@@ -163,6 +163,12 @@ function timu_core_init(): void {
 
 	// Handle AJAX actions.
 	add_action( 'wp_ajax_timu_toggle_module', __NAMESPACE__ . '\\timu_ajax_toggle_module' );
+	add_action( 'wp_ajax_timu_install_module', __NAMESPACE__ . '\\timu_ajax_install_module' );
+	add_action( 'wp_ajax_timu_update_module', __NAMESPACE__ . '\\timu_ajax_update_module' );
+
+	// Plugin page links and meta.
+	add_filter( 'plugin_action_links_' . TIMU_CORE_BASENAME, __NAMESPACE__ . '\\timu_core_plugin_action_links' );
+	add_filter( 'plugin_row_meta', __NAMESPACE__ . '\\timu_core_plugin_row_meta', 10, 2 );
 
 	// Enqueue admin scripts and styles.
 	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\timu_core_admin_enqueue' );
@@ -325,6 +331,221 @@ function timu_ajax_toggle_module(): void {
 }
 
 /**
+ * Handle AJAX install module request.
+ *
+ * @return void
+ */
+function timu_ajax_install_module(): void {
+	check_ajax_referer( 'timu_module_action', 'nonce' );
+
+	if ( is_multisite() && is_network_admin() ) {
+		if ( ! current_user_can( 'manage_network_plugins' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'core-support-thisismyurl' ) ) );
+		}
+	} else {
+		if ( ! current_user_can( 'install_plugins' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'core-support-thisismyurl' ) ) );
+		}
+	}
+
+	$slug = sanitize_text_field( wp_unslash( $_POST['slug'] ?? '' ) );
+
+	if ( empty( $slug ) ) {
+		wp_send_json_error( array( 'message' => __( 'Invalid module slug.', 'core-support-thisismyurl' ) ) );
+	}
+
+	$catalog = TIMU_Module_Registry::get_catalog_with_status();
+	$module  = $catalog[ $slug ] ?? null;
+
+	if ( empty( $module ) || empty( $module['download_url'] ) ) {
+		wp_send_json_error( array( 'message' => __( 'No download available for this module.', 'core-support-thisismyurl' ) ) );
+	}
+
+	require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+	require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+	require_once ABSPATH . 'wp-admin/includes/file.php';
+
+	if ( ! WP_Filesystem() ) {
+		wp_send_json_error( array( 'message' => __( 'File system credentials are required to install plugins.', 'core-support-thisismyurl' ) ) );
+	}
+
+	$skin     = new \Automatic_Upgrader_Skin();
+	$upgrader = new \Plugin_Upgrader( $skin );
+	$result   = $upgrader->install( esc_url_raw( $module['download_url'] ) );
+
+	if ( is_wp_error( $result ) || ! $result ) {
+		$message = is_wp_error( $result ) ? $result->get_error_message() : __( 'Installation failed.', 'core-support-thisismyurl' );
+		wp_send_json_error( array( 'message' => $message ) );
+	}
+
+	// Attempt activation.
+	$plugin_file = timu_core_find_plugin_file_by_slug( $slug );
+	if ( $plugin_file ) {
+		$network_wide = is_multisite() && is_network_admin();
+		$activation   = activate_plugin( $plugin_file, '', $network_wide, false );
+		if ( is_wp_error( $activation ) ) {
+			do_action( 'timu_catalog_install_warning', array( 'slug' => $slug, 'message' => $activation->get_error_message() ) );
+		}
+	}
+
+	TIMU_Module_Registry::clear_cache();
+	TIMU_Module_Registry::discover_modules();
+	TIMU_Module_Registry::load_catalog();
+
+	wp_send_json_success( array( 'message' => __( 'Module installed.', 'core-support-thisismyurl' ) ) );
+}
+
+/**
+ * Handle AJAX update module request.
+ *
+ * @return void
+ */
+function timu_ajax_update_module(): void {
+	check_ajax_referer( 'timu_module_action', 'nonce' );
+
+	if ( is_multisite() && is_network_admin() ) {
+		if ( ! current_user_can( 'manage_network_plugins' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'core-support-thisismyurl' ) ) );
+		}
+	} else {
+		if ( ! current_user_can( 'update_plugins' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'core-support-thisismyurl' ) ) );
+		}
+	}
+
+	$slug = sanitize_text_field( wp_unslash( $_POST['slug'] ?? '' ) );
+
+	if ( empty( $slug ) ) {
+		wp_send_json_error( array( 'message' => __( 'Invalid module slug.', 'core-support-thisismyurl' ) ) );
+	}
+
+	$catalog   = TIMU_Module_Registry::get_catalog_with_status();
+	$installed = TIMU_Module_Registry::get_module( $slug );
+	$module    = $catalog[ $slug ] ?? null;
+
+	if ( empty( $module ) || empty( $module['download_url'] ) || empty( $installed['file'] ) ) {
+		wp_send_json_error( array( 'message' => __( 'Update information is missing for this module.', 'core-support-thisismyurl' ) ) );
+	}
+
+	require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+	require_once ABSPATH . 'wp-admin/includes/file.php';
+
+	if ( ! WP_Filesystem() ) {
+		wp_send_json_error( array( 'message' => __( 'File system credentials are required to update plugins.', 'core-support-thisismyurl' ) ) );
+	}
+
+	$skin     = new \Automatic_Upgrader_Skin();
+	$upgrader = new \Plugin_Upgrader( $skin );
+	$result   = $upgrader->install( esc_url_raw( $module['download_url'] ) );
+
+	if ( is_wp_error( $result ) || ! $result ) {
+		$message = is_wp_error( $result ) ? $result->get_error_message() : __( 'Update failed.', 'core-support-thisismyurl' );
+		wp_send_json_error( array( 'message' => $message ) );
+	}
+
+	TIMU_Module_Registry::clear_cache();
+	TIMU_Module_Registry::discover_modules();
+	TIMU_Module_Registry::load_catalog();
+
+	wp_send_json_success( array( 'message' => __( 'Module updated.', 'core-support-thisismyurl' ) ) );
+}
+
+/**
+ * Attempt to find a plugin file by slug.
+ *
+ * @param string $slug Module slug.
+ * @return string|null Plugin file path or null.
+ */
+function timu_core_find_plugin_file_by_slug( string $slug ): ?string {
+	if ( ! function_exists( 'get_plugins' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/plugin.php';
+	}
+
+	$plugins = get_plugins();
+
+	foreach ( $plugins as $file => $data ) {
+		if ( dirname( $file ) === $slug || basename( $file, '.php' ) === $slug ) {
+			return $file;
+		}
+	}
+
+	return null;
+}
+
+/**
+ * Add action links to the plugins list for Core Support.
+ *
+ * @param array $links Plugin action links.
+ * @return array Modified action links.
+ */
+function timu_core_plugin_action_links( array $links ): array {
+	$dashboard_link = sprintf(
+		'<a href="%s">%s</a>',
+		esc_url( admin_url( 'admin.php?page=timu-core-support' ) ),
+		esc_html__( 'Dashboard', 'core-support-thisismyurl' )
+	);
+
+	$settings_link = '';
+	if ( current_user_can( 'manage_options' ) ) {
+		$settings_link = sprintf(
+			'<a href="%s">%s</a>',
+			esc_url( admin_url( 'admin.php?page=timu-core-settings' ) ),
+			esc_html__( 'Settings', 'core-support-thisismyurl' )
+		);
+	} elseif ( is_multisite() && current_user_can( 'manage_network_options' ) ) {
+		$settings_link = sprintf(
+			'<a href="%s">%s</a>',
+			esc_url( admin_url( 'admin.php?page=timu-core-network-settings', 'network' ) ),
+			esc_html__( 'Network Settings', 'core-support-thisismyurl' )
+		);
+	}
+
+	array_unshift( $links, $dashboard_link );
+	if ( ! empty( $settings_link ) ) {
+		array_unshift( $links, $settings_link );
+	}
+
+	return $links;
+}
+
+/**
+ * Add row meta to the plugins list for Core Support.
+ *
+ * @param array  $meta Plugin row meta.
+ * @param string $file Plugin file.
+ * @return array Modified row meta.
+ */
+function timu_core_plugin_row_meta( array $meta, string $file ): array {
+	if ( TIMU_CORE_BASENAME !== $file ) {
+		return $meta;
+	}
+
+	$docs_link = sprintf(
+		'<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
+		esc_url( 'https://github.com/thisismyurl/core-support-thisismyurl' ),
+		esc_html__( 'Documentation', 'core-support-thisismyurl' )
+	);
+
+	$privacy_link = sprintf(
+		'<a href="%s">%s</a>',
+		esc_url( 'https://thisismyurl.com/privacy' ),
+		esc_html__( 'Privacy', 'core-support-thisismyurl' )
+	);
+
+	$support_link = sprintf(
+		'<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
+		esc_url( 'https://thisismyurl.com/support' ),
+		esc_html__( 'Support', 'core-support-thisismyurl' )
+	);
+
+	$meta[] = $docs_link;
+	$meta[] = $privacy_link;
+	$meta[] = $support_link;
+
+	return $meta;
+}
+
+/**
  * Enqueue admin scripts and styles.
  *
  * @param string $hook The current admin page hook.
@@ -356,13 +577,18 @@ function timu_core_admin_enqueue( string $hook ): void {
 		'timu-core-admin',
 		'timuAdminData',
 		array(
-			'toggleNonce' => wp_create_nonce( 'timu_toggle_module' ),
-			'i18n'        => array(
-				'enabled'    => __( 'Enabled', 'core-support-thisismyurl' ),
-				'disabled'   => __( 'Disabled', 'core-support-thisismyurl' ),
-				'ajaxError'  => __( 'An error occurred. Please try again.', 'core-support-thisismyurl' ),
-				'noResults'  => __( 'No modules match this filter.', 'core-support-thisismyurl' ),
+			'toggleNonce'  => wp_create_nonce( 'timu_toggle_module' ),
+			'actionNonce'  => wp_create_nonce( 'timu_module_action' ),
+			'i18n'         => array(
+				'enabled'      => __( 'Enabled', 'core-support-thisismyurl' ),
+				'disabled'     => __( 'Disabled', 'core-support-thisismyurl' ),
+				'ajaxError'    => __( 'An error occurred. Please try again.', 'core-support-thisismyurl' ),
+				'noResults'    => __( 'No modules match this filter.', 'core-support-thisismyurl' ),
 				'installFirst' => __( 'Install the module before enabling it.', 'core-support-thisismyurl' ),
+				'installing'   => __( 'Installing...', 'core-support-thisismyurl' ),
+				'updating'     => __( 'Updating...', 'core-support-thisismyurl' ),
+				'install'      => __( 'Install', 'core-support-thisismyurl' ),
+				'update'       => __( 'Update', 'core-support-thisismyurl' ),
 			),
 		)
 	);
@@ -376,6 +602,25 @@ register_deactivation_hook( __FILE__, __NAMESPACE__ . '\\timu_core_deactivate' )
 add_action( 'plugins_loaded', __NAMESPACE__ . '\\timu_core_init' );
 
 /* @changelog
+ * [1.2601.71920] - 2026-01-07 19:35
+ * - Issue #33: In-dashboard install/update flows
+ * - Added AJAX handlers: timu_ajax_install_module and timu_ajax_update_module
+ * - Implement WP_Plugin_Upgrader for direct installation from catalog
+ * - Auto-activate installed modules after installation
+ * - Support for multisite with network-wide install/update
+ * - Permission checks for install_plugins and update_plugins capabilities
+ * - Helper function timu_core_find_plugin_file_by_slug() for plugin location
+ * - Cache invalidation and module discovery after install/update
+ * - Added actionNonce for install/update AJAX requests
+ * - Dashboard provides Install button for available modules
+ * - Dashboard provides Update button for modules with updates
+ * - Localized i18n strings for button labels and status messages
+ * - Files Modified:
+ *   - core-support-thisismyurl.php: Added install/update handlers + helpers
+ *   - assets/js/admin.js: Added handleInstall() and handleUpdate() methods
+ *   - includes/views/dashboard.php: Install/Update buttons for available/updateable modules
+ *   - assets/css/admin.css: Styling for install/update buttons
+ *
  * [1.2601.71910] - 2026-01-07 19:05
  * - Added remote catalog fetch with retries, timeouts, and allowed-host guard
  * - Added checksum validation for catalog payload with fallback to bundled JSON

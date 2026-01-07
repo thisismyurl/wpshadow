@@ -245,12 +245,30 @@
 	gap: 10px;
 	padding-top: 10px;
 	border-top: 1px solid #f0f0f1;
+	flex-wrap: wrap;
 }
 
 .timu-module-actions .button {
 	flex: 1;
+	min-width: 120px;
 	text-align: center;
 	justify-content: center;
+}
+
+.timu-module-actions .timu-btn-install,
+.timu-module-actions .timu-btn-update {
+	min-width: 140px;
+}
+
+.timu-module-actions .timu-btn-install:hover,
+.timu-module-actions .timu-btn-update:hover {
+	opacity: 0.9;
+}
+
+.timu-module-actions .timu-btn-install:disabled,
+.timu-module-actions .timu-btn-update:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
 }
 
 .timu-empty-state {
@@ -417,6 +435,15 @@
 }
 
 /* @changelog
+ * [1.2601.71920] - 2026-01-07 19:35
+ * - Issue #33: In-dashboard install/update flows
+ * - Added Install button for available modules
+ * - Added Update button for modules with updates
+ * - Updated View Release link to appear after update checks
+ * - Integrated AJAX handlers for install/update actions
+ * - Dashboard auto-reloads after successful install/update
+ * - Status refresh clears cache and reruns discovery
+ *
  * [1.2601.71900] - 2026-01-07 18:45
  * - Added status/update badges and available card styling
  * - Styled new stats icons for Available/Updates

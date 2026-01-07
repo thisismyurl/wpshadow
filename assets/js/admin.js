@@ -28,15 +28,12 @@
 
 			// Filter dropdown.
 			$('#timu-filter-type').on('change', this.handleFilter);
-		},
 
-		/**
-		 * Initialize filter state.
-		 */
-		initFilters: function() {
-			const filterType = localStorage.getItem('timu-filter-type') || 'all';
-			$('#timu-filter-type').val(filterType).trigger('change');
-		},
+		// Install buttons.
+		$(document).on('click', '.timu-btn-install', this.handleInstall);
+
+		// Update buttons.
+		$(document).on('click', '.timu-btn-update', this.handleUpdate);
 
 		/**
 		 * Handle module toggle.
@@ -117,6 +114,122 @@
 					// Remove loading state.
 					$card.removeClass('timu-loading');
 					$toggle.prop('disabled', false);
+				}
+			});
+		},
+
+		/**
+		 * Handle module install.
+		 *
+		 * @param {Event} e - Click event.
+		 */
+		handleInstall: function(e) {
+			e.preventDefault();
+
+			const $btn = $(this);
+			const $card = $btn.closest('.timu-module-card');
+			const slug = $btn.data('slug');
+			const isNetwork = window.location.pathname.includes('/wp-admin/network/');
+
+			if (!slug) {
+				TimuDashboard.showNotice('error', timuAdminData.i18n.ajaxError);
+				return;
+			}
+
+			// Disable button and show loading state.
+			$btn.prop('disabled', true).text(timuAdminData.i18n.installing);
+			$card.addClass('timu-loading');
+
+			// Send AJAX request.
+			$.ajax({
+				url: ajaxurl,
+				type: 'POST',
+				data: {
+					action: 'timu_install_module',
+					nonce: timuAdminData.actionNonce,
+					slug: slug
+				},
+				success: function(response) {
+					if (response.success) {
+						// Show success notice.
+						TimuDashboard.showNotice('success', response.data.message);
+
+						// Refresh dashboard after 1.5 seconds.
+						setTimeout(function() {
+							location.reload();
+						}, 1500);
+					} else {
+						// Show error notice.
+						TimuDashboard.showNotice('error', response.data.message);
+					}
+				},
+				error: function(xhr, status, error) {
+					// Show error notice.
+					TimuDashboard.showNotice('error', timuAdminData.i18n.ajaxError);
+					console.error('TIMU Install Error:', error);
+				},
+				complete: function() {
+					// Re-enable button and remove loading state.
+					$card.removeClass('timu-loading');
+					$btn.prop('disabled', false).text(timuAdminData.i18n.install);
+				}
+			});
+		},
+
+		/**
+		 * Handle module update.
+		 *
+		 * @param {Event} e - Click event.
+		 */
+		handleUpdate: function(e) {
+			e.preventDefault();
+
+			const $btn = $(this);
+			const $card = $btn.closest('.timu-module-card');
+			const slug = $btn.data('slug');
+			const isNetwork = window.location.pathname.includes('/wp-admin/network/');
+
+			if (!slug) {
+				TimuDashboard.showNotice('error', timuAdminData.i18n.ajaxError);
+				return;
+			}
+
+			// Disable button and show loading state.
+			$btn.prop('disabled', true).text(timuAdminData.i18n.updating);
+			$card.addClass('timu-loading');
+
+			// Send AJAX request.
+			$.ajax({
+				url: ajaxurl,
+				type: 'POST',
+				data: {
+					action: 'timu_update_module',
+					nonce: timuAdminData.actionNonce,
+					slug: slug
+				},
+				success: function(response) {
+					if (response.success) {
+						// Show success notice.
+						TimuDashboard.showNotice('success', response.data.message);
+
+						// Refresh dashboard after 1.5 seconds.
+						setTimeout(function() {
+							location.reload();
+						}, 1500);
+					} else {
+						// Show error notice.
+						TimuDashboard.showNotice('error', response.data.message);
+					}
+				},
+				error: function(xhr, status, error) {
+					// Show error notice.
+					TimuDashboard.showNotice('error', timuAdminData.i18n.ajaxError);
+					console.error('TIMU Update Error:', error);
+				},
+				complete: function() {
+					// Re-enable button and remove loading state.
+					$card.removeClass('timu-loading');
+					$btn.prop('disabled', false).text(timuAdminData.i18n.update);
 				}
 			});
 		},
@@ -218,6 +331,16 @@
 })(jQuery);
 
 /* @changelog
+ * [1.2601.71920] - 2026-01-07 19:35
+ * - Issue #33: In-dashboard install/update flows
+ * - Added handleInstall() method to trigger AJAX install action
+ * - Added handleUpdate() method to trigger AJAX update action
+ * - Integrated install/update button click handlers with event delegation
+ * - Dashboard auto-reloads after successful installation/update
+ * - Button states update with loading text and disabled state
+ * - Error handling with localized i18n messages
+ * - Binds to .timu-btn-install and .timu-btn-update button classes
+ *
  * [1.2601.71900] - 2026-01-07 18:45
  * - Block toggles for non-installed modules and show warning
  * - Update stats to reflect available/update counts from catalog

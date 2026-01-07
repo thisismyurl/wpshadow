@@ -182,9 +182,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 						</label>
 
 						<?php if ( ! empty( $module['download_url'] ) ) : ?>
-							<a href="<?php echo esc_url( $module['download_url'] ); ?>" class="button button-primary" target="_blank">
-								<?php echo $installed ? esc_html__( 'Open Release', 'core-support-thisismyurl' ) : esc_html__( 'Install from GitHub', 'core-support-thisismyurl' ); ?>
-							</a>
+							<?php if ( ! $installed ) : ?>
+								<button class="button button-primary timu-btn-install" data-slug="<?php echo esc_attr( $module['slug'] ); ?>">
+									<?php esc_html_e( 'Install', 'core-support-thisismyurl' ); ?>
+								</button>
+							<?php elseif ( $update_available ) : ?>
+								<button class="button button-warning timu-btn-update" data-slug="<?php echo esc_attr( $module['slug'] ); ?>">
+									<?php esc_html_e( 'Update Available', 'core-support-thisismyurl' ); ?>
+								</button>
+								<a href="<?php echo esc_url( $module['download_url'] ); ?>" class="button button-secondary" target="_blank">
+									<?php esc_html_e( 'View Release', 'core-support-thisismyurl' ); ?>
+								</a>
+							<?php else : ?>
+								<a href="<?php echo esc_url( $module['download_url'] ); ?>" class="button button-secondary" target="_blank">
+									<?php esc_html_e( 'View Release', 'core-support-thisismyurl' ); ?>
+								</a>
+							<?php endif; ?>
 						<?php endif; ?>
 
 						<?php if ( ! empty( $module['uri'] ) ) : ?>
