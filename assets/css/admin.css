@@ -99,6 +99,14 @@
 	color: #646970;
 }
 
+.timu-stat-icon.timu-stat-available {
+	color: #2271b1;
+}
+
+.timu-stat-icon.timu-stat-update {
+	color: #dba617;
+}
+
 .timu-dashboard-stat {
 	padding: 0 15px;
 	border-left: 1px solid #dcdcde;
@@ -133,6 +141,10 @@
 
 .timu-module-card:hover {
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.timu-module-card.timu-module-available {
+	border-color: #cce0f5;
 }
 
 .timu-module-header {
@@ -217,6 +229,17 @@
 	color: #fff;
 }
 
+.timu-badge-status {
+	background: #f0f0f1;
+	color: #1d2327;
+	border: 1px solid #dcdcde;
+}
+
+.timu-badge-update {
+	background: #dba617;
+	color: #fff;
+}
+
 .timu-module-actions {
 	display: flex;
 	gap: 10px;
@@ -282,6 +305,16 @@
 	background: #fff;
 	border-radius: 50%;
 	transition: transform 0.3s ease;
+}
+
+.timu-toggle-slider {
+	position: absolute;
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	white-space: nowrap;
+	width: 1px;
 }
 
 .timu-toggle input[type="checkbox"]:checked {
@@ -384,6 +417,10 @@
 }
 
 /* @changelog
+ * [1.2601.71900] - 2026-01-07 18:45
+ * - Added status/update badges and available card styling
+ * - Styled new stats icons for Available/Updates
+ * - Added hidden slider styling for toggle accessibility
  * [1.2601.71815] - 2026-01-07 18:15
  * - Added toggle switch component styles (custom checkbox UI)
  * - Implemented loading state animations with spinner overlay

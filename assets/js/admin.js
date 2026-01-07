@@ -49,6 +49,13 @@
 			const enabled = $toggle.is(':checked');
 			const $card = $toggle.closest('.timu-module-card');
 			const isNetwork = window.location.pathname.includes('/wp-admin/network/');
+			const isInstalled = $toggle.data('installed') === true || $toggle.data('installed') === 'true';
+
+			if (!isInstalled) {
+				$toggle.prop('checked', false);
+				TimuDashboard.showNotice('warning', timuAdminData.i18n.installFirst);
+				return;
+			}
 
 			// Disable toggle during request.
 			$toggle.prop('disabled', true);
@@ -162,11 +169,16 @@
 		 */
 		updateStats: function() {
 			const $cards = $('.timu-module-card');
-			const total = $cards.length;
-			const enabled = $cards.filter('.timu-module-enabled').length;
+			const installed = $cards.filter('[data-status="installed"], [data-status="update"]');
+			const totalInstalled = installed.length;
+			const enabled = installed.filter('.timu-module-enabled').length;
+			const available = $cards.filter('[data-status="available"]').length;
+			const updates = $cards.filter('[data-status="update"]').length;
 
-			$('.timu-stat-card').eq(0).find('.timu-stat-value').text(total);
+			$('.timu-stat-card').eq(0).find('.timu-stat-value').text(totalInstalled);
 			$('.timu-stat-card').eq(1).find('.timu-stat-value').text(enabled);
+			$('.timu-stat-card').eq(2).find('.timu-stat-value').text(available);
+			$('.timu-stat-card').eq(3).find('.timu-stat-value').text(updates);
 		},
 
 		/**
@@ -206,6 +218,10 @@
 })(jQuery);
 
 /* @changelog
+ * [1.2601.71900] - 2026-01-07 18:45
+ * - Block toggles for non-installed modules and show warning
+ * - Update stats to reflect available/update counts from catalog
+ * - Prepare UI for bundled catalog updater flow
  * [1.2601.71701] - 2026-01-07 17:17
  * - Initial admin JavaScript
  * - jQuery-based initialization

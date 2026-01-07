@@ -7,7 +7,7 @@
  * Donate link:         https://thisismyurl.com/core-support-thisismyurl/#register?source=core-support-thisismyurl
  * Description:         The Hub of the thisismyurl Media Suite. Provides Multi-Engine Fallback, Encryption, Cloud Bridge, and Killer Features (Pixel-Sovereign, Smart Focus-Point, The Vault, Surgical Scrubbing, Broken Link Guardian).
  * Tags:                media, core, hub, architecture, images, encryption, vault
- * Version:             1.2601.71818
+ * Version:             1.2601.71900
  * Requires at least:   6.4
  * Requires PHP:        8.1.29
  * Update URI:          https://github.com/thisismyurl/core-support-thisismyurl
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants.
-define( 'TIMU_CORE_VERSION', '1.2601.71818' );
+define( 'TIMU_CORE_VERSION', '1.2601.71900' );
 define( 'TIMU_CORE_FILE', __FILE__ );
 define( 'TIMU_CORE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'TIMU_CORE_URL', plugin_dir_url( __FILE__ ) );
@@ -248,12 +248,16 @@ function timu_core_render_dashboard(): void {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'core-support-thisismyurl' ) );
 	}
 
-	// Get all modules.
-	$modules      = TIMU_Module_Registry::get_modules();
-	$total        = count( $modules );
-	$enabled      = count( array_filter( $modules, fn( $m ) => TIMU_Module_Registry::is_enabled( $m['slug'] ) ) );
-	$hubs         = count( TIMU_Module_Registry::get_modules( 'hub' ) );
-	$spokes       = count( TIMU_Module_Registry::get_modules( 'spoke' ) );
+	$installed_modules = TIMU_Module_Registry::get_modules();
+	$catalog_modules   = TIMU_Module_Registry::get_catalog_with_status();
+
+	$total_installed = count( $installed_modules );
+	$enabled         = count( array_filter( $installed_modules, fn( $m ) => TIMU_Module_Registry::is_enabled( $m['slug'] ) ) );
+	$hubs            = count( TIMU_Module_Registry::get_modules( 'hub' ) );
+	$spokes          = count( TIMU_Module_Registry::get_modules( 'spoke' ) );
+	$available       = count( array_filter( $catalog_modules, fn( $m ) => empty( $m['installed'] ) ) );
+	$updates         = count( array_filter( $catalog_modules, fn( $m ) => ! empty( $m['update_available'] ) ) );
+	$modules         = $catalog_modules;
 
 	require_once TIMU_CORE_PATH . 'includes/views/dashboard.php';
 }
@@ -358,6 +362,7 @@ function timu_core_admin_enqueue( string $hook ): void {
 				'disabled'   => __( 'Disabled', 'core-support-thisismyurl' ),
 				'ajaxError'  => __( 'An error occurred. Please try again.', 'core-support-thisismyurl' ),
 				'noResults'  => __( 'No modules match this filter.', 'core-support-thisismyurl' ),
+				'installFirst' => __( 'Install the module before enabling it.', 'core-support-thisismyurl' ),
 			),
 		)
 	);
@@ -371,6 +376,14 @@ register_deactivation_hook( __FILE__, __NAMESPACE__ . '\\timu_core_deactivate' )
 add_action( 'plugins_loaded', __NAMESPACE__ . '\\timu_core_init' );
 
 /* @changelog
+ * [1.2601.71900] - 2026-01-07 18:45
+ * - Added bundled catalog for hubs/spokes with optional remote override
+ * - Catalog drives dashboard with available/update states and GitHub release links
+ * - Dashboard shows Available/Updates stats and status badges per module
+ * - Prevent enable toggles for non-installed modules; added notices
+ * - Catalog merged with installed modules (even if missing from catalog)
+ * - Issue #31: Bundled JSON catalog + updater integration groundwork
+ *
  * [1.2601.71818] - 2026-01-07 18:18
  * - Completed Issue #1: Support Menu & Modules Dashboard
  * - Created TIMU_Module_Registry class for action-based module discovery

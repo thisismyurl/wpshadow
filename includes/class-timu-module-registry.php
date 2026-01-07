@@ -25,6 +25,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class TIMU_Module_Registry {
 
 	/**
+	 * Bundled catalog cache.
+	 *
+	 * @var array
+	 */
+	private static array $catalog = array();
+
+	/**
 	 * Registered modules storage.
 	 *
 	 * @var array
@@ -39,6 +46,9 @@ class TIMU_Module_Registry {
 	public static function init(): void {
 		// Allow plugins to register themselves.
 		add_action( 'plugins_loaded', array( __CLASS__, 'discover_modules' ), 5 );
+
+		// Warm bundled catalog early for dashboard/updater.
+		add_action( 'plugins_loaded', array( __CLASS__, 'load_catalog' ), 4 );
 
 		// Provide hooks for modules to announce themselves.
 		do_action( 'timu_register_modules' );
@@ -157,6 +167,127 @@ class TIMU_Module_Registry {
 	}
 
 	/**
+	 * Load catalog (bundled JSON with optional remote override) and cache it.
+	 *
+	 * @return array Catalog data.
+	 */
+	public static function load_catalog(): array {
+		$cache_key = is_multisite() ? 'timu_catalog_network' : 'timu_catalog';
+		$cached    = is_multisite()
+			? get_site_transient( $cache_key )
+			: get_transient( $cache_key );
+
+		if ( false !== $cached && is_array( $cached ) ) {
+			self::$catalog = $cached;
+			return self::$catalog;
+		}
+
+		$catalog = self::get_bundled_catalog();
+
+		$remote_url = apply_filters( 'timu_catalog_remote_url', '' );
+		if ( ! empty( $remote_url ) ) {
+			$response = wp_remote_get(
+				$remote_url,
+				array(
+					'timeout' => 5,
+					'headers' => array( 'Accept' => 'application/json' ),
+				)
+			);
+
+			if ( ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ) {
+				$body = wp_remote_retrieve_body( $response );
+				$decoded = json_decode( $body, true );
+
+				if ( json_last_error() === JSON_ERROR_NONE && is_array( $decoded ) ) {
+					$catalog = $decoded;
+				}
+			}
+		}
+
+		$duration = 5 * MINUTE_IN_SECONDS;
+		if ( is_multisite() ) {
+			set_site_transient( $cache_key, $catalog, $duration );
+		} else {
+			set_transient( $cache_key, $catalog, $duration );
+		}
+
+		self::$catalog = $catalog;
+
+		return self::$catalog;
+	}
+
+	/**
+	 * Get catalog modules.
+	 *
+	 * @return array
+	 */
+	public static function get_catalog_modules(): array {
+		if ( empty( self::$catalog ) ) {
+			self::load_catalog();
+		}
+
+		return self::$catalog;
+	}
+
+	/**
+	 * Merge catalog with installed modules to provide status context.
+	 *
+	 * @return array
+	 */
+	public static function get_catalog_with_status(): array {
+		$catalog   = self::get_catalog_modules();
+		$installed = self::get_modules();
+		$result    = array();
+
+		foreach ( $catalog as $entry ) {
+			$slug          = $entry['slug'] ?? '';
+			$installed_mod = $installed[ $slug ] ?? null;
+
+			if ( empty( $slug ) ) {
+				continue;
+			}
+
+			$available_version = $entry['version'] ?? '0.0.0';
+			$installed_version = $installed_mod['version'] ?? null;
+			$update_available  = false;
+
+			if ( ! empty( $installed_version ) && version_compare( $available_version, $installed_version, '>' ) ) {
+				$update_available = true;
+			}
+
+			$result[ $slug ] = array_merge(
+				$entry,
+				array(
+					'installed'         => ! empty( $installed_mod ),
+					'installed_version'  => $installed_version,
+					'update_available'   => $update_available,
+					'enabled'            => $installed_mod ? self::is_enabled( $slug ) : false,
+				)
+			);
+		}
+
+		// Append installed modules that are missing from the catalog.
+		foreach ( $installed as $slug => $installed_mod ) {
+			if ( isset( $result[ $slug ] ) ) {
+				continue;
+			}
+
+			$result[ $slug ] = array_merge(
+				$installed_mod,
+				array(
+					'installed'         => true,
+					'installed_version'  => $installed_mod['version'] ?? null,
+					'update_available'   => false,
+					'enabled'            => self::is_enabled( $slug ),
+					'version'            => $installed_mod['version'] ?? '0.0.0',
+				)
+			);
+		}
+
+		return $result;
+	}
+
+	/**
 	 * Get all registered modules.
 	 *
 	 * @param string $type Optional. Filter by type (hub, spoke).
@@ -257,5 +388,28 @@ class TIMU_Module_Registry {
 		}
 
 		self::$modules = array();
+	}
+
+	/**
+	 * Get bundled catalog JSON as array.
+	 *
+	 * @return array
+	 */
+	private static function get_bundled_catalog(): array {
+		$json = '[
+			{"slug":"core-support-thisismyurl","type":"hub","name":"Core Support","description":"Hub for Multi-Engine Fallback, Vault, and suite governance.","version":"1.2601.71818","author":"Christopher Ross","uri":"https://github.com/thisismyurl/core-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/core-support-thisismyurl/releases/latest"},
+			{"slug":"image-support-thisismyurl","type":"hub","name":"Image Support","description":"Image Hub orchestrating format spokes with Pixel-Sovereign and Smart Focus-Point.","version":"1.2601.71701","author":"Christopher Ross","uri":"https://github.com/thisismyurl/image-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.9.0","download_url":"https://github.com/thisismyurl/image-support-thisismyurl/releases/latest"},
+			{"slug":"avif-support-thisismyurl","type":"spoke","name":"AVIF Support","description":"AVIF spoke for high-efficiency images with Vault mapping.","version":"1.0.0","author":"Christopher Ross","uri":"https://github.com/thisismyurl/avif-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/avif-support-thisismyurl/releases/latest"},
+			{"slug":"webp-support-thisismyurl","type":"spoke","name":"WebP Support","description":"WebP spoke for modern browser delivery with Broken Link Guardian.","version":"1.0.0","author":"Christopher Ross","uri":"https://github.com/thisismyurl/webp-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/webp-support-thisismyurl/releases/latest"},
+			{"slug":"heic-support-thisismyurl","type":"spoke","name":"HEIC Support","description":"HEIC spoke with conversion to web-safe formats.","version":"1.0.0","author":"Christopher Ross","uri":"https://github.com/thisismyurl/heic-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/heic-support-thisismyurl/releases/latest"},
+			{"slug":"raw-support-thisismyurl","type":"spoke","name":"RAW Support","description":"RAW spoke for ingesting professional formats into the Vault.","version":"1.0.0","author":"Christopher Ross","uri":"https://github.com/thisismyurl/raw-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/raw-support-thisismyurl/releases/latest"},
+			{"slug":"svg-support-thisismyurl","type":"spoke","name":"SVG Support","description":"SVG spoke with sanitization and Vault mapping.","version":"1.0.0","author":"Christopher Ross","uri":"https://github.com/thisismyurl/svg-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/svg-support-thisismyurl/releases/latest"},
+			{"slug":"tiff-support-thisismyurl","type":"spoke","name":"TIFF Support","description":"TIFF spoke with archival-grade handling and Vault routing.","version":"1.0.0","author":"Christopher Ross","uri":"https://github.com/thisismyurl/tiff-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/tiff-support-thisismyurl/releases/latest"},
+			{"slug":"bmp-support-thisismyurl","type":"spoke","name":"BMP Support","description":"BMP spoke for legacy ingestion with scrubbing.","version":"1.0.0","author":"Christopher Ross","uri":"https://github.com/thisismyurl/bmp-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/bmp-support-thisismyurl/releases/latest"}
+		]';
+
+		$decoded = json_decode( $json, true );
+
+		return ( json_last_error() === JSON_ERROR_NONE && is_array( $decoded ) ) ? $decoded : array();
 	}
 }

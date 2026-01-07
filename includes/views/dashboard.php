@@ -43,6 +43,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 
 		<div class="timu-stat-card">
+			<div class="timu-stat-icon timu-stat-available">
+				<span class="dashicons dashicons-plus-alt"></span>
+			</div>
+			<div class="timu-stat-content">
+				<div class="timu-stat-value"><?php echo esc_html( $available ); ?></div>
+				<div class="timu-stat-label"><?php esc_html_e( 'Available', 'core-support-thisismyurl' ); ?></div>
+			</div>
+		</div>
+
+		<div class="timu-stat-card">
+			<div class="timu-stat-icon timu-stat-update">
+				<span class="dashicons dashicons-update"></span>
+			</div>
+			<div class="timu-stat-content">
+				<div class="timu-stat-value"><?php echo esc_html( $updates ); ?></div>
+				<div class="timu-stat-label"><?php esc_html_e( 'Updates', 'core-support-thisismyurl' ); ?></div>
+			</div>
+		</div>
+
+		<div class="timu-stat-card">
 			<div class="timu-stat-icon timu-stat-hub">
 				<span class="dashicons dashicons-networking"></span>
 			</div>
@@ -84,24 +104,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php else : ?>
 			<?php foreach ( $modules as $module ) : ?>
 				<?php
-				$is_enabled = TIMU_Module_Registry::is_enabled( $module['slug'] );
-				$type_class = 'hub' === $module['type'] ? 'timu-type-hub' : 'timu-type-spoke';
-				$card_class = $is_enabled ? 'timu-module-enabled' : 'timu-module-disabled';
+				$slug             = $module['slug'];
+				$installed        = ! empty( $module['installed'] );
+				$is_enabled       = $installed ? \TIMU\CoreSupport\TIMU_Module_Registry::is_enabled( $slug ) : false;
+				$update_available = ! empty( $module['update_available'] );
+				$type_class       = 'hub' === $module['type'] ? 'timu-type-hub' : 'timu-type-spoke';
+				$status_class     = $installed ? ( $is_enabled ? 'timu-module-enabled' : 'timu-module-disabled' ) : 'timu-module-available';
+				$status_label     = $installed ? ( $update_available ? __( 'Update available', 'core-support-thisismyurl' ) : __( 'Installed', 'core-support-thisismyurl' ) ) : __( 'Available', 'core-support-thisismyurl' );
 				?>
-				<div class="timu-module-card <?php echo esc_attr( $type_class . ' ' . $card_class ); ?>" data-type="<?php echo esc_attr( $module['type'] ); ?>">
+				<div class="timu-module-card <?php echo esc_attr( $type_class . ' ' . $status_class ); ?>" data-type="<?php echo esc_attr( $module['type'] ); ?>" data-status="<?php echo esc_attr( $installed ? ( $update_available ? 'update' : 'installed' ) : 'available' ); ?>">
 					<div class="timu-module-header">
 						<h3 class="timu-module-name"><?php echo esc_html( $module['name'] ); ?></h3>
 						<div class="timu-module-badges">
 							<span class="timu-badge timu-badge-type">
 								<?php echo esc_html( ucfirst( $module['type'] ) ); ?>
 							</span>
-							<?php if ( $is_enabled ) : ?>
-								<span class="timu-badge timu-badge-enabled">
-									<?php esc_html_e( 'Enabled', 'core-support-thisismyurl' ); ?>
-								</span>
-							<?php else : ?>
-								<span class="timu-badge timu-badge-disabled">
-									<?php esc_html_e( 'Disabled', 'core-support-thisismyurl' ); ?>
+							<span class="timu-badge timu-badge-status">
+								<?php echo esc_html( $status_label ); ?>
+							</span>
+							<?php if ( $update_available ) : ?>
+								<span class="timu-badge timu-badge-update">
+									<?php esc_html_e( 'Update', 'core-support-thisismyurl' ); ?>
 								</span>
 							<?php endif; ?>
 						</div>
@@ -111,8 +134,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<div class="timu-module-version">
 							<span class="dashicons dashicons-tag"></span>
 							<?php
-							/* translators: %s: Plugin version number */
-							printf( esc_html__( 'Version %s', 'core-support-thisismyurl' ), esc_html( $module['version'] ) );
+							/* translators: %s: Available version number */
+							printf( esc_html__( 'Catalog %s', 'core-support-thisismyurl' ), esc_html( $module['version'] ) );
 							?>
 						</div>
 						<div class="timu-module-author">
@@ -122,6 +145,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 							printf( esc_html__( 'By %s', 'core-support-thisismyurl' ), esc_html( $module['author'] ) );
 							?>
 						</div>
+						<?php if ( $installed && ! empty( $module['installed_version'] ) ) : ?>
+							<div class="timu-module-installed-version">
+								<span class="dashicons dashicons-yes"></span>
+								<?php
+								/* translators: %s: Installed version number */
+								printf( esc_html__( 'Installed %s', 'core-support-thisismyurl' ), esc_html( $module['installed_version'] ) );
+								?>
+							</div>
+						<?php endif; ?>
 					</div>
 
 					<p class="timu-module-description"><?php echo esc_html( $module['description'] ); ?></p>
@@ -139,13 +171,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 								type="checkbox"
 								class="timu-module-toggle"
 								data-slug="<?php echo esc_attr( $module['slug'] ); ?>"
+								data-installed="<?php echo esc_attr( $installed ? 'true' : 'false' ); ?>"
 								<?php checked( $is_enabled ); ?>
+								<?php disabled( ! $installed ); ?>
 							>
 							<span class="timu-toggle-slider"></span>
 							<span class="timu-toggle-label">
 								<?php esc_html_e( 'Enable Module', 'core-support-thisismyurl' ); ?>
 							</span>
 						</label>
+
+						<?php if ( ! empty( $module['download_url'] ) ) : ?>
+							<a href="<?php echo esc_url( $module['download_url'] ); ?>" class="button button-primary" target="_blank">
+								<?php echo $installed ? esc_html__( 'Open Release', 'core-support-thisismyurl' ) : esc_html__( 'Install from GitHub', 'core-support-thisismyurl' ); ?>
+							</a>
+						<?php endif; ?>
 
 						<?php if ( ! empty( $module['uri'] ) ) : ?>
 							<a href="<?php echo esc_url( $module['uri'] ); ?>" class="button button-secondary" target="_blank">
