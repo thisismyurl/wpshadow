@@ -8,15 +8,199 @@
 	'use strict';
 
 	/**
-	 * Initialize admin functionality.
+	 * Initialize dashboard functionality.
 	 */
-	function init() {
-		console.log('Core Support Admin initialized');
-	}
+	const TimuDashboard = {
+		/**
+		 * Initialize.
+		 */
+		init: function() {
+			this.bindEvents();
+			this.initFilters();
+		},
 
-	// Document ready
+		/**
+		 * Bind event listeners.
+		 */
+		bindEvents: function() {
+			// Module toggle switches.
+			$('.timu-module-toggle').on('change', this.handleToggle);
+
+			// Filter dropdown.
+			$('#timu-filter-type').on('change', this.handleFilter);
+		},
+
+		/**
+		 * Initialize filter state.
+		 */
+		initFilters: function() {
+			const filterType = localStorage.getItem('timu-filter-type') || 'all';
+			$('#timu-filter-type').val(filterType).trigger('change');
+		},
+
+		/**
+		 * Handle module toggle.
+		 *
+		 * @param {Event} e - Change event.
+		 */
+		handleToggle: function(e) {
+			const $toggle = $(this);
+			const slug = $toggle.data('slug');
+			const enabled = $toggle.is(':checked');
+			const $card = $toggle.closest('.timu-module-card');
+			const isNetwork = window.location.pathname.includes('/wp-admin/network/');
+
+			// Disable toggle during request.
+			$toggle.prop('disabled', true);
+
+			// Add loading state.
+			$card.addClass('timu-loading');
+
+			// Send AJAX request.
+			$.ajax({
+				url: ajaxurl,
+				type: 'POST',
+				data: {
+					action: 'timu_toggle_module',
+					nonce: timuAdminData.toggleNonce,
+					slug: slug,
+					enabled: enabled ? 'true' : 'false',
+					network: isNetwork ? 'true' : 'false'
+				},
+				success: function(response) {
+					if (response.success) {
+						// Update card state.
+						if (enabled) {
+							$card.removeClass('timu-module-disabled').addClass('timu-module-enabled');
+							$card.find('.timu-badge-disabled')
+								.removeClass('timu-badge-disabled')
+								.addClass('timu-badge-enabled')
+								.text(timuAdminData.i18n.enabled);
+						} else {
+							$card.removeClass('timu-module-enabled').addClass('timu-module-disabled');
+							$card.find('.timu-badge-enabled')
+								.removeClass('timu-badge-enabled')
+								.addClass('timu-badge-disabled')
+								.text(timuAdminData.i18n.disabled);
+						}
+
+						// Show success notice.
+						TimuDashboard.showNotice('success', response.data.message);
+
+						// Update stats.
+						TimuDashboard.updateStats();
+					} else {
+						// Revert toggle state.
+						$toggle.prop('checked', !enabled);
+
+						// Show error notice.
+						TimuDashboard.showNotice('error', response.data.message);
+					}
+				},
+				error: function(xhr, status, error) {
+					// Revert toggle state.
+					$toggle.prop('checked', !enabled);
+
+					// Show error notice.
+					TimuDashboard.showNotice('error', timuAdminData.i18n.ajaxError);
+
+					console.error('TIMU Toggle Error:', error);
+				},
+				complete: function() {
+					// Remove loading state.
+					$card.removeClass('timu-loading');
+					$toggle.prop('disabled', false);
+				}
+			});
+		},
+
+		/**
+		 * Handle filter change.
+		 *
+		 * @param {Event} e - Change event.
+		 */
+		handleFilter: function(e) {
+			const filterType = $(this).val();
+			const $cards = $('.timu-module-card');
+
+			// Save filter preference.
+			localStorage.setItem('timu-filter-type', filterType);
+
+			// Filter cards.
+			if (filterType === 'all') {
+				$cards.show();
+			} else {
+				$cards.hide();
+				$cards.filter('[data-type="' + filterType + '"]').show();
+			}
+
+			// Check if any cards are visible.
+			const visibleCount = $cards.filter(':visible').length;
+			if (visibleCount === 0) {
+				TimuDashboard.showNoResults();
+			} else {
+				$('.timu-no-results').remove();
+			}
+		},
+
+		/**
+		 * Show "no results" message.
+		 */
+		showNoResults: function() {
+			if ($('.timu-no-results').length) {
+				return;
+			}
+
+			const $message = $('<div class="timu-no-results">')
+				.html('<span class="dashicons dashicons-info"></span><p>' + timuAdminData.i18n.noResults + '</p>');
+
+			$('.timu-modules-grid').append($message);
+		},
+
+		/**
+		 * Update statistics counters.
+		 */
+		updateStats: function() {
+			const $cards = $('.timu-module-card');
+			const total = $cards.length;
+			const enabled = $cards.filter('.timu-module-enabled').length;
+
+			$('.timu-stat-card').eq(0).find('.timu-stat-value').text(total);
+			$('.timu-stat-card').eq(1).find('.timu-stat-value').text(enabled);
+		},
+
+		/**
+		 * Show admin notice.
+		 *
+		 * @param {string} type - Notice type (success, error, warning, info).
+		 * @param {string} message - Notice message.
+		 */
+		showNotice: function(type, message) {
+			const $notice = $('<div class="notice notice-' + type + ' is-dismissible">')
+				.html('<p>' + message + '</p>');
+
+			// Insert after page title.
+			$('.wrap > h1').after($notice);
+
+			// Initialize dismiss functionality.
+			$(document).trigger('wp-updates-notice-added');
+
+			// Auto-dismiss after 5 seconds.
+			setTimeout(function() {
+				$notice.fadeOut(function() {
+					$(this).remove();
+				});
+			}, 5000);
+		}
+	};
+
+	/**
+	 * Initialize on document ready.
+	 */
 	$(document).ready(function() {
-		init();
+		if ($('.timu-dashboard-wrap').length) {
+			TimuDashboard.init();
+		}
 	});
 
 })(jQuery);
@@ -25,4 +209,12 @@
  * [1.2601.71701] - 2026-01-07 17:17
  * - Initial admin JavaScript
  * - jQuery-based initialization
+ *
+ * [1.2601.71712] - 2026-01-07 17:17
+ * - Added TimuDashboard module for dashboard functionality
+ * - Implemented module toggle handler with AJAX
+ * - Added filter functionality for hub/spoke types
+ * - Implemented stats counter updates
+ * - Added admin notice system with auto-dismiss
+ * - LocalStorage persistence for filter preferences
  */

@@ -1,0 +1,13 @@
+# Copyright (C) 2026 Christopher Ross
+# This file is distributed under the GPL2.
+msgid ""
+msgstr ""
+"Project-Id-Version: Core Support (thisismyurl) 1.2601.71701\n"
+"Report-Msgid-Bugs-To: https://thisismyurl.com/core-support-thisismyurl/\n"
+"POT-Creation-Date: 2026-01-07 00:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language-Team: thisismyurl <support@thisismyurl.com>\n"
+
+# This is a placeholder. Run WP-CLI i18n make-pot to generate the full POT file.

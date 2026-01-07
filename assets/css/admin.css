@@ -76,7 +76,326 @@
 	margin-right: 10px;
 }
 
+/* Module Dashboard Styles */
+.timu-dashboard {
+	max-width: 1200px;
+}
+
+.timu-dashboard-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+	padding: 20px;
+	background: #fff;
+	border: 1px solid #ccd0d4;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+.timu-dashboard-stats {
+	display: flex;
+	gap: 15px;
+	font-size: 13px;
+	color: #646970;
+}
+
+.timu-dashboard-stat {
+	padding: 0 15px;
+	border-left: 1px solid #dcdcde;
+}
+
+.timu-dashboard-stat:first-child {
+	border-left: none;
+	padding-left: 0;
+}
+
+.timu-dashboard-stat strong {
+	display: block;
+	font-size: 24px;
+	font-weight: 400;
+	color: #1d2327;
+	margin-bottom: 3px;
+}
+
+.timu-modules-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	gap: 20px;
+	margin-bottom: 30px;
+}
+
+.timu-module-card {
+	background: #fff;
+	border: 1px solid #ccd0d4;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+	transition: box-shadow 0.2s ease;
+}
+
+.timu-module-card:hover {
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.timu-module-header {
+	display: flex;
+	align-items: center;
+	padding: 15px 20px;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+.timu-module-icon {
+	font-size: 24px;
+	width: 40px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-right: 15px;
+	color: #2271b1;
+}
+
+.timu-module-info {
+	flex: 1;
+}
+
+.timu-module-title {
+	margin: 0 0 3px 0;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.4;
+}
+
+.timu-module-version {
+	font-size: 12px;
+	color: #646970;
+}
+
+.timu-module-body {
+	padding: 15px 20px;
+}
+
+.timu-module-description {
+	margin: 0 0 15px 0;
+	font-size: 13px;
+	line-height: 1.5;
+	color: #50575e;
+}
+
+.timu-module-meta {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+	margin-bottom: 15px;
+}
+
+.timu-module-badge {
+	display: inline-block;
+	padding: 3px 8px;
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	border-radius: 3px;
+	letter-spacing: 0.5px;
+}
+
+.timu-module-badge.type-hub {
+	background: #2271b1;
+	color: #fff;
+}
+
+.timu-module-badge.type-spoke {
+	background: #f0f0f1;
+	color: #50575e;
+}
+
+.timu-module-badge.status-enabled {
+	background: #00a32a;
+	color: #fff;
+}
+
+.timu-module-badge.status-disabled {
+	background: #dba617;
+	color: #fff;
+}
+
+.timu-module-actions {
+	display: flex;
+	gap: 10px;
+	padding-top: 10px;
+	border-top: 1px solid #f0f0f1;
+}
+
+.timu-module-actions .button {
+	flex: 1;
+	text-align: center;
+	justify-content: center;
+}
+
+.timu-empty-state {
+	text-align: center;
+	padding: 60px 20px;
+	background: #fff;
+	border: 1px solid #ccd0d4;
+}
+
+.timu-empty-state .dashicons {
+	font-size: 48px;
+	width: 48px;
+	height: 48px;
+	color: #c3c4c7;
+	margin-bottom: 20px;
+}
+
+.timu-empty-state h2 {
+	margin: 0 0 10px 0;
+	font-size: 18px;
+	font-weight: 400;
+}
+
+/* Toggle Switch Styles */
+.timu-toggle {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	cursor: pointer;
+}
+
+.timu-toggle input[type="checkbox"] {
+	position: relative;
+	width: 44px;
+	height: 24px;
+	appearance: none;
+	background: #dcdcde;
+	border-radius: 12px;
+	outline: none;
+	cursor: pointer;
+	transition: background 0.3s ease;
+	margin: 0;
+}
+
+.timu-toggle input[type="checkbox"]::before {
+	content: '';
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	width: 20px;
+	height: 20px;
+	background: #fff;
+	border-radius: 50%;
+	transition: transform 0.3s ease;
+}
+
+.timu-toggle input[type="checkbox"]:checked {
+	background: #2271b1;
+}
+
+.timu-toggle input[type="checkbox"]:checked::before {
+	transform: translateX(20px);
+}
+
+.timu-toggle input[type="checkbox"]:focus {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+}
+
+.timu-toggle input[type="checkbox"]:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.timu-toggle-label {
+	font-size: 13px;
+	color: #50575e;
+}
+
+/* Loading State */
+.timu-module-card.timu-loading {
+	opacity: 0.6;
+	pointer-events: none;
+	position: relative;
+}
+
+.timu-module-card.timu-loading::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 20px;
+	height: 20px;
+	margin: -10px 0 0 -10px;
+	border: 2px solid #2271b1;
+	border-radius: 50%;
+	border-top-color: transparent;
+	animation: timu-spin 0.6s linear infinite;
+}
+
+@keyframes timu-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* No Results Message */
+.timu-no-results {
+	grid-column: 1 / -1;
+	text-align: center;
+	padding: 40px;
+	background: #f9f9f9;
+	border: 1px dashed #ccd0d4;
+	border-radius: 4px;
+}
+
+.timu-no-results .dashicons {
+	font-size: 32px;
+	width: 32px;
+	height: 32px;
+	color: #c3c4c7;
+	margin-bottom: 10px;
+}
+
+.timu-no-results p {
+	margin: 0;
+	color: #646970;
+	font-size: 14px;
+}
+
+/* Accessibility improvements */
+.timu-module-actions .button:focus {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+	box-shadow: none;
+}
+
+/* Responsive design */
+@media screen and (max-width: 782px) {
+	.timu-dashboard-header {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.timu-dashboard-stats {
+		margin-top: 15px;
+		width: 100%;
+		justify-content: space-between;
+	}
+
+	.timu-modules-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
 /* @changelog
+ * [1.2601.71815] - 2026-01-07 18:15
+ * - Added toggle switch component styles (custom checkbox UI)
+ * - Implemented loading state animations with spinner overlay
+ * - Added no-results message styling
+ * - Enhanced disabled state for toggles during AJAX
+ *
+ * [1.2601.71800] - 2026-01-07 23:00
+ * - Added module dashboard grid styles
+ * - Implemented module card components
+ * - Added responsive breakpoints
+ * - Enhanced accessibility with focus states
+ *
  * [1.2601.71701] - 2026-01-07 17:17
  * - Initial admin stylesheet
  * - Added card-based layout system
