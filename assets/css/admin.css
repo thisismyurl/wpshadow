@@ -1,0 +1,84 @@
+/**
+ * Core Support Admin Styles
+ *
+ * @package TIMU_CORE_SUPPORT
+ */
+
+.wrap.timu-core-wrap {
+	max-width: 1200px;
+	margin: 20px auto;
+}
+
+.timu-core-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 30px;
+	padding: 20px;
+	background: #fff;
+	border-left: 4px solid #2271b1;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+.timu-core-header h1 {
+	margin: 0;
+	font-size: 24px;
+}
+
+.timu-core-badge {
+	display: inline-block;
+	padding: 4px 8px;
+	background: #2271b1;
+	color: #fff;
+	border-radius: 3px;
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+	margin-left: 10px;
+}
+
+.timu-core-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: 20px;
+	margin-top: 20px;
+}
+
+.timu-core-card {
+	background: #fff;
+	padding: 20px;
+	border: 1px solid #ccd0d4;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+.timu-core-card h2 {
+	margin-top: 0;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #eee;
+}
+
+.timu-core-feature-list {
+	list-style: none;
+	padding: 0;
+	margin: 15px 0;
+}
+
+.timu-core-feature-list li {
+	padding: 8px 0;
+	display: flex;
+	align-items: center;
+}
+
+.timu-core-feature-list li:before {
+	content: "✓";
+	color: #00a32a;
+	font-weight: bold;
+	margin-right: 10px;
+}
+
+/* @changelog
+ * [1.2601.71701] - 2026-01-07 17:17
+ * - Initial admin stylesheet
+ * - Added card-based layout system
+ * - Implemented Hub branding styles
+ */

@@ -1,0 +1,88 @@
+# Core Support (thisismyurl)
+
+**The Hub of the thisismyurl Media Suite**
+
+## Description
+
+Core Support is the foundational Hub of the thisismyurl Media Suite, providing essential architecture and killer features for all format-specific Spoke plugins.
+
+### The Hub & Spoke Architecture
+
+- **The Hub (Core):** Multi-Engine Fallback (Imagick/GD), Encryption, Cloud Bridge
+- **The Spokes:** Format-specific transcoders (AVIF, WebP, HEIC, etc.)
+- **Suite Identifier:** `thisismyurl-media-suite-2026` handshake ensures only relevant modules load
+
+### Killer Features
+
+1. **Pixel-Sovereign™** - Steganographic fingerprinting (LSB) for invisible ownership
+2. **Smart Focus-Point™** - Entropy-based subject detection for mobile cropping
+3. **The Vault™** - Secure original storage in `/vault/` (Zipped/Raw)
+4. **Surgical Scrubbing™** - Strip GPS/Privacy EXIF; inject Brand Metadata
+5. **Broken Link Guardian™** - Database ID-to-Vault mapping for self-healing 404s
+
+## Requirements
+
+- **WordPress:** 6.4 or higher
+- **PHP:** 8.4 or higher
+- **Multisite:** Full support with Network Governance
+
+## Installation
+
+1. Upload the plugin files to `/wp-content/plugins/core-support-thisismyurl/`
+2. Activate through the 'Plugins' menu in WordPress
+3. Configure settings under 'Core Support' in the admin menu
+
+### Multisite Installation
+
+For network-wide activation, activate from the Network Admin panel. Global settings will override individual site settings unless explicitly allowed.
+
+## Architecture
+
+This plugin follows production-ready standards:
+
+- **PHP 8.4+** with strict typing, Enums, and Property Hooks
+- **SVE Protocol:** Sanitize inputs, Validate capabilities, Escape outputs
+- **Late Escaping:** Security at point of output
+- **DB Hygiene:** Mandatory `$wpdb->prepare()` for all queries
+- **i18n Ready:** All strings wrapped in translation functions
+
+## Development
+
+### Directory Structure
+
+```
+core-support-thisismyurl/
+├── core-support-thisismyurl.php  # Main plugin file
+├── uninstall.php                  # Cleanup on uninstall
+├── includes/                      # Core functionality
+├── assets/                        # CSS/JS/Images
+│   ├── css/
+│   ├── js/
+│   └── images/
+└── languages/                     # Translation files
+```
+
+### Coding Standards
+
+- WordPress Coding Standards (WordPress-Extra)
+- PHPStan Level 8
+- PHPUnit for testing
+
+## Support
+
+- **Documentation:** https://thisismyurl.com/core-support-thisismyurl/
+- **Support:** https://thisismyurl.com/core-support-thisismyurl/#support
+- **GitHub:** https://github.com/thisismyurl/core-support-thisismyurl
+
+## License
+
+GPL2 or later. See LICENSE file for details.
+
+## Author
+
+**Christopher Ross**  
+Website: https://thisismyurl.com/?source=core-support-thisismyurl
+
+---
+
+*Part of the thisismyurl Media Suite*
