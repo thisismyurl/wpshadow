@@ -7,7 +7,7 @@
  * Donate link:         https://thisismyurl.com/core-support-thisismyurl/#register?source=core-support-thisismyurl
  * Description:         The Hub of the thisismyurl Media Suite. Provides Multi-Engine Fallback, Encryption, Cloud Bridge, and Killer Features (Pixel-Sovereign, Smart Focus-Point, The Vault, Surgical Scrubbing, Broken Link Guardian).
  * Tags:                media, core, hub, architecture, images, encryption, vault
- * Version:             1.2601.71900
+ * Version:             1.2601.71910
  * Requires at least:   6.4
  * Requires PHP:        8.1.29
  * Update URI:          https://github.com/thisismyurl/core-support-thisismyurl
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants.
-define( 'TIMU_CORE_VERSION', '1.2601.71900' );
+define( 'TIMU_CORE_VERSION', '1.2601.71910' );
 define( 'TIMU_CORE_FILE', __FILE__ );
 define( 'TIMU_CORE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'TIMU_CORE_URL', plugin_dir_url( __FILE__ ) );
@@ -376,6 +376,13 @@ register_deactivation_hook( __FILE__, __NAMESPACE__ . '\\timu_core_deactivate' )
 add_action( 'plugins_loaded', __NAMESPACE__ . '\\timu_core_init' );
 
 /* @changelog
+ * [1.2601.71910] - 2026-01-07 19:05
+ * - Added remote catalog fetch with retries, timeouts, and allowed-host guard
+ * - Added checksum validation for catalog payload with fallback to bundled JSON
+ * - Filterable catalog URL and cache TTL; logging hook on fetch failures
+ * - Maintains bundled catalog as authoritative fallback for offline/resilience
+ * - Issue #32: Catalog reliability and integrity improvements
+ *
  * [1.2601.71900] - 2026-01-07 18:45
  * - Added bundled catalog for hubs/spokes with optional remote override
  * - Catalog drives dashboard with available/update states and GitHub release links
@@ -407,7 +414,7 @@ add_action( 'plugins_loaded', __NAMESPACE__ . '\\timu_core_init' );
  *   - includes/views/dashboard.php: Dashboard template with module cards
  *   - assets/css/admin.css: Extended with toggle, grid, and loading styles
  *   - assets/js/admin.js: Dashboard controller with AJAX and filtering
- * 
+ *
  * - Completed Issue #24: Internationalization Baseline
  * - Created languages/ directory with placeholder POT file
  * - Verified all user-facing strings use gettext functions (__(), _e(), esc_html__())

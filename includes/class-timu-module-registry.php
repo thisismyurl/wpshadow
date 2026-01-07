@@ -182,33 +182,21 @@ class TIMU_Module_Registry {
 			return self::$catalog;
 		}
 
-		$catalog = self::get_bundled_catalog();
-
+		$catalog    = self::get_bundled_catalog();
 		$remote_url = apply_filters( 'timu_catalog_remote_url', '' );
-		if ( ! empty( $remote_url ) ) {
-			$response = wp_remote_get(
-				$remote_url,
-				array(
-					'timeout' => 5,
-					'headers' => array( 'Accept' => 'application/json' ),
-				)
-			);
+		$cache_ttl  = (int) apply_filters( 'timu_catalog_cache_ttl', 5 * MINUTE_IN_SECONDS );
 
-			if ( ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ) {
-				$body = wp_remote_retrieve_body( $response );
-				$decoded = json_decode( $body, true );
-
-				if ( json_last_error() === JSON_ERROR_NONE && is_array( $decoded ) ) {
-					$catalog = $decoded;
-				}
+		if ( ! empty( $remote_url ) && self::is_allowed_catalog_url( $remote_url ) ) {
+			$remote_catalog = self::fetch_remote_catalog( $remote_url );
+			if ( ! empty( $remote_catalog ) ) {
+				$catalog = $remote_catalog;
 			}
 		}
 
-		$duration = 5 * MINUTE_IN_SECONDS;
 		if ( is_multisite() ) {
-			set_site_transient( $cache_key, $catalog, $duration );
+			set_site_transient( $cache_key, $catalog, $cache_ttl );
 		} else {
-			set_transient( $cache_key, $catalog, $duration );
+			set_transient( $cache_key, $catalog, $cache_ttl );
 		}
 
 		self::$catalog = $catalog;
@@ -411,5 +399,129 @@ class TIMU_Module_Registry {
 		$decoded = json_decode( $json, true );
 
 		return ( json_last_error() === JSON_ERROR_NONE && is_array( $decoded ) ) ? $decoded : array();
+	}
+
+	/**
+	 * Fetch remote catalog with retries and integrity checks.
+	 *
+	 * @param string $remote_url Catalog URL.
+	 * @return array Catalog modules or empty array on failure.
+	 */
+	private static function fetch_remote_catalog( string $remote_url ): array {
+		$allowed_hosts = apply_filters(
+			'timu_catalog_allowed_hosts',
+			array( 'thisismyurl.com', 'raw.githubusercontent.com', 'github.com' )
+		);
+
+		if ( ! self::is_allowed_catalog_url( $remote_url, $allowed_hosts ) ) {
+			do_action( 'timu_catalog_fetch_error', array( 'url' => $remote_url, 'reason' => 'disallowed_host' ) );
+			return array();
+		}
+
+		$timeout  = (int) apply_filters( 'timu_catalog_timeout', 5 );
+		$attempts = 2;
+		$last_err = null;
+
+		for ( $i = 0; $i < $attempts; $i++ ) {
+			$response = wp_remote_get(
+				$remote_url,
+				array(
+					'timeout' => $timeout,
+					'headers' => array( 'Accept' => 'application/json' ),
+				)
+			);
+
+			if ( is_wp_error( $response ) ) {
+				$last_err = $response->get_error_message();
+				continue;
+			}
+
+			if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
+				$last_err = 'http_' . wp_remote_retrieve_response_code( $response );
+				continue;
+			}
+
+			$body    = wp_remote_retrieve_body( $response );
+			$decoded = json_decode( $body, true );
+
+			if ( json_last_error() !== JSON_ERROR_NONE || ! is_array( $decoded ) ) {
+				$last_err = 'invalid_json';
+				continue;
+			}
+
+			$modules = self::normalize_catalog( $decoded );
+			if ( empty( $modules ) ) {
+				$last_err = 'empty_catalog';
+				continue;
+			}
+
+			if ( ! self::validate_catalog_checksum( $decoded, $modules ) ) {
+				$last_err = 'checksum_mismatch';
+				continue;
+			}
+
+			return $modules;
+		}
+
+		do_action( 'timu_catalog_fetch_error', array( 'url' => $remote_url, 'reason' => $last_err ?? 'unknown' ) );
+
+		return array();
+	}
+
+	/**
+	 * Validate allowed hosts for catalog URL.
+	 *
+	 * @param string $url URL to validate.
+	 * @param array  $allowed_hosts Allowed hostnames.
+	 * @return bool
+	 */
+	private static function is_allowed_catalog_url( string $url, array $allowed_hosts = array() ): bool {
+		$host = wp_parse_url( $url, PHP_URL_HOST );
+		if ( empty( $host ) ) {
+			return false;
+		}
+
+		if ( empty( $allowed_hosts ) ) {
+			return true;
+		}
+
+		return in_array( strtolower( $host ), array_map( 'strtolower', $allowed_hosts ), true );
+	}
+
+	/**
+	 * Normalize catalog structure to a modules array.
+	 *
+	 * @param array $decoded Decoded JSON.
+	 * @return array Modules array.
+	 */
+	private static function normalize_catalog( array $decoded ): array {
+		if ( isset( $decoded['modules'] ) && is_array( $decoded['modules'] ) ) {
+			return $decoded['modules'];
+		}
+
+		// Already a flat array of modules.
+		if ( isset( $decoded[0] ) && is_array( $decoded[0] ) ) {
+			return $decoded;
+		}
+
+		return array();
+	}
+
+	/**
+	 * Validate catalog checksum when provided.
+	 *
+	 * @param array $decoded Raw decoded catalog (may include checksum/modules).
+	 * @param array $modules Normalized modules array.
+	 * @return bool True if valid or not provided, false if mismatch.
+	 */
+	private static function validate_catalog_checksum( array $decoded, array $modules ): bool {
+		if ( empty( $decoded['checksum'] ) ) {
+			return true; // No checksum provided, accept.
+		}
+
+		$expected = (string) $decoded['checksum'];
+		$actual   = hash( 'sha256', wp_json_encode( $modules ) );
+
+		return hash_equals( $expected, $actual );
 	}
 }
