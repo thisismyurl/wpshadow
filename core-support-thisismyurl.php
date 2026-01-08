@@ -252,6 +252,10 @@ function timu_core_init(): void {
 	require_once TIMU_CORE_PATH . 'includes/class-timu-vault.php';
 	TIMU_Vault::init();
 
+	// Load vault size monitoring (real-time alerts).
+	require_once TIMU_CORE_PATH . 'includes/class-timu-vault-size-monitor.php';
+	TIMU_Vault_Size_Monitor::init();
+
 	// Load plugin upgrader for install/update flows.
 	require_once TIMU_CORE_PATH . 'includes/class-timu-plugin-upgrader.php';
 
