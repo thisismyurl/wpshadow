@@ -118,6 +118,26 @@ core-support-thisismyurl/
 - PHPStan Level 8
 - PHPUnit for testing
 
+## Documentation
+
+### User Guides
+
+- **[Dashboard User Guide](DASHBOARD_USER_GUIDE.md)** — Complete admin dashboard documentation with workflows, settings, and FAQ
+- **Using the Support Dashboard** (in-plugin) — Help text and inline documentation
+- **Multisite Guide** — Network Admin policies and site-level overrides
+
+### Developer Resources
+
+- **README.md** — This file; architecture and installation
+- **CHANGELOG.md** — Version history and release notes
+- **[VAULT_PRIVACY_ERASER.md](VAULT_PRIVACY_ERASER.md)** — Privacy and data erasure documentation
+
+### External Links
+
+- **Online Documentation:** https://thisismyurl.com/core-support-thisismyurl/
+- **Support:** https://thisismyurl.com/core-support-thisismyurl/#support
+- **GitHub Issues:** https://github.com/thisismyurl/core-support-thisismyurl
+
 ## Support
 
 - **Documentation:** https://thisismyurl.com/core-support-thisismyurl/
