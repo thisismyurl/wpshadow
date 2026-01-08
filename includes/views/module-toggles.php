@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="wrap timu-module-settings" role="main" aria-label="<?php esc_attr_e( 'Module Configuration Settings', 'core-support-thisismyurl' ); ?>">
 	<h2><?php esc_html_e( 'Module Configuration', 'core-support-thisismyurl' ); ?></h2>
-	
+
 	<form method="post" action="options.php">
 		<?php
 		settings_fields( 'timu_core_modules' );

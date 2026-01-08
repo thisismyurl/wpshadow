@@ -256,6 +256,10 @@ function timu_core_init(): void {
 	require_once TIMU_CORE_PATH . 'includes/class-timu-vault-size-monitor.php';
 	TIMU_Vault_Size_Monitor::init();
 
+	// Load network license broadcaster for multisite (Super Admin push to all sites).
+	require_once TIMU_CORE_PATH . 'includes/class-timu-network-license.php';
+	TIMU_Network_License::init();
+
 	// Load plugin upgrader for install/update flows.
 	require_once TIMU_CORE_PATH . 'includes/class-timu-plugin-upgrader.php';
 

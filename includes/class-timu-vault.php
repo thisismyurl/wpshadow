@@ -1900,13 +1900,24 @@ class TIMU_Vault {
 	 * @param int    $offset Offset for pagination.
 	 * @param int    $limit Limit per page.
 	 * @param string $level_filter Optional level filter (error|warning|info).
+	 * @param string $search_query Optional search query (matches file name or attachment ID).
 	 * @return array Array of log entries.
 	 */
-	public static function get_logs( int $offset = 0, int $limit = 50, string $level_filter = '' ): array {
+	public static function get_logs( int $offset = 0, int $limit = 50, string $level_filter = '', string $search_query = '' ): array {
 		$logs = (array) get_option( self::LOG_OPTION, array() );
 
 		if ( ! empty( $level_filter ) ) {
 			$logs = array_filter( $logs, fn( $entry ) => ( $entry['level'] ?? '' ) === $level_filter );
+		}
+
+		if ( ! empty( $search_query ) ) {
+			$logs = array_filter(
+				$logs,
+				fn( $entry ) =>
+					stripos( (string) ( $entry['reason'] ?? '' ), $search_query ) !== false
+					|| stripos( (string) ( $entry['operation'] ?? '' ), $search_query ) !== false
+					|| stripos( (string) ( $entry['attachment_id'] ?? '' ), $search_query ) !== false
+			);
 		}
 
 		// Re-index after filter.
@@ -1916,16 +1927,27 @@ class TIMU_Vault {
 	}
 
 	/**
-	 * Get total count of logs with optional level filter.
+	 * Get total count of logs with optional level filter and search query.
 	 *
 	 * @param string $level_filter Optional level filter.
+	 * @param string $search_query Optional search query.
 	 * @return int
 	 */
-	public static function get_log_count( string $level_filter = '' ): int {
+	public static function get_log_count( string $level_filter = '', string $search_query = '' ): int {
 		$logs = (array) get_option( self::LOG_OPTION, array() );
 
 		if ( ! empty( $level_filter ) ) {
 			$logs = array_filter( $logs, fn( $entry ) => ( $entry['level'] ?? '' ) === $level_filter );
+		}
+
+		if ( ! empty( $search_query ) ) {
+			$logs = array_filter(
+				$logs,
+				fn( $entry ) =>
+					stripos( (string) ( $entry['reason'] ?? '' ), $search_query ) !== false
+					|| stripos( (string) ( $entry['operation'] ?? '' ), $search_query ) !== false
+					|| stripos( (string) ( $entry['attachment_id'] ?? '' ), $search_query ) !== false
+			);
 		}
 
 		return count( $logs );

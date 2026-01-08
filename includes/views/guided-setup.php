@@ -41,12 +41,12 @@ $install_url = add_query_arg(
 );
 ?>
 <div class="timu-setup-wizard" style="max-width: 800px; margin: 40px auto; padding: 30px; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" role="main" aria-label="<?php esc_attr_e( 'Core Support Setup Wizard', 'core-support-thisismyurl' ); ?>">
-	
+
 	<h1><?php esc_html_e( 'Welcome to Core Support', 'core-support-thisismyurl' ); ?></h1>
 	<p><?php esc_html_e( 'The Hub of the thisismyurl.com Support Suite. Let\'s set up the recommended modules to get you started.', 'core-support-thisismyurl' ); ?></p>
 
 	<h2><?php esc_html_e( 'Recommended Module Stack', 'core-support-thisismyurl' ); ?></h2>
-	
+
 	<div style="display: grid; gap: 20px; margin: 20px 0;" role="region" aria-label="<?php esc_attr_e( 'Recommended modules list', 'core-support-thisismyurl' ); ?>">
 		<?php foreach ( $recommended_modules as $slug => $module ) : ?>
 			<div style="padding: 15px; background: #f5f5f5; border-left: 4px solid #2271b1; border-radius: 4px;">

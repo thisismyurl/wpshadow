@@ -125,6 +125,11 @@ $modules_url = is_network_admin()
 						</tbody>
 					</table>
 				</div>
+				<p style="margin-top: 12px;">
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=timu-support-settings#timu-vault-logs' ) ); ?>" class="button button-small">
+						<?php esc_html_e( 'View Full Log History →', 'core-support-thisismyurl' ); ?>
+					</a>
+				</p>
 			<?php else : ?>
 				<p><em><?php esc_html_e( 'No recent activity yet.', 'core-support-thisismyurl' ); ?></em></p>
 			<?php endif; ?>

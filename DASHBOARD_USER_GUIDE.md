@@ -71,7 +71,7 @@ In the **Module Configuration** section, you can toggle features on/off:
 
 A table shows all installed modules with:
 
-- **Module name** 
+- **Module name**
 - **Status:** "Active" (green) or "Installed" (orange, if installed but not activated)
 - **Version:** Plugin version number
 
@@ -235,22 +235,22 @@ Each log entry shows:
 
 ## FAQ
 
-**Q: What if I disable a module toggle?**  
+**Q: What if I disable a module toggle?**
 A: That module's features won't work, but the plugin stays active. No data is deleted. Re-enable anytime.
 
-**Q: Can I use Core Support without child plugins?**  
+**Q: Can I use Core Support without child plugins?**
 A: Core Support works alone, but many features require Media Support (encryption, fallback engines). We recommend installing the full stack.
 
-**Q: How often are logs saved?**  
+**Q: How often are logs saved?**
 A: Every time a significant action happens: upload, backup, restore, configuration change, error, etc.
 
-**Q: Can I delete vault originals manually?**  
+**Q: Can I delete vault originals manually?**
 A: No—The Vault is managed automatically via the Vault Settings. Use **Retention Policies** or **Purge Tools** to manage cleanup.
 
-**Q: Do I need to manually back up the vault?**  
+**Q: Do I need to manually back up the vault?**
 A: Vault is your backup! Originals are stored securely in `/vault/`. Use **Export Full Vault** in Settings to create an offline ZIP backup.
 
-**Q: What's "Network-wide"?**  
+**Q: What's "Network-wide"?**
 A: In multisite installations, some settings can be applied to all sites at once via Network Admin. Individual sites can override (if not locked).
 
 ---

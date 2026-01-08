@@ -697,15 +697,54 @@ $license_checked = ! empty( $license_state['checked_at'] ) ? date_i18n( 'M j, Y 
 	<?php endif; ?>
 
 	<?php
-	$logs_total  = TIMU_Vault::get_log_count();
+	// Get level filter and search query from parameters.
+	$level_filter = isset( $_GET['timu_log_level'] ) ? sanitize_text_field( wp_unslash( $_GET['timu_log_level'] ) ) : '';
+	$level_filter = in_array( $level_filter, array( 'error', 'warning', 'info' ), true ) ? $level_filter : '';
+
+	$search_query = isset( $_GET['timu_log_search'] ) ? sanitize_text_field( wp_unslash( $_GET['timu_log_search'] ) ) : '';
+
+	$logs_total  = TIMU_Vault::get_log_count( $level_filter, $search_query );
 	$logs_page   = isset( $_GET['timu_log_page'] ) ? max( 1, (int) $_GET['timu_log_page'] ) : 1;
 	$logs_limit  = 20;
 	$logs_offset = ( $logs_page - 1 ) * $logs_limit;
-	$logs        = TIMU_Vault::get_logs( $logs_offset, $logs_limit );
+	$logs        = TIMU_Vault::get_logs( $logs_offset, $logs_limit, $level_filter, $search_query );
 	$logs_pages  = ceil( $logs_total / $logs_limit );
 	?>
 
 	<?php if ( $logs_total > 0 ) : ?>
+		<!-- Activity Log Filter & Search -->
+		<div style="margin-bottom: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+			<form method="get" action="" style="display: flex; gap: 8px; align-items: center;">
+				<?php wp_nonce_field( 'timu_log_filter', 'timu_log_filter_nonce' ); ?>
+				<input type="hidden" name="page" value="<?php echo esc_attr( isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '' ); ?>" />
+				
+				<!-- Level Filter -->
+				<label for="timu_log_level_filter" style="margin-right: 5px;">
+					<?php echo esc_html__( 'Filter by Level:', 'core-support-thisismyurl' ); ?>
+				</label>
+				<select id="timu_log_level_filter" name="timu_log_level" style="min-width: 120px;">
+					<option value=""><?php echo esc_html__( 'All Levels', 'core-support-thisismyurl' ); ?></option>
+					<option value="info" <?php selected( $level_filter, 'info' ); ?>><?php echo esc_html__( 'Info', 'core-support-thisismyurl' ); ?></option>
+					<option value="warning" <?php selected( $level_filter, 'warning' ); ?>><?php echo esc_html__( 'Warning', 'core-support-thisismyurl' ); ?></option>
+					<option value="error" <?php selected( $level_filter, 'error' ); ?>><?php echo esc_html__( 'Error', 'core-support-thisismyurl' ); ?></option>
+				</select>
+
+				<!-- Search Input -->
+				<label for="timu_log_search" style="margin-left: 15px; margin-right: 5px;">
+					<?php echo esc_html__( 'Search:', 'core-support-thisismyurl' ); ?>
+				</label>
+				<input type="text" id="timu_log_search" name="timu_log_search" value="<?php echo esc_attr( $search_query ); ?>" placeholder="<?php echo esc_attr__( 'File, ID, or operation...', 'core-support-thisismyurl' ); ?>" style="min-width: 150px;" />
+
+				<!-- Action Buttons -->
+				<button class="button" type="submit"><?php echo esc_html__( 'Search', 'core-support-thisismyurl' ); ?></button>
+				<?php if ( ! empty( $level_filter ) || ! empty( $search_query ) ) : ?>
+					<a href="<?php echo esc_url( add_query_arg( 'page', isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '' ) ); ?>" class="button">
+						<?php echo esc_html__( 'Clear All', 'core-support-thisismyurl' ); ?>
+					</a>
+				<?php endif; ?>
+			</form>
+		</div>
+
 		<table class="wp-list-table widefat striped">
 			<thead>
 				<tr>
@@ -746,17 +785,25 @@ $license_checked = ! empty( $license_state['checked_at'] ) ? date_i18n( 'M j, Y 
 		<?php if ( $logs_pages > 1 ) : ?>
 			<div style="margin-top: 15px;">
 				<?php
-				$pagination = paginate_links(
-					array(
-						'base'      => add_query_arg( 'timu_log_page', '%#%' ),
-						'format'    => '',
-						'prev_text' => __( '← Previous', 'core-support-thisismyurl' ),
-						'next_text' => __( 'Next →', 'core-support-thisismyurl' ),
-						'total'     => $logs_pages,
-						'current'   => $logs_page,
-						'echo'      => false,
-					)
+				$pagination_args = array(
+					'base'      => add_query_arg( 'timu_log_page', '%#%' ),
+					'format'    => '',
+					'prev_text' => __( '← Previous', 'core-support-thisismyurl' ),
+					'next_text' => __( 'Next →', 'core-support-thisismyurl' ),
+					'total'     => $logs_pages,
+					'current'   => $logs_page,
+					'echo'      => false,
 				);
+
+				// Preserve level filter and search query in pagination links.
+				if ( ! empty( $level_filter ) ) {
+					$pagination_args['base'] = add_query_arg( 'timu_log_level', $level_filter, $pagination_args['base'] );
+				}
+				if ( ! empty( $search_query ) ) {
+					$pagination_args['base'] = add_query_arg( 'timu_log_search', $search_query, $pagination_args['base'] );
+				}
+
+				$pagination = paginate_links( $pagination_args );
 				echo wp_kses_post( $pagination );
 				?>
 			</div>
