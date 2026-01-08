@@ -161,6 +161,89 @@
 	border: 1px solid #2271b1;
 }
 
+/* Module action buttons */
+.timu-btn-install-activate,
+.timu-btn-update,
+.timu-activate,
+.timu-deactivate-network {
+	display: inline-block;
+	padding: 5px 10px;
+	margin: 0;
+	background: #2271b1;
+	color: #fff;
+	border: 1px solid #2271b1;
+	border-radius: 3px;
+	font-size: 13px;
+	font-weight: 500;
+	cursor: pointer;
+	text-decoration: none;
+	transition: all 0.2s ease;
+}
+
+.timu-btn-install-activate:hover,
+.timu-btn-update:hover,
+.timu-activate:hover,
+.timu-deactivate-network:hover {
+	background: #135e96;
+	border-color: #135e96;
+	text-decoration: none;
+	color: #fff;
+}
+
+.timu-btn-install-activate:focus,
+.timu-btn-update:focus,
+.timu-activate:focus,
+.timu-deactivate-network:focus {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+}
+
+.timu-btn-install-activate:disabled,
+.timu-btn-update:disabled,
+.timu-activate:disabled,
+.timu-deactivate-network:disabled,
+.timu-btn-install-activate.timu-loading,
+.timu-btn-update.timu-loading,
+.timu-activate.timu-loading,
+.timu-deactivate-network.timu-loading {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.timu-btn-install-activate.timu-loading::before,
+.timu-btn-update.timu-loading::before,
+.timu-activate.timu-loading::before,
+.timu-deactivate-network.timu-loading::before {
+	content: '';
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	margin-right: 6px;
+	border: 2px solid rgba(255, 255, 255, 0.3);
+	border-radius: 50%;
+	border-top-color: #fff;
+	animation: timu-spinner 0.6s linear infinite;
+	vertical-align: middle;
+}
+
+@keyframes timu-spinner {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* Action link styles */
+.timu-action-link {
+	color: #2271b1;
+	text-decoration: none;
+	font-size: 13px;
+}
+
+.timu-action-link:hover {
+	color: #135e96;
+	text-decoration: underline;
+}
+
 /* @changelog
  * [1.2601.71920] - 2026-01-07 19:35
  * - Issue #33: In-dashboard install/update flows
@@ -175,6 +258,57 @@
  * - Added status/update badges and available card styling
  * - Styled new stats icons for Available/Updates
  * - Added hidden slider styling for toggle accessibility
+ */
+
+/* Responsive tables & accessibility (Issue #41: Dashboard QA & Accessibility Audit) */
+.timu-table-responsive {
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+	width: 100%;
+}
+
+.timu-skip-link {
+	position: absolute;
+	top: -9999px;
+	z-index: 99999;
+}
+
+.timu-skip-link:focus {
+	position: relative;
+	top: auto;
+	left: auto;
+	width: auto;
+	height: auto;
+	display: block;
+	padding: 10px;
+	background: #2271b1;
+	color: #fff;
+	text-decoration: none;
+}
+
+/* Dashboard main landmark for screen readers */
+[role="main"] {
+	display: block;
+}
+
+/* Table caption visibility for screen readers */
+table caption {
+	display: table-caption;
+	text-indent: -9999px;
+	height: 0;
+	overflow: hidden;
+}
+
+/* Enhance table headers with scope for proper semantics */
+th[scope="col"] {
+	text-align: left;
+	font-weight: 600;
+}
+
+/* Notice with live region for status updates (Issue #41) */
+.notice[role="status"] {
+	margin: 16px 0;
+}
  * [1.2601.71815] - 2026-01-07 18:15
  * - Added toggle switch component styles (custom checkbox UI)
  * - Implemented loading state animations with spinner overlay

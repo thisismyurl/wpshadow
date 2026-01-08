@@ -11,20 +11,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Normalize inputs.
-$modules            = isset( $modules ) && is_array( $modules ) ? $modules : array();
-$activity_logs      = isset( $activity_logs ) && is_array( $activity_logs ) ? $activity_logs : array();
-$pending_uploads    = isset( $pending_uploads ) && is_array( $pending_uploads ) ? $pending_uploads : array();
-$schedule_snapshot  = isset( $schedule_snapshot ) && is_array( $schedule_snapshot ) ? $schedule_snapshot : array();
-$run_now_nonce      = isset( $run_now_nonce ) ? (string) $run_now_nonce : '';
-$hub_modules        = array_filter( $modules, static fn( $m ) => ( $m['type'] ?? '' ) === 'hub' );
-$spoke_modules      = array_filter( $modules, static fn( $m ) => ( $m['type'] ?? '' ) === 'spoke' );
+$modules           = isset( $modules ) && is_array( $modules ) ? $modules : array();
+$activity_logs     = isset( $activity_logs ) && is_array( $activity_logs ) ? $activity_logs : array();
+$pending_uploads   = isset( $pending_uploads ) && is_array( $pending_uploads ) ? $pending_uploads : array();
+$schedule_snapshot = isset( $schedule_snapshot ) && is_array( $schedule_snapshot ) ? $schedule_snapshot : array();
+$run_now_nonce     = isset( $run_now_nonce ) ? (string) $run_now_nonce : '';
+$hub_modules       = array_filter( $modules, static fn( $m ) => ( $m['type'] ?? '' ) === 'hub' );
+$spoke_modules     = array_filter( $modules, static fn( $m ) => ( $m['type'] ?? '' ) === 'spoke' );
 
 $modules_url = is_network_admin()
 	? network_admin_url( 'admin.php?page=timu-core-modules' )
 	: admin_url( 'admin.php?page=timu-core-modules' );
 ?>
 
-<div class="wrap timu-dashboard-wrap">
+<div class="wrap timu-dashboard-wrap" id="timu-dashboard-main" role="main">
+	<a class="timu-skip-link screen-reader-text" href="#timu-dashboard-grid"><?php esc_html_e( 'Skip to dashboard content', 'core-support-thisismyurl' ); ?></a>
 	<div class="timu-dashboard-header">
 		<h1><?php esc_html_e( 'Support Dashboard', 'core-support-thisismyurl' ); ?></h1>
 		<p class="description"><?php esc_html_e( 'Operational view of module activity, scheduled tasks, and pending reviews.', 'core-support-thisismyurl' ); ?></p>
@@ -76,23 +77,25 @@ $modules_url = is_network_admin()
 		</div>
 	</div>
 
-	<div class="timu-dashboard-grid">
+	<div class="timu-dashboard-grid" id="timu-dashboard-grid">
 		<div class="timu-card">
 			<h2><?php esc_html_e( 'Activity Log', 'core-support-thisismyurl' ); ?></h2>
 			<p class="description"><?php esc_html_e( 'Recent module installs, updates, toggles, and Vault events.', 'core-support-thisismyurl' ); ?></p>
 			<?php if ( ! empty( $activity_logs ) ) : ?>
-				<table class="widefat fixed striped">
-					<thead>
-					<tr>
-						<th><?php esc_html_e( 'Time', 'core-support-thisismyurl' ); ?></th>
-						<th><?php esc_html_e( 'Level', 'core-support-thisismyurl' ); ?></th>
-						<th><?php esc_html_e( 'Task', 'core-support-thisismyurl' ); ?></th>
-						<th><?php esc_html_e( 'File', 'core-support-thisismyurl' ); ?></th>
-						<th><?php esc_html_e( 'User', 'core-support-thisismyurl' ); ?></th>
-						<th><?php esc_html_e( 'Details', 'core-support-thisismyurl' ); ?></th>
-					</tr>
-					</thead>
-					<tbody>
+				<div class="timu-table-responsive">
+					<table class="widefat fixed striped">
+						<caption class="screen-reader-text"><?php esc_html_e( 'Recent activity entries for the Support Dashboard.', 'core-support-thisismyurl' ); ?></caption>
+						<thead>
+						<tr>
+							<th scope="col"><?php esc_html_e( 'Time', 'core-support-thisismyurl' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Level', 'core-support-thisismyurl' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Task', 'core-support-thisismyurl' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'File', 'core-support-thisismyurl' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'User', 'core-support-thisismyurl' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Details', 'core-support-thisismyurl' ); ?></th>
+						</tr>
+						</thead>
+						<tbody>
 						<?php foreach ( $activity_logs as $entry ) : ?>
 							<?php
 							$timestamp = isset( $entry['timestamp'] ) ? strtotime( $entry['timestamp'] ) : 0;
@@ -104,7 +107,7 @@ $modules_url = is_network_admin()
 							}
 							$user_name = $entry['user'] ?? '';
 							if ( empty( $user_name ) && ! empty( $entry['user_id'] ) ) {
-								$user = get_user_by( 'id', (int) $entry['user_id'] );
+								$user      = get_user_by( 'id', (int) $entry['user_id'] );
 								$user_name = $user && $user->exists() ? $user->display_name : '';
 							}
 							$reason = $entry['reason'] ?? '';
@@ -119,8 +122,9 @@ $modules_url = is_network_admin()
 								<td><?php echo $reason ? esc_html( $reason ) : '—'; ?></td>
 							</tr>
 						<?php endforeach; ?>
-					</tbody>
-				</table>
+						</tbody>
+					</table>
+				</div>
 			<?php else : ?>
 				<p><em><?php esc_html_e( 'No recent activity yet.', 'core-support-thisismyurl' ); ?></em></p>
 			<?php endif; ?>
@@ -130,20 +134,22 @@ $modules_url = is_network_admin()
 			<h2><?php esc_html_e( 'Scheduled Tasks', 'core-support-thisismyurl' ); ?></h2>
 			<p class="description"><?php esc_html_e( 'Upcoming suite jobs with their next run window.', 'core-support-thisismyurl' ); ?></p>
 			<?php if ( isset( $_GET['timu_run_now'] ) ) : ?>
-				<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Task started immediately.', 'core-support-thisismyurl' ); ?></p></div>
+				<div class="notice notice-success is-dismissible" role="status" aria-live="polite"><p><?php esc_html_e( 'Task started immediately.', 'core-support-thisismyurl' ); ?></p></div>
 			<?php endif; ?>
 			<?php if ( ! empty( $schedule_snapshot ) ) : ?>
-				<table class="widefat fixed striped">
-					<thead>
-					<tr>
-						<th><?php esc_html_e( 'Task', 'core-support-thisismyurl' ); ?></th>
-						<th><?php esc_html_e( 'Next run', 'core-support-thisismyurl' ); ?></th>
-						<th><?php esc_html_e( 'Last run', 'core-support-thisismyurl' ); ?></th>
-						<th><?php esc_html_e( 'Status', 'core-support-thisismyurl' ); ?></th>
-						<th><?php esc_html_e( 'Action', 'core-support-thisismyurl' ); ?></th>
-					</tr>
-					</thead>
-					<tbody>
+				<div class="timu-table-responsive">
+					<table class="widefat fixed striped">
+						<caption class="screen-reader-text"><?php esc_html_e( 'Scheduled suite tasks with next and last run times.', 'core-support-thisismyurl' ); ?></caption>
+						<thead>
+						<tr>
+							<th scope="col"><?php esc_html_e( 'Task', 'core-support-thisismyurl' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Next run', 'core-support-thisismyurl' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Last run', 'core-support-thisismyurl' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Status', 'core-support-thisismyurl' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Action', 'core-support-thisismyurl' ); ?></th>
+						</tr>
+						</thead>
+						<tbody>
 						<?php foreach ( $schedule_snapshot as $task_key => $task_data ) : ?>
 							<?php
 							$next_run = isset( $task_data['next_run'] ) ? (int) $task_data['next_run'] : 0;
@@ -152,9 +158,10 @@ $modules_url = is_network_admin()
 							$next_txt = $next_run ? date_i18n( 'M j, Y g:i a', $next_run ) : __( 'Not scheduled', 'core-support-thisismyurl' );
 							$last_txt = $last_run ? date_i18n( 'M j, Y g:i a', $last_run ) : '—';
 							$hook     = $task_data['hook'] ?? '';
+							$task_lbl = isset( $task_data['label'] ) ? wp_strip_all_tags( (string) $task_data['label'] ) : ucfirst( $task_key );
 							?>
 							<tr>
-								<td><?php echo esc_html( $task_data['label'] ?? ucfirst( $task_key ) ); ?></td>
+								<td><?php echo esc_html( $task_lbl ); ?></td>
 								<td><?php echo esc_html( $next_txt ); ?></td>
 								<td><?php echo esc_html( $last_txt ); ?></td>
 								<td><?php echo esc_html( ucfirst( $status ) ); ?></td>
@@ -164,7 +171,7 @@ $modules_url = is_network_admin()
 											<?php wp_nonce_field( 'timu_run_task_now', 'nonce' ); ?>
 											<input type="hidden" name="action" value="timu_run_task_now" />
 											<input type="hidden" name="hook" value="<?php echo esc_attr( $hook ); ?>" />
-											<button type="submit" class="button button-small"><?php esc_html_e( 'Run now', 'core-support-thisismyurl' ); ?></button>
+											<button type="submit" class="button button-small" aria-label="<?php echo esc_attr( sprintf( __( 'Run %s now', 'core-support-thisismyurl' ), $task_lbl ) ); ?>"><?php esc_html_e( 'Run now', 'core-support-thisismyurl' ); ?></button>
 										</form>
 									<?php else : ?>
 										—
@@ -174,49 +181,52 @@ $modules_url = is_network_admin()
 						<?php endforeach; ?>
 					</tbody>
 				</table>
-			<?php else : ?>
-				<p><em><?php esc_html_e( 'No scheduled tasks found.', 'core-support-thisismyurl' ); ?></em></p>
-			<?php endif; ?>
-		</div>
+			</div>
+		<?php else : ?>
+			<p><em><?php esc_html_e( 'No scheduled tasks found.', 'core-support-thisismyurl' ); ?></em></p>
+		<?php endif; ?>
 	</div>
+</div>
 
-	<div class="timu-card">
-		<h2><?php esc_html_e( 'Pending Contributor Uploads', 'core-support-thisismyurl' ); ?></h2>
-		<p class="description"><?php esc_html_e( 'Uploads from contributors are optimized by default and held for Editor+ review.', 'core-support-thisismyurl' ); ?></p>
-		<?php if ( ! empty( $pending_uploads ) ) : ?>
+<div class="timu-card">
+	<h2><?php esc_html_e( 'Pending Contributor Uploads', 'core-support-thisismyurl' ); ?></h2>
+	<p class="description"><?php esc_html_e( 'Uploads from contributors are optimized by default and held for Editor+ review.', 'core-support-thisismyurl' ); ?></p>
+	<?php if ( ! empty( $pending_uploads ) ) : ?>
+		<div class="timu-table-responsive">
 			<table class="widefat fixed striped">
+				<caption class="screen-reader-text"><?php esc_html_e( 'Pending contributor uploads awaiting review.', 'core-support-thisismyurl' ); ?></caption>
 				<thead>
 				<tr>
-					<th><?php esc_html_e( 'File', 'core-support-thisismyurl' ); ?></th>
-					<th><?php esc_html_e( 'Uploaded by', 'core-support-thisismyurl' ); ?></th>
-					<th><?php esc_html_e( 'Uploaded at', 'core-support-thisismyurl' ); ?></th>
-					<th><?php esc_html_e( 'Optimized', 'core-support-thisismyurl' ); ?></th>
-					<th><?php esc_html_e( 'Action', 'core-support-thisismyurl' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'File', 'core-support-thisismyurl' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Uploaded by', 'core-support-thisismyurl' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Uploaded at', 'core-support-thisismyurl' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Optimized', 'core-support-thisismyurl' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Action', 'core-support-thisismyurl' ); ?></th>
 				</tr>
 				</thead>
 				<tbody>
-					<?php foreach ( $pending_uploads as $item ) : ?>
-						<?php
-						$uploaded = ! empty( $item['date'] ) ? date_i18n( 'M j, Y g:i a', strtotime( $item['date'] ) ) : '—';
-						?>
-						<tr>
-							<td><?php echo esc_html( $item['file'] ?: $item['title'] ); ?></td>
-							<td><?php echo esc_html( $item['user'] ?: __( 'Unknown', 'core-support-thisismyurl' ) ); ?></td>
-							<td><?php echo esc_html( $uploaded ); ?></td>
-							<td><?php echo ! empty( $item['optimized'] ) ? esc_html__( 'Yes', 'core-support-thisismyurl' ) : esc_html__( 'No', 'core-support-thisismyurl' ); ?></td>
-							<td>
-								<?php if ( ! empty( $item['edit_link'] ) ) : ?>
-									<a class="button" href="<?php echo esc_url( $item['edit_link'] ); ?>"><?php esc_html_e( 'Review', 'core-support-thisismyurl' ); ?></a>
-								<?php else : ?>
-									—
-								<?php endif; ?>
-							</td>
-						</tr>
-					<?php endforeach; ?>
+				<?php foreach ( $pending_uploads as $item ) : ?>
+					<?php
+					$uploaded = ! empty( $item['date'] ) ? date_i18n( 'M j, Y g:i a', strtotime( $item['date'] ) ) : '—';
+					?>
+					<tr>
+						<td><?php echo esc_html( $item['file'] ?: $item['title'] ); ?></td>
+						<td><?php echo esc_html( $item['user'] ?: __( 'Unknown', 'core-support-thisismyurl' ) ); ?></td>
+						<td><?php echo esc_html( $uploaded ); ?></td>
+						<td><?php echo ! empty( $item['optimized'] ) ? esc_html__( 'Yes', 'core-support-thisismyurl' ) : esc_html__( 'No', 'core-support-thisismyurl' ); ?></td>
+						<td>
+							<?php if ( ! empty( $item['edit_link'] ) ) : ?>
+								<a class="button" href="<?php echo esc_url( $item['edit_link'] ); ?>"><?php esc_html_e( 'Review', 'core-support-thisismyurl' ); ?></a>
+							<?php else : ?>
+								—
+							<?php endif; ?>
+						</td>
+					</tr>
+				<?php endforeach; ?>
 				</tbody>
 			</table>
-		<?php else : ?>
-			<p><em><?php esc_html_e( 'No pending contributor uploads.', 'core-support-thisismyurl' ); ?></em></p>
-		<?php endif; ?>
-	</div>
+		</div>
+	<?php else : ?>
+		<p><em><?php esc_html_e( 'No pending contributor uploads.', 'core-support-thisismyurl' ); ?></em></p>
+	<?php endif; ?>
 </div>

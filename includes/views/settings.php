@@ -6,48 +6,226 @@
  */
 
 use TIMU\CoreSupport\TIMU_Vault;
+use TIMU\CoreSupport\TIMU_License;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$is_network   = is_network_admin();
-$action_url   = $is_network ? network_admin_url( 'admin.php?page=timu-core-network-settings' ) : admin_url( 'admin.php?page=timu-core-settings' );
-$settings     = TIMU_Vault::get_settings();
-$saved        = isset( $_GET['timu_vault_saved'] );
-$locked       = ! $is_network && ! TIMU_Vault::site_override_allowed();
-$tool_notice  = isset( $_GET['timu_vault_tool'] ) ? sanitize_text_field( wp_unslash( $_GET['timu_vault_tool'] ) ) : '';
-$tool_ok      = isset( $_GET['ok'] ) ? (int) $_GET['ok'] : 0;
-$tool_fail    = isset( $_GET['fail'] ) ? (int) $_GET['fail'] : 0;
-$tool_skipped = isset( $_GET['skipped'] ) ? (int) $_GET['skipped'] : 0;
-$tool_missing = isset( $_GET['missing'] ) ? (int) $_GET['missing'] : 0;
+$is_network      = is_network_admin();
+$action_url      = $is_network ? network_admin_url( 'admin.php?page=timu-core-network-settings' ) : admin_url( 'admin.php?page=timu-core-settings' );
+$settings        = TIMU_Vault::get_settings();
+$saved           = isset( $_GET['timu_vault_saved'] );
+$locked          = ! $is_network && ! TIMU_Vault::site_override_allowed();
+$tool_notice     = isset( $_GET['timu_vault_tool'] ) ? sanitize_text_field( wp_unslash( $_GET['timu_vault_tool'] ) ) : '';
+$tool_ok         = isset( $_GET['ok'] ) ? (int) $_GET['ok'] : 0;
+$tool_fail       = isset( $_GET['fail'] ) ? (int) $_GET['fail'] : 0;
+$tool_skipped    = isset( $_GET['skipped'] ) ? (int) $_GET['skipped'] : 0;
+$tool_missing    = isset( $_GET['missing'] ) ? (int) $_GET['missing'] : 0;
+$license_state   = isset( $license_state ) && is_array( $license_state ) ? $license_state : TIMU_License::get_state( false );
+$license_locked  = $is_network;
+$license_status  = $license_state['status'] ?? 'none';
+$license_message = $license_state['message'] ?? '';
+$license_checked = ! empty( $license_state['checked_at'] ) ? date_i18n( 'M j, Y g:i a', (int) $license_state['checked_at'] ) : '—';
 ?>
 <div class="wrap timu-core-wrap">
 	<h1><?php echo esc_html__( 'Core Support - Vault Settings', 'core-support-thisismyurl' ); ?></h1>
 
+	<?php if ( $is_network ) : ?>
+		<div class="notice notice-info"><p><?php echo esc_html__( 'Network Admin: Register your license once, then broadcast it to all sub-sites below.', 'core-support-thisismyurl' ); ?></p></div>
+	<?php endif; ?>
+
+	<?php if ( isset( $_GET['timu_license_status'] ) ) : ?>
+		<?php
+			$status       = sanitize_text_field( wp_unslash( $_GET['timu_license_status'] ) );
+			$message      = isset( $_GET['timu_license_message'] ) ? sanitize_text_field( wp_unslash( $_GET['timu_license_message'] ) ) : '';
+			$notice_class = 'notice-info';
+		if ( 'valid' === $status ) {
+			$notice_class = 'notice-success';
+		} elseif ( in_array( $status, array( 'invalid', 'error' ), true ) ) {
+			$notice_class = 'notice-error';
+		}
+		?>
+		<div class="notice <?php echo esc_attr( $notice_class ); ?> is-dismissible"><p><?php echo esc_html( $message ? $message : __( 'License response received.', 'core-support-thisismyurl' ) ); ?></p></div>
+	<?php endif; ?>
+
+	<div class="timu-license-card" style="margin-top:10px; padding:16px; background:#fff; border:1px solid #ccd0d4;">
+		<h2 style="margin-top:0;"><?php echo esc_html__( 'Suite Registration', 'core-support-thisismyurl' ); ?></h2>
+		<p class="description"><?php echo esc_html__( 'Applies across all TIMU hub and spoke plugins on this site.', 'core-support-thisismyurl' ); ?></p>
+		<p>
+			<strong><?php echo esc_html__( 'Status:', 'core-support-thisismyurl' ); ?></strong>
+			<span style="display:inline-block; padding:2px 8px; border-radius:4px; background:#f1f1f1; margin-left:6px;">
+				<?php echo esc_html( ucfirst( $license_status ) ); ?>
+			</span>
+			<?php if ( 'valid' === $license_status ) : ?>
+				<span class="description" style="margin-left:8px; color:#2271b1;"><?php echo esc_html__( 'Registered for all plugins', 'core-support-thisismyurl' ); ?></span>
+			<?php endif; ?>
+		</p>
+		<p class="description"><?php echo esc_html( sprintf( __( 'Last checked: %s', 'core-support-thisismyurl' ), $license_checked ) ); ?></p>
+
+		<?php $license_button_attr = $license_locked ? 'disabled="disabled"' : ''; ?>
+		<form method="post" action="<?php echo esc_url( $action_url ); ?>">
+			<?php wp_nonce_field( 'timu_license_settings', 'timu_license_nonce' ); ?>
+			<input type="hidden" name="timu_license_action" value="save" />
+			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row"><label for="timu_license_key"><?php echo esc_html__( 'Registration Key', 'core-support-thisismyurl' ); ?></label></th>
+					<td>
+						<input type="text" name="timu_license_key" id="timu_license_key" value="<?php echo esc_attr( $license_state['key'] ?? '' ); ?>" class="regular-text" <?php disabled( $license_locked ); ?> />
+						<p class="description"><?php echo esc_html__( 'Validate once to unlock support and updates across the suite.', 'core-support-thisismyurl' ); ?></p>
+						<?php if ( $license_locked ) : ?>
+							<p class="description" style="color:#a00;">
+								<?php echo esc_html__( 'Licenses are site-specific. Enter the registration key from an individual site dashboard; Network Admin cannot modify it here.', 'core-support-thisismyurl' ); ?>
+							</p>
+						<?php endif; ?>
+					</td>
+				</tr>
+			</table>
+			<?php submit_button( esc_html__( 'Validate & Save', 'core-support-thisismyurl' ), 'primary', 'submit', false, 'style="margin-top:0;" ' . $license_button_attr ); ?>
+		</form>
+	</div>
+
+	<?php if ( $is_network && is_multisite() ) : ?>
+		<div class="timu-broadcast-card" style="margin-top:16px; padding:16px; background:#fff; border:1px solid #ccd0d4;">
+			<h2 style="margin-top:0;"><?php echo esc_html__( 'Network License Broadcast', 'core-support-thisismyurl' ); ?></h2>
+			<p class="description"><?php echo esc_html__( 'Push your registered license key to sub-sites in this network. Each site keeps its own copy for validation.', 'core-support-thisismyurl' ); ?></p>
+
+			<?php if ( ! empty( $license_state['key'] ) && 'valid' === $license_status ) : ?>
+				<form method="post" action="<?php echo esc_url( $action_url ); ?>" class="timu-broadcast-form">
+					<?php wp_nonce_field( 'timu_license_broadcast', 'timu_license_broadcast_nonce' ); ?>
+					<input type="hidden" name="timu_license_action" value="broadcast" />
+					<input type="hidden" name="timu_license_key" value="<?php echo esc_attr( $license_state['key'] ?? '' ); ?>" />
+
+					<div style="margin-bottom:12px;">
+						<label for="timu_broadcast_sites">
+							<strong><?php echo esc_html__( 'Target Sites:', 'core-support-thisismyurl' ); ?></strong>
+						</label>
+					</div>
+
+					<?php
+						$blogs = get_sites( array( 'fields' => 'ids' ) );
+						if ( ! empty( $blogs ) ) :
+							?>
+							<div style="background:#f9f9f9; padding:12px; border:1px solid #e0e0e0; border-radius:4px; max-height:200px; overflow-y:auto;">
+								<?php foreach ( $blogs as $blog_id ) : ?>
+									<?php
+										$blog_id = absint( $blog_id );
+										$blog_info = get_blog_details( $blog_id );
+										if ( ! $blog_info ) {
+											continue;
+										}
+										?>
+									<label style="display:block; margin-bottom:6px;">
+										<input type="checkbox" name="timu_broadcast_site_ids[]" value="<?php echo absint( $blog_id ); ?>" checked="checked" />
+										<?php echo esc_html( $blog_info->blogname ); ?> <span class="description">(<?php echo esc_html( $blog_info->domain . $blog_info->path ); ?>)</span>
+									</label>
+								<?php endforeach; ?>
+							</div>
+							<p class="description" style="margin-top:8px;"><?php echo esc_html__( 'All sites are selected by default. Uncheck any site to exclude it from this broadcast.', 'core-support-thisismyurl' ); ?></p>
+						<?php else : ?>
+							<p class="description"><?php echo esc_html__( 'No sub-sites available to broadcast to.', 'core-support-thisismyurl' ); ?></p>
+						<?php endif; ?>
+					</div>
+
+					<div style="margin-top:16px; margin-bottom:12px;">
+						<label>
+							<input type="checkbox" name="timu_auto_broadcast" id="timu_auto_broadcast" value="1" checked="checked" />
+							<?php echo esc_html__( 'Auto-apply to new sites created after this broadcast', 'core-support-thisismyurl' ); ?>
+						</label>
+					</div>
+
+					<?php submit_button( esc_html__( 'Broadcast License to Selected Sites', 'core-support-thisismyurl' ), 'primary', 'submit', false, 'id="timu-broadcast-btn"' ); ?>
+				</form>
+
+				<div id="timu-broadcast-result" style="margin-top:16px; display:none;"></div>
+
+				<script type="text/javascript">
+					(function() {
+						const form = document.querySelector('.timu-broadcast-form');
+						if (!form) return;
+
+						form.addEventListener('submit', function(e) {
+							e.preventDefault();
+							const btn = form.querySelector('#timu-broadcast-btn');
+							const resultDiv = document.querySelector('#timu-broadcast-result');
+							const key = form.querySelector('input[name="timu_license_key"]').value;
+							const siteIds = [];
+							form.querySelectorAll('input[name="timu_broadcast_site_ids[]"]:checked').forEach(input => {
+								siteIds.push(parseInt(input.value, 10));
+							});
+							const autoBroadcast = form.querySelector('input[name="timu_auto_broadcast"]').checked ? 1 : 0;
+
+							btn.disabled = true;
+							btn.textContent = '<?php echo esc_html__( 'Broadcasting...', 'core-support-thisismyurl' ); ?>';
+							resultDiv.style.display = 'none';
+
+							const xhr = new XMLHttpRequest();
+							xhr.open('POST', ajaxurl, true);
+							xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+							xhr.onload = function() {
+								btn.disabled = false;
+								btn.textContent = '<?php echo esc_html__( 'Broadcast License to Selected Sites', 'core-support-thisismyurl' ); ?>';
+
+								try {
+									const response = JSON.parse(xhr.responseText);
+									let html = '<div class="notice ' + (response.success > 0 && response.failed === 0 ? 'notice-success' : response.failed > 0 ? 'notice-warning' : 'notice-error') + '"><p>';
+									html += '<strong><?php echo esc_html__( 'Broadcast Result:', 'core-support-thisismyurl' ); ?></strong> ';
+									html += '<?php echo esc_html__( 'Success: %d, Failed: %d', 'core-support-thisismyurl' ); ?>'.replace('%d', response.success).replace('%d', response.failed);
+									if (response.errors && response.errors.length > 0) {
+										html += '<ul style="margin-top:8px;">';
+										response.errors.forEach(err => {
+											html += '<li>' + err + '</li>';
+										});
+										html += '</ul>';
+									}
+									html += '</p></div>';
+									resultDiv.innerHTML = html;
+									resultDiv.style.display = 'block';
+								} catch (e) {
+									resultDiv.innerHTML = '<div class="notice notice-error"><p><?php echo esc_html__( 'Server error. Check debug log.', 'core-support-thisismyurl' ); ?></p></div>';
+									resultDiv.style.display = 'block';
+								}
+							};
+							xhr.onerror = function() {
+								btn.disabled = false;
+								btn.textContent = '<?php echo esc_html__( 'Broadcast License to Selected Sites', 'core-support-thisismyurl' ); ?>';
+								resultDiv.innerHTML = '<div class="notice notice-error"><p><?php echo esc_html__( 'Network error. Check your connection.', 'core-support-thisismyurl' ); ?></p></div>';
+								resultDiv.style.display = 'block';
+							};
+							const data = 'action=timu_broadcast_license&nonce=<?php echo esc_js( wp_create_nonce( 'timu_broadcast_license' ) ); ?>&key=' + encodeURIComponent(key) + '&site_ids=' + encodeURIComponent(JSON.stringify(siteIds)) + '&auto_broadcast=' + autoBroadcast;
+							xhr.send(data);
+						});
+					})();
+				</script>
+			<?php else : ?>
+				<p class="description"><?php echo esc_html__( 'Register and validate a license key above before broadcasting to sub-sites.', 'core-support-thisismyurl' ); ?></p>
+			<?php endif; ?>
+		</div>
+	<?php endif; ?>
+
 	<?php
 		// Small summary banner: last job stats + quick export link.
-		$queue_state   = TIMU_Vault::get_queue_state();
-		$export_nonce  = wp_create_nonce( 'timu_vault_export' );
-		$export_url    = add_query_arg(
+		$queue_state  = TIMU_Vault::get_queue_state();
+		$export_nonce = wp_create_nonce( 'timu_vault_export' );
+		$export_url   = add_query_arg(
 			array(
-				'action'                   => 'timu_vault_export_logs',
-				'timu_vault_export_nonce'  => $export_nonce,
+				'action'                  => 'timu_vault_export_logs',
+				'timu_vault_export_nonce' => $export_nonce,
 			),
 			admin_url( 'admin-post.php' )
 		);
 		if ( ! empty( $queue_state ) ) :
-			$qs_type     = isset( $queue_state['type'] ) ? (string) $queue_state['type'] : '—';
-			$qs_ok       = (int) ( $queue_state['ok'] ?? 0 );
-			$qs_fail     = (int) ( $queue_state['fail'] ?? 0 );
-			$qs_missing  = (int) ( $queue_state['missing'] ?? 0 );
-			$qs_skipped  = (int) ( $queue_state['skipped'] ?? 0 );
-			$qs_processed= (int) ( $queue_state['processed'] ?? 0 );
-			$qs_total    = isset( $queue_state['total'] ) ? (string) $queue_state['total'] : '∞';
-			$qs_status   = isset( $queue_state['status'] ) ? (string) $queue_state['status'] : '';
-			$qs_last_run = isset( $queue_state['last_run'] ) ? (int) $queue_state['last_run'] : 0;
-			$qs_last_txt = $qs_last_run ? date_i18n( 'M j, Y g:i a', $qs_last_run ) : '—';
-	?>
+			$qs_type      = isset( $queue_state['type'] ) ? (string) $queue_state['type'] : '—';
+			$qs_ok        = (int) ( $queue_state['ok'] ?? 0 );
+			$qs_fail      = (int) ( $queue_state['fail'] ?? 0 );
+			$qs_missing   = (int) ( $queue_state['missing'] ?? 0 );
+			$qs_skipped   = (int) ( $queue_state['skipped'] ?? 0 );
+			$qs_processed = (int) ( $queue_state['processed'] ?? 0 );
+			$qs_total     = isset( $queue_state['total'] ) ? (string) $queue_state['total'] : '∞';
+			$qs_status    = isset( $queue_state['status'] ) ? (string) $queue_state['status'] : '';
+			$qs_last_run  = isset( $queue_state['last_run'] ) ? (int) $queue_state['last_run'] : 0;
+			$qs_last_txt  = $qs_last_run ? date_i18n( 'M j, Y g:i a', $qs_last_run ) : '—';
+			?>
 		<div class="notice notice-info" style="margin-top:10px;">
 			<p>
 				<strong><?php echo esc_html__( 'Vault Job Summary', 'core-support-thisismyurl' ); ?>:</strong>

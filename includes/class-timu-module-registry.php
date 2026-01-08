@@ -97,23 +97,23 @@ class TIMU_Module_Registry {
 		$get_fn       = is_multisite() ? 'get_site_option' : 'get_option';
 		$last_refresh = (int) call_user_func( $get_fn, 'timu_modules_last_refresh', 0 );
 
-		$queue_state = class_exists( '\TIMU\\CoreSupport\\TIMU_Vault' ) ? TIMU_Vault::get_queue_state() : array();
-		$queue_last  = isset( $queue_state['last_run'] ) ? (int) $queue_state['last_run'] : 0;
+		$queue_state  = class_exists( '\TIMU\\CoreSupport\\TIMU_Vault' ) ? TIMU_Vault::get_queue_state() : array();
+		$queue_last   = isset( $queue_state['last_run'] ) ? (int) $queue_state['last_run'] : 0;
 		$queue_status = isset( $queue_state['status'] ) ? (string) $queue_state['status'] : 'idle';
 
 		return array(
 			'catalog_refresh' => array(
-				'label'      => __( 'Catalog refresh', 'core-support-thisismyurl' ),
-				'hook'       => 'timu_refresh_modules',
-				'next_run'   => $next_refresh,
-				'last_run'   => $last_refresh,
+				'label'    => __( 'Catalog refresh', 'core-support-thisismyurl' ),
+				'hook'     => 'timu_refresh_modules',
+				'next_run' => $next_refresh,
+				'last_run' => $last_refresh,
 			),
 			'vault_queue'     => array(
-				'label'      => __( 'Vault queue runner', 'core-support-thisismyurl' ),
-				'hook'       => 'timu_vault_queue_runner',
-				'next_run'   => $next_vault,
-				'last_run'   => $queue_last,
-				'queue_state'=> $queue_status,
+				'label'       => __( 'Vault queue runner', 'core-support-thisismyurl' ),
+				'hook'        => 'timu_vault_queue_runner',
+				'next_run'    => $next_vault,
+				'last_run'    => $queue_last,
+				'queue_state' => $queue_status,
 			),
 		);
 	}

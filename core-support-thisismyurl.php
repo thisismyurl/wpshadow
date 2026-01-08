@@ -7,7 +7,7 @@
  * Donate link:         https://thisismyurl.com/core-support-thisismyurl/#register?source=core-support-thisismyurl
  * Description:         The Hub of the @thisismyurl Support Suite. Provides Multi-Engine Fallback, Encryption, Cloud Bridge, and Killer Features (Pixel-Sovereign, Smart Focus-Point, The Vault, Surgical Scrubbing, Broken Link Guardian).
  * Tags:                media, core, hub, architecture, images, encryption, vault
- * Version:             1.2601.72060
+ * Version:             1.2601.73000
  * Requires at least:   6.4
  * Requires PHP:        8.1.29
  * Update URI:          https://github.com/thisismyurl/core-support-thisismyurl
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants.
-define( 'TIMU_CORE_VERSION', '1.2601.72060' );
+define( 'TIMU_CORE_VERSION', '1.2601.73000' );
 define( 'TIMU_CORE_FILE', __FILE__ );
 define( 'TIMU_CORE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'TIMU_CORE_URL', plugin_dir_url( __FILE__ ) );
@@ -231,9 +231,20 @@ function timu_core_init(): void {
 	require_once TIMU_CORE_PATH . 'includes/class-timu-module-registry.php';
 	TIMU_Module_Registry::init();
 
+	// Load license utilities.
+	require_once TIMU_CORE_PATH . 'includes/class-timu-license.php';
+	TIMU_License::init();
+
 	// Load Vault service.
 	require_once TIMU_CORE_PATH . 'includes/class-timu-vault.php';
 	TIMU_Vault::init();
+
+	// Load plugin upgrader for install/update flows.
+	require_once TIMU_CORE_PATH . 'includes/class-timu-plugin-upgrader.php';
+
+	// Load module action handlers for AJAX install/update/activate.
+	require_once TIMU_CORE_PATH . 'includes/class-timu-module-actions.php';
+	TIMU_Module_Actions::init();
 
 	// Initialize multisite support if applicable.
 	if ( is_multisite() ) {
@@ -247,6 +258,7 @@ function timu_core_init(): void {
 	add_action( 'wp_ajax_timu_toggle_module', __NAMESPACE__ . '\\timu_ajax_toggle_module' );
 	add_action( 'wp_ajax_timu_install_module', __NAMESPACE__ . '\\timu_ajax_install_module' );
 	add_action( 'wp_ajax_timu_update_module', __NAMESPACE__ . '\\timu_ajax_update_module' );
+	add_action( 'wp_ajax_timu_broadcast_license', __NAMESPACE__ . '\\timu_ajax_broadcast_license' );
 
 	// Admin-post action to force scheduled tasks to run immediately.
 	add_action( 'admin_post_timu_run_task_now', __NAMESPACE__ . '\timu_run_task_now' );
@@ -269,13 +281,22 @@ function timu_core_init(): void {
  */
 function timu_core_network_admin_menu(): void {
 	add_menu_page(
-		__( 'Dashboard', 'core-support-thisismyurl' ),
-		__( 'Dashboard', 'core-support-thisismyurl' ),
+		__( 'Support Dashboard', 'core-support-thisismyurl' ),
+		__( 'Support', 'core-support-thisismyurl' ),
 		'manage_network_options',
 		'timu-core-support',
 		__NAMESPACE__ . '\\timu_core_render_dashboard',
 		'dashicons-admin-generic',
 		30
+	);
+
+	add_submenu_page(
+		'timu-core-support',
+		__( 'Support Dashboard', 'core-support-thisismyurl' ),
+		__( 'Dashboard', 'core-support-thisismyurl' ),
+		'manage_network_options',
+		'timu-core-support',
+		__NAMESPACE__ . '\\timu_core_render_dashboard'
 	);
 
 	add_submenu_page(
@@ -304,8 +325,8 @@ function timu_core_network_admin_menu(): void {
  */
 function timu_core_admin_menu(): void {
 	add_menu_page(
-		__( 'Dashboard', 'core-support-thisismyurl' ),
-		__( 'Dashboard', 'core-support-thisismyurl' ),
+		__( 'Support Dashboard', 'core-support-thisismyurl' ),
+		__( 'Support', 'core-support-thisismyurl' ),
 		'manage_options',
 		'timu-core-support',
 		__NAMESPACE__ . '\\timu_core_render_dashboard',
@@ -313,7 +334,15 @@ function timu_core_admin_menu(): void {
 		30
 	);
 
-	// Modules view
+	add_submenu_page(
+		'timu-core-support',
+		__( 'Support Dashboard', 'core-support-thisismyurl' ),
+		__( 'Dashboard', 'core-support-thisismyurl' ),
+		'manage_options',
+		'timu-core-support',
+		__NAMESPACE__ . '\\timu_core_render_dashboard'
+	);
+
 	add_submenu_page(
 		'timu-core-support',
 		__( 'Modules', 'core-support-thisismyurl' ),
@@ -472,9 +501,12 @@ function timu_core_render_network_settings(): void {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'core-support-thisismyurl' ) );
 	}
 
+	// Licenses are site-specific; Network Admin view is read-only.
 	TIMU_Vault::maybe_handle_settings_submission( true );
 	TIMU_Vault::maybe_handle_tools_submission( true );
 	TIMU_Vault::maybe_handle_log_action();
+
+	$license_state = TIMU_License::get_state( false );
 
 	require_once TIMU_CORE_PATH . 'includes/views/settings.php';
 }
@@ -489,9 +521,12 @@ function timu_core_render_settings_page(): void {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'core-support-thisismyurl' ) );
 	}
 
+	TIMU_License::maybe_handle_submission( false );
 	TIMU_Vault::maybe_handle_settings_submission( false );
 	TIMU_Vault::maybe_handle_tools_submission( false );
 	TIMU_Vault::maybe_handle_log_action();
+
+	$license_state = TIMU_License::get_state( false );
 
 	require_once TIMU_CORE_PATH . 'includes/views/settings.php';
 }
@@ -794,6 +829,50 @@ function timu_ajax_update_module(): void {
 }
 
 /**
+ * Handle network license broadcast via AJAX.
+ *
+ * @return void
+ */
+function timu_ajax_broadcast_license(): void {
+	if ( empty( $_POST['nonce'] ) ) {
+		wp_send_json_error( array( 'message' => __( 'Nonce failed.', 'core-support-thisismyurl' ) ) );
+	}
+
+	if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'timu_broadcast_license' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Nonce verification failed.', 'core-support-thisismyurl' ) ) );
+	}
+
+	if ( ! is_multisite() ) {
+		wp_send_json_error( array( 'message' => __( 'Multisite not enabled.', 'core-support-thisismyurl' ) ) );
+	}
+
+	if ( ! current_user_can( 'manage_network_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'core-support-thisismyurl' ) ) );
+	}
+
+	$key      = isset( $_POST['key'] ) ? sanitize_text_field( wp_unslash( $_POST['key'] ) ) : '';
+	$site_ids_json = isset( $_POST['site_ids'] ) ? sanitize_text_field( wp_unslash( $_POST['site_ids'] ) ) : '[]';
+	$auto_broadcast = isset( $_POST['auto_broadcast'] ) ? absint( $_POST['auto_broadcast'] ) : 0;
+
+	if ( empty( $key ) ) {
+		wp_send_json_error( array( 'message' => __( 'License key cannot be empty.', 'core-support-thisismyurl' ) ) );
+	}
+
+	// Parse site IDs from JSON.
+	$site_ids = (array) json_decode( $site_ids_json, true );
+	$site_ids = array_map( 'absint', array_filter( $site_ids ) );
+
+	if ( empty( $site_ids ) ) {
+		wp_send_json_error( array( 'message' => __( 'No sites selected.', 'core-support-thisismyurl' ) ) );
+	}
+
+	// Call the license broadcast method.
+	$result = TIMU_License::broadcast_network_key( $key, $site_ids, (bool) $auto_broadcast );
+
+	wp_send_json_success( $result );
+}
+
+/**
  * Attempt to find a plugin file by slug.
  *
  * @param string $slug Module slug.
@@ -1019,6 +1098,25 @@ function timu_core_admin_enqueue( string $hook ): void {
 				'install'      => __( 'Install', 'core-support-thisismyurl' ),
 				'update'       => __( 'Update', 'core-support-thisismyurl' ),
 			),
+		)
+	);
+
+	// Enqueue module actions script (install/update/activate).
+	wp_enqueue_script(
+		'timu-module-actions',
+		TIMU_CORE_URL . 'assets/js/module-actions.js',
+		array(),
+		TIMU_CORE_VERSION,
+		true
+	);
+
+	// Localize module actions script with nonce and AJAX URL.
+	wp_localize_script(
+		'timu-module-actions',
+		'timuModuleActions',
+		array(
+			'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			'nonce'   => wp_create_nonce( 'timu_module_actions' ),
 		)
 	);
 }
