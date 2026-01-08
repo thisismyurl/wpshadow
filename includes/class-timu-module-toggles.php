@@ -104,7 +104,7 @@ class TIMU_Module_Toggles {
 		$installed = self::is_plugin_installed( $module );
 
 		if ( ! $installed ) {
-			echo wp_kses_post( sprintf( '<em>%s</em>', __( 'Plugin not installed', 'core-support-thisismyurl' ) ) );
+			echo wp_kses_post( sprintf( '<em aria-label="%s">%s</em>', esc_attr__( 'Plugin not installed', 'core-support-thisismyurl' ), esc_html__( 'Plugin not installed', 'core-support-thisismyurl' ) ) );
 			return;
 		}
 
@@ -118,22 +118,31 @@ class TIMU_Module_Toggles {
 		}
 
 		if ( ! $deps_satisfied ) {
+			$dep_labels = implode( ', ', array_map( array( __CLASS__, 'get_module_label' ), $deps ) );
 			echo wp_kses_post(
 				sprintf(
+					'<em aria-label="%s" role="status">%s</em>',
+					esc_attr__( 'Requires dependencies', 'core-support-thisismyurl' ),
 					/* translators: Module names */
-					__( 'Requires: %s', 'core-support-thisismyurl' ),
-					esc_html( implode( ', ', array_map( array( __CLASS__, 'get_module_label' ), $deps ) ) )
+					sprintf( __( 'Requires: %s', 'core-support-thisismyurl' ), esc_html( $dep_labels ) )
 				)
 			);
 			return;
 		}
 
 		$field_name = 'timu_module_toggles[' . esc_attr( $module ) . ']';
+		$field_id   = 'timu_toggle_' . esc_attr( $module );
 		?>
-		<input type="checkbox" name="<?php echo esc_attr( $field_name ); ?>" value="1" <?php checked( $enabled, 1 ); ?> />
-		<label>
-			<?php esc_html_e( 'Enabled', 'core-support-thisismyurl' ); ?>
-		</label>
+		<fieldset>
+			<legend class="screen-reader-text"><?php echo esc_html( self::get_module_label( $module ) ); ?></legend>
+			<input type="checkbox" name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $field_id ); ?>" value="1" <?php checked( $enabled, 1 ); ?> aria-describedby="<?php echo esc_attr( $field_id . '_desc' ); ?>" />
+			<label for="<?php echo esc_attr( $field_id ); ?>">
+				<?php esc_html_e( 'Enabled', 'core-support-thisismyurl' ); ?>
+			</label>
+			<p class="description" id="<?php echo esc_attr( $field_id . '_desc' ); ?>">
+				<?php esc_html_e( 'Disabling this will turn off module features without deactivating the plugin.', 'core-support-thisismyurl' ); ?>
+			</p>
+		</fieldset>
 		<?php
 	}
 

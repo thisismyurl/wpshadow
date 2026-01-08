@@ -98,7 +98,7 @@ class TIMU_Module_Bootstrap {
 				admin_url( 'admin-post.php' )
 			);
 			?>
-			<div class="notice notice-warning is-dismissible">
+			<div class="notice notice-warning is-dismissible" role="alert" aria-live="polite">
 				<p>
 					<?php
 					echo wp_kses_post(
@@ -112,7 +112,7 @@ class TIMU_Module_Bootstrap {
 					?>
 				</p>
 				<p>
-					<a href="<?php echo esc_url( $action_url ); ?>" class="button button-primary">
+					<a href="<?php echo esc_url( $action_url ); ?>" class="button button-primary" aria-label="<?php echo esc_attr( sprintf( __( '%s: %s', 'core-support-thisismyurl' ), $action_label, $module['name'] ) ); ?>">
 						<?php echo esc_html( $action_label ); ?>
 					</a>
 				</p>
