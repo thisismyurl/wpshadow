@@ -33,6 +33,7 @@ class TIMU_Vault {
 	private const META_COMPRESSION      = '_timu_vault_compression';
 	private const META_ENCRYPTED        = '_timu_vault_encrypted';
 	private const META_KEY_ID           = '_timu_vault_key_id';
+	private const META_JOURNAL          = '_timu_vault_journal';
 	private const DOWNLOAD_ACTION       = 'timu_vault_download';
 	private const OPTION_ALLOW_OVERRIDE = 'allow_site_override';
 	private const KEY_ACTION            = 'timu_vault_key_action';
@@ -43,6 +44,8 @@ class TIMU_Vault {
 	private const LOG_LIMIT             = 50;
 	private const LOG_MAX_ENTRIES       = 500;
 	private const LOG_RETENTION_DAYS    = 30;
+	private const LEDGER_OPTION         = 'timu_vault_global_ledger';
+	private const LEDGER_MAX_ENTRIES    = 10000;
 
 	/**
 	 * Bootstrap hooks.
