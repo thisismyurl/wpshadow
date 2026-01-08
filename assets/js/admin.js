@@ -20,20 +20,68 @@
 		},
 
 		/**
+		 * Initialize filter UI (no-op if filter removed).
+		 */
+		initFilters: function() {
+			const $filter = $('#timu-filter-type');
+			if ($filter.length === 0) {
+				return; // Filter UI removed; skip.
+			}
+			// Restore from localStorage when present.
+			const saved = localStorage.getItem('timu-filter-type');
+			if (saved) {
+				$filter.val(saved);
+				$filter.trigger('change');
+			}
+		},
+
+		/**
 		 * Bind event listeners.
 		 */
 		bindEvents: function() {
 			// Module toggle switches.
 			$('.timu-module-toggle').on('change', this.handleToggle);
 
+			// Hub collapse/expand.
+			$(document).on('click', '.timu-hub-toggle', this.handleHubToggle);
+
 			// Filter dropdown.
 			$('#timu-filter-type').on('change', this.handleFilter);
 
-		// Install buttons.
-		$(document).on('click', '.timu-btn-install', this.handleInstall);
+			// Install buttons (both original and "Install and Activate" links).
+			$(document).on('click', '.timu-btn-install, .timu-btn-install-activate', this.handleInstall);
 
-		// Update buttons.
-		$(document).on('click', '.timu-btn-update', this.handleUpdate);
+			// Update buttons.
+			$(document).on('click', '.timu-btn-update', this.handleUpdate);
+
+			// Activate/Deactivate links.
+			$(document).on('click', '.timu-activate, .timu-deactivate', this.handleToggleLink);
+		},
+
+		/**
+		 * Handle collapsing/expanding spokes under a hub row.
+		 *
+		 * @param {Event} e - Click event.
+		 */
+		handleHubToggle: function(e) {
+			e.preventDefault();
+			const $btn = $(this);
+			const group = $btn.data('group');
+			if (!group) {
+				return;
+			}
+
+			const isExpanded = $btn.attr('aria-expanded') === 'true';
+			const $spokes = $( 'tr[data-parent="' + group + '"]' );
+
+			if (isExpanded) {
+				$spokes.addClass('timu-spokes-hidden');
+				$btn.attr('aria-expanded', 'false').addClass('is-collapsed');
+			} else {
+				$spokes.removeClass('timu-spokes-hidden');
+				$btn.attr('aria-expanded', 'true').removeClass('is-collapsed');
+			}
+		},
 
 		/**
 		 * Handle module toggle.
@@ -230,6 +278,67 @@
 					// Re-enable button and remove loading state.
 					$card.removeClass('timu-loading');
 					$btn.prop('disabled', false).text(timuAdminData.i18n.update);
+				}
+			});
+		},
+
+		/**
+		 * Handle activate/deactivate link clicks.
+		 *
+		 * @param {Event} e - Click event.
+		 */
+		handleToggleLink: function(e) {
+			e.preventDefault();
+
+			const $link = $(this);
+			const $card = $link.closest('.timu-module-card');
+			const slug = $link.data('slug');
+			const isActivate = $link.hasClass('timu-activate');
+			const isNetwork = window.location.pathname.includes('/wp-admin/network/');
+
+			if (!slug) {
+				TimuDashboard.showNotice('error', timuAdminData.i18n.ajaxError);
+				return;
+			}
+
+			// Disable link and show loading state.
+			$link.addClass('timu-loading');
+			$card.addClass('timu-loading');
+
+			// Send AJAX request (use same endpoint as toggle switches).
+			$.ajax({
+				url: ajaxurl,
+				type: 'POST',
+				data: {
+					action: 'timu_toggle_module',
+					nonce: timuAdminData.toggleNonce,
+					slug: slug,
+					enabled: isActivate ? 'true' : 'false',
+					network: isNetwork ? 'true' : 'false'
+				},
+				success: function(response) {
+					if (response.success) {
+						// Show success notice.
+						TimuDashboard.showNotice('success', response.data.message);
+
+						// Refresh dashboard after 1 second.
+						setTimeout(function() {
+							location.reload();
+						}, 1000);
+					} else {
+						// Show error notice.
+						TimuDashboard.showNotice('error', response.data.message);
+					}
+				},
+				error: function(xhr, status, error) {
+					// Show error notice.
+					TimuDashboard.showNotice('error', timuAdminData.i18n.ajaxError);
+					console.error('TIMU Toggle Error:', error);
+				},
+				complete: function() {
+					// Remove loading state.
+					$link.removeClass('timu-loading');
+					$card.removeClass('timu-loading');
 				}
 			});
 		},

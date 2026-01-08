@@ -50,8 +50,37 @@ class TIMU_Module_Registry {
 		// Warm bundled catalog early for dashboard/updater.
 		add_action( 'plugins_loaded', array( __CLASS__, 'load_catalog' ), 4 );
 
+		// Schedule periodic refresh aligned with WordPress plugin update checks (twice daily).
+		add_action( 'init', array( __CLASS__, 'schedule_refresh' ) );
+		add_action( 'timu_refresh_modules', array( __CLASS__, 'refresh_modules' ) );
+
 		// Provide hooks for modules to announce themselves.
 		do_action( 'timu_register_modules' );
+	}
+
+	/**
+	 * Schedule a recurring refresh of module discovery and catalog loading.
+	 * Matches WordPress plugin update frequency (twicedaily).
+	 *
+	 * @return void
+	 */
+	public static function schedule_refresh(): void {
+		if ( wp_next_scheduled( 'timu_refresh_modules' ) ) {
+			return;
+		}
+
+		wp_schedule_event( time() + HOUR_IN_SECONDS, 'twicedaily', 'timu_refresh_modules' );
+	}
+
+	/**
+	 * Refresh module cache and catalog.
+	 *
+	 * @return void
+	 */
+	public static function refresh_modules(): void {
+		self::clear_cache();
+		self::discover_modules();
+		self::load_catalog();
 	}
 
 	/**
@@ -76,7 +105,7 @@ class TIMU_Module_Registry {
 				'type'        => 'spoke',
 				'category'    => 'general',
 				'description' => '',
-				'author'      => 'Christopher Ross',
+				'author'      => '@thisismyurl',
 				'author_uri'  => 'https://thisismyurl.com',
 				'menu_parent' => 'timu-core-support',
 				'icon'        => 'dashicons-admin-plugins',
@@ -132,7 +161,7 @@ class TIMU_Module_Registry {
 
 			// Check if it's a TIMU suite plugin (basic heuristic).
 			if ( strpos( $plugin_data['TextDomain'], 'thisismyurl' ) !== false ||
-			     strpos( $plugin_data['Name'], 'thisismyurl' ) !== false ) {
+				strpos( $plugin_data['Name'], 'thisismyurl' ) !== false ) {
 
 				$slug = dirname( $plugin_file );
 				if ( $slug === '.' ) {
@@ -247,9 +276,9 @@ class TIMU_Module_Registry {
 				$entry,
 				array(
 					'installed'         => ! empty( $installed_mod ),
-					'installed_version'  => $installed_version,
-					'update_available'   => $update_available,
-					'enabled'            => $installed_mod ? self::is_enabled( $slug ) : false,
+					'installed_version' => $installed_version,
+					'update_available'  => $update_available,
+					'enabled'           => $installed_mod ? self::is_enabled( $slug ) : false,
 				)
 			);
 		}
@@ -264,10 +293,10 @@ class TIMU_Module_Registry {
 				$installed_mod,
 				array(
 					'installed'         => true,
-					'installed_version'  => $installed_mod['version'] ?? null,
-					'update_available'   => false,
-					'enabled'            => self::is_enabled( $slug ),
-					'version'            => $installed_mod['version'] ?? '0.0.0',
+					'installed_version' => $installed_mod['version'] ?? null,
+					'update_available'  => false,
+					'enabled'           => self::is_enabled( $slug ),
+					'version'           => $installed_mod['version'] ?? '0.0.0',
 				)
 			);
 		}
@@ -385,15 +414,15 @@ class TIMU_Module_Registry {
 	 */
 	private static function get_bundled_catalog(): array {
 		$json = '[
-			{"slug":"core-support-thisismyurl","type":"hub","name":"Core Support","description":"Hub for Multi-Engine Fallback, Vault, and suite governance.","version":"1.2601.71818","author":"Christopher Ross","uri":"https://github.com/thisismyurl/core-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/core-support-thisismyurl/releases/latest"},
-			{"slug":"image-support-thisismyurl","type":"hub","name":"Image Support","description":"Image Hub orchestrating format spokes with Pixel-Sovereign and Smart Focus-Point.","version":"1.2601.71701","author":"Christopher Ross","uri":"https://github.com/thisismyurl/image-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.9.0","download_url":"https://github.com/thisismyurl/image-support-thisismyurl/releases/latest"},
-			{"slug":"avif-support-thisismyurl","type":"spoke","name":"AVIF Support","description":"AVIF spoke for high-efficiency images with Vault mapping.","version":"1.0.0","author":"Christopher Ross","uri":"https://github.com/thisismyurl/avif-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/avif-support-thisismyurl/releases/latest"},
-			{"slug":"webp-support-thisismyurl","type":"spoke","name":"WebP Support","description":"WebP spoke for modern browser delivery with Broken Link Guardian.","version":"1.0.0","author":"Christopher Ross","uri":"https://github.com/thisismyurl/webp-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/webp-support-thisismyurl/releases/latest"},
-			{"slug":"heic-support-thisismyurl","type":"spoke","name":"HEIC Support","description":"HEIC spoke with conversion to web-safe formats.","version":"1.0.0","author":"Christopher Ross","uri":"https://github.com/thisismyurl/heic-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/heic-support-thisismyurl/releases/latest"},
-			{"slug":"raw-support-thisismyurl","type":"spoke","name":"RAW Support","description":"RAW spoke for ingesting professional formats into the Vault.","version":"1.0.0","author":"Christopher Ross","uri":"https://github.com/thisismyurl/raw-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/raw-support-thisismyurl/releases/latest"},
-			{"slug":"svg-support-thisismyurl","type":"spoke","name":"SVG Support","description":"SVG spoke with sanitization and Vault mapping.","version":"1.0.0","author":"Christopher Ross","uri":"https://github.com/thisismyurl/svg-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/svg-support-thisismyurl/releases/latest"},
-			{"slug":"tiff-support-thisismyurl","type":"spoke","name":"TIFF Support","description":"TIFF spoke with archival-grade handling and Vault routing.","version":"1.0.0","author":"Christopher Ross","uri":"https://github.com/thisismyurl/tiff-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/tiff-support-thisismyurl/releases/latest"},
-			{"slug":"bmp-support-thisismyurl","type":"spoke","name":"BMP Support","description":"BMP spoke for legacy ingestion with scrubbing.","version":"1.0.0","author":"Christopher Ross","uri":"https://github.com/thisismyurl/bmp-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/bmp-support-thisismyurl/releases/latest"}
+			{"slug":"core-support-thisismyurl","type":"hub","name":"Core Support","description":"Hub for Multi-Engine Fallback, Vault, and suite governance.","version":"1.2601.71818","author":"@thisismyurl","uri":"https://github.com/thisismyurl/core-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/core-support-thisismyurl/releases/latest"},
+			{"slug":"image-support-thisismyurl","type":"hub","name":"Image Support","description":"Image Hub orchestrating format spokes with Pixel-Sovereign and Smart Focus-Point.","version":"1.2601.71701","author":"@thisismyurl","uri":"https://github.com/thisismyurl/image-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.9.0","download_url":"https://github.com/thisismyurl/image-support-thisismyurl/releases/latest"},
+			{"slug":"avif-support-thisismyurl","type":"spoke","name":"AVIF Support","description":"AVIF spoke for high-efficiency images with Vault mapping.","version":"1.0.0","author":"@thisismyurl","uri":"https://github.com/thisismyurl/avif-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/avif-support-thisismyurl/releases/latest"},
+			{"slug":"webp-support-thisismyurl","type":"spoke","name":"WebP Support","description":"WebP spoke for modern browser delivery with Broken Link Guardian.","version":"1.0.0","author":"@thisismyurl","uri":"https://github.com/thisismyurl/webp-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/webp-support-thisismyurl/releases/latest"},
+			{"slug":"heic-support-thisismyurl","type":"spoke","name":"HEIC Support","description":"HEIC spoke with conversion to web-safe formats.","version":"1.0.0","author":"@thisismyurl","uri":"https://github.com/thisismyurl/heic-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/heic-support-thisismyurl/releases/latest"},
+			{"slug":"raw-support-thisismyurl","type":"spoke","name":"RAW Support","description":"RAW spoke for ingesting professional formats into the Vault.","version":"1.0.0","author":"@thisismyurl","uri":"https://github.com/thisismyurl/raw-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/raw-support-thisismyurl/releases/latest"},
+			{"slug":"svg-support-thisismyurl","type":"spoke","name":"SVG Support","description":"SVG spoke with sanitization and Vault mapping.","version":"1.0.0","author":"@thisismyurl","uri":"https://github.com/thisismyurl/svg-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/svg-support-thisismyurl/releases/latest"},
+			{"slug":"tiff-support-thisismyurl","type":"spoke","name":"TIFF Support","description":"TIFF spoke with archival-grade handling and Vault routing.","version":"1.0.0","author":"@thisismyurl","uri":"https://github.com/thisismyurl/tiff-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/tiff-support-thisismyurl/releases/latest"},
+			{"slug":"bmp-support-thisismyurl","type":"spoke","name":"BMP Support","description":"BMP spoke for legacy ingestion with scrubbing.","version":"1.0.0","author":"@thisismyurl","uri":"https://github.com/thisismyurl/bmp-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/bmp-support-thisismyurl/releases/latest"}
 		]';
 
 		$decoded = json_decode( $json, true );
@@ -414,7 +443,13 @@ class TIMU_Module_Registry {
 		);
 
 		if ( ! self::is_allowed_catalog_url( $remote_url, $allowed_hosts ) ) {
-			do_action( 'timu_catalog_fetch_error', array( 'url' => $remote_url, 'reason' => 'disallowed_host' ) );
+			do_action(
+				'timu_catalog_fetch_error',
+				array(
+					'url'    => $remote_url,
+					'reason' => 'disallowed_host',
+				)
+			);
 			return array();
 		}
 
@@ -463,7 +498,13 @@ class TIMU_Module_Registry {
 			return $modules;
 		}
 
-		do_action( 'timu_catalog_fetch_error', array( 'url' => $remote_url, 'reason' => $last_err ?? 'unknown' ) );
+		do_action(
+			'timu_catalog_fetch_error',
+			array(
+				'url'    => $remote_url,
+				'reason' => $last_err ?? 'unknown',
+			)
+		);
 
 		return array();
 	}

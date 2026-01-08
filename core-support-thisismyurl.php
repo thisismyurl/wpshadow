@@ -5,7 +5,7 @@
  * Plugin Name:         Core Support (thisismyurl)
  * Plugin URI:          https://thisismyurl.com/core-support-thisismyurl/?source=core-support-thisismyurl
  * Donate link:         https://thisismyurl.com/core-support-thisismyurl/#register?source=core-support-thisismyurl
- * Description:         The Hub of the thisismyurl Media Suite. Provides Multi-Engine Fallback, Encryption, Cloud Bridge, and Killer Features (Pixel-Sovereign, Smart Focus-Point, The Vault, Surgical Scrubbing, Broken Link Guardian).
+ * Description:         The Hub of the @thisismyurl Support Suite. Provides Multi-Engine Fallback, Encryption, Cloud Bridge, and Killer Features (Pixel-Sovereign, Smart Focus-Point, The Vault, Surgical Scrubbing, Broken Link Guardian).
  * Tags:                media, core, hub, architecture, images, encryption, vault
  * Version:             1.2601.71910
  * Requires at least:   6.4
@@ -105,7 +105,17 @@ function timu_core_deactivate(): void {
  */
 function timu_core_setup_vault(): bool {
 	$upload_dir = wp_upload_dir();
-	$vault_path = $upload_dir['basedir'] . '/vault';
+
+	// Get or generate vault directory name (hidden with random suffix).
+	$vault_dirname = get_option( 'timu_vault_dirname' );
+	if ( empty( $vault_dirname ) ) {
+		// Generate random directory name (e.g., .vault_a1b2c3d4e5f6).
+		$random_suffix = bin2hex( random_bytes( 6 ) );
+		$vault_dirname = '.vault_' . $random_suffix;
+		update_option( 'timu_vault_dirname', $vault_dirname );
+	}
+
+	$vault_path = $upload_dir['basedir'] . '/' . $vault_dirname;
 
 	// Create vault directory if it doesn't exist.
 	if ( ! file_exists( $vault_path ) ) {
@@ -118,11 +128,19 @@ function timu_core_setup_vault(): bool {
 	// Create .htaccess for Apache protection.
 	$htaccess_file = $vault_path . '/.htaccess';
 	if ( ! file_exists( $htaccess_file ) ) {
-		$htaccess_content = "# Protect vault directory\n";
+		$htaccess_content  = "# Protect vault directory\n";
 		$htaccess_content .= "Options -Indexes\n";
-		$htaccess_content .= "<FilesMatch \"\\.(zip|jpg|jpeg|png|gif|webp|avif|heic|bmp|tiff|svg|raw)$\">\n";
+		$htaccess_content .= "# Block direct access to vault files\n";
+		$htaccess_content .= "<FilesMatch \"\\.(zip|jpg|jpeg|png|gif|webp|avif|heic|bmp|tiff|svg|raw|enc)$\">\n";
 		$htaccess_content .= "    Require all denied\n";
 		$htaccess_content .= "</FilesMatch>\n";
+		$htaccess_content .= "# Block directory listing and script execution\n";
+		$htaccess_content .= "<IfModule mod_php7.c>\n";
+		$htaccess_content .= "    php_flag engine off\n";
+		$htaccess_content .= "</IfModule>\n";
+		$htaccess_content .= "<IfModule mod_php.c>\n";
+		$htaccess_content .= "    php_flag engine off\n";
+		$htaccess_content .= "</IfModule>\n";
 
 		file_put_contents( $htaccess_file, $htaccess_content );
 	}
@@ -133,7 +151,67 @@ function timu_core_setup_vault(): bool {
 		file_put_contents( $index_file, "<?php\n// Silence is golden.\n" );
 	}
 
+	// Initialize encryption keys if enabled.
+	timu_core_setup_encryption_keys();
+
 	return true;
+}
+
+/**
+ * Setup encryption keys for vault files.
+ * Checks wp-config for TIMU_VAULT_KEY; generates if missing.
+ *
+ * @return bool True if keys are available, false otherwise.
+ */
+function timu_core_setup_encryption_keys(): bool {
+	// If wp-config defines the key, use it.
+	if ( defined( 'TIMU_VAULT_KEY' ) && TIMU_VAULT_KEY ) {
+		return true;
+	}
+
+	// If not in wp-config, check if stored in options (for backward compatibility).
+	$stored_key = get_option( 'timu_vault_encryption_key' );
+	if ( ! empty( $stored_key ) ) {
+		return true;
+	}
+
+	// For production, keys MUST be in wp-config.
+	// For development, auto-generate and store (with warning).
+	if ( 'production' === wp_get_environment_type() ) {
+		error_log( 'TIMU Core: Encryption enabled but TIMU_VAULT_KEY not defined in wp-config.php. Define it for production use.' );
+		return false;
+	}
+
+	// Auto-generate for development.
+	$new_key = bin2hex( random_bytes( 32 ) ); // 256-bit key.
+	update_option( 'timu_vault_encryption_key', $new_key );
+
+	error_log( 'TIMU Core: Generated temporary encryption key. For production, add this to wp-config.php: define( "TIMU_VAULT_KEY", "' . $new_key . '" );' );
+
+	return true;
+}
+
+/**
+ * Get the encryption key for vault operations.
+ *
+ * @return string|null Encryption key, or null if not available.
+ */
+function timu_core_get_vault_key(): ?string {
+	if ( defined( 'TIMU_VAULT_KEY' ) && TIMU_VAULT_KEY ) {
+		return TIMU_VAULT_KEY;
+	}
+
+	$stored_key = get_option( 'timu_vault_encryption_key' );
+	return ! empty( $stored_key ) ? $stored_key : null;
+}
+
+/**
+ * Check if encryption is supported and enabled.
+ *
+ * @return bool True if openssl is available, false otherwise.
+ */
+function timu_core_encryption_supported(): bool {
+	return extension_loaded( 'openssl' );
 }
 
 /**
@@ -152,6 +230,10 @@ function timu_core_init(): void {
 	// Load module registry.
 	require_once TIMU_CORE_PATH . 'includes/class-timu-module-registry.php';
 	TIMU_Module_Registry::init();
+
+	// Load Vault service.
+	require_once TIMU_CORE_PATH . 'includes/class-timu-vault.php';
+	TIMU_Vault::init();
 
 	// Initialize multisite support if applicable.
 	if ( is_multisite() ) {
@@ -181,8 +263,8 @@ function timu_core_init(): void {
  */
 function timu_core_network_admin_menu(): void {
 	add_menu_page(
-		__( 'Support', 'core-support-thisismyurl' ),
-		__( 'Support', 'core-support-thisismyurl' ),
+		__( 'Dashboard', 'core-support-thisismyurl' ),
+		__( 'Dashboard', 'core-support-thisismyurl' ),
 		'manage_network_options',
 		'timu-core-support',
 		__NAMESPACE__ . '\\timu_core_render_dashboard',
@@ -195,8 +277,8 @@ function timu_core_network_admin_menu(): void {
 		__( 'Modules', 'core-support-thisismyurl' ),
 		__( 'Modules', 'core-support-thisismyurl' ),
 		'manage_network_options',
-		'timu-core-support',
-		__NAMESPACE__ . '\\timu_core_render_dashboard'
+		'timu-core-modules',
+		__NAMESPACE__ . '\\timu_core_render_modules'
 	);
 
 	add_submenu_page(
@@ -216,8 +298,8 @@ function timu_core_network_admin_menu(): void {
  */
 function timu_core_admin_menu(): void {
 	add_menu_page(
-		__( 'Support', 'core-support-thisismyurl' ),
-		__( 'Support', 'core-support-thisismyurl' ),
+		__( 'Dashboard', 'core-support-thisismyurl' ),
+		__( 'Dashboard', 'core-support-thisismyurl' ),
 		'manage_options',
 		'timu-core-support',
 		__NAMESPACE__ . '\\timu_core_render_dashboard',
@@ -225,13 +307,14 @@ function timu_core_admin_menu(): void {
 		30
 	);
 
+	// Modules view
 	add_submenu_page(
 		'timu-core-support',
 		__( 'Modules', 'core-support-thisismyurl' ),
 		__( 'Modules', 'core-support-thisismyurl' ),
 		'manage_options',
-		'timu-core-support',
-		__NAMESPACE__ . '\\timu_core_render_dashboard'
+		'timu-core-modules',
+		__NAMESPACE__ . '\\timu_core_render_modules'
 	);
 
 	add_submenu_page(
@@ -254,18 +337,70 @@ function timu_core_render_dashboard(): void {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'core-support-thisismyurl' ) );
 	}
 
-	$installed_modules = TIMU_Module_Registry::get_modules();
-	$catalog_modules   = TIMU_Module_Registry::get_catalog_with_status();
-
-	$total_installed = count( $installed_modules );
-	$enabled         = count( array_filter( $installed_modules, fn( $m ) => TIMU_Module_Registry::is_enabled( $m['slug'] ) ) );
-	$hubs            = count( TIMU_Module_Registry::get_modules( 'hub' ) );
-	$spokes          = count( TIMU_Module_Registry::get_modules( 'spoke' ) );
-	$available       = count( array_filter( $catalog_modules, fn( $m ) => empty( $m['installed'] ) ) );
-	$updates         = count( array_filter( $catalog_modules, fn( $m ) => ! empty( $m['update_available'] ) ) );
+	$catalog_modules = TIMU_Module_Registry::get_catalog_with_status();
 	$modules         = $catalog_modules;
 
+	// Top stats derived from catalog with real activation state.
+	$total_count     = count( $modules );
+	$hub_modules     = array_filter( $modules, static function ( $m ) { return ( $m['type'] ?? '' ) === 'hub'; } );
+	$spoke_modules   = array_filter( $modules, static function ( $m ) { return ( $m['type'] ?? '' ) === 'spoke'; } );
+	$hubs_count      = count( $hub_modules );
+	$spokes_count    = count( $spoke_modules );
+	$available_count = count( array_filter( $modules, static function ( $m ) { return empty( $m['installed'] ); } ) );
+	$updates_count   = count( array_filter( $modules, static function ( $m ) { return ! empty( $m['update_available'] ); } ) );
+	$enabled_count   = count(
+		array_filter(
+			$modules,
+			static function ( $m ) {
+				$slug = $m['slug'] ?? null;
+				if ( empty( $m['installed'] ) || ! $slug ) {
+					return false;
+				}
+				$plugin = $slug . '/' . $slug . '.php';
+				return is_plugin_active( $plugin ) || ( is_multisite() && is_plugin_active_for_network( $plugin ) );
+			}
+		)
+	);
+
 	require_once TIMU_CORE_PATH . 'includes/views/dashboard.php';
+}
+
+/**
+ * Render modules view.
+ *
+ * @return void
+ */
+function timu_core_render_modules(): void {
+	if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
+		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'core-support-thisismyurl' ) );
+	}
+
+	$catalog_modules = TIMU_Module_Registry::get_catalog_with_status();
+	$modules         = $catalog_modules;
+
+	// Top stats derived from catalog with real activation state.
+	$total_count     = count( $modules );
+	$hub_modules     = array_filter( $modules, static function ( $m ) { return ( $m['type'] ?? '' ) === 'hub'; } );
+	$spoke_modules   = array_filter( $modules, static function ( $m ) { return ( $m['type'] ?? '' ) === 'spoke'; } );
+	$hubs_count      = count( $hub_modules );
+	$spokes_count    = count( $spoke_modules );
+	$available_count = count( array_filter( $modules, static function ( $m ) { return empty( $m['installed'] ); } ) );
+	$updates_count   = count( array_filter( $modules, static function ( $m ) { return ! empty( $m['update_available'] ); } ) );
+	$enabled_count   = count(
+		array_filter(
+			$modules,
+			static function ( $m ) {
+				$slug = $m['slug'] ?? null;
+				if ( empty( $m['installed'] ) || ! $slug ) {
+					return false;
+				}
+				$plugin = $slug . '/' . $slug . '.php';
+				return is_plugin_active( $plugin ) || ( is_multisite() && is_plugin_active_for_network( $plugin ) );
+			}
+		)
+	);
+
+	require_once TIMU_CORE_PATH . 'includes/views/modules.php';
 }
 
 /**
@@ -278,10 +413,11 @@ function timu_core_render_network_settings(): void {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'core-support-thisismyurl' ) );
 	}
 
-	echo '<div class="wrap">';
-	echo '<h1>' . esc_html__( 'Network Settings', 'core-support-thisismyurl' ) . '</h1>';
-	echo '<p>' . esc_html__( 'Global Network Governance settings for the thisismyurl Media Suite.', 'core-support-thisismyurl' ) . '</p>';
-	echo '</div>';
+	TIMU_Vault::maybe_handle_settings_submission( true );
+	TIMU_Vault::maybe_handle_tools_submission( true );
+	TIMU_Vault::maybe_handle_log_action();
+
+	require_once TIMU_CORE_PATH . 'includes/views/settings.php';
 }
 
 /**
@@ -294,10 +430,11 @@ function timu_core_render_settings_page(): void {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'core-support-thisismyurl' ) );
 	}
 
-	echo '<div class="wrap">';
-	echo '<h1>' . esc_html__( 'Core Support - Settings', 'core-support-thisismyurl' ) . '</h1>';
-	echo '<p>' . esc_html__( 'Configure the thisismyurl Media Suite settings.', 'core-support-thisismyurl' ) . '</p>';
-	echo '</div>';
+	TIMU_Vault::maybe_handle_settings_submission( false );
+	TIMU_Vault::maybe_handle_tools_submission( false );
+	TIMU_Vault::maybe_handle_log_action();
+
+	require_once TIMU_CORE_PATH . 'includes/views/settings.php';
 }
 
 /**
@@ -342,10 +479,8 @@ function timu_ajax_install_module(): void {
 		if ( ! current_user_can( 'manage_network_plugins' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'core-support-thisismyurl' ) ) );
 		}
-	} else {
-		if ( ! current_user_can( 'install_plugins' ) ) {
+	} elseif ( ! current_user_can( 'install_plugins' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'core-support-thisismyurl' ) ) );
-		}
 	}
 
 	$slug = sanitize_text_field( wp_unslash( $_POST['slug'] ?? '' ) );
@@ -371,7 +506,8 @@ function timu_ajax_install_module(): void {
 
 	$skin     = new \Automatic_Upgrader_Skin();
 	$upgrader = new \Plugin_Upgrader( $skin );
-	$result   = $upgrader->install( esc_url_raw( $module['download_url'] ) );
+	$download = timu_core_resolve_download_url( $module );
+	$result   = $upgrader->install( $download );
 
 	if ( is_wp_error( $result ) || ! $result ) {
 		$message = is_wp_error( $result ) ? $result->get_error_message() : __( 'Installation failed.', 'core-support-thisismyurl' );
@@ -384,7 +520,13 @@ function timu_ajax_install_module(): void {
 		$network_wide = is_multisite() && is_network_admin();
 		$activation   = activate_plugin( $plugin_file, '', $network_wide, false );
 		if ( is_wp_error( $activation ) ) {
-			do_action( 'timu_catalog_install_warning', array( 'slug' => $slug, 'message' => $activation->get_error_message() ) );
+			do_action(
+				'timu_catalog_install_warning',
+				array(
+					'slug'    => $slug,
+					'message' => $activation->get_error_message(),
+				)
+			);
 		}
 	}
 
@@ -407,10 +549,8 @@ function timu_ajax_update_module(): void {
 		if ( ! current_user_can( 'manage_network_plugins' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'core-support-thisismyurl' ) ) );
 		}
-	} else {
-		if ( ! current_user_can( 'update_plugins' ) ) {
+	} elseif ( ! current_user_can( 'update_plugins' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'core-support-thisismyurl' ) ) );
-		}
 	}
 
 	$slug = sanitize_text_field( wp_unslash( $_POST['slug'] ?? '' ) );
@@ -436,7 +576,20 @@ function timu_ajax_update_module(): void {
 
 	$skin     = new \Automatic_Upgrader_Skin();
 	$upgrader = new \Plugin_Upgrader( $skin );
-	$result   = $upgrader->install( esc_url_raw( $module['download_url'] ) );
+
+	// Allow overwriting existing destination during update.
+	$filter = function ( array $options ): array {
+		$options['clear_destination']           = true;
+		$options['abort_if_destination_exists'] = false;
+		return $options;
+	};
+	add_filter( 'upgrader_package_options', $filter );
+
+	$download = timu_core_resolve_download_url( $module );
+	$result   = $upgrader->install( $download );
+
+	// Remove filter after run.
+	remove_filter( 'upgrader_package_options', $filter );
 
 	if ( is_wp_error( $result ) || ! $result ) {
 		$message = is_wp_error( $result ) ? $result->get_error_message() : __( 'Update failed.', 'core-support-thisismyurl' );
@@ -470,6 +623,45 @@ function timu_core_find_plugin_file_by_slug( string $slug ): ?string {
 	}
 
 	return null;
+}
+
+/**
+ * Resolve a module's download URL to a direct ZIP when possible.
+ *
+ * Supports GitHub release pages by converting to the latest asset download URL
+ * following a convention of {slug}.zip.
+ *
+ * @param array $module Module data including 'download_url' and 'slug'.
+ * @return string Resolved URL suitable for Plugin_Upgrader::install().
+ */
+function timu_core_resolve_download_url( array $module ): string {
+	$url  = isset( $module['download_url'] ) ? (string) $module['download_url'] : '';
+	$slug = isset( $module['slug'] ) ? (string) $module['slug'] : '';
+
+	if ( empty( $url ) ) {
+		return '';
+	}
+
+	$parts = wp_parse_url( $url );
+	$host  = $parts['host'] ?? '';
+	$path  = $parts['path'] ?? '';
+
+	// Convert GitHub release page to direct asset download if following suite convention.
+	if ( strpos( strtolower( $host ), 'github.com' ) !== false && str_ends_with( (string) $path, '/releases/latest' ) && ! empty( $slug ) ) {
+		// Build /releases/latest/download/{slug}.zip
+		$base = rtrim( $url, '/' );
+		$url  = $base . '/download/' . rawurlencode( $slug ) . '.zip';
+	}
+
+	/**
+	 * Filter to customize download URL resolution.
+	 *
+	 * @param string $url    Resolved URL.
+	 * @param array  $module Module data.
+	 */
+	$url = (string) apply_filters( 'timu_resolve_download_url', $url, $module );
+
+	return esc_url_raw( $url );
 }
 
 /**
@@ -577,9 +769,9 @@ function timu_core_admin_enqueue( string $hook ): void {
 		'timu-core-admin',
 		'timuAdminData',
 		array(
-			'toggleNonce'  => wp_create_nonce( 'timu_toggle_module' ),
-			'actionNonce'  => wp_create_nonce( 'timu_module_action' ),
-			'i18n'         => array(
+			'toggleNonce' => wp_create_nonce( 'timu_toggle_module' ),
+			'actionNonce' => wp_create_nonce( 'timu_module_action' ),
+			'i18n'        => array(
 				'enabled'      => __( 'Enabled', 'core-support-thisismyurl' ),
 				'disabled'     => __( 'Disabled', 'core-support-thisismyurl' ),
 				'ajaxError'    => __( 'An error occurred. Please try again.', 'core-support-thisismyurl' ),

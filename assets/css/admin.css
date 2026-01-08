@@ -76,362 +76,89 @@
 	margin-right: 10px;
 }
 
-/* Module Dashboard Styles */
-.timu-dashboard {
-	max-width: 1200px;
-}
+/* Dashboard styles cleared per request. Using default WordPress table styling. */
 
-.timu-dashboard-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 20px;
-	padding: 20px;
-	background: #fff;
-	border: 1px solid #ccd0d4;
-	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
-}
-
+/* Dashboard stats */
 .timu-dashboard-stats {
-	display: flex;
-	gap: 15px;
-	font-size: 13px;
-	color: #646970;
-}
-
-.timu-stat-icon.timu-stat-available {
-	color: #2271b1;
-}
-
-.timu-stat-icon.timu-stat-update {
-	color: #dba617;
-}
-
-.timu-dashboard-stat {
-	padding: 0 15px;
-	border-left: 1px solid #dcdcde;
-}
-
-.timu-dashboard-stat:first-child {
-	border-left: none;
-	padding-left: 0;
-}
-
-.timu-dashboard-stat strong {
-	display: block;
-	font-size: 24px;
-	font-weight: 400;
-	color: #1d2327;
-	margin-bottom: 3px;
-}
-
-.timu-modules-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-	gap: 20px;
-	margin-bottom: 30px;
+	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+	gap: 12px;
+	margin: 16px 0 24px;
 }
 
-.timu-module-card {
-	background: #fff;
-	border: 1px solid #ccd0d4;
-	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
-	transition: box-shadow 0.2s ease;
-}
-
-.timu-module-card:hover {
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.timu-module-card.timu-module-available {
-	border-color: #cce0f5;
-}
-
-.timu-module-header {
+.timu-stat-card {
 	display: flex;
 	align-items: center;
-	padding: 15px 20px;
-	border-bottom: 1px solid #f0f0f1;
+	padding: 12px 14px;
+	background: #fff;
+	border: 1px solid #ccd0d4;
+	box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+	border-left: 4px solid #2271b1;
 }
 
-.timu-module-icon {
-	font-size: 24px;
-	width: 40px;
-	height: 40px;
-	display: flex;
+.timu-stat-icon {
+	width: 36px;
+	height: 36px;
+	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	margin-right: 15px;
-	color: #2271b1;
+	margin-right: 10px;
+	border-radius: 50%;
+	background: #f0f0f1;
 }
 
-.timu-module-info {
-	flex: 1;
+.timu-stat-content .timu-stat-value {
+	font-size: 20px;
+	font-weight: 700;
+	line-height: 1;
 }
 
-.timu-module-title {
-	margin: 0 0 3px 0;
-	font-size: 14px;
-	font-weight: 600;
-	line-height: 1.4;
-}
-
-.timu-module-version {
-	font-size: 12px;
-	color: #646970;
-}
-
-.timu-module-body {
-	padding: 15px 20px;
-}
-
-.timu-module-description {
-	margin: 0 0 15px 0;
-	font-size: 13px;
-	line-height: 1.5;
+.timu-stat-content .timu-stat-label {
+	font-size: 11px;
 	color: #50575e;
 }
 
-.timu-module-meta {
-	display: flex;
-	gap: 10px;
-	flex-wrap: wrap;
-	margin-bottom: 15px;
+/* Stat specific accents */
+.timu-stat-enabled .dashicons { color: #00a32a; }
+.timu-stat-available .dashicons { color: #2271b1; }
+.timu-stat-update .dashicons { color: #d63638; }
+.timu-stat-hub .dashicons { color: #4b8bf4; }
+.timu-stat-spoke .dashicons { color: #646970; }
+
+.timu-hub-toggle {
+	margin-right: 4px;
+	color: #2271b1;
 }
 
-.timu-module-badge {
+.timu-hub-toggle .dashicons {
+	transition: transform 0.2s ease;
+}
+
+.timu-hub-toggle.is-collapsed .dashicons,
+.timu-hub-toggle[aria-expanded="false"] .dashicons {
+	transform: rotate(-90deg);
+}
+
+.timu-spokes-hidden {
+	display: none;
+}
+
+/* Network Active badge */
+.timu-badge {
 	display: inline-block;
-	padding: 3px 8px;
+	padding: 2px 6px;
+	margin-left: 8px;
+	border-radius: 3px;
 	font-size: 11px;
 	font-weight: 600;
 	text-transform: uppercase;
-	border-radius: 3px;
-	letter-spacing: 0.5px;
-}
-
-.timu-module-badge.type-hub {
-	background: #2271b1;
-	color: #fff;
-}
-
-.timu-module-badge.type-spoke {
-	background: #f0f0f1;
-	color: #50575e;
-}
-
-.timu-module-badge.status-enabled {
-	background: #00a32a;
-	color: #fff;
-}
-
-.timu-module-badge.status-disabled {
-	background: #dba617;
-	color: #fff;
-}
-
-.timu-badge-status {
-	background: #f0f0f1;
-	color: #1d2327;
-	border: 1px solid #dcdcde;
-}
-
-.timu-badge-update {
-	background: #dba617;
-	color: #fff;
-}
-
-.timu-module-actions {
-	display: flex;
-	gap: 10px;
-	padding-top: 10px;
-	border-top: 1px solid #f0f0f1;
-	flex-wrap: wrap;
-}
-
-.timu-module-actions .button {
-	flex: 1;
-	min-width: 120px;
-	text-align: center;
-	justify-content: center;
-}
-
-.timu-module-actions .timu-btn-install,
-.timu-module-actions .timu-btn-update {
-	min-width: 140px;
-}
-
-.timu-module-actions .timu-btn-install:hover,
-.timu-module-actions .timu-btn-update:hover {
-	opacity: 0.9;
-}
-
-.timu-module-actions .timu-btn-install:disabled,
-.timu-module-actions .timu-btn-update:disabled {
-	opacity: 0.6;
-	cursor: not-allowed;
-}
-
-.timu-empty-state {
-	text-align: center;
-	padding: 60px 20px;
-	background: #fff;
-	border: 1px solid #ccd0d4;
-}
-
-.timu-empty-state .dashicons {
-	font-size: 48px;
-	width: 48px;
-	height: 48px;
-	color: #c3c4c7;
-	margin-bottom: 20px;
-}
-
-.timu-empty-state h2 {
-	margin: 0 0 10px 0;
-	font-size: 18px;
-	font-weight: 400;
-}
-
-/* Toggle Switch Styles */
-.timu-toggle {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	cursor: pointer;
-}
-
-.timu-toggle input[type="checkbox"] {
-	position: relative;
-	width: 44px;
-	height: 24px;
-	appearance: none;
-	background: #dcdcde;
-	border-radius: 12px;
-	outline: none;
-	cursor: pointer;
-	transition: background 0.3s ease;
-	margin: 0;
-}
-
-.timu-toggle input[type="checkbox"]::before {
-	content: '';
-	position: absolute;
-	top: 2px;
-	left: 2px;
-	width: 20px;
-	height: 20px;
-	background: #fff;
-	border-radius: 50%;
-	transition: transform 0.3s ease;
-}
-
-.timu-toggle-slider {
-	position: absolute;
-	clip: rect(0 0 0 0);
-	clip-path: inset(50%);
-	height: 1px;
-	overflow: hidden;
 	white-space: nowrap;
-	width: 1px;
 }
 
-.timu-toggle input[type="checkbox"]:checked {
-	background: #2271b1;
-}
-
-.timu-toggle input[type="checkbox"]:checked::before {
-	transform: translateX(20px);
-}
-
-.timu-toggle input[type="checkbox"]:focus {
-	outline: 2px solid #2271b1;
-	outline-offset: 2px;
-}
-
-.timu-toggle input[type="checkbox"]:disabled {
-	opacity: 0.6;
-	cursor: not-allowed;
-}
-
-.timu-toggle-label {
-	font-size: 13px;
-	color: #50575e;
-}
-
-/* Loading State */
-.timu-module-card.timu-loading {
-	opacity: 0.6;
-	pointer-events: none;
-	position: relative;
-}
-
-.timu-module-card.timu-loading::after {
-	content: '';
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 20px;
-	height: 20px;
-	margin: -10px 0 0 -10px;
-	border: 2px solid #2271b1;
-	border-radius: 50%;
-	border-top-color: transparent;
-	animation: timu-spin 0.6s linear infinite;
-}
-
-@keyframes timu-spin {
-	to {
-		transform: rotate(360deg);
-	}
-}
-
-/* No Results Message */
-.timu-no-results {
-	grid-column: 1 / -1;
-	text-align: center;
-	padding: 40px;
-	background: #f9f9f9;
-	border: 1px dashed #ccd0d4;
-	border-radius: 4px;
-}
-
-.timu-no-results .dashicons {
-	font-size: 32px;
-	width: 32px;
-	height: 32px;
-	color: #c3c4c7;
-	margin-bottom: 10px;
-}
-
-.timu-no-results p {
-	margin: 0;
-	color: #646970;
-	font-size: 14px;
-}
-
-/* Accessibility improvements */
-.timu-module-actions .button:focus {
-	outline: 2px solid #2271b1;
-	outline-offset: 2px;
-	box-shadow: none;
-}
-
-/* Responsive design */
-@media screen and (max-width: 782px) {
-	.timu-dashboard-header {
-		flex-direction: column;
-		align-items: flex-start;
-	}
-
-	.timu-dashboard-stats {
-		margin-top: 15px;
-		width: 100%;
-		justify-content: space-between;
-	}
-
-	.timu-modules-grid {
-		grid-template-columns: 1fr;
-	}
+.timu-badge-network {
+	background: #b1d5ff;
+	color: #004a99;
+	border: 1px solid #2271b1;
 }
 
 /* @changelog

@@ -1,10 +1,10 @@
 # Core Support (thisismyurl)
 
-**The Hub of the thisismyurl Media Suite**
+**The Hub of the @thisismyurl Support Suite**
 
 ## Description
 
-Core Support is the foundational Hub of the thisismyurl Media Suite, providing essential architecture and killer features for all format-specific Spoke plugins.
+Core Support is the foundational Hub of the @thisismyurl Support Suite, providing essential architecture and killer features for all format-specific Spoke plugins.
 
 ### The Hub & Spoke Architecture
 
@@ -38,7 +38,7 @@ For network-wide activation, activate from the Network Admin panel. Global setti
 
 ## Using the Support Dashboard
 
-The **Support Dashboard** provides a central hub for managing your Media Suite modules:
+The **Support Dashboard** provides a central hub for managing your Support Suite modules:
 
 ### Dashboard Overview
 
@@ -141,9 +141,9 @@ GPL2 or later. See LICENSE file for details.
 
 ## Author
 
-**Christopher Ross**  
+**Christopher Ross**
 Website: https://thisismyurl.com/?source=core-support-thisismyurl
 
 ---
 
-*Part of the thisismyurl Media Suite*
+*Part of the @thisismyurl Support Suite*

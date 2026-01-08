@@ -1,6 +1,6 @@
 {
 	"name": "thisismyurl/core-support-thisismyurl",
-	"description": "The Hub of the thisismyurl Media Suite. Provides Multi-Engine Fallback, Encryption, Cloud Bridge, and Killer Features.",
+	"description": "The Hub of the @thisismyurl Support Suite. Provides Multi-Engine Fallback, Encryption, Cloud Bridge, and Killer Features.",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",
 	"authors": [
