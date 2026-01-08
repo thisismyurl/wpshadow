@@ -7,7 +7,7 @@
  * Donate link:         https://thisismyurl.com/core-support-thisismyurl/#register?source=core-support-thisismyurl
  * Description:         The Hub of the @thisismyurl Support Suite. Provides Multi-Engine Fallback, Encryption, Cloud Bridge, and Killer Features (Pixel-Sovereign, Smart Focus-Point, The Vault, Surgical Scrubbing, Broken Link Guardian).
  * Tags:                media, core, hub, architecture, images, encryption, vault
- * Version:             1.2601.71910
+ * Version:             1.2601.72060
  * Requires at least:   6.4
  * Requires PHP:        8.1.29
  * Update URI:          https://github.com/thisismyurl/core-support-thisismyurl
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants.
-define( 'TIMU_CORE_VERSION', '1.2601.71910' );
+define( 'TIMU_CORE_VERSION', '1.2601.72060' );
 define( 'TIMU_CORE_FILE', __FILE__ );
 define( 'TIMU_CORE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'TIMU_CORE_URL', plugin_dir_url( __FILE__ ) );
@@ -248,12 +248,18 @@ function timu_core_init(): void {
 	add_action( 'wp_ajax_timu_install_module', __NAMESPACE__ . '\\timu_ajax_install_module' );
 	add_action( 'wp_ajax_timu_update_module', __NAMESPACE__ . '\\timu_ajax_update_module' );
 
+	// Admin-post action to force scheduled tasks to run immediately.
+	add_action( 'admin_post_timu_run_task_now', __NAMESPACE__ . '\timu_run_task_now' );
+
 	// Plugin page links and meta.
 	add_filter( 'plugin_action_links_' . TIMU_CORE_BASENAME, __NAMESPACE__ . '\\timu_core_plugin_action_links' );
 	add_filter( 'plugin_row_meta', __NAMESPACE__ . '\\timu_core_plugin_row_meta', 10, 2 );
 
 	// Enqueue admin scripts and styles.
 	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\timu_core_admin_enqueue' );
+
+	// Register GDPR Personal Data Eraser for Vault.
+	add_filter( 'wp_privacy_personal_data_erasers', __NAMESPACE__ . '\\timu_core_register_privacy_erasers' );
 }
 
 /**
@@ -342,12 +348,36 @@ function timu_core_render_dashboard(): void {
 
 	// Top stats derived from catalog with real activation state.
 	$total_count     = count( $modules );
-	$hub_modules     = array_filter( $modules, static function ( $m ) { return ( $m['type'] ?? '' ) === 'hub'; } );
-	$spoke_modules   = array_filter( $modules, static function ( $m ) { return ( $m['type'] ?? '' ) === 'spoke'; } );
+	$hub_modules     = array_filter(
+		$modules,
+		static function ( $m ) {
+			return ( $m['type'] ?? '' ) === 'hub';
+		}
+	);
+	$spoke_modules   = array_filter(
+		$modules,
+		static function ( $m ) {
+			return ( $m['type'] ?? '' ) === 'spoke';
+		}
+	);
 	$hubs_count      = count( $hub_modules );
 	$spokes_count    = count( $spoke_modules );
-	$available_count = count( array_filter( $modules, static function ( $m ) { return empty( $m['installed'] ); } ) );
-	$updates_count   = count( array_filter( $modules, static function ( $m ) { return ! empty( $m['update_available'] ); } ) );
+	$available_count = count(
+		array_filter(
+			$modules,
+			static function ( $m ) {
+				return empty( $m['installed'] );
+			}
+		)
+	);
+	$updates_count   = count(
+		array_filter(
+			$modules,
+			static function ( $m ) {
+				return ! empty( $m['update_available'] );
+			}
+		)
+	);
 	$enabled_count   = count(
 		array_filter(
 			$modules,
@@ -361,6 +391,11 @@ function timu_core_render_dashboard(): void {
 			}
 		)
 	);
+
+	$activity_logs     = TIMU_Vault::get_logs( 0, 10 );
+	$pending_uploads   = TIMU_Vault::get_pending_contributor_uploads( 5 );
+	$schedule_snapshot = TIMU_Module_Registry::get_schedule_snapshot();
+	$run_now_nonce     = wp_create_nonce( 'timu_run_task_now' );
 
 	require_once TIMU_CORE_PATH . 'includes/views/dashboard.php';
 }
@@ -380,12 +415,36 @@ function timu_core_render_modules(): void {
 
 	// Top stats derived from catalog with real activation state.
 	$total_count     = count( $modules );
-	$hub_modules     = array_filter( $modules, static function ( $m ) { return ( $m['type'] ?? '' ) === 'hub'; } );
-	$spoke_modules   = array_filter( $modules, static function ( $m ) { return ( $m['type'] ?? '' ) === 'spoke'; } );
+	$hub_modules     = array_filter(
+		$modules,
+		static function ( $m ) {
+			return ( $m['type'] ?? '' ) === 'hub';
+		}
+	);
+	$spoke_modules   = array_filter(
+		$modules,
+		static function ( $m ) {
+			return ( $m['type'] ?? '' ) === 'spoke';
+		}
+	);
 	$hubs_count      = count( $hub_modules );
 	$spokes_count    = count( $spoke_modules );
-	$available_count = count( array_filter( $modules, static function ( $m ) { return empty( $m['installed'] ); } ) );
-	$updates_count   = count( array_filter( $modules, static function ( $m ) { return ! empty( $m['update_available'] ); } ) );
+	$available_count = count(
+		array_filter(
+			$modules,
+			static function ( $m ) {
+				return empty( $m['installed'] );
+			}
+		)
+	);
+	$updates_count   = count(
+		array_filter(
+			$modules,
+			static function ( $m ) {
+				return ! empty( $m['update_available'] );
+			}
+		)
+	);
 	$enabled_count   = count(
 		array_filter(
 			$modules,
@@ -460,9 +519,36 @@ function timu_ajax_toggle_module(): void {
 	$settings = array( 'enabled' => $enabled );
 	$success  = TIMU_Module_Registry::update_module_settings( $slug, $settings, $network );
 
+	$user      = wp_get_current_user();
+	$user_name = $user && $user->exists() ? $user->display_name : __( 'System', 'core-support-thisismyurl' );
+
 	if ( $success ) {
+		TIMU_Vault::add_log(
+			'info',
+			0,
+			sprintf( 'Module %1$s %2$s', $slug, $enabled ? 'enabled' : 'disabled' ),
+			'module_toggle',
+			array(
+				'task'    => 'module_toggle',
+				'file'    => $slug,
+				'user'    => $user_name,
+				'user_id' => (int) $user->ID,
+			)
+		);
 		wp_send_json_success( array( 'message' => __( 'Module settings updated.', 'core-support-thisismyurl' ) ) );
 	} else {
+		TIMU_Vault::add_log(
+			'error',
+			0,
+			sprintf( 'Failed to toggle %s', $slug ),
+			'module_toggle',
+			array(
+				'task'    => 'module_toggle',
+				'file'    => $slug,
+				'user'    => $user_name,
+				'user_id' => (int) $user->ID,
+			)
+		);
 		wp_send_json_error( array( 'message' => __( 'Failed to update settings.', 'core-support-thisismyurl' ) ) );
 	}
 }
@@ -483,9 +569,12 @@ function timu_ajax_install_module(): void {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'core-support-thisismyurl' ) ) );
 	}
 
-	$slug = sanitize_text_field( wp_unslash( $_POST['slug'] ?? '' ) );
+	$slug      = sanitize_text_field( wp_unslash( $_POST['slug'] ?? '' ) );
+	$user      = wp_get_current_user();
+	$user_name = $user && $user->exists() ? $user->display_name : __( 'System', 'core-support-thisismyurl' );
 
 	if ( empty( $slug ) ) {
+		TIMU_Vault::add_log( 'error', 0, __( 'Install failed: empty slug.', 'core-support-thisismyurl' ), 'module_install' );
 		wp_send_json_error( array( 'message' => __( 'Invalid module slug.', 'core-support-thisismyurl' ) ) );
 	}
 
@@ -493,6 +582,18 @@ function timu_ajax_install_module(): void {
 	$module  = $catalog[ $slug ] ?? null;
 
 	if ( empty( $module ) || empty( $module['download_url'] ) ) {
+		TIMU_Vault::add_log(
+			'error',
+			0,
+			sprintf( 'Install failed: no download for %s', $slug ),
+			'module_install',
+			array(
+				'task'    => 'module_install',
+				'file'    => $slug,
+				'user'    => $user_name,
+				'user_id' => (int) $user->ID,
+			)
+		);
 		wp_send_json_error( array( 'message' => __( 'No download available for this module.', 'core-support-thisismyurl' ) ) );
 	}
 
@@ -501,6 +602,18 @@ function timu_ajax_install_module(): void {
 	require_once ABSPATH . 'wp-admin/includes/file.php';
 
 	if ( ! WP_Filesystem() ) {
+		TIMU_Vault::add_log(
+			'error',
+			0,
+			sprintf( 'Install failed: filesystem credentials needed for %s', $slug ),
+			'module_install',
+			array(
+				'task'    => 'module_install',
+				'file'    => $slug,
+				'user'    => $user_name,
+				'user_id' => (int) $user->ID,
+			)
+		);
 		wp_send_json_error( array( 'message' => __( 'File system credentials are required to install plugins.', 'core-support-thisismyurl' ) ) );
 	}
 
@@ -511,6 +624,18 @@ function timu_ajax_install_module(): void {
 
 	if ( is_wp_error( $result ) || ! $result ) {
 		$message = is_wp_error( $result ) ? $result->get_error_message() : __( 'Installation failed.', 'core-support-thisismyurl' );
+		TIMU_Vault::add_log(
+			'error',
+			0,
+			wp_strip_all_tags( $message ),
+			'module_install',
+			array(
+				'task'    => 'module_install',
+				'file'    => $slug,
+				'user'    => $user_name,
+				'user_id' => (int) $user->ID,
+			)
+		);
 		wp_send_json_error( array( 'message' => $message ) );
 	}
 
@@ -534,6 +659,19 @@ function timu_ajax_install_module(): void {
 	TIMU_Module_Registry::discover_modules();
 	TIMU_Module_Registry::load_catalog();
 
+	TIMU_Vault::add_log(
+		'info',
+		0,
+		sprintf( 'Module installed: %s', $slug ),
+		'module_install',
+		array(
+			'task'    => 'module_install',
+			'file'    => $slug,
+			'user'    => $user_name,
+			'user_id' => (int) $user->ID,
+		)
+	);
+
 	wp_send_json_success( array( 'message' => __( 'Module installed.', 'core-support-thisismyurl' ) ) );
 }
 
@@ -553,9 +691,12 @@ function timu_ajax_update_module(): void {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'core-support-thisismyurl' ) ) );
 	}
 
-	$slug = sanitize_text_field( wp_unslash( $_POST['slug'] ?? '' ) );
+	$slug      = sanitize_text_field( wp_unslash( $_POST['slug'] ?? '' ) );
+	$user      = wp_get_current_user();
+	$user_name = $user && $user->exists() ? $user->display_name : __( 'System', 'core-support-thisismyurl' );
 
 	if ( empty( $slug ) ) {
+		TIMU_Vault::add_log( 'error', 0, __( 'Update failed: empty slug.', 'core-support-thisismyurl' ), 'module_update' );
 		wp_send_json_error( array( 'message' => __( 'Invalid module slug.', 'core-support-thisismyurl' ) ) );
 	}
 
@@ -564,6 +705,18 @@ function timu_ajax_update_module(): void {
 	$module    = $catalog[ $slug ] ?? null;
 
 	if ( empty( $module ) || empty( $module['download_url'] ) || empty( $installed['file'] ) ) {
+		TIMU_Vault::add_log(
+			'error',
+			0,
+			sprintf( 'Update failed: missing data for %s', $slug ),
+			'module_update',
+			array(
+				'task'    => 'module_update',
+				'file'    => $slug,
+				'user'    => $user_name,
+				'user_id' => (int) $user->ID,
+			)
+		);
 		wp_send_json_error( array( 'message' => __( 'Update information is missing for this module.', 'core-support-thisismyurl' ) ) );
 	}
 
@@ -571,6 +724,18 @@ function timu_ajax_update_module(): void {
 	require_once ABSPATH . 'wp-admin/includes/file.php';
 
 	if ( ! WP_Filesystem() ) {
+		TIMU_Vault::add_log(
+			'error',
+			0,
+			sprintf( 'Update failed: filesystem credentials needed for %s', $slug ),
+			'module_update',
+			array(
+				'task'    => 'module_update',
+				'file'    => $slug,
+				'user'    => $user_name,
+				'user_id' => (int) $user->ID,
+			)
+		);
 		wp_send_json_error( array( 'message' => __( 'File system credentials are required to update plugins.', 'core-support-thisismyurl' ) ) );
 	}
 
@@ -593,12 +758,37 @@ function timu_ajax_update_module(): void {
 
 	if ( is_wp_error( $result ) || ! $result ) {
 		$message = is_wp_error( $result ) ? $result->get_error_message() : __( 'Update failed.', 'core-support-thisismyurl' );
+		TIMU_Vault::add_log(
+			'error',
+			0,
+			wp_strip_all_tags( $message ),
+			'module_update',
+			array(
+				'task'    => 'module_update',
+				'file'    => $slug,
+				'user'    => $user_name,
+				'user_id' => (int) $user->ID,
+			)
+		);
 		wp_send_json_error( array( 'message' => $message ) );
 	}
 
 	TIMU_Module_Registry::clear_cache();
 	TIMU_Module_Registry::discover_modules();
 	TIMU_Module_Registry::load_catalog();
+
+	TIMU_Vault::add_log(
+		'info',
+		0,
+		sprintf( 'Module updated: %s', $slug ),
+		'module_update',
+		array(
+			'task'    => 'module_update',
+			'file'    => $slug,
+			'user'    => $user_name,
+			'user_id' => (int) $user->ID,
+		)
+	);
 
 	wp_send_json_success( array( 'message' => __( 'Module updated.', 'core-support-thisismyurl' ) ) );
 }
@@ -662,6 +852,53 @@ function timu_core_resolve_download_url( array $module ): string {
 	$url = (string) apply_filters( 'timu_resolve_download_url', $url, $module );
 
 	return esc_url_raw( $url );
+}
+
+/**
+ * Handle "Run Now" requests for scheduled tasks.
+ *
+ * @return void
+ */
+function timu_run_task_now(): void {
+	if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'timu_run_task_now' ) ) {
+		wp_safe_redirect( wp_get_referer() ?: admin_url() );
+		exit;
+	}
+
+	if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
+		wp_safe_redirect( wp_get_referer() ?: admin_url() );
+		exit;
+	}
+
+	$hook          = isset( $_POST['hook'] ) ? sanitize_text_field( wp_unslash( $_POST['hook'] ) ) : '';
+	$allowed_hooks = array( 'timu_refresh_modules', 'timu_vault_queue_runner' );
+	if ( ! in_array( $hook, $allowed_hooks, true ) ) {
+		wp_safe_redirect( wp_get_referer() ?: admin_url() );
+		exit;
+	}
+
+	// Run the task immediately.
+	do_action( $hook );
+
+	$user      = wp_get_current_user();
+	$user_name = $user && $user->exists() ? $user->display_name : __( 'System', 'core-support-thisismyurl' );
+
+	TIMU_Vault::add_log(
+		'info',
+		0,
+		sprintf( 'Manual run triggered for %s', $hook ),
+		'schedule_run',
+		array(
+			'task'    => 'run_now',
+			'file'    => $hook,
+			'user'    => $user_name,
+			'user_id' => (int) $user->ID,
+		)
+	);
+
+	$redirect = add_query_arg( 'timu_run_now', '1', wp_get_referer() ?: admin_url() );
+	wp_safe_redirect( $redirect );
+	exit;
 }
 
 /**
@@ -786,6 +1023,68 @@ function timu_core_admin_enqueue( string $hook ): void {
 	);
 }
 
+/**
+ * Register the Vault eraser with WordPress Personal Data Erasure.
+ *
+ * @param array $erasers Existing erasers.
+ * @return array Modified erasers.
+ */
+function timu_core_register_privacy_erasers( array $erasers ): array {
+	$erasers['timu-vault-eraser'] = array(
+		'eraser_friendly_name' => __( 'TIMU Vault (anonymize originals & derivatives)', 'core-support-thisismyurl' ),
+		'callback'             => __NAMESPACE__ . '\\timu_core_vault_eraser_callback',
+	);
+	return $erasers;
+}
+
+/**
+ * Vault eraser: anonymize attachments tied to the user; retain originals in Vault.
+ * Implements batching per WordPress privacy API contract.
+ *
+ * @param string $email_address User email being erased.
+ * @param int    $page          Page number for batching (1-indexed).
+ * @return array{items_removed:int,items_retained:int,messages:array,done:bool}
+ */
+function timu_core_vault_eraser_callback( string $email_address, int $page = 1 ): array {
+	$email_address = sanitize_email( $email_address );
+	if ( empty( $email_address ) ) {
+		return array(
+			'items_removed'  => 0,
+			'items_retained' => 0,
+			'messages'       => array( __( 'Invalid email address.', 'core-support-thisismyurl' ) ),
+			'done'           => true,
+		);
+	}
+
+	$user = get_user_by( 'email', $email_address );
+	if ( ! $user || ! $user->exists() ) {
+		return array(
+			'items_removed'  => 0,
+			'items_retained' => 0,
+			'messages'       => array( __( 'No user found for email; nothing to anonymize.', 'core-support-thisismyurl' ) ),
+			'done'           => true,
+		);
+	}
+
+	// Delegate to Vault anonymization (retains originals, scrubs personal data).
+	$result = TIMU_Vault::erase_user_personal_data( (int) $user->ID, max( 1, $page ), 50 );
+
+	// Ensure messages are sanitized.
+	$messages = array_map(
+		static function ( $m ) {
+			return wp_strip_all_tags( (string) $m );
+		},
+		(array) ( $result['messages'] ?? array() )
+	);
+
+	return array(
+		'items_removed'  => (int) ( $result['items_removed'] ?? 0 ),
+		'items_retained' => (int) ( $result['items_retained'] ?? 0 ),
+		'messages'       => $messages,
+		'done'           => (bool) ( $result['done'] ?? true ),
+	);
+}
+
 // Register activation and deactivation hooks.
 register_activation_hook( __FILE__, __NAMESPACE__ . '\\timu_core_activate' );
 register_deactivation_hook( __FILE__, __NAMESPACE__ . '\\timu_core_deactivate' );
@@ -794,6 +1093,13 @@ register_deactivation_hook( __FILE__, __NAMESPACE__ . '\\timu_core_deactivate' )
 add_action( 'plugins_loaded', __NAMESPACE__ . '\\timu_core_init' );
 
 /* @changelog
+ * [1.2601.72060] - 2026-01-08 20:06
+ * - Added dashboard activity log with task/file/user context
+ * - Surfaced scheduled task snapshots for catalog refresh and Vault queue
+ * - Flagged contributor uploads for Editor+ review while keeping them optimized
+ * - Logged module install/update/toggle outcomes for auditability
+ * - Dashboard now lists pending contributor uploads for review
+ *
  * [1.2601.71920] - 2026-01-07 19:35
  * - Issue #33: In-dashboard install/update flows
  * - Added AJAX handlers: timu_ajax_install_module and timu_ajax_update_module

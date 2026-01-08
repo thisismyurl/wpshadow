@@ -81,6 +81,41 @@ class TIMU_Module_Registry {
 		self::clear_cache();
 		self::discover_modules();
 		self::load_catalog();
+
+		$update_fn = is_multisite() ? 'update_site_option' : 'update_option';
+		call_user_func( $update_fn, 'timu_modules_last_refresh', time() );
+	}
+
+	/**
+	 * Provide a snapshot of scheduled tasks relevant to the suite.
+	 *
+	 * @return array<string,array<string,mixed>>
+	 */
+	public static function get_schedule_snapshot(): array {
+		$next_refresh = wp_next_scheduled( 'timu_refresh_modules' ) ?: 0;
+		$next_vault   = wp_next_scheduled( 'timu_vault_queue_runner' ) ?: 0;
+		$get_fn       = is_multisite() ? 'get_site_option' : 'get_option';
+		$last_refresh = (int) call_user_func( $get_fn, 'timu_modules_last_refresh', 0 );
+
+		$queue_state = class_exists( '\TIMU\\CoreSupport\\TIMU_Vault' ) ? TIMU_Vault::get_queue_state() : array();
+		$queue_last  = isset( $queue_state['last_run'] ) ? (int) $queue_state['last_run'] : 0;
+		$queue_status = isset( $queue_state['status'] ) ? (string) $queue_state['status'] : 'idle';
+
+		return array(
+			'catalog_refresh' => array(
+				'label'      => __( 'Catalog refresh', 'core-support-thisismyurl' ),
+				'hook'       => 'timu_refresh_modules',
+				'next_run'   => $next_refresh,
+				'last_run'   => $last_refresh,
+			),
+			'vault_queue'     => array(
+				'label'      => __( 'Vault queue runner', 'core-support-thisismyurl' ),
+				'hook'       => 'timu_vault_queue_runner',
+				'next_run'   => $next_vault,
+				'last_run'   => $queue_last,
+				'queue_state'=> $queue_status,
+			),
+		);
 	}
 
 	/**

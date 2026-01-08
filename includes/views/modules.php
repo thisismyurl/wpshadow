@@ -12,6 +12,9 @@ defined( 'ABSPATH' ) || exit;
 ?>
 <div class="wrap timu-modules-view">
     <h1 class="wp-heading-inline"><?php esc_html_e( 'Modules', 'core-support-thisismyurl' ); ?></h1>
+    <span class="dashicons dashicons-editor-help" aria-label="<?php esc_attr_e( 'Modules help', 'core-support-thisismyurl' ); ?>" title="<?php esc_attr_e( 'Install or update modules from the catalog; activate/deactivate per site or network. Network Active items can only be deactivated from Network Admin.', 'core-support-thisismyurl' ); ?>">
+        <span class="screen-reader-text"><?php esc_html_e( 'Install or update modules from the catalog; activate/deactivate per site or network. Network Active items can only be deactivated from Network Admin.', 'core-support-thisismyurl' ); ?></span>
+    </span>
     <?php $override_allowed = class_exists( 'TIMU_Vault' ) ? TIMU_Vault::site_override_allowed() : true; ?>
     <div class="timu-dashboard-stats">
         <?php

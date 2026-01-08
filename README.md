@@ -38,41 +38,30 @@ For network-wide activation, activate from the Network Admin panel. Global setti
 
 ## Using the Support Dashboard
 
-The **Support Dashboard** provides a central hub for managing your Support Suite modules:
+The Support Dashboard links to the **Modules** page, where all management now happens (stat cards + table). Dashboard itself is a lightweight overview.
 
-### Dashboard Overview
+### Navigation
+- **Dashboard (menu):** High-level intro with a button to Modules
+- **Modules (primary workspace):** Stat cards + modules table
+- **Settings / Network Settings:** Vault and policy configuration (scope depends on context)
 
-**Module Statistics:**
-- **Total Modules** - All installed hubs and spokes
-- **Enabled** - Active modules on this site
-- **Available** - Modules in the catalog not yet installed
-- **Updates** - Modules with newer versions available
-- **Hubs/Spokes** - Count of Hub vs. Spoke modules
+### Modules page layout
+- **Stat cards (top):** Total, Enabled, Available, Updates, Hubs, Spokes; numbers use `number_format_i18n()` and respect multisite activation (site + network-active)
+- **Modules table:** Hubs and spokes grouped by hub; hub rows can collapse/expand spokes
+- **Badges:** "Network Active" appears when a plugin is network-activated; override notices show when the Super Admin has locked settings
 
-### Module Management
+### Actions
+- **Activate/Deactivate:** Toggle installed modules. If network-active, only Network Admin sees Deactivate Network.
+- **Install/Update:** (when catalog download_url is available) install missing modules or update when a newer version is detected.
+- **External links:** Catalog/details links open in a new tab with `rel="noopener noreferrer"`.
 
-**Module Cards** display:
-- **Module Name & Type** - Hub or Spoke designation
-- **Status** - Installed, Available, or Update Available
-- **Enable/Disable Toggle** - Turn modules on/off without uninstalling
-- **Install Button** - Add available modules (if not installed)
-- **Update Button** - Install newer versions when available
+### Multisite behavior
+- **Network Admin:** Sees network-active badges and network deactivate links; controls global policies.
+- **Site Admin:** Sees network-active modules as enabled; cannot deactivate network-active modules. Override allowance is dictated by Super Admin policy.
 
-**Actions:**
-- **Toggle Enable/Disable:** Quickly enable or disable any installed module
-- **Install Module:** Download and activate modules from the catalog
-- **Update Module:** Update to the latest version with one click
-
-### Filters & Search
-
-- **Type Filter** - Show only Hubs, Spokes, or All
-- **Status Filter** - Show Installed, Available, or All
-- **Search** - Find modules by name or keyword
-
-### Module Types
-
-- **Hubs** - Core infrastructure (Multi-Engine Fallback, Encryption, Cloud Bridge)
-- **Spokes** - Format-specific transcoders (AVIF, WebP, HEIC, etc.)
+### Troubleshooting
+- If counts look off, ensure the plugin is active network-wide (for network modules) or locally; counts are derived from `is_plugin_active()` + `is_plugin_active_for_network()`.
+- If actions are missing, check capabilities: `manage_options` (site) or `manage_network_options` (network) are required.
 
 ## Multisite Configuration
 

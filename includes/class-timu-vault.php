@@ -21,31 +21,35 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class TIMU_Vault {
 
-	private const OPTION_KEY            = 'timu_vault_settings';
-	private const META_PATH             = '_timu_vault_path';
-	private const META_MODE             = '_timu_vault_mode';
-	private const META_HASH_RAW         = '_timu_vault_sha256_raw';
-	private const META_HASH_STORE       = '_timu_vault_sha256_store';
-	private const META_SIZE             = '_timu_vault_size';
-	private const META_MIME             = '_timu_vault_mime';
-	private const META_CREATED          = '_timu_vault_created';
-	private const META_SIGNATURE        = '_timu_vault_signature';
-	private const META_COMPRESSION      = '_timu_vault_compression';
-	private const META_ENCRYPTED        = '_timu_vault_encrypted';
-	private const META_KEY_ID           = '_timu_vault_key_id';
-	private const META_JOURNAL          = '_timu_vault_journal';
-	private const DOWNLOAD_ACTION       = 'timu_vault_download';
-	private const OPTION_ALLOW_OVERRIDE = 'allow_site_override';
-	private const KEY_ACTION            = 'timu_vault_key_action';
-	private const ATTACHMENT_ACTION     = 'timu_vault_attachment_action';
-	private const QUEUE_ACTION          = 'timu_vault_queue_action';
-	private const QUEUE_OPTION          = 'timu_vault_queue_state';
-	private const LOG_OPTION            = 'timu_vault_logs';
-	private const LOG_LIMIT             = 50;
-	private const LOG_MAX_ENTRIES       = 500;
-	private const LOG_RETENTION_DAYS    = 30;
-	private const LEDGER_OPTION         = 'timu_vault_global_ledger';
-	private const LEDGER_MAX_ENTRIES    = 10000;
+	private const OPTION_KEY             = 'timu_vault_settings';
+	private const META_PATH              = '_timu_vault_path';
+	private const META_MODE              = '_timu_vault_mode';
+	private const META_HASH_RAW          = '_timu_vault_sha256_raw';
+	private const META_HASH_STORE        = '_timu_vault_sha256_store';
+	private const META_SIZE              = '_timu_vault_size';
+	private const META_MIME              = '_timu_vault_mime';
+	private const META_CREATED           = '_timu_vault_created';
+	private const META_SIGNATURE         = '_timu_vault_signature';
+	private const META_COMPRESSION       = '_timu_vault_compression';
+	private const META_ENCRYPTED         = '_timu_vault_encrypted';
+	private const META_KEY_ID            = '_timu_vault_key_id';
+	private const META_JOURNAL           = '_timu_vault_journal';
+	private const META_UPLOADER          = '_timu_vault_uploader_user_id';
+	private const META_ANONYMIZED        = '_timu_vault_anonymized';
+	private const DOWNLOAD_ACTION        = 'timu_vault_download';
+	private const OPTION_ALLOW_OVERRIDE  = 'allow_site_override';
+	private const KEY_ACTION             = 'timu_vault_key_action';
+	private const ATTACHMENT_ACTION      = 'timu_vault_attachment_action';
+	private const QUEUE_ACTION           = 'timu_vault_queue_action';
+	private const QUEUE_OPTION           = 'timu_vault_queue_state';
+	private const LOG_OPTION             = 'timu_vault_logs';
+	private const LOG_LIMIT              = 50;
+	private const LOG_MAX_ENTRIES        = 0; // Unlimited until manually cleared.
+	private const LOG_RETENTION_DAYS     = 30;
+	private const LEDGER_OPTION          = 'timu_vault_global_ledger';
+	private const LEDGER_MAX_ENTRIES     = 10000;
+	private const META_PENDING_REVIEW    = '_timu_pending_review';
+	private const META_PENDING_OPTIMIZED = '_timu_pending_optimized';
 
 	/**
 	 * Bootstrap hooks.
@@ -79,6 +83,7 @@ class TIMU_Vault {
 			\WP_CLI::add_command( 'timu vault verify', array( __CLASS__, 'cli_verify' ) );
 			\WP_CLI::add_command( 'timu vault status', array( __CLASS__, 'cli_status' ) );
 			\WP_CLI::add_command( 'timu vault migrate', array( __CLASS__, 'cli_migrate' ) );
+			\WP_CLI::add_command( 'timu vault erase-user-data', array( __CLASS__, 'cli_erase_user_data' ) );
 		}
 	}
 
@@ -246,11 +251,14 @@ class TIMU_Vault {
 			if ( empty( $enc ) ) {
 				continue; // Only re-encrypt items already encrypted.
 			}
-			$ok = self::reencrypt_attachment( (int) $attachment_id ) ? ( $ok + 1 ) : $ok;
+			$ok   = self::reencrypt_attachment( (int) $attachment_id ) ? ( $ok + 1 ) : $ok;
 			$fail = ! self::reencrypt_attachment( (int) $attachment_id ) ? ( $fail + 1 ) : $fail;
 		}
 
-		return array( 'ok' => $ok, 'fail' => $fail );
+		return array(
+			'ok'   => $ok,
+			'fail' => $fail,
+		);
 	}
 
 	/**
@@ -287,6 +295,8 @@ class TIMU_Vault {
 	 * @return void
 	 */
 	public static function maybe_ingest_attachment( int $attachment_id ): void {
+			self::maybe_flag_pending_review( $attachment_id );
+
 		if ( ! self::is_enabled() ) {
 			return;
 		}
@@ -319,6 +329,49 @@ class TIMU_Vault {
 	public static function maybe_ingest_from_metadata( array $metadata, int $attachment_id ): array {
 		self::maybe_ingest_attachment( $attachment_id );
 		return $metadata;
+	}
+
+	/**
+	 * Flag contributor uploads for editor review while keeping them optimized by default.
+	 *
+	 * @param int $attachment_id Attachment ID.
+	 * @return void
+	 */
+	private static function maybe_flag_pending_review( int $attachment_id ): void {
+		$post = get_post( $attachment_id );
+		if ( ! $post || 'attachment' !== $post->post_type ) {
+			return;
+		}
+
+		$user_id = (int) ( $post->post_author ?? 0 );
+		if ( $user_id > 0 && user_can( $user_id, 'publish_posts' ) ) {
+			return; // Editor+ uploads do not require review.
+		}
+
+		$already_pending = (string) get_post_meta( $attachment_id, self::META_PENDING_REVIEW, true );
+		if ( '1' === $already_pending ) {
+			return;
+		}
+
+		update_post_meta( $attachment_id, self::META_PENDING_REVIEW, '1' );
+		update_post_meta( $attachment_id, self::META_PENDING_OPTIMIZED, '1' );
+
+		$file      = wp_basename( (string) get_attached_file( $attachment_id ) );
+		$user      = get_user_by( 'id', $user_id );
+		$user_name = $user && $user->exists() ? $user->display_name : __( 'Unknown', 'core-support-thisismyurl' );
+
+		self::add_log(
+			'info',
+			$attachment_id,
+			'Pending contributor upload queued for review.',
+			'upload_review',
+			array(
+				'task'    => 'pending_upload',
+				'file'    => $file,
+				'user'    => $user_name,
+				'user_id' => $user_id,
+			)
+		);
 	}
 
 	/**
@@ -641,11 +694,11 @@ class TIMU_Vault {
 			return false;
 		}
 
-		$mode       = (string) get_post_meta( $attachment_id, self::META_MODE, true );
-		$target     = get_attached_file( $attachment_id );
-		$raw_hash   = (string) get_post_meta( $attachment_id, self::META_HASH_RAW, true );
-		$mime_type  = (string) get_post_meta( $attachment_id, self::META_MIME, true );
-		$enc_algo    = (string) get_post_meta( $attachment_id, self::META_ENCRYPTED, true );
+		$mode         = (string) get_post_meta( $attachment_id, self::META_MODE, true );
+		$target       = get_attached_file( $attachment_id );
+		$raw_hash     = (string) get_post_meta( $attachment_id, self::META_HASH_RAW, true );
+		$mime_type    = (string) get_post_meta( $attachment_id, self::META_MIME, true );
+		$enc_algo     = (string) get_post_meta( $attachment_id, self::META_ENCRYPTED, true );
 		$is_encrypted = ! empty( $enc_algo );
 
 		if ( empty( $target ) ) {
@@ -693,6 +746,22 @@ class TIMU_Vault {
 			unlink( $work_path );
 		}
 
+		// Journal entry if successful.
+		if ( $result ) {
+			self::add_journal_entry(
+				$attachment_id,
+				array(
+					'op'          => 'rehydrate',
+					'args'        => array(
+						'mode'      => $mode,
+						'encrypted' => $is_encrypted,
+					),
+					'before_hash' => null,
+					'after_hash'  => $raw_hash,
+				)
+			);
+		}
+
 		return $result;
 	}
 
@@ -736,9 +805,9 @@ class TIMU_Vault {
 	 * @return void
 	 */
 	private static function ingest( int $attachment_id, string $source_path ): void {
-		$settings      = self::get_settings();
-		$mode          = self::resolve_mode( $settings['mode'] ?? 'raw' );
-		$uploads       = wp_upload_dir();
+		$settings = self::get_settings();
+		$mode     = self::resolve_mode( $settings['mode'] ?? 'raw' );
+		$uploads  = wp_upload_dir();
 		// Ensure vault directory is initialized and protected.
 		self::ensure_vault_directory();
 		$vault_dirname = (string) get_option( 'timu_vault_dirname' );
@@ -797,6 +866,240 @@ class TIMU_Vault {
 		update_post_meta( $attachment_id, self::META_CREATED, $start_time );
 		update_post_meta( $attachment_id, self::META_SIGNATURE, $signature );
 		update_post_meta( $attachment_id, self::META_COMPRESSION, $compression );
+		// Record uploader for privacy erasure mapping.
+		$uploader = get_current_user_id();
+		update_post_meta( $attachment_id, self::META_UPLOADER, (int) $uploader );
+
+		// Journal entry.
+		self::add_journal_entry(
+			$attachment_id,
+			array(
+				'op'          => 'ingest',
+				'args'        => array(
+					'mode'        => $mode,
+					'encrypt'     => $encrypt,
+					'key_id'      => $encrypt ? ( $key_info['id'] ?? 0 ) : null,
+					'compression' => $compression,
+				),
+				'before_hash' => null,
+				'after_hash'  => $raw_hash,
+			)
+		);
+	}
+
+	/**
+	 * Strip EXIF/metadata from a single image file.
+	 *
+	 * @param string $file Absolute path.
+	 * @return bool True when stripped or not applicable, false on failure.
+	 */
+	private static function strip_exif_from_file( string $file ): bool {
+		if ( ! file_exists( $file ) ) {
+			return false;
+		}
+
+		$ext = strtolower( (string) pathinfo( $file, PATHINFO_EXTENSION ) );
+		if ( ! in_array( $ext, array( 'jpg', 'jpeg', 'png', 'webp' ), true ) ) {
+			// Non-image or unsupported format; treat as OK (no EXIF).
+			return true;
+		}
+
+		// Prefer Imagick.
+		if ( class_exists( '\\Imagick' ) ) {
+			try {
+				$img = new \Imagick( $file );
+				$img->stripImage();
+				$ok = $img->writeImage( $file );
+				$img->clear();
+				$img->destroy();
+				return (bool) $ok;
+			} catch ( \Throwable $e ) {
+				return false;
+			}
+		}
+
+		// Fallback: GD re-encode to drop metadata.
+		$resource = null;
+		if ( in_array( $ext, array( 'jpg', 'jpeg' ), true ) && function_exists( 'imagecreatefromjpeg' ) ) {
+			$resource = @imagecreatefromjpeg( $file );
+			if ( ! $resource ) {
+				return false;
+			}
+			$ok = @imagejpeg( $resource, $file, 90 );
+			imagedestroy( $resource );
+			return (bool) $ok;
+		}
+
+		if ( 'png' === $ext && function_exists( 'imagecreatefrompng' ) ) {
+			$resource = @imagecreatefrompng( $file );
+			if ( ! $resource ) {
+				return false;
+			}
+			// Force no ancillary chunks; GD save drops most metadata.
+			$ok = @imagepng( $resource, $file );
+			imagedestroy( $resource );
+			return (bool) $ok;
+		}
+
+		if ( 'webp' === $ext && function_exists( 'imagecreatefromwebp' ) ) {
+			$resource = @imagecreatefromwebp( $file );
+			if ( ! $resource ) {
+				return false;
+			}
+			$ok = @imagewebp( $resource, $file, 80 );
+			imagedestroy( $resource );
+			return (bool) $ok;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Strip EXIF/metadata from attachment and its derivatives.
+	 *
+	 * @param int $attachment_id Attachment ID.
+	 * @return array{ok:int,fail:int}
+	 */
+	private static function strip_exif_from_attachment( int $attachment_id ): array {
+		$ok   = 0;
+		$fail = 0;
+
+		$main = get_attached_file( $attachment_id );
+		if ( ! empty( $main ) && file_exists( $main ) ) {
+			self::strip_exif_from_file( $main ) ? $ok++ : $fail++;
+		}
+
+		$meta = wp_get_attachment_metadata( $attachment_id );
+		if ( is_array( $meta ) && ! empty( $meta['sizes'] ) ) {
+			$uploads = wp_get_upload_dir();
+			$base    = trailingslashit( $uploads['basedir'] );
+			$folder  = trailingslashit( dirname( (string) $meta['file'] ) );
+			foreach ( (array) $meta['sizes'] as $size ) {
+				$path = $base . $folder . ( $size['file'] ?? '' );
+				if ( ! empty( $path ) && file_exists( $path ) ) {
+					self::strip_exif_from_file( $path ) ? $ok++ : $fail++;
+				}
+			}
+		}
+
+		return array(
+			'ok'   => $ok,
+			'fail' => $fail,
+		);
+	}
+
+	/**
+	 * Anonymize a single attachment: scrub uploader meta and journal user IDs; strip EXIF on derivatives.
+	 *
+	 * @param int $attachment_id Attachment ID.
+	 * @param int $user_id Target user to anonymize.
+	 * @return bool Success.
+	 */
+	public static function anonymize_attachment( int $attachment_id, int $user_id ): bool {
+		if ( $attachment_id < 1 || $user_id < 1 ) {
+			return false;
+		}
+
+		// Strip EXIF from public derivatives.
+		self::strip_exif_from_attachment( $attachment_id );
+
+		// Scrub uploader mapping if matches.
+		$uploader = (int) get_post_meta( $attachment_id, self::META_UPLOADER, true );
+		if ( $uploader === $user_id ) {
+			update_post_meta( $attachment_id, self::META_UPLOADER, 0 );
+		}
+
+		// Scrub journal user IDs.
+		$journal = get_post_meta( $attachment_id, self::META_JOURNAL, true );
+		if ( is_array( $journal ) && ! empty( $journal['operations'] ) ) {
+			$changed = false;
+			foreach ( $journal['operations'] as &$op ) {
+				if ( isset( $op['user_id'] ) && (int) $op['user_id'] === $user_id ) {
+					$op['user_id'] = 0; // anonymized
+					$changed       = true;
+				}
+			}
+			unset( $op );
+			if ( $changed ) {
+				update_post_meta( $attachment_id, self::META_JOURNAL, $journal );
+			}
+		}
+
+		// Mark anonymized.
+		update_post_meta( $attachment_id, self::META_ANONYMIZED, (string) gmdate( 'Y-m-d\TH:i:s\Z' ) );
+
+		// Ledger entry.
+		self::add_ledger_entry(
+			array(
+				'attachment_id' => $attachment_id,
+				'op'            => 'erase_personal_data',
+				'user_id'       => $user_id,
+				'success'       => true,
+			)
+		);
+
+		return true;
+	}
+
+	/**
+	 * Batch anonymize attachments for a given user.
+	 *
+	 * @param int $user_id User ID.
+	 * @param int $page    Page for batching (1-indexed).
+	 * @param int $per_page Items per batch.
+	 * @return array{items_removed:int,items_retained:int,messages:array,done:bool}
+	 */
+	public static function erase_user_personal_data( int $user_id, int $page = 1, int $per_page = 50 ): array {
+		$items_removed  = 0; // count of personal-data elements scrubbed
+		$items_retained = 0; // originals retained by policy
+		$messages       = array();
+
+		if ( $user_id < 1 ) {
+			return array(
+				'items_removed'  => 0,
+				'items_retained' => 0,
+				'messages'       => array( __( 'Invalid user.', 'core-support-thisismyurl' ) ),
+				'done'           => true,
+			);
+		}
+
+		$query = new \WP_Query(
+			array(
+				'post_type'      => 'attachment',
+				'post_status'    => 'inherit',
+				'posts_per_page' => max( 1, $per_page ),
+				'paged'          => max( 1, $page ),
+				'fields'         => 'ids',
+				'meta_query'     => array(
+					array(
+						'key'     => self::META_UPLOADER,
+						'value'   => $user_id,
+						'compare' => '=',
+						'type'    => 'NUMERIC',
+					),
+				),
+			)
+		);
+
+		foreach ( (array) $query->posts as $attachment_id ) {
+			$ok = self::anonymize_attachment( (int) $attachment_id, $user_id );
+			if ( $ok ) {
+				++$items_removed;
+				$messages[] = sprintf( /* translators: 1: attachment ID */ __( 'Anonymized attachment #%1$d.', 'core-support-thisismyurl' ), (int) $attachment_id );
+			} else {
+				++$items_retained;
+				$messages[] = sprintf( /* translators: 1: attachment ID */ __( 'Failed to anonymize attachment #%1$d.', 'core-support-thisismyurl' ), (int) $attachment_id );
+			}
+		}
+
+		$done = ( $query->post_count < $per_page );
+
+		return array(
+			'items_removed'  => $items_removed,
+			'items_retained' => $items_retained,
+			'messages'       => $messages,
+			'done'           => (bool) $done,
+		);
 	}
 
 	/**
@@ -1248,8 +1551,8 @@ class TIMU_Vault {
 		$state = array(
 			'id'        => uniqid( 'timu_vault_', true ),
 			'type'      => $type,
-				'page'      => 1,
-				'per_page'  => isset( $options['per_page'] ) ? max( 5, (int) $options['per_page'] ) : 25,
+			'page'      => 1,
+			'per_page'  => isset( $options['per_page'] ) ? max( 5, (int) $options['per_page'] ) : 25,
 			'ok'        => 0,
 			'fail'      => 0,
 			'missing'   => 0,
@@ -1266,6 +1569,58 @@ class TIMU_Vault {
 
 		update_option( self::QUEUE_OPTION, $state );
 		self::schedule_queue();
+	}
+
+	/**
+	 * Retrieve pending contributor uploads that require editor review.
+	 *
+	 * @param int $limit Number of entries to return.
+	 * @return array<int,array<string,mixed>>
+	 */
+	public static function get_pending_contributor_uploads( int $limit = 5 ): array {
+		$query = new \WP_Query(
+			array(
+				'post_type'      => 'attachment',
+				'post_status'    => 'inherit',
+				'posts_per_page' => $limit,
+				'orderby'        => 'date',
+				'order'          => 'DESC',
+				'fields'         => 'ids',
+				'meta_query'     => array(
+					array(
+						'key'   => self::META_PENDING_REVIEW,
+						'value' => '1',
+					),
+				),
+			)
+		);
+
+		if ( empty( $query->posts ) ) {
+			return array();
+		}
+
+		$items = array();
+		foreach ( $query->posts as $attachment_id ) {
+			$post         = get_post( (int) $attachment_id );
+			$user_id      = $post ? (int) $post->post_author : 0;
+			$user         = $user_id ? get_user_by( 'id', $user_id ) : null;
+			$user_name    = $user && $user->exists() ? $user->display_name : __( 'Unknown', 'core-support-thisismyurl' );
+			$file         = wp_basename( (string) get_attached_file( (int) $attachment_id ) );
+			$is_optimized = (string) get_post_meta( (int) $attachment_id, self::META_PENDING_OPTIMIZED, true ) === '1';
+
+			$items[] = array(
+				'id'        => (int) $attachment_id,
+				'title'     => $post ? $post->post_title : __( 'Untitled', 'core-support-thisismyurl' ),
+				'user'      => $user_name,
+				'user_id'   => $user_id,
+				'date'      => $post ? $post->post_date_gmt : '',
+				'file'      => $file,
+				'optimized' => $is_optimized,
+				'edit_link' => get_edit_post_link( (int) $attachment_id, '' ),
+			);
+		}
+
+		return $items;
 	}
 
 	/**
@@ -1332,7 +1687,6 @@ class TIMU_Vault {
 				),
 			);
 		}
-
 
 		// For migrate, only those without vault meta.
 		if ( 'migrate_all' === $type ) {
@@ -1458,9 +1812,10 @@ class TIMU_Vault {
 	 * @param int    $attachment_id Attachment ID.
 	 * @param string $reason Human-readable reason.
 	 * @param string $operation Optional operation name.
+	 * @param array  $context Optional context (task, file, user, user_id).
 	 * @return void
 	 */
-	private static function add_log( string $level, int $attachment_id, string $reason, string $operation = '' ): void {
+	public static function add_log( string $level, int $attachment_id, string $reason, string $operation = '', array $context = array() ): void {
 		$logs = (array) get_option( self::LOG_OPTION, array() );
 
 		$entry = array(
@@ -1469,13 +1824,17 @@ class TIMU_Vault {
 			'attachment_id' => $attachment_id,
 			'reason'        => sanitize_text_field( $reason ),
 			'operation'     => sanitize_text_field( $operation ),
+			'task'          => isset( $context['task'] ) ? sanitize_text_field( (string) $context['task'] ) : '',
+			'file'          => isset( $context['file'] ) ? sanitize_text_field( (string) $context['file'] ) : '',
+			'user'          => isset( $context['user'] ) ? sanitize_text_field( (string) $context['user'] ) : '',
+			'user_id'       => isset( $context['user_id'] ) ? (int) $context['user_id'] : 0,
 		);
 
 		// Prepend new entry.
 		array_unshift( $logs, $entry );
 
-		// Trim to max entries (ring buffer).
-		if ( count( $logs ) > self::LOG_MAX_ENTRIES ) {
+		// Trim to max entries only when explicitly configured.
+		if ( self::LOG_MAX_ENTRIES > 0 && count( $logs ) > self::LOG_MAX_ENTRIES ) {
 			$logs = array_slice( $logs, 0, self::LOG_MAX_ENTRIES );
 		}
 
@@ -1630,13 +1989,16 @@ class TIMU_Vault {
 		fputcsv( $fh, array( 'timestamp', 'level', 'attachment_id', 'reason', 'operation' ) );
 
 		foreach ( $logs as $entry ) {
-			fputcsv( $fh, array(
-				$entry['timestamp'] ?? '',
-				$entry['level'] ?? '',
-				(string) ( $entry['attachment_id'] ?? '' ),
-				$entry['reason'] ?? '',
-				$entry['operation'] ?? '',
-			) );
+			fputcsv(
+				$fh,
+				array(
+					$entry['timestamp'] ?? '',
+					$entry['level'] ?? '',
+					(string) ( $entry['attachment_id'] ?? '' ),
+					$entry['reason'] ?? '',
+					$entry['operation'] ?? '',
+				)
+			);
 		}
 
 		fclose( $fh );
@@ -1694,6 +2056,20 @@ class TIMU_Vault {
 				'reason' => 'Raw hash mismatch.',
 			);
 		}
+
+		// Journal entry for successful verification.
+		self::add_journal_entry(
+			$attachment_id,
+			array(
+				'op'          => 'verify',
+				'args'        => array(
+					'result'        => 'ok',
+					'expected_hash' => $expected_raw,
+				),
+				'before_hash' => $expected_raw,
+				'after_hash'  => $expected_raw,
+			)
+		);
 
 		return array(
 			'status' => 'ok',
@@ -1870,6 +2246,71 @@ class TIMU_Vault {
 		$per_page = isset( $assoc['per-page'] ) ? max( 5, (int) $assoc['per-page'] ) : 50;
 		self::start_queue( 'migrate_all', array( 'per_page' => $per_page ) );
 		\WP_CLI::success( 'Queued migrate job (per-page: ' . $per_page . ').' );
+	}
+
+	/**
+	 * WP-CLI: Anonymize attachments for a given user (GDPR erasure).
+	 * Retains originals in Vault; scrubs personal data.
+	 *
+	 * @param array $args Positional args: [user-id or email].
+	 * @param array $assoc Assoc args: batch, verbose.
+	 * @return void
+	 */
+	public static function cli_erase_user_data( array $args, array $assoc = array() ): void {
+		if ( empty( $args[0] ) ) {
+			\WP_CLI::error( 'Usage: wp timu vault erase-user-data <user-id-or-email> [--batch=50] [--verbose]' );
+		}
+
+		$user_input = (string) $args[0];
+		$batch_size = isset( $assoc['batch'] ) ? max( 1, (int) $assoc['batch'] ) : 50;
+		$verbose    = isset( $assoc['verbose'] ) && $assoc['verbose'];
+
+		// Resolve user.
+		if ( is_numeric( $user_input ) ) {
+			$user = get_user_by( 'id', (int) $user_input );
+		} else {
+			$user = get_user_by( 'email', (string) $user_input );
+		}
+
+		if ( ! $user || ! $user->exists() ) {
+			\WP_CLI::error( 'User not found: ' . $user_input );
+		}
+
+		$user_id = (int) $user->ID;
+
+		\WP_CLI::log( 'Anonymizing attachments for user: ' . $user->user_login . ' (ID: ' . $user_id . ', Email: ' . $user->user_email . ')' );
+		\WP_CLI::log( 'Policy: Retain originals in Vault, anonymize personal data.' );
+
+		$page          = 1;
+		$total_removed = 0;
+		$total_retain  = 0;
+
+		while ( true ) {
+			$result = self::erase_user_personal_data( $user_id, $page, $batch_size );
+
+			$items_removed = (int) ( $result['items_removed'] ?? 0 );
+			$items_retain  = (int) ( $result['items_retained'] ?? 0 );
+			$done          = (bool) ( $result['done'] ?? true );
+
+			$total_removed += $items_removed;
+			$total_retain  += $items_retain;
+
+			if ( $verbose ) {
+				foreach ( (array) ( $result['messages'] ?? array() ) as $msg ) {
+					\WP_CLI::log( '  ' . $msg );
+				}
+			}
+
+			\WP_CLI::log( "Page $page: Removed $items_removed, Retained $items_retain" );
+
+			if ( $done ) {
+				break;
+			}
+
+			++$page;
+		}
+
+		\WP_CLI::success( "Completed: Anonymized $total_removed attachments, $total_retain failed. Originals retained in Vault." );
 	}
 
 	/**
@@ -2112,7 +2553,7 @@ class TIMU_Vault {
 			return false;
 		}
 
-		$tag = '';
+		$tag        = '';
 		$ciphertext = openssl_encrypt( $plaintext, 'aes-256-gcm', $hash_key, OPENSSL_RAW_DATA, $iv, $tag );
 		if ( false === $ciphertext || empty( $tag ) ) {
 			return false;
@@ -2312,7 +2753,7 @@ class TIMU_Vault {
 		$index_path = trailingslashit( $vault ) . 'index.php';
 		if ( ! file_exists( $index_path ) ) {
 			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-			@file_put_contents( $index_path, "<?php http_response_code(404); exit;" );
+			@file_put_contents( $index_path, '<?php http_response_code(404); exit;' );
 		}
 
 		// Add .htaccess rules to deny all web access.
@@ -2339,6 +2780,175 @@ class TIMU_Vault {
 			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			@file_put_contents( $webconfig_path, $webconfig );
 		}
+	}
+
+	/**
+	 * Add entry to attachment journal and global ledger.
+	 *
+	 * @param int   $attachment_id Attachment post ID.
+	 * @param array $entry         Journal entry with op, user_id, args, before_hash, after_hash.
+	 * @return bool Success status.
+	 */
+	public static function add_journal_entry( int $attachment_id, array $entry ): bool {
+		if ( ! $attachment_id || $attachment_id < 1 ) {
+			return false;
+		}
+
+		// Validate required fields.
+		if ( empty( $entry['op'] ) ) {
+			return false;
+		}
+
+		// Build complete entry.
+		$journal_entry = array(
+			'ts'          => gmdate( 'Y-m-d\TH:i:s\Z' ),
+			'user_id'     => $entry['user_id'] ?? get_current_user_id(),
+			'op'          => sanitize_key( $entry['op'] ),
+			'args'        => $entry['args'] ?? array(),
+			'before_hash' => $entry['before_hash'] ?? null,
+			'after_hash'  => $entry['after_hash'] ?? null,
+		);
+
+		// Get existing journal.
+		$journal = get_post_meta( $attachment_id, self::META_JOURNAL, true );
+		if ( ! is_array( $journal ) || empty( $journal['operations'] ) ) {
+			$journal = array(
+				'attachment_id' => $attachment_id,
+				'created'       => gmdate( 'Y-m-d\TH:i:s\Z' ),
+				'operations'    => array(),
+			);
+		}
+
+		// Append entry.
+		$journal['operations'][] = $journal_entry;
+
+		// Save journal.
+		update_post_meta( $attachment_id, self::META_JOURNAL, $journal );
+
+		// Add to global ledger.
+		self::add_ledger_entry(
+			array(
+				'attachment_id' => $attachment_id,
+				'op'            => $journal_entry['op'],
+				'user_id'       => $journal_entry['user_id'],
+				'success'       => true,
+			)
+		);
+
+		return true;
+	}
+
+	/**
+	 * Get journal for attachment.
+	 *
+	 * @param int $attachment_id Attachment post ID.
+	 * @return array|null Journal array or null if not found.
+	 */
+	public static function get_journal( int $attachment_id ): ?array {
+		if ( ! $attachment_id || $attachment_id < 1 ) {
+			return null;
+		}
+
+		$journal = get_post_meta( $attachment_id, self::META_JOURNAL, true );
+
+		if ( ! is_array( $journal ) || empty( $journal['operations'] ) ) {
+			return null;
+		}
+
+		return $journal;
+	}
+
+	/**
+	 * Add entry to global ledger.
+	 *
+	 * @param array $entry Ledger entry with attachment_id, op, user_id, success.
+	 * @return void
+	 */
+	private static function add_ledger_entry( array $entry ): void {
+		$ledger = get_option( self::LEDGER_OPTION, array() );
+
+		if ( ! is_array( $ledger ) ) {
+			$ledger = array();
+		}
+
+		// Build complete entry.
+		$ledger_entry = array(
+			'ts'            => gmdate( 'Y-m-d\TH:i:s\Z' ),
+			'site_id'       => get_current_blog_id(),
+			'attachment_id' => $entry['attachment_id'] ?? 0,
+			'user_id'       => $entry['user_id'] ?? 0,
+			'op'            => sanitize_key( $entry['op'] ?? '' ),
+			'success'       => (bool) ( $entry['success'] ?? false ),
+		);
+
+		// Append entry.
+		$ledger[] = $ledger_entry;
+
+		// Rotate if exceeds limit.
+		if ( count( $ledger ) > self::LEDGER_MAX_ENTRIES ) {
+			// Keep most recent entries.
+			$ledger = array_slice( $ledger, -self::LEDGER_MAX_ENTRIES );
+		}
+
+		update_option( self::LEDGER_OPTION, $ledger, false );
+	}
+
+	/**
+	 * Get global ledger entries.
+	 *
+	 * @param array $args Optional filters: since, until, op, attachment_id, limit.
+	 * @return array Ledger entries.
+	 */
+	public static function get_global_ledger( array $args = array() ): array {
+		$ledger = get_option( self::LEDGER_OPTION, array() );
+
+		if ( ! is_array( $ledger ) ) {
+			return array();
+		}
+
+		// Apply filters.
+		if ( ! empty( $args['since'] ) ) {
+			$ledger = array_filter(
+				$ledger,
+				function ( $entry ) use ( $args ) {
+					return isset( $entry['ts'] ) && $entry['ts'] >= $args['since'];
+				}
+			);
+		}
+
+		if ( ! empty( $args['until'] ) ) {
+			$ledger = array_filter(
+				$ledger,
+				function ( $entry ) use ( $args ) {
+					return isset( $entry['ts'] ) && $entry['ts'] <= $args['until'];
+				}
+			);
+		}
+
+		if ( ! empty( $args['op'] ) ) {
+			$ledger = array_filter(
+				$ledger,
+				function ( $entry ) use ( $args ) {
+					return isset( $entry['op'] ) && $entry['op'] === $args['op'];
+				}
+			);
+		}
+
+		if ( ! empty( $args['attachment_id'] ) ) {
+			$ledger = array_filter(
+				$ledger,
+				function ( $entry ) use ( $args ) {
+					return isset( $entry['attachment_id'] ) && (int) $entry['attachment_id'] === (int) $args['attachment_id'];
+				}
+			);
+		}
+
+		// Apply limit.
+		if ( ! empty( $args['limit'] ) && is_int( $args['limit'] ) ) {
+			$ledger = array_slice( $ledger, -abs( $args['limit'] ) );
+		}
+
+		return array_values( $ledger );
 	}
 
 	/**
