@@ -1,0 +1,747 @@
+/**
+ * TIMU UI System — Modern Design System
+ * Inspired by GitHub and Jetpack
+ * Supports light and dark modes
+ *
+ * @package TIMU_CORE_SUPPORT
+ */
+
+/* ========== CSS Custom Properties (Design Tokens) ========== */
+:root {
+	/* Typography */
+	--timu-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+	--timu-font-mono: "SFMono-Regular", "Consolas", "Liberation Mono", "Menlo", "Courier", monospace;
+
+	/* Font Sizes */
+	--timu-text-xs: 0.75rem; /* 12px */
+	--timu-text-sm: 0.875rem; /* 14px */
+	--timu-text-base: 1rem; /* 16px */
+	--timu-text-lg: 1.125rem; /* 18px */
+	--timu-text-xl: 1.25rem; /* 20px */
+	--timu-text-2xl: 1.5rem; /* 24px */
+	--timu-text-3xl: 1.875rem; /* 30px */
+
+	/* Line Heights */
+	--timu-leading-tight: 1.25;
+	--timu-leading-normal: 1.5;
+	--timu-leading-relaxed: 1.625;
+
+	/* Font Weights */
+	--timu-font-normal: 400;
+	--timu-font-medium: 500;
+	--timu-font-semibold: 600;
+	--timu-font-bold: 700;
+
+	/* Spacing (8px base) */
+	--timu-space-xs: 0.25rem; /* 4px */
+	--timu-space-sm: 0.5rem; /* 8px */
+	--timu-space-md: 1rem; /* 16px */
+	--timu-space-lg: 1.5rem; /* 24px */
+	--timu-space-xl: 2rem; /* 32px */
+	--timu-space-2xl: 3rem; /* 48px */
+	--timu-space-3xl: 4rem; /* 64px */
+
+	/* Light Mode Colors */
+	--timu-bg-primary: #ffffff;
+	--timu-bg-secondary: #f6f8fa;
+	--timu-bg-tertiary: #eaeef2;
+
+	--timu-border-primary: #d0d7de;
+	--timu-border-secondary: #e5e7eb;
+	--timu-border-muted: #f0f0f0;
+
+	--timu-text-primary: #24292f;
+	--timu-text-secondary: #57606a;
+	--timu-text-muted: #848d97;
+	--timu-text-inverted: #ffffff;
+
+	/* Accent Colors */
+	--timu-accent-primary: #0969da;
+	--timu-accent-primary-hover: #0860ca;
+	--timu-accent-primary-active: #033d8b;
+
+	--timu-accent-success: #1a7f37;
+	--timu-accent-success-hover: #158f37;
+	--timu-accent-success-light: #dafbe1;
+
+	--timu-accent-warning: #9e6a03;
+	--timu-accent-warning-light: #fff8c5;
+
+	--timu-accent-danger: #da3633;
+	--timu-accent-danger-hover: #c5222c;
+	--timu-accent-danger-light: #ffebe6;
+
+	--timu-accent-info: #0969da;
+	--timu-accent-info-light: #ddf4ff;
+
+	/* Shadows */
+	--timu-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+	--timu-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+	--timu-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+	--timu-shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.12);
+	--timu-shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.15);
+
+	/* Transitions */
+	--timu-transition-fast: 150ms ease-out;
+	--timu-transition-base: 250ms ease-out;
+	--timu-transition-slow: 350ms ease-out;
+
+	/* Border Radius */
+	--timu-radius-xs: 2px;
+	--timu-radius-sm: 4px;
+	--timu-radius-md: 6px;
+	--timu-radius-lg: 8px;
+	--timu-radius-full: 9999px;
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+	:root {
+		--timu-bg-primary: #0d1117;
+		--timu-bg-secondary: #161b22;
+		--timu-bg-tertiary: #21262d;
+
+		--timu-border-primary: #30363d;
+		--timu-border-secondary: #21262d;
+		--timu-border-muted: #1c2128;
+
+		--timu-text-primary: #e6edf3;
+		--timu-text-secondary: #c9d1d9;
+		--timu-text-muted: #8b949e;
+		--timu-text-inverted: #0d1117;
+
+		--timu-accent-primary: #58a6ff;
+		--timu-accent-primary-hover: #79c0ff;
+		--timu-accent-primary-active: #388bfd;
+
+		--timu-accent-success: #3fb950;
+		--timu-accent-success-hover: #56d364;
+		--timu-accent-success-light: #0f5323;
+
+		--timu-accent-warning: #d29922;
+		--timu-accent-warning-light: #3d2601;
+
+		--timu-accent-danger: #f85149;
+		--timu-accent-danger-hover: #da3633;
+		--timu-accent-danger-light: #67060c;
+
+		--timu-accent-info: #58a6ff;
+		--timu-accent-info-light: #0f444f;
+	}
+}
+
+/* ========== Global Styles ========== */
+body.wp-admin {
+	font-family: var(--timu-font-family);
+	font-size: var(--timu-text-base);
+	line-height: var(--timu-leading-normal);
+	color: var(--timu-text-primary);
+	background-color: var(--timu-bg-primary);
+}
+
+/* ========== Typography ========== */
+h1, .timu-h1 {
+	font-size: var(--timu-text-3xl);
+	font-weight: var(--timu-font-bold);
+	line-height: var(--timu-leading-tight);
+	margin: var(--timu-space-lg) 0 var(--timu-space-md) 0;
+	color: var(--timu-text-primary);
+}
+
+h2, .timu-h2 {
+	font-size: var(--timu-text-2xl);
+	font-weight: var(--timu-font-bold);
+	line-height: var(--timu-leading-tight);
+	margin: var(--timu-space-lg) 0 var(--timu-space-md) 0;
+	color: var(--timu-text-primary);
+}
+
+h3, .timu-h3 {
+	font-size: var(--timu-text-xl);
+	font-weight: var(--timu-font-semibold);
+	line-height: var(--timu-leading-tight);
+	margin: var(--timu-space-md) 0 var(--timu-space-sm) 0;
+	color: var(--timu-text-primary);
+}
+
+p, .timu-text {
+	margin: 0 0 var(--timu-space-md) 0;
+	color: var(--timu-text-primary);
+}
+
+.timu-text-secondary {
+	color: var(--timu-text-secondary);
+}
+
+.timu-text-muted {
+	color: var(--timu-text-muted);
+	font-size: var(--timu-text-sm);
+}
+
+.timu-text-small {
+	font-size: var(--timu-text-sm);
+}
+
+.timu-text-mono {
+	font-family: var(--timu-font-mono);
+	font-size: var(--timu-text-sm);
+	background-color: var(--timu-bg-secondary);
+	padding: var(--timu-space-xs) var(--timu-space-sm);
+	border-radius: var(--timu-radius-sm);
+}
+
+/* ========== Buttons ========== */
+.button, .timu-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--timu-space-sm);
+	font-family: var(--timu-font-family);
+	font-size: var(--timu-text-sm);
+	font-weight: var(--timu-font-medium);
+	padding: var(--timu-space-sm) var(--timu-space-md);
+	border: 1px solid transparent;
+	border-radius: var(--timu-radius-md);
+	cursor: pointer;
+	transition: all var(--timu-transition-fast);
+	text-decoration: none;
+	min-height: 36px;
+	background-color: var(--timu-bg-secondary);
+	color: var(--timu-text-primary);
+	border-color: var(--timu-border-primary);
+}
+
+.button:hover, .timu-btn:hover {
+	background-color: var(--timu-bg-tertiary);
+	border-color: var(--timu-border-primary);
+	box-shadow: var(--timu-shadow-xs);
+}
+
+.button:active, .timu-btn:active {
+	background-color: var(--timu-bg-secondary);
+	transform: scale(0.98);
+}
+
+.button:disabled, .timu-btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+/* Primary Button */
+.button-primary, .timu-btn-primary {
+	background-color: var(--timu-accent-primary);
+	color: var(--timu-text-inverted);
+	border-color: var(--timu-accent-primary);
+}
+
+.button-primary:hover, .timu-btn-primary:hover {
+	background-color: var(--timu-accent-primary-hover);
+	border-color: var(--timu-accent-primary-hover);
+	box-shadow: var(--timu-shadow-md);
+}
+
+.button-primary:active, .timu-btn-primary:active {
+	background-color: var(--timu-accent-primary-active);
+}
+
+/* Destructive Button */
+.button-destructive, .timu-btn-danger {
+	background-color: var(--timu-accent-danger);
+	color: var(--timu-text-inverted);
+	border-color: var(--timu-accent-danger);
+}
+
+.button-destructive:hover, .timu-btn-danger:hover {
+	background-color: var(--timu-accent-danger-hover);
+	border-color: var(--timu-accent-danger-hover);
+}
+
+/* Button Sizes */
+.timu-btn-small, .timu-btn-sm {
+	padding: var(--timu-space-xs) var(--timu-space-sm);
+	font-size: var(--timu-text-xs);
+	min-height: 28px;
+}
+
+.timu-btn-large {
+	padding: var(--timu-space-md) var(--timu-space-lg);
+	font-size: var(--timu-text-base);
+	min-height: 44px;
+}
+
+/* Secondary Button */
+.timu-btn-secondary {
+	background-color: var(--timu-bg-secondary);
+	color: var(--timu-text-primary);
+	border-color: var(--timu-border-primary);
+}
+
+.timu-btn-secondary:hover {
+	background-color: var(--timu-bg-tertiary);
+	border-color: var(--timu-border-primary);
+	box-shadow: var(--timu-shadow-xs);
+}
+
+.timu-btn-secondary:active {
+	background-color: var(--timu-bg-secondary);
+	transform: scale(0.98);
+}
+
+/* Destructive Button Alias */
+.timu-btn-destructive {
+	background-color: var(--timu-accent-danger);
+	color: var(--timu-text-inverted);
+	border-color: var(--timu-accent-danger);
+}
+
+.timu-btn-destructive:hover {
+	background-color: var(--timu-accent-danger-hover);
+	border-color: var(--timu-accent-danger-hover);
+}
+
+/* ========== Forms ========== */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+select,
+textarea {
+	font-family: var(--timu-font-family);
+	font-size: var(--timu-text-base);
+	padding: var(--timu-space-sm) var(--timu-space-md);
+	border: 1px solid var(--timu-border-primary);
+	border-radius: var(--timu-radius-md);
+	background-color: var(--timu-bg-primary);
+	color: var(--timu-text-primary);
+	transition: all var(--timu-transition-fast);
+	min-height: 36px;
+}
+
+.timu-form-control {
+	font-family: var(--timu-font-family);
+	font-size: var(--timu-text-base);
+	padding: var(--timu-space-sm) var(--timu-space-md);
+	border: 1px solid var(--timu-border-primary);
+	border-radius: var(--timu-radius-md);
+	background-color: var(--timu-bg-primary);
+	color: var(--timu-text-primary);
+	transition: all var(--timu-transition-fast);
+	min-height: 36px;
+	width: 100%;
+	font-weight: normal;
+}
+
+.timu-form-control:focus {
+	outline: none;
+	border-color: var(--timu-accent-primary);
+	box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.1);
+	background-color: var(--timu-bg-primary);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+select:focus,
+textarea:focus {
+	outline: none;
+	border-color: var(--timu-accent-primary);
+	box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.1);
+	background-color: var(--timu-bg-primary);
+}
+
+textarea {
+	resize: vertical;
+	min-height: 100px;
+	font-family: var(--timu-font-mono);
+}
+
+/* Form Groups */
+.timu-form-group {
+	margin-bottom: var(--timu-space-lg);
+}
+
+.timu-form-label {
+	display: block;
+	margin-bottom: var(--timu-space-sm);
+	font-weight: var(--timu-font-medium);
+	color: var(--timu-text-primary);
+}
+
+.timu-form-group label {
+	display: block;
+	margin-bottom: var(--timu-space-sm);
+	font-weight: var(--timu-font-medium);
+	color: var(--timu-text-primary);
+}
+
+.timu-form-group .timu-help {
+	font-size: var(--timu-text-sm);
+	color: var(--timu-text-muted);
+	margin-top: var(--timu-space-xs);
+}
+
+.timu-form-group .timu-error {
+	color: var(--timu-accent-danger);
+	font-size: var(--timu-text-sm);
+	margin-top: var(--timu-space-xs);
+}
+
+/* ========== Cards ========== */
+.timu-card {
+	background-color: var(--timu-bg-primary);
+	border: 1px solid var(--timu-border-primary);
+	border-radius: var(--timu-radius-lg);
+	padding: var(--timu-space-lg);
+	box-shadow: var(--timu-shadow-xs);
+	transition: all var(--timu-transition-base);
+}
+
+.timu-card:hover {
+	box-shadow: var(--timu-shadow-md);
+	border-color: var(--timu-border-secondary);
+}
+
+.timu-card-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: var(--timu-space-md);
+	padding-bottom: var(--timu-space-md);
+	border-bottom: 1px solid var(--timu-border-secondary);
+}
+
+.timu-card-header h2,
+.timu-card-header h3 {
+	margin: 0;
+	font-size: var(--timu-text-lg);
+}
+
+.timu-card-body {
+	margin: 0;
+}
+
+.timu-card-footer {
+	margin-top: var(--timu-space-lg);
+	padding-top: var(--timu-space-md);
+	border-top: 1px solid var(--timu-border-secondary);
+	display: flex;
+	gap: var(--timu-space-md);
+	justify-content: flex-end;
+}
+
+/* ========== Tables ========== */
+.timu-table {
+	width: 100%;
+	border-collapse: collapse;
+	background-color: var(--timu-bg-primary);
+}
+
+.timu-table thead {
+	background-color: var(--timu-bg-secondary);
+}
+
+.timu-table th {
+	padding: var(--timu-space-md);
+	text-align: left;
+	font-weight: var(--timu-font-semibold);
+	color: var(--timu-text-primary);
+	border: 1px solid var(--timu-border-secondary);
+	font-size: var(--timu-text-sm);
+}
+
+.timu-table td {
+	padding: var(--timu-space-md);
+	border: 1px solid var(--timu-border-secondary);
+	color: var(--timu-text-primary);
+}
+
+.timu-table tbody tr {
+	transition: background-color var(--timu-transition-fast);
+}
+
+.timu-table tbody tr:hover {
+	background-color: var(--timu-bg-secondary);
+}
+
+.timu-table tbody tr:nth-child(odd) {
+	background-color: var(--timu-bg-secondary);
+}
+
+/* ========== Badges ========== */
+.timu-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--timu-space-xs);
+	padding: var(--timu-space-xs) var(--timu-space-sm);
+	border-radius: var(--timu-radius-full);
+	font-size: var(--timu-text-xs);
+	font-weight: var(--timu-font-medium);
+	background-color: var(--timu-bg-secondary);
+	color: var(--timu-text-primary);
+	border: 1px solid var(--timu-border-secondary);
+}
+
+.timu-badge-success {
+	background-color: var(--timu-accent-success-light);
+	color: var(--timu-accent-success);
+	border-color: var(--timu-accent-success);
+}
+
+.timu-badge-warning {
+	background-color: var(--timu-accent-warning-light);
+	color: var(--timu-accent-warning);
+	border-color: var(--timu-accent-warning);
+}
+
+.timu-badge-danger {
+	background-color: var(--timu-accent-danger-light);
+	color: var(--timu-accent-danger);
+	border-color: var(--timu-accent-danger);
+}
+
+.timu-badge-info {
+	background-color: var(--timu-accent-info-light);
+	color: var(--timu-accent-info);
+	border-color: var(--timu-accent-info);
+}
+
+/* ========== Alerts ========== */
+.timu-alert {
+	padding: var(--timu-space-md) var(--timu-space-lg);
+	border-radius: var(--timu-radius-md);
+	border-left: 4px solid;
+	display: flex;
+	align-items: flex-start;
+	gap: var(--timu-space-md);
+	margin-bottom: var(--timu-space-lg);
+	animation: slideDown var(--timu-transition-base);
+}
+
+@keyframes slideDown {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.timu-alert-success {
+	background-color: var(--timu-accent-success-light);
+	border-color: var(--timu-accent-success);
+	color: var(--timu-accent-success);
+}
+
+.timu-alert-warning {
+	background-color: var(--timu-accent-warning-light);
+	border-color: var(--timu-accent-warning);
+	color: var(--timu-accent-warning);
+}
+
+.timu-alert-danger {
+	background-color: var(--timu-accent-danger-light);
+	border-color: var(--timu-accent-danger);
+	color: var(--timu-accent-danger);
+}
+
+.timu-alert-info {
+	background-color: var(--timu-accent-info-light);
+	border-color: var(--timu-accent-info);
+	color: var(--timu-accent-info);
+}
+
+.timu-alert-close {
+	margin-left: auto;
+	cursor: pointer;
+	padding: var(--timu-space-xs);
+	opacity: 0.7;
+	transition: opacity var(--timu-transition-fast);
+}
+
+.timu-alert-close:hover {
+	opacity: 1;
+}
+
+/* ========== Grid Layout ========== */
+.timu-container {
+	max-width: 1280px;
+	margin: 0 auto;
+	padding: 0 var(--timu-space-md);
+}
+
+.timu-grid {
+	display: grid;
+	gap: var(--timu-space-lg);
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.timu-grid-2 {
+	grid-template-columns: repeat(2, 1fr);
+}
+
+.timu-grid-3 {
+	grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 768px) {
+	.timu-grid-3 {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.timu-grid-2 {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 480px) {
+	.timu-grid,
+	.timu-grid-2,
+	.timu-grid-3 {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* ========== Flexbox Utilities ========== */
+.timu-flex {
+	display: flex;
+	gap: var(--timu-space-md);
+}
+
+.timu-flex-center {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--timu-space-md);
+}
+
+.timu-flex-between {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--timu-space-md);
+}
+
+.timu-flex-col {
+	display: flex;
+	flex-direction: column;
+	gap: var(--timu-space-md);
+}
+
+/* ========== Spacing Utilities ========== */
+.timu-mt-sm { margin-top: var(--timu-space-sm); }
+.timu-mt-md { margin-top: var(--timu-space-md); }
+.timu-mt-lg { margin-top: var(--timu-space-lg); }
+
+.timu-mb-sm { margin-bottom: var(--timu-space-sm); }
+.timu-mb-md { margin-bottom: var(--timu-space-md); }
+.timu-mb-lg { margin-bottom: var(--timu-space-lg); }
+
+.timu-p-md { padding: var(--timu-space-md); }
+.timu-p-lg { padding: var(--timu-space-lg); }
+
+/* ========== Responsive Design ========== */
+@media (max-width: 768px) {
+	:root {
+		--timu-text-2xl: 1.25rem;
+		--timu-text-3xl: 1.5rem;
+	}
+
+	body.wp-admin {
+		font-size: var(--timu-text-sm);
+	}
+
+	.timu-card {
+		padding: var(--timu-space-md);
+	}
+
+	.timu-table {
+		font-size: var(--timu-text-sm);
+	}
+
+	.timu-table th,
+	.timu-table td {
+		padding: var(--timu-space-sm);
+	}
+}
+
+@media (max-width: 480px) {
+	:root {
+		--timu-space-lg: 1rem;
+		--timu-space-xl: 1.5rem;
+	}
+
+	h1, .timu-h1 {
+		font-size: var(--timu-text-2xl);
+	}
+
+	h2, .timu-h2 {
+		font-size: var(--timu-text-xl);
+	}
+
+	.button, .timu-btn {
+		width: 100%;
+	}
+
+	.timu-card-footer {
+		flex-direction: column;
+		justify-content: stretch;
+	}
+
+	.timu-card-footer .button {
+		width: 100%;
+	}
+}
+
+/* ========== Transitions & Animations ========== */
+.timu-fade-in {
+	animation: fadeIn var(--timu-transition-base);
+}
+
+@keyframes fadeIn {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+
+.timu-pulse {
+	animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0.5; }
+}
+
+/* ========== Accessibility ========== */
+.timu-sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
+}
+
+/* Focus Visible */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+	outline: 2px solid var(--timu-accent-primary);
+	outline-offset: 2px;
+}
+
+/* ========== Print Styles ========== */
+@media print {
+	.timu-no-print {
+		display: none;
+	}
+}

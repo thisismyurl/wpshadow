@@ -1104,10 +1104,18 @@ function timu_core_admin_enqueue( string $hook ): void {
 		return;
 	}
 
+	// Enqueue modern design system (shared across all TIMU plugins).
+	wp_enqueue_style(
+		'timu-ui-system',
+		TIMU_CORE_URL . 'assets/css/timu-ui-system.css',
+		array(),
+		TIMU_CORE_VERSION
+	);
+
 	wp_enqueue_style(
 		'timu-core-admin',
 		TIMU_CORE_URL . 'assets/css/admin.css',
-		array(),
+		array( 'timu-ui-system' ),
 		TIMU_CORE_VERSION
 	);
 

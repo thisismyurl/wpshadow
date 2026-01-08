@@ -712,111 +712,124 @@ $license_checked = ! empty( $license_state['checked_at'] ) ? date_i18n( 'M j, Y 
 	?>
 
 	<?php if ( $logs_total > 0 ) : ?>
-		<!-- Activity Log Filter & Search -->
-		<div style="margin-bottom: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-			<form method="get" action="" style="display: flex; gap: 8px; align-items: center;">
-				<?php wp_nonce_field( 'timu_log_filter', 'timu_log_filter_nonce' ); ?>
-				<input type="hidden" name="page" value="<?php echo esc_attr( isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '' ); ?>" />
-				
-				<!-- Level Filter -->
-				<label for="timu_log_level_filter" style="margin-right: 5px;">
-					<?php echo esc_html__( 'Filter by Level:', 'core-support-thisismyurl' ); ?>
-				</label>
-				<select id="timu_log_level_filter" name="timu_log_level" style="min-width: 120px;">
-					<option value=""><?php echo esc_html__( 'All Levels', 'core-support-thisismyurl' ); ?></option>
-					<option value="info" <?php selected( $level_filter, 'info' ); ?>><?php echo esc_html__( 'Info', 'core-support-thisismyurl' ); ?></option>
-					<option value="warning" <?php selected( $level_filter, 'warning' ); ?>><?php echo esc_html__( 'Warning', 'core-support-thisismyurl' ); ?></option>
-					<option value="error" <?php selected( $level_filter, 'error' ); ?>><?php echo esc_html__( 'Error', 'core-support-thisismyurl' ); ?></option>
-				</select>
+		<div class="timu-card" id="timu-vault-logs">
+			<div class="timu-card-header">
+				<h2 style="margin: 0;"><?php echo esc_html__( 'Vault Activity Log', 'core-support-thisismyurl' ); ?></h2>
+			</div>
+			<div class="timu-card-body">
+				<!-- Activity Log Filter & Search -->
+				<form method="get" action="" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--timu-space-md); margin-bottom: var(--timu-space-lg);">
+					<?php wp_nonce_field( 'timu_log_filter', 'timu_log_filter_nonce' ); ?>
+					<input type="hidden" name="page" value="<?php echo esc_attr( isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '' ); ?>" />
 
-				<!-- Search Input -->
-				<label for="timu_log_search" style="margin-left: 15px; margin-right: 5px;">
-					<?php echo esc_html__( 'Search:', 'core-support-thisismyurl' ); ?>
-				</label>
-				<input type="text" id="timu_log_search" name="timu_log_search" value="<?php echo esc_attr( $search_query ); ?>" placeholder="<?php echo esc_attr__( 'File, ID, or operation...', 'core-support-thisismyurl' ); ?>" style="min-width: 150px;" />
+					<div class="timu-form-group">
+						<label for="timu_log_level_filter" class="timu-form-label">
+							<?php echo esc_html__( 'Filter by Level', 'core-support-thisismyurl' ); ?>
+						</label>
+						<select id="timu_log_level_filter" name="timu_log_level" class="timu-form-control">
+							<option value=""><?php echo esc_html__( 'All Levels', 'core-support-thisismyurl' ); ?></option>
+							<option value="info" <?php selected( $level_filter, 'info' ); ?>><?php echo esc_html__( 'Info', 'core-support-thisismyurl' ); ?></option>
+							<option value="warning" <?php selected( $level_filter, 'warning' ); ?>><?php echo esc_html__( 'Warning', 'core-support-thisismyurl' ); ?></option>
+							<option value="error" <?php selected( $level_filter, 'error' ); ?>><?php echo esc_html__( 'Error', 'core-support-thisismyurl' ); ?></option>
+						</select>
+					</div>
 
-				<!-- Action Buttons -->
-				<button class="button" type="submit"><?php echo esc_html__( 'Search', 'core-support-thisismyurl' ); ?></button>
-				<?php if ( ! empty( $level_filter ) || ! empty( $search_query ) ) : ?>
-					<a href="<?php echo esc_url( add_query_arg( 'page', isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '' ) ); ?>" class="button">
-						<?php echo esc_html__( 'Clear All', 'core-support-thisismyurl' ); ?>
-					</a>
-				<?php endif; ?>
-			</form>
-		</div>
+					<div class="timu-form-group">
+						<label for="timu_log_search" class="timu-form-label">
+							<?php echo esc_html__( 'Search', 'core-support-thisismyurl' ); ?>
+						</label>
+						<input type="text" id="timu_log_search" name="timu_log_search" value="<?php echo esc_attr( $search_query ); ?>" placeholder="<?php echo esc_attr__( 'File, ID, operation...', 'core-support-thisismyurl' ); ?>" class="timu-form-control" />
+					</div>
 
-		<table class="wp-list-table widefat striped">
-			<thead>
-				<tr>
-					<th><?php echo esc_html__( 'Timestamp', 'core-support-thisismyurl' ); ?></th>
-					<th><?php echo esc_html__( 'Level', 'core-support-thisismyurl' ); ?></th>
-					<th><?php echo esc_html__( 'Attachment ID', 'core-support-thisismyurl' ); ?></th>
-					<th><?php echo esc_html__( 'Reason', 'core-support-thisismyurl' ); ?></th>
-					<th><?php echo esc_html__( 'Operation', 'core-support-thisismyurl' ); ?></th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php foreach ( $logs as $entry ) : ?>
-					<tr>
-						<td><?php echo esc_html( $entry['timestamp'] ); ?></td>
-						<td>
-							<span style="display: inline-block; padding: 2px 8px; border-radius: 3px;
+					<div style="display: flex; gap: var(--timu-space-sm); align-items: flex-end;">
+						<button class="timu-btn timu-btn-primary" type="submit"><?php echo esc_html__( 'Search', 'core-support-thisismyurl' ); ?></button>
+						<?php if ( ! empty( $level_filter ) || ! empty( $search_query ) ) : ?>
+							<a href="<?php echo esc_url( add_query_arg( 'page', isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '' ) ); ?>" class="timu-btn timu-btn-secondary">
+								<?php echo esc_html__( 'Clear', 'core-support-thisismyurl' ); ?>
+							</a>
+						<?php endif; ?>
+					</div>
+				</form>
+
+				<div class="timu-table-responsive">
+					<table class="timu-table">
+						<thead>
+							<tr>
+								<th><?php echo esc_html__( 'Timestamp', 'core-support-thisismyurl' ); ?></th>
+								<th><?php echo esc_html__( 'Level', 'core-support-thisismyurl' ); ?></th>
+								<th><?php echo esc_html__( 'Attachment ID', 'core-support-thisismyurl' ); ?></th>
+								<th><?php echo esc_html__( 'Reason', 'core-support-thisismyurl' ); ?></th>
+								<th><?php echo esc_html__( 'Operation', 'core-support-thisismyurl' ); ?></th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php foreach ( $logs as $entry ) : ?>
 								<?php
-								if ( 'error' === $entry['level'] ) {
-									echo 'background-color: #fee; color: #c00;';
-								} elseif ( 'warning' === $entry['level'] ) {
-									echo 'background-color: #ffd; color: #840;';
-								} else {
-									echo 'background-color: #efe; color: #080;';
-								}
+									$badge_class = 'timu-badge-info';
+									if ( 'error' === $entry['level'] ) {
+										$badge_class = 'timu-badge-danger';
+									} elseif ( 'warning' === $entry['level'] ) {
+										$badge_class = 'timu-badge-warning';
+									}
 								?>
-								">
-								<?php echo esc_html( ucfirst( $entry['level'] ) ); ?>
-							</span>
-						</td>
-						<td><?php echo $entry['attachment_id'] > 0 ? esc_html( (string) $entry['attachment_id'] ) : '—'; ?></td>
-						<td><?php echo esc_html( $entry['reason'] ); ?></td>
-						<td><?php echo $entry['operation'] ? esc_html( $entry['operation'] ) : '—'; ?></td>
-					</tr>
-				<?php endforeach; ?>
-			</tbody>
-		</table>
+								<tr>
+									<td><?php echo esc_html( $entry['timestamp'] ); ?></td>
+									<td><span class="timu-badge <?php echo esc_attr( $badge_class ); ?>"><?php echo esc_html( ucfirst( $entry['level'] ) ); ?></span></td>
+									<td><?php echo $entry['attachment_id'] > 0 ? esc_html( (string) $entry['attachment_id'] ) : '—'; ?></td>
+									<td><?php echo esc_html( $entry['reason'] ); ?></td>
+									<td><?php echo $entry['operation'] ? esc_html( $entry['operation'] ) : '—'; ?></td>
+								</tr>
+							<?php endforeach; ?>
+						</tbody>
+					</table>
+				</div>
 
 		<?php if ( $logs_pages > 1 ) : ?>
 			<div style="margin-top: 15px;">
 				<?php
-				$pagination_args = array(
-					'base'      => add_query_arg( 'timu_log_page', '%#%' ),
-					'format'    => '',
-					'prev_text' => __( '← Previous', 'core-support-thisismyurl' ),
-					'next_text' => __( 'Next →', 'core-support-thisismyurl' ),
-					'total'     => $logs_pages,
-					'current'   => $logs_page,
-					'echo'      => false,
-				);
+<?php if ( $logs_pages > 1 ) : ?>
+				<div style="margin-top: var(--timu-space-lg); padding-top: var(--timu-space-lg); border-top: 1px solid var(--timu-border-subtle);">
+					<?php
+					$pagination_args = array(
+						'base'      => add_query_arg( 'timu_log_page', '%#%' ),
+						'format'    => '',
+						'prev_text' => __( '← Previous', 'core-support-thisismyurl' ),
+						'next_text' => __( 'Next →', 'core-support-thisismyurl' ),
+						'total'     => $logs_pages,
+						'current'   => $logs_page,
+						'echo'      => false,
+					);
 
-				// Preserve level filter and search query in pagination links.
-				if ( ! empty( $level_filter ) ) {
-					$pagination_args['base'] = add_query_arg( 'timu_log_level', $level_filter, $pagination_args['base'] );
-				}
-				if ( ! empty( $search_query ) ) {
-					$pagination_args['base'] = add_query_arg( 'timu_log_search', $search_query, $pagination_args['base'] );
-				}
+					// Preserve level filter and search query in pagination links.
+					if ( ! empty( $level_filter ) ) {
+						$pagination_args['base'] = add_query_arg( 'timu_log_level', $level_filter, $pagination_args['base'] );
+					}
+					if ( ! empty( $search_query ) ) {
+						$pagination_args['base'] = add_query_arg( 'timu_log_search', $search_query, $pagination_args['base'] );
+					}
 
-				$pagination = paginate_links( $pagination_args );
-				echo wp_kses_post( $pagination );
-				?>
-			</div>
-		<?php endif; ?>
-	<?php else : ?>
-		<p><em><?php echo esc_html__( 'No logs yet.', 'core-support-thisismyurl' ); ?></em></p>
+					$pagination = paginate_links( $pagination_args );
+					echo wp_kses_post( $pagination );
+					?>
+				</div>
+			<?php endif; ?>
+		</div>
+	</div>
+<?php else : ?>
+	<div class="timu-card" id="timu-vault-logs">
+		<div class="timu-card-body">
+			<p style="color: var(--timu-text-muted); font-style: italic; margin: 0;"><?php echo esc_html__( 'No logs yet.', 'core-support-thisismyurl' ); ?></p>
+		</div>
+	</div>
 	<?php endif; ?>
 
-	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="margin-top: 15px;">
-		<?php wp_nonce_field( 'timu_vault_logs', 'timu_vault_log_nonce' ); ?>
-		<input type="hidden" name="action" value="timu_vault_log_action" />
-		<p>
-			<button class="button button-secondary" type="submit" name="timu_vault_log_action" value="clear_all" onclick="return confirm( '<?php echo esc_attr__( 'Clear all logs? This cannot be undone.', 'core-support-thisismyurl' ); ?>' );"><?php echo esc_html__( 'Clear All Logs', 'core-support-thisismyurl' ); ?></button>
-		</p>
-	</form>
+	<div class="timu-card" style="margin-top: var(--timu-space-xl);">
+		<div class="timu-card-body">
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<?php wp_nonce_field( 'timu_vault_logs', 'timu_vault_log_nonce' ); ?>
+				<input type="hidden" name="action" value="timu_vault_log_action" />
+				<button class="timu-btn timu-btn-destructive" type="submit" name="timu_vault_log_action" value="clear_all" onclick="return confirm( '<?php echo esc_attr__( 'Clear all logs? This cannot be undone.', 'core-support-thisismyurl' ); ?>' );"><?php echo esc_html__( 'Clear All Logs', 'core-support-thisismyurl' ); ?></button>
+			</form>
+		</div>
+	</div>
 </div>
