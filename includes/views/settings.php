@@ -104,17 +104,17 @@ $license_checked = ! empty( $license_state['checked_at'] ) ? date_i18n( 'M j, Y 
 
 					<?php
 						$blogs = get_sites( array( 'fields' => 'ids' ) );
-						if ( ! empty( $blogs ) ) :
-							?>
+					if ( ! empty( $blogs ) ) :
+						?>
 							<div style="background:#f9f9f9; padding:12px; border:1px solid #e0e0e0; border-radius:4px; max-height:200px; overflow-y:auto;">
-								<?php foreach ( $blogs as $blog_id ) : ?>
+							<?php foreach ( $blogs as $blog_id ) : ?>
 									<?php
-										$blog_id = absint( $blog_id );
+										$blog_id   = absint( $blog_id );
 										$blog_info = get_blog_details( $blog_id );
-										if ( ! $blog_info ) {
-											continue;
-										}
-										?>
+									if ( ! $blog_info ) {
+										continue;
+									}
+									?>
 									<label style="display:block; margin-bottom:6px;">
 										<input type="checkbox" name="timu_broadcast_site_ids[]" value="<?php echo absint( $blog_id ); ?>" checked="checked" />
 										<?php echo esc_html( $blog_info->blogname ); ?> <span class="description">(<?php echo esc_html( $blog_info->domain . $blog_info->path ); ?>)</span>
@@ -170,7 +170,7 @@ $license_checked = ! empty( $license_state['checked_at'] ) ? date_i18n( 'M j, Y 
 									const response = JSON.parse(xhr.responseText);
 									let html = '<div class="notice ' + (response.success > 0 && response.failed === 0 ? 'notice-success' : response.failed > 0 ? 'notice-warning' : 'notice-error') + '"><p>';
 									html += '<strong><?php echo esc_html__( 'Broadcast Result:', 'core-support-thisismyurl' ); ?></strong> ';
-									html += '<?php echo esc_html__( 'Success: %d, Failed: %d', 'core-support-thisismyurl' ); ?>'.replace('%d', response.success).replace('%d', response.failed);
+									html += '<?php echo esc_html__( 'Success: %1$d, Failed: %2$d', 'core-support-thisismyurl' ); ?>'.replace('%d', response.success).replace('%d', response.failed);
 									if (response.errors && response.errors.length > 0) {
 										html += '<ul style="margin-top:8px;">';
 										response.errors.forEach(err => {
@@ -205,12 +205,33 @@ $license_checked = ! empty( $license_state['checked_at'] ) ? date_i18n( 'M j, Y 
 
 	<?php
 		// Small summary banner: last job stats + quick export link.
-		$queue_state  = TIMU_Vault::get_queue_state();
-		$export_nonce = wp_create_nonce( 'timu_vault_export' );
-		$export_url   = add_query_arg(
+		$queue_state   = TIMU_Vault::get_queue_state();
+		$export_nonce  = wp_create_nonce( 'timu_vault_export' );
+		$ledger_nonce  = wp_create_nonce( 'timu_vault_export_ledger' );
+		$journal_nonce = wp_create_nonce( 'timu_vault_export_journal' );
+		$bundle_nonce  = wp_create_nonce( 'timu_vault_export_bundle' );
+
+		$export_url = add_query_arg(
 			array(
 				'action'                  => 'timu_vault_export_logs',
 				'timu_vault_export_nonce' => $export_nonce,
+			),
+			admin_url( 'admin-post.php' )
+		);
+
+		$ledger_url = add_query_arg(
+			array(
+				'action'                         => 'timu_vault_export_ledger',
+				'timu_vault_export_ledger_nonce' => $ledger_nonce,
+				'limit'                          => 500,
+			),
+			admin_url( 'admin-post.php' )
+		);
+
+		$journal_base_url = add_query_arg(
+			array(
+				'action'                          => 'timu_vault_export_journal',
+				'timu_vault_export_journal_nonce' => $journal_nonce,
 			),
 			admin_url( 'admin-post.php' )
 		);
@@ -231,6 +252,7 @@ $license_checked = ! empty( $license_state['checked_at'] ) ? date_i18n( 'M j, Y 
 				<strong><?php echo esc_html__( 'Vault Job Summary', 'core-support-thisismyurl' ); ?>:</strong>
 				<?php echo esc_html( sprintf( __( '%1$s (%2$s). Processed %3$d of %4$s. OK %5$d, Fail %6$d, Missing %7$d, Skipped %8$d. Last run: %9$s.', 'core-support-thisismyurl' ), $qs_type, $qs_status ?: '—', $qs_processed, $qs_total, $qs_ok, $qs_fail, $qs_missing, $qs_skipped, $qs_last_txt ) ); ?>
 				<a class="button button-link" style="margin-left:10px;" href="<?php echo esc_url( $export_url ); ?>"><?php echo esc_html__( 'Export logs', 'core-support-thisismyurl' ); ?></a>
+				<a class="button button-link" style="margin-left:10px;" href="<?php echo esc_url( $ledger_url ); ?>"><?php echo esc_html__( 'Export ledger (CSV)', 'core-support-thisismyurl' ); ?></a>
 			</p>
 		</div>
 	<?php endif; ?>
@@ -339,6 +361,130 @@ $license_checked = ! empty( $license_state['checked_at'] ) ? date_i18n( 'M j, Y 
 			<?php endif; ?>
 		</table>
 
+		<h3><?php echo esc_html__( 'Alerts & Resilience', 'core-support-thisismyurl' ); ?></h3>
+		<table class="form-table" role="presentation">
+			<tr>
+				<th scope="row"><label for="timu_vault_max_size_mb"><?php echo esc_html__( 'Max Vault Size (MB)', 'core-support-thisismyurl' ); ?></label></th>
+				<td>
+					<input type="number" min="0" step="50" name="timu_vault_max_size_mb" id="timu_vault_max_size_mb" value="<?php echo esc_attr( (int) ( $settings['max_size_mb'] ?? 0 ) ); ?>" <?php disabled( $locked ); ?> />
+					<p class="description"><?php echo esc_html__( 'Send an email alert when the vault exceeds this size. 0 disables alerts.', 'core-support-thisismyurl' ); ?></p>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><label for="timu_vault_alert_email"><?php echo esc_html__( 'Alert Email', 'core-support-thisismyurl' ); ?></label></th>
+				<td>
+					<input type="email" name="timu_vault_alert_email" id="timu_vault_alert_email" class="regular-text" value="<?php echo esc_attr( (string) ( $settings['alert_email'] ?? '' ) ); ?>" <?php disabled( $locked ); ?> />
+					<p class="description"><?php echo esc_html__( 'Leave blank to use the site admin email.', 'core-support-thisismyurl' ); ?></p>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><label for="timu_vault_mirror_logs"><?php echo esc_html__( 'Mirror Logs to Disk', 'core-support-thisismyurl' ); ?></label></th>
+				<td>
+					<label>
+						<input type="checkbox" name="timu_vault_mirror_logs" id="timu_vault_mirror_logs" value="1" <?php checked( ! empty( $settings['mirror_logs'] ) ); ?> <?php disabled( $locked ); ?> />
+						<?php echo esc_html__( 'Write Vault logs and journals to files inside the Vault for crash resilience.', 'core-support-thisismyurl' ); ?>
+					</label>
+				</td>
+			</tr>
+		</table>
+
+		<h3><?php echo esc_html__( 'Cloud Offload (Google Drive)', 'core-support-thisismyurl' ); ?></h3>
+		<p class="description"><?php echo esc_html__( 'Configure a connection to Google Drive to offload vaulted originals and free up disk space.', 'core-support-thisismyurl' ); ?></p>
+		<table class="form-table" role="presentation">
+			<tr>
+				<th scope="row"><label for="timu_vault_offload_enabled"><?php echo esc_html__( 'Enable Offload', 'core-support-thisismyurl' ); ?></label></th>
+				<td>
+					<label>
+						<input type="checkbox" name="timu_vault_offload_enabled" id="timu_vault_offload_enabled" value="1" <?php checked( ! empty( $settings['offload_enabled'] ) ); ?> <?php disabled( $locked ); ?> />
+						<?php echo esc_html__( 'Allow offloading vaulted items to Google Drive when connected.', 'core-support-thisismyurl' ); ?>
+					</label>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><label for="timu_gdrive_client_id"><?php echo esc_html__( 'Google Client ID', 'core-support-thisismyurl' ); ?></label></th>
+				<td>
+					<input type="text" name="timu_gdrive_client_id" id="timu_gdrive_client_id" class="regular-text" value="<?php echo esc_attr( (string) ( $settings['gdrive_client_id'] ?? '' ) ); ?>" <?php disabled( $locked ); ?> />
+
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><label for="timu_gdrive_client_secret"><?php echo esc_html__( 'Google Client Secret', 'core-support-thisismyurl' ); ?></label></th>
+				<td>
+					<input type="password" name="timu_gdrive_client_secret" id="timu_gdrive_client_secret" class="regular-text" value="<?php echo esc_attr( (string) ( $settings['gdrive_client_secret'] ?? '' ) ); ?>" autocomplete="new-password" <?php disabled( $locked ); ?> />
+					<p class="description"><?php echo esc_html__( 'Stored securely in WordPress options. Used to initiate OAuth connection.', 'core-support-thisismyurl' ); ?></p>
+				</td>
+			</tr>
+		</table>
+
+		<?php
+			$gdrive_status = isset( $_GET['timu_gdrive_status'] ) ? sanitize_text_field( wp_unslash( $_GET['timu_gdrive_status'] ) ) : '';
+			$gdrive_error  = isset( $_GET['timu_gdrive_error'] ) ? sanitize_text_field( wp_unslash( $_GET['timu_gdrive_error'] ) ) : '';
+			$connected     = (bool) get_option( 'timu_gdrive_token_blob', false );
+		?>
+
+		<?php if ( $gdrive_status ) : ?>
+			<div class="notice notice-success is-dismissible"><p><?php echo esc_html__( 'Google Drive connection updated.', 'core-support-thisismyurl' ); ?></p></div>
+		<?php endif; ?>
+		<?php if ( $gdrive_error ) : ?>
+			<div class="notice notice-error is-dismissible"><p><?php echo esc_html__( 'Google Drive error. Check credentials and try again.', 'core-support-thisismyurl' ); ?></p></div>
+		<?php endif; ?>
+
+		<div style="margin:8px 0 16px;">
+			<?php if ( ! empty( $settings['gdrive_client_id'] ) && ! empty( $settings['gdrive_client_secret'] ) ) : ?>
+				<?php if ( ! $connected ) : ?>
+					<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline-block; margin-right:8px;">
+						<?php wp_nonce_field( 'timu_gdrive_connect', 'timu_gdrive_nonce' ); ?>
+						<input type="hidden" name="action" value="timu_vault_gdrive_connect" />
+						<button class="button" type="submit" <?php disabled( $locked ); ?>><?php echo esc_html__( 'Connect Google Drive', 'core-support-thisismyurl' ); ?></button>
+					</form>
+				<?php else : ?>
+					<span style="display:inline-block; padding:2px 8px; border-radius:4px; background:#e8f5e9; color:#2e7d32; margin-right:8px;">
+						<?php echo esc_html__( 'Connected', 'core-support-thisismyurl' ); ?>
+					</span>
+					<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline-block;">
+						<?php wp_nonce_field( 'timu_gdrive_disconnect', 'timu_gdrive_nonce' ); ?>
+						<input type="hidden" name="action" value="timu_vault_gdrive_disconnect" />
+						<button class="button" type="submit" onclick="return confirm('<?php echo esc_attr__( 'Disconnect Google Drive?', 'core-support-thisismyurl' ); ?>');"><?php echo esc_html__( 'Disconnect', 'core-support-thisismyurl' ); ?></button>
+					</form>
+				<?php endif; ?>
+			<?php else : ?>
+				<p class="description" style="color:#a00;">
+					<?php echo esc_html__( 'Enter a valid Client ID and Secret, save settings, then connect.', 'core-support-thisismyurl' ); ?>
+				</p>
+			<?php endif; ?>
+		</div>
+
+		<h4><?php echo esc_html__( 'Offload Oldest Files', 'core-support-thisismyurl' ); ?></h4>
+		<p class="description"><?php echo esc_html__( 'Uploads the oldest N files from the Vault to the connected Drive folder. Optional: remove local copies after upload to free space.', 'core-support-thisismyurl' ); ?></p>
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+			<?php wp_nonce_field( 'timu_gdrive_offload', 'timu_gdrive_nonce' ); ?>
+			<input type="hidden" name="action" value="timu_vault_gdrive_offload" />
+			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row"><label for="timu_gdrive_folder"><?php echo esc_html__( 'Folder Name', 'core-support-thisismyurl' ); ?></label></th>
+					<td>
+						<input type="text" name="timu_gdrive_folder" id="timu_gdrive_folder" value="TIMU Vault" class="regular-text" />
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="timu_gdrive_count"><?php echo esc_html__( 'Number of Files', 'core-support-thisismyurl' ); ?></label></th>
+					<td>
+						<input type="number" name="timu_gdrive_count" id="timu_gdrive_count" min="1" max="100" value="10" />
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="timu_gdrive_delete_local"><?php echo esc_html__( 'Delete Local After Upload', 'core-support-thisismyurl' ); ?></label></th>
+					<td>
+						<label>
+							<input type="checkbox" name="timu_gdrive_delete_local" id="timu_gdrive_delete_local" value="1" />
+							<?php echo esc_html__( 'Remove files locally after successful upload to free space (irreversible).', 'core-support-thisismyurl' ); ?>
+						</label>
+					</td>
+				</tr>
+			</table>
+			<?php submit_button( esc_html__( 'Offload Oldest Files', 'core-support-thisismyurl' ), 'secondary' ); ?>
+		</form>
+
 		<?php submit_button( esc_html__( 'Save Vault Settings', 'core-support-thisismyurl' ) ); ?>
 	</form>
 
@@ -399,6 +545,16 @@ $license_checked = ! empty( $license_state['checked_at'] ) ? date_i18n( 'M j, Y 
 		</p>
 	</form>
 
+	<h2><?php echo esc_html__( 'Vault Backups', 'core-support-thisismyurl' ); ?></h2>
+	<p><?php echo esc_html__( 'Create and download a ZIP of the entire Vault. Large sites may take a long time and impact server resources.', 'core-support-thisismyurl' ); ?></p>
+	<form method="get" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+		<input type="hidden" name="action" value="timu_vault_export_full" />
+		<input type="hidden" name="timu_vault_export_full_nonce" value="<?php echo esc_attr( wp_create_nonce( 'timu_vault_export_full' ) ); ?>" />
+		<p>
+			<button class="button button-secondary" type="submit" onclick="return confirm('<?php echo esc_attr__( 'This may be very large and take significant time. Continue?', 'core-support-thisismyurl' ); ?>');"><?php echo esc_html__( 'Download Full Vault (ZIP)', 'core-support-thisismyurl' ); ?></button>
+		</p>
+	</form>
+
 	<h2><?php echo esc_html__( 'Background Jobs (Bulk)', 'core-support-thisismyurl' ); ?></h2>
 	<p><?php echo esc_html__( 'Launch a background job to process the full library in batches.', 'core-support-thisismyurl' ); ?></p>
 	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
@@ -434,9 +590,110 @@ $license_checked = ! empty( $license_state['checked_at'] ) ? date_i18n( 'M j, Y 
 
 	<h2><?php echo esc_html__( 'Vault Event Logs', 'core-support-thisismyurl' ); ?></h2>
 	<p><?php echo esc_html__( 'Recent errors and warnings from Vault operations.', 'core-support-thisismyurl' ); ?></p>
+	<p>
+		<a class="button" href="<?php echo esc_url( $export_url ); ?>"><?php echo esc_html__( 'Download logs (CSV)', 'core-support-thisismyurl' ); ?></a>
+		<a class="button" href="<?php echo esc_url( $ledger_url ); ?>"><?php echo esc_html__( 'Download ledger (CSV)', 'core-support-thisismyurl' ); ?></a>
+	</p>
+	<p class="description"><?php echo esc_html__( 'When enabled, logs and journals are mirrored to files inside the Vault for added resilience.', 'core-support-thisismyurl' ); ?></p>
+
+	<div style="margin:10px 0; padding:12px; background:#fff; border:1px solid #ccd0d4;">
+		<h3 style="margin-top:0;"><?php echo esc_html__( 'Export Options', 'core-support-thisismyurl' ); ?></h3>
+		<div style="display:flex; gap:24px; flex-wrap:wrap;">
+			<div>
+				<form method="get" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+					<input type="hidden" name="action" value="timu_vault_export_ledger" />
+					<input type="hidden" name="timu_vault_export_ledger_nonce" value="<?php echo esc_attr( $ledger_nonce ); ?>" />
+					<p style="margin:0 0 8px;"><strong><?php echo esc_html__( 'Ledger (CSV) filters', 'core-support-thisismyurl' ); ?></strong></p>
+					<p style="margin:0 0 8px;">
+						<label>
+							<?php echo esc_html__( 'Operation (optional)', 'core-support-thisismyurl' ); ?>
+							<input type="text" name="op" placeholder="migrate|rehydrate|verify|..." style="margin-left:6px;" />
+						</label>
+					</p>
+					<p style="margin:0 0 8px;">
+						<label>
+							<?php echo esc_html__( 'Attachment ID (optional)', 'core-support-thisismyurl' ); ?>
+							<input type="number" name="attachment_id" min="1" style="margin-left:6px; width:120px;" />
+						</label>
+					</p>
+					<p style="margin:0 0 8px;">
+						<label>
+							<?php echo esc_html__( 'Limit', 'core-support-thisismyurl' ); ?>
+							<input type="number" name="limit" value="500" min="1" max="100000" style="margin-left:6px; width:120px;" />
+						</label>
+					</p>
+					<p style="margin:8px 0 0;">
+						<button class="button" type="submit"><?php echo esc_html__( 'Download filtered ledger (CSV)', 'core-support-thisismyurl' ); ?></button>
+					</p>
+				</form>
+			</div>
+			<div>
+				<form method="get" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+					<input type="hidden" name="action" value="timu_vault_export_journal" />
+					<input type="hidden" name="timu_vault_export_journal_nonce" value="<?php echo esc_attr( $journal_nonce ); ?>" />
+					<p style="margin:0 0 8px;"><strong><?php echo esc_html__( 'Attachment Journal (JSON)', 'core-support-thisismyurl' ); ?></strong></p>
+					<p style="margin:0 0 8px;">
+						<label>
+							<?php echo esc_html__( 'Attachment ID', 'core-support-thisismyurl' ); ?>
+							<input type="number" name="attachment_id" min="1" required style="margin-left:6px; width:120px;" />
+						</label>
+					</p>
+					<p style="margin:8px 0 0;">
+						<button class="button" type="submit"><?php echo esc_html__( 'Download journal (JSON)', 'core-support-thisismyurl' ); ?></button>
+					</p>
+				</form>
+			</div>
+			<div>
+				<form method="get" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+					<input type="hidden" name="action" value="timu_vault_export_bundle" />
+					<input type="hidden" name="timu_vault_export_bundle_nonce" value="<?php echo esc_attr( $bundle_nonce ); ?>" />
+					<p style="margin:0 0 8px;"><strong><?php echo esc_html__( 'Support Bundle (ZIP)', 'core-support-thisismyurl' ); ?></strong></p>
+					<p style="margin:0 0 8px;">
+						<label>
+							<?php echo esc_html__( 'Ledger limit', 'core-support-thisismyurl' ); ?>
+							<input type="number" name="limit" value="1000" min="1" max="100000" style="margin-left:6px; width:120px;" />
+						</label>
+					</p>
+					<p style="margin:0 0 8px;">
+						<label>
+							<?php echo esc_html__( 'Operation filter (optional)', 'core-support-thisismyurl' ); ?>
+							<input type="text" name="op" placeholder="migrate|rehydrate|verify|..." style="margin-left:6px;" />
+						</label>
+					</p>
+					<p style="margin:0 0 8px;">
+						<label>
+							<?php echo esc_html__( 'Include journal for Attachment ID (optional)', 'core-support-thisismyurl' ); ?>
+							<input type="number" name="attachment_id" min="1" style="margin-left:6px; width:160px;" />
+						</label>
+					</p>
+					<p style="margin:8px 0 0;">
+						<button class="button button-primary" type="submit"><?php echo esc_html__( 'Download support bundle (ZIP)', 'core-support-thisismyurl' ); ?></button>
+					</p>
+				</form>
+			</div>
+		</div>
+	</div>
 
 	<?php if ( isset( $_GET['timu_vault_logs_cleared'] ) ) : ?>
 		<div class="notice notice-success is-dismissible"><p><?php echo esc_html__( 'All logs cleared.', 'core-support-thisismyurl' ); ?></p></div>
+	<?php endif; ?>
+
+	<?php if ( isset( $_GET['timu_vault_journal_empty'] ) ) : ?>
+		<div class="notice notice-info is-dismissible"><p><?php echo esc_html__( 'No journal entries found for that attachment.', 'core-support-thisismyurl' ); ?></p></div>
+	<?php endif; ?>
+
+	<?php if ( isset( $_GET['timu_vault_bundle_error'] ) ) : ?>
+		<?php $err = sanitize_text_field( wp_unslash( $_GET['timu_vault_bundle_error'] ) ); ?>
+		<div class="notice notice-error is-dismissible">
+			<p>
+				<?php echo esc_html__( 'Support bundle could not be created.', 'core-support-thisismyurl' ); ?>
+				<?php if ( 'zip_missing' === $err ) : ?>
+					<?php echo esc_html__( 'The ZipArchive PHP extension is not available.', 'core-support-thisismyurl' ); ?>
+				<?php elseif ( 'zip_open' === $err ) : ?>
+					<?php echo esc_html__( 'Failed to open a ZIP archive for writing.', 'core-support-thisismyurl' ); ?>
+				<?php endif; ?>
+			</p>
+		</div>
 	<?php endif; ?>
 
 	<?php

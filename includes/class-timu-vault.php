@@ -50,6 +50,16 @@ class TIMU_Vault {
 	private const LEDGER_MAX_ENTRIES     = 10000;
 	private const META_PENDING_REVIEW    = '_timu_pending_review';
 	private const META_PENDING_OPTIMIZED = '_timu_pending_optimized';
+	// Google Drive Offload.
+	private const GDRIVE_CONNECT_ACTION  = 'timu_vault_gdrive_connect';
+	private const GDRIVE_CALLBACK_ACTION = 'timu_vault_gdrive_oauth_callback';
+	private const GDRIVE_DISCONNECT      = 'timu_vault_gdrive_disconnect';
+	private const GDRIVE_OFFLOAD_ACTION  = 'timu_vault_gdrive_offload';
+	private const GDRIVE_TOKEN_OPTION    = 'timu_gdrive_token_blob';
+	private const GDRIVE_FOLDER_OPTION   = 'timu_gdrive_folder_id';
+	private const SIZE_CHECK_HOOK        = 'timu_vault_size_check';
+	private const SIZE_LAST_ALERT_OPTION = 'timu_vault_last_size_alert';
+	private const LOGS_DIR_NAME          = 'logs';
 
 	/**
 	 * Bootstrap hooks.
@@ -66,9 +76,18 @@ class TIMU_Vault {
 		add_action( 'admin_post_' . self::ATTACHMENT_ACTION, array( __CLASS__, 'handle_attachment_action' ) );
 		add_action( 'admin_post_' . self::QUEUE_ACTION, array( __CLASS__, 'handle_queue_action' ) );
 		add_action( 'admin_post_' . self::KEY_ACTION, array( __CLASS__, 'handle_key_action' ) );
+		// Google Drive OAuth and offload actions.
+		add_action( 'admin_post_' . self::GDRIVE_CONNECT_ACTION, array( __CLASS__, 'gdrive_connect' ) );
+		add_action( 'admin_post_' . self::GDRIVE_CALLBACK_ACTION, array( __CLASS__, 'gdrive_oauth_callback' ) );
+		add_action( 'admin_post_' . self::GDRIVE_DISCONNECT, array( __CLASS__, 'gdrive_disconnect' ) );
+		add_action( 'admin_post_' . self::GDRIVE_OFFLOAD_ACTION, array( __CLASS__, 'gdrive_offload_oldest' ) );
 		// Logs actions: clear and export.
 		add_action( 'admin_post_timu_vault_log_action', array( __CLASS__, 'maybe_handle_log_action' ) );
 		add_action( 'admin_post_timu_vault_export_logs', array( __CLASS__, 'handle_export_logs' ) );
+		add_action( 'admin_post_timu_vault_export_ledger', array( __CLASS__, 'handle_export_ledger' ) );
+		add_action( 'admin_post_timu_vault_export_journal', array( __CLASS__, 'handle_export_journal' ) );
+		add_action( 'admin_post_timu_vault_export_bundle', array( __CLASS__, 'handle_export_bundle' ) );
+		add_action( 'admin_post_timu_vault_export_full', array( __CLASS__, 'handle_export_full_vault' ) );
 		add_action( 'add_meta_boxes', array( __CLASS__, 'register_attachment_metabox' ) );
 		add_action( 'admin_notices', array( __CLASS__, 'maybe_render_notices' ) );
 		add_action( 'timu_vault_queue_runner', array( __CLASS__, 'process_queue' ) );
@@ -77,6 +96,10 @@ class TIMU_Vault {
 		// Content rewrites and 404 intercept.
 		add_filter( 'the_content', array( __CLASS__, 'rewrite_vault_urls_in_content' ), 20 );
 		add_action( 'template_redirect', array( __CLASS__, 'intercept_404_for_vault' ), 5 );
+
+		// Schedule size monitoring once daily.
+		add_action( self::SIZE_CHECK_HOOK, array( __CLASS__, 'cron_check_vault_size' ) );
+		self::schedule_size_check();
 
 		if ( defined( 'WP_CLI' ) && WP_CLI && class_exists( '\\WP_CLI' ) ) {
 			\WP_CLI::add_command( 'timu vault rehydrate', array( __CLASS__, 'cli_rehydrate' ) );
@@ -113,6 +136,12 @@ class TIMU_Vault {
 		$download_ttl   = isset( $_POST['timu_vault_download_ttl'] ) ? (int) $_POST['timu_vault_download_ttl'] : 600;
 		$encrypt        = isset( $_POST['timu_vault_encrypt'] ) && '1' === $_POST['timu_vault_encrypt'];
 		$allow_override = isset( $_POST['timu_vault_allow_override'] ) && '1' === $_POST['timu_vault_allow_override'];
+		$max_size_mb    = isset( $_POST['timu_vault_max_size_mb'] ) ? max( 0, (int) $_POST['timu_vault_max_size_mb'] ) : 0;
+		$alert_email    = isset( $_POST['timu_vault_alert_email'] ) ? sanitize_email( wp_unslash( $_POST['timu_vault_alert_email'] ) ) : '';
+		$mirror_logs    = isset( $_POST['timu_vault_mirror_logs'] ) && '1' === $_POST['timu_vault_mirror_logs'];
+		$offload_enable = isset( $_POST['timu_vault_offload_enabled'] ) && '1' === $_POST['timu_vault_offload_enabled'];
+		$gdrive_id      = isset( $_POST['timu_gdrive_client_id'] ) ? sanitize_text_field( wp_unslash( $_POST['timu_gdrive_client_id'] ) ) : '';
+		$gdrive_secret  = isset( $_POST['timu_gdrive_client_secret'] ) ? sanitize_text_field( wp_unslash( $_POST['timu_gdrive_client_secret'] ) ) : '';
 
 		$settings = array(
 			'enabled'                   => $enabled,
@@ -120,6 +149,12 @@ class TIMU_Vault {
 			'compression'               => $compression,
 			'download_ttl'              => $download_ttl,
 			'encrypt'                   => $encrypt,
+			'max_size_mb'               => $max_size_mb,
+			'alert_email'               => $alert_email,
+			'mirror_logs'               => $mirror_logs,
+			'offload_enabled'           => $offload_enable,
+			'gdrive_client_id'          => $gdrive_id,
+			'gdrive_client_secret'      => $gdrive_secret,
 			self::OPTION_ALLOW_OVERRIDE => $allow_override,
 		);
 
@@ -1346,6 +1381,12 @@ class TIMU_Vault {
 			'compression'               => 'store', // store = bit-identical; deflate = smaller.
 			'download_ttl'              => 600,
 			'encrypt'                   => false,
+			'max_size_mb'               => 0,
+			'alert_email'               => '',
+			'mirror_logs'               => true,
+			'offload_enabled'           => false,
+			'gdrive_client_id'          => '',
+			'gdrive_client_secret'      => '',
 			self::OPTION_ALLOW_OVERRIDE => true,
 		);
 
@@ -1358,10 +1399,16 @@ class TIMU_Vault {
 			$settings = array_merge( $settings, $site );
 		}
 
-		$settings['mode']         = self::resolve_mode( (string) ( $settings['mode'] ?? 'raw' ) );
-		$settings['download_ttl'] = max( 60, (int) ( $settings['download_ttl'] ?? 600 ) );
-		$settings['compression']  = in_array( strtolower( (string) ( $settings['compression'] ?? 'store' ) ), array( 'store', 'deflate' ), true ) ? strtolower( (string) $settings['compression'] ) : 'store';
-		$settings['encrypt']      = ! empty( $settings['encrypt'] );
+		$settings['mode']                 = self::resolve_mode( (string) ( $settings['mode'] ?? 'raw' ) );
+		$settings['download_ttl']         = max( 60, (int) ( $settings['download_ttl'] ?? 600 ) );
+		$settings['compression']          = in_array( strtolower( (string) ( $settings['compression'] ?? 'store' ) ), array( 'store', 'deflate' ), true ) ? strtolower( (string) $settings['compression'] ) : 'store';
+		$settings['encrypt']              = ! empty( $settings['encrypt'] );
+		$settings['max_size_mb']          = max( 0, (int) ( $settings['max_size_mb'] ?? 0 ) );
+		$settings['alert_email']          = sanitize_email( (string) ( $settings['alert_email'] ?? '' ) );
+		$settings['mirror_logs']          = ! empty( $settings['mirror_logs'] );
+		$settings['offload_enabled']      = ! empty( $settings['offload_enabled'] );
+		$settings['gdrive_client_id']     = (string) ( $settings['gdrive_client_id'] ?? '' );
+		$settings['gdrive_client_secret'] = (string) ( $settings['gdrive_client_secret'] ?? '' );
 
 		return $settings;
 	}
@@ -1839,6 +1886,12 @@ class TIMU_Vault {
 		}
 
 		update_option( self::LOG_OPTION, $logs );
+
+		// Mirror to disk for crash resilience when enabled.
+		$settings = self::get_settings();
+		if ( ! empty( $settings['mirror_logs'] ) ) {
+			self::mirror_log_entry_to_disk( $entry );
+		}
 	}
 
 	/**
@@ -2002,6 +2055,316 @@ class TIMU_Vault {
 		}
 
 		fclose( $fh );
+		exit;
+	}
+
+	/**
+	 * Handle export of global ledger as CSV.
+	 *
+	 * @return void
+	 */
+	public static function handle_export_ledger(): void {
+		$nonce = isset( $_GET['timu_vault_export_ledger_nonce'] ) ? sanitize_text_field( wp_unslash( $_GET['timu_vault_export_ledger_nonce'] ) ) : '';
+		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'timu_vault_export_ledger' ) ) {
+			wp_safe_redirect( wp_get_referer() ?: admin_url() );
+			exit;
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_safe_redirect( wp_get_referer() ?: admin_url() );
+			exit;
+		}
+
+		$limit_arg             = isset( $_GET['limit'] ) ? absint( $_GET['limit'] ) : 0;
+		$op_filter             = isset( $_GET['op'] ) ? sanitize_key( wp_unslash( $_GET['op'] ) ) : '';
+		$attachment_arg        = isset( $_GET['attachment_id'] ) ? absint( $_GET['attachment_id'] ) : 0;
+		$args                  = array();
+		$args['limit']         = $limit_arg > 0 ? $limit_arg : null;
+		$args['op']            = ! empty( $op_filter ) ? $op_filter : null;
+		$args['attachment_id'] = $attachment_arg > 0 ? $attachment_arg : null;
+
+		$ledger = self::get_global_ledger(
+			array_filter(
+				$args,
+				static function ( $value ) {
+					return null !== $value;
+				}
+			)
+		);
+
+		$filename = 'timu-vault-ledger-' . gmdate( 'Ymd-His' ) . '.csv';
+		header( 'Content-Type: text/csv; charset=UTF-8' );
+		header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
+		header( 'Pragma: no-cache' );
+		header( 'Expires: 0' );
+
+		$fh = fopen( 'php://output', 'w' );
+		if ( false === $fh ) {
+			wp_safe_redirect( wp_get_referer() ?: admin_url() );
+			exit;
+		}
+
+		// Header row.
+		fputcsv( $fh, array( 'timestamp', 'site_id', 'attachment_id', 'user_id', 'operation', 'success' ) );
+
+		foreach ( $ledger as $entry ) {
+			fputcsv(
+				$fh,
+				array(
+					$entry['ts'] ?? '',
+					(string) ( $entry['site_id'] ?? '' ),
+					(string) ( $entry['attachment_id'] ?? '' ),
+					(string) ( $entry['user_id'] ?? '' ),
+					$entry['op'] ?? '',
+					isset( $entry['success'] ) && $entry['success'] ? '1' : '0',
+				)
+			);
+		}
+
+		fclose( $fh );
+		exit;
+	}
+
+	/**
+	 * Export attachment journal as JSON download.
+	 *
+	 * @return void
+	 */
+	public static function handle_export_journal(): void {
+		$nonce = isset( $_GET['timu_vault_export_journal_nonce'] ) ? sanitize_text_field( wp_unslash( $_GET['timu_vault_export_journal_nonce'] ) ) : '';
+		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'timu_vault_export_journal' ) ) {
+			wp_safe_redirect( wp_get_referer() ?: admin_url() );
+			exit;
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_safe_redirect( wp_get_referer() ?: admin_url() );
+			exit;
+		}
+
+		$attachment_id = isset( $_GET['attachment_id'] ) ? absint( $_GET['attachment_id'] ) : 0;
+		if ( $attachment_id < 1 ) {
+			wp_safe_redirect( wp_get_referer() ?: admin_url() );
+			exit;
+		}
+
+		$journal = self::get_journal( $attachment_id );
+		if ( empty( $journal ) ) {
+			$redirect = add_query_arg( 'timu_vault_journal_empty', '1', wp_get_referer() ?: admin_url() );
+			wp_safe_redirect( $redirect );
+			exit;
+		}
+
+		$filename = 'timu-vault-journal-' . $attachment_id . '-' . gmdate( 'Ymd-His' ) . '.json';
+		header( 'Content-Type: application/json; charset=UTF-8' );
+		header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
+		header( 'Pragma: no-cache' );
+		header( 'Expires: 0' );
+
+		echo wp_json_encode( $journal );
+		exit;
+	}
+
+	/**
+	 * Export a support bundle ZIP including logs CSV, ledger CSV, and optional attachment journal JSON.
+	 *
+	 * @return void
+	 */
+	public static function handle_export_bundle(): void {
+		$nonce = isset( $_GET['timu_vault_export_bundle_nonce'] ) ? sanitize_text_field( wp_unslash( $_GET['timu_vault_export_bundle_nonce'] ) ) : '';
+		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'timu_vault_export_bundle' ) ) {
+			wp_safe_redirect( wp_get_referer() ?: admin_url() );
+			exit;
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_safe_redirect( wp_get_referer() ?: admin_url() );
+			exit;
+		}
+
+		if ( ! class_exists( 'ZipArchive' ) ) {
+			$redirect = add_query_arg( 'timu_vault_bundle_error', 'zip_missing', wp_get_referer() ?: admin_url() );
+			wp_safe_redirect( $redirect );
+			exit;
+		}
+
+		$limit_arg      = isset( $_GET['limit'] ) ? absint( $_GET['limit'] ) : 1000;
+		$op_filter      = isset( $_GET['op'] ) ? sanitize_key( wp_unslash( $_GET['op'] ) ) : '';
+		$attachment_arg = isset( $_GET['attachment_id'] ) ? absint( $_GET['attachment_id'] ) : 0;
+
+		$args                  = array();
+		$args['limit']         = $limit_arg > 0 ? $limit_arg : null;
+		$args['op']            = ! empty( $op_filter ) ? $op_filter : null;
+		$args['attachment_id'] = $attachment_arg > 0 ? $attachment_arg : null;
+
+		$ledger = self::get_global_ledger(
+			array_filter(
+				$args,
+				static function ( $value ) {
+					return null !== $value;
+				}
+			)
+		);
+
+		$logs = (array) get_option( self::LOG_OPTION, array() );
+
+		$tmp   = wp_tempnam( 'timu-vault-bundle' );
+		$zipfn = $tmp . '.zip';
+		@unlink( $zipfn ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		$zip = new \ZipArchive();
+		if ( true !== $zip->open( $zipfn, \ZipArchive::CREATE | \ZipArchive::OVERWRITE ) ) {
+			$redirect = add_query_arg( 'timu_vault_bundle_error', 'zip_open', wp_get_referer() ?: admin_url() );
+			wp_safe_redirect( $redirect );
+			exit;
+		}
+
+		// Add logs.csv.
+		$logs_csv = \fopen( 'php://temp', 'w+' );
+		if ( false !== $logs_csv ) {
+			\fputcsv( $logs_csv, array( 'timestamp', 'level', 'attachment_id', 'reason', 'operation' ) );
+			foreach ( $logs as $entry ) {
+				\fputcsv(
+					$logs_csv,
+					array(
+						$entry['timestamp'] ?? '',
+						$entry['level'] ?? '',
+						(string) ( $entry['attachment_id'] ?? '' ),
+						$entry['reason'] ?? '',
+						$entry['operation'] ?? '',
+					)
+				);
+			}
+			\rewind( $logs_csv );
+			$logs_contents = stream_get_contents( $logs_csv );
+			if ( false !== $logs_contents ) {
+				$zip->addFromString( 'logs.csv', $logs_contents );
+			}
+			\fclose( $logs_csv );
+		}
+
+		// Add ledger.csv.
+		$ledger_csv = \fopen( 'php://temp', 'w+' );
+		if ( false !== $ledger_csv ) {
+			\fputcsv( $ledger_csv, array( 'timestamp', 'site_id', 'attachment_id', 'user_id', 'operation', 'success' ) );
+			foreach ( $ledger as $entry ) {
+				\fputcsv(
+					$ledger_csv,
+					array(
+						$entry['ts'] ?? '',
+						(string) ( $entry['site_id'] ?? '' ),
+						(string) ( $entry['attachment_id'] ?? '' ),
+						(string) ( $entry['user_id'] ?? '' ),
+						$entry['op'] ?? '',
+						isset( $entry['success'] ) && $entry['success'] ? '1' : '0',
+					)
+				);
+			}
+			\rewind( $ledger_csv );
+			$ledger_contents = stream_get_contents( $ledger_csv );
+			if ( false !== $ledger_contents ) {
+				$zip->addFromString( 'ledger.csv', $ledger_contents );
+			}
+			\fclose( $ledger_csv );
+		}
+
+		// Optionally add a journal JSON for a specific attachment.
+		if ( $attachment_arg > 0 ) {
+			$journal = self::get_journal( $attachment_arg );
+			if ( ! empty( $journal ) ) {
+				$zip->addFromString( 'journal-' . $attachment_arg . '.json', wp_json_encode( $journal ) );
+			}
+		}
+
+		$zip->close();
+
+		$filename = 'timu-vault-support-bundle-' . gmdate( 'Ymd-His' ) . '.zip';
+		header( 'Content-Type: application/zip' );
+		header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
+		header( 'Pragma: no-cache' );
+		header( 'Expires: 0' );
+
+		$fh = \fopen( $zipfn, 'rb' );
+		if ( false !== $fh ) {
+			while ( ! \feof( $fh ) ) {
+				echo (string) \fread( $fh, 8192 );
+			}
+			\fclose( $fh );
+		}
+
+		@unlink( $zipfn ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		exit;
+	}
+
+	/**
+	 * Export a ZIP of the entire Vault directory (may be very large).
+	 *
+	 * @return void
+	 */
+	public static function handle_export_full_vault(): void {
+		$nonce = isset( $_GET['timu_vault_export_full_nonce'] ) ? sanitize_text_field( wp_unslash( $_GET['timu_vault_export_full_nonce'] ) ) : '';
+		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'timu_vault_export_full' ) ) {
+			wp_safe_redirect( wp_get_referer() ?: admin_url() );
+			exit;
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_safe_redirect( wp_get_referer() ?: admin_url() );
+			exit;
+		}
+
+		if ( ! class_exists( 'ZipArchive' ) ) {
+			$redirect = add_query_arg( 'timu_vault_bundle_error', 'zip_missing', wp_get_referer() ?: admin_url() );
+			wp_safe_redirect( $redirect );
+			exit;
+		}
+
+		@set_time_limit( 0 ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		$vault_dir = self::get_vault_absolute_path( '' );
+		$vault_dir = rtrim( $vault_dir, '/\\' );
+		if ( empty( $vault_dir ) || ! is_dir( $vault_dir ) ) {
+			wp_safe_redirect( wp_get_referer() ?: admin_url() );
+			exit;
+		}
+
+		$tmp   = wp_tempnam( 'timu-vault-full' );
+		$zipfn = $tmp . '.zip';
+		@unlink( $zipfn ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		$zip = new \ZipArchive();
+		if ( true !== $zip->open( $zipfn, \ZipArchive::CREATE | \ZipArchive::OVERWRITE ) ) {
+			$redirect = add_query_arg( 'timu_vault_bundle_error', 'zip_open', wp_get_referer() ?: admin_url() );
+			wp_safe_redirect( $redirect );
+			exit;
+		}
+
+		$baseLen = strlen( $vault_dir ) + 1;
+		$rii     = new \RecursiveIteratorIterator( new \RecursiveDirectoryIterator( $vault_dir, \FilesystemIterator::SKIP_DOTS ) );
+		foreach ( $rii as $file ) {
+			/** @var \SplFileInfo $file */
+			if ( $file->isDir() ) {
+				continue;
+			}
+			$fullPath = $file->getPathname();
+			$local    = substr( $fullPath, $baseLen );
+			$zip->addFile( $fullPath, 'vault/' . str_replace( '\\', '/', $local ) );
+		}
+
+		$zip->close();
+
+		$filename = 'timu-vault-full-' . gmdate( 'Ymd-His' ) . '.zip';
+		header( 'Content-Type: application/zip' );
+		header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
+		header( 'Pragma: no-cache' );
+		header( 'Expires: 0' );
+
+		$fh = \fopen( $zipfn, 'rb' );
+		if ( false !== $fh ) {
+			while ( ! \feof( $fh ) ) {
+				echo (string) \fread( $fh, 8192 );
+			}
+			\fclose( $fh );
+		}
+
+		@unlink( $zipfn ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		exit;
 	}
 
@@ -2783,6 +3146,512 @@ class TIMU_Vault {
 	}
 
 	/**
+	 * Ensure logs directory exists within the vault and return its path.
+	 *
+	 * @return string Absolute logs directory path.
+	 */
+	private static function ensure_vault_logs_dir(): string {
+		$uploads   = wp_upload_dir();
+		$vault     = trailingslashit( $uploads['basedir'] ) . (string) get_option( 'timu_vault_dirname' );
+		$logs_path = trailingslashit( $vault ) . self::LOGS_DIR_NAME;
+		wp_mkdir_p( $logs_path );
+		return $logs_path;
+	}
+
+	/**
+	 * Mirror a single log entry to a daily CSV file in the vault logs directory.
+	 *
+	 * @param array $entry Log entry.
+	 * @return void
+	 */
+	private static function mirror_log_entry_to_disk( array $entry ): void {
+		$dir  = self::ensure_vault_logs_dir();
+		$fn   = trailingslashit( $dir ) . 'events-' . gmdate( 'Ymd' ) . '.csv';
+		$line = array(
+			$entry['timestamp'] ?? '',
+			$entry['level'] ?? '',
+			(string) ( $entry['attachment_id'] ?? '' ),
+			$entry['reason'] ?? '',
+			$entry['operation'] ?? '',
+		);
+		$fh   = fopen( $fn, 'a' );
+		if ( false !== $fh ) {
+			fputcsv( $fh, $line );
+			fclose( $fh );
+		}
+	}
+
+	/**
+	 * Mirror ledger entry to a monthly CSV file in the vault logs directory.
+	 *
+	 * @param array $entry Ledger entry array (normalized).
+	 * @return void
+	 */
+	private static function mirror_ledger_entry_to_disk( array $entry ): void {
+		$dir  = self::ensure_vault_logs_dir();
+		$fn   = trailingslashit( $dir ) . 'ledger-' . gmdate( 'Ym' ) . '.csv';
+		$line = array(
+			$entry['ts'] ?? '',
+			(string) ( $entry['site_id'] ?? '' ),
+			(string) ( $entry['attachment_id'] ?? '' ),
+			(string) ( $entry['user_id'] ?? '' ),
+			$entry['op'] ?? '',
+			isset( $entry['success'] ) && $entry['success'] ? '1' : '0',
+		);
+		$fh   = fopen( $fn, 'a' );
+		if ( false !== $fh ) {
+			fputcsv( $fh, $line );
+			fclose( $fh );
+		}
+	}
+
+	/**
+	 * Mirror full journal JSON to a file in the logs directory.
+	 *
+	 * @param int   $attachment_id Attachment ID.
+	 * @param array $journal       Journal data.
+	 * @return void
+	 */
+	private static function mirror_journal_to_disk( int $attachment_id, array $journal ): void {
+		$dir = self::ensure_vault_logs_dir();
+		$fn  = trailingslashit( $dir ) . 'journal-' . (string) $attachment_id . '.json';
+		file_put_contents( $fn, wp_json_encode( $journal ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
+	}
+
+	/**
+	 * Schedule vault size check daily if not scheduled.
+	 *
+	 * @return void
+	 */
+	private static function schedule_size_check(): void {
+		if ( ! wp_next_scheduled( self::SIZE_CHECK_HOOK ) ) {
+			wp_schedule_event( time() + HOUR_IN_SECONDS, 'daily', self::SIZE_CHECK_HOOK );
+		}
+	}
+
+	/**
+	 * Cron callback to check vault size and email admin if threshold exceeded.
+	 *
+	 * @return void
+	 */
+	public static function cron_check_vault_size(): void {
+		$settings = self::get_settings();
+		$max_mb   = (int) ( $settings['max_size_mb'] ?? 0 );
+		if ( $max_mb <= 0 ) {
+			return;
+		}
+		$size_bytes = self::compute_vault_size_bytes();
+		$size_mb    = (int) ceil( $size_bytes / ( 1024 * 1024 ) );
+		if ( $size_mb <= $max_mb ) {
+			return;
+		}
+
+		$last = (int) get_option( self::SIZE_LAST_ALERT_OPTION, 0 );
+		if ( $last && ( time() - $last ) < DAY_IN_SECONDS ) {
+			return; // Avoid spamming.
+		}
+
+		$to   = ! empty( $settings['alert_email'] ) ? $settings['alert_email'] : get_option( 'admin_email' );
+		$site = wp_parse_url( home_url(), PHP_URL_HOST );
+		$subj = sprintf( 'TIMU Vault size alert on %s', (string) $site );
+		$body = sprintf( 'Vault size is %d MB, exceeding the configured limit of %d MB.', $size_mb, $max_mb );
+		wp_mail( $to, $subj, $body );
+		update_option( self::SIZE_LAST_ALERT_OPTION, time(), false );
+	}
+
+	/* =========================
+	 * Google Drive integration
+	 * ========================= */
+
+	/**
+	 * Start OAuth flow: redirect admin to Google consent screen.
+	 *
+	 * @return void
+	 */
+	public static function gdrive_connect(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'Unauthorized', 'core-support-thisismyurl' ) );
+		}
+
+		check_admin_referer( 'timu_gdrive_connect', 'timu_gdrive_nonce' );
+
+		$settings   = self::get_settings();
+		$client_id  = (string) ( $settings['gdrive_client_id'] ?? '' );
+		$client_sec = (string) ( $settings['gdrive_client_secret'] ?? '' );
+		if ( empty( $client_id ) || empty( $client_sec ) ) {
+			wp_safe_redirect( add_query_arg( 'timu_gdrive_error', 'missing_creds', wp_get_referer() ?: admin_url() ) );
+			exit;
+		}
+
+		$redirect = admin_url( 'admin-post.php?action=' . self::GDRIVE_CALLBACK_ACTION );
+		$state    = wp_create_nonce( 'timu_gdrive_state' );
+		$scope    = rawurlencode( 'https://www.googleapis.com/auth/drive.file' );
+		$url      = 'https://accounts.google.com/o/oauth2/v2/auth' .
+			'?response_type=code' .
+			'&client_id=' . rawurlencode( $client_id ) .
+			'&redirect_uri=' . rawurlencode( $redirect ) .
+			'&scope=' . $scope .
+			'&access_type=offline&prompt=consent&include_granted_scopes=true' .
+			'&state=' . rawurlencode( $state );
+
+		wp_safe_redirect( $url );
+		exit;
+	}
+
+	/**
+	 * OAuth callback: exchange code for tokens.
+	 *
+	 * @return void
+	 */
+	public static function gdrive_oauth_callback(): void {
+		$state = isset( $_GET['state'] ) ? sanitize_text_field( wp_unslash( $_GET['state'] ) ) : '';
+		$code  = isset( $_GET['code'] ) ? sanitize_text_field( wp_unslash( $_GET['code'] ) ) : '';
+		if ( empty( $code ) || ! wp_verify_nonce( $state, 'timu_gdrive_state' ) ) {
+			wp_safe_redirect( add_query_arg( 'timu_gdrive_error', 'bad_state', admin_url() ) );
+			exit;
+		}
+
+		$settings   = self::get_settings();
+		$client_id  = (string) ( $settings['gdrive_client_id'] ?? '' );
+		$client_sec = (string) ( $settings['gdrive_client_secret'] ?? '' );
+		$redirect   = admin_url( 'admin-post.php?action=' . self::GDRIVE_CALLBACK_ACTION );
+
+		$resp = wp_remote_post(
+			'https://oauth2.googleapis.com/token',
+			array(
+				'timeout' => 15,
+				'body'    => array(
+					'code'          => $code,
+					'client_id'     => $client_id,
+					'client_secret' => $client_sec,
+					'redirect_uri'  => $redirect,
+					'grant_type'    => 'authorization_code',
+				),
+			)
+		);
+
+		if ( is_wp_error( $resp ) ) {
+			wp_safe_redirect( add_query_arg( 'timu_gdrive_error', 'token_http', admin_url() ) );
+			exit;
+		}
+
+		$data = json_decode( (string) wp_remote_retrieve_body( $resp ), true );
+		if ( empty( $data['access_token'] ) ) {
+			wp_safe_redirect( add_query_arg( 'timu_gdrive_error', 'token_empty', admin_url() ) );
+			exit;
+		}
+
+		self::gdrive_save_token( $data );
+		wp_safe_redirect( add_query_arg( 'timu_gdrive_status', 'connected', admin_url( 'admin.php?page=' . ( is_network_admin() ? 'timu-core-network-settings' : 'timu-core-settings' ) ) ) );
+		exit;
+	}
+
+	/**
+	 * Disconnect and remove stored token.
+	 *
+	 * @return void
+	 */
+	public static function gdrive_disconnect(): void {
+		check_admin_referer( 'timu_gdrive_disconnect', 'timu_gdrive_nonce' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'Unauthorized', 'core-support-thisismyurl' ) );
+		}
+		delete_option( self::GDRIVE_TOKEN_OPTION );
+		delete_option( self::GDRIVE_FOLDER_OPTION );
+		wp_safe_redirect( add_query_arg( 'timu_gdrive_status', 'disconnected', wp_get_referer() ?: admin_url() ) );
+		exit;
+	}
+
+	/**
+	 * Offload oldest N files to Google Drive into a named folder.
+	 *
+	 * @return void
+	 */
+	public static function gdrive_offload_oldest(): void {
+		check_admin_referer( 'timu_gdrive_offload', 'timu_gdrive_nonce' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'Unauthorized', 'core-support-thisismyurl' ) );
+		}
+
+		$settings = self::get_settings();
+		if ( empty( $settings['offload_enabled'] ) ) {
+			wp_safe_redirect( add_query_arg( 'timu_gdrive_error', 'disabled', wp_get_referer() ?: admin_url() ) );
+			exit;
+		}
+
+		$folder_name  = isset( $_POST['timu_gdrive_folder'] ) ? sanitize_text_field( wp_unslash( $_POST['timu_gdrive_folder'] ) ) : 'TIMU Vault';
+		$count        = isset( $_POST['timu_gdrive_count'] ) ? max( 1, (int) $_POST['timu_gdrive_count'] ) : 10;
+		$delete_local = ! empty( $_POST['timu_gdrive_delete_local'] );
+
+		$token = self::gdrive_get_token();
+		if ( empty( $token ) ) {
+			wp_safe_redirect( add_query_arg( 'timu_gdrive_error', 'not_connected', wp_get_referer() ?: admin_url() ) );
+			exit;
+		}
+
+		$folder_id = self::gdrive_ensure_folder( $folder_name );
+		if ( empty( $folder_id ) ) {
+			wp_safe_redirect( add_query_arg( 'timu_gdrive_error', 'folder', wp_get_referer() ?: admin_url() ) );
+			exit;
+		}
+
+		$files = self::list_oldest_vault_files( $count );
+		$ok    = 0;
+		$fail  = 0;
+		foreach ( $files as $f ) {
+			if ( self::gdrive_upload_file( $folder_id, $f['path'], $f['name'] ) ) {
+				++$ok;
+				if ( $delete_local ) {
+					@unlink( $f['path'] ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+				}
+			} else {
+				++$fail;
+			}
+		}
+
+		$redirect = add_query_arg(
+			array(
+				'timu_gdrive_offload' => '1',
+				'ok'                  => $ok,
+				'fail'                => $fail,
+			),
+			wp_get_referer() ?: admin_url()
+		);
+		wp_safe_redirect( $redirect );
+		exit;
+	}
+
+	private static function gdrive_get_token(): array {
+		$blob = get_option( self::GDRIVE_TOKEN_OPTION, '' );
+		if ( empty( $blob ) ) {
+			return array();
+		}
+		$plain = self::decrypt_string( (string) $blob );
+		$data  = json_decode( (string) $plain, true );
+		if ( ! is_array( $data ) ) {
+			return array();
+		}
+		// Refresh if expired.
+		$expires_in  = (int) ( $data['expires_in'] ?? 0 );
+		$created_at  = (int) ( $data['created_at'] ?? 0 );
+		$has_refresh = ! empty( $data['refresh_token'] );
+		if ( $has_refresh && ( time() > ( $created_at + max( 60, $expires_in - 60 ) ) ) ) {
+			$data = self::gdrive_refresh_token( $data );
+		}
+		return $data;
+	}
+
+	private static function gdrive_save_token( array $data ): void {
+		$data['created_at'] = time();
+		$plain              = wp_json_encode( $data );
+		$blob               = self::encrypt_string( (string) $plain );
+		update_option( self::GDRIVE_TOKEN_OPTION, $blob, false );
+	}
+
+	private static function gdrive_refresh_token( array $token ): array {
+		$settings   = self::get_settings();
+		$client_id  = (string) ( $settings['gdrive_client_id'] ?? '' );
+		$client_sec = (string) ( $settings['gdrive_client_secret'] ?? '' );
+		$refresh    = (string) ( $token['refresh_token'] ?? '' );
+		if ( empty( $refresh ) ) {
+			return $token;
+		}
+		$resp = wp_remote_post(
+			'https://oauth2.googleapis.com/token',
+			array(
+				'timeout' => 15,
+				'body'    => array(
+					'client_id'     => $client_id,
+					'client_secret' => $client_sec,
+					'grant_type'    => 'refresh_token',
+					'refresh_token' => $refresh,
+				),
+			)
+		);
+		if ( is_wp_error( $resp ) ) {
+			return $token;
+		}
+		$data = json_decode( (string) wp_remote_retrieve_body( $resp ), true );
+		if ( empty( $data['access_token'] ) ) {
+			return $token;
+		}
+		// Keep original refresh token if not returned.
+		if ( empty( $data['refresh_token'] ) ) {
+			$data['refresh_token'] = $refresh;
+		}
+		self::gdrive_save_token( $data );
+		return $data;
+	}
+
+	private static function gdrive_api( string $method, string $url, array $headers = array(), $body = null ) {
+		$args = array(
+			'timeout' => 20,
+			'headers' => $headers,
+		);
+		if ( in_array( strtoupper( $method ), array( 'POST', 'PATCH', 'PUT' ), true ) ) {
+			$args['body'] = $body;
+		}
+		$response = wp_remote_request( $url, array_merge( $args, array( 'method' => strtoupper( $method ) ) ) );
+		return $response;
+	}
+
+	private static function gdrive_ensure_folder( string $name ): string {
+		$token = self::gdrive_get_token();
+		if ( empty( $token['access_token'] ) ) {
+			return '';
+		}
+		$cached = (string) get_option( self::GDRIVE_FOLDER_OPTION, '' );
+		if ( ! empty( $cached ) ) {
+			return $cached;
+		}
+		// Search for folder by name.
+		$q    = sprintf( "mimeType='application/vnd.google-apps.folder' and name='%s' and trashed=false", str_replace( "'", "\'", $name ) );
+		$url  = 'https://www.googleapis.com/drive/v3/files?q=' . rawurlencode( $q ) . '&fields=files(id,name)&spaces=drive';
+		$resp = self::gdrive_api( 'GET', $url, array( 'Authorization' => 'Bearer ' . $token['access_token'] ) );
+		if ( ! is_wp_error( $resp ) ) {
+			$list = json_decode( (string) wp_remote_retrieve_body( $resp ), true );
+			if ( ! empty( $list['files'][0]['id'] ) ) {
+				update_option( self::GDRIVE_FOLDER_OPTION, (string) $list['files'][0]['id'], false );
+				return (string) $list['files'][0]['id'];
+			}
+		}
+		// Create folder.
+		$meta = array(
+			'name'     => $name,
+			'mimeType' => 'application/vnd.google-apps.folder',
+		);
+		$resp = self::gdrive_api(
+			'POST',
+			'https://www.googleapis.com/drive/v3/files',
+			array(
+				'Authorization' => 'Bearer ' . $token['access_token'],
+				'Content-Type'  => 'application/json',
+			),
+			wp_json_encode( $meta )
+		);
+		if ( is_wp_error( $resp ) ) {
+			return '';
+		}
+		$data = json_decode( (string) wp_remote_retrieve_body( $resp ), true );
+		if ( empty( $data['id'] ) ) {
+			return '';
+		}
+		update_option( self::GDRIVE_FOLDER_OPTION, (string) $data['id'], false );
+		return (string) $data['id'];
+	}
+
+	private static function list_oldest_vault_files( int $count ): array {
+		$uploads = wp_upload_dir();
+		$vault   = trailingslashit( $uploads['basedir'] ) . (string) get_option( 'timu_vault_dirname' );
+		$rii     = new \RecursiveIteratorIterator( new \RecursiveDirectoryIterator( $vault, \FilesystemIterator::SKIP_DOTS ) );
+		$items   = array();
+		foreach ( $rii as $file ) {
+			/** @var \SplFileInfo $file */
+			if ( $file->isFile() ) {
+				$items[] = array(
+					'path' => $file->getPathname(),
+					'name' => $file->getFilename(),
+					'time' => (int) $file->getMTime(),
+				);
+			}
+		}
+		usort( $items, static fn( $a, $b ) => $a['time'] <=> $b['time'] );
+		return array_slice( $items, 0, $count );
+	}
+
+	private static function gdrive_upload_file( string $folder_id, string $path, string $name ): bool {
+		$token = self::gdrive_get_token();
+		if ( empty( $token['access_token'] ) ) {
+			return false;
+		}
+		$meta          = array(
+			'name'    => $name,
+			'parents' => array( $folder_id ),
+		);
+		$boundary      = wp_generate_password( 24, false, false );
+		$delimiter     = '-------------' . $boundary;
+		$eol           = "\r\n";
+		$file_contents = file_get_contents( $path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_get_contents
+		if ( false === $file_contents ) {
+			return false;
+		}
+		$body  = '--' . $delimiter . $eol;
+		$body .= 'Content-Type: application/json; charset=UTF-8' . $eol . $eol;
+		$body .= wp_json_encode( $meta ) . $eol;
+		$body .= '--' . $delimiter . $eol;
+		$body .= 'Content-Type: application/octet-stream' . $eol . $eol;
+		$body .= $file_contents . $eol;
+		$body .= '--' . $delimiter . '--';
+
+		$resp = self::gdrive_api(
+			'POST',
+			'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',
+			array(
+				'Authorization' => 'Bearer ' . $token['access_token'],
+				'Content-Type'  => 'multipart/related; boundary=' . $delimiter,
+			),
+			$body
+		);
+		if ( is_wp_error( $resp ) ) {
+			return false;
+		}
+		$code = (int) wp_remote_retrieve_response_code( $resp );
+		return $code >= 200 && $code < 300;
+	}
+
+	/* ============
+	 * Crypto utils
+	 * ============ */
+
+	private static function derive_key(): string {
+		$material = ( defined( 'SECURE_AUTH_KEY' ) ? SECURE_AUTH_KEY : ( defined( 'AUTH_KEY' ) ? AUTH_KEY : wp_salt() ) ) . ( defined( 'LOGGED_IN_SALT' ) ? LOGGED_IN_SALT : '' );
+		return hash( 'sha256', $material, true );
+	}
+
+	private static function encrypt_string( string $plain ): string {
+		$iv     = random_bytes( 12 );
+		$key    = self::derive_key();
+		$tag    = '';
+		$cipher = openssl_encrypt( $plain, 'aes-256-gcm', $key, OPENSSL_RAW_DATA, $iv, $tag );
+		return base64_encode( $iv . $tag . (string) $cipher );
+	}
+
+	private static function decrypt_string( string $blob ): string {
+		$data = base64_decode( $blob );
+		if ( false === $data || strlen( $data ) < 28 ) {
+			return '';
+		}
+		$iv    = substr( $data, 0, 12 );
+		$tag   = substr( $data, 12, 16 );
+		$ct    = substr( $data, 28 );
+		$key   = self::derive_key();
+		$plain = openssl_decrypt( $ct, 'aes-256-gcm', $key, OPENSSL_RAW_DATA, $iv, $tag );
+		return (string) $plain;
+	}
+
+	/**
+	 * Compute total size of the vault directory in bytes.
+	 *
+	 * @return int
+	 */
+	private static function compute_vault_size_bytes(): int {
+		$uploads = wp_upload_dir();
+		$vault   = trailingslashit( $uploads['basedir'] ) . (string) get_option( 'timu_vault_dirname' );
+		if ( empty( $vault ) || ! is_dir( $vault ) ) {
+			return 0;
+		}
+		$size = 0;
+		$rii  = new \RecursiveIteratorIterator( new \RecursiveDirectoryIterator( $vault, \FilesystemIterator::SKIP_DOTS ) );
+		foreach ( $rii as $file ) {
+			/** @var \SplFileInfo $file */
+			if ( $file->isFile() ) {
+				$size += (int) $file->getSize();
+			}
+		}
+		return $size;
+	}
+
+	/**
 	 * Add entry to attachment journal and global ledger.
 	 *
 	 * @param int   $attachment_id Attachment post ID.
@@ -2824,6 +3693,12 @@ class TIMU_Vault {
 
 		// Save journal.
 		update_post_meta( $attachment_id, self::META_JOURNAL, $journal );
+
+		// Mirror journal JSON to disk for crash resilience.
+		$settings = self::get_settings();
+		if ( ! empty( $settings['mirror_logs'] ) ) {
+			self::mirror_journal_to_disk( $attachment_id, $journal );
+		}
 
 		// Add to global ledger.
 		self::add_ledger_entry(
@@ -2891,6 +3766,12 @@ class TIMU_Vault {
 		}
 
 		update_option( self::LEDGER_OPTION, $ledger, false );
+
+		// Mirror ledger entry to disk.
+		$settings = self::get_settings();
+		if ( ! empty( $settings['mirror_logs'] ) ) {
+			self::mirror_ledger_entry_to_disk( $ledger_entry );
+		}
 	}
 
 	/**
@@ -2966,5 +3847,201 @@ class TIMU_Vault {
 		$rand   = strtolower( preg_replace( '/[^a-zA-Z0-9]+/', '', (string) $rand ) );
 		$prefix = 'vault-';
 		return $prefix . $rand;
+	}
+
+	/**
+	 * Rollback attachment to a previous state in its journal.
+	 * If step_index is -1, rollback all operations (full restore).
+	 * Otherwise, rollback up to and including the specified operation index.
+	 *
+	 * @param int $attachment_id Attachment ID.
+	 * @param int $step_index    Operation index (-1 for full rollback, 0+ for stepwise).
+	 * @return array{ok:bool,reason:string}
+	 */
+	public static function rollback_attachment( int $attachment_id, int $step_index = -1 ): array {
+		if ( $attachment_id < 1 ) {
+			return array(
+				'ok'     => false,
+				'reason' => 'Invalid attachment ID.',
+			);
+		}
+
+		$journal = self::get_journal( $attachment_id );
+		if ( ! $journal || empty( $journal['operations'] ) ) {
+			return array(
+				'ok'     => false,
+				'reason' => 'No journal found for attachment.',
+			);
+		}
+
+		$ops = (array) $journal['operations'];
+		if ( empty( $ops ) ) {
+			return array(
+				'ok'     => false,
+				'reason' => 'Journal has no operations.',
+			);
+		}
+
+		// Full rollback: process all ops in reverse.
+		$target_ops = -1 === $step_index ? $ops : array_slice( $ops, 0, $step_index + 1 );
+
+		if ( empty( $target_ops ) ) {
+			return array(
+				'ok'     => false,
+				'reason' => 'No operations to rollback.',
+			);
+		}
+
+		// Process operations in reverse order.
+		$target_ops = array_reverse( $target_ops );
+
+		foreach ( $target_ops as $op_idx => $op ) {
+			$op_type = (string) ( $op['op'] ?? '' );
+
+			// For now, we mainly support rehydrate (restore from vault).
+			// Other ops would need specific handling (e.g., rename, convert metadata).
+			if ( 'ingest' === $op_type || 'rehydrate' === $op_type ) {
+				// Restore file from vault.
+				$rehydrated = self::rehydrate( $attachment_id );
+				if ( ! $rehydrated ) {
+					return array(
+						'ok'     => false,
+						'reason' => 'Failed to rehydrate during rollback.',
+					);
+				}
+			}
+
+			// For future operations (rename, convert, etc.), add handlers here.
+		}
+
+		// After rollback, rebuild derivatives.
+		$rebuild_ok = self::rebuild_attachment_derivatives( $attachment_id );
+
+		// Update post references if needed.
+		self::update_post_featured_image_references( $attachment_id );
+
+		$result = array(
+			'ok'     => true,
+			'reason' => $rebuild_ok ? 'Rollback completed and derivatives rebuilt.' : 'Rollback completed (derivative rebuild had issues).',
+		);
+
+		// Journal the rollback operation.
+		self::add_journal_entry(
+			$attachment_id,
+			array(
+				'op'          => 'rollback',
+				'args'        => array(
+					'target_step' => $step_index,
+					'total_steps' => count( $ops ),
+				),
+				'before_hash' => (string) get_post_meta( $attachment_id, self::META_HASH_RAW, true ),
+				'after_hash'  => (string) get_post_meta( $attachment_id, self::META_HASH_RAW, true ),
+			)
+		);
+
+		return $result;
+	}
+
+	/**
+	 * Rebuild attachment derivatives (thumbnails, srcset sizes, social variants).
+	 * Uses WordPress media regeneration.
+	 *
+	 * @param int $attachment_id Attachment ID.
+	 * @return bool True if rebuild succeeded or no rebuild needed.
+	 */
+	public static function rebuild_attachment_derivatives( int $attachment_id ): bool {
+		if ( $attachment_id < 1 ) {
+			return false;
+		}
+
+		$file = get_attached_file( $attachment_id );
+		if ( empty( $file ) || ! file_exists( $file ) ) {
+			return false;
+		}
+
+		// Regenerate WordPress metadata (sizes, etc.).
+		if ( ! function_exists( 'wp_generate_attachment_metadata' ) ) {
+			return false;
+		}
+
+		$metadata = wp_generate_attachment_metadata( $attachment_id, $file );
+		if ( is_wp_error( $metadata ) || empty( $metadata ) ) {
+			self::add_log( 'warning', $attachment_id, 'Failed to regenerate attachment metadata.' );
+			return false;
+		}
+
+		wp_update_attachment_metadata( $attachment_id, $metadata );
+
+		// Allow hubs/spokes to rebuild their own derivatives via hook.
+		do_action( 'timu_vault_rebuild_derivatives', $attachment_id, $metadata );
+
+		return true;
+	}
+
+	/**
+	 * Update post content references and featured image for an attachment after rollback.
+	 * Scans post content for image references and ensures they're current.
+	 *
+	 * @param int $attachment_id Attachment ID.
+	 * @return void
+	 */
+	public static function update_post_featured_image_references( int $attachment_id ): void {
+		if ( $attachment_id < 1 ) {
+			return;
+		}
+
+		global $wpdb;
+
+		// Find posts with this attachment as featured image.
+		$posts = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_thumbnail_id' AND meta_value = %d",
+				$attachment_id
+			)
+		);
+
+		// Featured images are already correct; no action needed.
+		// (They reference the post_id directly, not the file path.)
+
+		// Scan post content for image URLs and validate they're current.
+		// This is handled by rewrite_vault_urls_in_content() on display.
+		// No persistent updates needed unless migrating content structure.
+	}
+
+	/**
+	 * Get a summary of rollback options for an attachment.
+	 *
+	 * @param int $attachment_id Attachment ID.
+	 * @return array{available:bool,step_count:int,latest_op:string,operations:array}
+	 */
+	public static function get_rollback_info( int $attachment_id ): array {
+		if ( $attachment_id < 1 ) {
+			return array(
+				'available'  => false,
+				'step_count' => 0,
+				'latest_op'  => '',
+				'operations' => array(),
+			);
+		}
+
+		$journal = self::get_journal( $attachment_id );
+		if ( ! $journal || empty( $journal['operations'] ) ) {
+			return array(
+				'available'  => false,
+				'step_count' => 0,
+				'latest_op'  => '',
+				'operations' => array(),
+			);
+		}
+
+		$ops    = (array) $journal['operations'];
+		$latest = end( $ops );
+
+		return array(
+			'available'  => true,
+			'step_count' => count( $ops ),
+			'latest_op'  => (string) ( $latest['op'] ?? '' ),
+			'operations' => $ops,
+		);
 	}
 }

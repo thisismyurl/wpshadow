@@ -120,6 +120,7 @@ function timu_core_setup_vault(): bool {
 	// Create vault directory if it doesn't exist.
 	if ( ! file_exists( $vault_path ) ) {
 		if ( ! wp_mkdir_p( $vault_path ) ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 			error_log( 'TIMU Core: Failed to create vault directory at ' . $vault_path );
 			return false;
 		}
@@ -142,12 +143,14 @@ function timu_core_setup_vault(): bool {
 		$htaccess_content .= "    php_flag engine off\n";
 		$htaccess_content .= "</IfModule>\n";
 
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 		file_put_contents( $htaccess_file, $htaccess_content );
 	}
 
 	// Create index.php to prevent directory listing.
 	$index_file = $vault_path . '/index.php';
 	if ( ! file_exists( $index_file ) ) {
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 		file_put_contents( $index_file, "<?php\n// Silence is golden.\n" );
 	}
 
@@ -178,6 +181,7 @@ function timu_core_setup_encryption_keys(): bool {
 	// For production, keys MUST be in wp-config.
 	// For development, auto-generate and store (with warning).
 	if ( 'production' === wp_get_environment_type() ) {
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 		error_log( 'TIMU Core: Encryption enabled but TIMU_VAULT_KEY not defined in wp-config.php. Define it for production use.' );
 		return false;
 	}
@@ -186,6 +190,7 @@ function timu_core_setup_encryption_keys(): bool {
 	$new_key = bin2hex( random_bytes( 32 ) ); // 256-bit key.
 	update_option( 'timu_vault_encryption_key', $new_key );
 
+	// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 	error_log( 'TIMU Core: Generated temporary encryption key. For production, add this to wp-config.php: define( "TIMU_VAULT_KEY", "' . $new_key . '" );' );
 
 	return true;
@@ -226,6 +231,14 @@ function timu_core_init(): void {
 		false,
 		dirname( TIMU_CORE_BASENAME ) . '/languages'
 	);
+
+	// Load module bootstrap for child plugin installation and activation.
+	require_once TIMU_CORE_PATH . 'includes/class-timu-module-bootstrap.php';
+	TIMU_Module_Bootstrap::init();
+
+	// Load module toggles for feature flags.
+	require_once TIMU_CORE_PATH . 'includes/class-timu-module-toggles.php';
+	TIMU_Module_Toggles::init();
 
 	// Load module registry.
 	require_once TIMU_CORE_PATH . 'includes/class-timu-module-registry.php';
@@ -270,6 +283,8 @@ function timu_core_init(): void {
 	// Enqueue admin scripts and styles.
 	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\timu_core_admin_enqueue' );
 
+	// Register GDPR Personal Data Exporter and Eraser.
+	add_filter( 'wp_privacy_personal_data_exporters', __NAMESPACE__ . '\\timu_core_register_privacy_exporters' );
 	// Register GDPR Personal Data Eraser for Vault.
 	add_filter( 'wp_privacy_personal_data_erasers', __NAMESPACE__ . '\\timu_core_register_privacy_erasers' );
 }
@@ -850,8 +865,8 @@ function timu_ajax_broadcast_license(): void {
 		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'core-support-thisismyurl' ) ) );
 	}
 
-	$key      = isset( $_POST['key'] ) ? sanitize_text_field( wp_unslash( $_POST['key'] ) ) : '';
-	$site_ids_json = isset( $_POST['site_ids'] ) ? sanitize_text_field( wp_unslash( $_POST['site_ids'] ) ) : '[]';
+	$key            = isset( $_POST['key'] ) ? sanitize_text_field( wp_unslash( $_POST['key'] ) ) : '';
+	$site_ids_json  = isset( $_POST['site_ids'] ) ? sanitize_text_field( wp_unslash( $_POST['site_ids'] ) ) : '[]';
 	$auto_broadcast = isset( $_POST['auto_broadcast'] ) ? absint( $_POST['auto_broadcast'] ) : 0;
 
 	if ( empty( $key ) ) {
@@ -940,19 +955,31 @@ function timu_core_resolve_download_url( array $module ): string {
  */
 function timu_run_task_now(): void {
 	if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'timu_run_task_now' ) ) {
-		wp_safe_redirect( wp_get_referer() ?: admin_url() );
+		$redirect_url = wp_get_referer();
+		if ( empty( $redirect_url ) ) {
+			$redirect_url = admin_url();
+		}
+		wp_safe_redirect( $redirect_url );
 		exit;
 	}
 
 	if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
-		wp_safe_redirect( wp_get_referer() ?: admin_url() );
+		$redirect_url = wp_get_referer();
+		if ( empty( $redirect_url ) ) {
+			$redirect_url = admin_url();
+		}
+		wp_safe_redirect( $redirect_url );
 		exit;
 	}
 
 	$hook          = isset( $_POST['hook'] ) ? sanitize_text_field( wp_unslash( $_POST['hook'] ) ) : '';
 	$allowed_hooks = array( 'timu_refresh_modules', 'timu_vault_queue_runner' );
 	if ( ! in_array( $hook, $allowed_hooks, true ) ) {
-		wp_safe_redirect( wp_get_referer() ?: admin_url() );
+		$redirect_url = wp_get_referer();
+		if ( empty( $redirect_url ) ) {
+			$redirect_url = admin_url();
+		}
+		wp_safe_redirect( $redirect_url );
 		exit;
 	}
 
@@ -975,7 +1002,11 @@ function timu_run_task_now(): void {
 		)
 	);
 
-	$redirect = add_query_arg( 'timu_run_now', '1', wp_get_referer() ?: admin_url() );
+	$redirect_url = wp_get_referer();
+	if ( empty( $redirect_url ) ) {
+		$redirect_url = admin_url();
+	}
+	$redirect = add_query_arg( 'timu_run_now', '1', $redirect_url );
 	wp_safe_redirect( $redirect );
 	exit;
 }
@@ -1118,6 +1149,138 @@ function timu_core_admin_enqueue( string $hook ): void {
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
 			'nonce'   => wp_create_nonce( 'timu_module_actions' ),
 		)
+	);
+}
+
+/**
+ * Register the Vault exporter with WordPress Personal Data Export.
+ *
+ * @param array $exporters Existing exporters.
+ * @return array Modified exporters.
+ */
+function timu_core_register_privacy_exporters( array $exporters ): array {
+	$exporters['timu-vault-exporter'] = array(
+		'exporter_friendly_name' => __( 'TIMU Vault', 'core-support-thisismyurl' ),
+		'callback'               => __NAMESPACE__ . '\\timu_core_vault_exporter_callback',
+	);
+
+	return $exporters;
+}
+
+/**
+ * Vault exporter: returns attachment metadata stored in the Vault for the requesting user.
+ * Implements batching per WordPress privacy API contract.
+ *
+ * @param string $email_address User email being exported.
+ * @param int    $page          Page number for batching (1-indexed).
+ * @return array{data:array,done:bool}
+ */
+function timu_core_vault_exporter_callback( string $email_address, int $page = 1 ): array {
+	$email_address = sanitize_email( $email_address );
+	if ( empty( $email_address ) ) {
+		return array(
+			'data' => array(),
+			'done' => true,
+		);
+	}
+
+	$user = get_user_by( 'email', $email_address );
+	if ( ! $user || ! $user->exists() ) {
+		return array(
+			'data' => array(),
+			'done' => true,
+		);
+	}
+
+	$paged    = max( 1, $page );
+	$per_page = 50;
+
+	$query = new \WP_Query(
+		array(
+			'post_type'      => 'attachment',
+			'post_status'    => 'any',
+			'paged'          => $paged,
+			'posts_per_page' => $per_page,
+			'fields'         => 'ids',
+			'meta_query'     => array(
+				array(
+					'key'   => '_timu_vault_uploader_user_id',
+					'value' => (int) $user->ID,
+				),
+			),
+		)
+	);
+
+	$items = array();
+
+	if ( $query->have_posts() ) {
+		foreach ( $query->posts as $attachment_id ) {
+			$attachment_id  = (int) $attachment_id;
+			$file_path      = (string) get_attached_file( $attachment_id );
+			$vault_path     = (string) get_post_meta( $attachment_id, '_timu_vault_path', true );
+			$vault_mode     = (string) get_post_meta( $attachment_id, '_timu_vault_mode', true );
+			$vault_created  = (string) get_post_meta( $attachment_id, '_timu_vault_created', true );
+			$hash_raw       = (string) get_post_meta( $attachment_id, '_timu_vault_sha256_raw', true );
+			$hash_store     = (string) get_post_meta( $attachment_id, '_timu_vault_sha256_store', true );
+			$anonymized_at  = (string) get_post_meta( $attachment_id, '_timu_vault_anonymized', true );
+			$encrypted_flag = (string) get_post_meta( $attachment_id, '_timu_vault_encrypted', true );
+
+			$items[] = array(
+				'group_id'    => 'timu-vault',
+				'group_label' => __( 'TIMU Vault', 'core-support-thisismyurl' ),
+				'item_id'     => 'attachment-' . $attachment_id,
+				'data'        => array(
+					array(
+						'name'  => __( 'Attachment ID', 'core-support-thisismyurl' ),
+						'value' => $attachment_id,
+					),
+					array(
+						'name'  => __( 'File name', 'core-support-thisismyurl' ),
+						'value' => wp_basename( $file_path ),
+					),
+					array(
+						'name'  => __( 'MIME type', 'core-support-thisismyurl' ),
+						'value' => (string) get_post_mime_type( $attachment_id ),
+					),
+					array(
+						'name'  => __( 'Vault path', 'core-support-thisismyurl' ),
+						'value' => $vault_path,
+					),
+					array(
+						'name'  => __( 'Vault mode', 'core-support-thisismyurl' ),
+						'value' => ! empty( $vault_mode ) ? $vault_mode : 'raw',
+					),
+					array(
+						'name'  => __( 'Encrypted', 'core-support-thisismyurl' ),
+						'value' => $encrypted_flag ? 'yes' : 'no',
+					),
+					array(
+						'name'  => __( 'Checksum (store)', 'core-support-thisismyurl' ),
+						'value' => $hash_store ? substr( $hash_store, 0, 12 ) : '',
+					),
+					array(
+						'name'  => __( 'Checksum (raw)', 'core-support-thisismyurl' ),
+						'value' => $hash_raw ? substr( $hash_raw, 0, 12 ) : '',
+					),
+					array(
+						'name'  => __( 'Vault created', 'core-support-thisismyurl' ),
+						'value' => $vault_created,
+					),
+					array(
+						'name'  => __( 'Anonymized at', 'core-support-thisismyurl' ),
+						'value' => $anonymized_at,
+					),
+				),
+			);
+		}
+	}
+
+	$max_pages = ! empty( $query->max_num_pages ) ? (int) $query->max_num_pages : 1;
+	$done      = $paged >= $max_pages;
+
+	return array(
+		'data' => $items,
+		'done' => $done,
 	);
 }
 

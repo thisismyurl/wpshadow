@@ -84,13 +84,13 @@ class TIMU_License {
 			$site_ids = isset( $_POST['timu_broadcast_site_ids'] ) ? array_map( 'absint', (array) $_POST['timu_broadcast_site_ids'] ) : array();
 			$auto_new = isset( $_POST['timu_auto_broadcast'] ) ? (int) $_POST['timu_auto_broadcast'] : 0;
 
-			$result   = self::broadcast_network_key( $key, $site_ids, (bool) $auto_new );
-			$message  = sprintf(
-				__( 'Broadcast completed: %d sites successful, %d failed.', 'core-support-thisismyurl' ),
+			$result  = self::broadcast_network_key( $key, $site_ids, (bool) $auto_new );
+			$message = sprintf(
+				__( 'Broadcast completed: %1$d sites successful, %2$d failed.', 'core-support-thisismyurl' ),
 				$result['success'],
 				$result['failed']
 			);
-			$status   = $result['failed'] > 0 ? 'warning' : 'success';
+			$status  = $result['failed'] > 0 ? 'warning' : 'success';
 
 			$redirect = network_admin_url( 'admin.php?page=timu-core-network-settings' );
 			$redirect = add_query_arg(
@@ -398,15 +398,15 @@ class TIMU_License {
 
 		// If site list is empty, apply to all sites.
 		if ( empty( $site_ids ) ) {
-			$blogs = get_sites( array( 'fields' => 'ids' ) );
+			$blogs    = get_sites( array( 'fields' => 'ids' ) );
 			$site_ids = array_map( 'absint', (array) $blogs );
 		}
 
 		$broadcast_id = wp_generate_uuid4();
-		$success = 0;
-		$failed  = 0;
-		$errors  = array();
-		$user_id = get_current_user_id();
+		$success      = 0;
+		$failed       = 0;
+		$errors       = array();
+		$user_id      = get_current_user_id();
 
 		// Try to apply key to each site.
 		foreach ( $site_ids as $site_id ) {
@@ -428,7 +428,7 @@ class TIMU_License {
 			} else {
 				++$failed;
 				$error_msg = $result['message'] ?? __( 'Unknown error', 'core-support-thisismyurl' );
-				$errors[] = sprintf( __( 'Site %d: %s', 'core-support-thisismyurl' ), $site_id, $error_msg );
+				$errors[]  = sprintf( __( 'Site %1$d: %2$s', 'core-support-thisismyurl' ), $site_id, $error_msg );
 				self::log_broadcast_event( $site_id, $broadcast_id, $user_id, false, $error_msg );
 			}
 		}
@@ -467,7 +467,7 @@ class TIMU_License {
 		);
 
 		// Append to a site-specific audit log (could also use activity logging).
-		$audit_log = get_option( 'timu_license_broadcast_log', array() );
+		$audit_log   = get_option( 'timu_license_broadcast_log', array() );
 		$audit_log[] = $log_entry;
 
 		// Keep last 100 broadcasts.
@@ -488,20 +488,23 @@ class TIMU_License {
 			return array();
 		}
 
-		$logs = array();
+		$logs  = array();
 		$blogs = get_sites( array( 'fields' => 'ids' ) );
 
 		foreach ( $blogs as $site_id ) {
 			switch_to_blog( absint( $site_id ) );
 			$site_log = (array) get_option( 'timu_license_broadcast_log', array() );
-			$logs = array_merge( $logs, $site_log );
+			$logs     = array_merge( $logs, $site_log );
 			restore_current_blog();
 		}
 
 		// Sort by timestamp, newest first.
-		usort( $logs, static function ( $a, $b ) {
-			return strtotime( (string) ( $b['timestamp'] ?? '' ) ) - strtotime( (string) ( $a['timestamp'] ?? '' ) );
-		} );
+		usort(
+			$logs,
+			static function ( $a, $b ) {
+				return strtotime( (string) ( $b['timestamp'] ?? '' ) ) - strtotime( (string) ( $a['timestamp'] ?? '' ) );
+			}
+		);
 
 		return $logs;
 	}
