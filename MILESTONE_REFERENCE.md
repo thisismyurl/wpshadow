@@ -14,11 +14,11 @@
 
 ## Rules
 
-✅ **Every issue must have a milestone** (M01–M06 or M99)  
-✅ **All repos use the same milestone structure** (synchronized)  
-✅ **No scope creep within 2 weeks of milestone due date**  
-✅ **Move lower-priority items to M99** if a milestone is at risk  
-✅ **Close completed milestone** and publish release notes monthly  
+✅ **Every issue must have a milestone** (M01–M06 or M99)
+✅ **All repos use the same milestone structure** (synchronized)
+✅ **No scope creep within 2 weeks of milestone due date**
+✅ **Move lower-priority items to M99** if a milestone is at risk
+✅ **Close completed milestone** and publish release notes monthly
 
 ## For Contributors
 

@@ -248,9 +248,26 @@ function timu_core_init(): void {
 	require_once TIMU_CORE_PATH . 'includes/class-timu-license.php';
 	TIMU_License::init();
 
-	// Load Vault service.
-	require_once TIMU_CORE_PATH . 'includes/class-timu-vault.php';
-	TIMU_Vault::init();
+	// Load Vault service (delegated to vault-support plugin when available).
+	$vault_core_class  = '\\TIMU\\CoreSupport\\TIMU_Vault';
+	$vault_plugin_file = WP_PLUGIN_DIR . '/vault-support-thisismyurl/includes/class-timu-vault.php';
+
+	if ( class_exists( '\\TIMU\\VaultSupport\\TIMU_Vault' ) && ! class_exists( $vault_core_class, false ) ) {
+		class_alias( '\\TIMU\\VaultSupport\\TIMU_Vault', $vault_core_class );
+	} elseif ( ! class_exists( $vault_core_class, false ) && file_exists( $vault_plugin_file ) ) {
+		require_once $vault_plugin_file;
+		if ( class_exists( '\\TIMU\\VaultSupport\\TIMU_Vault' ) && ! class_exists( $vault_core_class, false ) ) {
+			class_alias( '\\TIMU\\VaultSupport\\TIMU_Vault', $vault_core_class );
+		}
+	}
+
+	if ( ! class_exists( $vault_core_class, false ) ) {
+		require_once TIMU_CORE_PATH . 'includes/class-timu-vault.php';
+	}
+
+	if ( class_exists( $vault_core_class ) ) {
+		TIMU_Vault::init();
+	}
 
 	// Load vault size monitoring (real-time alerts).
 	require_once TIMU_CORE_PATH . 'includes/class-timu-vault-size-monitor.php';
@@ -266,6 +283,14 @@ function timu_core_init(): void {
 	// Load module action handlers for AJAX install/update/activate.
 	require_once TIMU_CORE_PATH . 'includes/class-timu-module-actions.php';
 	TIMU_Module_Actions::init();
+
+	// Load tab navigation system.
+	require_once TIMU_CORE_PATH . 'includes/class-timu-tab-navigation.php';
+	require_once TIMU_CORE_PATH . 'includes/class-timu-dashboard-widgets.php';
+
+	// Load notice manager for persistent dismissal.
+	require_once TIMU_CORE_PATH . 'includes/class-timu-notice-manager.php';
+	TIMU_Notice_Manager::init();
 
 	// Initialize multisite support if applicable.
 	if ( is_multisite() ) {
@@ -308,36 +333,9 @@ function timu_core_network_admin_menu(): void {
 		__( 'Support', 'core-support-thisismyurl' ),
 		'manage_network_options',
 		'timu-core-support',
-		__NAMESPACE__ . '\\timu_core_render_dashboard',
+		__NAMESPACE__ . '\\timu_core_render_tab_router',
 		'dashicons-admin-generic',
 		30
-	);
-
-	add_submenu_page(
-		'timu-core-support',
-		__( 'Support Dashboard', 'core-support-thisismyurl' ),
-		__( 'Dashboard', 'core-support-thisismyurl' ),
-		'manage_network_options',
-		'timu-core-support',
-		__NAMESPACE__ . '\\timu_core_render_dashboard'
-	);
-
-	add_submenu_page(
-		'timu-core-support',
-		__( 'Modules', 'core-support-thisismyurl' ),
-		__( 'Modules', 'core-support-thisismyurl' ),
-		'manage_network_options',
-		'timu-core-modules',
-		__NAMESPACE__ . '\\timu_core_render_modules'
-	);
-
-	add_submenu_page(
-		'timu-core-support',
-		__( 'Network Settings', 'core-support-thisismyurl' ),
-		__( 'Network Settings', 'core-support-thisismyurl' ),
-		'manage_network_options',
-		'timu-core-network-settings',
-		__NAMESPACE__ . '\\timu_core_render_network_settings'
 	);
 }
 
@@ -352,37 +350,183 @@ function timu_core_admin_menu(): void {
 		__( 'Support', 'core-support-thisismyurl' ),
 		'manage_options',
 		'timu-core-support',
-		__NAMESPACE__ . '\\timu_core_render_dashboard',
+		__NAMESPACE__ . '\\timu_core_render_tab_router',
 		'dashicons-admin-generic',
 		30
 	);
+}
 
-	add_submenu_page(
-		'timu-core-support',
-		__( 'Support Dashboard', 'core-support-thisismyurl' ),
-		__( 'Dashboard', 'core-support-thisismyurl' ),
-		'manage_options',
-		'timu-core-support',
-		__NAMESPACE__ . '\\timu_core_render_dashboard'
-	);
+/**
+ * Tab-based router for all admin pages.
+ *
+ * @return void
+ */
+function timu_core_render_tab_router(): void {
+	if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
+		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'core-support-thisismyurl' ) );
+	}
 
-	add_submenu_page(
-		'timu-core-support',
-		__( 'Modules', 'core-support-thisismyurl' ),
-		__( 'Modules', 'core-support-thisismyurl' ),
-		'manage_options',
-		'timu-core-modules',
-		__NAMESPACE__ . '\\timu_core_render_modules'
-	);
+	$context = TIMU_Tab_Navigation::get_current_context();
+	$hub     = $context['hub'];
+	$spoke   = $context['spoke'];
+	$tab     = $context['tab'];
+	$level   = $context['level'];
 
-	add_submenu_page(
-		'timu-core-support',
-		__( 'Settings', 'core-support-thisismyurl' ),
-		__( 'Settings', 'core-support-thisismyurl' ),
-		'manage_options',
-		'timu-core-settings',
-		__NAMESPACE__ . '\\timu_core_render_settings_page'
+	// Render breadcrumbs (except at Core level).
+	if ( 'core' !== $level ) {
+		TIMU_Tab_Navigation::render_breadcrumbs( $context );
+	}
+
+	// Determine tabs based on level.
+	if ( 'spoke' === $level && ! empty( $hub ) && ! empty( $spoke ) ) {
+		$tabs        = TIMU_Tab_Navigation::get_spoke_tabs( $hub, $spoke );
+		$active_tabs = array_merge( $tabs, timu_get_hub_tabs_for_spoke( $hub, $spoke ) );
+		TIMU_Tab_Navigation::render_tabs( $active_tabs, $tab );
+	} elseif ( 'hub' === $level && ! empty( $hub ) ) {
+		$tabs        = TIMU_Tab_Navigation::get_hub_tabs( $hub );
+		$active_tabs = array_merge( $tabs, timu_get_spoke_tabs_for_hub( $hub ) );
+		TIMU_Tab_Navigation::render_tabs( $active_tabs, $tab );
+	} else {
+		$tabs        = TIMU_Tab_Navigation::get_core_tabs();
+		$active_tabs = array_merge( $tabs, timu_get_active_hub_tabs() );
+		TIMU_Tab_Navigation::render_tabs( $active_tabs, $tab );
+	}
+
+	// Route to appropriate content based on level and tab.
+	if ( 'spoke' === $level && ! empty( $hub ) && ! empty( $spoke ) ) {
+		timu_core_render_spoke_content( $hub, $spoke, $tab );
+	} elseif ( 'hub' === $level && ! empty( $hub ) ) {
+		timu_core_render_hub_content( $hub, $tab );
+	} else {
+		timu_core_render_core_content( $tab );
+	}
+}
+
+/**
+ * Render Core-level content based on active tab.
+ *
+ * @param string $tab Active tab ID.
+ * @return void
+ */
+function timu_core_render_core_content( string $tab ): void {
+	switch ( $tab ) {
+		case 'settings':
+			timu_core_render_settings_page();
+			break;
+		case 'modules':
+			timu_core_render_modules();
+			break;
+		case 'dashboard':
+		default:
+			TIMU_Dashboard_Widgets::render_core_dashboard();
+			break;
+	}
+}
+
+/**
+ * Render Hub-level content based on active tab.
+ *
+ * @param string $hub_id Hub identifier.
+ * @param string $tab Active tab ID.
+ * @return void
+ */
+function timu_core_render_hub_content( string $hub_id, string $tab ): void {
+	switch ( $tab ) {
+		case 'settings':
+			echo '<div class="wrap"><h1>' . esc_html( ucfirst( $hub_id ) . ' Hub Settings' ) . '</h1>';
+			echo '<p>' . esc_html__( 'Hub-specific settings will be managed here.', 'core-support-thisismyurl' ) . '</p></div>';
+			break;
+		case 'dashboard':
+		default:
+			TIMU_Dashboard_Widgets::render_hub_dashboard( $hub_id );
+			break;
+	}
+}
+
+/**
+ * Render Spoke-level content based on active tab.
+ *
+ * @param string $hub_id Hub identifier.
+ * @param string $spoke_id Spoke identifier.
+ * @param string $tab Active tab ID.
+ * @return void
+ */
+function timu_core_render_spoke_content( string $hub_id, string $spoke_id, string $tab ): void {
+	switch ( $tab ) {
+		case 'settings':
+			echo '<div class="wrap"><h1>' . esc_html( strtoupper( $spoke_id ) . ' Settings' ) . '</h1>';
+			echo '<p>' . esc_html__( 'Spoke-specific settings will be managed here.', 'core-support-thisismyurl' ) . '</p></div>';
+			break;
+		case 'dashboard':
+		default:
+			TIMU_Dashboard_Widgets::render_spoke_dashboard( $hub_id, $spoke_id );
+			break;
+	}
+}
+
+/**
+ * Get active Hub tabs dynamically based on installed hubs.
+ *
+ * @return array<array{id: string, label: string, icon: string, url: string}>
+ */
+function timu_get_active_hub_tabs(): array {
+	$catalog = TIMU_Module_Registry::get_catalog_with_status();
+	$hubs    = array_filter( $catalog, fn( $m ) => 'hub' === ( $m['type'] ?? '' ) && ! empty( $m['status']['active'] ) );
+	$tabs    = array();
+
+	foreach ( $hubs as $hub ) {
+		$hub_id = sanitize_key( str_replace( '-support-thisismyurl', '', $hub['id'] ?? '' ) );
+		$tabs[] = array(
+			'id'    => $hub_id,
+			'label' => esc_html( $hub['name'] ?? ucfirst( $hub_id ) ),
+			'icon'  => 'dashicons-networking',
+			'url'   => TIMU_Tab_Navigation::build_hub_url( $hub_id ),
+		);
+	}
+
+	return $tabs;
+}
+
+/**
+ * Get Spoke tabs for a specific Hub.
+ *
+ * @param string $hub_id Hub identifier.
+ * @return array<array{id: string, label: string, icon: string, url: string}>
+ */
+function timu_get_spoke_tabs_for_hub( string $hub_id ): array {
+	$catalog = TIMU_Module_Registry::get_catalog_with_status();
+	$spokes  = array_filter(
+		$catalog,
+		fn( $m ) => 'spoke' === ( $m['type'] ?? '' )
+			&& ! empty( $m['status']['active'] )
+			&& str_starts_with( $m['id'] ?? '', $hub_id )
 	);
+	$tabs    = array();
+
+	foreach ( $spokes as $spoke ) {
+		$full_id  = $spoke['id'] ?? '';
+		$spoke_id = sanitize_key( str_replace( $hub_id . '-support-thisismyurl', '', $full_id ) );
+		$spoke_id = str_replace( '-', '', $spoke_id );
+		$tabs[]   = array(
+			'id'    => $spoke_id,
+			'label' => esc_html( $spoke['name'] ?? strtoupper( $spoke_id ) ),
+			'icon'  => 'dashicons-hammer',
+			'url'   => TIMU_Tab_Navigation::build_spoke_url( $hub_id, $spoke_id ),
+		);
+	}
+
+	return $tabs;
+}
+
+/**
+ * Get Hub tabs for breadcrumb context when in Spoke view.
+ *
+ * @param string $hub_id Hub identifier.
+ * @param string $spoke_id Spoke identifier.
+ * @return array<array{id: string, label: string, icon: string, url: string}>
+ */
+function timu_get_hub_tabs_for_spoke( string $hub_id, string $spoke_id ): array {
+	return timu_get_spoke_tabs_for_hub( $hub_id );
 }
 
 /**
@@ -1107,15 +1251,17 @@ function timu_core_admin_enqueue( string $hook ): void {
 	// TEMP: Load only CSS while debugging menu issue (scripts remain off).
 
 	// Cache-bust using file modification times to avoid stale admin assets.
-	$ui_system_file   = TIMU_CORE_PATH . 'assets/css/timu-ui-system.css';
-	$admin_css_file   = TIMU_CORE_PATH . 'assets/css/admin.css';
-	$admin_js_file    = TIMU_CORE_PATH . 'assets/js/admin.js';
-	$actions_js_file  = TIMU_CORE_PATH . 'assets/js/module-actions.js';
+	$ui_system_file     = TIMU_CORE_PATH . 'assets/css/timu-ui-system.css';
+	$admin_css_file     = TIMU_CORE_PATH . 'assets/css/admin.css';
+	$tab_nav_css_file   = TIMU_CORE_PATH . 'assets/css/tab-navigation.css';
+	$admin_js_file      = TIMU_CORE_PATH . 'assets/js/admin.js';
+	$actions_js_file    = TIMU_CORE_PATH . 'assets/js/module-actions.js';
 
-	$ui_system_ver  = file_exists( $ui_system_file ) ? TIMU_CORE_VERSION . '.' . filemtime( $ui_system_file ) : TIMU_CORE_VERSION;
-	$admin_css_ver  = file_exists( $admin_css_file ) ? TIMU_CORE_VERSION . '.' . filemtime( $admin_css_file ) : TIMU_CORE_VERSION;
-	$admin_js_ver   = file_exists( $admin_js_file ) ? TIMU_CORE_VERSION . '.' . filemtime( $admin_js_file ) : TIMU_CORE_VERSION;
-	$actions_js_ver = file_exists( $actions_js_file ) ? TIMU_CORE_VERSION . '.' . filemtime( $actions_js_file ) : TIMU_CORE_VERSION;
+	$ui_system_ver   = file_exists( $ui_system_file ) ? TIMU_CORE_VERSION . '.' . filemtime( $ui_system_file ) : TIMU_CORE_VERSION;
+	$admin_css_ver   = file_exists( $admin_css_file ) ? TIMU_CORE_VERSION . '.' . filemtime( $admin_css_file ) : TIMU_CORE_VERSION;
+	$tab_nav_css_ver = file_exists( $tab_nav_css_file ) ? TIMU_CORE_VERSION . '.' . filemtime( $tab_nav_css_file ) : TIMU_CORE_VERSION;
+	$admin_js_ver    = file_exists( $admin_js_file ) ? TIMU_CORE_VERSION . '.' . filemtime( $admin_js_file ) : TIMU_CORE_VERSION;
+	$actions_js_ver  = file_exists( $actions_js_file ) ? TIMU_CORE_VERSION . '.' . filemtime( $actions_js_file ) : TIMU_CORE_VERSION;
 
 	$load_admin_js   = true;
 	$load_actions_js = true;
@@ -1133,6 +1279,13 @@ function timu_core_admin_enqueue( string $hook ): void {
 		TIMU_CORE_URL . 'assets/css/admin.css',
 		array( 'timu-ui-system' ),
 		$admin_css_ver
+	);
+
+	wp_enqueue_style(
+		'timu-tab-navigation',
+		TIMU_CORE_URL . 'assets/css/tab-navigation.css',
+		array( 'timu-ui-system' ),
+		$tab_nav_css_ver
 	);
 
 

@@ -1,0 +1,208 @@
+/* Tab-based Navigation Styles */
+.timu-tab-navigation {
+	margin: 20px 0 30px;
+	border-bottom: 1px solid #ccd0d4;
+}
+
+.timu-tab-navigation .nav-tab {
+	margin-bottom: -1px;
+	transition: all 0.2s ease;
+}
+
+.timu-tab-navigation .nav-tab .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	vertical-align: text-bottom;
+	margin-right: 5px;
+}
+
+.timu-tab-navigation .nav-tab:hover {
+	background: #f0f0f1;
+}
+
+.timu-tab-navigation .nav-tab-active {
+	background: #fff;
+	border-bottom-color: #fff;
+	color: #2271b1;
+}
+
+/* Breadcrumbs */
+.timu-breadcrumbs {
+	margin: 15px 0;
+	padding: 10px 15px;
+	background: #f6f7f7;
+	border-left: 4px solid #2271b1;
+	font-size: 14px;
+}
+
+.timu-breadcrumbs a {
+	color: #2271b1;
+	text-decoration: none;
+}
+
+.timu-breadcrumbs a:hover {
+	color: #135e96;
+	text-decoration: underline;
+}
+
+.timu-breadcrumbs .separator {
+	margin: 0 8px;
+	color: #646970;
+}
+
+.timu-breadcrumbs .current {
+	font-weight: 600;
+	color: #1d2327;
+}
+
+/* Dashboard Widgets */
+.timu-dashboard {
+	margin-top: 20px;
+}
+
+.timu-dashboard-widgets-wrap {
+	max-width: 1800px;
+}
+
+.timu-dashboard-col-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+}
+
+.timu-dashboard-col {
+	flex: 1;
+	min-width: 400px;
+}
+
+.timu-dashboard-widget {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+	margin-bottom: 20px;
+}
+
+.timu-dashboard-widget h2 {
+	margin: 0;
+	padding: 12px 15px;
+	background: #f6f7f7;
+	border-bottom: 1px solid #c3c4c7;
+	font-size: 14px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.timu-widget-content {
+	padding: 15px;
+}
+
+.timu-widget-content p {
+	margin: 0 0 10px;
+}
+
+.timu-widget-content p:last-child {
+	margin-bottom: 0;
+}
+
+/* Stats Lists */
+.timu-stats-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.timu-stats-list li {
+	padding: 8px 0;
+	border-bottom: 1px solid #f0f0f1;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.timu-stats-list li:last-child {
+	border-bottom: none;
+}
+
+.timu-stats-list .dashicons {
+	color: #2271b1;
+	font-size: 18px;
+	width: 18px;
+	height: 18px;
+}
+
+/* Hub and Spoke Lists */
+.timu-hub-list,
+.timu-spoke-list,
+.timu-features-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.timu-hub-list li,
+.timu-spoke-list li,
+.timu-features-list li {
+	padding: 8px 0;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+.timu-hub-list li:last-child,
+.timu-spoke-list li:last-child,
+.timu-features-list li:last-child {
+	border-bottom: none;
+}
+
+.timu-hub-list a,
+.timu-spoke-list a {
+	text-decoration: none;
+	color: #2271b1;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	transition: color 0.2s ease;
+}
+
+.timu-hub-list a:hover,
+.timu-spoke-list a:hover {
+	color: #135e96;
+}
+
+.timu-hub-list .dashicons,
+.timu-spoke-list .dashicons,
+.timu-features-list .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 900px) {
+	.timu-dashboard-col-container {
+		flex-direction: column;
+	}
+
+	.timu-dashboard-col {
+		min-width: 100%;
+	}
+}
+
+/* Button Alignment in Widgets */
+.timu-widget-content .button {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.timu-widget-content .button .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+/* Empty State */
+.timu-widget-content p em {
+	color: #646970;
+}
+
+/* @changelog Added tab-based navigation and dashboard widget styles */

@@ -39,19 +39,6 @@ class TIMU_Vault_Size_Monitor {
 	 * @return void
 	 */
 	public static function show_size_alert(): void {
-		if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
-			return;
-		}
-
-		// Check if alert has been shown today (throttle).
-		$today      = gmdate( 'Ymd' );
-		$alert_key  = 'timu_vault_alert_shown_' . $today;
-		$shown_today = (bool) get_transient( $alert_key );
-
-		if ( $shown_today ) {
-			return;
-		}
-
 		// Get vault settings.
 		if ( ! class_exists( 'TIMU\\CoreSupport\\TIMU_Vault' ) ) {
 			return;
@@ -75,35 +62,32 @@ class TIMU_Vault_Size_Monitor {
 		}
 
 		// Exceeded threshold - show notice and set transient to throttle.
-		set_transient( $alert_key, 1, 86400 );
-
 		$settings_url = is_network_admin()
 			? network_admin_url( 'admin.php?page=timu-core-network-settings' )
 			: admin_url( 'admin.php?page=timu-core-settings' );
 
 		$percentage = round( ( $vault_size_mb / $max_size_mb ) * 100 );
 
-		?>
-		<div class="notice notice-warning is-dismissible" role="alert" aria-live="assertive">
-			<p>
-				<?php
-				echo wp_kses_post(
-					sprintf(
-						/* translators: 1: Current vault size in MB, 2: Threshold in MB, 3: Percentage */
-						__( '<strong>Vault Alert:</strong> Storage usage is at %1$s MB of %2$s MB (%3$s%%). Manage retention settings to prevent space issues.', 'core-support-thisismyurl' ),
-						esc_html( number_format_i18n( $vault_size_mb ) ),
-						esc_html( number_format_i18n( $max_size_mb ) ),
-						esc_html( number_format_i18n( $percentage ) )
-					)
-				);
-				?>
-			</p>
-			<p>
-				<a href="<?php echo esc_url( $settings_url ); ?>" class="button button-secondary" aria-label="<?php esc_attr_e( 'Go to Vault Settings to manage storage', 'core-support-thisismyurl' ); ?>">
-					<?php esc_html_e( 'Vault Settings →', 'core-support-thisismyurl' ); ?>
-				</a>
-			</p>
-		</div>
-		<?php
+		// Use Notice Manager for persistent dismissal.
+		$message = wp_kses_post(
+			sprintf(
+				/* translators: 1: Current vault size in MB, 2: Threshold in MB, 3: Percentage */
+				__( '<strong>Vault Alert:</strong> Storage usage is at %1$s MB of %2$s MB (%3$s%%). <a href="%4$s">Manage retention settings</a> to prevent space issues.', 'core-support-thisismyurl' ),
+				esc_html( number_format_i18n( $vault_size_mb ) ),
+				esc_html( number_format_i18n( $max_size_mb ) ),
+				esc_html( number_format_i18n( $percentage ) ),
+				esc_url( $settings_url )
+			)
+		);
+
+		// Notice key format: type_identifier (type extracted for suppression duration).
+		$notice_key = 'warning_vault_size_' . $max_size_mb;
+
+		TIMU_Notice_Manager::render_notice(
+			$notice_key,
+			$message,
+			'warning',
+			array( 'capability' => 'manage_options' )
+		);
 	}
 }

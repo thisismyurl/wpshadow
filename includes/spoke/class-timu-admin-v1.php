@@ -111,15 +111,15 @@ class TIMU_Admin_v1 {
 		$type = $field_def['type'] ?? 'text';
 
 		return match ( $type ) {
-			'toggle'   => (int) ( ! empty( $value ) ),
-			'range'    => (int) $value,
-			'number'   => (int) $value,
-			'radio'    => \in_array( (string) $value, \array_keys( (array) ( $field_def['options'] ?? array() ) ), true ) ? (string) $value : '',
-			' select'  => \in_array( (string) $value, \array_keys( (array) ( $field_def['options'] ?? array() ) ), true ) ? (string) $value : '',
-			'email'    => \sanitize_email( (string) $value ),
-			'url'      => \esc_url_raw( (string) $value ),
+			'toggle'  => (int) ( ! empty( $value ) ),
+			'range'   => (int) $value,
+			'number'  => (int) $value,
+			'radio'   => \in_array( (string) $value, \array_keys( (array) ( $field_def['options'] ?? array() ) ), true ) ? (string) $value : '',
+			'select'  => \in_array( (string) $value, \array_keys( (array) ( $field_def['options'] ?? array() ) ), true ) ? (string) $value : '',
+			'email'   => \sanitize_email( (string) $value ),
+			'url'     => \esc_url_raw( (string) $value ),
 			'textarea' => \wp_kses_post( (string) $value ),
-			default    => \sanitize_text_field( (string) $value ),
+			default   => \sanitize_text_field( (string) $value ),
 		};
 	}
 
@@ -232,7 +232,7 @@ class TIMU_Admin_v1 {
 				$options_list = (array) ( $args['options'] ?? array() );
 				echo '<fieldset>';
 				foreach ( $options_list as $opt_val => $opt_label ) {
-					echo '<label style="display:block; margin-bottom:8px;"><input type="radio" name="' . \esc_attr( $args['name'] ) . '" value="' . \esc_attr( (string) $opt_val ) . '" ' . checked( (string) $value, (string) $opt_val, false ) . ' /> <strong>' . \esc_html( (string) $opt_label ) . '</strong></label>';
+					echo '<label style="display:block; margin-bottom:8px;"><input type="radio" name="' . \esc_attr( $args['name'] ) . '" value="' . \esc_attr( (string) $opt_val ) . '" ' . \checked( (string) $value, (string) $opt_val, false ) . ' /> <strong>' . \esc_html( (string) $opt_label ) . '</strong></label>';
 					if ( ! empty( $args['descriptions'][ $opt_val ] ) ) {
 						echo '<p style="margin:0 0 12px 24px; font-size:12px; color:#666;">' . \wp_kses_post( $args['descriptions'][ $opt_val ] ) . '</p>';
 					}
@@ -243,7 +243,7 @@ class TIMU_Admin_v1 {
 				$options_list = (array) ( $args['options'] ?? array() );
 				echo '<select name="' . \esc_attr( $args['name'] ) . '" class="postform">';
 				foreach ( $options_list as $opt_val => $opt_label ) {
-					echo '<option value="' . \esc_attr( (string) $opt_val ) . '" ' . selected( (string) $value, (string) $opt_val, false ) . '>' . \esc_html( (string) $opt_label ) . '</option>';
+						echo '<option value="' . \esc_attr( (string) $opt_val ) . '" ' . \selected( (string) $value, (string) $opt_val, false ) . '>' . \esc_html( (string) $opt_label ) . '</option>';
 				}
 				echo '</select>';
 				break;
@@ -410,12 +410,12 @@ class TIMU_Admin_v1 {
 		echo '<form method="post" action="options.php">';
 		\settings_fields( 'timu_global_group' );
 		echo '<div class="postbox"><h2 class="hndle"><span>' . \esc_html( 'Global Settings' ) . '</span></h2><div class="inside"><table class="form-table">';
-		echo '<tr><th scope="row"><label for="timu-global-enabled">' . \esc_html( 'Master Enable' ) . '</label></th><td><label><input type="checkbox" id="timu-global-enabled" name="timu_global_options[enabled]" value="1" ' . checked( 1, $global_options['enabled'] ?? 0, false ) . ' /> ' . \esc_html( 'Enable all modules' ) . '</label></td></tr>';
+		echo '<tr><th scope="row"><label for="timu-global-enabled">' . \esc_html( 'Master Enable' ) . '</label></th><td><label><input type="checkbox" id="timu-global-enabled" name="timu_global_options[enabled]" value="1" ' . \checked( 1, $global_options['enabled'] ?? 0, false ) . ' /> ' . \esc_html( 'Enable all modules' ) . '</label></td></tr>';
 		if ( \is_multisite() ) {
 			echo '<tr><th scope="row"><label>' . \esc_html( 'Apply To' ) . '</label></th><td><fieldset>';
-			echo '<label><input type="radio" name="timu_global_options[multisite_scope]" value="site" ' . checked( $global_options['multisite_scope'] ?? 'site', 'site', false ) . ' /> ' . \esc_html( 'This site only' ) . '</label><br />';
+				echo '<label><input type="radio" name="timu_global_options[multisite_scope]" value="site" ' . \checked( $global_options['multisite_scope'] ?? 'site', 'site', false ) . ' /> ' . \esc_html( 'This site only' ) . '</label><br />';
 			if ( \current_user_can( 'manage_network_options' ) ) {
-				echo '<label><input type="radio" name="timu_global_options[multisite_scope]" value="network" ' . checked( $global_options['multisite_scope'] ?? 'site', 'network', false ) . ' /> ' . \esc_html( 'All sites in network' ) . '</label>';
+				echo '<label><input type="radio" name="timu_global_options[multisite_scope]" value="network" ' . \checked( $global_options['multisite_scope'] ?? 'site', 'network', false ) . ' /> ' . \esc_html( 'All sites in network' ) . '</label>';
 			}
 			echo '</fieldset></td></tr>';
 		}
