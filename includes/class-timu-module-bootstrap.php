@@ -26,7 +26,12 @@ class TIMU_Module_Bootstrap {
 	/**
 	 * Required child modules (slug => data).
 	 */
-	private const REQUIRED_MODULES = array(
+	private const REQUIRED_MODULES = array();
+
+	/**
+	 * Optional child modules (only shown if enabled in settings).
+	 */
+	private const OPTIONAL_MODULES = array(
 		'media-support-thisismyurl' => array(
 			'name'        => 'Media Support',
 			'description' => 'Provides shared media optimization and processing infrastructure',
@@ -39,12 +44,6 @@ class TIMU_Module_Bootstrap {
 			'repo'        => 'thisismyurl/image-support-thisismyurl',
 			'install_url' => 'https://github.com/thisismyurl/image-support-thisismyurl/archive/refs/heads/main.zip',
 		),
-	);
-
-	/**
-	 * Optional child modules (only shown if enabled in settings).
-	 */
-	private const OPTIONAL_MODULES = array(
 		'vault-support-thisismyurl' => array(
 			'name'        => 'Vault Support',
 			'description' => 'Secure original storage with encryption, journaling, and cloud offload',
@@ -112,7 +111,7 @@ class TIMU_Module_Bootstrap {
 					?>
 				</p>
 				<p>
-					<a href="<?php echo esc_url( $action_url ); ?>" class="button button-primary" aria-label="<?php echo esc_attr( sprintf( __( '%s: %s', 'core-support-thisismyurl' ), $action_label, $module['name'] ) ); ?>">
+					<a href="<?php echo esc_url( $action_url ); ?>" class="button button-primary" aria-label="<?php echo esc_attr( sprintf( __( '%1$s: %2$s', 'core-support-thisismyurl' ), $action_label, $module['name'] ) ); ?>">
 						<?php echo esc_html( $action_label ); ?>
 					</a>
 				</p>

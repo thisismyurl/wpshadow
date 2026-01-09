@@ -465,20 +465,17 @@ abstract class TIMU_Spoke_Base {
 	}
 
 	/**
-	 * Common method: Add admin submenu (only if multiple plugins installed)
+	 * Common method: Add admin submenu for hub plugins
 	 */
 	protected function add_admin_submenu( string $menu_title ): void {
-		$instances = self::$instances ?? array();
-		if ( \count( $instances ) > 1 ) {
-			\add_submenu_page(
-				'thisizmyurl-support',
-				$menu_title,
-				$menu_title,
-				'manage_options',
-				$this->plugin_slug,
-				array( $this, 'render_settings_page' )
-			);
-		}
+		\add_submenu_page(
+			$this->menu_parent,
+			$menu_title,
+			$menu_title,
+			'manage_options',
+			$this->plugin_slug,
+			array( $this, 'render_settings_page' )
+		);
 	}
 
 	/**

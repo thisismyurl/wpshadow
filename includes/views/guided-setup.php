@@ -33,8 +33,8 @@ $recommended_modules = array(
 $nonce       = wp_create_nonce( 'timu_setup_wizard' );
 $install_url = add_query_arg(
 	array(
-		'action'  => 'timu_setup_install_all',
-		'nonce'   => $nonce,
+		'action'   => 'timu_setup_install_all',
+		'nonce'    => $nonce,
 		'redirect' => rawurlencode( admin_url( 'admin.php?page=timu-core-dashboard' ) ),
 	),
 	admin_url( 'admin-post.php' )

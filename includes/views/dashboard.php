@@ -126,8 +126,8 @@ $modules_url = is_network_admin()
 									$user      = get_user_by( 'id', (int) $entry['user_id'] );
 									$user_name = $user && $user->exists() ? $user->display_name : '';
 								}
-								$reason = $entry['reason'] ?? '';
-								$level  = $entry['level'] ?? 'info';
+								$reason      = $entry['reason'] ?? '';
+								$level       = $entry['level'] ?? 'info';
 								$level_class = 'timu-badge-info';
 								if ( 'warning' === $level ) {
 									$level_class = 'timu-badge-warning';

@@ -70,7 +70,7 @@ class TIMU_Admin_v1 {
 							$args,
 							array(
 								'id'   => $field_id,
-								'name' => $this->core->plugin_slug . '_options[' . $field_id . ']'
+								'name' => $this->core->plugin_slug . '_options[' . $field_id . ']',
 							)
 						)
 					);
@@ -270,20 +270,8 @@ class TIMU_Admin_v1 {
 	}
 
 	public function handle_master_suite_menu(): void {
-		$instances  = TIMU_Spoke_Base::$instances ?? array();
-		$first_slug = \array_key_first( $instances );
-
-		if ( $this->core->plugin_slug !== $first_slug ) {
-			return;
-		}
-
-		if ( \count( $instances ) === 1 ) {
-			$plugin_name = \ucwords( \str_replace( '-', ' ', $this->core->get_data_prefix() ) ) . ' Support';
-			\add_management_page( $plugin_name, $plugin_name, 'manage_options', 'thisismyurl-support', array( $this, 'render_single_plugin_page' ) );
-		} else {
-			\add_menu_page( 'Support', 'Support', 'manage_options', 'thisismyurl-support', array( $this, 'render_master_page' ), 'dashicons-admin-generic', 80 );
-			\add_submenu_page( 'thisismyurl-support', 'Dashboard', 'Dashboard', 'manage_options', 'thisismyurl-support', array( $this, 'render_master_page' ) );
-		}
+		// Legacy method - menu system now handled by TIMU_Spoke_Base class.
+		// Do not add old management pages or menus here.
 	}
 
 	public function render_single_plugin_page(): void {
@@ -396,7 +384,10 @@ class TIMU_Admin_v1 {
 			return;
 		}
 
-		$default_options = array( 'enabled' => 1, 'multisite_scope' => 'site' );
+		$default_options = array(
+			'enabled'         => 1,
+			'multisite_scope' => 'site',
+		);
 		if ( \is_multisite() && \current_user_can( 'manage_network_options' ) ) {
 			$network_options = (array) \get_site_option( 'timu_network_global_options', array() );
 			$local_options   = (array) \get_option( 'timu_global_options', array() );

@@ -44,7 +44,7 @@ class TIMU_Vault_Size_Monitor {
 			return;
 		}
 
-		$settings   = TIMU_Vault::get_settings();
+		$settings    = TIMU_Vault::get_settings();
 		$max_size_mb = (int) ( $settings['max_size_mb'] ?? 0 );
 
 		// If no limit set, skip.

@@ -766,11 +766,11 @@ $license_checked = ! empty( $license_state['checked_at'] ) ? date_i18n( 'M j, Y 
 							<?php foreach ( $logs as $entry ) : ?>
 								<?php
 									$badge_class = 'timu-badge-info';
-									if ( 'error' === $entry['level'] ) {
-										$badge_class = 'timu-badge-danger';
-									} elseif ( 'warning' === $entry['level'] ) {
-										$badge_class = 'timu-badge-warning';
-									}
+								if ( 'error' === $entry['level'] ) {
+									$badge_class = 'timu-badge-danger';
+								} elseif ( 'warning' === $entry['level'] ) {
+									$badge_class = 'timu-badge-warning';
+								}
 								?>
 								<tr>
 									<td><?php echo esc_html( $entry['timestamp'] ); ?></td>

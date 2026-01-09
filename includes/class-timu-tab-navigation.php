@@ -19,8 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Hierarchical: Core > Hub > Spoke > Format
  */
 class TIMU_Tab_Navigation {
-	private const QUERY_VAR_TAB = 'timu_tab';
-	private const QUERY_VAR_HUB = 'timu_hub';
+	private const QUERY_VAR_TAB   = 'timu_tab';
+	private const QUERY_VAR_HUB   = 'timu_hub';
 	private const QUERY_VAR_SPOKE = 'timu_spoke';
 
 	/**
@@ -29,12 +29,12 @@ class TIMU_Tab_Navigation {
 	 * @return array{level: string, hub: string, spoke: string, tab: string}
 	 */
 	public static function get_current_context(): array {
-		return [
+		return array(
 			'hub'   => sanitize_text_field( (string) ( $_GET[ self::QUERY_VAR_HUB ] ?? '' ) ),
 			'spoke' => sanitize_text_field( (string) ( $_GET[ self::QUERY_VAR_SPOKE ] ?? '' ) ),
 			'tab'   => sanitize_text_field( (string) ( $_GET[ self::QUERY_VAR_TAB ] ?? 'dashboard' ) ),
 			'level' => self::determine_level(),
-		];
+		);
 	}
 
 	/**
@@ -92,9 +92,9 @@ class TIMU_Tab_Navigation {
 	 * @param array<string, string> $extra_args Additional query args.
 	 * @return string Tab URL.
 	 */
-	public static function build_tab_url( string $tab_id, array $extra_args = [] ): string {
+	public static function build_tab_url( string $tab_id, array $extra_args = array() ): string {
 		$base_url = admin_url( 'admin.php' );
-		$args     = [ 'page' => 'timu-core-support' ];
+		$args     = array( 'page' => 'timu-core-support' );
 
 		// Preserve context.
 		if ( ! empty( $_GET[ self::QUERY_VAR_HUB ] ) ) {
@@ -118,7 +118,7 @@ class TIMU_Tab_Navigation {
 	 * @return string Hub URL.
 	 */
 	public static function build_hub_url( string $hub_id, string $tab = 'dashboard' ): string {
-		return self::build_tab_url( $tab, [ self::QUERY_VAR_HUB => $hub_id ] );
+		return self::build_tab_url( $tab, array( self::QUERY_VAR_HUB => $hub_id ) );
 	}
 
 	/**
@@ -132,10 +132,10 @@ class TIMU_Tab_Navigation {
 	public static function build_spoke_url( string $hub_id, string $spoke_id, string $tab = 'dashboard' ): string {
 		return self::build_tab_url(
 			$tab,
-			[
+			array(
 				self::QUERY_VAR_HUB   => $hub_id,
 				self::QUERY_VAR_SPOKE => $spoke_id,
-			]
+			)
 		);
 	}
 
@@ -145,23 +145,18 @@ class TIMU_Tab_Navigation {
 	 * @return array<array{id: string, label: string, icon: string}>
 	 */
 	public static function get_core_tabs(): array {
-		return [
-			[
+		return array(
+			array(
 				'id'    => 'dashboard',
 				'label' => __( 'Dashboard', 'core-support-thisismyurl' ),
 				'icon'  => 'dashicons-dashboard',
-			],
-			[
-				'id'    => 'settings',
-				'label' => __( 'Settings', 'core-support-thisismyurl' ),
-				'icon'  => 'dashicons-admin-settings',
-			],
-			[
-				'id'    => 'modules',
-				'label' => __( 'Modules', 'core-support-thisismyurl' ),
-				'icon'  => 'dashicons-admin-plugins',
-			],
-		];
+			),
+			array(
+				'id'    => 'help',
+				'label' => __( 'Help', 'core-support-thisismyurl' ),
+				'icon'  => 'dashicons-editor-help',
+			),
+		);
 	}
 
 	/**
@@ -171,18 +166,18 @@ class TIMU_Tab_Navigation {
 	 * @return array<array{id: string, label: string, icon: string}>
 	 */
 	public static function get_hub_tabs( string $hub_id ): array {
-		return [
-			[
+		return array(
+			array(
 				'id'    => 'dashboard',
 				'label' => __( 'Dashboard', 'core-support-thisismyurl' ),
 				'icon'  => 'dashicons-dashboard',
-			],
-			[
-				'id'    => 'settings',
-				'label' => __( 'Settings', 'core-support-thisismyurl' ),
-				'icon'  => 'dashicons-admin-settings',
-			],
-		];
+			),
+			array(
+				'id'    => 'help',
+				'label' => __( 'Help', 'core-support-thisismyurl' ),
+				'icon'  => 'dashicons-editor-help',
+			),
+		);
 	}
 
 	/**
@@ -193,18 +188,18 @@ class TIMU_Tab_Navigation {
 	 * @return array<array{id: string, label: string, icon: string}>
 	 */
 	public static function get_spoke_tabs( string $hub_id, string $spoke_id ): array {
-		return [
-			[
+		return array(
+			array(
 				'id'    => 'dashboard',
 				'label' => __( 'Dashboard', 'core-support-thisismyurl' ),
 				'icon'  => 'dashicons-dashboard',
-			],
-			[
-				'id'    => 'settings',
-				'label' => __( 'Settings', 'core-support-thisismyurl' ),
-				'icon'  => 'dashicons-admin-settings',
-			],
-		];
+			),
+			array(
+				'id'    => 'help',
+				'label' => __( 'Help', 'core-support-thisismyurl' ),
+				'icon'  => 'dashicons-editor-help',
+			),
+		);
 	}
 
 	/**
@@ -214,27 +209,27 @@ class TIMU_Tab_Navigation {
 	 * @return array<array{label: string, url: string}>
 	 */
 	public static function get_breadcrumbs( array $context ): array {
-		$crumbs = [
-			[
+		$crumbs = array(
+			array(
 				'label' => __( 'Support', 'core-support-thisismyurl' ),
 				'url'   => admin_url( 'admin.php?page=timu-core-support' ),
-			],
-		];
+			),
+		);
 
 		if ( ! empty( $context['hub'] ) ) {
 			$hub_label = ucfirst( $context['hub'] ) . ' ' . __( 'Hub', 'core-support-thisismyurl' );
-			$crumbs[]  = [
+			$crumbs[]  = array(
 				'label' => $hub_label,
 				'url'   => self::build_hub_url( $context['hub'] ),
-			];
+			);
 		}
 
 		if ( ! empty( $context['spoke'] ) ) {
 			$spoke_label = strtoupper( $context['spoke'] ) . ' ' . __( 'Support', 'core-support-thisismyurl' );
-			$crumbs[]    = [
+			$crumbs[]    = array(
 				'label' => $spoke_label,
 				'url'   => self::build_spoke_url( $context['hub'], $context['spoke'] ),
-			];
+			);
 		}
 
 		return $crumbs;

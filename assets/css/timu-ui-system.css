@@ -745,3 +745,301 @@ textarea:focus-visible {
 		display: none;
 	}
 }
+
+/* ========== Loading States ========== */
+.timu-skeleton {
+	background: linear-gradient(
+		90deg,
+		var(--timu-bg-secondary) 0%,
+		var(--timu-bg-tertiary) 50%,
+		var(--timu-bg-secondary) 100%
+	);
+	background-size: 200% 100%;
+	animation: shimmer 1.5s infinite;
+	border-radius: var(--timu-radius-md);
+}
+
+@keyframes shimmer {
+	0% { background-position: 200% 0; }
+	100% { background-position: -200% 0; }
+}
+
+.timu-spinner {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	border: 2px solid var(--timu-border-primary);
+	border-top-color: var(--timu-accent-primary);
+	border-radius: 50%;
+	animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+	to { transform: rotate(360deg); }
+}
+
+.timu-loading {
+	position: relative;
+	pointer-events: none;
+	opacity: 0.6;
+}
+
+.timu-loading::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 20px;
+	height: 20px;
+	margin: -10px 0 0 -10px;
+	border: 2px solid var(--timu-border-primary);
+	border-top-color: var(--timu-accent-primary);
+	border-radius: 50%;
+	animation: spin 0.6s linear infinite;
+}
+
+/* ========== Dashboard Enhancements ========== */
+.timu-dashboard-wrap {
+	animation: fadeIn 0.3s ease-out;
+}
+
+.timu-dashboard-stats .timu-card,
+.timu-stat-card {
+	transition: all var(--timu-transition-base);
+	position: relative;
+	overflow: hidden;
+}
+
+.timu-dashboard-stats .timu-card:hover,
+.timu-stat-card:hover {
+	transform: translateY(-2px);
+	box-shadow: var(--timu-shadow-lg);
+}
+
+.timu-dashboard-stats .timu-card::before,
+.timu-stat-card::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 3px;
+	background: linear-gradient(90deg, var(--timu-accent-primary), var(--timu-accent-info));
+	opacity: 0;
+	transition: opacity var(--timu-transition-base);
+}
+
+.timu-dashboard-stats .timu-card:hover::before,
+.timu-stat-card:hover::before {
+	opacity: 1;
+}
+
+/* Activity Log Enhancements */
+.timu-table tbody tr {
+	animation: slideIn 0.3s ease-out backwards;
+}
+
+.timu-table tbody tr:nth-child(1) { animation-delay: 0.05s; }
+.timu-table tbody tr:nth-child(2) { animation-delay: 0.1s; }
+.timu-table tbody tr:nth-child(3) { animation-delay: 0.15s; }
+.timu-table tbody tr:nth-child(4) { animation-delay: 0.2s; }
+.timu-table tbody tr:nth-child(5) { animation-delay: 0.25s; }
+
+@keyframes slideIn {
+	from {
+		opacity: 0;
+		transform: translateX(-20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+/* Badge Micro-interactions */
+.timu-badge {
+	transition: all var(--timu-transition-fast);
+	cursor: default;
+}
+
+.timu-badge:hover {
+	transform: scale(1.05);
+}
+
+/* Button Ripple Effect */
+.timu-btn, .button {
+	position: relative;
+	overflow: hidden;
+}
+
+.timu-btn::after, .button::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 0;
+	height: 0;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.3);
+	transform: translate(-50%, -50%);
+	transition: width 0.4s ease, height 0.4s ease;
+}
+
+.timu-btn:active::after, .button:active::after {
+	width: 200px;
+	height: 200px;
+}
+
+/* Card Stacking Context */
+.timu-card {
+	z-index: 1;
+}
+
+.timu-card:hover {
+	z-index: 2;
+}
+
+/* Skip Link Enhancement */
+.timu-skip-link:focus {
+	position: fixed;
+	top: var(--timu-space-md);
+	left: var(--timu-space-md);
+	background: var(--timu-accent-primary);
+	color: var(--timu-text-inverted);
+	padding: var(--timu-space-md) var(--timu-space-lg);
+	border-radius: var(--timu-radius-md);
+	box-shadow: var(--timu-shadow-xl);
+	z-index: 9999;
+	text-decoration: none;
+	font-weight: var(--timu-font-semibold);
+}
+
+/* Status Indicator Animations */
+@keyframes statusPulse {
+	0%, 100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+	50% {
+		opacity: 0.7;
+		transform: scale(1.1);
+	}
+}
+
+.timu-status-active {
+	animation: statusPulse 2s ease-in-out infinite;
+}
+
+/* Smooth Scroll Behavior */
+html {
+	scroll-behavior: smooth;
+}
+
+/* Table Responsive Wrapper */
+.timu-table-responsive {
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+	margin: 0 calc(-1 * var(--timu-space-lg));
+	padding: 0 var(--timu-space-lg);
+}
+
+@media (max-width: 768px) {
+	.timu-table-responsive {
+		margin: 0;
+		padding: 0;
+	}
+}
+
+/* Progress Indicators */
+.timu-progress {
+	width: 100%;
+	height: 8px;
+	background-color: var(--timu-bg-secondary);
+	border-radius: var(--timu-radius-full);
+	overflow: hidden;
+}
+
+.timu-progress-bar {
+	height: 100%;
+	background: linear-gradient(90deg, var(--timu-accent-primary), var(--timu-accent-info));
+	border-radius: var(--timu-radius-full);
+	transition: width 0.6s ease;
+	animation: progressShimmer 2s infinite;
+}
+
+@keyframes progressShimmer {
+	0% { opacity: 1; }
+	50% { opacity: 0.8; }
+	100% { opacity: 1; }
+}
+
+/* Toast Notifications */
+.timu-toast {
+	position: fixed;
+	bottom: var(--timu-space-lg);
+	right: var(--timu-space-lg);
+	min-width: 300px;
+	max-width: 500px;
+	background: var(--timu-bg-primary);
+	border: 1px solid var(--timu-border-primary);
+	border-radius: var(--timu-radius-lg);
+	box-shadow: var(--timu-shadow-xl);
+	padding: var(--timu-space-md) var(--timu-space-lg);
+	z-index: 10000;
+	animation: toastSlideIn 0.3s ease-out;
+}
+
+@keyframes toastSlideIn {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.timu-toast-success {
+	border-left: 4px solid var(--timu-accent-success);
+}
+
+.timu-toast-error {
+	border-left: 4px solid var(--timu-accent-danger);
+}
+
+.timu-toast-info {
+	border-left: 4px solid var(--timu-accent-info);
+}
+
+/* Icon Enhancements */
+.dashicons {
+	transition: all var(--timu-transition-fast);
+}
+
+.timu-card .dashicons,
+.timu-stat-card .dashicons {
+	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* Utility: Text Truncation */
+.timu-truncate {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* Utility: Glass Effect (Subtle) */
+.timu-glass {
+	background: rgba(255, 255, 255, 0.8);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+	.timu-glass {
+		background: rgba(13, 17, 23, 0.8);
+		border: 1px solid rgba(48, 54, 61, 0.3);
+	}
+}

@@ -443,12 +443,17 @@ class TIMU_Module_Registry {
 	}
 
 	/**
-	 * Get bundled catalog JSON as array.
+	 * Get bundled catalog from installed plugins and fallback JSON.
+	 *
+	 * Scans the plugins directory for installed plugins matching the pattern
+	 * "*-support-thisismyurl" and builds the catalog from them, with fallback
+	 * to hardcoded JSON for any missing plugins.
 	 *
 	 * @return array
 	 */
 	private static function get_bundled_catalog(): array {
-		$json = '[
+		// First, load hardcoded fallback catalog.
+		$fallback_json = '[
 			{"slug":"core-support-thisismyurl","type":"hub","name":"Core Support","description":"Hub for Multi-Engine Fallback, Vault, and suite governance.","version":"1.2601.71818","author":"@thisismyurl","uri":"https://github.com/thisismyurl/core-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/core-support-thisismyurl/releases/latest"},
 			{"slug":"image-support-thisismyurl","type":"hub","name":"Image Support","description":"Image Hub orchestrating format spokes with Pixel-Sovereign and Smart Focus-Point.","version":"1.2601.71701","author":"@thisismyurl","uri":"https://github.com/thisismyurl/image-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.9.0","download_url":"https://github.com/thisismyurl/image-support-thisismyurl/releases/latest"},
 			{"slug":"avif-support-thisismyurl","type":"spoke","name":"AVIF Support","description":"AVIF spoke for high-efficiency images with Vault mapping.","version":"1.0.0","author":"@thisismyurl","uri":"https://github.com/thisismyurl/avif-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/avif-support-thisismyurl/releases/latest"},
@@ -460,9 +465,109 @@ class TIMU_Module_Registry {
 			{"slug":"bmp-support-thisismyurl","type":"spoke","name":"BMP Support","description":"BMP spoke for legacy ingestion with scrubbing.","version":"1.0.0","author":"@thisismyurl","uri":"https://github.com/thisismyurl/bmp-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/bmp-support-thisismyurl/releases/latest"}
 		]';
 
-		$decoded = json_decode( $json, true );
+		$fallback_catalog = json_decode( $fallback_json, true );
+		if ( json_last_error() !== JSON_ERROR_NONE || ! is_array( $fallback_catalog ) ) {
+			$fallback_catalog = array();
+		}
 
-		return ( json_last_error() === JSON_ERROR_NONE && is_array( $decoded ) ) ? $decoded : array();
+		// Scan plugins directory for installed *-support-thisismyurl plugins.
+		$installed_catalog = self::scan_installed_plugins();
+
+		// Merge installed plugins with fallback catalog.
+		// Installed plugins override fallback entries (by slug).
+		$merged          = $fallback_catalog;
+		$installed_slugs = array();
+
+		foreach ( $installed_catalog as $plugin ) {
+			$merged[ $plugin['slug'] ] = $plugin;
+			$installed_slugs[]         = $plugin['slug'];
+		}
+
+		// Convert to indexed array for consistency.
+		return array_values( $merged );
+	}
+
+	/**
+	 * Scan plugins directory for installed *-support-thisismyurl plugins.
+	 *
+	 * @return array Array of plugin data.
+	 */
+	private static function scan_installed_plugins(): array {
+		$plugins     = array();
+		$plugins_dir = WP_PLUGIN_DIR;
+
+		if ( ! is_dir( $plugins_dir ) ) {
+			return $plugins;
+		}
+
+		$dir_items = @scandir( $plugins_dir ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		if ( false === $dir_items ) {
+			return $plugins;
+		}
+
+		foreach ( $dir_items as $item ) {
+			// Only look for directories matching "*-support-thisismyurl" pattern.
+			if ( ! preg_match( '/^[a-z0-9]+-support-thisismyurl$/i', $item ) ) {
+				continue;
+			}
+
+			$item_path = $plugins_dir . '/' . $item;
+			if ( ! is_dir( $item_path ) ) {
+				continue;
+			}
+
+			// Find main plugin file in the directory.
+			$plugin_file = $item_path . '/' . $item . '.php';
+			if ( ! file_exists( $plugin_file ) ) {
+				continue;
+			}
+
+			// Read plugin headers.
+			$plugin_data = get_file_data(
+				$plugin_file,
+				array(
+					'Name'        => 'Plugin Name',
+					'Version'     => 'Version',
+					'Description' => 'Description',
+					'Author'      => 'Author',
+					'AuthorURI'   => 'Author URI',
+					'PluginURI'   => 'Plugin URI',
+					'TextDomain'  => 'Text Domain',
+				)
+			);
+
+			// Validate this is a TIMU suite plugin.
+			if ( empty( $plugin_data['Name'] ) ||
+				( strpos( $plugin_data['TextDomain'], 'thisismyurl' ) === false &&
+					strpos( $plugin_data['Name'], 'thisismyurl' ) === false ) ) {
+				continue;
+			}
+
+			// Determine module type based on name pattern.
+			$type = 'spoke'; // Default to spoke.
+			if ( preg_match( '/^(core|image|video|license)-support-thisismyurl$/i', $item ) ) {
+				$type = 'hub'; // Known hub patterns.
+			}
+
+			// Build plugin entry.
+			$plugins[] = array(
+				'slug'          => sanitize_key( $item ),
+				'type'          => $type,
+				'name'          => sanitize_text_field( $plugin_data['Name'] ),
+				'description'   => sanitize_text_field( $plugin_data['Description'] ),
+				'version'       => sanitize_text_field( $plugin_data['Version'] ),
+				'author'        => sanitize_text_field( $plugin_data['Author'] ),
+				'author_uri'    => esc_url_raw( $plugin_data['AuthorURI'] ),
+				'uri'           => esc_url_raw( $plugin_data['PluginURI'] ),
+				'suite_id'      => 'thisismyurl-media-suite-2026',
+				'requires_core' => '1.2601.71818',
+				'requires_php'  => '8.1.29',
+				'requires_wp'   => '6.4.0',
+				'download_url'  => 'https://github.com/thisismyurl/' . sanitize_key( $item ) . '/releases/latest',
+			);
+		}
+
+		return $plugins;
 	}
 
 	/**
