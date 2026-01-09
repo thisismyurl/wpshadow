@@ -42,3 +42,11 @@ error.log
 *.swp
 *.bak
 *~
+
+# Module Repositories
+# Modules remain as independent git repositories
+/modules/*/
+!modules/.gitkeep
+!modules/hubs/.gitkeep
+!modules/spokes/.gitkeep
+!modules/formats/.gitkeep

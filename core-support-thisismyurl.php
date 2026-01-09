@@ -244,28 +244,37 @@ function timu_core_init(): void {
 	require_once TIMU_CORE_PATH . 'includes/class-timu-module-registry.php';
 	TIMU_Module_Registry::init();
 
+	// Load module loader (manages independent module repositories).
+	require_once TIMU_CORE_PATH . 'includes/class-timu-module-loader.php';
+	\TIMU\Core\Module_Loader::init();
+
 	// Load license utilities.
 	require_once TIMU_CORE_PATH . 'includes/class-timu-license.php';
 	TIMU_License::init();
 
-	// Load Vault service (delegated to vault-support plugin when available).
-	$vault_core_class  = '\\TIMU\\CoreSupport\\TIMU_Vault';
-	$vault_plugin_file = WP_PLUGIN_DIR . '/vault-support-thisismyurl/includes/class-timu-vault.php';
+	// Load feature registry for flexible plugin dependencies.
+	require_once TIMU_CORE_PATH . 'includes/class-timu-feature-registry.php';
+	require_once TIMU_CORE_PATH . 'includes/timu-feature-functions.php';
+	TIMU_Feature_Registry::init();
 
-	if ( class_exists( '\\TIMU\\VaultSupport\\TIMU_Vault' ) && ! class_exists( $vault_core_class, false ) ) {
-		class_alias( '\\TIMU\\VaultSupport\\TIMU_Vault', $vault_core_class );
-	} elseif ( ! class_exists( $vault_core_class, false ) && file_exists( $vault_plugin_file ) ) {
-		require_once $vault_plugin_file;
-		if ( class_exists( '\\TIMU\\VaultSupport\\TIMU_Vault' ) && ! class_exists( $vault_core_class, false ) ) {
-			class_alias( '\\TIMU\\VaultSupport\\TIMU_Vault', $vault_core_class );
-		}
+	// Load Spoke Base for spoke plugins (Image, Media, etc).
+	require_once TIMU_CORE_PATH . 'includes/class-timu-spoke-base.php';
+
+	// Load Vault service (canonical implementation in vault-support plugin).
+	// Core aliases it for backward compatibility.
+	if ( ! class_exists( '\\TIMU\\VaultSupport\\TIMU_Vault' ) ) {
+		// Vault plugin not loaded yet; defer to vault-support plugin.
+		// If vault-support is active, it will provide TIMU_Vault.
+		// Core will alias it when available.
 	}
 
-	if ( ! class_exists( $vault_core_class, false ) ) {
+	// Always load the alias file which will create the alias if vault-support is available.
+	if ( file_exists( TIMU_CORE_PATH . 'includes/class-timu-vault.php' ) ) {
 		require_once TIMU_CORE_PATH . 'includes/class-timu-vault.php';
 	}
 
-	if ( class_exists( $vault_core_class ) ) {
+	// Initialize Vault if available (via vault-support's implementation).
+	if ( class_exists( '\\TIMU\\CoreSupport\\TIMU_Vault' ) ) {
 		TIMU_Vault::init();
 	}
 
@@ -335,8 +344,11 @@ function timu_core_network_admin_menu(): void {
 		'timu-core-support',
 		__NAMESPACE__ . '\\timu_core_render_tab_router',
 		'dashicons-admin-generic',
-		30
+		999
 	);
+
+	// Initialize dashboard screen extras (Screen Options, Help) and metaboxes.
+	add_action( 'load-toplevel_page_timu-core-support', __NAMESPACE__ . '\\timu_core_setup_dashboard_screen' );
 }
 
 /**
@@ -352,8 +364,11 @@ function timu_core_admin_menu(): void {
 		'timu-core-support',
 		__NAMESPACE__ . '\\timu_core_render_tab_router',
 		'dashicons-admin-generic',
-		30
+		999
 	);
+
+	// Initialize dashboard screen extras (Screen Options, Help) and metaboxes.
+	add_action( 'load-toplevel_page_timu-core-support', __NAMESPACE__ . '\\timu_core_setup_dashboard_screen' );
 }
 
 /**
@@ -403,6 +418,130 @@ function timu_core_render_tab_router(): void {
 }
 
 /**
+ * Setup Screen Options, Help tabs, and register dashboard meta boxes.
+ *
+ * @return void
+ */
+function timu_core_setup_dashboard_screen(): void {
+	$screen = get_current_screen();
+	if ( ! $screen || 'toplevel_page_timu-core-support' !== $screen->id ) {
+		return;
+	}
+
+	// Add Help tabs.
+	$screen->add_help_tab(
+		array(
+			'id'      => 'timu_overview',
+			'title'   => __( 'Overview', 'core-support-thisismyurl' ),
+			'content' => '<p>' . esc_html__( 'This dashboard provides a suite overview, active hubs, recent activity, and quick actions. Use Screen Options to show/hide cards and arrange them.', 'core-support-thisismyurl' ) . '</p>',
+		)
+	);
+
+	$screen->add_help_tab(
+		array(
+			'id'      => 'timu_shortcuts',
+			'title'   => __( 'Shortcuts', 'core-support-thisismyurl' ),
+			'content' => '<p>' . esc_html__( 'Drag cards to rearrange. Click the toggle arrow to hide/show cards. Use Quick Actions to jump to common tasks.', 'core-support-thisismyurl' ) . '</p>',
+		)
+	);
+
+	$screen->set_help_sidebar(
+		'<p><strong>' . esc_html__( 'More Help', 'core-support-thisismyurl' ) . '</strong></p>' .
+		'<p><a href="https://thisismyurl.com/core-support-thisismyurl/" target="_blank" rel="noopener">' . esc_html__( 'Documentation', 'core-support-thisismyurl' ) . '</a></p>'
+	);
+
+	// Enable Screen Options for number of columns (2 by default).
+	add_screen_option(
+		'layout_columns',
+		array(
+			'max'     => 2,
+			'default' => 2,
+		)
+	);
+
+	// Register meta boxes for the Core dashboard (left column: 'normal').
+	add_meta_box(
+		'timu_quick_actions',
+		__( 'Quick Actions', 'core-support-thisismyurl' ),
+		array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_quick_actions' ),
+		$screen->id,
+		'normal',
+		'high'
+	);
+
+	add_meta_box(
+		'timu_modules',
+		__( 'Modules', 'core-support-thisismyurl' ),
+		array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_modules' ),
+		$screen->id,
+		'normal',
+		'default'
+	);
+
+	add_meta_box(
+		'timu_activity',
+		__( 'Activity', 'core-support-thisismyurl' ),
+		array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_activity' ),
+		$screen->id,
+		'normal',
+		'low'
+	);
+
+	add_meta_box(
+		'timu_events_and_news',
+		__( 'Support Suite Events and News', 'core-support-thisismyurl' ),
+		array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_events_and_news' ),
+		$screen->id,
+		'normal',
+		'default'
+	);
+
+	// Register meta boxes for the Core dashboard (right column: 'side').
+	add_meta_box(
+		'timu_health',
+		__( 'Health', 'core-support-thisismyurl' ),
+		array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_health' ),
+		$screen->id,
+		'side',
+		'high'
+	);
+
+	add_meta_box(
+		'timu_at_a_glance',
+		__( 'At a Glance', 'core-support-thisismyurl' ),
+		array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_at_a_glance' ),
+		$screen->id,
+		'side',
+		'default'
+	);
+
+	add_meta_box(
+		'timu_scheduled_tasks',
+		__( 'Scheduled Tasks', 'core-support-thisismyurl' ),
+		array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_scheduled_tasks' ),
+		$screen->id,
+		'side',
+		'low'
+	);
+
+	// Initialize postboxes on this screen (drag/toggle).
+	add_action(
+		'admin_print_footer_scripts',
+		static function () use ( $screen ): void {
+			?>
+			<script>
+			jQuery(document).ready(function($){
+				if (typeof postboxes !== 'undefined') {
+					postboxes.add_postbox_toggles('<?php echo esc_js( $screen->id ); ?>');
+				}
+			});
+			</script>
+			<?php
+		}
+	);
+}
+
+/**
  * Render Core-level content based on active tab.
  *
  * @param string $tab Active tab ID.
@@ -410,15 +549,39 @@ function timu_core_render_tab_router(): void {
  */
 function timu_core_render_core_content( string $tab ): void {
 	switch ( $tab ) {
-		case 'settings':
-			timu_core_render_settings_page();
+		case 'register':
+			/* check if plugin is registered */
+			if ( ! is_licensed() ) {
+				echo '<div class="wrap"><h1>' . esc_html__( 'Register', 'core-support-thisismyurl' ) . '</h1>';
+				echo '<p>' . esc_html__( 'Register content will be added here.', 'core-support-thisismyurl' ) . '</p></div>';
+			}
+			break;
+		case 'help':
+			echo '<div class="wrap"><h1>' . esc_html__( 'Help', 'core-support-thisismyurl' ) . '</h1>';
+			echo '<p>' . esc_html__( 'Help content will be added here.', 'core-support-thisismyurl' ) . '</p></div>';
 			break;
 		case 'modules':
 			timu_core_render_modules();
 			break;
 		case 'dashboard':
 		default:
-			TIMU_Dashboard_Widgets::render_core_dashboard();
+			// Render meta box-based dashboard to enable Screen Options and drag sorting.
+			$screen = get_current_screen();
+			?>
+			<div class="wrap">
+				<h1><?php echo esc_html__( 'Support Dashboard', 'core-support-thisismyurl' ); ?></h1>
+				<div id="poststuff">
+					<div id="post-body" class="metabox-holder columns-2">
+						<div id="postbox-container-1" class="postbox-container">
+							<?php do_meta_boxes( $screen->id, 'side', null ); ?>
+						</div>
+						<div id="postbox-container-2" class="postbox-container">
+							<?php do_meta_boxes( $screen->id, 'normal', null ); ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<?php
 			break;
 	}
 }
@@ -432,9 +595,9 @@ function timu_core_render_core_content( string $tab ): void {
  */
 function timu_core_render_hub_content( string $hub_id, string $tab ): void {
 	switch ( $tab ) {
-		case 'settings':
-			echo '<div class="wrap"><h1>' . esc_html( ucfirst( $hub_id ) . ' Hub Settings' ) . '</h1>';
-			echo '<p>' . esc_html__( 'Hub-specific settings will be managed here.', 'core-support-thisismyurl' ) . '</p></div>';
+		case 'help':
+			echo '<div class="wrap"><h1>' . esc_html( ucfirst( $hub_id ) . ' - ' . __( 'Help', 'core-support-thisismyurl' ) ) . '</h1>';
+			echo '<p>' . esc_html__( 'Help content will be added here.', 'core-support-thisismyurl' ) . '</p></div>';
 			break;
 		case 'dashboard':
 		default:
@@ -453,9 +616,9 @@ function timu_core_render_hub_content( string $hub_id, string $tab ): void {
  */
 function timu_core_render_spoke_content( string $hub_id, string $spoke_id, string $tab ): void {
 	switch ( $tab ) {
-		case 'settings':
-			echo '<div class="wrap"><h1>' . esc_html( strtoupper( $spoke_id ) . ' Settings' ) . '</h1>';
-			echo '<p>' . esc_html__( 'Spoke-specific settings will be managed here.', 'core-support-thisismyurl' ) . '</p></div>';
+		case 'help':
+			echo '<div class="wrap"><h1>' . esc_html( strtoupper( $spoke_id ) . ' - ' . __( 'Help', 'core-support-thisismyurl' ) ) . '</h1>';
+			echo '<p>' . esc_html__( 'Help content will be added here.', 'core-support-thisismyurl' ) . '</p></div>';
 			break;
 		case 'dashboard':
 		default:
@@ -1251,11 +1414,11 @@ function timu_core_admin_enqueue( string $hook ): void {
 	// TEMP: Load only CSS while debugging menu issue (scripts remain off).
 
 	// Cache-bust using file modification times to avoid stale admin assets.
-	$ui_system_file     = TIMU_CORE_PATH . 'assets/css/timu-ui-system.css';
-	$admin_css_file     = TIMU_CORE_PATH . 'assets/css/admin.css';
-	$tab_nav_css_file   = TIMU_CORE_PATH . 'assets/css/tab-navigation.css';
-	$admin_js_file      = TIMU_CORE_PATH . 'assets/js/admin.js';
-	$actions_js_file    = TIMU_CORE_PATH . 'assets/js/module-actions.js';
+	$ui_system_file   = TIMU_CORE_PATH . 'assets/css/timu-ui-system.css';
+	$admin_css_file   = TIMU_CORE_PATH . 'assets/css/admin.css';
+	$tab_nav_css_file = TIMU_CORE_PATH . 'assets/css/tab-navigation.css';
+	$admin_js_file    = TIMU_CORE_PATH . 'assets/js/admin.js';
+	$actions_js_file  = TIMU_CORE_PATH . 'assets/js/module-actions.js';
 
 	$ui_system_ver   = file_exists( $ui_system_file ) ? TIMU_CORE_VERSION . '.' . filemtime( $ui_system_file ) : TIMU_CORE_VERSION;
 	$admin_css_ver   = file_exists( $admin_css_file ) ? TIMU_CORE_VERSION . '.' . filemtime( $admin_css_file ) : TIMU_CORE_VERSION;
@@ -1288,6 +1451,8 @@ function timu_core_admin_enqueue( string $hook ): void {
 		$tab_nav_css_ver
 	);
 
+	// Enable WordPress core postbox (drag/drop/toggle) for meta boxes.
+	wp_enqueue_script( 'postbox' );
 
 	if ( $load_admin_js ) {
 		wp_enqueue_script(
