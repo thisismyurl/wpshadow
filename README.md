@@ -137,8 +137,8 @@ wordpress-support-thisismyurl/
 
 ### External Links
 
-- **Online Documentation:** https://thisismyurl.com/core-support-thisismyurl/
-- **Support:** https://thisismyurl.com/core-support-thisismyurl/#support
+- **Online Documentation:** https://thisismyurl.com/wordpress-support-thisismyurl/
+- **Support:** https://thisismyurl.com/wordpress-support-thisismyurl/#support
 - **GitHub Issues:** https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl
 
 ## Support
