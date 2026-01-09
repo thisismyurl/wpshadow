@@ -11,9 +11,9 @@
 defined( 'ABSPATH' ) || exit;
 ?>
 <div class="wrap timu-modules-view" id="timu-modules-main" role="main">
-	<h1 class="wp-heading-inline"><?php esc_html_e( 'Modules', 'core-support-thisismyurl' ); ?></h1>
-	<span class="dashicons dashicons-editor-help" aria-label="<?php esc_attr_e( 'Modules help', 'core-support-thisismyurl' ); ?>" title="<?php esc_attr_e( 'Install or update modules from the catalog; activate/deactivate per site or network. Network Active items can only be deactivated from Network Admin.', 'core-support-thisismyurl' ); ?>">
-		<span class="screen-reader-text"><?php esc_html_e( 'Install or update modules from the catalog; activate/deactivate per site or network. Network Active items can only be deactivated from Network Admin.', 'core-support-thisismyurl' ); ?></span>
+	<h1 class="wp-heading-inline"><?php esc_html_e( 'Modules', 'wordpress-support-thisismyurl' ); ?></h1>
+	<span class="dashicons dashicons-editor-help" aria-label="<?php esc_attr_e( 'Modules help', 'wordpress-support-thisismyurl' ); ?>" title="<?php esc_attr_e( 'Install or update modules from the catalog; activate/deactivate per site or network. Network Active items can only be deactivated from Network Admin.', 'wordpress-support-thisismyurl' ); ?>">
+		<span class="screen-reader-text"><?php esc_html_e( 'Install or update modules from the catalog; activate/deactivate per site or network. Network Active items can only be deactivated from Network Admin.', 'wordpress-support-thisismyurl' ); ?></span>
 	</span>
 	<?php $override_allowed = class_exists( 'TIMU_Vault' ) ? TIMU_Vault::site_override_allowed() : true; ?>
 	<div class="timu-dashboard-stats">
@@ -36,63 +36,63 @@ defined( 'ABSPATH' ) || exit;
 			}
 		}
 		?>
-		<div class="timu-stat-card" role="group" aria-label="<?php esc_attr_e( 'Total modules', 'core-support-thisismyurl' ); ?>">
+		<div class="timu-stat-card" role="group" aria-label="<?php esc_attr_e( 'Total modules', 'wordpress-support-thisismyurl' ); ?>">
 			<div class="timu-stat-icon">
 				<span class="dashicons dashicons-admin-plugins"></span>
 			</div>
 			<div class="timu-stat-content">
 				<div class="timu-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $total_count ?? $total_fallback ) ) ); ?></div>
-				<div class="timu-stat-label"><?php esc_html_e( 'Total', 'core-support-thisismyurl' ); ?></div>
+				<div class="timu-stat-label"><?php esc_html_e( 'Total', 'wordpress-support-thisismyurl' ); ?></div>
 			</div>
 		</div>
 
-		<div class="timu-stat-card" role="group" aria-label="<?php esc_attr_e( 'Enabled modules', 'core-support-thisismyurl' ); ?>">
+		<div class="timu-stat-card" role="group" aria-label="<?php esc_attr_e( 'Enabled modules', 'wordpress-support-thisismyurl' ); ?>">
 			<div class="timu-stat-icon timu-stat-enabled">
 				<span class="dashicons dashicons-yes-alt"></span>
 			</div>
 			<div class="timu-stat-content">
 				<div class="timu-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $enabled_count ?? 0 ) ) ); ?></div>
-				<div class="timu-stat-label"><?php esc_html_e( 'Enabled', 'core-support-thisismyurl' ); ?></div>
+				<div class="timu-stat-label"><?php esc_html_e( 'Enabled', 'wordpress-support-thisismyurl' ); ?></div>
 			</div>
 		</div>
 
-		<div class="timu-stat-card" role="group" aria-label="<?php esc_attr_e( 'Available modules', 'core-support-thisismyurl' ); ?>">
+		<div class="timu-stat-card" role="group" aria-label="<?php esc_attr_e( 'Available modules', 'wordpress-support-thisismyurl' ); ?>">
 			<div class="timu-stat-icon timu-stat-available">
 				<span class="dashicons dashicons-plus-alt"></span>
 			</div>
 			<div class="timu-stat-content">
 				<div class="timu-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $available_count ?? 0 ) ) ); ?></div>
-				<div class="timu-stat-label"><?php esc_html_e( 'Available', 'core-support-thisismyurl' ); ?></div>
+				<div class="timu-stat-label"><?php esc_html_e( 'Available', 'wordpress-support-thisismyurl' ); ?></div>
 			</div>
 		</div>
 
-		<div class="timu-stat-card" role="group" aria-label="<?php esc_attr_e( 'Updates available', 'core-support-thisismyurl' ); ?>">
+		<div class="timu-stat-card" role="group" aria-label="<?php esc_attr_e( 'Updates available', 'wordpress-support-thisismyurl' ); ?>">
 			<div class="timu-stat-icon timu-stat-update">
 				<span class="dashicons dashicons-update"></span>
 			</div>
 			<div class="timu-stat-content">
 				<div class="timu-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $updates_count ?? $updates_fallback ) ) ); ?></div>
-				<div class="timu-stat-label"><?php esc_html_e( 'Updates', 'core-support-thisismyurl' ); ?></div>
+				<div class="timu-stat-label"><?php esc_html_e( 'Updates', 'wordpress-support-thisismyurl' ); ?></div>
 			</div>
 		</div>
 
-		<div class="timu-stat-card" role="group" aria-label="<?php esc_attr_e( 'Hubs', 'core-support-thisismyurl' ); ?>">
+		<div class="timu-stat-card" role="group" aria-label="<?php esc_attr_e( 'Hubs', 'wordpress-support-thisismyurl' ); ?>">
 			<div class="timu-stat-icon timu-stat-hub">
 				<span class="dashicons dashicons-networking"></span>
 			</div>
 			<div class="timu-stat-content">
 				<div class="timu-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $hubs_count ?? ( isset( $hub_modules ) ? count( $hub_modules ) : 0 ) ) ) ); ?></div>
-				<div class="timu-stat-label"><?php esc_html_e( 'Hubs', 'core-support-thisismyurl' ); ?></div>
+				<div class="timu-stat-label"><?php esc_html_e( 'Hubs', 'wordpress-support-thisismyurl' ); ?></div>
 			</div>
 		</div>
 
-		<div class="timu-stat-card" role="group" aria-label="<?php esc_attr_e( 'Spokes', 'core-support-thisismyurl' ); ?>">
+		<div class="timu-stat-card" role="group" aria-label="<?php esc_attr_e( 'Spokes', 'wordpress-support-thisismyurl' ); ?>">
 			<div class="timu-stat-icon timu-stat-spoke">
 				<span class="dashicons dashicons-admin-tools"></span>
 			</div>
 			<div class="timu-stat-content">
 				<div class="timu-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $spokes_count ?? ( isset( $spoke_modules ) ? count( $spoke_modules ) : 0 ) ) ) ); ?></div>
-				<div class="timu-stat-label"><?php esc_html_e( 'Spokes', 'core-support-thisismyurl' ); ?></div>
+				<div class="timu-stat-label"><?php esc_html_e( 'Spokes', 'wordpress-support-thisismyurl' ); ?></div>
 			</div>
 		</div>
 	</div>
@@ -124,19 +124,19 @@ defined( 'ABSPATH' ) || exit;
 		<?php if ( empty( $groups ) ) : ?>
 			<div class="timu-no-modules">
 				<span class="dashicons dashicons-info"></span>
-				<p><?php esc_html_e( 'No modules found.', 'core-support-thisismyurl' ); ?></p>
+				<p><?php esc_html_e( 'No modules found.', 'wordpress-support-thisismyurl' ); ?></p>
 			</div>
 		<?php else : ?>
 			<div class="timu-table-responsive">
 				<table class="widefat fixed striped timu-modules-table">
-					<caption class="screen-reader-text"><?php esc_html_e( 'Module catalog with status, version, and author information.', 'core-support-thisismyurl' ); ?></caption>
+					<caption class="screen-reader-text"><?php esc_html_e( 'Module catalog with status, version, and author information.', 'wordpress-support-thisismyurl' ); ?></caption>
 					<thead>
 					<tr>
-						<th scope="col"><?php esc_html_e( 'Module', 'core-support-thisismyurl' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Requires', 'core-support-thisismyurl' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Status', 'core-support-thisismyurl' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Version', 'core-support-thisismyurl' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Author', 'core-support-thisismyurl' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Module', 'wordpress-support-thisismyurl' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Requires', 'wordpress-support-thisismyurl' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Status', 'wordpress-support-thisismyurl' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Version', 'wordpress-support-thisismyurl' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Author', 'wordpress-support-thisismyurl' ); ?></th>
 					</tr>
 					</thead>
 					<tbody>
@@ -156,8 +156,8 @@ defined( 'ABSPATH' ) || exit;
 					?>
 					<tr class="timu-module-card <?php echo esc_attr( $type_class . ' ' . $status_class ); ?>" data-type="hub" data-group="<?php echo esc_attr( $slug ); ?>" data-status="<?php echo esc_attr( $installed ? ( $update_available ? 'update' : 'installed' ) : 'available' ); ?>">
 						<td class="timu-module-name">
-							<?php if ( $module['slug'] !== 'core-support-thisismyurl' ) : ?>
-								<button type="button" class="button-link timu-hub-toggle" data-group="<?php echo esc_attr( $module['slug'] ); ?>" aria-expanded="true" aria-label="<?php echo esc_attr( sprintf( __( 'Toggle %s spokes', 'core-support-thisismyurl' ), $module['name'] ) ); ?>">
+							<?php if ( $module['slug'] !== 'wordpress-support-thisismyurl' ) : ?>
+								<button type="button" class="button-link timu-hub-toggle" data-group="<?php echo esc_attr( $module['slug'] ); ?>" aria-expanded="true" aria-label="<?php echo esc_attr( sprintf( __( 'Toggle %s spokes', 'wordpress-support-thisismyurl' ), $module['name'] ) ); ?>">
 									<span class="dashicons dashicons-arrow-down-alt2"></span>
 								</button>
 							<?php endif; ?>
@@ -166,7 +166,7 @@ defined( 'ABSPATH' ) || exit;
 						</td>
 						<td>
 							<?php
-							$requires = ( $module['slug'] === 'core-support-thisismyurl' ) ? 'None' : 'Core ' . ( $module['requires_core'] ?? '' );
+							$requires = ( $module['slug'] === 'wordpress-support-thisismyurl' ) ? 'None' : 'Core ' . ( $module['requires_core'] ?? '' );
 							echo esc_html( $requires === 'None' ? '-' : $requires );
 							?>
 						</td>
@@ -181,31 +181,31 @@ defined( 'ABSPATH' ) || exit;
 							);
 							?>
 							<?php if ( ! $installed ) : ?>
-								<a href="#" class="timu-btn-install-activate" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( 'Install and Activate', 'core-support-thisismyurl' ); ?></a>
+								<a href="#" class="timu-btn-install-activate" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( 'Install and Activate', 'wordpress-support-thisismyurl' ); ?></a>
 							<?php elseif ( $is_enabled && ( $is_network_active && ! is_network_admin() ) ) : ?>
-								<?php esc_html_e( 'Active', 'core-support-thisismyurl' ); ?>
-								<span class="timu-badge timu-badge-network" aria-label="<?php esc_attr_e( 'Network Active', 'core-support-thisismyurl' ); ?>"><?php esc_html_e( 'Network Active', 'core-support-thisismyurl' ); ?></span>
+								<?php esc_html_e( 'Active', 'wordpress-support-thisismyurl' ); ?>
+								<span class="timu-badge timu-badge-network" aria-label="<?php esc_attr_e( 'Network Active', 'wordpress-support-thisismyurl' ); ?>"><?php esc_html_e( 'Network Active', 'wordpress-support-thisismyurl' ); ?></span>
 								<?php if ( ! $override_allowed ) : ?>
-									<br><small><?php esc_html_e( 'Final (no site overrides)', 'core-support-thisismyurl' ); ?></small>
+									<br><small><?php esc_html_e( 'Final (no site overrides)', 'wordpress-support-thisismyurl' ); ?></small>
 								<?php else : ?>
-									<br><small><?php esc_html_e( 'Site settings override allowed', 'core-support-thisismyurl' ); ?></small>
+									<br><small><?php esc_html_e( 'Site settings override allowed', 'wordpress-support-thisismyurl' ); ?></small>
 								<?php endif; ?>
 							<?php elseif ( $is_enabled && ! empty( $dependents_active ) ) : ?>
-								<?php esc_html_e( 'Active', 'core-support-thisismyurl' ); ?><br>
+								<?php esc_html_e( 'Active', 'wordpress-support-thisismyurl' ); ?><br>
 								<small>-</small>
 							<?php elseif ( $is_enabled && $is_network_active && is_network_admin() ) : ?>
-								<?php esc_html_e( 'Active', 'core-support-thisismyurl' ); ?>
-								<span class="timu-badge timu-badge-network" aria-label="<?php esc_attr_e( 'Network Active', 'core-support-thisismyurl' ); ?>"><?php esc_html_e( 'Network Active', 'core-support-thisismyurl' ); ?></span>
-								<br><small><a href="#" class="timu-action-link timu-deactivate-network" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( '(Deactivate Network)', 'core-support-thisismyurl' ); ?></a></small>
+								<?php esc_html_e( 'Active', 'wordpress-support-thisismyurl' ); ?>
+								<span class="timu-badge timu-badge-network" aria-label="<?php esc_attr_e( 'Network Active', 'wordpress-support-thisismyurl' ); ?>"><?php esc_html_e( 'Network Active', 'wordpress-support-thisismyurl' ); ?></span>
+								<br><small><a href="#" class="timu-action-link timu-deactivate-network" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( '(Deactivate Network)', 'wordpress-support-thisismyurl' ); ?></a></small>
 							<?php else : ?>
-								<?php esc_html_e( 'Installed', 'core-support-thisismyurl' ); ?><br>
-								<small><a href="#" class="timu-action-link timu-activate" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( 'activate', 'core-support-thisismyurl' ); ?></a></small>
+								<?php esc_html_e( 'Installed', 'wordpress-support-thisismyurl' ); ?><br>
+								<small><a href="#" class="timu-action-link timu-activate" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( 'activate', 'wordpress-support-thisismyurl' ); ?></a></small>
 							<?php endif; ?>
 						</td>
 						<td>
 							<?php echo esc_html( $module['version'] ); ?>
 							<?php if ( $update_available && ! empty( $module['download_url'] ) ) : ?>
-								<br><small><a href="#" class="timu-btn-update" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( 'Update', 'core-support-thisismyurl' ); ?></a></small>
+								<br><small><a href="#" class="timu-btn-update" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( 'Update', 'wordpress-support-thisismyurl' ); ?></a></small>
 							<?php endif; ?>
 						</td>
 						<td>
@@ -247,28 +247,28 @@ defined( 'ABSPATH' ) || exit;
 								</td>
 								<td>
 									<?php if ( ! $installed ) : ?>
-										<a href="#" class="timu-btn-install-activate" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( 'Install and Activate', 'core-support-thisismyurl' ); ?></a>
+										<a href="#" class="timu-btn-install-activate" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( 'Install and Activate', 'wordpress-support-thisismyurl' ); ?></a>
 									<?php elseif ( $is_enabled && $is_network_active && is_network_admin() ) : ?>
-										<?php esc_html_e( 'Active', 'core-support-thisismyurl' ); ?>
-										<span class="timu-badge timu-badge-network" aria-label="<?php esc_attr_e( 'Network Active', 'core-support-thisismyurl' ); ?>"><?php esc_html_e( 'Network Active', 'core-support-thisismyurl' ); ?></span>
-										<br><small><a href="#" class="timu-action-link timu-deactivate-network" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( '(Deactivate Network)', 'core-support-thisismyurl' ); ?></a></small>
+										<?php esc_html_e( 'Active', 'wordpress-support-thisismyurl' ); ?>
+										<span class="timu-badge timu-badge-network" aria-label="<?php esc_attr_e( 'Network Active', 'wordpress-support-thisismyurl' ); ?>"><?php esc_html_e( 'Network Active', 'wordpress-support-thisismyurl' ); ?></span>
+										<br><small><a href="#" class="timu-action-link timu-deactivate-network" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( '(Deactivate Network)', 'wordpress-support-thisismyurl' ); ?></a></small>
 									<?php elseif ( $is_enabled && $is_network_active && ! is_network_admin() ) : ?>
-										<?php esc_html_e( 'Active', 'core-support-thisismyurl' ); ?>
-										<span class="timu-badge timu-badge-network" aria-label="<?php esc_attr_e( 'Network Active', 'core-support-thisismyurl' ); ?>"><?php esc_html_e( 'Network Active', 'core-support-thisismyurl' ); ?></span>
+										<?php esc_html_e( 'Active', 'wordpress-support-thisismyurl' ); ?>
+										<span class="timu-badge timu-badge-network" aria-label="<?php esc_attr_e( 'Network Active', 'wordpress-support-thisismyurl' ); ?>"><?php esc_html_e( 'Network Active', 'wordpress-support-thisismyurl' ); ?></span>
 										<?php if ( ! $override_allowed ) : ?>
-											<br><small><?php esc_html_e( 'Final (no site overrides)', 'core-support-thisismyurl' ); ?></small>
+											<br><small><?php esc_html_e( 'Final (no site overrides)', 'wordpress-support-thisismyurl' ); ?></small>
 										<?php else : ?>
-											<br><small><?php esc_html_e( 'Site settings override allowed', 'core-support-thisismyurl' ); ?></small>
+											<br><small><?php esc_html_e( 'Site settings override allowed', 'wordpress-support-thisismyurl' ); ?></small>
 										<?php endif; ?>
 									<?php else : ?>
-										<?php esc_html_e( 'Installed', 'core-support-thisismyurl' ); ?><br>
-										<small><a href="#" class="timu-action-link timu-activate" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( 'activate', 'core-support-thisismyurl' ); ?></a></small>
+										<?php esc_html_e( 'Installed', 'wordpress-support-thisismyurl' ); ?><br>
+										<small><a href="#" class="timu-action-link timu-activate" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( 'activate', 'wordpress-support-thisismyurl' ); ?></a></small>
 									<?php endif; ?>
 								</td>
 								<td>
 									<?php echo esc_html( $module['version'] ); ?>
 									<?php if ( $update_available && ! empty( $module['download_url'] ) ) : ?>
-										<br><small><a href="#" class="timu-btn-update" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( 'Update', 'core-support-thisismyurl' ); ?></a></small>
+										<br><small><a href="#" class="timu-btn-update" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( 'Update', 'wordpress-support-thisismyurl' ); ?></a></small>
 									<?php endif; ?>
 								</td>
 								<td>

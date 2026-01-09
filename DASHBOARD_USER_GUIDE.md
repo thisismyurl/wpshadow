@@ -2,7 +2,7 @@
 
 ## Quick Start
 
-The **Support Dashboard** is your central hub for managing the Core Support Suite. Here you can:
+The **Support Dashboard** is your central hub for managing the WordPress Support Suite. Here you can:
 
 - View module status and statistics
 - Install and activate child plugins
@@ -12,7 +12,7 @@ The **Support Dashboard** is your central hub for managing the Core Support Suit
 
 ### Accessing the Dashboard
 
-1. From the WordPress admin menu, click **Core Support**
+1. From the WordPress admin menu, click **WordPress Support**
 2. Click **Dashboard** in the submenu
 3. You'll see an overview with stats and quick links
 
@@ -51,7 +51,7 @@ Click **Modules** in the primary navigation to manage individual modules.
 
 If a required module is missing, you'll see a yellow admin notice:
 
-> **Core Support:** Media Support is recommended. Provides shared media optimization and processing infrastructure
+> **WordPress Support:** Media Support is recommended. Provides shared media optimization and processing infrastructure
 
 **To install:**
 1. Click the **"Install & Activate"** button in the notice
@@ -113,7 +113,7 @@ If you're Network Admin:
 
 ## Guided Setup Wizard
 
-When you first activate Core Support, a **Setup Wizard** appears recommending the default module stack:
+When you first activate WordPress Support, a **Setup Wizard** appears recommending the default module stack:
 
 1. **Media Support** — Shared optimization and processing infrastructure (required)
 2. **Vault Support** — Secure original file storage with encryption
@@ -200,7 +200,7 @@ Each log entry shows:
 
 ### Module Won't Install
 
-- **Check PHP Version:** Core Support requires PHP 8.2+
+- **Check PHP Version:** WordPress Support requires PHP 8.2+
 - **Check WordPress Version:** Requires WordPress 6.4+
 - **Check Permissions:** Ensure you're logged in as administrator
 - **Check Nonce:** Browser may have expired; try again
@@ -238,8 +238,8 @@ Each log entry shows:
 **Q: What if I disable a module toggle?**
 A: That module's features won't work, but the plugin stays active. No data is deleted. Re-enable anytime.
 
-**Q: Can I use Core Support without child plugins?**
-A: Core Support works alone, but many features require Media Support (encryption, fallback engines). We recommend installing the full stack.
+**Q: Can I use WordPress Support without child plugins?**
+A: WordPress Support works alone, but many features require Media Support (encryption, fallback engines). We recommend installing the full stack.
 
 **Q: How often are logs saved?**
 A: Every time a significant action happens: upload, backup, restore, configuration change, error, etc.

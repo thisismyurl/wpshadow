@@ -6,22 +6,22 @@
  * that key to all sites in the network (or a selected subset).
  *
  * Author:              Christopher Ross
- * Author URI:          https://thisismyurl.com/?source=core-support-thisismyurl
- * Plugin Name:         Core Support - thisismyurl
- * Plugin URI:          https://thisismyurl.com/core-support-thisismyurl/?source=core-support-thisismyurl
- * Donate link:         https://thisismyurl.com/core-support-thisismyurl/#register?source=core-support-thisismyurl
- * Description:         Core licensing and module management for the thisismyurl product suite.
+ * Author URI:          https://thisismyurl.com/?source=wordpress-support-thisismyurl
+ * Plugin Name:         WordPress Support - thisismyurl
+ * Plugin URI:          https://thisismyurl.com/wordpress-support-thisismyurl/?source=wordpress-support-thisismyurl
+ * Donate link:         https://thisismyurl.com/wordpress-support-thisismyurl/#register?source=wordpress-support-thisismyurl
+ * Description:         Foundation plugin licensing and module management for the thisismyurl plugin suite.
  * Tags:                licensing,module-management,multisite,support-dashboard
- * Version:             1.2601.73000
+ * Version:             1.2601.73001
  * Requires at least:   6.4
  * Requires PHP:        8.2
- * Update URI:          https://github.com/thisismyurl/core-support-thisismyurl
- * GitHub Plugin URI:   https://github.com/thisismyurl/core-support-thisismyurl
+ * Update URI:          https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl
+ * GitHub Plugin URI:   https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl
  * Primary Branch:      main
- * Text Domain:         core-support-thisismyurl
+ * Text Domain:         wordpress-support-thisismyurl
  * License:             GPL2
  * License URI:         https://www.gnu.org/licenses/gpl-2.0.html
- * @package TIMU_CORE_SUPPORT
+ * @package TIMU_WORDPRESS_SUPPORT
  */
 
 namespace TIMU\CoreSupport;
@@ -75,8 +75,8 @@ class TIMU_Network_License {
 	public static function add_submenu_page(): void {
 		add_submenu_page(
 			'timu-core-support',
-			__( 'License Broadcast', 'core-support-thisismyurl' ),
-			__( 'License Broadcast', 'core-support-thisismyurl' ),
+			__( 'License Broadcast', 'wordpress-support-thisismyurl' ),
+			__( 'License Broadcast', 'wordpress-support-thisismyurl' ),
 			'manage_network_options',
 			'timu-network-license-broadcast',
 			array( __CLASS__, 'render_page' )
@@ -90,7 +90,7 @@ class TIMU_Network_License {
 	 */
 	public static function render_page(): void {
 		if ( ! current_user_can( 'manage_network_options' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'core-support-thisismyurl' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'wordpress-support-thisismyurl' ) );
 		}
 
 		$network_key = get_site_option( self::NETWORK_LICENSE_OPTION, '' );
@@ -98,15 +98,15 @@ class TIMU_Network_License {
 
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Network License Broadcast', 'core-support-thisismyurl' ); ?></h1>
-			<p class="description"><?php esc_html_e( 'Register a license key once and push it to all sites in the network or a selected subset.', 'core-support-thisismyurl' ); ?></p>
+			<h1><?php esc_html_e( 'Network License Broadcast', 'wordpress-support-thisismyurl' ); ?></h1>
+			<p class="description"><?php esc_html_e( 'Register a license key once and push it to all sites in the network or a selected subset.', 'wordpress-support-thisismyurl' ); ?></p>
 
 			<?php
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if ( isset( $_GET['timu_broadcast_success'] ) ) :
 				?>
 				<div class="notice notice-success is-dismissible">
-					<p><?php esc_html_e( 'License key successfully broadcast to selected sites.', 'core-support-thisismyurl' ); ?></p>
+					<p><?php esc_html_e( 'License key successfully broadcast to selected sites.', 'wordpress-support-thisismyurl' ); ?></p>
 				</div>
 			<?php endif; ?>
 
@@ -115,13 +115,13 @@ class TIMU_Network_License {
 			if ( isset( $_GET['timu_broadcast_error'] ) ) :
 				?>
 				<div class="notice notice-error is-dismissible">
-					<p><?php esc_html_e( 'An error occurred while broadcasting the license key.', 'core-support-thisismyurl' ); ?></p>
+					<p><?php esc_html_e( 'An error occurred while broadcasting the license key.', 'wordpress-support-thisismyurl' ); ?></p>
 				</div>
 			<?php endif; ?>
 
 			<!-- Network License Input -->
 			<div class="card">
-				<h2><?php esc_html_e( 'Network License Key', 'core-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( 'Network License Key', 'wordpress-support-thisismyurl' ); ?></h2>
 				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 					<?php wp_nonce_field( 'timu_broadcast_license', 'timu_broadcast_nonce' ); ?>
 					<input type="hidden" name="action" value="timu_broadcast_license" />
@@ -129,23 +129,23 @@ class TIMU_Network_License {
 					<table class="form-table">
 						<tr>
 							<th scope="row">
-								<label for="timu_network_key"><?php esc_html_e( 'License Key', 'core-support-thisismyurl' ); ?></label>
+								<label for="timu_network_key"><?php esc_html_e( 'License Key', 'wordpress-support-thisismyurl' ); ?></label>
 							</th>
 							<td>
 								<input type="text" id="timu_network_key" name="timu_network_key" value="<?php echo esc_attr( $network_key ); ?>" class="regular-text code" />
-								<p class="description"><?php esc_html_e( 'Enter a valid license key. This will be stored in network options and pushed to all sites.', 'core-support-thisismyurl' ); ?></p>
+								<p class="description"><?php esc_html_e( 'Enter a valid license key. This will be stored in network options and pushed to all sites.', 'wordpress-support-thisismyurl' ); ?></p>
 							</td>
 						</tr>
 					</table>
 
 					<!-- Site Selection -->
-					<h3><?php esc_html_e( 'Select Sites to Broadcast To', 'core-support-thisismyurl' ); ?></h3>
+					<h3><?php esc_html_e( 'Select Sites to Broadcast To', 'wordpress-support-thisismyurl' ); ?></h3>
 					<fieldset style="margin-bottom: 20px;">
-						<legend class="screen-reader-text"><?php esc_html_e( 'Site selection', 'core-support-thisismyurl' ); ?></legend>
+						<legend class="screen-reader-text"><?php esc_html_e( 'Site selection', 'wordpress-support-thisismyurl' ); ?></legend>
 						<div style="margin-bottom: 10px;">
 							<label>
 								<input type="checkbox" id="timu_select_all_sites" />
-								<strong><?php esc_html_e( 'Select All Sites', 'core-support-thisismyurl' ); ?></strong>
+								<strong><?php esc_html_e( 'Select All Sites', 'wordpress-support-thisismyurl' ); ?></strong>
 							</label>
 						</div>
 
@@ -161,7 +161,7 @@ class TIMU_Network_License {
 
 					<p class="submit">
 						<button type="submit" class="button button-primary" name="timu_broadcast_action" value="broadcast">
-							<?php esc_html_e( 'Broadcast License to Selected Sites', 'core-support-thisismyurl' ); ?>
+							<?php esc_html_e( 'Broadcast License to Selected Sites', 'wordpress-support-thisismyurl' ); ?>
 						</button>
 					</p>
 				</form>
@@ -203,7 +203,7 @@ class TIMU_Network_License {
 		$log = (array) get_site_option( self::NETWORK_BROADCAST_LOG, array() );
 
 		if ( empty( $log ) ) {
-			echo '<div class="card"><p><em>' . esc_html__( 'No broadcast history yet.', 'core-support-thisismyurl' ) . '</em></p></div>';
+			echo '<div class="card"><p><em>' . esc_html__( 'No broadcast history yet.', 'wordpress-support-thisismyurl' ) . '</em></p></div>';
 			return;
 		}
 
@@ -212,14 +212,14 @@ class TIMU_Network_License {
 
 		?>
 		<div class="card">
-			<h2><?php esc_html_e( 'Broadcast History', 'core-support-thisismyurl' ); ?></h2>
+			<h2><?php esc_html_e( 'Broadcast History', 'wordpress-support-thisismyurl' ); ?></h2>
 			<table class="wp-list-table widefat striped">
 				<thead>
 					<tr>
-						<th><?php esc_html_e( 'Timestamp', 'core-support-thisismyurl' ); ?></th>
-						<th><?php esc_html_e( 'User', 'core-support-thisismyurl' ); ?></th>
-						<th><?php esc_html_e( 'Sites Updated', 'core-support-thisismyurl' ); ?></th>
-						<th><?php esc_html_e( 'Status', 'core-support-thisismyurl' ); ?></th>
+						<th><?php esc_html_e( 'Timestamp', 'wordpress-support-thisismyurl' ); ?></th>
+						<th><?php esc_html_e( 'User', 'wordpress-support-thisismyurl' ); ?></th>
+						<th><?php esc_html_e( 'Sites Updated', 'wordpress-support-thisismyurl' ); ?></th>
+						<th><?php esc_html_e( 'Status', 'wordpress-support-thisismyurl' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -229,22 +229,22 @@ class TIMU_Network_License {
 						$time_text = $timestamp ? date_i18n( 'M j, Y g:i a', $timestamp ) : '—';
 						$user_id   = $entry['user_id'] ?? 0;
 						$user      = $user_id > 0 ? get_user_by( 'id', $user_id ) : null;
-						$user_name = $user && $user->exists() ? $user->display_name : __( 'Unknown', 'core-support-thisismyurl' );
+						$user_name = $user && $user->exists() ? $user->display_name : __( 'Unknown', 'wordpress-support-thisismyurl' );
 						$count     = count( $entry['site_ids'] ?? array() );
 						$status    = $entry['status'] ?? 'success';
 						?>
 						<tr>
 							<td><?php echo esc_html( $time_text ); ?></td>
 							<td><?php echo esc_html( $user_name ); ?></td>
-							<td><?php echo absint( $count ) . ' ' . esc_html( _n( 'site', 'sites', $count, 'core-support-thisismyurl' ) ); ?></td>
+							<td><?php echo absint( $count ) . ' ' . esc_html( _n( 'site', 'sites', $count, 'wordpress-support-thisismyurl' ) ); ?></td>
 							<td>
 								<?php
 								if ( 'success' === $status ) {
-									echo '<span style="color: green;">' . esc_html__( 'Success', 'core-support-thisismyurl' ) . '</span>';
+									echo '<span style="color: green;">' . esc_html__( 'Success', 'wordpress-support-thisismyurl' ) . '</span>';
 								} elseif ( 'partial' === $status ) {
-									echo '<span style="color: orange;">' . esc_html__( 'Partial', 'core-support-thisismyurl' ) . '</span>';
+									echo '<span style="color: orange;">' . esc_html__( 'Partial', 'wordpress-support-thisismyurl' ) . '</span>';
 								} else {
-									echo '<span style="color: red;">' . esc_html__( 'Failed', 'core-support-thisismyurl' ) . '</span>';
+									echo '<span style="color: red;">' . esc_html__( 'Failed', 'wordpress-support-thisismyurl' ) . '</span>';
 								}
 								?>
 							</td>

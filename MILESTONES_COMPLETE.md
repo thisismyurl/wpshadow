@@ -264,8 +264,8 @@ vault-support-thisismyurl/
 
 **New to TIMU?**
 
-1. Read [MILESTONE_REFERENCE.md](https://github.com/thisismyurl/core-support-thisismyurl/blob/main/MILESTONE_REFERENCE.md) (1-pager)
-2. For details, see [MILESTONES.md](https://github.com/thisismyurl/core-support-thisismyurl/blob/main/MILESTONES.md) (full guide)
+1. Read [MILESTONE_REFERENCE.md](https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl/blob/main/MILESTONE_REFERENCE.md) (1-pager)
+2. For details, see [MILESTONES.md](https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl/blob/main/MILESTONES.md) (full guide)
 
 **Creating an issue?**
 
@@ -296,8 +296,8 @@ vault-support-thisismyurl/
 ## 🤝 Questions?
 
 **Refer to:**
-- 📖 [MILESTONES.md](https://github.com/thisismyurl/core-support-thisismyurl/blob/main/MILESTONES.md) — Full guide
-- 📄 [MILESTONE_REFERENCE.md](https://github.com/thisismyurl/core-support-thisismyurl/blob/main/MILESTONE_REFERENCE.md) — Quick ref
+- 📖 [MILESTONES.md](https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl/blob/main/MILESTONES.md) — Full guide
+- 📄 [MILESTONE_REFERENCE.md](https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl/blob/main/MILESTONE_REFERENCE.md) — Quick ref
 - 🎯 Plugin-specific MILESTONE_REFERENCE.md — Plugin scope
 
 **For changes:**

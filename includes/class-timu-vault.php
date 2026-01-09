@@ -27,7 +27,7 @@ if ( ! class_exists( '\\TIMU\\VaultSupport\\TIMU_Vault' ) ) {
 	function timu_vault_missing_plugin_notice(): void {
 		printf(
 			'<div class="notice notice-error"><p>%s</p></div>',
-			esc_html__( 'Core Support requires Vault Support to be installed and active with the Vault class available.', 'core-support-thisismyurl' )
+			esc_html__( 'Core Support requires Vault Support to be installed and active with the Vault class available.', 'wordpress-support-thisismyurl' )
 		);
 	}
 	add_action( 'admin_notices', __NAMESPACE__ . '\\timu_vault_missing_plugin_notice' );

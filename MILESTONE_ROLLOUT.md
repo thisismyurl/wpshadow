@@ -326,7 +326,7 @@ jobs:
 
 ---
 
-**Questions?** Reference [MILESTONES.md](https://github.com/thisismyurl/core-support-thisismyurl/blob/main/MILESTONES.md) for complete details.
+**Questions?** Reference [MILESTONES.md](https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl/blob/main/MILESTONES.md) for complete details.
 
 **Last Updated:** January 8, 2026
 **Next Review:** January 31, 2026 (post-M01 release)

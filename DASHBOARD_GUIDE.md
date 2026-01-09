@@ -17,9 +17,9 @@ Welcome to the **Support Dashboard**—the command center for managing the @this
 
 ## Overview
 
-### What is Core Support?
+### What is WordPress Support?
 
-**Core Support** is the Hub of the @thisismyurl Support Suite. It provides:
+**WordPress Support** is the Hub of the @thisismyurl Support Suite. It provides:
 
 - **Foundation Architecture:** Multi-engine image processing fallback (Imagick/GD)
 - **Encryption & Security:** Data protection, CSRF/XSS prevention, capability-based access control
@@ -31,7 +31,7 @@ Welcome to the **Support Dashboard**—the command center for managing the @this
 
 The Suite operates on a **Hub & Spoke** model:
 
-- **Hub (Core Support):** Shared infrastructure, security, multi-engine logic
+- **Hub (WordPress Support):** Shared infrastructure, security, multi-engine logic
 - **Spokes (Format Plugins):** Lean, format-specific transcoders
 - **Suite Handshake:** `Suite: thisismyurl-media-suite-2026` ensures only compatible modules load
 
@@ -65,7 +65,7 @@ At the top of the Dashboard, you'll see six metric cards:
 | **Enabled** | Modules currently active on this site | Shows your active module count |
 | **Available** | Installed but not activated modules | Modules ready to use but off |
 | **Updates Available** | Modules with newer versions | Which modules need updating |
-| **Hubs** | Count of Hub plugins (core engines) | Usually 1–2 (Core Support, Image Support, etc.) |
+| **Hubs** | Count of Hub plugins (core engines) | Usually 1–2 (WordPress Support, Image Support, etc.) |
 | **Spokes** | Count of Spoke plugins (format-specific) | AVIF, WebP, HEIC, BMP, GIF, etc. |
 
 **Multisite Note:**
@@ -123,11 +123,11 @@ If your site accepts contributor uploads (e.g., from authors, editors):
 | **File** | Filename or post title |
 | **Uploaded by** | Contributor's display name |
 | **Uploaded at** | Upload date/time |
-| **Optimized** | `Yes` or `No` — whether Core Support auto-optimized the file |
+| **Optimized** | `Yes` or `No` — whether WordPress Support auto-optimized the file |
 | **Action** | **Review** button → Opens the attachment editor |
 
 **What This Means:**
-- Contributors upload media, which Core Support automatically optimizes
+- Contributors upload media, which WordPress Support automatically optimizes
 - Editors+ review and approve before files go live
 - Click **Review** to examine the optimized file and approve/reject
 
@@ -178,7 +178,7 @@ Hub: Image Support (Hub row - click ▼ arrow to collapse/expand)
 ├─ WebP Spoke [Status] [Version] [Author]
 └─ HEIC Spoke [Status] [Version] [Author]
 
-Hub: Core Support (no spokes; always expanded)
+Hub: WordPress Support (no spokes; always expanded)
 └─ [Status] [Version] [Author]
 ```
 
@@ -255,7 +255,7 @@ The **Status** column is information-rich:
 
 **What happens behind the scenes:**
 - WordPress registers the plugin's hooks and filters
-- Core Support (Hub) discovers the AVIF Spoke
+- WordPress Support (Hub) discovers the AVIF Spoke
 - Image uploads are now routed through the AVIF processor
 - Statistics update; **Enabled** count increases
 
@@ -281,7 +281,7 @@ The **Status** column is information-rich:
 **Prerequisites:**
 - You have **Edit Plugins** capability (Admin or Super Admin)
 - Your hosting provides at least 50MB free disk space
-- Core Support (Hub) is already active
+- WordPress Support (Hub) is already active
 
 **Steps:**
 1. Find the module in the table (search the page with Ctrl+F)
@@ -516,9 +516,9 @@ As a site admin on a multisite sub-site:
 2. Click **Refresh Stats** button (top right)
 3. Wait 2–3 seconds for the page to recalculate
 4. If the issue persists:
-   - Deactivate Core Support
+   - Deactivate WordPress Support
    - Delete `/wp-content/cache/timu_*` transients
-   - Reactivate Core Support
+   - Reactivate WordPress Support
 
 **For Network Admins:**
 - Ensure you're checking the **Network Modules** page, not a sub-site page
@@ -528,11 +528,11 @@ As a site admin on a multisite sub-site:
 
 **Symptoms:** No buttons to activate/deactivate modules; can't install new ones.
 
-**Cause:** Insufficient permissions or Core Support is inactive.
+**Cause:** Insufficient permissions or WordPress Support is inactive.
 
 **Solution:**
 1. Check that you're logged in as an Admin (site) or Super Admin (network)
-2. Ensure Core Support itself is active
+2. Ensure WordPress Support itself is active
 3. Clear browser cache (Ctrl+Shift+Del) and reload the Modules page
 4. If still missing, check [Permissions](#permissions) section below
 
@@ -548,7 +548,7 @@ As a site admin on a multisite sub-site:
    - Deactivate the module
    - Contact @thisismyurl support with the error message
 3. If errors mention "dependency not found":
-   - Ensure the Hub (Core Support) is active before activating Spokes
+   - Ensure the Hub (WordPress Support) is active before activating Spokes
    - Install any missing dependency modules first
 
 #### Issue: Vault is getting too large
@@ -655,7 +655,7 @@ If status is Invalid:
 | **Site-Active** | Activated on a single site's Plugins page | Enabled **only** on that site; Network Admin sees it as site-active |
 
 **Best Practice:**
-- Network-activate stable, essential modules (e.g., Image Hub, Core Support)
+- Network-activate stable, essential modules (e.g., Image Hub, WordPress Support)
 - Site-activate optional or experimental modules (e.g., niche Spokes)
 
 ---
@@ -693,7 +693,7 @@ To re-enable The Vault:
 **A:**
 1. Go to **Tools** > **Export Personal Data** (WordPress core feature)
 2. Enter a user email address
-3. Select **Core Support** in the data export options
+3. Select **WordPress Support** in the data export options
 4. Click **Request Data Export**
 5. WordPress will prepare a ZIP with all media metadata, Vault records, and audit logs for that user
 6. Download the ZIP from the confirmation email or admin page
@@ -716,8 +716,8 @@ For more info, see [Privacy & User Data](#privacy--user-data) in the main README
 
 ### Resources
 
-- **Documentation:** https://thisismyurl.com/core-support-thisismyurl/
-- **GitHub Issues:** https://github.com/thisismyurl/core-support-thisismyurl/issues
+- **Documentation:** https://thisismyurl.com/wordpress-support-thisismyurl/
+- **GitHub Issues:** https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl/issues
 - **Email Support:** support@thisismyurl.com
 - **Community Forum:** (coming soon)
 
@@ -727,7 +727,7 @@ For more info, see [Privacy & User Data](#privacy--user-data) in the main README
    - Your WordPress version, PHP version
    - List of active modules (from **Modules** page)
    - Error message from `/wp-content/debug.log` (if available)
-2. Go to [GitHub Issues](https://github.com/thisismyurl/core-support-thisismyurl/issues)
+2. Go to [GitHub Issues](https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl/issues)
 3. Click **New Issue**
 4. Title: Brief description (e.g., "Module activation fails on multisite")
 5. Description: Include the information from step 1
@@ -736,7 +736,7 @@ For more info, see [Privacy & User Data](#privacy--user-data) in the main README
 ### Requesting a Feature
 
 Have an idea for the Dashboard or modules?
-1. Go to [GitHub Issues](https://github.com/thisismyurl/core-support-thisismyurl/issues)
+1. Go to [GitHub Issues](https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl/issues)
 2. Click **New Issue**
 3. Title: What you want (e.g., "Add bulk enable/disable for modules")
 4. Description: Why it would be useful

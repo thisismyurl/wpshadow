@@ -1,10 +1,10 @@
 <?php
 /**
- * Uninstall script for Core Support (thisismyurl).
+ * Uninstall script for WordPress Support (thisismyurl).
  *
  * Fired when the plugin is uninstalled.
  *
- * @package TIMU_CORE_SUPPORT
+ * @package TIMU_WORDPRESS_SUPPORT
  */
 
 declare(strict_types=1);

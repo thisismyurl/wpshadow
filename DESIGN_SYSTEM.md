@@ -5,7 +5,7 @@
 
 ## Overview
 
-The TIMU Design System provides a modern, cohesive visual language inspired by GitHub and Jetpack. It ensures consistency across all Core Support plugins and add-ons with a flexible, accessible component library.
+The TIMU Design System provides a modern, cohesive visual language inspired by GitHub and Jetpack. It ensures consistency across all WordPress Support plugins and add-ons with a flexible, accessible component library.
 
 ---
 
@@ -535,8 +535,8 @@ wp_enqueue_style(
 ## Resources
 
 - **Stylesheet:** `core-support-thisismyurl/assets/css/timu-ui-system.css`
-- **GitHub Issues:** [#67 Design System](https://github.com/thisismyurl/core-support-thisismyurl/issues/67)
-- **Live Examples:** Core Support Dashboard (wp-admin → Dashboard)
+- **GitHub Issues:** [#67 Design System](https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl/issues/67)
+- **Live Examples:** WordPress Support Dashboard (wp-admin → Dashboard)
 
 ---
 

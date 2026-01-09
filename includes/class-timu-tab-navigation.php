@@ -148,12 +148,12 @@ class TIMU_Tab_Navigation {
 		return array(
 			array(
 				'id'    => 'dashboard',
-				'label' => __( 'Dashboard', 'core-support-thisismyurl' ),
+				'label' => __( 'Dashboard', 'wordpress-support-thisismyurl' ),
 				'icon'  => 'dashicons-dashboard',
 			),
 			array(
 				'id'    => 'help',
-				'label' => __( 'Help', 'core-support-thisismyurl' ),
+				'label' => __( 'Help', 'wordpress-support-thisismyurl' ),
 				'icon'  => 'dashicons-editor-help',
 			),
 		);
@@ -169,12 +169,12 @@ class TIMU_Tab_Navigation {
 		return array(
 			array(
 				'id'    => 'dashboard',
-				'label' => __( 'Dashboard', 'core-support-thisismyurl' ),
+				'label' => __( 'Dashboard', 'wordpress-support-thisismyurl' ),
 				'icon'  => 'dashicons-dashboard',
 			),
 			array(
 				'id'    => 'help',
-				'label' => __( 'Help', 'core-support-thisismyurl' ),
+				'label' => __( 'Help', 'wordpress-support-thisismyurl' ),
 				'icon'  => 'dashicons-editor-help',
 			),
 		);
@@ -191,12 +191,12 @@ class TIMU_Tab_Navigation {
 		return array(
 			array(
 				'id'    => 'dashboard',
-				'label' => __( 'Dashboard', 'core-support-thisismyurl' ),
+				'label' => __( 'Dashboard', 'wordpress-support-thisismyurl' ),
 				'icon'  => 'dashicons-dashboard',
 			),
 			array(
 				'id'    => 'help',
-				'label' => __( 'Help', 'core-support-thisismyurl' ),
+				'label' => __( 'Help', 'wordpress-support-thisismyurl' ),
 				'icon'  => 'dashicons-editor-help',
 			),
 		);
@@ -211,13 +211,13 @@ class TIMU_Tab_Navigation {
 	public static function get_breadcrumbs( array $context ): array {
 		$crumbs = array(
 			array(
-				'label' => __( 'Support', 'core-support-thisismyurl' ),
+				'label' => __( 'Support', 'wordpress-support-thisismyurl' ),
 				'url'   => admin_url( 'admin.php?page=timu-core-support' ),
 			),
 		);
 
 		if ( ! empty( $context['hub'] ) ) {
-			$hub_label = ucfirst( $context['hub'] ) . ' ' . __( 'Hub', 'core-support-thisismyurl' );
+			$hub_label = ucfirst( $context['hub'] ) . ' ' . __( 'Hub', 'wordpress-support-thisismyurl' );
 			$crumbs[]  = array(
 				'label' => $hub_label,
 				'url'   => self::build_hub_url( $context['hub'] ),
@@ -225,7 +225,7 @@ class TIMU_Tab_Navigation {
 		}
 
 		if ( ! empty( $context['spoke'] ) ) {
-			$spoke_label = strtoupper( $context['spoke'] ) . ' ' . __( 'Support', 'core-support-thisismyurl' );
+			$spoke_label = strtoupper( $context['spoke'] ) . ' ' . __( 'Support', 'wordpress-support-thisismyurl' );
 			$crumbs[]    = array(
 				'label' => $spoke_label,
 				'url'   => self::build_spoke_url( $context['hub'], $context['spoke'] ),

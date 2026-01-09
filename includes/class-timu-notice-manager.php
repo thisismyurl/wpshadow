@@ -88,12 +88,12 @@ class TIMU_Notice_Manager {
 		$notice_key = isset( $_POST['notice_key'] ) ? sanitize_key( $_POST['notice_key'] ) : '';
 
 		if ( empty( $notice_key ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid notice key.', 'core-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid notice key.', 'wordpress-support-thisismyurl' ) ) );
 		}
 
 		self::dismiss_notice( $notice_key );
 
-		wp_send_json_success( array( 'message' => __( 'Notice dismissed.', 'core-support-thisismyurl' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Notice dismissed.', 'wordpress-support-thisismyurl' ) ) );
 	}
 
 	/**
