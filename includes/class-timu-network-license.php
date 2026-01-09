@@ -6,22 +6,22 @@
  * that key to all sites in the network (or a selected subset).
  *
  * Author:              Christopher Ross
- * Author URI:          https://thisismyurl.com/?source=core-support-thisismyurl
- * Plugin Name:         Core Support - thisismyurl
- * Plugin URI:          https://thisismyurl.com/core-support-thisismyurl/?source=core-support-thisismyurl
- * Donate link:         https://thisismyurl.com/core-support-thisismyurl/#register?source=core-support-thisismyurl
- * Description:         Core licensing and module management for the thisismyurl product suite.
+ * Author URI:          https://thisismyurl.com/?source=wordpress-support-thisismyurl
+ * Plugin Name:         WordPress Support - thisismyurl
+ * Plugin URI:          https://thisismyurl.com/wordpress-support-thisismyurl/?source=wordpress-support-thisismyurl
+ * Donate link:         https://thisismyurl.com/wordpress-support-thisismyurl/#register?source=wordpress-support-thisismyurl
+ * Description:         Foundation plugin licensing and module management for the thisismyurl plugin suite.
  * Tags:                licensing,module-management,multisite,support-dashboard
- * Version:             1.2601.73000
+ * Version:             1.2601.73001
  * Requires at least:   6.4
  * Requires PHP:        8.2
- * Update URI:          https://github.com/thisismyurl/core-support-thisismyurl
- * GitHub Plugin URI:   https://github.com/thisismyurl/core-support-thisismyurl
+ * Update URI:          https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl
+ * GitHub Plugin URI:   https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl
  * Primary Branch:      main
- * Text Domain:         core-support-thisismyurl
+ * Text Domain:         wordpress-support-thisismyurl
  * License:             GPL2
  * License URI:         https://www.gnu.org/licenses/gpl-2.0.html
- * @package TIMU_CORE_SUPPORT
+ * @package TIMU_WORDPRESS_SUPPORT
  */
 
 namespace TIMU\CoreSupport;
