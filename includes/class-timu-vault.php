@@ -2768,7 +2768,7 @@ class TIMU_Vault {
 		}
 
 		// Check if request URI matches vault directory pattern.
-		$vault_path_pattern = '/' . preg_quote( $vault_dirname, '/' ) . '\\/';
+		$vault_path_pattern = '/' . preg_quote( $vault_dirname, '/' ) . '\//';
 		if ( ! preg_match( $vault_path_pattern, $request_uri ) ) {
 			return;
 		}

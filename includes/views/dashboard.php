@@ -26,7 +26,7 @@ $modules_url = is_network_admin()
 
 <div class="wrap timu-dashboard-wrap timu-container" id="timu-dashboard-main" role="main">
 	<a class="timu-skip-link timu-sr-only" href="#timu-dashboard-grid"><?php esc_html_e( 'Skip to dashboard content', 'core-support-thisismyurl' ); ?></a>
-	
+
 	<div style="margin-bottom: var(--timu-space-2xl);">
 		<h1 style="margin-bottom: var(--timu-space-sm);"><?php esc_html_e( 'Support Dashboard', 'core-support-thisismyurl' ); ?></h1>
 		<p class="timu-text-secondary" style="margin: 0;"><?php esc_html_e( 'Operational view of module activity, scheduled tasks, and pending reviews.', 'core-support-thisismyurl' ); ?></p>

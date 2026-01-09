@@ -137,10 +137,9 @@
 	 * @param {Event} e Click event.
 	 */
 	async function handleInstall(e) {
-		e.preventDefault();
-
 		const button = e.target.closest(actionButtons.install);
 		if (!button) return;
+		e.preventDefault();
 
 		const slug = button.dataset.slug;
 		if (!slug) return;
@@ -183,10 +182,9 @@
 	 * @param {Event} e Click event.
 	 */
 	async function handleUpdate(e) {
-		e.preventDefault();
-
 		const button = e.target.closest(actionButtons.update);
 		if (!button) return;
+		e.preventDefault();
 
 		const slug = button.dataset.slug;
 		if (!slug) return;
@@ -229,10 +227,9 @@
 	 * @param {Event} e Click event.
 	 */
 	async function handleActivate(e) {
-		e.preventDefault();
-
 		const button = e.target.closest(actionButtons.activate);
 		if (!button) return;
+		e.preventDefault();
 
 		const slug = button.dataset.slug;
 		if (!slug) return;
@@ -275,10 +272,9 @@
 	 * @param {Event} e Click event.
 	 */
 	async function handleDeactivate(e) {
-		e.preventDefault();
-
 		const button = e.target.closest(actionButtons.deactivate);
 		if (!button) return;
+		e.preventDefault();
 
 		const slug = button.dataset.slug;
 		if (!slug) return;

@@ -16,7 +16,7 @@
 	margin-bottom: 30px;
 	padding: 20px;
 	background: #fff;
-	border-left: 4px solid #2271b1;
+	border-left: 4px solid #123456;
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
 }
 
@@ -28,7 +28,7 @@
 .timu-core-badge {
 	display: inline-block;
 	padding: 4px 8px;
-	background: #2271b1;
+	background: #123456;
 	color: #fff;
 	border-radius: 3px;
 	font-size: 12px;
@@ -93,7 +93,7 @@
 	background: #fff;
 	border: 1px solid #ccd0d4;
 	box-shadow: 0 1px 1px rgba(0,0,0,0.04);
-	border-left: 4px solid #2271b1;
+	border-left: 4px solid #123456;
 }
 
 .timu-stat-icon {
@@ -120,14 +120,14 @@
 
 /* Stat specific accents */
 .timu-stat-enabled .dashicons { color: #00a32a; }
-.timu-stat-available .dashicons { color: #2271b1; }
+.timu-stat-available .dashicons { color: #123456; }
 .timu-stat-update .dashicons { color: #d63638; }
 .timu-stat-hub .dashicons { color: #4b8bf4; }
 .timu-stat-spoke .dashicons { color: #646970; }
 
 .timu-hub-toggle {
 	margin-right: 4px;
-	color: #2271b1;
+	color: #123456;
 }
 
 .timu-hub-toggle .dashicons {
@@ -158,7 +158,7 @@
 .timu-badge-network {
 	background: #b1d5ff;
 	color: #004a99;
-	border: 1px solid #2271b1;
+	border: 1px solid #123456;
 }
 
 /* Module action buttons */
@@ -169,9 +169,9 @@
 	display: inline-block;
 	padding: 5px 10px;
 	margin: 0;
-	background: #2271b1;
+	background: #123456;
 	color: #fff;
-	border: 1px solid #2271b1;
+	border: 1px solid #123456;
 	border-radius: 3px;
 	font-size: 13px;
 	font-weight: 500;
@@ -194,7 +194,7 @@
 .timu-btn-update:focus,
 .timu-activate:focus,
 .timu-deactivate-network:focus {
-	outline: 2px solid #2271b1;
+	outline: 2px solid #123456;
 	outline-offset: 2px;
 }
 
@@ -234,7 +234,7 @@
 
 /* Action link styles */
 .timu-action-link {
-	color: #2271b1;
+	color: #123456;
 	text-decoration: none;
 	font-size: 13px;
 }
@@ -281,9 +281,24 @@
 	height: auto;
 	display: block;
 	padding: 10px;
-	background: #2271b1;
+	background: #123456;
 	color: #fff;
 	text-decoration: none;
+}
+
+/* Keep WordPress admin menu interactive above plugin UI */
+#adminmenumain,
+#adminmenuwrap,
+#adminmenu {
+	position: relative;
+	z-index: 100000;
+}
+
+#wpwrap,
+#wpcontent,
+#wpbody {
+	position: relative;
+	z-index: 0;
 }
 
 /* Dashboard main landmark for screen readers */
@@ -309,6 +324,8 @@ th[scope="col"] {
 .notice[role="status"] {
 	margin: 16px 0;
 }
+
+/* @changelog
  * [1.2601.71815] - 2026-01-07 18:15
  * - Added toggle switch component styles (custom checkbox UI)
  * - Implemented loading state animations with spinner overlay

@@ -130,8 +130,8 @@
 	}
 }
 
-/* ========== Global Styles ========== */
-body.wp-admin {
+/* ========== Global Styles (TIMU Pages Only) ========== */
+.wrap.timu-core-wrap {
 	font-family: var(--timu-font-family);
 	font-size: var(--timu-text-base);
 	line-height: var(--timu-leading-normal);
@@ -191,7 +191,7 @@ p, .timu-text {
 }
 
 /* ========== Buttons ========== */
-.button, .timu-btn {
+.wrap.timu-core-wrap .button, .wrap.timu-core-wrap .timu-btn {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -211,102 +211,102 @@ p, .timu-text {
 	border-color: var(--timu-border-primary);
 }
 
-.button:hover, .timu-btn:hover {
+.wrap.timu-core-wrap .button:hover, .wrap.timu-core-wrap .timu-btn:hover {
 	background-color: var(--timu-bg-tertiary);
 	border-color: var(--timu-border-primary);
 	box-shadow: var(--timu-shadow-xs);
 }
 
-.button:active, .timu-btn:active {
+.wrap.timu-core-wrap .button:active, .wrap.timu-core-wrap .timu-btn:active {
 	background-color: var(--timu-bg-secondary);
 	transform: scale(0.98);
 }
 
-.button:disabled, .timu-btn:disabled {
+.wrap.timu-core-wrap .button:disabled, .wrap.timu-core-wrap .timu-btn:disabled {
 	opacity: 0.5;
 	cursor: not-allowed;
 }
 
 /* Primary Button */
-.button-primary, .timu-btn-primary {
+.wrap.timu-core-wrap .button-primary, .wrap.timu-core-wrap .timu-btn-primary {
 	background-color: var(--timu-accent-primary);
 	color: var(--timu-text-inverted);
 	border-color: var(--timu-accent-primary);
 }
 
-.button-primary:hover, .timu-btn-primary:hover {
+.wrap.timu-core-wrap .button-primary:hover, .wrap.timu-core-wrap .timu-btn-primary:hover {
 	background-color: var(--timu-accent-primary-hover);
 	border-color: var(--timu-accent-primary-hover);
 	box-shadow: var(--timu-shadow-md);
 }
 
-.button-primary:active, .timu-btn-primary:active {
+.wrap.timu-core-wrap .button-primary:active, .wrap.timu-core-wrap .timu-btn-primary:active {
 	background-color: var(--timu-accent-primary-active);
 }
 
 /* Destructive Button */
-.button-destructive, .timu-btn-danger {
+.wrap.timu-core-wrap .button-destructive, .wrap.timu-core-wrap .timu-btn-danger {
 	background-color: var(--timu-accent-danger);
 	color: var(--timu-text-inverted);
 	border-color: var(--timu-accent-danger);
 }
 
-.button-destructive:hover, .timu-btn-danger:hover {
+.wrap.timu-core-wrap .button-destructive:hover, .wrap.timu-core-wrap .timu-btn-danger:hover {
 	background-color: var(--timu-accent-danger-hover);
 	border-color: var(--timu-accent-danger-hover);
 }
 
 /* Button Sizes */
-.timu-btn-small, .timu-btn-sm {
+.wrap.timu-core-wrap .timu-btn-small, .wrap.timu-core-wrap .timu-btn-sm {
 	padding: var(--timu-space-xs) var(--timu-space-sm);
 	font-size: var(--timu-text-xs);
 	min-height: 28px;
 }
 
-.timu-btn-large {
+.wrap.timu-core-wrap .timu-btn-large {
 	padding: var(--timu-space-md) var(--timu-space-lg);
 	font-size: var(--timu-text-base);
 	min-height: 44px;
 }
 
 /* Secondary Button */
-.timu-btn-secondary {
+.wrap.timu-core-wrap .timu-btn-secondary {
 	background-color: var(--timu-bg-secondary);
 	color: var(--timu-text-primary);
 	border-color: var(--timu-border-primary);
 }
 
-.timu-btn-secondary:hover {
+.wrap.timu-core-wrap .timu-btn-secondary:hover {
 	background-color: var(--timu-bg-tertiary);
 	border-color: var(--timu-border-primary);
 	box-shadow: var(--timu-shadow-xs);
 }
 
-.timu-btn-secondary:active {
+.wrap.timu-core-wrap .timu-btn-secondary:active {
 	background-color: var(--timu-bg-secondary);
 	transform: scale(0.98);
 }
 
 /* Destructive Button Alias */
-.timu-btn-destructive {
+.wrap.timu-core-wrap .timu-btn-destructive {
 	background-color: var(--timu-accent-danger);
 	color: var(--timu-text-inverted);
 	border-color: var(--timu-accent-danger);
 }
 
-.timu-btn-destructive:hover {
+.wrap.timu-core-wrap .timu-btn-destructive:hover {
 	background-color: var(--timu-accent-danger-hover);
 	border-color: var(--timu-accent-danger-hover);
 }
 
 /* ========== Forms ========== */
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="number"],
-input[type="search"],
-select,
-textarea {
+.wrap.timu-core-wrap input[type="text"],
+.wrap.timu-core-wrap input[type="email"],
+.wrap.timu-core-wrap input[type="password"],
+.wrap.timu-core-wrap input[type="number"],
+.wrap.timu-core-wrap input[type="search"],
+.wrap.timu-core-wrap select,
+.wrap.timu-core-wrap textarea {
 	font-family: var(--timu-font-family);
 	font-size: var(--timu-text-base);
 	padding: var(--timu-space-sm) var(--timu-space-md);
@@ -318,7 +318,7 @@ textarea {
 	min-height: 36px;
 }
 
-.timu-form-control {
+.wrap.timu-core-wrap .timu-form-control {
 	font-family: var(--timu-font-family);
 	font-size: var(--timu-text-base);
 	padding: var(--timu-space-sm) var(--timu-space-md);
@@ -332,27 +332,27 @@ textarea {
 	font-weight: normal;
 }
 
-.timu-form-control:focus {
+.wrap.timu-core-wrap .timu-form-control:focus {
 	outline: none;
 	border-color: var(--timu-accent-primary);
 	box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.1);
 	background-color: var(--timu-bg-primary);
 }
 
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus,
-input[type="number"]:focus,
-input[type="search"]:focus,
-select:focus,
-textarea:focus {
+.wrap.timu-core-wrap input[type="text"]:focus,
+.wrap.timu-core-wrap input[type="email"]:focus,
+.wrap.timu-core-wrap input[type="password"]:focus,
+.wrap.timu-core-wrap input[type="number"]:focus,
+.wrap.timu-core-wrap input[type="search"]:focus,
+.wrap.timu-core-wrap select:focus,
+.wrap.timu-core-wrap textarea:focus {
 	outline: none;
 	border-color: var(--timu-accent-primary);
 	box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.1);
 	background-color: var(--timu-bg-primary);
 }
 
-textarea {
+.wrap.timu-core-wrap textarea {
 	resize: vertical;
 	min-height: 100px;
 	font-family: var(--timu-font-mono);

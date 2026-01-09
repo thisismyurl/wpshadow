@@ -58,7 +58,7 @@ $license_checked = ! empty( $license_state['checked_at'] ) ? date_i18n( 'M j, Y 
 				<?php echo esc_html( ucfirst( $license_status ) ); ?>
 			</span>
 			<?php if ( 'valid' === $license_status ) : ?>
-				<span class="description" style="margin-left:8px; color:#2271b1;"><?php echo esc_html__( 'Registered for all plugins', 'core-support-thisismyurl' ); ?></span>
+				<span class="description" style="margin-left:8px; color:#123456;"><?php echo esc_html__( 'Registered for all plugins', 'core-support-thisismyurl' ); ?></span>
 			<?php endif; ?>
 		</p>
 		<p class="description"><?php echo esc_html( sprintf( __( 'Last checked: %s', 'core-support-thisismyurl' ), $license_checked ) ); ?></p>
@@ -785,9 +785,6 @@ $license_checked = ! empty( $license_state['checked_at'] ) ? date_i18n( 'M j, Y 
 				</div>
 
 		<?php if ( $logs_pages > 1 ) : ?>
-			<div style="margin-top: 15px;">
-				<?php
-<?php if ( $logs_pages > 1 ) : ?>
 				<div style="margin-top: var(--timu-space-lg); padding-top: var(--timu-space-lg); border-top: 1px solid var(--timu-border-subtle);">
 					<?php
 					$pagination_args = array(

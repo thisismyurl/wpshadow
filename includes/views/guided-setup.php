@@ -49,7 +49,7 @@ $install_url = add_query_arg(
 
 	<div style="display: grid; gap: 20px; margin: 20px 0;" role="region" aria-label="<?php esc_attr_e( 'Recommended modules list', 'core-support-thisismyurl' ); ?>">
 		<?php foreach ( $recommended_modules as $slug => $module ) : ?>
-			<div style="padding: 15px; background: #f5f5f5; border-left: 4px solid #2271b1; border-radius: 4px;">
+			<div style="padding: 15px; background: #f5f5f5; border-left: 4px solid #123456; border-radius: 4px;">
 				<p style="margin: 0 0 10px 0; font-size: 18px; font-weight: bold;">
 					<?php echo esc_html( $module['icon'] ); ?> <?php echo esc_html( $module['name'] ); ?>
 				</p>

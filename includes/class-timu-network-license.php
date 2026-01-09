@@ -24,7 +24,7 @@
  * @package TIMU_CORE_SUPPORT
  */
 
-namespace TIMU\Core;
+namespace TIMU\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

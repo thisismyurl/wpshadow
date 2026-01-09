@@ -1104,68 +1104,90 @@ function timu_core_admin_enqueue( string $hook ): void {
 		return;
 	}
 
+	// TEMP: Load only CSS while debugging menu issue (scripts remain off).
+
+	// Cache-bust using file modification times to avoid stale admin assets.
+	$ui_system_file   = TIMU_CORE_PATH . 'assets/css/timu-ui-system.css';
+	$admin_css_file   = TIMU_CORE_PATH . 'assets/css/admin.css';
+	$admin_js_file    = TIMU_CORE_PATH . 'assets/js/admin.js';
+	$actions_js_file  = TIMU_CORE_PATH . 'assets/js/module-actions.js';
+
+	$ui_system_ver  = file_exists( $ui_system_file ) ? TIMU_CORE_VERSION . '.' . filemtime( $ui_system_file ) : TIMU_CORE_VERSION;
+	$admin_css_ver  = file_exists( $admin_css_file ) ? TIMU_CORE_VERSION . '.' . filemtime( $admin_css_file ) : TIMU_CORE_VERSION;
+	$admin_js_ver   = file_exists( $admin_js_file ) ? TIMU_CORE_VERSION . '.' . filemtime( $admin_js_file ) : TIMU_CORE_VERSION;
+	$actions_js_ver = file_exists( $actions_js_file ) ? TIMU_CORE_VERSION . '.' . filemtime( $actions_js_file ) : TIMU_CORE_VERSION;
+
+	$load_admin_js   = true;
+	$load_actions_js = true;
+
 	// Enqueue modern design system (shared across all TIMU plugins).
 	wp_enqueue_style(
 		'timu-ui-system',
 		TIMU_CORE_URL . 'assets/css/timu-ui-system.css',
 		array(),
-		TIMU_CORE_VERSION
+		$ui_system_ver
 	);
 
 	wp_enqueue_style(
 		'timu-core-admin',
 		TIMU_CORE_URL . 'assets/css/admin.css',
 		array( 'timu-ui-system' ),
-		TIMU_CORE_VERSION
+		$admin_css_ver
 	);
 
-	wp_enqueue_script(
-		'timu-core-admin',
-		TIMU_CORE_URL . 'assets/js/admin.js',
-		array( 'jquery' ),
-		TIMU_CORE_VERSION,
-		true
-	);
 
-	// Localize script for AJAX and i18n.
-	wp_localize_script(
-		'timu-core-admin',
-		'timuAdminData',
-		array(
-			'toggleNonce' => wp_create_nonce( 'timu_toggle_module' ),
-			'actionNonce' => wp_create_nonce( 'timu_module_action' ),
-			'i18n'        => array(
-				'enabled'      => __( 'Enabled', 'core-support-thisismyurl' ),
-				'disabled'     => __( 'Disabled', 'core-support-thisismyurl' ),
-				'ajaxError'    => __( 'An error occurred. Please try again.', 'core-support-thisismyurl' ),
-				'noResults'    => __( 'No modules match this filter.', 'core-support-thisismyurl' ),
-				'installFirst' => __( 'Install the module before enabling it.', 'core-support-thisismyurl' ),
-				'installing'   => __( 'Installing...', 'core-support-thisismyurl' ),
-				'updating'     => __( 'Updating...', 'core-support-thisismyurl' ),
-				'install'      => __( 'Install', 'core-support-thisismyurl' ),
-				'update'       => __( 'Update', 'core-support-thisismyurl' ),
-			),
-		)
-	);
+	if ( $load_admin_js ) {
+		wp_enqueue_script(
+			'timu-core-admin',
+			TIMU_CORE_URL . 'assets/js/admin.js',
+			array( 'jquery' ),
+			$admin_js_ver,
+			true
+		);
 
-	// Enqueue module actions script (install/update/activate).
-	wp_enqueue_script(
-		'timu-module-actions',
-		TIMU_CORE_URL . 'assets/js/module-actions.js',
-		array(),
-		TIMU_CORE_VERSION,
-		true
-	);
+		// Localize script for AJAX and i18n.
+		wp_localize_script(
+			'timu-core-admin',
+			'timuAdminData',
+			array(
+				'toggleNonce' => wp_create_nonce( 'timu_toggle_module' ),
+				'actionNonce' => wp_create_nonce( 'timu_module_action' ),
+				'i18n'        => array(
+					'enabled'      => __( 'Enabled', 'core-support-thisismyurl' ),
+					'disabled'     => __( 'Disabled', 'core-support-thisismyurl' ),
+					'ajaxError'    => __( 'An error occurred. Please try again.', 'core-support-thisismyurl' ),
+					'noResults'    => __( 'No modules match this filter.', 'core-support-thisismyurl' ),
+					'installFirst' => __( 'Install the module before enabling it.', 'core-support-thisismyurl' ),
+					'installing'   => __( 'Installing...', 'core-support-thisismyurl' ),
+					'updating'     => __( 'Updating...', 'core-support-thisismyurl' ),
+					'install'      => __( 'Install', 'core-support-thisismyurl' ),
+					'update'       => __( 'Update', 'core-support-thisismyurl' ),
+				),
+			)
+		);
 
-	// Localize module actions script with nonce and AJAX URL.
-	wp_localize_script(
-		'timu-module-actions',
-		'timuModuleActions',
-		array(
-			'ajaxurl' => admin_url( 'admin-ajax.php' ),
-			'nonce'   => wp_create_nonce( 'timu_module_actions' ),
-		)
-	);
+	}
+
+	if ( $load_actions_js ) {
+		// Enqueue module actions script (install/update/activate).
+		wp_enqueue_script(
+			'timu-module-actions',
+			TIMU_CORE_URL . 'assets/js/module-actions.js',
+			array(),
+			$actions_js_ver,
+			true
+		);
+
+		// Localize module actions script with nonce and AJAX URL.
+		wp_localize_script(
+			'timu-module-actions',
+			'timuModuleActions',
+			array(
+				'ajaxurl' => admin_url( 'admin-ajax.php' ),
+				'nonce'   => wp_create_nonce( 'timu_module_actions' ),
+			)
+		);
+	}
 }
 
 /**
