@@ -25,66 +25,66 @@ $modules_url = is_network_admin()
 ?>
 
 <div class="wrap timu-dashboard-wrap timu-container" id="timu-dashboard-main" role="main">
-	<a class="timu-skip-link timu-sr-only" href="#timu-dashboard-grid"><?php esc_html_e( 'Skip to dashboard content', 'core-support-thisismyurl' ); ?></a>
+	<a class="timu-skip-link timu-sr-only" href="#timu-dashboard-grid"><?php esc_html_e( 'Skip to dashboard content', 'wordpress-support-thisismyurl' ); ?></a>
 
 	<div style="margin-bottom: var(--timu-space-2xl);">
-		<h1 style="margin-bottom: var(--timu-space-sm);"><?php esc_html_e( 'Support Dashboard', 'core-support-thisismyurl' ); ?></h1>
-		<p class="timu-text-secondary" style="margin: 0;"><?php esc_html_e( 'Operational view of module activity, scheduled tasks, and pending reviews.', 'core-support-thisismyurl' ); ?></p>
+		<h1 style="margin-bottom: var(--timu-space-sm);"><?php esc_html_e( 'Support Dashboard', 'wordpress-support-thisismyurl' ); ?></h1>
+		<p class="timu-text-secondary" style="margin: 0;"><?php esc_html_e( 'Operational view of module activity, scheduled tasks, and pending reviews.', 'wordpress-support-thisismyurl' ); ?></p>
 	</div>
 
 	<!-- Stats Grid -->
 	<div class="timu-grid timu-grid-3" style="margin-bottom: var(--timu-space-2xl);">
-		<div class="timu-card" role="group" aria-label="<?php esc_attr_e( 'Total modules', 'core-support-thisismyurl' ); ?>">
+		<div class="timu-card" role="group" aria-label="<?php esc_attr_e( 'Total modules', 'wordpress-support-thisismyurl' ); ?>">
 			<div style="display: flex; align-items: center; gap: var(--timu-space-md); margin-bottom: var(--timu-space-md);">
 				<span class="dashicons dashicons-admin-plugins" style="font-size: 32px; color: var(--timu-accent-primary); width: auto; height: auto;"></span>
 				<div>
 					<div style="font-size: var(--timu-text-2xl); font-weight: var(--timu-font-bold); color: var(--timu-text-primary);"><?php echo esc_html( number_format_i18n( (int) ( $total_count ?? 0 ) ) ); ?></div>
-					<div style="font-size: var(--timu-text-sm); color: var(--timu-text-muted);"><?php esc_html_e( 'Total', 'core-support-thisismyurl' ); ?></div>
+					<div style="font-size: var(--timu-text-sm); color: var(--timu-text-muted);"><?php esc_html_e( 'Total', 'wordpress-support-thisismyurl' ); ?></div>
 				</div>
 			</div>
 		</div>
-		<div class="timu-card" role="group" aria-label="<?php esc_attr_e( 'Enabled modules', 'core-support-thisismyurl' ); ?>">
+		<div class="timu-card" role="group" aria-label="<?php esc_attr_e( 'Enabled modules', 'wordpress-support-thisismyurl' ); ?>">
 			<div style="display: flex; align-items: center; gap: var(--timu-space-md); margin-bottom: var(--timu-space-md);">
 				<span class="dashicons dashicons-yes-alt" style="font-size: 32px; color: var(--timu-accent-success); width: auto; height: auto;"></span>
 				<div>
 					<div style="font-size: var(--timu-text-2xl); font-weight: var(--timu-font-bold); color: var(--timu-text-primary);"><?php echo esc_html( number_format_i18n( (int) ( $enabled_count ?? 0 ) ) ); ?></div>
-					<div style="font-size: var(--timu-text-sm); color: var(--timu-text-muted);"><?php esc_html_e( 'Enabled', 'core-support-thisismyurl' ); ?></div>
+					<div style="font-size: var(--timu-text-sm); color: var(--timu-text-muted);"><?php esc_html_e( 'Enabled', 'wordpress-support-thisismyurl' ); ?></div>
 				</div>
 			</div>
 		</div>
-		<div class="timu-card" role="group" aria-label="<?php esc_attr_e( 'Available modules', 'core-support-thisismyurl' ); ?>">
+		<div class="timu-card" role="group" aria-label="<?php esc_attr_e( 'Available modules', 'wordpress-support-thisismyurl' ); ?>">
 			<div style="display: flex; align-items: center; gap: var(--timu-space-md); margin-bottom: var(--timu-space-md);">
 				<span class="dashicons dashicons-plus-alt" style="font-size: 32px; color: var(--timu-accent-info); width: auto; height: auto;"></span>
 				<div>
 					<div style="font-size: var(--timu-text-2xl); font-weight: var(--timu-font-bold); color: var(--timu-text-primary);"><?php echo esc_html( number_format_i18n( (int) ( $available_count ?? 0 ) ) ); ?></div>
-					<div style="font-size: var(--timu-text-sm); color: var(--timu-text-muted);"><?php esc_html_e( 'Available', 'core-support-thisismyurl' ); ?></div>
+					<div style="font-size: var(--timu-text-sm); color: var(--timu-text-muted);"><?php esc_html_e( 'Available', 'wordpress-support-thisismyurl' ); ?></div>
 				</div>
 			</div>
 		</div>
-		<div class="timu-card" role="group" aria-label="<?php esc_attr_e( 'Updates available', 'core-support-thisismyurl' ); ?>">
+		<div class="timu-card" role="group" aria-label="<?php esc_attr_e( 'Updates available', 'wordpress-support-thisismyurl' ); ?>">
 			<div style="display: flex; align-items: center; gap: var(--timu-space-md); margin-bottom: var(--timu-space-md);">
 				<span class="dashicons dashicons-update" style="font-size: 32px; color: var(--timu-accent-warning); width: auto; height: auto;"></span>
 				<div>
 					<div style="font-size: var(--timu-text-2xl); font-weight: var(--timu-font-bold); color: var(--timu-text-primary);"><?php echo esc_html( number_format_i18n( (int) ( $updates_count ?? 0 ) ) ); ?></div>
-					<div style="font-size: var(--timu-text-sm); color: var(--timu-text-muted);"><?php esc_html_e( 'Updates', 'core-support-thisismyurl' ); ?></div>
+					<div style="font-size: var(--timu-text-sm); color: var(--timu-text-muted);"><?php esc_html_e( 'Updates', 'wordpress-support-thisismyurl' ); ?></div>
 				</div>
 			</div>
 		</div>
-		<div class="timu-card" role="group" aria-label="<?php esc_attr_e( 'Hubs', 'core-support-thisismyurl' ); ?>">
+		<div class="timu-card" role="group" aria-label="<?php esc_attr_e( 'Hubs', 'wordpress-support-thisismyurl' ); ?>">
 			<div style="display: flex; align-items: center; gap: var(--timu-space-md); margin-bottom: var(--timu-space-md);">
 				<span class="dashicons dashicons-networking" style="font-size: 32px; color: var(--timu-accent-primary); width: auto; height: auto;"></span>
 				<div>
 					<div style="font-size: var(--timu-text-2xl); font-weight: var(--timu-font-bold); color: var(--timu-text-primary);"><?php echo esc_html( number_format_i18n( (int) ( $hubs_count ?? count( $hub_modules ) ) ) ); ?></div>
-					<div style="font-size: var(--timu-text-sm); color: var(--timu-text-muted);"><?php esc_html_e( 'Hubs', 'core-support-thisismyurl' ); ?></div>
+					<div style="font-size: var(--timu-text-sm); color: var(--timu-text-muted);"><?php esc_html_e( 'Hubs', 'wordpress-support-thisismyurl' ); ?></div>
 				</div>
 			</div>
 		</div>
-		<div class="timu-card" role="group" aria-label="<?php esc_attr_e( 'Spokes', 'core-support-thisismyurl' ); ?>">
+		<div class="timu-card" role="group" aria-label="<?php esc_attr_e( 'Spokes', 'wordpress-support-thisismyurl' ); ?>">
 			<div style="display: flex; align-items: center; gap: var(--timu-space-md); margin-bottom: var(--timu-space-md);">
 				<span class="dashicons dashicons-admin-tools" style="font-size: 32px; color: var(--timu-accent-info); width: auto; height: auto;"></span>
 				<div>
 					<div style="font-size: var(--timu-text-2xl); font-weight: var(--timu-font-bold); color: var(--timu-text-primary);"><?php echo esc_html( number_format_i18n( (int) ( $spokes_count ?? count( $spoke_modules ) ) ) ); ?></div>
-					<div style="font-size: var(--timu-text-sm); color: var(--timu-text-muted);"><?php esc_html_e( 'Spokes', 'core-support-thisismyurl' ); ?></div>
+					<div style="font-size: var(--timu-text-sm); color: var(--timu-text-muted);"><?php esc_html_e( 'Spokes', 'wordpress-support-thisismyurl' ); ?></div>
 				</div>
 			</div>
 		</div>
@@ -93,22 +93,22 @@ $modules_url = is_network_admin()
 	<div class="timu-grid timu-grid-2" id="timu-dashboard-grid">
 		<div class="timu-card">
 			<div class="timu-card-header">
-				<h2 style="margin: 0;"><?php esc_html_e( 'Activity Log', 'core-support-thisismyurl' ); ?></h2>
+				<h2 style="margin: 0;"><?php esc_html_e( 'Activity Log', 'wordpress-support-thisismyurl' ); ?></h2>
 			</div>
 			<div class="timu-card-body">
-				<p style="margin: 0 0 var(--timu-space-md) 0; font-size: var(--timu-text-sm); color: var(--timu-text-secondary);"><?php esc_html_e( 'Recent module installs, updates, toggles, and Vault events.', 'core-support-thisismyurl' ); ?></p>
+				<p style="margin: 0 0 var(--timu-space-md) 0; font-size: var(--timu-text-sm); color: var(--timu-text-secondary);"><?php esc_html_e( 'Recent module installs, updates, toggles, and Vault events.', 'wordpress-support-thisismyurl' ); ?></p>
 				<?php if ( ! empty( $activity_logs ) ) : ?>
 					<div class="timu-table-responsive">
 						<table class="timu-table">
-							<caption class="timu-sr-only"><?php esc_html_e( 'Recent activity entries for the Support Dashboard.', 'core-support-thisismyurl' ); ?></caption>
+							<caption class="timu-sr-only"><?php esc_html_e( 'Recent activity entries for the Support Dashboard.', 'wordpress-support-thisismyurl' ); ?></caption>
 							<thead>
 							<tr>
-								<th scope="col"><?php esc_html_e( 'Time', 'core-support-thisismyurl' ); ?></th>
-								<th scope="col"><?php esc_html_e( 'Level', 'core-support-thisismyurl' ); ?></th>
-								<th scope="col"><?php esc_html_e( 'Task', 'core-support-thisismyurl' ); ?></th>
-								<th scope="col"><?php esc_html_e( 'File', 'core-support-thisismyurl' ); ?></th>
-								<th scope="col"><?php esc_html_e( 'User', 'core-support-thisismyurl' ); ?></th>
-								<th scope="col"><?php esc_html_e( 'Details', 'core-support-thisismyurl' ); ?></th>
+								<th scope="col"><?php esc_html_e( 'Time', 'wordpress-support-thisismyurl' ); ?></th>
+								<th scope="col"><?php esc_html_e( 'Level', 'wordpress-support-thisismyurl' ); ?></th>
+								<th scope="col"><?php esc_html_e( 'Task', 'wordpress-support-thisismyurl' ); ?></th>
+								<th scope="col"><?php esc_html_e( 'File', 'wordpress-support-thisismyurl' ); ?></th>
+								<th scope="col"><?php esc_html_e( 'User', 'wordpress-support-thisismyurl' ); ?></th>
+								<th scope="col"><?php esc_html_e( 'Details', 'wordpress-support-thisismyurl' ); ?></th>
 							</tr>
 							</thead>
 							<tbody>
@@ -149,37 +149,37 @@ $modules_url = is_network_admin()
 					</div>
 					<div style="margin-top: var(--timu-space-md); padding-top: var(--timu-space-md); border-top: 1px solid var(--timu-border-subtle);">
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=timu-support-settings#timu-vault-logs' ) ); ?>" class="timu-btn timu-btn-secondary timu-btn-sm">
-							<?php esc_html_e( 'View Full Log History →', 'core-support-thisismyurl' ); ?>
+							<?php esc_html_e( 'View Full Log History →', 'wordpress-support-thisismyurl' ); ?>
 						</a>
 					</div>
 				<?php else : ?>
-					<p style="color: var(--timu-text-muted); font-style: italic; margin: 0;"><?php esc_html_e( 'No recent activity yet.', 'core-support-thisismyurl' ); ?></p>
+					<p style="color: var(--timu-text-muted); font-style: italic; margin: 0;"><?php esc_html_e( 'No recent activity yet.', 'wordpress-support-thisismyurl' ); ?></p>
 				<?php endif; ?>
 			</div>
 		</div>
 
 		<div class="timu-card">
 			<div class="timu-card-header">
-				<h2 style="margin: 0;"><?php esc_html_e( 'Scheduled Tasks', 'core-support-thisismyurl' ); ?></h2>
+				<h2 style="margin: 0;"><?php esc_html_e( 'Scheduled Tasks', 'wordpress-support-thisismyurl' ); ?></h2>
 			</div>
 			<div class="timu-card-body">
-				<p style="margin: 0 0 var(--timu-space-md) 0; font-size: var(--timu-text-sm); color: var(--timu-text-secondary);"><?php esc_html_e( 'Upcoming suite jobs with their next run window.', 'core-support-thisismyurl' ); ?></p>
+				<p style="margin: 0 0 var(--timu-space-md) 0; font-size: var(--timu-text-sm); color: var(--timu-text-secondary);"><?php esc_html_e( 'Upcoming suite jobs with their next run window.', 'wordpress-support-thisismyurl' ); ?></p>
 				<?php if ( isset( $_GET['timu_run_now'] ) ) : ?>
 					<div class="timu-alert timu-alert-success" role="status" aria-live="polite" style="margin-bottom: var(--timu-space-md);">
-						<p style="margin: 0;"><?php esc_html_e( 'Task started immediately.', 'core-support-thisismyurl' ); ?></p>
+						<p style="margin: 0;"><?php esc_html_e( 'Task started immediately.', 'wordpress-support-thisismyurl' ); ?></p>
 					</div>
 				<?php endif; ?>
 				<?php if ( ! empty( $schedule_snapshot ) ) : ?>
 					<div class="timu-table-responsive">
 						<table class="timu-table">
-							<caption class="timu-sr-only"><?php esc_html_e( 'Scheduled suite tasks with next and last run times.', 'core-support-thisismyurl' ); ?></caption>
+							<caption class="timu-sr-only"><?php esc_html_e( 'Scheduled suite tasks with next and last run times.', 'wordpress-support-thisismyurl' ); ?></caption>
 							<thead>
 							<tr>
-								<th scope="col"><?php esc_html_e( 'Task', 'core-support-thisismyurl' ); ?></th>
-								<th scope="col"><?php esc_html_e( 'Next run', 'core-support-thisismyurl' ); ?></th>
-								<th scope="col"><?php esc_html_e( 'Last run', 'core-support-thisismyurl' ); ?></th>
-								<th scope="col"><?php esc_html_e( 'Status', 'core-support-thisismyurl' ); ?></th>
-								<th scope="col"><?php esc_html_e( 'Action', 'core-support-thisismyurl' ); ?></th>
+								<th scope="col"><?php esc_html_e( 'Task', 'wordpress-support-thisismyurl' ); ?></th>
+								<th scope="col"><?php esc_html_e( 'Next run', 'wordpress-support-thisismyurl' ); ?></th>
+								<th scope="col"><?php esc_html_e( 'Last run', 'wordpress-support-thisismyurl' ); ?></th>
+								<th scope="col"><?php esc_html_e( 'Status', 'wordpress-support-thisismyurl' ); ?></th>
+								<th scope="col"><?php esc_html_e( 'Action', 'wordpress-support-thisismyurl' ); ?></th>
 							</tr>
 							</thead>
 							<tbody>
@@ -187,8 +187,8 @@ $modules_url = is_network_admin()
 								<?php
 								$next_run = isset( $task_data['next_run'] ) ? (int) $task_data['next_run'] : 0;
 								$last_run = isset( $task_data['last_run'] ) ? (int) $task_data['last_run'] : 0;
-								$status   = $task_data['queue_state'] ?? __( 'Scheduled', 'core-support-thisismyurl' );
-								$next_txt = $next_run ? date_i18n( 'M j, Y g:i a', $next_run ) : __( 'Not scheduled', 'core-support-thisismyurl' );
+								$status   = $task_data['queue_state'] ?? __( 'Scheduled', 'wordpress-support-thisismyurl' );
+								$next_txt = $next_run ? date_i18n( 'M j, Y g:i a', $next_run ) : __( 'Not scheduled', 'wordpress-support-thisismyurl' );
 								$last_txt = $last_run ? date_i18n( 'M j, Y g:i a', $last_run ) : '—';
 								$hook     = $task_data['hook'] ?? '';
 								$task_lbl = isset( $task_data['label'] ) ? wp_strip_all_tags( (string) $task_data['label'] ) : ucfirst( $task_key );
@@ -204,7 +204,7 @@ $modules_url = is_network_admin()
 												<?php wp_nonce_field( 'timu_run_task_now', 'nonce' ); ?>
 												<input type="hidden" name="action" value="timu_run_task_now" />
 												<input type="hidden" name="hook" value="<?php echo esc_attr( $hook ); ?>" />
-												<button type="submit" class="timu-btn timu-btn-secondary timu-btn-sm" aria-label="<?php echo esc_attr( sprintf( __( 'Run %s now', 'core-support-thisismyurl' ), $task_lbl ) ); ?>"><?php esc_html_e( 'Run now', 'core-support-thisismyurl' ); ?></button>
+												<button type="submit" class="timu-btn timu-btn-secondary timu-btn-sm" aria-label="<?php echo esc_attr( sprintf( __( 'Run %s now', 'wordpress-support-thisismyurl' ), $task_lbl ) ); ?>"><?php esc_html_e( 'Run now', 'wordpress-support-thisismyurl' ); ?></button>
 											</form>
 										<?php else : ?>
 											—
@@ -216,7 +216,7 @@ $modules_url = is_network_admin()
 						</table>
 					</div>
 				<?php else : ?>
-					<p style="color: var(--timu-text-muted); font-style: italic; margin: 0;"><?php esc_html_e( 'No scheduled tasks found.', 'core-support-thisismyurl' ); ?></p>
+					<p style="color: var(--timu-text-muted); font-style: italic; margin: 0;"><?php esc_html_e( 'No scheduled tasks found.', 'wordpress-support-thisismyurl' ); ?></p>
 				<?php endif; ?>
 			</div>
 		</div>
@@ -224,21 +224,21 @@ $modules_url = is_network_admin()
 
 	<div class="timu-card">
 		<div class="timu-card-header">
-			<h2 style="margin: 0;"><?php esc_html_e( 'Pending Contributor Uploads', 'core-support-thisismyurl' ); ?></h2>
+			<h2 style="margin: 0;"><?php esc_html_e( 'Pending Contributor Uploads', 'wordpress-support-thisismyurl' ); ?></h2>
 		</div>
 		<div class="timu-card-body">
-			<p style="margin: 0 0 var(--timu-space-md) 0; font-size: var(--timu-text-sm); color: var(--timu-text-secondary);"><?php esc_html_e( 'Uploads from contributors are optimized by default and held for Editor+ review.', 'core-support-thisismyurl' ); ?></p>
+			<p style="margin: 0 0 var(--timu-space-md) 0; font-size: var(--timu-text-sm); color: var(--timu-text-secondary);"><?php esc_html_e( 'Uploads from contributors are optimized by default and held for Editor+ review.', 'wordpress-support-thisismyurl' ); ?></p>
 			<?php if ( ! empty( $pending_uploads ) ) : ?>
 				<div class="timu-table-responsive">
 					<table class="timu-table">
-						<caption class="timu-sr-only"><?php esc_html_e( 'Pending contributor uploads awaiting review.', 'core-support-thisismyurl' ); ?></caption>
+						<caption class="timu-sr-only"><?php esc_html_e( 'Pending contributor uploads awaiting review.', 'wordpress-support-thisismyurl' ); ?></caption>
 						<thead>
 						<tr>
-							<th scope="col"><?php esc_html_e( 'File', 'core-support-thisismyurl' ); ?></th>
-							<th scope="col"><?php esc_html_e( 'Uploaded by', 'core-support-thisismyurl' ); ?></th>
-							<th scope="col"><?php esc_html_e( 'Uploaded at', 'core-support-thisismyurl' ); ?></th>
-							<th scope="col"><?php esc_html_e( 'Optimized', 'core-support-thisismyurl' ); ?></th>
-							<th scope="col"><?php esc_html_e( 'Action', 'core-support-thisismyurl' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'File', 'wordpress-support-thisismyurl' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Uploaded by', 'wordpress-support-thisismyurl' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Uploaded at', 'wordpress-support-thisismyurl' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Optimized', 'wordpress-support-thisismyurl' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Action', 'wordpress-support-thisismyurl' ); ?></th>
 						</tr>
 						</thead>
 						<tbody>
@@ -248,12 +248,12 @@ $modules_url = is_network_admin()
 							?>
 							<tr>
 								<td><?php echo esc_html( $item['file'] ?: $item['title'] ); ?></td>
-								<td><?php echo esc_html( $item['user'] ?: __( 'Unknown', 'core-support-thisismyurl' ) ); ?></td>
+								<td><?php echo esc_html( $item['user'] ?: __( 'Unknown', 'wordpress-support-thisismyurl' ) ); ?></td>
 								<td><?php echo esc_html( $uploaded ); ?></td>
-								<td><?php echo ! empty( $item['optimized'] ) ? '<span class="timu-badge timu-badge-success">' . esc_html__( 'Yes', 'core-support-thisismyurl' ) . '</span>' : '<span class="timu-badge">' . esc_html__( 'No', 'core-support-thisismyurl' ) . '</span>'; ?></td>
+								<td><?php echo ! empty( $item['optimized'] ) ? '<span class="timu-badge timu-badge-success">' . esc_html__( 'Yes', 'wordpress-support-thisismyurl' ) . '</span>' : '<span class="timu-badge">' . esc_html__( 'No', 'wordpress-support-thisismyurl' ) . '</span>'; ?></td>
 								<td>
 									<?php if ( ! empty( $item['edit_link'] ) ) : ?>
-										<a class="timu-btn timu-btn-primary timu-btn-sm" href="<?php echo esc_url( $item['edit_link'] ); ?>"><?php esc_html_e( 'Review', 'core-support-thisismyurl' ); ?></a>
+										<a class="timu-btn timu-btn-primary timu-btn-sm" href="<?php echo esc_url( $item['edit_link'] ); ?>"><?php esc_html_e( 'Review', 'wordpress-support-thisismyurl' ); ?></a>
 									<?php else : ?>
 										—
 									<?php endif; ?>
@@ -264,7 +264,7 @@ $modules_url = is_network_admin()
 					</table>
 				</div>
 			<?php else : ?>
-				<p style="color: var(--timu-text-muted); font-style: italic; margin: 0;"><?php esc_html_e( 'No pending contributor uploads.', 'core-support-thisismyurl' ); ?></p>
+				<p style="color: var(--timu-text-muted); font-style: italic; margin: 0;"><?php esc_html_e( 'No pending contributor uploads.', 'wordpress-support-thisismyurl' ); ?></p>
 			<?php endif; ?>
 		</div>
 	</div>

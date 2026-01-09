@@ -103,13 +103,13 @@ class TIMU_Module_Registry {
 
 		return array(
 			'catalog_refresh' => array(
-				'label'    => __( 'Catalog refresh', 'core-support-thisismyurl' ),
+				'label'    => __( 'Catalog refresh', 'wordpress-support-thisismyurl' ),
 				'hook'     => 'timu_refresh_modules',
 				'next_run' => $next_refresh,
 				'last_run' => $last_refresh,
 			),
 			'vault_queue'     => array(
-				'label'       => __( 'Vault queue runner', 'core-support-thisismyurl' ),
+				'label'       => __( 'Vault queue runner', 'wordpress-support-thisismyurl' ),
 				'hook'        => 'timu_vault_queue_runner',
 				'next_run'    => $next_vault,
 				'last_run'    => $queue_last,

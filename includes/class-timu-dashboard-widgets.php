@@ -27,7 +27,7 @@ class TIMU_Dashboard_Widgets {
 	public static function render_core_dashboard(): void {
 		?>
 		<div class="wrap timu-dashboard">
-			<h1><?php echo esc_html__( 'Support Dashboard', 'core-support-thisismyurl' ); ?></h1>
+			<h1><?php echo esc_html__( 'Support Dashboard', 'wordpress-support-thisismyurl' ); ?></h1>
 
 			<div class="timu-dashboard-widgets-wrap">
 				<div class="timu-dashboard-col-container">
@@ -56,7 +56,7 @@ class TIMU_Dashboard_Widgets {
 		$hub_name = ucfirst( $hub_id );
 		?>
 		<div class="wrap timu-dashboard">
-			<h1><?php echo esc_html( sprintf( __( '%s Hub Dashboard', 'core-support-thisismyurl' ), $hub_name ) ); ?></h1>
+			<h1><?php echo esc_html( sprintf( __( '%s Hub Dashboard', 'wordpress-support-thisismyurl' ), $hub_name ) ); ?></h1>
 
 			<div class="timu-dashboard-widgets-wrap">
 				<div class="timu-dashboard-col-container">
@@ -86,7 +86,7 @@ class TIMU_Dashboard_Widgets {
 		$spoke_name = strtoupper( $spoke_id );
 		?>
 		<div class="wrap timu-dashboard">
-			<h1><?php echo esc_html( sprintf( __( '%s Support Dashboard', 'core-support-thisismyurl' ), $spoke_name ) ); ?></h1>
+			<h1><?php echo esc_html( sprintf( __( '%s Support Dashboard', 'wordpress-support-thisismyurl' ), $spoke_name ) ); ?></h1>
 
 			<div class="timu-dashboard-widgets-wrap">
 				<div class="timu-dashboard-col-container">
@@ -150,13 +150,13 @@ class TIMU_Dashboard_Widgets {
 		// Color code based on health.
 		if ( $health >= 90 ) {
 			$color_class = 'timu-health-good';
-			$label       = __( 'Good', 'core-support-thisismyurl' );
+			$label       = __( 'Good', 'wordpress-support-thisismyurl' );
 		} elseif ( $health >= 70 ) {
 			$color_class = 'timu-health-warning';
-			$label       = __( 'Warning', 'core-support-thisismyurl' );
+			$label       = __( 'Warning', 'wordpress-support-thisismyurl' );
 		} else {
 			$color_class = 'timu-health-critical';
-			$label       = __( 'Critical', 'core-support-thisismyurl' );
+			$label       = __( 'Critical', 'wordpress-support-thisismyurl' );
 		}
 		?>
 		<div class="timu-widget-content">
@@ -165,9 +165,9 @@ class TIMU_Dashboard_Widgets {
 				<div class="timu-health-label"><?php echo esc_html( $label ); ?></div>
 			</div>
 			<ul class="timu-health-checks">
-					<li><span class="dashicons dashicons-yes"></span> <?php echo esc_html( sprintf( __( '%d Active Modules', 'core-support-thisismyurl' ), $active ) ); ?></li>
+					<li><span class="dashicons dashicons-yes"></span> <?php echo esc_html( sprintf( __( '%d Active Modules', 'wordpress-support-thisismyurl' ), $active ) ); ?></li>
 				<?php if ( $inactive > 0 ) : ?>
-					<li class="warning"><span class="dashicons dashicons-warning"></span> <?php echo esc_html( sprintf( __( '%d Inactive Modules', 'core-support-thisismyurl' ), $inactive ) ); ?></li>
+					<li class="warning"><span class="dashicons dashicons-warning"></span> <?php echo esc_html( sprintf( __( '%d Inactive Modules', 'wordpress-support-thisismyurl' ), $inactive ) ); ?></li>
 				<?php endif; ?>
 			</ul>
 		</div>
@@ -183,10 +183,10 @@ class TIMU_Dashboard_Widgets {
 		?>
 		<div class="timu-widget-content">
 			<ul class="timu-stats-list">
-					<li><span class="dashicons dashicons-admin-plugins"></span> <?php echo esc_html( sprintf( __( '%d Total Modules', 'core-support-thisismyurl' ), $total ) ); ?></li>
-					<li><span class="dashicons dashicons-yes"></span> <?php echo esc_html( sprintf( __( '%d Active', 'core-support-thisismyurl' ), $active ) ); ?></li>
-					<li><span class="dashicons dashicons-networking"></span> <?php echo esc_html( sprintf( __( '%d Hubs', 'core-support-thisismyurl' ), $hubs ) ); ?></li>
-				<li><span class="dashicons dashicons-hammer"></span> <?php echo esc_html( sprintf( __( '%d Spokes', 'core-support-thisismyurl' ), $spokes ) ); ?></li>
+					<li><span class="dashicons dashicons-admin-plugins"></span> <?php echo esc_html( sprintf( __( '%d Total Modules', 'wordpress-support-thisismyurl' ), $total ) ); ?></li>
+					<li><span class="dashicons dashicons-yes"></span> <?php echo esc_html( sprintf( __( '%d Active', 'wordpress-support-thisismyurl' ), $active ) ); ?></li>
+					<li><span class="dashicons dashicons-networking"></span> <?php echo esc_html( sprintf( __( '%d Hubs', 'wordpress-support-thisismyurl' ), $hubs ) ); ?></li>
+				<li><span class="dashicons dashicons-hammer"></span> <?php echo esc_html( sprintf( __( '%d Spokes', 'wordpress-support-thisismyurl' ), $spokes ) ); ?></li>
 			</ul>
 		</div>
 		<?php
@@ -195,7 +195,7 @@ class TIMU_Dashboard_Widgets {
 	private static function widget_activity(): void {
 		?>
 		<div class="timu-widget-content">
-			<p><em><?php esc_html_e( 'Activity log integration coming soon.', 'core-support-thisismyurl' ); ?></em></p>
+			<p><em><?php esc_html_e( 'Activity log integration coming soon.', 'wordpress-support-thisismyurl' ); ?></em></p>
 		</div>
 		<?php
 	}
@@ -203,7 +203,7 @@ class TIMU_Dashboard_Widgets {
 	private static function widget_scheduled_tasks(): void {
 		?>
 		<div class="timu-widget-content">
-			<p><em><?php esc_html_e( 'No scheduled tasks configured.', 'core-support-thisismyurl' ); ?></em></p>
+			<p><em><?php esc_html_e( 'No scheduled tasks configured.', 'wordpress-support-thisismyurl' ); ?></em></p>
 		</div>
 		<?php
 	}
@@ -235,7 +235,7 @@ class TIMU_Dashboard_Widgets {
 		?>
 		<div class="timu-widget-content">
 			<?php if ( empty( $next_level_modules ) ) : ?>
-				<p><?php esc_html_e( 'No modules available at this level.', 'core-support-thisismyurl' ); ?></p>
+				<p><?php esc_html_e( 'No modules available at this level.', 'wordpress-support-thisismyurl' ); ?></p>
 			<?php else : ?>
 				<ul class="timu-modules-list" style="list-style: none; padding: 0; margin: 0;">
 					<?php foreach ( $next_level_modules as $module ) : ?>
@@ -276,7 +276,7 @@ class TIMU_Dashboard_Widgets {
 			<p>
 				<a href="<?php echo esc_url( TIMU_Tab_Navigation::build_tab_url( 'settings' ) ); ?>" class="button button-primary">
 					<span class="dashicons dashicons-admin-settings"></span>
-					<?php esc_html_e( 'Configure Settings', 'core-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Configure Settings', 'wordpress-support-thisismyurl' ); ?>
 				</a>
 			</p>
 		</div>
@@ -287,26 +287,26 @@ class TIMU_Dashboard_Widgets {
 		?>
 		<div class="timu-widget-content">
 			<div class="timu-events-feed">
-				<p><em><?php esc_html_e( 'Loading latest events and news from Support Suite repositories...', 'core-support-thisismyurl' ); ?></em></p>
+				<p><em><?php esc_html_e( 'Loading latest events and news from Support Suite repositories...', 'wordpress-support-thisismyurl' ); ?></em></p>
 				<ul class="timu-events-list" style="list-style: none; padding: 0; margin: 0;">
 					<li style="padding: 8px 0; border-bottom: 1px solid #e5e5e5;">
-						<strong><?php esc_html_e( 'Release Updates', 'core-support-thisismyurl' ); ?></strong>
+						<strong><?php esc_html_e( 'Release Updates', 'wordpress-support-thisismyurl' ); ?></strong>
 						<br />
-						<small><?php esc_html_e( 'Latest plugin releases and updates', 'core-support-thisismyurl' ); ?></small>
+						<small><?php esc_html_e( 'Latest plugin releases and updates', 'wordpress-support-thisismyurl' ); ?></small>
 					</li>
 					<li style="padding: 8px 0; border-bottom: 1px solid #e5e5e5;">
-						<strong><?php esc_html_e( 'GitHub Issues', 'core-support-thisismyurl' ); ?></strong>
+						<strong><?php esc_html_e( 'GitHub Issues', 'wordpress-support-thisismyurl' ); ?></strong>
 						<br />
-						<small><?php esc_html_e( 'Recent discussions and feature requests', 'core-support-thisismyurl' ); ?></small>
+						<small><?php esc_html_e( 'Recent discussions and feature requests', 'wordpress-support-thisismyurl' ); ?></small>
 					</li>
 					<li style="padding: 8px 0;">
-						<strong><?php esc_html_e( 'Suite Announcements', 'core-support-thisismyurl' ); ?></strong>
+						<strong><?php esc_html_e( 'Suite Announcements', 'wordpress-support-thisismyurl' ); ?></strong>
 						<br />
-						<small><?php esc_html_e( 'Important suite-wide updates', 'core-support-thisismyurl' ); ?></small>
+						<small><?php esc_html_e( 'Important suite-wide updates', 'wordpress-support-thisismyurl' ); ?></small>
 					</li>
 				</ul>
 				<p style="margin-top: 12px; text-align: center;">
-					<a href="https://github.com/thisismyurl?tab=repositories" target="_blank" rel="noopener"><?php esc_html_e( 'Visit GitHub →', 'core-support-thisismyurl' ); ?></a>
+					<a href="https://github.com/thisismyurl?tab=repositories" target="_blank" rel="noopener"><?php esc_html_e( 'Visit GitHub →', 'wordpress-support-thisismyurl' ); ?></a>
 				</p>
 			</div>
 		</div>
@@ -318,7 +318,7 @@ class TIMU_Dashboard_Widgets {
 	private static function widget_hub_overview( string $hub_id ): void {
 		?>
 		<div class="timu-widget-content">
-			<p><?php echo esc_html( sprintf( __( 'Managing %s processing and distribution.', 'core-support-thisismyurl' ), strtoupper( $hub_id ) ) ); ?></p>
+			<p><?php echo esc_html( sprintf( __( 'Managing %s processing and distribution.', 'wordpress-support-thisismyurl' ), strtoupper( $hub_id ) ) ); ?></p>
 		</div>
 		<?php
 	}
@@ -334,7 +334,7 @@ class TIMU_Dashboard_Widgets {
 		?>
 		<div class="timu-widget-content">
 			<?php if ( empty( $spokes ) ) : ?>
-				<p><?php esc_html_e( 'No spokes currently active for this hub.', 'core-support-thisismyurl' ); ?></p>
+				<p><?php esc_html_e( 'No spokes currently active for this hub.', 'wordpress-support-thisismyurl' ); ?></p>
 			<?php else : ?>
 				<ul class="timu-spoke-list">
 					<?php foreach ( $spokes as $spoke ) : ?>
@@ -359,7 +359,7 @@ class TIMU_Dashboard_Widgets {
 	private static function widget_hub_stats( string $hub_id ): void {
 		?>
 		<div class="timu-widget-content">
-			<p><em><?php esc_html_e( 'Processing stats coming soon.', 'core-support-thisismyurl' ); ?></em></p>
+			<p><em><?php esc_html_e( 'Processing stats coming soon.', 'wordpress-support-thisismyurl' ); ?></em></p>
 		</div>
 		<?php
 	}
@@ -370,7 +370,7 @@ class TIMU_Dashboard_Widgets {
 			<p>
 				<a href="<?php echo esc_url( TIMU_Tab_Navigation::build_hub_url( $hub_id, 'settings' ) ); ?>" class="button button-primary">
 					<span class="dashicons dashicons-admin-settings"></span>
-					<?php esc_html_e( 'Hub Settings', 'core-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Hub Settings', 'wordpress-support-thisismyurl' ); ?>
 				</a>
 			</p>
 		</div>
@@ -382,7 +382,7 @@ class TIMU_Dashboard_Widgets {
 	private static function widget_spoke_overview( string $hub_id, string $spoke_id ): void {
 		?>
 		<div class="timu-widget-content">
-			<p><?php echo esc_html( sprintf( __( 'Managing %s format support.', 'core-support-thisismyurl' ), strtoupper( $spoke_id ) ) ); ?></p>
+			<p><?php echo esc_html( sprintf( __( 'Managing %s format support.', 'wordpress-support-thisismyurl' ), strtoupper( $spoke_id ) ) ); ?></p>
 		</div>
 		<?php
 	}
@@ -391,9 +391,9 @@ class TIMU_Dashboard_Widgets {
 		?>
 		<div class="timu-widget-content">
 			<ul class="timu-features-list">
-				<li><span class="dashicons dashicons-yes"></span> <?php esc_html_e( 'Format Detection', 'core-support-thisismyurl' ); ?></li>
-				<li><span class="dashicons dashicons-yes"></span> <?php esc_html_e( 'Conversion Support', 'core-support-thisismyurl' ); ?></li>
-				<li><span class="dashicons dashicons-yes"></span> <?php esc_html_e( 'Metadata Handling', 'core-support-thisismyurl' ); ?></li>
+				<li><span class="dashicons dashicons-yes"></span> <?php esc_html_e( 'Format Detection', 'wordpress-support-thisismyurl' ); ?></li>
+				<li><span class="dashicons dashicons-yes"></span> <?php esc_html_e( 'Conversion Support', 'wordpress-support-thisismyurl' ); ?></li>
+				<li><span class="dashicons dashicons-yes"></span> <?php esc_html_e( 'Metadata Handling', 'wordpress-support-thisismyurl' ); ?></li>
 			</ul>
 		</div>
 		<?php
@@ -402,7 +402,7 @@ class TIMU_Dashboard_Widgets {
 	private static function widget_spoke_stats( string $spoke_id ): void {
 		?>
 		<div class="timu-widget-content">
-			<p><em><?php esc_html_e( 'Format-specific stats coming soon.', 'core-support-thisismyurl' ); ?></em></p>
+			<p><em><?php esc_html_e( 'Format-specific stats coming soon.', 'wordpress-support-thisismyurl' ); ?></em></p>
 		</div>
 		<?php
 	}
@@ -413,7 +413,7 @@ class TIMU_Dashboard_Widgets {
 			<p>
 				<a href="<?php echo esc_url( TIMU_Tab_Navigation::build_spoke_url( $hub_id, $spoke_id, 'settings' ) ); ?>" class="button button-primary">
 					<span class="dashicons dashicons-admin-settings"></span>
-					<?php esc_html_e( 'Spoke Settings', 'core-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Spoke Settings', 'wordpress-support-thisismyurl' ); ?>
 				</a>
 			</p>
 		</div>

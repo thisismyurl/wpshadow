@@ -1,14 +1,17 @@
-# Core Support (thisismyurl)
+# WordPress Support (thisismyurl)
 
-**The Hub of the @thisismyurl Support Suite**
+**The Foundation Plugin for the @thisismyurl Plugin Suite**
 
 ## Description
 
-Core Support is the foundational Hub of the @thisismyurl Support Suite, providing essential architecture and killer features for all format-specific Spoke plugins.
+WordPress Support is the foundational plugin for all @thisismyurl plugin-* repositories. It acts as the backbone that other plugins extend and require to be installed first.
+
+This plugin manages all hub and spoke plugins, providing a means to install all modules and features.
 
 ### The Hub & Spoke Architecture
 
-- **The Hub (Core):** Multi-Engine Fallback (Imagick/GD), Encryption, Cloud Bridge
+- **The Foundation (WordPress Support):** Plugin management, Multi-Engine Fallback (Imagick/GD), Encryption, Cloud Bridge
+- **The Hubs:** Category-specific management plugins (Image, Media, etc.)
 - **The Spokes:** Format-specific transcoders (AVIF, WebP, HEIC, etc.)
 - **Suite Identifier:** `thisismyurl-media-suite-2026` handshake ensures only relevant modules load
 
@@ -28,9 +31,9 @@ Core Support is the foundational Hub of the @thisismyurl Support Suite, providin
 
 ## Installation
 
-1. Upload the plugin files to `/wp-content/plugins/core-support-thisismyurl/`
+1. Upload the plugin files to `/wp-content/plugins/wordpress-support-thisismyurl/`
 2. Activate through the 'Plugins' menu in WordPress
-3. Configure settings under 'Core Support' in the admin menu
+3. Configure settings under 'WordPress Support' in the admin menu
 
 ### Multisite Installation
 
@@ -85,7 +88,7 @@ Each site can:
 
 Core Support includes built-in privacy and GDPR compliance:
 
-- **Export Personal Data:** WordPress Tools → Export Personal Data includes Core and module data
+- **Export Personal Data:** WordPress Tools → Export Personal Data includes WordPress Support and module data
 - **Erase Personal Data:** Requests securely erase user data; Vault originals are purged
 - **Data Retention:** Admins set retention policies; old data auto-purges per schedule
 - **Audit Trail:** All export/erase operations are logged
@@ -101,15 +104,15 @@ Core Support includes built-in privacy and GDPR compliance:
 ### Directory Structure
 
 ```
-core-support-thisismyurl/
-├── core-support-thisismyurl.php  # Main plugin file
-├── uninstall.php                  # Cleanup on uninstall
-├── includes/                      # Core functionality
-├── assets/                        # CSS/JS/Images
+wordpress-support-thisismyurl/
+├── wordpress-support-thisismyurl.php  # Main plugin file
+├── uninstall.php                      # Cleanup on uninstall
+├── includes/                          # Core functionality
+├── assets/                            # CSS/JS/Images
 │   ├── css/
 │   ├── js/
 │   └── images/
-└── languages/                     # Translation files
+└── languages/                         # Translation files
 ```
 
 ### Coding Standards
@@ -136,13 +139,13 @@ core-support-thisismyurl/
 
 - **Online Documentation:** https://thisismyurl.com/core-support-thisismyurl/
 - **Support:** https://thisismyurl.com/core-support-thisismyurl/#support
-- **GitHub Issues:** https://github.com/thisismyurl/core-support-thisismyurl
+- **GitHub Issues:** https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl
 
 ## Support
 
-- **Documentation:** https://thisismyurl.com/core-support-thisismyurl/
-- **Support:** https://thisismyurl.com/core-support-thisismyurl/#support
-- **GitHub:** https://github.com/thisismyurl/core-support-thisismyurl
+- **Documentation:** https://thisismyurl.com/wordpress-support-thisismyurl/
+- **Support:** https://thisismyurl.com/wordpress-support-thisismyurl/#support
+- **GitHub:** https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl
 
 ## License
 
