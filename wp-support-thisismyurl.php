@@ -388,6 +388,9 @@ function timu_core_network_admin_menu(): void {
 		__NAMESPACE__ . '\\timu_core_render_capabilities_page'
 	);
 
+	// Dynamically register hub submenu items.
+	timu_core_register_hub_submenus( 'manage_network_options' );
+
 	// Initialize dashboard screen extras (Screen Options, Help) and metaboxes.
 	add_action( 'load-toplevel_page_wp-support', __NAMESPACE__ . '\\timu_core_setup_dashboard_screen' );
 }
@@ -417,8 +420,40 @@ function timu_core_admin_menu(): void {
 		__NAMESPACE__ . '\\timu_core_render_capabilities_page'
 	);
 
+	// Dynamically register hub submenu items.
+	timu_core_register_hub_submenus( 'manage_options' );
+
 	// Initialize dashboard screen extras (Screen Options, Help) and metaboxes.
 	add_action( 'load-toplevel_page_wp-support', __NAMESPACE__ . '\\timu_core_setup_dashboard_screen' );
+}
+
+/**
+ * Register submenu items for all active hubs.
+ *
+ * @param string $capability Required capability (manage_options or manage_network_options).
+ * @return void
+ */
+function timu_core_register_hub_submenus( string $capability ): void {
+	$catalog = TIMU_Module_Registry::get_catalog_with_status();
+	$hubs    = array_filter(
+		$catalog,
+		fn( $m ) => 'hub' === ( $m['type'] ?? '' ) && ! empty( $m['status']['active'] )
+	);
+
+	foreach ( $hubs as $hub ) {
+		$hub_id   = sanitize_key( str_replace( '-support-thisismyurl', '', $hub['id'] ?? '' ) );
+		$hub_name = esc_html( $hub['name'] ?? ucfirst( $hub_id ) );
+		$hub_url  = TIMU_Tab_Navigation::build_hub_url( $hub_id );
+
+		add_submenu_page(
+			'wp-support',
+			$hub_name,
+			$hub_name,
+			$capability,
+			'wp-support-hub-' . $hub_id, // Unique page slug.
+			__NAMESPACE__ . '\\timu_core_render_tab_router' // Same router handles all.
+		);
+	}
 }
 
 /**

@@ -73,10 +73,8 @@ function timu_media_init(): void {
 			public function __construct() {
 				parent::__construct( 'media-support-thisismyurl', TIMU_MEDIA_URL, 'timu_media_settings_group', 'dashicons-admin-media', 'wp-support' );
 				add_action( 'init', array( $this, 'setup_plugin' ), 20 );
-				add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
-			}
-
-			public function setup_plugin(): void {
+			// Hub menu items are now auto-registered by Core's timu_core_register_hub_submenus()
+			// add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 				$this->is_licensed();
 				$this->init_settings_generator(
 					array(
@@ -98,16 +96,8 @@ function timu_media_init(): void {
 			}
 
 			public function add_admin_menu(): void {
-				$this->add_admin_submenu( strtoupper( __( 'Media', TIMU_MEDIA_TEXT_DOMAIN ) ) );
-				add_submenu_page(
-					'upload.php',
-					__( 'Media Settings', TIMU_MEDIA_TEXT_DOMAIN ),
-					__( 'Media Settings', TIMU_MEDIA_TEXT_DOMAIN ),
-					'manage_options',
-					'timu-media-settings-redirect',
-					array( $this, 'render_media_settings_redirect' )
-				);
-			}
+			// Menu items are now auto-registered by Core's timu_core_register_hub_submenus()
+			// This method is kept for backward compatibility but does nothing.
 
 			public function render_media_settings_redirect(): void {
 				$redirect_url = admin_url( 'admin.php?page=wp-support&tab=media-support-thisismyurl' );

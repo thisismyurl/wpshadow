@@ -19,9 +19,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Hierarchical: Core > Hub > Spoke > Format
  */
 class TIMU_Tab_Navigation {
-	private const QUERY_VAR_TAB   = 'timu_tab';
-	private const QUERY_VAR_HUB   = 'timu_hub';
-	private const QUERY_VAR_SPOKE = 'timu_spoke';
+	private const QUERY_VAR_TAB    = 'timu_tab';
+	private const QUERY_VAR_MODULE = 'module';
+	private const QUERY_VAR_HUB    = 'timu_hub'; // Legacy support
+	private const QUERY_VAR_SPOKE  = 'timu_spoke'; // Legacy support
 
 	/**
 	 * Get the current tab context from query parameters.
@@ -29,9 +30,19 @@ class TIMU_Tab_Navigation {
 	 * @return array{level: string, hub: string, spoke: string, tab: string}
 	 */
 	public static function get_current_context(): array {
+		// Check for new 'module' parameter first, fallback to legacy timu_hub/timu_spoke.
+		$module = sanitize_text_field( (string) ( $_GET[ self::QUERY_VAR_MODULE ] ?? '' ) );
+		$hub    = sanitize_text_field( (string) ( $_GET[ self::QUERY_VAR_HUB ] ?? '' ) );
+		$spoke  = sanitize_text_field( (string) ( $_GET[ self::QUERY_VAR_SPOKE ] ?? '' ) );
+		
+		// If 'module' is set, use it as the hub (for now, treat all modules as hubs).
+		if ( ! empty( $module ) ) {
+			$hub = $module;
+		}
+		
 		return array(
-			'hub'   => sanitize_text_field( (string) ( $_GET[ self::QUERY_VAR_HUB ] ?? '' ) ),
-			'spoke' => sanitize_text_field( (string) ( $_GET[ self::QUERY_VAR_SPOKE ] ?? '' ) ),
+			'hub'   => $hub,
+			'spoke' => $spoke,
 			'tab'   => sanitize_text_field( (string) ( $_GET[ self::QUERY_VAR_TAB ] ?? 'dashboard' ) ),
 			'level' => self::determine_level(),
 		);
@@ -49,7 +60,8 @@ class TIMU_Tab_Navigation {
 		if ( ! empty( $_GET[ self::QUERY_VAR_SPOKE ] ) ) {
 			return 'spoke';
 		}
-		if ( ! empty( $_GET[ self::QUERY_VAR_HUB ] ) ) {
+		// Check both new 'module' param and legacy 'timu_hub'.
+		if ( ! empty( $_GET[ self::QUERY_VAR_MODULE ] ) || ! empty( $_GET[ self::QUERY_VAR_HUB ] ) ) {
 			return 'hub';
 		}
 		return 'core';
@@ -96,8 +108,10 @@ class TIMU_Tab_Navigation {
 		$base_url = admin_url( 'admin.php' );
 		$args     = array( 'page' => 'wp-support' );
 
-		// Preserve context.
-		if ( ! empty( $_GET[ self::QUERY_VAR_HUB ] ) ) {
+		// Preserve context - prioritize new 'module' param.
+		if ( ! empty( $_GET[ self::QUERY_VAR_MODULE ] ) ) {
+			$args[ self::QUERY_VAR_MODULE ] = sanitize_text_field( (string) $_GET[ self::QUERY_VAR_MODULE ] );
+		} elseif ( ! empty( $_GET[ self::QUERY_VAR_HUB ] ) ) {
 			$args[ self::QUERY_VAR_HUB ] = sanitize_text_field( (string) $_GET[ self::QUERY_VAR_HUB ] );
 		}
 		if ( ! empty( $_GET[ self::QUERY_VAR_SPOKE ] ) ) {
@@ -119,9 +133,14 @@ class TIMU_Tab_Navigation {
 	 */
 	public static function build_hub_url( string $hub_id, string $tab = 'dashboard' ): string {
 		// Extract short hub name from full slug if needed.
-		$hub_id = self::normalize_hub_id( $hub_id );
+		$hub_id  = self::normalize_hub_id( $hub_id );
+		$base_url = admin_url( 'admin.php' );
+		$args     = array(
+			'page'                    => 'wp-support',
+			self::QUERY_VAR_MODULE => $hub_id,
+		);
 		
-		return self::build_tab_url( $tab, array( self::QUERY_VAR_HUB => $hub_id ) );
+		return add_query_arg( $args, $base_url );
 	}
 
 	/**
