@@ -149,6 +149,14 @@ class TIMU_Dashboard_Widgets {
 		self::widget_system_health();
 	}
 
+	public static function render_metabox_media_overview(): void {
+		self::widget_media_overview();
+	}
+
+	public static function render_metabox_vault_overview(): void {
+		self::widget_vault_overview();
+	}
+
 	public static function render_metabox_events_and_news(): void {
 		self::widget_events_and_news();
 	}
@@ -904,6 +912,38 @@ class TIMU_Dashboard_Widgets {
 					<?php esc_html_e( 'Spoke Settings', 'plugin-wp-support-thisismyurl' ); ?>
 				</a>
 			</p>
+		</div>
+		<?php
+	}
+
+	private static function widget_media_overview(): void {
+		?>
+		<div class="timu-widget-content">
+			<p><?php esc_html_e( 'Media Hub provides centralized media processing and management capabilities.', 'plugin-wp-support-thisismyurl' ); ?></p>
+			<ul style="list-style: none; padding: 0;">
+				<li><span class="dashicons dashicons-admin-media"></span> <?php esc_html_e( 'Batch processing for media files', 'plugin-wp-support-thisismyurl' ); ?></li>
+				<li><span class="dashicons dashicons-admin-generic"></span> <?php esc_html_e( 'Media optimization policies', 'plugin-wp-support-thisismyurl' ); ?></li>
+				<li><span class="dashicons dashicons-networking"></span> <?php esc_html_e( 'Multi-format support coordination', 'plugin-wp-support-thisismyurl' ); ?></li>
+			</ul>
+		</div>
+		<?php
+	}
+
+	private static function widget_vault_overview(): void {
+		$vault_dir = wp_upload_dir()['basedir'] . '/.vault_' . get_option( 'timu_vault_dirname', 'default' );
+		$vault_exists = is_dir( $vault_dir );
+		$vault_writable = $vault_exists && wp_is_writable( $vault_dir );
+		?>
+		<div class="timu-widget-content">
+			<p><?php esc_html_e( 'The Vault securely stores original media files with SHA-256 verification and automatic recovery.', 'plugin-wp-support-thisismyurl' ); ?></p>
+			<ul style="list-style: none; padding: 0;">
+				<li>
+					<span class="dashicons dashicons-<?php echo $vault_writable ? 'yes' : 'no'; ?>" style="color: <?php echo $vault_writable ? '#00a32a' : '#d63638'; ?>;"></span>
+					<?php echo $vault_writable ? esc_html__( 'Vault directory is writable', 'plugin-wp-support-thisismyurl' ) : esc_html__( 'Vault directory not writable', 'plugin-wp-support-thisismyurl' ); ?>
+				</li>
+				<li><span class="dashicons dashicons-lock"></span> <?php esc_html_e( 'Optional encryption support', 'plugin-wp-support-thisismyurl' ); ?></li>
+				<li><span class="dashicons dashicons-image-rotate"></span> <?php esc_html_e( 'Automatic rehydration on 404', 'plugin-wp-support-thisismyurl' ); ?></li>
+			</ul>
 		</div>
 		<?php
 	}

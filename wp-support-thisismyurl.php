@@ -694,6 +694,117 @@ function timu_core_setup_dashboard_screen(): void {
 }
 
 /**
+ * Setup Screen Options and register dashboard meta boxes for hub pages.
+ *
+ * @param string $hub_id Hub identifier.
+ * @return void
+ */
+function timu_core_setup_hub_dashboard_screen( string $hub_id ): void {
+	$screen = get_current_screen();
+	if ( ! $screen ) {
+		return;
+	}
+
+	// Register metaboxes based on hub type.
+	switch ( $hub_id ) {
+		case 'media':
+			add_meta_box(
+				'timu_media_overview',
+				__( 'Media Hub Overview', 'plugin-wp-support-thisismyurl' ),
+				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_media_overview' ),
+				$screen->id,
+				'normal',
+				'high'
+			);
+			add_meta_box(
+				'timu_media_activity',
+				__( 'Recent Activity', 'plugin-wp-support-thisismyurl' ),
+				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_activity' ),
+				$screen->id,
+				'normal',
+				'default'
+			);
+			add_meta_box(
+				'timu_media_quick_actions',
+				__( 'Quick Actions', 'plugin-wp-support-thisismyurl' ),
+				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_quick_actions' ),
+				$screen->id,
+				'side',
+				'high'
+			);
+			add_meta_box(
+				'timu_media_health',
+				__( 'Health', 'plugin-wp-support-thisismyurl' ),
+				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_health' ),
+				$screen->id,
+				'side',
+				'default'
+			);
+			break;
+
+		case 'vault':
+			add_meta_box(
+				'timu_vault_overview',
+				__( 'Vault Overview', 'plugin-wp-support-thisismyurl' ),
+				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_vault_overview' ),
+				$screen->id,
+				'normal',
+				'high'
+			);
+			add_meta_box(
+				'timu_vault_activity',
+				__( 'Recent Activity', 'plugin-wp-support-thisismyurl' ),
+				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_activity' ),
+				$screen->id,
+				'normal',
+				'default'
+			);
+			add_meta_box(
+				'timu_vault_stats',
+				__( 'Vault Statistics', 'plugin-wp-support-thisismyurl' ),
+				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_vault_status' ),
+				$screen->id,
+				'side',
+				'high'
+			);
+			add_meta_box(
+				'timu_vault_quick_actions',
+				__( 'Quick Actions', 'plugin-wp-support-thisismyurl' ),
+				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_quick_actions' ),
+				$screen->id,
+				'side',
+				'default'
+			);
+			break;
+	}
+
+	// Enable Screen Options for number of columns.
+	add_screen_option(
+		'layout_columns',
+		array(
+			'max'     => 2,
+			'default' => 2,
+		)
+	);
+
+	// Initialize postboxes on this screen (drag/toggle).
+	add_action(
+		'admin_print_footer_scripts',
+		static function () use ( $screen ): void {
+			?>
+			<script>
+			jQuery(document).ready(function($){
+				if (typeof postboxes !== 'undefined') {
+					postboxes.add_postbox_toggles('<?php echo esc_js( $screen->id ); ?>');
+				}
+			});
+			</script>
+			<?php
+		}
+	);
+}
+
+/**
  * Render Core-level content based on active tab.
  *
  * @param string $tab Active tab ID.
@@ -753,7 +864,24 @@ function timu_core_render_hub_content( string $hub_id, string $tab ): void {
 			break;
 		case 'dashboard':
 		default:
-			TIMU_Dashboard_Widgets::render_hub_dashboard( $hub_id );
+			// Setup metaboxes for hub dashboard.
+			timu_core_setup_hub_dashboard_screen( $hub_id );
+			$screen = get_current_screen();
+			?>
+			<div class="wrap">
+				<h1><?php echo esc_html( ucfirst( $hub_id ) . ' ' . __( 'Hub', 'plugin-wp-support-thisismyurl' ) ); ?></h1>
+				<div id="poststuff">
+					<div id="post-body" class="metabox-holder columns-2">
+						<div id="postbox-container-1" class="postbox-container">
+							<?php do_meta_boxes( $screen->id, 'side', null ); ?>
+						</div>
+						<div id="postbox-container-2" class="postbox-container">
+							<?php do_meta_boxes( $screen->id, 'normal', null ); ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<?php
 			break;
 	}
 }
