@@ -33,7 +33,11 @@ class Module_Loader {
 	 * @return void
 	 */
 	public static function init() {
-		add_action( 'plugins_loaded', array( static::class, 'load_modules' ), 9 );
+		// Load modules immediately since this is called during timu_core_init() which is already on plugins_loaded
+		error_log( '=== MODULE_LOADER::INIT LOADING MODULES IMMEDIATELY ===' );
+		self::load_modules();
+		
+		// Then register activation hook for later
 		add_action( 'plugins_loaded', array( static::class, 'activate_modules' ), 11 );
 	}
 
@@ -43,6 +47,9 @@ class Module_Loader {
 	 * @return void
 	 */
 	public static function load_modules() {
+		error_log( '=== MODULE_LOADER::LOAD_MODULES STARTING ===' );
+		@file_put_contents( dirname( TIMU_CORE_PATH ) . '/load_modules_called.txt', date( 'Y-m-d H:i:s' ) );
+		
 		// Load hubs first
 		self::load_module_type( 'hubs' );
 
@@ -51,6 +58,9 @@ class Module_Loader {
 
 		// Load formats last
 		self::load_module_type( 'formats' );
+
+		@file_put_contents( dirname( TIMU_CORE_PATH ) . '/load_modules_completed.txt', date( 'Y-m-d H:i:s' ) );
+		error_log( '=== MODULE_LOADER::LOAD_MODULES COMPLETED ===' );
 
 		/**
 		 * Action fired after all modules are loaded
@@ -65,9 +75,14 @@ class Module_Loader {
 	 * @return void
 	 */
 	private static function load_module_type( $type ) {
+		error_log( "=== MODULE_LOADER: LOAD_MODULE_TYPE ({$type}) ===" );
+		@file_put_contents( dirname( TIMU_CORE_PATH ) . "/load_module_type_{$type}_started.txt", date( 'Y-m-d H:i:s' ) );
+		
 		$modules_dir = TIMU_CORE_PATH . "modules/{$type}/";
+		error_log( "Module dir: {$modules_dir}" );
 
 		if ( ! is_dir( $modules_dir ) ) {
+			error_log( "Module dir does not exist: {$modules_dir}" );
 			return;
 		}
 
@@ -77,8 +92,11 @@ class Module_Loader {
 				return is_dir( $dir );
 			}
 		);
+		
+		error_log( "Found " . count( $modules ) . " modules of type {$type}: " . implode( ', ', array_map( 'basename', $modules ) ) );
 
 		foreach ( $modules as $module_dir ) {
+			error_log( "Loading module: " . basename( $module_dir ) );
 			self::load_module( $module_dir, $type );
 		}
 	}

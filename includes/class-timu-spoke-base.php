@@ -420,7 +420,8 @@ abstract class TIMU_Spoke_Base {
 	}
 
 	public function add_media_sidebar_actions( array $form_fields, \WP_Post $post ): array {
-		return $this->admin?->add_media_sidebar_actions( $form_fields, $post ) ?? $form_fields;
+		// Return form fields as-is. Subclasses can override this method to add custom fields.
+		return $form_fields;
 	}
 
 	/**
