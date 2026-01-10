@@ -19,53 +19,48 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants.
-define( 'TIMU_MEDIA_VERSION', '1.2601.0819' );
-define( 'TIMU_MEDIA_FILE', __FILE__ );
-define( 'TIMU_MEDIA_PATH', plugin_dir_path( __FILE__ ) );
-define( 'TIMU_MEDIA_URL', plugin_dir_url( __FILE__ ) );
-define( 'TIMU_MEDIA_BASENAME', plugin_basename( __FILE__ ) );
-define( 'TIMU_MEDIA_TEXT_DOMAIN', 'media-support-thisismyurl' );
-define( 'TIMU_MEDIA_MIN_PHP', '8.1.29' );
-define( 'TIMU_MEDIA_MIN_WP', '6.4.0' );
-define( 'TIMU_SUITE_ID', 'thisismyurl-media-suite-2026' );
-define( 'TIMU_MEDIA_REQUIRES_CORE', 'core-support-thisismyurl/core-support-thisismyurl.php' );
+// Initialize constants via DRY initializer (defined in wp-support core).
+\TIMU\CoreSupport\TIMU_Module_Hub_Initializer::define_module_constants(
+	__FILE__,
+	'media-support-thisismyurl',
+	'media-support-thisismyurl',
+	'1.2601.0819',
+	'8.1.29',
+	'6.4.0'
+);
 
 /**
  * Initialize Media Support.
  */
 function timu_media_init(): void {
-	// Verify Core is present.
-	if ( ! class_exists( '\\TIMU\\Core\\Spoke\\TIMU_Spoke_Base' ) ) {
-		add_action( 'admin_notices', __NAMESPACE__ . '\timu_media_missing_core_notice' );
+	// Verify Core is present using DRY initializer.
+	if ( ! \TIMU\CoreSupport\TIMU_Module_Hub_Initializer::check_core_availability(
+		__( 'Media Support', TIMU_MEDIA_TEXT_DOMAIN ),
+		TIMU_MEDIA_TEXT_DOMAIN
+	) ) {
 		return;
 	}
 
-	// Register with Core module registry (Hub-level for media layer).
-	do_action(
-		'timu_register_module',
-		array(
-			'slug'         => 'media-support-thisismyurl',
-			'name'         => __( 'Media Support', TIMU_MEDIA_TEXT_DOMAIN ),
-			'type'         => 'hub',
-			'suite'        => 'media',
-			'version'      => TIMU_MEDIA_VERSION,
-			'description'  => __( 'Media hub for non-image media processing, batching, and policies.', TIMU_MEDIA_TEXT_DOMAIN ),
-			'capabilities' => array( 'media_hub', 'batch', 'policies' ),
-			'path'         => TIMU_MEDIA_PATH,
-			'url'          => TIMU_MEDIA_URL,
-			'basename'     => TIMU_MEDIA_BASENAME,
-		)
-	);
+	// Register hub module via DRY initializer.
+	\TIMU\CoreSupport\TIMU_Module_Hub_Initializer::register_hub_module( array(
+		'slug'         => 'media-support-thisismyurl',
+		'name'         => __( 'Media Support', TIMU_MEDIA_TEXT_DOMAIN ),
+		'suite'        => 'media',
+		'version'      => TIMU_MEDIA_VERSION,
+		'description'  => __( 'Media hub for non-image media processing, batching, and policies.', TIMU_MEDIA_TEXT_DOMAIN ),
+		'capabilities' => array( 'media_hub', 'batch', 'policies' ),
+		'path'         => TIMU_MEDIA_PATH,
+		'url'          => TIMU_MEDIA_URL,
+		'basename'     => TIMU_MEDIA_BASENAME,
+		'text_domain'  => TIMU_MEDIA_TEXT_DOMAIN,
+	) );
 
-	// Register media_hub feature for plugins that depend on media processing.
-	if ( function_exists( '\TIMU\CoreSupport\register_timu_feature' ) ) {
-		\TIMU\CoreSupport\register_timu_feature( 'media_hub', array(
-			'plugin'      => 'media-support-thisismyurl',
-			'name'        => __( 'Media Hub', TIMU_MEDIA_TEXT_DOMAIN ),
-			'description' => __( 'Shared media optimization and processing infrastructure', TIMU_MEDIA_TEXT_DOMAIN ),
-			'version'     => TIMU_MEDIA_VERSION,
-		) );
-	}
+	// Register hub feature via DRY initializer.
+	\TIMU\CoreSupport\TIMU_Module_Hub_Initializer::register_hub_feature( 'media_hub', array(
+		'name'        => __( 'Media Hub', TIMU_MEDIA_TEXT_DOMAIN ),
+		'description' => __( 'Shared media optimization and processing infrastructure', TIMU_MEDIA_TEXT_DOMAIN ),
+		'version'     => TIMU_MEDIA_VERSION,
+	) );
 
 	// Minimal hub class extending Core Spoke Base (no subcomponents yet).
 	if ( ! class_exists( __NAMESPACE__ . '\\TIMU_Media_Support' ) ) {
@@ -127,31 +122,13 @@ add_action( 'plugins_loaded', __NAMESPACE__ . '\timu_media_init', 12 );
  */
 function render_dashboard(): void {
 	// Get module catalog for spoke modules.
-	$catalog_modules = \TIMU\CoreSupport\TIMU_Module_Registry::get_catalog_with_status();
-	$modules         = array_filter(
-		$catalog_modules,
-		static function ( $m ) {
-			return ( $m['requires_hub'] ?? '' ) === 'media-support-thisismyurl';
-		}
-	);
+	// Get spoke modules via DRY initializer.
+	$modules = \TIMU\CoreSupport\TIMU_Module_Hub_Initializer::get_hub_spoke_modules( 'media-support-thisismyurl' );
 
 	// Get activity logs if Vault is available.
-	$activity_logs = class_exists( '\TIMU\VaultSupport\TIMU_Vault' )
-		? \TIMU\VaultSupport\TIMU_Vault::get_logs( 0, 10 )
-		: array();
+	// Get activity logs via DRY initializer.
+	$activity_logs = \TIMU\CoreSupport\TIMU_Module_Hub_Initializer::get_vault_activity_logs( 10 );
 
 	require_once TIMU_MEDIA_PATH . 'views/dashboard.php';
 }
 
-/**
- * Admin notice for missing Core.
- */
-function timu_media_missing_core_notice(): void {
-	if ( ! current_user_can( 'activate_plugins' ) ) {
-		return;
-	}
-	printf(
-		'<div class="notice notice-error"><p>%s</p></div>',
-		esc_html__( 'Media Support requires Core Support to be installed and active.', TIMU_MEDIA_TEXT_DOMAIN )
-	);
-}

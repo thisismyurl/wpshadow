@@ -282,6 +282,9 @@ function timu_core_init(): void {
 	// Load Spoke Base for spoke plugins (Image, Media, etc).
 	require_once TIMU_CORE_PATH . 'includes/class-timu-spoke-base.php';
 
+	// Load Module Hub Initializer (DRY hub initialization patterns).
+	require_once TIMU_CORE_PATH . 'includes/class-timu-module-hub-initializer.php';
+
 	// Load Vault service (canonical implementation in vault-support plugin).
 	// Core aliases it for backward compatibility.
 	if ( ! class_exists( '\\TIMU\\VaultSupport\\TIMU_Vault' ) ) {
