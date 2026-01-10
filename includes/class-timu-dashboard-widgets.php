@@ -157,6 +157,14 @@ class TIMU_Dashboard_Widgets {
 		self::widget_vault_overview();
 	}
 
+	public static function render_metabox_media_activity(): void {
+		self::widget_activity( 'media' );
+	}
+
+	public static function render_metabox_vault_activity(): void {
+		self::widget_activity( 'vault' );
+	}
+
 	public static function render_metabox_events_and_news(): void {
 		self::widget_events_and_news();
 	}
@@ -222,10 +230,26 @@ class TIMU_Dashboard_Widgets {
 		<?php
 	}
 
-	private static function widget_activity(): void {
+	private static function widget_activity( ?string $module_filter = null ): void {
 		// Use TIMU_Activity_Logger if available.
 		if ( class_exists( '\\TIMU\\CoreSupport\\TIMU_Activity_Logger' ) ) {
-			$events = \TIMU\CoreSupport\TIMU_Activity_Logger::get_events( 5 );
+			$events = \TIMU\CoreSupport\TIMU_Activity_Logger::get_events( 100 );
+
+			// Filter events by module if specified.
+			if ( ! empty( $module_filter ) ) {
+				$events = array_filter(
+					$events,
+					function( $event ) use ( $module_filter ) {
+						$module = $event['metadata']['module'] ?? null;
+						return $module === $module_filter;
+					}
+				);
+				// Limit to 5 after filtering.
+				$events = array_slice( $events, 0, 5 );
+			} else {
+				// If no filter, just get the first 5.
+				$events = array_slice( $events, 0, 5 );
+			}
 
 			if ( empty( $events ) ) {
 				?>

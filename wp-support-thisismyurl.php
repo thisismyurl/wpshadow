@@ -717,6 +717,14 @@ function timu_core_setup_hub_dashboard_screen( string $hub_id ): void {
 				'high'
 			);
 			add_meta_box(
+				'timu_media_activity',
+				__( 'Activity', 'plugin-wp-support-thisismyurl' ),
+				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_media_activity' ),
+				$screen->id,
+				'normal',
+				'default'
+			);
+			add_meta_box(
 				'timu_media_quick_actions',
 				__( 'Quick Actions', 'plugin-wp-support-thisismyurl' ),
 				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_quick_actions' ),
@@ -742,6 +750,14 @@ function timu_core_setup_hub_dashboard_screen( string $hub_id ): void {
 				$screen->id,
 				'normal',
 				'high'
+			);
+			add_meta_box(
+				'timu_vault_activity',
+				__( 'Activity', 'plugin-wp-support-thisismyurl' ),
+				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_vault_activity' ),
+				$screen->id,
+				'normal',
+				'default'
 			);
 			add_meta_box(
 				'timu_vault_stats',
