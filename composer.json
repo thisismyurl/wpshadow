@@ -1,5 +1,5 @@
 {
-	"name": "thisismyurl/plugin-wordpress-support-thisismyurl",
+	"name": "thisismyurl/plugin-wp-support-thisismyurl",
 	"description": "The foundational plugin for all thisismyurl plugin-* repositories. Provides the backbone architecture for hub and spoke plugins.",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",

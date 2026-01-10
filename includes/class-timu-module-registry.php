@@ -31,6 +31,8 @@ class TIMU_Module_Registry {
 	 */
 	private static array $catalog = array();
 
+	private const OPTION_KEY = 'timu_registered_modules';
+
 	/**
 	 * Registered modules storage.
 	 *
@@ -44,11 +46,16 @@ class TIMU_Module_Registry {
 	 * @return void
 	 */
 	public static function init(): void {
+		self::load_persisted_modules();
+
 		// Allow plugins to register themselves.
 		add_action( 'plugins_loaded', array( __CLASS__, 'discover_modules' ), 5 );
 
 		// Warm bundled catalog early for dashboard/updater.
 		add_action( 'plugins_loaded', array( __CLASS__, 'load_catalog' ), 4 );
+
+		// Capture module registrations via action hook.
+		add_action( 'timu_register_module', array( __CLASS__, 'register_from_action' ), 10, 1 );
 
 		// Schedule periodic refresh aligned with WordPress plugin update checks (twice daily).
 		add_action( 'init', array( __CLASS__, 'schedule_refresh' ) );
@@ -103,13 +110,13 @@ class TIMU_Module_Registry {
 
 		return array(
 			'catalog_refresh' => array(
-				'label'    => __( 'Catalog refresh', 'wordpress-support-thisismyurl' ),
+				'label'    => __( 'Catalog refresh', 'plugin-wp-support-thisismyurl' ),
 				'hook'     => 'timu_refresh_modules',
 				'next_run' => $next_refresh,
 				'last_run' => $last_refresh,
 			),
 			'vault_queue'     => array(
-				'label'       => __( 'Vault queue runner', 'wordpress-support-thisismyurl' ),
+				'label'       => __( 'Vault queue runner', 'plugin-wp-support-thisismyurl' ),
 				'hook'        => 'timu_vault_queue_runner',
 				'next_run'    => $next_vault,
 				'last_run'    => $queue_last,
@@ -125,6 +132,8 @@ class TIMU_Module_Registry {
 	 * @return bool True on success, false on failure.
 	 */
 	public static function register( array $module_data ): bool {
+		$module_data = self::sanitize_module_data( $module_data );
+
 		// Validate required fields.
 		$required = array( 'type', 'slug', 'name', 'version', 'file' );
 		foreach ( $required as $field ) {
@@ -142,14 +151,82 @@ class TIMU_Module_Registry {
 				'description' => '',
 				'author'      => '@thisismyurl',
 				'author_uri'  => 'https://thisismyurl.com',
-				'menu_parent' => 'timu-core-support',
+				'menu_parent' => 'wp-support',
 				'icon'        => 'dashicons-admin-plugins',
 				'enabled'     => true,
 				'hidden'      => false,
+				'capabilities' => array(),
+				'suite'        => 'general',
 			)
 		);
 
+		self::persist_modules();
+
 		return true;
+	}
+
+	/**
+	 * Register a module via action hook payload.
+	 *
+	 * @param array $module_data Module information.
+	 * @return void
+	 */
+	public static function register_from_action( array $module_data ): void {
+		self::register( $module_data );
+	}
+
+	/**
+	 * Sanitize module data payload.
+	 *
+	 * @param array $module_data Raw module data.
+	 * @return array
+	 */
+	private static function sanitize_module_data( array $module_data ): array {
+		$module_data['slug']    = isset( $module_data['slug'] ) ? sanitize_key( (string) $module_data['slug'] ) : '';
+		$module_data['type']    = isset( $module_data['type'] ) ? sanitize_key( (string) $module_data['type'] ) : 'spoke';
+		$module_data['suite']   = isset( $module_data['suite'] ) ? sanitize_text_field( (string) $module_data['suite'] ) : 'general';
+		$module_data['name']    = isset( $module_data['name'] ) ? sanitize_text_field( (string) $module_data['name'] ) : '';
+		$module_data['version'] = isset( $module_data['version'] ) ? sanitize_text_field( (string) $module_data['version'] ) : '';
+		$module_data['file']    = isset( $module_data['file'] ) ? sanitize_text_field( (string) $module_data['file'] ) : '';
+		$module_data['path']    = isset( $module_data['path'] ) ? sanitize_text_field( (string) $module_data['path'] ) : '';
+		$module_data['url']     = isset( $module_data['url'] ) ? esc_url_raw( (string) $module_data['url'] ) : '';
+		$module_data['basename'] = isset( $module_data['basename'] ) ? sanitize_text_field( (string) $module_data['basename'] ) : '';
+		$module_data['capabilities'] = isset( $module_data['capabilities'] ) && is_array( $module_data['capabilities'] )
+			? array_values( array_map( 'sanitize_key', $module_data['capabilities'] ) )
+			: array();
+
+		return $module_data;
+	}
+
+	/**
+	 * Persist registered modules.
+	 *
+	 * @return void
+	 */
+	private static function persist_modules(): void {
+		$storage = self::$modules;
+
+		if ( is_multisite() ) {
+			update_site_option( self::OPTION_KEY, $storage );
+			return;
+		}
+
+		update_option( self::OPTION_KEY, $storage );
+	}
+
+	/**
+	 * Load persisted modules from storage.
+	 *
+	 * @return void
+	 */
+	private static function load_persisted_modules(): void {
+		$stored = is_multisite()
+			? get_site_option( self::OPTION_KEY, array() )
+			: get_option( self::OPTION_KEY, array() );
+
+		if ( is_array( $stored ) && ! empty( $stored ) ) {
+			self::$modules = $stored;
+		}
 	}
 
 	/**
@@ -158,6 +235,8 @@ class TIMU_Module_Registry {
 	 * @return void
 	 */
 	public static function discover_modules(): void {
+		$persisted = self::$modules;
+
 		// Get cached modules.
 		$cache_key = is_multisite() ? 'timu_modules_network' : 'timu_modules';
 		$cached    = is_multisite()
@@ -165,7 +244,7 @@ class TIMU_Module_Registry {
 			: get_transient( $cache_key );
 
 		if ( false !== $cached && is_array( $cached ) ) {
-			self::$modules = $cached;
+			self::$modules = array_merge( $persisted, $cached );
 			return;
 		}
 
@@ -228,6 +307,10 @@ class TIMU_Module_Registry {
 		} else {
 			set_transient( $cache_key, self::$modules, $cache_duration );
 		}
+
+		// Merge with persisted store for durability.
+		self::$modules = array_merge( $persisted, self::$modules );
+		self::persist_modules();
 	}
 
 	/**
@@ -289,18 +372,26 @@ class TIMU_Module_Registry {
 	public static function get_catalog_with_status(): array {
 		$catalog   = self::get_catalog_modules();
 		$installed = self::get_modules();
+		
+		// Check for bundled modules in modules/ directory.
+		$bundled_modules = self::get_bundled_modules_from_filesystem();
+		
 		$result    = array();
 
 		foreach ( $catalog as $entry ) {
 			$slug          = $entry['slug'] ?? '';
 			$installed_mod = $installed[ $slug ] ?? null;
+			$bundled_mod   = $bundled_modules[ $slug ] ?? null;
 
 			if ( empty( $slug ) ) {
 				continue;
 			}
 
+			// If not registered but exists as bundled module, treat as installed.
+			$is_installed = ! empty( $installed_mod ) || ! empty( $bundled_mod );
+
 			$available_version = $entry['version'] ?? '0.0.0';
-			$installed_version = $installed_mod['version'] ?? null;
+			$installed_version = $installed_mod['version'] ?? ( $bundled_mod['version'] ?? null );
 			$update_available  = false;
 
 			if ( ! empty( $installed_version ) && version_compare( $available_version, $installed_version, '>' ) ) {
@@ -310,10 +401,10 @@ class TIMU_Module_Registry {
 			$result[ $slug ] = array_merge(
 				$entry,
 				array(
-					'installed'         => ! empty( $installed_mod ),
+					'installed'         => $is_installed,
 					'installed_version' => $installed_version,
 					'update_available'  => $update_available,
-					'enabled'           => $installed_mod ? self::is_enabled( $slug ) : false,
+					'enabled'           => $installed_mod ? self::is_enabled( $slug ) : ( $bundled_mod ? true : false ),
 				)
 			);
 		}
@@ -359,6 +450,30 @@ class TIMU_Module_Registry {
 	}
 
 	/**
+	 * Get modules filtered by type and suite.
+	 *
+	 * @param string|null $type  Optional module type.
+	 * @param string|null $suite Optional suite filter.
+	 * @return array
+	 */
+	public static function get_modules_filtered( ?string $type = null, ?string $suite = null ): array {
+		return array_filter(
+			self::$modules,
+			static function ( $module ) use ( $type, $suite ) {
+				if ( $type && ( $module['type'] ?? '' ) !== $type ) {
+					return false;
+				}
+
+				if ( $suite && ( $module['suite'] ?? '' ) !== $suite ) {
+					return false;
+				}
+
+				return true;
+			}
+		);
+	}
+
+	/**
 	 * Get a specific module.
 	 *
 	 * @param string $slug Module slug.
@@ -366,6 +481,96 @@ class TIMU_Module_Registry {
 	 */
 	public static function get_module( string $slug ): ?array {
 		return self::$modules[ $slug ] ?? null;
+	}
+
+	/**
+	 * Get bundled modules from filesystem (modules/ directory).
+	 *
+	 * @return array Modules found in modules/ directory, keyed by slug.
+	 */
+	private static function get_bundled_modules_from_filesystem(): array {
+		$bundled = array();
+		$modules_path = defined( 'TIMU_CORE_PATH' ) ? TIMU_CORE_PATH . 'modules/' : '';
+
+		if ( empty( $modules_path ) || ! is_dir( $modules_path ) ) {
+			return $bundled;
+		}
+
+		// Check hubs/, spokes/, formats/ directories.
+		foreach ( array( 'hubs', 'spokes', 'formats' ) as $type ) {
+			$type_path = $modules_path . $type . '/';
+
+			if ( ! is_dir( $type_path ) ) {
+				continue;
+			}
+
+			// Scan for module directories.
+			$modules = array_filter(
+				glob( $type_path . '*', GLOB_ONLYDIR ),
+				function( $dir ) {
+					return is_dir( $dir );
+				}
+			);
+
+			foreach ( $modules as $module_dir ) {
+				$module_name = basename( $module_dir );
+				$module_file = $module_dir . '/module.php';
+
+				if ( ! file_exists( $module_file ) ) {
+					continue;
+				}
+
+				// Parse module constants from file to get version.
+				$file_contents = file_get_contents( $module_file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+				$version = '1.0.0';
+
+				// Try to extract version constant.
+				if ( preg_match( "/define\s*\(\s*['\"]TIMU_\w+_VERSION['\"]\s*,\s*['\"]([\d.]+)['\"]\s*\)/i", $file_contents, $matches ) ) {
+					$version = $matches[1];
+				}
+
+				// Map directory name to expected plugin slug (e.g., "media" => "media-support-thisismyurl").
+				$slug_map = array(
+					'media' => 'media-support-thisismyurl',
+					'vault' => 'vault-support-thisismyurl',
+					'image' => 'image-support-thisismyurl',
+				);
+
+				$slug = $slug_map[ $module_name ] ?? ( $module_name . '-support-thisismyurl' );
+
+				$bundled[ $slug ] = array(
+					'slug'    => $slug,
+					'name'    => ucfirst( $module_name ) . ' Support',
+					'type'    => rtrim( $type, 's' ), // hubs => hub, spokes => spoke.
+					'version' => $version,
+					'path'    => $module_dir,
+				);
+			}
+		}
+
+		return $bundled;
+	}
+
+	/**
+	 * Determine whether any module declares a capability.
+	 *
+	 * @param string $capability Capability key.
+	 * @return bool
+	 */
+	public static function module_has_capability( string $capability ): bool {
+		$capability = sanitize_key( $capability );
+
+		foreach ( self::$modules as $module ) {
+			if ( empty( $module['capabilities'] ) || ! is_array( $module['capabilities'] ) ) {
+				continue;
+			}
+
+			if ( in_array( $capability, $module['capabilities'], true ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -454,8 +659,10 @@ class TIMU_Module_Registry {
 	private static function get_bundled_catalog(): array {
 		// First, load hardcoded fallback catalog.
 		$fallback_json = '[
-			{"slug":"wordpress-support-thisismyurl","type":"hub","name":"WordPress Support","description":"Foundation plugin managing all hub and spoke plugins for the thisismyurl plugin suite.","version":"1.2601.73001","author":"@thisismyurl","uri":"https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.73001","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl/releases/latest"},
-			{"slug":"image-support-thisismyurl","type":"hub","name":"Image Support","description":"Image Hub orchestrating format spokes with Pixel-Sovereign and Smart Focus-Point.","version":"1.2601.71701","author":"@thisismyurl","uri":"https://github.com/thisismyurl/image-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.9.0","download_url":"https://github.com/thisismyurl/image-support-thisismyurl/releases/latest"},
+			{"slug":"plugin-wp-support-thisismyurl","type":"core","name":"WP Support","description":"Foundation plugin managing all hub and spoke plugins for the thisismyurl plugin suite.","version":"1.2601.73001","author":"@thisismyurl","uri":"https://github.com/thisismyurl/plugin-wp-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.73001","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/plugin-wp-support-thisismyurl/releases/latest"},
+			{"slug":"media-support-thisismyurl","type":"hub","name":"Media Support","description":"Media Hub providing multi-engine fallback, encryption, and cloud bridge capabilities.","version":"1.0.0","author":"@thisismyurl","uri":"https://github.com/thisismyurl/media-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.73001","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/media-support-thisismyurl/releases/latest"},
+			{"slug":"vault-support-thisismyurl","type":"hub","name":"Vault Support","description":"The Vault - secure original storage with encryption, compression, and broken link guardian.","version":"1.0.0","author":"@thisismyurl","uri":"https://github.com/thisismyurl/vault-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.73001","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/vault-support-thisismyurl/releases/latest"},
+			{"slug":"image-support-thisismyurl","type":"hub","name":"Image Support","description":"Image Hub orchestrating format spokes with Pixel-Sovereign and Smart Focus-Point.","version":"1.2601.71701","author":"@thisismyurl","uri":"https://github.com/thisismyurl/image-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_hub":"media-support-thisismyurl","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.9.0","download_url":"https://github.com/thisismyurl/image-support-thisismyurl/releases/latest"},
 			{"slug":"avif-support-thisismyurl","type":"spoke","name":"AVIF Support","description":"AVIF spoke for high-efficiency images with Vault mapping.","version":"1.0.0","author":"@thisismyurl","uri":"https://github.com/thisismyurl/avif-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/avif-support-thisismyurl/releases/latest"},
 			{"slug":"webp-support-thisismyurl","type":"spoke","name":"WebP Support","description":"WebP spoke for modern browser delivery with Broken Link Guardian.","version":"1.0.0","author":"@thisismyurl","uri":"https://github.com/thisismyurl/webp-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/webp-support-thisismyurl/releases/latest"},
 			{"slug":"heic-support-thisismyurl","type":"spoke","name":"HEIC Support","description":"HEIC spoke with conversion to web-safe formats.","version":"1.0.0","author":"@thisismyurl","uri":"https://github.com/thisismyurl/heic-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/heic-support-thisismyurl/releases/latest"},

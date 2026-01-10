@@ -2,8 +2,8 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: WordPress Support (thisismyurl) 1.2601.73001\n"
-"Report-Msgid-Bugs-To: https://thisismyurl.com/wordpress-support-thisismyurl/\n"
+"Project-Id-Version: WP Support (thisismyurl) 1.2601.73001\n"
+"Report-Msgid-Bugs-To: https://thisismyurl.com/plugin-wp-support-thisismyurl/\n"
 "POT-Creation-Date: 2026-01-09 00:00+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"

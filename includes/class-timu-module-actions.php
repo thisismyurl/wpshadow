@@ -38,6 +38,44 @@ class TIMU_Module_Actions {
 
 		// Deactivate module (network).
 		add_action( 'wp_ajax_timu_module_deactivate', array( __CLASS__, 'ajax_deactivate_module' ) );
+
+		// Toggle module enabled setting (for bundled/non-plugin modules).
+		add_action( 'wp_ajax_timu_module_toggle', array( __CLASS__, 'ajax_toggle_module_enabled' ) );
+	}
+	/**
+	 * AJAX: Toggle module enabled setting (site or network scope).
+	 *
+	 * @return void
+	 */
+	public static function ajax_toggle_module_enabled(): void {
+		// Verify nonce.
+		check_ajax_referer( 'timu_module_actions', 'nonce' );
+
+		$network_scope = is_multisite() && is_network_admin();
+		$has_cap       = $network_scope ? current_user_can( 'manage_network_options' ) : current_user_can( 'manage_options' );
+		if ( ! $has_cap ) {
+			wp_send_json_error(
+				array( 'message' => __( 'You do not have permission to update module settings.', 'plugin-wp-support-thisismyurl' ) ),
+				403
+			);
+		}
+
+		$slug    = isset( $_POST['slug'] ) ? sanitize_key( wp_unslash( $_POST['slug'] ) ) : '';
+		$enabled = isset( $_POST['enabled'] ) ? (bool) intval( wp_unslash( $_POST['enabled'] ) ) : null;
+		if ( empty( $slug ) || null === $enabled ) {
+			wp_send_json_error(
+				array( 'message' => __( 'Missing parameters.', 'plugin-wp-support-thisismyurl' ) ),
+				400
+			);
+		}
+
+		$ok = TIMU_Module_Registry::update_module_settings( $slug, array( 'enabled' => $enabled ), $network_scope );
+		if ( ! $ok ) {
+			wp_send_json_error( array( 'message' => __( 'Failed to update settings.', 'plugin-wp-support-thisismyurl' ) ), 500 );
+		}
+
+		$status = TIMU_Module_Registry::get_catalog_with_status();
+		wp_send_json_success( array( 'message' => __( 'Settings updated.', 'plugin-wp-support-thisismyurl' ), 'status' => $status[ $slug ] ?? array() ) );
 	}
 
 	/**
@@ -54,7 +92,7 @@ class TIMU_Module_Actions {
 		if ( ! current_user_can( $cap ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'You do not have permission to install plugins.', 'wordpress-support-thisismyurl' ),
+					'message' => __( 'You do not have permission to install plugins.', 'plugin-wp-support-thisismyurl' ),
 				),
 				403
 			);
@@ -65,7 +103,7 @@ class TIMU_Module_Actions {
 		if ( empty( $slug ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Module slug is required.', 'wordpress-support-thisismyurl' ),
+					'message' => __( 'Module slug is required.', 'plugin-wp-support-thisismyurl' ),
 				),
 				400
 			);
@@ -85,7 +123,7 @@ class TIMU_Module_Actions {
 		if ( empty( $module_entry ) || empty( $module_entry['download_url'] ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Module not found in catalog or missing download URL.', 'wordpress-support-thisismyurl' ),
+					'message' => __( 'Module not found in catalog or missing download URL.', 'plugin-wp-support-thisismyurl' ),
 				),
 				404
 			);
@@ -116,7 +154,7 @@ class TIMU_Module_Actions {
 
 		wp_send_json_success(
 			array(
-				'message'     => __( 'Module installed and activated successfully.', 'wordpress-support-thisismyurl' ),
+				'message'     => __( 'Module installed and activated successfully.', 'plugin-wp-support-thisismyurl' ),
 				'plugin_base' => $upgrader->result,
 				'status'      => $status[ $slug ] ?? array(),
 			)
@@ -137,7 +175,7 @@ class TIMU_Module_Actions {
 		if ( ! current_user_can( $cap ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'You do not have permission to update plugins.', 'wordpress-support-thisismyurl' ),
+					'message' => __( 'You do not have permission to update plugins.', 'plugin-wp-support-thisismyurl' ),
 				),
 				403
 			);
@@ -148,7 +186,7 @@ class TIMU_Module_Actions {
 		if ( empty( $slug ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Module slug is required.', 'wordpress-support-thisismyurl' ),
+					'message' => __( 'Module slug is required.', 'plugin-wp-support-thisismyurl' ),
 				),
 				400
 			);
@@ -159,7 +197,7 @@ class TIMU_Module_Actions {
 		if ( empty( $installed[ $slug ] ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Module not found.', 'wordpress-support-thisismyurl' ),
+					'message' => __( 'Module not found.', 'plugin-wp-support-thisismyurl' ),
 				),
 				404
 			);
@@ -179,7 +217,7 @@ class TIMU_Module_Actions {
 		if ( empty( $module_entry ) || empty( $module_entry['download_url'] ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Module not found in catalog or missing download URL.', 'wordpress-support-thisismyurl' ),
+					'message' => __( 'Module not found in catalog or missing download URL.', 'plugin-wp-support-thisismyurl' ),
 				),
 				404
 			);
@@ -206,7 +244,7 @@ class TIMU_Module_Actions {
 
 		wp_send_json_success(
 			array(
-				'message'     => __( 'Module updated successfully.', 'wordpress-support-thisismyurl' ),
+				'message'     => __( 'Module updated successfully.', 'plugin-wp-support-thisismyurl' ),
 				'plugin_base' => $upgrader->result,
 				'status'      => $status[ $slug ] ?? array(),
 			)
@@ -227,7 +265,7 @@ class TIMU_Module_Actions {
 		if ( ! current_user_can( $cap ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'You do not have permission to activate plugins.', 'wordpress-support-thisismyurl' ),
+					'message' => __( 'You do not have permission to activate plugins.', 'plugin-wp-support-thisismyurl' ),
 				),
 				403
 			);
@@ -238,20 +276,32 @@ class TIMU_Module_Actions {
 		if ( empty( $slug ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Module slug is required.', 'wordpress-support-thisismyurl' ),
+					'message' => __( 'Module slug is required.', 'plugin-wp-support-thisismyurl' ),
 				),
 				400
 			);
 		}
 
-		// Build plugin file path.
-		$plugin_file = $slug . '/' . $slug . '.php';
+		// Resolve plugin file path.
+		$plugin_file = isset( $_POST['plugin_base'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_base'] ) ) : '';
+		if ( empty( $plugin_file ) ) {
+			$module = TIMU_Module_Registry::get_module( $slug ) ?? array();
+			$plugin_file = (string) ( $module['basename'] ?? ( $module['file'] ?? ( $slug . '/' . $slug . '.php' ) ) );
+		}
 		$plugin_path = WP_PLUGIN_DIR . '/' . $plugin_file;
+		if ( ! file_exists( $plugin_path ) ) {
+			// Fallback guess: plugin-<slug>/module.php
+			$guess_file = 'plugin-' . $slug . '/module.php';
+			if ( file_exists( WP_PLUGIN_DIR . '/' . $guess_file ) ) {
+				$plugin_file = $guess_file;
+				$plugin_path = WP_PLUGIN_DIR . '/' . $plugin_file;
+			}
+		}
 
 		if ( ! file_exists( $plugin_path ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Plugin file not found.', 'wordpress-support-thisismyurl' ),
+					'message' => __( 'Plugin file not found.', 'plugin-wp-support-thisismyurl' ),
 				),
 				404
 			);
@@ -280,7 +330,7 @@ class TIMU_Module_Actions {
 
 		wp_send_json_success(
 			array(
-				'message' => __( 'Module activated successfully.', 'wordpress-support-thisismyurl' ),
+				'message' => __( 'Module activated successfully.', 'plugin-wp-support-thisismyurl' ),
 				'status'  => $status[ $slug ] ?? array(),
 			)
 		);
@@ -295,11 +345,13 @@ class TIMU_Module_Actions {
 		// Verify nonce.
 		check_ajax_referer( 'timu_module_actions', 'nonce' );
 
-		// Check capability - only network admin can deactivate network plugins.
-		if ( ! is_multisite() || ! is_network_admin() || ! current_user_can( 'manage_network_plugins' ) ) {
+		// Determine scope and capability.
+		$network_scope = is_multisite() && is_network_admin();
+		$has_cap       = $network_scope ? current_user_can( 'manage_network_plugins' ) : current_user_can( 'activate_plugins' );
+		if ( ! $has_cap ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'You do not have permission to deactivate network plugins.', 'wordpress-support-thisismyurl' ),
+					'message' => __( 'You do not have permission to deactivate plugins.', 'plugin-wp-support-thisismyurl' ),
 				),
 				403
 			);
@@ -310,34 +362,46 @@ class TIMU_Module_Actions {
 		if ( empty( $slug ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Module slug is required.', 'wordpress-support-thisismyurl' ),
+					'message' => __( 'Module slug is required.', 'plugin-wp-support-thisismyurl' ),
 				),
 				400
 			);
 		}
 
-		// Build plugin file path.
-		$plugin_file = $slug . '/' . $slug . '.php';
+		// Resolve plugin file path.
+		$plugin_file = isset( $_POST['plugin_base'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_base'] ) ) : '';
+		if ( empty( $plugin_file ) ) {
+			$module = TIMU_Module_Registry::get_module( $slug ) ?? array();
+			$plugin_file = (string) ( $module['basename'] ?? ( $module['file'] ?? ( $slug . '/' . $slug . '.php' ) ) );
+		}
 		$plugin_path = WP_PLUGIN_DIR . '/' . $plugin_file;
+		if ( ! file_exists( $plugin_path ) ) {
+			// Fallback guess: plugin-<slug>/module.php
+			$guess_file = 'plugin-' . $slug . '/module.php';
+			if ( file_exists( WP_PLUGIN_DIR . '/' . $guess_file ) ) {
+				$plugin_file = $guess_file;
+				$plugin_path = WP_PLUGIN_DIR . '/' . $plugin_file;
+			}
+		}
 
 		if ( ! file_exists( $plugin_path ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Plugin file not found.', 'wordpress-support-thisismyurl' ),
+					'message' => __( 'Plugin file not found.', 'plugin-wp-support-thisismyurl' ),
 				),
 				404
 			);
 		}
 
-		// Deactivate network-wide.
-		deactivate_plugins( $plugin_file, false, true );
+		// Deactivate plugin (site or network scope).
+		deactivate_plugins( $plugin_file, false, $network_scope );
 
 		// Refresh catalog with status.
 		$status = TIMU_Module_Registry::get_catalog_with_status();
 
 		wp_send_json_success(
 			array(
-				'message' => __( 'Module deactivated successfully.', 'wordpress-support-thisismyurl' ),
+				'message' => __( 'Module deactivated successfully.', 'plugin-wp-support-thisismyurl' ),
 				'status'  => $status[ $slug ] ?? array(),
 			)
 		);

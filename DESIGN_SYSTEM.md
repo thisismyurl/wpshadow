@@ -535,7 +535,7 @@ wp_enqueue_style(
 ## Resources
 
 - **Stylesheet:** `core-support-thisismyurl/assets/css/timu-ui-system.css`
-- **GitHub Issues:** [#67 Design System](https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl/issues/67)
+- **GitHub Issues:** [#67 Design System](https://github.com/thisismyurl/plugin-plugin-wp-support-thisismyurl/issues/67)
 - **Live Examples:** WordPress Support Dashboard (wp-admin → Dashboard)
 
 ---

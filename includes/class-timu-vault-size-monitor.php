@@ -64,7 +64,7 @@ class TIMU_Vault_Size_Monitor {
 		// Exceeded threshold - show notice and set transient to throttle.
 		$settings_url = is_network_admin()
 			? network_admin_url( 'admin.php?page=timu-core-network-settings' )
-			: admin_url( 'admin.php?page=timu-core-settings' );
+			: admin_url( 'admin.php?page=wp-support&timu_tab=settings' );
 
 		$percentage = round( ( $vault_size_mb / $max_size_mb ) * 100 );
 
@@ -72,7 +72,7 @@ class TIMU_Vault_Size_Monitor {
 		$message = wp_kses_post(
 			sprintf(
 				/* translators: 1: Current vault size in MB, 2: Threshold in MB, 3: Percentage */
-				__( '<strong>Vault Alert:</strong> Storage usage is at %1$s MB of %2$s MB (%3$s%%). <a href="%4$s">Manage retention settings</a> to prevent space issues.', 'wordpress-support-thisismyurl' ),
+				__( '<strong>Vault Alert:</strong> Storage usage is at %1$s MB of %2$s MB (%3$s%%). <a href="%4$s">Manage retention settings</a> to prevent space issues.', 'plugin-wp-support-thisismyurl' ),
 				esc_html( number_format_i18n( $vault_size_mb ) ),
 				esc_html( number_format_i18n( $max_size_mb ) ),
 				esc_html( number_format_i18n( $percentage ) ),

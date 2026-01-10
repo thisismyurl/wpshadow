@@ -61,7 +61,7 @@ class TIMU_Module_Toggles {
 
 		add_settings_section(
 			'timu_module_toggles_section',
-			__( 'Module Features', 'wordpress-support-thisismyurl' ),
+			__( 'Module Features', 'plugin-wp-support-thisismyurl' ),
 			array( __CLASS__, 'render_section' ),
 			'timu_core_modules'
 		);
@@ -86,7 +86,7 @@ class TIMU_Module_Toggles {
 	 */
 	public static function render_section(): void {
 		?>
-		<p><?php esc_html_e( 'Enable or disable module features. Disabling a feature will not deactivate the plugin.', 'wordpress-support-thisismyurl' ); ?></p>
+		<p><?php esc_html_e( 'Enable or disable module features. Disabling a feature will not deactivate the plugin.', 'plugin-wp-support-thisismyurl' ); ?></p>
 		<?php
 	}
 
@@ -104,7 +104,7 @@ class TIMU_Module_Toggles {
 		$installed = self::is_plugin_installed( $module );
 
 		if ( ! $installed ) {
-			echo wp_kses_post( sprintf( '<em aria-label="%s">%s</em>', esc_attr__( 'Plugin not installed', 'wordpress-support-thisismyurl' ), esc_html__( 'Plugin not installed', 'wordpress-support-thisismyurl' ) ) );
+			echo wp_kses_post( sprintf( '<em aria-label="%s">%s</em>', esc_attr__( 'Plugin not installed', 'plugin-wp-support-thisismyurl' ), esc_html__( 'Plugin not installed', 'plugin-wp-support-thisismyurl' ) ) );
 			return;
 		}
 
@@ -122,9 +122,9 @@ class TIMU_Module_Toggles {
 			echo wp_kses_post(
 				sprintf(
 					'<em aria-label="%s" role="status">%s</em>',
-					esc_attr__( 'Requires dependencies', 'wordpress-support-thisismyurl' ),
+					esc_attr__( 'Requires dependencies', 'plugin-wp-support-thisismyurl' ),
 					/* translators: Module names */
-					sprintf( __( 'Requires: %s', 'wordpress-support-thisismyurl' ), esc_html( $dep_labels ) )
+					sprintf( __( 'Requires: %s', 'plugin-wp-support-thisismyurl' ), esc_html( $dep_labels ) )
 				)
 			);
 			return;
@@ -137,10 +137,10 @@ class TIMU_Module_Toggles {
 			<legend class="screen-reader-text"><?php echo esc_html( self::get_module_label( $module ) ); ?></legend>
 			<input type="checkbox" name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $field_id ); ?>" value="1" <?php checked( $enabled, 1 ); ?> aria-describedby="<?php echo esc_attr( $field_id . '_desc' ); ?>" />
 			<label for="<?php echo esc_attr( $field_id ); ?>">
-				<?php esc_html_e( 'Enabled', 'wordpress-support-thisismyurl' ); ?>
+				<?php esc_html_e( 'Enabled', 'plugin-wp-support-thisismyurl' ); ?>
 			</label>
 			<p class="description" id="<?php echo esc_attr( $field_id . '_desc' ); ?>">
-				<?php esc_html_e( 'Disabling this will turn off module features without deactivating the plugin.', 'wordpress-support-thisismyurl' ); ?>
+				<?php esc_html_e( 'Disabling this will turn off module features without deactivating the plugin.', 'plugin-wp-support-thisismyurl' ); ?>
 			</p>
 		</fieldset>
 		<?php
@@ -250,9 +250,9 @@ class TIMU_Module_Toggles {
 	 */
 	private static function get_module_label( string $module ): string {
 		$labels = array(
-			'media-support-thisismyurl' => __( 'Media Support', 'wordpress-support-thisismyurl' ),
-			'image-support-thisismyurl' => __( 'Image Support', 'wordpress-support-thisismyurl' ),
-			'vault-support-thisismyurl' => __( 'Vault Support', 'wordpress-support-thisismyurl' ),
+			'media-support-thisismyurl' => __( 'Media Support', 'plugin-wp-support-thisismyurl' ),
+			'image-support-thisismyurl' => __( 'Image Support', 'plugin-wp-support-thisismyurl' ),
+			'vault-support-thisismyurl' => __( 'Vault Support', 'plugin-wp-support-thisismyurl' ),
 		);
 
 		return $labels[ $module ] ?? ucwords( str_replace( '-', ' ', $module ) );

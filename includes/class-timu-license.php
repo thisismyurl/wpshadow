@@ -72,7 +72,7 @@ class TIMU_License {
 
 		$capability = $network && is_multisite() ? 'manage_network_options' : 'manage_options';
 		if ( ! current_user_can( $capability ) ) {
-			wp_die( esc_html__( 'You do not have permission to manage the license.', 'wordpress-support-thisismyurl' ) );
+			wp_die( esc_html__( 'You do not have permission to manage the license.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		$action = sanitize_text_field( wp_unslash( $_POST['timu_license_action'] ) );
@@ -86,7 +86,7 @@ class TIMU_License {
 
 			$result  = self::broadcast_network_key( $key, $site_ids, (bool) $auto_new );
 			$message = sprintf(
-				__( 'Broadcast completed: %1$d sites successful, %2$d failed.', 'wordpress-support-thisismyurl' ),
+				__( 'Broadcast completed: %1$d sites successful, %2$d failed.', 'plugin-wp-support-thisismyurl' ),
 				$result['success'],
 				$result['failed']
 			);
@@ -115,7 +115,7 @@ class TIMU_License {
 		$message  = $result['message'];
 		$redirect = $network && is_multisite()
 			? network_admin_url( 'admin.php?page=timu-core-network-settings' )
-			: admin_url( 'admin.php?page=timu-core-settings' );
+			: admin_url( 'admin.php?page=wp-support&timu_tab=settings' );
 
 		$redirect = add_query_arg(
 			array(
@@ -179,13 +179,13 @@ class TIMU_License {
 
 		if ( '' === $key ) {
 			call_user_func( $update_fn, self::OPTION_STATUS, 'none' );
-			call_user_func( $update_fn, self::OPTION_MESSAGE, __( 'No key provided.', 'wordpress-support-thisismyurl' ) );
+			call_user_func( $update_fn, self::OPTION_MESSAGE, __( 'No key provided.', 'plugin-wp-support-thisismyurl' ) );
 			call_user_func( $update_fn, self::OPTION_CHECKED, time() );
 			self::handle_reminder_scheduling( false, $use_network );
 
 			return array(
 				'status'  => 'none',
-				'message' => __( 'No key provided.', 'wordpress-support-thisismyurl' ),
+				'message' => __( 'No key provided.', 'plugin-wp-support-thisismyurl' ),
 			);
 		}
 
@@ -222,7 +222,7 @@ class TIMU_License {
 		$data = json_decode( (string) $body, true );
 
 		$valid   = ( 200 === $code ) && ( is_array( $data ) ? (bool) ( $data['valid'] ?? true ) : true );
-		$message = is_array( $data ) && isset( $data['message'] ) ? (string) $data['message'] : __( 'License verified.', 'wordpress-support-thisismyurl' );
+		$message = is_array( $data ) && isset( $data['message'] ) ? (string) $data['message'] : __( 'License verified.', 'plugin-wp-support-thisismyurl' );
 
 		call_user_func( $update_fn, self::OPTION_STATUS, $valid ? 'valid' : 'invalid' );
 		call_user_func( $update_fn, self::OPTION_MESSAGE, $message );
@@ -273,10 +273,10 @@ class TIMU_License {
 
 		$url     = $use_network && is_multisite()
 			? network_admin_url( 'admin.php?page=timu-core-network-settings' )
-			: admin_url( 'admin.php?page=timu-core-settings' );
+			: admin_url( 'admin.php?page=wp-support&timu_tab=settings' );
 		$message = sprintf(
 			/* translators: %s: license settings URL */
-			__( 'This site is not registered. Please register to receive updates and support. Visit the <a href="%s">license settings</a>.', 'wordpress-support-thisismyurl' ),
+			__( 'This site is not registered. Please register to receive updates and support. Visit the <a href="%s">license settings</a>.', 'plugin-wp-support-thisismyurl' ),
 			esc_url( $url )
 		);
 
@@ -382,7 +382,7 @@ class TIMU_License {
 			return array(
 				'success'      => 0,
 				'failed'       => count( $site_ids ),
-				'errors'       => array( __( 'Network admin context required.', 'wordpress-support-thisismyurl' ) ),
+				'errors'       => array( __( 'Network admin context required.', 'plugin-wp-support-thisismyurl' ) ),
 				'broadcast_id' => '',
 			);
 		}
@@ -391,7 +391,7 @@ class TIMU_License {
 			return array(
 				'success'      => 0,
 				'failed'       => 0,
-				'errors'       => array( __( 'License key cannot be empty.', 'wordpress-support-thisismyurl' ) ),
+				'errors'       => array( __( 'License key cannot be empty.', 'plugin-wp-support-thisismyurl' ) ),
 				'broadcast_id' => '',
 			);
 		}
@@ -427,8 +427,8 @@ class TIMU_License {
 				self::log_broadcast_event( $site_id, $broadcast_id, $user_id, true, $result['message'] );
 			} else {
 				++$failed;
-				$error_msg = $result['message'] ?? __( 'Unknown error', 'wordpress-support-thisismyurl' );
-				$errors[]  = sprintf( __( 'Site %1$d: %2$s', 'wordpress-support-thisismyurl' ), $site_id, $error_msg );
+				$error_msg = $result['message'] ?? __( 'Unknown error', 'plugin-wp-support-thisismyurl' );
+				$errors[]  = sprintf( __( 'Site %1$d: %2$s', 'plugin-wp-support-thisismyurl' ), $site_id, $error_msg );
 				self::log_broadcast_event( $site_id, $broadcast_id, $user_id, false, $error_msg );
 			}
 		}

@@ -9,10 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **BREAKING:** Renamed plugin from "Core Support" to "WordPress Support"
-- Plugin file renamed from `core-support-thisismyurl.php` to `wordpress-support-thisismyurl.php`
-- Text domain changed from `core-support-thisismyurl` to `wordpress-support-thisismyurl`
+- Plugin file renamed from `core-support-thisismyurl.php` to `plugin-wp-support-thisismyurl.php`
+- Text domain changed from `core-support-thisismyurl` to `plugin-wp-support-thisismyurl`
 - Updated plugin purpose: now acts as foundational plugin for all plugin-* repositories
-- Repository renamed to `plugin-wordpress-support-thisismyurl`
+- Repository renamed to `plugin-plugin-wp-support-thisismyurl`
 - Updated all documentation to reflect new name and purpose
 - Plugin now explicitly manages hub and spoke plugins as the backbone
 

@@ -17,22 +17,106 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// Verify vault-support Vault class is available.
-if ( ! class_exists( '\\TIMU\\VaultSupport\\TIMU_Vault' ) ) {
+// Alias vault-support Vault class into this namespace if available.
+// WP Support works independently - Vault Support is optional for extended features.
+if ( class_exists( '\\TIMU\\VaultSupport\\TIMU_Vault' ) ) {
+	class_alias( '\\TIMU\\VaultSupport\\TIMU_Vault', __NAMESPACE__ . '\\TIMU_Vault' );
+} else {
 	/**
-	 * Display admin notice when vault-support Vault class is missing.
+	 * Stub TIMU_Vault class when Vault Support plugin is not available.
+	 * Provides no-op methods to prevent fatal errors.
 	 *
-	 * @return void
+	 * @package TIMU_CORE_SUPPORT
 	 */
-	function timu_vault_missing_plugin_notice(): void {
-		printf(
-			'<div class="notice notice-error"><p>%s</p></div>',
-			esc_html__( 'Core Support requires Vault Support to be installed and active with the Vault class available.', 'wordpress-support-thisismyurl' )
-		);
-	}
-	add_action( 'admin_notices', __NAMESPACE__ . '\\timu_vault_missing_plugin_notice' );
-	return;
-}
+	class TIMU_Vault {
+		/**
+		 * No-op init method.
+		 *
+		 * @return void
+		 */
+		public static function init(): void {
+			// Vault Support not available - extended vault features disabled.
+		}
 
-// Alias vault-support Vault class into this namespace for backward compatibility.
-class_alias( '\\TIMU\\VaultSupport\\TIMU_Vault', __NAMESPACE__ . '\\TIMU_Vault' );
+		/**
+		 * No-op get_settings method.
+		 *
+		 * @return array Empty settings array.
+		 */
+		public static function get_settings(): array {
+			return array();
+		}
+
+		/**
+		 * No-op get_logs method.
+		 *
+		 * @param int $offset Offset for pagination.
+		 * @param int $limit  Limit for pagination.
+		 * @return array Empty logs array.
+		 */
+		public static function get_logs( int $offset = 0, int $limit = 10 ): array {
+			return array();
+		}
+
+		/**
+		 * No-op get_pending_contributor_uploads method.
+		 *
+		 * @param int $limit Limit for results.
+		 * @return array Empty array.
+		 */
+		public static function get_pending_contributor_uploads( int $limit = 5 ): array {
+			return array();
+		}
+
+		/**
+		 * No-op add_log method.
+		 *
+		 * @param string $level   Log level.
+		 * @param int    $user_id User ID.
+		 * @param string $message Log message.
+		 * @param string $context Log context.
+		 * @return void
+		 */
+		public static function add_log( string $level, int $user_id, string $message, string $context = '' ): void {
+			// Vault Support not available - logging disabled.
+		}
+
+		/**
+		 * No-op maybe_handle_settings_submission method.
+		 *
+		 * @param bool $network Network admin context.
+		 * @return void
+		 */
+		public static function maybe_handle_settings_submission( bool $network ): void {
+			// Vault Support not available.
+		}
+
+		/**
+		 * No-op maybe_handle_tools_submission method.
+		 *
+		 * @param bool $network Network admin context.
+		 * @return void
+		 */
+		public static function maybe_handle_tools_submission( bool $network ): void {
+			// Vault Support not available.
+		}
+
+		/**
+		 * No-op maybe_handle_log_action method.
+		 *
+		 * @return void
+		 */
+		public static function maybe_handle_log_action(): void {
+			// Vault Support not available.
+		}
+
+		/**
+		 * No-op site_override_allowed method.
+		 *
+		 * @return bool Always returns true when Vault not available.
+		 */
+		public static function site_override_allowed(): bool {
+			return true;
+		}
+	}
+}

@@ -94,7 +94,7 @@ class TIMU_Tab_Navigation {
 	 */
 	public static function build_tab_url( string $tab_id, array $extra_args = array() ): string {
 		$base_url = admin_url( 'admin.php' );
-		$args     = array( 'page' => 'timu-core-support' );
+		$args     = array( 'page' => 'wp-support' );
 
 		// Preserve context.
 		if ( ! empty( $_GET[ self::QUERY_VAR_HUB ] ) ) {
@@ -113,12 +113,34 @@ class TIMU_Tab_Navigation {
 	/**
 	 * Build hub navigation URL.
 	 *
-	 * @param string $hub_id Hub identifier (e.g., 'image', 'video').
+	 * @param string $hub_id Hub identifier (e.g., 'media-support-thisismyurl', 'vault-support-thisismyurl') or short form ('media', 'vault').
 	 * @param string $tab Current tab (default: 'dashboard').
 	 * @return string Hub URL.
 	 */
 	public static function build_hub_url( string $hub_id, string $tab = 'dashboard' ): string {
+		// Extract short hub name from full slug if needed.
+		$hub_id = self::normalize_hub_id( $hub_id );
+		
 		return self::build_tab_url( $tab, array( self::QUERY_VAR_HUB => $hub_id ) );
+	}
+
+	/**
+	 * Normalize hub ID to short form.
+	 *
+	 * Converts 'media-support-thisismyurl' to 'media', 'vault-support-thisismyurl' to 'vault', etc.
+	 *
+	 * @param string $hub_id Full or short hub identifier.
+	 * @return string Short hub identifier.
+	 */
+	private static function normalize_hub_id( string $hub_id ): string {
+		// If already short form, return as-is.
+		if ( ! str_contains( $hub_id, '-support-' ) ) {
+			return $hub_id;
+		}
+
+		// Extract the prefix before '-support-'.
+		$parts = explode( '-support-', $hub_id );
+		return $parts[0];
 	}
 
 	/**
@@ -148,12 +170,12 @@ class TIMU_Tab_Navigation {
 		return array(
 			array(
 				'id'    => 'dashboard',
-				'label' => __( 'Dashboard', 'wordpress-support-thisismyurl' ),
+				'label' => __( 'Dashboard', 'plugin-wp-support-thisismyurl' ),
 				'icon'  => 'dashicons-dashboard',
 			),
 			array(
 				'id'    => 'help',
-				'label' => __( 'Help', 'wordpress-support-thisismyurl' ),
+				'label' => __( 'Help', 'plugin-wp-support-thisismyurl' ),
 				'icon'  => 'dashicons-editor-help',
 			),
 		);
@@ -169,12 +191,12 @@ class TIMU_Tab_Navigation {
 		return array(
 			array(
 				'id'    => 'dashboard',
-				'label' => __( 'Dashboard', 'wordpress-support-thisismyurl' ),
+				'label' => __( 'Dashboard', 'plugin-wp-support-thisismyurl' ),
 				'icon'  => 'dashicons-dashboard',
 			),
 			array(
 				'id'    => 'help',
-				'label' => __( 'Help', 'wordpress-support-thisismyurl' ),
+				'label' => __( 'Help', 'plugin-wp-support-thisismyurl' ),
 				'icon'  => 'dashicons-editor-help',
 			),
 		);
@@ -191,12 +213,12 @@ class TIMU_Tab_Navigation {
 		return array(
 			array(
 				'id'    => 'dashboard',
-				'label' => __( 'Dashboard', 'wordpress-support-thisismyurl' ),
+				'label' => __( 'Dashboard', 'plugin-wp-support-thisismyurl' ),
 				'icon'  => 'dashicons-dashboard',
 			),
 			array(
 				'id'    => 'help',
-				'label' => __( 'Help', 'wordpress-support-thisismyurl' ),
+				'label' => __( 'Help', 'plugin-wp-support-thisismyurl' ),
 				'icon'  => 'dashicons-editor-help',
 			),
 		);
@@ -211,13 +233,13 @@ class TIMU_Tab_Navigation {
 	public static function get_breadcrumbs( array $context ): array {
 		$crumbs = array(
 			array(
-				'label' => __( 'Support', 'wordpress-support-thisismyurl' ),
-				'url'   => admin_url( 'admin.php?page=timu-core-support' ),
+				'label' => __( 'Support', 'plugin-wp-support-thisismyurl' ),
+				'url'   => admin_url( 'admin.php?page=wp-support' ),
 			),
 		);
 
 		if ( ! empty( $context['hub'] ) ) {
-			$hub_label = ucfirst( $context['hub'] ) . ' ' . __( 'Hub', 'wordpress-support-thisismyurl' );
+			$hub_label = ucfirst( $context['hub'] ) . ' ' . __( 'Hub', 'plugin-wp-support-thisismyurl' );
 			$crumbs[]  = array(
 				'label' => $hub_label,
 				'url'   => self::build_hub_url( $context['hub'] ),
@@ -225,7 +247,7 @@ class TIMU_Tab_Navigation {
 		}
 
 		if ( ! empty( $context['spoke'] ) ) {
-			$spoke_label = strtoupper( $context['spoke'] ) . ' ' . __( 'Support', 'wordpress-support-thisismyurl' );
+			$spoke_label = strtoupper( $context['spoke'] ) . ' ' . __( 'Support', 'plugin-wp-support-thisismyurl' );
 			$crumbs[]    = array(
 				'label' => $spoke_label,
 				'url'   => self::build_spoke_url( $context['hub'], $context['spoke'] ),

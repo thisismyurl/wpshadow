@@ -35,7 +35,11 @@ function register_timu_feature( string $feature, array $data = array() ): void {
  * @return bool
  */
 function has_timu_feature( string $feature ): bool {
-	return TIMU_Feature_Registry::has_feature( $feature );
+	if ( TIMU_Feature_Registry::has_feature( $feature ) ) {
+		return true;
+	}
+
+	return TIMU_Module_Registry::module_has_capability( $feature );
 }
 
 /**
@@ -78,4 +82,15 @@ function get_timu_features(): array {
  */
 function get_timu_feature( string $feature ): ?array {
 	return TIMU_Feature_Registry::get_feature( $feature );
+}
+
+/**
+ * Get registered modules with optional filtering.
+ *
+ * @param string|null $type  Module type filter.
+ * @param string|null $suite Suite filter.
+ * @return array
+ */
+function get_timu_modules( ?string $type = null, ?string $suite = null ): array {
+	return TIMU_Module_Registry::get_modules_filtered( $type, $suite );
 }

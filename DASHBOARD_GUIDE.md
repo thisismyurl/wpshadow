@@ -716,8 +716,8 @@ For more info, see [Privacy & User Data](#privacy--user-data) in the main README
 
 ### Resources
 
-- **Documentation:** https://thisismyurl.com/wordpress-support-thisismyurl/
-- **GitHub Issues:** https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl/issues
+- **Documentation:** https://thisismyurl.com/plugin-wp-support-thisismyurl/
+- **GitHub Issues:** https://github.com/thisismyurl/plugin-plugin-wp-support-thisismyurl/issues
 - **Email Support:** support@thisismyurl.com
 - **Community Forum:** (coming soon)
 
@@ -727,7 +727,7 @@ For more info, see [Privacy & User Data](#privacy--user-data) in the main README
    - Your WordPress version, PHP version
    - List of active modules (from **Modules** page)
    - Error message from `/wp-content/debug.log` (if available)
-2. Go to [GitHub Issues](https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl/issues)
+2. Go to [GitHub Issues](https://github.com/thisismyurl/plugin-plugin-wp-support-thisismyurl/issues)
 3. Click **New Issue**
 4. Title: Brief description (e.g., "Module activation fails on multisite")
 5. Description: Include the information from step 1
@@ -736,7 +736,7 @@ For more info, see [Privacy & User Data](#privacy--user-data) in the main README
 ### Requesting a Feature
 
 Have an idea for the Dashboard or modules?
-1. Go to [GitHub Issues](https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl/issues)
+1. Go to [GitHub Issues](https://github.com/thisismyurl/plugin-plugin-wp-support-thisismyurl/issues)
 2. Click **New Issue**
 3. Title: What you want (e.g., "Add bulk enable/disable for modules")
 4. Description: Why it would be useful

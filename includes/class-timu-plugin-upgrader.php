@@ -50,12 +50,12 @@ class TIMU_Plugin_Upgrader {
 
 		// Validate URL.
 		if ( empty( $download_url ) ) {
-			return new WP_Error( 'empty_url', __( 'Download URL is required.', 'wordpress-support-thisismyurl' ) );
+			return new WP_Error( 'empty_url', __( 'Download URL is required.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		// Initialize filesystem.
 		if ( ! $this->init_filesystem() ) {
-			return new WP_Error( 'fs_unavailable', __( 'Could not access filesystem.', 'wordpress-support-thisismyurl' ) );
+			return new WP_Error( 'fs_unavailable', __( 'Could not access filesystem.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		// Create temporary working directory.
@@ -98,7 +98,7 @@ class TIMU_Plugin_Upgrader {
 		if ( $wp_filesystem->exists( $destination ) ) {
 			if ( ! $wp_filesystem->delete( $destination, true ) ) {
 				$this->cleanup( $working_dir );
-				return new WP_Error( 'delete_failed', __( 'Could not remove old plugin version.', 'wordpress-support-thisismyurl' ) );
+				return new WP_Error( 'delete_failed', __( 'Could not remove old plugin version.', 'plugin-wp-support-thisismyurl' ) );
 			}
 		}
 
@@ -106,7 +106,7 @@ class TIMU_Plugin_Upgrader {
 		$move_result = $wp_filesystem->move( trailingslashit( $working_dir ) . $extract_result, $destination, true );
 		if ( ! $move_result ) {
 			$this->cleanup( $working_dir );
-			return new WP_Error( 'move_failed', __( 'Could not move plugin files to destination.', 'wordpress-support-thisismyurl' ) );
+			return new WP_Error( 'move_failed', __( 'Could not move plugin files to destination.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		// Clean up working directory.
@@ -118,7 +118,7 @@ class TIMU_Plugin_Upgrader {
 		// Validate plugin file.
 		$plugin_path = WP_PLUGIN_DIR . '/' . $plugin_basename;
 		if ( ! file_exists( $plugin_path ) ) {
-			return new WP_Error( 'plugin_not_found', __( 'Plugin file not found after extraction.', 'wordpress-support-thisismyurl' ) );
+			return new WP_Error( 'plugin_not_found', __( 'Plugin file not found after extraction.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		// Activate if requested.
@@ -153,18 +153,18 @@ class TIMU_Plugin_Upgrader {
 
 		// Validate inputs.
 		if ( empty( $plugin_file ) || empty( $download_url ) ) {
-			return new WP_Error( 'invalid_params', __( 'Plugin file and download URL are required.', 'wordpress-support-thisismyurl' ) );
+			return new WP_Error( 'invalid_params', __( 'Plugin file and download URL are required.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		// Check plugin exists.
 		$plugin_path = WP_PLUGIN_DIR . '/' . $plugin_file;
 		if ( ! file_exists( $plugin_path ) ) {
-			return new WP_Error( 'plugin_not_found', __( 'Plugin not found.', 'wordpress-support-thisismyurl' ) );
+			return new WP_Error( 'plugin_not_found', __( 'Plugin not found.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		// Initialize filesystem.
 		if ( ! $this->init_filesystem() ) {
-			return new WP_Error( 'fs_unavailable', __( 'Could not access filesystem.', 'wordpress-support-thisismyurl' ) );
+			return new WP_Error( 'fs_unavailable', __( 'Could not access filesystem.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		// Create temporary working directory.
@@ -218,7 +218,7 @@ class TIMU_Plugin_Upgrader {
 		if ( ! $wp_filesystem->move( $destination, $backup_dir, true ) ) {
 			$this->reactivate_plugin( $plugin_file, $was_active_network, $was_active_single );
 			$this->cleanup( $working_dir );
-			return new WP_Error( 'backup_failed', __( 'Could not backup current plugin version.', 'wordpress-support-thisismyurl' ) );
+			return new WP_Error( 'backup_failed', __( 'Could not backup current plugin version.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		// Move new version to destination.
@@ -228,7 +228,7 @@ class TIMU_Plugin_Upgrader {
 			$wp_filesystem->move( $backup_dir, $destination, true );
 			$this->reactivate_plugin( $plugin_file, $was_active_network, $was_active_single );
 			$this->cleanup( $working_dir );
-			return new WP_Error( 'move_failed', __( 'Could not move updated plugin files.', 'wordpress-support-thisismyurl' ) );
+			return new WP_Error( 'move_failed', __( 'Could not move updated plugin files.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		// Remove backup if successful.
@@ -277,13 +277,13 @@ class TIMU_Plugin_Upgrader {
 		$upload_dir = wp_upload_dir();
 
 		if ( is_wp_error( $upload_dir ) || empty( $upload_dir['basedir'] ) ) {
-			return new WP_Error( 'upload_dir_error', __( 'Could not determine upload directory.', 'wordpress-support-thisismyurl' ) );
+			return new WP_Error( 'upload_dir_error', __( 'Could not determine upload directory.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		$working_dir = $upload_dir['basedir'] . '/timu-temp-' . time();
 
 		if ( ! wp_mkdir_p( $working_dir ) ) {
-			return new WP_Error( 'mkdir_failed', __( 'Could not create temporary directory.', 'wordpress-support-thisismyurl' ) );
+			return new WP_Error( 'mkdir_failed', __( 'Could not create temporary directory.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		return $working_dir;
@@ -299,7 +299,7 @@ class TIMU_Plugin_Upgrader {
 	private function download_package( string $url, string $working_dir ) {
 		// Validate URL.
 		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
-			return new WP_Error( 'invalid_url', __( 'Invalid download URL.', 'wordpress-support-thisismyurl' ) );
+			return new WP_Error( 'invalid_url', __( 'Invalid download URL.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		// Download with timeout.
@@ -318,12 +318,12 @@ class TIMU_Plugin_Upgrader {
 
 		$http_code = wp_remote_retrieve_response_code( $response );
 		if ( 200 !== $http_code ) {
-			return new WP_Error( 'http_error', sprintf( __( 'HTTP error: %s', 'wordpress-support-thisismyurl' ), intval( $http_code ) ) );
+			return new WP_Error( 'http_error', sprintf( __( 'HTTP error: %s', 'plugin-wp-support-thisismyurl' ), intval( $http_code ) ) );
 		}
 
 		$zip_file = $working_dir . '/plugin.zip';
 		if ( ! file_exists( $zip_file ) ) {
-			return new WP_Error( 'download_failed', __( 'Could not download plugin ZIP.', 'wordpress-support-thisismyurl' ) );
+			return new WP_Error( 'download_failed', __( 'Could not download plugin ZIP.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		return $zip_file;
@@ -339,19 +339,19 @@ class TIMU_Plugin_Upgrader {
 	private function unpack_package( string $zip_file, string $working_dir ) {
 		// Load extraction class.
 		if ( ! class_exists( '\ZipArchive' ) ) {
-			return new WP_Error( 'no_zip_ext', __( 'ZIP extension not available.', 'wordpress-support-thisismyurl' ) );
+			return new WP_Error( 'no_zip_ext', __( 'ZIP extension not available.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		$zip = new \ZipArchive();
 		$res = $zip->open( $zip_file );
 
 		if ( true !== $res ) {
-			return new WP_Error( 'bad_zip', __( 'Could not open ZIP file.', 'wordpress-support-thisismyurl' ) );
+			return new WP_Error( 'bad_zip', __( 'Could not open ZIP file.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		if ( ! $zip->extractTo( $working_dir ) ) {
 			$zip->close();
-			return new WP_Error( 'extract_failed', __( 'Could not extract ZIP file.', 'wordpress-support-thisismyurl' ) );
+			return new WP_Error( 'extract_failed', __( 'Could not extract ZIP file.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		$zip->close();
@@ -359,7 +359,7 @@ class TIMU_Plugin_Upgrader {
 		// Find extracted directory (usually first folder in ZIP).
 		$files = scandir( $working_dir );
 		if ( false === $files ) {
-			return new WP_Error( 'scan_failed', __( 'Could not scan extracted files.', 'wordpress-support-thisismyurl' ) );
+			return new WP_Error( 'scan_failed', __( 'Could not scan extracted files.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		// Find first non-. directory.
@@ -369,7 +369,7 @@ class TIMU_Plugin_Upgrader {
 			}
 		}
 
-		return new WP_Error( 'no_dir_found', __( 'Could not find extracted plugin directory.', 'wordpress-support-thisismyurl' ) );
+		return new WP_Error( 'no_dir_found', __( 'Could not find extracted plugin directory.', 'plugin-wp-support-thisismyurl' ) );
 	}
 
 	/**
@@ -384,7 +384,7 @@ class TIMU_Plugin_Upgrader {
 		$files      = scandir( $plugin_dir );
 
 		if ( false === $files ) {
-			return new WP_Error( 'scan_failed', __( 'Could not scan plugin directory.', 'wordpress-support-thisismyurl' ) );
+			return new WP_Error( 'scan_failed', __( 'Could not scan plugin directory.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		// Look for PHP file matching directory name.
@@ -402,7 +402,7 @@ class TIMU_Plugin_Upgrader {
 			}
 		}
 
-		return new WP_Error( 'no_plugin_file', __( 'Could not find plugin file in extracted directory.', 'wordpress-support-thisismyurl' ) );
+		return new WP_Error( 'no_plugin_file', __( 'Could not find plugin file in extracted directory.', 'plugin-wp-support-thisismyurl' ) );
 	}
 
 	/**
@@ -418,7 +418,7 @@ class TIMU_Plugin_Upgrader {
 		$dir_name   = basename( $plugin_dir );
 
 		if ( empty( $dir_name ) ) {
-			return new WP_Error( 'invalid_dir_name', __( 'Could not determine plugin directory name.', 'wordpress-support-thisismyurl' ) );
+			return new WP_Error( 'invalid_dir_name', __( 'Could not determine plugin directory name.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		return WP_PLUGIN_DIR . '/' . $dir_name;

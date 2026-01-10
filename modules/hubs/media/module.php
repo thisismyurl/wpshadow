@@ -71,7 +71,7 @@ function timu_media_init(): void {
 	if ( ! class_exists( __NAMESPACE__ . '\\TIMU_Media_Support' ) ) {
 		class TIMU_Media_Support extends \TIMU\Core\Spoke\TIMU_Spoke_Base {
 			public function __construct() {
-				parent::__construct( 'media-support-thisismyurl', TIMU_MEDIA_URL, 'timu_media_settings_group', 'dashicons-admin-media', 'timu-core-support' );
+				parent::__construct( 'media-support-thisismyurl', TIMU_MEDIA_URL, 'timu_media_settings_group', 'dashicons-admin-media', 'wp-support' );
 				add_action( 'init', array( $this, 'setup_plugin' ), 20 );
 				add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 			}
@@ -110,7 +110,7 @@ function timu_media_init(): void {
 			}
 
 			public function render_media_settings_redirect(): void {
-				$redirect_url = admin_url( 'admin.php?page=timu-core-support&tab=media-support-thisismyurl' );
+				$redirect_url = admin_url( 'admin.php?page=wp-support&tab=media-support-thisismyurl' );
 				?>
 				<script type="text/javascript">
 					window.location.href = '<?php echo esc_url( $redirect_url ); ?>';
@@ -127,6 +127,29 @@ function timu_media_init(): void {
 	new TIMU_Media_Support();
 }
 add_action( 'plugins_loaded', __NAMESPACE__ . '\timu_media_init', 12 );
+
+/**
+ * Render Media Hub dashboard.
+ *
+ * @return void
+ */
+function render_dashboard(): void {
+	// Get module catalog for spoke modules.
+	$catalog_modules = \TIMU\CoreSupport\TIMU_Module_Registry::get_catalog_with_status();
+	$modules         = array_filter(
+		$catalog_modules,
+		static function ( $m ) {
+			return ( $m['requires_hub'] ?? '' ) === 'media-support-thisismyurl';
+		}
+	);
+
+	// Get activity logs if Vault is available.
+	$activity_logs = class_exists( '\TIMU\VaultSupport\TIMU_Vault' )
+		? \TIMU\VaultSupport\TIMU_Vault::get_logs( 0, 10 )
+		: array();
+
+	require_once TIMU_MEDIA_PATH . 'views/dashboard.php';
+}
 
 /**
  * Admin notice for missing Core.

@@ -84,7 +84,7 @@ class TIMU_Module_Bootstrap {
 
 		foreach ( $missing as $slug => $module ) {
 			$is_installed = self::is_plugin_installed( $slug );
-			$action_label = $is_installed ? __( 'Activate', 'wordpress-support-thisismyurl' ) : __( 'Install & Activate', 'wordpress-support-thisismyurl' );
+			$action_label = $is_installed ? __( 'Activate', 'plugin-wp-support-thisismyurl' ) : __( 'Install & Activate', 'plugin-wp-support-thisismyurl' );
 			$nonce        = wp_create_nonce( 'timu_module_action' );
 			$action       = $is_installed ? 'timu_activate_module' : 'timu_install_module';
 			$action_url   = add_query_arg(
@@ -103,7 +103,7 @@ class TIMU_Module_Bootstrap {
 					echo wp_kses_post(
 						sprintf(
 							/* translators: 1: Module name, 2: Module description */
-							__( '<strong>Core Support:</strong> %1$s is recommended. %2$s', 'wordpress-support-thisismyurl' ),
+							__( '<strong>Core Support:</strong> %1$s is recommended. %2$s', 'plugin-wp-support-thisismyurl' ),
 							esc_html( $module['name'] ),
 							esc_html( $module['description'] )
 						)
@@ -111,7 +111,7 @@ class TIMU_Module_Bootstrap {
 					?>
 				</p>
 				<p>
-					<a href="<?php echo esc_url( $action_url ); ?>" class="button button-primary" aria-label="<?php echo esc_attr( sprintf( __( '%1$s: %2$s', 'wordpress-support-thisismyurl' ), $action_label, $module['name'] ) ); ?>">
+					<a href="<?php echo esc_url( $action_url ); ?>" class="button button-primary" aria-label="<?php echo esc_attr( sprintf( __( '%1$s: %2$s', 'plugin-wp-support-thisismyurl' ), $action_label, $module['name'] ) ); ?>">
 						<?php echo esc_html( $action_label ); ?>
 					</a>
 				</p>
@@ -127,19 +127,19 @@ class TIMU_Module_Bootstrap {
 	 */
 	public static function handle_install_module(): void {
 		if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
-			wp_die( esc_html__( 'Insufficient permissions.', 'wordpress-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		$nonce  = isset( $_REQUEST['nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ) : '';
 		$module = isset( $_REQUEST['module'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['module'] ) ) : '';
 
 		if ( ! wp_verify_nonce( $nonce, 'timu_module_action' ) ) {
-			wp_die( esc_html__( 'Invalid nonce.', 'wordpress-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Invalid nonce.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		$all_modules = array_merge( self::REQUIRED_MODULES, self::OPTIONAL_MODULES );
 		if ( ! isset( $all_modules[ $module ] ) ) {
-			wp_die( esc_html__( 'Invalid module.', 'wordpress-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Invalid module.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		// Install plugin from GitHub.
@@ -174,29 +174,29 @@ class TIMU_Module_Bootstrap {
 	 */
 	public static function handle_activate_module(): void {
 		if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
-			wp_die( esc_html__( 'Insufficient permissions.', 'wordpress-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		$nonce  = isset( $_REQUEST['nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ) : '';
 		$module = isset( $_REQUEST['module'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['module'] ) ) : '';
 
 		if ( ! wp_verify_nonce( $nonce, 'timu_module_action' ) ) {
-			wp_die( esc_html__( 'Invalid nonce.', 'wordpress-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Invalid nonce.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		$all_modules = array_merge( self::REQUIRED_MODULES, self::OPTIONAL_MODULES );
 		if ( ! isset( $all_modules[ $module ] ) ) {
-			wp_die( esc_html__( 'Invalid module.', 'wordpress-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Invalid module.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		if ( ! self::is_plugin_installed( $module ) ) {
-			wp_die( esc_html__( 'Plugin not installed.', 'wordpress-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Plugin not installed.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		// Activate plugin.
 		$plugin_file = self::get_plugin_file( $module );
 		if ( ! $plugin_file ) {
-			wp_die( esc_html__( 'Plugin file not found.', 'wordpress-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Plugin file not found.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		$result = activate_plugin( $plugin_file );

@@ -31,7 +31,7 @@ This plugin manages all hub and spoke plugins, providing a means to install all 
 
 ## Installation
 
-1. Upload the plugin files to `/wp-content/plugins/wordpress-support-thisismyurl/`
+1. Upload the plugin files to `/wp-content/plugins/plugin-wp-support-thisismyurl/`
 2. Activate through the 'Plugins' menu in WordPress
 3. Configure settings under 'WordPress Support' in the admin menu
 
@@ -104,8 +104,8 @@ Core Support includes built-in privacy and GDPR compliance:
 ### Directory Structure
 
 ```
-wordpress-support-thisismyurl/
-├── wordpress-support-thisismyurl.php  # Main plugin file
+plugin-wp-support-thisismyurl/
+├── plugin-wp-support-thisismyurl.php  # Main plugin file
 ├── uninstall.php                      # Cleanup on uninstall
 ├── includes/                          # Core functionality
 ├── assets/                            # CSS/JS/Images
@@ -137,15 +137,15 @@ wordpress-support-thisismyurl/
 
 ### External Links
 
-- **Online Documentation:** https://thisismyurl.com/wordpress-support-thisismyurl/
-- **Support:** https://thisismyurl.com/wordpress-support-thisismyurl/#support
-- **GitHub Issues:** https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl
+- **Online Documentation:** https://thisismyurl.com/plugin-wp-support-thisismyurl/
+- **Support:** https://thisismyurl.com/plugin-wp-support-thisismyurl/#support
+- **GitHub Issues:** https://github.com/thisismyurl/plugin-plugin-wp-support-thisismyurl
 
 ## Support
 
-- **Documentation:** https://thisismyurl.com/wordpress-support-thisismyurl/
-- **Support:** https://thisismyurl.com/wordpress-support-thisismyurl/#support
-- **GitHub:** https://github.com/thisismyurl/plugin-wordpress-support-thisismyurl
+- **Documentation:** https://thisismyurl.com/plugin-wp-support-thisismyurl/
+- **Support:** https://thisismyurl.com/plugin-wp-support-thisismyurl/#support
+- **GitHub:** https://github.com/thisismyurl/plugin-plugin-wp-support-thisismyurl
 
 ## License
 
