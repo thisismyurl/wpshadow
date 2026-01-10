@@ -96,8 +96,9 @@ function timu_media_init(): void {
 			}
 
 			public function add_admin_menu(): void {
-			// Menu items are now auto-registered by Core's timu_core_register_hub_submenus()
-			// This method is kept for backward compatibility but does nothing.
+				// Menu items are now auto-registered by Core's timu_core_register_hub_submenus()
+				// This method is kept for backward compatibility but does nothing.
+			}
 
 			public function render_media_settings_redirect(): void {
 				$redirect_url = admin_url( 'admin.php?page=wp-support&tab=media-support-thisismyurl' );
