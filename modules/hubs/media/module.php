@@ -73,8 +73,9 @@ function timu_media_init(): void {
 			public function __construct() {
 				parent::__construct( 'media-support-thisismyurl', TIMU_MEDIA_URL, 'timu_media_settings_group', 'dashicons-admin-media', 'wp-support' );
 				add_action( 'init', array( $this, 'setup_plugin' ), 20 );
-			// Hub menu items are now auto-registered by Core's timu_core_register_hub_submenus()
-			// add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
+			}
+
+			public function setup_plugin(): void {
 				$this->is_licensed();
 				$this->init_settings_generator(
 					array(
