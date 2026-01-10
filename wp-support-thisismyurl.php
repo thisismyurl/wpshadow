@@ -735,7 +735,7 @@ function timu_core_setup_hub_dashboard_screen( string $hub_id ): void {
 			add_meta_box(
 				'timu_media_health',
 				__( 'Health', 'plugin-wp-support-thisismyurl' ),
-				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_health' ),
+				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_media_health' ),
 				$screen->id,
 				'side',
 				'default'
@@ -774,6 +774,14 @@ function timu_core_setup_hub_dashboard_screen( string $hub_id ): void {
 				$screen->id,
 				'side',
 				'default'
+			);
+			add_meta_box(
+				'timu_vault_health',
+				__( 'Health', 'plugin-wp-support-thisismyurl' ),
+				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_vault_health' ),
+				$screen->id,
+				'side',
+				'low'
 			);
 			break;
 	}

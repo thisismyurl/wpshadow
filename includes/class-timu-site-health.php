@@ -583,4 +583,146 @@ class TIMU_Site_Health {
 
 		return $info;
 	}
+
+	/**
+	 * Get health test results for a module and its dependents.
+	 *
+	 * @param string|null $module_filter Optional module filter (for hub-specific health).
+	 * @return array {
+	 *     @type int    'score'    Overall health score percentage
+	 *     @type string 'status'   Status: 'good', 'recommended', or 'critical'
+	 *     @type array  'results'  Array of test results with module info
+	 *     @type array  'dependents' Hierarchical dependent health data
+	 * }
+	 */
+	public static function get_health_check_results( ?string $module_filter = null ): array {
+		$tests = array(
+			'vault_directory'     => array(
+				'label'  => __( 'Vault Directory Status', 'plugin-wp-support-thisismyurl' ),
+				'test'   => 'test_vault_directory',
+				'module' => 'vault',
+			),
+			'encryption_config'   => array(
+				'label'  => __( 'Encryption Configuration', 'plugin-wp-support-thisismyurl' ),
+				'test'   => 'test_encryption_config',
+				'module' => 'vault',
+			),
+			'openssl_extension'   => array(
+				'label'  => __( 'OpenSSL Extension', 'plugin-wp-support-thisismyurl' ),
+				'test'   => 'test_openssl_extension',
+				'module' => 'core',
+			),
+			'php_version'         => array(
+				'label'  => __( 'PHP Version Compliance', 'plugin-wp-support-thisismyurl' ),
+				'test'   => 'test_php_version',
+				'module' => 'core',
+			),
+			'wordpress_version'   => array(
+				'label'  => __( 'WordPress Version Compliance', 'plugin-wp-support-thisismyurl' ),
+				'test'   => 'test_wordpress_version',
+				'module' => 'core',
+			),
+			'vault_permissions'   => array(
+				'label'  => __( 'Vault Write Permissions', 'plugin-wp-support-thisismyurl' ),
+				'test'   => 'test_vault_permissions',
+				'module' => 'vault',
+			),
+			'module_status'       => array(
+				'label'  => __( 'Module Status', 'plugin-wp-support-thisismyurl' ),
+				'test'   => 'test_module_status',
+				'module' => 'core',
+			),
+		);
+
+		$results = array();
+		$critical_count = 0;
+		$warning_count = 0;
+		$good_count = 0;
+
+		foreach ( $tests as $test_id => $test_data ) {
+			// Filter by module if specified.
+			if ( $module_filter && isset( $test_data['module'] ) && $test_data['module'] !== $module_filter ) {
+				continue;
+			}
+
+			if ( method_exists( __CLASS__, $test_data['test'] ) ) {
+				$result = call_user_func( array( __CLASS__, $test_data['test'] ) );
+				$status = $result['status'] ?? 'good';
+
+				$results[ $test_id ] = array(
+					'label'   => $test_data['label'],
+					'status'  => $status,
+					'module'  => $test_data['module'] ?? 'core',
+					'details' => $result['description'] ?? '',
+				);
+
+				if ( 'critical' === $status ) {
+					++$critical_count;
+				} elseif ( 'recommended' === $status ) {
+					++$warning_count;
+				} else {
+					++$good_count;
+				}
+			}
+		}
+
+		$total = count( $results );
+		$score = $total > 0 ? round( ( $good_count / $total ) * 100 ) : 100;
+
+		// Determine overall status.
+		if ( $critical_count > 0 ) {
+			$status = 'critical';
+		} elseif ( $warning_count > 0 ) {
+			$status = 'recommended';
+		} else {
+			$status = 'good';
+		}
+
+		return array(
+			'score'      => $score,
+			'status'     => $status,
+			'results'    => $results,
+			'counts'     => array(
+				'good'    => $good_count,
+				'warning' => $warning_count,
+				'critical' => $critical_count,
+				'total'   => $total,
+			),
+		);
+	}
+
+	/**
+	 * Get health results with dependent modules.
+	 *
+	 * @param string $module_id The module ID to get health for.
+	 * @return array Health data including dependents.
+	 */
+	public static function get_hierarchical_health( string $module_id ): array {
+		$self_health = self::get_health_check_results( $module_id );
+
+		// Get dependent modules from registry.
+		$catalog = \TIMU\CoreSupport\TIMU_Module_Registry::get_catalog_with_status();
+		$dependents_data = array();
+
+		foreach ( $catalog as $mod ) {
+			$mod_slug = $mod['slug'] ?? '';
+			if ( empty( $mod['dependencies'] ) ) {
+				continue;
+			}
+
+			// Check if current module is a dependency.
+			if ( in_array( $module_id, (array) $mod['dependencies'], true ) ) {
+				$dep_health = self::get_health_check_results( $mod_slug );
+				$dependents_data[ $mod_slug ] = array(
+					'name'   => $mod['name'] ?? $mod_slug,
+					'health' => $dep_health,
+				);
+			}
+		}
+
+		return array(
+			'self'       => $self_health,
+			'dependents' => $dependents_data,
+		);
+	}
 }

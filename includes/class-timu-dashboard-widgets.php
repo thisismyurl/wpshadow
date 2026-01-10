@@ -165,6 +165,14 @@ class TIMU_Dashboard_Widgets {
 		self::widget_activity( 'vault' );
 	}
 
+	public static function render_metabox_media_health(): void {
+		self::widget_hub_health( 'media' );
+	}
+
+	public static function render_metabox_vault_health(): void {
+		self::widget_hub_health( 'vault' );
+	}
+
 	public static function render_metabox_events_and_news(): void {
 		self::widget_events_and_news();
 	}
@@ -682,76 +690,41 @@ class TIMU_Dashboard_Widgets {
 	}
 
 	private static function widget_system_health(): void {
-		// Run Site Health tests programmatically.
-		$tests = array(
-			'vault_directory'    => array(
-				'label' => __( 'Vault Directory', 'plugin-wp-support-thisismyurl' ),
-				'test'  => 'test_vault_directory',
-			),
-			'encryption_config'  => array(
-				'label' => __( 'Encryption Config', 'plugin-wp-support-thisismyurl' ),
-				'test'  => 'test_encryption_config',
-			),
-			'openssl_extension'  => array(
-				'label' => __( 'OpenSSL Extension', 'plugin-wp-support-thisismyurl' ),
-				'test'  => 'test_openssl_extension',
-			),
-			'php_version'        => array(
-				'label' => __( 'PHP Version', 'plugin-wp-support-thisismyurl' ),
-				'test'  => 'test_php_version',
-			),
-			'wordpress_version'  => array(
-				'label' => __( 'WordPress Version', 'plugin-wp-support-thisismyurl' ),
-				'test'  => 'test_wordpress_version',
-			),
-			'vault_permissions'  => array(
-				'label' => __( 'Vault Permissions', 'plugin-wp-support-thisismyurl' ),
-				'test'  => 'test_vault_permissions',
-			),
-		);
-
-		$results         = array();
-		$critical_count  = 0;
-		$warning_count   = 0;
-		$good_count      = 0;
-
-		if ( class_exists( '\\TIMU\\CoreSupport\\TIMU_Site_Health' ) ) {
-			$site_health = new \TIMU\CoreSupport\TIMU_Site_Health();
-
-			foreach ( $tests as $test_id => $test_data ) {
-				$method = $test_data['test'];
-				if ( method_exists( $site_health, $method ) ) {
-					$result            = $site_health->$method();
-					$results[ $test_id ] = array(
-						'label'  => $test_data['label'],
-						'status' => $result['status'] ?? 'good',
-						'badge'  => $result['badge']['color'] ?? 'gray',
-					);
-
-					// Count by status.
-					$status = $result['status'] ?? 'good';
-					if ( 'critical' === $status ) {
-						++$critical_count;
-					} elseif ( 'recommended' === $status ) {
-						++$warning_count;
-					} else {
-						++$good_count;
-					}
-				}
-			}
+		if ( ! class_exists( '\\TIMU\\CoreSupport\\TIMU_Site_Health' ) ) {
+			echo '<div class="timu-widget-content"><p><em>' . esc_html__( 'Health checks unavailable.', 'plugin-wp-support-thisismyurl' ) . '</em></p></div>';
+			return;
 		}
 
-		$total_tests   = count( $results );
-		$health_score  = $total_tests > 0 ? round( ( $good_count / $total_tests ) * 100 ) : 0;
-		$health_color  = $critical_count > 0 ? '#d63638' : ( $warning_count > 0 ? '#dba617' : '#00a32a' );
-		$health_label  = $critical_count > 0 ? __( 'Critical', 'plugin-wp-support-thisismyurl' ) : ( $warning_count > 0 ? __( 'Warning', 'plugin-wp-support-thisismyurl' ) : __( 'Good', 'plugin-wp-support-thisismyurl' ) );
+		// Get health results for core module.
+		$health_data = \TIMU\CoreSupport\TIMU_Site_Health::get_health_check_results();
+		self::render_health_widget( $health_data );
+	}
+
+	/**
+	 * Render hierarchical health widget.
+	 *
+	 * @param array $health_data Health data array from get_health_check_results().
+	 * @return void
+	 */
+	private static function render_health_widget( array $health_data ): void {
+		$score        = $health_data['score'] ?? 0;
+		$status       = $health_data['status'] ?? 'good';
+		$results      = $health_data['results'] ?? array();
+		$counts       = $health_data['counts'] ?? array( 'good' => 0, 'warning' => 0, 'critical' => 0 );
+		$good_count   = $counts['good'] ?? 0;
+		$warning_count = $counts['warning'] ?? 0;
+		$critical_count = $counts['critical'] ?? 0;
+
+		// Color coding.
+		$health_color = 'critical' === $status ? '#d63638' : ( 'recommended' === $status ? '#dba617' : '#00a32a' );
+		$health_label = 'critical' === $status ? __( 'Critical', 'plugin-wp-support-thisismyurl' ) : ( 'recommended' === $status ? __( 'Warning', 'plugin-wp-support-thisismyurl' ) : __( 'Good', 'plugin-wp-support-thisismyurl' ) );
 		?>
 		<div class="timu-widget-content timu-system-health">
 			<!-- Health Score Badge -->
 			<div style="text-align: center; padding: 15px 0; border-bottom: 1px solid #e5e5e5; margin-bottom: 15px;">
 				<div style="width: 80px; height: 80px; margin: 0 auto; border-radius: 50%; border: 6px solid <?php echo esc_attr( $health_color ); ?>; display: flex; align-items: center; justify-content: center;">
 					<div>
-						<div style="font-size: 24px; font-weight: bold; color: <?php echo esc_attr( $health_color ); ?>;"><?php echo esc_html( $health_score ); ?>%</div>
+						<div style="font-size: 24px; font-weight: bold; color: <?php echo esc_attr( $health_color ); ?>;"><?php echo esc_html( $score ); ?>%</div>
 					</div>
 				</div>
 				<div style="margin-top: 10px;">
@@ -949,6 +922,87 @@ class TIMU_Dashboard_Widgets {
 				<li><span class="dashicons dashicons-admin-generic"></span> <?php esc_html_e( 'Media optimization policies', 'plugin-wp-support-thisismyurl' ); ?></li>
 				<li><span class="dashicons dashicons-networking"></span> <?php esc_html_e( 'Multi-format support coordination', 'plugin-wp-support-thisismyurl' ); ?></li>
 			</ul>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render hub health with dependents.
+	 *
+	 * @param string $hub_id Hub identifier.
+	 * @return void
+	 */
+	private static function widget_hub_health( string $hub_id ): void {
+		if ( ! class_exists( '\\TIMU\\CoreSupport\\TIMU_Site_Health' ) ) {
+			echo '<div class="timu-widget-content"><p><em>' . esc_html__( 'Health checks unavailable.', 'plugin-wp-support-thisismyurl' ) . '</em></p></div>';
+			return;
+		}
+
+		// Get hierarchical health data.
+		$health_hierarchy = \TIMU\CoreSupport\TIMU_Site_Health::get_hierarchical_health( $hub_id );
+		$self_health = $health_hierarchy['self'] ?? array();
+		$dependents = $health_hierarchy['dependents'] ?? array();
+		?>
+		<div class="timu-widget-content">
+			<!-- Self Health -->
+			<div style="margin-bottom: 20px;">
+				<h4 style="margin: 0 0 10px 0;"><?php esc_html_e( 'Hub Health', 'plugin-wp-support-thisismyurl' ); ?></h4>
+				<?php self::render_health_widget( $self_health ); ?>
+			</div>
+
+			<?php if ( ! empty( $dependents ) ) : ?>
+				<!-- Dependent Health -->
+				<div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e5e5;">
+					<h4 style="margin: 0 0 10px 0;"><?php esc_html_e( 'Dependent Modules Health', 'plugin-wp-support-thisismyurl' ); ?></h4>
+					<?php foreach ( $dependents as $dep_id => $dep_data ) : ?>
+						<div style="margin-bottom: 15px; padding: 10px; background: #f9f9f9; border-radius: 3px;">
+							<h5 style="margin: 0 0 8px 0; color: #2271b1;">
+								<?php echo esc_html( $dep_data['name'] ?? ucfirst( $dep_id ) ); ?>
+							</h5>
+							<?php self::render_compact_health_widget( $dep_data['health'] ?? array() ); ?>
+						</div>
+					<?php endforeach; ?>
+				</div>
+			<?php endif; ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render compact health widget (for dependents).
+	 *
+	 * @param array $health_data Health data.
+	 * @return void
+	 */
+	private static function render_compact_health_widget( array $health_data ): void {
+		$score = $health_data['score'] ?? 0;
+		$status = $health_data['status'] ?? 'good';
+		$counts = $health_data['counts'] ?? array( 'good' => 0, 'warning' => 0, 'critical' => 0 );
+		$results = $health_data['results'] ?? array();
+
+		$health_color = 'critical' === $status ? '#d63638' : ( 'recommended' === $status ? '#dba617' : '#00a32a' );
+		$health_label = 'critical' === $status ? __( 'Critical', 'plugin-wp-support-thisismyurl' ) : ( 'recommended' === $status ? __( 'Warning', 'plugin-wp-support-thisismyurl' ) : __( 'Good', 'plugin-wp-support-thisismyurl' ) );
+		?>
+		<div style="display: flex; align-items: center; justify-content: space-between; gap: 15px;">
+			<div style="flex: 0 0 60px;">
+				<div style="width: 60px; height: 60px; border-radius: 50%; border: 4px solid <?php echo esc_attr( $health_color ); ?>; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold; color: <?php echo esc_attr( $health_color ); ?>;">
+					<?php echo esc_html( $score ); ?>%
+				</div>
+			</div>
+			<div style="flex: 1;">
+				<div style="font-weight: 600; color: <?php echo esc_attr( $health_color ); ?>; margin-bottom: 6px;">
+					<?php echo esc_html( $health_label ); ?>
+				</div>
+				<div style="display: flex; gap: 10px; font-size: 12px; color: #666;">
+					<span><strong><?php echo esc_html( $counts['good'] ?? 0 ); ?></strong> <?php esc_html_e( 'Passed', 'plugin-wp-support-thisismyurl' ); ?></span>
+					<?php if ( ( $counts['warning'] ?? 0 ) > 0 ) : ?>
+						<span><strong style="color: #dba617;"><?php echo esc_html( $counts['warning'] ); ?></strong> <?php esc_html_e( 'Warnings', 'plugin-wp-support-thisismyurl' ); ?></span>
+					<?php endif; ?>
+					<?php if ( ( $counts['critical'] ?? 0 ) > 0 ) : ?>
+						<span><strong style="color: #d63638;"><?php echo esc_html( $counts['critical'] ); ?></strong> <?php esc_html_e( 'Critical', 'plugin-wp-support-thisismyurl' ); ?></span>
+					<?php endif; ?>
+				</div>
+			</div>
 		</div>
 		<?php
 	}
