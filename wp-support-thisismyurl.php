@@ -45,6 +45,10 @@ function wp_support_render_settings( string $hub_id = '' ): void {
 		return;
 	}
 
+	// Enqueue postbox script for draggable/closable widgets.
+	wp_enqueue_script( 'postbox' );
+	wp_enqueue_style( 'dashboard' );
+
 	// Title mirrors dashboard style.
 	$settings_title = __( 'Support Settings', 'plugin-wp-support-thisismyurl' );
 	if ( ! empty( $hub_id ) ) {
@@ -92,6 +96,24 @@ function wp_support_render_settings( string $hub_id = '' ): void {
 		__NAMESPACE__ . '\\render_settings_license',
 		$screen->id,
 		'side'
+	);
+
+	// Initialize postboxes on this screen (drag/toggle) in footer.
+	add_action(
+		'admin_print_footer_scripts',
+		static function () use ( $screen, $hub_id ): void {
+			// Use hub-specific state key for settings.
+			$state_key = 'wp-support-settings' . ( $hub_id ? '-' . $hub_id : '' );
+			?>
+			<script>
+			jQuery(document).ready(function($){
+				if (typeof postboxes !== 'undefined') {
+					postboxes.add_postbox_toggles('<?php echo esc_js( $state_key ); ?>');
+				}
+			});
+			</script>
+			<?php
+		}
 	);
 
 	?>
