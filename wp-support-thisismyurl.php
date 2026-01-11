@@ -499,9 +499,9 @@ function wp_support_init(): void {
 		dirname( wp_support_BASENAME ) . '/languages'
 	);
 
-	// Load GitHub updater for private repository updates.
-	require_once wp_support_PATH . 'includes/class-wps-github-updater.php';
-	WPS_GitHub_Updater::init( wp_support_BASENAME );
+	// Load update server client for automatic updates.
+	require_once wp_support_PATH . 'includes/class-wps-update-client.php';
+	\WPS\CoreSupport\WPS_Update_Client::init( wp_support_BASENAME );
 
 	// Load module bootstrap for child plugin installation and activation.
 	require_once wp_support_PATH . 'includes/class-wps-module-bootstrap.php';
@@ -1303,9 +1303,9 @@ function wp_support_render_core_content( string $tab ): void {
 			echo '<div class="wrap"><h1>' . esc_html__( 'Help', 'plugin-wp-support-thisismyurl' ) . '</h1>';
 			echo '<p>' . esc_html__( 'Help content will be added here.', 'plugin-wp-support-thisismyurl' ) . '</p></div>';
 			break;
-		case 'github-updates':
-			require_once wp_support_PATH . 'includes/class-wps-github-settings.php';
-			wp_support_render_github_updates();
+		case 'updates':
+			require_once wp_support_PATH . 'includes/class-wps-update-settings.php';
+			wp_support_render_updates_page();
 			break;
 		case 'modules':
 			wp_support_render_modules();
