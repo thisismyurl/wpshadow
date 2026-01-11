@@ -950,6 +950,19 @@ function wp_support_render_tab_router(): void {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
 	}
 
+	// Early guard: if a module is specified via URL and is disabled, block direct access.
+	// This complements the context-based guard below and covers cases where context parsing fails.
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$raw_module = isset( $_GET['module'] ) ? sanitize_key( wp_unslash( $_GET['module'] ) ) : '';
+	if ( ! empty( $raw_module ) ) {
+		$module_slug = $raw_module . '-support-thisismyurl';
+		if ( ! \WPS\CoreSupport\WPS_Module_Registry::is_enabled( $module_slug ) ) {
+			$parent_url = is_network_admin() ? network_admin_url( 'admin.php?page=wp-support' ) : admin_url( 'admin.php?page=wp-support' );
+			wp_safe_redirect( $parent_url );
+			exit;
+		}
+	}
+
 	$context = WPS_Tab_Navigation::get_current_context();
 	$hub     = $context['hub'];
 	$spoke   = $context['spoke'];
