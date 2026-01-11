@@ -31,6 +31,16 @@ $license_checked = ! empty( $license_state['checked_at'] ) ? date_i18n( 'M j, Y 
 <div class="wrap wps-core-wrap">
 	<h1><?php echo esc_html__( 'Core Support - Vault Settings', 'plugin-wp-support-thisismyurl' ); ?></h1>
 
+	<style>
+		/* Force single-column layout for settings */
+		.wps-core-wrap .metabox-holder,
+		.wps-core-wrap .postbox-container {
+			width: 100% !important;
+			max-width: 100% !important;
+			float: none;
+		}
+	</style>
+
 	<?php if ( $is_network ) : ?>
 		<div class="notice notice-info"><p><?php echo esc_html__( 'Network Admin: Register your license once, then broadcast it to all sub-sites below.', 'plugin-wp-support-thisismyurl' ); ?></p></div>
 	<?php endif; ?>

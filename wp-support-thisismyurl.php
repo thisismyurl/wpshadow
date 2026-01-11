@@ -1304,8 +1304,7 @@ function wp_support_render_core_content( string $tab ): void {
 			}
 			break;
 		case 'help':
-			echo '<div class="wrap"><h1>' . esc_html__( 'Help', 'plugin-wp-support-thisismyurl' ) . '</h1>';
-			echo '<p>' . esc_html__( 'Help content will be added here.', 'plugin-wp-support-thisismyurl' ) . '</p></div>';
+			wp_support_render_help_layout();
 			break;
 		case 'updates':
 			require_once wp_support_PATH . 'includes/class-wps-update-settings.php';
@@ -1335,8 +1334,7 @@ function wp_support_render_core_content( string $tab ): void {
 function wp_support_render_hub_content( string $hub_id, string $tab ): void {
 	switch ( $tab ) {
 		case 'help':
-			echo '<div class="wrap"><h1>' . esc_html( ucfirst( $hub_id ) . ' - ' . __( 'Help', 'plugin-wp-support-thisismyurl' ) ) . '</h1>';
-			echo '<p>' . esc_html__( 'Help content will be added here.', 'plugin-wp-support-thisismyurl' ) . '</p></div>';
+			wp_support_render_help_layout();
 			break;
 		case 'settings':
 			wp_support_render_settings( $hub_id );
@@ -1360,8 +1358,7 @@ function wp_support_render_hub_content( string $hub_id, string $tab ): void {
 function wp_support_render_spoke_content( string $hub_id, string $spoke_id, string $tab ): void {
 	switch ( $tab ) {
 		case 'help':
-			echo '<div class="wrap"><h1>' . esc_html( strtoupper( $spoke_id ) . ' - ' . __( 'Help', 'plugin-wp-support-thisismyurl' ) ) . '</h1>';
-			echo '<p>' . esc_html__( 'Help content will be added here.', 'plugin-wp-support-thisismyurl' ) . '</p></div>';
+			wp_support_render_help_layout();
 			break;
 		case 'dashboard':
 		default:
@@ -1527,7 +1524,14 @@ function wp_support_render_dashboard( string $hub_id = '', string $spoke_id = ''
 	?>
 	<div class="wrap">
 		<h1><?php echo esc_html( $dashboard_title ); ?></h1>
-		<div id="dashboard-widgets" class="metabox-holder">
+
+		<div class="wps-dashboard-license-row">
+			<div id="wps_license_widget" class="postbox" style="margin:0 0 16px 0;">
+				<?php \WPS\CoreSupport\WPS_License_Widget::render_widget(); ?>
+			</div>
+		</div>
+
+		<div id="dashboard-widgets" class="metabox-holder wps-dashboard-grid">
 			<div id="postbox-container-1" class="postbox-container">
 				<?php do_meta_boxes( $screen->id, 'normal', null ); ?>
 			</div>
@@ -1535,6 +1539,48 @@ function wp_support_render_dashboard( string $hub_id = '', string $spoke_id = ''
 				<?php do_meta_boxes( $screen->id, 'side', null ); ?>
 			</div>
 		</div>
+	</div>
+
+	<style>
+		.wps-dashboard-grid {
+			display: grid;
+			grid-template-columns: 2fr 1fr;
+			grid-column-gap: 16px;
+		}
+
+		.wps-dashboard-grid #postbox-container-1,
+		.wps-dashboard-grid #postbox-container-2 {
+			width: 100%;
+		}
+
+		@media (max-width: 1024px) {
+			.wps-dashboard-grid {
+				grid-template-columns: 1fr;
+			}
+		}
+	</style>
+	</div>
+	<?php
+}
+
+/**
+ * Render Help view with license emphasis.
+ *
+ * @return void
+ */
+function wp_support_render_help_layout(): void {
+	?>
+	<div class="wrap">
+		<h1><?php echo esc_html__( 'Help', 'plugin-wp-support-thisismyurl' ); ?></h1>
+		<div class="wps-dashboard-license-row">
+			<div id="wps_license_widget" class="postbox" style="margin:0 0 16px 0;">
+				<?php \WPS\CoreSupport\WPS_License_Widget::render_widget(); ?>
+			</div>
+		</div>
+		<style>
+			.wps-dashboard-license-row { margin-bottom: 12px; }
+			.wps-dashboard-license-row #wps_license_widget { width: 100%; }
+		</style>
 	</div>
 	<?php
 }

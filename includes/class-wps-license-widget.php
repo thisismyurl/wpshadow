@@ -102,8 +102,18 @@ class WPS_License_Widget {
 			__( 'License Status', 'plugin-wp-support-thisismyurl' ),
 			array( __CLASS__, 'render_widget' ),
 			$screen->id,
+			'license', // Use 'license' for full-width placement, 'side' as fallback
+			'core'
+		);
+		
+		// Also add to side if license container doesn't exist (backwards compat).
+		add_meta_box(
+			self::WIDGET_ID . '_side',
+			__( 'License Status', 'plugin-wp-support-thisismyurl' ),
+			array( __CLASS__, 'render_widget' ),
+			$screen->id,
 			'side',
-			'core' // Use 'core' instead of 'high' for top positioning
+			'core'
 		);
 	}
 
