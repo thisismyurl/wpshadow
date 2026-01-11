@@ -649,6 +649,9 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/class-wps-module-actions.php';
 	WPS_Module_Actions::init();
 
+	// Centralized router guard for disabled modules.
+	require_once wp_support_PATH . 'includes/class-wps-router-guard.php';
+
 	// Load tab navigation system.
 	require_once wp_support_PATH . 'includes/class-wps-tab-navigation.php';
 	require_once wp_support_PATH . 'includes/class-wps-dashboard-widgets.php';
@@ -1007,48 +1010,14 @@ function wp_support_render_tab_router(): void {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
 	}
 
-	// Early guard: if a module is specified via URL and is disabled, block direct access.
-	// This complements the context-based guard below and covers cases where context parsing fails.
-	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	$raw_module = isset( $_GET['module'] ) ? sanitize_key( wp_unslash( $_GET['module'] ) ) : '';
-	if ( ! empty( $raw_module ) ) {
-		$module_slug = $raw_module . '-support-thisismyurl';
-		if ( ! \WPS\CoreSupport\WPS_Module_Registry::is_enabled( $module_slug ) ) {
-			// Add one-time admin notice after redirect.
-			wp_support_add_admin_notice( sprintf( __( '%s is disabled. Redirected to Support dashboard.', 'plugin-wp-support-thisismyurl' ), ucfirst( $raw_module ) ), 'warning' );
-			$parent_url = is_network_admin() ? network_admin_url( 'admin.php?page=wp-support' ) : admin_url( 'admin.php?page=wp-support' );
-			wp_safe_redirect( $parent_url );
-			exit;
-		}
-	}
+	// Apply centralized router guard (raw module, hub, and spoke checks).
+	\WPS\CoreSupport\WPS_Router_Guard::execute();
 
 	$context = WPS_Tab_Navigation::get_current_context();
 	$hub     = $context['hub'];
 	$spoke   = $context['spoke'];
 	$tab     = $context['tab'];
 	$level   = $context['level'];
-
-	// Block and redirect if hub module is disabled (avoid dead dashboard access).
-	if ( ! empty( $hub ) ) {
-		$slug = $hub . '-support-thisismyurl';
-		if ( ! WPS_Module_Registry::is_enabled( $slug ) ) {
-			wp_support_add_admin_notice( sprintf( __( '%s hub is disabled. Redirected to Support dashboard.', 'plugin-wp-support-thisismyurl' ), ucfirst( $hub ) ), 'warning' );
-			$parent_url = is_network_admin() ? network_admin_url( 'admin.php?page=wp-support' ) : admin_url( 'admin.php?page=wp-support' );
-			wp_safe_redirect( $parent_url );
-			exit;
-		}
-
-		// Also block if spoke module is disabled.
-		if ( ! empty( $spoke ) ) {
-			$spoke_slug = $spoke . '-support-thisismyurl';
-			if ( ! WPS_Module_Registry::is_enabled( $spoke_slug ) ) {
-				wp_support_add_admin_notice( sprintf( __( '%1$s format is disabled. Redirected to %2$s hub.', 'plugin-wp-support-thisismyurl' ), strtoupper( $spoke ), ucfirst( $hub ) ), 'warning' );
-				$parent_url = is_network_admin() ? network_admin_url( 'admin.php?page=wp-support&module=' . $hub ) : admin_url( 'admin.php?page=wp-support&module=' . $hub );
-				wp_safe_redirect( $parent_url );
-				exit;
-			}
-		}
-	}
 
 	// Render breadcrumbs (except at Core level).
 	if ( 'core' !== $level ) {

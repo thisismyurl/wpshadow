@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+require_once __DIR__ . '/class-wps-health-renderer.php';
+
 /**
  * Site Health integration class.
  */
@@ -91,62 +93,42 @@ class WPS_Site_Health {
 		$vault_dirname = get_option( 'WPS_vault_dirname' );
 
 		if ( empty( $vault_dirname ) ) {
-			return array(
-				'label'       => __( 'Vault directory not configured', 'plugin-wp-support-thisismyurl' ),
-				'status'      => 'recommended',
-				'badge'       => array(
-					'label' => __( 'WPS Suite', 'plugin-wp-support-thisismyurl' ),
-					'color' => 'orange',
-				),
-				'description' => sprintf(
-					'<p>%s</p>',
-					esc_html__( 'The vault directory has not been created yet. It will be created automatically on first use.', 'plugin-wp-support-thisismyurl' )
-				),
-				'actions'     => '',
-				'test'        => 'WPS_vault_directory',
+			return WPS_Health_Renderer::build_result(
+				__( 'Vault directory not configured', 'plugin-wp-support-thisismyurl' ),
+				'recommended',
+				esc_html__( 'The vault directory has not been created yet. It will be created automatically on first use.', 'plugin-wp-support-thisismyurl' ),
+				'WPS_vault_directory',
+				'',
+				'orange'
 			);
 		}
 
 		$vault_path = $upload_dir['basedir'] . '/' . $vault_dirname;
 
 		if ( ! file_exists( $vault_path ) ) {
-			return array(
-				'label'       => __( 'Vault directory missing', 'plugin-wp-support-thisismyurl' ),
-				'status'      => 'critical',
-				'badge'       => array(
-					'label' => __( 'WPS Suite', 'plugin-wp-support-thisismyurl' ),
-					'color' => 'red',
+			return WPS_Health_Renderer::build_result(
+				__( 'Vault directory missing', 'plugin-wp-support-thisismyurl' ),
+				'critical',
+				sprintf(
+					/* translators: %s: vault path */
+					esc_html__( 'The vault directory was configured but does not exist at: %s', 'plugin-wp-support-thisismyurl' ),
+					'<code>' . esc_html( $vault_path ) . '</code>'
 				),
-				'description' => sprintf(
-					'<p>%s</p>',
-					sprintf(
-						/* translators: %s: vault path */
-						esc_html__( 'The vault directory was configured but does not exist at: %s', 'plugin-wp-support-thisismyurl' ),
-						'<code>' . esc_html( $vault_path ) . '</code>'
-					)
-				),
-				'actions'     => '',
-				'test'        => 'WPS_vault_directory',
+				'WPS_vault_directory',
+				'',
+				'red'
 			);
 		}
 
-		return array(
-			'label'       => __( 'Vault directory configured', 'plugin-wp-support-thisismyurl' ),
-			'status'      => 'good',
-			'badge'       => array(
-				'label' => __( 'WPS Suite', 'plugin-wp-support-thisismyurl' ),
-				'color' => 'blue',
+		return WPS_Health_Renderer::build_result(
+			__( 'Vault directory configured', 'plugin-wp-support-thisismyurl' ),
+			'good',
+			sprintf(
+				/* translators: %s: vault path */
+				esc_html__( 'The vault directory exists at: %s', 'plugin-wp-support-thisismyurl' ),
+				'<code>' . esc_html( $vault_path ) . '</code>'
 			),
-			'description' => sprintf(
-				'<p>%s</p>',
-				sprintf(
-					/* translators: %s: vault path */
-					esc_html__( 'The vault directory exists at: %s', 'plugin-wp-support-thisismyurl' ),
-					'<code>' . esc_html( $vault_path ) . '</code>'
-				)
-			),
-			'actions'     => '',
-			'test'        => 'WPS_vault_directory',
+			'WPS_vault_directory'
 		);
 	}
 
@@ -159,34 +141,22 @@ class WPS_Site_Health {
 		$is_production = 'production' === wp_get_environment_type();
 
 		if ( defined( 'WPS_VAULT_KEY' ) && WPS_VAULT_KEY ) {
-			return array(
-				'label'       => __( 'Encryption key configured in wp-config.php', 'plugin-wp-support-thisismyurl' ),
-				'status'      => 'good',
-				'badge'       => array(
-					'label' => __( 'WPS Suite', 'plugin-wp-support-thisismyurl' ),
-					'color' => 'blue',
-				),
-				'description' => sprintf(
-					'<p>%s</p>',
-					esc_html__( 'Encryption key is properly defined in wp-config.php.', 'plugin-wp-support-thisismyurl' )
-				),
-				'actions'     => '',
-				'test'        => 'WPS_encryption_config',
+			return WPS_Health_Renderer::build_result(
+				__( 'Encryption key configured in wp-config.php', 'plugin-wp-support-thisismyurl' ),
+				'good',
+				esc_html__( 'Encryption key is properly defined in wp-config.php.', 'plugin-wp-support-thisismyurl' ),
+				'WPS_encryption_config'
 			);
 		}
 
 		$stored_key = get_option( 'WPS_vault_encryption_key' );
 
 		if ( ! empty( $stored_key ) && $is_production ) {
-			return array(
-				'label'       => __( 'Encryption key should be in wp-config.php', 'plugin-wp-support-thisismyurl' ),
-				'status'      => 'critical',
-				'badge'       => array(
-					'label' => __( 'WPS Suite', 'plugin-wp-support-thisismyurl' ),
-					'color' => 'red',
-				),
-				'description' => sprintf(
-					'<p>%s</p><p>%s</p>',
+			return WPS_Health_Renderer::build_result(
+				__( 'Encryption key should be in wp-config.php', 'plugin-wp-support-thisismyurl' ),
+				'critical',
+				sprintf(
+					'%s<br><br>%s',
 					esc_html__( 'For production sites, encryption keys must be defined in wp-config.php, not stored in the database.', 'plugin-wp-support-thisismyurl' ),
 					sprintf(
 						/* translators: %s: example code */
@@ -194,41 +164,30 @@ class WPS_Site_Health {
 						'<code>define( "WPS_VAULT_KEY", "' . esc_html( $stored_key ) . '" );</code>'
 					)
 				),
-				'actions'     => '',
-				'test'        => 'WPS_encryption_config',
+				'WPS_encryption_config',
+				'',
+				'red'
 			);
 		}
 
 		if ( ! empty( $stored_key ) ) {
-			return array(
-				'label'       => __( 'Encryption key in options (development mode)', 'plugin-wp-support-thisismyurl' ),
-				'status'      => 'recommended',
-				'badge'       => array(
-					'label' => __( 'WPS Suite', 'plugin-wp-support-thisismyurl' ),
-					'color' => 'orange',
-				),
-				'description' => sprintf(
-					'<p>%s</p>',
-					esc_html__( 'Encryption key is stored in the database. This is acceptable for development but should be moved to wp-config.php for production.', 'plugin-wp-support-thisismyurl' )
-				),
-				'actions'     => '',
-				'test'        => 'WPS_encryption_config',
+			return WPS_Health_Renderer::build_result(
+				__( 'Encryption key in options (development mode)', 'plugin-wp-support-thisismyurl' ),
+				'recommended',
+				esc_html__( 'Encryption key is stored in the database. This is acceptable for development but should be moved to wp-config.php for production.', 'plugin-wp-support-thisismyurl' ),
+				'WPS_encryption_config',
+				'',
+				'orange'
 			);
 		}
 
-		return array(
-			'label'       => __( 'Encryption key not configured', 'plugin-wp-support-thisismyurl' ),
-			'status'      => 'recommended',
-			'badge'       => array(
-				'label' => __( 'WPS Suite', 'plugin-wp-support-thisismyurl' ),
-				'color' => 'orange',
-			),
-			'description' => sprintf(
-				'<p>%s</p>',
-				esc_html__( 'No encryption key is configured. An encryption key will be generated automatically when needed.', 'plugin-wp-support-thisismyurl' )
-			),
-			'actions'     => '',
-			'test'        => 'WPS_encryption_config',
+		return WPS_Health_Renderer::build_result(
+			__( 'Encryption key not configured', 'plugin-wp-support-thisismyurl' ),
+			'recommended',
+			esc_html__( 'No encryption key is configured. An encryption key will be generated automatically when needed.', 'plugin-wp-support-thisismyurl' ),
+			'WPS_encryption_config',
+			'',
+			'orange'
 		);
 	}
 
@@ -239,35 +198,21 @@ class WPS_Site_Health {
 	 */
 	public static function test_openssl_extension(): array {
 		if ( extension_loaded( 'openssl' ) ) {
-			return array(
-				'label'       => __( 'OpenSSL extension is available', 'plugin-wp-support-thisismyurl' ),
-				'status'      => 'good',
-				'badge'       => array(
-					'label' => __( 'WPS Suite', 'plugin-wp-support-thisismyurl' ),
-					'color' => 'blue',
-				),
-				'description' => sprintf(
-					'<p>%s</p>',
-					esc_html__( 'The OpenSSL PHP extension is loaded and encryption features are available.', 'plugin-wp-support-thisismyurl' )
-				),
-				'actions'     => '',
-				'test'        => 'WPS_openssl_extension',
+			return WPS_Health_Renderer::build_result(
+				__( 'OpenSSL extension is available', 'plugin-wp-support-thisismyurl' ),
+				'good',
+				esc_html__( 'The OpenSSL PHP extension is loaded and encryption features are available.', 'plugin-wp-support-thisismyurl' ),
+				'WPS_openssl_extension'
 			);
 		}
 
-		return array(
-			'label'       => __( 'OpenSSL extension is not available', 'plugin-wp-support-thisismyurl' ),
-			'status'      => 'critical',
-			'badge'       => array(
-				'label' => __( 'WPS Suite', 'plugin-wp-support-thisismyurl' ),
-				'color' => 'red',
-			),
-			'description' => sprintf(
-				'<p>%s</p>',
-				esc_html__( 'The OpenSSL PHP extension is required for encryption features. Contact your hosting provider to enable it.', 'plugin-wp-support-thisismyurl' )
-			),
-			'actions'     => '',
-			'test'        => 'WPS_openssl_extension',
+		return WPS_Health_Renderer::build_result(
+			__( 'OpenSSL extension is not available', 'plugin-wp-support-thisismyurl' ),
+			'critical',
+			esc_html__( 'The OpenSSL PHP extension is required for encryption features. Contact your hosting provider to enable it.', 'plugin-wp-support-thisismyurl' ),
+			'WPS_openssl_extension',
+			'',
+			'red'
 		);
 	}
 
@@ -278,49 +223,35 @@ class WPS_Site_Health {
 	 */
 	public static function test_php_version(): array {
 		if ( version_compare( PHP_VERSION, wp_support_MIN_PHP, '>=' ) ) {
-			return array(
-				'label'       => sprintf(
+			return WPS_Health_Renderer::build_result(
+				sprintf(
 					/* translators: %s: PHP version */
 					__( 'PHP version %s meets requirements', 'plugin-wp-support-thisismyurl' ),
 					PHP_VERSION
 				),
-				'status'      => 'good',
-				'badge'       => array(
-					'label' => __( 'WPS Suite', 'plugin-wp-support-thisismyurl' ),
-					'color' => 'blue',
+				'good',
+				sprintf(
+					/* translators: 1: current PHP version, 2: minimum required version */
+					esc_html__( 'Your PHP version (%1$s) meets the minimum requirement of %2$s.', 'plugin-wp-support-thisismyurl' ),
+					PHP_VERSION,
+					wp_support_MIN_PHP
 				),
-				'description' => sprintf(
-					'<p>%s</p>',
-					sprintf(
-						/* translators: 1: current PHP version, 2: minimum required version */
-						esc_html__( 'Your PHP version (%1$s) meets the minimum requirement of %2$s.', 'plugin-wp-support-thisismyurl' ),
-						PHP_VERSION,
-						wp_support_MIN_PHP
-					)
-				),
-				'actions'     => '',
-				'test'        => 'WPS_php_version',
+				'WPS_php_version'
 			);
 		}
 
-		return array(
-			'label'       => __( 'PHP version below minimum requirement', 'plugin-wp-support-thisismyurl' ),
-			'status'      => 'critical',
-			'badge'       => array(
-				'label' => __( 'WPS Suite', 'plugin-wp-support-thisismyurl' ),
-				'color' => 'red',
+		return WPS_Health_Renderer::build_result(
+			__( 'PHP version below minimum requirement', 'plugin-wp-support-thisismyurl' ),
+			'critical',
+			sprintf(
+				/* translators: 1: current PHP version, 2: minimum required version */
+				esc_html__( 'Your PHP version (%1$s) is below the minimum requirement of %2$s. Contact your hosting provider to upgrade PHP.', 'plugin-wp-support-thisismyurl' ),
+				PHP_VERSION,
+				wp_support_MIN_PHP
 			),
-			'description' => sprintf(
-				'<p>%s</p>',
-				sprintf(
-					/* translators: 1: current PHP version, 2: minimum required version */
-					esc_html__( 'Your PHP version (%1$s) is below the minimum requirement of %2$s. Contact your hosting provider to upgrade PHP.', 'plugin-wp-support-thisismyurl' ),
-					PHP_VERSION,
-					wp_support_MIN_PHP
-				)
-			),
-			'actions'     => '',
-			'test'        => 'WPS_php_version',
+			'WPS_php_version',
+			'',
+			'red'
 		);
 	}
 
@@ -333,49 +264,35 @@ class WPS_Site_Health {
 		global $wp_version;
 
 		if ( version_compare( $wp_version, wp_support_MIN_WP, '>=' ) ) {
-			return array(
-				'label'       => sprintf(
+			return WPS_Health_Renderer::build_result(
+				sprintf(
 					/* translators: %s: WordPress version */
 					__( 'WordPress version %s meets requirements', 'plugin-wp-support-thisismyurl' ),
 					$wp_version
 				),
-				'status'      => 'good',
-				'badge'       => array(
-					'label' => __( 'WPS Suite', 'plugin-wp-support-thisismyurl' ),
-					'color' => 'blue',
+				'good',
+				sprintf(
+					/* translators: 1: current WordPress version, 2: minimum required version */
+					esc_html__( 'Your WordPress version (%1$s) meets the minimum requirement of %2$s.', 'plugin-wp-support-thisismyurl' ),
+					$wp_version,
+					wp_support_MIN_WP
 				),
-				'description' => sprintf(
-					'<p>%s</p>',
-					sprintf(
-						/* translators: 1: current WordPress version, 2: minimum required version */
-						esc_html__( 'Your WordPress version (%1$s) meets the minimum requirement of %2$s.', 'plugin-wp-support-thisismyurl' ),
-						$wp_version,
-						wp_support_MIN_WP
-					)
-				),
-				'actions'     => '',
-				'test'        => 'WPS_wordpress_version',
+				'WPS_wordpress_version'
 			);
 		}
 
-		return array(
-			'label'       => __( 'WordPress version below minimum requirement', 'plugin-wp-support-thisismyurl' ),
-			'status'      => 'critical',
-			'badge'       => array(
-				'label' => __( 'WPS Suite', 'plugin-wp-support-thisismyurl' ),
-				'color' => 'red',
+		return WPS_Health_Renderer::build_result(
+			__( 'WordPress version below minimum requirement', 'plugin-wp-support-thisismyurl' ),
+			'critical',
+			sprintf(
+				/* translators: 1: current WordPress version, 2: minimum required version */
+				esc_html__( 'Your WordPress version (%1$s) is below the minimum requirement of %2$s. Please update WordPress.', 'plugin-wp-support-thisismyurl' ),
+				$wp_version,
+				wp_support_MIN_WP
 			),
-			'description' => sprintf(
-				'<p>%s</p>',
-				sprintf(
-					/* translators: 1: current WordPress version, 2: minimum required version */
-					esc_html__( 'Your WordPress version (%1$s) is below the minimum requirement of %2$s. Please update WordPress.', 'plugin-wp-support-thisismyurl' ),
-					$wp_version,
-					wp_support_MIN_WP
-				)
-			),
-			'actions'     => '',
-			'test'        => 'WPS_wordpress_version',
+			'WPS_wordpress_version',
+			'',
+			'red'
 		);
 	}
 
@@ -389,75 +306,49 @@ class WPS_Site_Health {
 		$vault_dirname = get_option( 'WPS_vault_dirname' );
 
 		if ( empty( $vault_dirname ) ) {
-			return array(
-				'label'       => __( 'Vault not configured yet', 'plugin-wp-support-thisismyurl' ),
-				'status'      => 'recommended',
-				'badge'       => array(
-					'label' => __( 'WPS Suite', 'plugin-wp-support-thisismyurl' ),
-					'color' => 'gray',
-				),
-				'description' => sprintf(
-					'<p>%s</p>',
-					esc_html__( 'Vault directory will be created with appropriate permissions when first needed.', 'plugin-wp-support-thisismyurl' )
-				),
-				'actions'     => '',
-				'test'        => 'WPS_vault_permissions',
+			return WPS_Health_Renderer::build_result(
+				__( 'Vault not configured yet', 'plugin-wp-support-thisismyurl' ),
+				'recommended',
+				esc_html__( 'Vault directory will be created with appropriate permissions when first needed.', 'plugin-wp-support-thisismyurl' ),
+				'WPS_vault_permissions',
+				'',
+				'gray'
 			);
 		}
 
 		$vault_path = $upload_dir['basedir'] . '/' . $vault_dirname;
 
 		if ( ! file_exists( $vault_path ) ) {
-			return array(
-				'label'       => __( 'Vault directory does not exist', 'plugin-wp-support-thisismyurl' ),
-				'status'      => 'critical',
-				'badge'       => array(
-					'label' => __( 'WPS Suite', 'plugin-wp-support-thisismyurl' ),
-					'color' => 'red',
-				),
-				'description' => sprintf(
-					'<p>%s</p>',
-					esc_html__( 'The vault directory was expected but does not exist. It will be recreated on next use.', 'plugin-wp-support-thisismyurl' )
-				),
-				'actions'     => '',
-				'test'        => 'WPS_vault_permissions',
+			return WPS_Health_Renderer::build_result(
+				__( 'Vault directory does not exist', 'plugin-wp-support-thisismyurl' ),
+				'critical',
+				esc_html__( 'The vault directory was expected but does not exist. It will be recreated on next use.', 'plugin-wp-support-thisismyurl' ),
+				'WPS_vault_permissions',
+				'',
+				'red'
 			);
 		}
 
 		if ( ! wp_is_writable( $vault_path ) ) {
-			return array(
-				'label'       => __( 'Vault directory is not writable', 'plugin-wp-support-thisismyurl' ),
-				'status'      => 'critical',
-				'badge'       => array(
-					'label' => __( 'WPS Suite', 'plugin-wp-support-thisismyurl' ),
-					'color' => 'red',
+			return WPS_Health_Renderer::build_result(
+				__( 'Vault directory is not writable', 'plugin-wp-support-thisismyurl' ),
+				'critical',
+				sprintf(
+					/* translators: %s: vault path */
+					esc_html__( 'The vault directory exists but is not writable: %s. Check directory permissions.', 'plugin-wp-support-thisismyurl' ),
+					'<code>' . esc_html( $vault_path ) . '</code>'
 				),
-				'description' => sprintf(
-					'<p>%s</p>',
-					sprintf(
-						/* translators: %s: vault path */
-						esc_html__( 'The vault directory exists but is not writable: %s. Check directory permissions.', 'plugin-wp-support-thisismyurl' ),
-						'<code>' . esc_html( $vault_path ) . '</code>'
-					)
-				),
-				'actions'     => '',
-				'test'        => 'WPS_vault_permissions',
+				'WPS_vault_permissions',
+				'',
+				'red'
 			);
 		}
 
-		return array(
-			'label'       => __( 'Vault directory has correct permissions', 'plugin-wp-support-thisismyurl' ),
-			'status'      => 'good',
-			'badge'       => array(
-				'label' => __( 'WPS Suite', 'plugin-wp-support-thisismyurl' ),
-				'color' => 'blue',
-			),
-			'description' => sprintf(
-				'<p>%s</p>',
-				esc_html__( 'The vault directory is writable and ready for use.', 'plugin-wp-support-thisismyurl' )
-			),
-			'actions'     => '',
-			'test'        => 'WPS_vault_permissions',
+		return WPS_Health_Renderer::build_result(
+			__( 'Vault directory has correct permissions', 'plugin-wp-support-thisismyurl' ),
+			'good',
+			esc_html__( 'The vault directory is writable and ready for use.', 'plugin-wp-support-thisismyurl' ),
+			'WPS_vault_permissions'
 		);
 	}
 
@@ -488,45 +379,31 @@ class WPS_Site_Health {
 		$module_count = $active_count;
 
 		if ( 0 === $module_count ) {
-			return array(
-				'label'       => __( 'No modules registered', 'plugin-wp-support-thisismyurl' ),
-				'status'      => 'recommended',
-				'badge'       => array(
-					'label' => __( 'WPS Suite', 'plugin-wp-support-thisismyurl' ),
-					'color' => 'gray',
-				),
-				'description' => sprintf(
-					'<p>%s</p>',
-					esc_html__( 'No WPS Suite modules have been registered yet. This is normal if no additional modules are installed.', 'plugin-wp-support-thisismyurl' )
-				),
-				'actions'     => '',
-				'test'        => 'WPS_module_status',
+			return WPS_Health_Renderer::build_result(
+				__( 'No modules registered', 'plugin-wp-support-thisismyurl' ),
+				'recommended',
+				esc_html__( 'No WPS Suite modules have been registered yet. This is normal if no additional modules are installed.', 'plugin-wp-support-thisismyurl' ),
+				'WPS_module_status',
+				'',
+				'gray'
 			);
 		}
 
-		return array(
-			'label'       => sprintf(
+		return WPS_Health_Renderer::build_result(
+			sprintf(
 				/* translators: 1: number of active modules, 2: total modules */
 				__( '%1$d of %2$d modules active', 'plugin-wp-support-thisismyurl' ),
 				$active_count,
 				$module_count
 			),
-			'status'      => 'good',
-			'badge'       => array(
-				'label' => __( 'WPS Suite', 'plugin-wp-support-thisismyurl' ),
-				'color' => 'blue',
+			'good',
+			sprintf(
+				/* translators: 1: hub count, 2: spoke count */
+				esc_html__( 'WPS Suite has %1$d hubs and %2$d spokes registered.', 'plugin-wp-support-thisismyurl' ),
+				$hub_count,
+				$spoke_count
 			),
-			'description' => sprintf(
-				'<p>%s</p>',
-				sprintf(
-					/* translators: 1: hub count, 2: spoke count */
-					esc_html__( 'WPS Suite has %1$d hubs and %2$d spokes registered.', 'plugin-wp-support-thisismyurl' ),
-					$hub_count,
-					$spoke_count
-				)
-			),
-			'actions'     => '',
-			'test'        => 'WPS_module_status',
+			'WPS_module_status'
 		);
 	}
 

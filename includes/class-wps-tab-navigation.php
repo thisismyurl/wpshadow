@@ -181,27 +181,38 @@ class WPS_Tab_Navigation {
 	}
 
 	/**
+	 * Build standard tab array with defaults.
+	 *
+	 * @param string $id Tab identifier.
+	 * @param string $label Tab label (will be translated).
+	 * @param string $icon Dashicons class (e.g., 'dashicons-dashboard').
+	 * @param string|null $url Optional custom URL (auto-generated if null).
+	 * @return array{id: string, label: string, icon: string, url?: string} Tab definition.
+	 */
+	private static function build_tab( string $id, string $label, string $icon, ?string $url = null ): array {
+		$tab = array(
+			'id'    => $id,
+			'label' => $label,
+			'icon'  => $icon,
+		);
+
+		if ( null !== $url ) {
+			$tab['url'] = $url;
+		}
+
+		return $tab;
+	}
+
+	/**
 	 * Get tabs for Core level.
 	 *
 	 * @return array<array{id: string, label: string, icon: string}>
 	 */
 	public static function get_core_tabs(): array {
 		return array(
-			array(
-				'id'    => 'dashboard',
-				'label' => __( 'Dashboard', 'plugin-wp-support-thisismyurl' ),
-				'icon'  => 'dashicons-dashboard',
-			),
-			array(
-				'id'    => 'settings',
-				'label' => __( 'Settings', 'plugin-wp-support-thisismyurl' ),
-				'icon'  => 'dashicons-admin-generic',
-			),
-			array(
-				'id'    => 'help',
-				'label' => __( 'Help', 'plugin-wp-support-thisismyurl' ),
-				'icon'  => 'dashicons-editor-help',
-			),
+			self::build_tab( 'dashboard', __( 'Dashboard', 'plugin-wp-support-thisismyurl' ), 'dashicons-dashboard' ),
+			self::build_tab( 'settings', __( 'Settings', 'plugin-wp-support-thisismyurl' ), 'dashicons-admin-generic' ),
+			self::build_tab( 'help', __( 'Help', 'plugin-wp-support-thisismyurl' ), 'dashicons-editor-help' ),
 		);
 	}
 
@@ -213,21 +224,9 @@ class WPS_Tab_Navigation {
 	 */
 	public static function get_hub_tabs( string $hub_id ): array {
 		return array(
-			array(
-				'id'    => 'dashboard',
-				'label' => __( 'Dashboard', 'plugin-wp-support-thisismyurl' ),
-				'icon'  => 'dashicons-dashboard',
-			),
-			array(
-				'id'    => 'settings',
-				'label' => __( 'Settings', 'plugin-wp-support-thisismyurl' ),
-				'icon'  => 'dashicons-admin-generic',
-			),
-			array(
-				'id'    => 'help',
-				'label' => __( 'Help', 'plugin-wp-support-thisismyurl' ),
-				'icon'  => 'dashicons-editor-help',
-			),
+			self::build_tab( 'dashboard', __( 'Dashboard', 'plugin-wp-support-thisismyurl' ), 'dashicons-dashboard' ),
+			self::build_tab( 'settings', __( 'Settings', 'plugin-wp-support-thisismyurl' ), 'dashicons-admin-generic' ),
+			self::build_tab( 'help', __( 'Help', 'plugin-wp-support-thisismyurl' ), 'dashicons-editor-help' ),
 		);
 	}
 
@@ -240,16 +239,8 @@ class WPS_Tab_Navigation {
 	 */
 	public static function get_spoke_tabs( string $hub_id, string $spoke_id ): array {
 		return array(
-			array(
-				'id'    => 'dashboard',
-				'label' => __( 'Dashboard', 'plugin-wp-support-thisismyurl' ),
-				'icon'  => 'dashicons-dashboard',
-			),
-			array(
-				'id'    => 'help',
-				'label' => __( 'Help', 'plugin-wp-support-thisismyurl' ),
-				'icon'  => 'dashicons-editor-help',
-			),
+			self::build_tab( 'dashboard', __( 'Dashboard', 'plugin-wp-support-thisismyurl' ), 'dashicons-dashboard' ),
+			self::build_tab( 'help', __( 'Help', 'plugin-wp-support-thisismyurl' ), 'dashicons-editor-help' ),
 		);
 	}
 

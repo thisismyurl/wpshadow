@@ -20,6 +20,46 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Admin AJAX request handlers for module management.
  */
 class WPS_Module_Actions {
+	/**
+	 * Verify AJAX nonce and capability, with optional network-awareness.
+	 *
+	 * @param string $nonce_action Nonce action key.
+	 * @param string $site_cap     Capability required on single site.
+	 * @param string $network_cap  Capability required on network admin (optional; defaults to $site_cap).
+	 * @return array{network_scope:bool} Context data.
+	 */
+	private static function verify_request( string $nonce_action, string $site_cap, string $network_cap = '' ): array {
+		check_ajax_referer( $nonce_action, 'nonce' );
+
+		$network_scope = is_multisite() && is_network_admin();
+		$cap           = $network_scope ? ( $network_cap ?: $site_cap ) : $site_cap;
+		if ( ! current_user_can( $cap ) ) {
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ), 403 );
+		}
+
+		return array( 'network_scope' => $network_scope );
+	}
+
+	/**
+	 * Send a standardized error JSON response.
+	 *
+	 * @param string $message Error message.
+	 * @param int    $code    HTTP status code.
+	 * @return void
+	 */
+	private static function respond_error( string $message, int $code = 400 ): void {
+		wp_send_json_error( array( 'message' => $message ), $code );
+	}
+
+	/**
+	 * Send a standardized success JSON response.
+	 *
+	 * @param array $data Payload.
+	 * @return void
+	 */
+	private static function respond_success( array $data = array() ): void {
+		wp_send_json_success( $data );
+	}
 
 	/**
 	 * Initialize AJAX handlers.
@@ -55,34 +95,21 @@ class WPS_Module_Actions {
 	 * @return void
 	 */
 	public static function ajax_toggle_module_enabled(): void {
-		// Verify nonce.
-		check_ajax_referer( 'WPS_module_actions', 'nonce' );
-
-		$network_scope = is_multisite() && is_network_admin();
-		$has_cap       = $network_scope ? current_user_can( 'manage_network_options' ) : current_user_can( 'manage_options' );
-		if ( ! $has_cap ) {
-			wp_send_json_error(
-				array( 'message' => __( 'You do not have permission to update module settings.', 'plugin-wp-support-thisismyurl' ) ),
-				403
-			);
-		}
+		$ctx = self::verify_request( 'WPS_module_actions', 'manage_options', 'manage_network_options' );
 
 		$slug    = isset( $_POST['slug'] ) ? sanitize_key( wp_unslash( $_POST['slug'] ) ) : '';
 		$enabled = isset( $_POST['enabled'] ) ? (bool) intval( wp_unslash( $_POST['enabled'] ) ) : null;
 		if ( empty( $slug ) || null === $enabled ) {
-			wp_send_json_error(
-				array( 'message' => __( 'Missing parameters.', 'plugin-wp-support-thisismyurl' ) ),
-				400
-			);
+			self::respond_error( __( 'Missing parameters.', 'plugin-wp-support-thisismyurl' ), 400 );
 		}
 
-		$ok = WPS_Module_Registry::update_module_settings( $slug, array( 'enabled' => $enabled ), $network_scope );
+		$ok = WPS_Module_Registry::update_module_settings( $slug, array( 'enabled' => $enabled ), (bool) $ctx['network_scope'] );
 		if ( ! $ok ) {
-			wp_send_json_error( array( 'message' => __( 'Failed to update settings.', 'plugin-wp-support-thisismyurl' ) ), 500 );
+			self::respond_error( __( 'Failed to update settings.', 'plugin-wp-support-thisismyurl' ), 500 );
 		}
 
 		$status = WPS_Module_Registry::get_catalog_with_status();
-		wp_send_json_success( array( 'message' => __( 'Settings updated.', 'plugin-wp-support-thisismyurl' ), 'status' => $status[ $slug ] ?? array() ) );
+		self::respond_success( array( 'message' => __( 'Settings updated.', 'plugin-wp-support-thisismyurl' ), 'status' => $status[ $slug ] ?? array() ) );
 	}
 
 	/**
@@ -174,19 +201,7 @@ class WPS_Module_Actions {
 	 * @return void
 	 */
 	public static function ajax_update_module(): void {
-		// Verify nonce.
-		check_ajax_referer( 'WPS_module_actions', 'nonce' );
-
-		// Check capability.
-		$cap = is_multisite() ? 'manage_network_plugins' : 'update_plugins';
-		if ( ! current_user_can( $cap ) ) {
-			wp_send_json_error(
-				array(
-					'message' => __( 'You do not have permission to update plugins.', 'plugin-wp-support-thisismyurl' ),
-				),
-				403
-			);
-		}
+		self::verify_request( 'WPS_module_actions', 'update_plugins', 'manage_network_plugins' );
 
 		// Get and validate inputs.
 		$slug = isset( $_POST['slug'] ) ? sanitize_text_field( wp_unslash( $_POST['slug'] ) ) : '';
@@ -202,12 +217,7 @@ class WPS_Module_Actions {
 		// Get installed module.
 		$installed = WPS_Module_Registry::get_modules();
 		if ( empty( $installed[ $slug ] ) ) {
-			wp_send_json_error(
-				array(
-					'message' => __( 'Module not found.', 'plugin-wp-support-thisismyurl' ),
-				),
-				404
-			);
+			self::respond_error( __( 'Module not found.', 'plugin-wp-support-thisismyurl' ), 404 );
 		}
 
 		// Get catalog entry.
@@ -222,12 +232,7 @@ class WPS_Module_Actions {
 		}
 
 		if ( empty( $module_entry ) || empty( $module_entry['download_url'] ) ) {
-			wp_send_json_error(
-				array(
-					'message' => __( 'Module not found in catalog or missing download URL.', 'plugin-wp-support-thisismyurl' ),
-				),
-				404
-			);
+			self::respond_error( __( 'Module not found in catalog or missing download URL.', 'plugin-wp-support-thisismyurl' ), 404 );
 		}
 
 		// Build plugin file path (slug/slug.php).
@@ -238,24 +243,17 @@ class WPS_Module_Actions {
 		$result   = $upgrader->update_plugin( $plugin_file, $module_entry['download_url'] );
 
 		if ( is_wp_error( $result ) ) {
-			wp_send_json_error(
-				array(
-					'message' => $result->get_error_message(),
-				),
-				500
-			);
+			self::respond_error( $result->get_error_message(), 500 );
 		}
 
 		// Refresh catalog with status.
 		$status = WPS_Module_Registry::get_catalog_with_status();
 
-		wp_send_json_success(
-			array(
-				'message'     => __( 'Module updated successfully.', 'plugin-wp-support-thisismyurl' ),
-				'plugin_base' => $upgrader->result,
-				'status'      => $status[ $slug ] ?? array(),
-			)
-		);
+		self::respond_success( array(
+			'message'     => __( 'Module updated successfully.', 'plugin-wp-support-thisismyurl' ),
+			'plugin_base' => $upgrader->result,
+			'status'      => $status[ $slug ] ?? array(),
+		) );
 	}
 
 	/**
@@ -264,19 +262,7 @@ class WPS_Module_Actions {
 	 * @return void
 	 */
 	public static function ajax_activate_module(): void {
-		// Verify nonce.
-		check_ajax_referer( 'WPS_module_actions', 'nonce' );
-
-		// Check capability.
-		$cap = is_multisite() ? 'manage_network_plugins' : 'activate_plugins';
-		if ( ! current_user_can( $cap ) ) {
-			wp_send_json_error(
-				array(
-					'message' => __( 'You do not have permission to activate plugins.', 'plugin-wp-support-thisismyurl' ),
-				),
-				403
-			);
-		}
+		self::verify_request( 'WPS_module_actions', 'activate_plugins', 'manage_network_plugins' );
 
 		// Get and validate inputs.
 		$slug = isset( $_POST['slug'] ) ? sanitize_text_field( wp_unslash( $_POST['slug'] ) ) : '';
@@ -305,12 +291,7 @@ class WPS_Module_Actions {
 			}
 
 			if ( is_wp_error( $result ) ) {
-				wp_send_json_error(
-					array(
-						'message' => $result->get_error_message(),
-					),
-					500
-				);
+				self::respond_error( $result->get_error_message(), 500 );
 			}
 		}
 
@@ -320,12 +301,7 @@ class WPS_Module_Actions {
 		// Refresh catalog with status.
 		$status = WPS_Module_Registry::get_catalog_with_status();
 
-		wp_send_json_success(
-			array(
-				'message' => __( 'Module activated successfully.', 'plugin-wp-support-thisismyurl' ),
-				'status'  => $status[ $slug ] ?? array(),
-			)
-		);
+		self::respond_success( array( 'message' => __( 'Module activated successfully.', 'plugin-wp-support-thisismyurl' ), 'status' => $status[ $slug ] ?? array() ) );
 	}
 
 	/**
@@ -334,20 +310,7 @@ class WPS_Module_Actions {
 	 * @return void
 	 */
 	public static function ajax_deactivate_module(): void {
-		// Verify nonce.
-		check_ajax_referer( 'WPS_module_actions', 'nonce' );
-
-		// Determine scope and capability.
-		$network_scope = is_multisite() && is_network_admin();
-		$has_cap       = $network_scope ? current_user_can( 'manage_network_plugins' ) : current_user_can( 'activate_plugins' );
-		if ( ! $has_cap ) {
-			wp_send_json_error(
-				array(
-					'message' => __( 'You do not have permission to deactivate plugins.', 'plugin-wp-support-thisismyurl' ),
-				),
-				403
-			);
-		}
+		$ctx = self::verify_request( 'WPS_module_actions', 'activate_plugins', 'manage_network_plugins' );
 
 		// Get and validate inputs.
 		$slug = isset( $_POST['slug'] ) ? sanitize_text_field( wp_unslash( $_POST['slug'] ) ) : '';
@@ -366,21 +329,16 @@ class WPS_Module_Actions {
 
 		if ( $plugin_file ) {
 			// Deactivate plugin (site or network scope).
-			deactivate_plugins( $plugin_file, false, $network_scope );
+			deactivate_plugins( $plugin_file, false, (bool) $ctx['network_scope'] );
 		}
 
 		// Always disable the module flag (plugin or module-only).
-		WPS_Module_Registry::update_module_settings( $slug, array( 'enabled' => false ), $network_scope );
+		WPS_Module_Registry::update_module_settings( $slug, array( 'enabled' => false ), (bool) $ctx['network_scope'] );
 
 		// Refresh catalog with status.
 		$status = WPS_Module_Registry::get_catalog_with_status();
 
-		wp_send_json_success(
-			array(
-				'message' => __( 'Module deactivated successfully.', 'plugin-wp-support-thisismyurl' ),
-				'status'  => $status[ $slug ] ?? array(),
-			)
-		);
+		self::respond_success( array( 'message' => __( 'Module deactivated successfully.', 'plugin-wp-support-thisismyurl' ), 'status' => $status[ $slug ] ?? array() ) );
 	}
 
 	/**
@@ -434,28 +392,15 @@ class WPS_Module_Actions {
 	 * @return void
 	 */
 	public static function ajax_clear_remembered(): void {
-		// Verify nonce.
-		check_ajax_referer( 'WPS_module_actions', 'nonce' );
-
-		$network_scope = is_multisite() && is_network_admin();
-		$has_cap       = $network_scope ? current_user_can( 'manage_network_options' ) : current_user_can( 'manage_options' );
-		if ( ! $has_cap ) {
-			wp_send_json_error(
-				array( 'message' => __( 'You do not have permission to update module settings.', 'plugin-wp-support-thisismyurl' ) ),
-				403
-			);
-		}
+		self::verify_request( 'WPS_module_actions', 'manage_options', 'manage_network_options' );
 
 		$parent_slug = isset( $_POST['parent_slug'] ) ? sanitize_key( wp_unslash( $_POST['parent_slug'] ) ) : '';
 		if ( empty( $parent_slug ) ) {
-			wp_send_json_error(
-				array( 'message' => __( 'Missing parent slug.', 'plugin-wp-support-thisismyurl' ) ),
-				400
-			);
+			self::respond_error( __( 'Missing parent slug.', 'plugin-wp-support-thisismyurl' ), 400 );
 		}
 
 		WPS_Module_Toggles::clear_remembered( $parent_slug );
-		wp_send_json_success( array( 'message' => __( 'Restoration memory cleared.', 'plugin-wp-support-thisismyurl' ) ) );
+		self::respond_success( array( 'message' => __( 'Restoration memory cleared.', 'plugin-wp-support-thisismyurl' ) ) );
 	}
 
 	/**
@@ -464,12 +409,7 @@ class WPS_Module_Actions {
 	 * @return void
 	 */
 	public static function ajax_refresh_health_widget(): void {
-		// Verify nonce.
-		check_ajax_referer( 'WPS_module_actions', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ), 403 );
-		}
+		self::verify_request( 'WPS_module_actions', 'manage_options', 'manage_network_options' );
 
 		// Get active module slugs.
 		$active_modules = array();
@@ -498,11 +438,7 @@ class WPS_Module_Actions {
 		WPS_Dashboard_Widgets::render_health_widget_html( $health_data );
 		$html = ob_get_clean();
 
-		wp_send_json_success( array(
-			'html' => $html,
-			'active_modules' => $active_modules,
-			'timestamp' => current_time( 'timestamp' ),
-		) );
+		self::respond_success( array( 'html' => $html, 'active_modules' => $active_modules, 'timestamp' => current_time( 'timestamp' ) ) );
 	}
 
 	/**
@@ -511,12 +447,7 @@ class WPS_Module_Actions {
 	 * @return void
 	 */
 	public static function ajax_refresh_events_widget(): void {
-		// Verify nonce.
-		check_ajax_referer( 'WPS_module_actions', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ), 403 );
-		}
+		self::verify_request( 'WPS_module_actions', 'manage_options', 'manage_network_options' );
 
 		// Get active module slugs and their repos.
 		$active_repos = array();
@@ -539,11 +470,7 @@ class WPS_Module_Actions {
 		WPS_Dashboard_Widgets::render_events_widget_html( $active_repos );
 		$html = ob_get_clean();
 
-		wp_send_json_success( array(
-			'html' => $html,
-			'active_repos' => $active_repos,
-			'timestamp' => current_time( 'timestamp' ),
-		) );
+		self::respond_success( array( 'html' => $html, 'active_repos' => $active_repos, 'timestamp' => current_time( 'timestamp' ) ) );
 	}
 }
 
