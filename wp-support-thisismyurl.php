@@ -491,9 +491,6 @@ function wp_support_encryption_supported(): bool {
  * @return void
  */
 function wp_support_init(): void {
-	@file_put_contents( wp_support_PATH . 'wp_support_init_called.txt', date( 'Y-m-d H:i:s' ) );
-	error_log( '=== wp_support_INIT CALLED ===' );
-	
 	// Load text domain for translations.
 	load_plugin_textdomain(
 		wp_support_TEXT_DOMAIN,
@@ -518,11 +515,7 @@ function wp_support_init(): void {
 
 	// Load module loader (manages independent module repositories).
 	require_once wp_support_PATH . 'includes/class-wps-module-loader.php';
-	error_log( '=== ABOUT TO CALL MODULE_LOADER::INIT ===' );
-	@file_put_contents( wp_support_PATH . 'about_to_call_module_loader_init.txt', date( 'Y-m-d H:i:s' ) );
 	\WPS\Core\Module_Loader::init();
-	@file_put_contents( wp_support_PATH . 'module_loader_init_returned.txt', date( 'Y-m-d H:i:s' ) );
-	error_log( '=== MODULE_LOADER::INIT RETURNED ===' );
 
 	// Load settings API (network + site with overrides).
 	require_once wp_support_PATH . 'includes/class-wps-settings.php';
