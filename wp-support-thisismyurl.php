@@ -872,6 +872,63 @@ function wp_support_prune_submenus(): void {
 
 // Run pruning after all menus are registered.
 add_action( 'admin_menu', __NAMESPACE__ . '\\wp_support_prune_submenus', 999 );
+/**
+ * Add a one-time admin notice, shown on next page load.
+ *
+ * @param string $message Notice message.
+ * @param string $type    Notice type: 'error'|'updated'|'warning'|'success'.
+ * @return void
+ */
+function wp_support_add_admin_notice( string $message, string $type = 'warning' ): void {
+	// Store transient for display in admin_notices.
+	set_transient( 'WPS_admin_notice', array(
+		'message' => sanitize_text_field( $message ),
+		'type'    => sanitize_key( $type ),
+	), 60 );
+}
+
+/**
+ * Render one-time admin notice and clear it.
+ *
+ * @return void
+ */
+function wp_support_render_admin_notice(): void {
+	$notice = get_transient( 'WPS_admin_notice' );
+	if ( empty( $notice ) || ! is_array( $notice ) ) {
+		return;
+	}
+
+	delete_transient( 'WPS_admin_notice' );
+
+	$type    = $notice['type'] ?? 'updated';
+	$message = $notice['message'] ?? '';
+	if ( empty( $message ) ) {
+		return;
+	}
+
+	// Map type to CSS class.
+	$class = 'notice';
+	switch ( $type ) {
+		case 'error':
+			$class .= ' notice-error';
+			break;
+		case 'warning':
+			$class .= ' notice-warning';
+			break;
+		case 'success':
+			$class .= ' notice-success';
+			break;
+		default:
+			$class .= ' notice-info';
+			break;
+	}
+
+	echo '<div class="' . esc_attr( $class ) . ' is-dismissible"><p>' . esc_html( $message ) . '</p></div>';
+}
+
+add_action( 'admin_notices', __NAMESPACE__ . '\wp_support_render_admin_notice' );
+add_action( 'network_admin_notices', __NAMESPACE__ . '\wp_support_render_admin_notice' );
+
 
 /**
  * Render the capabilities management page.
@@ -957,6 +1014,8 @@ function wp_support_render_tab_router(): void {
 	if ( ! empty( $raw_module ) ) {
 		$module_slug = $raw_module . '-support-thisismyurl';
 		if ( ! \WPS\CoreSupport\WPS_Module_Registry::is_enabled( $module_slug ) ) {
+			// Add one-time admin notice after redirect.
+			wp_support_add_admin_notice( sprintf( __( '%s is disabled. Redirected to Support dashboard.', 'plugin-wp-support-thisismyurl' ), ucfirst( $raw_module ) ), 'warning' );
 			$parent_url = is_network_admin() ? network_admin_url( 'admin.php?page=wp-support' ) : admin_url( 'admin.php?page=wp-support' );
 			wp_safe_redirect( $parent_url );
 			exit;
@@ -973,6 +1032,7 @@ function wp_support_render_tab_router(): void {
 	if ( ! empty( $hub ) ) {
 		$slug = $hub . '-support-thisismyurl';
 		if ( ! WPS_Module_Registry::is_enabled( $slug ) ) {
+			wp_support_add_admin_notice( sprintf( __( '%s hub is disabled. Redirected to Support dashboard.', 'plugin-wp-support-thisismyurl' ), ucfirst( $hub ) ), 'warning' );
 			$parent_url = is_network_admin() ? network_admin_url( 'admin.php?page=wp-support' ) : admin_url( 'admin.php?page=wp-support' );
 			wp_safe_redirect( $parent_url );
 			exit;
@@ -982,6 +1042,7 @@ function wp_support_render_tab_router(): void {
 		if ( ! empty( $spoke ) ) {
 			$spoke_slug = $spoke . '-support-thisismyurl';
 			if ( ! WPS_Module_Registry::is_enabled( $spoke_slug ) ) {
+				wp_support_add_admin_notice( sprintf( __( '%1$s format is disabled. Redirected to %2$s hub.', 'plugin-wp-support-thisismyurl' ), strtoupper( $spoke ), ucfirst( $hub ) ), 'warning' );
 				$parent_url = is_network_admin() ? network_admin_url( 'admin.php?page=wp-support&module=' . $hub ) : admin_url( 'admin.php?page=wp-support&module=' . $hub );
 				wp_safe_redirect( $parent_url );
 				exit;
