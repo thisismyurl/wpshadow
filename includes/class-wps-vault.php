@@ -120,5 +120,3 @@ if ( class_exists( '\\WPS\\VaultSupport\\WPS_Vault' ) ) {
 		}
 	}
 }
-
-

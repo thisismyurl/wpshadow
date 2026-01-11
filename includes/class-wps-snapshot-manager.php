@@ -63,7 +63,7 @@ class WPS_Snapshot_Manager {
 			'metrics'     => self::capture_site_metrics(),
 		);
 
-		$snapshots = get_option( self::SNAPSHOTS_KEY, array() );
+		$snapshots                    = get_option( self::SNAPSHOTS_KEY, array() );
 		$snapshots[ $snapshot['id'] ] = $snapshot;
 
 		// Keep only last N snapshots.
@@ -121,7 +121,7 @@ class WPS_Snapshot_Manager {
 		self::create_snapshot( 'Backup before restore to ' . wp_date( 'Y-m-d H:i:s', $snapshot['timestamp'] ) );
 
 		// Deactivate plugins not in snapshot.
-		$current_plugins = get_option( 'active_plugins', array() );
+		$current_plugins  = get_option( 'active_plugins', array() );
 		$snapshot_plugins = array_keys( $snapshot['plugins']['active'] );
 
 		foreach ( $current_plugins as $plugin ) {
@@ -163,27 +163,27 @@ class WPS_Snapshot_Manager {
 		}
 
 		$comparison = array(
-			'date1'           => wp_date( 'Y-m-d H:i:s', $snap1['timestamp'] ),
-			'date2'           => wp_date( 'Y-m-d H:i:s', $snap2['timestamp'] ),
-			'versions'        => array(
+			'date1'       => wp_date( 'Y-m-d H:i:s', $snap1['timestamp'] ),
+			'date2'       => wp_date( 'Y-m-d H:i:s', $snap2['timestamp'] ),
+			'versions'    => array(
 				'wordpress' => array(
-					'before' => $snap1['wordpress'],
-					'after'  => $snap2['wordpress'],
+					'before'  => $snap1['wordpress'],
+					'after'   => $snap2['wordpress'],
 					'changed' => $snap1['wordpress'] !== $snap2['wordpress'],
 				),
 				'php'       => array(
-					'before' => $snap1['php'],
-					'after'  => $snap2['php'],
+					'before'  => $snap1['php'],
+					'after'   => $snap2['php'],
 					'changed' => $snap1['php'] !== $snap2['php'],
 				),
 			),
-			'plugins'         => self::compare_plugin_changes( $snap1['plugins'], $snap2['plugins'] ),
-			'theme'           => array(
+			'plugins'     => self::compare_plugin_changes( $snap1['plugins'], $snap2['plugins'] ),
+			'theme'       => array(
 				'changed' => $snap1['theme']['stylesheet'] !== $snap2['theme']['stylesheet'],
 				'before'  => $snap1['theme']['name'] ?? $snap1['theme']['stylesheet'],
 				'after'   => $snap2['theme']['name'] ?? $snap2['theme']['stylesheet'],
 			),
-			'performance'     => array(
+			'performance' => array(
 				'load_time_before' => $snap1['metrics']['estimated_load_time'] ?? 'N/A',
 				'load_time_after'  => $snap2['metrics']['estimated_load_time'] ?? 'N/A',
 				'database_before'  => $snap1['metrics']['database_size'] ?? 'N/A',
@@ -224,12 +224,12 @@ class WPS_Snapshot_Manager {
 	 * @return array Plugin state data.
 	 */
 	private static function capture_plugin_state(): array {
-		$active   = get_option( 'active_plugins', array() );
-		$plugins  = get_plugins();
-		$state    = array(
-			'active'    => array(),
-			'inactive'  => array(),
-			'all'       => array(),
+		$active  = get_option( 'active_plugins', array() );
+		$plugins = get_plugins();
+		$state   = array(
+			'active'   => array(),
+			'inactive' => array(),
+			'all'      => array(),
 		);
 
 		foreach ( $plugins as $plugin_path => $plugin_data ) {
@@ -288,10 +288,10 @@ class WPS_Snapshot_Manager {
 		}
 
 		return array(
-			'database_size'        => size_format( $db_size ),
-			'plugin_count'         => count( get_option( 'active_plugins', array() ) ),
-			'post_count'           => wp_count_posts()->publish ?? 0,
-			'estimated_load_time'  => 'pending',
+			'database_size'       => size_format( $db_size ),
+			'plugin_count'        => count( get_option( 'active_plugins', array() ) ),
+			'post_count'          => wp_count_posts()->publish ?? 0,
+			'estimated_load_time' => 'pending',
 		);
 	}
 
@@ -304,9 +304,9 @@ class WPS_Snapshot_Manager {
 	 */
 	private static function compare_plugin_changes( array $plugins1, array $plugins2 ): array {
 		$changes = array(
-			'added'    => array(),
-			'removed'  => array(),
-			'updated'  => array(),
+			'added'       => array(),
+			'removed'     => array(),
+			'updated'     => array(),
 			'activated'   => array(),
 			'deactivated' => array(),
 		);

@@ -35,7 +35,7 @@ class Module_Loader {
 	public static function init() {
 		// Load modules immediately since this is called during wp_support_init() which is already on plugins_loaded
 		self::load_modules();
-		
+
 		// Then register activation hook for later
 		add_action( 'plugins_loaded', array( static::class, 'activate_modules' ), 11 );
 	}
@@ -46,7 +46,7 @@ class Module_Loader {
 	 * @return void
 	 */
 	public static function load_modules() {
-		
+
 		// Load hubs first
 		self::load_module_type( 'hubs' );
 
@@ -69,7 +69,7 @@ class Module_Loader {
 	 * @return void
 	 */
 	private static function load_module_type( $type ) {
-		
+
 		$modules_dir = wp_support_PATH . "modules/{$type}/";
 		error_log( "Module dir: {$modules_dir}" );
 
@@ -80,15 +80,15 @@ class Module_Loader {
 
 		$modules = array_filter(
 			glob( $modules_dir . '*', GLOB_ONLYDIR ),
-			function( $dir ) {
+			function ( $dir ) {
 				return is_dir( $dir );
 			}
 		);
-		
-		error_log( "Found " . count( $modules ) . " modules of type {$type}: " . implode( ', ', array_map( 'basename', $modules ) ) );
+
+		error_log( 'Found ' . count( $modules ) . " modules of type {$type}: " . implode( ', ', array_map( 'basename', $modules ) ) );
 
 		foreach ( $modules as $module_dir ) {
-			error_log( "Loading module: " . basename( $module_dir ) );
+			error_log( 'Loading module: ' . basename( $module_dir ) );
 			self::load_module( $module_dir, $type );
 		}
 	}
@@ -128,13 +128,13 @@ class Module_Loader {
 		require_once $module_file;
 
 		self::$modules[ $module_id ] = array(
-			'id'    => $module_id,
-			'type'  => $type,
-			'name'  => $module_name,
-			'path'  => $module_dir,
-			'file'  => $module_file,
-			'url'   => str_replace( '\\', '/', str_replace( ABSPATH, '', $module_dir ) ),
-			'url'   => plugins_url( '', $module_file ),
+			'id'   => $module_id,
+			'type' => $type,
+			'name' => $module_name,
+			'path' => $module_dir,
+			'file' => $module_file,
+			'url'  => str_replace( '\\', '/', str_replace( ABSPATH, '', $module_dir ) ),
+			'url'  => plugins_url( '', $module_file ),
 		);
 	}
 
@@ -161,7 +161,7 @@ class Module_Loader {
 
 		return array_filter(
 			self::$modules,
-			function( $module ) use ( $type ) {
+			function ( $module ) use ( $type ) {
 				return $module['type'] === $type;
 			}
 		);
@@ -187,5 +187,3 @@ class Module_Loader {
 		return isset( self::$modules[ $module_id ] );
 	}
 }
-
-

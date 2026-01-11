@@ -191,5 +191,3 @@ class WPS_Settings {
 		return update_option( self::SITE_OPTION, $settings );
 	}
 }
-
-

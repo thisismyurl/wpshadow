@@ -91,6 +91,3 @@ class WPS_Vault_Size_Monitor {
 		);
 	}
 }
-
-
-

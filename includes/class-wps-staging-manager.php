@@ -59,22 +59,22 @@ class WPS_Staging_Manager {
 		}
 
 		$staging = array(
-			'id'          => wp_generate_uuid4(),
-			'created'     => time(),
-			'name'        => sanitize_text_field( $name ) ?: 'Staging ' . wp_date( 'M d H:i' ),
-			'production'  => array(
-				'url'      => home_url(),
-				'path'     => ABSPATH,
-				'db_host'  => DB_HOST,
-				'db_name'  => DB_NAME,
+			'id'                             => wp_generate_uuid4(),
+			'created'                        => time(),
+			'name'                           => sanitize_text_field( $name ) ?: 'Staging ' . wp_date( 'M d H:i' ),
+			'production'                     => array(
+				'url'     => home_url(),
+				'path'    => ABSPATH,
+				'db_host' => DB_HOST,
+				'db_name' => DB_NAME,
 			),
-			'staging'     => array(
-				'url'      => '',
-				'path'     => '',
-				'db_name'  => DB_NAME . '_staging_' . substr( md5( microtime( true ) ), 0, 8 ),
+			'staging'                        => array(
+				'url'     => '',
+				'path'    => '',
+				'db_name' => DB_NAME . '_staging_' . substr( md5( microtime( true ) ), 0, 8 ),
 			),
-			'status'      => 'initializing',
-			'copy_size'   => 0,
+			'status'                         => 'initializing',
+			'copy_size'                      => 0,
 			'external_integrations_disabled' => false,
 		);
 
@@ -82,7 +82,7 @@ class WPS_Staging_Manager {
 		self::log_action( 'staging_created', $staging['id'], 'Name: ' . $staging['name'] );
 
 		// Store staging environment.
-		$envs = get_option( self::ENVS_KEY, array() );
+		$envs                   = get_option( self::ENVS_KEY, array() );
 		$envs[ $staging['id'] ] = $staging;
 		update_option( self::ENVS_KEY, $envs );
 
@@ -151,7 +151,7 @@ class WPS_Staging_Manager {
 		}
 
 		// Update staging status.
-		$envs[ $staging_id ]['status'] = 'deployed';
+		$envs[ $staging_id ]['status']   = 'deployed';
 		$envs[ $staging_id ]['deployed'] = time();
 		update_option( self::ENVS_KEY, $envs );
 
@@ -301,10 +301,12 @@ class WPS_Staging_Manager {
 			wp_send_json_error( __( 'Failed to create staging environment', 'plugin-wp-support-thisismyurl' ) );
 		}
 
-		wp_send_json_success( array(
-			'staging_id' => $staging_id,
-			'name'       => $name,
-		) );
+		wp_send_json_success(
+			array(
+				'staging_id' => $staging_id,
+				'name'       => $name,
+			)
+		);
 	}
 
 	/**

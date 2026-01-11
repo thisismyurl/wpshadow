@@ -146,4 +146,3 @@ class WPS_Feature_Registry {
 		do_action( 'WPS_register_features' );
 	}
 }
-

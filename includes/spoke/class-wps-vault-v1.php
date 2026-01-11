@@ -29,5 +29,3 @@ class WPS_Vault_v1 {
 		return $meta;
 	}
 }
-
-

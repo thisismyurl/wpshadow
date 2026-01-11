@@ -504,7 +504,8 @@ input:disabled + .wps-toggle-slider {
 						</label>
 						<span class="wps-progress" aria-live="polite"><span class="spinner is-active" style="float:none"></span><span class="bar"><span class="fill"></span></span><span class="progress-label"><?php esc_html_e( 'Working…', 'plugin-wp-support-thisismyurl' ); ?></span></span>
 					</td>
-						<?php foreach ( $group['spokes'] as $module ) : ?>
+				</tr>
+					<?php foreach ( $group['spokes'] as $module ) : ?>
 							<?php
 							$slug = $module['slug'];
 							// Real-time plugin state detection.
@@ -585,8 +586,7 @@ input:disabled + .wps-toggle-slider {
 								</td>
 							</tr>
 						<?php endforeach; ?>
-					<?php endif; ?>
-				<?php endforeach; ?>
+					<?php endforeach; ?>
 					</tbody>
 				</table>
 			</div>

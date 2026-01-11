@@ -517,6 +517,3 @@ class WPS_License {
 		return (int) wp_rand( self::REMINDER_MIN, self::REMINDER_MAX );
 	}
 }
-
-
-

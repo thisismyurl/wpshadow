@@ -42,11 +42,21 @@ class WPS_Dashboard_Widgets {
 			<div class="wps-dashboard-widgets-wrap">
 				<div class="wps-dashboard-col-container">
 					<div id="wps-dashboard-col-1" class="wps-dashboard-col">
-						<?php foreach ( $col1_callbacks as $callback ) { if ( is_callable( $callback ) ) { call_user_func( $callback ); } } ?>
+						<?php
+						foreach ( $col1_callbacks as $callback ) {
+							if ( is_callable( $callback ) ) {
+								call_user_func( $callback ); }
+						}
+						?>
 					</div>
 
 					<div id="wps-dashboard-col-2" class="wps-dashboard-col">
-						<?php foreach ( $col2_callbacks as $callback ) { if ( is_callable( $callback ) ) { call_user_func( $callback ); } } ?>
+						<?php
+						foreach ( $col2_callbacks as $callback ) {
+							if ( is_callable( $callback ) ) {
+								call_user_func( $callback ); }
+						}
+						?>
 					</div>
 				</div>
 			</div>
@@ -159,9 +169,9 @@ class WPS_Dashboard_Widgets {
 
 		try {
 			// Get the current module context (if viewing a module dashboard).
-			$context      = WPS_Tab_Navigation::get_current_context();
-			$module       = ! empty( $context['hub'] ) ? $context['hub'] : null;
-			$module_name  = '';
+			$context     = WPS_Tab_Navigation::get_current_context();
+			$module      = ! empty( $context['hub'] ) ? $context['hub'] : null;
+			$module_name = '';
 
 			// If we're on a module dashboard, get the module name.
 			if ( ! empty( $module ) ) {
@@ -192,7 +202,7 @@ class WPS_Dashboard_Widgets {
 			if ( ! empty( $module_filter ) ) {
 				$events = array_filter(
 					$events,
-					function( $event ) use ( $module_filter ) {
+					function ( $event ) use ( $module_filter ) {
 						$source = $event['module_source'] ?? ( $event['metadata']['module'] ?? null );
 						return $source === $module_filter;
 					}
@@ -284,8 +294,7 @@ class WPS_Dashboard_Widgets {
 					$next_level_modules[] = $module;
 				}
 			}
-		}
-		else if ( 'hub' === $context['level'] && ! empty( $context['hub'] ) ) {
+		} elseif ( 'hub' === $context['level'] && ! empty( $context['hub'] ) ) {
 			// On hub: show both dependent hubs and spokes under that hub.
 			$hub_id = $context['hub'];
 
@@ -309,7 +318,7 @@ class WPS_Dashboard_Widgets {
 			$hub_prefix = $hub_id . '-';
 			$spokes     = array_filter(
 				$catalog,
-				function( $m ) use ( $hub_prefix, $hub_id ) {
+				function ( $m ) use ( $hub_prefix, $hub_id ) {
 					if ( 'spoke' !== ( $m['type'] ?? '' ) ) {
 						return false;
 					}
@@ -677,7 +686,10 @@ class WPS_Dashboard_Widgets {
 		<div class="wps-widget-content">
 			<?php if ( empty( $next_level_modules ) ) : ?>
 				<p><?php esc_html_e( 'No modules available at this level.', 'plugin-wp-support-thisismyurl' ); ?></p>
-			<?php else : ?>				<style>
+				<?php
+			else :
+				?>
+				<style>
 				.wps-toggle-switch { display: inline-block; position: relative; width: 44px; height: 22px; }
 				.wps-toggle-switch input { opacity: 0; width: 0; height: 0; }
 				.wps-toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #6a1b1b; transition: .3s; border-radius: 22px; opacity: 0.8; }
@@ -711,7 +723,7 @@ class WPS_Dashboard_Widgets {
 						$icon_class = 'dashicons-networking';
 						$module_url = WPS_Tab_Navigation::build_hub_url( $module_slug );
 						if ( 'spoke' === $module_type && ! empty( $context['hub'] ) ) {
-							$spoke_id  = str_starts_with( $module_slug, $context['hub'] . '-' ) ? substr( $module_slug, strlen( $context['hub'] ) + 1 ) : $module_slug;
+							$spoke_id   = str_starts_with( $module_slug, $context['hub'] . '-' ) ? substr( $module_slug, strlen( $context['hub'] ) + 1 ) : $module_slug;
 							$module_url = WPS_Tab_Navigation::build_spoke_url( $context['hub'], $spoke_id );
 							$icon_class = 'dashicons-hammer';
 						}
@@ -763,11 +775,11 @@ class WPS_Dashboard_Widgets {
 								<div id="<?php echo esc_attr( $collapse_id ); ?>" class="wps-collapse-content" style="margin: 0; padding: 12px; background: #f9f9f9; border: 1px solid #e5e5e5; border-top: none; border-radius: 0 0 3px 3px;">
 									<?php foreach ( $dependent_hubs[ $module_slug ] as $dep_module ) : ?>
 										<?php
-										$dep_slug      = sanitize_key( $dep_module['slug'] ?? '' );
-										$dep_name      = esc_html( $dep_module['name'] ?? '' );
-										$dep_installed = ! empty( $dep_module['installed'] );
-										$dep_enabled   = \WPS\CoreSupport\WPS_Module_Registry::is_enabled( $dep_slug );
-										$dep_url       = WPS_Tab_Navigation::build_hub_url( $dep_slug );
+										$dep_slug         = sanitize_key( $dep_module['slug'] ?? '' );
+										$dep_name         = esc_html( $dep_module['name'] ?? '' );
+										$dep_installed    = ! empty( $dep_module['installed'] );
+										$dep_enabled      = \WPS\CoreSupport\WPS_Module_Registry::is_enabled( $dep_slug );
+										$dep_url          = WPS_Tab_Navigation::build_hub_url( $dep_slug );
 										$dep_card_classes = 'wps-module-card wps-widget-module-card wps-widget-dependent-card ' . ( $dep_enabled ? 'wps-module-enabled' : 'wps-module-disabled wps-module-card-inactive' );
 										?>
 										<div class="<?php echo esc_attr( $dep_card_classes ); ?>" style="padding: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px; background: #fff; border: 1px solid #e0e0e0; border-radius: 2px; margin-bottom: 6px;">
@@ -802,13 +814,13 @@ class WPS_Dashboard_Widgets {
 	}
 
 	private static function widget_quick_actions(): void {
-		$catalog         = \WPS\CoreSupport\WPS_Module_Registry::get_catalog_with_status();
-		$inactive_count  = count( array_filter( $catalog, fn( $m ) => empty( $m['status']['active'] ) && ! empty( $m['status']['installed'] ) ) );
-		$vault_path      = wp_upload_dir()['basedir'] . '/vault';
-		$vault_exists    = is_dir( $vault_path );
-		$vault_writable  = $vault_exists && wp_is_writable( $vault_path );
-		$encryption_key  = wp_support_get_vault_key();
-		$health_url      = admin_url( 'site-health.php?tab=debug' );
+		$catalog        = \WPS\CoreSupport\WPS_Module_Registry::get_catalog_with_status();
+		$inactive_count = count( array_filter( $catalog, fn( $m ) => empty( $m['status']['active'] ) && ! empty( $m['status']['installed'] ) ) );
+		$vault_path     = wp_upload_dir()['basedir'] . '/vault';
+		$vault_exists   = is_dir( $vault_path );
+		$vault_writable = $vault_exists && wp_is_writable( $vault_path );
+		$encryption_key = wp_support_get_vault_key();
+		$health_url     = admin_url( 'site-health.php?tab=debug' );
 		?>
 		<div class="wps-widget-content wps-quick-actions">
 			<div class="wps-actions-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
@@ -890,9 +902,9 @@ class WPS_Dashboard_Widgets {
 					continue;
 				}
 
-				$slug        = $item;
+				$slug         = $item;
 				$requires_hub = '';
-				$name        = ucwords( str_replace( array( '-', '_' ), ' ', $slug ) );
+				$name         = ucwords( str_replace( array( '-', '_' ), ' ', $slug ) );
 
 				$contents = @file_get_contents( $entry_file ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 				if ( $contents ) {
@@ -912,16 +924,16 @@ class WPS_Dashboard_Widgets {
 				}
 
 				$catalog_by_slug[ $slug ] = array(
-					'slug'          => $slug,
-					'type'          => $type,
-					'name'          => $name,
-					'description'   => __( 'Discovered local module', 'plugin-wp-support-thisismyurl' ),
-					'installed'     => true,
-					'enabled'       => false,
+					'slug'             => $slug,
+					'type'             => $type,
+					'name'             => $name,
+					'description'      => __( 'Discovered local module', 'plugin-wp-support-thisismyurl' ),
+					'installed'        => true,
+					'enabled'          => false,
 					'update_available' => false,
-					'basename'      => $item . '/module.php',
-					'path'          => trailingslashit( $module_dir ),
-					'requires_hub'  => $requires_hub,
+					'basename'         => $item . '/module.php',
+					'path'             => trailingslashit( $module_dir ),
+					'requires_hub'     => $requires_hub,
 				);
 			}
 		}
@@ -941,9 +953,9 @@ class WPS_Dashboard_Widgets {
 						continue;
 					}
 
-					$name        = sanitize_text_field( $entry['name'] ?? $slug );
-					$description = sanitize_text_field( $entry['description'] ?? '' );
-					$requires_hub = sanitize_key( $entry['requires_hub'] ?? '' );
+					$name           = sanitize_text_field( $entry['name'] ?? $slug );
+					$description    = sanitize_text_field( $entry['description'] ?? '' );
+					$requires_hub   = sanitize_key( $entry['requires_hub'] ?? '' );
 					$requires_spoke = sanitize_key( $entry['requires_spoke'] ?? '' );
 
 					$catalog_by_slug[ $slug ] = array_merge(
@@ -985,7 +997,7 @@ class WPS_Dashboard_Widgets {
 		$vault_size = 0;
 		$file_count = 0;
 		if ( $vault_exists ) {
-			$iterator   = new \RecursiveIteratorIterator(
+			$iterator = new \RecursiveIteratorIterator(
 				new \RecursiveDirectoryIterator( $vault_path, \RecursiveDirectoryIterator::SKIP_DOTS )
 			);
 			foreach ( $iterator as $file ) {
@@ -1135,7 +1147,7 @@ class WPS_Dashboard_Widgets {
 
 		// Get active module slugs for filtering.
 		$active_modules = array();
-		$catalog = \WPS\CoreSupport\WPS_Module_Registry::get_catalog_with_status();
+		$catalog        = \WPS\CoreSupport\WPS_Module_Registry::get_catalog_with_status();
 		foreach ( $catalog as $module ) {
 			$slug = $module['slug'] ?? '';
 			if ( ! empty( $slug ) && \WPS\CoreSupport\WPS_Module_Registry::is_enabled( $slug ) ) {
@@ -1160,12 +1172,16 @@ class WPS_Dashboard_Widgets {
 	 * @return void
 	 */
 	private static function render_health_widget( array $health_data, string $module_name = '' ): void {
-		$score        = $health_data['score'] ?? 0;
-		$status       = $health_data['status'] ?? 'good';
-		$results      = $health_data['results'] ?? array();
-		$counts       = $health_data['counts'] ?? array( 'good' => 0, 'warning' => 0, 'critical' => 0 );
-		$good_count   = $counts['good'] ?? 0;
-		$warning_count = $counts['warning'] ?? 0;
+		$score          = $health_data['score'] ?? 0;
+		$status         = $health_data['status'] ?? 'good';
+		$results        = $health_data['results'] ?? array();
+		$counts         = $health_data['counts'] ?? array(
+			'good'     => 0,
+			'warning'  => 0,
+			'critical' => 0,
+		);
+		$good_count     = $counts['good'] ?? 0;
+		$warning_count  = $counts['warning'] ?? 0;
 		$critical_count = $counts['critical'] ?? 0;
 
 		// Color coding.
@@ -1205,7 +1221,7 @@ class WPS_Dashboard_Widgets {
 			<div style="font-size: 13px;">
 				<?php foreach ( $results as $test_id => $result ) : ?>
 					<?php
-					$icon_map = array(
+					$icon_map  = array(
 						'good'        => array( 'dashicons-yes-alt', '#00a32a' ),
 						'recommended' => array( 'dashicons-warning', '#dba617' ),
 						'critical'    => array( 'dashicons-dismiss', '#d63638' ),
@@ -1232,11 +1248,11 @@ class WPS_Dashboard_Widgets {
 	private static function widget_events_and_news(): void {
 		// Get active module repos for filtering.
 		$active_repos = array();
-		$catalog = \WPS\CoreSupport\WPS_Module_Registry::get_catalog_with_status();
+		$catalog      = \WPS\CoreSupport\WPS_Module_Registry::get_catalog_with_status();
 		foreach ( $catalog as $module ) {
 			$slug = $module['slug'] ?? '';
 			if ( ! empty( $slug ) && \WPS\CoreSupport\WPS_Module_Registry::is_enabled( $slug ) ) {
-				$repo = 'plugin-' . $slug;
+				$repo           = 'plugin-' . $slug;
 				$active_repos[] = array(
 					'slug' => $slug,
 					'repo' => $repo,
@@ -1385,8 +1401,8 @@ class WPS_Dashboard_Widgets {
 
 		// Get hierarchical health data.
 		$health_hierarchy = \WPS\CoreSupport\WPS_Site_Health::get_hierarchical_health( $hub_id );
-		$self_health = $health_hierarchy['self'] ?? array();
-		$dependents = $health_hierarchy['dependents'] ?? array();
+		$self_health      = $health_hierarchy['self'] ?? array();
+		$dependents       = $health_hierarchy['dependents'] ?? array();
 		?>
 		<div class="wps-widget-content">
 			<!-- Self Health -->
@@ -1420,9 +1436,13 @@ class WPS_Dashboard_Widgets {
 	 * @return void
 	 */
 	private static function render_compact_health_widget( array $health_data ): void {
-		$score = $health_data['score'] ?? 0;
-		$status = $health_data['status'] ?? 'good';
-		$counts = $health_data['counts'] ?? array( 'good' => 0, 'warning' => 0, 'critical' => 0 );
+		$score   = $health_data['score'] ?? 0;
+		$status  = $health_data['status'] ?? 'good';
+		$counts  = $health_data['counts'] ?? array(
+			'good'     => 0,
+			'warning'  => 0,
+			'critical' => 0,
+		);
 		$results = $health_data['results'] ?? array();
 
 		$health_color = 'critical' === $status ? '#d63638' : ( 'recommended' === $status ? '#dba617' : '#00a32a' );
@@ -1453,10 +1473,10 @@ class WPS_Dashboard_Widgets {
 	}
 
 	private static function widget_vault_overview(): void {
-		$upload_dir    = wp_upload_dir();
-		$vault_dirname = get_option( 'WPS_vault_dirname' );
-		$vault_dir     = ! empty( $vault_dirname ) ? $upload_dir['basedir'] . '/' . $vault_dirname : '';
-		$vault_exists  = ! empty( $vault_dir ) && is_dir( $vault_dir );
+		$upload_dir     = wp_upload_dir();
+		$vault_dirname  = get_option( 'WPS_vault_dirname' );
+		$vault_dir      = ! empty( $vault_dirname ) ? $upload_dir['basedir'] . '/' . $vault_dirname : '';
+		$vault_exists   = ! empty( $vault_dir ) && is_dir( $vault_dir );
 		$vault_writable = $vault_exists && wp_is_writable( $vault_dir );
 		?>
 		<div class="wps-widget-content">
@@ -1519,7 +1539,6 @@ class WPS_Dashboard_Widgets {
 	public static function render_metabox_vault_status_custom(): void {
 		self::render_custom_metabox( 'WPS_vault_status', __( 'Vault Status', 'plugin-wp-support-thisismyurl' ), array( __CLASS__, 'widget_vault_status' ) );
 	}
-
 }
 
 /* @changelog */

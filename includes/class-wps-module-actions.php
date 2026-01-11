@@ -109,7 +109,12 @@ class WPS_Module_Actions {
 		}
 
 		$status = WPS_Module_Registry::get_catalog_with_status();
-		self::respond_success( array( 'message' => __( 'Settings updated.', 'plugin-wp-support-thisismyurl' ), 'status' => $status[ $slug ] ?? array() ) );
+		self::respond_success(
+			array(
+				'message' => __( 'Settings updated.', 'plugin-wp-support-thisismyurl' ),
+				'status'  => $status[ $slug ] ?? array(),
+			)
+		);
 	}
 
 	/**
@@ -249,11 +254,13 @@ class WPS_Module_Actions {
 		// Refresh catalog with status.
 		$status = WPS_Module_Registry::get_catalog_with_status();
 
-		self::respond_success( array(
-			'message'     => __( 'Module updated successfully.', 'plugin-wp-support-thisismyurl' ),
-			'plugin_base' => $upgrader->result,
-			'status'      => $status[ $slug ] ?? array(),
-		) );
+		self::respond_success(
+			array(
+				'message'     => __( 'Module updated successfully.', 'plugin-wp-support-thisismyurl' ),
+				'plugin_base' => $upgrader->result,
+				'status'      => $status[ $slug ] ?? array(),
+			)
+		);
 	}
 
 	/**
@@ -301,7 +308,12 @@ class WPS_Module_Actions {
 		// Refresh catalog with status.
 		$status = WPS_Module_Registry::get_catalog_with_status();
 
-		self::respond_success( array( 'message' => __( 'Module activated successfully.', 'plugin-wp-support-thisismyurl' ), 'status' => $status[ $slug ] ?? array() ) );
+		self::respond_success(
+			array(
+				'message' => __( 'Module activated successfully.', 'plugin-wp-support-thisismyurl' ),
+				'status'  => $status[ $slug ] ?? array(),
+			)
+		);
 	}
 
 	/**
@@ -338,7 +350,12 @@ class WPS_Module_Actions {
 		// Refresh catalog with status.
 		$status = WPS_Module_Registry::get_catalog_with_status();
 
-		self::respond_success( array( 'message' => __( 'Module deactivated successfully.', 'plugin-wp-support-thisismyurl' ), 'status' => $status[ $slug ] ?? array() ) );
+		self::respond_success(
+			array(
+				'message' => __( 'Module deactivated successfully.', 'plugin-wp-support-thisismyurl' ),
+				'status'  => $status[ $slug ] ?? array(),
+			)
+		);
 	}
 
 	/**
@@ -413,7 +430,7 @@ class WPS_Module_Actions {
 
 		// Get active module slugs.
 		$active_modules = array();
-		$catalog = WPS_Module_Registry::get_catalog_with_status();
+		$catalog        = WPS_Module_Registry::get_catalog_with_status();
 		foreach ( $catalog as $module ) {
 			$slug = $module['slug'] ?? '';
 			if ( ! empty( $slug ) && WPS_Module_Registry::is_enabled( $slug ) ) {
@@ -426,10 +443,14 @@ class WPS_Module_Actions {
 			$health_data = WPS_Site_Health::get_health_check_results( $active_modules );
 		} else {
 			$health_data = array(
-				'score' => 0,
-				'status' => 'unavailable',
+				'score'   => 0,
+				'status'  => 'unavailable',
 				'results' => array(),
-				'counts' => array( 'good' => 0, 'warning' => 0, 'critical' => 0 ),
+				'counts'  => array(
+					'good'     => 0,
+					'warning'  => 0,
+					'critical' => 0,
+				),
 			);
 		}
 
@@ -438,7 +459,13 @@ class WPS_Module_Actions {
 		WPS_Dashboard_Widgets::render_health_widget_html( $health_data );
 		$html = ob_get_clean();
 
-		self::respond_success( array( 'html' => $html, 'active_modules' => $active_modules, 'timestamp' => current_time( 'timestamp' ) ) );
+		self::respond_success(
+			array(
+				'html'           => $html,
+				'active_modules' => $active_modules,
+				'timestamp'      => current_time( 'timestamp' ),
+			)
+		);
 	}
 
 	/**
@@ -451,12 +478,12 @@ class WPS_Module_Actions {
 
 		// Get active module slugs and their repos.
 		$active_repos = array();
-		$catalog = WPS_Module_Registry::get_catalog_with_status();
+		$catalog      = WPS_Module_Registry::get_catalog_with_status();
 		foreach ( $catalog as $module ) {
 			$slug = $module['slug'] ?? '';
 			if ( ! empty( $slug ) && WPS_Module_Registry::is_enabled( $slug ) ) {
 				// Extract repo from slug (e.g., 'vault-support-thisismyurl' → 'plugin-vault-support-thisismyurl').
-				$repo = 'plugin-' . $slug;
+				$repo           = 'plugin-' . $slug;
 				$active_repos[] = array(
 					'slug' => $slug,
 					'repo' => $repo,
@@ -470,9 +497,14 @@ class WPS_Module_Actions {
 		WPS_Dashboard_Widgets::render_events_widget_html( $active_repos );
 		$html = ob_get_clean();
 
-		self::respond_success( array( 'html' => $html, 'active_repos' => $active_repos, 'timestamp' => current_time( 'timestamp' ) ) );
+		self::respond_success(
+			array(
+				'html'         => $html,
+				'active_repos' => $active_repos,
+				'timestamp'    => current_time( 'timestamp' ),
+			)
+		);
 	}
 }
 
 /* @changelog WPS_Module_Actions class created for AJAX install/update/activate handlers. */
-

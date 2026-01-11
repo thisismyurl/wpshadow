@@ -265,7 +265,7 @@ class WPS_Dashboard_Layout {
 			WPS_Activity_Logger::log(
 				'dashboard',
 				sprintf(
-					__( 'Dashboard layout inherited from %s for module %s', 'plugin-wp-support-thisismyurl' ),
+					__( 'Dashboard layout inherited from %1$s for module %2$s', 'plugin-wp-support-thisismyurl' ),
 					$parent_context,
 					$context
 				),
@@ -297,9 +297,9 @@ class WPS_Dashboard_Layout {
 			// Extract module name from context (e.g., 'media', 'vault').
 			$module_parts = explode( '-', $context );
 			$module_id    = $module_parts[0];
-			
+
 			// Get the proper module name from catalog.
-			$catalog = \WPS\CoreSupport\WPS_Module_Registry::get_catalog_with_status();
+			$catalog     = \WPS\CoreSupport\WPS_Module_Registry::get_catalog_with_status();
 			$module_slug = str_contains( $module_id, '-support-thisismyurl' ) ? $module_id : $module_id . '-support-thisismyurl';
 			if ( isset( $catalog[ $module_slug ] ) ) {
 				$module_name = $catalog[ $module_slug ]['name'] ?? ucfirst( $module_id );
@@ -334,7 +334,7 @@ class WPS_Dashboard_Layout {
 		// Enqueue custom dashboard layout script.
 		wp_enqueue_script(
 			'wps-dashboard-layout',
-			plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/dashboard-layout.js',
+			plugin_dir_url( __DIR__ ) . 'assets/js/dashboard-layout.js',
 			array( 'jquery', 'postbox', 'jquery-ui-sortable' ),
 			'1.0.0',
 			true
@@ -344,15 +344,15 @@ class WPS_Dashboard_Layout {
 			'wps-dashboard-layout',
 			'WPS_dashboard_layout',
 			array(
-				'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
-				'nonce'        => wp_create_nonce( 'WPS_dashboard_layout' ),
-				'context'      => $context,
-				'network'      => $network ? '1' : '0',
-				'applyPrompt'  => __( 'Apply this layout to:', 'plugin-wp-support-thisismyurl' ),
+				'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
+				'nonce'         => wp_create_nonce( 'WPS_dashboard_layout' ),
+				'context'       => $context,
+				'network'       => $network ? '1' : '0',
+				'applyPrompt'   => __( 'Apply this layout to:', 'plugin-wp-support-thisismyurl' ),
 				'applyChildren' => __( 'Child dashboards only', 'plugin-wp-support-thisismyurl' ),
-				'applyAll'     => __( 'All dashboards', 'plugin-wp-support-thisismyurl' ),
-				'cancel'       => __( 'Cancel', 'plugin-wp-support-thisismyurl' ),
-				'apply'        => __( 'Apply', 'plugin-wp-support-thisismyurl' ),
+				'applyAll'      => __( 'All dashboards', 'plugin-wp-support-thisismyurl' ),
+				'cancel'        => __( 'Cancel', 'plugin-wp-support-thisismyurl' ),
+				'apply'         => __( 'Apply', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}
@@ -374,7 +374,7 @@ class WPS_Dashboard_Layout {
 		}
 
 		$widget = $widgets[ $widget_id ];
-		
+
 		// Prepend module name to title if provided.
 		$title = $widget['title'];
 		if ( ! empty( $module_name ) ) {
@@ -398,43 +398,43 @@ class WPS_Dashboard_Layout {
 	 */
 	private static function get_available_widgets(): array {
 		return array(
-			'WPS_widget_activity'         => array(
+			'WPS_widget_activity'        => array(
 				'title'    => __( 'Activity', 'plugin-wp-support-thisismyurl' ),
 				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_activity' ),
 			),
-			'WPS_widget_scheduled_tasks'  => array(
+			'WPS_widget_scheduled_tasks' => array(
 				'title'    => __( 'Scheduled Tasks', 'plugin-wp-support-thisismyurl' ),
 				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_scheduled_tasks' ),
 			),
-			'WPS_widget_modules'          => array(
+			'WPS_widget_modules'         => array(
 				'title'    => __( 'Modules', 'plugin-wp-support-thisismyurl' ),
 				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_modules' ),
 			),
-			'WPS_widget_health'           => array(
+			'WPS_widget_health'          => array(
 				'title'    => __( 'Health', 'plugin-wp-support-thisismyurl' ),
 				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_health' ),
 			),
-			'WPS_widget_quick_actions'    => array(
+			'WPS_widget_quick_actions'   => array(
 				'title'    => __( 'Quick Actions', 'plugin-wp-support-thisismyurl' ),
 				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_quick_actions' ),
 			),
-			'WPS_widget_events_and_news'  => array(
+			'WPS_widget_events_and_news' => array(
 				'title'    => __( 'Events and News', 'plugin-wp-support-thisismyurl' ),
 				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_events_and_news' ),
 			),
-			'WPS_widget_system_health'    => array(
+			'WPS_widget_system_health'   => array(
 				'title'    => __( 'System Health', 'plugin-wp-support-thisismyurl' ),
 				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_system_health' ),
 			),
-			'WPS_widget_vault_status'     => array(
+			'WPS_widget_vault_status'    => array(
 				'title'    => __( 'Vault Status', 'plugin-wp-support-thisismyurl' ),
 				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_vault_status' ),
 			),
-			'WPS_widget_media_overview'   => array(
+			'WPS_widget_media_overview'  => array(
 				'title'    => __( 'Media Overview', 'plugin-wp-support-thisismyurl' ),
 				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_media_overview' ),
 			),
-			'WPS_widget_vault_overview'   => array(
+			'WPS_widget_vault_overview'  => array(
 				'title'    => __( 'Vault Overview', 'plugin-wp-support-thisismyurl' ),
 				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_vault_overview' ),
 			),
@@ -494,7 +494,7 @@ class WPS_Dashboard_Layout {
 		wp_send_json_success(
 			array(
 				'message' => sprintf(
-					__( 'Applied to %d dashboards. %d skipped.', 'plugin-wp-support-thisismyurl' ),
+					__( 'Applied to %1$d dashboards. %2$d skipped.', 'plugin-wp-support-thisismyurl' ),
 					$result['success'],
 					$result['failed']
 				),
@@ -503,6 +503,3 @@ class WPS_Dashboard_Layout {
 		);
 	}
 }
-
-
-

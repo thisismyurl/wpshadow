@@ -233,7 +233,7 @@ class WPS_Update_Simulator {
 	 * @return void
 	 */
 	public static function render_page(): void {
-		$available_updates = self::get_available_updates();
+		$available_updates  = self::get_available_updates();
 		$simulation_history = self::get_simulation_history();
 		?>
 		<div class="wrap wps-update-simulator-page">
@@ -413,7 +413,7 @@ class WPS_Update_Simulator {
 			return $changelog;
 		}
 
-		$url = 'https://wordpress.org/plugins/' . $plugin_data->slug . '/';
+		$url      = 'https://wordpress.org/plugins/' . $plugin_data->slug . '/';
 		$response = wp_remote_get( $url );
 
 		if ( is_wp_error( $response ) ) {
@@ -447,7 +447,7 @@ class WPS_Update_Simulator {
 
 		// Check WordPress version.
 		if ( isset( $plugin_data->requires ) && version_compare( $wp_version, $plugin_data->requires, '<' ) ) {
-			$compatibility['wordpress'] = false;
+			$compatibility['wordpress']  = false;
 			$compatibility['warnings'][] = sprintf(
 				/* translators: %s: Required WordPress version */
 				__( 'Requires WordPress %s or higher', 'plugin-wp-support-thisismyurl' ),
@@ -457,7 +457,7 @@ class WPS_Update_Simulator {
 
 		// Check PHP version.
 		if ( isset( $plugin_data->requires_php ) && version_compare( phpversion(), $plugin_data->requires_php, '<' ) ) {
-			$compatibility['php'] = false;
+			$compatibility['php']        = false;
 			$compatibility['warnings'][] = sprintf(
 				/* translators: %s: Required PHP version */
 				__( 'Requires PHP %s or higher', 'plugin-wp-support-thisismyurl' ),

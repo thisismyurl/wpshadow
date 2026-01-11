@@ -59,7 +59,7 @@ class WPS_Guided_Walkthroughs {
 	 */
 	private static function register_workflows(): void {
 		self::$workflows = array(
-			'update-plugin'    => array(
+			'update-plugin'  => array(
 				'title'       => __( 'Update a Plugin Safely', 'plugin-wp-support-thisismyurl' ),
 				'description' => __( 'Test plugin update in staging, then deploy to live site', 'plugin-wp-support-thisismyurl' ),
 				'steps'       => array(
@@ -90,7 +90,7 @@ class WPS_Guided_Walkthroughs {
 					),
 				),
 			),
-			'add-user'         => array(
+			'add-user'       => array(
 				'title'       => __( 'Add a Team Member', 'plugin-wp-support-thisismyurl' ),
 				'description' => __( 'Add new user with appropriate permissions', 'plugin-wp-support-thisismyurl' ),
 				'steps'       => array(
@@ -116,7 +116,7 @@ class WPS_Guided_Walkthroughs {
 					),
 				),
 			),
-			'create-backup'    => array(
+			'create-backup'  => array(
 				'title'       => __( 'Create a Backup', 'plugin-wp-support-thisismyurl' ),
 				'description' => __( 'Create full site backup with verification', 'plugin-wp-support-thisismyurl' ),
 				'steps'       => array(
@@ -137,7 +137,7 @@ class WPS_Guided_Walkthroughs {
 					),
 				),
 			),
-			'install-plugin'   => array(
+			'install-plugin' => array(
 				'title'       => __( 'Install a Plugin Safely', 'plugin-wp-support-thisismyurl' ),
 				'description' => __( 'Install new plugin with safety checks', 'plugin-wp-support-thisismyurl' ),
 				'steps'       => array(
@@ -168,7 +168,7 @@ class WPS_Guided_Walkthroughs {
 					),
 				),
 			),
-			'restore-backup'   => array(
+			'restore-backup' => array(
 				'title'       => __( 'Restore from Backup', 'plugin-wp-support-thisismyurl' ),
 				'description' => __( 'Safely restore your site from backup', 'plugin-wp-support-thisismyurl' ),
 				'steps'       => array(
@@ -302,7 +302,7 @@ class WPS_Guided_Walkthroughs {
 
 		update_option( self::PROGRESS_KEY . '_' . get_current_user_id(), $progress );
 
-		$workflow = self::$workflows[ $progress['workflow'] ] ?? array();
+		$workflow  = self::$workflows[ $progress['workflow'] ] ?? array();
 		$next_step = $workflow['steps'][ $progress['current_step'] ] ?? null;
 
 		wp_send_json_success(

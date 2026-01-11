@@ -53,14 +53,14 @@ class WPS_Backup_Verification {
 	 */
 	public static function run_verification_test(): array {
 		$test = array(
-			'id'              => wp_generate_uuid4(),
-			'timestamp'       => time(),
-			'duration'        => 0,
-			'success'         => false,
-			'snapshot_used'   => null,
-			'tests'           => array(),
-			'performance'     => array(),
-			'issues'          => array(),
+			'id'            => wp_generate_uuid4(),
+			'timestamp'     => time(),
+			'duration'      => 0,
+			'success'       => false,
+			'snapshot_used' => null,
+			'tests'         => array(),
+			'performance'   => array(),
+			'issues'        => array(),
 		);
 
 		$start_time = microtime( true );
@@ -77,7 +77,7 @@ class WPS_Backup_Verification {
 			return $test;
 		}
 
-		$latest_snapshot = end( $snapshots );
+		$latest_snapshot       = end( $snapshots );
 		$test['snapshot_used'] = $latest_snapshot['id'];
 
 		// Step 2: Create staging environment for restore test.
@@ -101,7 +101,7 @@ class WPS_Backup_Verification {
 		// Step 3: Attempt restoration in staging.
 		$restore_start = microtime( true );
 		if ( ! WPS_Snapshot_Manager::restore_snapshot( $latest_snapshot['id'] ) ) {
-			$test['tests'][] = array(
+			$test['tests'][]  = array(
 				'name'     => 'Restore Functionality',
 				'result'   => 'failed',
 				'duration' => microtime( true ) - $restore_start,
@@ -117,9 +117,9 @@ class WPS_Backup_Verification {
 		}
 
 		// Step 4: Verify database integrity in restored state.
-		$integrity_start = microtime( true );
+		$integrity_start  = microtime( true );
 		$integrity_result = self::verify_database_integrity();
-		$test['tests'][] = array(
+		$test['tests'][]  = array(
 			'name'     => 'Database Integrity Check',
 			'result'   => $integrity_result ? 'passed' : 'failed',
 			'duration' => microtime( true ) - $integrity_start,
@@ -130,8 +130,8 @@ class WPS_Backup_Verification {
 		}
 
 		// Step 5: Verify plugin/theme functionality.
-		$plugin_start = microtime( true );
-		$plugin_result = self::verify_plugin_functionality();
+		$plugin_start    = microtime( true );
+		$plugin_result   = self::verify_plugin_functionality();
 		$test['tests'][] = array(
 			'name'     => 'Plugin Functionality Check',
 			'result'   => $plugin_result ? 'passed' : 'failed',
@@ -143,8 +143,8 @@ class WPS_Backup_Verification {
 		}
 
 		// Step 6: Test WordPress login functionality.
-		$login_start = microtime( true );
-		$login_result = self::verify_login_functionality();
+		$login_start     = microtime( true );
+		$login_result    = self::verify_login_functionality();
 		$test['tests'][] = array(
 			'name'     => 'Login Functionality Check',
 			'result'   => $login_result ? 'passed' : 'failed',
@@ -157,21 +157,21 @@ class WPS_Backup_Verification {
 
 		// Step 7: Measure restoration speed.
 		$test['performance'] = array(
-			'total_duration'      => microtime( true ) - $start_time,
-			'restore_time'        => $test['tests'][1]['duration'] ?? 0,
-			'verification_time'   => microtime( true ) - $restore_start,
-			'estimated_full_recover_time' => (microtime( true ) - $start_time) . ' seconds',
+			'total_duration'              => microtime( true ) - $start_time,
+			'restore_time'                => $test['tests'][1]['duration'] ?? 0,
+			'verification_time'           => microtime( true ) - $restore_start,
+			'estimated_full_recover_time' => ( microtime( true ) - $start_time ) . ' seconds',
 		);
 
 		// Step 8: Clean up staging environment.
 		WPS_Staging_Manager::delete_staging( $staging_id );
 
 		// Set overall result.
-		$test['success'] = empty( $test['issues'] );
+		$test['success']  = empty( $test['issues'] );
 		$test['duration'] = microtime( true ) - $start_time;
 
 		// Store test result.
-		$results = get_option( self::RESULTS_KEY, array() );
+		$results                = get_option( self::RESULTS_KEY, array() );
 		$results[ $test['id'] ] = $test;
 
 		// Keep last 10 results.
@@ -313,7 +313,7 @@ class WPS_Backup_Verification {
 	 * @return void
 	 */
 	private static function log_verification( array $test ): void {
-		$status = $test['success'] ? 'SUCCESS' : 'FAILED';
+		$status   = $test['success'] ? 'SUCCESS' : 'FAILED';
 		$duration = round( $test['duration'], 2 );
 
 		$log_message = sprintf(

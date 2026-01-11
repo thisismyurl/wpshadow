@@ -61,15 +61,15 @@ class WPS_Hidden_Diagnostic_API {
 			return '';
 		}
 
-		$token = bin2hex( random_bytes( 32 ) );
+		$token  = bin2hex( random_bytes( 32 ) );
 		$tokens = get_option( self::TOKENS_KEY, array() );
 
 		$tokens[ $token ] = array(
-			'created'     => time(),
-			'expires'     => time() + ( self::TOKEN_EXPIRY * HOUR_IN_SECONDS ),
-			'support'     => sanitize_text_field( $support_name ),
-			'reason'      => sanitize_text_field( $reason ),
-			'uses'        => 0,
+			'created' => time(),
+			'expires' => time() + ( self::TOKEN_EXPIRY * HOUR_IN_SECONDS ),
+			'support' => sanitize_text_field( $support_name ),
+			'reason'  => sanitize_text_field( $reason ),
+			'uses'    => 0,
 		);
 
 		update_option( self::TOKENS_KEY, $tokens );
@@ -103,7 +103,7 @@ class WPS_Hidden_Diagnostic_API {
 		}
 
 		// Increment use count.
-		$tokens[ $token ]['uses']++;
+		++$tokens[ $token ]['uses'];
 		update_option( self::TOKENS_KEY, $tokens );
 
 		return true;
@@ -192,11 +192,13 @@ class WPS_Hidden_Diagnostic_API {
 		$reports = WPS_Site_Audit::get_reports();
 		$latest  = ! empty( $reports ) ? end( $reports ) : null;
 
-		wp_send_json_success( array(
-			'available' => ! empty( $reports ),
-			'latest'    => $latest,
-			'count'     => count( $reports ),
-		) );
+		wp_send_json_success(
+			array(
+				'available' => ! empty( $reports ),
+				'latest'    => $latest,
+				'count'     => count( $reports ),
+			)
+		);
 	}
 
 	/**
@@ -209,11 +211,13 @@ class WPS_Hidden_Diagnostic_API {
 		$log_file = WP_CONTENT_DIR . '/debug.log';
 
 		if ( ! file_exists( $log_file ) ) {
-			wp_send_json_success( array(
-				'exists' => false,
-				'size'   => 0,
-				'entries' => array(),
-			) );
+			wp_send_json_success(
+				array(
+					'exists'  => false,
+					'size'    => 0,
+					'entries' => array(),
+				)
+			);
 		}
 
 		$size = filesize( $log_file );
@@ -227,11 +231,13 @@ class WPS_Hidden_Diagnostic_API {
 			$lines = file( $log_file );
 		}
 
-		wp_send_json_success( array(
-			'exists'  => true,
-			'size'    => size_format( $size ),
-			'entries' => array_filter( $lines ),
-		) );
+		wp_send_json_success(
+			array(
+				'exists'  => true,
+				'size'    => size_format( $size ),
+				'entries' => array_filter( $lines ),
+			)
+		);
 	}
 
 	/**
@@ -256,10 +262,12 @@ class WPS_Hidden_Diagnostic_API {
 			);
 		}
 
-		wp_send_json_success( array(
-			'count'     => count( $list ),
-			'snapshots' => $list,
-		) );
+		wp_send_json_success(
+			array(
+				'count'     => count( $list ),
+				'snapshots' => $list,
+			)
+		);
 	}
 
 	/**
@@ -269,7 +277,7 @@ class WPS_Hidden_Diagnostic_API {
 	 * @return void
 	 */
 	private static function handle_plugin_info( string $token ): void {
-		$active = get_option( 'active_plugins', array() );
+		$active  = get_option( 'active_plugins', array() );
 		$plugins = get_plugins();
 
 		$list = array(

@@ -250,14 +250,14 @@ class WPS_Module_Toggles {
 	 * @return array Array of modules that were auto-deactivated.
 	 */
 	public static function cascade_deactivate( string $parent_module ): array {
-		$dependents = self::get_dependents( $parent_module );
-		$toggles    = self::get_toggles();
+		$dependents  = self::get_dependents( $parent_module );
+		$toggles     = self::get_toggles();
 		$deactivated = array();
 
 		foreach ( $dependents as $dep ) {
 			if ( ! empty( $toggles[ $dep ] ) ) {
 				$toggles[ $dep ] = 0;
-				$deactivated[] = $dep;
+				$deactivated[]   = $dep;
 			}
 		}
 

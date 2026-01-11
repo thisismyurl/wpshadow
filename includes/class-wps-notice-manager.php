@@ -221,6 +221,3 @@ class WPS_Notice_Manager {
 		return 'info';
 	}
 }
-
-
-

@@ -457,5 +457,3 @@ class WPS_Plugin_Upgrader {
 }
 
 /* @changelog WPS_Plugin_Upgrader class created for install/update/activate flows. */
-
-

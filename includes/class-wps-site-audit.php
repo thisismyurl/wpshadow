@@ -40,14 +40,14 @@ class WPS_Site_Audit {
 	 */
 	public static function generate_audit(): array {
 		$report = array(
-			'id'          => wp_generate_uuid4(),
-			'timestamp'   => time(),
-			'wordpress'   => array(),
-			'performance' => array(),
-			'security'    => array(),
+			'id'           => wp_generate_uuid4(),
+			'timestamp'    => time(),
+			'wordpress'    => array(),
+			'performance'  => array(),
+			'security'     => array(),
 			'optimization' => array(),
-			'plugins'     => array(),
-			'theme'       => array(),
+			'plugins'      => array(),
+			'theme'        => array(),
 		);
 
 		// WordPress analysis.
@@ -69,7 +69,7 @@ class WPS_Site_Audit {
 		$report['theme'] = self::audit_theme();
 
 		// Store report.
-		$reports = get_option( self::REPORTS_KEY, array() );
+		$reports                  = get_option( self::REPORTS_KEY, array() );
 		$reports[ $report['id'] ] = $report;
 
 		// Keep last 5 reports.
@@ -92,15 +92,15 @@ class WPS_Site_Audit {
 		global $wp_version;
 
 		return array(
-			'version'          => $wp_version,
-			'is_multisite'     => is_multisite(),
-			'debug_mode'       => defined( 'WP_DEBUG' ) && WP_DEBUG,
-			'debug_log'        => defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG,
-			'auto_updates'     => (bool) get_option( 'auto_core_update_triggered' ),
-			'wp_cron'          => (bool) wp_next_scheduled( 'wp_scheduled_auto_draft_delete' ),
+			'version'             => $wp_version,
+			'is_multisite'        => is_multisite(),
+			'debug_mode'          => defined( 'WP_DEBUG' ) && WP_DEBUG,
+			'debug_log'           => defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG,
+			'auto_updates'        => (bool) get_option( 'auto_core_update_triggered' ),
+			'wp_cron'             => (bool) wp_next_scheduled( 'wp_scheduled_auto_draft_delete' ),
 			'permalink_structure' => get_option( 'permalink_structure' ),
-			'post_count'       => wp_count_posts()->publish ?? 0,
-			'user_count'       => count_users()['total_users'] ?? 0,
+			'post_count'          => wp_count_posts()->publish ?? 0,
+			'user_count'          => count_users()['total_users'] ?? 0,
 		);
 	}
 
@@ -122,18 +122,18 @@ class WPS_Site_Audit {
 		}
 
 		// Count posts by status.
-		$drafts    = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_status='draft'" );
-		$revisions = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type='revision'" );
+		$drafts        = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_status='draft'" );
+		$revisions     = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type='revision'" );
 		$spam_comments = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->comments} WHERE comment_approved='spam'" );
 
 		return array(
-			'database_size'    => size_format( $db_size ),
+			'database_size'     => size_format( $db_size ),
 			'database_size_raw' => $db_size,
-			'tables_count'     => count( $tables ),
-			'draft_posts'      => intval( $drafts ),
-			'post_revisions'   => intval( $revisions ),
-			'spam_comments'    => intval( $spam_comments ),
-			'transients_count' => count( get_transient( 'WPS_transient_count' ) ?? array() ),
+			'tables_count'      => count( $tables ),
+			'draft_posts'       => intval( $drafts ),
+			'post_revisions'    => intval( $revisions ),
+			'spam_comments'     => intval( $spam_comments ),
+			'transients_count'  => count( get_transient( 'WPS_transient_count' ) ?? array() ),
 		);
 	}
 
@@ -150,10 +150,10 @@ class WPS_Site_Audit {
 		// Check for XML-RPC (security risk if not needed).
 		if ( xmlrpc_enabled() ) {
 			$issues[] = array(
-				'level'        => 'warning',
-				'title'        => 'XML-RPC Enabled',
-				'description'  => 'XML-RPC can be a security risk if not needed. Consider disabling it.',
-				'fix'          => 'Add filter: add_filter("xmlrpc_enabled", "__return_false");',
+				'level'       => 'warning',
+				'title'       => 'XML-RPC Enabled',
+				'description' => 'XML-RPC can be a security risk if not needed. Consider disabling it.',
+				'fix'         => 'Add filter: add_filter("xmlrpc_enabled", "__return_false");',
 			);
 		}
 
@@ -161,10 +161,10 @@ class WPS_Site_Audit {
 		$admin = get_user_by( 'id', 1 );
 		if ( $admin && 'admin' === $admin->user_login ) {
 			$issues[] = array(
-				'level'        => 'warning',
-				'title'        => 'Default Admin Username',
-				'description'  => 'Default "admin" username is a security risk.',
-				'fix'          => 'Rename user or create new admin account and delete default.',
+				'level'       => 'warning',
+				'title'       => 'Default Admin Username',
+				'description' => 'Default "admin" username is a security risk.',
+				'fix'         => 'Rename user or create new admin account and delete default.',
 			);
 		}
 
@@ -172,11 +172,11 @@ class WPS_Site_Audit {
 		$outdated = self::get_outdated_plugins();
 		if ( ! empty( $outdated ) ) {
 			$issues[] = array(
-				'level'        => 'critical',
-				'title'        => 'Outdated Plugins',
-				'description'  => count( $outdated ) . ' plugin(s) have available updates.',
-				'plugins'      => $outdated,
-				'fix'          => 'Update plugins immediately.',
+				'level'       => 'critical',
+				'title'       => 'Outdated Plugins',
+				'description' => count( $outdated ) . ' plugin(s) have available updates.',
+				'plugins'     => $outdated,
+				'fix'         => 'Update plugins immediately.',
 			);
 		}
 
@@ -184,10 +184,10 @@ class WPS_Site_Audit {
 		$has_ssl = strpos( home_url(), 'https://' ) !== false;
 		if ( ! $has_ssl ) {
 			$issues[] = array(
-				'level'        => 'critical',
-				'title'        => 'SSL Not Enabled',
-				'description'  => 'Site does not use HTTPS. Enable SSL for security.',
-				'fix'          => 'Enable SSL in hosting control panel and update WordPress Address.',
+				'level'       => 'critical',
+				'title'       => 'SSL Not Enabled',
+				'description' => 'Site does not use HTTPS. Enable SSL for security.',
+				'fix'         => 'Enable SSL in hosting control panel and update WordPress Address.',
 			);
 		}
 
@@ -212,9 +212,9 @@ class WPS_Site_Audit {
 		$revision_count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type='revision'" );
 		if ( $revision_count > 100 ) {
 			$suggestions[] = array(
-				'title'        => 'Cleanup Old Post Revisions',
-				'description'  => "You have {$revision_count} post revisions. Clean old ones to reduce database size.",
-				'action'       => 'WPS_cleanup_revisions',
+				'title'       => 'Cleanup Old Post Revisions',
+				'description' => "You have {$revision_count} post revisions. Clean old ones to reduce database size.",
+				'action'      => 'WPS_cleanup_revisions',
 			);
 		}
 
@@ -222,9 +222,9 @@ class WPS_Site_Audit {
 		$spam_count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->comments} WHERE comment_approved='spam'" );
 		if ( $spam_count > 50 ) {
 			$suggestions[] = array(
-				'title'        => 'Delete Spam Comments',
-				'description'  => "You have {$spam_count} spam comments. Delete to improve performance.",
-				'action'       => 'WPS_delete_spam_comments',
+				'title'       => 'Delete Spam Comments',
+				'description' => "You have {$spam_count} spam comments. Delete to improve performance.",
+				'action'      => 'WPS_delete_spam_comments',
 			);
 		}
 
@@ -232,9 +232,9 @@ class WPS_Site_Audit {
 		$auto_draft = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_status='auto-draft' AND post_date < DATE_SUB(NOW(), INTERVAL 7 DAY)" );
 		if ( $auto_draft > 0 ) {
 			$suggestions[] = array(
-				'title'        => 'Delete Old Auto Drafts',
-				'description'  => "You have {$auto_draft} old auto-draft posts. Clean to save space.",
-				'action'       => 'WPS_cleanup_auto_drafts',
+				'title'       => 'Delete Old Auto Drafts',
+				'description' => "You have {$auto_draft} old auto-draft posts. Clean to save space.",
+				'action'      => 'WPS_cleanup_auto_drafts',
 			);
 		}
 
@@ -242,15 +242,15 @@ class WPS_Site_Audit {
 		$unused = self::find_unused_plugins();
 		if ( ! empty( $unused ) ) {
 			$suggestions[] = array(
-				'title'        => 'Deactivate Unused Plugins',
-				'description'  => 'Found ' . count( $unused ) . ' inactive plugin(s). Deactivate unused plugins to improve security.',
-				'plugins'      => $unused,
-				'action'       => 'WPS_deactivate_plugins',
+				'title'       => 'Deactivate Unused Plugins',
+				'description' => 'Found ' . count( $unused ) . ' inactive plugin(s). Deactivate unused plugins to improve security.',
+				'plugins'     => $unused,
+				'action'      => 'WPS_deactivate_plugins',
 			);
 		}
 
 		return array(
-			'suggestions'      => $suggestions,
+			'suggestions'       => $suggestions,
 			'suggestions_count' => count( $suggestions ),
 		);
 	}
@@ -264,11 +264,11 @@ class WPS_Site_Audit {
 		$active   = get_option( 'active_plugins', array() );
 		$plugins  = get_plugins();
 		$analysis = array(
-			'active_count'    => count( $active ),
-			'inactive_count'  => count( $plugins ) - count( $active ),
-			'total_count'     => count( $plugins ),
-			'active'          => array(),
-			'inactive'        => array(),
+			'active_count'   => count( $active ),
+			'inactive_count' => count( $plugins ) - count( $active ),
+			'total_count'    => count( $plugins ),
+			'active'         => array(),
+			'inactive'       => array(),
 		);
 
 		foreach ( $plugins as $path => $data ) {
@@ -312,8 +312,8 @@ class WPS_Site_Audit {
 	 * @return array Outdated plugins list.
 	 */
 	private static function get_outdated_plugins(): array {
-		$outdated = array();
-		$plugins  = get_plugins();
+		$outdated  = array();
+		$plugins   = get_plugins();
 		$transient = get_transients( 'update_plugins' );
 
 		if ( ! is_object( $transient ) || empty( $transient->response ) ) {
@@ -323,8 +323,8 @@ class WPS_Site_Audit {
 		foreach ( $transient->response as $plugin_path => $update_data ) {
 			if ( isset( $plugins[ $plugin_path ] ) ) {
 				$outdated[] = array(
-					'name'     => $plugins[ $plugin_path ]['Name'] ?? '',
-					'current'  => $plugins[ $plugin_path ]['Version'] ?? '0',
+					'name'      => $plugins[ $plugin_path ]['Name'] ?? '',
+					'current'   => $plugins[ $plugin_path ]['Version'] ?? '0',
 					'available' => $update_data->new_version ?? 'unknown',
 				);
 			}
@@ -339,8 +339,8 @@ class WPS_Site_Audit {
 	 * @return array Inactive plugins.
 	 */
 	private static function find_unused_plugins(): array {
-		$unused = array();
-		$active = get_option( 'active_plugins', array() );
+		$unused  = array();
+		$active  = get_option( 'active_plugins', array() );
 		$plugins = get_plugins();
 
 		foreach ( $plugins as $path => $data ) {
@@ -500,7 +500,7 @@ class WPS_Site_Audit {
 					<!-- Plugin Stats -->
 					<div style="margin: 20px 0; padding: 15px; background: #eee;">
 						<h3><?php esc_html_e( '🔌 Plugins', 'plugin-wp-support-thisismyurl' ); ?></h3>
-						<p><?php printf( esc_html__( 'Active: %d | Inactive: %d | Total: %d', 'plugin-wp-support-thisismyurl' ), intval( $latest['plugins']['active_count'] ), intval( $latest['plugins']['inactive_count'] ), intval( $latest['plugins']['total_count'] ) ); ?></p>
+						<p><?php printf( esc_html__( 'Active: %1$d | Inactive: %2$d | Total: %3$d', 'plugin-wp-support-thisismyurl' ), intval( $latest['plugins']['active_count'] ), intval( $latest['plugins']['inactive_count'] ), intval( $latest['plugins']['total_count'] ) ); ?></p>
 					</div>
 				</div>
 			<?php endif; ?>

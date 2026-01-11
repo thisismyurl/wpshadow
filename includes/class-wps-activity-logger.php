@@ -91,31 +91,31 @@ class WPS_Activity_Logger {
 		 * @param int $post_id Attachment post ID.
 		 * @return void
 		 */
-		public static function on_add_attachment( int $post_id ): void {
-			$post = get_post( $post_id );
-			if ( ! $post || 'attachment' !== $post->post_type ) {
-				return;
-			}
-
-			$file_path = get_attached_file( $post_id );
-			$mime_type = get_post_mime_type( $post_id );
-			$title     = get_the_title( $post_id );
-
-			self::log(
-				self::EVENT_MEDIA_FILE_ADDED,
-				sprintf(
-					/* translators: %s: Attachment title */
-					__( 'Uploaded media: %s', 'plugin-wp-support-thisismyurl' ),
-					(string) $title
-				),
-				array(
-					'post_id'   => $post_id,
-					'file'      => $file_path ?: '',
-					'mime_type' => $mime_type ?: '',
-				),
-				'media'
-			);
+	public static function on_add_attachment( int $post_id ): void {
+		$post = get_post( $post_id );
+		if ( ! $post || 'attachment' !== $post->post_type ) {
+			return;
 		}
+
+		$file_path = get_attached_file( $post_id );
+		$mime_type = get_post_mime_type( $post_id );
+		$title     = get_the_title( $post_id );
+
+		self::log(
+			self::EVENT_MEDIA_FILE_ADDED,
+			sprintf(
+				/* translators: %s: Attachment title */
+				__( 'Uploaded media: %s', 'plugin-wp-support-thisismyurl' ),
+				(string) $title
+			),
+			array(
+				'post_id'   => $post_id,
+				'file'      => $file_path ?: '',
+				'mime_type' => $mime_type ?: '',
+			),
+			'media'
+		);
+	}
 
 	/**
 	 * Handle attachment deletion (Media Library).
@@ -217,7 +217,13 @@ class WPS_Activity_Logger {
 			\WPS\CoreSupport\WPS_Vault::add_log( 'info', get_current_user_id(), 'Backing up edited media ID ' . $post_id, 'media_edit_backup' );
 			if ( method_exists( '\\WPS\\CoreSupport\\WPS_Vault', 'backup_file' ) ) {
 				try {
-					\WPS\CoreSupport\WPS_Vault::backup_file( $file_path, array( 'post_id' => $post_id, 'reason' => 'edit' ) );
+					\WPS\CoreSupport\WPS_Vault::backup_file(
+						$file_path,
+						array(
+							'post_id' => $post_id,
+							'reason'  => 'edit',
+						)
+					);
 					return;
 				} catch ( \Throwable $e ) {
 					// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
@@ -488,7 +494,7 @@ class WPS_Activity_Logger {
 			// Prepare a secure inline form to trigger Vault rehydrate for this attachment.
 			$action_url = esc_url( admin_url( 'admin-post.php?action=WPS_vault_attachment_action' ) );
 			// Nonce must match the Vault handler's action key.
-			$nonce      = wp_create_nonce( 'WPS_vault_attachment_action' );
+			$nonce = wp_create_nonce( 'WPS_vault_attachment_action' );
 
 			$actions_html = sprintf(
 				'<form method="post" action="%1$s" style="display:inline;margin-left:8px;">'
@@ -513,7 +519,7 @@ class WPS_Activity_Logger {
 			esc_html( $description ),
 			esc_html( $timestamp ),
 			esc_html( $username ),
-			$actions_html
+			wp_kses_post( $actions_html )
 		);
 	}
 
@@ -937,7 +943,3 @@ class WPS_Activity_Logger {
 
 /* @changelog Added WPS_Activity_Logger for WordPress Dashboard Activity integration */
 /* @changelog Added module_source tracking to all log entries and get_events_by_module() method for filtering logs by module */
-
-
-
-

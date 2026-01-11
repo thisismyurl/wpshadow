@@ -44,5 +44,3 @@ class WPS_Ajax_v1 {
 		\wp_send_json_success( $data );
 	}
 }
-
-

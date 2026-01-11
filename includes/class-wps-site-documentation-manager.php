@@ -162,12 +162,17 @@ class WPS_Site_Documentation_Manager {
 				'protected_by' => get_current_user_id(),
 				'notify'       => true,
 			);
-			$message = __( 'Plugin marked as protected', 'plugin-wp-support-thisismyurl' );
+			$message                           = __( 'Plugin marked as protected', 'plugin-wp-support-thisismyurl' );
 		}
 
 		update_option( self::PROTECTED_PLUGINS_KEY, $protected_plugins );
 
-		wp_send_json_success( array( 'message' => $message, 'protected' => ! $is_protected ) );
+		wp_send_json_success(
+			array(
+				'message'   => $message,
+				'protected' => ! $is_protected,
+			)
+		);
 	}
 
 	/**
@@ -460,7 +465,7 @@ class WPS_Site_Documentation_Manager {
 		$functions_php = get_stylesheet_directory() . '/functions.php';
 
 		if ( file_exists( $functions_php ) ) {
-			$lines  = count( file( $functions_php ) );
+			$lines   = count( file( $functions_php ) );
 			$output .= '<div class="wps-custom-file">';
 			$output .= '<span class="dashicons dashicons-yes-alt"></span> ';
 			$output .= '<strong>' . esc_html( str_replace( wp_normalize_path( WP_CONTENT_DIR ), 'wp-content', wp_normalize_path( $functions_php ) ) ) . '</strong>';
@@ -503,12 +508,12 @@ class WPS_Site_Documentation_Manager {
 	private static function generate_technical_specs(): string {
 		global $wpdb;
 
-		$theme         = wp_get_theme();
-		$all_plugins   = get_plugins();
-		$active_count  = count( array_filter( $all_plugins, 'is_plugin_active', ARRAY_FILTER_USE_KEY ) );
-		$table_count   = $wpdb->get_var( "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '" . esc_sql( DB_NAME ) . "'" );
-		$upload_dir    = wp_upload_dir();
-		$disk_space    = 0;
+		$theme        = wp_get_theme();
+		$all_plugins  = get_plugins();
+		$active_count = count( array_filter( $all_plugins, 'is_plugin_active', ARRAY_FILTER_USE_KEY ) );
+		$table_count  = $wpdb->get_var( "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '" . esc_sql( DB_NAME ) . "'" );
+		$upload_dir   = wp_upload_dir();
+		$disk_space   = 0;
 
 		if ( isset( $upload_dir['basedir'] ) && is_dir( $upload_dir['basedir'] ) ) {
 			$disk_space = self::get_directory_size( $upload_dir['basedir'] );

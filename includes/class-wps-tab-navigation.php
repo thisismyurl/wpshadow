@@ -34,12 +34,12 @@ class WPS_Tab_Navigation {
 		$module = sanitize_text_field( (string) ( $_GET[ self::QUERY_VAR_MODULE ] ?? '' ) );
 		$hub    = sanitize_text_field( (string) ( $_GET[ self::QUERY_VAR_HUB ] ?? '' ) );
 		$spoke  = sanitize_text_field( (string) ( $_GET[ self::QUERY_VAR_SPOKE ] ?? '' ) );
-		
+
 		// If 'module' is set, use it as the hub (for now, treat all modules as hubs).
 		if ( ! empty( $module ) ) {
 			$hub = $module;
 		}
-		
+
 		return array(
 			'hub'   => $hub,
 			'spoke' => $spoke,
@@ -133,13 +133,13 @@ class WPS_Tab_Navigation {
 	 */
 	public static function build_hub_url( string $hub_id, string $tab = 'dashboard' ): string {
 		// Extract short hub name from full slug if needed.
-		$hub_id  = self::normalize_hub_id( $hub_id );
+		$hub_id   = self::normalize_hub_id( $hub_id );
 		$base_url = admin_url( 'admin.php' );
 		$args     = array(
-			'page'                    => 'wp-support',
+			'page'                 => 'wp-support',
 			self::QUERY_VAR_MODULE => $hub_id,
 		);
-		
+
 		return add_query_arg( $args, $base_url );
 	}
 

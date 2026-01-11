@@ -29,5 +29,3 @@ class WPS_Processor_v1 {
 		$this->core->clear_option_cache();
 	}
 }
-
-

@@ -169,10 +169,10 @@ class WPS_Emergency_Support {
 	public static function add_support_to_health_check( array $tests ): array {
 		// Add a custom test that checks for recent critical errors.
 		$tests['direct']['WPS_critical_errors'] = array(
-			'label'       => __( 'Critical Errors', 'plugin-wp-support-thisismyurl' ),
-			'test'        => array( __CLASS__, 'test_critical_errors' ),
-			'has_rest'    => true,
-			'async'       => false,
+			'label'    => __( 'Critical Errors', 'plugin-wp-support-thisismyurl' ),
+			'test'     => array( __CLASS__, 'test_critical_errors' ),
+			'has_rest' => true,
+			'async'    => false,
 		);
 
 		return $tests;
@@ -187,9 +187,12 @@ class WPS_Emergency_Support {
 		$errors = get_option( self::ERRORS_KEY, array() );
 
 		// Get errors from last 24 hours.
-		$recent = array_filter( $errors, static function ( $error ) {
-			return ( time() - $error['timestamp'] ) < 86400;
-		} );
+		$recent = array_filter(
+			$errors,
+			static function ( $error ) {
+				return ( time() - $error['timestamp'] ) < 86400;
+			}
+		);
 
 		if ( empty( $recent ) ) {
 			return array(
@@ -239,9 +242,12 @@ class WPS_Emergency_Support {
 		$errors = get_option( self::ERRORS_KEY, array() );
 
 		// Only show widget if there are recent errors.
-		$recent = array_filter( $errors, static function ( $error ) {
-			return ( time() - $error['timestamp'] ) < 604800; // Last 7 days.
-		} );
+		$recent = array_filter(
+			$errors,
+			static function ( $error ) {
+				return ( time() - $error['timestamp'] ) < 604800; // Last 7 days.
+			}
+		);
 
 		if ( empty( $recent ) ) {
 			return;
@@ -263,9 +269,12 @@ class WPS_Emergency_Support {
 		$errors = get_option( self::ERRORS_KEY, array() );
 
 		// Get recent errors.
-		$recent = array_filter( $errors, static function ( $error ) {
-			return ( time() - $error['timestamp'] ) < 604800;
-		} );
+		$recent = array_filter(
+			$errors,
+			static function ( $error ) {
+				return ( time() - $error['timestamp'] ) < 604800;
+			}
+		);
 
 		$recent = array_slice( array_reverse( $recent ), 0, 3 );
 
@@ -317,9 +326,12 @@ class WPS_Emergency_Support {
 		$errors = self::get_errors();
 
 		// Get errors from last 7 days.
-		$recent = array_filter( $errors, static function ( $error ) {
-			return ( time() - $error['timestamp'] ) < 604800;
-		} );
+		$recent = array_filter(
+			$errors,
+			static function ( $error ) {
+				return ( time() - $error['timestamp'] ) < 604800;
+			}
+		);
 
 		$recent = array_reverse( $recent );
 		?>

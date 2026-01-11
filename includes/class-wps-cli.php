@@ -71,8 +71,8 @@ class WPS_CLI_Settings {
 	 */
 	public function get( array $args, array $assoc_args ): void {
 		list( $module, $key ) = $args;
-		$network             = isset( $assoc_args['network'] );
-		$value               = WPS_Settings::get( $module, $key, null, $network );
+		$network              = isset( $assoc_args['network'] );
+		$value                = WPS_Settings::get( $module, $key, null, $network );
 
 		WP_CLI::line( is_scalar( $value ) ? (string) $value : wp_json_encode( $value ) );
 	}
@@ -95,7 +95,7 @@ class WPS_CLI_Settings {
 	 */
 	public function set( array $args, array $assoc_args ): void {
 		list( $module, $key, $value ) = $args;
-		$network                     = isset( $assoc_args['network'] );
+		$network                      = isset( $assoc_args['network'] );
 
 		$decoded = json_decode( $value, true );
 		$store   = ( JSON_ERROR_NONE === json_last_error() ) ? $decoded : $value;
@@ -119,11 +119,9 @@ class WPS_CLI_Settings {
 	 */
 	public function delete( array $args, array $assoc_args ): void {
 		list( $module, $key ) = $args;
-		$network             = isset( $assoc_args['network'] );
+		$network              = isset( $assoc_args['network'] );
 
 		WPS_Settings::delete( $module, $key, $network );
 		WP_CLI::success( 'Setting deleted.' );
 	}
 }
-
-

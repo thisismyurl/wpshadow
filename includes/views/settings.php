@@ -213,7 +213,7 @@ $license_checked = ! empty( $license_state['checked_at'] ) ? date_i18n( 'M j, Y 
 
 		$export_url = add_query_arg(
 			array(
-				'action'                  => 'WPS_vault_export_logs',
+				'action'                 => 'WPS_vault_export_logs',
 				'WPS_vault_export_nonce' => $export_nonce,
 			),
 			admin_url( 'admin-post.php' )
@@ -221,16 +221,16 @@ $license_checked = ! empty( $license_state['checked_at'] ) ? date_i18n( 'M j, Y 
 
 		$ledger_url = add_query_arg(
 			array(
-				'action'                         => 'WPS_vault_export_ledger',
+				'action'                        => 'WPS_vault_export_ledger',
 				'WPS_vault_export_ledger_nonce' => $ledger_nonce,
-				'limit'                          => 500,
+				'limit'                         => 500,
 			),
 			admin_url( 'admin-post.php' )
 		);
 
 		$journal_base_url = add_query_arg(
 			array(
-				'action'                          => 'WPS_vault_export_journal',
+				'action'                         => 'WPS_vault_export_journal',
 				'WPS_vault_export_journal_nonce' => $journal_nonce,
 			),
 			admin_url( 'admin-post.php' )

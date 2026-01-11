@@ -38,44 +38,44 @@ class WPS_Site_Health {
 	 */
 	public static function add_tests( array $tests ): array {
 		// Check if Vault module is enabled.
-		$modules = WPS_Module_Registry::get_catalog_with_status();
+		$modules       = WPS_Module_Registry::get_catalog_with_status();
 		$vault_enabled = ! empty( $modules['vault']['enabled'] );
 
 		// Only register Vault-specific tests if Vault is enabled.
 		if ( $vault_enabled ) {
-			$tests['direct']['WPS_vault_directory']    = array(
+			$tests['direct']['WPS_vault_directory'] = array(
 				'label' => __( 'Vault directory status', 'plugin-wp-support-thisismyurl' ),
 				'test'  => array( __CLASS__, 'test_vault_directory' ),
 			);
 
-			$tests['direct']['WPS_encryption_config']  = array(
+			$tests['direct']['WPS_encryption_config'] = array(
 				'label' => __( 'Encryption configuration', 'plugin-wp-support-thisismyurl' ),
 				'test'  => array( __CLASS__, 'test_encryption_config' ),
 			);
 
-			$tests['direct']['WPS_vault_permissions']  = array(
+			$tests['direct']['WPS_vault_permissions'] = array(
 				'label' => __( 'Vault write permissions', 'plugin-wp-support-thisismyurl' ),
 				'test'  => array( __CLASS__, 'test_vault_permissions' ),
 			);
 		}
 
 		// These are general tests that should always be shown.
-		$tests['direct']['WPS_openssl_extension']  = array(
+		$tests['direct']['WPS_openssl_extension'] = array(
 			'label' => __( 'OpenSSL extension', 'plugin-wp-support-thisismyurl' ),
 			'test'  => array( __CLASS__, 'test_openssl_extension' ),
 		);
 
-		$tests['direct']['WPS_php_version']        = array(
+		$tests['direct']['WPS_php_version'] = array(
 			'label' => __( 'PHP version compliance', 'plugin-wp-support-thisismyurl' ),
 			'test'  => array( __CLASS__, 'test_php_version' ),
 		);
 
-		$tests['direct']['WPS_wordpress_version']  = array(
+		$tests['direct']['WPS_wordpress_version'] = array(
 			'label' => __( 'WordPress version compliance', 'plugin-wp-support-thisismyurl' ),
 			'test'  => array( __CLASS__, 'test_wordpress_version' ),
 		);
 
-		$tests['direct']['WPS_module_status']      = array(
+		$tests['direct']['WPS_module_status'] = array(
 			'label' => __( 'Module status', 'plugin-wp-support-thisismyurl' ),
 			'test'  => array( __CLASS__, 'test_module_status' ),
 		);
@@ -358,10 +358,10 @@ class WPS_Site_Health {
 	 * @return array
 	 */
 	public static function test_module_status(): array {
-		$modules        = WPS_Module_Registry::get_catalog_with_status();
-		$active_count   = 0;
-		$hub_count      = 0;
-		$spoke_count    = 0;
+		$modules      = WPS_Module_Registry::get_catalog_with_status();
+		$active_count = 0;
+		$hub_count    = 0;
+		$spoke_count  = 0;
 
 		foreach ( $modules as $module ) {
 			// Only count enabled modules.
@@ -420,8 +420,8 @@ class WPS_Site_Health {
 			? $upload_dir['basedir'] . '/' . $vault_dirname
 			: __( 'Not configured', 'plugin-wp-support-thisismyurl' );
 
-		$modules       = WPS_Module_Registry::get_catalog_with_status();
-		$module_list   = array();
+		$modules     = WPS_Module_Registry::get_catalog_with_status();
+		$module_list = array();
 		foreach ( $modules as $slug => $module ) {
 			// Only show enabled modules in the site report.
 			if ( empty( $module['enabled'] ) ) {
@@ -488,47 +488,47 @@ class WPS_Site_Health {
 	 */
 	public static function get_health_check_results( ?string $module_filter = null ): array {
 		$tests = array(
-			'vault_directory'     => array(
+			'vault_directory'   => array(
 				'label'  => __( 'Vault Directory Status', 'plugin-wp-support-thisismyurl' ),
 				'test'   => 'test_vault_directory',
 				'module' => 'vault',
 			),
-			'encryption_config'   => array(
+			'encryption_config' => array(
 				'label'  => __( 'Encryption Configuration', 'plugin-wp-support-thisismyurl' ),
 				'test'   => 'test_encryption_config',
 				'module' => 'vault',
 			),
-			'openssl_extension'   => array(
+			'openssl_extension' => array(
 				'label'  => __( 'OpenSSL Extension', 'plugin-wp-support-thisismyurl' ),
 				'test'   => 'test_openssl_extension',
 				'module' => 'core',
 			),
-			'php_version'         => array(
+			'php_version'       => array(
 				'label'  => __( 'PHP Version Compliance', 'plugin-wp-support-thisismyurl' ),
 				'test'   => 'test_php_version',
 				'module' => 'core',
 			),
-			'wordpress_version'   => array(
+			'wordpress_version' => array(
 				'label'  => __( 'WordPress Version Compliance', 'plugin-wp-support-thisismyurl' ),
 				'test'   => 'test_wordpress_version',
 				'module' => 'core',
 			),
-			'vault_permissions'   => array(
+			'vault_permissions' => array(
 				'label'  => __( 'Vault Write Permissions', 'plugin-wp-support-thisismyurl' ),
 				'test'   => 'test_vault_permissions',
 				'module' => 'vault',
 			),
-			'module_status'       => array(
+			'module_status'     => array(
 				'label'  => __( 'Module Status', 'plugin-wp-support-thisismyurl' ),
 				'test'   => 'test_module_status',
 				'module' => 'core',
 			),
 		);
 
-		$results = array();
+		$results        = array();
 		$critical_count = 0;
-		$warning_count = 0;
-		$good_count = 0;
+		$warning_count  = 0;
+		$good_count     = 0;
 
 		foreach ( $tests as $test_id => $test_data ) {
 			// Filter by module if specified.
@@ -570,14 +570,14 @@ class WPS_Site_Health {
 		}
 
 		return array(
-			'score'      => $score,
-			'status'     => $status,
-			'results'    => $results,
-			'counts'     => array(
-				'good'    => $good_count,
-				'warning' => $warning_count,
+			'score'   => $score,
+			'status'  => $status,
+			'results' => $results,
+			'counts'  => array(
+				'good'     => $good_count,
+				'warning'  => $warning_count,
 				'critical' => $critical_count,
-				'total'   => $total,
+				'total'    => $total,
 			),
 		);
 	}
@@ -592,7 +592,7 @@ class WPS_Site_Health {
 		$self_health = self::get_health_check_results( $module_id );
 
 		// Get dependent modules from registry.
-		$catalog = \WPS\CoreSupport\WPS_Module_Registry::get_catalog_with_status();
+		$catalog         = \WPS\CoreSupport\WPS_Module_Registry::get_catalog_with_status();
 		$dependents_data = array();
 
 		foreach ( $catalog as $mod ) {
@@ -603,7 +603,7 @@ class WPS_Site_Health {
 
 			// Check if current module is a dependency.
 			if ( in_array( $module_id, (array) $mod['dependencies'], true ) ) {
-				$dep_health = self::get_health_check_results( $mod_slug );
+				$dep_health                   = self::get_health_check_results( $mod_slug );
 				$dependents_data[ $mod_slug ] = array(
 					'name'   => $mod['name'] ?? $mod_slug,
 					'health' => $dep_health,
@@ -617,7 +617,3 @@ class WPS_Site_Health {
 		);
 	}
 }
-
-
-
-

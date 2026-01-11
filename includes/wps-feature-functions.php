@@ -94,4 +94,3 @@ function get_WPS_feature( string $feature ): ?array {
 function get_WPS_modules( ?string $type = null, ?string $suite = null ): array {
 	return WPS_Module_Registry::get_modules_filtered( $type, $suite );
 }
-

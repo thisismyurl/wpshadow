@@ -20,14 +20,14 @@ function WPS_is_support_enabled(): bool {
 	}
 
 	$plugin_file = 'plugin-wp-support-thisismyurl/wp-support-thisismyurl.php';
-	
+
 	if ( ! is_plugin_active( $plugin_file ) ) {
 		return false;
 	}
 
 	// Check if there's a disable flag in options.
 	$disabled = get_option( 'WPS_support_disabled', false );
-	
+
 	return ! $disabled;
 }
 
@@ -42,7 +42,7 @@ function WPS_can_access_dashboard(): bool {
 	}
 
 	$required_cap = get_option( 'WPS_capability_dashboard_role', 'manage_options' );
-	
+
 	return current_user_can( $required_cap );
 }
 
@@ -57,13 +57,13 @@ function WPS_can_install_modules(): bool {
 	}
 
 	$install_roles = (array) get_option( 'WPS_capability_install_roles', array( 'manage_options' ) );
-	
+
 	foreach ( $install_roles as $cap ) {
 		if ( current_user_can( $cap ) ) {
 			return true;
 		}
 	}
-	
+
 	return false;
 }
 
@@ -78,13 +78,13 @@ function WPS_can_update_modules(): bool {
 	}
 
 	$update_roles = (array) get_option( 'WPS_capability_update_roles', array( 'manage_options' ) );
-	
+
 	foreach ( $update_roles as $cap ) {
 		if ( current_user_can( $cap ) ) {
 			return true;
 		}
 	}
-	
+
 	return false;
 }
 
@@ -100,7 +100,7 @@ function WPS_can_manage_settings(): bool {
 
 	// Settings require at minimum the dashboard capability.
 	$required_cap = get_option( 'WPS_capability_dashboard_role', 'manage_options' );
-	
+
 	return current_user_can( $required_cap );
 }
 
@@ -112,4 +112,3 @@ function WPS_can_manage_settings(): bool {
 function WPS_get_dashboard_capability(): string {
 	return get_option( 'WPS_capability_dashboard_role', 'manage_options' );
 }
-

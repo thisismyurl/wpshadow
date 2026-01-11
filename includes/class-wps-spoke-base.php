@@ -274,7 +274,7 @@ abstract class WPS_Spoke_Base {
 		if ( \file_exists( $css_path ) ) {
 			\wp_enqueue_style( 'wps-core-css', $css_url, array(), $css_ver );
 		}
-		
+
 		if ( \file_exists( $js_path ) ) {
 			\wp_enqueue_script( 'wps-core-ui', $js_url, array( 'jquery' ), $js_ver, true );
 		}

@@ -44,5 +44,3 @@ function WPS_get_module_capabilities( string $module ): array {
 function WPS_register_module( array $module ): bool {
 	return WPS_Module_Registry::register( $module );
 }
-
-

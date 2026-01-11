@@ -102,5 +102,3 @@ class WPS_Capabilities {
 		return update_option( self::OPTION_KEY, $map );
 	}
 }
-
-

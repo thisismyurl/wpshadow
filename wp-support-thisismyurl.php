@@ -6,7 +6,7 @@
  * Plugin URI:          https://thisismyurl.com/plugin-wp-support-thisismyurl/?source=plugin-wp-support-thisismyurl
  * Donate link:         https://thisismyurl.com/plugin-wp-support-thisismyurl/#register?source=plugin-wp-support-thisismyurl
  * Description:         The foundational plugin for all thisismyurl plugin-* repositories. Provides the backbone architecture for hub and spoke plugins, managing installations, updates, and features.
- * Tags:                wordpress, plugin, foundation, hub, architecture, management, suite
+ * Tags:                WordPress, plugin, foundation, hub, architecture, management, suite
  * Version:             1.2601.73001
  * Requires at least:   6.4
  * Requires PHP:        8.1.29
@@ -229,12 +229,12 @@ function wp_support_guard_disabled_modules(): void {
 	}
 	// Normalize to full slug regardless of whether the suffix is included in the query param.
 	$slug = str_contains( $raw_module, '-support-thisismyurl' ) ? $raw_module : $raw_module . '-support-thisismyurl';
-	
+
 	// Use live is_enabled() check instead of cached catalog to ensure accurate state.
 	if ( WPS_Module_Registry::is_enabled( $slug ) ) {
 		return;
 	}
-	
+
 	$target = is_network_admin() ? network_admin_url( 'admin.php?page=wp-support' ) : admin_url( 'admin.php?page=wp-support' );
 	wp_safe_redirect( $target );
 	exit;
@@ -256,7 +256,7 @@ define( 'wp_support_TEXT_DOMAIN', 'plugin-wp-support-thisismyurl' );
  */
 function wp_support_filter_parent_file( string $parent_file ): string {
 	global $submenu_file;
-	
+
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( empty( $_GET['page'] ) || 'wp-support' !== $_GET['page'] ) {
 		return $parent_file;
@@ -264,12 +264,12 @@ function wp_support_filter_parent_file( string $parent_file ): string {
 
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$module = isset( $_GET['module'] ) ? sanitize_key( wp_unslash( $_GET['module'] ) ) : '';
-	
+
 	if ( ! empty( $module ) ) {
 		$submenu_file = 'wp-support&module=' . $module;
 		error_log( "parent_file filter: setting submenu_file to wp-support&module={$module}" );
 	}
-	
+
 	return 'wp-support';
 }
 
@@ -559,16 +559,19 @@ function wp_support_init(): void {
 	WPS_Emergency_Support::init();
 
 	// Register emergency support admin menu.
-	add_action( 'admin_menu', static function (): void {
-		add_submenu_page(
-			'wp-support',
-			__( 'Emergency Support', 'plugin-wp-support-thisismyurl' ),
-			__( 'Emergency', 'plugin-wp-support-thisismyurl' ),
-			'manage_options',
-			'wps-emergency-support',
-			array( '\\WPS\\CoreSupport\\WPS_Emergency_Support', 'render_emergency_page' )
-		);
-	} );
+	add_action(
+		'admin_menu',
+		static function (): void {
+			add_submenu_page(
+				'wp-support',
+				__( 'Emergency Support', 'plugin-wp-support-thisismyurl' ),
+				__( 'Emergency', 'plugin-wp-support-thisismyurl' ),
+				'manage_options',
+				'wps-emergency-support',
+				array( '\\WPS\\CoreSupport\\WPS_Emergency_Support', 'render_emergency_page' )
+			);
+		}
+	);
 
 	// Load Site Documentation Manager for blueprint, protected plugins, and export.
 	require_once wp_support_PATH . 'includes/class-wps-site-documentation-manager.php';
@@ -583,26 +586,32 @@ function wp_support_init(): void {
 	WPS_Guided_Walkthroughs::init();
 
 	// Register AJAX handlers for Diagnostic API.
-	add_action( 'wp_ajax_wps_create_diagnostic_token', static function (): void {
-		check_ajax_referer( 'wp_ajax' );
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
+	add_action(
+		'wp_ajax_wps_create_diagnostic_token',
+		static function (): void {
+			check_ajax_referer( 'wp_ajax' );
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
+			}
+			$name   = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
+			$reason = isset( $_POST['reason'] ) ? sanitize_text_field( wp_unslash( $_POST['reason'] ) ) : '';
+			$token  = WPS_Hidden_Diagnostic_API::create_token( $name, $reason );
+			wp_send_json_success( array( 'token' => $token ) );
 		}
-		$name  = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
-		$reason = isset( $_POST['reason'] ) ? sanitize_text_field( wp_unslash( $_POST['reason'] ) ) : '';
-		$token = WPS_Hidden_Diagnostic_API::create_token( $name, $reason );
-		wp_send_json_success( array( 'token' => $token ) );
-	} );
+	);
 
-	add_action( 'wp_ajax_wps_revoke_diagnostic_token', static function (): void {
-		check_ajax_referer( 'wp_ajax' );
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
+	add_action(
+		'wp_ajax_wps_revoke_diagnostic_token',
+		static function (): void {
+			check_ajax_referer( 'wp_ajax' );
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
+			}
+			$token  = isset( $_POST['token'] ) ? sanitize_text_field( wp_unslash( $_POST['token'] ) ) : '';
+			$result = WPS_Hidden_Diagnostic_API::revoke_token( $token );
+			wp_send_json_success( array( 'revoked' => $result ) );
 		}
-		$token = isset( $_POST['token'] ) ? sanitize_text_field( wp_unslash( $_POST['token'] ) ) : '';
-		$result = WPS_Hidden_Diagnostic_API::revoke_token( $token );
-		wp_send_json_success( array( 'revoked' => $result ) );
-	} );
+	);
 
 	// Load license utilities.
 	require_once wp_support_PATH . 'includes/class-wps-license.php';
@@ -807,7 +816,7 @@ function wp_support_register_module_submenus( string $capability ): void {
 			}
 
 			// Verify module folder actually exists.
-			$module_id = sanitize_key( str_replace( '-support-thisismyurl', '', $m['slug'] ?? '' ) );
+			$module_id   = sanitize_key( str_replace( '-support-thisismyurl', '', $m['slug'] ?? '' ) );
 			$module_path = wp_support_PATH . 'modules/hubs/' . $module_id . '/';
 
 			if ( ! is_dir( $module_path ) ) {
@@ -884,10 +893,14 @@ add_action( 'admin_menu', __NAMESPACE__ . '\\wp_support_prune_submenus', 999 );
  */
 function wp_support_add_admin_notice( string $message, string $type = 'warning' ): void {
 	// Store transient for display in admin_notices.
-	set_transient( 'WPS_admin_notice', array(
-		'message' => sanitize_text_field( $message ),
-		'type'    => sanitize_key( $type ),
-	), 60 );
+	set_transient(
+		'WPS_admin_notice',
+		array(
+			'message' => sanitize_text_field( $message ),
+			'type'    => sanitize_key( $type ),
+		),
+		60
+	);
 }
 
 /**
@@ -1061,9 +1074,9 @@ function wp_support_setup_dashboard_screen(): void {
 	}
 
 	// Register dashboard metaboxes for all levels (core, hub, spoke) on dashboard tab.
-	$context = WPS_Tab_Navigation::get_current_context();
-	$tab     = $context['tab'] ?? 'dashboard';
-	$hub_id  = $context['hub'] ?? '';
+	$context  = WPS_Tab_Navigation::get_current_context();
+	$tab      = $context['tab'] ?? 'dashboard';
+	$hub_id   = $context['hub'] ?? '';
 	$spoke_id = $context['spoke'] ?? '';
 
 	// Only register metaboxes when on dashboard tab.
@@ -1124,7 +1137,7 @@ function wp_support_setup_dashboard_screen(): void {
  */
 function wp_support_setup_hub_dashboard_screen( string $hub_id ): void {
 	error_log( 'wp_support_setup_hub_dashboard_screen: Called for hub_id=' . $hub_id );
-	
+
 	$screen = get_current_screen();
 	if ( ! $screen ) {
 		error_log( 'wp_support_setup_hub_dashboard_screen: No screen available' );
@@ -1635,7 +1648,7 @@ function wps_ajax_toggle_module(): void {
 	}
 
 	// Update WPS_module_toggles array (unified toggle system).
-	$toggles = get_option( 'WPS_module_toggles', array() );
+	$toggles          = get_option( 'WPS_module_toggles', array() );
 	$toggles[ $slug ] = $enabled ? 1 : 0;
 
 	$deactivated = array();
@@ -2007,13 +2020,13 @@ function wps_ajax_save_metabox_state(): void {
 	}
 
 	$state = isset( $_POST['state'] ) ? sanitize_text_field( wp_unslash( $_POST['state'] ) ) : '';
-	
+
 	if ( empty( $state ) ) {
 		wp_send_json_error( array( 'message' => __( 'Invalid state data.', 'plugin-wp-support-thisismyurl' ) ) );
 	}
 
 	update_user_meta( get_current_user_id(), 'WPS_metabox_state', $state );
-	
+
 	wp_send_json_success();
 }
 
@@ -2057,11 +2070,13 @@ function wps_ajax_save_postbox_order(): void {
 
 	error_log( 'SAVED POSTBOX ORDER: user=' . $user_id . ', page=' . $page . ', order=' . json_encode( $order ) );
 
-	wp_send_json_success( array(
-		'message' => 'Order saved',
-		'page' => $page,
-		'order' => $order
-	) );
+	wp_send_json_success(
+		array(
+			'message' => 'Order saved',
+			'page'    => $page,
+			'order'   => $order,
+		)
+	);
 }
 
 /**
@@ -2106,11 +2121,13 @@ function wps_ajax_save_postbox_state(): void {
 
 	error_log( 'SAVED POSTBOX STATE: user=' . $user_id . ', page=' . $page . ', closed=' . json_encode( $closed ) );
 
-	wp_send_json_success( array(
-		'message' => 'State saved',
-		'page' => $page,
-		'closed' => $closed
-	) );
+	wp_send_json_success(
+		array(
+			'message' => 'State saved',
+			'page'    => $page,
+			'closed'  => $closed,
+		)
+	);
 }
 
 /**
@@ -2347,10 +2364,10 @@ function wp_support_postbox_classes( array $classes, string $box_id ): array {
  * @return mixed
  */
 function wp_support_get_metabox_order( $result ) {
-	$context = WPS_Tab_Navigation::get_current_context();
-	$hub_id  = $context['hub'] ?? '';
+	$context   = WPS_Tab_Navigation::get_current_context();
+	$hub_id    = $context['hub'] ?? '';
 	$state_key = 'wp-support' . ( $hub_id ? '-' . $hub_id : '' );
-	
+
 	// Get all states from JSON store
 	$user_id    = get_current_user_id();
 	$all_states = get_user_meta( $user_id, 'WPS_postbox_states', true );
@@ -2420,10 +2437,10 @@ function wp_support_get_metabox_order( $result ) {
  * @return mixed
  */
 function wp_support_get_closed_postboxes( $result ) {
-	$context = WPS_Tab_Navigation::get_current_context();
-	$hub_id  = $context['hub'] ?? '';
+	$context   = WPS_Tab_Navigation::get_current_context();
+	$hub_id    = $context['hub'] ?? '';
 	$state_key = 'wp-support' . ( $hub_id ? '-' . $hub_id : '' );
-	
+
 	// Get all states from JSON store
 	$user_id    = get_current_user_id();
 	$all_states = get_user_meta( $user_id, 'WPS_postbox_states', true );
@@ -2507,10 +2524,10 @@ function wp_support_admin_enqueue( string $hook ): void {
 	// Enable drag and drop for dashboard metaboxes on all wp-support pages using WordPress native postboxes.
 	if ( $screen && false !== strpos( $screen->id, 'wp-support' ) ) {
 		error_log( 'wp_support_admin_enqueue: Loading dashboard assets for screen=' . $screen->id );
-		
+
 		// Use WordPress's built-in postbox drag and drop.
 		wp_enqueue_script( 'postbox' );
-		
+
 		// Add custom script to handle context-specific state saving.
 		wp_enqueue_script(
 			'wps-postbox-state',
@@ -2519,12 +2536,12 @@ function wp_support_admin_enqueue( string $hook ): void {
 			$cache_bust,
 			true
 		);
-		
+
 		// Get current context for unique state key.
-		$context = WPS_Tab_Navigation::get_current_context();
-		$hub_id  = $context['hub'] ?? '';
+		$context   = WPS_Tab_Navigation::get_current_context();
+		$hub_id    = $context['hub'] ?? '';
 		$state_key = 'wp-support' . ( $hub_id ? '-' . $hub_id : '' );
-		
+
 		wp_localize_script(
 			'wps-postbox-state',
 			'wpsPostboxState',
@@ -2533,7 +2550,7 @@ function wp_support_admin_enqueue( string $hook ): void {
 				'nonce'    => wp_create_nonce( 'WPS_postbox_state' ),
 			)
 		);
-		
+
 		wp_enqueue_style(
 			'wps-dashboard-drag',
 			wp_support_URL . 'assets/css/dashboard-drag.css',
@@ -3013,10 +3030,10 @@ function render_settings_dashboard(): void {
  * @return void
  */
 function render_settings_license(): void {
-	$license_key     = get_option( 'WPS_license_key', '' );
-	$is_licensed     = ! empty( $license_key );
-	$auto_update     = (array) get_option( 'WPS_license_auto_update_types', array( 'minor', 'patch' ) );
-	$update_channel  = get_option( 'WPS_license_update_channel', 'stable' );
+	$license_key    = get_option( 'WPS_license_key', '' );
+	$is_licensed    = ! empty( $license_key );
+	$auto_update    = (array) get_option( 'WPS_license_auto_update_types', array( 'minor', 'patch' ) );
+	$update_channel = get_option( 'WPS_license_update_channel', 'stable' );
 	?>
 	<form method="post" class=\"wps-settings-form\" data-settings-group="license" style="max-width: 600px;">
 		<?php wp_nonce_field( 'WPS_settings_license', 'WPS_settings_nonce' ); ?>

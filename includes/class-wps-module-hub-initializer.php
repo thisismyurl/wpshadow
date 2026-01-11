@@ -87,12 +87,15 @@ class WPS_Module_Hub_Initializer {
 			return;
 		}
 
-		register_WPS_feature( $feature_slug, array(
-			'plugin'      => $feature_slug,
-			'name'        => $feature_config['name'] ?? $feature_slug,
-			'description' => $feature_config['description'] ?? '',
-			'version'     => $feature_config['version'] ?? '1.0.0',
-		) );
+		register_WPS_feature(
+			$feature_slug,
+			array(
+				'plugin'      => $feature_slug,
+				'name'        => $feature_config['name'] ?? $feature_slug,
+				'description' => $feature_config['description'] ?? '',
+				'version'     => $feature_config['version'] ?? '1.0.0',
+			)
+		);
 	}
 
 	/**
@@ -123,14 +126,14 @@ class WPS_Module_Hub_Initializer {
 
 		$build_constants = static function ( string $prefix ) use ( $module_file, $text_domain, $version, $min_php, $min_wp ): array {
 			return array(
-				"{$prefix}_VERSION" => $version,
-				"{$prefix}_FILE" => $module_file,
-				"{$prefix}_PATH" => plugin_dir_path( $module_file ),
-				"{$prefix}_URL" => plugin_dir_url( $module_file ),
-				"{$prefix}_BASENAME" => plugin_basename( $module_file ),
+				"{$prefix}_VERSION"     => $version,
+				"{$prefix}_FILE"        => $module_file,
+				"{$prefix}_PATH"        => plugin_dir_path( $module_file ),
+				"{$prefix}_URL"         => plugin_dir_url( $module_file ),
+				"{$prefix}_BASENAME"    => plugin_basename( $module_file ),
 				"{$prefix}_TEXT_DOMAIN" => $text_domain,
-				"{$prefix}_MIN_PHP" => $min_php,
-				"{$prefix}_MIN_WP" => $min_wp,
+				"{$prefix}_MIN_PHP"     => $min_php,
+				"{$prefix}_MIN_WP"      => $min_wp,
 			);
 		};
 
@@ -187,11 +190,13 @@ class WPS_Module_Hub_Initializer {
 				}
 				printf(
 					'<div class="notice notice-error"><p>%s</p></div>',
-					esc_html( sprintf(
+					esc_html(
+						sprintf(
 						/* translators: %s: Hub name */
-						__( '%s requires WP Support to be installed and active.', $text_domain ),
-						$hub_name
-					) )
+							__( '%s requires WP Support to be installed and active.', $text_domain ),
+							$hub_name
+						)
+					)
 				);
 			}
 		);
@@ -233,5 +238,3 @@ class WPS_Module_Hub_Initializer {
 		return \WPS\VaultSupport\WPS_Vault::get_logs( 0, $limit );
 	}
 }
-
-

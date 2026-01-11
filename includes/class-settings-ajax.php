@@ -14,7 +14,7 @@ function WPS_ajax_save_settings(): void {
 	}
 
 	// Parse the form data using wp-json encoded format.
-	$data = isset( $_POST['data'] ) ? sanitize_text_field( wp_unslash( $_POST['data'] ) ) : '';
+	$data      = isset( $_POST['data'] ) ? sanitize_text_field( wp_unslash( $_POST['data'] ) ) : '';
 	$form_data = json_decode( $data, true );
 
 	if ( empty( $form_data ) || ! is_array( $form_data ) ) {
@@ -70,4 +70,3 @@ function WPS_ajax_save_settings(): void {
 	wp_send_json_success( array( 'message' => __( 'Settings saved successfully', 'plugin-wp-support-thisismyurl' ) ) );
 }
 add_action( 'wp_ajax_WPS_save_settings', 'WPS_ajax_save_settings' );
-

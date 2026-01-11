@@ -446,6 +446,3 @@ class WPS_Admin_v1 {
 		echo '</ul></div>';
 	}
 }
-
-
-

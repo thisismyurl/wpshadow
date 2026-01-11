@@ -108,7 +108,7 @@ class WPS_Module_Registry {
 		$get_fn       = is_multisite() ? 'get_site_option' : 'get_option';
 		$last_refresh = (int) call_user_func( $get_fn, 'WPS_modules_last_refresh', 0 );
 
-		$queue_state  = array();
+		$queue_state = array();
 		if ( class_exists( '\WPS\CoreSupport\WPS_Vault' ) && method_exists( '\WPS\CoreSupport\WPS_Vault', 'get_queue_state' ) ) {
 			$queue_state = \WPS\CoreSupport\WPS_Vault::get_queue_state();
 		}
@@ -153,15 +153,15 @@ class WPS_Module_Registry {
 		self::$modules[ $module_data['slug'] ] = wp_parse_args(
 			$module_data,
 			array(
-				'type'        => 'spoke',
-				'category'    => 'general',
-				'description' => '',
-				'author'      => '@thisismyurl',
-				'author_uri'  => 'https://thisismyurl.com',
-				'menu_parent' => 'wp-support',
-				'icon'        => 'dashicons-admin-plugins',
-				'enabled'     => true,
-				'hidden'      => false,
+				'type'         => 'spoke',
+				'category'     => 'general',
+				'description'  => '',
+				'author'       => '@thisismyurl',
+				'author_uri'   => 'https://thisismyurl.com',
+				'menu_parent'  => 'wp-support',
+				'icon'         => 'dashicons-admin-plugins',
+				'enabled'      => true,
+				'hidden'       => false,
 				'capabilities' => array(),
 				'suite'        => 'general',
 			)
@@ -189,15 +189,15 @@ class WPS_Module_Registry {
 	 * @return array
 	 */
 	private static function sanitize_module_data( array $module_data ): array {
-		$module_data['slug']    = isset( $module_data['slug'] ) ? sanitize_key( (string) $module_data['slug'] ) : '';
-		$module_data['type']    = isset( $module_data['type'] ) ? sanitize_key( (string) $module_data['type'] ) : 'spoke';
-		$module_data['suite']   = isset( $module_data['suite'] ) ? sanitize_text_field( (string) $module_data['suite'] ) : 'general';
-		$module_data['name']    = isset( $module_data['name'] ) ? sanitize_text_field( (string) $module_data['name'] ) : '';
-		$module_data['version'] = isset( $module_data['version'] ) ? sanitize_text_field( (string) $module_data['version'] ) : '';
-		$module_data['file']    = isset( $module_data['file'] ) ? sanitize_text_field( (string) $module_data['file'] ) : '';
-		$module_data['path']    = isset( $module_data['path'] ) ? sanitize_text_field( (string) $module_data['path'] ) : '';
-		$module_data['url']     = isset( $module_data['url'] ) ? esc_url_raw( (string) $module_data['url'] ) : '';
-		$module_data['basename'] = isset( $module_data['basename'] ) ? sanitize_text_field( (string) $module_data['basename'] ) : '';
+		$module_data['slug']         = isset( $module_data['slug'] ) ? sanitize_key( (string) $module_data['slug'] ) : '';
+		$module_data['type']         = isset( $module_data['type'] ) ? sanitize_key( (string) $module_data['type'] ) : 'spoke';
+		$module_data['suite']        = isset( $module_data['suite'] ) ? sanitize_text_field( (string) $module_data['suite'] ) : 'general';
+		$module_data['name']         = isset( $module_data['name'] ) ? sanitize_text_field( (string) $module_data['name'] ) : '';
+		$module_data['version']      = isset( $module_data['version'] ) ? sanitize_text_field( (string) $module_data['version'] ) : '';
+		$module_data['file']         = isset( $module_data['file'] ) ? sanitize_text_field( (string) $module_data['file'] ) : '';
+		$module_data['path']         = isset( $module_data['path'] ) ? sanitize_text_field( (string) $module_data['path'] ) : '';
+		$module_data['url']          = isset( $module_data['url'] ) ? esc_url_raw( (string) $module_data['url'] ) : '';
+		$module_data['basename']     = isset( $module_data['basename'] ) ? sanitize_text_field( (string) $module_data['basename'] ) : '';
 		$module_data['capabilities'] = isset( $module_data['capabilities'] ) && is_array( $module_data['capabilities'] )
 			? array_values( array_map( 'sanitize_key', $module_data['capabilities'] ) )
 			: array();
@@ -379,11 +379,11 @@ class WPS_Module_Registry {
 	public static function get_catalog_with_status(): array {
 		$catalog   = self::get_catalog_modules();
 		$installed = self::get_modules();
-		
+
 		// Check for bundled modules in modules/ directory.
 		$bundled_modules = self::get_bundled_modules_from_filesystem();
-		
-		$result    = array();
+
+		$result = array();
 
 		foreach ( $catalog as $entry ) {
 			$slug          = $entry['slug'] ?? '';
@@ -496,7 +496,7 @@ class WPS_Module_Registry {
 	 * @return array Modules found in modules/ directory, keyed by slug.
 	 */
 	private static function get_bundled_modules_from_filesystem(): array {
-		$bundled = array();
+		$bundled      = array();
 		$modules_path = defined( 'wp_support_PATH' ) ? wp_support_PATH . 'modules/' : '';
 
 		if ( empty( $modules_path ) || ! is_dir( $modules_path ) ) {
@@ -514,7 +514,7 @@ class WPS_Module_Registry {
 			// Scan for module directories.
 			$modules = array_filter(
 				glob( $type_path . '*', GLOB_ONLYDIR ),
-				function( $dir ) {
+				function ( $dir ) {
 					return is_dir( $dir );
 				}
 			);
@@ -529,7 +529,7 @@ class WPS_Module_Registry {
 
 				// Parse module constants from file to get version.
 				$file_contents = file_get_contents( $module_file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-				$version = '1.0.0';
+				$version       = '1.0.0';
 
 				// Try to extract version constant.
 				if ( preg_match( "/define\s*\(\s*['\"]WPS_\w+_VERSION['\"]\s*,\s*['\"]([\d.]+)['\"]\s*\)/i", $file_contents, $matches ) ) {
@@ -648,15 +648,23 @@ class WPS_Module_Registry {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		$cache_key = is_multisite() ? 'WPS_modules_network' : 'WPS_modules';
+		// Clear module cache.
+		$modules_cache_key = is_multisite() ? 'WPS_modules_network' : 'WPS_modules';
+
+		// Clear catalog cache.
+		$catalog_cache_key = is_multisite() ? 'WPS_catalog_network' : 'WPS_catalog';
 
 		if ( is_multisite() ) {
-			delete_site_transient( $cache_key );
+			delete_site_transient( $modules_cache_key );
+			delete_site_transient( $catalog_cache_key );
 		} else {
-			delete_transient( $cache_key );
+			delete_transient( $modules_cache_key );
+			delete_transient( $catalog_cache_key );
 		}
 
+		// Reset static arrays.
 		self::$modules = array();
+		self::$catalog = array();
 	}
 
 	/**
@@ -782,7 +790,7 @@ class WPS_Module_Registry {
 				'requires_core' => '1.2601.71818',
 				'requires_php'  => '8.1.29',
 				'requires_wp'   => '6.4.0',
-				'basename'     => sanitize_key( $item ) . '/' . sanitize_key( $item ) . '.php',
+				'basename'      => sanitize_key( $item ) . '/' . sanitize_key( $item ) . '.php',
 				'download_url'  => 'https://github.com/thisismyurl/' . sanitize_key( $item ) . '/archive/refs/heads/main.zip',
 			);
 		}
@@ -926,5 +934,3 @@ class WPS_Module_Registry {
 		return hash_equals( $expected, $actual );
 	}
 }
-
-
