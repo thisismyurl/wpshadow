@@ -33,6 +33,13 @@ class Module_Loader {
 	 * @return void
 	 */
 	public static function init() {
+		// Skip module loading if modules directory doesn't exist (standalone core mode).
+		$modules_dir = wp_support_PATH . 'modules/';
+		if ( ! is_dir( $modules_dir ) ) {
+			// No modules directory - running in standalone core mode.
+			return;
+		}
+
 		// Load modules immediately since this is called during wp_support_init() which is already on plugins_loaded
 		self::load_modules();
 
@@ -46,6 +53,10 @@ class Module_Loader {
 	 * @return void
 	 */
 	public static function load_modules() {
+		// Silently return if modules directory doesn't exist (standalone core mode).
+		if ( ! is_dir( wp_support_PATH . 'modules/' ) ) {
+			return;
+		}
 
 		// Load hubs first
 		self::load_module_type( 'hubs' );
