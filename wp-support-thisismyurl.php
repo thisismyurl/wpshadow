@@ -51,37 +51,45 @@ function wp_support_render_settings( string $hub_id = '' ): void {
 		$settings_title = ucfirst( $hub_id ) . ' ' . __( 'Settings', 'plugin-wp-support-thisismyurl' );
 	}
 
-	// Register lightweight metaboxes representing settings groups for this context.
-	// These are placeholders until real settings UIs are wired in.
-	add_meta_box(
-		'timu_settings_general',
-		__( 'General Settings', 'plugin-wp-support-thisismyurl' ),
-		static function () use ( $hub_id ) {
-			$label = $hub_id ? sprintf( __( 'General settings for %s will appear here.', 'plugin-wp-support-thisismyurl' ), esc_html( ucfirst( $hub_id ) ) ) : __( 'Global settings will appear here.', 'plugin-wp-support-thisismyurl' );
-			echo '<p>' . esc_html( $label ) . '</p>';
-		},
-		$screen->id,
-		'normal'
-	);
+	// Register metaboxes for core-level settings.
+	if ( empty( $hub_id ) ) {
+		add_meta_box(
+			'timu_settings_module_registry',
+			__( 'Module Discovery', 'plugin-wp-support-thisismyurl' ),
+			__NAMESPACE__ . '\\render_settings_module_registry',
+			$screen->id,
+			'normal'
+		);
+
+		add_meta_box(
+			'timu_settings_capabilities',
+			__( 'Capability Mapping', 'plugin-wp-support-thisismyurl' ),
+			__NAMESPACE__ . '\\render_settings_capabilities',
+			$screen->id,
+			'normal'
+		);
+
+		add_meta_box(
+			'timu_settings_privacy',
+			__( 'Privacy & GDPR', 'plugin-wp-support-thisismyurl' ),
+			__NAMESPACE__ . '\\render_settings_privacy',
+			$screen->id,
+			'normal'
+		);
+	}
 
 	add_meta_box(
-		'timu_settings_notifications',
-		__( 'Notifications', 'plugin-wp-support-thisismyurl' ),
-		static function () use ( $hub_id ) {
-			$label = $hub_id ? sprintf( __( 'Notification settings for %s will appear here.', 'plugin-wp-support-thisismyurl' ), esc_html( ucfirst( $hub_id ) ) ) : __( 'Notification settings will appear here.', 'plugin-wp-support-thisismyurl' );
-			echo '<p>' . esc_html( $label ) . '</p>';
-		},
+		'timu_settings_dashboard',
+		__( 'Dashboard & UI', 'plugin-wp-support-thisismyurl' ),
+		__NAMESPACE__ . '\\render_settings_dashboard',
 		$screen->id,
 		'side'
 	);
 
 	add_meta_box(
-		'timu_settings_advanced',
-		__( 'Advanced', 'plugin-wp-support-thisismyurl' ),
-		static function () use ( $hub_id ) {
-			$label = $hub_id ? sprintf( __( 'Advanced settings for %s will appear here.', 'plugin-wp-support-thisismyurl' ), esc_html( ucfirst( $hub_id ) ) ) : __( 'Advanced settings will appear here.', 'plugin-wp-support-thisismyurl' );
-			echo '<p>' . esc_html( $label ) . '</p>';
-		},
+		'timu_settings_license',
+		__( 'License & Updates', 'plugin-wp-support-thisismyurl' ),
+		__NAMESPACE__ . '\\render_settings_license',
 		$screen->id,
 		'side'
 	);
@@ -2636,10 +2644,84 @@ add_action( 'plugins_loaded', __NAMESPACE__ . '\\wp_support_init' );
  *
  * [1.2601.71701] - 2026-01-07 17:17
  * - Initial plugin structure created
- * - Implemented Hub architecture with Suite ID handshake
- * - Added multisite support with network admin menu
- * - Created vault directory setup with security measures
- * - Enforced PHP 8.4+ and WordPress 6.4+ requirements
- * - Implemented strict typing and proper SVE protocol
- * - Added i18n support with proper text domain
  */
+
+/**
+ * Render Module Registry / Discovery settings widget.
+ *
+ * @return void
+ */
+function render_settings_module_registry(): void {
+	?>
+	<p><?php esc_html_e( 'Configure how modules are discovered and cataloged.', 'plugin-wp-support-thisismyurl' ); ?></p>
+	<div style="background: #f5f5f5; padding: 12px; border-radius: 4px; margin-top: 8px;">
+		<p><strong><?php esc_html_e( 'Module Sources:', 'plugin-wp-support-thisismyurl' ); ?></strong></p>
+		<p><?php esc_html_e( 'Automatic discovery from installed plugins with Hub & Spoke registration.', 'plugin-wp-support-thisismyurl' ); ?></p>
+		<small><?php echo wp_kses_post( sprintf( __( 'View catalog: <a href="%s">Modules</a>', 'plugin-wp-support-thisismyurl' ), esc_url( admin_url( 'admin.php?page=wp-support&timu_tab=modules' ) ) ) ); ?></small>
+	</div>
+	<?php
+}
+
+/**
+ * Render Capability Mapping settings widget.
+ *
+ * @return void
+ */
+function render_settings_capabilities(): void {
+	?>
+	<p><?php esc_html_e( 'Define which roles and capabilities can manage modules.', 'plugin-wp-support-thisismyurl' ); ?></p>
+	<div style="background: #f5f5f5; padding: 12px; border-radius: 4px; margin-top: 8px;">
+		<p><strong><?php esc_html_e( 'Admin Access:', 'plugin-wp-support-thisismyurl' ); ?></strong></p>
+		<p><?php esc_html_e( 'Users with "manage_options" (Admin) or "manage_network_options" (Super Admin) can access the Support dashboard.', 'plugin-wp-support-thisismyurl' ); ?></p>
+		<small><?php echo wp_kses_post( sprintf( __( 'Fine-tune capabilities: <a href="%s">Capabilities</a>', 'plugin-wp-support-thisismyurl' ), esc_url( admin_url( 'admin.php?page=timu-capabilities' ) ) ) ); ?></small>
+	</div>
+	<?php
+}
+
+/**
+ * Render Dashboard & UI settings widget.
+ *
+ * @return void
+ */
+function render_settings_dashboard(): void {
+	$columns = (int) get_user_option( 'screen_layout_toplevel_page_wp-support' ) ?: 2;
+	?>
+	<p><?php esc_html_e( 'Customize the dashboard layout and widgets.', 'plugin-wp-support-thisismyurl' ); ?></p>
+	<div style="background: #f5f5f5; padding: 12px; border-radius: 4px; margin-top: 8px;">
+		<p><?php echo esc_html( sprintf( __( 'Current columns: %d (use Screen Options to change)', 'plugin-wp-support-thisismyurl' ), $columns ) ); ?></p>
+		<small><?php esc_html_e( 'Drag widgets to rearrange. Use Screen Options above to show/hide or adjust columns.', 'plugin-wp-support-thisismyurl' ); ?></small>
+	</div>
+	<?php
+}
+
+/**
+ * Render License & Updates settings widget.
+ *
+ * @return void
+ */
+function render_settings_license(): void {
+	?>
+	<p><?php esc_html_e( 'Manage license key and update channels.', 'plugin-wp-support-thisismyurl' ); ?></p>
+	<div style="background: #f5f5f5; padding: 12px; border-radius: 4px; margin-top: 8px;">
+		<p><strong><?php esc_html_e( 'License Status:', 'plugin-wp-support-thisismyurl' ); ?></strong></p>
+		<p><?php esc_html_e( 'Not registered. Plugin updates are pulled from GitHub releases.', 'plugin-wp-support-thisismyurl' ); ?></p>
+	</div>
+	<?php
+}
+
+/**
+ * Render Privacy & GDPR settings widget.
+ *
+ * @return void
+ */
+function render_settings_privacy(): void {
+	?>
+	<p><?php esc_html_e( 'Control data retention, export, and deletion policies.', 'plugin-wp-support-thisismyurl' ); ?></p>
+	<div style="background: #f5f5f5; padding: 12px; border-radius: 4px; margin-top: 8px;">
+		<p><strong><?php esc_html_e( 'Activity Logs:', 'plugin-wp-support-thisismyurl' ); ?></strong></p>
+		<p><?php esc_html_e( 'Logs are stored in the Vault with configurable retention (handled by vault-support module).', 'plugin-wp-support-thisismyurl' ); ?></p>
+		<p><strong><?php esc_html_e( 'Data Export:', 'plugin-wp-support-thisismyurl' ); ?></strong></p>
+		<p><?php echo wp_kses_post( sprintf( __( 'Use WordPress privacy tools: <a href="%s">Privacy > Export Personal Data</a>', 'plugin-wp-support-thisismyurl' ), esc_url( admin_url( 'admin.php?page=privacy-export-personal-data' ) ) ) ); ?></p>
+	</div>
+	<?php
+}
