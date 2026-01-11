@@ -1,7 +1,7 @@
 /**
  * Core Support Admin Scripts
  *
- * @package TIMU_CORE_SUPPORT
+ * @package WPS_CORE_SUPPORT
  */
 
 (function($) {
@@ -23,12 +23,12 @@
 		 * Initialize filter UI (no-op if filter removed).
 		 */
 		initFilters: function() {
-			const $filter = $('#timu-filter-type');
+			const $filter = $('#wps-filter-type');
 			if ($filter.length === 0) {
 				return; // Filter UI removed; skip.
 			}
 			// Restore from localStorage when present.
-			const saved = localStorage.getItem('timu-filter-type');
+			const saved = localStorage.getItem('wps-filter-type');
 			if (saved) {
 				$filter.val(saved);
 				$filter.trigger('change');
@@ -40,22 +40,22 @@
 		 */
 		bindEvents: function() {
 			// Module toggle switches.
-			$('.timu-module-toggle').on('change', this.handleToggle);
+			$('.wps-module-toggle').on('change', this.handleToggle);
 
 			// Hub collapse/expand.
-			$(document).on('click', '.timu-hub-toggle', this.handleHubToggle);
+			$(document).on('click', '.wps-hub-toggle', this.handleHubToggle);
 
 			// Filter dropdown.
-			$('#timu-filter-type').on('change', this.handleFilter);
+			$('#wps-filter-type').on('change', this.handleFilter);
 
 			// Install buttons (both original and "Install and Activate" links).
-			$(document).on('click', '.timu-btn-install, .timu-btn-install-activate', this.handleInstall);
+			$(document).on('click', '.wps-btn-install, .wps-btn-install-activate', this.handleInstall);
 
 			// Update buttons.
-			$(document).on('click', '.timu-btn-update', this.handleUpdate);
+			$(document).on('click', '.wps-btn-update', this.handleUpdate);
 
 			// Activate/Deactivate links.
-			$(document).on('click', '.timu-activate, .timu-deactivate', this.handleToggleLink);
+			$(document).on('click', '.wps-activate, .wps-deactivate', this.handleToggleLink);
 		},
 
 		/**
@@ -75,10 +75,10 @@
 			const $spokes = $( 'tr[data-parent="' + group + '"]' );
 
 			if (isExpanded) {
-				$spokes.addClass('timu-spokes-hidden');
+				$spokes.addClass('wps-spokes-hidden');
 				$btn.attr('aria-expanded', 'false').addClass('is-collapsed');
 			} else {
-				$spokes.removeClass('timu-spokes-hidden');
+				$spokes.removeClass('wps-spokes-hidden');
 				$btn.attr('aria-expanded', 'true').removeClass('is-collapsed');
 			}
 		},
@@ -92,13 +92,13 @@
 			const $toggle = $(this);
 			const slug = $toggle.data('slug');
 			const enabled = $toggle.is(':checked');
-			const $card = $toggle.closest('.timu-module-card');
+			const $card = $toggle.closest('.wps-module-card');
 			const isNetwork = window.location.pathname.includes('/wp-admin/network/');
 			const isInstalled = $toggle.data('installed') === true || $toggle.data('installed') === 'true';
 
 			if (!isInstalled) {
 				$toggle.prop('checked', false);
-				TimuDashboard.showNotice('warning', timuAdminData.i18n.installFirst);
+				TimuDashboard.showNotice('warning', wpsAdminData.i18n.installFirst);
 				return;
 			}
 
@@ -106,15 +106,15 @@
 			$toggle.prop('disabled', true);
 
 			// Add loading state.
-			$card.addClass('timu-loading');
+			$card.addClass('wps-loading');
 
 			// Send AJAX request.
 			$.ajax({
 				url: ajaxurl,
 				type: 'POST',
 				data: {
-					action: 'timu_toggle_module',
-					nonce: timuAdminData.toggleNonce,
+					action: 'wps_toggle_module',
+					nonce: wpsAdminData.toggleNonce,
 					slug: slug,
 					enabled: enabled ? 'true' : 'false',
 					network: isNetwork ? 'true' : 'false'
@@ -123,17 +123,17 @@
 					if (response.success) {
 						// Update card state.
 						if (enabled) {
-							$card.removeClass('timu-module-disabled').addClass('timu-module-enabled');
-							$card.find('.timu-badge-disabled')
-								.removeClass('timu-badge-disabled')
-								.addClass('timu-badge-enabled')
-								.text(timuAdminData.i18n.enabled);
+							$card.removeClass('wps-module-disabled').addClass('wps-module-enabled');
+							$card.find('.wps-badge-disabled')
+								.removeClass('wps-badge-disabled')
+								.addClass('wps-badge-enabled')
+								.text(wpsAdminData.i18n.enabled);
 						} else {
-							$card.removeClass('timu-module-enabled').addClass('timu-module-disabled');
-							$card.find('.timu-badge-enabled')
-								.removeClass('timu-badge-enabled')
-								.addClass('timu-badge-disabled')
-								.text(timuAdminData.i18n.disabled);
+							$card.removeClass('wps-module-enabled').addClass('wps-module-disabled');
+							$card.find('.wps-badge-enabled')
+								.removeClass('wps-badge-enabled')
+								.addClass('wps-badge-disabled')
+								.text(wpsAdminData.i18n.disabled);
 						}
 
 						// Show success notice.
@@ -154,13 +154,13 @@
 					$toggle.prop('checked', !enabled);
 
 					// Show error notice.
-					TimuDashboard.showNotice('error', timuAdminData.i18n.ajaxError);
+					TimuDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
 
-					console.error('TIMU Toggle Error:', error);
+					console.error('WPS Toggle Error:', error);
 				},
 				complete: function() {
 					// Remove loading state.
-					$card.removeClass('timu-loading');
+					$card.removeClass('wps-loading');
 					$toggle.prop('disabled', false);
 				}
 			});
@@ -175,26 +175,26 @@
 			e.preventDefault();
 
 			const $btn = $(this);
-			const $card = $btn.closest('.timu-module-card');
+			const $card = $btn.closest('.wps-module-card');
 			const slug = $btn.data('slug');
 			const isNetwork = window.location.pathname.includes('/wp-admin/network/');
 
 			if (!slug) {
-				TimuDashboard.showNotice('error', timuAdminData.i18n.ajaxError);
+				TimuDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
 				return;
 			}
 
 			// Disable button and show loading state.
-			$btn.prop('disabled', true).text(timuAdminData.i18n.installing);
-			$card.addClass('timu-loading');
+			$btn.prop('disabled', true).text(wpsAdminData.i18n.installing);
+			$card.addClass('wps-loading');
 
 			// Send AJAX request.
 			$.ajax({
 				url: ajaxurl,
 				type: 'POST',
 				data: {
-					action: 'timu_install_module',
-					nonce: timuAdminData.actionNonce,
+					action: 'wps_install_module',
+					nonce: wpsAdminData.actionNonce,
 					slug: slug
 				},
 				success: function(response) {
@@ -213,13 +213,13 @@
 				},
 				error: function(xhr, status, error) {
 					// Show error notice.
-					TimuDashboard.showNotice('error', timuAdminData.i18n.ajaxError);
-					console.error('TIMU Install Error:', error);
+					TimuDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
+					console.error('WPS Install Error:', error);
 				},
 				complete: function() {
 					// Re-enable button and remove loading state.
-					$card.removeClass('timu-loading');
-					$btn.prop('disabled', false).text(timuAdminData.i18n.install);
+					$card.removeClass('wps-loading');
+					$btn.prop('disabled', false).text(wpsAdminData.i18n.install);
 				}
 			});
 		},
@@ -233,26 +233,26 @@
 			e.preventDefault();
 
 			const $btn = $(this);
-			const $card = $btn.closest('.timu-module-card');
+			const $card = $btn.closest('.wps-module-card');
 			const slug = $btn.data('slug');
 			const isNetwork = window.location.pathname.includes('/wp-admin/network/');
 
 			if (!slug) {
-				TimuDashboard.showNotice('error', timuAdminData.i18n.ajaxError);
+				TimuDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
 				return;
 			}
 
 			// Disable button and show loading state.
-			$btn.prop('disabled', true).text(timuAdminData.i18n.updating);
-			$card.addClass('timu-loading');
+			$btn.prop('disabled', true).text(wpsAdminData.i18n.updating);
+			$card.addClass('wps-loading');
 
 			// Send AJAX request.
 			$.ajax({
 				url: ajaxurl,
 				type: 'POST',
 				data: {
-					action: 'timu_update_module',
-					nonce: timuAdminData.actionNonce,
+					action: 'wps_update_module',
+					nonce: wpsAdminData.actionNonce,
 					slug: slug
 				},
 				success: function(response) {
@@ -271,13 +271,13 @@
 				},
 				error: function(xhr, status, error) {
 					// Show error notice.
-					TimuDashboard.showNotice('error', timuAdminData.i18n.ajaxError);
-					console.error('TIMU Update Error:', error);
+					TimuDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
+					console.error('WPS Update Error:', error);
 				},
 				complete: function() {
 					// Re-enable button and remove loading state.
-					$card.removeClass('timu-loading');
-					$btn.prop('disabled', false).text(timuAdminData.i18n.update);
+					$card.removeClass('wps-loading');
+					$btn.prop('disabled', false).text(wpsAdminData.i18n.update);
 				}
 			});
 		},
@@ -291,27 +291,27 @@
 			e.preventDefault();
 
 			const $link = $(this);
-			const $card = $link.closest('.timu-module-card');
+			const $card = $link.closest('.wps-module-card');
 			const slug = $link.data('slug');
-			const isActivate = $link.hasClass('timu-activate');
+			const isActivate = $link.hasClass('wps-activate');
 			const isNetwork = window.location.pathname.includes('/wp-admin/network/');
 
 			if (!slug) {
-				TimuDashboard.showNotice('error', timuAdminData.i18n.ajaxError);
+				TimuDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
 				return;
 			}
 
 			// Disable link and show loading state.
-			$link.addClass('timu-loading');
-			$card.addClass('timu-loading');
+			$link.addClass('wps-loading');
+			$card.addClass('wps-loading');
 
 			// Send AJAX request (use same endpoint as toggle switches).
 			$.ajax({
 				url: ajaxurl,
 				type: 'POST',
 				data: {
-					action: 'timu_toggle_module',
-					nonce: timuAdminData.toggleNonce,
+					action: 'wps_toggle_module',
+					nonce: wpsAdminData.toggleNonce,
 					slug: slug,
 					enabled: isActivate ? 'true' : 'false',
 					network: isNetwork ? 'true' : 'false'
@@ -332,13 +332,13 @@
 				},
 				error: function(xhr, status, error) {
 					// Show error notice.
-					TimuDashboard.showNotice('error', timuAdminData.i18n.ajaxError);
-					console.error('TIMU Toggle Error:', error);
+					TimuDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
+					console.error('WPS Toggle Error:', error);
 				},
 				complete: function() {
 					// Remove loading state.
-					$link.removeClass('timu-loading');
-					$card.removeClass('timu-loading');
+					$link.removeClass('wps-loading');
+					$card.removeClass('wps-loading');
 				}
 			});
 		},
@@ -350,10 +350,10 @@
 		 */
 		handleFilter: function(e) {
 			const filterType = $(this).val();
-			const $cards = $('.timu-module-card');
+			const $cards = $('.wps-module-card');
 
 			// Save filter preference.
-			localStorage.setItem('timu-filter-type', filterType);
+			localStorage.setItem('wps-filter-type', filterType);
 
 			// Filter cards.
 			if (filterType === 'all') {
@@ -368,7 +368,7 @@
 			if (visibleCount === 0) {
 				TimuDashboard.showNoResults();
 			} else {
-				$('.timu-no-results').remove();
+				$('.wps-no-results').remove();
 			}
 		},
 
@@ -376,31 +376,31 @@
 		 * Show "no results" message.
 		 */
 		showNoResults: function() {
-			if ($('.timu-no-results').length) {
+			if ($('.wps-no-results').length) {
 				return;
 			}
 
-			const $message = $('<div class="timu-no-results">')
-				.html('<span class="dashicons dashicons-info"></span><p>' + timuAdminData.i18n.noResults + '</p>');
+			const $message = $('<div class="wps-no-results">')
+				.html('<span class="dashicons dashicons-info"></span><p>' + wpsAdminData.i18n.noResults + '</p>');
 
-			$('.timu-modules-grid').append($message);
+			$('.wps-modules-grid').append($message);
 		},
 
 		/**
 		 * Update statistics counters.
 		 */
 		updateStats: function() {
-			const $cards = $('.timu-module-card');
+			const $cards = $('.wps-module-card');
 			const installed = $cards.filter('[data-status="installed"], [data-status="update"]');
 			const totalInstalled = installed.length;
-			const enabled = installed.filter('.timu-module-enabled').length;
+			const enabled = installed.filter('.wps-module-enabled').length;
 			const available = $cards.filter('[data-status="available"]').length;
 			const updates = $cards.filter('[data-status="update"]').length;
 
-			$('.timu-stat-card').eq(0).find('.timu-stat-value').text(totalInstalled);
-			$('.timu-stat-card').eq(1).find('.timu-stat-value').text(enabled);
-			$('.timu-stat-card').eq(2).find('.timu-stat-value').text(available);
-			$('.timu-stat-card').eq(3).find('.timu-stat-value').text(updates);
+			$('.wps-stat-card').eq(0).find('.wps-stat-value').text(totalInstalled);
+			$('.wps-stat-card').eq(1).find('.wps-stat-value').text(enabled);
+			$('.wps-stat-card').eq(2).find('.wps-stat-value').text(available);
+			$('.wps-stat-card').eq(3).find('.wps-stat-value').text(updates);
 		},
 
 		/**
@@ -432,7 +432,7 @@
 	 * Initialize on document ready.
 	 */
 	$(document).ready(function() {
-		if ($('.timu-dashboard-wrap').length) {
+		if ($('.wps-dashboard-wrap').length) {
 			TimuDashboard.init();
 		}
 	});
@@ -448,7 +448,7 @@
  * - Dashboard auto-reloads after successful installation/update
  * - Button states update with loading text and disabled state
  * - Error handling with localized i18n messages
- * - Binds to .timu-btn-install and .timu-btn-update button classes
+ * - Binds to .wps-btn-install and .wps-btn-update button classes
  *
  * [1.2601.71900] - 2026-01-07 18:45
  * - Block toggles for non-installed modules and show warning
@@ -466,3 +466,5 @@
  * - Added admin notice system with auto-dismiss
  * - LocalStorage persistence for filter preferences
  */
+
+

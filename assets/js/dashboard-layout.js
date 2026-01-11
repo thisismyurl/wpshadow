@@ -2,14 +2,14 @@
  * Dashboard Layout Manager - Client Side
  * Handles drag/drop saving and bulk apply prompt.
  *
- * @package TIMU_WP_SUPPORT_THISISMYURL
+ * @package WPS_WP_SUPPORT_THISISMYURL
  * @since 1.2601.74000
  */
 
 (function($) {
 	'use strict';
 
-	var timuDashboardLayout = {
+	var wpsDashboardLayout = {
 		/**
 		 * Initialize layout management.
 		 */
@@ -24,7 +24,7 @@
 			// Initialize after WordPress postboxes are ready.
 			$(document).ready(function() {
 				if (typeof postboxes !== 'undefined') {
-					timuDashboardLayout.hookPostboxEvents();
+					wpsDashboardLayout.hookPostboxEvents();
 				}
 			});
 		},
@@ -35,12 +35,12 @@
 		hookPostboxEvents: function() {
 			// Detect when widgets are reordered.
 			$('#dashboard-widgets .meta-box-sortables').on('sortstop', function() {
-				timuDashboardLayout.saveLayout(true); // true = show prompt
+				wpsDashboardLayout.saveLayout(true); // true = show prompt
 			});
 
 			// Detect when widgets are opened/closed (toggle state change).
 			$(document).on('postbox-toggled', function() {
-				timuDashboardLayout.saveLayout(false); // false = don't show prompt for toggle
+				wpsDashboardLayout.saveLayout(false); // false = don't show prompt for toggle
 			});
 		},
 
@@ -61,7 +61,7 @@
 		onWidgetToggled: function(event) {
 			// Don't show prompt for simple toggle, only for reorder.
 			setTimeout(function() {
-				timuDashboardLayout.saveLayout(false);
+				wpsDashboardLayout.saveLayout(false);
 			}, 100);
 		},
 
@@ -75,18 +75,18 @@
 
 			// Save via AJAX.
 			$.ajax({
-				url: timu_dashboard_layout.ajaxUrl,
+				url: wps_dashboard_layout.ajaxUrl,
 				method: 'POST',
 				data: {
-					action: 'timu_save_dashboard_layout',
-					nonce: timu_dashboard_layout.nonce,
-					context: timu_dashboard_layout.context,
-					network: timu_dashboard_layout.network,
+					action: 'wps_save_dashboard_layout',
+					nonce: wps_dashboard_layout.nonce,
+					context: wps_dashboard_layout.context,
+					network: wps_dashboard_layout.network,
 					layout: JSON.stringify(layout)
 				},
 				success: function(response) {
 					if (response.success && showPrompt) {
-						timuDashboardLayout.showApplyPrompt(layout);
+						wpsDashboardLayout.showApplyPrompt(layout);
 					}
 				},
 				error: function() {
@@ -126,7 +126,7 @@
 		 */
 		showApplyPrompt: function(layout) {
 			// Check if we have children or other modules.
-			if (timu_dashboard_layout.context === 'core' || this.hasChildModules()) {
+			if (wps_dashboard_layout.context === 'core' || this.hasChildModules()) {
 				this.renderPromptModal(layout);
 			}
 		},
@@ -138,7 +138,7 @@
 		 */
 		hasChildModules: function() {
 			// For core, always has children (hubs).
-			if (timu_dashboard_layout.context === 'core') {
+			if (wps_dashboard_layout.context === 'core') {
 				return true;
 			}
 
@@ -154,18 +154,18 @@
 		 */
 		renderPromptModal: function(layout) {
 			// Remove existing modal if any.
-			$('#timu-apply-layout-modal').remove();
+			$('#wps-apply-layout-modal').remove();
 
-			var modalHTML = '<div id="timu-apply-layout-modal" class="timu-modal-overlay" style="display:none;">' +
-				'<div class="timu-modal-content">' +
-				'<h2>' + timu_dashboard_layout.applyPrompt + '</h2>' +
-				'<div class="timu-modal-body">' +
-				'<label><input type="radio" name="timu-apply-scope" value="children" checked> ' + timu_dashboard_layout.applyChildren + '</label><br>' +
-				'<label><input type="radio" name="timu-apply-scope" value="all"> ' + timu_dashboard_layout.applyAll + '</label>' +
+			var modalHTML = '<div id="wps-apply-layout-modal" class="wps-modal-overlay" style="display:none;">' +
+				'<div class="wps-modal-content">' +
+				'<h2>' + wps_dashboard_layout.applyPrompt + '</h2>' +
+				'<div class="wps-modal-body">' +
+				'<label><input type="radio" name="wps-apply-scope" value="children" checked> ' + wps_dashboard_layout.applyChildren + '</label><br>' +
+				'<label><input type="radio" name="wps-apply-scope" value="all"> ' + wps_dashboard_layout.applyAll + '</label>' +
 				'</div>' +
-				'<div class="timu-modal-footer">' +
-				'<button class="button button-primary timu-apply-confirm">' + timu_dashboard_layout.apply + '</button> ' +
-				'<button class="button timu-apply-cancel">' + timu_dashboard_layout.cancel + '</button>' +
+				'<div class="wps-modal-footer">' +
+				'<button class="button button-primary wps-apply-confirm">' + wps_dashboard_layout.apply + '</button> ' +
+				'<button class="button wps-apply-cancel">' + wps_dashboard_layout.cancel + '</button>' +
 				'</div>' +
 				'</div>' +
 				'</div>';
@@ -173,39 +173,39 @@
 			$('body').append(modalHTML);
 
 			// Add simple CSS for modal.
-			if (!$('#timu-modal-styles').length) {
+			if (!$('#wps-modal-styles').length) {
 				$('head').append(
-					'<style id="timu-modal-styles">' +
-					'.timu-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100000; display: flex; align-items: center; justify-content: center; }' +
-					'.timu-modal-content { background: #fff; padding: 20px; border-radius: 4px; max-width: 500px; width: 90%; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }' +
-					'.timu-modal-content h2 { margin-top: 0; }' +
-					'.timu-modal-body { margin: 20px 0; }' +
-					'.timu-modal-body label { display: block; margin: 10px 0; cursor: pointer; }' +
-					'.timu-modal-footer { text-align: right; border-top: 1px solid #ddd; padding-top: 15px; margin-top: 15px; }' +
+					'<style id="wps-modal-styles">' +
+					'.wps-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100000; display: flex; align-items: center; justify-content: center; }' +
+					'.wps-modal-content { background: #fff; padding: 20px; border-radius: 4px; max-width: 500px; width: 90%; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }' +
+					'.wps-modal-content h2 { margin-top: 0; }' +
+					'.wps-modal-body { margin: 20px 0; }' +
+					'.wps-modal-body label { display: block; margin: 10px 0; cursor: pointer; }' +
+					'.wps-modal-footer { text-align: right; border-top: 1px solid #ddd; padding-top: 15px; margin-top: 15px; }' +
 					'</style>'
 				);
 			}
 
 			// Show modal with animation.
-			$('#timu-apply-layout-modal').fadeIn(200);
+			$('#wps-apply-layout-modal').fadeIn(200);
 
 			// Bind events.
-			$('.timu-apply-confirm').on('click', function() {
-				var scope = $('input[name="timu-apply-scope"]:checked').val();
-				timuDashboardLayout.applyToScope(layout, scope);
-				$('#timu-apply-layout-modal').fadeOut(200, function() {
+			$('.wps-apply-confirm').on('click', function() {
+				var scope = $('input[name="wps-apply-scope"]:checked').val();
+				wpsDashboardLayout.applyToScope(layout, scope);
+				$('#wps-apply-layout-modal').fadeOut(200, function() {
 					$(this).remove();
 				});
 			});
 
-			$('.timu-apply-cancel').on('click', function() {
-				$('#timu-apply-layout-modal').fadeOut(200, function() {
+			$('.wps-apply-cancel').on('click', function() {
+				$('#wps-apply-layout-modal').fadeOut(200, function() {
 					$(this).remove();
 				});
 			});
 
 			// Close on overlay click.
-			$('#timu-apply-layout-modal').on('click', function(e) {
+			$('#wps-apply-layout-modal').on('click', function(e) {
 				if (e.target === this) {
 					$(this).fadeOut(200, function() {
 						$(this).remove();
@@ -222,26 +222,26 @@
 		 */
 		applyToScope: function(layout, scope) {
 			$.ajax({
-				url: timu_dashboard_layout.ajaxUrl,
+				url: wps_dashboard_layout.ajaxUrl,
 				method: 'POST',
 				data: {
-					action: 'timu_apply_dashboard_layout',
-					nonce: timu_dashboard_layout.nonce,
-					context: timu_dashboard_layout.context,
-					network: timu_dashboard_layout.network,
+					action: 'wps_apply_dashboard_layout',
+					nonce: wps_dashboard_layout.nonce,
+					context: wps_dashboard_layout.context,
+					network: wps_dashboard_layout.network,
 					scope: scope,
 					layout: JSON.stringify(layout)
 				},
 				success: function(response) {
 					if (response.success) {
 						// Show success message.
-						timuDashboardLayout.showNotice(response.data.message, 'success');
+						wpsDashboardLayout.showNotice(response.data.message, 'success');
 					} else {
-						timuDashboardLayout.showNotice(response.data.message || 'Failed to apply layout.', 'error');
+						wpsDashboardLayout.showNotice(response.data.message || 'Failed to apply layout.', 'error');
 					}
 				},
 				error: function() {
-					timuDashboardLayout.showNotice('Failed to apply layout.', 'error');
+					wpsDashboardLayout.showNotice('Failed to apply layout.', 'error');
 				}
 			});
 		},
@@ -274,9 +274,11 @@
 
 	// Initialize on document ready.
 	$(document).ready(function() {
-		if (typeof timu_dashboard_layout !== 'undefined') {
-			timuDashboardLayout.init();
+		if (typeof wps_dashboard_layout !== 'undefined') {
+			wpsDashboardLayout.init();
 		}
 	});
 
 })(jQuery);
+
+

@@ -4,7 +4,7 @@
  *
  * Fired when the plugin is uninstalled.
  *
- * @package TIMU_WORDPRESS_SUPPORT
+ * @package WPS_WORDPRESS_SUPPORT
  */
 
 declare(strict_types=1);
@@ -73,3 +73,4 @@ wp_support_delete_options();
  * - Added optional vault cleanup (commented for safety)
  * - Implemented multisite option cleanup
  */
+

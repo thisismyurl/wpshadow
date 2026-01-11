@@ -9,32 +9,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use TIMU\CoreSupport\TIMU_Capabilities;
+use WPS\CoreSupport\WPS_Capabilities;
 
-$map = TIMU_Capabilities::get_map();
+$map = WPS_Capabilities::get_map();
 ?>
 <div class="wrap">
 	<h1><?php echo esc_html__( 'Module Capabilities', 'plugin-wp-support-thisismyurl' ); ?></h1>
 	<p><?php echo esc_html__( 'Map module capabilities to WordPress capabilities. This controls who can access module features.', 'plugin-wp-support-thisismyurl' ); ?></p>
 
-	<?php settings_errors( 'timu_capabilities' ); ?>
+	<?php settings_errors( 'WPS_capabilities' ); ?>
 
 	<form method="post" action="">
-		<?php wp_nonce_field( 'timu_capabilities', 'timu_capabilities_nonce' ); ?>
-		<input type="hidden" name="timu_capability_action" value="add" />
+		<?php wp_nonce_field( 'WPS_capabilities', 'WPS_capabilities_nonce' ); ?>
+		<input type="hidden" name="WPS_capability_action" value="add" />
 
 		<table class="form-table" role="presentation">
 			<tr>
-				<th scope="row"><label for="timu_module_slug"><?php echo esc_html__( 'Module slug', 'plugin-wp-support-thisismyurl' ); ?></label></th>
-				<td><input name="timu_module_slug" id="timu_module_slug" type="text" class="regular-text" required aria-required="true" /></td>
+				<th scope="row"><label for="WPS_module_slug"><?php echo esc_html__( 'Module slug', 'plugin-wp-support-thisismyurl' ); ?></label></th>
+				<td><input name="WPS_module_slug" id="WPS_module_slug" type="text" class="regular-text" required aria-required="true" /></td>
 			</tr>
 			<tr>
-				<th scope="row"><label for="timu_capability_key"><?php echo esc_html__( 'Module capability', 'plugin-wp-support-thisismyurl' ); ?></label></th>
-				<td><input name="timu_capability_key" id="timu_capability_key" type="text" class="regular-text" required aria-required="true" /></td>
+				<th scope="row"><label for="WPS_capability_key"><?php echo esc_html__( 'Module capability', 'plugin-wp-support-thisismyurl' ); ?></label></th>
+				<td><input name="WPS_capability_key" id="WPS_capability_key" type="text" class="regular-text" required aria-required="true" /></td>
 			</tr>
 			<tr>
-				<th scope="row"><label for="timu_wp_capability"><?php echo esc_html__( 'WordPress capability', 'plugin-wp-support-thisismyurl' ); ?></label></th>
-				<td><input name="timu_wp_capability" id="timu_wp_capability" type="text" class="regular-text" value="manage_options" required aria-required="true" /></td>
+				<th scope="row"><label for="WPS_wp_capability"><?php echo esc_html__( 'WordPress capability', 'plugin-wp-support-thisismyurl' ); ?></label></th>
+				<td><input name="WPS_wp_capability" id="WPS_wp_capability" type="text" class="regular-text" value="manage_options" required aria-required="true" /></td>
 			</tr>
 		</table>
 
@@ -69,3 +69,5 @@ $map = TIMU_Capabilities::get_map();
 		</tbody>
 	</table>
 </div>
+
+

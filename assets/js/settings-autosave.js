@@ -13,7 +13,7 @@
 	 * Initialize auto-save listeners on all settings forms.
 	 */
 	function init() {
-		const forms = $( '.timu-settings-form' );
+		const forms = $( '.wps-settings-form' );
 
 		if ( forms.length === 0 ) {
 			return;
@@ -38,8 +38,8 @@
 		clearTimeout( saveTimeout );
 
 		// Show saving state.
-		const statusEl = form.find( '.timu-settings-save-status' );
-		statusEl.text( '💾 ' + timu_settings_i18n.saving ).css( 'color', '#666' );
+		const statusEl = form.find( '.wps-settings-save-status' );
+		statusEl.text( '💾 ' + wps_settings_i18n.saving ).css( 'color', '#666' );
 
 		saveTimeout = setTimeout( function() {
 			autoSaveForm( form );
@@ -51,12 +51,12 @@
 	 * @param {jQuery} form - The form element.
 	 */
 	function autoSaveForm( form ) {
-		const statusEl = form.find( '.timu-settings-save-status' );
+		const statusEl = form.find( '.wps-settings-save-status' );
 		const group = form.data( 'settings-group' );
-		const nonce = form.find( 'input[name="timu_settings_nonce"]' ).val();
+		const nonce = form.find( 'input[name="wps_settings_nonce"]' ).val();
 
 		if ( ! group || ! nonce ) {
-			statusEl.text( '❌ ' + timu_settings_i18n.error ).css( 'color', 'red' );
+			statusEl.text( '❌ ' + wps_settings_i18n.error ).css( 'color', 'red' );
 			return;
 		}
 
@@ -64,12 +64,12 @@
 		const formData = new FormData( form[0] );
 		const data = {
 			group: group,
-			timu_settings_nonce: nonce,
+			wps_settings_nonce: nonce,
 		};
 
 		// Extract all form values.
 		formData.forEach( function( value, key ) {
-			if ( key === 'timu_settings_nonce' ) {
+			if ( key === 'wps_settings_nonce' ) {
 				return; // Skip nonce, we already have it.
 			}
 
@@ -87,25 +87,25 @@
 
 		// Perform AJAX request.
 		$.ajax( {
-			url: timu_settings_i18n.ajaxUrl,
+			url: wps_settings_i18n.ajaxUrl,
 			type: 'POST',
 			data: {
-				action: 'timu_save_settings',
+				action: 'wps_save_settings',
 				nonce: nonce,
 				data: JSON.stringify( data ),
 			},
 			success: function( response ) {
 				if ( response.success ) {
-					statusEl.text( '✓ ' + timu_settings_i18n.saved ).css( 'color', 'green' );
+					statusEl.text( '✓ ' + wps_settings_i18n.saved ).css( 'color', 'green' );
 					setTimeout( function() {
 						statusEl.text( '' );
 					}, 2000 );
 				} else {
-					statusEl.text( '❌ ' + ( response.data?.message || timu_settings_i18n.error ) ).css( 'color', 'red' );
+					statusEl.text( '❌ ' + ( response.data?.message || wps_settings_i18n.error ) ).css( 'color', 'red' );
 				}
 			},
 			error: function() {
-				statusEl.text( '❌ ' + timu_settings_i18n.error ).css( 'color', 'red' );
+				statusEl.text( '❌ ' + wps_settings_i18n.error ).css( 'color', 'red' );
 			},
 		} );
 	}
@@ -113,3 +113,4 @@
 	// Initialize on document ready.
 	$( document ).ready( init );
 } )( jQuery );
+

@@ -9,16 +9,16 @@
 	'use strict';
 
 	// Ensure we have the required globals.
-	if (typeof timuModuleActions === 'undefined') {
+	if (typeof wpsModuleActions === 'undefined') {
 		return;
 	}
 
-	const { ajaxurl, nonce } = timuModuleActions;
+	const { ajaxurl, nonce } = wpsModuleActions;
 	const actionButtons = {
-		install: '.timu-btn-install-activate',
-		update: '.timu-btn-update',
-		activate: '.timu-activate',
-		deactivate: '.timu-deactivate-network',
+		install: '.wps-btn-install-activate',
+		update: '.wps-btn-update',
+		activate: '.wps-activate',
+		deactivate: '.wps-deactivate-network',
 	};
 
 	/**
@@ -30,13 +30,13 @@
 	function showProgress(button, message) {
 		const originalText = button.textContent;
 		button.disabled = true;
-		button.classList.add('timu-loading');
+		button.classList.add('wps-loading');
 		button.textContent = message;
 
 		return {
 			restore: () => {
 				button.disabled = false;
-				button.classList.remove('timu-loading');
+				button.classList.remove('wps-loading');
 				button.textContent = originalText;
 			},
 		};
@@ -120,13 +120,13 @@
 		if (!row) return;
 
 		// Update status class.
-		row.classList.remove('timu-module-available', 'timu-module-enabled', 'timu-module-disabled');
+		row.classList.remove('wps-module-available', 'wps-module-enabled', 'wps-module-disabled');
 
 		if (status.installed) {
-			row.classList.add(status.enabled ? 'timu-module-enabled' : 'timu-module-disabled');
+			row.classList.add(status.enabled ? 'wps-module-enabled' : 'wps-module-disabled');
 			row.dataset.status = status.update_available ? 'update' : 'installed';
 		} else {
-			row.classList.add('timu-module-available');
+			row.classList.add('wps-module-available');
 			row.dataset.status = 'available';
 		}
 	}
@@ -163,7 +163,7 @@
 					'Content-Type': 'application/x-www-form-urlencoded',
 				},
 				body: new URLSearchParams({
-					action: 'timu_module_install',
+					action: 'wps_module_install',
 					nonce: nonce,
 					slug: slug,
 				}),
@@ -208,7 +208,7 @@
 					'Content-Type': 'application/x-www-form-urlencoded',
 				},
 				body: new URLSearchParams({
-					action: 'timu_module_update',
+					action: 'wps_module_update',
 					nonce: nonce,
 					slug: slug,
 				}),
@@ -253,7 +253,7 @@
 					'Content-Type': 'application/x-www-form-urlencoded',
 				},
 				body: new URLSearchParams({
-					action: 'timu_module_toggle',
+					action: 'wps_module_toggle',
 					nonce: nonce,
 					slug: slug,
 					enabled: 1,
@@ -304,7 +304,7 @@
 					'Content-Type': 'application/x-www-form-urlencoded',
 				},
 				body: new URLSearchParams({
-					action: 'timu_module_toggle',
+					action: 'wps_module_toggle',
 					nonce: nonce,
 					slug: slug,
 					enabled: 0,
@@ -345,3 +345,4 @@
 		init();
 	}
 })();
+

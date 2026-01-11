@@ -1,9 +1,9 @@
 /**
- * TIMU Notice Dismissal Handler
+ * WPS Notice Dismissal Handler
  *
  * Handles persistent dismissal of admin notices via AJAX.
  *
- * @package TIMU_CoreSupport
+ * @package WPS_CoreSupport
  * @since 1.2601.0822
  */
 
@@ -22,25 +22,27 @@
 
 			// Send AJAX request to persist dismissal
 			$.ajax({
-				url: timuNotices.ajaxUrl,
+				url: wpsNotices.ajaxUrl,
 				type: 'POST',
 				data: {
-					action: 'timu_dismiss_notice',
-					nonce: timuNotices.nonce,
+					action: 'wps_dismiss_notice',
+					nonce: wpsNotices.nonce,
 					notice_key: noticeKey
 				},
 				success: function(response) {
 					if (response.success) {
 						// WordPress already handles the visual dismissal
-						console.log('[TIMU] Notice dismissed:', noticeKey);
+						console.log('[WPS] Notice dismissed:', noticeKey);
 					} else {
-						console.error('[TIMU] Failed to dismiss notice:', response.data.message);
+						console.error('[WPS] Failed to dismiss notice:', response.data.message);
 					}
 				},
 				error: function(xhr, status, error) {
-					console.error('[TIMU] AJAX error dismissing notice:', error);
+					console.error('[WPS] AJAX error dismissing notice:', error);
 				}
 			});
 		});
 	});
 })(jQuery);
+
+

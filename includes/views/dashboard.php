@@ -20,71 +20,71 @@ $hub_modules       = array_filter( $modules, static fn( $m ) => ( $m['type'] ?? 
 $spoke_modules     = array_filter( $modules, static fn( $m ) => ( $m['type'] ?? '' ) === 'spoke' );
 
 $modules_url = is_network_admin()
-	? network_admin_url( 'admin.php?page=timu-core-modules' )
-	: admin_url( 'admin.php?page=timu-core-modules' );
+	? network_admin_url( 'admin.php?page=wps-core-modules' )
+	: admin_url( 'admin.php?page=wps-core-modules' );
 ?>
 
-<div class="wrap timu-dashboard-wrap timu-container" id="timu-dashboard-main" role="main">
-	<a class="timu-skip-link timu-sr-only" href="#timu-dashboard-grid"><?php esc_html_e( 'Skip to dashboard content', 'plugin-wp-support-thisismyurl' ); ?></a>
+<div class="wrap wps-dashboard-wrap wps-container" id="wps-dashboard-main" role="main">
+	<a class="wps-skip-link wps-sr-only" href="#wps-dashboard-grid"><?php esc_html_e( 'Skip to dashboard content', 'plugin-wp-support-thisismyurl' ); ?></a>
 
-	<div style="margin-bottom: var(--timu-space-2xl);">
-		<h1 style="margin-bottom: var(--timu-space-sm);"><?php esc_html_e( 'Support Dashboard', 'plugin-wp-support-thisismyurl' ); ?></h1>
-		<p class="timu-text-secondary" style="margin: 0;"><?php esc_html_e( 'Operational view of module activity, scheduled tasks, and pending reviews.', 'plugin-wp-support-thisismyurl' ); ?></p>
+	<div style="margin-bottom: var(--wps-space-2xl);">
+		<h1 style="margin-bottom: var(--wps-space-sm);"><?php esc_html_e( 'Support Dashboard', 'plugin-wp-support-thisismyurl' ); ?></h1>
+		<p class="wps-text-secondary" style="margin: 0;"><?php esc_html_e( 'Operational view of module activity, scheduled tasks, and pending reviews.', 'plugin-wp-support-thisismyurl' ); ?></p>
 	</div>
 
 	<!-- Stats Grid -->
-	<div class="timu-grid timu-grid-3" style="margin-bottom: var(--timu-space-2xl);">
-		<div class="timu-card" role="group" aria-label="<?php esc_attr_e( 'Total modules', 'plugin-wp-support-thisismyurl' ); ?>">
-			<div style="display: flex; align-items: center; gap: var(--timu-space-md); margin-bottom: var(--timu-space-md);">
-				<span class="dashicons dashicons-admin-plugins" style="font-size: 32px; color: var(--timu-accent-primary); width: auto; height: auto;"></span>
+	<div class="wps-grid wps-grid-3" style="margin-bottom: var(--wps-space-2xl);">
+		<div class="wps-card" role="group" aria-label="<?php esc_attr_e( 'Total modules', 'plugin-wp-support-thisismyurl' ); ?>">
+			<div style="display: flex; align-items: center; gap: var(--wps-space-md); margin-bottom: var(--wps-space-md);">
+				<span class="dashicons dashicons-admin-plugins" style="font-size: 32px; color: var(--wps-accent-primary); width: auto; height: auto;"></span>
 				<div>
-					<div style="font-size: var(--timu-text-2xl); font-weight: var(--timu-font-bold); color: var(--timu-text-primary);"><?php echo esc_html( number_format_i18n( (int) ( $total_count ?? 0 ) ) ); ?></div>
-					<div style="font-size: var(--timu-text-sm); color: var(--timu-text-muted);"><?php esc_html_e( 'Total', 'plugin-wp-support-thisismyurl' ); ?></div>
+					<div style="font-size: var(--wps-text-2xl); font-weight: var(--wps-font-bold); color: var(--wps-text-primary);"><?php echo esc_html( number_format_i18n( (int) ( $total_count ?? 0 ) ) ); ?></div>
+					<div style="font-size: var(--wps-text-sm); color: var(--wps-text-muted);"><?php esc_html_e( 'Total', 'plugin-wp-support-thisismyurl' ); ?></div>
 				</div>
 			</div>
 		</div>
-		<div class="timu-card" role="group" aria-label="<?php esc_attr_e( 'Enabled modules', 'plugin-wp-support-thisismyurl' ); ?>">
-			<div style="display: flex; align-items: center; gap: var(--timu-space-md); margin-bottom: var(--timu-space-md);">
-				<span class="dashicons dashicons-yes-alt" style="font-size: 32px; color: var(--timu-accent-success); width: auto; height: auto;"></span>
+		<div class="wps-card" role="group" aria-label="<?php esc_attr_e( 'Enabled modules', 'plugin-wp-support-thisismyurl' ); ?>">
+			<div style="display: flex; align-items: center; gap: var(--wps-space-md); margin-bottom: var(--wps-space-md);">
+				<span class="dashicons dashicons-yes-alt" style="font-size: 32px; color: var(--wps-accent-success); width: auto; height: auto;"></span>
 				<div>
-					<div style="font-size: var(--timu-text-2xl); font-weight: var(--timu-font-bold); color: var(--timu-text-primary);"><?php echo esc_html( number_format_i18n( (int) ( $enabled_count ?? 0 ) ) ); ?></div>
-					<div style="font-size: var(--timu-text-sm); color: var(--timu-text-muted);"><?php esc_html_e( 'Enabled', 'plugin-wp-support-thisismyurl' ); ?></div>
+					<div style="font-size: var(--wps-text-2xl); font-weight: var(--wps-font-bold); color: var(--wps-text-primary);"><?php echo esc_html( number_format_i18n( (int) ( $enabled_count ?? 0 ) ) ); ?></div>
+					<div style="font-size: var(--wps-text-sm); color: var(--wps-text-muted);"><?php esc_html_e( 'Enabled', 'plugin-wp-support-thisismyurl' ); ?></div>
 				</div>
 			</div>
 		</div>
-		<div class="timu-card" role="group" aria-label="<?php esc_attr_e( 'Available modules', 'plugin-wp-support-thisismyurl' ); ?>">
-			<div style="display: flex; align-items: center; gap: var(--timu-space-md); margin-bottom: var(--timu-space-md);">
-				<span class="dashicons dashicons-plus-alt" style="font-size: 32px; color: var(--timu-accent-info); width: auto; height: auto;"></span>
+		<div class="wps-card" role="group" aria-label="<?php esc_attr_e( 'Available modules', 'plugin-wp-support-thisismyurl' ); ?>">
+			<div style="display: flex; align-items: center; gap: var(--wps-space-md); margin-bottom: var(--wps-space-md);">
+				<span class="dashicons dashicons-plus-alt" style="font-size: 32px; color: var(--wps-accent-info); width: auto; height: auto;"></span>
 				<div>
-					<div style="font-size: var(--timu-text-2xl); font-weight: var(--timu-font-bold); color: var(--timu-text-primary);"><?php echo esc_html( number_format_i18n( (int) ( $available_count ?? 0 ) ) ); ?></div>
-					<div style="font-size: var(--timu-text-sm); color: var(--timu-text-muted);"><?php esc_html_e( 'Available', 'plugin-wp-support-thisismyurl' ); ?></div>
+					<div style="font-size: var(--wps-text-2xl); font-weight: var(--wps-font-bold); color: var(--wps-text-primary);"><?php echo esc_html( number_format_i18n( (int) ( $available_count ?? 0 ) ) ); ?></div>
+					<div style="font-size: var(--wps-text-sm); color: var(--wps-text-muted);"><?php esc_html_e( 'Available', 'plugin-wp-support-thisismyurl' ); ?></div>
 				</div>
 			</div>
 		</div>
-		<div class="timu-card" role="group" aria-label="<?php esc_attr_e( 'Updates available', 'plugin-wp-support-thisismyurl' ); ?>">
-			<div style="display: flex; align-items: center; gap: var(--timu-space-md); margin-bottom: var(--timu-space-md);">
-				<span class="dashicons dashicons-update" style="font-size: 32px; color: var(--timu-accent-warning); width: auto; height: auto;"></span>
+		<div class="wps-card" role="group" aria-label="<?php esc_attr_e( 'Updates available', 'plugin-wp-support-thisismyurl' ); ?>">
+			<div style="display: flex; align-items: center; gap: var(--wps-space-md); margin-bottom: var(--wps-space-md);">
+				<span class="dashicons dashicons-update" style="font-size: 32px; color: var(--wps-accent-warning); width: auto; height: auto;"></span>
 				<div>
-					<div style="font-size: var(--timu-text-2xl); font-weight: var(--timu-font-bold); color: var(--timu-text-primary);"><?php echo esc_html( number_format_i18n( (int) ( $updates_count ?? 0 ) ) ); ?></div>
-					<div style="font-size: var(--timu-text-sm); color: var(--timu-text-muted);"><?php esc_html_e( 'Updates', 'plugin-wp-support-thisismyurl' ); ?></div>
+					<div style="font-size: var(--wps-text-2xl); font-weight: var(--wps-font-bold); color: var(--wps-text-primary);"><?php echo esc_html( number_format_i18n( (int) ( $updates_count ?? 0 ) ) ); ?></div>
+					<div style="font-size: var(--wps-text-sm); color: var(--wps-text-muted);"><?php esc_html_e( 'Updates', 'plugin-wp-support-thisismyurl' ); ?></div>
 				</div>
 			</div>
 		</div>
-		<div class="timu-card" role="group" aria-label="<?php esc_attr_e( 'Hubs', 'plugin-wp-support-thisismyurl' ); ?>">
-			<div style="display: flex; align-items: center; gap: var(--timu-space-md); margin-bottom: var(--timu-space-md);">
-				<span class="dashicons dashicons-networking" style="font-size: 32px; color: var(--timu-accent-primary); width: auto; height: auto;"></span>
+		<div class="wps-card" role="group" aria-label="<?php esc_attr_e( 'Hubs', 'plugin-wp-support-thisismyurl' ); ?>">
+			<div style="display: flex; align-items: center; gap: var(--wps-space-md); margin-bottom: var(--wps-space-md);">
+				<span class="dashicons dashicons-networking" style="font-size: 32px; color: var(--wps-accent-primary); width: auto; height: auto;"></span>
 				<div>
-					<div style="font-size: var(--timu-text-2xl); font-weight: var(--timu-font-bold); color: var(--timu-text-primary);"><?php echo esc_html( number_format_i18n( (int) ( $hubs_count ?? count( $hub_modules ) ) ) ); ?></div>
-					<div style="font-size: var(--timu-text-sm); color: var(--timu-text-muted);"><?php esc_html_e( 'Hubs', 'plugin-wp-support-thisismyurl' ); ?></div>
+					<div style="font-size: var(--wps-text-2xl); font-weight: var(--wps-font-bold); color: var(--wps-text-primary);"><?php echo esc_html( number_format_i18n( (int) ( $hubs_count ?? count( $hub_modules ) ) ) ); ?></div>
+					<div style="font-size: var(--wps-text-sm); color: var(--wps-text-muted);"><?php esc_html_e( 'Hubs', 'plugin-wp-support-thisismyurl' ); ?></div>
 				</div>
 			</div>
 		</div>
-		<div class="timu-card" role="group" aria-label="<?php esc_attr_e( 'Spokes', 'plugin-wp-support-thisismyurl' ); ?>">
-			<div style="display: flex; align-items: center; gap: var(--timu-space-md); margin-bottom: var(--timu-space-md);">
-				<span class="dashicons dashicons-admin-tools" style="font-size: 32px; color: var(--timu-accent-info); width: auto; height: auto;"></span>
+		<div class="wps-card" role="group" aria-label="<?php esc_attr_e( 'Spokes', 'plugin-wp-support-thisismyurl' ); ?>">
+			<div style="display: flex; align-items: center; gap: var(--wps-space-md); margin-bottom: var(--wps-space-md);">
+				<span class="dashicons dashicons-admin-tools" style="font-size: 32px; color: var(--wps-accent-info); width: auto; height: auto;"></span>
 				<div>
-					<div style="font-size: var(--timu-text-2xl); font-weight: var(--timu-font-bold); color: var(--timu-text-primary);"><?php echo esc_html( number_format_i18n( (int) ( $spokes_count ?? count( $spoke_modules ) ) ) ); ?></div>
-					<div style="font-size: var(--timu-text-sm); color: var(--timu-text-muted);"><?php esc_html_e( 'Spokes', 'plugin-wp-support-thisismyurl' ); ?></div>
+					<div style="font-size: var(--wps-text-2xl); font-weight: var(--wps-font-bold); color: var(--wps-text-primary);"><?php echo esc_html( number_format_i18n( (int) ( $spokes_count ?? count( $spoke_modules ) ) ) ); ?></div>
+					<div style="font-size: var(--wps-text-sm); color: var(--wps-text-muted);"><?php esc_html_e( 'Spokes', 'plugin-wp-support-thisismyurl' ); ?></div>
 				</div>
 			</div>
 		</div>
@@ -104,17 +104,17 @@ $modules_url = is_network_admin()
 	</div>
 
 	<!-- Legacy Static Content (for reference - can be removed after full metabox migration) -->
-	<div class="timu-grid timu-grid-2" id="timu-dashboard-grid" style="display: none;">
-		<div class="timu-card">
-			<div class="timu-card-header">
+	<div class="wps-grid wps-grid-2" id="wps-dashboard-grid" style="display: none;">
+		<div class="wps-card">
+			<div class="wps-card-header">
 				<h2 style="margin: 0;"><?php esc_html_e( 'Activity Log', 'plugin-wp-support-thisismyurl' ); ?></h2>
 			</div>
-			<div class="timu-card-body">
-				<p style="margin: 0 0 var(--timu-space-md) 0; font-size: var(--timu-text-sm); color: var(--timu-text-secondary);"><?php esc_html_e( 'Recent module installs, updates, toggles, and Vault events.', 'plugin-wp-support-thisismyurl' ); ?></p>
+			<div class="wps-card-body">
+				<p style="margin: 0 0 var(--wps-space-md) 0; font-size: var(--wps-text-sm); color: var(--wps-text-secondary);"><?php esc_html_e( 'Recent module installs, updates, toggles, and Vault events.', 'plugin-wp-support-thisismyurl' ); ?></p>
 				<?php if ( ! empty( $activity_logs ) ) : ?>
-					<div class="timu-table-responsive">
-						<table class="timu-table">
-							<caption class="timu-sr-only"><?php esc_html_e( 'Recent activity entries for the Support Dashboard.', 'plugin-wp-support-thisismyurl' ); ?></caption>
+					<div class="wps-table-responsive">
+						<table class="wps-table">
+							<caption class="wps-sr-only"><?php esc_html_e( 'Recent activity entries for the Support Dashboard.', 'plugin-wp-support-thisismyurl' ); ?></caption>
 							<thead>
 							<tr>
 								<th scope="col"><?php esc_html_e( 'Time', 'plugin-wp-support-thisismyurl' ); ?></th>
@@ -142,16 +142,16 @@ $modules_url = is_network_admin()
 								}
 								$reason      = $entry['reason'] ?? '';
 								$level       = $entry['level'] ?? 'info';
-								$level_class = 'timu-badge-info';
+								$level_class = 'wps-badge-info';
 								if ( 'warning' === $level ) {
-									$level_class = 'timu-badge-warning';
+									$level_class = 'wps-badge-warning';
 								} elseif ( 'error' === $level ) {
-									$level_class = 'timu-badge-danger';
+									$level_class = 'wps-badge-danger';
 								}
 								?>
 								<tr>
 									<td><?php echo esc_html( $time_text ); ?></td>
-									<td><span class="timu-badge <?php echo esc_attr( $level_class ); ?>"><?php echo esc_html( ucfirst( $level ) ); ?></span></td>
+									<td><span class="wps-badge <?php echo esc_attr( $level_class ); ?>"><?php echo esc_html( ucfirst( $level ) ); ?></span></td>
 									<td><?php echo $task ? esc_html( $task ) : '—'; ?></td>
 									<td><?php echo $file ? esc_html( $file ) : '—'; ?></td>
 									<td><?php echo $user_name ? esc_html( $user_name ) : '—'; ?></td>
@@ -161,32 +161,32 @@ $modules_url = is_network_admin()
 							</tbody>
 						</table>
 					</div>
-					<div style="margin-top: var(--timu-space-md); padding-top: var(--timu-space-md); border-top: 1px solid var(--timu-border-subtle);">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=timu-support-settings#timu-vault-logs' ) ); ?>" class="timu-btn timu-btn-secondary timu-btn-sm">
+					<div style="margin-top: var(--wps-space-md); padding-top: var(--wps-space-md); border-top: 1px solid var(--wps-border-subtle);">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wps-support-settings#wps-vault-logs' ) ); ?>" class="wps-btn wps-btn-secondary wps-btn-sm">
 							<?php esc_html_e( 'View Full Log History →', 'plugin-wp-support-thisismyurl' ); ?>
 						</a>
 					</div>
 				<?php else : ?>
-					<p style="color: var(--timu-text-muted); font-style: italic; margin: 0;"><?php esc_html_e( 'No recent activity yet.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					<p style="color: var(--wps-text-muted); font-style: italic; margin: 0;"><?php esc_html_e( 'No recent activity yet.', 'plugin-wp-support-thisismyurl' ); ?></p>
 				<?php endif; ?>
 			</div>
 		</div>
 
-		<div class="timu-card">
-			<div class="timu-card-header">
+		<div class="wps-card">
+			<div class="wps-card-header">
 				<h2 style="margin: 0;"><?php esc_html_e( 'Scheduled Tasks', 'plugin-wp-support-thisismyurl' ); ?></h2>
 			</div>
-			<div class="timu-card-body">
-				<p style="margin: 0 0 var(--timu-space-md) 0; font-size: var(--timu-text-sm); color: var(--timu-text-secondary);"><?php esc_html_e( 'Upcoming suite jobs with their next run window.', 'plugin-wp-support-thisismyurl' ); ?></p>
-				<?php if ( isset( $_GET['timu_run_now'] ) ) : ?>
-					<div class="timu-alert timu-alert-success" role="status" aria-live="polite" style="margin-bottom: var(--timu-space-md);">
+			<div class="wps-card-body">
+				<p style="margin: 0 0 var(--wps-space-md) 0; font-size: var(--wps-text-sm); color: var(--wps-text-secondary);"><?php esc_html_e( 'Upcoming suite jobs with their next run window.', 'plugin-wp-support-thisismyurl' ); ?></p>
+				<?php if ( isset( $_GET['WPS_run_now'] ) ) : ?>
+					<div class="wps-alert wps-alert-success" role="status" aria-live="polite" style="margin-bottom: var(--wps-space-md);">
 						<p style="margin: 0;"><?php esc_html_e( 'Task started immediately.', 'plugin-wp-support-thisismyurl' ); ?></p>
 					</div>
 				<?php endif; ?>
 				<?php if ( ! empty( $schedule_snapshot ) ) : ?>
-					<div class="timu-table-responsive">
-						<table class="timu-table">
-							<caption class="timu-sr-only"><?php esc_html_e( 'Scheduled suite tasks with next and last run times.', 'plugin-wp-support-thisismyurl' ); ?></caption>
+					<div class="wps-table-responsive">
+						<table class="wps-table">
+							<caption class="wps-sr-only"><?php esc_html_e( 'Scheduled suite tasks with next and last run times.', 'plugin-wp-support-thisismyurl' ); ?></caption>
 							<thead>
 							<tr>
 								<th scope="col"><?php esc_html_e( 'Task', 'plugin-wp-support-thisismyurl' ); ?></th>
@@ -215,10 +215,10 @@ $modules_url = is_network_admin()
 									<td>
 										<?php if ( ! empty( $hook ) ) : ?>
 											<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display: inline;">
-												<?php wp_nonce_field( 'timu_run_task_now', 'nonce' ); ?>
-												<input type="hidden" name="action" value="timu_run_task_now" />
+												<?php wp_nonce_field( 'WPS_run_task_now', 'nonce' ); ?>
+												<input type="hidden" name="action" value="WPS_run_task_now" />
 												<input type="hidden" name="hook" value="<?php echo esc_attr( $hook ); ?>" />
-												<button type="submit" class="timu-btn timu-btn-secondary timu-btn-sm" aria-label="<?php echo esc_attr( sprintf( __( 'Run %s now', 'plugin-wp-support-thisismyurl' ), $task_lbl ) ); ?>"><?php esc_html_e( 'Run now', 'plugin-wp-support-thisismyurl' ); ?></button>
+												<button type="submit" class="wps-btn wps-btn-secondary wps-btn-sm" aria-label="<?php echo esc_attr( sprintf( __( 'Run %s now', 'plugin-wp-support-thisismyurl' ), $task_lbl ) ); ?>"><?php esc_html_e( 'Run now', 'plugin-wp-support-thisismyurl' ); ?></button>
 											</form>
 										<?php else : ?>
 											—
@@ -230,22 +230,22 @@ $modules_url = is_network_admin()
 						</table>
 					</div>
 				<?php else : ?>
-					<p style="color: var(--timu-text-muted); font-style: italic; margin: 0;"><?php esc_html_e( 'No scheduled tasks found.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					<p style="color: var(--wps-text-muted); font-style: italic; margin: 0;"><?php esc_html_e( 'No scheduled tasks found.', 'plugin-wp-support-thisismyurl' ); ?></p>
 				<?php endif; ?>
 			</div>
 		</div>
 </div>
 
-	<div class="timu-card">
-		<div class="timu-card-header">
+	<div class="wps-card">
+		<div class="wps-card-header">
 			<h2 style="margin: 0;"><?php esc_html_e( 'Pending Contributor Uploads', 'plugin-wp-support-thisismyurl' ); ?></h2>
 		</div>
-		<div class="timu-card-body">
-			<p style="margin: 0 0 var(--timu-space-md) 0; font-size: var(--timu-text-sm); color: var(--timu-text-secondary);"><?php esc_html_e( 'Uploads from contributors are optimized by default and held for Editor+ review.', 'plugin-wp-support-thisismyurl' ); ?></p>
+		<div class="wps-card-body">
+			<p style="margin: 0 0 var(--wps-space-md) 0; font-size: var(--wps-text-sm); color: var(--wps-text-secondary);"><?php esc_html_e( 'Uploads from contributors are optimized by default and held for Editor+ review.', 'plugin-wp-support-thisismyurl' ); ?></p>
 			<?php if ( ! empty( $pending_uploads ) ) : ?>
-				<div class="timu-table-responsive">
-					<table class="timu-table">
-						<caption class="timu-sr-only"><?php esc_html_e( 'Pending contributor uploads awaiting review.', 'plugin-wp-support-thisismyurl' ); ?></caption>
+				<div class="wps-table-responsive">
+					<table class="wps-table">
+						<caption class="wps-sr-only"><?php esc_html_e( 'Pending contributor uploads awaiting review.', 'plugin-wp-support-thisismyurl' ); ?></caption>
 						<thead>
 						<tr>
 							<th scope="col"><?php esc_html_e( 'File', 'plugin-wp-support-thisismyurl' ); ?></th>
@@ -264,10 +264,10 @@ $modules_url = is_network_admin()
 								<td><?php echo esc_html( $item['file'] ?: $item['title'] ); ?></td>
 								<td><?php echo esc_html( $item['user'] ?: __( 'Unknown', 'plugin-wp-support-thisismyurl' ) ); ?></td>
 								<td><?php echo esc_html( $uploaded ); ?></td>
-								<td><?php echo ! empty( $item['optimized'] ) ? '<span class="timu-badge timu-badge-success">' . esc_html__( 'Yes', 'plugin-wp-support-thisismyurl' ) . '</span>' : '<span class="timu-badge">' . esc_html__( 'No', 'plugin-wp-support-thisismyurl' ) . '</span>'; ?></td>
+								<td><?php echo ! empty( $item['optimized'] ) ? '<span class="wps-badge wps-badge-success">' . esc_html__( 'Yes', 'plugin-wp-support-thisismyurl' ) . '</span>' : '<span class="wps-badge">' . esc_html__( 'No', 'plugin-wp-support-thisismyurl' ) . '</span>'; ?></td>
 								<td>
 									<?php if ( ! empty( $item['edit_link'] ) ) : ?>
-										<a class="timu-btn timu-btn-primary timu-btn-sm" href="<?php echo esc_url( $item['edit_link'] ); ?>"><?php esc_html_e( 'Review', 'plugin-wp-support-thisismyurl' ); ?></a>
+										<a class="wps-btn wps-btn-primary wps-btn-sm" href="<?php echo esc_url( $item['edit_link'] ); ?>"><?php esc_html_e( 'Review', 'plugin-wp-support-thisismyurl' ); ?></a>
 									<?php else : ?>
 										—
 									<?php endif; ?>
@@ -278,7 +278,9 @@ $modules_url = is_network_admin()
 					</table>
 				</div>
 			<?php else : ?>
-				<p style="color: var(--timu-text-muted); font-style: italic; margin: 0;"><?php esc_html_e( 'No pending contributor uploads.', 'plugin-wp-support-thisismyurl' ); ?></p>
+				<p style="color: var(--wps-text-muted); font-style: italic; margin: 0;"><?php esc_html_e( 'No pending contributor uploads.', 'plugin-wp-support-thisismyurl' ); ?></p>
 			<?php endif; ?>
 		</div>
 	</div>
+
+

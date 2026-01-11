@@ -30,17 +30,17 @@ $recommended_modules = array(
 	),
 );
 
-$nonce       = wp_create_nonce( 'timu_setup_wizard' );
+$nonce       = wp_create_nonce( 'WPS_setup_wizard' );
 $install_url = add_query_arg(
 	array(
-		'action'   => 'timu_setup_install_all',
+		'action'   => 'WPS_setup_install_all',
 		'nonce'    => $nonce,
-		'redirect' => rawurlencode( admin_url( 'admin.php?page=timu-core-dashboard' ) ),
+		'redirect' => rawurlencode( admin_url( 'admin.php?page=wps-core-dashboard' ) ),
 	),
 	admin_url( 'admin-post.php' )
 );
 ?>
-<div class="timu-setup-wizard" style="max-width: 800px; margin: 40px auto; padding: 30px; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" role="main" aria-label="<?php esc_attr_e( 'Core Support Setup Wizard', 'plugin-wp-support-thisismyurl' ); ?>">
+<div class="wps-setup-wizard" style="max-width: 800px; margin: 40px auto; padding: 30px; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" role="main" aria-label="<?php esc_attr_e( 'Core Support Setup Wizard', 'plugin-wp-support-thisismyurl' ); ?>">
 
 	<h1><?php esc_html_e( 'Welcome to Core Support', 'plugin-wp-support-thisismyurl' ); ?></h1>
 	<p><?php esc_html_e( 'The Hub of the thisismyurl.com Support Suite. Let\'s set up the recommended modules to get you started.', 'plugin-wp-support-thisismyurl' ); ?></p>
@@ -71,7 +71,7 @@ $install_url = add_query_arg(
 		<a href="<?php echo esc_url( $install_url ); ?>" class="button button-primary" style="padding: 10px 20px; font-size: 16px;" aria-label="<?php esc_attr_e( 'Install and activate all recommended modules', 'plugin-wp-support-thisismyurl' ); ?>">
 			<?php esc_html_e( 'Install & Activate All', 'plugin-wp-support-thisismyurl' ); ?>
 		</a>
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=timu-core-dashboard' ) ); ?>" class="button" style="padding: 10px 20px; font-size: 16px;" aria-label="<?php esc_attr_e( 'Skip setup wizard and go to dashboard', 'plugin-wp-support-thisismyurl' ); ?>">
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=wps-core-dashboard' ) ); ?>" class="button" style="padding: 10px 20px; font-size: 16px;" aria-label="<?php esc_attr_e( 'Skip setup wizard and go to dashboard', 'plugin-wp-support-thisismyurl' ); ?>">
 			<?php esc_html_e( 'Skip for Now', 'plugin-wp-support-thisismyurl' ); ?>
 		</a>
 	</div>
@@ -81,3 +81,5 @@ $install_url = add_query_arg(
 	</p>
 
 </div>
+
+

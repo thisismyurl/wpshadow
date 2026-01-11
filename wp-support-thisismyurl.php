@@ -16,12 +16,12 @@
  * Text Domain:         plugin-wp-support-thisismyurl
  * License:             GPL2
  * License URI:         https://www.gnu.org/licenses/gpl-2.0.html
- * @package TIMU_WP_SUPPORT_THISISMYURL
+ * @package WPS_WP_SUPPORT_THISISMYURL
  */
 
 declare(strict_types=1);
 
-namespace TIMU\CoreSupport;
+namespace WPS\CoreSupport;
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return void
  */
 function wp_support_render_settings( string $hub_id = '' ): void {
-	if ( ! timu_can_manage_settings() ) {
+	if ( ! wps_can_manage_settings() ) {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
 	}
 
@@ -51,7 +51,7 @@ function wp_support_render_settings( string $hub_id = '' ): void {
 
 	// Enqueue auto-save script for settings forms.
 	wp_enqueue_script(
-		'timu-settings-autosave',
+		'wps-settings-autosave',
 		plugin_dir_url( __FILE__ ) . 'assets/js/settings-autosave.js',
 		array( 'jquery' ),
 		'1.0.0',
@@ -60,8 +60,8 @@ function wp_support_render_settings( string $hub_id = '' ): void {
 
 	// Localize script for AJAX and i18n.
 	wp_localize_script(
-		'timu-settings-autosave',
-		'timu_settings_i18n',
+		'wps-settings-autosave',
+		'wps_settings_i18n',
 		array(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 			'saving'  => __( 'Saving...', 'plugin-wp-support-thisismyurl' ),
@@ -79,7 +79,7 @@ function wp_support_render_settings( string $hub_id = '' ): void {
 	// Register metaboxes for core-level settings.
 	if ( empty( $hub_id ) ) {
 		add_meta_box(
-			'timu_settings_module_registry',
+			'wps_settings_module_registry',
 			__( 'Module Discovery', 'plugin-wp-support-thisismyurl' ),
 			__NAMESPACE__ . '\\render_settings_module_registry',
 			$screen->id,
@@ -87,7 +87,7 @@ function wp_support_render_settings( string $hub_id = '' ): void {
 		);
 
 		add_meta_box(
-			'timu_settings_capabilities',
+			'wps_settings_capabilities',
 			__( 'Capability Mapping', 'plugin-wp-support-thisismyurl' ),
 			__NAMESPACE__ . '\\render_settings_capabilities',
 			$screen->id,
@@ -95,7 +95,7 @@ function wp_support_render_settings( string $hub_id = '' ): void {
 		);
 
 		add_meta_box(
-			'timu_settings_privacy',
+			'wps_settings_privacy',
 			__( 'Privacy & GDPR', 'plugin-wp-support-thisismyurl' ),
 			__NAMESPACE__ . '\\render_settings_privacy',
 			$screen->id,
@@ -104,7 +104,7 @@ function wp_support_render_settings( string $hub_id = '' ): void {
 	}
 
 	add_meta_box(
-		'timu_settings_dashboard',
+		'wps_settings_dashboard',
 		__( 'Dashboard & UI', 'plugin-wp-support-thisismyurl' ),
 		__NAMESPACE__ . '\\render_settings_dashboard',
 		$screen->id,
@@ -112,7 +112,7 @@ function wp_support_render_settings( string $hub_id = '' ): void {
 	);
 
 	add_meta_box(
-		'timu_settings_license',
+		'wps_settings_license',
 		__( 'License & Updates', 'plugin-wp-support-thisismyurl' ),
 		__NAMESPACE__ . '\\render_settings_license',
 		$screen->id,
@@ -163,7 +163,7 @@ function wp_support_hide_disabled_submenus(): void {
 	<script>
 	(function(){
 		var scope = (document.documentElement.classList.contains('network-admin') ? 'network' : 'site');
-		var storagePrefix = 'timuToggleState:' + scope + ':';
+		var storagePrefix = 'wpsToggleState:' + scope + ':';
 		function applyHide(){
 			var top = document.getElementById('toplevel_page_wp-support');
 			if (!top){
@@ -229,7 +229,7 @@ function wp_support_guard_disabled_modules(): void {
 	}
 	// Normalize to full slug regardless of whether the suffix is included in the query param.
 	$slug    = str_contains( $raw_module, '-support-thisismyurl' ) ? $raw_module : $raw_module . '-support-thisismyurl';
-	$catalog = TIMU_Module_Registry::get_catalog_with_status();
+	$catalog = WPS_Module_Registry::get_catalog_with_status();
 	$enabled = (bool) ( $catalog[ $slug ]['enabled'] ?? false );
 	if ( $enabled ) {
 		return;
@@ -247,8 +247,64 @@ define( 'wp_support_URL', plugin_dir_url( __FILE__ ) );
 define( 'wp_support_BASENAME', plugin_basename( __FILE__ ) );
 define( 'wp_support_TEXT_DOMAIN', 'plugin-wp-support-thisismyurl' );
 
+/**
+ * Filter parent_file to ensure correct parent menu is set.
+ *
+ * @param string $parent_file The parent file.
+ * @return string The potentially modified parent file.
+ */
+function wp_support_filter_parent_file( string $parent_file ): string {
+	global $submenu_file;
+	
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	if ( empty( $_GET['page'] ) || 'wp-support' !== $_GET['page'] ) {
+		return $parent_file;
+	}
+
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$module = isset( $_GET['module'] ) ? sanitize_key( wp_unslash( $_GET['module'] ) ) : '';
+	
+	if ( ! empty( $module ) ) {
+		$submenu_file = 'wp-support&module=' . $module;
+		error_log( "parent_file filter: setting submenu_file to wp-support&module={$module}" );
+	}
+	
+	return 'wp-support';
+}
+
+/**
+ * Filter submenu_file to highlight the correct submenu item when viewing module dashboards.
+ * WordPress only checks the "page" parameter by default, but we use "module" to route to different dashboards.
+ * This filter ensures the correct submenu (Vault, Media, etc.) is highlighted when active.
+ *
+ * @param string|null $submenu_file The submenu file.
+ * @return string|null The potentially modified submenu file.
+ */
+function wp_support_filter_submenu_file( ?string $submenu_file ): ?string {
+	// Only apply when we're on the wp-support admin page.
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	if ( empty( $_GET['page'] ) || 'wp-support' !== $_GET['page'] ) {
+		return $submenu_file;
+	}
+
+	// Check if there's a module parameter that specifies which dashboard we're viewing.
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$module = isset( $_GET['module'] ) ? sanitize_key( wp_unslash( $_GET['module'] ) ) : '';
+	if ( empty( $module ) ) {
+		// No module param means we're on the main dashboard, don't override.
+		return $submenu_file;
+	}
+
+	// Return the submenu file that matches the module parameter.
+	// The submenu items are registered with slugs like 'wp-support&module=media', 'wp-support&module=vault', etc.
+	$target = 'wp-support&module=' . $module;
+	error_log( sprintf( 'submenu_file filter: original=%s, module=%s, returning=%s', $submenu_file, $module, $target ) );
+	return $target;
+}
+
+
 // Suite Identifier for Hub & Spoke handshake.
-define( 'TIMU_SUITE_ID', 'thisismyurl-media-suite-2026' );
+define( 'WPS_SUITE_ID', 'thisismyurl-media-suite-2026' );
 
 // Minimum requirements.
 define( 'wp_support_MIN_PHP', '8.1.29' );
@@ -317,12 +373,12 @@ function wp_support_setup_vault(): bool {
 	$upload_dir = wp_upload_dir();
 
 	// Get or generate vault directory name (hidden with random suffix).
-	$vault_dirname = get_option( 'timu_vault_dirname' );
+	$vault_dirname = get_option( 'wps_vault_dirname' );
 	if ( empty( $vault_dirname ) ) {
 		// Generate random directory name (e.g., .vault_a1b2c3d4e5f6).
 		$random_suffix = bin2hex( random_bytes( 6 ) );
 		$vault_dirname = '.vault_' . $random_suffix;
-		update_option( 'timu_vault_dirname', $vault_dirname );
+		update_option( 'wps_vault_dirname', $vault_dirname );
 	}
 
 	$vault_path = $upload_dir['basedir'] . '/' . $vault_dirname;
@@ -331,7 +387,7 @@ function wp_support_setup_vault(): bool {
 	if ( ! file_exists( $vault_path ) ) {
 		if ( ! wp_mkdir_p( $vault_path ) ) {
 			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-			error_log( 'TIMU Core: Failed to create vault directory at ' . $vault_path );
+			error_log( 'WPS Core: Failed to create vault directory at ' . $vault_path );
 			return false;
 		}
 	}
@@ -372,18 +428,18 @@ function wp_support_setup_vault(): bool {
 
 /**
  * Setup encryption keys for vault files.
- * Checks wp-config for TIMU_VAULT_KEY; generates if missing.
+ * Checks wp-config for WPS_VAULT_KEY; generates if missing.
  *
  * @return bool True if keys are available, false otherwise.
  */
 function wp_support_setup_encryption_keys(): bool {
 	// If wp-config defines the key, use it.
-	if ( defined( 'TIMU_VAULT_KEY' ) && TIMU_VAULT_KEY ) {
+	if ( defined( 'WPS_VAULT_KEY' ) && WPS_VAULT_KEY ) {
 		return true;
 	}
 
 	// If not in wp-config, check if stored in options (for backward compatibility).
-	$stored_key = get_option( 'timu_vault_encryption_key' );
+	$stored_key = get_option( 'wps_vault_encryption_key' );
 	if ( ! empty( $stored_key ) ) {
 		return true;
 	}
@@ -392,16 +448,16 @@ function wp_support_setup_encryption_keys(): bool {
 	// For development, auto-generate and store (with warning).
 	if ( 'production' === wp_get_environment_type() ) {
 		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-		error_log( 'TIMU Core: Encryption enabled but TIMU_VAULT_KEY not defined in wp-config.php. Define it for production use.' );
+		error_log( 'WPS Core: Encryption enabled but WPS_VAULT_KEY not defined in wp-config.php. Define it for production use.' );
 		return false;
 	}
 
 	// Auto-generate for development.
 	$new_key = bin2hex( random_bytes( 32 ) ); // 256-bit key.
-	update_option( 'timu_vault_encryption_key', $new_key );
+	update_option( 'wps_vault_encryption_key', $new_key );
 
 	// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-	error_log( 'TIMU Core: Generated temporary encryption key. For production, add this to wp-config.php: define( "TIMU_VAULT_KEY", "' . $new_key . '" );' );
+	error_log( 'WPS Core: Generated temporary encryption key. For production, add this to wp-config.php: define( "WPS_VAULT_KEY", "' . $new_key . '" );' );
 
 	return true;
 }
@@ -412,11 +468,11 @@ function wp_support_setup_encryption_keys(): bool {
  * @return string|null Encryption key, or null if not available.
  */
 function wp_support_get_vault_key(): ?string {
-	if ( defined( 'TIMU_VAULT_KEY' ) && TIMU_VAULT_KEY ) {
-		return TIMU_VAULT_KEY;
+	if ( defined( 'WPS_VAULT_KEY' ) && WPS_VAULT_KEY ) {
+		return WPS_VAULT_KEY;
 	}
 
-	$stored_key = get_option( 'timu_vault_encryption_key' );
+	$stored_key = get_option( 'wps_vault_encryption_key' );
 	return ! empty( $stored_key ) ? $stored_key : null;
 }
 
@@ -446,106 +502,176 @@ function wp_support_init(): void {
 	);
 
 	// Load module bootstrap for child plugin installation and activation.
-	require_once wp_support_PATH . 'includes/class-timu-module-bootstrap.php';
-	TIMU_Module_Bootstrap::init();
+	require_once wp_support_PATH . 'includes/class-wps-module-bootstrap.php';
+	WPS_Module_Bootstrap::init();
 
 	// Load module toggles for feature flags.
-	require_once wp_support_PATH . 'includes/class-timu-module-toggles.php';
-	TIMU_Module_Toggles::init();
+	require_once wp_support_PATH . 'includes/class-wps-module-toggles.php';
+	WPS_Module_Toggles::init();
 
 	// Load module registry.
-	require_once wp_support_PATH . 'includes/class-timu-module-registry.php';
-	TIMU_Module_Registry::init();
+	require_once wp_support_PATH . 'includes/class-wps-module-registry.php';
+	WPS_Module_Registry::init();
 
 	// Load DRY Hub initializer before loading modules.
-	require_once wp_support_PATH . 'includes/class-timu-module-hub-initializer.php';
+	require_once wp_support_PATH . 'includes/class-wps-module-hub-initializer.php';
 
 	// Load module loader (manages independent module repositories).
-	require_once wp_support_PATH . 'includes/class-timu-module-loader.php';
+	require_once wp_support_PATH . 'includes/class-wps-module-loader.php';
 	error_log( '=== ABOUT TO CALL MODULE_LOADER::INIT ===' );
 	@file_put_contents( wp_support_PATH . 'about_to_call_module_loader_init.txt', date( 'Y-m-d H:i:s' ) );
-	\TIMU\Core\Module_Loader::init();
+	\WPS\Core\Module_Loader::init();
 	@file_put_contents( wp_support_PATH . 'module_loader_init_returned.txt', date( 'Y-m-d H:i:s' ) );
 	error_log( '=== MODULE_LOADER::INIT RETURNED ===' );
 
 	// Load settings API (network + site with overrides).
-	require_once wp_support_PATH . 'includes/class-timu-settings.php';
-	TIMU_Settings::init();
-	require_once wp_support_PATH . 'includes/timu-settings-functions.php';
+	require_once wp_support_PATH . 'includes/class-wps-settings.php';
+	WPS_Settings::init();
+	require_once wp_support_PATH . 'includes/wps-settings-functions.php';
 
 	// Load capability manager.
-	require_once wp_support_PATH . 'includes/class-timu-capabilities.php';
+	require_once wp_support_PATH . 'includes/class-wps-capabilities.php';
 
 	// Load Site Health integration.
-	require_once wp_support_PATH . 'includes/class-timu-site-health.php';
-	TIMU_Site_Health::init();
+	require_once wp_support_PATH . 'includes/class-wps-site-health.php';
+	WPS_Site_Health::init();
 
 	// Load Activity Logger.
-	require_once wp_support_PATH . 'includes/class-timu-activity-logger.php';
-	TIMU_Activity_Logger::init();
+	require_once wp_support_PATH . 'includes/class-wps-activity-logger.php';
+	WPS_Activity_Logger::init();
+
+	// Load Snapshot Manager for site snapshots and rollback.
+	require_once wp_support_PATH . 'includes/class-wps-snapshot-manager.php';
+	WPS_Snapshot_Manager::init();
+
+	// Load Site Audit for performance, security, and optimization analysis.
+	require_once wp_support_PATH . 'includes/class-wps-site-audit.php';
+	WPS_Site_Audit::init();
+
+	// Load Hidden Diagnostic API for secure support access.
+	require_once wp_support_PATH . 'includes/class-wps-hidden-diagnostic-api.php';
+	WPS_Hidden_Diagnostic_API::init();
+
+	// Load Safe Staging Manager for isolated testing environments.
+	require_once wp_support_PATH . 'includes/class-wps-staging-manager.php';
+	WPS_Staging_Manager::init();
+
+	// Load Backup Verification for recovery drills and integrity testing.
+	require_once wp_support_PATH . 'includes/class-wps-backup-verification.php';
+	WPS_Backup_Verification::init();
+
+	// Load Emergency Support for critical error surfaces.
+	require_once wp_support_PATH . 'includes/class-wps-emergency-support.php';
+	WPS_Emergency_Support::init();
+
+	// Register emergency support admin menu.
+	add_action( 'admin_menu', static function (): void {
+		add_submenu_page(
+			'wp-support',
+			__( 'Emergency Support', 'plugin-wp-support-thisismyurl' ),
+			__( 'Emergency', 'plugin-wp-support-thisismyurl' ),
+			'manage_options',
+			'wps-emergency-support',
+			array( '\\WPS\\CoreSupport\\WPS_Emergency_Support', 'render_emergency_page' )
+		);
+	} );
+
+	// Load Site Documentation Manager for blueprint, protected plugins, and export.
+	require_once wp_support_PATH . 'includes/class-wps-site-documentation-manager.php';
+	WPS_Site_Documentation_Manager::init();
+
+	// Load Update Simulator for safe plugin/theme update testing.
+	require_once wp_support_PATH . 'includes/class-wps-update-simulator.php';
+	WPS_Update_Simulator::init();
+
+	// Load Guided Walkthroughs for step-by-step task assistance.
+	require_once wp_support_PATH . 'includes/class-wps-guided-walkthroughs.php';
+	WPS_Guided_Walkthroughs::init();
+
+	// Register AJAX handlers for Diagnostic API.
+	add_action( 'wp_ajax_wps_create_diagnostic_token', static function (): void {
+		check_ajax_referer( 'wp_ajax' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
+		}
+		$name  = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
+		$reason = isset( $_POST['reason'] ) ? sanitize_text_field( wp_unslash( $_POST['reason'] ) ) : '';
+		$token = WPS_Hidden_Diagnostic_API::create_token( $name, $reason );
+		wp_send_json_success( array( 'token' => $token ) );
+	} );
+
+	add_action( 'wp_ajax_wps_revoke_diagnostic_token', static function (): void {
+		check_ajax_referer( 'wp_ajax' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
+		}
+		$token = isset( $_POST['token'] ) ? sanitize_text_field( wp_unslash( $_POST['token'] ) ) : '';
+		$result = WPS_Hidden_Diagnostic_API::revoke_token( $token );
+		wp_send_json_success( array( 'revoked' => $result ) );
+	} );
 
 	// Load license utilities.
-	require_once wp_support_PATH . 'includes/class-timu-license.php';
-	TIMU_License::init();
+	require_once wp_support_PATH . 'includes/class-wps-license.php';
+	WPS_License::init();
 
 	// Load feature registry for flexible plugin dependencies.
-	require_once wp_support_PATH . 'includes/class-timu-feature-registry.php';
-	require_once wp_support_PATH . 'includes/timu-feature-functions.php';
-	TIMU_Feature_Registry::init();
+	require_once wp_support_PATH . 'includes/class-wps-feature-registry.php';
+	require_once wp_support_PATH . 'includes/wps-feature-functions.php';
+	WPS_Feature_Registry::init();
 
 	// Load Spoke Base for spoke plugins (Image, Media, etc).
-	require_once wp_support_PATH . 'includes/class-timu-spoke-base.php';
+	require_once wp_support_PATH . 'includes/class-wps-spoke-base.php';
 
 	// Load Vault service (canonical implementation in vault-support plugin).
 	// Core aliases it for backward compatibility.
-	if ( ! class_exists( '\\TIMU\\VaultSupport\\TIMU_Vault' ) ) {
+	if ( ! class_exists( '\\WPS\\VaultSupport\\WPS_Vault' ) ) {
 		// Vault plugin not loaded yet; defer to vault-support plugin.
-		// If vault-support is active, it will provide TIMU_Vault.
+		// If vault-support is active, it will provide WPS_Vault.
 		// Core will alias it when available.
 	}
 
 	// Always load the alias file which will create the alias if vault-support is available.
-	if ( file_exists( wp_support_PATH . 'includes/class-timu-vault.php' ) ) {
-		require_once wp_support_PATH . 'includes/class-timu-vault.php';
+	if ( file_exists( wp_support_PATH . 'includes/class-wps-vault.php' ) ) {
+		require_once wp_support_PATH . 'includes/class-wps-vault.php';
 	}
 
 	// Initialize Vault if available (via vault-support's implementation).
-	if ( class_exists( '\\TIMU\\CoreSupport\\TIMU_Vault' ) ) {
-		TIMU_Vault::init();
+	if ( class_exists( '\\WPS\\CoreSupport\\WPS_Vault' ) ) {
+		WPS_Vault::init();
 	}
 
 	// Load vault size monitoring (real-time alerts).
-	require_once wp_support_PATH . 'includes/class-timu-vault-size-monitor.php';
-	TIMU_Vault_Size_Monitor::init();
+	require_once wp_support_PATH . 'includes/class-wps-vault-size-monitor.php';
+	WPS_Vault_Size_Monitor::init();
 
 	// Load network license broadcaster for multisite (Super Admin push to all sites).
-	require_once wp_support_PATH . 'includes/class-timu-network-license.php';
-	TIMU_Network_License::init();
+	require_once wp_support_PATH . 'includes/class-wps-network-license.php';
+	WPS_Network_License::init();
 
 	// Load plugin upgrader for install/update flows.
-	require_once wp_support_PATH . 'includes/class-timu-plugin-upgrader.php';
+	require_once wp_support_PATH . 'includes/class-wps-plugin-upgrader.php';
 
 	// Load module action handlers for AJAX install/update/activate.
-	require_once wp_support_PATH . 'includes/class-timu-module-actions.php';
-	TIMU_Module_Actions::init();
+	require_once wp_support_PATH . 'includes/class-wps-module-actions.php';
+	WPS_Module_Actions::init();
 
 	// Load tab navigation system.
-	require_once wp_support_PATH . 'includes/class-timu-tab-navigation.php';
-	require_once wp_support_PATH . 'includes/class-timu-dashboard-widgets.php';
-	require_once wp_support_PATH . 'includes/class-timu-dashboard-layout.php';
+	require_once wp_support_PATH . 'includes/class-wps-tab-navigation.php';
+	require_once wp_support_PATH . 'includes/class-wps-dashboard-widgets.php';
+	require_once wp_support_PATH . 'includes/class-wps-dashboard-layout.php';
 	require_once wp_support_PATH . 'includes/class-settings-ajax.php';
-	require_once wp_support_PATH . 'includes/timu-capability-helpers.php';
+	require_once wp_support_PATH . 'includes/wps-capability-helpers.php';
 
 	// Load CLI commands when WP-CLI present.
 	if ( defined( 'WP_CLI' ) && WP_CLI ) {
-		require_once wp_support_PATH . 'includes/class-timu-cli.php';
-		\WP_CLI::add_command( 'timu modules', '\\TIMU\\CoreSupport\\TIMU_CLI_Modules' );
-		\WP_CLI::add_command( 'timu settings', '\\TIMU\\CoreSupport\\TIMU_CLI_Settings' );
+		require_once wp_support_PATH . 'includes/class-wps-cli.php';
+		\WP_CLI::add_command( 'wps modules', '\\WPS\\CoreSupport\\WPS_CLI_Modules' );
+		\WP_CLI::add_command( 'wps settings', '\\WPS\\CoreSupport\\WPS_CLI_Settings' );
 	}
 
 	// Load notice manager for persistent dismissal.
-	require_once wp_support_PATH . 'includes/class-timu-notice-manager.php';
-	TIMU_Notice_Manager::init();
+	require_once wp_support_PATH . 'includes/class-wps-notice-manager.php';
+	WPS_Notice_Manager::init();
 
 	// Initialize multisite support if applicable.
 	if ( is_multisite() ) {
@@ -557,22 +683,26 @@ function wp_support_init(): void {
 	add_action( 'admin_head', __NAMESPACE__ . '\\wp_support_hide_disabled_submenus' );
 	add_action( 'admin_init', __NAMESPACE__ . '\wp_support_guard_disabled_modules' );
 
+	// Fix sidebar menu active state for module navigation (#174).
+	add_filter( 'parent_file', __NAMESPACE__ . '\\wp_support_filter_parent_file', 10 );
+	add_filter( 'submenu_file', __NAMESPACE__ . '\\wp_support_filter_submenu_file', 10 );
+
 	// Handle capability mapping submissions.
 	add_action( 'admin_init', __NAMESPACE__ . '\\wp_support_handle_capabilities_post' );
 
 	// Handle AJAX actions.
-	add_action( 'wp_ajax_timu_toggle_module', __NAMESPACE__ . '\\timu_ajax_toggle_module' );
-	add_action( 'wp_ajax_timu_install_module', __NAMESPACE__ . '\\timu_ajax_install_module' );
-	add_action( 'wp_ajax_timu_update_module', __NAMESPACE__ . '\\timu_ajax_update_module' );
-	add_action( 'wp_ajax_timu_broadcast_license', __NAMESPACE__ . '\\timu_ajax_broadcast_license' );
-	add_action( 'wp_ajax_timu_save_metabox_state', __NAMESPACE__ . '\\timu_ajax_save_metabox_state' );
-	add_action( 'wp_ajax_timu_save_postbox_order', __NAMESPACE__ . '\\timu_ajax_save_postbox_order' );
-	add_action( 'wp_ajax_timu_save_postbox_state', __NAMESPACE__ . '\\timu_ajax_save_postbox_state' );
-	add_action( 'wp_ajax_timu_save_dashboard_layout', array( 'TIMU\\CoreSupport\\TIMU_Dashboard_Layout', 'ajax_save_layout' ) );
-	add_action( 'wp_ajax_timu_apply_dashboard_layout', array( 'TIMU\\CoreSupport\\TIMU_Dashboard_Layout', 'ajax_apply_layout' ) );
+	add_action( 'wp_ajax_wps_toggle_module', __NAMESPACE__ . '\\wps_ajax_toggle_module' );
+	add_action( 'wp_ajax_wps_install_module', __NAMESPACE__ . '\\wps_ajax_install_module' );
+	add_action( 'wp_ajax_wps_update_module', __NAMESPACE__ . '\\wps_ajax_update_module' );
+	add_action( 'wp_ajax_wps_broadcast_license', __NAMESPACE__ . '\\wps_ajax_broadcast_license' );
+	add_action( 'wp_ajax_wps_save_metabox_state', __NAMESPACE__ . '\\wps_ajax_save_metabox_state' );
+	add_action( 'wp_ajax_wps_save_postbox_order', __NAMESPACE__ . '\\wps_ajax_save_postbox_order' );
+	add_action( 'wp_ajax_wps_save_postbox_state', __NAMESPACE__ . '\\wps_ajax_save_postbox_state' );
+	add_action( 'wp_ajax_wps_save_dashboard_layout', array( 'WPS\\CoreSupport\\WPS_Dashboard_Layout', 'ajax_save_layout' ) );
+	add_action( 'wp_ajax_wps_apply_dashboard_layout', array( 'WPS\\CoreSupport\\WPS_Dashboard_Layout', 'ajax_apply_layout' ) );
 
 	// Admin-post action to force scheduled tasks to run immediately.
-	add_action( 'admin_post_timu_run_task_now', __NAMESPACE__ . '\timu_run_task_now' );
+	add_action( 'admin_post_wps_run_task_now', __NAMESPACE__ . '\wps_run_task_now' );
 
 	// Plugin page links and meta.
 	add_filter( 'plugin_action_links_' . wp_support_BASENAME, __NAMESPACE__ . '\\wp_support_plugin_action_links' );
@@ -666,16 +796,25 @@ function wp_support_admin_menu(): void {
  * @return void
  */
 function wp_support_register_module_submenus( string $capability ): void {
-	$catalog = TIMU_Module_Registry::get_catalog_with_status();
+	$catalog = WPS_Module_Registry::get_catalog_with_status();
 	$modules = array_filter(
 		$catalog,
 		function ( $m ) {
-			// Only include active hub modules that are direct children of wp-support.
-			// (i.e., have no requires_hub or requires_hub is empty).
-			return 'hub' === ( $m['type'] ?? '' )
-				&& ! empty( $m['installed'] )
-				&& ! empty( $m['enabled'] )
-				&& empty( $m['requires_hub'] );
+			// Only include active hub modules that are direct children of wp-support
+			// AND have actual module folders (not just catalog entries).
+			if ( 'hub' !== ( $m['type'] ?? '' )
+				|| empty( $m['installed'] )
+				|| empty( $m['enabled'] )
+				|| ! empty( $m['requires_hub'] )
+			) {
+				return false;
+			}
+
+			// Verify module folder actually exists.
+			$module_id = sanitize_key( str_replace( '-support-thisismyurl', '', $m['slug'] ?? '' ) );
+			$module_path = wp_support_PATH . 'modules/hubs/' . $module_id . '/';
+
+			return is_dir( $module_path );
 		}
 	);
 
@@ -719,7 +858,7 @@ function wp_support_handle_capabilities_post(): void {
 		return;
 	}
 
-	$action = isset( $_POST['timu_capability_action'] ) ? sanitize_key( wp_unslash( $_POST['timu_capability_action'] ) ) : '';
+	$action = isset( $_POST['WPS_capability_action'] ) ? sanitize_key( wp_unslash( $_POST['WPS_capability_action'] ) ) : '';
 	if ( 'add' !== $action ) {
 		return;
 	}
@@ -729,33 +868,33 @@ function wp_support_handle_capabilities_post(): void {
 		wp_die( esc_html__( 'You do not have sufficient permissions to manage capabilities.', 'plugin-wp-support-thisismyurl' ) );
 	}
 
-	$nonce = isset( $_POST['timu_capabilities_nonce'] ) ? wp_unslash( $_POST['timu_capabilities_nonce'] ) : '';
-	if ( ! wp_verify_nonce( $nonce, 'timu_capabilities' ) ) {
+	$nonce = isset( $_POST['WPS_capabilities_nonce'] ) ? wp_unslash( $_POST['WPS_capabilities_nonce'] ) : '';
+	if ( ! wp_verify_nonce( $nonce, 'WPS_capabilities' ) ) {
 		wp_die( esc_html__( 'Nonce verification failed. Please try again.', 'plugin-wp-support-thisismyurl' ) );
 	}
 
-	$module_slug    = isset( $_POST['timu_module_slug'] ) ? sanitize_key( wp_unslash( $_POST['timu_module_slug'] ) ) : '';
-	$capability_key = isset( $_POST['timu_capability_key'] ) ? sanitize_key( wp_unslash( $_POST['timu_capability_key'] ) ) : '';
-	$wp_capability  = isset( $_POST['timu_wp_capability'] ) ? sanitize_key( wp_unslash( $_POST['timu_wp_capability'] ) ) : '';
+	$module_slug    = isset( $_POST['WPS_module_slug'] ) ? sanitize_key( wp_unslash( $_POST['WPS_module_slug'] ) ) : '';
+	$capability_key = isset( $_POST['WPS_capability_key'] ) ? sanitize_key( wp_unslash( $_POST['WPS_capability_key'] ) ) : '';
+	$wp_capability  = isset( $_POST['WPS_wp_capability'] ) ? sanitize_key( wp_unslash( $_POST['WPS_wp_capability'] ) ) : '';
 
 	if ( empty( $module_slug ) || empty( $capability_key ) || empty( $wp_capability ) ) {
 		add_settings_error(
-			'timu_capabilities',
-			'timu_capabilities_invalid',
+			'WPS_capabilities',
+			'WPS_capabilities_invalid',
 			esc_html__( 'All fields are required to register a capability mapping.', 'plugin-wp-support-thisismyurl' ),
 			'error'
 		);
 	} else {
-		TIMU_Capabilities::register_capability( $module_slug, $capability_key, $wp_capability );
+		WPS_Capabilities::register_capability( $module_slug, $capability_key, $wp_capability );
 		add_settings_error(
-			'timu_capabilities',
-			'timu_capabilities_saved',
+			'WPS_capabilities',
+			'WPS_capabilities_saved',
 			esc_html__( 'Capability mapping saved.', 'plugin-wp-support-thisismyurl' ),
 			'updated'
 		);
 	}
 
-	$redirect = is_network_admin() ? network_admin_url( 'admin.php?page=timu-capabilities' ) : admin_url( 'admin.php?page=timu-capabilities' );
+	$redirect = is_network_admin() ? network_admin_url( 'admin.php?page=wps-capabilities' ) : admin_url( 'admin.php?page=wps-capabilities' );
 
 	wp_safe_redirect( add_query_arg( 'settings-updated', 'true', $redirect ) );
 	exit;
@@ -771,7 +910,7 @@ function wp_support_render_tab_router(): void {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
 	}
 
-	$context = TIMU_Tab_Navigation::get_current_context();
+	$context = WPS_Tab_Navigation::get_current_context();
 	$hub     = $context['hub'];
 	$spoke   = $context['spoke'];
 	$tab     = $context['tab'];
@@ -780,33 +919,44 @@ function wp_support_render_tab_router(): void {
 	// Block and redirect if hub module is disabled (avoid dead dashboard access).
 	if ( ! empty( $hub ) ) {
 		$slug    = $hub . '-support-thisismyurl';
-		$catalog = TIMU_Module_Registry::get_catalog_with_status();
+		$catalog = WPS_Module_Registry::get_catalog_with_status();
 		$enabled = (bool) ( $catalog[ $slug ]['enabled'] ?? false );
 		if ( ! $enabled ) {
 			$parent_url = is_network_admin() ? network_admin_url( 'admin.php?page=wp-support' ) : admin_url( 'admin.php?page=wp-support' );
 			wp_safe_redirect( $parent_url );
 			exit;
 		}
+
+		// Also block if spoke module is disabled.
+		if ( ! empty( $spoke ) ) {
+			$spoke_slug  = $spoke . '-support-thisismyurl';
+			$spoke_enabled = (bool) ( $catalog[ $spoke_slug ]['enabled'] ?? false );
+			if ( ! $spoke_enabled ) {
+				$parent_url = is_network_admin() ? network_admin_url( 'admin.php?page=wp-support&module=' . $hub ) : admin_url( 'admin.php?page=wp-support&module=' . $hub );
+				wp_safe_redirect( $parent_url );
+				exit;
+			}
+		}
 	}
 
 	// Render breadcrumbs (except at Core level).
 	if ( 'core' !== $level ) {
-		TIMU_Tab_Navigation::render_breadcrumbs( $context );
+		WPS_Tab_Navigation::render_breadcrumbs( $context );
 	}
 
 	// Determine tabs based on level.
 	if ( 'spoke' === $level && ! empty( $hub ) && ! empty( $spoke ) ) {
-		$tabs        = TIMU_Tab_Navigation::get_spoke_tabs( $hub, $spoke );
-		$active_tabs = array_merge( $tabs, timu_get_hub_tabs_for_spoke( $hub, $spoke ) );
-		TIMU_Tab_Navigation::render_tabs( $active_tabs, $tab );
+		$tabs        = WPS_Tab_Navigation::get_spoke_tabs( $hub, $spoke );
+		$active_tabs = array_merge( $tabs, wps_get_hub_tabs_for_spoke( $hub, $spoke ) );
+		WPS_Tab_Navigation::render_tabs( $active_tabs, $tab );
 	} elseif ( 'hub' === $level && ! empty( $hub ) ) {
-		$tabs        = TIMU_Tab_Navigation::get_hub_tabs( $hub );
-		$active_tabs = array_merge( $tabs, timu_get_spoke_tabs_for_hub( $hub ) );
-		TIMU_Tab_Navigation::render_tabs( $active_tabs, $tab );
+		$tabs        = WPS_Tab_Navigation::get_hub_tabs( $hub );
+		$active_tabs = array_merge( $tabs, wps_get_spoke_tabs_for_hub( $hub ) );
+		WPS_Tab_Navigation::render_tabs( $active_tabs, $tab );
 	} else {
-		$tabs        = TIMU_Tab_Navigation::get_core_tabs();
-		$active_tabs = array_merge( $tabs, timu_get_active_hub_tabs() );
-		TIMU_Tab_Navigation::render_tabs( $active_tabs, $tab );
+		$tabs        = WPS_Tab_Navigation::get_core_tabs();
+		$active_tabs = array_merge( $tabs, wps_get_active_hub_tabs() );
+		WPS_Tab_Navigation::render_tabs( $active_tabs, $tab );
 	}
 
 	// Route to appropriate content based on level and tab.
@@ -831,7 +981,7 @@ function wp_support_setup_dashboard_screen(): void {
 	}
 
 	// Register dashboard metaboxes for all levels (core, hub, spoke) on dashboard tab.
-	$context = TIMU_Tab_Navigation::get_current_context();
+	$context = WPS_Tab_Navigation::get_current_context();
 	$tab     = $context['tab'] ?? 'dashboard';
 	$hub_id  = $context['hub'] ?? '';
 	$spoke_id = $context['spoke'] ?? '';
@@ -854,7 +1004,7 @@ function wp_support_setup_dashboard_screen(): void {
 	// Add Help tabs.
 	$screen->add_help_tab(
 		array(
-			'id'      => 'timu_overview',
+			'id'      => 'WPS_overview',
 			'title'   => __( 'Overview', 'plugin-wp-support-thisismyurl' ),
 			'content' => '<p>' . esc_html__( 'This dashboard provides a suite overview, active hubs, recent activity, and quick actions. Use Screen Options to show/hide cards and arrange them.', 'plugin-wp-support-thisismyurl' ) . '</p>',
 		)
@@ -862,7 +1012,7 @@ function wp_support_setup_dashboard_screen(): void {
 
 	$screen->add_help_tab(
 		array(
-			'id'      => 'timu_shortcuts',
+			'id'      => 'WPS_shortcuts',
 			'title'   => __( 'Shortcuts', 'plugin-wp-support-thisismyurl' ),
 			'content' => '<p>' . esc_html__( 'Drag cards to rearrange. Click the toggle arrow to hide/show cards. Use Quick Actions to jump to common tasks.', 'plugin-wp-support-thisismyurl' ) . '</p>',
 		)
@@ -883,7 +1033,7 @@ function wp_support_setup_dashboard_screen(): void {
 	);
 
 	// Use dashboard layout manager to setup widgets with proper ordering.
-	TIMU_Dashboard_Layout::setup_dashboard_screen( $layout_context, $network );
+	WPS_Dashboard_Layout::setup_dashboard_screen( $layout_context, $network );
 }
 
 /**
@@ -910,33 +1060,33 @@ function wp_support_setup_hub_dashboard_screen( string $hub_id ): void {
 	switch ( $hub_id ) {
 		case 'media':
 			add_meta_box(
-				'timu_media_overview',
+				'WPS_media_overview',
 				__( 'Media Overview', 'plugin-wp-support-thisismyurl' ),
-				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_media_overview' ),
+				array( '\\\\WPS\\\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_media_overview' ),
 				$screen->id,
 				'normal',
 				'high'
 			);
 			add_meta_box(
-				'timu_media_activity',
+				'WPS_media_activity',
 				__( 'Media Activity', 'plugin-wp-support-thisismyurl' ),
-				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_media_activity' ),
+				array( '\\\\WPS\\\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_media_activity' ),
 				$screen->id,
 				'normal',
 				'default'
 			);
 			add_meta_box(
-				'timu_media_modules',
+				'WPS_media_modules',
 				$hub_name . ' ' . __( 'Modules', 'plugin-wp-support-thisismyurl' ),
-				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_modules' ),
+				array( '\\\\WPS\\\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_modules' ),
 				$screen->id,
 				'normal',
 				'low'
 			);
 			add_meta_box(
-				'timu_media_quick_actions',
+				'WPS_media_quick_actions',
 				__( 'Media Quick Actions', 'plugin-wp-support-thisismyurl' ),
-				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_quick_actions' ),
+				array( '\\\\WPS\\\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_quick_actions' ),
 				$screen->id,
 				'side',
 				'high'
@@ -945,49 +1095,49 @@ function wp_support_setup_hub_dashboard_screen( string $hub_id ): void {
 
 		case 'vault':
 			add_meta_box(
-				'timu_vault_overview',
+				'WPS_vault_overview',
 				__( 'Vault Overview', 'plugin-wp-support-thisismyurl' ),
-				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_vault_overview' ),
+				array( '\\\\WPS\\\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_vault_overview' ),
 				$screen->id,
 				'normal',
 				'high'
 			);
 			add_meta_box(
-				'timu_vault_activity',
+				'WPS_vault_activity',
 				__( 'Vault Activity', 'plugin-wp-support-thisismyurl' ),
-				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_vault_activity' ),
+				array( '\\\\WPS\\\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_vault_activity' ),
 				$screen->id,
 				'normal',
 				'default'
 			);
 			add_meta_box(
-				'timu_vault_modules',
+				'WPS_vault_modules',
 				$hub_name . ' ' . __( 'Modules', 'plugin-wp-support-thisismyurl' ),
-				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_modules' ),
+				array( '\\\\WPS\\\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_modules' ),
 				$screen->id,
 				'normal',
 				'low'
 			);
 			add_meta_box(
-				'timu_vault_stats',
+				'WPS_vault_stats',
 				__( 'Vault Status', 'plugin-wp-support-thisismyurl' ),
-				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_vault_status' ),
+				array( '\\\\WPS\\\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_vault_status' ),
 				$screen->id,
 				'side',
 				'high'
 			);
 			add_meta_box(
-				'timu_vault_quick_actions',
+				'WPS_vault_quick_actions',
 				__( 'Vault Quick Actions', 'plugin-wp-support-thisismyurl' ),
-				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_quick_actions' ),
+				array( '\\\\WPS\\\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_quick_actions' ),
 				$screen->id,
 				'side',
 				'default'
 			);
 			add_meta_box(
-				'timu_vault_health',
+				'WPS_vault_health',
 				__( 'Vault Health', 'plugin-wp-support-thisismyurl' ),
-				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_vault_health' ),
+				array( '\\\\WPS\\\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_vault_health' ),
 				$screen->id,
 				'side',
 				'low'
@@ -997,9 +1147,9 @@ function wp_support_setup_hub_dashboard_screen( string $hub_id ): void {
 		default:
 			// Generic hub dashboard: always include Modules widget.
 			add_meta_box(
-				'timu_' . sanitize_html_class( $hub_id ) . '_modules',
+				'WPS_' . sanitize_html_class( $hub_id ) . '_modules',
 				$hub_name . ' ' . __( 'Modules', 'plugin-wp-support-thisismyurl' ),
-				array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_modules' ),
+				array( '\\\\WPS\\\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_modules' ),
 				$screen->id,
 				'normal',
 				'default'
@@ -1119,8 +1269,8 @@ function wp_support_render_spoke_content( string $hub_id, string $spoke_id, stri
  *
  * @return array<array{id: string, label: string, icon: string, url: string}>
  */
-function timu_get_active_hub_tabs(): array {
-	$catalog = TIMU_Module_Registry::get_catalog_with_status();
+function wps_get_active_hub_tabs(): array {
+	$catalog = WPS_Module_Registry::get_catalog_with_status();
 	$hubs    = array_filter( $catalog, fn( $m ) => 'hub' === ( $m['type'] ?? '' ) && ! empty( $m['status']['active'] ) );
 	$tabs    = array();
 
@@ -1130,7 +1280,7 @@ function timu_get_active_hub_tabs(): array {
 			'id'    => $hub_id,
 			'label' => esc_html( $hub['name'] ?? ucfirst( $hub_id ) ),
 			'icon'  => 'dashicons-networking',
-			'url'   => TIMU_Tab_Navigation::build_hub_url( $hub_id ),
+			'url'   => WPS_Tab_Navigation::build_hub_url( $hub_id ),
 		);
 	}
 
@@ -1143,8 +1293,8 @@ function timu_get_active_hub_tabs(): array {
  * @param string $hub_id Hub identifier.
  * @return array<array{id: string, label: string, icon: string, url: string}>
  */
-function timu_get_spoke_tabs_for_hub( string $hub_id ): array {
-	$catalog = TIMU_Module_Registry::get_catalog_with_status();
+function wps_get_spoke_tabs_for_hub( string $hub_id ): array {
+	$catalog = WPS_Module_Registry::get_catalog_with_status();
 	$spokes  = array_filter(
 		$catalog,
 		fn( $m ) => 'spoke' === ( $m['type'] ?? '' )
@@ -1161,7 +1311,7 @@ function timu_get_spoke_tabs_for_hub( string $hub_id ): array {
 			'id'    => $spoke_id,
 			'label' => esc_html( $spoke['name'] ?? strtoupper( $spoke_id ) ),
 			'icon'  => 'dashicons-hammer',
-			'url'   => TIMU_Tab_Navigation::build_spoke_url( $hub_id, $spoke_id ),
+			'url'   => WPS_Tab_Navigation::build_spoke_url( $hub_id, $spoke_id ),
 		);
 	}
 
@@ -1175,8 +1325,8 @@ function timu_get_spoke_tabs_for_hub( string $hub_id ): array {
  * @param string $spoke_id Spoke identifier.
  * @return array<array{id: string, label: string, icon: string, url: string}>
  */
-function timu_get_hub_tabs_for_spoke( string $hub_id, string $spoke_id ): array {
-	return timu_get_spoke_tabs_for_hub( $hub_id );
+function wps_get_hub_tabs_for_spoke( string $hub_id, string $spoke_id ): array {
+	return wps_get_spoke_tabs_for_hub( $hub_id );
 }
 
 /**
@@ -1187,7 +1337,7 @@ function timu_get_hub_tabs_for_spoke( string $hub_id, string $spoke_id ): array 
  * @return void
  */
 function wp_support_render_dashboard( string $hub_id = '', string $spoke_id = '' ): void {
-	if ( ! timu_can_access_dashboard() ) {
+	if ( ! wps_can_access_dashboard() ) {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
 	}
 
@@ -1200,7 +1350,7 @@ function wp_support_render_dashboard( string $hub_id = '', string $spoke_id = ''
 	}
 
 	// Core-level dashboard (shown for all levels).
-	$catalog_modules = TIMU_Module_Registry::get_catalog_with_status();
+	$catalog_modules = WPS_Module_Registry::get_catalog_with_status();
 	$modules         = $catalog_modules;
 
 	// Top stats derived from catalog with real activation state.
@@ -1249,10 +1399,10 @@ function wp_support_render_dashboard( string $hub_id = '', string $spoke_id = ''
 		)
 	);
 
-	$activity_logs     = TIMU_Vault::get_logs( 0, 10 );
-	$pending_uploads   = TIMU_Vault::get_pending_contributor_uploads( 5 );
-	$schedule_snapshot = TIMU_Module_Registry::get_schedule_snapshot();
-	$run_now_nonce     = wp_create_nonce( 'timu_run_task_now' );
+	$activity_logs     = WPS_Vault::get_logs( 0, 10 );
+	$pending_uploads   = WPS_Vault::get_pending_contributor_uploads( 5 );
+	$schedule_snapshot = WPS_Module_Registry::get_schedule_snapshot();
+	$run_now_nonce     = wp_create_nonce( 'wps_run_task_now' );
 
 	// Setup metaboxes for dashboard rendering.
 	wp_support_setup_dashboard_screen( $hub_id, $spoke_id );
@@ -1292,7 +1442,7 @@ function wp_support_render_modules(): void {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
 	}
 
-	$catalog_modules = TIMU_Module_Registry::get_catalog_with_status();
+	$catalog_modules = WPS_Module_Registry::get_catalog_with_status();
 	$modules         = $catalog_modules;
 
 	// Top stats derived from catalog with real activation state.
@@ -1355,11 +1505,11 @@ function wp_support_render_network_settings(): void {
 	}
 
 	// Licenses are site-specific; Network Admin view is read-only.
-	TIMU_Vault::maybe_handle_settings_submission( true );
-	TIMU_Vault::maybe_handle_tools_submission( true );
-	TIMU_Vault::maybe_handle_log_action();
+	WPS_Vault::maybe_handle_settings_submission( true );
+	WPS_Vault::maybe_handle_tools_submission( true );
+	WPS_Vault::maybe_handle_log_action();
 
-	$license_state = TIMU_License::get_state( false );
+	$license_state = WPS_License::get_state( false );
 
 	require_once wp_support_PATH . 'includes/views/settings.php';
 }
@@ -1374,12 +1524,12 @@ function wp_support_render_settings_page(): void {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
 	}
 
-	TIMU_License::maybe_handle_submission( false );
-	TIMU_Vault::maybe_handle_settings_submission( false );
-	TIMU_Vault::maybe_handle_tools_submission( false );
-	TIMU_Vault::maybe_handle_log_action();
+	WPS_License::maybe_handle_submission( false );
+	WPS_Vault::maybe_handle_settings_submission( false );
+	WPS_Vault::maybe_handle_tools_submission( false );
+	WPS_Vault::maybe_handle_log_action();
 
-	$license_state = TIMU_License::get_state( false );
+	$license_state = WPS_License::get_state( false );
 
 	require_once wp_support_PATH . 'includes/views/settings.php';
 }
@@ -1389,8 +1539,8 @@ function wp_support_render_settings_page(): void {
  *
  * @return void
  */
-function timu_ajax_toggle_module(): void {
-	check_ajax_referer( 'timu_toggle_module', 'nonce' );
+function wps_ajax_toggle_module(): void {
+	check_ajax_referer( 'WPS_toggle_module', 'nonce' );
 
 	if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
 		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
@@ -1405,7 +1555,7 @@ function timu_ajax_toggle_module(): void {
 	}
 
 	$settings = array( 'enabled' => $enabled );
-	$success  = TIMU_Module_Registry::update_module_settings( $slug, $settings, $network );
+	$success  = WPS_Module_Registry::update_module_settings( $slug, $settings, $network );
 
 	$user      = wp_get_current_user();
 	$user_name = $user && $user->exists() ? $user->display_name : __( 'System', 'plugin-wp-support-thisismyurl' );
@@ -1413,10 +1563,10 @@ function timu_ajax_toggle_module(): void {
 	if ( $success ) {
 		// If module is being enabled, inherit parent dashboard layout.
 		if ( $enabled ) {
-			TIMU_Dashboard_Layout::on_module_activated( $slug, $network );
+			WPS_Dashboard_Layout::on_module_activated( $slug, $network );
 		}
 
-		TIMU_Vault::add_log(
+		WPS_Vault::add_log(
 			'info',
 			0,
 			sprintf( 'Module %1$s %2$s', $slug, $enabled ? 'enabled' : 'disabled' ),
@@ -1430,7 +1580,7 @@ function timu_ajax_toggle_module(): void {
 		);
 		wp_send_json_success( array( 'message' => __( 'Module settings updated.', 'plugin-wp-support-thisismyurl' ) ) );
 	} else {
-		TIMU_Vault::add_log(
+		WPS_Vault::add_log(
 			'error',
 			0,
 			sprintf( 'Failed to toggle %s', $slug ),
@@ -1451,10 +1601,10 @@ function timu_ajax_toggle_module(): void {
  *
  * @return void
  */
-function timu_ajax_install_module(): void {
-	check_ajax_referer( 'timu_module_action', 'nonce' );
+function wps_ajax_install_module(): void {
+	check_ajax_referer( 'WPS_module_action', 'nonce' );
 
-	if ( ! timu_can_install_modules() ) {
+	if ( ! wps_can_install_modules() ) {
 		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
 	}
 
@@ -1463,15 +1613,15 @@ function timu_ajax_install_module(): void {
 	$user_name = $user && $user->exists() ? $user->display_name : __( 'System', 'plugin-wp-support-thisismyurl' );
 
 	if ( empty( $slug ) ) {
-		TIMU_Vault::add_log( 'error', 0, __( 'Install failed: empty slug.', 'plugin-wp-support-thisismyurl' ), 'module_install' );
+		WPS_Vault::add_log( 'error', 0, __( 'Install failed: empty slug.', 'plugin-wp-support-thisismyurl' ), 'module_install' );
 		wp_send_json_error( array( 'message' => __( 'Invalid module slug.', 'plugin-wp-support-thisismyurl' ) ) );
 	}
 
-	$catalog = TIMU_Module_Registry::get_catalog_with_status();
+	$catalog = WPS_Module_Registry::get_catalog_with_status();
 	$module  = $catalog[ $slug ] ?? null;
 
 	if ( empty( $module ) || empty( $module['download_url'] ) ) {
-		TIMU_Vault::add_log(
+		WPS_Vault::add_log(
 			'error',
 			0,
 			sprintf( 'Install failed: no download for %s', $slug ),
@@ -1491,7 +1641,7 @@ function timu_ajax_install_module(): void {
 	require_once ABSPATH . 'wp-admin/includes/file.php';
 
 	if ( ! WP_Filesystem() ) {
-		TIMU_Vault::add_log(
+		WPS_Vault::add_log(
 			'error',
 			0,
 			sprintf( 'Install failed: filesystem credentials needed for %s', $slug ),
@@ -1513,7 +1663,7 @@ function timu_ajax_install_module(): void {
 
 	if ( is_wp_error( $result ) || ! $result ) {
 		$message = is_wp_error( $result ) ? $result->get_error_message() : __( 'Installation failed.', 'plugin-wp-support-thisismyurl' );
-		TIMU_Vault::add_log(
+		WPS_Vault::add_log(
 			'error',
 			0,
 			wp_strip_all_tags( $message ),
@@ -1535,7 +1685,7 @@ function timu_ajax_install_module(): void {
 		$activation   = activate_plugin( $plugin_file, '', $network_wide, false );
 		if ( is_wp_error( $activation ) ) {
 			do_action(
-				'timu_catalog_install_warning',
+				'WPS_catalog_install_warning',
 				array(
 					'slug'    => $slug,
 					'message' => $activation->get_error_message(),
@@ -1543,15 +1693,15 @@ function timu_ajax_install_module(): void {
 			);
 		} else {
 			// Module activated successfully, inherit dashboard layout.
-			TIMU_Dashboard_Layout::on_module_activated( $slug, $network_wide );
+			WPS_Dashboard_Layout::on_module_activated( $slug, $network_wide );
 		}
 	}
 
-	TIMU_Module_Registry::clear_cache();
-	TIMU_Module_Registry::discover_modules();
-	TIMU_Module_Registry::load_catalog();
+	WPS_Module_Registry::clear_cache();
+	WPS_Module_Registry::discover_modules();
+	WPS_Module_Registry::load_catalog();
 
-	TIMU_Vault::add_log(
+	WPS_Vault::add_log(
 		'info',
 		0,
 		sprintf( 'Module installed: %s', $slug ),
@@ -1572,10 +1722,10 @@ function timu_ajax_install_module(): void {
  *
  * @return void
  */
-function timu_ajax_update_module(): void {
-	check_ajax_referer( 'timu_module_action', 'nonce' );
+function wps_ajax_update_module(): void {
+	check_ajax_referer( 'WPS_module_action', 'nonce' );
 
-	if ( ! timu_can_update_modules() ) {
+	if ( ! wps_can_update_modules() ) {
 		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
 	}
 
@@ -1584,16 +1734,16 @@ function timu_ajax_update_module(): void {
 	$user_name = $user && $user->exists() ? $user->display_name : __( 'System', 'plugin-wp-support-thisismyurl' );
 
 	if ( empty( $slug ) ) {
-		TIMU_Vault::add_log( 'error', 0, __( 'Update failed: empty slug.', 'plugin-wp-support-thisismyurl' ), 'module_update' );
+		WPS_Vault::add_log( 'error', 0, __( 'Update failed: empty slug.', 'plugin-wp-support-thisismyurl' ), 'module_update' );
 		wp_send_json_error( array( 'message' => __( 'Invalid module slug.', 'plugin-wp-support-thisismyurl' ) ) );
 	}
 
-	$catalog   = TIMU_Module_Registry::get_catalog_with_status();
-	$installed = TIMU_Module_Registry::get_module( $slug );
+	$catalog   = WPS_Module_Registry::get_catalog_with_status();
+	$installed = WPS_Module_Registry::get_module( $slug );
 	$module    = $catalog[ $slug ] ?? null;
 
 	if ( empty( $module ) || empty( $module['download_url'] ) || empty( $installed['file'] ) ) {
-		TIMU_Vault::add_log(
+		WPS_Vault::add_log(
 			'error',
 			0,
 			sprintf( 'Update failed: missing data for %s', $slug ),
@@ -1612,7 +1762,7 @@ function timu_ajax_update_module(): void {
 	require_once ABSPATH . 'wp-admin/includes/file.php';
 
 	if ( ! WP_Filesystem() ) {
-		TIMU_Vault::add_log(
+		WPS_Vault::add_log(
 			'error',
 			0,
 			sprintf( 'Update failed: filesystem credentials needed for %s', $slug ),
@@ -1646,7 +1796,7 @@ function timu_ajax_update_module(): void {
 
 	if ( is_wp_error( $result ) || ! $result ) {
 		$message = is_wp_error( $result ) ? $result->get_error_message() : __( 'Update failed.', 'plugin-wp-support-thisismyurl' );
-		TIMU_Vault::add_log(
+		WPS_Vault::add_log(
 			'error',
 			0,
 			wp_strip_all_tags( $message ),
@@ -1661,11 +1811,11 @@ function timu_ajax_update_module(): void {
 		wp_send_json_error( array( 'message' => $message ) );
 	}
 
-	TIMU_Module_Registry::clear_cache();
-	TIMU_Module_Registry::discover_modules();
-	TIMU_Module_Registry::load_catalog();
+	WPS_Module_Registry::clear_cache();
+	WPS_Module_Registry::discover_modules();
+	WPS_Module_Registry::load_catalog();
 
-	TIMU_Vault::add_log(
+	WPS_Vault::add_log(
 		'info',
 		0,
 		sprintf( 'Module updated: %s', $slug ),
@@ -1686,12 +1836,12 @@ function timu_ajax_update_module(): void {
  *
  * @return void
  */
-function timu_ajax_broadcast_license(): void {
+function wps_ajax_broadcast_license(): void {
 	if ( empty( $_POST['nonce'] ) ) {
 		wp_send_json_error( array( 'message' => __( 'Nonce failed.', 'plugin-wp-support-thisismyurl' ) ) );
 	}
 
-	if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'timu_broadcast_license' ) ) {
+	if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'WPS_broadcast_license' ) ) {
 		wp_send_json_error( array( 'message' => __( 'Nonce verification failed.', 'plugin-wp-support-thisismyurl' ) ) );
 	}
 
@@ -1720,7 +1870,7 @@ function timu_ajax_broadcast_license(): void {
 	}
 
 	// Call the license broadcast method.
-	$result = TIMU_License::broadcast_network_key( $key, $site_ids, (bool) $auto_broadcast );
+	$result = WPS_License::broadcast_network_key( $key, $site_ids, (bool) $auto_broadcast );
 
 	wp_send_json_success( $result );
 }
@@ -1730,8 +1880,8 @@ function timu_ajax_broadcast_license(): void {
  *
  * @return void
  */
-function timu_ajax_save_metabox_state(): void {
-	if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'timu_metabox_state' ) ) {
+function wps_ajax_save_metabox_state(): void {
+	if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'WPS_metabox_state' ) ) {
 		wp_send_json_error( array( 'message' => __( 'Nonce verification failed.', 'plugin-wp-support-thisismyurl' ) ) );
 	}
 
@@ -1745,7 +1895,7 @@ function timu_ajax_save_metabox_state(): void {
 		wp_send_json_error( array( 'message' => __( 'Invalid state data.', 'plugin-wp-support-thisismyurl' ) ) );
 	}
 
-	update_user_meta( get_current_user_id(), 'timu_metabox_state', $state );
+	update_user_meta( get_current_user_id(), 'WPS_metabox_state', $state );
 	
 	wp_send_json_success();
 }
@@ -1755,8 +1905,8 @@ function timu_ajax_save_metabox_state(): void {
  *
  * @return void
  */
-function timu_ajax_save_postbox_order(): void {
-	check_ajax_referer( 'timu_postbox_state', 'nonce' );
+function wps_ajax_save_postbox_order(): void {
+	check_ajax_referer( 'WPS_postbox_state', 'nonce' );
 
 	if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
 		wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
@@ -1777,7 +1927,7 @@ function timu_ajax_save_postbox_order(): void {
 	$user_id = get_current_user_id();
 
 	// Get existing state
-	$all_states = get_user_meta( $user_id, 'timu_postbox_states', true );
+	$all_states = get_user_meta( $user_id, 'WPS_postbox_states', true );
 	if ( ! is_array( $all_states ) ) {
 		$all_states = array();
 	}
@@ -1786,7 +1936,7 @@ function timu_ajax_save_postbox_order(): void {
 	$all_states[ $page ]['order'] = $order;
 
 	// Save back to JSON store
-	update_user_meta( $user_id, 'timu_postbox_states', $all_states );
+	update_user_meta( $user_id, 'WPS_postbox_states', $all_states );
 
 	error_log( 'SAVED POSTBOX ORDER: user=' . $user_id . ', page=' . $page . ', order=' . json_encode( $order ) );
 
@@ -1802,8 +1952,8 @@ function timu_ajax_save_postbox_order(): void {
  *
  * @return void
  */
-function timu_ajax_save_postbox_state(): void {
-	check_ajax_referer( 'timu_postbox_state', 'nonce' );
+function wps_ajax_save_postbox_state(): void {
+	check_ajax_referer( 'WPS_postbox_state', 'nonce' );
 
 	if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
 		wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
@@ -1826,7 +1976,7 @@ function timu_ajax_save_postbox_state(): void {
 	$user_id = get_current_user_id();
 
 	// Get existing state
-	$all_states = get_user_meta( $user_id, 'timu_postbox_states', true );
+	$all_states = get_user_meta( $user_id, 'WPS_postbox_states', true );
 	if ( ! is_array( $all_states ) ) {
 		$all_states = array();
 	}
@@ -1835,7 +1985,7 @@ function timu_ajax_save_postbox_state(): void {
 	$all_states[ $page ]['closed'] = $closed;
 
 	// Save back to JSON store
-	update_user_meta( $user_id, 'timu_postbox_states', $all_states );
+	update_user_meta( $user_id, 'WPS_postbox_states', $all_states );
 
 	error_log( 'SAVED POSTBOX STATE: user=' . $user_id . ', page=' . $page . ', closed=' . json_encode( $closed ) );
 
@@ -1902,7 +2052,7 @@ function wp_support_resolve_download_url( array $module ): string {
 	 * @param string $url    Resolved URL.
 	 * @param array  $module Module data.
 	 */
-	$url = (string) apply_filters( 'timu_resolve_download_url', $url, $module );
+	$url = (string) apply_filters( 'WPS_resolve_download_url', $url, $module );
 
 	return esc_url_raw( $url );
 }
@@ -1912,8 +2062,8 @@ function wp_support_resolve_download_url( array $module ): string {
  *
  * @return void
  */
-function timu_run_task_now(): void {
-	if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'timu_run_task_now' ) ) {
+function wps_run_task_now(): void {
+	if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'wps_run_task_now' ) ) {
 		$redirect_url = wp_get_referer();
 		if ( empty( $redirect_url ) ) {
 			$redirect_url = admin_url();
@@ -1932,7 +2082,7 @@ function timu_run_task_now(): void {
 	}
 
 	$hook          = isset( $_POST['hook'] ) ? sanitize_text_field( wp_unslash( $_POST['hook'] ) ) : '';
-	$allowed_hooks = array( 'timu_refresh_modules', 'timu_vault_queue_runner' );
+	$allowed_hooks = array( 'WPS_refresh_modules', 'WPS_vault_queue_runner' );
 	if ( ! in_array( $hook, $allowed_hooks, true ) ) {
 		$redirect_url = wp_get_referer();
 		if ( empty( $redirect_url ) ) {
@@ -1948,7 +2098,7 @@ function timu_run_task_now(): void {
 	$user      = wp_get_current_user();
 	$user_name = $user && $user->exists() ? $user->display_name : __( 'System', 'plugin-wp-support-thisismyurl' );
 
-	TIMU_Vault::add_log(
+	WPS_Vault::add_log(
 		'info',
 		0,
 		sprintf( 'Manual run triggered for %s', $hook ),
@@ -1965,7 +2115,7 @@ function timu_run_task_now(): void {
 	if ( empty( $redirect_url ) ) {
 		$redirect_url = admin_url();
 	}
-	$redirect = add_query_arg( 'timu_run_now', '1', $redirect_url );
+	$redirect = add_query_arg( 'wps_run_now', '1', $redirect_url );
 	wp_safe_redirect( $redirect );
 	exit;
 }
@@ -1987,13 +2137,13 @@ function wp_support_plugin_action_links( array $links ): array {
 	if ( current_user_can( 'manage_options' ) ) {
 		$settings_link = sprintf(
 			'<a href="%s">%s</a>',
-			esc_url( admin_url( 'admin.php?page=wp-support&timu_tab=settings' ) ),
+			esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=settings' ) ),
 			esc_html__( 'Settings', 'plugin-wp-support-thisismyurl' )
 		);
 	} elseif ( is_multisite() && current_user_can( 'manage_network_options' ) ) {
 		$settings_link = sprintf(
 			'<a href="%s">%s</a>',
-			esc_url( admin_url( 'admin.php?page=timu-core-network-settings', 'network' ) ),
+			esc_url( admin_url( 'admin.php?page=wps-core-network-settings', 'network' ) ),
 			esc_html__( 'Network Settings', 'plugin-wp-support-thisismyurl' )
 		);
 	}
@@ -2080,13 +2230,13 @@ function wp_support_postbox_classes( array $classes, string $box_id ): array {
  * @return mixed
  */
 function wp_support_get_metabox_order( $result ) {
-	$context = TIMU_Tab_Navigation::get_current_context();
+	$context = WPS_Tab_Navigation::get_current_context();
 	$hub_id  = $context['hub'] ?? '';
 	$state_key = 'wp-support' . ( $hub_id ? '-' . $hub_id : '' );
 	
 	// Get all states from JSON store
 	$user_id    = get_current_user_id();
-	$all_states = get_user_meta( $user_id, 'timu_postbox_states', true );
+	$all_states = get_user_meta( $user_id, 'WPS_postbox_states', true );
 
 	if ( ! is_array( $all_states ) || ! isset( $all_states[ $state_key ]['order'] ) ) {
 		error_log( 'LOADING METABOX ORDER: page=' . $state_key . ', no data found' );
@@ -2115,7 +2265,7 @@ function wp_support_get_metabox_order( $result ) {
 	if ( ! $valid ) {
 		error_log( 'LOADING METABOX ORDER: page=' . $state_key . ' invalid data, purging entry' );
 		unset( $all_states[ $state_key ] );
-		update_user_meta( $user_id, 'timu_postbox_states', $all_states );
+		update_user_meta( $user_id, 'WPS_postbox_states', $all_states );
 		return false;
 	}
 
@@ -2153,13 +2303,13 @@ function wp_support_get_metabox_order( $result ) {
  * @return mixed
  */
 function wp_support_get_closed_postboxes( $result ) {
-	$context = TIMU_Tab_Navigation::get_current_context();
+	$context = WPS_Tab_Navigation::get_current_context();
 	$hub_id  = $context['hub'] ?? '';
 	$state_key = 'wp-support' . ( $hub_id ? '-' . $hub_id : '' );
 	
 	// Get all states from JSON store
 	$user_id    = get_current_user_id();
-	$all_states = get_user_meta( $user_id, 'timu_postbox_states', true );
+	$all_states = get_user_meta( $user_id, 'WPS_postbox_states', true );
 
 	if ( ! is_array( $all_states ) || ! isset( $all_states[ $state_key ]['closed'] ) ) {
 		error_log( 'LOADING CLOSED POSTBOXES: page=' . $state_key . ', no data found' );
@@ -2182,7 +2332,7 @@ function wp_support_get_closed_postboxes( $result ) {
 	if ( ! $valid ) {
 		error_log( 'LOADING CLOSED POSTBOXES: page=' . $state_key . ' invalid data, purging entry' );
 		unset( $all_states[ $state_key ] );
-		update_user_meta( $user_id, 'timu_postbox_states', $all_states );
+		update_user_meta( $user_id, 'WPS_postbox_states', $all_states );
 		return false;
 	}
 
@@ -2215,25 +2365,25 @@ function wp_support_admin_enqueue( string $hook ): void {
 	// Cache-bust using current timestamp to force reload for testing.
 	$cache_bust = time();
 
-	// Enqueue modern design system (shared across all TIMU plugins).
+	// Enqueue modern design system (shared across all WPS plugins).
 	wp_enqueue_style(
-		'timu-ui-system',
-		wp_support_URL . 'assets/css/timu-ui-system.css',
+		'wps-ui-system',
+		wp_support_URL . 'assets/css/wps-ui-system.css',
 		array(),
 		$cache_bust
 	);
 
 	wp_enqueue_style(
-		'timu-core-admin',
+		'wps-core-admin',
 		wp_support_URL . 'assets/css/admin.css',
-		array( 'timu-ui-system' ),
+		array( 'wps-ui-system' ),
 		$cache_bust
 	);
 
 	wp_enqueue_style(
-		'timu-tab-navigation',
+		'wps-tab-navigation',
 		wp_support_URL . 'assets/css/tab-navigation.css',
-		array( 'timu-ui-system' ),
+		array( 'wps-ui-system' ),
 		$cache_bust
 	);
 
@@ -2246,7 +2396,7 @@ function wp_support_admin_enqueue( string $hook ): void {
 		
 		// Add custom script to handle context-specific state saving.
 		wp_enqueue_script(
-			'timu-postbox-state',
+			'wps-postbox-state',
 			wp_support_URL . 'assets/js/postbox-state.js',
 			array( 'jquery', 'postbox' ),
 			$cache_bust,
@@ -2254,21 +2404,21 @@ function wp_support_admin_enqueue( string $hook ): void {
 		);
 		
 		// Get current context for unique state key.
-		$context = TIMU_Tab_Navigation::get_current_context();
+		$context = WPS_Tab_Navigation::get_current_context();
 		$hub_id  = $context['hub'] ?? '';
 		$state_key = 'wp-support' . ( $hub_id ? '-' . $hub_id : '' );
 		
 		wp_localize_script(
-			'timu-postbox-state',
-			'timuPostboxState',
+			'wps-postbox-state',
+			'wpsPostboxState',
 			array(
 				'stateKey' => $state_key,
-				'nonce'    => wp_create_nonce( 'timu_postbox_state' ),
+				'nonce'    => wp_create_nonce( 'WPS_postbox_state' ),
 			)
 		);
 		
 		wp_enqueue_style(
-			'timu-dashboard-drag',
+			'wps-dashboard-drag',
 			wp_support_URL . 'assets/css/dashboard-drag.css',
 			array(),
 			$cache_bust
@@ -2278,7 +2428,7 @@ function wp_support_admin_enqueue( string $hook ): void {
 	}
 
 	wp_enqueue_script(
-		'timu-core-admin',
+		'wps-core-admin',
 		wp_support_URL . 'assets/js/admin.js',
 		array( 'jquery' ),
 		$cache_bust,
@@ -2287,11 +2437,11 @@ function wp_support_admin_enqueue( string $hook ): void {
 
 	// Localize script for AJAX and i18n.
 	wp_localize_script(
-		'timu-core-admin',
-		'timuAdminData',
+		'wps-core-admin',
+		'wpsAdminData',
 		array(
-			'toggleNonce' => wp_create_nonce( 'timu_toggle_module' ),
-			'actionNonce' => wp_create_nonce( 'timu_module_action' ),
+			'toggleNonce' => wp_create_nonce( 'WPS_toggle_module' ),
+			'actionNonce' => wp_create_nonce( 'WPS_module_action' ),
 			'i18n'        => array(
 				'enabled'      => __( 'Enabled', 'plugin-wp-support-thisismyurl' ),
 				'disabled'     => __( 'Disabled', 'plugin-wp-support-thisismyurl' ),
@@ -2308,7 +2458,7 @@ function wp_support_admin_enqueue( string $hook ): void {
 
 	// Enqueue module actions script (install/update/activate).
 	wp_enqueue_script(
-		'timu-module-actions',
+		'wps-module-actions',
 		wp_support_URL . 'assets/js/module-actions.js',
 		array(),
 		$cache_bust,
@@ -2317,11 +2467,11 @@ function wp_support_admin_enqueue( string $hook ): void {
 
 	// Localize module actions script with nonce and AJAX URL.
 	wp_localize_script(
-		'timu-module-actions',
-		'timuModuleActions',
+		'wps-module-actions',
+		'wpsModuleActions',
 		array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
-			'nonce'   => wp_create_nonce( 'timu_module_actions' ),
+			'nonce'   => wp_create_nonce( 'WPS_module_actions' ),
 		)
 	);
 }
@@ -2333,8 +2483,8 @@ function wp_support_admin_enqueue( string $hook ): void {
  * @return array Modified exporters.
  */
 function wp_support_register_privacy_exporters( array $exporters ): array {
-	$exporters['timu-vault-exporter'] = array(
-		'exporter_friendly_name' => __( 'TIMU Vault', 'plugin-wp-support-thisismyurl' ),
+	$exporters['wps-vault-exporter'] = array(
+		'exporter_friendly_name' => __( 'WPS Vault', 'plugin-wp-support-thisismyurl' ),
 		'callback'               => __NAMESPACE__ . '\\wp_support_vault_exporter_callback',
 	);
 
@@ -2378,7 +2528,7 @@ function wp_support_vault_exporter_callback( string $email_address, int $page = 
 			'fields'         => 'ids',
 			'meta_query'     => array(
 				array(
-					'key'   => '_timu_vault_uploader_user_id',
+					'key'   => '_WPS_vault_uploader_user_id',
 					'value' => (int) $user->ID,
 				),
 			),
@@ -2391,17 +2541,17 @@ function wp_support_vault_exporter_callback( string $email_address, int $page = 
 		foreach ( $query->posts as $attachment_id ) {
 			$attachment_id  = (int) $attachment_id;
 			$file_path      = (string) get_attached_file( $attachment_id );
-			$vault_path     = (string) get_post_meta( $attachment_id, '_timu_vault_path', true );
-			$vault_mode     = (string) get_post_meta( $attachment_id, '_timu_vault_mode', true );
-			$vault_created  = (string) get_post_meta( $attachment_id, '_timu_vault_created', true );
-			$hash_raw       = (string) get_post_meta( $attachment_id, '_timu_vault_sha256_raw', true );
-			$hash_store     = (string) get_post_meta( $attachment_id, '_timu_vault_sha256_store', true );
-			$anonymized_at  = (string) get_post_meta( $attachment_id, '_timu_vault_anonymized', true );
-			$encrypted_flag = (string) get_post_meta( $attachment_id, '_timu_vault_encrypted', true );
+			$vault_path     = (string) get_post_meta( $attachment_id, '_WPS_vault_path', true );
+			$vault_mode     = (string) get_post_meta( $attachment_id, '_WPS_vault_mode', true );
+			$vault_created  = (string) get_post_meta( $attachment_id, '_WPS_vault_created', true );
+			$hash_raw       = (string) get_post_meta( $attachment_id, '_WPS_vault_sha256_raw', true );
+			$hash_store     = (string) get_post_meta( $attachment_id, '_WPS_vault_sha256_store', true );
+			$anonymized_at  = (string) get_post_meta( $attachment_id, '_WPS_vault_anonymized', true );
+			$encrypted_flag = (string) get_post_meta( $attachment_id, '_WPS_vault_encrypted', true );
 
 			$items[] = array(
-				'group_id'    => 'timu-vault',
-				'group_label' => __( 'TIMU Vault', 'plugin-wp-support-thisismyurl' ),
+				'group_id'    => 'wps-vault',
+				'group_label' => __( 'WPS Vault', 'plugin-wp-support-thisismyurl' ),
 				'item_id'     => 'attachment-' . $attachment_id,
 				'data'        => array(
 					array(
@@ -2465,8 +2615,8 @@ function wp_support_vault_exporter_callback( string $email_address, int $page = 
  * @return array Modified erasers.
  */
 function wp_support_register_privacy_erasers( array $erasers ): array {
-	$erasers['timu-vault-eraser'] = array(
-		'eraser_friendly_name' => __( 'TIMU Vault (anonymize originals & derivatives)', 'plugin-wp-support-thisismyurl' ),
+	$erasers['wps-vault-eraser'] = array(
+		'eraser_friendly_name' => __( 'WPS Vault (anonymize originals & derivatives)', 'plugin-wp-support-thisismyurl' ),
 		'callback'             => __NAMESPACE__ . '\\wp_support_vault_eraser_callback',
 	);
 	return $erasers;
@@ -2502,7 +2652,7 @@ function wp_support_vault_eraser_callback( string $email_address, int $page = 1 
 	}
 
 	// Delegate to Vault anonymization (retains originals, scrubs personal data).
-	$result = TIMU_Vault::erase_user_personal_data( (int) $user->ID, max( 1, $page ), 50 );
+	$result = WPS_Vault::erase_user_personal_data( (int) $user->ID, max( 1, $page ), 50 );
 
 	// Ensure messages are sanitized.
 	$messages = array_map(
@@ -2537,7 +2687,7 @@ add_action( 'plugins_loaded', __NAMESPACE__ . '\\wp_support_init' );
  *
  * [1.2601.71920] - 2026-01-07 19:35
  * - Issue #33: In-dashboard install/update flows
- * - Added AJAX handlers: timu_ajax_install_module and timu_ajax_update_module
+ * - Added AJAX handlers: wps_ajax_install_module and wps_ajax_update_module
  * - Implement WP_Plugin_Upgrader for direct installation from catalog
  * - Auto-activate installed modules after installation
  * - Support for multisite with network-wide install/update
@@ -2571,7 +2721,7 @@ add_action( 'plugins_loaded', __NAMESPACE__ . '\\wp_support_init' );
  *
  * [1.2601.71818] - 2026-01-07 18:18
  * - Completed Issue #1: Support Menu & Modules Dashboard
- * - Created TIMU_Module_Registry class for action-based module discovery
+ * - Created WPS_Module_Registry class for action-based module discovery
  * - Implemented Support top-level menu in both site and network admin
  * - Built responsive modules dashboard with stats, filters, and toggle controls
  * - Added AJAX handler for module enable/disable with multisite support
@@ -2588,7 +2738,7 @@ add_action( 'plugins_loaded', __NAMESPACE__ . '\\wp_support_init' );
  *   ✓ Feature toggles work via AJAX with visual feedback
  * - Files Modified:
  *   - core-support-thisismyurl.php: Added menu structure, AJAX handlers
- *   - includes/class-timu-module-registry.php: Full registry implementation
+ * - includes/class-wps-module-registry.php: Full registry implementation
  *   - includes/views/dashboard.php: Dashboard template with module cards
  *   - assets/css/admin.css: Extended with toggle, grid, and loading styles
  *   - assets/js/admin.js: Dashboard controller with AJAX and filtering
@@ -2610,24 +2760,24 @@ add_action( 'plugins_loaded', __NAMESPACE__ . '\\wp_support_init' );
  * @return void
  */
 function render_settings_module_registry(): void {
-	$enabled   = (bool) get_option( 'timu_module_discovery_enabled', true );
-	$frequency = get_option( 'timu_module_discovery_frequency', 'on-demand' );
+	$enabled   = (bool) get_option( 'WPS_module_discovery_enabled', true );
+	$frequency = get_option( 'WPS_module_discovery_frequency', 'on-demand' );
 	?>
-	<form method="post" class="timu-settings-form" data-settings-group="module_registry" style="max-width: 600px;">
-		<?php wp_nonce_field( 'timu_settings_module_registry', 'timu_settings_nonce' ); ?>
+	<form method="post" class=\"wps-settings-form\" data-settings-group="module_registry" style="max-width: 600px;">
+		<?php wp_nonce_field( 'WPS_settings_module_registry', 'WPS_settings_nonce' ); ?>
 		<table class="form-table" role="presentation">
 			<tbody>
 				<tr>
-					<th scope="row"><label for="timu_module_discovery_enabled"><?php esc_html_e( 'Auto-Discovery', 'plugin-wp-support-thisismyurl' ); ?></label></th>
+					<th scope="row"><label for="WPS_module_discovery_enabled"><?php esc_html_e( 'Auto-Discovery', 'plugin-wp-support-thisismyurl' ); ?></label></th>
 					<td>
-						<input type="checkbox" id="timu_module_discovery_enabled" name="timu_module_discovery_enabled" value="1" <?php checked( $enabled, true ); ?> />
-						<label for="timu_module_discovery_enabled"><?php esc_html_e( 'Automatically discover modules from installed plugins', 'plugin-wp-support-thisismyurl' ); ?></label>
+						<input type="checkbox" id="WPS_module_discovery_enabled" name="WPS_module_discovery_enabled" value="1" <?php checked( $enabled, true ); ?> />
+						<label for="WPS_module_discovery_enabled"><?php esc_html_e( 'Automatically discover modules from installed plugins', 'plugin-wp-support-thisismyurl' ); ?></label>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><label for="timu_module_discovery_frequency"><?php esc_html_e( 'Discovery Frequency', 'plugin-wp-support-thisismyurl' ); ?></label></th>
+					<th scope="row"><label for="WPS_module_discovery_frequency"><?php esc_html_e( 'Discovery Frequency', 'plugin-wp-support-thisismyurl' ); ?></label></th>
 					<td>
-						<select id="timu_module_discovery_frequency" name="timu_module_discovery_frequency">
+						<select id="WPS_module_discovery_frequency" name="WPS_module_discovery_frequency">
 							<option value="on-demand" <?php selected( $frequency, 'on-demand' ); ?>><?php esc_html_e( 'On-Demand (Manual)', 'plugin-wp-support-thisismyurl' ); ?></option>
 							<option value="daily" <?php selected( $frequency, 'daily' ); ?>><?php esc_html_e( 'Daily', 'plugin-wp-support-thisismyurl' ); ?></option>
 							<option value="weekly" <?php selected( $frequency, 'weekly' ); ?>><?php esc_html_e( 'Weekly', 'plugin-wp-support-thisismyurl' ); ?></option>
@@ -2637,11 +2787,11 @@ function render_settings_module_registry(): void {
 				</tr>
 			</tbody>
 		</table>
-		<div class="timu-settings-save-status" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
+		<div class=\"wps-settings-save-status\" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
 	</form>
 	<hr style="margin-top: 20px;">
 	<p>
-		<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?action=timu_rescan_modules' ), 'timu_rescan_modules' ) ); ?>" class="button"><?php esc_html_e( 'Rescan Modules Now', 'plugin-wp-support-thisismyurl' ); ?></a>
+		<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?action=WPS_rescan_modules' ), 'WPS_rescan_modules' ) ); ?>" class="button"><?php esc_html_e( 'Rescan Modules Now', 'plugin-wp-support-thisismyurl' ); ?></a>
 	</p>
 	<?php
 }
@@ -2652,18 +2802,18 @@ function render_settings_module_registry(): void {
  * @return void
  */
 function render_settings_capabilities(): void {
-	$dashboard_role = get_option( 'timu_capability_dashboard_role', 'manage_options' );
-	$install_roles  = (array) get_option( 'timu_capability_install_roles', array( 'manage_options' ) );
-	$update_roles   = (array) get_option( 'timu_capability_update_roles', array( 'manage_options' ) );
+	$dashboard_role = get_option( 'WPS_capability_dashboard_role', 'manage_options' );
+	$install_roles  = (array) get_option( 'WPS_capability_install_roles', array( 'manage_options' ) );
+	$update_roles   = (array) get_option( 'WPS_capability_update_roles', array( 'manage_options' ) );
 	?>
-	<form method="post" class="timu-settings-form" data-settings-group="capabilities" style="max-width: 600px;">
-		<?php wp_nonce_field( 'timu_settings_capabilities', 'timu_settings_nonce' ); ?>
+	<form method="post" class=\"wps-settings-form\" data-settings-group="capabilities" style="max-width: 600px;">
+		<?php wp_nonce_field( 'WPS_settings_capabilities', 'WPS_settings_nonce' ); ?>
 		<table class="form-table" role="presentation">
 			<tbody>
 				<tr>
-					<th scope="row"><label for="timu_capability_dashboard_role"><?php esc_html_e( 'Dashboard Access', 'plugin-wp-support-thisismyurl' ); ?></label></th>
+					<th scope="row"><label for="WPS_capability_dashboard_role"><?php esc_html_e( 'Dashboard Access', 'plugin-wp-support-thisismyurl' ); ?></label></th>
 					<td>
-						<select id="timu_capability_dashboard_role" name="timu_capability_dashboard_role">
+						<select id="WPS_capability_dashboard_role" name="WPS_capability_dashboard_role">
 							<option value="manage_options" <?php selected( $dashboard_role, 'manage_options' ); ?>><?php esc_html_e( 'Admin (manage_options)', 'plugin-wp-support-thisismyurl' ); ?></option>
 							<option value="manage_network_options" <?php selected( $dashboard_role, 'manage_network_options' ); ?>><?php esc_html_e( 'Super Admin (manage_network_options)', 'plugin-wp-support-thisismyurl' ); ?></option>
 						</select>
@@ -2673,22 +2823,22 @@ function render_settings_capabilities(): void {
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Install Permissions', 'plugin-wp-support-thisismyurl' ); ?></th>
 					<td>
-						<label><input type="checkbox" name="timu_capability_install_roles[]" value="manage_options" <?php checked( in_array( 'manage_options', $install_roles, true ) ); ?> /> <?php esc_html_e( 'Admin', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
-						<label><input type="checkbox" name="timu_capability_install_roles[]" value="manage_network_options" <?php checked( in_array( 'manage_network_options', $install_roles, true ) ); ?> /> <?php esc_html_e( 'Super Admin', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<label><input type="checkbox" name="WPS_capability_install_roles[]" value="manage_options" <?php checked( in_array( 'manage_options', $install_roles, true ) ); ?> /> <?php esc_html_e( 'Admin', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<label><input type="checkbox" name="WPS_capability_install_roles[]" value="manage_network_options" <?php checked( in_array( 'manage_network_options', $install_roles, true ) ); ?> /> <?php esc_html_e( 'Super Admin', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
 						<p class="description"><?php esc_html_e( 'Which roles can install modules.', 'plugin-wp-support-thisismyurl' ); ?></p>
 					</td>
 				</tr>
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Update Permissions', 'plugin-wp-support-thisismyurl' ); ?></th>
 					<td>
-						<label><input type="checkbox" name="timu_capability_update_roles[]" value="manage_options" <?php checked( in_array( 'manage_options', $update_roles, true ) ); ?> /> <?php esc_html_e( 'Admin', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
-						<label><input type="checkbox" name="timu_capability_update_roles[]" value="manage_network_options" <?php checked( in_array( 'manage_network_options', $update_roles, true ) ); ?> /> <?php esc_html_e( 'Super Admin', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<label><input type="checkbox" name="WPS_capability_update_roles[]" value="manage_options" <?php checked( in_array( 'manage_options', $update_roles, true ) ); ?> /> <?php esc_html_e( 'Admin', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<label><input type="checkbox" name="WPS_capability_update_roles[]" value="manage_network_options" <?php checked( in_array( 'manage_network_options', $update_roles, true ) ); ?> /> <?php esc_html_e( 'Super Admin', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
 						<p class="description"><?php esc_html_e( 'Which roles can update modules.', 'plugin-wp-support-thisismyurl' ); ?></p>
 					</td>
 				</tr>
 			</tbody>
 		</table>
-		<div class="timu-settings-save-status" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
+		<div class=\"wps-settings-save-status\" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
 	</form>
 	<?php
 }
@@ -2699,34 +2849,34 @@ function render_settings_capabilities(): void {
  * @return void
  */
 function render_settings_dashboard(): void {
-	$default_cols   = (int) get_option( 'timu_dashboard_default_columns', 2 );
-	$sticky_widgets = (array) get_option( 'timu_dashboard_sticky_widgets', array() );
-	$widget_sorting = get_option( 'timu_dashboard_widget_sorting', 'drag-order' );
+	$default_cols   = (int) get_option( 'WPS_dashboard_default_columns', 2 );
+	$sticky_widgets = (array) get_option( 'WPS_dashboard_sticky_widgets', array() );
+	$widget_sorting = get_option( 'WPS_dashboard_widget_sorting', 'drag-order' );
 	?>
-	<form method="post" class="timu-settings-form" data-settings-group="dashboard" style="max-width: 600px;">
-		<?php wp_nonce_field( 'timu_settings_dashboard', 'timu_settings_nonce' ); ?>
+	<form method="post" class=\"wps-settings-form\" data-settings-group="dashboard" style="max-width: 600px;">
+		<?php wp_nonce_field( 'WPS_settings_dashboard', 'WPS_settings_nonce' ); ?>
 		<table class="form-table" role="presentation">
 			<tbody>
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Default Column Layout', 'plugin-wp-support-thisismyurl' ); ?></th>
 					<td>
-						<label><input type="radio" name="timu_dashboard_default_columns" value="1" <?php checked( $default_cols, 1 ); ?> /> <?php esc_html_e( '1 Column', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
-						<label><input type="radio" name="timu_dashboard_default_columns" value="2" <?php checked( $default_cols, 2 ); ?> /> <?php esc_html_e( '2 Columns', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<label><input type="radio" name="WPS_dashboard_default_columns" value="1" <?php checked( $default_cols, 1 ); ?> /> <?php esc_html_e( '1 Column', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<label><input type="radio" name="WPS_dashboard_default_columns" value="2" <?php checked( $default_cols, 2 ); ?> /> <?php esc_html_e( '2 Columns', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
 						<p class="description"><?php esc_html_e( 'Default dashboard layout for new users.', 'plugin-wp-support-thisismyurl' ); ?></p>
 					</td>
 				</tr>
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Sticky Widgets', 'plugin-wp-support-thisismyurl' ); ?></th>
 					<td>
-						<label><input type="checkbox" name="timu_dashboard_sticky_widgets[]" value="timu_quick_actions" <?php checked( in_array( 'timu_quick_actions', $sticky_widgets, true ) ); ?> /> <?php esc_html_e( 'Always show Quick Actions', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
-						<label><input type="checkbox" name="timu_dashboard_sticky_widgets[]" value="timu_modules" <?php checked( in_array( 'timu_modules', $sticky_widgets, true ) ); ?> /> <?php esc_html_e( 'Always show Modules', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<label><input type="checkbox" name="WPS_dashboard_sticky_widgets[]" value="WPS_quick_actions" <?php checked( in_array( 'WPS_quick_actions', $sticky_widgets, true ) ); ?> /> <?php esc_html_e( 'Always show Quick Actions', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<label><input type="checkbox" name="WPS_dashboard_sticky_widgets[]" value="WPS_modules" <?php checked( in_array( 'WPS_modules', $sticky_widgets, true ) ); ?> /> <?php esc_html_e( 'Always show Modules', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
 						<p class="description"><?php esc_html_e( 'Widgets that cannot be hidden by users.', 'plugin-wp-support-thisismyurl' ); ?></p>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><label for="timu_dashboard_widget_sorting"><?php esc_html_e( 'Widget Sorting', 'plugin-wp-support-thisismyurl' ); ?></label></th>
+					<th scope="row"><label for="WPS_dashboard_widget_sorting"><?php esc_html_e( 'Widget Sorting', 'plugin-wp-support-thisismyurl' ); ?></label></th>
 					<td>
-						<select id="timu_dashboard_widget_sorting" name="timu_dashboard_widget_sorting">
+						<select id="WPS_dashboard_widget_sorting" name="WPS_dashboard_widget_sorting">
 							<option value="drag-order" <?php selected( $widget_sorting, 'drag-order' ); ?>><?php esc_html_e( 'Allow Drag & Drop', 'plugin-wp-support-thisismyurl' ); ?></option>
 							<option value="locked" <?php selected( $widget_sorting, 'locked' ); ?>><?php esc_html_e( 'Locked (Fixed Order)', 'plugin-wp-support-thisismyurl' ); ?></option>
 						</select>
@@ -2735,7 +2885,7 @@ function render_settings_dashboard(): void {
 				</tr>
 			</tbody>
 		</table>
-		<div class="timu-settings-save-status" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
+		<div class=\"wps-settings-save-status\" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
 	</form>
 	<?php
 }
@@ -2746,13 +2896,13 @@ function render_settings_dashboard(): void {
  * @return void
  */
 function render_settings_license(): void {
-	$license_key     = get_option( 'timu_license_key', '' );
+	$license_key     = get_option( 'WPS_license_key', '' );
 	$is_licensed     = ! empty( $license_key );
-	$auto_update     = (array) get_option( 'timu_license_auto_update_types', array( 'minor', 'patch' ) );
-	$update_channel  = get_option( 'timu_license_update_channel', 'stable' );
+	$auto_update     = (array) get_option( 'WPS_license_auto_update_types', array( 'minor', 'patch' ) );
+	$update_channel  = get_option( 'WPS_license_update_channel', 'stable' );
 	?>
-	<form method="post" class="timu-settings-form" data-settings-group="license" style="max-width: 600px;">
-		<?php wp_nonce_field( 'timu_settings_license', 'timu_settings_nonce' ); ?>
+	<form method="post" class=\"wps-settings-form\" data-settings-group="license" style="max-width: 600px;">
+		<?php wp_nonce_field( 'WPS_settings_license', 'WPS_settings_nonce' ); ?>
 		<table class="form-table" role="presentation">
 			<tbody>
 				<tr>
@@ -2763,25 +2913,25 @@ function render_settings_license(): void {
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><label for="timu_license_key"><?php esc_html_e( 'License Key', 'plugin-wp-support-thisismyurl' ); ?></label></th>
+					<th scope="row"><label for="WPS_license_key"><?php esc_html_e( 'License Key', 'plugin-wp-support-thisismyurl' ); ?></label></th>
 					<td>
-						<input type="password" id="timu_license_key" name="timu_license_key" value="<?php echo esc_attr( $license_key ); ?>" placeholder="<?php esc_attr_e( 'Enter license key', 'plugin-wp-support-thisismyurl' ); ?>" style="width: 100%; max-width: 300px;" />
+						<input type="password" id="WPS_license_key" name="WPS_license_key" value="<?php echo esc_attr( $license_key ); ?>" placeholder="<?php esc_attr_e( 'Enter license key', 'plugin-wp-support-thisismyurl' ); ?>" style="width: 100%; max-width: 300px;" />
 						<p class="description"><?php esc_html_e( 'Masked for security. Leave empty to disable licensing.', 'plugin-wp-support-thisismyurl' ); ?></p>
 					</td>
 				</tr>
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Auto-Update', 'plugin-wp-support-thisismyurl' ); ?></th>
 					<td>
-						<label><input type="checkbox" name="timu_license_auto_update_types[]" value="major" <?php checked( in_array( 'major', $auto_update, true ) ); ?> /> <?php esc_html_e( 'Major Versions', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
-						<label><input type="checkbox" name="timu_license_auto_update_types[]" value="minor" <?php checked( in_array( 'minor', $auto_update, true ) ); ?> /> <?php esc_html_e( 'Minor Versions', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
-						<label><input type="checkbox" name="timu_license_auto_update_types[]" value="patch" <?php checked( in_array( 'patch', $auto_update, true ) ); ?> /> <?php esc_html_e( 'Patch Updates', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<label><input type="checkbox" name="WPS_license_auto_update_types[]" value="major" <?php checked( in_array( 'major', $auto_update, true ) ); ?> /> <?php esc_html_e( 'Major Versions', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<label><input type="checkbox" name="WPS_license_auto_update_types[]" value="minor" <?php checked( in_array( 'minor', $auto_update, true ) ); ?> /> <?php esc_html_e( 'Minor Versions', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<label><input type="checkbox" name="WPS_license_auto_update_types[]" value="patch" <?php checked( in_array( 'patch', $auto_update, true ) ); ?> /> <?php esc_html_e( 'Patch Updates', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
 						<p class="description"><?php esc_html_e( 'Which update types to install automatically.', 'plugin-wp-support-thisismyurl' ); ?></p>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><label for="timu_license_update_channel"><?php esc_html_e( 'Update Channel', 'plugin-wp-support-thisismyurl' ); ?></label></th>
+					<th scope="row"><label for="WPS_license_update_channel"><?php esc_html_e( 'Update Channel', 'plugin-wp-support-thisismyurl' ); ?></label></th>
 					<td>
-						<select id="timu_license_update_channel" name="timu_license_update_channel">
+						<select id="WPS_license_update_channel" name="WPS_license_update_channel">
 							<option value="stable" <?php selected( $update_channel, 'stable' ); ?>><?php esc_html_e( 'Stable', 'plugin-wp-support-thisismyurl' ); ?></option>
 							<option value="beta" <?php selected( $update_channel, 'beta' ); ?>><?php esc_html_e( 'Beta', 'plugin-wp-support-thisismyurl' ); ?></option>
 							<option value="dev" <?php selected( $update_channel, 'dev' ); ?>><?php esc_html_e( 'Development', 'plugin-wp-support-thisismyurl' ); ?></option>
@@ -2791,7 +2941,7 @@ function render_settings_license(): void {
 				</tr>
 			</tbody>
 		</table>
-		<div class="timu-settings-save-status" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
+		<div class=\"wps-settings-save-status\" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
 	</form>
 	<?php
 }
@@ -2802,37 +2952,37 @@ function render_settings_license(): void {
  * @return void
  */
 function render_settings_privacy(): void {
-	$log_retention       = (int) get_option( 'timu_privacy_log_retention_days', 90 );
-	$auto_delete_enabled = (bool) get_option( 'timu_privacy_auto_delete_enabled', false );
-	$auto_delete_days    = (int) get_option( 'timu_privacy_auto_delete_days', 90 );
-	$audit_level         = get_option( 'timu_privacy_audit_logging_level', 'standard' );
-	$export_format       = get_option( 'timu_privacy_export_format', 'json' );
-	$contrib_see_user    = (bool) get_option( 'timu_privacy_contributors_see_user_activity', false );
-	$editor_see_admin    = (bool) get_option( 'timu_privacy_editors_see_admin_activity', false );
+	$log_retention       = (int) get_option( 'WPS_privacy_log_retention_days', 90 );
+	$auto_delete_enabled = (bool) get_option( 'WPS_privacy_auto_delete_enabled', false );
+	$auto_delete_days    = (int) get_option( 'WPS_privacy_auto_delete_days', 90 );
+	$audit_level         = get_option( 'WPS_privacy_audit_logging_level', 'standard' );
+	$export_format       = get_option( 'WPS_privacy_export_format', 'json' );
+	$contrib_see_user    = (bool) get_option( 'WPS_privacy_contributors_see_user_activity', false );
+	$editor_see_admin    = (bool) get_option( 'WPS_privacy_editors_see_admin_activity', false );
 	?>
-	<form method="post" class="timu-settings-form" data-settings-group="privacy" style="max-width: 600px;">
-		<?php wp_nonce_field( 'timu_settings_privacy', 'timu_settings_nonce' ); ?>
+	<form method="post" class=\"wps-settings-form\" data-settings-group="privacy" style="max-width: 600px;">
+		<?php wp_nonce_field( 'WPS_settings_privacy', 'WPS_settings_nonce' ); ?>
 		<table class="form-table" role="presentation">
 			<tbody>
 				<tr>
-					<th scope="row"><label for="timu_privacy_log_retention_days"><?php esc_html_e( 'Activity Log Retention', 'plugin-wp-support-thisismyurl' ); ?></label></th>
+					<th scope="row"><label for="WPS_privacy_log_retention_days"><?php esc_html_e( 'Activity Log Retention', 'plugin-wp-support-thisismyurl' ); ?></label></th>
 					<td>
-						<input type="number" id="timu_privacy_log_retention_days" name="timu_privacy_log_retention_days" value="<?php echo esc_attr( $log_retention ); ?>" min="1" max="3650" /> <?php esc_html_e( 'days', 'plugin-wp-support-thisismyurl' ); ?>
+						<input type="number" id="WPS_privacy_log_retention_days" name="WPS_privacy_log_retention_days" value="<?php echo esc_attr( $log_retention ); ?>" min="1" max="3650" /> <?php esc_html_e( 'days', 'plugin-wp-support-thisismyurl' ); ?>
 						<p class="description"><?php esc_html_e( 'How long to keep activity logs.', 'plugin-wp-support-thisismyurl' ); ?></p>
 					</td>
 				</tr>
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Auto-Delete Old Logs', 'plugin-wp-support-thisismyurl' ); ?></th>
 					<td>
-						<label><input type="checkbox" name="timu_privacy_auto_delete_enabled" value="1" <?php checked( $auto_delete_enabled, true ); ?> /> <?php esc_html_e( 'Automatically delete logs older than', 'plugin-wp-support-thisismyurl' ); ?></label>
-						<input type="number" name="timu_privacy_auto_delete_days" value="<?php echo esc_attr( $auto_delete_days ); ?>" min="1" max="3650" style="width: 80px;" /> <?php esc_html_e( 'days', 'plugin-wp-support-thisismyurl' ); ?>
+						<label><input type="checkbox" name="WPS_privacy_auto_delete_enabled" value="1" <?php checked( $auto_delete_enabled, true ); ?> /> <?php esc_html_e( 'Automatically delete logs older than', 'plugin-wp-support-thisismyurl' ); ?></label>
+						<input type="number" name="WPS_privacy_auto_delete_days" value="<?php echo esc_attr( $auto_delete_days ); ?>" min="1" max="3650" style="width: 80px;" /> <?php esc_html_e( 'days', 'plugin-wp-support-thisismyurl' ); ?>
 						<p class="description"><?php esc_html_e( 'Clean up old activity records automatically.', 'plugin-wp-support-thisismyurl' ); ?></p>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><label for="timu_privacy_audit_logging_level"><?php esc_html_e( 'Audit Logging Level', 'plugin-wp-support-thisismyurl' ); ?></label></th>
+					<th scope="row"><label for="WPS_privacy_audit_logging_level"><?php esc_html_e( 'Audit Logging Level', 'plugin-wp-support-thisismyurl' ); ?></label></th>
 					<td>
-						<select id="timu_privacy_audit_logging_level" name="timu_privacy_audit_logging_level">
+						<select id="WPS_privacy_audit_logging_level" name="WPS_privacy_audit_logging_level">
 							<option value="minimal" <?php selected( $audit_level, 'minimal' ); ?>><?php esc_html_e( 'Minimal', 'plugin-wp-support-thisismyurl' ); ?></option>
 							<option value="standard" <?php selected( $audit_level, 'standard' ); ?>><?php esc_html_e( 'Standard', 'plugin-wp-support-thisismyurl' ); ?></option>
 							<option value="verbose" <?php selected( $audit_level, 'verbose' ); ?>><?php esc_html_e( 'Verbose', 'plugin-wp-support-thisismyurl' ); ?></option>
@@ -2841,9 +2991,9 @@ function render_settings_privacy(): void {
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><label for="timu_privacy_export_format"><?php esc_html_e( 'GDPR Export Format', 'plugin-wp-support-thisismyurl' ); ?></label></th>
+					<th scope="row"><label for="WPS_privacy_export_format"><?php esc_html_e( 'GDPR Export Format', 'plugin-wp-support-thisismyurl' ); ?></label></th>
 					<td>
-						<select id="timu_privacy_export_format" name="timu_privacy_export_format">
+						<select id="WPS_privacy_export_format" name="WPS_privacy_export_format">
 							<option value="json" <?php selected( $export_format, 'json' ); ?>><?php esc_html_e( 'JSON', 'plugin-wp-support-thisismyurl' ); ?></option>
 							<option value="csv" <?php selected( $export_format, 'csv' ); ?>><?php esc_html_e( 'CSV', 'plugin-wp-support-thisismyurl' ); ?></option>
 							<option value="zip" <?php selected( $export_format, 'zip' ); ?>><?php esc_html_e( 'ZIP Archive', 'plugin-wp-support-thisismyurl' ); ?></option>
@@ -2854,14 +3004,14 @@ function render_settings_privacy(): void {
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Activity Visibility', 'plugin-wp-support-thisismyurl' ); ?></th>
 					<td>
-						<label><input type="checkbox" name="timu_privacy_contributors_see_user_activity" value="1" <?php checked( $contrib_see_user, true ); ?> /> <?php esc_html_e( 'Contributors can view other user activity', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
-						<label><input type="checkbox" name="timu_privacy_editors_see_admin_activity" value="1" <?php checked( $editor_see_admin, true ); ?> /> <?php esc_html_e( 'Editors can view admin activity', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<label><input type="checkbox" name="WPS_privacy_contributors_see_user_activity" value="1" <?php checked( $contrib_see_user, true ); ?> /> <?php esc_html_e( 'Contributors can view other user activity', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<label><input type="checkbox" name="WPS_privacy_editors_see_admin_activity" value="1" <?php checked( $editor_see_admin, true ); ?> /> <?php esc_html_e( 'Editors can view admin activity', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
 						<p class="description"><?php esc_html_e( 'Control who can see activity logs from other roles.', 'plugin-wp-support-thisismyurl' ); ?></p>
 					</td>
 				</tr>
 			</tbody>
 		</table>
-		<div class="timu-settings-save-status" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
+		<div class=\"wps-settings-save-status\" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
 	</form>
 	<?php
 }

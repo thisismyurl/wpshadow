@@ -1,8 +1,8 @@
 /**
- * TIMU Dashboard Drag and Drop
+ * WPS Dashboard Drag and Drop
  * Custom metabox drag-and-drop functionality
  *
- * @package TIMU_CORE_SUPPORT
+ * @package WPS_CORE_SUPPORT
  */
 
 (function($) {
@@ -13,7 +13,7 @@
 		 * Initialize drag and drop.
 		 */
 		init: function() {
-			if (!$('.timu-metabox-holder').length) {
+			if (!$('.wps-metabox-holder').length) {
 				return;
 			}
 
@@ -26,14 +26,14 @@
 		 * Enable sortable on metabox containers.
 		 */
 		enableSortable: function() {
-			$('.timu-metabox-container').sortable({
-				placeholder: 'timu-metabox-placeholder',
-				connectWith: '.timu-metabox-container',
-				handle: '.timu-metabox-handle',
+			$('.wps-metabox-container').sortable({
+				placeholder: 'wps-metabox-placeholder',
+				connectWith: '.wps-metabox-container',
+				handle: '.wps-metabox-handle',
 				cursor: 'move',
 				opacity: 0.65,
 				tolerance: 'pointer',
-				items: '.timu-metabox',
+				items: '.wps-metabox',
 				stop: function() {
 					TimuDashboardDrag.saveState();
 				}
@@ -44,10 +44,10 @@
 		 * Bind toggle collapse/expand.
 		 */
 		bindToggle: function() {
-			$(document).on('click', '.timu-metabox-toggle', function(e) {
+			$(document).on('click', '.wps-metabox-toggle', function(e) {
 				e.preventDefault();
-				const $metabox = $(this).closest('.timu-metabox');
-				const $content = $metabox.find('.timu-metabox-content');
+				const $metabox = $(this).closest('.wps-metabox');
+				const $content = $metabox.find('.wps-metabox-content');
 				
 				$metabox.toggleClass('closed');
 				$content.slideToggle(200);
@@ -66,11 +66,11 @@
 			};
 
 			// Get order for each container
-			$('.timu-metabox-container').each(function() {
+			$('.wps-metabox-container').each(function() {
 				const containerId = $(this).data('container');
 				state.order[containerId] = [];
 				
-				$(this).find('.timu-metabox').each(function() {
+				$(this).find('.wps-metabox').each(function() {
 					const metaboxId = $(this).data('metabox-id');
 					state.order[containerId].push(metaboxId);
 					
@@ -82,8 +82,8 @@
 
 			// Save via AJAX
 			$.post(ajaxurl, {
-				action: 'timu_save_metabox_state',
-				nonce: timuDashboardDrag.nonce,
+				action: 'wps_save_metabox_state',
+				nonce: wpsDashboardDrag.nonce,
 				state: JSON.stringify(state)
 			});
 		},
@@ -92,7 +92,7 @@
 		 * Load saved state and apply it.
 		 */
 		loadState: function() {
-			const savedState = timuDashboardDrag.savedState;
+			const savedState = wpsDashboardDrag.savedState;
 			if (!savedState) {
 				return;
 			}
@@ -103,20 +103,20 @@
 				// Apply closed state
 				if (state.closed && state.closed.length) {
 					state.closed.forEach(function(metaboxId) {
-						const $metabox = $('.timu-metabox[data-metabox-id="' + metaboxId + '"]');
+						const $metabox = $('.wps-metabox[data-metabox-id="' + metaboxId + '"]');
 						$metabox.addClass('closed');
-						$metabox.find('.timu-metabox-content').hide();
+						$metabox.find('.wps-metabox-content').hide();
 					});
 				}
 
 				// Apply order
 				if (state.order) {
 					Object.keys(state.order).forEach(function(containerId) {
-						const $container = $('.timu-metabox-container[data-container="' + containerId + '"]');
+						const $container = $('.wps-metabox-container[data-container="' + containerId + '"]');
 						const order = state.order[containerId];
 						
 						order.forEach(function(metaboxId) {
-							const $metabox = $('.timu-metabox[data-metabox-id="' + metaboxId + '"]');
+							const $metabox = $('.wps-metabox[data-metabox-id="' + metaboxId + '"]');
 							if ($metabox.length) {
 								$container.append($metabox);
 							}
@@ -137,3 +137,5 @@
 	});
 
 })(jQuery);
+
+

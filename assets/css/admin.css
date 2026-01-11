@@ -1,15 +1,15 @@
 /**
  * Core Support Admin Styles
  *
- * @package TIMU_CORE_SUPPORT
+ * @package WPS_CORE_SUPPORT
  */
 
-.wrap.timu-core-wrap {
+.wrap.wps-core-wrap {
 	max-width: 1200px;
 	margin: 20px auto;
 }
 
-.timu-core-header {
+.wps-core-header {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -20,12 +20,12 @@
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
 }
 
-.timu-core-header h1 {
+.wps-core-header h1 {
 	margin: 0;
 	font-size: 24px;
 }
 
-.timu-core-badge {
+.wps-core-badge {
 	display: inline-block;
 	padding: 4px 8px;
 	background: #123456;
@@ -37,39 +37,39 @@
 	margin-left: 10px;
 }
 
-.timu-core-grid {
+.wps-core-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 	gap: 20px;
 	margin-top: 20px;
 }
 
-.timu-core-card {
+.wps-core-card {
 	background: #fff;
 	padding: 20px;
 	border: 1px solid #ccd0d4;
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
 }
 
-.timu-core-card h2 {
+.wps-core-card h2 {
 	margin-top: 0;
 	padding-bottom: 10px;
 	border-bottom: 1px solid #eee;
 }
 
-.timu-core-feature-list {
+.wps-core-feature-list {
 	list-style: none;
 	padding: 0;
 	margin: 15px 0;
 }
 
-.timu-core-feature-list li {
+.wps-core-feature-list li {
 	padding: 8px 0;
 	display: flex;
 	align-items: center;
 }
 
-.timu-core-feature-list li:before {
+.wps-core-feature-list li:before {
 	content: "✓";
 	color: #00a32a;
 	font-weight: bold;
@@ -79,14 +79,14 @@
 /* Dashboard styles cleared per request. Using default WordPress table styling. */
 
 /* Dashboard stats */
-.timu-dashboard-stats {
+.wps-dashboard-stats {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
 	gap: 12px;
 	margin: 16px 0 24px;
 }
 
-.timu-stat-card {
+.wps-stat-card {
 	display: flex;
 	align-items: center;
 	padding: 12px 14px;
@@ -96,7 +96,7 @@
 	border-left: 4px solid #123456;
 }
 
-.timu-stat-icon {
+.wps-stat-icon {
 	width: 36px;
 	height: 36px;
 	display: inline-flex;
@@ -107,44 +107,44 @@
 	background: #f0f0f1;
 }
 
-.timu-stat-content .timu-stat-value {
+.wps-stat-content .wps-stat-value {
 	font-size: 20px;
 	font-weight: 700;
 	line-height: 1;
 }
 
-.timu-stat-content .timu-stat-label {
+.wps-stat-content .wps-stat-label {
 	font-size: 11px;
 	color: #50575e;
 }
 
 /* Stat specific accents */
-.timu-stat-enabled .dashicons { color: #00a32a; }
-.timu-stat-available .dashicons { color: #123456; }
-.timu-stat-update .dashicons { color: #d63638; }
-.timu-stat-hub .dashicons { color: #4b8bf4; }
-.timu-stat-spoke .dashicons { color: #646970; }
+.wps-stat-enabled .dashicons { color: #00a32a; }
+.wps-stat-available .dashicons { color: #123456; }
+.wps-stat-update .dashicons { color: #d63638; }
+.wps-stat-hub .dashicons { color: #4b8bf4; }
+.wps-stat-spoke .dashicons { color: #646970; }
 
-.timu-hub-toggle {
+.wps-hub-toggle {
 	margin-right: 4px;
 	color: #123456;
 }
 
-.timu-hub-toggle .dashicons {
+.wps-hub-toggle .dashicons {
 	transition: transform 0.2s ease;
 }
 
-.timu-hub-toggle.is-collapsed .dashicons,
-.timu-hub-toggle[aria-expanded="false"] .dashicons {
+.wps-hub-toggle.is-collapsed .dashicons,
+.wps-hub-toggle[aria-expanded="false"] .dashicons {
 	transform: rotate(-90deg);
 }
 
-.timu-spokes-hidden {
+.wps-spokes-hidden {
 	display: none;
 }
 
 /* Network Active badge */
-.timu-badge {
+.wps-badge {
 	display: inline-block;
 	padding: 2px 6px;
 	margin-left: 8px;
@@ -155,17 +155,17 @@
 	white-space: nowrap;
 }
 
-.timu-badge-network {
+.wps-badge-network {
 	background: #b1d5ff;
 	color: #004a99;
 	border: 1px solid #123456;
 }
 
 /* Module action buttons */
-.timu-btn-install-activate,
-.timu-btn-update,
-.timu-activate,
-.timu-deactivate-network {
+.wps-btn-install-activate,
+.wps-btn-update,
+.wps-activate,
+.wps-deactivate-network {
 	display: inline-block;
 	padding: 5px 10px;
 	margin: 0;
@@ -180,40 +180,40 @@
 	transition: all 0.2s ease;
 }
 
-.timu-btn-install-activate:hover,
-.timu-btn-update:hover,
-.timu-activate:hover,
-.timu-deactivate-network:hover {
+.wps-btn-install-activate:hover,
+.wps-btn-update:hover,
+.wps-activate:hover,
+.wps-deactivate-network:hover {
 	background: #135e96;
 	border-color: #135e96;
 	text-decoration: none;
 	color: #fff;
 }
 
-.timu-btn-install-activate:focus,
-.timu-btn-update:focus,
-.timu-activate:focus,
-.timu-deactivate-network:focus {
+.wps-btn-install-activate:focus,
+.wps-btn-update:focus,
+.wps-activate:focus,
+.wps-deactivate-network:focus {
 	outline: 2px solid #123456;
 	outline-offset: 2px;
 }
 
-.timu-btn-install-activate:disabled,
-.timu-btn-update:disabled,
-.timu-activate:disabled,
-.timu-deactivate-network:disabled,
-.timu-btn-install-activate.timu-loading,
-.timu-btn-update.timu-loading,
-.timu-activate.timu-loading,
-.timu-deactivate-network.timu-loading {
+.wps-btn-install-activate:disabled,
+.wps-btn-update:disabled,
+.wps-activate:disabled,
+.wps-deactivate-network:disabled,
+.wps-btn-install-activate.wps-loading,
+.wps-btn-update.wps-loading,
+.wps-activate.wps-loading,
+.wps-deactivate-network.wps-loading {
 	opacity: 0.6;
 	cursor: not-allowed;
 }
 
-.timu-btn-install-activate.timu-loading::before,
-.timu-btn-update.timu-loading::before,
-.timu-activate.timu-loading::before,
-.timu-deactivate-network.timu-loading::before {
+.wps-btn-install-activate.wps-loading::before,
+.wps-btn-update.wps-loading::before,
+.wps-activate.wps-loading::before,
+.wps-deactivate-network.wps-loading::before {
 	content: '';
 	display: inline-block;
 	width: 14px;
@@ -222,24 +222,24 @@
 	border: 2px solid rgba(255, 255, 255, 0.3);
 	border-radius: 50%;
 	border-top-color: #fff;
-	animation: timu-spinner 0.6s linear infinite;
+	animation: wps-spinner 0.6s linear infinite;
 	vertical-align: middle;
 }
 
-@keyframes timu-spinner {
+@keyframes wps-spinner {
 	to {
 		transform: rotate(360deg);
 	}
 }
 
 /* Action link styles */
-.timu-action-link {
+.wps-action-link {
 	color: #123456;
 	text-decoration: none;
 	font-size: 13px;
 }
 
-.timu-action-link:hover {
+.wps-action-link:hover {
 	color: #135e96;
 	text-decoration: underline;
 }
@@ -261,19 +261,19 @@
  */
 
 /* Responsive tables & accessibility (Issue #41: Dashboard QA & Accessibility Audit) */
-.timu-table-responsive {
+.wps-table-responsive {
 	overflow-x: auto;
 	-webkit-overflow-scrolling: touch;
 	width: 100%;
 }
 
-.timu-skip-link {
+.wps-skip-link {
 	position: absolute;
 	top: -9999px;
 	z-index: 99999;
 }
 
-.timu-skip-link:focus {
+.wps-skip-link:focus {
 	position: relative;
 	top: auto;
 	left: auto;
@@ -343,3 +343,5 @@ th[scope="col"] {
  * - Added card-based layout system
  * - Implemented Hub branding styles
  */
+
+

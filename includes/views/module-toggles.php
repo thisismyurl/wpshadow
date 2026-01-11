@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<div class="wrap timu-module-settings" role="main" aria-label="<?php esc_attr_e( 'Module Configuration Settings', 'plugin-wp-support-thisismyurl' ); ?>">
+<div class="wrap wps-module-settings" role="main" aria-label="<?php esc_attr_e( 'Module Configuration Settings', 'plugin-wp-support-thisismyurl' ); ?>">
 	<h2><?php esc_html_e( 'Module Configuration', 'plugin-wp-support-thisismyurl' ); ?></h2>
 
 	<form method="post" action="options.php">
@@ -59,3 +59,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</tbody>
 	</table>
 </div>
+

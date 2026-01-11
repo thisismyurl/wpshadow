@@ -1,8 +1,8 @@
 /**
- * TIMU Postbox State Handler
+ * WPS Postbox State Handler
  * Custom state saving for postboxes that accounts for hub/spoke context
  *
- * @package TIMU_CORE_SUPPORT
+ * @package WPS_CORE_SUPPORT
  */
 
 (function($) {
@@ -18,8 +18,8 @@
 		
 		postboxes.save_state = function(page) {
 			// Use our custom state key
-			if (typeof timuPostboxState !== 'undefined' && timuPostboxState.stateKey) {
-				page = timuPostboxState.stateKey;
+			if (typeof wpsPostboxState !== 'undefined' && wpsPostboxState.stateKey) {
+				page = wpsPostboxState.stateKey;
 			}
 			
 			// Get closed postboxes
@@ -29,10 +29,10 @@
 			
 			// Use our custom AJAX handler
 			$.post(ajaxurl, {
-				action: 'timu_save_postbox_state',
+				action: 'wps_save_postbox_state',
 				page: page,
 				closed: closed,
-				nonce: timuPostboxState.nonce
+				nonce: wpsPostboxState.nonce
 			}, function(response) {
 				// Optional: handle response if needed
 			});
@@ -42,8 +42,8 @@
 		const originalSaveOrder = postboxes.save_order;
 		
 		postboxes.save_order = function(page) {
-			if (typeof timuPostboxState !== 'undefined' && timuPostboxState.stateKey) {
-				page = timuPostboxState.stateKey;
+			if (typeof wpsPostboxState !== 'undefined' && wpsPostboxState.stateKey) {
+				page = wpsPostboxState.stateKey;
 			}
 			
 			// Get the order
@@ -58,10 +58,10 @@
 			
 			// Use our custom AJAX handler
 			$.post(ajaxurl, {
-				action: 'timu_save_postbox_order',
+				action: 'wps_save_postbox_order',
 				page: page,
 				order: order,
-				nonce: timuPostboxState.nonce
+				nonce: wpsPostboxState.nonce
 			}, function(response) {
 				// Optional: handle response if needed
 			});
@@ -69,3 +69,5 @@
 	}
 
 })(jQuery);
+
+

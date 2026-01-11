@@ -11,18 +11,18 @@
 defined( 'ABSPATH' ) || exit;
 ?>
 <style>
-.timu-toggle-switch {
+.wps-toggle-switch {
 	display: inline-block;
 	position: relative;
 	width: 50px;
 	height: 24px;
 }
-.timu-toggle-switch input {
+.wps-toggle-switch input {
 	opacity: 0;
 	width: 0;
 	height: 0;
 }
-.timu-toggle-slider {
+.wps-toggle-slider {
 	position: absolute;
 	cursor: pointer;
 	top: 0;
@@ -33,7 +33,7 @@ defined( 'ABSPATH' ) || exit;
 	transition: .3s;
 	border-radius: 24px;
 }
-.timu-toggle-slider:before {
+.wps-toggle-slider:before {
 	position: absolute;
 	content: "";
 	height: 18px;
@@ -44,32 +44,32 @@ defined( 'ABSPATH' ) || exit;
 	transition: .3s;
 	border-radius: 50%;
 }
-input:checked + .timu-toggle-slider {
+input:checked + .wps-toggle-slider {
 	background-color: #00a32a;
 }
-input:focus + .timu-toggle-slider {
+input:focus + .wps-toggle-slider {
 	box-shadow: 0 0 1px #00a32a;
 }
-input:checked + .timu-toggle-slider:before {
+input:checked + .wps-toggle-slider:before {
 	transform: translateX(26px);
 }
-input:disabled + .timu-toggle-slider {
+input:disabled + .wps-toggle-slider {
 	opacity: 0.5;
 	cursor: not-allowed;
 }
 /* Progress bar */
-.timu-progress { display: none; align-items: center; gap: 8px; margin-left: 8px; }
-.timu-progress .bar { width: 80px; height: 6px; background: #e5e5e5; border-radius: 6px; overflow: hidden; }
-.timu-progress .bar .fill { width: 50%; height: 100%; background: linear-gradient(90deg, #2271b1, #00a32a); animation: timuProgress 1s infinite alternate ease-in-out; }
-@keyframes timuProgress { from { width: 30%; } to { width: 90%; } }
+.wps-progress { display: none; align-items: center; gap: 8px; margin-left: 8px; }
+.wps-progress .bar { width: 80px; height: 6px; background: #e5e5e5; border-radius: 6px; overflow: hidden; }
+.wps-progress .bar .fill { width: 50%; height: 100%; background: linear-gradient(90deg, #2271b1, #00a32a); animation: wpsProgress 1s infinite alternate ease-in-out; }
+@keyframes wpsProgress { from { width: 30%; } to { width: 90%; } }
 </style>
-<div class="wrap timu-modules-view" id="timu-modules-main" role="main">
+<div class="wrap wps-modules-view" id="wps-modules-main" role="main">
 	<h1 class="wp-heading-inline"><?php esc_html_e( 'Modules', 'plugin-wp-support-thisismyurl' ); ?></h1>
 	<span class="dashicons dashicons-editor-help" aria-label="<?php esc_attr_e( 'Modules help', 'plugin-wp-support-thisismyurl' ); ?>" title="<?php esc_attr_e( 'Install or update modules from the catalog; activate/deactivate per site or network. Network Active items can only be deactivated from Network Admin.', 'plugin-wp-support-thisismyurl' ); ?>">
 		<span class="screen-reader-text"><?php esc_html_e( 'Install or update modules from the catalog; activate/deactivate per site or network. Network Active items can only be deactivated from Network Admin.', 'plugin-wp-support-thisismyurl' ); ?></span>
 	</span>
-	<?php $override_allowed = class_exists( 'TIMU_Vault' ) ? TIMU_Vault::site_override_allowed() : true; ?>
-	<div class="timu-dashboard-stats">
+	<?php $override_allowed = class_exists( 'WPS_Vault' ) ? WPS_Vault::site_override_allowed() : true; ?>
+	<div class="wps-dashboard-stats">
 		<?php
 		// Fallback counts when controller variables are missing.
 		$total_fallback   = (int) ( ( isset( $hub_modules ) ? count( $hub_modules ) : 0 ) + ( isset( $spoke_modules ) ? count( $spoke_modules ) : 0 ) );
@@ -89,23 +89,23 @@ input:disabled + .timu-toggle-slider {
 			}
 		}
 		?>
-		<div class="timu-stat-card" role="group" aria-label="<?php esc_attr_e( 'Total modules', 'plugin-wp-support-thisismyurl' ); ?>">
-			<div class="timu-stat-icon">
+		<div class="wps-stat-card" role="group" aria-label="<?php esc_attr_e( 'Total modules', 'plugin-wp-support-thisismyurl' ); ?>">
+			<div class="wps-stat-icon">
 				<span class="dashicons dashicons-admin-plugins"></span>
 			</div>
-			<div class="timu-stat-content">
-				<div class="timu-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $total_count ?? $total_fallback ) ) ); ?></div>
-				<div class="timu-stat-label"><?php esc_html_e( 'Total', 'plugin-wp-support-thisismyurl' ); ?></div>
+			<div class="wps-stat-content">
+				<div class="wps-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $total_count ?? $total_fallback ) ) ); ?></div>
+				<div class="wps-stat-label"><?php esc_html_e( 'Total', 'plugin-wp-support-thisismyurl' ); ?></div>
 			</div>
 		</div>
 
 			<script>
 			(function(){
 				const ajaxUrl = '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>';
-				const nonce = '<?php echo esc_js( wp_create_nonce( 'timu_module_actions' ) ); ?>';
+				const nonce = '<?php echo esc_js( wp_create_nonce( 'WPS_module_actions' ) ); ?>';
 				const scope = '<?php echo ( is_multisite() && is_network_admin() ) ? 'network' : 'site'; ?>';
 
-				const storagePrefix = 'timuToggleState:' + scope + ':';
+				const storagePrefix = 'wpsToggleState:' + scope + ':';
 				function saveToggleState(slug, checked){
 					try{ localStorage.setItem(storagePrefix + slug, checked ? '1' : '0'); }catch(e){ /* no-op */ }
 				}
@@ -114,7 +114,7 @@ input:disabled + .timu-toggle-slider {
 				}
 
 				// Pending queue for recovery across tabs
-				const pendingPrefix = 'timuTogglePending:' + scope + ':';
+				const pendingPrefix = 'wpsTogglePending:' + scope + ':';
 				function markPending(slug, target){
 					try{ localStorage.setItem(pendingPrefix + slug, target ? '1' : '0'); }catch(e){ /* no-op */ }
 				}
@@ -127,7 +127,7 @@ input:disabled + .timu-toggle-slider {
 
 				function setWorking(toggle, working) {
 					const row = toggle.closest('tr');
-					const progress = row ? row.querySelector('.timu-progress') : null;
+					const progress = row ? row.querySelector('.wps-progress') : null;
 					toggle.disabled = working;
 					if (progress) progress.style.display = working ? 'inline-flex' : 'none';
 				}
@@ -148,7 +148,7 @@ input:disabled + .timu-toggle-slider {
 
 				function handleToggleChange(e){
 					const input = e.target;
-					if (!input || !input.matches('.timu-toggle-switch input')) return;
+					if (!input || !input.matches('.wps-toggle-switch input')) return;
 					const slug = input.getAttribute('data-module');
 					const turningOn = input.checked;
 					// Optimistic: persist immediately
@@ -162,20 +162,20 @@ input:disabled + .timu-toggle-slider {
 					const pluginExists = input.getAttribute('data-plugin-exists') === '1';
 					const downloadable = input.getAttribute('data-downloadable') === '1';
 					setWorking(input, true);
-					let action = 'timu_module_toggle';
+					let action = 'WPS_module_toggle';
 					const payload = { slug };
 					if (turningOn) {
 						if (downloadable && !pluginExists) {
-							action = 'timu_module_install';
+							action = 'WPS_module_install';
 						} else if (pluginExists) {
-							action = 'timu_module_activate';
+							action = 'WPS_module_activate';
 							payload.plugin_base = pluginBase;
 						} else {
 							payload.enabled = 1;
 						}
 					} else {
 						if (pluginExists) {
-							action = 'timu_module_deactivate';
+							action = 'WPS_module_deactivate';
 							payload.plugin_base = pluginBase;
 						} else {
 							payload.enabled = 0;
@@ -210,7 +210,7 @@ input:disabled + .timu-toggle-slider {
 					if (ev.key.startsWith(storagePrefix)){
 						const slug = ev.key.substring(storagePrefix.length);
 						const val = ev.newValue;
-						const input = document.querySelector('.timu-toggle-switch input[data-module="' + slug + '"]');
+						const input = document.querySelector('.wps-toggle-switch input[data-module="' + slug + '"]');
 						if (input && (val === '1' || val === '0')){
 							input.checked = (val === '1');
 							if ((input.getAttribute('data-type')||'hub') === 'hub'){
@@ -223,7 +223,7 @@ input:disabled + .timu-toggle-slider {
 
 				// Periodically process pending queue (retry server updates)
 				async function processPending(){
-					const toggles = document.querySelectorAll('.timu-toggle-switch input[data-module]');
+					const toggles = document.querySelectorAll('.wps-toggle-switch input[data-module]');
 					for (const input of toggles){
 						const slug = input.getAttribute('data-module');
 						const pending = getPending(slug);
@@ -232,14 +232,14 @@ input:disabled + .timu-toggle-slider {
 						const pluginBase = input.getAttribute('data-plugin-base') || '';
 						const pluginExists = input.getAttribute('data-plugin-exists') === '1';
 						const downloadable = input.getAttribute('data-downloadable') === '1';
-						let action = 'timu_module_toggle';
+						let action = 'WPS_module_toggle';
 						const payload = { slug };
 						if (targetOn){
-							if (downloadable && !pluginExists){ action = 'timu_module_install'; }
-							else if (pluginExists){ action = 'timu_module_activate'; payload.plugin_base = pluginBase; }
+							if (downloadable && !pluginExists){ action = 'WPS_module_install'; }
+							else if (pluginExists){ action = 'WPS_module_activate'; payload.plugin_base = pluginBase; }
 							else { payload.enabled = 1; }
 						} else {
-							if (pluginExists){ action = 'timu_module_deactivate'; payload.plugin_base = pluginBase; }
+							if (pluginExists){ action = 'WPS_module_deactivate'; payload.plugin_base = pluginBase; }
 							else { payload.enabled = 0; }
 						}
 
@@ -262,7 +262,7 @@ input:disabled + .timu-toggle-slider {
 
 				// Restore saved toggle states on load.
 				function restoreSavedStates(){
-					const toggles = document.querySelectorAll('.timu-toggle-switch input[data-module]');
+					const toggles = document.querySelectorAll('.wps-toggle-switch input[data-module]');
 					toggles.forEach((input)=>{
 						const slug = input.getAttribute('data-module');
 						const saved = getToggleState(slug);
@@ -332,53 +332,53 @@ input:disabled + .timu-toggle-slider {
 			})();
 			</script>
 
-		<div class="timu-stat-card" role="group" aria-label="<?php esc_attr_e( 'Enabled modules', 'plugin-wp-support-thisismyurl' ); ?>">
-			<div class="timu-stat-icon timu-stat-enabled">
+		<div class="wps-stat-card" role="group" aria-label="<?php esc_attr_e( 'Enabled modules', 'plugin-wp-support-thisismyurl' ); ?>">
+			<div class="wps-stat-icon wps-stat-enabled">
 				<span class="dashicons dashicons-yes-alt"></span>
 			</div>
-			<div class="timu-stat-content">
-				<div class="timu-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $enabled_count ?? 0 ) ) ); ?></div>
-				<div class="timu-stat-label"><?php esc_html_e( 'Enabled', 'plugin-wp-support-thisismyurl' ); ?></div>
+			<div class="wps-stat-content">
+				<div class="wps-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $enabled_count ?? 0 ) ) ); ?></div>
+				<div class="wps-stat-label"><?php esc_html_e( 'Enabled', 'plugin-wp-support-thisismyurl' ); ?></div>
 			</div>
 		</div>
 
-		<div class="timu-stat-card" role="group" aria-label="<?php esc_attr_e( 'Available modules', 'plugin-wp-support-thisismyurl' ); ?>">
-			<div class="timu-stat-icon timu-stat-available">
+		<div class="wps-stat-card" role="group" aria-label="<?php esc_attr_e( 'Available modules', 'plugin-wp-support-thisismyurl' ); ?>">
+			<div class="wps-stat-icon wps-stat-available">
 				<span class="dashicons dashicons-plus-alt"></span>
 			</div>
-			<div class="timu-stat-content">
-				<div class="timu-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $available_count ?? 0 ) ) ); ?></div>
-				<div class="timu-stat-label"><?php esc_html_e( 'Available', 'plugin-wp-support-thisismyurl' ); ?></div>
+			<div class="wps-stat-content">
+				<div class="wps-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $available_count ?? 0 ) ) ); ?></div>
+				<div class="wps-stat-label"><?php esc_html_e( 'Available', 'plugin-wp-support-thisismyurl' ); ?></div>
 			</div>
 		</div>
 
-		<div class="timu-stat-card" role="group" aria-label="<?php esc_attr_e( 'Updates available', 'plugin-wp-support-thisismyurl' ); ?>">
-			<div class="timu-stat-icon timu-stat-update">
+		<div class="wps-stat-card" role="group" aria-label="<?php esc_attr_e( 'Updates available', 'plugin-wp-support-thisismyurl' ); ?>">
+			<div class="wps-stat-icon wps-stat-update">
 				<span class="dashicons dashicons-update"></span>
 			</div>
-			<div class="timu-stat-content">
-				<div class="timu-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $updates_count ?? $updates_fallback ) ) ); ?></div>
-				<div class="timu-stat-label"><?php esc_html_e( 'Updates', 'plugin-wp-support-thisismyurl' ); ?></div>
+			<div class="wps-stat-content">
+				<div class="wps-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $updates_count ?? $updates_fallback ) ) ); ?></div>
+				<div class="wps-stat-label"><?php esc_html_e( 'Updates', 'plugin-wp-support-thisismyurl' ); ?></div>
 			</div>
 		</div>
 
-		<div class="timu-stat-card" role="group" aria-label="<?php esc_attr_e( 'Hubs', 'plugin-wp-support-thisismyurl' ); ?>">
-			<div class="timu-stat-icon timu-stat-hub">
+		<div class="wps-stat-card" role="group" aria-label="<?php esc_attr_e( 'Hubs', 'plugin-wp-support-thisismyurl' ); ?>">
+			<div class="wps-stat-icon wps-stat-hub">
 				<span class="dashicons dashicons-networking"></span>
 			</div>
-			<div class="timu-stat-content">
-				<div class="timu-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $hubs_count ?? ( isset( $hub_modules ) ? count( $hub_modules ) : 0 ) ) ) ); ?></div>
-				<div class="timu-stat-label"><?php esc_html_e( 'Hubs', 'plugin-wp-support-thisismyurl' ); ?></div>
+			<div class="wps-stat-content">
+				<div class="wps-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $hubs_count ?? ( isset( $hub_modules ) ? count( $hub_modules ) : 0 ) ) ) ); ?></div>
+				<div class="wps-stat-label"><?php esc_html_e( 'Hubs', 'plugin-wp-support-thisismyurl' ); ?></div>
 			</div>
 		</div>
 
-		<div class="timu-stat-card" role="group" aria-label="<?php esc_attr_e( 'Spokes', 'plugin-wp-support-thisismyurl' ); ?>">
-			<div class="timu-stat-icon timu-stat-spoke">
+		<div class="wps-stat-card" role="group" aria-label="<?php esc_attr_e( 'Spokes', 'plugin-wp-support-thisismyurl' ); ?>">
+			<div class="wps-stat-icon wps-stat-spoke">
 				<span class="dashicons dashicons-admin-tools"></span>
 			</div>
-			<div class="timu-stat-content">
-				<div class="timu-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $spokes_count ?? ( isset( $spoke_modules ) ? count( $spoke_modules ) : 0 ) ) ) ); ?></div>
-				<div class="timu-stat-label"><?php esc_html_e( 'Spokes', 'plugin-wp-support-thisismyurl' ); ?></div>
+			<div class="wps-stat-content">
+				<div class="wps-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $spokes_count ?? ( isset( $spoke_modules ) ? count( $spoke_modules ) : 0 ) ) ) ); ?></div>
+				<div class="wps-stat-label"><?php esc_html_e( 'Spokes', 'plugin-wp-support-thisismyurl' ); ?></div>
 			</div>
 		</div>
 	</div>
@@ -406,15 +406,15 @@ input:disabled + .timu-toggle-slider {
 	}
 	?>
 
-	<div class="timu-modules-grid">
+	<div class="wps-modules-grid">
 		<?php if ( empty( $groups ) ) : ?>
-			<div class="timu-no-modules">
+			<div class="wps-no-modules">
 				<span class="dashicons dashicons-info"></span>
 				<p><?php esc_html_e( 'No modules found.', 'plugin-wp-support-thisismyurl' ); ?></p>
 			</div>
 		<?php else : ?>
-			<div class="timu-table-responsive">
-				<table class="widefat fixed striped timu-modules-table">
+			<div class="wps-table-responsive">
+				<table class="widefat fixed striped wps-modules-table">
 					<caption class="screen-reader-text"><?php esc_html_e( 'Module catalog with status, version, and author information.', 'plugin-wp-support-thisismyurl' ); ?></caption>
 					<thead>
 					<tr>
@@ -440,13 +440,13 @@ input:disabled + .timu-toggle-slider {
 					$registry_enabled  = ! empty( $module['enabled'] );
 					$is_enabled        = $plugin_exists ? ( is_plugin_active( $plugin_base ) || $is_network_active ) : $registry_enabled;
 					$update_available  = ! empty( $module['update_available'] );
-					$type_class        = 'timu-type-hub';
-					$status_class      = $installed ? ( $is_enabled ? 'timu-module-enabled' : 'timu-module-disabled' ) : 'timu-module-available';
+					$type_class        = 'wps-type-hub';
+					$status_class      = $installed ? ( $is_enabled ? 'wps-module-enabled' : 'wps-module-disabled' ) : 'wps-module-available';
 					?>
-					<tr class="timu-module-card <?php echo esc_attr( $type_class . ' ' . $status_class ); ?>" data-type="hub" data-group="<?php echo esc_attr( $slug ); ?>" data-status="<?php echo esc_attr( $installed ? ( $update_available ? 'update' : 'installed' ) : 'available' ); ?>">
-						<td class="timu-module-name">
+					<tr class="wps-module-card <?php echo esc_attr( $type_class . ' ' . $status_class ); ?>" data-type="hub" data-group="<?php echo esc_attr( $slug ); ?>" data-status="<?php echo esc_attr( $installed ? ( $update_available ? 'update' : 'installed' ) : 'available' ); ?>">
+						<td class="wps-module-name">
 							<?php if ( $module['slug'] !== 'plugin-wp-support-thisismyurl' ) : ?>
-								<button type="button" class="button-link timu-hub-toggle" data-group="<?php echo esc_attr( $module['slug'] ); ?>" aria-expanded="true" aria-label="<?php echo esc_attr( sprintf( __( 'Toggle %s spokes', 'plugin-wp-support-thisismyurl' ), $module['name'] ) ); ?>">
+								<button type="button" class="button-link wps-hub-toggle" data-group="<?php echo esc_attr( $module['slug'] ); ?>" aria-expanded="true" aria-label="<?php echo esc_attr( sprintf( __( 'Toggle %s spokes', 'plugin-wp-support-thisismyurl' ), $module['name'] ) ); ?>">
 									<span class="dashicons dashicons-arrow-down-alt2"></span>
 								</button>
 							<?php endif; ?>
@@ -462,7 +462,7 @@ input:disabled + .timu-toggle-slider {
 						<td>
 							<?php echo esc_html( $module['version'] ); ?>
 							<?php if ( $update_available && ! empty( $module['download_url'] ) ) : ?>
-								<br><small><a href="#" class="timu-btn-update" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( 'Update', 'plugin-wp-support-thisismyurl' ); ?></a></small>
+								<br><small><a href="#" class="wps-btn-update" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( 'Update', 'plugin-wp-support-thisismyurl' ); ?></a></small>
 							<?php endif; ?>
 						</td>
 						<td>
@@ -498,11 +498,11 @@ input:disabled + .timu-toggle-slider {
 							<a href="<?php echo esc_url( $author_github ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html( $module['author'] ); ?></a>
 						</td>
 					<td>
-						<label class="timu-toggle-switch">
+						<label class="wps-toggle-switch">
 							<input type="checkbox" <?php checked( $is_enabled ); ?> data-module="<?php echo esc_attr( $slug ); ?>" data-module-name="<?php echo esc_attr( $module['name'] ?? '' ); ?>" data-type="hub" data-installed="<?php echo esc_attr( $installed ? '1' : '0' ); ?>" data-plugin-base="<?php echo esc_attr( $module['basename'] ?? $plugin_base ); ?>" data-plugin-exists="<?php echo esc_attr( $plugin_exists ? '1' : '0' ); ?>" data-downloadable="<?php echo esc_attr( ! empty( $module['download_url'] ) ? '1' : '0' ); ?>">
-							<span class="timu-toggle-slider"></span>
+							<span class="wps-toggle-slider"></span>
 						</label>
-						<span class="timu-progress" aria-live="polite"><span class="spinner is-active" style="float:none"></span><span class="bar"><span class="fill"></span></span><span class="progress-label"><?php esc_html_e( 'Working…', 'plugin-wp-support-thisismyurl' ); ?></span></span>
+						<span class="wps-progress" aria-live="polite"><span class="spinner is-active" style="float:none"></span><span class="bar"><span class="fill"></span></span><span class="progress-label"><?php esc_html_e( 'Working…', 'plugin-wp-support-thisismyurl' ); ?></span></span>
 					</td>
 						<?php foreach ( $group['spokes'] as $module ) : ?>
 							<?php
@@ -518,12 +518,12 @@ input:disabled + .timu-toggle-slider {
 							$registry_enabled  = ! empty( $module['enabled'] );
 							$is_enabled        = $plugin_exists ? ( is_plugin_active( $plugin_base ) || $is_network_active ) : $registry_enabled;
 							$update_available  = ! empty( $module['update_available'] );
-							$type_class        = 'timu-type-spoke';
-							$status_class      = $installed ? ( $is_enabled ? 'timu-module-enabled' : 'timu-module-disabled' ) : 'timu-module-available';
+							$type_class        = 'wps-type-spoke';
+							$status_class      = $installed ? ( $is_enabled ? 'wps-module-enabled' : 'wps-module-disabled' ) : 'wps-module-available';
 							?>
-							<tr class="timu-module-card timu-child-module <?php echo esc_attr( $type_class . ' ' . $status_class ); ?>" data-type="spoke" data-parent="<?php echo esc_attr( $group['hub']['slug'] ?? '' ); ?>" data-status="<?php echo esc_attr( $installed ? ( $update_available ? 'update' : 'installed' ) : 'available' ); ?>">
-								<td class="timu-module-name">
-									<span class="timu-indent">&#8212; </span>
+							<tr class="wps-module-card wps-child-module <?php echo esc_attr( $type_class . ' ' . $status_class ); ?>" data-type="spoke" data-parent="<?php echo esc_attr( $group['hub']['slug'] ?? '' ); ?>" data-status="<?php echo esc_attr( $installed ? ( $update_available ? 'update' : 'installed' ) : 'available' ); ?>">
+								<td class="wps-module-name">
+									<span class="wps-indent">&#8212; </span>
 									<a href="<?php echo esc_url( $module['uri'] ?? '#' ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html( $module['name'] ); ?></a>
 									<br><span class="description"><?php echo esc_html( $module['description'] ); ?></span>
 								</td>
@@ -536,7 +536,7 @@ input:disabled + .timu-toggle-slider {
 								<td>
 									<?php echo esc_html( $module['version'] ); ?>
 									<?php if ( $update_available && ! empty( $module['download_url'] ) ) : ?>
-										<br><small><a href="#" class="timu-btn-update" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( 'Update', 'plugin-wp-support-thisismyurl' ); ?></a></small>
+										<br><small><a href="#" class="wps-btn-update" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( 'Update', 'plugin-wp-support-thisismyurl' ); ?></a></small>
 									<?php endif; ?>
 								</td>
 								<td>
@@ -577,11 +577,11 @@ input:disabled + .timu-toggle-slider {
 									<a href="<?php echo esc_url( $author_github ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html( $module['author'] ); ?></a>
 								</td>
 								<td>
-									<label class="timu-toggle-switch">
+									<label class="wps-toggle-switch">
 										<input type="checkbox" <?php checked( $is_enabled ); ?> data-module="<?php echo esc_attr( $slug ); ?>" data-module-name="<?php echo esc_attr( $module['name'] ?? '' ); ?>" data-type="spoke" data-installed="<?php echo esc_attr( $installed ? '1' : '0' ); ?>" data-plugin-base="<?php echo esc_attr( $module['basename'] ?? $plugin_base ); ?>" data-plugin-exists="<?php echo esc_attr( $plugin_exists ? '1' : '0' ); ?>" data-downloadable="<?php echo esc_attr( ! empty( $module['download_url'] ) ? '1' : '0' ); ?>">
-										<span class="timu-toggle-slider"></span>
+										<span class="wps-toggle-slider"></span>
 									</label>
-									<span class="timu-progress" aria-live="polite"><span class="spinner is-active" style="float:none"></span><span class="bar"><span class="fill"></span></span><span class="progress-label"><?php esc_html_e( 'Working…', 'plugin-wp-support-thisismyurl' ); ?></span></span>
+									<span class="wps-progress" aria-live="polite"><span class="spinner is-active" style="float:none"></span><span class="bar"><span class="fill"></span></span><span class="progress-label"><?php esc_html_e( 'Working…', 'plugin-wp-support-thisismyurl' ); ?></span></span>
 								</td>
 							</tr>
 						<?php endforeach; ?>
@@ -593,3 +593,5 @@ input:disabled + .timu-toggle-slider {
 		<?php endif; ?>
 	</div>
 </div>
+
+
