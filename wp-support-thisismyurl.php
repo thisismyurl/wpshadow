@@ -532,6 +532,7 @@ function wp_support_init(): void {
 	// Load tab navigation system.
 	require_once wp_support_PATH . 'includes/class-timu-tab-navigation.php';
 	require_once wp_support_PATH . 'includes/class-timu-dashboard-widgets.php';
+	require_once wp_support_PATH . 'includes/class-timu-dashboard-layout.php';
 	require_once wp_support_PATH . 'includes/class-settings-ajax.php';
 	require_once wp_support_PATH . 'includes/timu-capability-helpers.php';
 
@@ -567,6 +568,8 @@ function wp_support_init(): void {
 	add_action( 'wp_ajax_timu_save_metabox_state', __NAMESPACE__ . '\\timu_ajax_save_metabox_state' );
 	add_action( 'wp_ajax_timu_save_postbox_order', __NAMESPACE__ . '\\timu_ajax_save_postbox_order' );
 	add_action( 'wp_ajax_timu_save_postbox_state', __NAMESPACE__ . '\\timu_ajax_save_postbox_state' );
+	add_action( 'wp_ajax_timu_save_dashboard_layout', array( 'TIMU\\CoreSupport\\TIMU_Dashboard_Layout', 'ajax_save_layout' ) );
+	add_action( 'wp_ajax_timu_apply_dashboard_layout', array( 'TIMU\\CoreSupport\\TIMU_Dashboard_Layout', 'ajax_apply_layout' ) );
 
 	// Admin-post action to force scheduled tasks to run immediately.
 	add_action( 'admin_post_timu_run_task_now', __NAMESPACE__ . '\timu_run_task_now' );
@@ -822,39 +825,31 @@ function wp_support_render_tab_router(): void {
  * @return void
  */
 function wp_support_setup_dashboard_screen(): void {
-	error_log( 'wp_support_setup_dashboard_screen: FUNCTION CALLED' );
-	
 	$screen = get_current_screen();
 	if ( ! $screen ) {
-		error_log( 'wp_support_setup_dashboard_screen: No screen available' );
 		return;
 	}
-
-	error_log( 'wp_support_setup_dashboard_screen: Screen ID=' . $screen->id );
 
 	// Register dashboard metaboxes for all levels (core, hub, spoke) on dashboard tab.
 	$context = TIMU_Tab_Navigation::get_current_context();
 	$tab     = $context['tab'] ?? 'dashboard';
 	$hub_id  = $context['hub'] ?? '';
-
-	error_log( 'wp_support_setup_dashboard_screen: Context - tab=' . $tab . ', hub_id=' . $hub_id );
+	$spoke_id = $context['spoke'] ?? '';
 
 	// Only register metaboxes when on dashboard tab.
 	if ( 'dashboard' !== $tab ) {
-		error_log( 'wp_support_setup_dashboard_screen: Skipping - not on dashboard tab' );
 		return;
 	}
 
-	// If we have a hub context, use hub-specific dashboard setup.
-	if ( ! empty( $hub_id ) ) {
-		error_log( 'wp_support_setup_dashboard_screen: Routing to hub setup for: ' . $hub_id );
-		wp_support_setup_hub_dashboard_screen( $hub_id );
-		return;
+	// Determine context string for layout manager.
+	$layout_context = 'core';
+	if ( ! empty( $spoke_id ) && ! empty( $hub_id ) ) {
+		$layout_context = $hub_id . '_' . $spoke_id;
+	} elseif ( ! empty( $hub_id ) ) {
+		$layout_context = $hub_id;
 	}
 
-	error_log( 'wp_support_setup_dashboard_screen: Using core dashboard setup' );
-
-	// Core dashboard setup below:
+	$network = is_network_admin();
 
 	// Add Help tabs.
 	$screen->add_help_tab(
@@ -887,90 +882,8 @@ function wp_support_setup_dashboard_screen(): void {
 		)
 	);
 
-	// Register meta boxes for the Core dashboard (left column: 'normal').
-	add_meta_box(
-		'timu_quick_actions',
-		__( 'Quick Actions', 'plugin-wp-support-thisismyurl' ),
-		array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_quick_actions' ),
-		$screen->id,
-		'normal',
-		'high'
-	);
-
-	add_meta_box(
-		'timu_modules',
-		__( 'Modules', 'plugin-wp-support-thisismyurl' ),
-		array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_modules' ),
-		$screen->id,
-		'normal',
-		'default'
-	);
-
-	add_meta_box(
-		'timu_activity',
-		__( 'Activity', 'plugin-wp-support-thisismyurl' ),
-		array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_activity' ),
-		$screen->id,
-		'normal',
-		'low'
-	);
-
-	add_meta_box(
-		'timu_events_and_news',
-		__( 'Events and News', 'plugin-wp-support-thisismyurl' ),
-		array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_events_and_news' ),
-		$screen->id,
-		'normal',
-		'default'
-	);
-
-	// Register meta boxes for the Core dashboard (right column: 'side').
-	add_meta_box(
-		'timu_health',
-		__( 'Health', 'plugin-wp-support-thisismyurl' ),
-		array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_health' ),
-		$screen->id,
-		'side',
-		'high'
-	);
-
-	add_meta_box(
-		'timu_at_a_glance',
-		__( 'At a Glance', 'plugin-wp-support-thisismyurl' ),
-		array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_at_a_glance' ),
-		$screen->id,
-		'side',
-		'default'
-	);
-
-	add_meta_box(
-		'timu_scheduled_tasks',
-		__( 'Scheduled Tasks', 'plugin-wp-support-thisismyurl' ),
-		array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_scheduled_tasks' ),
-		$screen->id,
-		'side',
-		'low'
-	);
-
-	// Initialize postboxes on this screen (drag/toggle).
-	add_action(
-		'admin_print_footer_scripts',
-		static function () use ( $screen ): void {
-			// Get context-specific state key for core dashboard.
-			$context = TIMU_Tab_Navigation::get_current_context();
-			$hub_id  = $context['hub'] ?? '';
-			$state_key = 'wp-support' . ( $hub_id ? '-' . $hub_id : '' );
-			?>
-			<script>
-			jQuery(document).ready(function($){
-				if (typeof postboxes !== 'undefined') {
-					postboxes.add_postbox_toggles('<?php echo esc_js( $state_key ); ?>');
-				}
-			});
-			</script>
-			<?php
-		}
-	);
+	// Use dashboard layout manager to setup widgets with proper ordering.
+	TIMU_Dashboard_Layout::setup_dashboard_screen( $layout_context, $network );
 }
 
 /**
@@ -1342,7 +1255,7 @@ function wp_support_render_dashboard( string $hub_id = '', string $spoke_id = ''
 	$run_now_nonce     = wp_create_nonce( 'timu_run_task_now' );
 
 	// Setup metaboxes for dashboard rendering.
-	wp_support_setup_dashboard_screen();
+	wp_support_setup_dashboard_screen( $hub_id, $spoke_id );
 	$screen = get_current_screen();
 
 	// Determine dashboard title based on context.
@@ -1498,6 +1411,11 @@ function timu_ajax_toggle_module(): void {
 	$user_name = $user && $user->exists() ? $user->display_name : __( 'System', 'plugin-wp-support-thisismyurl' );
 
 	if ( $success ) {
+		// If module is being enabled, inherit parent dashboard layout.
+		if ( $enabled ) {
+			TIMU_Dashboard_Layout::on_module_activated( $slug, $network );
+		}
+
 		TIMU_Vault::add_log(
 			'info',
 			0,
@@ -1623,6 +1541,9 @@ function timu_ajax_install_module(): void {
 					'message' => $activation->get_error_message(),
 				)
 			);
+		} else {
+			// Module activated successfully, inherit dashboard layout.
+			TIMU_Dashboard_Layout::on_module_activated( $slug, $network_wide );
 		}
 	}
 
