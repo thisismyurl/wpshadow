@@ -2,7 +2,7 @@
 /**
  * Site Health integration for TIMU Suite.
  *
- * @package TIMU_CORE_SUPPORT
+ * @package wp_support_SUPPORT
  */
 
 declare(strict_types=1);
@@ -269,7 +269,7 @@ class TIMU_Site_Health {
 	 * @return array
 	 */
 	public static function test_php_version(): array {
-		if ( version_compare( PHP_VERSION, TIMU_CORE_MIN_PHP, '>=' ) ) {
+		if ( version_compare( PHP_VERSION, wp_support_MIN_PHP, '>=' ) ) {
 			return array(
 				'label'       => sprintf(
 					/* translators: %s: PHP version */
@@ -287,7 +287,7 @@ class TIMU_Site_Health {
 						/* translators: 1: current PHP version, 2: minimum required version */
 						esc_html__( 'Your PHP version (%1$s) meets the minimum requirement of %2$s.', 'plugin-wp-support-thisismyurl' ),
 						PHP_VERSION,
-						TIMU_CORE_MIN_PHP
+						wp_support_MIN_PHP
 					)
 				),
 				'actions'     => '',
@@ -308,7 +308,7 @@ class TIMU_Site_Health {
 					/* translators: 1: current PHP version, 2: minimum required version */
 					esc_html__( 'Your PHP version (%1$s) is below the minimum requirement of %2$s. Contact your hosting provider to upgrade PHP.', 'plugin-wp-support-thisismyurl' ),
 					PHP_VERSION,
-					TIMU_CORE_MIN_PHP
+					wp_support_MIN_PHP
 				)
 			),
 			'actions'     => '',
@@ -324,7 +324,7 @@ class TIMU_Site_Health {
 	public static function test_wordpress_version(): array {
 		global $wp_version;
 
-		if ( version_compare( $wp_version, TIMU_CORE_MIN_WP, '>=' ) ) {
+		if ( version_compare( $wp_version, wp_support_MIN_WP, '>=' ) ) {
 			return array(
 				'label'       => sprintf(
 					/* translators: %s: WordPress version */
@@ -342,7 +342,7 @@ class TIMU_Site_Health {
 						/* translators: 1: current WordPress version, 2: minimum required version */
 						esc_html__( 'Your WordPress version (%1$s) meets the minimum requirement of %2$s.', 'plugin-wp-support-thisismyurl' ),
 						$wp_version,
-						TIMU_CORE_MIN_WP
+						wp_support_MIN_WP
 					)
 				),
 				'actions'     => '',
@@ -363,7 +363,7 @@ class TIMU_Site_Health {
 					/* translators: 1: current WordPress version, 2: minimum required version */
 					esc_html__( 'Your WordPress version (%1$s) is below the minimum requirement of %2$s. Please update WordPress.', 'plugin-wp-support-thisismyurl' ),
 					$wp_version,
-					TIMU_CORE_MIN_WP
+					wp_support_MIN_WP
 				)
 			),
 			'actions'     => '',
@@ -548,7 +548,7 @@ class TIMU_Site_Health {
 			'fields' => array(
 				'core_version'          => array(
 					'label' => __( 'Core version', 'plugin-wp-support-thisismyurl' ),
-					'value' => TIMU_CORE_VERSION,
+					'value' => wp_support_VERSION,
 				),
 				'suite_id'              => array(
 					'label' => __( 'Suite ID', 'plugin-wp-support-thisismyurl' ),
@@ -556,7 +556,7 @@ class TIMU_Site_Health {
 				),
 				'text_domain'           => array(
 					'label' => __( 'Text domain', 'plugin-wp-support-thisismyurl' ),
-					'value' => TIMU_CORE_TEXT_DOMAIN,
+					'value' => wp_support_TEXT_DOMAIN,
 				),
 				'vault_dirname'         => array(
 					'label' => __( 'Vault directory name', 'plugin-wp-support-thisismyurl' ),

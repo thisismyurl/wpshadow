@@ -2,7 +2,7 @@
 /**
  * Modules Dashboard View
  *
- * @package TIMU_Core_Support
+ * @package wp_support_Support
  */
 
 // Exit if accessed directly.

@@ -4,7 +4,7 @@
  *
  * Handles persistent dismissal of admin notices with time-based suppression.
  *
- * @package TIMU_CoreSupport
+ * @package wp_supportSupport
  * @since 1.2601.0822
  */
 
@@ -61,9 +61,9 @@ class TIMU_Notice_Manager {
 	public static function enqueue_dismissal_script(): void {
 		wp_enqueue_script(
 			'timu-notice-dismissal',
-			TIMU_CORE_URL . 'assets/js/notice-dismissal.js',
+			wp_support_URL . 'assets/js/notice-dismissal.js',
 			array( 'jquery' ),
-			TIMU_CORE_VERSION,
+			wp_support_VERSION,
 			true
 		);
 

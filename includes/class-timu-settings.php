@@ -2,7 +2,7 @@
 /**
  * TIMU Settings API (network + site with overrides).
  *
- * @package TIMU_CORE_SUPPORT
+ * @package wp_support_SUPPORT
  */
 
 declare(strict_types=1);

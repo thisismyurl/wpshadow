@@ -5,7 +5,7 @@
  * Provides DRY initialization for all hub modules (Media, Vault, etc).
  * Eliminates duplicate code for constants, registration, menu setup, and more.
  *
- * @package TIMU_CORE_SUPPORT
+ * @package wp_support_SUPPORT
  * @since 1.2602.10010
  */
 

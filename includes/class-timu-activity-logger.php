@@ -5,7 +5,7 @@
  * Tracks module lifecycle, vault operations, license events, and settings changes
  * for display in WordPress Dashboard Activity widget.
  *
- * @package TIMU_Core_Support
+ * @package wp_support_Support
  * @since 1.0.0
  */
 
@@ -476,15 +476,44 @@ class TIMU_Activity_Logger {
 		$username      = $user ? $user->display_name : __( 'Unknown', 'plugin-wp-support-thisismyurl' );
 		$module_source = $event['module_source'] ?? 'core';
 
+		// Build optional action markup (e.g., Restore) for specific events.
+		$actions_html = '';
+		if (
+			self::EVENT_MEDIA_FILE_DELETED === ( $event['type'] ?? '' )
+			&& ! empty( $event['data']['post_id'] )
+			&& current_user_can( 'upload_files' )
+		) {
+			$attachment_id = (int) $event['data']['post_id'];
+
+			// Prepare a secure inline form to trigger Vault rehydrate for this attachment.
+			$action_url = esc_url( admin_url( 'admin-post.php?action=timu_vault_attachment_action' ) );
+			// Nonce must match the Vault handler's action key.
+			$nonce      = wp_create_nonce( 'timu_vault_attachment_action' );
+
+			$actions_html = sprintf(
+				'<form method="post" action="%1$s" style="display:inline;margin-left:8px;">'
+				. '<input type="hidden" name="timu_vault_attachment_nonce" value="%2$s" />'
+				. '<input type="hidden" name="attachment_id" value="%3$d" />'
+				. '<input type="hidden" name="timu_vault_attachment_cmd" value="rehydrate" />'
+				. '<button type="submit" class="button-link" style="padding:0 4px;">%4$s</button>'
+				. '</form>',
+				$action_url,
+				$nonce,
+				$attachment_id,
+				esc_html__( 'Restore', 'plugin-wp-support-thisismyurl' )
+			);
+		}
+
 		printf(
-			'<li data-event-type="%s" data-module="%s"><span class="dashicons %s" style="color: %s;"></span> <strong>%s</strong> - %s <small style="color: #666;">(%s)</small></li>',
+			'<li data-event-type="%s" data-module="%s"><span class="dashicons %s" style="color: %s;"></span> <strong>%s</strong> - %s <small style="color: #666;">(%s)</small>%s</li>',
 			esc_attr( $event['type'] ),
 			esc_attr( $module_source ),
 			esc_attr( $icon['class'] ),
 			esc_attr( $icon['color'] ),
 			esc_html( $description ),
 			esc_html( $timestamp ),
-			esc_html( $username )
+			esc_html( $username ),
+			$actions_html
 		);
 	}
 

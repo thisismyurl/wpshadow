@@ -4,7 +4,7 @@
  *
  * Convenience functions for plugins to interact with the feature registry.
  *
- * @package TIMU_CORE_SUPPORT
+ * @package wp_support_SUPPORT
  */
 
 declare(strict_types=1);

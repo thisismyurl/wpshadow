@@ -3,7 +3,7 @@
  * TIMU Admin UI Component - WordPress Settings API
  * Shared admin renderer for spoke plugins.
  *
- * @package TIMU_CORE_SUPPORT
+ * @package wp_support_SUPPORT
  * @version 1.2601.0819
  */
 

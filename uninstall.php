@@ -19,15 +19,15 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
  *
  * @return void
  */
-function timu_core_delete_options(): void {
+function wp_support_delete_options(): void {
 	// Delete single site options.
-	delete_option( 'timu_core_settings' );
-	delete_option( 'timu_core_version' );
+	delete_option( 'wp_support_settings' );
+	delete_option( 'wp_support_version' );
 
 	// Delete multisite options if applicable.
 	if ( is_multisite() ) {
-		delete_site_option( 'timu_core_network_settings' );
-		delete_site_option( 'timu_core_network_version' );
+		delete_site_option( 'wp_support_network_settings' );
+		delete_site_option( 'wp_support_network_version' );
 	}
 }
 
@@ -39,7 +39,7 @@ function timu_core_delete_options(): void {
  *
  * @return void
  */
-function timu_core_cleanup_vault(): void {
+function wp_support_cleanup_vault(): void {
 	/*
 	$upload_dir = wp_upload_dir();
 	$vault_path = $upload_dir['basedir'] . '/vault';
@@ -62,10 +62,10 @@ function timu_core_cleanup_vault(): void {
 }
 
 // Execute cleanup.
-timu_core_delete_options();
+wp_support_delete_options();
 
 // Optional: Uncomment to remove vault on uninstall.
-// timu_core_cleanup_vault();
+// wp_support_cleanup_vault();
 
 /* @changelog
  * [1.2601.71701] - 2026-01-07 17:17

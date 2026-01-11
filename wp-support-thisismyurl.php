@@ -28,35 +28,195 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Render Settings view (Core or Hub) using the same metabox layout as the dashboard.
+ * Widgets here represent settings groups for the current context.
+ *
+ * @param string $hub_id Optional hub identifier for hub-level settings.
+ * @return void
+ */
+function wp_support_render_settings( string $hub_id = '' ): void {
+	if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
+		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
+	}
+
+	$screen = get_current_screen();
+	if ( ! $screen ) {
+		return;
+	}
+
+	// Title mirrors dashboard style.
+	$settings_title = __( 'Support Settings', 'plugin-wp-support-thisismyurl' );
+	if ( ! empty( $hub_id ) ) {
+		$settings_title = ucfirst( $hub_id ) . ' ' . __( 'Settings', 'plugin-wp-support-thisismyurl' );
+	}
+
+	// Register lightweight metaboxes representing settings groups for this context.
+	// These are placeholders until real settings UIs are wired in.
+	add_meta_box(
+		'timu_settings_general',
+		__( 'General Settings', 'plugin-wp-support-thisismyurl' ),
+		static function () use ( $hub_id ) {
+			$label = $hub_id ? sprintf( __( 'General settings for %s will appear here.', 'plugin-wp-support-thisismyurl' ), esc_html( ucfirst( $hub_id ) ) ) : __( 'Global settings will appear here.', 'plugin-wp-support-thisismyurl' );
+			echo '<p>' . esc_html( $label ) . '</p>';
+		},
+		$screen->id,
+		'normal'
+	);
+
+	add_meta_box(
+		'timu_settings_notifications',
+		__( 'Notifications', 'plugin-wp-support-thisismyurl' ),
+		static function () use ( $hub_id ) {
+			$label = $hub_id ? sprintf( __( 'Notification settings for %s will appear here.', 'plugin-wp-support-thisismyurl' ), esc_html( ucfirst( $hub_id ) ) ) : __( 'Notification settings will appear here.', 'plugin-wp-support-thisismyurl' );
+			echo '<p>' . esc_html( $label ) . '</p>';
+		},
+		$screen->id,
+		'side'
+	);
+
+	add_meta_box(
+		'timu_settings_advanced',
+		__( 'Advanced', 'plugin-wp-support-thisismyurl' ),
+		static function () use ( $hub_id ) {
+			$label = $hub_id ? sprintf( __( 'Advanced settings for %s will appear here.', 'plugin-wp-support-thisismyurl' ), esc_html( ucfirst( $hub_id ) ) ) : __( 'Advanced settings will appear here.', 'plugin-wp-support-thisismyurl' );
+			echo '<p>' . esc_html( $label ) . '</p>';
+		},
+		$screen->id,
+		'side'
+	);
+
+	?>
+	<div class="wrap">
+		<h1><?php echo esc_html( $settings_title ); ?></h1>
+		<div id="dashboard-widgets" class="metabox-holder">
+			<div id="postbox-container-1" class="postbox-container">
+				<?php do_meta_boxes( $screen->id, 'normal', null ); ?>
+			</div>
+			<div id="postbox-container-2" class="postbox-container">
+				<?php do_meta_boxes( $screen->id, 'side', null ); ?>
+			</div>
+		</div>
+	</div>
+	<?php
+}
+
+/**
+ * Early guard to hide disabled module submenus based on localStorage state.
+ * Runs in admin_head to reduce initial hover flicker.
+ *
+ * @return void
+ */
+function wp_support_hide_disabled_submenus(): void {
+	?>
+	<script>
+	(function(){
+		var scope = (document.documentElement.classList.contains('network-admin') ? 'network' : 'site');
+		var storagePrefix = 'timuToggleState:' + scope + ':';
+		function applyHide(){
+			var top = document.getElementById('toplevel_page_wp-support');
+			if (!top){
+				var link = document.querySelector('#adminmenu a.menu-top[href*="page=wp-support"]');
+				if (link) { top = link.closest('li'); }
+			}
+			if (!top) return;
+			var submenu = top.querySelector('ul.wp-submenu-wrap') || top.querySelector('ul.wp-submenu');
+			if (!submenu) return;
+			var hideSlugs = [];
+			for (var i = 0; i < localStorage.length; i++){
+				var key = localStorage.key(i);
+				if (!key || key.indexOf(storagePrefix) !== 0) continue;
+				if (localStorage.getItem(key) === '0'){
+					hideSlugs.push(key.substring(storagePrefix.length));
+				}
+			}
+			if (!hideSlugs.length) return;
+			hideSlugs.forEach(function(slug){
+				var target = 'page=wp-support&module=' + encodeURIComponent(slug.replace(/-support-thisismyurl$/, ''));
+				submenu.querySelectorAll('a[href*="' + target + '"]').forEach(function(anchor){
+					var li = anchor.closest('li');
+					if (li){ li.style.display = 'none'; }
+					anchor.style.display = 'none';
+					anchor.setAttribute('aria-hidden','true');
+				});
+			});
+			var anyVisible = Array.from(submenu.querySelectorAll('li')).some(function(li){ return li.style.display !== 'none'; });
+			submenu.style.display = anyVisible ? '' : 'none';
+		}
+		if (document.readyState === 'loading'){
+			var tries = 0;
+			var waiter = function(){
+				tries++;
+				applyHide();
+				if (tries < 10) { requestAnimationFrame(waiter); }
+			};
+			waiter();
+		} else {
+			applyHide();
+		}
+		window.addEventListener('storage', function(ev){
+			if (!ev || typeof ev.key !== 'string') return;
+			if (ev.key.indexOf(storagePrefix) === 0) { applyHide(); }
+		});
+	})();
+	</script>
+	<?php
+}
+
+/**
+ * Admin guard: if a module is disabled, redirect to the parent dashboard when accessed directly.
+ *
+ * @return void
+ */
+function wp_support_guard_disabled_modules(): void {
+	if ( ! is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+		return;
+	}
+	$raw_module = isset( $_GET['module'] ) ? sanitize_key( wp_unslash( $_GET['module'] ) ) : '';
+	if ( empty( $raw_module ) ) {
+		return;
+	}
+	// Normalize to full slug regardless of whether the suffix is included in the query param.
+	$slug    = str_contains( $raw_module, '-support-thisismyurl' ) ? $raw_module : $raw_module . '-support-thisismyurl';
+	$catalog = TIMU_Module_Registry::get_catalog_with_status();
+	$enabled = (bool) ( $catalog[ $slug ]['enabled'] ?? false );
+	if ( $enabled ) {
+		return;
+	}
+	$target = is_network_admin() ? network_admin_url( 'admin.php?page=wp-support' ) : admin_url( 'admin.php?page=wp-support' );
+	wp_safe_redirect( $target );
+	exit;
+}
+
 // Plugin constants.
-define( 'TIMU_CORE_VERSION', '1.2601.73001' );
-define( 'TIMU_CORE_FILE', __FILE__ );
-define( 'TIMU_CORE_PATH', plugin_dir_path( __FILE__ ) );
-define( 'TIMU_CORE_URL', plugin_dir_url( __FILE__ ) );
-define( 'TIMU_CORE_BASENAME', plugin_basename( __FILE__ ) );
-define( 'TIMU_CORE_TEXT_DOMAIN', 'plugin-wp-support-thisismyurl' );
+define( 'wp_support_VERSION', '1.2601.73001' );
+define( 'wp_support_FILE', __FILE__ );
+define( 'wp_support_PATH', plugin_dir_path( __FILE__ ) );
+define( 'wp_support_URL', plugin_dir_url( __FILE__ ) );
+define( 'wp_support_BASENAME', plugin_basename( __FILE__ ) );
+define( 'wp_support_TEXT_DOMAIN', 'plugin-wp-support-thisismyurl' );
 
 // Suite Identifier for Hub & Spoke handshake.
 define( 'TIMU_SUITE_ID', 'thisismyurl-media-suite-2026' );
 
 // Minimum requirements.
-define( 'TIMU_CORE_MIN_PHP', '8.1.29' );
-define( 'TIMU_CORE_MIN_WP', '6.4.0' );
+define( 'wp_support_MIN_PHP', '8.1.29' );
+define( 'wp_support_MIN_WP', '6.4.0' );
 
 /**
  * Plugin activation hook.
  *
  * @return void
  */
-function timu_core_activate(): void {
+function wp_support_activate(): void {
 	// Check PHP version.
-	if ( version_compare( PHP_VERSION, TIMU_CORE_MIN_PHP, '<' ) ) {
-		deactivate_plugins( TIMU_CORE_BASENAME );
+	if ( version_compare( PHP_VERSION, wp_support_MIN_PHP, '<' ) ) {
+		deactivate_plugins( wp_support_BASENAME );
 		wp_die(
 			sprintf(
 				/* translators: 1: Required PHP version, 2: Current PHP version */
 				esc_html__( 'WordPress Support requires PHP %1$s or higher. You are running PHP %2$s.', 'plugin-wp-support-thisismyurl' ),
-				esc_html( TIMU_CORE_MIN_PHP ),
+				esc_html( wp_support_MIN_PHP ),
 				esc_html( PHP_VERSION )
 			),
 			esc_html__( 'Plugin Activation Error', 'plugin-wp-support-thisismyurl' ),
@@ -66,13 +226,13 @@ function timu_core_activate(): void {
 
 	// Check WordPress version.
 	global $wp_version;
-	if ( version_compare( $wp_version, TIMU_CORE_MIN_WP, '<' ) ) {
-		deactivate_plugins( TIMU_CORE_BASENAME );
+	if ( version_compare( $wp_version, wp_support_MIN_WP, '<' ) ) {
+		deactivate_plugins( wp_support_BASENAME );
 		wp_die(
 			sprintf(
 				/* translators: 1: Required WordPress version, 2: Current WordPress version */
 				esc_html__( 'WordPress Support requires WordPress %1$s or higher. You are running WordPress %2$s.', 'plugin-wp-support-thisismyurl' ),
-				esc_html( TIMU_CORE_MIN_WP ),
+				esc_html( wp_support_MIN_WP ),
 				esc_html( $wp_version )
 			),
 			esc_html__( 'Plugin Activation Error', 'plugin-wp-support-thisismyurl' ),
@@ -81,7 +241,7 @@ function timu_core_activate(): void {
 	}
 
 	// Create vault directory with proper permissions.
-	timu_core_setup_vault();
+	wp_support_setup_vault();
 
 	// Flush rewrite rules.
 	flush_rewrite_rules();
@@ -92,7 +252,7 @@ function timu_core_activate(): void {
  *
  * @return void
  */
-function timu_core_deactivate(): void {
+function wp_support_deactivate(): void {
 	// Flush rewrite rules.
 	flush_rewrite_rules();
 }
@@ -102,7 +262,7 @@ function timu_core_deactivate(): void {
  *
  * @return bool True on success, false on failure.
  */
-function timu_core_setup_vault(): bool {
+function wp_support_setup_vault(): bool {
 	$upload_dir = wp_upload_dir();
 
 	// Get or generate vault directory name (hidden with random suffix).
@@ -154,7 +314,7 @@ function timu_core_setup_vault(): bool {
 	}
 
 	// Initialize encryption keys if enabled.
-	timu_core_setup_encryption_keys();
+	wp_support_setup_encryption_keys();
 
 	return true;
 }
@@ -165,7 +325,7 @@ function timu_core_setup_vault(): bool {
  *
  * @return bool True if keys are available, false otherwise.
  */
-function timu_core_setup_encryption_keys(): bool {
+function wp_support_setup_encryption_keys(): bool {
 	// If wp-config defines the key, use it.
 	if ( defined( 'TIMU_VAULT_KEY' ) && TIMU_VAULT_KEY ) {
 		return true;
@@ -200,7 +360,7 @@ function timu_core_setup_encryption_keys(): bool {
  *
  * @return string|null Encryption key, or null if not available.
  */
-function timu_core_get_vault_key(): ?string {
+function wp_support_get_vault_key(): ?string {
 	if ( defined( 'TIMU_VAULT_KEY' ) && TIMU_VAULT_KEY ) {
 		return TIMU_VAULT_KEY;
 	}
@@ -214,7 +374,7 @@ function timu_core_get_vault_key(): ?string {
  *
  * @return bool True if openssl is available, false otherwise.
  */
-function timu_core_encryption_supported(): bool {
+function wp_support_encryption_supported(): bool {
 	return extension_loaded( 'openssl' );
 }
 
@@ -223,67 +383,67 @@ function timu_core_encryption_supported(): bool {
  *
  * @return void
  */
-function timu_core_init(): void {
-	@file_put_contents( TIMU_CORE_PATH . 'timu_core_init_called.txt', date( 'Y-m-d H:i:s' ) );
-	error_log( '=== TIMU_CORE_INIT CALLED ===' );
+function wp_support_init(): void {
+	@file_put_contents( wp_support_PATH . 'wp_support_init_called.txt', date( 'Y-m-d H:i:s' ) );
+	error_log( '=== wp_support_INIT CALLED ===' );
 	
 	// Load text domain for translations.
 	load_plugin_textdomain(
-		TIMU_CORE_TEXT_DOMAIN,
+		wp_support_TEXT_DOMAIN,
 		false,
-		dirname( TIMU_CORE_BASENAME ) . '/languages'
+		dirname( wp_support_BASENAME ) . '/languages'
 	);
 
 	// Load module bootstrap for child plugin installation and activation.
-	require_once TIMU_CORE_PATH . 'includes/class-timu-module-bootstrap.php';
+	require_once wp_support_PATH . 'includes/class-timu-module-bootstrap.php';
 	TIMU_Module_Bootstrap::init();
 
 	// Load module toggles for feature flags.
-	require_once TIMU_CORE_PATH . 'includes/class-timu-module-toggles.php';
+	require_once wp_support_PATH . 'includes/class-timu-module-toggles.php';
 	TIMU_Module_Toggles::init();
 
 	// Load module registry.
-	require_once TIMU_CORE_PATH . 'includes/class-timu-module-registry.php';
+	require_once wp_support_PATH . 'includes/class-timu-module-registry.php';
 	TIMU_Module_Registry::init();
 
 	// Load DRY Hub initializer before loading modules.
-	require_once TIMU_CORE_PATH . 'includes/class-timu-module-hub-initializer.php';
+	require_once wp_support_PATH . 'includes/class-timu-module-hub-initializer.php';
 
 	// Load module loader (manages independent module repositories).
-	require_once TIMU_CORE_PATH . 'includes/class-timu-module-loader.php';
+	require_once wp_support_PATH . 'includes/class-timu-module-loader.php';
 	error_log( '=== ABOUT TO CALL MODULE_LOADER::INIT ===' );
-	@file_put_contents( TIMU_CORE_PATH . 'about_to_call_module_loader_init.txt', date( 'Y-m-d H:i:s' ) );
+	@file_put_contents( wp_support_PATH . 'about_to_call_module_loader_init.txt', date( 'Y-m-d H:i:s' ) );
 	\TIMU\Core\Module_Loader::init();
-	@file_put_contents( TIMU_CORE_PATH . 'module_loader_init_returned.txt', date( 'Y-m-d H:i:s' ) );
+	@file_put_contents( wp_support_PATH . 'module_loader_init_returned.txt', date( 'Y-m-d H:i:s' ) );
 	error_log( '=== MODULE_LOADER::INIT RETURNED ===' );
 
 	// Load settings API (network + site with overrides).
-	require_once TIMU_CORE_PATH . 'includes/class-timu-settings.php';
+	require_once wp_support_PATH . 'includes/class-timu-settings.php';
 	TIMU_Settings::init();
-	require_once TIMU_CORE_PATH . 'includes/timu-settings-functions.php';
+	require_once wp_support_PATH . 'includes/timu-settings-functions.php';
 
 	// Load capability manager.
-	require_once TIMU_CORE_PATH . 'includes/class-timu-capabilities.php';
+	require_once wp_support_PATH . 'includes/class-timu-capabilities.php';
 
 	// Load Site Health integration.
-	require_once TIMU_CORE_PATH . 'includes/class-timu-site-health.php';
+	require_once wp_support_PATH . 'includes/class-timu-site-health.php';
 	TIMU_Site_Health::init();
 
 	// Load Activity Logger.
-	require_once TIMU_CORE_PATH . 'includes/class-timu-activity-logger.php';
+	require_once wp_support_PATH . 'includes/class-timu-activity-logger.php';
 	TIMU_Activity_Logger::init();
 
 	// Load license utilities.
-	require_once TIMU_CORE_PATH . 'includes/class-timu-license.php';
+	require_once wp_support_PATH . 'includes/class-timu-license.php';
 	TIMU_License::init();
 
 	// Load feature registry for flexible plugin dependencies.
-	require_once TIMU_CORE_PATH . 'includes/class-timu-feature-registry.php';
-	require_once TIMU_CORE_PATH . 'includes/timu-feature-functions.php';
+	require_once wp_support_PATH . 'includes/class-timu-feature-registry.php';
+	require_once wp_support_PATH . 'includes/timu-feature-functions.php';
 	TIMU_Feature_Registry::init();
 
 	// Load Spoke Base for spoke plugins (Image, Media, etc).
-	require_once TIMU_CORE_PATH . 'includes/class-timu-spoke-base.php';
+	require_once wp_support_PATH . 'includes/class-timu-spoke-base.php';
 
 	// Load Vault service (canonical implementation in vault-support plugin).
 	// Core aliases it for backward compatibility.
@@ -294,8 +454,8 @@ function timu_core_init(): void {
 	}
 
 	// Always load the alias file which will create the alias if vault-support is available.
-	if ( file_exists( TIMU_CORE_PATH . 'includes/class-timu-vault.php' ) ) {
-		require_once TIMU_CORE_PATH . 'includes/class-timu-vault.php';
+	if ( file_exists( wp_support_PATH . 'includes/class-timu-vault.php' ) ) {
+		require_once wp_support_PATH . 'includes/class-timu-vault.php';
 	}
 
 	// Initialize Vault if available (via vault-support's implementation).
@@ -304,45 +464,47 @@ function timu_core_init(): void {
 	}
 
 	// Load vault size monitoring (real-time alerts).
-	require_once TIMU_CORE_PATH . 'includes/class-timu-vault-size-monitor.php';
+	require_once wp_support_PATH . 'includes/class-timu-vault-size-monitor.php';
 	TIMU_Vault_Size_Monitor::init();
 
 	// Load network license broadcaster for multisite (Super Admin push to all sites).
-	require_once TIMU_CORE_PATH . 'includes/class-timu-network-license.php';
+	require_once wp_support_PATH . 'includes/class-timu-network-license.php';
 	TIMU_Network_License::init();
 
 	// Load plugin upgrader for install/update flows.
-	require_once TIMU_CORE_PATH . 'includes/class-timu-plugin-upgrader.php';
+	require_once wp_support_PATH . 'includes/class-timu-plugin-upgrader.php';
 
 	// Load module action handlers for AJAX install/update/activate.
-	require_once TIMU_CORE_PATH . 'includes/class-timu-module-actions.php';
+	require_once wp_support_PATH . 'includes/class-timu-module-actions.php';
 	TIMU_Module_Actions::init();
 
 	// Load tab navigation system.
-	require_once TIMU_CORE_PATH . 'includes/class-timu-tab-navigation.php';
-	require_once TIMU_CORE_PATH . 'includes/class-timu-dashboard-widgets.php';
+	require_once wp_support_PATH . 'includes/class-timu-tab-navigation.php';
+	require_once wp_support_PATH . 'includes/class-timu-dashboard-widgets.php';
 
 	// Load CLI commands when WP-CLI present.
 	if ( defined( 'WP_CLI' ) && WP_CLI ) {
-		require_once TIMU_CORE_PATH . 'includes/class-timu-cli.php';
+		require_once wp_support_PATH . 'includes/class-timu-cli.php';
 		\WP_CLI::add_command( 'timu modules', '\\TIMU\\CoreSupport\\TIMU_CLI_Modules' );
 		\WP_CLI::add_command( 'timu settings', '\\TIMU\\CoreSupport\\TIMU_CLI_Settings' );
 	}
 
 	// Load notice manager for persistent dismissal.
-	require_once TIMU_CORE_PATH . 'includes/class-timu-notice-manager.php';
+	require_once wp_support_PATH . 'includes/class-timu-notice-manager.php';
 	TIMU_Notice_Manager::init();
 
 	// Initialize multisite support if applicable.
 	if ( is_multisite() ) {
-		add_action( 'network_admin_menu', __NAMESPACE__ . '\\timu_core_network_admin_menu' );
+		add_action( 'network_admin_menu', __NAMESPACE__ . '\\wp_support_network_admin_menu' );
 	}
 
 	// Register admin menu.
-	add_action( 'admin_menu', __NAMESPACE__ . '\\timu_core_admin_menu' );
+	add_action( 'admin_menu', __NAMESPACE__ . '\\wp_support_admin_menu' );
+	add_action( 'admin_head', __NAMESPACE__ . '\\wp_support_hide_disabled_submenus' );
+	add_action( 'admin_init', __NAMESPACE__ . '\wp_support_guard_disabled_modules' );
 
 	// Handle capability mapping submissions.
-	add_action( 'admin_init', __NAMESPACE__ . '\\timu_core_handle_capabilities_post' );
+	add_action( 'admin_init', __NAMESPACE__ . '\\wp_support_handle_capabilities_post' );
 
 	// Handle AJAX actions.
 	add_action( 'wp_ajax_timu_toggle_module', __NAMESPACE__ . '\\timu_ajax_toggle_module' );
@@ -350,21 +512,31 @@ function timu_core_init(): void {
 	add_action( 'wp_ajax_timu_update_module', __NAMESPACE__ . '\\timu_ajax_update_module' );
 	add_action( 'wp_ajax_timu_broadcast_license', __NAMESPACE__ . '\\timu_ajax_broadcast_license' );
 	add_action( 'wp_ajax_timu_save_metabox_state', __NAMESPACE__ . '\\timu_ajax_save_metabox_state' );
+	add_action( 'wp_ajax_timu_save_postbox_order', __NAMESPACE__ . '\\timu_ajax_save_postbox_order' );
+	add_action( 'wp_ajax_timu_save_postbox_state', __NAMESPACE__ . '\\timu_ajax_save_postbox_state' );
 
 	// Admin-post action to force scheduled tasks to run immediately.
 	add_action( 'admin_post_timu_run_task_now', __NAMESPACE__ . '\timu_run_task_now' );
 
 	// Plugin page links and meta.
-	add_filter( 'plugin_action_links_' . TIMU_CORE_BASENAME, __NAMESPACE__ . '\\timu_core_plugin_action_links' );
-	add_filter( 'plugin_row_meta', __NAMESPACE__ . '\\timu_core_plugin_row_meta', 10, 2 );
+	add_filter( 'plugin_action_links_' . wp_support_BASENAME, __NAMESPACE__ . '\\wp_support_plugin_action_links' );
+	add_filter( 'plugin_row_meta', __NAMESPACE__ . '\\wp_support_plugin_row_meta', 10, 2 );
 
 	// Enqueue admin scripts and styles.
-	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\timu_core_admin_enqueue' );
+	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\wp_support_admin_enqueue' );
+
+	// Save screen options for dashboard.
+	add_filter( 'set-screen-option', __NAMESPACE__ . '\\wp_support_save_screen_option', 10, 3 );
+
+	// Filter postbox classes to load state from custom keys.
+	add_filter( 'postbox_classes_toplevel_page_wp-support', __NAMESPACE__ . '\\wp_support_postbox_classes', 10, 2 );
+	add_filter( 'get_user_option_meta-box-order_toplevel_page_wp-support', __NAMESPACE__ . '\\wp_support_get_metabox_order' );
+	add_filter( 'get_user_option_closedpostboxes_toplevel_page_wp-support', __NAMESPACE__ . '\\wp_support_get_closed_postboxes' );
 
 	// Register GDPR Personal Data Exporter and Eraser.
-	add_filter( 'wp_privacy_personal_data_exporters', __NAMESPACE__ . '\\timu_core_register_privacy_exporters' );
+	add_filter( 'wp_privacy_personal_data_exporters', __NAMESPACE__ . '\\wp_support_register_privacy_exporters' );
 	// Register GDPR Personal Data Eraser for Vault.
-	add_filter( 'wp_privacy_personal_data_erasers', __NAMESPACE__ . '\\timu_core_register_privacy_erasers' );
+	add_filter( 'wp_privacy_personal_data_erasers', __NAMESPACE__ . '\\wp_support_register_privacy_erasers' );
 }
 
 /**
@@ -372,13 +544,13 @@ function timu_core_init(): void {
  *
  * @return void
  */
-function timu_core_network_admin_menu(): void {
+function wp_support_network_admin_menu(): void {
 	add_menu_page(
 		__( 'Support Dashboard', 'plugin-wp-support-thisismyurl' ),
 		__( 'Support', 'plugin-wp-support-thisismyurl' ),
 		'manage_network_options',
 		'wp-support',
-		__NAMESPACE__ . '\\timu_core_render_tab_router',
+		__NAMESPACE__ . '\\wp_support_render_tab_router',
 		'dashicons-admin-generic',
 		999
 	);
@@ -389,17 +561,14 @@ function timu_core_network_admin_menu(): void {
 		__( 'Dashboard', 'plugin-wp-support-thisismyurl' ),
 		'manage_network_options',
 		'wp-support',
-		__NAMESPACE__ . '\\timu_core_render_tab_router'
+		__NAMESPACE__ . '\\wp_support_render_tab_router'
 	);
 
 	// Dynamically register module submenu items (Vault, Media, etc.).
-	timu_core_register_module_submenus( 'manage_network_options' );
-
-	// Dynamically register hub submenu items.
-	timu_core_register_hub_submenus( 'manage_network_options' );
+	wp_support_register_module_submenus( 'manage_network_options' );
 
 	// Initialize dashboard screen extras (Screen Options, Help) and metaboxes.
-	add_action( 'load-toplevel_page_wp-support', __NAMESPACE__ . '\\timu_core_setup_dashboard_screen' );
+	add_action( 'load-toplevel_page_wp-support', __NAMESPACE__ . '\\wp_support_setup_dashboard_screen' );
 }
 
 /**
@@ -407,13 +576,13 @@ function timu_core_network_admin_menu(): void {
  *
  * @return void
  */
-function timu_core_admin_menu(): void {
+function wp_support_admin_menu(): void {
 	add_menu_page(
 		__( 'Support Dashboard', 'plugin-wp-support-thisismyurl' ),
 		__( 'Support', 'plugin-wp-support-thisismyurl' ),
 		'manage_options',
 		'wp-support',
-		__NAMESPACE__ . '\\timu_core_render_tab_router',
+		__NAMESPACE__ . '\\wp_support_render_tab_router',
 		'dashicons-admin-generic',
 		999
 	);
@@ -424,17 +593,14 @@ function timu_core_admin_menu(): void {
 		__( 'Dashboard', 'plugin-wp-support-thisismyurl' ),
 		'manage_options',
 		'wp-support',
-		__NAMESPACE__ . '\\timu_core_render_tab_router'
+		__NAMESPACE__ . '\\wp_support_render_tab_router'
 	);
 
 	// Dynamically register module submenu items (Vault, Media, etc.).
-	timu_core_register_module_submenus( 'manage_options' );
-
-	// Dynamically register hub submenu items.
-	timu_core_register_hub_submenus( 'manage_options' );
+	wp_support_register_module_submenus( 'manage_options' );
 
 	// Initialize dashboard screen extras (Screen Options, Help) and metaboxes.
-	add_action( 'load-toplevel_page_wp-support', __NAMESPACE__ . '\\timu_core_setup_dashboard_screen' );
+	add_action( 'load-toplevel_page_wp-support', __NAMESPACE__ . '\\wp_support_setup_dashboard_screen' );
 }
 
 /**
@@ -443,7 +609,7 @@ function timu_core_admin_menu(): void {
  * @param string $capability Required capability (manage_options or manage_network_options).
  * @return void
  */
-function timu_core_register_module_submenus( string $capability ): void {
+function wp_support_register_module_submenus( string $capability ): void {
 	$catalog = TIMU_Module_Registry::get_catalog_with_status();
 	$modules = array_filter(
 		$catalog,
@@ -467,36 +633,7 @@ function timu_core_register_module_submenus( string $capability ): void {
 			$module_name,
 			$capability,
 			'wp-support&module=' . $module_id,
-			__NAMESPACE__ . '\\timu_core_render_tab_router'
-		);
-	}
-}
-
-/**
- * Register submenu items for all active hubs.
- *
- * @param string $capability Required capability (manage_options or manage_network_options).
- * @return void
- */
-function timu_core_register_hub_submenus( string $capability ): void {
-	$catalog = TIMU_Module_Registry::get_catalog_with_status();
-	$hubs    = array_filter(
-		$catalog,
-		fn( $m ) => 'hub' === ( $m['type'] ?? '' ) && ! empty( $m['status']['active'] )
-	);
-
-	foreach ( $hubs as $hub ) {
-		$hub_id   = sanitize_key( str_replace( '-support-thisismyurl', '', $hub['id'] ?? '' ) );
-		$hub_name = esc_html( $hub['name'] ?? ucfirst( $hub_id ) );
-		$hub_url  = TIMU_Tab_Navigation::build_hub_url( $hub_id );
-
-		add_submenu_page(
-			'wp-support',
-			$hub_name,
-			$hub_name,
-			$capability,
-			'wp-support-hub-' . $hub_id, // Unique page slug.
-			__NAMESPACE__ . '\\timu_core_render_tab_router' // Same router handles all.
+			__NAMESPACE__ . '\\wp_support_render_tab_router'
 		);
 	}
 }
@@ -506,14 +643,14 @@ function timu_core_register_hub_submenus( string $capability ): void {
  *
  * @return void
  */
-function timu_core_render_capabilities_page(): void {
+function wp_support_render_capabilities_page(): void {
 	$required_cap = is_network_admin() ? 'manage_network_options' : 'manage_options';
 
 	if ( ! current_user_can( $required_cap ) ) {
 		wp_die( esc_html__( 'You do not have sufficient permissions to manage capabilities.', 'plugin-wp-support-thisismyurl' ) );
 	}
 
-	require TIMU_CORE_PATH . 'includes/views/capabilities.php';
+	require wp_support_PATH . 'includes/views/capabilities.php';
 }
 
 /**
@@ -521,7 +658,7 @@ function timu_core_render_capabilities_page(): void {
  *
  * @return void
  */
-function timu_core_handle_capabilities_post(): void {
+function wp_support_handle_capabilities_post(): void {
 	if ( ! is_admin() ) {
 		return;
 	}
@@ -573,7 +710,7 @@ function timu_core_handle_capabilities_post(): void {
  *
  * @return void
  */
-function timu_core_render_tab_router(): void {
+function wp_support_render_tab_router(): void {
 	if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
 	}
@@ -583,6 +720,18 @@ function timu_core_render_tab_router(): void {
 	$spoke   = $context['spoke'];
 	$tab     = $context['tab'];
 	$level   = $context['level'];
+
+	// Block and redirect if hub module is disabled (avoid dead dashboard access).
+	if ( ! empty( $hub ) ) {
+		$slug    = $hub . '-support-thisismyurl';
+		$catalog = TIMU_Module_Registry::get_catalog_with_status();
+		$enabled = (bool) ( $catalog[ $slug ]['enabled'] ?? false );
+		if ( ! $enabled ) {
+			$parent_url = is_network_admin() ? network_admin_url( 'admin.php?page=wp-support' ) : admin_url( 'admin.php?page=wp-support' );
+			wp_safe_redirect( $parent_url );
+			exit;
+		}
+	}
 
 	// Render breadcrumbs (except at Core level).
 	if ( 'core' !== $level ) {
@@ -606,11 +755,11 @@ function timu_core_render_tab_router(): void {
 
 	// Route to appropriate content based on level and tab.
 	if ( 'spoke' === $level && ! empty( $hub ) && ! empty( $spoke ) ) {
-		timu_core_render_spoke_content( $hub, $spoke, $tab );
+		wp_support_render_spoke_content( $hub, $spoke, $tab );
 	} elseif ( 'hub' === $level && ! empty( $hub ) ) {
-		timu_core_render_hub_content( $hub, $tab );
+		wp_support_render_hub_content( $hub, $tab );
 	} else {
-		timu_core_render_core_content( $tab );
+		wp_support_render_core_content( $tab );
 	}
 }
 
@@ -619,24 +768,40 @@ function timu_core_render_tab_router(): void {
  *
  * @return void
  */
-function timu_core_setup_dashboard_screen(): void {
+function wp_support_setup_dashboard_screen(): void {
+	error_log( 'wp_support_setup_dashboard_screen: FUNCTION CALLED' );
+	
 	$screen = get_current_screen();
-	if ( ! $screen || 'toplevel_page_wp-support' !== $screen->id ) {
+	if ( ! $screen ) {
+		error_log( 'wp_support_setup_dashboard_screen: No screen available' );
 		return;
 	}
 
-	// Only register Core dashboard metaboxes on the Core dashboard tab to avoid leaking widgets into hub dashboards.
+	error_log( 'wp_support_setup_dashboard_screen: Screen ID=' . $screen->id );
+
+	// Register dashboard metaboxes for all levels (core, hub, spoke) on dashboard tab.
 	$context = TIMU_Tab_Navigation::get_current_context();
-	$level   = $context['level'] ?? 'core';
 	$tab     = $context['tab'] ?? 'dashboard';
+	$hub_id  = $context['hub'] ?? '';
 
-	// Defensive: avoid registering Core widgets if a hub or spoke is being viewed, even if context detection fails.
-	$hub_param   = isset( $_GET['hub'] ) ? sanitize_key( wp_unslash( $_GET['hub'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only context.
-	$spoke_param = isset( $_GET['spoke'] ) ? sanitize_key( wp_unslash( $_GET['spoke'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only context.
+	error_log( 'wp_support_setup_dashboard_screen: Context - tab=' . $tab . ', hub_id=' . $hub_id );
 
-	if ( 'core' !== $level || 'dashboard' !== $tab || ! empty( $hub_param ) || ! empty( $spoke_param ) ) {
+	// Only register metaboxes when on dashboard tab.
+	if ( 'dashboard' !== $tab ) {
+		error_log( 'wp_support_setup_dashboard_screen: Skipping - not on dashboard tab' );
 		return;
 	}
+
+	// If we have a hub context, use hub-specific dashboard setup.
+	if ( ! empty( $hub_id ) ) {
+		error_log( 'wp_support_setup_dashboard_screen: Routing to hub setup for: ' . $hub_id );
+		wp_support_setup_hub_dashboard_screen( $hub_id );
+		return;
+	}
+
+	error_log( 'wp_support_setup_dashboard_screen: Using core dashboard setup' );
+
+	// Core dashboard setup below:
 
 	// Add Help tabs.
 	$screen->add_help_tab(
@@ -672,7 +837,7 @@ function timu_core_setup_dashboard_screen(): void {
 	// Register meta boxes for the Core dashboard (left column: 'normal').
 	add_meta_box(
 		'timu_quick_actions',
-		__( 'WP Support Quick Actions', 'plugin-wp-support-thisismyurl' ),
+		__( 'Quick Actions', 'plugin-wp-support-thisismyurl' ),
 		array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_quick_actions' ),
 		$screen->id,
 		'normal',
@@ -681,7 +846,7 @@ function timu_core_setup_dashboard_screen(): void {
 
 	add_meta_box(
 		'timu_modules',
-		__( 'WP Support Modules', 'plugin-wp-support-thisismyurl' ),
+		__( 'Modules', 'plugin-wp-support-thisismyurl' ),
 		array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_modules' ),
 		$screen->id,
 		'normal',
@@ -690,7 +855,7 @@ function timu_core_setup_dashboard_screen(): void {
 
 	add_meta_box(
 		'timu_activity',
-		__( 'WP Support Activity', 'plugin-wp-support-thisismyurl' ),
+		__( 'Activity', 'plugin-wp-support-thisismyurl' ),
 		array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_activity' ),
 		$screen->id,
 		'normal',
@@ -699,7 +864,7 @@ function timu_core_setup_dashboard_screen(): void {
 
 	add_meta_box(
 		'timu_events_and_news',
-		__( 'WP Support Events and News', 'plugin-wp-support-thisismyurl' ),
+		__( 'Events and News', 'plugin-wp-support-thisismyurl' ),
 		array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_events_and_news' ),
 		$screen->id,
 		'normal',
@@ -709,7 +874,7 @@ function timu_core_setup_dashboard_screen(): void {
 	// Register meta boxes for the Core dashboard (right column: 'side').
 	add_meta_box(
 		'timu_health',
-		__( 'WP Support Health', 'plugin-wp-support-thisismyurl' ),
+		__( 'Health', 'plugin-wp-support-thisismyurl' ),
 		array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_health' ),
 		$screen->id,
 		'side',
@@ -718,7 +883,7 @@ function timu_core_setup_dashboard_screen(): void {
 
 	add_meta_box(
 		'timu_at_a_glance',
-		__( 'WP Support At a Glance', 'plugin-wp-support-thisismyurl' ),
+		__( 'At a Glance', 'plugin-wp-support-thisismyurl' ),
 		array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_at_a_glance' ),
 		$screen->id,
 		'side',
@@ -727,7 +892,7 @@ function timu_core_setup_dashboard_screen(): void {
 
 	add_meta_box(
 		'timu_scheduled_tasks',
-		__( 'WP Support Scheduled Tasks', 'plugin-wp-support-thisismyurl' ),
+		__( 'Scheduled Tasks', 'plugin-wp-support-thisismyurl' ),
 		array( '\\TIMU\\CoreSupport\\TIMU_Dashboard_Widgets', 'render_metabox_scheduled_tasks' ),
 		$screen->id,
 		'side',
@@ -738,11 +903,15 @@ function timu_core_setup_dashboard_screen(): void {
 	add_action(
 		'admin_print_footer_scripts',
 		static function () use ( $screen ): void {
+			// Get context-specific state key for core dashboard.
+			$context = TIMU_Tab_Navigation::get_current_context();
+			$hub_id  = $context['hub'] ?? '';
+			$state_key = 'wp-support' . ( $hub_id ? '-' . $hub_id : '' );
 			?>
 			<script>
 			jQuery(document).ready(function($){
 				if (typeof postboxes !== 'undefined') {
-					postboxes.add_postbox_toggles('<?php echo esc_js( $screen->id ); ?>');
+					postboxes.add_postbox_toggles('<?php echo esc_js( $state_key ); ?>');
 				}
 			});
 			</script>
@@ -757,11 +926,16 @@ function timu_core_setup_dashboard_screen(): void {
  * @param string $hub_id Hub identifier.
  * @return void
  */
-function timu_core_setup_hub_dashboard_screen( string $hub_id ): void {
+function wp_support_setup_hub_dashboard_screen( string $hub_id ): void {
+	error_log( 'wp_support_setup_hub_dashboard_screen: Called for hub_id=' . $hub_id );
+	
 	$screen = get_current_screen();
 	if ( ! $screen ) {
+		error_log( 'wp_support_setup_hub_dashboard_screen: No screen available' );
 		return;
 	}
+
+	error_log( 'wp_support_setup_hub_dashboard_screen: Screen ID=' . $screen->id );
 
 	// Format hub display name.
 	$hub_name = esc_html( ucfirst( str_replace( '-', ' ', $hub_id ) ) );
@@ -879,12 +1053,14 @@ function timu_core_setup_hub_dashboard_screen( string $hub_id ): void {
 	// Initialize postboxes on this screen (drag/toggle).
 	add_action(
 		'admin_print_footer_scripts',
-		static function () use ( $screen ): void {
+		static function () use ( $screen, $hub_id ): void {
+			// Use hub-specific state key.
+			$state_key = 'wp-support-' . $hub_id;
 			?>
 			<script>
 			jQuery(document).ready(function($){
 				if (typeof postboxes !== 'undefined') {
-					postboxes.add_postbox_toggles('<?php echo esc_js( $screen->id ); ?>');
+					postboxes.add_postbox_toggles('<?php echo esc_js( $state_key ); ?>');
 				}
 			});
 			</script>
@@ -899,7 +1075,7 @@ function timu_core_setup_hub_dashboard_screen( string $hub_id ): void {
  * @param string $tab Active tab ID.
  * @return void
  */
-function timu_core_render_core_content( string $tab ): void {
+function wp_support_render_core_content( string $tab ): void {
 	switch ( $tab ) {
 		case 'register':
 			/* check if plugin is registered */
@@ -913,31 +1089,15 @@ function timu_core_render_core_content( string $tab ): void {
 			echo '<p>' . esc_html__( 'Help content will be added here.', 'plugin-wp-support-thisismyurl' ) . '</p></div>';
 			break;
 		case 'modules':
-			timu_core_render_modules();
+			wp_support_render_modules();
+			break;
+		case 'settings':
+			wp_support_render_settings();
 			break;
 		case 'dashboard':
 		default:
-			// Render custom metabox-based dashboard with drag-and-drop.
-			?>
-			<div class="wrap">
-				<h1><?php echo esc_html__( 'Support Dashboard', 'plugin-wp-support-thisismyurl' ); ?></h1>
-				<div class="timu-metabox-holder">
-					<div class="timu-metabox-container" data-container="left">
-						<?php
-						TIMU_Dashboard_Widgets::render_metabox_quick_actions_custom();
-						TIMU_Dashboard_Widgets::render_metabox_modules_custom();
-						TIMU_Dashboard_Widgets::render_metabox_activity_custom();
-						?>
-					</div>
-					<div class="timu-metabox-container" data-container="right">
-						<?php
-						TIMU_Dashboard_Widgets::render_metabox_events_and_news_custom();
-						TIMU_Dashboard_Widgets::render_metabox_vault_status_custom();
-						?>
-					</div>
-				</div>
-			</div>
-			<?php
+			// Route to unified dashboard renderer.
+			wp_support_render_dashboard();
 			break;
 	}
 }
@@ -949,32 +1109,19 @@ function timu_core_render_core_content( string $tab ): void {
  * @param string $tab Active tab ID.
  * @return void
  */
-function timu_core_render_hub_content( string $hub_id, string $tab ): void {
+function wp_support_render_hub_content( string $hub_id, string $tab ): void {
 	switch ( $tab ) {
 		case 'help':
 			echo '<div class="wrap"><h1>' . esc_html( ucfirst( $hub_id ) . ' - ' . __( 'Help', 'plugin-wp-support-thisismyurl' ) ) . '</h1>';
 			echo '<p>' . esc_html__( 'Help content will be added here.', 'plugin-wp-support-thisismyurl' ) . '</p></div>';
 			break;
+		case 'settings':
+			wp_support_render_settings( $hub_id );
+			break;
 		case 'dashboard':
 		default:
-			// Setup metaboxes for hub dashboard.
-			timu_core_setup_hub_dashboard_screen( $hub_id );
-			$screen = get_current_screen();
-			?>
-			<div class="wrap">
-				<h1><?php echo esc_html( ucfirst( $hub_id ) . ' ' . __( 'Hub', 'plugin-wp-support-thisismyurl' ) ); ?></h1>
-				<div id="poststuff">
-					<div id="post-body" class="metabox-holder columns-2">
-						<div id="postbox-container-1" class="postbox-container">
-							<?php do_meta_boxes( $screen->id, 'side', null ); ?>
-						</div>
-						<div id="postbox-container-2" class="postbox-container">
-							<?php do_meta_boxes( $screen->id, 'normal', null ); ?>
-						</div>
-					</div>
-				</div>
-			</div>
-			<?php
+			// Route to unified dashboard renderer.
+			wp_support_render_dashboard( $hub_id );
 			break;
 	}
 }
@@ -987,7 +1134,7 @@ function timu_core_render_hub_content( string $hub_id, string $tab ): void {
  * @param string $tab Active tab ID.
  * @return void
  */
-function timu_core_render_spoke_content( string $hub_id, string $spoke_id, string $tab ): void {
+function wp_support_render_spoke_content( string $hub_id, string $spoke_id, string $tab ): void {
 	switch ( $tab ) {
 		case 'help':
 			echo '<div class="wrap"><h1>' . esc_html( strtoupper( $spoke_id ) . ' - ' . __( 'Help', 'plugin-wp-support-thisismyurl' ) ) . '</h1>';
@@ -995,7 +1142,8 @@ function timu_core_render_spoke_content( string $hub_id, string $spoke_id, strin
 			break;
 		case 'dashboard':
 		default:
-			TIMU_Dashboard_Widgets::render_spoke_dashboard( $hub_id, $spoke_id );
+			// Route to unified dashboard renderer.
+			wp_support_render_dashboard( $hub_id, $spoke_id );
 			break;
 	}
 }
@@ -1066,15 +1214,26 @@ function timu_get_hub_tabs_for_spoke( string $hub_id, string $spoke_id ): array 
 }
 
 /**
- * Render modules dashboard.
+ * Render dashboard (Core, Hub, or Spoke).
  *
+ * @param string $hub_id Optional hub identifier for hub-level dashboards.
+ * @param string $spoke_id Optional spoke identifier for spoke-level dashboards.
  * @return void
  */
-function timu_core_render_dashboard(): void {
+function wp_support_render_dashboard( string $hub_id = '', string $spoke_id = '' ): void {
 	if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
 	}
 
+	// Route to appropriate dashboard renderer.
+	// All levels (core, hub, spoke) show the same core dashboard content.
+	if ( ! empty( $spoke_id ) && ! empty( $hub_id ) ) {
+		// Spoke-level displays core dashboard content.
+	} elseif ( ! empty( $hub_id ) ) {
+		// Hub-level displays core dashboard content.
+	}
+
+	// Core-level dashboard (shown for all levels).
 	$catalog_modules = TIMU_Module_Registry::get_catalog_with_status();
 	$modules         = $catalog_modules;
 
@@ -1129,7 +1288,32 @@ function timu_core_render_dashboard(): void {
 	$schedule_snapshot = TIMU_Module_Registry::get_schedule_snapshot();
 	$run_now_nonce     = wp_create_nonce( 'timu_run_task_now' );
 
-	require_once TIMU_CORE_PATH . 'includes/views/dashboard.php';
+	// Setup metaboxes for dashboard rendering.
+	wp_support_setup_dashboard_screen();
+	$screen = get_current_screen();
+
+	// Determine dashboard title based on context.
+	$dashboard_title = __( 'Support Dashboard', 'plugin-wp-support-thisismyurl' );
+	if ( ! empty( $spoke_id ) && ! empty( $hub_id ) ) {
+		$dashboard_title = ucfirst( $spoke_id ) . ' ' . __( 'Dashboard', 'plugin-wp-support-thisismyurl' );
+	} elseif ( ! empty( $hub_id ) ) {
+		$dashboard_title = ucfirst( $hub_id ) . ' ' . __( 'Dashboard', 'plugin-wp-support-thisismyurl' );
+	}
+
+	// Render metabox-based dashboard.
+	?>
+	<div class="wrap">
+		<h1><?php echo esc_html( $dashboard_title ); ?></h1>
+		<div id="dashboard-widgets" class="metabox-holder">
+			<div id="postbox-container-1" class="postbox-container">
+				<?php do_meta_boxes( $screen->id, 'normal', null ); ?>
+			</div>
+			<div id="postbox-container-2" class="postbox-container">
+				<?php do_meta_boxes( $screen->id, 'side', null ); ?>
+			</div>
+		</div>
+	</div>
+	<?php
 }
 
 /**
@@ -1137,7 +1321,7 @@ function timu_core_render_dashboard(): void {
  *
  * @return void
  */
-function timu_core_render_modules(): void {
+function wp_support_render_modules(): void {
 	if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
 	}
@@ -1191,7 +1375,7 @@ function timu_core_render_modules(): void {
 		)
 	);
 
-	require_once TIMU_CORE_PATH . 'includes/views/modules.php';
+	require_once wp_support_PATH . 'includes/views/modules.php';
 }
 
 /**
@@ -1199,7 +1383,7 @@ function timu_core_render_modules(): void {
  *
  * @return void
  */
-function timu_core_render_network_settings(): void {
+function wp_support_render_network_settings(): void {
 	if ( ! current_user_can( 'manage_network_options' ) ) {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
 	}
@@ -1211,7 +1395,7 @@ function timu_core_render_network_settings(): void {
 
 	$license_state = TIMU_License::get_state( false );
 
-	require_once TIMU_CORE_PATH . 'includes/views/settings.php';
+	require_once wp_support_PATH . 'includes/views/settings.php';
 }
 
 /**
@@ -1219,7 +1403,7 @@ function timu_core_render_network_settings(): void {
  *
  * @return void
  */
-function timu_core_render_settings_page(): void {
+function wp_support_render_settings_page(): void {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
 	}
@@ -1231,7 +1415,7 @@ function timu_core_render_settings_page(): void {
 
 	$license_state = TIMU_License::get_state( false );
 
-	require_once TIMU_CORE_PATH . 'includes/views/settings.php';
+	require_once wp_support_PATH . 'includes/views/settings.php';
 }
 
 /**
@@ -1357,7 +1541,7 @@ function timu_ajax_install_module(): void {
 
 	$skin     = new \Automatic_Upgrader_Skin();
 	$upgrader = new \Plugin_Upgrader( $skin );
-	$download = timu_core_resolve_download_url( $module );
+	$download = wp_support_resolve_download_url( $module );
 	$result   = $upgrader->install( $download );
 
 	if ( is_wp_error( $result ) || ! $result ) {
@@ -1378,7 +1562,7 @@ function timu_ajax_install_module(): void {
 	}
 
 	// Attempt activation.
-	$plugin_file = timu_core_find_plugin_file_by_slug( $slug );
+	$plugin_file = wp_support_find_plugin_file_by_slug( $slug );
 	if ( $plugin_file ) {
 		$network_wide = is_multisite() && is_network_admin();
 		$activation   = activate_plugin( $plugin_file, '', $network_wide, false );
@@ -1488,7 +1672,7 @@ function timu_ajax_update_module(): void {
 	};
 	add_filter( 'upgrader_package_options', $filter );
 
-	$download = timu_core_resolve_download_url( $module );
+	$download = wp_support_resolve_download_url( $module );
 	$result   = $upgrader->install( $download );
 
 	// Remove filter after run.
@@ -1601,12 +1785,108 @@ function timu_ajax_save_metabox_state(): void {
 }
 
 /**
+ * AJAX handler to save postbox order.
+ *
+ * @return void
+ */
+function timu_ajax_save_postbox_order(): void {
+	check_ajax_referer( 'timu_postbox_state', 'nonce' );
+
+	if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
+		wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
+	}
+
+	$page  = isset( $_POST['page'] ) ? sanitize_key( $_POST['page'] ) : '';
+	$order = isset( $_POST['order'] ) ? wp_unslash( $_POST['order'] ) : array();
+
+	if ( empty( $page ) ) {
+		wp_send_json_error( array( 'message' => 'Invalid page parameter' ) );
+	}
+
+	// Ensure order is an associative array
+	if ( ! is_array( $order ) ) {
+		$order = array();
+	}
+
+	$user_id = get_current_user_id();
+
+	// Get existing state
+	$all_states = get_user_meta( $user_id, 'timu_postbox_states', true );
+	if ( ! is_array( $all_states ) ) {
+		$all_states = array();
+	}
+
+	// Update order for this page
+	$all_states[ $page ]['order'] = $order;
+
+	// Save back to JSON store
+	update_user_meta( $user_id, 'timu_postbox_states', $all_states );
+
+	error_log( 'SAVED POSTBOX ORDER: user=' . $user_id . ', page=' . $page . ', order=' . json_encode( $order ) );
+
+	wp_send_json_success( array(
+		'message' => 'Order saved',
+		'page' => $page,
+		'order' => $order
+	) );
+}
+
+/**
+ * AJAX handler to save postbox closed state.
+ *
+ * @return void
+ */
+function timu_ajax_save_postbox_state(): void {
+	check_ajax_referer( 'timu_postbox_state', 'nonce' );
+
+	if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
+		wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
+	}
+
+	$page   = isset( $_POST['page'] ) ? sanitize_key( $_POST['page'] ) : '';
+	$closed = isset( $_POST['closed'] ) ? wp_unslash( $_POST['closed'] ) : array();
+
+	if ( empty( $page ) ) {
+		wp_send_json_error( array( 'message' => 'Invalid page parameter' ) );
+	}
+
+	// Ensure closed is an array and sanitize
+	if ( ! is_array( $closed ) ) {
+		$closed = array();
+	} else {
+		$closed = array_map( 'sanitize_key', $closed );
+	}
+
+	$user_id = get_current_user_id();
+
+	// Get existing state
+	$all_states = get_user_meta( $user_id, 'timu_postbox_states', true );
+	if ( ! is_array( $all_states ) ) {
+		$all_states = array();
+	}
+
+	// Update closed for this page
+	$all_states[ $page ]['closed'] = $closed;
+
+	// Save back to JSON store
+	update_user_meta( $user_id, 'timu_postbox_states', $all_states );
+
+	error_log( 'SAVED POSTBOX STATE: user=' . $user_id . ', page=' . $page . ', closed=' . json_encode( $closed ) );
+
+	wp_send_json_success( array(
+		'message' => 'State saved',
+		'page' => $page,
+		'closed' => $closed
+	) );
+}
+
+/**
  * Attempt to find a plugin file by slug.
  *
  * @param string $slug Module slug.
  * @return string|null Plugin file path or null.
  */
-function timu_core_find_plugin_file_by_slug( string $slug ): ?string {
+function wp_support_find_plugin_file_by_slug( string $slug ): ?string {
 	if ( ! function_exists( 'get_plugins' ) ) {
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 	}
@@ -1631,7 +1911,7 @@ function timu_core_find_plugin_file_by_slug( string $slug ): ?string {
  * @param array $module Module data including 'download_url' and 'slug'.
  * @return string Resolved URL suitable for Plugin_Upgrader::install().
  */
-function timu_core_resolve_download_url( array $module ): string {
+function wp_support_resolve_download_url( array $module ): string {
 	$url  = isset( $module['download_url'] ) ? (string) $module['download_url'] : '';
 	$slug = isset( $module['slug'] ) ? (string) $module['slug'] : '';
 
@@ -1730,7 +2010,7 @@ function timu_run_task_now(): void {
  * @param array $links Plugin action links.
  * @return array Modified action links.
  */
-function timu_core_plugin_action_links( array $links ): array {
+function wp_support_plugin_action_links( array $links ): array {
 	$dashboard_link = sprintf(
 		'<a href="%s">%s</a>',
 		esc_url( admin_url( 'admin.php?page=wp-support' ) ),
@@ -1767,8 +2047,8 @@ function timu_core_plugin_action_links( array $links ): array {
  * @param string $file Plugin file.
  * @return array Modified row meta.
  */
-function timu_core_plugin_row_meta( array $meta, string $file ): array {
-	if ( TIMU_CORE_BASENAME !== $file ) {
+function wp_support_plugin_row_meta( array $meta, string $file ): array {
+	if ( wp_support_BASENAME !== $file ) {
 		return $meta;
 	}
 
@@ -1798,140 +2078,286 @@ function timu_core_plugin_row_meta( array $meta, string $file ): array {
 }
 
 /**
+ * Save screen options for dashboard pages.
+ *
+ * @param mixed  $status Screen option value. Default false to skip.
+ * @param string $option The option name.
+ * @param mixed  $value  The option value.
+ * @return mixed
+ */
+function wp_support_save_screen_option( $status, string $option, $value ) {
+	if ( 'layout_columns' === $option ) {
+		return $value;
+	}
+	return $status;
+}
+
+/**
+ * Filter postbox classes to apply saved closed state.
+ *
+ * @param array  $classes Postbox classes.
+ * @param string $box_id  Postbox ID.
+ * @return array
+ */
+function wp_support_postbox_classes( array $classes, string $box_id ): array {
+	$closed = wp_support_get_closed_postboxes( false );
+	if ( is_array( $closed ) && in_array( $box_id, $closed, true ) ) {
+		$classes[] = 'closed';
+	}
+	return $classes;
+}
+
+/**
+ * Get metabox order from custom state key.
+ *
+ * @param mixed $result Default result.
+ * @return mixed
+ */
+function wp_support_get_metabox_order( $result ) {
+	$context = TIMU_Tab_Navigation::get_current_context();
+	$hub_id  = $context['hub'] ?? '';
+	$state_key = 'wp-support' . ( $hub_id ? '-' . $hub_id : '' );
+	
+	// Get all states from JSON store
+	$user_id    = get_current_user_id();
+	$all_states = get_user_meta( $user_id, 'timu_postbox_states', true );
+
+	if ( ! is_array( $all_states ) || ! isset( $all_states[ $state_key ]['order'] ) ) {
+		error_log( 'LOADING METABOX ORDER: page=' . $state_key . ', no data found' );
+		return false;
+	}
+
+	$order = $all_states[ $state_key ]['order'];
+
+	// Validate shape: must be array of container => array of IDs
+	$valid = is_array( $order );
+	if ( $valid ) {
+		foreach ( $order as $container => $ids ) {
+			if ( ! is_array( $ids ) ) {
+				$valid = false;
+				break;
+			}
+			foreach ( $ids as $id ) {
+				if ( ! is_string( $id ) ) {
+					$valid = false;
+					break 2;
+				}
+			}
+		}
+	}
+
+	if ( ! $valid ) {
+		error_log( 'LOADING METABOX ORDER: page=' . $state_key . ' invalid data, purging entry' );
+		unset( $all_states[ $state_key ] );
+		update_user_meta( $user_id, 'timu_postbox_states', $all_states );
+		return false;
+	}
+
+	// Convert to WordPress expected keys: normal/side/column3/column4
+	$normalized = array(
+		'normal'  => '',
+		'side'    => '',
+		'column3' => '',
+		'column4' => '',
+	);
+
+	$map = array(
+		'postbox-container-1' => 'normal',
+		'postbox-container-2' => 'side',
+		'postbox-container-3' => 'column3',
+		'postbox-container-4' => 'column4',
+	);
+
+	foreach ( $order as $container => $ids ) {
+		$target = $map[ $container ] ?? null;
+		if ( $target ) {
+			$normalized[ $target ] = implode( ',', $ids );
+		}
+	}
+
+	error_log( 'LOADING METABOX ORDER: page=' . $state_key . ', order=' . json_encode( $normalized ) );
+
+	return $normalized;
+}
+
+/**
+ * Get closed postboxes from custom state key.
+ *
+ * @param mixed $result Default result.
+ * @return mixed
+ */
+function wp_support_get_closed_postboxes( $result ) {
+	$context = TIMU_Tab_Navigation::get_current_context();
+	$hub_id  = $context['hub'] ?? '';
+	$state_key = 'wp-support' . ( $hub_id ? '-' . $hub_id : '' );
+	
+	// Get all states from JSON store
+	$user_id    = get_current_user_id();
+	$all_states = get_user_meta( $user_id, 'timu_postbox_states', true );
+
+	if ( ! is_array( $all_states ) || ! isset( $all_states[ $state_key ]['closed'] ) ) {
+		error_log( 'LOADING CLOSED POSTBOXES: page=' . $state_key . ', no data found' );
+		return false;
+	}
+
+	$closed = $all_states[ $state_key ]['closed'];
+
+	// Validate shape: array of strings
+	$valid = is_array( $closed );
+	if ( $valid ) {
+		foreach ( $closed as $id ) {
+			if ( ! is_string( $id ) ) {
+				$valid = false;
+				break;
+			}
+		}
+	}
+
+	if ( ! $valid ) {
+		error_log( 'LOADING CLOSED POSTBOXES: page=' . $state_key . ' invalid data, purging entry' );
+		unset( $all_states[ $state_key ] );
+		update_user_meta( $user_id, 'timu_postbox_states', $all_states );
+		return false;
+	}
+
+	// Convert to string for WordPress explode()
+	$closed_str = implode( ',', $closed );
+
+	error_log( 'LOADING CLOSED POSTBOXES: page=' . $state_key . ', closed=' . $closed_str );
+
+	return $closed_str;
+}
+
+/**
  * Enqueue admin scripts and styles.
  *
  * @param string $hook The current admin page hook.
  * @return void
  */
-function timu_core_admin_enqueue( string $hook ): void {
-	// Only load on our plugin pages (core, hubs, spokes).
-	if ( false === strpos( $hook, 'timu' ) && false === strpos( $hook, 'wp-support' ) ) {
+function wp_support_admin_enqueue( string $hook ): void {
+	// Load on all wp-support related pages (core, hubs, spokes).
+	// Hooks can be: toplevel_page_wp-support, support-hub_page_wp-support-hub-media, etc.
+	if ( false === strpos( $hook, 'wp-support' ) ) {
 		return;
 	}
 
+	error_log( 'wp_support_admin_enqueue: Hook=' . $hook );
+
 	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+	error_log( 'wp_support_admin_enqueue: Screen ID=' . ( $screen ? $screen->id : 'null' ) );
 
-	// Cache-bust using file modification times to avoid stale admin assets.
-	$ui_system_file   = TIMU_CORE_PATH . 'assets/css/timu-ui-system.css';
-	$admin_css_file   = TIMU_CORE_PATH . 'assets/css/admin.css';
-	$tab_nav_css_file = TIMU_CORE_PATH . 'assets/css/tab-navigation.css';
-	$admin_js_file    = TIMU_CORE_PATH . 'assets/js/admin.js';
-	$actions_js_file  = TIMU_CORE_PATH . 'assets/js/module-actions.js';
-
-	$ui_system_ver   = file_exists( $ui_system_file ) ? TIMU_CORE_VERSION . '.' . filemtime( $ui_system_file ) : TIMU_CORE_VERSION;
-	$admin_css_ver   = file_exists( $admin_css_file ) ? TIMU_CORE_VERSION . '.' . filemtime( $admin_css_file ) : TIMU_CORE_VERSION;
-	$tab_nav_css_ver = file_exists( $tab_nav_css_file ) ? TIMU_CORE_VERSION . '.' . filemtime( $tab_nav_css_file ) : TIMU_CORE_VERSION;
-	$admin_js_ver    = file_exists( $admin_js_file ) ? TIMU_CORE_VERSION . '.' . filemtime( $admin_js_file ) : TIMU_CORE_VERSION;
-	$actions_js_ver  = file_exists( $actions_js_file ) ? TIMU_CORE_VERSION . '.' . filemtime( $actions_js_file ) : TIMU_CORE_VERSION;
-
-	$load_admin_js   = true;
-	$load_actions_js = true;
+	// Cache-bust using current timestamp to force reload for testing.
+	$cache_bust = time();
 
 	// Enqueue modern design system (shared across all TIMU plugins).
 	wp_enqueue_style(
 		'timu-ui-system',
-		TIMU_CORE_URL . 'assets/css/timu-ui-system.css',
+		wp_support_URL . 'assets/css/timu-ui-system.css',
 		array(),
-		$ui_system_ver
+		$cache_bust
 	);
 
 	wp_enqueue_style(
 		'timu-core-admin',
-		TIMU_CORE_URL . 'assets/css/admin.css',
+		wp_support_URL . 'assets/css/admin.css',
 		array( 'timu-ui-system' ),
-		$admin_css_ver
+		$cache_bust
 	);
 
 	wp_enqueue_style(
 		'timu-tab-navigation',
-		TIMU_CORE_URL . 'assets/css/tab-navigation.css',
+		wp_support_URL . 'assets/css/tab-navigation.css',
 		array( 'timu-ui-system' ),
-		$tab_nav_css_ver
+		$cache_bust
 	);
 
-	// Enable drag and drop for dashboard metaboxes on our dashboards.
-	if ( $screen && ( 'toplevel_page_wp-support' === $screen->id || str_starts_with( $screen->id, 'timu-hub' ) || str_starts_with( $screen->id, 'timu-spoke' ) ) ) {
-		wp_enqueue_script( 'jquery-ui-sortable' );
+	// Enable drag and drop for dashboard metaboxes on all wp-support pages using WordPress native postboxes.
+	if ( $screen && false !== strpos( $screen->id, 'wp-support' ) ) {
+		error_log( 'wp_support_admin_enqueue: Loading dashboard assets for screen=' . $screen->id );
 		
-		$drag_js_ver = filemtime( TIMU_CORE_PATH . 'assets/js/dashboard-drag.js' );
+		// Use WordPress's built-in postbox drag and drop.
+		wp_enqueue_script( 'postbox' );
+		
+		// Add custom script to handle context-specific state saving.
 		wp_enqueue_script(
-			'timu-dashboard-drag',
-			TIMU_CORE_URL . 'assets/js/dashboard-drag.js',
-			array( 'jquery', 'jquery-ui-sortable' ),
-			$drag_js_ver,
+			'timu-postbox-state',
+			wp_support_URL . 'assets/js/postbox-state.js',
+			array( 'jquery', 'postbox' ),
+			$cache_bust,
 			true
 		);
-
+		
+		// Get current context for unique state key.
+		$context = TIMU_Tab_Navigation::get_current_context();
+		$hub_id  = $context['hub'] ?? '';
+		$state_key = 'wp-support' . ( $hub_id ? '-' . $hub_id : '' );
+		
 		wp_localize_script(
-			'timu-dashboard-drag',
-			'timuDashboardDrag',
+			'timu-postbox-state',
+			'timuPostboxState',
 			array(
-				'nonce'      => wp_create_nonce( 'timu_metabox_state' ),
-				'savedState' => get_user_meta( get_current_user_id(), 'timu_metabox_state', true ),
+				'stateKey' => $state_key,
+				'nonce'    => wp_create_nonce( 'timu_postbox_state' ),
 			)
 		);
-
-		$drag_css_ver = filemtime( TIMU_CORE_PATH . 'assets/css/dashboard-drag.css' );
+		
 		wp_enqueue_style(
 			'timu-dashboard-drag',
-			TIMU_CORE_URL . 'assets/css/dashboard-drag.css',
+			wp_support_URL . 'assets/css/dashboard-drag.css',
 			array(),
-			$drag_css_ver
+			$cache_bust
 		);
+	} else {
+		error_log( 'wp_support_admin_enqueue: NOT loading dashboard assets. Screen=' . ( $screen ? $screen->id : 'null' ) );
 	}
 
-	if ( $load_admin_js ) {
-		wp_enqueue_script(
-			'timu-core-admin',
-			TIMU_CORE_URL . 'assets/js/admin.js',
-			array( 'jquery' ),
-			$admin_js_ver,
-			true
-		);
+	wp_enqueue_script(
+		'timu-core-admin',
+		wp_support_URL . 'assets/js/admin.js',
+		array( 'jquery' ),
+		$cache_bust,
+		true
+	);
 
-		// Localize script for AJAX and i18n.
-		wp_localize_script(
-			'timu-core-admin',
-			'timuAdminData',
-			array(
-				'toggleNonce' => wp_create_nonce( 'timu_toggle_module' ),
-				'actionNonce' => wp_create_nonce( 'timu_module_action' ),
-				'i18n'        => array(
-					'enabled'      => __( 'Enabled', 'plugin-wp-support-thisismyurl' ),
-					'disabled'     => __( 'Disabled', 'plugin-wp-support-thisismyurl' ),
-					'ajaxError'    => __( 'An error occurred. Please try again.', 'plugin-wp-support-thisismyurl' ),
-					'noResults'    => __( 'No modules match this filter.', 'plugin-wp-support-thisismyurl' ),
-					'installFirst' => __( 'Install the module before enabling it.', 'plugin-wp-support-thisismyurl' ),
-					'installing'   => __( 'Installing...', 'plugin-wp-support-thisismyurl' ),
-					'updating'     => __( 'Updating...', 'plugin-wp-support-thisismyurl' ),
-					'install'      => __( 'Install', 'plugin-wp-support-thisismyurl' ),
-					'update'       => __( 'Update', 'plugin-wp-support-thisismyurl' ),
-				),
-			)
-		);
+	// Localize script for AJAX and i18n.
+	wp_localize_script(
+		'timu-core-admin',
+		'timuAdminData',
+		array(
+			'toggleNonce' => wp_create_nonce( 'timu_toggle_module' ),
+			'actionNonce' => wp_create_nonce( 'timu_module_action' ),
+			'i18n'        => array(
+				'enabled'      => __( 'Enabled', 'plugin-wp-support-thisismyurl' ),
+				'disabled'     => __( 'Disabled', 'plugin-wp-support-thisismyurl' ),
+				'ajaxError'    => __( 'An error occurred. Please try again.', 'plugin-wp-support-thisismyurl' ),
+				'noResults'    => __( 'No modules match this filter.', 'plugin-wp-support-thisismyurl' ),
+				'installFirst' => __( 'Install the module before enabling it.', 'plugin-wp-support-thisismyurl' ),
+				'installing'   => __( 'Installing...', 'plugin-wp-support-thisismyurl' ),
+				'updating'     => __( 'Updating...', 'plugin-wp-support-thisismyurl' ),
+				'install'      => __( 'Install', 'plugin-wp-support-thisismyurl' ),
+				'update'       => __( 'Update', 'plugin-wp-support-thisismyurl' ),
+			),
+		)
+	);
 
-	}
+	// Enqueue module actions script (install/update/activate).
+	wp_enqueue_script(
+		'timu-module-actions',
+		wp_support_URL . 'assets/js/module-actions.js',
+		array(),
+		$cache_bust,
+		true
+	);
 
-	if ( $load_actions_js ) {
-		// Enqueue module actions script (install/update/activate).
-		wp_enqueue_script(
-			'timu-module-actions',
-			TIMU_CORE_URL . 'assets/js/module-actions.js',
-			array(),
-			$actions_js_ver,
-			true
-		);
-
-		// Localize module actions script with nonce and AJAX URL.
-		wp_localize_script(
-			'timu-module-actions',
-			'timuModuleActions',
-			array(
-				'ajaxurl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( 'timu_module_actions' ),
-			)
-		);
-	}
+	// Localize module actions script with nonce and AJAX URL.
+	wp_localize_script(
+		'timu-module-actions',
+		'timuModuleActions',
+		array(
+			'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			'nonce'   => wp_create_nonce( 'timu_module_actions' ),
+		)
+	);
 }
 
 /**
@@ -1940,10 +2366,10 @@ function timu_core_admin_enqueue( string $hook ): void {
  * @param array $exporters Existing exporters.
  * @return array Modified exporters.
  */
-function timu_core_register_privacy_exporters( array $exporters ): array {
+function wp_support_register_privacy_exporters( array $exporters ): array {
 	$exporters['timu-vault-exporter'] = array(
 		'exporter_friendly_name' => __( 'TIMU Vault', 'plugin-wp-support-thisismyurl' ),
-		'callback'               => __NAMESPACE__ . '\\timu_core_vault_exporter_callback',
+		'callback'               => __NAMESPACE__ . '\\wp_support_vault_exporter_callback',
 	);
 
 	return $exporters;
@@ -1957,7 +2383,7 @@ function timu_core_register_privacy_exporters( array $exporters ): array {
  * @param int    $page          Page number for batching (1-indexed).
  * @return array{data:array,done:bool}
  */
-function timu_core_vault_exporter_callback( string $email_address, int $page = 1 ): array {
+function wp_support_vault_exporter_callback( string $email_address, int $page = 1 ): array {
 	$email_address = sanitize_email( $email_address );
 	if ( empty( $email_address ) ) {
 		return array(
@@ -2072,10 +2498,10 @@ function timu_core_vault_exporter_callback( string $email_address, int $page = 1
  * @param array $erasers Existing erasers.
  * @return array Modified erasers.
  */
-function timu_core_register_privacy_erasers( array $erasers ): array {
+function wp_support_register_privacy_erasers( array $erasers ): array {
 	$erasers['timu-vault-eraser'] = array(
 		'eraser_friendly_name' => __( 'TIMU Vault (anonymize originals & derivatives)', 'plugin-wp-support-thisismyurl' ),
-		'callback'             => __NAMESPACE__ . '\\timu_core_vault_eraser_callback',
+		'callback'             => __NAMESPACE__ . '\\wp_support_vault_eraser_callback',
 	);
 	return $erasers;
 }
@@ -2088,7 +2514,7 @@ function timu_core_register_privacy_erasers( array $erasers ): array {
  * @param int    $page          Page number for batching (1-indexed).
  * @return array{items_removed:int,items_retained:int,messages:array,done:bool}
  */
-function timu_core_vault_eraser_callback( string $email_address, int $page = 1 ): array {
+function wp_support_vault_eraser_callback( string $email_address, int $page = 1 ): array {
 	$email_address = sanitize_email( $email_address );
 	if ( empty( $email_address ) ) {
 		return array(
@@ -2129,11 +2555,11 @@ function timu_core_vault_eraser_callback( string $email_address, int $page = 1 )
 }
 
 // Register activation and deactivation hooks.
-register_activation_hook( __FILE__, __NAMESPACE__ . '\\timu_core_activate' );
-register_deactivation_hook( __FILE__, __NAMESPACE__ . '\\timu_core_deactivate' );
+register_activation_hook( __FILE__, __NAMESPACE__ . '\\wp_support_activate' );
+register_deactivation_hook( __FILE__, __NAMESPACE__ . '\\wp_support_deactivate' );
 
 // Initialize the plugin.
-add_action( 'plugins_loaded', __NAMESPACE__ . '\\timu_core_init' );
+add_action( 'plugins_loaded', __NAMESPACE__ . '\\wp_support_init' );
 
 /* @changelog
  * [1.2601.72060] - 2026-01-08 20:06
@@ -2150,7 +2576,7 @@ add_action( 'plugins_loaded', __NAMESPACE__ . '\\timu_core_init' );
  * - Auto-activate installed modules after installation
  * - Support for multisite with network-wide install/update
  * - Permission checks for install_plugins and update_plugins capabilities
- * - Helper function timu_core_find_plugin_file_by_slug() for plugin location
+ * - Helper function wp_support_find_plugin_file_by_slug() for plugin location
  * - Cache invalidation and module discovery after install/update
  * - Added actionNonce for install/update AJAX requests
  * - Dashboard provides Install button for available modules

@@ -2,7 +2,7 @@
 /**
  * TIMU Processor - core runtime helper for spoke plugins.
  *
- * @package TIMU_CORE_SUPPORT
+ * @package wp_support_SUPPORT
  * @version 1.2601.0819
  */
 

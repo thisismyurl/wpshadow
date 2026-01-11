@@ -2,7 +2,7 @@
 /**
  * Capabilities management view.
  *
- * @package TIMU_CORE_SUPPORT
+ * @package wp_support_SUPPORT
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

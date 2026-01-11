@@ -131,6 +131,16 @@
 		}
 	}
 
+	function toggleSubmenu(slug, enabled) {
+		const hrefContains = `page=wp-support&module=${slug.replace('-support-thisismyurl','')}`;
+		const menus = document.querySelectorAll(`#adminmenu a[href*="${hrefContains}"]`);
+		menus.forEach((link) => {
+			const li = link.closest('li');
+			if (!li) return;
+			li.style.display = enabled ? '' : 'none';
+		});
+	}
+
 	/**
 	 * Handle install and activate action.
 	 *
@@ -243,19 +253,20 @@
 					'Content-Type': 'application/x-www-form-urlencoded',
 				},
 				body: new URLSearchParams({
-					action: 'timu_module_activate',
+					action: 'timu_module_toggle',
 					nonce: nonce,
 					slug: slug,
+					enabled: 1,
 				}),
 			});
 
 			const data = await response.json();
 
 			if (data.success) {
-				showSuccess(data.data.message);
-				updateRowStatus(slug, data.data.status);
-				// Reload page after a short delay for visual confirmation.
-				setTimeout(() => location.reload(), 1000);
+				showSuccess(data.data.message || 'Module enabled.');
+				updateRowStatus(slug, data.data.status || {});
+				toggleSubmenu(slug, true);
+					// Avoid reload to prevent flicker; submenu is toggled client-side.
 			} else {
 				showError(data.data.message || 'Activation failed.');
 				progress.restore();
@@ -293,19 +304,20 @@
 					'Content-Type': 'application/x-www-form-urlencoded',
 				},
 				body: new URLSearchParams({
-					action: 'timu_module_deactivate',
+					action: 'timu_module_toggle',
 					nonce: nonce,
 					slug: slug,
+					enabled: 0,
 				}),
 			});
 
 			const data = await response.json();
 
 			if (data.success) {
-				showSuccess(data.data.message);
-				updateRowStatus(slug, data.data.status);
-				// Reload page after a short delay for visual confirmation.
-				setTimeout(() => location.reload(), 1000);
+				showSuccess(data.data.message || 'Module disabled.');
+				updateRowStatus(slug, data.data.status || {});
+				toggleSubmenu(slug, false);
+					// Avoid reload to prevent flicker; submenu is toggled client-side.
 			} else {
 				showError(data.data.message || 'Deactivation failed.');
 				progress.restore();

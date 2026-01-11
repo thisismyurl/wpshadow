@@ -4,7 +4,7 @@
  *
  * Allows enabling/disabling module features independently of plugin activation.
  *
- * @package TIMU_CORE_SUPPORT
+ * @package wp_support_SUPPORT
  */
 
 declare(strict_types=1);
@@ -50,7 +50,7 @@ class TIMU_Module_Toggles {
 	 */
 	public static function register_settings(): void {
 		register_setting(
-			'timu_core_modules',
+			'wp_support_modules',
 			'timu_module_toggles',
 			array(
 				'type'              => 'object',
@@ -63,7 +63,7 @@ class TIMU_Module_Toggles {
 			'timu_module_toggles_section',
 			__( 'Module Features', 'plugin-wp-support-thisismyurl' ),
 			array( __CLASS__, 'render_section' ),
-			'timu_core_modules'
+			'wp_support_modules'
 		);
 
 		// Add fields for each module.
@@ -72,7 +72,7 @@ class TIMU_Module_Toggles {
 				'timu_toggle_' . $module,
 				esc_html( self::get_module_label( $module ) ),
 				array( __CLASS__, 'render_toggle_field' ),
-				'timu_core_modules',
+				'wp_support_modules',
 				'timu_module_toggles_section',
 				array( 'module' => $module )
 			);

@@ -5,7 +5,7 @@
  * Handles loading and managing independent module repositories.
  * Modules are stored in /modules/{type}/{name}/ and loaded dynamically.
  *
- * @package TIMU_CORE
+ * @package wp_support
  */
 
 namespace TIMU\Core;
@@ -33,7 +33,7 @@ class Module_Loader {
 	 * @return void
 	 */
 	public static function init() {
-		// Load modules immediately since this is called during timu_core_init() which is already on plugins_loaded
+		// Load modules immediately since this is called during wp_support_init() which is already on plugins_loaded
 		error_log( '=== MODULE_LOADER::INIT LOADING MODULES IMMEDIATELY ===' );
 		self::load_modules();
 		
@@ -48,7 +48,7 @@ class Module_Loader {
 	 */
 	public static function load_modules() {
 		error_log( '=== MODULE_LOADER::LOAD_MODULES STARTING ===' );
-		@file_put_contents( dirname( TIMU_CORE_PATH ) . '/load_modules_called.txt', date( 'Y-m-d H:i:s' ) );
+		@file_put_contents( dirname( wp_support_PATH ) . '/load_modules_called.txt', date( 'Y-m-d H:i:s' ) );
 		
 		// Load hubs first
 		self::load_module_type( 'hubs' );
@@ -59,7 +59,7 @@ class Module_Loader {
 		// Load formats last
 		self::load_module_type( 'formats' );
 
-		@file_put_contents( dirname( TIMU_CORE_PATH ) . '/load_modules_completed.txt', date( 'Y-m-d H:i:s' ) );
+		@file_put_contents( dirname( wp_support_PATH ) . '/load_modules_completed.txt', date( 'Y-m-d H:i:s' ) );
 		error_log( '=== MODULE_LOADER::LOAD_MODULES COMPLETED ===' );
 
 		/**
@@ -76,9 +76,9 @@ class Module_Loader {
 	 */
 	private static function load_module_type( $type ) {
 		error_log( "=== MODULE_LOADER: LOAD_MODULE_TYPE ({$type}) ===" );
-		@file_put_contents( dirname( TIMU_CORE_PATH ) . "/load_module_type_{$type}_started.txt", date( 'Y-m-d H:i:s' ) );
+		@file_put_contents( dirname( wp_support_PATH ) . "/load_module_type_{$type}_started.txt", date( 'Y-m-d H:i:s' ) );
 		
-		$modules_dir = TIMU_CORE_PATH . "modules/{$type}/";
+		$modules_dir = wp_support_PATH . "modules/{$type}/";
 		error_log( "Module dir: {$modules_dir}" );
 
 		if ( ! is_dir( $modules_dir ) ) {

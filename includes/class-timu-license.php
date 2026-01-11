@@ -2,7 +2,7 @@
 /**
  * Suite-wide license validator.
  *
- * @package TIMU_CORE_SUPPORT
+ * @package wp_support_SUPPORT
  */
 
 declare(strict_types=1);
@@ -192,13 +192,13 @@ class TIMU_License {
 		$args = array(
 			'timeout'    => 10,
 			'sslverify'  => true,
-			'user-agent' => 'TIMU-Core-Licensing/' . ( defined( 'TIMU_CORE_VERSION' ) ? TIMU_CORE_VERSION : 'dev' ),
+			'user-agent' => 'TIMU-Core-Licensing/' . ( defined( 'wp_support_VERSION' ) ? wp_support_VERSION : 'dev' ),
 		);
 
 		$query = array(
 			'license_key' => $key,
 			'site'        => home_url(),
-			'version'     => defined( 'TIMU_CORE_VERSION' ) ? TIMU_CORE_VERSION : 'dev',
+			'version'     => defined( 'wp_support_VERSION' ) ? wp_support_VERSION : 'dev',
 			'suite'       => defined( 'TIMU_SUITE_ID' ) ? TIMU_SUITE_ID : 'unknown',
 		);
 

@@ -4,7 +4,7 @@
  *
  * Manages registration and discovery of Hub and Spoke plugins.
  *
- * @package TIMU_CORE_SUPPORT
+ * @package wp_support_SUPPORT
  * @since 1.2601.71800
  */
 
@@ -490,7 +490,7 @@ class TIMU_Module_Registry {
 	 */
 	private static function get_bundled_modules_from_filesystem(): array {
 		$bundled = array();
-		$modules_path = defined( 'TIMU_CORE_PATH' ) ? TIMU_CORE_PATH . 'modules/' : '';
+		$modules_path = defined( 'wp_support_PATH' ) ? wp_support_PATH . 'modules/' : '';
 
 		if ( empty( $modules_path ) || ! is_dir( $modules_path ) ) {
 			return $bundled;

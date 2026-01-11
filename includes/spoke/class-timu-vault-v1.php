@@ -3,7 +3,7 @@
  * TIMU Vault handler (shim) for spoke plugins.
  * NOTE: This is a minimal bridge until Vault logic is fully relocated to the vault-support plugin.
  *
- * @package TIMU_CORE_SUPPORT
+ * @package wp_support_SUPPORT
  * @version 1.2601.0819
  */
 

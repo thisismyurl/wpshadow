@@ -4,7 +4,7 @@
  *
  * Displays dismissible admin notices when vault size exceeds configured threshold.
  *
- * @package TIMU_CORE_SUPPORT
+ * @package wp_support_SUPPORT
  */
 
 declare(strict_types=1);

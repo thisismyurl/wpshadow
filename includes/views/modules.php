@@ -103,6 +103,27 @@ input:disabled + .timu-toggle-slider {
 			(function(){
 				const ajaxUrl = '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>';
 				const nonce = '<?php echo esc_js( wp_create_nonce( 'timu_module_actions' ) ); ?>';
+				const scope = '<?php echo ( is_multisite() && is_network_admin() ) ? 'network' : 'site'; ?>';
+
+				const storagePrefix = 'timuToggleState:' + scope + ':';
+				function saveToggleState(slug, checked){
+					try{ localStorage.setItem(storagePrefix + slug, checked ? '1' : '0'); }catch(e){ /* no-op */ }
+				}
+				function getToggleState(slug){
+					try{ return localStorage.getItem(storagePrefix + slug); }catch(e){ return null; }
+				}
+
+				// Pending queue for recovery across tabs
+				const pendingPrefix = 'timuTogglePending:' + scope + ':';
+				function markPending(slug, target){
+					try{ localStorage.setItem(pendingPrefix + slug, target ? '1' : '0'); }catch(e){ /* no-op */ }
+				}
+				function clearPending(slug){
+					try{ localStorage.removeItem(pendingPrefix + slug); }catch(e){ /* no-op */ }
+				}
+				function getPending(slug){
+					try{ return localStorage.getItem(pendingPrefix + slug); }catch(e){ return null; }
+				}
 
 				function setWorking(toggle, working) {
 					const row = toggle.closest('tr');
@@ -129,24 +150,52 @@ input:disabled + .timu-toggle-slider {
 					const input = e.target;
 					if (!input || !input.matches('.timu-toggle-switch input')) return;
 					const slug = input.getAttribute('data-module');
-					const installed = input.getAttribute('data-installed') === '1';
 					const turningOn = input.checked;
+					// Optimistic: persist immediately
+					saveToggleState(slug, turningOn);
+					markPending(slug, turningOn);
+					// Reflect submenu immediately for hubs
+					const type = input.getAttribute('data-type') || 'hub';
+					const name = input.getAttribute('data-module-name') || '';
+					if (type === 'hub') { ensureSubmenuFromSlug(slug, name, turningOn); }
 					const pluginBase = input.getAttribute('data-plugin-base') || '';
+					const pluginExists = input.getAttribute('data-plugin-exists') === '1';
+					const downloadable = input.getAttribute('data-downloadable') === '1';
 					setWorking(input, true);
-					const canUsePluginAPI = !!pluginBase;
-					const action = canUsePluginAPI
-						? (turningOn ? (installed ? 'timu_module_activate' : 'timu_module_install') : 'timu_module_deactivate')
-						: 'timu_module_toggle';
-					const payload = canUsePluginAPI
-						? { slug, plugin_base: pluginBase }
-						: { slug, enabled: turningOn ? 1 : 0 };
+					let action = 'timu_module_toggle';
+					const payload = { slug };
+					if (turningOn) {
+						if (downloadable && !pluginExists) {
+							action = 'timu_module_install';
+						} else if (pluginExists) {
+							action = 'timu_module_activate';
+							payload.plugin_base = pluginBase;
+						} else {
+							payload.enabled = 1;
+						}
+					} else {
+						if (pluginExists) {
+							action = 'timu_module_deactivate';
+							payload.plugin_base = pluginBase;
+						} else {
+							payload.enabled = 0;
+						}
+					}
 					postAction(action, payload)
-						.then(()=>{
+						.then((data)=>{
 							input.setAttribute('data-installed','1');
+							if (data && data.plugin_base) {
+								input.setAttribute('data-plugin-exists','1');
+								input.setAttribute('data-plugin-base', data.plugin_base);
+							}
+							clearPending(slug);
+							// No reload to avoid flicker; UI and submenu are handled client-side.
 						})
 						.catch(err=>{
 							// revert toggle on failure
 							input.checked = !turningOn;
+							saveToggleState(slug, !turningOn);
+							// keep pending so another tab or retry can recover
 							console.error(err);
 							window.alert(err.message);
 						})
@@ -154,6 +203,132 @@ input:disabled + .timu-toggle-slider {
 				}
 
 				document.addEventListener('change', handleToggleChange, true);
+
+				// Cross-tab sync: reflect changes from other tabs
+				window.addEventListener('storage', (ev)=>{
+					if (!ev || typeof ev.key !== 'string') return;
+					if (ev.key.startsWith(storagePrefix)){
+						const slug = ev.key.substring(storagePrefix.length);
+						const val = ev.newValue;
+						const input = document.querySelector('.timu-toggle-switch input[data-module="' + slug + '"]');
+						if (input && (val === '1' || val === '0')){
+							input.checked = (val === '1');
+							if ((input.getAttribute('data-type')||'hub') === 'hub'){
+								const name = input.getAttribute('data-module-name') || '';
+								ensureSubmenuFromSlug(slug, name, (val === '1'));
+							}
+						}
+					}
+				});
+
+				// Periodically process pending queue (retry server updates)
+				async function processPending(){
+					const toggles = document.querySelectorAll('.timu-toggle-switch input[data-module]');
+					for (const input of toggles){
+						const slug = input.getAttribute('data-module');
+						const pending = getPending(slug);
+						if (pending !== '1' && pending !== '0') continue;
+						const targetOn = (pending === '1');
+						const pluginBase = input.getAttribute('data-plugin-base') || '';
+						const pluginExists = input.getAttribute('data-plugin-exists') === '1';
+						const downloadable = input.getAttribute('data-downloadable') === '1';
+						let action = 'timu_module_toggle';
+						const payload = { slug };
+						if (targetOn){
+							if (downloadable && !pluginExists){ action = 'timu_module_install'; }
+							else if (pluginExists){ action = 'timu_module_activate'; payload.plugin_base = pluginBase; }
+							else { payload.enabled = 1; }
+						} else {
+							if (pluginExists){ action = 'timu_module_deactivate'; payload.plugin_base = pluginBase; }
+							else { payload.enabled = 0; }
+						}
+
+						try{
+							const res = await postAction(action, payload);
+							clearPending(slug);
+							saveToggleState(slug, targetOn);
+							// reflect UI state
+							input.checked = targetOn;
+							if ((input.getAttribute('data-type')||'hub') === 'hub'){
+								const name = input.getAttribute('data-module-name') || '';
+								ensureSubmenuFromSlug(slug, name, targetOn);
+							}
+						}catch(err){
+							// keep pending; will retry next interval
+						}
+					}
+				}
+				setInterval(processPending, 5000);
+
+				// Restore saved toggle states on load.
+				function restoreSavedStates(){
+					const toggles = document.querySelectorAll('.timu-toggle-switch input[data-module]');
+					toggles.forEach((input)=>{
+						const slug = input.getAttribute('data-module');
+						const saved = getToggleState(slug);
+						if (saved === '1' || saved === '0') {
+							input.checked = (saved === '1');
+							if ((input.getAttribute('data-type')||'hub') === 'hub'){
+								const name = input.getAttribute('data-module-name') || '';
+								ensureSubmenuFromSlug(slug, name, (saved === '1'));
+							}
+						}
+					});
+				}
+
+				// Sweep existing menu to hide any disabled hubs rendered server-side.
+				function sweepSubmenusFromStorage(){
+					for (let i = 0; i < localStorage.length; i++){
+						const key = localStorage.key(i);
+						if (!key || !key.startsWith(storagePrefix)) continue;
+						const slug = key.substring(storagePrefix.length);
+						const val = localStorage.getItem(key);
+						if (val === '0'){
+							ensureSubmenuFromSlug(slug, '', false);
+						}
+					}
+				}
+
+				// Utility: add/remove submenu entry for a hub from its slug
+				function ensureSubmenuFromSlug(slug, name, enabled){
+					const moduleId = (slug || '').replace(/-support-thisismyurl$/,'');
+					const label = name || moduleId || 'Module';
+					ensureSubmenu(moduleId, label, enabled);
+				}
+
+				function ensureSubmenu(moduleId, label, enabled){
+					var top = document.getElementById('toplevel_page_wp-support');
+					if (!top){
+						var link = document.querySelector('#adminmenu a.menu-top[href*="page=wp-support"]');
+						if (link) { top = link.closest('li'); }
+					}
+					if (!top) return;
+					var submenu = top.querySelector('ul.wp-submenu-wrap') || top.querySelector('ul.wp-submenu');
+					if (!submenu){
+						// If submenu container is missing, defer to server-rendered menu; avoid creating.
+						return;
+					}
+					var target = 'page=wp-support&module=' + encodeURIComponent(moduleId);
+					var anchors = submenu.querySelectorAll('a[href*="' + target + '"]');
+					if (!anchors || anchors.length === 0){
+						// Nothing to toggle; avoid creating to prevent duplicates.
+						return;
+					}
+					anchors.forEach(function(anchor){
+						var li = anchor.closest('li');
+						if (!li) return;
+						li.style.display = enabled ? '' : 'none';
+						anchor.style.display = enabled ? '' : 'none';
+						anchor.setAttribute('aria-hidden', enabled ? 'false' : 'true');
+					});
+				}
+
+				if (document.readyState === 'loading') {
+					document.addEventListener('DOMContentLoaded', function(){ restoreSavedStates(); sweepSubmenusFromStorage(); });
+				} else {
+					restoreSavedStates();
+					sweepSubmenusFromStorage();
+				}
 			})();
 			</script>
 
@@ -255,11 +430,15 @@ input:disabled + .timu-toggle-slider {
 					$module = $group['hub'];
 					$slug   = $module['slug'];
 					// Real-time plugin state detection.
-					$plugin_file       = WP_PLUGIN_DIR . '/' . $slug . '/' . $slug . '.php';
-					$plugin_base       = $slug . '/' . $slug . '.php';
-					$installed         = ! empty( $module['installed'] ) || file_exists( $plugin_file );
+					$plugin_base       = $module['basename'] ?? $slug . '/' . $slug . '.php';
+					$plugin_base_path  = WP_PLUGIN_DIR . '/' . ltrim( $plugin_base, '/\\' );
+					$plugin_exists     = file_exists( $plugin_base_path );
+					$module_file_path  = (string) ( $module['file'] ?? '' );
+					$module_file_found = ! empty( $module_file_path ) && file_exists( $module_file_path );
+					$installed         = ! empty( $module['installed'] ) || $plugin_exists || $module_file_found;
 					$is_network_active = is_multisite() && is_plugin_active_for_network( $plugin_base );
-					$is_enabled        = $installed && ( is_plugin_active( $plugin_base ) || $is_network_active );
+					$registry_enabled  = ! empty( $module['enabled'] );
+					$is_enabled        = $plugin_exists ? ( is_plugin_active( $plugin_base ) || $is_network_active ) : $registry_enabled;
 					$update_available  = ! empty( $module['update_available'] );
 					$type_class        = 'timu-type-hub';
 					$status_class      = $installed ? ( $is_enabled ? 'timu-module-enabled' : 'timu-module-disabled' ) : 'timu-module-available';
@@ -288,25 +467,24 @@ input:disabled + .timu-toggle-slider {
 						</td>
 						<td>
 							<?php
-							// Get last modified time of module files
-							$module_path = TIMU_CORE_PATH . 'modules/hubs/' . basename( $slug );
+							// Get last modified time of module files.
+							$module_path = wp_support_PATH . 'modules/hubs/' . basename( $slug );
 							if ( ! file_exists( $module_path ) ) {
 								$module_path = WP_PLUGIN_DIR . '/' . $slug;
 							}
+							$module_file = '';
 							if ( file_exists( $module_path ) ) {
 								$module_file = $module_path . '/module.php';
 								if ( ! file_exists( $module_file ) ) {
 									$module_file = $module_path . '/' . basename( $slug ) . '.php';
 								}
-								if ( file_exists( $module_file ) ) {
-									$last_modified = filemtime( $module_file );
-									echo esc_html( human_time_diff( $last_modified, time() ) . ' ago' );
-									echo '<br><small>' . esc_html( date_i18n( get_option( 'date_format' ), $last_modified ) ) . '</small>';
-								} else {
-									echo '<span class="description">-</span>';
-								}
+							}
+							if ( $module_file && file_exists( $module_file ) ) {
+								$last_modified = filemtime( $module_file );
+								echo esc_html( human_time_diff( $last_modified, time() ) . ' ago' );
+								echo '<br><small>' . esc_html( date_i18n( get_option( 'date_format' ), $last_modified ) ) . '</small>';
 							} else {
-								echo '<span class="description">Not installed</span>';
+								echo '<span class="description">' . esc_html__( 'Not installed', 'plugin-wp-support-thisismyurl' ) . '</span>';
 							}
 							?>
 						</td>
@@ -321,7 +499,7 @@ input:disabled + .timu-toggle-slider {
 						</td>
 					<td>
 						<label class="timu-toggle-switch">
-							<input type="checkbox" <?php checked( $is_enabled ); ?> data-module="<?php echo esc_attr( $slug ); ?>" data-type="hub" data-installed="<?php echo esc_attr( $installed ? '1' : '0' ); ?>" data-plugin-base="<?php echo esc_attr( $module['basename'] ?? $plugin_base ); ?>">
+							<input type="checkbox" <?php checked( $is_enabled ); ?> data-module="<?php echo esc_attr( $slug ); ?>" data-module-name="<?php echo esc_attr( $module['name'] ?? '' ); ?>" data-type="hub" data-installed="<?php echo esc_attr( $installed ? '1' : '0' ); ?>" data-plugin-base="<?php echo esc_attr( $module['basename'] ?? $plugin_base ); ?>" data-plugin-exists="<?php echo esc_attr( $plugin_exists ? '1' : '0' ); ?>" data-downloadable="<?php echo esc_attr( ! empty( $module['download_url'] ) ? '1' : '0' ); ?>">
 							<span class="timu-toggle-slider"></span>
 						</label>
 						<span class="timu-progress" aria-live="polite"><span class="spinner is-active" style="float:none"></span><span class="bar"><span class="fill"></span></span><span class="progress-label"><?php esc_html_e( 'Working…', 'plugin-wp-support-thisismyurl' ); ?></span></span>
@@ -330,11 +508,15 @@ input:disabled + .timu-toggle-slider {
 							<?php
 							$slug = $module['slug'];
 							// Real-time plugin state detection.
-							$plugin_file       = WP_PLUGIN_DIR . '/' . $slug . '/' . $slug . '.php';
-							$plugin_base       = $slug . '/' . $slug . '.php';
-							$installed         = ! empty( $module['installed'] ) || file_exists( $plugin_file );
+							$plugin_base       = $module['basename'] ?? $slug . '/' . $slug . '.php';
+							$plugin_base_path  = WP_PLUGIN_DIR . '/' . ltrim( $plugin_base, '/\\' );
+							$plugin_exists     = file_exists( $plugin_base_path );
+							$module_file_path  = (string) ( $module['file'] ?? '' );
+							$module_file_found = ! empty( $module_file_path ) && file_exists( $module_file_path );
+							$installed         = ! empty( $module['installed'] ) || $plugin_exists || $module_file_found;
 							$is_network_active = is_multisite() && is_plugin_active_for_network( $plugin_base );
-							$is_enabled        = $installed && ( is_plugin_active( $plugin_base ) || $is_network_active );
+							$registry_enabled  = ! empty( $module['enabled'] );
+							$is_enabled        = $plugin_exists ? ( is_plugin_active( $plugin_base ) || $is_network_active ) : $registry_enabled;
 							$update_available  = ! empty( $module['update_available'] );
 							$type_class        = 'timu-type-spoke';
 							$status_class      = $installed ? ( $is_enabled ? 'timu-module-enabled' : 'timu-module-disabled' ) : 'timu-module-available';
@@ -365,24 +547,23 @@ input:disabled + .timu-toggle-slider {
 										$module_dir_hint = dirname( $module['basename'] );
 										$module_dir_hint = ( '.' === $module_dir_hint ) ? '' : trim( $module_dir_hint, '/\\' );
 									}
-									$module_path = TIMU_CORE_PATH . 'modules/spokes/' . ( ! empty( $module_dir_hint ) ? basename( $module_dir_hint ) : basename( $slug ) );
+									$module_path = wp_support_PATH . 'modules/spokes/' . ( ! empty( $module_dir_hint ) ? basename( $module_dir_hint ) : basename( $slug ) );
 									if ( ! file_exists( $module_path ) ) {
 										$module_path = WP_PLUGIN_DIR . '/' . ( ! empty( $module_dir_hint ) ? $module_dir_hint : $slug );
 									}
+									$module_file = '';
 									if ( file_exists( $module_path ) ) {
 										$module_file = $module_path . '/module.php';
 										if ( ! file_exists( $module_file ) ) {
 											$module_file = $module_path . '/' . basename( $slug ) . '.php';
 										}
-										if ( file_exists( $module_file ) ) {
-											$last_modified = filemtime( $module_file );
-											echo esc_html( human_time_diff( $last_modified, time() ) . ' ago' );
-											echo '<br><small>' . esc_html( date_i18n( get_option( 'date_format' ), $last_modified ) ) . '</small>';
-										} else {
-											echo '<span class="description">-</span>';
-										}
+									}
+									if ( $module_file && file_exists( $module_file ) ) {
+										$last_modified = filemtime( $module_file );
+										echo esc_html( human_time_diff( $last_modified, time() ) . ' ago' );
+										echo '<br><small>' . esc_html( date_i18n( get_option( 'date_format' ), $last_modified ) ) . '</small>';
 									} else {
-										echo '<span class="description">Not installed</span>';
+										echo '<span class="description">' . esc_html__( 'Not installed', 'plugin-wp-support-thisismyurl' ) . '</span>';
 									}
 									?>
 								</td>
@@ -397,7 +578,7 @@ input:disabled + .timu-toggle-slider {
 								</td>
 								<td>
 									<label class="timu-toggle-switch">
-										<input type="checkbox" <?php checked( $is_enabled ); ?> data-module="<?php echo esc_attr( $slug ); ?>" data-type="spoke" data-installed="<?php echo esc_attr( $installed ? '1' : '0' ); ?>" data-plugin-base="<?php echo esc_attr( $module['basename'] ?? $plugin_base ); ?>">
+										<input type="checkbox" <?php checked( $is_enabled ); ?> data-module="<?php echo esc_attr( $slug ); ?>" data-module-name="<?php echo esc_attr( $module['name'] ?? '' ); ?>" data-type="spoke" data-installed="<?php echo esc_attr( $installed ? '1' : '0' ); ?>" data-plugin-base="<?php echo esc_attr( $module['basename'] ?? $plugin_base ); ?>" data-plugin-exists="<?php echo esc_attr( $plugin_exists ? '1' : '0' ); ?>" data-downloadable="<?php echo esc_attr( ! empty( $module['download_url'] ) ? '1' : '0' ); ?>">
 										<span class="timu-toggle-slider"></span>
 									</label>
 									<span class="timu-progress" aria-live="polite"><span class="spinner is-active" style="float:none"></span><span class="bar"><span class="fill"></span></span><span class="progress-label"><?php esc_html_e( 'Working…', 'plugin-wp-support-thisismyurl' ); ?></span></span>

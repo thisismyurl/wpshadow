@@ -5,7 +5,7 @@
  * Allows plugins to register and check for capabilities/features they provide or require.
  * This enables flexible dependency management without hardcoding plugin names.
  *
- * @package TIMU_CORE_SUPPORT
+ * @package wp_support_SUPPORT
  */
 
 declare(strict_types=1);

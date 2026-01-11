@@ -5,7 +5,7 @@
  * This file delegates all Vault operations to the canonical implementation
  * in vault-support-thisismyurl plugin. No logic duplication.
  *
- * @package TIMU_CORE_SUPPORT
+ * @package wp_support_SUPPORT
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( class_exists( '\\TIMU\\VaultSupport\\TIMU_Vault' ) ) {
 	 * Stub TIMU_Vault class when Vault Support plugin is not available.
 	 * Provides no-op methods to prevent fatal errors.
 	 *
-	 * @package TIMU_CORE_SUPPORT
+	 * @package wp_support_SUPPORT
 	 */
 	class TIMU_Vault {
 		/**

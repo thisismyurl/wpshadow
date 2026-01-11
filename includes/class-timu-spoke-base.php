@@ -5,7 +5,7 @@
  * The central orchestration layer for spoke plugins (Image, Media, Formats, etc).
  * Moved from Image plugin's embedded core to enable DRY principle across suite.
  *
- * @package     TIMU_CORE_SUPPORT
+ * @package     wp_support_SUPPORT
  * @version     1.2601.073000
  * @since       1.0.0
  * @author      Senior Architect
@@ -258,9 +258,9 @@ abstract class TIMU_Spoke_Base {
 
 		// Compute cache-busting versions based on file mtimes (fallback to plugin version)
 		$base_dir = \plugin_dir_path( ( new \ReflectionClass( $this ) )->getFileName() );
-		$css_path = $base_dir . 'assets/css/shared-admin.css';
-		$js_path  = $base_dir . 'assets/js/shared-admin.js';
-		$bulk_js  = $base_dir . 'assets/js/shared-bulk.js';
+		$css_path = $base_dir . 'core/assets/css/shared-admin.css';
+		$js_path  = $base_dir . 'core/assets/js/shared-admin.js';
+		$bulk_js  = $base_dir . 'core/assets/js/shared-bulk.js';
 
 		$css_ver  = \file_exists( $css_path ) ? ( $version . '-' . (string) \filemtime( $css_path ) ) : $version;
 		$js_ver   = \file_exists( $js_path ) ? ( $version . '-' . (string) \filemtime( $js_path ) ) : $version;
@@ -270,12 +270,20 @@ abstract class TIMU_Spoke_Base {
 		$js_url   = $this->plugin_url . 'core/assets/js/shared-admin.js';
 		$bulk_url = $this->plugin_url . 'core/assets/js/shared-bulk.js';
 
-		\wp_enqueue_style( 'timu-core-css', $css_url, array(), $css_ver );
-		\wp_enqueue_script( 'timu-core-ui', $js_url, array( 'jquery' ), $js_ver, true );
+		// Only enqueue files that actually exist
+		if ( \file_exists( $css_path ) ) {
+			\wp_enqueue_style( 'timu-core-css', $css_url, array(), $css_ver );
+		}
+		
+		if ( \file_exists( $js_path ) ) {
+			\wp_enqueue_script( 'timu-core-ui', $js_url, array( 'jquery' ), $js_ver, true );
+		}
 
 		$current_page = isset( $_GET['page'] ) ? \sanitize_key( $_GET['page'] ) : '';
 		if ( $current_page === $this->plugin_slug || $current_page === 'thisismyurl-support' ) {
-			\wp_enqueue_script( 'timu-core-bulk', $bulk_url, array( 'jquery', 'timu-core-ui' ), $bulk_ver, true );
+			if ( \file_exists( $bulk_js ) ) {
+				\wp_enqueue_script( 'timu-core-bulk', $bulk_url, array( 'jquery', 'timu-core-ui' ), $bulk_ver, true );
+			}
 			\wp_enqueue_style( 'wp-color-picker' );
 			\wp_enqueue_script( 'wp-color-picker' );
 			\wp_enqueue_media();
@@ -283,7 +291,7 @@ abstract class TIMU_Spoke_Base {
 
 		\wp_localize_script(
 			'timu-core-ui',
-			'timu_core_vars',
+			'wp_support_vars',
 			array(
 				'ajax_url' => \admin_url( 'admin-ajax.php' ),
 				'nonce'    => \wp_create_nonce( 'timu_install_nonce' ),
@@ -353,7 +361,7 @@ abstract class TIMU_Spoke_Base {
 
 	public function get_bulk_stats(): array {
 		$cache_key = "{$this->plugin_slug}_bulk_stats";
-		$cached    = \wp_cache_get( $cache_key, 'timu_core' );
+		$cached    = \wp_cache_get( $cache_key, 'wp_support' );
 		if ( false !== $cached ) {
 			return (array) $cached;
 		}
@@ -391,12 +399,12 @@ abstract class TIMU_Spoke_Base {
 			'unprocessed' => (int) $unprocessed->found_posts,
 			'processed'   => (int) $processed->found_posts,
 		);
-		\wp_cache_set( $cache_key, $stats, 'timu_core', HOUR_IN_SECONDS );
+		\wp_cache_set( $cache_key, $stats, 'wp_support', HOUR_IN_SECONDS );
 		return $stats;
 	}
 
 	public function invalidate_bulk_stats(): void {
-		\wp_cache_delete( "{$this->plugin_slug}_bulk_stats", 'timu_core' );
+		\wp_cache_delete( "{$this->plugin_slug}_bulk_stats", 'wp_support' );
 	}
 
 	private function increment_total_savings_tracker( int $amount ): void {
@@ -709,7 +717,7 @@ abstract class TIMU_Spoke_Base {
 /**
  * --- SPOKE BASE ARCHITECT METADATA ---
  * Changelog:
- * - [1.2601.073000] Moved TIMU_Core_v1 from Image's embedded core to Core plugin as TIMU_Spoke_Base. Namespace: TIMU\Core\Spoke. Enables DRY principle and simplifies spoke plugin development.
+ * - [1.2601.073000] Moved wp_support_v1 from Image's embedded core to Core plugin as TIMU_Spoke_Base. Namespace: TIMU\Core\Spoke. Enables DRY principle and simplifies spoke plugin development.
  * Upgrade Notice: Consolidated spoke framework for cleaner architecture
  * Requires at least: 6.4 | PHP: 8.2
  */

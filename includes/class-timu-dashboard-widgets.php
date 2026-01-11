@@ -2,7 +2,7 @@
 /**
  * Dashboard widget system for tab-based interface.
  *
- * @package TIMU_Core_Support
+ * @package wp_support_Support
  * @since 1.0.0
  */
 
@@ -74,75 +74,27 @@ class TIMU_Dashboard_Widgets {
 
 	/**
 	 * Render Hub-level dashboard.
+	 * Shows the same core dashboard content.
 	 *
 	 * @param string $hub_id Hub identifier.
 	 * @return void
 	 */
 	public static function render_hub_dashboard( string $hub_id ): void {
-		// Check if hub module has its own dashboard renderer.
-		$slug_map = array(
-			'media' => 'TIMU\MediaSupport',
-			'vault' => 'TIMU\VaultSupport',
-		);
-
-		$namespace = $slug_map[ $hub_id ] ?? null;
-
-		if ( $namespace && function_exists( $namespace . '\\render_dashboard' ) ) {
-			call_user_func( $namespace . '\\render_dashboard' );
-			return;
-		}
-
-		// Fall back to generic hub dashboard.
-		$hub_name = ucfirst( $hub_id );
-		self::render_dashboard_shell(
-			esc_html( sprintf( __( '%s Hub Dashboard', 'plugin-wp-support-thisismyurl' ), $hub_name ) ),
-			array(
-				static function() use ( $hub_id ) {
-					self::widget_hub_overview( $hub_id );
-				},
-				static function() use ( $hub_id ) {
-					self::widget_active_spokes( $hub_id );
-				},
-			),
-			array(
-				static function() use ( $hub_id ) {
-					self::widget_hub_stats( $hub_id );
-				},
-				static function() use ( $hub_id ) {
-					self::widget_hub_quick_actions( $hub_id );
-				},
-			)
-		);
+		// Hub level displays core dashboard content.
+		self::render_core_dashboard();
 	}
 
 	/**
 	 * Render Spoke-level dashboard.
+	 * Shows the same core dashboard content.
 	 *
 	 * @param string $hub_id Hub identifier.
 	 * @param string $spoke_id Spoke identifier.
 	 * @return void
 	 */
 	public static function render_spoke_dashboard( string $hub_id, string $spoke_id ): void {
-		$spoke_name = strtoupper( $spoke_id );
-		self::render_dashboard_shell(
-			esc_html( sprintf( __( '%s Support Dashboard', 'plugin-wp-support-thisismyurl' ), $spoke_name ) ),
-			array(
-				static function() use ( $hub_id, $spoke_id ) {
-					self::widget_spoke_overview( $hub_id, $spoke_id );
-				},
-				static function() use ( $spoke_id ) {
-					self::widget_spoke_features( $spoke_id );
-				},
-			),
-			array(
-				static function() use ( $spoke_id ) {
-					self::widget_spoke_stats( $spoke_id );
-				},
-				static function() use ( $hub_id, $spoke_id ) {
-					self::widget_spoke_quick_actions( $hub_id, $spoke_id );
-				},
-			)
-		);
+		// Spoke level displays core dashboard content.
+		self::render_core_dashboard();
 	}
 
 	/* ====== CORE WIDGETS ====== */
@@ -439,36 +391,173 @@ class TIMU_Dashboard_Widgets {
 						}
 					});
 				});
-				// Toggle handling for dashboard module switches
+				// Toggle handling for dashboard module switches with persistence and submenu updates
 				const ajaxUrl = '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>';
 				const nonce = '<?php echo esc_js( wp_create_nonce( 'timu_module_actions' ) ); ?>';
+				const scope = '<?php echo ( is_multisite() && is_network_admin() ) ? 'network' : 'site'; ?>';
+				const storagePrefix = 'timuToggleState:' + scope + ':';
+				const pendingPrefix = 'timuTogglePending:' + scope + ':';
+				function saveToggleState(slug, checked){ try{ localStorage.setItem(storagePrefix + slug, checked ? '1':'0'); }catch(e){} }
+				function getToggleState(slug){ try{ return localStorage.getItem(storagePrefix + slug); }catch(e){ return null; } }
+				function markPending(slug, target){ try{ localStorage.setItem(pendingPrefix + slug, target ? '1':'0'); }catch(e){} }
+				function clearPending(slug){ try{ localStorage.removeItem(pendingPrefix + slug); }catch(e){} }
+				function getPending(slug){ try{ return localStorage.getItem(pendingPrefix + slug); }catch(e){ return null; } }
+				async function postAction(action, data){
+					const form = new URLSearchParams({ action, nonce });
+					Object.entries(data).forEach(([k,v])=>{ if (v != null) form.append(k,v); });
+					const res = await fetch(ajaxUrl, { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body: form.toString() });
+					const json = await res.json();
+					if (!json || json.success !== true) { throw new Error((json && json.data && json.data.message) ? json.data.message : 'Unexpected error'); }
+					return json.data || {};
+				}
 				document.addEventListener('change', async function(e){
 					const input = e.target;
 					if (!input.matches('.timu-toggle-switch input')) return;
 					const slug = input.getAttribute('data-module');
-					const installed = input.getAttribute('data-installed') === '1';
 					const turningOn = input.checked;
+					// optimistic persist
+					saveToggleState(slug, turningOn);
+					markPending(slug, turningOn);
+					// reflect submenu immediately for hubs
+					const type = input.getAttribute('data-type') || 'hub';
+					const name = input.getAttribute('data-module-name') || '';
+					if (type === 'hub') { ensureSubmenuFromSlug(slug, name, turningOn); }
 					const pluginBase = input.getAttribute('data-plugin-base') || '';
 					const card = input.closest('div[style*="border"]');
 					const progress = card ? card.querySelector('.timu-progress') : null;
 					input.disabled = true; if (progress) progress.style.display = 'inline-flex';
 					const isPlugin = input.getAttribute('data-is-plugin') === '1';
-					const action = isPlugin ? (turningOn ? (installed ? 'timu_module_activate' : 'timu_module_install') : 'timu_module_deactivate') : 'timu_module_toggle';
-					const form = new URLSearchParams({ action, nonce, slug });
-					if (isPlugin) { if (pluginBase) { form.append('plugin_base', pluginBase); } } else { form.append('enabled', turningOn ? 1 : 0); }
+					let action = 'timu_module_toggle';
+					const payload = { slug };
+					if (isPlugin) {
+						if (turningOn) { action = (input.getAttribute('data-installed') === '1') ? 'timu_module_activate' : 'timu_module_install'; }
+						else { action = 'timu_module_deactivate'; }
+						if (pluginBase) { payload.plugin_base = pluginBase; }
+					} else {
+						payload.enabled = turningOn ? 1 : 0;
+					}
 					try {
-						const res = await fetch(ajaxUrl, { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body: form.toString() });
-						const json = await res.json();
-						if (!json.success) throw new Error(json?.data?.message || 'Unexpected error');
+						const data = await postAction(action, payload);
 						if (action === 'timu_module_install') { input.setAttribute('data-installed','1'); }
+						clearPending(slug);
 					} catch (err) {
 						input.checked = !turningOn;
 						console.error(err);
 						alert(err.message);
+						// rollback optimistic save but keep pending for recovery
+						saveToggleState(slug, !turningOn);
 					} finally {
 						input.disabled = false; if (progress) progress.style.display = 'none';
 					}
 				});
+
+				// Restore saved states on load (and submenu entries)
+				document.querySelectorAll('.timu-toggle-switch input[data-module]').forEach(function(input){
+					const slug = input.getAttribute('data-module');
+					const saved = getToggleState(slug);
+					if (saved === '1' || saved === '0') {
+						input.checked = (saved === '1');
+						if ((input.getAttribute('data-type')||'hub') === 'hub'){
+							const name = input.getAttribute('data-module-name') || '';
+							ensureSubmenuFromSlug(slug, name, (saved === '1'));
+						}
+					}
+				});
+
+				// Sweep existing menu to hide any disabled hubs rendered server-side.
+				(function sweepSubmenusFromStorage(){
+					for (var i = 0; i < localStorage.length; i++){
+						var key = localStorage.key(i);
+						if (!key || key.indexOf(storagePrefix) !== 0) continue;
+						var slug = key.substring(storagePrefix.length);
+						var val = localStorage.getItem(key);
+						if (val === '0'){
+							ensureSubmenuFromSlug(slug, '', false);
+						}
+					}
+				})();
+
+				// Cross-tab sync (and submenu updates)
+				window.addEventListener('storage', function(ev){
+					if (!ev || typeof ev.key !== 'string') return;
+					if (ev.key.startsWith(storagePrefix)){
+						const slug = ev.key.substring(storagePrefix.length);
+						const val = ev.newValue;
+						const input = document.querySelector('.timu-toggle-switch input[data-module="' + slug + '"]');
+						if (input && (val === '1' || val === '0')){
+							input.checked = (val === '1');
+							if ((input.getAttribute('data-type')||'hub') === 'hub'){
+								const name = input.getAttribute('data-module-name') || '';
+								ensureSubmenuFromSlug(slug, name, (val === '1'));
+							}
+						}
+					}
+				});
+
+				// Utility: add/remove submenu entry for a hub from its slug
+				function ensureSubmenuFromSlug(slug, name, enabled){
+					var moduleId = (slug || '').replace(/-support-thisismyurl$/,'');
+					var label = name || moduleId || 'Module';
+					ensureSubmenu(moduleId, label, enabled);
+				}
+
+				function ensureSubmenu(moduleId, label, enabled){
+					var top = document.getElementById('toplevel_page_wp-support');
+					if (!top){
+						var link = document.querySelector('#adminmenu a.menu-top[href*="page=wp-support"]');
+						if (link) { top = link.closest('li'); }
+					}
+					if (!top) return;
+					var submenu = top.querySelector('ul.wp-submenu-wrap') || top.querySelector('ul.wp-submenu');
+					if (!submenu){
+						// If submenu container is missing, rely on server-rendered menu; do not create here.
+						return;
+					}
+					var target = 'page=wp-support&module=' + encodeURIComponent(moduleId);
+					var anchors = submenu.querySelectorAll('a[href*="' + target + '"]');
+					if (!anchors || anchors.length === 0){
+						// Nothing to toggle; avoid creating to prevent duplicates.
+						return;
+					}
+					anchors.forEach(function(anchor){
+						var li = anchor.closest('li');
+						if (!li) return;
+						li.style.display = enabled ? '' : 'none';
+						anchor.style.display = enabled ? '' : 'none';
+						anchor.setAttribute('aria-hidden', enabled ? 'false' : 'true');
+					});
+				}
+
+				// Retry pending periodically
+				async function processPending(){
+					document.querySelectorAll('.timu-toggle-switch input[data-module]').forEach(async function(input){
+						const slug = input.getAttribute('data-module');
+						const p = getPending(slug);
+						if (p !== '1' && p !== '0') return;
+						const targetOn = (p === '1');
+						const pluginBase = input.getAttribute('data-plugin-base') || '';
+						const isPlugin = input.getAttribute('data-is-plugin') === '1';
+						let action = 'timu_module_toggle';
+						const payload = { slug };
+						if (isPlugin){
+							action = targetOn ? 'timu_module_activate' : 'timu_module_deactivate';
+							if (pluginBase) { payload.plugin_base = pluginBase; }
+						} else {
+							payload.enabled = targetOn ? 1 : 0;
+						}
+						try{
+							await postAction(action, payload);
+							clearPending(slug);
+							saveToggleState(slug, targetOn);
+							input.checked = targetOn;
+							if ((input.getAttribute('data-type')||'hub') === 'hub'){
+								const name = input.getAttribute('data-module-name') || '';
+								ensureSubmenuFromSlug(slug, name, targetOn);
+							}
+						}catch(e){ /* keep pending */ }
+					});
+				}
+				setInterval(processPending, 5000);
 			});
 		</script>
 		<div class="timu-widget-content">
@@ -522,7 +611,7 @@ class TIMU_Dashboard_Widgets {
 								</div>
 								<div style="display: flex; align-items: center; flex-shrink: 0;">
 									<label class="timu-toggle-switch">
-										<input type="checkbox" <?php checked( $is_enabled ); ?> data-module="<?php echo esc_attr( $module_slug ); ?>" data-type="<?php echo esc_attr( 'spoke' === $module_type ? 'spoke' : 'hub' ); ?>" data-installed="<?php echo esc_attr( $is_installed ? '1' : '0' ); ?>" data-plugin-base="<?php echo esc_attr( $module['basename'] ?? '' ); ?>" data-is-plugin="<?php echo esc_attr( ( ! empty( $module['basename'] ?? '' ) || ! empty( $module['download_url'] ?? '' ) ) ? '1' : '0' ); ?>">
+										<input type="checkbox" <?php checked( $is_enabled ); ?> data-module="<?php echo esc_attr( $module_slug ); ?>" data-module-name="<?php echo esc_attr( $module_name ); ?>" data-type="<?php echo esc_attr( 'spoke' === $module_type ? 'spoke' : 'hub' ); ?>" data-installed="<?php echo esc_attr( $is_installed ? '1' : '0' ); ?>" data-plugin-base="<?php echo esc_attr( $module['basename'] ?? '' ); ?>" data-is-plugin="<?php echo esc_attr( ( ! empty( $module['basename'] ?? '' ) || ! empty( $module['download_url'] ?? '' ) ) ? '1' : '0' ); ?>">
 										<span class="timu-toggle-slider"></span>
 									</label>
 									<span class="timu-progress" aria-live="polite"><span class="spinner is-active" style="float:none"></span><span class="bar"><span class="fill"></span></span><span class="progress-label"><?php esc_html_e( 'Working…', 'plugin-wp-support-thisismyurl' ); ?></span></span>
@@ -569,7 +658,7 @@ class TIMU_Dashboard_Widgets {
 											</div>
 											<div style="display: flex; align-items: center; flex-shrink: 0;">
 												<label class="timu-toggle-switch">
-													<input type="checkbox" <?php checked( $dep_enabled ); ?> data-module="<?php echo esc_attr( $dep_slug ); ?>" data-type="hub" data-installed="<?php echo esc_attr( $dep_installed ? '1' : '0' ); ?>" data-plugin-base="<?php echo esc_attr( $dep_module['basename'] ?? '' ); ?>" data-is-plugin="<?php echo esc_attr( ( ! empty( $dep_module['basename'] ?? '' ) || ! empty( $dep_module['download_url'] ?? '' ) ) ? '1' : '0' ); ?>">
+													<input type="checkbox" <?php checked( $dep_enabled ); ?> data-module="<?php echo esc_attr( $dep_slug ); ?>" data-module-name="<?php echo esc_attr( $dep_name ); ?>" data-type="hub" data-installed="<?php echo esc_attr( $dep_installed ? '1' : '0' ); ?>" data-plugin-base="<?php echo esc_attr( $dep_module['basename'] ?? '' ); ?>" data-is-plugin="<?php echo esc_attr( ( ! empty( $dep_module['basename'] ?? '' ) || ! empty( $dep_module['download_url'] ?? '' ) ) ? '1' : '0' ); ?>">
 													<span class="timu-toggle-slider"></span>
 												</label>
 												<span class="timu-progress" aria-live="polite"><span class="spinner is-active" style="float:none"></span><span class="bar"><span class="fill"></span></span><span class="progress-label"><?php esc_html_e( 'Working…', 'plugin-wp-support-thisismyurl' ); ?></span></span>
@@ -597,7 +686,7 @@ class TIMU_Dashboard_Widgets {
 		$vault_path      = wp_upload_dir()['basedir'] . '/vault';
 		$vault_exists    = is_dir( $vault_path );
 		$vault_writable  = $vault_exists && wp_is_writable( $vault_path );
-		$encryption_key  = timu_core_get_vault_key();
+		$encryption_key  = wp_support_get_vault_key();
 		$health_url      = admin_url( 'site-health.php?tab=debug' );
 		?>
 		<div class="timu-widget-content timu-quick-actions">
@@ -670,8 +759,8 @@ class TIMU_Dashboard_Widgets {
 		}
 
 		$roots = array(
-			'hub'   => trailingslashit( TIMU_CORE_PATH ) . 'modules/hubs',
-			'spoke' => trailingslashit( TIMU_CORE_PATH ) . 'modules/spokes',
+			'hub'   => trailingslashit( wp_support_PATH ) . 'modules/hubs',
+			'spoke' => trailingslashit( wp_support_PATH ) . 'modules/spokes',
 		);
 
 		foreach ( $roots as $type => $root ) {
@@ -731,7 +820,7 @@ class TIMU_Dashboard_Widgets {
 		}
 
 		// Merge placeholders from modules/missing-modules.json so the widget lists not-yet-downloaded modules.
-		$missing_file = trailingslashit( TIMU_CORE_PATH ) . 'modules/missing-modules.json';
+		$missing_file = trailingslashit( wp_support_PATH ) . 'modules/missing-modules.json';
 		if ( file_exists( $missing_file ) && is_readable( $missing_file ) ) {
 			$missing_json = file_get_contents( $missing_file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			$missing_data = json_decode( (string) $missing_json, true );
@@ -781,7 +870,7 @@ class TIMU_Dashboard_Widgets {
 
 		$vault_exists   = ! empty( $vault_path ) && is_dir( $vault_path );
 		$vault_writable = $vault_exists && wp_is_writable( $vault_path );
-		$encryption_key = timu_core_get_vault_key();
+		$encryption_key = wp_support_get_vault_key();
 		$has_encryption = ! empty( $encryption_key );
 		$key_source     = defined( 'TIMU_VAULT_KEY' ) && TIMU_VAULT_KEY ? 'wp-config.php' : 'Options';
 

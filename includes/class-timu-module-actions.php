@@ -2,7 +2,7 @@
 /**
  * AJAX handlers for catalog module install/update/activate actions.
  *
- * @package TIMU_CORE_SUPPORT
+ * @package wp_support_SUPPORT
  * @since 1.2601.73000
  */
 
@@ -286,32 +286,29 @@ class TIMU_Module_Actions {
 		$requested_file = isset( $_POST['plugin_base'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_base'] ) ) : '';
 		$plugin_file    = self::resolve_plugin_file( $slug, $requested_file );
 
-		if ( empty( $plugin_file ) ) {
-			wp_send_json_error(
-				array(
-					'message' => __( 'Plugin file not found.', 'plugin-wp-support-thisismyurl' ),
-				),
-				404
-			);
-		}
-
 		// Determine activation scope.
 		$network_activate = is_multisite() && is_network_admin();
 
-		if ( $network_activate ) {
-			$result = activate_plugin( $plugin_file, '', true );
-		} else {
-			$result = activate_plugin( $plugin_file );
+		// If a plugin file exists, activate it; otherwise just mark enabled.
+		if ( $plugin_file ) {
+			if ( $network_activate ) {
+				$result = activate_plugin( $plugin_file, '', true );
+			} else {
+				$result = activate_plugin( $plugin_file );
+			}
+
+			if ( is_wp_error( $result ) ) {
+				wp_send_json_error(
+					array(
+						'message' => $result->get_error_message(),
+					),
+					500
+				);
+			}
 		}
 
-		if ( is_wp_error( $result ) ) {
-			wp_send_json_error(
-				array(
-					'message' => $result->get_error_message(),
-				),
-				500
-			);
-		}
+		// Ensure registry enabled flag is set even for module-only entries.
+		TIMU_Module_Registry::update_module_settings( $slug, array( 'enabled' => true ), $network_activate );
 
 		// Refresh catalog with status.
 		$status = TIMU_Module_Registry::get_catalog_with_status();
@@ -356,21 +353,17 @@ class TIMU_Module_Actions {
 			);
 		}
 
-		// Resolve plugin file path.
+		// Resolve plugin file path (optional for module-only entries).
 		$requested_file = isset( $_POST['plugin_base'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_base'] ) ) : '';
 		$plugin_file    = self::resolve_plugin_file( $slug, $requested_file );
 
-		if ( empty( $plugin_file ) ) {
-			wp_send_json_error(
-				array(
-					'message' => __( 'Plugin file not found.', 'plugin-wp-support-thisismyurl' ),
-				),
-				404
-			);
+		if ( $plugin_file ) {
+			// Deactivate plugin (site or network scope).
+			deactivate_plugins( $plugin_file, false, $network_scope );
 		}
 
-		// Deactivate plugin (site or network scope).
-		deactivate_plugins( $plugin_file, false, $network_scope );
+		// Always disable the module flag (plugin or module-only).
+		TIMU_Module_Registry::update_module_settings( $slug, array( 'enabled' => false ), $network_scope );
 
 		// Refresh catalog with status.
 		$status = TIMU_Module_Registry::get_catalog_with_status();

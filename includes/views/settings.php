@@ -2,7 +2,7 @@
 /**
  * Settings view for Core Support Vault.
  *
- * @package TIMU_CORE_SUPPORT
+ * @package wp_support_SUPPORT
  */
 
 use TIMU\CoreSupport\TIMU_Vault;

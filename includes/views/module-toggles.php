@@ -4,7 +4,7 @@
  *
  * Displays module enablement toggles for admin settings.
  *
- * @package TIMU_CORE_SUPPORT
+ * @package wp_support_SUPPORT
  */
 
 // Prevent direct access.
@@ -17,8 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<form method="post" action="options.php">
 		<?php
-		settings_fields( 'timu_core_modules' );
-		do_settings_sections( 'timu_core_modules' );
+		settings_fields( 'wp_support_modules' );
+		do_settings_sections( 'wp_support_modules' );
 		submit_button();
 		?>
 	</form>

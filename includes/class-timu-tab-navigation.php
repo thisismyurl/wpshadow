@@ -2,7 +2,7 @@
 /**
  * Tab-based navigation system for thisismyurl Suite.
  *
- * @package TIMU_Core_Support
+ * @package wp_support_Support
  * @since 1.0.0
  */
 
@@ -193,6 +193,11 @@ class TIMU_Tab_Navigation {
 				'icon'  => 'dashicons-dashboard',
 			),
 			array(
+				'id'    => 'settings',
+				'label' => __( 'Settings', 'plugin-wp-support-thisismyurl' ),
+				'icon'  => 'dashicons-admin-generic',
+			),
+			array(
 				'id'    => 'help',
 				'label' => __( 'Help', 'plugin-wp-support-thisismyurl' ),
 				'icon'  => 'dashicons-editor-help',
@@ -212,6 +217,11 @@ class TIMU_Tab_Navigation {
 				'id'    => 'dashboard',
 				'label' => __( 'Dashboard', 'plugin-wp-support-thisismyurl' ),
 				'icon'  => 'dashicons-dashboard',
+			),
+			array(
+				'id'    => 'settings',
+				'label' => __( 'Settings', 'plugin-wp-support-thisismyurl' ),
+				'icon'  => 'dashicons-admin-generic',
 			),
 			array(
 				'id'    => 'help',

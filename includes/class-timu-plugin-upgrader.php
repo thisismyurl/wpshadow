@@ -2,7 +2,7 @@
 /**
  * Plugin installer/upgrader for catalog-driven install/update flows.
  *
- * @package TIMU_CORE_SUPPORT
+ * @package wp_support_SUPPORT
  * @since 1.2601.73000
  */
 

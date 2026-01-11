@@ -4,7 +4,7 @@
  *
  * Detects missing required modules and offers one-click install/activate.
  *
- * @package TIMU_CORE_SUPPORT
+ * @package wp_support_SUPPORT
  */
 
 declare(strict_types=1);
@@ -301,13 +301,13 @@ class TIMU_Module_Bootstrap {
 			return;
 		}
 
-		$setup_done = (bool) get_option( 'timu_core_setup_completed', false );
+		$setup_done = (bool) get_option( 'wp_support_setup_completed', false );
 		if ( $setup_done ) {
 			return;
 		}
 
 		// Mark setup as done.
-		update_option( 'timu_core_setup_completed', time() );
+		update_option( 'wp_support_setup_completed', time() );
 
 		// Redirect to dashboard with setup flag.
 		if ( 'timu-core-dashboard' !== ( $_GET['page'] ?? null ) ) {

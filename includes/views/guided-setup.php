@@ -4,7 +4,7 @@
  *
  * Shows on first plugin activation to guide installation of recommended module stack.
  *
- * @package TIMU_CORE_SUPPORT
+ * @package wp_support_SUPPORT
  */
 
 // Prevent direct access.
