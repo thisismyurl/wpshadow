@@ -49,6 +49,27 @@ function wp_support_render_settings( string $hub_id = '' ): void {
 	wp_enqueue_script( 'postbox' );
 	wp_enqueue_style( 'dashboard' );
 
+	// Enqueue auto-save script for settings forms.
+	wp_enqueue_script(
+		'timu-settings-autosave',
+		plugin_dir_url( __FILE__ ) . 'assets/js/settings-autosave.js',
+		array( 'jquery' ),
+		'1.0.0',
+		true
+	);
+
+	// Localize script for AJAX and i18n.
+	wp_localize_script(
+		'timu-settings-autosave',
+		'timu_settings_i18n',
+		array(
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'saving'  => __( 'Saving...', 'plugin-wp-support-thisismyurl' ),
+			'saved'   => __( 'Saved', 'plugin-wp-support-thisismyurl' ),
+			'error'   => __( 'Save failed', 'plugin-wp-support-thisismyurl' ),
+		)
+	);
+
 	// Title mirrors dashboard style.
 	$settings_title = __( 'Support Settings', 'plugin-wp-support-thisismyurl' );
 	if ( ! empty( $hub_id ) ) {
@@ -511,6 +532,7 @@ function wp_support_init(): void {
 	// Load tab navigation system.
 	require_once wp_support_PATH . 'includes/class-timu-tab-navigation.php';
 	require_once wp_support_PATH . 'includes/class-timu-dashboard-widgets.php';
+	require_once wp_support_PATH . 'includes/class-settings-ajax.php';
 
 	// Load CLI commands when WP-CLI present.
 	if ( defined( 'WP_CLI' ) && WP_CLI ) {
@@ -2677,8 +2699,8 @@ function render_settings_module_registry(): void {
 	$enabled   = (bool) get_option( 'timu_module_discovery_enabled', true );
 	$frequency = get_option( 'timu_module_discovery_frequency', 'on-demand' );
 	?>
-	<form method="post" style="max-width: 600px;">
-		<?php wp_nonce_field( 'timu_settings_module_registry' ); ?>
+	<form method="post" class="timu-settings-form" data-settings-group="module_registry" style="max-width: 600px;">
+		<?php wp_nonce_field( 'timu_settings_module_registry', 'timu_settings_nonce' ); ?>
 		<table class="form-table" role="presentation">
 			<tbody>
 				<tr>
@@ -2701,7 +2723,7 @@ function render_settings_module_registry(): void {
 				</tr>
 			</tbody>
 		</table>
-		<?php submit_button( __( 'Save Module Discovery Settings', 'plugin-wp-support-thisismyurl' ), 'primary', 'timu_save_module_discovery' ); ?>
+		<div class="timu-settings-save-status" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
 	</form>
 	<hr style="margin-top: 20px;">
 	<p>
@@ -2720,8 +2742,8 @@ function render_settings_capabilities(): void {
 	$install_roles  = (array) get_option( 'timu_capability_install_roles', array( 'manage_options' ) );
 	$update_roles   = (array) get_option( 'timu_capability_update_roles', array( 'manage_options' ) );
 	?>
-	<form method="post" style="max-width: 600px;">
-		<?php wp_nonce_field( 'timu_settings_capabilities' ); ?>
+	<form method="post" class="timu-settings-form" data-settings-group="capabilities" style="max-width: 600px;">
+		<?php wp_nonce_field( 'timu_settings_capabilities', 'timu_settings_nonce' ); ?>
 		<table class="form-table" role="presentation">
 			<tbody>
 				<tr>
@@ -2752,7 +2774,7 @@ function render_settings_capabilities(): void {
 				</tr>
 			</tbody>
 		</table>
-		<?php submit_button( __( 'Save Capabilities', 'plugin-wp-support-thisismyurl' ), 'primary', 'timu_save_capabilities' ); ?>
+		<div class="timu-settings-save-status" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
 	</form>
 	<?php
 }
@@ -2767,8 +2789,8 @@ function render_settings_dashboard(): void {
 	$sticky_widgets = (array) get_option( 'timu_dashboard_sticky_widgets', array() );
 	$widget_sorting = get_option( 'timu_dashboard_widget_sorting', 'drag-order' );
 	?>
-	<form method="post" style="max-width: 600px;">
-		<?php wp_nonce_field( 'timu_settings_dashboard' ); ?>
+	<form method="post" class="timu-settings-form" data-settings-group="dashboard" style="max-width: 600px;">
+		<?php wp_nonce_field( 'timu_settings_dashboard', 'timu_settings_nonce' ); ?>
 		<table class="form-table" role="presentation">
 			<tbody>
 				<tr>
@@ -2799,7 +2821,7 @@ function render_settings_dashboard(): void {
 				</tr>
 			</tbody>
 		</table>
-		<?php submit_button( __( 'Save Dashboard Settings', 'plugin-wp-support-thisismyurl' ), 'primary', 'timu_save_dashboard' ); ?>
+		<div class="timu-settings-save-status" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
 	</form>
 	<?php
 }
@@ -2815,8 +2837,8 @@ function render_settings_license(): void {
 	$auto_update     = (array) get_option( 'timu_license_auto_update_types', array( 'minor', 'patch' ) );
 	$update_channel  = get_option( 'timu_license_update_channel', 'stable' );
 	?>
-	<form method="post" style="max-width: 600px;">
-		<?php wp_nonce_field( 'timu_settings_license' ); ?>
+	<form method="post" class="timu-settings-form" data-settings-group="license" style="max-width: 600px;">
+		<?php wp_nonce_field( 'timu_settings_license', 'timu_settings_nonce' ); ?>
 		<table class="form-table" role="presentation">
 			<tbody>
 				<tr>
@@ -2855,7 +2877,7 @@ function render_settings_license(): void {
 				</tr>
 			</tbody>
 		</table>
-		<?php submit_button( __( 'Save License Settings', 'plugin-wp-support-thisismyurl' ), 'primary', 'timu_save_license' ); ?>
+		<div class="timu-settings-save-status" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
 	</form>
 	<?php
 }
@@ -2874,8 +2896,8 @@ function render_settings_privacy(): void {
 	$contrib_see_user    = (bool) get_option( 'timu_privacy_contributors_see_user_activity', false );
 	$editor_see_admin    = (bool) get_option( 'timu_privacy_editors_see_admin_activity', false );
 	?>
-	<form method="post" style="max-width: 600px;">
-		<?php wp_nonce_field( 'timu_settings_privacy' ); ?>
+	<form method="post" class="timu-settings-form" data-settings-group="privacy" style="max-width: 600px;">
+		<?php wp_nonce_field( 'timu_settings_privacy', 'timu_settings_nonce' ); ?>
 		<table class="form-table" role="presentation">
 			<tbody>
 				<tr>
@@ -2925,7 +2947,7 @@ function render_settings_privacy(): void {
 				</tr>
 			</tbody>
 		</table>
-		<?php submit_button( __( 'Save Privacy Settings', 'plugin-wp-support-thisismyurl' ), 'primary', 'timu_save_privacy' ); ?>
+		<div class="timu-settings-save-status" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
 	</form>
 	<?php
 }
