@@ -20,30 +20,56 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class TIMU_Dashboard_Widgets {
 	/**
-	 * Render Core-level dashboard.
+	 * Shared dashboard shell for core, hub, and spoke views.
 	 *
+	 * @param string $title            Page heading.
+	 * @param array  $col1_callbacks   Callables to render in column 1.
+	 * @param array  $col2_callbacks   Callables to render in column 2.
 	 * @return void
 	 */
-	public static function render_core_dashboard(): void {
+	private static function render_dashboard_shell( string $title, array $col1_callbacks, array $col2_callbacks ): void {
 		?>
 		<div class="wrap timu-dashboard">
-			<h1><?php echo esc_html__( 'Support Dashboard', 'plugin-wp-support-thisismyurl' ); ?></h1>
+			<h1><?php echo esc_html( $title ); ?></h1>
+
+			<style>
+				.timu-dashboard { margin-top: 20px; }
+				.timu-dashboard-widgets-wrap { max-width: 1800px; }
+				.timu-dashboard-col-container { display: flex; flex-wrap: wrap; gap: 20px; }
+				.timu-dashboard-col { flex: 1; min-width: 400px; }
+			</style>
 
 			<div class="timu-dashboard-widgets-wrap">
 				<div class="timu-dashboard-col-container">
 					<div id="timu-dashboard-col-1" class="timu-dashboard-col">
-						<?php self::widget_suite_overview(); ?>
-						<?php self::widget_active_hubs(); ?>
+						<?php foreach ( $col1_callbacks as $callback ) { if ( is_callable( $callback ) ) { call_user_func( $callback ); } } ?>
 					</div>
 
 					<div id="timu-dashboard-col-2" class="timu-dashboard-col">
-						<?php self::widget_recent_activity(); ?>
-						<?php self::widget_quick_actions(); ?>
+						<?php foreach ( $col2_callbacks as $callback ) { if ( is_callable( $callback ) ) { call_user_func( $callback ); } } ?>
 					</div>
 				</div>
 			</div>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Render Core-level dashboard.
+	 *
+	 * @return void
+	 */
+	public static function render_core_dashboard(): void {
+		self::render_dashboard_shell(
+			esc_html__( 'Support Dashboard', 'plugin-wp-support-thisismyurl' ),
+			array(
+				array( __CLASS__, 'widget_suite_overview' ),
+				array( __CLASS__, 'widget_active_hubs' ),
+			),
+			array(
+				array( __CLASS__, 'widget_quick_actions' ),
+			)
+		);
 	}
 
 	/**
@@ -68,25 +94,25 @@ class TIMU_Dashboard_Widgets {
 
 		// Fall back to generic hub dashboard.
 		$hub_name = ucfirst( $hub_id );
-		?>
-		<div class="wrap timu-dashboard">
-			<h1><?php echo esc_html( sprintf( __( '%s Hub Dashboard', 'plugin-wp-support-thisismyurl' ), $hub_name ) ); ?></h1>
-
-			<div class="timu-dashboard-widgets-wrap">
-				<div class="timu-dashboard-col-container">
-					<div id="timu-dashboard-col-1" class="timu-dashboard-col">
-						<?php self::widget_hub_overview( $hub_id ); ?>
-						<?php self::widget_active_spokes( $hub_id ); ?>
-					</div>
-
-					<div id="timu-dashboard-col-2" class="timu-dashboard-col">
-						<?php self::widget_hub_stats( $hub_id ); ?>
-						<?php self::widget_hub_quick_actions( $hub_id ); ?>
-					</div>
-				</div>
-			</div>
-		</div>
-		<?php
+		self::render_dashboard_shell(
+			esc_html( sprintf( __( '%s Hub Dashboard', 'plugin-wp-support-thisismyurl' ), $hub_name ) ),
+			array(
+				static function() use ( $hub_id ) {
+					self::widget_hub_overview( $hub_id );
+				},
+				static function() use ( $hub_id ) {
+					self::widget_active_spokes( $hub_id );
+				},
+			),
+			array(
+				static function() use ( $hub_id ) {
+					self::widget_hub_stats( $hub_id );
+				},
+				static function() use ( $hub_id ) {
+					self::widget_hub_quick_actions( $hub_id );
+				},
+			)
+		);
 	}
 
 	/**
@@ -98,25 +124,25 @@ class TIMU_Dashboard_Widgets {
 	 */
 	public static function render_spoke_dashboard( string $hub_id, string $spoke_id ): void {
 		$spoke_name = strtoupper( $spoke_id );
-		?>
-		<div class="wrap timu-dashboard">
-			<h1><?php echo esc_html( sprintf( __( '%s Support Dashboard', 'plugin-wp-support-thisismyurl' ), $spoke_name ) ); ?></h1>
-
-			<div class="timu-dashboard-widgets-wrap">
-				<div class="timu-dashboard-col-container">
-					<div id="timu-dashboard-col-1" class="timu-dashboard-col">
-						<?php self::widget_spoke_overview( $hub_id, $spoke_id ); ?>
-						<?php self::widget_spoke_features( $spoke_id ); ?>
-					</div>
-
-					<div id="timu-dashboard-col-2" class="timu-dashboard-col">
-						<?php self::widget_spoke_stats( $spoke_id ); ?>
-						<?php self::widget_spoke_quick_actions( $hub_id, $spoke_id ); ?>
-					</div>
-				</div>
-			</div>
-		</div>
-		<?php
+		self::render_dashboard_shell(
+			esc_html( sprintf( __( '%s Support Dashboard', 'plugin-wp-support-thisismyurl' ), $spoke_name ) ),
+			array(
+				static function() use ( $hub_id, $spoke_id ) {
+					self::widget_spoke_overview( $hub_id, $spoke_id );
+				},
+				static function() use ( $spoke_id ) {
+					self::widget_spoke_features( $spoke_id );
+				},
+			),
+			array(
+				static function() use ( $spoke_id ) {
+					self::widget_spoke_stats( $spoke_id );
+				},
+				static function() use ( $hub_id, $spoke_id ) {
+					self::widget_spoke_quick_actions( $hub_id, $spoke_id );
+				},
+			)
+		);
 	}
 
 	/* ====== CORE WIDGETS ====== */
@@ -163,10 +189,6 @@ class TIMU_Dashboard_Widgets {
 
 	public static function render_metabox_vault_activity(): void {
 		self::widget_activity( 'vault' );
-	}
-
-	public static function render_metabox_media_health(): void {
-		self::widget_hub_health( 'media' );
 	}
 
 	public static function render_metabox_vault_health(): void {
@@ -248,8 +270,8 @@ class TIMU_Dashboard_Widgets {
 				$events = array_filter(
 					$events,
 					function( $event ) use ( $module_filter ) {
-						$module = $event['metadata']['module'] ?? null;
-						return $module === $module_filter;
+						$source = $event['module_source'] ?? ( $event['metadata']['module'] ?? null );
+						return $source === $module_filter;
 					}
 				);
 				// Limit to 5 after filtering.
@@ -307,6 +329,7 @@ class TIMU_Dashboard_Widgets {
 	private static function widget_modules(): void {
 		$context = TIMU_Tab_Navigation::get_current_context();
 		$catalog = \TIMU\CoreSupport\TIMU_Module_Registry::get_catalog_with_status();
+		$catalog = self::discover_local_module_entries( $catalog );
 
 		// Determine which modules to show based on current level.
 		$next_level_modules = array();
@@ -330,14 +353,53 @@ class TIMU_Dashboard_Widgets {
 					$next_level_modules[] = $module;
 				}
 			}
-		} elseif ( 'hub' === $context['level'] && ! empty( $context['hub'] ) ) {
-			// On hub (e.g., image): show all spokes under that hub.
-			$hub_prefix         = $context['hub'] . '-';
-			$next_level_modules = array_filter(
+		}
+		else if ( 'hub' === $context['level'] && ! empty( $context['hub'] ) ) {
+			// On hub: show both dependent hubs and spokes under that hub.
+			$hub_id = $context['hub'];
+
+			// First, collect dependent hubs (child hubs that require this hub).
+			foreach ( $catalog as $module ) {
+				if ( 'hub' !== ( $module['type'] ?? '' ) ) {
+					continue;
+				}
+				$requires = (string) ( $module['requires_hub'] ?? '' );
+				if ( empty( $requires ) ) {
+					continue;
+				}
+				// Normalize requires_hub value to short hub id when comparing.
+				$requires_short = str_contains( $requires, '-support-thisismyurl' ) ? explode( '-support-thisismyurl', $requires )[0] : $requires;
+				if ( $requires_short === $hub_id ) {
+					$next_level_modules[] = $module;
+				}
+			}
+
+			// Then, collect spokes for this hub.
+			$hub_prefix = $hub_id . '-';
+			$spokes     = array_filter(
 				$catalog,
-				fn( $m ) => 'spoke' === ( $m['type'] ?? '' )
-					&& str_starts_with( $m['slug'] ?? '', $hub_prefix )
+				function( $m ) use ( $hub_prefix, $hub_id ) {
+					if ( 'spoke' !== ( $m['type'] ?? '' ) ) {
+						return false;
+					}
+					// Prefer explicit requires_hub when available.
+					$requires = (string) ( $m['requires_hub'] ?? '' );
+					if ( ! empty( $requires ) ) {
+						$requires_short = str_contains( $requires, '-support-thisismyurl' ) ? explode( '-support-thisismyurl', $requires )[0] : $requires;
+						return $requires_short === $hub_id;
+					}
+					// Fallback: slug prefix convention (e.g., media-*, image-*).
+					return str_starts_with( (string) ( $m['slug'] ?? '' ), $hub_prefix );
+				}
 			);
+
+			// Merge spokes into modules list.
+			$next_level_modules = array_merge( $next_level_modules, $spokes );
+		}
+
+		// If there are no modules to render at this level, skip output entirely.
+		if ( empty( $next_level_modules ) ) {
+			return;
 		}
 
 		?>
@@ -390,15 +452,15 @@ class TIMU_Dashboard_Widgets {
 					const card = input.closest('div[style*="border"]');
 					const progress = card ? card.querySelector('.timu-progress') : null;
 					input.disabled = true; if (progress) progress.style.display = 'inline-flex';
-					const canUsePluginAPI = !!pluginBase;
-					const action = canUsePluginAPI ? (turningOn ? (installed ? 'timu_module_activate' : 'timu_module_install') : 'timu_module_deactivate') : 'timu_module_toggle';
+					const isPlugin = input.getAttribute('data-is-plugin') === '1';
+					const action = isPlugin ? (turningOn ? (installed ? 'timu_module_activate' : 'timu_module_install') : 'timu_module_deactivate') : 'timu_module_toggle';
 					const form = new URLSearchParams({ action, nonce, slug });
-					if (canUsePluginAPI) { form.append('plugin_base', pluginBase); } else { form.append('enabled', turningOn ? 1 : 0); }
+					if (isPlugin) { if (pluginBase) { form.append('plugin_base', pluginBase); } } else { form.append('enabled', turningOn ? 1 : 0); }
 					try {
 						const res = await fetch(ajaxUrl, { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body: form.toString() });
 						const json = await res.json();
 						if (!json.success) throw new Error(json?.data?.message || 'Unexpected error');
-						input.setAttribute('data-installed','1');
+						if (action === 'timu_module_install') { input.setAttribute('data-installed','1'); }
 					} catch (err) {
 						input.checked = !turningOn;
 						console.error(err);
@@ -429,20 +491,27 @@ class TIMU_Dashboard_Widgets {
 					<?php foreach ( $next_level_modules as $module ) : ?>
 						<?php
 						$module_slug      = sanitize_key( $module['slug'] ?? '' );
+						$module_type      = $module['type'] ?? '';
 						$module_name      = esc_html( $module['name'] ?? '' );
 						$module_version   = esc_html( $module['version'] ?? '?.?.?' );
 						$is_installed     = ! empty( $module['installed'] );
 						$is_enabled       = ! empty( $module['enabled'] );
 						$update_available = ! empty( $module['update_available'] );
 
-						// Build navigation URL.
+						// Build navigation URL (hub vs spoke) and icon.
+						$icon_class = 'dashicons-networking';
 						$module_url = TIMU_Tab_Navigation::build_hub_url( $module_slug );
+						if ( 'spoke' === $module_type && ! empty( $context['hub'] ) ) {
+							$spoke_id  = str_starts_with( $module_slug, $context['hub'] . '-' ) ? substr( $module_slug, strlen( $context['hub'] ) + 1 ) : $module_slug;
+							$module_url = TIMU_Tab_Navigation::build_spoke_url( $context['hub'], $spoke_id );
+							$icon_class = 'dashicons-hammer';
+						}
 						?>
 						<div style="padding: 12px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 10px; background: #fff;">
 							<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
 								<div style="flex: 1;">
 									<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-										<span class="dashicons dashicons-networking" style="font-size: 20px; width: 20px; height: 20px; color: #2271b1;"></span>
+										<span class="dashicons <?php echo esc_attr( $icon_class ); ?>" style="font-size: 20px; width: 20px; height: 20px; color: #2271b1;"></span>
 										<strong style="font-size: 14px;">
 											<a href="<?php echo esc_url( $module_url ); ?>" style="text-decoration: none; color: inherit;"><?php echo $module_name; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a>
 										</strong>
@@ -453,7 +522,7 @@ class TIMU_Dashboard_Widgets {
 								</div>
 								<div style="display: flex; align-items: center; flex-shrink: 0;">
 									<label class="timu-toggle-switch">
-										<input type="checkbox" <?php checked( $is_enabled ); ?> data-module="<?php echo esc_attr( $module_slug ); ?>" data-type="hub" data-installed="<?php echo esc_attr( $is_installed ? '1' : '0' ); ?>" data-plugin-base="<?php echo esc_attr( $module['basename'] ?? '' ); ?>">
+										<input type="checkbox" <?php checked( $is_enabled ); ?> data-module="<?php echo esc_attr( $module_slug ); ?>" data-type="<?php echo esc_attr( 'spoke' === $module_type ? 'spoke' : 'hub' ); ?>" data-installed="<?php echo esc_attr( $is_installed ? '1' : '0' ); ?>" data-plugin-base="<?php echo esc_attr( $module['basename'] ?? '' ); ?>" data-is-plugin="<?php echo esc_attr( ( ! empty( $module['basename'] ?? '' ) || ! empty( $module['download_url'] ?? '' ) ) ? '1' : '0' ); ?>">
 										<span class="timu-toggle-slider"></span>
 									</label>
 									<span class="timu-progress" aria-live="polite"><span class="spinner is-active" style="float:none"></span><span class="bar"><span class="fill"></span></span><span class="progress-label"><?php esc_html_e( 'Working…', 'plugin-wp-support-thisismyurl' ); ?></span></span>
@@ -485,11 +554,11 @@ class TIMU_Dashboard_Widgets {
 								<div id="<?php echo esc_attr( $collapse_id ); ?>" class="timu-collapse-content" style="margin: 0; padding: 12px; background: #f9f9f9; border: 1px solid #e5e5e5; border-top: none; border-radius: 0 0 3px 3px;">
 									<?php foreach ( $dependent_hubs[ $module_slug ] as $dep_module ) : ?>
 										<?php
-										$dep_slug             = sanitize_key( $dep_module['slug'] ?? '' );
-										$dep_name             = esc_html( $dep_module['name'] ?? '' );
-										$dep_installed        = ! empty( $dep_module['installed'] );
-										$dep_enabled          = ! empty( $dep_module['enabled'] );
-										$dep_url              = TIMU_Tab_Navigation::build_hub_url( $dep_slug );
+										$dep_slug      = sanitize_key( $dep_module['slug'] ?? '' );
+										$dep_name      = esc_html( $dep_module['name'] ?? '' );
+										$dep_installed = ! empty( $dep_module['installed'] );
+										$dep_enabled   = ! empty( $dep_module['enabled'] );
+										$dep_url       = TIMU_Tab_Navigation::build_hub_url( $dep_slug );
 										?>
 										<div style="padding: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px; background: #fff; border: 1px solid #e0e0e0; border-radius: 2px; margin-bottom: 6px;">
 											<div style="display: flex; align-items: center; gap: 8px; flex: 1;">
@@ -500,7 +569,7 @@ class TIMU_Dashboard_Widgets {
 											</div>
 											<div style="display: flex; align-items: center; flex-shrink: 0;">
 												<label class="timu-toggle-switch">
-													<input type="checkbox" <?php checked( $dep_enabled ); ?> data-module="<?php echo esc_attr( $dep_slug ); ?>" data-type="hub" data-installed="<?php echo esc_attr( $dep_installed ? '1' : '0' ); ?>" data-plugin-base="<?php echo esc_attr( $dep_module['basename'] ?? '' ); ?>">
+													<input type="checkbox" <?php checked( $dep_enabled ); ?> data-module="<?php echo esc_attr( $dep_slug ); ?>" data-type="hub" data-installed="<?php echo esc_attr( $dep_installed ? '1' : '0' ); ?>" data-plugin-base="<?php echo esc_attr( $dep_module['basename'] ?? '' ); ?>" data-is-plugin="<?php echo esc_attr( ( ! empty( $dep_module['basename'] ?? '' ) || ! empty( $dep_module['download_url'] ?? '' ) ) ? '1' : '0' ); ?>">
 													<span class="timu-toggle-slider"></span>
 												</label>
 												<span class="timu-progress" aria-live="polite"><span class="spinner is-active" style="float:none"></span><span class="bar"><span class="fill"></span></span><span class="progress-label"><?php esc_html_e( 'Working…', 'plugin-wp-support-thisismyurl' ); ?></span></span>
@@ -586,13 +655,135 @@ class TIMU_Dashboard_Widgets {
 		<?php
 	}
 
+	/**
+	 * Discover locally downloaded hubs/spokes and append to catalog for UI rendering.
+	 *
+	 * @param array $catalog Existing catalog with status.
+	 * @return array
+	 */
+	private static function discover_local_module_entries( array $catalog ): array {
+		$catalog_by_slug = array();
+		foreach ( $catalog as $entry ) {
+			if ( isset( $entry['slug'] ) ) {
+				$catalog_by_slug[ $entry['slug'] ] = $entry;
+			}
+		}
+
+		$roots = array(
+			'hub'   => trailingslashit( TIMU_CORE_PATH ) . 'modules/hubs',
+			'spoke' => trailingslashit( TIMU_CORE_PATH ) . 'modules/spokes',
+		);
+
+		foreach ( $roots as $type => $root ) {
+			if ( ! is_dir( $root ) ) {
+				continue;
+			}
+
+			$items = @scandir( $root ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			if ( false === $items ) {
+				continue;
+			}
+
+			foreach ( $items as $item ) {
+				if ( '.' === $item || '..' === $item ) {
+					continue;
+				}
+				$module_dir = $root . '/' . $item;
+				$entry_file = $module_dir . '/module.php';
+				if ( ! is_dir( $module_dir ) || ! file_exists( $entry_file ) ) {
+					continue;
+				}
+
+				$slug        = $item;
+				$requires_hub = '';
+				$name        = ucwords( str_replace( array( '-', '_' ), ' ', $slug ) );
+
+				$contents = @file_get_contents( $entry_file ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+				if ( $contents ) {
+					if ( preg_match( "/'slug'\s*=>\s*'([^']+)'/", $contents, $m ) ) {
+						$slug = sanitize_key( $m[1] );
+					}
+					if ( preg_match( "/'name'\s*=>\s*__\(\s*'([^']+)'/", $contents, $m ) ) {
+						$name = sanitize_text_field( $m[1] );
+					}
+					if ( preg_match( "/'requires_hub'\s*=>\s*'([^']+)'/", $contents, $m ) ) {
+						$requires_hub = sanitize_key( $m[1] );
+					}
+				}
+
+				if ( isset( $catalog_by_slug[ $slug ] ) ) {
+					continue;
+				}
+
+				$catalog_by_slug[ $slug ] = array(
+					'slug'          => $slug,
+					'type'          => $type,
+					'name'          => $name,
+					'description'   => __( 'Discovered local module', 'plugin-wp-support-thisismyurl' ),
+					'installed'     => true,
+					'enabled'       => false,
+					'update_available' => false,
+					'basename'      => $item . '/module.php',
+					'path'          => trailingslashit( $module_dir ),
+					'requires_hub'  => $requires_hub,
+				);
+			}
+		}
+
+		// Merge placeholders from modules/missing-modules.json so the widget lists not-yet-downloaded modules.
+		$missing_file = trailingslashit( TIMU_CORE_PATH ) . 'modules/missing-modules.json';
+		if ( file_exists( $missing_file ) && is_readable( $missing_file ) ) {
+			$missing_json = file_get_contents( $missing_file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			$missing_data = json_decode( (string) $missing_json, true );
+
+			if ( is_array( $missing_data ) ) {
+				foreach ( $missing_data as $entry ) {
+					$slug = sanitize_key( $entry['slug'] ?? '' );
+					$type = sanitize_key( $entry['type'] ?? '' );
+
+					if ( empty( $slug ) || isset( $catalog_by_slug[ $slug ] ) ) {
+						continue;
+					}
+
+					$name        = sanitize_text_field( $entry['name'] ?? $slug );
+					$description = sanitize_text_field( $entry['description'] ?? '' );
+					$requires_hub = sanitize_key( $entry['requires_hub'] ?? '' );
+					$requires_spoke = sanitize_key( $entry['requires_spoke'] ?? '' );
+
+					$catalog_by_slug[ $slug ] = array_merge(
+						$entry,
+						array(
+							'slug'             => $slug,
+							'type'             => $type,
+							'name'             => $name,
+							'description'      => $description,
+							'installed'        => false,
+							'enabled'          => false,
+							'update_available' => false,
+							'basename'         => '',
+							'path'             => '',
+							'requires_hub'     => $requires_hub,
+							'requires_spoke'   => $requires_spoke,
+							'download_url'     => esc_url_raw( $entry['download_url'] ?? '' ),
+						)
+					);
+				}
+			}
+		}
+
+		return array_values( $catalog_by_slug );
+	}
+
 	private static function widget_vault_status(): void {
-		$vault_path      = wp_upload_dir()['basedir'] . '/vault';
-		$vault_exists    = is_dir( $vault_path );
-		$vault_writable  = $vault_exists && wp_is_writable( $vault_path );
-		$encryption_key  = timu_core_get_vault_key();
-		$has_encryption  = ! empty( $encryption_key );
-		$key_source      = defined( 'TIMU_VAULT_KEY' ) && TIMU_VAULT_KEY ? 'wp-config.php' : 'Options';
+		$upload_dir    = wp_upload_dir();
+		$vault_dirname = get_option( 'timu_vault_dirname' );
+		$vault_path    = ! empty( $vault_dirname ) ? $upload_dir['basedir'] . '/' . $vault_dirname : '';
+
+		$vault_exists   = ! empty( $vault_path ) && is_dir( $vault_path );
+		$vault_writable = $vault_exists && wp_is_writable( $vault_path );
+		$encryption_key = timu_core_get_vault_key();
+		$has_encryption = ! empty( $encryption_key );
+		$key_source     = defined( 'TIMU_VAULT_KEY' ) && TIMU_VAULT_KEY ? 'wp-config.php' : 'Options';
 
 		// Calculate vault size if it exists.
 		$vault_size = 0;
@@ -1008,8 +1199,10 @@ class TIMU_Dashboard_Widgets {
 	}
 
 	private static function widget_vault_overview(): void {
-		$vault_dir = wp_upload_dir()['basedir'] . '/.vault_' . get_option( 'timu_vault_dirname', 'default' );
-		$vault_exists = is_dir( $vault_dir );
+		$upload_dir    = wp_upload_dir();
+		$vault_dirname = get_option( 'timu_vault_dirname' );
+		$vault_dir     = ! empty( $vault_dirname ) ? $upload_dir['basedir'] . '/' . $vault_dirname : '';
+		$vault_exists  = ! empty( $vault_dir ) && is_dir( $vault_dir );
 		$vault_writable = $vault_exists && wp_is_writable( $vault_dir );
 		?>
 		<div class="timu-widget-content">
@@ -1025,6 +1218,54 @@ class TIMU_Dashboard_Widgets {
 		</div>
 		<?php
 	}
+
+	/**
+	 * Render metabox with custom drag-and-drop wrapper.
+	 *
+	 * @param string $id Metabox ID.
+	 * @param string $title Metabox title.
+	 * @param callable $callback Content render callback.
+	 * @return void
+	 */
+	private static function render_custom_metabox( string $id, string $title, callable $callback ): void {
+		?>
+		<div class="timu-metabox" data-metabox-id="<?php echo esc_attr( $id ); ?>">
+			<div class="timu-metabox-header">
+				<div class="timu-metabox-handle"><?php echo esc_html( $title ); ?></div>
+				<a href="#" class="timu-metabox-toggle" aria-label="<?php esc_attr_e( 'Toggle panel', 'plugin-wp-support-thisismyurl' ); ?>">
+					<span class="dashicons dashicons-arrow-down-alt2"></span>
+				</a>
+			</div>
+			<div class="timu-metabox-content">
+				<?php call_user_func( $callback ); ?>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Custom render methods for drag-and-drop dashboard.
+	 */
+	public static function render_metabox_quick_actions_custom(): void {
+		self::render_custom_metabox( 'timu_quick_actions', __( 'WP Support Quick Actions', 'plugin-wp-support-thisismyurl' ), array( __CLASS__, 'widget_quick_actions' ) );
+	}
+
+	public static function render_metabox_modules_custom(): void {
+		self::render_custom_metabox( 'timu_modules', __( 'WP Support Modules', 'plugin-wp-support-thisismyurl' ), array( __CLASS__, 'widget_modules' ) );
+	}
+
+	public static function render_metabox_activity_custom(): void {
+		self::render_custom_metabox( 'timu_activity', __( 'WP Support Activity', 'plugin-wp-support-thisismyurl' ), array( __CLASS__, 'widget_activity' ) );
+	}
+
+	public static function render_metabox_events_and_news_custom(): void {
+		self::render_custom_metabox( 'timu_events_and_news', __( 'Events & News', 'plugin-wp-support-thisismyurl' ), array( __CLASS__, 'widget_events_and_news' ) );
+	}
+
+	public static function render_metabox_vault_status_custom(): void {
+		self::render_custom_metabox( 'timu_vault_status', __( 'Vault Status', 'plugin-wp-support-thisismyurl' ), array( __CLASS__, 'widget_vault_status' ) );
+	}
+
 }
 
-/* @changelog Added TIMU_Dashboard_Widgets for tab-based dashboard rendering */
+/* @changelog */

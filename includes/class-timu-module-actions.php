@@ -283,22 +283,10 @@ class TIMU_Module_Actions {
 		}
 
 		// Resolve plugin file path.
-		$plugin_file = isset( $_POST['plugin_base'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_base'] ) ) : '';
-		if ( empty( $plugin_file ) ) {
-			$module = TIMU_Module_Registry::get_module( $slug ) ?? array();
-			$plugin_file = (string) ( $module['basename'] ?? ( $module['file'] ?? ( $slug . '/' . $slug . '.php' ) ) );
-		}
-		$plugin_path = WP_PLUGIN_DIR . '/' . $plugin_file;
-		if ( ! file_exists( $plugin_path ) ) {
-			// Fallback guess: plugin-<slug>/module.php
-			$guess_file = 'plugin-' . $slug . '/module.php';
-			if ( file_exists( WP_PLUGIN_DIR . '/' . $guess_file ) ) {
-				$plugin_file = $guess_file;
-				$plugin_path = WP_PLUGIN_DIR . '/' . $plugin_file;
-			}
-		}
+		$requested_file = isset( $_POST['plugin_base'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_base'] ) ) : '';
+		$plugin_file    = self::resolve_plugin_file( $slug, $requested_file );
 
-		if ( ! file_exists( $plugin_path ) ) {
+		if ( empty( $plugin_file ) ) {
 			wp_send_json_error(
 				array(
 					'message' => __( 'Plugin file not found.', 'plugin-wp-support-thisismyurl' ),
@@ -369,22 +357,10 @@ class TIMU_Module_Actions {
 		}
 
 		// Resolve plugin file path.
-		$plugin_file = isset( $_POST['plugin_base'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_base'] ) ) : '';
-		if ( empty( $plugin_file ) ) {
-			$module = TIMU_Module_Registry::get_module( $slug ) ?? array();
-			$plugin_file = (string) ( $module['basename'] ?? ( $module['file'] ?? ( $slug . '/' . $slug . '.php' ) ) );
-		}
-		$plugin_path = WP_PLUGIN_DIR . '/' . $plugin_file;
-		if ( ! file_exists( $plugin_path ) ) {
-			// Fallback guess: plugin-<slug>/module.php
-			$guess_file = 'plugin-' . $slug . '/module.php';
-			if ( file_exists( WP_PLUGIN_DIR . '/' . $guess_file ) ) {
-				$plugin_file = $guess_file;
-				$plugin_path = WP_PLUGIN_DIR . '/' . $plugin_file;
-			}
-		}
+		$requested_file = isset( $_POST['plugin_base'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_base'] ) ) : '';
+		$plugin_file    = self::resolve_plugin_file( $slug, $requested_file );
 
-		if ( ! file_exists( $plugin_path ) ) {
+		if ( empty( $plugin_file ) ) {
 			wp_send_json_error(
 				array(
 					'message' => __( 'Plugin file not found.', 'plugin-wp-support-thisismyurl' ),
@@ -405,6 +381,51 @@ class TIMU_Module_Actions {
 				'status'  => $status[ $slug ] ?? array(),
 			)
 		);
+	}
+
+	/**
+	 * Resolve plugin file location for a module, tolerating GitHub zip naming.
+	 *
+	 * @param string $slug Module slug.
+	 * @param string $preferred Preferred plugin_base from request (optional).
+	 * @return string Plugin base path relative to WP_PLUGIN_DIR or empty string.
+	 */
+	private static function resolve_plugin_file( string $slug, string $preferred = '' ): string {
+		$slug       = sanitize_key( $slug );
+		$candidates = array();
+
+		if ( ! empty( $preferred ) ) {
+			$candidates[] = ltrim( $preferred, '\\/' );
+		}
+
+		$module      = TIMU_Module_Registry::get_module( $slug ) ?? array();
+		$basename    = (string) ( $module['basename'] ?? '' );
+		$module_file = (string) ( $module['file'] ?? '' );
+		if ( ! empty( $basename ) ) {
+			$candidates[] = ltrim( $basename, '\\/' );
+		}
+		if ( ! empty( $module_file ) ) {
+			$candidates[] = ltrim( $module_file, '\\/' );
+		}
+
+		// Default guesses.
+		$candidates[] = $slug . '/' . $slug . '.php';
+		$candidates[] = 'plugin-' . $slug . '/module.php';
+
+		// Glob for GitHub zip extra suffix (e.g., -main).
+		$glob = glob( WP_PLUGIN_DIR . '/*' . $slug . '*/' . $slug . '.php' );
+		if ( ! empty( $glob ) ) {
+			$candidates[] = ltrim( str_replace( WP_PLUGIN_DIR . '/', '', $glob[0] ), '\\/' );
+		}
+
+		foreach ( $candidates as $candidate ) {
+			$full_path = WP_PLUGIN_DIR . '/' . $candidate;
+			if ( file_exists( $full_path ) ) {
+				return $candidate;
+			}
+		}
+
+		return '';
 	}
 }
 

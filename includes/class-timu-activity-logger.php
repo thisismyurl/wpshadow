@@ -36,11 +36,14 @@ class TIMU_Activity_Logger {
 	public const EVENT_VAULT_FILE_REMOVED = 'vault_file_removed';
 	public const EVENT_VAULT_VERIFIED     = 'vault_verified';
 	public const EVENT_VAULT_RESTORED     = 'vault_restored';
+	public const EVENT_MEDIA_FILE_ADDED   = 'media_file_added';
 	public const EVENT_LICENSE_REGISTERED = 'license_registered';
 	public const EVENT_LICENSE_VERIFIED   = 'license_verified';
 	public const EVENT_LICENSE_EXPIRED    = 'license_expired';
 	public const EVENT_SETTINGS_CHANGED   = 'settings_changed';
 	public const EVENT_ENCRYPTION_CHANGED = 'encryption_changed';
+	public const EVENT_MEDIA_FILE_DELETED = 'media_file_deleted';
+	public const EVENT_MEDIA_FILE_EDITED  = 'media_file_edited';
 	public const EVENT_ERROR              = 'error';
 
 	/**
@@ -66,11 +69,185 @@ class TIMU_Activity_Logger {
 	public static function init(): void {
 		add_action( 'activity_box_end', array( __CLASS__, 'render_dashboard_activity' ) );
 		add_action( 'wp_dashboard_setup', array( __CLASS__, 'maybe_add_dashboard_widget' ) );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_dashboard_scripts' ) );
+		add_action( 'wp_ajax_timu_filter_activity', array( __CLASS__, 'ajax_filter_activity' ) );
 
 		// Hook into WordPress plugin lifecycle.
 		add_action( 'activated_plugin', array( __CLASS__, 'on_plugin_activated' ), 10, 2 );
 		add_action( 'deactivated_plugin', array( __CLASS__, 'on_plugin_deactivated' ), 10, 2 );
+
+		// Log media library uploads.
+		add_action( 'add_attachment', array( __CLASS__, 'on_add_attachment' ), 10, 1 );
+
+		// Log media library deletions.
+		add_action( 'delete_attachment', array( __CLASS__, 'on_delete_attachment' ), 10, 1 );
+
+		// Log media edits (metadata updates after crop/rotate/scale).
+		add_filter( 'wp_update_attachment_metadata', array( __CLASS__, 'on_update_attachment_metadata' ), 10, 2 );
 	}
+		/**
+		 * Handle attachment added (Media Library upload).
+		 *
+		 * @param int $post_id Attachment post ID.
+		 * @return void
+		 */
+		public static function on_add_attachment( int $post_id ): void {
+			$post = get_post( $post_id );
+			if ( ! $post || 'attachment' !== $post->post_type ) {
+				return;
+			}
+
+			$file_path = get_attached_file( $post_id );
+			$mime_type = get_post_mime_type( $post_id );
+			$title     = get_the_title( $post_id );
+
+			self::log(
+				self::EVENT_MEDIA_FILE_ADDED,
+				sprintf(
+					/* translators: %s: Attachment title */
+					__( 'Uploaded media: %s', 'plugin-wp-support-thisismyurl' ),
+					(string) $title
+				),
+				array(
+					'post_id'   => $post_id,
+					'file'      => $file_path ?: '',
+					'mime_type' => $mime_type ?: '',
+				),
+				'media'
+			);
+		}
+
+	/**
+	 * Handle attachment deletion (Media Library).
+	 *
+	 * @param int $post_id Attachment post ID.
+	 * @return void
+	 */
+	public static function on_delete_attachment( int $post_id ): void {
+		// Ensure it's an attachment.
+		$post = get_post( $post_id );
+		if ( ! $post || 'attachment' !== $post->post_type ) {
+			return;
+		}
+
+		$file_path = get_attached_file( $post_id );
+		$mime_type = get_post_mime_type( $post_id );
+		$title     = get_the_title( $post_id );
+
+		self::log(
+			self::EVENT_MEDIA_FILE_DELETED,
+			sprintf(
+				/* translators: %s: Attachment title */
+				__( 'Deleted media: %s', 'plugin-wp-support-thisismyurl' ),
+				(string) $title
+			),
+			array(
+				'post_id'   => $post_id,
+				'file'      => $file_path ?: '',
+				'mime_type' => $mime_type ?: '',
+			),
+			'media'
+		);
+	}
+
+	/**
+	 * Handle attachment metadata update (Media edits).
+	 *
+	 * @param array $data    New attachment metadata.
+	 * @param int   $post_id Attachment post ID.
+	 * @return array Metadata (unmodified).
+	 */
+	public static function on_update_attachment_metadata( array $data, int $post_id ): array {
+		$post = get_post( $post_id );
+		if ( ! $post || 'attachment' !== $post->post_type ) {
+			return $data;
+		}
+
+		$old_meta  = wp_get_attachment_metadata( $post_id );
+		$old_sizes = isset( $old_meta['sizes'] ) && is_array( $old_meta['sizes'] ) ? array_keys( $old_meta['sizes'] ) : array();
+		$new_sizes = isset( $data['sizes'] ) && is_array( $data['sizes'] ) ? array_keys( $data['sizes'] ) : array();
+		$added     = array_values( array_diff( $new_sizes, $old_sizes ) );
+		$removed   = array_values( array_diff( $old_sizes, $new_sizes ) );
+
+		$title     = get_the_title( $post_id );
+		$file_path = get_attached_file( $post_id );
+		$mime_type = get_post_mime_type( $post_id );
+
+		self::log(
+			self::EVENT_MEDIA_FILE_EDITED,
+			sprintf(
+				/* translators: %s: Attachment title */
+				__( 'Edited media: %s', 'plugin-wp-support-thisismyurl' ),
+				(string) $title
+			),
+			array(
+				'post_id'       => $post_id,
+				'file'          => $file_path ?: '',
+				'mime_type'     => $mime_type ?: '',
+				'added_sizes'   => $added,
+				'removed_sizes' => $removed,
+			),
+			'media'
+		);
+
+		// Attempt to back up edited file to Vault.
+		self::backup_attachment_to_vault( $post_id, (string) ( $file_path ?? '' ) );
+
+		return $data;
+	}
+
+	/**
+	 * Back up an attachment file into the Vault directory, versioned by timestamp.
+	 *
+	 * Uses Vault Support implementation when available; otherwise falls back to a
+	 * simple copy into the configured vault directory.
+	 *
+	 * @param int    $post_id   Attachment post ID.
+	 * @param string $file_path Absolute path to attachment file.
+	 * @return void
+	 */
+	private static function backup_attachment_to_vault( int $post_id, string $file_path ): void {
+		if ( empty( $file_path ) || ! file_exists( $file_path ) ) {
+			return;
+		}
+
+		// Prefer canonical Vault implementation when available.
+		if ( class_exists( '\\TIMU\\CoreSupport\\TIMU_Vault' ) && method_exists( '\\TIMU\\CoreSupport\\TIMU_Vault', 'add_log' ) ) {
+			// Log the intent in Vault logs; real backup is managed by Vault plugin when enabled.
+			\TIMU\CoreSupport\TIMU_Vault::add_log( 'info', get_current_user_id(), 'Backing up edited media ID ' . $post_id, 'media_edit_backup' );
+			if ( method_exists( '\\TIMU\\CoreSupport\\TIMU_Vault', 'backup_file' ) ) {
+				try {
+					\TIMU\CoreSupport\TIMU_Vault::backup_file( $file_path, array( 'post_id' => $post_id, 'reason' => 'edit' ) );
+					return;
+				} catch ( \Throwable $e ) {
+					// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+					error_log( 'TIMU Vault backup_file failed: ' . $e->getMessage() );
+				}
+			}
+		}
+
+		// Fallback: copy file into local vault directory.
+		$upload_dir    = wp_upload_dir();
+		$vault_dirname = get_option( 'timu_vault_dirname' );
+		$vault_root    = ! empty( $vault_dirname ) ? $upload_dir['basedir'] . '/' . $vault_dirname : '';
+
+		if ( empty( $vault_root ) || ! is_dir( $vault_root ) ) {
+			return;
+		}
+
+		$dest_dir = $vault_root . '/edits/' . $post_id;
+		if ( ! is_dir( $dest_dir ) ) {
+			wp_mkdir_p( $dest_dir );
+		}
+
+		$basename  = basename( $file_path );
+		$timestamp = (string) time();
+		$dest_file = $dest_dir . '/' . $basename . '.' . $timestamp . '.bak';
+
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_copy
+		@copy( $file_path, $dest_file );
+	}
+
 
 	/**
 	 * Handle plugin activation event.
@@ -138,15 +315,17 @@ class TIMU_Activity_Logger {
 	 * @param string $event_type Event type constant.
 	 * @param string $description Human-readable description.
 	 * @param array  $metadata Additional metadata.
+	 * @param string $module_source Optional module identifier (e.g., 'core', 'media', 'vault', 'images').
 	 * @return bool True on success, false on failure.
 	 */
-	public static function log( string $event_type, string $description, array $metadata = array() ): bool {
+	public static function log( string $event_type, string $description, array $metadata = array(), string $module_source = 'core' ): bool {
 		$activity = array(
-			'type'        => $event_type,
-			'description' => $description,
-			'metadata'    => $metadata,
-			'user_id'     => get_current_user_id(),
-			'timestamp'   => time(),
+			'type'          => $event_type,
+			'description'   => $description,
+			'metadata'      => $metadata,
+			'module_source' => $module_source,
+			'user_id'       => get_current_user_id(),
+			'timestamp'     => time(),
 		);
 
 		$events = self::get_events();
@@ -179,6 +358,30 @@ class TIMU_Activity_Logger {
 	}
 
 	/**
+	 * Get events filtered by module source.
+	 *
+	 * @param string $module_source Module identifier (e.g., 'core', 'media', 'vault', 'images').
+	 * @param int    $limit Optional limit on number of events to retrieve.
+	 * @return array Array of event data.
+	 */
+	public static function get_events_by_module( string $module_source, int $limit = 0 ): array {
+		$events = self::get_events();
+
+		$filtered = array_filter(
+			$events,
+			function ( $event ) use ( $module_source ) {
+				return isset( $event['module_source'] ) && $event['module_source'] === $module_source;
+			}
+		);
+
+		if ( $limit > 0 ) {
+			$filtered = array_slice( $filtered, 0, $limit );
+		}
+
+		return array_values( $filtered );
+	}
+
+	/**
 	 * Clear all logged events.
 	 *
 	 * @return bool True on success, false on failure.
@@ -193,34 +396,61 @@ class TIMU_Activity_Logger {
 	 * @return void
 	 */
 	public static function render_dashboard_activity(): void {
-		$events = self::get_events( 5 );
+		$events = self::get_events( 20 );
 
 		if ( empty( $events ) ) {
 			return;
 		}
 
-		echo '<div class="timu-activity-section">';
-		echo '<h3>' . esc_html__( 'TIMU Suite Activity', 'plugin-wp-support-thisismyurl' ) . '</h3>';
-		echo '<ul>';
+		// Get unique event types and modules.
+		$event_types = array_unique( array_column( $events, 'type' ) );
+		$modules     = array_unique( array_column( $events, 'module_source' ) );
+
+		echo '<div class="timu-activity-section" id="timu-activity-widget">';
+		echo '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">';
+		echo '<h3 style="margin: 0;">' . esc_html__( 'TIMU Suite Activity', 'plugin-wp-support-thisismyurl' ) . '</h3>';
+
+		// Filter controls.
+		echo '<div class="timu-activity-filters" style="display: flex; gap: 8px;">';
+
+		// Event type filter.
+		echo '<select id="timu-event-type-filter" style="font-size: 12px;">';
+		echo '<option value="">' . esc_html__( 'All Types', 'plugin-wp-support-thisismyurl' ) . '</option>';
+		foreach ( $event_types as $type ) {
+			$label = self::get_event_type_label( $type );
+			printf(
+				'<option value="%s">%s</option>',
+				esc_attr( $type ),
+				esc_html( $label )
+			);
+		}
+		echo '</select>';
+
+		// Module source filter.
+		echo '<select id="timu-module-filter" style="font-size: 12px;">';
+		echo '<option value="">' . esc_html__( 'All Modules', 'plugin-wp-support-thisismyurl' ) . '</option>';
+		foreach ( $modules as $module ) {
+			printf(
+				'<option value="%s">%s</option>',
+				esc_attr( $module ),
+				esc_html( ucfirst( $module ) )
+			);
+		}
+		echo '</select>';
+
+		// Clear filters button.
+		echo '<button id="timu-clear-filters" class="button button-small" style="font-size: 12px; display: none;">' . esc_html__( 'Clear', 'plugin-wp-support-thisismyurl' ) . '</button>';
+
+		echo '</div></div>';
+
+		echo '<ul id="timu-activity-list" style="margin-top: 0;">';
 
 		foreach ( $events as $event ) {
-			$icon        = self::get_event_icon( $event['type'] );
-			$description = esc_html( $event['description'] );
-			$timestamp   = human_time_diff( $event['timestamp'] ) . ' ' . __( 'ago', 'plugin-wp-support-thisismyurl' );
-			$user        = get_userdata( $event['user_id'] );
-			$username    = $user ? $user->display_name : __( 'Unknown', 'plugin-wp-support-thisismyurl' );
-
-			printf(
-				'<li><span class="dashicons %s" style="color: %s;"></span> <strong>%s</strong> - %s <small style="color: #666;">(%s)</small></li>',
-				esc_attr( $icon['class'] ),
-				esc_attr( $icon['color'] ),
-				esc_html( $description ),
-				esc_html( $timestamp ),
-				esc_html( $username )
-			);
+			self::render_activity_item( $event );
 		}
 
 		echo '</ul>';
+		echo '<div id="timu-no-results" style="display: none; padding: 12px; color: #666; font-style: italic;">' . esc_html__( 'No activity found matching the selected filters.', 'plugin-wp-support-thisismyurl' ) . '</div>';
 
 		$dashboard_url = admin_url( 'admin.php?page=timu-dashboard&tab=activity' );
 		printf(
@@ -233,21 +463,178 @@ class TIMU_Activity_Logger {
 	}
 
 	/**
+	 * Render a single activity item.
+	 *
+	 * @param array $event Event data.
+	 * @return void
+	 */
+	private static function render_activity_item( array $event ): void {
+		$icon          = self::get_event_icon( $event['type'] );
+		$description   = esc_html( $event['description'] );
+		$timestamp     = human_time_diff( $event['timestamp'] ) . ' ' . __( 'ago', 'plugin-wp-support-thisismyurl' );
+		$user          = get_userdata( $event['user_id'] );
+		$username      = $user ? $user->display_name : __( 'Unknown', 'plugin-wp-support-thisismyurl' );
+		$module_source = $event['module_source'] ?? 'core';
+
+		printf(
+			'<li data-event-type="%s" data-module="%s"><span class="dashicons %s" style="color: %s;"></span> <strong>%s</strong> - %s <small style="color: #666;">(%s)</small></li>',
+			esc_attr( $event['type'] ),
+			esc_attr( $module_source ),
+			esc_attr( $icon['class'] ),
+			esc_attr( $icon['color'] ),
+			esc_html( $description ),
+			esc_html( $timestamp ),
+			esc_html( $username )
+		);
+	}
+
+	/**
+	 * Get human-readable label for event type.
+	 *
+	 * @param string $event_type Event type constant.
+	 * @return string Human-readable label.
+	 */
+	private static function get_event_type_label( string $event_type ): string {
+		$labels = array(
+			self::EVENT_MODULE_ACTIVATED   => __( 'Module Activated', 'plugin-wp-support-thisismyurl' ),
+			self::EVENT_MODULE_DEACTIVATED => __( 'Module Deactivated', 'plugin-wp-support-thisismyurl' ),
+			self::EVENT_MODULE_INSTALLED   => __( 'Module Installed', 'plugin-wp-support-thisismyurl' ),
+			self::EVENT_MODULE_UPDATED     => __( 'Module Updated', 'plugin-wp-support-thisismyurl' ),
+			self::EVENT_VAULT_FILE_ADDED   => __( 'Vault File Added', 'plugin-wp-support-thisismyurl' ),
+			self::EVENT_VAULT_FILE_REMOVED => __( 'Vault File Removed', 'plugin-wp-support-thisismyurl' ),
+			self::EVENT_VAULT_VERIFIED     => __( 'Vault Verified', 'plugin-wp-support-thisismyurl' ),
+			self::EVENT_VAULT_RESTORED     => __( 'Vault Restored', 'plugin-wp-support-thisismyurl' ),
+			self::EVENT_LICENSE_REGISTERED => __( 'License Registered', 'plugin-wp-support-thisismyurl' ),
+			self::EVENT_LICENSE_VERIFIED   => __( 'License Verified', 'plugin-wp-support-thisismyurl' ),
+			self::EVENT_LICENSE_EXPIRED    => __( 'License Expired', 'plugin-wp-support-thisismyurl' ),
+			self::EVENT_SETTINGS_CHANGED   => __( 'Settings Changed', 'plugin-wp-support-thisismyurl' ),
+			self::EVENT_ENCRYPTION_CHANGED => __( 'Encryption Changed', 'plugin-wp-support-thisismyurl' ),
+			self::EVENT_MEDIA_FILE_ADDED   => __( 'Media File Uploaded', 'plugin-wp-support-thisismyurl' ),
+			self::EVENT_MEDIA_FILE_EDITED  => __( 'Media File Edited', 'plugin-wp-support-thisismyurl' ),
+			self::EVENT_MEDIA_FILE_DELETED => __( 'Media File Deleted', 'plugin-wp-support-thisismyurl' ),
+			self::EVENT_ERROR              => __( 'Error', 'plugin-wp-support-thisismyurl' ),
+		);
+
+		return $labels[ $event_type ] ?? ucwords( str_replace( '_', ' ', $event_type ) );
+	}
+
+	/**
+	 * Enqueue dashboard scripts for activity filtering.
+	 *
+	 * @param string $hook Current admin page hook.
+	 * @return void
+	 */
+	public static function enqueue_dashboard_scripts( string $hook ): void {
+		if ( 'index.php' !== $hook ) {
+			return;
+		}
+
+		wp_add_inline_script(
+			'dashboard',
+			"
+			jQuery(function($) {
+				const eventFilter = $('#timu-event-type-filter');
+				const moduleFilter = $('#timu-module-filter');
+				const clearButton = $('#timu-clear-filters');
+				const activityList = $('#timu-activity-list');
+				const noResults = $('#timu-no-results');
+
+				function filterActivities() {
+					const eventType = eventFilter.val();
+					const module = moduleFilter.val();
+					let visibleCount = 0;
+
+					activityList.find('li').each(function() {
+						const item = $(this);
+						const itemType = item.data('event-type');
+						const itemModule = item.data('module');
+
+						const matchesType = !eventType || itemType === eventType;
+						const matchesModule = !module || itemModule === module;
+
+						if (matchesType && matchesModule) {
+							item.show();
+							visibleCount++;
+						} else {
+							item.hide();
+						}
+					});
+
+					if (visibleCount === 0) {
+						activityList.hide();
+						noResults.show();
+					} else {
+						activityList.show();
+						noResults.hide();
+					}
+
+					// Show/hide clear button
+					if (eventType || module) {
+						clearButton.show();
+					} else {
+						clearButton.hide();
+					}
+				}
+
+				eventFilter.on('change', filterActivities);
+				moduleFilter.on('change', filterActivities);
+
+				clearButton.on('click', function() {
+					eventFilter.val('').trigger('change');
+					moduleFilter.val('').trigger('change');
+				});
+			});
+			"
+		);
+	}
+
+	/**
+	 * AJAX handler for filtering activity (future enhancement for server-side filtering).
+	 *
+	 * @return void
+	 */
+	public static function ajax_filter_activity(): void {
+		check_ajax_referer( 'timu-activity-filter', 'nonce' );
+
+		$event_type    = isset( $_POST['event_type'] ) ? sanitize_text_field( wp_unslash( $_POST['event_type'] ) ) : '';
+		$module_source = isset( $_POST['module'] ) ? sanitize_text_field( wp_unslash( $_POST['module'] ) ) : '';
+		$limit         = isset( $_POST['limit'] ) ? absint( $_POST['limit'] ) : 20;
+
+		$events = self::get_events( 100 );
+
+		// Filter events.
+		if ( $event_type || $module_source ) {
+			$events = array_filter(
+				$events,
+				function ( $event ) use ( $event_type, $module_source ) {
+					$matches_type   = ! $event_type || ( $event['type'] ?? '' ) === $event_type;
+					$matches_module = ! $module_source || ( $event['module_source'] ?? '' ) === $module_source;
+					return $matches_type && $matches_module;
+				}
+			);
+		}
+
+		$events = array_slice( $events, 0, $limit );
+
+		wp_send_json_success(
+			array(
+				'events' => $events,
+				'count'  => count( $events ),
+			)
+		);
+	}
+
+	/**
 	 * Maybe add standalone TIMU activity dashboard widget.
 	 *
 	 * Only adds if no WordPress activity widget exists or in multisite.
+	 * DISABLED: Activity is already injected into the Activity box via activity_box_end hook.
 	 *
 	 * @return void
 	 */
 	public static function maybe_add_dashboard_widget(): void {
-		// Always add for multisite network admin.
-		if ( is_multisite() && is_network_admin() ) {
-			wp_add_dashboard_widget(
-				'timu_activity',
-				__( 'TIMU Suite Activity', 'plugin-wp-support-thisismyurl' ),
-				array( __CLASS__, 'render_standalone_widget' )
-			);
-		}
+		// Disabled: TIMU activity is now injected into the WordPress Activity widget via activity_box_end hook.
+		// This prevents duplicate widgets on the dashboard.
 	}
 
 	/**
@@ -342,6 +729,18 @@ class TIMU_Activity_Logger {
 				'class' => 'dashicons-lock',
 				'color' => '#2271b1',
 			),
+			self::EVENT_MEDIA_FILE_ADDED   => array(
+				'class' => 'dashicons-upload',
+				'color' => '#00a32a',
+			),
+			self::EVENT_MEDIA_FILE_EDITED  => array(
+				'class' => 'dashicons-edit',
+				'color' => '#dba617',
+			),
+			self::EVENT_MEDIA_FILE_DELETED => array(
+				'class' => 'dashicons-trash',
+				'color' => '#d63638',
+			),
 			self::EVENT_ERROR              => array(
 				'class' => 'dashicons-warning',
 				'color' => '#d63638',
@@ -359,9 +758,10 @@ class TIMU_Activity_Logger {
 	 *
 	 * @param string $module_name Module name.
 	 * @param string $module_slug Module slug.
+	 * @param string $module_source Module source identifier.
 	 * @return bool True on success.
 	 */
-	public static function log_module_activated( string $module_name, string $module_slug ): bool {
+	public static function log_module_activated( string $module_name, string $module_slug, string $module_source = 'core' ): bool {
 		return self::log(
 			self::EVENT_MODULE_ACTIVATED,
 			sprintf(
@@ -369,7 +769,8 @@ class TIMU_Activity_Logger {
 				__( 'Activated %s', 'plugin-wp-support-thisismyurl' ),
 				$module_name
 			),
-			array( 'module_slug' => $module_slug )
+			array( 'module_slug' => $module_slug ),
+			$module_source
 		);
 	}
 
@@ -378,9 +779,10 @@ class TIMU_Activity_Logger {
 	 *
 	 * @param string $module_name Module name.
 	 * @param string $module_slug Module slug.
+	 * @param string $module_source Module source identifier.
 	 * @return bool True on success.
 	 */
-	public static function log_module_deactivated( string $module_name, string $module_slug ): bool {
+	public static function log_module_deactivated( string $module_name, string $module_slug, string $module_source = 'core' ): bool {
 		return self::log(
 			self::EVENT_MODULE_DEACTIVATED,
 			sprintf(
@@ -388,18 +790,20 @@ class TIMU_Activity_Logger {
 				__( 'Deactivated %s', 'plugin-wp-support-thisismyurl' ),
 				$module_name
 			),
-			array( 'module_slug' => $module_slug )
+			array( 'module_slug' => $module_slug ),
+			$module_source
 		);
 	}
 
 	/**
 	 * Log vault verification.
 	 *
-	 * @param int $files_verified Number of files verified.
-	 * @param int $files_failed Number of files that failed verification.
+	 * @param int    $files_verified Number of files verified.
+	 * @param int    $files_failed Number of files that failed verification.
+	 * @param string $module_source Module source identifier.
 	 * @return bool True on success.
 	 */
-	public static function log_vault_verified( int $files_verified, int $files_failed = 0 ): bool {
+	public static function log_vault_verified( int $files_verified, int $files_failed = 0, string $module_source = 'vault' ): bool {
 		if ( $files_failed > 0 ) {
 			$description = sprintf(
 				/* translators: 1: Files verified, 2: Files failed */
@@ -421,7 +825,8 @@ class TIMU_Activity_Logger {
 			array(
 				'verified' => $files_verified,
 				'failed'   => $files_failed,
-			)
+			),
+			$module_source
 		);
 	}
 
@@ -430,9 +835,10 @@ class TIMU_Activity_Logger {
 	 *
 	 * @param bool   $is_valid Whether license is valid.
 	 * @param string $license_type License type.
+	 * @param string $module_source Module source identifier.
 	 * @return bool True on success.
 	 */
-	public static function log_license_verified( bool $is_valid, string $license_type = '' ): bool {
+	public static function log_license_verified( bool $is_valid, string $license_type = '', string $module_source = 'core' ): bool {
 		if ( $is_valid ) {
 			$description = $license_type
 				? sprintf(
@@ -451,7 +857,8 @@ class TIMU_Activity_Logger {
 			array(
 				'is_valid'     => $is_valid,
 				'license_type' => $license_type,
-			)
+			),
+			$module_source
 		);
 	}
 
@@ -461,9 +868,10 @@ class TIMU_Activity_Logger {
 	 * @param string $setting_name Setting that was changed.
 	 * @param mixed  $old_value Old value.
 	 * @param mixed  $new_value New value.
+	 * @param string $module_source Module source identifier.
 	 * @return bool True on success.
 	 */
-	public static function log_settings_changed( string $setting_name, $old_value, $new_value ): bool {
+	public static function log_settings_changed( string $setting_name, $old_value, $new_value, string $module_source = 'core' ): bool {
 		return self::log(
 			self::EVENT_SETTINGS_CHANGED,
 			sprintf(
@@ -475,7 +883,8 @@ class TIMU_Activity_Logger {
 				'setting'   => $setting_name,
 				'old_value' => $old_value,
 				'new_value' => $new_value,
-			)
+			),
+			$module_source
 		);
 	}
 
@@ -484,15 +893,18 @@ class TIMU_Activity_Logger {
 	 *
 	 * @param string $error_message Error message.
 	 * @param array  $context Additional error context.
+	 * @param string $module_source Module source identifier.
 	 * @return bool True on success.
 	 */
-	public static function log_error( string $error_message, array $context = array() ): bool {
+	public static function log_error( string $error_message, array $context = array(), string $module_source = 'core' ): bool {
 		return self::log(
 			self::EVENT_ERROR,
 			$error_message,
-			$context
+			$context,
+			$module_source
 		);
 	}
 }
 
 /* @changelog Added TIMU_Activity_Logger for WordPress Dashboard Activity integration */
+/* @changelog Added module_source tracking to all log entries and get_events_by_module() method for filtering logs by module */

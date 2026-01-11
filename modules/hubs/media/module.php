@@ -18,6 +18,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Ensure DRY hub initializer is available when module files load directly.
+if ( ! class_exists( '\\TIMU\\CoreSupport\\TIMU_Module_Hub_Initializer' ) ) {
+	require_once dirname( __DIR__, 3 ) . '/includes/class-timu-module-hub-initializer.php';
+}
+
 // Plugin constants.
 // Initialize constants via DRY initializer (defined in wp-support core).
 \TIMU\CoreSupport\TIMU_Module_Hub_Initializer::define_module_constants(
@@ -26,7 +31,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	'media-support-thisismyurl',
 	'1.2601.0819',
 	'8.1.29',
-	'6.4.0'
+	'6.4.0',
+	'TIMU_MEDIA'
 );
 
 /**
@@ -91,44 +97,10 @@ function timu_media_init(): void {
 				);
 			}
 
-			public function add_admin_menu(): void {
-				// Menu items are now auto-registered by Core's timu_core_register_hub_submenus()
-				// This method is kept for backward compatibility but does nothing.
-			}
 
-			public function render_media_settings_redirect(): void {
-				$redirect_url = admin_url( 'admin.php?page=wp-support&tab=media-support-thisismyurl' );
-				?>
-				<script type="text/javascript">
-					window.location.href = '<?php echo esc_url( $redirect_url ); ?>';
-				</script>
-				<?php
-			}
-
-			public function render_settings_page(): void {
-				$this->render_settings_page_base( strtoupper( __( 'Media Support', TIMU_MEDIA_TEXT_DOMAIN ) ) );
-			}
 		}
 	}
 
 	new TIMU_Media_Support();
 }
 add_action( 'plugins_loaded', __NAMESPACE__ . '\timu_media_init', 12 );
-
-/**
- * Render Media Hub dashboard.
- *
- * @return void
- */
-function render_dashboard(): void {
-	// Get module catalog for spoke modules.
-	// Get spoke modules via DRY initializer.
-	$modules = \TIMU\CoreSupport\TIMU_Module_Hub_Initializer::get_hub_spoke_modules( 'media-support-thisismyurl' );
-
-	// Get activity logs if Vault is available.
-	// Get activity logs via DRY initializer.
-	$activity_logs = \TIMU\CoreSupport\TIMU_Module_Hub_Initializer::get_vault_activity_logs( 10 );
-
-	require_once TIMU_MEDIA_PATH . 'views/dashboard.php';
-}
-

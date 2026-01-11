@@ -115,21 +115,31 @@ class TIMU_Module_Hub_Initializer {
 		string $text_domain,
 		string $version,
 		string $min_php = '8.1.29',
-		string $min_wp = '6.4.0'
+		string $min_wp = '6.4.0',
+		?string $constant_prefix = null
 	): array {
-		$constant_prefix = strtoupper( str_replace( array( '-', '/' ), '_', $slug ) );
+		$computed_prefix = strtoupper( str_replace( array( '-', '/' ), '_', $slug ) );
+		$primary_prefix  = $constant_prefix ? strtoupper( $constant_prefix ) : $computed_prefix;
 
-		// Define all standard constants.
-		$constants = array(
-			"{$constant_prefix}_VERSION" => $version,
-			"{$constant_prefix}_FILE" => $module_file,
-			"{$constant_prefix}_PATH" => plugin_dir_path( $module_file ),
-			"{$constant_prefix}_URL" => plugin_dir_url( $module_file ),
-			"{$constant_prefix}_BASENAME" => plugin_basename( $module_file ),
-			"{$constant_prefix}_TEXT_DOMAIN" => $text_domain,
-			"{$constant_prefix}_MIN_PHP" => $min_php,
-			"{$constant_prefix}_MIN_WP" => $min_wp,
-		);
+		$build_constants = static function ( string $prefix ) use ( $module_file, $text_domain, $version, $min_php, $min_wp ): array {
+			return array(
+				"{$prefix}_VERSION" => $version,
+				"{$prefix}_FILE" => $module_file,
+				"{$prefix}_PATH" => plugin_dir_path( $module_file ),
+				"{$prefix}_URL" => plugin_dir_url( $module_file ),
+				"{$prefix}_BASENAME" => plugin_basename( $module_file ),
+				"{$prefix}_TEXT_DOMAIN" => $text_domain,
+				"{$prefix}_MIN_PHP" => $min_php,
+				"{$prefix}_MIN_WP" => $min_wp,
+			);
+		};
+
+		// Always define the primary prefix constants; optionally also define computed prefix for backward compatibility.
+		$constants = $build_constants( $primary_prefix );
+
+		if ( $primary_prefix !== $computed_prefix ) {
+			$constants = array_merge( $constants, $build_constants( $computed_prefix ) );
+		}
 
 		// Define each constant if not already defined.
 		foreach ( $constants as $const_name => $const_value ) {

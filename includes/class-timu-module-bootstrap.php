@@ -41,8 +41,8 @@ class TIMU_Module_Bootstrap {
 		'image-support-thisismyurl' => array(
 			'name'        => 'Image Support',
 			'description' => 'Hub for image format support and processing',
-			'repo'        => 'thisismyurl/image-support-thisismyurl',
-			'install_url' => 'https://github.com/thisismyurl/image-support-thisismyurl/archive/refs/heads/main.zip',
+			'repo'        => 'thisismyurl/module-images-support-thisismyurl',
+			'install_url' => 'https://github.com/thisismyurl/module-images-support-thisismyurl/archive/refs/heads/main.zip',
 		),
 		'vault-support-thisismyurl' => array(
 			'name'        => 'Vault Support',

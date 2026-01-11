@@ -360,9 +360,14 @@ input:disabled + .timu-toggle-slider {
 								<td>
 									<?php
 									// Get last modified time of module files
-									$module_path = TIMU_CORE_PATH . 'modules/spokes/' . basename( $slug );
+									$module_dir_hint = '';
+									if ( ! empty( $module['basename'] ) ) {
+										$module_dir_hint = dirname( $module['basename'] );
+										$module_dir_hint = ( '.' === $module_dir_hint ) ? '' : trim( $module_dir_hint, '/\\' );
+									}
+									$module_path = TIMU_CORE_PATH . 'modules/spokes/' . ( ! empty( $module_dir_hint ) ? basename( $module_dir_hint ) : basename( $slug ) );
 									if ( ! file_exists( $module_path ) ) {
-										$module_path = WP_PLUGIN_DIR . '/' . $slug;
+										$module_path = WP_PLUGIN_DIR . '/' . ( ! empty( $module_dir_hint ) ? $module_dir_hint : $slug );
 									}
 									if ( file_exists( $module_path ) ) {
 										$module_file = $module_path . '/module.php';
