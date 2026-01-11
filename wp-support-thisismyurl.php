@@ -503,6 +503,10 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/class-wps-update-client.php';
 	\WPS\CoreSupport\WPS_Update_Client::init( wp_support_BASENAME );
 
+	// Load license widget for dashboard.
+	require_once wp_support_PATH . 'includes/class-wps-license-widget.php';
+	\WPS\CoreSupport\WPS_License_Widget::init();
+
 	// Load module bootstrap for child plugin installation and activation.
 	require_once wp_support_PATH . 'includes/class-wps-module-bootstrap.php';
 	WPS_Module_Bootstrap::init();
