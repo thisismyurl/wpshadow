@@ -643,9 +643,11 @@ function wp_support_init(): void {
 		WPS_Vault::init();
 	}
 
-	// Load vault size monitoring (real-time alerts).
-	require_once wp_support_PATH . 'includes/class-wps-vault-size-monitor.php';
-	WPS_Vault_Size_Monitor::init();
+	// Load vault size monitoring (real-time alerts) - only if Vault is available.
+	if ( class_exists( '\\WPS\\CoreSupport\\WPS_Vault' ) ) {
+		require_once wp_support_PATH . 'includes/class-wps-vault-size-monitor.php';
+		WPS_Vault_Size_Monitor::init();
+	}
 
 	// Load network license broadcaster for multisite (Super Admin push to all sites).
 	require_once wp_support_PATH . 'includes/class-wps-network-license.php';

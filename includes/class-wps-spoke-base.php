@@ -128,6 +128,14 @@ abstract class WPS_Spoke_Base {
 	 * Shared image conversion logic.
 	 */
 	public function run_conversion_logic( int $id ): array {
+		// Vault component is required for spoke to function.
+		if ( null === $this->vault ) {
+			return array(
+				'success' => false,
+				'message' => 'Vault component not loaded.',
+			);
+		}
+
 		$prefix      = $this->get_data_prefix();
 		$savings_key = "_{$prefix}_savings";
 		$file_path   = \get_attached_file( $id );
