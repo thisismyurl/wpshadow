@@ -804,7 +804,6 @@ function wp_support_register_module_submenus( string $capability ): void {
 			// AND have actual module folders (not just catalog entries).
 			if ( 'hub' !== ( $m['type'] ?? '' )
 				|| empty( $m['installed'] )
-				|| empty( $m['enabled'] )
 				|| ! empty( $m['requires_hub'] )
 			) {
 				return false;
@@ -814,7 +813,13 @@ function wp_support_register_module_submenus( string $capability ): void {
 			$module_id = sanitize_key( str_replace( '-support-thisismyurl', '', $m['slug'] ?? '' ) );
 			$module_path = wp_support_PATH . 'modules/hubs/' . $module_id . '/';
 
-			return is_dir( $module_path );
+			if ( ! is_dir( $module_path ) ) {
+				return false;
+			}
+
+			// CRITICAL: Check enabled state using live registry (not cached catalog).
+			$slug = $m['slug'] ?? '';
+			return WPS_Module_Registry::is_enabled( $slug );
 		}
 	);
 
@@ -832,6 +837,48 @@ function wp_support_register_module_submenus( string $capability ): void {
 		);
 	}
 }
+
+/**
+ * Prune Support submenus to only allow hub modules (vault, media) and core screens.
+ *
+ * This removes legacy/experimental submenu entries registered elsewhere.
+ *
+ * @return void
+ */
+function wp_support_prune_submenus(): void {
+	// Parent menu slug.
+	$parent = 'wp-support';
+
+	// Allowed submenu slugs under wp-support (core screens always allowed).
+	$allowed = array(
+		'wp-support',         // Dashboard
+		'wp-support-modules', // Modules grid
+	);
+
+	// Only allow hub submenus when the module is enabled.
+	if ( \WPS\CoreSupport\WPS_Module_Registry::is_enabled( 'vault-support-thisismyurl' ) ) {
+		$allowed[] = 'wp-support&module=vault';
+	}
+	if ( \WPS\CoreSupport\WPS_Module_Registry::is_enabled( 'media-support-thisismyurl' ) ) {
+		$allowed[] = 'wp-support&module=media';
+	}
+
+	// Nothing to do if submenu is empty.
+	if ( empty( $GLOBALS['submenu'][ $parent ] ) || ! is_array( $GLOBALS['submenu'][ $parent ] ) ) {
+		return;
+	}
+
+	foreach ( $GLOBALS['submenu'][ $parent ] as $index => $item ) {
+		// $item structure: [0] => title, [1] => capability, [2] => slug, ...
+		$slug = $item[2] ?? '';
+		if ( ! in_array( $slug, $allowed, true ) ) {
+			remove_submenu_page( $parent, $slug );
+		}
+	}
+}
+
+// Run pruning after all menus are registered.
+add_action( 'admin_menu', __NAMESPACE__ . '\\wp_support_prune_submenus', 999 );
 
 /**
  * Render the capabilities management page.
@@ -1554,8 +1601,13 @@ function wps_ajax_toggle_module(): void {
 		wp_send_json_error( array( 'message' => __( 'Invalid module slug.', 'plugin-wp-support-thisismyurl' ) ) );
 	}
 
-	$settings = array( 'enabled' => $enabled );
-	$success  = WPS_Module_Registry::update_module_settings( $slug, $settings, $network );
+	// Update WPS_module_toggles array (unified toggle system).
+	$toggles = get_option( 'WPS_module_toggles', array() );
+	$toggles[ $slug ] = $enabled ? 1 : 0;
+	$success = update_option( 'WPS_module_toggles', $toggles );
+
+	// Clear catalog cache so submenu regenerates.
+	WPS_Module_Registry::clear_cache();
 
 	$user      = wp_get_current_user();
 	$user_name = $user && $user->exists() ? $user->display_name : __( 'System', 'plugin-wp-support-thisismyurl' );

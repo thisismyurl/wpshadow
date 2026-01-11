@@ -217,9 +217,10 @@ class WPS_Module_Toggles {
 		}
 
 		// Fill missing toggles with defaults (all enabled if plugin is installed).
+		// Bundled modules ship inside Core, so default to enabled when no toggle is stored.
 		foreach ( array_keys( self::MODULE_DEPENDENCIES ) as $module ) {
 			if ( ! isset( $toggles[ $module ] ) ) {
-				$toggles[ $module ] = self::is_plugin_installed( $module ) ? 1 : 0;
+				$toggles[ $module ] = 1;
 			}
 		}
 

@@ -61,6 +61,10 @@ class WPS_Module_Registry {
 		add_action( 'init', array( __CLASS__, 'schedule_refresh' ) );
 		add_action( 'WPS_refresh_modules', array( __CLASS__, 'refresh_modules' ) );
 
+		// Clear cache when plugins are activated/deactivated to ensure fresh enabled state.
+		add_action( 'activated_plugin', array( __CLASS__, 'clear_cache' ) );
+		add_action( 'deactivated_plugin', array( __CLASS__, 'clear_cache' ) );
+
 		// Provide hooks for modules to announce themselves.
 		do_action( 'WPS_register_modules' );
 	}
@@ -104,7 +108,10 @@ class WPS_Module_Registry {
 		$get_fn       = is_multisite() ? 'get_site_option' : 'get_option';
 		$last_refresh = (int) call_user_func( $get_fn, 'WPS_modules_last_refresh', 0 );
 
-		$queue_state  = class_exists( '\WPS\CoreSupport\WPS_Vault' ) ? \WPS\CoreSupport\WPS_Vault::get_queue_state() : array();
+		$queue_state  = array();
+		if ( class_exists( '\WPS\CoreSupport\WPS_Vault' ) && method_exists( '\WPS\CoreSupport\WPS_Vault', 'get_queue_state' ) ) {
+			$queue_state = \WPS\CoreSupport\WPS_Vault::get_queue_state();
+		}
 		$queue_last   = isset( $queue_state['last_run'] ) ? (int) $queue_state['last_run'] : 0;
 		$queue_status = isset( $queue_state['status'] ) ? (string) $queue_state['status'] : 'idle';
 
@@ -581,7 +588,12 @@ class WPS_Module_Registry {
 	 */
 	public static function is_enabled( string $slug ): bool {
 		$settings = self::get_module_settings( $slug );
-		return (bool) ( $settings['enabled'] ?? true );
+		$enabled  = (bool) ( $settings['enabled'] ?? true );
+
+		// Allow feature toggle overrides (e.g., WPS_Module_Toggles) to disable modules without deactivation.
+		$enabled = (bool) apply_filters( 'WPS_module_enabled', $enabled, $slug );
+
+		return $enabled;
 	}
 
 	/**

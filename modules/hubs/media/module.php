@@ -18,6 +18,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Skip loading if module toggles mark Media as disabled.
+if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Module_Toggles' ) ) {
+	require_once dirname( __DIR__, 3 ) . '/includes/class-wps-module-toggles.php';
+}
+
+$toggles = \WPS\CoreSupport\WPS_Module_Toggles::get_toggles();
+$enabled = ! empty( $toggles['media-support-thisismyurl'] );
+if ( ! $enabled ) {
+	return;
+}
+
 // Ensure DRY hub initializer is available when module files load directly.
 if ( ! class_exists( '\WPS\CoreSupport\WPS_Module_Hub_Initializer' ) ) {
 	require_once dirname( __DIR__, 3 ) . '/includes/class-wps-module-hub-initializer.php';

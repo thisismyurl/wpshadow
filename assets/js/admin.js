@@ -94,8 +94,11 @@
 			const enabled = $toggle.is(':checked');
 			const $card = $toggle.closest('.wps-module-card');
 			const isNetwork = window.location.pathname.includes('/wp-admin/network/');
-			const isInstalled = $toggle.data('installed') === true || $toggle.data('installed') === 'true';
+			// jQuery .data() parses '1'/'0' to numbers 1/0, so check for multiple types.
+			const installedData = $toggle.data('installed');
+			const isInstalled = installedData === 1 || installedData === '1' || installedData === true || installedData === 'true';
 
+		if (!slug) {
 			if (!isInstalled) {
 				$toggle.prop('checked', false);
 				TimuDashboard.showNotice('warning', wpsAdminData.i18n.installFirst);
@@ -432,7 +435,8 @@
 	 * Initialize on document ready.
 	 */
 	$(document).ready(function() {
-		if ($('.wps-dashboard-wrap').length) {
+		// Initialize if modules grid or dashboard widgets are present.
+		if ($('.wps-dashboard-wrap').length || $('.wps-module-toggle').length || $('#dashboard-widgets').length) {
 			TimuDashboard.init();
 		}
 	});
