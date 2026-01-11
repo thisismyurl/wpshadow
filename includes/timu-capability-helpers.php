@@ -6,7 +6,7 @@
  * @package TIMU_WP_SUPPORT_THISISMYURL
  */
 
-namespace TIMU\WP_Support;
+namespace TIMU\CoreSupport;
 
 /**
  * Check if WP Support plugin is active and enabled.
