@@ -381,6 +381,36 @@ class WPS_Dashboard_Widgets {
 				function markPending(slug, target){ try{ localStorage.setItem(pendingPrefix + slug, target ? '1':'0'); }catch(e){} }
 				function clearPending(slug){ try{ localStorage.removeItem(pendingPrefix + slug); }catch(e){} }
 				function getPending(slug){ try{ return localStorage.getItem(pendingPrefix + slug); }catch(e){ return null; } }
+				function applyCardState(input, enabled){
+					if (!input) return;
+					const card = input.closest('.wps-widget-module-card');
+					if (!card) return;
+					card.classList.toggle('wps-module-card-inactive', !enabled);
+					card.classList.toggle('wps-module-disabled', !enabled);
+					card.classList.toggle('wps-module-enabled', enabled);
+					const link = card.querySelector('.wps-module-link');
+					if (link) {
+						const storedUrl = link.getAttribute('data-url') || '';
+						if (!enabled) {
+							if (link.getAttribute('href')) {
+								link.setAttribute('data-url', link.getAttribute('href'));
+							}
+							link.removeAttribute('href');
+							link.setAttribute('aria-disabled','true');
+							link.setAttribute('tabindex','-1');
+							link.classList.add('is-link-disabled');
+						} else {
+							if (storedUrl) {
+								link.setAttribute('href', storedUrl);
+							} else {
+								link.removeAttribute('href');
+							}
+							link.removeAttribute('aria-disabled');
+							link.removeAttribute('tabindex');
+							link.classList.remove('is-link-disabled');
+						}
+					}
+				}
 				async function postAction(action, data){
 					const form = new URLSearchParams({ action, nonce });
 					Object.entries(data).forEach(([k,v])=>{ if (v != null) form.append(k,v); });
@@ -388,6 +418,35 @@ class WPS_Dashboard_Widgets {
 					const json = await res.json();
 					if (!json || json.success !== true) { throw new Error((json && json.data && json.data.message) ? json.data.message : 'Unexpected error'); }
 					return json.data || {};
+				}
+				async function refreshDashboardWidgets() {
+					// Refresh health widget
+					const healthContainer = document.getElementById('wps-health-widget-container');
+					if (healthContainer) {
+						try {
+							const healthData = await postAction('WPS_refresh_health_widget', {});
+							if (healthData && healthData.html) {
+								healthContainer.innerHTML = healthData.html;
+								console.info('Health widget refreshed for active modules:', healthData.active_modules);
+							}
+						} catch (err) {
+							console.error('Failed to refresh health widget:', err);
+						}
+					}
+					
+					// Refresh events/news widget
+					const eventsContainer = document.getElementById('wps-events-news-container');
+					if (eventsContainer) {
+						try {
+							const eventsData = await postAction('WPS_refresh_events_widget', {});
+							if (eventsData && eventsData.html) {
+								eventsContainer.innerHTML = eventsData.html;
+								console.info('Events widget refreshed for active repos:', eventsData.active_repos);
+							}
+						} catch (err) {
+							console.error('Failed to refresh events widget:', err);
+						}
+					}
 				}
 				document.addEventListener('change', async function(e){
 					const input = e.target;
@@ -419,12 +478,76 @@ class WPS_Dashboard_Widgets {
 						const data = await postAction(action, payload);
 						if (action === 'WPS_module_install') { input.setAttribute('data-installed','1'); }
 						clearPending(slug);
+						applyCardState(input, turningOn);
+						
+						// Refresh dashboard widgets on module state change
+						refreshDashboardWidgets();
+						
+						// Handle cascade deactivation notification
+						if (!turningOn && data.deactivated && data.deactivated.length > 0) {
+							const names = data.deactivated.map(s => {
+								const elem = document.querySelector(`input[data-module="${s}"]`);
+								return elem ? (elem.getAttribute('data-module-name') || s) : s;
+							}).join(', ');
+							console.info(`Cascade deactivated: ${names}`);
+							// Update UI for deactivated dependents
+							data.deactivated.forEach(depSlug => {
+								const depInput = document.querySelector(`input[data-module="${depSlug}"]`);
+								if (depInput && depInput.checked) {
+									depInput.checked = false;
+									saveToggleState(depSlug, false);
+									applyCardState(depInput, false);
+									if ((depInput.getAttribute('data-type')||'hub') === 'hub') {
+										const depName = depInput.getAttribute('data-module-name') || '';
+										ensureSubmenuFromSlug(depSlug, depName, false);
+									}
+								}
+							});
+						}
+						
+						// Handle restoration prompt
+						if (turningOn && data.remembered && data.remembered.length > 0) {
+							const names = data.remembered.map(s => {
+								const elem = document.querySelector(`input[data-module="${s}"]`);
+								return elem ? (elem.getAttribute('data-module-name') || s) : s;
+							}).join(', ');
+							if (confirm(`${name} was reactivated. Also restore these previously active modules?\n\n${names}`)) {
+								// Restore each remembered module
+								for (const remSlug of data.remembered) {
+									const remInput = document.querySelector(`input[data-module="${remSlug}"]`);
+									if (remInput && !remInput.checked) {
+										remInput.checked = true;
+										saveToggleState(remSlug, true);
+										applyCardState(remInput, true);
+										if ((remInput.getAttribute('data-type')||'hub') === 'hub') {
+											const remName = remInput.getAttribute('data-module-name') || '';
+											ensureSubmenuFromSlug(remSlug, remName, true);
+										}
+										// Send AJAX to persist restoration
+										try {
+											await postAction('WPS_module_toggle', { slug: remSlug, enabled: 1 });
+										} catch (restoreErr) {
+											console.error(`Failed to restore ${remSlug}:`, restoreErr);
+										}
+									}
+								}
+								// Clear remembered list after restoration
+								await postAction('WPS_clear_remembered', { parent_slug: slug });
+							} else {
+								// User declined, clear memory anyway
+								await postAction('WPS_clear_remembered', { parent_slug: slug });
+							}
+						}
 					} catch (err) {
 						input.checked = !turningOn;
 						console.error(err);
 						alert(err.message);
 						// rollback optimistic save but keep pending for recovery
 						saveToggleState(slug, !turningOn);
+						// Revert visual state
+						applyCardState(input, !turningOn);
+						// Revert submenu visibility
+						if (type === 'hub') { ensureSubmenuFromSlug(slug, name, !turningOn); }
 					} finally {
 						input.disabled = false; if (progress) progress.style.display = 'none';
 					}
@@ -440,7 +563,12 @@ class WPS_Dashboard_Widgets {
 							const name = input.getAttribute('data-module-name') || '';
 							ensureSubmenuFromSlug(slug, name, (saved === '1'));
 						}
+						applyCardState(input, input.checked);
 					}
+				});
+				// Ensure current DOM state is reflected even without saved toggle data.
+				document.querySelectorAll('.wps-toggle-switch input[data-module]').forEach(function(input){
+					applyCardState(input, input.checked);
 				});
 
 				// Sweep existing menu to hide any disabled hubs rendered server-side.
@@ -469,6 +597,7 @@ class WPS_Dashboard_Widgets {
 								const name = input.getAttribute('data-module-name') || '';
 								ensureSubmenuFromSlug(slug, name, (val === '1'));
 							}
+							applyCardState(input, input.checked);
 						}
 					}
 				});
@@ -533,10 +662,16 @@ class WPS_Dashboard_Widgets {
 								const name = input.getAttribute('data-module-name') || '';
 								ensureSubmenuFromSlug(slug, name, targetOn);
 							}
+							applyCardState(input, targetOn);
 						}catch(e){ /* keep pending */ }
 					});
 				}
 				setInterval(processPending, 5000);
+				
+				// Periodic refresh of dashboard widgets (every 2 minutes for real-time feedback)
+				setInterval(function() {
+					refreshDashboardWidgets();
+				}, 120000); // 2 minutes
 			});
 		</script>
 		<div class="wps-widget-content">
@@ -545,16 +680,21 @@ class WPS_Dashboard_Widgets {
 			<?php else : ?>				<style>
 				.wps-toggle-switch { display: inline-block; position: relative; width: 44px; height: 22px; }
 				.wps-toggle-switch input { opacity: 0; width: 0; height: 0; }
-				.wps-toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .3s; border-radius: 22px; }
+				.wps-toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #6a1b1b; transition: .3s; border-radius: 22px; opacity: 0.8; }
 				.wps-toggle-slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
-				input:checked + .wps-toggle-slider { background-color: #00a32a; }
+				input:checked + .wps-toggle-slider { background-color: #00a32a; opacity: 1; }
 				input:focus + .wps-toggle-slider { box-shadow: 0 0 1px #00a32a; }
 				input:checked + .wps-toggle-slider:before { transform: translateX(22px); }
-				input:disabled + .wps-toggle-slider { opacity: 0.5; cursor: not-allowed; }
+				.wps-widget-module-card .wps-toggle-switch input:disabled + .wps-toggle-slider { cursor: not-allowed; }
 				.wps-progress { display: none; align-items: center; gap: 8px; margin-left: 8px; }
 				.wps-progress .bar { width: 60px; height: 6px; background: #e5e5e5; border-radius: 6px; overflow: hidden; }
 				.wps-progress .bar .fill { width: 50%; height: 100%; background: linear-gradient(90deg, #2271b1, #00a32a); animation: wpsProgress 1s infinite alternate ease-in-out; }
 				@keyframes wpsProgress { from { width: 30%; } to { width: 90%; } }
+				.wps-widget-module-card.wps-module-card-inactive .wps-module-title,
+				.wps-widget-module-card.wps-module-card-inactive .wps-module-description,
+				.wps-widget-module-card.wps-module-card-inactive .wps-module-icon { opacity: 0.5; }
+				.wps-widget-module-card.wps-module-card-inactive .wps-module-link { pointer-events: none; cursor: default; text-decoration: none; }
+				.wps-widget-module-card .wps-module-link.is-link-disabled { color: inherit; }
 				</style>				<div class="wps-modules-list" style="margin: 0;">
 					<?php foreach ( $next_level_modules as $module ) : ?>
 						<?php
@@ -563,8 +703,9 @@ class WPS_Dashboard_Widgets {
 						$module_name      = esc_html( $module['name'] ?? '' );
 						$module_version   = esc_html( $module['version'] ?? '?.?.?' );
 						$is_installed     = ! empty( $module['installed'] );
-						$is_enabled       = ! empty( $module['enabled'] );
+						$is_enabled       = \WPS\CoreSupport\WPS_Module_Registry::is_enabled( $module_slug );
 						$update_available = ! empty( $module['update_available'] );
+						$card_classes     = 'wps-module-card wps-widget-module-card ' . ( $is_enabled ? 'wps-module-enabled' : 'wps-module-disabled wps-module-card-inactive' );
 
 						// Build navigation URL (hub vs spoke) and icon.
 						$icon_class = 'dashicons-networking';
@@ -575,16 +716,16 @@ class WPS_Dashboard_Widgets {
 							$icon_class = 'dashicons-hammer';
 						}
 						?>
-						<div style="padding: 12px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 10px; background: #fff;">
+						<div class="<?php echo esc_attr( $card_classes ); ?>" style="padding: 12px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 10px; background: #fff;">
 							<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
 								<div style="flex: 1;">
 									<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-										<span class="dashicons <?php echo esc_attr( $icon_class ); ?>" style="font-size: 20px; width: 20px; height: 20px; color: #2271b1;"></span>
-										<strong style="font-size: 14px;">
-											<a href="<?php echo esc_url( $module_url ); ?>" style="text-decoration: none; color: inherit;"><?php echo $module_name; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a>
+										<span class="dashicons <?php echo esc_attr( $icon_class ); ?> wps-module-icon" style="font-size: 20px; width: 20px; height: 20px; color: #2271b1;"></span>
+										<strong class="wps-module-title" style="font-size: 14px;">
+											<a class="wps-module-link" data-url="<?php echo esc_url( $module_url ); ?>" href="<?php echo esc_url( $module_url ); ?>" style="text-decoration: none; color: inherit;"><?php echo $module_name; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a>
 										</strong>
 									</div>
-									<div style="font-size: 12px; color: #666; margin-left: 28px;">
+									<div class="wps-module-description" style="font-size: 12px; color: #666; margin-left: 28px;">
 										<?php echo esc_html( $module['description'] ?? '' ); ?>
 									</div>
 								</div>
@@ -625,19 +766,20 @@ class WPS_Dashboard_Widgets {
 										$dep_slug      = sanitize_key( $dep_module['slug'] ?? '' );
 										$dep_name      = esc_html( $dep_module['name'] ?? '' );
 										$dep_installed = ! empty( $dep_module['installed'] );
-										$dep_enabled   = ! empty( $dep_module['enabled'] );
+										$dep_enabled   = \WPS\CoreSupport\WPS_Module_Registry::is_enabled( $dep_slug );
 										$dep_url       = WPS_Tab_Navigation::build_hub_url( $dep_slug );
+										$dep_card_classes = 'wps-module-card wps-widget-module-card wps-widget-dependent-card ' . ( $dep_enabled ? 'wps-module-enabled' : 'wps-module-disabled wps-module-card-inactive' );
 										?>
-										<div style="padding: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px; background: #fff; border: 1px solid #e0e0e0; border-radius: 2px; margin-bottom: 6px;">
+										<div class="<?php echo esc_attr( $dep_card_classes ); ?>" style="padding: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px; background: #fff; border: 1px solid #e0e0e0; border-radius: 2px; margin-bottom: 6px;">
 											<div style="display: flex; align-items: center; gap: 8px; flex: 1;">
-												<span class="dashicons dashicons-arrow-right-alt2" style="font-size: 16px; width: 16px; height: 16px; color: #999;"></span>
-												<span style="font-size: 13px;">
-													<a href="<?php echo esc_url( $dep_url ); ?>" style="text-decoration: none; color: inherit; font-weight: 500;"><?php echo $dep_name; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a>
+												<span class="dashicons dashicons-arrow-right-alt2 wps-module-icon" style="font-size: 16px; width: 16px; height: 16px; color: #999;"></span>
+												<span class="wps-module-title" style="font-size: 13px;">
+													<a class="wps-module-link" data-url="<?php echo esc_url( $dep_url ); ?>" href="<?php echo esc_url( $dep_url ); ?>" style="text-decoration: none; color: inherit; font-weight: 500;"><?php echo $dep_name; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a>
 												</span>
 											</div>
 											<div style="display: flex; align-items: center; flex-shrink: 0;">
 												<label class="wps-toggle-switch">
-													<input type="checkbox" <?php checked( $dep_enabled ); ?> data-module="<?php echo esc_attr( $dep_slug ); ?>" data-module-name="<?php echo esc_attr( $dep_name ); ?>" data-type="hub" data-installed="<?php echo esc_attr( $dep_installed ? '1' : '0' ); ?>" data-plugin-base="<?php echo esc_attr( $dep_module['basename'] ?? '' ); ?>" data-is-plugin="<?php echo esc_attr( ( ! empty( $dep_module['basename'] ?? '' ) || ! empty( $dep_module['download_url'] ?? '' ) ) ? '1' : '0' ); ?>">
+													<input type="checkbox" <?php checked( $dep_enabled ); ?> data-module="<?php echo esc_attr( $dep_slug ); ?>" data-module-name="<?php echo esc_attr( $dep_name ); ?>" data-type="hub" data-installed="<?php echo esc_attr( $dep_installed ? '1' : '0' ); ?>" data-plugin-base="<?php echo esc_attr( $dep_module['basename'] ?? '' ); ?>" data-is-plugin="<?php echo esc_attr( ( ! empty( $dep_module['basename'] ?? '' ) || ! empty( $dep_module['download_url'] ?? '' ) ) ? '1' : '0' ); ?>" data-slug="<?php echo esc_attr( $dep_slug ); ?>">
 													<span class="wps-toggle-slider"></span>
 												</label>
 												<span class="wps-progress" aria-live="polite"><span class="spinner is-active" style="float:none"></span><span class="bar"><span class="fill"></span></span><span class="progress-label"><?php esc_html_e( 'Working…', 'plugin-wp-support-thisismyurl' ); ?></span></span>
@@ -934,15 +1076,80 @@ class WPS_Dashboard_Widgets {
 		<?php
 	}
 
+	/**
+	 * Render health widget HTML (public for AJAX refresh).
+	 *
+	 * @param array  $health_data Health data array from get_health_check_results().
+	 * @param string $module_name Optional module name for context.
+	 * @return void
+	 */
+	public static function render_health_widget_html( array $health_data, string $module_name = '' ): void {
+		self::render_health_widget( $health_data, $module_name );
+	}
+
+	/**
+	 * Render events widget HTML (public for AJAX refresh).
+	 *
+	 * @param array $active_repos Active repository data.
+	 * @return void
+	 */
+	public static function render_events_widget_html( array $active_repos ): void {
+		?>
+		<div class="wps-events-feed">
+			<?php if ( empty( $active_repos ) ) : ?>
+				<p><em><?php esc_html_e( 'No active modules. Activate modules to see their updates.', 'plugin-wp-support-thisismyurl' ); ?></em></p>
+			<?php else : ?>
+				<p><em><?php esc_html_e( 'Showing events for active modules:', 'plugin-wp-support-thisismyurl' ); ?></em></p>
+				<ul class="wps-events-list" style="list-style: none; padding: 0; margin: 0;">
+					<?php foreach ( $active_repos as $repo_data ) : ?>
+						<li style="padding: 8px 0; border-bottom: 1px solid #e5e5e5;">
+							<strong><?php echo esc_html( $repo_data['name'] ); ?></strong>
+							<br />
+							<small>
+								<a href="<?php echo esc_url( 'https://github.com/thisismyurl/' . $repo_data['repo'] . '/releases' ); ?>" target="_blank" rel="noopener">
+									<?php esc_html_e( 'Latest releases', 'plugin-wp-support-thisismyurl' ); ?>
+								</a>
+								|
+								<a href="<?php echo esc_url( 'https://github.com/thisismyurl/' . $repo_data['repo'] . '/issues' ); ?>" target="_blank" rel="noopener">
+									<?php esc_html_e( 'Issues', 'plugin-wp-support-thisismyurl' ); ?>
+								</a>
+							</small>
+						</li>
+					<?php endforeach; ?>
+				</ul>
+				<p style="margin-top: 12px; text-align: center;">
+					<a href="https://github.com/thisismyurl?tab=repositories&q=plugin-" target="_blank" rel="noopener">
+						<?php esc_html_e( 'View all repositories →', 'plugin-wp-support-thisismyurl' ); ?>
+					</a>
+				</p>
+			<?php endif; ?>
+		</div>
+		<?php
+	}
+
 	private static function widget_system_health(): void {
 		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Site_Health' ) ) {
 			echo '<div class="wps-widget-content"><p><em>' . esc_html__( 'Health checks unavailable.', 'plugin-wp-support-thisismyurl' ) . '</em></p></div>';
 			return;
 		}
 
-		// Get health results for core module (system-wide health).
-		$health_data = \WPS\CoreSupport\WPS_Site_Health::get_health_check_results();
-		self::render_health_widget( $health_data, '' );
+		// Get active module slugs for filtering.
+		$active_modules = array();
+		$catalog = \WPS\CoreSupport\WPS_Module_Registry::get_catalog_with_status();
+		foreach ( $catalog as $module ) {
+			$slug = $module['slug'] ?? '';
+			if ( ! empty( $slug ) && \WPS\CoreSupport\WPS_Module_Registry::is_enabled( $slug ) ) {
+				$active_modules[] = $slug;
+			}
+		}
+
+		// Get health results for active modules only.
+		$health_data = \WPS\CoreSupport\WPS_Site_Health::get_health_check_results( $active_modules );
+		?>
+		<div id="wps-health-widget-container">
+			<?php self::render_health_widget( $health_data, '' ); ?>
+		</div>
+		<?php
 	}
 
 	/**
@@ -1023,31 +1230,23 @@ class WPS_Dashboard_Widgets {
 	}
 
 	private static function widget_events_and_news(): void {
+		// Get active module repos for filtering.
+		$active_repos = array();
+		$catalog = \WPS\CoreSupport\WPS_Module_Registry::get_catalog_with_status();
+		foreach ( $catalog as $module ) {
+			$slug = $module['slug'] ?? '';
+			if ( ! empty( $slug ) && \WPS\CoreSupport\WPS_Module_Registry::is_enabled( $slug ) ) {
+				$repo = 'plugin-' . $slug;
+				$active_repos[] = array(
+					'slug' => $slug,
+					'repo' => $repo,
+					'name' => $module['name'] ?? ucfirst( str_replace( '-', ' ', $slug ) ),
+				);
+			}
+		}
 		?>
-		<div class="wps-widget-content">
-			<div class="wps-events-feed">
-				<p><em><?php esc_html_e( 'Loading latest events and news from Support Suite repositories...', 'plugin-wp-support-thisismyurl' ); ?></em></p>
-				<ul class="wps-events-list" style="list-style: none; padding: 0; margin: 0;">
-					<li style="padding: 8px 0; border-bottom: 1px solid #e5e5e5;">
-						<strong><?php esc_html_e( 'Release Updates', 'plugin-wp-support-thisismyurl' ); ?></strong>
-						<br />
-						<small><?php esc_html_e( 'Latest plugin releases and updates', 'plugin-wp-support-thisismyurl' ); ?></small>
-					</li>
-					<li style="padding: 8px 0; border-bottom: 1px solid #e5e5e5;">
-						<strong><?php esc_html_e( 'GitHub Issues', 'plugin-wp-support-thisismyurl' ); ?></strong>
-						<br />
-						<small><?php esc_html_e( 'Recent discussions and feature requests', 'plugin-wp-support-thisismyurl' ); ?></small>
-					</li>
-					<li style="padding: 8px 0;">
-						<strong><?php esc_html_e( 'Suite Announcements', 'plugin-wp-support-thisismyurl' ); ?></strong>
-						<br />
-						<small><?php esc_html_e( 'Important suite-wide updates', 'plugin-wp-support-thisismyurl' ); ?></small>
-					</li>
-				</ul>
-				<p style="margin-top: 12px; text-align: center;">
-					<a href="https://github.com/thisismyurl?tab=repositories" target="_blank" rel="noopener"><?php esc_html_e( 'Visit GitHub →', 'plugin-wp-support-thisismyurl' ); ?></a>
-				</p>
-			</div>
+		<div class="wps-widget-content" id="wps-events-news-container">
+			<?php self::render_events_widget_html( $active_repos ); ?>
 		</div>
 		<?php
 	}

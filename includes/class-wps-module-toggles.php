@@ -228,6 +228,93 @@ class WPS_Module_Toggles {
 	}
 
 	/**
+	 * Get all modules that depend on the given module.
+	 *
+	 * @param string $parent_module Parent module slug.
+	 * @return array Array of dependent module slugs.
+	 */
+	public static function get_dependents( string $parent_module ): array {
+		$dependents = array();
+		foreach ( self::MODULE_DEPENDENCIES as $module => $deps ) {
+			if ( in_array( $parent_module, $deps, true ) ) {
+				$dependents[] = $module;
+			}
+		}
+		return $dependents;
+	}
+
+	/**
+	 * Cascade deactivate dependents and remember for restoration.
+	 *
+	 * @param string $parent_module Parent module being deactivated.
+	 * @return array Array of modules that were auto-deactivated.
+	 */
+	public static function cascade_deactivate( string $parent_module ): array {
+		$dependents = self::get_dependents( $parent_module );
+		$toggles    = self::get_toggles();
+		$deactivated = array();
+
+		foreach ( $dependents as $dep ) {
+			if ( ! empty( $toggles[ $dep ] ) ) {
+				$toggles[ $dep ] = 0;
+				$deactivated[] = $dep;
+			}
+		}
+
+		if ( ! empty( $deactivated ) ) {
+			update_option( 'WPS_module_toggles', $toggles, false );
+			self::remember_auto_deactivated( $parent_module, $deactivated );
+		}
+
+		return $deactivated;
+	}
+
+	/**
+	 * Remember which modules were auto-deactivated for later restoration.
+	 *
+	 * @param string $parent_module Parent module slug.
+	 * @param array  $deactivated Array of deactivated module slugs.
+	 * @return void
+	 */
+	private static function remember_auto_deactivated( string $parent_module, array $deactivated ): void {
+		$memory = get_option( 'WPS_auto_deactivated', array() );
+		if ( ! is_array( $memory ) ) {
+			$memory = array();
+		}
+		$memory[ $parent_module ] = $deactivated;
+		update_option( 'WPS_auto_deactivated', $memory, false );
+	}
+
+	/**
+	 * Get remembered auto-deactivated modules for a parent.
+	 *
+	 * @param string $parent_module Parent module slug.
+	 * @return array Array of module slugs that were auto-deactivated.
+	 */
+	public static function get_remembered_deactivated( string $parent_module ): array {
+		$memory = get_option( 'WPS_auto_deactivated', array() );
+		if ( ! is_array( $memory ) ) {
+			return array();
+		}
+		return $memory[ $parent_module ] ?? array();
+	}
+
+	/**
+	 * Clear remembered auto-deactivated modules for a parent.
+	 *
+	 * @param string $parent_module Parent module slug.
+	 * @return void
+	 */
+	public static function clear_remembered( string $parent_module ): void {
+		$memory = get_option( 'WPS_auto_deactivated', array() );
+		if ( ! is_array( $memory ) ) {
+			return;
+		}
+		unset( $memory[ $parent_module ] );
+		update_option( 'WPS_auto_deactivated', $memory, false );
+	}
+
+	/**
 	 * Check if plugin is installed.
 	 *
 	 * @param string $module Module slug.

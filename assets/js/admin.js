@@ -17,6 +17,7 @@
 		init: function() {
 			this.bindEvents();
 			this.initFilters();
+			this.syncInitialStates();
 		},
 
 		/**
@@ -32,6 +33,61 @@
 			if (saved) {
 				$filter.val(saved);
 				$filter.trigger('change');
+			}
+		},
+
+		/**
+		 * Apply initial card states based on toggle values.
+		 */
+		syncInitialStates: function() {
+			$('.wps-module-toggle').each(function() {
+				const $toggle = $(this);
+				const $card = $toggle.closest('.wps-module-card');
+				if (!$card.length) {
+					return;
+				}
+
+				TimuDashboard.applyModuleState($card, $toggle.is(':checked'));
+			});
+		},
+
+		/**
+		 * Apply enabled/disabled UI state to a module card.
+		 *
+		 * @param {jQuery} $card - Module card element.
+		 * @param {boolean} enabled - Whether the module is enabled.
+		 */
+		applyModuleState: function($card, enabled) {
+			$card.toggleClass('wps-module-enabled', enabled);
+			$card.toggleClass('wps-module-disabled', !enabled);
+
+			if (!$card.hasClass('wps-widget-module-card')) {
+				return;
+			}
+
+			$card.toggleClass('wps-module-card-inactive', !enabled);
+
+			const $link = $card.find('.wps-module-link').first();
+			if ($link.length) {
+				const storedUrl = $link.attr('data-url') || '';
+				if (!enabled) {
+					if ($link.attr('href')) {
+						$link.attr('data-url', $link.attr('href'));
+					}
+					$link.removeAttr('href')
+						.attr('aria-disabled', 'true')
+						.attr('tabindex', '-1')
+						.addClass('is-link-disabled');
+				} else if (storedUrl) {
+					$link.attr('href', storedUrl)
+						.removeAttr('aria-disabled')
+						.removeAttr('tabindex')
+						.removeClass('is-link-disabled');
+				} else {
+					$link.removeAttr('aria-disabled')
+						.removeAttr('tabindex')
+						.removeClass('is-link-disabled');
+				}
 			}
 		},
 
@@ -99,11 +155,15 @@
 			const isInstalled = installedData === 1 || installedData === '1' || installedData === true || installedData === 'true';
 
 		if (!slug) {
-			if (!isInstalled) {
-				$toggle.prop('checked', false);
-				TimuDashboard.showNotice('warning', wpsAdminData.i18n.installFirst);
-				return;
-			}
+			$toggle.prop('checked', false);
+			TimuDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
+			return;
+		}
+
+		if (!isInstalled) {
+			$toggle.prop('checked', false);
+			TimuDashboard.showNotice('warning', wpsAdminData.i18n.installFirst);
+			return;
 
 			// Disable toggle during request.
 			$toggle.prop('disabled', true);
@@ -125,14 +185,13 @@
 				success: function(response) {
 					if (response.success) {
 						// Update card state.
+						TimuDashboard.applyModuleState($card, enabled);
 						if (enabled) {
-							$card.removeClass('wps-module-disabled').addClass('wps-module-enabled');
 							$card.find('.wps-badge-disabled')
 								.removeClass('wps-badge-disabled')
 								.addClass('wps-badge-enabled')
 								.text(wpsAdminData.i18n.enabled);
 						} else {
-							$card.removeClass('wps-module-enabled').addClass('wps-module-disabled');
 							$card.find('.wps-badge-enabled')
 								.removeClass('wps-badge-enabled')
 								.addClass('wps-badge-disabled')

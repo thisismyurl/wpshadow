@@ -228,12 +228,13 @@ function wp_support_guard_disabled_modules(): void {
 		return;
 	}
 	// Normalize to full slug regardless of whether the suffix is included in the query param.
-	$slug    = str_contains( $raw_module, '-support-thisismyurl' ) ? $raw_module : $raw_module . '-support-thisismyurl';
-	$catalog = WPS_Module_Registry::get_catalog_with_status();
-	$enabled = (bool) ( $catalog[ $slug ]['enabled'] ?? false );
-	if ( $enabled ) {
+	$slug = str_contains( $raw_module, '-support-thisismyurl' ) ? $raw_module : $raw_module . '-support-thisismyurl';
+	
+	// Use live is_enabled() check instead of cached catalog to ensure accurate state.
+	if ( WPS_Module_Registry::is_enabled( $slug ) ) {
 		return;
 	}
+	
 	$target = is_network_admin() ? network_admin_url( 'admin.php?page=wp-support' ) : admin_url( 'admin.php?page=wp-support' );
 	wp_safe_redirect( $target );
 	exit;
@@ -810,9 +811,8 @@ function wp_support_register_module_submenus( string $capability ): void {
 				return false;
 			}
 
-			// CRITICAL: Check enabled state using live registry (not cached catalog).
-			$slug = $m['slug'] ?? '';
-			return WPS_Module_Registry::is_enabled( $slug );
+			// Always register if installed; pruning will handle visibility.
+			return true;
 		}
 	);
 
@@ -958,10 +958,8 @@ function wp_support_render_tab_router(): void {
 
 	// Block and redirect if hub module is disabled (avoid dead dashboard access).
 	if ( ! empty( $hub ) ) {
-		$slug    = $hub . '-support-thisismyurl';
-		$catalog = WPS_Module_Registry::get_catalog_with_status();
-		$enabled = (bool) ( $catalog[ $slug ]['enabled'] ?? false );
-		if ( ! $enabled ) {
+		$slug = $hub . '-support-thisismyurl';
+		if ( ! WPS_Module_Registry::is_enabled( $slug ) ) {
 			$parent_url = is_network_admin() ? network_admin_url( 'admin.php?page=wp-support' ) : admin_url( 'admin.php?page=wp-support' );
 			wp_safe_redirect( $parent_url );
 			exit;
@@ -969,9 +967,8 @@ function wp_support_render_tab_router(): void {
 
 		// Also block if spoke module is disabled.
 		if ( ! empty( $spoke ) ) {
-			$spoke_slug  = $spoke . '-support-thisismyurl';
-			$spoke_enabled = (bool) ( $catalog[ $spoke_slug ]['enabled'] ?? false );
-			if ( ! $spoke_enabled ) {
+			$spoke_slug = $spoke . '-support-thisismyurl';
+			if ( ! WPS_Module_Registry::is_enabled( $spoke_slug ) ) {
 				$parent_url = is_network_admin() ? network_admin_url( 'admin.php?page=wp-support&module=' . $hub ) : admin_url( 'admin.php?page=wp-support&module=' . $hub );
 				wp_safe_redirect( $parent_url );
 				exit;
@@ -1597,6 +1594,24 @@ function wps_ajax_toggle_module(): void {
 	// Update WPS_module_toggles array (unified toggle system).
 	$toggles = get_option( 'WPS_module_toggles', array() );
 	$toggles[ $slug ] = $enabled ? 1 : 0;
+
+	$deactivated = array();
+	$remembered  = array();
+
+	// Handle cascade deactivation of dependents.
+	if ( ! $enabled ) {
+		$deactivated = WPS_Module_Toggles::cascade_deactivate( $slug );
+		if ( ! empty( $deactivated ) ) {
+			// Reload toggles after cascade.
+			$toggles = get_option( 'WPS_module_toggles', array() );
+		}
+	}
+
+	// Handle restoration check on activation.
+	if ( $enabled ) {
+		$remembered = WPS_Module_Toggles::get_remembered_deactivated( $slug );
+	}
+
 	$success = update_option( 'WPS_module_toggles', $toggles );
 
 	// Clear catalog cache so submenu regenerates.
@@ -1623,7 +1638,21 @@ function wps_ajax_toggle_module(): void {
 				'user_id' => (int) $user->ID,
 			)
 		);
-		wp_send_json_success( array( 'message' => __( 'Module settings updated.', 'plugin-wp-support-thisismyurl' ) ) );
+
+		// Prepare response data.
+		$response_data = array( 'message' => __( 'Module settings updated.', 'plugin-wp-support-thisismyurl' ) );
+
+		// Add cascade info if modules were auto-deactivated.
+		if ( ! empty( $deactivated ) ) {
+			$response_data['deactivated'] = $deactivated;
+		}
+
+		// Add restoration prompt if remembered dependents exist.
+		if ( ! empty( $remembered ) ) {
+			$response_data['remembered'] = $remembered;
+		}
+
+		wp_send_json_success( $response_data );
 	} else {
 		WPS_Vault::add_log(
 			'error',

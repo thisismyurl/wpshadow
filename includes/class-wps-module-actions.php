@@ -41,6 +41,13 @@ class WPS_Module_Actions {
 
 		// Toggle module enabled setting (for bundled/non-plugin modules).
 		add_action( 'wp_ajax_WPS_module_toggle', array( __CLASS__, 'ajax_toggle_module_enabled' ) );
+
+		// Clear remembered deactivations after restoration.
+		add_action( 'wp_ajax_WPS_clear_remembered', array( __CLASS__, 'ajax_clear_remembered' ) );
+
+		// Refresh dashboard widgets dynamically.
+		add_action( 'wp_ajax_WPS_refresh_health_widget', array( __CLASS__, 'ajax_refresh_health_widget' ) );
+		add_action( 'wp_ajax_WPS_refresh_events_widget', array( __CLASS__, 'ajax_refresh_events_widget' ) );
 	}
 	/**
 	 * AJAX: Toggle module enabled setting (site or network scope).
@@ -419,6 +426,124 @@ class WPS_Module_Actions {
 		}
 
 		return '';
+	}
+
+	/**
+	 * AJAX: Clear remembered deactivations for a parent module after restoration.
+	 *
+	 * @return void
+	 */
+	public static function ajax_clear_remembered(): void {
+		// Verify nonce.
+		check_ajax_referer( 'WPS_module_actions', 'nonce' );
+
+		$network_scope = is_multisite() && is_network_admin();
+		$has_cap       = $network_scope ? current_user_can( 'manage_network_options' ) : current_user_can( 'manage_options' );
+		if ( ! $has_cap ) {
+			wp_send_json_error(
+				array( 'message' => __( 'You do not have permission to update module settings.', 'plugin-wp-support-thisismyurl' ) ),
+				403
+			);
+		}
+
+		$parent_slug = isset( $_POST['parent_slug'] ) ? sanitize_key( wp_unslash( $_POST['parent_slug'] ) ) : '';
+		if ( empty( $parent_slug ) ) {
+			wp_send_json_error(
+				array( 'message' => __( 'Missing parent slug.', 'plugin-wp-support-thisismyurl' ) ),
+				400
+			);
+		}
+
+		WPS_Module_Toggles::clear_remembered( $parent_slug );
+		wp_send_json_success( array( 'message' => __( 'Restoration memory cleared.', 'plugin-wp-support-thisismyurl' ) ) );
+	}
+
+	/**
+	 * AJAX: Refresh health widget with active modules only.
+	 *
+	 * @return void
+	 */
+	public static function ajax_refresh_health_widget(): void {
+		// Verify nonce.
+		check_ajax_referer( 'WPS_module_actions', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ), 403 );
+		}
+
+		// Get active module slugs.
+		$active_modules = array();
+		$catalog = WPS_Module_Registry::get_catalog_with_status();
+		foreach ( $catalog as $module ) {
+			$slug = $module['slug'] ?? '';
+			if ( ! empty( $slug ) && WPS_Module_Registry::is_enabled( $slug ) ) {
+				$active_modules[] = $slug;
+			}
+		}
+
+		// Get health data filtered by active modules.
+		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Site_Health' ) ) {
+			$health_data = WPS_Site_Health::get_health_check_results( $active_modules );
+		} else {
+			$health_data = array(
+				'score' => 0,
+				'status' => 'unavailable',
+				'results' => array(),
+				'counts' => array( 'good' => 0, 'warning' => 0, 'critical' => 0 ),
+			);
+		}
+
+		// Render widget HTML.
+		ob_start();
+		WPS_Dashboard_Widgets::render_health_widget_html( $health_data );
+		$html = ob_get_clean();
+
+		wp_send_json_success( array(
+			'html' => $html,
+			'active_modules' => $active_modules,
+			'timestamp' => current_time( 'timestamp' ),
+		) );
+	}
+
+	/**
+	 * AJAX: Refresh events and news widget for active modules.
+	 *
+	 * @return void
+	 */
+	public static function ajax_refresh_events_widget(): void {
+		// Verify nonce.
+		check_ajax_referer( 'WPS_module_actions', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ), 403 );
+		}
+
+		// Get active module slugs and their repos.
+		$active_repos = array();
+		$catalog = WPS_Module_Registry::get_catalog_with_status();
+		foreach ( $catalog as $module ) {
+			$slug = $module['slug'] ?? '';
+			if ( ! empty( $slug ) && WPS_Module_Registry::is_enabled( $slug ) ) {
+				// Extract repo from slug (e.g., 'vault-support-thisismyurl' → 'plugin-vault-support-thisismyurl').
+				$repo = 'plugin-' . $slug;
+				$active_repos[] = array(
+					'slug' => $slug,
+					'repo' => $repo,
+					'name' => $module['name'] ?? ucfirst( str_replace( '-', ' ', $slug ) ),
+				);
+			}
+		}
+
+		// Render widget HTML.
+		ob_start();
+		WPS_Dashboard_Widgets::render_events_widget_html( $active_repos );
+		$html = ob_get_clean();
+
+		wp_send_json_success( array(
+			'html' => $html,
+			'active_repos' => $active_repos,
+			'timestamp' => current_time( 'timestamp' ),
+		) );
 	}
 }
 
