@@ -2652,13 +2652,39 @@ add_action( 'plugins_loaded', __NAMESPACE__ . '\\wp_support_init' );
  * @return void
  */
 function render_settings_module_registry(): void {
+	$enabled   = (bool) get_option( 'timu_module_discovery_enabled', true );
+	$frequency = get_option( 'timu_module_discovery_frequency', 'on-demand' );
 	?>
-	<p><?php esc_html_e( 'Configure how modules are discovered and cataloged.', 'plugin-wp-support-thisismyurl' ); ?></p>
-	<div style="background: #f5f5f5; padding: 12px; border-radius: 4px; margin-top: 8px;">
-		<p><strong><?php esc_html_e( 'Module Sources:', 'plugin-wp-support-thisismyurl' ); ?></strong></p>
-		<p><?php esc_html_e( 'Automatic discovery from installed plugins with Hub & Spoke registration.', 'plugin-wp-support-thisismyurl' ); ?></p>
-		<small><?php echo wp_kses_post( sprintf( __( 'View catalog: <a href="%s">Modules</a>', 'plugin-wp-support-thisismyurl' ), esc_url( admin_url( 'admin.php?page=wp-support&timu_tab=modules' ) ) ) ); ?></small>
-	</div>
+	<form method="post" style="max-width: 600px;">
+		<?php wp_nonce_field( 'timu_settings_module_registry' ); ?>
+		<table class="form-table" role="presentation">
+			<tbody>
+				<tr>
+					<th scope="row"><label for="timu_module_discovery_enabled"><?php esc_html_e( 'Auto-Discovery', 'plugin-wp-support-thisismyurl' ); ?></label></th>
+					<td>
+						<input type="checkbox" id="timu_module_discovery_enabled" name="timu_module_discovery_enabled" value="1" <?php checked( $enabled, true ); ?> />
+						<label for="timu_module_discovery_enabled"><?php esc_html_e( 'Automatically discover modules from installed plugins', 'plugin-wp-support-thisismyurl' ); ?></label>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="timu_module_discovery_frequency"><?php esc_html_e( 'Discovery Frequency', 'plugin-wp-support-thisismyurl' ); ?></label></th>
+					<td>
+						<select id="timu_module_discovery_frequency" name="timu_module_discovery_frequency">
+							<option value="on-demand" <?php selected( $frequency, 'on-demand' ); ?>><?php esc_html_e( 'On-Demand (Manual)', 'plugin-wp-support-thisismyurl' ); ?></option>
+							<option value="daily" <?php selected( $frequency, 'daily' ); ?>><?php esc_html_e( 'Daily', 'plugin-wp-support-thisismyurl' ); ?></option>
+							<option value="weekly" <?php selected( $frequency, 'weekly' ); ?>><?php esc_html_e( 'Weekly', 'plugin-wp-support-thisismyurl' ); ?></option>
+						</select>
+						<p class="description"><?php esc_html_e( 'How often the module catalog should refresh.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<?php submit_button( __( 'Save Module Discovery Settings', 'plugin-wp-support-thisismyurl' ), 'primary', 'timu_save_module_discovery' ); ?>
+	</form>
+	<hr style="margin-top: 20px;">
+	<p>
+		<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?action=timu_rescan_modules' ), 'timu_rescan_modules' ) ); ?>" class="button"><?php esc_html_e( 'Rescan Modules Now', 'plugin-wp-support-thisismyurl' ); ?></a>
+	</p>
 	<?php
 }
 
@@ -2668,13 +2694,44 @@ function render_settings_module_registry(): void {
  * @return void
  */
 function render_settings_capabilities(): void {
+	$dashboard_role = get_option( 'timu_capability_dashboard_role', 'manage_options' );
+	$install_roles  = (array) get_option( 'timu_capability_install_roles', array( 'manage_options' ) );
+	$update_roles   = (array) get_option( 'timu_capability_update_roles', array( 'manage_options' ) );
 	?>
-	<p><?php esc_html_e( 'Define which roles and capabilities can manage modules.', 'plugin-wp-support-thisismyurl' ); ?></p>
-	<div style="background: #f5f5f5; padding: 12px; border-radius: 4px; margin-top: 8px;">
-		<p><strong><?php esc_html_e( 'Admin Access:', 'plugin-wp-support-thisismyurl' ); ?></strong></p>
-		<p><?php esc_html_e( 'Users with "manage_options" (Admin) or "manage_network_options" (Super Admin) can access the Support dashboard.', 'plugin-wp-support-thisismyurl' ); ?></p>
-		<small><?php echo wp_kses_post( sprintf( __( 'Fine-tune capabilities: <a href="%s">Capabilities</a>', 'plugin-wp-support-thisismyurl' ), esc_url( admin_url( 'admin.php?page=timu-capabilities' ) ) ) ); ?></small>
-	</div>
+	<form method="post" style="max-width: 600px;">
+		<?php wp_nonce_field( 'timu_settings_capabilities' ); ?>
+		<table class="form-table" role="presentation">
+			<tbody>
+				<tr>
+					<th scope="row"><label for="timu_capability_dashboard_role"><?php esc_html_e( 'Dashboard Access', 'plugin-wp-support-thisismyurl' ); ?></label></th>
+					<td>
+						<select id="timu_capability_dashboard_role" name="timu_capability_dashboard_role">
+							<option value="manage_options" <?php selected( $dashboard_role, 'manage_options' ); ?>><?php esc_html_e( 'Admin (manage_options)', 'plugin-wp-support-thisismyurl' ); ?></option>
+							<option value="manage_network_options" <?php selected( $dashboard_role, 'manage_network_options' ); ?>><?php esc_html_e( 'Super Admin (manage_network_options)', 'plugin-wp-support-thisismyurl' ); ?></option>
+						</select>
+						<p class="description"><?php esc_html_e( 'Minimum capability to access the Support dashboard.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Install Permissions', 'plugin-wp-support-thisismyurl' ); ?></th>
+					<td>
+						<label><input type="checkbox" name="timu_capability_install_roles[]" value="manage_options" <?php checked( in_array( 'manage_options', $install_roles, true ) ); ?> /> <?php esc_html_e( 'Admin', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<label><input type="checkbox" name="timu_capability_install_roles[]" value="manage_network_options" <?php checked( in_array( 'manage_network_options', $install_roles, true ) ); ?> /> <?php esc_html_e( 'Super Admin', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<p class="description"><?php esc_html_e( 'Which roles can install modules.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Update Permissions', 'plugin-wp-support-thisismyurl' ); ?></th>
+					<td>
+						<label><input type="checkbox" name="timu_capability_update_roles[]" value="manage_options" <?php checked( in_array( 'manage_options', $update_roles, true ) ); ?> /> <?php esc_html_e( 'Admin', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<label><input type="checkbox" name="timu_capability_update_roles[]" value="manage_network_options" <?php checked( in_array( 'manage_network_options', $update_roles, true ) ); ?> /> <?php esc_html_e( 'Super Admin', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<p class="description"><?php esc_html_e( 'Which roles can update modules.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<?php submit_button( __( 'Save Capabilities', 'plugin-wp-support-thisismyurl' ), 'primary', 'timu_save_capabilities' ); ?>
+	</form>
 	<?php
 }
 
@@ -2684,13 +2741,44 @@ function render_settings_capabilities(): void {
  * @return void
  */
 function render_settings_dashboard(): void {
-	$columns = (int) get_user_option( 'screen_layout_toplevel_page_wp-support' ) ?: 2;
+	$default_cols   = (int) get_option( 'timu_dashboard_default_columns', 2 );
+	$sticky_widgets = (array) get_option( 'timu_dashboard_sticky_widgets', array() );
+	$widget_sorting = get_option( 'timu_dashboard_widget_sorting', 'drag-order' );
 	?>
-	<p><?php esc_html_e( 'Customize the dashboard layout and widgets.', 'plugin-wp-support-thisismyurl' ); ?></p>
-	<div style="background: #f5f5f5; padding: 12px; border-radius: 4px; margin-top: 8px;">
-		<p><?php echo esc_html( sprintf( __( 'Current columns: %d (use Screen Options to change)', 'plugin-wp-support-thisismyurl' ), $columns ) ); ?></p>
-		<small><?php esc_html_e( 'Drag widgets to rearrange. Use Screen Options above to show/hide or adjust columns.', 'plugin-wp-support-thisismyurl' ); ?></small>
-	</div>
+	<form method="post" style="max-width: 600px;">
+		<?php wp_nonce_field( 'timu_settings_dashboard' ); ?>
+		<table class="form-table" role="presentation">
+			<tbody>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Default Column Layout', 'plugin-wp-support-thisismyurl' ); ?></th>
+					<td>
+						<label><input type="radio" name="timu_dashboard_default_columns" value="1" <?php checked( $default_cols, 1 ); ?> /> <?php esc_html_e( '1 Column', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<label><input type="radio" name="timu_dashboard_default_columns" value="2" <?php checked( $default_cols, 2 ); ?> /> <?php esc_html_e( '2 Columns', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<p class="description"><?php esc_html_e( 'Default dashboard layout for new users.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Sticky Widgets', 'plugin-wp-support-thisismyurl' ); ?></th>
+					<td>
+						<label><input type="checkbox" name="timu_dashboard_sticky_widgets[]" value="timu_quick_actions" <?php checked( in_array( 'timu_quick_actions', $sticky_widgets, true ) ); ?> /> <?php esc_html_e( 'Always show Quick Actions', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<label><input type="checkbox" name="timu_dashboard_sticky_widgets[]" value="timu_modules" <?php checked( in_array( 'timu_modules', $sticky_widgets, true ) ); ?> /> <?php esc_html_e( 'Always show Modules', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<p class="description"><?php esc_html_e( 'Widgets that cannot be hidden by users.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="timu_dashboard_widget_sorting"><?php esc_html_e( 'Widget Sorting', 'plugin-wp-support-thisismyurl' ); ?></label></th>
+					<td>
+						<select id="timu_dashboard_widget_sorting" name="timu_dashboard_widget_sorting">
+							<option value="drag-order" <?php selected( $widget_sorting, 'drag-order' ); ?>><?php esc_html_e( 'Allow Drag & Drop', 'plugin-wp-support-thisismyurl' ); ?></option>
+							<option value="locked" <?php selected( $widget_sorting, 'locked' ); ?>><?php esc_html_e( 'Locked (Fixed Order)', 'plugin-wp-support-thisismyurl' ); ?></option>
+						</select>
+						<p class="description"><?php esc_html_e( 'Allow users to rearrange dashboard widgets.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<?php submit_button( __( 'Save Dashboard Settings', 'plugin-wp-support-thisismyurl' ), 'primary', 'timu_save_dashboard' ); ?>
+	</form>
 	<?php
 }
 
@@ -2700,12 +2788,53 @@ function render_settings_dashboard(): void {
  * @return void
  */
 function render_settings_license(): void {
+	$license_key     = get_option( 'timu_license_key', '' );
+	$is_licensed     = ! empty( $license_key );
+	$auto_update     = (array) get_option( 'timu_license_auto_update_types', array( 'minor', 'patch' ) );
+	$update_channel  = get_option( 'timu_license_update_channel', 'stable' );
 	?>
-	<p><?php esc_html_e( 'Manage license key and update channels.', 'plugin-wp-support-thisismyurl' ); ?></p>
-	<div style="background: #f5f5f5; padding: 12px; border-radius: 4px; margin-top: 8px;">
-		<p><strong><?php esc_html_e( 'License Status:', 'plugin-wp-support-thisismyurl' ); ?></strong></p>
-		<p><?php esc_html_e( 'Not registered. Plugin updates are pulled from GitHub releases.', 'plugin-wp-support-thisismyurl' ); ?></p>
-	</div>
+	<form method="post" style="max-width: 600px;">
+		<?php wp_nonce_field( 'timu_settings_license' ); ?>
+		<table class="form-table" role="presentation">
+			<tbody>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'License Status', 'plugin-wp-support-thisismyurl' ); ?></th>
+					<td>
+						<p><?php echo $is_licensed ? '<span style="color: green;">✓ ' . esc_html__( 'Licensed', 'plugin-wp-support-thisismyurl' ) . '</span>' : '<span style="color: #999;">' . esc_html__( 'Not Licensed', 'plugin-wp-support-thisismyurl' ) . '</span>'; ?></p>
+						<p class="description"><?php esc_html_e( 'Updates are pulled from GitHub releases.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="timu_license_key"><?php esc_html_e( 'License Key', 'plugin-wp-support-thisismyurl' ); ?></label></th>
+					<td>
+						<input type="password" id="timu_license_key" name="timu_license_key" value="<?php echo esc_attr( $license_key ); ?>" placeholder="<?php esc_attr_e( 'Enter license key', 'plugin-wp-support-thisismyurl' ); ?>" style="width: 100%; max-width: 300px;" />
+						<p class="description"><?php esc_html_e( 'Masked for security. Leave empty to disable licensing.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Auto-Update', 'plugin-wp-support-thisismyurl' ); ?></th>
+					<td>
+						<label><input type="checkbox" name="timu_license_auto_update_types[]" value="major" <?php checked( in_array( 'major', $auto_update, true ) ); ?> /> <?php esc_html_e( 'Major Versions', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<label><input type="checkbox" name="timu_license_auto_update_types[]" value="minor" <?php checked( in_array( 'minor', $auto_update, true ) ); ?> /> <?php esc_html_e( 'Minor Versions', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<label><input type="checkbox" name="timu_license_auto_update_types[]" value="patch" <?php checked( in_array( 'patch', $auto_update, true ) ); ?> /> <?php esc_html_e( 'Patch Updates', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<p class="description"><?php esc_html_e( 'Which update types to install automatically.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="timu_license_update_channel"><?php esc_html_e( 'Update Channel', 'plugin-wp-support-thisismyurl' ); ?></label></th>
+					<td>
+						<select id="timu_license_update_channel" name="timu_license_update_channel">
+							<option value="stable" <?php selected( $update_channel, 'stable' ); ?>><?php esc_html_e( 'Stable', 'plugin-wp-support-thisismyurl' ); ?></option>
+							<option value="beta" <?php selected( $update_channel, 'beta' ); ?>><?php esc_html_e( 'Beta', 'plugin-wp-support-thisismyurl' ); ?></option>
+							<option value="dev" <?php selected( $update_channel, 'dev' ); ?>><?php esc_html_e( 'Development', 'plugin-wp-support-thisismyurl' ); ?></option>
+						</select>
+						<p class="description"><?php esc_html_e( 'Release channel for updates.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<?php submit_button( __( 'Save License Settings', 'plugin-wp-support-thisismyurl' ), 'primary', 'timu_save_license' ); ?>
+	</form>
 	<?php
 }
 
@@ -2715,13 +2844,66 @@ function render_settings_license(): void {
  * @return void
  */
 function render_settings_privacy(): void {
+	$log_retention       = (int) get_option( 'timu_privacy_log_retention_days', 90 );
+	$auto_delete_enabled = (bool) get_option( 'timu_privacy_auto_delete_enabled', false );
+	$auto_delete_days    = (int) get_option( 'timu_privacy_auto_delete_days', 90 );
+	$audit_level         = get_option( 'timu_privacy_audit_logging_level', 'standard' );
+	$export_format       = get_option( 'timu_privacy_export_format', 'json' );
+	$contrib_see_user    = (bool) get_option( 'timu_privacy_contributors_see_user_activity', false );
+	$editor_see_admin    = (bool) get_option( 'timu_privacy_editors_see_admin_activity', false );
 	?>
-	<p><?php esc_html_e( 'Control data retention, export, and deletion policies.', 'plugin-wp-support-thisismyurl' ); ?></p>
-	<div style="background: #f5f5f5; padding: 12px; border-radius: 4px; margin-top: 8px;">
-		<p><strong><?php esc_html_e( 'Activity Logs:', 'plugin-wp-support-thisismyurl' ); ?></strong></p>
-		<p><?php esc_html_e( 'Logs are stored in the Vault with configurable retention (handled by vault-support module).', 'plugin-wp-support-thisismyurl' ); ?></p>
-		<p><strong><?php esc_html_e( 'Data Export:', 'plugin-wp-support-thisismyurl' ); ?></strong></p>
-		<p><?php echo wp_kses_post( sprintf( __( 'Use WordPress privacy tools: <a href="%s">Privacy > Export Personal Data</a>', 'plugin-wp-support-thisismyurl' ), esc_url( admin_url( 'admin.php?page=privacy-export-personal-data' ) ) ) ); ?></p>
-	</div>
+	<form method="post" style="max-width: 600px;">
+		<?php wp_nonce_field( 'timu_settings_privacy' ); ?>
+		<table class="form-table" role="presentation">
+			<tbody>
+				<tr>
+					<th scope="row"><label for="timu_privacy_log_retention_days"><?php esc_html_e( 'Activity Log Retention', 'plugin-wp-support-thisismyurl' ); ?></label></th>
+					<td>
+						<input type="number" id="timu_privacy_log_retention_days" name="timu_privacy_log_retention_days" value="<?php echo esc_attr( $log_retention ); ?>" min="1" max="3650" /> <?php esc_html_e( 'days', 'plugin-wp-support-thisismyurl' ); ?>
+						<p class="description"><?php esc_html_e( 'How long to keep activity logs.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Auto-Delete Old Logs', 'plugin-wp-support-thisismyurl' ); ?></th>
+					<td>
+						<label><input type="checkbox" name="timu_privacy_auto_delete_enabled" value="1" <?php checked( $auto_delete_enabled, true ); ?> /> <?php esc_html_e( 'Automatically delete logs older than', 'plugin-wp-support-thisismyurl' ); ?></label>
+						<input type="number" name="timu_privacy_auto_delete_days" value="<?php echo esc_attr( $auto_delete_days ); ?>" min="1" max="3650" style="width: 80px;" /> <?php esc_html_e( 'days', 'plugin-wp-support-thisismyurl' ); ?>
+						<p class="description"><?php esc_html_e( 'Clean up old activity records automatically.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="timu_privacy_audit_logging_level"><?php esc_html_e( 'Audit Logging Level', 'plugin-wp-support-thisismyurl' ); ?></label></th>
+					<td>
+						<select id="timu_privacy_audit_logging_level" name="timu_privacy_audit_logging_level">
+							<option value="minimal" <?php selected( $audit_level, 'minimal' ); ?>><?php esc_html_e( 'Minimal', 'plugin-wp-support-thisismyurl' ); ?></option>
+							<option value="standard" <?php selected( $audit_level, 'standard' ); ?>><?php esc_html_e( 'Standard', 'plugin-wp-support-thisismyurl' ); ?></option>
+							<option value="verbose" <?php selected( $audit_level, 'verbose' ); ?>><?php esc_html_e( 'Verbose', 'plugin-wp-support-thisismyurl' ); ?></option>
+						</select>
+						<p class="description"><?php esc_html_e( 'How detailed the activity logs should be.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="timu_privacy_export_format"><?php esc_html_e( 'GDPR Export Format', 'plugin-wp-support-thisismyurl' ); ?></label></th>
+					<td>
+						<select id="timu_privacy_export_format" name="timu_privacy_export_format">
+							<option value="json" <?php selected( $export_format, 'json' ); ?>><?php esc_html_e( 'JSON', 'plugin-wp-support-thisismyurl' ); ?></option>
+							<option value="csv" <?php selected( $export_format, 'csv' ); ?>><?php esc_html_e( 'CSV', 'plugin-wp-support-thisismyurl' ); ?></option>
+							<option value="zip" <?php selected( $export_format, 'zip' ); ?>><?php esc_html_e( 'ZIP Archive', 'plugin-wp-support-thisismyurl' ); ?></option>
+						</select>
+						<p class="description"><?php esc_html_e( 'Format for data exports (privacy requests).', 'plugin-wp-support-thisismyurl' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Activity Visibility', 'plugin-wp-support-thisismyurl' ); ?></th>
+					<td>
+						<label><input type="checkbox" name="timu_privacy_contributors_see_user_activity" value="1" <?php checked( $contrib_see_user, true ); ?> /> <?php esc_html_e( 'Contributors can view other user activity', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<label><input type="checkbox" name="timu_privacy_editors_see_admin_activity" value="1" <?php checked( $editor_see_admin, true ); ?> /> <?php esc_html_e( 'Editors can view admin activity', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<p class="description"><?php esc_html_e( 'Control who can see activity logs from other roles.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<?php submit_button( __( 'Save Privacy Settings', 'plugin-wp-support-thisismyurl' ), 'primary', 'timu_save_privacy' ); ?>
+	</form>
 	<?php
 }
