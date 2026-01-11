@@ -36,10 +36,11 @@ class WPS_License_Widget {
 	 * Initialize the license widget
 	 */
 	public static function init(): void {
-		// Add widget to all WP Support pages.
-		add_action( 'wp_dashboard_setup', array( __CLASS__, 'maybe_add_to_dashboard' ) );
+		// Add widget to all WP Support pages (use admin_head for custom pages).
+		add_action( 'admin_head', array( __CLASS__, 'maybe_add_to_dashboard' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_widget_scripts' ) );
 		add_action( 'admin_footer', array( __CLASS__, 'force_widget_position' ) );
+		add_action( 'admin_init', array( __CLASS__, 'clear_screen_layout_cache' ) );
 
 		// Prevent dismissal if unlicensed.
 		add_filter( 'user_can_dismiss_widget', array( __CLASS__, 'prevent_dismissal' ), 10, 3 );
@@ -90,14 +91,19 @@ class WPS_License_Widget {
 			return;
 		}
 
-		// Add widget with high priority to appear first.
+		$screen = get_current_screen();
+		if ( ! $screen ) {
+			return;
+		}
+
+		// Add widget with core priority to appear first.
 		add_meta_box(
 			self::WIDGET_ID,
 			__( 'License Status', 'plugin-wp-support-thisismyurl' ),
 			array( __CLASS__, 'render_widget' ),
-			get_current_screen()->id,
+			$screen->id,
 			'side',
-			'high'
+			'core' // Use 'core' instead of 'high' for top positioning
 		);
 	}
 
@@ -257,6 +263,16 @@ class WPS_License_Widget {
 				order: -999 !important;
 			}
 			
+			/* Override any saved positions */
+			.postbox-container .meta-box-sortables {
+				display: flex;
+				flex-direction: column;
+			}
+			
+			#' . self::WIDGET_ID . ' {
+				order: -999 !important;
+			}
+			
 			/* Highlight widget when unlicensed */
 			.wps-license-unlicensed #' . self::WIDGET_ID . ',
 			.wps-license-invalid #' . self::WIDGET_ID . ' {
@@ -289,7 +305,8 @@ class WPS_License_Widget {
 		(function($) {
 			'use strict';
 			
-			$(document).ready(function() {
+			// Run immediately and on page load
+			function positionLicenseWidget() {
 				var widgetId = '<?php echo esc_js( self::WIDGET_ID ); ?>';
 				var $widget = $('#' + widgetId);
 				var isLicensed = <?php echo $is_licensed ? 'true' : 'false'; ?>;
@@ -298,37 +315,61 @@ class WPS_License_Widget {
 					return;
 				}
 				
-				// Force widget to top of side column.
-				var $sideColumn = $('#postbox-container-1 .meta-box-sortables');
+				// Find all possible side column selectors
+				var $sideColumn = $('#postbox-container-1 .meta-box-sortables, ' +
+									'#side-sortables, ' +
+									'.postbox-container.side .meta-box-sortables');
+				
 				if ($sideColumn.length > 0) {
-					$widget.prependTo($sideColumn);
+					// Force to very first position
+					$sideColumn.first().prepend($widget);
+					$widget.show();
 				}
 				
 				// Prevent dragging if unlicensed.
 				if (!isLicensed) {
-					$widget.removeClass('postbox');
+					$widget.removeClass('postbox closed');
+					$widget.addClass('postbox');
 					$widget.find('.hndle').css('cursor', 'default');
 					
 					// Disable sortable on this specific widget.
-					if (typeof postboxes !== 'undefined') {
-						$widget.off('mousedown');
-					}
+					$widget.off('mousedown');
 					
 					// Re-position if user tries to move it.
 					var repositionTimer;
-					$('.meta-box-sortables').on('sortstop', function() {
+					$('.meta-box-sortables').on('sortstop sortupdate', function() {
 						clearTimeout(repositionTimer);
 						repositionTimer = setTimeout(function() {
 							if ($widget.index() !== 0) {
-								$widget.prependTo($sideColumn);
+								$sideColumn.first().prepend($widget);
 							}
-						}, 50);
+						}, 10);
 					});
+					
+					// Force open if closed
+					$widget.removeClass('closed');
+					$widget.find('.handlediv').remove();
+					$widget.find('.handle-actions').remove();
 				}
 				
 				// Add body class for styling.
 				$('body').addClass(isLicensed ? 'wps-license-licensed' : 'wps-license-unlicensed');
+			}
+			
+			// Run immediately
+			positionLicenseWidget();
+			
+			// Run on DOM ready
+			$(document).ready(function() {
+				positionLicenseWidget();
 			});
+			
+			// Run after postboxes initialize
+			$(window).on('load', function() {
+				setTimeout(positionLicenseWidget, 100);
+				setTimeout(positionLicenseWidget, 500);
+			});
+			
 		})(jQuery);
 		</script>
 		<?php
@@ -368,5 +409,42 @@ class WPS_License_Widget {
 		$license_valid = ( $update_data && is_array( $update_data ) ) ? ( $update_data['license_valid'] ?? false ) : false;
 
 		return $has_license && $license_valid;
+	}
+
+	/**
+	 * Clear screen layout cache to force widget reordering
+	 */
+	public static function clear_screen_layout_cache(): void {
+		if ( ! self::is_timu_page() ) {
+			return;
+		}
+
+		$user_id = get_current_user_id();
+		if ( ! $user_id ) {
+			return;
+		}
+
+		// Clear screen layout options that cache widget positions.
+		$screen = get_current_screen();
+		if ( $screen ) {
+			delete_user_meta( $user_id, 'meta-box-order_' . $screen->id );
+			delete_user_meta( $user_id, 'screen_layout_' . $screen->id );
+			delete_user_meta( $user_id, 'closedpostboxes_' . $screen->id );
+			delete_user_meta( $user_id, 'metaboxhidden_' . $screen->id );
+		}
+
+		// Also clear for common TIMU screen IDs.
+		$timu_screens = array(
+			'toplevel_page_wp-support',
+			'wp-support_page_image-hub',
+			'wp-support_page_video-hub',
+		);
+
+		foreach ( $timu_screens as $screen_id ) {
+			delete_user_meta( $user_id, 'meta-box-order_' . $screen_id );
+			delete_user_meta( $user_id, 'screen_layout_' . $screen_id );
+			delete_user_meta( $user_id, 'closedpostboxes_' . $screen_id );
+			delete_user_meta( $user_id, 'metaboxhidden_' . $screen_id );
+		}
 	}
 }
