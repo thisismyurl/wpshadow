@@ -5,8 +5,8 @@
  * Plugin Name:         WP Support (thisismyurl)
  * Plugin URI:          https://thisismyurl.com/plugin-wp-support-thisismyurl/?source=plugin-wp-support-thisismyurl
  * Donate link:         https://thisismyurl.com/plugin-wp-support-thisismyurl/#register?source=plugin-wp-support-thisismyurl
- * Description:         The foundational plugin for all thisismyurl plugin-* repositories. Provides the backbone architecture for hub and spoke plugins, managing installations, updates, and features.
- * Tags:                WordPress, plugin, foundation, hub, architecture, management, suite
+ * Description:         The foundational support plugin for WordPress with comprehensive health diagnostics, emergency recovery, backup verification, and documentation management. Optionally extends with module ecosystem (Media Hub, Image Formats, Vault Storage, and more).
+ * Tags:                WordPress, plugin, foundation, hub, architecture, management, suite, diagnostics, health, backup
  * Version:             1.2601.73001
  * Requires at least:   6.4
  * Requires PHP:        8.1.29
@@ -1536,6 +1536,16 @@ function wp_support_render_modules(): void {
 	if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
 	}
+
+	// Display informational notice about modules being optional.
+	WPS_Notice_Manager::render_notice(
+		'wps_modules_are_optional',
+		wp_kses_post(
+			__( '<strong>Modules are optional enhancements.</strong> WordPress Support works perfectly as a standalone core with full diagnostics, emergency recovery, backup verification, and documentation management. Install modules only if you need specialized features like media optimization or vault storage.', 'plugin-wp-support-thisismyurl' )
+		),
+		'info',
+		array( 'capability' => 'manage_options' )
+	);
 
 	$catalog_modules = WPS_Module_Registry::get_catalog_with_status();
 	$modules         = $catalog_modules;
