@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return void
  */
 function wp_support_render_settings( string $hub_id = '' ): void {
-	if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
+	if ( ! timu_can_manage_settings() ) {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
 	}
 
@@ -533,6 +533,7 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/class-timu-tab-navigation.php';
 	require_once wp_support_PATH . 'includes/class-timu-dashboard-widgets.php';
 	require_once wp_support_PATH . 'includes/class-settings-ajax.php';
+	require_once wp_support_PATH . 'includes/timu-capability-helpers.php';
 
 	// Load CLI commands when WP-CLI present.
 	if ( defined( 'WP_CLI' ) && WP_CLI ) {
@@ -1273,7 +1274,7 @@ function timu_get_hub_tabs_for_spoke( string $hub_id, string $spoke_id ): array 
  * @return void
  */
 function wp_support_render_dashboard( string $hub_id = '', string $spoke_id = '' ): void {
-	if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
+	if ( ! timu_can_access_dashboard() ) {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
 	}
 
@@ -1535,12 +1536,8 @@ function timu_ajax_toggle_module(): void {
 function timu_ajax_install_module(): void {
 	check_ajax_referer( 'timu_module_action', 'nonce' );
 
-	if ( is_multisite() && is_network_admin() ) {
-		if ( ! current_user_can( 'manage_network_plugins' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
-		}
-	} elseif ( ! current_user_can( 'install_plugins' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
+	if ( ! timu_can_install_modules() ) {
+		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
 	}
 
 	$slug      = sanitize_text_field( wp_unslash( $_POST['slug'] ?? '' ) );
@@ -1657,12 +1654,8 @@ function timu_ajax_install_module(): void {
 function timu_ajax_update_module(): void {
 	check_ajax_referer( 'timu_module_action', 'nonce' );
 
-	if ( is_multisite() && is_network_admin() ) {
-		if ( ! current_user_can( 'manage_network_plugins' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
-		}
-	} elseif ( ! current_user_can( 'update_plugins' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
+	if ( ! timu_can_update_modules() ) {
+		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
 	}
 
 	$slug      = sanitize_text_field( wp_unslash( $_POST['slug'] ?? '' ) );
