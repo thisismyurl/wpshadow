@@ -824,12 +824,6 @@ class WPS_Dashboard_Widgets {
 		?>
 		<div class="wps-widget-content wps-quick-actions">
 			<div class="wps-actions-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-				<!-- Settings Action -->
-				<a href="<?php echo esc_url( WPS_Tab_Navigation::build_tab_url( 'settings' ) ); ?>" class="button button-primary" style="display: flex; align-items: center; justify-content: center; padding: 10px; text-align: center;">
-					<span class="dashicons dashicons-admin-settings" style="margin-right: 5px;"></span>
-					<?php esc_html_e( 'Settings', 'plugin-wp-support-thisismyurl' ); ?>
-				</a>
-
 				<!-- Site Health Action -->
 				<a href="<?php echo esc_url( $health_url ); ?>" class="button" style="display: flex; align-items: center; justify-content: center; padding: 10px; text-align: center;">
 					<span class="dashicons dashicons-heart" style="margin-right: 5px;"></span>
@@ -858,6 +852,14 @@ class WPS_Dashboard_Widgets {
 					<?php esc_html_e( 'Get Help', 'plugin-wp-support-thisismyurl' ); ?>
 				</a>
 			</div>
+			
+			<!-- Configure Dashboard Text Link -->
+			<div style="margin-top: 15px; text-align: center;">
+				<a href="<?php echo esc_url( WPS_Tab_Navigation::build_tab_url( 'settings' ) ); ?>" style="color: #2271b1; text-decoration: none; font-size: 13px;">
+					<?php esc_html_e( 'Configure Dashboard', 'plugin-wp-support-thisismyurl' ); ?>
+				</a>
+			</div>
+			
 			<div id="wps-action-feedback" style="margin-top: 10px; display: none;"></div>
 		</div>
 		<?php
