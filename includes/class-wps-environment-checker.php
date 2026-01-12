@@ -663,24 +663,25 @@ class WPS_Environment_Checker {
 	 */
 	private static function convert_to_bytes( string $value ): int {
 		$value = trim( $value );
-		if ( empty( $value ) ) {
+		if ( empty( $value ) || strlen( $value ) === 0 ) {
 			return 0;
 		}
+		
 		$last = strtolower( $value[ strlen( $value ) - 1 ] );
-		$value = (int) $value;
+		$numeric_value = (int) $value;
 
 		switch ( $last ) {
 			case 'g':
-				$value *= 1024;
+				$numeric_value *= 1024;
 				// Fall through.
 			case 'm':
-				$value *= 1024;
+				$numeric_value *= 1024;
 				// Fall through.
 			case 'k':
-				$value *= 1024;
+				$numeric_value *= 1024;
 		}
 
-		return $value;
+		return $numeric_value;
 	}
 
 	/**
