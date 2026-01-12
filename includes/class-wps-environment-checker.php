@@ -602,7 +602,8 @@ class WPS_Environment_Checker {
 		}
 
 		// Check if notice was dismissed.
-		if ( WPS_Notice_Manager::is_dismissed( 'wps_environment_constraints' ) ) {
+		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Notice_Manager' )
+			&& WPS_Notice_Manager::is_dismissed( 'wps_environment_constraints' ) ) {
 			return;
 		}
 
@@ -663,11 +664,16 @@ class WPS_Environment_Checker {
 	 */
 	private static function convert_to_bytes( string $value ): int {
 		$value = trim( $value );
-		if ( empty( $value ) || strlen( $value ) === 0 ) {
+		if ( empty( $value ) ) {
 			return 0;
 		}
 		
-		$last = strtolower( $value[ strlen( $value ) - 1 ] );
+		$last_char = substr( $value, -1 );
+		if ( ! $last_char ) {
+			return 0;
+		}
+		
+		$last = strtolower( $last_char );
 		$numeric_value = (int) $value;
 
 		switch ( $last ) {
