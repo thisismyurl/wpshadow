@@ -1692,6 +1692,11 @@ function wp_support_render_features_page( string $level, string $hub_id = '', st
 		wp_die( esc_html__( 'You do not have sufficient permissions to manage features.', 'plugin-wp-support-thisismyurl' ) );
 	}
 
+	// Enqueue postbox script for widget dragging
+	wp_enqueue_script( 'postbox' );
+	wp_enqueue_script( 'common' );
+	wp_enqueue_style( 'common' );
+
 	$network_scope = is_multisite() && is_network_admin();
 	$features      = WPS_Feature_Registry::get_features_by_scope( $level, $hub_id, $spoke_id, $network_scope );
 

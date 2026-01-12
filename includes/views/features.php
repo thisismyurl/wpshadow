@@ -47,10 +47,14 @@ foreach ( $features as $feature ) {
 					<p><?php esc_html_e( 'No features registered for this context yet.', 'plugin-wp-support-thisismyurl' ); ?></p>
 				</div>
 			<?php else : ?>
+				<div class="meta-box-sortables">
 				<?php foreach ( $grouped_features as $group_id => $group_data ) : ?>
-					<div class="wps-feature-widget" id="wps-widget-<?php echo esc_attr( $group_id ); ?>">
+					<div class="wps-feature-widget postbox" id="wps-widget-<?php echo esc_attr( $group_id ); ?>">
 						<div class="wps-widget-header" style="border-bottom: 1px solid #ddd; padding: 12px; background: #f5f5f5; border-radius: 3px 3px 0 0;">
 							<h3 style="margin: 0 0 4px 0; font-size: 13px; font-weight: 600; color: #23282d;">
+								<button type="button" class="handlediv button-link" aria-expanded="true">
+									<span class="screen-reader-text"><?php echo esc_html__( 'Toggle feature group', 'plugin-wp-support-thisismyurl' ); ?></span>
+								</button>
 								<?php echo esc_html( $group_data['label'] ); ?>
 							</h3>
 							<p style="margin: 0; font-size: 12px; color: #666;">
@@ -106,7 +110,8 @@ foreach ( $features as $feature ) {
 						</div>
 					</div>
 				<?php endforeach; ?>
-			<?php endif; ?>
+				<?php endforeach; ?>
+			</div>
 
 			<p class="submit">
 				<button type="submit" class="button button-primary">
@@ -123,10 +128,22 @@ foreach ( $features as $feature ) {
 </div>
 
 <style>
+	.meta-box-sortables {
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+	}
+
 	.wps-feature-widget {
 		background: #fff;
 		border: 1px solid #ddd;
 		border-radius: 3px;
+		margin-bottom: 20px;
+		cursor: move;
+	}
+
+	.wps-feature-widget.closed .wps-widget-content {
+		display: none;
 	}
 
 	.wps-feature-widget .wp-list-table {
@@ -151,3 +168,27 @@ foreach ( $features as $feature ) {
 		text-align: center;
 	}
 </style>
+
+<script>
+(function() {
+	// Enqueue postbox script if not already loaded
+	if ( typeof postboxes !== 'undefined' ) {
+		// Initialize sortable postboxes for features tab
+		postboxes.add_postbox_toggles('wps_features_page');
+		
+		// Save widget state on toggle
+		jQuery(document).on('postbox-toggled', function(e, postbox) {
+			var closed = postbox.hasClass('closed') ? 1 : 0;
+			jQuery.post(
+				ajaxurl,
+				{
+					action: 'wps_save_widget_state',
+					postbox_id: postbox.attr('id'),
+					closed: closed,
+					nonce: jQuery('input[name="wps_features_nonce"]').val()
+				}
+			);
+		});
+	}
+})();
+</script>
