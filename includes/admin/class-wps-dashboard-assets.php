@@ -1,3 +1,14 @@
+<?php
+/**
+ * Dashboard Asset Display Manager
+ *
+ * Automatically displays plugin icon and banner in WordPress dashboard
+ * if asset files exist.
+ *
+ * @since 1.1.0
+ * @package TIMU_WP_Support
+ */
+
 declare(strict_types=1);
 
 namespace WPS\CoreSupport\Admin;
