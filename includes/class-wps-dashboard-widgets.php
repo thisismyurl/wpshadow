@@ -77,6 +77,7 @@ class WPS_Dashboard_Widgets {
 				array( __CLASS__, 'widget_active_hubs' ),
 			),
 			array(
+				array( __CLASS__, 'widget_tips_coach' ),
 				array( __CLASS__, 'widget_quick_actions' ),
 			)
 		);
@@ -865,6 +866,29 @@ class WPS_Dashboard_Widgets {
 			</div>
 			
 			<div id="wps-action-feedback" style="margin-top: 10px; display: none;"></div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Tips Coach Widget - Contextual next-best-action cards.
+	 *
+	 * @return void
+	 */
+	private static function widget_tips_coach(): void {
+		if ( ! class_exists( '\\WPS\\CoreSupport\\Features\\WPS_Feature_Tips_Coach' ) ) {
+			return;
+		}
+
+		// Render the Tips Coach widget
+		?>
+		<div class="postbox">
+			<div class="postbox-header">
+				<h2 class="hndle"><?php esc_html_e( 'Tips Coach', 'plugin-wp-support-thisismyurl' ); ?></h2>
+			</div>
+			<div class="inside">
+				<?php \WPS\CoreSupport\Features\WPS_Feature_Tips_Coach::render_widget(); ?>
+			</div>
 		</div>
 		<?php
 	}
