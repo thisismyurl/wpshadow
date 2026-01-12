@@ -590,6 +590,14 @@ function wp_support_init(): void {
 	// Load capability manager.
 	require_once wp_support_PATH . 'includes/class-wps-capabilities.php';
 
+	// Load Environment Checker for server capability validation.
+	require_once wp_support_PATH . 'includes/class-wps-environment-checker.php';
+	WPS_Environment_Checker::init();
+
+	// Load Server Limits Manager for resource monitoring and graceful degradation.
+	require_once wp_support_PATH . 'includes/class-wps-server-limits.php';
+	WPS_Server_Limits::init();
+
 	// Load Site Health integration.
 	require_once wp_support_PATH . 'includes/class-wps-site-health.php';
 	WPS_Site_Health::init();
