@@ -49,7 +49,7 @@ class WPS_Feature_Tips_Coach {
 	 */
 	public static function detect_site_type(): string {
 		// Check for WooCommerce
-		if ( class_exists( 'WooCommerce' ) || is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
+		if ( class_exists( 'WooCommerce' ) || self::is_plugin_active_safe( 'woocommerce/woocommerce.php' ) ) {
 			return self::TYPE_WOOCOMMERCE;
 		}
 
@@ -62,7 +62,7 @@ class WPS_Feature_Tips_Coach {
 		);
 
 		foreach ( $lms_plugins as $plugin ) {
-			if ( is_plugin_active( $plugin ) ) {
+			if ( self::is_plugin_active_safe( $plugin ) ) {
 				return self::TYPE_LMS;
 			}
 		}
@@ -248,46 +248,54 @@ class WPS_Feature_Tips_Coach {
 
 		// Check if WooCommerce setup is complete
 		if ( function_exists( 'WC' ) ) {
+			$wc = WC();
+			
 			// Check if payment gateway is configured
-			$gateways = WC()->payment_gateways->get_available_payment_gateways();
-			if ( empty( $gateways ) && ! self::is_action_completed( 'setup_payment_gateway' ) ) {
-				$tips[] = array(
-					'id'          => 'setup_payment_gateway',
-					'title'       => __( 'Configure Payment Gateway', 'plugin-wp-support-thisismyurl' ),
-					'description' => __( 'Set up a payment method to start accepting orders.', 'plugin-wp-support-thisismyurl' ),
-					'action'      => 'open_woo_payments',
-					'action_label' => __( 'Configure Now', 'plugin-wp-support-thisismyurl' ),
-					'icon'        => 'dashicons-money-alt',
-					'priority'    => 95,
-				);
+			if ( isset( $wc->payment_gateways ) && method_exists( $wc->payment_gateways, 'get_available_payment_gateways' ) ) {
+				$gateways = $wc->payment_gateways->get_available_payment_gateways();
+				if ( empty( $gateways ) && ! self::is_action_completed( 'setup_payment_gateway' ) ) {
+					$tips[] = array(
+						'id'          => 'setup_payment_gateway',
+						'title'       => __( 'Configure Payment Gateway', 'plugin-wp-support-thisismyurl' ),
+						'description' => __( 'Set up a payment method to start accepting orders.', 'plugin-wp-support-thisismyurl' ),
+						'action'      => 'open_woo_payments',
+						'action_label' => __( 'Configure Now', 'plugin-wp-support-thisismyurl' ),
+						'icon'        => 'dashicons-money-alt',
+						'priority'    => 95,
+					);
+				}
 			}
 
 			// Check if shipping is configured
-			$shipping_methods = WC()->shipping()->get_shipping_methods();
-			if ( empty( $shipping_methods ) && ! self::is_action_completed( 'setup_shipping' ) ) {
-				$tips[] = array(
-					'id'          => 'setup_shipping',
-					'title'       => __( 'Configure Shipping Methods', 'plugin-wp-support-thisismyurl' ),
-					'description' => __( 'Set up shipping options for your customers.', 'plugin-wp-support-thisismyurl' ),
-					'action'      => 'open_woo_shipping',
-					'action_label' => __( 'Configure Now', 'plugin-wp-support-thisismyurl' ),
-					'icon'        => 'dashicons-cart',
-					'priority'    => 90,
-				);
+			if ( isset( $wc->shipping ) && method_exists( $wc->shipping, 'get_shipping_methods' ) ) {
+				$shipping_methods = $wc->shipping->get_shipping_methods();
+				if ( empty( $shipping_methods ) && ! self::is_action_completed( 'setup_shipping' ) ) {
+					$tips[] = array(
+						'id'          => 'setup_shipping',
+						'title'       => __( 'Configure Shipping Methods', 'plugin-wp-support-thisismyurl' ),
+						'description' => __( 'Set up shipping options for your customers.', 'plugin-wp-support-thisismyurl' ),
+						'action'      => 'open_woo_shipping',
+						'action_label' => __( 'Configure Now', 'plugin-wp-support-thisismyurl' ),
+						'icon'        => 'dashicons-cart',
+						'priority'    => 90,
+					);
+				}
 			}
 
 			// Check if tax settings are configured
-			$tax_enabled = wc_tax_enabled();
-			if ( ! $tax_enabled && ! self::is_action_completed( 'setup_taxes' ) ) {
-				$tips[] = array(
-					'id'          => 'setup_taxes',
-					'title'       => __( 'Configure Tax Settings', 'plugin-wp-support-thisismyurl' ),
-					'description' => __( 'Set up tax rates for your products.', 'plugin-wp-support-thisismyurl' ),
-					'action'      => 'open_woo_tax',
-					'action_label' => __( 'Configure Now', 'plugin-wp-support-thisismyurl' ),
-					'icon'        => 'dashicons-calculator',
-					'priority'    => 85,
-				);
+			if ( function_exists( 'wc_tax_enabled' ) ) {
+				$tax_enabled = wc_tax_enabled();
+				if ( ! $tax_enabled && ! self::is_action_completed( 'setup_taxes' ) ) {
+					$tips[] = array(
+						'id'          => 'setup_taxes',
+						'title'       => __( 'Configure Tax Settings', 'plugin-wp-support-thisismyurl' ),
+						'description' => __( 'Set up tax rates for your products.', 'plugin-wp-support-thisismyurl' ),
+						'action'      => 'open_woo_tax',
+						'action_label' => __( 'Configure Now', 'plugin-wp-support-thisismyurl' ),
+						'icon'        => 'dashicons-calculator',
+						'priority'    => 85,
+					);
+				}
 			}
 		}
 
@@ -413,6 +421,19 @@ class WPS_Feature_Tips_Coach {
 	}
 
 	/**
+	 * Check if a plugin is active (safe wrapper).
+	 *
+	 * @param string $plugin Plugin path relative to plugins directory.
+	 * @return bool True if plugin is active.
+	 */
+	private static function is_plugin_active_safe( string $plugin ): bool {
+		if ( ! function_exists( 'is_plugin_active' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		return is_plugin_active( $plugin );
+	}
+
+	/**
 	 * Check if site has an SEO plugin active.
 	 *
 	 * @return bool True if SEO plugin is active.
@@ -426,7 +447,7 @@ class WPS_Feature_Tips_Coach {
 		);
 
 		foreach ( $seo_plugins as $plugin ) {
-			if ( is_plugin_active( $plugin ) ) {
+			if ( self::is_plugin_active_safe( $plugin ) ) {
 				return true;
 			}
 		}
@@ -448,7 +469,7 @@ class WPS_Feature_Tips_Coach {
 		);
 
 		foreach ( $caching_plugins as $plugin ) {
-			if ( is_plugin_active( $plugin ) ) {
+			if ( self::is_plugin_active_safe( $plugin ) ) {
 				return true;
 			}
 		}
@@ -470,7 +491,7 @@ class WPS_Feature_Tips_Coach {
 		);
 
 		foreach ( $backup_plugins as $plugin ) {
-			if ( is_plugin_active( $plugin ) ) {
+			if ( self::is_plugin_active_safe( $plugin ) ) {
 				return true;
 			}
 		}
@@ -575,17 +596,17 @@ class WPS_Feature_Tips_Coach {
 
 			case 'open_course_creation':
 				// Try to determine the LMS plugin and redirect accordingly
-				if ( is_plugin_active( 'sfwd-lms/sfwd_lms.php' ) ) {
+				if ( self::is_plugin_active_safe( 'sfwd-lms/sfwd_lms.php' ) ) {
 					return array(
 						'success' => true,
 						'redirect' => admin_url( 'post-new.php?post_type=sfwd-courses' ),
 					);
-				} elseif ( is_plugin_active( 'lifterlms/lifterlms.php' ) ) {
+				} elseif ( self::is_plugin_active_safe( 'lifterlms/lifterlms.php' ) ) {
 					return array(
 						'success' => true,
 						'redirect' => admin_url( 'post-new.php?post_type=course' ),
 					);
-				} elseif ( is_plugin_active( 'tutor/tutor.php' ) ) {
+				} elseif ( self::is_plugin_active_safe( 'tutor/tutor.php' ) ) {
 					return array(
 						'success' => true,
 						'redirect' => admin_url( 'post-new.php?post_type=courses' ),
