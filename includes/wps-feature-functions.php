@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace WPS\CoreSupport;
 
+use WPS\CoreSupport\Features\WPS_Feature_Registry;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -18,12 +20,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Register a feature provided by a plugin.
  *
- * @param string                   $feature The feature identifier.
- * @param array<string, mixed> $data    Optional metadata.
+ * @param mixed $feature Feature identifier or object implementing WPS_Feature_Interface.
+ * @param array $data    Optional metadata for legacy array registration.
  *
  * @return void
  */
-function register_WPS_feature( string $feature, array $data = array() ): void {
+function register_WPS_feature( $feature, array $data = array() ): void {
 	WPS_Feature_Registry::register_feature( $feature, $data );
 }
 
@@ -35,8 +37,9 @@ function register_WPS_feature( string $feature, array $data = array() ): void {
  * @return bool
  */
 function has_WPS_feature( string $feature ): bool {
-	if ( WPS_Feature_Registry::has_feature( $feature ) ) {
-		return true;
+	$feature_data = WPS_Feature_Registry::get_feature( $feature );
+	if ( $feature_data ) {
+		return ! empty( $feature_data['enabled'] );
 	}
 
 	return WPS_Module_Registry::module_has_capability( $feature );
@@ -50,7 +53,17 @@ function has_WPS_feature( string $feature ): bool {
  * @return bool
  */
 function has_any_WPS_feature( array $features ): bool {
-	return WPS_Feature_Registry::has_any_feature( $features );
+	if ( WPS_Feature_Registry::has_any_feature( $features ) ) {
+		return true;
+	}
+
+	foreach ( $features as $feature ) {
+		if ( WPS_Module_Registry::module_has_capability( $feature ) ) {
+			return true;
+		}
+	}
+
+	return false;
 }
 
 /**
@@ -61,7 +74,13 @@ function has_any_WPS_feature( array $features ): bool {
  * @return bool
  */
 function has_all_WPS_features( array $features ): bool {
-	return WPS_Feature_Registry::has_all_features( $features );
+	foreach ( $features as $feature ) {
+		if ( ! has_WPS_feature( $feature ) ) {
+			return false;
+		}
+	}
+
+	return true;
 }
 
 /**

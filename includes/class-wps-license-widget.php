@@ -150,6 +150,10 @@ class WPS_License_Widget {
 			$status_text  = __( 'Unlicensed', 'plugin-wp-support-thisismyurl' );
 		}
 
+		// Display banner above license widget if it exists
+		if ( class_exists( '\\WPS\\CoreSupport\\Admin\\WPS_Dashboard_Assets' ) ) {
+			echo \WPS\CoreSupport\Admin\WPS_Dashboard_Assets::get_banner_html();
+		}
 		?>
 		<div class="wps-license-widget wps-license-<?php echo esc_attr( $status_class ); ?>">
 			<div class="wps-license-status" style="text-align: center; padding: 15px 0;">

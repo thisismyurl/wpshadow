@@ -23,9 +23,38 @@ declare(strict_types=1);
 
 namespace WPS\CoreSupport;
 
+use WPS\CoreSupport\Features\WPS_Feature_Core_Diagnostics;
+use WPS\CoreSupport\Features\WPS_Feature_Image_Smart_Focus;
+use WPS\CoreSupport\Features\WPS_Feature_Vault_Audit;
+use WPS\CoreSupport\Features\WPS_Feature_Script_Deferral;
+use WPS\CoreSupport\Features\WPS_Feature_Asset_Version_Removal;
+use WPS\CoreSupport\Features\WPS_Feature_Head_Cleanup;
+use WPS\CoreSupport\Features\WPS_Feature_Block_Cleanup;
+use WPS\CoreSupport\Features\WPS_Feature_CSS_Class_Cleanup;
+use WPS\CoreSupport\Features\WPS_Feature_Plugin_Cleanup;
+use WPS\CoreSupport\Features\WPS_Feature_HTML_Cleanup;
+use WPS\CoreSupport\Features\WPS_Feature_Resource_Hints;
+use WPS\CoreSupport\Features\WPS_Feature_Nav_Accessibility;
+use WPS\CoreSupport\Features\WPS_Feature_Embed_Disable;
+use WPS\CoreSupport\Features\WPS_Feature_jQuery_Cleanup;
+use WPS\CoreSupport\Features\WPS_Feature_Block_CSS_Cleanup;
+use WPS\CoreSupport\Features\WPS_Feature_Interactivity_Cleanup;
+use WPS\CoreSupport\Features\WPS_Feature_Registry;
+
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
+
+/**
+ * Initialize dashboard assets on init hook
+ *
+ * @return void
+ */
+function wp_support_init_dashboard_assets(): void {
+	if ( class_exists( '\\WPS\\CoreSupport\\Admin\\WPS_Dashboard_Assets' ) ) {
+		\WPS\CoreSupport\Admin\WPS_Dashboard_Assets::init( wp_support_PATH, wp_support_URL );
+	}
 }
 
 /**
@@ -215,6 +244,33 @@ function wp_support_hide_disabled_submenus(): void {
 }
 
 /**
+ * Register core features with the feature registry.
+ *
+ * @return void
+ */
+function wps_register_core_features(): void {
+	// Sample features.
+	register_WPS_feature( new WPS_Feature_Core_Diagnostics() );
+	register_WPS_feature( new WPS_Feature_Vault_Audit() );
+	register_WPS_feature( new WPS_Feature_Image_Smart_Focus() );
+
+	// Performance optimization features.
+	register_WPS_feature( new WPS_Feature_Script_Deferral() );
+	register_WPS_feature( new WPS_Feature_Asset_Version_Removal() );
+	register_WPS_feature( new WPS_Feature_Head_Cleanup() );
+	register_WPS_feature( new WPS_Feature_Block_Cleanup() );
+	register_WPS_feature( new WPS_Feature_CSS_Class_Cleanup() );
+	register_WPS_feature( new WPS_Feature_Plugin_Cleanup() );
+	register_WPS_feature( new WPS_Feature_HTML_Cleanup() );
+	register_WPS_feature( new WPS_Feature_Resource_Hints() );
+	register_WPS_feature( new WPS_Feature_Nav_Accessibility() );
+	register_WPS_feature( new WPS_Feature_Embed_Disable() );
+	register_WPS_feature( new WPS_Feature_jQuery_Cleanup() );
+	register_WPS_feature( new WPS_Feature_Block_CSS_Cleanup() );
+	register_WPS_feature( new WPS_Feature_Interactivity_Cleanup() );
+}
+
+/**
  * Admin guard: if a module is disabled, redirect to the parent dashboard when accessed directly.
  *
  * @return void
@@ -243,7 +299,7 @@ function wp_support_guard_disabled_modules(): void {
 // Plugin constants.
 define( 'wp_support_VERSION', '1.2601.73001' );
 define( 'wp_support_FILE', __FILE__ );
-define( 'wp_support_PATH', plugin_dir_path( __FILE__ ) );
+define( 'wp_support_PATH', str_replace( '/', DIRECTORY_SEPARATOR, trailingslashit( plugin_dir_path( __FILE__ ) ) ) );
 define( 'wp_support_URL', plugin_dir_url( __FILE__ ) );
 define( 'wp_support_BASENAME', plugin_basename( __FILE__ ) );
 define( 'wp_support_TEXT_DOMAIN', 'plugin-wp-support-thisismyurl' );
@@ -625,10 +681,37 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/class-wps-license.php';
 	WPS_License::init();
 
+	// Load dashboard assets on 'init' hook instead of here.
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/admin/class-wps-dashboard-assets.php' );
+	add_action(
+		'init',
+		__NAMESPACE__ . '\\wp_support_init_dashboard_assets',
+		11
+	);
+
 	// Load feature registry for flexible plugin dependencies.
-	require_once wp_support_PATH . 'includes/class-wps-feature-registry.php';
-	require_once wp_support_PATH . 'includes/wps-feature-functions.php';
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/interface-wps-feature.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-abstract.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-core-diagnostics.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-vault-audit.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-image-smart-focus.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-script-deferral.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-asset-version-removal.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-head-cleanup.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-block-cleanup.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-css-class-cleanup.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-plugin-cleanup.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-html-cleanup.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-resource-hints.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-nav-accessibility.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-embed-disable.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-jquery-cleanup.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-block-css-cleanup.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-interactivity-cleanup.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-registry.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/wps-feature-functions.php' );
 	WPS_Feature_Registry::init();
+	add_action( 'WPS_register_features', __NAMESPACE__ . '\\wps_register_core_features' );
 
 	// Load Spoke Base for spoke plugins (Image, Media, etc).
 	require_once wp_support_PATH . 'includes/class-wps-spoke-base.php';
@@ -795,6 +878,16 @@ function wp_support_admin_menu(): void {
 		__( 'Dashboard', 'plugin-wp-support-thisismyurl' ),
 		'manage_options',
 		'wp-support',
+		__NAMESPACE__ . '\\wp_support_render_tab_router'
+	);
+
+	// Add Get Help quick-access submenu (#119).
+	add_submenu_page(
+		'wp-support',
+		__( 'Get Help', 'plugin-wp-support-thisismyurl' ),
+		__( 'Get Help', 'plugin-wp-support-thisismyurl' ),
+		'manage_options',
+		'wp-support&tab=help',
 		__NAMESPACE__ . '\\wp_support_render_tab_router'
 	);
 
@@ -1306,9 +1399,9 @@ function wp_support_render_core_content( string $tab ): void {
 		case 'help':
 			wp_support_render_help_layout();
 			break;
-		case 'updates':
-			require_once wp_support_PATH . 'includes/class-wps-update-settings.php';
-			wp_support_render_updates_page();
+	case 'features':
+		wp_support_render_features_page( 'core' );
+		break;
 			break;
 		case 'modules':
 			wp_support_render_modules();
@@ -1336,9 +1429,9 @@ function wp_support_render_hub_content( string $hub_id, string $tab ): void {
 		case 'help':
 			wp_support_render_help_layout();
 			break;
-		case 'settings':
-			wp_support_render_settings( $hub_id );
-			break;
+	case 'features':
+		wp_support_render_features_page( 'hub', $hub_id );
+		break;
 		case 'dashboard':
 		default:
 			// Route to unified dashboard renderer.
@@ -1360,9 +1453,9 @@ function wp_support_render_spoke_content( string $hub_id, string $spoke_id, stri
 		case 'help':
 			wp_support_render_help_layout();
 			break;
-		case 'dashboard':
-		default:
-			// Route to unified dashboard renderer.
+	case 'features':
+		wp_support_render_features_page( 'spoke', $hub_id, $spoke_id );
+		break;
 			wp_support_render_dashboard( $hub_id, $spoke_id );
 			break;
 	}
@@ -1583,6 +1676,47 @@ function wp_support_render_help_layout(): void {
 		</style>
 	</div>
 	<?php
+}
+
+/**
+ * Render Features tab for a given context.
+ *
+ * @param string $level    Context level: core|hub|spoke.
+ * @param string $hub_id   Hub identifier when applicable.
+ * @param string $spoke_id Spoke identifier when applicable.
+ * @return void
+ */
+function wp_support_render_features_page( string $level, string $hub_id = '', string $spoke_id = '' ): void {
+	$required_cap = is_network_admin() ? 'manage_network_options' : 'manage_options';
+	if ( ! current_user_can( $required_cap ) ) {
+		wp_die( esc_html__( 'You do not have sufficient permissions to manage features.', 'plugin-wp-support-thisismyurl' ) );
+	}
+
+	$network_scope = is_multisite() && is_network_admin();
+	$features      = WPS_Feature_Registry::get_features_by_scope( $level, $hub_id, $spoke_id, $network_scope );
+
+	if ( 'POST' === $_SERVER['REQUEST_METHOD'] && isset( $_POST['wps_features_nonce'] ) ) {
+		check_admin_referer( 'WPS_save_features', 'wps_features_nonce' );
+
+		$enabled_ids = array();
+		if ( isset( $_POST['features'] ) && is_array( $_POST['features'] ) ) {
+			foreach ( $_POST['features'] as $feature_id => $flag ) {
+				$enabled_ids[] = sanitize_key( (string) $feature_id );
+			}
+		}
+
+		WPS_Feature_Registry::save_feature_states( array_values( $features ), $enabled_ids, $network_scope );
+		$features = WPS_Feature_Registry::get_features_by_scope( $level, $hub_id, $spoke_id, $network_scope );
+
+		add_settings_error(
+			'WPS_features',
+			'WPS_features_saved',
+			esc_html__( 'Feature settings updated.', 'plugin-wp-support-thisismyurl' ),
+			'updated'
+		);
+	}
+
+	require wp_support_PATH . 'includes/views/features.php';
 }
 
 /**
