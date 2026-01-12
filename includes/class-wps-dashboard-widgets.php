@@ -1562,8 +1562,8 @@ class WPS_Dashboard_Widgets {
 			return;
 		}
 
-		$env_status = WPS_Environment_Checker::get_environment_status();
-		$resource_status = WPS_Server_Limits::get_resource_status();
+		$env_status = \WPS\CoreSupport\WPS_Environment_Checker::get_environment_status();
+		$resource_status = \WPS\CoreSupport\WPS_Server_Limits::get_resource_status();
 
 		// Determine overall status icon and message.
 		$status_icon = '✓';
@@ -1680,7 +1680,7 @@ class WPS_Dashboard_Widgets {
 						<div style="width: <?php echo esc_attr( min( 100, $resource_status['memory']['usage_percentage'] ) ); ?>%; height: 100%; background: <?php echo esc_attr( $memory_bar_color ); ?>; transition: width 0.3s ease;"></div>
 					</div>
 					<div style="font-size: 11px; color: #666; margin-top: 2px;">
-						<?php echo esc_html( WPS_Environment_Checker::format_bytes( $resource_status['memory']['current_usage'] ) ); ?> / <?php echo esc_html( $resource_status['memory']['limit'] ); ?>
+						<?php echo esc_html( \WPS\CoreSupport\WPS_Environment_Checker::format_bytes( $resource_status['memory']['current_usage'] ) ); ?> / <?php echo esc_html( $resource_status['memory']['limit'] ); ?>
 					</div>
 				</div>
 
@@ -1739,7 +1739,7 @@ class WPS_Dashboard_Widgets {
 						printf(
 							/* translators: %d: Batch size */
 							esc_html__( 'Batching enabled (%d items/batch)', 'plugin-wp-support-thisismyurl' ),
-							WPS_Server_Limits::get_batch_size()
+							\WPS\CoreSupport\WPS_Server_Limits::get_batch_size()
 						);
 						?>
 					</span>

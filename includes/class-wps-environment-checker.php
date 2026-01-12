@@ -456,10 +456,10 @@ class WPS_Environment_Checker {
 		$status = self::$cached_status ?? self::get_environment_status();
 
 		// Batch tasks if we meet minimum but not recommended limits.
-		return $status['memory_limit']['meets_minimum']
-			&& ! $status['memory_limit']['meets_recommended']
-			|| $status['execution_time']['meets_minimum']
-			&& ! $status['execution_time']['meets_recommended'];
+		return ( $status['memory_limit']['meets_minimum']
+			&& ! $status['memory_limit']['meets_recommended'] )
+			|| ( $status['execution_time']['meets_minimum']
+			&& ! $status['execution_time']['meets_recommended'] );
 	}
 
 	/**
@@ -663,6 +663,9 @@ class WPS_Environment_Checker {
 	 */
 	private static function convert_to_bytes( string $value ): int {
 		$value = trim( $value );
+		if ( empty( $value ) ) {
+			return 0;
+		}
 		$last = strtolower( $value[ strlen( $value ) - 1 ] );
 		$value = (int) $value;
 

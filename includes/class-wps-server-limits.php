@@ -112,7 +112,9 @@ class WPS_Server_Limits {
 	 */
 	public static function get_execution_time_status(): array {
 		$max_execution = (int) ini_get( 'max_execution_time' );
-		$start_time = isset( $_SERVER['REQUEST_TIME_FLOAT'] ) ? (float) $_SERVER['REQUEST_TIME_FLOAT'] : microtime( true );
+		$start_time = isset( $_SERVER['REQUEST_TIME_FLOAT'] ) && is_numeric( $_SERVER['REQUEST_TIME_FLOAT'] )
+			? (float) $_SERVER['REQUEST_TIME_FLOAT']
+			: microtime( true );
 		$elapsed = microtime( true ) - $start_time;
 
 		// If max_execution_time is 0, it's unlimited.
@@ -162,6 +164,15 @@ class WPS_Server_Limits {
 		$levels = array( 'good', 'warning', 'critical' );
 		$memory_level_index = array_search( $memory['level'], $levels, true );
 		$time_level_index = array_search( $time['level'], $levels, true );
+		
+		// If either search fails, default to 0 (good).
+		if ( false === $memory_level_index ) {
+			$memory_level_index = 0;
+		}
+		if ( false === $time_level_index ) {
+			$time_level_index = 0;
+		}
+		
 		$overall_level = $levels[ max( $memory_level_index, $time_level_index ) ];
 
 		return array(
@@ -211,7 +222,8 @@ class WPS_Server_Limits {
 		}
 
 		// Check if environment has constraints.
-		if ( WPS_Environment_Checker::has_resource_constraints() ) {
+		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Environment_Checker' )
+			&& WPS_Environment_Checker::has_resource_constraints() ) {
 			return self::DEFAULT_BATCH_SIZE;
 		}
 

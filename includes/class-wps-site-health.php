@@ -500,7 +500,7 @@ class WPS_Site_Health {
 
 		// Add environment information.
 		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Environment_Checker' ) ) {
-			$env_status = WPS_Environment_Checker::get_environment_status();
+			$env_status = \WPS\CoreSupport\WPS_Environment_Checker::get_environment_status();
 
 			$info['wps-environment'] = array(
 				'label'  => __( 'WPS Environment', 'plugin-wp-support-thisismyurl' ),
@@ -549,11 +549,11 @@ class WPS_Site_Health {
 					),
 					'heavy_tasks_disabled'      => array(
 						'label' => __( 'Heavy tasks disabled', 'plugin-wp-support-thisismyurl' ),
-						'value' => WPS_Environment_Checker::should_disable_heavy_tasks() ? __( 'Yes', 'plugin-wp-support-thisismyurl' ) : __( 'No', 'plugin-wp-support-thisismyurl' ),
+						'value' => \WPS\CoreSupport\WPS_Environment_Checker::should_disable_heavy_tasks() ? __( 'Yes', 'plugin-wp-support-thisismyurl' ) : __( 'No', 'plugin-wp-support-thisismyurl' ),
 					),
 					'batching_enabled'          => array(
 						'label' => __( 'Task batching', 'plugin-wp-support-thisismyurl' ),
-						'value' => WPS_Environment_Checker::should_batch_tasks() ? __( 'Enabled', 'plugin-wp-support-thisismyurl' ) : __( 'Not required', 'plugin-wp-support-thisismyurl' ),
+						'value' => \WPS\CoreSupport\WPS_Environment_Checker::should_batch_tasks() ? __( 'Enabled', 'plugin-wp-support-thisismyurl' ) : __( 'Not required', 'plugin-wp-support-thisismyurl' ),
 					),
 				),
 			);
@@ -568,7 +568,7 @@ class WPS_Site_Health {
 				'fields' => array(
 					'memory_usage'          => array(
 						'label' => __( 'Current memory usage', 'plugin-wp-support-thisismyurl' ),
-						'value' => WPS_Environment_Checker::format_bytes( $resource_status['memory']['current_usage'] ) . ' / ' . $resource_status['memory']['limit'],
+						'value' => \WPS\CoreSupport\WPS_Environment_Checker::format_bytes( $resource_status['memory']['current_usage'] ) . ' / ' . $resource_status['memory']['limit'],
 					),
 					'memory_percentage'     => array(
 						'label' => __( 'Memory usage percentage', 'plugin-wp-support-thisismyurl' ),
@@ -576,7 +576,7 @@ class WPS_Site_Health {
 					),
 					'peak_memory'           => array(
 						'label' => __( 'Peak memory usage', 'plugin-wp-support-thisismyurl' ),
-						'value' => WPS_Environment_Checker::format_bytes( $resource_status['memory']['peak_usage'] ),
+						'value' => \WPS\CoreSupport\WPS_Environment_Checker::format_bytes( $resource_status['memory']['peak_usage'] ),
 					),
 					'time_elapsed'          => array(
 						'label' => __( 'Time elapsed', 'plugin-wp-support-thisismyurl' ),
@@ -592,7 +592,7 @@ class WPS_Site_Health {
 					),
 					'batch_size'            => array(
 						'label' => __( 'Recommended batch size', 'plugin-wp-support-thisismyurl' ),
-						'value' => (string) WPS_Server_Limits::get_batch_size(),
+						'value' => (string) \WPS\CoreSupport\WPS_Server_Limits::get_batch_size(),
 					),
 				),
 			);
@@ -758,8 +758,8 @@ class WPS_Site_Health {
 			);
 		}
 
-		$is_compatible = WPS_Environment_Checker::is_environment_compatible();
-		$has_constraints = WPS_Environment_Checker::has_resource_constraints();
+		$is_compatible = \WPS\CoreSupport\WPS_Environment_Checker::is_environment_compatible();
+		$has_constraints = \WPS\CoreSupport\WPS_Environment_Checker::has_resource_constraints();
 
 		if ( $is_compatible && ! $has_constraints ) {
 			return WPS_Health_Renderer::build_result(
@@ -806,7 +806,7 @@ class WPS_Site_Health {
 			);
 		}
 
-		$status = WPS_Environment_Checker::get_memory_limit_status();
+		$status = \WPS\CoreSupport\WPS_Environment_Checker::get_memory_limit_status();
 
 		if ( 'good' === $status['level'] ) {
 			return WPS_Health_Renderer::build_result(
@@ -865,7 +865,7 @@ class WPS_Site_Health {
 			);
 		}
 
-		$status = WPS_Environment_Checker::get_execution_time_status();
+		$status = \WPS\CoreSupport\WPS_Environment_Checker::get_execution_time_status();
 
 		if ( 'good' === $status['level'] ) {
 			$time_display = 0 === $status['current']
@@ -928,7 +928,7 @@ class WPS_Site_Health {
 			);
 		}
 
-		$status = WPS_Environment_Checker::get_extensions_status();
+		$status = \WPS\CoreSupport\WPS_Environment_Checker::get_extensions_status();
 
 		if ( $status['all_required_loaded'] && empty( $status['recommended_missing'] ) ) {
 			return WPS_Health_Renderer::build_result(
@@ -975,7 +975,7 @@ class WPS_Site_Health {
 			);
 		}
 
-		$status = WPS_Server_Limits::get_resource_status();
+		$status = \WPS\CoreSupport\WPS_Server_Limits::get_resource_status();
 		$memory = $status['memory'];
 		$time = $status['time'];
 
