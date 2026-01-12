@@ -590,6 +590,14 @@ function wp_support_init(): void {
 	// Load capability manager.
 	require_once wp_support_PATH . 'includes/class-wps-capabilities.php';
 
+	// Load Environment Checker for server capability validation.
+	require_once wp_support_PATH . 'includes/class-wps-environment-checker.php';
+	WPS_Environment_Checker::init();
+
+	// Load Server Limits Manager for resource monitoring and graceful degradation.
+	require_once wp_support_PATH . 'includes/class-wps-server-limits.php';
+	WPS_Server_Limits::init();
+
 	// Load Site Health integration.
 	require_once wp_support_PATH . 'includes/class-wps-site-health.php';
 	WPS_Site_Health::init();
@@ -3302,6 +3310,7 @@ function render_settings_privacy(): void {
 	$export_format       = get_option( 'WPS_privacy_export_format', 'json' );
 	$contrib_see_user    = (bool) get_option( 'WPS_privacy_contributors_see_user_activity', false );
 	$editor_see_admin    = (bool) get_option( 'WPS_privacy_editors_see_admin_activity', false );
+	$diagnostic_logging  = (bool) get_option( 'wps_diagnostic_logging_enabled', false );
 	?>
 	<form method="post" class=\"wps-settings-form\" data-settings-group="privacy" style="max-width: 600px;">
 		<?php wp_nonce_field( 'WPS_settings_privacy', 'WPS_settings_nonce' ); ?>
@@ -3331,6 +3340,13 @@ function render_settings_privacy(): void {
 							<option value="verbose" <?php selected( $audit_level, 'verbose' ); ?>><?php esc_html_e( 'Verbose', 'plugin-wp-support-thisismyurl' ); ?></option>
 						</select>
 						<p class="description"><?php esc_html_e( 'How detailed the activity logs should be.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Diagnostic Logging', 'plugin-wp-support-thisismyurl' ); ?></th>
+					<td>
+						<label><input type="checkbox" name="wps_diagnostic_logging_enabled" value="1" <?php checked( $diagnostic_logging, true ); ?> /> <?php esc_html_e( 'Enable diagnostic logging for support', 'plugin-wp-support-thisismyurl' ); ?></label>
+						<p class="description"><?php esc_html_e( 'Log environment checks and resource usage for troubleshooting. Recommended for debugging performance issues.', 'plugin-wp-support-thisismyurl' ); ?></p>
 					</td>
 				</tr>
 				<tr>

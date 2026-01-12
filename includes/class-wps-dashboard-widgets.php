@@ -161,6 +161,10 @@ class WPS_Dashboard_Widgets {
 		self::widget_modules();
 	}
 
+	public static function render_metabox_environment_status(): void {
+		self::widget_environment_status();
+	}
+
 	private static function widget_health(): void {
 		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Site_Health' ) ) {
 			echo '<div class="wps-widget-content"><p><em>' . esc_html__( 'Health checks unavailable.', 'plugin-wp-support-thisismyurl' ) . '</em></p></div>';
@@ -1540,6 +1544,209 @@ class WPS_Dashboard_Widgets {
 
 	public static function render_metabox_vault_status_custom(): void {
 		self::render_custom_metabox( 'WPS_vault_status', __( 'Vault Status', 'plugin-wp-support-thisismyurl' ), array( __CLASS__, 'widget_vault_status' ) );
+	}
+
+	/**
+	 * Widget: Environment Status
+	 * Shows current server environment status and resource usage.
+	 *
+	 * @return void
+	 */
+	private static function widget_environment_status(): void {
+		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Environment_Checker' ) || ! class_exists( '\\WPS\\CoreSupport\\WPS_Server_Limits' ) ) {
+			?>
+			<div class="wps-widget-content">
+				<p><em><?php esc_html_e( 'Environment checker unavailable.', 'plugin-wp-support-thisismyurl' ); ?></em></p>
+			</div>
+			<?php
+			return;
+		}
+
+		$env_status = \WPS\CoreSupport\WPS_Environment_Checker::get_environment_status();
+		$resource_status = \WPS\CoreSupport\WPS_Server_Limits::get_resource_status();
+
+		// Determine overall status icon and message.
+		$status_icon = '✓';
+		$status_color = '#46b450';
+		$status_message = __( 'Environment is optimal', 'plugin-wp-support-thisismyurl' );
+
+		if ( ! $env_status['is_compatible'] ) {
+			$status_icon = '✗';
+			$status_color = '#d63638';
+			$status_message = __( 'Environment is incompatible', 'plugin-wp-support-thisismyurl' );
+		} elseif ( $env_status['has_constraints'] || 'warning' === $resource_status['level'] ) {
+			$status_icon = '⚠';
+			$status_color = '#dba617';
+			$status_message = __( 'Resource constraints detected', 'plugin-wp-support-thisismyurl' );
+		} elseif ( 'critical' === $resource_status['level'] ) {
+			$status_icon = '✗';
+			$status_color = '#d63638';
+			$status_message = __( 'Critical resource usage', 'plugin-wp-support-thisismyurl' );
+		}
+
+		?>
+		<div class="wps-widget-content">
+			<!-- Overall Status -->
+			<div style="display: flex; align-items: center; margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 4px; border-left: 4px solid <?php echo esc_attr( $status_color ); ?>;">
+				<div style="font-size: 32px; margin-right: 15px; line-height: 1;"><?php echo esc_html( $status_icon ); ?></div>
+				<div>
+					<div style="font-size: 16px; font-weight: 600; color: <?php echo esc_attr( $status_color ); ?>;">
+						<?php echo esc_html( $status_message ); ?>
+					</div>
+					<div style="font-size: 13px; color: #666; margin-top: 4px;">
+						<?php
+						if ( $env_status['is_compatible'] && ! $env_status['has_constraints'] ) {
+							esc_html_e( 'All systems operational', 'plugin-wp-support-thisismyurl' );
+						} elseif ( $env_status['has_constraints'] ) {
+							esc_html_e( 'Operations will be batched automatically', 'plugin-wp-support-thisismyurl' );
+						} else {
+							esc_html_e( 'Heavy operations disabled', 'plugin-wp-support-thisismyurl' );
+						}
+						?>
+					</div>
+				</div>
+			</div>
+
+			<!-- Environment Details -->
+			<div style="margin-bottom: 20px;">
+				<h4 style="margin: 0 0 10px 0; font-size: 14px; color: #23282d;"><?php esc_html_e( 'Environment', 'plugin-wp-support-thisismyurl' ); ?></h4>
+				<table style="width: 100%; font-size: 13px;">
+					<tr>
+						<td style="padding: 6px 0; color: #666;"><?php esc_html_e( 'PHP Version:', 'plugin-wp-support-thisismyurl' ); ?></td>
+						<td style="padding: 6px 0; text-align: right; font-weight: 500;">
+							<?php echo esc_html( $env_status['php_version']['current'] ); ?>
+							<?php if ( ! $env_status['php_version']['meets_requirement'] ) : ?>
+								<span style="color: #d63638;">⚠</span>
+							<?php endif; ?>
+						</td>
+					</tr>
+					<tr>
+						<td style="padding: 6px 0; color: #666;"><?php esc_html_e( 'WordPress Version:', 'plugin-wp-support-thisismyurl' ); ?></td>
+						<td style="padding: 6px 0; text-align: right; font-weight: 500;">
+							<?php echo esc_html( $env_status['wp_version']['current'] ); ?>
+							<?php if ( ! $env_status['wp_version']['meets_requirement'] ) : ?>
+								<span style="color: #d63638;">⚠</span>
+							<?php endif; ?>
+						</td>
+					</tr>
+					<tr>
+						<td style="padding: 6px 0; color: #666;"><?php esc_html_e( 'Memory Limit:', 'plugin-wp-support-thisismyurl' ); ?></td>
+						<td style="padding: 6px 0; text-align: right; font-weight: 500;">
+							<?php echo esc_html( $env_status['memory_limit']['current'] ); ?>
+							<?php if ( 'critical' === $env_status['memory_limit']['level'] ) : ?>
+								<span style="color: #d63638;">⚠</span>
+							<?php elseif ( 'warning' === $env_status['memory_limit']['level'] ) : ?>
+								<span style="color: #dba617;">⚠</span>
+							<?php endif; ?>
+						</td>
+					</tr>
+					<tr>
+						<td style="padding: 6px 0; color: #666;"><?php esc_html_e( 'Execution Time:', 'plugin-wp-support-thisismyurl' ); ?></td>
+						<td style="padding: 6px 0; text-align: right; font-weight: 500;">
+							<?php
+							echo 0 === $env_status['execution_time']['current']
+								? esc_html__( 'Unlimited', 'plugin-wp-support-thisismyurl' )
+								: esc_html( $env_status['execution_time']['current'] . 's' );
+							?>
+							<?php if ( 'critical' === $env_status['execution_time']['level'] ) : ?>
+								<span style="color: #d63638;">⚠</span>
+							<?php elseif ( 'warning' === $env_status['execution_time']['level'] ) : ?>
+								<span style="color: #dba617;">⚠</span>
+							<?php endif; ?>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<!-- Resource Usage -->
+			<div style="margin-bottom: 20px;">
+				<h4 style="margin: 0 0 10px 0; font-size: 14px; color: #23282d;"><?php esc_html_e( 'Current Usage', 'plugin-wp-support-thisismyurl' ); ?></h4>
+				
+				<!-- Memory Usage Bar -->
+				<div style="margin-bottom: 12px;">
+					<div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12px;">
+						<span style="color: #666;"><?php esc_html_e( 'Memory', 'plugin-wp-support-thisismyurl' ); ?></span>
+						<span style="font-weight: 500;"><?php echo esc_html( number_format( $resource_status['memory']['usage_percentage'], 1 ) ); ?>%</span>
+					</div>
+					<div style="height: 8px; background: #e5e5e5; border-radius: 4px; overflow: hidden;">
+						<?php
+						$memory_bar_color = '#46b450';
+						if ( $resource_status['memory']['usage_percentage'] >= 90 ) {
+							$memory_bar_color = '#d63638';
+						} elseif ( $resource_status['memory']['usage_percentage'] >= 80 ) {
+							$memory_bar_color = '#dba617';
+						}
+						?>
+						<div style="width: <?php echo esc_attr( min( 100, $resource_status['memory']['usage_percentage'] ) ); ?>%; height: 100%; background: <?php echo esc_attr( $memory_bar_color ); ?>; transition: width 0.3s ease;"></div>
+					</div>
+					<div style="font-size: 11px; color: #666; margin-top: 2px;">
+						<?php echo esc_html( \WPS\CoreSupport\WPS_Environment_Checker::format_bytes( $resource_status['memory']['current_usage'] ) ); ?> / <?php echo esc_html( $resource_status['memory']['limit'] ); ?>
+					</div>
+				</div>
+
+				<!-- Time Usage Bar (if not unlimited) -->
+				<?php if ( 0 !== $resource_status['time']['max_execution_time'] ) : ?>
+					<div style="margin-bottom: 12px;">
+						<div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12px;">
+							<span style="color: #666;"><?php esc_html_e( 'Execution Time', 'plugin-wp-support-thisismyurl' ); ?></span>
+							<span style="font-weight: 500;"><?php echo esc_html( number_format( $resource_status['time']['usage_percentage'], 1 ) ); %>%</span>
+						</div>
+						<div style="height: 8px; background: #e5e5e5; border-radius: 4px; overflow: hidden;">
+							<?php
+							$time_bar_color = '#46b450';
+							if ( $resource_status['time']['usage_percentage'] >= 85 ) {
+								$time_bar_color = '#d63638';
+							} elseif ( $resource_status['time']['usage_percentage'] >= 75 ) {
+								$time_bar_color = '#dba617';
+							}
+							?>
+							<div style="width: <?php echo esc_attr( min( 100, $resource_status['time']['usage_percentage'] ) ); ?>%; height: 100%; background: <?php echo esc_attr( $time_bar_color ); ?>; transition: width 0.3s ease;"></div>
+						</div>
+						<div style="font-size: 11px; color: #666; margin-top: 2px;">
+							<?php echo esc_html( number_format( $resource_status['time']['elapsed'], 1 ) ); ?>s / <?php echo esc_html( $resource_status['time']['max_execution_time'] ); ?>s
+						</div>
+					</div>
+				<?php endif; ?>
+			</div>
+
+			<!-- PHP Extensions -->
+			<?php if ( ! empty( $env_status['extensions']['required_missing'] ) || ! empty( $env_status['extensions']['recommended_missing'] ) ) : ?>
+				<div style="margin-bottom: 15px;">
+					<h4 style="margin: 0 0 10px 0; font-size: 14px; color: #23282d;"><?php esc_html_e( 'Extensions', 'plugin-wp-support-thisismyurl' ); ?></h4>
+					<?php if ( ! empty( $env_status['extensions']['required_missing'] ) ) : ?>
+						<div style="padding: 8px 10px; background: #fff3cd; border-left: 3px solid #d63638; font-size: 12px; margin-bottom: 8px;">
+							<strong><?php esc_html_e( 'Missing required:', 'plugin-wp-support-thisismyurl' ); ?></strong>
+							<?php echo esc_html( implode( ', ', $env_status['extensions']['required_missing'] ) ); ?>
+						</div>
+					<?php endif; ?>
+					<?php if ( ! empty( $env_status['extensions']['recommended_missing'] ) ) : ?>
+						<div style="padding: 8px 10px; background: #f8f9fa; border-left: 3px solid #dba617; font-size: 12px;">
+							<strong><?php esc_html_e( 'Missing recommended:', 'plugin-wp-support-thisismyurl' ); ?></strong>
+							<?php echo esc_html( implode( ', ', $env_status['extensions']['recommended_missing'] ) ); ?>
+						</div>
+					<?php endif; ?>
+				</div>
+			<?php endif; ?>
+
+			<!-- Actions -->
+			<div style="padding-top: 15px; border-top: 1px solid #e5e5e5;">
+				<a href="<?php echo esc_url( admin_url( 'site-health.php' ) ); ?>" class="button button-secondary" style="margin-right: 8px;">
+					<?php esc_html_e( 'Site Health', 'plugin-wp-support-thisismyurl' ); ?>
+				</a>
+				<?php if ( $resource_status['should_batch'] ) : ?>
+					<span style="font-size: 12px; color: #666;">
+						<?php
+						printf(
+							/* translators: %d: Batch size */
+							esc_html__( 'Batching enabled (%d items/batch)', 'plugin-wp-support-thisismyurl' ),
+							\WPS\CoreSupport\WPS_Server_Limits::get_batch_size()
+						);
+						?>
+					</span>
+				<?php endif; ?>
+			</div>
+		</div>
+		<?php
 	}
 }
 
