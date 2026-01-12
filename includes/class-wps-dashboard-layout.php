@@ -34,6 +34,7 @@ class WPS_Dashboard_Layout {
 			),
 			'side'   => array(
 				'WPS_widget_health',
+				'WPS_widget_environment_status',
 				'WPS_widget_quick_actions',
 				'WPS_widget_events_and_news',
 			),
@@ -437,6 +438,10 @@ class WPS_Dashboard_Layout {
 			'WPS_widget_vault_overview'  => array(
 				'title'    => __( 'Vault Overview', 'plugin-wp-support-thisismyurl' ),
 				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_vault_overview' ),
+			),
+			'WPS_widget_environment_status' => array(
+				'title'    => __( 'Environment Status', 'plugin-wp-support-thisismyurl' ),
+				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_environment_status' ),
 			),
 		);
 	}
