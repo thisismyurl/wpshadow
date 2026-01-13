@@ -699,6 +699,10 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/class-wps-guided-walkthroughs.php';
 	WPS_Guided_Walkthroughs::init();
 
+	// Load Magic Link Support for secure time-limited developer access.
+	require_once wp_support_PATH . 'includes/class-wps-magic-link-support.php';
+	WPS_Magic_Link_Support::init();
+
 	// Register AJAX handlers for Diagnostic API.
 	add_action(
 		'wp_ajax_wps_create_diagnostic_token',
