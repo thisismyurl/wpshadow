@@ -16,6 +16,7 @@ This plugin provides complete functionality on its own and can optionally load h
 - **Site Documentation:** Plugin/theme inventory, protected plugins tracking, API documentation export
 - **Activity Logging:** Comprehensive audit trail of all plugin operations and changes
 - **Guided Walkthroughs:** Step-by-step task assistance for complex WordPress operations
+- **Video Walkthroughs:** Auto-generated video tutorials of site functionality (requires external service)
 - **Update Simulator:** Safe testing of plugin/theme updates before production deployment
 - **Diagnostic API:** Hidden diagnostic tokens for automated client support access
 - **Script Loading Optimization:** Comprehensive performance optimization system (see [SCRIPT_OPTIMIZATION.md](SCRIPT_OPTIMIZATION.md))
