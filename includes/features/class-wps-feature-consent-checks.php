@@ -78,8 +78,9 @@ final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
 		(function() {
 			'use strict';
 			
-			// Check for existing consent
-			var hasConsent = localStorage.getItem('wps_cookie_consent') === 'accepted';
+			// Check for existing consent (accepted or custom)
+			var consentStatus = localStorage.getItem('wps_cookie_consent');
+			var hasConsent = consentStatus === 'accepted' || consentStatus === 'custom';
 			
 			if (hasConsent) {
 				return; // User has already consented, allow all cookies
@@ -105,9 +106,18 @@ final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
 						var cookieName = value.split('=')[0].trim();
 						
 						// Check if cookie matches blocked patterns
-						var isBlocked = blockedPatterns.some(function(pattern) {
-							return new RegExp(pattern, 'i').test(cookieName);
-						});
+						var isBlocked = false;
+						for (var i = 0; i < blockedPatterns.length; i++) {
+							try {
+								if (new RegExp(blockedPatterns[i], 'i').test(cookieName)) {
+									isBlocked = true;
+									break;
+								}
+							} catch (e) {
+								// Invalid regex pattern, skip it
+								console.warn('[WPS Consent] Invalid pattern:', blockedPatterns[i]);
+							}
+						}
 						
 						if (isBlocked) {
 							console.warn('[WPS Consent] Blocked cookie before consent:', cookieName);
@@ -153,16 +163,18 @@ final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
 			return;
 		}
 
+		$plugin_url = defined( 'wp_support_URL' ) ? wp_support_URL : plugin_dir_url( dirname( dirname( __FILE__ ) ) );
+
 		wp_enqueue_style(
 			'wps-consent-banner',
-			plugin_dir_url( __DIR__ . '/../' ) . 'assets/css/consent-banner.css',
+			$plugin_url . 'assets/css/consent-banner.css',
 			array(),
 			'1.0.0'
 		);
 
 		wp_enqueue_script(
 			'wps-consent-manager',
-			plugin_dir_url( __DIR__ . '/../' ) . 'assets/js/consent-manager.js',
+			$plugin_url . 'assets/js/consent-manager.js',
 			array(),
 			'1.0.0',
 			true
@@ -172,9 +184,8 @@ final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
 			'wps-consent-manager',
 			'wpsConsentData',
 			array(
-				'ajaxurl'      => admin_url( 'admin-ajax.php' ),
-				'nonce'        => wp_create_nonce( 'wps_consent_action' ),
 				'cookieDomain' => $this->get_cookie_domain(),
+				'isSecure'     => is_ssl(),
 				'i18n'         => array(
 					'accepted' => __( 'Cookie preferences saved', 'plugin-wp-support-thisismyurl' ),
 					'rejected' => __( 'Cookies blocked', 'plugin-wp-support-thisismyurl' ),
