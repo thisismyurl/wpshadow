@@ -68,26 +68,29 @@ class WPS_Module_Actions {
 	 */
 	public static function init(): void {
 		// Install and activate module.
-		add_action( 'wp_ajax_WPS_module_install', array( __CLASS__, 'ajax_install_module' ) );
+		add_action( 'wp_ajax_wps_module_install', array( __CLASS__, 'ajax_install_module' ) );
 
 		// Update module.
-		add_action( 'wp_ajax_WPS_module_update', array( __CLASS__, 'ajax_update_module' ) );
+		add_action( 'wp_ajax_wps_module_update', array( __CLASS__, 'ajax_update_module' ) );
 
 		// Activate module.
-		add_action( 'wp_ajax_WPS_module_activate', array( __CLASS__, 'ajax_activate_module' ) );
+		add_action( 'wp_ajax_wps_module_activate', array( __CLASS__, 'ajax_activate_module' ) );
 
 		// Deactivate module (network).
-		add_action( 'wp_ajax_WPS_module_deactivate', array( __CLASS__, 'ajax_deactivate_module' ) );
+		add_action( 'wp_ajax_wps_module_deactivate', array( __CLASS__, 'ajax_deactivate_module' ) );
 
 		// Toggle module enabled setting (for bundled/non-plugin modules).
-		add_action( 'wp_ajax_WPS_module_toggle', array( __CLASS__, 'ajax_toggle_module_enabled' ) );
+		add_action( 'wp_ajax_wps_module_toggle', array( __CLASS__, 'ajax_toggle_module_enabled' ) );
 
 		// Clear remembered deactivations after restoration.
-		add_action( 'wp_ajax_WPS_clear_remembered', array( __CLASS__, 'ajax_clear_remembered' ) );
+		add_action( 'wp_ajax_wps_clear_remembered', array( __CLASS__, 'ajax_clear_remembered' ) );
 
 		// Refresh dashboard widgets dynamically.
-		add_action( 'wp_ajax_WPS_refresh_health_widget', array( __CLASS__, 'ajax_refresh_health_widget' ) );
-		add_action( 'wp_ajax_WPS_refresh_events_widget', array( __CLASS__, 'ajax_refresh_events_widget' ) );
+		add_action( 'wp_ajax_wps_refresh_health_widget', array( __CLASS__, 'ajax_refresh_health_widget' ) );
+		add_action( 'wp_ajax_wps_refresh_events_widget', array( __CLASS__, 'ajax_refresh_events_widget' ) );
+
+		// Download progress polling.
+		add_action( 'wp_ajax_wps_module_download_progress', array( __CLASS__, 'ajax_download_progress' ) );
 	}
 	/**
 	 * AJAX: Toggle module enabled setting (site or network scope).
@@ -171,18 +174,31 @@ class WPS_Module_Actions {
 		// Determine if network activation.
 		$network_activate = is_multisite() && is_network_admin();
 
+		// Extract checksum if provided in catalog.
+		$expected_hash = ! empty( $module_entry['checksum'] ) ? sanitize_text_field( wp_unslash( $module_entry['checksum'] ) ) : null;
+
 		// Perform installation.
 		$upgrader = new WPS_Plugin_Upgrader();
 		$result   = $upgrader->install_plugin(
 			$module_entry['download_url'],
 			true,
-			$network_activate
+			$network_activate,
+			$expected_hash,
+			$slug
 		);
 
 		if ( is_wp_error( $result ) ) {
+			$error_data = $result->get_error_data();
+			$guidance   = ! empty( $error_data['guidance'] ) ? $error_data['guidance'] : '';
+			$message    = $result->get_error_message();
+
+			if ( ! empty( $guidance ) ) {
+				$message .= ' ' . $guidance;
+			}
+
 			wp_send_json_error(
 				array(
-					'message' => $result->get_error_message(),
+					'message' => $message,
 				),
 				500
 			);
@@ -243,12 +259,23 @@ class WPS_Module_Actions {
 		// Build plugin file path (slug/slug.php).
 		$plugin_file = $slug . '/' . $slug . '.php';
 
+		// Extract checksum if provided in catalog.
+		$expected_hash = ! empty( $module_entry['checksum'] ) ? sanitize_text_field( wp_unslash( $module_entry['checksum'] ) ) : null;
+
 		// Perform update.
 		$upgrader = new WPS_Plugin_Upgrader();
-		$result   = $upgrader->update_plugin( $plugin_file, $module_entry['download_url'] );
+		$result   = $upgrader->update_plugin( $plugin_file, $module_entry['download_url'], $expected_hash, $slug );
 
 		if ( is_wp_error( $result ) ) {
-			self::respond_error( $result->get_error_message(), 500 );
+			$error_data = $result->get_error_data();
+			$guidance   = ! empty( $error_data['guidance'] ) ? $error_data['guidance'] : '';
+			$message    = $result->get_error_message();
+
+			if ( ! empty( $guidance ) ) {
+				$message .= ' ' . $guidance;
+			}
+
+			self::respond_error( $message, 500 );
 		}
 
 		// Refresh catalog with status.
@@ -504,6 +531,38 @@ class WPS_Module_Actions {
 				'timestamp'    => current_time( 'timestamp' ),
 			)
 		);
+	}
+
+	/**
+	 * AJAX: Get download progress for module installation/update.
+	 *
+	 * @return void
+	 */
+	public static function ajax_download_progress(): void {
+		self::verify_request( 'WPS_module_actions', 'install_plugins', 'manage_network_plugins' );
+
+		$session_id = isset( $_POST['session_id'] ) ? sanitize_text_field( wp_unslash( $_POST['session_id'] ) ) : '';
+		if ( empty( $session_id ) ) {
+			self::respond_error( __( 'Session ID is required.', 'plugin-wp-support-thisismyurl' ), 400 );
+			return;
+		}
+
+		// Get progress from transient.
+		$transient_key = 'wps_dl_progress_' . $session_id;
+		$progress      = get_transient( $transient_key );
+
+		if ( false === $progress ) {
+			self::respond_success(
+				array(
+					'percent' => 0,
+					'status'  => 'unknown',
+					'message' => __( 'No progress data available.', 'plugin-wp-support-thisismyurl' ),
+				)
+			);
+			return;
+		}
+
+		self::respond_success( $progress );
 	}
 }
 
