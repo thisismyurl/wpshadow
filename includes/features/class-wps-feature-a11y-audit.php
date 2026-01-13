@@ -70,7 +70,7 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 			add_action( 'wp_head', array( $this, 'add_contrast_fixes' ) );
 		}
 
-		if ( $options['auto_fix_focus'] ?? false ) {
+		if ( $options['auto_fix_focus'] ?? true ) {
 			add_action( 'wp_footer', array( $this, 'add_focus_indicators' ) );
 		}
 
@@ -152,14 +152,14 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 			'wps-a11y-audit',
 			plugins_url( 'assets/css/a11y-audit.css', dirname( __DIR__, 2 ) ),
 			array(),
-			'1.0.0'
+			filemtime( dirname( __DIR__, 2 ) . '/assets/css/a11y-audit.css' )
 		);
 
 		wp_enqueue_script(
 			'wps-a11y-audit',
 			plugins_url( 'assets/js/a11y-audit.js', dirname( __DIR__, 2 ) ),
 			array( 'jquery' ),
-			'1.0.0',
+			filemtime( dirname( __DIR__, 2 ) . '/assets/js/a11y-audit.js' ),
 			true
 		);
 
@@ -169,6 +169,9 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 			array(
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'wps_a11y_audit_nonce' ),
+				'strings' => array(
+					'enterUrl' => __( 'Please enter a URL to audit.', 'plugin-wp-support-thisismyurl' ),
+				),
 			)
 		);
 
@@ -275,8 +278,8 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 		preg_match_all( '/<img[^>]+>/i', $content, $matches );
 
 		foreach ( $matches[0] as $img_tag ) {
-			// Check if alt attribute is missing or empty.
-			if ( ! preg_match( '/alt=["\']([^"\']*)["\']/', $img_tag, $alt_match ) ) {
+			// Check if alt attribute is missing or empty (check for various quote styles and unquoted).
+			if ( ! preg_match( '/\salt=(["\']?)([^"\'\s>]*)\1/i', $img_tag, $alt_match ) ) {
 				$issues[] = array(
 					'type'        => 'alt_text',
 					'severity'    => 'high',
@@ -287,7 +290,7 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 					'fix_action'  => 'add_alt_attribute',
 					'suggestion'  => __( 'Add descriptive alt text to help screen readers understand the image content.', 'plugin-wp-support-thisismyurl' ),
 				);
-			} elseif ( empty( trim( $alt_match[1] ) ) ) {
+			} elseif ( empty( trim( $alt_match[2] ) ) ) {
 				// Check for decorative images - if they have role="presentation" or are truly decorative.
 				if ( ! str_contains( $img_tag, 'role="presentation"' ) && ! str_contains( $img_tag, 'role="none"' ) ) {
 					$issues[] = array(
@@ -495,7 +498,7 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 				break;
 
 			case 'remove_tabindex':
-				$content  = preg_replace( '/\s*tabindex=["\'][1-9][0-9]*["\']/', '', $content );
+				$content  = preg_replace( '/\s*tabindex=(["\']?)[1-9][0-9]*\1/i', '', $content );
 				$modified = true;
 				break;
 
@@ -537,7 +540,7 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 	 */
 	private function fix_missing_alt( string $content ): string {
 		// Add empty alt to images without alt attribute (assumes decorative).
-		return preg_replace( '/<img(?![^>]*\salt=)([^>]*)>/i', '<img alt=""$1>', $content );
+		return preg_replace( '/<img([^>]*?)(?<!\salt=)(\s*\/>|>)/i', '<img$1 alt=""$2', $content );
 	}
 
 	/**
@@ -548,9 +551,10 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 	 */
 	private function fix_empty_alt( string $content ): string {
 		// Add role="presentation" to images with empty alt that don't have a role.
+		// Match: <img ... alt="" ... > where there's no role= attribute
 		return preg_replace(
-			'/<img([^>]*)\salt=["\']["\'](?![^>]*\srole=)([^>]*)>/i',
-			'<img$1 alt="" role="presentation"$2>',
+			'/<img([^>]*?)alt=(["\'])\\2(?![^>]*\srole=)([^>]*?)>/i',
+			'<img$1alt=$2$2 role="presentation"$3>',
 			$content
 		);
 	}
@@ -562,8 +566,8 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 	 * @return string Modified content.
 	 */
 	public function auto_fix_aria_in_content( string $content ): string {
-		// Remove positive tabindex values.
-		$content = preg_replace( '/\s*tabindex=["\'][1-9][0-9]*["\']/', '', $content );
+		// Remove positive tabindex values (both quoted and unquoted).
+		$content = preg_replace( '/\s*tabindex=(["\']?)[1-9][0-9]*\1/i', '', $content );
 		return $content;
 	}
 
