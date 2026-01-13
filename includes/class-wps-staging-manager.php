@@ -40,6 +40,7 @@ class WPS_Staging_Manager {
 		add_action( 'wp_ajax_WPS_create_staging', array( __CLASS__, 'handle_staging_creation' ) );
 		add_action( 'wp_ajax_WPS_delete_staging', array( __CLASS__, 'handle_staging_deletion' ) );
 		add_action( 'wp_ajax_WPS_deploy_staging', array( __CLASS__, 'handle_staging_deployment' ) );
+		add_action( 'wp_ajax_WPS_rollback_staging', array( __CLASS__, 'handle_staging_rollback' ) );
 	}
 
 	/**
@@ -352,6 +353,27 @@ class WPS_Staging_Manager {
 	}
 
 	/**
+	 * Handle AJAX staging rollback.
+	 *
+	 * @return void
+	 */
+	public static function handle_staging_rollback(): void {
+		check_ajax_referer( 'WPS_staging_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
+		}
+
+		$staging_id = isset( $_POST['staging_id'] ) ? sanitize_text_field( wp_unslash( $_POST['staging_id'] ) ) : '';
+
+		if ( ! self::rollback_staging( $staging_id ) ) {
+			wp_send_json_error( __( 'Failed to rollback staging environment', 'plugin-wp-support-thisismyurl' ) );
+		}
+
+		wp_send_json_success();
+	}
+
+	/**
 	 * Register staging menu.
 	 *
 	 * @return void
@@ -419,7 +441,7 @@ class WPS_Staging_Manager {
 										<button class="button button-small wps-deploy-staging" data-staging-id="<?php echo esc_attr( $id ); ?>" data-nonce="<?php echo esc_attr( $nonce ); ?>">
 											<?php esc_html_e( 'Deploy', 'plugin-wp-support-thisismyurl' ); ?>
 										</button>
-										<button class="button button-small wps-rollback-staging" data-staging-id="<?php echo esc_attr( $id ); ?>">
+										<button class="button button-small wps-rollback-staging" data-staging-id="<?php echo esc_attr( $id ); ?>" data-nonce="<?php echo esc_attr( $nonce ); ?>">
 											<?php esc_html_e( 'Rollback', 'plugin-wp-support-thisismyurl' ); ?>
 										</button>
 									<?php endif; ?>
@@ -467,6 +489,19 @@ class WPS_Staging_Manager {
 					method: 'POST',
 					headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 					body: 'action=WPS_deploy_staging&nonce=' + nonce + '&staging_id=' + encodeURIComponent(this.dataset.stagingId)
+				})
+				.then(r => r.json())
+				.then(d => { if (d.success) location.reload(); else { alert('Error: ' + d.data); this.disabled = false; } });
+			});
+		});
+		document.querySelectorAll('.wps-rollback-staging')?.forEach(btn => {
+			btn.addEventListener('click', function() {
+				if (!confirm('Rollback to the pre-staging snapshot? This will restore your site to the state before staging was created.')) return;
+				this.disabled = true;
+				fetch(ajaxurl, {
+					method: 'POST',
+					headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+					body: 'action=WPS_rollback_staging&nonce=' + nonce + '&staging_id=' + encodeURIComponent(this.dataset.stagingId)
 				})
 				.then(r => r.json())
 				.then(d => { if (d.success) location.reload(); else { alert('Error: ' + d.data); this.disabled = false; } });
