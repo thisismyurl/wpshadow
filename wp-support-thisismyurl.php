@@ -629,6 +629,10 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/class-wps-activity-logger.php';
 	WPS_Activity_Logger::init();
 
+	// Load Performance Monitor for real-time performance tracking.
+	require_once wp_support_PATH . 'includes/class-wps-performance-monitor.php';
+	WPS_Performance_Monitor::init();
+
 	// Load Achievement Badges system.
 	require_once wp_support_PATH . 'includes/class-wps-achievement-badges.php';
 	WPS_Achievement_Badges::init();

@@ -75,6 +75,7 @@ class WPS_Dashboard_Widgets {
 			array(
 				array( __CLASS__, 'widget_suite_overview' ),
 				array( __CLASS__, 'widget_active_hubs' ),
+				array( __CLASS__, 'widget_performance_monitor' ),
 				array( __CLASS__, 'widget_weekly_performance' ),
 			),
 			array(
@@ -1010,6 +1011,158 @@ class WPS_Dashboard_Widgets {
 					<p style="text-align: center; margin-top: 15px;">
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wps-performance-reports' ) ); ?>" class="button button-primary">
 							<?php esc_html_e( 'View Full Report', 'plugin-wp-support-thisismyurl' ); ?>
+						</a>
+					</p>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Performance Monitor widget for real-time performance metrics.
+	 *
+	 * @return void
+	 */
+	private static function widget_performance_monitor(): void {
+		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Performance_Monitor' ) ) {
+			return;
+		}
+
+		$metrics = \WPS\CoreSupport\WPS_Performance_Monitor::get_current_metrics();
+		$score_data = \WPS\CoreSupport\WPS_Performance_Monitor::calculate_performance_score();
+		$recommendations = \WPS\CoreSupport\WPS_Performance_Monitor::get_recommendations();
+
+		?>
+		<div class="postbox">
+			<div class="postbox-header">
+				<h2 class="hndle"><?php esc_html_e( '⚡ Performance Overview', 'plugin-wp-support-thisismyurl' ); ?></h2>
+			</div>
+			<div class="inside">
+				<div class="wps-widget-content">
+					<style>
+						.wps-performance-score {
+							text-align: center;
+							margin-bottom: 20px;
+							padding: 20px;
+							background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+							border-radius: 8px;
+							color: #fff;
+						}
+						.wps-performance-score .score {
+							font-size: 48px;
+							font-weight: 700;
+							display: block;
+							margin: 10px 0;
+						}
+						.wps-performance-score .grade {
+							font-size: 24px;
+							opacity: 0.9;
+						}
+						.wps-current-metrics {
+							display: grid;
+							grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+							gap: 12px;
+							margin-bottom: 15px;
+						}
+						.wps-metric-item {
+							padding: 12px;
+							background: #f8f9fa;
+							border-radius: 4px;
+							border: 1px solid #e9ecef;
+						}
+						.wps-metric-item .metric-label {
+							font-size: 11px;
+							color: #6c757d;
+							text-transform: uppercase;
+							letter-spacing: 0.5px;
+							display: block;
+							margin-bottom: 5px;
+						}
+						.wps-metric-item .metric-value {
+							font-size: 18px;
+							font-weight: 600;
+							color: #333;
+							display: block;
+						}
+						.wps-recommendations {
+							margin-top: 15px;
+						}
+						.wps-recommendation {
+							padding: 10px 12px;
+							margin-bottom: 8px;
+							border-radius: 4px;
+							font-size: 13px;
+						}
+						.wps-recommendation.warning {
+							background: #fff3cd;
+							border-left: 4px solid #ffc107;
+							color: #856404;
+						}
+						.wps-recommendation.critical {
+							background: #f8d7da;
+							border-left: 4px solid #dc3545;
+							color: #721c24;
+						}
+						.wps-recommendation.info {
+							background: #d1ecf1;
+							border-left: 4px solid #17a2b8;
+							color: #0c5460;
+						}
+						.wps-recommendation strong {
+							display: block;
+							margin-bottom: 3px;
+						}
+					</style>
+
+					<!-- Performance Score -->
+					<div class="wps-performance-score" style="background: <?php echo esc_attr( $score_data['color'] ); ?>;">
+						<div class="score-label" style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9;">
+							<?php esc_html_e( 'Performance Score', 'plugin-wp-support-thisismyurl' ); ?>
+						</div>
+						<span class="score"><?php echo esc_html( $score_data['score'] ); ?></span>
+						<span class="grade"><?php echo esc_html( $score_data['grade'] ); ?></span>
+					</div>
+
+					<!-- Current Metrics -->
+					<div class="wps-current-metrics">
+						<div class="wps-metric-item">
+							<span class="metric-label"><?php esc_html_e( 'Queries', 'plugin-wp-support-thisismyurl' ); ?></span>
+							<span class="metric-value"><?php echo esc_html( $metrics['query_count'] ?? 0 ); ?></span>
+						</div>
+						<div class="wps-metric-item">
+							<span class="metric-label"><?php esc_html_e( 'Load Time', 'plugin-wp-support-thisismyurl' ); ?></span>
+							<span class="metric-value"><?php echo esc_html( number_format( (float) ( $metrics['load_time'] ?? 0 ), 3 ) ); ?>s</span>
+						</div>
+						<div class="wps-metric-item">
+							<span class="metric-label"><?php esc_html_e( 'Memory', 'plugin-wp-support-thisismyurl' ); ?></span>
+							<span class="metric-value"><?php echo esc_html( $metrics['memory_mb'] ?? 0 ); ?> MB</span>
+						</div>
+						<div class="wps-metric-item">
+							<span class="metric-label"><?php esc_html_e( 'Database', 'plugin-wp-support-thisismyurl' ); ?></span>
+							<span class="metric-value"><?php echo esc_html( $metrics['db_size'] ?? 0 ); ?> MB</span>
+						</div>
+					</div>
+
+					<!-- Recommendations -->
+					<?php if ( ! empty( $recommendations ) ) : ?>
+					<div class="wps-recommendations">
+						<h4 style="margin: 0 0 10px 0; font-size: 13px; font-weight: 600; color: #333;">
+							<?php esc_html_e( '💡 Optimization Recommendations', 'plugin-wp-support-thisismyurl' ); ?>
+						</h4>
+						<?php foreach ( array_slice( $recommendations, 0, 3 ) as $rec ) : ?>
+							<div class="wps-recommendation <?php echo esc_attr( $rec['type'] ); ?>">
+								<strong><?php echo esc_html( $rec['title'] ); ?></strong>
+								<span><?php echo esc_html( $rec['description'] ); ?></span>
+							</div>
+						<?php endforeach; ?>
+					</div>
+					<?php endif; ?>
+
+					<!-- Quick Actions -->
+					<p style="text-align: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e9ecef;">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=performance' ) ); ?>" class="button button-primary">
+							<?php esc_html_e( 'View Full Dashboard', 'plugin-wp-support-thisismyurl' ); ?>
 						</a>
 					</p>
 				</div>
