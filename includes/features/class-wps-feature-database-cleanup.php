@@ -289,9 +289,12 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 
 		foreach ( $tables as $table ) {
 			$table_name = $table[0];
-			// Only optimize WordPress tables.
+			// Only optimize WordPress tables with the correct prefix.
 			if ( strpos( $table_name, $wpdb->prefix ) === 0 ) {
-				$wpdb->query( "OPTIMIZE TABLE {$table_name}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				// Validate table name contains only alphanumeric characters and underscores.
+				if ( preg_match( '/^[a-zA-Z0-9_]+$/', $table_name ) ) {
+					$wpdb->query( "OPTIMIZE TABLE `{$table_name}`" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				}
 			}
 		}
 	}
@@ -333,7 +336,7 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 		}
 
 		// Check if cleanup was just run.
-		if ( isset( $_GET['wps_cleanup'] ) && 'success' === $_GET['wps_cleanup'] ) {
+		if ( isset( $_GET['wps_cleanup'] ) && 'success' === sanitize_text_field( wp_unslash( $_GET['wps_cleanup'] ) ) ) {
 			echo '<div class="notice notice-success is-dismissible"><p>' . 
 				esc_html__( 'Database cleanup completed successfully.', 'plugin-wp-support-thisismyurl' ) . 
 				'</p></div>';
