@@ -12,6 +12,7 @@ This plugin provides complete functionality on its own and can optionally load h
 
 - **Health Diagnostics:** Real-time WordPress health status, plugin/theme compatibility checks
 - **Emergency Support:** Critical error recovery, one-click emergency isolation mode
+- **Conflict Sandbox:** Per-user plugin deactivation and theme switching for debugging without affecting live visitors
 - **Backup Verification:** Automated backup integrity testing and recovery drills
 - **Site Documentation:** Plugin/theme inventory, protected plugins tracking, API documentation export
 - **Activity Logging:** Comprehensive audit trail of all plugin operations and changes
@@ -84,6 +85,15 @@ The Support Dashboard provides quick access to all core features.
 - Automated error log monitoring
 - Quick recovery procedures
 - Network-wide emergency controls (in Network Admin)
+
+**Conflict Sandbox:**
+- Enable from Settings → Features → Debugging & Diagnostics
+- Deactivate plugins temporarily for your browser session only
+- Switch themes temporarily for debugging
+- Live site remains normal for all visitors
+- Perfect for isolating plugin/theme conflicts without taking site offline
+- Session automatically expires after 24 hours
+- Access via WordPress Support → Conflict Sandbox menu
 
 **Backup Verification:**
 - Run automated backup integrity tests
