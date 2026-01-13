@@ -454,6 +454,7 @@ function wp_support_deactivate(): void {
 	flush_rewrite_rules();
 	// Moved to Vault module. Directory and protection are ensured by
 	// WPS\VaultSupport\WPS_Vault::init() when the module is enabled.
+}
 
 /**
  * Setup the vault directory for secure original storage.
@@ -604,6 +605,10 @@ function wp_support_init(): void {
 	// Load Magic Link Support for secure time-limited developer access.
 	require_once wp_support_PATH . 'includes/class-wps-magic-link-support.php';
 	WPS_Magic_Link_Support::init();
+
+	// Load System Report Generator for comprehensive debug information.
+	require_once wp_support_PATH . 'includes/class-wps-system-report-generator.php';
+	WPS_System_Report_Generator::init();
 
 	// Register AJAX handlers for Diagnostic API.
 	add_action(
