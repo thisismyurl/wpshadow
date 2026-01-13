@@ -26,14 +26,28 @@
 	 *
 	 * @param {HTMLElement} button Button element.
 	 * @param {string} message Status message.
+	 * @param {number} percent Progress percent (0-100, optional).
 	 */
-	function showProgress(button, message) {
+	function showProgress(button, message, percent = null) {
 		const originalText = button.textContent;
 		button.disabled = true;
 		button.classList.add('wps-loading');
-		button.textContent = message;
+
+		// Show progress with percentage if provided.
+		if (percent !== null && !isNaN(percent)) {
+			button.textContent = `${message} (${Math.round(percent)}%)`;
+		} else {
+			button.textContent = message;
+		}
 
 		return {
+			update: (newMessage, newPercent = null) => {
+				if (newPercent !== null && !isNaN(newPercent)) {
+					button.textContent = `${newMessage} (${Math.round(newPercent)}%)`;
+				} else {
+					button.textContent = newMessage;
+				}
+			},
 			restore: () => {
 				button.disabled = false;
 				button.classList.remove('wps-loading');
@@ -142,6 +156,62 @@
 	}
 
 	/**
+	 * Poll download progress for a session.
+	 *
+	 * @param {string} sessionId Session ID.
+	 * @param {Object} progress Progress UI object.
+	 * @returns {Promise} Promise that resolves when polling completes.
+	 */
+	async function pollDownloadProgress(sessionId, progress) {
+		const maxAttempts = 60; // Poll for up to 60 seconds.
+		let attempts = 0;
+
+		return new Promise((resolve, reject) => {
+			const interval = setInterval(async () => {
+				attempts++;
+
+				try {
+					const response = await fetch(ajaxurl, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded',
+						},
+						body: new URLSearchParams({
+							action: 'wps_module_download_progress',
+							nonce: nonce,
+							session_id: sessionId,
+						}),
+					});
+
+					const data = await response.json();
+
+					if (data.success && data.data) {
+						const { percent, status, message } = data.data;
+
+						// Update UI with progress.
+						progress.update(message || 'Downloading...', percent);
+
+						// Stop polling if complete or failed.
+						if (status === 'complete' || status === 'failed') {
+							clearInterval(interval);
+							resolve({ status, message });
+						}
+					}
+
+					// Stop after max attempts.
+					if (attempts >= maxAttempts) {
+						clearInterval(interval);
+						resolve({ status: 'timeout', message: 'Progress polling timed out' });
+					}
+				} catch (error) {
+					// Ignore polling errors, continue.
+					console.warn('Progress polling error:', error);
+				}
+			}, 1000); // Poll every second.
+		});
+	}
+
+	/**
 	 * Handle install and activate action.
 	 *
 	 * @param {Event} e Click event.
@@ -154,7 +224,7 @@
 		const slug = button.dataset.slug;
 		if (!slug) return;
 
-		const progress = showProgress(button, 'Installing...');
+		const progress = showProgress(button, 'Starting installation...', 0);
 
 		try {
 			const response = await fetch(ajaxurl, {
@@ -199,7 +269,7 @@
 		const slug = button.dataset.slug;
 		if (!slug) return;
 
-		const progress = showProgress(button, 'Updating...');
+		const progress = showProgress(button, 'Starting update...', 0);
 
 		try {
 			const response = await fetch(ajaxurl, {

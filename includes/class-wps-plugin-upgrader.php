@@ -38,14 +38,23 @@ class WPS_Plugin_Upgrader {
 	private string $hook_suffix = '';
 
 	/**
+	 * Download session ID for progress tracking.
+	 *
+	 * @var string
+	 */
+	private string $download_session_id = '';
+
+	/**
 	 * Install plugin from download URL.
 	 *
-	 * @param string $download_url URL to plugin ZIP.
-	 * @param bool   $activate Whether to activate after install.
-	 * @param bool   $network Whether to activate network-wide (multisite only).
+	 * @param string      $download_url URL to plugin ZIP.
+	 * @param bool        $activate Whether to activate after install.
+	 * @param bool        $network Whether to activate network-wide (multisite only).
+	 * @param string|null $expected_hash Optional SHA-256 hash for verification.
+	 * @param string|null $expected_slug Optional expected plugin slug.
 	 * @return bool|WP_Error True on success, WP_Error on failure.
 	 */
-	public function install_plugin( string $download_url, bool $activate = true, bool $network = false ) {
+	public function install_plugin( string $download_url, bool $activate = true, bool $network = false, ?string $expected_hash = null, ?string $expected_slug = null ) {
 		global $wp_filesystem;
 
 		// Validate URL.
@@ -64,8 +73,8 @@ class WPS_Plugin_Upgrader {
 			return $working_dir;
 		}
 
-		// Download ZIP file.
-		$download_result = $this->download_package( $download_url, $working_dir );
+		// Download ZIP file using robust downloader.
+		$download_result = $this->download_package( $download_url, $working_dir, $expected_hash, $expected_slug );
 		if ( is_wp_error( $download_result ) ) {
 			$this->cleanup( $working_dir );
 			return $download_result;
@@ -144,11 +153,13 @@ class WPS_Plugin_Upgrader {
 	/**
 	 * Update existing plugin from download URL.
 	 *
-	 * @param string $plugin_file Plugin base name (slug/slug.php).
-	 * @param string $download_url URL to plugin ZIP.
+	 * @param string      $plugin_file Plugin base name (slug/slug.php).
+	 * @param string      $download_url URL to plugin ZIP.
+	 * @param string|null $expected_hash Optional SHA-256 hash for verification.
+	 * @param string|null $expected_slug Optional expected plugin slug.
 	 * @return bool|WP_Error True on success, WP_Error on failure.
 	 */
-	public function update_plugin( string $plugin_file, string $download_url ) {
+	public function update_plugin( string $plugin_file, string $download_url, ?string $expected_hash = null, ?string $expected_slug = null ) {
 		global $wp_filesystem;
 
 		// Validate inputs.
@@ -184,8 +195,8 @@ class WPS_Plugin_Upgrader {
 			deactivate_plugins( $plugin_file );
 		}
 
-		// Download ZIP file.
-		$download_result = $this->download_package( $download_url, $working_dir );
+		// Download ZIP file using robust downloader.
+		$download_result = $this->download_package( $download_url, $working_dir, $expected_hash, $expected_slug );
 		if ( is_wp_error( $download_result ) ) {
 			$this->reactivate_plugin( $plugin_file, $was_active_network, $was_active_single );
 			$this->cleanup( $working_dir );
@@ -290,43 +301,55 @@ class WPS_Plugin_Upgrader {
 	}
 
 	/**
-	 * Download package from URL.
+	 * Download package from URL using robust downloader.
 	 *
-	 * @param string $url Download URL.
-	 * @param string $working_dir Working directory path.
+	 * @param string      $url           Download URL.
+	 * @param string      $working_dir   Working directory path.
+	 * @param string|null $expected_hash Optional SHA-256 hash.
+	 * @param string|null $expected_slug Optional expected slug.
 	 * @return string|WP_Error Path to downloaded ZIP or error.
 	 */
-	private function download_package( string $url, string $working_dir ) {
-		// Validate URL.
-		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
-			return new WP_Error( 'invalid_url', __( 'Invalid download URL.', 'plugin-wp-support-thisismyurl' ) );
-		}
-
-		// Download with timeout.
-		$response = wp_remote_get(
-			$url,
-			array(
-				'timeout'  => 30,
-				'stream'   => true,
-				'filename' => $working_dir . '/plugin.zip',
-			)
-		);
-
-		if ( is_wp_error( $response ) ) {
-			return $response;
-		}
-
-		$http_code = wp_remote_retrieve_response_code( $response );
-		if ( 200 !== $http_code ) {
-			return new WP_Error( 'http_error', sprintf( __( 'HTTP error: %s', 'plugin-wp-support-thisismyurl' ), intval( $http_code ) ) );
-		}
-
+	private function download_package( string $url, string $working_dir, ?string $expected_hash = null, ?string $expected_slug = null ) {
 		$zip_file = $working_dir . '/plugin.zip';
-		if ( ! file_exists( $zip_file ) ) {
-			return new WP_Error( 'download_failed', __( 'Could not download plugin ZIP.', 'plugin-wp-support-thisismyurl' ) );
+
+		// Use robust downloader.
+		$downloader = new WPS_Module_Downloader();
+		$result     = $downloader->download( $url, $zip_file, $expected_hash );
+
+		if ( is_wp_error( $result ) ) {
+			// Add guidance to error message.
+			$guidance = WPS_Module_Downloader::get_error_guidance( $result );
+			$result->add_data( array( 'guidance' => $guidance ) );
+			return $result;
 		}
+
+		// Store session ID for progress tracking.
+		$this->download_session_id = $downloader->get_session_id();
+
+		// Validate ZIP structure if slug provided.
+		if ( ! empty( $expected_slug ) ) {
+			$validation = $downloader->validate_zip( $zip_file, $expected_slug );
+			if ( is_wp_error( $validation ) ) {
+				$guidance = WPS_Module_Downloader::get_error_guidance( $validation );
+				$validation->add_data( array( 'guidance' => $guidance ) );
+				$downloader->clear_progress();
+				return $validation;
+			}
+		}
+
+		// Clear progress on success.
+		$downloader->clear_progress();
 
 		return $zip_file;
+	}
+
+	/**
+	 * Get download session ID for progress tracking.
+	 *
+	 * @return string
+	 */
+	public function get_download_session_id(): string {
+		return $this->download_session_id;
 	}
 
 	/**
@@ -450,8 +473,18 @@ class WPS_Plugin_Upgrader {
 	 */
 	private function cleanup( string $working_dir ): void {
 		if ( is_dir( $working_dir ) ) {
-			array_map( 'unlink', glob( $working_dir . '/*', GLOB_NOSORT ) );
-			rmdir( $working_dir );
+			// Recursively delete all files and subdirectories.
+			$files = glob( $working_dir . '/*', GLOB_NOSORT );
+			if ( false !== $files ) {
+				foreach ( $files as $file ) {
+					if ( is_dir( $file ) ) {
+						$this->cleanup( $file );
+					} else {
+						wp_delete_file( $file );
+					}
+				}
+			}
+			@rmdir( $working_dir ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		}
 	}
 }

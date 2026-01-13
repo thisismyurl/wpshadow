@@ -795,6 +795,9 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/class-wps-network-license.php';
 	WPS_Network_License::init();
 
+	// Load module downloader for resilient downloads.
+	require_once wp_support_PATH . 'includes/class-wps-module-downloader.php';
+
 	// Load plugin upgrader for install/update flows.
 	require_once wp_support_PATH . 'includes/class-wps-plugin-upgrader.php';
 

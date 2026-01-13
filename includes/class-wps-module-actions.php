@@ -88,6 +88,9 @@ class WPS_Module_Actions {
 		// Refresh dashboard widgets dynamically.
 		add_action( 'wp_ajax_WPS_refresh_health_widget', array( __CLASS__, 'ajax_refresh_health_widget' ) );
 		add_action( 'wp_ajax_WPS_refresh_events_widget', array( __CLASS__, 'ajax_refresh_events_widget' ) );
+
+		// Download progress polling.
+		add_action( 'wp_ajax_WPS_module_download_progress', array( __CLASS__, 'ajax_download_progress' ) );
 	}
 	/**
 	 * AJAX: Toggle module enabled setting (site or network scope).
@@ -171,18 +174,31 @@ class WPS_Module_Actions {
 		// Determine if network activation.
 		$network_activate = is_multisite() && is_network_admin();
 
+		// Extract checksum if provided in catalog.
+		$expected_hash = ! empty( $module_entry['checksum'] ) ? sanitize_text_field( wp_unslash( $module_entry['checksum'] ) ) : null;
+
 		// Perform installation.
 		$upgrader = new WPS_Plugin_Upgrader();
 		$result   = $upgrader->install_plugin(
 			$module_entry['download_url'],
 			true,
-			$network_activate
+			$network_activate,
+			$expected_hash,
+			$slug
 		);
 
 		if ( is_wp_error( $result ) ) {
+			$error_data = $result->get_error_data();
+			$guidance   = ! empty( $error_data['guidance'] ) ? $error_data['guidance'] : '';
+			$message    = $result->get_error_message();
+
+			if ( ! empty( $guidance ) ) {
+				$message .= ' ' . $guidance;
+			}
+
 			wp_send_json_error(
 				array(
-					'message' => $result->get_error_message(),
+					'message' => $message,
 				),
 				500
 			);
@@ -243,12 +259,23 @@ class WPS_Module_Actions {
 		// Build plugin file path (slug/slug.php).
 		$plugin_file = $slug . '/' . $slug . '.php';
 
+		// Extract checksum if provided in catalog.
+		$expected_hash = ! empty( $module_entry['checksum'] ) ? sanitize_text_field( wp_unslash( $module_entry['checksum'] ) ) : null;
+
 		// Perform update.
 		$upgrader = new WPS_Plugin_Upgrader();
-		$result   = $upgrader->update_plugin( $plugin_file, $module_entry['download_url'] );
+		$result   = $upgrader->update_plugin( $plugin_file, $module_entry['download_url'], $expected_hash, $slug );
 
 		if ( is_wp_error( $result ) ) {
-			self::respond_error( $result->get_error_message(), 500 );
+			$error_data = $result->get_error_data();
+			$guidance   = ! empty( $error_data['guidance'] ) ? $error_data['guidance'] : '';
+			$message    = $result->get_error_message();
+
+			if ( ! empty( $guidance ) ) {
+				$message .= ' ' . $guidance;
+			}
+
+			self::respond_error( $message, 500 );
 		}
 
 		// Refresh catalog with status.
@@ -469,41 +496,33 @@ class WPS_Module_Actions {
 	}
 
 	/**
-	 * AJAX: Refresh events and news widget for active modules.
+	 * AJAX: Get download progress for module installation/update.
 	 *
 	 * @return void
 	 */
-	public static function ajax_refresh_events_widget(): void {
-		self::verify_request( 'WPS_module_actions', 'manage_options', 'manage_network_options' );
+	public static function ajax_download_progress(): void {
+		self::verify_request( 'WPS_module_actions', 'install_plugins', 'manage_network_plugins' );
 
-		// Get active module slugs and their repos.
-		$active_repos = array();
-		$catalog      = WPS_Module_Registry::get_catalog_with_status();
-		foreach ( $catalog as $module ) {
-			$slug = $module['slug'] ?? '';
-			if ( ! empty( $slug ) && WPS_Module_Registry::is_enabled( $slug ) ) {
-				// Extract repo from slug (e.g., 'vault-support-thisismyurl' → 'plugin-vault-support-thisismyurl').
-				$repo           = 'plugin-' . $slug;
-				$active_repos[] = array(
-					'slug' => $slug,
-					'repo' => $repo,
-					'name' => $module['name'] ?? ucfirst( str_replace( '-', ' ', $slug ) ),
-				);
-			}
+		$session_id = isset( $_POST['session_id'] ) ? sanitize_text_field( wp_unslash( $_POST['session_id'] ) ) : '';
+		if ( empty( $session_id ) ) {
+			self::respond_error( __( 'Session ID is required.', 'plugin-wp-support-thisismyurl' ), 400 );
 		}
 
-		// Render widget HTML.
-		ob_start();
-		WPS_Dashboard_Widgets::render_events_widget_html( $active_repos );
-		$html = ob_get_clean();
+		// Get progress from transient.
+		$transient_key = 'wps_dl_progress_' . $session_id;
+		$progress      = get_transient( $transient_key );
 
-		self::respond_success(
-			array(
-				'html'         => $html,
-				'active_repos' => $active_repos,
-				'timestamp'    => current_time( 'timestamp' ),
-			)
-		);
+		if ( false === $progress ) {
+			self::respond_success(
+				array(
+					'percent' => 0,
+					'status'  => 'unknown',
+					'message' => __( 'No progress data available.', 'plugin-wp-support-thisismyurl' ),
+				)
+			);
+		}
+
+		self::respond_success( $progress );
 	}
 }
 
