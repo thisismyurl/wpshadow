@@ -73,11 +73,6 @@
 	 * Create mobile navigation elements
 	 */
 	function createMobileNav() {
-		// Only create on smaller screens
-		if ($(window).width() >= 1024) {
-			return;
-		}
-
 		const $body = $('body');
 
 		// Create toggle button

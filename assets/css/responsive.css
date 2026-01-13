@@ -425,9 +425,9 @@
 /* Reduce animations on low-end devices */
 @media (prefers-reduced-motion: reduce) {
 	* {
-		animation-duration: 0.01ms !important;
+		animation-duration: 0ms !important;
 		animation-iteration-count: 1 !important;
-		transition-duration: 0.01ms !important;
+		transition-duration: 0ms !important;
 	}
 }
 
@@ -531,8 +531,13 @@
 }
 
 /* ========== No Horizontal Scrolling ========== */
-/* Ensure nothing causes horizontal scroll */
-* {
+/* Ensure nothing causes horizontal scroll within WPS pages */
+.wps-core-wrap * {
+	box-sizing: border-box;
+}
+
+.wps-core-wrap *::before,
+.wps-core-wrap *::after {
 	box-sizing: border-box;
 }
 

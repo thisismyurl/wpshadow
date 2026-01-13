@@ -786,7 +786,8 @@ p, .wps-text {
 	}
 }
 
-/* Legacy media queries preserved for backward compatibility */
+/* Legacy media queries preserved for backward compatibility with existing components */
+/* These work alongside the new breakpoint system to ensure no regressions */
 @media (max-width: 768px) {
 	:root {
 		--wps-text-2xl: 1.25rem;
