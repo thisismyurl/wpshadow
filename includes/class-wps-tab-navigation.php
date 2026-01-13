@@ -209,13 +209,21 @@ class WPS_Tab_Navigation {
 	 * @return array<array{id: string, label: string, icon: string}>
 	 */
 	public static function get_core_tabs(): array {
-		return array(
+		$tabs = array(
 			self::build_tab( 'dashboard', __( 'Dashboard', 'plugin-wp-support-thisismyurl' ), 'dashicons-dashboard' ),
 			self::build_tab( 'performance', __( 'Performance', 'plugin-wp-support-thisismyurl' ), 'dashicons-performance' ),
+			self::build_tab( 'collection', __( 'Spoke Collection', 'plugin-wp-support-thisismyurl' ), 'dashicons-star-filled' ),
 			self::build_tab( 'settings', __( 'Settings', 'plugin-wp-support-thisismyurl' ), 'dashicons-admin-generic' ),
 			self::build_tab( 'features', __( 'Features', 'plugin-wp-support-thisismyurl' ), 'dashicons-admin-plugins' ),
 			self::build_tab( 'help', __( 'Help', 'plugin-wp-support-thisismyurl' ), 'dashicons-editor-help' ),
 		);
+
+		// Add register tab only if not licensed.
+		if ( ! WPS_License::is_registered() ) {
+			$tabs[] = self::build_tab( 'register', __( 'Register', 'plugin-wp-support-thisismyurl' ), 'dashicons-unlock' );
+		}
+
+		return $tabs;
 	}
 
 	/**

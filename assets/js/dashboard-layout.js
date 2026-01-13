@@ -160,7 +160,8 @@
 				'<div class="wps-modal-content">' +
 				'<h2>' + wps_dashboard_layout.applyPrompt + '</h2>' +
 				'<div class="wps-modal-body">' +
-				'<label><input type="radio" name="wps-apply-scope" value="children" checked> ' + wps_dashboard_layout.applyChildren + '</label><br>' +
+				'<label><input type="radio" name="wps-apply-scope" value="this" checked> ' + wps_dashboard_layout.applyThis + '</label><br>' +
+				'<label><input type="radio" name="wps-apply-scope" value="children"> ' + wps_dashboard_layout.applyChildren + '</label><br>' +
 				'<label><input type="radio" name="wps-apply-scope" value="all"> ' + wps_dashboard_layout.applyAll + '</label>' +
 				'</div>' +
 				'<div class="wps-modal-footer">' +

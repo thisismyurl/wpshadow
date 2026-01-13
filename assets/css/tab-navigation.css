@@ -177,6 +177,71 @@
 }
 
 /* Responsive Adjustments */
+@media (max-width: 640px) {
+	/* Mobile: Horizontal scrolling tabs */
+	.wps-tab-navigation {
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		white-space: nowrap;
+		margin-bottom: 16px;
+		padding-bottom: 8px;
+	}
+
+	.wps-tab-navigation .nav-tab {
+		min-height: 48px;
+		padding: 12px 16px;
+		display: inline-flex;
+		align-items: center;
+		font-size: 14px;
+	}
+
+	/* Breadcrumbs stack better on mobile */
+	.wps-breadcrumbs {
+		font-size: 13px;
+		padding: 8px 12px;
+	}
+
+	.wps-breadcrumbs .separator {
+		margin: 0 4px;
+	}
+
+	/* Dashboard widgets stack on mobile */
+	.wps-dashboard-col-container {
+		flex-direction: column;
+	}
+
+	.wps-dashboard-col {
+		min-width: 100%;
+		width: 100%;
+	}
+
+	/* Widget content adjustments */
+	.wps-widget-content .button {
+		width: 100%;
+		justify-content: center;
+		min-height: 48px;
+	}
+
+	/* Stats lists more compact on mobile */
+	.wps-stats-list li {
+		padding: 10px 0;
+		font-size: 14px;
+	}
+}
+
+@media (min-width: 641px) and (max-width: 900px) {
+	/* Tablet: 2-column layout */
+	.wps-dashboard-col-container {
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	.wps-dashboard-col {
+		flex: 1 1 calc(50% - 10px);
+		min-width: 280px;
+	}
+}
+
 @media (max-width: 900px) {
 	.wps-dashboard-col-container {
 		flex-direction: column;

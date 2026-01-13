@@ -54,6 +54,14 @@ function wp_support_admin_enqueue( string $hook ): void {
 		$cache_bust
 	);
 
+	// Enqueue responsive design system (mobile-first, touch-friendly).
+	wp_enqueue_style(
+		'wps-responsive',
+		wp_support_URL . 'assets/css/responsive.css',
+		array( 'wps-ui-system', 'wps-core-admin' ),
+		$cache_bust
+	);
+
 	// Enable drag and drop for dashboard metaboxes on all wp-support pages using WordPress native postboxes.
 	if ( $screen && false !== strpos( $screen->id, 'wp-support' ) ) {
 		error_log( 'wp_support_admin_enqueue: Loading dashboard assets for screen=' . $screen->id );
@@ -97,6 +105,15 @@ function wp_support_admin_enqueue( string $hook ): void {
 	wp_enqueue_script(
 		'wps-core-admin',
 		wp_support_URL . 'assets/js/admin.js',
+		array( 'jquery' ),
+		$cache_bust,
+		true
+	);
+
+	// Enqueue responsive navigation script.
+	wp_enqueue_script(
+		'wps-responsive-nav',
+		wp_support_URL . 'assets/js/responsive-nav.js',
 		array( 'jquery' ),
 		$cache_bust,
 		true
@@ -157,4 +174,42 @@ function wp_support_admin_enqueue( string $hook ): void {
 		$cache_bust,
 		true
 	);
+	// Enqueue Spoke Collection assets if on collection tab.
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$current_tab = isset( $_GET['WPS_tab'] ) ? sanitize_text_field( wp_unslash( $_GET['WPS_tab'] ) ) : 'dashboard';
+	if ( 'collection' === $current_tab ) {
+		wp_enqueue_style(
+			'wps-spoke-collection',
+			wp_support_URL . 'assets/css/spoke-collection.css',
+			array( 'wps-ui-system' ),
+			$cache_bust
+		);
+
+		wp_enqueue_script(
+			'wps-spoke-collection',
+			wp_support_URL . 'assets/js/spoke-collection.js',
+			array( 'jquery' ),
+			$cache_bust,
+			true
+		);
+
+		// Localize spoke collection script.
+		wp_localize_script(
+			'wps-spoke-collection',
+			'wpsSpokeCollection',
+			array(
+				'nonce' => wp_create_nonce( 'WPS_spoke_collection' ),
+				'i18n'  => array(
+					'install'           => __( 'Install This Spoke', 'plugin-wp-support-thisismyurl' ),
+					'activate'          => __( 'Activate', 'plugin-wp-support-thisismyurl' ),
+					'deactivate'        => __( 'Deactivate', 'plugin-wp-support-thisismyurl' ),
+					'notInstalled'      => __( 'Not Installed', 'plugin-wp-support-thisismyurl' ),
+					'readyToActivate'   => __( 'Ready to Activate', 'plugin-wp-support-thisismyurl' ),
+					'activeProcessing'  => __( 'Active & Processing', 'plugin-wp-support-thisismyurl' ),
+					'mastered'          => __( 'Mastered!', 'plugin-wp-support-thisismyurl' ),
+					'confirmDeactivate' => __( 'Are you sure you want to deactivate this spoke?', 'plugin-wp-support-thisismyurl' ),
+				),
+			)
+		);
+	}
 }
