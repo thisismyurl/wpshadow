@@ -54,6 +54,7 @@ use WPS\CoreSupport\Features\WPS_Feature_Conditional_Loading;
 use WPS\CoreSupport\Features\WPS_Feature_Google_Fonts_Disabler;
 use WPS\CoreSupport\Features\WPS_Feature_Critical_CSS;
 use WPS\CoreSupport\Features\WPS_Feature_Script_Optimizer;
+use WPS\CoreSupport\Features\WPS_Feature_Conflict_Sandbox;
 use WPS\CoreSupport\Features\WPS_Feature_Smart_Recommendations;
 
 // Prevent direct access.
@@ -305,6 +306,8 @@ function wps_register_core_features(): void {
 	register_WPS_feature( new WPS_Feature_Hardening() );
 	// Safety features.
 	register_WPS_feature( new WPS_Feature_Auto_Rollback() );
+	// Debugging features.
+	register_WPS_feature( new WPS_Feature_Conflict_Sandbox() );
 	register_WPS_feature( new WPS_Feature_Visual_Regression() );
 }
 
