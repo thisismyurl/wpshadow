@@ -21,6 +21,12 @@ This plugin provides complete functionality on its own and can optionally load h
 - **Update Simulator:** Safe testing of plugin/theme updates before production deployment
 - **Visual Regression Update Guard:** Automatic screenshot capture before/after updates with visual change detection
 - **Diagnostic API:** Hidden diagnostic tokens for automated client support access
+- **Debug Mode Toggles:** One-click toggles for WordPress debug features without editing wp-config.php (see [DEBUG_MODE_TOGGLES.md](docs/DEBUG_MODE_TOGGLES.md))
+  - Backend logging (WP_DEBUG, WP_DEBUG_LOG, SCRIPT_DEBUG, SAVEQUERIES)
+  - Frontend display (admin-only with cookie-based access)
+  - Floating debug bar with query info and memory usage
+  - Error log viewer with refresh and clear functionality
+  - Auto-disable after 1 hour for safety
 - **Spoke Collection System:** Gamified interface for discovering and managing format-specific plugins with milestones, achievements, and visual progression tracking (see [SPOKE_COLLECTION.md](docs/SPOKE_COLLECTION.md))
 - **Script Loading Optimization:** Comprehensive performance optimization system (see [SCRIPT_OPTIMIZATION.md](SCRIPT_OPTIMIZATION.md))
   - Enhanced Script Deferral with auto-detection

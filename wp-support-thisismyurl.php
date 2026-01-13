@@ -616,6 +616,9 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/class-wps-magic-link-support.php';
 	WPS_Magic_Link_Support::init();
 
+	// Load Debug Mode Manager for one-click debug toggles.
+	require_once wp_support_PATH . 'includes/class-wps-debug-mode.php';
+	WPS_Debug_Mode::init();
 	// Load System Report Generator for comprehensive debug information.
 	require_once wp_support_PATH . 'includes/class-wps-system-report-generator.php';
 	WPS_System_Report_Generator::init();

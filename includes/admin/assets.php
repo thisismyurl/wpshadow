@@ -159,6 +159,21 @@ function wp_support_admin_enqueue( string $hook ): void {
 		)
 	);
 
+	// Register debug tools assets (enqueued conditionally in debug-tools.php).
+	wp_register_style(
+		'wps-debug-tools',
+		wp_support_URL . 'assets/css/debug-tools.css',
+		array(),
+		$cache_bust
+	);
+
+	wp_register_script(
+		'wps-debug-tools',
+		wp_support_URL . 'assets/js/debug-tools.js',
+		array( 'jquery' ),
+		$cache_bust,
+		true
+	);
 	// Enqueue Spoke Collection assets if on collection tab.
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$current_tab = isset( $_GET['WPS_tab'] ) ? sanitize_text_field( wp_unslash( $_GET['WPS_tab'] ) ) : 'dashboard';
