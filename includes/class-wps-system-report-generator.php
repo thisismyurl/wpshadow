@@ -32,6 +32,9 @@ class WPS_System_Report_Generator {
 		add_action( 'wp_ajax_wps_generate_report', array( __CLASS__, 'ajax_generate_report' ) );
 		add_action( 'wp_ajax_wps_create_shareable_link', array( __CLASS__, 'ajax_create_shareable_link' ) );
 		
+		// Public report viewing (with token).
+		add_action( 'template_redirect', array( __CLASS__, 'handle_shareable_report' ) );
+		
 		// Cron for auto-delete expired links.
 		add_action( 'wps_cleanup_expired_reports', array( __CLASS__, 'cleanup_expired_reports' ) );
 		
@@ -649,6 +652,243 @@ class WPS_System_Report_Generator {
 			'url'        => $url,
 			'expires_at' => date( 'Y-m-d H:i:s', $expiry ),
 		);
+	}
+
+	/**
+	 * Handle shareable report viewing.
+	 * Runs on template_redirect to intercept report viewing requests.
+	 *
+	 * @return void
+	 */
+	public static function handle_shareable_report(): void {
+		if ( ! isset( $_GET['wps_report'] ) ) {
+			return;
+		}
+
+		$token = sanitize_text_field( wp_unslash( $_GET['wps_report'] ) );
+		$link_data = get_transient( 'wps_report_' . $token );
+
+		if ( ! $link_data || ! is_array( $link_data ) ) {
+			wp_die( esc_html__( 'This report link is invalid or has expired.', 'plugin-wp-support-thisismyurl' ) );
+		}
+
+		// Check if password required.
+		if ( ! empty( $link_data['password'] ) ) {
+			$provided_password = isset( $_POST['report_password'] ) ? sanitize_text_field( wp_unslash( $_POST['report_password'] ) ) : '';
+			
+			if ( empty( $provided_password ) ) {
+				// Show password form.
+				self::render_password_form( $token );
+				exit;
+			}
+
+			if ( ! wp_check_password( $provided_password, $link_data['password'] ) ) {
+				wp_die( esc_html__( 'Incorrect password.', 'plugin-wp-support-thisismyurl' ) );
+			}
+		}
+
+		// Display the report.
+		self::render_shareable_report( $link_data['data'], $link_data['expires_at'] );
+		exit;
+	}
+
+	/**
+	 * Render password form for protected reports.
+	 *
+	 * @param string $token Report token.
+	 * @return void
+	 */
+	private static function render_password_form( string $token ): void {
+		?>
+		<!DOCTYPE html>
+		<html <?php language_attributes(); ?>>
+		<head>
+			<meta charset="<?php bloginfo( 'charset' ); ?>">
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<title><?php esc_html_e( 'Protected Report', 'plugin-wp-support-thisismyurl' ); ?></title>
+			<style>
+				body {
+					font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+					background: #f0f0f1;
+					padding: 50px 20px;
+				}
+				.password-form-container {
+					max-width: 400px;
+					margin: 0 auto;
+					background: #fff;
+					padding: 40px;
+					border-radius: 8px;
+					box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+				}
+				h1 {
+					margin: 0 0 20px;
+					font-size: 24px;
+					color: #1d2327;
+				}
+				label {
+					display: block;
+					margin-bottom: 8px;
+					font-weight: 600;
+					color: #1d2327;
+				}
+				input[type="password"] {
+					width: 100%;
+					padding: 10px;
+					border: 1px solid #ddd;
+					border-radius: 4px;
+					font-size: 14px;
+					box-sizing: border-box;
+				}
+				button {
+					width: 100%;
+					padding: 12px;
+					background: #2271b1;
+					color: #fff;
+					border: none;
+					border-radius: 4px;
+					font-size: 14px;
+					font-weight: 600;
+					cursor: pointer;
+					margin-top: 15px;
+				}
+				button:hover {
+					background: #135e96;
+				}
+			</style>
+		</head>
+		<body>
+			<div class="password-form-container">
+				<h1><?php esc_html_e( 'Protected Report', 'plugin-wp-support-thisismyurl' ); ?></h1>
+				<p><?php esc_html_e( 'This report is password protected. Please enter the password to view.', 'plugin-wp-support-thisismyurl' ); ?></p>
+				<form method="post">
+					<label for="report_password"><?php esc_html_e( 'Password:', 'plugin-wp-support-thisismyurl' ); ?></label>
+					<input type="password" id="report_password" name="report_password" required />
+					<button type="submit"><?php esc_html_e( 'View Report', 'plugin-wp-support-thisismyurl' ); ?></button>
+				</form>
+			</div>
+		</body>
+		</html>
+		<?php
+	}
+
+	/**
+	 * Render the shareable report.
+	 *
+	 * @param array<string, mixed> $data       Report data.
+	 * @param int                  $expires_at Expiry timestamp.
+	 * @return void
+	 */
+	private static function render_shareable_report( array $data, int $expires_at ): void {
+		$report_text = self::export_txt( $data );
+		?>
+		<!DOCTYPE html>
+		<html <?php language_attributes(); ?>>
+		<head>
+			<meta charset="<?php bloginfo( 'charset' ); ?>">
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<title><?php esc_html_e( 'System Report', 'plugin-wp-support-thisismyurl' ); ?></title>
+			<style>
+				body {
+					font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+					background: #f0f0f1;
+					padding: 20px;
+					margin: 0;
+				}
+				.report-container {
+					max-width: 1200px;
+					margin: 0 auto;
+					background: #fff;
+					padding: 30px;
+					border-radius: 8px;
+					box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+				}
+				h1 {
+					margin: 0 0 10px;
+					font-size: 28px;
+					color: #1d2327;
+				}
+				.expiry-notice {
+					background: #fff3cd;
+					border: 1px solid #ffecb5;
+					padding: 12px;
+					border-radius: 4px;
+					margin-bottom: 20px;
+					color: #856404;
+				}
+				pre {
+					background: #f9f9f9;
+					border: 1px solid #ddd;
+					padding: 20px;
+					border-radius: 4px;
+					overflow-x: auto;
+					white-space: pre-wrap;
+					word-wrap: break-word;
+					font-family: 'Courier New', Courier, monospace;
+					font-size: 13px;
+					line-height: 1.6;
+				}
+				.actions {
+					margin-bottom: 20px;
+				}
+				button {
+					padding: 10px 20px;
+					background: #2271b1;
+					color: #fff;
+					border: none;
+					border-radius: 4px;
+					font-size: 14px;
+					cursor: pointer;
+					margin-right: 10px;
+				}
+				button:hover {
+					background: #135e96;
+				}
+			</style>
+		</head>
+		<body>
+			<div class="report-container">
+				<h1><?php esc_html_e( 'System Report', 'plugin-wp-support-thisismyurl' ); ?></h1>
+				<div class="expiry-notice">
+					<?php
+					printf(
+						/* translators: %s: Expiry date */
+						esc_html__( 'This report link expires on: %s', 'plugin-wp-support-thisismyurl' ),
+						'<strong>' . esc_html( date( 'Y-m-d H:i:s', $expires_at ) ) . '</strong>'
+					);
+					?>
+				</div>
+				<div class="actions">
+					<button onclick="copyToClipboard()"><?php esc_html_e( 'Copy to Clipboard', 'plugin-wp-support-thisismyurl' ); ?></button>
+					<button onclick="downloadReport()"><?php esc_html_e( 'Download', 'plugin-wp-support-thisismyurl' ); ?></button>
+				</div>
+				<pre id="report-content"><?php echo esc_html( $report_text ); ?></pre>
+			</div>
+			<script>
+				function copyToClipboard() {
+					const content = document.getElementById('report-content').textContent;
+					navigator.clipboard.writeText(content).then(function() {
+						alert('<?php esc_html_e( 'Report copied to clipboard', 'plugin-wp-support-thisismyurl' ); ?>');
+					}).catch(function() {
+						alert('<?php esc_html_e( 'Failed to copy', 'plugin-wp-support-thisismyurl' ); ?>');
+					});
+				}
+
+				function downloadReport() {
+					const content = document.getElementById('report-content').textContent;
+					const blob = new Blob([content], { type: 'text/plain' });
+					const url = window.URL.createObjectURL(blob);
+					const a = document.createElement('a');
+					a.href = url;
+					a.download = 'system-report-' + Date.now() + '.txt';
+					document.body.appendChild(a);
+					a.click();
+					window.URL.revokeObjectURL(url);
+					document.body.removeChild(a);
+				}
+			</script>
+		</body>
+		</html>
+		<?php
 	}
 
 	/**
