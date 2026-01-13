@@ -463,7 +463,8 @@ class WPS_Site_Audit {
 				}
 
 				// Convert relative URLs to absolute.
-				if ( strpos( $url, '//' ) === false ) {
+				$parsed = wp_parse_url( $url );
+				if ( empty( $parsed['scheme'] ) && empty( $parsed['host'] ) ) {
 					$url = home_url( $url );
 				}
 
@@ -475,7 +476,7 @@ class WPS_Site_Audit {
 					array(
 						'timeout'     => 5,
 						'redirection' => 3,
-						'sslverify'   => false,
+						'sslverify'   => true,
 					)
 				);
 
@@ -562,7 +563,7 @@ class WPS_Site_Audit {
 						'post_id'    => $post->ID,
 						'post_title' => $post->post_title,
 						'src'        => $src,
-						'img_tag'    => wp_strip_all_tags( substr( $img_tag, 0, 100 ) ),
+						'img_tag'    => esc_html( substr( $img_tag, 0, 100 ) ),
 					);
 				}
 			}
@@ -582,8 +583,22 @@ class WPS_Site_Audit {
 	 */
 	private static function audit_php_compatibility(): array {
 		$current_php     = PHP_VERSION;
-		$recommended_php = '8.1';
-		$min_wp_php      = '7.4';
+		$recommended_php = '8.1'; // WordPress recommended minimum as of WP 6.4.
+		$min_wp_php      = '7.4'; // WordPress absolute minimum as of WP 6.4.
+
+		/**
+		 * Filter the recommended PHP version for compatibility checks.
+		 *
+		 * @param string $recommended_php Recommended PHP version.
+		 */
+		$recommended_php = apply_filters( 'wps_audit_recommended_php_version', $recommended_php );
+
+		/**
+		 * Filter the minimum WordPress PHP version for compatibility checks.
+		 *
+		 * @param string $min_wp_php Minimum WordPress PHP version.
+		 */
+		$min_wp_php = apply_filters( 'wps_audit_minimum_php_version', $min_wp_php );
 
 		$issues = array();
 
