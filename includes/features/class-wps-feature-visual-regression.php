@@ -42,6 +42,41 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 	private const DEFAULT_THRESHOLD = 5.0;
 
 	/**
+	 * Transient timeout for results (seconds).
+	 */
+	private const RESULTS_TRANSIENT_TIMEOUT = 300;
+
+	/**
+	 * Transient name for visual regression failure flag.
+	 */
+	private const FAILED_FLAG_TRANSIENT = 'wps_visual_regression_failed';
+
+	/**
+	 * Stabilization delay after update (seconds).
+	 */
+	private const STABILIZATION_DELAY = 3;
+
+	/**
+	 * Maximum text content length to analyze.
+	 */
+	private const MAX_TEXT_LENGTH = 5000;
+
+	/**
+	 * Weight for fingerprint difference in comparison.
+	 */
+	private const FINGERPRINT_DIFF_WEIGHT = 30;
+
+	/**
+	 * Weight for HTML hash difference in comparison.
+	 */
+	private const HTML_HASH_DIFF_WEIGHT = 20;
+
+	/**
+	 * Maximum weight for length difference in comparison.
+	 */
+	private const LENGTH_DIFF_MAX_WEIGHT = 50;
+
+	/**
 	 * Pages to capture for visual regression testing.
 	 */
 	private const CAPTURE_PAGES = array(
@@ -182,8 +217,8 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 
 		error_log( '[VISUAL-REGRESSION] Starting post-update screenshot capture and comparison' );
 
-		// Allow site to stabilize after update.
-		sleep( 3 );
+		// Allow site to stabilize after update (configurable delay).
+		sleep( self::STABILIZATION_DELAY );
 
 		// Capture post-update screenshots.
 		$post_screenshots = $this->capture_screenshots();
@@ -232,7 +267,7 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 				'exceeded_threshold' => $avg_difference > $threshold,
 				'details'            => $comparison_results,
 			),
-			300
+			self::RESULTS_TRANSIENT_TIMEOUT
 		);
 
 		// Flag for manual review or trigger rollback if threshold exceeded.
@@ -244,7 +279,7 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 			) );
 
 			// Set a flag that can be checked by auto-rollback feature.
-			set_transient( 'wps_visual_regression_failed', true, 300 );
+			set_transient( self::FAILED_FLAG_TRANSIENT, true, self::RESULTS_TRANSIENT_TIMEOUT );
 		} else {
 			error_log( '[VISUAL-REGRESSION] Visual difference within acceptable threshold' );
 		}
@@ -270,13 +305,18 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 			$url = $page_path ? trailingslashit( $site_url ) . $page_path : $site_url;
 
 			// Use WordPress HTTP API to fetch page content.
+			// Note: SSL verification is enabled for security. If you need to disable it for local development,
+			// use the 'wps_visual_regression_request_args' filter.
 			$response = wp_remote_get(
 				$url,
-				array(
-					'timeout'     => 30,
-					'sslverify'   => false,
-					'user-agent'  => 'WPS-Visual-Regression-Bot/1.0',
-					'redirection' => 5,
+				apply_filters(
+					'wps_visual_regression_request_args',
+					array(
+						'timeout'     => 30,
+						'sslverify'   => true,
+						'user-agent'  => 'WPS-Visual-Regression-Bot/1.0',
+						'redirection' => 5,
+					)
 				)
 			);
 
@@ -349,7 +389,7 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 		// 4. Extract visible text content (content changes).
 		$text = wp_strip_all_tags( $html );
 		$text = preg_replace( '/\s+/', ' ', $text );
-		$text = substr( $text, 0, 5000 ); // Limit to first 5000 chars.
+		$text = substr( $text, 0, self::MAX_TEXT_LENGTH );
 		$visual_elements['text'] = $text;
 
 		// 5. Extract stylesheet links (CSS file changes).
@@ -393,24 +433,24 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 			$differences = array();
 
 			// 1. Fingerprint difference (most important).
-			$differences[] = $fingerprint_match ? 0 : 30;
+			$differences[] = $fingerprint_match ? 0 : self::FINGERPRINT_DIFF_WEIGHT;
 
 			// 2. HTML hash difference.
-			$differences[] = $pre_data['html_hash'] === $post_data['html_hash'] ? 0 : 20;
+			$differences[] = $pre_data['html_hash'] === $post_data['html_hash'] ? 0 : self::HTML_HASH_DIFF_WEIGHT;
 
 			// 3. HTML length difference (significant structural changes).
 			$length_diff = abs( $pre_data['html_length'] - $post_data['html_length'] );
 			$length_diff_pct = $pre_data['html_length'] > 0
 				? ( $length_diff / $pre_data['html_length'] ) * 100
 				: 0;
-			$differences[] = min( $length_diff_pct, 50 );
+			$differences[] = min( $length_diff_pct, self::LENGTH_DIFF_MAX_WEIGHT );
 
 			// Calculate average difference.
 			$total_difference = array_sum( $differences );
 			$avg_difference   = count( $differences ) > 0 ? $total_difference / count( $differences ) : 0;
 
 			$results[ $page_id ] = array(
-				'status'            => $avg_difference > 5 ? 'changed' : 'unchanged',
+				'status'            => $avg_difference > self::DEFAULT_THRESHOLD ? 'changed' : 'unchanged',
 				'difference'        => $avg_difference,
 				'fingerprint_match' => $fingerprint_match,
 				'html_hash_match'   => $pre_data['html_hash'] === $post_data['html_hash'],
@@ -471,7 +511,7 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 		if ( $exceeded ) {
 			$message = sprintf(
 				/* translators: 1: Update type, 2: Visual difference percentage, 3: Threshold percentage */
-				__( 'Visual Regression Detected: %1$s update resulted in %.2f%% visual difference (threshold: %.2f%%). Manual review recommended.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Visual Regression Detected: %s update resulted in %.2f%% visual difference (threshold: %.2f%%). Manual review recommended.', 'plugin-wp-support-thisismyurl' ),
 				ucfirst( $type ),
 				$avg_diff,
 				$threshold
@@ -479,7 +519,7 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 		} else {
 			$message = sprintf(
 				/* translators: 1: Update type, 2: Visual difference percentage */
-				__( 'Visual Check Passed: %1$s update resulted in %.2f%% visual difference. No significant layout changes detected.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Visual Check Passed: %s update resulted in %.2f%% visual difference. No significant layout changes detected.', 'plugin-wp-support-thisismyurl' ),
 				ucfirst( $type ),
 				$avg_diff
 			);
