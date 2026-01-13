@@ -1,5 +1,20 @@
 [
   {
+    "slug": "maintenance-support-thisismyurl",
+    "type": "spoke",
+    "name": "Maintenance Support",
+    "description": "Automated scheduled maintenance with WP-Cron for database optimization, cleanup tasks, and performance reports.",
+    "version": "1.0.0",
+    "suite_id": "thisismyurl-media-suite-2026",
+    "requires_core": "1.2601.71818",
+    "requires_php": "8.1.29",
+    "requires_wp": "6.4.0",
+    "download_url": "https://github.com/thisismyurl/maintenance-support-thisismyurl/archive/refs/heads/main.zip",
+    "downloaded": false,
+    "status": "planned",
+    "target_milestone": "post-M02"
+  },
+  {
     "slug": "license-support-thisismyurl",
     "type": "hub",
     "name": "License Support",
