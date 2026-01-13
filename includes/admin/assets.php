@@ -54,9 +54,11 @@ function wp_support_admin_enqueue( string $hook ): void {
 		$cache_bust
 	);
 
-	// Enqueue help styles when on help tab.
+	// Get context once for reuse.
 	$context = WPS_Tab_Navigation::get_current_context();
 	$tab     = $context['tab'] ?? '';
+
+	// Enqueue help styles when on help tab.
 	if ( 'help' === $tab ) {
 		wp_enqueue_style(
 			'wps-help',
@@ -82,8 +84,7 @@ function wp_support_admin_enqueue( string $hook ): void {
 			true
 		);
 
-		// Get current context for unique state key.
-		$context   = WPS_Tab_Navigation::get_current_context();
+		// Use cached context from above for unique state key.
 		$hub_id    = $context['hub'] ?? '';
 		$state_key = 'wp-support' . ( $hub_id ? '-' . $hub_id : '' );
 

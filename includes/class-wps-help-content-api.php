@@ -106,14 +106,18 @@ class WPS_Help_Content_API {
 
 		// Handle request errors.
 		if ( is_wp_error( $response ) ) {
-			error_log( 'WPS Help Content API: Failed to fetch - ' . $response->get_error_message() );
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( 'WPS Help Content API: Failed to fetch - ' . $response->get_error_message() );
+			}
 			return null;
 		}
 
 		// Check response code.
 		$code = wp_remote_retrieve_response_code( $response );
 		if ( 200 !== $code ) {
-			error_log( "WPS Help Content API: Unexpected response code {$code}" );
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( "WPS Help Content API: Unexpected response code {$code}" );
+			}
 			return null;
 		}
 
@@ -122,7 +126,9 @@ class WPS_Help_Content_API {
 		$data = json_decode( $body, true );
 
 		if ( ! is_array( $data ) ) {
-			error_log( 'WPS Help Content API: Invalid JSON response' );
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( 'WPS Help Content API: Invalid JSON response' );
+			}
 			return null;
 		}
 
