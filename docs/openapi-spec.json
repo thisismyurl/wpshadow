@@ -1,0 +1,215 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "WP Support Suite REST API",
+    "description": "Comprehensive REST API for WordPress Support Suite module management, vault operations, licensing, and configuration",
+    "version": "1.0.0",
+    "contact": {
+      "name": "thisismyurl",
+      "url": "https://thisismyurl.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "{siteUrl}/wp-json/timu/v1",
+      "description": "Production API",
+      "variables": {
+        "siteUrl": {
+          "default": "https://example.com",
+          "description": "Your WordPress site URL"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "ApplicationPassword": []
+    },
+    {
+      "BasicAuth": []
+    }
+  ],
+  "paths": {
+    "/modules": {
+      "get": {
+        "summary": "List Modules",
+        "description": "List all registered modules with their status",
+        "operationId": "listModules",
+        "tags": ["Module Management"],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number for pagination",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "Items per page",
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filter by module type",
+            "schema": {
+              "type": "string",
+              "enum": ["hub", "spoke"]
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter by module status",
+            "schema": {
+              "type": "string",
+              "enum": ["active", "installed", "available"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "headers": {
+              "X-WP-Total": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Total number of modules"
+              },
+              "X-WP-TotalPages": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Total number of pages"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health Check",
+        "description": "Fast health check endpoint for monitoring systems (public)",
+        "operationId": "healthCheck",
+        "tags": ["Configuration"],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Health status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "string",
+                          "enum": ["healthy", "unhealthy"]
+                        },
+                        "timestamp": {
+                          "type": "string"
+                        },
+                        "version": {
+                          "type": "string"
+                        },
+                        "checks": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApplicationPassword": {
+        "type": "http",
+        "scheme": "basic",
+        "description": "WordPress Application Password (recommended)"
+      },
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic",
+        "description": "Basic Authentication (requires plugin)"
+      }
+    },
+    "schemas": {
+      "SuccessResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Module Management",
+      "description": "Module installation, activation, and feature management"
+    },
+    {
+      "name": "Vault Operations",
+      "description": "Vault file management and operations"
+    },
+    {
+      "name": "License Management",
+      "description": "License registration and verification"
+    },
+    {
+      "name": "Configuration",
+      "description": "Settings management and health checks"
+    }
+  ]
+}
