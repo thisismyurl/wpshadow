@@ -485,6 +485,8 @@ if ( isset( $_POST['wps_update_thresholds'] ) && check_admin_referer( 'wps_perfo
 	<!-- Export Functionality -->
 	<script>
 		jQuery(document).ready(function($) {
+			var ajaxurl = '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>';
+			
 			// Export as CSV.
 			$('#wps-export-csv').on('click', function(e) {
 				e.preventDefault();
