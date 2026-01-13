@@ -454,6 +454,7 @@ function wp_support_deactivate(): void {
 	flush_rewrite_rules();
 	// Moved to Vault module. Directory and protection are ensured by
 	// WPS\VaultSupport\WPS_Vault::init() when the module is enabled.
+}
 
 /**
  * Setup the vault directory for secure original storage.
