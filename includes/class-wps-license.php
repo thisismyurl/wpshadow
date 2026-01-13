@@ -246,6 +246,59 @@ class WPS_License {
 	}
 
 	/**
+	 * Register a license key (alias for save_key + validate_key).
+	 *
+	 * @param string $key     License key.
+	 * @param bool   $network Whether to use network storage.
+	 * @return array|WP_Error
+	 */
+	public static function register( string $key, bool $network ) {
+		self::save_key( $key, $network );
+		$result = self::validate_key( $key, $network );
+
+		if ( 'valid' !== $result['status'] ) {
+			return new \WP_Error( 'invalid_license', $result['message'] );
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Remove license key.
+	 *
+	 * @param bool $network Whether to use network storage.
+	 * @return bool
+	 */
+	public static function remove( bool $network ): bool {
+		$use_network = $network && is_multisite();
+		$delete_fn   = $use_network ? 'delete_site_option' : 'delete_option';
+
+		call_user_func( $delete_fn, self::OPTION_KEY );
+		call_user_func( $delete_fn, self::OPTION_STATUS );
+		call_user_func( $delete_fn, self::OPTION_MESSAGE );
+		call_user_func( $delete_fn, self::OPTION_CHECKED );
+
+		return true;
+	}
+
+	/**
+	 * Force remote verification of current license key.
+	 *
+	 * @param bool $network Whether to use network storage.
+	 * @return array|WP_Error
+	 */
+	public static function verify_remote( bool $network ) {
+		$state = self::get_state( $network );
+		$key   = $state['key'] ?? '';
+
+		if ( empty( $key ) ) {
+			return new \WP_Error( 'no_license', __( 'No license key found.', 'plugin-wp-support-thisismyurl' ) );
+		}
+
+		return self::validate_key( $key, $network );
+	}
+
+	/**
 	 * Render a notice and refresh schedule if needed.
 	 *
 	 * @param bool $use_network Whether to use network storage for state.

@@ -190,4 +190,57 @@ class WPS_Settings {
 
 		return update_option( self::SITE_OPTION, $settings );
 	}
+
+	/**
+	 * Get all settings for a specific module.
+	 *
+	 * @param string $module  Module slug.
+	 * @param bool   $network Force network scope.
+	 * @return array
+	 */
+	public static function get_module_settings( string $module, bool $network = false ): array {
+		$module   = sanitize_key( $module );
+		$settings = self::get_settings( $network );
+
+		return $settings[ $module ] ?? array();
+	}
+
+	/**
+	 * Get all settings (all modules).
+	 *
+	 * @param bool $network Force network scope.
+	 * @return array
+	 */
+	public static function get_all_settings( bool $network = false ): array {
+		return self::get_settings( $network );
+	}
+
+	/**
+	 * Reset a module's settings to defaults.
+	 *
+	 * @param string $module  Module slug.
+	 * @param bool   $network Network scope.
+	 * @return bool
+	 */
+	public static function reset_module( string $module, bool $network = false ): bool {
+		$module   = sanitize_key( $module );
+		$settings = self::get_settings( $network );
+
+		if ( isset( $settings[ $module ] ) ) {
+			unset( $settings[ $module ] );
+			return self::persist( $settings, $network );
+		}
+
+		return true;
+	}
+
+	/**
+	 * Reset all settings to defaults.
+	 *
+	 * @param bool $network Network scope.
+	 * @return bool
+	 */
+	public static function reset_all( bool $network = false ): bool {
+		return self::persist( array(), $network );
+	}
 }
