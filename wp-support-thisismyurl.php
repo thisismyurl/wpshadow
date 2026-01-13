@@ -726,6 +726,7 @@ function wp_support_init(): void {
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-jquery-cleanup.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-block-css-cleanup.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-interactivity-cleanup.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-a11y-audit.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-tips-coach.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-registry.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/wps-feature-functions.php' );
