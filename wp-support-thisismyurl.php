@@ -48,6 +48,7 @@ use WPS\CoreSupport\Features\WPS_Feature_Image_Lazy_Loading;
 use WPS\CoreSupport\Features\WPS_Feature_Asset_Minification;
 use WPS\CoreSupport\Features\WPS_Feature_Database_Cleanup;
 use WPS\CoreSupport\Features\WPS_Feature_Auto_Rollback;
+use WPS\CoreSupport\Features\WPS_Feature_Weekly_Performance_Report;
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -283,6 +284,9 @@ function wps_register_core_features(): void {
 	register_WPS_feature( new WPS_Feature_Image_Lazy_Loading() );
 	register_WPS_feature( new WPS_Feature_Asset_Minification() );
 	register_WPS_feature( new WPS_Feature_Database_Cleanup() );
+
+	// Reporting and analytics features.
+	register_WPS_feature( new WPS_Feature_Weekly_Performance_Report() );
 
 	// Privacy and compliance features.
 	register_WPS_feature( new WPS_Feature_Consent_Checks() );
@@ -628,6 +632,10 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/class-wps-activity-logger.php';
 	WPS_Activity_Logger::init();
 
+	// Load Achievement Badges system.
+	require_once wp_support_PATH . 'includes/class-wps-achievement-badges.php';
+	WPS_Achievement_Badges::init();
+
 	// Load Snapshot Manager for site snapshots and rollback.
 	require_once wp_support_PATH . 'includes/class-wps-snapshot-manager.php';
 	WPS_Snapshot_Manager::init();
@@ -748,6 +756,7 @@ function wp_support_init(): void {
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-asset-minification.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-database-cleanup.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-auto-rollback.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-weekly-performance-report.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-registry.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/wps-feature-functions.php' );
 	WPS_Feature_Registry::init();
@@ -755,6 +764,9 @@ function wp_support_init(): void {
 	
 	// Initialize Tips Coach feature
 	\WPS\CoreSupport\Features\WPS_Feature_Tips_Coach::init();
+
+	// Initialize Weekly Performance Report feature
+	\WPS\CoreSupport\Features\WPS_Feature_Weekly_Performance_Report::init();
 
 	// Load Spoke Base for spoke plugins (Image, Media, etc).
 	require_once wp_support_PATH . 'includes/class-wps-spoke-base.php';
@@ -1932,6 +1944,9 @@ function wps_ajax_toggle_module(): void {
 		// If module is being enabled, inherit parent dashboard layout.
 		if ( $enabled ) {
 			WPS_Dashboard_Layout::on_module_activated( $slug, $network );
+			
+			// Fire action for achievement badges and other hooks.
+			do_action( 'wps_module_activated', (int) $user->ID, $slug );
 		}
 
 		WPS_Vault::add_log(
