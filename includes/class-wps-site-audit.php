@@ -40,14 +40,17 @@ class WPS_Site_Audit {
 	 */
 	public static function generate_audit(): array {
 		$report = array(
-			'id'           => wp_generate_uuid4(),
-			'timestamp'    => time(),
-			'wordpress'    => array(),
-			'performance'  => array(),
-			'security'     => array(),
-			'optimization' => array(),
-			'plugins'      => array(),
-			'theme'        => array(),
+			'id'              => wp_generate_uuid4(),
+			'timestamp'       => time(),
+			'wordpress'       => array(),
+			'performance'     => array(),
+			'security'        => array(),
+			'optimization'    => array(),
+			'plugins'         => array(),
+			'theme'           => array(),
+			'broken_links'    => array(),
+			'missing_alt'     => array(),
+			'php_compat'      => array(),
 		);
 
 		// WordPress analysis.
@@ -67,6 +70,15 @@ class WPS_Site_Audit {
 
 		// Theme analysis.
 		$report['theme'] = self::audit_theme();
+
+		// Broken links analysis.
+		$report['broken_links'] = self::audit_broken_links();
+
+		// Missing alt tags analysis.
+		$report['missing_alt'] = self::audit_missing_alt_tags();
+
+		// PHP compatibility analysis.
+		$report['php_compat'] = self::audit_php_compatibility();
 
 		// Store report.
 		$reports                  = get_option( self::REPORTS_KEY, array() );
@@ -168,15 +180,27 @@ class WPS_Site_Audit {
 			);
 		}
 
-		// Check for outdated plugins.
-		$outdated = self::get_outdated_plugins();
-		if ( ! empty( $outdated ) ) {
+		// Check for outdated plugins (enhanced).
+		$outdated_plugins = self::get_outdated_plugins();
+		if ( ! empty( $outdated_plugins ) ) {
 			$issues[] = array(
 				'level'       => 'critical',
 				'title'       => 'Outdated Plugins',
-				'description' => count( $outdated ) . ' plugin(s) have available updates.',
-				'plugins'     => $outdated,
-				'fix'         => 'Update plugins immediately.',
+				'description' => count( $outdated_plugins ) . ' plugin(s) have available updates.',
+				'plugins'     => $outdated_plugins,
+				'fix'         => 'Update plugins immediately to ensure security and compatibility.',
+			);
+		}
+
+		// Check for outdated theme.
+		$outdated_themes = self::get_outdated_themes();
+		if ( ! empty( $outdated_themes ) ) {
+			$issues[] = array(
+				'level'       => 'warning',
+				'title'       => 'Outdated Theme',
+				'description' => count( $outdated_themes ) . ' theme(s) have available updates.',
+				'themes'      => $outdated_themes,
+				'fix'         => 'Update themes to ensure security and compatibility.',
 			);
 		}
 
@@ -188,6 +212,17 @@ class WPS_Site_Audit {
 				'title'       => 'SSL Not Enabled',
 				'description' => 'Site does not use HTTPS. Enable SSL for security.',
 				'fix'         => 'Enable SSL in hosting control panel and update WordPress Address.',
+			);
+		}
+
+		// Check for WordPress core updates.
+		$core_updates = get_core_updates();
+		if ( ! empty( $core_updates ) && isset( $core_updates[0]->response ) && 'upgrade' === $core_updates[0]->response ) {
+			$issues[] = array(
+				'level'       => 'critical',
+				'title'       => 'WordPress Core Update Available',
+				'description' => 'WordPress ' . $core_updates[0]->current . ' is available. Current version: ' . get_bloginfo( 'version' ),
+				'fix'         => 'Update WordPress core immediately.',
 			);
 		}
 
@@ -314,7 +349,7 @@ class WPS_Site_Audit {
 	private static function get_outdated_plugins(): array {
 		$outdated  = array();
 		$plugins   = get_plugins();
-		$transient = get_transients( 'update_plugins' );
+		$transient = get_site_transient( 'update_plugins' );
 
 		if ( ! is_object( $transient ) || empty( $transient->response ) ) {
 			return $outdated;
@@ -326,6 +361,34 @@ class WPS_Site_Audit {
 					'name'      => $plugins[ $plugin_path ]['Name'] ?? '',
 					'current'   => $plugins[ $plugin_path ]['Version'] ?? '0',
 					'available' => $update_data->new_version ?? 'unknown',
+				);
+			}
+		}
+
+		return $outdated;
+	}
+
+	/**
+	 * Get outdated themes.
+	 *
+	 * @return array Outdated themes list.
+	 */
+	private static function get_outdated_themes(): array {
+		$outdated  = array();
+		$themes    = wp_get_themes();
+		$transient = get_site_transient( 'update_themes' );
+
+		if ( ! is_object( $transient ) || empty( $transient->response ) ) {
+			return $outdated;
+		}
+
+		foreach ( $transient->response as $theme_slug => $update_data ) {
+			if ( isset( $themes[ $theme_slug ] ) ) {
+				$theme      = $themes[ $theme_slug ];
+				$outdated[] = array(
+					'name'      => $theme->get( 'Name' ),
+					'current'   => $theme->get( 'Version' ),
+					'available' => $update_data['new_version'] ?? 'unknown',
 				);
 			}
 		}
@@ -354,6 +417,262 @@ class WPS_Site_Audit {
 		}
 
 		return $unused;
+	}
+
+	/**
+	 * Audit for broken links in posts and pages.
+	 *
+	 * @return array Broken links report.
+	 */
+	private static function audit_broken_links(): array {
+		global $wpdb;
+
+		$broken_links = array();
+		$posts        = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT ID, post_title, post_content FROM {$wpdb->posts} 
+				WHERE post_status = %s 
+				AND post_type IN ('post', 'page') 
+				LIMIT 100",
+				'publish'
+			)
+		);
+
+		if ( empty( $posts ) ) {
+			return array(
+				'total_checked' => 0,
+				'broken_count'  => 0,
+				'links'         => array(),
+			);
+		}
+
+		$total_links_checked = 0;
+
+		foreach ( $posts as $post ) {
+			// Extract all links from post content.
+			preg_match_all( '/<a[^>]+href=["\']([^"\']+)["\'][^>]*>/i', $post->post_content, $matches );
+
+			if ( empty( $matches[1] ) ) {
+				continue;
+			}
+
+			foreach ( $matches[1] as $url ) {
+				// Skip anchors, mailto, and tel links.
+				if ( strpos( $url, '#' ) === 0 || strpos( $url, 'mailto:' ) === 0 || strpos( $url, 'tel:' ) === 0 ) {
+					continue;
+				}
+
+				// Convert relative URLs to absolute.
+				if ( strpos( $url, '//' ) === false ) {
+					$url = home_url( $url );
+				}
+
+				$total_links_checked++;
+
+				// Check if URL is accessible (basic check).
+				$response = wp_safe_remote_head(
+					$url,
+					array(
+						'timeout'     => 5,
+						'redirection' => 3,
+						'sslverify'   => false,
+					)
+				);
+
+				if ( is_wp_error( $response ) ) {
+					$broken_links[] = array(
+						'post_id'    => $post->ID,
+						'post_title' => $post->post_title,
+						'url'        => $url,
+						'error'      => $response->get_error_message(),
+					);
+				} else {
+					$status_code = wp_remote_retrieve_response_code( $response );
+					if ( $status_code >= 400 ) {
+						$broken_links[] = array(
+							'post_id'     => $post->ID,
+							'post_title'  => $post->post_title,
+							'url'         => $url,
+							'status_code' => $status_code,
+						);
+					}
+				}
+
+				// Limit to prevent timeout (check max 50 links).
+				if ( $total_links_checked >= 50 ) {
+					break 2;
+				}
+			}
+		}
+
+		return array(
+			'total_checked' => $total_links_checked,
+			'broken_count'  => count( $broken_links ),
+			'links'         => $broken_links,
+		);
+	}
+
+	/**
+	 * Audit for missing alt tags in images.
+	 *
+	 * @return array Missing alt tags report.
+	 */
+	private static function audit_missing_alt_tags(): array {
+		global $wpdb;
+
+		$missing_alt = array();
+		$posts       = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT ID, post_title, post_content FROM {$wpdb->posts} 
+				WHERE post_status = %s 
+				AND post_type IN ('post', 'page') 
+				LIMIT 100",
+				'publish'
+			)
+		);
+
+		if ( empty( $posts ) ) {
+			return array(
+				'total_images'   => 0,
+				'missing_count'  => 0,
+				'images'         => array(),
+			);
+		}
+
+		$total_images = 0;
+
+		foreach ( $posts as $post ) {
+			// Extract all img tags from post content.
+			preg_match_all( '/<img[^>]+>/i', $post->post_content, $matches );
+
+			if ( empty( $matches[0] ) ) {
+				continue;
+			}
+
+			foreach ( $matches[0] as $img_tag ) {
+				$total_images++;
+
+				// Check if alt attribute exists and is not empty.
+				if ( ! preg_match( '/alt=["\']([^"\']*)["\']/', $img_tag, $alt_match ) || empty( trim( $alt_match[1] ) ) ) {
+					// Extract src for reference.
+					preg_match( '/src=["\']([^"\']+)["\']/', $img_tag, $src_match );
+					$src = $src_match[1] ?? 'unknown';
+
+					$missing_alt[] = array(
+						'post_id'    => $post->ID,
+						'post_title' => $post->post_title,
+						'src'        => $src,
+						'img_tag'    => wp_strip_all_tags( substr( $img_tag, 0, 100 ) ),
+					);
+				}
+			}
+		}
+
+		return array(
+			'total_images'  => $total_images,
+			'missing_count' => count( $missing_alt ),
+			'images'        => $missing_alt,
+		);
+	}
+
+	/**
+	 * Audit PHP version compatibility.
+	 *
+	 * @return array PHP compatibility report.
+	 */
+	private static function audit_php_compatibility(): array {
+		$current_php     = PHP_VERSION;
+		$recommended_php = '8.1';
+		$min_wp_php      = '7.4';
+
+		$issues = array();
+
+		// Check if PHP version is below recommended.
+		if ( version_compare( $current_php, $recommended_php, '<' ) ) {
+			$issues[] = array(
+				'level'       => 'warning',
+				'title'       => 'PHP Version Below Recommended',
+				'description' => sprintf(
+					'Current PHP version %s is below the recommended %s. Consider upgrading for better performance and security.',
+					$current_php,
+					$recommended_php
+				),
+			);
+		}
+
+		// Check if PHP version is below WordPress minimum.
+		if ( version_compare( $current_php, $min_wp_php, '<' ) ) {
+			$issues[] = array(
+				'level'       => 'critical',
+				'title'       => 'PHP Version Below WordPress Minimum',
+				'description' => sprintf(
+					'Current PHP version %s is below WordPress minimum %s. Upgrade immediately.',
+					$current_php,
+					$min_wp_php
+				),
+			);
+		}
+
+		// Check plugins for PHP requirements.
+		$plugins              = get_plugins();
+		$incompatible_plugins = array();
+
+		foreach ( $plugins as $plugin_path => $plugin_data ) {
+			if ( isset( $plugin_data['RequiresPHP'] ) && ! empty( $plugin_data['RequiresPHP'] ) ) {
+				$required_php = $plugin_data['RequiresPHP'];
+				if ( version_compare( $current_php, $required_php, '<' ) ) {
+					$incompatible_plugins[] = array(
+						'name'         => $plugin_data['Name'] ?? 'Unknown',
+						'requires_php' => $required_php,
+					);
+				}
+			}
+		}
+
+		if ( ! empty( $incompatible_plugins ) ) {
+			$issues[] = array(
+				'level'       => 'critical',
+				'title'       => 'Plugins Require Higher PHP Version',
+				'description' => sprintf(
+					'%d plugin(s) require a higher PHP version than currently installed.',
+					count( $incompatible_plugins )
+				),
+				'plugins'     => $incompatible_plugins,
+			);
+		}
+
+		// Check theme PHP requirements.
+		$theme        = wp_get_theme();
+		$theme_php    = $theme->get( 'RequiresPHP' );
+		$theme_issues = array();
+
+		if ( ! empty( $theme_php ) && version_compare( $current_php, $theme_php, '<' ) ) {
+			$theme_issues[] = array(
+				'name'         => $theme->get( 'Name' ),
+				'requires_php' => $theme_php,
+			);
+		}
+
+		if ( ! empty( $theme_issues ) ) {
+			$issues[] = array(
+				'level'       => 'critical',
+				'title'       => 'Theme Requires Higher PHP Version',
+				'description' => sprintf(
+					'Active theme requires PHP %s but current version is %s.',
+					$theme_php,
+					$current_php
+				),
+				'themes'      => $theme_issues,
+			);
+		}
+
+		return array(
+			'current_version'      => $current_php,
+			'recommended_version'  => $recommended_php,
+			'issues_count'         => count( $issues ),
+			'issues'               => $issues,
+			'is_compatible'        => empty( $issues ),
+		);
 	}
 
 	/**
@@ -451,15 +770,103 @@ class WPS_Site_Audit {
 										<p style="margin: 5px 0; font-size: 13px; color: #666;">
 											<?php echo esc_html( $issue['description'] ); ?>
 										</p>
+										<?php if ( ! empty( $issue['fix'] ) ) : ?>
+											<p style="margin: 5px 0; font-size: 12px; color: #333;"><em><?php echo esc_html( $issue['fix'] ); ?></em></p>
+										<?php endif; ?>
 									</li>
 								<?php endforeach; ?>
 							</ul>
 						</div>
 					<?php endif; ?>
 
+					<!-- PHP Compatibility Issues -->
+					<?php if ( ! empty( $latest['php_compat']['issues'] ) ) : ?>
+						<div style="margin: 20px 0; padding: 15px; background: #fee; border-left: 4px solid #ff6600;">
+							<h3><?php esc_html_e( '⚠️ PHP Compatibility Issues', 'plugin-wp-support-thisismyurl' ); ?> (<?php echo intval( count( $latest['php_compat']['issues'] ) ); ?>)</h3>
+							<p style="margin: 10px 0; font-size: 13px;">
+								<?php
+								printf(
+									esc_html__( 'Current PHP Version: %s | Recommended: %s', 'plugin-wp-support-thisismyurl' ),
+									esc_html( $latest['php_compat']['current_version'] ),
+									esc_html( $latest['php_compat']['recommended_version'] )
+								);
+								?>
+							</p>
+							<ul style="margin: 10px 0; padding-left: 20px;">
+								<?php foreach ( $latest['php_compat']['issues'] as $issue ) : ?>
+									<li>
+										<strong><?php echo esc_html( $issue['title'] ); ?></strong>
+										<p style="margin: 5px 0; font-size: 13px; color: #666;">
+											<?php echo esc_html( $issue['description'] ); ?>
+										</p>
+									</li>
+								<?php endforeach; ?>
+							</ul>
+						</div>
+					<?php endif; ?>
+
+					<!-- Broken Links -->
+					<?php if ( ! empty( $latest['broken_links']['broken_count'] ) ) : ?>
+						<div style="margin: 20px 0; padding: 15px; background: #ffe; border-left: 4px solid #ff6600;">
+							<h3><?php esc_html_e( '🔗 Broken Links Found', 'plugin-wp-support-thisismyurl' ); ?> (<?php echo intval( $latest['broken_links']['broken_count'] ); ?>)</h3>
+							<p style="margin: 10px 0; font-size: 13px; color: #666;">
+								<?php
+								printf(
+									esc_html__( 'Checked %d links and found %d broken.', 'plugin-wp-support-thisismyurl' ),
+									intval( $latest['broken_links']['total_checked'] ),
+									intval( $latest['broken_links']['broken_count'] )
+								);
+								?>
+							</p>
+							<ul style="margin: 10px 0; padding-left: 20px; max-height: 300px; overflow-y: auto;">
+								<?php foreach ( array_slice( $latest['broken_links']['links'], 0, 10 ) as $link ) : ?>
+									<li style="margin-bottom: 10px;">
+										<strong><?php echo esc_html( $link['post_title'] ); ?></strong>
+										<br/>
+										<code style="font-size: 11px; background: #f5f5f5; padding: 2px 5px;"><?php echo esc_html( $link['url'] ); ?></code>
+										<?php if ( ! empty( $link['status_code'] ) ) : ?>
+											<span style="color: #c00; font-size: 12px;"> - HTTP <?php echo intval( $link['status_code'] ); ?></span>
+										<?php endif; ?>
+									</li>
+								<?php endforeach; ?>
+								<?php if ( count( $latest['broken_links']['links'] ) > 10 ) : ?>
+									<li style="font-style: italic; color: #666;"><?php printf( esc_html__( 'And %d more...', 'plugin-wp-support-thisismyurl' ), count( $latest['broken_links']['links'] ) - 10 ); ?></li>
+								<?php endif; ?>
+							</ul>
+						</div>
+					<?php endif; ?>
+
+					<!-- Missing Alt Tags -->
+					<?php if ( ! empty( $latest['missing_alt']['missing_count'] ) ) : ?>
+						<div style="margin: 20px 0; padding: 15px; background: #ffe; border-left: 4px solid #ffb900;">
+							<h3><?php esc_html_e( '🖼️ Missing Alt Tags', 'plugin-wp-support-thisismyurl' ); ?> (<?php echo intval( $latest['missing_alt']['missing_count'] ); ?>)</h3>
+							<p style="margin: 10px 0; font-size: 13px; color: #666;">
+								<?php
+								printf(
+									esc_html__( 'Found %d images without alt tags out of %d total images checked.', 'plugin-wp-support-thisismyurl' ),
+									intval( $latest['missing_alt']['missing_count'] ),
+									intval( $latest['missing_alt']['total_images'] )
+								);
+								?>
+							</p>
+							<ul style="margin: 10px 0; padding-left: 20px; max-height: 300px; overflow-y: auto;">
+								<?php foreach ( array_slice( $latest['missing_alt']['images'], 0, 10 ) as $image ) : ?>
+									<li style="margin-bottom: 10px;">
+										<strong><?php echo esc_html( $image['post_title'] ); ?></strong>
+										<br/>
+										<code style="font-size: 11px; background: #f5f5f5; padding: 2px 5px;"><?php echo esc_html( basename( $image['src'] ) ); ?></code>
+									</li>
+								<?php endforeach; ?>
+								<?php if ( count( $latest['missing_alt']['images'] ) > 10 ) : ?>
+									<li style="font-style: italic; color: #666;"><?php printf( esc_html__( 'And %d more...', 'plugin-wp-support-thisismyurl' ), count( $latest['missing_alt']['images'] ) - 10 ); ?></li>
+								<?php endif; ?>
+							</ul>
+						</div>
+					<?php endif; ?>
+
 					<!-- Optimization Suggestions -->
 					<?php if ( ! empty( $latest['optimization']['suggestions'] ) ) : ?>
-						<div style="margin: 20px 0; padding: 15px; background: #ffe; border-left: 4px solid #ffb900;">
+						<div style="margin: 20px 0; padding: 15px; background: #eff; border-left: 4px solid #0073aa;">
 							<h3><?php esc_html_e( '⚡ Optimization Opportunities', 'plugin-wp-support-thisismyurl' ); ?> (<?php echo intval( count( $latest['optimization']['suggestions'] ) ); ?>)</h3>
 							<ul style="margin: 10px 0; padding-left: 20px;">
 								<?php foreach ( $latest['optimization']['suggestions'] as $suggestion ) : ?>
@@ -509,6 +916,7 @@ class WPS_Site_Audit {
 		<script>
 		document.getElementById('wps-audit-generate')?.addEventListener('click', function() {
 			this.disabled = true;
+			this.textContent = '<?php esc_html_e( 'Generating Audit...', 'plugin-wp-support-thisismyurl' ); ?>';
 			fetch(ajaxurl, {
 				method: 'POST',
 				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -517,9 +925,9 @@ class WPS_Site_Audit {
 			.then(r => r.json())
 			.then(d => {
 				if (d.success) { location.reload(); }
-				else { alert('Error: ' + d.data); this.disabled = false; }
+				else { alert('Error: ' + d.data); this.disabled = false; this.textContent = '<?php esc_html_e( '📋 Generate New Audit', 'plugin-wp-support-thisismyurl' ); ?>'; }
 			})
-			.catch(e => { alert('Error: ' + e); this.disabled = false; });
+			.catch(e => { alert('Error: ' + e); this.disabled = false; this.textContent = '<?php esc_html_e( '📋 Generate New Audit', 'plugin-wp-support-thisismyurl' ); ?>'; });
 		});
 		</script>
 		<?php
