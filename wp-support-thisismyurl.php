@@ -625,6 +625,10 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/class-wps-activity-logger.php';
 	WPS_Activity_Logger::init();
 
+	// Load Achievement Badges system.
+	require_once wp_support_PATH . 'includes/class-wps-achievement-badges.php';
+	WPS_Achievement_Badges::init();
+
 	// Load Snapshot Manager for site snapshots and rollback.
 	require_once wp_support_PATH . 'includes/class-wps-snapshot-manager.php';
 	WPS_Snapshot_Manager::init();
@@ -1928,6 +1932,9 @@ function wps_ajax_toggle_module(): void {
 		// If module is being enabled, inherit parent dashboard layout.
 		if ( $enabled ) {
 			WPS_Dashboard_Layout::on_module_activated( $slug, $network );
+			
+			// Fire action for achievement badges and other hooks.
+			do_action( 'wps_module_activated', (int) $user->ID, $slug );
 		}
 
 		WPS_Vault::add_log(
