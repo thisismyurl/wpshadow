@@ -107,11 +107,12 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 			return;
 		}
 
-		// Register a minimal style handle to ensure we always have something to attach to.
-		wp_register_style( 'wps-skiplinks', false ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+		// Register and enqueue a minimal style handle for skip links.
+		// We use inline styles only, so no external file is needed.
+		wp_register_style( 'wps-skiplinks', '' ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 		wp_enqueue_style( 'wps-skiplinks' );
 		
-		// Inline styles for skip links (no external CSS file needed).
+		// Add inline styles for skip links.
 		$css = $this->get_skip_links_css();
 		wp_add_inline_style( 'wps-skiplinks', $css );
 	}

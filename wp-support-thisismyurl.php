@@ -35,6 +35,7 @@ use WPS\CoreSupport\Features\WPS_Feature_Plugin_Cleanup;
 use WPS\CoreSupport\Features\WPS_Feature_HTML_Cleanup;
 use WPS\CoreSupport\Features\WPS_Feature_Resource_Hints;
 use WPS\CoreSupport\Features\WPS_Feature_Nav_Accessibility;
+use WPS\CoreSupport\Features\WPS_Feature_Skiplinks;
 use WPS\CoreSupport\Features\WPS_Feature_Embed_Disable;
 use WPS\CoreSupport\Features\WPS_Feature_jQuery_Cleanup;
 use WPS\CoreSupport\Features\WPS_Feature_Block_CSS_Cleanup;
