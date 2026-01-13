@@ -18,6 +18,13 @@ This plugin provides complete functionality on its own and can optionally load h
 - **Guided Walkthroughs:** Step-by-step task assistance for complex WordPress operations
 - **Update Simulator:** Safe testing of plugin/theme updates before production deployment
 - **Diagnostic API:** Hidden diagnostic tokens for automated client support access
+- **Script Loading Optimization:** Comprehensive performance optimization system (see [SCRIPT_OPTIMIZATION.md](SCRIPT_OPTIMIZATION.md))
+  - Enhanced Script Deferral with auto-detection
+  - Conditional Script Loading for plugin-specific pages
+  - Google Fonts Disabler for privacy and performance
+  - Critical CSS Inline for instant rendering
+  - Resource Preloading for fonts, scripts, and images
+  - Script Optimization Analyzer with recommendations
 
 ### Optional Hub & Spoke Architecture (When Modules Installed)
 
