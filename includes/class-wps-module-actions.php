@@ -68,29 +68,29 @@ class WPS_Module_Actions {
 	 */
 	public static function init(): void {
 		// Install and activate module.
-		add_action( 'wp_ajax_WPS_module_install', array( __CLASS__, 'ajax_install_module' ) );
+		add_action( 'wp_ajax_wps_module_install', array( __CLASS__, 'ajax_install_module' ) );
 
 		// Update module.
-		add_action( 'wp_ajax_WPS_module_update', array( __CLASS__, 'ajax_update_module' ) );
+		add_action( 'wp_ajax_wps_module_update', array( __CLASS__, 'ajax_update_module' ) );
 
 		// Activate module.
-		add_action( 'wp_ajax_WPS_module_activate', array( __CLASS__, 'ajax_activate_module' ) );
+		add_action( 'wp_ajax_wps_module_activate', array( __CLASS__, 'ajax_activate_module' ) );
 
 		// Deactivate module (network).
-		add_action( 'wp_ajax_WPS_module_deactivate', array( __CLASS__, 'ajax_deactivate_module' ) );
+		add_action( 'wp_ajax_wps_module_deactivate', array( __CLASS__, 'ajax_deactivate_module' ) );
 
 		// Toggle module enabled setting (for bundled/non-plugin modules).
-		add_action( 'wp_ajax_WPS_module_toggle', array( __CLASS__, 'ajax_toggle_module_enabled' ) );
+		add_action( 'wp_ajax_wps_module_toggle', array( __CLASS__, 'ajax_toggle_module_enabled' ) );
 
 		// Clear remembered deactivations after restoration.
-		add_action( 'wp_ajax_WPS_clear_remembered', array( __CLASS__, 'ajax_clear_remembered' ) );
+		add_action( 'wp_ajax_wps_clear_remembered', array( __CLASS__, 'ajax_clear_remembered' ) );
 
 		// Refresh dashboard widgets dynamically.
-		add_action( 'wp_ajax_WPS_refresh_health_widget', array( __CLASS__, 'ajax_refresh_health_widget' ) );
-		add_action( 'wp_ajax_WPS_refresh_events_widget', array( __CLASS__, 'ajax_refresh_events_widget' ) );
+		add_action( 'wp_ajax_wps_refresh_health_widget', array( __CLASS__, 'ajax_refresh_health_widget' ) );
+		add_action( 'wp_ajax_wps_refresh_events_widget', array( __CLASS__, 'ajax_refresh_events_widget' ) );
 
 		// Download progress polling.
-		add_action( 'wp_ajax_WPS_module_download_progress', array( __CLASS__, 'ajax_download_progress' ) );
+		add_action( 'wp_ajax_wps_module_download_progress', array( __CLASS__, 'ajax_download_progress' ) );
 	}
 	/**
 	 * AJAX: Toggle module enabled setting (site or network scope).
@@ -491,6 +491,44 @@ class WPS_Module_Actions {
 				'html'           => $html,
 				'active_modules' => $active_modules,
 				'timestamp'      => current_time( 'timestamp' ),
+			)
+		);
+	}
+
+	/**
+	 * AJAX: Refresh events and news widget for active modules.
+	 *
+	 * @return void
+	 */
+	public static function ajax_refresh_events_widget(): void {
+		self::verify_request( 'WPS_module_actions', 'manage_options', 'manage_network_options' );
+
+		// Get active module slugs and their repos.
+		$active_repos = array();
+		$catalog      = WPS_Module_Registry::get_catalog_with_status();
+		foreach ( $catalog as $module ) {
+			$slug = $module['slug'] ?? '';
+			if ( ! empty( $slug ) && WPS_Module_Registry::is_enabled( $slug ) ) {
+				// Extract repo from slug (e.g., 'vault-support-thisismyurl' → 'plugin-vault-support-thisismyurl').
+				$repo           = 'plugin-' . $slug;
+				$active_repos[] = array(
+					'slug' => $slug,
+					'repo' => $repo,
+					'name' => $module['name'] ?? ucfirst( str_replace( '-', ' ', $slug ) ),
+				);
+			}
+		}
+
+		// Render widget HTML.
+		ob_start();
+		WPS_Dashboard_Widgets::render_events_widget_html( $active_repos );
+		$html = ob_get_clean();
+
+		self::respond_success(
+			array(
+				'html'         => $html,
+				'active_repos' => $active_repos,
+				'timestamp'    => current_time( 'timestamp' ),
 			)
 		);
 	}
