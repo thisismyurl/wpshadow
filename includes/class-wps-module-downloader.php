@@ -152,6 +152,8 @@ class WPS_Module_Downloader {
 						$backoff_seconds
 					)
 				);
+				// Note: sleep() blocks but is acceptable here as download operations are expected to take time.
+				// For asynchronous processing, consider using WordPress cron for background downloads.
 				sleep( $backoff_seconds );
 			}
 		}

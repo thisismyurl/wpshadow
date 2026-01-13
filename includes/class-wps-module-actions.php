@@ -506,6 +506,7 @@ class WPS_Module_Actions {
 		$session_id = isset( $_POST['session_id'] ) ? sanitize_text_field( wp_unslash( $_POST['session_id'] ) ) : '';
 		if ( empty( $session_id ) ) {
 			self::respond_error( __( 'Session ID is required.', 'plugin-wp-support-thisismyurl' ), 400 );
+			return;
 		}
 
 		// Get progress from transient.
@@ -520,6 +521,7 @@ class WPS_Module_Actions {
 					'message' => __( 'No progress data available.', 'plugin-wp-support-thisismyurl' ),
 				)
 			);
+			return;
 		}
 
 		self::respond_success( $progress );
