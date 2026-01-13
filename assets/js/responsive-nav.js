@@ -3,7 +3,7 @@
  * Handles mobile navigation drawer and hamburger menu
  *
  * @package WPS_CORE_SUPPORT
- * @since 1.2601.71900
+ * @since 1.2601.71920
  */
 
 (function($) {
