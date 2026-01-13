@@ -616,6 +616,10 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/class-wps-magic-link-support.php';
 	WPS_Magic_Link_Support::init();
 
+	// Load System Report Generator for comprehensive debug information.
+	require_once wp_support_PATH . 'includes/class-wps-system-report-generator.php';
+	WPS_System_Report_Generator::init();
+
 	// Register AJAX handlers for Diagnostic API.
 	add_action(
 		'wp_ajax_wps_create_diagnostic_token',
