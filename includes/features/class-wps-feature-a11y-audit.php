@@ -278,8 +278,9 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 		preg_match_all( '/<img[^>]+>/i', $content, $matches );
 
 		foreach ( $matches[0] as $img_tag ) {
-			// Check if alt attribute is missing or empty (check for various quote styles and unquoted).
-			if ( ! preg_match( '/\balt=(["\']?)([^"\'\s>]*)\1/i', $img_tag, $alt_match ) ) {
+			// Check if alt attribute exists (including empty ones).
+			if ( ! preg_match( '/\balt=/i', $img_tag ) ) {
+				// No alt attribute at all.
 				$issues[] = array(
 					'type'        => 'alt_text',
 					'severity'    => 'high',
@@ -290,19 +291,22 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 					'fix_action'  => 'add_alt_attribute',
 					'suggestion'  => __( 'Add descriptive alt text to help screen readers understand the image content.', 'plugin-wp-support-thisismyurl' ),
 				);
-			} elseif ( empty( trim( $alt_match[2] ) ) ) {
-				// Check for decorative images - if they have role="presentation" or are truly decorative.
-				if ( ! str_contains( $img_tag, 'role="presentation"' ) && ! str_contains( $img_tag, 'role="none"' ) ) {
-					$issues[] = array(
-						'type'        => 'alt_text',
-						'severity'    => 'medium',
-						'message'     => __( 'Image has empty alt text without decorative role', 'plugin-wp-support-thisismyurl' ),
-						'element'     => $img_tag,
-						'post_id'     => $post_id,
-						'auto_fix'    => true,
-						'fix_action'  => 'add_descriptive_alt',
-						'suggestion'  => __( 'Either add descriptive alt text or mark as decorative with role="presentation".', 'plugin-wp-support-thisismyurl' ),
-					);
+			} elseif ( preg_match( '/\balt=(["\']?)([^"\'>]*)\1/i', $img_tag, $alt_match ) ) {
+				// Alt attribute exists, check if it's empty.
+				if ( empty( trim( $alt_match[2] ) ) ) {
+					// Check for decorative images - if they have role="presentation" or are truly decorative.
+					if ( ! str_contains( $img_tag, 'role="presentation"' ) && ! str_contains( $img_tag, 'role="none"' ) ) {
+						$issues[] = array(
+							'type'        => 'alt_text',
+							'severity'    => 'medium',
+							'message'     => __( 'Image has empty alt text without decorative role', 'plugin-wp-support-thisismyurl' ),
+							'element'     => $img_tag,
+							'post_id'     => $post_id,
+							'auto_fix'    => true,
+							'fix_action'  => 'add_descriptive_alt',
+							'suggestion'  => __( 'Either add descriptive alt text or mark as decorative with role="presentation".', 'plugin-wp-support-thisismyurl' ),
+						);
+					}
 				}
 			}
 		}
@@ -541,7 +545,7 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 	private function fix_missing_alt( string $content ): string {
 		// Add empty alt to images without alt attribute (assumes decorative).
 		// Use negative lookahead to check if alt attribute doesn't exist.
-		return preg_replace( '/<img\b(?![^>]*\balt=)([^>]*?)(\s*\/?>)/i', '<img alt=""$1$2', $content );
+		return preg_replace( '/<img\b(?![^>]*\balt=)([^>]*?)(\s*\/?>)/i', '<img$1 alt=""$2', $content );
 	}
 
 	/**
@@ -553,9 +557,10 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 	private function fix_empty_alt( string $content ): string {
 		// Add role="presentation" to images with empty alt (no text between quotes) that don't have a role.
 		// This only matches truly empty alt attributes (alt="" or alt='')
+		// Pattern: \2 references the captured quote, so we match alt="<quote><same-quote>"
 		return preg_replace(
-			'/<img\b([^>]*?)\balt=(["\'])(\2)(?![^>]*\brole=)([^>]*?)>/i',
-			'<img$1alt=$2$3 role="presentation"$4>',
+			'/<img\b([^>]*?)\balt=(["\'])\2(?![^>]*\brole=)([^>]*?)>/i',
+			'<img$1alt=$2$2 role="presentation"$3>',
 			$content
 		);
 	}
