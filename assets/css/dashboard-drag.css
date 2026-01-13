@@ -89,6 +89,56 @@
 }
 
 /* Mobile responsiveness */
+@media (max-width: 640px) {
+	/* Stack metaboxes vertically on mobile */
+	.wps-metabox-holder {
+		flex-direction: column;
+	}
+	
+	.wps-metabox-container {
+		width: 100%;
+	}
+
+	/* Adjust metabox padding for mobile */
+	.wps-metabox-header {
+		padding: 10px 14px;
+		font-size: 14px;
+	}
+
+	.wps-metabox-content {
+		padding: 14px;
+	}
+
+	/* Touch-friendly toggle button */
+	.wps-metabox-toggle {
+		width: 32px;
+		height: 32px;
+		font-size: 18px;
+	}
+
+	/* Disable drag on mobile (use native scrolling instead) */
+	.wps-metabox-header {
+		cursor: default;
+	}
+
+	/* Hide placeholder on mobile (can be confusing) */
+	.wps-metabox-placeholder {
+		display: none;
+	}
+}
+
+@media (min-width: 641px) and (max-width: 782px) {
+	/* Tablet: Keep 2-column but narrower */
+	.wps-metabox-holder {
+		flex-direction: row;
+	}
+
+	.wps-metabox-container {
+		flex: 1;
+		min-width: 280px;
+	}
+}
+
 @media (max-width: 782px) {
 	.wps-metabox-holder {
 		flex-direction: column;
