@@ -166,11 +166,13 @@ class WPS_Debug_Mode {
 		// Log activity.
 		WPS_Activity_Logger::log(
 			'settings_changed',
+			'Debug mode settings updated',
 			array(
-				'context' => 'debug_mode',
+				'context'  => 'debug_mode',
 				'settings' => $updated,
-				'user_id' => get_current_user_id(),
-			)
+				'user_id'  => get_current_user_id(),
+			),
+			'debug'
 		);
 
 		return true;
@@ -298,11 +300,13 @@ class WPS_Debug_Mode {
 			// Log auto-disable.
 			WPS_Activity_Logger::log(
 				'settings_changed',
+				'Debug mode auto-disabled due to timeout',
 				array(
-					'context' => 'debug_mode_auto_disabled',
-					'reason' => 'timeout',
+					'context'         => 'debug_mode_auto_disabled',
+					'reason'          => 'timeout',
 					'elapsed_seconds' => $elapsed,
-				)
+				),
+				'debug'
 			);
 		}
 	}
@@ -601,10 +605,12 @@ class WPS_Debug_Mode {
 			// Log activity.
 			WPS_Activity_Logger::log(
 				'settings_changed',
+				'Debug log file cleared',
 				array(
 					'context' => 'debug_log_cleared',
 					'user_id' => get_current_user_id(),
-				)
+				),
+				'debug'
 			);
 
 			wp_send_json_success( array( 'message' => __( 'Error log cleared', 'plugin-wp-support-thisismyurl' ) ) );
