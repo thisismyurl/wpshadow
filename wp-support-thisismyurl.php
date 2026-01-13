@@ -48,6 +48,10 @@ use WPS\CoreSupport\Features\WPS_Feature_Image_Lazy_Loading;
 use WPS\CoreSupport\Features\WPS_Feature_Asset_Minification;
 use WPS\CoreSupport\Features\WPS_Feature_Database_Cleanup;
 use WPS\CoreSupport\Features\WPS_Feature_Weekly_Performance_Report;
+use WPS\CoreSupport\Features\WPS_Feature_Conditional_Loading;
+use WPS\CoreSupport\Features\WPS_Feature_Google_Fonts_Disabler;
+use WPS\CoreSupport\Features\WPS_Feature_Critical_CSS;
+use WPS\CoreSupport\Features\WPS_Feature_Script_Optimizer;
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -283,6 +287,10 @@ function wps_register_core_features(): void {
 	register_WPS_feature( new WPS_Feature_Image_Lazy_Loading() );
 	register_WPS_feature( new WPS_Feature_Asset_Minification() );
 	register_WPS_feature( new WPS_Feature_Database_Cleanup() );
+	register_WPS_feature( new WPS_Feature_Conditional_Loading() );
+	register_WPS_feature( new WPS_Feature_Google_Fonts_Disabler() );
+	register_WPS_feature( new WPS_Feature_Critical_CSS() );
+	register_WPS_feature( new WPS_Feature_Script_Optimizer() );
 
 	// Reporting and analytics features.
 	register_WPS_feature( new WPS_Feature_Weekly_Performance_Report() );
