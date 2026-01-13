@@ -211,6 +211,7 @@ class WPS_Tab_Navigation {
 	public static function get_core_tabs(): array {
 		return array(
 			self::build_tab( 'dashboard', __( 'Dashboard', 'plugin-wp-support-thisismyurl' ), 'dashicons-dashboard' ),
+			self::build_tab( 'performance', __( 'Performance', 'plugin-wp-support-thisismyurl' ), 'dashicons-performance' ),
 			self::build_tab( 'settings', __( 'Settings', 'plugin-wp-support-thisismyurl' ), 'dashicons-admin-generic' ),
 			self::build_tab( 'features', __( 'Features', 'plugin-wp-support-thisismyurl' ), 'dashicons-admin-plugins' ),
 			self::build_tab( 'help', __( 'Help', 'plugin-wp-support-thisismyurl' ), 'dashicons-editor-help' ),

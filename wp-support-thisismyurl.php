@@ -632,6 +632,10 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/class-wps-activity-logger.php';
 	WPS_Activity_Logger::init();
 
+	// Load Performance Monitor for real-time performance tracking.
+	require_once wp_support_PATH . 'includes/class-wps-performance-monitor.php';
+	WPS_Performance_Monitor::init();
+
 	// Load Achievement Badges system.
 	require_once wp_support_PATH . 'includes/class-wps-achievement-badges.php';
 	WPS_Achievement_Badges::init();
@@ -1457,6 +1461,9 @@ function wp_support_render_core_content( string $tab ): void {
 	case 'features':
 		wp_support_render_features_page( 'core' );
 		break;
+		case 'performance':
+			wp_support_render_performance_dashboard();
+			break;
 			break;
 		case 'modules':
 			wp_support_render_modules();
@@ -1731,6 +1738,15 @@ function wp_support_render_help_layout(): void {
 		</style>
 	</div>
 	<?php
+}
+
+/**
+ * Render Performance Dashboard tab.
+ *
+ * @return void
+ */
+function wp_support_render_performance_dashboard(): void {
+	require_once wp_support_PATH . 'includes/views/performance-dashboard.php';
 }
 
 /**
