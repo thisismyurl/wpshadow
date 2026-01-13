@@ -40,6 +40,7 @@ use WPS\CoreSupport\Features\WPS_Feature_Embed_Disable;
 use WPS\CoreSupport\Features\WPS_Feature_jQuery_Cleanup;
 use WPS\CoreSupport\Features\WPS_Feature_Block_CSS_Cleanup;
 use WPS\CoreSupport\Features\WPS_Feature_Interactivity_Cleanup;
+use WPS\CoreSupport\Features\WPS_Feature_Hardening;
 use WPS\CoreSupport\Features\WPS_Feature_Registry;
 
 // Prevent direct access.
@@ -270,6 +271,9 @@ function wps_register_core_features(): void {
 	register_WPS_feature( new WPS_Feature_jQuery_Cleanup() );
 	register_WPS_feature( new WPS_Feature_Block_CSS_Cleanup() );
 	register_WPS_feature( new WPS_Feature_Interactivity_Cleanup() );
+
+	// Security features.
+	register_WPS_feature( new WPS_Feature_Hardening() );
 }
 
 /**
