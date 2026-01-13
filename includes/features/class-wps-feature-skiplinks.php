@@ -92,7 +92,9 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 			return;
 		}
 
-		echo '<div class="wps-skip-links">' . implode( '', $links ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped.
+		// Each link in the array is already escaped during creation (esc_attr, esc_html).
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Links escaped individually above.
+		echo '<div class="wps-skip-links">' . implode( '', $links ) . '</div>';
 	}
 
 	/**
@@ -109,9 +111,10 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 
 		// Register and enqueue a minimal style handle for skip links.
 		// We use inline styles only, so no external file is needed.
-		wp_register_style( 'wps-skiplinks', '' ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+		// Version is based on plugin version for cache busting.
+		wp_register_style( 'wps-skiplinks', '', array(), wp_support_VERSION );
 		wp_enqueue_style( 'wps-skiplinks' );
-		
+
 		// Add inline styles for skip links.
 		$css = $this->get_skip_links_css();
 		wp_add_inline_style( 'wps-skiplinks', $css );
