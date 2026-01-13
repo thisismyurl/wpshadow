@@ -141,4 +141,20 @@ function wp_support_admin_enqueue( string $hook ): void {
 			'nonce'   => wp_create_nonce( 'WPS_module_actions' ),
 		)
 	);
+
+	// Register debug tools assets (enqueued conditionally in debug-tools.php).
+	wp_register_style(
+		'wps-debug-tools',
+		wp_support_URL . 'assets/css/debug-tools.css',
+		array(),
+		$cache_bust
+	);
+
+	wp_register_script(
+		'wps-debug-tools',
+		wp_support_URL . 'assets/js/debug-tools.js',
+		array( 'jquery' ),
+		$cache_bust,
+		true
+	);
 }
