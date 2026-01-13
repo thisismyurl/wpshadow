@@ -438,8 +438,7 @@ function wp_support_activate(): void {
 		);
 	}
 
-	// Create vault directory with proper permissions.
-	wp_support_setup_vault();
+	// Vault setup moved to Vault module; handled when module initializes.
 
 	// Flush rewrite rules.
 	flush_rewrite_rules();
@@ -453,127 +452,30 @@ function wp_support_activate(): void {
 function wp_support_deactivate(): void {
 	// Flush rewrite rules.
 	flush_rewrite_rules();
-}
+	// Moved to Vault module. Directory and protection are ensured by
+	// WPS\VaultSupport\WPS_Vault::init() when the module is enabled.
 
 /**
  * Setup the vault directory for secure original storage.
  *
  * @return bool True on success, false on failure.
  */
-function wp_support_setup_vault(): bool {
-	$upload_dir = wp_upload_dir();
-
-	// Get or generate vault directory name (hidden with random suffix).
-	$vault_dirname = get_option( 'wps_vault_dirname' );
-	if ( empty( $vault_dirname ) ) {
-		// Generate random directory name (e.g., .vault_a1b2c3d4e5f6).
-		$random_suffix = bin2hex( random_bytes( 6 ) );
-		$vault_dirname = '.vault_' . $random_suffix;
-		update_option( 'wps_vault_dirname', $vault_dirname );
-	}
-
-	$vault_path = $upload_dir['basedir'] . '/' . $vault_dirname;
-
-	// Create vault directory if it doesn't exist.
-	if ( ! file_exists( $vault_path ) ) {
-		if ( ! wp_mkdir_p( $vault_path ) ) {
-			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-			error_log( 'WPS Core: Failed to create vault directory at ' . $vault_path );
-			return false;
+// Vault helpers moved to the Vault module. Keep a thin compatibility wrapper
+// for dashboard widgets that display key presence.
+function wp_support_get_vault_key(): ?string {
+	if ( class_exists( '\\WPS\\VaultSupport\\WPS_Vault' ) ) {
+		// Prefer module-provided key.
+		if ( method_exists( '\\WPS\\VaultSupport\\WPS_Vault', 'get_current_key' ) ) {
+			$key = \WPS\VaultSupport\WPS_Vault::get_current_key();
+			return ! empty( $key ) ? (string) $key : null;
 		}
 	}
-
-	// Create .htaccess for Apache protection.
-	$htaccess_file = $vault_path . '/.htaccess';
-	if ( ! file_exists( $htaccess_file ) ) {
-		$htaccess_content  = "# Protect vault directory\n";
-		$htaccess_content .= "Options -Indexes\n";
-		$htaccess_content .= "# Block direct access to vault files\n";
-		$htaccess_content .= "<FilesMatch \"\\.(zip|jpg|jpeg|png|gif|webp|avif|heic|bmp|tiff|svg|raw|enc)$\">\n";
-		$htaccess_content .= "    Require all denied\n";
-		$htaccess_content .= "</FilesMatch>\n";
-		$htaccess_content .= "# Block directory listing and script execution\n";
-		$htaccess_content .= "<IfModule mod_php7.c>\n";
-		$htaccess_content .= "    php_flag engine off\n";
-		$htaccess_content .= "</IfModule>\n";
-		$htaccess_content .= "<IfModule mod_php.c>\n";
-		$htaccess_content .= "    php_flag engine off\n";
-		$htaccess_content .= "</IfModule>\n";
-
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
-		file_put_contents( $htaccess_file, $htaccess_content );
-	}
-
-	// Create index.php to prevent directory listing.
-	$index_file = $vault_path . '/index.php';
-	if ( ! file_exists( $index_file ) ) {
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
-		file_put_contents( $index_file, "<?php\n// Silence is golden.\n" );
-	}
-
-	// Initialize encryption keys if enabled.
-	wp_support_setup_encryption_keys();
-
-	return true;
-}
-
-/**
- * Setup encryption keys for vault files.
- * Checks wp-config for WPS_VAULT_KEY; generates if missing.
- *
- * @return bool True if keys are available, false otherwise.
- */
-function wp_support_setup_encryption_keys(): bool {
-	// If wp-config defines the key, use it.
+	// Fallback to legacy storage if module not loaded yet.
 	if ( defined( 'WPS_VAULT_KEY' ) && WPS_VAULT_KEY ) {
-		return true;
+		return (string) WPS_VAULT_KEY;
 	}
-
-	// If not in wp-config, check if stored in options (for backward compatibility).
-	$stored_key = get_option( 'wps_vault_encryption_key' );
-	if ( ! empty( $stored_key ) ) {
-		return true;
-	}
-
-	// For production, keys MUST be in wp-config.
-	// For development, auto-generate and store (with warning).
-	if ( 'production' === wp_get_environment_type() ) {
-		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-		error_log( 'WPS Core: Encryption enabled but WPS_VAULT_KEY not defined in wp-config.php. Define it for production use.' );
-		return false;
-	}
-
-	// Auto-generate for development.
-	$new_key = bin2hex( random_bytes( 32 ) ); // 256-bit key.
-	update_option( 'wps_vault_encryption_key', $new_key );
-
-	// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-	error_log( 'WPS Core: Generated temporary encryption key. For production, add this to wp-config.php: define( "WPS_VAULT_KEY", "' . $new_key . '" );' );
-
-	return true;
-}
-
-/**
- * Get the encryption key for vault operations.
- *
- * @return string|null Encryption key, or null if not available.
- */
-function wp_support_get_vault_key(): ?string {
-	if ( defined( 'WPS_VAULT_KEY' ) && WPS_VAULT_KEY ) {
-		return WPS_VAULT_KEY;
-	}
-
-	$stored_key = get_option( 'wps_vault_encryption_key' );
-	return ! empty( $stored_key ) ? $stored_key : null;
-}
-
-/**
- * Check if encryption is supported and enabled.
- *
- * @return bool True if openssl is available, false otherwise.
- */
-function wp_support_encryption_supported(): bool {
-	return extension_loaded( 'openssl' );
+	$stored_key = get_option( 'WPS_vault_enc_key', '' );
+	return ! empty( $stored_key ) ? (string) $stored_key : null;
 }
 
 /**
@@ -835,6 +737,12 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/class-settings-ajax.php';
 	require_once wp_support_PATH . 'includes/wps-capability-helpers.php';
 
+	// Load extracted admin assets, screens, dashboard view, and AJAX handlers.
+	require_once wp_support_PATH . 'includes/admin/assets.php';
+	require_once wp_support_PATH . 'includes/admin/screens.php';
+	require_once wp_support_PATH . 'includes/views/dashboard-renderer.php';
+	require_once wp_support_PATH . 'includes/admin/ajax-modules.php';
+
 	// Load CLI commands when WP-CLI present.
 	if ( defined( 'WP_CLI' ) && WP_CLI ) {
 		require_once wp_support_PATH . 'includes/class-wps-cli.php';
@@ -893,9 +801,8 @@ function wp_support_init(): void {
 	add_filter( 'get_user_option_closedpostboxes_toplevel_page_wp-support', __NAMESPACE__ . '\\wp_support_get_closed_postboxes' );
 
 	// Register GDPR Personal Data Exporter and Eraser.
-	add_filter( 'wp_privacy_personal_data_exporters', __NAMESPACE__ . '\\wp_support_register_privacy_exporters' );
-	// Register GDPR Personal Data Eraser for Vault.
-	add_filter( 'wp_privacy_personal_data_erasers', __NAMESPACE__ . '\\wp_support_register_privacy_erasers' );
+	// Moved to Vault module: privacy exporters/erasers are registered
+	// by WPS\VaultSupport when the module is enabled.
 }
 
 /**
@@ -1244,67 +1151,7 @@ function wp_support_render_tab_router(): void {
  *
  * @return void
  */
-function wp_support_setup_dashboard_screen(): void {
-	$screen = get_current_screen();
-	if ( ! $screen ) {
-		return;
-	}
-
-	// Register dashboard metaboxes for all levels (core, hub, spoke) on dashboard tab.
-	$context  = WPS_Tab_Navigation::get_current_context();
-	$tab      = $context['tab'] ?? 'dashboard';
-	$hub_id   = $context['hub'] ?? '';
-	$spoke_id = $context['spoke'] ?? '';
-
-	// Only register metaboxes when on dashboard tab.
-	if ( 'dashboard' !== $tab ) {
-		return;
-	}
-
-	// Determine context string for layout manager.
-	$layout_context = 'core';
-	if ( ! empty( $spoke_id ) && ! empty( $hub_id ) ) {
-		$layout_context = $hub_id . '_' . $spoke_id;
-	} elseif ( ! empty( $hub_id ) ) {
-		$layout_context = $hub_id;
-	}
-
-	$network = is_network_admin();
-
-	// Add Help tabs.
-	$screen->add_help_tab(
-		array(
-			'id'      => 'WPS_overview',
-			'title'   => __( 'Overview', 'plugin-wp-support-thisismyurl' ),
-			'content' => '<p>' . esc_html__( 'This dashboard provides a suite overview, active hubs, recent activity, and quick actions. Use Screen Options to show/hide cards and arrange them.', 'plugin-wp-support-thisismyurl' ) . '</p>',
-		)
-	);
-
-	$screen->add_help_tab(
-		array(
-			'id'      => 'WPS_shortcuts',
-			'title'   => __( 'Shortcuts', 'plugin-wp-support-thisismyurl' ),
-			'content' => '<p>' . esc_html__( 'Drag cards to rearrange. Click the toggle arrow to hide/show cards. Use Quick Actions to jump to common tasks.', 'plugin-wp-support-thisismyurl' ) . '</p>',
-		)
-	);
-
-	$screen->set_help_sidebar(
-		'<p><strong>' . esc_html__( 'More Help', 'plugin-wp-support-thisismyurl' ) . '</strong></p>' .
-		'<p><a href="https://thisismyurl.com/plugin-wp-support-thisismyurl/" target="_blank" rel="noopener">' . esc_html__( 'Documentation', 'plugin-wp-support-thisismyurl' ) . '</a></p>'
-	);
-
-	// Enable Screen Options for number of columns (2 by default).
-	add_screen_option(
-		'layout_columns',
-		array(
-			'max'     => 2,
-			'default' => 2,
-		)
-	);
-
-	// Use dashboard layout manager to setup widgets with proper ordering.
-	WPS_Dashboard_Layout::setup_dashboard_screen( $layout_context, $network );
-}
+// Moved to includes/admin/screens.php
 
 /**
  * Setup Screen Options and register dashboard meta boxes for hub pages.
@@ -1312,148 +1159,7 @@ function wp_support_setup_dashboard_screen(): void {
  * @param string $hub_id Hub identifier.
  * @return void
  */
-function wp_support_setup_hub_dashboard_screen( string $hub_id ): void {
-	error_log( 'wp_support_setup_hub_dashboard_screen: Called for hub_id=' . $hub_id );
-
-	$screen = get_current_screen();
-	if ( ! $screen ) {
-		error_log( 'wp_support_setup_hub_dashboard_screen: No screen available' );
-		return;
-	}
-
-	error_log( 'wp_support_setup_hub_dashboard_screen: Screen ID=' . $screen->id );
-
-	// Format hub display name.
-	$hub_name = esc_html( ucfirst( str_replace( '-', ' ', $hub_id ) ) );
-
-	// Register metaboxes based on hub type.
-	switch ( $hub_id ) {
-		case 'media':
-			add_meta_box(
-				'WPS_media_overview',
-				__( 'Media Overview', 'plugin-wp-support-thisismyurl' ),
-				array( '\\\\WPS\\\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_media_overview' ),
-				$screen->id,
-				'normal',
-				'high'
-			);
-			add_meta_box(
-				'WPS_media_activity',
-				__( 'Media Activity', 'plugin-wp-support-thisismyurl' ),
-				array( '\\\\WPS\\\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_media_activity' ),
-				$screen->id,
-				'normal',
-				'default'
-			);
-			add_meta_box(
-				'WPS_media_modules',
-				$hub_name . ' ' . __( 'Modules', 'plugin-wp-support-thisismyurl' ),
-				array( '\\\\WPS\\\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_modules' ),
-				$screen->id,
-				'normal',
-				'low'
-			);
-			add_meta_box(
-				'WPS_media_quick_actions',
-				__( 'Media Quick Actions', 'plugin-wp-support-thisismyurl' ),
-				array( '\\\\WPS\\\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_quick_actions' ),
-				$screen->id,
-				'side',
-				'high'
-			);
-			break;
-
-		case 'vault':
-			add_meta_box(
-				'WPS_vault_overview',
-				__( 'Vault Overview', 'plugin-wp-support-thisismyurl' ),
-				array( '\\\\WPS\\\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_vault_overview' ),
-				$screen->id,
-				'normal',
-				'high'
-			);
-			add_meta_box(
-				'WPS_vault_activity',
-				__( 'Vault Activity', 'plugin-wp-support-thisismyurl' ),
-				array( '\\\\WPS\\\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_vault_activity' ),
-				$screen->id,
-				'normal',
-				'default'
-			);
-			add_meta_box(
-				'WPS_vault_modules',
-				$hub_name . ' ' . __( 'Modules', 'plugin-wp-support-thisismyurl' ),
-				array( '\\\\WPS\\\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_modules' ),
-				$screen->id,
-				'normal',
-				'low'
-			);
-			add_meta_box(
-				'WPS_vault_stats',
-				__( 'Vault Status', 'plugin-wp-support-thisismyurl' ),
-				array( '\\\\WPS\\\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_vault_status' ),
-				$screen->id,
-				'side',
-				'high'
-			);
-			add_meta_box(
-				'WPS_vault_quick_actions',
-				__( 'Vault Quick Actions', 'plugin-wp-support-thisismyurl' ),
-				array( '\\\\WPS\\\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_quick_actions' ),
-				$screen->id,
-				'side',
-				'default'
-			);
-			add_meta_box(
-				'WPS_vault_health',
-				__( 'Vault Health', 'plugin-wp-support-thisismyurl' ),
-				array( '\\\\WPS\\\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_vault_health' ),
-				$screen->id,
-				'side',
-				'low'
-			);
-			break;
-
-		default:
-			// Generic hub dashboard: always include Modules widget.
-			add_meta_box(
-				'WPS_' . sanitize_html_class( $hub_id ) . '_modules',
-				$hub_name . ' ' . __( 'Modules', 'plugin-wp-support-thisismyurl' ),
-				array( '\\\\WPS\\\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_modules' ),
-				$screen->id,
-				'normal',
-				'default'
-			);
-			break;
-	}
-
-	// Enable Screen Options for number of columns.
-	add_screen_option(
-		'layout_columns',
-		array(
-			'max'     => 2,
-			'default' => 2,
-		)
-	);
-
-	// Initialize postboxes on this screen (drag/toggle).
-	add_action(
-		'admin_print_footer_scripts',
-		static function () use ( $screen, $hub_id ): void {
-			// Use hub-specific state key.
-			$state_key = 'wp-support-' . $hub_id;
-			?>
-			<script>
-			jQuery(document).ready(function($){
-				if (typeof postboxes !== 'undefined') {
-					postboxes.add_postbox_toggles('<?php echo esc_js( $state_key ); ?>');
-				}
-			});
-			</script>
-			<?php
-		}
-	);
-}
+// Moved to includes/admin/screens.php
 
 /**
  * Render Core-level content based on active tab.
@@ -1610,128 +1316,7 @@ function wps_get_hub_tabs_for_spoke( string $hub_id, string $spoke_id ): array {
  * @param string $spoke_id Optional spoke identifier for spoke-level dashboards.
  * @return void
  */
-function wp_support_render_dashboard( string $hub_id = '', string $spoke_id = '' ): void {
-	if ( ! wps_can_access_dashboard() ) {
-		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
-	}
-
-	// Route to appropriate dashboard renderer.
-	// All levels (core, hub, spoke) show the same core dashboard content.
-	if ( ! empty( $spoke_id ) && ! empty( $hub_id ) ) {
-		// Spoke-level displays core dashboard content.
-	} elseif ( ! empty( $hub_id ) ) {
-		// Hub-level displays core dashboard content.
-	}
-
-	// Core-level dashboard (shown for all levels).
-	$catalog_modules = WPS_Module_Registry::get_catalog_with_status();
-	$modules         = $catalog_modules;
-
-	// Top stats derived from catalog with real activation state.
-	$total_count     = count( $modules );
-	$hub_modules     = array_filter(
-		$modules,
-		static function ( $m ) {
-			return ( $m['type'] ?? '' ) === 'hub';
-		}
-	);
-	$spoke_modules   = array_filter(
-		$modules,
-		static function ( $m ) {
-			return ( $m['type'] ?? '' ) === 'spoke';
-		}
-	);
-	$hubs_count      = count( $hub_modules );
-	$spokes_count    = count( $spoke_modules );
-	$available_count = count(
-		array_filter(
-			$modules,
-			static function ( $m ) {
-				return empty( $m['installed'] );
-			}
-		)
-	);
-	$updates_count   = count(
-		array_filter(
-			$modules,
-			static function ( $m ) {
-				return ! empty( $m['update_available'] );
-			}
-		)
-	);
-	$enabled_count   = count(
-		array_filter(
-			$modules,
-			static function ( $m ) {
-				$slug = $m['slug'] ?? null;
-				if ( empty( $m['installed'] ) || ! $slug ) {
-					return false;
-				}
-				$plugin = $slug . '/' . $slug . '.php';
-				return is_plugin_active( $plugin ) || ( is_multisite() && is_plugin_active_for_network( $plugin ) );
-			}
-		)
-	);
-
-	$activity_logs     = WPS_Vault::get_logs( 0, 10 );
-	$pending_uploads   = WPS_Vault::get_pending_contributor_uploads( 5 );
-	$schedule_snapshot = WPS_Module_Registry::get_schedule_snapshot();
-	$run_now_nonce     = wp_create_nonce( 'wps_run_task_now' );
-
-	// Setup metaboxes for dashboard rendering.
-	wp_support_setup_dashboard_screen( $hub_id, $spoke_id );
-	$screen = get_current_screen();
-
-	// Determine dashboard title based on context.
-	$dashboard_title = __( 'Support Dashboard', 'plugin-wp-support-thisismyurl' );
-	if ( ! empty( $spoke_id ) && ! empty( $hub_id ) ) {
-		$dashboard_title = ucfirst( $spoke_id ) . ' ' . __( 'Dashboard', 'plugin-wp-support-thisismyurl' );
-	} elseif ( ! empty( $hub_id ) ) {
-		$dashboard_title = ucfirst( $hub_id ) . ' ' . __( 'Dashboard', 'plugin-wp-support-thisismyurl' );
-	}
-
-	// Render metabox-based dashboard.
-	?>
-	<div class="wrap">
-		<h1><?php echo esc_html( $dashboard_title ); ?></h1>
-
-		<div class="wps-dashboard-license-row">
-			<div id="wps_license_widget" class="postbox" style="margin:0 0 16px 0;">
-				<?php \WPS\CoreSupport\WPS_License_Widget::render_widget(); ?>
-			</div>
-		</div>
-
-		<div id="dashboard-widgets" class="metabox-holder wps-dashboard-grid">
-			<div id="postbox-container-1" class="postbox-container">
-				<?php do_meta_boxes( $screen->id, 'normal', null ); ?>
-			</div>
-			<div id="postbox-container-2" class="postbox-container">
-				<?php do_meta_boxes( $screen->id, 'side', null ); ?>
-			</div>
-		</div>
-	</div>
-
-	<style>
-		.wps-dashboard-grid {
-			display: grid;
-			grid-template-columns: 2fr 1fr;
-			grid-column-gap: 16px;
-		}
-
-		.wps-dashboard-grid #postbox-container-1,
-		.wps-dashboard-grid #postbox-container-2 {
-			width: 100%;
-		}
-
-		@media (max-width: 1024px) {
-			.wps-dashboard-grid {
-				grid-template-columns: 1fr;
-			}
-		}
-	</style>
-	</div>
-	<?php
-}
+// Moved to includes/views/dashboard.php
 
 /**
  * Render Help view with license emphasis.
@@ -1927,381 +1512,28 @@ function wp_support_render_settings_page(): void {
  *
  * @return void
  */
-function wps_ajax_toggle_module(): void {
-	check_ajax_referer( 'WPS_toggle_module', 'nonce' );
-
-	if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
-	}
-
-	$slug    = sanitize_text_field( wp_unslash( $_POST['slug'] ?? '' ) );
-	$enabled = isset( $_POST['enabled'] ) && 'true' === $_POST['enabled'];
-	$network = isset( $_POST['network'] ) && 'true' === $_POST['network'] && is_multisite();
-
-	if ( empty( $slug ) ) {
-		wp_send_json_error( array( 'message' => __( 'Invalid module slug.', 'plugin-wp-support-thisismyurl' ) ) );
-	}
-
-	// Update WPS_module_toggles array (unified toggle system).
-	$toggles          = get_option( 'WPS_module_toggles', array() );
-	$toggles[ $slug ] = $enabled ? 1 : 0;
-
-	$deactivated = array();
-	$remembered  = array();
-
-	// Handle cascade deactivation of dependents.
-	if ( ! $enabled ) {
-		$deactivated = WPS_Module_Toggles::cascade_deactivate( $slug );
-		if ( ! empty( $deactivated ) ) {
-			// Reload toggles after cascade.
-			$toggles = get_option( 'WPS_module_toggles', array() );
-		}
-	}
-
-	// Handle restoration check on activation.
-	if ( $enabled ) {
-		$remembered = WPS_Module_Toggles::get_remembered_deactivated( $slug );
-	}
-
-	$success = update_option( 'WPS_module_toggles', $toggles );
-
-	// Clear catalog cache so submenu regenerates.
-	WPS_Module_Registry::clear_cache();
-
-	$user      = wp_get_current_user();
-	$user_name = $user && $user->exists() ? $user->display_name : __( 'System', 'plugin-wp-support-thisismyurl' );
-
-	if ( $success ) {
-		// If module is being enabled, inherit parent dashboard layout.
-		if ( $enabled ) {
-			WPS_Dashboard_Layout::on_module_activated( $slug, $network );
-			
-			// Fire action for achievement badges and other hooks.
-			do_action( 'wps_module_activated', (int) $user->ID, $slug );
-		}
-
-		WPS_Vault::add_log(
-			'info',
-			0,
-			sprintf( 'Module %1$s %2$s', $slug, $enabled ? 'enabled' : 'disabled' ),
-			'module_toggle',
-			array(
-				'task'    => 'module_toggle',
-				'file'    => $slug,
-				'user'    => $user_name,
-				'user_id' => (int) $user->ID,
-			)
-		);
-
-		// Prepare response data.
-		$response_data = array( 'message' => __( 'Module settings updated.', 'plugin-wp-support-thisismyurl' ) );
-
-		// Add cascade info if modules were auto-deactivated.
-		if ( ! empty( $deactivated ) ) {
-			$response_data['deactivated'] = $deactivated;
-		}
-
-		// Add restoration prompt if remembered dependents exist.
-		if ( ! empty( $remembered ) ) {
-			$response_data['remembered'] = $remembered;
-		}
-
-		wp_send_json_success( $response_data );
-	} else {
-		WPS_Vault::add_log(
-			'error',
-			0,
-			sprintf( 'Failed to toggle %s', $slug ),
-			'module_toggle',
-			array(
-				'task'    => 'module_toggle',
-				'file'    => $slug,
-				'user'    => $user_name,
-				'user_id' => (int) $user->ID,
-			)
-		);
-		wp_send_json_error( array( 'message' => __( 'Failed to update settings.', 'plugin-wp-support-thisismyurl' ) ) );
-	}
-}
+// Moved to includes/admin/ajax-modules.php
 
 /**
  * Handle AJAX install module request.
  *
  * @return void
  */
-function wps_ajax_install_module(): void {
-	check_ajax_referer( 'WPS_module_action', 'nonce' );
-
-	if ( ! wps_can_install_modules() ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
-	}
-
-	$slug      = sanitize_text_field( wp_unslash( $_POST['slug'] ?? '' ) );
-	$user      = wp_get_current_user();
-	$user_name = $user && $user->exists() ? $user->display_name : __( 'System', 'plugin-wp-support-thisismyurl' );
-
-	if ( empty( $slug ) ) {
-		WPS_Vault::add_log( 'error', 0, __( 'Install failed: empty slug.', 'plugin-wp-support-thisismyurl' ), 'module_install' );
-		wp_send_json_error( array( 'message' => __( 'Invalid module slug.', 'plugin-wp-support-thisismyurl' ) ) );
-	}
-
-	$catalog = WPS_Module_Registry::get_catalog_with_status();
-	$module  = $catalog[ $slug ] ?? null;
-
-	if ( empty( $module ) || empty( $module['download_url'] ) ) {
-		WPS_Vault::add_log(
-			'error',
-			0,
-			sprintf( 'Install failed: no download for %s', $slug ),
-			'module_install',
-			array(
-				'task'    => 'module_install',
-				'file'    => $slug,
-				'user'    => $user_name,
-				'user_id' => (int) $user->ID,
-			)
-		);
-		wp_send_json_error( array( 'message' => __( 'No download available for this module.', 'plugin-wp-support-thisismyurl' ) ) );
-	}
-
-	require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
-	require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
-	require_once ABSPATH . 'wp-admin/includes/file.php';
-
-	if ( ! WP_Filesystem() ) {
-		WPS_Vault::add_log(
-			'error',
-			0,
-			sprintf( 'Install failed: filesystem credentials needed for %s', $slug ),
-			'module_install',
-			array(
-				'task'    => 'module_install',
-				'file'    => $slug,
-				'user'    => $user_name,
-				'user_id' => (int) $user->ID,
-			)
-		);
-		wp_send_json_error( array( 'message' => __( 'File system credentials are required to install plugins.', 'plugin-wp-support-thisismyurl' ) ) );
-	}
-
-	$skin     = new \Automatic_Upgrader_Skin();
-	$upgrader = new \Plugin_Upgrader( $skin );
-	$download = wp_support_resolve_download_url( $module );
-	$result   = $upgrader->install( $download );
-
-	if ( is_wp_error( $result ) || ! $result ) {
-		$message = is_wp_error( $result ) ? $result->get_error_message() : __( 'Installation failed.', 'plugin-wp-support-thisismyurl' );
-		WPS_Vault::add_log(
-			'error',
-			0,
-			wp_strip_all_tags( $message ),
-			'module_install',
-			array(
-				'task'    => 'module_install',
-				'file'    => $slug,
-				'user'    => $user_name,
-				'user_id' => (int) $user->ID,
-			)
-		);
-		wp_send_json_error( array( 'message' => $message ) );
-	}
-
-	// Attempt activation.
-	$plugin_file = wp_support_find_plugin_file_by_slug( $slug );
-	if ( $plugin_file ) {
-		$network_wide = is_multisite() && is_network_admin();
-		$activation   = activate_plugin( $plugin_file, '', $network_wide, false );
-		if ( is_wp_error( $activation ) ) {
-			do_action(
-				'WPS_catalog_install_warning',
-				array(
-					'slug'    => $slug,
-					'message' => $activation->get_error_message(),
-				)
-			);
-		} else {
-			// Module activated successfully, inherit dashboard layout.
-			WPS_Dashboard_Layout::on_module_activated( $slug, $network_wide );
-		}
-	}
-
-	WPS_Module_Registry::clear_cache();
-	WPS_Module_Registry::discover_modules();
-	WPS_Module_Registry::load_catalog();
-
-	WPS_Vault::add_log(
-		'info',
-		0,
-		sprintf( 'Module installed: %s', $slug ),
-		'module_install',
-		array(
-			'task'    => 'module_install',
-			'file'    => $slug,
-			'user'    => $user_name,
-			'user_id' => (int) $user->ID,
-		)
-	);
-
-	wp_send_json_success( array( 'message' => __( 'Module installed.', 'plugin-wp-support-thisismyurl' ) ) );
-}
+// Moved to includes/admin/ajax-modules.php
 
 /**
  * Handle AJAX update module request.
  *
  * @return void
  */
-function wps_ajax_update_module(): void {
-	check_ajax_referer( 'WPS_module_action', 'nonce' );
-
-	if ( ! wps_can_update_modules() ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
-	}
-
-	$slug      = sanitize_text_field( wp_unslash( $_POST['slug'] ?? '' ) );
-	$user      = wp_get_current_user();
-	$user_name = $user && $user->exists() ? $user->display_name : __( 'System', 'plugin-wp-support-thisismyurl' );
-
-	if ( empty( $slug ) ) {
-		WPS_Vault::add_log( 'error', 0, __( 'Update failed: empty slug.', 'plugin-wp-support-thisismyurl' ), 'module_update' );
-		wp_send_json_error( array( 'message' => __( 'Invalid module slug.', 'plugin-wp-support-thisismyurl' ) ) );
-	}
-
-	$catalog   = WPS_Module_Registry::get_catalog_with_status();
-	$installed = WPS_Module_Registry::get_module( $slug );
-	$module    = $catalog[ $slug ] ?? null;
-
-	if ( empty( $module ) || empty( $module['download_url'] ) || empty( $installed['file'] ) ) {
-		WPS_Vault::add_log(
-			'error',
-			0,
-			sprintf( 'Update failed: missing data for %s', $slug ),
-			'module_update',
-			array(
-				'task'    => 'module_update',
-				'file'    => $slug,
-				'user'    => $user_name,
-				'user_id' => (int) $user->ID,
-			)
-		);
-		wp_send_json_error( array( 'message' => __( 'Update information is missing for this module.', 'plugin-wp-support-thisismyurl' ) ) );
-	}
-
-	require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
-	require_once ABSPATH . 'wp-admin/includes/file.php';
-
-	if ( ! WP_Filesystem() ) {
-		WPS_Vault::add_log(
-			'error',
-			0,
-			sprintf( 'Update failed: filesystem credentials needed for %s', $slug ),
-			'module_update',
-			array(
-				'task'    => 'module_update',
-				'file'    => $slug,
-				'user'    => $user_name,
-				'user_id' => (int) $user->ID,
-			)
-		);
-		wp_send_json_error( array( 'message' => __( 'File system credentials are required to update plugins.', 'plugin-wp-support-thisismyurl' ) ) );
-	}
-
-	$skin     = new \Automatic_Upgrader_Skin();
-	$upgrader = new \Plugin_Upgrader( $skin );
-
-	// Allow overwriting existing destination during update.
-	$filter = function ( array $options ): array {
-		$options['clear_destination']           = true;
-		$options['abort_if_destination_exists'] = false;
-		return $options;
-	};
-	add_filter( 'upgrader_package_options', $filter );
-
-	$download = wp_support_resolve_download_url( $module );
-	$result   = $upgrader->install( $download );
-
-	// Remove filter after run.
-	remove_filter( 'upgrader_package_options', $filter );
-
-	if ( is_wp_error( $result ) || ! $result ) {
-		$message = is_wp_error( $result ) ? $result->get_error_message() : __( 'Update failed.', 'plugin-wp-support-thisismyurl' );
-		WPS_Vault::add_log(
-			'error',
-			0,
-			wp_strip_all_tags( $message ),
-			'module_update',
-			array(
-				'task'    => 'module_update',
-				'file'    => $slug,
-				'user'    => $user_name,
-				'user_id' => (int) $user->ID,
-			)
-		);
-		wp_send_json_error( array( 'message' => $message ) );
-	}
-
-	WPS_Module_Registry::clear_cache();
-	WPS_Module_Registry::discover_modules();
-	WPS_Module_Registry::load_catalog();
-
-	WPS_Vault::add_log(
-		'info',
-		0,
-		sprintf( 'Module updated: %s', $slug ),
-		'module_update',
-		array(
-			'task'    => 'module_update',
-			'file'    => $slug,
-			'user'    => $user_name,
-			'user_id' => (int) $user->ID,
-		)
-	);
-
-	wp_send_json_success( array( 'message' => __( 'Module updated.', 'plugin-wp-support-thisismyurl' ) ) );
-}
+// Moved to includes/admin/ajax-modules.php
 
 /**
  * Handle network license broadcast via AJAX.
  *
  * @return void
  */
-function wps_ajax_broadcast_license(): void {
-	if ( empty( $_POST['nonce'] ) ) {
-		wp_send_json_error( array( 'message' => __( 'Nonce failed.', 'plugin-wp-support-thisismyurl' ) ) );
-	}
-
-	if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'WPS_broadcast_license' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Nonce verification failed.', 'plugin-wp-support-thisismyurl' ) ) );
-	}
-
-	if ( ! is_multisite() ) {
-		wp_send_json_error( array( 'message' => __( 'Multisite not enabled.', 'plugin-wp-support-thisismyurl' ) ) );
-	}
-
-	if ( ! current_user_can( 'manage_network_options' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
-	}
-
-	$key            = isset( $_POST['key'] ) ? sanitize_text_field( wp_unslash( $_POST['key'] ) ) : '';
-	$site_ids_json  = isset( $_POST['site_ids'] ) ? sanitize_text_field( wp_unslash( $_POST['site_ids'] ) ) : '[]';
-	$auto_broadcast = isset( $_POST['auto_broadcast'] ) ? absint( $_POST['auto_broadcast'] ) : 0;
-
-	if ( empty( $key ) ) {
-		wp_send_json_error( array( 'message' => __( 'License key cannot be empty.', 'plugin-wp-support-thisismyurl' ) ) );
-	}
-
-	// Parse site IDs from JSON.
-	$site_ids = (array) json_decode( $site_ids_json, true );
-	$site_ids = array_map( 'absint', array_filter( $site_ids ) );
-
-	if ( empty( $site_ids ) ) {
-		wp_send_json_error( array( 'message' => __( 'No sites selected.', 'plugin-wp-support-thisismyurl' ) ) );
-	}
-
-	// Call the license broadcast method.
-	$result = WPS_License::broadcast_network_key( $key, $site_ids, (bool) $auto_broadcast );
-
-	wp_send_json_success( $result );
-}
+// Moved to includes/admin/ajax-modules.php
 
 /**
  * AJAX handler to save metabox state (order and collapsed state).
@@ -2782,131 +2014,7 @@ function wp_support_get_closed_postboxes( $result ) {
  * @param string $hook The current admin page hook.
  * @return void
  */
-function wp_support_admin_enqueue( string $hook ): void {
-	// Load on all wp-support related pages (core, hubs, spokes).
-	// Hooks can be: toplevel_page_wp-support, support-hub_page_wp-support-hub-media, etc.
-	if ( false === strpos( $hook, 'wp-support' ) ) {
-		return;
-	}
-
-	error_log( 'wp_support_admin_enqueue: Hook=' . $hook );
-
-	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-	error_log( 'wp_support_admin_enqueue: Screen ID=' . ( $screen ? $screen->id : 'null' ) );
-
-	// Cache-bust using current timestamp to force reload for testing.
-	$cache_bust = time();
-
-	// Enqueue modern design system (shared across all WPS plugins).
-	wp_enqueue_style(
-		'wps-ui-system',
-		wp_support_URL . 'assets/css/wps-ui-system.css',
-		array(),
-		$cache_bust
-	);
-
-	wp_enqueue_style(
-		'wps-core-admin',
-		wp_support_URL . 'assets/css/admin.css',
-		array( 'wps-ui-system' ),
-		$cache_bust
-	);
-
-	wp_enqueue_style(
-		'wps-tab-navigation',
-		wp_support_URL . 'assets/css/tab-navigation.css',
-		array( 'wps-ui-system' ),
-		$cache_bust
-	);
-
-	// Enable drag and drop for dashboard metaboxes on all wp-support pages using WordPress native postboxes.
-	if ( $screen && false !== strpos( $screen->id, 'wp-support' ) ) {
-		error_log( 'wp_support_admin_enqueue: Loading dashboard assets for screen=' . $screen->id );
-
-		// Use WordPress's built-in postbox drag and drop.
-		wp_enqueue_script( 'postbox' );
-
-		// Add custom script to handle context-specific state saving.
-		wp_enqueue_script(
-			'wps-postbox-state',
-			wp_support_URL . 'assets/js/postbox-state.js',
-			array( 'jquery', 'postbox' ),
-			$cache_bust,
-			true
-		);
-
-		// Get current context for unique state key.
-		$context   = WPS_Tab_Navigation::get_current_context();
-		$hub_id    = $context['hub'] ?? '';
-		$state_key = 'wp-support' . ( $hub_id ? '-' . $hub_id : '' );
-
-		wp_localize_script(
-			'wps-postbox-state',
-			'wpsPostboxState',
-			array(
-				'stateKey' => $state_key,
-				'nonce'    => wp_create_nonce( 'WPS_postbox_state' ),
-			)
-		);
-
-		wp_enqueue_style(
-			'wps-dashboard-drag',
-			wp_support_URL . 'assets/css/dashboard-drag.css',
-			array(),
-			$cache_bust
-		);
-	} else {
-		error_log( 'wp_support_admin_enqueue: NOT loading dashboard assets. Screen=' . ( $screen ? $screen->id : 'null' ) );
-	}
-
-	wp_enqueue_script(
-		'wps-core-admin',
-		wp_support_URL . 'assets/js/admin.js',
-		array( 'jquery' ),
-		$cache_bust,
-		true
-	);
-
-	// Localize script for AJAX and i18n.
-	wp_localize_script(
-		'wps-core-admin',
-		'wpsAdminData',
-		array(
-			'toggleNonce' => wp_create_nonce( 'WPS_toggle_module' ),
-			'actionNonce' => wp_create_nonce( 'WPS_module_action' ),
-			'i18n'        => array(
-				'enabled'      => __( 'Enabled', 'plugin-wp-support-thisismyurl' ),
-				'disabled'     => __( 'Disabled', 'plugin-wp-support-thisismyurl' ),
-				'ajaxError'    => __( 'An error occurred. Please try again.', 'plugin-wp-support-thisismyurl' ),
-				'noResults'    => __( 'No modules match this filter.', 'plugin-wp-support-thisismyurl' ),
-				'installFirst' => __( 'Install the module before enabling it.', 'plugin-wp-support-thisismyurl' ),
-				'installing'   => __( 'Installing...', 'plugin-wp-support-thisismyurl' ),
-				'updating'     => __( 'Updating...', 'plugin-wp-support-thisismyurl' ),
-				'install'      => __( 'Install', 'plugin-wp-support-thisismyurl' ),
-				'update'       => __( 'Update', 'plugin-wp-support-thisismyurl' ),
-			),
-		)
-	);
-
-	// Enqueue module actions script (install/update/activate).
-	wp_enqueue_script(
-		'wps-module-actions',
-		wp_support_URL . 'assets/js/module-actions.js',
-		array(),
-		$cache_bust,
-		true
-	);
-
-	// Localize module actions script with nonce and AJAX URL.
-	wp_localize_script(
-		'wps-module-actions',
-		'wpsModuleActions',
-		array(
-			'ajaxurl' => admin_url( 'admin-ajax.php' ),
-			'nonce'   => wp_create_nonce( 'WPS_module_actions' ),
-		)
-	);
-}
+// Moved to includes/admin/assets.php
 
 /**
  * Register the Vault exporter with WordPress Personal Data Export.
@@ -2914,193 +2022,7 @@ function wp_support_admin_enqueue( string $hook ): void {
  * @param array $exporters Existing exporters.
  * @return array Modified exporters.
  */
-function wp_support_register_privacy_exporters( array $exporters ): array {
-	$exporters['wps-vault-exporter'] = array(
-		'exporter_friendly_name' => __( 'WPS Vault', 'plugin-wp-support-thisismyurl' ),
-		'callback'               => __NAMESPACE__ . '\\wp_support_vault_exporter_callback',
-	);
-
-	return $exporters;
-}
-
-/**
- * Vault exporter: returns attachment metadata stored in the Vault for the requesting user.
- * Implements batching per WordPress privacy API contract.
- *
- * @param string $email_address User email being exported.
- * @param int    $page          Page number for batching (1-indexed).
- * @return array{data:array,done:bool}
- */
-function wp_support_vault_exporter_callback( string $email_address, int $page = 1 ): array {
-	$email_address = sanitize_email( $email_address );
-	if ( empty( $email_address ) ) {
-		return array(
-			'data' => array(),
-			'done' => true,
-		);
-	}
-
-	$user = get_user_by( 'email', $email_address );
-	if ( ! $user || ! $user->exists() ) {
-		return array(
-			'data' => array(),
-			'done' => true,
-		);
-	}
-
-	$paged    = max( 1, $page );
-	$per_page = 50;
-
-	$query = new \WP_Query(
-		array(
-			'post_type'      => 'attachment',
-			'post_status'    => 'any',
-			'paged'          => $paged,
-			'posts_per_page' => $per_page,
-			'fields'         => 'ids',
-			'meta_query'     => array(
-				array(
-					'key'   => '_WPS_vault_uploader_user_id',
-					'value' => (int) $user->ID,
-				),
-			),
-		)
-	);
-
-	$items = array();
-
-	if ( $query->have_posts() ) {
-		foreach ( $query->posts as $attachment_id ) {
-			$attachment_id  = (int) $attachment_id;
-			$file_path      = (string) get_attached_file( $attachment_id );
-			$vault_path     = (string) get_post_meta( $attachment_id, '_WPS_vault_path', true );
-			$vault_mode     = (string) get_post_meta( $attachment_id, '_WPS_vault_mode', true );
-			$vault_created  = (string) get_post_meta( $attachment_id, '_WPS_vault_created', true );
-			$hash_raw       = (string) get_post_meta( $attachment_id, '_WPS_vault_sha256_raw', true );
-			$hash_store     = (string) get_post_meta( $attachment_id, '_WPS_vault_sha256_store', true );
-			$anonymized_at  = (string) get_post_meta( $attachment_id, '_WPS_vault_anonymized', true );
-			$encrypted_flag = (string) get_post_meta( $attachment_id, '_WPS_vault_encrypted', true );
-
-			$items[] = array(
-				'group_id'    => 'wps-vault',
-				'group_label' => __( 'WPS Vault', 'plugin-wp-support-thisismyurl' ),
-				'item_id'     => 'attachment-' . $attachment_id,
-				'data'        => array(
-					array(
-						'name'  => __( 'Attachment ID', 'plugin-wp-support-thisismyurl' ),
-						'value' => $attachment_id,
-					),
-					array(
-						'name'  => __( 'File name', 'plugin-wp-support-thisismyurl' ),
-						'value' => wp_basename( $file_path ),
-					),
-					array(
-						'name'  => __( 'MIME type', 'plugin-wp-support-thisismyurl' ),
-						'value' => (string) get_post_mime_type( $attachment_id ),
-					),
-					array(
-						'name'  => __( 'Vault path', 'plugin-wp-support-thisismyurl' ),
-						'value' => $vault_path,
-					),
-					array(
-						'name'  => __( 'Vault mode', 'plugin-wp-support-thisismyurl' ),
-						'value' => ! empty( $vault_mode ) ? $vault_mode : 'raw',
-					),
-					array(
-						'name'  => __( 'Encrypted', 'plugin-wp-support-thisismyurl' ),
-						'value' => $encrypted_flag ? 'yes' : 'no',
-					),
-					array(
-						'name'  => __( 'Checksum (store)', 'plugin-wp-support-thisismyurl' ),
-						'value' => $hash_store ? substr( $hash_store, 0, 12 ) : '',
-					),
-					array(
-						'name'  => __( 'Checksum (raw)', 'plugin-wp-support-thisismyurl' ),
-						'value' => $hash_raw ? substr( $hash_raw, 0, 12 ) : '',
-					),
-					array(
-						'name'  => __( 'Vault created', 'plugin-wp-support-thisismyurl' ),
-						'value' => $vault_created,
-					),
-					array(
-						'name'  => __( 'Anonymized at', 'plugin-wp-support-thisismyurl' ),
-						'value' => $anonymized_at,
-					),
-				),
-			);
-		}
-	}
-
-	$max_pages = ! empty( $query->max_num_pages ) ? (int) $query->max_num_pages : 1;
-	$done      = $paged >= $max_pages;
-
-	return array(
-		'data' => $items,
-		'done' => $done,
-	);
-}
-
-/**
- * Register the Vault eraser with WordPress Personal Data Erasure.
- *
- * @param array $erasers Existing erasers.
- * @return array Modified erasers.
- */
-function wp_support_register_privacy_erasers( array $erasers ): array {
-	$erasers['wps-vault-eraser'] = array(
-		'eraser_friendly_name' => __( 'WPS Vault (anonymize originals & derivatives)', 'plugin-wp-support-thisismyurl' ),
-		'callback'             => __NAMESPACE__ . '\\wp_support_vault_eraser_callback',
-	);
-	return $erasers;
-}
-
-/**
- * Vault eraser: anonymize attachments tied to the user; retain originals in Vault.
- * Implements batching per WordPress privacy API contract.
- *
- * @param string $email_address User email being erased.
- * @param int    $page          Page number for batching (1-indexed).
- * @return array{items_removed:int,items_retained:int,messages:array,done:bool}
- */
-function wp_support_vault_eraser_callback( string $email_address, int $page = 1 ): array {
-	$email_address = sanitize_email( $email_address );
-	if ( empty( $email_address ) ) {
-		return array(
-			'items_removed'  => 0,
-			'items_retained' => 0,
-			'messages'       => array( __( 'Invalid email address.', 'plugin-wp-support-thisismyurl' ) ),
-			'done'           => true,
-		);
-	}
-
-	$user = get_user_by( 'email', $email_address );
-	if ( ! $user || ! $user->exists() ) {
-		return array(
-			'items_removed'  => 0,
-			'items_retained' => 0,
-			'messages'       => array( __( 'No user found for email; nothing to anonymize.', 'plugin-wp-support-thisismyurl' ) ),
-			'done'           => true,
-		);
-	}
-
-	// Delegate to Vault anonymization (retains originals, scrubs personal data).
-	$result = WPS_Vault::erase_user_personal_data( (int) $user->ID, max( 1, $page ), 50 );
-
-	// Ensure messages are sanitized.
-	$messages = array_map(
-		static function ( $m ) {
-			return wp_strip_all_tags( (string) $m );
-		},
-		(array) ( $result['messages'] ?? array() )
-	);
-
-	return array(
-		'items_removed'  => (int) ( $result['items_removed'] ?? 0 ),
-		'items_retained' => (int) ( $result['items_retained'] ?? 0 ),
-		'messages'       => $messages,
-		'done'           => (bool) ( $result['done'] ?? true ),
-	);
-}
+// Vault privacy exporters/erasers moved to the Vault module.
 
 // Register activation and deactivation hooks.
 register_activation_hook( __FILE__, __NAMESPACE__ . '\\wp_support_activate' );

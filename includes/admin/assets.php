@@ -1,0 +1,144 @@
+<?php
+/**
+ * Admin assets enqueue functions extracted from bootstrap.
+ */
+
+declare(strict_types=1);
+
+namespace WPS\CoreSupport;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Enqueue admin scripts and styles.
+ *
+ * @param string $hook The current admin page hook.
+ * @return void
+ */
+function wp_support_admin_enqueue( string $hook ): void {
+	// Load on all wp-support related pages (core, hubs, spokes).
+	// Hooks can be: toplevel_page_wp-support, support-hub_page_wp-support-hub-media, etc.
+	if ( false === strpos( $hook, 'wp-support' ) ) {
+		return;
+	}
+
+	error_log( 'wp_support_admin_enqueue: Hook=' . $hook );
+
+	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+	error_log( 'wp_support_admin_enqueue: Screen ID=' . ( $screen ? $screen->id : 'null' ) );
+
+	// Cache-bust using current timestamp to force reload for testing.
+	$cache_bust = time();
+
+	// Enqueue modern design system (shared across all WPS plugins).
+	wp_enqueue_style(
+		'wps-ui-system',
+		wp_support_URL . 'assets/css/wps-ui-system.css',
+		array(),
+		$cache_bust
+	);
+
+	wp_enqueue_style(
+		'wps-core-admin',
+		wp_support_URL . 'assets/css/admin.css',
+		array( 'wps-ui-system' ),
+		$cache_bust
+	);
+
+	wp_enqueue_style(
+		'wps-tab-navigation',
+		wp_support_URL . 'assets/css/tab-navigation.css',
+		array( 'wps-ui-system' ),
+		$cache_bust
+	);
+
+	// Enable drag and drop for dashboard metaboxes on all wp-support pages using WordPress native postboxes.
+	if ( $screen && false !== strpos( $screen->id, 'wp-support' ) ) {
+		error_log( 'wp_support_admin_enqueue: Loading dashboard assets for screen=' . $screen->id );
+
+		// Use WordPress's built-in postbox drag and drop.
+		wp_enqueue_script( 'postbox' );
+
+		// Add custom script to handle context-specific state saving.
+		wp_enqueue_script(
+			'wps-postbox-state',
+			wp_support_URL . 'assets/js/postbox-state.js',
+			array( 'jquery', 'postbox' ),
+			$cache_bust,
+			true
+		);
+
+		// Get current context for unique state key.
+		$context   = WPS_Tab_Navigation::get_current_context();
+		$hub_id    = $context['hub'] ?? '';
+		$state_key = 'wp-support' . ( $hub_id ? '-' . $hub_id : '' );
+
+		wp_localize_script(
+			'wps-postbox-state',
+			'wpsPostboxState',
+			array(
+				'stateKey' => $state_key,
+				'nonce'    => wp_create_nonce( 'WPS_postbox_state' ),
+			)
+		);
+
+		wp_enqueue_style(
+			'wps-dashboard-drag',
+			wp_support_URL . 'assets/css/dashboard-drag.css',
+			array(),
+			$cache_bust
+		);
+	} else {
+		error_log( 'wp_support_admin_enqueue: NOT loading dashboard assets. Screen=' . ( $screen ? $screen->id : 'null' ) );
+	}
+
+	wp_enqueue_script(
+		'wps-core-admin',
+		wp_support_URL . 'assets/js/admin.js',
+		array( 'jquery' ),
+		$cache_bust,
+		true
+	);
+
+	// Localize script for AJAX and i18n.
+	wp_localize_script(
+		'wps-core-admin',
+		'wpsAdminData',
+		array(
+			'toggleNonce' => wp_create_nonce( 'WPS_toggle_module' ),
+			'actionNonce' => wp_create_nonce( 'WPS_module_action' ),
+			'i18n'        => array(
+				'enabled'      => __( 'Enabled', 'plugin-wp-support-thisismyurl' ),
+				'disabled'     => __( 'Disabled', 'plugin-wp-support-thisismyurl' ),
+				'ajaxError'    => __( 'An error occurred. Please try again.', 'plugin-wp-support-thisismyurl' ),
+				'noResults'    => __( 'No modules match this filter.', 'plugin-wp-support-thisismyurl' ),
+				'installFirst' => __( 'Install the module before enabling it.', 'plugin-wp-support-thisismyurl' ),
+				'installing'   => __( 'Installing...', 'plugin-wp-support-thisismyurl' ),
+				'updating'     => __( 'Updating...', 'plugin-wp-support-thisismyurl' ),
+				'install'      => __( 'Install', 'plugin-wp-support-thisismyurl' ),
+				'update'       => __( 'Update', 'plugin-wp-support-thisismyurl' ),
+			),
+		)
+	);
+
+	// Enqueue module actions script (install/update/activate).
+	wp_enqueue_script(
+		'wps-module-actions',
+		wp_support_URL . 'assets/js/module-actions.js',
+		array(),
+		$cache_bust,
+		true
+	);
+
+	// Localize module actions script with nonce and AJAX URL.
+	wp_localize_script(
+		'wps-module-actions',
+		'wpsModuleActions',
+		array(
+			'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			'nonce'   => wp_create_nonce( 'WPS_module_actions' ),
+		)
+	);
+}
