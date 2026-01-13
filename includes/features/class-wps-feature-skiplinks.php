@@ -107,9 +107,13 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 			return;
 		}
 
+		// Register a minimal style handle to ensure we always have something to attach to.
+		wp_register_style( 'wps-skiplinks', false ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+		wp_enqueue_style( 'wps-skiplinks' );
+		
 		// Inline styles for skip links (no external CSS file needed).
 		$css = $this->get_skip_links_css();
-		wp_add_inline_style( 'wp-block-library', $css );
+		wp_add_inline_style( 'wps-skiplinks', $css );
 	}
 
 	/**
@@ -121,8 +125,8 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 		$options = (array) get_option( 'wps_skiplinks_options', $this->get_default_options() );
 
 		// Allow theme customization via filter.
-		$bg_color   = apply_filters( 'wps_skiplinks_bg_color', $options['bg_color'] ?? '#21759b' );
-		$text_color = apply_filters( 'wps_skiplinks_text_color', $options['text_color'] ?? '#ffffff' );
+		$bg_color   = $this->sanitize_hex_color( apply_filters( 'wps_skiplinks_bg_color', $options['bg_color'] ?? '#21759b' ) );
+		$text_color = $this->sanitize_hex_color( apply_filters( 'wps_skiplinks_text_color', $options['text_color'] ?? '#ffffff' ) );
 
 		return "
 			.wps-skip-links {
@@ -137,8 +141,8 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 				left: -9999px;
 				display: block;
 				padding: 1rem 1.5rem;
-				background-color: {$bg_color};
-				color: {$text_color};
+				background-color: " . esc_attr( $bg_color ) . ";
+				color: " . esc_attr( $text_color ) . ";
 				text-decoration: none;
 				font-size: 1rem;
 				font-weight: 600;
@@ -150,14 +154,38 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 			.wps-skip-link:focus {
 				top: 0;
 				left: 0;
-				outline: 3px solid {$text_color};
+				outline: 3px solid " . esc_attr( $text_color ) . ";
 				outline-offset: 2px;
 			}
 			
 			.wps-skip-link:hover {
-				background-color: " . $this->darken_color( $bg_color, 20 ) . ";
+				background-color: " . esc_attr( $this->darken_color( $bg_color, 20 ) ) . ";
 			}
 		";
+	}
+
+	/**
+	 * Sanitize a hex color value.
+	 *
+	 * @param string $color Hex color value.
+	 * @return string Sanitized hex color.
+	 */
+	private function sanitize_hex_color( string $color ): string {
+		// Remove any whitespace.
+		$color = trim( $color );
+		
+		// Add # if missing.
+		if ( '#' !== substr( $color, 0, 1 ) ) {
+			$color = '#' . $color;
+		}
+		
+		// Check if valid hex color (3 or 6 characters after #).
+		if ( ! preg_match( '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/', $color ) ) {
+			// Return default blue if invalid.
+			return '#21759b';
+		}
+		
+		return $color;
 	}
 
 	/**
@@ -205,18 +233,9 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 			return sanitize_key( $content_id );
 		}
 
-		// Common content IDs in themes.
+		// Common content IDs in themes (default to first one).
 		$common_ids = array( 'content', 'main', 'main-content', 'primary', 'site-content' );
 
-		// Check if nav-accessibility feature is enabled and has custom settings.
-		if ( \WPS\CoreSupport\has_WPS_feature( 'nav-accessibility' ) ) {
-			$nav_options = (array) get_option( 'wps_nav_accessibility_options', array() );
-			if ( ! empty( $nav_options['content_id'] ) ) {
-				return sanitize_key( $nav_options['content_id'] );
-			}
-		}
-
-		// Return first common ID (themes should have at least one).
 		return $common_ids[0];
 	}
 
@@ -235,18 +254,9 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 			return sanitize_key( $nav_id );
 		}
 
-		// Common navigation IDs in themes.
+		// Common navigation IDs in themes (default to first one).
 		$common_ids = array( 'site-navigation', 'primary-navigation', 'nav', 'navigation', 'primary-menu' );
 
-		// Check if nav-accessibility feature is enabled and has custom settings.
-		if ( \WPS\CoreSupport\has_WPS_feature( 'nav-accessibility' ) ) {
-			$nav_options = (array) get_option( 'wps_nav_accessibility_options', array() );
-			if ( ! empty( $nav_options['nav_id'] ) ) {
-				return sanitize_key( $nav_options['nav_id'] );
-			}
-		}
-
-		// Return first common ID.
 		return $common_ids[0];
 	}
 
