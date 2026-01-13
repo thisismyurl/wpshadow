@@ -51,6 +51,7 @@ final class WPS_Feature_Resource_Hints extends WPS_Abstract_Feature {
 		}
 
 		add_filter( 'wp_resource_hints', array( $this, 'filter_resource_hints' ), 10, 2 );
+		add_action( 'wp_head', array( $this, 'add_preload_headers' ), 2 );
 	}
 
 	/**
@@ -98,6 +99,43 @@ final class WPS_Feature_Resource_Hints extends WPS_Abstract_Feature {
 		return array(
 			'remove_s_w_org' => true,
 		);
+	}
+
+	/**
+	 * Add preload headers for critical resources.
+	 *
+	 * @return void
+	 */
+	public function add_preload_headers(): void {
+		$preload_resources = (array) get_option( 'wps_preload_resources', array() );
+
+		// Allow filtering.
+		$preload_resources = apply_filters( 'wps_preload_resources', $preload_resources );
+
+		foreach ( $preload_resources as $resource ) {
+			if ( ! is_array( $resource ) || empty( $resource['url'] ) || empty( $resource['type'] ) ) {
+				continue;
+			}
+
+			$url  = esc_url( $resource['url'] );
+			$type = sanitize_key( $resource['type'] );
+
+			// Build preload tag based on resource type.
+			$attributes = sprintf( 'rel="preload" href="%s" as="%s"', $url, $type );
+
+			// Add type attribute for fonts.
+			if ( 'font' === $type ) {
+				$mime_type = $resource['mime_type'] ?? 'font/woff2';
+				$attributes .= sprintf( ' type="%s" crossorigin', esc_attr( $mime_type ) );
+			}
+
+			// Add media attribute for styles if specified.
+			if ( 'style' === $type && ! empty( $resource['media'] ) ) {
+				$attributes .= sprintf( ' media="%s"', esc_attr( $resource['media'] ) );
+			}
+
+			echo '<link ' . $attributes . '>' . "\n";
+		}
 	}
 }
 
