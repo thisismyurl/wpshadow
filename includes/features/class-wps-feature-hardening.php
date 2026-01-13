@@ -7,7 +7,7 @@
  * - wp-json selective lockdown
  * - Directory listing protection
  * - Secure salts validation
- * - File write permissions check
+ * - File permissions check
  *
  * @package WPS\CoreSupport
  * @since 1.2601.73001
@@ -163,9 +163,9 @@ final class WPS_Feature_Hardening extends WPS_Abstract_Feature {
 			$value = constant( $salt );
 
 			// Check if salt is the default placeholder or too short.
-			if ( empty( $value ) || 
-				 'put your unique phrase here' === $value ||
-				 strlen( $value ) < 64 ) {
+			if ( empty( $value ) ||
+				'put your unique phrase here' === $value ||
+				strlen( $value ) < 64 ) {
 				$weak_salts[] = $salt;
 			}
 		}
@@ -202,10 +202,7 @@ final class WPS_Feature_Hardening extends WPS_Abstract_Feature {
 			$perms = fileperms( $wp_config_path );
 			// Check if wp-config.php is world-readable (other can read).
 			if ( $perms & 0x0004 ) {
-				$checks[] = sprintf(
-					/* translators: %s: file path */
-					__( 'wp-config.php is world-readable. Recommended permissions: 0600 or 0400.', 'plugin-wp-support-thisismyurl' )
-				);
+				$checks[] = __( 'wp-config.php is world-readable. Recommended permissions: 0600 or 0400.', 'plugin-wp-support-thisismyurl' );
 			}
 		}
 
@@ -339,7 +336,7 @@ final class WPS_Feature_Hardening extends WPS_Abstract_Feature {
 	 */
 	private function add_security_notice( string $id, string $message, string $type = 'warning' ): void {
 		$notices = get_option( 'wps_security_hardening_notices', array() );
-		
+
 		$notices[ $id ] = array(
 			'message' => $message,
 			'type'    => $type,
