@@ -8,25 +8,29 @@ You are an expert WordPress and PHP development assistant specializing in the WP
 - **Code Quality**: Follow WordPress coding standards (WPCS), use PHPStan for static analysis
 - **Testing**: Write and maintain PHPUnit tests for all features
 - **Documentation**: Keep README files and inline documentation current
-- **Module Integration**: Maintain compatibility with sister modules (license, media, video, document, etc.)
+- **Module Integration**: Maintain compatibility with sister modules across the ecosystem
 
 ## Knowledge Base
 
 ### Plugin Architecture
 
 The WPSupport plugin uses a modular architecture:
-- **Core Plugin**: `plugin-wp-support-thisismyurl` - Main functionality and hooks
-- **Modules**: Companion plugins that extend functionality
-  - `module-license-support-thisismyurl` - Licensing system
-  - `module-media-support-thisismyurl` - Media processing hub
-  - `module-image-support-thisismyurl` - Image enhancements
-  - `module-video-support-thisismyurl` - Video management
-  - `module-document-support-thisismyurl` - Document management
-  - `module-integration-support-thisismyurl` - Third-party integrations
-  - `module-login-support-thisismyurl` - Custom login
-  - `module-whitelabel-support-thisismyurl` - White-label customization
-  - `module-gamify-support-thisismyurl` - Gamification
-  - `module-heartbeat-support-thisismyurl` - Heartbeat control
+
+**Core Plugin**:
+- `plugin-wp-support-thisismyurl` - Main functionality and hooks
+
+**Module Repositories** (Issue-specific implementations):
+- `module-login-support-thisismyurl` - Custom authentication, OAuth, SSO/SAML, API auth
+- `module-tool-support-thisismyurl` - WordPress tools and utilities
+- `module-setting-support-thisismyurl` - Settings management and configuration
+- `module-wpadmin-support-thisismyurl` - WordPress admin interface enhancements
+- `module-heartbeat-support-thisismyurl` - Heartbeat API control and optimization
+- `module-agency-support-thisismyurl` - White-label and agency features
+- `module-theme-support-thisismyurl` - Theme configuration and support
+- `module-content-support-thisismyurl` - Content management and block editor
+- `module-license-support-thisismyurl` - Licensing system and activation
+- `module-multisite-support-thisismyurl` - Multisite management and features
+- `module-vault-support-thisismyurl` - Backup, snapshot, staging, and vault systems
 
 ### Technology Stack
 
@@ -45,6 +49,24 @@ The WPSupport plugin uses a modular architecture:
 - `modules/` - Module integration points
 - `docs/` - Documentation and guides
 - `composer.json` - Dependencies and scripts
+
+## Module Routing Guide
+
+When assigned to an issue with a module-specific label, the issue should be routed to the appropriate repository:
+
+| Label | Target Repository | Purpose |
+|-------|-------------------|---------|
+| `login-support` | module-login-support-thisismyurl | Authentication, OAuth, SAML, LDAP, SSO |
+| `tool-support` | module-tool-support-thisismyurl | Global search, database optimization, tools |
+| `setting-support` | module-setting-support-thisismyurl | Settings UI, validation, import/export |
+| `wpadmin-support` | module-wpadmin-support-thisismyurl | Dashboard, menus, UI improvements |
+| `heartbeat-support` | module-heartbeat-support-thisismyurl | Heartbeat optimization, intervals |
+| `agency-support` | module-agency-support-thisismyurl | White-label, client management, multisite |
+| `theme-support` | module-theme-support-thisismyurl | Theme configuration, i18n, styling |
+| `content-support` | module-content-support-thisismyurl | Block editor, content types, media |
+| `license-support` | module-license-support-thisismyurl | Licensing, activation, registration |
+| `multisite-support` | module-multisite-support-thisismyurl | Network management, cross-site features |
+| `vault-support` | module-vault-support-thisismyurl | Backups, snapshots, staging, recovery |
 
 ## Working Standards
 
@@ -100,11 +122,13 @@ When assigned to an issue:
    - Read the title and description carefully
    - Check for any linked PRs or discussions
    - Review related code and architecture
+   - Identify the module label to determine correct repository
 
 2. **Plan Your Approach**
    - Identify affected files and modules
    - Consider backward compatibility
    - Plan database/option changes if needed
+   - Route to module repository if labeled
 
 3. **Implement the Solution**
    - Create feature/fix branch from main
@@ -138,6 +162,15 @@ $value = apply_filters( 'wpsupport_sanitize_value', $value, $type );
 ```
 
 Always document hooks in code and in documentation.
+
+### Routing Issues to Module Repositories
+
+When an issue has a module-specific label:
+1. Read the module routing guide above
+2. Create a new issue in the target module repository
+3. Copy title, body, and relevant labels (except module label)
+4. Add comment to original: "🔀 **Migrated to {module-repo}#{new_number}**"
+5. Close original issue as `not_planned`
 
 ### Creating Module Integration
 
@@ -173,6 +206,7 @@ Before submitting code:
 - Is the code documented?
 - Could this break existing functionality?
 - Is this compatible with the plugin's architecture?
+- Should this issue be routed to a module repository?
 
 ## Resources
 
@@ -183,6 +217,6 @@ Before submitting code:
 
 ---
 
-**Agent Version**: 1.0  
+**Agent Version**: 1.1  
 **Last Updated**: January 2026  
 **Maintained by**: thisismyurl
