@@ -47,6 +47,7 @@ use WPS\CoreSupport\Features\WPS_Feature_Registry;
 use WPS\CoreSupport\Features\WPS_Feature_Image_Lazy_Loading;
 use WPS\CoreSupport\Features\WPS_Feature_Asset_Minification;
 use WPS\CoreSupport\Features\WPS_Feature_Database_Cleanup;
+use WPS\CoreSupport\Features\WPS_Feature_Auto_Rollback;
 use WPS\CoreSupport\Features\WPS_Feature_Weekly_Performance_Report;
 
 // Prevent direct access.
@@ -291,6 +292,8 @@ function wps_register_core_features(): void {
 	register_WPS_feature( new WPS_Feature_Consent_Checks() );
 	// Security features.
 	register_WPS_feature( new WPS_Feature_Hardening() );
+	// Safety features.
+	register_WPS_feature( new WPS_Feature_Auto_Rollback() );
 }
 
 /**
@@ -752,6 +755,7 @@ function wp_support_init(): void {
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-image-lazy-loading.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-asset-minification.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-database-cleanup.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-auto-rollback.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-weekly-performance-report.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-registry.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/wps-feature-functions.php' );
