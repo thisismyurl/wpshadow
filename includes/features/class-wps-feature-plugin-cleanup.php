@@ -3,7 +3,7 @@
  * Feature: Third-Party Plugin Asset Cleanup
  *
  * Selectively dequeue unnecessary CSS/JS from common plugins
- * (Jetpack, RankMath, etc.) that load globally but aren't used on every page.
+ * (Contact Form 7, WooCommerce, Jetpack, RankMath, etc.) that load globally but aren't used on every page.
  *
  * @package WPS\CoreSupport\Features
  * @since 1.2601.73001
@@ -29,7 +29,7 @@ final class WPS_Feature_Plugin_Cleanup extends WPS_Abstract_Feature {
 			array(
 				'id'                  => 'plugin-cleanup',
 				'name'                => __( 'Third-Party Plugin Asset Cleanup', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Remove unused CSS/JS from Jetpack, RankMath, and other plugins', 'plugin-wp-support-thisismyurl' ),
+				'description'         => __( 'Remove unused CSS/JS from Contact Form 7, WooCommerce, Jetpack, RankMath, and other plugins', 'plugin-wp-support-thisismyurl' ),
 				'scope'               => 'core',
 				'default_enabled'     => false,
 				'version'             => '1.0.0',
@@ -90,10 +90,86 @@ final class WPS_Feature_Plugin_Cleanup extends WPS_Abstract_Feature {
 		// RankMath credit notice.
 		add_filter( 'rank_math/frontend/remove_credit_notice', '__return_true' );
 
+		// Contact Form 7 cleanup - only load on pages with forms.
+		if ( $cleanup_options['contact_form_7'] ?? false ) {
+			$this->cleanup_contact_form_7();
+		}
+
+		// WooCommerce cleanup - only load on shop/product pages.
+		if ( $cleanup_options['woocommerce'] ?? false ) {
+			$this->cleanup_woocommerce();
+		}
+
 		// Theme-specific cleanup.
 		if ( $cleanup_options['theme_cleanup'] ?? false ) {
 			wp_dequeue_style( 'mediaelement' );
 			wp_dequeue_style( 'wp-mediaelement' );
+		}
+	}
+
+	/**
+	 * Cleanup Contact Form 7 assets when not needed.
+	 *
+	 * @return void
+	 */
+	private function cleanup_contact_form_7(): void {
+		// Check if Contact Form 7 is active.
+		if ( ! function_exists( 'wpcf7_contact_form' ) ) {
+			return;
+		}
+
+		// Check if current page has a Contact Form 7 shortcode.
+		global $post;
+		$has_cf7_form = false;
+
+		if ( is_a( $post, 'WP_Post' ) ) {
+			$has_cf7_form = has_shortcode( $post->post_content, 'contact-form-7' );
+		}
+
+		// Allow filtering of the check for custom use cases.
+		$has_cf7_form = apply_filters( 'wps_has_contact_form_7', $has_cf7_form );
+
+		// Dequeue if no form present.
+		if ( ! $has_cf7_form ) {
+			wp_dequeue_style( 'contact-form-7' );
+			wp_dequeue_script( 'contact-form-7' );
+			wp_deregister_style( 'contact-form-7' );
+			wp_deregister_script( 'contact-form-7' );
+		}
+	}
+
+	/**
+	 * Cleanup WooCommerce assets when not needed.
+	 *
+	 * @return void
+	 */
+	private function cleanup_woocommerce(): void {
+		// Check if WooCommerce is active.
+		if ( ! function_exists( 'is_woocommerce' ) ) {
+			return;
+		}
+
+		// Check if we're on a WooCommerce page.
+		$is_woo_page = is_woocommerce() || is_cart() || is_checkout() || is_account_page();
+
+		// Allow filtering of the check for custom use cases.
+		$is_woo_page = apply_filters( 'wps_is_woocommerce_page', $is_woo_page );
+
+		// Dequeue if not on a WooCommerce page.
+		if ( ! $is_woo_page ) {
+			// Dequeue WooCommerce styles.
+			wp_dequeue_style( 'woocommerce-general' );
+			wp_dequeue_style( 'woocommerce-layout' );
+			wp_dequeue_style( 'woocommerce-smallscreen' );
+			wp_deregister_style( 'woocommerce-general' );
+			wp_deregister_style( 'woocommerce-layout' );
+			wp_deregister_style( 'woocommerce-smallscreen' );
+
+			// Dequeue WooCommerce scripts.
+			wp_dequeue_script( 'wc-cart-fragments' );
+			wp_dequeue_script( 'woocommerce' );
+			wp_deregister_script( 'wc-cart-fragments' );
+			wp_deregister_script( 'woocommerce' );
 		}
 	}
 
@@ -104,9 +180,11 @@ final class WPS_Feature_Plugin_Cleanup extends WPS_Abstract_Feature {
 	 */
 	private function get_default_options(): array {
 		return array(
-			'jetpack'       => false,
-			'rankmath'      => false,
-			'theme_cleanup' => false,
+			'jetpack'         => false,
+			'rankmath'        => false,
+			'contact_form_7'  => false,
+			'woocommerce'     => false,
+			'theme_cleanup'   => false,
 		);
 	}
 }
