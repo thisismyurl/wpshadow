@@ -30,7 +30,7 @@ $tabs = array(
 );
 
 // Build tab URLs.
-$base_url = add_query_arg( 'tab', 'help', admin_url( 'admin.php?page=wp-support' ) );
+$base_url = add_query_arg( 'WPS_tab', 'help', admin_url( 'admin.php?page=wp-support' ) );
 ?>
 
 <div class="wrap wps-help-page">

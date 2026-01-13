@@ -71,7 +71,7 @@ class WPS_Help_Content_API {
 
 		if ( ! empty( $remote_content ) ) {
 			// Cache the successful response.
-			set_transient( self::CACHE_KEY, $remote_content, self::CACHE_EXPIRATION );
+			set_transient( self::CACHE_KEY, $remote_content, self::get_cache_expiration() );
 			return self::filter_section( $remote_content, $section );
 		}
 
