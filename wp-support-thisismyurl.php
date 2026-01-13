@@ -48,6 +48,7 @@ use WPS\CoreSupport\Features\WPS_Feature_Image_Lazy_Loading;
 use WPS\CoreSupport\Features\WPS_Feature_Asset_Minification;
 use WPS\CoreSupport\Features\WPS_Feature_Database_Cleanup;
 use WPS\CoreSupport\Features\WPS_Feature_Auto_Rollback;
+use WPS\CoreSupport\Features\WPS_Feature_Visual_Regression;
 use WPS\CoreSupport\Features\WPS_Feature_Weekly_Performance_Report;
 use WPS\CoreSupport\Features\WPS_Feature_Conditional_Loading;
 use WPS\CoreSupport\Features\WPS_Feature_Google_Fonts_Disabler;
@@ -302,6 +303,7 @@ function wps_register_core_features(): void {
 	register_WPS_feature( new WPS_Feature_Hardening() );
 	// Safety features.
 	register_WPS_feature( new WPS_Feature_Auto_Rollback() );
+	register_WPS_feature( new WPS_Feature_Visual_Regression() );
 }
 
 /**
@@ -454,6 +456,7 @@ function wp_support_deactivate(): void {
 	flush_rewrite_rules();
 	// Moved to Vault module. Directory and protection are ensured by
 	// WPS\VaultSupport\WPS_Vault::init() when the module is enabled.
+}
 
 /**
  * Setup the vault directory for secure original storage.
