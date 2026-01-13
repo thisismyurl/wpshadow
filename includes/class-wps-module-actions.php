@@ -111,6 +111,9 @@ class WPS_Module_Actions {
 			self::respond_error( __( 'Failed to update settings.', 'plugin-wp-support-thisismyurl' ), 500 );
 		}
 
+		// Trigger health check refresh hook.
+		do_action( $enabled ? 'WPS_module_enabled' : 'WPS_module_disabled', $slug );
+
 		$status = WPS_Module_Registry::get_catalog_with_status();
 		self::respond_success(
 			array(
@@ -332,6 +335,9 @@ class WPS_Module_Actions {
 		// Ensure registry enabled flag is set even for module-only entries.
 		WPS_Module_Registry::update_module_settings( $slug, array( 'enabled' => true ), $network_activate );
 
+		// Trigger health check refresh hook.
+		do_action( 'WPS_module_enabled', $slug );
+
 		// Refresh catalog with status.
 		$status = WPS_Module_Registry::get_catalog_with_status();
 
@@ -373,6 +379,9 @@ class WPS_Module_Actions {
 
 		// Always disable the module flag (plugin or module-only).
 		WPS_Module_Registry::update_module_settings( $slug, array( 'enabled' => false ), (bool) $ctx['network_scope'] );
+
+		// Trigger health check refresh hook.
+		do_action( 'WPS_module_disabled', $slug );
 
 		// Refresh catalog with status.
 		$status = WPS_Module_Registry::get_catalog_with_status();
