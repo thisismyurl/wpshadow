@@ -456,6 +456,7 @@ function wp_support_activate(): void {
 function wp_support_deactivate(): void {
 	// Flush rewrite rules.
 	flush_rewrite_rules();
+}
 	// Moved to Vault module. Directory and protection are ensured by
 	// WPS\VaultSupport\WPS_Vault::init() when the module is enabled.
 }
@@ -590,6 +591,10 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/class-wps-emergency-support.php';
 	WPS_Emergency_Support::init();
 
+	// Load White Screen Auto-Recovery for fatal error handling.
+	require_once wp_support_PATH . 'includes/class-wps-white-screen-recovery.php';
+	WPS_White_Screen_Recovery::init();
+
 	// Register emergency support admin menu.
 	add_action(
 		'admin_menu',
@@ -604,6 +609,9 @@ function wp_support_init(): void {
 			);
 		}
 	);
+
+	// Handle recovery actions from emergency dashboard.
+	add_action( 'admin_init', array( '\\WPS\\CoreSupport\\WPS_White_Screen_Recovery', 'handle_recovery_actions' ) );
 
 	// Load Site Documentation Manager for blueprint, protected plugins, and export.
 	require_once wp_support_PATH . 'includes/class-wps-site-documentation-manager.php';

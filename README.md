@@ -13,6 +13,11 @@ This plugin provides complete functionality on its own and can optionally load h
 - **Seamless Registration:** One-click site registration with pre-populated details and automatic license provisioning
 - **Health Diagnostics:** Real-time WordPress health status, plugin/theme compatibility checks
 - **Emergency Support:** Critical error recovery, one-click emergency isolation mode
+- **White Screen Auto-Recovery:** Automatic detection and recovery from fatal errors (WSoD) - see [WHITE_SCREEN_RECOVERY.md](docs/WHITE_SCREEN_RECOVERY.md)
+  - Automatic plugin conflict detection
+  - Up to 3 automatic recovery attempts
+  - Recovery mode for safe admin access
+  - Problematic plugin tracking and logging
 - **Backup Verification:** Automated backup integrity testing and recovery drills
 - **Site Documentation:** Plugin/theme inventory, protected plugins tracking, API documentation export
 - **Activity Logging:** Comprehensive audit trail of all plugin operations and changes
