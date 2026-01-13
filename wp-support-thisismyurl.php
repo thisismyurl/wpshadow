@@ -499,6 +499,10 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/class-wps-license-widget.php';
 	\WPS\CoreSupport\WPS_License_Widget::init();
 
+	// Load REST API.
+	require_once wp_support_PATH . 'includes/api/class-wps-rest-api.php';
+	\WPS\CoreSupport\API\WPS_REST_API::init();
+
 	// Load module bootstrap for child plugin installation and activation.
 	require_once wp_support_PATH . 'includes/class-wps-module-bootstrap.php';
 	WPS_Module_Bootstrap::init();
