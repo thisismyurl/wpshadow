@@ -502,6 +502,9 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/class-wps-license-widget.php';
 	\WPS\CoreSupport\WPS_License_Widget::init();
 
+	// Load help content API for dynamic documentation.
+	require_once wp_support_PATH . 'includes/class-wps-help-content-api.php';
+	\WPS\CoreSupport\WPS_Help_Content_API::init();
 	// Load REST API.
 	require_once wp_support_PATH . 'includes/api/class-wps-rest-api.php';
 	\WPS\CoreSupport\API\WPS_REST_API::init();
@@ -1344,25 +1347,12 @@ function wps_get_hub_tabs_for_spoke( string $hub_id, string $spoke_id ): array {
 // Moved to includes/views/dashboard.php
 
 /**
- * Render Help view with license emphasis.
+ * Render Help view with enhanced documentation and FAQ.
  *
  * @return void
  */
 function wp_support_render_help_layout(): void {
-	?>
-	<div class="wrap">
-		<h1><?php echo esc_html__( 'Help', 'plugin-wp-support-thisismyurl' ); ?></h1>
-		<div class="wps-dashboard-license-row">
-			<div id="wps_license_widget" class="postbox" style="margin:0 0 16px 0;">
-				<?php \WPS\CoreSupport\WPS_License_Widget::render_widget(); ?>
-			</div>
-		</div>
-		<style>
-			.wps-dashboard-license-row { margin-bottom: 12px; }
-			.wps-dashboard-license-row #wps_license_widget { width: 100%; }
-		</style>
-	</div>
-	<?php
+	require_once wp_support_PATH . 'includes/views/help.php';
 }
 
 /**
