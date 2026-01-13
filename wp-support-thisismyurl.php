@@ -26,6 +26,7 @@ namespace WPS\CoreSupport;
 use WPS\CoreSupport\Features\WPS_Feature_Core_Diagnostics;
 use WPS\CoreSupport\Features\WPS_Feature_Image_Smart_Focus;
 use WPS\CoreSupport\Features\WPS_Feature_Vault_Audit;
+use WPS\CoreSupport\Features\WPS_Feature_Vulnerability_Watch;
 use WPS\CoreSupport\Features\WPS_Feature_Script_Deferral;
 use WPS\CoreSupport\Features\WPS_Feature_Asset_Version_Removal;
 use WPS\CoreSupport\Features\WPS_Feature_Head_Cleanup;
@@ -252,6 +253,7 @@ function wps_register_core_features(): void {
 	// Sample features.
 	register_WPS_feature( new WPS_Feature_Core_Diagnostics() );
 	register_WPS_feature( new WPS_Feature_Vault_Audit() );
+	register_WPS_feature( new WPS_Feature_Vulnerability_Watch() );
 	register_WPS_feature( new WPS_Feature_Image_Smart_Focus() );
 
 	// Performance optimization features.
@@ -702,6 +704,7 @@ function wp_support_init(): void {
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-abstract.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-core-diagnostics.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-vault-audit.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-vulnerability-watch.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-image-smart-focus.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-script-deferral.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-asset-version-removal.php' );
