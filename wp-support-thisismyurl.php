@@ -53,6 +53,7 @@ use WPS\CoreSupport\Features\WPS_Feature_Conditional_Loading;
 use WPS\CoreSupport\Features\WPS_Feature_Google_Fonts_Disabler;
 use WPS\CoreSupport\Features\WPS_Feature_Critical_CSS;
 use WPS\CoreSupport\Features\WPS_Feature_Script_Optimizer;
+use WPS\CoreSupport\Features\WPS_Feature_Conflict_Sandbox;
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -302,6 +303,8 @@ function wps_register_core_features(): void {
 	register_WPS_feature( new WPS_Feature_Hardening() );
 	// Safety features.
 	register_WPS_feature( new WPS_Feature_Auto_Rollback() );
+	// Debugging features.
+	register_WPS_feature( new WPS_Feature_Conflict_Sandbox() );
 }
 
 /**
@@ -454,6 +457,7 @@ function wp_support_deactivate(): void {
 	flush_rewrite_rules();
 	// Moved to Vault module. Directory and protection are ensured by
 	// WPS\VaultSupport\WPS_Vault::init() when the module is enabled.
+}
 
 /**
  * Setup the vault directory for secure original storage.
