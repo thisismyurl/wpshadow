@@ -75,6 +75,7 @@ class WPS_Dashboard_Widgets {
 			array(
 				array( __CLASS__, 'widget_suite_overview' ),
 				array( __CLASS__, 'widget_active_hubs' ),
+				array( __CLASS__, 'widget_weekly_performance' ),
 			),
 			array(
 				array( __CLASS__, 'widget_tips_coach' ),
@@ -888,6 +889,130 @@ class WPS_Dashboard_Widgets {
 			</div>
 			<div class="inside">
 				<?php \WPS\CoreSupport\Features\WPS_Feature_Tips_Coach::render_widget(); ?>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Widget: Weekly Performance Report
+	 *
+	 * @return void
+	 */
+	private static function widget_weekly_performance(): void {
+		if ( ! class_exists( '\\WPS\\CoreSupport\\Features\\WPS_Feature_Weekly_Performance_Report' ) ) {
+			return;
+		}
+
+		$metrics = \WPS\CoreSupport\Features\WPS_Feature_Weekly_Performance_Report::get_current_week_metrics();
+		
+		$uptime_percentage = 0;
+		if ( $metrics['uptime_checks'] > 0 ) {
+			$uptime_percentage = ( $metrics['uptime_success'] / $metrics['uptime_checks'] ) * 100;
+		}
+
+		$time_saved_hours = round( $metrics['time_saved_seconds'] / 3600, 2 );
+		$data_saved_mb = round( $metrics['data_saved_mb'], 2 );
+
+		?>
+		<div class="postbox">
+			<div class="postbox-header">
+				<h2 class="hndle"><?php esc_html_e( '📊 This Week\'s Performance', 'plugin-wp-support-thisismyurl' ); ?></h2>
+			</div>
+			<div class="inside">
+				<div class="wps-widget-content">
+					<style>
+						.wps-perf-metrics {
+							display: grid;
+							grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+							gap: 15px;
+							margin-bottom: 15px;
+						}
+						.wps-perf-metric {
+							text-align: center;
+							padding: 15px;
+							background: #f8f9fa;
+							border-radius: 6px;
+							border: 1px solid #e9ecef;
+						}
+						.wps-perf-metric .value {
+							font-size: 28px;
+							font-weight: 700;
+							color: #667eea;
+							display: block;
+							margin: 5px 0;
+						}
+						.wps-perf-metric .label {
+							font-size: 12px;
+							color: #6c757d;
+							text-transform: uppercase;
+							letter-spacing: 0.5px;
+						}
+						.wps-perf-highlight {
+							padding: 12px;
+							background: #e8f4f8;
+							border-left: 4px solid #0073aa;
+							margin-bottom: 10px;
+							border-radius: 3px;
+							font-size: 13px;
+						}
+						.wps-perf-highlight strong {
+							color: #0073aa;
+						}
+					</style>
+					
+					<div class="wps-perf-metrics">
+						<div class="wps-perf-metric">
+							<span class="value"><?php echo esc_html( $time_saved_hours ); ?></span>
+							<span class="label"><?php esc_html_e( 'Hours Saved', 'plugin-wp-support-thisismyurl' ); ?></span>
+						</div>
+						<div class="wps-perf-metric">
+							<span class="value"><?php echo esc_html( $data_saved_mb ); ?></span>
+							<span class="label"><?php esc_html_e( 'MB Saved', 'plugin-wp-support-thisismyurl' ); ?></span>
+						</div>
+						<div class="wps-perf-metric">
+							<span class="value"><?php echo esc_html( $metrics['issues_fixed'] ); ?></span>
+							<span class="label"><?php esc_html_e( 'Issues Fixed', 'plugin-wp-support-thisismyurl' ); ?></span>
+						</div>
+						<div class="wps-perf-metric">
+							<span class="value"><?php echo esc_html( number_format( $uptime_percentage, 1 ) ); ?>%</span>
+							<span class="label"><?php esc_html_e( 'Uptime', 'plugin-wp-support-thisismyurl' ); ?></span>
+						</div>
+					</div>
+
+					<?php if ( $time_saved_hours > 0 ) : ?>
+					<div class="wps-perf-highlight">
+						<?php
+						// translators: %s: hours saved this week.
+						echo wp_kses_post( sprintf( __( '<strong>You saved %s hours this week!</strong> That\'s time you can spend on what matters most.', 'plugin-wp-support-thisismyurl' ), $time_saved_hours ) );
+						?>
+					</div>
+					<?php endif; ?>
+
+					<?php if ( $data_saved_mb > 0 ) : ?>
+					<div class="wps-perf-highlight">
+						<?php
+						// translators: %s: MB of data saved this week.
+						echo wp_kses_post( sprintf( __( '<strong>You saved %s MB of data this week!</strong>', 'plugin-wp-support-thisismyurl' ), $data_saved_mb ) );
+						?>
+					</div>
+					<?php endif; ?>
+
+					<?php if ( $metrics['cpu_cycles_saved'] > 0 ) : ?>
+					<div class="wps-perf-highlight">
+						<?php
+						// translators: %s: CPU cycles saved this week.
+						echo wp_kses_post( sprintf( __( '<strong>You saved %s CPU cycles this week!</strong>', 'plugin-wp-support-thisismyurl' ), number_format( $metrics['cpu_cycles_saved'] ) ) );
+						?>
+					</div>
+					<?php endif; ?>
+
+					<p style="text-align: center; margin-top: 15px;">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wps-performance-reports' ) ); ?>" class="button button-primary">
+							<?php esc_html_e( 'View Full Report', 'plugin-wp-support-thisismyurl' ); ?>
+						</a>
+					</p>
+				</div>
 			</div>
 		</div>
 		<?php
