@@ -54,6 +54,18 @@ function wp_support_admin_enqueue( string $hook ): void {
 		$cache_bust
 	);
 
+	// Enqueue help styles when on help tab.
+	$context = WPS_Tab_Navigation::get_current_context();
+	$tab     = $context['tab'] ?? '';
+	if ( 'help' === $tab ) {
+		wp_enqueue_style(
+			'wps-help',
+			wp_support_URL . 'assets/css/help.css',
+			array( 'wps-ui-system' ),
+			$cache_bust
+		);
+	}
+
 	// Enable drag and drop for dashboard metaboxes on all wp-support pages using WordPress native postboxes.
 	if ( $screen && false !== strpos( $screen->id, 'wp-support' ) ) {
 		error_log( 'wp_support_admin_enqueue: Loading dashboard assets for screen=' . $screen->id );
