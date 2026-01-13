@@ -96,6 +96,16 @@ The Support Dashboard provides quick access to all core features.
 - Export activity reports
 - Network-wide activity viewing (in Network Admin)
 
+**Cookie Consent Management:**
+- Enable from Settings → Features → Privacy & Compliance
+- Displays consent banner to visitors before setting non-essential cookies
+- Granular consent options for analytics, marketing, and essential cookies
+- Blocks third-party cookies until consent given
+- Customize banner text and blocked cookie patterns in settings
+- Built-in patterns for Google Analytics, Facebook Pixel, DoubleClick, etc.
+- No external CDN dependencies - fully local implementation
+- GDPR and privacy law compliant
+
 ### Modules Page (When Modules Installed)
 
 - **Stat cards:** Total, Enabled, Available modules
@@ -130,6 +140,12 @@ Each site can:
 
 Core Support includes built-in privacy and GDPR compliance:
 
+- **Cookie Consent Management:** Built-in consent banner for GDPR compliance (no external CDNs)
+  - Detects and blocks third-party cookies until consent is given
+  - Granular consent options (essential, analytics, marketing)
+  - Local banner with customizable messaging
+  - Auto-blocks common trackers (Google Analytics, Facebook Pixel, DoubleClick)
+  - Dark mode and mobile responsive
 - **Export Personal Data:** WordPress Tools → Export Personal Data includes WordPress Support and module data
 - **Erase Personal Data:** Requests securely erase user data; Vault originals are purged
 - **Data Retention:** Admins set retention policies; old data auto-purges per schedule
