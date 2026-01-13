@@ -273,38 +273,27 @@ final class WPS_Feature_Auto_Rollback extends WPS_Abstract_Feature {
 	 * @return array Lines from file.
 	 */
 	private function tail_file( string $file, int $lines = 50 ): array {
-		$handle = @fopen( $file, 'r' );
-		if ( ! $handle ) {
+		// Check if file exists and is readable.
+		if ( ! file_exists( $file ) || ! is_readable( $file ) ) {
 			return array();
 		}
 
-		$line_count = 0;
-		$buffer     = array();
-
-		// Read file backwards.
-		fseek( $handle, -1, SEEK_END );
-		$current_line = '';
-
-		while ( ftell( $handle ) > 0 && $line_count < $lines ) {
-			$char = fgetc( $handle );
-			if ( "\n" === $char ) {
-				$buffer[] = strrev( $current_line );
-				$current_line = '';
-				++$line_count;
-			} else {
-				$current_line .= $char;
-			}
-			fseek( $handle, -2, SEEK_CUR );
+		// Get file size.
+		$file_size = filesize( $file );
+		if ( false === $file_size || 0 === $file_size ) {
+			return array();
 		}
 
-		// Add last line.
-		if ( ! empty( $current_line ) ) {
-			$buffer[] = strrev( $current_line );
+		// Use file() function which is more efficient and handles edge cases.
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$all_lines = file( $file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES );
+
+		if ( false === $all_lines ) {
+			return array();
 		}
 
-		fclose( $handle );
-
-		return array_reverse( $buffer );
+		// Return last N lines.
+		return array_slice( $all_lines, -$lines );
 	}
 
 	/**
