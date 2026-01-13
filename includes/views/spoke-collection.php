@@ -85,8 +85,8 @@ function wp_support_render_spoke_collection(): void {
 					<svg class="wps-progress-svg" width="80" height="80">
 						<circle class="wps-progress-bg" cx="40" cy="40" r="35" />
 						<circle class="wps-progress-fill" cx="40" cy="40" r="35" 
-							style="stroke-dasharray: <?php echo esc_attr( 2 * 3.14159 * 35 ); ?>; 
-								   stroke-dashoffset: <?php echo esc_attr( 2 * 3.14159 * 35 * ( 1 - $stats['progress'] / 100 ) ); ?>;" />
+							style="stroke-dasharray: <?php echo esc_attr( 2 * M_PI * 35 ); ?>; 
+								   stroke-dashoffset: <?php echo esc_attr( 2 * M_PI * 35 * ( 1 - $stats['progress'] / 100 ) ); ?>;" />
 						<text x="40" y="45" class="wps-progress-text"><?php echo esc_html( $stats['progress'] . '%' ); ?></text>
 					</svg>
 				</div>
@@ -230,13 +230,16 @@ function wp_support_render_spoke_collection(): void {
 	// Show milestone popup if there are new achievements.
 	if ( $new_milestones && is_array( $new_milestones ) ) :
 		$first_milestone = reset( $new_milestones );
+		$milestone_name = $first_milestone['name'] ?? '';
+		$milestone_desc = $first_milestone['description'] ?? '';
+		$milestone_reward = $first_milestone['reward'] ?? '';
 		?>
 		<script>
 		jQuery(document).ready(function($) {
 			// Show achievement modal on page load.
-			$('#wps-milestone-name').text(<?php echo wp_json_encode( $first_milestone['name'] ?? '' ); ?>);
-			$('#wps-milestone-description').text(<?php echo wp_json_encode( $first_milestone['description'] ?? '' ); ?>);
-			$('#wps-milestone-reward').text(<?php echo wp_json_encode( $first_milestone['reward'] ?? '' ); ?>);
+			$('#wps-milestone-name').text(<?php echo wp_json_encode( $milestone_name ); ?>);
+			$('#wps-milestone-description').text(<?php echo wp_json_encode( $milestone_desc ); ?>);
+			$('#wps-milestone-reward').text(<?php echo wp_json_encode( $milestone_reward ); ?>);
 			$('#wps-milestone-modal').fadeIn(300);
 			
 			// Add celebration animation.

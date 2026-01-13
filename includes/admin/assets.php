@@ -168,13 +168,14 @@ function wp_support_admin_enqueue( string $hook ): void {
 			array(
 				'nonce' => wp_create_nonce( 'WPS_spoke_collection' ),
 				'i18n'  => array(
-					'install'          => __( 'Install This Spoke', 'plugin-wp-support-thisismyurl' ),
-					'activate'         => __( 'Activate', 'plugin-wp-support-thisismyurl' ),
-					'deactivate'       => __( 'Deactivate', 'plugin-wp-support-thisismyurl' ),
-					'notInstalled'     => __( 'Not Installed', 'plugin-wp-support-thisismyurl' ),
-					'readyToActivate'  => __( 'Ready to Activate', 'plugin-wp-support-thisismyurl' ),
-					'activeProcessing' => __( 'Active & Processing', 'plugin-wp-support-thisismyurl' ),
-					'mastered'         => __( 'Mastered!', 'plugin-wp-support-thisismyurl' ),
+					'install'           => __( 'Install This Spoke', 'plugin-wp-support-thisismyurl' ),
+					'activate'          => __( 'Activate', 'plugin-wp-support-thisismyurl' ),
+					'deactivate'        => __( 'Deactivate', 'plugin-wp-support-thisismyurl' ),
+					'notInstalled'      => __( 'Not Installed', 'plugin-wp-support-thisismyurl' ),
+					'readyToActivate'   => __( 'Ready to Activate', 'plugin-wp-support-thisismyurl' ),
+					'activeProcessing'  => __( 'Active & Processing', 'plugin-wp-support-thisismyurl' ),
+					'mastered'          => __( 'Mastered!', 'plugin-wp-support-thisismyurl' ),
+					'confirmDeactivate' => __( 'Are you sure you want to deactivate this spoke?', 'plugin-wp-support-thisismyurl' ),
 				),
 			)
 		);

@@ -162,7 +162,8 @@
 			const spoke = $button.data('spoke');
 			const $card = $button.closest('.wps-spoke-card');
 
-			if (!confirm('Are you sure you want to deactivate this spoke?')) {
+			const confirmMessage = wpsSpokeCollection.i18n.confirmDeactivate || 'Are you sure you want to deactivate this spoke?';
+			if (!confirm(confirmMessage)) {
 				return;
 			}
 
