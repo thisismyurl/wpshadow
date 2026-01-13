@@ -163,44 +163,44 @@
 			const $card = $button.closest('.wps-spoke-card');
 
 			const confirmMessage = wpsSpokeCollection.i18n.confirmDeactivate || 'Are you sure you want to deactivate this spoke?';
-			if (!confirm(confirmMessage)) {
-				return;
-			}
+			
+			// Show accessible confirmation modal
+			this.showConfirmModal(confirmMessage, function() {
+				// Show loading state
+				$button.addClass('is-loading').prop('disabled', true);
 
-			// Show loading state
-			$button.addClass('is-loading').prop('disabled', true);
+				// Make AJAX request to deactivate spoke
+				$.ajax({
+					url: ajaxurl,
+					type: 'POST',
+					data: {
+						action: 'wps_deactivate_spoke',
+						spoke: spoke,
+						nonce: wpsSpokeCollection.nonce
+					},
+					success: function(response) {
+						if (response.success) {
+							// Update card state
+							SpokeCollection.updateCardState($card, 'unlocked');
+							$button.removeClass('is-loading').prop('disabled', false);
 
-			// Make AJAX request to deactivate spoke
-			$.ajax({
-				url: ajaxurl,
-				type: 'POST',
-				data: {
-					action: 'wps_deactivate_spoke',
-					spoke: spoke,
-					nonce: wpsSpokeCollection.nonce
-				},
-				success: function(response) {
-					if (response.success) {
-						// Update card state
-						SpokeCollection.updateCardState($card, 'unlocked');
+							// Show toast notification
+							SpokeCollection.showToast(response.data.message || 'Spoke deactivated successfully!', 'success');
+
+							// Reload page to update metrics
+							setTimeout(function() {
+								location.reload();
+							}, 1000);
+						} else {
+							$button.removeClass('is-loading').prop('disabled', false);
+							SpokeCollection.showToast(response.data || 'Deactivation failed. Please try again.', 'error');
+						}
+					},
+					error: function() {
 						$button.removeClass('is-loading').prop('disabled', false);
-
-						// Show toast notification
-						SpokeCollection.showToast(response.data.message || 'Spoke deactivated successfully!', 'success');
-
-						// Reload page to update metrics
-						setTimeout(function() {
-							location.reload();
-						}, 1000);
-					} else {
-						$button.removeClass('is-loading').prop('disabled', false);
-						SpokeCollection.showToast(response.data || 'Deactivation failed. Please try again.', 'error');
+						SpokeCollection.showToast('An error occurred. Please try again.', 'error');
 					}
-				},
-				error: function() {
-					$button.removeClass('is-loading').prop('disabled', false);
-					SpokeCollection.showToast('An error occurred. Please try again.', 'error');
-				}
+				});
 			});
 		},
 
@@ -335,6 +335,36 @@
 			const $modal = $('#wps-milestone-modal');
 			$modal.fadeOut(300);
 			$modal.find('.wps-modal-content').removeClass('wps-animate-bounce');
+		},
+
+		/**
+		 * Show accessible confirmation modal
+		 */
+		showConfirmModal: function(message, onConfirm) {
+			const $modal = $('#wps-confirm-modal');
+			
+			// Set message
+			$modal.find('#wps-confirm-message').text(message);
+			
+			// Clear previous handlers
+			$modal.find('.wps-confirm-ok').off('click');
+			$modal.find('.wps-confirm-cancel').off('click');
+			
+			// Set up handlers
+			$modal.find('.wps-confirm-ok').on('click', function() {
+				$modal.fadeOut(300);
+				if (typeof onConfirm === 'function') {
+					onConfirm();
+				}
+			});
+			
+			$modal.find('.wps-confirm-cancel').on('click', function() {
+				$modal.fadeOut(300);
+			});
+			
+			// Show modal
+			$modal.fadeIn(300);
+			$modal.find('.wps-confirm-ok').focus();
 		},
 
 		/**

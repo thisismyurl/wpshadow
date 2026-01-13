@@ -224,6 +224,24 @@ function wp_support_render_spoke_collection(): void {
 				</div>
 			</div>
 		</div>
+
+		<!-- Confirmation Modal (hidden by default) -->
+		<div id="wps-confirm-modal" class="wps-modal" style="display: none;">
+			<div class="wps-modal-overlay"></div>
+			<div class="wps-modal-content">
+				<div class="wps-modal-header">
+					<span class="dashicons dashicons-warning" style="color: #f59e0b; font-size: 48px;"></span>
+					<h2 id="wps-confirm-title"><?php esc_html_e( 'Confirm Action', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				</div>
+				<div class="wps-modal-body">
+					<p id="wps-confirm-message"></p>
+				</div>
+				<div class="wps-modal-footer" style="display: flex; gap: 10px; justify-content: center;">
+					<button class="button wps-confirm-cancel"><?php esc_html_e( 'Cancel', 'plugin-wp-support-thisismyurl' ); ?></button>
+					<button class="button button-primary wps-confirm-ok"><?php esc_html_e( 'Confirm', 'plugin-wp-support-thisismyurl' ); ?></button>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<?php
