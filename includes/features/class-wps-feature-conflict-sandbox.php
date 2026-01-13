@@ -267,12 +267,12 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 	/**
 	 * Filter active plugins for sandbox mode.
 	 *
-	 * @param array $plugins Active plugins.
+	 * @param mixed $plugins Active plugins.
 	 * @return array Filtered plugins.
 	 */
 	public function filter_active_plugins( $plugins ): array {
 		if ( ! is_array( $plugins ) ) {
-			return $plugins;
+			return array();
 		}
 
 		$state = $this->get_sandbox_state();
