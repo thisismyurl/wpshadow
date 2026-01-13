@@ -7,7 +7,7 @@
  * Donate link:         https://thisismyurl.com/plugin-wp-support-thisismyurl/#register?source=plugin-wp-support-thisismyurl
  * Description:         The foundational support plugin for WordPress with comprehensive health diagnostics, emergency recovery, backup verification, and documentation management. Optionally extends with module ecosystem (Media Hub, Image Formats, Vault Storage, and more).
  * Tags:                WordPress, plugin, foundation, hub, architecture, management, suite, diagnostics, health, backup
- * Version:             1.2601.73001
+ * Version:             1.2601.73002
  * Requires at least:   6.4
  * Requires PHP:        8.1.29
  * Update URI:          https://github.com/thisismyurl/plugin-wp-support-thisismyurl
@@ -607,6 +607,10 @@ function wp_support_init(): void {
 	// Load Guided Walkthroughs for step-by-step task assistance.
 	require_once wp_support_PATH . 'includes/class-wps-guided-walkthroughs.php';
 	WPS_Guided_Walkthroughs::init();
+
+	// Load Video Walkthroughs for auto-generated video tutorials.
+	require_once wp_support_PATH . 'includes/class-wps-video-walkthroughs.php';
+	WPS_Video_Walkthroughs::init();
 
 	// Load Magic Link Support for secure time-limited developer access.
 	require_once wp_support_PATH . 'includes/class-wps-magic-link-support.php';
