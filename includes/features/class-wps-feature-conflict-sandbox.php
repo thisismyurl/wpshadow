@@ -141,7 +141,7 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 	 *
 	 * @return string|false Session ID if valid, false otherwise.
 	 */
-	private function get_validated_session_id() {
+	private function get_validated_session_id(): string|false {
 		if ( ! isset( $_COOKIE[ self::COOKIE_NAME ] ) || ! is_string( $_COOKIE[ self::COOKIE_NAME ] ) ) {
 			return false;
 		}
@@ -181,7 +181,7 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 	 *
 	 * @return array|false Sandbox state or false if not active.
 	 */
-	private function get_sandbox_state() {
+	private function get_sandbox_state(): array|false {
 		$session_id = $this->get_validated_session_id();
 		if ( false === $session_id ) {
 			return false;
