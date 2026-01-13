@@ -1,0 +1,317 @@
+/**
+ * Help Tab Styles
+ *
+ * Styles for the enhanced help and documentation tab.
+ */
+
+/* Help Page Container */
+.wps-help-page {
+	max-width: 1200px;
+}
+
+/* License Widget Row */
+.wps-help-license-row {
+	margin: 20px 0;
+}
+
+.wps-help-license-row #wps_license_widget {
+	width: 100%;
+	margin: 0;
+}
+
+/* Help Tab Navigation */
+.wps-help-tabs {
+	margin: 20px 0 0 0;
+	border-bottom: 1px solid #c3c4c7;
+}
+
+.wps-help-tabs .nav-tab {
+	position: relative;
+	padding: 8px 14px;
+	font-size: 14px;
+	line-height: 1.5;
+	border: 1px solid transparent;
+	border-bottom: none;
+	background: transparent;
+	color: #50575e;
+	text-decoration: none;
+	transition: all 0.2s;
+}
+
+.wps-help-tabs .nav-tab:hover {
+	background-color: #f0f0f1;
+	color: #2271b1;
+}
+
+.wps-help-tabs .nav-tab-active {
+	border-color: #c3c4c7;
+	border-bottom-color: #f0f0f1;
+	background: #f0f0f1;
+	color: #000;
+	font-weight: 600;
+}
+
+.wps-help-tabs .nav-tab:focus {
+	box-shadow: 0 0 0 1px #2271b1, 0 0 2px 1px rgba(34, 113, 177, 0.8);
+	outline: 2px solid transparent;
+}
+
+/* Help Content Area */
+.wps-help-content {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-top: none;
+	padding: 24px;
+	margin-bottom: 20px;
+	min-height: 400px;
+}
+
+.wps-help-section h2 {
+	margin-top: 0;
+	font-size: 23px;
+	font-weight: 400;
+	line-height: 1.3;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #dcdcde;
+}
+
+.wps-help-description {
+	font-size: 14px;
+	color: #646970;
+	margin-bottom: 24px;
+}
+
+/* Standard Content Items */
+.wps-help-content-item {
+	margin-bottom: 24px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+.wps-help-content-item:last-child {
+	border-bottom: none;
+	margin-bottom: 0;
+}
+
+.wps-help-content-item h3 {
+	margin: 0 0 12px 0;
+	font-size: 16px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.wps-help-content-item p {
+	margin: 0 0 12px 0;
+	font-size: 14px;
+	line-height: 1.6;
+	color: #3c434a;
+}
+
+.wps-help-content-item p:last-child {
+	margin-bottom: 0;
+}
+
+/* FAQ Items */
+.wps-help-faq {
+	margin-top: 20px;
+}
+
+.wps-faq-item {
+	margin-bottom: 20px;
+	padding: 16px;
+	background: #f6f7f7;
+	border-left: 4px solid #2271b1;
+	border-radius: 3px;
+	transition: all 0.2s;
+}
+
+.wps-faq-item:hover {
+	background: #f0f0f1;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.wps-faq-question {
+	margin: 0 0 12px 0;
+	font-size: 15px;
+	font-weight: 600;
+	color: #1d2327;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.wps-faq-question .dashicons {
+	color: #2271b1;
+	flex-shrink: 0;
+}
+
+.wps-faq-answer {
+	margin-left: 28px;
+}
+
+.wps-faq-answer p {
+	margin: 0;
+	font-size: 14px;
+	line-height: 1.6;
+	color: #3c434a;
+}
+
+/* Help Footer */
+.wps-help-footer {
+	margin-top: 32px;
+	padding-top: 24px;
+	border-top: 2px solid #dcdcde;
+}
+
+.wps-help-footer h3 {
+	margin: 0 0 16px 0;
+	font-size: 16px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.wps-help-links {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 12px;
+}
+
+.wps-help-links li {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 12px;
+	background: #f6f7f7;
+	border-radius: 3px;
+	transition: all 0.2s;
+}
+
+.wps-help-links li:hover {
+	background: #e8eaeb;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.wps-help-links .dashicons {
+	color: #2271b1;
+	flex-shrink: 0;
+}
+
+.wps-help-links a {
+	color: #2271b1;
+	text-decoration: none;
+	font-weight: 500;
+	font-size: 14px;
+	transition: color 0.2s;
+}
+
+.wps-help-links a:hover,
+.wps-help-links a:focus {
+	color: #135e96;
+	text-decoration: underline;
+}
+
+/* Error State */
+.wps-help-error {
+	padding: 20px;
+	background: #fcf0f1;
+	border: 1px solid #f0b8bd;
+	border-radius: 3px;
+	color: #d63638;
+	text-align: center;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 782px) {
+	.wps-help-tabs .nav-tab {
+		margin-bottom: 0;
+		padding: 10px 12px;
+		font-size: 13px;
+	}
+
+	.wps-help-content {
+		padding: 16px;
+	}
+
+	.wps-help-section h2 {
+		font-size: 20px;
+	}
+
+	.wps-help-content-item h3 {
+		font-size: 15px;
+	}
+
+	.wps-help-links {
+		grid-template-columns: 1fr;
+	}
+
+	.wps-faq-answer {
+		margin-left: 0;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	.wps-help-tabs {
+		border-bottom: none;
+	}
+
+	.wps-help-tabs .nav-tab {
+		display: block;
+		width: 100%;
+		margin: 0 0 -1px 0;
+		border: 1px solid #c3c4c7;
+		border-radius: 0;
+	}
+
+	.wps-help-tabs .nav-tab-active {
+		border-color: #2271b1;
+		background: #2271b1;
+		color: #fff;
+	}
+
+	.wps-help-content {
+		border-top: 1px solid #c3c4c7;
+		border-radius: 0 0 3px 3px;
+	}
+}
+
+/* Accessibility Improvements */
+.wps-help-tabs .nav-tab:focus-visible {
+	outline: 2px solid #2271b1;
+	outline-offset: -2px;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+	.wps-help-tabs .nav-tab-active {
+		border: 2px solid currentColor;
+	}
+
+	.wps-faq-item {
+		border-left-width: 6px;
+	}
+}
+
+/* Print Styles */
+@media print {
+	.wps-help-tabs {
+		display: none;
+	}
+
+	.wps-help-content {
+		border: none;
+		box-shadow: none;
+	}
+
+	.wps-help-footer {
+		page-break-before: always;
+	}
+
+	.wps-help-links a::after {
+		content: " (" attr(href) ")";
+		font-size: 11px;
+		color: #666;
+	}
+}

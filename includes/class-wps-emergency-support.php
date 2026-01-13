@@ -339,6 +339,15 @@ class WPS_Emergency_Support {
 			<h1><?php esc_html_e( 'Critical Errors & Support', 'plugin-wp-support-thisismyurl' ); ?></h1>
 			<p><?php esc_html_e( 'Critical errors detected on your site. Get professional help to fix them.', 'plugin-wp-support-thisismyurl' ); ?></p>
 
+			<?php
+			// Display recovery status metabox.
+			if ( class_exists( '\\WPS\\CoreSupport\\WPS_White_Screen_Recovery' ) ) {
+				echo '<div style="margin: 20px 0;">';
+				\WPS\CoreSupport\WPS_White_Screen_Recovery::render_recovery_metabox();
+				echo '</div>';
+			}
+			?>
+
 			<?php if ( ! empty( $recent ) ) : ?>
 				<div style="margin: 30px 0; padding: 20px; background: #fee; border: 2px solid #c00; border-radius: 5px;">
 					<h2 style="margin-top: 0; color: #c00;">🚨 <?php esc_html_e( 'Active Issues', 'plugin-wp-support-thisismyurl' ); ?> (<?php echo count( $recent ); ?>)</h2>

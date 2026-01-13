@@ -10,15 +10,30 @@ This plugin provides complete functionality on its own and can optionally load h
 
 ### Standalone Core Features (Always Included)
 
+- **Seamless Registration:** One-click site registration with pre-populated details and automatic license provisioning
 - **Health Diagnostics:** Real-time WordPress health status, plugin/theme compatibility checks
 - **Emergency Support:** Critical error recovery, one-click emergency isolation mode
 - **Conflict Sandbox:** Per-user plugin deactivation and theme switching for debugging without affecting live visitors
+- **White Screen Auto-Recovery:** Automatic detection and recovery from fatal errors (WSoD) - see [WHITE_SCREEN_RECOVERY.md](docs/WHITE_SCREEN_RECOVERY.md)
+  - Automatic plugin conflict detection
+  - Up to 3 automatic recovery attempts
+  - Recovery mode for safe admin access
+  - Problematic plugin tracking and logging
 - **Backup Verification:** Automated backup integrity testing and recovery drills
 - **Site Documentation:** Plugin/theme inventory, protected plugins tracking, API documentation export
 - **Activity Logging:** Comprehensive audit trail of all plugin operations and changes
 - **Guided Walkthroughs:** Step-by-step task assistance for complex WordPress operations
+- **Video Walkthroughs:** Auto-generated video tutorials of site functionality (requires external service)
 - **Update Simulator:** Safe testing of plugin/theme updates before production deployment
+- **Visual Regression Update Guard:** Automatic screenshot capture before/after updates with visual change detection
 - **Diagnostic API:** Hidden diagnostic tokens for automated client support access
+- **Debug Mode Toggles:** One-click toggles for WordPress debug features without editing wp-config.php (see [DEBUG_MODE_TOGGLES.md](docs/DEBUG_MODE_TOGGLES.md))
+  - Backend logging (WP_DEBUG, WP_DEBUG_LOG, SCRIPT_DEBUG, SAVEQUERIES)
+  - Frontend display (admin-only with cookie-based access)
+  - Floating debug bar with query info and memory usage
+  - Error log viewer with refresh and clear functionality
+  - Auto-disable after 1 hour for safety
+- **Spoke Collection System:** Gamified interface for discovering and managing format-specific plugins with milestones, achievements, and visual progression tracking (see [SPOKE_COLLECTION.md](docs/SPOKE_COLLECTION.md))
 - **Script Loading Optimization:** Comprehensive performance optimization system (see [SCRIPT_OPTIMIZATION.md](SCRIPT_OPTIMIZATION.md))
   - Enhanced Script Deferral with auto-detection
   - Conditional Script Loading for plugin-specific pages
@@ -66,6 +81,23 @@ For network-wide activation, activate from the Network Admin panel. Global setti
 ## Using the Support Dashboard
 
 The Support Dashboard provides quick access to all core features.
+
+### Registration
+
+**Seamless Site Registration** (New in 1.2601.73002):
+- One-click registration directly from the plugin interface
+- Pre-populated with your WordPress site details
+- Automatic license provisioning
+- Choose email preferences (updates, security alerts, newsletter)
+- Access via "Register" tab or License Status widget
+
+Benefits of registering:
+- Automatic plugin updates
+- Security vulnerability notifications
+- Priority support access
+- Premium feature unlocks
+
+For detailed documentation, see [SEAMLESS_REGISTRATION.md](docs/SEAMLESS_REGISTRATION.md)
 
 ### Navigation
 - **Dashboard (menu):** High-level overview and quick access to features

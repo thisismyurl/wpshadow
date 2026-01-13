@@ -7,7 +7,7 @@
  * Donate link:         https://thisismyurl.com/plugin-wp-support-thisismyurl/#register?source=plugin-wp-support-thisismyurl
  * Description:         The foundational support plugin for WordPress with comprehensive health diagnostics, emergency recovery, backup verification, and documentation management. Optionally extends with module ecosystem (Media Hub, Image Formats, Vault Storage, and more).
  * Tags:                WordPress, plugin, foundation, hub, architecture, management, suite, diagnostics, health, backup
- * Version:             1.2601.73001
+ * Version:             1.2601.73002
  * Requires at least:   6.4
  * Requires PHP:        8.1.29
  * Update URI:          https://github.com/thisismyurl/plugin-wp-support-thisismyurl
@@ -48,12 +48,14 @@ use WPS\CoreSupport\Features\WPS_Feature_Image_Lazy_Loading;
 use WPS\CoreSupport\Features\WPS_Feature_Asset_Minification;
 use WPS\CoreSupport\Features\WPS_Feature_Database_Cleanup;
 use WPS\CoreSupport\Features\WPS_Feature_Auto_Rollback;
+use WPS\CoreSupport\Features\WPS_Feature_Visual_Regression;
 use WPS\CoreSupport\Features\WPS_Feature_Weekly_Performance_Report;
 use WPS\CoreSupport\Features\WPS_Feature_Conditional_Loading;
 use WPS\CoreSupport\Features\WPS_Feature_Google_Fonts_Disabler;
 use WPS\CoreSupport\Features\WPS_Feature_Critical_CSS;
 use WPS\CoreSupport\Features\WPS_Feature_Script_Optimizer;
 use WPS\CoreSupport\Features\WPS_Feature_Conflict_Sandbox;
+use WPS\CoreSupport\Features\WPS_Feature_Smart_Recommendations;
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -296,6 +298,7 @@ function wps_register_core_features(): void {
 
 	// Reporting and analytics features.
 	register_WPS_feature( new WPS_Feature_Weekly_Performance_Report() );
+	register_WPS_feature( new WPS_Feature_Smart_Recommendations() );
 
 	// Privacy and compliance features.
 	register_WPS_feature( new WPS_Feature_Consent_Checks() );
@@ -305,6 +308,7 @@ function wps_register_core_features(): void {
 	register_WPS_feature( new WPS_Feature_Auto_Rollback() );
 	// Debugging features.
 	register_WPS_feature( new WPS_Feature_Conflict_Sandbox() );
+	register_WPS_feature( new WPS_Feature_Visual_Regression() );
 }
 
 /**
@@ -455,6 +459,7 @@ function wp_support_activate(): void {
 function wp_support_deactivate(): void {
 	// Flush rewrite rules.
 	flush_rewrite_rules();
+}
 	// Moved to Vault module. Directory and protection are ensured by
 	// WPS\VaultSupport\WPS_Vault::init() when the module is enabled.
 }
@@ -502,6 +507,13 @@ function wp_support_init(): void {
 	// Load license widget for dashboard.
 	require_once wp_support_PATH . 'includes/class-wps-license-widget.php';
 	\WPS\CoreSupport\WPS_License_Widget::init();
+
+	// Load help content API for dynamic documentation.
+	require_once wp_support_PATH . 'includes/class-wps-help-content-api.php';
+	\WPS\CoreSupport\WPS_Help_Content_API::init();
+	// Load REST API.
+	require_once wp_support_PATH . 'includes/api/class-wps-rest-api.php';
+	\WPS\CoreSupport\API\WPS_REST_API::init();
 
 	// Load module bootstrap for child plugin installation and activation.
 	require_once wp_support_PATH . 'includes/class-wps-module-bootstrap.php';
@@ -554,6 +566,10 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/class-wps-achievement-badges.php';
 	WPS_Achievement_Badges::init();
 
+	// Load Spoke Collection system for gamified spoke management.
+	require_once wp_support_PATH . 'includes/class-wps-spoke-collection.php';
+	WPS_Spoke_Collection::init();
+
 	// Load Snapshot Manager for site snapshots and rollback.
 	require_once wp_support_PATH . 'includes/class-wps-snapshot-manager.php';
 	WPS_Snapshot_Manager::init();
@@ -578,6 +594,10 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/class-wps-emergency-support.php';
 	WPS_Emergency_Support::init();
 
+	// Load White Screen Auto-Recovery for fatal error handling.
+	require_once wp_support_PATH . 'includes/class-wps-white-screen-recovery.php';
+	WPS_White_Screen_Recovery::init();
+
 	// Register emergency support admin menu.
 	add_action(
 		'admin_menu',
@@ -593,6 +613,9 @@ function wp_support_init(): void {
 		}
 	);
 
+	// Handle recovery actions from emergency dashboard.
+	add_action( 'admin_init', array( '\\WPS\\CoreSupport\\WPS_White_Screen_Recovery', 'handle_recovery_actions' ) );
+
 	// Load Site Documentation Manager for blueprint, protected plugins, and export.
 	require_once wp_support_PATH . 'includes/class-wps-site-documentation-manager.php';
 	WPS_Site_Documentation_Manager::init();
@@ -605,9 +628,20 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/class-wps-guided-walkthroughs.php';
 	WPS_Guided_Walkthroughs::init();
 
+	// Load Video Walkthroughs for auto-generated video tutorials.
+	require_once wp_support_PATH . 'includes/class-wps-video-walkthroughs.php';
+	WPS_Video_Walkthroughs::init();
+
 	// Load Magic Link Support for secure time-limited developer access.
 	require_once wp_support_PATH . 'includes/class-wps-magic-link-support.php';
 	WPS_Magic_Link_Support::init();
+
+	// Load Debug Mode Manager for one-click debug toggles.
+	require_once wp_support_PATH . 'includes/class-wps-debug-mode.php';
+	WPS_Debug_Mode::init();
+	// Load System Report Generator for comprehensive debug information.
+	require_once wp_support_PATH . 'includes/class-wps-system-report-generator.php';
+	WPS_System_Report_Generator::init();
 
 	// Register AJAX handlers for Diagnostic API.
 	add_action(
@@ -640,6 +674,10 @@ function wp_support_init(): void {
 	// Load license utilities.
 	require_once wp_support_PATH . 'includes/class-wps-license.php';
 	WPS_License::init();
+
+	// Load registration handler.
+	require_once wp_support_PATH . 'includes/class-wps-registration.php';
+	WPS_Registration::init();
 
 	// Load dashboard assets on 'init' hook instead of here.
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/admin/class-wps-dashboard-assets.php' );
@@ -679,6 +717,7 @@ function wp_support_init(): void {
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-database-cleanup.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-auto-rollback.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-weekly-performance-report.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-smart-recommendations.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-registry.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/wps-feature-functions.php' );
 	WPS_Feature_Registry::init();
@@ -746,6 +785,7 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/admin/screens.php';
 	require_once wp_support_PATH . 'includes/views/dashboard-renderer.php';
 	require_once wp_support_PATH . 'includes/admin/ajax-modules.php';
+	require_once wp_support_PATH . 'includes/admin/ajax-spoke-collection.php';
 
 	// Load CLI commands when WP-CLI present.
 	if ( defined( 'WP_CLI' ) && WP_CLI ) {
@@ -1174,21 +1214,19 @@ function wp_support_render_tab_router(): void {
 function wp_support_render_core_content( string $tab ): void {
 	switch ( $tab ) {
 		case 'register':
-			/* check if plugin is registered */
-			if ( ! is_licensed() ) {
-				echo '<div class="wrap"><h1>' . esc_html__( 'Register', 'plugin-wp-support-thisismyurl' ) . '</h1>';
-				echo '<p>' . esc_html__( 'Register content will be added here.', 'plugin-wp-support-thisismyurl' ) . '</p></div>';
-			}
+			require_once wp_support_PATH . 'includes/views/register.php';
 			break;
 		case 'help':
 			wp_support_render_help_layout();
 			break;
-	case 'features':
-		wp_support_render_features_page( 'core' );
-		break;
+		case 'features':
+			wp_support_render_features_page( 'core' );
+			break;
+		case 'collection':
+			wp_support_render_spoke_collection();
+			break;
 		case 'performance':
 			wp_support_render_performance_dashboard();
-			break;
 			break;
 		case 'modules':
 			wp_support_render_modules();
@@ -1323,25 +1361,12 @@ function wps_get_hub_tabs_for_spoke( string $hub_id, string $spoke_id ): array {
 // Moved to includes/views/dashboard.php
 
 /**
- * Render Help view with license emphasis.
+ * Render Help view with enhanced documentation and FAQ.
  *
  * @return void
  */
 function wp_support_render_help_layout(): void {
-	?>
-	<div class="wrap">
-		<h1><?php echo esc_html__( 'Help', 'plugin-wp-support-thisismyurl' ); ?></h1>
-		<div class="wps-dashboard-license-row">
-			<div id="wps_license_widget" class="postbox" style="margin:0 0 16px 0;">
-				<?php \WPS\CoreSupport\WPS_License_Widget::render_widget(); ?>
-			</div>
-		</div>
-		<style>
-			.wps-dashboard-license-row { margin-bottom: 12px; }
-			.wps-dashboard-license-row #wps_license_widget { width: 100%; }
-		</style>
-	</div>
-	<?php
+	require_once wp_support_PATH . 'includes/views/help.php';
 }
 
 /**
@@ -1351,6 +1376,16 @@ function wp_support_render_help_layout(): void {
  */
 function wp_support_render_performance_dashboard(): void {
 	require_once wp_support_PATH . 'includes/views/performance-dashboard.php';
+}
+
+/**
+ * Render Spoke Collection tab.
+ *
+ * @return void
+ */
+function wp_support_render_spoke_collection(): void {
+	require_once wp_support_PATH . 'includes/views/spoke-collection.php';
+	\WPS\CoreSupport\wp_support_render_spoke_collection();
 }
 
 /**

@@ -140,11 +140,20 @@ class WPS_Dashboard_Layout {
 	 *
 	 * @param string $source_context Source dashboard context.
 	 * @param array  $layout         Layout to apply.
-	 * @param string $scope          Scope: 'children' or 'all'.
+	 * @param string $scope          Scope: 'this', 'children' or 'all'.
 	 * @param bool   $network        Network admin context.
 	 * @return array{success: int, failed: int, targets: array<string>}
 	 */
 	public static function apply_layout_to_scope( string $source_context, array $layout, string $scope, bool $network = false ): array {
+		// If scope is 'this', only save to current context (already done), no propagation.
+		if ( 'this' === $scope ) {
+			return array(
+				'success' => 0,
+				'failed'  => 0,
+				'targets' => array(),
+			);
+		}
+
 		$targets = self::get_target_contexts( $source_context, $scope, $network );
 		$success = 0;
 		$failed  = 0;
@@ -177,11 +186,16 @@ class WPS_Dashboard_Layout {
 	 * Get target contexts based on scope.
 	 *
 	 * @param string $source_context Source dashboard context.
-	 * @param string $scope          Scope: 'children' or 'all'.
+	 * @param string $scope          Scope: 'this', 'children' or 'all'.
 	 * @param bool   $network        Network admin context.
 	 * @return array<string>
 	 */
 	private static function get_target_contexts( string $source_context, string $scope, bool $network ): array {
+		// 'this' scope doesn't target any other contexts.
+		if ( 'this' === $scope ) {
+			return array();
+		}
+
 		$catalog = WPS_Module_Registry::get_catalog_with_status();
 		$targets = array();
 
@@ -350,6 +364,7 @@ class WPS_Dashboard_Layout {
 				'context'       => $context,
 				'network'       => $network ? '1' : '0',
 				'applyPrompt'   => __( 'Apply this layout to:', 'plugin-wp-support-thisismyurl' ),
+				'applyThis'     => __( 'This dashboard only', 'plugin-wp-support-thisismyurl' ),
 				'applyChildren' => __( 'Child dashboards only', 'plugin-wp-support-thisismyurl' ),
 				'applyAll'      => __( 'All dashboards', 'plugin-wp-support-thisismyurl' ),
 				'cancel'        => __( 'Cancel', 'plugin-wp-support-thisismyurl' ),

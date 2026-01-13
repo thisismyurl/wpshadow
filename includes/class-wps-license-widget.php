@@ -193,13 +193,20 @@ class WPS_License_Widget {
 				<div class="wps-license-message" style="padding: 10px 15px; background: #f8f9fa; border-top: 1px solid #ddd;">
 					<p style="margin: 0 0 10px; font-size: 13px;">
 						<?php if ( ! $has_license ) : ?>
-							<?php esc_html_e( 'Enter your license key to receive automatic updates and unlock premium features.', 'plugin-wp-support-thisismyurl' ); ?>
+							<?php esc_html_e( 'Register your site for free to receive automatic updates and unlock premium features.', 'plugin-wp-support-thisismyurl' ); ?>
 						<?php else : ?>
 							<?php esc_html_e( 'Your license key is invalid or expired. Please check your key or contact support.', 'plugin-wp-support-thisismyurl' ); ?>
 						<?php endif; ?>
 					</p>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&tab=updates' ) ); ?>" 
-					   class="button button-primary button-large" 
+					<?php if ( ! $has_license ) : ?>
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=register' ) ); ?>" 
+						   class="button button-primary button-large" 
+						   style="width: 100%; text-align: center; margin-bottom: 5px;">
+							<?php esc_html_e( 'Register Your Site (Free)', 'plugin-wp-support-thisismyurl' ); ?>
+						</a>
+					<?php endif; ?>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=settings' ) ); ?>" 
+					   class="button <?php echo ! $has_license ? 'button-secondary' : 'button-primary'; ?> button-large" 
 					   style="width: 100%; text-align: center; margin-bottom: 5px;">
 						<?php esc_html_e( 'Enter License Key', 'plugin-wp-support-thisismyurl' ); ?>
 					</a>

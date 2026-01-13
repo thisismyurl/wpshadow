@@ -1453,18 +1453,8 @@ class WPS_Dashboard_Widgets {
 			return;
 		}
 
-		// Get active module slugs for filtering.
-		$active_modules = array();
-		$catalog        = \WPS\CoreSupport\WPS_Module_Registry::get_catalog_with_status();
-		foreach ( $catalog as $module ) {
-			$slug = $module['slug'] ?? '';
-			if ( ! empty( $slug ) && \WPS\CoreSupport\WPS_Module_Registry::is_enabled( $slug ) ) {
-				$active_modules[] = $slug;
-			}
-		}
-
-		// Get health results for active modules only.
-		$health_data = \WPS\CoreSupport\WPS_Site_Health::get_health_check_results( $active_modules );
+		// Get health results (automatically filters by active modules).
+		$health_data = \WPS\CoreSupport\WPS_Site_Health::get_health_check_results();
 		?>
 		<div id="wps-health-widget-container">
 			<?php self::render_health_widget( $health_data, '' ); ?>

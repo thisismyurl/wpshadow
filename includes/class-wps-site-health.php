@@ -21,6 +21,13 @@ require_once __DIR__ . '/class-wps-health-renderer.php';
 class WPS_Site_Health {
 
 	/**
+	 * Registry of module-specific health checks.
+	 *
+	 * @var array
+	 */
+	private static $module_checks = array();
+
+	/**
 	 * Initialize Site Health integration.
 	 *
 	 * @return void
@@ -28,6 +35,46 @@ class WPS_Site_Health {
 	public static function init(): void {
 		add_filter( 'site_status_tests', array( __CLASS__, 'add_tests' ) );
 		add_filter( 'debug_information', array( __CLASS__, 'add_debug_info' ) );
+
+		// Hook into module state changes to refresh health checks.
+		add_action( 'WPS_module_enabled', array( __CLASS__, 'on_module_state_change' ) );
+		add_action( 'WPS_module_disabled', array( __CLASS__, 'on_module_state_change' ) );
+
+		// Register built-in module checks once during init.
+		add_action( 'plugins_loaded', array( __CLASS__, 'register_builtin_module_checks' ), 20 );
+	}
+
+	/**
+	 * Register health checks for a specific module.
+	 *
+	 * @param string $module_slug Module slug (e.g., 'vault-support-thisismyurl').
+	 * @param array  $checks      Array of health check definitions.
+	 * @return void
+	 */
+	public static function register_module_checks( string $module_slug, array $checks ): void {
+		if ( empty( $module_slug ) || empty( $checks ) ) {
+			return;
+		}
+
+		self::$module_checks[ $module_slug ] = $checks;
+	}
+
+	/**
+	 * Handle module state changes to trigger health check updates.
+	 *
+	 * @param string $module_slug Module slug that changed state.
+	 * @return void
+	 */
+	public static function on_module_state_change( string $module_slug ): void {
+		// Clear any cached Site Health data when module state changes.
+		delete_transient( 'health-check-site-status-result' );
+
+		/**
+		 * Action fired when a module's health checks should be refreshed.
+		 *
+		 * @param string $module_slug Module slug.
+		 */
+		do_action( 'WPS_health_checks_updated', $module_slug );
 	}
 
 	/**
@@ -37,76 +84,172 @@ class WPS_Site_Health {
 	 * @return array
 	 */
 	public static function add_tests( array $tests ): array {
-		// Check if Vault module is enabled.
-		$modules       = WPS_Module_Registry::get_catalog_with_status();
-		$vault_enabled = ! empty( $modules['vault']['enabled'] );
+		// Add core-level tests (always active).
+		$core_checks = self::get_core_checks();
+		foreach ( $core_checks as $check_id => $check_config ) {
+			$tests['direct'][ $check_id ] = $check_config;
+		}
 
-		// Only register Vault-specific tests if Vault is enabled.
-		if ( $vault_enabled ) {
-			$tests['direct']['WPS_vault_directory'] = array(
-				'label' => __( 'Vault directory status', 'plugin-wp-support-thisismyurl' ),
-				'test'  => array( __CLASS__, 'test_vault_directory' ),
-			);
+		// Add module-specific tests only for enabled modules.
+		foreach ( self::$module_checks as $module_slug => $module_check_list ) {
+			// Check if module is enabled.
+			if ( ! WPS_Module_Registry::is_enabled( $module_slug ) ) {
+				continue;
+			}
 
-			$tests['direct']['WPS_encryption_config'] = array(
-				'label' => __( 'Encryption configuration', 'plugin-wp-support-thisismyurl' ),
-				'test'  => array( __CLASS__, 'test_encryption_config' ),
-			);
+			// Add each check from this module.
+			foreach ( $module_check_list as $check_id => $check_config ) {
+				$tests['direct'][ $check_id ] = $check_config;
+			}
+		}
 
-			$tests['direct']['WPS_vault_permissions'] = array(
-				'label' => __( 'Vault write permissions', 'plugin-wp-support-thisismyurl' ),
-				'test'  => array( __CLASS__, 'test_vault_permissions' ),
+		return $tests;
+	}
+
+	/**
+	 * Get core-level health checks (always active).
+	 *
+	 * @return array
+	 */
+	private static function get_core_checks(): array {
+		return array(
+			'WPS_openssl_extension'         => array(
+				'label' => __( 'OpenSSL extension', 'plugin-wp-support-thisismyurl' ),
+				'test'  => array( __CLASS__, 'test_openssl_extension' ),
+			),
+			'WPS_php_version'               => array(
+				'label' => __( 'PHP version compliance', 'plugin-wp-support-thisismyurl' ),
+				'test'  => array( __CLASS__, 'test_php_version' ),
+			),
+			'WPS_wordpress_version'         => array(
+				'label' => __( 'WordPress version compliance', 'plugin-wp-support-thisismyurl' ),
+				'test'  => array( __CLASS__, 'test_wordpress_version' ),
+			),
+			'WPS_module_status'             => array(
+				'label' => __( 'Module status', 'plugin-wp-support-thisismyurl' ),
+				'test'  => array( __CLASS__, 'test_module_status' ),
+			),
+			'WPS_environment_compatibility' => array(
+				'label' => __( 'Environment compatibility', 'plugin-wp-support-thisismyurl' ),
+				'test'  => array( __CLASS__, 'test_environment_compatibility' ),
+			),
+			'WPS_memory_limit'              => array(
+				'label' => __( 'Memory limit status', 'plugin-wp-support-thisismyurl' ),
+				'test'  => array( __CLASS__, 'test_memory_limit' ),
+			),
+			'WPS_execution_time'            => array(
+				'label' => __( 'Execution time limit', 'plugin-wp-support-thisismyurl' ),
+				'test'  => array( __CLASS__, 'test_execution_time' ),
+			),
+			'WPS_required_extensions'       => array(
+				'label' => __( 'Required PHP extensions', 'plugin-wp-support-thisismyurl' ),
+				'test'  => array( __CLASS__, 'test_required_extensions' ),
+			),
+			'WPS_resource_usage'            => array(
+				'label' => __( 'Current resource usage', 'plugin-wp-support-thisismyurl' ),
+				'test'  => array( __CLASS__, 'test_resource_usage' ),
+			),
+		);
+	}
+
+	/**
+	 * Register built-in module health checks.
+	 *
+	 * @return void
+	 */
+	public static function register_builtin_module_checks(): void {
+		// Vault module checks.
+		self::register_module_checks(
+			'vault-support-thisismyurl',
+			array(
+				'WPS_vault_directory'    => array(
+					'label' => __( 'Vault directory status', 'plugin-wp-support-thisismyurl' ),
+					'test'  => array( __CLASS__, 'test_vault_directory' ),
+				),
+				'WPS_encryption_config'  => array(
+					'label' => __( 'Encryption configuration', 'plugin-wp-support-thisismyurl' ),
+					'test'  => array( __CLASS__, 'test_encryption_config' ),
+				),
+				'WPS_vault_permissions'  => array(
+					'label' => __( 'Vault write permissions', 'plugin-wp-support-thisismyurl' ),
+					'test'  => array( __CLASS__, 'test_vault_permissions' ),
+				),
+			)
+		);
+
+		/**
+		 * Allow other modules to register their health checks.
+		 */
+		do_action( 'WPS_register_health_checks' );
+	}
+
+	/**
+	 * Extract test method name from check configuration.
+	 *
+	 * @param array $check_config Check configuration array.
+	 * @return string Test method name or empty string.
+	 */
+	private static function extract_test_method( array $check_config ): string {
+		if ( ! isset( $check_config['test'] ) ) {
+			return '';
+		}
+
+		$test = $check_config['test'];
+		return is_array( $test ) && isset( $test[1] ) ? $test[1] : '';
+	}
+
+	/**
+	 * Build a test map for get_health_check_results() with module attribution.
+	 *
+	 * Maps test IDs to their configuration including method names and module ownership.
+	 *
+	 * @return array Test map with module attribution.
+	 */
+	private static function build_test_map(): array {
+		$map = array();
+
+		// Add core checks with attribution (derive from get_core_checks).
+		$core_checks = self::get_core_checks();
+		foreach ( $core_checks as $check_id => $check_config ) {
+			// Extract method name from test callback.
+			$test_method = self::extract_test_method( $check_config );
+			
+			// Convert check_id to test_id (remove WPS_ prefix).
+			$test_id = str_replace( 'WPS_', '', $check_id );
+			
+			$map[ $test_id ] = array(
+				'label'  => $check_config['label'],
+				'test'   => $test_method,
+				'module' => 'core',
 			);
 		}
 
-		// These are general tests that should always be shown.
-		$tests['direct']['WPS_openssl_extension'] = array(
-			'label' => __( 'OpenSSL extension', 'plugin-wp-support-thisismyurl' ),
-			'test'  => array( __CLASS__, 'test_openssl_extension' ),
-		);
+		// Add module-specific checks from registry.
+		foreach ( self::$module_checks as $module_slug => $module_check_list ) {
+			// Check if module is enabled.
+			if ( ! WPS_Module_Registry::is_enabled( $module_slug ) ) {
+				continue;
+			}
 
-		$tests['direct']['WPS_php_version'] = array(
-			'label' => __( 'PHP version compliance', 'plugin-wp-support-thisismyurl' ),
-			'test'  => array( __CLASS__, 'test_php_version' ),
-		);
+			// Extract module name from slug (e.g., 'vault-support-thisismyurl' -> 'vault').
+			$module_name = str_replace( '-support-thisismyurl', '', $module_slug );
 
-		$tests['direct']['WPS_wordpress_version'] = array(
-			'label' => __( 'WordPress version compliance', 'plugin-wp-support-thisismyurl' ),
-			'test'  => array( __CLASS__, 'test_wordpress_version' ),
-		);
+			foreach ( $module_check_list as $check_id => $check_config ) {
+				// Extract method name from test callback.
+				$test_method = self::extract_test_method( $check_config );
+				
+				// Convert check_id to test_id (remove WPS_ prefix).
+				$test_id = str_replace( 'WPS_', '', $check_id );
+				
+				$map[ $test_id ] = array(
+					'label'  => $check_config['label'],
+					'test'   => $test_method,
+					'module' => $module_name,
+				);
+			}
+		}
 
-		$tests['direct']['WPS_module_status'] = array(
-			'label' => __( 'Module status', 'plugin-wp-support-thisismyurl' ),
-			'test'  => array( __CLASS__, 'test_module_status' ),
-		);
-
-		// Environment and server limit tests.
-		$tests['direct']['WPS_environment_compatibility'] = array(
-			'label' => __( 'Environment compatibility', 'plugin-wp-support-thisismyurl' ),
-			'test'  => array( __CLASS__, 'test_environment_compatibility' ),
-		);
-
-		$tests['direct']['WPS_memory_limit'] = array(
-			'label' => __( 'Memory limit status', 'plugin-wp-support-thisismyurl' ),
-			'test'  => array( __CLASS__, 'test_memory_limit' ),
-		);
-
-		$tests['direct']['WPS_execution_time'] = array(
-			'label' => __( 'Execution time limit', 'plugin-wp-support-thisismyurl' ),
-			'test'  => array( __CLASS__, 'test_execution_time' ),
-		);
-
-		$tests['direct']['WPS_required_extensions'] = array(
-			'label' => __( 'Required PHP extensions', 'plugin-wp-support-thisismyurl' ),
-			'test'  => array( __CLASS__, 'test_required_extensions' ),
-		);
-
-		$tests['direct']['WPS_resource_usage'] = array(
-			'label' => __( 'Current resource usage', 'plugin-wp-support-thisismyurl' ),
-			'test'  => array( __CLASS__, 'test_resource_usage' ),
-		);
-
-		return $tests;
+		return $map;
 	}
 
 	/**
@@ -613,50 +756,15 @@ class WPS_Site_Health {
 	 * }
 	 */
 	public static function get_health_check_results( ?string $module_filter = null ): array {
-		$tests = array(
-			'vault_directory'   => array(
-				'label'  => __( 'Vault Directory Status', 'plugin-wp-support-thisismyurl' ),
-				'test'   => 'test_vault_directory',
-				'module' => 'vault',
-			),
-			'encryption_config' => array(
-				'label'  => __( 'Encryption Configuration', 'plugin-wp-support-thisismyurl' ),
-				'test'   => 'test_encryption_config',
-				'module' => 'vault',
-			),
-			'openssl_extension' => array(
-				'label'  => __( 'OpenSSL Extension', 'plugin-wp-support-thisismyurl' ),
-				'test'   => 'test_openssl_extension',
-				'module' => 'core',
-			),
-			'php_version'       => array(
-				'label'  => __( 'PHP Version Compliance', 'plugin-wp-support-thisismyurl' ),
-				'test'   => 'test_php_version',
-				'module' => 'core',
-			),
-			'wordpress_version' => array(
-				'label'  => __( 'WordPress Version Compliance', 'plugin-wp-support-thisismyurl' ),
-				'test'   => 'test_wordpress_version',
-				'module' => 'core',
-			),
-			'vault_permissions' => array(
-				'label'  => __( 'Vault Write Permissions', 'plugin-wp-support-thisismyurl' ),
-				'test'   => 'test_vault_permissions',
-				'module' => 'vault',
-			),
-			'module_status'     => array(
-				'label'  => __( 'Module Status', 'plugin-wp-support-thisismyurl' ),
-				'test'   => 'test_module_status',
-				'module' => 'core',
-			),
-		);
+		// Build test map from registry.
+		$test_map = self::build_test_map();
 
 		$results        = array();
 		$critical_count = 0;
 		$warning_count  = 0;
 		$good_count     = 0;
 
-		foreach ( $tests as $test_id => $test_data ) {
+		foreach ( $test_map as $test_id => $test_data ) {
 			// Filter by module if specified.
 			if ( $module_filter && isset( $test_data['module'] ) && $test_data['module'] !== $module_filter ) {
 				continue;
@@ -740,6 +848,70 @@ class WPS_Site_Health {
 		return array(
 			'self'       => $self_health,
 			'dependents' => $dependents_data,
+		);
+	}
+
+	/**
+	 * Get health checks grouped by module type (core, hub, spoke).
+	 *
+	 * Provides a hierarchical view of health checks organized by module ownership.
+	 *
+	 * @return array {
+	 *     @type array 'core'   Core-level health checks
+	 *     @type array 'hubs'   Hub-level health checks grouped by module
+	 *     @type array 'spokes' Spoke-level health checks grouped by module
+	 * }
+	 */
+	public static function get_health_by_module_type(): array {
+		$modules    = WPS_Module_Registry::get_catalog_with_status();
+		$test_map   = self::build_test_map();
+		$core_tests = array();
+		$hub_tests  = array();
+		$spoke_tests = array();
+
+		foreach ( $test_map as $test_id => $test_data ) {
+			$module = $test_data['module'] ?? 'core';
+
+			// Run the test.
+			if ( method_exists( __CLASS__, $test_data['test'] ) ) {
+				$result = call_user_func( array( __CLASS__, $test_data['test'] ) );
+				$status = $result['status'] ?? 'good';
+
+				$test_result = array(
+					'label'   => $test_data['label'],
+					'status'  => $status,
+					'module'  => $module,
+					'details' => $result['description'] ?? '',
+				);
+
+				// Categorize by type.
+				if ( 'core' === $module ) {
+					$core_tests[ $test_id ] = $test_result;
+				} else {
+					// Determine if hub or spoke based on module slug.
+					$module_slug = $module . '-support-thisismyurl';
+					$module_info = $modules[ $module_slug ] ?? array();
+					$module_type = $module_info['type'] ?? 'spoke';
+
+					if ( 'hub' === $module_type ) {
+						if ( ! isset( $hub_tests[ $module ] ) ) {
+							$hub_tests[ $module ] = array();
+						}
+						$hub_tests[ $module ][ $test_id ] = $test_result;
+					} else {
+						if ( ! isset( $spoke_tests[ $module ] ) ) {
+							$spoke_tests[ $module ] = array();
+						}
+						$spoke_tests[ $module ][ $test_id ] = $test_result;
+					}
+				}
+			}
+		}
+
+		return array(
+			'core'   => $core_tests,
+			'hubs'   => $hub_tests,
+			'spokes' => $spoke_tests,
 		);
 	}
 
@@ -1016,3 +1188,40 @@ class WPS_Site_Health {
 		);
 	}
 }
+
+/**
+ * Example: How modules should register their health checks
+ *
+ * Modules should register health checks during initialization using the
+ * 'WPS_register_health_checks' action hook.
+ *
+ * @example
+ * ```php
+ * add_action( 'WPS_register_health_checks', function() {
+ *     \WPS\CoreSupport\WPS_Site_Health::register_module_checks(
+ *         'media-support-thisismyurl',
+ *         array(
+ *             'WPS_imagick_available' => array(
+ *                 'label' => __( 'ImageMagick availability', 'media-support-thisismyurl' ),
+ *                 'test'  => array( 'MediaHub\Health', 'test_imagick' ),
+ *             ),
+ *             'WPS_gd_available' => array(
+ *                 'label' => __( 'GD library availability', 'media-support-thisismyurl' ),
+ *                 'test'  => array( 'MediaHub\Health', 'test_gd' ),
+ *             ),
+ *         )
+ *     );
+ * });
+ * ```
+ *
+ * Health check test methods should return an array with the following structure:
+ * ```php
+ * array(
+ *     'label'       => 'Check name',
+ *     'status'      => 'good|recommended|critical',
+ *     'badge'       => array( 'label' => 'Status', 'color' => 'green|orange|red' ),
+ *     'description' => 'Detailed message about the health check result',
+ *     'test'        => 'test_id',
+ * )
+ * ```
+ */

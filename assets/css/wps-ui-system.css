@@ -645,6 +645,149 @@ p, .wps-text {
 .wps-p-lg { padding: var(--wps-space-lg); }
 
 /* ========== Responsive Design ========== */
+/* Mobile-first breakpoints: 320px, 640px, 1024px, 1280px */
+
+/* Base styles for mobile (320px+) */
+@media (max-width: 640px) {
+	:root {
+		--wps-text-2xl: 1.25rem; /* 20px */
+		--wps-text-3xl: 1.5rem; /* 24px */
+		--wps-space-lg: 1rem; /* 16px */
+		--wps-space-xl: 1.5rem; /* 24px */
+	}
+
+	body.wp-admin {
+		font-size: var(--wps-text-sm);
+	}
+
+	/* Ensure content doesn't overflow */
+	.wrap.wps-core-wrap {
+		padding: var(--wps-space-md);
+		overflow-x: hidden;
+	}
+
+	.wps-card {
+		padding: var(--wps-space-md);
+	}
+
+	.wps-table {
+		font-size: var(--wps-text-sm);
+	}
+
+	.wps-table th,
+	.wps-table td {
+		padding: var(--wps-space-sm);
+	}
+
+	/* Stack buttons vertically on mobile */
+	.wrap.wps-core-wrap .button,
+	.wrap.wps-core-wrap .wps-btn {
+		width: 100%;
+		justify-content: center;
+	}
+
+	/* Card footers stack on mobile */
+	.wps-card-footer {
+		flex-direction: column;
+		justify-content: stretch;
+	}
+
+	.wps-card-footer .button {
+		width: 100%;
+	}
+
+	/* Headers stack on mobile */
+	.wps-card-header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: var(--wps-space-sm);
+	}
+
+	/* Grid becomes single column */
+	.wps-grid,
+	.wps-grid-2,
+	.wps-grid-3 {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* Tablet breakpoint (640px+) */
+@media (min-width: 640px) and (max-width: 1023px) {
+	.wps-grid-3 {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.wps-grid-2 {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	/* Allow horizontal button layout on tablets */
+	.wrap.wps-core-wrap .button,
+	.wrap.wps-core-wrap .wps-btn {
+		width: auto;
+	}
+
+	.wps-card-footer {
+		flex-direction: row;
+		justify-content: flex-end;
+	}
+
+	.wps-card-footer .button {
+		width: auto;
+	}
+}
+
+/* Desktop breakpoint (1024px+) */
+@media (min-width: 1024px) {
+	.wps-grid-3 {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	.wps-grid-2 {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	/* Full desktop spacing */
+	.wrap.wps-core-wrap {
+		padding: var(--wps-space-xl);
+	}
+}
+
+/* Large desktop breakpoint (1280px+) */
+@media (min-width: 1280px) {
+	.wps-container {
+		max-width: 1400px;
+	}
+
+	.wps-grid {
+		gap: var(--wps-space-xl);
+	}
+}
+
+/* Ensure minimum 48px touch targets on all touchscreens */
+@media (hover: none) and (pointer: coarse) {
+	.wrap.wps-core-wrap .button,
+	.wrap.wps-core-wrap .wps-btn,
+	.wrap.wps-core-wrap a.button {
+		min-height: 48px;
+		min-width: 48px;
+		padding: 12px 20px;
+	}
+
+	.wrap.wps-core-wrap input[type="text"],
+	.wrap.wps-core-wrap input[type="email"],
+	.wrap.wps-core-wrap input[type="password"],
+	.wrap.wps-core-wrap input[type="number"],
+	.wrap.wps-core-wrap input[type="search"],
+	.wrap.wps-core-wrap select,
+	.wrap.wps-core-wrap textarea {
+		min-height: 48px;
+		font-size: 16px; /* Prevent iOS zoom */
+	}
+}
+
+/* Legacy media queries preserved for backward compatibility with existing components */
+/* These work alongside the new breakpoint system to ensure no regressions */
 @media (max-width: 768px) {
 	:root {
 		--wps-text-2xl: 1.25rem;
