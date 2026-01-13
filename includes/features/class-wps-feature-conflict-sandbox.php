@@ -114,9 +114,18 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 			return;
 		}
 
-		// Check if sandbox cookie exists.
-		if ( isset( $_COOKIE[ self::COOKIE_NAME ] ) ) {
-			$session_id = sanitize_key( $_COOKIE[ self::COOKIE_NAME ] );
+		// Check if sandbox cookie exists and validate it.
+		if ( isset( $_COOKIE[ self::COOKIE_NAME ] ) && is_string( $_COOKIE[ self::COOKIE_NAME ] ) ) {
+			$raw_session_id = $_COOKIE[ self::COOKIE_NAME ];
+			
+			// Validate cookie format (alphanumeric, reasonable length).
+			if ( strlen( $raw_session_id ) > 64 || ! preg_match( '/^[a-zA-Z0-9]+$/', $raw_session_id ) ) {
+				// Invalid format, clear cookie.
+				$this->clear_sandbox_cookie();
+				return;
+			}
+			
+			$session_id = sanitize_key( $raw_session_id );
 			
 			// Validate session.
 			$state = get_transient( self::TRANSIENT_PREFIX . $session_id );
@@ -125,6 +134,26 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 				$this->clear_sandbox_cookie();
 			}
 		}
+	}
+
+	/**
+	 * Validate and get session ID from cookie.
+	 *
+	 * @return string|false Session ID if valid, false otherwise.
+	 */
+	private function get_validated_session_id() {
+		if ( ! isset( $_COOKIE[ self::COOKIE_NAME ] ) || ! is_string( $_COOKIE[ self::COOKIE_NAME ] ) ) {
+			return false;
+		}
+
+		$raw_session_id = $_COOKIE[ self::COOKIE_NAME ];
+
+		// Validate cookie format (alphanumeric, reasonable length).
+		if ( strlen( $raw_session_id ) > 64 || ! preg_match( '/^[a-zA-Z0-9]+$/', $raw_session_id ) ) {
+			return false;
+		}
+
+		return sanitize_key( $raw_session_id );
 	}
 
 	/**
@@ -137,12 +166,12 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 			return false;
 		}
 
-		if ( ! isset( $_COOKIE[ self::COOKIE_NAME ] ) ) {
+		$session_id = $this->get_validated_session_id();
+		if ( false === $session_id ) {
 			return false;
 		}
 
-		$session_id = sanitize_key( $_COOKIE[ self::COOKIE_NAME ] );
-		$state      = get_transient( self::TRANSIENT_PREFIX . $session_id );
+		$state = get_transient( self::TRANSIENT_PREFIX . $session_id );
 
 		return false !== $state && is_array( $state ) && ! empty( $state['active'] );
 	}
@@ -153,12 +182,12 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 	 * @return array|false Sandbox state or false if not active.
 	 */
 	private function get_sandbox_state() {
-		if ( ! isset( $_COOKIE[ self::COOKIE_NAME ] ) ) {
+		$session_id = $this->get_validated_session_id();
+		if ( false === $session_id ) {
 			return false;
 		}
 
-		$session_id = sanitize_key( $_COOKIE[ self::COOKIE_NAME ] );
-		$state      = get_transient( self::TRANSIENT_PREFIX . $session_id );
+		$state = get_transient( self::TRANSIENT_PREFIX . $session_id );
 
 		if ( false === $state || ! is_array( $state ) ) {
 			return false;
@@ -186,8 +215,9 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 	 * @return string Session ID.
 	 */
 	private function get_or_create_session_id(): string {
-		if ( isset( $_COOKIE[ self::COOKIE_NAME ] ) ) {
-			return sanitize_key( $_COOKIE[ self::COOKIE_NAME ] );
+		$session_id = $this->get_validated_session_id();
+		if ( false !== $session_id ) {
+			return $session_id;
 		}
 
 		// Generate new session ID.
@@ -259,10 +289,15 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 	/**
 	 * Filter stylesheet (child theme) for sandbox mode.
 	 *
-	 * @param string $stylesheet Current stylesheet.
+	 * @param mixed $stylesheet Current stylesheet.
 	 * @return string Filtered stylesheet.
 	 */
-	public function filter_stylesheet( string $stylesheet ): string {
+	public function filter_stylesheet( $stylesheet ): string {
+		// Ensure we have a string to work with.
+		if ( ! is_string( $stylesheet ) ) {
+			return '';
+		}
+
 		$state = $this->get_sandbox_state();
 		if ( false === $state || empty( $state['theme'] ) ) {
 			return $stylesheet;
@@ -274,10 +309,15 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 	/**
 	 * Filter template (parent theme) for sandbox mode.
 	 *
-	 * @param string $template Current template.
+	 * @param mixed $template Current template.
 	 * @return string Filtered template.
 	 */
-	public function filter_template( string $template ): string {
+	public function filter_template( $template ): string {
+		// Ensure we have a string to work with.
+		if ( ! is_string( $template ) ) {
+			return '';
+		}
+
 		$state = $this->get_sandbox_state();
 		if ( false === $state || empty( $state['theme'] ) ) {
 			return $template;
