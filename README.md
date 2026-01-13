@@ -10,6 +10,7 @@ This plugin provides complete functionality on its own and can optionally load h
 
 ### Standalone Core Features (Always Included)
 
+- **Seamless Registration:** One-click site registration with pre-populated details and automatic license provisioning
 - **Health Diagnostics:** Real-time WordPress health status, plugin/theme compatibility checks
 - **Emergency Support:** Critical error recovery, one-click emergency isolation mode
 - **Backup Verification:** Automated backup integrity testing and recovery drills
@@ -68,6 +69,23 @@ For network-wide activation, activate from the Network Admin panel. Global setti
 ## Using the Support Dashboard
 
 The Support Dashboard provides quick access to all core features.
+
+### Registration
+
+**Seamless Site Registration** (New in 1.2601.73002):
+- One-click registration directly from the plugin interface
+- Pre-populated with your WordPress site details
+- Automatic license provisioning
+- Choose email preferences (updates, security alerts, newsletter)
+- Access via "Register" tab or License Status widget
+
+Benefits of registering:
+- Automatic plugin updates
+- Security vulnerability notifications
+- Priority support access
+- Premium feature unlocks
+
+For detailed documentation, see [SEAMLESS_REGISTRATION.md](docs/SEAMLESS_REGISTRATION.md)
 
 ### Navigation
 - **Dashboard (menu):** High-level overview and quick access to features

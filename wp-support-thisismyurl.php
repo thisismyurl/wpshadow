@@ -652,6 +652,10 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/class-wps-license.php';
 	WPS_License::init();
 
+	// Load registration handler.
+	require_once wp_support_PATH . 'includes/class-wps-registration.php';
+	WPS_Registration::init();
+
 	// Load dashboard assets on 'init' hook instead of here.
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/admin/class-wps-dashboard-assets.php' );
 	add_action(
@@ -1186,11 +1190,7 @@ function wp_support_render_tab_router(): void {
 function wp_support_render_core_content( string $tab ): void {
 	switch ( $tab ) {
 		case 'register':
-			/* check if plugin is registered */
-			if ( ! is_licensed() ) {
-				echo '<div class="wrap"><h1>' . esc_html__( 'Register', 'plugin-wp-support-thisismyurl' ) . '</h1>';
-				echo '<p>' . esc_html__( 'Register content will be added here.', 'plugin-wp-support-thisismyurl' ) . '</p></div>';
-			}
+			require_once wp_support_PATH . 'includes/views/register.php';
 			break;
 		case 'help':
 			wp_support_render_help_layout();
