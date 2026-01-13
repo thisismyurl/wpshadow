@@ -1,0 +1,50 @@
+/**
+ * Accessibility Audit Styles
+ *
+ * @package wp_support_SUPPORT
+ */
+
+/* Additional styles specific to the audit page that complement the inline styles in the view */
+
+.wps-audit-success {
+	padding: 20px;
+	background: #d4edda;
+	border: 1px solid #c3e6cb;
+	border-radius: 4px;
+	color: #155724;
+	font-weight: 600;
+	text-align: center;
+}
+
+.wps-audit-issue-type {
+	margin-bottom: 30px;
+}
+
+.wps-audit-issue-type h4 {
+	margin: 0 0 15px 0;
+	padding: 10px 15px;
+	background: #f0f0f1;
+	border-left: 4px solid #2271b1;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.wps-audit-issue-element {
+	margin: 10px 0;
+	padding: 8px;
+	background: #282c34;
+	border-radius: 3px;
+	overflow-x: auto;
+}
+
+.wps-audit-issue-element code {
+	color: #abb2bf;
+	font-family: 'Courier New', Courier, monospace;
+	font-size: 12px;
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.wps-audit-issue .button.wps-apply-fix {
+	margin-top: 10px;
+}

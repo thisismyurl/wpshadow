@@ -39,6 +39,7 @@ use WPS\CoreSupport\Features\WPS_Feature_Embed_Disable;
 use WPS\CoreSupport\Features\WPS_Feature_jQuery_Cleanup;
 use WPS\CoreSupport\Features\WPS_Feature_Block_CSS_Cleanup;
 use WPS\CoreSupport\Features\WPS_Feature_Interactivity_Cleanup;
+use WPS\CoreSupport\Features\WPS_Feature_A11y_Audit;
 use WPS\CoreSupport\Features\WPS_Feature_Registry;
 
 // Prevent direct access.
@@ -268,6 +269,9 @@ function wps_register_core_features(): void {
 	register_WPS_feature( new WPS_Feature_jQuery_Cleanup() );
 	register_WPS_feature( new WPS_Feature_Block_CSS_Cleanup() );
 	register_WPS_feature( new WPS_Feature_Interactivity_Cleanup() );
+
+	// Accessibility audit feature.
+	register_WPS_feature( new WPS_Feature_A11y_Audit() );
 }
 
 /**
@@ -716,6 +720,7 @@ function wp_support_init(): void {
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-jquery-cleanup.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-block-css-cleanup.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-interactivity-cleanup.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-a11y-audit.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-tips-coach.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-registry.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/wps-feature-functions.php' );
