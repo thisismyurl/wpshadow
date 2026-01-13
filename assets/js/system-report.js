@@ -153,24 +153,39 @@
 	 * @param {string} text Text to copy
 	 */
 	function copyToClipboard(text) {
+		// Use modern Clipboard API
+		if (navigator.clipboard && navigator.clipboard.writeText) {
+			navigator.clipboard.writeText(text).then(function() {
+				showSuccess(wpsSystemReport.strings.copied);
+			}).catch(function() {
+				// Fallback to textarea method
+				fallbackCopyToClipboard(text);
+			});
+		} else {
+			// Fallback for older browsers
+			fallbackCopyToClipboard(text);
+		}
+	}
+
+	/**
+	 * Fallback copy method for older browsers.
+	 *
+	 * @param {string} text Text to copy
+	 */
+	function fallbackCopyToClipboard(text) {
 		const $temp = $('<textarea>');
 		$('body').append($temp);
 		$temp.val(text).select();
 
 		try {
-			document.execCommand('copy');
-			showSuccess(wpsSystemReport.strings.copied);
-		} catch (err) {
-			// Fallback for modern browsers
-			if (navigator.clipboard && navigator.clipboard.writeText) {
-				navigator.clipboard.writeText(text).then(function() {
-					showSuccess(wpsSystemReport.strings.copied);
-				}).catch(function() {
-					showError(wpsSystemReport.strings.copyFailed);
-				});
+			const successful = document.execCommand('copy');
+			if (successful) {
+				showSuccess(wpsSystemReport.strings.copied);
 			} else {
 				showError(wpsSystemReport.strings.copyFailed);
 			}
+		} catch (err) {
+			showError(wpsSystemReport.strings.copyFailed);
 		}
 
 		$temp.remove();

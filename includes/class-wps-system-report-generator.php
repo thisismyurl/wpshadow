@@ -329,9 +329,12 @@ class WPS_System_Report_Generator {
 	 * @return array<string, mixed>
 	 */
 	private static function get_file_permissions(): array {
+		$upload_dir = wp_upload_dir();
+		$upload_path = ! empty( $upload_dir['basedir'] ) && empty( $upload_dir['error'] ) ? $upload_dir['basedir'] : WP_CONTENT_DIR . '/uploads';
+
 		$paths = array(
-			'wp-content'       => WP_CONTENT_DIR,
-			'wp-content/uploads' => wp_upload_dir()['basedir'],
+			'wp-content'         => WP_CONTENT_DIR,
+			'wp-content/uploads' => $upload_path,
 			'wp-content/plugins' => WP_PLUGIN_DIR,
 			'wp-content/themes'  => get_theme_root(),
 		);
@@ -481,7 +484,10 @@ class WPS_System_Report_Generator {
 		);
 
 		foreach ( $patterns as $pattern ) {
-			$line = preg_replace( $pattern, '[REDACTED]', $line );
+			$result = preg_replace( $pattern, '[REDACTED]', $line );
+			if ( null !== $result ) {
+				$line = $result;
+			}
 		}
 
 		return $line;
@@ -599,7 +605,8 @@ class WPS_System_Report_Generator {
 		// Error log.
 		$output .= "=== ERROR LOG (Last 100 Lines) ===\n";
 		foreach ( $data['error_log'] as $line ) {
-			$output .= $line;
+			// Ensure each line ends with a newline.
+			$output .= rtrim( $line ) . "\n";
 		}
 
 		return $output;
