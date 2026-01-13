@@ -474,9 +474,9 @@ class WPS_Module_Actions {
 			}
 		}
 
-		// Get health data filtered by active modules.
+		// Get health data (automatically filters by active modules).
 		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Site_Health' ) ) {
-			$health_data = WPS_Site_Health::get_health_check_results( $active_modules );
+			$health_data = WPS_Site_Health::get_health_check_results();
 		} else {
 			$health_data = array(
 				'score'   => 0,

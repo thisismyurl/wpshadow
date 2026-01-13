@@ -884,6 +884,70 @@ class WPS_Site_Health {
 	}
 
 	/**
+	 * Get health checks grouped by module type (core, hub, spoke).
+	 *
+	 * Provides a hierarchical view of health checks organized by module ownership.
+	 *
+	 * @return array {
+	 *     @type array 'core'   Core-level health checks
+	 *     @type array 'hubs'   Hub-level health checks grouped by module
+	 *     @type array 'spokes' Spoke-level health checks grouped by module
+	 * }
+	 */
+	public static function get_health_by_module_type(): array {
+		$modules    = WPS_Module_Registry::get_catalog_with_status();
+		$test_map   = self::build_test_map();
+		$core_tests = array();
+		$hub_tests  = array();
+		$spoke_tests = array();
+
+		foreach ( $test_map as $test_id => $test_data ) {
+			$module = $test_data['module'] ?? 'core';
+
+			// Run the test.
+			if ( method_exists( __CLASS__, $test_data['test'] ) ) {
+				$result = call_user_func( array( __CLASS__, $test_data['test'] ) );
+				$status = $result['status'] ?? 'good';
+
+				$test_result = array(
+					'label'   => $test_data['label'],
+					'status'  => $status,
+					'module'  => $module,
+					'details' => $result['description'] ?? '',
+				);
+
+				// Categorize by type.
+				if ( 'core' === $module ) {
+					$core_tests[ $test_id ] = $test_result;
+				} else {
+					// Determine if hub or spoke based on module slug.
+					$module_slug = $module . '-support-thisismyurl';
+					$module_info = $modules[ $module_slug ] ?? array();
+					$module_type = $module_info['type'] ?? 'spoke';
+
+					if ( 'hub' === $module_type ) {
+						if ( ! isset( $hub_tests[ $module ] ) ) {
+							$hub_tests[ $module ] = array();
+						}
+						$hub_tests[ $module ][ $test_id ] = $test_result;
+					} else {
+						if ( ! isset( $spoke_tests[ $module ] ) ) {
+							$spoke_tests[ $module ] = array();
+						}
+						$spoke_tests[ $module ][ $test_id ] = $test_result;
+					}
+				}
+			}
+		}
+
+		return array(
+			'core'   => $core_tests,
+			'hubs'   => $hub_tests,
+			'spokes' => $spoke_tests,
+		);
+	}
+
+	/**
 	 * Test overall environment compatibility.
 	 *
 	 * @return array
@@ -1156,3 +1220,40 @@ class WPS_Site_Health {
 		);
 	}
 }
+
+/**
+ * Example: How modules should register their health checks
+ *
+ * Modules should register health checks during initialization using the
+ * 'WPS_register_health_checks' action hook.
+ *
+ * @example
+ * ```php
+ * add_action( 'WPS_register_health_checks', function() {
+ *     \WPS\CoreSupport\WPS_Site_Health::register_module_checks(
+ *         'media-support-thisismyurl',
+ *         array(
+ *             'WPS_imagick_available' => array(
+ *                 'label' => __( 'ImageMagick availability', 'media-support-thisismyurl' ),
+ *                 'test'  => array( 'MediaHub\Health', 'test_imagick' ),
+ *             ),
+ *             'WPS_gd_available' => array(
+ *                 'label' => __( 'GD library availability', 'media-support-thisismyurl' ),
+ *                 'test'  => array( 'MediaHub\Health', 'test_gd' ),
+ *             ),
+ *         )
+ *     );
+ * });
+ * ```
+ *
+ * Health check test methods should return an array with the following structure:
+ * ```php
+ * array(
+ *     'label'       => 'Check name',
+ *     'status'      => 'good|recommended|critical',
+ *     'badge'       => array( 'label' => 'Status', 'color' => 'green|orange|red' ),
+ *     'description' => 'Detailed message about the health check result',
+ *     'test'        => 'test_id',
+ * )
+ * ```
+ */
