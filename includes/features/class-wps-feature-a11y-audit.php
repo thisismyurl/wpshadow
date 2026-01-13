@@ -279,7 +279,7 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 
 		foreach ( $matches[0] as $img_tag ) {
 			// Check if alt attribute is missing or empty (check for various quote styles and unquoted).
-			if ( ! preg_match( '/\salt=(["\']?)([^"\'\s>]*)\1/i', $img_tag, $alt_match ) ) {
+			if ( ! preg_match( '/\balt=(["\']?)([^"\'\s>]*)\1/i', $img_tag, $alt_match ) ) {
 				$issues[] = array(
 					'type'        => 'alt_text',
 					'severity'    => 'high',
@@ -498,7 +498,7 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 				break;
 
 			case 'remove_tabindex':
-				$content  = preg_replace( '/\s*tabindex=(["\']?)[1-9][0-9]*\1/i', '', $content );
+				$content  = preg_replace( '/\s*\btabindex=(["\']?)[1-9][0-9]*\\1/i', '', $content );
 				$modified = true;
 				break;
 
@@ -540,7 +540,8 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 	 */
 	private function fix_missing_alt( string $content ): string {
 		// Add empty alt to images without alt attribute (assumes decorative).
-		return preg_replace( '/<img([^>]*?)(?<!\salt=)(\s*\/>|>)/i', '<img$1 alt=""$2', $content );
+		// Use negative lookahead to check if alt attribute doesn't exist.
+		return preg_replace( '/<img\b(?![^>]*\balt=)([^>]*?)(\s*\/?>)/i', '<img alt=""$1$2', $content );
 	}
 
 	/**
@@ -550,11 +551,11 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 	 * @return string Fixed content.
 	 */
 	private function fix_empty_alt( string $content ): string {
-		// Add role="presentation" to images with empty alt that don't have a role.
-		// Match: <img ... alt="" ... > where there's no role= attribute
+		// Add role="presentation" to images with empty alt (no text between quotes) that don't have a role.
+		// This only matches truly empty alt attributes (alt="" or alt='')
 		return preg_replace(
-			'/<img([^>]*?)alt=(["\'])\\2(?![^>]*\srole=)([^>]*?)>/i',
-			'<img$1alt=$2$2 role="presentation"$3>',
+			'/<img\b([^>]*?)\balt=(["\'])(\2)(?![^>]*\brole=)([^>]*?)>/i',
+			'<img$1alt=$2$3 role="presentation"$4>',
 			$content
 		);
 	}
@@ -567,7 +568,7 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 	 */
 	public function auto_fix_aria_in_content( string $content ): string {
 		// Remove positive tabindex values (both quoted and unquoted).
-		$content = preg_replace( '/\s*tabindex=(["\']?)[1-9][0-9]*\1/i', '', $content );
+		$content = preg_replace( '/\s*\btabindex=(["\']?)[1-9][0-9]*\\1/i', '', $content );
 		return $content;
 	}
 
