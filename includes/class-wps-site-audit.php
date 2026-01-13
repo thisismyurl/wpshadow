@@ -31,6 +31,7 @@ class WPS_Site_Audit {
 	public static function init(): void {
 		add_action( 'admin_menu', array( __CLASS__, 'register_menu' ) );
 		add_action( 'wp_ajax_WPS_generate_audit', array( __CLASS__, 'handle_audit_generation' ) );
+		add_action( 'wp_ajax_WPS_toggle_autoload', array( __CLASS__, 'handle_toggle_autoload' ) );
 	}
 
 	/**
@@ -51,6 +52,7 @@ class WPS_Site_Audit {
 			'broken_links'    => array(),
 			'missing_alt'     => array(),
 			'php_compat'      => array(),
+			'autoload'     => array(),
 		);
 
 		// WordPress analysis.
@@ -64,6 +66,9 @@ class WPS_Site_Audit {
 
 		// Database optimization opportunities.
 		$report['optimization'] = self::audit_optimization();
+
+		// Autoload analysis (wp_options).
+		$report['autoload'] = self::audit_autoload();
 
 		// Plugin analysis.
 		$report['plugins'] = self::audit_plugins();
@@ -287,6 +292,70 @@ class WPS_Site_Audit {
 		return array(
 			'suggestions'       => $suggestions,
 			'suggestions_count' => count( $suggestions ),
+		);
+	}
+
+	/**
+	 * Audit wp_options autoload data (the biggest silent killer).
+	 *
+	 * Every row where autoload = 'yes' is loaded into memory on every single request.
+	 * Uninstalled plugins often leave behind megabytes of data here.
+	 *
+	 * @return array Autoload analysis with offenders.
+	 */
+	private static function audit_autoload(): array {
+		global $wpdb;
+
+		// Query to find largest autoloaded options (from issue description).
+		$query = $wpdb->prepare(
+			"SELECT option_name, LENGTH(option_value) AS size 
+			FROM {$wpdb->options} 
+			WHERE autoload = %s 
+			ORDER BY size DESC 
+			LIMIT 20",
+			'yes'
+		);
+
+		$results = $wpdb->get_results( $query, ARRAY_A );
+
+		$offenders        = array();
+		$total_autoload   = 0;
+		$offenders_500kb  = 0;
+		$offenders_100kb  = 0;
+
+		if ( ! empty( $results ) ) {
+			foreach ( $results as $row ) {
+				$size_bytes   = (int) $row['size'];
+				$size_kb      = round( $size_bytes / 1024, 2 );
+				$option_name  = (string) $row['option_name'];
+				$total_autoload += $size_bytes;
+
+				$severity = 'info';
+				if ( $size_kb >= 500 ) {
+					$severity = 'critical';
+					$offenders_500kb++;
+				} elseif ( $size_kb >= 100 ) {
+					$severity = 'warning';
+					$offenders_100kb++;
+				}
+
+				$offenders[] = array(
+					'option_name' => $option_name,
+					'size_bytes'  => $size_bytes,
+					'size_kb'     => $size_kb,
+					'size_human'  => size_format( $size_bytes ),
+					'severity'    => $severity,
+				);
+			}
+		}
+
+		return array(
+			'offenders'       => $offenders,
+			'total_autoload'  => $total_autoload,
+			'total_human'     => size_format( $total_autoload ),
+			'offenders_500kb' => $offenders_500kb,
+			'offenders_100kb' => $offenders_100kb,
+			'count'           => count( $offenders ),
 		);
 	}
 
@@ -742,6 +811,53 @@ class WPS_Site_Audit {
 	}
 
 	/**
+	 * Handle AJAX toggle autoload request.
+	 *
+	 * @return void
+	 */
+	public static function handle_toggle_autoload(): void {
+		check_ajax_referer( 'WPS_audit_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
+		}
+
+		$option_name = isset( $_POST['option_name'] ) ? sanitize_text_field( wp_unslash( $_POST['option_name'] ) ) : '';
+
+		if ( empty( $option_name ) ) {
+			wp_send_json_error( __( 'Invalid option name', 'plugin-wp-support-thisismyurl' ) );
+		}
+
+		global $wpdb;
+
+		// Update the autoload flag to 'no'.
+		$result = $wpdb->update(
+			$wpdb->options,
+			array( 'autoload' => 'no' ),
+			array( 'option_name' => $option_name ),
+			array( '%s' ),
+			array( '%s' )
+		);
+
+		if ( false === $result ) {
+			wp_send_json_error( __( 'Failed to update option', 'plugin-wp-support-thisismyurl' ) );
+		}
+
+		// Clear cache to ensure the change is reflected.
+		wp_cache_delete( $option_name, 'options' );
+
+		wp_send_json_success(
+			array(
+				'message' => sprintf(
+					/* translators: %s: option name */
+					__( 'Successfully disabled autoload for %s', 'plugin-wp-support-thisismyurl' ),
+					$option_name
+				),
+			)
+		);
+	}
+
+	/**
 	 * Render audit page.
 	 *
 	 * @return void
@@ -895,6 +1011,91 @@ class WPS_Site_Audit {
 						</div>
 					<?php endif; ?>
 
+					<!-- Autoload Audit (wp_options) -->
+					<?php if ( ! empty( $latest['autoload']['offenders'] ) ) : ?>
+						<div style="margin: 20px 0; padding: 15px; background: <?php echo ( $latest['autoload']['offenders_500kb'] > 0 ) ? '#fee' : '#ffe'; ?>; border-left: 4px solid <?php echo ( $latest['autoload']['offenders_500kb'] > 0 ) ? '#c00' : '#ffb900'; ?>;">
+							<h3>
+								<?php
+								if ( $latest['autoload']['offenders_500kb'] > 0 ) {
+									esc_html_e( '⚠️ Autoload Audit (wp_options) - Critical Offenders Found', 'plugin-wp-support-thisismyurl' );
+								} else {
+									esc_html_e( '⚡ Autoload Audit (wp_options)', 'plugin-wp-support-thisismyurl' );
+								}
+								?>
+							</h3>
+							<p style="margin: 10px 0; font-size: 13px; color: #666;">
+								<?php
+								printf(
+									/* translators: %s: total autoload size */
+									esc_html__( 'Total autoloaded data: %s. Every row with autoload=yes is loaded into memory on every request.', 'plugin-wp-support-thisismyurl' ),
+									esc_html( $latest['autoload']['total_human'] )
+								);
+								?>
+							</p>
+							<?php if ( $latest['autoload']['offenders_500kb'] > 0 ) : ?>
+								<p style="margin: 10px 0; font-size: 13px; color: #c00; font-weight: bold;">
+									<?php
+									printf(
+										/* translators: %d: number of critical offenders */
+										esc_html__( '⚠️ %d option(s) over 500KB found! These should be disabled from autoload.', 'plugin-wp-support-thisismyurl' ),
+										intval( $latest['autoload']['offenders_500kb'] )
+									);
+									?>
+								</p>
+							<?php endif; ?>
+							<table style="width: 100%; font-size: 13px; margin-top: 10px; border-collapse: collapse;">
+								<thead>
+									<tr style="background: rgba(0,0,0,0.05); border-bottom: 2px solid rgba(0,0,0,0.1);">
+										<th style="padding: 8px; text-align: left;"><?php esc_html_e( 'Option Name', 'plugin-wp-support-thisismyurl' ); ?></th>
+										<th style="padding: 8px; text-align: right;"><?php esc_html_e( 'Size', 'plugin-wp-support-thisismyurl' ); ?></th>
+										<th style="padding: 8px; text-align: center;"><?php esc_html_e( 'Severity', 'plugin-wp-support-thisismyurl' ); ?></th>
+										<th style="padding: 8px; text-align: center;"><?php esc_html_e( 'Action', 'plugin-wp-support-thisismyurl' ); ?></th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php foreach ( $latest['autoload']['offenders'] as $offender ) : ?>
+										<tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
+											<td style="padding: 8px; font-family: monospace; font-size: 12px;"><?php echo esc_html( $offender['option_name'] ); ?></td>
+											<td style="padding: 8px; text-align: right; font-weight: bold;">
+												<?php echo esc_html( $offender['size_human'] ); ?>
+												<span style="color: #999; font-size: 11px;">(<?php echo esc_html( number_format( $offender['size_kb'], 2 ) ); ?> KB)</span>
+											</td>
+											<td style="padding: 8px; text-align: center;">
+												<?php
+												$badge_color = '#999';
+												$badge_text  = __( 'Info', 'plugin-wp-support-thisismyurl' );
+												if ( 'critical' === $offender['severity'] ) {
+													$badge_color = '#c00';
+													$badge_text  = __( 'Critical', 'plugin-wp-support-thisismyurl' );
+												} elseif ( 'warning' === $offender['severity'] ) {
+													$badge_color = '#ffb900';
+													$badge_text  = __( 'Warning', 'plugin-wp-support-thisismyurl' );
+												}
+												?>
+												<span style="display: inline-block; padding: 2px 8px; background: <?php echo esc_attr( $badge_color ); ?>; color: white; border-radius: 3px; font-size: 11px; font-weight: bold;">
+													<?php echo esc_html( $badge_text ); ?>
+												</span>
+											</td>
+											<td style="padding: 8px; text-align: center;">
+												<button 
+													class="button button-small wps-toggle-autoload" 
+													data-option="<?php echo esc_attr( $offender['option_name'] ); ?>"
+													data-nonce="<?php echo esc_attr( wp_create_nonce( 'WPS_audit_nonce' ) ); ?>"
+													style="font-size: 11px;">
+													<?php esc_html_e( 'Disable Autoload', 'plugin-wp-support-thisismyurl' ); ?>
+												</button>
+											</td>
+										</tr>
+									<?php endforeach; ?>
+								</tbody>
+							</table>
+							<p style="margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.05); border-radius: 3px; font-size: 12px; color: #666;">
+								<strong><?php esc_html_e( 'Tip:', 'plugin-wp-support-thisismyurl' ); ?></strong>
+								<?php esc_html_e( 'If you find a plugin\'s settings taking up 500kb+ but only used on one admin page, update it to autoload = no. WordPress will still fetch it when requested, but it won\'t clog every frontend page load.', 'plugin-wp-support-thisismyurl' ); ?>
+							</p>
+						</div>
+					<?php endif; ?>
+
 					<!-- Database Stats -->
 					<div style="margin: 20px 0; padding: 15px; background: #eee;">
 						<h3><?php esc_html_e( '📊 Database', 'plugin-wp-support-thisismyurl' ); ?></h3>
@@ -942,6 +1143,47 @@ class WPS_Site_Audit {
 				else { alert('Error: ' + d.data); this.disabled = false; this.textContent = '<?php esc_html_e( '📋 Generate New Audit', 'plugin-wp-support-thisismyurl' ); ?>'; }
 			})
 			.catch(e => { alert('Error: ' + e); this.disabled = false; this.textContent = '<?php esc_html_e( '📋 Generate New Audit', 'plugin-wp-support-thisismyurl' ); ?>'; });
+		});
+
+		// Handle toggle autoload buttons
+		document.querySelectorAll('.wps-toggle-autoload').forEach(function(btn) {
+			btn.addEventListener('click', function() {
+				if (!confirm('<?php echo esc_js( __( 'Are you sure you want to disable autoload for this option? WordPress will still fetch it when needed, but it won\'t be loaded on every request.', 'plugin-wp-support-thisismyurl' ) ); ?>')) {
+					return;
+				}
+				
+				const option = this.getAttribute('data-option');
+				const nonce = this.getAttribute('data-nonce');
+				const button = this;
+				
+				button.disabled = true;
+				button.textContent = '<?php echo esc_js( __( 'Processing...', 'plugin-wp-support-thisismyurl' ) ); ?>';
+				
+				fetch(ajaxurl, {
+					method: 'POST',
+					headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+					body: 'action=WPS_toggle_autoload&nonce=' + encodeURIComponent(nonce) + '&option_name=' + encodeURIComponent(option)
+				})
+				.then(r => r.json())
+				.then(d => {
+					if (d.success) {
+						button.textContent = '<?php echo esc_js( __( 'Disabled ✓', 'plugin-wp-support-thisismyurl' ) ); ?>';
+						button.style.background = '#46b450';
+						button.style.color = 'white';
+						button.style.borderColor = '#46b450';
+						setTimeout(function() { location.reload(); }, 1500);
+					} else {
+						alert('<?php echo esc_js( __( 'Error:', 'plugin-wp-support-thisismyurl' ) ); ?> ' + d.data);
+						button.disabled = false;
+						button.textContent = '<?php echo esc_js( __( 'Disable Autoload', 'plugin-wp-support-thisismyurl' ) ); ?>';
+					}
+				})
+				.catch(e => {
+					alert('<?php echo esc_js( __( 'Error:', 'plugin-wp-support-thisismyurl' ) ); ?> ' + e);
+					button.disabled = false;
+					button.textContent = '<?php echo esc_js( __( 'Disable Autoload', 'plugin-wp-support-thisismyurl' ) ); ?>';
+				});
+			});
 		});
 		</script>
 		<?php
