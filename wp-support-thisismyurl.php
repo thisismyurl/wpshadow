@@ -54,6 +54,7 @@ use WPS\CoreSupport\Features\WPS_Feature_Conditional_Loading;
 use WPS\CoreSupport\Features\WPS_Feature_Google_Fonts_Disabler;
 use WPS\CoreSupport\Features\WPS_Feature_Critical_CSS;
 use WPS\CoreSupport\Features\WPS_Feature_Script_Optimizer;
+use WPS\CoreSupport\Features\WPS_Feature_Smart_Recommendations;
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -296,6 +297,7 @@ function wps_register_core_features(): void {
 
 	// Reporting and analytics features.
 	register_WPS_feature( new WPS_Feature_Weekly_Performance_Report() );
+	register_WPS_feature( new WPS_Feature_Smart_Recommendations() );
 
 	// Privacy and compliance features.
 	register_WPS_feature( new WPS_Feature_Consent_Checks() );
@@ -704,6 +706,7 @@ function wp_support_init(): void {
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-database-cleanup.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-auto-rollback.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-weekly-performance-report.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-smart-recommendations.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-registry.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/wps-feature-functions.php' );
 	WPS_Feature_Registry::init();
