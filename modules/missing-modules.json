@@ -1,5 +1,20 @@
 [
   {
+    "slug": "email-support-thisismyurl",
+    "type": "hub",
+    "name": "Email Support",
+    "description": "Advanced email configuration and reporting hub with SMTP setup, sender address control, delivery monitoring, and notification management to ensure reliable WordPress email delivery.",
+    "version": "1.0.0",
+    "suite_id": "thisismyurl-media-suite-2026",
+    "requires_core": "1.2601.71818",
+    "requires_php": "8.1.29",
+    "requires_wp": "6.4.0",
+    "download_url": "https://github.com/thisismyurl/email-support-thisismyurl/archive/refs/heads/main.zip",
+    "downloaded": false,
+    "status": "deferred",
+    "target_milestone": "future"
+  },
+  {
     "slug": "maintenance-support-thisismyurl",
     "type": "spoke",
     "name": "Maintenance Support",
