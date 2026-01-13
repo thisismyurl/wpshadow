@@ -19,6 +19,7 @@ This plugin provides complete functionality on its own and can optionally load h
 - **Update Simulator:** Safe testing of plugin/theme updates before production deployment
 - **Visual Regression Update Guard:** Automatic screenshot capture before/after updates with visual change detection
 - **Diagnostic API:** Hidden diagnostic tokens for automated client support access
+- **Spoke Collection System:** Gamified interface for discovering and managing format-specific plugins with milestones, achievements, and visual progression tracking (see [SPOKE_COLLECTION.md](docs/SPOKE_COLLECTION.md))
 - **Script Loading Optimization:** Comprehensive performance optimization system (see [SCRIPT_OPTIMIZATION.md](SCRIPT_OPTIMIZATION.md))
   - Enhanced Script Deferral with auto-detection
   - Conditional Script Loading for plugin-specific pages
