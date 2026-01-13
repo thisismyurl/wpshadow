@@ -182,6 +182,7 @@ class WPS_Feature_Registry {
 	 */
 	public static function save_feature_states( array $features, array $enabled_ids, bool $network ): void {
 		$toggles = $network && is_multisite() ? self::$network_toggles : self::$site_toggles;
+		$old_toggles = $toggles; // Store previous state to detect changes.
 
 		foreach ( $features as $feature ) {
 			$id = isset( $feature['id'] ) ? sanitize_key( (string) $feature['id'] ) : '';
@@ -189,7 +190,16 @@ class WPS_Feature_Registry {
 				continue;
 			}
 
-			$toggles[ $id ] = in_array( $id, $enabled_ids, true ) ? 1 : 0;
+			$new_state = in_array( $id, $enabled_ids, true ) ? 1 : 0;
+			$old_state = isset( $old_toggles[ $id ] ) ? $old_toggles[ $id ] : 0;
+			
+			// Fire action when feature is newly enabled.
+			if ( 1 === $new_state && 0 === $old_state ) {
+				$user_id = get_current_user_id();
+				do_action( 'wps_feature_enabled', $id, $user_id );
+			}
+			
+			$toggles[ $id ] = $new_state;
 		}
 
 		self::persist_toggles( $toggles, $network );
