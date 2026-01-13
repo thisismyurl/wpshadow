@@ -325,7 +325,74 @@ th[scope="col"] {
 	margin: 16px 0;
 }
 
+/* Responsive enhancements for better mobile experience */
+@media (max-width: 640px) {
+	.wrap.wps-core-wrap {
+		margin: 10px;
+		padding: 16px;
+	}
+
+	.wps-core-header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 12px;
+	}
+
+	.wps-core-header h1 {
+		font-size: 20px;
+	}
+
+	.wps-core-badge {
+		display: block;
+		margin-left: 0;
+		margin-top: 8px;
+	}
+
+	/* Stack stat cards on mobile */
+	.wps-dashboard-stats {
+		grid-template-columns: 1fr;
+	}
+
+	.wps-stat-card {
+		flex-direction: row;
+		align-items: center;
+	}
+
+	/* Ensure buttons are touch-friendly */
+	.wps-btn-install-activate,
+	.wps-btn-update,
+	.wps-activate,
+	.wps-deactivate-network {
+		min-height: 48px;
+		padding: 12px 16px;
+		font-size: 14px;
+	}
+
+	/* Make action links larger for touch */
+	.wps-action-link {
+		display: inline-block;
+		padding: 8px 4px;
+		font-size: 14px;
+	}
+}
+
+@media (max-width: 1024px) {
+	.wps-core-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.wps-dashboard-stats {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
 /* @changelog
+ * [1.2601.71920] - 2026-01-13 22:31
+ * - Added responsive design enhancements for mobile-first approach
+ * - Implemented touch-friendly button sizes (48px minimum)
+ * - Added mobile-specific layouts and spacing
+ * - Enhanced grid responsiveness at all breakpoints
+ *
  * [1.2601.71815] - 2026-01-07 18:15
  * - Added toggle switch component styles (custom checkbox UI)
  * - Implemented loading state animations with spinner overlay

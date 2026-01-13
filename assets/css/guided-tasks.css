@@ -163,6 +163,67 @@
 	margin-top: 15px;
 }
 
+@media (max-width: 640px) {
+	/* Mobile: Single column */
+	.wps-workflow-grid {
+		grid-template-columns: 1fr;
+	}
+
+	/* Step actions stack vertically */
+	.wps-step-actions {
+		flex-direction: column;
+	}
+
+	.wps-step-actions .button {
+		width: 100%;
+		min-height: 48px;
+	}
+
+	.wps-step-actions .wps-cancel-walkthrough {
+		margin-left: 0;
+	}
+
+	/* Workflow cards more compact */
+	.wps-workflow-card {
+		padding: 16px;
+	}
+
+	.wps-workflow-card h3 {
+		font-size: 18px;
+	}
+
+	/* Active walkthrough more compact */
+	.wps-active-walkthrough {
+		padding: 20px;
+	}
+
+	.wps-current-step {
+		padding: 16px;
+	}
+
+	/* Steps list more compact */
+	.wps-steps-list li {
+		padding: 8px 12px;
+		font-size: 14px;
+	}
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+	/* Tablet: 2 columns */
+	.wps-workflow-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.wps-step-actions {
+		flex-wrap: wrap;
+	}
+
+	.wps-step-actions .button {
+		flex: 1 1 calc(50% - 5px);
+		min-width: 120px;
+	}
+}
+
 @media (max-width: 768px) {
 	.wps-workflow-grid {
 		grid-template-columns: 1fr;
