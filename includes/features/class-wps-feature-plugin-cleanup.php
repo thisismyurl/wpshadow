@@ -22,6 +22,13 @@ namespace WPS\CoreSupport\Features;
 final class WPS_Feature_Plugin_Cleanup extends WPS_Abstract_Feature {
 
 	/**
+	 * Cache for plugin availability checks.
+	 *
+	 * @var array
+	 */
+	private array $plugin_availability = array();
+
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
@@ -37,6 +44,12 @@ final class WPS_Feature_Plugin_Cleanup extends WPS_Abstract_Feature {
 				'widget_label'        => __( 'Admin Management', 'plugin-wp-support-thisismyurl' ),
 				'widget_description'  => __( 'Clean up admin interface and plugin management', 'plugin-wp-support-thisismyurl' ),
 			)
+		);
+
+		// Cache plugin availability checks.
+		$this->plugin_availability = array(
+			'contact_form_7' => function_exists( 'wpcf7_contact_form' ),
+			'woocommerce'    => function_exists( 'is_woocommerce' ),
 		);
 	}
 
@@ -114,16 +127,56 @@ final class WPS_Feature_Plugin_Cleanup extends WPS_Abstract_Feature {
 	 */
 	private function cleanup_contact_form_7(): void {
 		// Check if Contact Form 7 is active.
-		if ( ! function_exists( 'wpcf7_contact_form' ) ) {
+		if ( ! $this->plugin_availability['contact_form_7'] ) {
 			return;
 		}
 
-		// Check if current page has a Contact Form 7 shortcode.
-		global $post;
 		$has_cf7_form = false;
 
+		// Check main post content.
+		$post = get_post();
 		if ( is_a( $post, 'WP_Post' ) ) {
 			$has_cf7_form = has_shortcode( $post->post_content, 'contact-form-7' );
+		}
+
+		// Check widgets and sidebars for CF7 shortcodes if not found in main content.
+		if ( ! $has_cf7_form && is_active_sidebar( 'sidebar-1' ) ) {
+			global $wp_registered_sidebars, $wp_registered_widgets;
+
+			// Check all active sidebars for CF7 shortcode widgets.
+			foreach ( $wp_registered_sidebars as $sidebar_id => $sidebar ) {
+				if ( ! is_active_sidebar( $sidebar_id ) ) {
+					continue;
+				}
+
+				$widgets = wp_get_sidebars_widgets();
+				if ( ! isset( $widgets[ $sidebar_id ] ) || ! is_array( $widgets[ $sidebar_id ] ) ) {
+					continue;
+				}
+
+				foreach ( $widgets[ $sidebar_id ] as $widget_id ) {
+					if ( ! isset( $wp_registered_widgets[ $widget_id ] ) ) {
+						continue;
+					}
+
+					// Check text widgets and custom HTML widgets for CF7 shortcodes.
+					$widget = $wp_registered_widgets[ $widget_id ];
+					if ( isset( $widget['callback'][0] ) && is_object( $widget['callback'][0] ) ) {
+						$widget_instance = get_option( $widget['callback'][0]->option_name );
+						if ( is_array( $widget_instance ) ) {
+							foreach ( $widget_instance as $instance ) {
+								if ( is_array( $instance ) ) {
+									$text = $instance['text'] ?? $instance['content'] ?? '';
+									if ( is_string( $text ) && has_shortcode( $text, 'contact-form-7' ) ) {
+										$has_cf7_form = true;
+										break 3;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 
 		// Allow filtering of the check for custom use cases.
@@ -145,7 +198,7 @@ final class WPS_Feature_Plugin_Cleanup extends WPS_Abstract_Feature {
 	 */
 	private function cleanup_woocommerce(): void {
 		// Check if WooCommerce is active.
-		if ( ! function_exists( 'is_woocommerce' ) ) {
+		if ( ! $this->plugin_availability['woocommerce'] ) {
 			return;
 		}
 
