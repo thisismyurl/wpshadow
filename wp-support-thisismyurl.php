@@ -1457,6 +1457,9 @@ function wp_support_render_core_content( string $tab ): void {
 	case 'features':
 		wp_support_render_features_page( 'core' );
 		break;
+		case 'performance':
+			wp_support_render_performance_dashboard();
+			break;
 			break;
 		case 'modules':
 			wp_support_render_modules();
@@ -1731,6 +1734,15 @@ function wp_support_render_help_layout(): void {
 		</style>
 	</div>
 	<?php
+}
+
+/**
+ * Render Performance Dashboard tab.
+ *
+ * @return void
+ */
+function wp_support_render_performance_dashboard(): void {
+	require_once wp_support_PATH . 'includes/views/performance-dashboard.php';
 }
 
 /**
