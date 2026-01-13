@@ -502,7 +502,8 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 				break;
 
 			case 'remove_tabindex':
-				$content  = preg_replace( '/\s*\btabindex=(["\']?)[1-9][0-9]*\\1/i', '', $content );
+				// Remove positive tabindex values. Backreference \1 matches the captured quote.
+				$content  = preg_replace( '/\s*\btabindex=(["\']?)[1-9][0-9]*\1/i', '', $content );
 				$modified = true;
 				break;
 
@@ -544,7 +545,7 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 	 */
 	private function fix_missing_alt( string $content ): string {
 		// Add empty alt to images without alt attribute (assumes decorative).
-		// Use negative lookahead to check if alt attribute doesn't exist.
+		// Negative lookahead (?![^>]*\balt=) ensures the img tag doesn't already have an alt attribute.
 		return preg_replace( '/<img\b(?![^>]*\balt=)([^>]*?)(\s*\/?>)/i', '<img$1 alt=""$2', $content );
 	}
 
@@ -557,7 +558,8 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 	private function fix_empty_alt( string $content ): string {
 		// Add role="presentation" to images with empty alt (no text between quotes) that don't have a role.
 		// This only matches truly empty alt attributes (alt="" or alt='')
-		// Pattern: \2 references the captured quote, so we match alt="<quote><same-quote>"
+		// Backreference \2 captures the quote character (either " or '), and \2 is used again to match
+		// the same closing quote, ensuring we only match empty quotes like alt="" or alt=''
 		return preg_replace(
 			'/<img\b([^>]*?)\balt=(["\'])\2(?![^>]*\brole=)([^>]*?)>/i',
 			'<img$1alt=$2$2 role="presentation"$3>',
@@ -573,7 +575,8 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 	 */
 	public function auto_fix_aria_in_content( string $content ): string {
 		// Remove positive tabindex values (both quoted and unquoted).
-		$content = preg_replace( '/\s*\btabindex=(["\']?)[1-9][0-9]*\\1/i', '', $content );
+		// Backreference \1 (or \\1 in replacement context) refers to the optional quote captured in group 1.
+		$content = preg_replace( '/\s*\btabindex=(["\']?)[1-9][0-9]*\1/i', '', $content );
 		return $content;
 	}
 
