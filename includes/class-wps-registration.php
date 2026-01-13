@@ -250,13 +250,4 @@ class WPS_Registration {
 
 		return $json;
 	}
-
-	/**
-	 * Check if site is already registered
-	 *
-	 * @return bool
-	 */
-	public static function is_registered(): bool {
-		return WPS_License::is_registered();
-	}
 }

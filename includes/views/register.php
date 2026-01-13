@@ -23,9 +23,8 @@ $site_title   = get_bloginfo( 'name' );
 $site_url     = home_url();
 $admin_email  = get_option( 'admin_email' );
 
-// Get license status to show appropriate messaging.
-$license_state = WPS_License::get_state( false );
-$is_licensed   = ( 'valid' === $license_state['status'] );
+// Check if site is already registered.
+$is_licensed = WPS_License::is_registered();
 ?>
 
 <div class="wrap wps-register-page">
