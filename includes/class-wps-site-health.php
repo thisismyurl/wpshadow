@@ -39,6 +39,9 @@ class WPS_Site_Health {
 		// Hook into module state changes to refresh health checks.
 		add_action( 'WPS_module_enabled', array( __CLASS__, 'on_module_state_change' ) );
 		add_action( 'WPS_module_disabled', array( __CLASS__, 'on_module_state_change' ) );
+
+		// Register built-in module checks once during init.
+		add_action( 'plugins_loaded', array( __CLASS__, 'register_builtin_module_checks' ), 20 );
 	}
 
 	/**
@@ -81,12 +84,6 @@ class WPS_Site_Health {
 	 * @return array
 	 */
 	public static function add_tests( array $tests ): array {
-		// Register built-in module checks.
-		self::register_builtin_module_checks();
-
-		// Get all active modules.
-		$modules = WPS_Module_Registry::get_catalog_with_status();
-
 		// Add core-level tests (always active).
 		$core_checks = self::get_core_checks();
 		foreach ( $core_checks as $check_id => $check_config ) {
@@ -160,7 +157,7 @@ class WPS_Site_Health {
 	 *
 	 * @return void
 	 */
-	private static function register_builtin_module_checks(): void {
+	public static function register_builtin_module_checks(): void {
 		// Vault module checks.
 		self::register_module_checks(
 			'vault-support-thisismyurl',
@@ -187,6 +184,21 @@ class WPS_Site_Health {
 	}
 
 	/**
+	 * Extract test method name from check configuration.
+	 *
+	 * @param array $check_config Check configuration array.
+	 * @return string Test method name or empty string.
+	 */
+	private static function extract_test_method( array $check_config ): string {
+		if ( ! isset( $check_config['test'] ) ) {
+			return '';
+		}
+
+		$test = $check_config['test'];
+		return is_array( $test ) && isset( $test[1] ) ? $test[1] : '';
+	}
+
+	/**
 	 * Build a test map for get_health_check_results() with module attribution.
 	 *
 	 * Maps test IDs to their configuration including method names and module ownership.
@@ -200,7 +212,7 @@ class WPS_Site_Health {
 		$core_checks = self::get_core_checks();
 		foreach ( $core_checks as $check_id => $check_config ) {
 			// Extract method name from test callback.
-			$test_method = is_array( $check_config['test'] ?? null ) ? $check_config['test'][1] : '';
+			$test_method = self::extract_test_method( $check_config );
 			
 			// Convert check_id to test_id (remove WPS_ prefix).
 			$test_id = str_replace( 'WPS_', '', $check_id );
@@ -211,9 +223,6 @@ class WPS_Site_Health {
 				'module' => 'core',
 			);
 		}
-
-		// Register built-in module checks first.
-		self::register_builtin_module_checks();
 
 		// Add module-specific checks from registry.
 		foreach ( self::$module_checks as $module_slug => $module_check_list ) {
@@ -227,7 +236,7 @@ class WPS_Site_Health {
 
 			foreach ( $module_check_list as $check_id => $check_config ) {
 				// Extract method name from test callback.
-				$test_method = is_array( $check_config['test'] ?? null ) ? $check_config['test'][1] : '';
+				$test_method = self::extract_test_method( $check_config );
 				
 				// Convert check_id to test_id (remove WPS_ prefix).
 				$test_id = str_replace( 'WPS_', '', $check_id );
