@@ -238,7 +238,8 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 	/**
 	 * Get content element ID based on theme.
 	 *
-	 * Tries to detect common content IDs used by themes.
+	 * Returns a common content ID used by most themes. If the default doesn't match
+	 * your theme, set a custom content_id via the wps_skiplinks_options.
 	 *
 	 * @return string Content element ID.
 	 */
@@ -250,7 +251,8 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 			return sanitize_key( $content_id );
 		}
 
-		// Common content IDs in themes (default to first one).
+		// Common content IDs in themes. Returns first one as default.
+		// Users should customize via options if their theme uses a different ID.
 		$common_ids = array( 'content', 'main', 'main-content', 'primary', 'site-content' );
 
 		return $common_ids[0];
@@ -259,7 +261,8 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 	/**
 	 * Get navigation element ID based on theme.
 	 *
-	 * Tries to detect common navigation IDs used by themes.
+	 * Returns a common navigation ID used by most themes. If the default doesn't match
+	 * your theme, set a custom nav_id via the wps_skiplinks_options.
 	 *
 	 * @return string Navigation element ID.
 	 */
@@ -271,7 +274,8 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 			return sanitize_key( $nav_id );
 		}
 
-		// Common navigation IDs in themes (default to first one).
+		// Common navigation IDs in themes. Returns first one as default.
+		// Users should customize via options if their theme uses a different ID.
 		$common_ids = array( 'site-navigation', 'primary-navigation', 'nav', 'navigation', 'primary-menu' );
 
 		return $common_ids[0];
