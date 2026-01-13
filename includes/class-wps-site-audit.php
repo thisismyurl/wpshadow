@@ -563,7 +563,6 @@ class WPS_Site_Audit {
 						'post_id'    => $post->ID,
 						'post_title' => $post->post_title,
 						'src'        => $src,
-						'img_tag'    => esc_html( substr( $img_tag, 0, 100 ) ),
 					);
 				}
 			}
