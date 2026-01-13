@@ -131,17 +131,33 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 
 		return "
 			.wps-skip-links {
-				position: absolute;
-				top: -9999px;
-				left: -9999px;
+				margin: 0;
+				padding: 0;
 			}
 			
 			.wps-skip-link {
 				position: absolute;
-				top: -9999px;
-				left: -9999px;
-				display: block;
+				width: 1px;
+				height: 1px;
+				margin: -1px;
+				padding: 0;
+				overflow: hidden;
+				clip: rect(0, 0, 0, 0);
+				white-space: nowrap;
+				border: 0;
+			}
+			
+			.wps-skip-link:focus {
+				position: fixed;
+				top: 10px;
+				left: 10px;
+				width: auto;
+				height: auto;
+				margin: 0;
 				padding: 1rem 1.5rem;
+				overflow: visible;
+				clip: auto;
+				white-space: normal;
 				background-color: " . esc_attr( $bg_color ) . ";
 				color: " . esc_attr( $text_color ) . ";
 				text-decoration: none;
@@ -149,17 +165,14 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 				font-weight: 600;
 				line-height: 1.5;
 				z-index: 100000;
-				transition: top 0.2s ease-in-out, left 0.2s ease-in-out;
-			}
-			
-			.wps-skip-link:focus {
-				top: 0;
-				left: 0;
+				border-radius: 4px;
+				box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 				outline: 3px solid " . esc_attr( $text_color ) . ";
 				outline-offset: 2px;
 			}
 			
-			.wps-skip-link:hover {
+			.wps-skip-link:hover,
+			.wps-skip-link:focus:hover {
 				background-color: " . esc_attr( $this->darken_color( $bg_color, 20 ) ) . ";
 			}
 		";
