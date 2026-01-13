@@ -116,7 +116,7 @@ final class WPS_Feature_Script_Deferral extends WPS_Abstract_Feature {
 		// Auto mode: defer all non-excluded scripts by default.
 		if ( 'auto' === $mode ) {
 			// Check if it's a local script (better for deferring).
-			$is_local = strpos( $src, site_url() ) !== false || strpos( $src, '/' ) === 0;
+			$is_local = strpos( $src, site_url() ) !== false || ( strpos( $src, '/' ) === 0 && strpos( $src, '//' ) !== 0 );
 
 			// Only auto-defer local scripts to avoid breaking external dependencies.
 			if ( $is_local ) {

@@ -61,7 +61,7 @@ final class WPS_Feature_Google_Fonts_Disabler extends WPS_Abstract_Feature {
 	 * Remove Google Fonts from style URLs.
 	 *
 	 * @param string $src Style source URL.
-	 * @return string|bool Modified URL or false to remove.
+	 * @return string|false Modified URL or false to remove.
 	 */
 	public function remove_google_fonts_from_styles( string $src ) {
 		if ( strpos( $src, 'fonts.googleapis.com' ) !== false || strpos( $src, 'fonts.gstatic.com' ) !== false ) {

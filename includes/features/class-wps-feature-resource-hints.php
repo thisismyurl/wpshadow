@@ -134,7 +134,7 @@ final class WPS_Feature_Resource_Hints extends WPS_Abstract_Feature {
 				$attributes .= sprintf( ' media="%s"', esc_attr( $resource['media'] ) );
 			}
 
-			printf( '<link %s>' . "\n", $attributes );
+			echo '<link ' . $attributes . '>' . "\n";
 		}
 	}
 }

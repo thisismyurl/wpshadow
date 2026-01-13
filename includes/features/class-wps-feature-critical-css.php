@@ -105,9 +105,17 @@ final class WPS_Feature_Critical_CSS extends WPS_Abstract_Feature {
 			return $html;
 		}
 
-		// Use print media to load without blocking, then switch to 'all' on load.
-		$html = str_replace( "media='{$media}'", "media='print' onload=\"this.media='all'\"", $html );
-		$html = str_replace( "media=\"{$media}\"", "media='print' onload=\"this.media='all'\"", $html );
+		// Default media if not set.
+		if ( empty( $media ) ) {
+			$media = 'all';
+		}
+
+		// Use print media to load without blocking, then switch to media type on load.
+		$html = preg_replace(
+			'/media=["\']([^"\']+)["\']/i',
+			"media='print' onload=\"this.media='$1'\"",
+			$html
+		);
 
 		// Add noscript fallback.
 		$noscript = sprintf( '<noscript><link rel="stylesheet" href="%s" media="%s"></noscript>', esc_url( $href ), esc_attr( $media ) );

@@ -184,26 +184,6 @@ final class WPS_Feature_Conditional_Loading extends WPS_Abstract_Feature {
 	 * @return string|null Plugin name or null if not detected.
 	 */
 	private function detect_plugin_from_handle( string $handle ): ?string {
-		$known_plugins = array(
-			'contact-form-7'     => 'Contact Form 7',
-			'wpcf7'              => 'Contact Form 7',
-			'woocommerce'        => 'WooCommerce',
-			'wc-'                => 'WooCommerce',
-			'elementor'          => 'Elementor',
-			'jetpack'            => 'Jetpack',
-			'wpforms'            => 'WPForms',
-			'gravityforms'       => 'Gravity Forms',
-			'yoast'              => 'Yoast SEO',
-			'wp-rocket'          => 'WP Rocket',
-			'autoptimize'        => 'Autoptimize',
-		);
-
-		foreach ( $known_plugins as $prefix => $name ) {
-			if ( strpos( $handle, $prefix ) === 0 ) {
-				return $name;
-			}
-		}
-
-		return null;
+		return WPS_Script_Utils::detect_plugin_from_handle( $handle );
 	}
 }
