@@ -550,6 +550,10 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/class-wps-achievement-badges.php';
 	WPS_Achievement_Badges::init();
 
+	// Load Spoke Collection system for gamified spoke management.
+	require_once wp_support_PATH . 'includes/class-wps-spoke-collection.php';
+	WPS_Spoke_Collection::init();
+
 	// Load Snapshot Manager for site snapshots and rollback.
 	require_once wp_support_PATH . 'includes/class-wps-snapshot-manager.php';
 	WPS_Snapshot_Manager::init();
@@ -742,6 +746,7 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/admin/screens.php';
 	require_once wp_support_PATH . 'includes/views/dashboard-renderer.php';
 	require_once wp_support_PATH . 'includes/admin/ajax-modules.php';
+	require_once wp_support_PATH . 'includes/admin/ajax-spoke-collection.php';
 
 	// Load CLI commands when WP-CLI present.
 	if ( defined( 'WP_CLI' ) && WP_CLI ) {
@@ -1179,12 +1184,14 @@ function wp_support_render_core_content( string $tab ): void {
 		case 'help':
 			wp_support_render_help_layout();
 			break;
-	case 'features':
-		wp_support_render_features_page( 'core' );
-		break;
+		case 'features':
+			wp_support_render_features_page( 'core' );
+			break;
+		case 'collection':
+			wp_support_render_spoke_collection();
+			break;
 		case 'performance':
 			wp_support_render_performance_dashboard();
-			break;
 			break;
 		case 'modules':
 			wp_support_render_modules();
@@ -1347,6 +1354,16 @@ function wp_support_render_help_layout(): void {
  */
 function wp_support_render_performance_dashboard(): void {
 	require_once wp_support_PATH . 'includes/views/performance-dashboard.php';
+}
+
+/**
+ * Render Spoke Collection tab.
+ *
+ * @return void
+ */
+function wp_support_render_spoke_collection(): void {
+	require_once wp_support_PATH . 'includes/views/spoke-collection.php';
+	\WPS\CoreSupport\wp_support_render_spoke_collection();
 }
 
 /**

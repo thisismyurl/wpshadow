@@ -1,0 +1,694 @@
+/**
+ * Spoke Collection Gallery Styles
+ *
+ * Gamified collection interface with status states, animations, and responsive layout.
+ *
+ * @package WPS_WP_SUPPORT_THISISMYURL
+ * @since 1.2601.73002
+ */
+
+/* ========================================
+   Collection Stats
+   ======================================== */
+
+.wps-collection-stats {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: 20px;
+	margin: 30px 0;
+}
+
+.wps-stat-card {
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 8px;
+	padding: 20px;
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	transition: all 0.3s ease;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.wps-stat-card:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.wps-stat-icon {
+	font-size: 32px;
+	color: #2271b1;
+	flex-shrink: 0;
+}
+
+.wps-stat-content {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.wps-stat-value {
+	font-size: 24px;
+	font-weight: 600;
+	color: #1d2327;
+	line-height: 1;
+}
+
+.wps-stat-label {
+	font-size: 13px;
+	color: #646970;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.wps-progress-card {
+	flex-direction: column;
+	text-align: center;
+	gap: 10px;
+}
+
+/* Progress Circle */
+.wps-progress-circle {
+	position: relative;
+	width: 80px;
+	height: 80px;
+}
+
+.wps-progress-svg {
+	transform: rotate(-90deg);
+}
+
+.wps-progress-bg {
+	fill: none;
+	stroke: #e5e7eb;
+	stroke-width: 6;
+}
+
+.wps-progress-fill {
+	fill: none;
+	stroke: #2271b1;
+	stroke-width: 6;
+	stroke-linecap: round;
+	transition: stroke-dashoffset 1s ease;
+}
+
+.wps-progress-text {
+	font-size: 18px;
+	font-weight: 600;
+	fill: #1d2327;
+	text-anchor: middle;
+	dominant-baseline: middle;
+	transform: rotate(90deg);
+	transform-origin: center;
+}
+
+/* ========================================
+   Spoke Gallery Grid
+   ======================================== */
+
+.wps-spoke-gallery {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	gap: 24px;
+	margin: 40px 0;
+}
+
+@media (max-width: 768px) {
+	.wps-spoke-gallery {
+		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+		gap: 16px;
+	}
+}
+
+/* ========================================
+   Spoke Card
+   ======================================== */
+
+.wps-spoke-card {
+	background: #fff;
+	border: 2px solid #dcdcde;
+	border-radius: 12px;
+	padding: 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	transition: all 0.3s ease;
+	position: relative;
+	overflow: hidden;
+}
+
+.wps-spoke-card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Status-based styling */
+.wps-spoke-locked {
+	opacity: 0.6;
+	background: #f6f7f7;
+}
+
+.wps-spoke-locked .wps-spoke-icon {
+	opacity: 0.4;
+}
+
+.wps-spoke-unlocked {
+	border-color: #4f46e5;
+}
+
+.wps-spoke-unlocked .wps-spoke-icon {
+	opacity: 0.7;
+	color: #4f46e5;
+}
+
+.wps-spoke-active {
+	border-color: #10b981;
+	background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+}
+
+.wps-spoke-active .wps-spoke-icon {
+	color: #10b981;
+	opacity: 1;
+}
+
+.wps-spoke-mastered {
+	border-color: #f59e0b;
+	background: linear-gradient(135deg, #ffffff 0%, #fffbeb 100%);
+	position: relative;
+}
+
+.wps-spoke-mastered::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.1) 0%, transparent 70%);
+	pointer-events: none;
+}
+
+.wps-spoke-mastered .wps-spoke-icon {
+	color: #f59e0b;
+	opacity: 1;
+	animation: wps-glow-pulse 2s ease-in-out infinite;
+}
+
+/* Icon Wrapper */
+.wps-spoke-icon-wrapper {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 80px;
+	height: 80px;
+	margin: 0 auto;
+}
+
+.wps-spoke-icon {
+	font-size: 48px;
+	transition: all 0.3s ease;
+}
+
+/* Status Badge */
+.wps-spoke-badge {
+	position: absolute;
+	bottom: -4px;
+	right: -4px;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	background: #fff;
+	border: 2px solid #fff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.wps-spoke-badge .dashicons {
+	font-size: 20px;
+}
+
+.wps-badge-locked {
+	background: #9ca3af;
+}
+
+.wps-badge-locked .dashicons {
+	color: #fff;
+}
+
+.wps-badge-unlocked {
+	background: #4f46e5;
+}
+
+.wps-badge-unlocked .dashicons {
+	color: #fff;
+}
+
+.wps-badge-active {
+	background: #10b981;
+}
+
+.wps-badge-active .dashicons {
+	color: #fff;
+}
+
+.wps-badge-mastered {
+	background: #f59e0b;
+	animation: wps-badge-shine 3s ease-in-out infinite;
+}
+
+.wps-badge-mastered .dashicons {
+	color: #fff;
+}
+
+/* Title & Description */
+.wps-spoke-title {
+	font-size: 20px;
+	font-weight: 600;
+	color: #1d2327;
+	margin: 0;
+	text-align: center;
+}
+
+.wps-spoke-description {
+	font-size: 14px;
+	color: #646970;
+	line-height: 1.6;
+	text-align: center;
+	margin: 0;
+}
+
+/* Benefits */
+.wps-spoke-benefits {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+	padding: 12px;
+	background: #f0f6fc;
+	border-radius: 6px;
+	font-size: 13px;
+	color: #1d2327;
+}
+
+.wps-spoke-benefits .dashicons {
+	color: #10b981;
+	flex-shrink: 0;
+	margin-top: 2px;
+}
+
+/* Browser Support */
+.wps-spoke-support {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.wps-support-label {
+	font-size: 12px;
+	color: #646970;
+	font-weight: 500;
+}
+
+.wps-support-bar {
+	position: relative;
+	height: 20px;
+	background: #e5e7eb;
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+.wps-support-fill {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+	transition: width 0.5s ease;
+}
+
+.wps-support-percent {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 11px;
+	font-weight: 600;
+	color: #1d2327;
+	text-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Metrics */
+.wps-spoke-metrics {
+	display: flex;
+	gap: 16px;
+	padding: 12px;
+	background: #f9fafb;
+	border-radius: 6px;
+}
+
+.wps-metric {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 13px;
+	color: #646970;
+	flex: 1;
+}
+
+.wps-metric .dashicons {
+	color: #2271b1;
+	font-size: 18px;
+}
+
+/* Action Buttons */
+.wps-spoke-actions {
+	display: flex;
+	gap: 8px;
+	margin-top: auto;
+}
+
+.wps-spoke-actions .button {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	padding: 8px 16px;
+	border-radius: 6px;
+	font-weight: 500;
+	transition: all 0.2s ease;
+}
+
+.wps-spoke-actions .button .dashicons {
+	font-size: 18px;
+}
+
+.wps-install-spoke {
+	background: #2271b1;
+	border-color: #2271b1;
+	color: #fff;
+}
+
+.wps-install-spoke:hover {
+	background: #135e96;
+	border-color: #135e96;
+	transform: scale(1.02);
+}
+
+.wps-activate-spoke {
+	background: #10b981;
+	border-color: #10b981;
+	color: #fff;
+}
+
+.wps-activate-spoke:hover {
+	background: #059669;
+	border-color: #059669;
+	transform: scale(1.02);
+}
+
+.wps-deactivate-spoke {
+	background: #fff;
+	border-color: #dcdcde;
+	color: #646970;
+}
+
+.wps-deactivate-spoke:hover {
+	background: #f6f7f7;
+	border-color: #c3c4c7;
+}
+
+/* Status Text */
+.wps-spoke-status-text {
+	text-align: center;
+	font-size: 12px;
+	color: #646970;
+	font-weight: 500;
+	padding-top: 8px;
+	border-top: 1px solid #f0f0f1;
+}
+
+/* ========================================
+   Milestone Modal
+   ======================================== */
+
+.wps-modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 100000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.wps-modal-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.7);
+	backdrop-filter: blur(4px);
+}
+
+.wps-modal-content {
+	position: relative;
+	background: #fff;
+	border-radius: 16px;
+	max-width: 500px;
+	width: 90%;
+	padding: 40px;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+	z-index: 1;
+}
+
+.wps-animate-bounce {
+	animation: wps-bounce 0.6s ease;
+}
+
+.wps-modal-header {
+	text-align: center;
+	margin-bottom: 24px;
+}
+
+.wps-achievement-icon {
+	font-size: 64px;
+	color: #f59e0b;
+	animation: wps-star-spin 1s ease;
+}
+
+.wps-modal-header h2 {
+	margin: 16px 0 0 0;
+	font-size: 28px;
+	color: #1d2327;
+}
+
+.wps-modal-body {
+	text-align: center;
+}
+
+.wps-modal-body h3 {
+	font-size: 20px;
+	color: #1d2327;
+	margin: 0 0 12px 0;
+}
+
+.wps-modal-body p {
+	font-size: 15px;
+	color: #646970;
+	line-height: 1.6;
+	margin: 0 0 24px 0;
+}
+
+.wps-milestone-reward {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	padding: 16px 24px;
+	background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+	border: 2px solid #f59e0b;
+	border-radius: 8px;
+	font-size: 15px;
+	font-weight: 600;
+	color: #92400e;
+}
+
+.wps-milestone-reward .dashicons {
+	font-size: 24px;
+	color: #f59e0b;
+}
+
+.wps-modal-footer {
+	margin-top: 32px;
+	text-align: center;
+}
+
+.wps-close-modal {
+	padding: 12px 32px;
+	font-size: 15px;
+	font-weight: 600;
+	border-radius: 8px;
+}
+
+/* ========================================
+   Animations
+   ======================================== */
+
+@keyframes wps-glow-pulse {
+	0%, 100% {
+		filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.6));
+	}
+	50% {
+		filter: drop-shadow(0 0 16px rgba(245, 158, 11, 0.9));
+	}
+}
+
+@keyframes wps-badge-shine {
+	0%, 100% {
+		box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+	}
+	50% {
+		box-shadow: 0 2px 16px rgba(245, 158, 11, 0.6), 0 0 24px rgba(245, 158, 11, 0.4);
+	}
+}
+
+@keyframes wps-bounce {
+	0% {
+		transform: scale(0.3) translateY(-100px);
+		opacity: 0;
+	}
+	50% {
+		transform: scale(1.05);
+	}
+	70% {
+		transform: scale(0.95);
+	}
+	100% {
+		transform: scale(1) translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes wps-star-spin {
+	0% {
+		transform: rotate(0deg) scale(0.3);
+		opacity: 0;
+	}
+	50% {
+		transform: rotate(180deg) scale(1.1);
+	}
+	100% {
+		transform: rotate(360deg) scale(1);
+		opacity: 1;
+	}
+}
+
+/* ========================================
+   Responsive Design
+   ======================================== */
+
+@media (max-width: 1024px) {
+	.wps-collection-stats {
+		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+		gap: 16px;
+	}
+
+	.wps-spoke-gallery {
+		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+	}
+}
+
+@media (max-width: 600px) {
+	.wps-collection-stats {
+		grid-template-columns: 1fr;
+	}
+
+	.wps-spoke-gallery {
+		grid-template-columns: 1fr;
+		gap: 16px;
+	}
+
+	.wps-modal-content {
+		padding: 24px;
+		width: 95%;
+	}
+
+	.wps-modal-header h2 {
+		font-size: 22px;
+	}
+
+	.wps-achievement-icon {
+		font-size: 48px;
+	}
+}
+
+/* ========================================
+   Loading States
+   ======================================== */
+
+.wps-spoke-actions .button.is-loading {
+	position: relative;
+	color: transparent;
+	pointer-events: none;
+}
+
+.wps-spoke-actions .button.is-loading::after {
+	content: '';
+	position: absolute;
+	width: 16px;
+	height: 16px;
+	border: 2px solid transparent;
+	border-top-color: currentColor;
+	border-radius: 50%;
+	animation: wps-spin 0.6s linear infinite;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+@keyframes wps-spin {
+	to {
+		transform: translate(-50%, -50%) rotate(360deg);
+	}
+}
+
+/* ========================================
+   Accessibility
+   ======================================== */
+
+.wps-spoke-card:focus-within {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+}
+
+.wps-spoke-actions .button:focus {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+	box-shadow: 0 0 0 3px rgba(34, 113, 177, 0.1);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+	.wps-spoke-card {
+		border-width: 3px;
+	}
+
+	.wps-spoke-badge {
+		border-width: 3px;
+	}
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	* {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}
