@@ -721,10 +721,10 @@ function wp_support_init(): void {
 	add_action( 'WPS_register_features', __NAMESPACE__ . '\\wps_register_core_features' );
 	
 	// Initialize Tips Coach feature
-	\WPS\CoreSupport\Features\WPS_Feature_Tips_Coach::init();
+	\WPS\CoreSupport\WPS_Feature_Tips_Coach::init();
 
 	// Initialize Weekly Performance Report feature
-	\WPS\CoreSupport\Features\WPS_Feature_Weekly_Performance_Report::init();
+	\WPS\CoreSupport\WPS_Feature_Weekly_Performance_Report::init();
 
 	// Load Spoke Base for spoke plugins (Image, Media, etc).
 	require_once wp_support_PATH . 'includes/class-wps-spoke-base.php';
