@@ -23,15 +23,15 @@ declare(strict_types=1);
 
 namespace WPS\CoreSupport;
 
-use WPS\CoreSupport\Features\WPS_Feature_Core_Diagnostics;
-use WPS\CoreSupport\Features\WPS_Feature_Image_Smart_Focus;
-use WPS\CoreSupport\Features\WPS_Feature_Vault_Audit;
-use WPS\CoreSupport\Features\WPS_Feature_Vulnerability_Watch;
-use WPS\CoreSupport\Features\WPS_Feature_Script_Deferral;
-use WPS\CoreSupport\Features\WPS_Feature_Asset_Version_Removal;
-use WPS\CoreSupport\Features\WPS_Feature_Head_Cleanup;
-use WPS\CoreSupport\Features\WPS_Feature_Block_Cleanup;
-use WPS\CoreSupport\Features\WPS_Feature_CSS_Class_Cleanup;
+use WPS\CoreSupport\WPS_Feature_Core_Diagnostics;
+use WPS\CoreSupport\WPS_Feature_Image_Smart_Focus;
+use WPS\CoreSupport\WPS_Feature_Vault_Audit;
+use WPS\CoreSupport\WPS_Feature_Vulnerability_Watch;
+use WPS\CoreSupport\WPS_Feature_Script_Deferral;
+use WPS\CoreSupport\WPS_Feature_Asset_Version_Removal;
+use WPS\CoreSupport\WPS_Feature_Head_Cleanup;
+use WPS\CoreSupport\WPS_Feature_Block_Cleanup;
+use WPS\CoreSupport\WPS_Feature_CSS_Class_Cleanup;
 use WPS\CoreSupport\WPS_Feature_Plugin_Cleanup;
 use WPS\CoreSupport\WPS_Feature_HTML_Cleanup;
 use WPS\CoreSupport\WPS_Feature_Resource_Hints;
