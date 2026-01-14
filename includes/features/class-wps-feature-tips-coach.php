@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
+namespace WPS\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects site type and provides contextual action recommendations.
  */
-class WPS_Feature_Tips_Coach {
+class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 
 	/**
 	 * Site type constants
@@ -31,6 +31,25 @@ class WPS_Feature_Tips_Coach {
 	private const TYPE_WOOCOMMERCE = 'woocommerce';
 	private const TYPE_LMS = 'lms';
 	private const TYPE_GENERIC = 'generic';
+	/**
+	 * Constructor
+	 */
+	public function __construct() {
+		parent::__construct(
+			array(
+				'id'                  => 'wps_tips_coach',
+				'name'                => __( 'Tips Coach', 'plugin-wp-support-thisismyurl' ),
+				'description'         => __( 'Get smart suggestions customized for your specific type of site', 'plugin-wp-support-thisismyurl' ),
+				'scope'               => 'core',
+				'version'             => '1.0.0',
+				'default_enabled'     => true,
+				'widget_group'        => 'diagnostics',
+				'widget_label'        => __( 'Diagnostics & Monitoring', 'plugin-wp-support-thisismyurl' ),
+				'widget_description'  => __( 'Health checks and monitoring features', 'plugin-wp-support-thisismyurl' ),
+			)
+		);
+	}
+
 
 	/**
 	 * Initialize the Tips Coach feature.

@@ -7,8 +7,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
-
+namespace WPS\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -25,7 +24,7 @@ class WPS_Feature_Vault_Audit extends WPS_Abstract_Feature {
 				'hub'                 => 'vault',
 				'version'             => '1.0.0',
 				'default_enabled'     => true,
-				'widget_group'        => 'advanced-features',
+				'widget_group'        => 'advanced',
 				'widget_label'        => __( 'Advanced Features', 'plugin-wp-support-thisismyurl' ),
 				'widget_description'  => __( 'Powerful features for diagnostics and specialized functionality', 'plugin-wp-support-thisismyurl' ),
 			)

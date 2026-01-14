@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace WPS\CoreSupport;
 
-use WPS\CoreSupport\Features\WPS_Feature_Registry;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }

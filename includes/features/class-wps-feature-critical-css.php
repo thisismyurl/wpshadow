@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
+namespace WPS\CoreSupport;
 
 /**
  * WPS_Feature_Critical_CSS
@@ -32,7 +32,7 @@ final class WPS_Feature_Critical_CSS extends WPS_Abstract_Feature {
 				'scope'               => 'core',
 				'default_enabled'     => false,
 				'version'             => '1.0.0',
-				'widget_group'        => 'resource-optimization',
+				'widget_group'        => 'performance',
 				'widget_label'        => __( 'Resource Optimization', 'plugin-wp-support-thisismyurl' ),
 				'widget_description'  => __( 'Optimize how resources are loaded and delivered', 'plugin-wp-support-thisismyurl' ),
 			)

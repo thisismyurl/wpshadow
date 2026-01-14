@@ -552,15 +552,16 @@ class WPS_Performance_Monitor {
 	 */
 	private static function trigger_alert( string $type, string $message ): void {
 		// Log to WPS Activity Logger if available.
-		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
-			WPS_Activity_Logger::log_event(
-				'performance_alert',
-				$message,
-				array(
-					'alert_type' => $type,
-				)
-			);
-		}
+		// TODO: Re-enable when WPS_Activity_Logger::log_event() method exists
+		// if ( class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
+		// 	WPS_Activity_Logger::log_event(
+		// 		'performance_alert',
+		// 		$message,
+		// 		array(
+		// 			'alert_type' => $type,
+		// 		)
+		// 	);
+		// }
 
 		// Store alert in transient to display in admin.
 		$alerts = get_transient( 'wps_performance_alerts' );

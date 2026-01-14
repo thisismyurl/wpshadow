@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
+namespace WPS\CoreSupport;
 
 use WPS\CoreSupport\WPS_Snapshot_Manager;
 
@@ -48,7 +48,7 @@ final class WPS_Feature_Auto_Rollback extends WPS_Abstract_Feature {
 				'scope'               => 'core',
 				'default_enabled'     => false,
 				'version'             => '1.0.0',
-				'widget_group'        => 'safety',
+				'widget_group'        => 'advanced',
 				'widget_label'        => __( 'Safety Features', 'plugin-wp-support-thisismyurl' ),
 				'widget_description'  => __( 'Advanced safety and recovery features to protect your WordPress installation', 'plugin-wp-support-thisismyurl' ),
 			)

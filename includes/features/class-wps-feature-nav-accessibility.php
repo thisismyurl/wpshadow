@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
+namespace WPS\CoreSupport;
 
 
 /**
@@ -29,13 +29,13 @@ final class WPS_Feature_Nav_Accessibility extends WPS_Abstract_Feature {
 			array(
 				'id'                  => 'nav-accessibility',
 				'name'                => __( 'Navigation Menu Accessibility & Class Simplification', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Add ARIA attributes and simplify menu classes for better accessibility and cleaner HTML', 'plugin-wp-support-thisismyurl' ),
+				'description'         => __( 'Make your navigation easier for everyone to use, including people with disabilities', 'plugin-wp-support-thisismyurl' ),
 				'scope'               => 'core',
 				'default_enabled'     => true,
 				'version'             => '1.0.0',
-				'widget_group'        => 'ux-accessibility',
-				'widget_label'        => __( 'UX & Accessibility', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Improve user experience and accessibility standards', 'plugin-wp-support-thisismyurl' ),
+			'widget_group'        => 'accessibility',
+			'widget_label'        => __( 'Accessibility', 'plugin-wp-support-thisismyurl' ),
+			'widget_description'  => __( 'Improve site accessibility for all users', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}

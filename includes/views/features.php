@@ -30,10 +30,164 @@ foreach ( $features as $feature ) {
 	$grouped_features[ $group ]['features'][] = $feature;
 }
 
+// Store grouped_features in global for use in metabox callbacks
+$GLOBALS['wps_grouped_features'] = $grouped_features;
+
 ?>
 <div class="wrap">
 	<h1><?php echo esc_html__( 'Features', 'plugin-wp-support-thisismyurl' ); ?></h1>
 	<?php settings_errors( 'WPS_features' ); ?>
+
+	<?php
+	// Check if wizard should be shown (not dismissed and not completed)
+	$wizard_dismissed = get_user_meta( get_current_user_id(), 'wps_setup_wizard_dismissed', true );
+	$wizard_completed = get_user_meta( get_current_user_id(), 'wps_setup_wizard_completed', true );
+	
+	if ( ! $wizard_dismissed && ! $wizard_completed && ! empty( $features ) ) :
+		// Define plain English explanations for each feature
+		$feature_explanations = array(
+			'wps_core_diagnostics' => array(
+				'title' => 'Keep Your Site Healthy',
+				'description' => 'Think of this as a regular check-up for your website. It watches for problems, helps you recover if something goes wrong, and keeps important safeguards in place. Like having a doctor on call for your site.',
+				'recommended' => true,
+			),
+			'wps_tips_coach' => array(
+				'title' => 'Get Smart Suggestions',
+				'description' => 'Your website gives you helpful recommendations based on what type of site you have. It\'s like having an expert advisor pointing out things you might have missed.',
+				'recommended' => true,
+			),
+			'a11y-audit' => array(
+				'title' => 'Make Your Site Work for Everyone',
+				'description' => 'This checks that people with disabilities can use your website easily. It looks for things like proper contrast, keyboard navigation, and screen reader support. Making your site accessible isn\'t just good practice—it\'s the right thing to do.',
+				'recommended' => true,
+			),
+			'script-deferral' => array(
+				'title' => 'Speed Up Your Page Loading',
+				'description' => 'This delays loading certain scripts until after your page content shows up, so visitors see your page faster. Think of it like getting the main course served quickly while the waiter prepares dessert.',
+				'recommended' => false,
+			),
+			'asset-version-removal' => array(
+				'title' => 'Better Browser Caching',
+				'description' => 'Removes version numbers from file links so browsers can cache them longer. This means repeat visitors load your site faster because their browser remembers files from last time.',
+				'recommended' => true,
+			),
+			'head-cleanup' => array(
+				'title' => 'Clean Up Extra Code',
+				'description' => 'Removes unnecessary code that WordPress adds to every page. This makes your site a bit faster and slightly more secure by not advertising what version of WordPress you\'re running.',
+				'recommended' => true,
+			),
+			'block-cleanup' => array(
+				'title' => 'Remove Unused Editor Styles',
+				'description' => 'If you don\'t use the block editor, this removes its styling code from your pages. That\'s 100KB+ your visitors don\'t need to download.',
+				'recommended' => false,
+			),
+			'css-class-cleanup' => array(
+				'title' => 'Simplify Your HTML',
+				'description' => 'WordPress adds dozens of CSS classes to posts and menus. This strips most of them out to make your code cleaner and pages slightly smaller.',
+				'recommended' => false,
+			),
+			'plugin-cleanup' => array(
+				'title' => 'Stop Loading Plugin Files Everywhere',
+				'description' => 'Many plugins load their CSS and scripts on every page, even where they\'re not needed. This prevents that waste, loading them only on pages where they\'re actually used.',
+				'recommended' => false,
+			),
+			'html-cleanup' => array(
+				'title' => 'Compress Your Page Code',
+				'description' => 'Removes extra spaces, comments, and empty tags from your HTML. Makes pages 20-40% smaller, which means faster downloads for your visitors.',
+				'recommended' => false,
+			),
+			'resource-hints' => array(
+				'title' => 'Pre-Connect to External Resources',
+				'description' => 'Tells browsers to start connecting to external services (like Google Fonts) before they\'re needed, making those resources load faster when the time comes.',
+				'recommended' => true,
+			),
+			'nav-accessibility' => array(
+				'title' => 'Make Menus Easier to Navigate',
+				'description' => 'Adds helpful markers for screen readers and simplifies menu code so it\'s easier for everyone to use your navigation, especially people using keyboards or assistive technology.',
+				'recommended' => true,
+			),
+			'skiplinks' => array(
+				'title' => 'Add Quick Navigation Links',
+				'description' => 'Adds invisible "skip to content" links that keyboard users can use to jump past your menu straight to the main content. A small addition that makes a big difference for accessibility.',
+				'recommended' => true,
+			),
+			'embed-disable' => array(
+				'title' => 'Remove Embedding Features',
+				'description' => 'Removes the code that lets other sites embed your content. Unless you specifically want that feature, turning it off makes your site a little faster.',
+				'recommended' => true,
+			),
+			'jquery-cleanup' => array(
+				'title' => 'Remove Old jQuery Code',
+				'description' => 'Removes an old compatibility script that most modern sites don\'t need anymore. Safe to turn on unless you have very old plugins.',
+				'recommended' => true,
+			),
+		);
+		?>
+		<div id="wps-setup-wizard" class="wps-wizard" data-current-step="0" data-total-features="<?php echo count( $features ); ?>">
+			<div class="wps-wizard-header">
+				<button type="button" class="wps-wizard-dismiss" title="<?php esc_attr_e( 'Dismiss wizard', 'plugin-wp-support-thisismyurl' ); ?>">
+					<span class="dashicons dashicons-no-alt"></span>
+				</button>
+			</div>
+			<div class="wps-wizard-content">
+				<div class="wps-wizard-step wps-wizard-welcome active">
+					<h2><?php esc_html_e( 'Welcome! Let\'s Set Up Your Site Features', 'plugin-wp-support-thisismyurl' ); ?></h2>
+					<p style="font-size: 16px; line-height: 1.6; max-width: 700px; margin: 0 auto 24px;">
+						<?php esc_html_e( 'We\'ll walk you through each feature one at a time and explain what it does in plain English. You can turn features on or off as we go, and your choices will be saved automatically.', 'plugin-wp-support-thisismyurl' ); ?>
+					</p>
+					<p style="font-size: 14px; color: #fff; font-weight: 600; margin-bottom: 24px;">
+						<?php echo sprintf( esc_html__( 'This will take about %d minutes. You can skip or dismiss this anytime.', 'plugin-wp-support-thisismyurl' ), ceil( count( $features ) / 10 ) ); ?>
+					</p>
+					<button type="button" class="button button-primary button-hero wps-wizard-start"><?php esc_html_e( 'Get Started', 'plugin-wp-support-thisismyurl' ); ?></button>
+				</div>
+				<?php
+				$step_index = 0;
+				foreach ( $features as $feature ) :
+					$feature_id = $feature['id'] ?? '';
+					$explanation = $feature_explanations[ $feature_id ] ?? array(
+						'title' => $feature['name'] ?? $feature_id,
+						'description' => $feature['description'] ?? '',
+						'recommended' => false,
+					);
+					$is_enabled = ! empty( $feature['enabled'] );
+					$step_index++;
+					?>
+					<div class="wps-wizard-step wps-wizard-feature" data-feature-id="<?php echo esc_attr( $feature_id ); ?>" data-step="<?php echo $step_index; ?>">
+						<div class="wps-wizard-step-number"><?php echo sprintf( esc_html__( 'Feature %d of %d', 'plugin-wp-support-thisismyurl' ), $step_index, count( $features ) ); ?></div>
+						<h2><?php echo esc_html( $explanation['title'] ); ?></h2>
+						<?php if ( $explanation['recommended'] ) : ?>
+							<span class="wps-wizard-badge wps-recommended"><?php esc_html_e( 'Recommended', 'plugin-wp-support-thisismyurl' ); ?></span>
+						<?php endif; ?>
+						<p style="font-size: 16px; line-height: 1.6; max-width: 650px; margin: 20px auto 32px;">
+							<?php echo esc_html( $explanation['description'] ); ?>
+						</p>
+						<div class="wps-wizard-toggle-group">
+							<label class="wps-wizard-toggle-label">
+								<input type="checkbox" class="wps-wizard-feature-toggle" data-feature-id="<?php echo esc_attr( $feature_id ); ?>" <?php checked( $is_enabled ); ?> />
+								<span class="wps-toggle-switch"></span>
+								<span class="wps-toggle-text"><?php esc_html_e( 'Enable this feature', 'plugin-wp-support-thisismyurl' ); ?></span>
+							</label>
+						</div>
+						<div class="wps-wizard-actions">
+							<button type="button" class="button wps-wizard-prev"><?php esc_html_e( 'Previous', 'plugin-wp-support-thisismyurl' ); ?></button>
+							<button type="button" class="button button-primary wps-wizard-next"><?php esc_html_e( 'Next', 'plugin-wp-support-thisismyurl' ); ?></button>
+						</div>
+					</div>
+				<?php endforeach; ?>
+				<div class="wps-wizard-step wps-wizard-complete">
+					<div class="dashicons dashicons-yes-alt" style="font-size: 80px; width: 80px; height: 80px; color: #46b450; margin: 0 auto 24px;"></div>
+					<h2><?php esc_html_e( 'All Set!', 'plugin-wp-support-thisismyurl' ); ?></h2>
+					<p style="font-size: 16px; line-height: 1.6; max-width: 600px; margin: 0 auto 32px;">
+						<?php esc_html_e( 'Your features are configured and ready to go. You can always change these settings later from the features list below.', 'plugin-wp-support-thisismyurl' ); ?>
+					</p>
+					<button type="button" class="button button-primary button-hero wps-wizard-finish"><?php esc_html_e( 'Finish Setup', 'plugin-wp-support-thisismyurl' ); ?></button>
+				</div>
+			</div>
+			<div class="wps-wizard-progress">
+				<div class="wps-wizard-progress-bar" style="width: 0%;"></div>
+			</div>
+		</div>
+	<?php endif; ?>
 
 	<div class="wps-features-container">
 		<form method="post" id="wps-features-form">
@@ -47,81 +201,38 @@ foreach ( $features as $feature ) {
 					<p><?php esc_html_e( 'No features registered for this context yet.', 'plugin-wp-support-thisismyurl' ); ?></p>
 				</div>
 			<?php else : ?>
-				<div class="meta-box-sortables">
-				<?php foreach ( $grouped_features as $group_id => $group_data ) : ?>
-					<div class="wps-feature-widget postbox" id="wps-widget-<?php echo esc_attr( $group_id ); ?>">
-						<div class="wps-widget-header" style="border-bottom: 1px solid #ddd; padding: 12px; background: #f5f5f5; border-radius: 3px 3px 0 0;">
-							<h3 style="margin: 0 0 4px 0; font-size: 13px; font-weight: 600; color: #23282d;">
-								<button type="button" class="handlediv button-link" aria-expanded="true">
-									<span class="screen-reader-text"><?php echo esc_html__( 'Toggle feature group', 'plugin-wp-support-thisismyurl' ); ?></span>
-								</button>
-								<?php echo esc_html( $group_data['label'] ); ?>
-							</h3>
-							<p style="margin: 0; font-size: 12px; color: #666;">
-								<?php echo esc_html( $group_data['description'] ); ?>
-							</p>
-						</div>
-
-						<div class="wps-widget-content" style="padding: 12px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 3px 3px; margin-bottom: 20px;">
-							<table class="wp-list-table widefat fixed striped" style="margin: 0;">
-								<thead>
-									<tr>
-										<th scope="col" class="manage-column column-cb check-column" style="width: 40px;">
-											<span class="screen-reader-text"><?php esc_html_e( 'Toggle feature', 'plugin-wp-support-thisismyurl' ); ?></span>
-										</th>
-										<th scope="col" style="width: 25%;"><?php esc_html_e( 'Feature', 'plugin-wp-support-thisismyurl' ); ?></th>
-										<th scope="col" style="width: 55%;"><?php esc_html_e( 'Description', 'plugin-wp-support-thisismyurl' ); ?></th>
-										<th scope="col" style="width: 10%;"><?php esc_html_e( 'Version', 'plugin-wp-support-thisismyurl' ); ?></th>
-									</tr>
-								</thead>
-								<tbody>
-									<?php foreach ( $group_data['features'] as $feature ) :
-										$feature_id      = esc_attr( $feature['id'] ?? '' );
-										$feature_name    = esc_html( $feature['name'] ?? $feature_id );
-										$feature_desc    = esc_html( $feature['description'] ?? '' );
-										$feature_version = esc_html( $feature['version'] ?? '1.0.0' );
-										$is_enabled      = ! empty( $feature['enabled'] );
-										?>
-										<tr>
-											<th scope="row" class="check-column">
-												<input type="checkbox" name="features[<?php echo $feature_id; ?>]" value="1" <?php checked( $is_enabled ); ?> />
-											</th>
-											<td>
-												<strong><?php echo $feature_name; ?></strong>
-												<?php if ( ! empty( $feature['hub'] ) || ! empty( $feature['spoke'] ) ) : ?>
-													<div style="color:#555;font-size:11px;margin-top:4px;">
-														<?php
-														if ( ! empty( $feature['hub'] ) ) {
-															echo esc_html( sprintf( /* translators: %s hub identifier */ __( 'Hub: %s', 'plugin-wp-support-thisismyurl' ), $feature['hub'] ) );
-														}
-														if ( ! empty( $feature['spoke'] ) ) {
-															echo ' · ' . esc_html( sprintf( /* translators: %s spoke identifier */ __( 'Spoke: %s', 'plugin-wp-support-thisismyurl' ), $feature['spoke'] ) );
-														}
-														?>
-													</div>
-												<?php endif; ?>
-											</td>
-											<td><?php echo $feature_desc; ?></td>
-											<td><?php echo $feature_version; ?></td>
-										</tr>
-									<?php endforeach; ?>
-								</tbody>
-							</table>
+			<div id="poststuff">
+				<div id="post-body" class="metabox-holder columns-1">
+					<div id="postbox-container-1" class="postbox-container">
+						<div id="normal-sortables" class="meta-box-sortables ui-sortable">
+							<?php do_meta_boxes( 'toplevel_page_wp-support', 'normal', null ); ?>
 						</div>
 					</div>
-				<?php endforeach; ?>
-				<?php endforeach; ?>
+				</div>
 			</div>
+		<?php endif; ?>
 
 			<p class="submit">
 				<button type="submit" class="button button-primary">
 					<?php echo esc_html__( 'Save features', 'plugin-wp-support-thisismyurl' ); ?>
 				</button>
-				<?php if ( $network ) : ?>
-					<span style="margin-left:8px; color:#666; font-size:12px;">
-						<?php echo esc_html__( 'Network scope', 'plugin-wp-support-thisismyurl' ); ?>
-					</span>
-				<?php endif; ?>
+				<div style="display: inline-flex; align-items: center; gap: 15px; margin-left: 15px;">
+					<?php if ( $network ) : ?>
+						<span style="color:#666; font-size:12px;">
+							<?php echo esc_html__( 'Network scope', 'plugin-wp-support-thisismyurl' ); ?>
+						</span>
+					<?php endif; ?>
+					<?php
+					// Show rerun wizard link if wizard was completed or dismissed
+					if ( $wizard_dismissed || $wizard_completed ) :
+						?>
+						<a href="#" class="wps-rerun-wizard" style="color: #667eea; text-decoration: none; font-weight: 500; cursor: pointer;">
+							<?php esc_html_e( 'Rerun Setup Wizard', 'plugin-wp-support-thisismyurl' ); ?>
+						</a>
+						<?php
+						endif;
+						?>
+				</div>
 			</p>
 		</form>
 	</div>
@@ -161,7 +272,7 @@ foreach ( $features as $feature ) {
 	.wps-feature-widget td,
 	.wps-feature-widget th {
 		padding: 10px 8px;
-		vertical-align: middle;
+		vertical-align: top;
 	}
 
 	.wps-feature-widget .check-column {
@@ -170,25 +281,431 @@ foreach ( $features as $feature ) {
 </style>
 
 <script>
-(function() {
-	// Enqueue postbox script if not already loaded
-	if ( typeof postboxes !== 'undefined' ) {
-		// Initialize sortable postboxes for features tab
-		postboxes.add_postbox_toggles('wps_features_page');
+jQuery(document).ready(function($) {
+	// Initialize postboxes for features page
+	if (typeof postboxes !== 'undefined') {
+		var screen_id = 'toplevel_page_wp-support';
+		postboxes.add_postbox_toggles(screen_id);
 		
-		// Save widget state on toggle
-		jQuery(document).on('postbox-toggled', function(e, postbox) {
-			var closed = postbox.hasClass('closed') ? 1 : 0;
-			jQuery.post(
-				ajaxurl,
-				{
-					action: 'wps_save_widget_state',
-					postbox_id: postbox.attr('id'),
-					closed: closed,
-					nonce: jQuery('input[name="wps_features_nonce"]').val()
-				}
-			);
+		// Make metaboxes sortable
+		$('.meta-box-sortables').sortable({
+			handle: '.hndle',
+			cursor: 'move',
+			update: function() {
+				postboxes.save_order(screen_id);
+			}
 		});
 	}
-})();
+});
+</script>
+
+<style>
+.wps-wizard {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	color: #fff;
+	padding: 40px 20px;
+	border-radius: 8px;
+	margin-bottom: 30px;
+	box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+	position: relative;
+}
+.wps-wizard-header {
+	position: relative;
+	margin-bottom: 30px;
+}
+.wps-wizard-progress {
+	height: 4px;
+	background: rgba(255,255,255,0.2);
+	border-radius: 2px;
+	overflow: hidden;
+	margin-top: 30px;
+}
+.wps-wizard-progress-bar {
+	height: 100%;
+	background: #fff;
+	transition: width 0.3s ease;
+	border-radius: 2px;
+}
+.wps-wizard-dismiss {
+	position: absolute;
+	top: -20px;
+	right: 10px;
+	background: rgba(255,255,255,0.2);
+	border: none;
+	color: #fff;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: background 0.2s;
+}
+.wps-wizard-dismiss:hover {
+	background: rgba(255,255,255,0.3);
+}
+.wps-wizard-content {
+	max-width: 900px;
+	margin: 0 auto;
+	text-align: center;
+}
+.wps-wizard-step {
+	display: none;
+}
+.wps-wizard-step.active {
+	display: block;
+	animation: fadeIn 0.4s ease;
+}
+@keyframes fadeIn {
+	from { opacity: 0; transform: translateY(10px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+.wps-wizard-step h2 {
+	color: #fff;
+	font-size: 32px;
+	margin: 0 0 16px;
+	font-weight: 600;
+}
+.wps-wizard-step-number {
+	font-size: 14px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	opacity: 0.8;
+	margin-bottom: 12px;
+}
+.wps-wizard-badge {
+	display: inline-block;
+	padding: 6px 16px;
+	border-radius: 20px;
+	font-size: 13px;
+	font-weight: 600;
+	margin: 8px 0 16px;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+.wps-wizard-badge.wps-recommended {
+	background: #46b450;
+	color: #fff;
+}
+.wps-wizard-toggle-group {
+	margin: 40px auto;
+	display: inline-block;
+}
+.wps-wizard-toggle-label {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	cursor: pointer;
+	background: rgba(255,255,255,0.15);
+	padding: 20px 32px;
+	border-radius: 50px;
+	transition: background 0.2s;
+	border: 2px solid rgba(255,255,255,0.2);
+}
+.wps-wizard-toggle-label:hover {
+	background: rgba(255,255,255,0.25);
+	border-color: rgba(255,255,255,0.4);
+}
+.wps-wizard-feature-toggle {
+	display: none !important;
+	visibility: hidden !important;
+	opacity: 0 !important;
+	position: absolute !important;
+	width: 0 !important;
+	height: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+.wps-toggle-switch {
+	position: relative;
+	width: 56px;
+	height: 32px;
+	background: rgba(0,0,0,0.3);
+	border-radius: 16px;
+	transition: background 0.3s;
+	flex-shrink: 0;
+}
+.wps-toggle-switch::after {
+	content: '';
+	position: absolute;
+	top: 4px;
+	left: 4px;
+	width: 24px;
+	height: 24px;
+	background: #fff;
+	border-radius: 50%;
+	transition: transform 0.3s;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.wps-wizard-feature-toggle:checked + .wps-toggle-switch {
+	background: #46b450;
+}
+.wps-wizard-feature-toggle:checked + .wps-toggle-switch::after {
+	transform: translateX(24px);
+}
+.wps-toggle-text {
+	font-size: 18px;
+	font-weight: 500;
+	color: #fff;
+}
+.wps-wizard-actions {
+	display: flex;
+	gap: 12px;
+	justify-content: center;
+	align-items: center;
+	margin-top: 40px;
+}
+.wps-wizard-actions .button {
+	min-width: 120px;
+	height: 44px;
+	font-size: 15px;
+}
+.wps-wizard-actions .button-primary {
+	background: #fff;
+	color: #667eea;
+	border: none;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.wps-wizard-actions .button-primary:hover {
+	background: #f5f5f5;
+	color: #667eea;
+}
+.wps-wizard-actions .button:not(.button-primary) {
+	background: rgba(255,255,255,0.15);
+	color: #fff;
+	border: 1px solid rgba(255,255,255,0.3);
+}
+.wps-wizard-actions .button:not(.button-primary):hover {
+	background: rgba(255,255,255,0.25);
+}
+.wps-wizard-welcome .button-hero {
+	height: 54px;
+	font-size: 17px;
+	padding: 0 40px;
+}
+.wps-wizard-complete {
+	padding: 40px 0;
+}
+@media (max-width: 782px) {
+	.wps-wizard {
+		padding: 30px 15px;
+	}
+	.wps-wizard-step h2 {
+		font-size: 24px;
+	}
+	.wps-wizard-actions {
+		flex-direction: column;
+		width: 100%;
+	}
+	.wps-wizard-actions .button {
+		width: 100%;
+	}
+}
+
+/* Toggle Switch Styles for Widgets */
+.wps-widget-toggle {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	cursor: pointer;
+}
+.wps-toggle-input {
+	display: none !important;
+}
+.wps-toggle-slider {
+	position: relative;
+	display: inline-block;
+	width: 44px;
+	height: 24px;
+	background: #ccc;
+	border-radius: 24px;
+	transition: background 0.3s ease;
+	border: none;
+	outline: none;
+}
+.wps-toggle-slider::after {
+	content: '';
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	background: white;
+	border-radius: 50%;
+	top: 2px;
+	left: 2px;
+	transition: left 0.3s ease;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.wps-toggle-input:checked + .wps-toggle-slider {
+	background: #667eea;
+}
+.wps-toggle-input:checked + .wps-toggle-slider::after {
+	left: 22px;
+}
+.wps-toggle-input:focus + .wps-toggle-slider {
+	outline: 2px solid #667eea;
+	outline-offset: 2px;
+}
+</style>
+
+<script>
+jQuery(document).ready(function($) {
+	var wizard = $('#wps-setup-wizard');
+	console.log('Wizard element found:', wizard.length);
+	if (!wizard.length) return;
+
+	var steps = wizard.find('.wps-wizard-step');
+	console.log('Total steps found:', steps.length);
+	var currentStep = 0;
+	var totalSteps = steps.length;
+	var progressBar = wizard.find('.wps-wizard-progress-bar');
+	
+	// Initial state
+	wizard.find('.wps-wizard-prev').hide();
+
+	function updateProgress() {
+		var progress = (currentStep / (totalSteps - 1)) * 100;
+		progressBar.css('width', progress + '%');
+	}
+
+	function showStep(index) {
+		steps.removeClass('active');
+		steps.eq(index).addClass('active');
+		currentStep = index;
+		updateProgress();
+
+		// Update prev button visibility
+		if (index <= 1) {
+			wizard.find('.wps-wizard-prev').hide();
+		} else {
+			wizard.find('.wps-wizard-prev').show();
+		}
+
+		// Update next button text on last feature
+		if (index === totalSteps - 2) {
+			wizard.find('.wps-wizard-next').text('<?php esc_html_e( 'Finish', 'plugin-wp-support-thisismyurl' ); ?>');
+		}
+	}
+
+	function saveFeatureState(featureId, enabled) {
+		return $.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			data: {
+				action: 'wps_wizard_save_feature',
+				nonce: '<?php echo wp_create_nonce( 'wps_wizard_save' ); ?>',
+				feature_id: featureId,
+				enabled: enabled ? 1 : 0
+			}
+		});
+	}
+
+	function completeWizard() {
+		$.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			data: {
+				action: 'wps_wizard_complete',
+				nonce: '<?php echo wp_create_nonce( 'wps_wizard_complete' ); ?>'
+			},
+			success: function() {
+				wizard.slideUp(400, function() {
+					wizard.remove();
+					location.reload();
+				});
+			}
+		});
+	}
+
+	function dismissWizard() {
+		$.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			data: {
+				action: 'wps_wizard_dismiss',
+				nonce: '<?php echo wp_create_nonce( 'wps_wizard_dismiss' ); ?>'
+			},
+			success: function() {
+				wizard.slideUp(400, function() {
+					wizard.remove();
+				});
+			}
+		});
+	}
+
+	// Start wizard
+	wizard.find('.wps-wizard-start').on('click', function() {
+		console.log('Get Started clicked, showing step 1');
+		showStep(1);
+	});
+	console.log('Get Started button handler attached to', wizard.find('.wps-wizard-start').length, 'elements');
+
+	// Next button
+	wizard.find('.wps-wizard-next').on('click', function() {
+		var currentFeatureStep = steps.eq(currentStep);
+		if (currentFeatureStep.hasClass('wps-wizard-feature')) {
+			var featureId = currentFeatureStep.data('feature-id');
+			var toggle = currentFeatureStep.find('.wps-wizard-feature-toggle');
+			var enabled = toggle.is(':checked');
+
+			// Save state
+			saveFeatureState(featureId, enabled);
+		}
+
+		if (currentStep < totalSteps - 1) {
+			showStep(currentStep + 1);
+		}
+	});
+
+	// Previous button
+	wizard.find('.wps-wizard-prev').on('click', function() {
+		if (currentStep > 1) {
+			showStep(currentStep - 1);
+		}
+	});
+
+	// Finish button
+	wizard.find('.wps-wizard-finish').on('click', function() {
+		completeWizard();
+	});
+
+	// Dismiss button
+	wizard.find('.wps-wizard-dismiss').on('click', function() {
+		if (confirm('<?php esc_html_e( 'Are you sure you want to dismiss the setup wizard?', 'plugin-wp-support-thisismyurl' ); ?>')) {
+			dismissWizard();
+		}
+	});
+
+	// Toggle change - save immediately
+	wizard.find('.wps-wizard-feature-toggle').on('change', function() {
+		var featureId = $(this).data('feature-id');
+		var enabled = $(this).is(':checked');
+		saveFeatureState(featureId, enabled);
+	});
+	
+	// Rerun wizard link
+	$('.wps-rerun-wizard').on('click', function(e) {
+		e.preventDefault();
+		var link = $(this);
+		var originalText = link.text();
+		link.css('opacity', '0.5').css('pointer-events', 'none');
+		
+		$.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			data: {
+				action: 'wps_wizard_reset',
+				nonce: '<?php echo wp_create_nonce( 'wps_wizard_reset' ); ?>'
+			},
+			success: function() {
+				location.reload();
+			},
+			error: function() {
+				link.css('opacity', '1').css('pointer-events', 'auto');
+				alert('<?php esc_html_e( 'Failed to reset wizard. Please try again.', 'plugin-wp-support-thisismyurl' ); ?>');
+			}
+		});
+	});
+});
 </script>

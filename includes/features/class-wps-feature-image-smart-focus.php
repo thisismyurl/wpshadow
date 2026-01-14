@@ -7,8 +7,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
-
+namespace WPS\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -26,7 +25,7 @@ class WPS_Feature_Image_Smart_Focus extends WPS_Abstract_Feature {
 				'spoke'               => 'image',
 				'version'             => '1.0.0',
 				'default_enabled'     => false,
-				'widget_group'        => 'advanced-features',
+				'widget_group'        => 'advanced',
 				'widget_label'        => __( 'Advanced Features', 'plugin-wp-support-thisismyurl' ),
 				'widget_description'  => __( 'Powerful features for diagnostics and specialized functionality', 'plugin-wp-support-thisismyurl' ),
 			)

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
+namespace WPS\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -32,11 +32,11 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 			array(
 				'id'                  => 'a11y-audit',
 				'name'                => __( 'Accessibility Audit', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Scan and fix common accessibility issues including contrast, focus order, ARIA roles, alt text, and keyboard traps', 'plugin-wp-support-thisismyurl' ),
+				'description'         => __( 'Check that people with disabilities can use your site fully and comfortably', 'plugin-wp-support-thisismyurl' ),
 				'scope'               => 'core',
 				'default_enabled'     => true,
 				'version'             => '1.0.0',
-				'widget_group'        => 'ux-accessibility',
+				'widget_group'        => 'accessibility',
 				'widget_label'        => __( 'UX & Accessibility', 'plugin-wp-support-thisismyurl' ),
 				'widget_description'  => __( 'Improve user experience and accessibility standards', 'plugin-wp-support-thisismyurl' ),
 			)

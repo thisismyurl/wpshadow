@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace WPS\CoreSupport;
 
-use WPS\CoreSupport\WPS_Feature_Interface;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -62,7 +60,13 @@ class WPS_Feature_Registry {
 	 */
 	public static function init(): void {
 		self::load_toggles();
-		add_action( 'plugins_loaded', array( __CLASS__, 'trigger_registration' ), 12 );
+		
+		// If plugins_loaded has already fired, trigger registration immediately
+		if ( did_action( 'plugins_loaded' ) ) {
+			self::trigger_registration();
+		} else {
+			add_action( 'plugins_loaded', array( __CLASS__, 'trigger_registration' ), 12 );
+		}
 	}
 
 	/**
@@ -71,7 +75,9 @@ class WPS_Feature_Registry {
 	 * @return void
 	 */
 	public static function trigger_registration(): void {
+		error_log( 'WP Support: trigger_registration() called' );
 		do_action( 'WPS_register_features' );
+		error_log( 'WP Support: After WPS_register_features action, feature count: ' . count( self::$feature_objects ) );
 		
 		// After registration, initialize features that have a register() method.
 		foreach ( self::$feature_objects as $feature ) {
@@ -367,6 +373,9 @@ class WPS_Feature_Registry {
 			'version'         => $feature->get_version(),
 			'default_enabled' => $feature->get_default_state(),
 			'enabled'         => self::get_toggle_state( $feature->get_id(), $feature->get_default_state(), $network ),
+			'widget_group'        => $feature->get_widget_group(),
+			'widget_label'        => $feature->get_widget_label(),
+			'widget_description'  => $feature->get_widget_description(),
 		);
 	}
 }

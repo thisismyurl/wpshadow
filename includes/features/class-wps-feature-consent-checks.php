@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
+namespace WPS\CoreSupport;
 
 /**
  * WPS_Feature_Consent_Checks
@@ -33,7 +33,7 @@ final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
 				'scope'               => 'core',
 				'default_enabled'     => false,
 				'version'             => '1.0.0',
-				'widget_group'        => 'privacy-compliance',
+				'widget_group'        => 'security',
 				'widget_label'        => __( 'Privacy & Compliance', 'plugin-wp-support-thisismyurl' ),
 				'widget_description'  => __( 'Tools for GDPR and privacy compliance', 'plugin-wp-support-thisismyurl' ),
 			)

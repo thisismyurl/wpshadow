@@ -107,12 +107,21 @@ class WPS_Environment_Checker {
 			return;
 		}
 
+		// Prevent infinite recursion by marking as checking.
+		static $checking = false;
+		if ( $checking ) {
+			return;
+		}
+		$checking = true;
+
 		self::$cached_status = self::get_environment_status();
 
 		// Log diagnostics if enabled.
 		if ( self::is_diagnostic_logging_enabled() ) {
 			self::log_environment_check();
 		}
+
+		$checking = false;
 	}
 
 	/**
@@ -121,7 +130,25 @@ class WPS_Environment_Checker {
 	 * @return array<string, mixed>
 	 */
 	public static function get_environment_status(): array {
-		return array(
+		// Prevent infinite recursion.
+		static $getting = false;
+		if ( $getting ) {
+			return array(
+				'php_version'       => array( 'current' => PHP_VERSION, 'meets_requirement' => true ),
+				'wp_version'        => array( 'current' => $GLOBALS['wp_version'], 'meets_requirement' => true ),
+				'memory_limit'      => array( 'current' => ini_get( 'memory_limit' ), 'current_bytes' => 0 ),
+				'execution_time'    => array( 'current' => ini_get( 'max_execution_time' ) ),
+				'upload_limit'      => array( 'current' => ini_get( 'upload_max_filesize' ) ),
+				'extensions'        => array(),
+				'environment_type'  => 'production',
+				'is_compatible'     => true,
+				'has_constraints'   => false,
+				'checked_at'        => current_time( 'mysql' ),
+			);
+		}
+		$getting = true;
+
+		$result = array(
 			'php_version'       => self::get_php_version_status(),
 			'wp_version'        => self::get_wp_version_status(),
 			'memory_limit'      => self::get_memory_limit_status(),
@@ -133,6 +160,9 @@ class WPS_Environment_Checker {
 			'has_constraints'   => self::has_resource_constraints(),
 			'checked_at'        => current_time( 'mysql' ),
 		);
+
+		$getting = false;
+		return $result;
 	}
 
 	/**

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
+namespace WPS\CoreSupport;
 
 
 /**
@@ -36,11 +36,11 @@ final class WPS_Feature_Plugin_Cleanup extends WPS_Abstract_Feature {
 			array(
 				'id'                  => 'plugin-cleanup',
 				'name'                => __( 'Third-Party Plugin Asset Cleanup', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Remove unused CSS/JS from Contact Form 7, WooCommerce, Jetpack, RankMath, and other plugins', 'plugin-wp-support-thisismyurl' ),
+				'description'         => __( 'Stop loading plugin files on pages where they\'re not needed', 'plugin-wp-support-thisismyurl' ),
 				'scope'               => 'core',
 				'default_enabled'     => false,
 				'version'             => '1.0.0',
-				'widget_group'        => 'admin-management',
+				'widget_group'        => 'cleanup',
 				'widget_label'        => __( 'Admin Management', 'plugin-wp-support-thisismyurl' ),
 				'widget_description'  => __( 'Clean up admin interface and plugin management', 'plugin-wp-support-thisismyurl' ),
 			)

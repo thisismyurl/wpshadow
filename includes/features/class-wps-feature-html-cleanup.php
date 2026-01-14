@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
+namespace WPS\CoreSupport;
 
 
 /**
@@ -29,11 +29,11 @@ final class WPS_Feature_HTML_Cleanup extends WPS_Abstract_Feature {
 			array(
 				'id'                  => 'html-cleanup',
 				'name'                => __( 'HTML Output Buffer Compression', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Compress HTML by removing comments, whitespace, and empty tags (20-40% reduction)', 'plugin-wp-support-thisismyurl' ),
+				'description'         => __( 'Shrink your pages and make them download faster', 'plugin-wp-support-thisismyurl' ),
 				'scope'               => 'core',
 				'default_enabled'     => false,
 				'version'             => '1.0.0',
-				'widget_group'        => 'code-cleanup',
+				'widget_group'        => 'cleanup',
 				'widget_label'        => __( 'Code Cleanup', 'plugin-wp-support-thisismyurl' ),
 				'widget_description'  => __( 'Remove unnecessary code artifacts and optimize output', 'plugin-wp-support-thisismyurl' ),
 			)

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
+namespace WPS\CoreSupport;
 
 /**
  * WPS_Feature_Block_Cleanup
@@ -28,7 +28,7 @@ final class WPS_Feature_Block_Cleanup extends WPS_Abstract_Feature {
 			array(
 				'id'               => 'block-cleanup',
 				'name'             => __( 'Gutenberg/Block Editor Asset Cleanup', 'plugin-wp-support-thisismyurl' ),
-				'description'      => __( 'Remove block editor CSS/JS if not using blocks (100KB+ savings)', 'plugin-wp-support-thisismyurl' ),
+				'description'      => __( 'Remove editor code your visitors don\'t need and lighten your pages', 'plugin-wp-support-thisismyurl' ),
 				'scope'            => 'core',
 				'default_enabled'  => false,
 				'version'          => '1.0.0',

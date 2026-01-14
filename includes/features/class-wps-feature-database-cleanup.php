@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
+namespace WPS\CoreSupport;
 
 /**
  * WPS_Feature_Database_Cleanup
@@ -32,7 +32,7 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 				'scope'               => 'core',
 				'default_enabled'     => false,
 				'version'             => '1.0.0',
-				'widget_group'        => 'performance-optimization',
+				'widget_group'        => 'performance',
 				'widget_label'        => __( 'Performance Optimization', 'plugin-wp-support-thisismyurl' ),
 				'widget_description'  => __( 'Optimize images and page load performance', 'plugin-wp-support-thisismyurl' ),
 			)
@@ -337,9 +337,19 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 
 		// Check if cleanup was just run.
 		if ( isset( $_GET['wps_cleanup'] ) && 'success' === sanitize_text_field( wp_unslash( $_GET['wps_cleanup'] ) ) ) {
-			echo '<div class="notice notice-success is-dismissible"><p>' . 
-				esc_html__( 'Database cleanup completed successfully.', 'plugin-wp-support-thisismyurl' ) . 
-				'</p></div>';
+			// Mark as dismissed to prevent re-display on refresh.
+			WPS_Notice_Manager::dismiss_notice( 'success_database_cleanup_completed' );
+			// Use notice manager for persistent dismissal.
+			WPS_Notice_Manager::render_notice(
+				'success_database_cleanup_completed',
+				esc_html__( 'Database cleanup completed successfully.', 'plugin-wp-support-thisismyurl' ),
+				'success'
+			);
+			// Redirect to remove query param after showing once.
+			wp_safe_remote_post(
+				add_query_arg( 'wps_cleanup', null ),
+				array( 'blocking' => false )
+			);
 			return;
 		}
 

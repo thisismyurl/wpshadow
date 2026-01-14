@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
+namespace WPS\CoreSupport;
 
 /**
  * WPS_Feature_Head_Cleanup
@@ -28,11 +28,11 @@ final class WPS_Feature_Head_Cleanup extends WPS_Abstract_Feature {
 			array(
 				'id'                  => 'head-cleanup',
 				'name'                => __( 'Head Cleanup & Security Hardening', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Remove unnecessary meta tags, links, and version info from page head', 'plugin-wp-support-thisismyurl' ),
+				'description'         => __( 'Remove clutter from your site and keep your WordPress version private', 'plugin-wp-support-thisismyurl' ),
 				'scope'               => 'core',
 				'default_enabled'     => true,
 				'version'             => '1.0.0',
-				'widget_group'        => 'performance-security',
+				'widget_group'        => 'performance',
 				'widget_label'        => __( 'Performance & Security', 'plugin-wp-support-thisismyurl' ),
 				'widget_description'  => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wp-support-thisismyurl' ),
 			)

@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
+namespace WPS\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -19,13 +19,13 @@ class WPS_Feature_Core_Diagnostics extends WPS_Abstract_Feature {
 			array(
 				'id'                  => 'wps_core_diagnostics',
 				'name'                => __( 'Core Diagnostics', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Keeps the suite health checks, recovery helpers, and layout cache safeguards active.', 'plugin-wp-support-thisismyurl' ),
+				'description'         => __( 'Keep your site healthy with automatic check-ups and recovery tools', 'plugin-wp-support-thisismyurl' ),
 				'scope'               => 'core',
 				'version'             => '1.0.0',
 				'default_enabled'     => true,
-				'widget_group'        => 'advanced-features',
-				'widget_label'        => __( 'Advanced Features', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Powerful features for diagnostics and specialized functionality', 'plugin-wp-support-thisismyurl' ),
+			'widget_group'        => 'diagnostics',
+			'widget_label'        => __( 'Diagnostics & Monitoring', 'plugin-wp-support-thisismyurl' ),
+			'widget_description'  => __( 'Health checks and monitoring features', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}

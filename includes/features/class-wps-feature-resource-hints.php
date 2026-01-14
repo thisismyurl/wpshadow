@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
+namespace WPS\CoreSupport;
 
 
 /**
@@ -29,11 +29,11 @@ final class WPS_Feature_Resource_Hints extends WPS_Abstract_Feature {
 			array(
 				'id'                  => 'resource-hints',
 				'name'                => __( 'DNS Prefetch & Resource Hints Management', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Control DNS prefetch and resource hints to improve external resource loading', 'plugin-wp-support-thisismyurl' ),
+				'description'         => __( 'Tell browsers to prepare for external services, so they load faster', 'plugin-wp-support-thisismyurl' ),
 				'scope'               => 'core',
 				'default_enabled'     => false,
 				'version'             => '1.0.0',
-				'widget_group'        => 'resource-optimization',
+				'widget_group'        => 'performance',
 				'widget_label'        => __( 'Resource Optimization', 'plugin-wp-support-thisismyurl' ),
 				'widget_description'  => __( 'Optimize how resources are loaded and delivered', 'plugin-wp-support-thisismyurl' ),
 			)

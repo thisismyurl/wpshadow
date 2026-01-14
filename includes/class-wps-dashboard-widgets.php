@@ -202,7 +202,7 @@ class WPS_Dashboard_Widgets {
 
 	private static function widget_activity( ?string $module_filter = null ): void {
 		// Use WPS_Activity_Logger if available.
-		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
+			if ( class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
 			$events = \WPS\CoreSupport\WPS_Activity_Logger::get_events( 100 );
 
 			// Filter events by module if specified.
@@ -1981,7 +1981,7 @@ class WPS_Dashboard_Widgets {
 					<div style="margin-bottom: 12px;">
 						<div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12px;">
 							<span style="color: #666;"><?php esc_html_e( 'Execution Time', 'plugin-wp-support-thisismyurl' ); ?></span>
-							<span style="font-weight: 500;"><?php echo esc_html( number_format( $resource_status['time']['usage_percentage'], 1 ) ); %>%</span>
+							<span style="font-weight: 500;"><?php echo esc_html( number_format( $resource_status['time']['usage_percentage'], 1 ) ); ?>%</span>
 						</div>
 						<div style="height: 8px; background: #e5e5e5; border-radius: 4px; overflow: hidden;">
 							<?php

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
+namespace WPS\CoreSupport;
 
 
 /**
@@ -29,11 +29,11 @@ final class WPS_Feature_Embed_Disable extends WPS_Abstract_Feature {
 			array(
 				'id'                  => 'embed-disable',
 				'name'                => __( 'Embed Script Disabling & Optimization', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Disable wp-embed.js and oEmbed functionality to reduce JS footprint', 'plugin-wp-support-thisismyurl' ),
+				'description'         => __( 'Remove code for embedding features you probably don\'t use', 'plugin-wp-support-thisismyurl' ),
 				'scope'               => 'core',
 				'default_enabled'     => true,
 				'version'             => '1.0.0',
-				'widget_group'        => 'performance-security',
+				'widget_group'        => 'performance',
 				'widget_label'        => __( 'Performance & Security', 'plugin-wp-support-thisismyurl' ),
 				'widget_description'  => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wp-support-thisismyurl' ),
 			)

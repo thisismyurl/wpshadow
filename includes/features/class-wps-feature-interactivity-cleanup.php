@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
+namespace WPS\CoreSupport;
 
 /**
  * WPS_Feature_Interactivity_Cleanup
@@ -32,7 +32,7 @@ final class WPS_Feature_Interactivity_Cleanup extends WPS_Abstract_Feature {
 				'scope'               => 'core',
 				'default_enabled'     => false,
 				'version'             => '1.0.0',
-				'widget_group'        => 'performance-security',
+				'widget_group'        => 'performance',
 				'widget_label'        => __( 'Performance & Security', 'plugin-wp-support-thisismyurl' ),
 				'widget_description'  => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wp-support-thisismyurl' ),
 			)

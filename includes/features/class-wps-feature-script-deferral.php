@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
+namespace WPS\CoreSupport;
 
 /**
  * WPS_Feature_Script_Deferral
@@ -39,13 +39,13 @@ final class WPS_Feature_Script_Deferral extends WPS_Abstract_Feature {
 			array(
 				'id'                  => 'script-deferral',
 				'name'                => __( 'Script Deferral System', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Defer non-critical JavaScript for faster Time to Interactive', 'plugin-wp-support-thisismyurl' ),
+				'description'         => __( 'Load scripts after your page appears, making pages feel faster', 'plugin-wp-support-thisismyurl' ),
 				'scope'               => 'core',
 				'default_enabled'     => false,
 				'version'             => '1.1.0',
-				'widget_group'        => 'resource-optimization',
-				'widget_label'        => __( 'Resource Optimization', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Optimize how resources are loaded and delivered', 'plugin-wp-support-thisismyurl' ),
+			'widget_group'        => 'performance',
+			'widget_label'        => __( 'Performance Optimization', 'plugin-wp-support-thisismyurl' ),
+			'widget_description'  => __( 'Speed and resource loading improvements', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}

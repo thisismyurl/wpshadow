@@ -16,7 +16,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
+namespace WPS\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -25,7 +25,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Weekly Performance Report Feature Class
  */
-class WPS_Feature_Weekly_Performance_Report extends WPS_Feature_Abstract {
+class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
+	/**
+	 * Constructor
+	 */
+	public function __construct() {
+		parent::__construct(
+			array(
+				'id'                  => 'wps_weekly_performance_report',
+				'name'                => __( 'Weekly Performance Report', 'plugin-wp-support-thisismyurl' ),
+				'description'         => __( 'Sends weekly email reports with performance metrics and improvements.', 'plugin-wp-support-thisismyurl' ),
+				'scope'               => 'core',
+				'version'             => '1.0.0',
+				'default_enabled'     => false,
+				'widget_group'        => 'diagnostics',
+				'widget_label'        => __( 'Diagnostics & Monitoring', 'plugin-wp-support-thisismyurl' ),
+				'widget_description'  => __( 'Health checks and monitoring features', 'plugin-wp-support-thisismyurl' ),
+			)
+		);
+	}
+
 
 	/**
 	 * Option key for storing weekly metrics.

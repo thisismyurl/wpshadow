@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
+namespace WPS\CoreSupport;
 
 /**
  * WPS_Feature_Asset_Version_Removal
@@ -28,13 +28,13 @@ final class WPS_Feature_Asset_Version_Removal extends WPS_Abstract_Feature {
 			array(
 				'id'                  => 'asset-version-removal',
 				'name'                => __( 'Remove Asset Version Strings', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Strip version query strings from CSS/JS URLs for better caching', 'plugin-wp-support-thisismyurl' ),
+				'description'         => __( 'Help visitors load files faster by letting their browser remember them longer', 'plugin-wp-support-thisismyurl' ),
 				'scope'               => 'core',
 				'default_enabled'     => true,
 				'version'             => '1.0.0',
-				'widget_group'        => 'code-cleanup',
-				'widget_label'        => __( 'Code Cleanup', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Remove unnecessary code artifacts and optimize output', 'plugin-wp-support-thisismyurl' ),
+			'widget_group'        => 'cleanup',
+			'widget_label'        => __( 'Code Cleanup', 'plugin-wp-support-thisismyurl' ),
+			'widget_description'  => __( 'Remove unnecessary code and optimize markup', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}

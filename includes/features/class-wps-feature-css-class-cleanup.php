@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
+namespace WPS\CoreSupport;
 
 
 /**
@@ -29,11 +29,11 @@ final class WPS_Feature_CSS_Class_Cleanup extends WPS_Abstract_Feature {
 			array(
 				'id'                  => 'css-class-cleanup',
 				'name'                => __( 'CSS Class Cleanup (Post/Nav/Body)', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Remove excessive WordPress CSS classes from posts, menus, and body tag', 'plugin-wp-support-thisismyurl' ),
+				'description'         => __( 'Streamline your HTML and make your pages lighter with cleaner code', 'plugin-wp-support-thisismyurl' ),
 				'scope'               => 'core',
 				'default_enabled'     => false,
 				'version'             => '1.0.0',
-				'widget_group'        => 'code-cleanup',
+				'widget_group'        => 'cleanup',
 				'widget_label'        => __( 'Code Cleanup', 'plugin-wp-support-thisismyurl' ),
 				'widget_description'  => __( 'Remove unnecessary code artifacts and optimize output', 'plugin-wp-support-thisismyurl' ),
 			)

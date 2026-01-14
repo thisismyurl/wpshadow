@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
+namespace WPS\CoreSupport;
 
 /**
  * WPS_Feature_Image_Lazy_Loading
@@ -32,7 +32,7 @@ final class WPS_Feature_Image_Lazy_Loading extends WPS_Abstract_Feature {
 				'scope'               => 'core',
 				'default_enabled'     => true,
 				'version'             => '1.0.0',
-				'widget_group'        => 'performance-optimization',
+				'widget_group'        => 'performance',
 				'widget_label'        => __( 'Performance Optimization', 'plugin-wp-support-thisismyurl' ),
 				'widget_description'  => __( 'Optimize images and page load performance', 'plugin-wp-support-thisismyurl' ),
 			)
