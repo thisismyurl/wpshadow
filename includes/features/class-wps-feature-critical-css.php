@@ -26,15 +26,15 @@ final class WPS_Feature_Critical_CSS extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'critical-css',
-				'name'                => __( 'Inline Critical CSS', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Inline above-the-fold CSS for instant page rendering', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => false,
-				'version'             => '1.0.0',
-				'widget_group'        => 'performance',
-				'widget_label'        => __( 'Resource Optimization', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Optimize how resources are loaded and delivered', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'critical-css',
+				'name'               => __( 'Inline Critical CSS', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Inline above-the-fold CSS for instant page rendering', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => false,
+				'version'            => '1.0.0',
+				'widget_group'       => 'performance',
+				'widget_label'       => __( 'Resource Optimization', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Optimize how resources are loaded and delivered', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}
@@ -60,7 +60,7 @@ final class WPS_Feature_Critical_CSS extends WPS_Abstract_Feature {
 	 */
 	public function inline_critical_css(): void {
 		// Get critical CSS from options.
-		$critical_css = get_option( 'wps_critical_css', '' );
+		$critical_css = $this->get_setting( 'wps_critical_css', ''  );
 
 		// Allow filtering.
 		$critical_css = apply_filters( 'wps_critical_css', $critical_css );
@@ -87,13 +87,13 @@ final class WPS_Feature_Critical_CSS extends WPS_Abstract_Feature {
 	 */
 	public function defer_non_critical_css( string $html, string $handle, string $href, string $media ): string {
 		// Get list of stylesheets to defer.
-		$defer_styles = (array) get_option( 'wps_defer_stylesheets', array() );
+		$defer_styles = (array) $this->get_setting( 'wps_defer_stylesheets', array( ) );
 
 		// Allow filtering.
 		$defer_styles = apply_filters( 'wps_defer_stylesheets', $defer_styles );
 
 		// Skip if not in defer list and not in auto mode.
-		$auto_defer = get_option( 'wps_auto_defer_css', false );
+		$auto_defer = $this->get_setting( 'wps_auto_defer_css', false  );
 
 		if ( ! in_array( $handle, $defer_styles, true ) && ! $auto_defer ) {
 			return $html;

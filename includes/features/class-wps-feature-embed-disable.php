@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace WPS\CoreSupport;
 
-
 /**
  * WPS_Feature_Embed_Disable
  *
@@ -27,15 +26,15 @@ final class WPS_Feature_Embed_Disable extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'embed-disable',
-				'name'                => __( 'Embed Script Disabling & Optimization', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Remove code for embedding features you probably don\'t use', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => true,
-				'version'             => '1.0.0',
-				'widget_group'        => 'performance',
-				'widget_label'        => __( 'Performance & Security', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'embed-disable',
+				'name'               => __( 'Embed Script Disabling & Optimization', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Remove code for embedding features you probably don\'t use', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => true,
+				'version'            => '1.0.0',
+				'widget_group'       => 'performance',
+				'widget_label'       => __( 'Performance & Security', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}
@@ -59,7 +58,7 @@ final class WPS_Feature_Embed_Disable extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function disable_embeds(): void {
-		$options = (array) get_option( 'wps_embed_disable_options', $this->get_default_options() );
+		$options = (array) $this->get_setting( 'wps_embed_disable_options', $this->get_default_options( ) );
 
 		// Remove embed script on frontend.
 		if ( $options['disable_embed_script'] ?? false ) {
@@ -78,7 +77,7 @@ final class WPS_Feature_Embed_Disable extends WPS_Abstract_Feature {
 		if ( $options['disable_rest_oembed'] ?? false ) {
 			add_filter(
 				'rest_endpoints',
-				static function( $endpoints ) {
+				static function ( $endpoints ) {
 					unset( $endpoints['/oembed/1.0/embed'] );
 					return $endpoints;
 				}
@@ -93,10 +92,9 @@ final class WPS_Feature_Embed_Disable extends WPS_Abstract_Feature {
 	 */
 	private function get_default_options(): array {
 		return array(
-			'disable_embed_script'  => true,
-			'remove_oembed_links'   => true,
-			'disable_rest_oembed'   => false, // Keep by default (might break some integrations).
+			'disable_embed_script' => true,
+			'remove_oembed_links'  => true,
+			'disable_rest_oembed'  => false, // Keep by default (might break some integrations).
 		);
 	}
 }
-

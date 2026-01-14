@@ -37,15 +37,24 @@ final class WPS_Feature_Script_Deferral extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'script-deferral',
-				'name'                => __( 'Script Deferral System', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Load scripts after your page appears, making pages feel faster', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => false,
-				'version'             => '1.1.0',
-			'widget_group'        => 'performance',
-			'widget_label'        => __( 'Performance Optimization', 'plugin-wp-support-thisismyurl' ),
-			'widget_description'  => __( 'Speed and resource loading improvements', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'script-deferral',
+				'name'               => __( 'Script Deferral System', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Load scripts after your page appears, making pages feel faster', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => false,
+				'version'            => '1.1.0',
+				'widget_group'       => 'performance',
+				'widget_label'       => __( 'Performance Optimization', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Speed and resource loading improvements', 'plugin-wp-support-thisismyurl' ),
+			)
+		);
+
+		// Register default settings.
+		$this->register_default_settings(
+			array(
+				'defer_mode'             => 'auto',
+				'defer_excluded_handles' => array(),
+				'defer_script_handles'   => array(),
 			)
 		);
 	}
@@ -83,14 +92,14 @@ final class WPS_Feature_Script_Deferral extends WPS_Abstract_Feature {
 		}
 
 		// Get mode: 'auto', 'manual', or 'disabled'.
-		$mode = get_option( 'wps_defer_mode', 'auto' );
+		$mode = $this->get_setting( 'defer_mode', 'auto' );
 
 		if ( 'disabled' === $mode ) {
 			return $tag;
 		}
 
 		// Get custom exclusion list.
-		$custom_excluded = (array) get_option( 'wps_defer_excluded_handles', array() );
+		$custom_excluded = (array) $this->get_setting( 'defer_excluded_handles', array() );
 		$excluded        = array_merge( $this->default_excluded, $custom_excluded );
 
 		// Allow filtering of exclusion list.
@@ -103,7 +112,7 @@ final class WPS_Feature_Script_Deferral extends WPS_Abstract_Feature {
 
 		// In manual mode, only defer explicitly listed handles.
 		if ( 'manual' === $mode ) {
-			$defer_handles = (array) get_option( 'wps_defer_script_handles', array() );
+			$defer_handles = (array) $this->get_setting( 'defer_script_handles', array() );
 			$defer_handles = apply_filters( 'wps_defer_script_handles', $defer_handles );
 
 			if ( in_array( $handle, $defer_handles, true ) ) {

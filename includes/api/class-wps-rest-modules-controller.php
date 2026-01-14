@@ -244,7 +244,7 @@ class WPS_REST_Modules_Controller extends WPS_REST_Controller_Base {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function get_module_status( WP_REST_Request $request ) {
-		$slug     = $this->validate_slug( $request->get_param( 'slug' ) );
+		$slug = $this->validate_slug( $request->get_param( 'slug' ) );
 		if ( is_wp_error( $slug ) ) {
 			return $slug;
 		}
@@ -351,7 +351,7 @@ class WPS_REST_Modules_Controller extends WPS_REST_Controller_Base {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function activate_module( WP_REST_Request $request ) {
-		$slug    = $this->validate_slug( $request->get_param( 'slug' ) );
+		$slug = $this->validate_slug( $request->get_param( 'slug' ) );
 		if ( is_wp_error( $slug ) ) {
 			return $slug;
 		}
@@ -389,7 +389,7 @@ class WPS_REST_Modules_Controller extends WPS_REST_Controller_Base {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function deactivate_module( WP_REST_Request $request ) {
-		$slug    = $this->validate_slug( $request->get_param( 'slug' ) );
+		$slug = $this->validate_slug( $request->get_param( 'slug' ) );
 		if ( is_wp_error( $slug ) ) {
 			return $slug;
 		}
@@ -425,7 +425,7 @@ class WPS_REST_Modules_Controller extends WPS_REST_Controller_Base {
 			return $rate_check;
 		}
 
-		$slug   = $this->validate_slug( $request->get_param( 'slug' ) );
+		$slug = $this->validate_slug( $request->get_param( 'slug' ) );
 		if ( is_wp_error( $slug ) ) {
 			return $slug;
 		}
@@ -469,7 +469,7 @@ class WPS_REST_Modules_Controller extends WPS_REST_Controller_Base {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function toggle_feature( WP_REST_Request $request ) {
-		$slug    = $this->validate_slug( $request->get_param( 'slug' ) );
+		$slug = $this->validate_slug( $request->get_param( 'slug' ) );
 		if ( is_wp_error( $slug ) ) {
 			return $slug;
 		}

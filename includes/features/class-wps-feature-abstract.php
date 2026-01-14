@@ -42,17 +42,17 @@ abstract class WPS_Abstract_Feature implements WPS_Feature_Interface {
 	 * @param array<string, mixed> $config Feature configuration.
 	 */
 	public function __construct( array $config ) {
-		$this->id                  = sanitize_key( (string) ( $config['id'] ?? '' ) );
-		$this->name                = (string) ( $config['name'] ?? '' );
-		$this->description         = (string) ( $config['description'] ?? '' );
-		$this->scope               = $this->sanitize_scope( (string) ( $config['scope'] ?? 'core' ) );
-		$this->hub                 = isset( $config['hub'] ) ? sanitize_key( (string) $config['hub'] ) : null;
-		$this->spoke               = isset( $config['spoke'] ) ? sanitize_key( (string) $config['spoke'] ) : null;
-		$this->version             = (string) ( $config['version'] ?? '1.0.0' );
-		$this->default_enabled     = (bool) ( $config['default_enabled'] ?? false );
-		$this->widget_group        = sanitize_key( (string) ( $config['widget_group'] ?? 'general' ) );
-		$this->widget_label        = (string) ( $config['widget_label'] ?? __( 'General Features', 'plugin-wp-support-thisismyurl' ) );
-		$this->widget_description  = (string) ( $config['widget_description'] ?? __( 'Miscellaneous features.', 'plugin-wp-support-thisismyurl' ) );
+		$this->id                 = sanitize_key( (string) ( $config['id'] ?? '' ) );
+		$this->name               = (string) ( $config['name'] ?? '' );
+		$this->description        = (string) ( $config['description'] ?? '' );
+		$this->scope              = $this->sanitize_scope( (string) ( $config['scope'] ?? 'core' ) );
+		$this->hub                = isset( $config['hub'] ) ? sanitize_key( (string) $config['hub'] ) : null;
+		$this->spoke              = isset( $config['spoke'] ) ? sanitize_key( (string) $config['spoke'] ) : null;
+		$this->version            = (string) ( $config['version'] ?? '1.0.0' );
+		$this->default_enabled    = (bool) ( $config['default_enabled'] ?? false );
+		$this->widget_group       = sanitize_key( (string) ( $config['widget_group'] ?? 'general' ) );
+		$this->widget_label       = (string) ( $config['widget_label'] ?? __( 'General Features', 'plugin-wp-support-thisismyurl' ) );
+		$this->widget_description = (string) ( $config['widget_description'] ?? __( 'Miscellaneous features.', 'plugin-wp-support-thisismyurl' ) );
 	}
 
 	public function get_id(): string {
@@ -105,7 +105,7 @@ abstract class WPS_Abstract_Feature implements WPS_Feature_Interface {
 		$class_name = get_called_class();
 		$short_name = preg_replace( '/^.*\\\WPS_Feature_/', '', $class_name );
 		$feature_id = strtolower( str_replace( '_', '-', $short_name ) );
-		
+
 		return WPS_Feature_Registry::is_feature_enabled( $feature_id, true, $network );
 	}
 
@@ -116,5 +116,61 @@ abstract class WPS_Abstract_Feature implements WPS_Feature_Interface {
 		}
 
 		return $scope;
+	}
+
+	/**
+	 * Get a feature-specific setting using the centralized cache.
+	 *
+	 * @param string $setting_name Setting name (will be prefixed with feature ID).
+	 * @param mixed  $default      Default value.
+	 * @param bool   $network      Whether to get network option.
+	 * @return mixed Setting value.
+	 */
+	protected function get_setting( string $setting_name, $default = null, bool $network = false ) {
+		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Settings_Cache' ) ) {
+			$option_name = $this->id . '_' . $setting_name;
+			return \WPS\CoreSupport\WPS_Settings_Cache::get( $option_name, $default, $network );
+		}
+
+		// Fallback to direct get_option if cache not available.
+		$option_name = 'wps_' . $this->id . '_' . $setting_name;
+		return $network && is_multisite() ? get_site_option( $option_name, $default ) : get_option( $option_name, $default );
+	}
+
+	/**
+	 * Update a feature-specific setting.
+	 *
+	 * @param string $setting_name Setting name (will be prefixed with feature ID).
+	 * @param mixed  $value        New value.
+	 * @param bool   $network      Whether to update network option.
+	 * @return bool True if update succeeded.
+	 */
+	protected function update_setting( string $setting_name, $value, bool $network = false ): bool {
+		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Settings_Cache' ) ) {
+			$option_name = $this->id . '_' . $setting_name;
+			return \WPS\CoreSupport\WPS_Settings_Cache::update( $option_name, $value, $network );
+		}
+
+		// Fallback to direct update_option if cache not available.
+		$option_name = 'wps_' . $this->id . '_' . $setting_name;
+		return $network && is_multisite() ? update_site_option( $option_name, $value ) : update_option( $option_name, $value );
+	}
+
+	/**
+	 * Register default settings for this feature.
+	 * Call this from child constructor after parent::__construct().
+	 *
+	 * @param array<string, mixed> $defaults Default setting values.
+	 * @return void
+	 */
+	protected function register_default_settings( array $defaults ): void {
+		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Settings_Cache' ) ) {
+			return;
+		}
+
+		foreach ( $defaults as $setting_name => $value ) {
+			$option_name = $this->id . '_' . $setting_name;
+			\WPS\CoreSupport\WPS_Settings_Cache::register_defaults( $option_name, $value );
+		}
 	}
 }

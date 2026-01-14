@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace WPS\CoreSupport;
 
-
 /**
  * WPS_Feature_HTML_Cleanup
  *
@@ -27,15 +26,15 @@ final class WPS_Feature_HTML_Cleanup extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'html-cleanup',
-				'name'                => __( 'HTML Output Buffer Compression', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Shrink your pages and make them download faster', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => false,
-				'version'             => '1.0.0',
-				'widget_group'        => 'cleanup',
-				'widget_label'        => __( 'Code Cleanup', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Remove unnecessary code artifacts and optimize output', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'html-cleanup',
+				'name'               => __( 'HTML Output Buffer Compression', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Shrink your pages and make them download faster', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => false,
+				'version'            => '1.0.0',
+				'widget_group'       => 'cleanup',
+				'widget_label'       => __( 'Code Cleanup', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Remove unnecessary code artifacts and optimize output', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}
@@ -92,7 +91,7 @@ final class WPS_Feature_HTML_Cleanup extends WPS_Abstract_Feature {
 		}
 
 		// Get options.
-		$options = (array) get_option( 'wps_html_cleanup_options', $this->get_default_options() );
+		$options = (array) $this->get_setting( 'wps_html_cleanup_options', $this->get_default_options( ) );
 
 		// 1. Remove HTML comments (but preserve conditional comments and structured data).
 		if ( $options['remove_comments'] ?? false ) {
@@ -126,12 +125,12 @@ final class WPS_Feature_HTML_Cleanup extends WPS_Abstract_Feature {
 	private function remove_empty_tags( string $buffer ): string {
 		// Exclude functional tags that should be preserved even if empty.
 		$excluded_tags = 'iframe|embed|object|video|canvas|script|style|textarea|i|span|div|noscript';
-		$pattern        = '/<(?!(?:' . $excluded_tags . ')\b)([a-zA-Z0-9]+)\b[^>]*>([\s\xA0]*)<\/\1>/i';
+		$pattern       = '/<(?!(?:' . $excluded_tags . ')\b)([a-zA-Z0-9]+)\b[^>]*>([\s\xA0]*)<\/\1>/i';
 
 		$prev = '';
 		while ( $prev !== $buffer ) {
-			$prev    = $buffer;
-			$buffer  = preg_replace( $pattern, '', $buffer );
+			$prev   = $buffer;
+			$buffer = preg_replace( $pattern, '', $buffer );
 		}
 
 		return $buffer;
@@ -144,11 +143,10 @@ final class WPS_Feature_HTML_Cleanup extends WPS_Abstract_Feature {
 	 */
 	private function get_default_options(): array {
 		return array(
-			'remove_comments'      => true,
-			'collapse_whitespace'  => true,
-			'trim_lines'           => false, // Can break inline JS, disabled by default.
-			'remove_empty_tags'    => true,
+			'remove_comments'     => true,
+			'collapse_whitespace' => true,
+			'trim_lines'          => false, // Can break inline JS, disabled by default.
+			'remove_empty_tags'   => true,
 		);
 	}
 }
-

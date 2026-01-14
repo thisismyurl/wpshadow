@@ -107,24 +107,24 @@ class WPS_Maintenance_Plans {
 	 * @var array
 	 */
 	private static array $feature_labels = array(
-		'weekly_health_reports'          => 'Weekly health reports',
-		'performance_monitoring'         => 'Performance monitoring',
-		'auto_fixes_common'              => 'Auto-fixes for common issues',
-		'error_log_viewer'               => 'Error log viewer',
-		'support_request_form'           => 'Support request form',
-		'priority_support_4h'            => 'Priority support (4-hour response)',
-		'monthly_optimization_audit'     => 'Monthly optimization audit',
-		'automated_db_cleanup_weekly'    => 'Automated database cleanup (weekly)',
-		'quick_fixes_6_month'            => 'Quick fixes (6 per month)',
-		'site_comparison_benchmark'      => 'Site comparison benchmarking',
-		'email_alerts_critical'          => 'Email alerts for critical issues',
-		'direct_phone_email_support'     => 'Direct phone/email support',
-		'support_24_7'                   => '24/7 support available',
-		'weekly_optimization_review'     => 'Weekly optimization review',
-		'unlimited_quick_fixes'          => 'Unlimited quick fixes',
-		'custom_recommendation_engine'   => 'Custom recommendation engine',
-		'integration_consulting'         => 'Integration consulting',
-		'emergency_sos_2h'               => 'Emergency SOS (2-hour response)',
+		'weekly_health_reports'           => 'Weekly health reports',
+		'performance_monitoring'          => 'Performance monitoring',
+		'auto_fixes_common'               => 'Auto-fixes for common issues',
+		'error_log_viewer'                => 'Error log viewer',
+		'support_request_form'            => 'Support request form',
+		'priority_support_4h'             => 'Priority support (4-hour response)',
+		'monthly_optimization_audit'      => 'Monthly optimization audit',
+		'automated_db_cleanup_weekly'     => 'Automated database cleanup (weekly)',
+		'quick_fixes_6_month'             => 'Quick fixes (6 per month)',
+		'site_comparison_benchmark'       => 'Site comparison benchmarking',
+		'email_alerts_critical'           => 'Email alerts for critical issues',
+		'direct_phone_email_support'      => 'Direct phone/email support',
+		'support_24_7'                    => '24/7 support available',
+		'weekly_optimization_review'      => 'Weekly optimization review',
+		'unlimited_quick_fixes'           => 'Unlimited quick fixes',
+		'custom_recommendation_engine'    => 'Custom recommendation engine',
+		'integration_consulting'          => 'Integration consulting',
+		'emergency_sos_2h'                => 'Emergency SOS (2-hour response)',
 		'quarterly_strategy_consultation' => 'Quarterly strategy consultation',
 	);
 
@@ -265,9 +265,9 @@ class WPS_Maintenance_Plans {
 		$comparison = array();
 		foreach ( $all_features as $feature ) {
 			$comparison[ $feature ] = array(
-				'label' => self::get_feature_label( $feature ),
-				'free'  => in_array( $feature, self::$plan_tiers[ self::TIER_FREE ]['features'], true ),
-				'pro'   => in_array( $feature, self::$plan_tiers[ self::TIER_PRO ]['features'], true ),
+				'label'      => self::get_feature_label( $feature ),
+				'free'       => in_array( $feature, self::$plan_tiers[ self::TIER_FREE ]['features'], true ),
+				'pro'        => in_array( $feature, self::$plan_tiers[ self::TIER_PRO ]['features'], true ),
 				'enterprise' => in_array( $feature, self::$plan_tiers[ self::TIER_ENTERPRISE ]['features'], true ),
 			);
 		}

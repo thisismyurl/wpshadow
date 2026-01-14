@@ -26,15 +26,15 @@ final class WPS_Feature_jQuery_Cleanup extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'jquery-cleanup',
-				'name'                => __( 'jQuery Migrate Removal', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Remove a script for old code that modern sites don\'t need', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => true,
-				'version'             => '1.0.0',
-				'widget_group'        => 'performance',
-				'widget_label'        => __( 'Performance & Security', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'jquery-cleanup',
+				'name'               => __( 'jQuery Migrate Removal', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Remove a script for old code that modern sites don\'t need', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => true,
+				'version'            => '1.0.0',
+				'widget_group'       => 'performance',
+				'widget_label'       => __( 'Performance & Security', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}
@@ -68,4 +68,3 @@ final class WPS_Feature_jQuery_Cleanup extends WPS_Abstract_Feature {
 		}
 	}
 }
-

@@ -27,12 +27,12 @@ class WPS_Achievement_Badges {
 	/**
 	 * Badge types.
 	 */
-	public const BADGE_FIRST_FIX          = 'first_fix';
-	public const BADGE_SECURITY_HARDENED  = 'security_hardened';
-	public const BADGE_PERFORMANCE_BOOST  = 'performance_boost';
-	public const BADGE_MODULE_MASTER      = 'module_master';
-	public const BADGE_VAULT_GUARDIAN     = 'vault_guardian';
-	public const BADGE_EARLY_ADOPTER      = 'early_adopter';
+	public const BADGE_FIRST_FIX         = 'first_fix';
+	public const BADGE_SECURITY_HARDENED = 'security_hardened';
+	public const BADGE_PERFORMANCE_BOOST = 'performance_boost';
+	public const BADGE_MODULE_MASTER     = 'module_master';
+	public const BADGE_VAULT_GUARDIAN    = 'vault_guardian';
+	public const BADGE_EARLY_ADOPTER     = 'early_adopter';
 
 	/**
 	 * User meta key for badges.
@@ -74,37 +74,37 @@ class WPS_Achievement_Badges {
 	 */
 	public static function get_badge_definitions(): array {
 		return array(
-			self::BADGE_FIRST_FIX          => array(
+			self::BADGE_FIRST_FIX         => array(
 				'title'       => __( 'First Fix', 'plugin-wp-support-thisismyurl' ),
 				'description' => __( 'Activated your first feature or module', 'plugin-wp-support-thisismyurl' ),
 				'icon'        => 'dashicons-admin-tools',
 				'color'       => '#4CAF50',
 			),
-			self::BADGE_SECURITY_HARDENED  => array(
+			self::BADGE_SECURITY_HARDENED => array(
 				'title'       => __( 'Security Hardened', 'plugin-wp-support-thisismyurl' ),
 				'description' => __( 'Enabled security features to protect your site', 'plugin-wp-support-thisismyurl' ),
 				'icon'        => 'dashicons-lock',
 				'color'       => '#F44336',
 			),
-			self::BADGE_PERFORMANCE_BOOST  => array(
+			self::BADGE_PERFORMANCE_BOOST => array(
 				'title'       => __( 'Performance Boosted', 'plugin-wp-support-thisismyurl' ),
 				'description' => __( 'Optimized your site for better performance', 'plugin-wp-support-thisismyurl' ),
 				'icon'        => 'dashicons-performance',
 				'color'       => '#2196F3',
 			),
-			self::BADGE_MODULE_MASTER      => array(
+			self::BADGE_MODULE_MASTER     => array(
 				'title'       => __( 'Module Master', 'plugin-wp-support-thisismyurl' ),
 				'description' => __( 'Activated 5 or more modules', 'plugin-wp-support-thisismyurl' ),
 				'icon'        => 'dashicons-admin-plugins',
 				'color'       => '#9C27B0',
 			),
-			self::BADGE_VAULT_GUARDIAN     => array(
+			self::BADGE_VAULT_GUARDIAN    => array(
 				'title'       => __( 'Vault Guardian', 'plugin-wp-support-thisismyurl' ),
 				'description' => __( 'Protected your first file in the vault', 'plugin-wp-support-thisismyurl' ),
 				'icon'        => 'dashicons-vault',
 				'color'       => '#FF9800',
 			),
-			self::BADGE_EARLY_ADOPTER      => array(
+			self::BADGE_EARLY_ADOPTER     => array(
 				'title'       => __( 'Early Adopter', 'plugin-wp-support-thisismyurl' ),
 				'description' => __( 'One of the first to use WP Support', 'plugin-wp-support-thisismyurl' ),
 				'icon'        => 'dashicons-star-filled',
@@ -206,7 +206,8 @@ class WPS_Achievement_Badges {
 
 		$message = sprintf(
 			/* translators: 1: User display name, 2: Badge title, 3: Badge description, 4: Site URL */
-			__( 'Congratulations %1$s!
+			__(
+				'Congratulations %1$s!
 
 You have earned the "%2$s" badge!
 
@@ -216,7 +217,9 @@ View your achievements: %4$s
 
 Keep up the great work!
 
--- The WP Support Team', 'plugin-wp-support-thisismyurl' ),
+-- The WP Support Team',
+				'plugin-wp-support-thisismyurl'
+			),
 			$user->display_name,
 			$badge['title'],
 			$badge['description'],
@@ -464,11 +467,13 @@ Keep up the great work!
 				esc_attr( $def['icon'] ),
 				esc_html( $def['title'] ),
 				esc_html( $def['description'] ),
-				esc_html( sprintf(
+				esc_html(
+					sprintf(
 					/* translators: %s: Time ago */
-					__( 'Earned %s', 'plugin-wp-support-thisismyurl' ),
-					human_time_diff( $badge_data['timestamp'], time() ) . ' ' . __( 'ago', 'plugin-wp-support-thisismyurl' )
-				) )
+						__( 'Earned %s', 'plugin-wp-support-thisismyurl' ),
+						human_time_diff( $badge_data['timestamp'], time() ) . ' ' . __( 'ago', 'plugin-wp-support-thisismyurl' )
+					)
+				)
 			);
 		}
 		echo '</div>';
@@ -510,7 +515,9 @@ Keep up the great work!
 			return;
 		}
 
-		wp_add_inline_style( 'wps-core-admin', '
+		wp_add_inline_style(
+			'wps-core-admin',
+			'
 			.wps-badges-widget { padding: 12px 0; }
 			.wps-badge-item { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid #f0f0f1; }
 			.wps-badge-item:last-child { border-bottom: none; }
@@ -535,6 +542,7 @@ Keep up the great work!
 			.wps-badge-card h3 { margin: 0 0 8px 0; font-size: 16px; }
 			.wps-badge-card p { margin: 0; color: #646970; font-size: 13px; }
 			.wps-badge-card small { display: block; margin-top: 12px; color: #50575e; font-size: 12px; }
-		' );
+		'
+		);
 	}
 }

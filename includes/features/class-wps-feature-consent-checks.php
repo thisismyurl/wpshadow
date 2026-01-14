@@ -27,15 +27,15 @@ final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'consent-checks',
-				'name'                => __( 'Cookie Consent Checks', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Detect third-party cookies and provide consent management without external dependencies', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => false,
-				'version'             => '1.0.0',
-				'widget_group'        => 'security',
-				'widget_label'        => __( 'Privacy & Compliance', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Tools for GDPR and privacy compliance', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'consent-checks',
+				'name'               => __( 'Cookie Consent Checks', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Detect third-party cookies and provide consent management without external dependencies', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => false,
+				'version'            => '1.0.0',
+				'widget_group'       => 'security',
+				'widget_label'       => __( 'Privacy & Compliance', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Tools for GDPR and privacy compliance', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}
@@ -52,13 +52,13 @@ final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
 
 		// Hook early in head to inject blocking script before any other scripts load.
 		add_action( 'wp_head', array( $this, 'inject_consent_checker' ), 1 );
-		
+
 		// Enqueue consent banner styles and scripts.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_consent_assets' ), 1 );
-		
+
 		// Add consent banner to footer.
 		add_action( 'wp_footer', array( $this, 'render_consent_banner' ), 1 );
-		
+
 		// Add settings page integration.
 		add_filter( 'wps_feature_settings_consent-checks', array( $this, 'render_settings' ) );
 	}
@@ -71,7 +71,7 @@ final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function inject_consent_checker(): void {
-		$blocked_patterns = $this->get_blocked_patterns();
+		$blocked_patterns      = $this->get_blocked_patterns();
 		$blocked_patterns_json = wp_json_encode( $blocked_patterns );
 		?>
 		<script id="wps-consent-checker">
@@ -163,7 +163,7 @@ final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
 			return;
 		}
 
-		$plugin_url = defined( 'wp_support_URL' ) ? wp_support_URL : plugin_dir_url( dirname( dirname( __FILE__ ) ) );
+		$plugin_url = defined( 'wp_support_URL' ) ? wp_support_URL : plugin_dir_url( dirname( __DIR__ ) );
 
 		wp_enqueue_style(
 			'wps-consent-banner',
@@ -205,7 +205,7 @@ final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
 			return;
 		}
 
-		$banner_text = get_option( 'wps_consent_banner_text', $this->get_default_banner_text() );
+		$banner_text = $this->get_setting( 'wps_consent_banner_text', $this->get_default_banner_text( ) );
 		$privacy_url = get_privacy_policy_url();
 		?>
 		<div id="wps-consent-banner" class="wps-consent-banner" style="display:none;" aria-live="polite" role="dialog" aria-labelledby="wps-consent-title">
@@ -277,8 +277,8 @@ final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
 			'^test_cookie$',  // DoubleClick
 		);
 
-		$custom_patterns = (array) get_option( 'wps_consent_blocked_patterns', array() );
-		$patterns = array_merge( $default_patterns, $custom_patterns );
+		$custom_patterns = (array) $this->get_setting( 'wps_consent_blocked_patterns', array( ) );
+		$patterns        = array_merge( $default_patterns, $custom_patterns );
 
 		/**
 		 * Filter the list of blocked cookie patterns.
@@ -295,7 +295,7 @@ final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
 	 */
 	private function get_cookie_domain(): string {
 		$domain = wp_parse_url( home_url(), PHP_URL_HOST );
-		
+
 		// Strip www. prefix if present for better cookie sharing across subdomains.
 		if ( strpos( $domain, 'www.' ) === 0 ) {
 			$domain = substr( $domain, 4 );
@@ -319,8 +319,8 @@ final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function render_settings(): void {
-		$banner_text = get_option( 'wps_consent_banner_text', $this->get_default_banner_text() );
-		$custom_patterns = get_option( 'wps_consent_blocked_patterns', array() );
+		$banner_text          = $this->get_setting( 'wps_consent_banner_text', $this->get_default_banner_text( ) );
+		$custom_patterns      = $this->get_setting( 'wps_consent_blocked_patterns', array( ) );
 		$custom_patterns_text = is_array( $custom_patterns ) ? implode( "\n", $custom_patterns ) : '';
 		?>
 		<h3><?php echo esc_html__( 'Cookie Consent Settings', 'plugin-wp-support-thisismyurl' ); ?></h3>

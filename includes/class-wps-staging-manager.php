@@ -252,7 +252,6 @@ class WPS_Staging_Manager {
 		// $wpdb->query( "DROP DATABASE IF EXISTS {$db_name}" );
 
 		// For safety in this POC, just log the intention.
-		error_log( "Staging cleanup would drop database: {$db_name}" );
 	}
 
 	/**

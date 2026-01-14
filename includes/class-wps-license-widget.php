@@ -105,7 +105,7 @@ class WPS_License_Widget {
 			'license', // Use 'license' for full-width placement, 'side' as fallback
 			'core'
 		);
-		
+
 		// Also add to side if license container doesn't exist (backwards compat).
 		add_meta_box(
 			self::WIDGET_ID . '_side',
@@ -158,7 +158,7 @@ class WPS_License_Widget {
 		<div class="wps-license-widget wps-license-<?php echo esc_attr( $status_class ); ?>">
 			<div class="wps-license-status" style="text-align: center; padding: 15px 0;">
 				<span class="dashicons dashicons-<?php echo esc_attr( $status_icon ); ?>" 
-					  style="font-size: 48px; width: 48px; height: 48px; color: <?php echo esc_attr( $status_color ); ?>;"></span>
+						style="font-size: 48px; width: 48px; height: 48px; color: <?php echo esc_attr( $status_color ); ?>;"></span>
 				<h3 style="margin: 10px 0 5px; font-size: 16px;">
 					<?php echo esc_html( $status_text ); ?>
 				</h3>
@@ -169,7 +169,7 @@ class WPS_License_Widget {
 					<?php
 					$expire_date = strtotime( $license_expire );
 					$days_left   = (int) ( ( $expire_date - time() ) / DAY_IN_SECONDS );
-					
+
 					if ( $days_left <= 30 ) {
 						echo '<span style="color: #f0b849; font-weight: 600;">';
 						printf(
@@ -200,28 +200,28 @@ class WPS_License_Widget {
 					</p>
 					<?php if ( ! $has_license ) : ?>
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=register' ) ); ?>" 
-						   class="button button-primary button-large" 
-						   style="width: 100%; text-align: center; margin-bottom: 5px;">
+							class="button button-primary button-large" 
+							style="width: 100%; text-align: center; margin-bottom: 5px;">
 							<?php esc_html_e( 'Register Your Site (Free)', 'plugin-wp-support-thisismyurl' ); ?>
 						</a>
 					<?php endif; ?>
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=settings' ) ); ?>" 
-					   class="button <?php echo ! $has_license ? 'button-secondary' : 'button-primary'; ?> button-large" 
-					   style="width: 100%; text-align: center; margin-bottom: 5px;">
+						class="button <?php echo ! $has_license ? 'button-secondary' : 'button-primary'; ?> button-large" 
+						style="width: 100%; text-align: center; margin-bottom: 5px;">
 						<?php esc_html_e( 'Enter License Key', 'plugin-wp-support-thisismyurl' ); ?>
 					</a>
 					<a href="https://thisismyurl.com/wp-support/#pricing" 
-					   target="_blank" 
-					   class="button button-secondary button-large" 
-					   style="width: 100%; text-align: center;">
+						target="_blank" 
+						class="button button-secondary button-large" 
+						style="width: 100%; text-align: center;">
 						<?php esc_html_e( 'Purchase License', 'plugin-wp-support-thisismyurl' ); ?>
 					</a>
 				</div>
 			<?php else : ?>
 				<div class="wps-license-actions" style="padding: 10px 15px; background: #f8f9fa; border-top: 1px solid #ddd; text-align: center;">
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&tab=updates' ) ); ?>" 
-					   class="button button-secondary" 
-					   style="width: 100%;">
+						class="button button-secondary" 
+						style="width: 100%;">
 						<?php esc_html_e( 'Manage License', 'plugin-wp-support-thisismyurl' ); ?>
 					</a>
 				</div>

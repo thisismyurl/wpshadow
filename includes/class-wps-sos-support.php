@@ -118,7 +118,7 @@ class WPS_SOS_Support {
 			echo '<div style="border-left: 4px solid ' . esc_attr( $severity_color ) . '; padding: 10px; margin: 10px 0; background: #f9f9f9;">';
 			echo '<p style="margin: 0; font-size: 13px;"><strong>#' . esc_html( $incident['id'] ?? '' ) . '</strong> - ' . esc_html( $incident['subject'] ?? __( 'No subject', 'plugin-wp-support-thisismyurl' ) ) . '</p>';
 			echo '<p style="margin: 5px 0 0 0; font-size: 11px; color: #666;">';
-			echo esc_html( sprintf( __( 'Severity: %s | %s ago', 'plugin-wp-support-thisismyurl' ), ucfirst( $incident['severity'] ?? 'high' ), $time_ago ) );
+			echo esc_html( sprintf( __( 'Severity: %1$s | %2$s ago', 'plugin-wp-support-thisismyurl' ), ucfirst( $incident['severity'] ?? 'high' ), $time_ago ) );
 			echo '</p>';
 			echo '</div>';
 		}
@@ -253,8 +253,8 @@ class WPS_SOS_Support {
 	 */
 	private static function create_incident( array $data ) {
 		// Get next incident ID.
-		$counter     = (int) get_option( self::COUNTER_KEY, 0 );
-		$counter++;
+		$counter = (int) get_option( self::COUNTER_KEY, 0 );
+		++$counter;
 		$incident_id = 'SOS-' . str_pad( (string) $counter, 6, '0', STR_PAD_LEFT );
 
 		// Build incident record.
@@ -426,7 +426,7 @@ class WPS_SOS_Support {
 			"- We'll contact you at: %s\n\n" .
 			"Track your incident: %s\n\n" .
 			"Thank you,\n" .
-			"WordPress Support Team",
+			'WordPress Support Team',
 			$incident['name'] ?? 'there',
 			$incident['id'] ?? '',
 			$incident['subject'] ?? '',
@@ -452,7 +452,7 @@ class WPS_SOS_Support {
 	private static function send_admin_notification( array $incident ): void {
 		$admin_email = get_option( 'admin_email' );
 
-		$subject = sprintf( __( '🚨 New Emergency SOS: #%s (%s)', 'plugin-wp-support-thisismyurl' ), $incident['id'] ?? '', ucfirst( $incident['severity'] ?? 'high' ) );
+		$subject = sprintf( __( '🚨 New Emergency SOS: #%1$s (%2$s)', 'plugin-wp-support-thisismyurl' ), $incident['id'] ?? '', ucfirst( $incident['severity'] ?? 'high' ) );
 
 		$message = sprintf(
 			"New Emergency SOS Incident Received\n\n" .
@@ -472,7 +472,7 @@ class WPS_SOS_Support {
 			"- Estimated Cause: %s\n" .
 			"- Estimated Time: %s\n\n" .
 			"View Incident: %s\n\n" .
-			"Response Required: %s",
+			'Response Required: %s',
 			$incident['id'] ?? '',
 			ucfirst( $incident['severity'] ?? 'high' ),
 			ucfirst( str_replace( '_', ' ', $incident['triage']['category'] ?? 'general' ) ),

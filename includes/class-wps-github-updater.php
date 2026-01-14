@@ -131,24 +131,24 @@ class WPS_GitHub_Updater {
 		}
 
 		$plugin_info = (object) array(
-			'name'              => 'WP Support (thisismyurl)',
-			'slug'              => 'plugin-wp-support-thisismyurl',
-			'version'           => ltrim( $release_data['tag_name'], 'v' ),
-			'author'            => 'Christopher Ross',
-			'author_profile'    => 'https://github.com/thisismyurl',
-			'download_link'     => $release_data['zipball_url'],
-			'description'       => $release_data['body'] ?? 'The foundational support plugin for WordPress with comprehensive diagnostics, emergency recovery, and backup verification.',
-			'homepage'          => 'https://thisismyurl.com/plugin-wp-support-thisismyurl',
-			'requires'          => '6.4',
-			'requires_php'      => '8.1.29',
-			'tested'            => '6.9',
-			'last_updated'      => $release_data['published_at'] ?? current_time( 'mysql' ),
-			'sections'          => array(
+			'name'           => 'WP Support (thisismyurl)',
+			'slug'           => 'plugin-wp-support-thisismyurl',
+			'version'        => ltrim( $release_data['tag_name'], 'v' ),
+			'author'         => 'Christopher Ross',
+			'author_profile' => 'https://github.com/thisismyurl',
+			'download_link'  => $release_data['zipball_url'],
+			'description'    => $release_data['body'] ?? 'The foundational support plugin for WordPress with comprehensive diagnostics, emergency recovery, and backup verification.',
+			'homepage'       => 'https://thisismyurl.com/plugin-wp-support-thisismyurl',
+			'requires'       => '6.4',
+			'requires_php'   => '8.1.29',
+			'tested'         => '6.9',
+			'last_updated'   => $release_data['published_at'] ?? current_time( 'mysql' ),
+			'sections'       => array(
 				'description' => 'WP Support provides comprehensive WordPress health diagnostics, emergency recovery tools, backup verification, and documentation management.',
 			),
-			'banners'           => array(),
-			'banners_rtl'       => array(),
-			'icons'             => array(),
+			'banners'        => array(),
+			'banners_rtl'    => array(),
+			'icons'          => array(),
 		);
 
 		return $plugin_info;
@@ -175,8 +175,8 @@ class WPS_GitHub_Updater {
 		);
 
 		// Get optional GitHub token from options (for private repos or higher rate limits).
-		$token  = self::get_github_token();
-		$args   = array(
+		$token = self::get_github_token();
+		$args  = array(
 			'timeout' => 10,
 			'headers' => array(),
 		);
@@ -189,13 +189,13 @@ class WPS_GitHub_Updater {
 		$response = wp_remote_get( $url, $args );
 
 		if ( is_wp_error( $response ) ) {
-			error_log( 'WPS GitHub updater fetch failed: ' . $response->get_error_message() );
+
 			return null;
 		}
 
 		$status_code = (int) wp_remote_retrieve_response_code( $response );
 		if ( 200 !== $status_code ) {
-			error_log( sprintf( 'WPS GitHub API error: HTTP %d', $status_code ) );
+
 			return null;
 		}
 

@@ -275,7 +275,7 @@ class WPS_Video_Walkthroughs {
 			wp_send_json_error( array( 'message' => __( 'Invalid video ID', 'plugin-wp-support-thisismyurl' ) ) );
 		}
 
-		$settings = get_option( self::VIDEO_SETTINGS_KEY, array() );
+		$settings    = get_option( self::VIDEO_SETTINGS_KEY, array() );
 		$service_url = $settings['service_url'] ?? '';
 
 		if ( empty( $service_url ) ) {
@@ -326,13 +326,13 @@ class WPS_Video_Walkthroughs {
 	 */
 	private static function request_video_generation( string $service_url, string $video_id, array $config ) {
 		$request_body = array(
-			'video_id'  => $video_id,
-			'site_url'  => home_url(),
-			'title'     => $config['title'],
-			'steps'     => $config['steps'],
-			'duration'  => $config['duration'] ?? 'auto',
-			'language'  => get_locale(),
-			'branding'  => array(
+			'video_id' => $video_id,
+			'site_url' => home_url(),
+			'title'    => $config['title'],
+			'steps'    => $config['steps'],
+			'duration' => $config['duration'] ?? 'auto',
+			'language' => get_locale(),
+			'branding' => array(
 				'site_name' => get_bloginfo( 'name' ),
 				'logo_url'  => get_site_icon_url(),
 			),
@@ -482,7 +482,7 @@ class WPS_Video_Walkthroughs {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
 		}
 
-		$settings = get_option( self::VIDEO_SETTINGS_KEY, array() );
+		$settings    = get_option( self::VIDEO_SETTINGS_KEY, array() );
 		$service_url = $settings['service_url'] ?? '';
 
 		if ( empty( $service_url ) ) {
@@ -522,8 +522,8 @@ class WPS_Video_Walkthroughs {
 	 * @return void
 	 */
 	public static function render_page(): void {
-		$library  = get_option( self::VIDEO_LIBRARY_KEY, array() );
-		$settings = get_option( self::VIDEO_SETTINGS_KEY, array() );
+		$library            = get_option( self::VIDEO_LIBRARY_KEY, array() );
+		$settings           = get_option( self::VIDEO_SETTINGS_KEY, array() );
 		$service_configured = ! empty( $settings['service_url'] );
 		?>
 		<div class="wrap wps-video-library-page">
@@ -566,7 +566,7 @@ class WPS_Video_Walkthroughs {
 					<div class="wps-video-grid">
 						<?php foreach ( $type['videos'] as $video_id => $video ) : ?>
 							<?php
-							$in_library = isset( $library[ $video_id ] );
+							$in_library   = isset( $library[ $video_id ] );
 							$video_status = $in_library ? $library[ $video_id ]['status'] : 'not_generated';
 							?>
 							<div class="wps-video-card" data-video-id="<?php echo esc_attr( $video_id ); ?>">

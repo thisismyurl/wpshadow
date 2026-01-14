@@ -42,9 +42,9 @@ final class WPS_Dashboard_Assets {
 	 * Asset paths
 	 */
 	private static array $assets = array(
-		'icon_32'  => '/assets/images/icon-32x32.png',
-		'icon_64'  => '/assets/images/icon-64x64.png',
-		'banner'   => '/assets/images/banner-594x198.png',
+		'icon_32' => '/assets/images/icon-32x32.png',
+		'icon_64' => '/assets/images/icon-64x64.png',
+		'banner'  => '/assets/images/banner-594x198.png',
 	);
 
 	/**
@@ -100,7 +100,7 @@ final class WPS_Dashboard_Assets {
 		// Add banner before other links
 		array_unshift(
 			$links,
-			'<img src="' . esc_url( self::get_asset_url( 'banner' ) ) . 
+			'<img src="' . esc_url( self::get_asset_url( 'banner' ) ) .
 			'" alt="WPS Banner" style="max-width: 100%; height: auto; margin: 8px 0; display: block; border-radius: 4px;" />'
 		);
 

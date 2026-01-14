@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace WPS\CoreSupport;
 
-
 /**
  * WPS_Feature_Skiplinks
  *
@@ -27,15 +26,22 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'skiplinks',
-				'name'                => __( 'Skip Links Injection', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Help keyboard users jump straight to content, skipping repetitive navigation', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => true,
-				'version'             => '1.0.0',
-				'widget_group'        => 'accessibility',
-				'widget_label'        => __( 'UX & Accessibility', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Improve user experience and accessibility standards', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'skiplinks',
+				'name'               => __( 'Skip Links Injection', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Help keyboard users jump straight to content, skipping repetitive navigation', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => true,
+				'version'            => '1.0.0',
+				'widget_group'       => 'accessibility',
+				'widget_label'       => __( 'UX & Accessibility', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Improve user experience and accessibility standards', 'plugin-wp-support-thisismyurl' ),
+			)
+		);
+
+		// Register default settings.
+		$this->register_default_settings(
+			array(
+				'wps_skiplinks_options' => $this->get_default_options(),
 			)
 		);
 	}
@@ -60,7 +66,7 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function inject_skip_links(): void {
-		$options = (array) get_option( 'wps_skiplinks_options', $this->get_default_options() );
+		$options = (array) $this->get_setting( 'wps_skiplinks_options', $this->get_default_options() );
 
 		if ( ! ( $options['enable_skiplinks'] ?? true ) ) {
 			return;
@@ -103,7 +109,7 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function enqueue_styles(): void {
-		$options = (array) get_option( 'wps_skiplinks_options', $this->get_default_options() );
+		$options = (array) $this->get_setting( 'wps_skiplinks_options', $this->get_default_options() );
 
 		if ( ! ( $options['enable_skiplinks'] ?? true ) ) {
 			return;
@@ -126,13 +132,13 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 	 * @return string CSS code.
 	 */
 	private function get_skip_links_css(): string {
-		$options = (array) get_option( 'wps_skiplinks_options', $this->get_default_options() );
+		$options = (array) $this->get_setting( 'wps_skiplinks_options', $this->get_default_options() );
 
 		// Allow theme customization via filter.
 		$bg_color   = $this->sanitize_hex_color( apply_filters( 'wps_skiplinks_bg_color', $options['bg_color'] ?? '#21759b' ) );
 		$text_color = $this->sanitize_hex_color( apply_filters( 'wps_skiplinks_text_color', $options['text_color'] ?? '#ffffff' ) );
 
-		return "
+		return '
 			.wps-skip-links {
 				margin: 0;
 				padding: 0;
@@ -161,8 +167,8 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 				overflow: visible;
 				clip: auto;
 				white-space: normal;
-				background-color: " . esc_attr( $bg_color ) . ";
-				color: " . esc_attr( $text_color ) . ";
+				background-color: ' . esc_attr( $bg_color ) . ';
+				color: ' . esc_attr( $text_color ) . ';
 				text-decoration: none;
 				font-size: 1rem;
 				font-weight: 600;
@@ -170,15 +176,15 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 				z-index: 100000;
 				border-radius: 4px;
 				box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-				outline: 3px solid " . esc_attr( $text_color ) . ";
+				outline: 3px solid ' . esc_attr( $text_color ) . ';
 				outline-offset: 2px;
 			}
 			
 			.wps-skip-link:hover,
 			.wps-skip-link:focus:hover {
-				background-color: " . esc_attr( $this->darken_color( $bg_color, 20 ) ) . ";
+				background-color: ' . esc_attr( $this->darken_color( $bg_color, 20 ) ) . ';
 			}
-		";
+		';
 	}
 
 	/**
@@ -190,18 +196,18 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 	private function sanitize_hex_color( string $color ): string {
 		// Remove any whitespace.
 		$color = trim( $color );
-		
+
 		// Add # if missing.
 		if ( '#' !== substr( $color, 0, 1 ) ) {
 			$color = '#' . $color;
 		}
-		
+
 		// Check if valid hex color (3 or 6 characters after #).
 		if ( ! preg_match( '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/', $color ) ) {
 			// Return default blue if invalid.
 			return '#21759b';
 		}
-		
+
 		return $color;
 	}
 
@@ -244,7 +250,7 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 	 * @return string Content element ID.
 	 */
 	private function get_content_id(): string {
-		$options    = (array) get_option( 'wps_skiplinks_options', $this->get_default_options() );
+		$options    = (array) $this->get_setting( 'wps_skiplinks_options', $this->get_default_options() );
 		$content_id = $options['content_id'] ?? '';
 
 		if ( ! empty( $content_id ) ) {
@@ -267,7 +273,7 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 	 * @return string Navigation element ID.
 	 */
 	private function get_nav_id(): string {
-		$options = (array) get_option( 'wps_skiplinks_options', $this->get_default_options() );
+		$options = (array) $this->get_setting( 'wps_skiplinks_options', $this->get_default_options() );
 		$nav_id  = $options['nav_id'] ?? '';
 
 		if ( ! empty( $nav_id ) ) {
@@ -288,15 +294,15 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 	 */
 	private function get_default_options(): array {
 		return array(
-			'enable_skiplinks'  => true,
-			'skip_to_content'   => true,
-			'skip_to_nav'       => true,
-			'content_id'        => '',  // Auto-detect if empty.
-			'nav_id'            => '',  // Auto-detect if empty.
-			'content_label'     => __( 'Skip to content', 'plugin-wp-support-thisismyurl' ),
-			'nav_label'         => __( 'Skip to navigation', 'plugin-wp-support-thisismyurl' ),
-			'bg_color'          => '#21759b',
-			'text_color'        => '#ffffff',
+			'enable_skiplinks' => true,
+			'skip_to_content'  => true,
+			'skip_to_nav'      => true,
+			'content_id'       => '',  // Auto-detect if empty.
+			'nav_id'           => '',  // Auto-detect if empty.
+			'content_label'    => __( 'Skip to content', 'plugin-wp-support-thisismyurl' ),
+			'nav_label'        => __( 'Skip to navigation', 'plugin-wp-support-thisismyurl' ),
+			'bg_color'         => '#21759b',
+			'text_color'       => '#ffffff',
 		);
 	}
 }

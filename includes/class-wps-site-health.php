@@ -162,15 +162,15 @@ class WPS_Site_Health {
 		self::register_module_checks(
 			'vault-support-thisismyurl',
 			array(
-				'WPS_vault_directory'    => array(
+				'WPS_vault_directory'   => array(
 					'label' => __( 'Vault directory status', 'plugin-wp-support-thisismyurl' ),
 					'test'  => array( __CLASS__, 'test_vault_directory' ),
 				),
-				'WPS_encryption_config'  => array(
+				'WPS_encryption_config' => array(
 					'label' => __( 'Encryption configuration', 'plugin-wp-support-thisismyurl' ),
 					'test'  => array( __CLASS__, 'test_encryption_config' ),
 				),
-				'WPS_vault_permissions'  => array(
+				'WPS_vault_permissions' => array(
 					'label' => __( 'Vault write permissions', 'plugin-wp-support-thisismyurl' ),
 					'test'  => array( __CLASS__, 'test_vault_permissions' ),
 				),
@@ -213,10 +213,10 @@ class WPS_Site_Health {
 		foreach ( $core_checks as $check_id => $check_config ) {
 			// Extract method name from test callback.
 			$test_method = self::extract_test_method( $check_config );
-			
+
 			// Convert check_id to test_id (remove WPS_ prefix).
 			$test_id = str_replace( 'WPS_', '', $check_id );
-			
+
 			$map[ $test_id ] = array(
 				'label'  => $check_config['label'],
 				'test'   => $test_method,
@@ -237,10 +237,10 @@ class WPS_Site_Health {
 			foreach ( $module_check_list as $check_id => $check_config ) {
 				// Extract method name from test callback.
 				$test_method = self::extract_test_method( $check_config );
-				
+
 				// Convert check_id to test_id (remove WPS_ prefix).
 				$test_id = str_replace( 'WPS_', '', $check_id );
-				
+
 				$map[ $test_id ] = array(
 					'label'  => $check_config['label'],
 					'test'   => $test_method,
@@ -648,53 +648,53 @@ class WPS_Site_Health {
 			$info['wps-environment'] = array(
 				'label'  => __( 'WPS Environment', 'plugin-wp-support-thisismyurl' ),
 				'fields' => array(
-					'compatibility_status'      => array(
+					'compatibility_status'   => array(
 						'label' => __( 'Environment compatibility', 'plugin-wp-support-thisismyurl' ),
 						'value' => $env_status['is_compatible'] ? __( 'Compatible', 'plugin-wp-support-thisismyurl' ) : __( 'Incompatible', 'plugin-wp-support-thisismyurl' ),
 					),
-					'resource_constraints'      => array(
+					'resource_constraints'   => array(
 						'label' => __( 'Resource constraints', 'plugin-wp-support-thisismyurl' ),
 						'value' => $env_status['has_constraints'] ? __( 'Yes', 'plugin-wp-support-thisismyurl' ) : __( 'No', 'plugin-wp-support-thisismyurl' ),
 					),
-					'memory_limit'              => array(
+					'memory_limit'           => array(
 						'label' => __( 'Memory limit', 'plugin-wp-support-thisismyurl' ),
 						'value' => $env_status['memory_limit']['current'] . ' (' . $env_status['memory_limit']['level'] . ')',
 					),
-					'execution_time'            => array(
+					'execution_time'         => array(
 						'label' => __( 'Max execution time', 'plugin-wp-support-thisismyurl' ),
 						'value' => 0 === $env_status['execution_time']['current']
 							? __( 'Unlimited', 'plugin-wp-support-thisismyurl' )
 							: $env_status['execution_time']['current'] . 's (' . $env_status['execution_time']['level'] . ')',
 					),
-					'upload_max_filesize'       => array(
+					'upload_max_filesize'    => array(
 						'label' => __( 'Upload max filesize', 'plugin-wp-support-thisismyurl' ),
 						'value' => $env_status['upload_limit']['upload_max_filesize'],
 					),
-					'post_max_size'             => array(
+					'post_max_size'          => array(
 						'label' => __( 'Post max size', 'plugin-wp-support-thisismyurl' ),
 						'value' => $env_status['upload_limit']['post_max_size'],
 					),
-					'required_extensions'       => array(
+					'required_extensions'    => array(
 						'label' => __( 'Required extensions', 'plugin-wp-support-thisismyurl' ),
 						'value' => $env_status['extensions']['all_required_loaded']
 							? __( 'All loaded', 'plugin-wp-support-thisismyurl' )
 							: __( 'Missing: ', 'plugin-wp-support-thisismyurl' ) . implode( ', ', $env_status['extensions']['required_missing'] ),
 					),
-					'recommended_extensions'    => array(
+					'recommended_extensions' => array(
 						'label' => __( 'Recommended extensions', 'plugin-wp-support-thisismyurl' ),
 						'value' => empty( $env_status['extensions']['recommended_missing'] )
 							? __( 'All loaded', 'plugin-wp-support-thisismyurl' )
 							: __( 'Missing: ', 'plugin-wp-support-thisismyurl' ) . implode( ', ', $env_status['extensions']['recommended_missing'] ),
 					),
-					'diagnostic_logging'        => array(
+					'diagnostic_logging'     => array(
 						'label' => __( 'Diagnostic logging', 'plugin-wp-support-thisismyurl' ),
 						'value' => get_option( 'wps_diagnostic_logging_enabled', false ) ? __( 'Enabled', 'plugin-wp-support-thisismyurl' ) : __( 'Disabled', 'plugin-wp-support-thisismyurl' ),
 					),
-					'heavy_tasks_disabled'      => array(
+					'heavy_tasks_disabled'   => array(
 						'label' => __( 'Heavy tasks disabled', 'plugin-wp-support-thisismyurl' ),
 						'value' => \WPS\CoreSupport\WPS_Environment_Checker::should_disable_heavy_tasks() ? __( 'Yes', 'plugin-wp-support-thisismyurl' ) : __( 'No', 'plugin-wp-support-thisismyurl' ),
 					),
-					'batching_enabled'          => array(
+					'batching_enabled'       => array(
 						'label' => __( 'Task batching', 'plugin-wp-support-thisismyurl' ),
 						'value' => \WPS\CoreSupport\WPS_Environment_Checker::should_batch_tasks() ? __( 'Enabled', 'plugin-wp-support-thisismyurl' ) : __( 'Not required', 'plugin-wp-support-thisismyurl' ),
 					),
@@ -709,31 +709,31 @@ class WPS_Site_Health {
 			$info['wps-resources'] = array(
 				'label'  => __( 'WPS Resource Usage', 'plugin-wp-support-thisismyurl' ),
 				'fields' => array(
-					'memory_usage'          => array(
+					'memory_usage'      => array(
 						'label' => __( 'Current memory usage', 'plugin-wp-support-thisismyurl' ),
 						'value' => \WPS\CoreSupport\WPS_Environment_Checker::format_bytes( $resource_status['memory']['current_usage'] ) . ' / ' . $resource_status['memory']['limit'],
 					),
-					'memory_percentage'     => array(
+					'memory_percentage' => array(
 						'label' => __( 'Memory usage percentage', 'plugin-wp-support-thisismyurl' ),
 						'value' => number_format( $resource_status['memory']['usage_percentage'], 2 ) . '%',
 					),
-					'peak_memory'           => array(
+					'peak_memory'       => array(
 						'label' => __( 'Peak memory usage', 'plugin-wp-support-thisismyurl' ),
 						'value' => \WPS\CoreSupport\WPS_Environment_Checker::format_bytes( $resource_status['memory']['peak_usage'] ),
 					),
-					'time_elapsed'          => array(
+					'time_elapsed'      => array(
 						'label' => __( 'Time elapsed', 'plugin-wp-support-thisismyurl' ),
 						'value' => number_format( $resource_status['time']['elapsed'], 2 ) . 's',
 					),
-					'time_percentage'       => array(
+					'time_percentage'   => array(
 						'label' => __( 'Time usage percentage', 'plugin-wp-support-thisismyurl' ),
 						'value' => number_format( $resource_status['time']['usage_percentage'], 2 ) . '%',
 					),
-					'resource_level'        => array(
+					'resource_level'    => array(
 						'label' => __( 'Overall resource level', 'plugin-wp-support-thisismyurl' ),
 						'value' => ucfirst( $resource_status['level'] ),
 					),
-					'batch_size'            => array(
+					'batch_size'        => array(
 						'label' => __( 'Recommended batch size', 'plugin-wp-support-thisismyurl' ),
 						'value' => (string) \WPS\CoreSupport\WPS_Server_Limits::get_batch_size(),
 					),
@@ -863,10 +863,10 @@ class WPS_Site_Health {
 	 * }
 	 */
 	public static function get_health_by_module_type(): array {
-		$modules    = WPS_Module_Registry::get_catalog_with_status();
-		$test_map   = self::build_test_map();
-		$core_tests = array();
-		$hub_tests  = array();
+		$modules     = WPS_Module_Registry::get_catalog_with_status();
+		$test_map    = self::build_test_map();
+		$core_tests  = array();
+		$hub_tests   = array();
 		$spoke_tests = array();
 
 		foreach ( $test_map as $test_id => $test_data ) {
@@ -930,7 +930,7 @@ class WPS_Site_Health {
 			);
 		}
 
-		$is_compatible = \WPS\CoreSupport\WPS_Environment_Checker::is_environment_compatible();
+		$is_compatible   = \WPS\CoreSupport\WPS_Environment_Checker::is_environment_compatible();
 		$has_constraints = \WPS\CoreSupport\WPS_Environment_Checker::has_resource_constraints();
 
 		if ( $is_compatible && ! $has_constraints ) {
@@ -1149,7 +1149,7 @@ class WPS_Site_Health {
 
 		$status = \WPS\CoreSupport\WPS_Server_Limits::get_resource_status();
 		$memory = $status['memory'];
-		$time = $status['time'];
+		$time   = $status['time'];
 
 		$description = sprintf(
 			/* translators: 1: Memory usage percentage, 2: Time usage percentage */

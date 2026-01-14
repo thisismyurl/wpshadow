@@ -41,7 +41,7 @@ final class WPS_Spoke_Collection {
 	 * @var array<string, array{name: string, class: string, description: string, icon: string, benefits: string, browser_support: int, format: string}>
 	 */
 	private const SPOKES = array(
-		'avif'  => array(
+		'avif' => array(
 			'name'            => 'AVIF',
 			'class'           => 'WPS_Module_AVIF',
 			'description'     => 'Next-generation image format with superior compression',
@@ -50,7 +50,7 @@ final class WPS_Spoke_Collection {
 			'browser_support' => 90,
 			'format'          => 'image/avif',
 		),
-		'webp'  => array(
+		'webp' => array(
 			'name'            => 'WebP',
 			'class'           => 'WPS_Module_WebP',
 			'description'     => 'Modern image format with broad browser support',
@@ -59,7 +59,7 @@ final class WPS_Spoke_Collection {
 			'browser_support' => 95,
 			'format'          => 'image/webp',
 		),
-		'svg'   => array(
+		'svg'  => array(
 			'name'            => 'SVG',
 			'class'           => 'WPS_Module_SVG',
 			'description'     => 'Scalable vector graphics for crisp logos and icons',
@@ -68,7 +68,7 @@ final class WPS_Spoke_Collection {
 			'browser_support' => 99,
 			'format'          => 'image/svg+xml',
 		),
-		'tiff'  => array(
+		'tiff' => array(
 			'name'            => 'TIFF',
 			'class'           => 'WPS_Module_TIFF',
 			'description'     => 'High-quality image format for professional photography',
@@ -77,7 +77,7 @@ final class WPS_Spoke_Collection {
 			'browser_support' => 75,
 			'format'          => 'image/tiff',
 		),
-		'bmp'   => array(
+		'bmp'  => array(
 			'name'            => 'BMP',
 			'class'           => 'WPS_Module_BMP',
 			'description'     => 'Uncompressed bitmap format for legacy compatibility',
@@ -86,7 +86,7 @@ final class WPS_Spoke_Collection {
 			'browser_support' => 98,
 			'format'          => 'image/bmp',
 		),
-		'gif'   => array(
+		'gif'  => array(
 			'name'            => 'GIF',
 			'class'           => 'WPS_Module_GIF',
 			'description'     => 'Animated image format with palette-based compression',
@@ -95,7 +95,7 @@ final class WPS_Spoke_Collection {
 			'browser_support' => 99,
 			'format'          => 'image/gif',
 		),
-		'heic'  => array(
+		'heic' => array(
 			'name'            => 'HEIC',
 			'class'           => 'WPS_Module_HEIC',
 			'description'     => 'Apple\'s modern image format with excellent compression',
@@ -104,7 +104,7 @@ final class WPS_Spoke_Collection {
 			'browser_support' => 65,
 			'format'          => 'image/heic',
 		),
-		'raw'   => array(
+		'raw'  => array(
 			'name'            => 'RAW',
 			'class'           => 'WPS_Module_RAW',
 			'description'     => 'Professional camera raw format for maximum quality',
@@ -260,8 +260,8 @@ final class WPS_Spoke_Collection {
 		$spokes = array();
 
 		foreach ( self::SPOKES as $spoke_id => $spoke_data ) {
-			$status                = self::get_status( $spoke_id );
-			$spokes[ $spoke_id ]   = array_merge( $spoke_data, $status );
+			$status                    = self::get_status( $spoke_id );
+			$spokes[ $spoke_id ]       = array_merge( $spoke_data, $status );
 			$spokes[ $spoke_id ]['id'] = $spoke_id;
 		}
 
@@ -275,7 +275,7 @@ final class WPS_Spoke_Collection {
 	 * @return bool True if installed.
 	 */
 	private static function is_spoke_installed( string $spoke ): bool {
-		$spoke_slug = $spoke . '-support-thisismyurl';
+		$spoke_slug  = $spoke . '-support-thisismyurl';
 		$plugin_file = $spoke_slug . '/' . $spoke_slug . '.php';
 
 		if ( ! function_exists( 'get_plugins' ) ) {
@@ -293,7 +293,7 @@ final class WPS_Spoke_Collection {
 	 * @return bool True if active.
 	 */
 	private static function is_spoke_active( string $spoke ): bool {
-		$spoke_slug = $spoke . '-support-thisismyurl';
+		$spoke_slug  = $spoke . '-support-thisismyurl';
 		$plugin_file = $spoke_slug . '/' . $spoke_slug . '.php';
 
 		if ( ! function_exists( 'is_plugin_active' ) ) {
@@ -357,7 +357,7 @@ final class WPS_Spoke_Collection {
 	 * @return array<string, array> Newly unlocked milestones.
 	 */
 	public static function check_milestone_unlocks(): array {
-		$milestones = get_option( self::MILESTONE_OPTION, array() );
+		$milestones  = get_option( self::MILESTONE_OPTION, array() );
 		$new_unlocks = array();
 
 		// Check system-wide milestones.
@@ -369,13 +369,13 @@ final class WPS_Spoke_Collection {
 				++$installed_count;
 			}
 
-			$metrics = self::get_metrics( $spoke );
+			$metrics          = self::get_metrics( $spoke );
 			$total_converted += $metrics['files_processed'];
 		}
 
 		// First spoke milestone.
 		if ( $installed_count >= 1 && empty( $milestones['first_spoke'] ) ) {
-			$milestones['first_spoke'] = time();
+			$milestones['first_spoke']  = time();
 			$new_unlocks['first_spoke'] = self::MILESTONES['first_spoke'];
 
 			// Log achievement.
@@ -391,7 +391,7 @@ final class WPS_Spoke_Collection {
 
 		// Multi-format master milestone.
 		if ( $installed_count >= 3 && empty( $milestones['multi_master'] ) ) {
-			$milestones['multi_master'] = time();
+			$milestones['multi_master']  = time();
 			$new_unlocks['multi_master'] = self::MILESTONES['multi_master'];
 
 			WPS_Activity_Logger::log(
@@ -407,7 +407,7 @@ final class WPS_Spoke_Collection {
 
 		// Full collection milestone.
 		if ( $installed_count >= 8 && empty( $milestones['full_collection'] ) ) {
-			$milestones['full_collection'] = time();
+			$milestones['full_collection']  = time();
 			$new_unlocks['full_collection'] = self::MILESTONES['full_collection'];
 
 			WPS_Activity_Logger::log(
@@ -422,7 +422,7 @@ final class WPS_Spoke_Collection {
 
 		// Format expert milestone.
 		if ( $total_converted >= 1000 && empty( $milestones['format_expert'] ) ) {
-			$milestones['format_expert'] = time();
+			$milestones['format_expert']  = time();
 			$new_unlocks['format_expert'] = self::MILESTONES['format_expert'];
 
 			WPS_Activity_Logger::log(
@@ -438,12 +438,12 @@ final class WPS_Spoke_Collection {
 
 		// Check per-format milestones.
 		foreach ( array_keys( self::SPOKES ) as $spoke ) {
-			$metrics = self::get_metrics( $spoke );
+			$metrics   = self::get_metrics( $spoke );
 			$converted = $metrics['files_processed'];
 
 			$milestone_key = $spoke . '_first_convert';
 			if ( $converted >= 1 && empty( $milestones[ $milestone_key ] ) ) {
-				$milestones[ $milestone_key ] = time();
+				$milestones[ $milestone_key ]  = time();
 				$new_unlocks[ $milestone_key ] = array_merge(
 					self::MILESTONES['first_convert'],
 					array( 'spoke' => $spoke )
@@ -452,7 +452,7 @@ final class WPS_Spoke_Collection {
 
 			$milestone_key = $spoke . '_apprentice';
 			if ( $converted >= 100 && empty( $milestones[ $milestone_key ] ) ) {
-				$milestones[ $milestone_key ] = time();
+				$milestones[ $milestone_key ]  = time();
 				$new_unlocks[ $milestone_key ] = array_merge(
 					self::MILESTONES['format_apprentice'],
 					array( 'spoke' => $spoke )
@@ -461,7 +461,7 @@ final class WPS_Spoke_Collection {
 
 			$milestone_key = $spoke . '_master';
 			if ( $converted >= 1000 && empty( $milestones[ $milestone_key ] ) ) {
-				$milestones[ $milestone_key ] = time();
+				$milestones[ $milestone_key ]  = time();
 				$new_unlocks[ $milestone_key ] = array_merge(
 					self::MILESTONES['format_master'],
 					array( 'spoke' => $spoke )
@@ -470,7 +470,7 @@ final class WPS_Spoke_Collection {
 
 			$milestone_key = $spoke . '_legend';
 			if ( $converted >= 5000 && empty( $milestones[ $milestone_key ] ) ) {
-				$milestones[ $milestone_key ] = time();
+				$milestones[ $milestone_key ]  = time();
 				$new_unlocks[ $milestone_key ] = array_merge(
 					self::MILESTONES['format_legend'],
 					array( 'spoke' => $spoke )
@@ -555,7 +555,7 @@ final class WPS_Spoke_Collection {
 		$metrics = self::get_metrics( $spoke );
 
 		// Increment files processed.
-		$metrics['files_processed']++;
+		++$metrics['files_processed'];
 
 		// Add space saved if provided.
 		if ( isset( $conversion_data['space_saved'] ) ) {
@@ -564,7 +564,7 @@ final class WPS_Spoke_Collection {
 
 		// Update quality retention (running average).
 		if ( isset( $conversion_data['quality_retention'] ) ) {
-			$count = $metrics['files_processed'];
+			$count                        = $metrics['files_processed'];
 			$metrics['quality_retention'] = (
 				( $metrics['quality_retention'] * ( $count - 1 ) ) +
 				(float) $conversion_data['quality_retention']
@@ -573,7 +573,7 @@ final class WPS_Spoke_Collection {
 
 		// Update processing time (running average).
 		if ( isset( $conversion_data['processing_time'] ) ) {
-			$count = $metrics['files_processed'];
+			$count                      = $metrics['files_processed'];
 			$metrics['processing_time'] = (int) (
 				( $metrics['processing_time'] * ( $count - 1 ) ) +
 				(int) $conversion_data['processing_time']
@@ -611,10 +611,10 @@ final class WPS_Spoke_Collection {
 	 */
 	public static function get_collection_stats(): array {
 		$total_spokes = count( self::SPOKES );
-		$installed = 0;
-		$active = 0;
-		$total_files = 0;
-		$total_saved = 0;
+		$installed    = 0;
+		$active       = 0;
+		$total_files  = 0;
+		$total_saved  = 0;
 
 		foreach ( array_keys( self::SPOKES ) as $spoke ) {
 			if ( self::is_spoke_installed( $spoke ) ) {
@@ -625,7 +625,7 @@ final class WPS_Spoke_Collection {
 				++$active;
 			}
 
-			$metrics = self::get_metrics( $spoke );
+			$metrics      = self::get_metrics( $spoke );
 			$total_files += $metrics['files_processed'];
 			$total_saved += $metrics['space_saved'];
 		}

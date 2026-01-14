@@ -26,12 +26,12 @@ final class WPS_Feature_Block_Cleanup extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'               => 'block-cleanup',
-				'name'             => __( 'Gutenberg/Block Editor Asset Cleanup', 'plugin-wp-support-thisismyurl' ),
-				'description'      => __( 'Remove editor code your visitors don\'t need and lighten your pages', 'plugin-wp-support-thisismyurl' ),
-				'scope'            => 'core',
-				'default_enabled'  => false,
-				'version'          => '1.0.0',
+				'id'              => 'block-cleanup',
+				'name'            => __( 'Gutenberg/Block Editor Asset Cleanup', 'plugin-wp-support-thisismyurl' ),
+				'description'     => __( 'Remove editor code your visitors don\'t need and lighten your pages', 'plugin-wp-support-thisismyurl' ),
+				'scope'           => 'core',
+				'default_enabled' => false,
+				'version'         => '1.0.0',
 			)
 		);
 	}
@@ -66,7 +66,7 @@ final class WPS_Feature_Block_Cleanup extends WPS_Abstract_Feature {
 	 */
 	public function cleanup_block_assets(): void {
 		// Get options for granular control.
-		$cleanup_options = (array) get_option( 'wps_block_cleanup_options', $this->get_default_options() );
+		$cleanup_options = (array) $this->get_setting( 'wps_block_cleanup_options', $this->get_default_options( ) );
 
 		// Block library styles.
 		if ( $cleanup_options['remove_block_library'] ?? false ) {

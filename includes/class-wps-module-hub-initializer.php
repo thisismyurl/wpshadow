@@ -46,7 +46,6 @@ class WPS_Module_Hub_Initializer {
 		$required_keys = array( 'slug', 'name', 'suite', 'version', 'path', 'url', 'basename' );
 		foreach ( $required_keys as $key ) {
 			if ( empty( $hub_config[ $key ] ) ) {
-				error_log( "WPS Hub Initializer: Missing required key '$key' in hub config" );
 				return;
 			}
 		}

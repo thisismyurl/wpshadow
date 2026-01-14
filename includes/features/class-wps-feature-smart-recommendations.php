@@ -30,15 +30,15 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'wps_smart_recommendations',
-				'name'                => __( 'Smart Recommendations Engine', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Personalized optimization recommendations based on site profile and heuristic analysis. Provides performance, security, and scalability recommendations with priority scoring and ROI estimation.', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'version'             => '1.0.0',
-				'default_enabled'     => true,
-				'widget_group'        => 'analytics-features',
-				'widget_label'        => __( 'Analytics & Recommendations', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Intelligent site analysis and recommendation features', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'wps_smart_recommendations',
+				'name'               => __( 'Smart Recommendations Engine', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Personalized optimization recommendations based on site profile and heuristic analysis. Provides performance, security, and scalability recommendations with priority scoring and ROI estimation.', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'version'            => '1.0.0',
+				'default_enabled'    => true,
+				'widget_group'       => 'analytics-features',
+				'widget_label'       => __( 'Analytics & Recommendations', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Intelligent site analysis and recommendation features', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}
@@ -67,10 +67,10 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 
 		// Dashboard widget registration.
 		add_action( 'wp_dashboard_setup', array( __CLASS__, 'register_dashboard_widget' ) );
-		
+
 		// Admin page for detailed recommendations view.
 		add_action( 'admin_menu', array( __CLASS__, 'register_admin_page' ) );
-		
+
 		// AJAX handler for dismissing recommendations.
 		add_action( 'wp_ajax_wps_dismiss_recommendation', array( __CLASS__, 'ajax_dismiss_recommendation' ) );
 	}
@@ -164,12 +164,12 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 
 		// Calculate basic security score.
 		$security_score = 50; // Base score.
-		
+
 		// Check SSL.
 		if ( is_ssl() ) {
 			$security_score += 10;
 		}
-		
+
 		// Check if using security plugin.
 		$security_plugins = array(
 			'wordfence/wordfence.php',
@@ -182,7 +182,7 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 				break;
 			}
 		}
-		
+
 		// Check WordPress version.
 		global $wp_version;
 		$latest_wp = get_transient( 'wps_latest_wp_version' );
@@ -192,7 +192,7 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 		if ( version_compare( $wp_version, $latest_wp, '=' ) ) {
 			$security_score += 10;
 		}
-		
+
 		$classification['security_score'] = min( 100, $security_score );
 
 		// Cache for 12 hours.
@@ -208,7 +208,7 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 	 * @return array Array of recommendation objects.
 	 */
 	public static function generate_recommendations(): array {
-		$classification = self::classify_site();
+		$classification  = self::classify_site();
 		$recommendations = array();
 
 		// Performance recommendations.
@@ -247,34 +247,34 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 		// Check if object caching is available.
 		if ( ! wp_using_ext_object_cache() ) {
 			$recommendations[] = array(
-				'id'              => 'enable_object_caching',
-				'type'            => 'performance',
-				'title'           => __( 'Enable Object Caching', 'plugin-wp-support-thisismyurl' ),
-				'description'     => __( 'Object caching (Redis/Memcached) can significantly improve database query performance.', 'plugin-wp-support-thisismyurl' ),
-				'impact'          => 'high',
-				'estimated_gain'  => '-500ms to -800ms load time',
-				'difficulty'      => 'moderate',
-				'cost'            => 'free',
-				'priority_score'  => 90,
-				'action_label'    => __( 'Learn More', 'plugin-wp-support-thisismyurl' ),
-				'action_url'      => 'https://wordpress.org/support/article/optimization/#caching',
+				'id'             => 'enable_object_caching',
+				'type'           => 'performance',
+				'title'          => __( 'Enable Object Caching', 'plugin-wp-support-thisismyurl' ),
+				'description'    => __( 'Object caching (Redis/Memcached) can significantly improve database query performance.', 'plugin-wp-support-thisismyurl' ),
+				'impact'         => 'high',
+				'estimated_gain' => '-500ms to -800ms load time',
+				'difficulty'     => 'moderate',
+				'cost'           => 'free',
+				'priority_score' => 90,
+				'action_label'   => __( 'Learn More', 'plugin-wp-support-thisismyurl' ),
+				'action_url'     => 'https://wordpress.org/support/article/optimization/#caching',
 			);
 		}
 
 		// Check for image optimization.
 		if ( ! is_plugin_active( 'image-support-thisismyurl/image-support-thisismyurl.php' ) ) {
 			$recommendations[] = array(
-				'id'              => 'optimize_images',
-				'type'            => 'performance',
-				'title'           => __( 'Optimize Images', 'plugin-wp-support-thisismyurl' ),
-				'description'     => __( 'Install Image Hub to enable WebP, AVIF conversion and smart compression.', 'plugin-wp-support-thisismyurl' ),
-				'impact'          => 'high',
-				'estimated_gain'  => '-300ms to -600ms load time',
-				'difficulty'      => 'easy',
-				'cost'            => 'free',
-				'priority_score'  => 85,
-				'action_label'    => __( 'Install Image Hub', 'plugin-wp-support-thisismyurl' ),
-				'action_url'      => admin_url( 'admin.php?page=wp-support&tab=modules' ),
+				'id'             => 'optimize_images',
+				'type'           => 'performance',
+				'title'          => __( 'Optimize Images', 'plugin-wp-support-thisismyurl' ),
+				'description'    => __( 'Install Image Hub to enable WebP, AVIF conversion and smart compression.', 'plugin-wp-support-thisismyurl' ),
+				'impact'         => 'high',
+				'estimated_gain' => '-300ms to -600ms load time',
+				'difficulty'     => 'easy',
+				'cost'           => 'free',
+				'priority_score' => 85,
+				'action_label'   => __( 'Install Image Hub', 'plugin-wp-support-thisismyurl' ),
+				'action_url'     => admin_url( 'admin.php?page=wp-support&tab=modules' ),
 			);
 		}
 
@@ -284,34 +284,34 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 
 		if ( ! $script_deferral_enabled ) {
 			$recommendations[] = array(
-				'id'              => 'enable_script_deferral',
-				'type'            => 'performance',
-				'title'           => __( 'Enable Script Deferral', 'plugin-wp-support-thisismyurl' ),
-				'description'     => __( 'Defer non-critical JavaScript to improve initial page load time.', 'plugin-wp-support-thisismyurl' ),
-				'impact'          => 'medium',
-				'estimated_gain'  => '-200ms to -400ms load time',
-				'difficulty'      => 'easy',
-				'cost'            => 'free',
-				'priority_score'  => 75,
-				'action_label'    => __( 'Enable Feature', 'plugin-wp-support-thisismyurl' ),
-				'action_url'      => admin_url( 'admin.php?page=wp-support&tab=features' ),
+				'id'             => 'enable_script_deferral',
+				'type'           => 'performance',
+				'title'          => __( 'Enable Script Deferral', 'plugin-wp-support-thisismyurl' ),
+				'description'    => __( 'Defer non-critical JavaScript to improve initial page load time.', 'plugin-wp-support-thisismyurl' ),
+				'impact'         => 'medium',
+				'estimated_gain' => '-200ms to -400ms load time',
+				'difficulty'     => 'easy',
+				'cost'           => 'free',
+				'priority_score' => 75,
+				'action_label'   => __( 'Enable Feature', 'plugin-wp-support-thisismyurl' ),
+				'action_url'     => admin_url( 'admin.php?page=wp-support&tab=features' ),
 			);
 		}
 
 		// WooCommerce specific recommendations.
 		if ( 'ecommerce' === $classification['type'] ) {
 			$recommendations[] = array(
-				'id'              => 'woocommerce_optimization',
-				'type'            => 'performance',
-				'title'           => __( 'WooCommerce Performance Optimization', 'plugin-wp-support-thisismyurl' ),
-				'description'     => __( 'Optimize WooCommerce for better performance: Enable cart fragments caching, disable unused features, optimize product images.', 'plugin-wp-support-thisismyurl' ),
-				'impact'          => 'high',
-				'estimated_gain'  => '-400ms to -700ms load time',
-				'difficulty'      => 'moderate',
-				'cost'            => 'free',
-				'priority_score'  => 88,
-				'action_label'    => __( 'View Guide', 'plugin-wp-support-thisismyurl' ),
-				'action_url'      => 'https://woocommerce.com/document/woocommerce-performance/',
+				'id'             => 'woocommerce_optimization',
+				'type'           => 'performance',
+				'title'          => __( 'WooCommerce Performance Optimization', 'plugin-wp-support-thisismyurl' ),
+				'description'    => __( 'Optimize WooCommerce for better performance: Enable cart fragments caching, disable unused features, optimize product images.', 'plugin-wp-support-thisismyurl' ),
+				'impact'         => 'high',
+				'estimated_gain' => '-400ms to -700ms load time',
+				'difficulty'     => 'moderate',
+				'cost'           => 'free',
+				'priority_score' => 88,
+				'action_label'   => __( 'View Guide', 'plugin-wp-support-thisismyurl' ),
+				'action_url'     => 'https://woocommerce.com/document/woocommerce-performance/',
 			);
 		}
 
@@ -331,34 +331,34 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 		// SSL recommendation.
 		if ( ! is_ssl() ) {
 			$recommendations[] = array(
-				'id'              => 'enable_ssl',
-				'type'            => 'security',
-				'title'           => __( 'Enable HTTPS/SSL', 'plugin-wp-support-thisismyurl' ),
-				'description'     => __( 'Secure your site with HTTPS to protect user data and improve SEO.', 'plugin-wp-support-thisismyurl' ),
-				'impact'          => 'critical',
-				'estimated_gain'  => 'Enhanced security, improved SEO',
-				'difficulty'      => 'moderate',
-				'cost'            => 'free with Let\'s Encrypt',
-				'priority_score'  => 95,
-				'action_label'    => __( 'Learn More', 'plugin-wp-support-thisismyurl' ),
-				'action_url'      => 'https://wordpress.org/support/article/https-for-wordpress/',
+				'id'             => 'enable_ssl',
+				'type'           => 'security',
+				'title'          => __( 'Enable HTTPS/SSL', 'plugin-wp-support-thisismyurl' ),
+				'description'    => __( 'Secure your site with HTTPS to protect user data and improve SEO.', 'plugin-wp-support-thisismyurl' ),
+				'impact'         => 'critical',
+				'estimated_gain' => 'Enhanced security, improved SEO',
+				'difficulty'     => 'moderate',
+				'cost'           => 'free with Let\'s Encrypt',
+				'priority_score' => 95,
+				'action_label'   => __( 'Learn More', 'plugin-wp-support-thisismyurl' ),
+				'action_url'     => 'https://wordpress.org/support/article/https-for-wordpress/',
 			);
 		}
 
 		// Security plugin recommendation.
 		if ( $security_score < 70 ) {
 			$recommendations[] = array(
-				'id'              => 'install_security_plugin',
-				'type'            => 'security',
-				'title'           => __( 'Install Security Plugin', 'plugin-wp-support-thisismyurl' ),
-				'description'     => __( 'Add a security plugin like Wordfence or Sucuri to protect against threats.', 'plugin-wp-support-thisismyurl' ),
-				'impact'          => 'high',
-				'estimated_gain'  => 'Protection against common attacks',
-				'difficulty'      => 'easy',
-				'cost'            => 'free tier available',
-				'priority_score'  => 85,
-				'action_label'    => __( 'Browse Security Plugins', 'plugin-wp-support-thisismyurl' ),
-				'action_url'      => admin_url( 'plugin-install.php?s=security&tab=search' ),
+				'id'             => 'install_security_plugin',
+				'type'           => 'security',
+				'title'          => __( 'Install Security Plugin', 'plugin-wp-support-thisismyurl' ),
+				'description'    => __( 'Add a security plugin like Wordfence or Sucuri to protect against threats.', 'plugin-wp-support-thisismyurl' ),
+				'impact'         => 'high',
+				'estimated_gain' => 'Protection against common attacks',
+				'difficulty'     => 'easy',
+				'cost'           => 'free tier available',
+				'priority_score' => 85,
+				'action_label'   => __( 'Browse Security Plugins', 'plugin-wp-support-thisismyurl' ),
+				'action_url'     => admin_url( 'plugin-install.php?s=security&tab=search' ),
 			);
 		}
 
@@ -372,38 +372,38 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 
 		if ( $update_count > 0 ) {
 			$recommendations[] = array(
-				'id'              => 'update_plugins',
-				'type'            => 'security',
-				'title'           => sprintf(
+				'id'             => 'update_plugins',
+				'type'           => 'security',
+				'title'          => sprintf(
 					/* translators: %d: number of plugin updates */
 					_n( 'Update %d Plugin', 'Update %d Plugins', $update_count, 'plugin-wp-support-thisismyurl' ),
 					$update_count
 				),
-				'description'     => __( 'Outdated plugins may contain security vulnerabilities. Keep all plugins up to date.', 'plugin-wp-support-thisismyurl' ),
-				'impact'          => 'high',
-				'estimated_gain'  => 'Reduced vulnerability risk',
-				'difficulty'      => 'easy',
-				'cost'            => 'free',
-				'priority_score'  => 90,
-				'action_label'    => __( 'View Updates', 'plugin-wp-support-thisismyurl' ),
-				'action_url'      => admin_url( 'plugins.php' ),
+				'description'    => __( 'Outdated plugins may contain security vulnerabilities. Keep all plugins up to date.', 'plugin-wp-support-thisismyurl' ),
+				'impact'         => 'high',
+				'estimated_gain' => 'Reduced vulnerability risk',
+				'difficulty'     => 'easy',
+				'cost'           => 'free',
+				'priority_score' => 90,
+				'action_label'   => __( 'View Updates', 'plugin-wp-support-thisismyurl' ),
+				'action_url'     => admin_url( 'plugins.php' ),
 			);
 		}
 
 		// Backup recommendation.
 		if ( ! self::has_backup_solution() ) {
 			$recommendations[] = array(
-				'id'              => 'setup_backups',
-				'type'            => 'security',
-				'title'           => __( 'Setup Automated Backups', 'plugin-wp-support-thisismyurl' ),
-				'description'     => __( 'Regular backups protect against data loss from security incidents or errors.', 'plugin-wp-support-thisismyurl' ),
-				'impact'          => 'high',
-				'estimated_gain'  => 'Data protection and recovery capability',
-				'difficulty'      => 'easy',
-				'cost'            => 'free tier available',
-				'priority_score'  => 88,
-				'action_label'    => __( 'Browse Backup Plugins', 'plugin-wp-support-thisismyurl' ),
-				'action_url'      => admin_url( 'plugin-install.php?s=backup&tab=search' ),
+				'id'             => 'setup_backups',
+				'type'           => 'security',
+				'title'          => __( 'Setup Automated Backups', 'plugin-wp-support-thisismyurl' ),
+				'description'    => __( 'Regular backups protect against data loss from security incidents or errors.', 'plugin-wp-support-thisismyurl' ),
+				'impact'         => 'high',
+				'estimated_gain' => 'Data protection and recovery capability',
+				'difficulty'     => 'easy',
+				'cost'           => 'free tier available',
+				'priority_score' => 88,
+				'action_label'   => __( 'Browse Backup Plugins', 'plugin-wp-support-thisismyurl' ),
+				'action_url'     => admin_url( 'plugin-install.php?s=backup&tab=search' ),
 			);
 		}
 
@@ -425,17 +425,17 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 		if ( 'high' === $traffic_level || 'medium' === $traffic_level ) {
 			if ( ! self::has_cdn_configured() ) {
 				$recommendations[] = array(
-					'id'              => 'enable_cdn',
-					'type'            => 'scalability',
-					'title'           => __( 'Enable CDN', 'plugin-wp-support-thisismyurl' ),
-					'description'     => __( 'Content Delivery Network distributes your static assets globally for faster loading.', 'plugin-wp-support-thisismyurl' ),
-					'impact'          => 'high',
-					'estimated_gain'  => 'Can handle 2-3x traffic, -200ms to -500ms for global users',
-					'difficulty'      => 'moderate',
-					'cost'            => '$5-10/month',
-					'priority_score'  => 80,
-					'action_label'    => __( 'Learn More', 'plugin-wp-support-thisismyurl' ),
-					'action_url'      => 'https://www.cloudflare.com/',
+					'id'             => 'enable_cdn',
+					'type'           => 'scalability',
+					'title'          => __( 'Enable CDN', 'plugin-wp-support-thisismyurl' ),
+					'description'    => __( 'Content Delivery Network distributes your static assets globally for faster loading.', 'plugin-wp-support-thisismyurl' ),
+					'impact'         => 'high',
+					'estimated_gain' => 'Can handle 2-3x traffic, -200ms to -500ms for global users',
+					'difficulty'     => 'moderate',
+					'cost'           => '$5-10/month',
+					'priority_score' => 80,
+					'action_label'   => __( 'Learn More', 'plugin-wp-support-thisismyurl' ),
+					'action_url'     => 'https://www.cloudflare.com/',
 				);
 			}
 		}
@@ -443,34 +443,34 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 		// Database optimization for complex sites.
 		if ( 'complex' === $complexity ) {
 			$recommendations[] = array(
-				'id'              => 'optimize_database',
-				'type'            => 'scalability',
-				'title'           => __( 'Optimize Database', 'plugin-wp-support-thisismyurl' ),
-				'description'     => __( 'Clean up database overhead, optimize tables, and remove old revisions to improve query performance.', 'plugin-wp-support-thisismyurl' ),
-				'impact'          => 'medium',
-				'estimated_gain'  => 'Faster queries, reduced server load',
-				'difficulty'      => 'easy',
-				'cost'            => 'free',
-				'priority_score'  => 70,
-				'action_label'    => __( 'Enable Database Cleanup', 'plugin-wp-support-thisismyurl' ),
-				'action_url'      => admin_url( 'admin.php?page=wp-support&tab=features' ),
+				'id'             => 'optimize_database',
+				'type'           => 'scalability',
+				'title'          => __( 'Optimize Database', 'plugin-wp-support-thisismyurl' ),
+				'description'    => __( 'Clean up database overhead, optimize tables, and remove old revisions to improve query performance.', 'plugin-wp-support-thisismyurl' ),
+				'impact'         => 'medium',
+				'estimated_gain' => 'Faster queries, reduced server load',
+				'difficulty'     => 'easy',
+				'cost'           => 'free',
+				'priority_score' => 70,
+				'action_label'   => __( 'Enable Database Cleanup', 'plugin-wp-support-thisismyurl' ),
+				'action_url'     => admin_url( 'admin.php?page=wp-support&tab=features' ),
 			);
 		}
 
 		// Consultation recommendation for growing sites.
 		if ( 'high' === $traffic_level && 'complex' === $complexity ) {
 			$recommendations[] = array(
-				'id'              => 'scaling_consultation',
-				'type'            => 'scalability',
-				'title'           => __( 'Schedule Scaling Consultation', 'plugin-wp-support-thisismyurl' ),
-				'description'     => __( 'Your site is growing. Get expert advice on architecture, hosting, and optimization strategies.', 'plugin-wp-support-thisismyurl' ),
-				'impact'          => 'high',
-				'estimated_gain'  => 'Custom optimization strategy',
-				'difficulty'      => 'professional',
-				'cost'            => '$500',
-				'priority_score'  => 65,
-				'action_label'    => __( 'Book Consultation', 'plugin-wp-support-thisismyurl' ),
-				'action_url'      => 'https://thisismyurl.com/support',
+				'id'             => 'scaling_consultation',
+				'type'           => 'scalability',
+				'title'          => __( 'Schedule Scaling Consultation', 'plugin-wp-support-thisismyurl' ),
+				'description'    => __( 'Your site is growing. Get expert advice on architecture, hosting, and optimization strategies.', 'plugin-wp-support-thisismyurl' ),
+				'impact'         => 'high',
+				'estimated_gain' => 'Custom optimization strategy',
+				'difficulty'     => 'professional',
+				'cost'           => '$500',
+				'priority_score' => 65,
+				'action_label'   => __( 'Book Consultation', 'plugin-wp-support-thisismyurl' ),
+				'action_url'     => 'https://thisismyurl.com/support',
 			);
 		}
 
@@ -540,9 +540,9 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 		self::$site_classification = null;
 
 		$recommendations = self::generate_recommendations();
-		
+
 		// Filter out dismissed recommendations.
-		$dismissed = get_option( 'wps_dismissed_recommendations', array() );
+		$dismissed = $this->get_setting( 'wps_dismissed_recommendations', array( ) );
 		if ( is_array( $dismissed ) ) {
 			$recommendations = array_filter(
 				$recommendations,
@@ -581,7 +581,7 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 		}
 
 		$recommendations = get_transient( 'wps_recommendations_cache' );
-		
+
 		if ( ! is_array( $recommendations ) ) {
 			self::refresh_recommendations();
 			$recommendations = get_transient( 'wps_recommendations_cache' );
@@ -597,31 +597,31 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 	 */
 	public static function send_weekly_digest(): void {
 		$recommendations = self::get_recommendations( true );
-		
+
 		if ( empty( $recommendations ) ) {
 			return;
 		}
 
 		// Get top 5 recommendations.
 		$top_recommendations = array_slice( $recommendations, 0, 5 );
-		
+
 		// Get admin email.
-		$admin_email = get_option( 'admin_email' );
+		$admin_email = $this->get_setting( 'admin_email' );
 		$site_name   = get_bloginfo( 'name' );
-		
+
 		// Build email content.
 		$subject = sprintf(
 			/* translators: %s: site name */
-			__( 'Weekly Recommendations for %s', 'plugin-wp-support-thisismyurl' ),
+			__( 'Weekly Recommendations for %s', 'plugin-wp-support-thisismyurl'  ),
 			$site_name
 		);
-		
+
 		$message = sprintf(
 			/* translators: %s: site name */
 			__( 'Here are this week\'s top recommendations for %s:', 'plugin-wp-support-thisismyurl' ),
 			$site_name
 		) . "\n\n";
-		
+
 		foreach ( $top_recommendations as $index => $rec ) {
 			$message .= sprintf(
 				"%d. %s\n",
@@ -632,21 +632,24 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 			$message .= sprintf( "   Impact: %s | Difficulty: %s | Cost: %s\n", $rec['impact'], $rec['difficulty'], $rec['cost'] );
 			$message .= sprintf( "   %s\n\n", $rec['action_url'] ?? '' );
 		}
-		
+
 		$message .= sprintf(
 			__( 'View all recommendations: %s', 'plugin-wp-support-thisismyurl' ),
 			admin_url( 'admin.php?page=wps-recommendations' )
 		);
-		
+
 		// Send email.
 		wp_mail( $admin_email, $subject, $message );
-		
+
 		// Log email sent.
 		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
 			\WPS\CoreSupport\WPS_Activity_Logger::log(
 				'system',
 				__( 'Weekly recommendations digest email sent', 'plugin-wp-support-thisismyurl' ),
-				array( 'recipient' => $admin_email, 'count' => count( $top_recommendations ) )
+				array(
+					'recipient' => $admin_email,
+					'count'     => count( $top_recommendations ),
+				)
 			);
 		}
 	}
@@ -671,15 +674,15 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 	 */
 	public static function render_dashboard_widget(): void {
 		$recommendations = self::get_recommendations();
-		
+
 		if ( empty( $recommendations ) ) {
 			echo '<p>' . esc_html__( 'No recommendations at this time. Your site is well optimized!', 'plugin-wp-support-thisismyurl' ) . '</p>';
 			return;
 		}
-		
+
 		// Display top 3 recommendations.
 		$top_recs = array_slice( $recommendations, 0, 3 );
-		
+
 		echo '<style>
 			.wps-recommendation { margin-bottom: 15px; padding: 10px; border-left: 3px solid #2271b1; background: #f6f7f7; }
 			.wps-recommendation h4 { margin: 0 0 5px 0; }
@@ -690,7 +693,7 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 			.wps-recommendation-meta { font-size: 12px; color: #646970; margin: 5px 0; }
 			.wps-recommendation-actions { margin-top: 8px; }
 		</style>';
-		
+
 		foreach ( $top_recs as $rec ) {
 			$impact_class = 'impact-' . sanitize_html_class( $rec['impact'] ?? 'medium' );
 			?>
@@ -723,7 +726,7 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 			</div>
 			<?php
 		}
-		
+
 		if ( count( $recommendations ) > 3 ) {
 			?>
 			<p>
@@ -739,7 +742,7 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 			</p>
 			<?php
 		}
-		
+
 		// Enqueue dismiss script.
 		?>
 		<script>
@@ -772,27 +775,27 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 	 */
 	public static function ajax_dismiss_recommendation(): void {
 		check_ajax_referer( 'wps_dismiss_recommendation', 'nonce' );
-		
+
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
 		}
-		
+
 		$rec_id = isset( $_POST['rec_id'] ) ? sanitize_key( $_POST['rec_id'] ) : '';
-		
+
 		if ( empty( $rec_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid recommendation ID', 'plugin-wp-support-thisismyurl' ) ) );
 		}
-		
-		$dismissed = get_option( 'wps_dismissed_recommendations', array() );
+
+		$dismissed = $this->get_setting( 'wps_dismissed_recommendations', array( ) );
 		if ( ! is_array( $dismissed ) ) {
 			$dismissed = array();
 		}
-		
+
 		if ( ! in_array( $rec_id, $dismissed, true ) ) {
 			$dismissed[] = $rec_id;
-			update_option( 'wps_dismissed_recommendations', $dismissed );
+			$this->update_setting( 'wps_dismissed_recommendations', $dismissed  );
 		}
-		
+
 		wp_send_json_success();
 	}
 
@@ -821,10 +824,10 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
 		}
-		
+
 		$recommendations = self::get_recommendations();
 		$classification  = self::classify_site();
-		
+
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Smart Recommendations', 'plugin-wp-support-thisismyurl' ); ?></h1>
@@ -864,18 +867,18 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 				<?php
 				// Group by type.
 				$grouped = array(
-					'performance'  => array(),
-					'security'     => array(),
-					'scalability'  => array(),
+					'performance' => array(),
+					'security'    => array(),
+					'scalability' => array(),
 				);
-				
+
 				foreach ( $recommendations as $rec ) {
 					$type = $rec['type'] ?? 'performance';
 					if ( isset( $grouped[ $type ] ) ) {
 						$grouped[ $type ][] = $rec;
 					}
 				}
-				
+
 				foreach ( $grouped as $type => $recs ) {
 					if ( empty( $recs ) ) {
 						continue;

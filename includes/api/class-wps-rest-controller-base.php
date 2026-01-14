@@ -96,7 +96,7 @@ abstract class WPS_REST_Controller_Base extends WP_REST_Controller {
 	 */
 	protected function validate_slug( string $slug ) {
 		$sanitized = sanitize_key( $slug );
-		
+
 		if ( empty( $sanitized ) ) {
 			return $this->error_response(
 				'invalid_slug',

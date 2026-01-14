@@ -22,25 +22,10 @@ if ( ! current_user_can( 'manage_options' ) ) {
 $current_tab = isset( $_GET['perf_tab'] ) ? sanitize_key( $_GET['perf_tab'] ) : 'overview'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 // Get performance data.
-$metrics = WPS_Performance_Monitor::get_current_metrics();
-$score_data = WPS_Performance_Monitor::calculate_performance_score();
+$metrics         = WPS_Performance_Monitor::get_current_metrics();
+$score_data      = WPS_Performance_Monitor::calculate_performance_score();
 $recommendations = WPS_Performance_Monitor::get_recommendations();
-$db_stats = WPS_Performance_Monitor::get_database_stats();
-$thresholds = WPS_Performance_Monitor::get_thresholds();
-
-// Update thresholds if form submitted.
-if ( isset( $_POST['wps_update_thresholds'] ) && check_admin_referer( 'wps_performance_thresholds' ) ) {
-	$new_thresholds = array(
-		'query_count' => isset( $_POST['threshold_query_count'] ) ? absint( $_POST['threshold_query_count'] ) : 50,
-		'load_time'   => isset( $_POST['threshold_load_time'] ) ? floatval( $_POST['threshold_load_time'] ) : 2,
-		'memory'      => isset( $_POST['threshold_memory'] ) ? absint( $_POST['threshold_memory'] ) : 80,
-	);
-	
-	WPS_Performance_Monitor::update_thresholds( $new_thresholds );
-	$thresholds = $new_thresholds;
-	
-	echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Alert thresholds updated successfully.', 'plugin-wp-support-thisismyurl' ) . '</p></div>';
-}
+$db_stats        = WPS_Performance_Monitor::get_database_stats();
 
 ?>
 <div class="wrap wps-performance-dashboard">
@@ -179,9 +164,6 @@ if ( isset( $_POST['wps_update_thresholds'] ) && check_admin_referer( 'wps_perfo
 		</a>
 		<a href="?page=wp-support&WPS_tab=performance&perf_tab=history" class="nav-tab <?php echo 'history' === $current_tab ? 'nav-tab-active' : ''; ?>">
 			<?php esc_html_e( 'History', 'plugin-wp-support-thisismyurl' ); ?>
-		</a>
-		<a href="?page=wp-support&WPS_tab=performance&perf_tab=alerts" class="nav-tab <?php echo 'alerts' === $current_tab ? 'nav-tab-active' : ''; ?>">
-			<?php esc_html_e( 'Alerts', 'plugin-wp-support-thisismyurl' ); ?>
 		</a>
 	</h2>
 
@@ -377,7 +359,7 @@ if ( isset( $_POST['wps_update_thresholds'] ) && check_admin_referer( 'wps_perfo
 
 			<?php
 			// Get historical data for charts.
-			$history_7days = WPS_Performance_Monitor::get_historical_metrics( 7 );
+			$history_7days  = WPS_Performance_Monitor::get_historical_metrics( 7 );
 			$history_30days = WPS_Performance_Monitor::get_historical_metrics( 30 );
 			?>
 
@@ -403,81 +385,6 @@ if ( isset( $_POST['wps_update_thresholds'] ) && check_admin_referer( 'wps_perfo
 					<a href="#" class="button" id="wps-export-json"><?php esc_html_e( 'Export as JSON', 'plugin-wp-support-thisismyurl' ); ?></a>
 				</p>
 			</div>
-
-		<?php elseif ( 'alerts' === $current_tab ) : ?>
-			<!-- Alerts Tab -->
-			<h2><?php esc_html_e( '🔔 Performance Alerts', 'plugin-wp-support-thisismyurl' ); ?></h2>
-
-			<div class="wps-perf-card">
-				<h3><?php esc_html_e( 'Alert Thresholds', 'plugin-wp-support-thisismyurl' ); ?></h3>
-				<p><?php esc_html_e( 'Configure when performance alerts should be triggered.', 'plugin-wp-support-thisismyurl' ); ?></p>
-
-				<form method="post" action="">
-					<?php wp_nonce_field( 'wps_performance_thresholds' ); ?>
-					<input type="hidden" name="wps_update_thresholds" value="1" />
-
-					<table class="form-table">
-						<tr>
-							<th scope="row">
-								<label for="threshold_query_count"><?php esc_html_e( 'Query Count Threshold', 'plugin-wp-support-thisismyurl' ); ?></label>
-							</th>
-							<td>
-								<input type="number" id="threshold_query_count" name="threshold_query_count" value="<?php echo esc_attr( $thresholds['query_count'] ); ?>" class="small-text" />
-								<p class="description"><?php esc_html_e( 'Alert when query count exceeds this value.', 'plugin-wp-support-thisismyurl' ); ?></p>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">
-								<label for="threshold_load_time"><?php esc_html_e( 'Load Time Threshold (seconds)', 'plugin-wp-support-thisismyurl' ); ?></label>
-							</th>
-							<td>
-								<input type="number" id="threshold_load_time" name="threshold_load_time" value="<?php echo esc_attr( $thresholds['load_time'] ); ?>" step="0.1" class="small-text" />
-								<p class="description"><?php esc_html_e( 'Alert when page load time exceeds this value.', 'plugin-wp-support-thisismyurl' ); ?></p>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">
-								<label for="threshold_memory"><?php esc_html_e( 'Memory Usage Threshold (%)', 'plugin-wp-support-thisismyurl' ); ?></label>
-							</th>
-							<td>
-								<input type="number" id="threshold_memory" name="threshold_memory" value="<?php echo esc_attr( $thresholds['memory'] ); ?>" class="small-text" />
-								<p class="description"><?php esc_html_e( 'Alert when memory usage exceeds this percentage of the limit.', 'plugin-wp-support-thisismyurl' ); ?></p>
-							</td>
-						</tr>
-					</table>
-
-					<?php submit_button( __( 'Update Thresholds', 'plugin-wp-support-thisismyurl' ) ); ?>
-				</form>
-			</div>
-
-			<?php
-			// Display recent alerts.
-			$alerts = get_transient( 'wps_performance_alerts' );
-			if ( ! empty( $alerts ) && is_array( $alerts ) ) :
-				?>
-			<div class="wps-perf-card" style="margin-top: 20px;">
-				<h3><?php esc_html_e( 'Recent Alerts', 'plugin-wp-support-thisismyurl' ); ?></h3>
-				<ul class="wps-recommendation-list">
-					<?php foreach ( array_slice( array_reverse( $alerts ), 0, 10 ) as $alert ) : ?>
-						<li class="warning">
-							<strong><?php echo esc_html( ucfirst( $alert['type'] ) ); ?></strong>
-							<?php echo esc_html( $alert['message'] ); ?>
-							<br />
-							<small style="color: #666;">
-								<?php
-								/* translators: %s: time ago */
-								echo esc_html( sprintf( __( '%s ago', 'plugin-wp-support-thisismyurl' ), human_time_diff( $alert['timestamp'] ) ) );
-								?>
-							</small>
-						</li>
-					<?php endforeach; ?>
-				</ul>
-			</div>
-			<?php else : ?>
-			<div class="notice notice-success inline">
-				<p><?php esc_html_e( '✅ No alerts triggered recently. Your site is performing well!', 'plugin-wp-support-thisismyurl' ); ?></p>
-			</div>
-			<?php endif; ?>
 
 		<?php endif; ?>
 	</div>

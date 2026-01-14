@@ -179,6 +179,230 @@ When an issue has a module-specific label:
 3. Test cross-module functionality
 4. Document the integration
 
+## Namespace Conventions (CRITICAL)
+
+**RULE_1: ALL feature classes use `WPS\CoreSupport` namespace**
+- CORRECT: `namespace WPS\CoreSupport;` in includes/features/class-wps-feature-*.php
+- WRONG: `namespace WPS\CoreSupport\Features;` (breaks autoloading and class resolution)
+- Consequence: "Class not found" fatal error during plugin initialization
+- Fixed in commit: Visual-regression and script-utils files corrected (Jan 2026)
+- All 40+ feature files follow this pattern; verify before instantiation
+
+**RULE_2: Core classes use `WPS\CoreSupport` namespace**
+- All includes/class-wps-*.php files MUST declare `namespace WPS\CoreSupport;`
+- Examples: class-wps-module-registry.php, class-wps-dashboard-widgets.php, class-wps-feature-registry.php
+- Helpers and utilities: class-wps-script-utils.php, class-wps-notice-manager.php, etc.
+- Extends to API classes: use `namespace WPS\CoreSupport\API;` (see includes/api/)
+
+**RULE_3: Module classes use `WPS\ModuleName` namespace**
+- Replace ModuleName with specific module name (e.g., `namespace WPS\VaultSupport;`)
+- Modules in modules/hubs/ or modules/spokes/ follow this pattern
+- Keeps module isolation clean and prevents core/module coupling
+- Do NOT import core classes into modules; use module registry hooks instead
+
+**RULE_4: REST API classes use `WPS\CoreSupport\API` namespace**
+- Specialized namespace for REST API endpoints
+- Example: includes/api/class-wps-rest-api.php uses `namespace WPS\CoreSupport\API;`
+- All API-related classes live under includes/api/ and use this namespace
+
+**RULE_5: When adding new feature, follow 5-step process**
+1. Create class file: includes/features/class-wps-feature-name.php
+2. Add `<?php declare(strict_types=1);` at top (strict types required)
+3. Add `namespace WPS\CoreSupport;` immediately after declare
+4. Extend WPS_Feature_Abstract class
+5. Add `require_once wp_support_PATH . 'includes/features/class-wps-feature-name.php';` in wp-support-thisismyurl.php BEFORE instantiation
+6. Register feature in wps_register_core_features() function around line 280
+
+**Correct Feature Template:**
+```php
+<?php declare(strict_types=1);
+namespace WPS\CoreSupport;
+
+final class WPS_Feature_ExampleName extends WPS_Feature_Abstract {
+    
+    public function register_hooks(): void {
+        add_action( 'wp_loaded', [ $this, 'initialize' ] );
+    }
+    
+    public function initialize(): void {
+        // Feature initialization
+    }
+}
+```
+
+**Common Mistake (Causes Fatal Error):**
+```php
+// WRONG - Do NOT do this:
+namespace WPS\CoreSupport\Features;
+class WPS_Feature_ExampleName extends WPS_Feature_Abstract { ... }
+// Result: "Class WPS\CoreSupport\Features\WPS_Abstract_Feature not found"
+```
+
+**Why This Matters:**
+- PSR-4 autoloader expects `WPS\CoreSupport` → `includes/` directory mapping (see composer.json)
+- Wrong namespace breaks class resolution during feature instantiation
+- Feature instantiation in wps_register_core_features() depends on correct namespace
+- Strict validation via PHPStan level 8 catches violations (run `composer phpstan`)
+- Type errors in features block entire plugin initialization
+
+**Verification:**
+- Check namespace in new feature files before submitting PR
+- Run `composer phpstan` to catch namespace violations
+- Verify require_once statement in wp-support-thisismyurl.php (around line 700-724)
+- Test plugin activation: `wp plugin activate plugin-wp-support-thisismyurl`
+- Check debug.log for "fatal" or "Cannot redeclare" errors
+
+## Feature Registration Pattern (MUST FOLLOW)
+
+**The require_once + register workflow is NON-NEGOTIABLE**
+
+When registering a feature class, you MUST:
+1. Add `require_once` statement in wp-support-thisismyurl.php (lines ~700-724)
+2. Instantiate the class in `wps_register_core_features()` function (lines ~280)
+3. Never instantiate a class that hasn't been require_once'd first
+
+**Missing require_once = Plugin Fatal Error:**
+```
+"Cannot redeclare class WPS\CoreSupport\WPS_Feature_ExampleName"
+```
+
+**Evidence from Latest Session (January 2026):**
+- Issue: 8 feature files were registered but not required first
+- Result: Fatal error when plugin initializes
+- Fix: Added 8 missing require_once statements
+- Files affected: conditional-loading, google-fonts-disabler, critical-css, script-optimizer, conflict-sandbox, visual-regression, script-utils, and others
+
+**Correct Feature Registration:**
+```php
+// Step 1: In wp-support-thisismyurl.php around line 700, add:
+require_once wp_support_PATH . 'includes/features/class-wps-feature-example-name.php';
+
+// Step 2: In wps_register_core_features() around line 280, add:
+register_WPS_feature( new WPS_Feature_ExampleName() );
+```
+
+**Validation:**
+- Before committing: Check wp-support-thisismyurl.php lines 700-724 for ALL registered features
+- Run `composer phpstan` to catch missing classes
+- Test: `wp plugin activate plugin-wp-support-thisismyurl` with no fatals
+- Check debug.log tail for "Cannot redeclare" errors
+
+## Code Duplication Detection (BEFORE COMMITTING)
+
+**Duplicate functions = Fatal "Cannot redeclare" error**
+
+Prevent duplication by:
+1. Search for existing functions before writing new ones
+2. Use grep to find function definitions before implementing
+3. Check for duplicate implementations in the same file
+4. If function exists, extend or refactor instead of copying
+
+**Evidence from Latest Session (January 2026):**
+- Issue: class-wps-feature-conflict-sandbox.php had 937 lines of duplicate code
+- Root Cause: Entire methods and implementation blocks were copy-pasted within the same file
+- Result: Functions defined twice → Fatal "Cannot redeclare filter_active_plugins()" error
+- Fix: Removed duplicate block (lines 553-820), kept only first implementation
+
+**Anti-Pattern to Avoid:**
+```php
+// WRONG - Function defined twice in same file:
+public function is_sandbox_active() {
+    // Implementation 1 (line 187)
+}
+
+// ... hundreds of lines later ...
+
+public function is_sandbox_active() {
+    // Implementation 2 (line 827) - FATAL ERROR
+}
+```
+
+**How to Find Duplication:**
+1. After implementing large methods, search the file for that function name
+2. Use grep to verify function appears only once
+3. Check git diff to spot accidentally pasted blocks
+4. Watch for duplicate line ranges in diffs
+
+## Type Safety Patterns (CATCH ERRORS EARLY)
+
+**Don't assume variable types - validate before use**
+
+Use type checks to prevent runtime errors:
+- `is_string($var)` before calling string functions (strpos, str_replace, etc.)
+- `is_array($var)` before accessing array keys
+- `isset($var)` before using method calls on objects
+- `!empty($var)` before operations that expect non-falsy values
+
+**Evidence from Latest Session (January 2026):**
+- Issue: google-fonts-disabler.php called `strpos($style->src, ...)` where `$style->src` could be bool
+- Result: "TypeError: strpos(): Argument #1 ($haystack) must be of type string, bool given"
+- Fix: Added `is_string($style->src)` check before strpos calls
+
+**Correct Type Safety Pattern:**
+```php
+// WRONG - Don't assume type:
+foreach ( $styles as $style ) {
+    if ( strpos( $style->src, 'googleapis' ) !== false ) { ... }
+}
+
+// CORRECT - Validate type first:
+foreach ( $styles as $style ) {
+    if ( is_string( $style->src ) && strpos( $style->src, 'googleapis' ) !== false ) { ... }
+}
+```
+
+**Type Safety Checklist (Before Committing):**
+- [ ] All array accesses check `isset()` or `array_key_exists()` first
+- [ ] String functions check `is_string()` before operating on variables
+- [ ] Method calls check `is_object()` or `isset()` before calling methods
+- [ ] Loop variables use proper guards before accessing nested properties
+- [ ] Run `composer phpstan` to catch type violations (targets level 8)
+
+## Pre-Commit Validation Checklist (REQUIRED)
+
+Before submitting ANY pull request, verify:
+
+**1. Namespace & Registration**
+- [ ] All feature classes use `namespace WPS\CoreSupport;`
+- [ ] All feature files have require_once in wp-support-thisismyurl.php
+- [ ] Features registered in wps_register_core_features()
+- [ ] No uses of `namespace WPS\CoreSupport\Features;`
+
+**2. Code Quality**
+- [ ] Run `composer phpcs` - no WordPress Standard violations
+- [ ] Run `composer phpstan` - no type errors (target level 8)
+- [ ] Run `composer test` - all PHPUnit tests pass
+- [ ] No duplicate function definitions in any file
+- [ ] No copy-pasted code blocks (use DRY principle)
+
+**3. Type Safety**
+- [ ] All string operations check `is_string()` first
+- [ ] All array accesses check `isset()` or `array_key_exists()`
+- [ ] All object methods check `is_object()` first
+- [ ] PHPStan catches no type mismatches
+
+**4. Testing & Activation**
+- [ ] Plugin activates: `wp plugin activate plugin-wp-support-thisismyurl`
+- [ ] Debug.log has no fatal errors
+- [ ] Dashboard loads without errors
+- [ ] Module system works (enabled/disabled modules function correctly)
+
+**5. Documentation**
+- [ ] PHPDoc blocks added to all new functions/classes
+- [ ] Code comments explain complex logic
+- [ ] Feature description is clear and user-facing
+- [ ] Hooks/filters documented in code
+
+**CI/CD Pipeline Check:**
+```powershell
+# Run before committing:
+composer phpcs && composer phpstan && composer test
+
+# Test activation:
+wp plugin activate plugin-wp-support-thisismyurl
+Get-Content 'C:\Users\Owner\Local Sites\dev\app\public\wp-content\debug.log' -Tail 10
+```
+
 ### Updating Documentation
 
 1. Keep README.md current with features and usage

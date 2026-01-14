@@ -231,13 +231,12 @@ class WPS_Update_Client {
 		$response = wp_remote_post( self::UPDATE_SERVER_URL, $args );
 
 		if ( is_wp_error( $response ) ) {
-			error_log( 'WPS Update Server Error: ' . $response->get_error_message() );
+
 			return false;
 		}
 
 		$code = wp_remote_retrieve_response_code( $response );
 		if ( 200 !== $code ) {
-			error_log( 'WPS Update Server returned HTTP ' . $code );
 			return false;
 		}
 
@@ -374,11 +373,13 @@ class WPS_Update_Client {
 		$update_data = self::get_update_data();
 
 		if ( $update_data ) {
-			wp_send_json_success( array(
-				'message'       => 'Updates checked successfully',
-				'license_valid' => $update_data['license_valid'] ?? false,
-				'plugins'       => count( $update_data['plugins'] ?? array() ),
-			) );
+			wp_send_json_success(
+				array(
+					'message'       => 'Updates checked successfully',
+					'license_valid' => $update_data['license_valid'] ?? false,
+					'plugins'       => count( $update_data['plugins'] ?? array() ),
+				)
+			);
 		} else {
 			wp_send_json_error( array( 'message' => 'Failed to check for updates' ) );
 		}

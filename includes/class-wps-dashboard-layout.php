@@ -35,6 +35,8 @@ class WPS_Dashboard_Layout {
 			'side'   => array(
 				'WPS_widget_health',
 				'WPS_widget_environment_status',
+				'WPS_widget_database_stats',
+				'WPS_widget_performance_history',
 				'WPS_widget_quick_actions',
 				'WPS_widget_events_and_news',
 			),
@@ -414,43 +416,51 @@ class WPS_Dashboard_Layout {
 	 */
 	private static function get_available_widgets(): array {
 		return array(
-			'WPS_widget_activity'        => array(
+			'WPS_widget_activity'           => array(
 				'title'    => __( 'Activity', 'plugin-wp-support-thisismyurl' ),
 				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_activity' ),
 			),
-			'WPS_widget_scheduled_tasks' => array(
+			'WPS_widget_scheduled_tasks'    => array(
 				'title'    => __( 'Scheduled Tasks', 'plugin-wp-support-thisismyurl' ),
 				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_scheduled_tasks' ),
 			),
-			'WPS_widget_modules'         => array(
+			'WPS_widget_modules'            => array(
 				'title'    => __( 'Modules', 'plugin-wp-support-thisismyurl' ),
 				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_modules' ),
 			),
-			'WPS_widget_health'          => array(
+			'WPS_widget_health'             => array(
 				'title'    => __( 'Health', 'plugin-wp-support-thisismyurl' ),
 				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_health' ),
 			),
-			'WPS_widget_quick_actions'   => array(
+			'WPS_widget_quick_actions'      => array(
 				'title'    => __( 'Quick Actions', 'plugin-wp-support-thisismyurl' ),
 				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_quick_actions' ),
 			),
-			'WPS_widget_events_and_news' => array(
+			'WPS_widget_events_and_news'    => array(
 				'title'    => __( 'Events and News', 'plugin-wp-support-thisismyurl' ),
 				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_events_and_news' ),
 			),
-			'WPS_widget_system_health'   => array(
+			'WPS_widget_system_health'      => array(
 				'title'    => __( 'System Health', 'plugin-wp-support-thisismyurl' ),
 				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_system_health' ),
 			),
-			'WPS_widget_vault_status'    => array(
+			'WPS_widget_vault_status'       => array(
 				'title'    => __( 'Vault Status', 'plugin-wp-support-thisismyurl' ),
 				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_vault_status' ),
 			),
-			'WPS_widget_media_overview'  => array(
+			'WPS_widget_database_stats'     => array(
+				'title'    => __( 'Database Statistics', 'plugin-wp-support-thisismyurl' ),
+				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_database_stats' ),
+			),
+			'WPS_widget_performance_history' => array(
+				'title'    => __( 'Historical Performance', 'plugin-wp-support-thisismyurl' ),
+				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_performance_history' ),
+			),
+			'WPS_widget_media_overview'     => array(
 				'title'    => __( 'Media Overview', 'plugin-wp-support-thisismyurl' ),
 				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_media_overview' ),
 			),
-			'WPS_widget_vault_overview'  => array(
+			'WPS_widget_vault_overview'     => array(
 				'title'    => __( 'Vault Overview', 'plugin-wp-support-thisismyurl' ),
 				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_vault_overview' ),
 			),

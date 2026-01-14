@@ -472,8 +472,6 @@ class WPS_Snapshot_Manager {
 			get_current_user_id(),
 			$description
 		);
-
-		error_log( $log_message );
 	}
 
 	/**

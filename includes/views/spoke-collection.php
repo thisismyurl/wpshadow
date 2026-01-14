@@ -29,8 +29,8 @@ function wp_support_render_spoke_collection(): void {
 	}
 
 	// Get collection data.
-	$spokes = WPS_Spoke_Collection::get_all_spokes();
-	$stats  = WPS_Spoke_Collection::get_collection_stats();
+	$spokes     = WPS_Spoke_Collection::get_all_spokes();
+	$stats      = WPS_Spoke_Collection::get_collection_stats();
 	$milestones = WPS_Spoke_Collection::get_unlocked_milestones();
 
 	// Check for new milestone notifications.
@@ -86,7 +86,7 @@ function wp_support_render_spoke_collection(): void {
 						<circle class="wps-progress-bg" cx="40" cy="40" r="35" />
 						<circle class="wps-progress-fill" cx="40" cy="40" r="35" 
 							style="stroke-dasharray: <?php echo esc_attr( 2 * M_PI * 35 ); ?>; 
-								   stroke-dashoffset: <?php echo esc_attr( 2 * M_PI * 35 * ( 1 - $stats['progress'] / 100 ) ); ?>;" />
+									stroke-dashoffset: <?php echo esc_attr( 2 * M_PI * 35 * ( 1 - $stats['progress'] / 100 ) ); ?>;" />
 						<text x="40" y="45" class="wps-progress-text"><?php echo esc_html( $stats['progress'] . '%' ); ?></text>
 					</svg>
 				</div>
@@ -98,7 +98,7 @@ function wp_support_render_spoke_collection(): void {
 		<div class="wps-spoke-gallery">
 			<?php foreach ( $spokes as $spoke_id => $spoke ) : ?>
 				<div class="wps-spoke-card wps-spoke-<?php echo esc_attr( $spoke['status'] ); ?>" 
-					 data-spoke="<?php echo esc_attr( $spoke_id ); ?>">
+					data-spoke="<?php echo esc_attr( $spoke_id ); ?>">
 					
 					<!-- Spoke Icon -->
 					<div class="wps-spoke-icon-wrapper">
@@ -247,9 +247,9 @@ function wp_support_render_spoke_collection(): void {
 	<?php
 	// Show milestone popup if there are new achievements.
 	if ( $new_milestones && is_array( $new_milestones ) ) :
-		$first_milestone = reset( $new_milestones );
-		$milestone_name = $first_milestone['name'] ?? '';
-		$milestone_desc = $first_milestone['description'] ?? '';
+		$first_milestone  = reset( $new_milestones );
+		$milestone_name   = $first_milestone['name'] ?? '';
+		$milestone_desc   = $first_milestone['description'] ?? '';
 		$milestone_reward = $first_milestone['reward'] ?? '';
 		?>
 		<script>

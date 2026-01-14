@@ -41,17 +41,17 @@ class WPS_Site_Audit {
 	 */
 	public static function generate_audit(): array {
 		$report = array(
-			'id'              => wp_generate_uuid4(),
-			'timestamp'       => time(),
-			'wordpress'       => array(),
-			'performance'     => array(),
-			'security'        => array(),
-			'optimization'    => array(),
-			'plugins'         => array(),
-			'theme'           => array(),
-			'broken_links'    => array(),
-			'missing_alt'     => array(),
-			'php_compat'      => array(),
+			'id'           => wp_generate_uuid4(),
+			'timestamp'    => time(),
+			'wordpress'    => array(),
+			'performance'  => array(),
+			'security'     => array(),
+			'optimization' => array(),
+			'plugins'      => array(),
+			'theme'        => array(),
+			'broken_links' => array(),
+			'missing_alt'  => array(),
+			'php_compat'   => array(),
 			'autoload'     => array(),
 		);
 
@@ -318,25 +318,25 @@ class WPS_Site_Audit {
 
 		$results = $wpdb->get_results( $query, ARRAY_A );
 
-		$offenders        = array();
-		$total_autoload   = 0;
-		$offenders_500kb  = 0;
-		$offenders_100kb  = 0;
+		$offenders       = array();
+		$total_autoload  = 0;
+		$offenders_500kb = 0;
+		$offenders_100kb = 0;
 
 		if ( ! empty( $results ) ) {
 			foreach ( $results as $row ) {
-				$size_bytes   = (int) $row['size'];
-				$size_kb      = round( $size_bytes / 1024, 2 );
-				$option_name  = (string) $row['option_name'];
+				$size_bytes      = (int) $row['size'];
+				$size_kb         = round( $size_bytes / 1024, 2 );
+				$option_name     = (string) $row['option_name'];
 				$total_autoload += $size_bytes;
 
 				$severity = 'info';
 				if ( $size_kb >= 500 ) {
 					$severity = 'critical';
-					$offenders_500kb++;
+					++$offenders_500kb;
 				} elseif ( $size_kb >= 100 ) {
 					$severity = 'warning';
-					$offenders_100kb++;
+					++$offenders_100kb;
 				}
 
 				$offenders[] = array(
@@ -537,7 +537,7 @@ class WPS_Site_Audit {
 					$url = home_url( $url );
 				}
 
-				$total_links_checked++;
+				++$total_links_checked;
 
 				// Check if URL is accessible (basic check).
 				$response = wp_safe_remote_head(
@@ -603,9 +603,9 @@ class WPS_Site_Audit {
 
 		if ( empty( $posts ) ) {
 			return array(
-				'total_images'   => 0,
-				'missing_count'  => 0,
-				'images'         => array(),
+				'total_images'  => 0,
+				'missing_count' => 0,
+				'images'        => array(),
 			);
 		}
 
@@ -620,7 +620,7 @@ class WPS_Site_Audit {
 			}
 
 			foreach ( $matches[0] as $img_tag ) {
-				$total_images++;
+				++$total_images;
 
 				// Check if alt attribute exists and is not empty.
 				if ( ! preg_match( '/alt=["\']([^"\']*)["\']/', $img_tag, $alt_match ) || empty( trim( $alt_match[1] ) ) ) {
@@ -750,11 +750,11 @@ class WPS_Site_Audit {
 		}
 
 		return array(
-			'current_version'      => $current_php,
-			'recommended_version'  => $recommended_php,
-			'issues_count'         => count( $issues ),
-			'issues'               => $issues,
-			'is_compatible'        => empty( $issues ),
+			'current_version'     => $current_php,
+			'recommended_version' => $recommended_php,
+			'issues_count'        => count( $issues ),
+			'issues'              => $issues,
+			'is_compatible'       => empty( $issues ),
 		);
 	}
 
@@ -916,7 +916,7 @@ class WPS_Site_Audit {
 							<p style="margin: 10px 0; font-size: 13px;">
 								<?php
 								printf(
-									esc_html__( 'Current PHP Version: %s | Recommended: %s', 'plugin-wp-support-thisismyurl' ),
+									esc_html__( 'Current PHP Version: %1$s | Recommended: %2$s', 'plugin-wp-support-thisismyurl' ),
 									esc_html( $latest['php_compat']['current_version'] ),
 									esc_html( $latest['php_compat']['recommended_version'] )
 								);
@@ -942,7 +942,7 @@ class WPS_Site_Audit {
 							<p style="margin: 10px 0; font-size: 13px; color: #666;">
 								<?php
 								printf(
-									esc_html__( 'Checked %d links and found %d broken.', 'plugin-wp-support-thisismyurl' ),
+									esc_html__( 'Checked %1$d links and found %2$d broken.', 'plugin-wp-support-thisismyurl' ),
 									intval( $latest['broken_links']['total_checked'] ),
 									intval( $latest['broken_links']['broken_count'] )
 								);
@@ -973,7 +973,7 @@ class WPS_Site_Audit {
 							<p style="margin: 10px 0; font-size: 13px; color: #666;">
 								<?php
 								printf(
-									esc_html__( 'Found %d images without alt tags out of %d total images checked.', 'plugin-wp-support-thisismyurl' ),
+									esc_html__( 'Found %1$d images without alt tags out of %2$d total images checked.', 'plugin-wp-support-thisismyurl' ),
 									intval( $latest['missing_alt']['missing_count'] ),
 									intval( $latest['missing_alt']['total_images'] )
 								);

@@ -42,15 +42,15 @@ final class WPS_Feature_Auto_Rollback extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'auto-rollback',
-				'name'                => __( 'Automatic Update Rollback', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Automatically create snapshots before updates (core/theme/plugins), validate after completion, and rollback on failure with diff summary', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => false,
-				'version'             => '1.0.0',
-				'widget_group'        => 'advanced',
-				'widget_label'        => __( 'Safety Features', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Advanced safety and recovery features to protect your WordPress installation', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'auto-rollback',
+				'name'               => __( 'Automatic Update Rollback', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Automatically create snapshots before updates (core/theme/plugins), validate after completion, and rollback on failure with diff summary', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => false,
+				'version'            => '1.0.0',
+				'widget_group'       => 'advanced',
+				'widget_label'       => __( 'Safety Features', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Advanced safety and recovery features to protect your WordPress installation', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}
@@ -89,7 +89,7 @@ final class WPS_Feature_Auto_Rollback extends WPS_Abstract_Feature {
 		// Only create snapshot if we're doing an update (not install).
 		if ( isset( $hook_extra['action'] ) && 'update' === $hook_extra['action'] ) {
 			$type = $hook_extra['type'] ?? 'unknown';
-			
+
 			// Create snapshot description.
 			$description = sprintf(
 				'Pre-update snapshot: %s update',
@@ -101,17 +101,14 @@ final class WPS_Feature_Auto_Rollback extends WPS_Abstract_Feature {
 
 			if ( $snapshot_id ) {
 				// Store snapshot ID for later validation.
-				update_option( self::PRE_UPDATE_SNAPSHOT_KEY, $snapshot_id, false );
-				update_option( self::UPDATE_IN_PROGRESS_KEY, array(
-					'type'      => $type,
-					'timestamp' => time(),
-				), false );
+				$this->update_setting( self::PRE_UPDATE_SNAPSHOT_KEY, $snapshot_id, false  );
+				$this->update_setting( self::UPDATE_IN_PROGRESS_KEY, array(
+						'type'      => $type,
+						'timestamp' => time( ),
+					),
+					false
+				);
 
-				error_log( sprintf(
-					'[AUTO-ROLLBACK] Created pre-update snapshot: %s (Type: %s)',
-					$snapshot_id,
-					$type
-				) );
 			}
 		}
 
@@ -141,7 +138,7 @@ final class WPS_Feature_Auto_Rollback extends WPS_Abstract_Feature {
 	 */
 	public function validate_and_rollback( $upgrader, $options ): void {
 		// Check if we have a pre-update snapshot.
-		$pre_snapshot_id = get_option( self::PRE_UPDATE_SNAPSHOT_KEY );
+		$pre_snapshot_id = $this->get_setting( self::PRE_UPDATE_SNAPSHOT_KEY );
 		$update_info     = get_option( self::UPDATE_IN_PROGRESS_KEY );
 
 		if ( ! $pre_snapshot_id || ! $update_info ) {
@@ -155,15 +152,14 @@ final class WPS_Feature_Auto_Rollback extends WPS_Abstract_Feature {
 			// Update succeeded - create post-update snapshot for comparison.
 			$post_snapshot_id = WPS_Snapshot_Manager::create_snapshot(
 				sprintf(
-					'Post-update snapshot: %s update succeeded',
-					$update_info['type']
-				)
+					'Post-update snapshot: %s update succeeded', $update_info['type']
+				 )
 			);
 
 			// Generate diff summary.
 			if ( $post_snapshot_id ) {
 				$diff = $this->generate_diff_summary( $pre_snapshot_id, $post_snapshot_id );
-				
+
 				// Store success notice with diff.
 				set_transient(
 					'wps_rollback_notice',
@@ -177,10 +173,6 @@ final class WPS_Feature_Auto_Rollback extends WPS_Abstract_Feature {
 					300
 				);
 
-				error_log( sprintf(
-					'[AUTO-ROLLBACK] Update validated successfully (Type: %s)',
-					$update_info['type']
-				) );
 			}
 		} else {
 			// Validation failed - perform rollback.
@@ -244,7 +236,7 @@ final class WPS_Feature_Auto_Rollback extends WPS_Abstract_Feature {
 
 		// Read last 50 lines of error log.
 		$lines = $this->tail_file( $error_log_file, 50 );
-		
+
 		// Filter for recent errors (last 5 minutes).
 		$time_threshold = time() - 300;
 
@@ -253,9 +245,9 @@ final class WPS_Feature_Auto_Rollback extends WPS_Abstract_Feature {
 			if ( preg_match( '/\[(\d{2}-\w{3}-\d{4} \d{2}:\d{2}:\d{2}.*?)\]/', $line, $matches ) ) {
 				$error_time = strtotime( $matches[1] );
 				if ( $error_time && $error_time > $time_threshold ) {
-					if ( stripos( $line, 'Fatal error' ) !== false || 
-					     stripos( $line, 'Parse error' ) !== false ||
-					     stripos( $line, 'Catchable fatal error' ) !== false ) {
+					if ( stripos( $line, 'Fatal error' ) !== false ||
+						stripos( $line, 'Parse error' ) !== false ||
+						stripos( $line, 'Catchable fatal error' ) !== false ) {
 						$errors[] = $line;
 					}
 				}
@@ -305,11 +297,6 @@ final class WPS_Feature_Auto_Rollback extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	private function perform_rollback( string $snapshot_id, array $errors, string $update_type ): void {
-		error_log( sprintf(
-			'[AUTO-ROLLBACK] Performing rollback to snapshot %s due to validation failures (Type: %s)',
-			$snapshot_id,
-			$update_type
-		) );
 
 		// Attempt to restore the snapshot.
 		$restored = WPS_Snapshot_Manager::restore_snapshot( $snapshot_id );
@@ -328,10 +315,6 @@ final class WPS_Feature_Auto_Rollback extends WPS_Abstract_Feature {
 				300
 			);
 
-			error_log( sprintf(
-				'[AUTO-ROLLBACK] Rollback completed successfully. Errors: %s',
-				implode( ', ', $errors )
-			) );
 		} else {
 			// Rollback failed.
 			set_transient(
@@ -342,8 +325,6 @@ final class WPS_Feature_Auto_Rollback extends WPS_Abstract_Feature {
 				),
 				300
 			);
-
-			error_log( '[AUTO-ROLLBACK] Rollback failed!' );
 		}
 	}
 
@@ -366,7 +347,7 @@ final class WPS_Feature_Auto_Rollback extends WPS_Abstract_Feature {
 		// WordPress version change.
 		if ( ! empty( $comparison['versions']['wordpress']['changed'] ) ) {
 			$summary[] = sprintf(
-				__( 'WordPress: %s → %s', 'plugin-wp-support-thisismyurl' ),
+				__( 'WordPress: %1$s → %2$s', 'plugin-wp-support-thisismyurl' ),
 				$comparison['versions']['wordpress']['before'],
 				$comparison['versions']['wordpress']['after']
 			);
@@ -377,7 +358,7 @@ final class WPS_Feature_Auto_Rollback extends WPS_Abstract_Feature {
 			$plugin_summary = array();
 
 			if ( ! empty( $comparison['plugins']['updated'] ) ) {
-				$count = count( $comparison['plugins']['updated'] );
+				$count            = count( $comparison['plugins']['updated'] );
 				$plugin_summary[] = sprintf(
 					_n( '%d plugin updated', '%d plugins updated', $count, 'plugin-wp-support-thisismyurl' ),
 					$count
@@ -385,7 +366,7 @@ final class WPS_Feature_Auto_Rollback extends WPS_Abstract_Feature {
 			}
 
 			if ( ! empty( $comparison['plugins']['added'] ) ) {
-				$count = count( $comparison['plugins']['added'] );
+				$count            = count( $comparison['plugins']['added'] );
 				$plugin_summary[] = sprintf(
 					_n( '%d plugin added', '%d plugins added', $count, 'plugin-wp-support-thisismyurl' ),
 					$count
@@ -393,7 +374,7 @@ final class WPS_Feature_Auto_Rollback extends WPS_Abstract_Feature {
 			}
 
 			if ( ! empty( $comparison['plugins']['removed'] ) ) {
-				$count = count( $comparison['plugins']['removed'] );
+				$count            = count( $comparison['plugins']['removed'] );
 				$plugin_summary[] = sprintf(
 					_n( '%d plugin removed', '%d plugins removed', $count, 'plugin-wp-support-thisismyurl' ),
 					$count
@@ -401,7 +382,7 @@ final class WPS_Feature_Auto_Rollback extends WPS_Abstract_Feature {
 			}
 
 			if ( ! empty( $comparison['plugins']['activated'] ) ) {
-				$count = count( $comparison['plugins']['activated'] );
+				$count            = count( $comparison['plugins']['activated'] );
 				$plugin_summary[] = sprintf(
 					_n( '%d plugin activated', '%d plugins activated', $count, 'plugin-wp-support-thisismyurl' ),
 					$count
@@ -409,7 +390,7 @@ final class WPS_Feature_Auto_Rollback extends WPS_Abstract_Feature {
 			}
 
 			if ( ! empty( $comparison['plugins']['deactivated'] ) ) {
-				$count = count( $comparison['plugins']['deactivated'] );
+				$count            = count( $comparison['plugins']['deactivated'] );
 				$plugin_summary[] = sprintf(
 					_n( '%d plugin deactivated', '%d plugins deactivated', $count, 'plugin-wp-support-thisismyurl' ),
 					$count
@@ -424,7 +405,7 @@ final class WPS_Feature_Auto_Rollback extends WPS_Abstract_Feature {
 		// Theme change.
 		if ( ! empty( $comparison['theme']['changed'] ) ) {
 			$summary[] = sprintf(
-				__( 'Theme: %s → %s', 'plugin-wp-support-thisismyurl' ),
+				__( 'Theme: %1$s → %2$s', 'plugin-wp-support-thisismyurl' ),
 				$comparison['theme']['before'],
 				$comparison['theme']['after']
 			);

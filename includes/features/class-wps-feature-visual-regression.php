@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
+namespace WPS\CoreSupport;
 
 use WPS\CoreSupport\WPS_Snapshot_Manager;
 
@@ -91,15 +91,15 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'visual-regression',
-				'name'                => __( 'Visual Regression Update Guard', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Automatically capture screenshots before/after updates and detect visual changes. Flags or rolls back updates with >5% visual difference.', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => false,
-				'version'             => '1.0.0',
-				'widget_group'        => 'safety',
-				'widget_label'        => __( 'Safety Features', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Advanced safety and recovery features to protect your WordPress installation', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'visual-regression',
+				'name'               => __( 'Visual Regression Update Guard', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Automatically capture screenshots before/after updates and detect visual changes. Flags or rolls back updates with >5% visual difference.', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => false,
+				'version'            => '1.0.0',
+				'widget_group'       => 'safety',
+				'widget_label'       => __( 'Safety Features', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Advanced safety and recovery features to protect your WordPress installation', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}
@@ -168,32 +168,20 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 		if ( isset( $hook_extra['action'] ) && 'update' === $hook_extra['action'] ) {
 			$type = $hook_extra['type'] ?? 'unknown';
 
-			error_log( sprintf(
-				'[VISUAL-REGRESSION] Starting screenshot capture for %s update',
-				$type
-			) );
-
 			// Capture screenshots of key pages.
 			$screenshots = $this->capture_screenshots();
 
 			if ( ! empty( $screenshots ) ) {
 				// Store screenshots for later comparison.
-				update_option(
-					self::PRE_UPDATE_SCREENSHOTS_KEY,
-					array(
+				$this->update_setting( self::PRE_UPDATE_SCREENSHOTS_KEY, array(
 						'type'        => $type,
-						'timestamp'   => time(),
+						'timestamp'   => time( ),
 						'screenshots' => $screenshots,
 					),
 					false
 				);
 
-				error_log( sprintf(
-					'[VISUAL-REGRESSION] Captured %d screenshots before update',
-					count( $screenshots )
-				) );
 			} else {
-				error_log( '[VISUAL-REGRESSION] Failed to capture pre-update screenshots' );
 			}
 		}
 
@@ -209,14 +197,11 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 	 */
 	public function validate_visual_changes( $upgrader, $options ): void {
 		// Check if we have pre-update screenshots.
-		$pre_update_data = get_option( self::PRE_UPDATE_SCREENSHOTS_KEY );
+		$pre_update_data = $this->get_setting( self::PRE_UPDATE_SCREENSHOTS_KEY );
 
 		if ( ! $pre_update_data || empty( $pre_update_data['screenshots'] ) ) {
 			return;
 		}
-
-		error_log( '[VISUAL-REGRESSION] Starting post-update screenshot capture and comparison' );
-
 		// Allow site to stabilize after update (configurable delay).
 		sleep( self::STABILIZATION_DELAY );
 
@@ -224,7 +209,6 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 		$post_screenshots = $this->capture_screenshots();
 
 		if ( empty( $post_screenshots ) ) {
-			error_log( '[VISUAL-REGRESSION] Failed to capture post-update screenshots' );
 			$this->cleanup_screenshots( $pre_update_data['screenshots'] );
 			delete_option( self::PRE_UPDATE_SCREENSHOTS_KEY );
 			return;
@@ -232,9 +216,8 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 
 		// Compare screenshots.
 		$comparison_results = $this->compare_screenshots(
-			$pre_update_data['screenshots'],
-			$post_screenshots
-		);
+			$pre_update_data['screenshots'], $post_screenshots
+		 );
 
 		// Calculate average visual difference.
 		$total_diff = 0;
@@ -249,12 +232,6 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 
 		$avg_difference = $count > 0 ? $total_diff / $count : 0;
 		$threshold      = $this->get_threshold();
-
-		error_log( sprintf(
-			'[VISUAL-REGRESSION] Average visual difference: %.2f%% (threshold: %.2f%%)',
-			$avg_difference,
-			$threshold
-		) );
 
 		// Store comparison results.
 		set_transient(
@@ -272,16 +249,10 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 
 		// Flag for manual review or trigger rollback if threshold exceeded.
 		if ( $avg_difference > $threshold ) {
-			error_log( sprintf(
-				'[VISUAL-REGRESSION] Visual difference (%.2f%%) exceeds threshold (%.2f%%). Flagging for review.',
-				$avg_difference,
-				$threshold
-			) );
 
 			// Set a flag that can be checked by auto-rollback feature.
 			set_transient( self::FAILED_FLAG_TRANSIENT, true, self::RESULTS_TRANSIENT_TIMEOUT );
 		} else {
-			error_log( '[VISUAL-REGRESSION] Visual difference within acceptable threshold' );
 		}
 
 		// Cleanup old screenshots.
@@ -321,21 +292,13 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 			);
 
 			if ( is_wp_error( $response ) ) {
-				error_log( sprintf(
-					'[VISUAL-REGRESSION] Failed to fetch %s: %s',
-					$url,
-					$response->get_error_message()
-				) );
+
 				continue;
 			}
 
 			$status_code = wp_remote_retrieve_response_code( $response );
 			if ( 200 !== $status_code ) {
-				error_log( sprintf(
-					'[VISUAL-REGRESSION] Non-200 status for %s: %d',
-					$url,
-					$status_code
-				) );
+
 				continue;
 			}
 
@@ -387,9 +350,9 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 		}
 
 		// 4. Extract visible text content (content changes).
-		$text = wp_strip_all_tags( $html );
-		$text = preg_replace( '/\s+/', ' ', $text );
-		$text = substr( $text, 0, self::MAX_TEXT_LENGTH );
+		$text                    = wp_strip_all_tags( $html );
+		$text                    = preg_replace( '/\s+/', ' ', $text );
+		$text                    = substr( $text, 0, self::MAX_TEXT_LENGTH );
 		$visual_elements['text'] = $text;
 
 		// 5. Extract stylesheet links (CSS file changes).
@@ -439,11 +402,11 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 			$differences[] = $pre_data['html_hash'] === $post_data['html_hash'] ? 0 : self::HTML_HASH_DIFF_WEIGHT;
 
 			// 3. HTML length difference (significant structural changes).
-			$length_diff = abs( $pre_data['html_length'] - $post_data['html_length'] );
+			$length_diff     = abs( $pre_data['html_length'] - $post_data['html_length'] );
 			$length_diff_pct = $pre_data['html_length'] > 0
 				? ( $length_diff / $pre_data['html_length'] ) * 100
 				: 0;
-			$differences[] = min( $length_diff_pct, self::LENGTH_DIFF_MAX_WEIGHT );
+			$differences[]   = min( $length_diff_pct, self::LENGTH_DIFF_MAX_WEIGHT );
 
 			// Calculate average difference.
 			$total_difference = array_sum( $differences );
@@ -482,7 +445,7 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 	 * @return float Threshold percentage.
 	 */
 	private function get_threshold(): float {
-		$threshold = get_option( self::THRESHOLD_KEY, self::DEFAULT_THRESHOLD );
+		$threshold = $this->get_setting( self::THRESHOLD_KEY, self::DEFAULT_THRESHOLD  );
 		return (float) $threshold;
 	}
 
@@ -501,17 +464,17 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 		// Delete transient so notice only shows once.
 		delete_transient( 'wps_visual_regression_results' );
 
-		$exceeded = $results['exceeded_threshold'] ?? false;
-		$avg_diff = $results['avg_difference'] ?? 0;
+		$exceeded  = $results['exceeded_threshold'] ?? false;
+		$avg_diff  = $results['avg_difference'] ?? 0;
 		$threshold = $results['threshold'] ?? self::DEFAULT_THRESHOLD;
-		$type = $results['type'] ?? 'unknown';
+		$type      = $results['type'] ?? 'unknown';
 
 		$class = $exceeded ? 'notice-warning' : 'notice-success';
 
 		if ( $exceeded ) {
 			$message = sprintf(
 				/* translators: 1: Update type, 2: Visual difference percentage, 3: Threshold percentage */
-				__( 'Visual Regression Detected: %s update resulted in %.2f%% visual difference (threshold: %.2f%%). Manual review recommended.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Visual Regression Detected: %1$s update resulted in %2$.2f%% visual difference (threshold: %3$.2f%%). Manual review recommended.', 'plugin-wp-support-thisismyurl' ),
 				ucfirst( $type ),
 				$avg_diff,
 				$threshold
@@ -519,7 +482,7 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 		} else {
 			$message = sprintf(
 				/* translators: 1: Update type, 2: Visual difference percentage */
-				__( 'Visual Check Passed: %s update resulted in %.2f%% visual difference. No significant layout changes detected.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Visual Check Passed: %1$s update resulted in %2$.2f%% visual difference. No significant layout changes detected.', 'plugin-wp-support-thisismyurl' ),
 				ucfirst( $type ),
 				$avg_diff
 			);

@@ -26,15 +26,15 @@ final class WPS_Feature_Asset_Version_Removal extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'asset-version-removal',
-				'name'                => __( 'Remove Asset Version Strings', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Help visitors load files faster by letting their browser remember them longer', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => true,
-				'version'             => '1.0.0',
-			'widget_group'        => 'cleanup',
-			'widget_label'        => __( 'Code Cleanup', 'plugin-wp-support-thisismyurl' ),
-			'widget_description'  => __( 'Remove unnecessary code and optimize markup', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'asset-version-removal',
+				'name'               => __( 'Remove Asset Version Strings', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Help visitors load files faster by letting their browser remember them longer', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => true,
+				'version'            => '1.0.0',
+				'widget_group'       => 'cleanup',
+				'widget_label'       => __( 'Code Cleanup', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Remove unnecessary code and optimize markup', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}
@@ -69,4 +69,3 @@ final class WPS_Feature_Asset_Version_Removal extends WPS_Abstract_Feature {
 		return remove_query_arg( 'ver', $src );
 	}
 }
-

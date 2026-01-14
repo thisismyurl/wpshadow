@@ -362,7 +362,7 @@ abstract class WPS_Spoke_Base {
 				$content
 			);
 		} catch ( \Exception $e ) {
-			\error_log( 'WPS Content Filter Error: ' . $e->getMessage() );
+
 			return $content;
 		}
 	}

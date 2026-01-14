@@ -28,9 +28,9 @@ class WPS_Customization_Audit {
 	/**
 	 * Risk level constants.
 	 */
-	private const RISK_LOW = 'low';
+	private const RISK_LOW    = 'low';
 	private const RISK_MEDIUM = 'medium';
-	private const RISK_HIGH = 'high';
+	private const RISK_HIGH   = 'high';
 
 	/**
 	 * Initialize Customization Audit system.
@@ -66,20 +66,20 @@ class WPS_Customization_Audit {
 	 */
 	public static function generate_audit(): array {
 		$report = array(
-			'id'                => wp_generate_uuid4(),
-			'timestamp'         => time(),
-			'site_url'          => get_site_url(),
-			'custom_post_types' => array(),
-			'custom_taxonomies' => array(),
-			'custom_shortcodes' => array(),
-			'custom_meta_fields' => array(),
-			'custom_hooks'      => array(),
-			'custom_tables'     => array(),
-			'wp_config_mods'    => array(),
-			'theme_customizations' => array(),
+			'id'                    => wp_generate_uuid4(),
+			'timestamp'             => time(),
+			'site_url'              => get_site_url(),
+			'custom_post_types'     => array(),
+			'custom_taxonomies'     => array(),
+			'custom_shortcodes'     => array(),
+			'custom_meta_fields'    => array(),
+			'custom_hooks'          => array(),
+			'custom_tables'         => array(),
+			'wp_config_mods'        => array(),
+			'theme_customizations'  => array(),
 			'plugin_customizations' => array(),
-			'risk_assessment'   => array(),
-			'summary'           => array(),
+			'risk_assessment'       => array(),
+			'summary'               => array(),
 		);
 
 		// Detect custom post types.
@@ -166,7 +166,12 @@ class WPS_Customization_Audit {
 
 		foreach ( $taxonomies as $slug => $taxonomy ) {
 			$location   = self::find_registration_location( 'taxonomy', $slug );
-			$term_count = wp_count_terms( array( 'taxonomy' => $slug, 'hide_empty' => false ) );
+			$term_count = wp_count_terms(
+				array(
+					'taxonomy'   => $slug,
+					'hide_empty' => false,
+				)
+			);
 
 			$custom_taxonomies[] = array(
 				'name'        => $taxonomy->label,
@@ -307,7 +312,7 @@ class WPS_Customization_Audit {
 					'count'      => $total,
 					'risk_level' => self::RISK_LOW,
 				);
-				$count++;
+				++$count;
 			}
 		}
 
@@ -492,7 +497,7 @@ class WPS_Customization_Audit {
 		}
 
 		// Check for dropins.
-		$dropins = _get_dropins();
+		$dropins        = _get_dropins();
 		$active_dropins = array();
 
 		foreach ( $dropins as $file => $dropin ) {
@@ -547,15 +552,15 @@ class WPS_Customization_Audit {
 			}
 
 			foreach ( $report[ $section ] as $item ) {
-				$total_customizations++;
+				++$total_customizations;
 
 				$risk = $item['risk_level'] ?? self::RISK_LOW;
 				if ( $risk === self::RISK_HIGH ) {
-					$high_risk_count++;
+					++$high_risk_count;
 				} elseif ( $risk === self::RISK_MEDIUM ) {
-					$medium_risk_count++;
+					++$medium_risk_count;
 				} else {
-					$low_risk_count++;
+					++$low_risk_count;
 				}
 			}
 		}

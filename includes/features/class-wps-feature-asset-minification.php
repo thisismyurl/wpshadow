@@ -26,15 +26,15 @@ final class WPS_Feature_Asset_Minification extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'asset-minification',
-				'name'                => __( 'Asset Minification & Compression', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Minify CSS/JS and enable compression for faster asset delivery', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => false,
-				'version'             => '1.0.0',
-				'widget_group'        => 'performance',
-				'widget_label'        => __( 'Performance Optimization', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Optimize images and page load performance', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'asset-minification',
+				'name'               => __( 'Asset Minification & Compression', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Minify CSS/JS and enable compression for faster asset delivery', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => false,
+				'version'            => '1.0.0',
+				'widget_group'       => 'performance',
+				'widget_label'       => __( 'Performance Optimization', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Optimize images and page load performance', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}
@@ -104,8 +104,8 @@ final class WPS_Feature_Asset_Minification extends WPS_Abstract_Feature {
 		}
 
 		// Get configured async/defer scripts from options.
-		$async_handles = (array) get_option( 'wps_async_script_handles', array() );
-		$defer_handles = (array) get_option( 'wps_defer_script_handles', array() );
+		$async_handles = (array) $this->get_setting( 'wps_async_script_handles', array( ) );
+		$defer_handles = (array) $this->get_setting( 'wps_defer_script_handles', array( ) );
 
 		// Allow filtering.
 		$async_handles = apply_filters( 'wps_async_script_handles', $async_handles );

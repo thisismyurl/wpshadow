@@ -63,7 +63,7 @@ function wps_ajax_install_spoke(): void {
 	}
 
 	// Get module info from registry (for download URL).
-	$catalog = WPS_Module_Registry::get_catalog_with_status();
+	$catalog     = WPS_Module_Registry::get_catalog_with_status();
 	$module_info = null;
 
 	foreach ( $catalog as $module ) {
@@ -83,7 +83,7 @@ function wps_ajax_install_spoke(): void {
 	}
 
 	$upgrader = new WPS_Plugin_Upgrader();
-	$result = $upgrader->install( $module_info['download_url'] );
+	$result   = $upgrader->install( $module_info['download_url'] );
 
 	if ( is_wp_error( $result ) ) {
 		wp_send_json_error( $result->get_error_message() );
@@ -139,7 +139,7 @@ function wps_ajax_activate_spoke(): void {
 	}
 
 	// Get spoke slug.
-	$spoke_slug = $spoke . '-support-thisismyurl';
+	$spoke_slug  = $spoke . '-support-thisismyurl';
 	$plugin_file = $spoke_slug . '/' . $spoke_slug . '.php';
 
 	// Check if plugin exists.
@@ -227,7 +227,7 @@ function wps_ajax_deactivate_spoke(): void {
 	}
 
 	// Get spoke slug.
-	$spoke_slug = $spoke . '-support-thisismyurl';
+	$spoke_slug  = $spoke . '-support-thisismyurl';
 	$plugin_file = $spoke_slug . '/' . $spoke_slug . '.php';
 
 	// Check if plugin exists.

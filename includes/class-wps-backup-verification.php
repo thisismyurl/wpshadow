@@ -210,7 +210,6 @@ class WPS_Backup_Verification {
 		foreach ( $required_tables as $table ) {
 			$exists = $wpdb->get_var( "SHOW TABLES LIKE '" . esc_sql( $table ) . "'" );
 			if ( ! $exists ) {
-				error_log( "Backup verification: Table {$table} missing" );
 				return false;
 			}
 		}
@@ -218,14 +217,12 @@ class WPS_Backup_Verification {
 		// Check basic row counts.
 		$user_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->users}" );
 		if ( $user_count < 1 ) {
-			error_log( 'Backup verification: No users found' );
 			return false;
 		}
 
 		// Check for options table data.
 		$options_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->options}" );
 		if ( $options_count < 5 ) {
-			error_log( 'Backup verification: Options table appears corrupted' );
 			return false;
 		}
 
@@ -245,7 +242,6 @@ class WPS_Backup_Verification {
 
 			// Check if plugin file still exists.
 			if ( ! file_exists( $plugin_file ) ) {
-				error_log( "Backup verification: Plugin {$plugin} missing after restore" );
 				return false;
 			}
 		}
@@ -263,14 +259,12 @@ class WPS_Backup_Verification {
 		$admins = get_users( array( 'role' => 'administrator' ) );
 
 		if ( empty( $admins ) ) {
-			error_log( 'Backup verification: No admin users found' );
 			return false;
 		}
 
 		// Verify admin user has valid data.
 		$admin = $admins[0];
 		if ( empty( $admin->user_login ) || empty( $admin->user_email ) ) {
-			error_log( 'Backup verification: Admin user data corrupted' );
 			return false;
 		}
 
@@ -323,9 +317,6 @@ class WPS_Backup_Verification {
 			count( $test['tests'] ),
 			count( $test['issues'] )
 		);
-
-		error_log( $log_message );
-
 		// If failed, send email alert (if enabled).
 		if ( ! $test['success'] ) {
 			self::send_verification_alert( $test );

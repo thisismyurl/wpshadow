@@ -330,8 +330,7 @@ class WPS_Module_Downloader {
 			esc_url_raw( $url ),
 			$attempts
 		);
-
-		error_log( $message ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 
 		// Optional audit event.
 		do_action( 'WPS_module_download_success', $url, $attempts, $this->session_id );
@@ -352,8 +351,7 @@ class WPS_Module_Downloader {
 			sanitize_key( $reason ),
 			sanitize_text_field( $detail )
 		);
-
-		error_log( $message ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 
 		// Optional audit event.
 		do_action( 'WPS_module_download_failure', $url, $reason, $detail, $this->session_id );
@@ -418,7 +416,7 @@ class WPS_Module_Downloader {
 				'invalid_structure',
 				sprintf(
 					/* translators: %s: Expected slug */
-					__( 'ZIP does not contain expected plugin structure (%s/%s.php). The archive may be invalid.', 'plugin-wp-support-thisismyurl' ),
+					__( 'ZIP does not contain expected plugin structure (%1$s/%2$s.php). The archive may be invalid.', 'plugin-wp-support-thisismyurl' ),
 					$expected_slug,
 					$expected_slug
 				)

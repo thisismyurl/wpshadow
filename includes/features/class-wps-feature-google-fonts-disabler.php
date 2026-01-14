@@ -26,15 +26,15 @@ final class WPS_Feature_Google_Fonts_Disabler extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'google-fonts-disabler',
-				'name'                => __( 'Disable Google Fonts', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Remove Google Fonts for better privacy and faster load times', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => false,
-				'version'             => '1.0.0',
-				'widget_group'        => 'performance',
-				'widget_label'        => __( 'Resource Optimization', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Optimize how resources are loaded and delivered', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'google-fonts-disabler',
+				'name'               => __( 'Disable Google Fonts', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Remove Google Fonts for better privacy and faster load times', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => false,
+				'version'            => '1.0.0',
+				'widget_group'       => 'performance',
+				'widget_label'       => __( 'Resource Optimization', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Optimize how resources are loaded and delivered', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}
@@ -84,7 +84,7 @@ final class WPS_Feature_Google_Fonts_Disabler extends WPS_Abstract_Feature {
 		}
 
 		foreach ( $wp_styles->registered as $handle => $style ) {
-			if ( isset( $style->src ) && ( strpos( $style->src, 'fonts.googleapis.com' ) !== false || strpos( $style->src, 'fonts.gstatic.com' ) !== false ) ) {
+			if ( isset( $style->src ) && is_string( $style->src ) && ( strpos( $style->src, 'fonts.googleapis.com' ) !== false || strpos( $style->src, 'fonts.gstatic.com' ) !== false ) ) {
 				wp_dequeue_style( $handle );
 				wp_deregister_style( $handle );
 			}

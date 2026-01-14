@@ -26,10 +26,10 @@ function wp_support_setup_dashboard_screen( string $hub_id = '', string $spoke_i
 	}
 
 	// Register dashboard metaboxes for all levels (core, hub, spoke) on dashboard tab.
-	$context  = WPS_Tab_Navigation::get_current_context();
-	$tab      = $context['tab'] ?? 'dashboard';
-	$hub      = $context['hub'] ?? '';
-	$spoke    = $context['spoke'] ?? '';
+	$context = WPS_Tab_Navigation::get_current_context();
+	$tab     = $context['tab'] ?? 'dashboard';
+	$hub     = $context['hub'] ?? '';
+	$spoke   = $context['spoke'] ?? '';
 
 	// Only register metaboxes when on dashboard tab.
 	if ( 'dashboard' !== $tab ) {
@@ -88,16 +88,10 @@ function wp_support_setup_dashboard_screen( string $hub_id = '', string $spoke_i
  * @return void
  */
 function wp_support_setup_hub_dashboard_screen( string $hub_id ): void {
-	error_log( 'wp_support_setup_hub_dashboard_screen: Called for hub_id=' . $hub_id );
-
 	$screen = get_current_screen();
 	if ( ! $screen ) {
-		error_log( 'wp_support_setup_hub_dashboard_screen: No screen available' );
 		return;
 	}
-
-	error_log( 'wp_support_setup_hub_dashboard_screen: Screen ID=' . $screen->id );
-
 	// Format hub display name.
 	$hub_name = esc_html( ucfirst( str_replace( '-', ' ', $hub_id ) ) );
 

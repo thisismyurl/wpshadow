@@ -41,15 +41,15 @@ final class WPS_Feature_Brute_Force_Protection extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'brute-force-protection',
-				'name'                => __( 'Brute Force Protection', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Protects against brute force login attacks by rate-limiting failed attempts. After 5 failed attempts within 15 minutes, the IP is locked out for 30 minutes.', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => false,
-				'version'             => '1.0.0',
-				'widget_group'        => 'security',
-				'widget_label'        => __( 'Security', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Advanced security features to protect your WordPress installation', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'brute-force-protection',
+				'name'               => __( 'Brute Force Protection', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Protects against brute force login attacks by rate-limiting failed attempts. After 5 failed attempts within 15 minutes, the IP is locked out for 30 minutes.', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => false,
+				'version'            => '1.0.0',
+				'widget_group'       => 'security',
+				'widget_label'       => __( 'Security', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}
@@ -376,7 +376,7 @@ final class WPS_Feature_Brute_Force_Protection extends WPS_Abstract_Feature {
 
 		foreach ( $results as $row ) {
 			$lockout_until = (int) $row->option_value;
-			
+
 			// Skip expired lockouts.
 			if ( $lockout_until <= $now ) {
 				continue;
@@ -384,12 +384,12 @@ final class WPS_Feature_Brute_Force_Protection extends WPS_Abstract_Feature {
 
 			// Extract IP hash from option name.
 			$ip_hash = str_replace( $prefix, '', $row->option_name );
-			
+
 			// Try to find the actual IP from attempts data.
 			$attempts_key = 'wps_login_attempts_' . $ip_hash;
 			$attempts     = get_transient( $attempts_key );
 			$ip           = '';
-			
+
 			if ( is_array( $attempts ) && ! empty( $attempts ) ) {
 				$ip = $attempts[0]['ip'] ?? $ip_hash;
 			} else {
@@ -418,7 +418,7 @@ final class WPS_Feature_Brute_Force_Protection extends WPS_Abstract_Feature {
 		}
 
 		$ip = isset( $_POST['ip'] ) ? sanitize_text_field( wp_unslash( $_POST['ip'] ) ) : '';
-		
+
 		if ( empty( $ip ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid IP address', 'plugin-wp-support-thisismyurl' ) ) );
 		}

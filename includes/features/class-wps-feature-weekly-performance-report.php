@@ -32,15 +32,26 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'wps_weekly_performance_report',
-				'name'                => __( 'Weekly Performance Report', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Sends weekly email reports with performance metrics and improvements.', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'version'             => '1.0.0',
-				'default_enabled'     => false,
-				'widget_group'        => 'diagnostics',
-				'widget_label'        => __( 'Diagnostics & Monitoring', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Health checks and monitoring features', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'wps_weekly_performance_report',
+				'name'               => __( 'Weekly Performance Report', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Sends weekly email reports with performance metrics and improvements.', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'version'            => '1.0.0',
+				'default_enabled'    => false,
+				'widget_group'       => 'diagnostics',
+				'widget_label'       => __( 'Diagnostics & Monitoring', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Health checks and monitoring features', 'plugin-wp-support-thisismyurl' ),
+			)
+		);
+
+		// Register default settings.
+		$this->register_default_settings(
+			array(
+				self::METRICS_OPTION_KEY  => array(),
+				self::SETTINGS_OPTION_KEY => array(
+					'enabled'          => true,
+					'recipient_emails' => array( get_option( 'admin_email' ) ),
+				),
 			)
 		);
 	}
@@ -139,12 +150,13 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 	 * @return array
 	 */
 	public static function get_current_week_metrics(): array {
-		$metrics = get_option( self::METRICS_OPTION_KEY, array() );
+		$instance = new self();
+		$metrics  = $instance->get_setting( self::METRICS_OPTION_KEY, array() );
 		$week_key = self::get_current_week_key();
 
 		if ( ! isset( $metrics[ $week_key ] ) ) {
 			$metrics[ $week_key ] = self::get_default_metrics();
-			update_option( self::METRICS_OPTION_KEY, $metrics );
+			$instance->update_setting( self::METRICS_OPTION_KEY, $metrics );
 		}
 
 		return $metrics[ $week_key ];
@@ -157,17 +169,17 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 	 */
 	private static function get_default_metrics(): array {
 		return array(
-			'uptime_checks'       => 0,
-			'uptime_success'      => 0,
-			'speed_improvements'  => 0,
-			'issues_fixed'        => 0,
-			'data_saved_mb'       => 0,
-			'cpu_cycles_saved'    => 0,
-			'time_saved_seconds'  => 0,
-			'page_load_before'    => 0,
-			'page_load_after'     => 0,
-			'week_start'          => strtotime( 'monday this week' ),
-			'week_end'            => strtotime( 'sunday this week' ) + DAY_IN_SECONDS - 1,
+			'uptime_checks'      => 0,
+			'uptime_success'     => 0,
+			'speed_improvements' => 0,
+			'issues_fixed'       => 0,
+			'data_saved_mb'      => 0,
+			'cpu_cycles_saved'   => 0,
+			'time_saved_seconds' => 0,
+			'page_load_before'   => 0,
+			'page_load_after'    => 0,
+			'week_start'         => strtotime( 'monday this week' ),
+			'week_end'           => strtotime( 'sunday this week' ) + DAY_IN_SECONDS - 1,
 		);
 	}
 
@@ -194,17 +206,18 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 
 		set_transient( 'wps_last_uptime_check', time(), HOUR_IN_SECONDS );
 
-		$metrics = get_option( self::METRICS_OPTION_KEY, array() );
+		$instance = new self();
+		$metrics  = $instance->get_setting( self::METRICS_OPTION_KEY, array() );
 		$week_key = self::get_current_week_key();
 
 		if ( ! isset( $metrics[ $week_key ] ) ) {
 			$metrics[ $week_key ] = self::get_default_metrics();
 		}
 
-		$metrics[ $week_key ]['uptime_checks']++;
-		$metrics[ $week_key ]['uptime_success']++;
+		++$metrics[ $week_key ]['uptime_checks'];
+		++$metrics[ $week_key ]['uptime_success'];
 
-		update_option( self::METRICS_OPTION_KEY, $metrics );
+		$instance->update_setting( self::METRICS_OPTION_KEY, $metrics );
 	}
 
 	/**
@@ -214,19 +227,20 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public static function track_issue_resolved( array $issue_data ): void {
-		$metrics = get_option( self::METRICS_OPTION_KEY, array() );
+		$instance = new self();
+		$metrics  = $instance->get_setting( self::METRICS_OPTION_KEY, array() );
 		$week_key = self::get_current_week_key();
 
 		if ( ! isset( $metrics[ $week_key ] ) ) {
 			$metrics[ $week_key ] = self::get_default_metrics();
 		}
 
-		$metrics[ $week_key ]['issues_fixed']++;
+		++$metrics[ $week_key ]['issues_fixed'];
 
 		// Estimate time saved (average 30 minutes per issue).
 		$metrics[ $week_key ]['time_saved_seconds'] += 1800;
 
-		update_option( self::METRICS_OPTION_KEY, $metrics );
+		$instance->update_setting( self::METRICS_OPTION_KEY, $metrics );
 	}
 
 	/**
@@ -237,7 +251,8 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public static function track_performance_improvement( string $improvement_type, array $improvement_data ): void {
-		$metrics = get_option( self::METRICS_OPTION_KEY, array() );
+		$instance = new self();
+		$metrics  = $instance->get_setting( self::METRICS_OPTION_KEY, array() );
 		$week_key = self::get_current_week_key();
 
 		if ( ! isset( $metrics[ $week_key ] ) ) {
@@ -246,13 +261,13 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 
 		switch ( $improvement_type ) {
 			case 'speed':
-				$metrics[ $week_key ]['speed_improvements']++;
+				++$metrics[ $week_key ]['speed_improvements'];
 				if ( isset( $improvement_data['time_saved'] ) ) {
 					$metrics[ $week_key ]['time_saved_seconds'] += (int) $improvement_data['time_saved'];
 				}
 				if ( isset( $improvement_data['load_time_before'], $improvement_data['load_time_after'] ) ) {
 					$metrics[ $week_key ]['page_load_before'] = (float) $improvement_data['load_time_before'];
-					$metrics[ $week_key ]['page_load_after'] = (float) $improvement_data['load_time_after'];
+					$metrics[ $week_key ]['page_load_after']  = (float) $improvement_data['load_time_after'];
 				}
 				break;
 
@@ -285,11 +300,11 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 		}
 
 		$time_saved_hours = round( $metrics['time_saved_seconds'] / 3600, 2 );
-		$data_saved_mb = round( $metrics['data_saved_mb'], 2 );
-		$cpu_cycles = number_format( $metrics['cpu_cycles_saved'] );
+		$data_saved_mb    = round( $metrics['data_saved_mb'], 2 );
+		$cpu_cycles       = number_format( $metrics['cpu_cycles_saved'] );
 
 		$week_start = gmdate( 'M j, Y', $metrics['week_start'] );
-		$week_end = gmdate( 'M j, Y', $metrics['week_end'] );
+		$week_end   = gmdate( 'M j, Y', $metrics['week_end'] );
 
 		ob_start();
 		?>
@@ -502,16 +517,17 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public static function send_weekly_report(): void {
-		$settings = get_option( self::SETTINGS_OPTION_KEY, array() );
-		$enabled = $settings['enabled'] ?? true;
+		$instance = new self();
+		$settings = $instance->get_setting( self::SETTINGS_OPTION_KEY, array() );
+		$enabled  = $settings['enabled'] ?? true;
 
 		if ( ! $enabled ) {
 			return;
 		}
 
 		$recipient_emails = $settings['recipient_emails'] ?? array( get_option( 'admin_email' ) );
-		$week_key = self::get_current_week_key();
-		$metrics = get_option( self::METRICS_OPTION_KEY, array() );
+		$week_key         = self::get_current_week_key();
+		$metrics          = $instance->get_setting( self::METRICS_OPTION_KEY, array() );
 
 		if ( ! isset( $metrics[ $week_key ] ) ) {
 			return;
@@ -571,7 +587,7 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
-		$metrics = self::get_current_week_metrics();
+		$metrics     = self::get_current_week_metrics();
 		$report_html = self::generate_report_html( $metrics );
 
 		?>
@@ -595,7 +611,7 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 							<td>
 								<?php
 								$settings = get_option( self::SETTINGS_OPTION_KEY, array() );
-								$enabled = $settings['enabled'] ?? true;
+								$enabled  = $settings['enabled'] ?? true;
 								?>
 								<label>
 									<input type="checkbox" name="<?php echo esc_attr( self::SETTINGS_OPTION_KEY ); ?>[enabled]" value="1" <?php checked( $enabled, true ); ?> />
@@ -623,7 +639,7 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
 		}
 
-		$metrics = self::get_current_week_metrics();
+		$metrics     = self::get_current_week_metrics();
 		$report_html = self::generate_report_html( $metrics );
 
 		wp_send_json_success( array( 'html' => $report_html ) );

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace WPS\CoreSupport;
 
-
 /**
  * WPS_Feature_Nav_Accessibility
  *
@@ -27,15 +26,15 @@ final class WPS_Feature_Nav_Accessibility extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'nav-accessibility',
-				'name'                => __( 'Navigation Menu Accessibility & Class Simplification', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Make your navigation easier for everyone to use, including people with disabilities', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => true,
-				'version'             => '1.0.0',
-			'widget_group'        => 'accessibility',
-			'widget_label'        => __( 'Accessibility', 'plugin-wp-support-thisismyurl' ),
-			'widget_description'  => __( 'Improve site accessibility for all users', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'nav-accessibility',
+				'name'               => __( 'Navigation Menu Accessibility & Class Simplification', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Make your navigation easier for everyone to use, including people with disabilities', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => true,
+				'version'            => '1.0.0',
+				'widget_group'       => 'accessibility',
+				'widget_label'       => __( 'Accessibility', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Improve site accessibility for all users', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}
@@ -62,7 +61,7 @@ final class WPS_Feature_Nav_Accessibility extends WPS_Abstract_Feature {
 	 * @return array Modified menu items.
 	 */
 	public function optimize_menu_output( array $items, $args ): array {
-		$options = (array) get_option( 'wps_nav_accessibility_options', $this->get_default_options() );
+		$options = (array) $this->get_setting( 'wps_nav_accessibility_options', $this->get_default_options( ) );
 
 		foreach ( $items as $item ) {
 			// Add ARIA attributes.
@@ -74,9 +73,9 @@ final class WPS_Feature_Nav_Accessibility extends WPS_Abstract_Feature {
 
 			// Simplify classes.
 			if ( $options['simplify_classes'] ?? false ) {
-				$active_class   = $item->current ? 'is-active' : '';
-				$has_children   = in_array( 'menu-item-has-children', $item->classes, true ) ? 'has-children' : '';
-				$item->classes  = array_filter( array( 'nav-item', $active_class, $has_children ) );
+				$active_class  = $item->current ? 'is-active' : '';
+				$has_children  = in_array( 'menu-item-has-children', $item->classes, true ) ? 'has-children' : '';
+				$item->classes = array_filter( array( 'nav-item', $active_class, $has_children ) );
 			}
 		}
 
@@ -90,9 +89,8 @@ final class WPS_Feature_Nav_Accessibility extends WPS_Abstract_Feature {
 	 */
 	private function get_default_options(): array {
 		return array(
-			'add_aria_current'  => true,
-			'simplify_classes'  => true,
+			'add_aria_current' => true,
+			'simplify_classes' => true,
 		);
 	}
 }
-

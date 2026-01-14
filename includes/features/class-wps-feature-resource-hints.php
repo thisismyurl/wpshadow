@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace WPS\CoreSupport;
 
-
 /**
  * WPS_Feature_Resource_Hints
  *
@@ -27,15 +26,15 @@ final class WPS_Feature_Resource_Hints extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'resource-hints',
-				'name'                => __( 'DNS Prefetch & Resource Hints Management', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Tell browsers to prepare for external services, so they load faster', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => false,
-				'version'             => '1.0.0',
-				'widget_group'        => 'performance',
-				'widget_label'        => __( 'Resource Optimization', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Optimize how resources are loaded and delivered', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'resource-hints',
+				'name'               => __( 'DNS Prefetch & Resource Hints Management', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Tell browsers to prepare for external services, so they load faster', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => false,
+				'version'            => '1.0.0',
+				'widget_group'       => 'performance',
+				'widget_label'       => __( 'Resource Optimization', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Optimize how resources are loaded and delivered', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}
@@ -66,7 +65,7 @@ final class WPS_Feature_Resource_Hints extends WPS_Abstract_Feature {
 			return $urls;
 		}
 
-		$options = (array) get_option( 'wps_resource_hints_options', $this->get_default_options() );
+		$options = (array) $this->get_setting( 'wps_resource_hints_options', $this->get_default_options( ) );
 
 		// Remove WordPress.org DNS prefetch.
 		if ( $options['remove_s_w_org'] ?? false ) {
@@ -81,7 +80,7 @@ final class WPS_Feature_Resource_Hints extends WPS_Abstract_Feature {
 		}
 
 		// Add custom hints.
-		$custom_hints = (array) get_option( 'wps_custom_resource_hints', array() );
+		$custom_hints = (array) $this->get_setting( 'wps_custom_resource_hints', array( ) );
 		if ( ! empty( $custom_hints ) ) {
 			$urls = array_merge( $urls, array_values( $custom_hints ) );
 			$urls = array_unique( $urls );
@@ -107,7 +106,7 @@ final class WPS_Feature_Resource_Hints extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function add_preload_headers(): void {
-		$preload_resources = (array) get_option( 'wps_preload_resources', array() );
+		$preload_resources = (array) $this->get_setting( 'wps_preload_resources', array( ) );
 
 		// Allow filtering.
 		$preload_resources = apply_filters( 'wps_preload_resources', $preload_resources );
@@ -125,7 +124,7 @@ final class WPS_Feature_Resource_Hints extends WPS_Abstract_Feature {
 
 			// Add type attribute for fonts.
 			if ( 'font' === $type ) {
-				$mime_type = $resource['mime_type'] ?? 'font/woff2';
+				$mime_type   = $resource['mime_type'] ?? 'font/woff2';
 				$attributes .= sprintf( ' type="%s" crossorigin', esc_attr( $mime_type ) );
 			}
 
@@ -138,4 +137,3 @@ final class WPS_Feature_Resource_Hints extends WPS_Abstract_Feature {
 		}
 	}
 }
-

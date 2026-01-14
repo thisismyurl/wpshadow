@@ -27,17 +27,17 @@ class WPS_System_Report_Generator {
 	public static function init(): void {
 		// Admin menu.
 		add_action( 'admin_menu', array( __CLASS__, 'register_menu' ) );
-		
+
 		// AJAX handlers.
 		add_action( 'wp_ajax_wps_generate_report', array( __CLASS__, 'ajax_generate_report' ) );
 		add_action( 'wp_ajax_wps_create_shareable_link', array( __CLASS__, 'ajax_create_shareable_link' ) );
-		
+
 		// Public report viewing (with token).
 		add_action( 'template_redirect', array( __CLASS__, 'handle_shareable_report' ) );
-		
+
 		// Cron for auto-delete expired links.
 		add_action( 'wps_cleanup_expired_reports', array( __CLASS__, 'cleanup_expired_reports' ) );
-		
+
 		if ( ! wp_next_scheduled( 'wps_cleanup_expired_reports' ) ) {
 			wp_schedule_event( time(), 'daily', 'wps_cleanup_expired_reports' );
 		}
@@ -84,13 +84,13 @@ class WPS_System_Report_Generator {
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'wps_system_report' ),
 				'strings' => array(
-					'generating'      => __( 'Generating report...', 'plugin-wp-support-thisismyurl' ),
-					'generated'       => __( 'Report generated successfully', 'plugin-wp-support-thisismyurl' ),
-					'copied'          => __( 'Copied to clipboard', 'plugin-wp-support-thisismyurl' ),
-					'copyFailed'      => __( 'Failed to copy', 'plugin-wp-support-thisismyurl' ),
-					'creatingLink'    => __( 'Creating shareable link...', 'plugin-wp-support-thisismyurl' ),
-					'linkCreated'     => __( 'Link created successfully', 'plugin-wp-support-thisismyurl' ),
-					'error'           => __( 'An error occurred', 'plugin-wp-support-thisismyurl' ),
+					'generating'   => __( 'Generating report...', 'plugin-wp-support-thisismyurl' ),
+					'generated'    => __( 'Report generated successfully', 'plugin-wp-support-thisismyurl' ),
+					'copied'       => __( 'Copied to clipboard', 'plugin-wp-support-thisismyurl' ),
+					'copyFailed'   => __( 'Failed to copy', 'plugin-wp-support-thisismyurl' ),
+					'creatingLink' => __( 'Creating shareable link...', 'plugin-wp-support-thisismyurl' ),
+					'linkCreated'  => __( 'Link created successfully', 'plugin-wp-support-thisismyurl' ),
+					'error'        => __( 'An error occurred', 'plugin-wp-support-thisismyurl' ),
 				),
 			)
 		);
@@ -132,7 +132,6 @@ class WPS_System_Report_Generator {
 		$info['server'] = self::get_server_config();
 
 		// Error log.
-		$info['error_log'] = self::get_error_log();
 
 		// Database info.
 		$info['database'] = self::get_database_info();
@@ -233,11 +232,11 @@ class WPS_System_Report_Generator {
 	 * @return array<string, mixed>
 	 */
 	private static function get_server_config(): array {
-		$memory_limit     = ini_get( 'memory_limit' );
-		$max_execution    = ini_get( 'max_execution_time' );
-		$upload_max       = ini_get( 'upload_max_filesize' );
-		$post_max         = ini_get( 'post_max_size' );
-		$max_input_vars   = ini_get( 'max_input_vars' );
+		$memory_limit   = ini_get( 'memory_limit' );
+		$max_execution  = ini_get( 'max_execution_time' );
+		$upload_max     = ini_get( 'upload_max_filesize' );
+		$post_max       = ini_get( 'post_max_size' );
+		$max_input_vars = ini_get( 'max_input_vars' );
 
 		return array(
 			'memory_limit'       => $memory_limit,
@@ -255,9 +254,8 @@ class WPS_System_Report_Generator {
 	 *
 	 * @return array<int, string>
 	 */
-	private static function get_error_log(): array {
-		$error_log_path = ini_get( 'error_log' );
-
+	private static function get_error_log_lines(): array {
+		$error_log_path = WP_CONTENT_DIR . '/debug.log';
 		if ( empty( $error_log_path ) || ! file_exists( $error_log_path ) || ! is_readable( $error_log_path ) ) {
 			return array( 'Error log not accessible or not configured' );
 		}
@@ -294,9 +292,9 @@ class WPS_System_Report_Generator {
 		// Get total database size.
 		$size_query = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT SUM(data_length + index_length) / 1024 / 1024 
+				'SELECT SUM(data_length + index_length) / 1024 / 1024 
 				FROM information_schema.TABLES 
-				WHERE table_schema = %s",
+				WHERE table_schema = %s',
 				$db_name
 			)
 		);
@@ -318,7 +316,7 @@ class WPS_System_Report_Generator {
 		);
 
 		return array(
-			'total_size_mb' => $total_size,
+			'total_size_mb'  => $total_size,
 			'largest_tables' => $tables_query ? $tables_query : array(),
 		);
 	}
@@ -329,7 +327,7 @@ class WPS_System_Report_Generator {
 	 * @return array<string, mixed>
 	 */
 	private static function get_file_permissions(): array {
-		$upload_dir = wp_upload_dir();
+		$upload_dir  = wp_upload_dir();
 		$upload_path = ! empty( $upload_dir['basedir'] ) && empty( $upload_dir['error'] ) ? $upload_dir['basedir'] : WP_CONTENT_DIR . '/uploads';
 
 		$paths = array(
@@ -343,7 +341,7 @@ class WPS_System_Report_Generator {
 
 		foreach ( $paths as $name => $path ) {
 			if ( file_exists( $path ) ) {
-				$perms = fileperms( $path );
+				$perms                = fileperms( $path );
 				$permissions[ $name ] = array(
 					'path'       => $path,
 					'permission' => substr( sprintf( '%o', $perms ), -4 ),
@@ -454,7 +452,7 @@ class WPS_System_Report_Generator {
 		foreach ( $constants as $constant ) {
 			if ( defined( $constant ) ) {
 				$value = constant( $constant );
-				
+
 				// Convert boolean to string.
 				if ( is_bool( $value ) ) {
 					$value = $value ? 'true' : 'false';
@@ -522,51 +520,51 @@ class WPS_System_Report_Generator {
 	 * @return string Text report.
 	 */
 	public static function export_txt( array $data ): string {
-		$output = "=== SYSTEM REPORT ===\n";
-		$output .= "Generated: " . $data['generated_at'] . "\n";
-		$output .= "Site URL: " . $data['site_url'] . "\n\n";
+		$output  = "=== SYSTEM REPORT ===\n";
+		$output .= 'Generated: ' . $data['generated_at'] . "\n";
+		$output .= 'Site URL: ' . $data['site_url'] . "\n\n";
 
 		// Versions.
 		$output .= "=== VERSIONS ===\n";
 		foreach ( $data['versions'] as $key => $value ) {
-			$output .= ucfirst( $key ) . ": " . $value . "\n";
+			$output .= ucfirst( $key ) . ': ' . $value . "\n";
 		}
 		$output .= "\n";
 
 		// Theme.
 		$output .= "=== ACTIVE THEME ===\n";
-		$output .= "Name: " . $data['theme']['name'] . "\n";
-		$output .= "Version: " . $data['theme']['version'] . "\n";
-		$output .= "Author: " . $data['theme']['author'] . "\n\n";
+		$output .= 'Name: ' . $data['theme']['name'] . "\n";
+		$output .= 'Version: ' . $data['theme']['version'] . "\n";
+		$output .= 'Author: ' . $data['theme']['author'] . "\n\n";
 
 		// Plugins.
-		$output .= "=== PLUGINS ===\n";
-		$active_count = 0;
+		$output        .= "=== PLUGINS ===\n";
+		$active_count   = 0;
 		$inactive_count = 0;
 		foreach ( $data['plugins'] as $path => $plugin ) {
 			$status = $plugin['active'] ? '[Active]' : '[Inactive]';
 			if ( $plugin['active'] ) {
-				$active_count++;
+				++$active_count;
 			} else {
-				$inactive_count++;
+				++$inactive_count;
 			}
-			$output .= $status . " " . $plugin['name'] . " - v" . $plugin['version'] . "\n";
+			$output .= $status . ' ' . $plugin['name'] . ' - v' . $plugin['version'] . "\n";
 		}
-		$output .= "\nTotal Active: " . $active_count . ", Inactive: " . $inactive_count . "\n\n";
+		$output .= "\nTotal Active: " . $active_count . ', Inactive: ' . $inactive_count . "\n\n";
 
 		// Server config.
 		$output .= "=== SERVER CONFIGURATION ===\n";
 		foreach ( $data['server'] as $key => $value ) {
-			$output .= ucfirst( str_replace( '_', ' ', $key ) ) . ": " . $value . "\n";
+			$output .= ucfirst( str_replace( '_', ' ', $key ) ) . ': ' . $value . "\n";
 		}
 		$output .= "\n";
 
 		// Database.
 		$output .= "=== DATABASE ===\n";
-		$output .= "Total Size: " . $data['database']['total_size_mb'] . " MB\n";
+		$output .= 'Total Size: ' . $data['database']['total_size_mb'] . " MB\n";
 		$output .= "Largest Tables:\n";
 		foreach ( $data['database']['largest_tables'] as $table ) {
-			$output .= "  - " . $table['table'] . ": " . $table['size_mb'] . " MB\n";
+			$output .= '  - ' . $table['table'] . ': ' . $table['size_mb'] . " MB\n";
 		}
 		$output .= "\n";
 
@@ -574,31 +572,31 @@ class WPS_System_Report_Generator {
 		$output .= "=== FILE PERMISSIONS ===\n";
 		foreach ( $data['file_permissions'] as $name => $info ) {
 			$writable = $info['writable'] ? 'Writable' : 'Not Writable';
-			$output .= $name . ": " . $info['permission'] . " (" . $writable . ")\n";
+			$output  .= $name . ': ' . $info['permission'] . ' (' . $writable . ")\n";
 		}
 		$output .= "\n";
 
 		// Cron.
 		$output .= "=== CRON STATUS ===\n";
-		$output .= "Disabled: " . ( $data['cron']['disabled'] ? 'Yes' : 'No' ) . "\n";
-		$output .= "Scheduled Events: " . $data['cron']['event_count'] . "\n\n";
+		$output .= 'Disabled: ' . ( $data['cron']['disabled'] ? 'Yes' : 'No' ) . "\n";
+		$output .= 'Scheduled Events: ' . $data['cron']['event_count'] . "\n\n";
 
 		// Rewrite rules.
 		$output .= "=== REWRITE RULES ===\n";
-		$output .= "Permalink Structure: " . $data['rewrites']['permalink_structure'] . "\n";
-		$output .= "Rules Count: " . $data['rewrites']['rules_count'] . "\n\n";
+		$output .= 'Permalink Structure: ' . $data['rewrites']['permalink_structure'] . "\n";
+		$output .= 'Rules Count: ' . $data['rewrites']['rules_count'] . "\n\n";
 
 		// Multisite.
 		if ( ! empty( $data['multisite'] ) ) {
 			$output .= "=== MULTISITE ===\n";
-			$output .= "Site Count: " . $data['multisite']['site_count'] . "\n";
-			$output .= "Subdomain Install: " . ( $data['multisite']['subdomain'] ? 'Yes' : 'No' ) . "\n\n";
+			$output .= 'Site Count: ' . $data['multisite']['site_count'] . "\n";
+			$output .= 'Subdomain Install: ' . ( $data['multisite']['subdomain'] ? 'Yes' : 'No' ) . "\n\n";
 		}
 
 		// Constants.
 		$output .= "=== WP-CONFIG CONSTANTS ===\n";
 		foreach ( $data['constants'] as $constant => $value ) {
-			$output .= $constant . ": " . $value . "\n";
+			$output .= $constant . ': ' . $value . "\n";
 		}
 		$output .= "\n";
 
@@ -633,7 +631,7 @@ class WPS_System_Report_Generator {
 	 * @return array<string, mixed> Link info with token and expiry.
 	 */
 	public static function create_shareable_link( array $data, string $password = '' ): array {
-		$token = wp_generate_password( 32, false );
+		$token  = wp_generate_password( 32, false );
 		$expiry = time() + ( 7 * DAY_IN_SECONDS );
 
 		$link_data = array(
@@ -672,7 +670,7 @@ class WPS_System_Report_Generator {
 			return;
 		}
 
-		$token = sanitize_text_field( wp_unslash( $_GET['wps_report'] ) );
+		$token     = sanitize_text_field( wp_unslash( $_GET['wps_report'] ) );
 		$link_data = get_transient( 'wps_report_' . $token );
 
 		if ( ! $link_data || ! is_array( $link_data ) ) {
@@ -682,7 +680,7 @@ class WPS_System_Report_Generator {
 		// Check if password required.
 		if ( ! empty( $link_data['password'] ) ) {
 			$provided_password = isset( $_POST['report_password'] ) ? sanitize_text_field( wp_unslash( $_POST['report_password'] ) ) : '';
-			
+
 			if ( empty( $provided_password ) ) {
 				// Show password form.
 				self::render_password_form( $token );

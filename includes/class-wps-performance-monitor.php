@@ -86,9 +86,9 @@ class WPS_Performance_Monitor {
 			return;
 		}
 
-		$total_time = 0;
+		$total_time   = 0;
 		$slow_queries = array();
-		$query_types = array(
+		$query_types  = array(
 			'SELECT' => 0,
 			'INSERT' => 0,
 			'UPDATE' => 0,
@@ -99,8 +99,8 @@ class WPS_Performance_Monitor {
 		// Process queries if available.
 		if ( isset( $wpdb->queries ) && is_array( $wpdb->queries ) ) {
 			foreach ( $wpdb->queries as $query ) {
-				$sql = $query[0] ?? '';
-				$time = (float) ( $query[1] ?? 0 );
+				$sql    = $query[0] ?? '';
+				$time   = (float) ( $query[1] ?? 0 );
 				$caller = $query[2] ?? '';
 
 				$total_time += $time;
@@ -117,31 +117,31 @@ class WPS_Performance_Monitor {
 				// Count query types.
 				$sql_upper = strtoupper( trim( $sql ) );
 				if ( strpos( $sql_upper, 'SELECT' ) === 0 ) {
-					$query_types['SELECT']++;
+					++$query_types['SELECT'];
 				} elseif ( strpos( $sql_upper, 'INSERT' ) === 0 ) {
-					$query_types['INSERT']++;
+					++$query_types['INSERT'];
 				} elseif ( strpos( $sql_upper, 'UPDATE' ) === 0 ) {
-					$query_types['UPDATE']++;
+					++$query_types['UPDATE'];
 				} elseif ( strpos( $sql_upper, 'DELETE' ) === 0 ) {
-					$query_types['DELETE']++;
+					++$query_types['DELETE'];
 				} else {
-					$query_types['OTHER']++;
+					++$query_types['OTHER'];
 				}
 			}
 		}
 
 		// Collect current metrics.
 		$metrics = array(
-			'timestamp'       => time(),
-			'query_count'     => isset( $wpdb->queries ) ? count( $wpdb->queries ) : 0,
-			'query_time'      => round( $total_time, 4 ),
-			'slow_queries'    => $slow_queries,
-			'query_types'     => $query_types,
-			'memory'          => memory_get_peak_usage( true ),
-			'memory_mb'       => round( memory_get_peak_usage( true ) / 1024 / 1024, 2 ),
-			'load_time'       => timer_stop( 0, 4 ),
-			'db_size'         => self::get_database_size(),
-			'active_plugins'  => count( get_option( 'active_plugins', array() ) ),
+			'timestamp'      => time(),
+			'query_count'    => isset( $wpdb->queries ) ? count( $wpdb->queries ) : 0,
+			'query_time'     => round( $total_time, 4 ),
+			'slow_queries'   => $slow_queries,
+			'query_types'    => $query_types,
+			'memory'         => memory_get_peak_usage( true ),
+			'memory_mb'      => round( memory_get_peak_usage( true ) / 1024 / 1024, 2 ),
+			'load_time'      => timer_stop( 0, 4 ),
+			'db_size'        => self::get_database_size(),
+			'active_plugins' => count( get_option( 'active_plugins', array() ) ),
 		);
 
 		// Store current metrics.
@@ -167,7 +167,7 @@ class WPS_Performance_Monitor {
 		$history[ $metrics['timestamp'] ] = $metrics;
 
 		// Keep last 90 days.
-		$cutoff = time() - ( 90 * DAY_IN_SECONDS );
+		$cutoff  = time() - ( 90 * DAY_IN_SECONDS );
 		$history = array_filter(
 			$history,
 			function ( $timestamp ) use ( $cutoff ) {
@@ -216,17 +216,17 @@ class WPS_Performance_Monitor {
 		$query_score = min( 100, $query_score );
 
 		// Load time score (target: <1s).
-		$load_time = (float) ( $metrics['load_time'] ?? 1 );
+		$load_time  = (float) ( $metrics['load_time'] ?? 1 );
 		$load_score = max( 0, 100 - ( $load_time * 50 ) );
 		$load_score = min( 100, $load_score );
 
 		// Memory score (target: <50MB).
-		$memory_mb = (float) ( $metrics['memory_mb'] ?? 50 );
+		$memory_mb    = (float) ( $metrics['memory_mb'] ?? 50 );
 		$memory_score = max( 0, 100 - ( ( $memory_mb - 50 ) * 2 ) );
 		$memory_score = min( 100, $memory_score );
 
 		// Database size score (target: <100MB).
-		$db_size = (float) ( $metrics['db_size'] ?? 100 );
+		$db_size  = (float) ( $metrics['db_size'] ?? 100 );
 		$db_score = max( 0, 100 - ( ( $db_size - 100 ) * 0.5 ) );
 		$db_score = min( 100, $db_score );
 
@@ -271,10 +271,10 @@ class WPS_Performance_Monitor {
 		}
 
 		return array(
-			'score'       => $score,
-			'grade'       => $grade,
-			'color'       => $color,
-			'breakdown'   => array(
+			'score'     => $score,
+			'grade'     => $grade,
+			'color'     => $color,
+			'breakdown' => array(
 				'queries' => round( $query_score ),
 				'load'    => round( $load_score ),
 				'memory'  => round( $memory_score ),
@@ -370,7 +370,7 @@ class WPS_Performance_Monitor {
 	 */
 	public static function get_historical_metrics( int $days = 7 ): array {
 		$history = get_option( self::HISTORY_OPTION_KEY, array() );
-		$cutoff = time() - ( $days * DAY_IN_SECONDS );
+		$cutoff  = time() - ( $days * DAY_IN_SECONDS );
 
 		// Filter to requested timeframe.
 		$filtered = array_filter(
@@ -394,8 +394,8 @@ class WPS_Performance_Monitor {
 	 */
 	public static function get_recommendations(): array {
 		$recommendations = array();
-		$metrics = self::get_current_metrics();
-		$db_stats = self::get_database_stats();
+		$metrics         = self::get_current_metrics();
+		$db_stats        = self::get_database_stats();
 
 		// Check for high query count.
 		if ( isset( $metrics['query_count'] ) && $metrics['query_count'] > 50 ) {
@@ -425,7 +425,7 @@ class WPS_Performance_Monitor {
 
 		// Check for high memory usage.
 		if ( isset( $metrics['memory_mb'] ) && $metrics['memory_mb'] > 100 ) {
-			$memory_limit = ini_get( 'memory_limit' );
+			$memory_limit      = ini_get( 'memory_limit' );
 			$recommendations[] = array(
 				'type'        => 'critical',
 				'title'       => __( 'High Memory Usage', 'plugin-wp-support-thisismyurl' ),
@@ -503,8 +503,8 @@ class WPS_Performance_Monitor {
 		}
 
 		// Check memory threshold (80% of limit).
-		$memory_limit = ini_get( 'memory_limit' );
-		$memory_limit_mb = self::parse_memory_limit( $memory_limit );
+		$memory_limit     = ini_get( 'memory_limit' );
+		$memory_limit_mb  = self::parse_memory_limit( $memory_limit );
 		$memory_threshold = $memory_limit_mb * 0.8;
 
 		if ( $metrics['memory_mb'] > $memory_threshold ) {
@@ -528,7 +528,7 @@ class WPS_Performance_Monitor {
 	 */
 	private static function parse_memory_limit( string $limit ): float {
 		$limit = trim( $limit );
-		$unit = strtoupper( substr( $limit, -1 ) );
+		$unit  = strtoupper( substr( $limit, -1 ) );
 		$value = (float) substr( $limit, 0, -1 );
 
 		switch ( $unit ) {
@@ -554,13 +554,13 @@ class WPS_Performance_Monitor {
 		// Log to WPS Activity Logger if available.
 		// TODO: Re-enable when WPS_Activity_Logger::log_event() method exists
 		// if ( class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
-		// 	WPS_Activity_Logger::log_event(
-		// 		'performance_alert',
-		// 		$message,
-		// 		array(
-		// 			'alert_type' => $type,
-		// 		)
-		// 	);
+		//  WPS_Activity_Logger::log_event(
+		//      'performance_alert',
+		//      $message,
+		//      array(
+		//          'alert_type' => $type,
+		//      )
+		//  );
 		// }
 
 		// Store alert in transient to display in admin.
@@ -610,7 +610,7 @@ class WPS_Performance_Monitor {
 	 */
 	public static function cleanup_old_data(): void {
 		$history = get_option( self::HISTORY_OPTION_KEY, array() );
-		$cutoff = time() - ( 90 * DAY_IN_SECONDS );
+		$cutoff  = time() - ( 90 * DAY_IN_SECONDS );
 
 		$history = array_filter(
 			$history,
@@ -646,15 +646,25 @@ class WPS_Performance_Monitor {
 		}
 
 		$format = isset( $_POST['format'] ) ? sanitize_key( $_POST['format'] ) : 'json';
-		$days = isset( $_POST['days'] ) ? absint( $_POST['days'] ) : 30;
+		$days   = isset( $_POST['days'] ) ? absint( $_POST['days'] ) : 30;
 
 		$data = self::get_historical_metrics( $days );
 
 		if ( 'csv' === $format ) {
 			$csv = self::export_csv( $data );
-			wp_send_json_success( array( 'data' => $csv, 'format' => 'csv' ) );
+			wp_send_json_success(
+				array(
+					'data'   => $csv,
+					'format' => 'csv',
+				)
+			);
 		} else {
-			wp_send_json_success( array( 'data' => wp_json_encode( $data ), 'format' => 'json' ) );
+			wp_send_json_success(
+				array(
+					'data'   => wp_json_encode( $data ),
+					'format' => 'json',
+				)
+			);
 		}
 	}
 

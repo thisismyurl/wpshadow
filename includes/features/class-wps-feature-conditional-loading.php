@@ -26,15 +26,21 @@ final class WPS_Feature_Conditional_Loading extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'conditional-loading',
-				'name'                => __( 'Conditional Script Loading', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Load plugin scripts only on pages where they are needed', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => false,
-				'version'             => '1.0.0',
-				'widget_group'        => 'performance',
-				'widget_label'        => __( 'Resource Optimization', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Optimize how resources are loaded and delivered', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'conditional-loading',
+				'name'               => __( 'Conditional Script Loading', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Load plugin scripts only on pages where they are needed', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => false,
+				'version'            => '1.0.0',
+				'widget_group'       => 'performance',
+				'widget_label'       => __( 'Resource Optimization', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Optimize how resources are loaded and delivered', 'plugin-wp-support-thisismyurl' ),
+			)
+		);
+
+		$this->register_default_settings(
+			array(
+				'conditional_loading_rules' => array(),
 			)
 		);
 	}
@@ -58,7 +64,7 @@ final class WPS_Feature_Conditional_Loading extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function conditional_script_loading(): void {
-		$rules = (array) get_option( 'wps_conditional_loading_rules', array() );
+		$rules = (array) $this->get_setting( 'conditional_loading_rules', array() );
 
 		// Allow filtering of rules.
 		$rules = apply_filters( 'wps_conditional_loading_rules', $rules );

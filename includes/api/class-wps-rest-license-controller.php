@@ -107,9 +107,9 @@ class WPS_REST_License_Controller extends WPS_REST_Controller_Base {
 						'sanitize_callback' => 'sanitize_text_field',
 					),
 					'site_ids'    => array(
-						'type'              => 'array',
-						'default'           => array(),
-						'items'             => array(
+						'type'    => 'array',
+						'default' => array(),
+						'items'   => array(
 							'type' => 'integer',
 						),
 					),

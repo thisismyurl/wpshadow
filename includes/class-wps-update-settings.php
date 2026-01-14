@@ -63,9 +63,9 @@ function wp_support_render_updates_page(): void {
 	$masked_license = $has_license ? str_repeat( '•', max( 20, strlen( $license_key ) - 4 ) ) . substr( $license_key, -4 ) : '';
 
 	// Get current update status.
-	$update_data    = get_transient( 'wps_update_data' );
-	$license_valid  = false;
-	$license_expire = '';
+	$update_data       = get_transient( 'wps_update_data' );
+	$license_valid     = false;
+	$license_expire    = '';
 	$available_updates = array();
 
 	if ( $update_data && is_array( $update_data ) ) {

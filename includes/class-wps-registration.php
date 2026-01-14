@@ -60,11 +60,11 @@ class WPS_Registration {
 		}
 
 		// Validate and sanitize input data.
-		$site_name    = isset( $_POST['site_name'] ) ? sanitize_text_field( wp_unslash( $_POST['site_name'] ) ) : '';
-		$site_url     = isset( $_POST['site_url'] ) ? esc_url_raw( wp_unslash( $_POST['site_url'] ) ) : '';
-		$admin_name   = isset( $_POST['admin_name'] ) ? sanitize_text_field( wp_unslash( $_POST['admin_name'] ) ) : '';
-		$admin_email  = isset( $_POST['admin_email'] ) ? sanitize_email( wp_unslash( $_POST['admin_email'] ) ) : '';
-		$agree_terms  = isset( $_POST['agree_terms'] ) ? (bool) $_POST['agree_terms'] : false;
+		$site_name   = isset( $_POST['site_name'] ) ? sanitize_text_field( wp_unslash( $_POST['site_name'] ) ) : '';
+		$site_url    = isset( $_POST['site_url'] ) ? esc_url_raw( wp_unslash( $_POST['site_url'] ) ) : '';
+		$admin_name  = isset( $_POST['admin_name'] ) ? sanitize_text_field( wp_unslash( $_POST['admin_name'] ) ) : '';
+		$admin_email = isset( $_POST['admin_email'] ) ? sanitize_email( wp_unslash( $_POST['admin_email'] ) ) : '';
+		$agree_terms = isset( $_POST['agree_terms'] ) ? (bool) $_POST['agree_terms'] : false;
 
 		// Email preferences.
 		$opt_in_updates    = isset( $_POST['opt_in_updates'] ) ? (bool) $_POST['opt_in_updates'] : false;
@@ -131,10 +131,10 @@ class WPS_Registration {
 		// Store license key if provided.
 		if ( ! empty( $result['license_key'] ) ) {
 			WPS_License::save_key( $result['license_key'], false );
-			
+
 			// Validate the key immediately.
 			$validation = WPS_License::validate_key( $result['license_key'], false );
-			
+
 			if ( 'valid' !== $validation['status'] ) {
 				wp_send_json_error(
 					array(
@@ -183,12 +183,12 @@ class WPS_Registration {
 	 */
 	private static function call_registration_endpoint( array $data ) {
 		$args = array(
-			'method'      => 'POST',
-			'timeout'     => 15,
-			'sslverify'   => true,
-			'user-agent'  => 'WPS-Core-Registration/' . ( defined( 'wp_support_VERSION' ) ? wp_support_VERSION : 'dev' ),
-			'body'        => wp_json_encode( $data ),
-			'headers'     => array(
+			'method'     => 'POST',
+			'timeout'    => 15,
+			'sslverify'  => true,
+			'user-agent' => 'WPS-Core-Registration/' . ( defined( 'wp_support_VERSION' ) ? wp_support_VERSION : 'dev' ),
+			'body'       => wp_json_encode( $data ),
+			'headers'    => array(
 				'Content-Type' => 'application/json',
 			),
 		);

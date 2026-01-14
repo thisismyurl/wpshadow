@@ -26,15 +26,23 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'database-cleanup',
-				'name'                => __( 'Database Cleanup & Optimization', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Clean up post revisions, expired transients, and optimize database tables', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => false,
-				'version'             => '1.0.0',
-				'widget_group'        => 'performance',
-				'widget_label'        => __( 'Performance Optimization', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Optimize images and page load performance', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'database-cleanup',
+				'name'               => __( 'Database Cleanup & Optimization', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Clean up post revisions, expired transients, and optimize database tables', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+						'default_enabled'    => true,
+		$this->register_default_settings(
+			array(
+				'cleanup_frequency' => 'weekly',
+				'cleanup_options'   => array(
+					'cleanup_revisions'     => true,
+					'cleanup_transients'    => true,
+					'cleanup_spam'          => true,
+					'cleanup_orphaned_meta' => true,
+					'cleanup_auto_drafts'   => true,
+					'optimize_tables'       => false,
+					'keep_revisions'        => 5,
+				),
 			)
 		);
 	}
@@ -51,12 +59,12 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 
 		// Schedule cleanup events.
 		add_action( 'init', array( $this, 'schedule_cleanup' ) );
-		
+
 		// Register cleanup hooks.
 		add_action( 'wps_database_cleanup', array( $this, 'run_cleanup' ) );
 
-		// Add admin notice for manual cleanup.
-		add_action( 'admin_notices', array( $this, 'admin_cleanup_notice' ) );
+		// Admin notice removed - cleanup is automated via WP-Cron schedule.
+		// Users can manage settings in Dashboard Settings tab.
 
 		// Handle manual cleanup action.
 		add_action( 'admin_post_wps_run_database_cleanup', array( $this, 'handle_manual_cleanup' ) );
@@ -70,7 +78,7 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 	public function schedule_cleanup(): void {
 		if ( ! wp_next_scheduled( 'wps_database_cleanup' ) ) {
 			// Schedule weekly cleanup by default.
-			$frequency = get_option( 'wps_database_cleanup_frequency', 'weekly' );
+			$frequency = $this->get_setting( 'cleanup_frequency', 'weekly' );
 			wp_schedule_event( time(), $frequency, 'wps_database_cleanup' );
 		}
 	}
@@ -173,7 +181,7 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 
 			foreach ( $revisions_to_delete as $revision ) {
 				if ( wp_delete_post_revision( $revision->ID ) ) {
-					$deleted++;
+					++$deleted;
 				}
 			}
 		}
@@ -257,7 +265,7 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 		global $wpdb;
 
 		// Delete auto-drafts older than 7 days.
-		$deleted = 0;
+		$deleted     = 0;
 		$auto_drafts = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT ID FROM {$wpdb->posts} 
@@ -269,7 +277,7 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 
 		foreach ( $auto_drafts as $draft ) {
 			if ( wp_delete_post( $draft->ID, true ) ) {
-				$deleted++;
+				++$deleted;
 			}
 		}
 
@@ -315,7 +323,7 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 			'optimize_tables'       => false,
 		);
 
-		return array_merge( $defaults, (array) get_option( 'wps_database_cleanup_options', array() ) );
+		return array_merge( $defaults, (array) $this->get_setting( 'cleanup_options', array() ) );
 	}
 
 	/**
@@ -359,10 +367,10 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 			'wps_run_database_cleanup'
 		);
 
-		echo '<div class="notice notice-info"><p>' . 
-			esc_html__( 'Database Cleanup is enabled. ', 'plugin-wp-support-thisismyurl' ) . 
-			'<a href="' . esc_url( $cleanup_url ) . '" class="button button-small">' . 
-			esc_html__( 'Run Cleanup Now', 'plugin-wp-support-thisismyurl' ) . 
+		echo '<div class="notice notice-info"><p>' .
+			esc_html__( 'Database Cleanup is enabled. ', 'plugin-wp-support-thisismyurl' ) .
+			'<a href="' . esc_url( $cleanup_url ) . '" class="button button-small">' .
+			esc_html__( 'Run Cleanup Now', 'plugin-wp-support-thisismyurl' ) .
 			'</a></p></div>';
 	}
 

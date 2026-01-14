@@ -26,15 +26,15 @@ final class WPS_Feature_Image_Lazy_Loading extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'image-lazy-loading',
-				'name'                => __( 'Enhanced Image Lazy Loading', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Auto-enable native lazy loading for all images to improve page load performance', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => true,
-				'version'             => '1.0.0',
-				'widget_group'        => 'performance',
-				'widget_label'        => __( 'Performance Optimization', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Optimize images and page load performance', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'image-lazy-loading',
+				'name'               => __( 'Enhanced Image Lazy Loading', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Auto-enable native lazy loading for all images to improve page load performance', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => true,
+				'version'            => '1.0.0',
+				'widget_group'       => 'performance',
+				'widget_label'       => __( 'Performance Optimization', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Optimize images and page load performance', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}
@@ -51,13 +51,13 @@ final class WPS_Feature_Image_Lazy_Loading extends WPS_Abstract_Feature {
 
 		// Force lazy loading for all images.
 		add_filter( 'wp_lazy_loading_enabled', array( $this, 'enable_lazy_loading' ), 10, 2 );
-		
+
 		// Add loading attribute to content images.
 		add_filter( 'the_content', array( $this, 'add_loading_attribute_to_images' ), 20 );
-		
+
 		// Add loading attribute to post thumbnails.
 		add_filter( 'post_thumbnail_html', array( $this, 'add_loading_lazy' ), 10, 1 );
-		
+
 		// Add loading attribute to avatar images.
 		add_filter( 'get_avatar', array( $this, 'add_loading_lazy' ), 10, 1 );
 	}
@@ -95,7 +95,7 @@ final class WPS_Feature_Image_Lazy_Loading extends WPS_Abstract_Feature {
 			'/<img([^>]+?)\/?>/',
 			function ( $matches ) {
 				$img_tag = $matches[0];
-				
+
 				// Skip if already has loading attribute.
 				if ( strpos( $img_tag, 'loading=' ) !== false ) {
 					return $img_tag;

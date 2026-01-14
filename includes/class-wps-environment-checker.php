@@ -134,31 +134,40 @@ class WPS_Environment_Checker {
 		static $getting = false;
 		if ( $getting ) {
 			return array(
-				'php_version'       => array( 'current' => PHP_VERSION, 'meets_requirement' => true ),
-				'wp_version'        => array( 'current' => $GLOBALS['wp_version'], 'meets_requirement' => true ),
-				'memory_limit'      => array( 'current' => ini_get( 'memory_limit' ), 'current_bytes' => 0 ),
-				'execution_time'    => array( 'current' => ini_get( 'max_execution_time' ) ),
-				'upload_limit'      => array( 'current' => ini_get( 'upload_max_filesize' ) ),
-				'extensions'        => array(),
-				'environment_type'  => 'production',
-				'is_compatible'     => true,
-				'has_constraints'   => false,
-				'checked_at'        => current_time( 'mysql' ),
+				'php_version'      => array(
+					'current'           => PHP_VERSION,
+					'meets_requirement' => true,
+				),
+				'wp_version'       => array(
+					'current'           => $GLOBALS['wp_version'],
+					'meets_requirement' => true,
+				),
+				'memory_limit'     => array(
+					'current'       => ini_get( 'memory_limit' ),
+					'current_bytes' => 0,
+				),
+				'execution_time'   => array( 'current' => ini_get( 'max_execution_time' ) ),
+				'upload_limit'     => array( 'current' => ini_get( 'upload_max_filesize' ) ),
+				'extensions'       => array(),
+				'environment_type' => 'production',
+				'is_compatible'    => true,
+				'has_constraints'  => false,
+				'checked_at'       => current_time( 'mysql' ),
 			);
 		}
 		$getting = true;
 
 		$result = array(
-			'php_version'       => self::get_php_version_status(),
-			'wp_version'        => self::get_wp_version_status(),
-			'memory_limit'      => self::get_memory_limit_status(),
-			'execution_time'    => self::get_execution_time_status(),
-			'upload_limit'      => self::get_upload_limit_status(),
-			'extensions'        => self::get_extensions_status(),
-			'environment_type'  => wp_get_environment_type(),
-			'is_compatible'     => self::is_environment_compatible(),
-			'has_constraints'   => self::has_resource_constraints(),
-			'checked_at'        => current_time( 'mysql' ),
+			'php_version'      => self::get_php_version_status(),
+			'wp_version'       => self::get_wp_version_status(),
+			'memory_limit'     => self::get_memory_limit_status(),
+			'execution_time'   => self::get_execution_time_status(),
+			'upload_limit'     => self::get_upload_limit_status(),
+			'extensions'       => self::get_extensions_status(),
+			'environment_type' => wp_get_environment_type(),
+			'is_compatible'    => self::is_environment_compatible(),
+			'has_constraints'  => self::has_resource_constraints(),
+			'checked_at'       => current_time( 'mysql' ),
 		);
 
 		$getting = false;
@@ -171,7 +180,7 @@ class WPS_Environment_Checker {
 	 * @return array<string, mixed>
 	 */
 	public static function get_php_version_status(): array {
-		$current = PHP_VERSION;
+		$current           = PHP_VERSION;
 		$meets_requirement = version_compare( $current, self::MIN_PHP_VERSION, '>=' );
 
 		return array(
@@ -196,7 +205,7 @@ class WPS_Environment_Checker {
 	 */
 	public static function get_wp_version_status(): array {
 		global $wp_version;
-		$current = $wp_version;
+		$current           = $wp_version;
 		$meets_requirement = version_compare( $current, self::MIN_WP_VERSION, '>=' );
 
 		return array(
@@ -223,7 +232,7 @@ class WPS_Environment_Checker {
 		$memory_limit = ini_get( 'memory_limit' );
 		$memory_bytes = self::convert_to_bytes( $memory_limit );
 
-		$meets_minimum = $memory_bytes >= self::MINIMUM_MEMORY_LIMIT;
+		$meets_minimum     = $memory_bytes >= self::MINIMUM_MEMORY_LIMIT;
 		$meets_recommended = $memory_bytes >= self::RECOMMENDED_MEMORY_LIMIT;
 
 		$level = 'good';
@@ -293,7 +302,7 @@ class WPS_Environment_Checker {
 			);
 		}
 
-		$meets_minimum = $max_execution_time >= self::MINIMUM_EXECUTION_TIME;
+		$meets_minimum     = $max_execution_time >= self::MINIMUM_EXECUTION_TIME;
 		$meets_recommended = $max_execution_time >= self::RECOMMENDED_EXECUTION_TIME;
 
 		$level = 'good';
@@ -348,10 +357,10 @@ class WPS_Environment_Checker {
 	 */
 	public static function get_upload_limit_status(): array {
 		$upload_max = ini_get( 'upload_max_filesize' );
-		$post_max = ini_get( 'post_max_size' );
+		$post_max   = ini_get( 'post_max_size' );
 
 		$upload_bytes = self::convert_to_bytes( $upload_max );
-		$post_bytes = self::convert_to_bytes( $post_max );
+		$post_bytes   = self::convert_to_bytes( $post_max );
 
 		return array(
 			'upload_max_filesize' => $upload_max,
@@ -374,7 +383,7 @@ class WPS_Environment_Checker {
 	 * @return array<string, mixed>
 	 */
 	public static function get_extensions_status(): array {
-		$required_missing = array();
+		$required_missing    = array();
 		$recommended_missing = array();
 
 		foreach ( self::REQUIRED_EXTENSIONS as $ext ) {
@@ -697,13 +706,13 @@ class WPS_Environment_Checker {
 		if ( empty( $value ) ) {
 			return 0;
 		}
-		
+
 		$last_char = substr( $value, -1 );
 		if ( ! $last_char ) {
 			return 0;
 		}
-		
-		$last = strtolower( $last_char );
+
+		$last          = strtolower( $last_char );
 		$numeric_value = (int) $value;
 
 		switch ( $last ) {
@@ -750,9 +759,9 @@ class WPS_Environment_Checker {
 
 		if ( empty( $requirements ) ) {
 			return array(
-				'supported'    => true,
-				'missing'      => array(),
-				'message'      => __( 'No specific requirements for this module.', 'plugin-wp-support-thisismyurl' ),
+				'supported' => true,
+				'missing'   => array(),
+				'message'   => __( 'No specific requirements for this module.', 'plugin-wp-support-thisismyurl' ),
 			);
 		}
 
@@ -767,10 +776,10 @@ class WPS_Environment_Checker {
 		$supported = empty( $missing );
 
 		return array(
-			'supported'    => $supported,
-			'required'     => $requirements,
-			'missing'      => $missing,
-			'message'      => $supported
+			'supported' => $supported,
+			'required'  => $requirements,
+			'missing'   => $missing,
+			'message'   => $supported
 				? sprintf(
 					/* translators: %s: Module name */
 					__( '%s: All requirements met.', 'plugin-wp-support-thisismyurl' ),
@@ -793,13 +802,13 @@ class WPS_Environment_Checker {
 	 */
 	private static function get_module_requirements( string $module ): array {
 		$requirements_map = array(
-			'image'  => array( 'gd' ),
-			'vault'  => array( 'openssl', 'zip' ),
-			'avif'   => array( 'imagick' ),
-			'webp'   => array( 'gd' ),
-			'heic'   => array( 'imagick' ),
-			'raw'    => array( 'imagick' ),
-			'svg'    => array( 'xml' ),
+			'image' => array( 'gd' ),
+			'vault' => array( 'openssl', 'zip' ),
+			'avif'  => array( 'imagick' ),
+			'webp'  => array( 'gd' ),
+			'heic'  => array( 'imagick' ),
+			'raw'   => array( 'imagick' ),
+			'svg'   => array( 'xml' ),
 		);
 
 		/**

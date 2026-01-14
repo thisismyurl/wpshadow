@@ -42,82 +42,82 @@ $GLOBALS['wps_grouped_features'] = $grouped_features;
 	// Check if wizard should be shown (not dismissed and not completed)
 	$wizard_dismissed = get_user_meta( get_current_user_id(), 'wps_setup_wizard_dismissed', true );
 	$wizard_completed = get_user_meta( get_current_user_id(), 'wps_setup_wizard_completed', true );
-	
+
 	if ( ! $wizard_dismissed && ! $wizard_completed && ! empty( $features ) ) :
 		// Define plain English explanations for each feature
 		$feature_explanations = array(
-			'wps_core_diagnostics' => array(
-				'title' => 'Keep Your Site Healthy',
+			'wps_core_diagnostics'  => array(
+				'title'       => 'Keep Your Site Healthy',
 				'description' => 'Think of this as a regular check-up for your website. It watches for problems, helps you recover if something goes wrong, and keeps important safeguards in place. Like having a doctor on call for your site.',
 				'recommended' => true,
 			),
-			'wps_tips_coach' => array(
-				'title' => 'Get Smart Suggestions',
+			'wps_tips_coach'        => array(
+				'title'       => 'Get Smart Suggestions',
 				'description' => 'Your website gives you helpful recommendations based on what type of site you have. It\'s like having an expert advisor pointing out things you might have missed.',
 				'recommended' => true,
 			),
-			'a11y-audit' => array(
-				'title' => 'Make Your Site Work for Everyone',
+			'a11y-audit'            => array(
+				'title'       => 'Make Your Site Work for Everyone',
 				'description' => 'This checks that people with disabilities can use your website easily. It looks for things like proper contrast, keyboard navigation, and screen reader support. Making your site accessible isn\'t just good practice—it\'s the right thing to do.',
 				'recommended' => true,
 			),
-			'script-deferral' => array(
-				'title' => 'Speed Up Your Page Loading',
+			'script-deferral'       => array(
+				'title'       => 'Speed Up Your Page Loading',
 				'description' => 'This delays loading certain scripts until after your page content shows up, so visitors see your page faster. Think of it like getting the main course served quickly while the waiter prepares dessert.',
 				'recommended' => false,
 			),
 			'asset-version-removal' => array(
-				'title' => 'Better Browser Caching',
+				'title'       => 'Better Browser Caching',
 				'description' => 'Removes version numbers from file links so browsers can cache them longer. This means repeat visitors load your site faster because their browser remembers files from last time.',
 				'recommended' => true,
 			),
-			'head-cleanup' => array(
-				'title' => 'Clean Up Extra Code',
+			'head-cleanup'          => array(
+				'title'       => 'Clean Up Extra Code',
 				'description' => 'Removes unnecessary code that WordPress adds to every page. This makes your site a bit faster and slightly more secure by not advertising what version of WordPress you\'re running.',
 				'recommended' => true,
 			),
-			'block-cleanup' => array(
-				'title' => 'Remove Unused Editor Styles',
+			'block-cleanup'         => array(
+				'title'       => 'Remove Unused Editor Styles',
 				'description' => 'If you don\'t use the block editor, this removes its styling code from your pages. That\'s 100KB+ your visitors don\'t need to download.',
 				'recommended' => false,
 			),
-			'css-class-cleanup' => array(
-				'title' => 'Simplify Your HTML',
+			'css-class-cleanup'     => array(
+				'title'       => 'Simplify Your HTML',
 				'description' => 'WordPress adds dozens of CSS classes to posts and menus. This strips most of them out to make your code cleaner and pages slightly smaller.',
 				'recommended' => false,
 			),
-			'plugin-cleanup' => array(
-				'title' => 'Stop Loading Plugin Files Everywhere',
+			'plugin-cleanup'        => array(
+				'title'       => 'Stop Loading Plugin Files Everywhere',
 				'description' => 'Many plugins load their CSS and scripts on every page, even where they\'re not needed. This prevents that waste, loading them only on pages where they\'re actually used.',
 				'recommended' => false,
 			),
-			'html-cleanup' => array(
-				'title' => 'Compress Your Page Code',
+			'html-cleanup'          => array(
+				'title'       => 'Compress Your Page Code',
 				'description' => 'Removes extra spaces, comments, and empty tags from your HTML. Makes pages 20-40% smaller, which means faster downloads for your visitors.',
 				'recommended' => false,
 			),
-			'resource-hints' => array(
-				'title' => 'Pre-Connect to External Resources',
+			'resource-hints'        => array(
+				'title'       => 'Pre-Connect to External Resources',
 				'description' => 'Tells browsers to start connecting to external services (like Google Fonts) before they\'re needed, making those resources load faster when the time comes.',
 				'recommended' => true,
 			),
-			'nav-accessibility' => array(
-				'title' => 'Make Menus Easier to Navigate',
+			'nav-accessibility'     => array(
+				'title'       => 'Make Menus Easier to Navigate',
 				'description' => 'Adds helpful markers for screen readers and simplifies menu code so it\'s easier for everyone to use your navigation, especially people using keyboards or assistive technology.',
 				'recommended' => true,
 			),
-			'skiplinks' => array(
-				'title' => 'Add Quick Navigation Links',
+			'skiplinks'             => array(
+				'title'       => 'Add Quick Navigation Links',
 				'description' => 'Adds invisible "skip to content" links that keyboard users can use to jump past your menu straight to the main content. A small addition that makes a big difference for accessibility.',
 				'recommended' => true,
 			),
-			'embed-disable' => array(
-				'title' => 'Remove Embedding Features',
+			'embed-disable'         => array(
+				'title'       => 'Remove Embedding Features',
 				'description' => 'Removes the code that lets other sites embed your content. Unless you specifically want that feature, turning it off makes your site a little faster.',
 				'recommended' => true,
 			),
-			'jquery-cleanup' => array(
-				'title' => 'Remove Old jQuery Code',
+			'jquery-cleanup'        => array(
+				'title'       => 'Remove Old jQuery Code',
 				'description' => 'Removes an old compatibility script that most modern sites don\'t need anymore. Safe to turn on unless you have very old plugins.',
 				'recommended' => true,
 			),
@@ -136,24 +136,24 @@ $GLOBALS['wps_grouped_features'] = $grouped_features;
 						<?php esc_html_e( 'We\'ll walk you through each feature one at a time and explain what it does in plain English. You can turn features on or off as we go, and your choices will be saved automatically.', 'plugin-wp-support-thisismyurl' ); ?>
 					</p>
 					<p style="font-size: 14px; color: #fff; font-weight: 600; margin-bottom: 24px;">
-						<?php echo sprintf( esc_html__( 'This will take about %d minutes. You can skip or dismiss this anytime.', 'plugin-wp-support-thisismyurl' ), ceil( count( $features ) / 10 ) ); ?>
+						<?php printf( esc_html__( 'This will take about %d minutes. You can skip or dismiss this anytime.', 'plugin-wp-support-thisismyurl' ), ceil( count( $features ) / 10 ) ); ?>
 					</p>
 					<button type="button" class="button button-primary button-hero wps-wizard-start"><?php esc_html_e( 'Get Started', 'plugin-wp-support-thisismyurl' ); ?></button>
 				</div>
 				<?php
 				$step_index = 0;
 				foreach ( $features as $feature ) :
-					$feature_id = $feature['id'] ?? '';
+					$feature_id  = $feature['id'] ?? '';
 					$explanation = $feature_explanations[ $feature_id ] ?? array(
-						'title' => $feature['name'] ?? $feature_id,
+						'title'       => $feature['name'] ?? $feature_id,
 						'description' => $feature['description'] ?? '',
 						'recommended' => false,
 					);
-					$is_enabled = ! empty( $feature['enabled'] );
-					$step_index++;
+					$is_enabled  = ! empty( $feature['enabled'] );
+					++$step_index;
 					?>
 					<div class="wps-wizard-step wps-wizard-feature" data-feature-id="<?php echo esc_attr( $feature_id ); ?>" data-step="<?php echo $step_index; ?>">
-						<div class="wps-wizard-step-number"><?php echo sprintf( esc_html__( 'Feature %d of %d', 'plugin-wp-support-thisismyurl' ), $step_index, count( $features ) ); ?></div>
+						<div class="wps-wizard-step-number"><?php printf( esc_html__( 'Feature %1$d of %2$d', 'plugin-wp-support-thisismyurl' ), $step_index, count( $features ) ); ?></div>
 						<h2><?php echo esc_html( $explanation['title'] ); ?></h2>
 						<?php if ( $explanation['recommended'] ) : ?>
 							<span class="wps-wizard-badge wps-recommended"><?php esc_html_e( 'Recommended', 'plugin-wp-support-thisismyurl' ); ?></span>
@@ -231,7 +231,7 @@ $GLOBALS['wps_grouped_features'] = $grouped_features;
 						</a>
 						<?php
 						endif;
-						?>
+					?>
 				</div>
 			</p>
 		</form>

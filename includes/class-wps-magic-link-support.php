@@ -110,17 +110,17 @@ class WPS_Magic_Link_Support {
 		$expires_at = $created_at + ( self::LINK_EXPIRY * HOUR_IN_SECONDS );
 
 		$links[ $token ] = array(
-			'created'          => $created_at,
-			'expires'          => $expires_at,
-			'developer_name'   => sanitize_text_field( $developer_name ),
-			'developer_email'  => $developer_email,
-			'owner_email'      => $owner_email,
-			'reason'           => sanitize_text_field( $reason ),
-			'uses'             => 0,
-			'last_used'        => 0,
-			'ip_address'       => '',
-			'session_id'       => '',
-			'created_by_user'  => get_current_user_id(),
+			'created'         => $created_at,
+			'expires'         => $expires_at,
+			'developer_name'  => sanitize_text_field( $developer_name ),
+			'developer_email' => $developer_email,
+			'owner_email'     => $owner_email,
+			'reason'          => sanitize_text_field( $reason ),
+			'uses'            => 0,
+			'last_used'       => 0,
+			'ip_address'      => '',
+			'session_id'      => '',
+			'created_by_user' => get_current_user_id(),
 		);
 
 		update_option( self::LINKS_KEY, $links );
@@ -199,8 +199,8 @@ class WPS_Magic_Link_Support {
 		// For now, allow multiple uses within validity period.
 
 		// Update usage stats.
-		$links[ $token ]['uses']      = ( $link_data['uses'] ?? 0 ) + 1;
-		$links[ $token ]['last_used'] = time();
+		$links[ $token ]['uses']       = ( $link_data['uses'] ?? 0 ) + 1;
+		$links[ $token ]['last_used']  = time();
 		$links[ $token ]['ip_address'] = $_SERVER['REMOTE_ADDR'] ?? '';
 		update_option( self::LINKS_KEY, $links );
 
@@ -588,7 +588,7 @@ class WPS_Magic_Link_Support {
 			$developer_name
 		);
 
-		$message  = sprintf(
+		$message = sprintf(
 			/* translators: 1: developer name, 2: site name */
 			__( 'Support access by %1$s on %2$s has ended.', 'plugin-wp-support-thisismyurl' ) . "\n\n",
 			$developer_name,
@@ -968,8 +968,8 @@ class WPS_Magic_Link_Support {
 					<tbody>
 						<?php foreach ( array_reverse( $active_links, true ) as $token => $link_data ) : ?>
 							<?php
-							$is_active  = ! empty( $link_data['session_id'] ) && isset( $sessions[ $link_data['session_id'] ] );
-							$time_left  = human_time_diff( time(), $link_data['expires'] );
+							$is_active = ! empty( $link_data['session_id'] ) && isset( $sessions[ $link_data['session_id'] ] );
+							$time_left = human_time_diff( time(), $link_data['expires'] );
 							?>
 							<tr>
 								<td><strong><?php echo esc_html( $link_data['developer_name'] ); ?></strong></td>

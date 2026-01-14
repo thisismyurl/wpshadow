@@ -26,15 +26,15 @@ final class WPS_Feature_Script_Optimizer extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'script-optimizer',
-				'name'                => __( 'Script Optimization Analyzer', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Analyze scripts and provide optimization recommendations', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => true,
-				'version'             => '1.0.0',
-				'widget_group'        => 'performance',
-				'widget_label'        => __( 'Resource Optimization', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Optimize how resources are loaded and delivered', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'script-optimizer',
+				'name'               => __( 'Script Optimization Analyzer', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Analyze scripts and provide optimization recommendations', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => true,
+				'version'            => '1.0.0',
+				'widget_group'       => 'performance',
+				'widget_label'       => __( 'Resource Optimization', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Optimize how resources are loaded and delivered', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}
@@ -71,7 +71,7 @@ final class WPS_Feature_Script_Optimizer extends WPS_Abstract_Feature {
 		if ( $wp_scripts && is_array( $wp_scripts->queue ) ) {
 			foreach ( $wp_scripts->queue as $handle ) {
 				if ( isset( $wp_scripts->registered[ $handle ] ) ) {
-					$script                   = $wp_scripts->registered[ $handle ];
+					$script                 = $wp_scripts->registered[ $handle ];
 					$script_data[ $handle ] = array(
 						'type'   => 'script',
 						'src'    => $script->src ?? null,
@@ -89,7 +89,7 @@ final class WPS_Feature_Script_Optimizer extends WPS_Abstract_Feature {
 			$stored_data = array();
 		}
 
-		$page_id = get_queried_object_id();
+		$page_id                 = get_queried_object_id();
 		$stored_data[ $page_id ] = $script_data;
 
 		// Keep data for 7 days.
@@ -102,8 +102,8 @@ final class WPS_Feature_Script_Optimizer extends WPS_Abstract_Feature {
 	 * @return array<array<string, mixed>> List of suggestions.
 	 */
 	public function get_optimization_suggestions(): array {
-		$suggestions  = array();
-		$stored_data  = get_transient( 'wps_script_analysis_data' );
+		$suggestions = array();
+		$stored_data = get_transient( 'wps_script_analysis_data' );
 
 		if ( ! is_array( $stored_data ) || empty( $stored_data ) ) {
 			return $suggestions;
@@ -191,18 +191,18 @@ final class WPS_Feature_Script_Optimizer extends WPS_Abstract_Feature {
 		$stats['total_scripts'] = count( $wp_scripts->registered );
 
 		// Count deferred scripts.
-		$defer_handles = (array) get_option( 'wps_defer_script_handles', array() );
+		$defer_handles             = (array) $this->get_setting( 'wps_defer_script_handles', array( ) );
 		$stats['deferred_scripts'] = count( $defer_handles );
 
 		// Count external scripts.
 		foreach ( $wp_scripts->registered as $handle => $script ) {
 			if ( isset( $script->src ) && ( strpos( $script->src, 'http' ) === 0 && strpos( $script->src, site_url() ) === false ) ) {
-				$stats['external_scripts']++;
+				++$stats['external_scripts'];
 			}
 		}
 
 		// Estimate savings from conditional loading.
-		$rules = (array) get_option( 'wps_conditional_loading_rules', array() );
+		$rules = (array) $this->get_setting( 'wps_conditional_loading_rules', array( ) );
 		foreach ( $rules as $rule ) {
 			if ( isset( $rule['handles'] ) && is_array( $rule['handles'] ) ) {
 				$stats['estimated_savings'] += count( $rule['handles'] ) * 15; // Estimate 15KB per script.

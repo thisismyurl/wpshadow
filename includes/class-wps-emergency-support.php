@@ -93,15 +93,6 @@ class WPS_Emergency_Support {
 		update_option( self::ERRORS_KEY, $errors );
 
 		// Log to error log.
-		error_log(
-			sprintf(
-				'[CRITICAL_ERROR] %s in %s:%d - %s',
-				$critical['severity'],
-				$critical['file'],
-				$critical['line'],
-				$critical['message']
-			)
-		);
 
 		// Send admin alert.
 		self::send_critical_error_alert( $critical );

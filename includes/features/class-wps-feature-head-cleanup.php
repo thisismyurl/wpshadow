@@ -26,15 +26,22 @@ final class WPS_Feature_Head_Cleanup extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'head-cleanup',
-				'name'                => __( 'Head Cleanup & Security Hardening', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Remove clutter from your site and keep your WordPress version private', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => true,
-				'version'             => '1.0.0',
-				'widget_group'        => 'performance',
-				'widget_label'        => __( 'Performance & Security', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'head-cleanup',
+				'name'               => __( 'Head Cleanup & Security Hardening', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Remove clutter from your site and keep your WordPress version private', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => true,
+				'version'            => '1.0.0',
+				'widget_group'       => 'performance',
+				'widget_label'       => __( 'Performance & Security', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wp-support-thisismyurl' ),
+			)
+		);
+
+		// Register default settings.
+		$this->register_default_settings(
+			array(
+				'cleanup_options' => $this->get_default_options(),
 			)
 		);
 	}
@@ -59,7 +66,7 @@ final class WPS_Feature_Head_Cleanup extends WPS_Abstract_Feature {
 	 */
 	public function cleanup_head_elements(): void {
 		// Get options for granular control.
-		$cleanup_options = (array) get_option( 'wps_head_cleanup_options', $this->get_default_options() );
+		$cleanup_options = (array) $this->get_setting( 'cleanup_options', $this->get_default_options() );
 
 		// Emojis.
 		if ( $cleanup_options['remove_emoji'] ?? false ) {
@@ -128,17 +135,16 @@ final class WPS_Feature_Head_Cleanup extends WPS_Abstract_Feature {
 	 */
 	private function get_default_options(): array {
 		return array(
-			'remove_emoji'            => true,
-			'remove_generator'        => true,
-			'remove_shortlink'        => true,
-			'remove_rsd'              => true,
-			'remove_wlw'              => true,
-			'remove_rest_link'        => false, // Keep by default (might break REST clients).
-			'remove_oembed'           => true,
-			'remove_feeds'            => false, // Keep by default (might be needed).
-			'remove_comments_style'   => true,
-			'disable_xmlrpc'          => true,
+			'remove_emoji'          => true,
+			'remove_generator'      => true,
+			'remove_shortlink'      => true,
+			'remove_rsd'            => true,
+			'remove_wlw'            => true,
+			'remove_rest_link'      => false, // Keep by default (might break REST clients).
+			'remove_oembed'         => true,
+			'remove_feeds'          => false, // Keep by default (might be needed).
+			'remove_comments_style' => true,
+			'disable_xmlrpc'        => true,
 		);
 	}
 }
-

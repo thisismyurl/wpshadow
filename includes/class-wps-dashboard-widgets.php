@@ -76,6 +76,7 @@ class WPS_Dashboard_Widgets {
 				array( __CLASS__, 'widget_suite_overview' ),
 				array( __CLASS__, 'widget_active_hubs' ),
 				array( __CLASS__, 'widget_performance_monitor' ),
+				array( __CLASS__, 'widget_performance_alerts' ),
 				array( __CLASS__, 'widget_weekly_performance' ),
 			),
 			array(
@@ -168,6 +169,14 @@ class WPS_Dashboard_Widgets {
 		self::widget_environment_status();
 	}
 
+	public static function render_metabox_database_stats(): void {
+		self::widget_database_stats();
+	}
+
+	public static function render_metabox_performance_history(): void {
+		self::widget_performance_history();
+	}
+
 	private static function widget_health(): void {
 		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Site_Health' ) ) {
 			echo '<div class="wps-widget-content"><p><em>' . esc_html__( 'Health checks unavailable.', 'plugin-wp-support-thisismyurl' ) . '</em></p></div>';
@@ -196,13 +205,13 @@ class WPS_Dashboard_Widgets {
 			self::render_health_widget( $health_data, $module_name );
 		} catch ( \Exception $e ) {
 			echo '<div class="wps-widget-content"><p style="color: #d63638;"><strong>' . esc_html__( 'Error:', 'plugin-wp-support-thisismyurl' ) . '</strong> ' . esc_html( $e->getMessage() ) . '</p></div>';
-			error_log( 'Health Widget Error: ' . $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine() );
+
 		}
 	}
 
 	private static function widget_activity( ?string $module_filter = null ): void {
 		// Use WPS_Activity_Logger if available.
-			if ( class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
+		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
 			$events = \WPS\CoreSupport\WPS_Activity_Logger::get_events( 100 );
 
 			// Filter events by module if specified.
@@ -231,7 +240,7 @@ class WPS_Dashboard_Widgets {
 				<div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #eee;">
 					<form method="get" style="display: inline;">
 						<label for="WPS_activity_type_filter" style="display: inline; margin-right: 8px;">
-							<?php esc_html_e( 'Filter:', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'Filter:', 'plugin-wp-support-thisismyurl' ); ?>
 						</label>
 						<select id="WPS_activity_type_filter" name="activity_type" style="padding: 4px 8px; font-size: 12px;">
 							<option value="">- <?php esc_html_e( 'All Activity', 'plugin-wp-support-thisismyurl' ); ?> -</option>
@@ -244,7 +253,7 @@ class WPS_Dashboard_Widgets {
 					</form>
 				</div>
 				<ul style="list-style: none; padding: 0; margin: 0;">
-					<?php foreach ( $events as $event ) : ?>
+				<?php foreach ( $events as $event ) : ?>
 						<?php
 						$description = esc_html( $event['description'] );
 						$timestamp   = human_time_diff( $event['timestamp'] ) . ' ' . __( 'ago', 'plugin-wp-support-thisismyurl' );
@@ -847,7 +856,7 @@ class WPS_Dashboard_Widgets {
 
 				<?php if ( empty( $encryption_key ) ) : ?>
 					<!-- Setup Encryption Action -->
-					<a href="<?php echo esc_url( WPS_Tab_Navigation::build_tab_url( 'settings' ) . '&section=encryption' ); ?>" class="button button-secondary" style="display: flex; align-items: center; justify-content: center; padding: 10px; text-align: center;">
+					<a href="<?php echo esc_url( WPS_Tab_Navigation::build_tab_url( 'dashboard_settings' ) . '&section=encryption' ); ?>" class="button button-secondary" style="display: flex; align-items: center; justify-content: center; padding: 10px; text-align: center;">
 						<span class="dashicons dashicons-lock" style="margin-right: 5px; color: #d63638;"></span>
 						<?php esc_html_e( 'Setup Encryption', 'plugin-wp-support-thisismyurl' ); ?>
 					</a>
@@ -862,8 +871,9 @@ class WPS_Dashboard_Widgets {
 			
 			<!-- Configure Dashboard Text Link -->
 			<div style="margin-top: 15px; text-align: center;">
-				<a href="<?php echo esc_url( WPS_Tab_Navigation::build_tab_url( 'settings' ) ); ?>" style="color: #2271b1; text-decoration: none; font-size: 13px;">
-					<?php esc_html_e( 'Configure Dashboard', 'plugin-wp-support-thisismyurl' ); ?>
+				<a href="<?php echo esc_url( WPS_Tab_Navigation::build_tab_url( 'dashboard_settings' ) ); ?>" style="color: #2271b1; text-decoration: none; font-size: 13px;">
+					<span class="dashicons dashicons-admin-generic" style="font-size: 14px; vertical-align: middle;"></span>
+					<?php esc_html_e( 'Dashboard Settings', 'plugin-wp-support-thisismyurl' ); ?>
 				</a>
 			</div>
 			
@@ -906,14 +916,14 @@ class WPS_Dashboard_Widgets {
 		}
 
 		$metrics = \WPS\CoreSupport\Features\WPS_Feature_Weekly_Performance_Report::get_current_week_metrics();
-		
+
 		$uptime_percentage = 0;
 		if ( $metrics['uptime_checks'] > 0 ) {
 			$uptime_percentage = ( $metrics['uptime_success'] / $metrics['uptime_checks'] ) * 100;
 		}
 
 		$time_saved_hours = round( $metrics['time_saved_seconds'] / 3600, 2 );
-		$data_saved_mb = round( $metrics['data_saved_mb'], 2 );
+		$data_saved_mb    = round( $metrics['data_saved_mb'], 2 );
 
 		?>
 		<div class="postbox">
@@ -1029,8 +1039,8 @@ class WPS_Dashboard_Widgets {
 			return;
 		}
 
-		$metrics = \WPS\CoreSupport\WPS_Performance_Monitor::get_current_metrics();
-		$score_data = \WPS\CoreSupport\WPS_Performance_Monitor::calculate_performance_score();
+		$metrics         = \WPS\CoreSupport\WPS_Performance_Monitor::get_current_metrics();
+		$score_data      = \WPS\CoreSupport\WPS_Performance_Monitor::calculate_performance_score();
 		$recommendations = \WPS\CoreSupport\WPS_Performance_Monitor::get_recommendations();
 
 		?>
@@ -1165,6 +1175,93 @@ class WPS_Dashboard_Widgets {
 							<?php esc_html_e( 'View Full Dashboard', 'plugin-wp-support-thisismyurl' ); ?>
 						</a>
 					</p>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Performance Alerts Widget
+	 * Displays recent performance alerts and warnings.
+	 *
+	 * @return void
+	 */
+	private static function widget_performance_alerts(): void {
+		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Performance_Monitor' ) ) {
+			return;
+		}
+
+		// Get recent alerts.
+		$alerts = get_transient( 'wps_performance_alerts' );
+		if ( empty( $alerts ) || ! is_array( $alerts ) ) {
+			// No alerts - don't display widget.
+			return;
+		}
+
+		// Get most recent 5 alerts.
+		$recent_alerts = array_slice( array_reverse( $alerts ), 0, 5 );
+
+		?>
+		<div class="postbox">
+			<div class="postbox-header">
+				<h2 class="hndle"><?php esc_html_e( '🔔 Performance Alerts', 'plugin-wp-support-thisismyurl' ); ?></h2>
+			</div>
+			<div class="inside">
+				<div class="wps-widget-content">
+					<style>
+						.wps-alert-item {
+							padding: 10px 12px;
+							margin-bottom: 8px;
+							border-radius: 4px;
+							font-size: 13px;
+							background: #fff3cd;
+							border-left: 4px solid #ffc107;
+							color: #856404;
+						}
+						.wps-alert-item strong {
+							display: block;
+							margin-bottom: 3px;
+							text-transform: capitalize;
+						}
+						.wps-alert-item small {
+							color: #666;
+							font-size: 11px;
+						}
+						.wps-no-alerts {
+							text-align: center;
+							padding: 20px;
+							color: #28a745;
+						}
+					</style>
+
+					<?php if ( ! empty( $recent_alerts ) ) : ?>
+						<ul style="list-style: none; padding: 0; margin: 0;">
+							<?php foreach ( $recent_alerts as $alert ) : ?>
+								<li class="wps-alert-item">
+									<strong><?php echo esc_html( ucfirst( $alert['type'] ?? 'alert' ) ); ?></strong>
+									<span><?php echo esc_html( $alert['message'] ?? '' ); ?></span>
+									<br />
+									<small>
+										<?php
+										/* translators: %s: time ago */
+										echo esc_html( sprintf( __( '%s ago', 'plugin-wp-support-thisismyurl' ), human_time_diff( $alert['timestamp'] ?? time() ) ) );
+										?>
+									</small>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+
+						<p style="text-align: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e9ecef;">
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=features&feature_filter=performance' ) ); ?>" class="button">
+								<?php esc_html_e( 'Configure Alert Settings', 'plugin-wp-support-thisismyurl' ); ?>
+							</a>
+						</p>
+					<?php else : ?>
+						<div class="wps-no-alerts">
+							<p><?php esc_html_e( '✅ No alerts triggered recently. Your site is performing well!', 'plugin-wp-support-thisismyurl' ); ?></p>
+						</div>
+					<?php endif; ?>
 				</div>
 			</div>
 		</div>
@@ -1854,25 +1951,25 @@ class WPS_Dashboard_Widgets {
 			return;
 		}
 
-		$env_status = \WPS\CoreSupport\WPS_Environment_Checker::get_environment_status();
+		$env_status      = \WPS\CoreSupport\WPS_Environment_Checker::get_environment_status();
 		$resource_status = \WPS\CoreSupport\WPS_Server_Limits::get_resource_status();
 
 		// Determine overall status icon and message.
-		$status_icon = '✓';
-		$status_color = '#46b450';
+		$status_icon    = '✓';
+		$status_color   = '#46b450';
 		$status_message = __( 'Environment is optimal', 'plugin-wp-support-thisismyurl' );
 
 		if ( ! $env_status['is_compatible'] ) {
-			$status_icon = '✗';
-			$status_color = '#d63638';
+			$status_icon    = '✗';
+			$status_color   = '#d63638';
 			$status_message = __( 'Environment is incompatible', 'plugin-wp-support-thisismyurl' );
 		} elseif ( $env_status['has_constraints'] || 'warning' === $resource_status['level'] ) {
-			$status_icon = '⚠';
-			$status_color = '#dba617';
+			$status_icon    = '⚠';
+			$status_color   = '#dba617';
 			$status_message = __( 'Resource constraints detected', 'plugin-wp-support-thisismyurl' );
 		} elseif ( 'critical' === $resource_status['level'] ) {
-			$status_icon = '✗';
-			$status_color = '#d63638';
+			$status_icon    = '✗';
+			$status_color   = '#d63638';
 			$status_message = __( 'Critical resource usage', 'plugin-wp-support-thisismyurl' );
 		}
 
@@ -2038,6 +2135,215 @@ class WPS_Dashboard_Widgets {
 				<?php endif; ?>
 			</div>
 		</div>
+		<?php
+	}
+
+	/**
+	 * Render database statistics widget.
+	 *
+	 * @return void
+	 */
+	private static function widget_database_stats(): void {
+		global $wpdb;
+
+		// Get table sizes.
+		$tables = $wpdb->get_results(
+			"SELECT 
+				table_name AS 'name',
+				ROUND(((data_length + index_length) / 1024 / 1024), 2) AS 'size'
+			FROM information_schema.TABLES 
+			WHERE table_schema = DATABASE()
+			ORDER BY (data_length + index_length) DESC
+			LIMIT 10",
+			ARRAY_A
+		);
+
+		// Get total database size.
+		$db_size_result = $wpdb->get_var(
+			"SELECT ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) 
+			FROM information_schema.TABLES 
+			WHERE table_schema = DATABASE()"
+		);
+		$db_size        = $db_size_result ? $db_size_result : 0;
+
+		// Get transient counts.
+		$transient_count = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
+				$wpdb->esc_like( '_transient_' ) . '%',
+				$wpdb->esc_like( '_site_transient_' ) . '%'
+			)
+		);
+
+		// Get autoload size.
+		$autoload_size = $wpdb->get_var(
+			"SELECT ROUND(SUM(LENGTH(option_value)) / 1024, 2)
+			FROM {$wpdb->options}
+			WHERE autoload = 'yes'"
+		);
+
+		// Get post counts by status.
+		$post_counts = $wpdb->get_results(
+			"SELECT post_status, COUNT(*) as count 
+			FROM {$wpdb->posts} 
+			GROUP BY post_status",
+			ARRAY_A
+		);
+
+		?>
+		<div class="wps-widget-content">
+			<div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 4px;">
+				<div style="font-size: 32px; font-weight: 700; color: #2271b1; margin-bottom: 5px;">
+					<?php echo esc_html( $db_size ); ?> MB
+				</div>
+				<div style="font-size: 13px; color: #666;">
+					<?php esc_html_e( 'Total Database Size', 'plugin-wp-support-thisismyurl' ); ?>
+				</div>
+			</div>
+
+			<div style="margin-bottom: 20px;">
+				<h4 style="margin: 0 0 10px 0; font-size: 14px;"><?php esc_html_e( 'Largest Tables', 'plugin-wp-support-thisismyurl' ); ?></h4>
+				<table style="width: 100%; font-size: 13px;">
+					<?php foreach ( $tables as $table ) : ?>
+						<tr>
+							<td style="padding: 6px 0; color: #666;"><?php echo esc_html( $table['name'] ); ?></td>
+							<td style="padding: 6px 0; text-align: right; font-weight: 500;">
+								<?php echo esc_html( $table['size'] ); ?> MB
+							</td>
+						</tr>
+					<?php endforeach; ?>
+				</table>
+			</div>
+
+			<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+				<div style="padding: 10px; background: #fff; border: 1px solid #e5e5e5; border-radius: 4px;">
+					<div style="font-size: 20px; font-weight: 600; color: #2271b1;"><?php echo esc_html( $transient_count ); ?></div>
+					<div style="font-size: 12px; color: #666;"><?php esc_html_e( 'Transients', 'plugin-wp-support-thisismyurl' ); ?></div>
+				</div>
+				<div style="padding: 10px; background: #fff; border: 1px solid #e5e5e5; border-radius: 4px;">
+					<div style="font-size: 20px; font-weight: 600; color: #2271b1;"><?php echo esc_html( $autoload_size ); ?> KB</div>
+					<div style="font-size: 12px; color: #666;"><?php esc_html_e( 'Autoload Size', 'plugin-wp-support-thisismyurl' ); ?></div>
+				</div>
+			</div>
+
+			<?php if ( ! empty( $post_counts ) ) : ?>
+				<div style="margin-bottom: 15px;">
+					<h4 style="margin: 0 0 10px 0; font-size: 14px;"><?php esc_html_e( 'Post Counts', 'plugin-wp-support-thisismyurl' ); ?></h4>
+					<table style="width: 100%; font-size: 13px;">
+						<?php foreach ( $post_counts as $status ) : ?>
+							<tr>
+								<td style="padding: 6px 0; color: #666;"><?php echo esc_html( ucfirst( $status['post_status'] ) ); ?></td>
+								<td style="padding: 6px 0; text-align: right; font-weight: 500;">
+									<?php echo esc_html( number_format_i18n( (int) $status['count'] ) ); ?>
+								</td>
+							</tr>
+						<?php endforeach; ?>
+					</table>
+				</div>
+			<?php endif; ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render historical performance widget.
+	 *
+	 * @return void
+	 */
+	private static function widget_performance_history(): void {
+		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Performance_Monitor' ) ) {
+			?>
+			<div class="wps-widget-content">
+				<p><em><?php esc_html_e( 'Performance monitoring unavailable.', 'plugin-wp-support-thisismyurl' ); ?></em></p>
+			</div>
+			<?php
+			return;
+		}
+
+		// Get historical metrics (last 7 days).
+		$history = \WPS\CoreSupport\WPS_Performance_Monitor::get_performance_history( 7 );
+		
+		if ( empty( $history ) ) {
+			?>
+			<div class="wps-widget-content">
+				<p><em><?php esc_html_e( 'No performance history available yet. Check back after collecting some data.', 'plugin-wp-support-thisismyurl' ); ?></em></p>
+			</div>
+			<?php
+			return;
+		}
+
+		// Prepare chart data.
+		$dates  = array();
+		$scores = array();
+		foreach ( $history as $entry ) {
+			$dates[]  = date_i18n( 'M j', $entry['timestamp'] );
+			$scores[] = $entry['score'];
+		}
+
+		$chart_id = 'wps-performance-chart-' . wp_rand();
+		?>
+		<div class="wps-widget-content">
+			<canvas id="<?php echo esc_attr( $chart_id ); ?>" style="max-height: 200px;"></canvas>
+			
+			<div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e5e5e5;">
+				<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+					<div>
+						<div style="font-size: 12px; color: #666; margin-bottom: 3px;"><?php esc_html_e( 'Current Score', 'plugin-wp-support-thisismyurl' ); ?></div>
+						<div style="font-size: 24px; font-weight: 600; color: #2271b1;">
+							<?php echo esc_html( end( $scores ) ); ?>
+						</div>
+					</div>
+					<div>
+						<div style="font-size: 12px; color: #666; margin-bottom: 3px;"><?php esc_html_e( 'Avg Score', 'plugin-wp-support-thisismyurl' ); ?></div>
+						<div style="font-size: 24px; font-weight: 600; color: #666;">
+							<?php echo esc_html( round( array_sum( $scores ) / count( $scores ) ) ); ?>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+		(function($) {
+			$(document).ready(function() {
+				if (typeof Chart === 'undefined') {
+					console.warn('Chart.js not loaded - performance history chart unavailable');
+					return;
+				}
+
+				var ctx = document.getElementById('<?php echo esc_js( $chart_id ); ?>').getContext('2d');
+				new Chart(ctx, {
+					type: 'line',
+					data: {
+						labels: <?php echo wp_json_encode( $dates ); ?>,
+						datasets: [{
+							label: '<?php echo esc_js( __( 'Performance Score', 'plugin-wp-support-thisismyurl' ) ); ?>',
+							data: <?php echo wp_json_encode( $scores ); ?>,
+							borderColor: '#2271b1',
+							backgroundColor: 'rgba(34, 113, 177, 0.1)',
+							tension: 0.4,
+							fill: true
+						}]
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						plugins: {
+							legend: {
+								display: false
+							}
+						},
+						scales: {
+							y: {
+								beginAtZero: true,
+								max: 100
+							}
+						}
+					}
+				});
+			});
+		})(jQuery);
+		</script>
 		<?php
 	}
 }

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace WPS\CoreSupport;
 
-
 /**
  * WPS_Feature_Plugin_Cleanup
  *
@@ -34,15 +33,15 @@ final class WPS_Feature_Plugin_Cleanup extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'plugin-cleanup',
-				'name'                => __( 'Third-Party Plugin Asset Cleanup', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Stop loading plugin files on pages where they\'re not needed', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => false,
-				'version'             => '1.0.0',
-				'widget_group'        => 'cleanup',
-				'widget_label'        => __( 'Admin Management', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Clean up admin interface and plugin management', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'plugin-cleanup',
+				'name'               => __( 'Third-Party Plugin Asset Cleanup', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Stop loading plugin files on pages where they\'re not needed', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => false,
+				'version'            => '1.0.0',
+				'widget_group'       => 'cleanup',
+				'widget_label'       => __( 'Admin Management', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Clean up admin interface and plugin management', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 
@@ -76,7 +75,7 @@ final class WPS_Feature_Plugin_Cleanup extends WPS_Abstract_Feature {
 			return;
 		}
 
-		$cleanup_options = (array) get_option( 'wps_plugin_cleanup_options', $this->get_default_options() );
+		$cleanup_options = (array) $this->get_setting( 'wps_plugin_cleanup_options', $this->get_default_options( ) );
 
 		// Jetpack cleanup.
 		if ( $cleanup_options['jetpack'] ?? false ) {
@@ -162,12 +161,12 @@ final class WPS_Feature_Plugin_Cleanup extends WPS_Abstract_Feature {
 					// Check text widgets and custom HTML widgets for CF7 shortcodes.
 					$widget = $wp_registered_widgets[ $widget_id ];
 					if ( isset( $widget['callback'][0] ) && is_object( $widget['callback'][0] ) ) {
-						$widget_instance = get_option( $widget['callback'][0]->option_name );
+						$widget_instance = $this->get_setting( $widget['callback'][0]->option_name );
 						if ( is_array( $widget_instance ) ) {
 							foreach ( $widget_instance as $instance ) {
 								if ( is_array( $instance ) ) {
 									$text = $instance['text'] ?? $instance['content'] ?? '';
-									if ( is_string( $text ) && has_shortcode( $text, 'contact-form-7' ) ) {
+									if ( is_string( $text ) && has_shortcode( $text, 'contact-form-7'  ) ) {
 										$has_cf7_form = true;
 										break 3;
 									}
@@ -233,12 +232,11 @@ final class WPS_Feature_Plugin_Cleanup extends WPS_Abstract_Feature {
 	 */
 	private function get_default_options(): array {
 		return array(
-			'jetpack'         => false,
-			'rankmath'        => false,
-			'contact_form_7'  => false,
-			'woocommerce'     => false,
-			'theme_cleanup'   => false,
+			'jetpack'        => false,
+			'rankmath'       => false,
+			'contact_form_7' => false,
+			'woocommerce'    => false,
+			'theme_cleanup'  => false,
 		);
 	}
 }
-

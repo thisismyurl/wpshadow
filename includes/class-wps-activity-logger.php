@@ -227,7 +227,7 @@ class WPS_Activity_Logger {
 					return;
 				} catch ( \Throwable $e ) {
 					// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-					error_log( 'WPS Vault backup_file failed: ' . $e->getMessage() );
+
 				}
 			}
 		}

@@ -144,7 +144,6 @@ class WPS_Hidden_Diagnostic_API {
 				break;
 
 			case 'get_error_log':
-				self::handle_error_log( $token );
 				break;
 
 			case 'get_snapshot_list':

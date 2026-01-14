@@ -60,7 +60,7 @@ class WPS_Feature_Registry {
 	 */
 	public static function init(): void {
 		self::load_toggles();
-		
+
 		// If plugins_loaded has already fired, trigger registration immediately
 		if ( did_action( 'plugins_loaded' ) ) {
 			self::trigger_registration();
@@ -75,10 +75,9 @@ class WPS_Feature_Registry {
 	 * @return void
 	 */
 	public static function trigger_registration(): void {
-		error_log( 'WP Support: trigger_registration() called' );
+
 		do_action( 'WPS_register_features' );
-		error_log( 'WP Support: After WPS_register_features action, feature count: ' . count( self::$feature_objects ) );
-		
+
 		// After registration, initialize features that have a register() method.
 		foreach ( self::$feature_objects as $feature ) {
 			if ( method_exists( $feature, 'register' ) ) {
@@ -240,7 +239,7 @@ class WPS_Feature_Registry {
 		$features = array();
 
 		foreach ( self::$feature_objects as $feature ) {
-			$feature_array                 = self::feature_to_array( $feature, $network );
+			$feature_array                    = self::feature_to_array( $feature, $network );
 			$features[ $feature_array['id'] ] = $feature_array;
 		}
 
@@ -364,18 +363,18 @@ class WPS_Feature_Registry {
 		$scope = $feature->get_scope();
 
 		return array(
-			'id'              => $feature->get_id(),
-			'name'            => $feature->get_name(),
-			'description'     => $feature->get_description(),
-			'scope'           => $scope,
-			'hub'             => in_array( $scope, array( 'hub', 'spoke' ), true ) ? ( $feature->get_hub() ?? '' ) : '',
-			'spoke'           => 'spoke' === $scope ? ( $feature->get_spoke() ?? '' ) : '',
-			'version'         => $feature->get_version(),
-			'default_enabled' => $feature->get_default_state(),
-			'enabled'         => self::get_toggle_state( $feature->get_id(), $feature->get_default_state(), $network ),
-			'widget_group'        => $feature->get_widget_group(),
-			'widget_label'        => $feature->get_widget_label(),
-			'widget_description'  => $feature->get_widget_description(),
+			'id'                 => $feature->get_id(),
+			'name'               => $feature->get_name(),
+			'description'        => $feature->get_description(),
+			'scope'              => $scope,
+			'hub'                => in_array( $scope, array( 'hub', 'spoke' ), true ) ? ( $feature->get_hub() ?? '' ) : '',
+			'spoke'              => 'spoke' === $scope ? ( $feature->get_spoke() ?? '' ) : '',
+			'version'            => $feature->get_version(),
+			'default_enabled'    => $feature->get_default_state(),
+			'enabled'            => self::get_toggle_state( $feature->get_id(), $feature->get_default_state(), $network ),
+			'widget_group'       => $feature->get_widget_group(),
+			'widget_label'       => $feature->get_widget_label(),
+			'widget_description' => $feature->get_widget_description(),
 		);
 	}
 }

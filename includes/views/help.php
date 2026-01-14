@@ -47,13 +47,13 @@ $base_url = add_query_arg( 'WPS_tab', 'help', admin_url( 'admin.php?page=wp-supp
 	<nav class="wps-help-tabs nav-tab-wrapper wp-clearfix" role="navigation" aria-label="<?php esc_attr_e( 'Help sections', 'plugin-wp-support-thisismyurl' ); ?>">
 		<?php foreach ( $tabs as $tab_id => $tab_label ) : ?>
 			<?php
-			$tab_url    = add_query_arg( 'help_section', $tab_id, $base_url );
-			$is_current = ( $current_tab === $tab_id );
+			$tab_url      = add_query_arg( 'help_section', $tab_id, $base_url );
+			$is_current   = ( $current_tab === $tab_id );
 			$aria_current = $is_current ? ' aria-current="page"' : '';
 			?>
 			<a href="<?php echo esc_url( $tab_url ); ?>" 
-			   class="nav-tab<?php echo $is_current ? ' nav-tab-active' : ''; ?>"
-			   <?php echo $aria_current; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+				class="nav-tab<?php echo $is_current ? ' nav-tab-active' : ''; ?>"
+				<?php echo $aria_current; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 				<?php echo esc_html( $tab_label ); ?>
 			</a>
 		<?php endforeach; ?>

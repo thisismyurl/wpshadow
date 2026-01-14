@@ -76,13 +76,13 @@ class WPS_Server_Limits {
 	 * @return array<string, mixed>
 	 */
 	public static function get_memory_status(): array {
-		$memory_limit = ini_get( 'memory_limit' );
+		$memory_limit       = ini_get( 'memory_limit' );
 		$memory_limit_bytes = WPS_Environment_Checker::get_memory_limit_status()['current_bytes'];
-		$current_usage = memory_get_usage( true );
-		$peak_usage = memory_get_peak_usage( true );
+		$current_usage      = memory_get_usage( true );
+		$peak_usage         = memory_get_peak_usage( true );
 
 		$usage_percentage = $memory_limit_bytes > 0 ? ( $current_usage / $memory_limit_bytes ) : 0;
-		$peak_percentage = $memory_limit_bytes > 0 ? ( $peak_usage / $memory_limit_bytes ) : 0;
+		$peak_percentage  = $memory_limit_bytes > 0 ? ( $peak_usage / $memory_limit_bytes ) : 0;
 
 		$level = 'good';
 		if ( $usage_percentage >= self::MEMORY_CRITICAL_THRESHOLD ) {
@@ -92,16 +92,16 @@ class WPS_Server_Limits {
 		}
 
 		return array(
-			'limit'              => $memory_limit,
-			'limit_bytes'        => $memory_limit_bytes,
-			'current_usage'      => $current_usage,
-			'peak_usage'         => $peak_usage,
-			'available'          => max( 0, $memory_limit_bytes - $current_usage ),
-			'usage_percentage'   => round( $usage_percentage * 100, 2 ),
-			'peak_percentage'    => round( $peak_percentage * 100, 2 ),
-			'level'              => $level,
-			'should_batch'       => $usage_percentage >= self::MEMORY_WARNING_THRESHOLD,
-			'should_stop'        => $usage_percentage >= self::MEMORY_CRITICAL_THRESHOLD,
+			'limit'            => $memory_limit,
+			'limit_bytes'      => $memory_limit_bytes,
+			'current_usage'    => $current_usage,
+			'peak_usage'       => $peak_usage,
+			'available'        => max( 0, $memory_limit_bytes - $current_usage ),
+			'usage_percentage' => round( $usage_percentage * 100, 2 ),
+			'peak_percentage'  => round( $peak_percentage * 100, 2 ),
+			'level'            => $level,
+			'should_batch'     => $usage_percentage >= self::MEMORY_WARNING_THRESHOLD,
+			'should_stop'      => $usage_percentage >= self::MEMORY_CRITICAL_THRESHOLD,
 		);
 	}
 
@@ -112,10 +112,10 @@ class WPS_Server_Limits {
 	 */
 	public static function get_execution_time_status(): array {
 		$max_execution = (int) ini_get( 'max_execution_time' );
-		$start_time = isset( $_SERVER['REQUEST_TIME_FLOAT'] ) && is_numeric( $_SERVER['REQUEST_TIME_FLOAT'] )
+		$start_time    = isset( $_SERVER['REQUEST_TIME_FLOAT'] ) && is_numeric( $_SERVER['REQUEST_TIME_FLOAT'] )
 			? (float) $_SERVER['REQUEST_TIME_FLOAT']
 			: microtime( true );
-		$elapsed = microtime( true ) - $start_time;
+		$elapsed       = microtime( true ) - $start_time;
 
 		// If max_execution_time is 0, it's unlimited.
 		if ( 0 === $max_execution ) {
@@ -130,7 +130,7 @@ class WPS_Server_Limits {
 			);
 		}
 
-		$remaining = max( 0, $max_execution - $elapsed );
+		$remaining        = max( 0, $max_execution - $elapsed );
 		$usage_percentage = $elapsed / $max_execution;
 
 		$level = 'good';
@@ -158,13 +158,13 @@ class WPS_Server_Limits {
 	 */
 	public static function get_resource_status(): array {
 		$memory = self::get_memory_status();
-		$time = self::get_execution_time_status();
+		$time   = self::get_execution_time_status();
 
 		// Determine overall level (worst of both).
-		$levels = array( 'good', 'warning', 'critical' );
+		$levels             = array( 'good', 'warning', 'critical' );
 		$memory_level_index = array_search( $memory['level'], $levels, true );
-		$time_level_index = array_search( $time['level'], $levels, true );
-		
+		$time_level_index   = array_search( $time['level'], $levels, true );
+
 		// If either search fails, default to 0 (good).
 		if ( false === $memory_level_index ) {
 			$memory_level_index = 0;
@@ -172,7 +172,7 @@ class WPS_Server_Limits {
 		if ( false === $time_level_index ) {
 			$time_level_index = 0;
 		}
-		
+
 		$overall_level = $levels[ max( $memory_level_index, $time_level_index ) ];
 
 		return array(
@@ -423,27 +423,27 @@ class WPS_Server_Limits {
 	 * @return array<string, mixed>
 	 */
 	public static function get_resource_report(): array {
-		$status = self::get_resource_status();
+		$status     = self::get_resource_status();
 		$env_status = WPS_Environment_Checker::get_environment_status();
 
 		return array(
-			'environment'    => array(
+			'environment'     => array(
 				'php_version'    => $env_status['php_version']['current'],
 				'wp_version'     => $env_status['wp_version']['current'],
 				'memory_limit'   => $env_status['memory_limit']['current'],
 				'execution_time' => $env_status['execution_time']['current'],
 			),
-			'current_usage'  => array(
+			'current_usage'   => array(
 				'memory'         => WPS_Environment_Checker::format_bytes( $status['memory']['current_usage'] ),
 				'memory_percent' => $status['memory']['usage_percentage'] . '%',
 				'time_elapsed'   => $status['time']['elapsed'] . 's',
 				'time_percent'   => $status['time']['usage_percentage'] . '%',
 			),
 			'recommendations' => self::get_recommendations( $status ),
-			'batch_config'   => array(
-				'should_batch'   => $status['should_batch'],
-				'batch_size'     => self::get_batch_size(),
-				'sleep_time'     => self::get_batch_sleep_time(),
+			'batch_config'    => array(
+				'should_batch' => $status['should_batch'],
+				'batch_size'   => self::get_batch_size(),
+				'sleep_time'   => self::get_batch_sleep_time(),
 			),
 		);
 	}

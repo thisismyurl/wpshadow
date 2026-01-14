@@ -23,11 +23,7 @@ function wp_support_admin_enqueue( string $hook ): void {
 	if ( false === strpos( $hook, 'wp-support' ) ) {
 		return;
 	}
-
-	error_log( 'wp_support_admin_enqueue: Hook=' . $hook );
-
 	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-	error_log( 'wp_support_admin_enqueue: Screen ID=' . ( $screen ? $screen->id : 'null' ) );
 
 	// Cache-bust using current timestamp to force reload for testing.
 	$cache_bust = time();
@@ -77,10 +73,19 @@ function wp_support_admin_enqueue( string $hook ): void {
 
 	// Enable drag and drop for dashboard metaboxes on all wp-support pages using WordPress native postboxes.
 	if ( $screen && false !== strpos( $screen->id, 'wp-support' ) ) {
-		error_log( 'wp_support_admin_enqueue: Loading dashboard assets for screen=' . $screen->id );
-
 		// Use WordPress's built-in postbox drag and drop.
 		wp_enqueue_script( 'postbox' );
+
+		// Enqueue Chart.js for performance history visualization (dashboard only).
+		if ( 'dashboard' === $tab ) {
+			wp_enqueue_script(
+				'chartjs',
+				'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js',
+				array(),
+				'4.4.1',
+				true
+			);
+		}
 
 		// Add custom script to handle context-specific state saving.
 		wp_enqueue_script(
@@ -111,7 +116,7 @@ function wp_support_admin_enqueue( string $hook ): void {
 			$cache_bust
 		);
 	} else {
-		error_log( 'wp_support_admin_enqueue: NOT loading dashboard assets. Screen=' . ( $screen ? $screen->id : 'null' ) );
+
 	}
 
 	wp_enqueue_script(

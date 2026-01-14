@@ -87,7 +87,7 @@ class WPS_White_Screen_Recovery {
 
 		// In recovery mode, we filter active plugins to only include WP Support.
 		add_filter( 'option_active_plugins', array( __CLASS__, 'filter_plugins_in_recovery_mode' ) );
-		
+
 		// Network-wide recovery for multisite.
 		if ( is_multisite() ) {
 			add_filter( 'site_option_active_sitewide_plugins', array( __CLASS__, 'filter_network_plugins_in_recovery_mode' ) );
@@ -109,7 +109,7 @@ class WPS_White_Screen_Recovery {
 		$wp_support_plugin = wp_support_BASENAME;
 		return array_filter(
 			$plugins,
-			function( $plugin ) use ( $wp_support_plugin ) {
+			function ( $plugin ) use ( $wp_support_plugin ) {
 				return $plugin === $wp_support_plugin;
 			}
 		);
@@ -128,8 +128,8 @@ class WPS_White_Screen_Recovery {
 
 		// Only keep WP Support plugin active.
 		$wp_support_plugin = wp_support_BASENAME;
-		$filtered = array();
-		
+		$filtered          = array();
+
 		foreach ( $plugins as $plugin => $time ) {
 			if ( $plugin === $wp_support_plugin ) {
 				$filtered[ $plugin ] = $time;
@@ -182,16 +182,16 @@ class WPS_White_Screen_Recovery {
 			set_transient(
 				'WPS_auto_recovery_performed',
 				array(
-					'plugin'   => $problematic_plugin,
-					'error'    => $error,
-					'attempt'  => $attempts + 1,
+					'plugin'  => $problematic_plugin,
+					'error'   => $error,
+					'attempt' => $attempts + 1,
 				),
 				HOUR_IN_SECONDS
 			);
 		} else {
 			// Can't identify plugin, activate recovery mode.
 			self::activate_recovery_mode();
-			
+
 			// Store error for display.
 			set_transient( 'WPS_fatal_error_recovery_mode', $error, HOUR_IN_SECONDS );
 		}
@@ -220,7 +220,7 @@ class WPS_White_Screen_Recovery {
 
 		// Extract plugin directory from path.
 		$relative_path = str_replace( trailingslashit( $plugin_dir ), '', $file );
-		$parts = explode( '/', $relative_path );
+		$parts         = explode( '/', $relative_path );
 
 		if ( empty( $parts[0] ) ) {
 			return null;
@@ -263,19 +263,13 @@ class WPS_White_Screen_Recovery {
 
 		// Mark as problematic.
 		$problematic = get_option( self::PROBLEMATIC_PLUGINS_KEY, array() );
-		
+
 		if ( ! in_array( $plugin, $problematic, true ) ) {
 			$problematic[] = $plugin;
 			update_option( self::PROBLEMATIC_PLUGINS_KEY, $problematic );
 		}
 
 		// Log to error log.
-		error_log(
-			sprintf(
-				'[WPS_AUTO_RECOVERY] Deactivated problematic plugin: %s',
-				$plugin
-			)
-		);
 	}
 
 	/**
@@ -285,8 +279,6 @@ class WPS_White_Screen_Recovery {
 	 */
 	private static function activate_recovery_mode(): void {
 		update_option( self::RECOVERY_MODE_KEY, true );
-
-		error_log( '[WPS_AUTO_RECOVERY] Recovery mode activated' );
 	}
 
 	/**
@@ -297,8 +289,6 @@ class WPS_White_Screen_Recovery {
 	public static function deactivate_recovery_mode(): void {
 		delete_option( self::RECOVERY_MODE_KEY );
 		delete_option( self::RECOVERY_ATTEMPTS_KEY );
-
-		error_log( '[WPS_AUTO_RECOVERY] Recovery mode deactivated' );
 	}
 
 	/**
@@ -328,10 +318,10 @@ class WPS_White_Screen_Recovery {
 					$error['line'] ?? 0
 				),
 				array(
-					'error_type' => $error['type'] ?? 0,
+					'error_type'    => $error['type'] ?? 0,
 					'error_message' => $error['message'] ?? '',
-					'error_file' => $error['file'] ?? '',
-					'error_line' => $error['line'] ?? 0,
+					'error_file'    => $error['file'] ?? '',
+					'error_line'    => $error['line'] ?? 0,
 				)
 			);
 		}
@@ -355,9 +345,9 @@ class WPS_White_Screen_Recovery {
 					$plugin
 				),
 				array(
-					'plugin' => $plugin,
+					'plugin'  => $plugin,
 					'attempt' => $attempt,
-					'error' => $error,
+					'error'   => $error,
 				)
 			);
 		}
@@ -385,7 +375,7 @@ class WPS_White_Screen_Recovery {
 		// Verify nonce if provided.
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
-		
+
 		if ( ! empty( $nonce ) && ! wp_verify_nonce( $nonce, 'wps_recovery' ) ) {
 			wp_die( esc_html__( 'Invalid recovery link.', 'plugin-wp-support-thisismyurl' ) );
 		}
@@ -406,12 +396,12 @@ class WPS_White_Screen_Recovery {
 	public static function display_recovery_notice(): void {
 		// Check for auto-recovery.
 		$recovery = get_transient( 'WPS_auto_recovery_performed' );
-		
+
 		if ( $recovery ) {
 			delete_transient( 'WPS_auto_recovery_performed' );
 
 			$plugin_name = $recovery['plugin'] ?? __( 'Unknown Plugin', 'plugin-wp-support-thisismyurl' );
-			$attempt = $recovery['attempt'] ?? 1;
+			$attempt     = $recovery['attempt'] ?? 1;
 
 			?>
 			<div class="notice notice-warning is-dismissible">
@@ -461,7 +451,7 @@ class WPS_White_Screen_Recovery {
 
 		// Check for manual recovery needed.
 		$manual_recovery = get_transient( 'WPS_fatal_error_needs_manual_recovery' );
-		
+
 		if ( $manual_recovery ) {
 			?>
 			<div class="notice notice-error">
@@ -504,8 +494,8 @@ class WPS_White_Screen_Recovery {
 	 */
 	public static function render_recovery_metabox(): void {
 		$recovery_mode = self::is_recovery_mode_active();
-		$attempts = get_option( self::RECOVERY_ATTEMPTS_KEY, 0 );
-		$problematic = get_option( self::PROBLEMATIC_PLUGINS_KEY, array() );
+		$attempts      = get_option( self::RECOVERY_ATTEMPTS_KEY, 0 );
+		$problematic   = get_option( self::PROBLEMATIC_PLUGINS_KEY, array() );
 
 		?>
 		<div class="wps-recovery-status">
@@ -633,9 +623,9 @@ class WPS_White_Screen_Recovery {
 	public static function get_recovery_status(): array {
 		return array(
 			'recovery_mode_active' => self::is_recovery_mode_active(),
-			'attempts' => get_option( self::RECOVERY_ATTEMPTS_KEY, 0 ),
-			'max_attempts' => self::MAX_RECOVERY_ATTEMPTS,
-			'problematic_plugins' => get_option( self::PROBLEMATIC_PLUGINS_KEY, array() ),
+			'attempts'             => get_option( self::RECOVERY_ATTEMPTS_KEY, 0 ),
+			'max_attempts'         => self::MAX_RECOVERY_ATTEMPTS,
+			'problematic_plugins'  => get_option( self::PROBLEMATIC_PLUGINS_KEY, array() ),
 		);
 	}
 }

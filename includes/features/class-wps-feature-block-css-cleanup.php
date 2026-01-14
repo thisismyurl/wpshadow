@@ -27,15 +27,15 @@ final class WPS_Feature_Block_CSS_Cleanup extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'block-css-cleanup',
-				'name'                => __( 'Aggressive Block Library CSS Cleanup', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Dequeue unnecessary Gutenberg block CSS from front-end', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => false,
-				'version'             => '1.0.0',
-				'widget_group'        => 'performance',
-				'widget_label'        => __( 'Performance & Security', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'block-css-cleanup',
+				'name'               => __( 'Aggressive Block Library CSS Cleanup', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Dequeue unnecessary Gutenberg block CSS from front-end', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => false,
+				'version'            => '1.0.0',
+				'widget_group'       => 'performance',
+				'widget_label'       => __( 'Performance & Security', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}
@@ -74,4 +74,3 @@ final class WPS_Feature_Block_CSS_Cleanup extends WPS_Abstract_Feature {
 		wp_dequeue_style( 'global-styles' );
 	}
 }
-

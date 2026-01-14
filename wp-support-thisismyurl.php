@@ -298,6 +298,7 @@ function wps_register_core_features(): void {
 
 	// Reporting and analytics features.
 	register_WPS_feature( new WPS_Feature_Weekly_Performance_Report() );
+	register_WPS_feature( new WPS_Feature_Performance_Alerts() );
 	register_WPS_feature( new WPS_Feature_Smart_Recommendations() );
 
 	// Privacy and compliance features.
@@ -364,7 +365,7 @@ function wp_support_filter_parent_file( string $parent_file ): string {
 
 	if ( ! empty( $module ) ) {
 		$submenu_file = 'wp-support&module=' . $module;
-		error_log( "parent_file filter: setting submenu_file to wp-support&module={$module}" );
+
 	}
 
 	return 'wp-support';
@@ -396,7 +397,7 @@ function wp_support_filter_submenu_file( ?string $submenu_file ): ?string {
 	// Return the submenu file that matches the module parameter.
 	// The submenu items are registered with slugs like 'wp-support&module=media', 'wp-support&module=vault', etc.
 	$target = 'wp-support&module=' . $module;
-	error_log( sprintf( 'submenu_file filter: original=%s, module=%s, returning=%s', $submenu_file, $module, $target ) );
+
 	return $target;
 }
 
@@ -685,8 +686,13 @@ function wp_support_init(): void {
 	);
 
 	// Load feature registry for flexible plugin dependencies.
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/class-wps-settings-cache.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/interface-wps-feature.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-abstract.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-script-utils.php' );
+	
+	// Initialize settings cache early.
+	WPS_Settings_Cache::init();
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-core-diagnostics.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-vault-audit.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-vulnerability-watch.php' );
@@ -714,7 +720,14 @@ function wp_support_init(): void {
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-database-cleanup.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-auto-rollback.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-weekly-performance-report.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-performance-alerts.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-smart-recommendations.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-conditional-loading.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-google-fonts-disabler.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-critical-css.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-script-optimizer.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-conflict-sandbox.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-visual-regression.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-registry.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/wps-feature-functions.php' );
 	WPS_Feature_Registry::init();
@@ -1222,13 +1235,21 @@ function wp_support_render_core_content( string $tab ): void {
 		case 'collection':
 			wp_support_render_spoke_collection();
 			break;
-		case 'performance':
-			wp_support_render_performance_dashboard();
-			break;
+		case 'performance': // Redirect to dashboard - performance is now integrated.
+			$redirect_url = add_query_arg( 'WPS_tab', 'dashboard', admin_url( 'admin.php?page=wp-support' ) );
+			wp_safe_redirect( $redirect_url );
+			exit;
 		case 'modules':
 			wp_support_render_modules();
 			break;
-		case 'settings':
+		case 'dashboard_settings':
+		case 'settings': // Backward compatibility redirect.
+			if ( 'settings' === $tab ) {
+				// Redirect old settings URL to new dashboard_settings.
+				$redirect_url = add_query_arg( 'WPS_tab', 'dashboard_settings', admin_url( 'admin.php?page=wp-support' ) );
+				wp_safe_redirect( $redirect_url );
+				exit;
+			}
 			wp_support_render_settings();
 			break;
 		case 'dashboard':
@@ -1382,7 +1403,6 @@ function wp_support_render_performance_dashboard(): void {
  */
 function wp_support_render_spoke_collection(): void {
 	require_once wp_support_PATH . 'includes/views/spoke-collection.php';
-	\WPS\CoreSupport\wp_support_render_spoke_collection();
 }
 
 /**
@@ -1634,7 +1654,7 @@ function wps_ajax_save_postbox_order(): void {
 	// Save back to JSON store
 	update_user_meta( $user_id, 'WPS_postbox_states', $all_states );
 
-	error_log( 'SAVED POSTBOX ORDER: user=' . $user_id . ', page=' . $page . ', order=' . json_encode( $order ) );
+
 
 	wp_send_json_success(
 		array(
@@ -1685,7 +1705,7 @@ function wps_ajax_save_postbox_state(): void {
 	// Save back to JSON store
 	update_user_meta( $user_id, 'WPS_postbox_states', $all_states );
 
-	error_log( 'SAVED POSTBOX STATE: user=' . $user_id . ', page=' . $page . ', closed=' . json_encode( $closed ) );
+
 
 	wp_send_json_success(
 		array(
@@ -1939,7 +1959,7 @@ function wp_support_get_metabox_order( $result ) {
 	$all_states = get_user_meta( $user_id, 'WPS_postbox_states', true );
 
 	if ( ! is_array( $all_states ) || ! isset( $all_states[ $state_key ]['order'] ) ) {
-		error_log( 'LOADING METABOX ORDER: page=' . $state_key . ', no data found' );
+
 		return false;
 	}
 
@@ -1963,7 +1983,7 @@ function wp_support_get_metabox_order( $result ) {
 	}
 
 	if ( ! $valid ) {
-		error_log( 'LOADING METABOX ORDER: page=' . $state_key . ' invalid data, purging entry' );
+
 		unset( $all_states[ $state_key ] );
 		update_user_meta( $user_id, 'WPS_postbox_states', $all_states );
 		return false;
@@ -1991,7 +2011,7 @@ function wp_support_get_metabox_order( $result ) {
 		}
 	}
 
-	error_log( 'LOADING METABOX ORDER: page=' . $state_key . ', order=' . json_encode( $normalized ) );
+
 
 	return $normalized;
 }
@@ -2012,7 +2032,7 @@ function wp_support_get_closed_postboxes( $result ) {
 	$all_states = get_user_meta( $user_id, 'WPS_postbox_states', true );
 
 	if ( ! is_array( $all_states ) || ! isset( $all_states[ $state_key ]['closed'] ) ) {
-		error_log( 'LOADING CLOSED POSTBOXES: page=' . $state_key . ', no data found' );
+
 		return false;
 	}
 
@@ -2030,7 +2050,7 @@ function wp_support_get_closed_postboxes( $result ) {
 	}
 
 	if ( ! $valid ) {
-		error_log( 'LOADING CLOSED POSTBOXES: page=' . $state_key . ' invalid data, purging entry' );
+
 		unset( $all_states[ $state_key ] );
 		update_user_meta( $user_id, 'WPS_postbox_states', $all_states );
 		return false;
@@ -2039,7 +2059,7 @@ function wp_support_get_closed_postboxes( $result ) {
 	// Convert to string for WordPress explode()
 	$closed_str = implode( ',', $closed );
 
-	error_log( 'LOADING CLOSED POSTBOXES: page=' . $state_key . ', closed=' . $closed_str );
+
 
 	return $closed_str;
 }

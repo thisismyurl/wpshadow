@@ -26,15 +26,15 @@ final class WPS_Feature_Interactivity_Cleanup extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'interactivity-cleanup',
-				'name'                => __( 'Interactivity API & DNS Cleanup', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Disable Interactivity API and Block Bindings scripts on pages that don\'t need them; remove unnecessary DNS prefetch', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => false,
-				'version'             => '1.0.0',
-				'widget_group'        => 'performance',
-				'widget_label'        => __( 'Performance & Security', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'interactivity-cleanup',
+				'name'               => __( 'Interactivity API & DNS Cleanup', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Disable Interactivity API and Block Bindings scripts on pages that don\'t need them; remove unnecessary DNS prefetch', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => false,
+				'version'            => '1.0.0',
+				'widget_group'       => 'performance',
+				'widget_label'       => __( 'Performance & Security', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}
@@ -51,7 +51,7 @@ final class WPS_Feature_Interactivity_Cleanup extends WPS_Abstract_Feature {
 
 		// Remove Interactivity API on frontend if not needed.
 		add_action( 'wp_enqueue_scripts', array( $this, 'disable_interactivity_api' ), 100 );
-		
+
 		// Remove DNS prefetch.
 		add_filter( 'wp_resource_hints', array( $this, 'remove_dns_prefetch' ), 10, 2 );
 	}
@@ -177,4 +177,3 @@ final class WPS_Feature_Interactivity_Cleanup extends WPS_Abstract_Feature {
 		return (bool) preg_match( '/metadata":\s*{[^}]*"bindings"/', $post->post_content );
 	}
 }
-

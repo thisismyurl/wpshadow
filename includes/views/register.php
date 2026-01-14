@@ -95,8 +95,8 @@ $is_licensed = WPS_License::is_registered();
 							</th>
 							<td>
 								<input type="text" id="wps_site_name" name="wps_site_name" 
-									   value="<?php echo esc_attr( $site_title ); ?>" 
-									   class="regular-text" required />
+										value="<?php echo esc_attr( $site_title ); ?>" 
+										class="regular-text" required />
 								<p class="description"><?php esc_html_e( 'The name of your WordPress site.', 'plugin-wp-support-thisismyurl' ); ?></p>
 							</td>
 						</tr>
@@ -107,8 +107,8 @@ $is_licensed = WPS_License::is_registered();
 							</th>
 							<td>
 								<input type="url" id="wps_site_url" name="wps_site_url" 
-									   value="<?php echo esc_url( $site_url ); ?>" 
-									   class="regular-text" required readonly />
+										value="<?php echo esc_url( $site_url ); ?>" 
+										class="regular-text" required readonly />
 								<p class="description"><?php esc_html_e( 'Your WordPress site URL (cannot be changed).', 'plugin-wp-support-thisismyurl' ); ?></p>
 							</td>
 						</tr>
@@ -119,8 +119,8 @@ $is_licensed = WPS_License::is_registered();
 							</th>
 							<td>
 								<input type="text" id="wps_admin_name" name="wps_admin_name" 
-									   value="<?php echo esc_attr( $current_user->display_name ); ?>" 
-									   class="regular-text" required />
+										value="<?php echo esc_attr( $current_user->display_name ); ?>" 
+										class="regular-text" required />
 								<p class="description"><?php esc_html_e( 'Your full name or display name.', 'plugin-wp-support-thisismyurl' ); ?></p>
 							</td>
 						</tr>
@@ -131,8 +131,8 @@ $is_licensed = WPS_License::is_registered();
 							</th>
 							<td>
 								<input type="email" id="wps_admin_email" name="wps_admin_email" 
-									   value="<?php echo esc_attr( $current_user->user_email ); ?>" 
-									   class="regular-text" required />
+										value="<?php echo esc_attr( $current_user->user_email ); ?>" 
+										class="regular-text" required />
 								<p class="description"><?php esc_html_e( 'We will use this email to send you updates and important notifications.', 'plugin-wp-support-thisismyurl' ); ?></p>
 							</td>
 						</tr>

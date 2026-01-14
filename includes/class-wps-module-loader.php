@@ -82,10 +82,7 @@ class Module_Loader {
 	private static function load_module_type( $type ) {
 
 		$modules_dir = wp_support_PATH . "modules/{$type}/";
-		error_log( "Module dir: {$modules_dir}" );
-
 		if ( ! is_dir( $modules_dir ) ) {
-			error_log( "Module dir does not exist: {$modules_dir}" );
 			return;
 		}
 
@@ -96,10 +93,8 @@ class Module_Loader {
 			}
 		);
 
-		error_log( 'Found ' . count( $modules ) . " modules of type {$type}: " . implode( ', ', array_map( 'basename', $modules ) ) );
-
 		foreach ( $modules as $module_dir ) {
-			error_log( 'Loading module: ' . basename( $module_dir ) );
+
 			self::load_module( $module_dir, $type );
 		}
 	}
@@ -131,7 +126,7 @@ class Module_Loader {
 		// Bundled modules are enabled by default, but can be explicitly disabled.
 		$module_slug = $module_name . '-support-thisismyurl';
 		if ( ! \WPS\CoreSupport\WPS_Module_Registry::is_enabled( $module_slug ) ) {
-			error_log( "Module {$module_id} ({$module_slug}) is disabled, skipping load" );
+
 			return;
 		}
 

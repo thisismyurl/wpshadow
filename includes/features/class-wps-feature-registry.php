@@ -70,7 +70,7 @@ class WPS_Feature_Registry {
 	 */
 	public static function trigger_registration(): void {
 		do_action( 'WPS_register_features' );
-		
+
 		// After registration, initialize features that have a register() method.
 		foreach ( self::$feature_objects as $feature ) {
 			if ( method_exists( $feature, 'register' ) ) {
@@ -181,7 +181,7 @@ class WPS_Feature_Registry {
 	 * @return void
 	 */
 	public static function save_feature_states( array $features, array $enabled_ids, bool $network ): void {
-		$toggles = $network && is_multisite() ? self::$network_toggles : self::$site_toggles;
+		$toggles     = $network && is_multisite() ? self::$network_toggles : self::$site_toggles;
 		$old_toggles = $toggles; // Store previous state to detect changes.
 
 		foreach ( $features as $feature ) {
@@ -192,13 +192,13 @@ class WPS_Feature_Registry {
 
 			$new_state = in_array( $id, $enabled_ids, true ) ? 1 : 0;
 			$old_state = isset( $old_toggles[ $id ] ) ? $old_toggles[ $id ] : 0;
-			
+
 			// Fire action when feature is newly enabled.
 			if ( 1 === $new_state && 0 === $old_state ) {
 				$user_id = get_current_user_id();
 				do_action( 'wps_feature_enabled', $id, $user_id );
 			}
-			
+
 			$toggles[ $id ] = $new_state;
 		}
 
@@ -242,7 +242,7 @@ class WPS_Feature_Registry {
 		$features = array();
 
 		foreach ( self::$feature_objects as $feature ) {
-			$feature_array                 = self::feature_to_array( $feature, $network );
+			$feature_array                    = self::feature_to_array( $feature, $network );
 			$features[ $feature_array['id'] ] = $feature_array;
 		}
 
@@ -366,18 +366,18 @@ class WPS_Feature_Registry {
 		$scope = $feature->get_scope();
 
 		return array(
-			'id'                  => $feature->get_id(),
-			'name'                => $feature->get_name(),
-			'description'         => $feature->get_description(),
-			'scope'               => $scope,
-			'hub'                 => in_array( $scope, array( 'hub', 'spoke' ), true ) ? ( $feature->get_hub() ?? '' ) : '',
-			'spoke'               => 'spoke' === $scope ? ( $feature->get_spoke() ?? '' ) : '',
-			'version'             => $feature->get_version(),
-			'default_enabled'     => $feature->get_default_state(),
-			'enabled'             => self::get_toggle_state( $feature->get_id(), $feature->get_default_state(), $network ),
-			'widget_group'        => $feature->get_widget_group(),
-			'widget_label'        => $feature->get_widget_label(),
-			'widget_description'  => $feature->get_widget_description(),
+			'id'                 => $feature->get_id(),
+			'name'               => $feature->get_name(),
+			'description'        => $feature->get_description(),
+			'scope'              => $scope,
+			'hub'                => in_array( $scope, array( 'hub', 'spoke' ), true ) ? ( $feature->get_hub() ?? '' ) : '',
+			'spoke'              => 'spoke' === $scope ? ( $feature->get_spoke() ?? '' ) : '',
+			'version'            => $feature->get_version(),
+			'default_enabled'    => $feature->get_default_state(),
+			'enabled'            => self::get_toggle_state( $feature->get_id(), $feature->get_default_state(), $network ),
+			'widget_group'       => $feature->get_widget_group(),
+			'widget_label'       => $feature->get_widget_label(),
+			'widget_description' => $feature->get_widget_description(),
 		);
 	}
 }

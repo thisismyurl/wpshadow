@@ -27,25 +27,25 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 	/**
 	 * Site type constants
 	 */
-	private const TYPE_BLOG = 'blog';
+	private const TYPE_BLOG        = 'blog';
 	private const TYPE_WOOCOMMERCE = 'woocommerce';
-	private const TYPE_LMS = 'lms';
-	private const TYPE_GENERIC = 'generic';
+	private const TYPE_LMS         = 'lms';
+	private const TYPE_GENERIC     = 'generic';
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'wps_tips_coach',
-				'name'                => __( 'Tips Coach', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Get smart suggestions customized for your specific type of site', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'version'             => '1.0.0',
-				'default_enabled'     => true,
-				'widget_group'        => 'diagnostics',
-				'widget_label'        => __( 'Diagnostics & Monitoring', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Health checks and monitoring features', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'wps_tips_coach',
+				'name'               => __( 'Tips Coach', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Get smart suggestions customized for your specific type of site', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'version'            => '1.0.0',
+				'default_enabled'    => true,
+				'widget_group'       => 'diagnostics',
+				'widget_label'       => __( 'Diagnostics & Monitoring', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Health checks and monitoring features', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}
@@ -89,7 +89,7 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 		// Check if it's primarily a blog (more posts than pages)
 		$post_count = wp_count_posts( 'post' );
 		$page_count = wp_count_posts( 'page' );
-		
+
 		if ( isset( $post_count->publish, $page_count->publish ) && $post_count->publish > 5 ) {
 			return self::TYPE_BLOG;
 		}
@@ -146,9 +146,12 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 		}
 
 		// Filter out dismissed tips
-		$tips = array_filter( $tips, function( $tip ) {
-			return ! self::is_tip_dismissed( $tip['id'] );
-		} );
+		$tips = array_filter(
+			$tips,
+			function ( $tip ) {
+				return ! self::is_tip_dismissed( $tip['id'] );
+			}
+		);
 
 		// Limit to top 3 most relevant tips
 		return array_slice( $tips, 0, 3 );
@@ -167,13 +170,13 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 			$health_data = get_transient( 'health-check-site-status-result' );
 			if ( false === $health_data || ( isset( $health_data['critical'] ) && $health_data['critical'] > 0 ) ) {
 				$tips[] = array(
-					'id'          => 'check_site_health',
-					'title'       => __( 'Check Site Health', 'plugin-wp-support-thisismyurl' ),
-					'description' => __( 'Your site has critical health issues that need attention.', 'plugin-wp-support-thisismyurl' ),
-					'action'      => 'open_site_health',
+					'id'           => 'check_site_health',
+					'title'        => __( 'Check Site Health', 'plugin-wp-support-thisismyurl' ),
+					'description'  => __( 'Your site has critical health issues that need attention.', 'plugin-wp-support-thisismyurl' ),
+					'action'       => 'open_site_health',
 					'action_label' => __( 'View Issues', 'plugin-wp-support-thisismyurl' ),
-					'icon'        => 'dashicons-heart',
-					'priority'    => 100,
+					'icon'         => 'dashicons-heart',
+					'priority'     => 100,
 				);
 			}
 		}
@@ -181,26 +184,26 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 		// Check if backups are configured
 		if ( ! self::is_action_completed( 'setup_backups' ) && ! self::has_backup_plugin() ) {
 			$tips[] = array(
-				'id'          => 'setup_backups',
-				'title'       => __( 'Set Up Backups', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Protect your site with automated backups.', 'plugin-wp-support-thisismyurl' ),
-				'action'      => 'open_backup_info',
+				'id'           => 'setup_backups',
+				'title'        => __( 'Set Up Backups', 'plugin-wp-support-thisismyurl' ),
+				'description'  => __( 'Protect your site with automated backups.', 'plugin-wp-support-thisismyurl' ),
+				'action'       => 'open_backup_info',
 				'action_label' => __( 'Learn More', 'plugin-wp-support-thisismyurl' ),
-				'icon'        => 'dashicons-backup',
-				'priority'    => 90,
+				'icon'         => 'dashicons-backup',
+				'priority'     => 90,
 			);
 		}
 
 		// Check if SSL is enabled
 		if ( ! is_ssl() && ! self::is_action_completed( 'enable_ssl' ) ) {
 			$tips[] = array(
-				'id'          => 'enable_ssl',
-				'title'       => __( 'Enable HTTPS', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Secure your site with HTTPS for better security and SEO.', 'plugin-wp-support-thisismyurl' ),
-				'action'      => 'open_ssl_info',
+				'id'           => 'enable_ssl',
+				'title'        => __( 'Enable HTTPS', 'plugin-wp-support-thisismyurl' ),
+				'description'  => __( 'Secure your site with HTTPS for better security and SEO.', 'plugin-wp-support-thisismyurl' ),
+				'action'       => 'open_ssl_info',
 				'action_label' => __( 'Learn More', 'plugin-wp-support-thisismyurl' ),
-				'icon'        => 'dashicons-lock',
-				'priority'    => 85,
+				'icon'         => 'dashicons-lock',
+				'priority'     => 85,
 			);
 		}
 
@@ -218,39 +221,39 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 		// Check if SEO plugin is active
 		if ( ! self::has_seo_plugin() && ! self::is_action_completed( 'install_seo_plugin' ) ) {
 			$tips[] = array(
-				'id'          => 'install_seo_plugin',
-				'title'       => __( 'Optimize for Search Engines', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Install an SEO plugin to improve your search rankings.', 'plugin-wp-support-thisismyurl' ),
-				'action'      => 'open_seo_plugins',
+				'id'           => 'install_seo_plugin',
+				'title'        => __( 'Optimize for Search Engines', 'plugin-wp-support-thisismyurl' ),
+				'description'  => __( 'Install an SEO plugin to improve your search rankings.', 'plugin-wp-support-thisismyurl' ),
+				'action'       => 'open_seo_plugins',
 				'action_label' => __( 'Browse Plugins', 'plugin-wp-support-thisismyurl' ),
-				'icon'        => 'dashicons-chart-line',
-				'priority'    => 80,
+				'icon'         => 'dashicons-chart-line',
+				'priority'     => 80,
 			);
 		}
 
 		// Check if caching is enabled
 		if ( ! self::has_caching_plugin() && ! self::is_action_completed( 'enable_caching' ) ) {
 			$tips[] = array(
-				'id'          => 'enable_caching',
-				'title'       => __( 'Speed Up Your Site', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Enable caching to improve page load times.', 'plugin-wp-support-thisismyurl' ),
-				'action'      => 'open_caching_plugins',
+				'id'           => 'enable_caching',
+				'title'        => __( 'Speed Up Your Site', 'plugin-wp-support-thisismyurl' ),
+				'description'  => __( 'Enable caching to improve page load times.', 'plugin-wp-support-thisismyurl' ),
+				'action'       => 'open_caching_plugins',
 				'action_label' => __( 'Browse Plugins', 'plugin-wp-support-thisismyurl' ),
-				'icon'        => 'dashicons-performance',
-				'priority'    => 75,
+				'icon'         => 'dashicons-performance',
+				'priority'     => 75,
 			);
 		}
 
 		// Check if comments are moderated
 		if ( '1' !== get_option( 'comment_moderation' ) && ! self::is_action_completed( 'enable_comment_moderation' ) ) {
 			$tips[] = array(
-				'id'          => 'enable_comment_moderation',
-				'title'       => __( 'Enable Comment Moderation', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Prevent spam by requiring approval for new comments.', 'plugin-wp-support-thisismyurl' ),
-				'action'      => 'enable_comment_moderation',
+				'id'           => 'enable_comment_moderation',
+				'title'        => __( 'Enable Comment Moderation', 'plugin-wp-support-thisismyurl' ),
+				'description'  => __( 'Prevent spam by requiring approval for new comments.', 'plugin-wp-support-thisismyurl' ),
+				'action'       => 'enable_comment_moderation',
 				'action_label' => __( 'Enable Now', 'plugin-wp-support-thisismyurl' ),
-				'icon'        => 'dashicons-admin-comments',
-				'priority'    => 70,
+				'icon'         => 'dashicons-admin-comments',
+				'priority'     => 70,
 			);
 		}
 
@@ -268,19 +271,19 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 		// Check if WooCommerce setup is complete
 		if ( function_exists( 'WC' ) ) {
 			$wc = WC();
-			
+
 			// Check if payment gateway is configured
 			if ( isset( $wc->payment_gateways ) && method_exists( $wc->payment_gateways, 'get_available_payment_gateways' ) ) {
 				$gateways = $wc->payment_gateways->get_available_payment_gateways();
 				if ( empty( $gateways ) && ! self::is_action_completed( 'setup_payment_gateway' ) ) {
 					$tips[] = array(
-						'id'          => 'setup_payment_gateway',
-						'title'       => __( 'Configure Payment Gateway', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Set up a payment method to start accepting orders.', 'plugin-wp-support-thisismyurl' ),
-						'action'      => 'open_woo_payments',
+						'id'           => 'setup_payment_gateway',
+						'title'        => __( 'Configure Payment Gateway', 'plugin-wp-support-thisismyurl' ),
+						'description'  => __( 'Set up a payment method to start accepting orders.', 'plugin-wp-support-thisismyurl' ),
+						'action'       => 'open_woo_payments',
 						'action_label' => __( 'Configure Now', 'plugin-wp-support-thisismyurl' ),
-						'icon'        => 'dashicons-money-alt',
-						'priority'    => 95,
+						'icon'         => 'dashicons-money-alt',
+						'priority'     => 95,
 					);
 				}
 			}
@@ -290,13 +293,13 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 				$shipping_methods = $wc->shipping->get_shipping_methods();
 				if ( empty( $shipping_methods ) && ! self::is_action_completed( 'setup_shipping' ) ) {
 					$tips[] = array(
-						'id'          => 'setup_shipping',
-						'title'       => __( 'Configure Shipping Methods', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Set up shipping options for your customers.', 'plugin-wp-support-thisismyurl' ),
-						'action'      => 'open_woo_shipping',
+						'id'           => 'setup_shipping',
+						'title'        => __( 'Configure Shipping Methods', 'plugin-wp-support-thisismyurl' ),
+						'description'  => __( 'Set up shipping options for your customers.', 'plugin-wp-support-thisismyurl' ),
+						'action'       => 'open_woo_shipping',
 						'action_label' => __( 'Configure Now', 'plugin-wp-support-thisismyurl' ),
-						'icon'        => 'dashicons-cart',
-						'priority'    => 90,
+						'icon'         => 'dashicons-cart',
+						'priority'     => 90,
 					);
 				}
 			}
@@ -306,13 +309,13 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 				$tax_enabled = wc_tax_enabled();
 				if ( ! $tax_enabled && ! self::is_action_completed( 'setup_taxes' ) ) {
 					$tips[] = array(
-						'id'          => 'setup_taxes',
-						'title'       => __( 'Configure Tax Settings', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Set up tax rates for your products.', 'plugin-wp-support-thisismyurl' ),
-						'action'      => 'open_woo_tax',
+						'id'           => 'setup_taxes',
+						'title'        => __( 'Configure Tax Settings', 'plugin-wp-support-thisismyurl' ),
+						'description'  => __( 'Set up tax rates for your products.', 'plugin-wp-support-thisismyurl' ),
+						'action'       => 'open_woo_tax',
 						'action_label' => __( 'Configure Now', 'plugin-wp-support-thisismyurl' ),
-						'icon'        => 'dashicons-calculator',
-						'priority'    => 85,
+						'icon'         => 'dashicons-calculator',
+						'priority'     => 85,
 					);
 				}
 			}
@@ -332,39 +335,39 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 		// Check if membership/enrollment is set up
 		if ( ! self::is_action_completed( 'create_first_course' ) ) {
 			$tips[] = array(
-				'id'          => 'create_first_course',
-				'title'       => __( 'Create Your First Course', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Start building content for your students.', 'plugin-wp-support-thisismyurl' ),
-				'action'      => 'open_course_creation',
+				'id'           => 'create_first_course',
+				'title'        => __( 'Create Your First Course', 'plugin-wp-support-thisismyurl' ),
+				'description'  => __( 'Start building content for your students.', 'plugin-wp-support-thisismyurl' ),
+				'action'       => 'open_course_creation',
 				'action_label' => __( 'Create Course', 'plugin-wp-support-thisismyurl' ),
-				'icon'        => 'dashicons-welcome-learn-more',
-				'priority'    => 95,
+				'icon'         => 'dashicons-welcome-learn-more',
+				'priority'     => 95,
 			);
 		}
 
 		// Check if email notifications are configured
 		if ( ! self::is_action_completed( 'setup_email_notifications' ) ) {
 			$tips[] = array(
-				'id'          => 'setup_email_notifications',
-				'title'       => __( 'Configure Email Notifications', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Set up automated emails for course enrollments and completions.', 'plugin-wp-support-thisismyurl' ),
-				'action'      => 'open_email_settings',
+				'id'           => 'setup_email_notifications',
+				'title'        => __( 'Configure Email Notifications', 'plugin-wp-support-thisismyurl' ),
+				'description'  => __( 'Set up automated emails for course enrollments and completions.', 'plugin-wp-support-thisismyurl' ),
+				'action'       => 'open_email_settings',
 				'action_label' => __( 'Configure Now', 'plugin-wp-support-thisismyurl' ),
-				'icon'        => 'dashicons-email-alt',
-				'priority'    => 85,
+				'icon'         => 'dashicons-email-alt',
+				'priority'     => 85,
 			);
 		}
 
 		// Check if certificates are enabled
 		if ( ! self::is_action_completed( 'enable_certificates' ) ) {
 			$tips[] = array(
-				'id'          => 'enable_certificates',
-				'title'       => __( 'Enable Course Certificates', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Reward students with certificates upon course completion.', 'plugin-wp-support-thisismyurl' ),
-				'action'      => 'open_certificate_settings',
+				'id'           => 'enable_certificates',
+				'title'        => __( 'Enable Course Certificates', 'plugin-wp-support-thisismyurl' ),
+				'description'  => __( 'Reward students with certificates upon course completion.', 'plugin-wp-support-thisismyurl' ),
+				'action'       => 'open_certificate_settings',
 				'action_label' => __( 'Learn More', 'plugin-wp-support-thisismyurl' ),
-				'icon'        => 'dashicons-awards',
-				'priority'    => 80,
+				'icon'         => 'dashicons-awards',
+				'priority'     => 80,
 			);
 		}
 
@@ -380,30 +383,28 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 		$tips = array();
 
 		// Check if site tagline is still default
-		$tagline = get_option( 'blogdescription' );
+		$tagline = $this->get_setting( 'blogdescription' );
 		if ( 'Just another WordPress site' === $tagline && ! self::is_action_completed( 'update_tagline' ) ) {
 			$tips[] = array(
-				'id'          => 'update_tagline',
-				'title'       => __( 'Update Site Tagline', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Customize your site tagline to describe your website.', 'plugin-wp-support-thisismyurl' ),
-				'action'      => 'open_general_settings',
+				'id'           => 'update_tagline', 'title'        => __( 'Update Site Tagline', 'plugin-wp-support-thisismyurl'  ),
+				'description'  => __( 'Customize your site tagline to describe your website.', 'plugin-wp-support-thisismyurl' ),
+				'action'       => 'open_general_settings',
 				'action_label' => __( 'Update Now', 'plugin-wp-support-thisismyurl' ),
-				'icon'        => 'dashicons-admin-settings',
-				'priority'    => 75,
+				'icon'         => 'dashicons-admin-settings',
+				'priority'     => 75,
 			);
 		}
 
 		// Check if permalink structure is optimized
-		$permalink_structure = get_option( 'permalink_structure' );
+		$permalink_structure = $this->get_setting( 'permalink_structure' );
 		if ( empty( $permalink_structure ) && ! self::is_action_completed( 'optimize_permalinks' ) ) {
 			$tips[] = array(
-				'id'          => 'optimize_permalinks',
-				'title'       => __( 'Optimize Permalinks', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Use SEO-friendly URLs for better search rankings.', 'plugin-wp-support-thisismyurl' ),
-				'action'      => 'open_permalink_settings',
+				'id'           => 'optimize_permalinks', 'title'        => __( 'Optimize Permalinks', 'plugin-wp-support-thisismyurl'  ),
+				'description'  => __( 'Use SEO-friendly URLs for better search rankings.', 'plugin-wp-support-thisismyurl' ),
+				'action'       => 'open_permalink_settings',
 				'action_label' => __( 'Configure Now', 'plugin-wp-support-thisismyurl' ),
-				'icon'        => 'dashicons-admin-links',
-				'priority'    => 80,
+				'icon'         => 'dashicons-admin-links',
+				'priority'     => 80,
 			);
 		}
 
@@ -417,7 +418,7 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 	 * @return bool True if completed.
 	 */
 	private static function is_action_completed( string $action_id ): bool {
-		$completed = get_option( 'wps_completed_tips', array() );
+		$completed = $this->get_setting( 'wps_completed_tips', array( ) );
 		return is_array( $completed ) && in_array( $action_id, $completed, true );
 	}
 
@@ -428,13 +429,13 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 	 * @return bool True on success.
 	 */
 	private static function mark_action_completed( string $action_id ): bool {
-		$completed = get_option( 'wps_completed_tips', array() );
+		$completed = $this->get_setting( 'wps_completed_tips', array( ) );
 		if ( ! is_array( $completed ) ) {
 			$completed = array();
 		}
 		if ( ! in_array( $action_id, $completed, true ) ) {
 			$completed[] = $action_id;
-			return update_option( 'wps_completed_tips', $completed );
+			return $this->update_setting( 'wps_completed_tips', $completed  );
 		}
 		return true;
 	}
@@ -558,58 +559,58 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 	private static function process_tip_action( string $action, string $tip_id ): array {
 		switch ( $action ) {
 			case 'enable_comment_moderation':
-				update_option( 'comment_moderation', '1' );
+				$this->update_setting( 'comment_moderation', '1'  );
 				return array(
-					'success' => true,
-					'message' => __( 'Comment moderation enabled successfully.', 'plugin-wp-support-thisismyurl' ),
+					'success'  => true,
+					'message'  => __( 'Comment moderation enabled successfully.', 'plugin-wp-support-thisismyurl' ),
 					'redirect' => admin_url( 'options-discussion.php' ),
 				);
 
 			case 'open_site_health':
 				return array(
-					'success' => true,
+					'success'  => true,
 					'redirect' => admin_url( 'site-health.php' ),
 				);
 
 			case 'open_backup_info':
 				return array(
-					'success' => true,
+					'success'  => true,
 					'redirect' => admin_url( 'plugin-install.php?s=backup&tab=search' ),
 				);
 
 			case 'open_ssl_info':
 				return array(
-					'success' => true,
+					'success'  => true,
 					'redirect' => admin_url( 'options-general.php' ),
 				);
 
 			case 'open_seo_plugins':
 				return array(
-					'success' => true,
+					'success'  => true,
 					'redirect' => admin_url( 'plugin-install.php?s=seo&tab=search' ),
 				);
 
 			case 'open_caching_plugins':
 				return array(
-					'success' => true,
+					'success'  => true,
 					'redirect' => admin_url( 'plugin-install.php?s=cache&tab=search' ),
 				);
 
 			case 'open_woo_payments':
 				return array(
-					'success' => true,
+					'success'  => true,
 					'redirect' => admin_url( 'admin.php?page=wc-settings&tab=checkout' ),
 				);
 
 			case 'open_woo_shipping':
 				return array(
-					'success' => true,
+					'success'  => true,
 					'redirect' => admin_url( 'admin.php?page=wc-settings&tab=shipping' ),
 				);
 
 			case 'open_woo_tax':
 				return array(
-					'success' => true,
+					'success'  => true,
 					'redirect' => admin_url( 'admin.php?page=wc-settings&tab=tax' ),
 				);
 
@@ -617,41 +618,41 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 				// Try to determine the LMS plugin and redirect accordingly
 				if ( self::is_plugin_active_safe( 'sfwd-lms/sfwd_lms.php' ) ) {
 					return array(
-						'success' => true,
+						'success'  => true,
 						'redirect' => admin_url( 'post-new.php?post_type=sfwd-courses' ),
 					);
 				} elseif ( self::is_plugin_active_safe( 'lifterlms/lifterlms.php' ) ) {
 					return array(
-						'success' => true,
+						'success'  => true,
 						'redirect' => admin_url( 'post-new.php?post_type=course' ),
 					);
 				} elseif ( self::is_plugin_active_safe( 'tutor/tutor.php' ) ) {
 					return array(
-						'success' => true,
+						'success'  => true,
 						'redirect' => admin_url( 'post-new.php?post_type=courses' ),
 					);
 				}
 				return array(
-					'success' => true,
+					'success'  => true,
 					'redirect' => admin_url( 'edit.php?post_type=courses' ),
 				);
 
 			case 'open_email_settings':
 			case 'open_certificate_settings':
 				return array(
-					'success' => true,
+					'success'  => true,
 					'redirect' => admin_url( 'options-general.php' ),
 				);
 
 			case 'open_general_settings':
 				return array(
-					'success' => true,
+					'success'  => true,
 					'redirect' => admin_url( 'options-general.php' ),
 				);
 
 			case 'open_permalink_settings':
 				return array(
-					'success' => true,
+					'success'  => true,
 					'redirect' => admin_url( 'options-permalink.php' ),
 				);
 
@@ -703,11 +704,14 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 		}
 
 		// Sort tips by priority (highest first)
-		usort( $tips, function( $a, $b ) {
-			return ( $b['priority'] ?? 0 ) - ( $a['priority'] ?? 0 );
-		} );
+		usort(
+			$tips,
+			function ( $a, $b ) {
+				return ( $b['priority'] ?? 0 ) - ( $a['priority'] ?? 0 );
+			}
+		);
 
-		$site_type = self::detect_site_type();
+		$site_type       = self::detect_site_type();
 		$site_type_label = self::get_site_type_label( $site_type );
 
 		wp_enqueue_script( 'jquery' );

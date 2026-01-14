@@ -30,15 +30,15 @@ final class WPS_Feature_Hardening extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                  => 'security-hardening',
-				'name'                => __( 'One-Click Security Hardening', 'plugin-wp-support-thisismyurl' ),
-				'description'         => __( 'Comprehensive security hardening: disable XML-RPC, lock down wp-json, prevent directory listing, validate salts, and check file permissions', 'plugin-wp-support-thisismyurl' ),
-				'scope'               => 'core',
-				'default_enabled'     => false,
-				'version'             => '1.0.0',
-				'widget_group'        => 'security',
-				'widget_label'        => __( 'Security', 'plugin-wp-support-thisismyurl' ),
-				'widget_description'  => __( 'Advanced security features to protect your WordPress installation', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'security-hardening',
+				'name'               => __( 'One-Click Security Hardening', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Comprehensive security hardening: disable XML-RPC, lock down wp-json, prevent directory listing, validate salts, and check file permissions', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => false,
+				'version'            => '1.0.0',
+				'widget_group'       => 'security',
+				'widget_label'       => __( 'Security', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wp-support-thisismyurl' ),
 			)
 		);
 	}
@@ -278,7 +278,7 @@ final class WPS_Feature_Hardening extends WPS_Abstract_Feature {
 			}
 		}
 
-		$htaccess_content = "# WPS Security Hardening\n";
+		$htaccess_content  = "# WPS Security Hardening\n";
 		$htaccess_content .= "Options -Indexes\n";
 		$htaccess_content .= "<IfModule mod_autoindex.c>\n";
 		$htaccess_content .= "    IndexIgnore *\n";
@@ -297,7 +297,7 @@ final class WPS_Feature_Hardening extends WPS_Abstract_Feature {
 		$result = @file_put_contents( $htaccess_file, $htaccess_content );
 
 		if ( false === $result ) {
-			error_log( sprintf( 'WPS Security Hardening: Failed to create .htaccess in %s', $directory ) );
+
 		}
 	}
 
@@ -322,7 +322,7 @@ final class WPS_Feature_Hardening extends WPS_Abstract_Feature {
 		$result = @file_put_contents( $index_file, $index_content );
 
 		if ( false === $result ) {
-			error_log( sprintf( 'WPS Security Hardening: Failed to create index.php in %s', $directory ) );
+
 		}
 	}
 
@@ -335,7 +335,7 @@ final class WPS_Feature_Hardening extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	private function add_security_notice( string $id, string $message, string $type = 'warning' ): void {
-		$notices = get_option( 'wps_security_hardening_notices', array() );
+		$notices = $this->get_setting( 'wps_security_hardening_notices', array( ) );
 
 		$notices[ $id ] = array(
 			'message' => $message,
@@ -343,7 +343,7 @@ final class WPS_Feature_Hardening extends WPS_Abstract_Feature {
 			'time'    => time(),
 		);
 
-		update_option( 'wps_security_hardening_notices', $notices );
+		$this->update_setting( 'wps_security_hardening_notices', $notices  );
 
 		// Also add as WordPress admin notice.
 		add_action(

@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Features;
+namespace WPS\CoreSupport;
 
 /**
  * WPS_Script_Utils
@@ -25,17 +25,17 @@ final class WPS_Script_Utils {
 	 * @var array<string, string>
 	 */
 	private static array $known_plugins = array(
-		'contact-form-7'     => 'Contact Form 7',
-		'wpcf7'              => 'Contact Form 7',
-		'woocommerce'        => 'WooCommerce',
-		'wc-'                => 'WooCommerce',
-		'elementor'          => 'Elementor',
-		'jetpack'            => 'Jetpack',
-		'wpforms'            => 'WPForms',
-		'gravityforms'       => 'Gravity Forms',
-		'yoast'              => 'Yoast SEO',
-		'wp-rocket'          => 'WP Rocket',
-		'autoptimize'        => 'Autoptimize',
+		'contact-form-7' => 'Contact Form 7',
+		'wpcf7'          => 'Contact Form 7',
+		'woocommerce'    => 'WooCommerce',
+		'wc-'            => 'WooCommerce',
+		'elementor'      => 'Elementor',
+		'jetpack'        => 'Jetpack',
+		'wpforms'        => 'WPForms',
+		'gravityforms'   => 'Gravity Forms',
+		'yoast'          => 'Yoast SEO',
+		'wp-rocket'      => 'WP Rocket',
+		'autoptimize'    => 'Autoptimize',
 	);
 
 	/**

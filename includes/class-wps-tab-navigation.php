@@ -78,6 +78,15 @@ class WPS_Tab_Navigation {
 		if ( empty( $tabs ) ) {
 			return;
 		}
+
+		// Filter out dashboard_settings tab from navigation (still accessible via URL).
+		$tabs = array_filter(
+			$tabs,
+			function ( $tab ) {
+				return 'dashboard_settings' !== $tab['id'];
+			}
+		);
+
 		?>
 		<h2 class="nav-tab-wrapper wps-tab-navigation">
 			<?php foreach ( $tabs as $tab ) : ?>
@@ -211,9 +220,8 @@ class WPS_Tab_Navigation {
 	public static function get_core_tabs(): array {
 		$tabs = array(
 			self::build_tab( 'dashboard', __( 'Dashboard', 'plugin-wp-support-thisismyurl' ), 'dashicons-dashboard' ),
-			self::build_tab( 'performance', __( 'Performance', 'plugin-wp-support-thisismyurl' ), 'dashicons-performance' ),
 			self::build_tab( 'collection', __( 'Spoke Collection', 'plugin-wp-support-thisismyurl' ), 'dashicons-star-filled' ),
-			self::build_tab( 'settings', __( 'Settings', 'plugin-wp-support-thisismyurl' ), 'dashicons-admin-generic' ),
+			self::build_tab( 'dashboard_settings', __( 'Settings', 'plugin-wp-support-thisismyurl' ), 'dashicons-admin-generic' ),
 			self::build_tab( 'features', __( 'Features', 'plugin-wp-support-thisismyurl' ), 'dashicons-admin-plugins' ),
 			self::build_tab( 'help', __( 'Help', 'plugin-wp-support-thisismyurl' ), 'dashicons-editor-help' ),
 		);
@@ -235,7 +243,7 @@ class WPS_Tab_Navigation {
 	public static function get_hub_tabs( string $hub_id ): array {
 		return array(
 			self::build_tab( 'dashboard', __( 'Dashboard', 'plugin-wp-support-thisismyurl' ), 'dashicons-dashboard' ),
-			self::build_tab( 'settings', __( 'Settings', 'plugin-wp-support-thisismyurl' ), 'dashicons-admin-generic' ),
+			self::build_tab( 'dashboard_settings', __( 'Settings', 'plugin-wp-support-thisismyurl' ), 'dashicons-admin-generic' ),
 			self::build_tab( 'features', __( 'Features', 'plugin-wp-support-thisismyurl' ), 'dashicons-admin-plugins' ),
 			self::build_tab( 'help', __( 'Help', 'plugin-wp-support-thisismyurl' ), 'dashicons-editor-help' ),
 		);

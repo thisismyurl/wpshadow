@@ -379,11 +379,11 @@ class WPS_Privacy_Requests {
 
 		$data = array(
 			'user_info'     => array(
-				'username'       => $user->user_login,
-				'email'          => $user->user_email,
-				'display_name'   => $user->display_name,
-				'registered'     => $user->user_registered,
-				'roles'          => $user->roles,
+				'username'     => $user->user_login,
+				'email'        => $user->user_email,
+				'display_name' => $user->display_name,
+				'registered'   => $user->user_registered,
+				'roles'        => $user->roles,
 			),
 			'activity_logs' => array(),
 			'requests'      => array(),
@@ -393,7 +393,7 @@ class WPS_Privacy_Requests {
 		global $wpdb;
 		$activity_table = $wpdb->prefix . 'wps_activity_log';
 		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $activity_table ) ) === $activity_table ) {
-			$logs = $wpdb->get_results(
+			$logs                  = $wpdb->get_results(
 				$wpdb->prepare(
 					"SELECT * FROM {$activity_table} WHERE user_id = %d ORDER BY logged_at DESC",
 					$user_id
