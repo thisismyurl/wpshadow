@@ -99,8 +99,14 @@ abstract class WPS_Abstract_Feature implements WPS_Feature_Interface {
 		return $this->widget_description;
 	}
 
-	public function is_enabled( bool $network = false ): bool {
-		return WPS_Feature_Registry::is_feature_enabled( $this->id, $this->default_enabled, $network );
+	public static function is_enabled( bool $network = false ): bool {
+		// For static calls, we need to derive the feature ID from the class name
+		// WPS_Feature_FeatureName -> feature-name
+		$class_name = get_called_class();
+		$short_name = preg_replace( '/^.*\\\WPS_Feature_/', '', $class_name );
+		$feature_id = strtolower( str_replace( '_', '-', $short_name ) );
+		
+		return WPS_Feature_Registry::is_feature_enabled( $feature_id, true, $network );
 	}
 
 	protected function sanitize_scope( string $scope ): string {
