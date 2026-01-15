@@ -243,7 +243,7 @@ class WPS_GitHub_Updater {
 		if ( current_user_can( 'manage_options' ) ) {
 			$settings_link = sprintf(
 				'<a href="%s">%s</a>',
-				esc_url( add_query_arg( 'WPS_tab', 'github-updates', admin_url( 'admin.php?page=wp-support&WPS_tab=settings' ) ) ),
+				esc_url( add_query_arg( 'WPS_tab', 'github-updates', admin_url( 'admin.php?page=wp-support' ) ) ),
 				esc_html__( 'GitHub Updates', 'plugin-wp-support-thisismyurl' )
 			);
 			array_unshift( $links, $settings_link );

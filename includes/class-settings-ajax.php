@@ -61,6 +61,50 @@ function WPS_ajax_save_settings(): void {
 			update_option( 'WPS_privacy_export_format', sanitize_key( $form_data['WPS_privacy_export_format'] ?? 'json' ) );
 			update_option( 'WPS_privacy_contributors_see_user_activity', isset( $form_data['WPS_privacy_contributors_see_user_activity'] ) ? 1 : 0 );
 			update_option( 'WPS_privacy_editors_see_admin_activity', isset( $form_data['WPS_privacy_editors_see_admin_activity'] ) ? 1 : 0 );
+			update_option( 'wps_diagnostic_logging_enabled', isset( $form_data['wps_diagnostic_logging_enabled'] ) ? 1 : 0 );
+			break;
+
+		case 'database_cleanup':
+			// Get the database cleanup feature instance.
+			$feature = \WPS\CoreSupport\WPS_Feature_Registry::get_feature( 'database-cleanup' );
+			if ( ! $feature ) {
+				wp_send_json_error( array( 'message' => 'Database cleanup feature not found' ) );
+			}
+
+			// Update enabled status.
+			$enabled = isset( $form_data['wps_database_cleanup_enabled'] ) ? 1 : 0;
+			$feature->update_setting( 'enabled', $enabled );
+
+			// Update cleanup frequency.
+			$old_frequency = $feature->get_setting( 'cleanup_frequency', 'weekly' );
+			$new_frequency = sanitize_key( $form_data['wps_cleanup_frequency'] ?? 'weekly' );
+			$feature->update_setting( 'cleanup_frequency', $new_frequency );
+
+			// Update cleanup options.
+			$cleanup_options = array(
+				'cleanup_revisions'     => isset( $form_data['wps_cleanup_options']['cleanup_revisions'] ) ? 1 : 0,
+				'cleanup_transients'    => isset( $form_data['wps_cleanup_options']['cleanup_transients'] ) ? 1 : 0,
+				'cleanup_spam'          => isset( $form_data['wps_cleanup_options']['cleanup_spam'] ) ? 1 : 0,
+				'cleanup_orphaned_meta' => isset( $form_data['wps_cleanup_options']['cleanup_orphaned_meta'] ) ? 1 : 0,
+				'cleanup_auto_drafts'   => isset( $form_data['wps_cleanup_options']['cleanup_auto_drafts'] ) ? 1 : 0,
+				'optimize_tables'       => isset( $form_data['wps_cleanup_options']['optimize_tables'] ) ? 1 : 0,
+				'keep_revisions'        => absint( $form_data['wps_cleanup_options']['keep_revisions'] ?? 5 ),
+			);
+			$feature->update_setting( 'cleanup_options', $cleanup_options );
+
+			// Reschedule if frequency changed.
+			if ( $old_frequency !== $new_frequency ) {
+				// Clear existing schedule.
+				$timestamp = wp_next_scheduled( 'wps_database_cleanup' );
+				if ( $timestamp ) {
+					wp_unschedule_event( $timestamp, 'wps_database_cleanup' );
+				}
+
+				// Schedule new event if enabled.
+				if ( $enabled ) {
+					wp_schedule_event( time(), $new_frequency, 'wps_database_cleanup' );
+				}
+			}
 			break;
 
 		default:

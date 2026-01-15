@@ -278,7 +278,105 @@
 		if (typeof wps_dashboard_layout !== 'undefined') {
 			wpsDashboardLayout.init();
 		}
+		
+		// Handle database stats refresh button.
+		$(document).on('click', '.wps-refresh-database-stats', function(e) {
+			e.preventDefault();
+			
+			var button = $(this);
+			var container = $('#wps-database-stats-container');
+			var spinner = button.siblings('.wps-refresh-spinner');
+			
+			// Disable button and show spinner.
+			button.prop('disabled', true);
+			spinner.show();
+			
+			// Make AJAX request.
+			$.ajax({
+				url: ajaxurl,
+				type: 'POST',
+				data: {
+					action: 'wps_refresh_database_stats',
+					nonce: WPS_dashboard_layout.moduleNonce
+				},
+				success: function(response) {
+					if (response.success && response.data && response.data.stats) {
+						// Update the widget content.
+						var stats = response.data.stats;
+						
+						// Update total size.
+						container.find('.wps-widget-content > div:first-child > div:first-child').text(
+							formatBytes(stats.total_size)
+						);
+						
+						// Update quick stats.
+						var statsBoxes = container.find('.wps-widget-content > div:nth-child(2) > div');
+						$(statsBoxes[0]).find('div:first-child').text(stats.table_count);
+						$(statsBoxes[1]).find('div:first-child').text(Number(stats.expired_transients).toLocaleString());
+						$(statsBoxes[2]).find('div:first-child').text(Number(stats.revisions).toLocaleString());
+						$(statsBoxes[3]).find('div:first-child').text(Number(stats.autodrafts).toLocaleString());
+						
+						// Show success message briefly.
+						if (typeof WPS_dashboard_layout !== 'undefined' && WPS_dashboard_layout.refreshSuccess) {
+							var successMsg = $('<div class="notice notice-success inline" style="margin: 10px 0; padding: 8px;"><p>' + 
+								WPS_dashboard_layout.refreshSuccess + '</p></div>');
+							container.prepend(successMsg);
+							setTimeout(function() {
+								successMsg.fadeOut(function() { $(this).remove(); });
+							}, 3000);
+						}
+					} else {
+						// Show error message.
+						var errorText = 'Failed to refresh database statistics.';
+						if (typeof WPS_dashboard_layout !== 'undefined' && WPS_dashboard_layout.refreshError) {
+							errorText = WPS_dashboard_layout.refreshError;
+						}
+						if (response.data && response.data.message) {
+							errorText = response.data.message;
+						}
+						var errorMsg = $('<div class="notice notice-error inline" style="margin: 10px 0; padding: 8px;"><p>' + 
+							errorText + '</p></div>');
+						container.prepend(errorMsg);
+						setTimeout(function() {
+							errorMsg.fadeOut(function() { $(this).remove(); });
+						}, 5000);
+					}
+				},
+				error: function() {
+					// Show error message.
+					var errorText = 'An error occurred while refreshing database statistics.';
+					if (typeof WPS_dashboard_layout !== 'undefined' && WPS_dashboard_layout.refreshError) {
+						errorText = WPS_dashboard_layout.refreshError;
+					}
+					var errorMsg = $('<div class="notice notice-error inline" style="margin: 10px 0; padding: 8px;"><p>' + 
+						errorText + '</p></div>');
+					container.prepend(errorMsg);
+					setTimeout(function() {
+						errorMsg.fadeOut(function() { $(this).remove(); });
+					}, 5000);
+				},
+				complete: function() {
+					// Re-enable button and hide spinner.
+					button.prop('disabled', false);
+					spinner.hide();
+				}
+			});
+		});
 	});
+	
+	/**
+	 * Format bytes to human-readable format.
+	 * 
+	 * @param {number} bytes - Bytes to format.
+	 * @return {string} Formatted string.
+	 */
+	function formatBytes(bytes) {
+		if (bytes === 0) return '0 B';
+		var k = 1024;
+		var sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+		var i = Math.floor(Math.log(bytes) / Math.log(k));
+		return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+	}
 
 })(jQuery);
 
