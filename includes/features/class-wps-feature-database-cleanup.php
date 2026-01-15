@@ -30,7 +30,10 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 				'name'               => __( 'Database Cleanup & Optimization', 'plugin-wp-support-thisismyurl' ),
 				'description'        => __( 'Clean up post revisions, expired transients, and optimize database tables', 'plugin-wp-support-thisismyurl' ),
 				'scope'              => 'core',
-						'default_enabled'    => true,
+				'default_enabled'    => true,
+			)
+		);
+		
 		$this->register_default_settings(
 			array(
 				'cleanup_frequency' => 'weekly',
