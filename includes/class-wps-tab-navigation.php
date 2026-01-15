@@ -23,6 +23,7 @@ class WPS_Tab_Navigation {
 	private const QUERY_VAR_MODULE = 'module';
 	private const QUERY_VAR_HUB    = 'WPS_hub'; // Legacy support
 	private const QUERY_VAR_SPOKE  = 'WPS_spoke'; // Legacy support
+	public const TAB_DASHBOARD_SETTINGS = 'dashboard_settings';
 
 	/**
 	 * Get the current tab context from query parameters.
@@ -83,7 +84,7 @@ class WPS_Tab_Navigation {
 		$tabs = array_filter(
 			$tabs,
 			function ( $tab ) {
-				return 'dashboard_settings' !== $tab['id'];
+				return self::TAB_DASHBOARD_SETTINGS !== $tab['id'];
 			}
 		);
 
@@ -291,6 +292,18 @@ class WPS_Tab_Navigation {
 			$crumbs[]    = array(
 				'label' => $spoke_label,
 				'url'   => self::build_spoke_url( $context['hub'], $context['spoke'] ),
+			);
+		}
+
+		// Add Dashboard Settings breadcrumb when on dashboard_settings tab at core level.
+		if ( self::TAB_DASHBOARD_SETTINGS === $context['tab'] && empty( $context['hub'] ) && empty( $context['spoke'] ) ) {
+			$crumbs[] = array(
+				'label' => __( 'Dashboard', 'plugin-wp-support-thisismyurl' ),
+				'url'   => admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard' ),
+			);
+			$crumbs[] = array(
+				'label' => __( 'Dashboard Settings', 'plugin-wp-support-thisismyurl' ),
+				'url'   => admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard_settings' ),
 			);
 		}
 

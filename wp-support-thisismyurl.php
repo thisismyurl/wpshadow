@@ -1178,8 +1178,8 @@ function wp_support_render_tab_router(): void {
 	$tab     = $context['tab'];
 	$level   = $context['level'];
 
-	// Render breadcrumbs (except at Core level).
-	if ( 'core' !== $level ) {
+	// Render breadcrumbs (except at Core level, unless on dashboard_settings tab).
+	if ( 'core' !== $level || WPS_Tab_Navigation::TAB_DASHBOARD_SETTINGS === $tab ) {
 		WPS_Tab_Navigation::render_breadcrumbs( $context );
 	}
 
