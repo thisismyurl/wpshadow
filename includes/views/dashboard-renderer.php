@@ -101,7 +101,13 @@ function wp_support_render_dashboard( string $hub_id = '', string $spoke_id = ''
 	// Render metabox-based dashboard.
 	?>
 	<div class="wrap">
-		<h1><?php echo esc_html( $dashboard_title ); ?></h1>
+		<div class="wps-dashboard-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+			<h1 style="margin: 0;"><?php echo esc_html( $dashboard_title ); ?></h1>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard_settings' ) ); ?>" class="button button-secondary">
+				<span class="dashicons dashicons-admin-generic" style="vertical-align: middle; margin-right: 4px;"></span>
+				<?php esc_html_e( 'Dashboard Settings', 'plugin-wp-support-thisismyurl' ); ?>
+			</a>
+		</div>
 
 		<div class="wps-dashboard-license-row">
 			<div id="wps_license_widget" class="postbox" style="margin:0 0 16px 0;">

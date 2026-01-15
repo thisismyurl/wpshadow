@@ -294,6 +294,18 @@ class WPS_Tab_Navigation {
 			);
 		}
 
+		// Add Dashboard Settings breadcrumb when on dashboard_settings tab at core level.
+		if ( 'dashboard_settings' === $context['tab'] && empty( $context['hub'] ) && empty( $context['spoke'] ) ) {
+			$crumbs[] = array(
+				'label' => __( 'Dashboard', 'plugin-wp-support-thisismyurl' ),
+				'url'   => admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard' ),
+			);
+			$crumbs[] = array(
+				'label' => __( 'Dashboard Settings', 'plugin-wp-support-thisismyurl' ),
+				'url'   => admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard_settings' ),
+			);
+		}
+
 		return $crumbs;
 	}
 
