@@ -146,6 +146,14 @@ function wp_support_render_settings( string $hub_id = '' ): void {
 			$screen->id,
 			'normal'
 		);
+
+		add_meta_box(
+			'wps_settings_database_cleanup',
+			__( 'Database Cleanup', 'plugin-wp-support-thisismyurl' ),
+			__NAMESPACE__ . '\\render_settings_database_cleanup',
+			$screen->id,
+			'normal'
+		);
 	}
 
 	add_meta_box(
@@ -2425,6 +2433,312 @@ function render_settings_privacy(): void {
 						<label><input type="checkbox" name="WPS_privacy_contributors_see_user_activity" value="1" <?php checked( $contrib_see_user, true ); ?> /> <?php esc_html_e( 'Contributors can view other user activity', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
 						<label><input type="checkbox" name="WPS_privacy_editors_see_admin_activity" value="1" <?php checked( $editor_see_admin, true ); ?> /> <?php esc_html_e( 'Editors can view admin activity', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
 						<p class="description"><?php esc_html_e( 'Control who can see activity logs from other roles.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class=\"wps-settings-save-status\" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
+	</form>
+	<?php
+}
+
+/**
+ * Render Database Cleanup settings widget.
+ *
+ * @return void
+ */
+function render_settings_database_cleanup(): void {
+// Get the database cleanup feature instance
+$feature = \WPS\CoreSupport\WPS_Feature_Registry::get_feature( 'database-cleanup' );
+
+if ( ! $feature ) {
+echo '<p>' . esc_html__( 'Database cleanup feature is not available.', 'plugin-wp-support-thisismyurl' ) . '</p>';
+return;
+}
+
+$enabled            = $feature->is_enabled();
+$cleanup_frequency  = $feature->get_setting( 'cleanup_frequency', 'weekly' );
+$cleanup_options    = $feature->get_setting( 'cleanup_options', array() );
+
+// Default options if not set
+$default_options = array(
+'cleanup_revisions'     => true,
+'cleanup_transients'    => true,
+'cleanup_spam'          => true,
+'cleanup_orphaned_meta' => true,
+'cleanup_auto_drafts'   => true,
+'optimize_tables'       => false,
+'keep_revisions'        => 5,
+);
+
+$cleanup_options = array_merge( $default_options, $cleanup_options );
+
+// Calculate next scheduled run
+$next_run = wp_next_scheduled( 'wps_database_cleanup' );
+$next_run_text = $next_run ? wp_date( 'F j, Y g:i A', $next_run ) : __( 'Not scheduled', 'plugin-wp-support-thisismyurl' );
+
+// Get last cleanup from activity log if available
+$last_cleanup = get_option( 'wps_last_database_cleanup', 0 );
+$last_cleanup_text = $last_cleanup ? wp_date( 'F j, Y g:i A', $last_cleanup ) : __( 'Never', 'plugin-wp-support-thisismyurl' );
+
+?>
+<form method="post" class=\"wps-settings-form\" data-settings-group="database_cleanup" style="max-width: 600px;">
+<?php wp_nonce_field( 'WPS_settings_database_cleanup', 'WPS_settings_nonce' ); ?>
+<table class="form-table" role="presentation">
+<tbody>
+<tr>
+<th scope="row"><?php esc_html_e( 'Automatic Cleanup', 'plugin-wp-support-thisismyurl' ); ?></th>
+<td>
+<label>
+<input type="checkbox" name="wps_database_cleanup_enabled" value="1" <?php checked( $enabled, true ); ?> />
+<?php esc_html_e( 'Enable automatic database cleanup', 'plugin-wp-support-thisismyurl' ); ?>
+</label>
+<p class="description">
+<?php esc_html_e( 'Automatically clean up database overhead on a scheduled basis.', 'plugin-wp-support-thisismyurl' ); ?>
+</p>
+</td>
+</tr>
+
+<tr>
+<th scope="row"><label for="wps_cleanup_frequency"><?php esc_html_e( 'Schedule', 'plugin-wp-support-thisismyurl' ); ?></label></th>
+<td>
+<select id="wps_cleanup_frequency" name="wps_cleanup_frequency">
+<option value="daily" <?php selected( $cleanup_frequency, 'daily' ); ?>><?php esc_html_e( 'Daily', 'plugin-wp-support-thisismyurl' ); ?></option>
+<option value="weekly" <?php selected( $cleanup_frequency, 'weekly' ); ?>><?php esc_html_e( 'Weekly', 'plugin-wp-support-thisismyurl' ); ?></option>
+<option value="monthly" <?php selected( $cleanup_frequency, 'monthly' ); ?>><?php esc_html_e( 'Monthly', 'plugin-wp-support-thisismyurl' ); ?></option>
+</select>
+<p class="description">
+<?php esc_html_e( 'How often to run automatic cleanup.', 'plugin-wp-support-thisismyurl' ); ?>
+</p>
+</td>
+</tr>
+
+<tr>
+<th scope="row"><?php esc_html_e( 'Cleanup Status', 'plugin-wp-support-thisismyurl' ); ?></th>
+<td>
+<p><strong><?php esc_html_e( 'Last Cleanup:', 'plugin-wp-support-thisismyurl' ); ?></strong> <?php echo esc_html( $last_cleanup_text ); ?></p>
+<p><strong><?php esc_html_e( 'Next Scheduled:', 'plugin-wp-support-thisismyurl' ); ?></strong> <?php echo esc_html( $next_run_text ); ?></p>
+</td>
+</tr>
+
+<tr>
+<th scope="row"><?php esc_html_e( 'Cleanup Options', 'plugin-wp-support-thisismyurl' ); ?></th>
+<td>
+<label>
+<input type="checkbox" name="wps_cleanup_options[cleanup_revisions]" value="1" <?php checked( $cleanup_options['cleanup_revisions'], true ); ?> />
+<?php esc_html_e( 'Clean up post revisions', 'plugin-wp-support-thisismyurl' ); ?>
+</label>
+<br/>
+<label style="margin-left: 24px;">
+<?php esc_html_e( 'Keep', 'plugin-wp-support-thisismyurl' ); ?>
+<input type="number" name="wps_cleanup_options[keep_revisions]" value="<?php echo esc_attr( $cleanup_options['keep_revisions'] ); ?>" min="0" max="50" style="width: 60px;" />
+<?php esc_html_e( 'most recent revisions per post', 'plugin-wp-support-thisismyurl' ); ?>
+</label>
+<br/><br/>
+
+<label>
+<input type="checkbox" name="wps_cleanup_options[cleanup_transients]" value="1" <?php checked( $cleanup_options['cleanup_transients'], true ); ?> />
+<?php esc_html_e( 'Clean up expired transients', 'plugin-wp-support-thisismyurl' ); ?>
+</label>
+<br/>
+
+<label>
+<input type="checkbox" name="wps_cleanup_options[cleanup_spam]" value="1" <?php checked( $cleanup_options['cleanup_spam'], true ); ?> />
+<?php esc_html_e( 'Clean up spam comments', 'plugin-wp-support-thisismyurl' ); ?>
+</label>
+<br/>
+
+<label>
+<input type="checkbox" name="wps_cleanup_options[cleanup_orphaned_meta]" value="1" <?php checked( $cleanup_options['cleanup_orphaned_meta'], true ); ?> />
+<?php esc_html_e( 'Clean up orphaned post metadata', 'plugin-wp-support-thisismyurl' ); ?>
+</label>
+<br/>
+
+<label>
+<input type="checkbox" name="wps_cleanup_options[cleanup_auto_drafts]" value="1" <?php checked( $cleanup_options['cleanup_auto_drafts'], true ); ?> />
+<?php esc_html_e( 'Clean up old auto-drafts', 'plugin-wp-support-thisismyurl' ); ?>
+</label>
+<br/>
+
+<label>
+<input type="checkbox" name="wps_cleanup_options[optimize_tables]" value="1" <?php checked( $cleanup_options['optimize_tables'], true ); ?> />
+<?php esc_html_e( 'Optimize database tables', 'plugin-wp-support-thisismyurl' ); ?>
+</label>
+
+<p class="description">
+<?php esc_html_e( 'Select which cleanup tasks to perform automatically.', 'plugin-wp-support-thisismyurl' ); ?>
+</p>
+</td>
+</tr>
+
+<tr>
+<th scope="row"><?php esc_html_e( 'Manual Cleanup', 'plugin-wp-support-thisismyurl' ); ?></th>
+<td>
+<?php
+$cleanup_url = wp_nonce_url(
+admin_url( 'admin-post.php?action=wps_run_database_cleanup' ),
+'wps_run_database_cleanup'
+);
+?>
+<a href="<?php echo esc_url( $cleanup_url ); ?>" class="button button-secondary">
+<?php esc_html_e( 'Run Cleanup Now', 'plugin-wp-support-thisismyurl' ); ?>
+</a>
+<p class="description">
+<?php esc_html_e( 'Manually trigger a database cleanup immediately.', 'plugin-wp-support-thisismyurl' ); ?>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class=\"wps-settings-save-status\" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
+</form>
+<?php
+}
+
+/**
+ * Render Database Cleanup settings widget.
+ *
+ * @return void
+ */
+function render_settings_database_cleanup(): void {
+	// Get the database cleanup feature instance
+	$feature = \WPS\CoreSupport\WPS_Feature_Registry::get_feature( 'database-cleanup' );
+	
+	if ( ! $feature ) {
+		echo '<p>' . esc_html__( 'Database cleanup feature is not available.', 'plugin-wp-support-thisismyurl' ) . '</p>';
+		return;
+	}
+
+	$enabled            = $feature->is_enabled();
+	$cleanup_frequency  = $feature->get_setting( 'cleanup_frequency', 'weekly' );
+	$cleanup_options    = $feature->get_setting( 'cleanup_options', array() );
+	
+	// Default options if not set
+	$default_options = array(
+		'cleanup_revisions'     => true,
+		'cleanup_transients'    => true,
+		'cleanup_spam'          => true,
+		'cleanup_orphaned_meta' => true,
+		'cleanup_auto_drafts'   => true,
+		'optimize_tables'       => false,
+		'keep_revisions'        => 5,
+	);
+	
+	$cleanup_options = array_merge( $default_options, $cleanup_options );
+	
+	// Calculate next scheduled run
+	$next_run = wp_next_scheduled( 'wps_database_cleanup' );
+	$next_run_text = $next_run ? wp_date( 'F j, Y g:i A', $next_run ) : __( 'Not scheduled', 'plugin-wp-support-thisismyurl' );
+	
+	// Get last cleanup from activity log if available
+	$last_cleanup = get_option( 'wps_last_database_cleanup', 0 );
+	$last_cleanup_text = $last_cleanup ? wp_date( 'F j, Y g:i A', $last_cleanup ) : __( 'Never', 'plugin-wp-support-thisismyurl' );
+	
+	?>
+	<form method="post" class=\"wps-settings-form\" data-settings-group="database_cleanup" style="max-width: 600px;">
+		<?php wp_nonce_field( 'WPS_settings_database_cleanup', 'WPS_settings_nonce' ); ?>
+		<table class="form-table" role="presentation">
+			<tbody>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Automatic Cleanup', 'plugin-wp-support-thisismyurl' ); ?></th>
+					<td>
+						<label>
+							<input type="checkbox" name="wps_database_cleanup_enabled" value="1" <?php checked( $enabled, true ); ?> />
+							<?php esc_html_e( 'Enable automatic database cleanup', 'plugin-wp-support-thisismyurl' ); ?>
+						</label>
+						<p class="description">
+							<?php esc_html_e( 'Automatically clean up database overhead on a scheduled basis.', 'plugin-wp-support-thisismyurl' ); ?>
+						</p>
+					</td>
+				</tr>
+				
+				<tr>
+					<th scope="row"><label for="wps_cleanup_frequency"><?php esc_html_e( 'Schedule', 'plugin-wp-support-thisismyurl' ); ?></label></th>
+					<td>
+						<select id="wps_cleanup_frequency" name="wps_cleanup_frequency">
+							<option value="daily" <?php selected( $cleanup_frequency, 'daily' ); ?>><?php esc_html_e( 'Daily', 'plugin-wp-support-thisismyurl' ); ?></option>
+							<option value="weekly" <?php selected( $cleanup_frequency, 'weekly' ); ?>><?php esc_html_e( 'Weekly', 'plugin-wp-support-thisismyurl' ); ?></option>
+							<option value="monthly" <?php selected( $cleanup_frequency, 'monthly' ); ?>><?php esc_html_e( 'Monthly', 'plugin-wp-support-thisismyurl' ); ?></option>
+						</select>
+						<p class="description">
+							<?php esc_html_e( 'How often to run automatic cleanup.', 'plugin-wp-support-thisismyurl' ); ?>
+						</p>
+					</td>
+				</tr>
+				
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Cleanup Status', 'plugin-wp-support-thisismyurl' ); ?></th>
+					<td>
+						<p><strong><?php esc_html_e( 'Last Cleanup:', 'plugin-wp-support-thisismyurl' ); ?></strong> <?php echo esc_html( $last_cleanup_text ); ?></p>
+						<p><strong><?php esc_html_e( 'Next Scheduled:', 'plugin-wp-support-thisismyurl' ); ?></strong> <?php echo esc_html( $next_run_text ); ?></p>
+					</td>
+				</tr>
+				
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Cleanup Options', 'plugin-wp-support-thisismyurl' ); ?></th>
+					<td>
+						<label>
+							<input type="checkbox" name="wps_cleanup_options[cleanup_revisions]" value="1" <?php checked( $cleanup_options['cleanup_revisions'], true ); ?> />
+							<?php esc_html_e( 'Clean up post revisions', 'plugin-wp-support-thisismyurl' ); ?>
+						</label>
+						<br/>
+						<label style="margin-left: 24px;">
+							<?php esc_html_e( 'Keep', 'plugin-wp-support-thisismyurl' ); ?>
+							<input type="number" name="wps_cleanup_options[keep_revisions]" value="<?php echo esc_attr( $cleanup_options['keep_revisions'] ); ?>" min="0" max="50" style="width: 60px;" />
+							<?php esc_html_e( 'most recent revisions per post', 'plugin-wp-support-thisismyurl' ); ?>
+						</label>
+						<br/><br/>
+						
+						<label>
+							<input type="checkbox" name="wps_cleanup_options[cleanup_transients]" value="1" <?php checked( $cleanup_options['cleanup_transients'], true ); ?> />
+							<?php esc_html_e( 'Clean up expired transients', 'plugin-wp-support-thisismyurl' ); ?>
+						</label>
+						<br/>
+						
+						<label>
+							<input type="checkbox" name="wps_cleanup_options[cleanup_spam]" value="1" <?php checked( $cleanup_options['cleanup_spam'], true ); ?> />
+							<?php esc_html_e( 'Clean up spam comments', 'plugin-wp-support-thisismyurl' ); ?>
+						</label>
+						<br/>
+						
+						<label>
+							<input type="checkbox" name="wps_cleanup_options[cleanup_orphaned_meta]" value="1" <?php checked( $cleanup_options['cleanup_orphaned_meta'], true ); ?> />
+							<?php esc_html_e( 'Clean up orphaned post metadata', 'plugin-wp-support-thisismyurl' ); ?>
+						</label>
+						<br/>
+						
+						<label>
+							<input type="checkbox" name="wps_cleanup_options[cleanup_auto_drafts]" value="1" <?php checked( $cleanup_options['cleanup_auto_drafts'], true ); ?> />
+							<?php esc_html_e( 'Clean up old auto-drafts', 'plugin-wp-support-thisismyurl' ); ?>
+						</label>
+						<br/>
+						
+						<label>
+							<input type="checkbox" name="wps_cleanup_options[optimize_tables]" value="1" <?php checked( $cleanup_options['optimize_tables'], true ); ?> />
+							<?php esc_html_e( 'Optimize database tables', 'plugin-wp-support-thisismyurl' ); ?>
+						</label>
+						
+						<p class="description">
+							<?php esc_html_e( 'Select which cleanup tasks to perform automatically.', 'plugin-wp-support-thisismyurl' ); ?>
+						</p>
+					</td>
+				</tr>
+				
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Manual Cleanup', 'plugin-wp-support-thisismyurl' ); ?></th>
+					<td>
+						<?php
+						$cleanup_url = wp_nonce_url(
+							admin_url( 'admin-post.php?action=wps_run_database_cleanup' ),
+							'wps_run_database_cleanup'
+						);
+						?>
+						<a href="<?php echo esc_url( $cleanup_url ); ?>" class="button button-secondary">
+							<?php esc_html_e( 'Run Cleanup Now', 'plugin-wp-support-thisismyurl' ); ?>
+						</a>
+						<p class="description">
+							<?php esc_html_e( 'Manually trigger a database cleanup immediately.', 'plugin-wp-support-thisismyurl' ); ?>
+						</p>
 					</td>
 				</tr>
 			</tbody>

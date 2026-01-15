@@ -132,6 +132,9 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 			$this->optimize_database_tables();
 		}
 
+		// Store last cleanup timestamp.
+		update_option( 'wps_last_database_cleanup', time() );
+
 		// Log cleanup activity.
 		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
 			\WPS\CoreSupport\WPS_Activity_Logger::log(
