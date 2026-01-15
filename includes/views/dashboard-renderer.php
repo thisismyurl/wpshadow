@@ -118,10 +118,12 @@ function wp_support_render_dashboard( string $hub_id = '', string $spoke_id = ''
 		</style>
 		<div class="wps-dashboard-header">
 			<h1><?php echo esc_html( $dashboard_title ); ?></h1>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard_settings' ) ); ?>" class="button button-secondary">
-				<span class="dashicons dashicons-admin-generic"></span>
-				<?php esc_html_e( 'Dashboard Settings', 'plugin-wp-support-thisismyurl' ); ?>
-			</a>
+			<?php if ( empty( $hub_id ) && empty( $spoke_id ) ) : ?>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=' . \WPS\CoreSupport\WPS_Tab_Navigation::TAB_DASHBOARD_SETTINGS ) ); ?>" class="button button-secondary">
+					<span class="dashicons dashicons-admin-generic"></span>
+					<?php esc_html_e( 'Dashboard Settings', 'plugin-wp-support-thisismyurl' ); ?>
+				</a>
+			<?php endif; ?>
 		</div>
 
 		<div class="wps-dashboard-license-row">
