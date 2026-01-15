@@ -1,0 +1,249 @@
+<?php
+/**
+ * Feature: CDN Integration
+ *
+ * TODO: Implement CDN URL rewriting and integration
+ *
+ * MISSING CAPABILITIES (vs WP Rocket/NitroPack):
+ * - Automatic asset URL rewriting to CDN
+ * - Support for multiple CDN zones (images, CSS, JS)
+ * - CDN hostname configuration
+ * - Exclude specific files from CDN
+ * - Include specific file types only
+ * - Support for CDN with custom paths
+ * - CloudFlare API integration
+ * - Cache purging via CDN API
+ * - CDN performance statistics
+ *
+ * IMPLEMENTATION NOTES:
+ * - Rewrite URLs in output buffer (after page cache if enabled)
+ * - Support multiple CDN hostnames for domain sharding
+ * - Add settings page for CDN configuration
+ * - Detect and integrate with popular CDN providers
+ * - Support relative protocol URLs (//cdn.example.com)
+ * - Handle SSL/non-SSL environments
+ *
+ * INTEGRATION POINTS:
+ * - Hook into 'template_redirect' for output buffering
+ * - Integrate with existing cache system
+ * - Add CloudFlare API settings (zone ID, API key)
+ * - Add BunnyCDN API integration
+ * - Add StackPath/MaxCDN integration
+ *
+ * CDN PROVIDERS TO SUPPORT:
+ * - CloudFlare (most popular)
+ * - BunnyCDN (affordable)
+ * - KeyCDN
+ * - StackPath/MaxCDN
+ * - Amazon CloudFront
+ * - Generic CDN (custom hostname)
+ *
+ * PERFORMANCE CONSIDERATIONS:
+ * - Minimal overhead in URL rewriting
+ * - Cache rewritten URLs when possible
+ * - Don't rewrite admin URLs
+ * - Don't rewrite external URLs
+ *
+ * @package WPS\CoreSupport
+ * @since 1.2601.75000
+ */
+
+declare(strict_types=1);
+
+namespace WPS\CoreSupport;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * WPS_Feature_CDN_Integration
+ *
+ * CDN URL rewriting and provider integration.
+ *
+ * @todo Implement all CDN features
+ */
+final class WPS_Feature_CDN_Integration extends WPS_Abstract_Feature {
+
+	/**
+	 * Constructor.
+	 */
+	public function __construct() {
+		parent::__construct(
+			array(
+				'id'                 => 'cdn-integration',
+				'name'               => __( 'CDN Integration', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Automatic CDN URL rewriting for images, CSS, JS with support for CloudFlare, BunnyCDN, and custom CDN providers', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => false,
+				'version'            => '1.0.0',
+				'widget_group'       => 'performance',
+				'widget_label'       => __( 'Performance', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Caching and performance optimization', 'plugin-wp-support-thisismyurl' ),
+				// Unified metadata.
+				'license_level'      => 3, // Good tier.
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-networking',
+				'category'           => 'performance',
+				'priority'           => 20,
+				'dashboard'          => 'overview',
+				'widget_column'      => 'right',
+				'widget_priority'    => 20,
+			)
+		);
+	}
+
+	/**
+	 * Register hooks when feature is enabled.
+	 *
+	 * @return void
+	 *
+	 * @todo Implement hook registration
+	 */
+	public function register(): void {
+		if ( ! $this->is_enabled() ) {
+			return;
+		}
+
+		// TODO: Output buffering for URL rewriting
+		// add_action( 'template_redirect', array( $this, 'start_output_buffering' ), 1 );
+
+		// TODO: Admin menu for CDN settings
+		// add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
+
+		// TODO: AJAX handlers for CDN testing
+		// add_action( 'wp_ajax_wps_test_cdn', array( $this, 'ajax_test_cdn_connection' ) );
+		// add_action( 'wp_ajax_wps_purge_cdn', array( $this, 'ajax_purge_cdn_cache' ) );
+
+		// TODO: Admin notices for CDN status
+		// add_action( 'admin_notices', array( $this, 'cdn_status_notices' ) );
+	}
+
+	/**
+	 * Start output buffering for URL rewriting.
+	 *
+	 * @return void
+	 *
+	 * @todo Implement output buffering
+	 */
+	private function start_output_buffering(): void {
+		// TODO: Don't buffer admin pages
+		// TODO: Don't buffer AJAX requests
+		// TODO: Start output buffering
+		// ob_start( array( $this, 'rewrite_urls' ) );
+	}
+
+	/**
+	 * Rewrite URLs to CDN in HTML output.
+	 *
+	 * @param string $html Page HTML.
+	 * @return string HTML with rewritten URLs.
+	 *
+	 * @todo Implement URL rewriting
+	 */
+	private function rewrite_urls( string $html ): string {
+		// TODO: Get CDN settings
+		// TODO: Build regex pattern for site URLs
+		// TODO: Rewrite image URLs to CDN
+		// TODO: Rewrite CSS URLs to CDN
+		// TODO: Rewrite JS URLs to CDN
+		// TODO: Respect exclusion rules
+		// TODO: Handle relative vs absolute URLs
+		// TODO: Return modified HTML
+
+		return $html;
+	}
+
+	/**
+	 * Get CDN hostname(s) for asset type.
+	 *
+	 * @param string $asset_type Asset type (images, css, js, etc.).
+	 * @return string CDN hostname.
+	 *
+	 * @todo Implement CDN hostname retrieval
+	 */
+	private function get_cdn_hostname( string $asset_type = 'default' ): string {
+		// TODO: Get configured CDN hostnames
+		// TODO: Support multiple CDN zones
+		// TODO: Support domain sharding (cdn1, cdn2, cdn3)
+		// TODO: Return appropriate hostname
+
+		return '';
+	}
+
+	/**
+	 * Check if URL should be rewritten to CDN.
+	 *
+	 * @param string $url URL to check.
+	 * @return bool True if should rewrite, false otherwise.
+	 *
+	 * @todo Implement URL eligibility check
+	 */
+	private function should_rewrite_url( string $url ): bool {
+		// TODO: Check if URL is from current site
+		// TODO: Check if file type is included
+		// TODO: Check if URL matches exclusion rules
+		// TODO: Don't rewrite admin URLs
+		// TODO: Don't rewrite login URLs
+
+		return false;
+	}
+
+	/**
+	 * Test CDN connection.
+	 *
+	 * @param string $cdn_url CDN URL to test.
+	 * @return array Test results.
+	 *
+	 * @todo Implement CDN connection testing
+	 */
+	private function test_cdn_connection( string $cdn_url ): array {
+		// TODO: Try to fetch a test file via CDN
+		// TODO: Check response code
+		// TODO: Measure response time
+		// TODO: Return test results
+
+		return array(
+			'success'       => false,
+			'response_time' => 0,
+			'message'       => __( 'Not implemented', 'plugin-wp-support-thisismyurl' ),
+		);
+	}
+
+	/**
+	 * Purge CDN cache via API.
+	 *
+	 * @param string $provider CDN provider (cloudflare, bunnycdn, etc.).
+	 * @param array  $urls URLs to purge (empty for all).
+	 * @return bool|WP_Error True on success, WP_Error on failure.
+	 *
+	 * @todo Implement CDN cache purging
+	 */
+	private function purge_cdn_cache( string $provider, array $urls = array() ): bool|\WP_Error {
+		// TODO: Check if API credentials are configured
+		// TODO: Build API request for provider
+		// TODO: Send purge request
+		// TODO: Handle response
+		// TODO: Return result
+
+		return new \WP_Error( 'not_implemented', __( 'CDN cache purging not yet implemented', 'plugin-wp-support-thisismyurl' ) );
+	}
+
+	/**
+	 * CloudFlare API: Purge cache.
+	 *
+	 * @param array $urls URLs to purge.
+	 * @return bool|WP_Error True on success, WP_Error on failure.
+	 *
+	 * @todo Implement CloudFlare API integration
+	 */
+	private function cloudflare_purge_cache( array $urls = array() ): bool|\WP_Error {
+		// TODO: Get CloudFlare Zone ID and API key
+		// TODO: Build API request
+		// TODO: Send request to CloudFlare API v4
+		// TODO: Handle response
+		// TODO: Return result
+
+		return new \WP_Error( 'not_implemented', __( 'CloudFlare integration not yet implemented', 'plugin-wp-support-thisismyurl' ) );
+	}
+}

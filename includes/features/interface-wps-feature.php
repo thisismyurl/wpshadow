@@ -37,4 +37,22 @@ interface WPS_Feature_Interface {
 	public function get_widget_label(): string;
 
 	public function get_widget_description(): string;
+
+	public function get_license_level(): int;
+
+	public function get_minimum_capability(): string;
+
+	public function get_sub_features(): array;
+
+	public function get_icon(): string;
+
+	public function get_category(): string;
+
+	public function get_priority(): int;
+
+	public function get_dashboard(): string;
+
+	public function get_widget_column(): string;
+
+	public function get_widget_priority(): int;
 }

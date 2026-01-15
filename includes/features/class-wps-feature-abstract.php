@@ -38,6 +38,24 @@ abstract class WPS_Abstract_Feature implements WPS_Feature_Interface {
 
 	protected string $widget_description;
 
+	protected int $license_level;
+
+	protected string $minimum_capability;
+
+	protected array $sub_features;
+
+	protected string $icon;
+
+	protected string $category;
+
+	protected int $priority;
+
+	protected string $dashboard;
+
+	protected string $widget_column;
+
+	protected int $widget_priority;
+
 	/**
 	 * @param array<string, mixed> $config Feature configuration.
 	 */
@@ -53,6 +71,15 @@ abstract class WPS_Abstract_Feature implements WPS_Feature_Interface {
 		$this->widget_group       = sanitize_key( (string) ( $config['widget_group'] ?? 'general' ) );
 		$this->widget_label       = (string) ( $config['widget_label'] ?? __( 'General Features', 'plugin-wp-support-thisismyurl' ) );
 		$this->widget_description = (string) ( $config['widget_description'] ?? __( 'Miscellaneous features.', 'plugin-wp-support-thisismyurl' ) );
+		$this->license_level      = max( 1, min( 5, (int) ( $config['license_level'] ?? 1 ) ) );
+		$this->minimum_capability = (string) ( $config['minimum_capability'] ?? 'manage_options' );
+		$this->sub_features       = (array) ( $config['sub_features'] ?? array() );
+		$this->icon               = (string) ( $config['icon'] ?? 'dashicons-admin-generic' );
+		$this->category           = sanitize_key( (string) ( $config['category'] ?? 'general' ) );
+		$this->priority           = (int) ( $config['priority'] ?? 10 );
+		$this->dashboard          = sanitize_key( (string) ( $config['dashboard'] ?? 'overview' ) );
+		$this->widget_column      = (string) ( $config['widget_column'] ?? 'left' );
+		$this->widget_priority    = (int) ( $config['widget_priority'] ?? 10 );
 	}
 
 	public function get_id(): string {
@@ -97,6 +124,42 @@ abstract class WPS_Abstract_Feature implements WPS_Feature_Interface {
 
 	public function get_widget_description(): string {
 		return $this->widget_description;
+	}
+
+	public function get_license_level(): int {
+		return $this->license_level;
+	}
+
+	public function get_minimum_capability(): string {
+		return $this->minimum_capability;
+	}
+
+	public function get_sub_features(): array {
+		return $this->sub_features;
+	}
+
+	public function get_icon(): string {
+		return $this->icon;
+	}
+
+	public function get_category(): string {
+		return $this->category;
+	}
+
+	public function get_priority(): int {
+		return $this->priority;
+	}
+
+	public function get_dashboard(): string {
+		return $this->dashboard;
+	}
+
+	public function get_widget_column(): string {
+		return $this->widget_column;
+	}
+
+	public function get_widget_priority(): int {
+		return $this->widget_priority;
 	}
 
 	public static function is_enabled( bool $network = false ): bool {

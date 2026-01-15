@@ -61,8 +61,12 @@ class WPS_Feature_Registry {
 	public static function init(): void {
 		self::load_toggles();
 
+		// Auto-discover features from includes/features/ directory.
+		add_action( 'plugins_loaded', array( __CLASS__, 'auto_discover_features' ), 5 );
+
 		// If plugins_loaded has already fired, trigger registration immediately
 		if ( did_action( 'plugins_loaded' ) ) {
+			self::auto_discover_features();
 			self::trigger_registration();
 		} else {
 			add_action( 'plugins_loaded', array( __CLASS__, 'trigger_registration' ), 12 );
@@ -375,6 +379,58 @@ class WPS_Feature_Registry {
 			'widget_group'       => $feature->get_widget_group(),
 			'widget_label'       => $feature->get_widget_label(),
 			'widget_description' => $feature->get_widget_description(),
+			// New unified metadata system fields.
+			'license_level'      => method_exists( $feature, 'get_license_level' ) ? $feature->get_license_level() : 1,
+			'minimum_capability' => method_exists( $feature, 'get_minimum_capability' ) ? $feature->get_minimum_capability() : 'manage_options',
+			'sub_features'       => method_exists( $feature, 'get_sub_features' ) ? $feature->get_sub_features() : array(),
+			'icon'               => method_exists( $feature, 'get_icon' ) ? $feature->get_icon() : 'dashicons-admin-generic',
+			'category'           => method_exists( $feature, 'get_category' ) ? $feature->get_category() : 'general',
+			'priority'           => method_exists( $feature, 'get_priority' ) ? $feature->get_priority() : 50,
+			'dashboard'          => method_exists( $feature, 'get_dashboard' ) ? $feature->get_dashboard() : 'overview',
+			'widget_column'      => method_exists( $feature, 'get_widget_column' ) ? $feature->get_widget_column() : 'left',
+			'widget_priority'    => method_exists( $feature, 'get_widget_priority' ) ? $feature->get_widget_priority() : 50,
 		);
+	}
+
+	/**
+	 * Auto-discover feature classes from includes/features/ directory.
+	 *
+	 * @return void
+	 */
+	public static function auto_discover_features(): void {
+		$features_dir = WP_PLUGIN_DIR . '/plugin-wp-support-thisismyurl/includes/features';
+
+		if ( ! is_dir( $features_dir ) ) {
+			return;
+		}
+
+		$feature_files = glob( $features_dir . '/class-wps-feature-*.php' );
+		if ( false === $feature_files ) {
+			return;
+		}
+
+		foreach ( $feature_files as $file ) {
+			// Extract class name from filename.
+			$basename   = basename( $file, '.php' );
+			$class_name = str_replace( 'class-', '', $basename );
+			$class_name = str_replace( '-', '_', $class_name );
+			$class_name = 'WPS\\CoreSupport\\' . ucwords( $class_name, '_' );
+
+			// Load the file if not already loaded.
+			if ( ! class_exists( $class_name ) ) {
+				require_once $file;
+			}
+
+			// Instantiate and register if it implements the interface.
+			if ( class_exists( $class_name ) && is_subclass_of( $class_name, 'WPS\\CoreSupport\\WPS_Feature_Interface' ) ) {
+				try {
+					$feature = new $class_name();
+					self::register_feature( $feature );
+				} catch ( \Exception $e ) {
+					// Silent failure for features that can't be instantiated.
+					continue;
+				}
+			}
+		}
 	}
 }

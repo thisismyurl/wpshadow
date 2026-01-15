@@ -313,6 +313,18 @@ function wps_register_core_features(): void {
 	register_WPS_feature( new WPS_Feature_Consent_Checks() );
 	// Security features.
 	register_WPS_feature( new WPS_Feature_Hardening() );
+	register_WPS_feature( new WPS_Feature_Core_Integrity() );
+	register_WPS_feature( new WPS_Feature_Firewall() );
+	register_WPS_feature( new WPS_Feature_Malware_Scanner() );
+	register_WPS_feature( new WPS_Feature_Traffic_Monitor() );
+
+	// Advanced performance features.
+	register_WPS_feature( new WPS_Feature_Image_Optimizer() );
+	register_WPS_feature( new WPS_Feature_Page_Cache() );
+	register_WPS_feature( new WPS_Feature_CDN_Integration() );
+
+	// Tool features.
+	register_WPS_feature( new WPS_Feature_Maintenance_Cleanup() );
 	// Safety features.
 	register_WPS_feature( new WPS_Feature_Auto_Rollback() );
 	// Debugging features.
@@ -697,6 +709,20 @@ function wp_support_init(): void {
 	// Load Debug Mode Manager for one-click debug toggles.
 	require_once wp_support_PATH . 'includes/class-wps-debug-mode.php';
 	WPS_Debug_Mode::init();
+	// Load Maintenance Cleanup feature.
+	require_once wp_support_PATH . 'includes/features/class-wps-feature-maintenance-cleanup.php';
+
+	// Load Core Integrity feature.
+	require_once wp_support_PATH . 'includes/features/class-wps-feature-core-integrity.php';
+
+	// Load advanced performance features.
+	require_once wp_support_PATH . 'includes/features/class-wps-feature-image-optimizer.php';
+	require_once wp_support_PATH . 'includes/features/class-wps-feature-firewall.php';
+	require_once wp_support_PATH . 'includes/features/class-wps-feature-page-cache.php';
+	require_once wp_support_PATH . 'includes/features/class-wps-feature-cdn-integration.php';
+	require_once wp_support_PATH . 'includes/features/class-wps-feature-malware-scanner.php';
+	require_once wp_support_PATH . 'includes/features/class-wps-feature-traffic-monitor.php';
+
 	// Load System Report Generator for comprehensive debug information.
 	require_once wp_support_PATH . 'includes/class-wps-system-report-generator.php';
 	WPS_System_Report_Generator::init();
@@ -753,6 +779,11 @@ function wp_support_init(): void {
 	
 	// Initialize settings cache early.
 	WPS_Settings_Cache::init();
+
+	// Load Registry System (Unified Metadata System).
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/class-wps-feature-registry.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/class-wps-widget-registry.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/class-wps-dashboard-registry.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-core-diagnostics.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-vault-audit.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-vulnerability-watch.php' );
@@ -788,9 +819,13 @@ function wp_support_init(): void {
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-script-optimizer.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-conflict-sandbox.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-visual-regression.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/features/class-wps-feature-registry.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, wp_support_PATH . 'includes/wps-feature-functions.php' );
+	
+	// Initialize Registry System.
 	WPS_Feature_Registry::init();
+	WPS_Widget_Registry::init();
+	WPS_Dashboard_Registry::init();
+	
 	add_action( 'WPS_register_features', __NAMESPACE__ . '\\wps_register_core_features' );
 	
 	// Initialize Tips Coach feature

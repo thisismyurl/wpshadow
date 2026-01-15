@@ -1,0 +1,348 @@
+<?php
+/**
+ * Feature: Web Application Firewall (WAF)
+ *
+ * TODO: Implement basic web application firewall
+ *
+ * MISSING CAPABILITIES (vs Wordfence):
+ * - Request filtering and blocking
+ * - IP address blocking (individual, range, country)
+ * - Rate limiting (all endpoints, not just login)
+ * - Attack pattern detection (SQL injection, XSS, etc.)
+ * - Threat intelligence integration
+ * - Whitelist/blacklist management
+ * - Automatic IP blocking for repeated violations
+ * - WAF rules engine
+ * - Traffic analytics
+ * - Geolocation-based blocking
+ *
+ * IMPLEMENTATION NOTES:
+ * - Hook early (muplugins_loaded or earlier)
+ * - Store blocked IPs in database for fast lookup
+ * - Use transients for rate limiting counters
+ * - Add settings page for WAF configuration
+ * - Log all blocked requests
+ * - Support CIDR notation for IP ranges
+ *
+ * ATTACK PATTERNS TO DETECT:
+ * - SQL injection attempts
+ * - XSS (Cross-Site Scripting)
+ * - Directory traversal (../)
+ * - File inclusion attacks
+ * - Command injection
+ * - Suspicious user agents
+ * - Known malicious IPs
+ *
+ * BLOCKING METHODS:
+ * - IP address (exact match)
+ * - IP range (CIDR)
+ * - Country (GeoIP)
+ * - User agent pattern
+ * - Referrer pattern
+ * - Rate limiting (requests per minute)
+ *
+ * INTEGRATION POINTS:
+ * - Extend existing brute force protection
+ * - Integrate with activity logger
+ * - Add to security dashboard
+ * - Provide WP-CLI commands
+ *
+ * PERFORMANCE CONSIDERATIONS:
+ * - Cache blocked IP list in memory
+ * - Use fast lookups (hash tables)
+ * - Minimal processing overhead
+ * - Exit early for blocked requests
+ *
+ * @package WPS\CoreSupport
+ * @since 1.2601.75000
+ */
+
+declare(strict_types=1);
+
+namespace WPS\CoreSupport;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * WPS_Feature_Firewall
+ *
+ * Web Application Firewall for request filtering and IP blocking.
+ *
+ * @todo Implement all WAF features
+ */
+final class WPS_Feature_Firewall extends WPS_Abstract_Feature {
+
+	/**
+	 * Blocked IPs option key.
+	 */
+	private const BLOCKED_IPS_KEY = 'wps_firewall_blocked_ips';
+
+	/**
+	 * WAF rules option key.
+	 */
+	private const WAF_RULES_KEY = 'wps_firewall_rules';
+
+	/**
+	 * Rate limit window (seconds).
+	 */
+	private const RATE_LIMIT_WINDOW = 60;
+
+	/**
+	 * Constructor.
+	 */
+	public function __construct() {
+		parent::__construct(
+			array(
+				'id'                 => 'firewall',
+				'name'               => __( 'Web Application Firewall', 'plugin-wp-support-thisismyurl' ),
+				'description'        => __( 'Block malicious requests with IP blocking, rate limiting, attack pattern detection, and country-based filtering', 'plugin-wp-support-thisismyurl' ),
+				'scope'              => 'core',
+				'default_enabled'    => false,
+				'version'            => '1.0.0',
+				'widget_group'       => 'security',
+				'widget_label'       => __( 'Security', 'plugin-wp-support-thisismyurl' ),
+				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wp-support-thisismyurl' ),
+				// Unified metadata.
+				'license_level'      => 3, // Good tier.
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-shield',
+				'category'           => 'security',
+				'priority'           => 1, // Highest priority.
+				'dashboard'          => 'overview',
+				'widget_column'      => 'right',
+				'widget_priority'    => 1,
+			)
+		);
+	}
+
+	/**
+	 * Register hooks when feature is enabled.
+	 *
+	 * @return void
+	 *
+	 * @todo Implement hook registration
+	 */
+	public function register(): void {
+		if ( ! $this->is_enabled() ) {
+			return;
+		}
+
+		// TODO: Early request filtering (before WordPress fully loads)
+		// add_action( 'muplugins_loaded', array( $this, 'check_request' ), 1 );
+
+		// TODO: Admin menu for firewall management
+		// add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
+
+		// TODO: AJAX handlers
+		// add_action( 'wp_ajax_wps_block_ip', array( $this, 'ajax_block_ip' ) );
+		// add_action( 'wp_ajax_wps_unblock_ip', array( $this, 'ajax_unblock_ip' ) );
+		// add_action( 'wp_ajax_wps_clear_rate_limits', array( $this, 'ajax_clear_rate_limits' ) );
+
+		// TODO: Admin bar menu
+		// add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_menu' ), 100 );
+
+		// TODO: Cleanup expired rate limits
+		// if ( ! wp_next_scheduled( 'wps_firewall_cleanup' ) ) {
+		//     wp_schedule_event( time(), 'hourly', 'wps_firewall_cleanup' );
+		// }
+		// add_action( 'wps_firewall_cleanup', array( $this, 'cleanup_expired_limits' ) );
+	}
+
+	/**
+	 * Check current request against firewall rules.
+	 *
+	 * @return void Exits if request is blocked.
+	 *
+	 * @todo Implement request checking
+	 */
+	private function check_request(): void {
+		// TODO: Get client IP
+		// TODO: Check if IP is blocked
+		// TODO: Check rate limits
+		// TODO: Check for attack patterns
+		// TODO: Check country blocking rules
+		// TODO: If blocked, log and exit
+	}
+
+	/**
+	 * Get client IP address.
+	 *
+	 * @return string Client IP address.
+	 *
+	 * @todo Implement IP detection
+	 */
+	private function get_client_ip(): string {
+		// TODO: Check for proxy headers (X-Forwarded-For, etc.)
+		// TODO: Validate IP address
+		// TODO: Return sanitized IP
+
+		return '';
+	}
+
+	/**
+	 * Check if IP is blocked.
+	 *
+	 * @param string $ip IP address.
+	 * @return bool True if blocked, false otherwise.
+	 *
+	 * @todo Implement IP blocking check
+	 */
+	private function is_ip_blocked( string $ip ): bool {
+		// TODO: Get blocked IP list
+		// TODO: Check exact match
+		// TODO: Check IP ranges (CIDR)
+		// TODO: Return result
+
+		return false;
+	}
+
+	/**
+	 * Block an IP address.
+	 *
+	 * @param string $ip IP address or CIDR range.
+	 * @param string $reason Reason for blocking.
+	 * @param int    $duration Duration in seconds (0 = permanent).
+	 * @return bool True on success, false on failure.
+	 *
+	 * @todo Implement IP blocking
+	 */
+	private function block_ip( string $ip, string $reason = '', int $duration = 0 ): bool {
+		// TODO: Validate IP address
+		// TODO: Add to blocked list
+		// TODO: Set expiration if temporary
+		// TODO: Log block action
+		// TODO: Return result
+
+		return false;
+	}
+
+	/**
+	 * Unblock an IP address.
+	 *
+	 * @param string $ip IP address or CIDR range.
+	 * @return bool True on success, false on failure.
+	 *
+	 * @todo Implement IP unblocking
+	 */
+	private function unblock_ip( string $ip ): bool {
+		// TODO: Remove from blocked list
+		// TODO: Log unblock action
+		// TODO: Return result
+
+		return false;
+	}
+
+	/**
+	 * Check rate limit for IP.
+	 *
+	 * @param string $ip IP address.
+	 * @param int    $limit Maximum requests allowed.
+	 * @param int    $window Time window in seconds.
+	 * @return bool True if within limit, false if exceeded.
+	 *
+	 * @todo Implement rate limiting
+	 */
+	private function check_rate_limit( string $ip, int $limit, int $window ): bool {
+		// TODO: Get request count for IP in time window
+		// TODO: Increment counter
+		// TODO: Check if limit exceeded
+		// TODO: Auto-block if exceeded multiple times
+		// TODO: Return result
+
+		return true;
+	}
+
+	/**
+	 * Detect attack patterns in request.
+	 *
+	 * @return array Detected attacks.
+	 *
+	 * @todo Implement attack pattern detection
+	 */
+	private function detect_attack_patterns(): array {
+		// TODO: Check URL for SQL injection patterns
+		// TODO: Check URL for XSS patterns
+		// TODO: Check for directory traversal
+		// TODO: Check POST data
+		// TODO: Check user agent
+		// TODO: Return detected patterns
+
+		return array();
+	}
+
+	/**
+	 * Block request and log.
+	 *
+	 * @param string $reason Reason for blocking.
+	 * @param array  $details Additional details.
+	 * @return void Exits.
+	 *
+	 * @todo Implement request blocking
+	 */
+	private function block_request( string $reason, array $details = array() ): void {
+		// TODO: Log blocked request
+		// TODO: Send appropriate HTTP status (403)
+		// TODO: Display block message
+		// TODO: Exit
+
+		wp_die(
+			esc_html__( 'Access denied by firewall.', 'plugin-wp-support-thisismyurl' ),
+			esc_html__( 'Forbidden', 'plugin-wp-support-thisismyurl' ),
+			array( 'response' => 403 )
+		);
+	}
+
+	/**
+	 * Get country from IP address.
+	 *
+	 * @param string $ip IP address.
+	 * @return string|false Country code or false if unknown.
+	 *
+	 * @todo Implement GeoIP lookup
+	 */
+	private function get_country_from_ip( string $ip ): string|false {
+		// TODO: Use GeoIP database or API
+		// TODO: Return country code
+
+		return false;
+	}
+
+	/**
+	 * Check if country is blocked.
+	 *
+	 * @param string $country_code Country code.
+	 * @return bool True if blocked, false otherwise.
+	 *
+	 * @todo Implement country blocking
+	 */
+	private function is_country_blocked( string $country_code ): bool {
+		// TODO: Get blocked country list
+		// TODO: Check if country is blocked
+		// TODO: Return result
+
+		return false;
+	}
+
+	/**
+	 * Get firewall statistics.
+	 *
+	 * @return array Firewall statistics.
+	 *
+	 * @todo Implement statistics collection
+	 */
+	private function get_statistics(): array {
+		// TODO: Count blocked requests (today, week, month)
+		// TODO: Count blocked IPs
+		// TODO: Get top blocked countries
+		// TODO: Get top attack types
+		// TODO: Return statistics
+
+		return array(
+			'blocked_today'     => 0,
+			'blocked_this_week' => 0,
+			'total_blocked_ips' => 0,
+		);
+	}
+}

@@ -46,6 +46,15 @@ final class WPS_Feature_Script_Deferral extends WPS_Abstract_Feature {
 				'widget_group'       => 'performance',
 				'widget_label'       => __( 'Performance Optimization', 'plugin-wp-support-thisismyurl' ),
 				'widget_description' => __( 'Speed and resource loading improvements', 'plugin-wp-support-thisismyurl' ),
+				// New unified metadata fields.
+				'license_level'      => 2, // Free registered users.
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-performance',
+				'category'           => 'performance',
+				'priority'           => 20,
+				'dashboard'          => 'performance',
+				'widget_column'      => 'left',
+				'widget_priority'    => 10,
 			)
 		);
 
