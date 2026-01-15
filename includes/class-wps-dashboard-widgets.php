@@ -79,10 +79,12 @@ class WPS_Dashboard_Widgets {
 				array( __CLASS__, 'widget_performance_history' ),
 				array( __CLASS__, 'widget_performance_alerts' ),
 				array( __CLASS__, 'widget_weekly_performance' ),
+				array( __CLASS__, 'widget_database_stats_boxed' ),
 			),
 			array(
 				array( __CLASS__, 'widget_tips_coach' ),
 				array( __CLASS__, 'widget_quick_actions' ),
+				array( __CLASS__, 'widget_performance_history_boxed' ),
 			)
 		);
 	}
@@ -1172,8 +1174,8 @@ class WPS_Dashboard_Widgets {
 
 					<!-- Quick Actions -->
 					<p style="text-align: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e9ecef;">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=performance' ) ); ?>" class="button button-primary">
-							<?php esc_html_e( 'View Full Dashboard', 'plugin-wp-support-thisismyurl' ); ?>
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=features' ) ); ?>" class="button button-primary">
+							<?php esc_html_e( 'Performance Features', 'plugin-wp-support-thisismyurl' ); ?>
 						</a>
 					</p>
 				</div>
@@ -1254,7 +1256,7 @@ class WPS_Dashboard_Widgets {
 						</ul>
 
 						<p style="text-align: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e9ecef;">
-							<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=features&feature_filter=performance' ) ); ?>" class="button">
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=features' ) ); ?>" class="button">
 								<?php esc_html_e( 'Configure Alert Settings', 'plugin-wp-support-thisismyurl' ); ?>
 							</a>
 						</p>
@@ -2607,6 +2609,39 @@ class WPS_Dashboard_Widgets {
 	}
 
 	/**
+	 * Database Stats Widget (boxed version for dashboard).
+	 *
+	 * @return void
+	 */
+	private static function widget_database_stats_boxed(): void {
+		?>
+		<div class="postbox">
+			<div class="postbox-header">
+				<h2 class="hndle"><?php esc_html_e( '🗄️ Database Statistics', 'plugin-wp-support-thisismyurl' ); ?></h2>
+			</div>
+			<div class="inside">
+				<?php self::widget_database_stats(); ?>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Performance History Widget (boxed version for dashboard).
+	 *
+	 * @return void
+	 */
+	private static function widget_performance_history_boxed(): void {
+		?>
+		<div class="postbox">
+			<div class="postbox-header">
+				<h2 class="hndle"><?php esc_html_e( '📈 Performance History', 'plugin-wp-support-thisismyurl' ); ?></h2>
+			</div>
+			<div class="inside">
+				<?php self::widget_performance_history(); ?>
+			</div>
+		</div>
+		<?php
 	 * Get database statistics (public method for AJAX).
 	 *
 	 * @return array<string, mixed>

@@ -1243,10 +1243,6 @@ function wp_support_render_core_content( string $tab ): void {
 		case 'collection':
 			wp_support_render_spoke_collection();
 			break;
-		case 'performance': // Redirect to dashboard - performance is now integrated.
-			$redirect_url = add_query_arg( 'WPS_tab', 'dashboard', admin_url( 'admin.php?page=wp-support' ) );
-			wp_safe_redirect( $redirect_url );
-			exit;
 		case 'modules':
 			wp_support_render_modules();
 			break;
