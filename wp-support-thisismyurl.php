@@ -709,6 +709,15 @@ function wp_support_init(): void {
 	// Load Debug Mode Manager for one-click debug toggles.
 	require_once wp_support_PATH . 'includes/class-wps-debug-mode.php';
 	WPS_Debug_Mode::init();
+
+	// Load Site Health Integration for scoring and WordPress integration.
+	require_once wp_support_PATH . 'includes/class-wps-site-health-integration.php';
+	WPS_Site_Health_Integration::init();
+
+	// Load Health Score Dashboard Widget.
+	require_once wp_support_PATH . 'includes/class-wps-health-score-widget.php';
+	WPS_Health_Score_Widget::init();
+
 	// Load Maintenance Cleanup feature.
 	require_once wp_support_PATH . 'includes/features/class-wps-feature-maintenance-cleanup.php';
 
