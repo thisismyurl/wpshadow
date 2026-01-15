@@ -369,9 +369,9 @@ function wps_ajax_broadcast_license(): void {
 		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
 	}
 
-	$key            = isset( $_POST['key'] ) ? sanitize_text_field( wp_unslash( $_POST['key'] ) ) : '';
-	$site_ids_json  = isset( $_POST['site_ids'] ) ? sanitize_text_field( wp_unslash( $_POST['site_ids'] ) ) : '[]';
-	$auto_broadcast = isset( $_POST['auto_broadcast'] ) ? absint( $_POST['auto_broadcast'] ) : 0;
+	$key            = \WPS\CoreSupport\wps_get_post_text( 'key' );
+	$site_ids_json  = \WPS\CoreSupport\wps_get_post_text( 'site_ids', '[]' );
+	$auto_broadcast = \WPS\CoreSupport\wps_get_post_int( 'auto_broadcast' );
 
 	if ( empty( $key ) ) {
 		wp_send_json_error( array( 'message' => __( 'License key cannot be empty.', 'plugin-wp-support-thisismyurl' ) ) );

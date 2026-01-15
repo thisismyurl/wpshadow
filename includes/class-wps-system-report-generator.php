@@ -679,7 +679,7 @@ class WPS_System_Report_Generator {
 
 		// Check if password required.
 		if ( ! empty( $link_data['password'] ) ) {
-			$provided_password = isset( $_POST['report_password'] ) ? sanitize_text_field( wp_unslash( $_POST['report_password'] ) ) : '';
+			$provided_password = \WPS\CoreSupport\wps_get_post_text( 'report_password' );
 
 			if ( empty( $provided_password ) ) {
 				// Show password form.
@@ -929,7 +929,7 @@ class WPS_System_Report_Generator {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
 		}
 
-		$format = isset( $_POST['format'] ) ? sanitize_text_field( wp_unslash( $_POST['format'] ) ) : 'json';
+		$format = \WPS\CoreSupport\wps_get_post_text( 'format', 'json' );
 
 		$data = self::collect_system_info();
 		$data = self::sanitize_report_data( $data );
@@ -969,7 +969,7 @@ class WPS_System_Report_Generator {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
 		}
 
-		$password = isset( $_POST['password'] ) ? sanitize_text_field( wp_unslash( $_POST['password'] ) ) : '';
+		$password = \WPS\CoreSupport\wps_get_post_text( 'password' );
 
 		$data = self::collect_system_info();
 		$data = self::sanitize_report_data( $data );

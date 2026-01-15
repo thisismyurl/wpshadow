@@ -238,14 +238,7 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_run_test(): void {
-		// Verify nonce.
-		check_ajax_referer( 'wps-cron-test', 'nonce' );
-
-		// Check capability.
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
-			return;
-		}
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps-cron-test' );
 
 		// Schedule test event.
 		wp_schedule_single_event( time(), 'wps_test_cron_event' );
@@ -285,17 +278,9 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_run_event(): void {
-		// Verify nonce.
-		check_ajax_referer( 'wps-cron-test', 'nonce' );
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps-cron-test' );
 
-		// Check capability.
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
-			return;
-		}
-
-		// Get hook name.
-		$hook = isset( $_POST['hook'] ) ? sanitize_text_field( wp_unslash( $_POST['hook'] ) ) : '';
+		$hook = \WPS\CoreSupport\wps_get_post_text( 'hook' );
 		
 		if ( empty( $hook ) ) {
 			wp_send_json_error( array( 'message' => __( 'No hook specified', 'plugin-wp-support-thisismyurl' ) ) );

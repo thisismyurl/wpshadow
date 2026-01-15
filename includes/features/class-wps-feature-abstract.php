@@ -236,4 +236,139 @@ abstract class WPS_Abstract_Feature implements WPS_Feature_Interface {
 			\WPS\CoreSupport\WPS_Settings_Cache::register_defaults( $option_name, $value );
 		}
 	}
+
+	/**
+	 * Get default options for this feature.
+	 *
+	 * Override this method in child classes to define default options.
+	 * Allows centralized default option management.
+	 *
+	 * @return array Default options.
+	 */
+	protected function get_default_options(): array {
+		return array();
+	}
+
+	/**
+	 * Get feature options with defaults merged.
+	 *
+	 * Retrieves options from database and merges with defaults.
+	 *
+	 * @return array Feature options.
+	 */
+	public function get_options(): array {
+		$option_name = 'wps_' . $this->id . '_options';
+		$options     = get_option( $option_name, array() );
+
+		if ( ! is_array( $options ) ) {
+			$options = array();
+		}
+
+		return wp_parse_args( $options, $this->get_default_options() );
+	}
+
+	/**
+	 * Update feature options.
+	 *
+	 * @param array $options Feature options to save.
+	 * @return bool True if updated successfully.
+	 */
+	public function update_options( array $options ): bool {
+		$option_name = 'wps_' . $this->id . '_options';
+		return update_option( $option_name, $options );
+	}
+
+	/**
+	 * Register a scheduled cron event.
+	 *
+	 * @param string   $hook       Cron hook name.
+	 * @param string   $recurrence Recurrence (hourly, daily, weekly, etc.).
+	 * @param callable $callback   Callback function.
+	 * @param array    $args       Optional arguments to pass to callback.
+	 * @return void
+	 */
+	protected function register_cron_event( string $hook, string $recurrence, callable $callback, array $args = array() ): void {
+		if ( ! wp_next_scheduled( $hook, $args ) ) {
+			wp_schedule_event( time(), $recurrence, $hook, $args );
+		}
+		add_action( $hook, $callback );
+	}
+
+	/**
+	 * Unregister a scheduled cron event.
+	 *
+	 * @param string $hook Cron hook name.
+	 * @param array  $args Optional arguments that were passed to wp_schedule_event().
+	 * @return void
+	 */
+	protected function unregister_cron_event( string $hook, array $args = array() ): void {
+		$timestamp = wp_next_scheduled( $hook, $args );
+		if ( $timestamp ) {
+			wp_unschedule_event( $timestamp, $hook, $args );
+		}
+	}
+
+	/**
+	 * Get cached data using WPS_Cache_Helper.
+	 *
+	 * Shorthand for accessing cache with feature ID as prefix.
+	 *
+	 * @param string $key Cache key suffix.
+	 * @return mixed|false Cached data or false if not found.
+	 */
+	protected function get_cache( string $key ) {
+		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Cache_Helper' ) ) {
+			return false;
+		}
+
+		$cache_key = \WPS\CoreSupport\WPS_Cache_Helper::generate_key( $this->id, $key );
+		return \WPS\CoreSupport\WPS_Cache_Helper::get( $cache_key );
+	}
+
+	/**
+	 * Set cached data using WPS_Cache_Helper.
+	 *
+	 * Shorthand for setting cache with feature ID as prefix.
+	 *
+	 * @param string $key        Cache key suffix.
+	 * @param mixed  $data       Data to cache.
+	 * @param int    $expiration Expiration in seconds (default: 1 hour).
+	 * @return bool True on success.
+	 */
+	protected function set_cache( string $key, $data, int $expiration = HOUR_IN_SECONDS ): bool {
+		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Cache_Helper' ) ) {
+			return false;
+		}
+
+		$cache_key = \WPS\CoreSupport\WPS_Cache_Helper::generate_key( $this->id, $key );
+		return \WPS\CoreSupport\WPS_Cache_Helper::set( $cache_key, $data, $expiration );
+	}
+
+	/**
+	 * Delete cached data using WPS_Cache_Helper.
+	 *
+	 * @param string $key Cache key suffix.
+	 * @return bool True on success.
+	 */
+	protected function delete_cache( string $key ): bool {
+		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Cache_Helper' ) ) {
+			return false;
+		}
+
+		$cache_key = \WPS\CoreSupport\WPS_Cache_Helper::generate_key( $this->id, $key );
+		return \WPS\CoreSupport\WPS_Cache_Helper::delete( $cache_key );
+	}
+
+	/**
+	 * Clear all caches for this feature.
+	 *
+	 * @return int Number of cache entries deleted.
+	 */
+	protected function clear_feature_cache(): int {
+		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Cache_Helper' ) ) {
+			return 0;
+		}
+
+		return \WPS\CoreSupport\WPS_Cache_Helper::delete_by_prefix( $this->id );
+	}
 }

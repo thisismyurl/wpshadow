@@ -63,7 +63,7 @@ class WPS_GitHub_Settings {
 	}
 
 	// Get token from POST.
-	$token = isset( $_POST['WPS_github_token'] ) ? sanitize_text_field( wp_unslash( $_POST['WPS_github_token'] ) ) : '';
+	$token = \WPS\CoreSupport\wps_get_post_text( 'WPS_github_token' );
 
 	if ( ! empty( $token ) ) {
 		// Validate token format (GitHub tokens are typically 40+ chars).

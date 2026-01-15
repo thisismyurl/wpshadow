@@ -32,7 +32,7 @@ function wps_ajax_install_spoke(): void {
 	}
 
 	// Get spoke identifier.
-	$spoke = isset( $_POST['spoke'] ) ? sanitize_key( wp_unslash( $_POST['spoke'] ) ) : '';
+	$spoke = \WPS\CoreSupport\wps_get_post_key( 'spoke' );
 
 	if ( empty( $spoke ) ) {
 		wp_send_json_error( __( 'Invalid spoke identifier.', 'plugin-wp-support-thisismyurl' ) );
@@ -132,7 +132,7 @@ function wps_ajax_activate_spoke(): void {
 	}
 
 	// Get spoke identifier.
-	$spoke = isset( $_POST['spoke'] ) ? sanitize_key( wp_unslash( $_POST['spoke'] ) ) : '';
+	$spoke = \WPS\CoreSupport\wps_get_post_key( 'spoke' );
 
 	if ( empty( $spoke ) ) {
 		wp_send_json_error( __( 'Invalid spoke identifier.', 'plugin-wp-support-thisismyurl' ) );
@@ -220,7 +220,7 @@ function wps_ajax_deactivate_spoke(): void {
 	}
 
 	// Get spoke identifier.
-	$spoke = isset( $_POST['spoke'] ) ? sanitize_key( wp_unslash( $_POST['spoke'] ) ) : '';
+	$spoke = \WPS\CoreSupport\wps_get_post_key( 'spoke' );
 
 	if ( empty( $spoke ) ) {
 		wp_send_json_error( __( 'Invalid spoke identifier.', 'plugin-wp-support-thisismyurl' ) );

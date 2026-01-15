@@ -487,15 +487,7 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_scan_core_files(): void {
-		check_ajax_referer( 'wps_core_integrity' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error(
-				array(
-					'message' => __( 'You do not have permission to perform this action.', 'plugin-wp-support-thisismyurl' ),
-				)
-			);
-		}
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_core_integrity' );
 
 		$results = $this->run_integrity_scan();
 
@@ -523,17 +515,9 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_repair_core_file(): void {
-		check_ajax_referer( 'wps_core_integrity' );
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_core_integrity' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error(
-				array(
-					'message' => __( 'You do not have permission to perform this action.', 'plugin-wp-support-thisismyurl' ),
-				)
-			);
-		}
-
-		$file_path = isset( $_POST['file_path'] ) ? sanitize_text_field( wp_unslash( $_POST['file_path'] ) ) : '';
+		$file_path = \WPS\CoreSupport\wps_get_post_text( 'file_path' );
 
 		if ( empty( $file_path ) ) {
 			wp_send_json_error(
@@ -566,15 +550,7 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_repair_all_core_files(): void {
-		check_ajax_referer( 'wps_core_integrity' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error(
-				array(
-					'message' => __( 'You do not have permission to perform this action.', 'plugin-wp-support-thisismyurl' ),
-				)
-			);
-		}
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_core_integrity' );
 
 		$modified_files = $this->get_modified_files();
 

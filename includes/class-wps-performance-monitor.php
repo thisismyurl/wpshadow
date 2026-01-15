@@ -708,8 +708,8 @@ class WPS_Performance_Monitor {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
 		}
 
-		$format = isset( $_POST['format'] ) ? sanitize_key( $_POST['format'] ) : 'json';
-		$days   = isset( $_POST['days'] ) ? absint( $_POST['days'] ) : 30;
+		$format = \WPS\CoreSupport\wps_get_post_key( 'format', 'json' );
+		$days   = \WPS\CoreSupport\wps_get_post_int( 'days', 30 );
 
 		$data = self::get_historical_metrics( $days );
 

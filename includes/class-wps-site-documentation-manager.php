@@ -145,7 +145,7 @@ class WPS_Site_Documentation_Manager {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
 		}
 
-		$plugin_file = isset( $_POST['plugin'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin'] ) ) : '';
+		$plugin_file = \WPS\CoreSupport\wps_get_post_text( 'plugin' );
 		if ( empty( $plugin_file ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid plugin specified', 'plugin-wp-support-thisismyurl' ) ) );
 		}
@@ -187,7 +187,7 @@ class WPS_Site_Documentation_Manager {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
 		}
 
-		$format = isset( $_POST['format'] ) ? sanitize_text_field( wp_unslash( $_POST['format'] ) ) : 'html';
+		$format = \WPS\CoreSupport\wps_get_post_text( 'format', 'html' );
 		$export = self::generate_export( $format );
 
 		if ( is_wp_error( $export ) ) {

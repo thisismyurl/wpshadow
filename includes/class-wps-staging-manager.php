@@ -293,7 +293,7 @@ class WPS_Staging_Manager {
 			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
 		}
 
-		$name = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
+		$name = \WPS\CoreSupport\wps_get_post_text( 'name' );
 
 		$staging_id = self::create_staging( $name );
 
@@ -321,7 +321,7 @@ class WPS_Staging_Manager {
 			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
 		}
 
-		$staging_id = isset( $_POST['staging_id'] ) ? sanitize_text_field( wp_unslash( $_POST['staging_id'] ) ) : '';
+		$staging_id = \WPS\CoreSupport\wps_get_post_text( 'staging_id' );
 
 		if ( ! self::delete_staging( $staging_id ) ) {
 			wp_send_json_error( __( 'Failed to delete staging environment', 'plugin-wp-support-thisismyurl' ) );
@@ -342,7 +342,7 @@ class WPS_Staging_Manager {
 			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
 		}
 
-		$staging_id = isset( $_POST['staging_id'] ) ? sanitize_text_field( wp_unslash( $_POST['staging_id'] ) ) : '';
+		$staging_id = \WPS\CoreSupport\wps_get_post_text( 'staging_id' );
 
 		if ( ! self::deploy_to_production( $staging_id ) ) {
 			wp_send_json_error( __( 'Failed to deploy staging environment', 'plugin-wp-support-thisismyurl' ) );
@@ -363,7 +363,7 @@ class WPS_Staging_Manager {
 			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
 		}
 
-		$staging_id = isset( $_POST['staging_id'] ) ? sanitize_text_field( wp_unslash( $_POST['staging_id'] ) ) : '';
+		$staging_id = \WPS\CoreSupport\wps_get_post_text( 'staging_id' );
 
 		if ( ! self::rollback_staging( $staging_id ) ) {
 			wp_send_json_error( __( 'Failed to rollback staging environment', 'plugin-wp-support-thisismyurl' ) );

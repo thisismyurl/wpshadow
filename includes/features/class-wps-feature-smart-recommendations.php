@@ -774,13 +774,9 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public static function ajax_dismiss_recommendation(): void {
-		check_ajax_referer( 'wps_dismiss_recommendation', 'nonce' );
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_recommendations' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
-		}
-
-		$rec_id = isset( $_POST['rec_id'] ) ? sanitize_key( $_POST['rec_id'] ) : '';
+		$rec_id = \WPS\CoreSupport\wps_get_post_key( 'rec_id' );
 
 		if ( empty( $rec_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid recommendation ID', 'plugin-wp-support-thisismyurl' ) ) );

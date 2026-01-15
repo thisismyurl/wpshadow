@@ -822,7 +822,7 @@ class WPS_Site_Audit {
 			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
 		}
 
-		$option_name = isset( $_POST['option_name'] ) ? sanitize_text_field( wp_unslash( $_POST['option_name'] ) ) : '';
+		$option_name = \WPS\CoreSupport\wps_get_post_text( 'option_name' );
 
 		if ( empty( $option_name ) ) {
 			wp_send_json_error( __( 'Invalid option name', 'plugin-wp-support-thisismyurl' ) );

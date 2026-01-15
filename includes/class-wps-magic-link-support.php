@@ -799,10 +799,10 @@ class WPS_Magic_Link_Support {
 			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
 		}
 
-		$developer_name  = isset( $_POST['developer_name'] ) ? sanitize_text_field( wp_unslash( $_POST['developer_name'] ) ) : '';
-		$developer_email = isset( $_POST['developer_email'] ) ? sanitize_email( wp_unslash( $_POST['developer_email'] ) ) : '';
-		$owner_email     = isset( $_POST['owner_email'] ) ? sanitize_email( wp_unslash( $_POST['owner_email'] ) ) : '';
-		$reason          = isset( $_POST['reason'] ) ? sanitize_text_field( wp_unslash( $_POST['reason'] ) ) : '';
+		$developer_name  = \WPS\CoreSupport\wps_get_post_text( 'developer_name' );
+		$developer_email = \WPS\CoreSupport\wps_get_post_email( 'developer_email' );
+		$owner_email     = \WPS\CoreSupport\wps_get_post_email( 'owner_email' );
+		$reason          = \WPS\CoreSupport\wps_get_post_text( 'reason' );
 
 		if ( empty( $developer_name ) || empty( $developer_email ) || empty( $owner_email ) ) {
 			wp_send_json_error( __( 'All fields are required', 'plugin-wp-support-thisismyurl' ) );
@@ -834,7 +834,7 @@ class WPS_Magic_Link_Support {
 			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
 		}
 
-		$token = isset( $_POST['token'] ) ? sanitize_text_field( wp_unslash( $_POST['token'] ) ) : '';
+		$token = \WPS\CoreSupport\wps_get_post_text( 'token' );
 
 		if ( empty( $token ) ) {
 			wp_send_json_error( __( 'Token is required', 'plugin-wp-support-thisismyurl' ) );

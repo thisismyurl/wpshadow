@@ -215,14 +215,7 @@ final class WPS_Feature_Loopback_Test extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_run_test(): void {
-		// Verify nonce.
-		check_ajax_referer( 'wps-loopback-test', 'nonce' );
-
-		// Check capability.
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
-			return;
-		}
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps-loopback-test' );
 
 		// Run test.
 		$results = $this->run_loopback_test();

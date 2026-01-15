@@ -633,11 +633,7 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public static function ajax_view_report(): void {
-		check_ajax_referer( 'wps_view_report', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
-		}
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_view_report' );
 
 		$metrics     = self::get_current_week_metrics();
 		$report_html = self::generate_report_html( $metrics );

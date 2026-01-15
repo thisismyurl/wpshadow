@@ -818,8 +818,8 @@ class WPS_Customization_Audit {
 			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
 		}
 
-		$report_id = isset( $_POST['report_id'] ) ? sanitize_text_field( wp_unslash( $_POST['report_id'] ) ) : '';
-		$format    = isset( $_POST['format'] ) ? sanitize_text_field( wp_unslash( $_POST['format'] ) ) : 'json';
+		$report_id = \WPS\CoreSupport\wps_get_post_text( 'report_id' );
+		$format    = \WPS\CoreSupport\wps_get_post_text( 'format', 'json' );
 
 		$reports = get_option( self::REPORTS_KEY, array() );
 		$report  = $reports[ $report_id ] ?? null;

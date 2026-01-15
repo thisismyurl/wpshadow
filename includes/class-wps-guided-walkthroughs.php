@@ -254,7 +254,7 @@ class WPS_Guided_Walkthroughs {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
 		}
 
-		$workflow = isset( $_POST['workflow'] ) ? sanitize_key( wp_unslash( $_POST['workflow'] ) ) : '';
+		$workflow = \WPS\CoreSupport\wps_get_post_key( 'workflow' );
 		if ( ! isset( self::$workflows[ $workflow ] ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid workflow', 'plugin-wp-support-thisismyurl' ) ) );
 		}

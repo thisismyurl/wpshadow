@@ -161,13 +161,9 @@ final class WPS_Feature_Image_Optimizer extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_optimize_image(): void {
-		check_ajax_referer( 'wps-optimize-image', 'nonce' );
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps-optimize-image', 'upload_files' );
 
-		if ( ! current_user_can( 'upload_files' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
-		}
-
-		$attachment_id = isset( $_POST['attachment_id'] ) ? (int) $_POST['attachment_id'] : 0;
+		$attachment_id = \WPS\CoreSupport\wps_get_post_int( 'attachment_id' );
 		if ( ! $attachment_id ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid attachment ID', 'plugin-wp-support-thisismyurl' ) ) );
 		}

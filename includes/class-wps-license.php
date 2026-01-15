@@ -80,7 +80,7 @@ class WPS_License {
 		if ( 'broadcast' === $action && $network && is_multisite() ) {
 			check_admin_referer( 'WPS_license_broadcast', 'WPS_license_broadcast_nonce' );
 
-			$key      = isset( $_POST['WPS_license_key'] ) ? sanitize_text_field( wp_unslash( $_POST['WPS_license_key'] ) ) : '';
+			$key      = \WPS\CoreSupport\wps_get_post_text( 'WPS_license_key' );
 			$site_ids = isset( $_POST['WPS_broadcast_site_ids'] ) ? array_map( 'absint', (array) $_POST['WPS_broadcast_site_ids'] ) : array();
 			$auto_new = isset( $_POST['WPS_auto_broadcast'] ) ? (int) $_POST['WPS_auto_broadcast'] : 0;
 
@@ -107,7 +107,7 @@ class WPS_License {
 
 		check_admin_referer( 'WPS_license_settings', 'WPS_license_nonce' );
 
-		$key = isset( $_POST['WPS_license_key'] ) ? sanitize_text_field( wp_unslash( $_POST['WPS_license_key'] ) ) : '';
+		$key = \WPS\CoreSupport\wps_get_post_text( 'WPS_license_key' );
 		self::save_key( $key, $network );
 
 		$result   = self::validate_key( $key, $network );

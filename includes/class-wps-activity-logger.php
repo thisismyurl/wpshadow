@@ -631,9 +631,9 @@ class WPS_Activity_Logger {
 	public static function ajax_filter_activity(): void {
 		check_ajax_referer( 'wps-activity-filter', 'nonce' );
 
-		$event_type    = isset( $_POST['event_type'] ) ? sanitize_text_field( wp_unslash( $_POST['event_type'] ) ) : '';
-		$module_source = isset( $_POST['module'] ) ? sanitize_text_field( wp_unslash( $_POST['module'] ) ) : '';
-		$limit         = isset( $_POST['limit'] ) ? absint( $_POST['limit'] ) : 20;
+		$event_type    = \WPS\CoreSupport\wps_get_post_text( 'event_type' );
+		$module_source = \WPS\CoreSupport\wps_get_post_text( 'module' );
+		$limit         = \WPS\CoreSupport\wps_get_post_int( 'limit', 20 );
 
 		$events = self::get_events( 100 );
 

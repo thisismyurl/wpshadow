@@ -368,11 +368,7 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_start_troubleshooting(): void {
-		check_ajax_referer( 'wps_troubleshooting', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Permission denied', 'plugin-wp-support-thisismyurl' ) ) );
-		}
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_troubleshooting' );
 
 		$user_id = get_current_user_id();
 		$token   = wp_generate_password( 32, false );
@@ -403,11 +399,7 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_stop_troubleshooting(): void {
-		check_ajax_referer( 'wps_troubleshooting', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Permission denied', 'plugin-wp-support-thisismyurl' ) ) );
-		}
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_troubleshooting' );
 
 		$user_id = get_current_user_id();
 		delete_transient( self::TRANSIENT_KEY . $user_id );
@@ -429,13 +421,9 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_toggle_plugin(): void {
-		check_ajax_referer( 'wps_troubleshooting', 'nonce' );
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_troubleshooting' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Permission denied', 'plugin-wp-support-thisismyurl' ) ) );
-		}
-
-		$plugin = isset( $_POST['plugin'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin'] ) ) : '';
+		$plugin = \WPS\CoreSupport\wps_get_post_text( 'plugin' );
 		$enable = ! empty( $_POST['enable'] );
 
 		if ( empty( $plugin ) ) {

@@ -525,14 +525,10 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public static function ajax_apply_tip_action(): void {
-		check_ajax_referer( 'wps_tips_coach', 'nonce' );
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_tips_coach' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
-		}
-
-		$action = isset( $_POST['action_type'] ) ? sanitize_key( $_POST['action_type'] ) : '';
-		$tip_id = isset( $_POST['tip_id'] ) ? sanitize_key( $_POST['tip_id'] ) : '';
+		$action = \WPS\CoreSupport\wps_get_post_key( 'action_type' );
+		$tip_id = \WPS\CoreSupport\wps_get_post_key( 'tip_id' );
 
 		if ( empty( $action ) || empty( $tip_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid action or tip ID', 'plugin-wp-support-thisismyurl' ) ) );
@@ -670,13 +666,9 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public static function ajax_dismiss_tip(): void {
-		check_ajax_referer( 'wps_tips_coach', 'nonce' );
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_tips_coach' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
-		}
-
-		$tip_id = isset( $_POST['tip_id'] ) ? sanitize_key( $_POST['tip_id'] ) : '';
+		$tip_id = \WPS\CoreSupport\wps_get_post_key( 'tip_id' );
 
 		if ( empty( $tip_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid tip ID', 'plugin-wp-support-thisismyurl' ) ) );

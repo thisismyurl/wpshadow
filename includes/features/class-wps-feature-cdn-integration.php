@@ -147,11 +147,7 @@ final class WPS_Feature_CDN_Integration extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_test_cdn_connection(): void {
-		check_ajax_referer( 'wps-cdn', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
-		}
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps-cdn' );
 
 		$cdn_url = isset( $_POST['cdn_url'] ) ? esc_url_raw( wp_unslash( $_POST['cdn_url'] ) ) : '';
 

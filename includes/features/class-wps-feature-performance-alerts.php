@@ -68,9 +68,9 @@ final class WPS_Feature_Performance_Alerts extends WPS_Abstract_Feature {
 		// Handle form submission.
 		if ( isset( $_POST['wps_update_performance_thresholds'] ) && check_admin_referer( 'wps_performance_thresholds' ) ) {
 			$new_thresholds = array(
-				'query_count' => isset( $_POST['threshold_query_count'] ) ? absint( $_POST['threshold_query_count'] ) : 50,
+				'query_count' => \WPS\CoreSupport\wps_get_post_int( 'threshold_query_count', 50 ),
 				'load_time'   => isset( $_POST['threshold_load_time'] ) ? floatval( $_POST['threshold_load_time'] ) : 2,
-				'memory'      => isset( $_POST['threshold_memory'] ) ? absint( $_POST['threshold_memory'] ) : 80,
+				'memory'      => \WPS\CoreSupport\wps_get_post_int( 'threshold_memory', 80 ),
 			);
 
 			\WPS\CoreSupport\WPS_Performance_Monitor::update_thresholds( $new_thresholds );

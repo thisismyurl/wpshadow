@@ -184,11 +184,7 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_run_audit(): void {
-		check_ajax_referer( 'wps_a11y_audit_nonce', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
-		}
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_a11y_audit_nonce' );
 
 		$url = isset( $_POST['url'] ) ? esc_url_raw( wp_unslash( $_POST['url'] ) ) : '';
 
@@ -207,14 +203,10 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_apply_fix(): void {
-		check_ajax_referer( 'wps_a11y_audit_nonce', 'nonce' );
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_a11y_audit_nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
-		}
-
-		$fix_type = isset( $_POST['fix_type'] ) ? sanitize_key( wp_unslash( $_POST['fix_type'] ) ) : '';
-		$post_id  = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
+		$fix_type = \WPS\CoreSupport\wps_get_post_key( 'fix_type' );
+		$post_id  = \WPS\CoreSupport\wps_get_post_int( 'post_id' );
 
 		if ( empty( $fix_type ) || empty( $post_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid fix parameters.', 'plugin-wp-support-thisismyurl' ) ) );

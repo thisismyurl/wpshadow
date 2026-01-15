@@ -48,7 +48,7 @@ class WPS_Settings_Ajax {
 		}
 
 		// Parse the form data using wp-json encoded format.
-		$data      = isset( $_POST['data'] ) ? sanitize_text_field( wp_unslash( $_POST['data'] ) ) : '';
+		$data      = \WPS\CoreSupport\wps_get_post_text( 'data' );
 		$form_data = json_decode( $data, true );
 
 		if ( empty( $form_data ) || ! is_array( $form_data ) ) {

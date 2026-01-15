@@ -502,7 +502,7 @@ class WPS_Debug_Mode {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
 		}
 
-		$setting = isset( $_POST['setting'] ) ? sanitize_key( $_POST['setting'] ) : '';
+		$setting = \WPS\CoreSupport\wps_get_post_key( 'setting' );
 		$value   = isset( $_POST['value'] ) ? (bool) $_POST['value'] : false;
 
 		if ( empty( $setting ) ) {

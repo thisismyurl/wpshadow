@@ -85,7 +85,7 @@ class WPS_Notice_Manager {
 	public static function ajax_dismiss_notice(): void {
 		check_ajax_referer( 'WPS_dismiss_notice', 'nonce' );
 
-		$notice_key = isset( $_POST['notice_key'] ) ? sanitize_key( $_POST['notice_key'] ) : '';
+		$notice_key = \WPS\CoreSupport\wps_get_post_key( 'notice_key' );
 
 		if ( empty( $notice_key ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid notice key.', 'plugin-wp-support-thisismyurl' ) ) );

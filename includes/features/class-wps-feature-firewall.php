@@ -384,14 +384,10 @@ final class WPS_Feature_Firewall extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_block_ip(): void {
-		check_ajax_referer( 'wps-firewall', 'nonce' );
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps-firewall' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
-		}
-
-		$ip     = isset( $_POST['ip'] ) ? sanitize_text_field( wp_unslash( $_POST['ip'] ) ) : '';
-		$reason = isset( $_POST['reason'] ) ? sanitize_text_field( wp_unslash( $_POST['reason'] ) ) : 'Manual block';
+		$ip     = \WPS\CoreSupport\wps_get_post_text( 'ip' );
+		$reason = \WPS\CoreSupport\wps_get_post_text( 'reason', 'Manual block' );
 
 		if ( empty( $ip ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid IP address', 'plugin-wp-support-thisismyurl' ) ) );
@@ -410,13 +406,9 @@ final class WPS_Feature_Firewall extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_unblock_ip(): void {
-		check_ajax_referer( 'wps-firewall', 'nonce' );
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps-firewall' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
-		}
-
-		$ip = isset( $_POST['ip'] ) ? sanitize_text_field( wp_unslash( $_POST['ip'] ) ) : '';
+		$ip = \WPS\CoreSupport\wps_get_post_text( 'ip' );
 
 		if ( empty( $ip ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid IP address', 'plugin-wp-support-thisismyurl' ) ) );
@@ -435,11 +427,7 @@ final class WPS_Feature_Firewall extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_get_blocked_ips(): void {
-		check_ajax_referer( 'wps-firewall', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
-		}
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps-firewall' );
 
 		$blocked_ips = get_option( self::BLOCKED_IPS_KEY, array() );
 

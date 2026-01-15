@@ -600,7 +600,7 @@ class WPS_Privacy_Requests {
 		}
 
 		$user_id      = get_current_user_id();
-		$request_type = isset( $_POST['request_type'] ) ? sanitize_key( $_POST['request_type'] ) : '';
+		$request_type = \WPS\CoreSupport\wps_get_post_key( 'request_type' );
 
 		if ( ! in_array( $request_type, array( 'export', 'erase' ), true ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid request type.', 'plugin-wp-support-thisismyurl' ) ) );
@@ -632,8 +632,8 @@ class WPS_Privacy_Requests {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
 		}
 
-		$request_id = isset( $_POST['request_id'] ) ? absint( $_POST['request_id'] ) : 0;
-		$action     = isset( $_POST['request_action'] ) ? sanitize_key( $_POST['request_action'] ) : '';
+		$request_id = \WPS\CoreSupport\wps_get_post_int( 'request_id' );
+		$action     = \WPS\CoreSupport\wps_get_post_key( 'request_action' );
 
 		$request = self::get_request( $request_id );
 
@@ -656,7 +656,7 @@ class WPS_Privacy_Requests {
 				break;
 
 			case 'deny':
-				$notes = isset( $_POST['admin_notes'] ) ? sanitize_textarea_field( wp_unslash( $_POST['admin_notes'] ) ) : '';
+				$notes = \WPS\CoreSupport\wps_get_post_textarea( 'admin_notes' );
 				self::update_request_status( $request_id, 'denied', get_current_user_id(), $notes );
 				wp_send_json_success( array( 'message' => __( 'Request denied.', 'plugin-wp-support-thisismyurl' ) ) );
 				break;

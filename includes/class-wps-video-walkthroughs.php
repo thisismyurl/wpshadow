@@ -270,7 +270,7 @@ class WPS_Video_Walkthroughs {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
 		}
 
-		$video_id = isset( $_POST['video_id'] ) ? sanitize_key( wp_unslash( $_POST['video_id'] ) ) : '';
+		$video_id = \WPS\CoreSupport\wps_get_post_key( 'video_id' );
 		if ( empty( $video_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid video ID', 'plugin-wp-support-thisismyurl' ) ) );
 		}
@@ -426,7 +426,7 @@ class WPS_Video_Walkthroughs {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
 		}
 
-		$video_id = isset( $_POST['video_id'] ) ? sanitize_key( wp_unslash( $_POST['video_id'] ) ) : '';
+		$video_id = \WPS\CoreSupport\wps_get_post_key( 'video_id' );
 		$library  = get_option( self::VIDEO_LIBRARY_KEY, array() );
 
 		if ( ! isset( $library[ $video_id ] ) ) {
@@ -454,7 +454,7 @@ class WPS_Video_Walkthroughs {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
 		}
 
-		$video_id = isset( $_POST['video_id'] ) ? sanitize_key( wp_unslash( $_POST['video_id'] ) ) : '';
+		$video_id = \WPS\CoreSupport\wps_get_post_key( 'video_id' );
 		$library  = get_option( self::VIDEO_LIBRARY_KEY, array() );
 
 		if ( ! isset( $library[ $video_id ] ) ) {

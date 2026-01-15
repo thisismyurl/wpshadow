@@ -101,7 +101,7 @@ class WPS_Module_Actions {
 	public static function ajax_toggle_module_enabled(): void {
 		$ctx = self::verify_request( 'WPS_module_actions', 'manage_options', 'manage_network_options' );
 
-		$slug    = isset( $_POST['slug'] ) ? sanitize_key( wp_unslash( $_POST['slug'] ) ) : '';
+		$slug    = \WPS\CoreSupport\wps_get_post_key( 'slug' );
 		$enabled = isset( $_POST['enabled'] ) ? (bool) intval( wp_unslash( $_POST['enabled'] ) ) : null;
 		if ( empty( $slug ) || null === $enabled ) {
 			self::respond_error( __( 'Missing parameters.', 'plugin-wp-support-thisismyurl' ), 400 );
@@ -145,7 +145,7 @@ class WPS_Module_Actions {
 		}
 
 		// Get and validate inputs.
-		$slug = isset( $_POST['slug'] ) ? sanitize_text_field( wp_unslash( $_POST['slug'] ) ) : '';
+		$slug = \WPS\CoreSupport\wps_get_post_text( 'slug' );
 		if ( empty( $slug ) ) {
 			wp_send_json_error(
 				array(
@@ -229,7 +229,7 @@ class WPS_Module_Actions {
 		self::verify_request( 'WPS_module_actions', 'update_plugins', 'manage_network_plugins' );
 
 		// Get and validate inputs.
-		$slug = isset( $_POST['slug'] ) ? sanitize_text_field( wp_unslash( $_POST['slug'] ) ) : '';
+		$slug = \WPS\CoreSupport\wps_get_post_text( 'slug' );
 		if ( empty( $slug ) ) {
 			wp_send_json_error(
 				array(
@@ -303,7 +303,7 @@ class WPS_Module_Actions {
 		self::verify_request( 'WPS_module_actions', 'activate_plugins', 'manage_network_plugins' );
 
 		// Get and validate inputs.
-		$slug = isset( $_POST['slug'] ) ? sanitize_text_field( wp_unslash( $_POST['slug'] ) ) : '';
+		$slug = \WPS\CoreSupport\wps_get_post_text( 'slug' );
 		if ( empty( $slug ) ) {
 			wp_send_json_error(
 				array(
@@ -314,7 +314,7 @@ class WPS_Module_Actions {
 		}
 
 		// Resolve plugin file path.
-		$requested_file = isset( $_POST['plugin_base'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_base'] ) ) : '';
+		$requested_file = \WPS\CoreSupport\wps_get_post_text( 'plugin_base' );
 		$plugin_file    = self::resolve_plugin_file( $slug, $requested_file );
 
 		// Determine activation scope.
@@ -359,7 +359,7 @@ class WPS_Module_Actions {
 		$ctx = self::verify_request( 'WPS_module_actions', 'activate_plugins', 'manage_network_plugins' );
 
 		// Get and validate inputs.
-		$slug = isset( $_POST['slug'] ) ? sanitize_text_field( wp_unslash( $_POST['slug'] ) ) : '';
+		$slug = \WPS\CoreSupport\wps_get_post_text( 'slug' );
 		if ( empty( $slug ) ) {
 			wp_send_json_error(
 				array(
@@ -369,8 +369,8 @@ class WPS_Module_Actions {
 			);
 		}
 
-		// Resolve plugin file path (optional for module-only entries).
-		$requested_file = isset( $_POST['plugin_base'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_base'] ) ) : '';
+		// Resolve plugin file path.
+		$requested_file = \WPS\CoreSupport\wps_get_post_text( 'plugin_base' );
 		$plugin_file    = self::resolve_plugin_file( $slug, $requested_file );
 
 		if ( $plugin_file ) {
@@ -448,7 +448,7 @@ class WPS_Module_Actions {
 	public static function ajax_clear_remembered(): void {
 		self::verify_request( 'WPS_module_actions', 'manage_options', 'manage_network_options' );
 
-		$parent_slug = isset( $_POST['parent_slug'] ) ? sanitize_key( wp_unslash( $_POST['parent_slug'] ) ) : '';
+		$parent_slug = \WPS\CoreSupport\wps_get_post_key( 'parent_slug' );
 		if ( empty( $parent_slug ) ) {
 			self::respond_error( __( 'Missing parent slug.', 'plugin-wp-support-thisismyurl' ), 400 );
 		}
@@ -578,7 +578,7 @@ class WPS_Module_Actions {
 	public static function ajax_download_progress(): void {
 		self::verify_request( 'WPS_module_actions', 'install_plugins', 'manage_network_plugins' );
 
-		$session_id = isset( $_POST['session_id'] ) ? sanitize_text_field( wp_unslash( $_POST['session_id'] ) ) : '';
+		$session_id = \WPS\CoreSupport\wps_get_post_text( 'session_id' );
 		if ( empty( $session_id ) ) {
 			self::respond_error( __( 'Session ID is required.', 'plugin-wp-support-thisismyurl' ), 400 );
 			return;

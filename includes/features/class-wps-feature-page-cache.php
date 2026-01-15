@@ -346,11 +346,7 @@ final class WPS_Feature_Page_Cache extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_purge_cache(): void {
-		check_ajax_referer( 'wps-purge-cache', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
-		}
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps-cache' );
 
 		$this->purge_all_cache();
 

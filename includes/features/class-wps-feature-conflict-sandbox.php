@@ -410,11 +410,7 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_toggle_sandbox(): void {
-		check_ajax_referer( 'wps_sandbox_nonce', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Permission denied', 'plugin-wp-support-thisismyurl' ) ) );
-		}
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_sandbox_nonce' );
 
 		$enable = ! empty( $_POST['enable'] );
 
@@ -442,13 +438,9 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_toggle_plugin(): void {
-		check_ajax_referer( 'wps_sandbox_nonce', 'nonce' );
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_sandbox_nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Permission denied', 'plugin-wp-support-thisismyurl' ) ) );
-		}
-
-		$plugin  = isset( $_POST['plugin'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin'] ) ) : '';
+		$plugin  = \WPS\CoreSupport\wps_get_post_text( 'plugin' );
 		$disable = ! empty( $_POST['disable'] );
 
 		if ( empty( $plugin ) ) {
@@ -488,13 +480,9 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_switch_theme(): void {
-		check_ajax_referer( 'wps_sandbox_nonce', 'nonce' );
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_sandbox_nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Permission denied', 'plugin-wp-support-thisismyurl' ) ) );
-		}
-
-		$theme = isset( $_POST['theme'] ) ? sanitize_key( $_POST['theme'] ) : '';
+		$theme = \WPS\CoreSupport\wps_get_post_key( 'theme' );
 
 		$state = $this->get_sandbox_state();
 		if ( false === $state ) {
@@ -531,11 +519,7 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_clear_sandbox(): void {
-		check_ajax_referer( 'wps_sandbox_nonce', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Permission denied', 'plugin-wp-support-thisismyurl' ) ) );
-		}
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_sandbox_nonce' );
 
 		$state = array(
 			'active'           => true,

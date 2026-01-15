@@ -119,7 +119,7 @@ class WPS_Update_Simulator {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
 		}
 
-		$plugin = isset( $_POST['plugin'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin'] ) ) : '';
+		$plugin = \WPS\CoreSupport\wps_get_post_text( 'plugin' );
 		if ( empty( $plugin ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid plugin specified', 'plugin-wp-support-thisismyurl' ) ) );
 		}
@@ -164,7 +164,7 @@ class WPS_Update_Simulator {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
 		}
 
-		$plugin = isset( $_POST['plugin'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin'] ) ) : '';
+		$plugin = \WPS\CoreSupport\wps_get_post_text( 'plugin' );
 		if ( empty( $plugin ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid plugin specified', 'plugin-wp-support-thisismyurl' ) ) );
 		}
@@ -209,7 +209,7 @@ class WPS_Update_Simulator {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
 		}
 
-		$snapshot_id = isset( $_POST['snapshot_id'] ) ? sanitize_text_field( wp_unslash( $_POST['snapshot_id'] ) ) : '';
+		$snapshot_id = \WPS\CoreSupport\wps_get_post_text( 'snapshot_id' );
 		if ( empty( $snapshot_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid snapshot specified', 'plugin-wp-support-thisismyurl' ) ) );
 		}

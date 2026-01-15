@@ -183,15 +183,11 @@ final class WPS_Feature_Email_Test extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_send_test_email(): void {
-		check_ajax_referer( 'wps_email_test', 'nonce' );
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_email_test' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Permission denied', 'plugin-wp-support-thisismyurl' ) ) );
-		}
-
-		$to      = isset( $_POST['to'] ) ? sanitize_email( wp_unslash( $_POST['to'] ) ) : '';
-		$subject = isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : __( 'WP Support Test Email', 'plugin-wp-support-thisismyurl' );
-		$message = isset( $_POST['message'] ) ? wp_kses_post( wp_unslash( $_POST['message'] ) ) : $this->get_default_test_message();
+		$to      = \WPS\CoreSupport\wps_get_post_email( 'to' );
+		$subject = \WPS\CoreSupport\wps_get_post_text( 'subject', __( 'WP Support Test Email', 'plugin-wp-support-thisismyurl' ) );
+		$message = \WPS\CoreSupport\wps_get_post_html( 'message', $this->get_default_test_message() );
 
 		if ( empty( $to ) || ! is_email( $to ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid email address', 'plugin-wp-support-thisismyurl' ) ) );
@@ -247,11 +243,7 @@ final class WPS_Feature_Email_Test extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_clear_logs(): void {
-		check_ajax_referer( 'wps_email_test', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Permission denied', 'plugin-wp-support-thisismyurl' ) ) );
-		}
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_email_test' );
 
 		delete_option( self::LOG_KEY );
 

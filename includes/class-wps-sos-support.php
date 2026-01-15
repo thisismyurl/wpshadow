@@ -206,13 +206,13 @@ class WPS_SOS_Support {
 
 		// Collect form data.
 		$data = array(
-			'name'        => isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '',
-			'email'       => isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '',
-			'phone'       => isset( $_POST['phone'] ) ? sanitize_text_field( wp_unslash( $_POST['phone'] ) ) : '',
-			'subject'     => isset( $_POST['subject'] ) ? sanitize_text_field( wp_unslash( $_POST['subject'] ) ) : '',
-			'description' => isset( $_POST['description'] ) ? sanitize_textarea_field( wp_unslash( $_POST['description'] ) ) : '',
-			'severity'    => isset( $_POST['severity'] ) ? sanitize_key( wp_unslash( $_POST['severity'] ) ) : 'high',
-			'category'    => isset( $_POST['category'] ) ? sanitize_key( wp_unslash( $_POST['category'] ) ) : 'general',
+			'name'        => \WPS\CoreSupport\wps_get_post_text( 'name' ),
+			'email'       => \WPS\CoreSupport\wps_get_post_email( 'email' ),
+			'phone'       => \WPS\CoreSupport\wps_get_post_text( 'phone' ),
+			'subject'     => \WPS\CoreSupport\wps_get_post_text( 'subject' ),
+			'description' => \WPS\CoreSupport\wps_get_post_textarea( 'description' ),
+			'severity'    => \WPS\CoreSupport\wps_get_post_key( 'severity', 'high' ),
+			'category'    => \WPS\CoreSupport\wps_get_post_key( 'category', 'general' ),
 			'site_url'    => home_url(),
 		);
 
@@ -623,8 +623,8 @@ class WPS_SOS_Support {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
 		}
 
-		$incident_id = isset( $_POST['incident_id'] ) ? sanitize_text_field( wp_unslash( $_POST['incident_id'] ) ) : '';
-		$status      = isset( $_POST['status'] ) ? sanitize_key( wp_unslash( $_POST['status'] ) ) : '';
+		$incident_id = \WPS\CoreSupport\wps_get_post_text( 'incident_id' );
+		$status      = \WPS\CoreSupport\wps_get_post_key( 'status' );
 
 		if ( empty( $incident_id ) || empty( $status ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid parameters', 'plugin-wp-support-thisismyurl' ) ) );
@@ -651,8 +651,8 @@ class WPS_SOS_Support {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
 		}
 
-		$incident_id = isset( $_POST['incident_id'] ) ? sanitize_text_field( wp_unslash( $_POST['incident_id'] ) ) : '';
-		$note        = isset( $_POST['note'] ) ? sanitize_textarea_field( wp_unslash( $_POST['note'] ) ) : '';
+		$incident_id = \WPS\CoreSupport\wps_get_post_text( 'incident_id' );
+		$note        = \WPS\CoreSupport\wps_get_post_textarea( 'note' );
 
 		if ( empty( $incident_id ) || empty( $note ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid parameters', 'plugin-wp-support-thisismyurl' ) ) );

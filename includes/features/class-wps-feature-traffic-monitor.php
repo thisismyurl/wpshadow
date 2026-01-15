@@ -293,13 +293,9 @@ final class WPS_Feature_Traffic_Monitor extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_get_live_traffic(): void {
-		check_ajax_referer( 'wps-traffic', 'nonce' );
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps-traffic' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
-		}
-
-		$limit  = isset( $_POST['limit'] ) ? (int) $_POST['limit'] : 50;
+		$limit  = \WPS\CoreSupport\wps_get_post_int( 'limit', 50 );
 		$traffic = $this->get_live_traffic( $limit );
 
 		wp_send_json_success( array(
@@ -314,13 +310,9 @@ final class WPS_Feature_Traffic_Monitor extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_get_traffic_stats(): void {
-		check_ajax_referer( 'wps-traffic', 'nonce' );
+		\WPS\CoreSupport\wps_verify_ajax_request( 'wps-traffic' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
-		}
-
-		$period = isset( $_POST['period'] ) ? sanitize_text_field( wp_unslash( $_POST['period'] ) ) : 'day';
+		$period = \WPS\CoreSupport\wps_get_post_text( 'period', 'day' );
 		$stats  = $this->get_traffic_statistics( $period );
 
 		wp_send_json_success( array( 'stats' => $stats ) );
