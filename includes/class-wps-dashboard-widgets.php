@@ -76,6 +76,7 @@ class WPS_Dashboard_Widgets {
 				array( __CLASS__, 'widget_suite_overview' ),
 				array( __CLASS__, 'widget_active_hubs' ),
 				array( __CLASS__, 'widget_performance_monitor' ),
+				array( __CLASS__, 'widget_performance_history' ),
 				array( __CLASS__, 'widget_performance_alerts' ),
 				array( __CLASS__, 'widget_weekly_performance' ),
 			),
@@ -2260,8 +2261,14 @@ class WPS_Dashboard_Widgets {
 			return;
 		}
 
-		// Get historical metrics (last 7 days).
-		$history = \WPS\CoreSupport\WPS_Performance_Monitor::get_performance_history( 7 );
+		// Get time range from request (default: 7 days).
+		$days = isset( $_GET['perf_days'] ) ? absint( $_GET['perf_days'] ) : 7; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! in_array( $days, array( 7, 30, 90 ), true ) ) {
+			$days = 7;
+		}
+
+		// Get historical metrics for selected time range.
+		$history = \WPS\CoreSupport\WPS_Performance_Monitor::get_performance_history( $days );
 		
 		if ( empty( $history ) ) {
 			?>
@@ -2273,30 +2280,63 @@ class WPS_Dashboard_Widgets {
 		}
 
 		// Prepare chart data.
-		$dates  = array();
-		$scores = array();
+		$dates         = array();
+		$scores        = array();
+		$query_counts  = array();
+		$load_times    = array();
+		$memory_usages = array();
+		
 		foreach ( $history as $entry ) {
-			$dates[]  = date_i18n( 'M j', $entry['timestamp'] );
-			$scores[] = $entry['score'];
+			$dates[]         = $entry['date'] ?? date_i18n( 'M j', $entry['timestamp'] );
+			$scores[]        = $entry['score'] ?? 0;
+			$query_counts[]  = $entry['query_count'] ?? 0;
+			$load_times[]    = round( ( $entry['load_time'] ?? 0 ) * 1000, 2 ); // Convert to ms.
+			$memory_usages[] = round( $entry['memory_mb'] ?? 0, 2 );
 		}
 
 		$chart_id = 'wps-performance-chart-' . wp_rand();
 		?>
-		<div class="wps-widget-content">
-			<canvas id="<?php echo esc_attr( $chart_id ); ?>" style="max-height: 200px;"></canvas>
+		<div class="wps-widget-content wps-performance-history">
+			<!-- Time Range Selector -->
+			<div class="wps-widget-controls" style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+				<label for="wps-history-range-<?php echo esc_attr( $chart_id ); ?>" style="font-weight: 600; font-size: 13px; color: #666;">
+					<?php esc_html_e( 'Time Range:', 'plugin-wp-support-thisismyurl' ); ?>
+				</label>
+				<select id="wps-history-range-<?php echo esc_attr( $chart_id ); ?>" class="wps-history-range-selector" style="padding: 4px 8px; font-size: 13px;">
+					<option value="7" <?php selected( $days, 7 ); ?>><?php esc_html_e( 'Last 7 days', 'plugin-wp-support-thisismyurl' ); ?></option>
+					<option value="30" <?php selected( $days, 30 ); ?>><?php esc_html_e( 'Last 30 days', 'plugin-wp-support-thisismyurl' ); ?></option>
+					<option value="90" <?php selected( $days, 90 ); ?>><?php esc_html_e( 'Last 90 days', 'plugin-wp-support-thisismyurl' ); ?></option>
+				</select>
+			</div>
 			
+			<!-- Chart Canvas -->
+			<canvas id="<?php echo esc_attr( $chart_id ); ?>" style="max-height: 250px;"></canvas>
+			
+			<!-- Summary Stats -->
 			<div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e5e5e5;">
-				<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-					<div>
-						<div style="font-size: 12px; color: #666; margin-bottom: 3px;"><?php esc_html_e( 'Current Score', 'plugin-wp-support-thisismyurl' ); ?></div>
-						<div style="font-size: 24px; font-weight: 600; color: #2271b1;">
-							<?php echo esc_html( end( $scores ) ); ?>
+				<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px;">
+					<div style="text-align: center;">
+						<div style="font-size: 11px; color: #666; margin-bottom: 3px; text-transform: uppercase;"><?php esc_html_e( 'Avg Score', 'plugin-wp-support-thisismyurl' ); ?></div>
+						<div style="font-size: 20px; font-weight: 600; color: #2271b1;">
+							<?php echo esc_html( ! empty( $scores ) ? round( array_sum( $scores ) / count( $scores ) ) : 0 ); ?>
 						</div>
 					</div>
-					<div>
-						<div style="font-size: 12px; color: #666; margin-bottom: 3px;"><?php esc_html_e( 'Avg Score', 'plugin-wp-support-thisismyurl' ); ?></div>
-						<div style="font-size: 24px; font-weight: 600; color: #666;">
-							<?php echo esc_html( round( array_sum( $scores ) / count( $scores ) ) ); ?>
+					<div style="text-align: center;">
+						<div style="font-size: 11px; color: #666; margin-bottom: 3px; text-transform: uppercase;"><?php esc_html_e( 'Avg Queries', 'plugin-wp-support-thisismyurl' ); ?></div>
+						<div style="font-size: 20px; font-weight: 600; color: #0969da;">
+							<?php echo esc_html( ! empty( $query_counts ) ? round( array_sum( $query_counts ) / count( $query_counts ) ) : 0 ); ?>
+						</div>
+					</div>
+					<div style="text-align: center;">
+						<div style="font-size: 11px; color: #666; margin-bottom: 3px; text-transform: uppercase;"><?php esc_html_e( 'Avg Load', 'plugin-wp-support-thisismyurl' ); ?></div>
+						<div style="font-size: 20px; font-weight: 600; color: #1a7f37;">
+							<?php echo esc_html( ! empty( $load_times ) ? round( array_sum( $load_times ) / count( $load_times ) ) : 0 ); ?><span style="font-size: 12px; font-weight: 400;">ms</span>
+						</div>
+					</div>
+					<div style="text-align: center;">
+						<div style="font-size: 11px; color: #666; margin-bottom: 3px; text-transform: uppercase;"><?php esc_html_e( 'Avg Memory', 'plugin-wp-support-thisismyurl' ); ?></div>
+						<div style="font-size: 20px; font-weight: 600; color: #8250df;">
+							<?php echo esc_html( ! empty( $memory_usages ) ? round( array_sum( $memory_usages ) / count( $memory_usages ), 1 ) : 0 ); ?><span style="font-size: 12px; font-weight: 400;">MB</span>
 						</div>
 					</div>
 				</div>
@@ -2312,34 +2352,110 @@ class WPS_Dashboard_Widgets {
 				}
 
 				var ctx = document.getElementById('<?php echo esc_js( $chart_id ); ?>').getContext('2d');
-				new Chart(ctx, {
+				var chart = new Chart(ctx, {
 					type: 'line',
 					data: {
 						labels: <?php echo wp_json_encode( $dates ); ?>,
 						datasets: [{
-							label: '<?php echo esc_js( __( 'Performance Score', 'plugin-wp-support-thisismyurl' ) ); ?>',
-							data: <?php echo wp_json_encode( $scores ); ?>,
-							borderColor: '#2271b1',
-							backgroundColor: 'rgba(34, 113, 177, 0.1)',
+							label: '<?php echo esc_js( __( 'Query Count', 'plugin-wp-support-thisismyurl' ) ); ?>',
+							data: <?php echo wp_json_encode( $query_counts ); ?>,
+							borderColor: '#0969da',
+							backgroundColor: 'rgba(9, 105, 218, 0.1)',
 							tension: 0.4,
-							fill: true
+							fill: true,
+							yAxisID: 'y-queries'
+						}, {
+							label: '<?php echo esc_js( __( 'Load Time (ms)', 'plugin-wp-support-thisismyurl' ) ); ?>',
+							data: <?php echo wp_json_encode( $load_times ); ?>,
+							borderColor: '#1a7f37',
+							backgroundColor: 'rgba(26, 127, 55, 0.1)',
+							tension: 0.4,
+							fill: true,
+							yAxisID: 'y-time'
 						}]
 					},
 					options: {
 						responsive: true,
 						maintainAspectRatio: false,
+						interaction: {
+							mode: 'index',
+							intersect: false
+						},
 						plugins: {
 							legend: {
-								display: false
+								display: true,
+								position: 'top',
+								labels: {
+									boxWidth: 12,
+									padding: 10,
+									font: {
+										size: 11
+									}
+								}
+							},
+							tooltip: {
+								callbacks: {
+									label: function(context) {
+										var label = context.dataset.label || '';
+										if (label) {
+											label += ': ';
+										}
+										label += context.parsed.y;
+										if (context.dataset.yAxisID === 'y-time') {
+											label += ' ms';
+										}
+										return label;
+									}
+								}
 							}
 						},
 						scales: {
-							y: {
+							'y-queries': {
+								type: 'linear',
+								display: true,
+								position: 'left',
+								title: {
+									display: true,
+									text: '<?php echo esc_js( __( 'Queries', 'plugin-wp-support-thisismyurl' ) ); ?>',
+									font: {
+										size: 11
+									}
+								},
+								beginAtZero: true
+							},
+							'y-time': {
+								type: 'linear',
+								display: true,
+								position: 'right',
+								title: {
+									display: true,
+									text: '<?php echo esc_js( __( 'Time (ms)', 'plugin-wp-support-thisismyurl' ) ); ?>',
+									font: {
+										size: 11
+									}
+								},
 								beginAtZero: true,
-								max: 100
+								grid: {
+									drawOnChartArea: false
+								}
 							}
 						}
 					}
+				});
+
+				// Handle time range selector change.
+				$('#wps-history-range-<?php echo esc_js( $chart_id ); ?>').on('change', function() {
+					var days = $(this).val();
+					var url = window.location.href;
+					
+					// Update or add perf_days parameter.
+					if (url.indexOf('perf_days=') !== -1) {
+						url = url.replace(/perf_days=\d+/, 'perf_days=' + days);
+					} else {
+						url += (url.indexOf('?') !== -1 ? '&' : '?') + 'perf_days=' + days;
+					}
+					
+					window.location.href = url;
 				});
 			});
 		})(jQuery);
