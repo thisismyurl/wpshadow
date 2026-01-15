@@ -66,6 +66,9 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 		// Admin notice removed - cleanup is automated via WP-Cron schedule.
 		// Users can manage settings in Dashboard Settings tab.
 
+		// Show success notice after manual cleanup.
+		add_action( 'admin_notices', array( $this, 'show_cleanup_success_notice' ) );
+
 		// Handle manual cleanup action.
 		add_action( 'admin_post_wps_run_database_cleanup', array( $this, 'handle_manual_cleanup' ) );
 	}
@@ -378,6 +381,34 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 	}
 
 	/**
+	 * Show success notice after manual cleanup.
+	 *
+	 * @return void
+	 */
+	public function show_cleanup_success_notice(): void {
+		// Only show to administrators on settings page.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		// Check if we're on the settings page and cleanup was successful.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! isset( $_GET['wps_cleanup'] ) || 'success' !== sanitize_text_field( wp_unslash( $_GET['wps_cleanup'] ) ) ) {
+			return;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$screen = get_current_screen();
+		if ( ! $screen || strpos( $screen->id, 'wp-support' ) === false ) {
+			return;
+		}
+
+		echo '<div class="notice notice-success is-dismissible"><p>';
+		echo esc_html__( 'Database cleanup completed successfully.', 'plugin-wp-support-thisismyurl' );
+		echo '</p></div>';
+	}
+
+	/**
 	 * Handle manual cleanup request.
 	 *
 	 * @return void
@@ -397,10 +428,20 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 		$this->run_cleanup();
 
 		// Redirect back with success message.
-		$redirect_url = add_query_arg(
-			array( 'wps_cleanup' => 'success' ),
-			wp_get_referer() ?: admin_url( 'admin.php?page=wp-support' )
-		);
+		// Prefer referer (settings tab), fallback to settings, then dashboard.
+		$referer = wp_get_referer();
+		if ( $referer && strpos( $referer, 'page=wp-support' ) !== false ) {
+			$redirect_url = add_query_arg( array( 'wps_cleanup' => 'success' ), $referer );
+		} else {
+			$redirect_url = add_query_arg(
+				array(
+					'page'        => 'wp-support',
+					'WPS_tab'     => 'settings',
+					'wps_cleanup' => 'success',
+				),
+				admin_url( 'admin.php' )
+			);
+		}
 
 		wp_safe_redirect( $redirect_url );
 		exit;
