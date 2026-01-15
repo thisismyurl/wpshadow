@@ -1857,7 +1857,7 @@ function wp_support_plugin_action_links( array $links ): array {
 	if ( current_user_can( 'manage_options' ) ) {
 		$settings_link = sprintf(
 			'<a href="%s">%s</a>',
-			esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=settings' ) ),
+			esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard_settings' ) ),
 			esc_html__( 'Settings', 'plugin-wp-support-thisismyurl' )
 		);
 	} elseif ( is_multisite() && current_user_can( 'manage_network_options' ) ) {

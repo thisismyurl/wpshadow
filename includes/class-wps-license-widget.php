@@ -205,7 +205,7 @@ class WPS_License_Widget {
 							<?php esc_html_e( 'Register Your Site (Free)', 'plugin-wp-support-thisismyurl' ); ?>
 						</a>
 					<?php endif; ?>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=settings' ) ); ?>" 
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard_settings' ) ); ?>" 
 						class="button <?php echo ! $has_license ? 'button-secondary' : 'button-primary'; ?> button-large" 
 						style="width: 100%; text-align: center; margin-bottom: 5px;">
 						<?php esc_html_e( 'Enter License Key', 'plugin-wp-support-thisismyurl' ); ?>

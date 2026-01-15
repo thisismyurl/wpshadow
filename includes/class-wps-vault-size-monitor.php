@@ -64,7 +64,7 @@ class WPS_Vault_Size_Monitor {
 		// Exceeded threshold - show notice and set transient to throttle.
 		$settings_url = is_network_admin()
 			? network_admin_url( 'admin.php?page=wps-core-network-settings' )
-			: admin_url( 'admin.php?page=wp-support&WPS_tab=settings' );
+			: admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard_settings' );
 
 		$percentage = round( ( $vault_size_mb / $max_size_mb ) * 100 );
 
