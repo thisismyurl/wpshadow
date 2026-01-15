@@ -1173,7 +1173,7 @@ class WPS_Dashboard_Widgets {
 
 					<!-- Quick Actions -->
 					<p style="text-align: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e9ecef;">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=features&feature_filter=performance' ) ); ?>" class="button button-primary">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=features' ) ); ?>" class="button button-primary">
 							<?php esc_html_e( 'Performance Features', 'plugin-wp-support-thisismyurl' ); ?>
 						</a>
 					</p>
@@ -1255,7 +1255,7 @@ class WPS_Dashboard_Widgets {
 						</ul>
 
 						<p style="text-align: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e9ecef;">
-							<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=features&feature_filter=performance' ) ); ?>" class="button">
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=features' ) ); ?>" class="button">
 								<?php esc_html_e( 'Configure Alert Settings', 'plugin-wp-support-thisismyurl' ); ?>
 							</a>
 						</p>
