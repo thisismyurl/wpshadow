@@ -388,6 +388,48 @@ class WPS_Performance_Monitor {
 	}
 
 	/**
+	 * Get performance history formatted for dashboard widget.
+	 *
+	 * @param int $days Number of days to retrieve (7, 30, or 90).
+	 * @return array Formatted historical data with dates and scores.
+	 */
+	public static function get_performance_history( int $days = 7 ): array {
+		$history = self::get_historical_metrics( $days );
+		
+		if ( empty( $history ) ) {
+			return array();
+		}
+		
+		$formatted = array();
+		
+		foreach ( $history as $timestamp => $metrics ) {
+			// Calculate score for each historical entry.
+			$query_count = $metrics['query_count'] ?? 0;
+			$load_time   = (float) ( $metrics['load_time'] ?? 1 );
+			$memory_mb   = (float) ( $metrics['memory_mb'] ?? 50 );
+			
+			// Simplified score calculation (0-100).
+			$query_score  = max( 0, 100 - ( ( $query_count - 20 ) * 2 ) );
+			$load_score   = max( 0, 100 - ( $load_time * 50 ) );
+			$memory_score = max( 0, 100 - ( ( $memory_mb - 50 ) * 2 ) );
+			
+			$score = round( ( $query_score * 0.40 + $load_score * 0.35 + $memory_score * 0.25 ) );
+			$score = max( 0, min( 100, $score ) );
+			
+			$formatted[] = array(
+				'date'        => date_i18n( 'M j', $timestamp ),
+				'timestamp'   => $timestamp,
+				'score'       => $score,
+				'query_count' => $query_count,
+				'load_time'   => $load_time,
+				'memory_mb'   => $memory_mb,
+			);
+		}
+		
+		return $formatted;
+	}
+
+	/**
 	 * Get optimization recommendations.
 	 *
 	 * @return array List of recommendations.

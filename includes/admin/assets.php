@@ -76,16 +76,14 @@ function wp_support_admin_enqueue( string $hook ): void {
 		// Use WordPress's built-in postbox drag and drop.
 		wp_enqueue_script( 'postbox' );
 
-		// Enqueue Chart.js for performance history visualization (dashboard only).
-		if ( 'dashboard' === $tab ) {
-			wp_enqueue_script(
-				'chartjs',
-				'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js',
-				array(),
-				'4.4.1',
-				true
-			);
-		}
+		// Enqueue Chart.js for performance history visualization on all wp-support pages.
+		wp_enqueue_script(
+			'chartjs',
+			'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js',
+			array(),
+			'4.4.1',
+			true
+		);
 
 		// Add custom script to handle context-specific state saving.
 		wp_enqueue_script(
