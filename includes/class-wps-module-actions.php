@@ -88,6 +88,7 @@ class WPS_Module_Actions {
 		// Refresh dashboard widgets dynamically.
 		add_action( 'wp_ajax_wps_refresh_health_widget', array( __CLASS__, 'ajax_refresh_health_widget' ) );
 		add_action( 'wp_ajax_wps_refresh_events_widget', array( __CLASS__, 'ajax_refresh_events_widget' ) );
+		add_action( 'wp_ajax_wps_refresh_database_stats', array( __CLASS__, 'ajax_refresh_database_stats' ) );
 
 		// Download progress polling.
 		add_action( 'wp_ajax_wps_module_download_progress', array( __CLASS__, 'ajax_download_progress' ) );
@@ -538,6 +539,33 @@ class WPS_Module_Actions {
 				'html'         => $html,
 				'active_repos' => $active_repos,
 				'timestamp'    => current_time( 'timestamp' ),
+			)
+		);
+	}
+
+	/**
+	 * AJAX: Refresh database statistics widget.
+	 *
+	 * @return void
+	 */
+	public static function ajax_refresh_database_stats(): void {
+		self::verify_request( 'WPS_module_actions', 'manage_options', 'manage_network_options' );
+
+		// Clear the cached database stats to force fresh data.
+		delete_transient( 'wps_database_stats' );
+
+		// Get fresh database statistics.
+		$stats = WPS_Dashboard_Widgets::get_database_statistics_for_ajax();
+
+		if ( empty( $stats ) ) {
+			self::respond_error( __( 'Unable to retrieve database statistics.', 'plugin-wp-support-thisismyurl' ), 500 );
+			return;
+		}
+
+		self::respond_success(
+			array(
+				'stats'     => $stats,
+				'timestamp' => current_time( 'timestamp' ),
 			)
 		);
 	}

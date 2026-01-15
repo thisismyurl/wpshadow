@@ -2144,105 +2144,246 @@ class WPS_Dashboard_Widgets {
 	 * @return void
 	 */
 	private static function widget_database_stats(): void {
-		global $wpdb;
+		// Get cached or fresh database statistics.
+		$stats = self::get_database_statistics();
 
-		// Get table sizes.
-		$tables = $wpdb->get_results(
-			"SELECT 
-				table_name AS 'name',
-				ROUND(((data_length + index_length) / 1024 / 1024), 2) AS 'size'
-			FROM information_schema.TABLES 
-			WHERE table_schema = DATABASE()
-			ORDER BY (data_length + index_length) DESC
-			LIMIT 10",
-			ARRAY_A
-		);
-
-		// Get total database size.
-		$db_size_result = $wpdb->get_var(
-			"SELECT ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) 
-			FROM information_schema.TABLES 
-			WHERE table_schema = DATABASE()"
-		);
-		$db_size        = $db_size_result ? $db_size_result : 0;
-
-		// Get transient counts.
-		$transient_count = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
-				$wpdb->esc_like( '_transient_' ) . '%',
-				$wpdb->esc_like( '_site_transient_' ) . '%'
-			)
-		);
-
-		// Get autoload size.
-		$autoload_size = $wpdb->get_var(
-			"SELECT ROUND(SUM(LENGTH(option_value)) / 1024, 2)
-			FROM {$wpdb->options}
-			WHERE autoload = 'yes'"
-		);
-
-		// Get post counts by status.
-		$post_counts = $wpdb->get_results(
-			"SELECT post_status, COUNT(*) as count 
-			FROM {$wpdb->posts} 
-			GROUP BY post_status",
-			ARRAY_A
-		);
+		if ( empty( $stats ) ) {
+			?>
+			<div class="wps-widget-content">
+				<p><em><?php esc_html_e( 'Unable to retrieve database statistics.', 'plugin-wp-support-thisismyurl' ); ?></em></p>
+			</div>
+			<?php
+			return;
+		}
 
 		?>
-		<div class="wps-widget-content">
+		<div class="wps-widget-content" id="wps-database-stats-container">
+			<!-- Total Database Size -->
 			<div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 4px;">
 				<div style="font-size: 32px; font-weight: 700; color: #2271b1; margin-bottom: 5px;">
-					<?php echo esc_html( $db_size ); ?> MB
+					<?php echo esc_html( size_format( $stats['total_size'], 2 ) ); ?>
 				</div>
 				<div style="font-size: 13px; color: #666;">
 					<?php esc_html_e( 'Total Database Size', 'plugin-wp-support-thisismyurl' ); ?>
 				</div>
 			</div>
 
+			<!-- Quick Stats Grid -->
+			<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+				<div style="padding: 10px; background: #fff; border: 1px solid #e5e5e5; border-radius: 4px;">
+					<div style="font-size: 20px; font-weight: 600; color: #2271b1;"><?php echo esc_html( $stats['table_count'] ); ?></div>
+					<div style="font-size: 12px; color: #666;"><?php esc_html_e( 'Tables', 'plugin-wp-support-thisismyurl' ); ?></div>
+				</div>
+				<div style="padding: 10px; background: #fff; border: 1px solid #e5e5e5; border-radius: 4px;">
+					<div style="font-size: 20px; font-weight: 600; color: <?php echo $stats['expired_transients'] > 100 ? '#d63638' : '#2271b1'; ?>;">
+						<?php echo esc_html( number_format_i18n( $stats['expired_transients'] ) ); ?>
+					</div>
+					<div style="font-size: 12px; color: #666;"><?php esc_html_e( 'Expired Transients', 'plugin-wp-support-thisismyurl' ); ?></div>
+				</div>
+				<div style="padding: 10px; background: #fff; border: 1px solid #e5e5e5; border-radius: 4px;">
+					<div style="font-size: 20px; font-weight: 600; color: <?php echo $stats['revisions'] > 500 ? '#dba617' : '#2271b1'; ?>;">
+						<?php echo esc_html( number_format_i18n( $stats['revisions'] ) ); ?>
+					</div>
+					<div style="font-size: 12px; color: #666;"><?php esc_html_e( 'Post Revisions', 'plugin-wp-support-thisismyurl' ); ?></div>
+				</div>
+				<div style="padding: 10px; background: #fff; border: 1px solid #e5e5e5; border-radius: 4px;">
+					<div style="font-size: 20px; font-weight: 600; color: #2271b1;"><?php echo esc_html( number_format_i18n( $stats['autodrafts'] ) ); ?></div>
+					<div style="font-size: 12px; color: #666;"><?php esc_html_e( 'Auto-Drafts', 'plugin-wp-support-thisismyurl' ); ?></div>
+				</div>
+			</div>
+
+			<!-- Largest Tables -->
 			<div style="margin-bottom: 20px;">
 				<h4 style="margin: 0 0 10px 0; font-size: 14px;"><?php esc_html_e( 'Largest Tables', 'plugin-wp-support-thisismyurl' ); ?></h4>
 				<table style="width: 100%; font-size: 13px;">
-					<?php foreach ( $tables as $table ) : ?>
+					<thead>
 						<tr>
-							<td style="padding: 6px 0; color: #666;"><?php echo esc_html( $table['name'] ); ?></td>
-							<td style="padding: 6px 0; text-align: right; font-weight: 500;">
-								<?php echo esc_html( $table['size'] ); ?> MB
-							</td>
+							<th style="padding: 6px 0; color: #666; font-weight: 600; text-align: left;"><?php esc_html_e( 'Table', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th style="padding: 6px 0; color: #666; font-weight: 600; text-align: right;"><?php esc_html_e( 'Size', 'plugin-wp-support-thisismyurl' ); ?></th>
 						</tr>
-					<?php endforeach; ?>
-				</table>
-			</div>
-
-			<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-				<div style="padding: 10px; background: #fff; border: 1px solid #e5e5e5; border-radius: 4px;">
-					<div style="font-size: 20px; font-weight: 600; color: #2271b1;"><?php echo esc_html( $transient_count ); ?></div>
-					<div style="font-size: 12px; color: #666;"><?php esc_html_e( 'Transients', 'plugin-wp-support-thisismyurl' ); ?></div>
-				</div>
-				<div style="padding: 10px; background: #fff; border: 1px solid #e5e5e5; border-radius: 4px;">
-					<div style="font-size: 20px; font-weight: 600; color: #2271b1;"><?php echo esc_html( $autoload_size ); ?> KB</div>
-					<div style="font-size: 12px; color: #666;"><?php esc_html_e( 'Autoload Size', 'plugin-wp-support-thisismyurl' ); ?></div>
-				</div>
-			</div>
-
-			<?php if ( ! empty( $post_counts ) ) : ?>
-				<div style="margin-bottom: 15px;">
-					<h4 style="margin: 0 0 10px 0; font-size: 14px;"><?php esc_html_e( 'Post Counts', 'plugin-wp-support-thisismyurl' ); ?></h4>
-					<table style="width: 100%; font-size: 13px;">
-						<?php foreach ( $post_counts as $status ) : ?>
+					</thead>
+					<tbody>
+						<?php foreach ( $stats['largest_tables'] as $table ) : ?>
 							<tr>
-								<td style="padding: 6px 0; color: #666;"><?php echo esc_html( ucfirst( $status['post_status'] ) ); ?></td>
+								<td style="padding: 6px 0; color: #666;"><?php echo esc_html( $table['name'] ); ?></td>
 								<td style="padding: 6px 0; text-align: right; font-weight: 500;">
-									<?php echo esc_html( number_format_i18n( (int) $status['count'] ) ); ?>
+									<?php echo esc_html( size_format( $table['size'], 2 ) ); ?>
 								</td>
 							</tr>
 						<?php endforeach; ?>
-					</table>
+					</tbody>
+				</table>
+			</div>
+
+			<!-- Optimization Opportunities -->
+			<?php if ( ! empty( $stats['recommendations'] ) ) : ?>
+				<div style="margin-bottom: 15px;">
+					<h4 style="margin: 0 0 10px 0; font-size: 14px;"><?php esc_html_e( 'Optimization Opportunities', 'plugin-wp-support-thisismyurl' ); ?></h4>
+					<ul style="list-style: none; margin: 0; padding: 0;">
+						<?php foreach ( $stats['recommendations'] as $rec ) : ?>
+							<li style="padding: 10px; margin-bottom: 8px; background: #fff3cd; border-left: 4px solid #dba617; border-radius: 2px;">
+								<div style="display: flex; align-items: center; gap: 8px;">
+									<span class="dashicons dashicons-info" style="color: #dba617; flex-shrink: 0;"></span>
+									<div style="flex: 1;">
+										<div style="font-size: 13px; margin-bottom: 4px;"><?php echo esc_html( $rec['message'] ); ?></div>
+										<a href="<?php echo esc_url( $rec['action_url'] ); ?>" class="button button-small" style="font-size: 11px; padding: 2px 8px; height: auto;">
+											<?php echo esc_html( $rec['action_label'] ); ?>
+										</a>
+									</div>
+								</div>
+							</li>
+						<?php endforeach; ?>
+					</ul>
 				</div>
 			<?php endif; ?>
+
+			<!-- Refresh Button -->
+			<div style="text-align: center; padding-top: 10px; border-top: 1px solid #e5e5e5;">
+				<button type="button" class="button button-small wps-refresh-database-stats" style="font-size: 12px;">
+					<span class="dashicons dashicons-update" style="font-size: 14px; vertical-align: middle;"></span>
+					<?php esc_html_e( 'Refresh', 'plugin-wp-support-thisismyurl' ); ?>
+				</button>
+				<span class="wps-refresh-spinner" style="display: none; margin-left: 8px;">
+					<span class="spinner is-active" style="float: none; margin: 0;"></span>
+				</span>
+			</div>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Get database statistics (cached).
+	 *
+	 * @return array<string, mixed>
+	 */
+	private static function get_database_statistics(): array {
+		// Check cache first.
+		$cached = get_transient( 'wps_database_stats' );
+		if ( false !== $cached && is_array( $cached ) ) {
+			return $cached;
+		}
+
+		global $wpdb;
+
+		$stats = array();
+
+		try {
+			// Total database size.
+			$result = $wpdb->get_results(
+				$wpdb->prepare(
+					'SELECT SUM(data_length + index_length) as size 
+					 FROM information_schema.TABLES 
+					 WHERE table_schema = %s',
+					DB_NAME
+				)
+			);
+			$stats['total_size'] = ! empty( $result[0]->size ) ? (int) $result[0]->size : 0;
+
+			// Table count.
+			$stats['table_count'] = (int) $wpdb->get_var(
+				$wpdb->prepare(
+					'SELECT COUNT(*) FROM information_schema.TABLES WHERE table_schema = %s',
+					DB_NAME
+				)
+			);
+
+			// Largest tables (top 5).
+			$largest_tables = $wpdb->get_results(
+				$wpdb->prepare(
+					'SELECT table_name as name, (data_length + index_length) as size 
+					 FROM information_schema.TABLES 
+					 WHERE table_schema = %s 
+					 ORDER BY size DESC 
+					 LIMIT 5',
+					DB_NAME
+				),
+				ARRAY_A
+			);
+
+			$stats['largest_tables'] = array();
+			if ( ! empty( $largest_tables ) ) {
+				foreach ( $largest_tables as $table ) {
+					$stats['largest_tables'][] = array(
+						'name' => $table['name'],
+						'size' => (int) $table['size'],
+					);
+				}
+			}
+
+			// Expired transients.
+			$stats['expired_transients'] = (int) $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT COUNT(*) FROM {$wpdb->options} 
+					 WHERE option_name LIKE %s 
+					 AND option_value < UNIX_TIMESTAMP()",
+					$wpdb->esc_like( '_transient_timeout_' ) . '%'
+				)
+			);
+
+			// Post revisions.
+			$stats['revisions'] = (int) $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = %s",
+					'revision'
+				)
+			);
+
+			// Auto-drafts.
+			$stats['autodrafts'] = (int) $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_status = %s",
+					'auto-draft'
+				)
+			);
+
+			// Build recommendations.
+			$stats['recommendations'] = array();
+
+			if ( $stats['expired_transients'] > 100 ) {
+				$stats['recommendations'][] = array(
+					'message'      => sprintf(
+						/* translators: %d: number of expired transients */
+						__( 'Clean %d expired transients to save space', 'plugin-wp-support-thisismyurl' ),
+						$stats['expired_transients']
+					),
+					'action_label' => __( 'Clean Now', 'plugin-wp-support-thisismyurl' ),
+					'action_url'   => admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard_settings&action=clean_transients' ),
+				);
+			}
+
+			if ( $stats['revisions'] > 500 ) {
+				$stats['recommendations'][] = array(
+					'message'      => sprintf(
+						/* translators: %d: number of post revisions */
+						__( '%d post revisions can be cleaned', 'plugin-wp-support-thisismyurl' ),
+						$stats['revisions']
+					),
+					'action_label' => __( 'Manage Revisions', 'plugin-wp-support-thisismyurl' ),
+					'action_url'   => admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard_settings#revisions' ),
+				);
+			}
+
+			if ( $stats['autodrafts'] > 50 ) {
+				$stats['recommendations'][] = array(
+					'message'      => sprintf(
+						/* translators: %d: number of auto-drafts */
+						__( '%d auto-drafts can be removed', 'plugin-wp-support-thisismyurl' ),
+						$stats['autodrafts']
+					),
+					'action_label' => __( 'Clean Auto-Drafts', 'plugin-wp-support-thisismyurl' ),
+					'action_url'   => admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard_settings#autodrafts' ),
+				);
+			}
+
+			// Cache for 1 hour.
+			set_transient( 'wps_database_stats', $stats, HOUR_IN_SECONDS );
+
+			return $stats;
+		} catch ( \Exception $e ) {
+			// Log error but don't expose to user.
+			error_log( 'WPS Database Stats Error: ' . $e->getMessage() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			return array();
+		}
 	}
 
 	/**
@@ -2345,6 +2486,15 @@ class WPS_Dashboard_Widgets {
 		})(jQuery);
 		</script>
 		<?php
+	}
+
+	/**
+	 * Get database statistics (public method for AJAX).
+	 *
+	 * @return array<string, mixed>
+	 */
+	public static function get_database_statistics_for_ajax(): array {
+		return self::get_database_statistics();
 	}
 }
 
