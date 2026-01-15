@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $is_network      = is_network_admin();
-$action_url      = $is_network ? network_admin_url( 'admin.php?page=wps-core-network-settings' ) : admin_url( 'admin.php?page=wp-support&WPS_tab=settings' );
+$action_url      = $is_network ? network_admin_url( 'admin.php?page=wps-core-network-settings' ) : admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard_settings' );
 $settings        = WPS_Vault::get_settings();
 $saved           = isset( $_GET['WPS_vault_saved'] );
 $locked          = ! $is_network && ! WPS_Vault::site_override_allowed();

@@ -115,7 +115,7 @@ class WPS_License {
 		$message  = $result['message'];
 		$redirect = $network && is_multisite()
 			? network_admin_url( 'admin.php?page=wps-core-network-settings' )
-			: admin_url( 'admin.php?page=wp-support&WPS_tab=settings' );
+			: admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard_settings' );
 
 		$redirect = add_query_arg(
 			array(
@@ -326,7 +326,7 @@ class WPS_License {
 
 		$url     = $use_network && is_multisite()
 			? network_admin_url( 'admin.php?page=wps-core-network-settings' )
-			: admin_url( 'admin.php?page=wp-support&WPS_tab=settings' );
+			: admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard_settings' );
 		$message = sprintf(
 			/* translators: %s: license settings URL */
 			__( 'This site is not registered. Please register to receive updates and support. Visit the <a href="%s">license settings</a>.', 'plugin-wp-support-thisismyurl' ),

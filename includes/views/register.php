@@ -36,7 +36,7 @@ $is_licensed = WPS_License::is_registered();
 			<p><?php esc_html_e( 'You have an active license and are receiving updates and support.', 'plugin-wp-support-thisismyurl' ); ?></p>
 		</div>
 		<p>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=settings' ) ); ?>" class="button button-primary">
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard_settings' ) ); ?>" class="button button-primary">
 				<?php esc_html_e( 'Manage License', 'plugin-wp-support-thisismyurl' ); ?>
 			</a>
 		</p>
@@ -203,7 +203,7 @@ $is_licensed = WPS_License::is_registered();
 			<div class="wps-register-footer">
 				<p>
 					<strong><?php esc_html_e( 'Already have a license key?', 'plugin-wp-support-thisismyurl' ); ?></strong>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=settings' ) ); ?>">
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard_settings' ) ); ?>">
 						<?php esc_html_e( 'Enter it in settings instead', 'plugin-wp-support-thisismyurl' ); ?>
 					</a>
 				</p>
