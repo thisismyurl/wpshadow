@@ -1,10 +1,10 @@
-# WordPress Support (thisismyurl)
+# WP support (thisismyurl)
 
-**The Complete WordPress Support Solution - Standalone Core + Optional Module Ecosystem**
+**The Complete WP support Solution - Standalone Core + Optional Module Ecosystem**
 
 ## Description
 
-WordPress Support is a comprehensive WordPress support and diagnostics plugin that works perfectly as a **standalone core** or optionally extends with specialized modules (Image Hub, Media Hub, Vault Storage, and more). It acts as the foundational platform for managing features, diagnostics, emergency recovery, backup verification, and documentation.
+WP support is a comprehensive WordPress support and diagnostics plugin that works perfectly as a **standalone core** or optionally extends with specialized modules (Image Hub, Media Hub, Vault Storage, and more). It acts as the foundational platform for managing features, diagnostics, emergency recovery, backup verification, and documentation.
 
 This plugin provides complete functionality on its own and can optionally load hub and spoke plugins for extended capabilities.
 
@@ -61,7 +61,7 @@ This plugin provides complete functionality on its own and can optionally load h
 
 1. Upload the plugin files to `/wp-content/plugins/plugin-wp-support-thisismyurl/`
 2. Activate through the 'Plugins' menu in WordPress
-3. Configure settings under 'WordPress Support' in the admin menu
+3. Configure settings under 'WP support' in the admin menu
 4. (Optional) Install additional modules from the Modules page for extended functionality
 
 ### Standalone Setup (Core Only)
@@ -125,7 +125,7 @@ For detailed documentation, see [SEAMLESS_REGISTRATION.md](docs/SEAMLESS_REGISTR
 - Live site remains normal for all visitors
 - Perfect for isolating plugin/theme conflicts without taking site offline
 - Session automatically expires after 24 hours
-- Access via WordPress Support → Conflict Sandbox menu
+- Access via WP support → Conflict Sandbox menu
 
 **Backup Verification:**
 - Run automated backup integrity tests
@@ -195,10 +195,12 @@ Core Support includes built-in privacy and GDPR compliance:
   - Local banner with customizable messaging
   - Auto-blocks common trackers (Google Analytics, Facebook Pixel, DoubleClick)
   - Dark mode and mobile responsive
-- **Export Personal Data:** WordPress Tools → Export Personal Data includes WordPress Support and module data
+- **Export Personal Data:** WordPress Tools → Export Personal Data includes WP support and module data
 - **Erase Personal Data:** Requests securely erase user data; Vault originals are purged
 - **Data Retention:** Admins set retention policies; old data auto-purges per schedule
 - **Audit Trail:** All export/erase operations are logged
+
+Core WP support includes built-in privacy and GDPR compliance:
 
 - **PHP 8.4+** with strict typing, Enums, and Property Hooks
 - **SVE Protocol:** Sanitize inputs, Validate capabilities, Escape outputs

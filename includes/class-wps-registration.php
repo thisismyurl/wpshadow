@@ -41,62 +41,39 @@ class WPS_Registration {
 	 * @return void
 	 */
 	public static function handle_ajax_registration(): void {
-		// Verify nonce.
-		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'wps_register_site' ) ) {
-			wp_send_json_error(
-				array(
-					'message' => __( 'Security verification failed. Please refresh the page and try again.', 'plugin-wp-support-thisismyurl' ),
-				)
-			);
-		}
+		// Verify nonce and permissions.
+		check_ajax_referer( 'wps_register_site', 'nonce' );
 
-		// Check permissions.
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error(
-				array(
-					'message' => __( 'You do not have permission to register this site.', 'plugin-wp-support-thisismyurl' ),
-				)
-			);
+			\WPS\CoreSupport\wps_ajax_permission_denied();
 		}
 
-		// Validate and sanitize input data.
-		$site_name   = isset( $_POST['site_name'] ) ? sanitize_text_field( wp_unslash( $_POST['site_name'] ) ) : '';
-		$site_url    = isset( $_POST['site_url'] ) ? esc_url_raw( wp_unslash( $_POST['site_url'] ) ) : '';
-		$admin_name  = isset( $_POST['admin_name'] ) ? sanitize_text_field( wp_unslash( $_POST['admin_name'] ) ) : '';
-		$admin_email = isset( $_POST['admin_email'] ) ? sanitize_email( wp_unslash( $_POST['admin_email'] ) ) : '';
-		$agree_terms = isset( $_POST['agree_terms'] ) ? (bool) $_POST['agree_terms'] : false;
+		// Validate and sanitize input data using helpers.
+		$site_name   = \WPS\CoreSupport\wps_get_post_text( 'site_name' );
+		$site_url    = \WPS\CoreSupport\wps_get_post_url( 'site_url' );
+		$admin_name  = \WPS\CoreSupport\wps_get_post_text( 'admin_name' );
+		$admin_email = \WPS\CoreSupport\wps_get_post_email( 'admin_email' );
+		$agree_terms = \WPS\CoreSupport\wps_get_post_bool( 'agree_terms' );
 
 		// Email preferences.
-		$opt_in_updates    = isset( $_POST['opt_in_updates'] ) ? (bool) $_POST['opt_in_updates'] : false;
-		$opt_in_security   = isset( $_POST['opt_in_security'] ) ? (bool) $_POST['opt_in_security'] : false;
-		$opt_in_newsletter = isset( $_POST['opt_in_newsletter'] ) ? (bool) $_POST['opt_in_newsletter'] : false;
-		$opt_in_marketing  = isset( $_POST['opt_in_marketing'] ) ? (bool) $_POST['opt_in_marketing'] : false;
+		$opt_in_updates    = \WPS\CoreSupport\wps_get_post_bool( 'opt_in_updates' );
+		$opt_in_security   = \WPS\CoreSupport\wps_get_post_bool( 'opt_in_security' );
+		$opt_in_newsletter = \WPS\CoreSupport\wps_get_post_bool( 'opt_in_newsletter' );
+		$opt_in_marketing  = \WPS\CoreSupport\wps_get_post_bool( 'opt_in_marketing' );
 
 		// Validate required fields.
 		if ( empty( $site_name ) || empty( $site_url ) || empty( $admin_name ) || empty( $admin_email ) ) {
-			wp_send_json_error(
-				array(
-					'message' => __( 'Please fill in all required fields.', 'plugin-wp-support-thisismyurl' ),
-				)
-			);
+			\WPS\CoreSupport\wps_ajax_error( __( 'Please fill in all required fields.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		// Validate email.
 		if ( ! is_email( $admin_email ) ) {
-			wp_send_json_error(
-				array(
-					'message' => __( 'Please enter a valid email address.', 'plugin-wp-support-thisismyurl' ),
-				)
-			);
+			\WPS\CoreSupport\wps_ajax_error( __( 'Please enter a valid email address.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		// Validate terms agreement.
 		if ( ! $agree_terms ) {
-			wp_send_json_error(
-				array(
-					'message' => __( 'You must agree to the Terms of Service and Privacy Policy.', 'plugin-wp-support-thisismyurl' ),
-				)
-			);
+			\WPS\CoreSupport\wps_ajax_error( __( 'You must agree to the Terms of Service and Privacy Policy.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		// Prepare registration data.

@@ -6,59 +6,80 @@
  *
  * @package    WP_Support
  * @subpackage Core
- * @since      1.2601.73001
+ * @since      1.2601.73002
  */
 
 declare(strict_types=1);
+
+namespace WPS\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
- * Handle license key submission
+ * WPS_Update_Settings Class
+ *
+ * Manages license key configuration and update settings UI.
  */
-function wp_support_handle_license_submission(): void {
-	if ( ! isset( $_POST['wps_license_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wps_license_nonce'] ) ), 'wps_save_license' ) ) {
-		return;
+class WPS_Update_Settings {
+
+	/**
+	 * Initialize update settings.
+	 *
+	 * @return void
+	 */
+	public static function init(): void {
+		add_action( 'admin_init', array( __CLASS__, 'handle_license_submission' ) );
 	}
 
-	if ( ! current_user_can( 'manage_options' ) ) {
-		return;
-	}
+	/**
+	 * Handle license key submission
+	 *
+	 * @return void
+	 */
+	public static function handle_license_submission(): void {
+		if ( ! isset( $_POST['wps_license_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wps_license_nonce'] ) ), 'wps_save_license' ) ) {
+			return;
+		}
 
-	if ( isset( $_POST['wps_license_key'] ) ) {
-		$license_key = sanitize_text_field( wp_unslash( $_POST['wps_license_key'] ) );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
 
-		if ( ! empty( $license_key ) ) {
-			update_option( 'wps_license_key', $license_key );
-			add_settings_error(
-				'wps_license',
-				'license_saved',
-				__( 'License key saved successfully.', 'plugin-wp-support-thisismyurl' ),
-				'success'
-			);
+		if ( isset( $_POST['wps_license_key'] ) ) {
+			$license_key = sanitize_text_field( wp_unslash( $_POST['wps_license_key'] ) );
 
-			// Clear update cache to force license validation.
-			\WPS\CoreSupport\WPS_Update_Client::clear_cache();
-		} else {
-			delete_option( 'wps_license_key' );
-			add_settings_error(
-				'wps_license',
-				'license_removed',
-				__( 'License key removed successfully.', 'plugin-wp-support-thisismyurl' ),
-				'success'
-			);
+			if ( ! empty( $license_key ) ) {
+				update_option( 'wps_license_key', $license_key );
+				add_settings_error(
+					'wps_license',
+					'license_saved',
+					__( 'License key saved successfully.', 'plugin-wp-support-thisismyurl' ),
+					'success'
+				);
+
+				// Clear update cache to force license validation.
+				\WPS\CoreSupport\WPS_Update_Client::clear_cache();
+			} else {
+				delete_option( 'wps_license_key' );
+				add_settings_error(
+					'wps_license',
+					'license_removed',
+					__( 'License key removed successfully.', 'plugin-wp-support-thisismyurl' ),
+					'success'
+				);
+			}
 		}
 	}
-}
-add_action( 'admin_init', 'wp_support_handle_license_submission' );
 
-/**
- * Render license & updates settings page
- */
-function wp_support_render_updates_page(): void {
-	$license_key    = get_option( 'wps_license_key', '' );
+	/**
+	 * Render license & updates settings page
+	 *
+	 * @return void
+	 */
+	public static function render_settings_page(): void {
+		$license_key    = get_option( 'wps_license_key', '' );
 	$has_license    = ! empty( $license_key );
 	$masked_license = $has_license ? str_repeat( '•', max( 20, strlen( $license_key ) - 4 ) ) . substr( $license_key, -4 ) : '';
 
@@ -275,7 +296,7 @@ function wp_support_render_updates_page(): void {
 				nonce: '<?php echo esc_js( wp_create_nonce( 'wps_check_updates' ) ); ?>'
 			})
 		})
-		.then(response => response.json())
+	}
 		.then(data => {
 			button.disabled = false;
 			button.textContent = '<?php esc_html_e( 'Check for Updates Now', 'plugin-wp-support-thisismyurl' ); ?>';
@@ -296,4 +317,5 @@ function wp_support_render_updates_page(): void {
 	</script>
 
 	<?php
+	}
 }

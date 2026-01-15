@@ -8,7 +8,9 @@
  * @package wp_support
  */
 
-namespace WPS\Core;
+declare(strict_types=1);
+
+namespace WPS\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

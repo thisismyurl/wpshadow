@@ -396,7 +396,14 @@ class WPS_Backup_Verification {
 		$nonce   = wp_create_nonce( 'WPS_backup_nonce' );
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Backup Verification & Recovery Drills', 'plugin-wp-support-thisismyurl' ); ?></h1>
+			<h1>
+				<?php esc_html_e( 'Backup Verification & Recovery Drills', 'plugin-wp-support-thisismyurl' ); ?>
+				<?php
+				if ( class_exists( '\\WPS\\CoreSupport\\WPS_Feature_Detector' ) ) {
+					WPS_Feature_Detector::render_feature_badge( 'core' );
+				}
+				?>
+			</h1>
 			<p><?php esc_html_e( 'Automated testing of backup integrity through staged restoration and functionality validation.', 'plugin-wp-support-thisismyurl' ); ?></p>
 
 			<button id="wps-backup-verify" class="button button-primary" data-nonce="<?php echo esc_attr( $nonce ); ?>">
@@ -461,7 +468,24 @@ class WPS_Backup_Verification {
 						</ul>
 					<?php endif; ?>
 				</div>
-
+			<!-- Ghost Features - Enhanced Backup Capabilities -->
+			<?php
+			if ( class_exists( '\\WPS\\CoreSupport\\WPS_Ghost_Features' ) ) {
+				echo '<div style="margin: 30px 0;">';
+				echo '<h2>' . esc_html__( '🚀 Unlock Enhanced Backup Features', 'plugin-wp-support-thisismyurl' ) . '</h2>';
+				echo '<p style="color: #646970; margin-bottom: 20px;">' . esc_html__( 'Install the free Vault module to enhance your backup capabilities with encryption, cloud offload, and more.', 'plugin-wp-support-thisismyurl' ) . '</p>';
+				WPS_Ghost_Features::render_category_features(
+					'backup',
+					array(
+						'include_installed'   => false,
+						'show_install_button' => true,
+						'show_benefits'       => true,
+						'columns'             => 2,
+					)
+				);
+				echo '</div>';
+			}
+			?>
 				<!-- Test History -->
 				<?php if ( count( $results ) > 1 ) : ?>
 					<h3><?php esc_html_e( 'Verification History', 'plugin-wp-support-thisismyurl' ); ?></h3>

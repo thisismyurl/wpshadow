@@ -506,6 +506,12 @@ function wp_support_init(): void {
 		dirname( wp_support_BASENAME ) . '/languages'
 	);
 
+	// Load DRY helper functions and traits.
+	require_once wp_support_PATH . 'includes/helpers/wps-input-helpers.php';
+	require_once wp_support_PATH . 'includes/helpers/wps-ajax-helpers.php';
+	require_once wp_support_PATH . 'includes/helpers/wps-array-helpers.php';
+	require_once wp_support_PATH . 'includes/traits/trait-wps-ajax-security.php';
+
 	// Load update server client for automatic updates.
 	require_once wp_support_PATH . 'includes/class-wps-update-client.php';
 	\WPS\CoreSupport\WPS_Update_Client::init( wp_support_BASENAME );
@@ -533,12 +539,58 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/class-wps-module-registry.php';
 	WPS_Module_Registry::init();
 
+	// Load Ghost Features system for module feature discovery.
+	require_once wp_support_PATH . 'includes/class-wps-ghost-features.php';
+	require_once wp_support_PATH . 'includes/class-wps-feature-detector.php';
+	require_once wp_support_PATH . 'includes/class-wps-features-discovery-widget.php';
+	require_once wp_support_PATH . 'includes/ghost-features-catalog.php';
+	WPS_Ghost_Features::init();
+	WPS_Features_Discovery_Widget::init();
+
 	// Load DRY Hub initializer before loading modules.
 	require_once wp_support_PATH . 'includes/class-wps-module-hub-initializer.php';
 
 	// Load module loader (manages independent module repositories).
 	require_once wp_support_PATH . 'includes/class-wps-module-loader.php';
-	\WPS\Core\Module_Loader::init();
+	Module_Loader::init();
+
+	// Register ghost features from catalog.
+	add_action(
+		'plugins_loaded',
+		static function (): void {
+			$catalog = \WPS\CoreSupport\get_ghost_features_catalog();
+			foreach ( $catalog as $module_slug => $features ) {
+				$is_installed = WPS_Module_Registry::is_installed( $module_slug );
+				$modules      = WPS_Module_Registry::get_catalog_modules();
+				$module_data  = array();
+				foreach ( $modules as $module ) {
+					if ( $module['slug'] === $module_slug ) {
+						$module_data = $module;
+						break;
+					}
+				}
+				foreach ( $features as $feature ) {
+					WPS_Ghost_Features::register_feature(
+						array_merge(
+							$feature,
+							array(
+								'module_slug'   => $module_slug,
+								'module_name'   => $module_data['name'] ?? '',
+								'module_type'   => $module_data['type'] ?? 'spoke',
+								'is_available'  => $is_installed,
+								'download_url'  => $module_data['download_url'] ?? '',
+								'requires_core' => $module_data['requires_core'] ?? '',
+								'requires_php'  => $module_data['requires_php'] ?? '',
+								'requires_wp'   => $module_data['requires_wp'] ?? '',
+								'requires_hub'  => $module_data['requires_hub'] ?? '',
+							)
+						)
+					);
+				}
+			}
+		},
+		20
+	);
 
 	// Load settings API (network + site with overrides).
 	require_once wp_support_PATH . 'includes/class-wps-settings.php';
@@ -655,12 +707,12 @@ function wp_support_init(): void {
 		static function (): void {
 			check_ajax_referer( 'wp_ajax' );
 			if ( ! current_user_can( 'manage_options' ) ) {
-				wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
+				\WPS\CoreSupport\wps_ajax_permission_denied();
 			}
-			$name   = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
-			$reason = isset( $_POST['reason'] ) ? sanitize_text_field( wp_unslash( $_POST['reason'] ) ) : '';
+			$name   = \WPS\CoreSupport\wps_get_post_text( 'name' );
+			$reason = \WPS\CoreSupport\wps_get_post_text( 'reason' );
 			$token  = WPS_Hidden_Diagnostic_API::create_token( $name, $reason );
-			wp_send_json_success( array( 'token' => $token ) );
+			\WPS\CoreSupport\wps_ajax_success( array( 'token' => $token ) );
 		}
 	);
 
@@ -669,11 +721,11 @@ function wp_support_init(): void {
 		static function (): void {
 			check_ajax_referer( 'wp_ajax' );
 			if ( ! current_user_can( 'manage_options' ) ) {
-				wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
+				\WPS\CoreSupport\wps_ajax_permission_denied();
 			}
-			$token  = isset( $_POST['token'] ) ? sanitize_text_field( wp_unslash( $_POST['token'] ) ) : '';
+			$token  = \WPS\CoreSupport\wps_get_post_text( 'token' );
 			$result = WPS_Hidden_Diagnostic_API::revoke_token( $token );
-			wp_send_json_success( array( 'revoked' => $result ) );
+			\WPS\CoreSupport\wps_ajax_success( array( 'revoked' => $result ) );
 		}
 	);
 
@@ -795,7 +847,8 @@ function wp_support_init(): void {
 	require_once wp_support_PATH . 'includes/class-wps-tab-navigation.php';
 	require_once wp_support_PATH . 'includes/class-wps-dashboard-widgets.php';
 	require_once wp_support_PATH . 'includes/class-wps-dashboard-layout.php';
-	require_once wp_support_PATH . 'includes/class-settings-ajax.php';
+	require_once wp_support_PATH . 'includes/admin/class-wps-settings-ajax.php';
+	\WPS\CoreSupport\Admin\WPS_Settings_Ajax::init();
 	require_once wp_support_PATH . 'includes/wps-capability-helpers.php';
 
 	// Load extracted admin assets, screens, dashboard view, and AJAX handlers.
@@ -1601,23 +1654,21 @@ function wp_support_render_settings_page(): void {
  * @return void
  */
 function wps_ajax_save_metabox_state(): void {
-	if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'WPS_metabox_state' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Nonce verification failed.', 'plugin-wp-support-thisismyurl' ) ) );
-	}
+	check_ajax_referer( 'WPS_metabox_state', 'nonce' );
 
 	if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
+		\WPS\CoreSupport\wps_ajax_permission_denied();
 	}
 
-	$state = isset( $_POST['state'] ) ? sanitize_text_field( wp_unslash( $_POST['state'] ) ) : '';
+	$state = \WPS\CoreSupport\wps_get_post_text( 'state' );
 
 	if ( empty( $state ) ) {
-		wp_send_json_error( array( 'message' => __( 'Invalid state data.', 'plugin-wp-support-thisismyurl' ) ) );
+		\WPS\CoreSupport\wps_ajax_invalid_request( 'state' );
 	}
 
 	update_user_meta( get_current_user_id(), 'WPS_metabox_state', $state );
 
-	wp_send_json_success();
+	\WPS\CoreSupport\wps_ajax_success();
 }
 
 /**
@@ -1629,14 +1680,14 @@ function wps_ajax_save_postbox_order(): void {
 	check_ajax_referer( 'WPS_postbox_state', 'nonce' );
 
 	if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
-		wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
+		\WPS\CoreSupport\wps_ajax_permission_denied();
 	}
 
-	$page  = isset( $_POST['page'] ) ? sanitize_key( $_POST['page'] ) : '';
+	$page  = \WPS\CoreSupport\wps_get_post_key( 'page' );
 	$order = isset( $_POST['order'] ) ? wp_unslash( $_POST['order'] ) : array();
 
 	if ( empty( $page ) ) {
-		wp_send_json_error( array( 'message' => 'Invalid page parameter' ) );
+		\WPS\CoreSupport\wps_ajax_invalid_request( 'page' );
 	}
 
 	// Ensure order is an associative array
@@ -1660,7 +1711,7 @@ function wps_ajax_save_postbox_order(): void {
 
 
 
-	wp_send_json_success(
+	\WPS\CoreSupport\wps_ajax_success(
 		array(
 			'message' => 'Order saved',
 			'page'    => $page,

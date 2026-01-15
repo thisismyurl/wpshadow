@@ -454,13 +454,13 @@ class WPS_Troubleshooting_Wizard {
 		check_ajax_referer( 'wps_troubleshoot_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
+			\WPS\CoreSupport\wps_ajax_permission_denied();
 		}
 
-		$issue = sanitize_text_field( wp_unslash( $_POST['issue'] ?? '' ) );
+		$issue = \WPS\CoreSupport\wps_get_post_text( 'issue' );
 
 		if ( empty( $issue ) || ! isset( self::$issue_categories[ $issue ] ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid issue type.', 'plugin-wp-support-thisismyurl' ) ) );
+			\WPS\CoreSupport\wps_ajax_invalid_request( 'issue' );
 		}
 
 		$session = array(
@@ -489,21 +489,21 @@ class WPS_Troubleshooting_Wizard {
 		check_ajax_referer( 'wps_troubleshoot_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
+			\WPS\CoreSupport\wps_ajax_permission_denied();
 		}
 
 		$user_id = get_current_user_id();
 		$session = get_transient( self::SESSION_KEY . '_' . $user_id );
 
 		if ( empty( $session ) ) {
-			wp_send_json_error( array( 'message' => __( 'No active session found.', 'plugin-wp-support-thisismyurl' ) ) );
+			\WPS\CoreSupport\wps_ajax_error( __( 'No active session found.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		$issue    = $session['issue'];
 		$category = self::$issue_categories[ $issue ] ?? array();
 
 		if ( empty( $category ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid issue category.', 'plugin-wp-support-thisismyurl' ) ) );
+			\WPS\CoreSupport\wps_ajax_error( __( 'Invalid issue category.', 'plugin-wp-support-thisismyurl' ) );
 		}
 
 		// Perform analysis based on category checks.
@@ -698,10 +698,8 @@ class WPS_Troubleshooting_Wizard {
 			'user_id'   => get_current_user_id(),
 		);
 
-		// Keep last 50 sessions.
-		if ( count( $history ) > 50 ) {
-			array_shift( $history );
-		}
+		// Keep last 50 sessions using helper.
+		$history = \WPS\CoreSupport\wps_limit_array_size( $history, 50 );
 
 		update_option( self::HISTORY_KEY, $history );
 	}

@@ -4,7 +4,9 @@
  *
  * Manages GitHub personal access token configuration for private repository updates.
  *
- * @package wp_support_SUPPORT
+ * @package    WP_Support
+ * @subpackage Core
+ * @since      1.2601.73002
  */
 
 declare(strict_types=1);
@@ -16,11 +18,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Handle GitHub token settings submission
+ * WPS_GitHub_Settings Class
  *
- * @return void
+ * Manages GitHub personal access token configuration and settings UI.
  */
-function wp_support_handle_github_token_submission(): void {
+class WPS_GitHub_Settings {
+
+	/**
+	 * Initialize GitHub settings.
+	 *
+	 * @return void
+	 */
+	public static function init(): void {
+		add_action( 'admin_init', array( __CLASS__, 'handle_token_submission' ) );
+	}
+
+	/**
+	 * Handle GitHub token settings submission
+	 *
+	 * @return void
+	 */
+	public static function handle_token_submission(): void {
 	// Only process on settings page.
 	if ( ! isset( $_GET['page'] ) || 'wp-support' !== $_GET['page'] ) {
 		return;
@@ -72,18 +90,15 @@ function wp_support_handle_github_token_submission(): void {
 	}
 }
 
-/**
- * Render GitHub Updates settings panel
- *
- * @return void
- */
-function wp_support_render_github_updates(): void {
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
-	}
-
-	// Handle token submission.
-	wp_support_handle_github_token_submission();
+	/**
+	 * Render GitHub Updates settings panel
+	 *
+	 * @return void
+	 */
+	public static function render_settings_page(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
+		}
 
 	$token_set = ! empty( get_option( 'wps_github_token' ) );
 	$saved     = isset( $_GET['WPS_github_saved'] );
@@ -207,4 +222,5 @@ function wp_support_render_github_updates(): void {
 		</div>
 	</div>
 	<?php
+	}
 }
