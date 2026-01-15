@@ -1,13 +1,13 @@
 {
-	"name": "thisismyurl/plugin-wp-support-thisismyurl",
-	"description": "The foundational plugin for all thisismyurl plugin-* repositories. Provides the backbone architecture for hub and spoke plugins.",
+	"name": "wpshadow/plugin-wpshadow",
+	"description": "The foundational plugin for all wpshadow plugin-* repositories. Provides the backbone architecture for hub and spoke plugins.",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",
 	"authors": [
 		{
 			"name": "Christopher Ross",
-			"email": "info@thisismyurl.com",
-			"homepage": "https://thisismyurl.com"
+			"email": "info@wpshadow.com",
+			"homepage": "https://wpshadow.com"
 		}
 	],
 	"require": {
@@ -21,7 +21,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"WPS\\CoreSupport\\": "includes/"
+			"WPShadow\\": "includes/"
 		}
 	},
 	"config": {

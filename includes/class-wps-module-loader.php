@@ -36,13 +36,13 @@ class Module_Loader {
 	 */
 	public static function init() {
 		// Skip module loading if modules directory doesn't exist (standalone core mode).
-		$modules_dir = wp_support_PATH . 'modules/';
+		$modules_dir = WPSHADOW_PATH . 'modules/';
 		if ( ! is_dir( $modules_dir ) ) {
 			// No modules directory - running in standalone core mode.
 			return;
 		}
 
-		// Load modules immediately since this is called during wp_support_init() which is already on plugins_loaded
+		// Load modules immediately since this is called during wpshadow_init() which is already on plugins_loaded
 		self::load_modules();
 
 		// Then register activation hook for later
@@ -56,7 +56,7 @@ class Module_Loader {
 	 */
 	public static function load_modules() {
 		// Silently return if modules directory doesn't exist (standalone core mode).
-		if ( ! is_dir( wp_support_PATH . 'modules/' ) ) {
+		if ( ! is_dir( WPSHADOW_PATH . 'modules/' ) ) {
 			return;
 		}
 
@@ -72,7 +72,7 @@ class Module_Loader {
 		/**
 		 * Action fired after all modules are loaded
 		 */
-		do_action( 'WPS_modules_loaded', self::$modules );
+		do_action( 'wpshadow_modules_loaded', self::$modules );
 	}
 
 	/**
@@ -83,7 +83,7 @@ class Module_Loader {
 	 */
 	private static function load_module_type( $type ) {
 
-		$modules_dir = wp_support_PATH . "modules/{$type}/";
+		$modules_dir = WPSHADOW_PATH . "modules/{$type}/";
 		if ( ! is_dir( $modules_dir ) ) {
 			return;
 		}
@@ -124,10 +124,10 @@ class Module_Loader {
 		}
 
 		// Check if module is enabled before loading.
-		// Derive slug from directory name using the naming convention: {dirname}-support-thisismyurl
+		// Derive slug from directory name using the naming convention: {dirname}-wpshadow
 		// Bundled modules are enabled by default, but can be explicitly disabled.
-		$module_slug = $module_name . '-support-thisismyurl';
-		if ( ! \WPS\CoreSupport\WPS_Module_Registry::is_enabled( $module_slug ) ) {
+		$module_slug = $module_name . '-wpshadow';
+		if ( ! \WPS\CoreSupport\WPSHADOW_Module_Registry::is_enabled( $module_slug ) ) {
 
 			return;
 		}

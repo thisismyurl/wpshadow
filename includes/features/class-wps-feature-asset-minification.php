@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * WPS_Feature_Asset_Minification
+ * WPSHADOW_Feature_Asset_Minification
  *
  * Optimize CSS and JavaScript delivery for better performance.
  */
-final class WPS_Feature_Asset_Minification extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Asset_Minification extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -27,14 +27,14 @@ final class WPS_Feature_Asset_Minification extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'asset-minification',
-				'name'               => __( 'Asset Minification & Compression', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Minify CSS/JS and enable compression for faster asset delivery', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Asset Minification & Compression', 'plugin-wpshadow' ),
+				'description'        => __( 'Minify CSS/JS and enable compression for faster asset delivery', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Performance Optimization', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Optimize images and page load performance', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Performance Optimization', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Optimize images and page load performance', 'plugin-wpshadow' ),
 			)
 		);
 	}
@@ -104,12 +104,12 @@ final class WPS_Feature_Asset_Minification extends WPS_Abstract_Feature {
 		}
 
 		// Get configured async/defer scripts from options.
-		$async_handles = (array) $this->get_setting( 'wps_async_script_handles', array( ) );
-		$defer_handles = (array) $this->get_setting( 'wps_defer_script_handles', array( ) );
+		$async_handles = (array) $this->get_setting( 'wpshadow_async_script_handles', array( ) );
+		$defer_handles = (array) $this->get_setting( 'wpshadow_defer_script_handles', array( ) );
 
 		// Allow filtering.
-		$async_handles = apply_filters( 'wps_async_script_handles', $async_handles );
-		$defer_handles = apply_filters( 'wps_defer_script_handles', $defer_handles );
+		$async_handles = apply_filters( 'wpshadow_async_script_handles', $async_handles );
+		$defer_handles = apply_filters( 'wpshadow_defer_script_handles', $defer_handles );
 
 		// Don't add defer/async to scripts that shouldn't have it (like jQuery).
 		$skip_optimization = array( 'jquery', 'jquery-core', 'jquery-migrate' );
@@ -138,7 +138,7 @@ final class WPS_Feature_Asset_Minification extends WPS_Abstract_Feature {
 	 */
 	public function minify_css( string $css ): string {
 		// Skip if minification is disabled in options.
-		if ( ! get_option( 'wps_minify_inline_css', true ) ) {
+		if ( ! get_option( 'wpshadow_minify_inline_css', true ) ) {
 			return $css;
 		}
 

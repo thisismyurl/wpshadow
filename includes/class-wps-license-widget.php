@@ -2,7 +2,7 @@
 /**
  * License Status Widget
  *
- * Persistent widget displayed on all WP Support dashboard pages.
+ * Persistent widget displayed on all WPShadow dashboard pages.
  * Cannot be dismissed, moved, or reordered until plugin is licensed.
  *
  * @package    WP_Support
@@ -21,22 +21,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * License Widget Class
  *
- * Displays persistent license status widget on all TIMU plugin dashboards.
+ * Displays persistent license status widget on all WPShadow plugin dashboards.
  */
-class WPS_License_Widget {
+class WPSHADOW_License_Widget {
 
 	/**
 	 * Widget ID
 	 *
 	 * @var string
 	 */
-	private const WIDGET_ID = 'wps_license_widget';
+	private const WIDGET_ID = 'wpshadow_license_widget';
 
 	/**
 	 * Initialize the license widget
 	 */
 	public static function init(): void {
-		// Add widget to all WP Support pages (use admin_head for custom pages).
+		// Add widget to all WPShadow pages (use admin_head for custom pages).
 		add_action( 'admin_head', array( __CLASS__, 'maybe_add_to_dashboard' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_widget_scripts' ) );
 		add_action( 'admin_footer', array( __CLASS__, 'force_widget_position' ) );
@@ -47,11 +47,11 @@ class WPS_License_Widget {
 	}
 
 	/**
-	 * Check if current page is a TIMU plugin page
+	 * Check if current page is a WPShadow plugin page
 	 *
 	 * @return bool
 	 */
-	private static function is_timu_page(): bool {
+	private static function is_wpshadow_page(): bool {
 		if ( ! isset( $_GET['page'] ) ) {
 			return false;
 		}
@@ -59,17 +59,17 @@ class WPS_License_Widget {
 		$page = sanitize_text_field( wp_unslash( $_GET['page'] ) );
 
 		// Core and hub pages.
-		$timu_pages = array(
+		$wpshadow_pages = array(
 			'wp-support',
 			'image-hub',
 			'video-hub',
 		);
 
 		// Check for spoke pages (format-specific plugins).
-		$spoke_patterns = array( '-spoke', '-support-thisismyurl' );
+		$spoke_patterns = array( '-spoke', '-wpshadow' );
 
-		foreach ( $timu_pages as $timu_page ) {
-			if ( $page === $timu_page ) {
+		foreach ( $wpshadow_pages as $wpshadow_page ) {
+			if ( $page === $wpshadow_page ) {
 				return true;
 			}
 		}
@@ -84,10 +84,10 @@ class WPS_License_Widget {
 	}
 
 	/**
-	 * Add widget to dashboard (only on TIMU pages)
+	 * Add widget to dashboard (only on WPShadow pages)
 	 */
 	public static function maybe_add_to_dashboard(): void {
-		if ( ! self::is_timu_page() ) {
+		if ( ! self::is_wpshadow_page() ) {
 			return;
 		}
 
@@ -99,7 +99,7 @@ class WPS_License_Widget {
 		// Add widget with core priority to appear first.
 		add_meta_box(
 			self::WIDGET_ID,
-			__( 'License Status', 'plugin-wp-support-thisismyurl' ),
+			__( 'License Status', 'plugin-wpshadow' ),
 			array( __CLASS__, 'render_widget' ),
 			$screen->id,
 			'license', // Use 'license' for full-width placement, 'side' as fallback
@@ -109,7 +109,7 @@ class WPS_License_Widget {
 		// Also add to side if license container doesn't exist (backwards compat).
 		add_meta_box(
 			self::WIDGET_ID . '_side',
-			__( 'License Status', 'plugin-wp-support-thisismyurl' ),
+			__( 'License Status', 'plugin-wpshadow' ),
 			array( __CLASS__, 'render_widget' ),
 			$screen->id,
 			'side',
@@ -121,9 +121,9 @@ class WPS_License_Widget {
 	 * Render the license widget
 	 */
 	public static function render_widget(): void {
-		$license_key    = get_option( 'wps_license_key', '' );
+		$license_key    = get_option( 'wpshadow_license_key', '' );
 		$has_license    = ! empty( $license_key );
-		$update_data    = get_transient( 'wps_update_data' );
+		$update_data    = get_transient( 'wpshadow_update_data' );
 		$license_valid  = false;
 		$license_expire = '';
 
@@ -137,22 +137,22 @@ class WPS_License_Widget {
 			$status_class = 'licensed';
 			$status_icon  = 'yes-alt';
 			$status_color = '#46b450';
-			$status_text  = __( 'Licensed & Active', 'plugin-wp-support-thisismyurl' );
+			$status_text  = __( 'Licensed & Active', 'plugin-wpshadow' );
 		} elseif ( $has_license && ! $license_valid ) {
 			$status_class = 'invalid';
 			$status_icon  = 'warning';
 			$status_color = '#f0b849';
-			$status_text  = __( 'License Invalid', 'plugin-wp-support-thisismyurl' );
+			$status_text  = __( 'License Invalid', 'plugin-wpshadow' );
 		} else {
 			$status_class = 'unlicensed';
 			$status_icon  = 'lock';
 			$status_color = '#dc3232';
-			$status_text  = __( 'Unlicensed', 'plugin-wp-support-thisismyurl' );
+			$status_text  = __( 'Unlicensed', 'plugin-wpshadow' );
 		}
 
 		// Display banner above license widget if it exists
-		if ( class_exists( '\\WPS\\CoreSupport\\Admin\\WPS_Dashboard_Assets' ) ) {
-			echo \WPS\CoreSupport\Admin\WPS_Dashboard_Assets::get_banner_html();
+		if ( class_exists( '\\WPShadow\\Admin\\WPSHADOW_Dashboard_Assets' ) ) {
+			echo \WPS\CoreSupport\Admin\WPSHADOW_Dashboard_Assets::get_banner_html();
 		}
 		?>
 		<div class="wps-license-widget wps-license-<?php echo esc_attr( $status_class ); ?>">
@@ -174,14 +174,14 @@ class WPS_License_Widget {
 						echo '<span style="color: #f0b849; font-weight: 600;">';
 						printf(
 							/* translators: %d: days until expiration */
-							esc_html( _n( 'Expires in %d day', 'Expires in %d days', $days_left, 'plugin-wp-support-thisismyurl' ) ),
+							esc_html( _n( 'Expires in %d day', 'Expires in %d days', $days_left, 'plugin-wpshadow' ) ),
 							$days_left
 						);
 						echo '</span>';
 					} else {
 						printf(
 							/* translators: %s: expiration date */
-							esc_html__( 'Expires: %s', 'plugin-wp-support-thisismyurl' ),
+							esc_html__( 'Expires: %s', 'plugin-wpshadow' ),
 							esc_html( date_i18n( get_option( 'date_format' ), $expire_date ) )
 						);
 					}
@@ -193,28 +193,28 @@ class WPS_License_Widget {
 				<div class="wps-license-message" style="padding: 10px 15px; background: #f8f9fa; border-top: 1px solid #ddd;">
 					<p style="margin: 0 0 10px; font-size: 13px;">
 						<?php if ( ! $has_license ) : ?>
-							<?php esc_html_e( 'Register your site for free to receive automatic updates and unlock premium features.', 'plugin-wp-support-thisismyurl' ); ?>
+							<?php esc_html_e( 'Register your site for free to receive automatic updates and unlock premium features.', 'plugin-wpshadow' ); ?>
 						<?php else : ?>
-							<?php esc_html_e( 'Your license key is invalid or expired. Please check your key or contact support.', 'plugin-wp-support-thisismyurl' ); ?>
+							<?php esc_html_e( 'Your license key is invalid or expired. Please check your key or contact support.', 'plugin-wpshadow' ); ?>
 						<?php endif; ?>
 					</p>
 					<?php if ( ! $has_license ) : ?>
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=register' ) ); ?>" 
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=register' ) ); ?>" 
 							class="button button-primary button-large" 
 							style="width: 100%; text-align: center; margin-bottom: 5px;">
-							<?php esc_html_e( 'Register Your Site (Free)', 'plugin-wp-support-thisismyurl' ); ?>
+							<?php esc_html_e( 'Register Your Site (Free)', 'plugin-wpshadow' ); ?>
 						</a>
 					<?php endif; ?>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard_settings' ) ); ?>" 
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=dashboard_settings' ) ); ?>" 
 						class="button <?php echo ! $has_license ? 'button-secondary' : 'button-primary'; ?> button-large" 
 						style="width: 100%; text-align: center; margin-bottom: 5px;">
-						<?php esc_html_e( 'Enter License Key', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'Enter License Key', 'plugin-wpshadow' ); ?>
 					</a>
-					<a href="https://thisismyurl.com/wp-support/#pricing" 
+					<a href="https://wpshadow.com/wp-support/#pricing" 
 						target="_blank" 
 						class="button button-secondary button-large" 
 						style="width: 100%; text-align: center;">
-						<?php esc_html_e( 'Purchase License', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'Purchase License', 'plugin-wpshadow' ); ?>
 					</a>
 				</div>
 			<?php else : ?>
@@ -222,7 +222,7 @@ class WPS_License_Widget {
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&tab=updates' ) ); ?>" 
 						class="button button-secondary" 
 						style="width: 100%;">
-						<?php esc_html_e( 'Manage License', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'Manage License', 'plugin-wpshadow' ); ?>
 					</a>
 				</div>
 			<?php endif; ?>
@@ -249,7 +249,7 @@ class WPS_License_Widget {
 	 * @param string $hook Current admin page hook.
 	 */
 	public static function enqueue_widget_scripts( string $hook ): void {
-		if ( ! self::is_timu_page() ) {
+		if ( ! self::is_wpshadow_page() ) {
 			return;
 		}
 
@@ -311,13 +311,13 @@ class WPS_License_Widget {
 	 * Force widget position at top of side column
 	 */
 	public static function force_widget_position(): void {
-		if ( ! self::is_timu_page() ) {
+		if ( ! self::is_wpshadow_page() ) {
 			return;
 		}
 
-		$license_key   = get_option( 'wps_license_key', '' );
+		$license_key   = get_option( 'wpshadow_license_key', '' );
 		$has_license   = ! empty( $license_key );
-		$update_data   = get_transient( 'wps_update_data' );
+		$update_data   = get_transient( 'wpshadow_update_data' );
 		$license_valid = ( $update_data && is_array( $update_data ) ) ? ( $update_data['license_valid'] ?? false ) : false;
 		$is_licensed   = $has_license && $license_valid;
 
@@ -409,9 +409,9 @@ class WPS_License_Widget {
 			return $can_dismiss;
 		}
 
-		$license_key   = get_option( 'wps_license_key', '' );
+		$license_key   = get_option( 'wpshadow_license_key', '' );
 		$has_license   = ! empty( $license_key );
-		$update_data   = get_transient( 'wps_update_data' );
+		$update_data   = get_transient( 'wpshadow_update_data' );
 		$license_valid = ( $update_data && is_array( $update_data ) ) ? ( $update_data['license_valid'] ?? false ) : false;
 
 		// Only allow dismissal if licensed.
@@ -424,9 +424,9 @@ class WPS_License_Widget {
 	 * @return bool
 	 */
 	public static function is_licensed(): bool {
-		$license_key   = get_option( 'wps_license_key', '' );
+		$license_key   = get_option( 'wpshadow_license_key', '' );
 		$has_license   = ! empty( $license_key );
-		$update_data   = get_transient( 'wps_update_data' );
+		$update_data   = get_transient( 'wpshadow_update_data' );
 		$license_valid = ( $update_data && is_array( $update_data ) ) ? ( $update_data['license_valid'] ?? false ) : false;
 
 		return $has_license && $license_valid;
@@ -436,7 +436,7 @@ class WPS_License_Widget {
 	 * Clear screen layout cache to force widget reordering
 	 */
 	public static function clear_screen_layout_cache(): void {
-		if ( ! self::is_timu_page() ) {
+		if ( ! self::is_wpshadow_page() ) {
 			return;
 		}
 
@@ -454,14 +454,14 @@ class WPS_License_Widget {
 			delete_user_meta( $user_id, 'metaboxhidden_' . $screen->id );
 		}
 
-		// Also clear for common TIMU screen IDs.
-		$timu_screens = array(
+		// Also clear for common WPShadow screen IDs.
+		$wpshadow_screens = array(
 			'toplevel_page_wp-support',
 			'wp-support_page_image-hub',
 			'wp-support_page_video-hub',
 		);
 
-		foreach ( $timu_screens as $screen_id ) {
+		foreach ( $wpshadow_screens as $screen_id ) {
 			delete_user_meta( $user_id, 'meta-box-order_' . $screen_id );
 			delete_user_meta( $user_id, 'screen_layout_' . $screen_id );
 			delete_user_meta( $user_id, 'closedpostboxes_' . $screen_id );

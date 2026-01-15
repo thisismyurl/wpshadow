@@ -4,7 +4,7 @@
  *
  * Manages registration and discovery of Hub and Spoke plugins.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  * @since 1.2601.71800
  */
 
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles plugin registration, discovery, and status management.
  */
-class WPS_Module_Registry {
+class WPSHADOW_Module_Registry {
 
 	/**
 	 * Bundled catalog cache.
@@ -31,7 +31,7 @@ class WPS_Module_Registry {
 	 */
 	private static array $catalog = array();
 
-	private const OPTION_KEY = 'WPS_registered_modules';
+	private const OPTION_KEY = 'wpshadow_registered_modules';
 
 	/**
 	 * Registered modules storage.
@@ -55,18 +55,18 @@ class WPS_Module_Registry {
 		add_action( 'plugins_loaded', array( __CLASS__, 'load_catalog' ), 4 );
 
 		// Capture module registrations via action hook.
-		add_action( 'WPS_register_module', array( __CLASS__, 'register_from_action' ), 10, 1 );
+		add_action( 'wpshadow_register_module', array( __CLASS__, 'register_from_action' ), 10, 1 );
 
 		// Schedule periodic refresh aligned with WordPress plugin update checks (twice daily).
 		add_action( 'init', array( __CLASS__, 'schedule_refresh' ) );
-		add_action( 'WPS_refresh_modules', array( __CLASS__, 'refresh_modules' ) );
+		add_action( 'wpshadow_refresh_modules', array( __CLASS__, 'refresh_modules' ) );
 
 		// Clear cache when plugins are activated/deactivated to ensure fresh enabled state.
 		add_action( 'activated_plugin', array( __CLASS__, 'clear_cache' ) );
 		add_action( 'deactivated_plugin', array( __CLASS__, 'clear_cache' ) );
 
 		// Provide hooks for modules to announce themselves.
-		do_action( 'WPS_register_modules' );
+		do_action( 'wpshadow_register_modules' );
 	}
 
 	/**
@@ -76,11 +76,11 @@ class WPS_Module_Registry {
 	 * @return void
 	 */
 	public static function schedule_refresh(): void {
-		if ( wp_next_scheduled( 'WPS_refresh_modules' ) ) {
+		if ( wp_next_scheduled( 'wpshadow_refresh_modules' ) ) {
 			return;
 		}
 
-		wp_schedule_event( time() + HOUR_IN_SECONDS, 'twicedaily', 'WPS_refresh_modules' );
+		wp_schedule_event( time() + HOUR_IN_SECONDS, 'twicedaily', 'wpshadow_refresh_modules' );
 	}
 
 	/**
@@ -94,7 +94,7 @@ class WPS_Module_Registry {
 		self::load_catalog();
 
 		$update_fn = is_multisite() ? 'update_site_option' : 'update_option';
-		call_user_func( $update_fn, 'WPS_modules_last_refresh', time() );
+		call_user_func( $update_fn, 'wpshadow_modules_last_refresh', time() );
 	}
 
 	/**
@@ -103,28 +103,28 @@ class WPS_Module_Registry {
 	 * @return array<string,array<string,mixed>>
 	 */
 	public static function get_schedule_snapshot(): array {
-		$next_refresh = wp_next_scheduled( 'WPS_refresh_modules' ) ?: 0;
-		$next_vault   = wp_next_scheduled( 'WPS_vault_queue_runner' ) ?: 0;
+		$next_refresh = wp_next_scheduled( 'wpshadow_refresh_modules' ) ?: 0;
+		$next_vault   = wp_next_scheduled( 'wpshadow_vault_queue_runner' ) ?: 0;
 		$get_fn       = is_multisite() ? 'get_site_option' : 'get_option';
-		$last_refresh = (int) call_user_func( $get_fn, 'WPS_modules_last_refresh', 0 );
+		$last_refresh = (int) call_user_func( $get_fn, 'wpshadow_modules_last_refresh', 0 );
 
 		$queue_state = array();
-		if ( class_exists( '\WPS\CoreSupport\WPS_Vault' ) && method_exists( '\WPS\CoreSupport\WPS_Vault', 'get_queue_state' ) ) {
-			$queue_state = \WPS\CoreSupport\WPS_Vault::get_queue_state();
+		if ( class_exists( '\WPS\CoreSupport\WPSHADOW_Vault' ) && method_exists( '\WPS\CoreSupport\WPSHADOW_Vault', 'get_queue_state' ) ) {
+			$queue_state = \WPS\CoreSupport\WPSHADOW_Vault::get_queue_state();
 		}
 		$queue_last   = isset( $queue_state['last_run'] ) ? (int) $queue_state['last_run'] : 0;
 		$queue_status = isset( $queue_state['status'] ) ? (string) $queue_state['status'] : 'idle';
 
 		return array(
 			'catalog_refresh' => array(
-				'label'    => __( 'Catalog refresh', 'plugin-wp-support-thisismyurl' ),
-				'hook'     => 'WPS_refresh_modules',
+				'label'    => __( 'Catalog refresh', 'plugin-wpshadow' ),
+				'hook'     => 'wpshadow_refresh_modules',
 				'next_run' => $next_refresh,
 				'last_run' => $last_refresh,
 			),
 			'vault_queue'     => array(
-				'label'       => __( 'Vault queue runner', 'plugin-wp-support-thisismyurl' ),
-				'hook'        => 'WPS_vault_queue_runner',
+				'label'       => __( 'Vault queue runner', 'plugin-wpshadow' ),
+				'hook'        => 'wpshadow_vault_queue_runner',
 				'next_run'    => $next_vault,
 				'last_run'    => $queue_last,
 				'queue_state' => $queue_status,
@@ -156,8 +156,8 @@ class WPS_Module_Registry {
 				'type'         => 'spoke',
 				'category'     => 'general',
 				'description'  => '',
-				'author'       => '@thisismyurl',
-				'author_uri'   => 'https://thisismyurl.com',
+				'author'       => '@wpshadow',
+				'author_uri'   => 'https://wpshadow.com',
 				'menu_parent'  => 'wp-support',
 				'icon'         => 'dashicons-admin-plugins',
 				'enabled'      => true,
@@ -245,7 +245,7 @@ class WPS_Module_Registry {
 		$persisted = self::$modules;
 
 		// Get cached modules.
-		$cache_key = is_multisite() ? 'WPS_modules_network' : 'WPS_modules';
+		$cache_key = is_multisite() ? 'wpshadow_modules_network' : 'wpshadow_modules';
 		$cached    = is_multisite()
 			? get_site_transient( $cache_key )
 			: get_transient( $cache_key );
@@ -281,8 +281,8 @@ class WPS_Module_Registry {
 			);
 
 			// Check if it's a WPS Suite plugin (basic heuristic).
-			if ( strpos( $plugin_data['TextDomain'], 'thisismyurl' ) !== false ||
-				strpos( $plugin_data['Name'], 'thisismyurl' ) !== false ) {
+			if ( strpos( $plugin_data['TextDomain'], 'wpshadow' ) !== false ||
+				strpos( $plugin_data['Name'], 'wpshadow' ) !== false ) {
 
 				$slug = dirname( $plugin_file );
 				if ( $slug === '.' ) {
@@ -326,7 +326,7 @@ class WPS_Module_Registry {
 	 * @return array Catalog data.
 	 */
 	public static function load_catalog(): array {
-		$cache_key = is_multisite() ? 'WPS_catalog_network' : 'WPS_catalog';
+		$cache_key = is_multisite() ? 'wpshadow_catalog_network' : 'wpshadow_catalog';
 		$cached    = is_multisite()
 			? get_site_transient( $cache_key )
 			: get_transient( $cache_key );
@@ -337,8 +337,8 @@ class WPS_Module_Registry {
 		}
 
 		$catalog    = self::get_bundled_catalog();
-		$remote_url = apply_filters( 'WPS_catalog_remote_url', '' );
-		$cache_ttl  = (int) apply_filters( 'WPS_catalog_cache_ttl', 5 * MINUTE_IN_SECONDS );
+		$remote_url = apply_filters( 'wpshadow_catalog_remote_url', '' );
+		$cache_ttl  = (int) apply_filters( 'wpshadow_catalog_cache_ttl', 5 * MINUTE_IN_SECONDS );
 
 		if ( ! empty( $remote_url ) && self::is_allowed_catalog_url( $remote_url ) ) {
 			$remote_catalog = self::fetch_remote_catalog( $remote_url );
@@ -497,7 +497,7 @@ class WPS_Module_Registry {
 	 */
 	private static function get_bundled_modules_from_filesystem(): array {
 		$bundled      = array();
-		$modules_path = defined( 'wp_support_PATH' ) ? wp_support_PATH . 'modules/' : '';
+		$modules_path = defined( 'WPSHADOW_PATH' ) ? WPSHADOW_PATH . 'modules/' : '';
 
 		if ( empty( $modules_path ) || ! is_dir( $modules_path ) ) {
 			return $bundled;
@@ -532,18 +532,18 @@ class WPS_Module_Registry {
 				$version       = '1.0.0';
 
 				// Try to extract version constant.
-				if ( preg_match( "/define\s*\(\s*['\"]WPS_\w+_VERSION['\"]\s*,\s*['\"]([\d.]+)['\"]\s*\)/i", $file_contents, $matches ) ) {
+				if ( preg_match( "/define\s*\(\s*['\"]WPSHADOW_\w+_VERSION['\"]\s*,\s*['\"]([\d.]+)['\"]\s*\)/i", $file_contents, $matches ) ) {
 					$version = $matches[1];
 				}
 
-				// Map directory name to expected plugin slug (e.g., "media" => "media-support-thisismyurl").
+				// Map directory name to expected plugin slug (e.g., "media" => "media-wpshadow").
 				$slug_map = array(
-					'media' => 'media-support-thisismyurl',
-					'vault' => 'vault-support-thisismyurl',
-					'image' => 'image-support-thisismyurl',
+					'media' => 'media-wpshadow',
+					'vault' => 'vault-wpshadow',
+					'image' => 'image-wpshadow',
 				);
 
-				$slug = $slug_map[ $module_name ] ?? ( $module_name . '-support-thisismyurl' );
+				$slug = $slug_map[ $module_name ] ?? ( $module_name . '-wpshadow' );
 
 				$bundled[ $slug ] = array(
 					'slug'    => $slug,
@@ -590,8 +590,8 @@ class WPS_Module_Registry {
 		$settings = self::get_module_settings( $slug );
 		$enabled  = (bool) ( $settings['enabled'] ?? true );
 
-		// Allow feature toggle overrides (e.g., WPS_Module_Toggles) to disable modules without deactivation.
-		$enabled = (bool) apply_filters( 'WPS_module_enabled', $enabled, $slug );
+		// Allow feature toggle overrides (e.g., WPSHADOW_Module_Toggles) to disable modules without deactivation.
+		$enabled = (bool) apply_filters( 'wpshadow_module_enabled', $enabled, $slug );
 
 		return $enabled;
 	}
@@ -603,7 +603,7 @@ class WPS_Module_Registry {
 	 * @return array Module settings.
 	 */
 	public static function get_module_settings( string $slug ): array {
-		$option_key = 'WPS_module_' . $slug;
+		$option_key = 'wpshadow_module_' . $slug;
 
 		if ( is_multisite() ) {
 			$network_settings = get_site_option( $option_key, array() );
@@ -625,10 +625,10 @@ class WPS_Module_Registry {
 	 * @return bool True on success, false on failure.
 	 */
 	public static function update_module_settings( string $slug, array $settings, bool $network = false ): bool {
-		$option_key = 'WPS_module_' . $slug;
+		$option_key = 'wpshadow_module_' . $slug;
 
 		// Clear module cache.
-		$cache_key = is_multisite() ? 'WPS_modules_network' : 'WPS_modules';
+		$cache_key = is_multisite() ? 'wpshadow_modules_network' : 'wpshadow_modules';
 		if ( is_multisite() ) {
 			delete_site_transient( $cache_key );
 		} else {
@@ -649,10 +649,10 @@ class WPS_Module_Registry {
 	 */
 	public static function clear_cache(): void {
 		// Clear module cache.
-		$modules_cache_key = is_multisite() ? 'WPS_modules_network' : 'WPS_modules';
+		$modules_cache_key = is_multisite() ? 'wpshadow_modules_network' : 'wpshadow_modules';
 
 		// Clear catalog cache.
-		$catalog_cache_key = is_multisite() ? 'WPS_catalog_network' : 'WPS_catalog';
+		$catalog_cache_key = is_multisite() ? 'wpshadow_catalog_network' : 'wpshadow_catalog';
 
 		if ( is_multisite() ) {
 			delete_site_transient( $modules_cache_key );
@@ -671,7 +671,7 @@ class WPS_Module_Registry {
 	 * Get bundled catalog from installed plugins and fallback JSON.
 	 *
 	 * Scans the plugins directory for installed plugins matching the pattern
-	 * "*-support-thisismyurl" and builds the catalog from them, with fallback
+	 * "*-wpshadow" and builds the catalog from them, with fallback
 	 * to hardcoded JSON for any missing plugins.
 	 *
 	 * @return array
@@ -679,17 +679,17 @@ class WPS_Module_Registry {
 	private static function get_bundled_catalog(): array {
 		// First, load hardcoded fallback catalog.
 		$fallback_json = '[
-			{"slug":"plugin-wp-support-thisismyurl","type":"core","name":"WP Support","description":"Foundation plugin managing all hub and spoke plugins for the thisismyurl plugin suite.","version":"1.2601.73001","author":"@thisismyurl","uri":"https://github.com/thisismyurl/plugin-wp-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.73001","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/plugin-wp-support-thisismyurl/archive/refs/heads/main.zip"},
-			{"slug":"media-support-thisismyurl","type":"hub","name":"Media","description":"Media Hub providing multi-engine fallback, encryption, and cloud bridge capabilities.","version":"1.0.0","author":"@thisismyurl","uri":"https://github.com/thisismyurl/media-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.73001","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/media-support-thisismyurl/archive/refs/heads/main.zip"},
-			{"slug":"vault-support-thisismyurl","type":"hub","name":"Vault","description":"The Vault - secure original storage with encryption, compression, and broken link guardian.","version":"1.0.0","author":"@thisismyurl","uri":"https://github.com/thisismyurl/vault-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.73001","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/vault-support-thisismyurl/archive/refs/heads/main.zip"},
-			{"slug":"image-support-thisismyurl","type":"spoke","name":"Image","description":"Image Hub orchestrating format spokes with Pixel-Sovereign and Smart Focus-Point.","version":"1.2601.71701","author":"@thisismyurl","uri":"https://github.com/thisismyurl/image-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_hub":"media-support-thisismyurl","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.9.0","basename":"image/module.php","download_url":"https://github.com/thisismyurl/module-images-support-thisismyurl/archive/refs/heads/main.zip"},
-			{"slug":"avif-support-thisismyurl","type":"spoke","name":"AVIF Support","description":"AVIF spoke for high-efficiency images with Vault mapping.","version":"1.0.0","author":"@thisismyurl","uri":"https://github.com/thisismyurl/avif-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/avif-support-thisismyurl/archive/refs/heads/main.zip"},
-			{"slug":"webp-support-thisismyurl","type":"spoke","name":"WebP Support","description":"WebP spoke for modern browser delivery with Broken Link Guardian.","version":"1.0.0","author":"@thisismyurl","uri":"https://github.com/thisismyurl/webp-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/webp-support-thisismyurl/archive/refs/heads/main.zip"},
-			{"slug":"heic-support-thisismyurl","type":"spoke","name":"HEIC Support","description":"HEIC spoke with conversion to web-safe formats.","version":"1.0.0","author":"@thisismyurl","uri":"https://github.com/thisismyurl/heic-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/heic-support-thisismyurl/archive/refs/heads/main.zip"},
-			{"slug":"raw-support-thisismyurl","type":"spoke","name":"RAW Support","description":"RAW spoke for ingesting professional formats into the Vault.","version":"1.0.0","author":"@thisismyurl","uri":"https://github.com/thisismyurl/raw-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/raw-support-thisismyurl/archive/refs/heads/main.zip"},
-			{"slug":"svg-support-thisismyurl","type":"spoke","name":"SVG Support","description":"SVG spoke with sanitization and Vault mapping.","version":"1.0.0","author":"@thisismyurl","uri":"https://github.com/thisismyurl/svg-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/svg-support-thisismyurl/archive/refs/heads/main.zip"},
-			{"slug":"tiff-support-thisismyurl","type":"spoke","name":"TIFF Support","description":"TIFF spoke with archival-grade handling and Vault routing.","version":"1.0.0","author":"@thisismyurl","uri":"https://github.com/thisismyurl/tiff-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/tiff-support-thisismyurl/archive/refs/heads/main.zip"},
-			{"slug":"bmp-support-thisismyurl","type":"spoke","name":"BMP Support","description":"BMP spoke for legacy ingestion with scrubbing.","version":"1.0.0","author":"@thisismyurl","uri":"https://github.com/thisismyurl/bmp-support-thisismyurl","suite_id":"thisismyurl-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/bmp-support-thisismyurl/archive/refs/heads/main.zip"}
+			{"slug":"plugin-wpshadow","type":"core","name":"WPShadow","description":"Foundation plugin managing all hub and spoke plugins for the wpshadow plugin suite.","version":"1.2601.73001","author":"@wpshadow","uri":"https://github.com/thisismyurl/plugin-wpshadow","suite_id":"wpshadow-media-suite-2026","requires_core":"1.2601.73001","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/plugin-wpshadow/archive/refs/heads/main.zip"},
+			{"slug":"media-wpshadow","type":"hub","name":"Media","description":"Media Hub providing multi-engine fallback, encryption, and cloud bridge capabilities.","version":"1.0.0","author":"@wpshadow","uri":"https://github.com/thisismyurl/media-wpshadow","suite_id":"wpshadow-media-suite-2026","requires_core":"1.2601.73001","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/media-wpshadow/archive/refs/heads/main.zip"},
+			{"slug":"vault-wpshadow","type":"hub","name":"Vault","description":"The Vault - secure original storage with encryption, compression, and broken link guardian.","version":"1.0.0","author":"@wpshadow","uri":"https://github.com/thisismyurl/vault-wpshadow","suite_id":"wpshadow-media-suite-2026","requires_core":"1.2601.73001","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/vault-wpshadow/archive/refs/heads/main.zip"},
+			{"slug":"image-wpshadow","type":"spoke","name":"Image","description":"Image Hub orchestrating format spokes with Pixel-Sovereign and Smart Focus-Point.","version":"1.2601.71701","author":"@wpshadow","uri":"https://github.com/thisismyurl/image-wpshadow","suite_id":"wpshadow-media-suite-2026","requires_hub":"media-wpshadow","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.9.0","basename":"image/module.php","download_url":"https://github.com/thisismyurl/module-images-wpshadow/archive/refs/heads/main.zip"},
+			{"slug":"avif-wpshadow","type":"spoke","name":"AVIF Support","description":"AVIF spoke for high-efficiency images with Vault mapping.","version":"1.0.0","author":"@wpshadow","uri":"https://github.com/thisismyurl/avif-wpshadow","suite_id":"wpshadow-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/avif-wpshadow/archive/refs/heads/main.zip"},
+			{"slug":"webp-wpshadow","type":"spoke","name":"WebP Support","description":"WebP spoke for modern browser delivery with Broken Link Guardian.","version":"1.0.0","author":"@wpshadow","uri":"https://github.com/thisismyurl/webp-wpshadow","suite_id":"wpshadow-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/webp-wpshadow/archive/refs/heads/main.zip"},
+			{"slug":"heic-wpshadow","type":"spoke","name":"HEIC Support","description":"HEIC spoke with conversion to web-safe formats.","version":"1.0.0","author":"@wpshadow","uri":"https://github.com/thisismyurl/heic-wpshadow","suite_id":"wpshadow-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/heic-wpshadow/archive/refs/heads/main.zip"},
+			{"slug":"raw-wpshadow","type":"spoke","name":"RAW Support","description":"RAW spoke for ingesting professional formats into the Vault.","version":"1.0.0","author":"@wpshadow","uri":"https://github.com/thisismyurl/raw-wpshadow","suite_id":"wpshadow-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/raw-wpshadow/archive/refs/heads/main.zip"},
+			{"slug":"svg-wpshadow","type":"spoke","name":"SVG Support","description":"SVG spoke with sanitization and Vault mapping.","version":"1.0.0","author":"@wpshadow","uri":"https://github.com/thisismyurl/svg-wpshadow","suite_id":"wpshadow-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/svg-wpshadow/archive/refs/heads/main.zip"},
+			{"slug":"tiff-wpshadow","type":"spoke","name":"TIFF Support","description":"TIFF spoke with archival-grade handling and Vault routing.","version":"1.0.0","author":"@wpshadow","uri":"https://github.com/thisismyurl/tiff-wpshadow","suite_id":"wpshadow-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/tiff-wpshadow/archive/refs/heads/main.zip"},
+			{"slug":"bmp-wpshadow","type":"spoke","name":"BMP Support","description":"BMP spoke for legacy ingestion with scrubbing.","version":"1.0.0","author":"@wpshadow","uri":"https://github.com/thisismyurl/bmp-wpshadow","suite_id":"wpshadow-media-suite-2026","requires_core":"1.2601.71818","requires_php":"8.1.29","requires_wp":"6.4.0","download_url":"https://github.com/thisismyurl/bmp-wpshadow/archive/refs/heads/main.zip"}
 		]';
 
 		$fallback_catalog = json_decode( $fallback_json, true );
@@ -697,7 +697,7 @@ class WPS_Module_Registry {
 			$fallback_catalog = array();
 		}
 
-		// Scan plugins directory for installed *-support-thisismyurl plugins.
+		// Scan plugins directory for installed *-wpshadow plugins.
 		$installed_catalog = self::scan_installed_plugins();
 
 		// Merge installed plugins with fallback catalog.
@@ -715,7 +715,7 @@ class WPS_Module_Registry {
 	}
 
 	/**
-	 * Scan plugins directory for installed *-support-thisismyurl plugins.
+	 * Scan plugins directory for installed *-wpshadow plugins.
 	 *
 	 * @return array Array of plugin data.
 	 */
@@ -733,8 +733,8 @@ class WPS_Module_Registry {
 		}
 
 		foreach ( $dir_items as $item ) {
-			// Only look for directories matching "*-support-thisismyurl" pattern.
-			if ( ! preg_match( '/^[a-z0-9]+-support-thisismyurl$/i', $item ) ) {
+			// Only look for directories matching "*-wpshadow" pattern.
+			if ( ! preg_match( '/^[a-z0-9]+-wpshadow$/i', $item ) ) {
 				continue;
 			}
 
@@ -765,14 +765,14 @@ class WPS_Module_Registry {
 
 			// Validate this is a WPS Suite plugin.
 			if ( empty( $plugin_data['Name'] ) ||
-				( strpos( $plugin_data['TextDomain'], 'thisismyurl' ) === false &&
-					strpos( $plugin_data['Name'], 'thisismyurl' ) === false ) ) {
+				( strpos( $plugin_data['TextDomain'], 'wpshadow' ) === false &&
+					strpos( $plugin_data['Name'], 'wpshadow' ) === false ) ) {
 				continue;
 			}
 
 			// Determine module type based on name pattern.
 			$type = 'spoke'; // Default to spoke.
-			if ( preg_match( '/^(core|image|video|license)-support-thisismyurl$/i', $item ) ) {
+			if ( preg_match( '/^(core|image|video|license)-wpshadow$/i', $item ) ) {
 				$type = 'hub'; // Known hub patterns.
 			}
 
@@ -786,7 +786,7 @@ class WPS_Module_Registry {
 				'author'        => sanitize_text_field( $plugin_data['Author'] ),
 				'author_uri'    => esc_url_raw( $plugin_data['AuthorURI'] ),
 				'uri'           => esc_url_raw( $plugin_data['PluginURI'] ),
-				'suite_id'      => 'thisismyurl-media-suite-2026',
+				'suite_id'      => 'wpshadow-media-suite-2026',
 				'requires_core' => '1.2601.71818',
 				'requires_php'  => '8.1.29',
 				'requires_wp'   => '6.4.0',
@@ -806,13 +806,13 @@ class WPS_Module_Registry {
 	 */
 	private static function fetch_remote_catalog( string $remote_url ): array {
 		$allowed_hosts = apply_filters(
-			'WPS_catalog_allowed_hosts',
-			array( 'thisismyurl.com', 'raw.githubusercontent.com', 'github.com' )
+			'wpshadow_catalog_allowed_hosts',
+			array( 'wpshadow.com', 'raw.githubusercontent.com', 'github.com' )
 		);
 
 		if ( ! self::is_allowed_catalog_url( $remote_url, $allowed_hosts ) ) {
 			do_action(
-				'WPS_catalog_fetch_error',
+				'wpshadow_catalog_fetch_error',
 				array(
 					'url'    => $remote_url,
 					'reason' => 'disallowed_host',
@@ -821,7 +821,7 @@ class WPS_Module_Registry {
 			return array();
 		}
 
-		$timeout  = (int) apply_filters( 'WPS_catalog_timeout', 5 );
+		$timeout  = (int) apply_filters( 'wpshadow_catalog_timeout', 5 );
 		$attempts = 2;
 		$last_err = null;
 
@@ -867,7 +867,7 @@ class WPS_Module_Registry {
 		}
 
 		do_action(
-			'WPS_catalog_fetch_error',
+			'wpshadow_catalog_fetch_error',
 			array(
 				'url'    => $remote_url,
 				'reason' => $last_err ?? 'unknown',

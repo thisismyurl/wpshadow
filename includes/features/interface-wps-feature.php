@@ -4,7 +4,7 @@
  *
  * Defines the contract for feature objects managed by the registry.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
 declare(strict_types=1);
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-interface WPS_Feature_Interface {
+interface WPSHADOW_Feature_Interface {
 	public function get_id(): string;
 
 	public function get_name(): string;

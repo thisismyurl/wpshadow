@@ -6,7 +6,7 @@
  * query counts, memory usage, and load times. Tracks improvements, identifies bottlenecks,
  * and measures optimization impact.
  *
- * @package WPS_CoreSupport
+ * @package WPSHADOW_CoreSupport
  * @since 1.0.0
  */
 
@@ -21,22 +21,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Performance Monitor Class
  */
-class WPS_Performance_Monitor {
+class WPSHADOW_Performance_Monitor {
 
 	/**
 	 * Option key for storing performance history.
 	 */
-	private const HISTORY_OPTION_KEY = 'wps_performance_history';
+	private const HISTORY_OPTION_KEY = 'wpshadow_performance_history';
 
 	/**
 	 * Option key for storing alert thresholds.
 	 */
-	private const THRESHOLDS_OPTION_KEY = 'wps_performance_thresholds';
+	private const THRESHOLDS_OPTION_KEY = 'wpshadow_performance_thresholds';
 
 	/**
 	 * Option key for storing current metrics.
 	 */
-	private const CURRENT_METRICS_KEY = 'wps_performance_current';
+	private const CURRENT_METRICS_KEY = 'wpshadow_performance_current';
 
 	/**
 	 * Scoring thresholds and weights for performance calculations.
@@ -75,14 +75,14 @@ class WPS_Performance_Monitor {
 		add_action( 'admin_menu', array( __CLASS__, 'add_admin_menu' ) );
 
 		// Register AJAX handlers.
-		add_action( 'wp_ajax_wps_performance_export', array( __CLASS__, 'ajax_export_data' ) );
-		add_action( 'wp_ajax_wps_performance_clear_history', array( __CLASS__, 'ajax_clear_history' ) );
+		add_action( 'wp_ajax_WPSHADOW_performance_export', array( __CLASS__, 'ajax_export_data' ) );
+		add_action( 'wp_ajax_WPSHADOW_performance_clear_history', array( __CLASS__, 'ajax_clear_history' ) );
 
 		// Schedule cleanup of old data.
-		if ( ! wp_next_scheduled( 'wps_performance_cleanup' ) ) {
-			wp_schedule_event( time(), 'daily', 'wps_performance_cleanup' );
+		if ( ! wp_next_scheduled( 'wpshadow_performance_cleanup' ) ) {
+			wp_schedule_event( time(), 'daily', 'wpshadow_performance_cleanup' );
 		}
-		add_action( 'wps_performance_cleanup', array( __CLASS__, 'cleanup_old_data' ) );
+		add_action( 'wpshadow_performance_cleanup', array( __CLASS__, 'cleanup_old_data' ) );
 	}
 
 	/**
@@ -464,10 +464,10 @@ class WPS_Performance_Monitor {
 		if ( isset( $metrics['query_count'] ) && $metrics['query_count'] > 50 ) {
 			$recommendations[] = array(
 				'type'        => 'warning',
-				'title'       => __( 'High Query Count', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'High Query Count', 'plugin-wpshadow' ),
 				'description' => sprintf(
 					/* translators: %d: number of queries */
-					__( 'Query count is high (%d queries) - consider object caching or query optimization.', 'plugin-wp-support-thisismyurl' ),
+					__( 'Query count is high (%d queries) - consider object caching or query optimization.', 'plugin-wpshadow' ),
 					$metrics['query_count']
 				),
 			);
@@ -477,10 +477,10 @@ class WPS_Performance_Monitor {
 		if ( $db_stats['expired_transients'] > 100 ) {
 			$recommendations[] = array(
 				'type'        => 'warning',
-				'title'       => __( 'Expired Transients', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Expired Transients', 'plugin-wpshadow' ),
 				'description' => sprintf(
 					/* translators: %d: number of expired transients */
-					__( 'Database has %d expired transients - cleanup recommended.', 'plugin-wp-support-thisismyurl' ),
+					__( 'Database has %d expired transients - cleanup recommended.', 'plugin-wpshadow' ),
 					$db_stats['expired_transients']
 				),
 			);
@@ -491,10 +491,10 @@ class WPS_Performance_Monitor {
 			$memory_limit      = ini_get( 'memory_limit' );
 			$recommendations[] = array(
 				'type'        => 'critical',
-				'title'       => __( 'High Memory Usage', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'High Memory Usage', 'plugin-wpshadow' ),
 				'description' => sprintf(
 					/* translators: 1: current memory usage, 2: memory limit */
-					__( 'Memory usage is high (%1$s MB). Current limit: %2$s. Consider increasing WP_MEMORY_LIMIT.', 'plugin-wp-support-thisismyurl' ),
+					__( 'Memory usage is high (%1$s MB). Current limit: %2$s. Consider increasing WP_MEMORY_LIMIT.', 'plugin-wpshadow' ),
 					$metrics['memory_mb'],
 					$memory_limit
 				),
@@ -505,10 +505,10 @@ class WPS_Performance_Monitor {
 		if ( $db_stats['orphaned_postmeta'] > 0 ) {
 			$recommendations[] = array(
 				'type'        => 'info',
-				'title'       => __( 'Orphaned Data', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Orphaned Data', 'plugin-wpshadow' ),
 				'description' => sprintf(
 					/* translators: %d: number of orphaned postmeta records */
-					__( 'Found %d orphaned postmeta records - database cleanup recommended.', 'plugin-wp-support-thisismyurl' ),
+					__( 'Found %d orphaned postmeta records - database cleanup recommended.', 'plugin-wpshadow' ),
 					$db_stats['orphaned_postmeta']
 				),
 			);
@@ -518,10 +518,10 @@ class WPS_Performance_Monitor {
 		if ( isset( $metrics['load_time'] ) && $metrics['load_time'] > 2 ) {
 			$recommendations[] = array(
 				'type'        => 'warning',
-				'title'       => __( 'Slow Page Load', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Slow Page Load', 'plugin-wpshadow' ),
 				'description' => sprintf(
 					/* translators: %s: load time in seconds */
-					__( 'Page load time is %s seconds - consider enabling caching and optimization features.', 'plugin-wp-support-thisismyurl' ),
+					__( 'Page load time is %s seconds - consider enabling caching and optimization features.', 'plugin-wpshadow' ),
 					$metrics['load_time']
 				),
 			);
@@ -545,7 +545,7 @@ class WPS_Performance_Monitor {
 				'query_count',
 				sprintf(
 					/* translators: 1: current query count, 2: threshold */
-					__( 'Query count (%1$d) exceeds threshold (%2$d)', 'plugin-wp-support-thisismyurl' ),
+					__( 'Query count (%1$d) exceeds threshold (%2$d)', 'plugin-wpshadow' ),
 					$metrics['query_count'],
 					$thresholds['query_count']
 				)
@@ -558,7 +558,7 @@ class WPS_Performance_Monitor {
 				'load_time',
 				sprintf(
 					/* translators: 1: current load time, 2: threshold */
-					__( 'Load time (%1$s s) exceeds threshold (%2$s s)', 'plugin-wp-support-thisismyurl' ),
+					__( 'Load time (%1$s s) exceeds threshold (%2$s s)', 'plugin-wpshadow' ),
 					$metrics['load_time'],
 					$thresholds['load_time']
 				)
@@ -575,7 +575,7 @@ class WPS_Performance_Monitor {
 				'memory',
 				sprintf(
 					/* translators: 1: current memory usage, 2: threshold */
-					__( 'Memory usage (%1$s MB) exceeds 80%% of limit (%2$s MB)', 'plugin-wp-support-thisismyurl' ),
+					__( 'Memory usage (%1$s MB) exceeds 80%% of limit (%2$s MB)', 'plugin-wpshadow' ),
 					$metrics['memory_mb'],
 					round( $memory_threshold, 2 )
 				)
@@ -615,9 +615,9 @@ class WPS_Performance_Monitor {
 	 */
 	private static function trigger_alert( string $type, string $message ): void {
 		// Log to WPS Activity Logger if available.
-		// TODO: Re-enable when WPS_Activity_Logger::log_event() method exists
-		// if ( class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
-		//  WPS_Activity_Logger::log_event(
+		// TODO: Re-enable when WPSHADOW_Activity_Logger::log_event() method exists
+		// if ( class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) ) {
+		//  WPSHADOW_Activity_Logger::log_event(
 		//      'performance_alert',
 		//      $message,
 		//      array(
@@ -627,7 +627,7 @@ class WPS_Performance_Monitor {
 		// }
 
 		// Store alert in transient to display in admin.
-		$alerts = get_transient( 'wps_performance_alerts' );
+		$alerts = get_transient( 'wpshadow_performance_alerts' );
 		if ( ! is_array( $alerts ) ) {
 			$alerts = array();
 		}
@@ -638,7 +638,7 @@ class WPS_Performance_Monitor {
 			'timestamp' => time(),
 		);
 
-		set_transient( 'wps_performance_alerts', $alerts, HOUR_IN_SECONDS );
+		set_transient( 'wpshadow_performance_alerts', $alerts, HOUR_IN_SECONDS );
 	}
 
 	/**
@@ -702,14 +702,14 @@ class WPS_Performance_Monitor {
 	 * @return void
 	 */
 	public static function ajax_export_data(): void {
-		check_ajax_referer( 'wps_performance_export', 'nonce' );
+		check_ajax_referer( 'wpshadow_performance_export', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$format = \WPS\CoreSupport\wps_get_post_key( 'format', 'json' );
-		$days   = \WPS\CoreSupport\wps_get_post_int( 'days', 30 );
+		$format = \WPS\CoreSupport\WPSHADOW_get_post_key( 'format', 'json' );
+		$days   = \WPS\CoreSupport\WPSHADOW_get_post_int( 'days', 30 );
 
 		$data = self::get_historical_metrics( $days );
 
@@ -762,13 +762,13 @@ class WPS_Performance_Monitor {
 	 * @return void
 	 */
 	public static function ajax_clear_history(): void {
-		check_ajax_referer( 'wps_performance_clear', 'nonce' );
+		check_ajax_referer( 'wpshadow_performance_clear', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
 		delete_option( self::HISTORY_OPTION_KEY );
-		wp_send_json_success( array( 'message' => __( 'Historical data cleared', 'plugin-wp-support-thisismyurl' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Historical data cleared', 'plugin-wpshadow' ) ) );
 	}
 }

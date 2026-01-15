@@ -18,11 +18,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Feature_A11y_Audit
+ * WPSHADOW_Feature_A11y_Audit
  *
  * Provides comprehensive accessibility auditing and automated fixes.
  */
-final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_A11y_Audit extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -31,14 +31,14 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'a11y-audit',
-				'name'               => __( 'Accessibility Audit', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Check that people with disabilities can use your site fully and comfortably', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Accessibility Audit', 'plugin-wpshadow' ),
+				'description'        => __( 'Check that people with disabilities can use your site fully and comfortably', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'accessibility',
-				'widget_label'       => __( 'UX & Accessibility', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Improve user experience and accessibility standards', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'UX & Accessibility', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Improve user experience and accessibility standards', 'plugin-wpshadow' ),
 			)
 		);
 	}
@@ -79,8 +79,8 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 		}
 
 		// AJAX handlers for manual audit.
-		add_action( 'wp_ajax_wps_run_a11y_audit', array( $this, 'ajax_run_audit' ) );
-		add_action( 'wp_ajax_wps_apply_a11y_fix', array( $this, 'ajax_apply_fix' ) );
+		add_action( 'wp_ajax_WPSHADOW_run_a11y_audit', array( $this, 'ajax_run_audit' ) );
+		add_action( 'wp_ajax_WPSHADOW_apply_a11y_fix', array( $this, 'ajax_apply_fix' ) );
 	}
 
 	/**
@@ -91,8 +91,8 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 	public function add_admin_menu(): void {
 		add_submenu_page(
 			'wp-support',
-			__( 'Accessibility Audit', 'plugin-wp-support-thisismyurl' ),
-			__( 'A11y Audit', 'plugin-wp-support-thisismyurl' ),
+			__( 'Accessibility Audit', 'plugin-wpshadow' ),
+			__( 'A11y Audit', 'plugin-wpshadow' ),
 			'manage_options',
 			'wp-support-a11y-audit',
 			array( $this, 'render_audit_page' )
@@ -106,8 +106,8 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 	 */
 	public function register_settings(): void {
 		register_setting(
-			'wps_a11y_audit_options_group',
-			'wps_a11y_audit_options',
+			'wpshadow_a11y_audit_options_group',
+			'wpshadow_a11y_audit_options',
 			array(
 				'type'              => 'array',
 				'sanitize_callback' => array( $this, 'sanitize_options' ),
@@ -145,7 +145,7 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 	 */
 	public function render_audit_page(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wpshadow' ) );
 		}
 
 		wp_enqueue_style(
@@ -168,9 +168,9 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 			'wpsA11yAudit',
 			array(
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( 'wps_a11y_audit_nonce' ),
+				'nonce'   => wp_create_nonce( 'wpshadow_a11y_audit_nonce' ),
 				'strings' => array(
-					'enterUrl' => __( 'Please enter a URL to audit.', 'plugin-wp-support-thisismyurl' ),
+					'enterUrl' => __( 'Please enter a URL to audit.', 'plugin-wpshadow' ),
 				),
 			)
 		);
@@ -184,12 +184,12 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_run_audit(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_a11y_audit_nonce' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_a11y_audit_nonce' );
 
 		$url = isset( $_POST['url'] ) ? esc_url_raw( wp_unslash( $_POST['url'] ) ) : '';
 
 		if ( empty( $url ) ) {
-			wp_send_json_error( array( 'message' => __( 'URL is required.', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'URL is required.', 'plugin-wpshadow' ) ) );
 		}
 
 		$issues = $this->scan_url( $url );
@@ -203,21 +203,21 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_apply_fix(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_a11y_audit_nonce' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_a11y_audit_nonce' );
 
-		$fix_type = \WPS\CoreSupport\wps_get_post_key( 'fix_type' );
-		$post_id  = \WPS\CoreSupport\wps_get_post_int( 'post_id' );
+		$fix_type = \WPS\CoreSupport\WPSHADOW_get_post_key( 'fix_type' );
+		$post_id  = \WPS\CoreSupport\WPSHADOW_get_post_int( 'post_id' );
 
 		if ( empty( $fix_type ) || empty( $post_id ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid fix parameters.', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid fix parameters.', 'plugin-wpshadow' ) ) );
 		}
 
 		$result = $this->apply_fix( $fix_type, $post_id );
 
 		if ( $result ) {
-			wp_send_json_success( array( 'message' => __( 'Fix applied successfully.', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_success( array( 'message' => __( 'Fix applied successfully.', 'plugin-wpshadow' ) ) );
 		} else {
-			wp_send_json_error( array( 'message' => __( 'Failed to apply fix.', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Failed to apply fix.', 'plugin-wpshadow' ) ) );
 		}
 	}
 
@@ -276,12 +276,12 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 				$issues[] = array(
 					'type'       => 'alt_text',
 					'severity'   => 'high',
-					'message'    => __( 'Image missing alt attribute', 'plugin-wp-support-thisismyurl' ),
+					'message'    => __( 'Image missing alt attribute', 'plugin-wpshadow' ),
 					'element'    => $img_tag,
 					'post_id'    => $post_id,
 					'auto_fix'   => true,
 					'fix_action' => 'add_alt_attribute',
-					'suggestion' => __( 'Add descriptive alt text to help screen readers understand the image content.', 'plugin-wp-support-thisismyurl' ),
+					'suggestion' => __( 'Add descriptive alt text to help screen readers understand the image content.', 'plugin-wpshadow' ),
 				);
 			} elseif ( preg_match( '/\balt=(["\']?)([^"\'>]*)\1/i', $img_tag, $alt_match ) ) {
 				// Alt attribute exists, check if it's empty.
@@ -291,12 +291,12 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 						$issues[] = array(
 							'type'       => 'alt_text',
 							'severity'   => 'medium',
-							'message'    => __( 'Image has empty alt text without decorative role', 'plugin-wp-support-thisismyurl' ),
+							'message'    => __( 'Image has empty alt text without decorative role', 'plugin-wpshadow' ),
 							'element'    => $img_tag,
 							'post_id'    => $post_id,
 							'auto_fix'   => true,
 							'fix_action' => 'add_descriptive_alt',
-							'suggestion' => __( 'Either add descriptive alt text or mark as decorative with role="presentation".', 'plugin-wp-support-thisismyurl' ),
+							'suggestion' => __( 'Either add descriptive alt text or mark as decorative with role="presentation".', 'plugin-wpshadow' ),
 						);
 					}
 				}
@@ -399,13 +399,13 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 					'severity'   => 'high',
 					'message'    => sprintf(
 						/* translators: %s: Invalid ARIA role name */
-						__( 'Invalid ARIA role: %s', 'plugin-wp-support-thisismyurl' ),
+						__( 'Invalid ARIA role: %s', 'plugin-wpshadow' ),
 						esc_html( $role )
 					),
 					'element'    => $role,
 					'post_id'    => $post_id,
 					'auto_fix'   => false,
-					'suggestion' => __( 'Remove or replace with a valid ARIA role. See ARIA specification for valid roles.', 'plugin-wp-support-thisismyurl' ),
+					'suggestion' => __( 'Remove or replace with a valid ARIA role. See ARIA specification for valid roles.', 'plugin-wpshadow' ),
 				);
 			}
 		}
@@ -420,11 +420,11 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 				$issues[] = array(
 					'type'       => 'aria_role',
 					'severity'   => 'high',
-					'message'    => __( 'Button has no accessible label', 'plugin-wp-support-thisismyurl' ),
+					'message'    => __( 'Button has no accessible label', 'plugin-wpshadow' ),
 					'element'    => $button_tag,
 					'post_id'    => $post_id,
 					'auto_fix'   => false,
-					'suggestion' => __( 'Add visible text content or aria-label attribute to the button.', 'plugin-wp-support-thisismyurl' ),
+					'suggestion' => __( 'Add visible text content or aria-label attribute to the button.', 'plugin-wpshadow' ),
 				);
 			}
 		}
@@ -453,14 +453,14 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 					'severity'   => 'medium',
 					'message'    => sprintf(
 						/* translators: %d: tabindex value */
-						__( 'Positive tabindex value detected: %d', 'plugin-wp-support-thisismyurl' ),
+						__( 'Positive tabindex value detected: %d', 'plugin-wpshadow' ),
 						$index_value
 					),
 					'element'    => 'tabindex="' . esc_attr( $tabindex ) . '"',
 					'post_id'    => $post_id,
 					'auto_fix'   => true,
 					'fix_action' => 'remove_tabindex',
-					'suggestion' => __( 'Use tabindex="0" for programmatically focusable elements or tabindex="-1" to remove from tab order. Positive values disrupt natural tab order.', 'plugin-wp-support-thisismyurl' ),
+					'suggestion' => __( 'Use tabindex="0" for programmatically focusable elements or tabindex="-1" to remove from tab order. Positive values disrupt natural tab order.', 'plugin-wpshadow' ),
 				);
 			}
 		}
@@ -471,11 +471,11 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 				$issues[] = array(
 					'type'       => 'keyboard_trap',
 					'severity'   => 'medium',
-					'message'    => __( 'Dialog/modal detected - ensure keyboard trap management', 'plugin-wp-support-thisismyurl' ),
+					'message'    => __( 'Dialog/modal detected - ensure keyboard trap management', 'plugin-wpshadow' ),
 					'element'    => $dialog,
 					'post_id'    => $post_id,
 					'auto_fix'   => false,
-					'suggestion' => __( 'Ensure the dialog can be closed with Escape key and focus is properly trapped and restored.', 'plugin-wp-support-thisismyurl' ),
+					'suggestion' => __( 'Ensure the dialog can be closed with Escape key and focus is properly trapped and restored.', 'plugin-wpshadow' ),
 				);
 			}
 		}
@@ -495,11 +495,11 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 		$issues[] = array(
 			'type'       => 'contrast',
 			'severity'   => 'info',
-			'message'    => __( 'Contrast ratio check required', 'plugin-wp-support-thisismyurl' ),
-			'element'    => __( 'Site-wide', 'plugin-wp-support-thisismyurl' ),
+			'message'    => __( 'Contrast ratio check required', 'plugin-wpshadow' ),
+			'element'    => __( 'Site-wide', 'plugin-wpshadow' ),
 			'post_id'    => 0,
 			'auto_fix'   => false,
-			'suggestion' => __( 'Use browser tools or specialized contrast checkers to verify text has at least 4.5:1 contrast ratio (3:1 for large text). Enable auto-fix in settings to add enhanced focus indicators.', 'plugin-wp-support-thisismyurl' ),
+			'suggestion' => __( 'Use browser tools or specialized contrast checkers to verify text has at least 4.5:1 contrast ratio (3:1 for large text). Enable auto-fix in settings to add enhanced focus indicators.', 'plugin-wpshadow' ),
 		);
 
 		return $issues;
@@ -517,12 +517,12 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 		$issues[] = array(
 			'type'       => 'focus_order',
 			'severity'   => 'info',
-			'message'    => __( 'Focus visibility check recommended', 'plugin-wp-support-thisismyurl' ),
-			'element'    => __( 'Site-wide', 'plugin-wp-support-thisismyurl' ),
+			'message'    => __( 'Focus visibility check recommended', 'plugin-wpshadow' ),
+			'element'    => __( 'Site-wide', 'plugin-wpshadow' ),
 			'post_id'    => 0,
 			'auto_fix'   => true,
 			'fix_action' => 'add_focus_styles',
-			'suggestion' => __( 'Ensure all interactive elements have visible focus indicators. Enable auto-fix in settings to add enhanced focus styles.', 'plugin-wp-support-thisismyurl' ),
+			'suggestion' => __( 'Ensure all interactive elements have visible focus indicators. Enable auto-fix in settings to add enhanced focus styles.', 'plugin-wpshadow' ),
 		);
 
 		return $issues;
@@ -686,9 +686,9 @@ final class WPS_Feature_A11y_Audit extends WPS_Abstract_Feature {
 	 *
 	 * @return array<string, mixed> Options array.
 	 */
-	private function get_options(): array {
+	public function get_options(): array {
 		return (array) get_option(
-			'wps_a11y_audit_options',
+			'wpshadow_a11y_audit_options',
 			array(
 				'auto_fix_images'   => false,
 				'auto_fix_contrast' => false,

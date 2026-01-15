@@ -3,7 +3,7 @@
  *
  * Handles interactions, animations, and AJAX requests for the Spoke Collection interface.
  *
- * @package WPS_WP_SUPPORT_THISISMYURL
+ * @package WPSHADOW_wpshadow_THISISMYURL
  * @since 1.2601.73002
  */
 
@@ -62,7 +62,7 @@
 				url: ajaxurl,
 				type: 'POST',
 				data: {
-					action: 'wps_install_spoke',
+					action: 'wpshadow_install_spoke',
 					spoke: spoke,
 					nonce: wpsSpokeCollection.nonce
 				},
@@ -114,7 +114,7 @@
 				url: ajaxurl,
 				type: 'POST',
 				data: {
-					action: 'wps_activate_spoke',
+					action: 'wpshadow_activate_spoke',
 					spoke: spoke,
 					nonce: wpsSpokeCollection.nonce
 				},
@@ -174,7 +174,7 @@
 					url: ajaxurl,
 					type: 'POST',
 					data: {
-						action: 'wps_deactivate_spoke',
+						action: 'wpshadow_deactivate_spoke',
 						spoke: spoke,
 						nonce: wpsSpokeCollection.nonce
 					},

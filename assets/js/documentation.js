@@ -3,7 +3,7 @@
  *
  * JavaScript for Site Blueprint, Protected Plugins, and Export Documentation pages.
  *
- * @package WPS_WP_SUPPORT
+ * @package WPSHADOW_WP_SUPPORT
  * @since 1.2601.1111
  */
 
@@ -35,7 +35,7 @@
 			url: wpsDocumentation.ajax_url,
 			method: 'POST',
 			data: {
-				action: 'wps_export_documentation',
+				action: 'wpshadow_export_documentation',
 				nonce: wpsDocumentation.nonce,
 					format: format,
 					type: type || 'full'
@@ -101,7 +101,7 @@
 				url: wpsDocumentation.ajax_url,
 				method: 'POST',
 				data: {
-					action: 'wps_toggle_plugin_protection',
+					action: 'wpshadow_toggle_plugin_protection',
 					nonce: wpsDocumentation.nonce,
 					plugin: plugin
 				},
@@ -158,7 +158,7 @@
 				url: wpsDocumentation.ajax_url,
 				method: 'POST',
 				data: {
-					action: 'wps_export_documentation',
+					action: 'wpshadow_export_documentation',
 					nonce: wpsDocumentation.nonce,
 					format: format
 				},

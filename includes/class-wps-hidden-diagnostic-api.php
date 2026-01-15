@@ -5,7 +5,7 @@
  * Provides support access to diagnostics without admin credentials.
  * Uses encrypted action names and token-based authentication.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
 declare(strict_types=1);
@@ -19,17 +19,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Hidden Diagnostic API Manager
  */
-class WPS_Hidden_Diagnostic_API {
+class WPSHADOW_Hidden_Diagnostic_API {
 
 	/**
 	 * Tokens option key.
 	 */
-	private const TOKENS_KEY = 'WPS_diagnostic_tokens';
+	private const TOKENS_KEY = 'wpshadow_diagnostic_tokens';
 
 	/**
 	 * API access logs option key.
 	 */
-	private const LOGS_KEY = 'WPS_diagnostic_api_logs';
+	private const LOGS_KEY = 'wpshadow_diagnostic_api_logs';
 
 	/**
 	 * Token validity duration (hours).
@@ -43,7 +43,7 @@ class WPS_Hidden_Diagnostic_API {
 	 */
 	public static function init(): void {
 		// Register hidden API endpoint - uses encrypted action to prevent discovery.
-		add_action( 'wp_ajax_nopriv_WPS_diag_' . md5( 'support_' . WPS_SUITE_ID ), array( __CLASS__, 'handle_diagnostic_request' ) );
+		add_action( 'wp_ajax_nopriv_WPSHADOW_diag_' . md5( 'support_' . WPSHADOW_SUITE_ID ), array( __CLASS__, 'handle_diagnostic_request' ) );
 
 		// Register admin menu for token management.
 		add_action( 'admin_menu', array( __CLASS__, 'register_menu' ) );
@@ -184,11 +184,11 @@ class WPS_Hidden_Diagnostic_API {
 	 * @return void
 	 */
 	private static function handle_audit_report( string $token ): void {
-		if ( ! class_exists( '\WPS\CoreSupport\WPS_Site_Audit' ) ) {
+		if ( ! class_exists( '\WPS\CoreSupport\WPSHADOW_Site_Audit' ) ) {
 			wp_send_json_error( 'Audit feature not available', 503 );
 		}
 
-		$reports = WPS_Site_Audit::get_reports();
+		$reports = WPSHADOW_Site_Audit::get_reports();
 		$latest  = ! empty( $reports ) ? end( $reports ) : null;
 
 		wp_send_json_success(
@@ -246,11 +246,11 @@ class WPS_Hidden_Diagnostic_API {
 	 * @return void
 	 */
 	private static function handle_snapshot_list( string $token ): void {
-		if ( ! class_exists( '\WPS\CoreSupport\WPS_Snapshot_Manager' ) ) {
+		if ( ! class_exists( '\WPS\CoreSupport\WPSHADOW_Snapshot_Manager' ) ) {
 			wp_send_json_error( 'Snapshots feature not available', 503 );
 		}
 
-		$snapshots = WPS_Snapshot_Manager::get_snapshots();
+		$snapshots = WPSHADOW_Snapshot_Manager::get_snapshots();
 		$list      = array();
 
 		foreach ( $snapshots as $id => $snapshot ) {
@@ -375,8 +375,8 @@ class WPS_Hidden_Diagnostic_API {
 	public static function register_menu(): void {
 		add_submenu_page(
 			'wp-support',
-			__( 'Support Access', 'plugin-wp-support-thisismyurl' ),
-			__( 'Support', 'plugin-wp-support-thisismyurl' ),
+			__( 'Support Access', 'plugin-wpshadow' ),
+			__( 'Support', 'plugin-wpshadow' ),
 			'manage_options',
 			'wps-support-access',
 			array( __CLASS__, 'render_support_page' )
@@ -390,44 +390,44 @@ class WPS_Hidden_Diagnostic_API {
 	 */
 	public static function render_support_page(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Insufficient permissions.', 'plugin-wpshadow' ) );
 		}
 
 		$tokens = self::get_tokens();
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Support Access Control', 'plugin-wp-support-thisismyurl' ); ?></h1>
-			<p><?php esc_html_e( 'Create secure access tokens for support to diagnose issues without admin credentials.', 'plugin-wp-support-thisismyurl' ); ?></p>
+			<h1><?php esc_html_e( 'Support Access Control', 'plugin-wpshadow' ); ?></h1>
+			<p><?php esc_html_e( 'Create secure access tokens for support to diagnose issues without admin credentials.', 'plugin-wpshadow' ); ?></p>
 
 			<div style="margin: 20px 0;">
-				<h3><?php esc_html_e( 'Create New Token', 'plugin-wp-support-thisismyurl' ); ?></h3>
+				<h3><?php esc_html_e( 'Create New Token', 'plugin-wpshadow' ); ?></h3>
 				<form id="wps-create-token" style="max-width: 500px;">
 					<div style="margin: 10px 0;">
-						<label><?php esc_html_e( 'Support Agent Name', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<label><?php esc_html_e( 'Support Agent Name', 'plugin-wpshadow' ); ?></label><br/>
 						<input type="text" name="support_name" placeholder="e.g., Christopher Ross" style="width: 100%; padding: 8px; margin: 5px 0;">
 					</div>
 					<div style="margin: 10px 0;">
-						<label><?php esc_html_e( 'Reason for Access', 'plugin-wp-support-thisismyurl' ); ?></label><br/>
+						<label><?php esc_html_e( 'Reason for Access', 'plugin-wpshadow' ); ?></label><br/>
 						<input type="text" name="reason" placeholder="e.g., Investigating performance issue" style="width: 100%; padding: 8px; margin: 5px 0;">
 					</div>
 					<button type="submit" class="button button-primary">
-						<?php esc_html_e( '🔐 Create Token (24hr expiry)', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( '🔐 Create Token (24hr expiry)', 'plugin-wpshadow' ); ?>
 					</button>
 				</form>
 			</div>
 
 			<?php if ( ! empty( $tokens ) ) : ?>
-				<h3><?php esc_html_e( 'Active Tokens', 'plugin-wp-support-thisismyurl' ); ?></h3>
+				<h3><?php esc_html_e( 'Active Tokens', 'plugin-wpshadow' ); ?></h3>
 				<table class="wp-list-table widefat striped">
 					<thead>
 						<tr>
-							<th><?php esc_html_e( 'Created', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Support Agent', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Reason', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Expires', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Uses', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Token', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Actions', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th><?php esc_html_e( 'Created', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Support Agent', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Reason', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Expires', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Uses', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Token', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Actions', 'plugin-wpshadow' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -441,10 +441,10 @@ class WPS_Hidden_Diagnostic_API {
 								<td><code style="font-size: 11px;"><?php echo esc_html( substr( $token, 0, 16 ) . '...' ); ?></code></td>
 								<td>
 									<button class="button button-small wps-copy-token" data-token="<?php echo esc_attr( $token ); ?>">
-										<?php esc_html_e( 'Copy', 'plugin-wp-support-thisismyurl' ); ?>
+										<?php esc_html_e( 'Copy', 'plugin-wpshadow' ); ?>
 									</button>
 									<button class="button button-small wps-revoke-token" data-token="<?php echo esc_attr( $token ); ?>">
-										<?php esc_html_e( 'Revoke', 'plugin-wp-support-thisismyurl' ); ?>
+										<?php esc_html_e( 'Revoke', 'plugin-wpshadow' ); ?>
 									</button>
 								</td>
 							</tr>
@@ -462,7 +462,7 @@ class WPS_Hidden_Diagnostic_API {
 			fetch(ajaxurl, {
 				method: 'POST',
 				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-				body: 'action=WPS_create_diagnostic_token&name=' + encodeURIComponent(name) + '&reason=' + encodeURIComponent(reason)
+				body: 'action=WPSHADOW_create_diagnostic_token&name=' + encodeURIComponent(name) + '&reason=' + encodeURIComponent(reason)
 			})
 			.then(r => r.json())
 			.then(d => {
@@ -483,7 +483,7 @@ class WPS_Hidden_Diagnostic_API {
 				fetch(ajaxurl, {
 					method: 'POST',
 					headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-					body: 'action=WPS_revoke_diagnostic_token&token=' + encodeURIComponent(this.dataset.token)
+					body: 'action=WPSHADOW_revoke_diagnostic_token&token=' + encodeURIComponent(this.dataset.token)
 				})
 				.then(r => r.json())
 				.then(d => { if (d.success) location.reload(); });

@@ -39,7 +39,7 @@
 
 		// Show saving state.
 		const statusEl = form.find( '.wps-settings-save-status' );
-		statusEl.text( '💾 ' + wps_settings_i18n.saving ).css( 'color', '#666' );
+		statusEl.text( '💾 ' + WPSHADOW_settings_i18n.saving ).css( 'color', '#666' );
 
 		saveTimeout = setTimeout( function() {
 			autoSaveForm( form );
@@ -53,10 +53,10 @@
 	function autoSaveForm( form ) {
 		const statusEl = form.find( '.wps-settings-save-status' );
 		const group = form.data( 'settings-group' );
-		const nonce = form.find( 'input[name="wps_settings_nonce"]' ).val();
+		const nonce = form.find( 'input[name="wpshadow_settings_nonce"]' ).val();
 
 		if ( ! group || ! nonce ) {
-			statusEl.text( '❌ ' + wps_settings_i18n.error ).css( 'color', 'red' );
+			statusEl.text( '❌ ' + WPSHADOW_settings_i18n.error ).css( 'color', 'red' );
 			return;
 		}
 
@@ -64,12 +64,12 @@
 		const formData = new FormData( form[0] );
 		const data = {
 			group: group,
-			wps_settings_nonce: nonce,
+			WPSHADOW_settings_nonce: nonce,
 		};
 
 		// Extract all form values.
 		formData.forEach( function( value, key ) {
-			if ( key === 'wps_settings_nonce' ) {
+			if ( key === 'wpshadow_settings_nonce' ) {
 				return; // Skip nonce, we already have it.
 			}
 
@@ -87,25 +87,25 @@
 
 		// Perform AJAX request.
 		$.ajax( {
-			url: wps_settings_i18n.ajaxUrl,
+			url: WPSHADOW_settings_i18n.ajaxUrl,
 			type: 'POST',
 			data: {
-				action: 'wps_save_settings',
+				action: 'wpshadow_save_settings',
 				nonce: nonce,
 				data: JSON.stringify( data ),
 			},
 			success: function( response ) {
 				if ( response.success ) {
-					statusEl.text( '✓ ' + wps_settings_i18n.saved ).css( 'color', 'green' );
+					statusEl.text( '✓ ' + WPSHADOW_settings_i18n.saved ).css( 'color', 'green' );
 					setTimeout( function() {
 						statusEl.text( '' );
 					}, 2000 );
 				} else {
-					statusEl.text( '❌ ' + ( response.data?.message || wps_settings_i18n.error ) ).css( 'color', 'red' );
+					statusEl.text( '❌ ' + ( response.data?.message || WPSHADOW_settings_i18n.error ) ).css( 'color', 'red' );
 				}
 			},
 			error: function() {
-				statusEl.text( '❌ ' + wps_settings_i18n.error ).css( 'color', 'red' );
+				statusEl.text( '❌ ' + WPSHADOW_settings_i18n.error ).css( 'color', 'red' );
 			},
 		} );
 	}

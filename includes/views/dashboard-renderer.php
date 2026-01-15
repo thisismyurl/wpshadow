@@ -18,9 +18,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param string $spoke_id Optional spoke identifier for spoke-level dashboards.
  * @return void
  */
-function wp_support_render_dashboard( string $hub_id = '', string $spoke_id = '' ): void {
-	if ( ! wps_can_access_dashboard() ) {
-		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
+function wpshadow_render_dashboard( string $hub_id = '', string $spoke_id = '' ): void {
+	if ( ! WPSHADOW_can_access_dashboard() ) {
+		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wpshadow' ) );
 	}
 
 	// Route to appropriate dashboard renderer.
@@ -32,7 +32,7 @@ function wp_support_render_dashboard( string $hub_id = '', string $spoke_id = ''
 	}
 
 	// Core-level dashboard (shown for all levels).
-	$catalog_modules = WPS_Module_Registry::get_catalog_with_status();
+	$catalog_modules = WPSHADOW_Module_Registry::get_catalog_with_status();
 	$modules         = $catalog_modules;
 
 	// Top stats derived from catalog with real activation state.
@@ -81,21 +81,21 @@ function wp_support_render_dashboard( string $hub_id = '', string $spoke_id = ''
 		)
 	);
 
-	$activity_logs     = WPS_Vault::get_logs( 0, 10 );
-	$pending_uploads   = WPS_Vault::get_pending_contributor_uploads( 5 );
-	$schedule_snapshot = WPS_Module_Registry::get_schedule_snapshot();
-	$run_now_nonce     = wp_create_nonce( 'wps_run_task_now' );
+	$activity_logs     = WPSHADOW_Vault::get_logs( 0, 10 );
+	$pending_uploads   = WPSHADOW_Vault::get_pending_contributor_uploads( 5 );
+	$schedule_snapshot = WPSHADOW_Module_Registry::get_schedule_snapshot();
+	$run_now_nonce     = wp_create_nonce( 'wpshadow_run_task_now' );
 
 	// Setup metaboxes for dashboard rendering.
-	wp_support_setup_dashboard_screen( $hub_id, $spoke_id );
+	wpshadow_setup_dashboard_screen( $hub_id, $spoke_id );
 	$screen = get_current_screen();
 
 	// Determine dashboard title based on context.
-	$dashboard_title = __( 'Support Dashboard', 'plugin-wp-support-thisismyurl' );
+	$dashboard_title = __( 'Support Dashboard', 'plugin-wpshadow' );
 	if ( ! empty( $spoke_id ) && ! empty( $hub_id ) ) {
-		$dashboard_title = ucfirst( $spoke_id ) . ' ' . __( 'Dashboard', 'plugin-wp-support-thisismyurl' );
+		$dashboard_title = ucfirst( $spoke_id ) . ' ' . __( 'Dashboard', 'plugin-wpshadow' );
 	} elseif ( ! empty( $hub_id ) ) {
-		$dashboard_title = ucfirst( $hub_id ) . ' ' . __( 'Dashboard', 'plugin-wp-support-thisismyurl' );
+		$dashboard_title = ucfirst( $hub_id ) . ' ' . __( 'Dashboard', 'plugin-wpshadow' );
 	}
 
 	// Render metabox-based dashboard.
@@ -119,16 +119,16 @@ function wp_support_render_dashboard( string $hub_id = '', string $spoke_id = ''
 		<div class="wps-dashboard-header">
 			<h1><?php echo esc_html( $dashboard_title ); ?></h1>
 			<?php if ( empty( $hub_id ) && empty( $spoke_id ) ) : ?>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=' . \WPS\CoreSupport\WPS_Tab_Navigation::TAB_DASHBOARD_SETTINGS ) ); ?>" class="button button-secondary">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=' . \WPS\CoreSupport\WPSHADOW_Tab_Navigation::TAB_DASHBOARD_SETTINGS ) ); ?>" class="button button-secondary">
 					<span class="dashicons dashicons-admin-generic"></span>
-					<?php esc_html_e( 'Dashboard Settings', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Dashboard Settings', 'plugin-wpshadow' ); ?>
 				</a>
 			<?php endif; ?>
 		</div>
 
 		<div class="wps-dashboard-license-row">
-			<div id="wps_license_widget" class="postbox" style="margin:0 0 16px 0;">
-				<?php \WPS\CoreSupport\WPS_License_Widget::render_widget(); ?>
+			<div id="wpshadow_license_widget" class="postbox" style="margin:0 0 16px 0;">
+				<?php \WPS\CoreSupport\WPSHADOW_License_Widget::render_widget(); ?>
 			</div>
 		</div>
 

@@ -96,14 +96,14 @@ final class WPS_Feature_Firewall extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'firewall',
-				'name'               => __( 'Web Application Firewall', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Block malicious requests with IP blocking, rate limiting, attack pattern detection, and country-based filtering', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Web Application Firewall', 'plugin-wp-support-wpshadow' ),
+				'description'        => __( 'Block malicious requests with IP blocking, rate limiting, attack pattern detection, and country-based filtering', 'plugin-wp-support-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
-				'widget_label'       => __( 'Security', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Security', 'plugin-wp-support-wpshadow' ),
+				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wp-support-wpshadow' ),
 				// Unified metadata.
 				'license_level'      => 3, // Good tier.
 				'minimum_capability' => 'manage_options',
@@ -288,8 +288,8 @@ final class WPS_Feature_Firewall extends WPS_Abstract_Feature {
 		// TODO: Exit
 
 		wp_die(
-			esc_html__( 'Access denied by firewall.', 'plugin-wp-support-thisismyurl' ),
-			esc_html__( 'Forbidden', 'plugin-wp-support-thisismyurl' ),
+			esc_html__( 'Access denied by firewall.', 'plugin-wp-support-wpshadow' ),
+			esc_html__( 'Forbidden', 'plugin-wp-support-wpshadow' ),
 			array( 'response' => 403 )
 		);
 	}

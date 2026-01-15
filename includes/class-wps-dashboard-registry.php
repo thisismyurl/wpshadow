@@ -19,11 +19,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Dashboard_Registry Class
+ * WPSHADOW_Dashboard_Registry Class
  *
  * Manages dashboard discovery, registration, and rendering.
  */
-class WPS_Dashboard_Registry {
+class WPSHADOW_Dashboard_Registry {
 
 	/**
 	 * Dashboard cache.
@@ -35,7 +35,7 @@ class WPS_Dashboard_Registry {
 	/**
 	 * Cache option name.
 	 */
-	private const CACHE_KEY = 'wps_dashboards_cache';
+	private const CACHE_KEY = 'wpshadow_dashboards_cache';
 
 	/**
 	 * Cache version for invalidation.
@@ -49,8 +49,8 @@ class WPS_Dashboard_Registry {
 	 */
 	public static function init(): void {
 		add_action( 'admin_init', array( __CLASS__, 'maybe_refresh_cache' ) );
-		add_action( 'WPS_feature_state_changed', array( __CLASS__, 'clear_cache' ) );
-		add_action( 'WPS_widget_registered', array( __CLASS__, 'clear_cache' ) );
+		add_action( 'wpshadow_feature_state_changed', array( __CLASS__, 'clear_cache' ) );
+		add_action( 'wpshadow_widget_registered', array( __CLASS__, 'clear_cache' ) );
 	}
 
 	/**
@@ -97,8 +97,8 @@ class WPS_Dashboard_Registry {
 			// Core dashboards (always present).
 			'overview'    => array(
 				'id'          => 'overview',
-				'name'        => __( 'Overview', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Main dashboard with key metrics and quick actions', 'plugin-wp-support-thisismyurl' ),
+				'name'        => __( 'Overview', 'plugin-wpshadow' ),
+				'description' => __( 'Main dashboard with key metrics and quick actions', 'plugin-wpshadow' ),
 				'icon'        => 'dashicons-dashboard',
 				'context'     => 'core',
 				'visible'     => true,
@@ -107,8 +107,8 @@ class WPS_Dashboard_Registry {
 			),
 			'performance' => array(
 				'id'          => 'performance',
-				'name'        => __( 'Performance', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Performance monitoring and optimization', 'plugin-wp-support-thisismyurl' ),
+				'name'        => __( 'Performance', 'plugin-wpshadow' ),
+				'description' => __( 'Performance monitoring and optimization', 'plugin-wpshadow' ),
 				'icon'        => 'dashicons-performance',
 				'context'     => 'core',
 				'visible'     => true,
@@ -117,8 +117,8 @@ class WPS_Dashboard_Registry {
 			),
 			'security'    => array(
 				'id'          => 'security',
-				'name'        => __( 'Security', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Security hardening and vulnerability monitoring', 'plugin-wp-support-thisismyurl' ),
+				'name'        => __( 'Security', 'plugin-wpshadow' ),
+				'description' => __( 'Security hardening and vulnerability monitoring', 'plugin-wpshadow' ),
 				'icon'        => 'dashicons-shield',
 				'context'     => 'core',
 				'visible'     => true,
@@ -128,7 +128,7 @@ class WPS_Dashboard_Registry {
 		);
 
 		// Discover additional dashboards from widgets.
-		$widgets = WPS_Widget_Registry::get_widgets();
+		$widgets = WPSHADOW_Widget_Registry::get_widgets();
 		foreach ( $widgets as $widget ) {
 			$dashboard_id = $widget['dashboard'] ?? 'overview';
 
@@ -138,7 +138,7 @@ class WPS_Dashboard_Registry {
 					$dashboards[ $dashboard_id ] = array(
 						'id'          => $dashboard_id,
 						'name'        => $widget['context_name'] ?? ucfirst( str_replace( array( '-', '_' ), ' ', $dashboard_id ) ),
-						'description' => sprintf( __( 'Dashboard for %s', 'plugin-wp-support-thisismyurl' ), $widget['context_name'] ?? $dashboard_id ),
+						'description' => sprintf( __( 'Dashboard for %s', 'plugin-wpshadow' ), $widget['context_name'] ?? $dashboard_id ),
 						'icon'        => 'dashicons-admin-plugins',
 						'context'     => $widget['context'],
 						'visible'     => true,
@@ -198,13 +198,13 @@ class WPS_Dashboard_Registry {
 		if ( isset( $dashboard['context'] ) && 'core' !== $dashboard['context'] ) {
 			// Check if required hub/spoke is active.
 			$context = $dashboard['context'];
-			if ( ! WPS_Module_Registry::is_installed( $context ) ) {
+			if ( ! WPSHADOW_Module_Registry::is_installed( $context ) ) {
 				return false;
 			}
 		}
 
 		// Check user capability (minimum across all widgets).
-		$widgets = WPS_Widget_Registry::get_widgets_for_dashboard( $dashboard_id );
+		$widgets = WPSHADOW_Widget_Registry::get_widgets_for_dashboard( $dashboard_id );
 		foreach ( $widgets as $widget ) {
 			if ( ! current_user_can( $widget['capability'] ?? 'manage_options' ) ) {
 				return false;
@@ -270,7 +270,7 @@ class WPS_Dashboard_Registry {
 		$dashboard = self::get_dashboard( $dashboard_id );
 
 		if ( ! $dashboard || ! self::can_access_dashboard( $dashboard_id ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this dashboard.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'You do not have permission to access this dashboard.', 'plugin-wpshadow' ) );
 		}
 
 		?>
@@ -283,7 +283,7 @@ class WPS_Dashboard_Registry {
 			<?php self::render_dashboard_tabs( $dashboard_id ); ?>
 
 			<div class="wps-dashboard-content">
-				<?php WPS_Widget_Registry::render_widgets_for_dashboard( $dashboard_id ); ?>
+				<?php WPSHADOW_Widget_Registry::render_widgets_for_dashboard( $dashboard_id ); ?>
 			</div>
 		</div>
 		<?php

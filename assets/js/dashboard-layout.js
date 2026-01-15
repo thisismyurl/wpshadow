@@ -2,7 +2,7 @@
  * Dashboard Layout Manager - Client Side
  * Handles drag/drop saving and bulk apply prompt.
  *
- * @package WPS_WP_SUPPORT_THISISMYURL
+ * @package WPSHADOW_wpshadow_THISISMYURL
  * @since 1.2601.74000
  */
 
@@ -75,13 +75,13 @@
 
 			// Save via AJAX.
 			$.ajax({
-				url: wps_dashboard_layout.ajaxUrl,
+				url: WPSHADOW_dashboard_layout.ajaxUrl,
 				method: 'POST',
 				data: {
-					action: 'wps_save_dashboard_layout',
-					nonce: wps_dashboard_layout.nonce,
-					context: wps_dashboard_layout.context,
-					network: wps_dashboard_layout.network,
+					action: 'wpshadow_save_dashboard_layout',
+					nonce: WPSHADOW_dashboard_layout.nonce,
+					context: WPSHADOW_dashboard_layout.context,
+					network: WPSHADOW_dashboard_layout.network,
 					layout: JSON.stringify(layout)
 				},
 				success: function(response) {
@@ -126,7 +126,7 @@
 		 */
 		showApplyPrompt: function(layout) {
 			// Check if we have children or other modules.
-			if (wps_dashboard_layout.context === 'core' || this.hasChildModules()) {
+			if (WPSHADOW_dashboard_layout.context === 'core' || this.hasChildModules()) {
 				this.renderPromptModal(layout);
 			}
 		},
@@ -138,7 +138,7 @@
 		 */
 		hasChildModules: function() {
 			// For core, always has children (hubs).
-			if (wps_dashboard_layout.context === 'core') {
+			if (WPSHADOW_dashboard_layout.context === 'core') {
 				return true;
 			}
 
@@ -158,15 +158,15 @@
 
 			var modalHTML = '<div id="wps-apply-layout-modal" class="wps-modal-overlay" style="display:none;">' +
 				'<div class="wps-modal-content">' +
-				'<h2>' + wps_dashboard_layout.applyPrompt + '</h2>' +
+				'<h2>' + WPSHADOW_dashboard_layout.applyPrompt + '</h2>' +
 				'<div class="wps-modal-body">' +
-				'<label><input type="radio" name="wps-apply-scope" value="this" checked> ' + wps_dashboard_layout.applyThis + '</label><br>' +
-				'<label><input type="radio" name="wps-apply-scope" value="children"> ' + wps_dashboard_layout.applyChildren + '</label><br>' +
-				'<label><input type="radio" name="wps-apply-scope" value="all"> ' + wps_dashboard_layout.applyAll + '</label>' +
+				'<label><input type="radio" name="wps-apply-scope" value="this" checked> ' + WPSHADOW_dashboard_layout.applyThis + '</label><br>' +
+				'<label><input type="radio" name="wps-apply-scope" value="children"> ' + WPSHADOW_dashboard_layout.applyChildren + '</label><br>' +
+				'<label><input type="radio" name="wps-apply-scope" value="all"> ' + WPSHADOW_dashboard_layout.applyAll + '</label>' +
 				'</div>' +
 				'<div class="wps-modal-footer">' +
-				'<button class="button button-primary wps-apply-confirm">' + wps_dashboard_layout.apply + '</button> ' +
-				'<button class="button wps-apply-cancel">' + wps_dashboard_layout.cancel + '</button>' +
+				'<button class="button button-primary wps-apply-confirm">' + WPSHADOW_dashboard_layout.apply + '</button> ' +
+				'<button class="button wps-apply-cancel">' + WPSHADOW_dashboard_layout.cancel + '</button>' +
 				'</div>' +
 				'</div>' +
 				'</div>';
@@ -223,13 +223,13 @@
 		 */
 		applyToScope: function(layout, scope) {
 			$.ajax({
-				url: wps_dashboard_layout.ajaxUrl,
+				url: WPSHADOW_dashboard_layout.ajaxUrl,
 				method: 'POST',
 				data: {
-					action: 'wps_apply_dashboard_layout',
-					nonce: wps_dashboard_layout.nonce,
-					context: wps_dashboard_layout.context,
-					network: wps_dashboard_layout.network,
+					action: 'wpshadow_apply_dashboard_layout',
+					nonce: WPSHADOW_dashboard_layout.nonce,
+					context: WPSHADOW_dashboard_layout.context,
+					network: WPSHADOW_dashboard_layout.network,
 					scope: scope,
 					layout: JSON.stringify(layout)
 				},
@@ -275,7 +275,7 @@
 
 	// Initialize on document ready.
 	$(document).ready(function() {
-		if (typeof wps_dashboard_layout !== 'undefined') {
+		if (typeof WPSHADOW_dashboard_layout !== 'undefined') {
 			wpsDashboardLayout.init();
 		}
 		
@@ -296,8 +296,8 @@
 				url: ajaxurl,
 				type: 'POST',
 				data: {
-					action: 'wps_refresh_database_stats',
-					nonce: WPS_dashboard_layout.moduleNonce
+					action: 'wpshadow_refresh_database_stats',
+					nonce: WPSHADOW_dashboard_layout.moduleNonce
 				},
 				success: function(response) {
 					if (response.success && response.data && response.data.stats) {
@@ -317,9 +317,9 @@
 						$(statsBoxes[3]).find('div:first-child').text(Number(stats.autodrafts).toLocaleString());
 						
 						// Show success message briefly.
-						if (typeof WPS_dashboard_layout !== 'undefined' && WPS_dashboard_layout.refreshSuccess) {
+						if (typeof WPSHADOW_dashboard_layout !== 'undefined' && WPSHADOW_dashboard_layout.refreshSuccess) {
 							var successMsg = $('<div class="notice notice-success inline" style="margin: 10px 0; padding: 8px;"><p>' + 
-								WPS_dashboard_layout.refreshSuccess + '</p></div>');
+								WPSHADOW_dashboard_layout.refreshSuccess + '</p></div>');
 							container.prepend(successMsg);
 							setTimeout(function() {
 								successMsg.fadeOut(function() { $(this).remove(); });
@@ -328,8 +328,8 @@
 					} else {
 						// Show error message.
 						var errorText = 'Failed to refresh database statistics.';
-						if (typeof WPS_dashboard_layout !== 'undefined' && WPS_dashboard_layout.refreshError) {
-							errorText = WPS_dashboard_layout.refreshError;
+						if (typeof WPSHADOW_dashboard_layout !== 'undefined' && WPSHADOW_dashboard_layout.refreshError) {
+							errorText = WPSHADOW_dashboard_layout.refreshError;
 						}
 						if (response.data && response.data.message) {
 							errorText = response.data.message;
@@ -345,8 +345,8 @@
 				error: function() {
 					// Show error message.
 					var errorText = 'An error occurred while refreshing database statistics.';
-					if (typeof WPS_dashboard_layout !== 'undefined' && WPS_dashboard_layout.refreshError) {
-						errorText = WPS_dashboard_layout.refreshError;
+					if (typeof WPSHADOW_dashboard_layout !== 'undefined' && WPSHADOW_dashboard_layout.refreshError) {
+						errorText = WPSHADOW_dashboard_layout.refreshError;
 					}
 					var errorMsg = $('<div class="notice notice-error inline" style="margin: 10px 0; padding: 8px;"><p>' + 
 						errorText + '</p></div>');

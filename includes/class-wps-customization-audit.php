@@ -4,7 +4,7 @@
  *
  * Identifies non-standard customizations and unique configurations.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
 declare(strict_types=1);
@@ -18,12 +18,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Customization Audit Manager Class
  */
-class WPS_Customization_Audit {
+class WPSHADOW_Customization_Audit {
 
 	/**
 	 * Audit reports option key.
 	 */
-	private const REPORTS_KEY = 'WPS_customization_audit_reports';
+	private const REPORTS_KEY = 'wpshadow_customization_audit_reports';
 
 	/**
 	 * Risk level constants.
@@ -39,8 +39,8 @@ class WPS_Customization_Audit {
 	 */
 	public static function init(): void {
 		add_action( 'admin_menu', array( __CLASS__, 'register_menu' ) );
-		add_action( 'wp_ajax_WPS_generate_customization_audit', array( __CLASS__, 'handle_audit_generation' ) );
-		add_action( 'wp_ajax_WPS_export_customization_audit', array( __CLASS__, 'handle_audit_export' ) );
+		add_action( 'wp_ajax_WPSHADOW_generate_customization_audit', array( __CLASS__, 'handle_audit_generation' ) );
+		add_action( 'wp_ajax_WPSHADOW_export_customization_audit', array( __CLASS__, 'handle_audit_export' ) );
 	}
 
 	/**
@@ -51,8 +51,8 @@ class WPS_Customization_Audit {
 	public static function register_menu(): void {
 		add_submenu_page(
 			'wp-support',
-			__( 'Customization Audit', 'plugin-wp-support-thisismyurl' ),
-			__( 'Customization Audit', 'plugin-wp-support-thisismyurl' ),
+			__( 'Customization Audit', 'plugin-wpshadow' ),
+			__( 'Customization Audit', 'plugin-wpshadow' ),
 			'manage_options',
 			'wps-customization-audit',
 			array( __CLASS__, 'render_audit_page' )
@@ -148,7 +148,7 @@ class WPS_Customization_Audit {
 				'public'      => $post_type->public,
 				'count'       => $total,
 				'risk_level'  => self::assess_post_type_risk( $slug, $total, $location ),
-				'description' => $post_type->description ?: __( 'No description', 'plugin-wp-support-thisismyurl' ),
+				'description' => $post_type->description ?: __( 'No description', 'plugin-wpshadow' ),
 			);
 		}
 
@@ -383,7 +383,7 @@ class WPS_Customization_Audit {
 				'type'        => 'Custom Database Prefix',
 				'value'       => $wpdb->prefix,
 				'risk_level'  => self::RISK_LOW,
-				'description' => __( 'Custom database table prefix', 'plugin-wp-support-thisismyurl' ),
+				'description' => __( 'Custom database table prefix', 'plugin-wpshadow' ),
 			);
 		}
 
@@ -393,7 +393,7 @@ class WPS_Customization_Audit {
 				'type'        => 'Debug Mode',
 				'value'       => 'Enabled',
 				'risk_level'  => self::RISK_MEDIUM,
-				'description' => __( 'Debug mode is enabled', 'plugin-wp-support-thisismyurl' ),
+				'description' => __( 'Debug mode is enabled', 'plugin-wpshadow' ),
 			);
 		}
 
@@ -403,7 +403,7 @@ class WPS_Customization_Audit {
 				'type'        => 'Custom Content Directory',
 				'value'       => WP_CONTENT_DIR,
 				'risk_level'  => self::RISK_MEDIUM,
-				'description' => __( 'Custom wp-content directory location', 'plugin-wp-support-thisismyurl' ),
+				'description' => __( 'Custom wp-content directory location', 'plugin-wpshadow' ),
 			);
 		}
 
@@ -413,7 +413,7 @@ class WPS_Customization_Audit {
 				'type'        => 'Custom Memory Limit',
 				'value'       => WP_MEMORY_LIMIT,
 				'risk_level'  => self::RISK_LOW,
-				'description' => __( 'Custom PHP memory limit', 'plugin-wp-support-thisismyurl' ),
+				'description' => __( 'Custom PHP memory limit', 'plugin-wpshadow' ),
 			);
 		}
 
@@ -447,7 +447,7 @@ class WPS_Customization_Audit {
 				'risk_level'  => $lines > 200 ? self::RISK_HIGH : ( $lines > 50 ? self::RISK_MEDIUM : self::RISK_LOW ),
 				'description' => sprintf(
 					/* translators: %d: number of lines */
-					__( 'Child theme with %d lines in functions.php', 'plugin-wp-support-thisismyurl' ),
+					__( 'Child theme with %d lines in functions.php', 'plugin-wpshadow' ),
 					$lines
 				),
 			);
@@ -463,7 +463,7 @@ class WPS_Customization_Audit {
 				'risk_level'  => self::RISK_LOW,
 				'description' => sprintf(
 					/* translators: %d: number of templates */
-					__( '%d custom page templates', 'plugin-wp-support-thisismyurl' ),
+					__( '%d custom page templates', 'plugin-wpshadow' ),
 					count( $templates )
 				),
 			);
@@ -490,7 +490,7 @@ class WPS_Customization_Audit {
 				'risk_level'  => self::RISK_MEDIUM,
 				'description' => sprintf(
 					/* translators: %d: number of mu-plugins */
-					__( '%d must-use plugins installed', 'plugin-wp-support-thisismyurl' ),
+					__( '%d must-use plugins installed', 'plugin-wpshadow' ),
 					count( $mu_plugins )
 				),
 			);
@@ -514,7 +514,7 @@ class WPS_Customization_Audit {
 				'risk_level'  => self::RISK_HIGH,
 				'description' => sprintf(
 					/* translators: %d: number of drop-ins */
-					__( '%d drop-in files detected', 'plugin-wp-support-thisismyurl' ),
+					__( '%d drop-in files detected', 'plugin-wpshadow' ),
 					count( $active_dropins )
 				),
 			);
@@ -630,18 +630,18 @@ class WPS_Customization_Audit {
 	 */
 	private static function get_recommendation( string $complexity, int $high_risk_count ): string {
 		if ( $high_risk_count > 2 ) {
-			return __( 'Your site has multiple high-risk customizations. Consider professional maintenance and thorough testing before updates.', 'plugin-wp-support-thisismyurl' );
+			return __( 'Your site has multiple high-risk customizations. Consider professional maintenance and thorough testing before updates.', 'plugin-wpshadow' );
 		}
 
 		if ( $complexity === 'complex' ) {
-			return __( 'Your site is more customized than average. Recommend careful update testing and professional maintenance.', 'plugin-wp-support-thisismyurl' );
+			return __( 'Your site is more customized than average. Recommend careful update testing and professional maintenance.', 'plugin-wpshadow' );
 		}
 
 		if ( $complexity === 'moderate' ) {
-			return __( 'Your site has moderate customizations. Test updates in staging environment before applying to production.', 'plugin-wp-support-thisismyurl' );
+			return __( 'Your site has moderate customizations. Test updates in staging environment before applying to production.', 'plugin-wpshadow' );
 		}
 
-		return __( 'Your site has minimal customizations. Standard update procedures should be safe.', 'plugin-wp-support-thisismyurl' );
+		return __( 'Your site has minimal customizations. Standard update procedures should be safe.', 'plugin-wpshadow' );
 	}
 
 	/**
@@ -659,7 +659,7 @@ class WPS_Customization_Audit {
 		// This is a simplified approach - full implementation would require more sophisticated detection.
 		return sprintf(
 			/* translators: %s: type slug */
-			__( 'Registered by plugin or theme (slug: %s)', 'plugin-wp-support-thisismyurl' ),
+			__( 'Registered by plugin or theme (slug: %s)', 'plugin-wpshadow' ),
 			$slug
 		);
 	}
@@ -674,7 +674,7 @@ class WPS_Customization_Audit {
 		if ( is_string( $callback ) ) {
 			return sprintf(
 				/* translators: %s: function name */
-				__( 'Function: %s', 'plugin-wp-support-thisismyurl' ),
+				__( 'Function: %s', 'plugin-wpshadow' ),
 				$callback
 			);
 		}
@@ -683,13 +683,13 @@ class WPS_Customization_Audit {
 			$class = is_object( $callback[0] ) ? get_class( $callback[0] ) : $callback[0];
 			return sprintf(
 				/* translators: 1: class name, 2: method name */
-				__( 'Method: %1$s::%2$s', 'plugin-wp-support-thisismyurl' ),
+				__( 'Method: %1$s::%2$s', 'plugin-wpshadow' ),
 				$class,
 				$callback[1]
 			);
 		}
 
-		return __( 'Unknown location', 'plugin-wp-support-thisismyurl' );
+		return __( 'Unknown location', 'plugin-wpshadow' );
 	}
 
 	/**
@@ -793,14 +793,14 @@ class WPS_Customization_Audit {
 		check_ajax_referer( 'wp_ajax', '_ajax_nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
+			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
 		}
 
 		$report = self::generate_audit();
 
 		wp_send_json_success(
 			array(
-				'message' => __( 'Audit generated successfully', 'plugin-wp-support-thisismyurl' ),
+				'message' => __( 'Audit generated successfully', 'plugin-wpshadow' ),
 				'report'  => $report,
 			)
 		);
@@ -815,17 +815,17 @@ class WPS_Customization_Audit {
 		check_ajax_referer( 'wp_ajax', '_ajax_nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
+			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
 		}
 
-		$report_id = \WPS\CoreSupport\wps_get_post_text( 'report_id' );
-		$format    = \WPS\CoreSupport\wps_get_post_text( 'format', 'json' );
+		$report_id = \WPS\CoreSupport\WPSHADOW_get_post_text( 'report_id' );
+		$format    = \WPS\CoreSupport\WPSHADOW_get_post_text( 'format', 'json' );
 
 		$reports = get_option( self::REPORTS_KEY, array() );
 		$report  = $reports[ $report_id ] ?? null;
 
 		if ( ! $report ) {
-			wp_send_json_error( __( 'Report not found', 'plugin-wp-support-thisismyurl' ) );
+			wp_send_json_error( __( 'Report not found', 'plugin-wpshadow' ) );
 		}
 
 		$export_data = self::export_report( $report, $format );
@@ -973,12 +973,12 @@ class WPS_Customization_Audit {
 	 */
 	public static function render_audit_page(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wpshadow' ) );
 		}
 
 		$reports = get_option( self::REPORTS_KEY, array() );
 		$latest  = ! empty( $reports ) ? end( $reports ) : null;
 
-		require_once wp_support_PATH . 'includes/views/customization-audit.php';
+		require_once WPSHADOW_PATH . 'includes/views/customization-audit.php';
 	}
 }

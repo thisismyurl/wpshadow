@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * WPS_Feature_Image_Lazy_Loading
+ * WPSHADOW_Feature_Image_Lazy_Loading
  *
  * Enhanced image lazy loading for better performance.
  */
-final class WPS_Feature_Image_Lazy_Loading extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Image_Lazy_Loading extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -27,14 +27,14 @@ final class WPS_Feature_Image_Lazy_Loading extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'image-lazy-loading',
-				'name'               => __( 'Enhanced Image Lazy Loading', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Auto-enable native lazy loading for all images to improve page load performance', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Enhanced Image Lazy Loading', 'plugin-wpshadow' ),
+				'description'        => __( 'Auto-enable native lazy loading for all images to improve page load performance', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Performance Optimization', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Optimize images and page load performance', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Performance Optimization', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Optimize images and page load performance', 'plugin-wpshadow' ),
 			)
 		);
 	}

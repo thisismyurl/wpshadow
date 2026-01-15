@@ -17,11 +17,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Feature_Validator
+ * WPSHADOW_Feature_Validator
  *
  * Validates feature metadata and provides defaults for missing fields.
  */
-final class WPS_Feature_Validator {
+final class WPSHADOW_Feature_Validator {
 
 	/**
 	 * Required feature metadata fields.

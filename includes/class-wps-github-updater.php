@@ -5,7 +5,7 @@
  * Handles automatic updates from private GitHub repositories using
  * GitHub API with optional authentication token support.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
 declare(strict_types=1);
@@ -21,21 +21,21 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Enables private GitHub repository updates via WordPress plugin update system.
  */
-class WPS_GitHub_Updater {
+class WPSHADOW_GitHub_Updater {
 
 	/**
 	 * GitHub repository owner
 	 *
 	 * @var string
 	 */
-	private const REPO_OWNER = 'thisismyurl';
+	private const REPO_OWNER = 'wpshadow';
 
 	/**
 	 * GitHub repository name
 	 *
 	 * @var string
 	 */
-	private const REPO_NAME = 'plugin-wp-support-thisismyurl';
+	private const REPO_NAME = 'plugin-wpshadow';
 
 	/**
 	 * GitHub API base URL
@@ -92,7 +92,7 @@ class WPS_GitHub_Updater {
 		if ( version_compare( $release_version, $current_version, '>' ) ) {
 			$transient->response[ self::$plugin_basename ] = (object) array(
 				'id'            => self::$plugin_basename,
-				'slug'          => 'plugin-wp-support-thisismyurl',
+				'slug'          => 'plugin-wpshadow',
 				'plugin'        => self::$plugin_basename,
 				'new_version'   => $release_version,
 				'url'           => $release_data['html_url'],
@@ -120,7 +120,7 @@ class WPS_GitHub_Updater {
 	 * @return object|bool Modified plugin info or false.
 	 */
 	public static function plugin_info_api( $result, string $action, $args ) {
-		if ( 'plugin_information' !== $action || 'plugin-wp-support-thisismyurl' !== $args->slug ) {
+		if ( 'plugin_information' !== $action || 'plugin-wpshadow' !== $args->slug ) {
 			return $result;
 		}
 
@@ -131,20 +131,20 @@ class WPS_GitHub_Updater {
 		}
 
 		$plugin_info = (object) array(
-			'name'           => 'WP Support (thisismyurl)',
-			'slug'           => 'plugin-wp-support-thisismyurl',
+			'name'           => 'WPShadow',
+			'slug'           => 'plugin-wpshadow',
 			'version'        => ltrim( $release_data['tag_name'], 'v' ),
 			'author'         => 'Christopher Ross',
 			'author_profile' => 'https://github.com/thisismyurl',
 			'download_link'  => $release_data['zipball_url'],
 			'description'    => $release_data['body'] ?? 'The foundational support plugin for WordPress with comprehensive diagnostics, emergency recovery, and backup verification.',
-			'homepage'       => 'https://thisismyurl.com/plugin-wp-support-thisismyurl',
+			'homepage'       => 'https://wpshadow.com/plugin-wpshadow',
 			'requires'       => '6.4',
 			'requires_php'   => '8.1.29',
 			'tested'         => '6.9',
 			'last_updated'   => $release_data['published_at'] ?? current_time( 'mysql' ),
 			'sections'       => array(
-				'description' => 'WP Support provides comprehensive WordPress health diagnostics, emergency recovery tools, backup verification, and documentation management.',
+				'description' => 'WPShadow provides comprehensive WordPress health diagnostics, emergency recovery tools, backup verification, and documentation management.',
 			),
 			'banners'        => array(),
 			'banners_rtl'    => array(),
@@ -161,7 +161,7 @@ class WPS_GitHub_Updater {
 	 */
 	private static function get_latest_release(): ?array {
 		// Check transient cache first (6 hour expiration).
-		$cached = get_transient( 'wps_github_latest_release' );
+		$cached = get_transient( 'wpshadow_github_latest_release' );
 		if ( is_array( $cached ) && ! empty( $cached ) ) {
 			return $cached;
 		}
@@ -207,7 +207,7 @@ class WPS_GitHub_Updater {
 		}
 
 		// Cache the release data for 6 hours.
-		set_transient( 'wps_github_latest_release', $data, 6 * HOUR_IN_SECONDS );
+		set_transient( 'wpshadow_github_latest_release', $data, 6 * HOUR_IN_SECONDS );
 
 		return $data;
 	}
@@ -219,7 +219,7 @@ class WPS_GitHub_Updater {
 	 */
 	private static function get_github_token(): ?string {
 		// Check for token in plugin option.
-		$token = get_option( 'wps_github_token' );
+		$token = get_option( 'wpshadow_github_token' );
 		if ( ! empty( $token ) && is_string( $token ) ) {
 			return sanitize_text_field( $token );
 		}
@@ -243,8 +243,8 @@ class WPS_GitHub_Updater {
 		if ( current_user_can( 'manage_options' ) ) {
 			$settings_link = sprintf(
 				'<a href="%s">%s</a>',
-				esc_url( add_query_arg( 'WPS_tab', 'github-updates', admin_url( 'admin.php?page=wp-support' ) ) ),
-				esc_html__( 'GitHub Updates', 'plugin-wp-support-thisismyurl' )
+				esc_url( add_query_arg( 'wpshadow_tab', 'github-updates', admin_url( 'admin.php?page=wp-support' ) ) ),
+				esc_html__( 'GitHub Updates', 'plugin-wpshadow' )
 			);
 			array_unshift( $links, $settings_link );
 		}
@@ -258,7 +258,7 @@ class WPS_GitHub_Updater {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wps_github_latest_release' );
+		delete_transient( 'wpshadow_github_latest_release' );
 		delete_site_transient( 'update_plugins' );
 	}
 

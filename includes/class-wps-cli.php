@@ -2,7 +2,7 @@
 /**
  * WP-CLI commands for WPS core.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
 declare(strict_types=1);
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * CLI: Modules.
  */
-class WPS_CLI_Modules {
+class WPSHADOW_CLI_Modules {
 	/**
 	 * List registered modules.
 	 *
@@ -34,7 +34,7 @@ class WPS_CLI_Modules {
 		$type  = isset( $assoc_args['type'] ) ? sanitize_key( $assoc_args['type'] ) : null;
 		$suite = isset( $assoc_args['suite'] ) ? sanitize_text_field( (string) $assoc_args['suite'] ) : null;
 
-		$modules = WPS_Module_Registry::get_modules_filtered( $type, $suite );
+		$modules = WPSHADOW_Module_Registry::get_modules_filtered( $type, $suite );
 
 		$rows = array();
 		foreach ( $modules as $module ) {
@@ -55,7 +55,7 @@ class WPS_CLI_Modules {
 /**
  * CLI: Settings.
  */
-class WPS_CLI_Settings {
+class WPSHADOW_CLI_Settings {
 	/**
 	 * Get a setting.
 	 *
@@ -72,7 +72,7 @@ class WPS_CLI_Settings {
 	public function get( array $args, array $assoc_args ): void {
 		list( $module, $key ) = $args;
 		$network              = isset( $assoc_args['network'] );
-		$value                = WPS_Settings::get( $module, $key, null, $network );
+		$value                = WPSHADOW_Settings::get( $module, $key, null, $network );
 
 		WP_CLI::line( is_scalar( $value ) ? (string) $value : wp_json_encode( $value ) );
 	}
@@ -100,7 +100,7 @@ class WPS_CLI_Settings {
 		$decoded = json_decode( $value, true );
 		$store   = ( JSON_ERROR_NONE === json_last_error() ) ? $decoded : $value;
 
-		WPS_Settings::update( $module, $key, $store, $network );
+		WPSHADOW_Settings::update( $module, $key, $store, $network );
 		WP_CLI::success( 'Setting updated.' );
 	}
 
@@ -121,7 +121,7 @@ class WPS_CLI_Settings {
 		list( $module, $key ) = $args;
 		$network              = isset( $assoc_args['network'] );
 
-		WPS_Settings::delete( $module, $key, $network );
+		WPSHADOW_Settings::delete( $module, $key, $network );
 		WP_CLI::success( 'Setting deleted.' );
 	}
 }

@@ -5,7 +5,7 @@
  * Handles site blueprint generation, protected plugins, and comprehensive documentation export.
  * Integrates #163 (Blueprint), #167 (Protected Plugins), #169 (Export Documentation).
  *
- * @package WPS_WP_SUPPORT
+ * @package WPSHADOW_WP_SUPPORT
  * @since 1.2601.1111
  */
 
@@ -14,24 +14,24 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * Class WPS_Site_Documentation_Manager
+ * Class WPSHADOW_Site_Documentation_Manager
  *
  * Provides comprehensive site documentation features:
  * - Site Blueprint: Auto-generated plain-English documentation
  * - Protected Plugins: Mark critical plugins with consequence warnings
  * - Export Engine: PDF/DOCX/HTML/Markdown export capabilities
  */
-class WPS_Site_Documentation_Manager {
+class WPSHADOW_Site_Documentation_Manager {
 
 	/**
 	 * Database option key for protected plugins.
 	 */
-	private const PROTECTED_PLUGINS_KEY = 'wps_protected_plugins';
+	private const PROTECTED_PLUGINS_KEY = 'wpshadow_protected_plugins';
 
 	/**
 	 * Database option key for documentation metadata.
 	 */
-	private const DOC_METADATA_KEY = 'wps_documentation_metadata';
+	private const DOC_METADATA_KEY = 'wpshadow_documentation_metadata';
 
 	/**
 	 * Initialize the documentation manager.
@@ -41,8 +41,8 @@ class WPS_Site_Documentation_Manager {
 	public static function init(): void {
 		add_action( 'admin_menu', array( __CLASS__, 'register_admin_pages' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
-		add_action( 'wp_ajax_wps_toggle_plugin_protection', array( __CLASS__, 'ajax_toggle_protection' ) );
-		add_action( 'wp_ajax_wps_export_documentation', array( __CLASS__, 'ajax_export_documentation' ) );
+		add_action( 'wp_ajax_WPSHADOW_toggle_plugin_protection', array( __CLASS__, 'ajax_toggle_protection' ) );
+		add_action( 'wp_ajax_WPSHADOW_export_documentation', array( __CLASS__, 'ajax_export_documentation' ) );
 		add_filter( 'plugin_action_links', array( __CLASS__, 'add_plugin_action_links' ), 10, 2 );
 	}
 
@@ -55,8 +55,8 @@ class WPS_Site_Documentation_Manager {
 		// Site Blueprint page.
 		add_submenu_page(
 			'wp-support',
-			__( 'Site Blueprint', 'plugin-wp-support-thisismyurl' ),
-			__( 'Site Blueprint', 'plugin-wp-support-thisismyurl' ),
+			__( 'Site Blueprint', 'plugin-wpshadow' ),
+			__( 'Site Blueprint', 'plugin-wpshadow' ),
 			'manage_options',
 			'wps-site-blueprint',
 			array( __CLASS__, 'render_blueprint_page' )
@@ -65,8 +65,8 @@ class WPS_Site_Documentation_Manager {
 		// Protected Plugins page.
 		add_submenu_page(
 			'wp-support',
-			__( 'Protected Plugins', 'plugin-wp-support-thisismyurl' ),
-			__( 'Protected Plugins', 'plugin-wp-support-thisismyurl' ),
+			__( 'Protected Plugins', 'plugin-wpshadow' ),
+			__( 'Protected Plugins', 'plugin-wpshadow' ),
 			'manage_options',
 			'wps-protected-plugins',
 			array( __CLASS__, 'render_protected_plugins_page' )
@@ -75,8 +75,8 @@ class WPS_Site_Documentation_Manager {
 		// Export Documentation page.
 		add_submenu_page(
 			'wp-support',
-			__( 'Export Documentation', 'plugin-wp-support-thisismyurl' ),
-			__( 'Export Documentation', 'plugin-wp-support-thisismyurl' ),
+			__( 'Export Documentation', 'plugin-wpshadow' ),
+			__( 'Export Documentation', 'plugin-wpshadow' ),
 			'manage_options',
 			'wps-export-documentation',
 			array( __CLASS__, 'render_export_page' )
@@ -104,7 +104,7 @@ class WPS_Site_Documentation_Manager {
 			'wpsDocumentation',
 			array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonce'    => wp_create_nonce( 'wps_documentation_nonce' ),
+				'nonce'    => wp_create_nonce( 'wpshadow_documentation_nonce' ),
 			)
 		);
 	}
@@ -120,10 +120,10 @@ class WPS_Site_Documentation_Manager {
 		$protected_plugins = self::get_protected_plugins();
 		$is_protected      = isset( $protected_plugins[ $plugin_file ] );
 
-		$link_text = $is_protected ? __( 'Unprotect', 'plugin-wp-support-thisismyurl' ) : __( 'Protect', 'plugin-wp-support-thisismyurl' );
+		$link_text = $is_protected ? __( 'Unprotect', 'plugin-wpshadow' ) : __( 'Protect', 'plugin-wpshadow' );
 		$class     = $is_protected ? 'wps-unprotect-plugin' : 'wps-protect-plugin';
 
-		$actions['WPS_protect'] = sprintf(
+		$actions['wpshadow_protect'] = sprintf(
 			'<a href="#" class="%s" data-plugin="%s">%s</a>',
 			esc_attr( $class ),
 			esc_attr( $plugin_file ),
@@ -139,15 +139,15 @@ class WPS_Site_Documentation_Manager {
 	 * @return void
 	 */
 	public static function ajax_toggle_protection(): void {
-		check_ajax_referer( 'wps_documentation_nonce', 'nonce' );
+		check_ajax_referer( 'wpshadow_documentation_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$plugin_file = \WPS\CoreSupport\wps_get_post_text( 'plugin' );
+		$plugin_file = \WPS\CoreSupport\WPSHADOW_get_post_text( 'plugin' );
 		if ( empty( $plugin_file ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid plugin specified', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid plugin specified', 'plugin-wpshadow' ) ) );
 		}
 
 		$protected_plugins = self::get_protected_plugins();
@@ -155,14 +155,14 @@ class WPS_Site_Documentation_Manager {
 
 		if ( $is_protected ) {
 			unset( $protected_plugins[ $plugin_file ] );
-			$message = __( 'Plugin protection removed', 'plugin-wp-support-thisismyurl' );
+			$message = __( 'Plugin protection removed', 'plugin-wpshadow' );
 		} else {
 			$protected_plugins[ $plugin_file ] = array(
 				'protected_at' => time(),
 				'protected_by' => get_current_user_id(),
 				'notify'       => true,
 			);
-			$message                           = __( 'Plugin marked as protected', 'plugin-wp-support-thisismyurl' );
+			$message                           = __( 'Plugin marked as protected', 'plugin-wpshadow' );
 		}
 
 		update_option( self::PROTECTED_PLUGINS_KEY, $protected_plugins );
@@ -181,13 +181,13 @@ class WPS_Site_Documentation_Manager {
 	 * @return void
 	 */
 	public static function ajax_export_documentation(): void {
-		check_ajax_referer( 'wps_documentation_nonce', 'nonce' );
+		check_ajax_referer( 'wpshadow_documentation_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$format = \WPS\CoreSupport\wps_get_post_text( 'format', 'html' );
+		$format = \WPS\CoreSupport\WPSHADOW_get_post_text( 'format', 'html' );
 		$export = self::generate_export( $format );
 
 		if ( is_wp_error( $export ) ) {
@@ -206,17 +206,17 @@ class WPS_Site_Documentation_Manager {
 		$blueprint = self::generate_blueprint();
 		?>
 		<div class="wrap wps-blueprint-page">
-			<h1><?php esc_html_e( 'Site Blueprint', 'plugin-wp-support-thisismyurl' ); ?></h1>
+			<h1><?php esc_html_e( 'Site Blueprint', 'plugin-wpshadow' ); ?></h1>
 			<p class="description">
-				<?php esc_html_e( 'Comprehensive site documentation in plain English. Understand what you have and how it works.', 'plugin-wp-support-thisismyurl' ); ?>
+				<?php esc_html_e( 'Comprehensive site documentation in plain English. Understand what you have and how it works.', 'plugin-wpshadow' ); ?>
 			</p>
 
 			<div class="wps-blueprint-actions">
 				<button type="button" class="button button-primary" id="wps-export-blueprint">
-					<?php esc_html_e( 'Export Blueprint', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Export Blueprint', 'plugin-wpshadow' ); ?>
 				</button>
 				<button type="button" class="button" id="wps-refresh-blueprint">
-					<?php esc_html_e( 'Refresh', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Refresh', 'plugin-wpshadow' ); ?>
 				</button>
 			</div>
 
@@ -237,25 +237,25 @@ class WPS_Site_Documentation_Manager {
 		$all_plugins       = get_plugins();
 		?>
 		<div class="wrap wps-protected-plugins-page">
-			<h1><?php esc_html_e( 'Protected Plugins', 'plugin-wp-support-thisismyurl' ); ?></h1>
+			<h1><?php esc_html_e( 'Protected Plugins', 'plugin-wpshadow' ); ?></h1>
 			<p class="description">
-				<?php esc_html_e( 'Mark critical plugins for protection. Prevent accidental removal and receive update notifications.', 'plugin-wp-support-thisismyurl' ); ?>
+				<?php esc_html_e( 'Mark critical plugins for protection. Prevent accidental removal and receive update notifications.', 'plugin-wpshadow' ); ?>
 			</p>
 
 			<div class="wps-protected-summary">
 				<span class="dashicons dashicons-shield"></span>
 				<strong><?php echo esc_html( count( $protected_plugins ) ); ?></strong>
-				<?php esc_html_e( 'plugins protected', 'plugin-wp-support-thisismyurl' ); ?>
+				<?php esc_html_e( 'plugins protected', 'plugin-wpshadow' ); ?>
 			</div>
 
 			<table class="widefat wps-protected-plugins-table">
 				<thead>
 					<tr>
-						<th><?php esc_html_e( 'Plugin', 'plugin-wp-support-thisismyurl' ); ?></th>
-						<th><?php esc_html_e( 'Purpose', 'plugin-wp-support-thisismyurl' ); ?></th>
-						<th><?php esc_html_e( 'If Removed', 'plugin-wp-support-thisismyurl' ); ?></th>
-						<th><?php esc_html_e( 'Protected', 'plugin-wp-support-thisismyurl' ); ?></th>
-						<th><?php esc_html_e( 'Actions', 'plugin-wp-support-thisismyurl' ); ?></th>
+						<th><?php esc_html_e( 'Plugin', 'plugin-wpshadow' ); ?></th>
+						<th><?php esc_html_e( 'Purpose', 'plugin-wpshadow' ); ?></th>
+						<th><?php esc_html_e( 'If Removed', 'plugin-wpshadow' ); ?></th>
+						<th><?php esc_html_e( 'Protected', 'plugin-wpshadow' ); ?></th>
+						<th><?php esc_html_e( 'Actions', 'plugin-wpshadow' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -276,15 +276,15 @@ class WPS_Site_Documentation_Manager {
 							<td>
 								<?php if ( $is_protected ) : ?>
 									<span class="dashicons dashicons-shield-alt" style="color: #46b450;"></span>
-									<?php esc_html_e( 'Yes', 'plugin-wp-support-thisismyurl' ); ?>
+									<?php esc_html_e( 'Yes', 'plugin-wpshadow' ); ?>
 								<?php else : ?>
 									<span class="dashicons dashicons-shield" style="color: #ddd;"></span>
-									<?php esc_html_e( 'No', 'plugin-wp-support-thisismyurl' ); ?>
+									<?php esc_html_e( 'No', 'plugin-wpshadow' ); ?>
 								<?php endif; ?>
 							</td>
 							<td>
 								<button type="button" class="button wps-toggle-protection" data-plugin="<?php echo esc_attr( $plugin_file ); ?>">
-									<?php echo $is_protected ? esc_html__( 'Unprotect', 'plugin-wp-support-thisismyurl' ) : esc_html__( 'Protect', 'plugin-wp-support-thisismyurl' ); ?>
+									<?php echo $is_protected ? esc_html__( 'Unprotect', 'plugin-wpshadow' ) : esc_html__( 'Protect', 'plugin-wpshadow' ); ?>
 								</button>
 							</td>
 						</tr>
@@ -303,61 +303,61 @@ class WPS_Site_Documentation_Manager {
 	public static function render_export_page(): void {
 		?>
 		<div class="wrap wps-export-page">
-			<h1><?php esc_html_e( 'Export Site Documentation', 'plugin-wp-support-thisismyurl' ); ?></h1>
+			<h1><?php esc_html_e( 'Export Site Documentation', 'plugin-wpshadow' ); ?></h1>
 			<p class="description">
-				<?php esc_html_e( 'Export complete site documentation for handoff to developers or for personal records.', 'plugin-wp-support-thisismyurl' ); ?>
+				<?php esc_html_e( 'Export complete site documentation for handoff to developers or for personal records.', 'plugin-wpshadow' ); ?>
 			</p>
 
 			<div class="wps-export-options">
-				<h2><?php esc_html_e( 'Export Format', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( 'Export Format', 'plugin-wpshadow' ); ?></h2>
 				<ul class="wps-export-formats">
 					<li>
 						<label>
 							<input type="radio" name="export_format" value="html" checked>
-							<strong><?php esc_html_e( 'HTML', 'plugin-wp-support-thisismyurl' ); ?></strong>
+							<strong><?php esc_html_e( 'HTML', 'plugin-wpshadow' ); ?></strong>
 							<br>
-							<small><?php esc_html_e( 'Web viewable, can be opened in any browser', 'plugin-wp-support-thisismyurl' ); ?></small>
+							<small><?php esc_html_e( 'Web viewable, can be opened in any browser', 'plugin-wpshadow' ); ?></small>
 						</label>
 					</li>
 					<li>
 						<label>
 							<input type="radio" name="export_format" value="markdown">
-							<strong><?php esc_html_e( 'Markdown', 'plugin-wp-support-thisismyurl' ); ?></strong>
+							<strong><?php esc_html_e( 'Markdown', 'plugin-wpshadow' ); ?></strong>
 							<br>
-							<small><?php esc_html_e( 'Developer friendly, works with GitHub and documentation systems', 'plugin-wp-support-thisismyurl' ); ?></small>
+							<small><?php esc_html_e( 'Developer friendly, works with GitHub and documentation systems', 'plugin-wpshadow' ); ?></small>
 						</label>
 					</li>
 					<li>
 						<label>
 							<input type="radio" name="export_format" value="text">
-							<strong><?php esc_html_e( 'Plain Text', 'plugin-wp-support-thisismyurl' ); ?></strong>
+							<strong><?php esc_html_e( 'Plain Text', 'plugin-wpshadow' ); ?></strong>
 							<br>
-							<small><?php esc_html_e( 'Universal format, readable anywhere', 'plugin-wp-support-thisismyurl' ); ?></small>
+							<small><?php esc_html_e( 'Universal format, readable anywhere', 'plugin-wpshadow' ); ?></small>
 						</label>
 					</li>
 				</ul>
 
-				<h2><?php esc_html_e( 'Include Sections', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( 'Include Sections', 'plugin-wpshadow' ); ?></h2>
 				<ul class="wps-export-sections">
-					<li><label><input type="checkbox" name="include_summary" checked> <?php esc_html_e( 'Executive Summary', 'plugin-wp-support-thisismyurl' ); ?></label></li>
-					<li><label><input type="checkbox" name="include_plugins" checked> <?php esc_html_e( 'Plugin Inventory', 'plugin-wp-support-thisismyurl' ); ?></label></li>
-					<li><label><input type="checkbox" name="include_customizations" checked> <?php esc_html_e( 'Customization Audit', 'plugin-wp-support-thisismyurl' ); ?></label></li>
-					<li><label><input type="checkbox" name="include_technical" checked> <?php esc_html_e( 'Technical Specifications', 'plugin-wp-support-thisismyurl' ); ?></label></li>
-					<li><label><input type="checkbox" name="include_maintenance" checked> <?php esc_html_e( 'Maintenance Schedule', 'plugin-wp-support-thisismyurl' ); ?></label></li>
-					<li><label><input type="checkbox" name="include_emergency" checked> <?php esc_html_e( 'Emergency Contacts', 'plugin-wp-support-thisismyurl' ); ?></label></li>
-					<li><label><input type="checkbox" name="include_recovery" checked> <?php esc_html_e( 'Recovery Procedures', 'plugin-wp-support-thisismyurl' ); ?></label></li>
+					<li><label><input type="checkbox" name="include_summary" checked> <?php esc_html_e( 'Executive Summary', 'plugin-wpshadow' ); ?></label></li>
+					<li><label><input type="checkbox" name="include_plugins" checked> <?php esc_html_e( 'Plugin Inventory', 'plugin-wpshadow' ); ?></label></li>
+					<li><label><input type="checkbox" name="include_customizations" checked> <?php esc_html_e( 'Customization Audit', 'plugin-wpshadow' ); ?></label></li>
+					<li><label><input type="checkbox" name="include_technical" checked> <?php esc_html_e( 'Technical Specifications', 'plugin-wpshadow' ); ?></label></li>
+					<li><label><input type="checkbox" name="include_maintenance" checked> <?php esc_html_e( 'Maintenance Schedule', 'plugin-wpshadow' ); ?></label></li>
+					<li><label><input type="checkbox" name="include_emergency" checked> <?php esc_html_e( 'Emergency Contacts', 'plugin-wpshadow' ); ?></label></li>
+					<li><label><input type="checkbox" name="include_recovery" checked> <?php esc_html_e( 'Recovery Procedures', 'plugin-wpshadow' ); ?></label></li>
 				</ul>
 
 				<button type="button" class="button button-primary button-hero" id="wps-export-now">
-					<?php esc_html_e( 'Export Documentation', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Export Documentation', 'plugin-wpshadow' ); ?>
 				</button>
 			</div>
 
 			<div class="wps-export-preview" style="display: none;">
-				<h2><?php esc_html_e( 'Preview', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( 'Preview', 'plugin-wpshadow' ); ?></h2>
 				<div class="wps-export-content"></div>
 				<button type="button" class="button button-primary" id="wps-download-export">
-					<?php esc_html_e( 'Download', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Download', 'plugin-wpshadow' ); ?>
 				</button>
 			</div>
 		</div>
@@ -374,25 +374,25 @@ class WPS_Site_Documentation_Manager {
 
 		// Executive Summary.
 		$output .= '<div class="wps-blueprint-section">';
-		$output .= '<h2>' . esc_html__( 'Executive Summary', 'plugin-wp-support-thisismyurl' ) . '</h2>';
+		$output .= '<h2>' . esc_html__( 'Executive Summary', 'plugin-wpshadow' ) . '</h2>';
 		$output .= self::generate_executive_summary();
 		$output .= '</div>';
 
 		// Plugin Inventory.
 		$output .= '<div class="wps-blueprint-section">';
-		$output .= '<h2>' . esc_html__( 'Your Plugins Explained', 'plugin-wp-support-thisismyurl' ) . '</h2>';
+		$output .= '<h2>' . esc_html__( 'Your Plugins Explained', 'plugin-wpshadow' ) . '</h2>';
 		$output .= self::generate_plugin_inventory();
 		$output .= '</div>';
 
 		// Customization Audit.
 		$output .= '<div class="wps-blueprint-section">';
-		$output .= '<h2>' . esc_html__( 'What\'s Custom on Your Site', 'plugin-wp-support-thisismyurl' ) . '</h2>';
+		$output .= '<h2>' . esc_html__( 'What\'s Custom on Your Site', 'plugin-wpshadow' ) . '</h2>';
 		$output .= self::generate_customization_audit();
 		$output .= '</div>';
 
 		// Technical Specifications.
 		$output .= '<div class="wps-blueprint-section">';
-		$output .= '<h2>' . esc_html__( 'Technical Specifications', 'plugin-wp-support-thisismyurl' ) . '</h2>';
+		$output .= '<h2>' . esc_html__( 'Technical Specifications', 'plugin-wpshadow' ) . '</h2>';
 		$output .= self::generate_technical_specs();
 		$output .= '</div>';
 
@@ -410,12 +410,12 @@ class WPS_Site_Documentation_Manager {
 		$theme          = wp_get_theme();
 
 		$output  = '<ul class="wps-summary-list">';
-		$output .= '<li><strong>' . esc_html__( 'Site URL:', 'plugin-wp-support-thisismyurl' ) . '</strong> ' . esc_html( get_site_url() ) . '</li>';
-		$output .= '<li><strong>' . esc_html__( 'Last Updated:', 'plugin-wp-support-thisismyurl' ) . '</strong> ' . esc_html( date_i18n( get_option( 'date_format' ), time() ) ) . '</li>';
-		$output .= '<li><strong>' . esc_html__( 'Total Plugins:', 'plugin-wp-support-thisismyurl' ) . '</strong> ' . esc_html( (string) count( $active_plugins ) ) . ' active, ' . esc_html( (string) ( count( $all_plugins ) - count( $active_plugins ) ) ) . ' inactive</li>';
-		$output .= '<li><strong>' . esc_html__( 'Theme:', 'plugin-wp-support-thisismyurl' ) . '</strong> ' . esc_html( $theme->get( 'Name' ) ) . ' v' . esc_html( $theme->get( 'Version' ) ) . '</li>';
-		$output .= '<li><strong>' . esc_html__( 'Multisite:', 'plugin-wp-support-thisismyurl' ) . '</strong> ' . ( is_multisite() ? esc_html__( 'Yes', 'plugin-wp-support-thisismyurl' ) : esc_html__( 'No', 'plugin-wp-support-thisismyurl' ) ) . '</li>';
-		$output .= '<li><strong>' . esc_html__( 'WooCommerce:', 'plugin-wp-support-thisismyurl' ) . '</strong> ' . ( class_exists( 'WooCommerce' ) ? esc_html__( 'Yes', 'plugin-wp-support-thisismyurl' ) : esc_html__( 'No', 'plugin-wp-support-thisismyurl' ) ) . '</li>';
+		$output .= '<li><strong>' . esc_html__( 'Site URL:', 'plugin-wpshadow' ) . '</strong> ' . esc_html( get_site_url() ) . '</li>';
+		$output .= '<li><strong>' . esc_html__( 'Last Updated:', 'plugin-wpshadow' ) . '</strong> ' . esc_html( date_i18n( get_option( 'date_format' ), time() ) ) . '</li>';
+		$output .= '<li><strong>' . esc_html__( 'Total Plugins:', 'plugin-wpshadow' ) . '</strong> ' . esc_html( (string) count( $active_plugins ) ) . ' active, ' . esc_html( (string) ( count( $all_plugins ) - count( $active_plugins ) ) ) . ' inactive</li>';
+		$output .= '<li><strong>' . esc_html__( 'Theme:', 'plugin-wpshadow' ) . '</strong> ' . esc_html( $theme->get( 'Name' ) ) . ' v' . esc_html( $theme->get( 'Version' ) ) . '</li>';
+		$output .= '<li><strong>' . esc_html__( 'Multisite:', 'plugin-wpshadow' ) . '</strong> ' . ( is_multisite() ? esc_html__( 'Yes', 'plugin-wpshadow' ) : esc_html__( 'No', 'plugin-wpshadow' ) ) . '</li>';
+		$output .= '<li><strong>' . esc_html__( 'WooCommerce:', 'plugin-wpshadow' ) . '</strong> ' . ( class_exists( 'WooCommerce' ) ? esc_html__( 'Yes', 'plugin-wpshadow' ) : esc_html__( 'No', 'plugin-wpshadow' ) ) . '</li>';
 		$output .= '</ul>';
 
 		return $output;
@@ -440,10 +440,10 @@ class WPS_Site_Documentation_Manager {
 
 			$output .= '<div class="wps-plugin-card">';
 			$output .= '<h3>' . esc_html( $plugin_data['Name'] ) . ' <small>v' . esc_html( $plugin_data['Version'] ) . '</small></h3>';
-			$output .= '<p><strong>' . esc_html__( 'Purpose:', 'plugin-wp-support-thisismyurl' ) . '</strong> ' . esc_html( $purpose ) . '</p>';
-			$output .= '<p><strong>' . esc_html__( 'What it does:', 'plugin-wp-support-thisismyurl' ) . '</strong> ' . esc_html( $what_it_does ) . '</p>';
-			$output .= '<p><strong>' . esc_html__( 'Is it essential?', 'plugin-wp-support-thisismyurl' ) . '</strong> ' . ( $essential ? '<span class="wps-badge-yes">' . esc_html__( 'YES', 'plugin-wp-support-thisismyurl' ) . '</span>' : '<span class="wps-badge-no">' . esc_html__( 'NO', 'plugin-wp-support-thisismyurl' ) . '</span>' ) . '</p>';
-			$output .= '<p><strong>' . esc_html__( 'If removed:', 'plugin-wp-support-thisismyurl' ) . '</strong> ' . esc_html( $consequences ) . '</p>';
+			$output .= '<p><strong>' . esc_html__( 'Purpose:', 'plugin-wpshadow' ) . '</strong> ' . esc_html( $purpose ) . '</p>';
+			$output .= '<p><strong>' . esc_html__( 'What it does:', 'plugin-wpshadow' ) . '</strong> ' . esc_html( $what_it_does ) . '</p>';
+			$output .= '<p><strong>' . esc_html__( 'Is it essential?', 'plugin-wpshadow' ) . '</strong> ' . ( $essential ? '<span class="wps-badge-yes">' . esc_html__( 'YES', 'plugin-wpshadow' ) . '</span>' : '<span class="wps-badge-no">' . esc_html__( 'NO', 'plugin-wpshadow' ) . '</span>' ) . '</p>';
+			$output .= '<p><strong>' . esc_html__( 'If removed:', 'plugin-wpshadow' ) . '</strong> ' . esc_html( $consequences ) . '</p>';
 			$output .= '</div>';
 		}
 
@@ -470,7 +470,7 @@ class WPS_Site_Documentation_Manager {
 			$output .= '<span class="dashicons dashicons-yes-alt"></span> ';
 			$output .= '<strong>' . esc_html( str_replace( wp_normalize_path( WP_CONTENT_DIR ), 'wp-content', wp_normalize_path( $functions_php ) ) ) . '</strong>';
 			$output .= ' (' . esc_html( (string) $lines ) . ' lines)';
-			$output .= '<br><small>' . esc_html__( 'Purpose: Adds custom features to your theme', 'plugin-wp-support-thisismyurl' ) . '</small>';
+			$output .= '<br><small>' . esc_html__( 'Purpose: Adds custom features to your theme', 'plugin-wpshadow' ) . '</small>';
 			$output .= '</div>';
 		}
 
@@ -481,18 +481,18 @@ class WPS_Site_Documentation_Manager {
 				$output .= '<div class="wps-custom-file">';
 				$output .= '<span class="dashicons dashicons-yes-alt"></span> ';
 				$output .= '<strong>' . esc_html( dirname( $plugin_file ) ) . '</strong>';
-				$output .= '<br><small>' . esc_html__( 'Purpose: Custom functionality', 'plugin-wp-support-thisismyurl' ) . '</small>';
-				$output .= '<br><small>' . esc_html__( 'Maintenance: May require developer for updates', 'plugin-wp-support-thisismyurl' ) . '</small>';
+				$output .= '<br><small>' . esc_html__( 'Purpose: Custom functionality', 'plugin-wpshadow' ) . '</small>';
+				$output .= '<br><small>' . esc_html__( 'Maintenance: May require developer for updates', 'plugin-wpshadow' ) . '</small>';
 				$output .= '</div>';
 			}
 		}
 
 		// Standard setup items.
-		$output .= '<h4>' . esc_html__( 'Standard Setup (No Customization)', 'plugin-wp-support-thisismyurl' ) . '</h4>';
+		$output .= '<h4>' . esc_html__( 'Standard Setup (No Customization)', 'plugin-wpshadow' ) . '</h4>';
 		$output .= '<ul>';
-		$output .= '<li><span class="dashicons dashicons-yes-alt"></span> ' . esc_html__( 'Menus', 'plugin-wp-support-thisismyurl' ) . '</li>';
-		$output .= '<li><span class="dashicons dashicons-yes-alt"></span> ' . esc_html__( 'Widgets', 'plugin-wp-support-thisismyurl' ) . '</li>';
-		$output .= '<li><span class="dashicons dashicons-yes-alt"></span> ' . esc_html__( 'Pages/Posts', 'plugin-wp-support-thisismyurl' ) . '</li>';
+		$output .= '<li><span class="dashicons dashicons-yes-alt"></span> ' . esc_html__( 'Menus', 'plugin-wpshadow' ) . '</li>';
+		$output .= '<li><span class="dashicons dashicons-yes-alt"></span> ' . esc_html__( 'Widgets', 'plugin-wpshadow' ) . '</li>';
+		$output .= '<li><span class="dashicons dashicons-yes-alt"></span> ' . esc_html__( 'Pages/Posts', 'plugin-wpshadow' ) . '</li>';
 		$output .= '</ul>';
 
 		$output .= '</div>';
@@ -520,13 +520,13 @@ class WPS_Site_Documentation_Manager {
 		}
 
 		$output  = '<ul class="wps-technical-specs">';
-		$output .= '<li><strong>' . esc_html__( 'WordPress Version:', 'plugin-wp-support-thisismyurl' ) . '</strong> ' . esc_html( get_bloginfo( 'version' ) ) . '</li>';
-		$output .= '<li><strong>' . esc_html__( 'PHP Version:', 'plugin-wp-support-thisismyurl' ) . '</strong> ' . esc_html( phpversion() ) . '</li>';
-		$output .= '<li><strong>' . esc_html__( 'MySQL Version:', 'plugin-wp-support-thisismyurl' ) . '</strong> ' . esc_html( $wpdb->db_version() ) . '</li>';
-		$output .= '<li><strong>' . esc_html__( 'Theme:', 'plugin-wp-support-thisismyurl' ) . '</strong> ' . esc_html( $theme->get( 'Name' ) ) . '</li>';
-		$output .= '<li><strong>' . esc_html__( 'Plugins:', 'plugin-wp-support-thisismyurl' ) . '</strong> ' . esc_html( (string) $active_count ) . ' active, ' . esc_html( (string) ( count( $all_plugins ) - $active_count ) ) . ' inactive</li>';
-		$output .= '<li><strong>' . esc_html__( 'Database Tables:', 'plugin-wp-support-thisismyurl' ) . '</strong> ' . esc_html( (string) $table_count ) . '</li>';
-		$output .= '<li><strong>' . esc_html__( 'Uploads Disk Space:', 'plugin-wp-support-thisismyurl' ) . '</strong> ' . esc_html( size_format( $disk_space ) ) . '</li>';
+		$output .= '<li><strong>' . esc_html__( 'WordPress Version:', 'plugin-wpshadow' ) . '</strong> ' . esc_html( get_bloginfo( 'version' ) ) . '</li>';
+		$output .= '<li><strong>' . esc_html__( 'PHP Version:', 'plugin-wpshadow' ) . '</strong> ' . esc_html( phpversion() ) . '</li>';
+		$output .= '<li><strong>' . esc_html__( 'MySQL Version:', 'plugin-wpshadow' ) . '</strong> ' . esc_html( $wpdb->db_version() ) . '</li>';
+		$output .= '<li><strong>' . esc_html__( 'Theme:', 'plugin-wpshadow' ) . '</strong> ' . esc_html( $theme->get( 'Name' ) ) . '</li>';
+		$output .= '<li><strong>' . esc_html__( 'Plugins:', 'plugin-wpshadow' ) . '</strong> ' . esc_html( (string) $active_count ) . ' active, ' . esc_html( (string) ( count( $all_plugins ) - $active_count ) ) . ' inactive</li>';
+		$output .= '<li><strong>' . esc_html__( 'Database Tables:', 'plugin-wpshadow' ) . '</strong> ' . esc_html( (string) $table_count ) . '</li>';
+		$output .= '<li><strong>' . esc_html__( 'Uploads Disk Space:', 'plugin-wpshadow' ) . '</strong> ' . esc_html( size_format( $disk_space ) ) . '</li>';
 		$output .= '</ul>';
 
 		return $output;
@@ -540,7 +540,7 @@ class WPS_Site_Documentation_Manager {
 	 */
 	private static function generate_export( string $format ): array|\WP_Error {
 		if ( ! in_array( $format, array( 'html', 'markdown', 'text' ), true ) ) {
-			return new \WP_Error( 'invalid_format', __( 'Invalid export format', 'plugin-wp-support-thisismyurl' ) );
+			return new \WP_Error( 'invalid_format', __( 'Invalid export format', 'plugin-wpshadow' ) );
 		}
 
 		$content = '';
@@ -581,11 +581,11 @@ class WPS_Site_Documentation_Manager {
 		$output .= '<style>body{font-family:Arial,sans-serif;max-width:1200px;margin:40px auto;padding:20px;line-height:1.6;}h1{border-bottom:3px solid #0073aa;}h2{color:#0073aa;margin-top:30px;}.plugin-card{background:#f5f5f5;padding:15px;margin:15px 0;border-left:4px solid #0073aa;}</style>';
 		$output .= '</head><body>';
 		$output .= '<h1>' . esc_html( $site_name ) . ' - Site Documentation</h1>';
-		$output .= '<p><em>' . esc_html__( 'Generated:', 'plugin-wp-support-thisismyurl' ) . ' ' . esc_html( $date ) . '</em></p>';
+		$output .= '<p><em>' . esc_html__( 'Generated:', 'plugin-wpshadow' ) . ' ' . esc_html( $date ) . '</em></p>';
 		$output .= self::generate_blueprint();
-		$output .= '<hr><h2>' . esc_html__( 'Maintenance Schedule', 'plugin-wp-support-thisismyurl' ) . '</h2>';
+		$output .= '<hr><h2>' . esc_html__( 'Maintenance Schedule', 'plugin-wpshadow' ) . '</h2>';
 		$output .= self::generate_maintenance_schedule();
-		$output .= '<h2>' . esc_html__( 'Emergency Contacts', 'plugin-wp-support-thisismyurl' ) . '</h2>';
+		$output .= '<h2>' . esc_html__( 'Emergency Contacts', 'plugin-wpshadow' ) . '</h2>';
 		$output .= self::generate_emergency_contacts();
 		$output .= '</body></html>';
 
@@ -633,22 +633,22 @@ class WPS_Site_Documentation_Manager {
 	 */
 	private static function generate_maintenance_schedule(): string {
 		$output  = '<div class="wps-maintenance-schedule">';
-		$output .= '<h3>' . esc_html__( 'Monthly (First Monday)', 'plugin-wp-support-thisismyurl' ) . '</h3>';
+		$output .= '<h3>' . esc_html__( 'Monthly (First Monday)', 'plugin-wpshadow' ) . '</h3>';
 		$output .= '<ul>';
-		$output .= '<li>' . esc_html__( 'Check for plugin updates', 'plugin-wp-support-thisismyurl' ) . '</li>';
-		$output .= '<li>' . esc_html__( 'Run site audit', 'plugin-wp-support-thisismyurl' ) . '</li>';
-		$output .= '<li>' . esc_html__( 'Review error logs', 'plugin-wp-support-thisismyurl' ) . '</li>';
-		$output .= '<li>' . esc_html__( 'Verify backups working', 'plugin-wp-support-thisismyurl' ) . '</li>';
+		$output .= '<li>' . esc_html__( 'Check for plugin updates', 'plugin-wpshadow' ) . '</li>';
+		$output .= '<li>' . esc_html__( 'Run site audit', 'plugin-wpshadow' ) . '</li>';
+		$output .= '<li>' . esc_html__( 'Review error logs', 'plugin-wpshadow' ) . '</li>';
+		$output .= '<li>' . esc_html__( 'Verify backups working', 'plugin-wpshadow' ) . '</li>';
 		$output .= '</ul>';
-		$output .= '<p><em>' . esc_html__( 'Expected time: 1-2 hours', 'plugin-wp-support-thisismyurl' ) . '</em></p>';
+		$output .= '<p><em>' . esc_html__( 'Expected time: 1-2 hours', 'plugin-wpshadow' ) . '</em></p>';
 
-		$output .= '<h3>' . esc_html__( 'Quarterly', 'plugin-wp-support-thisismyurl' ) . '</h3>';
+		$output .= '<h3>' . esc_html__( 'Quarterly', 'plugin-wpshadow' ) . '</h3>';
 		$output .= '<ul>';
-		$output .= '<li>' . esc_html__( 'Full security audit', 'plugin-wp-support-thisismyurl' ) . '</li>';
-		$output .= '<li>' . esc_html__( 'Performance optimization', 'plugin-wp-support-thisismyurl' ) . '</li>';
-		$output .= '<li>' . esc_html__( 'Database cleanup', 'plugin-wp-support-thisismyurl' ) . '</li>';
+		$output .= '<li>' . esc_html__( 'Full security audit', 'plugin-wpshadow' ) . '</li>';
+		$output .= '<li>' . esc_html__( 'Performance optimization', 'plugin-wpshadow' ) . '</li>';
+		$output .= '<li>' . esc_html__( 'Database cleanup', 'plugin-wpshadow' ) . '</li>';
 		$output .= '</ul>';
-		$output .= '<p><em>' . esc_html__( 'Expected time: 3-4 hours', 'plugin-wp-support-thisismyurl' ) . '</em></p>';
+		$output .= '<p><em>' . esc_html__( 'Expected time: 3-4 hours', 'plugin-wpshadow' ) . '</em></p>';
 		$output .= '</div>';
 
 		return $output;
@@ -661,14 +661,14 @@ class WPS_Site_Documentation_Manager {
 	 */
 	private static function generate_emergency_contacts(): string {
 		$output  = '<div class="wps-emergency-contacts">';
-		$output .= '<h3>' . esc_html__( 'Emergency Support', 'plugin-wp-support-thisismyurl' ) . '</h3>';
-		$output .= '<p><strong>' . esc_html__( 'WPS Dashboard Support', 'plugin-wp-support-thisismyurl' ) . '</strong><br>';
-		$output .= esc_html__( 'Email:', 'plugin-wp-support-thisismyurl' ) . ' christopher@thisismyurl.com<br>';
-		$output .= esc_html__( 'Support Portal:', 'plugin-wp-support-thisismyurl' ) . ' <a href="https://thisismyurl.com/support" target="_blank">https://thisismyurl.com/support</a><br>';
-		$output .= esc_html__( '24/7 Emergency SOS available', 'plugin-wp-support-thisismyurl' ) . '</p>';
+		$output .= '<h3>' . esc_html__( 'Emergency Support', 'plugin-wpshadow' ) . '</h3>';
+		$output .= '<p><strong>' . esc_html__( 'WPS Dashboard Support', 'plugin-wpshadow' ) . '</strong><br>';
+		$output .= esc_html__( 'Email:', 'plugin-wpshadow' ) . ' christopher@wpshadow.com<br>';
+		$output .= esc_html__( 'Support Portal:', 'plugin-wpshadow' ) . ' <a href="https://wpshadow.com/support" target="_blank">https://wpshadow.com/support</a><br>';
+		$output .= esc_html__( '24/7 Emergency SOS available', 'plugin-wpshadow' ) . '</p>';
 
-		$output .= '<h3>' . esc_html__( 'Community Support', 'plugin-wp-support-thisismyurl' ) . '</h3>';
-		$output .= '<p>' . esc_html__( 'WordPress.org Forums:', 'plugin-wp-support-thisismyurl' ) . ' <a href="https://wordpress.org/support/" target="_blank">https://wordpress.org/support/</a></p>';
+		$output .= '<h3>' . esc_html__( 'Community Support', 'plugin-wpshadow' ) . '</h3>';
+		$output .= '<p>' . esc_html__( 'WordPress.org Forums:', 'plugin-wpshadow' ) . ' <a href="https://wordpress.org/support/" target="_blank">https://wordpress.org/support/</a></p>';
 		$output .= '</div>';
 
 		return $output;
@@ -693,15 +693,15 @@ class WPS_Site_Documentation_Manager {
 	private static function get_plugin_purpose( string $plugin_file ): string {
 		// Map common plugins to their purposes.
 		$purposes = array(
-			'contact-form-7/'                => __( 'Contact form management', 'plugin-wp-support-thisismyurl' ),
-			'woocommerce/'                   => __( 'E-commerce shop functionality', 'plugin-wp-support-thisismyurl' ),
-			'wordpress-seo/'                 => __( 'SEO optimization and ranking', 'plugin-wp-support-thisismyurl' ),
-			'akismet/'                       => __( 'Spam protection', 'plugin-wp-support-thisismyurl' ),
-			'elementor/'                     => __( 'Page builder and design', 'plugin-wp-support-thisismyurl' ),
-			'jetpack/'                       => __( 'Security, performance, and marketing', 'plugin-wp-support-thisismyurl' ),
-			'wordfence/'                     => __( 'Security and firewall', 'plugin-wp-support-thisismyurl' ),
-			'wp-support-thisismyurl/'        => __( 'Site management and support', 'plugin-wp-support-thisismyurl' ),
-			'plugin-wp-support-thisismyurl/' => __( 'Site management and support', 'plugin-wp-support-thisismyurl' ),
+			'contact-form-7/'                => __( 'Contact form management', 'plugin-wpshadow' ),
+			'woocommerce/'                   => __( 'E-commerce shop functionality', 'plugin-wpshadow' ),
+			'wordpress-seo/'                 => __( 'SEO optimization and ranking', 'plugin-wpshadow' ),
+			'akismet/'                       => __( 'Spam protection', 'plugin-wpshadow' ),
+			'elementor/'                     => __( 'Page builder and design', 'plugin-wpshadow' ),
+			'jetpack/'                       => __( 'Security, performance, and marketing', 'plugin-wpshadow' ),
+			'wordfence/'                     => __( 'Security and firewall', 'plugin-wpshadow' ),
+			'wpshadow/'        => __( 'Site management and support', 'plugin-wpshadow' ),
+			'plugin-wpshadow/' => __( 'Site management and support', 'plugin-wpshadow' ),
 		);
 
 		foreach ( $purposes as $slug => $purpose ) {
@@ -710,7 +710,7 @@ class WPS_Site_Documentation_Manager {
 			}
 		}
 
-		return __( 'General plugin functionality', 'plugin-wp-support-thisismyurl' );
+		return __( 'General plugin functionality', 'plugin-wpshadow' );
 	}
 
 	/**
@@ -721,15 +721,15 @@ class WPS_Site_Documentation_Manager {
 	 */
 	private static function get_plugin_function( string $plugin_file ): string {
 		$functions = array(
-			'contact-form-7/'                => __( 'Collects form submissions and sends email notifications', 'plugin-wp-support-thisismyurl' ),
-			'woocommerce/'                   => __( 'Manages products, orders, and payments', 'plugin-wp-support-thisismyurl' ),
-			'wordpress-seo/'                 => __( 'Analyzes content and suggests SEO improvements', 'plugin-wp-support-thisismyurl' ),
-			'akismet/'                       => __( 'Automatically filters spam comments', 'plugin-wp-support-thisismyurl' ),
-			'elementor/'                     => __( 'Provides drag-and-drop page design tools', 'plugin-wp-support-thisismyurl' ),
-			'jetpack/'                       => __( 'Adds security features, backups, and traffic tools', 'plugin-wp-support-thisismyurl' ),
-			'wordfence/'                     => __( 'Scans for malware and blocks attacks', 'plugin-wp-support-thisismyurl' ),
-			'wp-support-thisismyurl/'        => __( 'Provides dashboard insights and maintenance tools', 'plugin-wp-support-thisismyurl' ),
-			'plugin-wp-support-thisismyurl/' => __( 'Provides dashboard insights and maintenance tools', 'plugin-wp-support-thisismyurl' ),
+			'contact-form-7/'                => __( 'Collects form submissions and sends email notifications', 'plugin-wpshadow' ),
+			'woocommerce/'                   => __( 'Manages products, orders, and payments', 'plugin-wpshadow' ),
+			'wordpress-seo/'                 => __( 'Analyzes content and suggests SEO improvements', 'plugin-wpshadow' ),
+			'akismet/'                       => __( 'Automatically filters spam comments', 'plugin-wpshadow' ),
+			'elementor/'                     => __( 'Provides drag-and-drop page design tools', 'plugin-wpshadow' ),
+			'jetpack/'                       => __( 'Adds security features, backups, and traffic tools', 'plugin-wpshadow' ),
+			'wordfence/'                     => __( 'Scans for malware and blocks attacks', 'plugin-wpshadow' ),
+			'wpshadow/'        => __( 'Provides dashboard insights and maintenance tools', 'plugin-wpshadow' ),
+			'plugin-wpshadow/' => __( 'Provides dashboard insights and maintenance tools', 'plugin-wpshadow' ),
 		);
 
 		foreach ( $functions as $slug => $function ) {
@@ -738,7 +738,7 @@ class WPS_Site_Documentation_Manager {
 			}
 		}
 
-		return __( 'Adds additional features to your site', 'plugin-wp-support-thisismyurl' );
+		return __( 'Adds additional features to your site', 'plugin-wpshadow' );
 	}
 
 	/**
@@ -752,8 +752,8 @@ class WPS_Site_Documentation_Manager {
 			'woocommerce/',
 			'contact-form-7/',
 			'wordfence/',
-			'wp-support-thisismyurl/',
-			'plugin-wp-support-thisismyurl/',
+			'wpshadow/',
+			'plugin-wpshadow/',
 		);
 
 		foreach ( $essential_patterns as $pattern ) {
@@ -773,15 +773,15 @@ class WPS_Site_Documentation_Manager {
 	 */
 	private static function get_removal_consequences( string $plugin_file ): string {
 		$consequences = array(
-			'contact-form-7/'                => __( 'Contact forms will stop working', 'plugin-wp-support-thisismyurl' ),
-			'woocommerce/'                   => __( 'Your entire shop will be disabled', 'plugin-wp-support-thisismyurl' ),
-			'wordpress-seo/'                 => __( 'You lose SEO guidance (site still works)', 'plugin-wp-support-thisismyurl' ),
-			'akismet/'                       => __( 'Spam comments will appear on your site', 'plugin-wp-support-thisismyurl' ),
-			'elementor/'                     => __( 'Page layouts may break or render incorrectly', 'plugin-wp-support-thisismyurl' ),
-			'jetpack/'                       => __( 'Security features and backups will be disabled', 'plugin-wp-support-thisismyurl' ),
-			'wordfence/'                     => __( 'Site security monitoring will stop', 'plugin-wp-support-thisismyurl' ),
-			'wp-support-thisismyurl/'        => __( 'Dashboard management tools will be unavailable', 'plugin-wp-support-thisismyurl' ),
-			'plugin-wp-support-thisismyurl/' => __( 'Dashboard management tools will be unavailable', 'plugin-wp-support-thisismyurl' ),
+			'contact-form-7/'                => __( 'Contact forms will stop working', 'plugin-wpshadow' ),
+			'woocommerce/'                   => __( 'Your entire shop will be disabled', 'plugin-wpshadow' ),
+			'wordpress-seo/'                 => __( 'You lose SEO guidance (site still works)', 'plugin-wpshadow' ),
+			'akismet/'                       => __( 'Spam comments will appear on your site', 'plugin-wpshadow' ),
+			'elementor/'                     => __( 'Page layouts may break or render incorrectly', 'plugin-wpshadow' ),
+			'jetpack/'                       => __( 'Security features and backups will be disabled', 'plugin-wpshadow' ),
+			'wordfence/'                     => __( 'Site security monitoring will stop', 'plugin-wpshadow' ),
+			'wpshadow/'        => __( 'Dashboard management tools will be unavailable', 'plugin-wpshadow' ),
+			'plugin-wpshadow/' => __( 'Dashboard management tools will be unavailable', 'plugin-wpshadow' ),
 		);
 
 		foreach ( $consequences as $slug => $consequence ) {
@@ -790,7 +790,7 @@ class WPS_Site_Documentation_Manager {
 			}
 		}
 
-		return __( 'Some site features may stop working', 'plugin-wp-support-thisismyurl' );
+		return __( 'Some site features may stop working', 'plugin-wpshadow' );
 	}
 
 	/**

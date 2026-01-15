@@ -5,7 +5,7 @@
  * Awards badges for actions like "First Fix," "Security Hardened," "Performance Boosted."
  * Displays badges in the dashboard and sends email notifications when badges are earned.
  *
- * @package wp_support_Support
+ * @package wpshadow_Support
  * @since 1.2601.73002
  */
 
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tracks user achievements and awards badges for significant actions.
  */
-class WPS_Achievement_Badges {
+class WPSHADOW_Achievement_Badges {
 
 	/**
 	 * Badge types.
@@ -37,12 +37,12 @@ class WPS_Achievement_Badges {
 	/**
 	 * User meta key for badges.
 	 */
-	private const USER_META_KEY = 'wps_achievement_badges';
+	private const USER_META_KEY = 'wpshadow_achievement_badges';
 
 	/**
 	 * Option key for badge notification settings.
 	 */
-	private const NOTIFICATION_OPTION = 'wps_badge_notifications_enabled';
+	private const NOTIFICATION_OPTION = 'wpshadow_badge_notifications_enabled';
 
 	/**
 	 * Initialize the achievement badges system.
@@ -51,11 +51,11 @@ class WPS_Achievement_Badges {
 	 */
 	public static function init(): void {
 		// Hook into activity events to award badges.
-		add_action( 'wps_feature_enabled', array( __CLASS__, 'on_feature_enabled' ), 10, 2 );
-		add_action( 'wps_module_activated', array( __CLASS__, 'on_module_activated' ), 10, 1 );
-		add_action( 'wps_security_action', array( __CLASS__, 'on_security_action' ), 10, 1 );
-		add_action( 'wps_performance_action', array( __CLASS__, 'on_performance_action' ), 10, 1 );
-		add_action( 'wps_vault_file_added', array( __CLASS__, 'on_vault_file_added' ), 10, 1 );
+		add_action( 'wpshadow_feature_enabled', array( __CLASS__, 'on_feature_enabled' ), 10, 2 );
+		add_action( 'wpshadow_module_activated', array( __CLASS__, 'on_module_activated' ), 10, 1 );
+		add_action( 'wpshadow_security_action', array( __CLASS__, 'on_security_action' ), 10, 1 );
+		add_action( 'wpshadow_performance_action', array( __CLASS__, 'on_performance_action' ), 10, 1 );
+		add_action( 'wpshadow_vault_file_added', array( __CLASS__, 'on_vault_file_added' ), 10, 1 );
 
 		// Add dashboard widget.
 		add_action( 'wp_dashboard_setup', array( __CLASS__, 'register_dashboard_widget' ) );
@@ -75,38 +75,38 @@ class WPS_Achievement_Badges {
 	public static function get_badge_definitions(): array {
 		return array(
 			self::BADGE_FIRST_FIX         => array(
-				'title'       => __( 'First Fix', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Activated your first feature or module', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'First Fix', 'plugin-wpshadow' ),
+				'description' => __( 'Activated your first feature or module', 'plugin-wpshadow' ),
 				'icon'        => 'dashicons-admin-tools',
 				'color'       => '#4CAF50',
 			),
 			self::BADGE_SECURITY_HARDENED => array(
-				'title'       => __( 'Security Hardened', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Enabled security features to protect your site', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Security Hardened', 'plugin-wpshadow' ),
+				'description' => __( 'Enabled security features to protect your site', 'plugin-wpshadow' ),
 				'icon'        => 'dashicons-lock',
 				'color'       => '#F44336',
 			),
 			self::BADGE_PERFORMANCE_BOOST => array(
-				'title'       => __( 'Performance Boosted', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Optimized your site for better performance', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Performance Boosted', 'plugin-wpshadow' ),
+				'description' => __( 'Optimized your site for better performance', 'plugin-wpshadow' ),
 				'icon'        => 'dashicons-performance',
 				'color'       => '#2196F3',
 			),
 			self::BADGE_MODULE_MASTER     => array(
-				'title'       => __( 'Module Master', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Activated 5 or more modules', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Module Master', 'plugin-wpshadow' ),
+				'description' => __( 'Activated 5 or more modules', 'plugin-wpshadow' ),
 				'icon'        => 'dashicons-admin-plugins',
 				'color'       => '#9C27B0',
 			),
 			self::BADGE_VAULT_GUARDIAN    => array(
-				'title'       => __( 'Vault Guardian', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Protected your first file in the vault', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Vault Guardian', 'plugin-wpshadow' ),
+				'description' => __( 'Protected your first file in the vault', 'plugin-wpshadow' ),
 				'icon'        => 'dashicons-vault',
 				'color'       => '#FF9800',
 			),
 			self::BADGE_EARLY_ADOPTER     => array(
-				'title'       => __( 'Early Adopter', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'One of the first to use WP Support', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Early Adopter', 'plugin-wpshadow' ),
+				'description' => __( 'One of the first to use WPShadow', 'plugin-wpshadow' ),
 				'icon'        => 'dashicons-star-filled',
 				'color'       => '#FFD700',
 			),
@@ -142,12 +142,12 @@ class WPS_Achievement_Badges {
 		}
 
 		// Log achievement.
-		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
-			WPS_Activity_Logger::log_event(
+		if ( class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) ) {
+			WPSHADOW_Activity_Logger::log_event(
 				'badge_earned',
 				sprintf(
 					/* translators: %s: Badge title */
-					__( 'Earned badge: %s', 'plugin-wp-support-thisismyurl' ),
+					__( 'Earned badge: %s', 'plugin-wpshadow' ),
 					self::get_badge_definitions()[ $badge_id ]['title']
 				),
 				$user_id
@@ -199,7 +199,7 @@ class WPS_Achievement_Badges {
 
 		$subject = sprintf(
 			/* translators: 1: Site name, 2: Badge title */
-			__( '[%1$s] Achievement Unlocked: %2$s', 'plugin-wp-support-thisismyurl' ),
+			__( '[%1$s] Achievement Unlocked: %2$s', 'plugin-wpshadow' ),
 			get_bloginfo( 'name' ),
 			$badge['title']
 		);
@@ -217,8 +217,8 @@ View your achievements: %4$s
 
 Keep up the great work!
 
--- The WP Support Team',
-				'plugin-wp-support-thisismyurl'
+-- The WPShadow Team',
+				'plugin-wpshadow'
 			),
 			$user->display_name,
 			$badge['title'],
@@ -268,8 +268,8 @@ Keep up the great work!
 	 */
 	public static function on_module_activated( int $user_id ): void {
 		// Count active modules.
-		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Module_Registry' ) ) {
-			$catalog        = WPS_Module_Registry::get_catalog_with_status();
+		if ( class_exists( '\\WPShadow\\WPSHADOW_Module_Registry' ) ) {
+			$catalog        = WPSHADOW_Module_Registry::get_catalog_with_status();
 			$active_modules = array_filter(
 				$catalog,
 				function ( $module ) {
@@ -326,8 +326,8 @@ Keep up the great work!
 	 */
 	public static function register_dashboard_widget(): void {
 		wp_add_dashboard_widget(
-			'wps_achievement_badges',
-			__( 'Achievement Badges', 'plugin-wp-support-thisismyurl' ),
+			'wpshadow_achievement_badges',
+			__( 'Achievement Badges', 'plugin-wpshadow' ),
 			array( __CLASS__, 'render_dashboard_widget' )
 		);
 	}
@@ -345,7 +345,7 @@ Keep up the great work!
 		echo '<div class="wps-badges-widget">';
 
 		if ( empty( $badges ) ) {
-			echo '<p>' . esc_html__( 'Start using WP Support features to earn achievement badges!', 'plugin-wp-support-thisismyurl' ) . '</p>';
+			echo '<p>' . esc_html__( 'Start using WPShadow features to earn achievement badges!', 'plugin-wpshadow' ) . '</p>';
 		} else {
 			echo '<div class="wps-badges-earned">';
 			foreach ( $badges as $badge_id => $badge_data ) {
@@ -365,7 +365,7 @@ Keep up the great work!
 					esc_attr( $def['icon'] ),
 					esc_attr( $def['color'] ),
 					esc_html( $def['title'] ),
-					esc_html( human_time_diff( $badge_data['timestamp'], time() ) . ' ' . __( 'ago', 'plugin-wp-support-thisismyurl' ) )
+					esc_html( human_time_diff( $badge_data['timestamp'], time() ) . ' ' . __( 'ago', 'plugin-wpshadow' ) )
 				);
 			}
 			echo '</div>';
@@ -375,7 +375,7 @@ Keep up the great work!
 		$locked_badges = array_diff_key( $definitions, $badges );
 		if ( ! empty( $locked_badges ) ) {
 			echo '<div class="wps-badges-locked">';
-			echo '<h4>' . esc_html__( 'Locked Badges', 'plugin-wp-support-thisismyurl' ) . '</h4>';
+			echo '<h4>' . esc_html__( 'Locked Badges', 'plugin-wpshadow' ) . '</h4>';
 			foreach ( $locked_badges as $badge_id => $def ) {
 				printf(
 					'<div class="wps-badge-item locked" title="%s">
@@ -394,7 +394,7 @@ Keep up the great work!
 			echo '</div>';
 		}
 
-		echo '<p><a href="' . esc_url( admin_url( 'admin.php?page=wps-achievements' ) ) . '" class="button">' . esc_html__( 'View All Achievements', 'plugin-wp-support-thisismyurl' ) . '</a></p>';
+		echo '<p><a href="' . esc_url( admin_url( 'admin.php?page=wps-achievements' ) ) . '" class="button">' . esc_html__( 'View All Achievements', 'plugin-wpshadow' ) . '</a></p>';
 		echo '</div>';
 	}
 
@@ -406,8 +406,8 @@ Keep up the great work!
 	public static function register_admin_menu(): void {
 		add_submenu_page(
 			'wp-support',
-			__( 'Achievements', 'plugin-wp-support-thisismyurl' ),
-			__( 'Achievements', 'plugin-wp-support-thisismyurl' ),
+			__( 'Achievements', 'plugin-wpshadow' ),
+			__( 'Achievements', 'plugin-wpshadow' ),
 			'read',
 			'wps-achievements',
 			array( __CLASS__, 'render_achievements_page' )
@@ -425,7 +425,7 @@ Keep up the great work!
 		$definitions = self::get_badge_definitions();
 
 		echo '<div class="wrap wps-achievements-page">';
-		echo '<h1>' . esc_html__( 'Your Achievements', 'plugin-wp-support-thisismyurl' ) . '</h1>';
+		echo '<h1>' . esc_html__( 'Your Achievements', 'plugin-wpshadow' ) . '</h1>';
 
 		// Stats.
 		$earned_count = count( $badges );
@@ -437,7 +437,7 @@ Keep up the great work!
 			'<p>%s</p>',
 			sprintf(
 				/* translators: 1: Earned count, 2: Total count, 3: Percentage */
-				esc_html__( 'You have earned %1$d out of %2$d badges (%3$d%%)', 'plugin-wp-support-thisismyurl' ),
+				esc_html__( 'You have earned %1$d out of %2$d badges (%3$d%%)', 'plugin-wpshadow' ),
 				(int) $earned_count,
 				(int) $total_count,
 				(int) $percentage
@@ -447,7 +447,7 @@ Keep up the great work!
 		echo '</div>';
 
 		// Earned badges.
-		echo '<h2>' . esc_html__( 'Earned Badges', 'plugin-wp-support-thisismyurl' ) . '</h2>';
+		echo '<h2>' . esc_html__( 'Earned Badges', 'plugin-wpshadow' ) . '</h2>';
 		echo '<div class="wps-badges-grid">';
 		foreach ( $badges as $badge_id => $badge_data ) {
 			if ( ! isset( $definitions[ $badge_id ] ) ) {
@@ -470,8 +470,8 @@ Keep up the great work!
 				esc_html(
 					sprintf(
 					/* translators: %s: Time ago */
-						__( 'Earned %s', 'plugin-wp-support-thisismyurl' ),
-						human_time_diff( $badge_data['timestamp'], time() ) . ' ' . __( 'ago', 'plugin-wp-support-thisismyurl' )
+						__( 'Earned %s', 'plugin-wpshadow' ),
+						human_time_diff( $badge_data['timestamp'], time() ) . ' ' . __( 'ago', 'plugin-wpshadow' )
 					)
 				)
 			);
@@ -481,7 +481,7 @@ Keep up the great work!
 		// Locked badges.
 		$locked_badges = array_diff_key( $definitions, $badges );
 		if ( ! empty( $locked_badges ) ) {
-			echo '<h2>' . esc_html__( 'Locked Badges', 'plugin-wp-support-thisismyurl' ) . '</h2>';
+			echo '<h2>' . esc_html__( 'Locked Badges', 'plugin-wpshadow' ) . '</h2>';
 			echo '<div class="wps-badges-grid">';
 			foreach ( $locked_badges as $badge_id => $def ) {
 				printf(

@@ -4,7 +4,7 @@
  *
  * Displays dismissible admin notices when vault size exceeds configured threshold.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
 declare(strict_types=1);
@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Monitors vault size and displays alerts when thresholds are exceeded.
  */
-class WPS_Vault_Size_Monitor {
+class WPSHADOW_Vault_Size_Monitor {
 
 	/**
 	 * Initialize monitoring.
@@ -40,11 +40,11 @@ class WPS_Vault_Size_Monitor {
 	 */
 	public static function show_size_alert(): void {
 		// Get vault settings.
-		if ( ! class_exists( 'WPS\\CoreSupport\\WPS_Vault' ) ) {
+		if ( ! class_exists( 'WPShadow\\WPSHADOW_Vault' ) ) {
 			return;
 		}
 
-		$settings    = WPS_Vault::get_settings();
+		$settings    = WPSHADOW_Vault::get_settings();
 		$max_size_mb = (int) ( $settings['max_size_mb'] ?? 0 );
 
 		// If no limit set, skip.
@@ -53,7 +53,7 @@ class WPS_Vault_Size_Monitor {
 		}
 
 		// Compute current vault size.
-		$vault_size_bytes = WPS_Vault::compute_vault_size_bytes();
+		$vault_size_bytes = WPSHADOW_Vault::compute_vault_size_bytes();
 		$vault_size_mb    = ceil( $vault_size_bytes / 1048576 );
 
 		// If under threshold, skip.
@@ -64,7 +64,7 @@ class WPS_Vault_Size_Monitor {
 		// Exceeded threshold - show notice and set transient to throttle.
 		$settings_url = is_network_admin()
 			? network_admin_url( 'admin.php?page=wps-core-network-settings' )
-			: admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard_settings' );
+			: admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=dashboard_settings' );
 
 		$percentage = round( ( $vault_size_mb / $max_size_mb ) * 100 );
 
@@ -72,7 +72,7 @@ class WPS_Vault_Size_Monitor {
 		$message = wp_kses_post(
 			sprintf(
 				/* translators: 1: Current vault size in MB, 2: Threshold in MB, 3: Percentage */
-				__( '<strong>Vault Alert:</strong> Storage usage is at %1$s MB of %2$s MB (%3$s%%). <a href="%4$s">Manage retention settings</a> to prevent space issues.', 'plugin-wp-support-thisismyurl' ),
+				__( '<strong>Vault Alert:</strong> Storage usage is at %1$s MB of %2$s MB (%3$s%%). <a href="%4$s">Manage retention settings</a> to prevent space issues.', 'plugin-wpshadow' ),
 				esc_html( number_format_i18n( $vault_size_mb ) ),
 				esc_html( number_format_i18n( $max_size_mb ) ),
 				esc_html( number_format_i18n( $percentage ) ),
@@ -83,7 +83,7 @@ class WPS_Vault_Size_Monitor {
 		// Notice key format: type_identifier (type extracted for suppression duration).
 		$notice_key = 'warning_vault_size_' . $max_size_mb;
 
-		WPS_Notice_Manager::render_notice(
+		WPSHADOW_Notice_Manager::render_notice(
 			$notice_key,
 			$message,
 			'warning',

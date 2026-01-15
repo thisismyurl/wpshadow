@@ -17,16 +17,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Feature_Traffic_Monitor
+ * WPSHADOW_Feature_Traffic_Monitor
  *
  * Monitor live traffic with real-time request logging, visitor analytics, and bot detection.
  */
-final class WPS_Feature_Traffic_Monitor extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Traffic_Monitor extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Database table name.
 	 */
-	private const TABLE_NAME = 'wps_traffic_log';
+	private const TABLE_NAME = 'wpshadow_traffic_log';
 
 	/**
 	 * Maximum log retention (days).
@@ -40,14 +40,14 @@ final class WPS_Feature_Traffic_Monitor extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'traffic-monitor',
-				'name'               => __( 'Traffic Monitor', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Monitor live traffic with real-time request logging, visitor analytics, bot detection, and attack monitoring', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Traffic Monitor', 'plugin-wpshadow' ),
+				'description'        => __( 'Monitor live traffic with real-time request logging, visitor analytics, bot detection, and attack monitoring', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
-				'widget_label'       => __( 'Security', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Advanced security features', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Security', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Advanced security features', 'plugin-wpshadow' ),
 				'license_level'      => 3,
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-networking',
@@ -74,14 +74,14 @@ final class WPS_Feature_Traffic_Monitor extends WPS_Abstract_Feature {
 		add_action( 'wp_loaded', array( $this, 'log_request' ), 99999 );
 
 		// AJAX handlers for live updates.
-		add_action( 'wp_ajax_wps_get_live_traffic', array( $this, 'ajax_get_live_traffic' ) );
-		add_action( 'wp_ajax_wps_get_traffic_stats', array( $this, 'ajax_get_traffic_stats' ) );
+		add_action( 'wp_ajax_WPSHADOW_get_live_traffic', array( $this, 'ajax_get_live_traffic' ) );
+		add_action( 'wp_ajax_WPSHADOW_get_traffic_stats', array( $this, 'ajax_get_traffic_stats' ) );
 
 		// Log cleanup.
-		if ( ! wp_next_scheduled( 'wps_traffic_cleanup' ) ) {
-			wp_schedule_event( time(), 'daily', 'wps_traffic_cleanup' );
+		if ( ! wp_next_scheduled( 'wpshadow_traffic_cleanup' ) ) {
+			wp_schedule_event( time(), 'daily', 'wpshadow_traffic_cleanup' );
 		}
-		add_action( 'wps_traffic_cleanup', array( $this, 'cleanup_old_logs' ) );
+		add_action( 'wpshadow_traffic_cleanup', array( $this, 'cleanup_old_logs' ) );
 
 		// Create database table if needed.
 		$this->maybe_create_table();
@@ -293,9 +293,9 @@ final class WPS_Feature_Traffic_Monitor extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_get_live_traffic(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps-traffic' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wps-traffic' );
 
-		$limit  = \WPS\CoreSupport\wps_get_post_int( 'limit', 50 );
+		$limit  = \WPS\CoreSupport\WPSHADOW_get_post_int( 'limit', 50 );
 		$traffic = $this->get_live_traffic( $limit );
 
 		wp_send_json_success( array(
@@ -310,9 +310,9 @@ final class WPS_Feature_Traffic_Monitor extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_get_traffic_stats(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps-traffic' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wps-traffic' );
 
-		$period = \WPS\CoreSupport\wps_get_post_text( 'period', 'day' );
+		$period = \WPS\CoreSupport\WPSHADOW_get_post_text( 'period', 'day' );
 		$stats  = $this->get_traffic_statistics( $period );
 
 		wp_send_json_success( array( 'stats' => $stats ) );

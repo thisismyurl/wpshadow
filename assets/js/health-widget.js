@@ -1,5 +1,5 @@
 /**
- * WP Support Health Widget JavaScript
+ * WPShadow Health Widget JavaScript
  *
  * Handles live updates and interactions for the health score widget.
  *
@@ -56,7 +56,7 @@
 				url: wpsHealth.ajaxUrl,
 				type: 'POST',
 				data: {
-					action: 'wps_get_health_score',
+					action: 'wpshadow_get_health_score',
 					nonce: wpsHealth.nonce
 				},
 				success: function(response) {

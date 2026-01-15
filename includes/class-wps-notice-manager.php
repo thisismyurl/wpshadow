@@ -18,18 +18,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * class WPS_Notice_Manager
+ * class WPSHADOW_Notice_Manager
  *
  * Manages admin notice dismissal with persistent storage and time-based expiration.
  */
-class WPS_Notice_Manager {
+class WPSHADOW_Notice_Manager {
 
 	/**
 	 * User meta key for storing dismissed notices.
 	 *
 	 * @var string
 	 */
-	private const META_KEY = 'WPS_dismissed_notices';
+	private const META_KEY = 'wpshadow_dismissed_notices';
 
 	/**
 	 * Default suppression durations by notice type (in seconds).
@@ -50,7 +50,7 @@ class WPS_Notice_Manager {
 	 */
 	public static function init(): void {
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_dismissal_script' ) );
-		add_action( 'wp_ajax_WPS_dismiss_notice', array( __CLASS__, 'ajax_dismiss_notice' ) );
+		add_action( 'wp_ajax_WPSHADOW_dismiss_notice', array( __CLASS__, 'ajax_dismiss_notice' ) );
 	}
 
 	/**
@@ -61,9 +61,9 @@ class WPS_Notice_Manager {
 	public static function enqueue_dismissal_script(): void {
 		wp_enqueue_script(
 			'wps-notice-dismissal',
-			wp_support_URL . 'assets/js/notice-dismissal.js',
+			WPSHADOW_URL . 'assets/js/notice-dismissal.js',
 			array( 'jquery' ),
-			wp_support_VERSION,
+			WPSHADOW_VERSION,
 			true
 		);
 
@@ -72,7 +72,7 @@ class WPS_Notice_Manager {
 			'wpsNotices',
 			array(
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( 'WPS_dismiss_notice' ),
+				'nonce'   => wp_create_nonce( 'wpshadow_dismiss_notice' ),
 			)
 		);
 	}
@@ -83,17 +83,17 @@ class WPS_Notice_Manager {
 	 * @return void
 	 */
 	public static function ajax_dismiss_notice(): void {
-		check_ajax_referer( 'WPS_dismiss_notice', 'nonce' );
+		check_ajax_referer( 'wpshadow_dismiss_notice', 'nonce' );
 
-		$notice_key = \WPS\CoreSupport\wps_get_post_key( 'notice_key' );
+		$notice_key = \WPS\CoreSupport\WPSHADOW_get_post_key( 'notice_key' );
 
 		if ( empty( $notice_key ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid notice key.', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid notice key.', 'plugin-wpshadow' ) ) );
 		}
 
 		self::dismiss_notice( $notice_key );
 
-		wp_send_json_success( array( 'message' => __( 'Notice dismissed.', 'plugin-wp-support-thisismyurl' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Notice dismissed.', 'plugin-wpshadow' ) ) );
 	}
 
 	/**

@@ -5,7 +5,7 @@
  * Provides DRY initialization for all hub modules (Media, Vault, etc).
  * Eliminates duplicate code for constants, registration, menu setup, and more.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  * @since 1.2602.10010
  */
 
@@ -22,13 +22,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Reusable hub initialization logic to eliminate code duplication.
  */
-class WPS_Module_Hub_Initializer {
+class WPSHADOW_Module_Hub_Initializer {
 
 	/**
 	 * Register a hub module with Core.
 	 *
 	 * @param array $hub_config {
-	 *     @type string $slug         Hub slug (e.g., 'media-support-thisismyurl')
+	 *     @type string $slug         Hub slug (e.g., 'media-wpshadow')
 	 *     @type string $name         Display name
 	 *     @type string $suite        Suite name (e.g., 'media', 'storage')
 	 *     @type string $description  Hub description
@@ -50,11 +50,11 @@ class WPS_Module_Hub_Initializer {
 			}
 		}
 
-		$text_domain = $hub_config['text_domain'] ?? 'plugin-wp-support-thisismyurl';
+		$text_domain = $hub_config['text_domain'] ?? 'plugin-wpshadow';
 
 		// Register via action for Core to pick up.
 		do_action(
-			'WPS_register_module',
+			'wpshadow_register_module',
 			array(
 				'slug'         => $hub_config['slug'],
 				'name'         => $hub_config['name'],
@@ -82,11 +82,11 @@ class WPS_Module_Hub_Initializer {
 	 * @return void
 	 */
 	public static function register_hub_feature( string $feature_slug, array $feature_config ): void {
-		if ( ! function_exists( '\\WPS\\CoreSupport\\register_WPS_feature' ) ) {
+		if ( ! function_exists( '\\WPShadow\\register_WPSHADOW_feature' ) ) {
 			return;
 		}
 
-		register_WPS_feature(
+		register_WPSHADOW_feature(
 			$feature_slug,
 			array(
 				'plugin'      => $feature_slug,
@@ -104,7 +104,7 @@ class WPS_Module_Hub_Initializer {
 	 * without repetition across modules.
 	 *
 	 * @param string $module_file    The __FILE__ constant from module.php
-	 * @param string $slug           Hub slug (e.g., 'media-support-thisismyurl')
+	 * @param string $slug           Hub slug (e.g., 'media-wpshadow')
 	 * @param string $text_domain    Text domain for translations
 	 * @param string $version        Module version
 	 * @param string $min_php        Minimum PHP version
@@ -176,7 +176,7 @@ class WPS_Module_Hub_Initializer {
 	 * @return bool True if Core is available, false otherwise
 	 */
 	public static function check_core_availability( string $hub_name, string $text_domain ): bool {
-		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Module_Registry' ) ) {
+		if ( class_exists( '\\WPShadow\\WPSHADOW_Module_Registry' ) ) {
 			return true;
 		}
 
@@ -192,7 +192,7 @@ class WPS_Module_Hub_Initializer {
 					esc_html(
 						sprintf(
 						/* translators: %s: Hub name */
-							__( '%s requires WP Support to be installed and active.', $text_domain ),
+							__( '%s requires WPShadow to be installed and active.', $text_domain ),
 							$hub_name
 						)
 					)
@@ -210,11 +210,11 @@ class WPS_Module_Hub_Initializer {
 	 * @return array Array of module data for spokes
 	 */
 	public static function get_hub_spoke_modules( string $hub_slug ): array {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Module_Registry' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Module_Registry' ) ) {
 			return array();
 		}
 
-		$catalog = \WPS\CoreSupport\WPS_Module_Registry::get_catalog_with_status();
+		$catalog = \WPS\CoreSupport\WPSHADOW_Module_Registry::get_catalog_with_status();
 		return array_filter(
 			$catalog,
 			static function ( $m ) use ( $hub_slug ) {
@@ -230,10 +230,10 @@ class WPS_Module_Hub_Initializer {
 	 * @return array Activity log entries
 	 */
 	public static function get_vault_activity_logs( int $limit = 10 ): array {
-		if ( ! class_exists( '\\WPS\\VaultSupport\\WPS_Vault' ) ) {
+		if ( ! class_exists( '\\WPS\\VaultSupport\\WPSHADOW_Vault' ) ) {
 			return array();
 		}
 
-		return \WPS\VaultSupport\WPS_Vault::get_logs( 0, $limit );
+		return \WPS\VaultSupport\WPSHADOW_Vault::get_logs( 0, $limit );
 	}
 }

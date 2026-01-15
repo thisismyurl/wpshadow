@@ -6,7 +6,7 @@
  * if asset files exist.
  *
  * @since 1.1.0
- * @package TIMU_WP_Support
+ * @package WPShadow_WP_Support
  */
 
 declare(strict_types=1);
@@ -24,9 +24,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * if asset files exist.
  *
  * @since 1.1.0
- * @package TIMU_WP_Support
+ * @package WPShadow_WP_Support
  */
-final class WPS_Dashboard_Assets {
+final class WPSHADOW_Dashboard_Assets {
 
 	/**
 	 * Plugin root path
@@ -72,7 +72,7 @@ final class WPS_Dashboard_Assets {
 
 		echo '<style id="wps-plugin-icon-css" type="text/css">';
 		printf(
-			'#toplevel_page_wps_features .wp-menu-image::before { background: url("%s") no-repeat center / contain; content: ""; display: block; width: 20px; height: 20px; margin: 2px auto; } ',
+			'#toplevel_page_WPSHADOW_features .wp-menu-image::before { background: url("%s") no-repeat center / contain; content: ""; display: block; width: 20px; height: 20px; margin: 2px auto; } ',
 			esc_url( $icon_url )
 		);
 		printf(
@@ -89,7 +89,7 @@ final class WPS_Dashboard_Assets {
 	 */
 	public static function inject_banner_in_list( array $links, string $plugin_file ): array {
 		// Only inject for our plugin
-		if ( strpos( $plugin_file, 'wp-support-thisismyurl' ) === false ) {
+		if ( strpos( $plugin_file, 'wpshadow' ) === false ) {
 			return $links;
 		}
 

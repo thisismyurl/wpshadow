@@ -2,7 +2,7 @@
 /**
  * Module Management REST API Controller
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  * @since 1.2601.73002
  */
 
@@ -14,8 +14,8 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 use WP_Error;
-use WPS\CoreSupport\WPS_Module_Registry;
-use WPS\CoreSupport\WPS_Module_Actions;
+use WPS\CoreSupport\WPSHADOW_Module_Registry;
+use WPS\CoreSupport\WPSHADOW_Module_Actions;
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Module Management REST Controller
  */
-class WPS_REST_Modules_Controller extends WPS_REST_Controller_Base {
+class WPSHADOW_REST_Modules_Controller extends WPSHADOW_REST_Controller_Base {
 
 	/**
 	 * Register routes
@@ -198,7 +198,7 @@ class WPS_REST_Modules_Controller extends WPS_REST_Controller_Base {
 	 */
 	public function get_modules( WP_REST_Request $request ) {
 		$params  = $this->get_pagination_params( $request );
-		$catalog = WPS_Module_Registry::get_catalog_with_status();
+		$catalog = WPSHADOW_Module_Registry::get_catalog_with_status();
 
 		// Apply filters.
 		$type = $request->get_param( 'type' );
@@ -249,7 +249,7 @@ class WPS_REST_Modules_Controller extends WPS_REST_Controller_Base {
 			return $slug;
 		}
 
-		$catalog = WPS_Module_Registry::get_catalog_with_status();
+		$catalog = WPSHADOW_Module_Registry::get_catalog_with_status();
 		$module  = null;
 
 		foreach ( $catalog as $item ) {
@@ -262,7 +262,7 @@ class WPS_REST_Modules_Controller extends WPS_REST_Controller_Base {
 		if ( ! $module ) {
 			return $this->error_response(
 				'module_not_found',
-				__( 'Module not found.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Module not found.', 'plugin-wpshadow' ),
 				404
 			);
 		}
@@ -289,7 +289,7 @@ class WPS_REST_Modules_Controller extends WPS_REST_Controller_Base {
 		}
 
 		// Find module in catalog.
-		$catalog = WPS_Module_Registry::get_catalog_with_status();
+		$catalog = WPSHADOW_Module_Registry::get_catalog_with_status();
 		$module  = null;
 
 		foreach ( $catalog as $item ) {
@@ -302,7 +302,7 @@ class WPS_REST_Modules_Controller extends WPS_REST_Controller_Base {
 		if ( ! $module ) {
 			return $this->error_response(
 				'module_not_found',
-				__( 'Module not found in catalog.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Module not found in catalog.', 'plugin-wpshadow' ),
 				404
 			);
 		}
@@ -310,21 +310,21 @@ class WPS_REST_Modules_Controller extends WPS_REST_Controller_Base {
 		if ( ! empty( $module['installed'] ) ) {
 			return $this->error_response(
 				'already_installed',
-				__( 'Module is already installed.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Module is already installed.', 'plugin-wpshadow' ),
 				400
 			);
 		}
 
 		// Use existing install logic.
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Module_Actions' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Module_Actions' ) ) {
 			return $this->error_response(
 				'install_failed',
-				__( 'Module installer not available.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Module installer not available.', 'plugin-wpshadow' ),
 				500
 			);
 		}
 
-		$result = WPS_Module_Actions::install_module( $module );
+		$result = WPSHADOW_Module_Actions::install_module( $module );
 
 		if ( is_wp_error( $result ) ) {
 			return $this->error_response(
@@ -335,11 +335,11 @@ class WPS_REST_Modules_Controller extends WPS_REST_Controller_Base {
 		}
 
 		// Refresh cache.
-		WPS_Module_Registry::clear_cache();
+		WPSHADOW_Module_Registry::clear_cache();
 
 		return $this->success_response(
 			array( 'slug' => $slug ),
-			__( 'Module installed successfully.', 'plugin-wp-support-thisismyurl' ),
+			__( 'Module installed successfully.', 'plugin-wpshadow' ),
 			201
 		);
 	}
@@ -374,11 +374,11 @@ class WPS_REST_Modules_Controller extends WPS_REST_Controller_Base {
 		}
 
 		// Refresh cache.
-		WPS_Module_Registry::clear_cache();
+		WPSHADOW_Module_Registry::clear_cache();
 
 		return $this->success_response(
 			array( 'slug' => $slug ),
-			__( 'Module activated successfully.', 'plugin-wp-support-thisismyurl' )
+			__( 'Module activated successfully.', 'plugin-wpshadow' )
 		);
 	}
 
@@ -404,11 +404,11 @@ class WPS_REST_Modules_Controller extends WPS_REST_Controller_Base {
 		deactivate_plugins( $plugin, false, $network );
 
 		// Refresh cache.
-		WPS_Module_Registry::clear_cache();
+		WPSHADOW_Module_Registry::clear_cache();
 
 		return $this->success_response(
 			array( 'slug' => $slug ),
-			__( 'Module deactivated successfully.', 'plugin-wp-support-thisismyurl' )
+			__( 'Module deactivated successfully.', 'plugin-wpshadow' )
 		);
 	}
 
@@ -454,11 +454,11 @@ class WPS_REST_Modules_Controller extends WPS_REST_Controller_Base {
 		}
 
 		// Refresh cache.
-		WPS_Module_Registry::clear_cache();
+		WPSHADOW_Module_Registry::clear_cache();
 
 		return $this->success_response(
 			array( 'slug' => $slug ),
-			__( 'Module uninstalled successfully.', 'plugin-wp-support-thisismyurl' )
+			__( 'Module uninstalled successfully.', 'plugin-wpshadow' )
 		);
 	}
 
@@ -483,12 +483,12 @@ class WPS_REST_Modules_Controller extends WPS_REST_Controller_Base {
 
 		// Use settings API to store feature flags.
 		$settings_key = "feature_{$feature}_enabled";
-		$result       = \WPS\CoreSupport\WPS_Settings::update( $slug, $settings_key, $enabled );
+		$result       = \WPS\CoreSupport\WPSHADOW_Settings::update( $slug, $settings_key, $enabled );
 
 		if ( ! $result ) {
 			return $this->error_response(
 				'toggle_failed',
-				__( 'Failed to toggle feature flag.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Failed to toggle feature flag.', 'plugin-wpshadow' ),
 				500
 			);
 		}
@@ -501,7 +501,7 @@ class WPS_REST_Modules_Controller extends WPS_REST_Controller_Base {
 			),
 			sprintf(
 				/* translators: %s: feature name */
-				__( 'Feature %s toggled successfully.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Feature %s toggled successfully.', 'plugin-wpshadow' ),
 				$feature
 			)
 		);

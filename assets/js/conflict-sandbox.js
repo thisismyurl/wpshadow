@@ -50,7 +50,7 @@
 					url: wpsSandbox.ajaxUrl,
 					type: 'POST',
 					data: {
-						action: 'wps_sandbox_enter',
+						action: 'wpshadow_sandbox_enter',
 						nonce: wpsSandbox.nonce
 					},
 					success: function() {
@@ -83,7 +83,7 @@
 					url: wpsSandbox.ajaxUrl,
 					type: 'POST',
 					data: {
-						action: 'wps_sandbox_exit',
+						action: 'wpshadow_sandbox_exit',
 						nonce: wpsSandbox.nonce
 					},
 					success: function() {
@@ -114,7 +114,7 @@
 					url: wpsSandbox.ajaxUrl,
 					type: 'POST',
 					data: {
-						action: 'wps_sandbox_toggle_plugin',
+						action: 'wpshadow_sandbox_toggle_plugin',
 						nonce: wpsSandbox.nonce,
 						plugin: plugin,
 						action_type: action
@@ -149,7 +149,7 @@
 					url: wpsSandbox.ajaxUrl,
 					type: 'POST',
 					data: {
-						action: 'wps_sandbox_set_theme',
+						action: 'wpshadow_sandbox_set_theme',
 						nonce: wpsSandbox.nonce,
 						theme: theme
 					},

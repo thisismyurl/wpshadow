@@ -5,7 +5,7 @@
  * Step-by-step guided workflows for common WordPress tasks.
  * Includes confirmations, safety checks, and automatic backups.
  *
- * @package WPS_WP_SUPPORT
+ * @package WPSHADOW_WP_SUPPORT
  * @since 1.2601.1111
  */
 
@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * Class WPS_Guided_Walkthroughs
+ * Class WPSHADOW_Guided_Walkthroughs
  *
  * Provides guided task workflows with:
  * - Step-by-step UI for common tasks
@@ -23,12 +23,12 @@ namespace WPS\CoreSupport;
  * - Undo functionality
  * - Progress tracking
  */
-class WPS_Guided_Walkthroughs {
+class WPSHADOW_Guided_Walkthroughs {
 
 	/**
 	 * Database option key for walkthrough progress.
 	 */
-	private const PROGRESS_KEY = 'wps_walkthrough_progress';
+	private const PROGRESS_KEY = 'wpshadow_walkthrough_progress';
 
 	/**
 	 * Available walkthrough workflows.
@@ -47,9 +47,9 @@ class WPS_Guided_Walkthroughs {
 
 		add_action( 'admin_menu', array( __CLASS__, 'register_admin_page' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
-		add_action( 'wp_ajax_wps_start_walkthrough', array( __CLASS__, 'ajax_start_walkthrough' ) );
-		add_action( 'wp_ajax_wps_complete_step', array( __CLASS__, 'ajax_complete_step' ) );
-		add_action( 'wp_ajax_wps_undo_step', array( __CLASS__, 'ajax_undo_step' ) );
+		add_action( 'wp_ajax_WPSHADOW_start_walkthrough', array( __CLASS__, 'ajax_start_walkthrough' ) );
+		add_action( 'wp_ajax_WPSHADOW_complete_step', array( __CLASS__, 'ajax_complete_step' ) );
+		add_action( 'wp_ajax_WPSHADOW_undo_step', array( __CLASS__, 'ajax_undo_step' ) );
 	}
 
 	/**
@@ -60,141 +60,141 @@ class WPS_Guided_Walkthroughs {
 	private static function register_workflows(): void {
 		self::$workflows = array(
 			'update-plugin'  => array(
-				'title'       => __( 'Update a Plugin Safely', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Test plugin update in staging, then deploy to live site', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Update a Plugin Safely', 'plugin-wpshadow' ),
+				'description' => __( 'Test plugin update in staging, then deploy to live site', 'plugin-wpshadow' ),
 				'steps'       => array(
 					array(
-						'title'       => __( 'Create Backup', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Automatic backup created before update', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Create Backup', 'plugin-wpshadow' ),
+						'description' => __( 'Automatic backup created before update', 'plugin-wpshadow' ),
 						'action'      => 'create_backup',
 					),
 					array(
-						'title'       => __( 'Test in Staging', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Update staging site and test functionality', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Test in Staging', 'plugin-wpshadow' ),
+						'description' => __( 'Update staging site and test functionality', 'plugin-wpshadow' ),
 						'action'      => 'update_staging',
 					),
 					array(
-						'title'       => __( 'Review Changes', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'See what changed in this update', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Review Changes', 'plugin-wpshadow' ),
+						'description' => __( 'See what changed in this update', 'plugin-wpshadow' ),
 						'action'      => 'show_changelog',
 					),
 					array(
-						'title'       => __( 'Update Live Site', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Apply update to production', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Update Live Site', 'plugin-wpshadow' ),
+						'description' => __( 'Apply update to production', 'plugin-wpshadow' ),
 						'action'      => 'update_live',
 					),
 					array(
-						'title'       => __( 'Verify Functionality', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Check that everything still works', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Verify Functionality', 'plugin-wpshadow' ),
+						'description' => __( 'Check that everything still works', 'plugin-wpshadow' ),
 						'action'      => 'verify',
 					),
 				),
 			),
 			'add-user'       => array(
-				'title'       => __( 'Add a Team Member', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Add new user with appropriate permissions', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Add a Team Member', 'plugin-wpshadow' ),
+				'description' => __( 'Add new user with appropriate permissions', 'plugin-wpshadow' ),
 				'steps'       => array(
 					array(
-						'title'       => __( 'Enter Email Address', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Email address for new user', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Enter Email Address', 'plugin-wpshadow' ),
+						'description' => __( 'Email address for new user', 'plugin-wpshadow' ),
 						'action'      => 'get_email',
 					),
 					array(
-						'title'       => __( 'Choose Role', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Select appropriate permission level', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Choose Role', 'plugin-wpshadow' ),
+						'description' => __( 'Select appropriate permission level', 'plugin-wpshadow' ),
 						'action'      => 'select_role',
 					),
 					array(
-						'title'       => __( 'Review Details', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Confirm user information', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Review Details', 'plugin-wpshadow' ),
+						'description' => __( 'Confirm user information', 'plugin-wpshadow' ),
 						'action'      => 'review',
 					),
 					array(
-						'title'       => __( 'Create User', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Add user and send invitation', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Create User', 'plugin-wpshadow' ),
+						'description' => __( 'Add user and send invitation', 'plugin-wpshadow' ),
 						'action'      => 'create_user',
 					),
 				),
 			),
 			'create-backup'  => array(
-				'title'       => __( 'Create a Backup', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Create full site backup with verification', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Create a Backup', 'plugin-wpshadow' ),
+				'description' => __( 'Create full site backup with verification', 'plugin-wpshadow' ),
 				'steps'       => array(
 					array(
-						'title'       => __( 'Select Backup Type', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Full backup or files only', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Select Backup Type', 'plugin-wpshadow' ),
+						'description' => __( 'Full backup or files only', 'plugin-wpshadow' ),
 						'action'      => 'select_type',
 					),
 					array(
-						'title'       => __( 'Create Backup', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Backup in progress...', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Create Backup', 'plugin-wpshadow' ),
+						'description' => __( 'Backup in progress...', 'plugin-wpshadow' ),
 						'action'      => 'create_backup',
 					),
 					array(
-						'title'       => __( 'Verify Backup', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Ensure backup is valid', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Verify Backup', 'plugin-wpshadow' ),
+						'description' => __( 'Ensure backup is valid', 'plugin-wpshadow' ),
 						'action'      => 'verify_backup',
 					),
 				),
 			),
 			'install-plugin' => array(
-				'title'       => __( 'Install a Plugin Safely', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Install new plugin with safety checks', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Install a Plugin Safely', 'plugin-wpshadow' ),
+				'description' => __( 'Install new plugin with safety checks', 'plugin-wpshadow' ),
 				'steps'       => array(
 					array(
-						'title'       => __( 'Search Plugin', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Find plugin in WordPress directory', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Search Plugin', 'plugin-wpshadow' ),
+						'description' => __( 'Find plugin in WordPress directory', 'plugin-wpshadow' ),
 						'action'      => 'search_plugin',
 					),
 					array(
-						'title'       => __( 'Review Plugin', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Check ratings, reviews, compatibility', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Review Plugin', 'plugin-wpshadow' ),
+						'description' => __( 'Check ratings, reviews, compatibility', 'plugin-wpshadow' ),
 						'action'      => 'review_plugin',
 					),
 					array(
-						'title'       => __( 'Create Backup', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Backup before installation', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Create Backup', 'plugin-wpshadow' ),
+						'description' => __( 'Backup before installation', 'plugin-wpshadow' ),
 						'action'      => 'create_backup',
 					),
 					array(
-						'title'       => __( 'Install Plugin', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Install and activate', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Install Plugin', 'plugin-wpshadow' ),
+						'description' => __( 'Install and activate', 'plugin-wpshadow' ),
 						'action'      => 'install_plugin',
 					),
 					array(
-						'title'       => __( 'Test Site', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Verify site still works', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Test Site', 'plugin-wpshadow' ),
+						'description' => __( 'Verify site still works', 'plugin-wpshadow' ),
 						'action'      => 'test_site',
 					),
 				),
 			),
 			'restore-backup' => array(
-				'title'       => __( 'Restore from Backup', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Safely restore your site from backup', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Restore from Backup', 'plugin-wpshadow' ),
+				'description' => __( 'Safely restore your site from backup', 'plugin-wpshadow' ),
 				'steps'       => array(
 					array(
-						'title'       => __( 'Select Backup', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Choose backup to restore', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Select Backup', 'plugin-wpshadow' ),
+						'description' => __( 'Choose backup to restore', 'plugin-wpshadow' ),
 						'action'      => 'select_backup',
 					),
 					array(
-						'title'       => __( 'Preview Backup', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'See what will be restored', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Preview Backup', 'plugin-wpshadow' ),
+						'description' => __( 'See what will be restored', 'plugin-wpshadow' ),
 						'action'      => 'preview_backup',
 					),
 					array(
-						'title'       => __( 'Confirm Restore', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'This will overwrite current site', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Confirm Restore', 'plugin-wpshadow' ),
+						'description' => __( 'This will overwrite current site', 'plugin-wpshadow' ),
 						'action'      => 'confirm_restore',
 					),
 					array(
-						'title'       => __( 'Restore Backup', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Restoration in progress...', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Restore Backup', 'plugin-wpshadow' ),
+						'description' => __( 'Restoration in progress...', 'plugin-wpshadow' ),
 						'action'      => 'restore',
 					),
 					array(
-						'title'       => __( 'Verify Site', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Check that everything works', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Verify Site', 'plugin-wpshadow' ),
+						'description' => __( 'Check that everything works', 'plugin-wpshadow' ),
 						'action'      => 'verify_site',
 					),
 				),
@@ -210,8 +210,8 @@ class WPS_Guided_Walkthroughs {
 	public static function register_admin_page(): void {
 		add_submenu_page(
 			'wp-support',
-			__( 'Guided Tasks', 'plugin-wp-support-thisismyurl' ),
-			__( 'Guided Tasks', 'plugin-wp-support-thisismyurl' ),
+			__( 'Guided Tasks', 'plugin-wpshadow' ),
+			__( 'Guided Tasks', 'plugin-wpshadow' ),
 			'manage_options',
 			'wps-guided-tasks',
 			array( __CLASS__, 'render_page' )
@@ -237,7 +237,7 @@ class WPS_Guided_Walkthroughs {
 			'wpsGuidedTasks',
 			array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonce'    => wp_create_nonce( 'wps_guided_tasks_nonce' ),
+				'nonce'    => wp_create_nonce( 'wpshadow_guided_tasks_nonce' ),
 			)
 		);
 	}
@@ -248,15 +248,15 @@ class WPS_Guided_Walkthroughs {
 	 * @return void
 	 */
 	public static function ajax_start_walkthrough(): void {
-		check_ajax_referer( 'wps_guided_tasks_nonce', 'nonce' );
+		check_ajax_referer( 'wpshadow_guided_tasks_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$workflow = \WPS\CoreSupport\wps_get_post_key( 'workflow' );
+		$workflow = \WPS\CoreSupport\WPSHADOW_get_post_key( 'workflow' );
 		if ( ! isset( self::$workflows[ $workflow ] ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid workflow', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid workflow', 'plugin-wpshadow' ) ) );
 		}
 
 		$progress = array(
@@ -283,15 +283,15 @@ class WPS_Guided_Walkthroughs {
 	 * @return void
 	 */
 	public static function ajax_complete_step(): void {
-		check_ajax_referer( 'wps_guided_tasks_nonce', 'nonce' );
+		check_ajax_referer( 'wpshadow_guided_tasks_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
 		$progress = get_option( self::PROGRESS_KEY . '_' . get_current_user_id(), array() );
 		if ( empty( $progress ) ) {
-			wp_send_json_error( array( 'message' => __( 'No active walkthrough', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No active walkthrough', 'plugin-wpshadow' ) ) );
 		}
 
 		$step_data = isset( $_POST['step_data'] ) ? wp_unslash( $_POST['step_data'] ) : array();
@@ -320,15 +320,15 @@ class WPS_Guided_Walkthroughs {
 	 * @return void
 	 */
 	public static function ajax_undo_step(): void {
-		check_ajax_referer( 'wps_guided_tasks_nonce', 'nonce' );
+		check_ajax_referer( 'wpshadow_guided_tasks_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
 		$progress = get_option( self::PROGRESS_KEY . '_' . get_current_user_id(), array() );
 		if ( empty( $progress ) || $progress['current_step'] <= 0 ) {
-			wp_send_json_error( array( 'message' => __( 'Cannot undo', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Cannot undo', 'plugin-wpshadow' ) ) );
 		}
 
 		$progress['current_step'] -= 1;
@@ -356,9 +356,9 @@ class WPS_Guided_Walkthroughs {
 		$active_progress = get_option( self::PROGRESS_KEY . '_' . get_current_user_id(), array() );
 		?>
 		<div class="wrap wps-guided-tasks-page">
-			<h1><?php esc_html_e( 'Guided Tasks', 'plugin-wp-support-thisismyurl' ); ?></h1>
+			<h1><?php esc_html_e( 'Guided Tasks', 'plugin-wpshadow' ); ?></h1>
 			<p class="description">
-				<?php esc_html_e( 'Step-by-step guides for common WordPress tasks. Each task includes confirmations and automatic backups for safety.', 'plugin-wp-support-thisismyurl' ); ?>
+				<?php esc_html_e( 'Step-by-step guides for common WordPress tasks. Each task includes confirmations and automatic backups for safety.', 'plugin-wpshadow' ); ?>
 			</p>
 
 			<?php if ( ! empty( $active_progress ) ) : ?>
@@ -373,13 +373,13 @@ class WPS_Guided_Walkthroughs {
 								<?php
 								printf(
 									/* translators: %d: Number of steps */
-									esc_html( _n( '%d step', '%d steps', count( $workflow['steps'] ), 'plugin-wp-support-thisismyurl' ) ),
+									esc_html( _n( '%d step', '%d steps', count( $workflow['steps'] ), 'plugin-wpshadow' ) ),
 									count( $workflow['steps'] )
 								);
 								?>
 							</p>
 							<button type="button" class="button button-primary wps-start-workflow" data-workflow="<?php echo esc_attr( $workflow_id ); ?>">
-								<?php esc_html_e( 'Start Guided Task', 'plugin-wp-support-thisismyurl' ); ?>
+								<?php esc_html_e( 'Start Guided Task', 'plugin-wpshadow' ); ?>
 							</button>
 						</div>
 					<?php endforeach; ?>
@@ -417,7 +417,7 @@ class WPS_Guided_Walkthroughs {
 				<?php
 				printf(
 					/* translators: 1: Current step number, 2: Total steps */
-					esc_html__( 'Step %1$d of %2$d', 'plugin-wp-support-thisismyurl' ),
+					esc_html__( 'Step %1$d of %2$d', 'plugin-wpshadow' ),
 					esc_html( (string) ( $progress['current_step'] + 1 ) ),
 					esc_html( (string) $total_steps )
 				);
@@ -432,30 +432,30 @@ class WPS_Guided_Walkthroughs {
 					<div class="wps-step-actions">
 						<?php if ( $progress['current_step'] > 0 ) : ?>
 							<button type="button" class="button wps-undo-step">
-								<?php esc_html_e( '← Previous Step', 'plugin-wp-support-thisismyurl' ); ?>
+								<?php esc_html_e( '← Previous Step', 'plugin-wpshadow' ); ?>
 							</button>
 						<?php endif; ?>
 
 						<button type="button" class="button button-primary wps-complete-step">
-							<?php esc_html_e( 'Continue →', 'plugin-wp-support-thisismyurl' ); ?>
+							<?php esc_html_e( 'Continue →', 'plugin-wpshadow' ); ?>
 						</button>
 
 						<button type="button" class="button wps-cancel-walkthrough">
-							<?php esc_html_e( 'Cancel', 'plugin-wp-support-thisismyurl' ); ?>
+							<?php esc_html_e( 'Cancel', 'plugin-wpshadow' ); ?>
 						</button>
 					</div>
 				</div>
 			<?php else : ?>
 				<div class="notice notice-success">
-					<p><?php esc_html_e( 'Task completed successfully!', 'plugin-wp-support-thisismyurl' ); ?></p>
+					<p><?php esc_html_e( 'Task completed successfully!', 'plugin-wpshadow' ); ?></p>
 					<button type="button" class="button button-primary wps-finish-walkthrough">
-						<?php esc_html_e( 'Done', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'Done', 'plugin-wpshadow' ); ?>
 					</button>
 				</div>
 			<?php endif; ?>
 
 			<div class="wps-steps-list">
-				<h4><?php esc_html_e( 'All Steps', 'plugin-wp-support-thisismyurl' ); ?></h4>
+				<h4><?php esc_html_e( 'All Steps', 'plugin-wpshadow' ); ?></h4>
 				<ul>
 					<?php foreach ( $workflow['steps'] as $index => $step ) : ?>
 						<li class="<?php echo $index < $progress['current_step'] ? 'completed' : ( $index === $progress['current_step'] ? 'active' : '' ); ?>">

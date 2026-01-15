@@ -2,7 +2,7 @@
 /**
  * Dashboard widget system for tab-based interface.
  *
- * @package wp_support_Support
+ * @package wpshadow_Support
  * @since 1.0.0
  */
 
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Dashboard Widgets Manager
  * Mimics WordPress Core dashboard functionality.
  */
-class WPS_Dashboard_Widgets {
+class WPSHADOW_Dashboard_Widgets {
 	/**
 	 * Shared dashboard shell for core, hub, and spoke views.
 	 *
@@ -71,7 +71,7 @@ class WPS_Dashboard_Widgets {
 	 */
 	public static function render_core_dashboard(): void {
 		self::render_dashboard_shell(
-			esc_html__( 'Support Dashboard', 'plugin-wp-support-thisismyurl' ),
+			esc_html__( 'Support Dashboard', 'plugin-wpshadow' ),
 			array(
 				array( __CLASS__, 'widget_suite_overview' ),
 				array( __CLASS__, 'widget_active_hubs' ),
@@ -181,41 +181,41 @@ class WPS_Dashboard_Widgets {
 	}
 
 	private static function widget_health(): void {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Site_Health' ) ) {
-			echo '<div class="wps-widget-content"><p><em>' . esc_html__( 'Health checks unavailable.', 'plugin-wp-support-thisismyurl' ) . '</em></p></div>';
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Site_Health' ) ) {
+			echo '<div class="wps-widget-content"><p><em>' . esc_html__( 'Health checks unavailable.', 'plugin-wpshadow' ) . '</em></p></div>';
 			return;
 		}
 
 		try {
 			// Get the current module context (if viewing a module dashboard).
-			$context     = WPS_Tab_Navigation::get_current_context();
+			$context     = WPSHADOW_Tab_Navigation::get_current_context();
 			$module      = ! empty( $context['hub'] ) ? $context['hub'] : null;
 			$module_name = '';
 
 			// If we're on a module dashboard, get the module name.
 			if ( ! empty( $module ) ) {
-				$catalog     = \WPS\CoreSupport\WPS_Module_Registry::get_catalog_with_status();
-				$module_slug = str_contains( $module, '-support-thisismyurl' ) ? $module : $module . '-support-thisismyurl';
+				$catalog     = \WPS\CoreSupport\WPSHADOW_Module_Registry::get_catalog_with_status();
+				$module_slug = str_contains( $module, '-wpshadow' ) ? $module : $module . '-wpshadow';
 				if ( isset( $catalog[ $module_slug ] ) ) {
 					$module_name = $catalog[ $module_slug ]['name'] ?? ucfirst( $module );
 				}
 			}
 
 			// Get health results filtered by module (null means all checks).
-			$health_data = \WPS\CoreSupport\WPS_Site_Health::get_health_check_results( $module );
+			$health_data = \WPS\CoreSupport\WPSHADOW_Site_Health::get_health_check_results( $module );
 
 			// Render the health widget with module context.
 			self::render_health_widget( $health_data, $module_name );
 		} catch ( \Exception $e ) {
-			echo '<div class="wps-widget-content"><p style="color: #d63638;"><strong>' . esc_html__( 'Error:', 'plugin-wp-support-thisismyurl' ) . '</strong> ' . esc_html( $e->getMessage() ) . '</p></div>';
+			echo '<div class="wps-widget-content"><p style="color: #d63638;"><strong>' . esc_html__( 'Error:', 'plugin-wpshadow' ) . '</strong> ' . esc_html( $e->getMessage() ) . '</p></div>';
 
 		}
 	}
 
 	private static function widget_activity( ?string $module_filter = null ): void {
-		// Use WPS_Activity_Logger if available.
-		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
-			$events = \WPS\CoreSupport\WPS_Activity_Logger::get_events( 100 );
+		// Use WPSHADOW_Activity_Logger if available.
+		if ( class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) ) {
+			$events = \WPS\CoreSupport\WPSHADOW_Activity_Logger::get_events( 100 );
 
 			// Filter events by module if specified.
 			if ( ! empty( $module_filter ) ) {
@@ -242,26 +242,26 @@ class WPS_Dashboard_Widgets {
 			<div class="wps-widget-content">
 				<div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #eee;">
 					<form method="get" style="display: inline;">
-						<label for="WPS_activity_type_filter" style="display: inline; margin-right: 8px;">
-						<?php esc_html_e( 'Filter:', 'plugin-wp-support-thisismyurl' ); ?>
+						<label for="wpshadow_activity_type_filter" style="display: inline; margin-right: 8px;">
+						<?php esc_html_e( 'Filter:', 'plugin-wpshadow' ); ?>
 						</label>
-						<select id="WPS_activity_type_filter" name="activity_type" style="padding: 4px 8px; font-size: 12px;">
-							<option value="">- <?php esc_html_e( 'All Activity', 'plugin-wp-support-thisismyurl' ); ?> -</option>
-							<option value="module_activated">📌 <?php esc_html_e( 'Module Activated', 'plugin-wp-support-thisismyurl' ); ?></option>
-							<option value="module_deactivated">📴 <?php esc_html_e( 'Module Deactivated', 'plugin-wp-support-thisismyurl' ); ?></option>
-							<option value="settings_changed">⚙️ <?php esc_html_e( 'Settings Changed', 'plugin-wp-support-thisismyurl' ); ?></option>
-							<option value="error_logged">⚠️ <?php esc_html_e( 'Error', 'plugin-wp-support-thisismyurl' ); ?></option>
+						<select id="wpshadow_activity_type_filter" name="activity_type" style="padding: 4px 8px; font-size: 12px;">
+							<option value="">- <?php esc_html_e( 'All Activity', 'plugin-wpshadow' ); ?> -</option>
+							<option value="module_activated">📌 <?php esc_html_e( 'Module Activated', 'plugin-wpshadow' ); ?></option>
+							<option value="module_deactivated">📴 <?php esc_html_e( 'Module Deactivated', 'plugin-wpshadow' ); ?></option>
+							<option value="settings_changed">⚙️ <?php esc_html_e( 'Settings Changed', 'plugin-wpshadow' ); ?></option>
+							<option value="error_logged">⚠️ <?php esc_html_e( 'Error', 'plugin-wpshadow' ); ?></option>
 						</select>
-						<noscript><input type="submit" value="<?php esc_attr_e( 'Filter', 'plugin-wp-support-thisismyurl' ); ?>" /></noscript>
+						<noscript><input type="submit" value="<?php esc_attr_e( 'Filter', 'plugin-wpshadow' ); ?>" /></noscript>
 					</form>
 				</div>
 				<ul style="list-style: none; padding: 0; margin: 0;">
 				<?php foreach ( $events as $event ) : ?>
 						<?php
 						$description = esc_html( $event['description'] );
-						$timestamp   = human_time_diff( $event['timestamp'] ) . ' ' . __( 'ago', 'plugin-wp-support-thisismyurl' );
+						$timestamp   = human_time_diff( $event['timestamp'] ) . ' ' . __( 'ago', 'plugin-wpshadow' );
 						$user        = get_userdata( $event['user_id'] );
-						$username    = $user ? $user->display_name : __( 'System', 'plugin-wp-support-thisismyurl' );
+						$username    = $user ? $user->display_name : __( 'System', 'plugin-wpshadow' );
 						?>
 						<li style="padding: 8px 0; border-bottom: 1px solid #e5e5e5;">
 							<strong><?php echo esc_html( $description ); ?></strong>
@@ -275,7 +275,7 @@ class WPS_Dashboard_Widgets {
 		} else {
 			?>
 			<div class="wps-widget-content">
-				<p><em><?php esc_html_e( 'Activity log integration coming soon.', 'plugin-wp-support-thisismyurl' ); ?></em></p>
+				<p><em><?php esc_html_e( 'Activity log integration coming soon.', 'plugin-wpshadow' ); ?></em></p>
 			</div>
 			<?php
 		}
@@ -287,8 +287,8 @@ class WPS_Dashboard_Widgets {
 	}
 
 	private static function widget_modules(): void {
-		$context = WPS_Tab_Navigation::get_current_context();
-		$catalog = \WPS\CoreSupport\WPS_Module_Registry::get_catalog_with_status();
+		$context = WPSHADOW_Tab_Navigation::get_current_context();
+		$catalog = \WPS\CoreSupport\WPSHADOW_Module_Registry::get_catalog_with_status();
 		$catalog = self::discover_local_module_entries( $catalog );
 
 		// Determine which modules to show based on current level.
@@ -327,7 +327,7 @@ class WPS_Dashboard_Widgets {
 					continue;
 				}
 				// Normalize requires_hub value to short hub id when comparing.
-				$requires_short = str_contains( $requires, '-support-thisismyurl' ) ? explode( '-support-thisismyurl', $requires )[0] : $requires;
+				$requires_short = str_contains( $requires, '-wpshadow' ) ? explode( '-wpshadow', $requires )[0] : $requires;
 				if ( $requires_short === $hub_id ) {
 					$next_level_modules[] = $module;
 				}
@@ -344,7 +344,7 @@ class WPS_Dashboard_Widgets {
 					// Prefer explicit requires_hub when available.
 					$requires = (string) ( $m['requires_hub'] ?? '' );
 					if ( ! empty( $requires ) ) {
-						$requires_short = str_contains( $requires, '-support-thisismyurl' ) ? explode( '-support-thisismyurl', $requires )[0] : $requires;
+						$requires_short = str_contains( $requires, '-wpshadow' ) ? explode( '-wpshadow', $requires )[0] : $requires;
 						return $requires_short === $hub_id;
 					}
 					// Fallback: slug prefix convention (e.g., media-*, image-*).
@@ -400,7 +400,7 @@ class WPS_Dashboard_Widgets {
 				});
 				// Toggle handling for dashboard module switches with persistence and submenu updates
 				const ajaxUrl = '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>';
-				const nonce = '<?php echo esc_js( wp_create_nonce( 'WPS_module_actions' ) ); ?>';
+				const nonce = '<?php echo esc_js( wp_create_nonce( 'wpshadow_module_actions' ) ); ?>';
 				const scope = '<?php echo ( is_multisite() && is_network_admin() ) ? 'network' : 'site'; ?>';
 				const storagePrefix = 'wpsToggleState:' + scope + ':';
 				const pendingPrefix = 'wpsTogglePending:' + scope + ':';
@@ -452,7 +452,7 @@ class WPS_Dashboard_Widgets {
 					const healthContainer = document.getElementById('wps-health-widget-container');
 					if (healthContainer) {
 						try {
-							const healthData = await postAction('WPS_refresh_health_widget', {});
+							const healthData = await postAction('wpshadow_refresh_health_widget', {});
 							if (healthData && healthData.html) {
 								healthContainer.innerHTML = healthData.html;
 								console.info('Health widget refreshed for active modules:', healthData.active_modules);
@@ -466,7 +466,7 @@ class WPS_Dashboard_Widgets {
 					const eventsContainer = document.getElementById('wps-events-news-container');
 					if (eventsContainer) {
 						try {
-							const eventsData = await postAction('WPS_refresh_events_widget', {});
+							const eventsData = await postAction('wpshadow_refresh_events_widget', {});
 							if (eventsData && eventsData.html) {
 								eventsContainer.innerHTML = eventsData.html;
 								console.info('Events widget refreshed for active repos:', eventsData.active_repos);
@@ -493,18 +493,18 @@ class WPS_Dashboard_Widgets {
 					const progress = card ? card.querySelector('.wps-progress') : null;
 					input.disabled = true; if (progress) progress.style.display = 'inline-flex';
 					const isPlugin = input.getAttribute('data-is-plugin') === '1';
-					let action = 'WPS_module_toggle';
+					let action = 'wpshadow_module_toggle';
 					const payload = { slug };
 					if (isPlugin) {
-						if (turningOn) { action = (input.getAttribute('data-installed') === '1') ? 'WPS_module_activate' : 'WPS_module_install'; }
-						else { action = 'WPS_module_deactivate'; }
+						if (turningOn) { action = (input.getAttribute('data-installed') === '1') ? 'wpshadow_module_activate' : 'wpshadow_module_install'; }
+						else { action = 'wpshadow_module_deactivate'; }
 						if (pluginBase) { payload.plugin_base = pluginBase; }
 					} else {
 						payload.enabled = turningOn ? 1 : 0;
 					}
 					try {
 						const data = await postAction(action, payload);
-						if (action === 'WPS_module_install') { input.setAttribute('data-installed','1'); }
+						if (action === 'wpshadow_module_install') { input.setAttribute('data-installed','1'); }
 						clearPending(slug);
 						applyCardState(input, turningOn);
 						
@@ -553,17 +553,17 @@ class WPS_Dashboard_Widgets {
 										}
 										// Send AJAX to persist restoration
 										try {
-											await postAction('WPS_module_toggle', { slug: remSlug, enabled: 1 });
+											await postAction('wpshadow_module_toggle', { slug: remSlug, enabled: 1 });
 										} catch (restoreErr) {
 											console.error(`Failed to restore ${remSlug}:`, restoreErr);
 										}
 									}
 								}
 								// Clear remembered list after restoration
-								await postAction('WPS_clear_remembered', { parent_slug: slug });
+								await postAction('wpshadow_clear_remembered', { parent_slug: slug });
 							} else {
 								// User declined, clear memory anyway
-								await postAction('WPS_clear_remembered', { parent_slug: slug });
+								await postAction('wpshadow_clear_remembered', { parent_slug: slug });
 							}
 						}
 					} catch (err) {
@@ -632,7 +632,7 @@ class WPS_Dashboard_Widgets {
 
 				// Utility: add/remove submenu entry for a hub from its slug
 				function ensureSubmenuFromSlug(slug, name, enabled){
-					var moduleId = (slug || '').replace(/-support-thisismyurl$/,'');
+					var moduleId = (slug || '').replace(/-wpshadow$/,'');
 					var label = name || moduleId || 'Module';
 					ensureSubmenu(moduleId, label, enabled);
 				}
@@ -673,10 +673,10 @@ class WPS_Dashboard_Widgets {
 						const targetOn = (p === '1');
 						const pluginBase = input.getAttribute('data-plugin-base') || '';
 						const isPlugin = input.getAttribute('data-is-plugin') === '1';
-						let action = 'WPS_module_toggle';
+						let action = 'wpshadow_module_toggle';
 						const payload = { slug };
 						if (isPlugin){
-							action = targetOn ? 'WPS_module_activate' : 'WPS_module_deactivate';
+							action = targetOn ? 'wpshadow_module_activate' : 'wpshadow_module_deactivate';
 							if (pluginBase) { payload.plugin_base = pluginBase; }
 						} else {
 							payload.enabled = targetOn ? 1 : 0;
@@ -704,7 +704,7 @@ class WPS_Dashboard_Widgets {
 		</script>
 		<div class="wps-widget-content">
 			<?php if ( empty( $next_level_modules ) ) : ?>
-				<p><?php esc_html_e( 'No modules available at this level.', 'plugin-wp-support-thisismyurl' ); ?></p>
+				<p><?php esc_html_e( 'No modules available at this level.', 'plugin-wpshadow' ); ?></p>
 				<?php
 			else :
 				?>
@@ -734,16 +734,16 @@ class WPS_Dashboard_Widgets {
 						$module_name      = esc_html( $module['name'] ?? '' );
 						$module_version   = esc_html( $module['version'] ?? '?.?.?' );
 						$is_installed     = ! empty( $module['installed'] );
-						$is_enabled       = \WPS\CoreSupport\WPS_Module_Registry::is_enabled( $module_slug );
+						$is_enabled       = \WPS\CoreSupport\WPSHADOW_Module_Registry::is_enabled( $module_slug );
 						$update_available = ! empty( $module['update_available'] );
 						$card_classes     = 'wps-module-card wps-widget-module-card ' . ( $is_enabled ? 'wps-module-enabled' : 'wps-module-disabled wps-module-card-inactive' );
 
 						// Build navigation URL (hub vs spoke) and icon.
 						$icon_class = 'dashicons-networking';
-						$module_url = WPS_Tab_Navigation::build_hub_url( $module_slug );
+						$module_url = WPSHADOW_Tab_Navigation::build_hub_url( $module_slug );
 						if ( 'spoke' === $module_type && ! empty( $context['hub'] ) ) {
 							$spoke_id   = str_starts_with( $module_slug, $context['hub'] . '-' ) ? substr( $module_slug, strlen( $context['hub'] ) + 1 ) : $module_slug;
-							$module_url = WPS_Tab_Navigation::build_spoke_url( $context['hub'], $spoke_id );
+							$module_url = WPSHADOW_Tab_Navigation::build_spoke_url( $context['hub'], $spoke_id );
 							$icon_class = 'dashicons-hammer';
 						}
 						?>
@@ -765,7 +765,7 @@ class WPS_Dashboard_Widgets {
 										<input type="checkbox" class="wps-module-toggle" <?php checked( $is_enabled ); ?> data-module="<?php echo esc_attr( $module_slug ); ?>" data-module-name="<?php echo esc_attr( $module_name ); ?>" data-type="<?php echo esc_attr( 'spoke' === $module_type ? 'spoke' : 'hub' ); ?>" data-installed="<?php echo esc_attr( $is_installed ? '1' : '0' ); ?>" data-plugin-base="<?php echo esc_attr( $module['basename'] ?? '' ); ?>" data-is-plugin="<?php echo esc_attr( ( ! empty( $module['basename'] ?? '' ) || ! empty( $module['download_url'] ?? '' ) ) ? '1' : '0' ); ?>" data-slug="<?php echo esc_attr( $module_slug ); ?>">
 										<span class="wps-toggle-slider"></span>
 									</label>
-									<span class="wps-progress" aria-live="polite"><span class="spinner is-active" style="float:none"></span><span class="bar"><span class="fill"></span></span><span class="progress-label"><?php esc_html_e( 'Working…', 'plugin-wp-support-thisismyurl' ); ?></span></span>
+									<span class="wps-progress" aria-live="polite"><span class="spinner is-active" style="float:none"></span><span class="bar"><span class="fill"></span></span><span class="progress-label"><?php esc_html_e( 'Working…', 'plugin-wpshadow' ); ?></span></span>
 								</div>
 							</div>
 
@@ -781,12 +781,12 @@ class WPS_Dashboard_Widgets {
 										<span style="font-size: 11px; text-transform: uppercase; color: #666; font-weight: 600; letter-spacing: 0.5px;">
 											<?php
 											/* translators: %d: number of dependent modules */
-											echo esc_html( sprintf( _n( '%d Dependent Module', '%d Dependent Modules', count( $dependent_hubs[ $module_slug ] ), 'plugin-wp-support-thisismyurl' ), count( $dependent_hubs[ $module_slug ] ) ) );
+											echo esc_html( sprintf( _n( '%d Dependent Module', '%d Dependent Modules', count( $dependent_hubs[ $module_slug ] ), 'plugin-wpshadow' ), count( $dependent_hubs[ $module_slug ] ) ) );
 											?>
 										</span>
 										<?php if ( ! $parent_can_support ) : ?>
 											<span style="font-size: 10px; padding: 2px 6px; background: #999; color: #fff; border-radius: 2px;">
-												<?php esc_html_e( 'Parent Required', 'plugin-wp-support-thisismyurl' ); ?>
+												<?php esc_html_e( 'Parent Required', 'plugin-wpshadow' ); ?>
 											</span>
 										<?php endif; ?>
 									</div>
@@ -797,8 +797,8 @@ class WPS_Dashboard_Widgets {
 										$dep_slug         = sanitize_key( $dep_module['slug'] ?? '' );
 										$dep_name         = esc_html( $dep_module['name'] ?? '' );
 										$dep_installed    = ! empty( $dep_module['installed'] );
-										$dep_enabled      = \WPS\CoreSupport\WPS_Module_Registry::is_enabled( $dep_slug );
-										$dep_url          = WPS_Tab_Navigation::build_hub_url( $dep_slug );
+										$dep_enabled      = \WPS\CoreSupport\WPSHADOW_Module_Registry::is_enabled( $dep_slug );
+										$dep_url          = WPSHADOW_Tab_Navigation::build_hub_url( $dep_slug );
 										$dep_card_classes = 'wps-module-card wps-widget-module-card wps-widget-dependent-card ' . ( $dep_enabled ? 'wps-module-enabled' : 'wps-module-disabled wps-module-card-inactive' );
 										?>
 										<div class="<?php echo esc_attr( $dep_card_classes ); ?>" style="padding: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px; background: #fff; border: 1px solid #e0e0e0; border-radius: 2px; margin-bottom: 6px;">
@@ -813,7 +813,7 @@ class WPS_Dashboard_Widgets {
 													<input type="checkbox" <?php checked( $dep_enabled ); ?> data-module="<?php echo esc_attr( $dep_slug ); ?>" data-module-name="<?php echo esc_attr( $dep_name ); ?>" data-type="hub" data-installed="<?php echo esc_attr( $dep_installed ? '1' : '0' ); ?>" data-plugin-base="<?php echo esc_attr( $dep_module['basename'] ?? '' ); ?>" data-is-plugin="<?php echo esc_attr( ( ! empty( $dep_module['basename'] ?? '' ) || ! empty( $dep_module['download_url'] ?? '' ) ) ? '1' : '0' ); ?>" data-slug="<?php echo esc_attr( $dep_slug ); ?>">
 													<span class="wps-toggle-slider"></span>
 												</label>
-												<span class="wps-progress" aria-live="polite"><span class="spinner is-active" style="float:none"></span><span class="bar"><span class="fill"></span></span><span class="progress-label"><?php esc_html_e( 'Working…', 'plugin-wp-support-thisismyurl' ); ?></span></span>
+												<span class="wps-progress" aria-live="polite"><span class="spinner is-active" style="float:none"></span><span class="bar"><span class="fill"></span></span><span class="progress-label"><?php esc_html_e( 'Working…', 'plugin-wpshadow' ); ?></span></span>
 											</div>
 										</div>
 									<?php endforeach; ?>
@@ -833,12 +833,12 @@ class WPS_Dashboard_Widgets {
 	}
 
 	private static function widget_quick_actions(): void {
-		$catalog        = \WPS\CoreSupport\WPS_Module_Registry::get_catalog_with_status();
+		$catalog        = \WPS\CoreSupport\WPSHADOW_Module_Registry::get_catalog_with_status();
 		$inactive_count = count( array_filter( $catalog, fn( $m ) => empty( $m['status']['active'] ) && ! empty( $m['status']['installed'] ) ) );
 		$vault_path     = wp_upload_dir()['basedir'] . '/vault';
 		$vault_exists   = is_dir( $vault_path );
 		$vault_writable = $vault_exists && wp_is_writable( $vault_path );
-		$encryption_key = wp_support_get_vault_key();
+		$encryption_key = wpshadow_get_vault_key();
 		$health_url     = admin_url( 'site-health.php?tab=debug' );
 		?>
 		<div class="wps-widget-content wps-quick-actions">
@@ -846,37 +846,37 @@ class WPS_Dashboard_Widgets {
 				<!-- Site Health Action -->
 				<a href="<?php echo esc_url( $health_url ); ?>" class="button" style="display: flex; align-items: center; justify-content: center; padding: 10px; text-align: center;">
 					<span class="dashicons dashicons-heart" style="margin-right: 5px;"></span>
-					<?php esc_html_e( 'Site Health', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Site Health', 'plugin-wpshadow' ); ?>
 				</a>
 
 				<?php if ( $inactive_count > 0 ) : ?>
 					<!-- Activate Modules Action -->
-					<a href="<?php echo esc_url( admin_url( 'plugins.php?s=thisismyurl' ) ); ?>" class="button" style="display: flex; align-items: center; justify-content: center; padding: 10px; text-align: center;">
+					<a href="<?php echo esc_url( admin_url( 'plugins.php?s=wpshadow' ) ); ?>" class="button" style="display: flex; align-items: center; justify-content: center; padding: 10px; text-align: center;">
 						<span class="dashicons dashicons-update" style="margin-right: 5px;"></span>
-						<?php echo esc_html( sprintf( __( 'Activate %d Module(s)', 'plugin-wp-support-thisismyurl' ), $inactive_count ) ); ?>
+						<?php echo esc_html( sprintf( __( 'Activate %d Module(s)', 'plugin-wpshadow' ), $inactive_count ) ); ?>
 					</a>
 				<?php endif; ?>
 
 				<?php if ( empty( $encryption_key ) ) : ?>
 					<!-- Setup Encryption Action -->
-					<a href="<?php echo esc_url( WPS_Tab_Navigation::build_tab_url( 'dashboard_settings' ) . '&section=encryption' ); ?>" class="button button-secondary" style="display: flex; align-items: center; justify-content: center; padding: 10px; text-align: center;">
+					<a href="<?php echo esc_url( WPSHADOW_Tab_Navigation::build_tab_url( 'dashboard_settings' ) . '&section=encryption' ); ?>" class="button button-secondary" style="display: flex; align-items: center; justify-content: center; padding: 10px; text-align: center;">
 						<span class="dashicons dashicons-lock" style="margin-right: 5px; color: #d63638;"></span>
-						<?php esc_html_e( 'Setup Encryption', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'Setup Encryption', 'plugin-wpshadow' ); ?>
 					</a>
 				<?php endif; ?>
 
 				<!-- Get Help Action -->
-				<a href="https://thisismyurl.com/?source=plugin-wp-support-thisismyurl" target="_blank" rel="noopener noreferrer" class="button" style="display: flex; align-items: center; justify-content: center; padding: 10px; text-align: center;">
+				<a href="https://wpshadow.com/?source=plugin-wpshadow" target="_blank" rel="noopener noreferrer" class="button" style="display: flex; align-items: center; justify-content: center; padding: 10px; text-align: center;">
 					<span class="dashicons dashicons-editor-help" style="margin-right: 5px;"></span>
-					<?php esc_html_e( 'Get Help', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Get Help', 'plugin-wpshadow' ); ?>
 				</a>
 			</div>
 			
 			<!-- Configure Dashboard Text Link -->
 			<div style="margin-top: 15px; text-align: center;">
-				<a href="<?php echo esc_url( WPS_Tab_Navigation::build_tab_url( 'dashboard_settings' ) ); ?>" style="color: #2271b1; text-decoration: none; font-size: 13px;">
+				<a href="<?php echo esc_url( WPSHADOW_Tab_Navigation::build_tab_url( 'dashboard_settings' ) ); ?>" style="color: #2271b1; text-decoration: none; font-size: 13px;">
 					<span class="dashicons dashicons-admin-generic" style="font-size: 14px; vertical-align: middle;"></span>
-					<?php esc_html_e( 'Dashboard Settings', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Dashboard Settings', 'plugin-wpshadow' ); ?>
 				</a>
 			</div>
 			
@@ -891,7 +891,7 @@ class WPS_Dashboard_Widgets {
 	 * @return void
 	 */
 	private static function widget_tips_coach(): void {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\Features\\WPS_Feature_Tips_Coach' ) ) {
+		if ( ! class_exists( '\\WPShadow\\Features\\WPSHADOW_Feature_Tips_Coach' ) ) {
 			return;
 		}
 
@@ -899,10 +899,10 @@ class WPS_Dashboard_Widgets {
 		?>
 		<div class="postbox">
 			<div class="postbox-header">
-				<h2 class="hndle"><?php esc_html_e( 'Tips Coach', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2 class="hndle"><?php esc_html_e( 'Tips Coach', 'plugin-wpshadow' ); ?></h2>
 			</div>
 			<div class="inside">
-				<?php \WPS\CoreSupport\Features\WPS_Feature_Tips_Coach::render_widget(); ?>
+				<?php \WPS\CoreSupport\Features\WPSHADOW_Feature_Tips_Coach::render_widget(); ?>
 			</div>
 		</div>
 		<?php
@@ -914,11 +914,11 @@ class WPS_Dashboard_Widgets {
 	 * @return void
 	 */
 	private static function widget_weekly_performance(): void {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\Features\\WPS_Feature_Weekly_Performance_Report' ) ) {
+		if ( ! class_exists( '\\WPShadow\\Features\\WPSHADOW_Feature_Weekly_Performance_Report' ) ) {
 			return;
 		}
 
-		$metrics = \WPS\CoreSupport\Features\WPS_Feature_Weekly_Performance_Report::get_current_week_metrics();
+		$metrics = \WPS\CoreSupport\Features\WPSHADOW_Feature_Weekly_Performance_Report::get_current_week_metrics();
 
 		$uptime_percentage = 0;
 		if ( $metrics['uptime_checks'] > 0 ) {
@@ -931,7 +931,7 @@ class WPS_Dashboard_Widgets {
 		?>
 		<div class="postbox">
 			<div class="postbox-header">
-				<h2 class="hndle"><?php esc_html_e( '📊 This Week\'s Performance', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2 class="hndle"><?php esc_html_e( '📊 This Week\'s Performance', 'plugin-wpshadow' ); ?></h2>
 			</div>
 			<div class="inside">
 				<div class="wps-widget-content">
@@ -978,19 +978,19 @@ class WPS_Dashboard_Widgets {
 					<div class="wps-perf-metrics">
 						<div class="wps-perf-metric">
 							<span class="value"><?php echo esc_html( $time_saved_hours ); ?></span>
-							<span class="label"><?php esc_html_e( 'Hours Saved', 'plugin-wp-support-thisismyurl' ); ?></span>
+							<span class="label"><?php esc_html_e( 'Hours Saved', 'plugin-wpshadow' ); ?></span>
 						</div>
 						<div class="wps-perf-metric">
 							<span class="value"><?php echo esc_html( $data_saved_mb ); ?></span>
-							<span class="label"><?php esc_html_e( 'MB Saved', 'plugin-wp-support-thisismyurl' ); ?></span>
+							<span class="label"><?php esc_html_e( 'MB Saved', 'plugin-wpshadow' ); ?></span>
 						</div>
 						<div class="wps-perf-metric">
 							<span class="value"><?php echo esc_html( $metrics['issues_fixed'] ); ?></span>
-							<span class="label"><?php esc_html_e( 'Issues Fixed', 'plugin-wp-support-thisismyurl' ); ?></span>
+							<span class="label"><?php esc_html_e( 'Issues Fixed', 'plugin-wpshadow' ); ?></span>
 						</div>
 						<div class="wps-perf-metric">
 							<span class="value"><?php echo esc_html( number_format( $uptime_percentage, 1 ) ); ?>%</span>
-							<span class="label"><?php esc_html_e( 'Uptime', 'plugin-wp-support-thisismyurl' ); ?></span>
+							<span class="label"><?php esc_html_e( 'Uptime', 'plugin-wpshadow' ); ?></span>
 						</div>
 					</div>
 
@@ -998,7 +998,7 @@ class WPS_Dashboard_Widgets {
 					<div class="wps-perf-highlight">
 						<?php
 						// translators: %s: hours saved this week.
-						echo wp_kses_post( sprintf( __( '<strong>You saved %s hours this week!</strong> That\'s time you can spend on what matters most.', 'plugin-wp-support-thisismyurl' ), $time_saved_hours ) );
+						echo wp_kses_post( sprintf( __( '<strong>You saved %s hours this week!</strong> That\'s time you can spend on what matters most.', 'plugin-wpshadow' ), $time_saved_hours ) );
 						?>
 					</div>
 					<?php endif; ?>
@@ -1007,7 +1007,7 @@ class WPS_Dashboard_Widgets {
 					<div class="wps-perf-highlight">
 						<?php
 						// translators: %s: MB of data saved this week.
-						echo wp_kses_post( sprintf( __( '<strong>You saved %s MB of data this week!</strong>', 'plugin-wp-support-thisismyurl' ), $data_saved_mb ) );
+						echo wp_kses_post( sprintf( __( '<strong>You saved %s MB of data this week!</strong>', 'plugin-wpshadow' ), $data_saved_mb ) );
 						?>
 					</div>
 					<?php endif; ?>
@@ -1016,14 +1016,14 @@ class WPS_Dashboard_Widgets {
 					<div class="wps-perf-highlight">
 						<?php
 						// translators: %s: CPU cycles saved this week.
-						echo wp_kses_post( sprintf( __( '<strong>You saved %s CPU cycles this week!</strong>', 'plugin-wp-support-thisismyurl' ), number_format( $metrics['cpu_cycles_saved'] ) ) );
+						echo wp_kses_post( sprintf( __( '<strong>You saved %s CPU cycles this week!</strong>', 'plugin-wpshadow' ), number_format( $metrics['cpu_cycles_saved'] ) ) );
 						?>
 					</div>
 					<?php endif; ?>
 
 					<p style="text-align: center; margin-top: 15px;">
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wps-performance-reports' ) ); ?>" class="button button-primary">
-							<?php esc_html_e( 'View Full Report', 'plugin-wp-support-thisismyurl' ); ?>
+							<?php esc_html_e( 'View Full Report', 'plugin-wpshadow' ); ?>
 						</a>
 					</p>
 				</div>
@@ -1038,18 +1038,18 @@ class WPS_Dashboard_Widgets {
 	 * @return void
 	 */
 	private static function widget_performance_monitor(): void {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Performance_Monitor' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Performance_Monitor' ) ) {
 			return;
 		}
 
-		$metrics         = \WPS\CoreSupport\WPS_Performance_Monitor::get_current_metrics();
-		$score_data      = \WPS\CoreSupport\WPS_Performance_Monitor::calculate_performance_score();
-		$recommendations = \WPS\CoreSupport\WPS_Performance_Monitor::get_recommendations();
+		$metrics         = \WPS\CoreSupport\WPSHADOW_Performance_Monitor::get_current_metrics();
+		$score_data      = \WPS\CoreSupport\WPSHADOW_Performance_Monitor::calculate_performance_score();
+		$recommendations = \WPS\CoreSupport\WPSHADOW_Performance_Monitor::get_recommendations();
 
 		?>
 		<div class="postbox">
 			<div class="postbox-header">
-				<h2 class="hndle"><?php esc_html_e( '⚡ Performance Overview', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2 class="hndle"><?php esc_html_e( '⚡ Performance Overview', 'plugin-wpshadow' ); ?></h2>
 			</div>
 			<div class="inside">
 				<div class="wps-widget-content">
@@ -1131,7 +1131,7 @@ class WPS_Dashboard_Widgets {
 					<!-- Performance Score -->
 					<div class="wps-performance-score" style="background: <?php echo esc_attr( $score_data['color'] ); ?>;">
 						<div class="score-label" style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9;">
-							<?php esc_html_e( 'Performance Score', 'plugin-wp-support-thisismyurl' ); ?>
+							<?php esc_html_e( 'Performance Score', 'plugin-wpshadow' ); ?>
 						</div>
 						<span class="score"><?php echo esc_html( $score_data['score'] ); ?></span>
 						<span class="grade"><?php echo esc_html( $score_data['grade'] ); ?></span>
@@ -1140,19 +1140,19 @@ class WPS_Dashboard_Widgets {
 					<!-- Current Metrics -->
 					<div class="wps-current-metrics">
 						<div class="wps-metric-item">
-							<span class="metric-label"><?php esc_html_e( 'Queries', 'plugin-wp-support-thisismyurl' ); ?></span>
+							<span class="metric-label"><?php esc_html_e( 'Queries', 'plugin-wpshadow' ); ?></span>
 							<span class="metric-value"><?php echo esc_html( $metrics['query_count'] ?? 0 ); ?></span>
 						</div>
 						<div class="wps-metric-item">
-							<span class="metric-label"><?php esc_html_e( 'Load Time', 'plugin-wp-support-thisismyurl' ); ?></span>
+							<span class="metric-label"><?php esc_html_e( 'Load Time', 'plugin-wpshadow' ); ?></span>
 							<span class="metric-value"><?php echo esc_html( number_format( (float) ( $metrics['load_time'] ?? 0 ), 3 ) ); ?>s</span>
 						</div>
 						<div class="wps-metric-item">
-							<span class="metric-label"><?php esc_html_e( 'Memory', 'plugin-wp-support-thisismyurl' ); ?></span>
+							<span class="metric-label"><?php esc_html_e( 'Memory', 'plugin-wpshadow' ); ?></span>
 							<span class="metric-value"><?php echo esc_html( $metrics['memory_mb'] ?? 0 ); ?> MB</span>
 						</div>
 						<div class="wps-metric-item">
-							<span class="metric-label"><?php esc_html_e( 'Database', 'plugin-wp-support-thisismyurl' ); ?></span>
+							<span class="metric-label"><?php esc_html_e( 'Database', 'plugin-wpshadow' ); ?></span>
 							<span class="metric-value"><?php echo esc_html( $metrics['db_size'] ?? 0 ); ?> MB</span>
 						</div>
 					</div>
@@ -1161,7 +1161,7 @@ class WPS_Dashboard_Widgets {
 					<?php if ( ! empty( $recommendations ) ) : ?>
 					<div class="wps-recommendations">
 						<h4 style="margin: 0 0 10px 0; font-size: 13px; font-weight: 600; color: #333;">
-							<?php esc_html_e( '💡 Optimization Recommendations', 'plugin-wp-support-thisismyurl' ); ?>
+							<?php esc_html_e( '💡 Optimization Recommendations', 'plugin-wpshadow' ); ?>
 						</h4>
 						<?php foreach ( array_slice( $recommendations, 0, 3 ) as $rec ) : ?>
 							<div class="wps-recommendation <?php echo esc_attr( $rec['type'] ); ?>">
@@ -1174,8 +1174,8 @@ class WPS_Dashboard_Widgets {
 
 					<!-- Quick Actions -->
 					<p style="text-align: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e9ecef;">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=features' ) ); ?>" class="button button-primary">
-							<?php esc_html_e( 'Performance Features', 'plugin-wp-support-thisismyurl' ); ?>
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=features' ) ); ?>" class="button button-primary">
+							<?php esc_html_e( 'Performance Features', 'plugin-wpshadow' ); ?>
 						</a>
 					</p>
 				</div>
@@ -1191,12 +1191,12 @@ class WPS_Dashboard_Widgets {
 	 * @return void
 	 */
 	private static function widget_performance_alerts(): void {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Performance_Monitor' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Performance_Monitor' ) ) {
 			return;
 		}
 
 		// Get recent alerts.
-		$alerts = get_transient( 'wps_performance_alerts' );
+		$alerts = get_transient( 'wpshadow_performance_alerts' );
 		if ( empty( $alerts ) || ! is_array( $alerts ) ) {
 			// No alerts - don't display widget.
 			return;
@@ -1208,7 +1208,7 @@ class WPS_Dashboard_Widgets {
 		?>
 		<div class="postbox">
 			<div class="postbox-header">
-				<h2 class="hndle"><?php esc_html_e( '🔔 Performance Alerts', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2 class="hndle"><?php esc_html_e( '🔔 Performance Alerts', 'plugin-wpshadow' ); ?></h2>
 			</div>
 			<div class="inside">
 				<div class="wps-widget-content">
@@ -1248,7 +1248,7 @@ class WPS_Dashboard_Widgets {
 									<small>
 										<?php
 										/* translators: %s: time ago */
-										echo esc_html( sprintf( __( '%s ago', 'plugin-wp-support-thisismyurl' ), human_time_diff( $alert['timestamp'] ?? time() ) ) );
+										echo esc_html( sprintf( __( '%s ago', 'plugin-wpshadow' ), human_time_diff( $alert['timestamp'] ?? time() ) ) );
 										?>
 									</small>
 								</li>
@@ -1256,13 +1256,13 @@ class WPS_Dashboard_Widgets {
 						</ul>
 
 						<p style="text-align: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e9ecef;">
-							<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPS_tab=features' ) ); ?>" class="button">
-								<?php esc_html_e( 'Configure Alert Settings', 'plugin-wp-support-thisismyurl' ); ?>
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=features' ) ); ?>" class="button">
+								<?php esc_html_e( 'Configure Alert Settings', 'plugin-wpshadow' ); ?>
 							</a>
 						</p>
 					<?php else : ?>
 						<div class="wps-no-alerts">
-							<p><?php esc_html_e( '✅ No alerts triggered recently. Your site is performing well!', 'plugin-wp-support-thisismyurl' ); ?></p>
+							<p><?php esc_html_e( '✅ No alerts triggered recently. Your site is performing well!', 'plugin-wpshadow' ); ?></p>
 						</div>
 					<?php endif; ?>
 				</div>
@@ -1286,8 +1286,8 @@ class WPS_Dashboard_Widgets {
 		}
 
 		$roots = array(
-			'hub'   => trailingslashit( wp_support_PATH ) . 'modules/hubs',
-			'spoke' => trailingslashit( wp_support_PATH ) . 'modules/spokes',
+			'hub'   => trailingslashit( WPSHADOW_PATH ) . 'modules/hubs',
+			'spoke' => trailingslashit( WPSHADOW_PATH ) . 'modules/spokes',
 		);
 
 		foreach ( $roots as $type => $root ) {
@@ -1335,7 +1335,7 @@ class WPS_Dashboard_Widgets {
 					'slug'             => $slug,
 					'type'             => $type,
 					'name'             => $name,
-					'description'      => __( 'Discovered local module', 'plugin-wp-support-thisismyurl' ),
+					'description'      => __( 'Discovered local module', 'plugin-wpshadow' ),
 					'installed'        => true,
 					'enabled'          => false,
 					'update_available' => false,
@@ -1347,7 +1347,7 @@ class WPS_Dashboard_Widgets {
 		}
 
 		// Merge placeholders from modules/missing-modules.json so the widget lists not-yet-downloaded modules.
-		$missing_file = trailingslashit( wp_support_PATH ) . 'modules/missing-modules.json';
+		$missing_file = trailingslashit( WPSHADOW_PATH ) . 'modules/missing-modules.json';
 		if ( file_exists( $missing_file ) && is_readable( $missing_file ) ) {
 			$missing_json = file_get_contents( $missing_file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			$missing_data = json_decode( (string) $missing_json, true );
@@ -1392,14 +1392,14 @@ class WPS_Dashboard_Widgets {
 
 	private static function widget_vault_status(): void {
 		$upload_dir    = wp_upload_dir();
-		$vault_dirname = get_option( 'WPS_vault_dirname' );
+		$vault_dirname = get_option( 'wpshadow_vault_dirname' );
 		$vault_path    = ! empty( $vault_dirname ) ? $upload_dir['basedir'] . '/' . $vault_dirname : '';
 
 		$vault_exists   = ! empty( $vault_path ) && is_dir( $vault_path );
 		$vault_writable = $vault_exists && wp_is_writable( $vault_path );
-		$encryption_key = wp_support_get_vault_key();
+		$encryption_key = wpshadow_get_vault_key();
 		$has_encryption = ! empty( $encryption_key );
-		$key_source     = defined( 'WPS_VAULT_KEY' ) && WPS_VAULT_KEY ? 'wp-config.php' : 'Options';
+		$key_source     = defined( 'wpshadow_VAULT_KEY' ) && WPSHADOW_VAULT_KEY ? 'wp-config.php' : 'Options';
 
 		// Calculate vault size if it exists.
 		$vault_size = 0;
@@ -1421,12 +1421,12 @@ class WPS_Dashboard_Widgets {
 		// Determine overall vault health status.
 		$status_issues = array();
 		if ( ! $vault_exists ) {
-			$status_issues[] = __( 'Vault directory missing', 'plugin-wp-support-thisismyurl' );
+			$status_issues[] = __( 'Vault directory missing', 'plugin-wpshadow' );
 		} elseif ( ! $vault_writable ) {
-			$status_issues[] = __( 'Vault not writable', 'plugin-wp-support-thisismyurl' );
+			$status_issues[] = __( 'Vault not writable', 'plugin-wpshadow' );
 		}
 		if ( ! $has_encryption ) {
-			$status_issues[] = __( 'Encryption not configured', 'plugin-wp-support-thisismyurl' );
+			$status_issues[] = __( 'Encryption not configured', 'plugin-wpshadow' );
 		}
 
 		$is_healthy = empty( $status_issues );
@@ -1437,12 +1437,12 @@ class WPS_Dashboard_Widgets {
 				<?php if ( $is_healthy ) : ?>
 					<span class="dashicons dashicons-yes-alt" style="font-size: 48px; width: 48px; height: 48px; color: #00a32a;"></span>
 					<div style="margin-top: 8px;">
-						<strong style="color: #00a32a; font-size: 16px;"><?php esc_html_e( 'Vault Operational', 'plugin-wp-support-thisismyurl' ); ?></strong>
+						<strong style="color: #00a32a; font-size: 16px;"><?php esc_html_e( 'Vault Operational', 'plugin-wpshadow' ); ?></strong>
 					</div>
 				<?php else : ?>
 					<span class="dashicons dashicons-warning" style="font-size: 48px; width: 48px; height: 48px; color: #d63638;"></span>
 					<div style="margin-top: 8px;">
-						<strong style="color: #d63638; font-size: 16px;"><?php esc_html_e( 'Vault Needs Attention', 'plugin-wp-support-thisismyurl' ); ?></strong>
+						<strong style="color: #d63638; font-size: 16px;"><?php esc_html_e( 'Vault Needs Attention', 'plugin-wpshadow' ); ?></strong>
 					</div>
 				<?php endif; ?>
 			</div>
@@ -1451,31 +1451,31 @@ class WPS_Dashboard_Widgets {
 			<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
 				<div style="text-align: center; padding: 10px; background: #f6f7f7; border-radius: 4px;">
 					<div style="font-size: 24px; font-weight: bold; color: #2271b1;"><?php echo esc_html( $file_count ); ?></div>
-					<div style="font-size: 12px; color: #666; margin-top: 4px;"><?php esc_html_e( 'Files Stored', 'plugin-wp-support-thisismyurl' ); ?></div>
+					<div style="font-size: 12px; color: #666; margin-top: 4px;"><?php esc_html_e( 'Files Stored', 'plugin-wpshadow' ); ?></div>
 				</div>
 				<div style="text-align: center; padding: 10px; background: #f6f7f7; border-radius: 4px;">
 					<div style="font-size: 24px; font-weight: bold; color: #2271b1;"><?php echo esc_html( $vault_size_formatted ); ?></div>
-					<div style="font-size: 12px; color: #666; margin-top: 4px;"><?php esc_html_e( 'Total Size', 'plugin-wp-support-thisismyurl' ); ?></div>
+					<div style="font-size: 12px; color: #666; margin-top: 4px;"><?php esc_html_e( 'Total Size', 'plugin-wpshadow' ); ?></div>
 				</div>
 			</div>
 
 			<!-- Configuration Details -->
 			<div style="font-size: 13px;">
 				<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e5e5e5;">
-					<span><?php esc_html_e( 'Directory', 'plugin-wp-support-thisismyurl' ); ?>:</span>
+					<span><?php esc_html_e( 'Directory', 'plugin-wpshadow' ); ?>:</span>
 					<strong><?php echo $vault_exists ? '<span style="color: #00a32a;">✓</span>' : '<span style="color: #d63638;">✗</span>'; ?></strong>
 				</div>
 				<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e5e5e5;">
-					<span><?php esc_html_e( 'Writable', 'plugin-wp-support-thisismyurl' ); ?>:</span>
+					<span><?php esc_html_e( 'Writable', 'plugin-wpshadow' ); ?>:</span>
 					<strong><?php echo $vault_writable ? '<span style="color: #00a32a;">✓</span>' : '<span style="color: #d63638;">✗</span>'; ?></strong>
 				</div>
 				<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e5e5e5;">
-					<span><?php esc_html_e( 'Encryption', 'plugin-wp-support-thisismyurl' ); ?>:</span>
+					<span><?php esc_html_e( 'Encryption', 'plugin-wpshadow' ); ?>:</span>
 					<strong><?php echo $has_encryption ? '<span style="color: #00a32a;">✓</span>' : '<span style="color: #d63638;">✗</span>'; ?></strong>
 				</div>
 				<?php if ( $has_encryption ) : ?>
 					<div style="display: flex; justify-content: space-between; padding: 8px 0;">
-						<span><?php esc_html_e( 'Key Source', 'plugin-wp-support-thisismyurl' ); ?>:</span>
+						<span><?php esc_html_e( 'Key Source', 'plugin-wpshadow' ); ?>:</span>
 						<strong><?php echo esc_html( $key_source ); ?></strong>
 					</div>
 				<?php endif; ?>
@@ -1484,7 +1484,7 @@ class WPS_Dashboard_Widgets {
 			<?php if ( ! empty( $status_issues ) ) : ?>
 				<!-- Issues List -->
 				<div style="margin-top: 15px; padding: 10px; background: #fcf0f1; border-left: 4px solid #d63638; border-radius: 2px;">
-					<strong style="color: #d63638;"><?php esc_html_e( 'Issues Found:', 'plugin-wp-support-thisismyurl' ); ?></strong>
+					<strong style="color: #d63638;"><?php esc_html_e( 'Issues Found:', 'plugin-wpshadow' ); ?></strong>
 					<ul style="margin: 8px 0 0 20px; color: #d63638;">
 						<?php foreach ( $status_issues as $issue ) : ?>
 							<li><?php echo esc_html( $issue ); ?></li>
@@ -1517,9 +1517,9 @@ class WPS_Dashboard_Widgets {
 		?>
 		<div class="wps-events-feed">
 			<?php if ( empty( $active_repos ) ) : ?>
-				<p><em><?php esc_html_e( 'No active modules. Activate modules to see their updates.', 'plugin-wp-support-thisismyurl' ); ?></em></p>
+				<p><em><?php esc_html_e( 'No active modules. Activate modules to see their updates.', 'plugin-wpshadow' ); ?></em></p>
 			<?php else : ?>
-				<p><em><?php esc_html_e( 'Showing events for active modules:', 'plugin-wp-support-thisismyurl' ); ?></em></p>
+				<p><em><?php esc_html_e( 'Showing events for active modules:', 'plugin-wpshadow' ); ?></em></p>
 				<ul class="wps-events-list" style="list-style: none; padding: 0; margin: 0;">
 					<?php foreach ( $active_repos as $repo_data ) : ?>
 						<li style="padding: 8px 0; border-bottom: 1px solid #e5e5e5;">
@@ -1527,11 +1527,11 @@ class WPS_Dashboard_Widgets {
 							<br />
 							<small>
 								<a href="<?php echo esc_url( 'https://github.com/thisismyurl/' . $repo_data['repo'] . '/releases' ); ?>" target="_blank" rel="noopener">
-									<?php esc_html_e( 'Latest releases', 'plugin-wp-support-thisismyurl' ); ?>
+									<?php esc_html_e( 'Latest releases', 'plugin-wpshadow' ); ?>
 								</a>
 								|
 								<a href="<?php echo esc_url( 'https://github.com/thisismyurl/' . $repo_data['repo'] . '/issues' ); ?>" target="_blank" rel="noopener">
-									<?php esc_html_e( 'Issues', 'plugin-wp-support-thisismyurl' ); ?>
+									<?php esc_html_e( 'Issues', 'plugin-wpshadow' ); ?>
 								</a>
 							</small>
 						</li>
@@ -1539,7 +1539,7 @@ class WPS_Dashboard_Widgets {
 				</ul>
 				<p style="margin-top: 12px; text-align: center;">
 					<a href="https://github.com/thisismyurl?tab=repositories&q=plugin-" target="_blank" rel="noopener">
-						<?php esc_html_e( 'View all repositories →', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'View all repositories →', 'plugin-wpshadow' ); ?>
 					</a>
 				</p>
 			<?php endif; ?>
@@ -1548,13 +1548,13 @@ class WPS_Dashboard_Widgets {
 	}
 
 	private static function widget_system_health(): void {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Site_Health' ) ) {
-			echo '<div class="wps-widget-content"><p><em>' . esc_html__( 'Health checks unavailable.', 'plugin-wp-support-thisismyurl' ) . '</em></p></div>';
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Site_Health' ) ) {
+			echo '<div class="wps-widget-content"><p><em>' . esc_html__( 'Health checks unavailable.', 'plugin-wpshadow' ) . '</em></p></div>';
 			return;
 		}
 
 		// Get health results (automatically filters by active modules).
-		$health_data = \WPS\CoreSupport\WPS_Site_Health::get_health_check_results();
+		$health_data = \WPS\CoreSupport\WPSHADOW_Site_Health::get_health_check_results();
 		?>
 		<div id="wps-health-widget-container">
 			<?php self::render_health_widget( $health_data, '' ); ?>
@@ -1584,7 +1584,7 @@ class WPS_Dashboard_Widgets {
 
 		// Color coding.
 		$health_color = 'critical' === $status ? '#d63638' : ( 'recommended' === $status ? '#dba617' : '#00a32a' );
-		$health_label = 'critical' === $status ? __( 'Critical', 'plugin-wp-support-thisismyurl' ) : ( 'recommended' === $status ? __( 'Warning', 'plugin-wp-support-thisismyurl' ) : __( 'Good', 'plugin-wp-support-thisismyurl' ) );
+		$health_label = 'critical' === $status ? __( 'Critical', 'plugin-wpshadow' ) : ( 'recommended' === $status ? __( 'Warning', 'plugin-wpshadow' ) : __( 'Good', 'plugin-wpshadow' ) );
 		?>
 		<div class="wps-widget-content wps-system-health">
 			<!-- Health Score Badge -->
@@ -1603,15 +1603,15 @@ class WPS_Dashboard_Widgets {
 			<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 15px;">
 				<div style="text-align: center; padding: 10px; background: #f6f7f7; border-radius: 4px;">
 					<div style="font-size: 20px; font-weight: bold; color: #00a32a;"><?php echo esc_html( $good_count ); ?></div>
-					<div style="font-size: 11px; color: #666; margin-top: 2px;"><?php esc_html_e( 'Passed', 'plugin-wp-support-thisismyurl' ); ?></div>
+					<div style="font-size: 11px; color: #666; margin-top: 2px;"><?php esc_html_e( 'Passed', 'plugin-wpshadow' ); ?></div>
 				</div>
 				<div style="text-align: center; padding: 10px; background: #f6f7f7; border-radius: 4px;">
 					<div style="font-size: 20px; font-weight: bold; color: #dba617;"><?php echo esc_html( $warning_count ); ?></div>
-					<div style="font-size: 11px; color: #666; margin-top: 2px;"><?php esc_html_e( 'Warnings', 'plugin-wp-support-thisismyurl' ); ?></div>
+					<div style="font-size: 11px; color: #666; margin-top: 2px;"><?php esc_html_e( 'Warnings', 'plugin-wpshadow' ); ?></div>
 				</div>
 				<div style="text-align: center; padding: 10px; background: #f6f7f7; border-radius: 4px;">
 					<div style="font-size: 20px; font-weight: bold; color: #d63638;"><?php echo esc_html( $critical_count ); ?></div>
-					<div style="font-size: 11px; color: #666; margin-top: 2px;"><?php esc_html_e( 'Critical', 'plugin-wp-support-thisismyurl' ); ?></div>
+					<div style="font-size: 11px; color: #666; margin-top: 2px;"><?php esc_html_e( 'Critical', 'plugin-wpshadow' ); ?></div>
 				</div>
 			</div>
 
@@ -1636,7 +1636,7 @@ class WPS_Dashboard_Widgets {
 			<!-- View Full Report Link -->
 			<div style="text-align: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e5e5e5;">
 				<a href="<?php echo esc_url( admin_url( 'site-health.php' ) ); ?>" class="button">
-					<?php esc_html_e( 'View Full Site Health Report →', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'View Full Site Health Report →', 'plugin-wpshadow' ); ?>
 				</a>
 			</div>
 		</div>
@@ -1646,10 +1646,10 @@ class WPS_Dashboard_Widgets {
 	private static function widget_events_and_news(): void {
 		// Get active module repos for filtering.
 		$active_repos = array();
-		$catalog      = \WPS\CoreSupport\WPS_Module_Registry::get_catalog_with_status();
+		$catalog      = \WPS\CoreSupport\WPSHADOW_Module_Registry::get_catalog_with_status();
 		foreach ( $catalog as $module ) {
 			$slug = $module['slug'] ?? '';
-			if ( ! empty( $slug ) && \WPS\CoreSupport\WPS_Module_Registry::is_enabled( $slug ) ) {
+			if ( ! empty( $slug ) && \WPS\CoreSupport\WPSHADOW_Module_Registry::is_enabled( $slug ) ) {
 				$repo           = 'plugin-' . $slug;
 				$active_repos[] = array(
 					'slug' => $slug,
@@ -1670,13 +1670,13 @@ class WPS_Dashboard_Widgets {
 	private static function widget_hub_overview( string $hub_id ): void {
 		?>
 		<div class="wps-widget-content">
-			<p><?php echo esc_html( sprintf( __( 'Managing %s processing and distribution.', 'plugin-wp-support-thisismyurl' ), strtoupper( $hub_id ) ) ); ?></p>
+			<p><?php echo esc_html( sprintf( __( 'Managing %s processing and distribution.', 'plugin-wpshadow' ), strtoupper( $hub_id ) ) ); ?></p>
 		</div>
 		<?php
 	}
 
 	private static function widget_active_spokes( string $hub_id ): void {
-		$catalog = \WPS\CoreSupport\WPS_Module_Registry::get_catalog_with_status();
+		$catalog = \WPS\CoreSupport\WPSHADOW_Module_Registry::get_catalog_with_status();
 		$spokes  = array_filter(
 			$catalog,
 			fn( $m ) => 'spoke' === ( $m['type'] ?? '' )
@@ -1686,14 +1686,14 @@ class WPS_Dashboard_Widgets {
 		?>
 		<div class="wps-widget-content">
 			<?php if ( empty( $spokes ) ) : ?>
-				<p><?php esc_html_e( 'No spokes currently active for this hub.', 'plugin-wp-support-thisismyurl' ); ?></p>
+				<p><?php esc_html_e( 'No spokes currently active for this hub.', 'plugin-wpshadow' ); ?></p>
 			<?php else : ?>
 				<ul class="wps-spoke-list">
 					<?php foreach ( $spokes as $spoke ) : ?>
 						<?php
 						$spoke_id   = sanitize_key( str_replace( $hub_id . '-', '', $spoke['id'] ?? '' ) );
 						$spoke_name = esc_html( $spoke['name'] ?? $spoke_id );
-						$spoke_url  = WPS_Tab_Navigation::build_spoke_url( $hub_id, $spoke_id );
+						$spoke_url  = WPSHADOW_Tab_Navigation::build_spoke_url( $hub_id, $spoke_id );
 						?>
 						<li>
 							<a href="<?php echo esc_url( $spoke_url ); ?>">
@@ -1711,7 +1711,7 @@ class WPS_Dashboard_Widgets {
 	private static function widget_hub_stats( string $hub_id ): void {
 		?>
 		<div class="wps-widget-content">
-			<p><em><?php esc_html_e( 'Processing stats coming soon.', 'plugin-wp-support-thisismyurl' ); ?></em></p>
+			<p><em><?php esc_html_e( 'Processing stats coming soon.', 'plugin-wpshadow' ); ?></em></p>
 		</div>
 		<?php
 	}
@@ -1720,9 +1720,9 @@ class WPS_Dashboard_Widgets {
 		?>
 		<div class="wps-widget-content">
 			<p>
-				<a href="<?php echo esc_url( WPS_Tab_Navigation::build_hub_url( $hub_id, 'settings' ) ); ?>" class="button button-primary">
+				<a href="<?php echo esc_url( WPSHADOW_Tab_Navigation::build_hub_url( $hub_id, 'settings' ) ); ?>" class="button button-primary">
 					<span class="dashicons dashicons-admin-settings"></span>
-					<?php esc_html_e( 'Hub Settings', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Hub Settings', 'plugin-wpshadow' ); ?>
 				</a>
 			</p>
 		</div>
@@ -1734,7 +1734,7 @@ class WPS_Dashboard_Widgets {
 	private static function widget_spoke_overview( string $hub_id, string $spoke_id ): void {
 		?>
 		<div class="wps-widget-content">
-			<p><?php echo esc_html( sprintf( __( 'Managing %s format support.', 'plugin-wp-support-thisismyurl' ), strtoupper( $spoke_id ) ) ); ?></p>
+			<p><?php echo esc_html( sprintf( __( 'Managing %s format support.', 'plugin-wpshadow' ), strtoupper( $spoke_id ) ) ); ?></p>
 		</div>
 		<?php
 	}
@@ -1743,9 +1743,9 @@ class WPS_Dashboard_Widgets {
 		?>
 		<div class="wps-widget-content">
 			<ul class="wps-features-list">
-				<li><span class="dashicons dashicons-yes"></span> <?php esc_html_e( 'Format Detection', 'plugin-wp-support-thisismyurl' ); ?></li>
-				<li><span class="dashicons dashicons-yes"></span> <?php esc_html_e( 'Conversion Support', 'plugin-wp-support-thisismyurl' ); ?></li>
-				<li><span class="dashicons dashicons-yes"></span> <?php esc_html_e( 'Metadata Handling', 'plugin-wp-support-thisismyurl' ); ?></li>
+				<li><span class="dashicons dashicons-yes"></span> <?php esc_html_e( 'Format Detection', 'plugin-wpshadow' ); ?></li>
+				<li><span class="dashicons dashicons-yes"></span> <?php esc_html_e( 'Conversion Support', 'plugin-wpshadow' ); ?></li>
+				<li><span class="dashicons dashicons-yes"></span> <?php esc_html_e( 'Metadata Handling', 'plugin-wpshadow' ); ?></li>
 			</ul>
 		</div>
 		<?php
@@ -1754,7 +1754,7 @@ class WPS_Dashboard_Widgets {
 	private static function widget_spoke_stats( string $spoke_id ): void {
 		?>
 		<div class="wps-widget-content">
-			<p><em><?php esc_html_e( 'Format-specific stats coming soon.', 'plugin-wp-support-thisismyurl' ); ?></em></p>
+			<p><em><?php esc_html_e( 'Format-specific stats coming soon.', 'plugin-wpshadow' ); ?></em></p>
 		</div>
 		<?php
 	}
@@ -1763,9 +1763,9 @@ class WPS_Dashboard_Widgets {
 		?>
 		<div class="wps-widget-content">
 			<p>
-				<a href="<?php echo esc_url( WPS_Tab_Navigation::build_spoke_url( $hub_id, $spoke_id, 'settings' ) ); ?>" class="button button-primary">
+				<a href="<?php echo esc_url( WPSHADOW_Tab_Navigation::build_spoke_url( $hub_id, $spoke_id, 'settings' ) ); ?>" class="button button-primary">
 					<span class="dashicons dashicons-admin-settings"></span>
-					<?php esc_html_e( 'Spoke Settings', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Spoke Settings', 'plugin-wpshadow' ); ?>
 				</a>
 			</p>
 		</div>
@@ -1775,11 +1775,11 @@ class WPS_Dashboard_Widgets {
 	private static function widget_media_overview(): void {
 		?>
 		<div class="wps-widget-content">
-			<p><?php esc_html_e( 'Media Hub provides centralized media processing and management capabilities.', 'plugin-wp-support-thisismyurl' ); ?></p>
+			<p><?php esc_html_e( 'Media Hub provides centralized media processing and management capabilities.', 'plugin-wpshadow' ); ?></p>
 			<ul style="list-style: none; padding: 0;">
-				<li><span class="dashicons dashicons-admin-media"></span> <?php esc_html_e( 'Batch processing for media files', 'plugin-wp-support-thisismyurl' ); ?></li>
-				<li><span class="dashicons dashicons-admin-generic"></span> <?php esc_html_e( 'Media optimization policies', 'plugin-wp-support-thisismyurl' ); ?></li>
-				<li><span class="dashicons dashicons-networking"></span> <?php esc_html_e( 'Multi-format support coordination', 'plugin-wp-support-thisismyurl' ); ?></li>
+				<li><span class="dashicons dashicons-admin-media"></span> <?php esc_html_e( 'Batch processing for media files', 'plugin-wpshadow' ); ?></li>
+				<li><span class="dashicons dashicons-admin-generic"></span> <?php esc_html_e( 'Media optimization policies', 'plugin-wpshadow' ); ?></li>
+				<li><span class="dashicons dashicons-networking"></span> <?php esc_html_e( 'Multi-format support coordination', 'plugin-wpshadow' ); ?></li>
 			</ul>
 		</div>
 		<?php
@@ -1792,27 +1792,27 @@ class WPS_Dashboard_Widgets {
 	 * @return void
 	 */
 	private static function widget_hub_health( string $hub_id ): void {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Site_Health' ) ) {
-			echo '<div class="wps-widget-content"><p><em>' . esc_html__( 'Health checks unavailable.', 'plugin-wp-support-thisismyurl' ) . '</em></p></div>';
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Site_Health' ) ) {
+			echo '<div class="wps-widget-content"><p><em>' . esc_html__( 'Health checks unavailable.', 'plugin-wpshadow' ) . '</em></p></div>';
 			return;
 		}
 
 		// Get hierarchical health data.
-		$health_hierarchy = \WPS\CoreSupport\WPS_Site_Health::get_hierarchical_health( $hub_id );
+		$health_hierarchy = \WPS\CoreSupport\WPSHADOW_Site_Health::get_hierarchical_health( $hub_id );
 		$self_health      = $health_hierarchy['self'] ?? array();
 		$dependents       = $health_hierarchy['dependents'] ?? array();
 		?>
 		<div class="wps-widget-content">
 			<!-- Self Health -->
 			<div style="margin-bottom: 20px;">
-				<h4 style="margin: 0 0 10px 0;"><?php esc_html_e( 'Hub Health', 'plugin-wp-support-thisismyurl' ); ?></h4>
+				<h4 style="margin: 0 0 10px 0;"><?php esc_html_e( 'Hub Health', 'plugin-wpshadow' ); ?></h4>
 				<?php self::render_health_widget( $self_health ); ?>
 			</div>
 
 			<?php if ( ! empty( $dependents ) ) : ?>
 				<!-- Dependent Health -->
 				<div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e5e5;">
-					<h4 style="margin: 0 0 10px 0;"><?php esc_html_e( 'Dependent Modules Health', 'plugin-wp-support-thisismyurl' ); ?></h4>
+					<h4 style="margin: 0 0 10px 0;"><?php esc_html_e( 'Dependent Modules Health', 'plugin-wpshadow' ); ?></h4>
 					<?php foreach ( $dependents as $dep_id => $dep_data ) : ?>
 						<div style="margin-bottom: 15px; padding: 10px; background: #f9f9f9; border-radius: 3px;">
 							<h5 style="margin: 0 0 8px 0; color: #2271b1;">
@@ -1844,7 +1844,7 @@ class WPS_Dashboard_Widgets {
 		$results = $health_data['results'] ?? array();
 
 		$health_color = 'critical' === $status ? '#d63638' : ( 'recommended' === $status ? '#dba617' : '#00a32a' );
-		$health_label = 'critical' === $status ? __( 'Critical', 'plugin-wp-support-thisismyurl' ) : ( 'recommended' === $status ? __( 'Warning', 'plugin-wp-support-thisismyurl' ) : __( 'Good', 'plugin-wp-support-thisismyurl' ) );
+		$health_label = 'critical' === $status ? __( 'Critical', 'plugin-wpshadow' ) : ( 'recommended' === $status ? __( 'Warning', 'plugin-wpshadow' ) : __( 'Good', 'plugin-wpshadow' ) );
 		?>
 		<div style="display: flex; align-items: center; justify-content: space-between; gap: 15px;">
 			<div style="flex: 0 0 60px;">
@@ -1857,12 +1857,12 @@ class WPS_Dashboard_Widgets {
 					<?php echo esc_html( $health_label ); ?>
 				</div>
 				<div style="display: flex; gap: 10px; font-size: 12px; color: #666;">
-					<span><strong><?php echo esc_html( $counts['good'] ?? 0 ); ?></strong> <?php esc_html_e( 'Passed', 'plugin-wp-support-thisismyurl' ); ?></span>
+					<span><strong><?php echo esc_html( $counts['good'] ?? 0 ); ?></strong> <?php esc_html_e( 'Passed', 'plugin-wpshadow' ); ?></span>
 					<?php if ( ( $counts['warning'] ?? 0 ) > 0 ) : ?>
-						<span><strong style="color: #dba617;"><?php echo esc_html( $counts['warning'] ); ?></strong> <?php esc_html_e( 'Warnings', 'plugin-wp-support-thisismyurl' ); ?></span>
+						<span><strong style="color: #dba617;"><?php echo esc_html( $counts['warning'] ); ?></strong> <?php esc_html_e( 'Warnings', 'plugin-wpshadow' ); ?></span>
 					<?php endif; ?>
 					<?php if ( ( $counts['critical'] ?? 0 ) > 0 ) : ?>
-						<span><strong style="color: #d63638;"><?php echo esc_html( $counts['critical'] ); ?></strong> <?php esc_html_e( 'Critical', 'plugin-wp-support-thisismyurl' ); ?></span>
+						<span><strong style="color: #d63638;"><?php echo esc_html( $counts['critical'] ); ?></strong> <?php esc_html_e( 'Critical', 'plugin-wpshadow' ); ?></span>
 					<?php endif; ?>
 				</div>
 			</div>
@@ -1872,20 +1872,20 @@ class WPS_Dashboard_Widgets {
 
 	private static function widget_vault_overview(): void {
 		$upload_dir     = wp_upload_dir();
-		$vault_dirname  = get_option( 'WPS_vault_dirname' );
+		$vault_dirname  = get_option( 'wpshadow_vault_dirname' );
 		$vault_dir      = ! empty( $vault_dirname ) ? $upload_dir['basedir'] . '/' . $vault_dirname : '';
 		$vault_exists   = ! empty( $vault_dir ) && is_dir( $vault_dir );
 		$vault_writable = $vault_exists && wp_is_writable( $vault_dir );
 		?>
 		<div class="wps-widget-content">
-			<p><?php esc_html_e( 'The Vault securely stores original media files with SHA-256 verification and automatic recovery.', 'plugin-wp-support-thisismyurl' ); ?></p>
+			<p><?php esc_html_e( 'The Vault securely stores original media files with SHA-256 verification and automatic recovery.', 'plugin-wpshadow' ); ?></p>
 			<ul style="list-style: none; padding: 0;">
 				<li>
 					<span class="dashicons dashicons-<?php echo $vault_writable ? 'yes' : 'no'; ?>" style="color: <?php echo $vault_writable ? '#00a32a' : '#d63638'; ?>;"></span>
-					<?php echo $vault_writable ? esc_html__( 'Vault directory is writable', 'plugin-wp-support-thisismyurl' ) : esc_html__( 'Vault directory not writable', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php echo $vault_writable ? esc_html__( 'Vault directory is writable', 'plugin-wpshadow' ) : esc_html__( 'Vault directory not writable', 'plugin-wpshadow' ); ?>
 				</li>
-				<li><span class="dashicons dashicons-lock"></span> <?php esc_html_e( 'Optional encryption support', 'plugin-wp-support-thisismyurl' ); ?></li>
-				<li><span class="dashicons dashicons-image-rotate"></span> <?php esc_html_e( 'Automatic rehydration on 404', 'plugin-wp-support-thisismyurl' ); ?></li>
+				<li><span class="dashicons dashicons-lock"></span> <?php esc_html_e( 'Optional encryption support', 'plugin-wpshadow' ); ?></li>
+				<li><span class="dashicons dashicons-image-rotate"></span> <?php esc_html_e( 'Automatic rehydration on 404', 'plugin-wpshadow' ); ?></li>
 			</ul>
 		</div>
 		<?php
@@ -1904,7 +1904,7 @@ class WPS_Dashboard_Widgets {
 		<div class="wps-metabox" data-metabox-id="<?php echo esc_attr( $id ); ?>">
 			<div class="wps-metabox-header">
 				<div class="wps-metabox-handle"><?php echo esc_html( $title ); ?></div>
-				<a href="#" class="wps-metabox-toggle" aria-label="<?php esc_attr_e( 'Toggle panel', 'plugin-wp-support-thisismyurl' ); ?>">
+				<a href="#" class="wps-metabox-toggle" aria-label="<?php esc_attr_e( 'Toggle panel', 'plugin-wpshadow' ); ?>">
 					<span class="dashicons dashicons-arrow-down-alt2"></span>
 				</a>
 			</div>
@@ -1919,23 +1919,23 @@ class WPS_Dashboard_Widgets {
 	 * Custom render methods for drag-and-drop dashboard.
 	 */
 	public static function render_metabox_quick_actions_custom(): void {
-		self::render_custom_metabox( 'WPS_quick_actions', __( 'WP Support Quick Actions', 'plugin-wp-support-thisismyurl' ), array( __CLASS__, 'widget_quick_actions' ) );
+		self::render_custom_metabox( 'wpshadow_quick_actions', __( 'WPShadow Quick Actions', 'plugin-wpshadow' ), array( __CLASS__, 'widget_quick_actions' ) );
 	}
 
 	public static function render_metabox_modules_custom(): void {
-		self::render_custom_metabox( 'WPS_modules', __( 'WP Support Modules', 'plugin-wp-support-thisismyurl' ), array( __CLASS__, 'widget_modules' ) );
+		self::render_custom_metabox( 'wpshadow_modules', __( 'WPShadow Modules', 'plugin-wpshadow' ), array( __CLASS__, 'widget_modules' ) );
 	}
 
 	public static function render_metabox_activity_custom(): void {
-		self::render_custom_metabox( 'WPS_activity', __( 'WP Support Activity', 'plugin-wp-support-thisismyurl' ), array( __CLASS__, 'widget_activity' ) );
+		self::render_custom_metabox( 'wpshadow_activity', __( 'WPShadow Activity', 'plugin-wpshadow' ), array( __CLASS__, 'widget_activity' ) );
 	}
 
 	public static function render_metabox_events_and_news_custom(): void {
-		self::render_custom_metabox( 'WPS_events_and_news', __( 'Events & News', 'plugin-wp-support-thisismyurl' ), array( __CLASS__, 'widget_events_and_news' ) );
+		self::render_custom_metabox( 'wpshadow_events_and_news', __( 'Events & News', 'plugin-wpshadow' ), array( __CLASS__, 'widget_events_and_news' ) );
 	}
 
 	public static function render_metabox_vault_status_custom(): void {
-		self::render_custom_metabox( 'WPS_vault_status', __( 'Vault Status', 'plugin-wp-support-thisismyurl' ), array( __CLASS__, 'widget_vault_status' ) );
+		self::render_custom_metabox( 'wpshadow_vault_status', __( 'Vault Status', 'plugin-wpshadow' ), array( __CLASS__, 'widget_vault_status' ) );
 	}
 
 	/**
@@ -1945,35 +1945,35 @@ class WPS_Dashboard_Widgets {
 	 * @return void
 	 */
 	private static function widget_environment_status(): void {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Environment_Checker' ) || ! class_exists( '\\WPS\\CoreSupport\\WPS_Server_Limits' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Environment_Checker' ) || ! class_exists( '\\WPShadow\\WPSHADOW_Server_Limits' ) ) {
 			?>
 			<div class="wps-widget-content">
-				<p><em><?php esc_html_e( 'Environment checker unavailable.', 'plugin-wp-support-thisismyurl' ); ?></em></p>
+				<p><em><?php esc_html_e( 'Environment checker unavailable.', 'plugin-wpshadow' ); ?></em></p>
 			</div>
 			<?php
 			return;
 		}
 
-		$env_status      = \WPS\CoreSupport\WPS_Environment_Checker::get_environment_status();
-		$resource_status = \WPS\CoreSupport\WPS_Server_Limits::get_resource_status();
+		$env_status      = \WPS\CoreSupport\WPSHADOW_Environment_Checker::get_environment_status();
+		$resource_status = \WPS\CoreSupport\WPSHADOW_Server_Limits::get_resource_status();
 
 		// Determine overall status icon and message.
 		$status_icon    = '✓';
 		$status_color   = '#46b450';
-		$status_message = __( 'Environment is optimal', 'plugin-wp-support-thisismyurl' );
+		$status_message = __( 'Environment is optimal', 'plugin-wpshadow' );
 
 		if ( ! $env_status['is_compatible'] ) {
 			$status_icon    = '✗';
 			$status_color   = '#d63638';
-			$status_message = __( 'Environment is incompatible', 'plugin-wp-support-thisismyurl' );
+			$status_message = __( 'Environment is incompatible', 'plugin-wpshadow' );
 		} elseif ( $env_status['has_constraints'] || 'warning' === $resource_status['level'] ) {
 			$status_icon    = '⚠';
 			$status_color   = '#dba617';
-			$status_message = __( 'Resource constraints detected', 'plugin-wp-support-thisismyurl' );
+			$status_message = __( 'Resource constraints detected', 'plugin-wpshadow' );
 		} elseif ( 'critical' === $resource_status['level'] ) {
 			$status_icon    = '✗';
 			$status_color   = '#d63638';
-			$status_message = __( 'Critical resource usage', 'plugin-wp-support-thisismyurl' );
+			$status_message = __( 'Critical resource usage', 'plugin-wpshadow' );
 		}
 
 		?>
@@ -1988,11 +1988,11 @@ class WPS_Dashboard_Widgets {
 					<div style="font-size: 13px; color: #666; margin-top: 4px;">
 						<?php
 						if ( $env_status['is_compatible'] && ! $env_status['has_constraints'] ) {
-							esc_html_e( 'All systems operational', 'plugin-wp-support-thisismyurl' );
+							esc_html_e( 'All systems operational', 'plugin-wpshadow' );
 						} elseif ( $env_status['has_constraints'] ) {
-							esc_html_e( 'Operations will be batched automatically', 'plugin-wp-support-thisismyurl' );
+							esc_html_e( 'Operations will be batched automatically', 'plugin-wpshadow' );
 						} else {
-							esc_html_e( 'Heavy operations disabled', 'plugin-wp-support-thisismyurl' );
+							esc_html_e( 'Heavy operations disabled', 'plugin-wpshadow' );
 						}
 						?>
 					</div>
@@ -2001,10 +2001,10 @@ class WPS_Dashboard_Widgets {
 
 			<!-- Environment Details -->
 			<div style="margin-bottom: 20px;">
-				<h4 style="margin: 0 0 10px 0; font-size: 14px; color: #23282d;"><?php esc_html_e( 'Environment', 'plugin-wp-support-thisismyurl' ); ?></h4>
+				<h4 style="margin: 0 0 10px 0; font-size: 14px; color: #23282d;"><?php esc_html_e( 'Environment', 'plugin-wpshadow' ); ?></h4>
 				<table style="width: 100%; font-size: 13px;">
 					<tr>
-						<td style="padding: 6px 0; color: #666;"><?php esc_html_e( 'PHP Version:', 'plugin-wp-support-thisismyurl' ); ?></td>
+						<td style="padding: 6px 0; color: #666;"><?php esc_html_e( 'PHP Version:', 'plugin-wpshadow' ); ?></td>
 						<td style="padding: 6px 0; text-align: right; font-weight: 500;">
 							<?php echo esc_html( $env_status['php_version']['current'] ); ?>
 							<?php if ( ! $env_status['php_version']['meets_requirement'] ) : ?>
@@ -2013,7 +2013,7 @@ class WPS_Dashboard_Widgets {
 						</td>
 					</tr>
 					<tr>
-						<td style="padding: 6px 0; color: #666;"><?php esc_html_e( 'WordPress Version:', 'plugin-wp-support-thisismyurl' ); ?></td>
+						<td style="padding: 6px 0; color: #666;"><?php esc_html_e( 'WordPress Version:', 'plugin-wpshadow' ); ?></td>
 						<td style="padding: 6px 0; text-align: right; font-weight: 500;">
 							<?php echo esc_html( $env_status['wp_version']['current'] ); ?>
 							<?php if ( ! $env_status['wp_version']['meets_requirement'] ) : ?>
@@ -2022,7 +2022,7 @@ class WPS_Dashboard_Widgets {
 						</td>
 					</tr>
 					<tr>
-						<td style="padding: 6px 0; color: #666;"><?php esc_html_e( 'Memory Limit:', 'plugin-wp-support-thisismyurl' ); ?></td>
+						<td style="padding: 6px 0; color: #666;"><?php esc_html_e( 'Memory Limit:', 'plugin-wpshadow' ); ?></td>
 						<td style="padding: 6px 0; text-align: right; font-weight: 500;">
 							<?php echo esc_html( $env_status['memory_limit']['current'] ); ?>
 							<?php if ( 'critical' === $env_status['memory_limit']['level'] ) : ?>
@@ -2033,11 +2033,11 @@ class WPS_Dashboard_Widgets {
 						</td>
 					</tr>
 					<tr>
-						<td style="padding: 6px 0; color: #666;"><?php esc_html_e( 'Execution Time:', 'plugin-wp-support-thisismyurl' ); ?></td>
+						<td style="padding: 6px 0; color: #666;"><?php esc_html_e( 'Execution Time:', 'plugin-wpshadow' ); ?></td>
 						<td style="padding: 6px 0; text-align: right; font-weight: 500;">
 							<?php
 							echo 0 === $env_status['execution_time']['current']
-								? esc_html__( 'Unlimited', 'plugin-wp-support-thisismyurl' )
+								? esc_html__( 'Unlimited', 'plugin-wpshadow' )
 								: esc_html( $env_status['execution_time']['current'] . 's' );
 							?>
 							<?php if ( 'critical' === $env_status['execution_time']['level'] ) : ?>
@@ -2052,12 +2052,12 @@ class WPS_Dashboard_Widgets {
 
 			<!-- Resource Usage -->
 			<div style="margin-bottom: 20px;">
-				<h4 style="margin: 0 0 10px 0; font-size: 14px; color: #23282d;"><?php esc_html_e( 'Current Usage', 'plugin-wp-support-thisismyurl' ); ?></h4>
+				<h4 style="margin: 0 0 10px 0; font-size: 14px; color: #23282d;"><?php esc_html_e( 'Current Usage', 'plugin-wpshadow' ); ?></h4>
 				
 				<!-- Memory Usage Bar -->
 				<div style="margin-bottom: 12px;">
 					<div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12px;">
-						<span style="color: #666;"><?php esc_html_e( 'Memory', 'plugin-wp-support-thisismyurl' ); ?></span>
+						<span style="color: #666;"><?php esc_html_e( 'Memory', 'plugin-wpshadow' ); ?></span>
 						<span style="font-weight: 500;"><?php echo esc_html( number_format( $resource_status['memory']['usage_percentage'], 1 ) ); ?>%</span>
 					</div>
 					<div style="height: 8px; background: #e5e5e5; border-radius: 4px; overflow: hidden;">
@@ -2072,7 +2072,7 @@ class WPS_Dashboard_Widgets {
 						<div style="width: <?php echo esc_attr( min( 100, $resource_status['memory']['usage_percentage'] ) ); ?>%; height: 100%; background: <?php echo esc_attr( $memory_bar_color ); ?>; transition: width 0.3s ease;"></div>
 					</div>
 					<div style="font-size: 11px; color: #666; margin-top: 2px;">
-						<?php echo esc_html( \WPS\CoreSupport\WPS_Environment_Checker::format_bytes( $resource_status['memory']['current_usage'] ) ); ?> / <?php echo esc_html( $resource_status['memory']['limit'] ); ?>
+						<?php echo esc_html( \WPS\CoreSupport\WPSHADOW_Environment_Checker::format_bytes( $resource_status['memory']['current_usage'] ) ); ?> / <?php echo esc_html( $resource_status['memory']['limit'] ); ?>
 					</div>
 				</div>
 
@@ -2080,7 +2080,7 @@ class WPS_Dashboard_Widgets {
 				<?php if ( 0 !== $resource_status['time']['max_execution_time'] ) : ?>
 					<div style="margin-bottom: 12px;">
 						<div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12px;">
-							<span style="color: #666;"><?php esc_html_e( 'Execution Time', 'plugin-wp-support-thisismyurl' ); ?></span>
+							<span style="color: #666;"><?php esc_html_e( 'Execution Time', 'plugin-wpshadow' ); ?></span>
 							<span style="font-weight: 500;"><?php echo esc_html( number_format( $resource_status['time']['usage_percentage'], 1 ) ); ?>%</span>
 						</div>
 						<div style="height: 8px; background: #e5e5e5; border-radius: 4px; overflow: hidden;">
@@ -2104,16 +2104,16 @@ class WPS_Dashboard_Widgets {
 			<!-- PHP Extensions -->
 			<?php if ( ! empty( $env_status['extensions']['required_missing'] ) || ! empty( $env_status['extensions']['recommended_missing'] ) ) : ?>
 				<div style="margin-bottom: 15px;">
-					<h4 style="margin: 0 0 10px 0; font-size: 14px; color: #23282d;"><?php esc_html_e( 'Extensions', 'plugin-wp-support-thisismyurl' ); ?></h4>
+					<h4 style="margin: 0 0 10px 0; font-size: 14px; color: #23282d;"><?php esc_html_e( 'Extensions', 'plugin-wpshadow' ); ?></h4>
 					<?php if ( ! empty( $env_status['extensions']['required_missing'] ) ) : ?>
 						<div style="padding: 8px 10px; background: #fff3cd; border-left: 3px solid #d63638; font-size: 12px; margin-bottom: 8px;">
-							<strong><?php esc_html_e( 'Missing required:', 'plugin-wp-support-thisismyurl' ); ?></strong>
+							<strong><?php esc_html_e( 'Missing required:', 'plugin-wpshadow' ); ?></strong>
 							<?php echo esc_html( implode( ', ', $env_status['extensions']['required_missing'] ) ); ?>
 						</div>
 					<?php endif; ?>
 					<?php if ( ! empty( $env_status['extensions']['recommended_missing'] ) ) : ?>
 						<div style="padding: 8px 10px; background: #f8f9fa; border-left: 3px solid #dba617; font-size: 12px;">
-							<strong><?php esc_html_e( 'Missing recommended:', 'plugin-wp-support-thisismyurl' ); ?></strong>
+							<strong><?php esc_html_e( 'Missing recommended:', 'plugin-wpshadow' ); ?></strong>
 							<?php echo esc_html( implode( ', ', $env_status['extensions']['recommended_missing'] ) ); ?>
 						</div>
 					<?php endif; ?>
@@ -2123,15 +2123,15 @@ class WPS_Dashboard_Widgets {
 			<!-- Actions -->
 			<div style="padding-top: 15px; border-top: 1px solid #e5e5e5;">
 				<a href="<?php echo esc_url( admin_url( 'site-health.php' ) ); ?>" class="button button-secondary" style="margin-right: 8px;">
-					<?php esc_html_e( 'Site Health', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Site Health', 'plugin-wpshadow' ); ?>
 				</a>
 				<?php if ( $resource_status['should_batch'] ) : ?>
 					<span style="font-size: 12px; color: #666;">
 						<?php
 						printf(
 							/* translators: %d: Batch size */
-							esc_html__( 'Batching enabled (%d items/batch)', 'plugin-wp-support-thisismyurl' ),
-							\WPS\CoreSupport\WPS_Server_Limits::get_batch_size()
+							esc_html__( 'Batching enabled (%d items/batch)', 'plugin-wpshadow' ),
+							\WPS\CoreSupport\WPSHADOW_Server_Limits::get_batch_size()
 						);
 						?>
 					</span>
@@ -2153,7 +2153,7 @@ class WPS_Dashboard_Widgets {
 		if ( empty( $stats ) ) {
 			?>
 			<div class="wps-widget-content">
-				<p><em><?php esc_html_e( 'Unable to retrieve database statistics.', 'plugin-wp-support-thisismyurl' ); ?></em></p>
+				<p><em><?php esc_html_e( 'Unable to retrieve database statistics.', 'plugin-wpshadow' ); ?></em></p>
 			</div>
 			<?php
 			return;
@@ -2167,7 +2167,7 @@ class WPS_Dashboard_Widgets {
 					<?php echo esc_html( size_format( $stats['total_size'], 2 ) ); ?>
 				</div>
 				<div style="font-size: 13px; color: #666;">
-					<?php esc_html_e( 'Total Database Size', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Total Database Size', 'plugin-wpshadow' ); ?>
 				</div>
 			</div>
 
@@ -2175,34 +2175,34 @@ class WPS_Dashboard_Widgets {
 			<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
 				<div style="padding: 10px; background: #fff; border: 1px solid #e5e5e5; border-radius: 4px;">
 					<div style="font-size: 20px; font-weight: 600; color: #2271b1;"><?php echo esc_html( $stats['table_count'] ); ?></div>
-					<div style="font-size: 12px; color: #666;"><?php esc_html_e( 'Tables', 'plugin-wp-support-thisismyurl' ); ?></div>
+					<div style="font-size: 12px; color: #666;"><?php esc_html_e( 'Tables', 'plugin-wpshadow' ); ?></div>
 				</div>
 				<div style="padding: 10px; background: #fff; border: 1px solid #e5e5e5; border-radius: 4px;">
 					<div style="font-size: 20px; font-weight: 600; color: <?php echo $stats['expired_transients'] > 100 ? '#d63638' : '#2271b1'; ?>;">
 						<?php echo esc_html( number_format_i18n( $stats['expired_transients'] ) ); ?>
 					</div>
-					<div style="font-size: 12px; color: #666;"><?php esc_html_e( 'Expired Transients', 'plugin-wp-support-thisismyurl' ); ?></div>
+					<div style="font-size: 12px; color: #666;"><?php esc_html_e( 'Expired Transients', 'plugin-wpshadow' ); ?></div>
 				</div>
 				<div style="padding: 10px; background: #fff; border: 1px solid #e5e5e5; border-radius: 4px;">
 					<div style="font-size: 20px; font-weight: 600; color: <?php echo $stats['revisions'] > 500 ? '#dba617' : '#2271b1'; ?>;">
 						<?php echo esc_html( number_format_i18n( $stats['revisions'] ) ); ?>
 					</div>
-					<div style="font-size: 12px; color: #666;"><?php esc_html_e( 'Post Revisions', 'plugin-wp-support-thisismyurl' ); ?></div>
+					<div style="font-size: 12px; color: #666;"><?php esc_html_e( 'Post Revisions', 'plugin-wpshadow' ); ?></div>
 				</div>
 				<div style="padding: 10px; background: #fff; border: 1px solid #e5e5e5; border-radius: 4px;">
 					<div style="font-size: 20px; font-weight: 600; color: #2271b1;"><?php echo esc_html( number_format_i18n( $stats['autodrafts'] ) ); ?></div>
-					<div style="font-size: 12px; color: #666;"><?php esc_html_e( 'Auto-Drafts', 'plugin-wp-support-thisismyurl' ); ?></div>
+					<div style="font-size: 12px; color: #666;"><?php esc_html_e( 'Auto-Drafts', 'plugin-wpshadow' ); ?></div>
 				</div>
 			</div>
 
 			<!-- Largest Tables -->
 			<div style="margin-bottom: 20px;">
-				<h4 style="margin: 0 0 10px 0; font-size: 14px;"><?php esc_html_e( 'Largest Tables', 'plugin-wp-support-thisismyurl' ); ?></h4>
+				<h4 style="margin: 0 0 10px 0; font-size: 14px;"><?php esc_html_e( 'Largest Tables', 'plugin-wpshadow' ); ?></h4>
 				<table style="width: 100%; font-size: 13px;">
 					<thead>
 						<tr>
-							<th style="padding: 6px 0; color: #666; font-weight: 600; text-align: left;"><?php esc_html_e( 'Table', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th style="padding: 6px 0; color: #666; font-weight: 600; text-align: right;"><?php esc_html_e( 'Size', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th style="padding: 6px 0; color: #666; font-weight: 600; text-align: left;"><?php esc_html_e( 'Table', 'plugin-wpshadow' ); ?></th>
+							<th style="padding: 6px 0; color: #666; font-weight: 600; text-align: right;"><?php esc_html_e( 'Size', 'plugin-wpshadow' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -2221,7 +2221,7 @@ class WPS_Dashboard_Widgets {
 			<!-- Optimization Opportunities -->
 			<?php if ( ! empty( $stats['recommendations'] ) ) : ?>
 				<div style="margin-bottom: 15px;">
-					<h4 style="margin: 0 0 10px 0; font-size: 14px;"><?php esc_html_e( 'Optimization Opportunities', 'plugin-wp-support-thisismyurl' ); ?></h4>
+					<h4 style="margin: 0 0 10px 0; font-size: 14px;"><?php esc_html_e( 'Optimization Opportunities', 'plugin-wpshadow' ); ?></h4>
 					<ul style="list-style: none; margin: 0; padding: 0;">
 						<?php foreach ( $stats['recommendations'] as $rec ) : ?>
 							<li style="padding: 10px; margin-bottom: 8px; background: #fff3cd; border-left: 4px solid #dba617; border-radius: 2px;">
@@ -2244,7 +2244,7 @@ class WPS_Dashboard_Widgets {
 			<div style="text-align: center; padding-top: 10px; border-top: 1px solid #e5e5e5;">
 				<button type="button" class="button button-small wps-refresh-database-stats" style="font-size: 12px;">
 					<span class="dashicons dashicons-update" style="font-size: 14px; vertical-align: middle;"></span>
-					<?php esc_html_e( 'Refresh', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Refresh', 'plugin-wpshadow' ); ?>
 				</button>
 				<span class="wps-refresh-spinner" style="display: none; margin-left: 8px;">
 					<span class="spinner is-active" style="float: none; margin: 0;"></span>
@@ -2261,7 +2261,7 @@ class WPS_Dashboard_Widgets {
 	 */
 	private static function get_database_statistics(): array {
 		// Check cache first.
-		$cached = get_transient( 'wps_database_stats' );
+		$cached = get_transient( 'wpshadow_database_stats' );
 		if ( false !== $cached && is_array( $cached ) ) {
 			return $cached;
 		}
@@ -2346,11 +2346,11 @@ class WPS_Dashboard_Widgets {
 				$stats['recommendations'][] = array(
 					'message'      => sprintf(
 						/* translators: %d: number of expired transients */
-						__( 'Clean %d expired transients to save space', 'plugin-wp-support-thisismyurl' ),
+						__( 'Clean %d expired transients to save space', 'plugin-wpshadow' ),
 						$stats['expired_transients']
 					),
-					'action_label' => __( 'Clean Now', 'plugin-wp-support-thisismyurl' ),
-					'action_url'   => admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard_settings&action=clean_transients' ),
+					'action_label' => __( 'Clean Now', 'plugin-wpshadow' ),
+					'action_url'   => admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=dashboard_settings&action=clean_transients' ),
 				);
 			}
 
@@ -2358,11 +2358,11 @@ class WPS_Dashboard_Widgets {
 				$stats['recommendations'][] = array(
 					'message'      => sprintf(
 						/* translators: %d: number of post revisions */
-						__( '%d post revisions can be cleaned', 'plugin-wp-support-thisismyurl' ),
+						__( '%d post revisions can be cleaned', 'plugin-wpshadow' ),
 						$stats['revisions']
 					),
-					'action_label' => __( 'Manage Revisions', 'plugin-wp-support-thisismyurl' ),
-					'action_url'   => admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard_settings#revisions' ),
+					'action_label' => __( 'Manage Revisions', 'plugin-wpshadow' ),
+					'action_url'   => admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=dashboard_settings#revisions' ),
 				);
 			}
 
@@ -2370,16 +2370,16 @@ class WPS_Dashboard_Widgets {
 				$stats['recommendations'][] = array(
 					'message'      => sprintf(
 						/* translators: %d: number of auto-drafts */
-						__( '%d auto-drafts can be removed', 'plugin-wp-support-thisismyurl' ),
+						__( '%d auto-drafts can be removed', 'plugin-wpshadow' ),
 						$stats['autodrafts']
 					),
-					'action_label' => __( 'Clean Auto-Drafts', 'plugin-wp-support-thisismyurl' ),
-					'action_url'   => admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard_settings#autodrafts' ),
+					'action_label' => __( 'Clean Auto-Drafts', 'plugin-wpshadow' ),
+					'action_url'   => admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=dashboard_settings#autodrafts' ),
 				);
 			}
 
 			// Cache for 1 hour.
-			set_transient( 'wps_database_stats', $stats, HOUR_IN_SECONDS );
+			set_transient( 'wpshadow_database_stats', $stats, HOUR_IN_SECONDS );
 
 			return $stats;
 		} catch ( \Exception $e ) {
@@ -2395,10 +2395,10 @@ class WPS_Dashboard_Widgets {
 	 * @return void
 	 */
 	private static function widget_performance_history(): void {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Performance_Monitor' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Performance_Monitor' ) ) {
 			?>
 			<div class="wps-widget-content">
-				<p><em><?php esc_html_e( 'Performance monitoring unavailable.', 'plugin-wp-support-thisismyurl' ); ?></em></p>
+				<p><em><?php esc_html_e( 'Performance monitoring unavailable.', 'plugin-wpshadow' ); ?></em></p>
 			</div>
 			<?php
 			return;
@@ -2412,12 +2412,12 @@ class WPS_Dashboard_Widgets {
 		}
 
 		// Get historical metrics for selected time range.
-		$history = \WPS\CoreSupport\WPS_Performance_Monitor::get_performance_history( $days );
+		$history = \WPS\CoreSupport\WPSHADOW_Performance_Monitor::get_performance_history( $days );
 		
 		if ( empty( $history ) ) {
 			?>
 			<div class="wps-widget-content">
-				<p><em><?php esc_html_e( 'No performance history available yet. Check back after collecting some data.', 'plugin-wp-support-thisismyurl' ); ?></em></p>
+				<p><em><?php esc_html_e( 'No performance history available yet. Check back after collecting some data.', 'plugin-wpshadow' ); ?></em></p>
 			</div>
 			<?php
 			return;
@@ -2444,12 +2444,12 @@ class WPS_Dashboard_Widgets {
 			<!-- Time Range Selector -->
 			<div class="wps-widget-controls" style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
 				<label for="wps-history-range-<?php echo esc_attr( $chart_id ); ?>" style="font-weight: 600; font-size: 13px; color: #666;">
-					<?php esc_html_e( 'Time Range:', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Time Range:', 'plugin-wpshadow' ); ?>
 				</label>
 				<select id="wps-history-range-<?php echo esc_attr( $chart_id ); ?>" class="wps-history-range-selector" style="padding: 4px 8px; font-size: 13px;">
-					<option value="7" <?php selected( $days, 7 ); ?>><?php esc_html_e( 'Last 7 days', 'plugin-wp-support-thisismyurl' ); ?></option>
-					<option value="30" <?php selected( $days, 30 ); ?>><?php esc_html_e( 'Last 30 days', 'plugin-wp-support-thisismyurl' ); ?></option>
-					<option value="90" <?php selected( $days, 90 ); ?>><?php esc_html_e( 'Last 90 days', 'plugin-wp-support-thisismyurl' ); ?></option>
+					<option value="7" <?php selected( $days, 7 ); ?>><?php esc_html_e( 'Last 7 days', 'plugin-wpshadow' ); ?></option>
+					<option value="30" <?php selected( $days, 30 ); ?>><?php esc_html_e( 'Last 30 days', 'plugin-wpshadow' ); ?></option>
+					<option value="90" <?php selected( $days, 90 ); ?>><?php esc_html_e( 'Last 90 days', 'plugin-wpshadow' ); ?></option>
 				</select>
 			</div>
 			
@@ -2467,25 +2467,25 @@ class WPS_Dashboard_Widgets {
 			<div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e5e5e5;">
 				<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px;">
 					<div style="text-align: center;">
-						<div style="font-size: 11px; color: #666; margin-bottom: 3px; text-transform: uppercase;"><?php esc_html_e( 'Avg Score', 'plugin-wp-support-thisismyurl' ); ?></div>
+						<div style="font-size: 11px; color: #666; margin-bottom: 3px; text-transform: uppercase;"><?php esc_html_e( 'Avg Score', 'plugin-wpshadow' ); ?></div>
 						<div style="font-size: 20px; font-weight: 600; color: #2271b1;">
 							<?php echo esc_html( $avg_score ); ?>
 						</div>
 					</div>
 					<div style="text-align: center;">
-						<div style="font-size: 11px; color: #666; margin-bottom: 3px; text-transform: uppercase;"><?php esc_html_e( 'Avg Queries', 'plugin-wp-support-thisismyurl' ); ?></div>
+						<div style="font-size: 11px; color: #666; margin-bottom: 3px; text-transform: uppercase;"><?php esc_html_e( 'Avg Queries', 'plugin-wpshadow' ); ?></div>
 						<div style="font-size: 20px; font-weight: 600; color: #0969da;">
 							<?php echo esc_html( $avg_queries ); ?>
 						</div>
 					</div>
 					<div style="text-align: center;">
-						<div style="font-size: 11px; color: #666; margin-bottom: 3px; text-transform: uppercase;"><?php esc_html_e( 'Avg Load', 'plugin-wp-support-thisismyurl' ); ?></div>
+						<div style="font-size: 11px; color: #666; margin-bottom: 3px; text-transform: uppercase;"><?php esc_html_e( 'Avg Load', 'plugin-wpshadow' ); ?></div>
 						<div style="font-size: 20px; font-weight: 600; color: #1a7f37;">
 							<?php echo esc_html( $avg_load ); ?><span style="font-size: 12px; font-weight: 400;">ms</span>
 						</div>
 					</div>
 					<div style="text-align: center;">
-						<div style="font-size: 11px; color: #666; margin-bottom: 3px; text-transform: uppercase;"><?php esc_html_e( 'Avg Memory', 'plugin-wp-support-thisismyurl' ); ?></div>
+						<div style="font-size: 11px; color: #666; margin-bottom: 3px; text-transform: uppercase;"><?php esc_html_e( 'Avg Memory', 'plugin-wpshadow' ); ?></div>
 						<div style="font-size: 20px; font-weight: 600; color: #8250df;">
 							<?php echo esc_html( $avg_memory ); ?><span style="font-size: 12px; font-weight: 400;">MB</span>
 						</div>
@@ -2508,7 +2508,7 @@ class WPS_Dashboard_Widgets {
 					data: {
 						labels: <?php echo wp_json_encode( $dates ); ?>,
 						datasets: [{
-							label: '<?php echo esc_js( __( 'Query Count', 'plugin-wp-support-thisismyurl' ) ); ?>',
+							label: '<?php echo esc_js( __( 'Query Count', 'plugin-wpshadow' ) ); ?>',
 							data: <?php echo wp_json_encode( $query_counts ); ?>,
 							borderColor: '#0969da',
 							backgroundColor: 'rgba(9, 105, 218, 0.1)',
@@ -2516,7 +2516,7 @@ class WPS_Dashboard_Widgets {
 							fill: true,
 							yAxisID: 'y-queries'
 						}, {
-							label: '<?php echo esc_js( __( 'Load Time (ms)', 'plugin-wp-support-thisismyurl' ) ); ?>',
+							label: '<?php echo esc_js( __( 'Load Time (ms)', 'plugin-wpshadow' ) ); ?>',
 							data: <?php echo wp_json_encode( $load_times ); ?>,
 							borderColor: '#1a7f37',
 							backgroundColor: 'rgba(26, 127, 55, 0.1)',
@@ -2567,7 +2567,7 @@ class WPS_Dashboard_Widgets {
 								position: 'left',
 								title: {
 									display: true,
-									text: '<?php echo esc_js( __( 'Queries', 'plugin-wp-support-thisismyurl' ) ); ?>',
+									text: '<?php echo esc_js( __( 'Queries', 'plugin-wpshadow' ) ); ?>',
 									font: {
 										size: 11
 									}
@@ -2580,7 +2580,7 @@ class WPS_Dashboard_Widgets {
 								position: 'right',
 								title: {
 									display: true,
-									text: '<?php echo esc_js( __( 'Time (ms)', 'plugin-wp-support-thisismyurl' ) ); ?>',
+									text: '<?php echo esc_js( __( 'Time (ms)', 'plugin-wpshadow' ) ); ?>',
 									font: {
 										size: 11
 									}
@@ -2617,7 +2617,7 @@ class WPS_Dashboard_Widgets {
 		?>
 		<div class="postbox">
 			<div class="postbox-header">
-				<h2 class="hndle"><?php esc_html_e( '🗄️ Database Statistics', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2 class="hndle"><?php esc_html_e( '🗄️ Database Statistics', 'plugin-wpshadow' ); ?></h2>
 			</div>
 			<div class="inside">
 				<?php self::widget_database_stats(); ?>
@@ -2635,13 +2635,16 @@ class WPS_Dashboard_Widgets {
 		?>
 		<div class="postbox">
 			<div class="postbox-header">
-				<h2 class="hndle"><?php esc_html_e( '📈 Performance History', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2 class="hndle"><?php esc_html_e( '📈 Performance History', 'plugin-wpshadow' ); ?></h2>
 			</div>
 			<div class="inside">
 				<?php self::widget_performance_history(); ?>
 			</div>
 		</div>
 		<?php
+	}
+
+	/**
 	 * Get database statistics (public method for AJAX).
 	 *
 	 * @return array<string, mixed>

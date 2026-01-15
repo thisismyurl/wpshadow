@@ -4,7 +4,7 @@
  *
  * Detects missing required modules and offers one-click install/activate.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
 declare(strict_types=1);
@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages detection of missing child plugins and provides install/activate UI.
  */
-class WPS_Module_Bootstrap {
+class WPSHADOW_Module_Bootstrap {
 
 	/**
 	 * Required child modules (slug => data).
@@ -32,23 +32,23 @@ class WPS_Module_Bootstrap {
 	 * Optional child modules (only shown if enabled in settings).
 	 */
 	private const OPTIONAL_MODULES = array(
-		'media-support-thisismyurl' => array(
+		'media-wpshadow' => array(
 			'name'        => 'Media',
 			'description' => 'Provides shared media optimization and processing infrastructure',
-			'repo'        => 'thisismyurl/media-support-thisismyurl',
-			'install_url' => 'https://github.com/thisismyurl/media-support-thisismyurl/archive/refs/heads/main.zip',
+			'repo'        => 'wpshadow/media-wpshadow',
+			'install_url' => 'https://github.com/thisismyurl/media-wpshadow/archive/refs/heads/main.zip',
 		),
-		'image-support-thisismyurl' => array(
+		'image-wpshadow' => array(
 			'name'        => 'Image',
 			'description' => 'Hub for image format support and processing',
-			'repo'        => 'thisismyurl/module-images-support-thisismyurl',
-			'install_url' => 'https://github.com/thisismyurl/module-images-support-thisismyurl/archive/refs/heads/main.zip',
+			'repo'        => 'wpshadow/module-images-wpshadow',
+			'install_url' => 'https://github.com/thisismyurl/module-images-wpshadow/archive/refs/heads/main.zip',
 		),
-		'vault-support-thisismyurl' => array(
+		'vault-wpshadow' => array(
 			'name'        => 'Vault',
 			'description' => 'Secure original storage with encryption, journaling, and cloud offload',
-			'repo'        => 'thisismyurl/vault-support-thisismyurl',
-			'install_url' => 'https://github.com/thisismyurl/vault-support-thisismyurl/archive/refs/heads/main.zip',
+			'repo'        => 'wpshadow/vault-wpshadow',
+			'install_url' => 'https://github.com/thisismyurl/vault-wpshadow/archive/refs/heads/main.zip',
 		),
 	);
 
@@ -63,8 +63,8 @@ class WPS_Module_Bootstrap {
 		add_action( 'network_admin_notices', array( __CLASS__, 'show_missing_notices' ) );
 
 		// Handle install/activate actions.
-		add_action( 'admin_post_WPS_install_module', array( __CLASS__, 'handle_install_module' ) );
-		add_action( 'admin_post_WPS_activate_module', array( __CLASS__, 'handle_activate_module' ) );
+		add_action( 'admin_post_WPSHADOW_install_module', array( __CLASS__, 'handle_install_module' ) );
+		add_action( 'admin_post_WPSHADOW_activate_module', array( __CLASS__, 'handle_activate_module' ) );
 
 		// Show guided setup on first run (if no modules detected).
 		add_action( 'admin_init', array( __CLASS__, 'maybe_show_guided_setup' ) );
@@ -84,9 +84,9 @@ class WPS_Module_Bootstrap {
 
 		foreach ( $missing as $slug => $module ) {
 			$is_installed = self::is_plugin_installed( $slug );
-			$action_label = $is_installed ? __( 'Activate', 'plugin-wp-support-thisismyurl' ) : __( 'Install & Activate', 'plugin-wp-support-thisismyurl' );
-			$nonce        = wp_create_nonce( 'WPS_module_action' );
-			$action       = $is_installed ? 'WPS_activate_module' : 'WPS_install_module';
+			$action_label = $is_installed ? __( 'Activate', 'plugin-wpshadow' ) : __( 'Install & Activate', 'plugin-wpshadow' );
+			$nonce        = wp_create_nonce( 'wpshadow_module_action' );
+			$action       = $is_installed ? 'wpshadow_activate_module' : 'wpshadow_install_module';
 			$action_url   = add_query_arg(
 				array(
 					'action'   => $action,
@@ -103,7 +103,7 @@ class WPS_Module_Bootstrap {
 					echo wp_kses_post(
 						sprintf(
 							/* translators: 1: Module name, 2: Module description */
-							__( '<strong>Core Support:</strong> %1$s is recommended. %2$s', 'plugin-wp-support-thisismyurl' ),
+							__( '<strong>Core Support:</strong> %1$s is recommended. %2$s', 'plugin-wpshadow' ),
 							esc_html( $module['name'] ),
 							esc_html( $module['description'] )
 						)
@@ -111,7 +111,7 @@ class WPS_Module_Bootstrap {
 					?>
 				</p>
 				<p>
-					<a href="<?php echo esc_url( $action_url ); ?>" class="button button-primary" aria-label="<?php echo esc_attr( sprintf( __( '%1$s: %2$s', 'plugin-wp-support-thisismyurl' ), $action_label, $module['name'] ) ); ?>">
+					<a href="<?php echo esc_url( $action_url ); ?>" class="button button-primary" aria-label="<?php echo esc_attr( sprintf( __( '%1$s: %2$s', 'plugin-wpshadow' ), $action_label, $module['name'] ) ); ?>">
 						<?php echo esc_html( $action_label ); ?>
 					</a>
 				</p>
@@ -127,19 +127,19 @@ class WPS_Module_Bootstrap {
 	 */
 	public static function handle_install_module(): void {
 		if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
-			wp_die( esc_html__( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Insufficient permissions.', 'plugin-wpshadow' ) );
 		}
 
 		$nonce  = isset( $_REQUEST['nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ) : '';
 		$module = isset( $_REQUEST['module'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['module'] ) ) : '';
 
-		if ( ! wp_verify_nonce( $nonce, 'WPS_module_action' ) ) {
-			wp_die( esc_html__( 'Invalid nonce.', 'plugin-wp-support-thisismyurl' ) );
+		if ( ! wp_verify_nonce( $nonce, 'wpshadow_module_action' ) ) {
+			wp_die( esc_html__( 'Invalid nonce.', 'plugin-wpshadow' ) );
 		}
 
 		$all_modules = array_merge( self::REQUIRED_MODULES, self::OPTIONAL_MODULES );
 		if ( ! isset( $all_modules[ $module ] ) ) {
-			wp_die( esc_html__( 'Invalid module.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Invalid module.', 'plugin-wpshadow' ) );
 		}
 
 		// Check if already installed locally before attempting remote install.
@@ -148,9 +148,9 @@ class WPS_Module_Bootstrap {
 			wp_redirect(
 				add_query_arg(
 					array(
-						'action'   => 'WPS_activate_module',
+						'action'   => 'wpshadow_activate_module',
 						'module'   => $module,
-						'nonce'    => wp_create_nonce( 'WPS_module_action' ),
+						'nonce'    => wp_create_nonce( 'wpshadow_module_action' ),
 						'redirect' => rawurlencode( isset( $_REQUEST['redirect'] ) ? sanitize_url( wp_unslash( $_REQUEST['redirect'] ) ) : admin_url( 'admin.php?page=wps-core-dashboard' ) ),
 					),
 					admin_url( 'admin-post.php' )
@@ -173,9 +173,9 @@ class WPS_Module_Bootstrap {
 		wp_redirect(
 			add_query_arg(
 				array(
-					'action'   => 'WPS_activate_module',
+					'action'   => 'wpshadow_activate_module',
 					'module'   => $module,
-					'nonce'    => wp_create_nonce( 'WPS_module_action' ),
+					'nonce'    => wp_create_nonce( 'wpshadow_module_action' ),
 					'redirect' => rawurlencode( isset( $_REQUEST['redirect'] ) ? sanitize_url( wp_unslash( $_REQUEST['redirect'] ) ) : admin_url( 'admin.php?page=wps-core-dashboard' ) ),
 				),
 				admin_url( 'admin-post.php' )
@@ -191,29 +191,29 @@ class WPS_Module_Bootstrap {
 	 */
 	public static function handle_activate_module(): void {
 		if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
-			wp_die( esc_html__( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Insufficient permissions.', 'plugin-wpshadow' ) );
 		}
 
 		$nonce  = isset( $_REQUEST['nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ) : '';
 		$module = isset( $_REQUEST['module'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['module'] ) ) : '';
 
-		if ( ! wp_verify_nonce( $nonce, 'WPS_module_action' ) ) {
-			wp_die( esc_html__( 'Invalid nonce.', 'plugin-wp-support-thisismyurl' ) );
+		if ( ! wp_verify_nonce( $nonce, 'wpshadow_module_action' ) ) {
+			wp_die( esc_html__( 'Invalid nonce.', 'plugin-wpshadow' ) );
 		}
 
 		$all_modules = array_merge( self::REQUIRED_MODULES, self::OPTIONAL_MODULES );
 		if ( ! isset( $all_modules[ $module ] ) ) {
-			wp_die( esc_html__( 'Invalid module.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Invalid module.', 'plugin-wpshadow' ) );
 		}
 
 		if ( ! self::is_plugin_installed( $module ) ) {
-			wp_die( esc_html__( 'Plugin not installed.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Plugin not installed.', 'plugin-wpshadow' ) );
 		}
 
 		// Activate plugin.
 		$plugin_file = self::get_plugin_file( $module );
 		if ( ! $plugin_file ) {
-			wp_die( esc_html__( 'Plugin file not found.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Plugin file not found.', 'plugin-wpshadow' ) );
 		}
 
 		$result = activate_plugin( $plugin_file );
@@ -227,7 +227,7 @@ class WPS_Module_Bootstrap {
 		// Redirect.
 		$redirect = isset( $_REQUEST['redirect'] ) ? sanitize_url( wp_unslash( $_REQUEST['redirect'] ) ) : admin_url( 'admin.php?page=wps-core-dashboard' );
 		wp_safe_remote_post(
-			add_query_arg( 'WPS_module_activated', $module, $redirect ),
+			add_query_arg( 'wpshadow_module_activated', $module, $redirect ),
 			array( 'blocking' => false )
 		);
 		exit;
@@ -318,17 +318,17 @@ class WPS_Module_Bootstrap {
 			return;
 		}
 
-		$setup_done = (bool) get_option( 'wp_support_setup_completed', false );
+		$setup_done = (bool) get_option( 'wpshadow_setup_completed', false );
 		if ( $setup_done ) {
 			return;
 		}
 
 		// Mark setup as done.
-		update_option( 'wp_support_setup_completed', time() );
+		update_option( 'wpshadow_setup_completed', time() );
 
 		// Redirect to dashboard with setup flag.
 		if ( 'wps-core-dashboard' !== ( $_GET['page'] ?? null ) ) {
-			wp_safe_redirect( add_query_arg( 'WPS_setup', '1', admin_url( 'admin.php?page=wps-core-dashboard' ) ) );
+			wp_safe_redirect( add_query_arg( 'wpshadow_setup', '1', admin_url( 'admin.php?page=wps-core-dashboard' ) ) );
 			exit;
 		}
 	}
@@ -345,8 +345,8 @@ class WPS_Module_Bootstrap {
 		$user      = get_user_by( 'id', $user_id );
 		$user_name = $user ? $user->display_name : 'Unknown';
 
-		if ( class_exists( 'WPS\\CoreSupport\\WPS_Vault' ) ) {
-			WPS_Vault::add_log(
+		if ( class_exists( 'WPShadow\\WPSHADOW_Vault' ) ) {
+			WPSHADOW_Vault::add_log(
 				'info',
 				0,
 				sprintf( 'Module %s: %s', esc_html( $module ), esc_html( $action ) ),

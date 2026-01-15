@@ -16,11 +16,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @return void
  */
-function wps_ajax_toggle_module(): void {
-	check_ajax_referer( 'WPS_toggle_module', 'nonce' );
+function WPSHADOW_ajax_toggle_module(): void {
+	check_ajax_referer( 'wpshadow_toggle_module', 'nonce' );
 
 	if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wpshadow' ) ) );
 	}
 
 	$slug    = sanitize_text_field( wp_unslash( $_POST['slug'] ?? '' ) );
@@ -28,11 +28,11 @@ function wps_ajax_toggle_module(): void {
 	$network = isset( $_POST['network'] ) && 'true' === $_POST['network'] && is_multisite();
 
 	if ( empty( $slug ) ) {
-		wp_send_json_error( array( 'message' => __( 'Invalid module slug.', 'plugin-wp-support-thisismyurl' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Invalid module slug.', 'plugin-wpshadow' ) ) );
 	}
 
-	// Update WPS_module_toggles array (unified toggle system).
-	$toggles          = get_option( 'WPS_module_toggles', array() );
+	// Update WPSHADOW_module_toggles array (unified toggle system).
+	$toggles          = get_option( 'wpshadow_module_toggles', array() );
 	$toggles[ $slug ] = $enabled ? 1 : 0;
 
 	$deactivated = array();
@@ -40,35 +40,35 @@ function wps_ajax_toggle_module(): void {
 
 	// Handle cascade deactivation of dependents.
 	if ( ! $enabled ) {
-		$deactivated = WPS_Module_Toggles::cascade_deactivate( $slug );
+		$deactivated = WPSHADOW_Module_Toggles::cascade_deactivate( $slug );
 		if ( ! empty( $deactivated ) ) {
 			// Reload toggles after cascade.
-			$toggles = get_option( 'WPS_module_toggles', array() );
+			$toggles = get_option( 'wpshadow_module_toggles', array() );
 		}
 	}
 
 	// Handle restoration check on activation.
 	if ( $enabled ) {
-		$remembered = WPS_Module_Toggles::get_remembered_deactivated( $slug );
+		$remembered = WPSHADOW_Module_Toggles::get_remembered_deactivated( $slug );
 	}
 
-	$success = update_option( 'WPS_module_toggles', $toggles );
+	$success = update_option( 'wpshadow_module_toggles', $toggles );
 
 	// Clear catalog cache so submenu regenerates.
-	WPS_Module_Registry::clear_cache();
+	WPSHADOW_Module_Registry::clear_cache();
 
 	$user      = wp_get_current_user();
-	$user_name = $user && $user->exists() ? $user->display_name : __( 'System', 'plugin-wp-support-thisismyurl' );
+	$user_name = $user && $user->exists() ? $user->display_name : __( 'System', 'plugin-wpshadow' );
 
 	if ( $success ) {
 		// If module is being enabled, inherit parent dashboard layout.
 		if ( $enabled ) {
-			WPS_Dashboard_Layout::on_module_activated( $slug, $network );
+			WPSHADOW_Dashboard_Layout::on_module_activated( $slug, $network );
 			// Fire action for achievement badges and other hooks.
-			do_action( 'wps_module_activated', (int) $user->ID, $slug );
+			do_action( 'wpshadow_module_activated', (int) $user->ID, $slug );
 		}
 
-		WPS_Vault::add_log(
+		WPSHADOW_Vault::add_log(
 			'info',
 			0,
 			sprintf( 'Module %1$s %2$s', $slug, $enabled ? 'enabled' : 'disabled' ),
@@ -82,7 +82,7 @@ function wps_ajax_toggle_module(): void {
 		);
 
 		// Prepare response data.
-		$response_data = array( 'message' => __( 'Module settings updated.', 'plugin-wp-support-thisismyurl' ) );
+		$response_data = array( 'message' => __( 'Module settings updated.', 'plugin-wpshadow' ) );
 
 		// Add cascade info if modules were auto-deactivated.
 		if ( ! empty( $deactivated ) ) {
@@ -96,7 +96,7 @@ function wps_ajax_toggle_module(): void {
 
 		wp_send_json_success( $response_data );
 	} else {
-		WPS_Vault::add_log(
+		WPSHADOW_Vault::add_log(
 			'error',
 			0,
 			sprintf( 'Failed to toggle %s', $slug ),
@@ -108,7 +108,7 @@ function wps_ajax_toggle_module(): void {
 				'user_id' => (int) $user->ID,
 			)
 		);
-		wp_send_json_error( array( 'message' => __( 'Failed to update settings.', 'plugin-wp-support-thisismyurl' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Failed to update settings.', 'plugin-wpshadow' ) ) );
 	}
 }
 
@@ -117,27 +117,27 @@ function wps_ajax_toggle_module(): void {
  *
  * @return void
  */
-function wps_ajax_install_module(): void {
-	check_ajax_referer( 'WPS_module_action', 'nonce' );
+function WPSHADOW_ajax_install_module(): void {
+	check_ajax_referer( 'wpshadow_module_action', 'nonce' );
 
-	if ( ! wps_can_install_modules() ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
+	if ( ! WPSHADOW_can_install_modules() ) {
+		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wpshadow' ) ) );
 	}
 
 	$slug      = sanitize_text_field( wp_unslash( $_POST['slug'] ?? '' ) );
 	$user      = wp_get_current_user();
-	$user_name = $user && $user->exists() ? $user->display_name : __( 'System', 'plugin-wp-support-thisismyurl' );
+	$user_name = $user && $user->exists() ? $user->display_name : __( 'System', 'plugin-wpshadow' );
 
 	if ( empty( $slug ) ) {
-		WPS_Vault::add_log( 'error', 0, __( 'Install failed: empty slug.', 'plugin-wp-support-thisismyurl' ), 'module_install' );
-		wp_send_json_error( array( 'message' => __( 'Invalid module slug.', 'plugin-wp-support-thisismyurl' ) ) );
+		WPSHADOW_Vault::add_log( 'error', 0, __( 'Install failed: empty slug.', 'plugin-wpshadow' ), 'module_install' );
+		wp_send_json_error( array( 'message' => __( 'Invalid module slug.', 'plugin-wpshadow' ) ) );
 	}
 
-	$catalog = WPS_Module_Registry::get_catalog_with_status();
+	$catalog = WPSHADOW_Module_Registry::get_catalog_with_status();
 	$module  = $catalog[ $slug ] ?? null;
 
 	if ( empty( $module ) || empty( $module['download_url'] ) ) {
-		WPS_Vault::add_log(
+		WPSHADOW_Vault::add_log(
 			'error',
 			0,
 			sprintf( 'Install failed: no download for %s', $slug ),
@@ -149,7 +149,7 @@ function wps_ajax_install_module(): void {
 				'user_id' => (int) $user->ID,
 			)
 		);
-		wp_send_json_error( array( 'message' => __( 'No download available for this module.', 'plugin-wp-support-thisismyurl' ) ) );
+		wp_send_json_error( array( 'message' => __( 'No download available for this module.', 'plugin-wpshadow' ) ) );
 	}
 
 	require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
@@ -157,7 +157,7 @@ function wps_ajax_install_module(): void {
 	require_once ABSPATH . 'wp-admin/includes/file.php';
 
 	if ( ! WP_Filesystem() ) {
-		WPS_Vault::add_log(
+		WPSHADOW_Vault::add_log(
 			'error',
 			0,
 			sprintf( 'Install failed: filesystem credentials needed for %s', $slug ),
@@ -169,17 +169,17 @@ function wps_ajax_install_module(): void {
 				'user_id' => (int) $user->ID,
 			)
 		);
-		wp_send_json_error( array( 'message' => __( 'File system credentials are required to install plugins.', 'plugin-wp-support-thisismyurl' ) ) );
+		wp_send_json_error( array( 'message' => __( 'File system credentials are required to install plugins.', 'plugin-wpshadow' ) ) );
 	}
 
 	$skin     = new \Automatic_Upgrader_Skin();
 	$upgrader = new \Plugin_Upgrader( $skin );
-	$download = wp_support_resolve_download_url( $module );
+	$download = wpshadow_resolve_download_url( $module );
 	$result   = $upgrader->install( $download );
 
 	if ( is_wp_error( $result ) || ! $result ) {
-		$message = is_wp_error( $result ) ? $result->get_error_message() : __( 'Installation failed.', 'plugin-wp-support-thisismyurl' );
-		WPS_Vault::add_log(
+		$message = is_wp_error( $result ) ? $result->get_error_message() : __( 'Installation failed.', 'plugin-wpshadow' );
+		WPSHADOW_Vault::add_log(
 			'error',
 			0,
 			wp_strip_all_tags( $message ),
@@ -195,13 +195,13 @@ function wps_ajax_install_module(): void {
 	}
 
 	// Attempt activation.
-	$plugin_file = wp_support_find_plugin_file_by_slug( $slug );
+	$plugin_file = wpshadow_find_plugin_file_by_slug( $slug );
 	if ( $plugin_file ) {
 		$network_wide = is_multisite() && is_network_admin();
 		$activation   = activate_plugin( $plugin_file, '', $network_wide, false );
 		if ( is_wp_error( $activation ) ) {
 			do_action(
-				'WPS_catalog_install_warning',
+				'wpshadow_catalog_install_warning',
 				array(
 					'slug'    => $slug,
 					'message' => $activation->get_error_message(),
@@ -209,15 +209,15 @@ function wps_ajax_install_module(): void {
 			);
 		} else {
 			// Module activated successfully, inherit dashboard layout.
-			WPS_Dashboard_Layout::on_module_activated( $slug, $network_wide );
+			WPSHADOW_Dashboard_Layout::on_module_activated( $slug, $network_wide );
 		}
 	}
 
-	WPS_Module_Registry::clear_cache();
-	WPS_Module_Registry::discover_modules();
-	WPS_Module_Registry::load_catalog();
+	WPSHADOW_Module_Registry::clear_cache();
+	WPSHADOW_Module_Registry::discover_modules();
+	WPSHADOW_Module_Registry::load_catalog();
 
-	WPS_Vault::add_log(
+	WPSHADOW_Vault::add_log(
 		'info',
 		0,
 		sprintf( 'Module installed: %s', $slug ),
@@ -230,7 +230,7 @@ function wps_ajax_install_module(): void {
 		)
 	);
 
-	wp_send_json_success( array( 'message' => __( 'Module installed.', 'plugin-wp-support-thisismyurl' ) ) );
+	wp_send_json_success( array( 'message' => __( 'Module installed.', 'plugin-wpshadow' ) ) );
 }
 
 /**
@@ -238,28 +238,28 @@ function wps_ajax_install_module(): void {
  *
  * @return void
  */
-function wps_ajax_update_module(): void {
-	check_ajax_referer( 'WPS_module_action', 'nonce' );
+function WPSHADOW_ajax_update_module(): void {
+	check_ajax_referer( 'wpshadow_module_action', 'nonce' );
 
-	if ( ! wps_can_update_modules() ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
+	if ( ! WPSHADOW_can_update_modules() ) {
+		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wpshadow' ) ) );
 	}
 
 	$slug      = sanitize_text_field( wp_unslash( $_POST['slug'] ?? '' ) );
 	$user      = wp_get_current_user();
-	$user_name = $user && $user->exists() ? $user->display_name : __( 'System', 'plugin-wp-support-thisismyurl' );
+	$user_name = $user && $user->exists() ? $user->display_name : __( 'System', 'plugin-wpshadow' );
 
 	if ( empty( $slug ) ) {
-		WPS_Vault::add_log( 'error', 0, __( 'Update failed: empty slug.', 'plugin-wp-support-thisismyurl' ), 'module_update' );
-		wp_send_json_error( array( 'message' => __( 'Invalid module slug.', 'plugin-wp-support-thisismyurl' ) ) );
+		WPSHADOW_Vault::add_log( 'error', 0, __( 'Update failed: empty slug.', 'plugin-wpshadow' ), 'module_update' );
+		wp_send_json_error( array( 'message' => __( 'Invalid module slug.', 'plugin-wpshadow' ) ) );
 	}
 
-	$catalog   = WPS_Module_Registry::get_catalog_with_status();
-	$installed = WPS_Module_Registry::get_module( $slug );
+	$catalog   = WPSHADOW_Module_Registry::get_catalog_with_status();
+	$installed = WPSHADOW_Module_Registry::get_module( $slug );
 	$module    = $catalog[ $slug ] ?? null;
 
 	if ( empty( $module ) || empty( $module['download_url'] ) || empty( $installed['file'] ) ) {
-		WPS_Vault::add_log(
+		WPSHADOW_Vault::add_log(
 			'error',
 			0,
 			sprintf( 'Update failed: missing data for %s', $slug ),
@@ -271,14 +271,14 @@ function wps_ajax_update_module(): void {
 				'user_id' => (int) $user->ID,
 			)
 		);
-		wp_send_json_error( array( 'message' => __( 'Update information is missing for this module.', 'plugin-wp-support-thisismyurl' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Update information is missing for this module.', 'plugin-wpshadow' ) ) );
 	}
 
 	require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 	require_once ABSPATH . 'wp-admin/includes/file.php';
 
 	if ( ! WP_Filesystem() ) {
-		WPS_Vault::add_log(
+		WPSHADOW_Vault::add_log(
 			'error',
 			0,
 			sprintf( 'Update failed: filesystem credentials needed for %s', $slug ),
@@ -290,7 +290,7 @@ function wps_ajax_update_module(): void {
 				'user_id' => (int) $user->ID,
 			)
 		);
-		wp_send_json_error( array( 'message' => __( 'File system credentials are required to update plugins.', 'plugin-wp-support-thisismyurl' ) ) );
+		wp_send_json_error( array( 'message' => __( 'File system credentials are required to update plugins.', 'plugin-wpshadow' ) ) );
 	}
 
 	$skin     = new \Automatic_Upgrader_Skin();
@@ -304,15 +304,15 @@ function wps_ajax_update_module(): void {
 	};
 	add_filter( 'upgrader_package_options', $filter );
 
-	$download = wp_support_resolve_download_url( $module );
+	$download = wpshadow_resolve_download_url( $module );
 	$result   = $upgrader->install( $download );
 
 	// Remove filter after run.
 	remove_filter( 'upgrader_package_options', $filter );
 
 	if ( is_wp_error( $result ) || ! $result ) {
-		$message = is_wp_error( $result ) ? $result->get_error_message() : __( 'Update failed.', 'plugin-wp-support-thisismyurl' );
-		WPS_Vault::add_log(
+		$message = is_wp_error( $result ) ? $result->get_error_message() : __( 'Update failed.', 'plugin-wpshadow' );
+		WPSHADOW_Vault::add_log(
 			'error',
 			0,
 			wp_strip_all_tags( $message ),
@@ -327,11 +327,11 @@ function wps_ajax_update_module(): void {
 		wp_send_json_error( array( 'message' => $message ) );
 	}
 
-	WPS_Module_Registry::clear_cache();
-	WPS_Module_Registry::discover_modules();
-	WPS_Module_Registry::load_catalog();
+	WPSHADOW_Module_Registry::clear_cache();
+	WPSHADOW_Module_Registry::discover_modules();
+	WPSHADOW_Module_Registry::load_catalog();
 
-	WPS_Vault::add_log(
+	WPSHADOW_Vault::add_log(
 		'info',
 		0,
 		sprintf( 'Module updated: %s', $slug ),
@@ -344,7 +344,7 @@ function wps_ajax_update_module(): void {
 		)
 	);
 
-	wp_send_json_success( array( 'message' => __( 'Module updated.', 'plugin-wp-support-thisismyurl' ) ) );
+	wp_send_json_success( array( 'message' => __( 'Module updated.', 'plugin-wpshadow' ) ) );
 }
 
 /**
@@ -352,29 +352,29 @@ function wps_ajax_update_module(): void {
  *
  * @return void
  */
-function wps_ajax_broadcast_license(): void {
+function WPSHADOW_ajax_broadcast_license(): void {
 	if ( empty( $_POST['nonce'] ) ) {
-		wp_send_json_error( array( 'message' => __( 'Nonce failed.', 'plugin-wp-support-thisismyurl' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Nonce failed.', 'plugin-wpshadow' ) ) );
 	}
 
-	if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'WPS_broadcast_license' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Nonce verification failed.', 'plugin-wp-support-thisismyurl' ) ) );
+	if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'wpshadow_broadcast_license' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Nonce verification failed.', 'plugin-wpshadow' ) ) );
 	}
 
 	if ( ! is_multisite() ) {
-		wp_send_json_error( array( 'message' => __( 'Multisite not enabled.', 'plugin-wp-support-thisismyurl' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Multisite not enabled.', 'plugin-wpshadow' ) ) );
 	}
 
 	if ( ! current_user_can( 'manage_network_options' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wpshadow' ) ) );
 	}
 
-	$key            = \WPS\CoreSupport\wps_get_post_text( 'key' );
-	$site_ids_json  = \WPS\CoreSupport\wps_get_post_text( 'site_ids', '[]' );
-	$auto_broadcast = \WPS\CoreSupport\wps_get_post_int( 'auto_broadcast' );
+	$key            = \WPS\CoreSupport\WPSHADOW_get_post_text( 'key' );
+	$site_ids_json  = \WPS\CoreSupport\WPSHADOW_get_post_text( 'site_ids', '[]' );
+	$auto_broadcast = \WPS\CoreSupport\WPSHADOW_get_post_int( 'auto_broadcast' );
 
 	if ( empty( $key ) ) {
-		wp_send_json_error( array( 'message' => __( 'License key cannot be empty.', 'plugin-wp-support-thisismyurl' ) ) );
+		wp_send_json_error( array( 'message' => __( 'License key cannot be empty.', 'plugin-wpshadow' ) ) );
 	}
 
 	// Parse site IDs from JSON.
@@ -382,11 +382,11 @@ function wps_ajax_broadcast_license(): void {
 	$site_ids = array_map( 'absint', array_filter( $site_ids ) );
 
 	if ( empty( $site_ids ) ) {
-		wp_send_json_error( array( 'message' => __( 'No sites selected.', 'plugin-wp-support-thisismyurl' ) ) );
+		wp_send_json_error( array( 'message' => __( 'No sites selected.', 'plugin-wpshadow' ) ) );
 	}
 
 	// Call the license broadcast method.
-	$result = WPS_License::broadcast_network_key( $key, $site_ids, (bool) $auto_broadcast );
+	$result = WPSHADOW_License::broadcast_network_key( $key, $site_ids, (bool) $auto_broadcast );
 
 	wp_send_json_success( $result );
 }

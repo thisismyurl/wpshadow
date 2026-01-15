@@ -4,7 +4,7 @@
  *
  * Tests backup integrity through staged restoration and functionality validation.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
 declare(strict_types=1);
@@ -18,17 +18,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Backup Verification Manager
  */
-class WPS_Backup_Verification {
+class WPSHADOW_Backup_Verification {
 
 	/**
 	 * Verification tests option key.
 	 */
-	private const TESTS_KEY = 'WPS_backup_verification_tests';
+	private const TESTS_KEY = 'wpshadow_backup_verification_tests';
 
 	/**
 	 * Test results option key.
 	 */
-	private const RESULTS_KEY = 'WPS_backup_verification_results';
+	private const RESULTS_KEY = 'wpshadow_backup_verification_results';
 
 	/**
 	 * Initialize Backup Verification.
@@ -37,12 +37,12 @@ class WPS_Backup_Verification {
 	 */
 	public static function init(): void {
 		add_action( 'admin_menu', array( __CLASS__, 'register_menu' ) );
-		add_action( 'wp_ajax_WPS_run_backup_verification', array( __CLASS__, 'handle_verification_test' ) );
-		add_action( 'wp_scheduled_event_WPS_backup_verification', array( __CLASS__, 'run_scheduled_verification' ) );
+		add_action( 'wp_ajax_WPSHADOW_run_backup_verification', array( __CLASS__, 'handle_verification_test' ) );
+		add_action( 'wp_scheduled_event_WPSHADOW_backup_verification', array( __CLASS__, 'run_scheduled_verification' ) );
 
 		// Schedule daily verification.
-		if ( ! wp_next_scheduled( 'wp_scheduled_event_WPS_backup_verification' ) ) {
-			wp_schedule_event( time(), 'daily', 'wp_scheduled_event_WPS_backup_verification' );
+		if ( ! wp_next_scheduled( 'wp_scheduled_event_WPSHADOW_backup_verification' ) ) {
+			wp_schedule_event( time(), 'daily', 'wp_scheduled_event_WPSHADOW_backup_verification' );
 		}
 	}
 
@@ -66,12 +66,12 @@ class WPS_Backup_Verification {
 		$start_time = microtime( true );
 
 		// Step 1: Select latest snapshot for restoration test.
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Snapshot_Manager' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Snapshot_Manager' ) ) {
 			$test['issues'][] = 'Snapshot Manager not available';
 			return $test;
 		}
 
-		$snapshots = WPS_Snapshot_Manager::get_snapshots();
+		$snapshots = WPSHADOW_Snapshot_Manager::get_snapshots();
 		if ( empty( $snapshots ) ) {
 			$test['issues'][] = 'No snapshots available for verification';
 			return $test;
@@ -81,12 +81,12 @@ class WPS_Backup_Verification {
 		$test['snapshot_used'] = $latest_snapshot['id'];
 
 		// Step 2: Create staging environment for restore test.
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Staging_Manager' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Staging_Manager' ) ) {
 			$test['issues'][] = 'Staging Manager not available';
 			return $test;
 		}
 
-		$staging_id = WPS_Staging_Manager::create_staging( 'Backup Verification Test - ' . wp_date( 'Y-m-d H:i:s' ) );
+		$staging_id = WPSHADOW_Staging_Manager::create_staging( 'Backup Verification Test - ' . wp_date( 'Y-m-d H:i:s' ) );
 		if ( ! $staging_id ) {
 			$test['issues'][] = 'Failed to create staging environment';
 			return $test;
@@ -100,7 +100,7 @@ class WPS_Backup_Verification {
 
 		// Step 3: Attempt restoration in staging.
 		$restore_start = microtime( true );
-		if ( ! WPS_Snapshot_Manager::restore_snapshot( $latest_snapshot['id'] ) ) {
+		if ( ! WPSHADOW_Snapshot_Manager::restore_snapshot( $latest_snapshot['id'] ) ) {
 			$test['tests'][]  = array(
 				'name'     => 'Restore Functionality',
 				'result'   => 'failed',
@@ -164,7 +164,7 @@ class WPS_Backup_Verification {
 		);
 
 		// Step 8: Clean up staging environment.
-		WPS_Staging_Manager::delete_staging( $staging_id );
+		WPSHADOW_Staging_Manager::delete_staging( $staging_id );
 
 		// Set overall result.
 		$test['success']  = empty( $test['issues'] );
@@ -355,10 +355,10 @@ class WPS_Backup_Verification {
 	 * @return void
 	 */
 	public static function handle_verification_test(): void {
-		check_ajax_referer( 'WPS_backup_nonce', 'nonce' );
+		check_ajax_referer( 'wpshadow_backup_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
+			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
 		}
 
 		$result = self::run_verification_test();
@@ -373,8 +373,8 @@ class WPS_Backup_Verification {
 	public static function register_menu(): void {
 		add_submenu_page(
 			'wp-support',
-			__( 'Backup Verification', 'plugin-wp-support-thisismyurl' ),
-			__( 'Verification', 'plugin-wp-support-thisismyurl' ),
+			__( 'Backup Verification', 'plugin-wpshadow' ),
+			__( 'Verification', 'plugin-wpshadow' ),
 			'manage_options',
 			'wps-backup-verification',
 			array( __CLASS__, 'render_verification_page' )
@@ -388,61 +388,61 @@ class WPS_Backup_Verification {
 	 */
 	public static function render_verification_page(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Insufficient permissions.', 'plugin-wpshadow' ) );
 		}
 
 		$results = self::get_results();
 		$latest  = ! empty( $results ) ? end( $results ) : null;
-		$nonce   = wp_create_nonce( 'WPS_backup_nonce' );
+		$nonce   = wp_create_nonce( 'wpshadow_backup_nonce' );
 		?>
 		<div class="wrap">
 			<h1>
-				<?php esc_html_e( 'Backup Verification & Recovery Drills', 'plugin-wp-support-thisismyurl' ); ?>
+				<?php esc_html_e( 'Backup Verification & Recovery Drills', 'plugin-wpshadow' ); ?>
 				<?php
-				if ( class_exists( '\\WPS\\CoreSupport\\WPS_Feature_Detector' ) ) {
-					WPS_Feature_Detector::render_feature_badge( 'core' );
+				if ( class_exists( '\\WPShadow\\WPSHADOW_Feature_Detector' ) ) {
+					WPSHADOW_Feature_Detector::render_feature_badge( 'core' );
 				}
 				?>
 			</h1>
-			<p><?php esc_html_e( 'Automated testing of backup integrity through staged restoration and functionality validation.', 'plugin-wp-support-thisismyurl' ); ?></p>
+			<p><?php esc_html_e( 'Automated testing of backup integrity through staged restoration and functionality validation.', 'plugin-wpshadow' ); ?></p>
 
 			<button id="wps-backup-verify" class="button button-primary" data-nonce="<?php echo esc_attr( $nonce ); ?>">
-				<?php esc_html_e( '🔍 Run Verification Test Now', 'plugin-wp-support-thisismyurl' ); ?>
+				<?php esc_html_e( '🔍 Run Verification Test Now', 'plugin-wpshadow' ); ?>
 			</button>
 
 			<?php if ( ! $latest ) : ?>
 				<p style="margin-top: 20px; padding: 15px; background: #f0f0f0; border-left: 4px solid #ffb900;">
-					<?php esc_html_e( 'No verification tests yet. Run one to test backup recovery capability.', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'No verification tests yet. Run one to test backup recovery capability.', 'plugin-wpshadow' ); ?>
 				</p>
 			<?php else : ?>
 				<div style="margin: 30px 0; padding: 20px; background: <?php echo $latest['success'] ? '#eeffee' : '#ffeeee'; ?>; border: 1px solid <?php echo $latest['success'] ? '#00cc00' : '#cc0000'; ?>; border-radius: 5px;">
 					<h2>
 						<?php echo $latest['success'] ? '✅' : '❌'; ?>
-						<?php esc_html_e( 'Latest Verification Result', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'Latest Verification Result', 'plugin-wpshadow' ); ?>
 					</h2>
 					<p style="margin: 10px 0; color: #666;">
 						<?php echo esc_html( wp_date( 'F j, Y \a\t g:i a', $latest['timestamp'] ) ); ?>
 					</p>
 
 					<!-- Performance Metrics -->
-					<h3><?php esc_html_e( '⏱️ Recovery Performance', 'plugin-wp-support-thisismyurl' ); ?></h3>
+					<h3><?php esc_html_e( '⏱️ Recovery Performance', 'plugin-wpshadow' ); ?></h3>
 					<table style="width: 100%; font-size: 13px; margin: 10px 0;">
 						<tr>
-							<td><strong><?php esc_html_e( 'Total Duration:', 'plugin-wp-support-thisismyurl' ); ?></strong></td>
+							<td><strong><?php esc_html_e( 'Total Duration:', 'plugin-wpshadow' ); ?></strong></td>
 							<td><?php echo esc_html( round( $latest['duration'], 2 ) ); ?>s</td>
 						</tr>
 						<tr>
-							<td><strong><?php esc_html_e( 'Restore Time:', 'plugin-wp-support-thisismyurl' ); ?></strong></td>
+							<td><strong><?php esc_html_e( 'Restore Time:', 'plugin-wpshadow' ); ?></strong></td>
 							<td><?php echo isset( $latest['performance']['restore_time'] ) ? esc_html( round( $latest['performance']['restore_time'], 2 ) ) . 's' : 'N/A'; ?></td>
 						</tr>
 						<tr>
-							<td><strong><?php esc_html_e( 'Full Recovery Estimate:', 'plugin-wp-support-thisismyurl' ); ?></strong></td>
+							<td><strong><?php esc_html_e( 'Full Recovery Estimate:', 'plugin-wpshadow' ); ?></strong></td>
 							<td><?php echo esc_html( $latest['performance']['estimated_full_recover_time'] ); ?></td>
 						</tr>
 					</table>
 
 					<!-- Test Results -->
-					<h3><?php esc_html_e( '📋 Test Results', 'plugin-wp-support-thisismyurl' ); ?></h3>
+					<h3><?php esc_html_e( '📋 Test Results', 'plugin-wpshadow' ); ?></h3>
 					<ul style="margin: 10px 0; padding-left: 20px;">
 						<?php foreach ( $latest['tests'] as $test ) : ?>
 							<li>
@@ -460,7 +460,7 @@ class WPS_Backup_Verification {
 
 					<?php if ( ! empty( $latest['issues'] ) ) : ?>
 						<!-- Issues Found -->
-						<h3 style="color: #c00;"><?php esc_html_e( '⚠️ Issues Found', 'plugin-wp-support-thisismyurl' ); ?></h3>
+						<h3 style="color: #c00;"><?php esc_html_e( '⚠️ Issues Found', 'plugin-wpshadow' ); ?></h3>
 						<ul style="margin: 10px 0; padding-left: 20px; color: #c00;">
 							<?php foreach ( $latest['issues'] as $issue ) : ?>
 								<li><?php echo esc_html( $issue ); ?></li>
@@ -470,11 +470,11 @@ class WPS_Backup_Verification {
 				</div>
 			<!-- Ghost Features - Enhanced Backup Capabilities -->
 			<?php
-			if ( class_exists( '\\WPS\\CoreSupport\\WPS_Ghost_Features' ) ) {
+			if ( class_exists( '\\WPShadow\\WPSHADOW_Ghost_Features' ) ) {
 				echo '<div style="margin: 30px 0;">';
-				echo '<h2>' . esc_html__( '🚀 Unlock Enhanced Backup Features', 'plugin-wp-support-thisismyurl' ) . '</h2>';
-				echo '<p style="color: #646970; margin-bottom: 20px;">' . esc_html__( 'Install the free Vault module to enhance your backup capabilities with encryption, cloud offload, and more.', 'plugin-wp-support-thisismyurl' ) . '</p>';
-				WPS_Ghost_Features::render_category_features(
+				echo '<h2>' . esc_html__( '🚀 Unlock Enhanced Backup Features', 'plugin-wpshadow' ) . '</h2>';
+				echo '<p style="color: #646970; margin-bottom: 20px;">' . esc_html__( 'Install the free Vault module to enhance your backup capabilities with encryption, cloud offload, and more.', 'plugin-wpshadow' ) . '</p>';
+				WPSHADOW_Ghost_Features::render_category_features(
 					'backup',
 					array(
 						'include_installed'   => false,
@@ -488,15 +488,15 @@ class WPS_Backup_Verification {
 			?>
 				<!-- Test History -->
 				<?php if ( count( $results ) > 1 ) : ?>
-					<h3><?php esc_html_e( 'Verification History', 'plugin-wp-support-thisismyurl' ); ?></h3>
+					<h3><?php esc_html_e( 'Verification History', 'plugin-wpshadow' ); ?></h3>
 					<table class="wp-list-table widefat striped">
 						<thead>
 							<tr>
-								<th><?php esc_html_e( 'Date', 'plugin-wp-support-thisismyurl' ); ?></th>
-								<th><?php esc_html_e( 'Result', 'plugin-wp-support-thisismyurl' ); ?></th>
-								<th><?php esc_html_e( 'Duration', 'plugin-wp-support-thisismyurl' ); ?></th>
-								<th><?php esc_html_e( 'Tests', 'plugin-wp-support-thisismyurl' ); ?></th>
-								<th><?php esc_html_e( 'Issues', 'plugin-wp-support-thisismyurl' ); ?></th>
+								<th><?php esc_html_e( 'Date', 'plugin-wpshadow' ); ?></th>
+								<th><?php esc_html_e( 'Result', 'plugin-wpshadow' ); ?></th>
+								<th><?php esc_html_e( 'Duration', 'plugin-wpshadow' ); ?></th>
+								<th><?php esc_html_e( 'Tests', 'plugin-wpshadow' ); ?></th>
+								<th><?php esc_html_e( 'Issues', 'plugin-wpshadow' ); ?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -522,7 +522,7 @@ class WPS_Backup_Verification {
 			fetch(ajaxurl, {
 				method: 'POST',
 				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-				body: 'action=WPS_run_backup_verification&nonce=<?php echo esc_js( $nonce ); ?>'
+				body: 'action=WPSHADOW_run_backup_verification&nonce=<?php echo esc_js( $nonce ); ?>'
 			})
 			.then(r => r.json())
 			.then(d => {

@@ -5,7 +5,7 @@
  * Personalized optimization recommendations based on site profile and heuristic analysis.
  * Extensible to support industry benchmarking when data becomes available.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
 declare(strict_types=1);
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
+class WPSHADOW_Feature_Smart_Recommendations extends WPSHADOW_Abstract_Feature {
 	/**
 	 * Site classification cache.
 	 *
@@ -30,15 +30,15 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                 => 'wps_smart_recommendations',
-				'name'               => __( 'Smart Recommendations Engine', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Personalized optimization recommendations based on site profile and heuristic analysis. Provides performance, security, and scalability recommendations with priority scoring and ROI estimation.', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'wpshadow_smart_recommendations',
+				'name'               => __( 'Smart Recommendations Engine', 'plugin-wpshadow' ),
+				'description'        => __( 'Personalized optimization recommendations based on site profile and heuristic analysis. Provides performance, security, and scalability recommendations with priority scoring and ROI estimation.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'version'            => '1.0.0',
 				'default_enabled'    => true,
 				'widget_group'       => 'analytics-features',
-				'widget_label'       => __( 'Analytics & Recommendations', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Intelligent site analysis and recommendation features', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Analytics & Recommendations', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Intelligent site analysis and recommendation features', 'plugin-wpshadow' ),
 			)
 		);
 	}
@@ -54,16 +54,16 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 		}
 
 		// Schedule daily recommendation refresh.
-		if ( ! wp_next_scheduled( 'wps_recommendations_refresh' ) ) {
-			wp_schedule_event( time(), 'daily', 'wps_recommendations_refresh' );
+		if ( ! wp_next_scheduled( 'wpshadow_recommendations_refresh' ) ) {
+			wp_schedule_event( time(), 'daily', 'wpshadow_recommendations_refresh' );
 		}
-		add_action( 'wps_recommendations_refresh', array( __CLASS__, 'refresh_recommendations' ) );
+		add_action( 'wpshadow_recommendations_refresh', array( __CLASS__, 'refresh_recommendations' ) );
 
 		// Weekly recommendation digest email.
-		if ( ! wp_next_scheduled( 'wps_recommendations_digest' ) ) {
-			wp_schedule_event( strtotime( 'next Monday 9:00' ), 'weekly', 'wps_recommendations_digest' );
+		if ( ! wp_next_scheduled( 'wpshadow_recommendations_digest' ) ) {
+			wp_schedule_event( strtotime( 'next Monday 9:00' ), 'weekly', 'wpshadow_recommendations_digest' );
 		}
-		add_action( 'wps_recommendations_digest', array( __CLASS__, 'send_weekly_digest' ) );
+		add_action( 'wpshadow_recommendations_digest', array( __CLASS__, 'send_weekly_digest' ) );
 
 		// Dashboard widget registration.
 		add_action( 'wp_dashboard_setup', array( __CLASS__, 'register_dashboard_widget' ) );
@@ -72,7 +72,7 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 		add_action( 'admin_menu', array( __CLASS__, 'register_admin_page' ) );
 
 		// AJAX handler for dismissing recommendations.
-		add_action( 'wp_ajax_wps_dismiss_recommendation', array( __CLASS__, 'ajax_dismiss_recommendation' ) );
+		add_action( 'wp_ajax_WPSHADOW_dismiss_recommendation', array( __CLASS__, 'ajax_dismiss_recommendation' ) );
 	}
 
 	/**
@@ -86,7 +86,7 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 		}
 
 		// Check cache first.
-		$cached = get_transient( 'wps_site_classification' );
+		$cached = get_transient( 'wpshadow_site_classification' );
 		if ( is_array( $cached ) ) {
 			self::$site_classification = $cached;
 			return $cached;
@@ -185,7 +185,7 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 
 		// Check WordPress version.
 		global $wp_version;
-		$latest_wp = get_transient( 'wps_latest_wp_version' );
+		$latest_wp = get_transient( 'wpshadow_latest_wp_version' );
 		if ( ! $latest_wp ) {
 			$latest_wp = $wp_version; // Fallback.
 		}
@@ -196,7 +196,7 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 		$classification['security_score'] = min( 100, $security_score );
 
 		// Cache for 12 hours.
-		set_transient( 'wps_site_classification', $classification, 12 * HOUR_IN_SECONDS );
+		set_transient( 'wpshadow_site_classification', $classification, 12 * HOUR_IN_SECONDS );
 		self::$site_classification = $classification;
 
 		return $classification;
@@ -232,7 +232,7 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 		);
 
 		// Apply filter to allow extensions.
-		return apply_filters( 'wps_smart_recommendations', $recommendations, $classification );
+		return apply_filters( 'wpshadow_smart_recommendations', $recommendations, $classification );
 	}
 
 	/**
@@ -249,51 +249,51 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 			$recommendations[] = array(
 				'id'             => 'enable_object_caching',
 				'type'           => 'performance',
-				'title'          => __( 'Enable Object Caching', 'plugin-wp-support-thisismyurl' ),
-				'description'    => __( 'Object caching (Redis/Memcached) can significantly improve database query performance.', 'plugin-wp-support-thisismyurl' ),
+				'title'          => __( 'Enable Object Caching', 'plugin-wpshadow' ),
+				'description'    => __( 'Object caching (Redis/Memcached) can significantly improve database query performance.', 'plugin-wpshadow' ),
 				'impact'         => 'high',
 				'estimated_gain' => '-500ms to -800ms load time',
 				'difficulty'     => 'moderate',
 				'cost'           => 'free',
 				'priority_score' => 90,
-				'action_label'   => __( 'Learn More', 'plugin-wp-support-thisismyurl' ),
+				'action_label'   => __( 'Learn More', 'plugin-wpshadow' ),
 				'action_url'     => 'https://wordpress.org/support/article/optimization/#caching',
 			);
 		}
 
 		// Check for image optimization.
-		if ( ! is_plugin_active( 'image-support-thisismyurl/image-support-thisismyurl.php' ) ) {
+		if ( ! is_plugin_active( 'image-wpshadow/image-wpshadow.php' ) ) {
 			$recommendations[] = array(
 				'id'             => 'optimize_images',
 				'type'           => 'performance',
-				'title'          => __( 'Optimize Images', 'plugin-wp-support-thisismyurl' ),
-				'description'    => __( 'Install Image Hub to enable WebP, AVIF conversion and smart compression.', 'plugin-wp-support-thisismyurl' ),
+				'title'          => __( 'Optimize Images', 'plugin-wpshadow' ),
+				'description'    => __( 'Install Image Hub to enable WebP, AVIF conversion and smart compression.', 'plugin-wpshadow' ),
 				'impact'         => 'high',
 				'estimated_gain' => '-300ms to -600ms load time',
 				'difficulty'     => 'easy',
 				'cost'           => 'free',
 				'priority_score' => 85,
-				'action_label'   => __( 'Install Image Hub', 'plugin-wp-support-thisismyurl' ),
+				'action_label'   => __( 'Install Image Hub', 'plugin-wpshadow' ),
 				'action_url'     => admin_url( 'admin.php?page=wp-support&tab=modules' ),
 			);
 		}
 
 		// Check for script optimization.
-		$script_deferral_enabled = class_exists( '\\WPS\\CoreSupport\\Features\\WPS_Feature_Script_Deferral' )
-			&& \WPS\CoreSupport\Features\WPS_Feature_Registry::is_feature_enabled( 'wps_script_deferral', false );
+		$script_deferral_enabled = class_exists( '\\WPShadow\\Features\\WPSHADOW_Feature_Script_Deferral' )
+			&& \WPS\CoreSupport\Features\WPSHADOW_Feature_Registry::is_feature_enabled( 'wpshadow_script_deferral', false );
 
 		if ( ! $script_deferral_enabled ) {
 			$recommendations[] = array(
 				'id'             => 'enable_script_deferral',
 				'type'           => 'performance',
-				'title'          => __( 'Enable Script Deferral', 'plugin-wp-support-thisismyurl' ),
-				'description'    => __( 'Defer non-critical JavaScript to improve initial page load time.', 'plugin-wp-support-thisismyurl' ),
+				'title'          => __( 'Enable Script Deferral', 'plugin-wpshadow' ),
+				'description'    => __( 'Defer non-critical JavaScript to improve initial page load time.', 'plugin-wpshadow' ),
 				'impact'         => 'medium',
 				'estimated_gain' => '-200ms to -400ms load time',
 				'difficulty'     => 'easy',
 				'cost'           => 'free',
 				'priority_score' => 75,
-				'action_label'   => __( 'Enable Feature', 'plugin-wp-support-thisismyurl' ),
+				'action_label'   => __( 'Enable Feature', 'plugin-wpshadow' ),
 				'action_url'     => admin_url( 'admin.php?page=wp-support&tab=features' ),
 			);
 		}
@@ -303,14 +303,14 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 			$recommendations[] = array(
 				'id'             => 'woocommerce_optimization',
 				'type'           => 'performance',
-				'title'          => __( 'WooCommerce Performance Optimization', 'plugin-wp-support-thisismyurl' ),
-				'description'    => __( 'Optimize WooCommerce for better performance: Enable cart fragments caching, disable unused features, optimize product images.', 'plugin-wp-support-thisismyurl' ),
+				'title'          => __( 'WooCommerce Performance Optimization', 'plugin-wpshadow' ),
+				'description'    => __( 'Optimize WooCommerce for better performance: Enable cart fragments caching, disable unused features, optimize product images.', 'plugin-wpshadow' ),
 				'impact'         => 'high',
 				'estimated_gain' => '-400ms to -700ms load time',
 				'difficulty'     => 'moderate',
 				'cost'           => 'free',
 				'priority_score' => 88,
-				'action_label'   => __( 'View Guide', 'plugin-wp-support-thisismyurl' ),
+				'action_label'   => __( 'View Guide', 'plugin-wpshadow' ),
 				'action_url'     => 'https://woocommerce.com/document/woocommerce-performance/',
 			);
 		}
@@ -333,14 +333,14 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 			$recommendations[] = array(
 				'id'             => 'enable_ssl',
 				'type'           => 'security',
-				'title'          => __( 'Enable HTTPS/SSL', 'plugin-wp-support-thisismyurl' ),
-				'description'    => __( 'Secure your site with HTTPS to protect user data and improve SEO.', 'plugin-wp-support-thisismyurl' ),
+				'title'          => __( 'Enable HTTPS/SSL', 'plugin-wpshadow' ),
+				'description'    => __( 'Secure your site with HTTPS to protect user data and improve SEO.', 'plugin-wpshadow' ),
 				'impact'         => 'critical',
 				'estimated_gain' => 'Enhanced security, improved SEO',
 				'difficulty'     => 'moderate',
 				'cost'           => 'free with Let\'s Encrypt',
 				'priority_score' => 95,
-				'action_label'   => __( 'Learn More', 'plugin-wp-support-thisismyurl' ),
+				'action_label'   => __( 'Learn More', 'plugin-wpshadow' ),
 				'action_url'     => 'https://wordpress.org/support/article/https-for-wordpress/',
 			);
 		}
@@ -350,14 +350,14 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 			$recommendations[] = array(
 				'id'             => 'install_security_plugin',
 				'type'           => 'security',
-				'title'          => __( 'Install Security Plugin', 'plugin-wp-support-thisismyurl' ),
-				'description'    => __( 'Add a security plugin like Wordfence or Sucuri to protect against threats.', 'plugin-wp-support-thisismyurl' ),
+				'title'          => __( 'Install Security Plugin', 'plugin-wpshadow' ),
+				'description'    => __( 'Add a security plugin like Wordfence or Sucuri to protect against threats.', 'plugin-wpshadow' ),
 				'impact'         => 'high',
 				'estimated_gain' => 'Protection against common attacks',
 				'difficulty'     => 'easy',
 				'cost'           => 'free tier available',
 				'priority_score' => 85,
-				'action_label'   => __( 'Browse Security Plugins', 'plugin-wp-support-thisismyurl' ),
+				'action_label'   => __( 'Browse Security Plugins', 'plugin-wpshadow' ),
 				'action_url'     => admin_url( 'plugin-install.php?s=security&tab=search' ),
 			);
 		}
@@ -376,16 +376,16 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 				'type'           => 'security',
 				'title'          => sprintf(
 					/* translators: %d: number of plugin updates */
-					_n( 'Update %d Plugin', 'Update %d Plugins', $update_count, 'plugin-wp-support-thisismyurl' ),
+					_n( 'Update %d Plugin', 'Update %d Plugins', $update_count, 'plugin-wpshadow' ),
 					$update_count
 				),
-				'description'    => __( 'Outdated plugins may contain security vulnerabilities. Keep all plugins up to date.', 'plugin-wp-support-thisismyurl' ),
+				'description'    => __( 'Outdated plugins may contain security vulnerabilities. Keep all plugins up to date.', 'plugin-wpshadow' ),
 				'impact'         => 'high',
 				'estimated_gain' => 'Reduced vulnerability risk',
 				'difficulty'     => 'easy',
 				'cost'           => 'free',
 				'priority_score' => 90,
-				'action_label'   => __( 'View Updates', 'plugin-wp-support-thisismyurl' ),
+				'action_label'   => __( 'View Updates', 'plugin-wpshadow' ),
 				'action_url'     => admin_url( 'plugins.php' ),
 			);
 		}
@@ -395,14 +395,14 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 			$recommendations[] = array(
 				'id'             => 'setup_backups',
 				'type'           => 'security',
-				'title'          => __( 'Setup Automated Backups', 'plugin-wp-support-thisismyurl' ),
-				'description'    => __( 'Regular backups protect against data loss from security incidents or errors.', 'plugin-wp-support-thisismyurl' ),
+				'title'          => __( 'Setup Automated Backups', 'plugin-wpshadow' ),
+				'description'    => __( 'Regular backups protect against data loss from security incidents or errors.', 'plugin-wpshadow' ),
 				'impact'         => 'high',
 				'estimated_gain' => 'Data protection and recovery capability',
 				'difficulty'     => 'easy',
 				'cost'           => 'free tier available',
 				'priority_score' => 88,
-				'action_label'   => __( 'Browse Backup Plugins', 'plugin-wp-support-thisismyurl' ),
+				'action_label'   => __( 'Browse Backup Plugins', 'plugin-wpshadow' ),
 				'action_url'     => admin_url( 'plugin-install.php?s=backup&tab=search' ),
 			);
 		}
@@ -427,14 +427,14 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 				$recommendations[] = array(
 					'id'             => 'enable_cdn',
 					'type'           => 'scalability',
-					'title'          => __( 'Enable CDN', 'plugin-wp-support-thisismyurl' ),
-					'description'    => __( 'Content Delivery Network distributes your static assets globally for faster loading.', 'plugin-wp-support-thisismyurl' ),
+					'title'          => __( 'Enable CDN', 'plugin-wpshadow' ),
+					'description'    => __( 'Content Delivery Network distributes your static assets globally for faster loading.', 'plugin-wpshadow' ),
 					'impact'         => 'high',
 					'estimated_gain' => 'Can handle 2-3x traffic, -200ms to -500ms for global users',
 					'difficulty'     => 'moderate',
 					'cost'           => '$5-10/month',
 					'priority_score' => 80,
-					'action_label'   => __( 'Learn More', 'plugin-wp-support-thisismyurl' ),
+					'action_label'   => __( 'Learn More', 'plugin-wpshadow' ),
 					'action_url'     => 'https://www.cloudflare.com/',
 				);
 			}
@@ -445,14 +445,14 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 			$recommendations[] = array(
 				'id'             => 'optimize_database',
 				'type'           => 'scalability',
-				'title'          => __( 'Optimize Database', 'plugin-wp-support-thisismyurl' ),
-				'description'    => __( 'Clean up database overhead, optimize tables, and remove old revisions to improve query performance.', 'plugin-wp-support-thisismyurl' ),
+				'title'          => __( 'Optimize Database', 'plugin-wpshadow' ),
+				'description'    => __( 'Clean up database overhead, optimize tables, and remove old revisions to improve query performance.', 'plugin-wpshadow' ),
 				'impact'         => 'medium',
 				'estimated_gain' => 'Faster queries, reduced server load',
 				'difficulty'     => 'easy',
 				'cost'           => 'free',
 				'priority_score' => 70,
-				'action_label'   => __( 'Enable Database Cleanup', 'plugin-wp-support-thisismyurl' ),
+				'action_label'   => __( 'Enable Database Cleanup', 'plugin-wpshadow' ),
 				'action_url'     => admin_url( 'admin.php?page=wp-support&tab=features' ),
 			);
 		}
@@ -462,15 +462,15 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 			$recommendations[] = array(
 				'id'             => 'scaling_consultation',
 				'type'           => 'scalability',
-				'title'          => __( 'Schedule Scaling Consultation', 'plugin-wp-support-thisismyurl' ),
-				'description'    => __( 'Your site is growing. Get expert advice on architecture, hosting, and optimization strategies.', 'plugin-wp-support-thisismyurl' ),
+				'title'          => __( 'Schedule Scaling Consultation', 'plugin-wpshadow' ),
+				'description'    => __( 'Your site is growing. Get expert advice on architecture, hosting, and optimization strategies.', 'plugin-wpshadow' ),
 				'impact'         => 'high',
 				'estimated_gain' => 'Custom optimization strategy',
 				'difficulty'     => 'professional',
 				'cost'           => '$500',
 				'priority_score' => 65,
-				'action_label'   => __( 'Book Consultation', 'plugin-wp-support-thisismyurl' ),
-				'action_url'     => 'https://thisismyurl.com/support',
+				'action_label'   => __( 'Book Consultation', 'plugin-wpshadow' ),
+				'action_url'     => 'https://wpshadow.com/support',
 			);
 		}
 
@@ -536,13 +536,13 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 	 */
 	public static function refresh_recommendations(): void {
 		// Clear classification cache to force refresh.
-		delete_transient( 'wps_site_classification' );
+		delete_transient( 'wpshadow_site_classification' );
 		self::$site_classification = null;
 
 		$recommendations = self::generate_recommendations();
 
 		// Filter out dismissed recommendations.
-		$dismissed = $this->get_setting( 'wps_dismissed_recommendations', array( ) );
+		$dismissed = $this->get_setting( 'wpshadow_dismissed_recommendations', array( ) );
 		if ( is_array( $dismissed ) ) {
 			$recommendations = array_filter(
 				$recommendations,
@@ -553,15 +553,15 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 		}
 
 		// Cache recommendations for 24 hours.
-		set_transient( 'wps_recommendations_cache', $recommendations, DAY_IN_SECONDS );
+		set_transient( 'wpshadow_recommendations_cache', $recommendations, DAY_IN_SECONDS );
 
 		// Log refresh.
-		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
-			\WPS\CoreSupport\WPS_Activity_Logger::log(
+		if ( class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) ) {
+			\WPS\CoreSupport\WPSHADOW_Activity_Logger::log(
 				'system',
 				sprintf(
 					/* translators: %d: number of recommendations */
-					__( 'Smart Recommendations refreshed: %d recommendations generated', 'plugin-wp-support-thisismyurl' ),
+					__( 'Smart Recommendations refreshed: %d recommendations generated', 'plugin-wpshadow' ),
 					count( $recommendations )
 				),
 				array( 'count' => count( $recommendations ) )
@@ -580,11 +580,11 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 			self::refresh_recommendations();
 		}
 
-		$recommendations = get_transient( 'wps_recommendations_cache' );
+		$recommendations = get_transient( 'wpshadow_recommendations_cache' );
 
 		if ( ! is_array( $recommendations ) ) {
 			self::refresh_recommendations();
-			$recommendations = get_transient( 'wps_recommendations_cache' );
+			$recommendations = get_transient( 'wpshadow_recommendations_cache' );
 		}
 
 		return is_array( $recommendations ) ? $recommendations : array();
@@ -612,13 +612,13 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 		// Build email content.
 		$subject = sprintf(
 			/* translators: %s: site name */
-			__( 'Weekly Recommendations for %s', 'plugin-wp-support-thisismyurl'  ),
+			__( 'Weekly Recommendations for %s', 'plugin-wpshadow'  ),
 			$site_name
 		);
 
 		$message = sprintf(
 			/* translators: %s: site name */
-			__( 'Here are this week\'s top recommendations for %s:', 'plugin-wp-support-thisismyurl' ),
+			__( 'Here are this week\'s top recommendations for %s:', 'plugin-wpshadow' ),
 			$site_name
 		) . "\n\n";
 
@@ -634,7 +634,7 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 		}
 
 		$message .= sprintf(
-			__( 'View all recommendations: %s', 'plugin-wp-support-thisismyurl' ),
+			__( 'View all recommendations: %s', 'plugin-wpshadow' ),
 			admin_url( 'admin.php?page=wps-recommendations' )
 		);
 
@@ -642,10 +642,10 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 		wp_mail( $admin_email, $subject, $message );
 
 		// Log email sent.
-		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
-			\WPS\CoreSupport\WPS_Activity_Logger::log(
+		if ( class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) ) {
+			\WPS\CoreSupport\WPSHADOW_Activity_Logger::log(
 				'system',
-				__( 'Weekly recommendations digest email sent', 'plugin-wp-support-thisismyurl' ),
+				__( 'Weekly recommendations digest email sent', 'plugin-wpshadow' ),
 				array(
 					'recipient' => $admin_email,
 					'count'     => count( $top_recommendations ),
@@ -661,8 +661,8 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 	 */
 	public static function register_dashboard_widget(): void {
 		wp_add_dashboard_widget(
-			'wps_smart_recommendations',
-			__( 'Smart Recommendations', 'plugin-wp-support-thisismyurl' ),
+			'wpshadow_smart_recommendations',
+			__( 'Smart Recommendations', 'plugin-wpshadow' ),
 			array( __CLASS__, 'render_dashboard_widget' )
 		);
 	}
@@ -676,7 +676,7 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 		$recommendations = self::get_recommendations();
 
 		if ( empty( $recommendations ) ) {
-			echo '<p>' . esc_html__( 'No recommendations at this time. Your site is well optimized!', 'plugin-wp-support-thisismyurl' ) . '</p>';
+			echo '<p>' . esc_html__( 'No recommendations at this time. Your site is well optimized!', 'plugin-wpshadow' ) . '</p>';
 			return;
 		}
 
@@ -704,23 +704,23 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 				</h4>
 				<p><?php echo esc_html( $rec['description'] ?? '' ); ?></p>
 				<div class="wps-recommendation-meta">
-					<strong><?php esc_html_e( 'Impact:', 'plugin-wp-support-thisismyurl' ); ?></strong> <?php echo esc_html( ucfirst( $rec['impact'] ?? 'medium' ) ); ?> |
-					<strong><?php esc_html_e( 'Difficulty:', 'plugin-wp-support-thisismyurl' ); ?></strong> <?php echo esc_html( ucfirst( $rec['difficulty'] ?? 'moderate' ) ); ?> |
-					<strong><?php esc_html_e( 'Cost:', 'plugin-wp-support-thisismyurl' ); ?></strong> <?php echo esc_html( $rec['cost'] ?? 'unknown' ); ?>
+					<strong><?php esc_html_e( 'Impact:', 'plugin-wpshadow' ); ?></strong> <?php echo esc_html( ucfirst( $rec['impact'] ?? 'medium' ) ); ?> |
+					<strong><?php esc_html_e( 'Difficulty:', 'plugin-wpshadow' ); ?></strong> <?php echo esc_html( ucfirst( $rec['difficulty'] ?? 'moderate' ) ); ?> |
+					<strong><?php esc_html_e( 'Cost:', 'plugin-wpshadow' ); ?></strong> <?php echo esc_html( $rec['cost'] ?? 'unknown' ); ?>
 				</div>
 				<?php if ( ! empty( $rec['estimated_gain'] ) ) : ?>
 					<div class="wps-recommendation-meta">
-						<strong><?php esc_html_e( 'Expected Result:', 'plugin-wp-support-thisismyurl' ); ?></strong> <?php echo esc_html( $rec['estimated_gain'] ); ?>
+						<strong><?php esc_html_e( 'Expected Result:', 'plugin-wpshadow' ); ?></strong> <?php echo esc_html( $rec['estimated_gain'] ); ?>
 					</div>
 				<?php endif; ?>
 				<div class="wps-recommendation-actions">
 					<?php if ( ! empty( $rec['action_url'] ) ) : ?>
 						<a href="<?php echo esc_url( $rec['action_url'] ); ?>" class="button button-small button-primary">
-							<?php echo esc_html( $rec['action_label'] ?? __( 'Take Action', 'plugin-wp-support-thisismyurl' ) ); ?>
+							<?php echo esc_html( $rec['action_label'] ?? __( 'Take Action', 'plugin-wpshadow' ) ); ?>
 						</a>
 					<?php endif; ?>
-					<a href="#" class="button button-small wps-dismiss-recommendation" data-rec-id="<?php echo esc_attr( $rec['id'] ?? '' ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'wps_dismiss_recommendation' ) ); ?>">
-						<?php esc_html_e( 'Dismiss', 'plugin-wp-support-thisismyurl' ); ?>
+					<a href="#" class="button button-small wps-dismiss-recommendation" data-rec-id="<?php echo esc_attr( $rec['id'] ?? '' ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_dismiss_recommendation' ) ); ?>">
+						<?php esc_html_e( 'Dismiss', 'plugin-wpshadow' ); ?>
 					</a>
 				</div>
 			</div>
@@ -734,7 +734,7 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 					<?php
 					printf(
 						/* translators: %d: number of additional recommendations */
-						esc_html__( 'View %d more recommendations →', 'plugin-wp-support-thisismyurl' ),
+						esc_html__( 'View %d more recommendations →', 'plugin-wpshadow' ),
 						count( $recommendations ) - 3
 					);
 					?>
@@ -754,7 +754,7 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 				var nonce = button.data('nonce');
 				
 				$.post(ajaxurl, {
-					action: 'wps_dismiss_recommendation',
+					action: 'wpshadow_dismiss_recommendation',
 					rec_id: recId,
 					nonce: nonce
 				}, function(response) {
@@ -774,22 +774,22 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public static function ajax_dismiss_recommendation(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_recommendations' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_recommendations' );
 
-		$rec_id = \WPS\CoreSupport\wps_get_post_key( 'rec_id' );
+		$rec_id = \WPS\CoreSupport\WPSHADOW_get_post_key( 'rec_id' );
 
 		if ( empty( $rec_id ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid recommendation ID', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid recommendation ID', 'plugin-wpshadow' ) ) );
 		}
 
-		$dismissed = $this->get_setting( 'wps_dismissed_recommendations', array( ) );
+		$dismissed = $this->get_setting( 'wpshadow_dismissed_recommendations', array( ) );
 		if ( ! is_array( $dismissed ) ) {
 			$dismissed = array();
 		}
 
 		if ( ! in_array( $rec_id, $dismissed, true ) ) {
 			$dismissed[] = $rec_id;
-			$this->update_setting( 'wps_dismissed_recommendations', $dismissed  );
+			$this->update_setting( 'wpshadow_dismissed_recommendations', $dismissed  );
 		}
 
 		wp_send_json_success();
@@ -803,8 +803,8 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 	public static function register_admin_page(): void {
 		add_submenu_page(
 			'wp-support',
-			__( 'Smart Recommendations', 'plugin-wp-support-thisismyurl' ),
-			__( 'Recommendations', 'plugin-wp-support-thisismyurl' ),
+			__( 'Smart Recommendations', 'plugin-wpshadow' ),
+			__( 'Recommendations', 'plugin-wpshadow' ),
 			'manage_options',
 			'wps-recommendations',
 			array( __CLASS__, 'render_admin_page' )
@@ -818,7 +818,7 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 	 */
 	public static function render_admin_page(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wpshadow' ) );
 		}
 
 		$recommendations = self::get_recommendations();
@@ -826,39 +826,39 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Smart Recommendations', 'plugin-wp-support-thisismyurl' ); ?></h1>
+			<h1><?php esc_html_e( 'Smart Recommendations', 'plugin-wpshadow' ); ?></h1>
 			
 			<div class="wps-recommendations-header" style="margin-bottom: 20px; padding: 15px; background: #fff; border-left: 4px solid #2271b1;">
-				<h2><?php esc_html_e( 'Your Site Profile', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( 'Your Site Profile', 'plugin-wpshadow' ); ?></h2>
 				<p>
-					<strong><?php esc_html_e( 'Site Type:', 'plugin-wp-support-thisismyurl' ); ?></strong> <?php echo esc_html( ucfirst( $classification['type'] ?? 'blog' ) ); ?><br>
-					<strong><?php esc_html_e( 'Complexity:', 'plugin-wp-support-thisismyurl' ); ?></strong> <?php echo esc_html( ucfirst( $classification['complexity'] ?? 'simple' ) ); ?><br>
-					<strong><?php esc_html_e( 'Traffic Level:', 'plugin-wp-support-thisismyurl' ); ?></strong> <?php echo esc_html( ucfirst( $classification['traffic_level'] ?? 'low' ) ); ?><br>
-					<strong><?php esc_html_e( 'Security Score:', 'plugin-wp-support-thisismyurl' ); ?></strong> <?php echo esc_html( $classification['security_score'] ?? 50 ); ?>/100
+					<strong><?php esc_html_e( 'Site Type:', 'plugin-wpshadow' ); ?></strong> <?php echo esc_html( ucfirst( $classification['type'] ?? 'blog' ) ); ?><br>
+					<strong><?php esc_html_e( 'Complexity:', 'plugin-wpshadow' ); ?></strong> <?php echo esc_html( ucfirst( $classification['complexity'] ?? 'simple' ) ); ?><br>
+					<strong><?php esc_html_e( 'Traffic Level:', 'plugin-wpshadow' ); ?></strong> <?php echo esc_html( ucfirst( $classification['traffic_level'] ?? 'low' ) ); ?><br>
+					<strong><?php esc_html_e( 'Security Score:', 'plugin-wpshadow' ); ?></strong> <?php echo esc_html( $classification['security_score'] ?? 50 ); ?>/100
 				</p>
 				<p>
-					<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=wps-recommendations&action=refresh' ), 'wps_refresh_recommendations' ) ); ?>" class="button">
-						<?php esc_html_e( 'Refresh Recommendations', 'plugin-wp-support-thisismyurl' ); ?>
+					<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=wps-recommendations&action=refresh' ), 'wpshadow_refresh_recommendations' ) ); ?>" class="button">
+						<?php esc_html_e( 'Refresh Recommendations', 'plugin-wpshadow' ); ?>
 					</a>
 				</p>
 			</div>
 			
-			<?php if ( isset( $_GET['action'] ) && 'refresh' === $_GET['action'] && check_admin_referer( 'wps_refresh_recommendations' ) ) : ?>
+			<?php if ( isset( $_GET['action'] ) && 'refresh' === $_GET['action'] && check_admin_referer( 'wpshadow_refresh_recommendations' ) ) : ?>
 				<?php
 				self::refresh_recommendations();
 				$recommendations = self::get_recommendations();
 				?>
 				<div class="notice notice-success is-dismissible">
-					<p><?php esc_html_e( 'Recommendations refreshed successfully.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					<p><?php esc_html_e( 'Recommendations refreshed successfully.', 'plugin-wpshadow' ); ?></p>
 				</div>
 			<?php endif; ?>
 			
 			<?php if ( empty( $recommendations ) ) : ?>
 				<div class="notice notice-info">
-					<p><?php esc_html_e( 'No recommendations at this time. Your site is well optimized!', 'plugin-wp-support-thisismyurl' ); ?></p>
+					<p><?php esc_html_e( 'No recommendations at this time. Your site is well optimized!', 'plugin-wpshadow' ); ?></p>
 				</div>
 			<?php else : ?>
-				<h2><?php esc_html_e( 'Recommendations (by Priority)', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( 'Recommendations (by Priority)', 'plugin-wpshadow' ); ?></h2>
 				
 				<?php
 				// Group by type.
@@ -880,27 +880,27 @@ class WPS_Feature_Smart_Recommendations extends WPS_Abstract_Feature {
 						continue;
 					}
 					?>
-					<h3><?php echo esc_html( ucfirst( $type ) . ' ' . __( 'Recommendations', 'plugin-wp-support-thisismyurl' ) ); ?></h3>
+					<h3><?php echo esc_html( ucfirst( $type ) . ' ' . __( 'Recommendations', 'plugin-wpshadow' ) ); ?></h3>
 					
 					<?php foreach ( $recs as $rec ) : ?>
 						<div class="wps-recommendation" style="margin-bottom: 20px; padding: 15px; background: #fff; border-left: 4px solid #<?php echo 'critical' === $rec['impact'] ? 'd63638' : ( 'high' === $rec['impact'] ? 'dba617' : '2271b1' ); ?>;">
 							<h4><?php echo esc_html( $rec['title'] ?? '' ); ?></h4>
 							<p><?php echo esc_html( $rec['description'] ?? '' ); ?></p>
 							<div style="margin: 10px 0; font-size: 13px; color: #646970;">
-								<strong><?php esc_html_e( 'Impact:', 'plugin-wp-support-thisismyurl' ); ?></strong> <?php echo esc_html( ucfirst( $rec['impact'] ?? 'medium' ) ); ?> |
-								<strong><?php esc_html_e( 'Difficulty:', 'plugin-wp-support-thisismyurl' ); ?></strong> <?php echo esc_html( ucfirst( $rec['difficulty'] ?? 'moderate' ) ); ?> |
-								<strong><?php esc_html_e( 'Cost:', 'plugin-wp-support-thisismyurl' ); ?></strong> <?php echo esc_html( $rec['cost'] ?? 'unknown' ); ?> |
-								<strong><?php esc_html_e( 'Priority Score:', 'plugin-wp-support-thisismyurl' ); ?></strong> <?php echo esc_html( $rec['priority_score'] ?? 0 ); ?>/100
+								<strong><?php esc_html_e( 'Impact:', 'plugin-wpshadow' ); ?></strong> <?php echo esc_html( ucfirst( $rec['impact'] ?? 'medium' ) ); ?> |
+								<strong><?php esc_html_e( 'Difficulty:', 'plugin-wpshadow' ); ?></strong> <?php echo esc_html( ucfirst( $rec['difficulty'] ?? 'moderate' ) ); ?> |
+								<strong><?php esc_html_e( 'Cost:', 'plugin-wpshadow' ); ?></strong> <?php echo esc_html( $rec['cost'] ?? 'unknown' ); ?> |
+								<strong><?php esc_html_e( 'Priority Score:', 'plugin-wpshadow' ); ?></strong> <?php echo esc_html( $rec['priority_score'] ?? 0 ); ?>/100
 							</div>
 							<?php if ( ! empty( $rec['estimated_gain'] ) ) : ?>
 								<div style="margin: 10px 0; padding: 10px; background: #f0f6fc; border-radius: 3px;">
-									<strong><?php esc_html_e( 'Expected Result:', 'plugin-wp-support-thisismyurl' ); ?></strong> <?php echo esc_html( $rec['estimated_gain'] ); ?>
+									<strong><?php esc_html_e( 'Expected Result:', 'plugin-wpshadow' ); ?></strong> <?php echo esc_html( $rec['estimated_gain'] ); ?>
 								</div>
 							<?php endif; ?>
 							<div style="margin-top: 10px;">
 								<?php if ( ! empty( $rec['action_url'] ) ) : ?>
 									<a href="<?php echo esc_url( $rec['action_url'] ); ?>" class="button button-primary">
-										<?php echo esc_html( $rec['action_label'] ?? __( 'Take Action', 'plugin-wp-support-thisismyurl' ) ); ?>
+										<?php echo esc_html( $rec['action_label'] ?? __( 'Take Action', 'plugin-wpshadow' ) ); ?>
 									</a>
 								<?php endif; ?>
 							</div>

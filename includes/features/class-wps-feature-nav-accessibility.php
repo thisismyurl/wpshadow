@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * WPS_Feature_Nav_Accessibility
+ * WPSHADOW_Feature_Nav_Accessibility
  *
  * Improves navigation accessibility and reduces HTML bloat.
  */
-final class WPS_Feature_Nav_Accessibility extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Nav_Accessibility extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -27,14 +27,14 @@ final class WPS_Feature_Nav_Accessibility extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'nav-accessibility',
-				'name'               => __( 'Navigation Menu Accessibility & Class Simplification', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Make your navigation easier for everyone to use, including people with disabilities', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Navigation Menu Accessibility & Class Simplification', 'plugin-wpshadow' ),
+				'description'        => __( 'Make your navigation easier for everyone to use, including people with disabilities', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'accessibility',
-				'widget_label'       => __( 'Accessibility', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Improve site accessibility for all users', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Accessibility', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Improve site accessibility for all users', 'plugin-wpshadow' ),
 			)
 		);
 	}
@@ -61,7 +61,7 @@ final class WPS_Feature_Nav_Accessibility extends WPS_Abstract_Feature {
 	 * @return array Modified menu items.
 	 */
 	public function optimize_menu_output( array $items, $args ): array {
-		$options = (array) $this->get_setting( 'wps_nav_accessibility_options', $this->get_default_options( ) );
+		$options = (array) $this->get_setting( 'wpshadow_nav_accessibility_options', $this->get_default_options( ) );
 
 		foreach ( $items as $item ) {
 			// Add ARIA attributes.
@@ -87,7 +87,7 @@ final class WPS_Feature_Nav_Accessibility extends WPS_Abstract_Feature {
 	 *
 	 * @return array Default options.
 	 */
-	private function get_default_options(): array {
+	protected function get_default_options(): array {
 		return array(
 			'add_aria_current' => true,
 			'simplify_classes' => true,

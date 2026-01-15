@@ -13,11 +13,11 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * WPS_Script_Utils
+ * WPSHADOW_Script_Utils
  *
  * Utility functions for script analysis and optimization.
  */
-final class WPS_Script_Utils {
+final class WPSHADOW_Script_Utils {
 
 	/**
 	 * Known plugin prefixes and their display names.

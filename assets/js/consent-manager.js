@@ -15,18 +15,18 @@
 		
 		// Check if consent has been given (accepted or custom)
 		hasConsent: function() {
-			var status = localStorage.getItem('wps_cookie_consent');
+			var status = localStorage.getItem('wpshadow_cookie_consent');
 			return status === 'accepted' || status === 'custom';
 		},
 
 		// Check if consent has been rejected
 		hasRejected: function() {
-			return localStorage.getItem('wps_cookie_consent') === 'rejected';
+			return localStorage.getItem('wpshadow_cookie_consent') === 'rejected';
 		},
 
 		// Get specific consent preferences
 		getPreferences: function() {
-			var prefs = localStorage.getItem('wps_cookie_preferences');
+			var prefs = localStorage.getItem('wpshadow_cookie_preferences');
 			if (!prefs) {
 				return {
 					essential: true,
@@ -47,12 +47,12 @@
 
 		// Set consent status
 		setConsent: function(status) {
-			localStorage.setItem('wps_cookie_consent', status);
+			localStorage.setItem('wpshadow_cookie_consent', status);
 			
 			// Set cookie for server-side detection with secure flag if HTTPS
 			var expiryDate = new Date();
 			expiryDate.setFullYear(expiryDate.getFullYear() + 1);
-			var cookieStr = 'wps_cookie_consent=' + status + '; expires=' + expiryDate.toUTCString() + '; path=/; SameSite=Lax';
+			var cookieStr = 'wpshadow_cookie_consent=' + status + '; expires=' + expiryDate.toUTCString() + '; path=/; SameSite=Lax';
 			
 			// Add Secure flag if available from localized data or detect HTTPS
 			if ((window.wpsConsentData && window.wpsConsentData.isSecure) || window.location.protocol === 'https:') {
@@ -64,12 +64,12 @@
 
 		// Save specific preferences
 		savePreferences: function(prefs) {
-			localStorage.setItem('wps_cookie_preferences', JSON.stringify(prefs));
+			localStorage.setItem('wpshadow_cookie_preferences', JSON.stringify(prefs));
 			
 			// Set cookie for server-side detection with secure flag if HTTPS
 			var expiryDate = new Date();
 			expiryDate.setFullYear(expiryDate.getFullYear() + 1);
-			var cookieStr = 'wps_cookie_preferences=' + encodeURIComponent(JSON.stringify(prefs)) + '; expires=' + expiryDate.toUTCString() + '; path=/; SameSite=Lax';
+			var cookieStr = 'wpshadow_cookie_preferences=' + encodeURIComponent(JSON.stringify(prefs)) + '; expires=' + expiryDate.toUTCString() + '; path=/; SameSite=Lax';
 			
 			// Add Secure flag if available from localized data or detect HTTPS
 			if ((window.wpsConsentData && window.wpsConsentData.isSecure) || window.location.protocol === 'https:') {
@@ -172,7 +172,7 @@
 		// Initialize the consent manager
 		init: function() {
 			// Check if consent decision already made (including custom)
-			var consentStatus = localStorage.getItem('wps_cookie_consent');
+			var consentStatus = localStorage.getItem('wpshadow_cookie_consent');
 			if (consentStatus === 'accepted' || consentStatus === 'custom' || consentStatus === 'rejected') {
 				this.hideBanner();
 				return;

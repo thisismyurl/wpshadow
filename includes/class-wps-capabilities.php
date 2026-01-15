@@ -2,7 +2,7 @@
 /**
  * Capability mapping for WPS modules.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
 declare(strict_types=1);
@@ -16,8 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Capability manager maps module capabilities to WordPress capabilities.
  */
-class WPS_Capabilities {
-	private const OPTION_KEY = 'WPS_capability_map';
+class WPSHADOW_Capabilities {
+	private const OPTION_KEY = 'wpshadow_capability_map';
 
 	/**
 	 * Register a capability mapping.

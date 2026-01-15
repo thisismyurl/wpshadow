@@ -5,7 +5,7 @@
  * Allows plugins to register and check for capabilities/features they provide or require.
  * This enables flexible dependency management without hardcoding plugin names.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
 declare(strict_types=1);
@@ -21,14 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages registration, discovery, and toggle state for features.
  */
-class WPS_Feature_Registry {
-	private const OPTION_KEY_SITE    = 'WPS_feature_toggles';
-	private const OPTION_KEY_NETWORK = 'WPS_feature_toggles_network';
+class WPSHADOW_Feature_Registry {
+	private const OPTION_KEY_SITE    = 'wpshadow_feature_toggles';
+	private const OPTION_KEY_NETWORK = 'wpshadow_feature_toggles_network';
 
 	/**
 	 * Registered feature instances (class-based).
 	 *
-	 * @var array<string, WPS_Feature_Interface>
+	 * @var array<string, WPSHADOW_Feature_Interface>
 	 */
 	private static array $feature_objects = array();
 
@@ -80,7 +80,7 @@ class WPS_Feature_Registry {
 	 */
 	public static function trigger_registration(): void {
 
-		do_action( 'WPS_register_features' );
+		do_action( 'wpshadow_register_features' );
 
 		// After registration, initialize features that have a register() method.
 		foreach ( self::$feature_objects as $feature ) {
@@ -94,12 +94,12 @@ class WPS_Feature_Registry {
 	 * Register a feature provided by a plugin.
 	 * Accepts either a Feature Interface implementation or legacy array payload.
 	 *
-	 * @param WPS_Feature_Interface|string $feature Feature instance or identifier.
+	 * @param WPSHADOW_Feature_Interface|string $feature Feature instance or identifier.
 	 * @param array<string, mixed>         $data    Optional metadata (legacy path).
 	 * @return void
 	 */
 	public static function register_feature( $feature, array $data = array() ): void {
-		if ( $feature instanceof WPS_Feature_Interface ) {
+		if ( $feature instanceof WPSHADOW_Feature_Interface ) {
 			$feature_id                           = $feature->get_id();
 			self::$feature_objects[ $feature_id ] = $feature;
 			self::$feature_data[ $feature_id ]    = self::feature_to_array( $feature );
@@ -359,11 +359,11 @@ class WPS_Feature_Registry {
 	/**
 	 * Convert a feature object to an array with resolved state.
 	 *
-	 * @param WPS_Feature_Interface $feature Feature instance.
+	 * @param WPSHADOW_Feature_Interface $feature Feature instance.
 	 * @param bool                  $network Whether to read network scope.
 	 * @return array<string, mixed>
 	 */
-	private static function feature_to_array( WPS_Feature_Interface $feature, bool $network = false ): array {
+	private static function feature_to_array( WPSHADOW_Feature_Interface $feature, bool $network = false ): array {
 		$scope = $feature->get_scope();
 
 		return array(
@@ -398,7 +398,7 @@ class WPS_Feature_Registry {
 	 * @return void
 	 */
 	public static function auto_discover_features(): void {
-		$features_dir = WP_PLUGIN_DIR . '/plugin-wp-support-thisismyurl/includes/features';
+		$features_dir = WP_PLUGIN_DIR . '/plugin-wpshadow/includes/features';
 
 		if ( ! is_dir( $features_dir ) ) {
 			return;
@@ -414,7 +414,7 @@ class WPS_Feature_Registry {
 			$basename   = basename( $file, '.php' );
 			$class_name = str_replace( 'class-', '', $basename );
 			$class_name = str_replace( '-', '_', $class_name );
-			$class_name = 'WPS\\CoreSupport\\' . ucwords( $class_name, '_' );
+			$class_name = 'WPShadow\\' . ucwords( $class_name, '_' );
 
 			// Load the file if not already loaded.
 			if ( ! class_exists( $class_name ) ) {
@@ -422,7 +422,7 @@ class WPS_Feature_Registry {
 			}
 
 			// Instantiate and register if it implements the interface.
-			if ( class_exists( $class_name ) && is_subclass_of( $class_name, 'WPS\\CoreSupport\\WPS_Feature_Interface' ) ) {
+			if ( class_exists( $class_name ) && is_subclass_of( $class_name, 'WPShadow\\WPSHADOW_Feature_Interface' ) ) {
 				try {
 					$feature = new $class_name();
 					self::register_feature( $feature );

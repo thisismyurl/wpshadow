@@ -10,7 +10,7 @@
  * - CPU cycles saved
  * - Time saved (hours)
  *
- * @package wp_support_Support
+ * @package wpshadow_Support
  * @since 1.0.0
  */
 
@@ -25,22 +25,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Weekly Performance Report Feature Class
  */
-class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
+class WPSHADOW_Feature_Weekly_Performance_Report extends WPSHADOW_Abstract_Feature {
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                 => 'wps_weekly_performance_report',
-				'name'               => __( 'Weekly Performance Report', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Sends weekly email reports with performance metrics and improvements.', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'wpshadow_weekly_performance_report',
+				'name'               => __( 'Weekly Performance Report', 'plugin-wpshadow' ),
+				'description'        => __( 'Sends weekly email reports with performance metrics and improvements.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'version'            => '1.0.0',
 				'default_enabled'    => false,
 				'widget_group'       => 'diagnostics',
-				'widget_label'       => __( 'Diagnostics & Monitoring', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Health checks and monitoring features', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Diagnostics & Monitoring', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Health checks and monitoring features', 'plugin-wpshadow' ),
 			)
 		);
 
@@ -60,17 +60,17 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 	/**
 	 * Option key for storing weekly metrics.
 	 */
-	private const METRICS_OPTION_KEY = 'wps_weekly_performance_metrics';
+	private const METRICS_OPTION_KEY = 'wpshadow_weekly_performance_metrics';
 
 	/**
 	 * Option key for storing report settings.
 	 */
-	private const SETTINGS_OPTION_KEY = 'wps_weekly_performance_settings';
+	private const SETTINGS_OPTION_KEY = 'wpshadow_weekly_performance_settings';
 
 	/**
 	 * Cron hook for weekly report generation.
 	 */
-	private const CRON_HOOK = 'wps_send_weekly_performance_report';
+	private const CRON_HOOK = 'wpshadow_send_weekly_performance_report';
 
 	/**
 	 * Initialize the feature.
@@ -95,12 +95,12 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 
 		// Hook into various WordPress actions to track metrics.
 		add_action( 'wp_loaded', array( __CLASS__, 'track_uptime' ) );
-		add_action( 'WPS_issue_resolved', array( __CLASS__, 'track_issue_resolved' ), 10, 1 );
-		add_action( 'WPS_performance_improvement', array( __CLASS__, 'track_performance_improvement' ), 10, 2 );
+		add_action( 'wpshadow_issue_resolved', array( __CLASS__, 'track_issue_resolved' ), 10, 1 );
+		add_action( 'wpshadow_performance_improvement', array( __CLASS__, 'track_performance_improvement' ), 10, 2 );
 
 		// Admin interface hooks.
 		add_action( 'admin_menu', array( __CLASS__, 'add_admin_menu' ) );
-		add_action( 'wp_ajax_wps_view_weekly_report', array( __CLASS__, 'ajax_view_report' ) );
+		add_action( 'wp_ajax_WPSHADOW_view_weekly_report', array( __CLASS__, 'ajax_view_report' ) );
 	}
 
 	/**
@@ -118,7 +118,7 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 	 * @return string
 	 */
 	public function get_name(): string {
-		return __( 'Weekly Performance Report', 'plugin-wp-support-thisismyurl' );
+		return __( 'Weekly Performance Report', 'plugin-wpshadow' );
 	}
 
 	/**
@@ -127,7 +127,7 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 	 * @return string
 	 */
 	public function get_description(): string {
-		return __( 'Generates and sends weekly visual performance reports showing uptime, speed improvements, issues fixed, and savings metrics.', 'plugin-wp-support-thisismyurl' );
+		return __( 'Generates and sends weekly visual performance reports showing uptime, speed improvements, issues fixed, and savings metrics.', 'plugin-wpshadow' );
 	}
 
 	/**
@@ -139,7 +139,7 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 	public static function add_weekly_cron_schedule( array $schedules ): array {
 		$schedules['weekly'] = array(
 			'interval' => WEEK_IN_SECONDS,
-			'display'  => __( 'Once Weekly', 'plugin-wp-support-thisismyurl' ),
+			'display'  => __( 'Once Weekly', 'plugin-wpshadow' ),
 		);
 		return $schedules;
 	}
@@ -199,12 +199,12 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 	 */
 	public static function track_uptime(): void {
 		// Only track once per hour to avoid excessive checks.
-		$last_check = get_transient( 'wps_last_uptime_check' );
+		$last_check = get_transient( 'wpshadow_last_uptime_check' );
 		if ( false !== $last_check ) {
 			return;
 		}
 
-		set_transient( 'wps_last_uptime_check', time(), HOUR_IN_SECONDS );
+		set_transient( 'wpshadow_last_uptime_check', time(), HOUR_IN_SECONDS );
 
 		$instance = new self();
 		$metrics  = $instance->get_setting( self::METRICS_OPTION_KEY, array() );
@@ -313,7 +313,7 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 		<head>
 			<meta charset="utf-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1.0">
-			<title><?php esc_html_e( 'Weekly Performance Report', 'plugin-wp-support-thisismyurl' ); ?></title>
+			<title><?php esc_html_e( 'Weekly Performance Report', 'plugin-wpshadow' ); ?></title>
 			<style>
 				body {
 					font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
@@ -409,7 +409,7 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 		<body>
 			<div class="report-container">
 				<div class="report-header">
-					<h1><?php esc_html_e( '📊 Weekly Performance Report', 'plugin-wp-support-thisismyurl' ); ?></h1>
+					<h1><?php esc_html_e( '📊 Weekly Performance Report', 'plugin-wpshadow' ); ?></h1>
 					<div class="date-range"><?php echo esc_html( $week_start . ' - ' . $week_end ); ?></div>
 				</div>
 
@@ -417,48 +417,48 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 					<div class="metric-card">
 						<div class="icon">⏰</div>
 						<div class="value"><?php echo esc_html( $time_saved_hours ); ?></div>
-						<div class="label"><?php esc_html_e( 'Hours Saved', 'plugin-wp-support-thisismyurl' ); ?></div>
+						<div class="label"><?php esc_html_e( 'Hours Saved', 'plugin-wpshadow' ); ?></div>
 					</div>
 
 					<div class="metric-card">
 						<div class="icon">💾</div>
 						<div class="value"><?php echo esc_html( $data_saved_mb ); ?></div>
-						<div class="label"><?php esc_html_e( 'MB Data Saved', 'plugin-wp-support-thisismyurl' ); ?></div>
+						<div class="label"><?php esc_html_e( 'MB Data Saved', 'plugin-wpshadow' ); ?></div>
 					</div>
 
 					<div class="metric-card">
 						<div class="icon">🔧</div>
 						<div class="value"><?php echo esc_html( $metrics['issues_fixed'] ); ?></div>
-						<div class="label"><?php esc_html_e( 'Issues Fixed', 'plugin-wp-support-thisismyurl' ); ?></div>
+						<div class="label"><?php esc_html_e( 'Issues Fixed', 'plugin-wpshadow' ); ?></div>
 					</div>
 
 					<div class="metric-card">
 						<div class="icon">⚡</div>
 						<div class="value"><?php echo esc_html( number_format( $uptime_percentage, 1 ) ); ?>%</div>
-						<div class="label"><?php esc_html_e( 'Uptime', 'plugin-wp-support-thisismyurl' ); ?></div>
+						<div class="label"><?php esc_html_e( 'Uptime', 'plugin-wpshadow' ); ?></div>
 					</div>
 
 					<div class="metric-card">
 						<div class="icon">🚀</div>
 						<div class="value"><?php echo esc_html( $metrics['speed_improvements'] ); ?></div>
-						<div class="label"><?php esc_html_e( 'Speed Improvements', 'plugin-wp-support-thisismyurl' ); ?></div>
+						<div class="label"><?php esc_html_e( 'Speed Improvements', 'plugin-wpshadow' ); ?></div>
 					</div>
 
 					<div class="metric-card">
 						<div class="icon">🔄</div>
 						<div class="value"><?php echo esc_html( $cpu_cycles ); ?></div>
-						<div class="label"><?php esc_html_e( 'CPU Cycles Saved', 'plugin-wp-support-thisismyurl' ); ?></div>
+						<div class="label"><?php esc_html_e( 'CPU Cycles Saved', 'plugin-wpshadow' ); ?></div>
 					</div>
 				</div>
 
 				<div class="highlights">
-					<h2><?php esc_html_e( '✨ This Week\'s Highlights', 'plugin-wp-support-thisismyurl' ); ?></h2>
+					<h2><?php esc_html_e( '✨ This Week\'s Highlights', 'plugin-wpshadow' ); ?></h2>
 
 					<?php if ( $time_saved_hours > 0 ) : ?>
 					<div class="highlight-item">
 						<?php
 						// translators: %s: hours saved this week.
-						echo wp_kses_post( sprintf( __( '<strong>You saved %s hours this week!</strong> That\'s time you can spend on what matters most.', 'plugin-wp-support-thisismyurl' ), $time_saved_hours ) );
+						echo wp_kses_post( sprintf( __( '<strong>You saved %s hours this week!</strong> That\'s time you can spend on what matters most.', 'plugin-wpshadow' ), $time_saved_hours ) );
 						?>
 					</div>
 					<?php endif; ?>
@@ -467,7 +467,7 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 					<div class="highlight-item">
 						<?php
 						// translators: %s: MB of data saved this week.
-						echo wp_kses_post( sprintf( __( '<strong>You saved %s MB of data this week!</strong> Optimized images and efficient caching are keeping your site lean.', 'plugin-wp-support-thisismyurl' ), $data_saved_mb ) );
+						echo wp_kses_post( sprintf( __( '<strong>You saved %s MB of data this week!</strong> Optimized images and efficient caching are keeping your site lean.', 'plugin-wpshadow' ), $data_saved_mb ) );
 						?>
 					</div>
 					<?php endif; ?>
@@ -476,7 +476,7 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 					<div class="highlight-item">
 						<?php
 						// translators: %s: CPU cycles saved this week.
-						echo wp_kses_post( sprintf( __( '<strong>You saved %s CPU cycles this week!</strong> Your server is running more efficiently thanks to code optimizations.', 'plugin-wp-support-thisismyurl' ), $cpu_cycles ) );
+						echo wp_kses_post( sprintf( __( '<strong>You saved %s CPU cycles this week!</strong> Your server is running more efficiently thanks to code optimizations.', 'plugin-wpshadow' ), $cpu_cycles ) );
 						?>
 					</div>
 					<?php endif; ?>
@@ -485,7 +485,7 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 					<div class="highlight-item">
 						<?php
 						// translators: %s: number of issues fixed.
-						echo wp_kses_post( sprintf( __( '<strong>Fixed %s issues</strong> automatically, keeping your site running smoothly.', 'plugin-wp-support-thisismyurl' ), $metrics['issues_fixed'] ) );
+						echo wp_kses_post( sprintf( __( '<strong>Fixed %s issues</strong> automatically, keeping your site running smoothly.', 'plugin-wpshadow' ), $metrics['issues_fixed'] ) );
 						?>
 					</div>
 					<?php endif; ?>
@@ -494,15 +494,15 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 					<div class="highlight-item">
 						<?php
 						// translators: %s: uptime percentage.
-						echo wp_kses_post( sprintf( __( '<strong>%s%% uptime</strong> - Your site was rock solid this week!', 'plugin-wp-support-thisismyurl' ), number_format( $uptime_percentage, 1 ) ) );
+						echo wp_kses_post( sprintf( __( '<strong>%s%% uptime</strong> - Your site was rock solid this week!', 'plugin-wpshadow' ), number_format( $uptime_percentage, 1 ) ) );
 						?>
 					</div>
 					<?php endif; ?>
 				</div>
 
 				<div class="footer">
-					<p><?php esc_html_e( 'Powered by WP Support (thisismyurl)', 'plugin-wp-support-thisismyurl' ); ?></p>
-					<p><a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support' ) ); ?>"><?php esc_html_e( 'View Dashboard', 'plugin-wp-support-thisismyurl' ); ?></a></p>
+					<p><?php esc_html_e( 'Powered by WPShadow', 'plugin-wpshadow' ); ?></p>
+					<p><a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support' ) ); ?>"><?php esc_html_e( 'View Dashboard', 'plugin-wpshadow' ); ?></a></p>
 				</div>
 			</div>
 		</body>
@@ -537,7 +537,7 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 
 		$subject = sprintf(
 			/* translators: %s: site name */
-			__( 'Weekly Performance Report - %s', 'plugin-wp-support-thisismyurl' ),
+			__( 'Weekly Performance Report - %s', 'plugin-wpshadow' ),
 			get_bloginfo( 'name' )
 		);
 
@@ -551,9 +551,9 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 		}
 
 		// Log the report generation.
-		WPS_Activity_Logger::log_event(
-			WPS_Activity_Logger::EVENT_SETTINGS_CHANGED,
-			__( 'Weekly performance report sent', 'plugin-wp-support-thisismyurl' ),
+		WPSHADOW_Activity_Logger::log_event(
+			WPSHADOW_Activity_Logger::EVENT_SETTINGS_CHANGED,
+			__( 'Weekly performance report sent', 'plugin-wpshadow' ),
 			array(
 				'recipients' => count( $recipient_emails ),
 				'week'       => $week_key,
@@ -569,8 +569,8 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 	public static function add_admin_menu(): void {
 		add_submenu_page(
 			'wp-support',
-			__( 'Performance Reports', 'plugin-wp-support-thisismyurl' ),
-			__( 'Performance Reports', 'plugin-wp-support-thisismyurl' ),
+			__( 'Performance Reports', 'plugin-wpshadow' ),
+			__( 'Performance Reports', 'plugin-wpshadow' ),
 			'manage_options',
 			'wps-performance-reports',
 			array( __CLASS__, 'render_admin_page' )
@@ -584,7 +584,7 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 	 */
 	public static function render_admin_page(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wpshadow' ) );
 		}
 
 		$metrics     = self::get_current_week_metrics();
@@ -592,22 +592,22 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Weekly Performance Reports', 'plugin-wp-support-thisismyurl' ); ?></h1>
+			<h1><?php esc_html_e( 'Weekly Performance Reports', 'plugin-wpshadow' ); ?></h1>
 
 			<div class="wps-report-viewer" style="margin-top: 20px;">
 				<?php echo $report_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</div>
 
 			<div class="wps-report-settings" style="margin-top: 30px; padding: 20px; background: #fff; border: 1px solid #ccc; border-radius: 4px;">
-				<h2><?php esc_html_e( 'Report Settings', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( 'Report Settings', 'plugin-wpshadow' ); ?></h2>
 				<form method="post" action="options.php">
 					<?php
-					settings_fields( 'wps_performance_report_settings' );
-					do_settings_sections( 'wps_performance_report_settings' );
+					settings_fields( 'wpshadow_performance_report_settings' );
+					do_settings_sections( 'wpshadow_performance_report_settings' );
 					?>
 					<table class="form-table">
 						<tr>
-							<th scope="row"><?php esc_html_e( 'Send Weekly Reports', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th scope="row"><?php esc_html_e( 'Send Weekly Reports', 'plugin-wpshadow' ); ?></th>
 							<td>
 								<?php
 								$settings = get_option( self::SETTINGS_OPTION_KEY, array() );
@@ -615,7 +615,7 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 								?>
 								<label>
 									<input type="checkbox" name="<?php echo esc_attr( self::SETTINGS_OPTION_KEY ); ?>[enabled]" value="1" <?php checked( $enabled, true ); ?> />
-									<?php esc_html_e( 'Enable weekly performance report emails', 'plugin-wp-support-thisismyurl' ); ?>
+									<?php esc_html_e( 'Enable weekly performance report emails', 'plugin-wpshadow' ); ?>
 								</label>
 							</td>
 						</tr>
@@ -633,7 +633,7 @@ class WPS_Feature_Weekly_Performance_Report extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public static function ajax_view_report(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_view_report' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_view_report' );
 
 		$metrics     = self::get_current_week_metrics();
 		$report_html = self::generate_report_html( $metrics );

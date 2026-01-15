@@ -2,7 +2,7 @@
 /**
  * Health item renderer for standardized health check output.
  *
- * @package WPS_WP_SUPPORT_THISISMYURL
+ * @package WPSHADOW_wpshadow_THISISMYURL
  */
 
 declare(strict_types=1);
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Health item renderer to eliminate duplication in health check results.
  */
-class WPS_Health_Renderer {
+class WPSHADOW_Health_Renderer {
 	/**
 	 * Build a standardized health check result array.
 	 *
@@ -40,7 +40,7 @@ class WPS_Health_Renderer {
 			'label'       => $label,
 			'status'      => $status,
 			'badge'       => array(
-				'label' => __( 'WPS Suite', 'plugin-wp-support-thisismyurl' ),
+				'label' => __( 'WPS Suite', 'plugin-wpshadow' ),
 				'color' => $badge_color,
 			),
 			'description' => sprintf( '<p>%s</p>', $description ),
@@ -65,4 +65,4 @@ class WPS_Health_Renderer {
 	}
 }
 
-/* @changelog Introduce WPS_Health_Renderer to standardize health check result formatting. */
+/* @changelog Introduce WPSHADOW_Health_Renderer to standardize health check result formatting. */

@@ -2,7 +2,7 @@
 /**
  * Performance Monitoring Dashboard View
  *
- * @package WPS_CoreSupport
+ * @package WPSHADOW_CoreSupport
  */
 
 declare(strict_types=1);
@@ -15,21 +15,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Check permissions.
 if ( ! current_user_can( 'manage_options' ) ) {
-	wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
+	wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wpshadow' ) );
 }
 
 // Get current tab.
 $current_tab = isset( $_GET['perf_tab'] ) ? sanitize_key( $_GET['perf_tab'] ) : 'overview'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 // Get performance data.
-$metrics         = WPS_Performance_Monitor::get_current_metrics();
-$score_data      = WPS_Performance_Monitor::calculate_performance_score();
-$recommendations = WPS_Performance_Monitor::get_recommendations();
-$db_stats        = WPS_Performance_Monitor::get_database_stats();
+$metrics         = WPSHADOW_Performance_Monitor::get_current_metrics();
+$score_data      = WPSHADOW_Performance_Monitor::calculate_performance_score();
+$recommendations = WPSHADOW_Performance_Monitor::get_recommendations();
+$db_stats        = WPSHADOW_Performance_Monitor::get_database_stats();
 
 ?>
 <div class="wrap wps-performance-dashboard">
-	<h1><?php esc_html_e( 'Performance Monitoring Dashboard', 'plugin-wp-support-thisismyurl' ); ?></h1>
+	<h1><?php esc_html_e( 'Performance Monitoring Dashboard', 'plugin-wpshadow' ); ?></h1>
 	
 	<style>
 		.wps-performance-dashboard .nav-tab-wrapper {
@@ -156,14 +156,14 @@ $db_stats        = WPS_Performance_Monitor::get_database_stats();
 
 	<!-- Tab Navigation -->
 	<h2 class="nav-tab-wrapper">
-		<a href="?page=wp-support&WPS_tab=performance&perf_tab=overview" class="nav-tab <?php echo 'overview' === $current_tab ? 'nav-tab-active' : ''; ?>">
-			<?php esc_html_e( 'Overview', 'plugin-wp-support-thisismyurl' ); ?>
+		<a href="?page=wp-support&WPSHADOW_tab=performance&perf_tab=overview" class="nav-tab <?php echo 'overview' === $current_tab ? 'nav-tab-active' : ''; ?>">
+			<?php esc_html_e( 'Overview', 'plugin-wpshadow' ); ?>
 		</a>
-		<a href="?page=wp-support&WPS_tab=performance&perf_tab=database" class="nav-tab <?php echo 'database' === $current_tab ? 'nav-tab-active' : ''; ?>">
-			<?php esc_html_e( 'Database', 'plugin-wp-support-thisismyurl' ); ?>
+		<a href="?page=wp-support&WPSHADOW_tab=performance&perf_tab=database" class="nav-tab <?php echo 'database' === $current_tab ? 'nav-tab-active' : ''; ?>">
+			<?php esc_html_e( 'Database', 'plugin-wpshadow' ); ?>
 		</a>
-		<a href="?page=wp-support&WPS_tab=performance&perf_tab=history" class="nav-tab <?php echo 'history' === $current_tab ? 'nav-tab-active' : ''; ?>">
-			<?php esc_html_e( 'History', 'plugin-wp-support-thisismyurl' ); ?>
+		<a href="?page=wp-support&WPSHADOW_tab=performance&perf_tab=history" class="nav-tab <?php echo 'history' === $current_tab ? 'nav-tab-active' : ''; ?>">
+			<?php esc_html_e( 'History', 'plugin-wpshadow' ); ?>
 		</a>
 	</h2>
 
@@ -174,7 +174,7 @@ $db_stats        = WPS_Performance_Monitor::get_database_stats();
 			<div class="wps-perf-overview">
 				<!-- Performance Score -->
 				<div class="wps-perf-card" style="max-width: 500px; margin: 20px auto;">
-					<h3 style="text-align: center; font-size: 16px;"><?php esc_html_e( 'Performance Score', 'plugin-wp-support-thisismyurl' ); ?></h3>
+					<h3 style="text-align: center; font-size: 16px;"><?php esc_html_e( 'Performance Score', 'plugin-wpshadow' ); ?></h3>
 					
 					<div class="wps-perf-score-ring">
 						<svg width="200" height="200" viewBox="0 0 200 200">
@@ -193,13 +193,13 @@ $db_stats        = WPS_Performance_Monitor::get_database_stats();
 						<p style="margin: 0; font-size: 14px; color: #666;">
 							<?php
 							if ( $score_data['score'] >= 90 ) {
-								esc_html_e( '🎉 Excellent! Your site is performing very well.', 'plugin-wp-support-thisismyurl' );
+								esc_html_e( '🎉 Excellent! Your site is performing very well.', 'plugin-wpshadow' );
 							} elseif ( $score_data['score'] >= 70 ) {
-								esc_html_e( '✅ Good performance. Check recommendations for improvements.', 'plugin-wp-support-thisismyurl' );
+								esc_html_e( '✅ Good performance. Check recommendations for improvements.', 'plugin-wpshadow' );
 							} elseif ( $score_data['score'] >= 50 ) {
-								esc_html_e( '⚠️ Performance needs attention. Review recommendations below.', 'plugin-wp-support-thisismyurl' );
+								esc_html_e( '⚠️ Performance needs attention. Review recommendations below.', 'plugin-wpshadow' );
 							} else {
-								esc_html_e( '🚨 Critical performance issues detected. Immediate action recommended.', 'plugin-wp-support-thisismyurl' );
+								esc_html_e( '🚨 Critical performance issues detected. Immediate action recommended.', 'plugin-wpshadow' );
 							}
 							?>
 						</p>
@@ -207,53 +207,53 @@ $db_stats        = WPS_Performance_Monitor::get_database_stats();
 				</div>
 
 				<!-- Current Metrics -->
-				<h2><?php esc_html_e( '📊 Current Metrics', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( '📊 Current Metrics', 'plugin-wpshadow' ); ?></h2>
 				<div class="wps-perf-grid">
 					<div class="wps-perf-card">
-						<h3><?php esc_html_e( 'Database Queries', 'plugin-wp-support-thisismyurl' ); ?></h3>
+						<h3><?php esc_html_e( 'Database Queries', 'plugin-wpshadow' ); ?></h3>
 						<span class="metric-value"><?php echo esc_html( $metrics['query_count'] ?? 0 ); ?></span>
 						<span class="metric-label">
 							<?php
 							/* translators: %s: query time in seconds */
-							echo esc_html( sprintf( __( '%s sec total time', 'plugin-wp-support-thisismyurl' ), number_format( (float) ( $metrics['query_time'] ?? 0 ), 3 ) ) );
+							echo esc_html( sprintf( __( '%s sec total time', 'plugin-wpshadow' ), number_format( (float) ( $metrics['query_time'] ?? 0 ), 3 ) ) );
 							?>
 						</span>
 					</div>
 
 					<div class="wps-perf-card">
-						<h3><?php esc_html_e( 'Page Load Time', 'plugin-wp-support-thisismyurl' ); ?></h3>
+						<h3><?php esc_html_e( 'Page Load Time', 'plugin-wpshadow' ); ?></h3>
 						<span class="metric-value"><?php echo esc_html( number_format( (float) ( $metrics['load_time'] ?? 0 ), 3 ) ); ?>s</span>
-						<span class="metric-label"><?php esc_html_e( 'Server generation time', 'plugin-wp-support-thisismyurl' ); ?></span>
+						<span class="metric-label"><?php esc_html_e( 'Server generation time', 'plugin-wpshadow' ); ?></span>
 					</div>
 
 					<div class="wps-perf-card">
-						<h3><?php esc_html_e( 'Memory Usage', 'plugin-wp-support-thisismyurl' ); ?></h3>
+						<h3><?php esc_html_e( 'Memory Usage', 'plugin-wpshadow' ); ?></h3>
 						<span class="metric-value"><?php echo esc_html( $metrics['memory_mb'] ?? 0 ); ?> MB</span>
 						<span class="metric-label">
 							<?php
 							$memory_limit = ini_get( 'memory_limit' );
 							/* translators: %s: memory limit */
-							echo esc_html( sprintf( __( 'Limit: %s', 'plugin-wp-support-thisismyurl' ), $memory_limit ) );
+							echo esc_html( sprintf( __( 'Limit: %s', 'plugin-wpshadow' ), $memory_limit ) );
 							?>
 						</span>
 					</div>
 
 					<div class="wps-perf-card">
-						<h3><?php esc_html_e( 'Database Size', 'plugin-wp-support-thisismyurl' ); ?></h3>
+						<h3><?php esc_html_e( 'Database Size', 'plugin-wpshadow' ); ?></h3>
 						<span class="metric-value"><?php echo esc_html( $metrics['db_size'] ?? 0 ); ?> MB</span>
-						<span class="metric-label"><?php esc_html_e( 'Total database size', 'plugin-wp-support-thisismyurl' ); ?></span>
+						<span class="metric-label"><?php esc_html_e( 'Total database size', 'plugin-wpshadow' ); ?></span>
 					</div>
 
 					<div class="wps-perf-card">
-						<h3><?php esc_html_e( 'Active Plugins', 'plugin-wp-support-thisismyurl' ); ?></h3>
+						<h3><?php esc_html_e( 'Active Plugins', 'plugin-wpshadow' ); ?></h3>
 						<span class="metric-value"><?php echo esc_html( $metrics['active_plugins'] ?? 0 ); ?></span>
-						<span class="metric-label"><?php esc_html_e( 'Currently active', 'plugin-wp-support-thisismyurl' ); ?></span>
+						<span class="metric-label"><?php esc_html_e( 'Currently active', 'plugin-wpshadow' ); ?></span>
 					</div>
 				</div>
 
 				<!-- Recommendations -->
 				<?php if ( ! empty( $recommendations ) ) : ?>
-				<h2><?php esc_html_e( '💡 Optimization Recommendations', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( '💡 Optimization Recommendations', 'plugin-wpshadow' ); ?></h2>
 				<ul class="wps-recommendation-list">
 					<?php foreach ( $recommendations as $rec ) : ?>
 						<li class="<?php echo esc_attr( $rec['type'] ); ?>">
@@ -264,47 +264,47 @@ $db_stats        = WPS_Performance_Monitor::get_database_stats();
 				</ul>
 				<?php else : ?>
 				<div class="notice notice-success inline">
-					<p><?php esc_html_e( '✅ No performance issues detected! Your site is running well.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					<p><?php esc_html_e( '✅ No performance issues detected! Your site is running well.', 'plugin-wpshadow' ); ?></p>
 				</div>
 				<?php endif; ?>
 			</div>
 
 		<?php elseif ( 'database' === $current_tab ) : ?>
 			<!-- Database Tab -->
-			<h2><?php esc_html_e( '🗄️ Database Statistics', 'plugin-wp-support-thisismyurl' ); ?></h2>
+			<h2><?php esc_html_e( '🗄️ Database Statistics', 'plugin-wpshadow' ); ?></h2>
 			
 			<div class="wps-perf-grid">
 				<div class="wps-perf-card">
-					<h3><?php esc_html_e( 'Total Size', 'plugin-wp-support-thisismyurl' ); ?></h3>
+					<h3><?php esc_html_e( 'Total Size', 'plugin-wpshadow' ); ?></h3>
 					<span class="metric-value"><?php echo esc_html( $db_stats['total_size'] ); ?> MB</span>
-					<span class="metric-label"><?php esc_html_e( 'All tables combined', 'plugin-wp-support-thisismyurl' ); ?></span>
+					<span class="metric-label"><?php esc_html_e( 'All tables combined', 'plugin-wpshadow' ); ?></span>
 				</div>
 
 				<div class="wps-perf-card">
-					<h3><?php esc_html_e( 'Transients', 'plugin-wp-support-thisismyurl' ); ?></h3>
+					<h3><?php esc_html_e( 'Transients', 'plugin-wpshadow' ); ?></h3>
 					<span class="metric-value"><?php echo esc_html( $db_stats['transient_count'] ); ?></span>
 					<span class="metric-label">
 						<?php
 						/* translators: %d: expired transients count */
-						echo esc_html( sprintf( __( '%d expired', 'plugin-wp-support-thisismyurl' ), $db_stats['expired_transients'] ) );
+						echo esc_html( sprintf( __( '%d expired', 'plugin-wpshadow' ), $db_stats['expired_transients'] ) );
 						?>
 					</span>
 				</div>
 
 				<div class="wps-perf-card">
-					<h3><?php esc_html_e( 'Orphaned Data', 'plugin-wp-support-thisismyurl' ); ?></h3>
+					<h3><?php esc_html_e( 'Orphaned Data', 'plugin-wpshadow' ); ?></h3>
 					<span class="metric-value"><?php echo esc_html( $db_stats['orphaned_postmeta'] ); ?></span>
-					<span class="metric-label"><?php esc_html_e( 'Orphaned postmeta records', 'plugin-wp-support-thisismyurl' ); ?></span>
+					<span class="metric-label"><?php esc_html_e( 'Orphaned postmeta records', 'plugin-wpshadow' ); ?></span>
 				</div>
 			</div>
 
 			<?php if ( ! empty( $db_stats['largest_tables'] ) ) : ?>
-			<h3><?php esc_html_e( 'Largest Tables (Top 10)', 'plugin-wp-support-thisismyurl' ); ?></h3>
+			<h3><?php esc_html_e( 'Largest Tables (Top 10)', 'plugin-wpshadow' ); ?></h3>
 			<table class="wps-db-table">
 				<thead>
 					<tr>
-						<th><?php esc_html_e( 'Table Name', 'plugin-wp-support-thisismyurl' ); ?></th>
-						<th><?php esc_html_e( 'Size (MB)', 'plugin-wp-support-thisismyurl' ); ?></th>
+						<th><?php esc_html_e( 'Table Name', 'plugin-wpshadow' ); ?></th>
+						<th><?php esc_html_e( 'Size (MB)', 'plugin-wpshadow' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -319,13 +319,13 @@ $db_stats        = WPS_Performance_Monitor::get_database_stats();
 			<?php endif; ?>
 
 			<?php if ( ! empty( $metrics['slow_queries'] ) ) : ?>
-			<h3><?php esc_html_e( 'Slow Queries (&gt;100ms)', 'plugin-wp-support-thisismyurl' ); ?></h3>
+			<h3><?php esc_html_e( 'Slow Queries (&gt;100ms)', 'plugin-wpshadow' ); ?></h3>
 			<table class="wps-db-table">
 				<thead>
 					<tr>
-						<th><?php esc_html_e( 'Query', 'plugin-wp-support-thisismyurl' ); ?></th>
-						<th><?php esc_html_e( 'Time (s)', 'plugin-wp-support-thisismyurl' ); ?></th>
-						<th><?php esc_html_e( 'Caller', 'plugin-wp-support-thisismyurl' ); ?></th>
+						<th><?php esc_html_e( 'Query', 'plugin-wpshadow' ); ?></th>
+						<th><?php esc_html_e( 'Time (s)', 'plugin-wpshadow' ); ?></th>
+						<th><?php esc_html_e( 'Caller', 'plugin-wpshadow' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -341,13 +341,13 @@ $db_stats        = WPS_Performance_Monitor::get_database_stats();
 			<?php endif; ?>
 
 			<?php if ( ! empty( $metrics['query_types'] ) ) : ?>
-			<h3><?php esc_html_e( 'Query Breakdown by Type', 'plugin-wp-support-thisismyurl' ); ?></h3>
+			<h3><?php esc_html_e( 'Query Breakdown by Type', 'plugin-wpshadow' ); ?></h3>
 			<div class="wps-perf-grid">
 				<?php foreach ( $metrics['query_types'] as $type => $count ) : ?>
 					<div class="wps-perf-card">
 						<h3><?php echo esc_html( $type ); ?></h3>
 						<span class="metric-value"><?php echo esc_html( $count ); ?></span>
-						<span class="metric-label"><?php esc_html_e( 'queries', 'plugin-wp-support-thisismyurl' ); ?></span>
+						<span class="metric-label"><?php esc_html_e( 'queries', 'plugin-wpshadow' ); ?></span>
 					</div>
 				<?php endforeach; ?>
 			</div>
@@ -355,34 +355,34 @@ $db_stats        = WPS_Performance_Monitor::get_database_stats();
 
 		<?php elseif ( 'history' === $current_tab ) : ?>
 			<!-- History Tab -->
-			<h2><?php esc_html_e( '📈 Historical Performance Data', 'plugin-wp-support-thisismyurl' ); ?></h2>
+			<h2><?php esc_html_e( '📈 Historical Performance Data', 'plugin-wpshadow' ); ?></h2>
 
 			<?php
 			// Get historical data for charts.
-			$history_7days  = WPS_Performance_Monitor::get_historical_metrics( 7 );
-			$history_30days = WPS_Performance_Monitor::get_historical_metrics( 30 );
+			$history_7days  = WPSHADOW_Performance_Monitor::get_historical_metrics( 7 );
+			$history_30days = WPSHADOW_Performance_Monitor::get_historical_metrics( 30 );
 			?>
 
 			<div class="wps-perf-card">
-				<h3><?php esc_html_e( 'Performance Trends', 'plugin-wp-support-thisismyurl' ); ?></h3>
+				<h3><?php esc_html_e( 'Performance Trends', 'plugin-wpshadow' ); ?></h3>
 				<p><?php esc_html_e( 'Historical data tracking coming soon. This will show:' ); ?></p>
 				<ul>
-					<li><?php esc_html_e( 'Average page load time (7/30/90 days)', 'plugin-wp-support-thisismyurl' ); ?></li>
-					<li><?php esc_html_e( 'Query count per request trends', 'plugin-wp-support-thisismyurl' ); ?></li>
-					<li><?php esc_html_e( 'Memory usage trends', 'plugin-wp-support-thisismyurl' ); ?></li>
-					<li><?php esc_html_e( 'Database size growth', 'plugin-wp-support-thisismyurl' ); ?></li>
+					<li><?php esc_html_e( 'Average page load time (7/30/90 days)', 'plugin-wpshadow' ); ?></li>
+					<li><?php esc_html_e( 'Query count per request trends', 'plugin-wpshadow' ); ?></li>
+					<li><?php esc_html_e( 'Memory usage trends', 'plugin-wpshadow' ); ?></li>
+					<li><?php esc_html_e( 'Database size growth', 'plugin-wpshadow' ); ?></li>
 				</ul>
 
 				<p style="margin-top: 20px;">
 					<?php
 					/* translators: %d: number of data points */
-					echo esc_html( sprintf( __( 'Currently tracking %d data points over the last 90 days.', 'plugin-wp-support-thisismyurl' ), count( WPS_Performance_Monitor::get_historical_metrics( 90 ) ) ) );
+					echo esc_html( sprintf( __( 'Currently tracking %d data points over the last 90 days.', 'plugin-wpshadow' ), count( WPSHADOW_Performance_Monitor::get_historical_metrics( 90 ) ) ) );
 					?>
 				</p>
 
 				<p>
-					<a href="#" class="button" id="wps-export-csv"><?php esc_html_e( 'Export as CSV', 'plugin-wp-support-thisismyurl' ); ?></a>
-					<a href="#" class="button" id="wps-export-json"><?php esc_html_e( 'Export as JSON', 'plugin-wp-support-thisismyurl' ); ?></a>
+					<a href="#" class="button" id="wps-export-csv"><?php esc_html_e( 'Export as CSV', 'plugin-wpshadow' ); ?></a>
+					<a href="#" class="button" id="wps-export-json"><?php esc_html_e( 'Export as JSON', 'plugin-wpshadow' ); ?></a>
 				</p>
 			</div>
 
@@ -401,10 +401,10 @@ $db_stats        = WPS_Performance_Monitor::get_database_stats();
 					url: ajaxurl,
 					type: 'POST',
 					data: {
-						action: 'wps_performance_export',
+						action: 'wpshadow_performance_export',
 						format: 'csv',
 						days: 30,
-						nonce: '<?php echo esc_js( wp_create_nonce( 'wps_performance_export' ) ); ?>'
+						nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_performance_export' ) ); ?>'
 					},
 					success: function(response) {
 						if (response.success && response.data) {
@@ -427,10 +427,10 @@ $db_stats        = WPS_Performance_Monitor::get_database_stats();
 					url: ajaxurl,
 					type: 'POST',
 					data: {
-						action: 'wps_performance_export',
+						action: 'wpshadow_performance_export',
 						format: 'json',
 						days: 30,
-						nonce: '<?php echo esc_js( wp_create_nonce( 'wps_performance_export' ) ); ?>'
+						nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_performance_export' ) ); ?>'
 					},
 					success: function(response) {
 						if (response.success && response.data) {

@@ -4,7 +4,7 @@
  *
  * Manages performance monitoring alert thresholds and notification settings.
  *
- * @package WPS_CoreSupport
+ * @package WPSHADOW_CoreSupport
  * @since 1.2601.73002
  */
 
@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides UI for configuring when performance alerts should be triggered.
  */
-final class WPS_Feature_Performance_Alerts extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Performance_Alerts extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor
@@ -29,15 +29,15 @@ final class WPS_Feature_Performance_Alerts extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                 => 'wps_performance_alerts',
-				'name'               => __( 'Performance Alert Thresholds', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Configure thresholds for performance alerts and monitoring notifications.', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'wpshadow_performance_alerts',
+				'name'               => __( 'Performance Alert Thresholds', 'plugin-wpshadow' ),
+				'description'        => __( 'Configure thresholds for performance alerts and monitoring notifications.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'version'            => '1.0.0',
 				'default_enabled'    => true,
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Performance Features', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Performance monitoring and optimization', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Performance Features', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Performance monitoring and optimization', 'plugin-wpshadow' ),
 			)
 		);
 	}
@@ -57,44 +57,44 @@ final class WPS_Feature_Performance_Alerts extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function render_settings(): void {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Performance_Monitor' ) ) {
-			echo '<div class="notice notice-warning"><p>' . esc_html__( 'Performance monitoring is not available.', 'plugin-wp-support-thisismyurl' ) . '</p></div>';
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Performance_Monitor' ) ) {
+			echo '<div class="notice notice-warning"><p>' . esc_html__( 'Performance monitoring is not available.', 'plugin-wpshadow' ) . '</p></div>';
 			return;
 		}
 
 		// Get current thresholds.
-		$thresholds = \WPS\CoreSupport\WPS_Performance_Monitor::get_thresholds();
+		$thresholds = \WPS\CoreSupport\WPSHADOW_Performance_Monitor::get_thresholds();
 
 		// Handle form submission.
-		if ( isset( $_POST['wps_update_performance_thresholds'] ) && check_admin_referer( 'wps_performance_thresholds' ) ) {
+		if ( isset( $_POST['wpshadow_update_performance_thresholds'] ) && check_admin_referer( 'wpshadow_performance_thresholds' ) ) {
 			$new_thresholds = array(
-				'query_count' => \WPS\CoreSupport\wps_get_post_int( 'threshold_query_count', 50 ),
+				'query_count' => \WPS\CoreSupport\WPSHADOW_get_post_int( 'threshold_query_count', 50 ),
 				'load_time'   => isset( $_POST['threshold_load_time'] ) ? floatval( $_POST['threshold_load_time'] ) : 2,
-				'memory'      => \WPS\CoreSupport\wps_get_post_int( 'threshold_memory', 80 ),
+				'memory'      => \WPS\CoreSupport\WPSHADOW_get_post_int( 'threshold_memory', 80 ),
 			);
 
-			\WPS\CoreSupport\WPS_Performance_Monitor::update_thresholds( $new_thresholds );
+			\WPS\CoreSupport\WPSHADOW_Performance_Monitor::update_thresholds( $new_thresholds );
 			$thresholds = $new_thresholds;
 
-			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Alert thresholds updated successfully.', 'plugin-wp-support-thisismyurl' ) . '</p></div>';
+			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Alert thresholds updated successfully.', 'plugin-wpshadow' ) . '</p></div>';
 		}
 
 		?>
 		<div class="wps-feature-settings">
-			<h3><?php esc_html_e( '🔔 Performance Alert Configuration', 'plugin-wp-support-thisismyurl' ); ?></h3>
+			<h3><?php esc_html_e( '🔔 Performance Alert Configuration', 'plugin-wpshadow' ); ?></h3>
 			<p class="description">
-				<?php esc_html_e( 'Configure the thresholds that trigger performance alerts. When these limits are exceeded, alerts will appear in your dashboard and activity log.', 'plugin-wp-support-thisismyurl' ); ?>
+				<?php esc_html_e( 'Configure the thresholds that trigger performance alerts. When these limits are exceeded, alerts will appear in your dashboard and activity log.', 'plugin-wpshadow' ); ?>
 			</p>
 
 			<form method="post" action="">
-				<?php wp_nonce_field( 'wps_performance_thresholds' ); ?>
-				<input type="hidden" name="wps_update_performance_thresholds" value="1" />
+				<?php wp_nonce_field( 'wpshadow_performance_thresholds' ); ?>
+				<input type="hidden" name="wpshadow_update_performance_thresholds" value="1" />
 
 				<table class="form-table" role="presentation">
 					<tbody>
 						<tr>
 							<th scope="row">
-								<label for="threshold_query_count"><?php esc_html_e( 'Database Query Threshold', 'plugin-wp-support-thisismyurl' ); ?></label>
+								<label for="threshold_query_count"><?php esc_html_e( 'Database Query Threshold', 'plugin-wpshadow' ); ?></label>
 							</th>
 							<td>
 								<input 
@@ -107,13 +107,13 @@ final class WPS_Feature_Performance_Alerts extends WPS_Abstract_Feature {
 									max="1000" 
 								/>
 								<p class="description">
-									<?php esc_html_e( 'Trigger an alert when a single page executes more than this many database queries. Default: 50 queries.', 'plugin-wp-support-thisismyurl' ); ?>
+									<?php esc_html_e( 'Trigger an alert when a single page executes more than this many database queries. Default: 50 queries.', 'plugin-wpshadow' ); ?>
 								</p>
 							</td>
 						</tr>
 						<tr>
 							<th scope="row">
-								<label for="threshold_load_time"><?php esc_html_e( 'Page Load Time Threshold', 'plugin-wp-support-thisismyurl' ); ?></label>
+								<label for="threshold_load_time"><?php esc_html_e( 'Page Load Time Threshold', 'plugin-wpshadow' ); ?></label>
 							</th>
 							<td>
 								<input 
@@ -126,15 +126,15 @@ final class WPS_Feature_Performance_Alerts extends WPS_Abstract_Feature {
 									min="0.1" 
 									max="30" 
 								/>
-								<span><?php esc_html_e( 'seconds', 'plugin-wp-support-thisismyurl' ); ?></span>
+								<span><?php esc_html_e( 'seconds', 'plugin-wpshadow' ); ?></span>
 								<p class="description">
-									<?php esc_html_e( 'Trigger an alert when page generation time exceeds this duration. Default: 2.0 seconds.', 'plugin-wp-support-thisismyurl' ); ?>
+									<?php esc_html_e( 'Trigger an alert when page generation time exceeds this duration. Default: 2.0 seconds.', 'plugin-wpshadow' ); ?>
 								</p>
 							</td>
 						</tr>
 						<tr>
 							<th scope="row">
-								<label for="threshold_memory"><?php esc_html_e( 'Memory Usage Threshold', 'plugin-wp-support-thisismyurl' ); ?></label>
+								<label for="threshold_memory"><?php esc_html_e( 'Memory Usage Threshold', 'plugin-wpshadow' ); ?></label>
 							</th>
 							<td>
 								<input 
@@ -148,24 +148,24 @@ final class WPS_Feature_Performance_Alerts extends WPS_Abstract_Feature {
 								/>
 								<span>%</span>
 								<p class="description">
-									<?php esc_html_e( 'Trigger an alert when memory usage exceeds this percentage of the PHP memory limit. Default: 80%.', 'plugin-wp-support-thisismyurl' ); ?>
+									<?php esc_html_e( 'Trigger an alert when memory usage exceeds this percentage of the PHP memory limit. Default: 80%.', 'plugin-wpshadow' ); ?>
 								</p>
 							</td>
 						</tr>
 					</tbody>
 				</table>
 
-				<?php submit_button( __( 'Update Alert Thresholds', 'plugin-wp-support-thisismyurl' ) ); ?>
+				<?php submit_button( __( 'Update Alert Thresholds', 'plugin-wpshadow' ) ); ?>
 			</form>
 
 			<div class="wps-feature-info" style="margin-top: 30px; padding: 15px; background: #f8f9fa; border-left: 4px solid #0073aa; border-radius: 4px;">
-				<h4 style="margin-top: 0;"><?php esc_html_e( '💡 Performance Monitoring Tips', 'plugin-wp-support-thisismyurl' ); ?></h4>
+				<h4 style="margin-top: 0;"><?php esc_html_e( '💡 Performance Monitoring Tips', 'plugin-wpshadow' ); ?></h4>
 				<ul style="margin-bottom: 0;">
-					<li><?php esc_html_e( 'Lower thresholds provide earlier warnings but may generate more alerts.', 'plugin-wp-support-thisismyurl' ); ?></li>
-					<li><?php esc_html_e( 'Monitor alerts in your dashboard or check the Performance tab for detailed metrics.', 'plugin-wp-support-thisismyurl' ); ?></li>
-					<li><?php esc_html_e( 'High query counts often indicate inefficient database queries or excessive plugin overhead.', 'plugin-wp-support-thisismyurl' ); ?></li>
-					<li><?php esc_html_e( 'Slow page load times can be caused by large media files, inefficient code, or server resource limitations.', 'plugin-wp-support-thisismyurl' ); ?></li>
-					<li><?php esc_html_e( 'High memory usage may require increasing your PHP memory limit or optimizing resource-intensive operations.', 'plugin-wp-support-thisismyurl' ); ?></li>
+					<li><?php esc_html_e( 'Lower thresholds provide earlier warnings but may generate more alerts.', 'plugin-wpshadow' ); ?></li>
+					<li><?php esc_html_e( 'Monitor alerts in your dashboard or check the Performance tab for detailed metrics.', 'plugin-wpshadow' ); ?></li>
+					<li><?php esc_html_e( 'High query counts often indicate inefficient database queries or excessive plugin overhead.', 'plugin-wpshadow' ); ?></li>
+					<li><?php esc_html_e( 'Slow page load times can be caused by large media files, inefficient code, or server resource limitations.', 'plugin-wpshadow' ); ?></li>
+					<li><?php esc_html_e( 'High memory usage may require increasing your PHP memory limit or optimizing resource-intensive operations.', 'plugin-wpshadow' ); ?></li>
 				</ul>
 			</div>
 		</div>

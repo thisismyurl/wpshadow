@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * WPS_Feature_Brute_Force_Protection
+ * WPSHADOW_Feature_Brute_Force_Protection
  *
  * Rate limiting for failed login attempts with IP-based lockouts.
  */
-final class WPS_Feature_Brute_Force_Protection extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Brute_Force_Protection extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Maximum allowed failed attempts before lockout.
@@ -42,14 +42,14 @@ final class WPS_Feature_Brute_Force_Protection extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'brute-force-protection',
-				'name'               => __( 'Brute Force Protection', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Protects against brute force login attacks by rate-limiting failed attempts. After 5 failed attempts within 15 minutes, the IP is locked out for 30 minutes.', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Brute Force Protection', 'plugin-wpshadow' ),
+				'description'        => __( 'Protects against brute force login attacks by rate-limiting failed attempts. After 5 failed attempts within 15 minutes, the IP is locked out for 30 minutes.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
-				'widget_label'       => __( 'Security', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Security', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wpshadow' ),
 			)
 		);
 	}
@@ -77,10 +77,10 @@ final class WPS_Feature_Brute_Force_Protection extends WPS_Abstract_Feature {
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 
 		// AJAX handler for unlocking IPs.
-		add_action( 'wp_ajax_wps_unlock_ip', array( $this, 'ajax_unlock_ip' ) );
+		add_action( 'wp_ajax_WPSHADOW_unlock_ip', array( $this, 'ajax_unlock_ip' ) );
 
 		// Cleanup old records daily.
-		add_action( 'wps_daily_cleanup', array( $this, 'cleanup_old_records' ) );
+		add_action( 'wpshadow_daily_cleanup', array( $this, 'cleanup_old_records' ) );
 	}
 
 	/**
@@ -95,8 +95,8 @@ final class WPS_Feature_Brute_Force_Protection extends WPS_Abstract_Feature {
 			return;
 		}
 
-		$attempts_key = 'wps_login_attempts_' . md5( $ip );
-		$lockout_key  = 'wps_lockout_' . md5( $ip );
+		$attempts_key = 'wpshadow_login_attempts_' . md5( $ip );
+		$lockout_key  = 'wpshadow_lockout_' . md5( $ip );
 
 		// Check if already locked out.
 		$lockout_until = get_transient( $lockout_key );
@@ -135,12 +135,12 @@ final class WPS_Feature_Brute_Force_Protection extends WPS_Abstract_Feature {
 			set_transient( $lockout_key, $lockout_until, self::LOCKOUT_DURATION );
 
 			// Log the lockout.
-			if ( class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
-				\WPS\CoreSupport\WPS_Activity_Logger::log(
+			if ( class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) ) {
+				\WPS\CoreSupport\WPSHADOW_Activity_Logger::log(
 					'security',
 					sprintf(
 						/* translators: 1: IP address, 2: number of attempts */
-						__( 'IP address %1$s locked out after %2$d failed login attempts', 'plugin-wp-support-thisismyurl' ),
+						__( 'IP address %1$s locked out after %2$d failed login attempts', 'plugin-wpshadow' ),
 						$ip,
 						count( $attempts )
 					),
@@ -171,7 +171,7 @@ final class WPS_Feature_Brute_Force_Protection extends WPS_Abstract_Feature {
 			return $user;
 		}
 
-		$lockout_key   = 'wps_lockout_' . md5( $ip );
+		$lockout_key   = 'wpshadow_lockout_' . md5( $ip );
 		$lockout_until = get_transient( $lockout_key );
 
 		if ( false !== $lockout_until && is_numeric( $lockout_until ) ) {
@@ -179,14 +179,14 @@ final class WPS_Feature_Brute_Force_Protection extends WPS_Abstract_Feature {
 			$minutes   = ceil( $remaining / 60 );
 
 			return new \WP_Error(
-				'wps_too_many_attempts',
+				'wpshadow_too_many_attempts',
 				sprintf(
 					/* translators: %d: number of minutes */
 					_n(
 						'Too many failed login attempts. Please try again in %d minute.',
 						'Too many failed login attempts. Please try again in %d minutes.',
 						$minutes,
-						'plugin-wp-support-thisismyurl'
+						'plugin-wpshadow'
 					),
 					$minutes
 				)
@@ -209,7 +209,7 @@ final class WPS_Feature_Brute_Force_Protection extends WPS_Abstract_Feature {
 			return;
 		}
 
-		$attempts_key = 'wps_login_attempts_' . md5( $ip );
+		$attempts_key = 'wpshadow_login_attempts_' . md5( $ip );
 		delete_transient( $attempts_key );
 	}
 
@@ -257,8 +257,8 @@ final class WPS_Feature_Brute_Force_Protection extends WPS_Abstract_Feature {
 	public function add_admin_menu(): void {
 		add_submenu_page(
 			'wp-support',
-			__( 'Locked IPs', 'plugin-wp-support-thisismyurl' ),
-			__( 'Locked IPs', 'plugin-wp-support-thisismyurl' ),
+			__( 'Locked IPs', 'plugin-wpshadow' ),
+			__( 'Locked IPs', 'plugin-wpshadow' ),
 			'manage_options',
 			'wps-locked-ips',
 			array( $this, 'render_locked_ips_page' )
@@ -272,27 +272,27 @@ final class WPS_Feature_Brute_Force_Protection extends WPS_Abstract_Feature {
 	 */
 	public function render_locked_ips_page(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wpshadow' ) );
 		}
 
 		$locked_ips = $this->get_locked_ips();
 
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Locked IP Addresses', 'plugin-wp-support-thisismyurl' ); ?></h1>
+			<h1><?php esc_html_e( 'Locked IP Addresses', 'plugin-wpshadow' ); ?></h1>
 			
-			<p><?php esc_html_e( 'These IP addresses are currently locked out due to too many failed login attempts.', 'plugin-wp-support-thisismyurl' ); ?></p>
+			<p><?php esc_html_e( 'These IP addresses are currently locked out due to too many failed login attempts.', 'plugin-wpshadow' ); ?></p>
 
 			<?php if ( empty( $locked_ips ) ) : ?>
-				<p><em><?php esc_html_e( 'No IP addresses are currently locked out.', 'plugin-wp-support-thisismyurl' ); ?></em></p>
+				<p><em><?php esc_html_e( 'No IP addresses are currently locked out.', 'plugin-wpshadow' ); ?></em></p>
 			<?php else : ?>
 				<table class="wp-list-table widefat fixed striped">
 					<thead>
 						<tr>
-							<th><?php esc_html_e( 'IP Address', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Locked Until', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Time Remaining', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Actions', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th><?php esc_html_e( 'IP Address', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Locked Until', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Time Remaining', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Actions', 'plugin-wpshadow' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -302,8 +302,8 @@ final class WPS_Feature_Brute_Force_Protection extends WPS_Abstract_Feature {
 								<td><?php echo esc_html( wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $lockout['until'] ) ); ?></td>
 								<td><?php echo esc_html( human_time_diff( time(), $lockout['until'] ) ); ?></td>
 								<td>
-									<button type="button" class="button button-small wps-unlock-ip" data-ip="<?php echo esc_attr( $lockout['ip'] ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'wps_unlock_ip' ) ); ?>">
-										<?php esc_html_e( 'Unlock', 'plugin-wp-support-thisismyurl' ); ?>
+									<button type="button" class="button button-small wps-unlock-ip" data-ip="<?php echo esc_attr( $lockout['ip'] ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_unlock_ip' ) ); ?>">
+										<?php esc_html_e( 'Unlock', 'plugin-wpshadow' ); ?>
 									</button>
 								</td>
 							</tr>
@@ -320,13 +320,13 @@ final class WPS_Feature_Brute_Force_Protection extends WPS_Abstract_Feature {
 				var ip = button.data('ip');
 				var nonce = button.data('nonce');
 				
-				button.prop('disabled', true).text('<?php esc_attr_e( 'Unlocking...', 'plugin-wp-support-thisismyurl' ); ?>');
+				button.prop('disabled', true).text('<?php esc_attr_e( 'Unlocking...', 'plugin-wpshadow' ); ?>');
 				
 				$.ajax({
 					url: ajaxurl,
 					type: 'POST',
 					data: {
-						action: 'wps_unlock_ip',
+						action: 'wpshadow_unlock_ip',
 						ip: ip,
 						nonce: nonce
 					},
@@ -339,13 +339,13 @@ final class WPS_Feature_Brute_Force_Protection extends WPS_Abstract_Feature {
 								}
 							});
 						} else {
-							alert(response.data.message || '<?php esc_attr_e( 'Failed to unlock IP', 'plugin-wp-support-thisismyurl' ); ?>');
-							button.prop('disabled', false).text('<?php esc_attr_e( 'Unlock', 'plugin-wp-support-thisismyurl' ); ?>');
+							alert(response.data.message || '<?php esc_attr_e( 'Failed to unlock IP', 'plugin-wpshadow' ); ?>');
+							button.prop('disabled', false).text('<?php esc_attr_e( 'Unlock', 'plugin-wpshadow' ); ?>');
 						}
 					},
 					error: function() {
-						alert('<?php esc_attr_e( 'An error occurred', 'plugin-wp-support-thisismyurl' ); ?>');
-						button.prop('disabled', false).text('<?php esc_attr_e( 'Unlock', 'plugin-wp-support-thisismyurl' ); ?>');
+						alert('<?php esc_attr_e( 'An error occurred', 'plugin-wpshadow' ); ?>');
+						button.prop('disabled', false).text('<?php esc_attr_e( 'Unlock', 'plugin-wpshadow' ); ?>');
 					}
 				});
 			});
@@ -363,7 +363,7 @@ final class WPS_Feature_Brute_Force_Protection extends WPS_Abstract_Feature {
 		global $wpdb;
 
 		$locked_ips = array();
-		$prefix     = '_transient_wps_lockout_';
+		$prefix     = '_transient_WPSHADOW_lockout_';
 		$now        = time();
 
 		// Query transients from database.
@@ -386,7 +386,7 @@ final class WPS_Feature_Brute_Force_Protection extends WPS_Abstract_Feature {
 			$ip_hash = str_replace( $prefix, '', $row->option_name );
 
 			// Try to find the actual IP from attempts data.
-			$attempts_key = 'wps_login_attempts_' . $ip_hash;
+			$attempts_key = 'wpshadow_login_attempts_' . $ip_hash;
 			$attempts     = get_transient( $attempts_key );
 			$ip           = '';
 
@@ -411,29 +411,29 @@ final class WPS_Feature_Brute_Force_Protection extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_unlock_ip(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_unlock_ip' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_unlock_ip' );
 
-		$ip = \WPS\CoreSupport\wps_get_post_text( 'ip' );
+		$ip = \WPS\CoreSupport\WPSHADOW_get_post_text( 'ip' );
 
 		if ( empty( $ip ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid IP address', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid IP address', 'plugin-wpshadow' ) ) );
 		}
 
 		// Delete lockout transient.
-		$lockout_key = 'wps_lockout_' . md5( $ip );
+		$lockout_key = 'wpshadow_lockout_' . md5( $ip );
 		delete_transient( $lockout_key );
 
 		// Delete attempts transient.
-		$attempts_key = 'wps_login_attempts_' . md5( $ip );
+		$attempts_key = 'wpshadow_login_attempts_' . md5( $ip );
 		delete_transient( $attempts_key );
 
 		// Log the unlock.
-		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
-			\WPS\CoreSupport\WPS_Activity_Logger::log(
+		if ( class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) ) {
+			\WPS\CoreSupport\WPSHADOW_Activity_Logger::log(
 				'security',
 				sprintf(
 					/* translators: %s: IP address */
-					__( 'IP address %s manually unlocked', 'plugin-wp-support-thisismyurl' ),
+					__( 'IP address %s manually unlocked', 'plugin-wpshadow' ),
 					$ip
 				),
 				array(
@@ -443,7 +443,7 @@ final class WPS_Feature_Brute_Force_Protection extends WPS_Abstract_Feature {
 			);
 		}
 
-		wp_send_json_success( array( 'message' => __( 'IP unlocked successfully', 'plugin-wp-support-thisismyurl' ) ) );
+		wp_send_json_success( array( 'message' => __( 'IP unlocked successfully', 'plugin-wpshadow' ) ) );
 	}
 
 	/**
@@ -455,7 +455,7 @@ final class WPS_Feature_Brute_Force_Protection extends WPS_Abstract_Feature {
 		global $wpdb;
 
 		$now    = time();
-		$prefix = '_transient_wps_lockout_';
+		$prefix = '_transient_WPSHADOW_lockout_';
 
 		// Delete expired lockout transients.
 		$wpdb->query(
@@ -470,7 +470,7 @@ final class WPS_Feature_Brute_Force_Protection extends WPS_Abstract_Feature {
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s AND CAST(option_value AS UNSIGNED) < %d",
-				$wpdb->esc_like( '_transient_timeout_wps_lockout_' ) . '%',
+				$wpdb->esc_like( '_transient_timeout_WPSHADOW_lockout_' ) . '%',
 				$now
 			)
 		);

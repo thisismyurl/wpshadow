@@ -3,7 +3,7 @@
  * Dashboard Layout Manager
  * Handles widget ordering, inheritance, and bulk operations.
  *
- * @package WPS_WP_SUPPORT_THISISMYURL
+ * @package WPSHADOW_wpshadow_THISISMYURL
  * @since 1.2601.74000
  */
 
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Manages dashboard widget layout, ordering, and inheritance.
  */
-class WPS_Dashboard_Layout {
+class WPSHADOW_Dashboard_Layout {
 	/**
 	 * Default widget order for core dashboard.
 	 * Matches WordPress core layout for familiarity.
@@ -28,17 +28,17 @@ class WPS_Dashboard_Layout {
 	public static function get_default_order(): array {
 		return array(
 			'normal' => array(
-				'WPS_widget_activity',
-				'WPS_widget_scheduled_tasks',
-				'WPS_widget_modules',
+				'wpshadow_widget_activity',
+				'wpshadow_widget_scheduled_tasks',
+				'wpshadow_widget_modules',
 			),
 			'side'   => array(
-				'WPS_widget_health',
-				'WPS_widget_environment_status',
-				'WPS_widget_database_stats',
-				'WPS_widget_performance_history',
-				'WPS_widget_quick_actions',
-				'WPS_widget_events_and_news',
+				'wpshadow_widget_health',
+				'wpshadow_widget_environment_status',
+				'wpshadow_widget_database_stats',
+				'wpshadow_widget_performance_history',
+				'wpshadow_widget_quick_actions',
+				'wpshadow_widget_events_and_news',
 			),
 		);
 	}
@@ -198,14 +198,14 @@ class WPS_Dashboard_Layout {
 			return array();
 		}
 
-		$catalog = WPS_Module_Registry::get_catalog_with_status();
+		$catalog = WPSHADOW_Module_Registry::get_catalog_with_status();
 		$targets = array();
 
 		if ( 'all' === $scope ) {
 			// Apply to all active modules.
 			foreach ( $catalog as $module ) {
 				if ( ! empty( $module['status']['active'] ) ) {
-					$module_id = sanitize_key( str_replace( '-support-thisismyurl', '', $module['id'] ?? '' ) );
+					$module_id = sanitize_key( str_replace( '-wpshadow', '', $module['id'] ?? '' ) );
 					if ( $module_id !== $source_context ) {
 						$targets[] = $module_id;
 					}
@@ -218,7 +218,7 @@ class WPS_Dashboard_Layout {
 					continue;
 				}
 
-				$module_id = sanitize_key( str_replace( '-support-thisismyurl', '', $module['id'] ?? '' ) );
+				$module_id = sanitize_key( str_replace( '-wpshadow', '', $module['id'] ?? '' ) );
 
 				// For core, children are all hubs.
 				if ( 'core' === $source_context && 'hub' === ( $module['type'] ?? '' ) ) {
@@ -244,7 +244,7 @@ class WPS_Dashboard_Layout {
 	 * @return string
 	 */
 	private static function get_layout_option_name( string $context, bool $network ): string {
-		$prefix = $network ? 'WPS_network_' : 'WPS_';
+		$prefix = $network ? 'wpshadow_network_' : 'wpshadow_';
 		return $prefix . 'dashboard_layout_' . sanitize_key( $context );
 	}
 
@@ -257,7 +257,7 @@ class WPS_Dashboard_Layout {
 	 * @return void
 	 */
 	public static function on_module_activated( string $module_id, bool $network = false ): void {
-		$context        = sanitize_key( str_replace( '-support-thisismyurl', '', $module_id ) );
+		$context        = sanitize_key( str_replace( '-wpshadow', '', $module_id ) );
 		$parent_context = self::get_parent_context( $context );
 
 		if ( ! $parent_context ) {
@@ -278,11 +278,11 @@ class WPS_Dashboard_Layout {
 		self::save_layout( $context, $parent_layout, $network );
 
 		// Log activity.
-		if ( class_exists( 'WPS\CoreSupport\WPS_Activity_Logger' ) ) {
-			WPS_Activity_Logger::log(
+		if ( class_exists( 'WPS\CoreSupport\WPSHADOW_Activity_Logger' ) ) {
+			WPSHADOW_Activity_Logger::log(
 				'dashboard',
 				sprintf(
-					__( 'Dashboard layout inherited from %1$s for module %2$s', 'plugin-wp-support-thisismyurl' ),
+					__( 'Dashboard layout inherited from %1$s for module %2$s', 'plugin-wpshadow' ),
 					$parent_context,
 					$context
 				),
@@ -316,8 +316,8 @@ class WPS_Dashboard_Layout {
 			$module_id    = $module_parts[0];
 
 			// Get the proper module name from catalog.
-			$catalog     = \WPS\CoreSupport\WPS_Module_Registry::get_catalog_with_status();
-			$module_slug = str_contains( $module_id, '-support-thisismyurl' ) ? $module_id : $module_id . '-support-thisismyurl';
+			$catalog     = \WPS\CoreSupport\WPSHADOW_Module_Registry::get_catalog_with_status();
+			$module_slug = str_contains( $module_id, '-wpshadow' ) ? $module_id : $module_id . '-wpshadow';
 			if ( isset( $catalog[ $module_slug ] ) ) {
 				$module_name = $catalog[ $module_slug ]['name'] ?? ucfirst( $module_id );
 			} else {
@@ -359,21 +359,21 @@ class WPS_Dashboard_Layout {
 
 		wp_localize_script(
 			'wps-dashboard-layout',
-			'WPS_dashboard_layout',
+			'wpshadow_dashboard_layout',
 			array(
 				'ajaxUrl'        => admin_url( 'admin-ajax.php' ),
-				'nonce'          => wp_create_nonce( 'WPS_dashboard_layout' ),
-				'moduleNonce'    => wp_create_nonce( 'WPS_module_actions' ),
+				'nonce'          => wp_create_nonce( 'wpshadow_dashboard_layout' ),
+				'moduleNonce'    => wp_create_nonce( 'wpshadow_module_actions' ),
 				'context'        => $context,
 				'network'        => $network ? '1' : '0',
-				'applyPrompt'    => __( 'Apply this layout to:', 'plugin-wp-support-thisismyurl' ),
-				'applyThis'      => __( 'This dashboard only', 'plugin-wp-support-thisismyurl' ),
-				'applyChildren'  => __( 'Child dashboards only', 'plugin-wp-support-thisismyurl' ),
-				'applyAll'       => __( 'All dashboards', 'plugin-wp-support-thisismyurl' ),
-				'cancel'         => __( 'Cancel', 'plugin-wp-support-thisismyurl' ),
-				'apply'          => __( 'Apply', 'plugin-wp-support-thisismyurl' ),
-				'refreshSuccess' => __( 'Database statistics refreshed successfully.', 'plugin-wp-support-thisismyurl' ),
-				'refreshError'   => __( 'Failed to refresh database statistics.', 'plugin-wp-support-thisismyurl' ),
+				'applyPrompt'    => __( 'Apply this layout to:', 'plugin-wpshadow' ),
+				'applyThis'      => __( 'This dashboard only', 'plugin-wpshadow' ),
+				'applyChildren'  => __( 'Child dashboards only', 'plugin-wpshadow' ),
+				'applyAll'       => __( 'All dashboards', 'plugin-wpshadow' ),
+				'cancel'         => __( 'Cancel', 'plugin-wpshadow' ),
+				'apply'          => __( 'Apply', 'plugin-wpshadow' ),
+				'refreshSuccess' => __( 'Database statistics refreshed successfully.', 'plugin-wpshadow' ),
+				'refreshError'   => __( 'Failed to refresh database statistics.', 'plugin-wpshadow' ),
 			)
 		);
 	}
@@ -419,57 +419,57 @@ class WPS_Dashboard_Layout {
 	 */
 	private static function get_available_widgets(): array {
 		return array(
-			'WPS_widget_activity'           => array(
-				'title'    => __( 'Activity', 'plugin-wp-support-thisismyurl' ),
-				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_activity' ),
+			'wpshadow_widget_activity'           => array(
+				'title'    => __( 'Activity', 'plugin-wpshadow' ),
+				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_activity' ),
 			),
-			'WPS_widget_scheduled_tasks'    => array(
-				'title'    => __( 'Scheduled Tasks', 'plugin-wp-support-thisismyurl' ),
-				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_scheduled_tasks' ),
+			'wpshadow_widget_scheduled_tasks'    => array(
+				'title'    => __( 'Scheduled Tasks', 'plugin-wpshadow' ),
+				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_scheduled_tasks' ),
 			),
-			'WPS_widget_modules'            => array(
-				'title'    => __( 'Modules', 'plugin-wp-support-thisismyurl' ),
-				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_modules' ),
+			'wpshadow_widget_modules'            => array(
+				'title'    => __( 'Modules', 'plugin-wpshadow' ),
+				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_modules' ),
 			),
-			'WPS_widget_health'             => array(
-				'title'    => __( 'Health', 'plugin-wp-support-thisismyurl' ),
-				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_health' ),
+			'wpshadow_widget_health'             => array(
+				'title'    => __( 'Health', 'plugin-wpshadow' ),
+				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_health' ),
 			),
-			'WPS_widget_quick_actions'      => array(
-				'title'    => __( 'Quick Actions', 'plugin-wp-support-thisismyurl' ),
-				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_quick_actions' ),
+			'wpshadow_widget_quick_actions'      => array(
+				'title'    => __( 'Quick Actions', 'plugin-wpshadow' ),
+				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_quick_actions' ),
 			),
-			'WPS_widget_events_and_news'    => array(
-				'title'    => __( 'Events and News', 'plugin-wp-support-thisismyurl' ),
-				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_events_and_news' ),
+			'wpshadow_widget_events_and_news'    => array(
+				'title'    => __( 'Events and News', 'plugin-wpshadow' ),
+				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_events_and_news' ),
 			),
-			'WPS_widget_system_health'      => array(
-				'title'    => __( 'System Health', 'plugin-wp-support-thisismyurl' ),
-				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_system_health' ),
+			'wpshadow_widget_system_health'      => array(
+				'title'    => __( 'System Health', 'plugin-wpshadow' ),
+				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_system_health' ),
 			),
-			'WPS_widget_vault_status'       => array(
-				'title'    => __( 'Vault Status', 'plugin-wp-support-thisismyurl' ),
-				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_vault_status' ),
+			'wpshadow_widget_vault_status'       => array(
+				'title'    => __( 'Vault Status', 'plugin-wpshadow' ),
+				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_vault_status' ),
 			),
-			'WPS_widget_database_stats'     => array(
-				'title'    => __( 'Database Statistics', 'plugin-wp-support-thisismyurl' ),
-				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_database_stats' ),
+			'wpshadow_widget_database_stats'     => array(
+				'title'    => __( 'Database Statistics', 'plugin-wpshadow' ),
+				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_database_stats' ),
 			),
-			'WPS_widget_performance_history' => array(
-				'title'    => __( 'Historical Performance', 'plugin-wp-support-thisismyurl' ),
-				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_performance_history' ),
+			'wpshadow_widget_performance_history' => array(
+				'title'    => __( 'Historical Performance', 'plugin-wpshadow' ),
+				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_performance_history' ),
 			),
-			'WPS_widget_media_overview'     => array(
-				'title'    => __( 'Media Overview', 'plugin-wp-support-thisismyurl' ),
-				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_media_overview' ),
+			'wpshadow_widget_media_overview'     => array(
+				'title'    => __( 'Media Overview', 'plugin-wpshadow' ),
+				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_media_overview' ),
 			),
-			'WPS_widget_vault_overview'     => array(
-				'title'    => __( 'Vault Overview', 'plugin-wp-support-thisismyurl' ),
-				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_vault_overview' ),
+			'wpshadow_widget_vault_overview'     => array(
+				'title'    => __( 'Vault Overview', 'plugin-wpshadow' ),
+				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_vault_overview' ),
 			),
-			'WPS_widget_environment_status' => array(
-				'title'    => __( 'Environment Status', 'plugin-wp-support-thisismyurl' ),
-				'callback' => array( 'WPS\CoreSupport\WPS_Dashboard_Widgets', 'render_metabox_environment_status' ),
+			'wpshadow_widget_environment_status' => array(
+				'title'    => __( 'Environment Status', 'plugin-wpshadow' ),
+				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_environment_status' ),
 			),
 		);
 	}
@@ -480,10 +480,10 @@ class WPS_Dashboard_Layout {
 	 * @return void
 	 */
 	public static function ajax_save_layout(): void {
-		check_ajax_referer( 'WPS_dashboard_layout', 'nonce' );
+		check_ajax_referer( 'wpshadow_dashboard_layout', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wpshadow' ) ) );
 		}
 
 		$context = sanitize_text_field( wp_unslash( $_POST['context'] ?? 'core' ) );
@@ -491,13 +491,13 @@ class WPS_Dashboard_Layout {
 		$layout  = json_decode( wp_unslash( $_POST['layout'] ?? '{}' ), true );
 
 		if ( ! is_array( $layout ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid layout data.', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid layout data.', 'plugin-wpshadow' ) ) );
 		}
 
 		if ( self::save_layout( $context, $layout, $network ) ) {
-			wp_send_json_success( array( 'message' => __( 'Layout saved.', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_success( array( 'message' => __( 'Layout saved.', 'plugin-wpshadow' ) ) );
 		} else {
-			wp_send_json_error( array( 'message' => __( 'Failed to save layout.', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Failed to save layout.', 'plugin-wpshadow' ) ) );
 		}
 	}
 
@@ -507,10 +507,10 @@ class WPS_Dashboard_Layout {
 	 * @return void
 	 */
 	public static function ajax_apply_layout(): void {
-		check_ajax_referer( 'WPS_dashboard_layout', 'nonce' );
+		check_ajax_referer( 'wpshadow_dashboard_layout', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wpshadow' ) ) );
 		}
 
 		$context = sanitize_text_field( wp_unslash( $_POST['context'] ?? 'core' ) );
@@ -519,7 +519,7 @@ class WPS_Dashboard_Layout {
 		$layout  = json_decode( wp_unslash( $_POST['layout'] ?? '{}' ), true );
 
 		if ( ! is_array( $layout ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid layout data.', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid layout data.', 'plugin-wpshadow' ) ) );
 		}
 
 		$result = self::apply_layout_to_scope( $context, $layout, $scope, $network );
@@ -527,7 +527,7 @@ class WPS_Dashboard_Layout {
 		wp_send_json_success(
 			array(
 				'message' => sprintf(
-					__( 'Applied to %1$d dashboards. %2$d skipped.', 'plugin-wp-support-thisismyurl' ),
+					__( 'Applied to %1$d dashboards. %2$d skipped.', 'plugin-wpshadow' ),
 					$result['success'],
 					$result['failed']
 				),

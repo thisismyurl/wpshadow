@@ -2,10 +2,10 @@
 /**
  * Features management view with widget grouping.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
-use WPS\CoreSupport\WPS_Tab_Navigation;
+use WPS\CoreSupport\WPSHADOW_Tab_Navigation;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,27 +31,27 @@ foreach ( $features as $feature ) {
 }
 
 // Store grouped_features in global for use in metabox callbacks
-$GLOBALS['wps_grouped_features'] = $grouped_features;
+$GLOBALS['wpshadow_grouped_features'] = $grouped_features;
 
 ?>
 <div class="wrap">
-	<h1><?php echo esc_html__( 'Features', 'plugin-wp-support-thisismyurl' ); ?></h1>
-	<?php settings_errors( 'WPS_features' ); ?>
+	<h1><?php echo esc_html__( 'Features', 'plugin-wpshadow' ); ?></h1>
+	<?php settings_errors( 'wpshadow_features' ); ?>
 
 	<?php
 	// Check if wizard should be shown (not dismissed and not completed)
-	$wizard_dismissed = get_user_meta( get_current_user_id(), 'wps_setup_wizard_dismissed', true );
-	$wizard_completed = get_user_meta( get_current_user_id(), 'wps_setup_wizard_completed', true );
+	$wizard_dismissed = get_user_meta( get_current_user_id(), 'wpshadow_setup_wizard_dismissed', true );
+	$wizard_completed = get_user_meta( get_current_user_id(), 'wpshadow_setup_wizard_completed', true );
 
 	if ( ! $wizard_dismissed && ! $wizard_completed && ! empty( $features ) ) :
 		// Define plain English explanations for each feature
 		$feature_explanations = array(
-			'wps_core_diagnostics'  => array(
+			'wpshadow_core_diagnostics'  => array(
 				'title'       => 'Keep Your Site Healthy',
 				'description' => 'Think of this as a regular check-up for your website. It watches for problems, helps you recover if something goes wrong, and keeps important safeguards in place. Like having a doctor on call for your site.',
 				'recommended' => true,
 			),
-			'wps_tips_coach'        => array(
+			'wpshadow_tips_coach'        => array(
 				'title'       => 'Get Smart Suggestions',
 				'description' => 'Your website gives you helpful recommendations based on what type of site you have. It\'s like having an expert advisor pointing out things you might have missed.',
 				'recommended' => true,
@@ -125,20 +125,20 @@ $GLOBALS['wps_grouped_features'] = $grouped_features;
 		?>
 		<div id="wps-setup-wizard" class="wps-wizard" data-current-step="0" data-total-features="<?php echo count( $features ); ?>">
 			<div class="wps-wizard-header">
-				<button type="button" class="wps-wizard-dismiss" title="<?php esc_attr_e( 'Dismiss wizard', 'plugin-wp-support-thisismyurl' ); ?>">
+				<button type="button" class="wps-wizard-dismiss" title="<?php esc_attr_e( 'Dismiss wizard', 'plugin-wpshadow' ); ?>">
 					<span class="dashicons dashicons-no-alt"></span>
 				</button>
 			</div>
 			<div class="wps-wizard-content">
 				<div class="wps-wizard-step wps-wizard-welcome active">
-					<h2><?php esc_html_e( 'Welcome! Let\'s Set Up Your Site Features', 'plugin-wp-support-thisismyurl' ); ?></h2>
+					<h2><?php esc_html_e( 'Welcome! Let\'s Set Up Your Site Features', 'plugin-wpshadow' ); ?></h2>
 					<p style="font-size: 16px; line-height: 1.6; max-width: 700px; margin: 0 auto 24px;">
-						<?php esc_html_e( 'We\'ll walk you through each feature one at a time and explain what it does in plain English. You can turn features on or off as we go, and your choices will be saved automatically.', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'We\'ll walk you through each feature one at a time and explain what it does in plain English. You can turn features on or off as we go, and your choices will be saved automatically.', 'plugin-wpshadow' ); ?>
 					</p>
 					<p style="font-size: 14px; color: #fff; font-weight: 600; margin-bottom: 24px;">
-						<?php printf( esc_html__( 'This will take about %d minutes. You can skip or dismiss this anytime.', 'plugin-wp-support-thisismyurl' ), ceil( count( $features ) / 10 ) ); ?>
+						<?php printf( esc_html__( 'This will take about %d minutes. You can skip or dismiss this anytime.', 'plugin-wpshadow' ), ceil( count( $features ) / 10 ) ); ?>
 					</p>
-					<button type="button" class="button button-primary button-hero wps-wizard-start"><?php esc_html_e( 'Get Started', 'plugin-wp-support-thisismyurl' ); ?></button>
+					<button type="button" class="button button-primary button-hero wps-wizard-start"><?php esc_html_e( 'Get Started', 'plugin-wpshadow' ); ?></button>
 				</div>
 				<?php
 				$step_index = 0;
@@ -153,10 +153,10 @@ $GLOBALS['wps_grouped_features'] = $grouped_features;
 					++$step_index;
 					?>
 					<div class="wps-wizard-step wps-wizard-feature" data-feature-id="<?php echo esc_attr( $feature_id ); ?>" data-step="<?php echo $step_index; ?>">
-						<div class="wps-wizard-step-number"><?php printf( esc_html__( 'Feature %1$d of %2$d', 'plugin-wp-support-thisismyurl' ), $step_index, count( $features ) ); ?></div>
+						<div class="wps-wizard-step-number"><?php printf( esc_html__( 'Feature %1$d of %2$d', 'plugin-wpshadow' ), $step_index, count( $features ) ); ?></div>
 						<h2><?php echo esc_html( $explanation['title'] ); ?></h2>
 						<?php if ( $explanation['recommended'] ) : ?>
-							<span class="wps-wizard-badge wps-recommended"><?php esc_html_e( 'Recommended', 'plugin-wp-support-thisismyurl' ); ?></span>
+							<span class="wps-wizard-badge wps-recommended"><?php esc_html_e( 'Recommended', 'plugin-wpshadow' ); ?></span>
 						<?php endif; ?>
 						<p style="font-size: 16px; line-height: 1.6; max-width: 650px; margin: 20px auto 32px;">
 							<?php echo esc_html( $explanation['description'] ); ?>
@@ -165,22 +165,22 @@ $GLOBALS['wps_grouped_features'] = $grouped_features;
 							<label class="wps-wizard-toggle-label">
 								<input type="checkbox" class="wps-wizard-feature-toggle" data-feature-id="<?php echo esc_attr( $feature_id ); ?>" <?php checked( $is_enabled ); ?> />
 								<span class="wps-toggle-switch"></span>
-								<span class="wps-toggle-text"><?php esc_html_e( 'Enable this feature', 'plugin-wp-support-thisismyurl' ); ?></span>
+								<span class="wps-toggle-text"><?php esc_html_e( 'Enable this feature', 'plugin-wpshadow' ); ?></span>
 							</label>
 						</div>
 						<div class="wps-wizard-actions">
-							<button type="button" class="button wps-wizard-prev"><?php esc_html_e( 'Previous', 'plugin-wp-support-thisismyurl' ); ?></button>
-							<button type="button" class="button button-primary wps-wizard-next"><?php esc_html_e( 'Next', 'plugin-wp-support-thisismyurl' ); ?></button>
+							<button type="button" class="button wps-wizard-prev"><?php esc_html_e( 'Previous', 'plugin-wpshadow' ); ?></button>
+							<button type="button" class="button button-primary wps-wizard-next"><?php esc_html_e( 'Next', 'plugin-wpshadow' ); ?></button>
 						</div>
 					</div>
 				<?php endforeach; ?>
 				<div class="wps-wizard-step wps-wizard-complete">
 					<div class="dashicons dashicons-yes-alt" style="font-size: 80px; width: 80px; height: 80px; color: #46b450; margin: 0 auto 24px;"></div>
-					<h2><?php esc_html_e( 'All Set!', 'plugin-wp-support-thisismyurl' ); ?></h2>
+					<h2><?php esc_html_e( 'All Set!', 'plugin-wpshadow' ); ?></h2>
 					<p style="font-size: 16px; line-height: 1.6; max-width: 600px; margin: 0 auto 32px;">
-						<?php esc_html_e( 'Your features are configured and ready to go. You can always change these settings later from the features list below.', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'Your features are configured and ready to go. You can always change these settings later from the features list below.', 'plugin-wpshadow' ); ?>
 					</p>
-					<button type="button" class="button button-primary button-hero wps-wizard-finish"><?php esc_html_e( 'Finish Setup', 'plugin-wp-support-thisismyurl' ); ?></button>
+					<button type="button" class="button button-primary button-hero wps-wizard-finish"><?php esc_html_e( 'Finish Setup', 'plugin-wpshadow' ); ?></button>
 				</div>
 			</div>
 			<div class="wps-wizard-progress">
@@ -191,14 +191,14 @@ $GLOBALS['wps_grouped_features'] = $grouped_features;
 
 	<div class="wps-features-container">
 		<form method="post" id="wps-features-form">
-			<?php wp_nonce_field( 'WPS_save_features', 'wps_features_nonce' ); ?>
-			<input type="hidden" name="wps_features_context[level]" value="<?php echo esc_attr( $level ); ?>" />
-			<input type="hidden" name="wps_features_context[hub]" value="<?php echo esc_attr( $hub_id ); ?>" />
-			<input type="hidden" name="wps_features_context[spoke]" value="<?php echo esc_attr( $spoke_id ); ?>" />
+			<?php wp_nonce_field( 'wpshadow_save_features', 'wpshadow_features_nonce' ); ?>
+			<input type="hidden" name="wpshadow_features_context[level]" value="<?php echo esc_attr( $level ); ?>" />
+			<input type="hidden" name="wpshadow_features_context[hub]" value="<?php echo esc_attr( $hub_id ); ?>" />
+			<input type="hidden" name="wpshadow_features_context[spoke]" value="<?php echo esc_attr( $spoke_id ); ?>" />
 
 			<?php if ( empty( $features ) ) : ?>
 				<div class="notice notice-info">
-					<p><?php esc_html_e( 'No features registered for this context yet.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					<p><?php esc_html_e( 'No features registered for this context yet.', 'plugin-wpshadow' ); ?></p>
 				</div>
 			<?php else : ?>
 			<div id="poststuff">
@@ -214,12 +214,12 @@ $GLOBALS['wps_grouped_features'] = $grouped_features;
 
 			<p class="submit">
 				<button type="submit" class="button button-primary">
-					<?php echo esc_html__( 'Save features', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php echo esc_html__( 'Save features', 'plugin-wpshadow' ); ?>
 				</button>
 				<div style="display: inline-flex; align-items: center; gap: 15px; margin-left: 15px;">
 					<?php if ( $network ) : ?>
 						<span style="color:#666; font-size:12px;">
-							<?php echo esc_html__( 'Network scope', 'plugin-wp-support-thisismyurl' ); ?>
+							<?php echo esc_html__( 'Network scope', 'plugin-wpshadow' ); ?>
 						</span>
 					<?php endif; ?>
 					<?php
@@ -227,7 +227,7 @@ $GLOBALS['wps_grouped_features'] = $grouped_features;
 					if ( $wizard_dismissed || $wizard_completed ) :
 						?>
 						<a href="#" class="wps-rerun-wizard" style="color: #667eea; text-decoration: none; font-weight: 500; cursor: pointer;">
-							<?php esc_html_e( 'Rerun Setup Wizard', 'plugin-wp-support-thisismyurl' ); ?>
+							<?php esc_html_e( 'Rerun Setup Wizard', 'plugin-wpshadow' ); ?>
 						</a>
 						<?php
 						endif;
@@ -584,7 +584,7 @@ jQuery(document).ready(function($) {
 
 		// Update next button text on last feature
 		if (index === totalSteps - 2) {
-			wizard.find('.wps-wizard-next').text('<?php esc_html_e( 'Finish', 'plugin-wp-support-thisismyurl' ); ?>');
+			wizard.find('.wps-wizard-next').text('<?php esc_html_e( 'Finish', 'plugin-wpshadow' ); ?>');
 		}
 	}
 
@@ -593,8 +593,8 @@ jQuery(document).ready(function($) {
 			url: ajaxurl,
 			type: 'POST',
 			data: {
-				action: 'wps_wizard_save_feature',
-				nonce: '<?php echo wp_create_nonce( 'wps_wizard_save' ); ?>',
+				action: 'wpshadow_wizard_save_feature',
+				nonce: '<?php echo wp_create_nonce( 'wpshadow_wizard_save' ); ?>',
 				feature_id: featureId,
 				enabled: enabled ? 1 : 0
 			}
@@ -606,8 +606,8 @@ jQuery(document).ready(function($) {
 			url: ajaxurl,
 			type: 'POST',
 			data: {
-				action: 'wps_wizard_complete',
-				nonce: '<?php echo wp_create_nonce( 'wps_wizard_complete' ); ?>'
+				action: 'wpshadow_wizard_complete',
+				nonce: '<?php echo wp_create_nonce( 'wpshadow_wizard_complete' ); ?>'
 			},
 			success: function() {
 				wizard.slideUp(400, function() {
@@ -623,8 +623,8 @@ jQuery(document).ready(function($) {
 			url: ajaxurl,
 			type: 'POST',
 			data: {
-				action: 'wps_wizard_dismiss',
-				nonce: '<?php echo wp_create_nonce( 'wps_wizard_dismiss' ); ?>'
+				action: 'wpshadow_wizard_dismiss',
+				nonce: '<?php echo wp_create_nonce( 'wpshadow_wizard_dismiss' ); ?>'
 			},
 			success: function() {
 				wizard.slideUp(400, function() {
@@ -672,7 +672,7 @@ jQuery(document).ready(function($) {
 
 	// Dismiss button
 	wizard.find('.wps-wizard-dismiss').on('click', function() {
-		if (confirm('<?php esc_html_e( 'Are you sure you want to dismiss the setup wizard?', 'plugin-wp-support-thisismyurl' ); ?>')) {
+		if (confirm('<?php esc_html_e( 'Are you sure you want to dismiss the setup wizard?', 'plugin-wpshadow' ); ?>')) {
 			dismissWizard();
 		}
 	});
@@ -695,15 +695,15 @@ jQuery(document).ready(function($) {
 			url: ajaxurl,
 			type: 'POST',
 			data: {
-				action: 'wps_wizard_reset',
-				nonce: '<?php echo wp_create_nonce( 'wps_wizard_reset' ); ?>'
+				action: 'wpshadow_wizard_reset',
+				nonce: '<?php echo wp_create_nonce( 'wpshadow_wizard_reset' ); ?>'
 			},
 			success: function() {
 				location.reload();
 			},
 			error: function() {
 				link.css('opacity', '1').css('pointer-events', 'auto');
-				alert('<?php esc_html_e( 'Failed to reset wizard. Please try again.', 'plugin-wp-support-thisismyurl' ); ?>');
+				alert('<?php esc_html_e( 'Failed to reset wizard. Please try again.', 'plugin-wpshadow' ); ?>');
 			}
 		});
 	});

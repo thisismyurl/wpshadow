@@ -5,7 +5,7 @@
  * Provides secure, time-limited (24-hour) login URLs for developers with
  * session tracking and email summaries of changes made during the session.
  *
- * @package WPS_WP_SUPPORT_THISISMYURL
+ * @package WPSHADOW_wpshadow_THISISMYURL
  */
 
 declare(strict_types=1);
@@ -19,17 +19,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Magic Link Support Access Manager
  */
-class WPS_Magic_Link_Support {
+class WPSHADOW_Magic_Link_Support {
 
 	/**
 	 * Magic links option key.
 	 */
-	private const LINKS_KEY = 'WPS_magic_links';
+	private const LINKS_KEY = 'wpshadow_magic_links';
 
 	/**
 	 * Active sessions option key.
 	 */
-	private const SESSIONS_KEY = 'WPS_magic_link_sessions';
+	private const SESSIONS_KEY = 'wpshadow_magic_link_sessions';
 
 	/**
 	 * Link validity duration (hours).
@@ -52,14 +52,14 @@ class WPS_Magic_Link_Support {
 		add_action( 'admin_menu', array( __CLASS__, 'register_menu' ) );
 
 		// Schedule expiry check.
-		if ( ! wp_next_scheduled( 'WPS_check_magic_link_expiry' ) ) {
-			wp_schedule_event( time(), 'hourly', 'WPS_check_magic_link_expiry' );
+		if ( ! wp_next_scheduled( 'wpshadow_check_magic_link_expiry' ) ) {
+			wp_schedule_event( time(), 'hourly', 'wpshadow_check_magic_link_expiry' );
 		}
-		add_action( 'WPS_check_magic_link_expiry', array( __CLASS__, 'check_expired_links' ) );
+		add_action( 'wpshadow_check_magic_link_expiry', array( __CLASS__, 'check_expired_links' ) );
 
 		// Register AJAX handlers.
-		add_action( 'wp_ajax_WPS_create_magic_link', array( __CLASS__, 'ajax_create_magic_link' ) );
-		add_action( 'wp_ajax_WPS_revoke_magic_link', array( __CLASS__, 'ajax_revoke_magic_link' ) );
+		add_action( 'wp_ajax_WPSHADOW_create_magic_link', array( __CLASS__, 'ajax_create_magic_link' ) );
+		add_action( 'wp_ajax_WPSHADOW_revoke_magic_link', array( __CLASS__, 'ajax_revoke_magic_link' ) );
 
 		// Track all admin actions during magic link session.
 		add_action( 'admin_init', array( __CLASS__, 'log_admin_action' ), 999 );
@@ -87,7 +87,7 @@ class WPS_Magic_Link_Support {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return array(
 				'success' => false,
-				'error'   => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ),
+				'error'   => __( 'Insufficient permissions', 'plugin-wpshadow' ),
 			);
 		}
 
@@ -98,7 +98,7 @@ class WPS_Magic_Link_Support {
 		if ( ! is_email( $developer_email ) || ! is_email( $owner_email ) ) {
 			return array(
 				'success' => false,
-				'error'   => __( 'Invalid email address', 'plugin-wp-support-thisismyurl' ),
+				'error'   => __( 'Invalid email address', 'plugin-wpshadow' ),
 			);
 		}
 
@@ -128,19 +128,19 @@ class WPS_Magic_Link_Support {
 		// Generate magic link URL.
 		$link_url = add_query_arg(
 			array(
-				'wps_magic_link' => $token,
-				'action'         => 'wps_ml_login',
+				'wpshadow_magic_link' => $token,
+				'action'         => 'wpshadow_ml_login',
 			),
 			home_url()
 		);
 
 		// Log creation.
-		if ( class_exists( '\WPS\CoreSupport\WPS_Activity_Logger' ) ) {
-			WPS_Activity_Logger::log(
+		if ( class_exists( '\WPS\CoreSupport\WPSHADOW_Activity_Logger' ) ) {
+			WPSHADOW_Activity_Logger::log(
 				'magic_link_created',
 				sprintf(
 					/* translators: 1: developer name, 2: expiry time */
-					__( 'Magic link created for %1$s, expires %2$s', 'plugin-wp-support-thisismyurl' ),
+					__( 'Magic link created for %1$s, expires %2$s', 'plugin-wpshadow' ),
 					$developer_name,
 					wp_date( 'M d, Y H:i', $expires_at )
 				),
@@ -167,19 +167,19 @@ class WPS_Magic_Link_Support {
 	 */
 	public static function handle_magic_link_login(): void {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( ! isset( $_GET['wps_magic_link'] ) || ! isset( $_GET['action'] ) || 'wps_ml_login' !== $_GET['action'] ) {
+		if ( ! isset( $_GET['wpshadow_magic_link'] ) || ! isset( $_GET['action'] ) || 'wpshadow_ml_login' !== $_GET['action'] ) {
 			return;
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$token = sanitize_text_field( wp_unslash( $_GET['wps_magic_link'] ) );
+		$token = sanitize_text_field( wp_unslash( $_GET['wpshadow_magic_link'] ) );
 		$links = get_option( self::LINKS_KEY, array() );
 
 		// Validate token exists.
 		if ( ! isset( $links[ $token ] ) ) {
 			wp_die(
-				esc_html__( 'Invalid magic link.', 'plugin-wp-support-thisismyurl' ),
-				esc_html__( 'Access Denied', 'plugin-wp-support-thisismyurl' ),
+				esc_html__( 'Invalid magic link.', 'plugin-wpshadow' ),
+				esc_html__( 'Access Denied', 'plugin-wpshadow' ),
 				array( 'response' => 403 )
 			);
 		}
@@ -189,8 +189,8 @@ class WPS_Magic_Link_Support {
 		// Check expiry.
 		if ( $link_data['expires'] < time() ) {
 			wp_die(
-				esc_html__( 'This magic link has expired.', 'plugin-wp-support-thisismyurl' ),
-				esc_html__( 'Link Expired', 'plugin-wp-support-thisismyurl' ),
+				esc_html__( 'This magic link has expired.', 'plugin-wpshadow' ),
+				esc_html__( 'Link Expired', 'plugin-wpshadow' ),
 				array( 'response' => 403 )
 			);
 		}
@@ -206,7 +206,7 @@ class WPS_Magic_Link_Support {
 
 		// Create temporary admin user or log them in as administrator.
 		// For security, create a temporary user account with admin privileges.
-		$temp_username = 'wps_temp_' . substr( $token, 0, 8 );
+		$temp_username = 'wpshadow_temp_' . substr( $token, 0, 8 );
 		$temp_email    = $link_data['developer_email'];
 
 		// Check if temp user already exists.
@@ -223,7 +223,7 @@ class WPS_Magic_Link_Support {
 			if ( is_wp_error( $user_id ) ) {
 				wp_die(
 					esc_html( $user_id->get_error_message() ),
-					esc_html__( 'Login Error', 'plugin-wp-support-thisismyurl' ),
+					esc_html__( 'Login Error', 'plugin-wpshadow' ),
 					array( 'response' => 500 )
 				);
 			}
@@ -234,9 +234,9 @@ class WPS_Magic_Link_Support {
 			$user->set_role( 'administrator' );
 
 			// Add meta to identify as magic link user.
-			update_user_meta( $user_id, 'wps_magic_link_token', $token );
-			update_user_meta( $user_id, 'wps_magic_link_created', time() );
-			update_user_meta( $user_id, 'wps_magic_link_expires', $link_data['expires'] );
+			update_user_meta( $user_id, 'wpshadow_magic_link_token', $token );
+			update_user_meta( $user_id, 'wpshadow_magic_link_created', time() );
+			update_user_meta( $user_id, 'wpshadow_magic_link_expires', $link_data['expires'] );
 		}
 
 		// Log them in.
@@ -262,19 +262,19 @@ class WPS_Magic_Link_Support {
 		update_option( self::SESSIONS_KEY, $sessions );
 
 		// Store session ID in user meta for tracking.
-		update_user_meta( $user->ID, 'wps_magic_link_session_id', $session_id );
+		update_user_meta( $user->ID, 'wpshadow_magic_link_session_id', $session_id );
 
 		// Update link data with session ID.
 		$links[ $token ]['session_id'] = $session_id;
 		update_option( self::LINKS_KEY, $links );
 
 		// Log the login.
-		if ( class_exists( '\WPS\CoreSupport\WPS_Activity_Logger' ) ) {
-			WPS_Activity_Logger::log(
+		if ( class_exists( '\WPS\CoreSupport\WPSHADOW_Activity_Logger' ) ) {
+			WPSHADOW_Activity_Logger::log(
 				'magic_link_used',
 				sprintf(
 					/* translators: %s: developer name */
-					__( 'Magic link login: %s', 'plugin-wp-support-thisismyurl' ),
+					__( 'Magic link login: %s', 'plugin-wpshadow' ),
 					$link_data['developer_name']
 				),
 				array(
@@ -287,7 +287,7 @@ class WPS_Magic_Link_Support {
 		}
 
 		// Redirect to admin dashboard with welcome message.
-		$redirect_url = add_query_arg( 'wps_ml_active', '1', admin_url() );
+		$redirect_url = add_query_arg( 'wpshadow_ml_active', '1', admin_url() );
 		wp_safe_redirect( $redirect_url );
 		exit;
 	}
@@ -303,7 +303,7 @@ class WPS_Magic_Link_Support {
 		}
 
 		$user_id    = get_current_user_id();
-		$session_id = get_user_meta( $user_id, 'wps_magic_link_session_id', true );
+		$session_id = get_user_meta( $user_id, 'wpshadow_magic_link_session_id', true );
 
 		if ( empty( $session_id ) ) {
 			return;
@@ -336,7 +336,7 @@ class WPS_Magic_Link_Support {
 		}
 
 		$user_id    = get_current_user_id();
-		$session_id = get_user_meta( $user_id, 'wps_magic_link_session_id', true );
+		$session_id = get_user_meta( $user_id, 'wpshadow_magic_link_session_id', true );
 
 		if ( empty( $session_id ) ) {
 			return;
@@ -384,7 +384,7 @@ class WPS_Magic_Link_Support {
 		}
 
 		$user_id    = get_current_user_id();
-		$session_id = get_user_meta( $user_id, 'wps_magic_link_session_id', true );
+		$session_id = get_user_meta( $user_id, 'wpshadow_magic_link_session_id', true );
 
 		if ( empty( $session_id ) ) {
 			return;
@@ -422,7 +422,7 @@ class WPS_Magic_Link_Support {
 		}
 
 		$user_id    = get_current_user_id();
-		$session_id = get_user_meta( $user_id, 'wps_magic_link_session_id', true );
+		$session_id = get_user_meta( $user_id, 'wpshadow_magic_link_session_id', true );
 
 		if ( empty( $session_id ) ) {
 			return;
@@ -435,7 +435,7 @@ class WPS_Magic_Link_Support {
 		}
 
 		// Skip tracking our own options.
-		if ( strpos( $option, 'WPS_magic_link' ) === 0 ) {
+		if ( strpos( $option, 'wpshadow_magic_link' ) === 0 ) {
 			return;
 		}
 
@@ -464,7 +464,7 @@ class WPS_Magic_Link_Support {
 		}
 
 		$user_id    = get_current_user_id();
-		$session_id = get_user_meta( $user_id, 'wps_magic_link_session_id', true );
+		$session_id = get_user_meta( $user_id, 'wpshadow_magic_link_session_id', true );
 
 		if ( empty( $session_id ) ) {
 			return;
@@ -500,7 +500,7 @@ class WPS_Magic_Link_Support {
 		}
 
 		$user_id    = get_current_user_id();
-		$session_id = get_user_meta( $user_id, 'wps_magic_link_session_id', true );
+		$session_id = get_user_meta( $user_id, 'wpshadow_magic_link_session_id', true );
 
 		if ( empty( $session_id ) ) {
 			return;
@@ -543,7 +543,7 @@ class WPS_Magic_Link_Support {
 
 		// Clean up temporary user.
 		$user = get_user_by( 'id', $session['user_id'] );
-		if ( $user && str_starts_with( $user->user_login, 'wps_temp_' ) ) {
+		if ( $user && str_starts_with( $user->user_login, 'wpshadow_temp_' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/user.php';
 			wp_delete_user( $session['user_id'] );
 		}
@@ -553,12 +553,12 @@ class WPS_Magic_Link_Support {
 		update_option( self::SESSIONS_KEY, $sessions );
 
 		// Log session end.
-		if ( class_exists( '\WPS\CoreSupport\WPS_Activity_Logger' ) ) {
-			WPS_Activity_Logger::log(
+		if ( class_exists( '\WPS\CoreSupport\WPSHADOW_Activity_Logger' ) ) {
+			WPSHADOW_Activity_Logger::log(
 				'magic_link_expired',
 				sprintf(
 					/* translators: %s: developer name */
-					__( 'Magic link session ended: %s', 'plugin-wp-support-thisismyurl' ),
+					__( 'Magic link session ended: %s', 'plugin-wpshadow' ),
 					$session['developer_name']
 				),
 				array(
@@ -583,26 +583,26 @@ class WPS_Magic_Link_Support {
 
 		$subject = sprintf(
 			/* translators: 1: site name, 2: developer name */
-			__( '[%1$s] Support Access Summary - %2$s', 'plugin-wp-support-thisismyurl' ),
+			__( '[%1$s] Support Access Summary - %2$s', 'plugin-wpshadow' ),
 			get_bloginfo( 'name' ),
 			$developer_name
 		);
 
 		$message = sprintf(
 			/* translators: 1: developer name, 2: site name */
-			__( 'Support access by %1$s on %2$s has ended.', 'plugin-wp-support-thisismyurl' ) . "\n\n",
+			__( 'Support access by %1$s on %2$s has ended.', 'plugin-wpshadow' ) . "\n\n",
 			$developer_name,
 			get_bloginfo( 'name' )
 		);
 
-		$message .= __( 'Summary of changes made:', 'plugin-wp-support-thisismyurl' ) . "\n\n";
+		$message .= __( 'Summary of changes made:', 'plugin-wpshadow' ) . "\n\n";
 
 		if ( empty( $changes ) ) {
-			$message .= __( 'No changes were made during this session.', 'plugin-wp-support-thisismyurl' ) . "\n";
+			$message .= __( 'No changes were made during this session.', 'plugin-wpshadow' ) . "\n";
 		} else {
 			$message .= sprintf(
 				/* translators: %d: number of changes */
-				__( 'Total changes: %d', 'plugin-wp-support-thisismyurl' ) . "\n\n",
+				__( 'Total changes: %d', 'plugin-wpshadow' ) . "\n\n",
 				count( $changes )
 			);
 
@@ -616,7 +616,7 @@ class WPS_Magic_Link_Support {
 					case 'post_created':
 						$message .= sprintf(
 							/* translators: 1: post type, 2: post title */
-							__( 'Created %1$s: %2$s', 'plugin-wp-support-thisismyurl' ),
+							__( 'Created %1$s: %2$s', 'plugin-wpshadow' ),
 							$change['post_type'],
 							$change['post_title']
 						);
@@ -625,7 +625,7 @@ class WPS_Magic_Link_Support {
 					case 'post_updated':
 						$message .= sprintf(
 							/* translators: 1: post type, 2: post title */
-							__( 'Updated %1$s: %2$s', 'plugin-wp-support-thisismyurl' ),
+							__( 'Updated %1$s: %2$s', 'plugin-wpshadow' ),
 							$change['post_type'],
 							$change['post_title']
 						);
@@ -634,7 +634,7 @@ class WPS_Magic_Link_Support {
 					case 'option_updated':
 						$message .= sprintf(
 							/* translators: %s: option name */
-							__( 'Changed setting: %s', 'plugin-wp-support-thisismyurl' ),
+							__( 'Changed setting: %s', 'plugin-wpshadow' ),
 							$change['option']
 						);
 						break;
@@ -642,7 +642,7 @@ class WPS_Magic_Link_Support {
 					case 'plugin_activated':
 						$message .= sprintf(
 							/* translators: %s: plugin name */
-							__( 'Activated plugin: %s', 'plugin-wp-support-thisismyurl' ),
+							__( 'Activated plugin: %s', 'plugin-wpshadow' ),
 							$change['plugin']
 						);
 						break;
@@ -650,7 +650,7 @@ class WPS_Magic_Link_Support {
 					case 'plugin_deactivated':
 						$message .= sprintf(
 							/* translators: %s: plugin name */
-							__( 'Deactivated plugin: %s', 'plugin-wp-support-thisismyurl' ),
+							__( 'Deactivated plugin: %s', 'plugin-wpshadow' ),
 							$change['plugin']
 						);
 						break;
@@ -659,13 +659,13 @@ class WPS_Magic_Link_Support {
 						if ( ! empty( $change['action'] ) ) {
 							$message .= sprintf(
 								/* translators: %s: action name */
-								__( 'Performed action: %s', 'plugin-wp-support-thisismyurl' ),
+								__( 'Performed action: %s', 'plugin-wpshadow' ),
 								$change['action']
 							);
 						} elseif ( ! empty( $change['page'] ) ) {
 							$message .= sprintf(
 								/* translators: %s: page name */
-								__( 'Accessed page: %s', 'plugin-wp-support-thisismyurl' ),
+								__( 'Accessed page: %s', 'plugin-wpshadow' ),
 								$change['page']
 							);
 						}
@@ -674,7 +674,7 @@ class WPS_Magic_Link_Support {
 					default:
 						$message .= sprintf(
 							/* translators: %s: change type */
-							__( 'Change type: %s', 'plugin-wp-support-thisismyurl' ),
+							__( 'Change type: %s', 'plugin-wpshadow' ),
 							$type
 						);
 						break;
@@ -686,7 +686,7 @@ class WPS_Magic_Link_Support {
 
 		$message .= "\n" . sprintf(
 			/* translators: %s: admin URL */
-			__( 'View your site: %s', 'plugin-wp-support-thisismyurl' ),
+			__( 'View your site: %s', 'plugin-wpshadow' ),
 			admin_url()
 		) . "\n";
 
@@ -756,10 +756,10 @@ class WPS_Magic_Link_Support {
 		update_option( self::LINKS_KEY, $links );
 
 		// Log revocation.
-		if ( class_exists( '\WPS\CoreSupport\WPS_Activity_Logger' ) ) {
-			WPS_Activity_Logger::log(
+		if ( class_exists( '\WPS\CoreSupport\WPSHADOW_Activity_Logger' ) ) {
+			WPSHADOW_Activity_Logger::log(
 				'magic_link_revoked',
-				__( 'Magic link revoked', 'plugin-wp-support-thisismyurl' ),
+				__( 'Magic link revoked', 'plugin-wpshadow' ),
 				array( 'token' => substr( $token, 0, 8 ) . '...' ),
 				'security'
 			);
@@ -793,19 +793,19 @@ class WPS_Magic_Link_Support {
 	 * @return void
 	 */
 	public static function ajax_create_magic_link(): void {
-		check_ajax_referer( 'wps_magic_link_nonce', 'nonce' );
+		check_ajax_referer( 'wpshadow_magic_link_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
+			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
 		}
 
-		$developer_name  = \WPS\CoreSupport\wps_get_post_text( 'developer_name' );
-		$developer_email = \WPS\CoreSupport\wps_get_post_email( 'developer_email' );
-		$owner_email     = \WPS\CoreSupport\wps_get_post_email( 'owner_email' );
-		$reason          = \WPS\CoreSupport\wps_get_post_text( 'reason' );
+		$developer_name  = \WPS\CoreSupport\WPSHADOW_get_post_text( 'developer_name' );
+		$developer_email = \WPS\CoreSupport\WPSHADOW_get_post_email( 'developer_email' );
+		$owner_email     = \WPS\CoreSupport\WPSHADOW_get_post_email( 'owner_email' );
+		$reason          = \WPS\CoreSupport\WPSHADOW_get_post_text( 'reason' );
 
 		if ( empty( $developer_name ) || empty( $developer_email ) || empty( $owner_email ) ) {
-			wp_send_json_error( __( 'All fields are required', 'plugin-wp-support-thisismyurl' ) );
+			wp_send_json_error( __( 'All fields are required', 'plugin-wpshadow' ) );
 		}
 
 		$result = self::create_magic_link( $developer_name, $developer_email, $owner_email, $reason );
@@ -818,7 +818,7 @@ class WPS_Magic_Link_Support {
 				)
 			);
 		} else {
-			wp_send_json_error( $result['error'] ?? __( 'Failed to create magic link', 'plugin-wp-support-thisismyurl' ) );
+			wp_send_json_error( $result['error'] ?? __( 'Failed to create magic link', 'plugin-wpshadow' ) );
 		}
 	}
 
@@ -828,16 +828,16 @@ class WPS_Magic_Link_Support {
 	 * @return void
 	 */
 	public static function ajax_revoke_magic_link(): void {
-		check_ajax_referer( 'wps_magic_link_nonce', 'nonce' );
+		check_ajax_referer( 'wpshadow_magic_link_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
+			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
 		}
 
-		$token = \WPS\CoreSupport\wps_get_post_text( 'token' );
+		$token = \WPS\CoreSupport\WPSHADOW_get_post_text( 'token' );
 
 		if ( empty( $token ) ) {
-			wp_send_json_error( __( 'Token is required', 'plugin-wp-support-thisismyurl' ) );
+			wp_send_json_error( __( 'Token is required', 'plugin-wpshadow' ) );
 		}
 
 		$result = self::revoke_magic_link( $token );
@@ -845,7 +845,7 @@ class WPS_Magic_Link_Support {
 		if ( $result ) {
 			wp_send_json_success( array( 'revoked' => true ) );
 		} else {
-			wp_send_json_error( __( 'Failed to revoke magic link', 'plugin-wp-support-thisismyurl' ) );
+			wp_send_json_error( __( 'Failed to revoke magic link', 'plugin-wpshadow' ) );
 		}
 	}
 
@@ -857,8 +857,8 @@ class WPS_Magic_Link_Support {
 	public static function register_menu(): void {
 		add_submenu_page(
 			'wp-support',
-			__( 'Magic Link Support', 'plugin-wp-support-thisismyurl' ),
-			__( 'Magic Links', 'plugin-wp-support-thisismyurl' ),
+			__( 'Magic Link Support', 'plugin-wpshadow' ),
+			__( 'Magic Links', 'plugin-wpshadow' ),
 			'manage_options',
 			'wps-magic-link-support',
 			array( __CLASS__, 'render_admin_page' )
@@ -872,7 +872,7 @@ class WPS_Magic_Link_Support {
 	 */
 	public static function render_admin_page(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Insufficient permissions.', 'plugin-wpshadow' ) );
 		}
 
 		$active_links = self::get_active_links();
@@ -880,89 +880,89 @@ class WPS_Magic_Link_Support {
 		$admin_email  = get_option( 'admin_email' );
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Magic Link Support Access', 'plugin-wp-support-thisismyurl' ); ?></h1>
+			<h1><?php esc_html_e( 'Magic Link Support Access', 'plugin-wpshadow' ); ?></h1>
 			<p class="description">
-				<?php esc_html_e( 'Generate secure, time-limited login URLs for developers. All changes made during the session are tracked and a summary is emailed when the link expires.', 'plugin-wp-support-thisismyurl' ); ?>
+				<?php esc_html_e( 'Generate secure, time-limited login URLs for developers. All changes made during the session are tracked and a summary is emailed when the link expires.', 'plugin-wpshadow' ); ?>
 			</p>
 
 			<div style="background: #fff; border: 1px solid #ccd0d4; padding: 20px; margin: 20px 0; max-width: 800px;">
-				<h2><?php esc_html_e( 'Create New Magic Link', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( 'Create New Magic Link', 'plugin-wpshadow' ); ?></h2>
 				<form id="wps-create-magic-link-form">
 					<table class="form-table">
 						<tr>
 							<th scope="row">
-								<label for="developer_name"><?php esc_html_e( 'Developer Name', 'plugin-wp-support-thisismyurl' ); ?></label>
+								<label for="developer_name"><?php esc_html_e( 'Developer Name', 'plugin-wpshadow' ); ?></label>
 							</th>
 							<td>
-								<input type="text" id="developer_name" name="developer_name" class="regular-text" required placeholder="<?php esc_attr_e( 'e.g., John Smith', 'plugin-wp-support-thisismyurl' ); ?>">
-								<p class="description"><?php esc_html_e( 'Name of the developer who will receive access', 'plugin-wp-support-thisismyurl' ); ?></p>
+								<input type="text" id="developer_name" name="developer_name" class="regular-text" required placeholder="<?php esc_attr_e( 'e.g., John Smith', 'plugin-wpshadow' ); ?>">
+								<p class="description"><?php esc_html_e( 'Name of the developer who will receive access', 'plugin-wpshadow' ); ?></p>
 							</td>
 						</tr>
 						<tr>
 							<th scope="row">
-								<label for="developer_email"><?php esc_html_e( 'Developer Email', 'plugin-wp-support-thisismyurl' ); ?></label>
+								<label for="developer_email"><?php esc_html_e( 'Developer Email', 'plugin-wpshadow' ); ?></label>
 							</th>
 							<td>
-								<input type="email" id="developer_email" name="developer_email" class="regular-text" required placeholder="<?php esc_attr_e( 'developer@example.com', 'plugin-wp-support-thisismyurl' ); ?>">
-								<p class="description"><?php esc_html_e( 'Email address for the temporary admin account', 'plugin-wp-support-thisismyurl' ); ?></p>
+								<input type="email" id="developer_email" name="developer_email" class="regular-text" required placeholder="<?php esc_attr_e( 'developer@example.com', 'plugin-wpshadow' ); ?>">
+								<p class="description"><?php esc_html_e( 'Email address for the temporary admin account', 'plugin-wpshadow' ); ?></p>
 							</td>
 						</tr>
 						<tr>
 							<th scope="row">
-								<label for="owner_email"><?php esc_html_e( 'Site Owner Email', 'plugin-wp-support-thisismyurl' ); ?></label>
+								<label for="owner_email"><?php esc_html_e( 'Site Owner Email', 'plugin-wpshadow' ); ?></label>
 							</th>
 							<td>
 								<input type="email" id="owner_email" name="owner_email" class="regular-text" required value="<?php echo esc_attr( $admin_email ); ?>">
-								<p class="description"><?php esc_html_e( 'Email address to receive the activity summary', 'plugin-wp-support-thisismyurl' ); ?></p>
+								<p class="description"><?php esc_html_e( 'Email address to receive the activity summary', 'plugin-wpshadow' ); ?></p>
 							</td>
 						</tr>
 						<tr>
 							<th scope="row">
-								<label for="reason"><?php esc_html_e( 'Reason for Access', 'plugin-wp-support-thisismyurl' ); ?></label>
+								<label for="reason"><?php esc_html_e( 'Reason for Access', 'plugin-wpshadow' ); ?></label>
 							</th>
 							<td>
-								<input type="text" id="reason" name="reason" class="regular-text" placeholder="<?php esc_attr_e( 'e.g., Debugging performance issue', 'plugin-wp-support-thisismyurl' ); ?>">
-								<p class="description"><?php esc_html_e( 'Optional description of why access is needed', 'plugin-wp-support-thisismyurl' ); ?></p>
+								<input type="text" id="reason" name="reason" class="regular-text" placeholder="<?php esc_attr_e( 'e.g., Debugging performance issue', 'plugin-wpshadow' ); ?>">
+								<p class="description"><?php esc_html_e( 'Optional description of why access is needed', 'plugin-wpshadow' ); ?></p>
 							</td>
 						</tr>
 					</table>
 					<p class="submit">
 						<button type="submit" class="button button-primary button-large">
-							<?php esc_html_e( '🔐 Generate Magic Link (24-hour expiry)', 'plugin-wp-support-thisismyurl' ); ?>
+							<?php esc_html_e( '🔐 Generate Magic Link (24-hour expiry)', 'plugin-wpshadow' ); ?>
 						</button>
 					</p>
 				</form>
 
 				<div id="wps-magic-link-result" style="display: none; margin-top: 20px; padding: 15px; background: #d4edda; border: 1px solid #c3e6cb; border-radius: 4px;">
-					<h3><?php esc_html_e( 'Magic Link Created!', 'plugin-wp-support-thisismyurl' ); ?></h3>
-					<p><?php esc_html_e( 'Send this link to the developer:', 'plugin-wp-support-thisismyurl' ); ?></p>
+					<h3><?php esc_html_e( 'Magic Link Created!', 'plugin-wpshadow' ); ?></h3>
+					<p><?php esc_html_e( 'Send this link to the developer:', 'plugin-wpshadow' ); ?></p>
 					<div style="background: #fff; padding: 10px; border: 1px solid #ddd; border-radius: 3px; word-break: break-all; font-family: monospace; font-size: 12px;">
 						<span id="wps-magic-link-url"></span>
 					</div>
 					<p style="margin-top: 10px;">
 						<button type="button" class="button" id="wps-copy-magic-link">
-							<?php esc_html_e( 'Copy Link', 'plugin-wp-support-thisismyurl' ); ?>
+							<?php esc_html_e( 'Copy Link', 'plugin-wpshadow' ); ?>
 						</button>
 					</p>
 					<p class="description">
-						<?php esc_html_e( 'This link expires in 24 hours and grants full admin access. A summary of changes will be emailed when the link expires or is revoked.', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'This link expires in 24 hours and grants full admin access. A summary of changes will be emailed when the link expires or is revoked.', 'plugin-wpshadow' ); ?>
 					</p>
 				</div>
 			</div>
 
 			<?php if ( ! empty( $active_links ) ) : ?>
-				<h2><?php esc_html_e( 'Active Magic Links', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( 'Active Magic Links', 'plugin-wpshadow' ); ?></h2>
 				<table class="wp-list-table widefat fixed striped">
 					<thead>
 						<tr>
-							<th><?php esc_html_e( 'Developer', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Email', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Reason', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Created', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Expires', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Uses', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Status', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Actions', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th><?php esc_html_e( 'Developer', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Email', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Reason', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Created', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Expires', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Uses', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Status', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Actions', 'plugin-wpshadow' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -978,21 +978,21 @@ class WPS_Magic_Link_Support {
 								<td><?php echo esc_html( wp_date( 'M d, Y H:i', $link_data['created'] ) ); ?></td>
 								<td>
 									<?php echo esc_html( wp_date( 'M d, Y H:i', $link_data['expires'] ) ); ?>
-									<br><small><?php echo esc_html( $time_left ); ?> <?php esc_html_e( 'remaining', 'plugin-wp-support-thisismyurl' ); ?></small>
+									<br><small><?php echo esc_html( $time_left ); ?> <?php esc_html_e( 'remaining', 'plugin-wpshadow' ); ?></small>
 								</td>
 								<td><?php echo intval( $link_data['uses'] ); ?></td>
 								<td>
 									<?php if ( $is_active ) : ?>
-										<span style="color: #2ecc71; font-weight: bold;">● <?php esc_html_e( 'Active Session', 'plugin-wp-support-thisismyurl' ); ?></span>
+										<span style="color: #2ecc71; font-weight: bold;">● <?php esc_html_e( 'Active Session', 'plugin-wpshadow' ); ?></span>
 									<?php elseif ( $link_data['uses'] > 0 ) : ?>
-										<span style="color: #f39c12;">○ <?php esc_html_e( 'Used', 'plugin-wp-support-thisismyurl' ); ?></span>
+										<span style="color: #f39c12;">○ <?php esc_html_e( 'Used', 'plugin-wpshadow' ); ?></span>
 									<?php else : ?>
-										<span style="color: #95a5a6;">○ <?php esc_html_e( 'Unused', 'plugin-wp-support-thisismyurl' ); ?></span>
+										<span style="color: #95a5a6;">○ <?php esc_html_e( 'Unused', 'plugin-wpshadow' ); ?></span>
 									<?php endif; ?>
 								</td>
 								<td>
 									<button type="button" class="button button-small wps-revoke-link" data-token="<?php echo esc_attr( $token ); ?>">
-										<?php esc_html_e( 'Revoke', 'plugin-wp-support-thisismyurl' ); ?>
+										<?php esc_html_e( 'Revoke', 'plugin-wpshadow' ); ?>
 									</button>
 								</td>
 							</tr>
@@ -1001,7 +1001,7 @@ class WPS_Magic_Link_Support {
 				</table>
 			<?php else : ?>
 				<div style="background: #f9f9f9; border: 1px solid #ddd; padding: 20px; margin: 20px 0; text-align: center;">
-					<p><?php esc_html_e( 'No active magic links. Create one above to grant temporary support access.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					<p><?php esc_html_e( 'No active magic links. Create one above to grant temporary support access.', 'plugin-wpshadow' ); ?></p>
 				</div>
 			<?php endif; ?>
 		</div>
@@ -1012,8 +1012,8 @@ class WPS_Magic_Link_Support {
 				e.preventDefault();
 				
 				var formData = {
-					action: 'WPS_create_magic_link',
-					nonce: '<?php echo esc_js( wp_create_nonce( 'wps_magic_link_nonce' ) ); ?>',
+					action: 'wpshadow_create_magic_link',
+					nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_magic_link_nonce' ) ); ?>',
 					developer_name: $('#developer_name').val(),
 					developer_email: $('#developer_email').val(),
 					owner_email: $('#owner_email').val(),
@@ -1036,15 +1036,15 @@ class WPS_Magic_Link_Support {
 				var link = $('#wps-magic-link-url').text();
 				navigator.clipboard.writeText(link).then(function() {
 					var btn = $('#wps-copy-magic-link');
-					btn.text('<?php esc_html_e( 'Copied!', 'plugin-wp-support-thisismyurl' ); ?>');
+					btn.text('<?php esc_html_e( 'Copied!', 'plugin-wpshadow' ); ?>');
 					setTimeout(function() {
-						btn.text('<?php esc_html_e( 'Copy Link', 'plugin-wp-support-thisismyurl' ); ?>');
+						btn.text('<?php esc_html_e( 'Copy Link', 'plugin-wpshadow' ); ?>');
 					}, 2000);
 				});
 			});
 
 			$('.wps-revoke-link').on('click', function() {
-				if (!confirm('<?php esc_html_e( 'Are you sure you want to revoke this magic link? Any active session will be terminated and a summary email will be sent.', 'plugin-wp-support-thisismyurl' ); ?>')) {
+				if (!confirm('<?php esc_html_e( 'Are you sure you want to revoke this magic link? Any active session will be terminated and a summary email will be sent.', 'plugin-wpshadow' ); ?>')) {
 					return;
 				}
 
@@ -1052,8 +1052,8 @@ class WPS_Magic_Link_Support {
 				var btn = $(this);
 
 				$.post(ajaxurl, {
-					action: 'WPS_revoke_magic_link',
-					nonce: '<?php echo esc_js( wp_create_nonce( 'wps_magic_link_nonce' ) ); ?>',
+					action: 'wpshadow_revoke_magic_link',
+					nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_magic_link_nonce' ) ); ?>',
 					token: token
 				}, function(response) {
 					if (response.success) {

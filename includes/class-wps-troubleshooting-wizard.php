@@ -5,7 +5,7 @@
  * Intelligent problem solver that guides users through common WordPress issues
  * with smart detection and one-click fixes.
  *
- * @package WPS_WP_SUPPORT
+ * @package WPSHADOW_WP_SUPPORT
  * @since 1.2601.73002
  */
 
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class WPS_Troubleshooting_Wizard
+ * Class WPSHADOW_Troubleshooting_Wizard
  *
  * Provides conversational step-by-step problem solver with:
  * - 10+ common issue categories
@@ -27,17 +27,17 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - One-click fixes
  * - System report integration
  */
-class WPS_Troubleshooting_Wizard {
+class WPSHADOW_Troubleshooting_Wizard {
 
 	/**
 	 * Database option key for wizard sessions.
 	 */
-	private const SESSION_KEY = 'wps_troubleshooting_session';
+	private const SESSION_KEY = 'wpshadow_troubleshooting_session';
 
 	/**
 	 * Database option key for issue history.
 	 */
-	private const HISTORY_KEY = 'wps_troubleshooting_history';
+	private const HISTORY_KEY = 'wpshadow_troubleshooting_history';
 
 	/**
 	 * Issue categories and their patterns.
@@ -56,10 +56,10 @@ class WPS_Troubleshooting_Wizard {
 
 		add_action( 'admin_menu', array( __CLASS__, 'register_admin_page' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
-		add_action( 'wp_ajax_wps_start_troubleshooting', array( __CLASS__, 'ajax_start_troubleshooting' ) );
-		add_action( 'wp_ajax_wps_analyze_issue', array( __CLASS__, 'ajax_analyze_issue' ) );
-		add_action( 'wp_ajax_wps_apply_fix', array( __CLASS__, 'ajax_apply_fix' ) );
-		add_action( 'wp_ajax_wps_generate_support_report', array( __CLASS__, 'ajax_generate_support_report' ) );
+		add_action( 'wp_ajax_WPSHADOW_start_troubleshooting', array( __CLASS__, 'ajax_start_troubleshooting' ) );
+		add_action( 'wp_ajax_WPSHADOW_analyze_issue', array( __CLASS__, 'ajax_analyze_issue' ) );
+		add_action( 'wp_ajax_WPSHADOW_apply_fix', array( __CLASS__, 'ajax_apply_fix' ) );
+		add_action( 'wp_ajax_WPSHADOW_generate_support_report', array( __CLASS__, 'ajax_generate_support_report' ) );
 		add_action( 'wp_dashboard_setup', array( __CLASS__, 'add_dashboard_widget' ) );
 	}
 
@@ -71,80 +71,80 @@ class WPS_Troubleshooting_Wizard {
 	private static function register_issue_categories(): void {
 		self::$issue_categories = array(
 			'white_screen'      => array(
-				'title'       => __( 'White Screen of Death', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Site shows blank page or error', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'White Screen of Death', 'plugin-wpshadow' ),
+				'description' => __( 'Site shows blank page or error', 'plugin-wpshadow' ),
 				'icon'        => 'dashicons-warning',
 				'patterns'    => array( 'Fatal error', 'syntax error', 'parse error', 'allowed memory size', 'maximum execution time' ),
 				'checks'      => array( 'check_error_logs', 'check_memory_limit', 'check_php_version' ),
 				'fixes'       => array( 'enable_debug', 'increase_memory', 'disable_plugins', 'switch_theme' ),
 			),
 			'login_issues'      => array(
-				'title'       => __( 'Cannot Login', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Login page not working or redirecting', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Cannot Login', 'plugin-wpshadow' ),
+				'description' => __( 'Login page not working or redirecting', 'plugin-wpshadow' ),
 				'icon'        => 'dashicons-lock',
 				'patterns'    => array( 'wp-login.php', 'redirect loop', 'cookies are blocked', 'invalid username', 'too many redirects' ),
 				'checks'      => array( 'check_wp_config', 'check_htaccess', 'check_cookies' ),
 				'fixes'       => array( 'clear_cookies', 'reset_permalinks', 'check_site_url', 'disable_plugins' ),
 			),
 			'plugin_error'      => array(
-				'title'       => __( 'Plugin Error', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Plugin causing issues or conflicts', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Plugin Error', 'plugin-wpshadow' ),
+				'description' => __( 'Plugin causing issues or conflicts', 'plugin-wpshadow' ),
 				'icon'        => 'dashicons-admin-plugins',
 				'patterns'    => array( 'Call to undefined function', 'Call to undefined method', 'plugin', 'conflict', 'incompatible' ),
 				'checks'      => array( 'check_error_logs', 'check_plugin_compatibility' ),
 				'fixes'       => array( 'disable_plugins', 'update_plugins', 'safe_mode' ),
 			),
 			'slow_performance'  => array(
-				'title'       => __( 'Slow Performance', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Site loading slowly or timing out', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Slow Performance', 'plugin-wpshadow' ),
+				'description' => __( 'Site loading slowly or timing out', 'plugin-wpshadow' ),
 				'icon'        => 'dashicons-dashboard',
 				'patterns'    => array( 'slow query', 'timeout', 'max_execution_time', 'memory_limit' ),
 				'checks'      => array( 'check_database_queries', 'check_cache', 'check_plugins_load' ),
 				'fixes'       => array( 'enable_cache', 'optimize_database', 'disable_heavy_plugins' ),
 			),
 			'upload_fails'      => array(
-				'title'       => __( 'Upload Fails', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Cannot upload images or files', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Upload Fails', 'plugin-wpshadow' ),
+				'description' => __( 'Cannot upload images or files', 'plugin-wpshadow' ),
 				'icon'        => 'dashicons-upload',
 				'patterns'    => array( 'upload', 'post_max_size', 'upload_max_filesize', 'permission denied', 'failed to write' ),
 				'checks'      => array( 'check_upload_limits', 'check_directory_permissions' ),
 				'fixes'       => array( 'increase_upload_limits', 'fix_permissions', 'check_disk_space' ),
 			),
 			'email_issues'      => array(
-				'title'       => __( 'Email Not Working', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'WordPress not sending emails', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Email Not Working', 'plugin-wpshadow' ),
+				'description' => __( 'WordPress not sending emails', 'plugin-wpshadow' ),
 				'icon'        => 'dashicons-email',
 				'patterns'    => array( 'wp_mail', 'mail() failed', 'SMTP', 'email', 'sendmail' ),
 				'checks'      => array( 'check_mail_function', 'check_smtp_settings' ),
 				'fixes'       => array( 'test_email', 'configure_smtp', 'check_spam_folder' ),
 			),
 			'database_error'    => array(
-				'title'       => __( 'Database Error', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Database connection or query issues', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Database Error', 'plugin-wpshadow' ),
+				'description' => __( 'Database connection or query issues', 'plugin-wpshadow' ),
 				'icon'        => 'dashicons-database',
 				'patterns'    => array( 'Error establishing a database connection', 'database', 'MySQL', 'query', 'table doesn\'t exist' ),
 				'checks'      => array( 'check_database_connection', 'check_database_tables' ),
 				'fixes'       => array( 'repair_database', 'check_credentials', 'optimize_tables' ),
 			),
 			'theme_issues'      => array(
-				'title'       => __( 'Theme Problems', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Theme causing display or functionality issues', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Theme Problems', 'plugin-wpshadow' ),
+				'description' => __( 'Theme causing display or functionality issues', 'plugin-wpshadow' ),
 				'icon'        => 'dashicons-admin-appearance',
 				'patterns'    => array( 'theme', 'template', 'stylesheet', 'header', 'footer' ),
 				'checks'      => array( 'check_theme_files', 'check_theme_compatibility' ),
 				'fixes'       => array( 'switch_theme', 'update_theme', 'clear_cache' ),
 			),
 			'security_concerns' => array(
-				'title'       => __( 'Security Concerns', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Suspicious activity or vulnerabilities', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Security Concerns', 'plugin-wpshadow' ),
+				'description' => __( 'Suspicious activity or vulnerabilities', 'plugin-wpshadow' ),
 				'icon'        => 'dashicons-shield',
 				'patterns'    => array( 'hack', 'malware', 'unauthorized', 'suspicious', 'injection' ),
 				'checks'      => array( 'check_file_changes', 'check_user_accounts', 'check_activity_logs' ),
 				'fixes'       => array( 'scan_files', 'review_users', 'update_passwords', 'enable_2fa' ),
 			),
 			'update_failures'   => array(
-				'title'       => __( 'Update Failed', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'WordPress, plugin, or theme update issues', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Update Failed', 'plugin-wpshadow' ),
+				'description' => __( 'WordPress, plugin, or theme update issues', 'plugin-wpshadow' ),
 				'icon'        => 'dashicons-update',
 				'patterns'    => array( 'update failed', 'download failed', 'installation failed', 'version', 'upgrade' ),
 				'checks'      => array( 'check_file_permissions', 'check_disk_space', 'check_connection' ),
@@ -161,8 +161,8 @@ class WPS_Troubleshooting_Wizard {
 	public static function register_admin_page(): void {
 		add_submenu_page(
 			'wp-support',
-			__( 'Troubleshooting Wizard', 'plugin-wp-support-thisismyurl' ),
-			__( 'Troubleshoot', 'plugin-wp-support-thisismyurl' ),
+			__( 'Troubleshooting Wizard', 'plugin-wpshadow' ),
+			__( 'Troubleshoot', 'plugin-wpshadow' ),
 			'manage_options',
 			'wp-support-troubleshoot',
 			array( __CLASS__, 'render_wizard_page' )
@@ -200,7 +200,7 @@ class WPS_Troubleshooting_Wizard {
 			'wpsWizard',
 			array(
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( 'wps_troubleshoot_nonce' ),
+				'nonce'   => wp_create_nonce( 'wpshadow_troubleshoot_nonce' ),
 			)
 		);
 	}
@@ -212,15 +212,15 @@ class WPS_Troubleshooting_Wizard {
 	 */
 	public static function render_wizard_page(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wpshadow' ) );
 		}
 
 		$session = get_transient( self::SESSION_KEY . '_' . get_current_user_id() );
 		?>
 <div class="wrap wps-troubleshooting-wizard">
-<h1><?php esc_html_e( 'Troubleshooting Wizard', 'plugin-wp-support-thisismyurl' ); ?></h1>
+<h1><?php esc_html_e( 'Troubleshooting Wizard', 'plugin-wpshadow' ); ?></h1>
 <p class="description">
-		<?php esc_html_e( 'Let\'s solve your WordPress problem step by step with smart detection and one-click fixes.', 'plugin-wp-support-thisismyurl' ); ?>
+		<?php esc_html_e( 'Let\'s solve your WordPress problem step by step with smart detection and one-click fixes.', 'plugin-wpshadow' ); ?>
 </p>
 
 <div class="wps-wizard-container">
@@ -242,7 +242,7 @@ class WPS_Troubleshooting_Wizard {
 	private static function render_issue_selection(): void {
 		?>
 <div class="wps-wizard-step wps-step-selection" data-step="selection">
-<h2><?php esc_html_e( 'What\'s happening with your site?', 'plugin-wp-support-thisismyurl' ); ?></h2>
+<h2><?php esc_html_e( 'What\'s happening with your site?', 'plugin-wpshadow' ); ?></h2>
 
 <div class="wps-issue-grid">
 		<?php foreach ( self::$issue_categories as $key => $category ) : ?>
@@ -251,7 +251,7 @@ class WPS_Troubleshooting_Wizard {
 <h3><?php echo esc_html( $category['title'] ); ?></h3>
 <p><?php echo esc_html( $category['description'] ); ?></p>
 <button type="button" class="button button-primary wps-select-issue">
-			<?php esc_html_e( 'Diagnose This', 'plugin-wp-support-thisismyurl' ); ?>
+			<?php esc_html_e( 'Diagnose This', 'plugin-wpshadow' ); ?>
 </button>
 </div>
 <?php endforeach; ?>
@@ -262,8 +262,8 @@ class WPS_Troubleshooting_Wizard {
 		<?php
 		printf(
 		/* translators: %s: Link to support */
-			esc_html__( 'Don\'t see your issue? %s', 'plugin-wp-support-thisismyurl' ),
-			'<a href="' . esc_url( admin_url( 'admin.php?page=wp-support&tab=help' ) ) . '">' . esc_html__( 'Contact Professional Support', 'plugin-wp-support-thisismyurl' ) . '</a>'
+			esc_html__( 'Don\'t see your issue? %s', 'plugin-wpshadow' ),
+			'<a href="' . esc_url( admin_url( 'admin.php?page=wp-support&tab=help' ) ) . '">' . esc_html__( 'Contact Professional Support', 'plugin-wpshadow' ) . '</a>'
 		);
 		?>
 </p>
@@ -293,15 +293,15 @@ class WPS_Troubleshooting_Wizard {
 <div class="wps-wizard-progress">
 <div class="wps-progress-step <?php echo 'diagnosis' === $step ? 'active' : 'completed'; ?>">
 <span class="step-number">1</span>
-<span class="step-label"><?php esc_html_e( 'Diagnosis', 'plugin-wp-support-thisismyurl' ); ?></span>
+<span class="step-label"><?php esc_html_e( 'Diagnosis', 'plugin-wpshadow' ); ?></span>
 </div>
 <div class="wps-progress-step <?php echo 'fixes' === $step ? 'active' : ( 'support' === $step ? 'completed' : '' ); ?>">
 <span class="step-number">2</span>
-<span class="step-label"><?php esc_html_e( 'Suggested Fixes', 'plugin-wp-support-thisismyurl' ); ?></span>
+<span class="step-label"><?php esc_html_e( 'Suggested Fixes', 'plugin-wpshadow' ); ?></span>
 </div>
 <div class="wps-progress-step <?php echo 'support' === $step ? 'active' : ''; ?>">
 <span class="step-number">3</span>
-<span class="step-label"><?php esc_html_e( 'Get Support', 'plugin-wp-support-thisismyurl' ); ?></span>
+<span class="step-label"><?php esc_html_e( 'Get Support', 'plugin-wpshadow' ); ?></span>
 </div>
 </div>
 
@@ -328,7 +328,7 @@ class WPS_Troubleshooting_Wizard {
 
 <div class="wps-wizard-actions">
 <button type="button" class="button wps-restart-wizard">
-		<?php esc_html_e( 'Start Over', 'plugin-wp-support-thisismyurl' ); ?>
+		<?php esc_html_e( 'Start Over', 'plugin-wpshadow' ); ?>
 </button>
 </div>
 </div>
@@ -347,7 +347,7 @@ class WPS_Troubleshooting_Wizard {
 <div class="wps-diagnosis-panel">
 <div class="wps-diagnosis-loading">
 <span class="spinner is-active"></span>
-<p><?php esc_html_e( 'Analyzing your WordPress site...', 'plugin-wp-support-thisismyurl' ); ?></p>
+<p><?php esc_html_e( 'Analyzing your WordPress site...', 'plugin-wpshadow' ); ?></p>
 </div>
 
 <div class="wps-diagnosis-results" style="display: none;">
@@ -355,7 +355,7 @@ class WPS_Troubleshooting_Wizard {
 </div>
 
 <button type="button" class="button button-primary wps-view-fixes" style="display: none;">
-		<?php esc_html_e( 'View Suggested Fixes', 'plugin-wp-support-thisismyurl' ); ?>
+		<?php esc_html_e( 'View Suggested Fixes', 'plugin-wpshadow' ); ?>
 </button>
 </div>
 		<?php
@@ -373,11 +373,11 @@ class WPS_Troubleshooting_Wizard {
 		$findings = $session['findings'] ?? array();
 		?>
 <div class="wps-fixes-panel">
-<h3><?php esc_html_e( 'Recommended Solutions', 'plugin-wp-support-thisismyurl' ); ?></h3>
+<h3><?php esc_html_e( 'Recommended Solutions', 'plugin-wpshadow' ); ?></h3>
 
 		<?php if ( ! empty( $findings ) ) : ?>
 <div class="wps-findings-summary">
-<h4><?php esc_html_e( 'What We Found:', 'plugin-wp-support-thisismyurl' ); ?></h4>
+<h4><?php esc_html_e( 'What We Found:', 'plugin-wpshadow' ); ?></h4>
 <ul>
 			<?php foreach ( $findings as $finding ) : ?>
 <li>
@@ -395,9 +395,9 @@ class WPS_Troubleshooting_Wizard {
 
 <div class="wps-wizard-footer">
 <p>
-		<?php esc_html_e( 'Still having issues after trying these fixes?', 'plugin-wp-support-thisismyurl' ); ?>
+		<?php esc_html_e( 'Still having issues after trying these fixes?', 'plugin-wpshadow' ); ?>
 <button type="button" class="button wps-need-support">
-		<?php esc_html_e( 'Generate Support Report', 'plugin-wp-support-thisismyurl' ); ?>
+		<?php esc_html_e( 'Generate Support Report', 'plugin-wpshadow' ); ?>
 </button>
 </p>
 </div>
@@ -416,29 +416,29 @@ class WPS_Troubleshooting_Wizard {
 	private static function render_support_step( string $issue, array $category, array $session ): void {
 		?>
 <div class="wps-support-panel">
-<h3><?php esc_html_e( 'Professional Support', 'plugin-wp-support-thisismyurl' ); ?></h3>
+<h3><?php esc_html_e( 'Professional Support', 'plugin-wpshadow' ); ?></h3>
 
-<p><?php esc_html_e( 'We\'ve generated a comprehensive report about your issue. This report includes:', 'plugin-wp-support-thisismyurl' ); ?></p>
+<p><?php esc_html_e( 'We\'ve generated a comprehensive report about your issue. This report includes:', 'plugin-wpshadow' ); ?></p>
 
 <ul class="wps-report-contents">
-<li><?php esc_html_e( 'System information and environment details', 'plugin-wp-support-thisismyurl' ); ?></li>
-<li><?php esc_html_e( 'Error logs and diagnostic findings', 'plugin-wp-support-thisismyurl' ); ?></li>
-<li><?php esc_html_e( 'Steps taken and fixes attempted', 'plugin-wp-support-thisismyurl' ); ?></li>
-<li><?php esc_html_e( 'Plugin and theme information', 'plugin-wp-support-thisismyurl' ); ?></li>
+<li><?php esc_html_e( 'System information and environment details', 'plugin-wpshadow' ); ?></li>
+<li><?php esc_html_e( 'Error logs and diagnostic findings', 'plugin-wpshadow' ); ?></li>
+<li><?php esc_html_e( 'Steps taken and fixes attempted', 'plugin-wpshadow' ); ?></li>
+<li><?php esc_html_e( 'Plugin and theme information', 'plugin-wpshadow' ); ?></li>
 </ul>
 
 <div class="wps-report-download">
 <button type="button" class="button button-primary wps-download-report">
 <span class="dashicons dashicons-download"></span>
-		<?php esc_html_e( 'Download Support Report', 'plugin-wp-support-thisismyurl' ); ?>
+		<?php esc_html_e( 'Download Support Report', 'plugin-wpshadow' ); ?>
 </button>
 </div>
 
 <div class="wps-contact-support">
-<h4><?php esc_html_e( 'Contact Support', 'plugin-wp-support-thisismyurl' ); ?></h4>
-<p><?php esc_html_e( 'Share this report with your support team or WordPress developer.', 'plugin-wp-support-thisismyurl' ); ?></p>
+<h4><?php esc_html_e( 'Contact Support', 'plugin-wpshadow' ); ?></h4>
+<p><?php esc_html_e( 'Share this report with your support team or WordPress developer.', 'plugin-wpshadow' ); ?></p>
 <a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&tab=help' ) ); ?>" class="button button-secondary">
-		<?php esc_html_e( 'Go to Support Page', 'plugin-wp-support-thisismyurl' ); ?>
+		<?php esc_html_e( 'Go to Support Page', 'plugin-wpshadow' ); ?>
 </a>
 </div>
 </div>
@@ -451,16 +451,16 @@ class WPS_Troubleshooting_Wizard {
 	 * @return void
 	 */
 	public static function ajax_start_troubleshooting(): void {
-		check_ajax_referer( 'wps_troubleshoot_nonce', 'nonce' );
+		check_ajax_referer( 'wpshadow_troubleshoot_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			\WPS\CoreSupport\wps_ajax_permission_denied();
+			\WPS\CoreSupport\WPSHADOW_ajax_permission_denied();
 		}
 
-		$issue = \WPS\CoreSupport\wps_get_post_text( 'issue' );
+		$issue = \WPS\CoreSupport\WPSHADOW_get_post_text( 'issue' );
 
 		if ( empty( $issue ) || ! isset( self::$issue_categories[ $issue ] ) ) {
-			\WPS\CoreSupport\wps_ajax_invalid_request( 'issue' );
+			\WPS\CoreSupport\WPSHADOW_ajax_invalid_request( 'issue' );
 		}
 
 		$session = array(
@@ -474,7 +474,7 @@ class WPS_Troubleshooting_Wizard {
 
 		wp_send_json_success(
 			array(
-				'message'  => __( 'Troubleshooting session started.', 'plugin-wp-support-thisismyurl' ),
+				'message'  => __( 'Troubleshooting session started.', 'plugin-wpshadow' ),
 				'redirect' => admin_url( 'admin.php?page=wp-support-troubleshoot' ),
 			)
 		);
@@ -486,24 +486,24 @@ class WPS_Troubleshooting_Wizard {
 	 * @return void
 	 */
 	public static function ajax_analyze_issue(): void {
-		check_ajax_referer( 'wps_troubleshoot_nonce', 'nonce' );
+		check_ajax_referer( 'wpshadow_troubleshoot_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			\WPS\CoreSupport\wps_ajax_permission_denied();
+			\WPS\CoreSupport\WPSHADOW_ajax_permission_denied();
 		}
 
 		$user_id = get_current_user_id();
 		$session = get_transient( self::SESSION_KEY . '_' . $user_id );
 
 		if ( empty( $session ) ) {
-			\WPS\CoreSupport\wps_ajax_error( __( 'No active session found.', 'plugin-wp-support-thisismyurl' ) );
+			\WPS\CoreSupport\WPSHADOW_ajax_error( __( 'No active session found.', 'plugin-wpshadow' ) );
 		}
 
 		$issue    = $session['issue'];
 		$category = self::$issue_categories[ $issue ] ?? array();
 
 		if ( empty( $category ) ) {
-			\WPS\CoreSupport\wps_ajax_error( __( 'Invalid issue category.', 'plugin-wp-support-thisismyurl' ) );
+			\WPS\CoreSupport\WPSHADOW_ajax_error( __( 'Invalid issue category.', 'plugin-wpshadow' ) );
 		}
 
 		// Perform analysis based on category checks.
@@ -556,7 +556,7 @@ class WPS_Troubleshooting_Wizard {
 		if ( empty( $findings ) ) {
 			$findings[] = array(
 				'severity' => 'info',
-				'message'  => __( 'No specific issues detected. Proceeding with recommended fixes.', 'plugin-wp-support-thisismyurl' ),
+				'message'  => __( 'No specific issues detected. Proceeding with recommended fixes.', 'plugin-wpshadow' ),
 				'details'  => '',
 			);
 		}
@@ -581,7 +581,7 @@ class WPS_Troubleshooting_Wizard {
 						'severity' => 'critical',
 						'message'  => sprintf(
 						/* translators: %s: Error pattern found */
-							__( 'Found error pattern: %s', 'plugin-wp-support-thisismyurl' ),
+							__( 'Found error pattern: %s', 'plugin-wpshadow' ),
 							$pattern
 						),
 						'details'  => substr( $log_entry, 0, 200 ),
@@ -699,7 +699,7 @@ class WPS_Troubleshooting_Wizard {
 		);
 
 		// Keep last 50 sessions using helper.
-		$history = \WPS\CoreSupport\wps_limit_array_size( $history, 50 );
+		$history = \WPS\CoreSupport\WPSHADOW_limit_array_size( $history, 50 );
 
 		update_option( self::HISTORY_KEY, $history );
 	}
@@ -710,16 +710,16 @@ class WPS_Troubleshooting_Wizard {
 	 * @return void
 	 */
 	public static function ajax_apply_fix(): void {
-		check_ajax_referer( 'wps_troubleshoot_nonce', 'nonce' );
+		check_ajax_referer( 'wpshadow_troubleshoot_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wpshadow' ) ) );
 		}
 
 		$fix = sanitize_text_field( wp_unslash( $_POST['fix'] ?? '' ) );
 
 		if ( empty( $fix ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid fix action.', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid fix action.', 'plugin-wpshadow' ) ) );
 		}
 
 		// Apply the fix based on type.
@@ -743,21 +743,21 @@ class WPS_Troubleshooting_Wizard {
 			case 'enable_debug':
 				return array(
 					'success' => true,
-					'message' => __( 'To enable debug mode, add these lines to wp-config.php before "That\'s all, stop editing!"', 'plugin-wp-support-thisismyurl' ),
+					'message' => __( 'To enable debug mode, add these lines to wp-config.php before "That\'s all, stop editing!"', 'plugin-wpshadow' ),
 					'code'    => "define( 'WP_DEBUG', true );\ndefine( 'WP_DEBUG_LOG', true );\ndefine( 'WP_DEBUG_DISPLAY', false );",
 				);
 
 			case 'disable_plugins':
 				return array(
 					'success' => true,
-					'message' => __( 'Use the Emergency Recovery mode to safely disable all plugins.', 'plugin-wp-support-thisismyurl' ),
+					'message' => __( 'Use the Emergency Recovery mode to safely disable all plugins.', 'plugin-wpshadow' ),
 					'action'  => 'emergency_mode',
 				);
 
 			case 'switch_theme':
 				return array(
 					'success' => true,
-					'message' => __( 'Consider switching to a default WordPress theme to test.', 'plugin-wp-support-thisismyurl' ),
+					'message' => __( 'Consider switching to a default WordPress theme to test.', 'plugin-wpshadow' ),
 					'action'  => 'change_theme',
 				);
 
@@ -765,13 +765,13 @@ class WPS_Troubleshooting_Wizard {
 				wp_cache_flush();
 				return array(
 					'success' => true,
-					'message' => __( 'Cache cleared successfully.', 'plugin-wp-support-thisismyurl' ),
+					'message' => __( 'Cache cleared successfully.', 'plugin-wpshadow' ),
 				);
 
 			default:
 				return array(
 					'success' => false,
-					'message' => __( 'Unknown fix action.', 'plugin-wp-support-thisismyurl' ),
+					'message' => __( 'Unknown fix action.', 'plugin-wpshadow' ),
 				);
 		}
 	}
@@ -782,17 +782,17 @@ class WPS_Troubleshooting_Wizard {
 	 * @return void
 	 */
 	public static function ajax_generate_support_report(): void {
-		check_ajax_referer( 'wps_troubleshoot_nonce', 'nonce' );
+		check_ajax_referer( 'wpshadow_troubleshoot_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wpshadow' ) ) );
 		}
 
 		$user_id = get_current_user_id();
 		$session = get_transient( self::SESSION_KEY . '_' . $user_id );
 
 		if ( empty( $session ) ) {
-			wp_send_json_error( array( 'message' => __( 'No active session found.', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No active session found.', 'plugin-wpshadow' ) ) );
 		}
 
 		$report = self::generate_support_report( $session );
@@ -816,7 +816,7 @@ class WPS_Troubleshooting_Wizard {
 		$category = self::$issue_categories[ $issue ] ?? array();
 		$findings = $session['findings'] ?? array();
 
-		$report  = "=== WP Support Troubleshooting Report ===\n\n";
+		$report  = "=== WPShadow Troubleshooting Report ===\n\n";
 		$report .= 'Generated: ' . date( 'Y-m-d H:i:s' ) . "\n";
 		$report .= 'Site URL: ' . site_url() . "\n\n";
 
@@ -882,8 +882,8 @@ class WPS_Troubleshooting_Wizard {
 		}
 
 		add_meta_box(
-			'wps_troubleshooting_widget',
-			__( 'Troubleshooting Wizard', 'plugin-wp-support-thisismyurl' ),
+			'wpshadow_troubleshooting_widget',
+			__( 'Troubleshooting Wizard', 'plugin-wpshadow' ),
 			array( __CLASS__, 'render_dashboard_widget' ),
 			'dashboard',
 			'side',
@@ -899,10 +899,10 @@ class WPS_Troubleshooting_Wizard {
 	public static function render_dashboard_widget(): void {
 		?>
 <div class="wps-troubleshoot-widget">
-<p><?php esc_html_e( 'Having WordPress issues? Let our wizard guide you through diagnosis and fixes.', 'plugin-wp-support-thisismyurl' ); ?></p>
+<p><?php esc_html_e( 'Having WordPress issues? Let our wizard guide you through diagnosis and fixes.', 'plugin-wpshadow' ); ?></p>
 <p>
 <a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support-troubleshoot' ) ); ?>" class="button button-primary">
-		<?php esc_html_e( 'Start Troubleshooting', 'plugin-wp-support-thisismyurl' ); ?>
+		<?php esc_html_e( 'Start Troubleshooting', 'plugin-wpshadow' ); ?>
 </a>
 </p>
 </div>

@@ -1,7 +1,7 @@
 /**
  * WPS Guided Tasks Scripts
  *
- * @package WPS_WP_SUPPORT
+ * @package WPSHADOW_WP_SUPPORT
  * @since 1.2601.1111
  */
 
@@ -25,7 +25,7 @@
 				url: wpsGuidedTasks.ajax_url,
 				method: 'POST',
 				data: {
-					action: 'wps_start_walkthrough',
+					action: 'wpshadow_start_walkthrough',
 					nonce: wpsGuidedTasks.nonce,
 					workflow: workflow
 				},
@@ -55,7 +55,7 @@
 				url: wpsGuidedTasks.ajax_url,
 				method: 'POST',
 				data: {
-					action: 'wps_complete_step',
+					action: 'wpshadow_complete_step',
 					nonce: wpsGuidedTasks.nonce,
 					step_data: {}
 				},
@@ -98,7 +98,7 @@
 				url: wpsGuidedTasks.ajax_url,
 				method: 'POST',
 				data: {
-					action: 'wps_undo_step',
+					action: 'wpshadow_undo_step',
 					nonce: wpsGuidedTasks.nonce
 				},
 				beforeSend() {

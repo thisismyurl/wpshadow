@@ -1,7 +1,7 @@
 /**
  * System Report Generator JavaScript.
  *
- * @package WPS_WP_SUPPORT_THISISMYURL
+ * @package WPSHADOW_wpshadow_THISISMYURL
  */
 
 (function($) {
@@ -70,7 +70,7 @@
 			url: wpsSystemReport.ajaxUrl,
 			type: 'POST',
 			data: {
-				action: 'wps_generate_report',
+				action: 'wpshadow_generate_report',
 				format: format,
 				nonce: wpsSystemReport.nonce
 			},
@@ -118,7 +118,7 @@
 			url: wpsSystemReport.ajaxUrl,
 			type: 'POST',
 			data: {
-				action: 'wps_create_shareable_link',
+				action: 'wpshadow_create_shareable_link',
 				password: password,
 				nonce: wpsSystemReport.nonce
 			},

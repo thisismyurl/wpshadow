@@ -6,7 +6,7 @@
  * situations by detecting fatal errors, identifying problematic plugins, and
  * automatically attempting recovery.
  *
- * @package WPS_WP_SUPPORT_THISISMYURL
+ * @package WPSHADOW_wpshadow_THISISMYURL
  */
 
 declare(strict_types=1);
@@ -23,22 +23,22 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Handles automatic detection and recovery from fatal errors that cause
  * white screen of death (WSoD) situations.
  */
-class WPS_White_Screen_Recovery {
+class WPSHADOW_White_Screen_Recovery {
 
 	/**
 	 * Recovery attempts option key.
 	 */
-	private const RECOVERY_ATTEMPTS_KEY = 'WPS_recovery_attempts';
+	private const RECOVERY_ATTEMPTS_KEY = 'wpshadow_recovery_attempts';
 
 	/**
 	 * Recovery mode option key.
 	 */
-	private const RECOVERY_MODE_KEY = 'WPS_recovery_mode_active';
+	private const RECOVERY_MODE_KEY = 'wpshadow_recovery_mode_active';
 
 	/**
 	 * Problematic plugins option key.
 	 */
-	private const PROBLEMATIC_PLUGINS_KEY = 'WPS_problematic_plugins';
+	private const PROBLEMATIC_PLUGINS_KEY = 'wpshadow_problematic_plugins';
 
 	/**
 	 * Maximum auto-recovery attempts before giving up.
@@ -69,13 +69,13 @@ class WPS_White_Screen_Recovery {
 		add_action( 'admin_notices', array( __CLASS__, 'display_recovery_notice' ) );
 
 		// Add recovery metabox to emergency support dashboard.
-		add_action( 'WPS_emergency_metaboxes', array( __CLASS__, 'register_recovery_metabox' ) );
+		add_action( 'wpshadow_emergency_metaboxes', array( __CLASS__, 'register_recovery_metabox' ) );
 	}
 
 	/**
 	 * Handle recovery mode if activated.
 	 *
-	 * Recovery mode disables all plugins except WP Support to allow
+	 * Recovery mode disables all plugins except WPShadow to allow
 	 * safe access to the admin area.
 	 *
 	 * @return void
@@ -85,7 +85,7 @@ class WPS_White_Screen_Recovery {
 			return;
 		}
 
-		// In recovery mode, we filter active plugins to only include WP Support.
+		// In recovery mode, we filter active plugins to only include WPShadow.
 		add_filter( 'option_active_plugins', array( __CLASS__, 'filter_plugins_in_recovery_mode' ) );
 
 		// Network-wide recovery for multisite.
@@ -98,19 +98,19 @@ class WPS_White_Screen_Recovery {
 	 * Filter active plugins in recovery mode.
 	 *
 	 * @param array $plugins Active plugins.
-	 * @return array Filtered plugins (only WP Support).
+	 * @return array Filtered plugins (only WPShadow).
 	 */
 	public static function filter_plugins_in_recovery_mode( $plugins ): array {
 		if ( ! is_array( $plugins ) ) {
 			return array();
 		}
 
-		// Only keep WP Support plugin active.
-		$wp_support_plugin = wp_support_BASENAME;
+		// Only keep WPShadow plugin active.
+		$wpshadow_plugin = WPSHADOW_BASENAME;
 		return array_filter(
 			$plugins,
-			function ( $plugin ) use ( $wp_support_plugin ) {
-				return $plugin === $wp_support_plugin;
+			function ( $plugin ) use ( $wpshadow_plugin ) {
+				return $plugin === $wpshadow_plugin;
 			}
 		);
 	}
@@ -119,19 +119,19 @@ class WPS_White_Screen_Recovery {
 	 * Filter network plugins in recovery mode for multisite.
 	 *
 	 * @param array $plugins Active network plugins.
-	 * @return array Filtered plugins (only WP Support).
+	 * @return array Filtered plugins (only WPShadow).
 	 */
 	public static function filter_network_plugins_in_recovery_mode( $plugins ): array {
 		if ( ! is_array( $plugins ) ) {
 			return array();
 		}
 
-		// Only keep WP Support plugin active.
-		$wp_support_plugin = wp_support_BASENAME;
+		// Only keep WPShadow plugin active.
+		$wpshadow_plugin = WPSHADOW_BASENAME;
 		$filtered          = array();
 
 		foreach ( $plugins as $plugin => $time ) {
-			if ( $plugin === $wp_support_plugin ) {
+			if ( $plugin === $wpshadow_plugin ) {
 				$filtered[ $plugin ] = $time;
 			}
 		}
@@ -161,7 +161,7 @@ class WPS_White_Screen_Recovery {
 		// If we've exceeded max attempts, don't auto-recover.
 		if ( $attempts >= self::MAX_RECOVERY_ATTEMPTS ) {
 			// Store error for manual recovery.
-			set_transient( 'WPS_fatal_error_needs_manual_recovery', $error, DAY_IN_SECONDS );
+			set_transient( 'wpshadow_fatal_error_needs_manual_recovery', $error, DAY_IN_SECONDS );
 			return;
 		}
 
@@ -180,7 +180,7 @@ class WPS_White_Screen_Recovery {
 
 			// Store information for admin notice.
 			set_transient(
-				'WPS_auto_recovery_performed',
+				'wpshadow_auto_recovery_performed',
 				array(
 					'plugin'  => $problematic_plugin,
 					'error'   => $error,
@@ -193,7 +193,7 @@ class WPS_White_Screen_Recovery {
 			self::activate_recovery_mode();
 
 			// Store error for display.
-			set_transient( 'WPS_fatal_error_recovery_mode', $error, HOUR_IN_SECONDS );
+			set_transient( 'wpshadow_fatal_error_recovery_mode', $error, HOUR_IN_SECONDS );
 		}
 	}
 
@@ -237,8 +237,8 @@ class WPS_White_Screen_Recovery {
 
 		foreach ( $all_plugins as $plugin_file => $plugin_data ) {
 			if ( strpos( $plugin_file, $plugin_slug . '/' ) === 0 ) {
-				// Don't deactivate WP Support itself.
-				if ( $plugin_file === wp_support_BASENAME ) {
+				// Don't deactivate WPShadow itself.
+				if ( $plugin_file === WPSHADOW_BASENAME ) {
 					return null;
 				}
 				return $plugin_file;
@@ -308,8 +308,8 @@ class WPS_White_Screen_Recovery {
 	 */
 	private static function log_fatal_error( array $error ): void {
 		// Use existing emergency support logging.
-		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
-			WPS_Activity_Logger::log(
+		if ( class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) ) {
+			WPSHADOW_Activity_Logger::log(
 				'error',
 				sprintf(
 					'Fatal error: %s in %s:%d',
@@ -336,8 +336,8 @@ class WPS_White_Screen_Recovery {
 	 * @return void
 	 */
 	private static function log_recovery_attempt( array $error, string $plugin, int $attempt ): void {
-		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
-			WPS_Activity_Logger::log(
+		if ( class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) ) {
+			WPSHADOW_Activity_Logger::log(
 				'info',
 				sprintf(
 					'Auto-recovery attempt #%d: Deactivated plugin %s',
@@ -376,8 +376,8 @@ class WPS_White_Screen_Recovery {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
 
-		if ( ! empty( $nonce ) && ! wp_verify_nonce( $nonce, 'wps_recovery' ) ) {
-			wp_die( esc_html__( 'Invalid recovery link.', 'plugin-wp-support-thisismyurl' ) );
+		if ( ! empty( $nonce ) && ! wp_verify_nonce( $nonce, 'wpshadow_recovery' ) ) {
+			wp_die( esc_html__( 'Invalid recovery link.', 'plugin-wpshadow' ) );
 		}
 
 		// Activate recovery mode.
@@ -395,23 +395,23 @@ class WPS_White_Screen_Recovery {
 	 */
 	public static function display_recovery_notice(): void {
 		// Check for auto-recovery.
-		$recovery = get_transient( 'WPS_auto_recovery_performed' );
+		$recovery = get_transient( 'wpshadow_auto_recovery_performed' );
 
 		if ( $recovery ) {
-			delete_transient( 'WPS_auto_recovery_performed' );
+			delete_transient( 'wpshadow_auto_recovery_performed' );
 
-			$plugin_name = $recovery['plugin'] ?? __( 'Unknown Plugin', 'plugin-wp-support-thisismyurl' );
+			$plugin_name = $recovery['plugin'] ?? __( 'Unknown Plugin', 'plugin-wpshadow' );
 			$attempt     = $recovery['attempt'] ?? 1;
 
 			?>
 			<div class="notice notice-warning is-dismissible">
 				<p>
-					<strong><?php esc_html_e( 'WP Support Auto-Recovery:', 'plugin-wp-support-thisismyurl' ); ?></strong>
+					<strong><?php esc_html_e( 'WPShadow Auto-Recovery:', 'plugin-wpshadow' ); ?></strong>
 					<?php
 					echo esc_html(
 						sprintf(
 							/* translators: 1: Plugin name, 2: Attempt number */
-							__( 'A fatal error was detected and plugin "%1$s" was automatically deactivated (attempt #%2$d). Please review the error details and contact the plugin author.', 'plugin-wp-support-thisismyurl' ),
+							__( 'A fatal error was detected and plugin "%1$s" was automatically deactivated (attempt #%2$d). Please review the error details and contact the plugin author.', 'plugin-wpshadow' ),
 							$plugin_name,
 							$attempt
 						)
@@ -420,7 +420,7 @@ class WPS_White_Screen_Recovery {
 				</p>
 				<p>
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wps-emergency-support' ) ); ?>" class="button">
-						<?php esc_html_e( 'View Error Details', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'View Error Details', 'plugin-wpshadow' ); ?>
 					</a>
 				</p>
 			</div>
@@ -432,17 +432,17 @@ class WPS_White_Screen_Recovery {
 			?>
 			<div class="notice notice-error">
 				<p>
-					<strong><?php esc_html_e( '🚨 Recovery Mode Active', 'plugin-wp-support-thisismyurl' ); ?></strong>
+					<strong><?php esc_html_e( '🚨 Recovery Mode Active', 'plugin-wpshadow' ); ?></strong>
 				</p>
 				<p>
-					<?php esc_html_e( 'All plugins except WP Support have been temporarily disabled due to a critical error. Please review the error details and fix the issue before exiting recovery mode.', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'All plugins except WPShadow have been temporarily disabled due to a critical error. Please review the error details and fix the issue before exiting recovery mode.', 'plugin-wpshadow' ); ?>
 				</p>
 				<p>
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wps-emergency-support' ) ); ?>" class="button button-primary">
-						<?php esc_html_e( 'Emergency Dashboard', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'Emergency Dashboard', 'plugin-wpshadow' ); ?>
 					</a>
-					<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=wps-emergency-support&action=exit-recovery' ), 'wps_exit_recovery' ) ); ?>" class="button">
-						<?php esc_html_e( 'Exit Recovery Mode', 'plugin-wp-support-thisismyurl' ); ?>
+					<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=wps-emergency-support&action=exit-recovery' ), 'wpshadow_exit_recovery' ) ); ?>" class="button">
+						<?php esc_html_e( 'Exit Recovery Mode', 'plugin-wpshadow' ); ?>
 					</a>
 				</p>
 			</div>
@@ -450,20 +450,20 @@ class WPS_White_Screen_Recovery {
 		}
 
 		// Check for manual recovery needed.
-		$manual_recovery = get_transient( 'WPS_fatal_error_needs_manual_recovery' );
+		$manual_recovery = get_transient( 'wpshadow_fatal_error_needs_manual_recovery' );
 
 		if ( $manual_recovery ) {
 			?>
 			<div class="notice notice-error">
 				<p>
-					<strong><?php esc_html_e( '🚨 Critical Error - Manual Recovery Required', 'plugin-wp-support-thisismyurl' ); ?></strong>
+					<strong><?php esc_html_e( '🚨 Critical Error - Manual Recovery Required', 'plugin-wpshadow' ); ?></strong>
 				</p>
 				<p>
-					<?php esc_html_e( 'Multiple recovery attempts have been made. Manual intervention is required to fix this issue.', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Multiple recovery attempts have been made. Manual intervention is required to fix this issue.', 'plugin-wpshadow' ); ?>
 				</p>
 				<p>
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wps-emergency-support' ) ); ?>" class="button button-primary">
-						<?php esc_html_e( 'View Details & Get Help', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'View Details & Get Help', 'plugin-wpshadow' ); ?>
 					</a>
 				</p>
 			</div>
@@ -478,8 +478,8 @@ class WPS_White_Screen_Recovery {
 	 */
 	public static function register_recovery_metabox(): void {
 		add_meta_box(
-			'WPS_recovery_status',
-			__( 'Auto-Recovery Status', 'plugin-wp-support-thisismyurl' ),
+			'wpshadow_recovery_status',
+			__( 'Auto-Recovery Status', 'plugin-wpshadow' ),
 			array( __CLASS__, 'render_recovery_metabox' ),
 			'wps-emergency-support',
 			'normal',
@@ -502,24 +502,24 @@ class WPS_White_Screen_Recovery {
 			<table class="form-table" role="presentation">
 				<tbody>
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Recovery Mode:', 'plugin-wp-support-thisismyurl' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Recovery Mode:', 'plugin-wpshadow' ); ?></th>
 						<td>
 							<?php if ( $recovery_mode ) : ?>
-								<span style="color: #c00; font-weight: bold;">⚠️ <?php esc_html_e( 'ACTIVE', 'plugin-wp-support-thisismyurl' ); ?></span>
+								<span style="color: #c00; font-weight: bold;">⚠️ <?php esc_html_e( 'ACTIVE', 'plugin-wpshadow' ); ?></span>
 							<?php else : ?>
-								<span style="color: #090;">✓ <?php esc_html_e( 'Inactive', 'plugin-wp-support-thisismyurl' ); ?></span>
+								<span style="color: #090;">✓ <?php esc_html_e( 'Inactive', 'plugin-wpshadow' ); ?></span>
 							<?php endif; ?>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Recovery Attempts:', 'plugin-wp-support-thisismyurl' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Recovery Attempts:', 'plugin-wpshadow' ); ?></th>
 						<td>
 							<?php echo esc_html( $attempts ); ?> / <?php echo esc_html( self::MAX_RECOVERY_ATTEMPTS ); ?>
 						</td>
 					</tr>
 					<?php if ( ! empty( $problematic ) ) : ?>
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Problematic Plugins:', 'plugin-wp-support-thisismyurl' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Problematic Plugins:', 'plugin-wpshadow' ); ?></th>
 						<td>
 							<ul style="list-style: disc; padding-left: 20px;">
 								<?php foreach ( $problematic as $plugin ) : ?>
@@ -527,7 +527,7 @@ class WPS_White_Screen_Recovery {
 								<?php endforeach; ?>
 							</ul>
 							<p class="description">
-								<?php esc_html_e( 'These plugins were automatically deactivated due to fatal errors.', 'plugin-wp-support-thisismyurl' ); ?>
+								<?php esc_html_e( 'These plugins were automatically deactivated due to fatal errors.', 'plugin-wpshadow' ); ?>
 							</p>
 						</td>
 					</tr>
@@ -537,34 +537,34 @@ class WPS_White_Screen_Recovery {
 
 			<?php if ( $recovery_mode ) : ?>
 				<div style="margin-top: 20px; padding: 15px; background: #fee; border-left: 4px solid #c00;">
-					<h4 style="margin-top: 0;"><?php esc_html_e( 'Recovery Mode Instructions', 'plugin-wp-support-thisismyurl' ); ?></h4>
+					<h4 style="margin-top: 0;"><?php esc_html_e( 'Recovery Mode Instructions', 'plugin-wpshadow' ); ?></h4>
 					<ol>
-						<li><?php esc_html_e( 'Review the error details above', 'plugin-wp-support-thisismyurl' ); ?></li>
-						<li><?php esc_html_e( 'Fix the problematic plugin or remove it', 'plugin-wp-support-thisismyurl' ); ?></li>
-						<li><?php esc_html_e( 'Exit recovery mode to restore normal operation', 'plugin-wp-support-thisismyurl' ); ?></li>
+						<li><?php esc_html_e( 'Review the error details above', 'plugin-wpshadow' ); ?></li>
+						<li><?php esc_html_e( 'Fix the problematic plugin or remove it', 'plugin-wpshadow' ); ?></li>
+						<li><?php esc_html_e( 'Exit recovery mode to restore normal operation', 'plugin-wpshadow' ); ?></li>
 					</ol>
 					<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=wps-emergency-support' ) ); ?>">
-						<?php wp_nonce_field( 'wps_exit_recovery', 'wps_recovery_nonce' ); ?>
+						<?php wp_nonce_field( 'wpshadow_exit_recovery', 'wpshadow_recovery_nonce' ); ?>
 						<input type="hidden" name="action" value="exit_recovery" />
 						<button type="submit" class="button button-primary">
-							<?php esc_html_e( 'Exit Recovery Mode', 'plugin-wp-support-thisismyurl' ); ?>
+							<?php esc_html_e( 'Exit Recovery Mode', 'plugin-wpshadow' ); ?>
 						</button>
 						<button type="submit" name="clear_problematic" value="1" class="button">
-							<?php esc_html_e( 'Clear Problematic Plugins List', 'plugin-wp-support-thisismyurl' ); ?>
+							<?php esc_html_e( 'Clear Problematic Plugins List', 'plugin-wpshadow' ); ?>
 						</button>
 					</form>
 				</div>
 			<?php else : ?>
 				<div style="margin-top: 20px;">
 					<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=wps-emergency-support' ) ); ?>">
-						<?php wp_nonce_field( 'wps_manual_recovery', 'wps_recovery_nonce' ); ?>
+						<?php wp_nonce_field( 'wpshadow_manual_recovery', 'wpshadow_recovery_nonce' ); ?>
 						<input type="hidden" name="action" value="activate_recovery" />
 						<button type="submit" class="button">
-							<?php esc_html_e( 'Manually Activate Recovery Mode', 'plugin-wp-support-thisismyurl' ); ?>
+							<?php esc_html_e( 'Manually Activate Recovery Mode', 'plugin-wpshadow' ); ?>
 						</button>
 						<?php if ( $attempts > 0 ) : ?>
 							<button type="submit" name="reset_attempts" value="1" class="button">
-								<?php esc_html_e( 'Reset Recovery Counter', 'plugin-wp-support-thisismyurl' ); ?>
+								<?php esc_html_e( 'Reset Recovery Counter', 'plugin-wpshadow' ); ?>
 							</button>
 						<?php endif; ?>
 					</form>
@@ -583,7 +583,7 @@ class WPS_White_Screen_Recovery {
 		// Check for exit recovery action.
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_POST['action'] ) && 'exit_recovery' === $_POST['action'] ) {
-			check_admin_referer( 'wps_exit_recovery', 'wps_recovery_nonce' );
+			check_admin_referer( 'wpshadow_exit_recovery', 'wpshadow_recovery_nonce' );
 
 			// Clear problematic plugins list if requested.
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -600,7 +600,7 @@ class WPS_White_Screen_Recovery {
 		// Check for activate recovery action.
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_POST['action'] ) && 'activate_recovery' === $_POST['action'] ) {
-			check_admin_referer( 'wps_manual_recovery', 'wps_recovery_nonce' );
+			check_admin_referer( 'wpshadow_manual_recovery', 'wpshadow_recovery_nonce' );
 
 			// Reset attempts if requested.
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended

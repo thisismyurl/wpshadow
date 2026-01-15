@@ -3,7 +3,7 @@
  *
  * Handles AJAX requests for running audits and applying fixes.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
 (function($) {
@@ -48,7 +48,7 @@
 				url: wpsA11yAudit.ajaxUrl,
 				type: 'POST',
 				data: {
-					action: 'wps_run_a11y_audit',
+					action: 'wpshadow_run_a11y_audit',
 					nonce: wpsA11yAudit.nonce,
 					url: url
 				},
@@ -205,7 +205,7 @@
 				url: wpsA11yAudit.ajaxUrl,
 				type: 'POST',
 				data: {
-					action: 'wps_apply_a11y_fix',
+					action: 'wpshadow_apply_a11y_fix',
 					nonce: wpsA11yAudit.nonce,
 					fix_type: fixType,
 					post_id: postId

@@ -2,7 +2,7 @@
 /**
  * Suite Configuration REST API Controller
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  * @since 1.2601.73002
  */
 
@@ -14,7 +14,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 use WP_Error;
-use WPS\CoreSupport\WPS_Settings;
+use WPS\CoreSupport\WPSHADOW_Settings;
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Suite Configuration REST Controller
  */
-class WPS_REST_Settings_Controller extends WPS_REST_Controller_Base {
+class WPSHADOW_REST_Settings_Controller extends WPSHADOW_REST_Controller_Base {
 
 	/**
 	 * Register routes
@@ -124,10 +124,10 @@ class WPS_REST_Settings_Controller extends WPS_REST_Controller_Base {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function get_settings( WP_REST_Request $request ) {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Settings' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Settings' ) ) {
 			return $this->error_response(
 				'settings_not_available',
-				__( 'Settings system is not available.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Settings system is not available.', 'plugin-wpshadow' ),
 				503
 			);
 		}
@@ -136,7 +136,7 @@ class WPS_REST_Settings_Controller extends WPS_REST_Controller_Base {
 
 		if ( $module ) {
 			// Get settings for specific module.
-			$settings = WPS_Settings::get_module_settings( $module );
+			$settings = WPSHADOW_Settings::get_module_settings( $module );
 
 			return $this->success_response(
 				array(
@@ -147,7 +147,7 @@ class WPS_REST_Settings_Controller extends WPS_REST_Controller_Base {
 		}
 
 		// Get all settings.
-		$all_settings = WPS_Settings::get_all_settings();
+		$all_settings = WPSHADOW_Settings::get_all_settings();
 
 		return $this->success_response( $all_settings );
 	}
@@ -159,10 +159,10 @@ class WPS_REST_Settings_Controller extends WPS_REST_Controller_Base {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function update_settings( WP_REST_Request $request ) {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Settings' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Settings' ) ) {
 			return $this->error_response(
 				'settings_not_available',
-				__( 'Settings system is not available.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Settings system is not available.', 'plugin-wpshadow' ),
 				503
 			);
 		}
@@ -174,7 +174,7 @@ class WPS_REST_Settings_Controller extends WPS_REST_Controller_Base {
 		if ( empty( $module ) ) {
 			return $this->error_response(
 				'invalid_module',
-				__( 'Module parameter is required.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Module parameter is required.', 'plugin-wpshadow' ),
 				400
 			);
 		}
@@ -182,7 +182,7 @@ class WPS_REST_Settings_Controller extends WPS_REST_Controller_Base {
 		if ( ! is_array( $settings ) ) {
 			return $this->error_response(
 				'invalid_settings',
-				__( 'Settings must be an object.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Settings must be an object.', 'plugin-wpshadow' ),
 				400
 			);
 		}
@@ -190,7 +190,7 @@ class WPS_REST_Settings_Controller extends WPS_REST_Controller_Base {
 		// Update each setting.
 		$updated_count = 0;
 		foreach ( $settings as $key => $value ) {
-			$result = WPS_Settings::update( $module, sanitize_key( $key ), $value, $network );
+			$result = WPSHADOW_Settings::update( $module, sanitize_key( $key ), $value, $network );
 			if ( $result ) {
 				++$updated_count;
 			}
@@ -199,7 +199,7 @@ class WPS_REST_Settings_Controller extends WPS_REST_Controller_Base {
 		if ( 0 === $updated_count ) {
 			return $this->error_response(
 				'update_failed',
-				__( 'Failed to update settings.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Failed to update settings.', 'plugin-wpshadow' ),
 				500
 			);
 		}
@@ -211,7 +211,7 @@ class WPS_REST_Settings_Controller extends WPS_REST_Controller_Base {
 			),
 			sprintf(
 				/* translators: %d: number of settings updated */
-				__( '%d settings updated successfully.', 'plugin-wp-support-thisismyurl' ),
+				__( '%d settings updated successfully.', 'plugin-wpshadow' ),
 				$updated_count
 			)
 		);
@@ -224,10 +224,10 @@ class WPS_REST_Settings_Controller extends WPS_REST_Controller_Base {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function reset_settings( WP_REST_Request $request ) {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Settings' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Settings' ) ) {
 			return $this->error_response(
 				'settings_not_available',
-				__( 'Settings system is not available.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Settings system is not available.', 'plugin-wpshadow' ),
 				503
 			);
 		}
@@ -243,12 +243,12 @@ class WPS_REST_Settings_Controller extends WPS_REST_Controller_Base {
 
 		if ( $module ) {
 			// Reset specific module.
-			$result = WPS_Settings::reset_module( $module, $network );
+			$result = WPSHADOW_Settings::reset_module( $module, $network );
 
 			if ( ! $result ) {
 				return $this->error_response(
 					'reset_failed',
-					__( 'Failed to reset module settings.', 'plugin-wp-support-thisismyurl' ),
+					__( 'Failed to reset module settings.', 'plugin-wpshadow' ),
 					500
 				);
 			}
@@ -257,26 +257,26 @@ class WPS_REST_Settings_Controller extends WPS_REST_Controller_Base {
 				array( 'module' => $module ),
 				sprintf(
 					/* translators: %s: module name */
-					__( 'Settings for %s reset to defaults.', 'plugin-wp-support-thisismyurl' ),
+					__( 'Settings for %s reset to defaults.', 'plugin-wpshadow' ),
 					$module
 				)
 			);
 		}
 
 		// Reset all settings.
-		$result = WPS_Settings::reset_all( $network );
+		$result = WPSHADOW_Settings::reset_all( $network );
 
 		if ( ! $result ) {
 			return $this->error_response(
 				'reset_failed',
-				__( 'Failed to reset all settings.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Failed to reset all settings.', 'plugin-wpshadow' ),
 				500
 			);
 		}
 
 		return $this->success_response(
 			array( 'reset' => 'all' ),
-			__( 'All settings reset to defaults.', 'plugin-wp-support-thisismyurl' )
+			__( 'All settings reset to defaults.', 'plugin-wpshadow' )
 		);
 	}
 
@@ -290,7 +290,7 @@ class WPS_REST_Settings_Controller extends WPS_REST_Controller_Base {
 		$health_data = array(
 			'status'    => 'healthy',
 			'timestamp' => current_time( 'mysql' ),
-			'version'   => defined( 'wp_support_VERSION' ) ? wp_support_VERSION : 'unknown',
+			'version'   => defined( 'WPSHADOW_VERSION' ) ? WPSHADOW_VERSION : 'unknown',
 			'checks'    => array(
 				'database'  => $this->check_database(),
 				'modules'   => $this->check_modules(),
@@ -337,7 +337,7 @@ class WPS_REST_Settings_Controller extends WPS_REST_Controller_Base {
 	 * @return array
 	 */
 	private function check_modules(): array {
-		$available = class_exists( '\\WPS\\CoreSupport\\WPS_Module_Registry' );
+		$available = class_exists( '\\WPShadow\\WPSHADOW_Module_Registry' );
 
 		return array(
 			'status'  => $available ? 'ok' : 'warning',
@@ -351,7 +351,7 @@ class WPS_REST_Settings_Controller extends WPS_REST_Controller_Base {
 	 * @return array
 	 */
 	private function check_vault(): array {
-		$available = class_exists( '\\WPS\\CoreSupport\\WPS_Vault' );
+		$available = class_exists( '\\WPShadow\\WPSHADOW_Vault' );
 
 		return array(
 			'status'  => $available ? 'ok' : 'info',
@@ -365,7 +365,7 @@ class WPS_REST_Settings_Controller extends WPS_REST_Controller_Base {
 	 * @return array
 	 */
 	private function check_licensing(): array {
-		$available = class_exists( '\\WPS\\CoreSupport\\WPS_License' );
+		$available = class_exists( '\\WPShadow\\WPSHADOW_License' );
 
 		return array(
 			'status'  => $available ? 'ok' : 'warning',

@@ -2,7 +2,7 @@
 /**
  * WPS Processor - core runtime helper for spoke plugins.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  * @version 1.2601.0819
  */
 
@@ -14,9 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class WPS_Processor_v1 {
+class WPSHADOW_Processor_v1 {
 
-	public function __construct( private readonly WPS_Spoke_Base $core ) {
+	public function __construct( private readonly WPSHADOW_Spoke_Base $core ) {
 		\add_action( 'init', array( $this, 'maybe_run_cron' ) );
 	}
 

@@ -2,7 +2,7 @@
 /**
  * Base REST API Controller
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  * @since 1.2601.73002
  */
 
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Base REST Controller providing common functionality
  */
-abstract class WPS_REST_Controller_Base extends WP_REST_Controller {
+abstract class WPSHADOW_REST_Controller_Base extends WP_REST_Controller {
 
 	/**
 	 * Namespace for all REST routes
 	 *
 	 * @var string
 	 */
-	protected $namespace = 'timu/v1';
+	protected $namespace = 'wpshadow/v1';
 
 	/**
 	 * Check if user has required capability
@@ -42,7 +42,7 @@ abstract class WPS_REST_Controller_Base extends WP_REST_Controller {
 		if ( ! current_user_can( $capability ) ) {
 			return new WP_Error(
 				'rest_forbidden',
-				__( 'You do not have permission to access this resource.', 'plugin-wp-support-thisismyurl' ),
+				__( 'You do not have permission to access this resource.', 'plugin-wpshadow' ),
 				array( 'status' => 403 )
 			);
 		}
@@ -100,7 +100,7 @@ abstract class WPS_REST_Controller_Base extends WP_REST_Controller {
 		if ( empty( $sanitized ) ) {
 			return $this->error_response(
 				'invalid_slug',
-				__( 'Invalid slug parameter.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Invalid slug parameter.', 'plugin-wpshadow' ),
 				400
 			);
 		}
@@ -118,7 +118,7 @@ abstract class WPS_REST_Controller_Base extends WP_REST_Controller {
 	 */
 	protected function check_rate_limit( string $operation, int $limit = 10, int $period = 300 ) {
 		$user_id = get_current_user_id();
-		$key     = "wps_rate_limit_{$operation}_{$user_id}";
+		$key     = "wpshadow_rate_limit_{$operation}_{$user_id}";
 		$count   = get_transient( $key );
 
 		if ( false === $count ) {
@@ -131,7 +131,7 @@ abstract class WPS_REST_Controller_Base extends WP_REST_Controller {
 				'rate_limit_exceeded',
 				sprintf(
 					/* translators: 1: operation name, 2: limit, 3: period in minutes */
-					__( 'Rate limit exceeded for %1$s. Maximum %2$d requests per %3$d minutes.', 'plugin-wp-support-thisismyurl' ),
+					__( 'Rate limit exceeded for %1$s. Maximum %2$d requests per %3$d minutes.', 'plugin-wpshadow' ),
 					$operation,
 					$limit,
 					$period / 60

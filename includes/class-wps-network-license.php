@@ -6,22 +6,22 @@
  * that key to all sites in the network (or a selected subset).
  *
  * Author:              Christopher Ross
- * Author URI:          https://thisismyurl.com/?source=plugin-wp-support-thisismyurl
- * Plugin Name:         WordPress Support - thisismyurl
- * Plugin URI:          https://thisismyurl.com/plugin-wp-support-thisismyurl/?source=plugin-wp-support-thisismyurl
- * Donate link:         https://thisismyurl.com/plugin-wp-support-thisismyurl/#register?source=plugin-wp-support-thisismyurl
- * Description:         Foundation plugin licensing and module management for the thisismyurl plugin suite.
+ * Author URI:          https://wpshadow.com/?source=plugin-wpshadow
+ * Plugin Name:         WPShadow - wpshadow
+ * Plugin URI:          https://wpshadow.com/plugin-wpshadow/?source=plugin-wpshadow
+ * Donate link:         https://wpshadow.com/plugin-wpshadow/#register?source=plugin-wpshadow
+ * Description:         Foundation plugin licensing and module management for the wpshadow plugin suite.
  * Tags:                licensing,module-management,multisite,support-dashboard
  * Version:             1.2601.73001
  * Requires at least:   6.4
  * Requires PHP:        8.2
- * Update URI:          https://github.com/thisismyurl/plugin-plugin-wp-support-thisismyurl
- * GitHub Plugin URI:   https://github.com/thisismyurl/plugin-plugin-wp-support-thisismyurl
+ * Update URI:          https://github.com/thisismyurl/plugin-plugin-wpshadow
+ * GitHub Plugin URI:   https://github.com/thisismyurl/plugin-plugin-wpshadow
  * Primary Branch:      main
- * Text Domain:         plugin-wp-support-thisismyurl
+ * Text Domain:         plugin-wpshadow
  * License:             GPL2
  * License URI:         https://www.gnu.org/licenses/gpl-2.0.html
- * @package WPS_WORDPRESS_SUPPORT
+ * @package WPSHADOW_WORDPRESS_SUPPORT
  */
 
 namespace WPS\CoreSupport;
@@ -37,21 +37,21 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.2601.73000
  */
-class WPS_Network_License {
+class WPSHADOW_Network_License {
 
 	/**
 	 * Option name for network license key.
 	 *
 	 * @var string
 	 */
-	private const NETWORK_LICENSE_OPTION = 'WPS_network_license_key';
+	private const NETWORK_LICENSE_OPTION = 'wpshadow_network_license_key';
 
 	/**
 	 * Option name for network broadcast audit log.
 	 *
 	 * @var string
 	 */
-	private const NETWORK_BROADCAST_LOG = 'WPS_network_broadcast_log';
+	private const NETWORK_BROADCAST_LOG = 'wpshadow_network_broadcast_log';
 
 	/**
 	 * Initialize hooks.
@@ -64,7 +64,7 @@ class WPS_Network_License {
 		}
 
 		add_action( 'network_admin_menu', array( __CLASS__, 'add_submenu_page' ) );
-		add_action( 'admin_post_WPS_broadcast_license', array( __CLASS__, 'handle_broadcast_submission' ) );
+		add_action( 'admin_post_WPSHADOW_broadcast_license', array( __CLASS__, 'handle_broadcast_submission' ) );
 	}
 
 	/**
@@ -75,8 +75,8 @@ class WPS_Network_License {
 	public static function add_submenu_page(): void {
 		add_submenu_page(
 			'wp-support',
-			__( 'License Broadcast', 'plugin-wp-support-thisismyurl' ),
-			__( 'License Broadcast', 'plugin-wp-support-thisismyurl' ),
+			__( 'License Broadcast', 'plugin-wpshadow' ),
+			__( 'License Broadcast', 'plugin-wpshadow' ),
 			'manage_network_options',
 			'wps-network-license-broadcast',
 			array( __CLASS__, 'render_page' )
@@ -90,7 +90,7 @@ class WPS_Network_License {
 	 */
 	public static function render_page(): void {
 		if ( ! current_user_can( 'manage_network_options' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wpshadow' ) );
 		}
 
 		$network_key = get_site_option( self::NETWORK_LICENSE_OPTION, '' );
@@ -98,61 +98,61 @@ class WPS_Network_License {
 
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Network License Broadcast', 'plugin-wp-support-thisismyurl' ); ?></h1>
-			<p class="description"><?php esc_html_e( 'Register a license key once and push it to all sites in the network or a selected subset.', 'plugin-wp-support-thisismyurl' ); ?></p>
+			<h1><?php esc_html_e( 'Network License Broadcast', 'plugin-wpshadow' ); ?></h1>
+			<p class="description"><?php esc_html_e( 'Register a license key once and push it to all sites in the network or a selected subset.', 'plugin-wpshadow' ); ?></p>
 
 			<?php
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			if ( isset( $_GET['WPS_broadcast_success'] ) ) :
+			if ( isset( $_GET['wpshadow_broadcast_success'] ) ) :
 				?>
 				<div class="notice notice-success is-dismissible">
-					<p><?php esc_html_e( 'License key successfully broadcast to selected sites.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					<p><?php esc_html_e( 'License key successfully broadcast to selected sites.', 'plugin-wpshadow' ); ?></p>
 				</div>
 			<?php endif; ?>
 
 			<?php
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			if ( isset( $_GET['WPS_broadcast_error'] ) ) :
+			if ( isset( $_GET['wpshadow_broadcast_error'] ) ) :
 				?>
 				<div class="notice notice-error is-dismissible">
-					<p><?php esc_html_e( 'An error occurred while broadcasting the license key.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					<p><?php esc_html_e( 'An error occurred while broadcasting the license key.', 'plugin-wpshadow' ); ?></p>
 				</div>
 			<?php endif; ?>
 
 			<!-- Network License Input -->
 			<div class="card">
-				<h2><?php esc_html_e( 'Network License Key', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( 'Network License Key', 'plugin-wpshadow' ); ?></h2>
 				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-					<?php wp_nonce_field( 'WPS_broadcast_license', 'WPS_broadcast_nonce' ); ?>
-					<input type="hidden" name="action" value="WPS_broadcast_license" />
+					<?php wp_nonce_field( 'wpshadow_broadcast_license', 'wpshadow_broadcast_nonce' ); ?>
+					<input type="hidden" name="action" value="wpshadow_broadcast_license" />
 
 					<table class="form-table">
 						<tr>
 							<th scope="row">
-								<label for="WPS_network_key"><?php esc_html_e( 'License Key', 'plugin-wp-support-thisismyurl' ); ?></label>
+								<label for="wpshadow_network_key"><?php esc_html_e( 'License Key', 'plugin-wpshadow' ); ?></label>
 							</th>
 							<td>
-								<input type="text" id="WPS_network_key" name="WPS_network_key" value="<?php echo esc_attr( $network_key ); ?>" class="regular-text code" />
-								<p class="description"><?php esc_html_e( 'Enter a valid license key. This will be stored in network options and pushed to all sites.', 'plugin-wp-support-thisismyurl' ); ?></p>
+								<input type="text" id="wpshadow_network_key" name="wpshadow_network_key" value="<?php echo esc_attr( $network_key ); ?>" class="regular-text code" />
+								<p class="description"><?php esc_html_e( 'Enter a valid license key. This will be stored in network options and pushed to all sites.', 'plugin-wpshadow' ); ?></p>
 							</td>
 						</tr>
 					</table>
 
 					<!-- Site Selection -->
-					<h3><?php esc_html_e( 'Select Sites to Broadcast To', 'plugin-wp-support-thisismyurl' ); ?></h3>
+					<h3><?php esc_html_e( 'Select Sites to Broadcast To', 'plugin-wpshadow' ); ?></h3>
 					<fieldset style="margin-bottom: 20px;">
-						<legend class="screen-reader-text"><?php esc_html_e( 'Site selection', 'plugin-wp-support-thisismyurl' ); ?></legend>
+						<legend class="screen-reader-text"><?php esc_html_e( 'Site selection', 'plugin-wpshadow' ); ?></legend>
 						<div style="margin-bottom: 10px;">
 							<label>
-								<input type="checkbox" id="WPS_select_all_sites" />
-								<strong><?php esc_html_e( 'Select All Sites', 'plugin-wp-support-thisismyurl' ); ?></strong>
+								<input type="checkbox" id="wpshadow_select_all_sites" />
+								<strong><?php esc_html_e( 'Select All Sites', 'plugin-wpshadow' ); ?></strong>
 							</label>
 						</div>
 
 						<div style="max-height: 300px; overflow-y: auto; border: 1px solid #ddd; padding: 10px;">
 							<?php foreach ( $sites as $site ) : ?>
 								<label style="display: block; margin-bottom: 8px;">
-									<input type="checkbox" class="WPS_site_checkbox" name="WPS_broadcast_sites[]" value="<?php echo absint( $site->blog_id ); ?>" />
+									<input type="checkbox" class="wpshadow_site_checkbox" name="wpshadow_broadcast_sites[]" value="<?php echo absint( $site->blog_id ); ?>" />
 									<?php echo esc_html( $site->blogname ) . ' (' . esc_html( $site->domain . $site->path ) . ')'; ?>
 								</label>
 							<?php endforeach; ?>
@@ -160,8 +160,8 @@ class WPS_Network_License {
 					</fieldset>
 
 					<p class="submit">
-						<button type="submit" class="button button-primary" name="WPS_broadcast_action" value="broadcast">
-							<?php esc_html_e( 'Broadcast License to Selected Sites', 'plugin-wp-support-thisismyurl' ); ?>
+						<button type="submit" class="button button-primary" name="wpshadow_broadcast_action" value="broadcast">
+							<?php esc_html_e( 'Broadcast License to Selected Sites', 'plugin-wpshadow' ); ?>
 						</button>
 					</p>
 				</form>
@@ -173,8 +173,8 @@ class WPS_Network_License {
 
 		<script>
 		document.addEventListener( 'DOMContentLoaded', function() {
-			const selectAll = document.getElementById( 'WPS_select_all_sites' );
-			const checkboxes = document.querySelectorAll( '.WPS_site_checkbox' );
+			const selectAll = document.getElementById( 'wpshadow_select_all_sites' );
+			const checkboxes = document.querySelectorAll( '.WPSHADOW_site_checkbox' );
 
 			if ( selectAll ) {
 				selectAll.addEventListener( 'change', function() {
@@ -203,7 +203,7 @@ class WPS_Network_License {
 		$log = (array) get_site_option( self::NETWORK_BROADCAST_LOG, array() );
 
 		if ( empty( $log ) ) {
-			echo '<div class="card"><p><em>' . esc_html__( 'No broadcast history yet.', 'plugin-wp-support-thisismyurl' ) . '</em></p></div>';
+			echo '<div class="card"><p><em>' . esc_html__( 'No broadcast history yet.', 'plugin-wpshadow' ) . '</em></p></div>';
 			return;
 		}
 
@@ -212,14 +212,14 @@ class WPS_Network_License {
 
 		?>
 		<div class="card">
-			<h2><?php esc_html_e( 'Broadcast History', 'plugin-wp-support-thisismyurl' ); ?></h2>
+			<h2><?php esc_html_e( 'Broadcast History', 'plugin-wpshadow' ); ?></h2>
 			<table class="wp-list-table widefat striped">
 				<thead>
 					<tr>
-						<th><?php esc_html_e( 'Timestamp', 'plugin-wp-support-thisismyurl' ); ?></th>
-						<th><?php esc_html_e( 'User', 'plugin-wp-support-thisismyurl' ); ?></th>
-						<th><?php esc_html_e( 'Sites Updated', 'plugin-wp-support-thisismyurl' ); ?></th>
-						<th><?php esc_html_e( 'Status', 'plugin-wp-support-thisismyurl' ); ?></th>
+						<th><?php esc_html_e( 'Timestamp', 'plugin-wpshadow' ); ?></th>
+						<th><?php esc_html_e( 'User', 'plugin-wpshadow' ); ?></th>
+						<th><?php esc_html_e( 'Sites Updated', 'plugin-wpshadow' ); ?></th>
+						<th><?php esc_html_e( 'Status', 'plugin-wpshadow' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -229,22 +229,22 @@ class WPS_Network_License {
 						$time_text = $timestamp ? date_i18n( 'M j, Y g:i a', $timestamp ) : '—';
 						$user_id   = $entry['user_id'] ?? 0;
 						$user      = $user_id > 0 ? get_user_by( 'id', $user_id ) : null;
-						$user_name = $user && $user->exists() ? $user->display_name : __( 'Unknown', 'plugin-wp-support-thisismyurl' );
+						$user_name = $user && $user->exists() ? $user->display_name : __( 'Unknown', 'plugin-wpshadow' );
 						$count     = count( $entry['site_ids'] ?? array() );
 						$status    = $entry['status'] ?? 'success';
 						?>
 						<tr>
 							<td><?php echo esc_html( $time_text ); ?></td>
 							<td><?php echo esc_html( $user_name ); ?></td>
-							<td><?php echo absint( $count ) . ' ' . esc_html( _n( 'site', 'sites', $count, 'plugin-wp-support-thisismyurl' ) ); ?></td>
+							<td><?php echo absint( $count ) . ' ' . esc_html( _n( 'site', 'sites', $count, 'plugin-wpshadow' ) ); ?></td>
 							<td>
 								<?php
 								if ( 'success' === $status ) {
-									echo '<span style="color: green;">' . esc_html__( 'Success', 'plugin-wp-support-thisismyurl' ) . '</span>';
+									echo '<span style="color: green;">' . esc_html__( 'Success', 'plugin-wpshadow' ) . '</span>';
 								} elseif ( 'partial' === $status ) {
-									echo '<span style="color: orange;">' . esc_html__( 'Partial', 'plugin-wp-support-thisismyurl' ) . '</span>';
+									echo '<span style="color: orange;">' . esc_html__( 'Partial', 'plugin-wpshadow' ) . '</span>';
 								} else {
-									echo '<span style="color: red;">' . esc_html__( 'Failed', 'plugin-wp-support-thisismyurl' ) . '</span>';
+									echo '<span style="color: red;">' . esc_html__( 'Failed', 'plugin-wpshadow' ) . '</span>';
 								}
 								?>
 							</td>
@@ -263,17 +263,17 @@ class WPS_Network_License {
 	 */
 	public static function handle_broadcast_submission(): void {
 		if ( ! current_user_can( 'manage_network_options' ) ) {
-			wp_safe_redirect( network_admin_url( 'admin.php?page=wps-network-license-broadcast&WPS_broadcast_error=1' ) );
+			wp_safe_redirect( network_admin_url( 'admin.php?page=wps-network-license-broadcast&WPSHADOW_broadcast_error=1' ) );
 			exit;
 		}
 
-		check_admin_referer( 'WPS_broadcast_license', 'WPS_broadcast_nonce' );
+		check_admin_referer( 'wpshadow_broadcast_license', 'wpshadow_broadcast_nonce' );
 
-		$network_key = sanitize_text_field( wp_unslash( $_POST['WPS_network_key'] ?? '' ) );
-		$site_ids    = isset( $_POST['WPS_broadcast_sites'] ) ? array_map( 'absint', (array) wp_unslash( $_POST['WPS_broadcast_sites'] ) ) : array();
+		$network_key = sanitize_text_field( wp_unslash( $_POST['wpshadow_network_key'] ?? '' ) );
+		$site_ids    = isset( $_POST['wpshadow_broadcast_sites'] ) ? array_map( 'absint', (array) wp_unslash( $_POST['wpshadow_broadcast_sites'] ) ) : array();
 
 		if ( empty( $network_key ) || empty( $site_ids ) ) {
-			wp_safe_redirect( network_admin_url( 'admin.php?page=wps-network-license-broadcast&WPS_broadcast_error=1' ) );
+			wp_safe_redirect( network_admin_url( 'admin.php?page=wps-network-license-broadcast&WPSHADOW_broadcast_error=1' ) );
 			exit;
 		}
 
@@ -285,7 +285,7 @@ class WPS_Network_License {
 		$failed_sites     = 0;
 
 		foreach ( $site_ids as $blog_id ) {
-			$result = update_blog_option( $blog_id, 'WPS_license_key', $network_key );
+			$result = update_blog_option( $blog_id, 'wpshadow_license_key', $network_key );
 			if ( $result ) {
 				++$successful_sites;
 			} else {
@@ -305,19 +305,19 @@ class WPS_Network_License {
 		$log[] = $log_entry;
 		update_site_option( self::NETWORK_BROADCAST_LOG, $log );
 
-		wp_safe_redirect( network_admin_url( 'admin.php?page=wps-network-license-broadcast&WPS_broadcast_success=1' ) );
+		wp_safe_redirect( network_admin_url( 'admin.php?page=wps-network-license-broadcast&WPSHADOW_broadcast_success=1' ) );
 		exit;
 	}
 }
 
 /* @changelog
 - Version 1.2601.73000: Initial implementation of network-wide license broadcast
-	- Added WPS_Network_License class for Super Admin license broadcasting
+	- Added WPSHADOW_Network_License class for Super Admin license broadcasting
 	- Network License Broadcast submenu page in Network Admin
 	- Select all/individual sites for license push
 	- Broadcast audit log to track licensing changes
 	- Nonce verification and capability checks for security
-	- Automatic option update for each site (WPS_license_key)
+	- Automatic option update for each site (WPSHADOW_license_key)
 */
 
 

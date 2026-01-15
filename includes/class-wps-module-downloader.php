@@ -5,7 +5,7 @@
  * Handles resilient ZIP downloads with retry, checksum verification, progress tracking,
  * and graceful failure handling.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  * @since 1.2601.74000
  */
 
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Module Downloader with resilience features.
  */
-class WPS_Module_Downloader {
+class WPSHADOW_Module_Downloader {
 
 	/**
 	 * Download session ID for progress tracking.
@@ -67,7 +67,7 @@ class WPS_Module_Downloader {
 	 * @return string
 	 */
 	private function generate_session_id(): string {
-		return 'wps_dl_' . wp_generate_password( 12, false );
+		return 'wpshadow_dl_' . wp_generate_password( 12, false );
 	}
 
 	/**
@@ -90,17 +90,17 @@ class WPS_Module_Downloader {
 	public function download( string $url, string $destination, ?string $expected_hash = null ) {
 		// Validate URL.
 		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
-			return new WP_Error( 'invalid_url', __( 'Invalid download URL.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'invalid_url', __( 'Invalid download URL.', 'plugin-wpshadow' ) );
 		}
 
 		// Ensure destination directory exists.
 		$dest_dir = dirname( $destination );
 		if ( ! is_dir( $dest_dir ) && ! wp_mkdir_p( $dest_dir ) ) {
-			return new WP_Error( 'mkdir_failed', __( 'Could not create destination directory.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'mkdir_failed', __( 'Could not create destination directory.', 'plugin-wpshadow' ) );
 		}
 
 		// Initialize progress.
-		$this->update_progress( 0, 'starting', __( 'Starting download...', 'plugin-wp-support-thisismyurl' ) );
+		$this->update_progress( 0, 'starting', __( 'Starting download...', 'plugin-wpshadow' ) );
 
 		// Attempt download with retry logic.
 		$attempt    = 0;
@@ -114,7 +114,7 @@ class WPS_Module_Downloader {
 				'downloading',
 				sprintf(
 					/* translators: %d: Attempt number */
-					__( 'Download attempt %d...', 'plugin-wp-support-thisismyurl' ),
+					__( 'Download attempt %d...', 'plugin-wpshadow' ),
 					$attempt
 				)
 			);
@@ -132,7 +132,7 @@ class WPS_Module_Downloader {
 					}
 				}
 
-				$this->update_progress( 100, 'complete', __( 'Download complete.', 'plugin-wp-support-thisismyurl' ) );
+				$this->update_progress( 100, 'complete', __( 'Download complete.', 'plugin-wpshadow' ) );
 				$this->log_success( $url, $attempt );
 				return true;
 			}
@@ -148,7 +148,7 @@ class WPS_Module_Downloader {
 					'retrying',
 					sprintf(
 						/* translators: %d: Wait time in seconds */
-						__( 'Retrying in %d seconds...', 'plugin-wp-support-thisismyurl' ),
+						__( 'Retrying in %d seconds...', 'plugin-wpshadow' ),
 						$backoff_seconds
 					)
 				);
@@ -160,10 +160,10 @@ class WPS_Module_Downloader {
 
 		// All retries exhausted.
 		$this->cleanup_file( $destination );
-		$this->update_progress( 0, 'failed', __( 'Download failed after all retries.', 'plugin-wp-support-thisismyurl' ) );
+		$this->update_progress( 0, 'failed', __( 'Download failed after all retries.', 'plugin-wpshadow' ) );
 		$this->log_failure( $url, 'exhausted_retries', $last_error ? $last_error->get_error_message() : 'Unknown error' );
 
-		return $last_error ?? new WP_Error( 'download_failed', __( 'Download failed.', 'plugin-wp-support-thisismyurl' ) );
+		return $last_error ?? new WP_Error( 'download_failed', __( 'Download failed.', 'plugin-wpshadow' ) );
 	}
 
 	/**
@@ -194,7 +194,7 @@ class WPS_Module_Downloader {
 				'http_error',
 				sprintf(
 					/* translators: %d: HTTP status code */
-					__( 'HTTP error: %d', 'plugin-wp-support-thisismyurl' ),
+					__( 'HTTP error: %d', 'plugin-wpshadow' ),
 					$http_code
 				)
 			);
@@ -202,7 +202,7 @@ class WPS_Module_Downloader {
 
 		// Verify file was created and has content.
 		if ( ! file_exists( $destination ) || 0 === filesize( $destination ) ) {
-			return new WP_Error( 'download_incomplete', __( 'Downloaded file is empty or missing.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'download_incomplete', __( 'Downloaded file is empty or missing.', 'plugin-wpshadow' ) );
 		}
 
 		return true;
@@ -217,18 +217,18 @@ class WPS_Module_Downloader {
 	 */
 	private function verify_checksum( string $file_path, string $expected_hash ): bool|WP_Error {
 		if ( ! file_exists( $file_path ) ) {
-			return new WP_Error( 'file_not_found', __( 'File not found for checksum verification.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'file_not_found', __( 'File not found for checksum verification.', 'plugin-wpshadow' ) );
 		}
 
 		$actual_hash = hash_file( 'sha256', $file_path );
 		if ( false === $actual_hash ) {
-			return new WP_Error( 'hash_failed', __( 'Could not calculate file hash.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'hash_failed', __( 'Could not calculate file hash.', 'plugin-wpshadow' ) );
 		}
 
 		if ( ! hash_equals( strtolower( $expected_hash ), strtolower( $actual_hash ) ) ) {
 			$remediation = sprintf(
 				/* translators: 1: Expected hash, 2: Actual hash */
-				__( 'Checksum mismatch. Expected: %1$s, Got: %2$s. Please try downloading again or contact support if the issue persists.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Checksum mismatch. Expected: %1$s, Got: %2$s. Please try downloading again or contact support if the issue persists.', 'plugin-wpshadow' ),
 				substr( $expected_hash, 0, 16 ) . '...',
 				substr( $actual_hash, 0, 16 ) . '...'
 			);
@@ -266,7 +266,7 @@ class WPS_Module_Downloader {
 			'time'    => time(),
 		);
 
-		$transient_key = 'wps_dl_progress_' . $this->session_id;
+		$transient_key = 'wpshadow_dl_progress_' . $this->session_id;
 		set_transient( $transient_key, $progress, 5 * MINUTE_IN_SECONDS );
 	}
 
@@ -276,14 +276,14 @@ class WPS_Module_Downloader {
 	 * @return array Progress data.
 	 */
 	public function get_progress(): array {
-		$transient_key = 'wps_dl_progress_' . $this->session_id;
+		$transient_key = 'wpshadow_dl_progress_' . $this->session_id;
 		$progress      = get_transient( $transient_key );
 
 		if ( false === $progress ) {
 			return array(
 				'percent' => 0,
 				'status'  => 'unknown',
-				'message' => __( 'No progress data available.', 'plugin-wp-support-thisismyurl' ),
+				'message' => __( 'No progress data available.', 'plugin-wpshadow' ),
 				'time'    => time(),
 			);
 		}
@@ -297,7 +297,7 @@ class WPS_Module_Downloader {
 	 * @return void
 	 */
 	public function clear_progress(): void {
-		$transient_key = 'wps_dl_progress_' . $this->session_id;
+		$transient_key = 'wpshadow_dl_progress_' . $this->session_id;
 		delete_transient( $transient_key );
 	}
 
@@ -333,7 +333,7 @@ class WPS_Module_Downloader {
 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 
 		// Optional audit event.
-		do_action( 'WPS_module_download_success', $url, $attempts, $this->session_id );
+		do_action( 'wpshadow_module_download_success', $url, $attempts, $this->session_id );
 	}
 
 	/**
@@ -354,7 +354,7 @@ class WPS_Module_Downloader {
 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 
 		// Optional audit event.
-		do_action( 'WPS_module_download_failure', $url, $reason, $detail, $this->session_id );
+		do_action( 'wpshadow_module_download_failure', $url, $reason, $detail, $this->session_id );
 	}
 
 	/**
@@ -367,12 +367,12 @@ class WPS_Module_Downloader {
 	public function validate_zip( string $zip_path, string $expected_slug ): bool|WP_Error {
 		// Check file exists.
 		if ( ! file_exists( $zip_path ) ) {
-			return new WP_Error( 'zip_not_found', __( 'ZIP file not found.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'zip_not_found', __( 'ZIP file not found.', 'plugin-wpshadow' ) );
 		}
 
 		// Check ZIP extension is available.
 		if ( ! class_exists( '\ZipArchive' ) ) {
-			return new WP_Error( 'no_zip_ext', __( 'ZIP extension not available.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'no_zip_ext', __( 'ZIP extension not available.', 'plugin-wpshadow' ) );
 		}
 
 		$zip = new \ZipArchive();
@@ -383,7 +383,7 @@ class WPS_Module_Downloader {
 				'bad_zip',
 				sprintf(
 					/* translators: %d: ZIP error code */
-					__( 'Could not open ZIP file (error code: %d). The file may be corrupt.', 'plugin-wp-support-thisismyurl' ),
+					__( 'Could not open ZIP file (error code: %d). The file may be corrupt.', 'plugin-wpshadow' ),
 					$res
 				)
 			);
@@ -416,7 +416,7 @@ class WPS_Module_Downloader {
 				'invalid_structure',
 				sprintf(
 					/* translators: %s: Expected slug */
-					__( 'ZIP does not contain expected plugin structure (%1$s/%2$s.php). The archive may be invalid.', 'plugin-wp-support-thisismyurl' ),
+					__( 'ZIP does not contain expected plugin structure (%1$s/%2$s.php). The archive may be invalid.', 'plugin-wpshadow' ),
 					$expected_slug,
 					$expected_slug
 				)
@@ -436,17 +436,17 @@ class WPS_Module_Downloader {
 		$code = $error->get_error_code();
 
 		$guidance_map = array(
-			'invalid_url'         => __( 'The download URL is invalid. Please refresh the catalog and try again.', 'plugin-wp-support-thisismyurl' ),
-			'http_error'          => __( 'The server returned an error. Please check your internet connection and try again.', 'plugin-wp-support-thisismyurl' ),
-			'download_incomplete' => __( 'The download did not complete. Please check your internet connection and try again.', 'plugin-wp-support-thisismyurl' ),
-			'checksum_mismatch'   => __( 'The downloaded file is corrupt. Please try again or contact support if the issue persists.', 'plugin-wp-support-thisismyurl' ),
-			'bad_zip'             => __( 'The ZIP file is corrupt. Please try downloading again.', 'plugin-wp-support-thisismyurl' ),
-			'invalid_structure'   => __( 'The downloaded plugin has an unexpected structure. Please contact the plugin author.', 'plugin-wp-support-thisismyurl' ),
-			'exhausted_retries'   => __( 'Download failed after multiple attempts. Please check your internet connection or try again later.', 'plugin-wp-support-thisismyurl' ),
+			'invalid_url'         => __( 'The download URL is invalid. Please refresh the catalog and try again.', 'plugin-wpshadow' ),
+			'http_error'          => __( 'The server returned an error. Please check your internet connection and try again.', 'plugin-wpshadow' ),
+			'download_incomplete' => __( 'The download did not complete. Please check your internet connection and try again.', 'plugin-wpshadow' ),
+			'checksum_mismatch'   => __( 'The downloaded file is corrupt. Please try again or contact support if the issue persists.', 'plugin-wpshadow' ),
+			'bad_zip'             => __( 'The ZIP file is corrupt. Please try downloading again.', 'plugin-wpshadow' ),
+			'invalid_structure'   => __( 'The downloaded plugin has an unexpected structure. Please contact the plugin author.', 'plugin-wpshadow' ),
+			'exhausted_retries'   => __( 'Download failed after multiple attempts. Please check your internet connection or try again later.', 'plugin-wpshadow' ),
 		);
 
-		return $guidance_map[ $code ] ?? __( 'An unexpected error occurred. Please try again.', 'plugin-wp-support-thisismyurl' );
+		return $guidance_map[ $code ] ?? __( 'An unexpected error occurred. Please try again.', 'plugin-wpshadow' );
 	}
 }
 
-/* @changelog WPS_Module_Downloader class created for resilient module downloads. */
+/* @changelog WPSHADOW_Module_Downloader class created for resilient module downloads. */

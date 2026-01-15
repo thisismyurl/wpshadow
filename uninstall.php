@@ -1,10 +1,10 @@
 <?php
 /**
- * Uninstall script for WordPress Support (thisismyurl).
+ * Uninstall script for WPShadow (wpshadow).
  *
  * Fired when the plugin is uninstalled.
  *
- * @package WPS_WORDPRESS_SUPPORT
+ * @package WPSHADOW_WORDPRESS_SUPPORT
  */
 
 declare(strict_types=1);
@@ -19,15 +19,15 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
  *
  * @return void
  */
-function wp_support_delete_options(): void {
+function wpshadow_delete_options(): void {
 	// Delete single site options.
-	delete_option( 'wp_support_settings' );
-	delete_option( 'wp_support_version' );
+	delete_option( 'wpshadow_settings' );
+	delete_option( 'WPSHADOW_VERSION' );
 
 	// Delete multisite options if applicable.
 	if ( is_multisite() ) {
-		delete_site_option( 'wp_support_network_settings' );
-		delete_site_option( 'wp_support_network_version' );
+		delete_site_option( 'wpshadow_network_settings' );
+		delete_site_option( 'wpshadow_network_version' );
 	}
 }
 
@@ -39,7 +39,7 @@ function wp_support_delete_options(): void {
  *
  * @return void
  */
-function wp_support_cleanup_vault(): void {
+function wpshadow_cleanup_vault(): void {
 	/*
 	$upload_dir = wp_upload_dir();
 	$vault_path = $upload_dir['basedir'] . '/vault';
@@ -62,10 +62,10 @@ function wp_support_cleanup_vault(): void {
 }
 
 // Execute cleanup.
-wp_support_delete_options();
+wpshadow_delete_options();
 
 // Optional: Uncomment to remove vault on uninstall.
-// wp_support_cleanup_vault();
+// wpshadow_cleanup_vault();
 
 /* @changelog
  * [1.2601.71701] - 2026-01-07 17:17

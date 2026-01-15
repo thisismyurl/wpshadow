@@ -4,7 +4,7 @@
  *
  * Convenience functions for plugins to interact with the feature registry.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
 declare(strict_types=1);
@@ -18,13 +18,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Register a feature provided by a plugin.
  *
- * @param mixed $feature Feature identifier or object implementing WPS_Feature_Interface.
+ * @param mixed $feature Feature identifier or object implementing WPSHADOW_Feature_Interface.
  * @param array $data    Optional metadata for legacy array registration.
  *
  * @return void
  */
-function register_WPS_feature( $feature, array $data = array() ): void {
-	WPS_Feature_Registry::register_feature( $feature, $data );
+function register_WPSHADOW_feature( $feature, array $data = array() ): void {
+	WPSHADOW_Feature_Registry::register_feature( $feature, $data );
 }
 
 /**
@@ -34,13 +34,13 @@ function register_WPS_feature( $feature, array $data = array() ): void {
  *
  * @return bool
  */
-function has_WPS_feature( string $feature ): bool {
-	$feature_data = WPS_Feature_Registry::get_feature( $feature );
+function has_WPSHADOW_feature( string $feature ): bool {
+	$feature_data = WPSHADOW_Feature_Registry::get_feature( $feature );
 	if ( $feature_data ) {
 		return ! empty( $feature_data['enabled'] );
 	}
 
-	return WPS_Module_Registry::module_has_capability( $feature );
+	return WPSHADOW_Module_Registry::module_has_capability( $feature );
 }
 
 /**
@@ -50,13 +50,13 @@ function has_WPS_feature( string $feature ): bool {
  *
  * @return bool
  */
-function has_any_WPS_feature( array $features ): bool {
-	if ( WPS_Feature_Registry::has_any_feature( $features ) ) {
+function has_any_WPSHADOW_feature( array $features ): bool {
+	if ( WPSHADOW_Feature_Registry::has_any_feature( $features ) ) {
 		return true;
 	}
 
 	foreach ( $features as $feature ) {
-		if ( WPS_Module_Registry::module_has_capability( $feature ) ) {
+		if ( WPSHADOW_Module_Registry::module_has_capability( $feature ) ) {
 			return true;
 		}
 	}
@@ -71,9 +71,9 @@ function has_any_WPS_feature( array $features ): bool {
  *
  * @return bool
  */
-function has_all_WPS_features( array $features ): bool {
+function has_all_WPSHADOW_features( array $features ): bool {
 	foreach ( $features as $feature ) {
-		if ( ! has_WPS_feature( $feature ) ) {
+		if ( ! has_WPSHADOW_feature( $feature ) ) {
 			return false;
 		}
 	}
@@ -86,8 +86,8 @@ function has_all_WPS_features( array $features ): bool {
  *
  * @return array<string, array<string, mixed>>
  */
-function get_WPS_features(): array {
-	return WPS_Feature_Registry::get_features();
+function get_WPSHADOW_features(): array {
+	return WPSHADOW_Feature_Registry::get_features();
 }
 
 /**
@@ -97,8 +97,8 @@ function get_WPS_features(): array {
  *
  * @return array<string, mixed>|null
  */
-function get_WPS_feature( string $feature ): ?array {
-	return WPS_Feature_Registry::get_feature( $feature );
+function get_WPSHADOW_feature( string $feature ): ?array {
+	return WPSHADOW_Feature_Registry::get_feature( $feature );
 }
 
 /**
@@ -108,6 +108,6 @@ function get_WPS_feature( string $feature ): ?array {
  * @param string|null $suite Suite filter.
  * @return array
  */
-function get_WPS_modules( ?string $type = null, ?string $suite = null ): array {
-	return WPS_Module_Registry::get_modules_filtered( $type, $suite );
+function get_WPSHADOW_modules( ?string $type = null, ?string $suite = null ): array {
+	return WPSHADOW_Module_Registry::get_modules_filtered( $type, $suite );
 }

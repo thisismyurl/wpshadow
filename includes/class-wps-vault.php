@@ -3,9 +3,9 @@
  * Vault class alias for core-support plugin.
  *
  * This file delegates all Vault operations to the canonical implementation
- * in vault-support-thisismyurl plugin. No logic duplication.
+ * in vault-wpshadow plugin. No logic duplication.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
 declare(strict_types=1);
@@ -18,17 +18,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Alias vault-support Vault class into this namespace if available.
-// WP Support works independently - Vault Support is optional for extended features.
-if ( class_exists( '\\WPS\\VaultSupport\\WPS_Vault' ) ) {
-	class_alias( '\\WPS\\VaultSupport\\WPS_Vault', __NAMESPACE__ . '\\WPS_Vault' );
+// WPShadow works independently - Vault Support is optional for extended features.
+if ( class_exists( '\\WPS\\VaultSupport\\WPSHADOW_Vault' ) ) {
+	class_alias( '\\WPS\\VaultSupport\\WPSHADOW_Vault', __NAMESPACE__ . '\\WPSHADOW_Vault' );
 } else {
 	/**
-	 * Stub WPS_Vault class when Vault Support plugin is not available.
+	 * Stub WPSHADOW_Vault class when Vault Support plugin is not available.
 	 * Provides no-op methods to prevent fatal errors.
 	 *
-	 * @package wp_support_SUPPORT
+	 * @package wpshadow_SUPPORT
 	 */
-	class WPS_Vault {
+	class WPSHADOW_Vault {
 		/**
 		 * No-op init method.
 		 *

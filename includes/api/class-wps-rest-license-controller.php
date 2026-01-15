@@ -2,7 +2,7 @@
 /**
  * License Management REST API Controller
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  * @since 1.2601.73002
  */
 
@@ -14,7 +14,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 use WP_Error;
-use WPS\CoreSupport\WPS_License;
+use WPS\CoreSupport\WPSHADOW_License;
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * License Management REST Controller
  */
-class WPS_REST_License_Controller extends WPS_REST_Controller_Base {
+class WPSHADOW_REST_License_Controller extends WPSHADOW_REST_Controller_Base {
 
 	/**
 	 * Register routes
@@ -141,7 +141,7 @@ class WPS_REST_License_Controller extends WPS_REST_Controller_Base {
 		if ( ! is_multisite() ) {
 			return $this->error_response(
 				'not_multisite',
-				__( 'Network endpoints are only available in multisite installations.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Network endpoints are only available in multisite installations.', 'plugin-wpshadow' ),
 				400
 			);
 		}
@@ -156,15 +156,15 @@ class WPS_REST_License_Controller extends WPS_REST_Controller_Base {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function get_license( WP_REST_Request $request ) {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_License' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_License' ) ) {
 			return $this->error_response(
 				'license_not_available',
-				__( 'License system is not available.', 'plugin-wp-support-thisismyurl' ),
+				__( 'License system is not available.', 'plugin-wpshadow' ),
 				503
 			);
 		}
 
-		$state = WPS_License::get_state( false );
+		$state = WPSHADOW_License::get_state( false );
 
 		return $this->success_response( $state );
 	}
@@ -176,10 +176,10 @@ class WPS_REST_License_Controller extends WPS_REST_Controller_Base {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function register_license( WP_REST_Request $request ) {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_License' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_License' ) ) {
 			return $this->error_response(
 				'license_not_available',
-				__( 'License system is not available.', 'plugin-wp-support-thisismyurl' ),
+				__( 'License system is not available.', 'plugin-wpshadow' ),
 				503
 			);
 		}
@@ -195,13 +195,13 @@ class WPS_REST_License_Controller extends WPS_REST_Controller_Base {
 		if ( empty( $license_key ) ) {
 			return $this->error_response(
 				'invalid_license_key',
-				__( 'License key cannot be empty.', 'plugin-wp-support-thisismyurl' ),
+				__( 'License key cannot be empty.', 'plugin-wpshadow' ),
 				400
 			);
 		}
 
 		// Store license key.
-		$result = WPS_License::register( $license_key, false );
+		$result = WPSHADOW_License::register( $license_key, false );
 
 		if ( is_wp_error( $result ) ) {
 			return $this->error_response(
@@ -213,7 +213,7 @@ class WPS_REST_License_Controller extends WPS_REST_Controller_Base {
 
 		return $this->success_response(
 			array( 'status' => 'registered' ),
-			__( 'License registered successfully.', 'plugin-wp-support-thisismyurl' ),
+			__( 'License registered successfully.', 'plugin-wpshadow' ),
 			201
 		);
 	}
@@ -225,27 +225,27 @@ class WPS_REST_License_Controller extends WPS_REST_Controller_Base {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function remove_license( WP_REST_Request $request ) {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_License' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_License' ) ) {
 			return $this->error_response(
 				'license_not_available',
-				__( 'License system is not available.', 'plugin-wp-support-thisismyurl' ),
+				__( 'License system is not available.', 'plugin-wpshadow' ),
 				503
 			);
 		}
 
-		$result = WPS_License::remove( false );
+		$result = WPSHADOW_License::remove( false );
 
 		if ( ! $result ) {
 			return $this->error_response(
 				'removal_failed',
-				__( 'Failed to remove license.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Failed to remove license.', 'plugin-wpshadow' ),
 				500
 			);
 		}
 
 		return $this->success_response(
 			array( 'status' => 'removed' ),
-			__( 'License removed successfully.', 'plugin-wp-support-thisismyurl' )
+			__( 'License removed successfully.', 'plugin-wpshadow' )
 		);
 	}
 
@@ -256,10 +256,10 @@ class WPS_REST_License_Controller extends WPS_REST_Controller_Base {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function verify_license( WP_REST_Request $request ) {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_License' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_License' ) ) {
 			return $this->error_response(
 				'license_not_available',
-				__( 'License system is not available.', 'plugin-wp-support-thisismyurl' ),
+				__( 'License system is not available.', 'plugin-wpshadow' ),
 				503
 			);
 		}
@@ -270,7 +270,7 @@ class WPS_REST_License_Controller extends WPS_REST_Controller_Base {
 			return $rate_check;
 		}
 
-		$result = WPS_License::verify_remote( false );
+		$result = WPSHADOW_License::verify_remote( false );
 
 		if ( is_wp_error( $result ) ) {
 			return $this->error_response(
@@ -280,11 +280,11 @@ class WPS_REST_License_Controller extends WPS_REST_Controller_Base {
 			);
 		}
 
-		$state = WPS_License::get_state( false );
+		$state = WPSHADOW_License::get_state( false );
 
 		return $this->success_response(
 			$state,
-			__( 'License verified successfully.', 'plugin-wp-support-thisismyurl' )
+			__( 'License verified successfully.', 'plugin-wpshadow' )
 		);
 	}
 
@@ -295,22 +295,22 @@ class WPS_REST_License_Controller extends WPS_REST_Controller_Base {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function get_network_license( WP_REST_Request $request ) {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_License' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_License' ) ) {
 			return $this->error_response(
 				'license_not_available',
-				__( 'License system is not available.', 'plugin-wp-support-thisismyurl' ),
+				__( 'License system is not available.', 'plugin-wpshadow' ),
 				503
 			);
 		}
 
-		$state = WPS_License::get_state( true );
+		$state = WPSHADOW_License::get_state( true );
 
 		$sites = array();
 		if ( is_multisite() ) {
 			$sites_list = get_sites( array( 'number' => 1000 ) );
 			foreach ( $sites_list as $site ) {
 				switch_to_blog( $site->blog_id );
-				$site_state = WPS_License::get_state( false );
+				$site_state = WPSHADOW_License::get_state( false );
 				restore_current_blog();
 
 				$sites[] = array(
@@ -337,10 +337,10 @@ class WPS_REST_License_Controller extends WPS_REST_Controller_Base {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function broadcast_license( WP_REST_Request $request ) {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_License' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_License' ) ) {
 			return $this->error_response(
 				'license_not_available',
-				__( 'License system is not available.', 'plugin-wp-support-thisismyurl' ),
+				__( 'License system is not available.', 'plugin-wpshadow' ),
 				503
 			);
 		}
@@ -358,18 +358,18 @@ class WPS_REST_License_Controller extends WPS_REST_Controller_Base {
 		if ( empty( $license_key ) ) {
 			return $this->error_response(
 				'invalid_license_key',
-				__( 'License key cannot be empty.', 'plugin-wp-support-thisismyurl' ),
+				__( 'License key cannot be empty.', 'plugin-wpshadow' ),
 				400
 			);
 		}
 
-		$result = WPS_License::broadcast_network_key( $license_key, $site_ids, $auto_new );
+		$result = WPSHADOW_License::broadcast_network_key( $license_key, $site_ids, $auto_new );
 
 		return $this->success_response(
 			$result,
 			sprintf(
 				/* translators: 1: successful count, 2: failed count */
-				__( 'Broadcast completed: %1$d sites successful, %2$d failed.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Broadcast completed: %1$d sites successful, %2$d failed.', 'plugin-wpshadow' ),
 				$result['success'],
 				$result['failed']
 			)

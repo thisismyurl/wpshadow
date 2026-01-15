@@ -18,11 +18,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Feature_Detector Class
+ * WPSHADOW_Feature_Detector Class
  *
  * Detects which modules are installed and what features are available.
  */
-class WPS_Feature_Detector {
+class WPSHADOW_Feature_Detector {
 
 	/**
 	 * Feature capability cache.
@@ -37,7 +37,7 @@ class WPS_Feature_Detector {
 	 * @return bool True if Vault is available.
 	 */
 	public static function has_vault(): bool {
-		return class_exists( '\\WPS\\VaultSupport\\WPS_Vault' );
+		return class_exists( '\\WPS\\VaultSupport\\WPSHADOW_Vault' );
 	}
 
 	/**
@@ -86,22 +86,22 @@ class WPS_Feature_Detector {
 			'backup_verification'   => array(
 				'available'   => true,
 				'level'       => 'core',
-				'description' => __( 'Snapshot-based backup verification and restore testing', 'plugin-wp-support-thisismyurl' ),
+				'description' => __( 'Snapshot-based backup verification and restore testing', 'plugin-wpshadow' ),
 			),
 			'automated_scheduling'  => array(
 				'available'   => true,
 				'level'       => 'core',
-				'description' => __( 'Schedule automatic backup verification tests', 'plugin-wp-support-thisismyurl' ),
+				'description' => __( 'Schedule automatic backup verification tests', 'plugin-wpshadow' ),
 			),
 			'integrity_monitoring'  => array(
 				'available'   => true,
 				'level'       => 'core',
-				'description' => __( 'Database and file integrity checks', 'plugin-wp-support-thisismyurl' ),
+				'description' => __( 'Database and file integrity checks', 'plugin-wpshadow' ),
 			),
 			'restore_simulation'    => array(
 				'available'   => true,
 				'level'       => 'core',
-				'description' => __( 'Test restore procedures in staging environment', 'plugin-wp-support-thisismyurl' ),
+				'description' => __( 'Test restore procedures in staging environment', 'plugin-wpshadow' ),
 			),
 		);
 
@@ -110,45 +110,45 @@ class WPS_Feature_Detector {
 			'encrypted_backups'     => array(
 				'available'   => $has_vault,
 				'level'       => $has_vault ? 'vault' : 'upgrade',
-				'description' => __( 'AES-256 encrypted backup storage for sensitive data', 'plugin-wp-support-thisismyurl' ),
-				'upgrade_url' => admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-support-thisismyurl' ),
+				'description' => __( 'AES-256 encrypted backup storage for sensitive data', 'plugin-wpshadow' ),
+				'upgrade_url' => admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-wpshadow' ),
 			),
 			'cloud_offload'         => array(
 				'available'   => $has_vault,
 				'level'       => $has_vault ? 'vault' : 'upgrade',
-				'description' => __( 'Automatic offsite backup to cloud storage providers', 'plugin-wp-support-thisismyurl' ),
-				'upgrade_url' => admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-support-thisismyurl' ),
+				'description' => __( 'Automatic offsite backup to cloud storage providers', 'plugin-wpshadow' ),
+				'upgrade_url' => admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-wpshadow' ),
 			),
 			'file_versioning'       => array(
 				'available'   => $has_vault,
 				'level'       => $has_vault ? 'vault' : 'upgrade',
-				'description' => __( 'Keep multiple versions of files with one-click rollback', 'plugin-wp-support-thisismyurl' ),
-				'upgrade_url' => admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-support-thisismyurl' ),
+				'description' => __( 'Keep multiple versions of files with one-click rollback', 'plugin-wpshadow' ),
+				'upgrade_url' => admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-wpshadow' ),
 			),
 			'compression'           => array(
 				'available'   => $has_vault,
 				'level'       => $has_vault ? 'vault' : 'upgrade',
-				'description' => __( 'Intelligent compression reduces storage by up to 70%', 'plugin-wp-support-thisismyurl' ),
-				'upgrade_url' => admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-support-thisismyurl' ),
+				'description' => __( 'Intelligent compression reduces storage by up to 70%', 'plugin-wpshadow' ),
+				'upgrade_url' => admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-wpshadow' ),
 			),
 			'deduplication'         => array(
 				'available'   => $has_vault,
 				'level'       => $has_vault ? 'vault' : 'upgrade',
-				'description' => __( 'Eliminate duplicate files to save space', 'plugin-wp-support-thisismyurl' ),
-				'upgrade_url' => admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-support-thisismyurl' ),
+				'description' => __( 'Eliminate duplicate files to save space', 'plugin-wpshadow' ),
+				'upgrade_url' => admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-wpshadow' ),
 			),
 			'broken_link_guardian'  => array(
 				'available'   => $has_vault,
 				'level'       => $has_vault ? 'vault' : 'upgrade',
-				'description' => __( 'Prevent broken links when media files are deleted', 'plugin-wp-support-thisismyurl' ),
-				'upgrade_url' => admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-support-thisismyurl' ),
+				'description' => __( 'Prevent broken links when media files are deleted', 'plugin-wpshadow' ),
+				'upgrade_url' => admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-wpshadow' ),
 			),
 		);
 
 		self::$capabilities_cache = array_merge( $core_capabilities, $vault_capabilities );
 
 		// Allow Ghost Features system to sync with Feature Detector.
-		self::$capabilities_cache = apply_filters( 'WPS_feature_capabilities', self::$capabilities_cache );
+		self::$capabilities_cache = apply_filters( 'wpshadow_feature_capabilities', self::$capabilities_cache );
 
 		return self::$capabilities_cache;
 	}
@@ -184,16 +184,16 @@ class WPS_Feature_Detector {
 			return;
 		}
 
-		$install_url = admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-support-thisismyurl' );
+		$install_url = admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-wpshadow' );
 		?>
 		<div class="notice notice-info wps-vault-upgrade-prompt" style="border-left-color: #2271b1; padding: 15px;">
 			<h3 style="margin-top: 0;">
 				<span class="dashicons dashicons-vault" style="font-size: 24px; vertical-align: middle;"></span>
-				<?php esc_html_e( 'Unlock Advanced Backup Features', 'plugin-wp-support-thisismyurl' ); ?>
+				<?php esc_html_e( 'Unlock Advanced Backup Features', 'plugin-wpshadow' ); ?>
 			</h3>
 			
 			<p>
-				<?php esc_html_e( 'Install the free Vault module to enhance your backup capabilities:', 'plugin-wp-support-thisismyurl' ); ?>
+				<?php esc_html_e( 'Install the free Vault module to enhance your backup capabilities:', 'plugin-wpshadow' ); ?>
 			</p>
 
 			<ul style="list-style: disc; margin-left: 25px; margin-bottom: 15px;">
@@ -205,15 +205,15 @@ class WPS_Feature_Detector {
 			<p>
 				<a href="<?php echo esc_url( $install_url ); ?>" class="button button-primary">
 					<span class="dashicons dashicons-download" style="vertical-align: middle;"></span>
-					<?php esc_html_e( 'Install Vault Module (Free)', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Install Vault Module (Free)', 'plugin-wpshadow' ); ?>
 				</a>
-				<a href="https://thisismyurl.com/vault-support" target="_blank" class="button button-secondary">
-					<?php esc_html_e( 'Learn More', 'plugin-wp-support-thisismyurl' ); ?>
+				<a href="https://wpshadow.com/vault-support" target="_blank" class="button button-secondary">
+					<?php esc_html_e( 'Learn More', 'plugin-wpshadow' ); ?>
 				</a>
 			</p>
 
 			<p class="description">
-				<?php esc_html_e( '✓ Free forever  •  ✓ No credit card needed  •  ✓ Install in one click', 'plugin-wp-support-thisismyurl' ); ?>
+				<?php esc_html_e( '✓ Free forever  •  ✓ No credit card needed  •  ✓ Install in one click', 'plugin-wpshadow' ); ?>
 			</p>
 		</div>
 		<?php
@@ -228,22 +228,22 @@ class WPS_Feature_Detector {
 	public static function render_feature_badge( string $level ): void {
 		$badges = array(
 			'core'    => array(
-				'label' => __( 'Core', 'plugin-wp-support-thisismyurl' ),
+				'label' => __( 'Core', 'plugin-wpshadow' ),
 				'color' => '#46b450',
 				'icon'  => 'dashicons-yes-alt',
 			),
 			'vault'   => array(
-				'label' => __( 'Vault', 'plugin-wp-support-thisismyurl' ),
+				'label' => __( 'Vault', 'plugin-wpshadow' ),
 				'color' => '#2271b1',
 				'icon'  => 'dashicons-vault',
 			),
 			'upgrade' => array(
-				'label' => __( 'Upgrade', 'plugin-wp-support-thisismyurl' ),
+				'label' => __( 'Upgrade', 'plugin-wpshadow' ),
 				'color' => '#dba617',
 				'icon'  => 'dashicons-lock',
 			),
 			'pro'     => array(
-				'label' => __( 'Pro', 'plugin-wp-support-thisismyurl' ),
+				'label' => __( 'Pro', 'plugin-wpshadow' ),
 				'color' => '#9b51e0',
 				'icon'  => 'dashicons-star-filled',
 			),

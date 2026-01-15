@@ -72,14 +72,14 @@ final class WPS_Feature_CDN_Integration extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'cdn-integration',
-				'name'               => __( 'CDN Integration', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Automatic CDN URL rewriting for images, CSS, JS with support for CloudFlare, BunnyCDN, and custom CDN providers', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'CDN Integration', 'plugin-wp-support-wpshadow' ),
+				'description'        => __( 'Automatic CDN URL rewriting for images, CSS, JS with support for CloudFlare, BunnyCDN, and custom CDN providers', 'plugin-wp-support-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Performance', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Caching and performance optimization', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Performance', 'plugin-wp-support-wpshadow' ),
+				'widget_description' => __( 'Caching and performance optimization', 'plugin-wp-support-wpshadow' ),
 				// Unified metadata.
 				'license_level'      => 3, // Good tier.
 				'minimum_capability' => 'manage_options',
@@ -206,7 +206,7 @@ final class WPS_Feature_CDN_Integration extends WPS_Abstract_Feature {
 		return array(
 			'success'       => false,
 			'response_time' => 0,
-			'message'       => __( 'Not implemented', 'plugin-wp-support-thisismyurl' ),
+			'message'       => __( 'Not implemented', 'plugin-wp-support-wpshadow' ),
 		);
 	}
 
@@ -226,7 +226,7 @@ final class WPS_Feature_CDN_Integration extends WPS_Abstract_Feature {
 		// TODO: Handle response
 		// TODO: Return result
 
-		return new \WP_Error( 'not_implemented', __( 'CDN cache purging not yet implemented', 'plugin-wp-support-thisismyurl' ) );
+		return new \WP_Error( 'not_implemented', __( 'CDN cache purging not yet implemented', 'plugin-wp-support-wpshadow' ) );
 	}
 
 	/**
@@ -244,6 +244,6 @@ final class WPS_Feature_CDN_Integration extends WPS_Abstract_Feature {
 		// TODO: Handle response
 		// TODO: Return result
 
-		return new \WP_Error( 'not_implemented', __( 'CloudFlare integration not yet implemented', 'plugin-wp-support-thisismyurl' ) );
+		return new \WP_Error( 'not_implemented', __( 'CloudFlare integration not yet implemented', 'plugin-wp-support-wpshadow' ) );
 	}
 }

@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * WPS_Feature_HTML_Cleanup
+ * WPSHADOW_Feature_HTML_Cleanup
  *
  * Compresses HTML output via buffer manipulation.
  */
-final class WPS_Feature_HTML_Cleanup extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_HTML_Cleanup extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -27,14 +27,14 @@ final class WPS_Feature_HTML_Cleanup extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'html-cleanup',
-				'name'               => __( 'HTML Output Buffer Compression', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Shrink your pages and make them download faster', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'HTML Output Buffer Compression', 'plugin-wpshadow' ),
+				'description'        => __( 'Shrink your pages and make them download faster', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'cleanup',
-				'widget_label'       => __( 'Code Cleanup', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Remove unnecessary code artifacts and optimize output', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Code Cleanup', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Remove unnecessary code artifacts and optimize output', 'plugin-wpshadow' ),
 			)
 		);
 	}
@@ -91,7 +91,7 @@ final class WPS_Feature_HTML_Cleanup extends WPS_Abstract_Feature {
 		}
 
 		// Get options.
-		$options = (array) $this->get_setting( 'wps_html_cleanup_options', $this->get_default_options( ) );
+		$options = (array) $this->get_setting( 'wpshadow_html_cleanup_options', $this->get_default_options( ) );
 
 		// 1. Remove HTML comments (but preserve conditional comments and structured data).
 		if ( $options['remove_comments'] ?? false ) {
@@ -141,7 +141,7 @@ final class WPS_Feature_HTML_Cleanup extends WPS_Abstract_Feature {
 	 *
 	 * @return array Default options.
 	 */
-	private function get_default_options(): array {
+	protected function get_default_options(): array {
 		return array(
 			'remove_comments'     => true,
 			'collapse_whitespace' => true,

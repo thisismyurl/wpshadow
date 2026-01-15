@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * WPS_Feature_Conditional_Loading
+ * WPSHADOW_Feature_Conditional_Loading
  *
  * Conditionally load scripts and styles based on page context.
  */
-final class WPS_Feature_Conditional_Loading extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Conditional_Loading extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -27,14 +27,14 @@ final class WPS_Feature_Conditional_Loading extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'conditional-loading',
-				'name'               => __( 'Conditional Script Loading', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Load plugin scripts only on pages where they are needed', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Conditional Script Loading', 'plugin-wpshadow' ),
+				'description'        => __( 'Load plugin scripts only on pages where they are needed', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Resource Optimization', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Optimize how resources are loaded and delivered', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Resource Optimization', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Optimize how resources are loaded and delivered', 'plugin-wpshadow' ),
 			)
 		);
 
@@ -67,7 +67,7 @@ final class WPS_Feature_Conditional_Loading extends WPS_Abstract_Feature {
 		$rules = (array) $this->get_setting( 'conditional_loading_rules', array() );
 
 		// Allow filtering of rules.
-		$rules = apply_filters( 'wps_conditional_loading_rules', $rules );
+		$rules = apply_filters( 'wpshadow_conditional_loading_rules', $rules );
 
 		foreach ( $rules as $rule ) {
 			if ( ! is_array( $rule ) ) {
@@ -171,7 +171,7 @@ final class WPS_Feature_Conditional_Loading extends WPS_Abstract_Feature {
 						'plugin'         => $plugin,
 						'recommendation' => sprintf(
 							/* translators: 1: script handle, 2: plugin name */
-							__( 'Consider loading %1$s (%2$s) only on relevant pages', 'plugin-wp-support-thisismyurl' ),
+							__( 'Consider loading %1$s (%2$s) only on relevant pages', 'plugin-wpshadow' ),
 							$handle,
 							$plugin
 						),
@@ -190,6 +190,6 @@ final class WPS_Feature_Conditional_Loading extends WPS_Abstract_Feature {
 	 * @return string|null Plugin name or null if not detected.
 	 */
 	private function detect_plugin_from_handle( string $handle ): ?string {
-		return WPS_Script_Utils::detect_plugin_from_handle( $handle );
+		return WPSHADOW_Script_Utils::detect_plugin_from_handle( $handle );
 	}
 }

@@ -2,7 +2,7 @@
 /**
  * Vault Operations REST API Controller
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  * @since 1.2601.73002
  */
 
@@ -14,7 +14,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 use WP_Error;
-use WPS\CoreSupport\WPS_Vault;
+use WPS\CoreSupport\WPSHADOW_Vault;
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Vault Operations REST Controller
  */
-class WPS_REST_Vault_Controller extends WPS_REST_Controller_Base {
+class WPSHADOW_REST_Vault_Controller extends WPSHADOW_REST_Controller_Base {
 
 	/**
 	 * Register routes
@@ -155,15 +155,15 @@ class WPS_REST_Vault_Controller extends WPS_REST_Controller_Base {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function get_status( WP_REST_Request $request ) {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Vault' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Vault' ) ) {
 			return $this->error_response(
 				'vault_not_available',
-				__( 'Vault module is not available.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Vault module is not available.', 'plugin-wpshadow' ),
 				503
 			);
 		}
 
-		$settings = WPS_Vault::get_settings();
+		$settings = WPSHADOW_Vault::get_settings();
 		$stats    = array(
 			'enabled'     => ! empty( $settings['enabled'] ),
 			'files_count' => $this->get_files_count(),
@@ -185,10 +185,10 @@ class WPS_REST_Vault_Controller extends WPS_REST_Controller_Base {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function get_files( WP_REST_Request $request ) {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Vault' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Vault' ) ) {
 			return $this->error_response(
 				'vault_not_available',
-				__( 'Vault module is not available.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Vault module is not available.', 'plugin-wpshadow' ),
 				503
 			);
 		}
@@ -202,7 +202,7 @@ class WPS_REST_Vault_Controller extends WPS_REST_Controller_Base {
 			'paged'          => $params['page'],
 			'meta_query'     => array(
 				array(
-					'key'     => '_wps_vaulted',
+					'key'     => '_WPSHADOW_vaulted',
 					'value'   => '1',
 					'compare' => '=',
 				),
@@ -227,10 +227,10 @@ class WPS_REST_Vault_Controller extends WPS_REST_Controller_Base {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function get_file( WP_REST_Request $request ) {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Vault' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Vault' ) ) {
 			return $this->error_response(
 				'vault_not_available',
-				__( 'Vault module is not available.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Vault module is not available.', 'plugin-wpshadow' ),
 				503
 			);
 		}
@@ -240,16 +240,16 @@ class WPS_REST_Vault_Controller extends WPS_REST_Controller_Base {
 		if ( ! get_post( $attachment_id ) ) {
 			return $this->error_response(
 				'file_not_found',
-				__( 'Attachment not found.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Attachment not found.', 'plugin-wpshadow' ),
 				404
 			);
 		}
 
-		$vaulted = get_post_meta( $attachment_id, '_wps_vaulted', true );
+		$vaulted = get_post_meta( $attachment_id, '_WPSHADOW_vaulted', true );
 		if ( '1' !== $vaulted ) {
 			return $this->error_response(
 				'not_vaulted',
-				__( 'Attachment is not vaulted.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Attachment is not vaulted.', 'plugin-wpshadow' ),
 				404
 			);
 		}
@@ -265,10 +265,10 @@ class WPS_REST_Vault_Controller extends WPS_REST_Controller_Base {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function verify_file( WP_REST_Request $request ) {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Vault' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Vault' ) ) {
 			return $this->error_response(
 				'vault_not_available',
-				__( 'Vault module is not available.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Vault module is not available.', 'plugin-wpshadow' ),
 				503
 			);
 		}
@@ -284,7 +284,7 @@ class WPS_REST_Vault_Controller extends WPS_REST_Controller_Base {
 		if ( ! get_post( $attachment_id ) ) {
 			return $this->error_response(
 				'file_not_found',
-				__( 'Attachment not found.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Attachment not found.', 'plugin-wpshadow' ),
 				404
 			);
 		}
@@ -297,7 +297,7 @@ class WPS_REST_Vault_Controller extends WPS_REST_Controller_Base {
 				'attachment_id' => $attachment_id,
 				'valid'         => $is_valid,
 			),
-			__( 'File integrity verified.', 'plugin-wp-support-thisismyurl' )
+			__( 'File integrity verified.', 'plugin-wpshadow' )
 		);
 	}
 
@@ -308,10 +308,10 @@ class WPS_REST_Vault_Controller extends WPS_REST_Controller_Base {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function restore_file( WP_REST_Request $request ) {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Vault' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Vault' ) ) {
 			return $this->error_response(
 				'vault_not_available',
-				__( 'Vault module is not available.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Vault module is not available.', 'plugin-wpshadow' ),
 				503
 			);
 		}
@@ -327,7 +327,7 @@ class WPS_REST_Vault_Controller extends WPS_REST_Controller_Base {
 		if ( ! get_post( $attachment_id ) ) {
 			return $this->error_response(
 				'file_not_found',
-				__( 'Attachment not found.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Attachment not found.', 'plugin-wpshadow' ),
 				404
 			);
 		}
@@ -338,14 +338,14 @@ class WPS_REST_Vault_Controller extends WPS_REST_Controller_Base {
 		if ( ! $restored ) {
 			return $this->error_response(
 				'restore_failed',
-				__( 'Failed to restore file from vault.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Failed to restore file from vault.', 'plugin-wpshadow' ),
 				500
 			);
 		}
 
 		return $this->success_response(
 			array( 'attachment_id' => $attachment_id ),
-			__( 'File restored from vault successfully.', 'plugin-wp-support-thisismyurl' )
+			__( 'File restored from vault successfully.', 'plugin-wpshadow' )
 		);
 	}
 
@@ -356,10 +356,10 @@ class WPS_REST_Vault_Controller extends WPS_REST_Controller_Base {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function get_size( WP_REST_Request $request ) {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Vault' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Vault' ) ) {
 			return $this->error_response(
 				'vault_not_available',
-				__( 'Vault module is not available.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Vault module is not available.', 'plugin-wpshadow' ),
 				503
 			);
 		}
@@ -385,10 +385,10 @@ class WPS_REST_Vault_Controller extends WPS_REST_Controller_Base {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function cleanup( WP_REST_Request $request ) {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Vault' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Vault' ) ) {
 			return $this->error_response(
 				'vault_not_available',
-				__( 'Vault module is not available.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Vault module is not available.', 'plugin-wpshadow' ),
 				503
 			);
 		}
@@ -406,7 +406,7 @@ class WPS_REST_Vault_Controller extends WPS_REST_Controller_Base {
 			array( 'removed_count' => $removed_count ),
 			sprintf(
 				/* translators: %d: number of files removed */
-				__( 'Vault cleanup completed. %d orphaned files removed.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Vault cleanup completed. %d orphaned files removed.', 'plugin-wpshadow' ),
 				$removed_count
 			)
 		);
@@ -451,8 +451,8 @@ class WPS_REST_Vault_Controller extends WPS_REST_Controller_Base {
 			'mime_type'     => get_post_mime_type( $attachment_id ),
 			'file_size'     => $filesize,
 			'file_path'     => $file,
-			'vaulted'       => get_post_meta( $attachment_id, '_wps_vaulted', true ) === '1',
-			'vaulted_at'    => get_post_meta( $attachment_id, '_wps_vaulted_at', true ),
+			'vaulted'       => get_post_meta( $attachment_id, '_WPSHADOW_vaulted', true ) === '1',
+			'vaulted_at'    => get_post_meta( $attachment_id, '_WPSHADOW_vaulted_at', true ),
 		);
 	}
 
@@ -467,7 +467,7 @@ class WPS_REST_Vault_Controller extends WPS_REST_Controller_Base {
 		$query = "
 			SELECT SUM(meta_value)
 			FROM {$wpdb->postmeta}
-			WHERE meta_key = '_wps_vault_size'
+			WHERE meta_key = '_WPSHADOW_vault_size'
 		";
 
 		return (int) $wpdb->get_var( $query );
@@ -484,7 +484,7 @@ class WPS_REST_Vault_Controller extends WPS_REST_Controller_Base {
 		$query = "
 			SELECT COUNT(*)
 			FROM {$wpdb->postmeta}
-			WHERE meta_key = '_wps_vaulted'
+			WHERE meta_key = '_WPSHADOW_vaulted'
 			AND meta_value = '1'
 		";
 

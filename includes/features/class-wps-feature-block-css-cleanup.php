@@ -15,11 +15,11 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * WPS_Feature_Block_CSS_Cleanup
+ * WPSHADOW_Feature_Block_CSS_Cleanup
  *
  * Remove unnecessary Gutenberg block stylesheets.
  */
-final class WPS_Feature_Block_CSS_Cleanup extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Block_CSS_Cleanup extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -28,14 +28,14 @@ final class WPS_Feature_Block_CSS_Cleanup extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'block-css-cleanup',
-				'name'               => __( 'Aggressive Block Library CSS Cleanup', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Dequeue unnecessary Gutenberg block CSS from front-end', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Aggressive Block Library CSS Cleanup', 'plugin-wpshadow' ),
+				'description'        => __( 'Dequeue unnecessary Gutenberg block CSS from front-end', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Performance & Security', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Performance & Security', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wpshadow' ),
 			)
 		);
 	}

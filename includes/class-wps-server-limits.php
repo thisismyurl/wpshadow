@@ -5,7 +5,7 @@
  * Monitors server resource usage and provides methods to gracefully handle
  * resource constraints by batching or skipping operations.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  * @since 1.2601.73002
  */
 
@@ -19,11 +19,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class WPS_Server_Limits
+ * Class WPSHADOW_Server_Limits
  *
  * Manages server resource limits and provides graceful degradation.
  */
-class WPS_Server_Limits {
+class WPSHADOW_Server_Limits {
 
 	/**
 	 * Memory threshold percentage for warnings (80%).
@@ -67,7 +67,7 @@ class WPS_Server_Limits {
 	 */
 	public static function init(): void {
 		// Hook into long-running operations to check limits.
-		add_action( 'wps_before_batch_operation', array( __CLASS__, 'check_limits_before_operation' ) );
+		add_action( 'wpshadow_before_batch_operation', array( __CLASS__, 'check_limits_before_operation' ) );
 	}
 
 	/**
@@ -77,7 +77,7 @@ class WPS_Server_Limits {
 	 */
 	public static function get_memory_status(): array {
 		$memory_limit       = ini_get( 'memory_limit' );
-		$memory_limit_bytes = WPS_Environment_Checker::get_memory_limit_status()['current_bytes'];
+		$memory_limit_bytes = WPSHADOW_Environment_Checker::get_memory_limit_status()['current_bytes'];
 		$current_usage      = memory_get_usage( true );
 		$peak_usage         = memory_get_peak_usage( true );
 
@@ -222,8 +222,8 @@ class WPS_Server_Limits {
 		}
 
 		// Check if environment has constraints.
-		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Environment_Checker' )
-			&& WPS_Environment_Checker::has_resource_constraints() ) {
+		if ( class_exists( '\\WPShadow\\WPSHADOW_Environment_Checker' )
+			&& WPSHADOW_Environment_Checker::has_resource_constraints() ) {
 			return self::DEFAULT_BATCH_SIZE;
 		}
 
@@ -260,8 +260,8 @@ class WPS_Server_Limits {
 
 		if ( $status['should_stop'] ) {
 			// Log critical resource status.
-			if ( class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
-				WPS_Activity_Logger::log(
+			if ( class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) ) {
+				WPSHADOW_Activity_Logger::log(
 					'resource_limit_critical',
 					'system',
 					array(
@@ -282,7 +282,7 @@ class WPS_Server_Limits {
 	 */
 	public static function can_process_heavy_images(): bool {
 		// Check environment compatibility first.
-		if ( WPS_Environment_Checker::should_disable_heavy_tasks() ) {
+		if ( WPSHADOW_Environment_Checker::should_disable_heavy_tasks() ) {
 			return false;
 		}
 
@@ -298,13 +298,13 @@ class WPS_Server_Limits {
 	 */
 	public static function can_perform_vault_operations(): bool {
 		// Check if vault requirements are met.
-		$vault_status = WPS_Environment_Checker::get_module_requirements_status( 'vault' );
+		$vault_status = WPSHADOW_Environment_Checker::get_module_requirements_status( 'vault' );
 		if ( ! $vault_status['supported'] ) {
 			return false;
 		}
 
 		// Check environment compatibility.
-		if ( WPS_Environment_Checker::should_disable_heavy_tasks() ) {
+		if ( WPSHADOW_Environment_Checker::should_disable_heavy_tasks() ) {
 			return false;
 		}
 
@@ -340,7 +340,7 @@ class WPS_Server_Limits {
 		 * @param int    $base_limit     Base limit before adjustment.
 		 */
 		return (int) apply_filters(
-			'wps_max_items_per_request',
+			'wpshadow_max_items_per_request',
 			max( 1, (int) ( $base_limit * $multiplier ) ),
 			$operation_type,
 			$base_limit
@@ -355,17 +355,17 @@ class WPS_Server_Limits {
 	 */
 	public static function log_resource_usage( string $context ): void {
 		// Only log if diagnostic logging is enabled.
-		if ( ! get_option( 'wps_diagnostic_logging_enabled', false ) ) {
+		if ( ! get_option( 'wpshadow_diagnostic_logging_enabled', false ) ) {
 			return;
 		}
 
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) ) {
 			return;
 		}
 
 		$status = self::get_resource_status();
 
-		WPS_Activity_Logger::log(
+		WPSHADOW_Activity_Logger::log(
 			'resource_usage',
 			'system',
 			array(
@@ -424,7 +424,7 @@ class WPS_Server_Limits {
 	 */
 	public static function get_resource_report(): array {
 		$status     = self::get_resource_status();
-		$env_status = WPS_Environment_Checker::get_environment_status();
+		$env_status = WPSHADOW_Environment_Checker::get_environment_status();
 
 		return array(
 			'environment'     => array(
@@ -434,7 +434,7 @@ class WPS_Server_Limits {
 				'execution_time' => $env_status['execution_time']['current'],
 			),
 			'current_usage'   => array(
-				'memory'         => WPS_Environment_Checker::format_bytes( $status['memory']['current_usage'] ),
+				'memory'         => WPSHADOW_Environment_Checker::format_bytes( $status['memory']['current_usage'] ),
 				'memory_percent' => $status['memory']['usage_percentage'] . '%',
 				'time_elapsed'   => $status['time']['elapsed'] . 's',
 				'time_percent'   => $status['time']['usage_percentage'] . '%',
@@ -458,19 +458,19 @@ class WPS_Server_Limits {
 		$recommendations = array();
 
 		if ( 'critical' === $status['memory']['level'] ) {
-			$recommendations[] = __( 'Memory usage is critical. Consider increasing PHP memory_limit.', 'plugin-wp-support-thisismyurl' );
+			$recommendations[] = __( 'Memory usage is critical. Consider increasing PHP memory_limit.', 'plugin-wpshadow' );
 		} elseif ( 'warning' === $status['memory']['level'] ) {
-			$recommendations[] = __( 'Memory usage is high. Operations will be batched automatically.', 'plugin-wp-support-thisismyurl' );
+			$recommendations[] = __( 'Memory usage is high. Operations will be batched automatically.', 'plugin-wpshadow' );
 		}
 
 		if ( 'critical' === $status['time']['level'] ) {
-			$recommendations[] = __( 'Execution time is critical. Consider increasing max_execution_time.', 'plugin-wp-support-thisismyurl' );
+			$recommendations[] = __( 'Execution time is critical. Consider increasing max_execution_time.', 'plugin-wpshadow' );
 		} elseif ( 'warning' === $status['time']['level'] ) {
-			$recommendations[] = __( 'Execution time is high. Long operations will be batched.', 'plugin-wp-support-thisismyurl' );
+			$recommendations[] = __( 'Execution time is high. Long operations will be batched.', 'plugin-wpshadow' );
 		}
 
 		if ( empty( $recommendations ) ) {
-			$recommendations[] = __( 'Resource usage is optimal.', 'plugin-wp-support-thisismyurl' );
+			$recommendations[] = __( 'Resource usage is optimal.', 'plugin-wpshadow' );
 		}
 
 		return $recommendations;

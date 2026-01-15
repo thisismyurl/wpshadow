@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * WPS_Feature_Asset_Version_Removal
+ * WPSHADOW_Feature_Asset_Version_Removal
  *
  * Remove version query parameters from CSS/JS asset URLs.
  */
-final class WPS_Feature_Asset_Version_Removal extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Asset_Version_Removal extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -27,14 +27,14 @@ final class WPS_Feature_Asset_Version_Removal extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'asset-version-removal',
-				'name'               => __( 'Remove Asset Version Strings', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Help visitors load files faster by letting their browser remember them longer', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Remove Asset Version Strings', 'plugin-wpshadow' ),
+				'description'        => __( 'Help visitors load files faster by letting their browser remember them longer', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'cleanup',
-				'widget_label'       => __( 'Code Cleanup', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Remove unnecessary code and optimize markup', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Code Cleanup', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Remove unnecessary code and optimize markup', 'plugin-wpshadow' ),
 			)
 		);
 	}

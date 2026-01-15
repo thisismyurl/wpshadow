@@ -21,16 +21,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Feature_Email_Test
+ * WPSHADOW_Feature_Email_Test
  *
  * Email testing and diagnostics.
  */
-final class WPS_Feature_Email_Test extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Email_Test extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Option key for email logs.
 	 */
-	private const LOG_KEY = 'wps_email_test_log';
+	private const LOG_KEY = 'wpshadow_email_test_log';
 
 	/**
 	 * Maximum number of logs to keep.
@@ -44,14 +44,14 @@ final class WPS_Feature_Email_Test extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'email-test',
-				'name'               => __( 'Email Test & Diagnostics', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Test email delivery, diagnose SMTP issues, and view email logs to ensure notifications work correctly', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Email Test & Diagnostics', 'plugin-wpshadow' ),
+				'description'        => __( 'Test email delivery, diagnose SMTP issues, and view email logs to ensure notifications work correctly', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'debugging',
-				'widget_label'       => __( 'Debugging & Diagnostics', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Tools for diagnosing and resolving site issues', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Debugging & Diagnostics', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Tools for diagnosing and resolving site issues', 'plugin-wpshadow' ),
 				// Unified metadata.
 				'license_level'      => 1, // Free for everyone.
 				'minimum_capability' => 'manage_options',
@@ -79,8 +79,8 @@ final class WPS_Feature_Email_Test extends WPS_Abstract_Feature {
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 
 		// AJAX handlers.
-		add_action( 'wp_ajax_wps_send_test_email', array( $this, 'ajax_send_test_email' ) );
-		add_action( 'wp_ajax_wps_clear_email_logs', array( $this, 'ajax_clear_logs' ) );
+		add_action( 'wp_ajax_WPSHADOW_send_test_email', array( $this, 'ajax_send_test_email' ) );
+		add_action( 'wp_ajax_WPSHADOW_clear_email_logs', array( $this, 'ajax_clear_logs' ) );
 
 		// Log all emails if enabled in settings.
 		if ( $this->get_setting( 'log_all_emails', false ) ) {
@@ -97,8 +97,8 @@ final class WPS_Feature_Email_Test extends WPS_Abstract_Feature {
 	public function add_admin_menu(): void {
 		add_submenu_page(
 			'wp-support',
-			__( 'Email Test', 'plugin-wp-support-thisismyurl' ),
-			__( 'Email Test', 'plugin-wp-support-thisismyurl' ),
+			__( 'Email Test', 'plugin-wpshadow' ),
+			__( 'Email Test', 'plugin-wpshadow' ),
 			'manage_options',
 			'wp-support-email-test',
 			array( $this, 'render_page' )
@@ -183,14 +183,14 @@ final class WPS_Feature_Email_Test extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_send_test_email(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_email_test' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_email_test' );
 
-		$to      = \WPS\CoreSupport\wps_get_post_email( 'to' );
-		$subject = \WPS\CoreSupport\wps_get_post_text( 'subject', __( 'WP Support Test Email', 'plugin-wp-support-thisismyurl' ) );
-		$message = \WPS\CoreSupport\wps_get_post_html( 'message', $this->get_default_test_message() );
+		$to      = \WPS\CoreSupport\WPSHADOW_get_post_email( 'to' );
+		$subject = \WPS\CoreSupport\WPSHADOW_get_post_text( 'subject', __( 'WPShadow Test Email', 'plugin-wpshadow' ) );
+		$message = \WPS\CoreSupport\WPSHADOW_get_post_html( 'message', $this->get_default_test_message() );
 
 		if ( empty( $to ) || ! is_email( $to ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid email address', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid email address', 'plugin-wpshadow' ) ) );
 		}
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
@@ -211,7 +211,7 @@ final class WPS_Feature_Email_Test extends WPS_Abstract_Feature {
 
 			wp_send_json_success(
 				array(
-					'message' => __( 'Test email sent successfully!', 'plugin-wp-support-thisismyurl' ),
+					'message' => __( 'Test email sent successfully!', 'plugin-wpshadow' ),
 					'details' => $this->get_email_diagnostics(),
 				)
 			);
@@ -223,14 +223,14 @@ final class WPS_Feature_Email_Test extends WPS_Abstract_Feature {
 					'to'      => $to,
 					'subject' => $subject,
 					'type'    => 'test',
-					'error'   => __( 'wp_mail() returned false', 'plugin-wp-support-thisismyurl' ),
+					'error'   => __( 'wp_mail() returned false', 'plugin-wpshadow' ),
 					'time'    => time(),
 				)
 			);
 
 			wp_send_json_error(
 				array(
-					'message' => __( 'Failed to send test email', 'plugin-wp-support-thisismyurl' ),
+					'message' => __( 'Failed to send test email', 'plugin-wpshadow' ),
 					'details' => $this->get_email_diagnostics(),
 				)
 			);
@@ -243,11 +243,11 @@ final class WPS_Feature_Email_Test extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_clear_logs(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_email_test' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_email_test' );
 
 		delete_option( self::LOG_KEY );
 
-		wp_send_json_success( array( 'message' => __( 'Email logs cleared', 'plugin-wp-support-thisismyurl' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Email logs cleared', 'plugin-wpshadow' ) ) );
 	}
 
 	/**
@@ -272,18 +272,18 @@ final class WPS_Feature_Email_Test extends WPS_Abstract_Feature {
 			</ul>
 			<p>%s</p>
 			</body></html>',
-			esc_html__( 'Test Email from WP Support', 'plugin-wp-support-thisismyurl' ),
-			esc_html__( 'This is a test email sent from your WordPress site to verify email functionality.', 'plugin-wp-support-thisismyurl' ),
-			esc_html__( 'Site Name', 'plugin-wp-support-thisismyurl' ),
+			esc_html__( 'Test Email from WPShadow', 'plugin-wpshadow' ),
+			esc_html__( 'This is a test email sent from your WordPress site to verify email functionality.', 'plugin-wpshadow' ),
+			esc_html__( 'Site Name', 'plugin-wpshadow' ),
 			esc_html( $site_name ),
-			esc_html__( 'Site URL', 'plugin-wp-support-thisismyurl' ),
+			esc_html__( 'Site URL', 'plugin-wpshadow' ),
 			esc_url( $site_url ),
 			esc_url( $site_url ),
-			esc_html__( 'Sent At', 'plugin-wp-support-thisismyurl' ),
+			esc_html__( 'Sent At', 'plugin-wpshadow' ),
 			esc_html( $time ),
-			esc_html__( 'WordPress Version', 'plugin-wp-support-thisismyurl' ),
+			esc_html__( 'WordPress Version', 'plugin-wpshadow' ),
 			esc_html( get_bloginfo( 'version' ) ),
-			esc_html__( 'If you received this email, your WordPress email functionality is working correctly!', 'plugin-wp-support-thisismyurl' )
+			esc_html__( 'If you received this email, your WordPress email functionality is working correctly!', 'plugin-wpshadow' )
 		);
 	}
 
@@ -325,15 +325,15 @@ final class WPS_Feature_Email_Test extends WPS_Abstract_Feature {
 
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Email Test & Diagnostics', 'plugin-wp-support-thisismyurl' ); ?></h1>
+			<h1><?php esc_html_e( 'Email Test & Diagnostics', 'plugin-wpshadow' ); ?></h1>
 
 			<div class="card">
-				<h2><?php esc_html_e( 'Send Test Email', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( 'Send Test Email', 'plugin-wpshadow' ); ?></h2>
 				<form id="wps-email-test-form">
 					<table class="form-table">
 						<tr>
 							<th scope="row">
-								<label for="wps-email-to"><?php esc_html_e( 'Send To', 'plugin-wp-support-thisismyurl' ); ?></label>
+								<label for="wps-email-to"><?php esc_html_e( 'Send To', 'plugin-wpshadow' ); ?></label>
 							</th>
 							<td>
 								<input
@@ -344,12 +344,12 @@ final class WPS_Feature_Email_Test extends WPS_Abstract_Feature {
 									value="<?php echo esc_attr( wp_get_current_user()->user_email ); ?>"
 									required
 								/>
-								<p class="description"><?php esc_html_e( 'Email address to send test message to', 'plugin-wp-support-thisismyurl' ); ?></p>
+								<p class="description"><?php esc_html_e( 'Email address to send test message to', 'plugin-wpshadow' ); ?></p>
 							</td>
 						</tr>
 						<tr>
 							<th scope="row">
-								<label for="wps-email-subject"><?php esc_html_e( 'Subject', 'plugin-wp-support-thisismyurl' ); ?></label>
+								<label for="wps-email-subject"><?php esc_html_e( 'Subject', 'plugin-wpshadow' ); ?></label>
 							</th>
 							<td>
 								<input
@@ -357,14 +357,14 @@ final class WPS_Feature_Email_Test extends WPS_Abstract_Feature {
 									id="wps-email-subject"
 									name="subject"
 									class="regular-text"
-									value="<?php esc_attr_e( 'WP Support Test Email', 'plugin-wp-support-thisismyurl' ); ?>"
+									value="<?php esc_attr_e( 'WPShadow Test Email', 'plugin-wpshadow' ); ?>"
 									required
 								/>
 							</td>
 						</tr>
 						<tr>
 							<th scope="row">
-								<label for="wps-email-message"><?php esc_html_e( 'Message', 'plugin-wp-support-thisismyurl' ); ?></label>
+								<label for="wps-email-message"><?php esc_html_e( 'Message', 'plugin-wpshadow' ); ?></label>
 							</th>
 							<td>
 								<textarea
@@ -373,14 +373,14 @@ final class WPS_Feature_Email_Test extends WPS_Abstract_Feature {
 									rows="10"
 									class="large-text code"
 								><?php echo esc_textarea( $this->get_default_test_message() ); ?></textarea>
-								<p class="description"><?php esc_html_e( 'HTML is allowed', 'plugin-wp-support-thisismyurl' ); ?></p>
+								<p class="description"><?php esc_html_e( 'HTML is allowed', 'plugin-wpshadow' ); ?></p>
 							</td>
 						</tr>
 					</table>
 
 					<p>
 						<button type="submit" class="button button-primary" id="wps-send-test-email">
-							<?php esc_html_e( 'Send Test Email', 'plugin-wp-support-thisismyurl' ); ?>
+							<?php esc_html_e( 'Send Test Email', 'plugin-wpshadow' ); ?>
 						</button>
 					</p>
 				</form>
@@ -389,46 +389,46 @@ final class WPS_Feature_Email_Test extends WPS_Abstract_Feature {
 			</div>
 
 			<div class="card">
-				<h2><?php esc_html_e( 'Email Configuration', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( 'Email Configuration', 'plugin-wpshadow' ); ?></h2>
 				<table class="widefat striped">
 					<tbody>
 						<tr>
-							<th style="width: 30%;"><?php esc_html_e( 'PHP mail() Available', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th style="width: 30%;"><?php esc_html_e( 'PHP mail() Available', 'plugin-wpshadow' ); ?></th>
 							<td>
 								<?php if ( $diagnostics['php_mail_available'] ) : ?>
 									<span class="dashicons dashicons-yes-alt" style="color: #46b450;"></span>
-									<?php esc_html_e( 'Yes', 'plugin-wp-support-thisismyurl' ); ?>
+									<?php esc_html_e( 'Yes', 'plugin-wpshadow' ); ?>
 								<?php else : ?>
 									<span class="dashicons dashicons-dismiss" style="color: #dc3232;"></span>
-									<?php esc_html_e( 'No', 'plugin-wp-support-thisismyurl' ); ?>
+									<?php esc_html_e( 'No', 'plugin-wpshadow' ); ?>
 								<?php endif; ?>
 							</td>
 						</tr>
 						<tr>
-							<th><?php esc_html_e( 'From Email', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th><?php esc_html_e( 'From Email', 'plugin-wpshadow' ); ?></th>
 							<td><code><?php echo esc_html( $diagnostics['from_email'] ); ?></code></td>
 						</tr>
 						<tr>
-							<th><?php esc_html_e( 'From Name', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th><?php esc_html_e( 'From Name', 'plugin-wpshadow' ); ?></th>
 							<td><?php echo esc_html( $diagnostics['from_name'] ); ?></td>
 						</tr>
 						<?php if ( isset( $diagnostics['mailer'] ) ) : ?>
 							<tr>
-								<th><?php esc_html_e( 'Mailer', 'plugin-wp-support-thisismyurl' ); ?></th>
+								<th><?php esc_html_e( 'Mailer', 'plugin-wpshadow' ); ?></th>
 								<td><code><?php echo esc_html( strtoupper( $diagnostics['mailer'] ) ); ?></code></td>
 							</tr>
 							<?php if ( 'smtp' === $diagnostics['mailer'] ) : ?>
 								<tr>
-									<th><?php esc_html_e( 'SMTP Host', 'plugin-wp-support-thisismyurl' ); ?></th>
+									<th><?php esc_html_e( 'SMTP Host', 'plugin-wpshadow' ); ?></th>
 									<td><code><?php echo esc_html( $diagnostics['smtp_host'] ?? 'N/A' ); ?></code></td>
 								</tr>
 								<tr>
-									<th><?php esc_html_e( 'SMTP Port', 'plugin-wp-support-thisismyurl' ); ?></th>
+									<th><?php esc_html_e( 'SMTP Port', 'plugin-wpshadow' ); ?></th>
 									<td><code><?php echo esc_html( $diagnostics['smtp_port'] ?? 'N/A' ); ?></code></td>
 								</tr>
 								<tr>
-									<th><?php esc_html_e( 'SMTP Auth', 'plugin-wp-support-thisismyurl' ); ?></th>
-									<td><?php echo $diagnostics['smtp_auth'] ? esc_html__( 'Enabled', 'plugin-wp-support-thisismyurl' ) : esc_html__( 'Disabled', 'plugin-wp-support-thisismyurl' ); ?></td>
+									<th><?php esc_html_e( 'SMTP Auth', 'plugin-wpshadow' ); ?></th>
+									<td><?php echo $diagnostics['smtp_auth'] ? esc_html__( 'Enabled', 'plugin-wpshadow' ) : esc_html__( 'Disabled', 'plugin-wpshadow' ); ?></td>
 								</tr>
 							<?php endif; ?>
 						<?php endif; ?>
@@ -439,18 +439,18 @@ final class WPS_Feature_Email_Test extends WPS_Abstract_Feature {
 			<?php if ( ! empty( $logs ) ) : ?>
 				<div class="card">
 					<h2>
-						<?php esc_html_e( 'Email Log', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'Email Log', 'plugin-wpshadow' ); ?>
 						<button type="button" id="wps-clear-email-logs" class="button button-small" style="float: right;">
-							<?php esc_html_e( 'Clear Logs', 'plugin-wp-support-thisismyurl' ); ?>
+							<?php esc_html_e( 'Clear Logs', 'plugin-wpshadow' ); ?>
 						</button>
 					</h2>
 					<table class="wp-list-table widefat fixed striped">
 						<thead>
 							<tr>
-								<th style="width: 80px;"><?php esc_html_e( 'Status', 'plugin-wp-support-thisismyurl' ); ?></th>
-								<th><?php esc_html_e( 'To', 'plugin-wp-support-thisismyurl' ); ?></th>
-								<th><?php esc_html_e( 'Subject', 'plugin-wp-support-thisismyurl' ); ?></th>
-								<th style="width: 150px;"><?php esc_html_e( 'Time', 'plugin-wp-support-thisismyurl' ); ?></th>
+								<th style="width: 80px;"><?php esc_html_e( 'Status', 'plugin-wpshadow' ); ?></th>
+								<th><?php esc_html_e( 'To', 'plugin-wpshadow' ); ?></th>
+								<th><?php esc_html_e( 'Subject', 'plugin-wpshadow' ); ?></th>
+								<th style="width: 150px;"><?php esc_html_e( 'Time', 'plugin-wpshadow' ); ?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -459,13 +459,13 @@ final class WPS_Feature_Email_Test extends WPS_Abstract_Feature {
 									<td>
 										<?php if ( 'success' === $log['status'] ) : ?>
 											<span class="dashicons dashicons-yes-alt" style="color: #46b450;"></span>
-											<?php esc_html_e( 'Success', 'plugin-wp-support-thisismyurl' ); ?>
+											<?php esc_html_e( 'Success', 'plugin-wpshadow' ); ?>
 										<?php else : ?>
 											<span class="dashicons dashicons-dismiss" style="color: #dc3232;"></span>
-											<?php esc_html_e( 'Failed', 'plugin-wp-support-thisismyurl' ); ?>
+											<?php esc_html_e( 'Failed', 'plugin-wpshadow' ); ?>
 										<?php endif; ?>
 										<?php if ( isset( $log['type'] ) && 'test' === $log['type'] ) : ?>
-											<br><small><em><?php esc_html_e( '(Test)', 'plugin-wp-support-thisismyurl' ); ?></em></small>
+											<br><small><em><?php esc_html_e( '(Test)', 'plugin-wpshadow' ); ?></em></small>
 										<?php endif; ?>
 									</td>
 									<td><code><?php echo esc_html( $log['to'] ); ?></code></td>
@@ -493,7 +493,7 @@ final class WPS_Feature_Email_Test extends WPS_Abstract_Feature {
 
 		<script>
 		jQuery(document).ready(function($) {
-			const nonce = '<?php echo esc_js( wp_create_nonce( 'wps_email_test' ) ); ?>';
+			const nonce = '<?php echo esc_js( wp_create_nonce( 'wpshadow_email_test' ) ); ?>';
 
 			// Send test email.
 			$('#wps-email-test-form').on('submit', function(e) {
@@ -503,11 +503,11 @@ final class WPS_Feature_Email_Test extends WPS_Abstract_Feature {
 				const $button = $('#wps-send-test-email');
 				const $result = $('#wps-email-result');
 
-				$button.prop('disabled', true).text('<?php echo esc_js( __( 'Sending...', 'plugin-wp-support-thisismyurl' ) ); ?>');
+				$button.prop('disabled', true).text('<?php echo esc_js( __( 'Sending...', 'plugin-wpshadow' ) ); ?>');
 				$result.html('');
 
 				$.post(ajaxurl, {
-					action: 'wps_send_test_email',
+					action: 'wpshadow_send_test_email',
 					nonce: nonce,
 					to: $('#wps-email-to').val(),
 					subject: $('#wps-email-subject').val(),
@@ -527,7 +527,7 @@ final class WPS_Feature_Email_Test extends WPS_Abstract_Feature {
 						);
 					}
 				}).always(function() {
-					$button.prop('disabled', false).text('<?php echo esc_js( __( 'Send Test Email', 'plugin-wp-support-thisismyurl' ) ); ?>');
+					$button.prop('disabled', false).text('<?php echo esc_js( __( 'Send Test Email', 'plugin-wpshadow' ) ); ?>');
 				});
 			});
 
@@ -535,7 +535,7 @@ final class WPS_Feature_Email_Test extends WPS_Abstract_Feature {
 			$('#wps-clear-email-logs').on('click', function(e) {
 				e.preventDefault();
 
-				if (!confirm('<?php echo esc_js( __( 'Clear all email logs?', 'plugin-wp-support-thisismyurl' ) ); ?>')) {
+				if (!confirm('<?php echo esc_js( __( 'Clear all email logs?', 'plugin-wpshadow' ) ); ?>')) {
 					return;
 				}
 
@@ -543,7 +543,7 @@ final class WPS_Feature_Email_Test extends WPS_Abstract_Feature {
 				$button.prop('disabled', true);
 
 				$.post(ajaxurl, {
-					action: 'wps_clear_email_logs',
+					action: 'wpshadow_clear_email_logs',
 					nonce: nonce
 				}, function(response) {
 					if (response.success) {

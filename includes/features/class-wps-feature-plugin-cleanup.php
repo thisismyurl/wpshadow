@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * WPS_Feature_Plugin_Cleanup
+ * WPSHADOW_Feature_Plugin_Cleanup
  *
  * Removes unnecessary plugin assets.
  */
-final class WPS_Feature_Plugin_Cleanup extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Plugin_Cleanup extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Cache for plugin availability checks.
@@ -34,14 +34,14 @@ final class WPS_Feature_Plugin_Cleanup extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'plugin-cleanup',
-				'name'               => __( 'Third-Party Plugin Asset Cleanup', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Stop loading plugin files on pages where they\'re not needed', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Third-Party Plugin Asset Cleanup', 'plugin-wpshadow' ),
+				'description'        => __( 'Stop loading plugin files on pages where they\'re not needed', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'cleanup',
-				'widget_label'       => __( 'Admin Management', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Clean up admin interface and plugin management', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Admin Management', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Clean up admin interface and plugin management', 'plugin-wpshadow' ),
 			)
 		);
 
@@ -75,7 +75,7 @@ final class WPS_Feature_Plugin_Cleanup extends WPS_Abstract_Feature {
 			return;
 		}
 
-		$cleanup_options = (array) $this->get_setting( 'wps_plugin_cleanup_options', $this->get_default_options( ) );
+		$cleanup_options = (array) $this->get_setting( 'wpshadow_plugin_cleanup_options', $this->get_default_options( ) );
 
 		// Jetpack cleanup.
 		if ( $cleanup_options['jetpack'] ?? false ) {
@@ -179,7 +179,7 @@ final class WPS_Feature_Plugin_Cleanup extends WPS_Abstract_Feature {
 		}
 
 		// Allow filtering of the check for custom use cases.
-		$has_cf7_form = apply_filters( 'wps_has_contact_form_7', $has_cf7_form );
+		$has_cf7_form = apply_filters( 'wpshadow_has_contact_form_7', $has_cf7_form );
 
 		// Dequeue if no form present.
 		if ( ! $has_cf7_form ) {
@@ -205,7 +205,7 @@ final class WPS_Feature_Plugin_Cleanup extends WPS_Abstract_Feature {
 		$is_woo_page = is_woocommerce() || is_cart() || is_checkout() || is_account_page();
 
 		// Allow filtering of the check for custom use cases.
-		$is_woo_page = apply_filters( 'wps_is_woocommerce_page', $is_woo_page );
+		$is_woo_page = apply_filters( 'wpshadow_is_woocommerce_page', $is_woo_page );
 
 		// Dequeue if not on a WooCommerce page.
 		if ( ! $is_woo_page ) {
@@ -230,7 +230,7 @@ final class WPS_Feature_Plugin_Cleanup extends WPS_Abstract_Feature {
 	 *
 	 * @return array Default options.
 	 */
-	private function get_default_options(): array {
+	protected function get_default_options(): array {
 		return array(
 			'jetpack'        => false,
 			'rankmath'       => false,

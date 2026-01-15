@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param string $default Default value if key not set.
  * @return string Sanitized text value.
  */
-function wps_get_post_text( string $key, string $default = '' ): string {
+function WPSHADOW_get_post_text( string $key, string $default = '' ): string {
 	return isset( $_POST[ $key ] ) ? sanitize_text_field( wp_unslash( $_POST[ $key ] ) ) : $default;
 }
 
@@ -35,7 +35,7 @@ function wps_get_post_text( string $key, string $default = '' ): string {
  * @param string $default Default value if key not set.
  * @return string Sanitized email value.
  */
-function wps_get_post_email( string $key, string $default = '' ): string {
+function WPSHADOW_get_post_email( string $key, string $default = '' ): string {
 	return isset( $_POST[ $key ] ) ? sanitize_email( wp_unslash( $_POST[ $key ] ) ) : $default;
 }
 
@@ -46,7 +46,7 @@ function wps_get_post_email( string $key, string $default = '' ): string {
  * @param string $default Default value if key not set.
  * @return string Sanitized URL value.
  */
-function wps_get_post_url( string $key, string $default = '' ): string {
+function WPSHADOW_get_post_url( string $key, string $default = '' ): string {
 	return isset( $_POST[ $key ] ) ? esc_url_raw( wp_unslash( $_POST[ $key ] ) ) : $default;
 }
 
@@ -57,7 +57,7 @@ function wps_get_post_url( string $key, string $default = '' ): string {
  * @param int    $default Default value if key not set.
  * @return int Sanitized integer value.
  */
-function wps_get_post_int( string $key, int $default = 0 ): int {
+function WPSHADOW_get_post_int( string $key, int $default = 0 ): int {
 	return isset( $_POST[ $key ] ) ? absint( $_POST[ $key ] ) : $default;
 }
 
@@ -68,7 +68,7 @@ function wps_get_post_int( string $key, int $default = 0 ): int {
  * @param string $default Default value if key not set.
  * @return string Sanitized key value.
  */
-function wps_get_post_key( string $key, string $default = '' ): string {
+function WPSHADOW_get_post_key( string $key, string $default = '' ): string {
 	return isset( $_POST[ $key ] ) ? sanitize_key( wp_unslash( $_POST[ $key ] ) ) : $default;
 }
 
@@ -79,7 +79,7 @@ function wps_get_post_key( string $key, string $default = '' ): string {
  * @param bool   $default Default value if key not set.
  * @return bool Boolean value.
  */
-function wps_get_post_bool( string $key, bool $default = false ): bool {
+function WPSHADOW_get_post_bool( string $key, bool $default = false ): bool {
 	return isset( $_POST[ $key ] ) ? (bool) $_POST[ $key ] : $default;
 }
 
@@ -90,7 +90,7 @@ function wps_get_post_bool( string $key, bool $default = false ): bool {
  * @param string $default Default value if key not set.
  * @return string Sanitized textarea content.
  */
-function wps_get_post_textarea( string $key, string $default = '' ): string {
+function WPSHADOW_get_post_textarea( string $key, string $default = '' ): string {
 	return isset( $_POST[ $key ] ) ? sanitize_textarea_field( wp_unslash( $_POST[ $key ] ) ) : $default;
 }
 
@@ -101,7 +101,7 @@ function wps_get_post_textarea( string $key, string $default = '' ): string {
  * @param string $default Default value if key not set.
  * @return string Sanitized text value.
  */
-function wps_get_query_text( string $key, string $default = '' ): string {
+function WPSHADOW_get_query_text( string $key, string $default = '' ): string {
 	return isset( $_GET[ $key ] ) ? sanitize_text_field( wp_unslash( $_GET[ $key ] ) ) : $default;
 }
 
@@ -112,7 +112,7 @@ function wps_get_query_text( string $key, string $default = '' ): string {
  * @param string $default Default value if key not set.
  * @return string Sanitized key value.
  */
-function wps_get_query_key( string $key, string $default = '' ): string {
+function WPSHADOW_get_query_key( string $key, string $default = '' ): string {
 	return isset( $_GET[ $key ] ) ? sanitize_key( wp_unslash( $_GET[ $key ] ) ) : $default;
 }
 
@@ -123,7 +123,7 @@ function wps_get_query_key( string $key, string $default = '' ): string {
  * @param int    $default Default value if key not set.
  * @return int Sanitized integer value.
  */
-function wps_get_query_int( string $key, int $default = 0 ): int {
+function WPSHADOW_get_query_int( string $key, int $default = 0 ): int {
 	return isset( $_GET[ $key ] ) ? absint( $_GET[ $key ] ) : $default;
 }
 
@@ -134,7 +134,7 @@ function wps_get_query_int( string $key, int $default = 0 ): int {
  * @param string $default Default value if key not set.
  * @return string Sanitized URL value.
  */
-function wps_get_query_url( string $key, string $default = '' ): string {
+function WPSHADOW_get_query_url( string $key, string $default = '' ): string {
 	return isset( $_GET[ $key ] ) ? esc_url_raw( wp_unslash( $_GET[ $key ] ) ) : $default;
 }
 
@@ -145,7 +145,7 @@ function wps_get_query_url( string $key, string $default = '' ): string {
  * @param bool   $default Default value if key not set.
  * @return bool Boolean value.
  */
-function wps_get_query_bool( string $key, bool $default = false ): bool {
+function WPSHADOW_get_query_bool( string $key, bool $default = false ): bool {
 	return isset( $_GET[ $key ] ) ? (bool) $_GET[ $key ] : $default;
 }
 
@@ -156,7 +156,7 @@ function wps_get_query_bool( string $key, bool $default = false ): bool {
  * @param array  $default Default value if key not set.
  * @return array Array of sanitized text values.
  */
-function wps_get_post_array( string $key, array $default = array() ): array {
+function WPSHADOW_get_post_array( string $key, array $default = array() ): array {
 	if ( ! isset( $_POST[ $key ] ) || ! is_array( $_POST[ $key ] ) ) {
 		return $default;
 	}
@@ -176,7 +176,7 @@ function wps_get_post_array( string $key, array $default = array() ): array {
  * @param array  $default Default value if key not set.
  * @return array Array of sanitized key values.
  */
-function wps_get_post_key_array( string $key, array $default = array() ): array {
+function WPSHADOW_get_post_key_array( string $key, array $default = array() ): array {
 	if ( ! isset( $_POST[ $key ] ) || ! is_array( $_POST[ $key ] ) ) {
 		return $default;
 	}

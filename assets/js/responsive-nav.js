@@ -2,7 +2,7 @@
  * WPS Responsive Navigation
  * Handles mobile navigation drawer and hamburger menu
  *
- * @package WPS_CORE_SUPPORT
+ * @package WPSHADOW_CORE_SUPPORT
  * @since 1.2601.71920
  */
 

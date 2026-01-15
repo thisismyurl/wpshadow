@@ -2,7 +2,7 @@
 /**
  * Suite-wide license validator.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
 declare(strict_types=1);
@@ -18,15 +18,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * License utility for site-wide registration.
  */
-class WPS_License {
-	private const OPTION_KEY      = 'WPS_suite_license_key';
-	private const OPTION_STATUS   = 'WPS_suite_license_status';
-	private const OPTION_MESSAGE  = 'WPS_suite_license_message';
-	private const OPTION_CHECKED  = 'WPS_suite_license_checked_at';
-	private const OPTION_REMINDER = 'WPS_suite_license_reminder_at';
+class WPSHADOW_License {
+	private const OPTION_KEY      = 'wpshadow_suite_license_key';
+	private const OPTION_STATUS   = 'wpshadow_suite_license_status';
+	private const OPTION_MESSAGE  = 'wpshadow_suite_license_message';
+	private const OPTION_CHECKED  = 'wpshadow_suite_license_checked_at';
+	private const OPTION_REMINDER = 'wpshadow_suite_license_reminder_at';
 	private const REMINDER_MIN    = 6 * MONTH_IN_SECONDS;
 	private const REMINDER_MAX    = 12 * MONTH_IN_SECONDS;
-	private const ENDPOINT        = 'https://thisismyurl.com/wp-json/wps/v1/license';
+	private const ENDPOINT        = 'https://wpshadow.com/wp-json/wps/v1/license';
 
 	/**
 	 * Initialize hooks if needed later.
@@ -66,27 +66,27 @@ class WPS_License {
 	 * @return void
 	 */
 	public static function maybe_handle_submission( bool $network ): void {
-		if ( empty( $_POST['WPS_license_action'] ) ) {
+		if ( empty( $_POST['wpshadow_license_action'] ) ) {
 			return;
 		}
 
 		$capability = $network && is_multisite() ? 'manage_network_options' : 'manage_options';
 		if ( ! current_user_can( $capability ) ) {
-			wp_die( esc_html__( 'You do not have permission to manage the license.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'You do not have permission to manage the license.', 'plugin-wpshadow' ) );
 		}
 
-		$action = sanitize_text_field( wp_unslash( $_POST['WPS_license_action'] ) );
+		$action = sanitize_text_field( wp_unslash( $_POST['wpshadow_license_action'] ) );
 
 		if ( 'broadcast' === $action && $network && is_multisite() ) {
-			check_admin_referer( 'WPS_license_broadcast', 'WPS_license_broadcast_nonce' );
+			check_admin_referer( 'wpshadow_license_broadcast', 'wpshadow_license_broadcast_nonce' );
 
-			$key      = \WPS\CoreSupport\wps_get_post_text( 'WPS_license_key' );
-			$site_ids = isset( $_POST['WPS_broadcast_site_ids'] ) ? array_map( 'absint', (array) $_POST['WPS_broadcast_site_ids'] ) : array();
-			$auto_new = isset( $_POST['WPS_auto_broadcast'] ) ? (int) $_POST['WPS_auto_broadcast'] : 0;
+			$key      = \WPS\CoreSupport\WPSHADOW_get_post_text( 'wpshadow_license_key' );
+			$site_ids = isset( $_POST['wpshadow_broadcast_site_ids'] ) ? array_map( 'absint', (array) $_POST['wpshadow_broadcast_site_ids'] ) : array();
+			$auto_new = isset( $_POST['wpshadow_auto_broadcast'] ) ? (int) $_POST['wpshadow_auto_broadcast'] : 0;
 
 			$result  = self::broadcast_network_key( $key, $site_ids, (bool) $auto_new );
 			$message = sprintf(
-				__( 'Broadcast completed: %1$d sites successful, %2$d failed.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Broadcast completed: %1$d sites successful, %2$d failed.', 'plugin-wpshadow' ),
 				$result['success'],
 				$result['failed']
 			);
@@ -95,8 +95,8 @@ class WPS_License {
 			$redirect = network_admin_url( 'admin.php?page=wps-core-network-settings' );
 			$redirect = add_query_arg(
 				array(
-					'WPS_license_status'  => rawurlencode( $status ),
-					'WPS_license_message' => rawurlencode( $message ),
+					'wpshadow_license_status'  => rawurlencode( $status ),
+					'wpshadow_license_message' => rawurlencode( $message ),
 				),
 				$redirect
 			);
@@ -105,9 +105,9 @@ class WPS_License {
 			exit;
 		}
 
-		check_admin_referer( 'WPS_license_settings', 'WPS_license_nonce' );
+		check_admin_referer( 'wpshadow_license_settings', 'wpshadow_license_nonce' );
 
-		$key = \WPS\CoreSupport\wps_get_post_text( 'WPS_license_key' );
+		$key = \WPS\CoreSupport\WPSHADOW_get_post_text( 'wpshadow_license_key' );
 		self::save_key( $key, $network );
 
 		$result   = self::validate_key( $key, $network );
@@ -115,12 +115,12 @@ class WPS_License {
 		$message  = $result['message'];
 		$redirect = $network && is_multisite()
 			? network_admin_url( 'admin.php?page=wps-core-network-settings' )
-			: admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard_settings' );
+			: admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=dashboard_settings' );
 
 		$redirect = add_query_arg(
 			array(
-				'WPS_license_status'  => rawurlencode( $status ),
-				'WPS_license_message' => rawurlencode( $message ),
+				'wpshadow_license_status'  => rawurlencode( $status ),
+				'wpshadow_license_message' => rawurlencode( $message ),
 			),
 			$redirect
 		);
@@ -179,27 +179,27 @@ class WPS_License {
 
 		if ( '' === $key ) {
 			call_user_func( $update_fn, self::OPTION_STATUS, 'none' );
-			call_user_func( $update_fn, self::OPTION_MESSAGE, __( 'No key provided.', 'plugin-wp-support-thisismyurl' ) );
+			call_user_func( $update_fn, self::OPTION_MESSAGE, __( 'No key provided.', 'plugin-wpshadow' ) );
 			call_user_func( $update_fn, self::OPTION_CHECKED, time() );
 			self::handle_reminder_scheduling( false, $use_network );
 
 			return array(
 				'status'  => 'none',
-				'message' => __( 'No key provided.', 'plugin-wp-support-thisismyurl' ),
+				'message' => __( 'No key provided.', 'plugin-wpshadow' ),
 			);
 		}
 
 		$args = array(
 			'timeout'    => 10,
 			'sslverify'  => true,
-			'user-agent' => 'WPS-Core-Licensing/' . ( defined( 'wp_support_VERSION' ) ? wp_support_VERSION : 'dev' ),
+			'user-agent' => 'WPS-Core-Licensing/' . ( defined( 'WPSHADOW_VERSION' ) ? WPSHADOW_VERSION : 'dev' ),
 		);
 
 		$query = array(
 			'license_key' => $key,
 			'site'        => home_url(),
-			'version'     => defined( 'wp_support_VERSION' ) ? wp_support_VERSION : 'dev',
-			'suite'       => defined( 'WPS_SUITE_ID' ) ? WPS_SUITE_ID : 'unknown',
+			'version'     => defined( 'WPSHADOW_VERSION' ) ? WPSHADOW_VERSION : 'dev',
+			'suite'       => defined( 'WPSHADOW_SUITE_ID' ) ? WPSHADOW_SUITE_ID : 'unknown',
 		);
 
 		$response = wp_remote_get( add_query_arg( $query, self::ENDPOINT ), $args );
@@ -222,7 +222,7 @@ class WPS_License {
 		$data = json_decode( (string) $body, true );
 
 		$valid   = ( 200 === $code ) && ( is_array( $data ) ? (bool) ( $data['valid'] ?? true ) : true );
-		$message = is_array( $data ) && isset( $data['message'] ) ? (string) $data['message'] : __( 'License verified.', 'plugin-wp-support-thisismyurl' );
+		$message = is_array( $data ) && isset( $data['message'] ) ? (string) $data['message'] : __( 'License verified.', 'plugin-wpshadow' );
 
 		call_user_func( $update_fn, self::OPTION_STATUS, $valid ? 'valid' : 'invalid' );
 		call_user_func( $update_fn, self::OPTION_MESSAGE, $message );
@@ -292,7 +292,7 @@ class WPS_License {
 		$key   = $state['key'] ?? '';
 
 		if ( empty( $key ) ) {
-			return new \WP_Error( 'no_license', __( 'No license key found.', 'plugin-wp-support-thisismyurl' ) );
+			return new \WP_Error( 'no_license', __( 'No license key found.', 'plugin-wpshadow' ) );
 		}
 
 		return self::validate_key( $key, $network );
@@ -326,10 +326,10 @@ class WPS_License {
 
 		$url     = $use_network && is_multisite()
 			? network_admin_url( 'admin.php?page=wps-core-network-settings' )
-			: admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard_settings' );
+			: admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=dashboard_settings' );
 		$message = sprintf(
 			/* translators: %s: license settings URL */
-			__( 'This site is not registered. Please register to receive updates and support. Visit the <a href="%s">license settings</a>.', 'plugin-wp-support-thisismyurl' ),
+			__( 'This site is not registered. Please register to receive updates and support. Visit the <a href="%s">license settings</a>.', 'plugin-wpshadow' ),
 			esc_url( $url )
 		);
 
@@ -435,7 +435,7 @@ class WPS_License {
 			return array(
 				'success'      => 0,
 				'failed'       => count( $site_ids ),
-				'errors'       => array( __( 'Network admin context required.', 'plugin-wp-support-thisismyurl' ) ),
+				'errors'       => array( __( 'Network admin context required.', 'plugin-wpshadow' ) ),
 				'broadcast_id' => '',
 			);
 		}
@@ -444,7 +444,7 @@ class WPS_License {
 			return array(
 				'success'      => 0,
 				'failed'       => 0,
-				'errors'       => array( __( 'License key cannot be empty.', 'plugin-wp-support-thisismyurl' ) ),
+				'errors'       => array( __( 'License key cannot be empty.', 'plugin-wpshadow' ) ),
 				'broadcast_id' => '',
 			);
 		}
@@ -480,15 +480,15 @@ class WPS_License {
 				self::log_broadcast_event( $site_id, $broadcast_id, $user_id, true, $result['message'] );
 			} else {
 				++$failed;
-				$error_msg = $result['message'] ?? __( 'Unknown error', 'plugin-wp-support-thisismyurl' );
-				$errors[]  = sprintf( __( 'Site %1$d: %2$s', 'plugin-wp-support-thisismyurl' ), $site_id, $error_msg );
+				$error_msg = $result['message'] ?? __( 'Unknown error', 'plugin-wpshadow' );
+				$errors[]  = sprintf( __( 'Site %1$d: %2$s', 'plugin-wpshadow' ), $site_id, $error_msg );
 				self::log_broadcast_event( $site_id, $broadcast_id, $user_id, false, $error_msg );
 			}
 		}
 
 		// Store network-level broadcast metadata (for future audit trail).
 		if ( $auto_new ) {
-			update_site_option( 'WPS_auto_broadcast_network_key', 'yes' );
+			update_site_option( 'wpshadow_auto_broadcast_network_key', 'yes' );
 		}
 
 		return array(
@@ -520,7 +520,7 @@ class WPS_License {
 		);
 
 		// Append to a site-specific audit log (could also use activity logging).
-		$audit_log   = get_option( 'WPS_license_broadcast_log', array() );
+		$audit_log   = get_option( 'wpshadow_license_broadcast_log', array() );
 		$audit_log[] = $log_entry;
 
 		// Keep last 100 broadcasts.
@@ -528,7 +528,7 @@ class WPS_License {
 			$audit_log = array_slice( $audit_log, -100, 100 );
 		}
 
-		update_option( 'WPS_license_broadcast_log', $audit_log );
+		update_option( 'wpshadow_license_broadcast_log', $audit_log );
 	}
 
 	/**
@@ -546,7 +546,7 @@ class WPS_License {
 
 		foreach ( $blogs as $site_id ) {
 			switch_to_blog( absint( $site_id ) );
-			$site_log = (array) get_option( 'WPS_license_broadcast_log', array() );
+			$site_log = (array) get_option( 'wpshadow_license_broadcast_log', array() );
 			$logs     = array_merge( $logs, $site_log );
 			restore_current_blog();
 		}

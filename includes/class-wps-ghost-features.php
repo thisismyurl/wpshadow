@@ -19,11 +19,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Ghost_Features Class
+ * WPSHADOW_Ghost_Features Class
  *
  * Manages ghost feature declarations from uninstalled modules.
  */
-class WPS_Ghost_Features {
+class WPSHADOW_Ghost_Features {
 
 	/**
 	 * Feature cache.
@@ -39,7 +39,7 @@ class WPS_Ghost_Features {
 	 */
 	public static function init(): void {
 		// Allow modules to register their ghost features.
-		add_action( 'WPS_register_ghost_features', array( __CLASS__, 'register_catalog_features' ), 10 );
+		add_action( 'wpshadow_register_ghost_features', array( __CLASS__, 'register_catalog_features' ), 10 );
 	}
 
 	/**
@@ -50,7 +50,7 @@ class WPS_Ghost_Features {
 	 * @return void
 	 */
 	public static function register_catalog_features(): void {
-		$catalog = WPS_Module_Registry::get_catalog_modules();
+		$catalog = WPSHADOW_Module_Registry::get_catalog_modules();
 
 		foreach ( $catalog as $module ) {
 			if ( ! isset( $module['ghost_features'] ) || empty( $module['ghost_features'] ) ) {
@@ -58,7 +58,7 @@ class WPS_Ghost_Features {
 			}
 
 			$module_slug = $module['slug'] ?? '';
-			$is_installed = WPS_Module_Registry::is_installed( $module_slug );
+			$is_installed = WPSHADOW_Module_Registry::is_installed( $module_slug );
 
 			foreach ( $module['ghost_features'] as $feature ) {
 				self::register_feature(
@@ -142,7 +142,7 @@ class WPS_Ghost_Features {
 	 */
 	public static function get_all_features( bool $include_installed = true ): array {
 		if ( null === self::$features_cache ) {
-			do_action( 'WPS_register_ghost_features' );
+			do_action( 'wpshadow_register_ghost_features' );
 		}
 
 		if ( ! $include_installed ) {
@@ -277,7 +277,7 @@ class WPS_Ghost_Features {
 								margin-left: 8px;
 								vertical-align: middle;
 							">
-								<?php esc_html_e( 'Install to Unlock', 'plugin-wp-support-thisismyurl' ); ?>
+								<?php esc_html_e( 'Install to Unlock', 'plugin-wpshadow' ); ?>
 							</span>
 						<?php else : ?>
 							<span class="wps-active-badge" style="
@@ -292,14 +292,14 @@ class WPS_Ghost_Features {
 								margin-left: 8px;
 								vertical-align: middle;
 							">
-								<?php esc_html_e( 'Active', 'plugin-wp-support-thisismyurl' ); ?>
+								<?php esc_html_e( 'Active', 'plugin-wpshadow' ); ?>
 							</span>
 						<?php endif; ?>
 					</h3>
 					<p style="margin: 5px 0 0; font-size: 12px; color: #646970;">
 						<?php
 						/* translators: %s: Module name */
-						printf( esc_html__( 'from %s module', 'plugin-wp-support-thisismyurl' ), '<strong>' . esc_html( $feature['module_name'] ) . '</strong>' );
+						printf( esc_html__( 'from %s module', 'plugin-wpshadow' ), '<strong>' . esc_html( $feature['module_name'] ) . '</strong>' );
 						?>
 					</p>
 				</div>
@@ -323,12 +323,12 @@ class WPS_Ghost_Features {
 						<span class="dashicons dashicons-download" style="vertical-align: middle;"></span>
 						<?php
 						/* translators: %s: Module name */
-						printf( esc_html__( 'Install %s', 'plugin-wp-support-thisismyurl' ), esc_html( $feature['module_name'] ) );
+						printf( esc_html__( 'Install %s', 'plugin-wpshadow' ), esc_html( $feature['module_name'] ) );
 						?>
 					</a>
 					<?php if ( ! empty( $feature['download_url'] ) ) : ?>
 						<a href="<?php echo esc_url( $feature['download_url'] ); ?>" class="button button-secondary" target="_blank">
-							<?php esc_html_e( 'Learn More', 'plugin-wp-support-thisismyurl' ); ?>
+							<?php esc_html_e( 'Learn More', 'plugin-wpshadow' ); ?>
 						</a>
 					<?php endif; ?>
 				</div>
@@ -370,7 +370,7 @@ class WPS_Ghost_Features {
 						<?php echo absint( $active_count ); ?>
 					</div>
 					<div style="color: #3c434a; font-size: 14px;">
-						<?php esc_html_e( 'Active Features', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'Active Features', 'plugin-wpshadow' ); ?>
 					</div>
 				</div>
 				<div style="flex: 1; padding: 20px; background: #fef8e7; border-left: 4px solid #dba617; border-radius: 4px;">
@@ -378,7 +378,7 @@ class WPS_Ghost_Features {
 						<?php echo absint( $ghost_count ); ?>
 					</div>
 					<div style="color: #3c434a; font-size: 14px;">
-						<?php esc_html_e( 'Available to Install', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'Available to Install', 'plugin-wpshadow' ); ?>
 					</div>
 				</div>
 			</div>
@@ -387,12 +387,12 @@ class WPS_Ghost_Features {
 				<div class="wps-ghost-prompt" style="padding: 20px; background: white; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 30px;">
 					<h3 style="margin-top: 0;">
 						<span class="dashicons dashicons-info" style="color: #2271b1; font-size: 24px; vertical-align: middle;"></span>
-						<?php esc_html_e( 'Unlock More Features', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'Unlock More Features', 'plugin-wpshadow' ); ?>
 					</h3>
 					<p style="color: #646970; line-height: 1.6;">
 						<?php
 						/* translators: %d: Number of available features */
-						printf( esc_html__( 'You have %d additional features available. Install free modules to enhance your site with backup encryption, media optimization, and more.', 'plugin-wp-support-thisismyurl' ), absint( $ghost_count ) );
+						printf( esc_html__( 'You have %d additional features available. Install free modules to enhance your site with backup encryption, media optimization, and more.', 'plugin-wpshadow' ), absint( $ghost_count ) );
 						?>
 					</p>
 				</div>
@@ -418,7 +418,7 @@ class WPS_Ghost_Features {
 									font-weight: 600;
 									text-transform: uppercase;
 								">
-									<?php esc_html_e( 'Installed', 'plugin-wp-support-thisismyurl' ); ?>
+									<?php esc_html_e( 'Installed', 'plugin-wpshadow' ); ?>
 								</span>
 							<?php else : ?>
 								<span class="wps-module-badge-ghost" style="
@@ -430,7 +430,7 @@ class WPS_Ghost_Features {
 									font-weight: 600;
 									text-transform: uppercase;
 								">
-									<?php esc_html_e( 'Not Installed', 'plugin-wp-support-thisismyurl' ); ?>
+									<?php esc_html_e( 'Not Installed', 'plugin-wpshadow' ); ?>
 								</span>
 							<?php endif; ?>
 						</h2>

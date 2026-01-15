@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * WPS_Feature_Database_Cleanup
+ * WPSHADOW_Feature_Database_Cleanup
  *
  * Comprehensive database cleanup and optimization.
  */
-final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Database_Cleanup extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -27,8 +27,8 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'database-cleanup',
-				'name'               => __( 'Database Cleanup & Optimization', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Clean up post revisions, expired transients, and optimize database tables', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Database Cleanup & Optimization', 'plugin-wpshadow' ),
+				'description'        => __( 'Clean up post revisions, expired transients, and optimize database tables', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 			)
@@ -64,7 +64,7 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 		add_action( 'init', array( $this, 'schedule_cleanup' ) );
 
 		// Register cleanup hooks.
-		add_action( 'wps_database_cleanup', array( $this, 'run_cleanup' ) );
+		add_action( 'wpshadow_database_cleanup', array( $this, 'run_cleanup' ) );
 
 		// Admin notice removed - cleanup is automated via WP-Cron schedule.
 		// Users can manage settings in Dashboard Settings tab.
@@ -73,7 +73,7 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 		add_action( 'admin_notices', array( $this, 'show_cleanup_success_notice' ) );
 
 		// Handle manual cleanup action.
-		add_action( 'admin_post_wps_run_database_cleanup', array( $this, 'handle_manual_cleanup' ) );
+		add_action( 'admin_post_WPSHADOW_run_database_cleanup', array( $this, 'handle_manual_cleanup' ) );
 	}
 
 	/**
@@ -82,10 +82,10 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function schedule_cleanup(): void {
-		if ( ! wp_next_scheduled( 'wps_database_cleanup' ) ) {
+		if ( ! wp_next_scheduled( 'wpshadow_database_cleanup' ) ) {
 			// Schedule weekly cleanup by default.
 			$frequency = $this->get_setting( 'cleanup_frequency', 'weekly' );
-			wp_schedule_event( time(), $frequency, 'wps_database_cleanup' );
+			wp_schedule_event( time(), $frequency, 'wpshadow_database_cleanup' );
 		}
 	}
 
@@ -139,13 +139,13 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 		}
 
 		// Store last cleanup timestamp.
-		update_option( 'wps_last_database_cleanup', time() );
+		update_option( 'wpshadow_last_database_cleanup', time() );
 
 		// Log cleanup activity.
-		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
-			\WPS\CoreSupport\WPS_Activity_Logger::log(
+		if ( class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) ) {
+			\WPS\CoreSupport\WPSHADOW_Activity_Logger::log(
 				'database_cleanup',
-				__( 'Database cleanup completed', 'plugin-wp-support-thisismyurl' ),
+				__( 'Database cleanup completed', 'plugin-wpshadow' ),
 				$stats
 			);
 		}
@@ -353,18 +353,18 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 		}
 
 		// Check if cleanup was just run.
-		if ( isset( $_GET['wps_cleanup'] ) && 'success' === sanitize_text_field( wp_unslash( $_GET['wps_cleanup'] ) ) ) {
+		if ( isset( $_GET['wpshadow_cleanup'] ) && 'success' === sanitize_text_field( wp_unslash( $_GET['wpshadow_cleanup'] ) ) ) {
 			// Mark as dismissed to prevent re-display on refresh.
-			WPS_Notice_Manager::dismiss_notice( 'success_database_cleanup_completed' );
+			WPSHADOW_Notice_Manager::dismiss_notice( 'success_database_cleanup_completed' );
 			// Use notice manager for persistent dismissal.
-			WPS_Notice_Manager::render_notice(
+			WPSHADOW_Notice_Manager::render_notice(
 				'success_database_cleanup_completed',
-				esc_html__( 'Database cleanup completed successfully.', 'plugin-wp-support-thisismyurl' ),
+				esc_html__( 'Database cleanup completed successfully.', 'plugin-wpshadow' ),
 				'success'
 			);
 			// Redirect to remove query param after showing once.
 			wp_safe_remote_post(
-				add_query_arg( 'wps_cleanup', null ),
+				add_query_arg( 'wpshadow_cleanup', null ),
 				array( 'blocking' => false )
 			);
 			return;
@@ -372,14 +372,14 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 
 		// Show manual cleanup option.
 		$cleanup_url = wp_nonce_url(
-			admin_url( 'admin-post.php?action=wps_run_database_cleanup' ),
-			'wps_run_database_cleanup'
+			admin_url( 'admin-post.php?action=WPSHADOW_run_database_cleanup' ),
+			'wpshadow_run_database_cleanup'
 		);
 
 		echo '<div class="notice notice-info"><p>' .
-			esc_html__( 'Database Cleanup is enabled. ', 'plugin-wp-support-thisismyurl' ) .
+			esc_html__( 'Database Cleanup is enabled. ', 'plugin-wpshadow' ) .
 			'<a href="' . esc_url( $cleanup_url ) . '" class="button button-small">' .
-			esc_html__( 'Run Cleanup Now', 'plugin-wp-support-thisismyurl' ) .
+			esc_html__( 'Run Cleanup Now', 'plugin-wpshadow' ) .
 			'</a></p></div>';
 	}
 
@@ -396,7 +396,7 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 
 		// Check if we're on the settings page and cleanup was successful.
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( ! isset( $_GET['wps_cleanup'] ) || 'success' !== sanitize_text_field( wp_unslash( $_GET['wps_cleanup'] ) ) ) {
+		if ( ! isset( $_GET['wpshadow_cleanup'] ) || 'success' !== sanitize_text_field( wp_unslash( $_GET['wpshadow_cleanup'] ) ) ) {
 			return;
 		}
 
@@ -407,7 +407,7 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 		}
 
 		echo '<div class="notice notice-success is-dismissible"><p>';
-		echo esc_html__( 'Database cleanup completed successfully.', 'plugin-wp-support-thisismyurl' );
+		echo esc_html__( 'Database cleanup completed successfully.', 'plugin-wpshadow' );
 		echo '</p></div>';
 	}
 
@@ -418,13 +418,13 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 	 */
 	public function handle_manual_cleanup(): void {
 		// Verify nonce.
-		if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'wps_run_database_cleanup' ) ) {
-			wp_die( esc_html__( 'Security check failed.', 'plugin-wp-support-thisismyurl' ) );
+		if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'wpshadow_run_database_cleanup' ) ) {
+			wp_die( esc_html__( 'Security check failed.', 'plugin-wpshadow' ) );
 		}
 
 		// Verify permissions.
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to perform this action.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'You do not have permission to perform this action.', 'plugin-wpshadow' ) );
 		}
 
 		// Run cleanup.
@@ -434,13 +434,13 @@ final class WPS_Feature_Database_Cleanup extends WPS_Abstract_Feature {
 		// Prefer referer (settings tab), fallback to settings, then dashboard.
 		$referer = wp_get_referer();
 		if ( $referer && strpos( $referer, 'page=wp-support' ) !== false ) {
-			$redirect_url = add_query_arg( array( 'wps_cleanup' => 'success' ), $referer );
+			$redirect_url = add_query_arg( array( 'wpshadow_cleanup' => 'success' ), $referer );
 		} else {
 			$redirect_url = add_query_arg(
 				array(
 					'page'        => 'wp-support',
-					'WPS_tab'     => 'settings',
-					'wps_cleanup' => 'success',
+					'wpshadow_tab'     => 'settings',
+					'wpshadow_cleanup' => 'success',
 				),
 				admin_url( 'admin.php' )
 			);

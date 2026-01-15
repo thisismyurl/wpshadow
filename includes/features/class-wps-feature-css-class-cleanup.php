@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * WPS_Feature_CSS_Class_Cleanup
+ * WPSHADOW_Feature_CSS_Class_Cleanup
  *
  * Filters CSS classes for cleaner HTML.
  */
-final class WPS_Feature_CSS_Class_Cleanup extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_CSS_Class_Cleanup extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -27,14 +27,14 @@ final class WPS_Feature_CSS_Class_Cleanup extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'css-class-cleanup',
-				'name'               => __( 'CSS Class Cleanup (Post/Nav/Body)', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Streamline your HTML and make your pages lighter with cleaner code', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'CSS Class Cleanup (Post/Nav/Body)', 'plugin-wpshadow' ),
+				'description'        => __( 'Streamline your HTML and make your pages lighter with cleaner code', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'cleanup',
-				'widget_label'       => __( 'Code Cleanup', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Remove unnecessary code artifacts and optimize output', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Code Cleanup', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Remove unnecessary code artifacts and optimize output', 'plugin-wpshadow' ),
 			)
 		);
 	}
@@ -62,7 +62,7 @@ final class WPS_Feature_CSS_Class_Cleanup extends WPS_Abstract_Feature {
 	 * @return array Filtered classes.
 	 */
 	public function clean_post_classes( array $classes ): array {
-		$keep_classes = (array) $this->get_setting( 'wps_post_class_whitelist', array( 'has-post-thumbnail', 'post', 'hentry'  ) );
+		$keep_classes = (array) $this->get_setting( 'wpshadow_post_class_whitelist', array( 'has-post-thumbnail', 'post', 'hentry'  ) );
 		return array_intersect( $classes, $keep_classes );
 	}
 

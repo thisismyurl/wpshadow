@@ -59,11 +59,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Feature_Core_Integrity
+ * WPSHADOW_Feature_Core_Integrity
  *
  * WordPress core file integrity checking and repair with automatic verification.
  */
-final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Core_Integrity extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * WordPress.org checksums API URL.
@@ -77,14 +77,14 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'core-integrity',
-				'name'               => __( 'Core File Integrity', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Verify WordPress core files against official checksums, detect modifications, and repair compromised files automatically', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Core File Integrity', 'plugin-wpshadow' ),
+				'description'        => __( 'Verify WordPress core files against official checksums, detect modifications, and repair compromised files automatically', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
-				'widget_label'       => __( 'Security', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Security', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wpshadow' ),
 				// Unified metadata.
 				'license_level'      => 1, // Free for everyone.
 				'minimum_capability' => 'manage_options',
@@ -109,15 +109,15 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 		}
 
 		// Scheduled integrity scans.
-		if ( ! wp_next_scheduled( 'wps_core_integrity_scan' ) ) {
-			wp_schedule_event( time(), 'daily', 'wps_core_integrity_scan' );
+		if ( ! wp_next_scheduled( 'wpshadow_core_integrity_scan' ) ) {
+			wp_schedule_event( time(), 'daily', 'wpshadow_core_integrity_scan' );
 		}
-		add_action( 'wps_core_integrity_scan', array( $this, 'run_scheduled_scan' ) );
+		add_action( 'wpshadow_core_integrity_scan', array( $this, 'run_scheduled_scan' ) );
 
 		// AJAX handlers.
-		add_action( 'wp_ajax_wps_scan_core_files', array( $this, 'ajax_scan_core_files' ) );
-		add_action( 'wp_ajax_wps_repair_core_file', array( $this, 'ajax_repair_core_file' ) );
-		add_action( 'wp_ajax_wps_repair_all_core_files', array( $this, 'ajax_repair_all_core_files' ) );
+		add_action( 'wp_ajax_WPSHADOW_scan_core_files', array( $this, 'ajax_scan_core_files' ) );
+		add_action( 'wp_ajax_WPSHADOW_repair_core_file', array( $this, 'ajax_repair_core_file' ) );
+		add_action( 'wp_ajax_WPSHADOW_repair_all_core_files', array( $this, 'ajax_repair_all_core_files' ) );
 
 		// Add to Site Health checks.
 		add_filter( 'site_status_tests', array( $this, 'add_site_health_test' ) );
@@ -186,13 +186,13 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 		);
 
 		// Store results.
-		set_transient( 'wps_core_integrity_results', $results, DAY_IN_SECONDS );
+		set_transient( 'wpshadow_core_integrity_results', $results, DAY_IN_SECONDS );
 
 		// Set flag if issues found.
 		if ( ! empty( $modified_files ) || ! empty( $unknown_files ) ) {
-			set_transient( 'wps_core_integrity_issues', true, WEEK_IN_SECONDS );
+			set_transient( 'wpshadow_core_integrity_issues', true, WEEK_IN_SECONDS );
 		} else {
-			delete_transient( 'wps_core_integrity_issues' );
+			delete_transient( 'wpshadow_core_integrity_issues' );
 		}
 
 		return $results;
@@ -206,7 +206,7 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 	 * @return array|\WP_Error Array of checksums or WP_Error on failure.
 	 */
 	private function fetch_checksums( string $version, string $locale = 'en_US' ): array|\WP_Error {
-		$cache_key = 'wps_checksums_' . $version . '_' . $locale;
+		$cache_key = 'wpshadow_checksums_' . $version . '_' . $locale;
 
 		// Check cache first.
 		$cached = get_transient( $cache_key );
@@ -241,7 +241,7 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 				'api_error',
 				sprintf(
 					/* translators: %d: HTTP response code */
-					__( 'Failed to fetch checksums from WordPress.org (HTTP %d)', 'plugin-wp-support-thisismyurl' ),
+					__( 'Failed to fetch checksums from WordPress.org (HTTP %d)', 'plugin-wpshadow' ),
 					$response_code
 				)
 			);
@@ -253,7 +253,7 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 		if ( ! is_array( $data ) || ! isset( $data['checksums'] ) ) {
 			return new \WP_Error(
 				'parse_error',
-				__( 'Failed to parse checksums response', 'plugin-wp-support-thisismyurl' )
+				__( 'Failed to parse checksums response', 'plugin-wpshadow' )
 			);
 		}
 
@@ -310,13 +310,13 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 		$absolute_path = ABSPATH . $relative_path;
 
 		if ( ! file_exists( $absolute_path ) ) {
-			return new \WP_Error( 'file_not_found', __( 'File not found', 'plugin-wp-support-thisismyurl' ) );
+			return new \WP_Error( 'file_not_found', __( 'File not found', 'plugin-wpshadow' ) );
 		}
 
 		// Backup current file.
 		$backup_path = $absolute_path . '.wps-backup-' . time();
 		if ( ! copy( $absolute_path, $backup_path ) ) {
-			return new \WP_Error( 'backup_failed', __( 'Failed to backup file before repair', 'plugin-wp-support-thisismyurl' ) );
+			return new \WP_Error( 'backup_failed', __( 'Failed to backup file before repair', 'plugin-wpshadow' ) );
 		}
 
 		// Download fresh copy from WordPress.org.
@@ -344,7 +344,7 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 				'download_failed',
 				sprintf(
 					/* translators: %d: HTTP response code */
-					__( 'Failed to download file from WordPress.org (HTTP %d)', 'plugin-wp-support-thisismyurl' ),
+					__( 'Failed to download file from WordPress.org (HTTP %d)', 'plugin-wpshadow' ),
 					$response_code
 				)
 			);
@@ -359,14 +359,14 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 			// Restore backup.
 			copy( $backup_path, $absolute_path );
 			wp_delete_file( $backup_path );
-			return new \WP_Error( 'filesystem_error', __( 'Could not access filesystem', 'plugin-wp-support-thisismyurl' ) );
+			return new \WP_Error( 'filesystem_error', __( 'Could not access filesystem', 'plugin-wpshadow' ) );
 		}
 
 		if ( ! $wp_filesystem->put_contents( $absolute_path, $file_contents, FS_CHMOD_FILE ) ) {
 			// Restore backup.
 			copy( $backup_path, $absolute_path );
 			wp_delete_file( $backup_path );
-			return new \WP_Error( 'write_failed', __( 'Failed to write repaired file', 'plugin-wp-support-thisismyurl' ) );
+			return new \WP_Error( 'write_failed', __( 'Failed to write repaired file', 'plugin-wpshadow' ) );
 		}
 
 		// Verify repair was successful.
@@ -376,12 +376,12 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 				// Restore backup.
 				copy( $backup_path, $absolute_path );
 				wp_delete_file( $backup_path );
-				return new \WP_Error( 'verification_failed', __( 'Repaired file verification failed', 'plugin-wp-support-thisismyurl' ) );
+				return new \WP_Error( 'verification_failed', __( 'Repaired file verification failed', 'plugin-wpshadow' ) );
 			}
 		}
 
 		// Repair successful, delete backup after 7 days.
-		wp_schedule_single_event( time() + ( 7 * DAY_IN_SECONDS ), 'wps_delete_backup_file', array( $backup_path ) );
+		wp_schedule_single_event( time() + ( 7 * DAY_IN_SECONDS ), 'wpshadow_delete_backup_file', array( $backup_path ) );
 
 		// Log repair action.
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
@@ -397,7 +397,7 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 	 * @return array Modified files with details.
 	 */
 	private function get_modified_files(): array {
-		$results = get_transient( 'wps_core_integrity_results' );
+		$results = get_transient( 'wpshadow_core_integrity_results' );
 
 		if ( false === $results || ! isset( $results['modified_files'] ) ) {
 			return array();
@@ -487,7 +487,7 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_scan_core_files(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_core_integrity' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_core_integrity' );
 
 		$results = $this->run_integrity_scan();
 
@@ -515,14 +515,14 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_repair_core_file(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_core_integrity' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_core_integrity' );
 
-		$file_path = \WPS\CoreSupport\wps_get_post_text( 'file_path' );
+		$file_path = \WPS\CoreSupport\WPSHADOW_get_post_text( 'file_path' );
 
 		if ( empty( $file_path ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Invalid file path.', 'plugin-wp-support-thisismyurl' ),
+					'message' => __( 'Invalid file path.', 'plugin-wpshadow' ),
 				)
 			);
 		}
@@ -539,7 +539,7 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 
 		wp_send_json_success(
 			array(
-				'message' => __( 'File repaired successfully.', 'plugin-wp-support-thisismyurl' ),
+				'message' => __( 'File repaired successfully.', 'plugin-wpshadow' ),
 			)
 		);
 	}
@@ -550,14 +550,14 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_repair_all_core_files(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_core_integrity' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_core_integrity' );
 
 		$modified_files = $this->get_modified_files();
 
 		if ( empty( $modified_files ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'No modified files to repair.', 'plugin-wp-support-thisismyurl' ),
+					'message' => __( 'No modified files to repair.', 'plugin-wpshadow' ),
 				)
 			);
 		}
@@ -598,8 +598,8 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 	 * @return array Modified tests.
 	 */
 	public function add_site_health_test( array $tests ): array {
-		$tests['direct']['wps_core_integrity'] = array(
-			'label' => __( 'WordPress core file integrity', 'plugin-wp-support-thisismyurl' ),
+		$tests['direct']['wpshadow_core_integrity'] = array(
+			'label' => __( 'WordPress core file integrity', 'plugin-wpshadow' ),
 			'test'  => array( $this, 'site_health_test_callback' ),
 		);
 
@@ -612,7 +612,7 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 	 * @return array Test result.
 	 */
 	public function site_health_test_callback(): array {
-		$results = get_transient( 'wps_core_integrity_results' );
+		$results = get_transient( 'wpshadow_core_integrity_results' );
 
 		// If no scan has been run yet, run one now.
 		if ( false === $results ) {
@@ -621,17 +621,17 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 
 		if ( isset( $results['error'] ) ) {
 			return array(
-				'label'       => __( 'Core integrity check failed', 'plugin-wp-support-thisismyurl' ),
+				'label'       => __( 'Core integrity check failed', 'plugin-wpshadow' ),
 				'status'      => 'recommended',
 				'badge'       => array(
-					'label' => __( 'Security', 'plugin-wp-support-thisismyurl' ),
+					'label' => __( 'Security', 'plugin-wpshadow' ),
 					'color' => 'orange',
 				),
 				'description' => sprintf(
 					'<p>%s</p>',
 					esc_html( $results['error'] )
 				),
-				'test'        => 'wps_core_integrity',
+				'test'        => 'wpshadow_core_integrity',
 			);
 		}
 
@@ -640,42 +640,42 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 
 		if ( $modified_count > 0 || $unknown_count > 0 ) {
 			return array(
-				'label'       => __( 'Modified core files detected', 'plugin-wp-support-thisismyurl' ),
+				'label'       => __( 'Modified core files detected', 'plugin-wpshadow' ),
 				'status'      => 'critical',
 				'badge'       => array(
-					'label' => __( 'Security', 'plugin-wp-support-thisismyurl' ),
+					'label' => __( 'Security', 'plugin-wpshadow' ),
 					'color' => 'red',
 				),
 				'description' => sprintf(
 					'<p>%s</p>',
 					sprintf(
 						/* translators: 1: number of modified files, 2: number of unknown files */
-						__( 'Found %1$d modified core files and %2$d unknown files. This could indicate a security compromise.', 'plugin-wp-support-thisismyurl' ),
+						__( 'Found %1$d modified core files and %2$d unknown files. This could indicate a security compromise.', 'plugin-wpshadow' ),
 						$modified_count,
 						$unknown_count
 					)
 				),
-				'test'        => 'wps_core_integrity',
+				'test'        => 'wpshadow_core_integrity',
 				'actions'     => sprintf(
 					'<a href="%s">%s</a>',
 					admin_url( 'tools.php?page=wps-core-integrity' ),
-					__( 'View and Repair Files', 'plugin-wp-support-thisismyurl' )
+					__( 'View and Repair Files', 'plugin-wpshadow' )
 				),
 			);
 		}
 
 		return array(
-			'label'       => __( 'Core files are intact', 'plugin-wp-support-thisismyurl' ),
+			'label'       => __( 'Core files are intact', 'plugin-wpshadow' ),
 			'status'      => 'good',
 			'badge'       => array(
-				'label' => __( 'Security', 'plugin-wp-support-thisismyurl' ),
+				'label' => __( 'Security', 'plugin-wpshadow' ),
 				'color' => 'blue',
 			),
 			'description' => sprintf(
 				'<p>%s</p>',
-				__( 'All WordPress core files match official checksums.', 'plugin-wp-support-thisismyurl' )
+				__( 'All WordPress core files match official checksums.', 'plugin-wpshadow' )
 			),
-			'test'        => 'wps_core_integrity',
+			'test'        => 'wpshadow_core_integrity',
 		);
 	}
 
@@ -689,11 +689,11 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 			return;
 		}
 
-		if ( ! get_transient( 'wps_core_integrity_issues' ) ) {
+		if ( ! get_transient( 'wpshadow_core_integrity_issues' ) ) {
 			return;
 		}
 
-		$results = get_transient( 'wps_core_integrity_results' );
+		$results = get_transient( 'wpshadow_core_integrity_results' );
 
 		if ( false === $results ) {
 			return;
@@ -709,13 +709,13 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 		?>
 		<div class="notice notice-error is-dismissible">
 			<p>
-				<strong><?php esc_html_e( 'WP Support: Core Integrity Issue Detected', 'plugin-wp-support-thisismyurl' ); ?></strong>
+				<strong><?php esc_html_e( 'WPShadow: Core Integrity Issue Detected', 'plugin-wpshadow' ); ?></strong>
 			</p>
 			<p>
 				<?php
 				printf(
 					/* translators: 1: number of modified files, 2: number of unknown files */
-					esc_html__( 'Found %1$d modified core files and %2$d unknown files. This could indicate a security issue.', 'plugin-wp-support-thisismyurl' ),
+					esc_html__( 'Found %1$d modified core files and %2$d unknown files. This could indicate a security issue.', 'plugin-wpshadow' ),
 					$modified_count,
 					$unknown_count
 				);
@@ -723,7 +723,7 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 			</p>
 			<p>
 				<button type="button" class="button button-primary" id="wps-repair-all-core-files">
-					<?php esc_html_e( 'Repair All Modified Files', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Repair All Modified Files', 'plugin-wpshadow' ); ?>
 				</button>
 				<span class="spinner" style="float: none; margin: 0 0 0 10px;"></span>
 			</p>
@@ -734,7 +734,7 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 				var $button = $(this);
 				var $spinner = $button.next('.spinner');
 				
-				if (!confirm('<?php esc_html_e( 'Are you sure you want to repair all modified core files? This will overwrite the current files.', 'plugin-wp-support-thisismyurl' ); ?>')) {
+				if (!confirm('<?php esc_html_e( 'Are you sure you want to repair all modified core files? This will overwrite the current files.', 'plugin-wpshadow' ); ?>')) {
 					return;
 				}
 				
@@ -742,23 +742,23 @@ final class WPS_Feature_Core_Integrity extends WPS_Abstract_Feature {
 				$spinner.addClass('is-active');
 				
 				$.post(ajaxurl, {
-					action: 'wps_repair_all_core_files',
-					_ajax_nonce: '<?php echo esc_js( wp_create_nonce( 'wps_core_integrity' ) ); ?>'
+					action: 'wpshadow_repair_all_core_files',
+					_ajax_nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_core_integrity' ) ); ?>'
 				}, function(response) {
 					if (response.success) {
 						$button.closest('.notice').fadeOut(function() {
 							$(this).remove();
 						});
-						alert('<?php esc_html_e( 'Files repaired successfully!', 'plugin-wp-support-thisismyurl' ); ?>\n' + 
-							  '<?php esc_html_e( 'Repaired:', 'plugin-wp-support-thisismyurl' ); ?> ' + response.data.repaired_count);
+						alert('<?php esc_html_e( 'Files repaired successfully!', 'plugin-wpshadow' ); ?>\n' + 
+							  '<?php esc_html_e( 'Repaired:', 'plugin-wpshadow' ); ?> ' + response.data.repaired_count);
 						location.reload();
 					} else {
-						alert(response.data.message || '<?php esc_html_e( 'Failed to repair files.', 'plugin-wp-support-thisismyurl' ); ?>');
+						alert(response.data.message || '<?php esc_html_e( 'Failed to repair files.', 'plugin-wpshadow' ); ?>');
 						$button.prop('disabled', false);
 						$spinner.removeClass('is-active');
 					}
 				}).fail(function() {
-					alert('<?php esc_html_e( 'An error occurred. Please try again.', 'plugin-wp-support-thisismyurl' ); ?>');
+					alert('<?php esc_html_e( 'An error occurred. Please try again.', 'plugin-wpshadow' ); ?>');
 					$button.prop('disabled', false);
 					$spinner.removeClass('is-active');
 				});

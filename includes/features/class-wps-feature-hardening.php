@@ -18,11 +18,11 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * WPS_Feature_Hardening
+ * WPSHADOW_Feature_Hardening
  *
  * One-click security hardening implementation.
  */
-final class WPS_Feature_Hardening extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -31,14 +31,14 @@ final class WPS_Feature_Hardening extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'security-hardening',
-				'name'               => __( 'One-Click Security Hardening', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Comprehensive security hardening: disable XML-RPC, lock down wp-json, prevent directory listing, validate salts, and check file permissions', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'One-Click Security Hardening', 'plugin-wpshadow' ),
+				'description'        => __( 'Comprehensive security hardening: disable XML-RPC, lock down wp-json, prevent directory listing, validate salts, and check file permissions', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
-				'widget_label'       => __( 'Security', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Security', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wpshadow' ),
 			)
 		);
 	}
@@ -110,7 +110,7 @@ final class WPS_Feature_Hardening extends WPS_Abstract_Feature {
 		// Block all other unauthenticated REST API access.
 		return new \WP_Error(
 			'rest_not_logged_in',
-			__( 'You are not currently logged in.', 'plugin-wp-support-thisismyurl' ),
+			__( 'You are not currently logged in.', 'plugin-wpshadow' ),
 			array( 'status' => 401 )
 		);
 	}
@@ -122,13 +122,13 @@ final class WPS_Feature_Hardening extends WPS_Abstract_Feature {
 	 */
 	public function perform_security_checks(): void {
 		// Only run checks once per day to avoid performance impact.
-		$last_check = get_transient( 'wps_security_hardening_last_check' );
+		$last_check = get_transient( 'wpshadow_security_hardening_last_check' );
 		if ( false !== $last_check ) {
 			return;
 		}
 
 		// Set transient for 24 hours.
-		set_transient( 'wps_security_hardening_last_check', time(), DAY_IN_SECONDS );
+		set_transient( 'wpshadow_security_hardening_last_check', time(), DAY_IN_SECONDS );
 
 		// Run checks.
 		$this->check_security_salts();
@@ -175,7 +175,7 @@ final class WPS_Feature_Hardening extends WPS_Abstract_Feature {
 				'weak_salts',
 				sprintf(
 					/* translators: %s: comma-separated list of weak salt constants */
-					__( 'Security Warning: The following security keys/salts are weak or undefined: %s. Visit https://api.wordpress.org/secret-key/1.1/salt/ to generate new keys.', 'plugin-wp-support-thisismyurl' ),
+					__( 'Security Warning: The following security keys/salts are weak or undefined: %s. Visit https://api.wordpress.org/secret-key/1.1/salt/ to generate new keys.', 'plugin-wpshadow' ),
 					implode( ', ', $weak_salts )
 				),
 				'error'
@@ -202,7 +202,7 @@ final class WPS_Feature_Hardening extends WPS_Abstract_Feature {
 			$perms = fileperms( $wp_config_path );
 			// Check if wp-config.php is world-readable (other can read).
 			if ( $perms & 0x0004 ) {
-				$checks[] = __( 'wp-config.php is world-readable. Recommended permissions: 0600 or 0400.', 'plugin-wp-support-thisismyurl' );
+				$checks[] = __( 'wp-config.php is world-readable. Recommended permissions: 0600 or 0400.', 'plugin-wpshadow' );
 			}
 		}
 
@@ -212,7 +212,7 @@ final class WPS_Feature_Hardening extends WPS_Abstract_Feature {
 			// This is actually normal for WordPress to function, but note if world-writable.
 			$perms = fileperms( $htaccess_path );
 			if ( $perms & 0x0002 ) { // World-writable.
-				$checks[] = __( '.htaccess is world-writable. Consider restricting permissions to 0644.', 'plugin-wp-support-thisismyurl' );
+				$checks[] = __( '.htaccess is world-writable. Consider restricting permissions to 0644.', 'plugin-wpshadow' );
 			}
 		}
 
@@ -221,7 +221,7 @@ final class WPS_Feature_Hardening extends WPS_Abstract_Feature {
 		if ( file_exists( $wp_content_path ) ) {
 			$perms = fileperms( $wp_content_path );
 			if ( $perms & 0x0002 ) { // World-writable.
-				$checks[] = __( 'wp-content directory is world-writable. Consider restricting permissions to 0755.', 'plugin-wp-support-thisismyurl' );
+				$checks[] = __( 'wp-content directory is world-writable. Consider restricting permissions to 0755.', 'plugin-wpshadow' );
 			}
 		}
 
@@ -335,7 +335,7 @@ final class WPS_Feature_Hardening extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	private function add_security_notice( string $id, string $message, string $type = 'warning' ): void {
-		$notices = $this->get_setting( 'wps_security_hardening_notices', array( ) );
+		$notices = $this->get_setting( 'wpshadow_security_hardening_notices', array( ) );
 
 		$notices[ $id ] = array(
 			'message' => $message,
@@ -343,7 +343,7 @@ final class WPS_Feature_Hardening extends WPS_Abstract_Feature {
 			'time'    => time(),
 		);
 
-		$this->update_setting( 'wps_security_hardening_notices', $notices  );
+		$this->update_setting( 'wpshadow_security_hardening_notices', $notices  );
 
 		// Also add as WordPress admin notice.
 		add_action(

@@ -4,7 +4,7 @@
  *
  * Handles install, activate, and deactivate requests for spoke plugins.
  *
- * @package WPS_WP_SUPPORT_THISISMYURL
+ * @package WPSHADOW_wpshadow_THISISMYURL
  * @since 1.2601.73002
  */
 
@@ -22,24 +22,24 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @return void
  */
-function wps_ajax_install_spoke(): void {
+function WPSHADOW_ajax_install_spoke(): void {
 	// Verify nonce.
-	check_ajax_referer( 'WPS_spoke_collection', 'nonce' );
+	check_ajax_referer( 'wpshadow_spoke_collection', 'nonce' );
 
 	// Check permissions.
 	if ( ! current_user_can( 'install_plugins' ) ) {
-		wp_send_json_error( __( 'You do not have permission to install plugins.', 'plugin-wp-support-thisismyurl' ) );
+		wp_send_json_error( __( 'You do not have permission to install plugins.', 'plugin-wpshadow' ) );
 	}
 
 	// Get spoke identifier.
-	$spoke = \WPS\CoreSupport\wps_get_post_key( 'spoke' );
+	$spoke = \WPS\CoreSupport\WPSHADOW_get_post_key( 'spoke' );
 
 	if ( empty( $spoke ) ) {
-		wp_send_json_error( __( 'Invalid spoke identifier.', 'plugin-wp-support-thisismyurl' ) );
+		wp_send_json_error( __( 'Invalid spoke identifier.', 'plugin-wpshadow' ) );
 	}
 
 	// Get spoke slug.
-	$spoke_slug = $spoke . '-support-thisismyurl';
+	$spoke_slug = $spoke . '-wpshadow';
 
 	// Check if already installed.
 	$plugin_file = $spoke_slug . '/' . $spoke_slug . '.php';
@@ -54,7 +54,7 @@ function wps_ajax_install_spoke(): void {
 			array(
 				'message'    => sprintf(
 					/* translators: %s: Spoke name */
-					__( '%s spoke is already installed.', 'plugin-wp-support-thisismyurl' ),
+					__( '%s spoke is already installed.', 'plugin-wpshadow' ),
 					strtoupper( $spoke )
 				),
 				'milestones' => array(),
@@ -63,7 +63,7 @@ function wps_ajax_install_spoke(): void {
 	}
 
 	// Get module info from registry (for download URL).
-	$catalog     = WPS_Module_Registry::get_catalog_with_status();
+	$catalog     = WPSHADOW_Module_Registry::get_catalog_with_status();
 	$module_info = null;
 
 	foreach ( $catalog as $module ) {
@@ -74,15 +74,15 @@ function wps_ajax_install_spoke(): void {
 	}
 
 	if ( ! $module_info || empty( $module_info['download_url'] ) ) {
-		wp_send_json_error( __( 'Spoke not found in catalog or download URL missing.', 'plugin-wp-support-thisismyurl' ) );
+		wp_send_json_error( __( 'Spoke not found in catalog or download URL missing.', 'plugin-wpshadow' ) );
 	}
 
-	// Use WPS_Plugin_Upgrader to install.
-	if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Plugin_Upgrader' ) ) {
-		require_once wp_support_PATH . 'includes/class-wps-plugin-upgrader.php';
+	// Use WPSHADOW_Plugin_Upgrader to install.
+	if ( ! class_exists( '\\WPShadow\\WPSHADOW_Plugin_Upgrader' ) ) {
+		require_once WPSHADOW_PATH . 'includes/class-wps-plugin-upgrader.php';
 	}
 
-	$upgrader = new WPS_Plugin_Upgrader();
+	$upgrader = new WPSHADOW_Plugin_Upgrader();
 	$result   = $upgrader->install( $module_info['download_url'] );
 
 	if ( is_wp_error( $result ) ) {
@@ -90,7 +90,7 @@ function wps_ajax_install_spoke(): void {
 	}
 
 	// Log installation.
-	WPS_Activity_Logger::log(
+	WPSHADOW_Activity_Logger::log(
 		'spoke_installed',
 		sprintf( '%s Spoke Installed', strtoupper( $spoke ) ),
 		array(
@@ -100,16 +100,16 @@ function wps_ajax_install_spoke(): void {
 	);
 
 	// Check for milestone unlocks.
-	$milestones = WPS_Spoke_Collection::check_milestone_unlocks();
+	$milestones = WPSHADOW_Spoke_Collection::check_milestone_unlocks();
 
 	// Clear module registry cache.
-	WPS_Module_Registry::clear_cache();
+	WPSHADOW_Module_Registry::clear_cache();
 
 	wp_send_json_success(
 		array(
 			'message'    => sprintf(
 				/* translators: %s: Spoke name */
-				__( '%s spoke installed successfully!', 'plugin-wp-support-thisismyurl' ),
+				__( '%s spoke installed successfully!', 'plugin-wpshadow' ),
 				strtoupper( $spoke )
 			),
 			'milestones' => array_values( $milestones ),
@@ -122,24 +122,24 @@ function wps_ajax_install_spoke(): void {
  *
  * @return void
  */
-function wps_ajax_activate_spoke(): void {
+function WPSHADOW_ajax_activate_spoke(): void {
 	// Verify nonce.
-	check_ajax_referer( 'WPS_spoke_collection', 'nonce' );
+	check_ajax_referer( 'wpshadow_spoke_collection', 'nonce' );
 
 	// Check permissions.
 	if ( ! current_user_can( 'activate_plugins' ) ) {
-		wp_send_json_error( __( 'You do not have permission to activate plugins.', 'plugin-wp-support-thisismyurl' ) );
+		wp_send_json_error( __( 'You do not have permission to activate plugins.', 'plugin-wpshadow' ) );
 	}
 
 	// Get spoke identifier.
-	$spoke = \WPS\CoreSupport\wps_get_post_key( 'spoke' );
+	$spoke = \WPS\CoreSupport\WPSHADOW_get_post_key( 'spoke' );
 
 	if ( empty( $spoke ) ) {
-		wp_send_json_error( __( 'Invalid spoke identifier.', 'plugin-wp-support-thisismyurl' ) );
+		wp_send_json_error( __( 'Invalid spoke identifier.', 'plugin-wpshadow' ) );
 	}
 
 	// Get spoke slug.
-	$spoke_slug  = $spoke . '-support-thisismyurl';
+	$spoke_slug  = $spoke . '-wpshadow';
 	$plugin_file = $spoke_slug . '/' . $spoke_slug . '.php';
 
 	// Check if plugin exists.
@@ -149,7 +149,7 @@ function wps_ajax_activate_spoke(): void {
 
 	$plugins = get_plugins();
 	if ( ! isset( $plugins[ $plugin_file ] ) ) {
-		wp_send_json_error( __( 'Spoke plugin not found. Please install it first.', 'plugin-wp-support-thisismyurl' ) );
+		wp_send_json_error( __( 'Spoke plugin not found. Please install it first.', 'plugin-wpshadow' ) );
 	}
 
 	// Check if already active.
@@ -162,7 +162,7 @@ function wps_ajax_activate_spoke(): void {
 			array(
 				'message'    => sprintf(
 					/* translators: %s: Spoke name */
-					__( '%s spoke is already active.', 'plugin-wp-support-thisismyurl' ),
+					__( '%s spoke is already active.', 'plugin-wpshadow' ),
 					strtoupper( $spoke )
 				),
 				'milestones' => array(),
@@ -178,7 +178,7 @@ function wps_ajax_activate_spoke(): void {
 	}
 
 	// Log activation.
-	WPS_Activity_Logger::log(
+	WPSHADOW_Activity_Logger::log(
 		'spoke_activated',
 		sprintf( '%s Spoke Activated', strtoupper( $spoke ) ),
 		array(
@@ -188,16 +188,16 @@ function wps_ajax_activate_spoke(): void {
 	);
 
 	// Check for milestone unlocks.
-	$milestones = WPS_Spoke_Collection::check_milestone_unlocks();
+	$milestones = WPSHADOW_Spoke_Collection::check_milestone_unlocks();
 
 	// Clear module registry cache.
-	WPS_Module_Registry::clear_cache();
+	WPSHADOW_Module_Registry::clear_cache();
 
 	wp_send_json_success(
 		array(
 			'message'    => sprintf(
 				/* translators: %s: Spoke name */
-				__( '%s spoke activated successfully!', 'plugin-wp-support-thisismyurl' ),
+				__( '%s spoke activated successfully!', 'plugin-wpshadow' ),
 				strtoupper( $spoke )
 			),
 			'milestones' => array_values( $milestones ),
@@ -210,24 +210,24 @@ function wps_ajax_activate_spoke(): void {
  *
  * @return void
  */
-function wps_ajax_deactivate_spoke(): void {
+function WPSHADOW_ajax_deactivate_spoke(): void {
 	// Verify nonce.
-	check_ajax_referer( 'WPS_spoke_collection', 'nonce' );
+	check_ajax_referer( 'wpshadow_spoke_collection', 'nonce' );
 
 	// Check permissions.
 	if ( ! current_user_can( 'activate_plugins' ) ) {
-		wp_send_json_error( __( 'You do not have permission to deactivate plugins.', 'plugin-wp-support-thisismyurl' ) );
+		wp_send_json_error( __( 'You do not have permission to deactivate plugins.', 'plugin-wpshadow' ) );
 	}
 
 	// Get spoke identifier.
-	$spoke = \WPS\CoreSupport\wps_get_post_key( 'spoke' );
+	$spoke = \WPS\CoreSupport\WPSHADOW_get_post_key( 'spoke' );
 
 	if ( empty( $spoke ) ) {
-		wp_send_json_error( __( 'Invalid spoke identifier.', 'plugin-wp-support-thisismyurl' ) );
+		wp_send_json_error( __( 'Invalid spoke identifier.', 'plugin-wpshadow' ) );
 	}
 
 	// Get spoke slug.
-	$spoke_slug  = $spoke . '-support-thisismyurl';
+	$spoke_slug  = $spoke . '-wpshadow';
 	$plugin_file = $spoke_slug . '/' . $spoke_slug . '.php';
 
 	// Check if plugin exists.
@@ -237,7 +237,7 @@ function wps_ajax_deactivate_spoke(): void {
 
 	$plugins = get_plugins();
 	if ( ! isset( $plugins[ $plugin_file ] ) ) {
-		wp_send_json_error( __( 'Spoke plugin not found.', 'plugin-wp-support-thisismyurl' ) );
+		wp_send_json_error( __( 'Spoke plugin not found.', 'plugin-wpshadow' ) );
 	}
 
 	// Check if already inactive.
@@ -250,7 +250,7 @@ function wps_ajax_deactivate_spoke(): void {
 			array(
 				'message' => sprintf(
 					/* translators: %s: Spoke name */
-					__( '%s spoke is already inactive.', 'plugin-wp-support-thisismyurl' ),
+					__( '%s spoke is already inactive.', 'plugin-wpshadow' ),
 					strtoupper( $spoke )
 				),
 			)
@@ -261,7 +261,7 @@ function wps_ajax_deactivate_spoke(): void {
 	deactivate_plugins( $plugin_file );
 
 	// Log deactivation.
-	WPS_Activity_Logger::log(
+	WPSHADOW_Activity_Logger::log(
 		'spoke_deactivated',
 		sprintf( '%s Spoke Deactivated', strtoupper( $spoke ) ),
 		array(
@@ -271,13 +271,13 @@ function wps_ajax_deactivate_spoke(): void {
 	);
 
 	// Clear module registry cache.
-	WPS_Module_Registry::clear_cache();
+	WPSHADOW_Module_Registry::clear_cache();
 
 	wp_send_json_success(
 		array(
 			'message' => sprintf(
 				/* translators: %s: Spoke name */
-				__( '%s spoke deactivated successfully!', 'plugin-wp-support-thisismyurl' ),
+				__( '%s spoke deactivated successfully!', 'plugin-wpshadow' ),
 				strtoupper( $spoke )
 			),
 		)
@@ -285,6 +285,6 @@ function wps_ajax_deactivate_spoke(): void {
 }
 
 // Register AJAX handlers.
-add_action( 'wp_ajax_wps_install_spoke', __NAMESPACE__ . '\\wps_ajax_install_spoke' );
-add_action( 'wp_ajax_wps_activate_spoke', __NAMESPACE__ . '\\wps_ajax_activate_spoke' );
-add_action( 'wp_ajax_wps_deactivate_spoke', __NAMESPACE__ . '\\wps_ajax_deactivate_spoke' );
+add_action( 'wp_ajax_WPSHADOW_install_spoke', __NAMESPACE__ . '\\WPSHADOW_ajax_install_spoke' );
+add_action( 'wp_ajax_WPSHADOW_activate_spoke', __NAMESPACE__ . '\\WPSHADOW_ajax_activate_spoke' );
+add_action( 'wp_ajax_WPSHADOW_deactivate_spoke', __NAMESPACE__ . '\\WPSHADOW_ajax_deactivate_spoke' );

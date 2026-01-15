@@ -2,7 +2,7 @@
 /**
  * Features Discovery Dashboard Widget
  *
- * Shows active and ghost features from all modules in the WP Support ecosystem.
+ * Shows active and ghost features from all modules in the WPShadow ecosystem.
  *
  * @package    WP_Support
  * @subpackage Core
@@ -18,11 +18,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Features_Discovery_Widget Class
+ * WPSHADOW_Features_Discovery_Widget Class
  *
  * Dashboard widget for feature discovery.
  */
-class WPS_Features_Discovery_Widget {
+class WPSHADOW_Features_Discovery_Widget {
 
 	/**
 	 * Initialize the widget.
@@ -44,8 +44,8 @@ class WPS_Features_Discovery_Widget {
 		}
 
 		wp_add_dashboard_widget(
-			'wps_features_discovery',
-			__( '🚀 WP Support Features - Discover What\'s Available', 'plugin-wp-support-thisismyurl' ),
+			'wpshadow_features_discovery',
+			__( '🚀 WPShadow Features - Discover What\'s Available', 'plugin-wpshadow' ),
 			array( __CLASS__, 'render_widget' ),
 			null,
 			null,
@@ -61,12 +61,12 @@ class WPS_Features_Discovery_Widget {
 	 */
 	public static function render_widget(): void {
 		// Initialize ghost features if not already loaded.
-		$all_features = WPS_Ghost_Features::get_all_features( true );
+		$all_features = WPSHADOW_Ghost_Features::get_all_features( true );
 		
 		if ( empty( $all_features ) ) {
 			// Trigger registration if cache is empty.
-			do_action( 'WPS_register_ghost_features' );
-			$all_features = WPS_Ghost_Features::get_all_features( true );
+			do_action( 'wpshadow_register_ghost_features' );
+			$all_features = WPSHADOW_Ghost_Features::get_all_features( true );
 		}
 
 		$active_count = 0;
@@ -221,30 +221,30 @@ class WPS_Features_Discovery_Widget {
 			<div class="wps-features-stats">
 				<div class="wps-stat-box" style="background: #f0f9f1; border: 1px solid #46b450;">
 					<div class="wps-stat-number" style="color: #46b450;"><?php echo absint( $active_count ); ?></div>
-					<div class="wps-stat-label"><?php esc_html_e( 'Active Features', 'plugin-wp-support-thisismyurl' ); ?></div>
+					<div class="wps-stat-label"><?php esc_html_e( 'Active Features', 'plugin-wpshadow' ); ?></div>
 				</div>
 				<div class="wps-stat-box" style="background: #fef8e7; border: 1px solid #dba617;">
 					<div class="wps-stat-number" style="color: #dba617;"><?php echo absint( $ghost_count ); ?></div>
-					<div class="wps-stat-label"><?php esc_html_e( 'Available to Install', 'plugin-wp-support-thisismyurl' ); ?></div>
+					<div class="wps-stat-label"><?php esc_html_e( 'Available to Install', 'plugin-wpshadow' ); ?></div>
 				</div>
 			</div>
 
 			<!-- Tabs Section -->
 			<div class="wps-features-tabs">
 				<button class="wps-tab-button active" data-tab="all">
-					<?php esc_html_e( 'All Features', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'All Features', 'plugin-wpshadow' ); ?>
 				</button>
 				<button class="wps-tab-button" data-tab="backup">
-					<?php esc_html_e( 'Backup', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Backup', 'plugin-wpshadow' ); ?>
 				</button>
 				<button class="wps-tab-button" data-tab="media">
-					<?php esc_html_e( 'Media', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Media', 'plugin-wpshadow' ); ?>
 				</button>
 				<button class="wps-tab-button" data-tab="performance">
-					<?php esc_html_e( 'Performance', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Performance', 'plugin-wpshadow' ); ?>
 				</button>
 				<button class="wps-tab-button" data-tab="security">
-					<?php esc_html_e( 'Security', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Security', 'plugin-wpshadow' ); ?>
 				</button>
 			</div>
 
@@ -255,28 +255,28 @@ class WPS_Features_Discovery_Widget {
 
 			<div class="wps-tab-content" data-tab-content="backup">
 				<?php
-				$backup_features = WPS_Ghost_Features::get_features_by_category( 'backup', true );
+				$backup_features = WPSHADOW_Ghost_Features::get_features_by_category( 'backup', true );
 				self::render_features_list( $backup_features, 5 );
 				?>
 			</div>
 
 			<div class="wps-tab-content" data-tab-content="media">
 				<?php
-				$media_features = WPS_Ghost_Features::get_features_by_category( 'media', true );
+				$media_features = WPSHADOW_Ghost_Features::get_features_by_category( 'media', true );
 				self::render_features_list( $media_features, 5 );
 				?>
 			</div>
 
 			<div class="wps-tab-content" data-tab-content="performance">
 				<?php
-				$performance_features = WPS_Ghost_Features::get_features_by_category( 'performance', true );
+				$performance_features = WPSHADOW_Ghost_Features::get_features_by_category( 'performance', true );
 				self::render_features_list( $performance_features, 5 );
 				?>
 			</div>
 
 			<div class="wps-tab-content" data-tab-content="security">
 				<?php
-				$security_features = WPS_Ghost_Features::get_features_by_category( 'security', true );
+				$security_features = WPSHADOW_Ghost_Features::get_features_by_category( 'security', true );
 				self::render_features_list( $security_features, 5 );
 				?>
 			</div>
@@ -284,15 +284,15 @@ class WPS_Features_Discovery_Widget {
 			<!-- CTA Section -->
 			<?php if ( $ghost_count > 0 ) : ?>
 				<div class="wps-cta-box">
-					<h3><?php esc_html_e( '🎁 Free Features Waiting!', 'plugin-wp-support-thisismyurl' ); ?></h3>
+					<h3><?php esc_html_e( '🎁 Free Features Waiting!', 'plugin-wpshadow' ); ?></h3>
 					<p style="margin: 0 0 15px; opacity: 0.9;">
 						<?php
 						/* translators: %d: Number of ghost features */
-						printf( esc_html__( 'Install free modules to unlock %d additional features. No credit card required.', 'plugin-wp-support-thisismyurl' ), absint( $ghost_count ) );
+						printf( esc_html__( 'Install free modules to unlock %d additional features. No credit card required.', 'plugin-wpshadow' ), absint( $ghost_count ) );
 						?>
 					</p>
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&tab=modules' ) ); ?>" class="wps-cta-button">
-						<?php esc_html_e( 'Browse All Modules', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'Browse All Modules', 'plugin-wpshadow' ); ?>
 					</a>
 				</div>
 			<?php endif; ?>
@@ -331,7 +331,7 @@ class WPS_Features_Discovery_Widget {
 	private static function render_features_list( array $features, int $limit = 5 ): void {
 		if ( empty( $features ) ) {
 			echo '<p style="color: #646970; text-align: center; padding: 20px;">';
-			esc_html_e( 'No features found in this category.', 'plugin-wp-support-thisismyurl' );
+			esc_html_e( 'No features found in this category.', 'plugin-wpshadow' );
 			echo '</p>';
 			return;
 		}
@@ -353,11 +353,11 @@ class WPS_Features_Discovery_Widget {
 						<?php echo esc_html( $feature['title'] ); ?>
 						<?php if ( $is_available ) : ?>
 							<span style="display: inline-block; padding: 2px 6px; background: #46b450; color: white; font-size: 10px; border-radius: 3px; font-weight: 700;">
-								<?php esc_html_e( 'ACTIVE', 'plugin-wp-support-thisismyurl' ); ?>
+								<?php esc_html_e( 'ACTIVE', 'plugin-wpshadow' ); ?>
 							</span>
 						<?php else : ?>
 							<span style="display: inline-block; padding: 2px 6px; background: #dba617; color: white; font-size: 10px; border-radius: 3px; font-weight: 700;">
-								<?php esc_html_e( 'INSTALL', 'plugin-wp-support-thisismyurl' ); ?>
+								<?php esc_html_e( 'INSTALL', 'plugin-wpshadow' ); ?>
 							</span>
 						<?php endif; ?>
 					</div>
@@ -367,7 +367,7 @@ class WPS_Features_Discovery_Widget {
 					<div class="wps-feature-module">
 						<?php
 						/* translators: %s: Module name */
-						printf( esc_html__( 'from %s module', 'plugin-wp-support-thisismyurl' ), '<strong>' . esc_html( $feature['module_name'] ) . '</strong>' );
+						printf( esc_html__( 'from %s module', 'plugin-wpshadow' ), '<strong>' . esc_html( $feature['module_name'] ) . '</strong>' );
 						?>
 					</div>
 					<?php if ( ! $is_available ) : ?>
@@ -375,7 +375,7 @@ class WPS_Features_Discovery_Widget {
 							<span class="dashicons dashicons-download" style="font-size: 12px; vertical-align: middle;"></span>
 							<?php
 							/* translators: %s: Module name */
-							printf( esc_html__( 'Install %s →', 'plugin-wp-support-thisismyurl' ), esc_html( $feature['module_name'] ) );
+							printf( esc_html__( 'Install %s →', 'plugin-wpshadow' ), esc_html( $feature['module_name'] ) );
 							?>
 						</a>
 					<?php endif; ?>
@@ -397,7 +397,7 @@ class WPS_Features_Discovery_Widget {
 				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&tab=modules' ) ); ?>" style="color: #2271b1; text-decoration: none; font-weight: 600;">
 					<?php
 					/* translators: %d: Number of additional features */
-					printf( esc_html__( 'View %d more features →', 'plugin-wp-support-thisismyurl' ), absint( $total_count - $limit ) );
+					printf( esc_html__( 'View %d more features →', 'plugin-wpshadow' ), absint( $total_count - $limit ) );
 					?>
 				</a>
 			</p>

@@ -4,7 +4,7 @@
  *
  * Creates isolated copy of site for testing without affecting production.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
 declare(strict_types=1);
@@ -18,17 +18,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Staging Manager Class
  */
-class WPS_Staging_Manager {
+class WPSHADOW_Staging_Manager {
 
 	/**
 	 * Staging environments option key.
 	 */
-	private const ENVS_KEY = 'WPS_staging_environments';
+	private const ENVS_KEY = 'wpshadow_staging_environments';
 
 	/**
 	 * Staging logs option key.
 	 */
-	private const LOGS_KEY = 'WPS_staging_logs';
+	private const LOGS_KEY = 'wpshadow_staging_logs';
 
 	/**
 	 * Initialize Staging Manager.
@@ -37,10 +37,10 @@ class WPS_Staging_Manager {
 	 */
 	public static function init(): void {
 		add_action( 'admin_menu', array( __CLASS__, 'register_menu' ) );
-		add_action( 'wp_ajax_WPS_create_staging', array( __CLASS__, 'handle_staging_creation' ) );
-		add_action( 'wp_ajax_WPS_delete_staging', array( __CLASS__, 'handle_staging_deletion' ) );
-		add_action( 'wp_ajax_WPS_deploy_staging', array( __CLASS__, 'handle_staging_deployment' ) );
-		add_action( 'wp_ajax_WPS_rollback_staging', array( __CLASS__, 'handle_staging_rollback' ) );
+		add_action( 'wp_ajax_WPSHADOW_create_staging', array( __CLASS__, 'handle_staging_creation' ) );
+		add_action( 'wp_ajax_WPSHADOW_delete_staging', array( __CLASS__, 'handle_staging_deletion' ) );
+		add_action( 'wp_ajax_WPSHADOW_deploy_staging', array( __CLASS__, 'handle_staging_deployment' ) );
+		add_action( 'wp_ajax_WPSHADOW_rollback_staging', array( __CLASS__, 'handle_staging_rollback' ) );
 	}
 
 	/**
@@ -55,8 +55,8 @@ class WPS_Staging_Manager {
 		}
 
 		// Create snapshot before starting staging creation.
-		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Snapshot_Manager' ) ) {
-			WPS_Snapshot_Manager::create_snapshot( 'Pre-staging: ' . $name );
+		if ( class_exists( '\\WPShadow\\WPSHADOW_Snapshot_Manager' ) ) {
+			WPSHADOW_Snapshot_Manager::create_snapshot( 'Pre-staging: ' . $name );
 		}
 
 		$staging = array(
@@ -141,8 +141,8 @@ class WPS_Staging_Manager {
 		$staging = $envs[ $staging_id ];
 
 		// Create final snapshot before deployment.
-		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Snapshot_Manager' ) ) {
-			WPS_Snapshot_Manager::create_snapshot( 'Pre-deployment from staging: ' . $staging['name'] );
+		if ( class_exists( '\\WPShadow\\WPSHADOW_Snapshot_Manager' ) ) {
+			WPSHADOW_Snapshot_Manager::create_snapshot( 'Pre-deployment from staging: ' . $staging['name'] );
 		}
 
 		// Sync staging database to production.
@@ -172,7 +172,7 @@ class WPS_Staging_Manager {
 			return false;
 		}
 
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Snapshot_Manager' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Snapshot_Manager' ) ) {
 			return false;
 		}
 
@@ -185,11 +185,11 @@ class WPS_Staging_Manager {
 		$staging = $envs[ $staging_id ];
 
 		// Find the pre-staging snapshot by looking at snapshots created before staging.
-		$snapshots = WPS_Snapshot_Manager::get_snapshots();
+		$snapshots = WPSHADOW_Snapshot_Manager::get_snapshots();
 
 		foreach ( array_reverse( $snapshots ) as $snap_id => $snapshot ) {
 			if ( $snapshot['timestamp'] < $staging['created'] ) {
-				WPS_Snapshot_Manager::restore_snapshot( $snap_id );
+				WPSHADOW_Snapshot_Manager::restore_snapshot( $snap_id );
 				self::log_action( 'staging_rollback', $staging_id, 'Rolled back to snapshot ' . substr( $snap_id, 0, 8 ) );
 				return true;
 			}
@@ -287,18 +287,18 @@ class WPS_Staging_Manager {
 	 * @return void
 	 */
 	public static function handle_staging_creation(): void {
-		check_ajax_referer( 'WPS_staging_nonce', 'nonce' );
+		check_ajax_referer( 'wpshadow_staging_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
+			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
 		}
 
-		$name = \WPS\CoreSupport\wps_get_post_text( 'name' );
+		$name = \WPS\CoreSupport\WPSHADOW_get_post_text( 'name' );
 
 		$staging_id = self::create_staging( $name );
 
 		if ( ! $staging_id ) {
-			wp_send_json_error( __( 'Failed to create staging environment', 'plugin-wp-support-thisismyurl' ) );
+			wp_send_json_error( __( 'Failed to create staging environment', 'plugin-wpshadow' ) );
 		}
 
 		wp_send_json_success(
@@ -315,16 +315,16 @@ class WPS_Staging_Manager {
 	 * @return void
 	 */
 	public static function handle_staging_deletion(): void {
-		check_ajax_referer( 'WPS_staging_nonce', 'nonce' );
+		check_ajax_referer( 'wpshadow_staging_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
+			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
 		}
 
-		$staging_id = \WPS\CoreSupport\wps_get_post_text( 'staging_id' );
+		$staging_id = \WPS\CoreSupport\WPSHADOW_get_post_text( 'staging_id' );
 
 		if ( ! self::delete_staging( $staging_id ) ) {
-			wp_send_json_error( __( 'Failed to delete staging environment', 'plugin-wp-support-thisismyurl' ) );
+			wp_send_json_error( __( 'Failed to delete staging environment', 'plugin-wpshadow' ) );
 		}
 
 		wp_send_json_success();
@@ -336,16 +336,16 @@ class WPS_Staging_Manager {
 	 * @return void
 	 */
 	public static function handle_staging_deployment(): void {
-		check_ajax_referer( 'WPS_staging_nonce', 'nonce' );
+		check_ajax_referer( 'wpshadow_staging_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
+			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
 		}
 
-		$staging_id = \WPS\CoreSupport\wps_get_post_text( 'staging_id' );
+		$staging_id = \WPS\CoreSupport\WPSHADOW_get_post_text( 'staging_id' );
 
 		if ( ! self::deploy_to_production( $staging_id ) ) {
-			wp_send_json_error( __( 'Failed to deploy staging environment', 'plugin-wp-support-thisismyurl' ) );
+			wp_send_json_error( __( 'Failed to deploy staging environment', 'plugin-wpshadow' ) );
 		}
 
 		wp_send_json_success();
@@ -357,16 +357,16 @@ class WPS_Staging_Manager {
 	 * @return void
 	 */
 	public static function handle_staging_rollback(): void {
-		check_ajax_referer( 'WPS_staging_nonce', 'nonce' );
+		check_ajax_referer( 'wpshadow_staging_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
+			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
 		}
 
-		$staging_id = \WPS\CoreSupport\wps_get_post_text( 'staging_id' );
+		$staging_id = \WPS\CoreSupport\WPSHADOW_get_post_text( 'staging_id' );
 
 		if ( ! self::rollback_staging( $staging_id ) ) {
-			wp_send_json_error( __( 'Failed to rollback staging environment', 'plugin-wp-support-thisismyurl' ) );
+			wp_send_json_error( __( 'Failed to rollback staging environment', 'plugin-wpshadow' ) );
 		}
 
 		wp_send_json_success();
@@ -380,8 +380,8 @@ class WPS_Staging_Manager {
 	public static function register_menu(): void {
 		add_submenu_page(
 			'wp-support',
-			__( 'Staging Environments', 'plugin-wp-support-thisismyurl' ),
-			__( 'Staging', 'plugin-wp-support-thisismyurl' ),
+			__( 'Staging Environments', 'plugin-wpshadow' ),
+			__( 'Staging', 'plugin-wpshadow' ),
 			'manage_options',
 			'wps-staging',
 			array( __CLASS__, 'render_staging_page' )
@@ -395,33 +395,33 @@ class WPS_Staging_Manager {
 	 */
 	public static function render_staging_page(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Insufficient permissions.', 'plugin-wpshadow' ) );
 		}
 
 		$stagings = self::get_stagings();
-		$nonce    = wp_create_nonce( 'WPS_staging_nonce' );
+		$nonce    = wp_create_nonce( 'wpshadow_staging_nonce' );
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Safe Staging Environments', 'plugin-wp-support-thisismyurl' ); ?></h1>
-			<p><?php esc_html_e( 'Create isolated copies of your site for testing plugin/theme updates without affecting production.', 'plugin-wp-support-thisismyurl' ); ?></p>
+			<h1><?php esc_html_e( 'Safe Staging Environments', 'plugin-wpshadow' ); ?></h1>
+			<p><?php esc_html_e( 'Create isolated copies of your site for testing plugin/theme updates without affecting production.', 'plugin-wpshadow' ); ?></p>
 
 			<button id="wps-staging-create" class="button button-primary">
-				<?php esc_html_e( '🎭 Create Staging Environment', 'plugin-wp-support-thisismyurl' ); ?>
+				<?php esc_html_e( '🎭 Create Staging Environment', 'plugin-wpshadow' ); ?>
 			</button>
 
 			<?php if ( empty( $stagings ) ) : ?>
 				<p style="margin-top: 20px; padding: 15px; background: #f0f0f0; border-left: 4px solid #ffb900;">
-					<?php esc_html_e( 'No staging environments yet. Create one to test changes safely.', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'No staging environments yet. Create one to test changes safely.', 'plugin-wpshadow' ); ?>
 				</p>
 			<?php else : ?>
 				<table class="wp-list-table widefat striped" style="margin-top: 20px;">
 					<thead>
 						<tr>
-							<th><?php esc_html_e( 'Name', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Created', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Status', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Size', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Actions', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th><?php esc_html_e( 'Name', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Created', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Status', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Size', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Actions', 'plugin-wpshadow' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -438,14 +438,14 @@ class WPS_Staging_Manager {
 								<td>
 									<?php if ( 'deployed' !== $staging['status'] ) : ?>
 										<button class="button button-small wps-deploy-staging" data-staging-id="<?php echo esc_attr( $id ); ?>" data-nonce="<?php echo esc_attr( $nonce ); ?>">
-											<?php esc_html_e( 'Deploy', 'plugin-wp-support-thisismyurl' ); ?>
+											<?php esc_html_e( 'Deploy', 'plugin-wpshadow' ); ?>
 										</button>
 										<button class="button button-small wps-rollback-staging" data-staging-id="<?php echo esc_attr( $id ); ?>" data-nonce="<?php echo esc_attr( $nonce ); ?>">
-											<?php esc_html_e( 'Rollback', 'plugin-wp-support-thisismyurl' ); ?>
+											<?php esc_html_e( 'Rollback', 'plugin-wpshadow' ); ?>
 										</button>
 									<?php endif; ?>
 									<button class="button button-small wps-delete-staging" data-staging-id="<?php echo esc_attr( $id ); ?>" data-nonce="<?php echo esc_attr( $nonce ); ?>">
-										<?php esc_html_e( 'Delete', 'plugin-wp-support-thisismyurl' ); ?>
+										<?php esc_html_e( 'Delete', 'plugin-wpshadow' ); ?>
 									</button>
 								</td>
 							</tr>
@@ -463,7 +463,7 @@ class WPS_Staging_Manager {
 			fetch(ajaxurl, {
 				method: 'POST',
 				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-				body: 'action=WPS_create_staging&nonce=' + nonce + '&name=' + encodeURIComponent(name)
+				body: 'action=WPSHADOW_create_staging&nonce=' + nonce + '&name=' + encodeURIComponent(name)
 			})
 			.then(r => r.json())
 			.then(d => { if (d.success) location.reload(); else alert('Error: ' + d.data); });
@@ -474,7 +474,7 @@ class WPS_Staging_Manager {
 				fetch(ajaxurl, {
 					method: 'POST',
 					headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-					body: 'action=WPS_delete_staging&nonce=' + nonce + '&staging_id=' + encodeURIComponent(this.dataset.stagingId)
+					body: 'action=WPSHADOW_delete_staging&nonce=' + nonce + '&staging_id=' + encodeURIComponent(this.dataset.stagingId)
 				})
 				.then(r => r.json())
 				.then(d => { if (d.success) location.reload(); else alert('Error: ' + d.data); });
@@ -487,7 +487,7 @@ class WPS_Staging_Manager {
 				fetch(ajaxurl, {
 					method: 'POST',
 					headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-					body: 'action=WPS_deploy_staging&nonce=' + nonce + '&staging_id=' + encodeURIComponent(this.dataset.stagingId)
+					body: 'action=WPSHADOW_deploy_staging&nonce=' + nonce + '&staging_id=' + encodeURIComponent(this.dataset.stagingId)
 				})
 				.then(r => r.json())
 				.then(d => { if (d.success) location.reload(); else { alert('Error: ' + d.data); this.disabled = false; } });
@@ -500,7 +500,7 @@ class WPS_Staging_Manager {
 				fetch(ajaxurl, {
 					method: 'POST',
 					headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-					body: 'action=WPS_rollback_staging&nonce=' + nonce + '&staging_id=' + encodeURIComponent(this.dataset.stagingId)
+					body: 'action=WPSHADOW_rollback_staging&nonce=' + nonce + '&staging_id=' + encodeURIComponent(this.dataset.stagingId)
 				})
 				.then(r => r.json())
 				.then(d => { if (d.success) location.reload(); else { alert('Error: ' + d.data); this.disabled = false; } });

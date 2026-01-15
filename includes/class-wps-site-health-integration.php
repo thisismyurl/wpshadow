@@ -18,11 +18,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Site_Health_Integration
+ * WPSHADOW_Site_Health_Integration
  *
  * Manages health scoring and WordPress Site Health integration.
  */
-final class WPS_Site_Health_Integration {
+final class WPSHADOW_Site_Health_Integration {
 
 	/**
 	 * Maximum possible health score.
@@ -59,7 +59,7 @@ final class WPS_Site_Health_Integration {
 		add_filter( 'debug_information', array( __CLASS__, 'add_debug_information' ) );
 
 		// AJAX endpoint for health score.
-		add_action( 'wp_ajax_wps_get_health_score', array( __CLASS__, 'ajax_get_health_score' ) );
+		add_action( 'wp_ajax_WPSHADOW_get_health_score', array( __CLASS__, 'ajax_get_health_score' ) );
 	}
 
 	/**
@@ -70,25 +70,25 @@ final class WPS_Site_Health_Integration {
 	 */
 	public static function register_site_health_tests( array $tests ): array {
 		// Direct tests (run immediately).
-		$tests['direct']['wps_security_score'] = array(
-			'label' => __( 'WP Support Security Score', 'plugin-wp-support-thisismyurl' ),
+		$tests['direct']['wpshadow_security_score'] = array(
+			'label' => __( 'WPShadow Security Score', 'plugin-wpshadow' ),
 			'test'  => array( __CLASS__, 'test_security_score' ),
 		);
 
-		$tests['direct']['wps_performance_score'] = array(
-			'label' => __( 'WP Support Performance Score', 'plugin-wp-support-thisismyurl' ),
+		$tests['direct']['wpshadow_performance_score'] = array(
+			'label' => __( 'WPShadow Performance Score', 'plugin-wpshadow' ),
 			'test'  => array( __CLASS__, 'test_performance_score' ),
 		);
 
-		$tests['direct']['wps_overall_health'] = array(
-			'label' => __( 'WP Support Overall Health', 'plugin-wp-support-thisismyurl' ),
+		$tests['direct']['wpshadow_overall_health'] = array(
+			'label' => __( 'WPShadow Overall Health', 'plugin-wpshadow' ),
 			'test'  => array( __CLASS__, 'test_overall_health' ),
 		);
 
 		// Async tests (run via AJAX).
-		$tests['async']['wps_feature_status'] = array(
-			'label'             => __( 'WP Support Feature Status', 'plugin-wp-support-thisismyurl' ),
-			'test'              => 'wps_feature_status',
+		$tests['async']['wpshadow_feature_status'] = array(
+			'label'             => __( 'WPShadow Feature Status', 'plugin-wpshadow' ),
+			'test'              => 'wpshadow_feature_status',
 			'has_rest'          => false,
 			'async_direct_test' => array( __CLASS__, 'test_feature_status' ),
 		);
@@ -105,39 +105,39 @@ final class WPS_Site_Health_Integration {
 		$score = self::calculate_security_score();
 
 		$status = 'good';
-		$label  = __( 'Your security configuration is excellent', 'plugin-wp-support-thisismyurl' );
+		$label  = __( 'Your security configuration is excellent', 'plugin-wpshadow' );
 
 		if ( $score < self::STATUS_GOOD ) {
 			$status = 'recommended';
-			$label  = __( 'Your security could be improved', 'plugin-wp-support-thisismyurl' );
+			$label  = __( 'Your security could be improved', 'plugin-wpshadow' );
 		}
 
 		if ( $score < self::STATUS_CRITICAL ) {
 			$status = 'critical';
-			$label  = __( 'Your security needs immediate attention', 'plugin-wp-support-thisismyurl' );
+			$label  = __( 'Your security needs immediate attention', 'plugin-wpshadow' );
 		}
 
 		return array(
 			'label'       => $label,
 			'status'      => $status,
 			'badge'       => array(
-				'label' => __( 'Security', 'plugin-wp-support-thisismyurl' ),
+				'label' => __( 'Security', 'plugin-wpshadow' ),
 				'color' => 'blue',
 			),
 			'description' => sprintf(
 				'<p>%s</p>',
 				sprintf(
 					/* translators: %d: security score */
-					__( 'WP Support Security Score: %d/100', 'plugin-wp-support-thisismyurl' ),
+					__( 'WPShadow Security Score: %d/100', 'plugin-wpshadow' ),
 					$score
 				)
 			),
 			'actions'     => sprintf(
 				'<a href="%s">%s</a>',
 				admin_url( 'admin.php?page=wp-support-settings&tab=security' ),
-				__( 'Review Security Settings', 'plugin-wp-support-thisismyurl' )
+				__( 'Review Security Settings', 'plugin-wpshadow' )
 			),
-			'test'        => 'wps_security_score',
+			'test'        => 'wpshadow_security_score',
 		);
 	}
 
@@ -150,39 +150,39 @@ final class WPS_Site_Health_Integration {
 		$score = self::calculate_performance_score();
 
 		$status = 'good';
-		$label  = __( 'Your performance optimization is excellent', 'plugin-wp-support-thisismyurl' );
+		$label  = __( 'Your performance optimization is excellent', 'plugin-wpshadow' );
 
 		if ( $score < self::STATUS_GOOD ) {
 			$status = 'recommended';
-			$label  = __( 'Your performance could be improved', 'plugin-wp-support-thisismyurl' );
+			$label  = __( 'Your performance could be improved', 'plugin-wpshadow' );
 		}
 
 		if ( $score < self::STATUS_CRITICAL ) {
 			$status = 'critical';
-			$label  = __( 'Your performance needs attention', 'plugin-wp-support-thisismyurl' );
+			$label  = __( 'Your performance needs attention', 'plugin-wpshadow' );
 		}
 
 		return array(
 			'label'       => $label,
 			'status'      => $status,
 			'badge'       => array(
-				'label' => __( 'Performance', 'plugin-wp-support-thisismyurl' ),
+				'label' => __( 'Performance', 'plugin-wpshadow' ),
 				'color' => 'orange',
 			),
 			'description' => sprintf(
 				'<p>%s</p>',
 				sprintf(
 					/* translators: %d: performance score */
-					__( 'WP Support Performance Score: %d/100', 'plugin-wp-support-thisismyurl' ),
+					__( 'WPShadow Performance Score: %d/100', 'plugin-wpshadow' ),
 					$score
 				)
 			),
 			'actions'     => sprintf(
 				'<a href="%s">%s</a>',
 				admin_url( 'admin.php?page=wp-support-settings&tab=performance' ),
-				__( 'Review Performance Settings', 'plugin-wp-support-thisismyurl' )
+				__( 'Review Performance Settings', 'plugin-wpshadow' )
 			),
-			'test'        => 'wps_performance_score',
+			'test'        => 'wpshadow_performance_score',
 		);
 	}
 
@@ -195,39 +195,39 @@ final class WPS_Site_Health_Integration {
 		$score = self::calculate_overall_health();
 
 		$status = 'good';
-		$label  = __( 'WP Support is optimally configured', 'plugin-wp-support-thisismyurl' );
+		$label  = __( 'WPShadow is optimally configured', 'plugin-wpshadow' );
 
 		if ( $score < self::STATUS_GOOD ) {
 			$status = 'recommended';
-			$label  = __( 'WP Support configuration could be improved', 'plugin-wp-support-thisismyurl' );
+			$label  = __( 'WPShadow configuration could be improved', 'plugin-wpshadow' );
 		}
 
 		if ( $score < self::STATUS_CRITICAL ) {
 			$status = 'critical';
-			$label  = __( 'WP Support needs configuration', 'plugin-wp-support-thisismyurl' );
+			$label  = __( 'WPShadow needs configuration', 'plugin-wpshadow' );
 		}
 
 		return array(
 			'label'       => $label,
 			'status'      => $status,
 			'badge'       => array(
-				'label' => __( 'WP Support', 'plugin-wp-support-thisismyurl' ),
+				'label' => __( 'WPShadow', 'plugin-wpshadow' ),
 				'color' => 'green',
 			),
 			'description' => sprintf(
 				'<p>%s</p>',
 				sprintf(
 					/* translators: %d: overall health score */
-					__( 'Overall Health Score: %d/100', 'plugin-wp-support-thisismyurl' ),
+					__( 'Overall Health Score: %d/100', 'plugin-wpshadow' ),
 					$score
 				)
 			),
 			'actions'     => sprintf(
 				'<a href="%s">%s</a>',
 				admin_url( 'admin.php?page=wp-support' ),
-				__( 'View WP Support Dashboard', 'plugin-wp-support-thisismyurl' )
+				__( 'View WPShadow Dashboard', 'plugin-wpshadow' )
 			),
-			'test'        => 'wps_overall_health',
+			'test'        => 'wpshadow_overall_health',
 		);
 	}
 
@@ -242,21 +242,21 @@ final class WPS_Site_Health_Integration {
 
 		$status = $enabled_count > 0 ? 'good' : 'recommended';
 		$label  = $enabled_count > 0
-			? __( 'WP Support features are active', 'plugin-wp-support-thisismyurl' )
-			: __( 'No WP Support features are enabled', 'plugin-wp-support-thisismyurl' );
+			? __( 'WPShadow features are active', 'plugin-wpshadow' )
+			: __( 'No WPShadow features are enabled', 'plugin-wpshadow' );
 
 		return array(
 			'label'       => $label,
 			'status'      => $status,
 			'badge'       => array(
-				'label' => __( 'Features', 'plugin-wp-support-thisismyurl' ),
+				'label' => __( 'Features', 'plugin-wpshadow' ),
 				'color' => 'purple',
 			),
 			'description' => sprintf(
 				'<p>%s</p>',
 				sprintf(
 					/* translators: 1: enabled count, 2: total count */
-					__( '%1$d of %2$d features enabled', 'plugin-wp-support-thisismyurl' ),
+					__( '%1$d of %2$d features enabled', 'plugin-wpshadow' ),
 					$enabled_count,
 					$total_count
 				)
@@ -264,9 +264,9 @@ final class WPS_Site_Health_Integration {
 			'actions'     => sprintf(
 				'<a href="%s">%s</a>',
 				admin_url( 'admin.php?page=wp-support-features' ),
-				__( 'Manage Features', 'plugin-wp-support-thisismyurl' )
+				__( 'Manage Features', 'plugin-wpshadow' )
 			),
-			'test'        => 'wps_feature_status',
+			'test'        => 'wpshadow_feature_status',
 		);
 	}
 
@@ -530,12 +530,12 @@ final class WPS_Site_Health_Integration {
 				'score'        => self::calculate_database_cleanup_score(),
 				'category'     => 'performance',
 				'sub_features' => array(
-					'revisions'       => array( 'enabled' => get_option( 'wps_cleanup_revisions', false ), 'points' => 25 ),
-					'auto_drafts'     => array( 'enabled' => get_option( 'wps_cleanup_autodrafts', false ), 'points' => 20 ),
-					'trashed_posts'   => array( 'enabled' => get_option( 'wps_cleanup_trash', false ), 'points' => 15 ),
-					'spam_comments'   => array( 'enabled' => get_option( 'wps_cleanup_spam', false ), 'points' => 15 ),
-					'transients'      => array( 'enabled' => get_option( 'wps_cleanup_transients', false ), 'points' => 15 ),
-					'optimize_tables' => array( 'enabled' => get_option( 'wps_optimize_tables', false ), 'points' => 10 ),
+					'revisions'       => array( 'enabled' => get_option( 'wpshadow_cleanup_revisions', false ), 'points' => 25 ),
+					'auto_drafts'     => array( 'enabled' => get_option( 'wpshadow_cleanup_autodrafts', false ), 'points' => 20 ),
+					'trashed_posts'   => array( 'enabled' => get_option( 'wpshadow_cleanup_trash', false ), 'points' => 15 ),
+					'spam_comments'   => array( 'enabled' => get_option( 'wpshadow_cleanup_spam', false ), 'points' => 15 ),
+					'transients'      => array( 'enabled' => get_option( 'wpshadow_cleanup_transients', false ), 'points' => 15 ),
+					'optimize_tables' => array( 'enabled' => get_option( 'wpshadow_optimize_tables', false ), 'points' => 10 ),
 				),
 			),
 			'image-lazy-loading' => array(
@@ -561,15 +561,15 @@ final class WPS_Site_Health_Integration {
 				'score'        => self::calculate_head_cleanup_score(),
 				'category'     => 'performance',
 				'sub_features' => array(
-					'rsd_link'         => array( 'enabled' => get_option( 'wps_remove_rsd_link', false ), 'points' => 5 ),
-					'wlwmanifest_link' => array( 'enabled' => get_option( 'wps_remove_wlwmanifest', false ), 'points' => 5 ),
-					'shortlink'        => array( 'enabled' => get_option( 'wps_remove_shortlink', false ), 'points' => 5 ),
-					'wp_generator'     => array( 'enabled' => get_option( 'wps_remove_wp_version', false ), 'points' => 10 ),
-					'feed_links'       => array( 'enabled' => get_option( 'wps_remove_feed_links', false ), 'points' => 10 ),
-					'rest_api_link'    => array( 'enabled' => get_option( 'wps_remove_rest_api_link', false ), 'points' => 10 ),
-					'oembed_links'     => array( 'enabled' => get_option( 'wps_remove_oembed', false ), 'points' => 15 ),
-					'emoji_scripts'    => array( 'enabled' => get_option( 'wps_disable_emojis', false ), 'points' => 20 ),
-					'dns_prefetch'     => array( 'enabled' => get_option( 'wps_remove_dns_prefetch', false ), 'points' => 20 ),
+					'rsd_link'         => array( 'enabled' => get_option( 'wpshadow_remove_rsd_link', false ), 'points' => 5 ),
+					'wlwmanifest_link' => array( 'enabled' => get_option( 'wpshadow_remove_wlwmanifest', false ), 'points' => 5 ),
+					'shortlink'        => array( 'enabled' => get_option( 'wpshadow_remove_shortlink', false ), 'points' => 5 ),
+					'wp_generator'     => array( 'enabled' => get_option( 'wpshadow_remove_wp_version', false ), 'points' => 10 ),
+					'feed_links'       => array( 'enabled' => get_option( 'wpshadow_remove_feed_links', false ), 'points' => 10 ),
+					'rest_api_link'    => array( 'enabled' => get_option( 'wpshadow_remove_rest_api_link', false ), 'points' => 10 ),
+					'oembed_links'     => array( 'enabled' => get_option( 'wpshadow_remove_oembed', false ), 'points' => 15 ),
+					'emoji_scripts'    => array( 'enabled' => get_option( 'wpshadow_disable_emojis', false ), 'points' => 20 ),
+					'dns_prefetch'     => array( 'enabled' => get_option( 'wpshadow_remove_dns_prefetch', false ), 'points' => 20 ),
 				),
 			),
 			'resource-hints' => array(
@@ -736,7 +736,7 @@ final class WPS_Site_Health_Integration {
 		}
 
 		$score = 0;
-		$blocked_ips = get_option( 'wps_firewall_blocked_ips', array() );
+		$blocked_ips = get_option( 'wpshadow_firewall_blocked_ips', array() );
 
 		// Base score for being enabled.
 		$score += 40;
@@ -747,7 +747,7 @@ final class WPS_Site_Health_Integration {
 		}
 
 		// Bonus for rate limiting configuration.
-		if ( get_option( 'wps_firewall_rate_limit', 100 ) < 100 ) {
+		if ( get_option( 'wpshadow_firewall_rate_limit', 100 ) < 100 ) {
 			$score += 30;
 		}
 
@@ -764,8 +764,8 @@ final class WPS_Site_Health_Integration {
 			return 0;
 		}
 
-		$last_scan = get_option( 'wps_last_malware_scan', 0 );
-		$threats   = get_option( 'wps_malware_threats', array() );
+		$last_scan = get_option( 'wpshadow_last_malware_scan', 0 );
+		$threats   = get_option( 'wpshadow_malware_threats', array() );
 
 		$score = 50; // Base for being enabled.
 
@@ -792,8 +792,8 @@ final class WPS_Site_Health_Integration {
 			return 0;
 		}
 
-		$last_check = get_option( 'wps_core_integrity_last_check', 0 );
-		$issues     = get_option( 'wps_core_integrity_issues', array() );
+		$last_check = get_option( 'wpshadow_core_integrity_last_check', 0 );
+		$issues     = get_option( 'wpshadow_core_integrity_issues', array() );
 
 		$score = 50; // Base for being enabled.
 
@@ -844,7 +844,7 @@ final class WPS_Site_Health_Integration {
 			return 0;
 		}
 
-		$cdn_hostname = get_option( 'wps_cdn_hostname', '' );
+		$cdn_hostname = get_option( 'wpshadow_cdn_hostname', '' );
 
 		if ( ! empty( $cdn_hostname ) ) {
 			return 100;
@@ -863,7 +863,7 @@ final class WPS_Site_Health_Integration {
 			return 0;
 		}
 
-		$optimized = get_option( 'wps_images_optimized', 0 );
+		$optimized = get_option( 'wpshadow_images_optimized', 0 );
 
 		if ( $optimized > 100 ) {
 			return 100;
@@ -927,7 +927,7 @@ final class WPS_Site_Health_Integration {
 	 * @return bool True if enabled.
 	 */
 	private static function is_feature_enabled( string $feature_id ): bool {
-		$registry = WPS_Feature_Registry::get_instance();
+		$registry = WPSHADOW_Feature_Registry::get_instance();
 		$feature  = $registry->get_feature( $feature_id );
 
 		return $feature && $feature->is_enabled();
@@ -963,23 +963,23 @@ final class WPS_Site_Health_Integration {
 		$category_breakdown = self::get_category_breakdown();
 
 		$info['wp-support'] = array(
-			'label'  => __( 'WP Support', 'plugin-wp-support-thisismyurl' ),
+			'label'  => __( 'WPShadow', 'plugin-wpshadow' ),
 			'fields' => array(
 				'version' => array(
-					'label' => __( 'Plugin Version', 'plugin-wp-support-thisismyurl' ),
-					'value' => defined( 'wp_support_VERSION' ) ? wp_support_VERSION : 'Unknown',
+					'label' => __( 'Plugin Version', 'plugin-wpshadow' ),
+					'value' => defined( 'WPSHADOW_VERSION' ) ? WPSHADOW_VERSION : 'Unknown',
 				),
 				'overall_health' => array(
-					'label' => __( 'Overall Health Score', 'plugin-wp-support-thisismyurl' ),
+					'label' => __( 'Overall Health Score', 'plugin-wpshadow' ),
 					'value' => $overall_score . '/100',
 				),
 				'enabled_features' => array(
-					'label' => __( 'Enabled Features', 'plugin-wp-support-thisismyurl' ),
+					'label' => __( 'Enabled Features', 'plugin-wpshadow' ),
 					'value' => count( $enabled_features ),
 				),
 				'feature_list' => array(
-					'label' => __( 'Active Features', 'plugin-wp-support-thisismyurl' ),
-					'value' => ! empty( $enabled_features ) ? implode( ', ', $enabled_features ) : __( 'None', 'plugin-wp-support-thisismyurl' ),
+					'label' => __( 'Active Features', 'plugin-wpshadow' ),
+					'value' => ! empty( $enabled_features ) ? implode( ', ', $enabled_features ) : __( 'None', 'plugin-wpshadow' ),
 				),
 			),
 		);
@@ -989,7 +989,7 @@ final class WPS_Site_Health_Integration {
 			$info['wp-support']['fields'][ $category . '_score' ] = array(
 				'label' => sprintf(
 					/* translators: %s: category name */
-					__( '%s Score', 'plugin-wp-support-thisismyurl' ),
+					__( '%s Score', 'plugin-wpshadow' ),
 					ucfirst( $category )
 				),
 				'value' => $data['score'] . '/100 (' . $data['enabled'] . '/' . $data['total'] . ' features)',
@@ -1043,7 +1043,7 @@ final class WPS_Site_Health_Integration {
 		check_ajax_referer( 'wps-health', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
 		$overall            = self::calculate_overall_health();

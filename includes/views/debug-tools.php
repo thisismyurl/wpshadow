@@ -2,7 +2,7 @@
 /**
  * Debug Tools Page View
  *
- * @package WPS_CoreSupport
+ * @package WPSHADOW_CoreSupport
  * @since 1.2601.73002
  */
 
@@ -17,70 +17,70 @@ if ( $settings['wp_debug'] || $settings['wp_debug_log'] || $settings['script_deb
 ?>
 
 <div class="wrap wps-debug-tools">
-	<h1><?php echo esc_html__( 'Debug Tools', 'plugin-wp-support-thisismyurl' ); ?></h1>
+	<h1><?php echo esc_html__( 'Debug Tools', 'plugin-wpshadow' ); ?></h1>
 
 	<div class="wps-debug-tools-container">
 		<!-- Backend Logging Section -->
 		<div class="wps-debug-section">
-			<h2><?php echo esc_html__( 'Backend Logging (Recommended)', 'plugin-wp-support-thisismyurl' ); ?></h2>
-			<p class="description"><?php echo esc_html__( 'These settings enable error logging without displaying errors to visitors. Safe for production use.', 'plugin-wp-support-thisismyurl' ); ?></p>
+			<h2><?php echo esc_html__( 'Backend Logging (Recommended)', 'plugin-wpshadow' ); ?></h2>
+			<p class="description"><?php echo esc_html__( 'These settings enable error logging without displaying errors to visitors. Safe for production use.', 'plugin-wpshadow' ); ?></p>
 
 			<table class="form-table wps-debug-toggles">
 				<tbody>
 					<tr>
 						<th scope="row">
-							<label for="wps_debug_wp_debug">
-								<?php echo esc_html__( 'Enable error logging', 'plugin-wp-support-thisismyurl' ); ?>
+							<label for="wpshadow_debug_wp_debug">
+								<?php echo esc_html__( 'Enable error logging', 'plugin-wpshadow' ); ?>
 							</label>
 						</th>
 						<td>
 							<label class="wps-toggle-switch">
-								<input type="checkbox" id="wps_debug_wp_debug" name="wp_debug" <?php checked( $settings['wp_debug'], true ); ?> />
+								<input type="checkbox" id="wpshadow_debug_wp_debug" name="wp_debug" <?php checked( $settings['wp_debug'], true ); ?> />
 								<span class="wps-toggle-slider"></span>
 							</label>
-							<p class="description"><?php echo esc_html__( 'WP_DEBUG: Enable WordPress debug mode for error logging', 'plugin-wp-support-thisismyurl' ); ?></p>
+							<p class="description"><?php echo esc_html__( 'WP_DEBUG: Enable WordPress debug mode for error logging', 'plugin-wpshadow' ); ?></p>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row">
-							<label for="wps_debug_wp_debug_log">
-								<?php echo esc_html__( 'Write errors to debug.log', 'plugin-wp-support-thisismyurl' ); ?>
+							<label for="wpshadow_debug_wp_debug_log">
+								<?php echo esc_html__( 'Write errors to debug.log', 'plugin-wpshadow' ); ?>
 							</label>
 						</th>
 						<td>
 							<label class="wps-toggle-switch">
-								<input type="checkbox" id="wps_debug_wp_debug_log" name="wp_debug_log" <?php checked( $settings['wp_debug_log'], true ); ?> />
+								<input type="checkbox" id="wpshadow_debug_wp_debug_log" name="wp_debug_log" <?php checked( $settings['wp_debug_log'], true ); ?> />
 								<span class="wps-toggle-slider"></span>
 							</label>
-							<p class="description"><?php echo esc_html__( 'WP_DEBUG_LOG: Write errors to wp-content/debug.log', 'plugin-wp-support-thisismyurl' ); ?></p>
+							<p class="description"><?php echo esc_html__( 'WP_DEBUG_LOG: Write errors to wp-content/debug.log', 'plugin-wpshadow' ); ?></p>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row">
-							<label for="wps_debug_script_debug">
-								<?php echo esc_html__( 'Use unminified scripts', 'plugin-wp-support-thisismyurl' ); ?>
+							<label for="wpshadow_debug_script_debug">
+								<?php echo esc_html__( 'Use unminified scripts', 'plugin-wpshadow' ); ?>
 							</label>
 						</th>
 						<td>
 							<label class="wps-toggle-switch">
-								<input type="checkbox" id="wps_debug_script_debug" name="script_debug" <?php checked( $settings['script_debug'], true ); ?> />
+								<input type="checkbox" id="wpshadow_debug_script_debug" name="script_debug" <?php checked( $settings['script_debug'], true ); ?> />
 								<span class="wps-toggle-slider"></span>
 							</label>
-							<p class="description"><?php echo esc_html__( 'SCRIPT_DEBUG: Use unminified JavaScript and CSS files', 'plugin-wp-support-thisismyurl' ); ?></p>
+							<p class="description"><?php echo esc_html__( 'SCRIPT_DEBUG: Use unminified JavaScript and CSS files', 'plugin-wpshadow' ); ?></p>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row">
-							<label for="wps_debug_savequeries">
-								<?php echo esc_html__( 'Log database queries', 'plugin-wp-support-thisismyurl' ); ?>
+							<label for="wpshadow_debug_savequeries">
+								<?php echo esc_html__( 'Log database queries', 'plugin-wpshadow' ); ?>
 							</label>
 						</th>
 						<td>
 							<label class="wps-toggle-switch">
-								<input type="checkbox" id="wps_debug_savequeries" name="savequeries" <?php checked( $settings['savequeries'], true ); ?> />
+								<input type="checkbox" id="wpshadow_debug_savequeries" name="savequeries" <?php checked( $settings['savequeries'], true ); ?> />
 								<span class="wps-toggle-slider"></span>
 							</label>
-							<p class="description"><?php echo esc_html__( 'SAVEQUERIES: Log all database queries for analysis', 'plugin-wp-support-thisismyurl' ); ?></p>
+							<p class="description"><?php echo esc_html__( 'SAVEQUERIES: Log all database queries for analysis', 'plugin-wpshadow' ); ?></p>
 						</td>
 					</tr>
 				</tbody>
@@ -89,51 +89,51 @@ if ( $settings['wp_debug'] || $settings['wp_debug_log'] || $settings['script_deb
 
 		<!-- Frontend Display Section -->
 		<div class="wps-debug-section">
-			<h2><?php echo esc_html__( 'Frontend Display (Admins Only)', 'plugin-wp-support-thisismyurl' ); ?></h2>
-			<p class="description"><?php echo esc_html__( 'These settings show debug information on screen. Only visible to administrators with the debug cookie.', 'plugin-wp-support-thisismyurl' ); ?></p>
+			<h2><?php echo esc_html__( 'Frontend Display (Admins Only)', 'plugin-wpshadow' ); ?></h2>
+			<p class="description"><?php echo esc_html__( 'These settings show debug information on screen. Only visible to administrators with the debug cookie.', 'plugin-wpshadow' ); ?></p>
 
 			<table class="form-table wps-debug-toggles">
 				<tbody>
 					<tr>
 						<th scope="row">
-							<label for="wps_debug_display">
-								<?php echo esc_html__( 'Show errors on screen', 'plugin-wp-support-thisismyurl' ); ?>
+							<label for="wpshadow_debug_display">
+								<?php echo esc_html__( 'Show errors on screen', 'plugin-wpshadow' ); ?>
 							</label>
 						</th>
 						<td>
 							<label class="wps-toggle-switch">
-								<input type="checkbox" id="wps_debug_display" name="debug_display" <?php checked( $settings['debug_display'], true ); ?> />
+								<input type="checkbox" id="wpshadow_debug_display" name="debug_display" <?php checked( $settings['debug_display'], true ); ?> />
 								<span class="wps-toggle-slider"></span>
 							</label>
-							<p class="description"><?php echo esc_html__( 'Display errors on screen (you only, via cookie)', 'plugin-wp-support-thisismyurl' ); ?></p>
+							<p class="description"><?php echo esc_html__( 'Display errors on screen (you only, via cookie)', 'plugin-wpshadow' ); ?></p>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row">
-							<label for="wps_debug_query_info">
-								<?php echo esc_html__( 'Show query information', 'plugin-wp-support-thisismyurl' ); ?>
+							<label for="wpshadow_debug_query_info">
+								<?php echo esc_html__( 'Show query information', 'plugin-wpshadow' ); ?>
 							</label>
 						</th>
 						<td>
 							<label class="wps-toggle-switch">
-								<input type="checkbox" id="wps_debug_query_info" name="query_info" <?php checked( $settings['query_info'], true ); ?> />
+								<input type="checkbox" id="wpshadow_debug_query_info" name="query_info" <?php checked( $settings['query_info'], true ); ?> />
 								<span class="wps-toggle-slider"></span>
 							</label>
-							<p class="description"><?php echo esc_html__( 'Show database query count and time in debug bar', 'plugin-wp-support-thisismyurl' ); ?></p>
+							<p class="description"><?php echo esc_html__( 'Show database query count and time in debug bar', 'plugin-wpshadow' ); ?></p>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row">
-							<label for="wps_debug_memory_usage">
-								<?php echo esc_html__( 'Show memory usage', 'plugin-wp-support-thisismyurl' ); ?>
+							<label for="wpshadow_debug_memory_usage">
+								<?php echo esc_html__( 'Show memory usage', 'plugin-wpshadow' ); ?>
 							</label>
 						</th>
 						<td>
 							<label class="wps-toggle-switch">
-								<input type="checkbox" id="wps_debug_memory_usage" name="memory_usage" <?php checked( $settings['memory_usage'], true ); ?> />
+								<input type="checkbox" id="wpshadow_debug_memory_usage" name="memory_usage" <?php checked( $settings['memory_usage'], true ); ?> />
 								<span class="wps-toggle-slider"></span>
 							</label>
-							<p class="description"><?php echo esc_html__( 'Show peak memory usage in debug bar', 'plugin-wp-support-thisismyurl' ); ?></p>
+							<p class="description"><?php echo esc_html__( 'Show peak memory usage in debug bar', 'plugin-wpshadow' ); ?></p>
 						</td>
 					</tr>
 				</tbody>
@@ -142,17 +142,17 @@ if ( $settings['wp_debug'] || $settings['wp_debug_log'] || $settings['script_deb
 
 		<!-- Status and Actions -->
 		<div class="wps-debug-section wps-debug-status">
-			<h2><?php echo esc_html__( 'Current Status', 'plugin-wp-support-thisismyurl' ); ?></h2>
+			<h2><?php echo esc_html__( 'Current Status', 'plugin-wpshadow' ); ?></h2>
 			<div class="wps-debug-status-row">
 				<div class="wps-debug-status-item">
-					<span class="wps-debug-status-label"><?php echo esc_html__( 'Current Mode:', 'plugin-wp-support-thisismyurl' ); ?></span>
+					<span class="wps-debug-status-label"><?php echo esc_html__( 'Current Mode:', 'plugin-wpshadow' ); ?></span>
 					<span class="wps-debug-status-value wps-debug-mode-<?php echo esc_attr( strtolower( $current_mode ) ); ?>">
 						<?php echo esc_html( $current_mode ); ?>
 					</span>
 				</div>
 				<?php if ( $time_remaining > 0 ) : ?>
 					<div class="wps-debug-status-item">
-						<span class="wps-debug-status-label"><?php echo esc_html__( 'Auto-disable in:', 'plugin-wp-support-thisismyurl' ); ?></span>
+						<span class="wps-debug-status-label"><?php echo esc_html__( 'Auto-disable in:', 'plugin-wpshadow' ); ?></span>
 						<span class="wps-debug-status-value wps-debug-countdown" data-remaining="<?php echo esc_attr( $time_remaining ); ?>">
 							<?php echo esc_html( gmdate( 'H:i:s', $time_remaining ) ); ?>
 						</span>
@@ -163,22 +163,22 @@ if ( $settings['wp_debug'] || $settings['wp_debug_log'] || $settings['script_deb
 
 		<!-- Error Log Viewer -->
 		<div class="wps-debug-section wps-debug-log-viewer">
-			<h2><?php echo esc_html__( 'Error Log', 'plugin-wp-support-thisismyurl' ); ?></h2>
+			<h2><?php echo esc_html__( 'Error Log', 'plugin-wpshadow' ); ?></h2>
 			<div class="wps-debug-log-actions">
-				<button type="button" class="button" id="wps_refresh_log">
+				<button type="button" class="button" id="wpshadow_refresh_log">
 					<span class="dashicons dashicons-update"></span>
-					<?php echo esc_html__( 'Refresh Log', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php echo esc_html__( 'Refresh Log', 'plugin-wpshadow' ); ?>
 				</button>
-				<button type="button" class="button" id="wps_clear_log">
+				<button type="button" class="button" id="wpshadow_clear_log">
 					<span class="dashicons dashicons-trash"></span>
-					<?php echo esc_html__( 'Clear Log', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php echo esc_html__( 'Clear Log', 'plugin-wpshadow' ); ?>
 				</button>
 			</div>
 			<div class="wps-debug-log-content">
-				<pre id="wps_log_viewer"><?php echo esc_html__( 'Loading...', 'plugin-wp-support-thisismyurl' ); ?></pre>
+				<pre id="wpshadow_log_viewer"><?php echo esc_html__( 'Loading...', 'plugin-wpshadow' ); ?></pre>
 			</div>
 			<div class="wps-debug-log-info">
-				<span id="wps_log_size"></span>
+				<span id="wpshadow_log_size"></span>
 			</div>
 		</div>
 	</div>
@@ -342,7 +342,7 @@ input:checked + .wps-toggle-slider:before {
 
 <script>
 jQuery(document).ready(function($) {
-	const nonce = '<?php echo esc_js( wp_create_nonce( 'wps_debug_tools' ) ); ?>';
+	const nonce = '<?php echo esc_js( wp_create_nonce( 'wpshadow_debug_tools' ) ); ?>';
 
 	// Handle toggle changes.
 	$('.wps-debug-toggles input[type="checkbox"]').on('change', function() {
@@ -356,7 +356,7 @@ jQuery(document).ready(function($) {
 			url: ajaxurl,
 			method: 'POST',
 			data: {
-				action: 'wps_toggle_debug',
+				action: 'wpshadow_toggle_debug',
 				nonce: nonce,
 				setting: setting,
 				value: value ? 1 : 0
@@ -366,12 +366,12 @@ jQuery(document).ready(function($) {
 					// Update current mode display.
 					updateModeDisplay(response.data.settings);
 				} else {
-					alert(response.data.message || '<?php echo esc_js( __( 'Failed to update setting', 'plugin-wp-support-thisismyurl' ) ); ?>');
+					alert(response.data.message || '<?php echo esc_js( __( 'Failed to update setting', 'plugin-wpshadow' ) ); ?>');
 					$checkbox.prop('checked', !value);
 				}
 			},
 			error: function() {
-				alert('<?php echo esc_js( __( 'An error occurred', 'plugin-wp-support-thisismyurl' ) ); ?>');
+				alert('<?php echo esc_js( __( 'An error occurred', 'plugin-wpshadow' ) ); ?>');
 				$checkbox.prop('checked', !value);
 			},
 			complete: function() {
@@ -394,37 +394,37 @@ jQuery(document).ready(function($) {
 
 	// Load error log.
 	function loadErrorLog() {
-		$('#wps_log_viewer').text('<?php echo esc_js( __( 'Loading...', 'plugin-wp-support-thisismyurl' ) ); ?>');
+		$('#WPSHADOW_log_viewer').text('<?php echo esc_js( __( 'Loading...', 'plugin-wpshadow' ) ); ?>');
 		
 		$.ajax({
 			url: ajaxurl,
 			method: 'POST',
 			data: {
-				action: 'wps_get_error_log',
+				action: 'wpshadow_get_error_log',
 				nonce: nonce
 			},
 			success: function(response) {
 				if (response.success) {
-					$('#wps_log_viewer').text(response.data.content || '<?php echo esc_js( __( 'No errors logged', 'plugin-wp-support-thisismyurl' ) ); ?>');
-					$('#wps_log_size').text('<?php echo esc_js( __( 'Log size:', 'plugin-wp-support-thisismyurl' ) ); ?> ' + response.data.size);
+					$('#WPSHADOW_log_viewer').text(response.data.content || '<?php echo esc_js( __( 'No errors logged', 'plugin-wpshadow' ) ); ?>');
+					$('#WPSHADOW_log_size').text('<?php echo esc_js( __( 'Log size:', 'plugin-wpshadow' ) ); ?> ' + response.data.size);
 				} else {
-					$('#wps_log_viewer').text(response.data.message || '<?php echo esc_js( __( 'Failed to load log', 'plugin-wp-support-thisismyurl' ) ); ?>');
+					$('#WPSHADOW_log_viewer').text(response.data.message || '<?php echo esc_js( __( 'Failed to load log', 'plugin-wpshadow' ) ); ?>');
 				}
 			},
 			error: function() {
-				$('#wps_log_viewer').text('<?php echo esc_js( __( 'An error occurred while loading the log', 'plugin-wp-support-thisismyurl' ) ); ?>');
+				$('#WPSHADOW_log_viewer').text('<?php echo esc_js( __( 'An error occurred while loading the log', 'plugin-wpshadow' ) ); ?>');
 			}
 		});
 	}
 
 	// Refresh log button.
-	$('#wps_refresh_log').on('click', function() {
+	$('#WPSHADOW_refresh_log').on('click', function() {
 		loadErrorLog();
 	});
 
 	// Clear log button.
-	$('#wps_clear_log').on('click', function() {
-		if (!confirm('<?php echo esc_js( __( 'Are you sure you want to clear the error log?', 'plugin-wp-support-thisismyurl' ) ); ?>')) {
+	$('#WPSHADOW_clear_log').on('click', function() {
+		if (!confirm('<?php echo esc_js( __( 'Are you sure you want to clear the error log?', 'plugin-wpshadow' ) ); ?>')) {
 			return;
 		}
 
@@ -432,18 +432,18 @@ jQuery(document).ready(function($) {
 			url: ajaxurl,
 			method: 'POST',
 			data: {
-				action: 'wps_clear_error_log',
+				action: 'wpshadow_clear_error_log',
 				nonce: nonce
 			},
 			success: function(response) {
 				if (response.success) {
 					loadErrorLog();
 				} else {
-					alert(response.data.message || '<?php echo esc_js( __( 'Failed to clear log', 'plugin-wp-support-thisismyurl' ) ); ?>');
+					alert(response.data.message || '<?php echo esc_js( __( 'Failed to clear log', 'plugin-wpshadow' ) ); ?>');
 				}
 			},
 			error: function() {
-				alert('<?php echo esc_js( __( 'An error occurred', 'plugin-wp-support-thisismyurl' ) ); ?>');
+				alert('<?php echo esc_js( __( 'An error occurred', 'plugin-wpshadow' ) ); ?>');
 			}
 		});
 	});

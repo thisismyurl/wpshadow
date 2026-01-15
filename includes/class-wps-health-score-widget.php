@@ -2,7 +2,7 @@
 /**
  * Health Score Dashboard Widget
  *
- * Displays health scores on WP Support dashboard and WordPress dashboard.
+ * Displays health scores on WPShadow dashboard and WordPress dashboard.
  *
  * @package WPS\CoreSupport
  * @since 1.2601.75000
@@ -17,11 +17,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Health_Score_Widget
+ * WPSHADOW_Health_Score_Widget
  *
  * Dashboard widget showing health metrics and scores.
  */
-final class WPS_Health_Score_Widget {
+final class WPSHADOW_Health_Score_Widget {
 
 	/**
 	 * Initialize hooks.
@@ -43,8 +43,8 @@ final class WPS_Health_Score_Widget {
 	 */
 	public static function register_wp_dashboard_widget(): void {
 		wp_add_dashboard_widget(
-			'wps_health_score',
-			__( 'WP Support Health Score', 'plugin-wp-support-thisismyurl' ),
+			'wpshadow_health_score',
+			__( 'WPShadow Health Score', 'plugin-wpshadow' ),
 			array( __CLASS__, 'render_widget' ),
 			null,
 			null,
@@ -66,16 +66,16 @@ final class WPS_Health_Score_Widget {
 
 		wp_enqueue_style(
 			'wps-health-widget',
-			plugins_url( 'assets/css/health-widget.css', dirname( __DIR__ ) . '/plugin-wp-support-thisismyurl.php' ),
+			plugins_url( 'assets/css/health-widget.css', dirname( __DIR__ ) . '/plugin-wpshadow.php' ),
 			array(),
-			wp_support_VERSION
+			WPSHADOW_VERSION
 		);
 
 		wp_enqueue_script(
 			'wps-health-widget',
-			plugins_url( 'assets/js/health-widget.js', dirname( __DIR__ ) . '/plugin-wp-support-thisismyurl.php' ),
+			plugins_url( 'assets/js/health-widget.js', dirname( __DIR__ ) . '/plugin-wpshadow.php' ),
 			array( 'jquery' ),
-			wp_support_VERSION,
+			WPSHADOW_VERSION,
 			true
 		);
 
@@ -95,8 +95,8 @@ final class WPS_Health_Score_Widget {
 	 * @return void
 	 */
 	public static function render_widget(): void {
-		$overall            = WPS_Site_Health_Integration::calculate_overall_health();
-		$category_breakdown = WPS_Site_Health_Integration::get_category_breakdown();
+		$overall            = WPSHADOW_Site_Health_Integration::calculate_overall_health();
+		$category_breakdown = WPSHADOW_Site_Health_Integration::get_category_breakdown();
 
 		$overall_status = self::get_status_class( $overall );
 
@@ -105,7 +105,7 @@ final class WPS_Health_Score_Widget {
 			<div class="wps-health-overall">
 				<div class="wps-health-circle wps-health-<?php echo esc_attr( $overall_status ); ?>">
 					<div class="wps-health-score"><?php echo esc_html( $overall ); ?></div>
-					<div class="wps-health-label"><?php esc_html_e( 'Overall Health', 'plugin-wp-support-thisismyurl' ); ?></div>
+					<div class="wps-health-label"><?php esc_html_e( 'Overall Health', 'plugin-wpshadow' ); ?></div>
 				</div>
 			</div>
 
@@ -131,10 +131,10 @@ final class WPS_Health_Score_Widget {
 
 			<div class="wps-health-actions">
 				<a href="<?php echo esc_url( admin_url( 'site-health.php' ) ); ?>" class="button">
-					<?php esc_html_e( 'View Site Health', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'View Site Health', 'plugin-wpshadow' ); ?>
 				</a>
 				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support' ) ); ?>" class="button button-primary">
-					<?php esc_html_e( 'WP Support Dashboard', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'WPShadow Dashboard', 'plugin-wpshadow' ); ?>
 				</a>
 			</div>
 
@@ -159,12 +159,12 @@ final class WPS_Health_Score_Widget {
 				$recommendations[] = array(
 					'title' => sprintf(
 						/* translators: %s: category name */
-						__( 'Improve %s', 'plugin-wp-support-thisismyurl' ),
+						__( 'Improve %s', 'plugin-wpshadow' ),
 						ucfirst( $category )
 					),
 					'text' => sprintf(
 						/* translators: 1: enabled count, 2: total count, 3: category */
-						__( 'Enable more %3$s features (%1$d of %2$d active).', 'plugin-wp-support-thisismyurl' ),
+						__( 'Enable more %3$s features (%1$d of %2$d active).', 'plugin-wpshadow' ),
 						$data['enabled'],
 						$data['total'],
 						$category
@@ -176,8 +176,8 @@ final class WPS_Health_Score_Widget {
 
 		if ( $overall >= 80 ) {
 			$recommendations[] = array(
-				'title' => __( 'Excellent Configuration', 'plugin-wp-support-thisismyurl' ),
-				'text'  => __( 'Your site is well optimized. Keep monitoring for continued health.', 'plugin-wp-support-thisismyurl' ),
+				'title' => __( 'Excellent Configuration', 'plugin-wpshadow' ),
+				'text'  => __( 'Your site is well optimized. Keep monitoring for continued health.', 'plugin-wpshadow' ),
 				'url'   => admin_url( 'site-health.php' ),
 			);
 		}
@@ -188,13 +188,13 @@ final class WPS_Health_Score_Widget {
 
 		?>
 		<div class="wps-health-recommendations">
-			<h4><?php esc_html_e( 'Recommendations', 'plugin-wp-support-thisismyurl' ); ?></h4>
+			<h4><?php esc_html_e( 'Recommendations', 'plugin-wpshadow' ); ?></h4>
 			<ul>
 				<?php foreach ( array_slice( $recommendations, 0, 3 ) as $rec ) : ?>
 					<li>
 						<strong><?php echo esc_html( $rec['title'] ); ?></strong>
 						<p><?php echo esc_html( $rec['text'] ); ?></p>
-						<a href="<?php echo esc_url( $rec['url'] ); ?>"><?php esc_html_e( 'Learn More', 'plugin-wp-support-thisismyurl' ); ?> &rarr;</a>
+						<a href="<?php echo esc_url( $rec['url'] ); ?>"><?php esc_html_e( 'Learn More', 'plugin-wpshadow' ); ?> &rarr;</a>
 					</li>
 				<?php endforeach; ?>
 			</ul>

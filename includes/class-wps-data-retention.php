@@ -4,7 +4,7 @@
  *
  * Manages data retention policies and automated purging of old data.
  *
- * @package WPS_SUPPORT
+ * @package WPSHADOW_SUPPORT
  */
 
 declare(strict_types=1);
@@ -16,18 +16,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Data_Retention class
+ * WPSHADOW_Data_Retention class
  */
-class WPS_Data_Retention {
+class WPSHADOW_Data_Retention {
 	/**
 	 * Option key for retention policies.
 	 */
-	private const RETENTION_POLICY_OPTION = 'WPS_retention_policies';
+	private const RETENTION_POLICY_OPTION = 'wpshadow_retention_policies';
 
 	/**
 	 * Hook for scheduled purge.
 	 */
-	private const PURGE_HOOK = 'wps_data_retention_purge';
+	private const PURGE_HOOK = 'wpshadow_data_retention_purge';
 
 	/**
 	 * Initialize the data retention manager.
@@ -49,27 +49,27 @@ class WPS_Data_Retention {
 			'activity_logs'     => array(
 				'enabled' => true,
 				'days'    => 90,
-				'label'   => __( 'Activity Logs', 'plugin-wp-support-thisismyurl' ),
+				'label'   => __( 'Activity Logs', 'plugin-wpshadow' ),
 			),
 			'privacy_requests'  => array(
 				'enabled' => true,
 				'days'    => 180,
-				'label'   => __( 'Privacy Requests', 'plugin-wp-support-thisismyurl' ),
+				'label'   => __( 'Privacy Requests', 'plugin-wpshadow' ),
 			),
 			'diagnostic_tokens' => array(
 				'enabled' => true,
 				'days'    => 30,
-				'label'   => __( 'Diagnostic Tokens', 'plugin-wp-support-thisismyurl' ),
+				'label'   => __( 'Diagnostic Tokens', 'plugin-wpshadow' ),
 			),
 			'error_logs'        => array(
 				'enabled' => true,
 				'days'    => 30,
-				'label'   => __( 'Error Logs', 'plugin-wp-support-thisismyurl' ),
+				'label'   => __( 'Error Logs', 'plugin-wpshadow' ),
 			),
 			'user_sessions'     => array(
 				'enabled' => true,
 				'days'    => 7,
-				'label'   => __( 'User Sessions', 'plugin-wp-support-thisismyurl' ),
+				'label'   => __( 'User Sessions', 'plugin-wpshadow' ),
 			),
 		);
 
@@ -129,12 +129,12 @@ class WPS_Data_Retention {
 				$results[ $data_type ] = $purged;
 
 				// Log purge activity.
-				if ( class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
-					WPS_Activity_Logger::log(
+				if ( class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) ) {
+					WPSHADOW_Activity_Logger::log(
 						'info',
 						sprintf(
 							/* translators: 1: data type, 2: number of items purged, 3: retention days */
-							__( 'Purged %2$d old %1$s records (retention: %3$d days)', 'plugin-wp-support-thisismyurl' ),
+							__( 'Purged %2$d old %1$s records (retention: %3$d days)', 'plugin-wpshadow' ),
 							$policy['label'] ?? $data_type,
 							$purged,
 							$policy['days']
@@ -167,8 +167,8 @@ class WPS_Data_Retention {
 
 		switch ( $data_type ) {
 			case 'activity_logs':
-				// Purge old activity logs from WPS_Activity_Logger.
-				$table = $wpdb->prefix . 'wps_activity_log';
+				// Purge old activity logs from WPSHADOW_Activity_Logger.
+				$table = $wpdb->prefix . 'wpshadow_activity_log';
 				if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) ) === $table ) {
 					$count = (int) $wpdb->query(
 						$wpdb->prepare(
@@ -183,7 +183,7 @@ class WPS_Data_Retention {
 				// Purge completed privacy requests older than retention period.
 				$count = (int) $wpdb->query(
 					$wpdb->prepare(
-						"DELETE FROM {$wpdb->prefix}wps_privacy_requests 
+						"DELETE FROM {$wpdb->prefix}WPSHADOW_privacy_requests 
 						WHERE status IN ('completed', 'denied') 
 						AND updated_at < %s",
 						$cutoff
@@ -193,7 +193,7 @@ class WPS_Data_Retention {
 
 			case 'diagnostic_tokens':
 				// Purge expired diagnostic tokens.
-				$tokens = get_option( 'wps_diagnostic_tokens', array() );
+				$tokens = get_option( 'wpshadow_diagnostic_tokens', array() );
 				$before = count( $tokens );
 				$tokens = array_filter(
 					$tokens,
@@ -202,7 +202,7 @@ class WPS_Data_Retention {
 						return gmdate( 'Y-m-d H:i:s', $created ) >= $cutoff;
 					}
 				);
-				update_option( 'wps_diagnostic_tokens', $tokens );
+				update_option( 'wpshadow_diagnostic_tokens', $tokens );
 				$count = $before - count( $tokens );
 				break;
 
@@ -238,8 +238,8 @@ class WPS_Data_Retention {
 						"DELETE FROM {$wpdb->options} 
 						WHERE option_name LIKE %s 
 						AND option_name NOT LIKE %s",
-						$wpdb->esc_like( '_transient_wps_user_session_' ) . '%',
-						$wpdb->esc_like( '_transient_timeout_wps_user_session_' ) . '%'
+						$wpdb->esc_like( '_transient_WPSHADOW_user_session_' ) . '%',
+						$wpdb->esc_like( '_transient_timeout_WPSHADOW_user_session_' ) . '%'
 					)
 				);
 				break;

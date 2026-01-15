@@ -1,7 +1,7 @@
 /**
  * WPS Update Simulator Scripts
  *
- * @package WPS_WP_SUPPORT
+ * @package WPSHADOW_WP_SUPPORT
  * @since 1.2601.1111
  */
 
@@ -30,7 +30,7 @@
 				url: wpsUpdateSimulator.ajax_url,
 				method: 'POST',
 				data: {
-					action: 'wps_simulate_update',
+					action: 'wpshadow_simulate_update',
 					nonce: wpsUpdateSimulator.nonce,
 					plugin: plugin
 				},
@@ -72,7 +72,7 @@
 				url: wpsUpdateSimulator.ajax_url,
 				method: 'POST',
 				data: {
-					action: 'wps_deploy_update',
+					action: 'wpshadow_deploy_update',
 					nonce: wpsUpdateSimulator.nonce,
 					plugin: plugin
 				},
@@ -109,7 +109,7 @@
 				url: wpsUpdateSimulator.ajax_url,
 				method: 'POST',
 				data: {
-					action: 'wps_rollback_update',
+					action: 'wpshadow_rollback_update',
 					nonce: wpsUpdateSimulator.nonce,
 					snapshot_id: snapshotId
 				},

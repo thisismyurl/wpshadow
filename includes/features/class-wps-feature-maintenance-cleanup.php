@@ -17,11 +17,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Feature_Maintenance_Cleanup
+ * WPSHADOW_Feature_Maintenance_Cleanup
  *
  * Detect and remove stuck maintenance mode files.
  */
-final class WPS_Feature_Maintenance_Cleanup extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Maintenance_Cleanup extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Maintenance file path.
@@ -40,14 +40,14 @@ final class WPS_Feature_Maintenance_Cleanup extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'maintenance-cleanup',
-				'name'               => __( 'Maintenance Mode Cleanup', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Automatically detect and remove stuck maintenance mode files after failed WordPress updates', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Maintenance Mode Cleanup', 'plugin-wpshadow' ),
+				'description'        => __( 'Automatically detect and remove stuck maintenance mode files after failed WordPress updates', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true, // Safe to enable by default.
 				'version'            => '1.0.0',
 				'widget_group'       => 'tools',
-				'widget_label'       => __( 'Tools', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'WordPress utility tools and helpers', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Tools', 'plugin-wpshadow' ),
+				'widget_description' => __( 'WordPress utility tools and helpers', 'plugin-wpshadow' ),
 				// Unified metadata.
 				'license_level'      => 1, // Free for everyone.
 				'minimum_capability' => 'update_core',
@@ -81,7 +81,7 @@ final class WPS_Feature_Maintenance_Cleanup extends WPS_Abstract_Feature {
 		add_filter( 'site_status_tests', array( $this, 'add_site_health_test' ) );
 
 		// AJAX handler for manual cleanup.
-		add_action( 'wp_ajax_wps_cleanup_maintenance', array( $this, 'ajax_cleanup_maintenance' ) );
+		add_action( 'wp_ajax_WPSHADOW_cleanup_maintenance', array( $this, 'ajax_cleanup_maintenance' ) );
 	}
 
 	/**
@@ -113,21 +113,21 @@ final class WPS_Feature_Maintenance_Cleanup extends WPS_Abstract_Feature {
 		if ( ! file_exists( self::MAINTENANCE_FILE ) ) {
 			return new \WP_Error(
 				'file_not_found',
-				__( 'Maintenance file not found', 'plugin-wp-support-thisismyurl' )
+				__( 'Maintenance file not found', 'plugin-wpshadow' )
 			);
 		}
 
 		if ( ! is_writable( self::MAINTENANCE_FILE ) ) {
 			return new \WP_Error(
 				'file_not_writable',
-				__( 'Maintenance file is not writable', 'plugin-wp-support-thisismyurl' )
+				__( 'Maintenance file is not writable', 'plugin-wpshadow' )
 			);
 		}
 
 		// Backup file contents before deletion.
 		$contents = file_get_contents( self::MAINTENANCE_FILE );
 		if ( false !== $contents ) {
-			set_transient( 'wps_maintenance_file_backup', $contents, HOUR_IN_SECONDS );
+			set_transient( 'wpshadow_maintenance_file_backup', $contents, HOUR_IN_SECONDS );
 		}
 
 		// Delete the file.
@@ -136,7 +136,7 @@ final class WPS_Feature_Maintenance_Cleanup extends WPS_Abstract_Feature {
 		if ( ! $deleted && file_exists( self::MAINTENANCE_FILE ) ) {
 			return new \WP_Error(
 				'deletion_failed',
-				__( 'Failed to delete maintenance file', 'plugin-wp-support-thisismyurl' )
+				__( 'Failed to delete maintenance file', 'plugin-wpshadow' )
 			);
 		}
 
@@ -216,8 +216,8 @@ final class WPS_Feature_Maintenance_Cleanup extends WPS_Abstract_Feature {
 	 * @return array Modified tests.
 	 */
 	public function add_site_health_test( array $tests ): array {
-		$tests['direct']['wps_maintenance_mode'] = array(
-			'label' => __( 'Maintenance mode status', 'plugin-wp-support-thisismyurl' ),
+		$tests['direct']['wpshadow_maintenance_mode'] = array(
+			'label' => __( 'Maintenance mode status', 'plugin-wpshadow' ),
 			'test'  => array( $this, 'site_health_test_callback' ),
 		);
 
@@ -234,63 +234,63 @@ final class WPS_Feature_Maintenance_Cleanup extends WPS_Abstract_Feature {
 
 		if ( false === $info ) {
 			return array(
-				'label'       => __( 'No maintenance mode issues', 'plugin-wp-support-thisismyurl' ),
+				'label'       => __( 'No maintenance mode issues', 'plugin-wpshadow' ),
 				'status'      => 'good',
 				'badge'       => array(
-					'label' => __( 'Performance', 'plugin-wp-support-thisismyurl' ),
+					'label' => __( 'Performance', 'plugin-wpshadow' ),
 					'color' => 'blue',
 				),
 				'description' => sprintf(
 					'<p>%s</p>',
-					__( 'No maintenance mode file detected.', 'plugin-wp-support-thisismyurl' )
+					__( 'No maintenance mode file detected.', 'plugin-wpshadow' )
 				),
-				'test'        => 'wps_maintenance_mode',
+				'test'        => 'wpshadow_maintenance_mode',
 			);
 		}
 
 		if ( $info['is_stuck'] ) {
 			return array(
-				'label'       => __( 'Maintenance mode is stuck', 'plugin-wp-support-thisismyurl' ),
+				'label'       => __( 'Maintenance mode is stuck', 'plugin-wpshadow' ),
 				'status'      => 'critical',
 				'badge'       => array(
-					'label' => __( 'Performance', 'plugin-wp-support-thisismyurl' ),
+					'label' => __( 'Performance', 'plugin-wpshadow' ),
 					'color' => 'red',
 				),
 				'description' => sprintf(
 					'<p>%s</p><p><a href="%s" class="button button-primary">%s</a></p>',
 					sprintf(
 						/* translators: %d: minutes since maintenance file was created */
-						__( 'Your site has been in maintenance mode for %d minutes. This usually indicates a failed update.', 'plugin-wp-support-thisismyurl' ),
+						__( 'Your site has been in maintenance mode for %d minutes. This usually indicates a failed update.', 'plugin-wpshadow' ),
 						$info['age_minutes']
 					),
-					wp_nonce_url( admin_url( 'admin-post.php?action=wps_cleanup_maintenance_file' ), 'wps_cleanup_maintenance' ),
-					__( 'Remove Maintenance Mode', 'plugin-wp-support-thisismyurl' )
+					wp_nonce_url( admin_url( 'admin-post.php?action=WPSHADOW_cleanup_maintenance_file' ), 'wpshadow_cleanup_maintenance' ),
+					__( 'Remove Maintenance Mode', 'plugin-wpshadow' )
 				),
-				'test'        => 'wps_maintenance_mode',
+				'test'        => 'wpshadow_maintenance_mode',
 				'actions'     => sprintf(
 					'<a href="%s">%s</a>',
-					wp_nonce_url( admin_url( 'admin-post.php?action=wps_cleanup_maintenance_file' ), 'wps_cleanup_maintenance' ),
-					__( 'Remove Maintenance File', 'plugin-wp-support-thisismyurl' )
+					wp_nonce_url( admin_url( 'admin-post.php?action=WPSHADOW_cleanup_maintenance_file' ), 'wpshadow_cleanup_maintenance' ),
+					__( 'Remove Maintenance File', 'plugin-wpshadow' )
 				),
 			);
 		}
 
 		return array(
-			'label'       => __( 'Maintenance mode active', 'plugin-wp-support-thisismyurl' ),
+			'label'       => __( 'Maintenance mode active', 'plugin-wpshadow' ),
 			'status'      => 'recommended',
 			'badge'       => array(
-				'label' => __( 'Performance', 'plugin-wp-support-thisismyurl' ),
+				'label' => __( 'Performance', 'plugin-wpshadow' ),
 				'color' => 'orange',
 			),
 			'description' => sprintf(
 				'<p>%s</p>',
 				sprintf(
 					/* translators: %d: minutes since maintenance file was created */
-					__( 'Your site is in maintenance mode (%d minutes). If this persists, you may need to remove it manually.', 'plugin-wp-support-thisismyurl' ),
+					__( 'Your site is in maintenance mode (%d minutes). If this persists, you may need to remove it manually.', 'plugin-wpshadow' ),
 					$info['age_minutes']
 				)
 			),
-			'test'        => 'wps_maintenance_mode',
+			'test'        => 'wpshadow_maintenance_mode',
 		);
 	}
 
@@ -306,9 +306,9 @@ final class WPS_Feature_Maintenance_Cleanup extends WPS_Abstract_Feature {
 
 		// Store maintenance mode status in transient for notice.
 		if ( $this->is_maintenance_stuck() ) {
-			set_transient( 'wps_maintenance_stuck', true, HOUR_IN_SECONDS );
+			set_transient( 'wpshadow_maintenance_stuck', true, HOUR_IN_SECONDS );
 		} else {
-			delete_transient( 'wps_maintenance_stuck' );
+			delete_transient( 'wpshadow_maintenance_stuck' );
 		}
 	}
 
@@ -322,7 +322,7 @@ final class WPS_Feature_Maintenance_Cleanup extends WPS_Abstract_Feature {
 			return;
 		}
 
-		if ( ! get_transient( 'wps_maintenance_stuck' ) ) {
+		if ( ! get_transient( 'wpshadow_maintenance_stuck' ) ) {
 			return;
 		}
 
@@ -334,20 +334,20 @@ final class WPS_Feature_Maintenance_Cleanup extends WPS_Abstract_Feature {
 		?>
 		<div class="notice notice-error is-dismissible">
 			<p>
-				<strong><?php esc_html_e( 'WP Support: Maintenance Mode Stuck', 'plugin-wp-support-thisismyurl' ); ?></strong>
+				<strong><?php esc_html_e( 'WPShadow: Maintenance Mode Stuck', 'plugin-wpshadow' ); ?></strong>
 			</p>
 			<p>
 				<?php
 				printf(
 					/* translators: %d: minutes since maintenance file was created */
-					esc_html__( 'Your site has been in maintenance mode for %d minutes. This usually means a WordPress update failed or was interrupted.', 'plugin-wp-support-thisismyurl' ),
+					esc_html__( 'Your site has been in maintenance mode for %d minutes. This usually means a WordPress update failed or was interrupted.', 'plugin-wpshadow' ),
 					(int) $info['age_minutes']
 				);
 				?>
 			</p>
 			<p>
 				<button type="button" class="button button-primary" id="wps-cleanup-maintenance">
-					<?php esc_html_e( 'Remove Maintenance Mode', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Remove Maintenance Mode', 'plugin-wpshadow' ); ?>
 				</button>
 				<span class="spinner" style="float: none; margin: 0 0 0 10px;"></span>
 			</p>
@@ -362,8 +362,8 @@ final class WPS_Feature_Maintenance_Cleanup extends WPS_Abstract_Feature {
 				$spinner.addClass('is-active');
 				
 				$.post(ajaxurl, {
-					action: 'wps_cleanup_maintenance',
-					_ajax_nonce: '<?php echo esc_js( wp_create_nonce( 'wps_cleanup_maintenance' ) ); ?>'
+					action: 'wpshadow_cleanup_maintenance',
+					_ajax_nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_cleanup_maintenance' ) ); ?>'
 				}, function(response) {
 					if (response.success) {
 						$button.closest('.notice').fadeOut(function() {
@@ -371,12 +371,12 @@ final class WPS_Feature_Maintenance_Cleanup extends WPS_Abstract_Feature {
 						});
 						location.reload();
 					} else {
-						alert(response.data.message || '<?php esc_html_e( 'Failed to remove maintenance file.', 'plugin-wp-support-thisismyurl' ); ?>');
+						alert(response.data.message || '<?php esc_html_e( 'Failed to remove maintenance file.', 'plugin-wpshadow' ); ?>');
 						$button.prop('disabled', false);
 						$spinner.removeClass('is-active');
 					}
 				}).fail(function() {
-					alert('<?php esc_html_e( 'An error occurred. Please try again.', 'plugin-wp-support-thisismyurl' ); ?>');
+					alert('<?php esc_html_e( 'An error occurred. Please try again.', 'plugin-wpshadow' ); ?>');
 					$button.prop('disabled', false);
 					$spinner.removeClass('is-active');
 				});
@@ -392,12 +392,12 @@ final class WPS_Feature_Maintenance_Cleanup extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_cleanup_maintenance(): void {
-		check_ajax_referer( 'wps_cleanup_maintenance' );
+		check_ajax_referer( 'wpshadow_cleanup_maintenance' );
 
 		if ( ! current_user_can( 'update_core' ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'You do not have permission to perform this action.', 'plugin-wp-support-thisismyurl' ),
+					'message' => __( 'You do not have permission to perform this action.', 'plugin-wpshadow' ),
 				)
 			);
 		}
@@ -415,11 +415,11 @@ final class WPS_Feature_Maintenance_Cleanup extends WPS_Abstract_Feature {
 		// Also clean up upgrade directories.
 		$this->cleanup_upgrade_directories();
 
-		delete_transient( 'wps_maintenance_stuck' );
+		delete_transient( 'wpshadow_maintenance_stuck' );
 
 		wp_send_json_success(
 			array(
-				'message' => __( 'Maintenance mode has been removed successfully.', 'plugin-wp-support-thisismyurl' ),
+				'message' => __( 'Maintenance mode has been removed successfully.', 'plugin-wpshadow' ),
 			)
 		);
 	}
@@ -443,8 +443,8 @@ final class WPS_Feature_Maintenance_Cleanup extends WPS_Abstract_Feature {
 		}
 
 		// Log to activity logger if available.
-		if ( class_exists( 'WPS_Activity_Logger' ) ) {
-			\WPS_Activity_Logger::log(
+		if ( class_exists( 'wpshadow_Activity_Logger' ) ) {
+			\WPSHADOW_Activity_Logger::log(
 				$action,
 				$success ? 'success' : 'error',
 				array(

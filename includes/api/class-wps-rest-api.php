@@ -2,7 +2,7 @@
 /**
  * REST API Initialization
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  * @since 1.2601.73002
  */
 
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * REST API Initialization Class
  */
-class WPS_REST_API {
+class WPSHADOW_REST_API {
 
 	/**
 	 * Initialize REST API
@@ -40,22 +40,22 @@ class WPS_REST_API {
 
 		// Load and register modules controller.
 		require_once __DIR__ . '/class-wps-rest-modules-controller.php';
-		$modules_controller = new WPS_REST_Modules_Controller();
+		$modules_controller = new WPSHADOW_REST_Modules_Controller();
 		$modules_controller->register_routes();
 
 		// Load and register vault controller.
 		require_once __DIR__ . '/class-wps-rest-vault-controller.php';
-		$vault_controller = new WPS_REST_Vault_Controller();
+		$vault_controller = new WPSHADOW_REST_Vault_Controller();
 		$vault_controller->register_routes();
 
 		// Load and register license controller.
 		require_once __DIR__ . '/class-wps-rest-license-controller.php';
-		$license_controller = new WPS_REST_License_Controller();
+		$license_controller = new WPSHADOW_REST_License_Controller();
 		$license_controller->register_routes();
 
 		// Load and register settings controller.
 		require_once __DIR__ . '/class-wps-rest-settings-controller.php';
-		$settings_controller = new WPS_REST_Settings_Controller();
+		$settings_controller = new WPSHADOW_REST_Settings_Controller();
 		$settings_controller->register_routes();
 	}
 }

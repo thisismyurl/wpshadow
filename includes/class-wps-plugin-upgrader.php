@@ -2,7 +2,7 @@
 /**
  * Plugin installer/upgrader for catalog-driven install/update flows.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  * @since 1.2601.73000
  */
 
@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles ZIP download, extraction, installation, and activation.
  */
-class WPS_Plugin_Upgrader {
+class WPSHADOW_Plugin_Upgrader {
 
 	/**
 	 * Result from upgrader operation.
@@ -59,12 +59,12 @@ class WPS_Plugin_Upgrader {
 
 		// Validate URL.
 		if ( empty( $download_url ) ) {
-			return new WP_Error( 'empty_url', __( 'Download URL is required.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'empty_url', __( 'Download URL is required.', 'plugin-wpshadow' ) );
 		}
 
 		// Initialize filesystem.
 		if ( ! $this->init_filesystem() ) {
-			return new WP_Error( 'fs_unavailable', __( 'Could not access filesystem.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'fs_unavailable', __( 'Could not access filesystem.', 'plugin-wpshadow' ) );
 		}
 
 		// Create temporary working directory.
@@ -107,7 +107,7 @@ class WPS_Plugin_Upgrader {
 		if ( $wp_filesystem->exists( $destination ) ) {
 			if ( ! $wp_filesystem->delete( $destination, true ) ) {
 				$this->cleanup( $working_dir );
-				return new WP_Error( 'delete_failed', __( 'Could not remove old plugin version.', 'plugin-wp-support-thisismyurl' ) );
+				return new WP_Error( 'delete_failed', __( 'Could not remove old plugin version.', 'plugin-wpshadow' ) );
 			}
 		}
 
@@ -115,7 +115,7 @@ class WPS_Plugin_Upgrader {
 		$move_result = $wp_filesystem->move( trailingslashit( $working_dir ) . $extract_result, $destination, true );
 		if ( ! $move_result ) {
 			$this->cleanup( $working_dir );
-			return new WP_Error( 'move_failed', __( 'Could not move plugin files to destination.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'move_failed', __( 'Could not move plugin files to destination.', 'plugin-wpshadow' ) );
 		}
 
 		// Clean up working directory.
@@ -127,7 +127,7 @@ class WPS_Plugin_Upgrader {
 		// Validate plugin file.
 		$plugin_path = WP_PLUGIN_DIR . '/' . $plugin_basename;
 		if ( ! file_exists( $plugin_path ) ) {
-			return new WP_Error( 'plugin_not_found', __( 'Plugin file not found after extraction.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'plugin_not_found', __( 'Plugin file not found after extraction.', 'plugin-wpshadow' ) );
 		}
 
 		// Activate if requested.
@@ -144,7 +144,7 @@ class WPS_Plugin_Upgrader {
 		}
 
 		// Clear module cache to refresh registry.
-		WPS_Module_Registry::refresh_modules();
+		WPSHADOW_Module_Registry::refresh_modules();
 
 		$this->result = $plugin_basename;
 		return true;
@@ -164,18 +164,18 @@ class WPS_Plugin_Upgrader {
 
 		// Validate inputs.
 		if ( empty( $plugin_file ) || empty( $download_url ) ) {
-			return new WP_Error( 'invalid_params', __( 'Plugin file and download URL are required.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'invalid_params', __( 'Plugin file and download URL are required.', 'plugin-wpshadow' ) );
 		}
 
 		// Check plugin exists.
 		$plugin_path = WP_PLUGIN_DIR . '/' . $plugin_file;
 		if ( ! file_exists( $plugin_path ) ) {
-			return new WP_Error( 'plugin_not_found', __( 'Plugin not found.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'plugin_not_found', __( 'Plugin not found.', 'plugin-wpshadow' ) );
 		}
 
 		// Initialize filesystem.
 		if ( ! $this->init_filesystem() ) {
-			return new WP_Error( 'fs_unavailable', __( 'Could not access filesystem.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'fs_unavailable', __( 'Could not access filesystem.', 'plugin-wpshadow' ) );
 		}
 
 		// Create temporary working directory.
@@ -229,7 +229,7 @@ class WPS_Plugin_Upgrader {
 		if ( ! $wp_filesystem->move( $destination, $backup_dir, true ) ) {
 			$this->reactivate_plugin( $plugin_file, $was_active_network, $was_active_single );
 			$this->cleanup( $working_dir );
-			return new WP_Error( 'backup_failed', __( 'Could not backup current plugin version.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'backup_failed', __( 'Could not backup current plugin version.', 'plugin-wpshadow' ) );
 		}
 
 		// Move new version to destination.
@@ -239,7 +239,7 @@ class WPS_Plugin_Upgrader {
 			$wp_filesystem->move( $backup_dir, $destination, true );
 			$this->reactivate_plugin( $plugin_file, $was_active_network, $was_active_single );
 			$this->cleanup( $working_dir );
-			return new WP_Error( 'move_failed', __( 'Could not move updated plugin files.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'move_failed', __( 'Could not move updated plugin files.', 'plugin-wpshadow' ) );
 		}
 
 		// Remove backup if successful.
@@ -252,7 +252,7 @@ class WPS_Plugin_Upgrader {
 		$this->reactivate_plugin( $plugin_file, $was_active_network, $was_active_single );
 
 		// Clear module cache to refresh registry and status.
-		WPS_Module_Registry::refresh_modules();
+		WPSHADOW_Module_Registry::refresh_modules();
 
 		$this->result = $plugin_file;
 		return true;
@@ -288,13 +288,13 @@ class WPS_Plugin_Upgrader {
 		$upload_dir = wp_upload_dir();
 
 		if ( is_wp_error( $upload_dir ) || empty( $upload_dir['basedir'] ) ) {
-			return new WP_Error( 'upload_dir_error', __( 'Could not determine upload directory.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'upload_dir_error', __( 'Could not determine upload directory.', 'plugin-wpshadow' ) );
 		}
 
 		$working_dir = $upload_dir['basedir'] . '/wps-temp-' . time();
 
 		if ( ! wp_mkdir_p( $working_dir ) ) {
-			return new WP_Error( 'mkdir_failed', __( 'Could not create temporary directory.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'mkdir_failed', __( 'Could not create temporary directory.', 'plugin-wpshadow' ) );
 		}
 
 		return $working_dir;
@@ -313,12 +313,12 @@ class WPS_Plugin_Upgrader {
 		$zip_file = $working_dir . '/plugin.zip';
 
 		// Use robust downloader.
-		$downloader = new WPS_Module_Downloader();
+		$downloader = new WPSHADOW_Module_Downloader();
 		$result     = $downloader->download( $url, $zip_file, $expected_hash );
 
 		if ( is_wp_error( $result ) ) {
 			// Add guidance to error message.
-			$guidance = WPS_Module_Downloader::get_error_guidance( $result );
+			$guidance = WPSHADOW_Module_Downloader::get_error_guidance( $result );
 			$result->add_data( array( 'guidance' => $guidance ) );
 			return $result;
 		}
@@ -330,7 +330,7 @@ class WPS_Plugin_Upgrader {
 		if ( ! empty( $expected_slug ) ) {
 			$validation = $downloader->validate_zip( $zip_file, $expected_slug );
 			if ( is_wp_error( $validation ) ) {
-				$guidance = WPS_Module_Downloader::get_error_guidance( $validation );
+				$guidance = WPSHADOW_Module_Downloader::get_error_guidance( $validation );
 				$validation->add_data( array( 'guidance' => $guidance ) );
 				$downloader->clear_progress();
 				return $validation;
@@ -362,19 +362,19 @@ class WPS_Plugin_Upgrader {
 	private function unpack_package( string $zip_file, string $working_dir ) {
 		// Load extraction class.
 		if ( ! class_exists( '\ZipArchive' ) ) {
-			return new WP_Error( 'no_zip_ext', __( 'ZIP extension not available.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'no_zip_ext', __( 'ZIP extension not available.', 'plugin-wpshadow' ) );
 		}
 
 		$zip = new \ZipArchive();
 		$res = $zip->open( $zip_file );
 
 		if ( true !== $res ) {
-			return new WP_Error( 'bad_zip', __( 'Could not open ZIP file.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'bad_zip', __( 'Could not open ZIP file.', 'plugin-wpshadow' ) );
 		}
 
 		if ( ! $zip->extractTo( $working_dir ) ) {
 			$zip->close();
-			return new WP_Error( 'extract_failed', __( 'Could not extract ZIP file.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'extract_failed', __( 'Could not extract ZIP file.', 'plugin-wpshadow' ) );
 		}
 
 		$zip->close();
@@ -382,7 +382,7 @@ class WPS_Plugin_Upgrader {
 		// Find extracted directory (usually first folder in ZIP).
 		$files = scandir( $working_dir );
 		if ( false === $files ) {
-			return new WP_Error( 'scan_failed', __( 'Could not scan extracted files.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'scan_failed', __( 'Could not scan extracted files.', 'plugin-wpshadow' ) );
 		}
 
 		// Find first non-. directory.
@@ -392,7 +392,7 @@ class WPS_Plugin_Upgrader {
 			}
 		}
 
-		return new WP_Error( 'no_dir_found', __( 'Could not find extracted plugin directory.', 'plugin-wp-support-thisismyurl' ) );
+		return new WP_Error( 'no_dir_found', __( 'Could not find extracted plugin directory.', 'plugin-wpshadow' ) );
 	}
 
 	/**
@@ -407,7 +407,7 @@ class WPS_Plugin_Upgrader {
 		$files      = scandir( $plugin_dir );
 
 		if ( false === $files ) {
-			return new WP_Error( 'scan_failed', __( 'Could not scan plugin directory.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'scan_failed', __( 'Could not scan plugin directory.', 'plugin-wpshadow' ) );
 		}
 
 		// Look for PHP file matching directory name.
@@ -425,7 +425,7 @@ class WPS_Plugin_Upgrader {
 			}
 		}
 
-		return new WP_Error( 'no_plugin_file', __( 'Could not find plugin file in extracted directory.', 'plugin-wp-support-thisismyurl' ) );
+		return new WP_Error( 'no_plugin_file', __( 'Could not find plugin file in extracted directory.', 'plugin-wpshadow' ) );
 	}
 
 	/**
@@ -441,7 +441,7 @@ class WPS_Plugin_Upgrader {
 		$dir_name   = basename( $plugin_dir );
 
 		if ( empty( $dir_name ) ) {
-			return new WP_Error( 'invalid_dir_name', __( 'Could not determine plugin directory name.', 'plugin-wp-support-thisismyurl' ) );
+			return new WP_Error( 'invalid_dir_name', __( 'Could not determine plugin directory name.', 'plugin-wpshadow' ) );
 		}
 
 		return WP_PLUGIN_DIR . '/' . $dir_name;
@@ -489,4 +489,4 @@ class WPS_Plugin_Upgrader {
 	}
 }
 
-/* @changelog WPS_Plugin_Upgrader class created for install/update/activate flows. */
+/* @changelog WPSHADOW_Plugin_Upgrader class created for install/update/activate flows. */

@@ -22,11 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Feature_MySQL_Diagnostics
+ * WPSHADOW_Feature_MySQL_Diagnostics
  *
  * MySQL database diagnostics and information viewer.
  */
-final class WPS_Feature_MySQL_Diagnostics extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_MySQL_Diagnostics extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -35,14 +35,14 @@ final class WPS_Feature_MySQL_Diagnostics extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'mysql-diagnostics',
-				'name'               => __( 'MySQL Diagnostics', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'View MySQL/MariaDB server information, table statistics, and database performance metrics', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'MySQL Diagnostics', 'plugin-wpshadow' ),
+				'description'        => __( 'View MySQL/MariaDB server information, table statistics, and database performance metrics', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'server-diagnostics',
-				'widget_label'       => __( 'Server Diagnostics', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Server environment and configuration tools', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Server Diagnostics', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Server environment and configuration tools', 'plugin-wpshadow' ),
 				// Unified metadata.
 				'license_level'      => 1, // Free for everyone.
 				'minimum_capability' => 'manage_options',
@@ -78,8 +78,8 @@ final class WPS_Feature_MySQL_Diagnostics extends WPS_Abstract_Feature {
 	public function add_admin_menu(): void {
 		add_submenu_page(
 			'wp-support',
-			__( 'MySQL Diagnostics', 'plugin-wp-support-thisismyurl' ),
-			__( 'MySQL Info', 'plugin-wp-support-thisismyurl' ),
+			__( 'MySQL Diagnostics', 'plugin-wpshadow' ),
+			__( 'MySQL Info', 'plugin-wpshadow' ),
 			'manage_options',
 			'wp-support-mysql-diagnostics',
 			array( $this, 'render_page' )
@@ -298,42 +298,42 @@ final class WPS_Feature_MySQL_Diagnostics extends WPS_Abstract_Feature {
 
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'MySQL Diagnostics', 'plugin-wp-support-thisismyurl' ); ?></h1>
+			<h1><?php esc_html_e( 'MySQL Diagnostics', 'plugin-wpshadow' ); ?></h1>
 
 			<div class="card">
-				<h2><?php esc_html_e( 'Database Server Information', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( 'Database Server Information', 'plugin-wpshadow' ); ?></h2>
 				<table class="widefat striped">
 					<tbody>
 						<tr>
-							<th style="width: 30%;"><?php esc_html_e( 'Server Type', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th style="width: 30%;"><?php esc_html_e( 'Server Type', 'plugin-wpshadow' ); ?></th>
 							<td><code><?php echo esc_html( $db_info['server_type'] ); ?></code></td>
 						</tr>
 						<tr>
-							<th><?php esc_html_e( 'Server Version', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th><?php esc_html_e( 'Server Version', 'plugin-wpshadow' ); ?></th>
 							<td><code><?php echo esc_html( $db_info['server_version'] ); ?></code></td>
 						</tr>
 						<tr>
-							<th><?php esc_html_e( 'Client Version', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th><?php esc_html_e( 'Client Version', 'plugin-wpshadow' ); ?></th>
 							<td><code><?php echo esc_html( $db_info['client_version'] ); ?></code></td>
 						</tr>
 						<tr>
-							<th><?php esc_html_e( 'Database Name', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th><?php esc_html_e( 'Database Name', 'plugin-wpshadow' ); ?></th>
 							<td><code><?php echo esc_html( $db_info['database_name'] ); ?></code></td>
 						</tr>
 						<tr>
-							<th><?php esc_html_e( 'Database Host', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th><?php esc_html_e( 'Database Host', 'plugin-wpshadow' ); ?></th>
 							<td><code><?php echo esc_html( $db_info['host'] ); ?></code></td>
 						</tr>
 						<tr>
-							<th><?php esc_html_e( 'Table Prefix', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th><?php esc_html_e( 'Table Prefix', 'plugin-wpshadow' ); ?></th>
 							<td><code><?php echo esc_html( $db_info['prefix'] ); ?></code></td>
 						</tr>
 						<tr>
-							<th><?php esc_html_e( 'Character Set', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th><?php esc_html_e( 'Character Set', 'plugin-wpshadow' ); ?></th>
 							<td><code><?php echo esc_html( $db_info['charset'] ); ?></code></td>
 						</tr>
 						<tr>
-							<th><?php esc_html_e( 'Collation', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th><?php esc_html_e( 'Collation', 'plugin-wpshadow' ); ?></th>
 							<td><code><?php echo esc_html( $db_info['collate'] ); ?></code></td>
 						</tr>
 					</tbody>
@@ -341,23 +341,23 @@ final class WPS_Feature_MySQL_Diagnostics extends WPS_Abstract_Feature {
 			</div>
 
 			<div class="card">
-				<h2><?php esc_html_e( 'Database Size', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( 'Database Size', 'plugin-wpshadow' ); ?></h2>
 				<table class="widefat striped">
 					<tbody>
 						<tr>
-							<th style="width: 30%;"><?php esc_html_e( 'Total Size', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th style="width: 30%;"><?php esc_html_e( 'Total Size', 'plugin-wpshadow' ); ?></th>
 							<td><strong><?php echo esc_html( $this->format_bytes( $db_size['total_size'] ) ); ?></strong></td>
 						</tr>
 						<tr>
-							<th><?php esc_html_e( 'Data Size', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th><?php esc_html_e( 'Data Size', 'plugin-wpshadow' ); ?></th>
 							<td><?php echo esc_html( $this->format_bytes( $db_size['data_size'] ) ); ?></td>
 						</tr>
 						<tr>
-							<th><?php esc_html_e( 'Index Size', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th><?php esc_html_e( 'Index Size', 'plugin-wpshadow' ); ?></th>
 							<td><?php echo esc_html( $this->format_bytes( $db_size['index_size'] ) ); ?></td>
 						</tr>
 						<tr>
-							<th><?php esc_html_e( 'Number of Tables', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th><?php esc_html_e( 'Number of Tables', 'plugin-wpshadow' ); ?></th>
 							<td><?php echo esc_html( number_format_i18n( $db_size['table_count'] ) ); ?></td>
 						</tr>
 					</tbody>
@@ -365,15 +365,15 @@ final class WPS_Feature_MySQL_Diagnostics extends WPS_Abstract_Feature {
 			</div>
 
 			<div class="card">
-				<h2><?php esc_html_e( 'Largest Tables (Top 20)', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( 'Largest Tables (Top 20)', 'plugin-wpshadow' ); ?></h2>
 				<table class="wp-list-table widefat fixed striped">
 					<thead>
 						<tr>
-							<th style="width: 35%;"><?php esc_html_e( 'Table Name', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th style="width: 15%;"><?php esc_html_e( 'Engine', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th style="width: 15%;"><?php esc_html_e( 'Rows', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th style="width: 15%;"><?php esc_html_e( 'Data Size', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th style="width: 20%;"><?php esc_html_e( 'Total Size', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th style="width: 35%;"><?php esc_html_e( 'Table Name', 'plugin-wpshadow' ); ?></th>
+							<th style="width: 15%;"><?php esc_html_e( 'Engine', 'plugin-wpshadow' ); ?></th>
+							<th style="width: 15%;"><?php esc_html_e( 'Rows', 'plugin-wpshadow' ); ?></th>
+							<th style="width: 15%;"><?php esc_html_e( 'Data Size', 'plugin-wpshadow' ); ?></th>
+							<th style="width: 20%;"><?php esc_html_e( 'Total Size', 'plugin-wpshadow' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -389,7 +389,7 @@ final class WPS_Feature_MySQL_Diagnostics extends WPS_Abstract_Feature {
 							<?php endforeach; ?>
 						<?php else : ?>
 							<tr>
-								<td colspan="5"><?php esc_html_e( 'No table information available.', 'plugin-wp-support-thisismyurl' ); ?></td>
+								<td colspan="5"><?php esc_html_e( 'No table information available.', 'plugin-wpshadow' ); ?></td>
 							</tr>
 						<?php endif; ?>
 					</tbody>
@@ -397,7 +397,7 @@ final class WPS_Feature_MySQL_Diagnostics extends WPS_Abstract_Feature {
 			</div>
 
 			<div class="card">
-				<h2><?php esc_html_e( 'Important MySQL Variables', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( 'Important MySQL Variables', 'plugin-wpshadow' ); ?></h2>
 				<table class="widefat striped">
 					<tbody>
 						<?php if ( ! empty( $variables ) ) : ?>
@@ -409,7 +409,7 @@ final class WPS_Feature_MySQL_Diagnostics extends WPS_Abstract_Feature {
 							<?php endforeach; ?>
 						<?php else : ?>
 							<tr>
-								<td colspan="2"><?php esc_html_e( 'Unable to retrieve MySQL variables.', 'plugin-wp-support-thisismyurl' ); ?></td>
+								<td colspan="2"><?php esc_html_e( 'Unable to retrieve MySQL variables.', 'plugin-wpshadow' ); ?></td>
 							</tr>
 						<?php endif; ?>
 					</tbody>
@@ -417,7 +417,7 @@ final class WPS_Feature_MySQL_Diagnostics extends WPS_Abstract_Feature {
 			</div>
 
 			<div class="card">
-				<h2><?php esc_html_e( 'Database Status', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( 'Database Status', 'plugin-wpshadow' ); ?></h2>
 				<table class="widefat striped">
 					<tbody>
 						<?php if ( ! empty( $status ) ) : ?>
@@ -434,7 +434,7 @@ final class WPS_Feature_MySQL_Diagnostics extends WPS_Abstract_Feature {
 							<?php endforeach; ?>
 						<?php else : ?>
 							<tr>
-								<td colspan="2"><?php esc_html_e( 'Unable to retrieve database status.', 'plugin-wp-support-thisismyurl' ); ?></td>
+								<td colspan="2"><?php esc_html_e( 'Unable to retrieve database status.', 'plugin-wpshadow' ); ?></td>
 							</tr>
 						<?php endif; ?>
 					</tbody>

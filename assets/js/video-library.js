@@ -1,7 +1,7 @@
 /**
  * WPS Video Library Scripts
  *
- * @package WPS_WP_SUPPORT
+ * @package WPSHADOW_WP_SUPPORT
  * @since 1.2601.73002
  */
 
@@ -33,7 +33,7 @@
 				url: wpsVideoLibrary.ajax_url,
 				method: 'POST',
 				data: {
-					action: 'wps_check_video_service',
+					action: 'wpshadow_check_video_service',
 					nonce: wpsVideoLibrary.nonce
 				},
 				success(response) {
@@ -67,7 +67,7 @@
 				url: wpsVideoLibrary.ajax_url,
 				method: 'POST',
 				data: {
-					action: 'wps_generate_video',
+					action: 'wpshadow_generate_video',
 					nonce: wpsVideoLibrary.nonce,
 					video_id: videoId
 				},
@@ -135,7 +135,7 @@
 				url: wpsVideoLibrary.ajax_url,
 				method: 'POST',
 				data: {
-					action: 'wps_download_video',
+					action: 'wpshadow_download_video',
 					nonce: wpsVideoLibrary.nonce,
 					video_id: videoId
 				},
@@ -169,7 +169,7 @@
 				url: wpsVideoLibrary.ajax_url,
 				method: 'POST',
 				data: {
-					action: 'wps_get_video_embed',
+					action: 'wpshadow_get_video_embed',
 					nonce: wpsVideoLibrary.nonce,
 					video_id: videoId
 				},

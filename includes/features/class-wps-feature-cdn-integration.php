@@ -17,11 +17,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Feature_CDN_Integration
+ * WPSHADOW_Feature_CDN_Integration
  *
  * CDN URL rewriting for images, CSS, JS with CloudFlare support.
  */
-final class WPS_Feature_CDN_Integration extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_CDN_Integration extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -30,14 +30,14 @@ final class WPS_Feature_CDN_Integration extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'cdn-integration',
-				'name'               => __( 'CDN Integration', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Automatic CDN URL rewriting for images, CSS, JS with support for CloudFlare, BunnyCDN, and custom CDN providers', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'CDN Integration', 'plugin-wpshadow' ),
+				'description'        => __( 'Automatic CDN URL rewriting for images, CSS, JS with support for CloudFlare, BunnyCDN, and custom CDN providers', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Performance', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'CDN and delivery optimization', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Performance', 'plugin-wpshadow' ),
+				'widget_description' => __( 'CDN and delivery optimization', 'plugin-wpshadow' ),
 				'license_level'      => 3,
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-networking',
@@ -64,8 +64,8 @@ final class WPS_Feature_CDN_Integration extends WPS_Abstract_Feature {
 		add_action( 'template_redirect', array( $this, 'start_output_buffering' ), 1 );
 
 		// AJAX handlers.
-		add_action( 'wp_ajax_wps_test_cdn', array( $this, 'ajax_test_cdn_connection' ) );
-		add_action( 'wp_ajax_wps_purge_cdn', array( $this, 'ajax_purge_cdn_cache' ) );
+		add_action( 'wp_ajax_WPSHADOW_test_cdn', array( $this, 'ajax_test_cdn_connection' ) );
+		add_action( 'wp_ajax_WPSHADOW_purge_cdn', array( $this, 'ajax_purge_cdn_cache' ) );
 	}
 
 	/**
@@ -89,7 +89,7 @@ final class WPS_Feature_CDN_Integration extends WPS_Abstract_Feature {
 	 * @return string HTML with rewritten URLs.
 	 */
 	public function rewrite_urls( string $html ): string {
-		$cdn_hostname = get_option( 'wps_cdn_hostname', '' );
+		$cdn_hostname = get_option( 'wpshadow_cdn_hostname', '' );
 
 		if ( empty( $cdn_hostname ) ) {
 			return $html;
@@ -131,7 +131,7 @@ final class WPS_Feature_CDN_Integration extends WPS_Abstract_Feature {
 		}
 
 		// Check exclusion list.
-		$exclusions = get_option( 'wps_cdn_exclusions', array() );
+		$exclusions = get_option( 'wpshadow_cdn_exclusions', array() );
 		foreach ( $exclusions as $exclusion ) {
 			if ( strpos( $url, $exclusion ) !== false ) {
 				return false;
@@ -147,12 +147,12 @@ final class WPS_Feature_CDN_Integration extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_test_cdn_connection(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps-cdn' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wps-cdn' );
 
 		$cdn_url = isset( $_POST['cdn_url'] ) ? esc_url_raw( wp_unslash( $_POST['cdn_url'] ) ) : '';
 
 		if ( empty( $cdn_url ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid CDN URL', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid CDN URL', 'plugin-wpshadow' ) ) );
 		}
 
 		// Test connection.
@@ -164,7 +164,7 @@ final class WPS_Feature_CDN_Integration extends WPS_Abstract_Feature {
 
 		if ( is_wp_error( $response ) ) {
 			wp_send_json_error( array(
-				'message'       => __( 'CDN connection failed', 'plugin-wp-support-thisismyurl' ),
+				'message'       => __( 'CDN connection failed', 'plugin-wpshadow' ),
 				'error'         => $response->get_error_message(),
 				'response_time' => $resp_time,
 			) );
@@ -173,7 +173,7 @@ final class WPS_Feature_CDN_Integration extends WPS_Abstract_Feature {
 		$code = wp_remote_retrieve_response_code( $response );
 
 		wp_send_json_success( array(
-			'message'       => __( 'CDN connection successful', 'plugin-wp-support-thisismyurl' ),
+			'message'       => __( 'CDN connection successful', 'plugin-wpshadow' ),
 			'response_code' => $code,
 			'response_time' => $resp_time,
 		) );
@@ -188,22 +188,22 @@ final class WPS_Feature_CDN_Integration extends WPS_Abstract_Feature {
 		check_ajax_referer( 'wps-cdn', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$provider = get_option( 'wps_cdn_provider', 'custom' );
+		$provider = get_option( 'wpshadow_cdn_provider', 'custom' );
 
 		if ( 'cloudflare' === $provider ) {
 			$result = $this->cloudflare_purge_cache();
 		} else {
-			wp_send_json_error( array( 'message' => __( 'CDN provider not configured', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'CDN provider not configured', 'plugin-wpshadow' ) ) );
 		}
 
 		if ( is_wp_error( $result ) ) {
 			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
 		}
 
-		wp_send_json_success( array( 'message' => __( 'CDN cache purged successfully', 'plugin-wp-support-thisismyurl' ) ) );
+		wp_send_json_success( array( 'message' => __( 'CDN cache purged successfully', 'plugin-wpshadow' ) ) );
 	}
 
 	/**
@@ -212,11 +212,11 @@ final class WPS_Feature_CDN_Integration extends WPS_Abstract_Feature {
 	 * @return bool|\WP_Error True on success, WP_Error on failure.
 	 */
 	private function cloudflare_purge_cache(): bool|\WP_Error {
-		$zone_id = get_option( 'wps_cloudflare_zone_id', '' );
-		$api_key = get_option( 'wps_cloudflare_api_key', '' );
+		$zone_id = get_option( 'wpshadow_cloudflare_zone_id', '' );
+		$api_key = get_option( 'wpshadow_cloudflare_api_key', '' );
 
 		if ( empty( $zone_id ) || empty( $api_key ) ) {
-			return new \WP_Error( 'missing_credentials', __( 'CloudFlare credentials not configured', 'plugin-wp-support-thisismyurl' ) );
+			return new \WP_Error( 'missing_credentials', __( 'CloudFlare credentials not configured', 'plugin-wpshadow' ) );
 		}
 
 		$url = sprintf( 'https://api.cloudflare.com/client/v4/zones/%s/purge_cache', $zone_id );
@@ -238,7 +238,7 @@ final class WPS_Feature_CDN_Integration extends WPS_Abstract_Feature {
 		$data = json_decode( $body, true );
 
 		if ( ! isset( $data['success'] ) || ! $data['success'] ) {
-			return new \WP_Error( 'api_error', __( 'CloudFlare API error', 'plugin-wp-support-thisismyurl' ) );
+			return new \WP_Error( 'api_error', __( 'CloudFlare API error', 'plugin-wpshadow' ) );
 		}
 
 		return true;

@@ -3,7 +3,7 @@
  *
  * Handles persistent dismissal of admin notices via AJAX.
  *
- * @package WPS_CoreSupport
+ * @package WPSHADOW_CoreSupport
  * @since 1.2601.0822
  */
 
@@ -25,7 +25,7 @@
 				url: wpsNotices.ajaxUrl,
 				type: 'POST',
 				data: {
-					action: 'wps_dismiss_notice',
+					action: 'wpshadow_dismiss_notice',
 					nonce: wpsNotices.nonce,
 					notice_key: noticeKey
 				},

@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * WPS_Feature_Script_Optimizer
+ * WPSHADOW_Feature_Script_Optimizer
  *
  * Analyze and suggest script optimizations.
  */
-final class WPS_Feature_Script_Optimizer extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Script_Optimizer extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -27,14 +27,14 @@ final class WPS_Feature_Script_Optimizer extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'script-optimizer',
-				'name'               => __( 'Script Optimization Analyzer', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Analyze scripts and provide optimization recommendations', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Script Optimization Analyzer', 'plugin-wpshadow' ),
+				'description'        => __( 'Analyze scripts and provide optimization recommendations', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Resource Optimization', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Optimize how resources are loaded and delivered', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Resource Optimization', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Optimize how resources are loaded and delivered', 'plugin-wpshadow' ),
 			)
 		);
 	}
@@ -84,7 +84,7 @@ final class WPS_Feature_Script_Optimizer extends WPS_Abstract_Feature {
 		}
 
 		// Store for later analysis.
-		$stored_data = get_transient( 'wps_script_analysis_data' );
+		$stored_data = get_transient( 'wpshadow_script_analysis_data' );
 		if ( ! is_array( $stored_data ) ) {
 			$stored_data = array();
 		}
@@ -93,7 +93,7 @@ final class WPS_Feature_Script_Optimizer extends WPS_Abstract_Feature {
 		$stored_data[ $page_id ] = $script_data;
 
 		// Keep data for 7 days.
-		set_transient( 'wps_script_analysis_data', $stored_data, 7 * DAY_IN_SECONDS );
+		set_transient( 'wpshadow_script_analysis_data', $stored_data, 7 * DAY_IN_SECONDS );
 	}
 
 	/**
@@ -103,7 +103,7 @@ final class WPS_Feature_Script_Optimizer extends WPS_Abstract_Feature {
 	 */
 	public function get_optimization_suggestions(): array {
 		$suggestions = array();
-		$stored_data = get_transient( 'wps_script_analysis_data' );
+		$stored_data = get_transient( 'wpshadow_script_analysis_data' );
 
 		if ( ! is_array( $stored_data ) || empty( $stored_data ) ) {
 			return $suggestions;
@@ -142,12 +142,12 @@ final class WPS_Feature_Script_Optimizer extends WPS_Abstract_Feature {
 				$suggestions[] = array(
 					'type'           => 'conditional_loading',
 					'handle'         => $handle,
-					'plugin'         => $usage['plugin'] ?? __( 'Unknown', 'plugin-wp-support-thisismyurl' ),
+					'plugin'         => $usage['plugin'] ?? __( 'Unknown', 'plugin-wpshadow' ),
 					'pages_loaded'   => $pages_count,
 					'total_pages'    => $total_pages,
 					'recommendation' => sprintf(
 						/* translators: 1: script handle, 2: number of pages, 3: total pages */
-						__( 'Script "%1$s" loads on %2$d of %3$d analyzed pages. Consider conditional loading to reduce page weight.', 'plugin-wp-support-thisismyurl' ),
+						__( 'Script "%1$s" loads on %2$d of %3$d analyzed pages. Consider conditional loading to reduce page weight.', 'plugin-wpshadow' ),
 						$handle,
 						$pages_count,
 						$total_pages
@@ -166,7 +166,7 @@ final class WPS_Feature_Script_Optimizer extends WPS_Abstract_Feature {
 	 * @return string|null Plugin name or null if not detected.
 	 */
 	private function detect_plugin_from_handle( string $handle ): ?string {
-		return WPS_Script_Utils::detect_plugin_from_handle( $handle );
+		return WPSHADOW_Script_Utils::detect_plugin_from_handle( $handle );
 	}
 
 	/**
@@ -191,7 +191,7 @@ final class WPS_Feature_Script_Optimizer extends WPS_Abstract_Feature {
 		$stats['total_scripts'] = count( $wp_scripts->registered );
 
 		// Count deferred scripts.
-		$defer_handles             = (array) $this->get_setting( 'wps_defer_script_handles', array( ) );
+		$defer_handles             = (array) $this->get_setting( 'wpshadow_defer_script_handles', array( ) );
 		$stats['deferred_scripts'] = count( $defer_handles );
 
 		// Count external scripts.
@@ -202,7 +202,7 @@ final class WPS_Feature_Script_Optimizer extends WPS_Abstract_Feature {
 		}
 
 		// Estimate savings from conditional loading.
-		$rules = (array) $this->get_setting( 'wps_conditional_loading_rules', array( ) );
+		$rules = (array) $this->get_setting( 'wpshadow_conditional_loading_rules', array( ) );
 		foreach ( $rules as $rule ) {
 			if ( isset( $rule['handles'] ) && is_array( $rule['handles'] ) ) {
 				$stats['estimated_savings'] += count( $rule['handles'] ) * 15; // Estimate 15KB per script.

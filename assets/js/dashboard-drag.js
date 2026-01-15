@@ -2,13 +2,13 @@
  * WPS Dashboard Drag and Drop
  * Custom metabox drag-and-drop functionality
  *
- * @package WPS_CORE_SUPPORT
+ * @package WPSHADOW_CORE_SUPPORT
  */
 
 (function($) {
 	'use strict';
 
-	const TimuDashboardDrag = {
+	const WPShadowDashboardDrag = {
 		/**
 		 * Initialize drag and drop.
 		 */
@@ -35,7 +35,7 @@
 				tolerance: 'pointer',
 				items: '.wps-metabox',
 				stop: function() {
-					TimuDashboardDrag.saveState();
+					WPShadowDashboardDrag.saveState();
 				}
 			});
 		},
@@ -52,7 +52,7 @@
 				$metabox.toggleClass('closed');
 				$content.slideToggle(200);
 				
-				TimuDashboardDrag.saveState();
+				WPShadowDashboardDrag.saveState();
 			});
 		},
 
@@ -82,7 +82,7 @@
 
 			// Save via AJAX
 			$.post(ajaxurl, {
-				action: 'wps_save_metabox_state',
+				action: 'wpshadow_save_metabox_state',
 				nonce: wpsDashboardDrag.nonce,
 				state: JSON.stringify(state)
 			});
@@ -133,7 +133,7 @@
 	 * Initialize on document ready.
 	 */
 	$(document).ready(function() {
-		TimuDashboardDrag.init();
+		WPShadowDashboardDrag.init();
 	});
 
 })(jQuery);

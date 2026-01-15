@@ -13,28 +13,28 @@ declare(strict_types=1);
 
 namespace WPS\CoreSupport;
 
-use WPS\CoreSupport\WPS_Snapshot_Manager;
+use WPS\CoreSupport\WPSHADOW_Snapshot_Manager;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
- * WPS_Feature_Visual_Regression
+ * WPSHADOW_Feature_Visual_Regression
  *
  * Visual regression detection using screenshot comparison.
  */
-final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Visual_Regression extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Option key for storing pre-update screenshots.
 	 */
-	private const PRE_UPDATE_SCREENSHOTS_KEY = 'WPS_pre_update_screenshots';
+	private const PRE_UPDATE_SCREENSHOTS_KEY = 'wpshadow_pre_update_screenshots';
 
 	/**
 	 * Option key for tracking visual regression threshold.
 	 */
-	private const THRESHOLD_KEY = 'WPS_visual_regression_threshold';
+	private const THRESHOLD_KEY = 'wpshadow_visual_regression_threshold';
 
 	/**
 	 * Default visual difference threshold (percentage).
@@ -49,7 +49,7 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 	/**
 	 * Transient name for visual regression failure flag.
 	 */
-	private const FAILED_FLAG_TRANSIENT = 'wps_visual_regression_failed';
+	private const FAILED_FLAG_TRANSIENT = 'wpshadow_visual_regression_failed';
 
 	/**
 	 * Stabilization delay after update (seconds).
@@ -92,14 +92,14 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'visual-regression',
-				'name'               => __( 'Visual Regression Update Guard', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Automatically capture screenshots before/after updates and detect visual changes. Flags or rolls back updates with >5% visual difference.', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Visual Regression Update Guard', 'plugin-wpshadow' ),
+				'description'        => __( 'Automatically capture screenshots before/after updates and detect visual changes. Flags or rolls back updates with >5% visual difference.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'safety',
-				'widget_label'       => __( 'Safety Features', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Advanced safety and recovery features to protect your WordPress installation', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Safety Features', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Advanced safety and recovery features to protect your WordPress installation', 'plugin-wpshadow' ),
 			)
 		);
 	}
@@ -134,11 +134,11 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 	 */
 	public function register_settings(): void {
 		register_setting(
-			'wps_visual_regression',
+			'wpshadow_visual_regression',
 			self::THRESHOLD_KEY,
 			array(
 				'type'              => 'number',
-				'description'       => __( 'Visual difference threshold percentage (0-100)', 'plugin-wp-support-thisismyurl' ),
+				'description'       => __( 'Visual difference threshold percentage (0-100)', 'plugin-wpshadow' ),
 				'sanitize_callback' => array( $this, 'sanitize_threshold' ),
 				'default'           => self::DEFAULT_THRESHOLD,
 			)
@@ -235,7 +235,7 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 
 		// Store comparison results.
 		set_transient(
-			'wps_visual_regression_results',
+			'wpshadow_visual_regression_results',
 			array(
 				'type'               => $pre_update_data['type'],
 				'timestamp'          => time(),
@@ -277,11 +277,11 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 
 			// Use WordPress HTTP API to fetch page content.
 			// Note: SSL verification is enabled for security. If you need to disable it for local development,
-			// use the 'wps_visual_regression_request_args' filter.
+			// use the 'wpshadow_visual_regression_request_args' filter.
 			$response = wp_remote_get(
 				$url,
 				apply_filters(
-					'wps_visual_regression_request_args',
+					'wpshadow_visual_regression_request_args',
 					array(
 						'timeout'     => 30,
 						'sslverify'   => true,
@@ -382,7 +382,7 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 				$results[ $page_id ] = array(
 					'status'     => 'missing',
 					'difference' => 100.0,
-					'message'    => __( 'Post-update screenshot not available', 'plugin-wp-support-thisismyurl' ),
+					'message'    => __( 'Post-update screenshot not available', 'plugin-wpshadow' ),
 				);
 				continue;
 			}
@@ -455,14 +455,14 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function display_visual_regression_notice(): void {
-		$results = get_transient( 'wps_visual_regression_results' );
+		$results = get_transient( 'wpshadow_visual_regression_results' );
 
 		if ( ! $results || ! is_array( $results ) ) {
 			return;
 		}
 
 		// Delete transient so notice only shows once.
-		delete_transient( 'wps_visual_regression_results' );
+		delete_transient( 'wpshadow_visual_regression_results' );
 
 		$exceeded  = $results['exceeded_threshold'] ?? false;
 		$avg_diff  = $results['avg_difference'] ?? 0;
@@ -474,7 +474,7 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 		if ( $exceeded ) {
 			$message = sprintf(
 				/* translators: 1: Update type, 2: Visual difference percentage, 3: Threshold percentage */
-				__( 'Visual Regression Detected: %1$s update resulted in %2$.2f%% visual difference (threshold: %3$.2f%%). Manual review recommended.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Visual Regression Detected: %1$s update resulted in %2$.2f%% visual difference (threshold: %3$.2f%%). Manual review recommended.', 'plugin-wpshadow' ),
 				ucfirst( $type ),
 				$avg_diff,
 				$threshold
@@ -482,7 +482,7 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 		} else {
 			$message = sprintf(
 				/* translators: 1: Update type, 2: Visual difference percentage */
-				__( 'Visual Check Passed: %1$s update resulted in %2$.2f%% visual difference. No significant layout changes detected.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Visual Check Passed: %1$s update resulted in %2$.2f%% visual difference. No significant layout changes detected.', 'plugin-wpshadow' ),
 				ucfirst( $type ),
 				$avg_diff
 			);
@@ -491,7 +491,7 @@ final class WPS_Feature_Visual_Regression extends WPS_Abstract_Feature {
 		printf(
 			'<div class="notice %s is-dismissible"><p><strong>%s:</strong> %s</p></div>',
 			esc_attr( $class ),
-			esc_html__( 'Visual Regression Update Guard', 'plugin-wp-support-thisismyurl' ),
+			esc_html__( 'Visual Regression Update Guard', 'plugin-wpshadow' ),
 			esc_html( $message )
 		);
 	}

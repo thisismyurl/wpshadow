@@ -5,7 +5,7 @@
  * The central orchestration layer for spoke plugins (Image, Media, Formats, etc).
  * Moved from Image plugin's embedded core to enable DRY principle across suite.
  *
- * @package     wp_support_SUPPORT
+ * @package     wpshadow_SUPPORT
  * @version     1.2601.073000
  * @since       1.0.0
  * @author      Senior Architect
@@ -20,12 +20,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Spoke_Base Class
+ * WPSHADOW_Spoke_Base Class
  *
  * Base class for all spoke plugins extending Core support.
  * Provides admin UI, settings management, asset enqueuing, and component loading.
  */
-abstract class WPS_Spoke_Base {
+abstract class WPSHADOW_Spoke_Base {
 
 	/** @var array Shared instances of all active plugins. */
 	public static array $instances = array();
@@ -44,22 +44,22 @@ abstract class WPS_Spoke_Base {
 	/** @var \WP_Filesystem_Base|null The filesystem object. */
 	public $fs = null;
 
-	/** @var \WPS\Core\Spoke\WPS_Admin_v1|null Administrative UI handler. */
+	/** @var \WPS\Core\Spoke\WPSHADOW_Admin_v1|null Administrative UI handler. */
 	public $admin;
 
-	/** @var \WPS\Core\Spoke\WPS_Ajax_v1|null AJAX endpoint handler. */
+	/** @var \WPS\Core\Spoke\WPSHADOW_Ajax_v1|null AJAX endpoint handler. */
 	public $ajax;
 
-	/** @var \WPS\Core\Spoke\WPS_Processor_v1|null Image processing logic. */
+	/** @var \WPS\Core\Spoke\WPSHADOW_Processor_v1|null Image processing logic. */
 	public $processor;
 
-	/** @var \WPS\Core\Spoke\WPS_Vault_v1|null Backup and recovery handler. */
+	/** @var \WPS\Core\Spoke\WPSHADOW_Vault_v1|null Backup and recovery handler. */
 	public $vault;
 
 	/**
 	 * Constructor.
 	 */
-	public function __construct( string $slug, string $url, string $group, string $icon = '', string $parent = 'thisismyurl-support' ) {
+	public function __construct( string $slug, string $url, string $group, string $icon = '', string $parent = 'wpshadow-support' ) {
 		$this->plugin_slug   = $slug;
 		$this->plugin_url    = \trailingslashit( $url );
 		$this->options_group = $group;
@@ -76,7 +76,7 @@ abstract class WPS_Spoke_Base {
 		\add_filter( 'the_content', array( $this, 'filter_content_images' ), 99 );
 
 		if ( $this->admin ) {
-			\add_action( 'WPS_sidebar_under_banner', array( $this->admin, 'render_default_sidebar_actions' ) );
+			\add_action( 'wpshadow_sidebar_under_banner', array( $this->admin, 'render_default_sidebar_actions' ) );
 		}
 
 		\add_filter( 'attachment_fields_to_edit', array( $this, 'add_media_sidebar_actions' ), 10, 2 );
@@ -100,19 +100,19 @@ abstract class WPS_Spoke_Base {
 			}
 		}
 
-		if ( \class_exists( __NAMESPACE__ . '\WPS_Vault_v1' ) ) {
-			$this->vault = new WPS_Vault_v1( $this );
+		if ( \class_exists( __NAMESPACE__ . '\WPSHADOW_Vault_v1' ) ) {
+			$this->vault = new WPSHADOW_Vault_v1( $this );
 		}
 
 		if ( \is_admin() || \wp_doing_ajax() ) {
-			if ( \class_exists( __NAMESPACE__ . '\WPS_Processor_v1' ) ) {
-				$this->processor = new WPS_Processor_v1( $this );
+			if ( \class_exists( __NAMESPACE__ . '\WPSHADOW_Processor_v1' ) ) {
+				$this->processor = new WPSHADOW_Processor_v1( $this );
 			}
-			if ( \class_exists( __NAMESPACE__ . '\WPS_Ajax_v1' ) ) {
-				$this->ajax = new WPS_Ajax_v1( $this );
+			if ( \class_exists( __NAMESPACE__ . '\WPSHADOW_Ajax_v1' ) ) {
+				$this->ajax = new WPSHADOW_Ajax_v1( $this );
 			}
-			if ( \class_exists( __NAMESPACE__ . '\WPS_Admin_v1' ) ) {
-				$this->admin = new WPS_Admin_v1( $this );
+			if ( \class_exists( __NAMESPACE__ . '\WPSHADOW_Admin_v1' ) ) {
+				$this->admin = new WPSHADOW_Admin_v1( $this );
 			}
 		}
 	}
@@ -248,7 +248,7 @@ abstract class WPS_Spoke_Base {
 		if ( \get_transient( "{$this->plugin_slug}_activation_redirect" ) ) {
 			\delete_transient( "{$this->plugin_slug}_activation_redirect" );
 			if ( ! \is_network_admin() && ! isset( $_GET['activate-multi'] ) ) {
-				\wp_safe_redirect( \admin_url( 'admin.php?page=thisismyurl-support&tab=' . $this->plugin_slug ) );
+				\wp_safe_redirect( \admin_url( 'admin.php?page=wpshadow-support&tab=' . $this->plugin_slug ) );
 				exit;
 			}
 		}
@@ -288,7 +288,7 @@ abstract class WPS_Spoke_Base {
 		}
 
 		$current_page = isset( $_GET['page'] ) ? \sanitize_key( $_GET['page'] ) : '';
-		if ( $current_page === $this->plugin_slug || $current_page === 'thisismyurl-support' ) {
+		if ( $current_page === $this->plugin_slug || $current_page === 'wpshadow-support' ) {
 			if ( \file_exists( $bulk_js ) ) {
 				\wp_enqueue_script( 'wps-core-bulk', $bulk_url, array( 'jquery', 'wps-core-ui' ), $bulk_ver, true );
 			}
@@ -299,10 +299,10 @@ abstract class WPS_Spoke_Base {
 
 		\wp_localize_script(
 			'wps-core-ui',
-			'wp_support_vars',
+			'wpshadow_vars',
 			array(
 				'ajax_url' => \admin_url( 'admin-ajax.php' ),
-				'nonce'    => \wp_create_nonce( 'WPS_install_nonce' ),
+				'nonce'    => \wp_create_nonce( 'wpshadow_install_nonce' ),
 				'slug'     => $this->plugin_slug,
 			)
 		);
@@ -328,8 +328,8 @@ abstract class WPS_Spoke_Base {
 	}
 
 	public function add_plugin_action_links( array $links ): array {
-		$settings_url = \admin_url( 'admin.php?page=thisismyurl-support&tab=' . $this->plugin_slug );
-		$register_url = 'https://thisismyurl.com/' . $this->plugin_slug . '/#register?source=plugin-list';
+		$settings_url = \admin_url( 'admin.php?page=wpshadow-support&tab=' . $this->plugin_slug );
+		$register_url = 'https://wpshadow.com/' . $this->plugin_slug . '/#register?source=plugin-list';
 		$links[]      = '<a href="' . \esc_url( $settings_url ) . '">Settings</a>';
 		$links[]      = '<a href="' . \esc_url( $register_url ) . '" target="_blank">Register</a>';
 		return $links;
@@ -349,10 +349,10 @@ abstract class WPS_Spoke_Base {
 				function ( array $m ) use ( $prefix, $target_ext ) {
 					$url       = $m[2];
 					$cache_key = 'url_to_id_' . \md5( (string) $url );
-					$id        = \wp_cache_get( $cache_key, 'WPS_url_lookups' );
+					$id        = \wp_cache_get( $cache_key, 'wpshadow_url_lookups' );
 					if ( false === $id ) {
 						$id = (int) \attachment_url_to_postid( (string) $url );
-						\wp_cache_set( $cache_key, $id, 'WPS_url_lookups', DAY_IN_SECONDS );
+						\wp_cache_set( $cache_key, $id, 'wpshadow_url_lookups', DAY_IN_SECONDS );
 					}
 					if ( $id > 0 && \get_post_meta( $id, "_{$prefix}_savings", true ) ) {
 						return $m[1] . '="' . \preg_replace( '/\.(jpe?g|png)$/i', '.' . $target_ext, (string) $url ) . '"';
@@ -450,8 +450,8 @@ abstract class WPS_Spoke_Base {
 		$page = isset( $_GET['page'] ) ? \sanitize_key( $_GET['page'] ) : '';
 		if ( $page === $this->plugin_slug ) {
 			$current_screen = \get_current_screen();
-			if ( ! $current_screen || 'toplevel_page_thisismyurl-support' !== $current_screen->id ) {
-				\wp_safe_redirect( \admin_url( 'admin.php?page=thisismyurl-support&tab=' . $this->plugin_slug ) );
+			if ( ! $current_screen || 'toplevel_page_wpshadow-support' !== $current_screen->id ) {
+				\wp_safe_redirect( \admin_url( 'admin.php?page=wpshadow-support&tab=' . $this->plugin_slug ) );
 				exit;
 			}
 		}
@@ -531,7 +531,7 @@ abstract class WPS_Spoke_Base {
 						<div id="postbox-container-1" class="postbox-container">
 							<div class="postbox">
 								<div class="inside">
-									<?php \do_action( 'WPS_sidebar_under_banner', $this->plugin_slug ); ?>
+									<?php \do_action( 'wpshadow_sidebar_under_banner', $this->plugin_slug ); ?>
 								</div>
 							</div>
 						</div>
@@ -725,7 +725,7 @@ abstract class WPS_Spoke_Base {
 /**
  * --- SPOKE BASE ARCHITECT METADATA ---
  * Changelog:
- * - [1.2601.073000] Moved wp_support_v1 from Image's embedded core to Core plugin as WPS_Spoke_Base. Namespace: WPS\Core\Spoke. Enables DRY principle and simplifies spoke plugin development.
+ * - [1.2601.073000] Moved wpshadow_v1 from Image's embedded core to Core plugin as WPSHADOW_Spoke_Base. Namespace: WPS\Core\Spoke. Enables DRY principle and simplifies spoke plugin development.
  * Upgrade Notice: Consolidated spoke framework for cleaner architecture
  * Requires at least: 6.4 | PHP: 8.2
  */

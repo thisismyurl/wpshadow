@@ -4,7 +4,7 @@
  *
  * Allows enabling/disabling module features independently of plugin activation.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
 declare(strict_types=1);
@@ -21,16 +21,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages feature flags for each module with dependency graph validation.
  */
-class WPS_Module_Toggles {
+class WPSHADOW_Module_Toggles {
 
 	/**
 	 * Module dependency graph.
 	 * key: module slug, value: required parent modules.
 	 */
 	private const MODULE_DEPENDENCIES = array(
-		'media-support-thisismyurl' => array(),
-		'image-support-thisismyurl' => array( 'media-support-thisismyurl' ),
-		'vault-support-thisismyurl' => array( 'media-support-thisismyurl' ),
+		'media-wpshadow' => array(),
+		'image-wpshadow' => array( 'media-wpshadow' ),
+		'vault-wpshadow' => array( 'media-wpshadow' ),
 	);
 
 	/**
@@ -40,7 +40,7 @@ class WPS_Module_Toggles {
 	 */
 	public static function init(): void {
 		add_action( 'admin_init', array( __CLASS__, 'register_settings' ) );
-		add_filter( 'WPS_module_enabled', array( __CLASS__, 'check_module_enabled' ), 10, 2 );
+		add_filter( 'wpshadow_module_enabled', array( __CLASS__, 'check_module_enabled' ), 10, 2 );
 	}
 
 	/**
@@ -50,8 +50,8 @@ class WPS_Module_Toggles {
 	 */
 	public static function register_settings(): void {
 		register_setting(
-			'wp_support_modules',
-			'WPS_module_toggles',
+			'wpshadow_modules',
+			'wpshadow_module_toggles',
 			array(
 				'type'              => 'object',
 				'sanitize_callback' => array( __CLASS__, 'sanitize_toggles' ),
@@ -60,20 +60,20 @@ class WPS_Module_Toggles {
 		);
 
 		add_settings_section(
-			'WPS_module_toggles_section',
-			__( 'Module Features', 'plugin-wp-support-thisismyurl' ),
+			'wpshadow_module_toggles_section',
+			__( 'Module Features', 'plugin-wpshadow' ),
 			array( __CLASS__, 'render_section' ),
-			'wp_support_modules'
+			'wpshadow_modules'
 		);
 
 		// Add fields for each module.
 		foreach ( self::MODULE_DEPENDENCIES as $module => $dependencies ) {
 			add_settings_field(
-				'WPS_toggle_' . $module,
+				'wpshadow_toggle_' . $module,
 				esc_html( self::get_module_label( $module ) ),
 				array( __CLASS__, 'render_toggle_field' ),
-				'wp_support_modules',
-				'WPS_module_toggles_section',
+				'wpshadow_modules',
+				'wpshadow_module_toggles_section',
 				array( 'module' => $module )
 			);
 		}
@@ -86,7 +86,7 @@ class WPS_Module_Toggles {
 	 */
 	public static function render_section(): void {
 		?>
-		<p><?php esc_html_e( 'Enable or disable module features. Disabling a feature will not deactivate the plugin.', 'plugin-wp-support-thisismyurl' ); ?></p>
+		<p><?php esc_html_e( 'Enable or disable module features. Disabling a feature will not deactivate the plugin.', 'plugin-wpshadow' ); ?></p>
 		<?php
 	}
 
@@ -104,7 +104,7 @@ class WPS_Module_Toggles {
 		$installed = self::is_plugin_installed( $module );
 
 		if ( ! $installed ) {
-			echo wp_kses_post( sprintf( '<em aria-label="%s">%s</em>', esc_attr__( 'Plugin not installed', 'plugin-wp-support-thisismyurl' ), esc_html__( 'Plugin not installed', 'plugin-wp-support-thisismyurl' ) ) );
+			echo wp_kses_post( sprintf( '<em aria-label="%s">%s</em>', esc_attr__( 'Plugin not installed', 'plugin-wpshadow' ), esc_html__( 'Plugin not installed', 'plugin-wpshadow' ) ) );
 			return;
 		}
 
@@ -122,25 +122,25 @@ class WPS_Module_Toggles {
 			echo wp_kses_post(
 				sprintf(
 					'<em aria-label="%s" role="status">%s</em>',
-					esc_attr__( 'Requires dependencies', 'plugin-wp-support-thisismyurl' ),
+					esc_attr__( 'Requires dependencies', 'plugin-wpshadow' ),
 					/* translators: Module names */
-					sprintf( __( 'Requires: %s', 'plugin-wp-support-thisismyurl' ), esc_html( $dep_labels ) )
+					sprintf( __( 'Requires: %s', 'plugin-wpshadow' ), esc_html( $dep_labels ) )
 				)
 			);
 			return;
 		}
 
-		$field_name = 'WPS_module_toggles[' . esc_attr( $module ) . ']';
-		$field_id   = 'WPS_toggle_' . esc_attr( $module );
+		$field_name = 'wpshadow_module_toggles[' . esc_attr( $module ) . ']';
+		$field_id   = 'wpshadow_toggle_' . esc_attr( $module );
 		?>
 		<fieldset>
 			<legend class="screen-reader-text"><?php echo esc_html( self::get_module_label( $module ) ); ?></legend>
 			<input type="checkbox" name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $field_id ); ?>" value="1" <?php checked( $enabled, 1 ); ?> aria-describedby="<?php echo esc_attr( $field_id . '_desc' ); ?>" />
 			<label for="<?php echo esc_attr( $field_id ); ?>">
-				<?php esc_html_e( 'Enabled', 'plugin-wp-support-thisismyurl' ); ?>
+				<?php esc_html_e( 'Enabled', 'plugin-wpshadow' ); ?>
 			</label>
 			<p class="description" id="<?php echo esc_attr( $field_id . '_desc' ); ?>">
-				<?php esc_html_e( 'Disabling this will turn off module features without deactivating the plugin.', 'plugin-wp-support-thisismyurl' ); ?>
+				<?php esc_html_e( 'Disabling this will turn off module features without deactivating the plugin.', 'plugin-wpshadow' ); ?>
 			</p>
 		</fieldset>
 		<?php
@@ -210,7 +210,7 @@ class WPS_Module_Toggles {
 	 * @return array Module toggles.
 	 */
 	public static function get_toggles(): array {
-		$toggles = get_option( 'WPS_module_toggles', array() );
+		$toggles = get_option( 'wpshadow_module_toggles', array() );
 
 		if ( ! is_array( $toggles ) ) {
 			$toggles = array();
@@ -262,7 +262,7 @@ class WPS_Module_Toggles {
 		}
 
 		if ( ! empty( $deactivated ) ) {
-			update_option( 'WPS_module_toggles', $toggles, false );
+			update_option( 'wpshadow_module_toggles', $toggles, false );
 			self::remember_auto_deactivated( $parent_module, $deactivated );
 		}
 
@@ -277,12 +277,12 @@ class WPS_Module_Toggles {
 	 * @return void
 	 */
 	private static function remember_auto_deactivated( string $parent_module, array $deactivated ): void {
-		$memory = get_option( 'WPS_auto_deactivated', array() );
+		$memory = get_option( 'wpshadow_auto_deactivated', array() );
 		if ( ! is_array( $memory ) ) {
 			$memory = array();
 		}
 		$memory[ $parent_module ] = $deactivated;
-		update_option( 'WPS_auto_deactivated', $memory, false );
+		update_option( 'wpshadow_auto_deactivated', $memory, false );
 	}
 
 	/**
@@ -292,7 +292,7 @@ class WPS_Module_Toggles {
 	 * @return array Array of module slugs that were auto-deactivated.
 	 */
 	public static function get_remembered_deactivated( string $parent_module ): array {
-		$memory = get_option( 'WPS_auto_deactivated', array() );
+		$memory = get_option( 'wpshadow_auto_deactivated', array() );
 		if ( ! is_array( $memory ) ) {
 			return array();
 		}
@@ -306,12 +306,12 @@ class WPS_Module_Toggles {
 	 * @return void
 	 */
 	public static function clear_remembered( string $parent_module ): void {
-		$memory = get_option( 'WPS_auto_deactivated', array() );
+		$memory = get_option( 'wpshadow_auto_deactivated', array() );
 		if ( ! is_array( $memory ) ) {
 			return;
 		}
 		unset( $memory[ $parent_module ] );
-		update_option( 'WPS_auto_deactivated', $memory, false );
+		update_option( 'wpshadow_auto_deactivated', $memory, false );
 	}
 
 	/**
@@ -338,9 +338,9 @@ class WPS_Module_Toggles {
 	 */
 	private static function get_module_label( string $module ): string {
 		$labels = array(
-			'media-support-thisismyurl' => __( 'Media', 'plugin-wp-support-thisismyurl' ),
-			'image-support-thisismyurl' => __( 'Image', 'plugin-wp-support-thisismyurl' ),
-			'vault-support-thisismyurl' => __( 'Vault', 'plugin-wp-support-thisismyurl' ),
+			'media-wpshadow' => __( 'Media', 'plugin-wpshadow' ),
+			'image-wpshadow' => __( 'Image', 'plugin-wpshadow' ),
+			'vault-wpshadow' => __( 'Vault', 'plugin-wpshadow' ),
 		);
 
 		return $labels[ $module ] ?? ucwords( str_replace( '-', ' ', $module ) );

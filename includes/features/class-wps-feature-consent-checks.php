@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * WPS_Feature_Consent_Checks
+ * WPSHADOW_Feature_Consent_Checks
  *
  * Monitors third-party scripts for cookie usage and provides
  * a consent management system without external dependencies.
  */
-final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Consent_Checks extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -28,14 +28,14 @@ final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'consent-checks',
-				'name'               => __( 'Cookie Consent Checks', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Detect third-party cookies and provide consent management without external dependencies', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Cookie Consent Checks', 'plugin-wpshadow' ),
+				'description'        => __( 'Detect third-party cookies and provide consent management without external dependencies', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
-				'widget_label'       => __( 'Privacy & Compliance', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Tools for GDPR and privacy compliance', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Privacy & Compliance', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Tools for GDPR and privacy compliance', 'plugin-wpshadow' ),
 			)
 		);
 	}
@@ -60,7 +60,7 @@ final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
 		add_action( 'wp_footer', array( $this, 'render_consent_banner' ), 1 );
 
 		// Add settings page integration.
-		add_filter( 'wps_feature_settings_consent-checks', array( $this, 'render_settings' ) );
+		add_filter( 'wpshadow_feature_settings_consent-checks', array( $this, 'render_settings' ) );
 	}
 
 	/**
@@ -79,7 +79,7 @@ final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
 			'use strict';
 			
 			// Check for existing consent (accepted or custom)
-			var consentStatus = localStorage.getItem('wps_cookie_consent');
+			var consentStatus = localStorage.getItem('wpshadow_cookie_consent');
 			var hasConsent = consentStatus === 'accepted' || consentStatus === 'custom';
 			
 			if (hasConsent) {
@@ -163,7 +163,7 @@ final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
 			return;
 		}
 
-		$plugin_url = defined( 'wp_support_URL' ) ? wp_support_URL : plugin_dir_url( dirname( __DIR__ ) );
+		$plugin_url = defined( 'WPSHADOW_URL' ) ? WPSHADOW_URL : plugin_dir_url( dirname( __DIR__ ) );
 
 		wp_enqueue_style(
 			'wps-consent-banner',
@@ -187,8 +187,8 @@ final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
 				'cookieDomain' => $this->get_cookie_domain(),
 				'isSecure'     => is_ssl(),
 				'i18n'         => array(
-					'accepted' => __( 'Cookie preferences saved', 'plugin-wp-support-thisismyurl' ),
-					'rejected' => __( 'Cookies blocked', 'plugin-wp-support-thisismyurl' ),
+					'accepted' => __( 'Cookie preferences saved', 'plugin-wpshadow' ),
+					'rejected' => __( 'Cookies blocked', 'plugin-wpshadow' ),
 				),
 			)
 		);
@@ -205,50 +205,50 @@ final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
 			return;
 		}
 
-		$banner_text = $this->get_setting( 'wps_consent_banner_text', $this->get_default_banner_text( ) );
+		$banner_text = $this->get_setting( 'wpshadow_consent_banner_text', $this->get_default_banner_text( ) );
 		$privacy_url = get_privacy_policy_url();
 		?>
 		<div id="wps-consent-banner" class="wps-consent-banner" style="display:none;" aria-live="polite" role="dialog" aria-labelledby="wps-consent-title">
 			<div class="wps-consent-content">
-				<h3 id="wps-consent-title"><?php echo esc_html__( 'Cookie Consent', 'plugin-wp-support-thisismyurl' ); ?></h3>
+				<h3 id="wps-consent-title"><?php echo esc_html__( 'Cookie Consent', 'plugin-wpshadow' ); ?></h3>
 				<p><?php echo wp_kses_post( $banner_text ); ?></p>
 				<?php if ( $privacy_url ) : ?>
 					<p class="wps-consent-privacy-link">
 						<a href="<?php echo esc_url( $privacy_url ); ?>" target="_blank" rel="noopener">
-							<?php echo esc_html__( 'View Privacy Policy', 'plugin-wp-support-thisismyurl' ); ?>
+							<?php echo esc_html__( 'View Privacy Policy', 'plugin-wpshadow' ); ?>
 						</a>
 					</p>
 				<?php endif; ?>
 				<div class="wps-consent-actions">
 					<button type="button" class="wps-consent-btn wps-consent-accept" id="wps-consent-accept">
-						<?php echo esc_html__( 'Accept All Cookies', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php echo esc_html__( 'Accept All Cookies', 'plugin-wpshadow' ); ?>
 					</button>
 					<button type="button" class="wps-consent-btn wps-consent-reject" id="wps-consent-reject">
-						<?php echo esc_html__( 'Reject Non-Essential', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php echo esc_html__( 'Reject Non-Essential', 'plugin-wpshadow' ); ?>
 					</button>
 					<button type="button" class="wps-consent-btn wps-consent-manage" id="wps-consent-manage">
-						<?php echo esc_html__( 'Manage Preferences', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php echo esc_html__( 'Manage Preferences', 'plugin-wpshadow' ); ?>
 					</button>
 				</div>
 				<div id="wps-consent-preferences" class="wps-consent-preferences" style="display:none;">
-					<h4><?php echo esc_html__( 'Cookie Preferences', 'plugin-wp-support-thisismyurl' ); ?></h4>
+					<h4><?php echo esc_html__( 'Cookie Preferences', 'plugin-wpshadow' ); ?></h4>
 					<label>
 						<input type="checkbox" checked disabled />
-						<strong><?php echo esc_html__( 'Essential Cookies', 'plugin-wp-support-thisismyurl' ); ?></strong>
-						<span class="wps-consent-desc"><?php echo esc_html__( 'Required for the website to function properly.', 'plugin-wp-support-thisismyurl' ); ?></span>
+						<strong><?php echo esc_html__( 'Essential Cookies', 'plugin-wpshadow' ); ?></strong>
+						<span class="wps-consent-desc"><?php echo esc_html__( 'Required for the website to function properly.', 'plugin-wpshadow' ); ?></span>
 					</label>
 					<label>
 						<input type="checkbox" id="wps-consent-analytics" />
-						<strong><?php echo esc_html__( 'Analytics Cookies', 'plugin-wp-support-thisismyurl' ); ?></strong>
-						<span class="wps-consent-desc"><?php echo esc_html__( 'Help us understand how visitors use our website.', 'plugin-wp-support-thisismyurl' ); ?></span>
+						<strong><?php echo esc_html__( 'Analytics Cookies', 'plugin-wpshadow' ); ?></strong>
+						<span class="wps-consent-desc"><?php echo esc_html__( 'Help us understand how visitors use our website.', 'plugin-wpshadow' ); ?></span>
 					</label>
 					<label>
 						<input type="checkbox" id="wps-consent-marketing" />
-						<strong><?php echo esc_html__( 'Marketing Cookies', 'plugin-wp-support-thisismyurl' ); ?></strong>
-						<span class="wps-consent-desc"><?php echo esc_html__( 'Used to track visitors across websites for marketing purposes.', 'plugin-wp-support-thisismyurl' ); ?></span>
+						<strong><?php echo esc_html__( 'Marketing Cookies', 'plugin-wpshadow' ); ?></strong>
+						<span class="wps-consent-desc"><?php echo esc_html__( 'Used to track visitors across websites for marketing purposes.', 'plugin-wpshadow' ); ?></span>
 					</label>
 					<button type="button" class="wps-consent-btn wps-consent-save" id="wps-consent-save-prefs">
-						<?php echo esc_html__( 'Save Preferences', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php echo esc_html__( 'Save Preferences', 'plugin-wpshadow' ); ?>
 					</button>
 				</div>
 			</div>
@@ -277,7 +277,7 @@ final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
 			'^test_cookie$',  // DoubleClick
 		);
 
-		$custom_patterns = (array) $this->get_setting( 'wps_consent_blocked_patterns', array( ) );
+		$custom_patterns = (array) $this->get_setting( 'wpshadow_consent_blocked_patterns', array( ) );
 		$patterns        = array_merge( $default_patterns, $custom_patterns );
 
 		/**
@@ -285,7 +285,7 @@ final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
 		 *
 		 * @param array $patterns List of regex patterns.
 		 */
-		return apply_filters( 'wps_consent_blocked_patterns', $patterns );
+		return apply_filters( 'wpshadow_consent_blocked_patterns', $patterns );
 	}
 
 	/**
@@ -310,7 +310,7 @@ final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
 	 * @return string Default banner text.
 	 */
 	private function get_default_banner_text(): string {
-		return __( 'This website uses cookies to improve your experience. We use essential cookies to make our site work. With your consent, we may also use non-essential cookies to improve user experience and analyze website traffic.', 'plugin-wp-support-thisismyurl' );
+		return __( 'This website uses cookies to improve your experience. We use essential cookies to make our site work. With your consent, we may also use non-essential cookies to improve user experience and analyze website traffic.', 'plugin-wpshadow' );
 	}
 
 	/**
@@ -319,44 +319,44 @@ final class WPS_Feature_Consent_Checks extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function render_settings(): void {
-		$banner_text          = $this->get_setting( 'wps_consent_banner_text', $this->get_default_banner_text( ) );
-		$custom_patterns      = $this->get_setting( 'wps_consent_blocked_patterns', array( ) );
+		$banner_text          = $this->get_setting( 'wpshadow_consent_banner_text', $this->get_default_banner_text( ) );
+		$custom_patterns      = $this->get_setting( 'wpshadow_consent_blocked_patterns', array( ) );
 		$custom_patterns_text = is_array( $custom_patterns ) ? implode( "\n", $custom_patterns ) : '';
 		?>
-		<h3><?php echo esc_html__( 'Cookie Consent Settings', 'plugin-wp-support-thisismyurl' ); ?></h3>
+		<h3><?php echo esc_html__( 'Cookie Consent Settings', 'plugin-wpshadow' ); ?></h3>
 		<table class="form-table">
 			<tr>
 				<th scope="row">
-					<label for="wps_consent_banner_text"><?php echo esc_html__( 'Banner Text', 'plugin-wp-support-thisismyurl' ); ?></label>
+					<label for="wpshadow_consent_banner_text"><?php echo esc_html__( 'Banner Text', 'plugin-wpshadow' ); ?></label>
 				</th>
 				<td>
 					<textarea 
-						id="wps_consent_banner_text" 
-						name="wps_consent_banner_text" 
+						id="wpshadow_consent_banner_text" 
+						name="wpshadow_consent_banner_text" 
 						rows="4" 
 						cols="50" 
 						class="large-text"
 					><?php echo esc_textarea( $banner_text ); ?></textarea>
 					<p class="description">
-						<?php echo esc_html__( 'The message displayed to visitors in the consent banner.', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php echo esc_html__( 'The message displayed to visitors in the consent banner.', 'plugin-wpshadow' ); ?>
 					</p>
 				</td>
 			</tr>
 			<tr>
 				<th scope="row">
-					<label for="wps_consent_blocked_patterns"><?php echo esc_html__( 'Custom Blocked Patterns', 'plugin-wp-support-thisismyurl' ); ?></label>
+					<label for="wpshadow_consent_blocked_patterns"><?php echo esc_html__( 'Custom Blocked Patterns', 'plugin-wpshadow' ); ?></label>
 				</th>
 				<td>
 					<textarea 
-						id="wps_consent_blocked_patterns" 
-						name="wps_consent_blocked_patterns" 
+						id="wpshadow_consent_blocked_patterns" 
+						name="wpshadow_consent_blocked_patterns" 
 						rows="8" 
 						cols="50" 
 						class="large-text"
 						placeholder="^custom_cookie_prefix&#10;^third_party_"
 					><?php echo esc_textarea( $custom_patterns_text ); ?></textarea>
 					<p class="description">
-						<?php echo esc_html__( 'One regex pattern per line. These patterns will be blocked until consent is given. Default patterns include Google Analytics, Facebook Pixel, and DoubleClick.', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php echo esc_html__( 'One regex pattern per line. These patterns will be blocked until consent is given. Default patterns include Google Analytics, Facebook Pixel, and DoubleClick.', 'plugin-wpshadow' ); ?>
 					</p>
 				</td>
 			</tr>

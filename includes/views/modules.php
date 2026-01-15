@@ -5,7 +5,7 @@
  * Renders the modules table with hubs and spokes, including install/activate/update actions.
  * Assumes controller passes `$hub_modules` and `$spoke_modules` arrays and computes activation states.
  *
- * @package core-support-thisismyurl
+ * @package core-wpshadow
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -64,11 +64,11 @@ input:disabled + .wps-toggle-slider {
 @keyframes wpsProgress { from { width: 30%; } to { width: 90%; } }
 </style>
 <div class="wrap wps-modules-view" id="wps-modules-main" role="main">
-	<h1 class="wp-heading-inline"><?php esc_html_e( 'Modules', 'plugin-wp-support-thisismyurl' ); ?></h1>
-	<span class="dashicons dashicons-editor-help" aria-label="<?php esc_attr_e( 'Modules help', 'plugin-wp-support-thisismyurl' ); ?>" title="<?php esc_attr_e( 'Install or update modules from the catalog; activate/deactivate per site or network. Network Active items can only be deactivated from Network Admin.', 'plugin-wp-support-thisismyurl' ); ?>">
-		<span class="screen-reader-text"><?php esc_html_e( 'Install or update modules from the catalog; activate/deactivate per site or network. Network Active items can only be deactivated from Network Admin.', 'plugin-wp-support-thisismyurl' ); ?></span>
+	<h1 class="wp-heading-inline"><?php esc_html_e( 'Modules', 'plugin-wpshadow' ); ?></h1>
+	<span class="dashicons dashicons-editor-help" aria-label="<?php esc_attr_e( 'Modules help', 'plugin-wpshadow' ); ?>" title="<?php esc_attr_e( 'Install or update modules from the catalog; activate/deactivate per site or network. Network Active items can only be deactivated from Network Admin.', 'plugin-wpshadow' ); ?>">
+		<span class="screen-reader-text"><?php esc_html_e( 'Install or update modules from the catalog; activate/deactivate per site or network. Network Active items can only be deactivated from Network Admin.', 'plugin-wpshadow' ); ?></span>
 	</span>
-	<?php $override_allowed = class_exists( 'WPS_Vault' ) ? WPS_Vault::site_override_allowed() : true; ?>
+	<?php $override_allowed = class_exists( 'wpshadow_Vault' ) ? WPSHADOW_Vault::site_override_allowed() : true; ?>
 	<div class="wps-dashboard-stats">
 		<?php
 		// Fallback counts when controller variables are missing.
@@ -89,20 +89,20 @@ input:disabled + .wps-toggle-slider {
 			}
 		}
 		?>
-		<div class="wps-stat-card" role="group" aria-label="<?php esc_attr_e( 'Total modules', 'plugin-wp-support-thisismyurl' ); ?>">
+		<div class="wps-stat-card" role="group" aria-label="<?php esc_attr_e( 'Total modules', 'plugin-wpshadow' ); ?>">
 			<div class="wps-stat-icon">
 				<span class="dashicons dashicons-admin-plugins"></span>
 			</div>
 			<div class="wps-stat-content">
 				<div class="wps-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $total_count ?? $total_fallback ) ) ); ?></div>
-				<div class="wps-stat-label"><?php esc_html_e( 'Total', 'plugin-wp-support-thisismyurl' ); ?></div>
+				<div class="wps-stat-label"><?php esc_html_e( 'Total', 'plugin-wpshadow' ); ?></div>
 			</div>
 		</div>
 
 			<script>
 			(function(){
 				const ajaxUrl = '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>';
-				const nonce = '<?php echo esc_js( wp_create_nonce( 'WPS_module_actions' ) ); ?>';
+				const nonce = '<?php echo esc_js( wp_create_nonce( 'wpshadow_module_actions' ) ); ?>';
 				const scope = '<?php echo ( is_multisite() && is_network_admin() ) ? 'network' : 'site'; ?>';
 
 				const storagePrefix = 'wpsToggleState:' + scope + ':';
@@ -162,20 +162,20 @@ input:disabled + .wps-toggle-slider {
 					const pluginExists = input.getAttribute('data-plugin-exists') === '1';
 					const downloadable = input.getAttribute('data-downloadable') === '1';
 					setWorking(input, true);
-					let action = 'WPS_module_toggle';
+					let action = 'wpshadow_module_toggle';
 					const payload = { slug };
 					if (turningOn) {
 						if (downloadable && !pluginExists) {
-							action = 'WPS_module_install';
+							action = 'wpshadow_module_install';
 						} else if (pluginExists) {
-							action = 'WPS_module_activate';
+							action = 'wpshadow_module_activate';
 							payload.plugin_base = pluginBase;
 						} else {
 							payload.enabled = 1;
 						}
 					} else {
 						if (pluginExists) {
-							action = 'WPS_module_deactivate';
+							action = 'wpshadow_module_deactivate';
 							payload.plugin_base = pluginBase;
 						} else {
 							payload.enabled = 0;
@@ -232,14 +232,14 @@ input:disabled + .wps-toggle-slider {
 						const pluginBase = input.getAttribute('data-plugin-base') || '';
 						const pluginExists = input.getAttribute('data-plugin-exists') === '1';
 						const downloadable = input.getAttribute('data-downloadable') === '1';
-						let action = 'WPS_module_toggle';
+						let action = 'wpshadow_module_toggle';
 						const payload = { slug };
 						if (targetOn){
-							if (downloadable && !pluginExists){ action = 'WPS_module_install'; }
-							else if (pluginExists){ action = 'WPS_module_activate'; payload.plugin_base = pluginBase; }
+							if (downloadable && !pluginExists){ action = 'wpshadow_module_install'; }
+							else if (pluginExists){ action = 'wpshadow_module_activate'; payload.plugin_base = pluginBase; }
 							else { payload.enabled = 1; }
 						} else {
-							if (pluginExists){ action = 'WPS_module_deactivate'; payload.plugin_base = pluginBase; }
+							if (pluginExists){ action = 'wpshadow_module_deactivate'; payload.plugin_base = pluginBase; }
 							else { payload.enabled = 0; }
 						}
 
@@ -291,7 +291,7 @@ input:disabled + .wps-toggle-slider {
 
 				// Utility: add/remove submenu entry for a hub from its slug
 				function ensureSubmenuFromSlug(slug, name, enabled){
-					const moduleId = (slug || '').replace(/-support-thisismyurl$/,'');
+					const moduleId = (slug || '').replace(/-wpshadow$/,'');
 					const label = name || moduleId || 'Module';
 					ensureSubmenu(moduleId, label, enabled);
 				}
@@ -332,53 +332,53 @@ input:disabled + .wps-toggle-slider {
 			})();
 			</script>
 
-		<div class="wps-stat-card" role="group" aria-label="<?php esc_attr_e( 'Enabled modules', 'plugin-wp-support-thisismyurl' ); ?>">
+		<div class="wps-stat-card" role="group" aria-label="<?php esc_attr_e( 'Enabled modules', 'plugin-wpshadow' ); ?>">
 			<div class="wps-stat-icon wps-stat-enabled">
 				<span class="dashicons dashicons-yes-alt"></span>
 			</div>
 			<div class="wps-stat-content">
 				<div class="wps-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $enabled_count ?? 0 ) ) ); ?></div>
-				<div class="wps-stat-label"><?php esc_html_e( 'Enabled', 'plugin-wp-support-thisismyurl' ); ?></div>
+				<div class="wps-stat-label"><?php esc_html_e( 'Enabled', 'plugin-wpshadow' ); ?></div>
 			</div>
 		</div>
 
-		<div class="wps-stat-card" role="group" aria-label="<?php esc_attr_e( 'Available modules', 'plugin-wp-support-thisismyurl' ); ?>">
+		<div class="wps-stat-card" role="group" aria-label="<?php esc_attr_e( 'Available modules', 'plugin-wpshadow' ); ?>">
 			<div class="wps-stat-icon wps-stat-available">
 				<span class="dashicons dashicons-plus-alt"></span>
 			</div>
 			<div class="wps-stat-content">
 				<div class="wps-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $available_count ?? 0 ) ) ); ?></div>
-				<div class="wps-stat-label"><?php esc_html_e( 'Available', 'plugin-wp-support-thisismyurl' ); ?></div>
+				<div class="wps-stat-label"><?php esc_html_e( 'Available', 'plugin-wpshadow' ); ?></div>
 			</div>
 		</div>
 
-		<div class="wps-stat-card" role="group" aria-label="<?php esc_attr_e( 'Updates available', 'plugin-wp-support-thisismyurl' ); ?>">
+		<div class="wps-stat-card" role="group" aria-label="<?php esc_attr_e( 'Updates available', 'plugin-wpshadow' ); ?>">
 			<div class="wps-stat-icon wps-stat-update">
 				<span class="dashicons dashicons-update"></span>
 			</div>
 			<div class="wps-stat-content">
 				<div class="wps-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $updates_count ?? $updates_fallback ) ) ); ?></div>
-				<div class="wps-stat-label"><?php esc_html_e( 'Updates', 'plugin-wp-support-thisismyurl' ); ?></div>
+				<div class="wps-stat-label"><?php esc_html_e( 'Updates', 'plugin-wpshadow' ); ?></div>
 			</div>
 		</div>
 
-		<div class="wps-stat-card" role="group" aria-label="<?php esc_attr_e( 'Hubs', 'plugin-wp-support-thisismyurl' ); ?>">
+		<div class="wps-stat-card" role="group" aria-label="<?php esc_attr_e( 'Hubs', 'plugin-wpshadow' ); ?>">
 			<div class="wps-stat-icon wps-stat-hub">
 				<span class="dashicons dashicons-networking"></span>
 			</div>
 			<div class="wps-stat-content">
 				<div class="wps-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $hubs_count ?? ( isset( $hub_modules ) ? count( $hub_modules ) : 0 ) ) ) ); ?></div>
-				<div class="wps-stat-label"><?php esc_html_e( 'Hubs', 'plugin-wp-support-thisismyurl' ); ?></div>
+				<div class="wps-stat-label"><?php esc_html_e( 'Hubs', 'plugin-wpshadow' ); ?></div>
 			</div>
 		</div>
 
-		<div class="wps-stat-card" role="group" aria-label="<?php esc_attr_e( 'Spokes', 'plugin-wp-support-thisismyurl' ); ?>">
+		<div class="wps-stat-card" role="group" aria-label="<?php esc_attr_e( 'Spokes', 'plugin-wpshadow' ); ?>">
 			<div class="wps-stat-icon wps-stat-spoke">
 				<span class="dashicons dashicons-admin-tools"></span>
 			</div>
 			<div class="wps-stat-content">
 				<div class="wps-stat-value"><?php echo esc_html( number_format_i18n( (int) ( $spokes_count ?? ( isset( $spoke_modules ) ? count( $spoke_modules ) : 0 ) ) ) ); ?></div>
-				<div class="wps-stat-label"><?php esc_html_e( 'Spokes', 'plugin-wp-support-thisismyurl' ); ?></div>
+				<div class="wps-stat-label"><?php esc_html_e( 'Spokes', 'plugin-wpshadow' ); ?></div>
 			</div>
 		</div>
 	</div>
@@ -393,7 +393,7 @@ input:disabled + .wps-toggle-slider {
 		);
 	}
 	foreach ( $spoke_modules as $spoke ) {
-		$parent = 'image-support-thisismyurl';
+		$parent = 'image-wpshadow';
 		if ( isset( $groups[ $parent ] ) ) {
 			$groups[ $parent ]['spokes'][] = $spoke;
 		} else {
@@ -410,19 +410,19 @@ input:disabled + .wps-toggle-slider {
 		<?php if ( empty( $groups ) ) : ?>
 			<div class="wps-no-modules">
 				<span class="dashicons dashicons-info"></span>
-				<p><?php esc_html_e( 'No modules found.', 'plugin-wp-support-thisismyurl' ); ?></p>
+				<p><?php esc_html_e( 'No modules found.', 'plugin-wpshadow' ); ?></p>
 			</div>
 		<?php else : ?>
 			<div class="wps-table-responsive">
 				<table class="widefat fixed striped wps-modules-table">
-					<caption class="screen-reader-text"><?php esc_html_e( 'Module catalog with status, version, and author information.', 'plugin-wp-support-thisismyurl' ); ?></caption>
+					<caption class="screen-reader-text"><?php esc_html_e( 'Module catalog with status, version, and author information.', 'plugin-wpshadow' ); ?></caption>
 					<thead>
 					<tr>
-						<th scope="col"><?php esc_html_e( 'Module', 'plugin-wp-support-thisismyurl' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Requires', 'plugin-wp-support-thisismyurl' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Version', 'plugin-wp-support-thisismyurl' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Last Updated', 'plugin-wp-support-thisismyurl' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Author', 'plugin-wp-support-thisismyurl' ); ?></th>			<th scope="col"><?php esc_html_e( 'Active', 'plugin-wp-support-thisismyurl' ); ?></th>					</tr>
+						<th scope="col"><?php esc_html_e( 'Module', 'plugin-wpshadow' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Requires', 'plugin-wpshadow' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Version', 'plugin-wpshadow' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Last Updated', 'plugin-wpshadow' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Author', 'plugin-wpshadow' ); ?></th>			<th scope="col"><?php esc_html_e( 'Active', 'plugin-wpshadow' ); ?></th>					</tr>
 					</thead>
 					<tbody>
 				<?php foreach ( $groups as $group ) : ?>
@@ -445,8 +445,8 @@ input:disabled + .wps-toggle-slider {
 					?>
 					<tr class="wps-module-card <?php echo esc_attr( $type_class . ' ' . $status_class ); ?>" data-type="hub" data-group="<?php echo esc_attr( $slug ); ?>" data-status="<?php echo esc_attr( $installed ? ( $update_available ? 'update' : 'installed' ) : 'available' ); ?>">
 						<td class="wps-module-name">
-							<?php if ( $module['slug'] !== 'plugin-wp-support-thisismyurl' ) : ?>
-								<button type="button" class="button-link wps-hub-toggle" data-group="<?php echo esc_attr( $module['slug'] ); ?>" aria-expanded="true" aria-label="<?php echo esc_attr( sprintf( __( 'Toggle %s spokes', 'plugin-wp-support-thisismyurl' ), $module['name'] ) ); ?>">
+							<?php if ( $module['slug'] !== 'plugin-wpshadow' ) : ?>
+								<button type="button" class="button-link wps-hub-toggle" data-group="<?php echo esc_attr( $module['slug'] ); ?>" aria-expanded="true" aria-label="<?php echo esc_attr( sprintf( __( 'Toggle %s spokes', 'plugin-wpshadow' ), $module['name'] ) ); ?>">
 									<span class="dashicons dashicons-arrow-down-alt2"></span>
 								</button>
 							<?php endif; ?>
@@ -455,20 +455,20 @@ input:disabled + .wps-toggle-slider {
 						</td>
 						<td>
 							<?php
-							$requires = ( $module['slug'] === 'plugin-wp-support-thisismyurl' ) ? 'None' : 'Core ' . ( $module['requires_core'] ?? '' );
+							$requires = ( $module['slug'] === 'plugin-wpshadow' ) ? 'None' : 'Core ' . ( $module['requires_core'] ?? '' );
 							echo esc_html( $requires === 'None' ? '-' : $requires );
 							?>
 						</td>
 						<td>
 							<?php echo esc_html( $module['version'] ); ?>
 							<?php if ( $update_available && ! empty( $module['download_url'] ) ) : ?>
-								<br><small><a href="#" class="wps-btn-update" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( 'Update', 'plugin-wp-support-thisismyurl' ); ?></a></small>
+								<br><small><a href="#" class="wps-btn-update" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( 'Update', 'plugin-wpshadow' ); ?></a></small>
 							<?php endif; ?>
 						</td>
 						<td>
 							<?php
 							// Get last modified time of module files.
-							$module_path = wp_support_PATH . 'modules/hubs/' . basename( $slug );
+							$module_path = WPSHADOW_PATH . 'modules/hubs/' . basename( $slug );
 							if ( ! file_exists( $module_path ) ) {
 								$module_path = WP_PLUGIN_DIR . '/' . $slug;
 							}
@@ -484,7 +484,7 @@ input:disabled + .wps-toggle-slider {
 								echo esc_html( human_time_diff( $last_modified, time() ) . ' ago' );
 								echo '<br><small>' . esc_html( date_i18n( get_option( 'date_format' ), $last_modified ) ) . '</small>';
 							} else {
-								echo '<span class="description">' . esc_html__( 'Not installed', 'plugin-wp-support-thisismyurl' ) . '</span>';
+								echo '<span class="description">' . esc_html__( 'Not installed', 'plugin-wpshadow' ) . '</span>';
 							}
 							?>
 						</td>
@@ -502,7 +502,7 @@ input:disabled + .wps-toggle-slider {
 							<input type="checkbox" <?php checked( $is_enabled ); ?> data-module="<?php echo esc_attr( $slug ); ?>" data-module-name="<?php echo esc_attr( $module['name'] ?? '' ); ?>" data-type="hub" data-installed="<?php echo esc_attr( $installed ? '1' : '0' ); ?>" data-plugin-base="<?php echo esc_attr( $module['basename'] ?? $plugin_base ); ?>" data-plugin-exists="<?php echo esc_attr( $plugin_exists ? '1' : '0' ); ?>" data-downloadable="<?php echo esc_attr( ! empty( $module['download_url'] ) ? '1' : '0' ); ?>">
 							<span class="wps-toggle-slider"></span>
 						</label>
-						<span class="wps-progress" aria-live="polite"><span class="spinner is-active" style="float:none"></span><span class="bar"><span class="fill"></span></span><span class="progress-label"><?php esc_html_e( 'Working…', 'plugin-wp-support-thisismyurl' ); ?></span></span>
+						<span class="wps-progress" aria-live="polite"><span class="spinner is-active" style="float:none"></span><span class="bar"><span class="fill"></span></span><span class="progress-label"><?php esc_html_e( 'Working…', 'plugin-wpshadow' ); ?></span></span>
 					</td>
 				</tr>
 					<?php foreach ( $group['spokes'] as $module ) : ?>
@@ -537,7 +537,7 @@ input:disabled + .wps-toggle-slider {
 								<td>
 									<?php echo esc_html( $module['version'] ); ?>
 									<?php if ( $update_available && ! empty( $module['download_url'] ) ) : ?>
-										<br><small><a href="#" class="wps-btn-update" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( 'Update', 'plugin-wp-support-thisismyurl' ); ?></a></small>
+										<br><small><a href="#" class="wps-btn-update" data-slug="<?php echo esc_attr( $module['slug'] ); ?>"><?php esc_html_e( 'Update', 'plugin-wpshadow' ); ?></a></small>
 									<?php endif; ?>
 								</td>
 								<td>
@@ -548,7 +548,7 @@ input:disabled + .wps-toggle-slider {
 										$module_dir_hint = dirname( $module['basename'] );
 										$module_dir_hint = ( '.' === $module_dir_hint ) ? '' : trim( $module_dir_hint, '/\\' );
 									}
-									$module_path = wp_support_PATH . 'modules/spokes/' . ( ! empty( $module_dir_hint ) ? basename( $module_dir_hint ) : basename( $slug ) );
+									$module_path = WPSHADOW_PATH . 'modules/spokes/' . ( ! empty( $module_dir_hint ) ? basename( $module_dir_hint ) : basename( $slug ) );
 									if ( ! file_exists( $module_path ) ) {
 										$module_path = WP_PLUGIN_DIR . '/' . ( ! empty( $module_dir_hint ) ? $module_dir_hint : $slug );
 									}
@@ -564,7 +564,7 @@ input:disabled + .wps-toggle-slider {
 										echo esc_html( human_time_diff( $last_modified, time() ) . ' ago' );
 										echo '<br><small>' . esc_html( date_i18n( get_option( 'date_format' ), $last_modified ) ) . '</small>';
 									} else {
-										echo '<span class="description">' . esc_html__( 'Not installed', 'plugin-wp-support-thisismyurl' ) . '</span>';
+										echo '<span class="description">' . esc_html__( 'Not installed', 'plugin-wpshadow' ) . '</span>';
 									}
 									?>
 								</td>
@@ -582,7 +582,7 @@ input:disabled + .wps-toggle-slider {
 										<input type="checkbox" <?php checked( $is_enabled ); ?> data-module="<?php echo esc_attr( $slug ); ?>" data-module-name="<?php echo esc_attr( $module['name'] ?? '' ); ?>" data-type="spoke" data-installed="<?php echo esc_attr( $installed ? '1' : '0' ); ?>" data-plugin-base="<?php echo esc_attr( $module['basename'] ?? $plugin_base ); ?>" data-plugin-exists="<?php echo esc_attr( $plugin_exists ? '1' : '0' ); ?>" data-downloadable="<?php echo esc_attr( ! empty( $module['download_url'] ) ? '1' : '0' ); ?>">
 										<span class="wps-toggle-slider"></span>
 									</label>
-									<span class="wps-progress" aria-live="polite"><span class="spinner is-active" style="float:none"></span><span class="bar"><span class="fill"></span></span><span class="progress-label"><?php esc_html_e( 'Working…', 'plugin-wp-support-thisismyurl' ); ?></span></span>
+									<span class="wps-progress" aria-live="polite"><span class="spinner is-active" style="float:none"></span><span class="bar"><span class="fill"></span></span><span class="progress-label"><?php esc_html_e( 'Working…', 'plugin-wpshadow' ); ?></span></span>
 								</td>
 							</tr>
 						<?php endforeach; ?>

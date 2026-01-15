@@ -2,7 +2,7 @@
  * Debug Tools JavaScript
  * Additional functionality for the Debug Tools page.
  *
- * @package WPS_CoreSupport
+ * @package WPSHADOW_CoreSupport
  * @since 1.2601.73002
  */
 

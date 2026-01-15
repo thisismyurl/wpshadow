@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * WPS_Feature_Script_Deferral
+ * WPSHADOW_Feature_Script_Deferral
  *
  * Defer non-critical scripts while preserving execution order.
  */
-final class WPS_Feature_Script_Deferral extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Script_Deferral extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Default excluded script handles (critical scripts that should never be deferred).
@@ -38,14 +38,14 @@ final class WPS_Feature_Script_Deferral extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'script-deferral',
-				'name'               => __( 'Script Deferral System', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Load scripts after your page appears, making pages feel faster', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Script Deferral System', 'plugin-wpshadow' ),
+				'description'        => __( 'Load scripts after your page appears, making pages feel faster', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.1.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Performance Optimization', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Speed and resource loading improvements', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Performance Optimization', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Speed and resource loading improvements', 'plugin-wpshadow' ),
 				// New unified metadata fields.
 				'license_level'      => 2, // Free registered users.
 				'minimum_capability' => 'manage_options',
@@ -112,7 +112,7 @@ final class WPS_Feature_Script_Deferral extends WPS_Abstract_Feature {
 		$excluded        = array_merge( $this->default_excluded, $custom_excluded );
 
 		// Allow filtering of exclusion list.
-		$excluded = apply_filters( 'wps_defer_excluded_handles', $excluded );
+		$excluded = apply_filters( 'wpshadow_defer_excluded_handles', $excluded );
 
 		// Never defer excluded scripts.
 		if ( in_array( $handle, $excluded, true ) ) {
@@ -122,7 +122,7 @@ final class WPS_Feature_Script_Deferral extends WPS_Abstract_Feature {
 		// In manual mode, only defer explicitly listed handles.
 		if ( 'manual' === $mode ) {
 			$defer_handles = (array) $this->get_setting( 'defer_script_handles', array() );
-			$defer_handles = apply_filters( 'wps_defer_script_handles', $defer_handles );
+			$defer_handles = apply_filters( 'wpshadow_defer_script_handles', $defer_handles );
 
 			if ( in_array( $handle, $defer_handles, true ) ) {
 				return str_replace( ' src=', ' defer src=', $tag );

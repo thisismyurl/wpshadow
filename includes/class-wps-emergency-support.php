@@ -4,7 +4,7 @@
  *
  * Injects professional support CTA when WordPress displays critical errors.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
 declare(strict_types=1);
@@ -18,12 +18,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Emergency Support Manager
  */
-class WPS_Emergency_Support {
+class WPSHADOW_Emergency_Support {
 
 	/**
 	 * Error logs option key.
 	 */
-	private const ERRORS_KEY = 'WPS_critical_errors';
+	private const ERRORS_KEY = 'wpshadow_critical_errors';
 
 	/**
 	 * Initialize Emergency Support system.
@@ -62,7 +62,7 @@ class WPS_Emergency_Support {
 		}
 
 		// Store error in transient for display on next page load.
-		set_transient( 'WPS_last_fatal_error', $error, 3600 );
+		set_transient( 'wpshadow_last_fatal_error', $error, 3600 );
 	}
 
 	/**
@@ -145,7 +145,7 @@ class WPS_Emergency_Support {
 			$error['line'],
 			wp_date( 'Y-m-d H:i:s', $error['timestamp'] ),
 			admin_url( 'admin.php?page=wp-support' ),
-			'https://thisismyurl.com/support'
+			'https://wpshadow.com/support'
 		);
 
 		wp_mail( $admin_email, $subject, $message );
@@ -159,8 +159,8 @@ class WPS_Emergency_Support {
 	 */
 	public static function add_support_to_health_check( array $tests ): array {
 		// Add a custom test that checks for recent critical errors.
-		$tests['direct']['WPS_critical_errors'] = array(
-			'label'    => __( 'Critical Errors', 'plugin-wp-support-thisismyurl' ),
+		$tests['direct']['wpshadow_critical_errors'] = array(
+			'label'    => __( 'Critical Errors', 'plugin-wpshadow' ),
 			'test'     => array( __CLASS__, 'test_critical_errors' ),
 			'has_rest' => true,
 			'async'    => false,
@@ -187,36 +187,36 @@ class WPS_Emergency_Support {
 
 		if ( empty( $recent ) ) {
 			return array(
-				'label'       => __( 'No Critical Errors', 'plugin-wp-support-thisismyurl' ),
+				'label'       => __( 'No Critical Errors', 'plugin-wpshadow' ),
 				'status'      => 'good',
 				'badge'       => array(
-					'label' => __( 'Security', 'plugin-wp-support-thisismyurl' ),
+					'label' => __( 'Security', 'plugin-wpshadow' ),
 					'color' => 'blue',
 				),
-				'description' => __( 'Your site has not encountered critical errors in the last 24 hours.', 'plugin-wp-support-thisismyurl' ),
+				'description' => __( 'Your site has not encountered critical errors in the last 24 hours.', 'plugin-wpshadow' ),
 				'actions'     => '',
-				'test'        => 'WPS_critical_errors',
+				'test'        => 'wpshadow_critical_errors',
 			);
 		}
 
 		$count = count( $recent );
 
 		return array(
-			'label'       => sprintf( __( '%d Critical Error(s) Found', 'plugin-wp-support-thisismyurl' ), $count ),
+			'label'       => sprintf( __( '%d Critical Error(s) Found', 'plugin-wpshadow' ), $count ),
 			'status'      => 'critical',
 			'badge'       => array(
-				'label' => __( 'Security', 'plugin-wp-support-thisismyurl' ),
+				'label' => __( 'Security', 'plugin-wpshadow' ),
 				'color' => 'red',
 			),
-			'description' => __( 'Critical errors were detected. Get professional help to fix them.', 'plugin-wp-support-thisismyurl' ),
+			'description' => __( 'Critical errors were detected. Get professional help to fix them.', 'plugin-wpshadow' ),
 			'actions'     => sprintf(
 				'<p><a href="%s" class="button button-primary">%s</a> <a href="%s" class="button">%s</a></p>',
 				admin_url( 'admin.php?page=wps-emergency-support' ),
-				__( 'View Details', 'plugin-wp-support-thisismyurl' ),
-				'https://thisismyurl.com/emergency-support',
-				__( 'Get Professional Help', 'plugin-wp-support-thisismyurl' )
+				__( 'View Details', 'plugin-wpshadow' ),
+				'https://wpshadow.com/emergency-support',
+				__( 'Get Professional Help', 'plugin-wpshadow' )
 			),
-			'test'        => 'WPS_critical_errors',
+			'test'        => 'wpshadow_critical_errors',
 		);
 	}
 
@@ -245,8 +245,8 @@ class WPS_Emergency_Support {
 		}
 
 		wp_add_dashboard_widget(
-			'WPS_emergency_support',
-			__( '🚨 Critical Issues Need Attention', 'plugin-wp-support-thisismyurl' ),
+			'wpshadow_emergency_support',
+			__( '🚨 Critical Issues Need Attention', 'plugin-wpshadow' ),
 			array( __CLASS__, 'render_dashboard_widget' )
 		);
 	}
@@ -270,7 +270,7 @@ class WPS_Emergency_Support {
 		$recent = array_slice( array_reverse( $recent ), 0, 3 );
 
 		if ( empty( $recent ) ) {
-			echo '<p>' . esc_html__( 'No critical issues detected.', 'plugin-wp-support-thisismyurl' ) . '</p>';
+			echo '<p>' . esc_html__( 'No critical issues detected.', 'plugin-wpshadow' ) . '</p>';
 			return;
 		}
 
@@ -287,10 +287,10 @@ class WPS_Emergency_Support {
 
 		echo '<div style="margin-top: 15px;">';
 		echo '<a href="' . esc_url( admin_url( 'admin.php?page=wps-emergency-support' ) ) . '" class="button button-primary" style="margin-right: 10px;">';
-		echo esc_html__( 'View All Issues', 'plugin-wp-support-thisismyurl' );
+		echo esc_html__( 'View All Issues', 'plugin-wpshadow' );
 		echo '</a>';
-		echo '<a href="https://thisismyurl.com/emergency-support" class="button" target="_blank">';
-		echo esc_html__( 'Get Professional Help', 'plugin-wp-support-thisismyurl' );
+		echo '<a href="https://wpshadow.com/emergency-support" class="button" target="_blank">';
+		echo esc_html__( 'Get Professional Help', 'plugin-wpshadow' );
 		echo '</a>';
 		echo '</div>';
 	}
@@ -311,7 +311,7 @@ class WPS_Emergency_Support {
 	 */
 	public static function render_emergency_page(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Insufficient permissions.', 'plugin-wpshadow' ) );
 		}
 
 		$errors = self::get_errors();
@@ -327,29 +327,29 @@ class WPS_Emergency_Support {
 		$recent = array_reverse( $recent );
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Critical Errors & Support', 'plugin-wp-support-thisismyurl' ); ?></h1>
-			<p><?php esc_html_e( 'Critical errors detected on your site. Get professional help to fix them.', 'plugin-wp-support-thisismyurl' ); ?></p>
+			<h1><?php esc_html_e( 'Critical Errors & Support', 'plugin-wpshadow' ); ?></h1>
+			<p><?php esc_html_e( 'Critical errors detected on your site. Get professional help to fix them.', 'plugin-wpshadow' ); ?></p>
 
 			<?php
 			// Display recovery status metabox.
-			if ( class_exists( '\\WPS\\CoreSupport\\WPS_White_Screen_Recovery' ) ) {
+			if ( class_exists( '\\WPShadow\\WPSHADOW_White_Screen_Recovery' ) ) {
 				echo '<div style="margin: 20px 0;">';
-				\WPS\CoreSupport\WPS_White_Screen_Recovery::render_recovery_metabox();
+				\WPS\CoreSupport\WPSHADOW_White_Screen_Recovery::render_recovery_metabox();
 				echo '</div>';
 			}
 			?>
 
 			<?php if ( ! empty( $recent ) ) : ?>
 				<div style="margin: 30px 0; padding: 20px; background: #fee; border: 2px solid #c00; border-radius: 5px;">
-					<h2 style="margin-top: 0; color: #c00;">🚨 <?php esc_html_e( 'Active Issues', 'plugin-wp-support-thisismyurl' ); ?> (<?php echo count( $recent ); ?>)</h2>
+					<h2 style="margin-top: 0; color: #c00;">🚨 <?php esc_html_e( 'Active Issues', 'plugin-wpshadow' ); ?> (<?php echo count( $recent ); ?>)</h2>
 
 					<table class="wp-list-table widefat striped" style="margin: 20px 0;">
 						<thead>
 							<tr>
-								<th><?php esc_html_e( 'When', 'plugin-wp-support-thisismyurl' ); ?></th>
-								<th><?php esc_html_e( 'Severity', 'plugin-wp-support-thisismyurl' ); ?></th>
-								<th><?php esc_html_e( 'Error', 'plugin-wp-support-thisismyurl' ); ?></th>
-								<th><?php esc_html_e( 'Location', 'plugin-wp-support-thisismyurl' ); ?></th>
+								<th><?php esc_html_e( 'When', 'plugin-wpshadow' ); ?></th>
+								<th><?php esc_html_e( 'Severity', 'plugin-wpshadow' ); ?></th>
+								<th><?php esc_html_e( 'Error', 'plugin-wpshadow' ); ?></th>
+								<th><?php esc_html_e( 'Location', 'plugin-wpshadow' ); ?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -369,8 +369,8 @@ class WPS_Emergency_Support {
 					</table>
 
 					<div style="background: white; padding: 20px; border-radius: 5px; margin: 20px 0;">
-						<h3><?php esc_html_e( 'What to Do', 'plugin-wp-support-thisismyurl' ); ?></h3>
-						<p><?php esc_html_e( 'Critical errors require immediate attention. Choose your support option:', 'plugin-wp-support-thisismyurl' ); ?></p>
+						<h3><?php esc_html_e( 'What to Do', 'plugin-wpshadow' ); ?></h3>
+						<p><?php esc_html_e( 'Critical errors require immediate attention. Choose your support option:', 'plugin-wpshadow' ); ?></p>
 
 						<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
 							<!-- Option 1: DIY Diagnostics -->
@@ -378,7 +378,7 @@ class WPS_Emergency_Support {
 								<h4>📖 Run Diagnostics (Free)</h4>
 								<p style="font-size: 13px; color: #666;">Generate error report for forums or your developer.</p>
 								<button class="button button-secondary" id="wps-export-errors">
-									<?php esc_html_e( 'Export Error Report', 'plugin-wp-support-thisismyurl' ); ?>
+									<?php esc_html_e( 'Export Error Report', 'plugin-wpshadow' ); ?>
 								</button>
 							</div>
 
@@ -386,8 +386,8 @@ class WPS_Emergency_Support {
 							<div style="border: 2px solid #0073aa; padding: 15px; border-radius: 5px; background: #f0f7ff;">
 								<h4 style="color: #0073aa;">💬 Get Professional Help</h4>
 								<p style="font-size: 13px; color: #666;">Expert diagnosis & fix from professionals.</p>
-								<a href="https://thisismyurl.com/emergency-support" class="button button-primary" target="_blank">
-									<?php esc_html_e( 'Schedule Support', 'plugin-wp-support-thisismyurl' ); ?>
+								<a href="https://wpshadow.com/emergency-support" class="button button-primary" target="_blank">
+									<?php esc_html_e( 'Schedule Support', 'plugin-wpshadow' ); ?>
 								</a>
 							</div>
 
@@ -395,8 +395,8 @@ class WPS_Emergency_Support {
 							<div style="border: 1px solid #ff9800; padding: 15px; border-radius: 5px;">
 								<h4 style="color: #ff9800;">🚨 Emergency SOS (24/7)</h4>
 								<p style="font-size: 13px; color: #666;">2-hour response. For urgent issues.</p>
-								<a href="https://thisismyurl.com/emergency-sos" class="button button-primary" style="background: #ff9800; border-color: #ff9800;" target="_blank">
-									<?php esc_html_e( 'Request Emergency Help', 'plugin-wp-support-thisismyurl' ); ?>
+								<a href="https://wpshadow.com/emergency-sos" class="button button-primary" style="background: #ff9800; border-color: #ff9800;" target="_blank">
+									<?php esc_html_e( 'Request Emergency Help', 'plugin-wpshadow' ); ?>
 								</a>
 							</div>
 
@@ -404,8 +404,8 @@ class WPS_Emergency_Support {
 							<div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px;">
 								<h4>📚 Self-Service Resources</h4>
 								<p style="font-size: 13px; color: #666;">Common error fixes and solutions.</p>
-								<a href="https://thisismyurl.com/error-solutions" class="button button-secondary" target="_blank">
-									<?php esc_html_e( 'Browse Solutions', 'plugin-wp-support-thisismyurl' ); ?>
+								<a href="https://wpshadow.com/error-solutions" class="button button-secondary" target="_blank">
+									<?php esc_html_e( 'Browse Solutions', 'plugin-wpshadow' ); ?>
 								</a>
 							</div>
 						</div>
@@ -413,7 +413,7 @@ class WPS_Emergency_Support {
 				</div>
 			<?php else : ?>
 				<p style="padding: 20px; background: #eeffee; border: 1px solid #00cc00; border-radius: 5px;">
-					✅ <?php esc_html_e( 'No critical errors detected! Your site is running smoothly.', 'plugin-wp-support-thisismyurl' ); ?>
+					✅ <?php esc_html_e( 'No critical errors detected! Your site is running smoothly.', 'plugin-wpshadow' ); ?>
 				</p>
 			<?php endif; ?>
 		</div>

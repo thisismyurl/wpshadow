@@ -5,7 +5,7 @@
  * Tracks module lifecycle, vault operations, license events, and settings changes
  * for display in WordPress Dashboard Activity widget.
  *
- * @package wp_support_Support
+ * @package wpshadow_Support
  * @since 1.0.0
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Provides structured logging of WPS Suite operations with WordPress
  * Dashboard integration.
  */
-class WPS_Activity_Logger {
+class WPSHADOW_Activity_Logger {
 
 	/**
 	 * Activity event types.
@@ -54,7 +54,7 @@ class WPS_Activity_Logger {
 	/**
 	 * Transient key for activity storage.
 	 */
-	private const TRANSIENT_KEY = 'WPS_activity_log';
+	private const TRANSIENT_KEY = 'wpshadow_activity_log';
 
 	/**
 	 * Transient expiration (7 days in seconds).
@@ -70,7 +70,7 @@ class WPS_Activity_Logger {
 		add_action( 'activity_box_end', array( __CLASS__, 'render_dashboard_activity' ) );
 		add_action( 'wp_dashboard_setup', array( __CLASS__, 'maybe_add_dashboard_widget' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_dashboard_scripts' ) );
-		add_action( 'wp_ajax_WPS_filter_activity', array( __CLASS__, 'ajax_filter_activity' ) );
+		add_action( 'wp_ajax_WPSHADOW_filter_activity', array( __CLASS__, 'ajax_filter_activity' ) );
 
 		// Hook into WordPress plugin lifecycle.
 		add_action( 'activated_plugin', array( __CLASS__, 'on_plugin_activated' ), 10, 2 );
@@ -105,7 +105,7 @@ class WPS_Activity_Logger {
 			self::EVENT_MEDIA_FILE_ADDED,
 			sprintf(
 				/* translators: %s: Attachment title */
-				__( 'Uploaded media: %s', 'plugin-wp-support-thisismyurl' ),
+				__( 'Uploaded media: %s', 'plugin-wpshadow' ),
 				(string) $title
 			),
 			array(
@@ -138,7 +138,7 @@ class WPS_Activity_Logger {
 			self::EVENT_MEDIA_FILE_DELETED,
 			sprintf(
 				/* translators: %s: Attachment title */
-				__( 'Deleted media: %s', 'plugin-wp-support-thisismyurl' ),
+				__( 'Deleted media: %s', 'plugin-wpshadow' ),
 				(string) $title
 			),
 			array(
@@ -177,7 +177,7 @@ class WPS_Activity_Logger {
 			self::EVENT_MEDIA_FILE_EDITED,
 			sprintf(
 				/* translators: %s: Attachment title */
-				__( 'Edited media: %s', 'plugin-wp-support-thisismyurl' ),
+				__( 'Edited media: %s', 'plugin-wpshadow' ),
 				(string) $title
 			),
 			array(
@@ -212,12 +212,12 @@ class WPS_Activity_Logger {
 		}
 
 		// Prefer canonical Vault implementation when available.
-		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Vault' ) && method_exists( '\\WPS\\CoreSupport\\WPS_Vault', 'add_log' ) ) {
+		if ( class_exists( '\\WPShadow\\WPSHADOW_Vault' ) && method_exists( '\\WPShadow\\WPSHADOW_Vault', 'add_log' ) ) {
 			// Log the intent in Vault logs; real backup is managed by Vault plugin when enabled.
-			\WPS\CoreSupport\WPS_Vault::add_log( 'info', get_current_user_id(), 'Backing up edited media ID ' . $post_id, 'media_edit_backup' );
-			if ( method_exists( '\\WPS\\CoreSupport\\WPS_Vault', 'backup_file' ) ) {
+			\WPS\CoreSupport\WPSHADOW_Vault::add_log( 'info', get_current_user_id(), 'Backing up edited media ID ' . $post_id, 'media_edit_backup' );
+			if ( method_exists( '\\WPShadow\\WPSHADOW_Vault', 'backup_file' ) ) {
 				try {
-					\WPS\CoreSupport\WPS_Vault::backup_file(
+					\WPS\CoreSupport\WPSHADOW_Vault::backup_file(
 						$file_path,
 						array(
 							'post_id' => $post_id,
@@ -234,7 +234,7 @@ class WPS_Activity_Logger {
 
 		// Fallback: copy file into local vault directory.
 		$upload_dir    = wp_upload_dir();
-		$vault_dirname = get_option( 'WPS_vault_dirname' );
+		$vault_dirname = get_option( 'wpshadow_vault_dirname' );
 		$vault_root    = ! empty( $vault_dirname ) ? $upload_dir['basedir'] . '/' . $vault_dirname : '';
 
 		if ( empty( $vault_root ) || ! is_dir( $vault_root ) ) {
@@ -264,7 +264,7 @@ class WPS_Activity_Logger {
 	 */
 	public static function on_plugin_activated( string $plugin, bool $network_wide = false ): void {
 		// Only log WPS Suite plugins.
-		if ( ! str_contains( $plugin, 'thisismyurl' ) ) {
+		if ( ! str_contains( $plugin, 'wpshadow' ) ) {
 			return;
 		}
 
@@ -275,7 +275,7 @@ class WPS_Activity_Logger {
 			self::EVENT_MODULE_ACTIVATED,
 			sprintf(
 				/* translators: %s: Plugin name */
-				__( 'Activated %s', 'plugin-wp-support-thisismyurl' ),
+				__( 'Activated %s', 'plugin-wpshadow' ),
 				$plugin_name
 			),
 			array(
@@ -294,7 +294,7 @@ class WPS_Activity_Logger {
 	 */
 	public static function on_plugin_deactivated( string $plugin, bool $network_wide = false ): void {
 		// Only log WPS Suite plugins.
-		if ( ! str_contains( $plugin, 'thisismyurl' ) ) {
+		if ( ! str_contains( $plugin, 'wpshadow' ) ) {
 			return;
 		}
 
@@ -305,7 +305,7 @@ class WPS_Activity_Logger {
 			self::EVENT_MODULE_DEACTIVATED,
 			sprintf(
 				/* translators: %s: Plugin name */
-				__( 'Deactivated %s', 'plugin-wp-support-thisismyurl' ),
+				__( 'Deactivated %s', 'plugin-wpshadow' ),
 				$plugin_name
 			),
 			array(
@@ -414,14 +414,14 @@ class WPS_Activity_Logger {
 
 		echo '<div class="wps-activity-section" id="wps-activity-widget">';
 		echo '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">';
-		echo '<h3 style="margin: 0;">' . esc_html__( 'WPS Suite Activity', 'plugin-wp-support-thisismyurl' ) . '</h3>';
+		echo '<h3 style="margin: 0;">' . esc_html__( 'WPS Suite Activity', 'plugin-wpshadow' ) . '</h3>';
 
 		// Filter controls.
 		echo '<div class="wps-activity-filters" style="display: flex; gap: 8px;">';
 
 		// Event type filter.
 		echo '<select id="wps-event-type-filter" style="font-size: 12px;">';
-		echo '<option value="">' . esc_html__( 'All Types', 'plugin-wp-support-thisismyurl' ) . '</option>';
+		echo '<option value="">' . esc_html__( 'All Types', 'plugin-wpshadow' ) . '</option>';
 		foreach ( $event_types as $type ) {
 			$label = self::get_event_type_label( $type );
 			printf(
@@ -434,7 +434,7 @@ class WPS_Activity_Logger {
 
 		// Module source filter.
 		echo '<select id="wps-module-filter" style="font-size: 12px;">';
-		echo '<option value="">' . esc_html__( 'All Modules', 'plugin-wp-support-thisismyurl' ) . '</option>';
+		echo '<option value="">' . esc_html__( 'All Modules', 'plugin-wpshadow' ) . '</option>';
 		foreach ( $modules as $module ) {
 			printf(
 				'<option value="%s">%s</option>',
@@ -445,7 +445,7 @@ class WPS_Activity_Logger {
 		echo '</select>';
 
 		// Clear filters button.
-		echo '<button id="wps-clear-filters" class="button button-small" style="font-size: 12px; display: none;">' . esc_html__( 'Clear', 'plugin-wp-support-thisismyurl' ) . '</button>';
+		echo '<button id="wps-clear-filters" class="button button-small" style="font-size: 12px; display: none;">' . esc_html__( 'Clear', 'plugin-wpshadow' ) . '</button>';
 
 		echo '</div></div>';
 
@@ -456,13 +456,13 @@ class WPS_Activity_Logger {
 		}
 
 		echo '</ul>';
-		echo '<div id="wps-no-results" style="display: none; padding: 12px; color: #666; font-style: italic;">' . esc_html__( 'No activity found matching the selected filters.', 'plugin-wp-support-thisismyurl' ) . '</div>';
+		echo '<div id="wps-no-results" style="display: none; padding: 12px; color: #666; font-style: italic;">' . esc_html__( 'No activity found matching the selected filters.', 'plugin-wpshadow' ) . '</div>';
 
 		$dashboard_url = admin_url( 'admin.php?page=wps-dashboard&tab=activity' );
 		printf(
 			'<p><a href="%s">%s →</a></p>',
 			esc_url( $dashboard_url ),
-			esc_html__( 'View all activity', 'plugin-wp-support-thisismyurl' )
+			esc_html__( 'View all activity', 'plugin-wpshadow' )
 		);
 
 		echo '</div>';
@@ -477,9 +477,9 @@ class WPS_Activity_Logger {
 	private static function render_activity_item( array $event ): void {
 		$icon          = self::get_event_icon( $event['type'] );
 		$description   = esc_html( $event['description'] );
-		$timestamp     = human_time_diff( $event['timestamp'] ) . ' ' . __( 'ago', 'plugin-wp-support-thisismyurl' );
+		$timestamp     = human_time_diff( $event['timestamp'] ) . ' ' . __( 'ago', 'plugin-wpshadow' );
 		$user          = get_userdata( $event['user_id'] );
-		$username      = $user ? $user->display_name : __( 'Unknown', 'plugin-wp-support-thisismyurl' );
+		$username      = $user ? $user->display_name : __( 'Unknown', 'plugin-wpshadow' );
 		$module_source = $event['module_source'] ?? 'core';
 
 		// Build optional action markup (e.g., Restore) for specific events.
@@ -492,21 +492,21 @@ class WPS_Activity_Logger {
 			$attachment_id = (int) $event['data']['post_id'];
 
 			// Prepare a secure inline form to trigger Vault rehydrate for this attachment.
-			$action_url = esc_url( admin_url( 'admin-post.php?action=WPS_vault_attachment_action' ) );
+			$action_url = esc_url( admin_url( 'admin-post.php?action=WPSHADOW_vault_attachment_action' ) );
 			// Nonce must match the Vault handler's action key.
-			$nonce = wp_create_nonce( 'WPS_vault_attachment_action' );
+			$nonce = wp_create_nonce( 'wpshadow_vault_attachment_action' );
 
 			$actions_html = sprintf(
 				'<form method="post" action="%1$s" style="display:inline;margin-left:8px;">'
-				. '<input type="hidden" name="WPS_vault_attachment_nonce" value="%2$s" />'
+				. '<input type="hidden" name="wpshadow_vault_attachment_nonce" value="%2$s" />'
 				. '<input type="hidden" name="attachment_id" value="%3$d" />'
-				. '<input type="hidden" name="WPS_vault_attachment_cmd" value="rehydrate" />'
+				. '<input type="hidden" name="wpshadow_vault_attachment_cmd" value="rehydrate" />'
 				. '<button type="submit" class="button-link" style="padding:0 4px;">%4$s</button>'
 				. '</form>',
 				$action_url,
 				$nonce,
 				$attachment_id,
-				esc_html__( 'Restore', 'plugin-wp-support-thisismyurl' )
+				esc_html__( 'Restore', 'plugin-wpshadow' )
 			);
 		}
 
@@ -531,23 +531,23 @@ class WPS_Activity_Logger {
 	 */
 	private static function get_event_type_label( string $event_type ): string {
 		$labels = array(
-			self::EVENT_MODULE_ACTIVATED   => __( 'Module Activated', 'plugin-wp-support-thisismyurl' ),
-			self::EVENT_MODULE_DEACTIVATED => __( 'Module Deactivated', 'plugin-wp-support-thisismyurl' ),
-			self::EVENT_MODULE_INSTALLED   => __( 'Module Installed', 'plugin-wp-support-thisismyurl' ),
-			self::EVENT_MODULE_UPDATED     => __( 'Module Updated', 'plugin-wp-support-thisismyurl' ),
-			self::EVENT_VAULT_FILE_ADDED   => __( 'Vault File Added', 'plugin-wp-support-thisismyurl' ),
-			self::EVENT_VAULT_FILE_REMOVED => __( 'Vault File Removed', 'plugin-wp-support-thisismyurl' ),
-			self::EVENT_VAULT_VERIFIED     => __( 'Vault Verified', 'plugin-wp-support-thisismyurl' ),
-			self::EVENT_VAULT_RESTORED     => __( 'Vault Restored', 'plugin-wp-support-thisismyurl' ),
-			self::EVENT_LICENSE_REGISTERED => __( 'License Registered', 'plugin-wp-support-thisismyurl' ),
-			self::EVENT_LICENSE_VERIFIED   => __( 'License Verified', 'plugin-wp-support-thisismyurl' ),
-			self::EVENT_LICENSE_EXPIRED    => __( 'License Expired', 'plugin-wp-support-thisismyurl' ),
-			self::EVENT_SETTINGS_CHANGED   => __( 'Settings Changed', 'plugin-wp-support-thisismyurl' ),
-			self::EVENT_ENCRYPTION_CHANGED => __( 'Encryption Changed', 'plugin-wp-support-thisismyurl' ),
-			self::EVENT_MEDIA_FILE_ADDED   => __( 'Media File Uploaded', 'plugin-wp-support-thisismyurl' ),
-			self::EVENT_MEDIA_FILE_EDITED  => __( 'Media File Edited', 'plugin-wp-support-thisismyurl' ),
-			self::EVENT_MEDIA_FILE_DELETED => __( 'Media File Deleted', 'plugin-wp-support-thisismyurl' ),
-			self::EVENT_ERROR              => __( 'Error', 'plugin-wp-support-thisismyurl' ),
+			self::EVENT_MODULE_ACTIVATED   => __( 'Module Activated', 'plugin-wpshadow' ),
+			self::EVENT_MODULE_DEACTIVATED => __( 'Module Deactivated', 'plugin-wpshadow' ),
+			self::EVENT_MODULE_INSTALLED   => __( 'Module Installed', 'plugin-wpshadow' ),
+			self::EVENT_MODULE_UPDATED     => __( 'Module Updated', 'plugin-wpshadow' ),
+			self::EVENT_VAULT_FILE_ADDED   => __( 'Vault File Added', 'plugin-wpshadow' ),
+			self::EVENT_VAULT_FILE_REMOVED => __( 'Vault File Removed', 'plugin-wpshadow' ),
+			self::EVENT_VAULT_VERIFIED     => __( 'Vault Verified', 'plugin-wpshadow' ),
+			self::EVENT_VAULT_RESTORED     => __( 'Vault Restored', 'plugin-wpshadow' ),
+			self::EVENT_LICENSE_REGISTERED => __( 'License Registered', 'plugin-wpshadow' ),
+			self::EVENT_LICENSE_VERIFIED   => __( 'License Verified', 'plugin-wpshadow' ),
+			self::EVENT_LICENSE_EXPIRED    => __( 'License Expired', 'plugin-wpshadow' ),
+			self::EVENT_SETTINGS_CHANGED   => __( 'Settings Changed', 'plugin-wpshadow' ),
+			self::EVENT_ENCRYPTION_CHANGED => __( 'Encryption Changed', 'plugin-wpshadow' ),
+			self::EVENT_MEDIA_FILE_ADDED   => __( 'Media File Uploaded', 'plugin-wpshadow' ),
+			self::EVENT_MEDIA_FILE_EDITED  => __( 'Media File Edited', 'plugin-wpshadow' ),
+			self::EVENT_MEDIA_FILE_DELETED => __( 'Media File Deleted', 'plugin-wpshadow' ),
+			self::EVENT_ERROR              => __( 'Error', 'plugin-wpshadow' ),
 		);
 
 		return $labels[ $event_type ] ?? ucwords( str_replace( '_', ' ', $event_type ) );
@@ -631,9 +631,9 @@ class WPS_Activity_Logger {
 	public static function ajax_filter_activity(): void {
 		check_ajax_referer( 'wps-activity-filter', 'nonce' );
 
-		$event_type    = \WPS\CoreSupport\wps_get_post_text( 'event_type' );
-		$module_source = \WPS\CoreSupport\wps_get_post_text( 'module' );
-		$limit         = \WPS\CoreSupport\wps_get_post_int( 'limit', 20 );
+		$event_type    = \WPS\CoreSupport\WPSHADOW_get_post_text( 'event_type' );
+		$module_source = \WPS\CoreSupport\WPSHADOW_get_post_text( 'module' );
+		$limit         = \WPS\CoreSupport\WPSHADOW_get_post_int( 'limit', 20 );
 
 		$events = self::get_events( 100 );
 
@@ -681,7 +681,7 @@ class WPS_Activity_Logger {
 		$events = self::get_events( 10 );
 
 		if ( empty( $events ) ) {
-			echo '<p>' . esc_html__( 'No recent WPS activity.', 'plugin-wp-support-thisismyurl' ) . '</p>';
+			echo '<p>' . esc_html__( 'No recent WPS activity.', 'plugin-wpshadow' ) . '</p>';
 			return;
 		}
 
@@ -690,7 +690,7 @@ class WPS_Activity_Logger {
 		foreach ( $events as $event ) {
 			$icon        = self::get_event_icon( $event['type'] );
 			$description = esc_html( $event['description'] );
-			$timestamp   = human_time_diff( $event['timestamp'] ) . ' ' . __( 'ago', 'plugin-wp-support-thisismyurl' );
+			$timestamp   = human_time_diff( $event['timestamp'] ) . ' ' . __( 'ago', 'plugin-wpshadow' );
 
 			printf(
 				'<li style="padding: 8px 0; border-bottom: 1px solid #e5e5e5;"><span class="dashicons %s" style="color: %s;"></span> %s <small style="color: #666; display: block; margin-top: 4px;">%s</small></li>',
@@ -801,7 +801,7 @@ class WPS_Activity_Logger {
 			self::EVENT_MODULE_ACTIVATED,
 			sprintf(
 				/* translators: %s: Module name */
-				__( 'Activated %s', 'plugin-wp-support-thisismyurl' ),
+				__( 'Activated %s', 'plugin-wpshadow' ),
 				$module_name
 			),
 			array( 'module_slug' => $module_slug ),
@@ -822,7 +822,7 @@ class WPS_Activity_Logger {
 			self::EVENT_MODULE_DEACTIVATED,
 			sprintf(
 				/* translators: %s: Module name */
-				__( 'Deactivated %s', 'plugin-wp-support-thisismyurl' ),
+				__( 'Deactivated %s', 'plugin-wpshadow' ),
 				$module_name
 			),
 			array( 'module_slug' => $module_slug ),
@@ -842,14 +842,14 @@ class WPS_Activity_Logger {
 		if ( $files_failed > 0 ) {
 			$description = sprintf(
 				/* translators: 1: Files verified, 2: Files failed */
-				__( 'Vault verified: %1$d files passed, %2$d failed', 'plugin-wp-support-thisismyurl' ),
+				__( 'Vault verified: %1$d files passed, %2$d failed', 'plugin-wpshadow' ),
 				$files_verified,
 				$files_failed
 			);
 		} else {
 			$description = sprintf(
 				/* translators: %d: Number of files */
-				__( 'Vault verified: %d files passed', 'plugin-wp-support-thisismyurl' ),
+				__( 'Vault verified: %d files passed', 'plugin-wpshadow' ),
 				$files_verified
 			);
 		}
@@ -878,12 +878,12 @@ class WPS_Activity_Logger {
 			$description = $license_type
 				? sprintf(
 					/* translators: %s: License type */
-					__( 'License verified: %s', 'plugin-wp-support-thisismyurl' ),
+					__( 'License verified: %s', 'plugin-wpshadow' ),
 					$license_type
 				)
-				: __( 'License verified successfully', 'plugin-wp-support-thisismyurl' );
+				: __( 'License verified successfully', 'plugin-wpshadow' );
 		} else {
-			$description = __( 'License verification failed', 'plugin-wp-support-thisismyurl' );
+			$description = __( 'License verification failed', 'plugin-wpshadow' );
 		}
 
 		return self::log(
@@ -911,7 +911,7 @@ class WPS_Activity_Logger {
 			self::EVENT_SETTINGS_CHANGED,
 			sprintf(
 				/* translators: %s: Setting name */
-				__( 'Updated setting: %s', 'plugin-wp-support-thisismyurl' ),
+				__( 'Updated setting: %s', 'plugin-wpshadow' ),
 				$setting_name
 			),
 			array(
@@ -941,5 +941,5 @@ class WPS_Activity_Logger {
 	}
 }
 
-/* @changelog Added WPS_Activity_Logger for WordPress Dashboard Activity integration */
+/* @changelog Added WPSHADOW_Activity_Logger for WordPress Dashboard Activity integration */
 /* @changelog Added module_source tracking to all log entries and get_events_by_module() method for filtering logs by module */

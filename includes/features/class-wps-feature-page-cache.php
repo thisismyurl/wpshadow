@@ -17,11 +17,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Feature_Page_Cache
+ * WPSHADOW_Feature_Page_Cache
  *
  * Full page caching with device detection and automatic invalidation.
  */
-final class WPS_Feature_Page_Cache extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Page_Cache extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Cache directory path.
@@ -40,14 +40,14 @@ final class WPS_Feature_Page_Cache extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'page-cache',
-				'name'               => __( 'Page Cache', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Full page caching with device detection, automatic invalidation, and cache preloading', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Page Cache', 'plugin-wpshadow' ),
+				'description'        => __( 'Full page caching with device detection, automatic invalidation, and cache preloading', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Performance', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Caching and performance optimization', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Performance', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Caching and performance optimization', 'plugin-wpshadow' ),
 				'license_level'      => 2,
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-performance',
@@ -83,13 +83,13 @@ final class WPS_Feature_Page_Cache extends WPS_Abstract_Feature {
 		add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_menu' ), 90 );
 
 		// AJAX handlers.
-		add_action( 'wp_ajax_wps_purge_cache', array( $this, 'ajax_purge_cache' ) );
+		add_action( 'wp_ajax_WPSHADOW_purge_cache', array( $this, 'ajax_purge_cache' ) );
 
 		// Scheduled garbage collection.
-		if ( ! wp_next_scheduled( 'wps_cache_cleanup' ) ) {
-			wp_schedule_event( time(), 'hourly', 'wps_cache_cleanup' );
+		if ( ! wp_next_scheduled( 'wpshadow_cache_cleanup' ) ) {
+			wp_schedule_event( time(), 'hourly', 'wpshadow_cache_cleanup' );
 		}
-		add_action( 'wps_cache_cleanup', array( $this, 'garbage_collection' ) );
+		add_action( 'wpshadow_cache_cleanup', array( $this, 'garbage_collection' ) );
 
 		// Ensure cache directory exists.
 		$this->ensure_cache_directory();
@@ -129,7 +129,7 @@ final class WPS_Feature_Page_Cache extends WPS_Abstract_Feature {
 		$cache_file = self::CACHE_DIR . $cache_key . '.html';
 
 		// Add cache info comment.
-		$html .= "\n<!-- Cached by WP Support on " . gmdate( 'Y-m-d H:i:s' ) . ' UTC -->';
+		$html .= "\n<!-- Cached by WPShadow on " . gmdate( 'Y-m-d H:i:s' ) . ' UTC -->';
 
 		// Save to cache file.
 		file_put_contents( $cache_file, $html, LOCK_EX );
@@ -331,7 +331,7 @@ final class WPS_Feature_Page_Cache extends WPS_Abstract_Feature {
 		$wp_admin_bar->add_node(
 			array(
 				'id'    => 'wps-purge-cache',
-				'title' => __( 'Purge Cache', 'plugin-wp-support-thisismyurl' ),
+				'title' => __( 'Purge Cache', 'plugin-wpshadow' ),
 				'href'  => '#',
 				'meta'  => array(
 					'class' => 'wps-purge-cache-link',
@@ -346,12 +346,12 @@ final class WPS_Feature_Page_Cache extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_purge_cache(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps-cache' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wps-cache' );
 
 		$this->purge_all_cache();
 
 		wp_send_json_success( array(
-			'message' => __( 'Cache purged successfully', 'plugin-wp-support-thisismyurl' ),
+			'message' => __( 'Cache purged successfully', 'plugin-wpshadow' ),
 		) );
 	}
 

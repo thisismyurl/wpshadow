@@ -30,26 +30,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Feature_Conflict_Sandbox
+ * WPSHADOW_Feature_Conflict_Sandbox
  *
  * Per-user conflict isolation implementation.
 /**
- * WPS_Feature_Conflict_Sandbox
+ * WPSHADOW_Feature_Conflict_Sandbox
  *
  * Per-user conflict debugging sandbox implementation.
  */
-final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Conflict_Sandbox extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Cookie name for sandbox mode.
 	 */
-	private const COOKIE_NAME = 'wps_conflict_sandbox';
+	private const COOKIE_NAME = 'wpshadow_conflict_sandbox';
 
 	/**
 	 * Transient prefix for sandbox state.
 	 */
-	private const TRANSIENT_PREFIX = 'wps_sandbox_state_';
-	private const SANDBOX_COOKIE   = 'wps_conflict_sandbox';
+	private const TRANSIENT_PREFIX = 'wpshadow_sandbox_state_';
+	private const SANDBOX_COOKIE   = 'wpshadow_conflict_sandbox';
 
 	/**
 	 * Cookie lifetime (24 hours).
@@ -63,16 +63,16 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'conflict-sandbox',
-				'name'               => __( 'Conflict Sandbox', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Per-user plugin deactivation and theme switching for debugging without affecting visitors', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Per-user conflict isolation: deactivate plugins or switch themes only for your session while visitors see the normal site', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Conflict Sandbox', 'plugin-wpshadow' ),
+				'description'        => __( 'Per-user plugin deactivation and theme switching for debugging without affecting visitors', 'plugin-wpshadow' ),
+				'description'        => __( 'Per-user conflict isolation: deactivate plugins or switch themes only for your session while visitors see the normal site', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'debugging',
-				'widget_label'       => __( 'Debugging & Diagnostics', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Advanced debugging features for troubleshooting', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Tools for diagnosing and resolving site conflicts', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Debugging & Diagnostics', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Advanced debugging features for troubleshooting', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Tools for diagnosing and resolving site conflicts', 'plugin-wpshadow' ),
 			)
 		);
 	}
@@ -91,10 +91,10 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 
 		// Handle AJAX actions for sandbox management.
-		add_action( 'wp_ajax_wps_sandbox_toggle', array( $this, 'ajax_toggle_sandbox' ) );
-		add_action( 'wp_ajax_wps_sandbox_toggle_plugin', array( $this, 'ajax_toggle_plugin' ) );
-		add_action( 'wp_ajax_wps_sandbox_switch_theme', array( $this, 'ajax_switch_theme' ) );
-		add_action( 'wp_ajax_wps_sandbox_clear', array( $this, 'ajax_clear_sandbox' ) );
+		add_action( 'wp_ajax_WPSHADOW_sandbox_toggle', array( $this, 'ajax_toggle_sandbox' ) );
+		add_action( 'wp_ajax_WPSHADOW_sandbox_toggle_plugin', array( $this, 'ajax_toggle_plugin' ) );
+		add_action( 'wp_ajax_WPSHADOW_sandbox_switch_theme', array( $this, 'ajax_switch_theme' ) );
+		add_action( 'wp_ajax_WPSHADOW_sandbox_clear', array( $this, 'ajax_clear_sandbox' ) );
 
 		// Apply sandbox filters if user is in sandbox mode.
 		if ( $this->is_sandbox_active() ) {
@@ -118,8 +118,8 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 	public function add_admin_menu(): void {
 		add_submenu_page(
 			'wp-support',
-			__( 'Conflict Sandbox', 'plugin-wp-support-thisismyurl' ),
-			__( 'Conflict Sandbox', 'plugin-wp-support-thisismyurl' ),
+			__( 'Conflict Sandbox', 'plugin-wpshadow' ),
+			__( 'Conflict Sandbox', 'plugin-wpshadow' ),
 			'manage_options',
 			'wp-support-conflict-sandbox',
 			array( $this, 'render_admin_page' )
@@ -371,23 +371,23 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 		$disabled_count = ! empty( $state['disabled_plugins'] ) ? count( $state['disabled_plugins'] ) : 0;
 		$theme_override = ! empty( $state['theme'] );
 
-		$message = __( '🔬 <strong>Conflict Sandbox Active:</strong> ', 'plugin-wp-support-thisismyurl' );
+		$message = __( '🔬 <strong>Conflict Sandbox Active:</strong> ', 'plugin-wpshadow' );
 
 		if ( $disabled_count > 0 ) {
 			$message .= sprintf(
 				/* translators: %d: number of disabled plugins */
-				_n( '%d plugin disabled', '%d plugins disabled', $disabled_count, 'plugin-wp-support-thisismyurl' ),
+				_n( '%d plugin disabled', '%d plugins disabled', $disabled_count, 'plugin-wpshadow' ),
 				$disabled_count
 			);
 		}
 
 		if ( $theme_override ) {
 			if ( $disabled_count > 0 ) {
-				$message .= __( ', ', 'plugin-wp-support-thisismyurl' );
+				$message .= __( ', ', 'plugin-wpshadow' );
 			}
 			$message .= sprintf(
 				/* translators: %s: theme name */
-				__( 'theme switched to %s', 'plugin-wp-support-thisismyurl' ),
+				__( 'theme switched to %s', 'plugin-wpshadow' ),
 				esc_html( $state['theme'] )
 			);
 		}
@@ -395,7 +395,7 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 		$message .= sprintf(
 			' <a href="%s">%s</a>',
 			esc_url( admin_url( 'admin.php?page=wp-support-conflict-sandbox' ) ),
-			__( 'Manage Sandbox', 'plugin-wp-support-thisismyurl' )
+			__( 'Manage Sandbox', 'plugin-wpshadow' )
 		);
 
 		printf(
@@ -410,7 +410,7 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_toggle_sandbox(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_sandbox_nonce' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_sandbox_nonce' );
 
 		$enable = ! empty( $_POST['enable'] );
 
@@ -422,13 +422,13 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 				'theme'            => '',
 			);
 			$this->save_sandbox_state( $state );
-			wp_send_json_success( array( 'message' => __( 'Sandbox mode enabled', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_success( array( 'message' => __( 'Sandbox mode enabled', 'plugin-wpshadow' ) ) );
 		} else {
 			// Disable sandbox mode.
 			$session_id = $this->get_or_create_session_id();
 			delete_transient( self::TRANSIENT_PREFIX . $session_id );
 			$this->clear_sandbox_cookie();
-			wp_send_json_success( array( 'message' => __( 'Sandbox mode disabled', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_success( array( 'message' => __( 'Sandbox mode disabled', 'plugin-wpshadow' ) ) );
 		}
 	}
 
@@ -438,13 +438,13 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_toggle_plugin(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_sandbox_nonce' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_sandbox_nonce' );
 
-		$plugin  = \WPS\CoreSupport\wps_get_post_text( 'plugin' );
+		$plugin  = \WPS\CoreSupport\WPSHADOW_get_post_text( 'plugin' );
 		$disable = ! empty( $_POST['disable'] );
 
 		if ( empty( $plugin ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid plugin', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid plugin', 'plugin-wpshadow' ) ) );
 		}
 
 		$state = $this->get_sandbox_state();
@@ -471,7 +471,7 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 		}
 
 		$this->save_sandbox_state( $state );
-		wp_send_json_success( array( 'message' => __( 'Plugin status updated', 'plugin-wp-support-thisismyurl' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Plugin status updated', 'plugin-wpshadow' ) ) );
 	}
 
 	/**
@@ -480,9 +480,9 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_switch_theme(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_sandbox_nonce' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_sandbox_nonce' );
 
-		$theme = \WPS\CoreSupport\wps_get_post_key( 'theme' );
+		$theme = \WPS\CoreSupport\WPSHADOW_get_post_key( 'theme' );
 
 		$state = $this->get_sandbox_state();
 		if ( false === $state ) {
@@ -497,7 +497,7 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 		if ( ! empty( $theme ) ) {
 			$theme_obj = wp_get_theme( $theme );
 			if ( ! $theme_obj->exists() ) {
-				wp_send_json_error( array( 'message' => __( 'Invalid theme', 'plugin-wp-support-thisismyurl' ) ) );
+				wp_send_json_error( array( 'message' => __( 'Invalid theme', 'plugin-wpshadow' ) ) );
 			}
 		}
 
@@ -507,8 +507,8 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 		wp_send_json_success(
 			array(
 				'message' => empty( $theme )
-					? __( 'Theme override cleared', 'plugin-wp-support-thisismyurl' )
-					: __( 'Theme switched', 'plugin-wp-support-thisismyurl' ),
+					? __( 'Theme override cleared', 'plugin-wpshadow' )
+					: __( 'Theme switched', 'plugin-wpshadow' ),
 			)
 		);
 	}
@@ -519,7 +519,7 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_clear_sandbox(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_sandbox_nonce' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_sandbox_nonce' );
 
 		$state = array(
 			'active'           => true,
@@ -528,6 +528,6 @@ final class WPS_Feature_Conflict_Sandbox extends WPS_Abstract_Feature {
 		);
 		$this->save_sandbox_state( $state );
 
-		wp_send_json_success( array( 'message' => __( 'Sandbox cleared', 'plugin-wp-support-thisismyurl' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Sandbox cleared', 'plugin-wpshadow' ) ) );
 	}
 }

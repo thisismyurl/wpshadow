@@ -1,7 +1,7 @@
 /**
  * Troubleshooting Wizard JavaScript
  *
- * @package WPS_WP_SUPPORT
+ * @package WPSHADOW_WP_SUPPORT
  * @since 1.2601.73002
  */
 
@@ -74,7 +74,7 @@
 				url: wpsWizard.ajaxurl,
 				type: 'POST',
 				data: {
-					action: 'wps_start_troubleshooting',
+					action: 'wpshadow_start_troubleshooting',
 					nonce: wpsWizard.nonce,
 					issue: issue
 				},
@@ -97,7 +97,7 @@
 				url: wpsWizard.ajaxurl,
 				type: 'POST',
 				data: {
-					action: 'wps_analyze_issue',
+					action: 'wpshadow_analyze_issue',
 					nonce: wpsWizard.nonce
 				},
 				success: function(response) {
@@ -189,7 +189,7 @@
 				url: wpsWizard.ajaxurl,
 				type: 'POST',
 				data: {
-					action: 'wps_apply_fix',
+					action: 'wpshadow_apply_fix',
 					nonce: wpsWizard.nonce,
 					fix: fix
 				},
@@ -251,7 +251,7 @@
 				url: wpsWizard.ajaxurl,
 				type: 'POST',
 				data: {
-					action: 'wps_generate_support_report',
+					action: 'wpshadow_generate_support_report',
 					nonce: wpsWizard.nonce
 				},
 				success: function(response) {

@@ -18,11 +18,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Update_Settings Class
+ * WPSHADOW_Update_Settings Class
  *
  * Manages license key configuration and update settings UI.
  */
-class WPS_Update_Settings {
+class WPSHADOW_Update_Settings {
 
 	/**
 	 * Initialize update settings.
@@ -39,7 +39,7 @@ class WPS_Update_Settings {
 	 * @return void
 	 */
 	public static function handle_license_submission(): void {
-		if ( ! isset( $_POST['wps_license_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wps_license_nonce'] ) ), 'wps_save_license' ) ) {
+		if ( ! isset( $_POST['wpshadow_license_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wpshadow_license_nonce'] ) ), 'wpshadow_save_license' ) ) {
 			return;
 		}
 
@@ -47,26 +47,26 @@ class WPS_Update_Settings {
 			return;
 		}
 
-		if ( isset( $_POST['wps_license_key'] ) ) {
-			$license_key = sanitize_text_field( wp_unslash( $_POST['wps_license_key'] ) );
+		if ( isset( $_POST['wpshadow_license_key'] ) ) {
+			$license_key = sanitize_text_field( wp_unslash( $_POST['wpshadow_license_key'] ) );
 
 			if ( ! empty( $license_key ) ) {
-				update_option( 'wps_license_key', $license_key );
+				update_option( 'wpshadow_license_key', $license_key );
 				add_settings_error(
-					'wps_license',
+					'wpshadow_license',
 					'license_saved',
-					__( 'License key saved successfully.', 'plugin-wp-support-thisismyurl' ),
+					__( 'License key saved successfully.', 'plugin-wpshadow' ),
 					'success'
 				);
 
 				// Clear update cache to force license validation.
-				\WPS\CoreSupport\WPS_Update_Client::clear_cache();
+				\WPS\CoreSupport\WPSHADOW_Update_Client::clear_cache();
 			} else {
-				delete_option( 'wps_license_key' );
+				delete_option( 'wpshadow_license_key' );
 				add_settings_error(
-					'wps_license',
+					'wpshadow_license',
 					'license_removed',
-					__( 'License key removed successfully.', 'plugin-wp-support-thisismyurl' ),
+					__( 'License key removed successfully.', 'plugin-wpshadow' ),
 					'success'
 				);
 			}
@@ -79,12 +79,12 @@ class WPS_Update_Settings {
 	 * @return void
 	 */
 	public static function render_settings_page(): void {
-		$license_key    = get_option( 'wps_license_key', '' );
+		$license_key    = get_option( 'wpshadow_license_key', '' );
 	$has_license    = ! empty( $license_key );
 	$masked_license = $has_license ? str_repeat( '•', max( 20, strlen( $license_key ) - 4 ) ) . substr( $license_key, -4 ) : '';
 
 	// Get current update status.
-	$update_data       = get_transient( 'wps_update_data' );
+	$update_data       = get_transient( 'wpshadow_update_data' );
 	$license_valid     = false;
 	$license_expire    = '';
 	$available_updates = array();
@@ -96,7 +96,7 @@ class WPS_Update_Settings {
 		// Check for available updates.
 		if ( ! empty( $update_data['plugins'] ) && is_array( $update_data['plugins'] ) ) {
 			foreach ( $update_data['plugins'] as $slug => $info ) {
-				$basename = \WPS\CoreSupport\WPS_Update_Client::find_plugin_basename( $slug );
+				$basename = \WPS\CoreSupport\WPSHADOW_Update_Client::find_plugin_basename( $slug );
 				if ( ! $basename ) {
 					continue;
 				}
@@ -125,21 +125,21 @@ class WPS_Update_Settings {
 		}
 	}
 
-	settings_errors( 'wps_license' );
+	settings_errors( 'wpshadow_license' );
 	?>
 
 	<div class="wrap">
-		<h1><?php esc_html_e( 'Updates & License', 'plugin-wp-support-thisismyurl' ); ?></h1>
+		<h1><?php esc_html_e( 'Updates & License', 'plugin-wpshadow' ); ?></h1>
 
 		<!-- License Status -->
 		<div class="card" style="max-width: 800px;">
-			<h2><?php esc_html_e( 'License Status', 'plugin-wp-support-thisismyurl' ); ?></h2>
+			<h2><?php esc_html_e( 'License Status', 'plugin-wpshadow' ); ?></h2>
 
 			<?php if ( $has_license && $license_valid ) : ?>
 				<div class="notice notice-success inline">
 					<p>
 						<span class="dashicons dashicons-yes-alt" style="color: #46b450;"></span>
-						<strong><?php esc_html_e( 'License Active', 'plugin-wp-support-thisismyurl' ); ?></strong>
+						<strong><?php esc_html_e( 'License Active', 'plugin-wpshadow' ); ?></strong>
 					</p>
 				</div>
 				<?php if ( $license_expire ) : ?>
@@ -147,7 +147,7 @@ class WPS_Update_Settings {
 						<?php
 						printf(
 							/* translators: %s: expiration date */
-							esc_html__( 'Your license expires on: %s', 'plugin-wp-support-thisismyurl' ),
+							esc_html__( 'Your license expires on: %s', 'plugin-wpshadow' ),
 							'<strong>' . esc_html( $license_expire ) . '</strong>'
 						);
 						?>
@@ -157,15 +157,15 @@ class WPS_Update_Settings {
 				<div class="notice notice-warning inline">
 					<p>
 						<span class="dashicons dashicons-warning" style="color: #f0b849;"></span>
-						<strong><?php esc_html_e( 'License Invalid or Expired', 'plugin-wp-support-thisismyurl' ); ?></strong>
+						<strong><?php esc_html_e( 'License Invalid or Expired', 'plugin-wpshadow' ); ?></strong>
 					</p>
 				</div>
-				<p><?php esc_html_e( 'Please check your license key or contact support.', 'plugin-wp-support-thisismyurl' ); ?></p>
+				<p><?php esc_html_e( 'Please check your license key or contact support.', 'plugin-wpshadow' ); ?></p>
 			<?php else : ?>
 				<div class="notice notice-info inline">
 					<p>
 						<span class="dashicons dashicons-info" style="color: #72aee6;"></span>
-						<?php esc_html_e( 'No license key configured. Updates are disabled.', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'No license key configured. Updates are disabled.', 'plugin-wpshadow' ); ?>
 					</p>
 				</div>
 			<?php endif; ?>
@@ -174,13 +174,13 @@ class WPS_Update_Settings {
 		<!-- Available Updates -->
 		<?php if ( ! empty( $available_updates ) ) : ?>
 			<div class="card" style="max-width: 800px; margin-top: 20px;">
-				<h2><?php esc_html_e( 'Available Updates', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( 'Available Updates', 'plugin-wpshadow' ); ?></h2>
 				<table class="widefat">
 					<thead>
 						<tr>
-							<th><?php esc_html_e( 'Plugin', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Current Version', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'New Version', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th><?php esc_html_e( 'Plugin', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Current Version', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'New Version', 'plugin-wpshadow' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -195,7 +195,7 @@ class WPS_Update_Settings {
 				</table>
 				<p style="margin-top: 15px;">
 					<a href="<?php echo esc_url( admin_url( 'plugins.php' ) ); ?>" class="button button-primary">
-						<?php esc_html_e( 'Go to Plugins Page to Update', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'Go to Plugins Page to Update', 'plugin-wpshadow' ); ?>
 					</a>
 				</p>
 			</div>
@@ -203,28 +203,28 @@ class WPS_Update_Settings {
 
 		<!-- License Key Form -->
 		<div class="card" style="max-width: 800px; margin-top: 20px;">
-			<h2><?php esc_html_e( 'License Key Configuration', 'plugin-wp-support-thisismyurl' ); ?></h2>
+			<h2><?php esc_html_e( 'License Key Configuration', 'plugin-wpshadow' ); ?></h2>
 
 			<form method="post" action="">
-				<?php wp_nonce_field( 'wps_save_license', 'wps_license_nonce' ); ?>
+				<?php wp_nonce_field( 'wpshadow_save_license', 'wpshadow_license_nonce' ); ?>
 
 				<table class="form-table" role="presentation">
 					<tr>
 						<th scope="row">
-							<label for="wps_license_key"><?php esc_html_e( 'License Key', 'plugin-wp-support-thisismyurl' ); ?></label>
+							<label for="wpshadow_license_key"><?php esc_html_e( 'License Key', 'plugin-wpshadow' ); ?></label>
 						</th>
 						<td>
 							<input
 								type="text"
-								id="wps_license_key"
-								name="wps_license_key"
+								id="wpshadow_license_key"
+								name="wpshadow_license_key"
 								value="<?php echo esc_attr( $masked_license ); ?>"
 								class="regular-text"
-								placeholder="<?php esc_attr_e( 'Enter your license key', 'plugin-wp-support-thisismyurl' ); ?>"
+								placeholder="<?php esc_attr_e( 'Enter your license key', 'plugin-wpshadow' ); ?>"
 								onfocus="if(this.value.includes('•')) this.value='';"
 							/>
 							<p class="description">
-								<?php esc_html_e( 'Enter your thisismyurl.com license key to receive automatic updates.', 'plugin-wp-support-thisismyurl' ); ?>
+								<?php esc_html_e( 'Enter your wpshadow.com license key to receive automatic updates.', 'plugin-wpshadow' ); ?>
 							</p>
 						</td>
 					</tr>
@@ -232,11 +232,11 @@ class WPS_Update_Settings {
 
 				<p class="submit">
 					<button type="submit" class="button button-primary">
-						<?php esc_html_e( 'Save License Key', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'Save License Key', 'plugin-wpshadow' ); ?>
 					</button>
 					<?php if ( $has_license ) : ?>
-						<button type="submit" name="wps_license_key" value="" class="button button-secondary">
-							<?php esc_html_e( 'Remove License Key', 'plugin-wp-support-thisismyurl' ); ?>
+						<button type="submit" name="wpshadow_license_key" value="" class="button button-secondary">
+							<?php esc_html_e( 'Remove License Key', 'plugin-wpshadow' ); ?>
 						</button>
 					<?php endif; ?>
 				</p>
@@ -245,11 +245,11 @@ class WPS_Update_Settings {
 
 		<!-- Manual Update Check -->
 		<div class="card" style="max-width: 800px; margin-top: 20px;">
-			<h2><?php esc_html_e( 'Manual Update Check', 'plugin-wp-support-thisismyurl' ); ?></h2>
-			<p><?php esc_html_e( 'Force an immediate check for updates from thisismyurl.com servers.', 'plugin-wp-support-thisismyurl' ); ?></p>
+			<h2><?php esc_html_e( 'Manual Update Check', 'plugin-wpshadow' ); ?></h2>
+			<p><?php esc_html_e( 'Force an immediate check for updates from wpshadow.com servers.', 'plugin-wpshadow' ); ?></p>
 
 			<button type="button" id="wps-check-updates" class="button">
-				<?php esc_html_e( 'Check for Updates Now', 'plugin-wp-support-thisismyurl' ); ?>
+				<?php esc_html_e( 'Check for Updates Now', 'plugin-wpshadow' ); ?>
 			</button>
 
 			<div id="wps-update-status" style="margin-top: 15px;"></div>
@@ -257,22 +257,22 @@ class WPS_Update_Settings {
 
 		<!-- How It Works -->
 		<div class="card" style="max-width: 800px; margin-top: 20px;">
-			<h2><?php esc_html_e( 'How Automatic Updates Work', 'plugin-wp-support-thisismyurl' ); ?></h2>
+			<h2><?php esc_html_e( 'How Automatic Updates Work', 'plugin-wpshadow' ); ?></h2>
 			<ol>
-				<li><strong><?php esc_html_e( 'Purchase License', 'plugin-wp-support-thisismyurl' ); ?>:</strong> <?php esc_html_e( 'Get your license key from thisismyurl.com', 'plugin-wp-support-thisismyurl' ); ?></li>
-				<li><strong><?php esc_html_e( 'Enter Key Above', 'plugin-wp-support-thisismyurl' ); ?>:</strong> <?php esc_html_e( 'Save your license key in this page', 'plugin-wp-support-thisismyurl' ); ?></li>
-				<li><strong><?php esc_html_e( 'Automatic Checks', 'plugin-wp-support-thisismyurl' ); ?>:</strong> <?php esc_html_e( 'WordPress checks for updates every 12 hours', 'plugin-wp-support-thisismyurl' ); ?></li>
-				<li><strong><?php esc_html_e( 'One-Click Updates', 'plugin-wp-support-thisismyurl' ); ?>:</strong> <?php esc_html_e( 'Update all TIMU plugins from the Plugins page', 'plugin-wp-support-thisismyurl' ); ?></li>
+				<li><strong><?php esc_html_e( 'Purchase License', 'plugin-wpshadow' ); ?>:</strong> <?php esc_html_e( 'Get your license key from wpshadow.com', 'plugin-wpshadow' ); ?></li>
+				<li><strong><?php esc_html_e( 'Enter Key Above', 'plugin-wpshadow' ); ?>:</strong> <?php esc_html_e( 'Save your license key in this page', 'plugin-wpshadow' ); ?></li>
+				<li><strong><?php esc_html_e( 'Automatic Checks', 'plugin-wpshadow' ); ?>:</strong> <?php esc_html_e( 'WordPress checks for updates every 12 hours', 'plugin-wpshadow' ); ?></li>
+				<li><strong><?php esc_html_e( 'One-Click Updates', 'plugin-wpshadow' ); ?>:</strong> <?php esc_html_e( 'Update all WPShadow plugins from the Plugins page', 'plugin-wpshadow' ); ?></li>
 			</ol>
 
 			<p>
-				<strong><?php esc_html_e( 'Update Server:', 'plugin-wp-support-thisismyurl' ); ?></strong>
-				<code>https://thisismyurl.com/api/updates/check.json</code>
+				<strong><?php esc_html_e( 'Update Server:', 'plugin-wpshadow' ); ?></strong>
+				<code>https://wpshadow.com/api/updates/check.json</code>
 			</p>
 
 			<p>
-				<strong><?php esc_html_e( 'Environment Variable (Optional):', 'plugin-wp-support-thisismyurl' ); ?></strong>
-				<code>WPS_LICENSE_KEY</code>
+				<strong><?php esc_html_e( 'Environment Variable (Optional):', 'plugin-wpshadow' ); ?></strong>
+				<code>WPSHADOW_LICENSE_KEY</code>
 			</p>
 		</div>
 	</div>
@@ -283,8 +283,8 @@ class WPS_Update_Settings {
 		const status = document.getElementById('wps-update-status');
 
 		button.disabled = true;
-		button.textContent = '<?php esc_html_e( 'Checking...', 'plugin-wp-support-thisismyurl' ); ?>';
-		status.innerHTML = '<div class="notice notice-info inline"><p><?php esc_html_e( 'Contacting update server...', 'plugin-wp-support-thisismyurl' ); ?></p></div>';
+		button.textContent = '<?php esc_html_e( 'Checking...', 'plugin-wpshadow' ); ?>';
+		status.innerHTML = '<div class="notice notice-info inline"><p><?php esc_html_e( 'Contacting update server...', 'plugin-wpshadow' ); ?></p></div>';
 
 		fetch(ajaxurl, {
 			method: 'POST',
@@ -292,26 +292,26 @@ class WPS_Update_Settings {
 				'Content-Type': 'application/x-www-form-urlencoded',
 			},
 			body: new URLSearchParams({
-				action: 'wps_check_updates',
-				nonce: '<?php echo esc_js( wp_create_nonce( 'wps_check_updates' ) ); ?>'
+				action: 'wpshadow_check_updates',
+				nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_check_updates' ) ); ?>'
 			})
 		})
 	}
 		.then(data => {
 			button.disabled = false;
-			button.textContent = '<?php esc_html_e( 'Check for Updates Now', 'plugin-wp-support-thisismyurl' ); ?>';
+			button.textContent = '<?php esc_html_e( 'Check for Updates Now', 'plugin-wpshadow' ); ?>';
 
 			if (data.success) {
-				status.innerHTML = '<div class="notice notice-success inline"><p><strong><?php esc_html_e( 'Success!', 'plugin-wp-support-thisismyurl' ); ?></strong> ' + data.data.message + '</p></div>';
+				status.innerHTML = '<div class="notice notice-success inline"><p><strong><?php esc_html_e( 'Success!', 'plugin-wpshadow' ); ?></strong> ' + data.data.message + '</p></div>';
 				setTimeout(() => location.reload(), 2000);
 			} else {
-				status.innerHTML = '<div class="notice notice-error inline"><p><strong><?php esc_html_e( 'Error:', 'plugin-wp-support-thisismyurl' ); ?></strong> ' + data.data.message + '</p></div>';
+				status.innerHTML = '<div class="notice notice-error inline"><p><strong><?php esc_html_e( 'Error:', 'plugin-wpshadow' ); ?></strong> ' + data.data.message + '</p></div>';
 			}
 		})
 		.catch(error => {
 			button.disabled = false;
-			button.textContent = '<?php esc_html_e( 'Check for Updates Now', 'plugin-wp-support-thisismyurl' ); ?>';
-			status.innerHTML = '<div class="notice notice-error inline"><p><strong><?php esc_html_e( 'Error:', 'plugin-wp-support-thisismyurl' ); ?></strong> ' + error.message + '</p></div>';
+			button.textContent = '<?php esc_html_e( 'Check for Updates Now', 'plugin-wpshadow' ); ?>';
+			status.innerHTML = '<div class="notice notice-error inline"><p><strong><?php esc_html_e( 'Error:', 'plugin-wpshadow' ); ?></strong> ' + error.message + '</p></div>';
 		});
 	});
 	</script>

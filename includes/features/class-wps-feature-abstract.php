@@ -4,7 +4,7 @@
  *
  * Provides common storage and helpers for feature metadata and state.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
 declare(strict_types=1);
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-abstract class WPS_Abstract_Feature implements WPS_Feature_Interface {
+abstract class WPSHADOW_Abstract_Feature implements WPSHADOW_Feature_Interface {
 	protected string $id;
 
 	protected string $name;
@@ -69,8 +69,8 @@ abstract class WPS_Abstract_Feature implements WPS_Feature_Interface {
 		$this->version            = (string) ( $config['version'] ?? '1.0.0' );
 		$this->default_enabled    = (bool) ( $config['default_enabled'] ?? false );
 		$this->widget_group       = sanitize_key( (string) ( $config['widget_group'] ?? 'general' ) );
-		$this->widget_label       = (string) ( $config['widget_label'] ?? __( 'General Features', 'plugin-wp-support-thisismyurl' ) );
-		$this->widget_description = (string) ( $config['widget_description'] ?? __( 'Miscellaneous features.', 'plugin-wp-support-thisismyurl' ) );
+		$this->widget_label       = (string) ( $config['widget_label'] ?? __( 'General Features', 'plugin-wpshadow' ) );
+		$this->widget_description = (string) ( $config['widget_description'] ?? __( 'Miscellaneous features.', 'plugin-wpshadow' ) );
 		$this->license_level      = max( 1, min( 5, (int) ( $config['license_level'] ?? 1 ) ) );
 		$this->minimum_capability = (string) ( $config['minimum_capability'] ?? 'manage_options' );
 		$this->sub_features       = (array) ( $config['sub_features'] ?? array() );
@@ -164,12 +164,12 @@ abstract class WPS_Abstract_Feature implements WPS_Feature_Interface {
 
 	public static function is_enabled( bool $network = false ): bool {
 		// For static calls, we need to derive the feature ID from the class name
-		// WPS_Feature_FeatureName -> feature-name
+		// WPSHADOW_Feature_FeatureName -> feature-name
 		$class_name = get_called_class();
-		$short_name = preg_replace( '/^.*\\\WPS_Feature_/', '', $class_name );
+		$short_name = preg_replace( '/^.*\\\WPSHADOW_Feature_/', '', $class_name );
 		$feature_id = strtolower( str_replace( '_', '-', $short_name ) );
 
-		return WPS_Feature_Registry::is_feature_enabled( $feature_id, true, $network );
+		return WPSHADOW_Feature_Registry::is_feature_enabled( $feature_id, true, $network );
 	}
 
 	protected function sanitize_scope( string $scope ): string {
@@ -190,13 +190,13 @@ abstract class WPS_Abstract_Feature implements WPS_Feature_Interface {
 	 * @return mixed Setting value.
 	 */
 	protected function get_setting( string $setting_name, $default = null, bool $network = false ) {
-		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Settings_Cache' ) ) {
+		if ( class_exists( '\\WPShadow\\WPSHADOW_Settings_Cache' ) ) {
 			$option_name = $this->id . '_' . $setting_name;
-			return \WPS\CoreSupport\WPS_Settings_Cache::get( $option_name, $default, $network );
+			return \WPS\CoreSupport\WPSHADOW_Settings_Cache::get( $option_name, $default, $network );
 		}
 
 		// Fallback to direct get_option if cache not available.
-		$option_name = 'wps_' . $this->id . '_' . $setting_name;
+		$option_name = 'wpshadow_' . $this->id . '_' . $setting_name;
 		return $network && is_multisite() ? get_site_option( $option_name, $default ) : get_option( $option_name, $default );
 	}
 
@@ -209,13 +209,13 @@ abstract class WPS_Abstract_Feature implements WPS_Feature_Interface {
 	 * @return bool True if update succeeded.
 	 */
 	protected function update_setting( string $setting_name, $value, bool $network = false ): bool {
-		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Settings_Cache' ) ) {
+		if ( class_exists( '\\WPShadow\\WPSHADOW_Settings_Cache' ) ) {
 			$option_name = $this->id . '_' . $setting_name;
-			return \WPS\CoreSupport\WPS_Settings_Cache::update( $option_name, $value, $network );
+			return \WPS\CoreSupport\WPSHADOW_Settings_Cache::update( $option_name, $value, $network );
 		}
 
 		// Fallback to direct update_option if cache not available.
-		$option_name = 'wps_' . $this->id . '_' . $setting_name;
+		$option_name = 'wpshadow_' . $this->id . '_' . $setting_name;
 		return $network && is_multisite() ? update_site_option( $option_name, $value ) : update_option( $option_name, $value );
 	}
 
@@ -227,13 +227,13 @@ abstract class WPS_Abstract_Feature implements WPS_Feature_Interface {
 	 * @return void
 	 */
 	protected function register_default_settings( array $defaults ): void {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Settings_Cache' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Settings_Cache' ) ) {
 			return;
 		}
 
 		foreach ( $defaults as $setting_name => $value ) {
 			$option_name = $this->id . '_' . $setting_name;
-			\WPS\CoreSupport\WPS_Settings_Cache::register_defaults( $option_name, $value );
+			\WPS\CoreSupport\WPSHADOW_Settings_Cache::register_defaults( $option_name, $value );
 		}
 	}
 
@@ -257,7 +257,7 @@ abstract class WPS_Abstract_Feature implements WPS_Feature_Interface {
 	 * @return array Feature options.
 	 */
 	public function get_options(): array {
-		$option_name = 'wps_' . $this->id . '_options';
+		$option_name = 'wpshadow_' . $this->id . '_options';
 		$options     = get_option( $option_name, array() );
 
 		if ( ! is_array( $options ) ) {
@@ -274,7 +274,7 @@ abstract class WPS_Abstract_Feature implements WPS_Feature_Interface {
 	 * @return bool True if updated successfully.
 	 */
 	public function update_options( array $options ): bool {
-		$option_name = 'wps_' . $this->id . '_options';
+		$option_name = 'wpshadow_' . $this->id . '_options';
 		return update_option( $option_name, $options );
 	}
 
@@ -309,7 +309,7 @@ abstract class WPS_Abstract_Feature implements WPS_Feature_Interface {
 	}
 
 	/**
-	 * Get cached data using WPS_Cache_Helper.
+	 * Get cached data using WPSHADOW_Cache_Helper.
 	 *
 	 * Shorthand for accessing cache with feature ID as prefix.
 	 *
@@ -317,16 +317,16 @@ abstract class WPS_Abstract_Feature implements WPS_Feature_Interface {
 	 * @return mixed|false Cached data or false if not found.
 	 */
 	protected function get_cache( string $key ) {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Cache_Helper' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Cache_Helper' ) ) {
 			return false;
 		}
 
-		$cache_key = \WPS\CoreSupport\WPS_Cache_Helper::generate_key( $this->id, $key );
-		return \WPS\CoreSupport\WPS_Cache_Helper::get( $cache_key );
+		$cache_key = \WPS\CoreSupport\WPSHADOW_Cache_Helper::generate_key( $this->id, $key );
+		return \WPS\CoreSupport\WPSHADOW_Cache_Helper::get( $cache_key );
 	}
 
 	/**
-	 * Set cached data using WPS_Cache_Helper.
+	 * Set cached data using WPSHADOW_Cache_Helper.
 	 *
 	 * Shorthand for setting cache with feature ID as prefix.
 	 *
@@ -336,27 +336,27 @@ abstract class WPS_Abstract_Feature implements WPS_Feature_Interface {
 	 * @return bool True on success.
 	 */
 	protected function set_cache( string $key, $data, int $expiration = HOUR_IN_SECONDS ): bool {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Cache_Helper' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Cache_Helper' ) ) {
 			return false;
 		}
 
-		$cache_key = \WPS\CoreSupport\WPS_Cache_Helper::generate_key( $this->id, $key );
-		return \WPS\CoreSupport\WPS_Cache_Helper::set( $cache_key, $data, $expiration );
+		$cache_key = \WPS\CoreSupport\WPSHADOW_Cache_Helper::generate_key( $this->id, $key );
+		return \WPS\CoreSupport\WPSHADOW_Cache_Helper::set( $cache_key, $data, $expiration );
 	}
 
 	/**
-	 * Delete cached data using WPS_Cache_Helper.
+	 * Delete cached data using WPSHADOW_Cache_Helper.
 	 *
 	 * @param string $key Cache key suffix.
 	 * @return bool True on success.
 	 */
 	protected function delete_cache( string $key ): bool {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Cache_Helper' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Cache_Helper' ) ) {
 			return false;
 		}
 
-		$cache_key = \WPS\CoreSupport\WPS_Cache_Helper::generate_key( $this->id, $key );
-		return \WPS\CoreSupport\WPS_Cache_Helper::delete( $cache_key );
+		$cache_key = \WPS\CoreSupport\WPSHADOW_Cache_Helper::generate_key( $this->id, $key );
+		return \WPS\CoreSupport\WPSHADOW_Cache_Helper::delete( $cache_key );
 	}
 
 	/**
@@ -365,10 +365,10 @@ abstract class WPS_Abstract_Feature implements WPS_Feature_Interface {
 	 * @return int Number of cache entries deleted.
 	 */
 	protected function clear_feature_cache(): int {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Cache_Helper' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Cache_Helper' ) ) {
 			return 0;
 		}
 
-		return \WPS\CoreSupport\WPS_Cache_Helper::delete_by_prefix( $this->id );
+		return \WPS\CoreSupport\WPSHADOW_Cache_Helper::delete_by_prefix( $this->id );
 	}
 }

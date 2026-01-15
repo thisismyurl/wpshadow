@@ -1,9 +1,9 @@
 <?php
 /**
- * Update Server Client for WP Support Plugin
+ * Update Server Client for WPShadow Plugin
  *
- * Handles automatic updates from thisismyurl.com update server.
- * Supports license key validation and tracking for all TIMU plugins.
+ * Handles automatic updates from wpshadow.com update server.
+ * Supports license key validation and tracking for all WPShadow plugins.
  *
  * @package    WP_Support
  * @subpackage Core
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Update Server Client Class
  *
  * Integrates with WordPress plugin update system to check for updates
- * from thisismyurl.com update server instead of WordPress.org.
+ * from wpshadow.com update server instead of WordPress.org.
  *
  * JSON Response Format Expected:
  * {
@@ -30,11 +30,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  *   "license_valid": true,
  *   "license_expires": "2026-12-31",
  *   "plugins": {
- *     "plugin-wp-support-thisismyurl": {
- *       "name": "WP Support",
+ *     "plugin-wpshadow": {
+ *       "name": "WPShadow",
  *       "version": "1.3.0",
- *       "download_url": "https://thisismyurl.com/downloads/plugin-wp-support-thisismyurl-1.3.0.zip",
- *       "homepage": "https://thisismyurl.com/wp-support/",
+ *       "download_url": "https://wpshadow.com/downloads/plugin-wpshadow-1.3.0.zip",
+ *       "homepage": "https://wpshadow.com/wp-support/",
  *       "requires": "6.4",
  *       "requires_php": "8.1",
  *       "tested": "6.9",
@@ -42,30 +42,30 @@ if ( ! defined( 'ABSPATH' ) ) {
  *       "description": "Core support functionality...",
  *       "changelog": "<h3>1.3.0</h3><ul><li>Feature X</li></ul>",
  *       "banners": {
- *         "high": "https://thisismyurl.com/banners/wp-support-high.png",
- *         "low": "https://thisismyurl.com/banners/wp-support-low.png"
+ *         "high": "https://wpshadow.com/banners/wp-support-high.png",
+ *         "low": "https://wpshadow.com/banners/wp-support-low.png"
  *       },
  *       "icons": {
- *         "1x": "https://thisismyurl.com/icons/wp-support.png",
- *         "2x": "https://thisismyurl.com/icons/wp-support@2x.png"
+ *         "1x": "https://wpshadow.com/icons/wp-support.png",
+ *         "2x": "https://wpshadow.com/icons/wp-support@2x.png"
  *       }
  *     },
- *     "plugin-image-hub-thisismyurl": { ... },
- *     "plugin-video-hub-thisismyurl": { ... }
+ *     "plugin-image-hub-wpshadow": { ... },
+ *     "plugin-video-hub-wpshadow": { ... }
  *   }
  * }
  */
-class WPS_Update_Client {
+class WPSHADOW_Update_Client {
 
 	/**
 	 * Update server endpoint URL
 	 *
 	 * @var string
 	 */
-	private const UPDATE_SERVER_URL = 'https://thisismyurl.com/api/updates/check.json';
+	private const UPDATE_SERVER_URL = 'https://wpshadow.com/api/updates/check.json';
 
 	/**
-	 * Plugin basename (e.g., 'plugin-wp-support-thisismyurl/wp-support-thisismyurl.php')
+	 * Plugin basename (e.g., 'plugin-wpshadow/wpshadow.php')
 	 *
 	 * @var string
 	 */
@@ -87,7 +87,7 @@ class WPS_Update_Client {
 		add_filter( 'plugin_action_links_' . $plugin_basename, array( __CLASS__, 'add_action_links' ) );
 
 		// Admin AJAX handlers for manual checks.
-		add_action( 'wp_ajax_wps_check_updates', array( __CLASS__, 'manual_check' ) );
+		add_action( 'wp_ajax_WPSHADOW_check_updates', array( __CLASS__, 'manual_check' ) );
 	}
 
 	/**
@@ -201,15 +201,15 @@ class WPS_Update_Client {
 	}
 
 	/**
-	 * Get updates from thisismyurl.com server
+	 * Get updates from wpshadow.com server
 	 *
-	 * Fetches update information for all TIMU plugins from update server.
+	 * Fetches update information for all WPShadow plugins from update server.
 	 * Caches the result for 6 hours to minimize server load.
 	 *
 	 * @return array|false Update data or false on failure.
 	 */
 	private static function get_update_data() {
-		$transient_key = 'wps_update_data';
+		$transient_key = 'wpshadow_update_data';
 		$cached        = get_transient( $transient_key );
 
 		if ( false !== $cached ) {
@@ -262,26 +262,26 @@ class WPS_Update_Client {
 	 */
 	private static function get_license_key(): string {
 		// Check WordPress option first.
-		$key = get_option( 'wps_license_key' );
+		$key = get_option( 'wpshadow_license_key' );
 		if ( ! empty( $key ) ) {
 			return $key;
 		}
 
 		// Check constant.
-		if ( defined( 'WPS_LICENSE_KEY' ) ) {
-			return WPS_LICENSE_KEY;
+		if ( defined( 'wpshadow_LICENSE_KEY' ) ) {
+			return WPSHADOW_LICENSE_KEY;
 		}
 
 		// Check environment variable.
-		if ( isset( $_ENV['WPS_LICENSE_KEY'] ) ) {
-			return sanitize_text_field( wp_unslash( $_ENV['WPS_LICENSE_KEY'] ) );
+		if ( isset( $_ENV['wpshadow_LICENSE_KEY'] ) ) {
+			return sanitize_text_field( wp_unslash( $_ENV['wpshadow_LICENSE_KEY'] ) );
 		}
 
 		return '';
 	}
 
 	/**
-	 * Get list of installed TIMU/WPS plugins
+	 * Get list of installed WPShadow/WPS plugins
 	 *
 	 * @return array Plugin slugs and versions.
 	 */
@@ -292,13 +292,13 @@ class WPS_Update_Client {
 
 		$all_plugins   = get_plugins();
 		$installed     = array();
-		$timu_prefixes = array( 'plugin-wp-support', 'plugin-image-hub', 'plugin-video-hub' );
+		$wpshadow_prefixes = array( 'plugin-wp-support', 'plugin-image-hub', 'plugin-video-hub' );
 
 		foreach ( $all_plugins as $plugin_file => $plugin_data ) {
 			$slug = dirname( $plugin_file );
 
-			// Check if it's a TIMU plugin.
-			foreach ( $timu_prefixes as $prefix ) {
+			// Check if it's a WPShadow plugin.
+			foreach ( $wpshadow_prefixes as $prefix ) {
 				if ( 0 === strpos( $slug, $prefix ) ) {
 					$installed[ $slug ] = $plugin_data['Version'];
 					break;
@@ -340,7 +340,7 @@ class WPS_Update_Client {
 		$settings_link = sprintf(
 			'<a href="%s">%s</a>',
 			esc_url( admin_url( 'admin.php?page=wp-support&tab=updates' ) ),
-			esc_html__( 'Updates & License', 'plugin-wp-support-thisismyurl' )
+			esc_html__( 'Updates & License', 'plugin-wpshadow' )
 		);
 
 		array_unshift( $links, $settings_link );
@@ -354,7 +354,7 @@ class WPS_Update_Client {
 	 * Useful for testing or forcing an immediate update check.
 	 */
 	public static function clear_cache(): void {
-		delete_transient( 'wps_update_data' );
+		delete_transient( 'wpshadow_update_data' );
 		delete_site_transient( 'update_plugins' );
 	}
 
@@ -362,7 +362,7 @@ class WPS_Update_Client {
 	 * Manual update check via AJAX
 	 */
 	public static function manual_check(): void {
-		check_ajax_referer( 'wps_check_updates', 'nonce' );
+		check_ajax_referer( 'wpshadow_check_updates', 'nonce' );
 
 		if ( ! current_user_can( 'update_plugins' ) ) {
 			wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );

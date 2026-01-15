@@ -4,7 +4,7 @@
  *
  * Handles user privacy data export and erasure requests.
  *
- * @package WPS_SUPPORT
+ * @package WPSHADOW_SUPPORT
  */
 
 declare(strict_types=1);
@@ -16,13 +16,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Privacy_Requests class
+ * WPSHADOW_Privacy_Requests class
  */
-class WPS_Privacy_Requests {
+class WPSHADOW_Privacy_Requests {
 	/**
 	 * Table name for privacy requests.
 	 */
-	private const TABLE_NAME = 'wps_privacy_requests';
+	private const TABLE_NAME = 'wpshadow_privacy_requests';
 
 	/**
 	 * Initialize the privacy requests manager.
@@ -31,9 +31,9 @@ class WPS_Privacy_Requests {
 	 */
 	public static function init(): void {
 		add_action( 'init', array( __CLASS__, 'register_table' ) );
-		add_action( 'wp_ajax_wps_submit_privacy_request', array( __CLASS__, 'ajax_submit_request' ) );
-		add_action( 'wp_ajax_wps_process_privacy_request', array( __CLASS__, 'ajax_process_request' ) );
-		add_action( 'wp_ajax_wps_download_export', array( __CLASS__, 'ajax_download_export' ) );
+		add_action( 'wp_ajax_WPSHADOW_submit_privacy_request', array( __CLASS__, 'ajax_submit_request' ) );
+		add_action( 'wp_ajax_WPSHADOW_process_privacy_request', array( __CLASS__, 'ajax_process_request' ) );
+		add_action( 'wp_ajax_WPSHADOW_download_export', array( __CLASS__, 'ajax_download_export' ) );
 	}
 
 	/**
@@ -108,12 +108,12 @@ class WPS_Privacy_Requests {
 		$request_id = (int) $wpdb->insert_id;
 
 		// Log the request.
-		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
-			WPS_Activity_Logger::log(
+		if ( class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) ) {
+			WPSHADOW_Activity_Logger::log(
 				'info',
 				sprintf(
 					/* translators: 1: request type, 2: user ID */
-					__( 'Privacy %1$s request submitted by user #%2$d', 'plugin-wp-support-thisismyurl' ),
+					__( 'Privacy %1$s request submitted by user #%2$d', 'plugin-wpshadow' ),
 					$request_type,
 					$user_id
 				),
@@ -238,12 +238,12 @@ class WPS_Privacy_Requests {
 			$request = self::get_request( $request_id );
 
 			// Log status change.
-			if ( class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) && $request ) {
-				WPS_Activity_Logger::log(
+			if ( class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) && $request ) {
+				WPSHADOW_Activity_Logger::log(
 					'info',
 					sprintf(
 						/* translators: 1: request type, 2: new status */
-						__( 'Privacy %1$s request status changed to %2$s', 'plugin-wp-support-thisismyurl' ),
+						__( 'Privacy %1$s request status changed to %2$s', 'plugin-wpshadow' ),
 						$request->request_type,
 						$status
 					),
@@ -285,7 +285,7 @@ class WPS_Privacy_Requests {
 		$user_data = self::collect_user_data( $request->user_id );
 
 		// Determine export format.
-		$format = get_option( 'WPS_privacy_export_format', 'json' );
+		$format = get_option( 'wpshadow_privacy_export_format', 'json' );
 
 		// Create export file.
 		$upload_dir = wp_upload_dir();
@@ -391,7 +391,7 @@ class WPS_Privacy_Requests {
 
 		// Collect activity logs.
 		global $wpdb;
-		$activity_table = $wpdb->prefix . 'wps_activity_log';
+		$activity_table = $wpdb->prefix . 'wpshadow_activity_log';
 		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $activity_table ) ) === $activity_table ) {
 			$logs                  = $wpdb->get_results(
 				$wpdb->prepare(
@@ -412,7 +412,7 @@ class WPS_Privacy_Requests {
 		 * @param array $data    User data.
 		 * @param int   $user_id User ID.
 		 */
-		return apply_filters( 'wps_privacy_export_data', $data, $user_id );
+		return apply_filters( 'wpshadow_privacy_export_data', $data, $user_id );
 	}
 
 	/**
@@ -425,7 +425,7 @@ class WPS_Privacy_Requests {
 		global $wpdb;
 
 		// Erase activity logs.
-		$activity_table = $wpdb->prefix . 'wps_activity_log';
+		$activity_table = $wpdb->prefix . 'wpshadow_activity_log';
 		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $activity_table ) ) === $activity_table ) {
 			$wpdb->delete( $activity_table, array( 'user_id' => $user_id ), array( '%d' ) );
 		}
@@ -435,7 +435,7 @@ class WPS_Privacy_Requests {
 		 *
 		 * @param int $user_id User ID.
 		 */
-		do_action( 'wps_privacy_erase_user_data', $user_id );
+		do_action( 'wpshadow_privacy_erase_user_data', $user_id );
 
 		return true;
 	}
@@ -512,44 +512,44 @@ class WPS_Privacy_Requests {
 
 		switch ( $event ) {
 			case 'submitted':
-				$subject = __( 'Privacy Request Submitted', 'plugin-wp-support-thisismyurl' );
+				$subject = __( 'Privacy Request Submitted', 'plugin-wpshadow' );
 				$message = sprintf(
 					/* translators: 1: request type */
-					__( 'Your privacy %1$s request has been submitted and is pending review.', 'plugin-wp-support-thisismyurl' ),
+					__( 'Your privacy %1$s request has been submitted and is pending review.', 'plugin-wpshadow' ),
 					$request->request_type
 				);
 				break;
 
 			case 'approved':
-				$subject = __( 'Privacy Request Approved', 'plugin-wp-support-thisismyurl' );
+				$subject = __( 'Privacy Request Approved', 'plugin-wpshadow' );
 				$message = sprintf(
 					/* translators: 1: request type */
-					__( 'Your privacy %1$s request has been approved and is being processed.', 'plugin-wp-support-thisismyurl' ),
+					__( 'Your privacy %1$s request has been approved and is being processed.', 'plugin-wpshadow' ),
 					$request->request_type
 				);
 				break;
 
 			case 'completed':
-				$subject = __( 'Privacy Request Completed', 'plugin-wp-support-thisismyurl' );
+				$subject = __( 'Privacy Request Completed', 'plugin-wpshadow' );
 				if ( 'export' === $request->request_type ) {
-					$download_url = admin_url( 'admin-ajax.php?action=wps_download_export&request_id=' . $request_id );
+					$download_url = admin_url( 'admin-ajax.php?action=WPSHADOW_download_export&request_id=' . $request_id );
 					$message      = sprintf(
 						/* translators: 1: download URL */
-						__( 'Your data export is ready. Download it here: %1$s', 'plugin-wp-support-thisismyurl' ),
+						__( 'Your data export is ready. Download it here: %1$s', 'plugin-wpshadow' ),
 						$download_url
 					);
 				} else {
-					$message = __( 'Your data erasure request has been completed.', 'plugin-wp-support-thisismyurl' );
+					$message = __( 'Your data erasure request has been completed.', 'plugin-wpshadow' );
 				}
 				break;
 
 			case 'denied':
-				$subject = __( 'Privacy Request Denied', 'plugin-wp-support-thisismyurl' );
+				$subject = __( 'Privacy Request Denied', 'plugin-wpshadow' );
 				$message = sprintf(
 					/* translators: 1: request type, 2: admin notes */
-					__( 'Your privacy %1$s request has been denied. Reason: %2$s', 'plugin-wp-support-thisismyurl' ),
+					__( 'Your privacy %1$s request has been denied. Reason: %2$s', 'plugin-wpshadow' ),
 					$request->request_type,
-					$request->admin_notes ?: __( 'No reason provided', 'plugin-wp-support-thisismyurl' )
+					$request->admin_notes ?: __( 'No reason provided', 'plugin-wpshadow' )
 				);
 				break;
 		}
@@ -575,10 +575,10 @@ class WPS_Privacy_Requests {
 		}
 
 		$admin_email = get_option( 'admin_email' );
-		$subject     = __( 'New Privacy Request', 'plugin-wp-support-thisismyurl' );
+		$subject     = __( 'New Privacy Request', 'plugin-wpshadow' );
 		$message     = sprintf(
 			/* translators: 1: request type, 2: user ID, 3: admin URL */
-			__( 'A new privacy %1$s request has been submitted by user #%2$d. Review it here: %3$s', 'plugin-wp-support-thisismyurl' ),
+			__( 'A new privacy %1$s request has been submitted by user #%2$d. Review it here: %3$s', 'plugin-wpshadow' ),
 			$request->request_type,
 			$request->user_id,
 			admin_url( 'admin.php?page=wps-privacy-requests' )
@@ -593,28 +593,28 @@ class WPS_Privacy_Requests {
 	 * @return void
 	 */
 	public static function ajax_submit_request(): void {
-		check_ajax_referer( 'wps_privacy_request', 'nonce' );
+		check_ajax_referer( 'wpshadow_privacy_request', 'nonce' );
 
 		if ( ! is_user_logged_in() ) {
-			wp_send_json_error( array( 'message' => __( 'You must be logged in to submit a request.', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You must be logged in to submit a request.', 'plugin-wpshadow' ) ) );
 		}
 
 		$user_id      = get_current_user_id();
-		$request_type = \WPS\CoreSupport\wps_get_post_key( 'request_type' );
+		$request_type = \WPS\CoreSupport\WPSHADOW_get_post_key( 'request_type' );
 
 		if ( ! in_array( $request_type, array( 'export', 'erase' ), true ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid request type.', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid request type.', 'plugin-wpshadow' ) ) );
 		}
 
 		$request_id = self::submit_request( $user_id, $request_type );
 
 		if ( ! $request_id ) {
-			wp_send_json_error( array( 'message' => __( 'Failed to submit request.', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Failed to submit request.', 'plugin-wpshadow' ) ) );
 		}
 
 		wp_send_json_success(
 			array(
-				'message'    => __( 'Request submitted successfully.', 'plugin-wp-support-thisismyurl' ),
+				'message'    => __( 'Request submitted successfully.', 'plugin-wpshadow' ),
 				'request_id' => $request_id,
 			)
 		);
@@ -626,19 +626,19 @@ class WPS_Privacy_Requests {
 	 * @return void
 	 */
 	public static function ajax_process_request(): void {
-		check_ajax_referer( 'wps_privacy_admin', 'nonce' );
+		check_ajax_referer( 'wpshadow_privacy_admin', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wpshadow' ) ) );
 		}
 
-		$request_id = \WPS\CoreSupport\wps_get_post_int( 'request_id' );
-		$action     = \WPS\CoreSupport\wps_get_post_key( 'request_action' );
+		$request_id = \WPS\CoreSupport\WPSHADOW_get_post_int( 'request_id' );
+		$action     = \WPS\CoreSupport\WPSHADOW_get_post_key( 'request_action' );
 
 		$request = self::get_request( $request_id );
 
 		if ( ! $request ) {
-			wp_send_json_error( array( 'message' => __( 'Request not found.', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Request not found.', 'plugin-wpshadow' ) ) );
 		}
 
 		switch ( $action ) {
@@ -652,17 +652,17 @@ class WPS_Privacy_Requests {
 					self::process_erase_request( $request_id );
 				}
 
-				wp_send_json_success( array( 'message' => __( 'Request approved and processed.', 'plugin-wp-support-thisismyurl' ) ) );
+				wp_send_json_success( array( 'message' => __( 'Request approved and processed.', 'plugin-wpshadow' ) ) );
 				break;
 
 			case 'deny':
-				$notes = \WPS\CoreSupport\wps_get_post_textarea( 'admin_notes' );
+				$notes = \WPS\CoreSupport\WPSHADOW_get_post_textarea( 'admin_notes' );
 				self::update_request_status( $request_id, 'denied', get_current_user_id(), $notes );
-				wp_send_json_success( array( 'message' => __( 'Request denied.', 'plugin-wp-support-thisismyurl' ) ) );
+				wp_send_json_success( array( 'message' => __( 'Request denied.', 'plugin-wpshadow' ) ) );
 				break;
 
 			default:
-				wp_send_json_error( array( 'message' => __( 'Invalid action.', 'plugin-wp-support-thisismyurl' ) ) );
+				wp_send_json_error( array( 'message' => __( 'Invalid action.', 'plugin-wpshadow' ) ) );
 		}
 	}
 
@@ -673,18 +673,18 @@ class WPS_Privacy_Requests {
 	 */
 	public static function ajax_download_export(): void {
 		if ( ! is_user_logged_in() ) {
-			wp_die( esc_html__( 'Access denied.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Access denied.', 'plugin-wpshadow' ) );
 		}
 
 		$request_id = isset( $_GET['request_id'] ) ? absint( $_GET['request_id'] ) : 0;
 		$request    = self::get_request( $request_id );
 
 		if ( ! $request || $request->user_id !== get_current_user_id() ) {
-			wp_die( esc_html__( 'Invalid request or access denied.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Invalid request or access denied.', 'plugin-wpshadow' ) );
 		}
 
 		if ( empty( $request->export_file ) ) {
-			wp_die( esc_html__( 'Export file not available.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Export file not available.', 'plugin-wpshadow' ) );
 		}
 
 		$upload_dir = wp_upload_dir();
@@ -692,7 +692,7 @@ class WPS_Privacy_Requests {
 		$filepath   = $export_dir . '/' . $request->export_file;
 
 		if ( ! file_exists( $filepath ) ) {
-			wp_die( esc_html__( 'Export file not found.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Export file not found.', 'plugin-wpshadow' ) );
 		}
 
 		header( 'Content-Type: application/octet-stream' );

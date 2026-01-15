@@ -2,7 +2,7 @@
 /**
  * Site Audit Generator - Comprehensive performance, security, and optimization analysis.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
 declare(strict_types=1);
@@ -16,12 +16,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Site Audit Manager Class
  */
-class WPS_Site_Audit {
+class WPSHADOW_Site_Audit {
 
 	/**
 	 * Audit reports option key.
 	 */
-	private const REPORTS_KEY = 'WPS_site_audit_reports';
+	private const REPORTS_KEY = 'wpshadow_site_audit_reports';
 
 	/**
 	 * Initialize Site Audit system.
@@ -30,8 +30,8 @@ class WPS_Site_Audit {
 	 */
 	public static function init(): void {
 		add_action( 'admin_menu', array( __CLASS__, 'register_menu' ) );
-		add_action( 'wp_ajax_WPS_generate_audit', array( __CLASS__, 'handle_audit_generation' ) );
-		add_action( 'wp_ajax_WPS_toggle_autoload', array( __CLASS__, 'handle_toggle_autoload' ) );
+		add_action( 'wp_ajax_WPSHADOW_generate_audit', array( __CLASS__, 'handle_audit_generation' ) );
+		add_action( 'wp_ajax_WPSHADOW_toggle_autoload', array( __CLASS__, 'handle_toggle_autoload' ) );
 	}
 
 	/**
@@ -150,7 +150,7 @@ class WPS_Site_Audit {
 			'draft_posts'       => intval( $drafts ),
 			'post_revisions'    => intval( $revisions ),
 			'spam_comments'     => intval( $spam_comments ),
-			'transients_count'  => count( get_transient( 'WPS_transient_count' ) ?? array() ),
+			'transients_count'  => count( get_transient( 'wpshadow_transient_count' ) ?? array() ),
 		);
 	}
 
@@ -254,7 +254,7 @@ class WPS_Site_Audit {
 			$suggestions[] = array(
 				'title'       => 'Cleanup Old Post Revisions',
 				'description' => "You have {$revision_count} post revisions. Clean old ones to reduce database size.",
-				'action'      => 'WPS_cleanup_revisions',
+				'action'      => 'wpshadow_cleanup_revisions',
 			);
 		}
 
@@ -264,7 +264,7 @@ class WPS_Site_Audit {
 			$suggestions[] = array(
 				'title'       => 'Delete Spam Comments',
 				'description' => "You have {$spam_count} spam comments. Delete to improve performance.",
-				'action'      => 'WPS_delete_spam_comments',
+				'action'      => 'wpshadow_delete_spam_comments',
 			);
 		}
 
@@ -274,7 +274,7 @@ class WPS_Site_Audit {
 			$suggestions[] = array(
 				'title'       => 'Delete Old Auto Drafts',
 				'description' => "You have {$auto_draft} old auto-draft posts. Clean to save space.",
-				'action'      => 'WPS_cleanup_auto_drafts',
+				'action'      => 'wpshadow_cleanup_auto_drafts',
 			);
 		}
 
@@ -285,7 +285,7 @@ class WPS_Site_Audit {
 				'title'       => 'Deactivate Unused Plugins',
 				'description' => 'Found ' . count( $unused ) . ' inactive plugin(s). Deactivate unused plugins to improve security.',
 				'plugins'     => $unused,
-				'action'      => 'WPS_deactivate_plugins',
+				'action'      => 'wpshadow_deactivate_plugins',
 			);
 		}
 
@@ -659,14 +659,14 @@ class WPS_Site_Audit {
 		 *
 		 * @param string $recommended_php Recommended PHP version.
 		 */
-		$recommended_php = apply_filters( 'wps_audit_recommended_php_version', $recommended_php );
+		$recommended_php = apply_filters( 'wpshadow_audit_recommended_php_version', $recommended_php );
 
 		/**
 		 * Filter the minimum WordPress PHP version for compatibility checks.
 		 *
 		 * @param string $min_wp_php Minimum WordPress PHP version.
 		 */
-		$min_wp_php = apply_filters( 'wps_audit_minimum_php_version', $min_wp_php );
+		$min_wp_php = apply_filters( 'wpshadow_audit_minimum_php_version', $min_wp_php );
 
 		$issues = array();
 
@@ -786,8 +786,8 @@ class WPS_Site_Audit {
 	public static function register_menu(): void {
 		add_submenu_page(
 			'wp-support',
-			__( 'Site Audit', 'plugin-wp-support-thisismyurl' ),
-			__( 'Audit', 'plugin-wp-support-thisismyurl' ),
+			__( 'Site Audit', 'plugin-wpshadow' ),
+			__( 'Audit', 'plugin-wpshadow' ),
 			'manage_options',
 			'wps-audit',
 			array( __CLASS__, 'render_audit_page' )
@@ -800,10 +800,10 @@ class WPS_Site_Audit {
 	 * @return void
 	 */
 	public static function handle_audit_generation(): void {
-		check_ajax_referer( 'WPS_audit_nonce', 'nonce' );
+		check_ajax_referer( 'wpshadow_audit_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
+			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
 		}
 
 		$report = self::generate_audit();
@@ -816,16 +816,16 @@ class WPS_Site_Audit {
 	 * @return void
 	 */
 	public static function handle_toggle_autoload(): void {
-		check_ajax_referer( 'WPS_audit_nonce', 'nonce' );
+		check_ajax_referer( 'wpshadow_audit_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) );
+			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
 		}
 
-		$option_name = \WPS\CoreSupport\wps_get_post_text( 'option_name' );
+		$option_name = \WPS\CoreSupport\WPSHADOW_get_post_text( 'option_name' );
 
 		if ( empty( $option_name ) ) {
-			wp_send_json_error( __( 'Invalid option name', 'plugin-wp-support-thisismyurl' ) );
+			wp_send_json_error( __( 'Invalid option name', 'plugin-wpshadow' ) );
 		}
 
 		global $wpdb;
@@ -840,7 +840,7 @@ class WPS_Site_Audit {
 		);
 
 		if ( false === $result ) {
-			wp_send_json_error( __( 'Failed to update option', 'plugin-wp-support-thisismyurl' ) );
+			wp_send_json_error( __( 'Failed to update option', 'plugin-wpshadow' ) );
 		}
 
 		// Clear cache to ensure the change is reflected.
@@ -850,7 +850,7 @@ class WPS_Site_Audit {
 			array(
 				'message' => sprintf(
 					/* translators: %s: option name */
-					__( 'Successfully disabled autoload for %s', 'plugin-wp-support-thisismyurl' ),
+					__( 'Successfully disabled autoload for %s', 'plugin-wpshadow' ),
 					$option_name
 				),
 			)
@@ -864,27 +864,27 @@ class WPS_Site_Audit {
 	 */
 	public static function render_audit_page(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Insufficient permissions.', 'plugin-wpshadow' ) );
 		}
 
 		$reports = self::get_reports();
 		$latest  = ! empty( $reports ) ? end( $reports ) : null;
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Site Audit', 'plugin-wp-support-thisismyurl' ); ?></h1>
-			<p><?php esc_html_e( 'Comprehensive analysis of site performance, security, and optimization opportunities.', 'plugin-wp-support-thisismyurl' ); ?></p>
+			<h1><?php esc_html_e( 'Site Audit', 'plugin-wpshadow' ); ?></h1>
+			<p><?php esc_html_e( 'Comprehensive analysis of site performance, security, and optimization opportunities.', 'plugin-wpshadow' ); ?></p>
 
 			<button id="wps-audit-generate" class="button button-primary">
-				<?php esc_html_e( '📋 Generate New Audit', 'plugin-wp-support-thisismyurl' ); ?>
+				<?php esc_html_e( '📋 Generate New Audit', 'plugin-wpshadow' ); ?>
 			</button>
 
 			<?php if ( ! $latest ) : ?>
 				<p style="margin-top: 20px; padding: 15px; background: #f0f0f0; border-left: 4px solid #ffb900;">
-					<?php esc_html_e( 'No audits generated yet. Create one to see recommendations.', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'No audits generated yet. Create one to see recommendations.', 'plugin-wpshadow' ); ?>
 				</p>
 			<?php else : ?>
 				<div style="margin-top: 30px;">
-					<h2><?php esc_html_e( 'Latest Audit Report', 'plugin-wp-support-thisismyurl' ); ?></h2>
+					<h2><?php esc_html_e( 'Latest Audit Report', 'plugin-wpshadow' ); ?></h2>
 					<p style="color: #666; font-size: 13px;">
 						<?php echo esc_html( wp_date( 'F j, Y \a\t g:i a', $latest['timestamp'] ) ); ?>
 					</p>
@@ -892,7 +892,7 @@ class WPS_Site_Audit {
 					<!-- Security Issues -->
 					<?php if ( ! empty( $latest['security']['issues'] ) ) : ?>
 						<div style="margin: 20px 0; padding: 15px; background: #fee; border-left: 4px solid #c00;">
-							<h3><?php esc_html_e( '🚨 Security Issues Found', 'plugin-wp-support-thisismyurl' ); ?> (<?php echo intval( count( $latest['security']['issues'] ) ); ?>)</h3>
+							<h3><?php esc_html_e( '🚨 Security Issues Found', 'plugin-wpshadow' ); ?> (<?php echo intval( count( $latest['security']['issues'] ) ); ?>)</h3>
 							<ul style="margin: 10px 0; padding-left: 20px;">
 								<?php foreach ( $latest['security']['issues'] as $issue ) : ?>
 									<li>
@@ -912,11 +912,11 @@ class WPS_Site_Audit {
 					<!-- PHP Compatibility Issues -->
 					<?php if ( ! empty( $latest['php_compat']['issues'] ) ) : ?>
 						<div style="margin: 20px 0; padding: 15px; background: #fee; border-left: 4px solid #ff6600;">
-							<h3><?php esc_html_e( '⚠️ PHP Compatibility Issues', 'plugin-wp-support-thisismyurl' ); ?> (<?php echo intval( count( $latest['php_compat']['issues'] ) ); ?>)</h3>
+							<h3><?php esc_html_e( '⚠️ PHP Compatibility Issues', 'plugin-wpshadow' ); ?> (<?php echo intval( count( $latest['php_compat']['issues'] ) ); ?>)</h3>
 							<p style="margin: 10px 0; font-size: 13px;">
 								<?php
 								printf(
-									esc_html__( 'Current PHP Version: %1$s | Recommended: %2$s', 'plugin-wp-support-thisismyurl' ),
+									esc_html__( 'Current PHP Version: %1$s | Recommended: %2$s', 'plugin-wpshadow' ),
 									esc_html( $latest['php_compat']['current_version'] ),
 									esc_html( $latest['php_compat']['recommended_version'] )
 								);
@@ -938,11 +938,11 @@ class WPS_Site_Audit {
 					<!-- Broken Links -->
 					<?php if ( ! empty( $latest['broken_links']['broken_count'] ) ) : ?>
 						<div style="margin: 20px 0; padding: 15px; background: #ffe; border-left: 4px solid #ff6600;">
-							<h3><?php esc_html_e( '🔗 Broken Links Found', 'plugin-wp-support-thisismyurl' ); ?> (<?php echo intval( $latest['broken_links']['broken_count'] ); ?>)</h3>
+							<h3><?php esc_html_e( '🔗 Broken Links Found', 'plugin-wpshadow' ); ?> (<?php echo intval( $latest['broken_links']['broken_count'] ); ?>)</h3>
 							<p style="margin: 10px 0; font-size: 13px; color: #666;">
 								<?php
 								printf(
-									esc_html__( 'Checked %1$d links and found %2$d broken.', 'plugin-wp-support-thisismyurl' ),
+									esc_html__( 'Checked %1$d links and found %2$d broken.', 'plugin-wpshadow' ),
 									intval( $latest['broken_links']['total_checked'] ),
 									intval( $latest['broken_links']['broken_count'] )
 								);
@@ -960,7 +960,7 @@ class WPS_Site_Audit {
 									</li>
 								<?php endforeach; ?>
 								<?php if ( count( $latest['broken_links']['links'] ) > 10 ) : ?>
-									<li style="font-style: italic; color: #666;"><?php printf( esc_html__( 'And %d more...', 'plugin-wp-support-thisismyurl' ), count( $latest['broken_links']['links'] ) - 10 ); ?></li>
+									<li style="font-style: italic; color: #666;"><?php printf( esc_html__( 'And %d more...', 'plugin-wpshadow' ), count( $latest['broken_links']['links'] ) - 10 ); ?></li>
 								<?php endif; ?>
 							</ul>
 						</div>
@@ -969,11 +969,11 @@ class WPS_Site_Audit {
 					<!-- Missing Alt Tags -->
 					<?php if ( ! empty( $latest['missing_alt']['missing_count'] ) ) : ?>
 						<div style="margin: 20px 0; padding: 15px; background: #ffe; border-left: 4px solid #ffb900;">
-							<h3><?php esc_html_e( '🖼️ Missing Alt Tags', 'plugin-wp-support-thisismyurl' ); ?> (<?php echo intval( $latest['missing_alt']['missing_count'] ); ?>)</h3>
+							<h3><?php esc_html_e( '🖼️ Missing Alt Tags', 'plugin-wpshadow' ); ?> (<?php echo intval( $latest['missing_alt']['missing_count'] ); ?>)</h3>
 							<p style="margin: 10px 0; font-size: 13px; color: #666;">
 								<?php
 								printf(
-									esc_html__( 'Found %1$d images without alt tags out of %2$d total images checked.', 'plugin-wp-support-thisismyurl' ),
+									esc_html__( 'Found %1$d images without alt tags out of %2$d total images checked.', 'plugin-wpshadow' ),
 									intval( $latest['missing_alt']['missing_count'] ),
 									intval( $latest['missing_alt']['total_images'] )
 								);
@@ -988,7 +988,7 @@ class WPS_Site_Audit {
 									</li>
 								<?php endforeach; ?>
 								<?php if ( count( $latest['missing_alt']['images'] ) > 10 ) : ?>
-									<li style="font-style: italic; color: #666;"><?php printf( esc_html__( 'And %d more...', 'plugin-wp-support-thisismyurl' ), count( $latest['missing_alt']['images'] ) - 10 ); ?></li>
+									<li style="font-style: italic; color: #666;"><?php printf( esc_html__( 'And %d more...', 'plugin-wpshadow' ), count( $latest['missing_alt']['images'] ) - 10 ); ?></li>
 								<?php endif; ?>
 							</ul>
 						</div>
@@ -997,7 +997,7 @@ class WPS_Site_Audit {
 					<!-- Optimization Suggestions -->
 					<?php if ( ! empty( $latest['optimization']['suggestions'] ) ) : ?>
 						<div style="margin: 20px 0; padding: 15px; background: #eff; border-left: 4px solid #0073aa;">
-							<h3><?php esc_html_e( '⚡ Optimization Opportunities', 'plugin-wp-support-thisismyurl' ); ?> (<?php echo intval( count( $latest['optimization']['suggestions'] ) ); ?>)</h3>
+							<h3><?php esc_html_e( '⚡ Optimization Opportunities', 'plugin-wpshadow' ); ?> (<?php echo intval( count( $latest['optimization']['suggestions'] ) ); ?>)</h3>
 							<ul style="margin: 10px 0; padding-left: 20px;">
 								<?php foreach ( $latest['optimization']['suggestions'] as $suggestion ) : ?>
 									<li>
@@ -1017,9 +1017,9 @@ class WPS_Site_Audit {
 							<h3>
 								<?php
 								if ( $latest['autoload']['offenders_500kb'] > 0 ) {
-									esc_html_e( '⚠️ Autoload Audit (wp_options) - Critical Offenders Found', 'plugin-wp-support-thisismyurl' );
+									esc_html_e( '⚠️ Autoload Audit (wp_options) - Critical Offenders Found', 'plugin-wpshadow' );
 								} else {
-									esc_html_e( '⚡ Autoload Audit (wp_options)', 'plugin-wp-support-thisismyurl' );
+									esc_html_e( '⚡ Autoload Audit (wp_options)', 'plugin-wpshadow' );
 								}
 								?>
 							</h3>
@@ -1027,7 +1027,7 @@ class WPS_Site_Audit {
 								<?php
 								printf(
 									/* translators: %s: total autoload size */
-									esc_html__( 'Total autoloaded data: %s. Every row with autoload=yes is loaded into memory on every request.', 'plugin-wp-support-thisismyurl' ),
+									esc_html__( 'Total autoloaded data: %s. Every row with autoload=yes is loaded into memory on every request.', 'plugin-wpshadow' ),
 									esc_html( $latest['autoload']['total_human'] )
 								);
 								?>
@@ -1037,7 +1037,7 @@ class WPS_Site_Audit {
 									<?php
 									printf(
 										/* translators: %d: number of critical offenders */
-										esc_html__( '⚠️ %d option(s) over 500KB found! These should be disabled from autoload.', 'plugin-wp-support-thisismyurl' ),
+										esc_html__( '⚠️ %d option(s) over 500KB found! These should be disabled from autoload.', 'plugin-wpshadow' ),
 										intval( $latest['autoload']['offenders_500kb'] )
 									);
 									?>
@@ -1046,10 +1046,10 @@ class WPS_Site_Audit {
 							<table style="width: 100%; font-size: 13px; margin-top: 10px; border-collapse: collapse;">
 								<thead>
 									<tr style="background: rgba(0,0,0,0.05); border-bottom: 2px solid rgba(0,0,0,0.1);">
-										<th style="padding: 8px; text-align: left;"><?php esc_html_e( 'Option Name', 'plugin-wp-support-thisismyurl' ); ?></th>
-										<th style="padding: 8px; text-align: right;"><?php esc_html_e( 'Size', 'plugin-wp-support-thisismyurl' ); ?></th>
-										<th style="padding: 8px; text-align: center;"><?php esc_html_e( 'Severity', 'plugin-wp-support-thisismyurl' ); ?></th>
-										<th style="padding: 8px; text-align: center;"><?php esc_html_e( 'Action', 'plugin-wp-support-thisismyurl' ); ?></th>
+										<th style="padding: 8px; text-align: left;"><?php esc_html_e( 'Option Name', 'plugin-wpshadow' ); ?></th>
+										<th style="padding: 8px; text-align: right;"><?php esc_html_e( 'Size', 'plugin-wpshadow' ); ?></th>
+										<th style="padding: 8px; text-align: center;"><?php esc_html_e( 'Severity', 'plugin-wpshadow' ); ?></th>
+										<th style="padding: 8px; text-align: center;"><?php esc_html_e( 'Action', 'plugin-wpshadow' ); ?></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -1063,13 +1063,13 @@ class WPS_Site_Audit {
 											<td style="padding: 8px; text-align: center;">
 												<?php
 												$badge_color = '#999';
-												$badge_text  = __( 'Info', 'plugin-wp-support-thisismyurl' );
+												$badge_text  = __( 'Info', 'plugin-wpshadow' );
 												if ( 'critical' === $offender['severity'] ) {
 													$badge_color = '#c00';
-													$badge_text  = __( 'Critical', 'plugin-wp-support-thisismyurl' );
+													$badge_text  = __( 'Critical', 'plugin-wpshadow' );
 												} elseif ( 'warning' === $offender['severity'] ) {
 													$badge_color = '#ffb900';
-													$badge_text  = __( 'Warning', 'plugin-wp-support-thisismyurl' );
+													$badge_text  = __( 'Warning', 'plugin-wpshadow' );
 												}
 												?>
 												<span style="display: inline-block; padding: 2px 8px; background: <?php echo esc_attr( $badge_color ); ?>; color: white; border-radius: 3px; font-size: 11px; font-weight: bold;">
@@ -1080,9 +1080,9 @@ class WPS_Site_Audit {
 												<button 
 													class="button button-small wps-toggle-autoload" 
 													data-option="<?php echo esc_attr( $offender['option_name'] ); ?>"
-													data-nonce="<?php echo esc_attr( wp_create_nonce( 'WPS_audit_nonce' ) ); ?>"
+													data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_audit_nonce' ) ); ?>"
 													style="font-size: 11px;">
-													<?php esc_html_e( 'Disable Autoload', 'plugin-wp-support-thisismyurl' ); ?>
+													<?php esc_html_e( 'Disable Autoload', 'plugin-wpshadow' ); ?>
 												</button>
 											</td>
 										</tr>
@@ -1090,30 +1090,30 @@ class WPS_Site_Audit {
 								</tbody>
 							</table>
 							<p style="margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.05); border-radius: 3px; font-size: 12px; color: #666;">
-								<strong><?php esc_html_e( 'Tip:', 'plugin-wp-support-thisismyurl' ); ?></strong>
-								<?php esc_html_e( 'If you find a plugin\'s settings taking up 500kb+ but only used on one admin page, update it to autoload = no. WordPress will still fetch it when requested, but it won\'t clog every frontend page load.', 'plugin-wp-support-thisismyurl' ); ?>
+								<strong><?php esc_html_e( 'Tip:', 'plugin-wpshadow' ); ?></strong>
+								<?php esc_html_e( 'If you find a plugin\'s settings taking up 500kb+ but only used on one admin page, update it to autoload = no. WordPress will still fetch it when requested, but it won\'t clog every frontend page load.', 'plugin-wpshadow' ); ?>
 							</p>
 						</div>
 					<?php endif; ?>
 
 					<!-- Database Stats -->
 					<div style="margin: 20px 0; padding: 15px; background: #eee;">
-						<h3><?php esc_html_e( '📊 Database', 'plugin-wp-support-thisismyurl' ); ?></h3>
+						<h3><?php esc_html_e( '📊 Database', 'plugin-wpshadow' ); ?></h3>
 						<table style="width: 100%; font-size: 13px;">
 							<tr>
-								<td><strong><?php esc_html_e( 'Database Size:', 'plugin-wp-support-thisismyurl' ); ?></strong></td>
+								<td><strong><?php esc_html_e( 'Database Size:', 'plugin-wpshadow' ); ?></strong></td>
 								<td><?php echo esc_html( $latest['performance']['database_size'] ); ?></td>
 							</tr>
 							<tr>
-								<td><strong><?php esc_html_e( 'Draft Posts:', 'plugin-wp-support-thisismyurl' ); ?></strong></td>
+								<td><strong><?php esc_html_e( 'Draft Posts:', 'plugin-wpshadow' ); ?></strong></td>
 								<td><?php echo intval( $latest['performance']['draft_posts'] ); ?></td>
 							</tr>
 							<tr>
-								<td><strong><?php esc_html_e( 'Post Revisions:', 'plugin-wp-support-thisismyurl' ); ?></strong></td>
+								<td><strong><?php esc_html_e( 'Post Revisions:', 'plugin-wpshadow' ); ?></strong></td>
 								<td><?php echo intval( $latest['performance']['post_revisions'] ); ?></td>
 							</tr>
 							<tr>
-								<td><strong><?php esc_html_e( 'Spam Comments:', 'plugin-wp-support-thisismyurl' ); ?></strong></td>
+								<td><strong><?php esc_html_e( 'Spam Comments:', 'plugin-wpshadow' ); ?></strong></td>
 								<td><?php echo intval( $latest['performance']['spam_comments'] ); ?></td>
 							</tr>
 						</table>
@@ -1121,8 +1121,8 @@ class WPS_Site_Audit {
 
 					<!-- Plugin Stats -->
 					<div style="margin: 20px 0; padding: 15px; background: #eee;">
-						<h3><?php esc_html_e( '🔌 Plugins', 'plugin-wp-support-thisismyurl' ); ?></h3>
-						<p><?php printf( esc_html__( 'Active: %1$d | Inactive: %2$d | Total: %3$d', 'plugin-wp-support-thisismyurl' ), intval( $latest['plugins']['active_count'] ), intval( $latest['plugins']['inactive_count'] ), intval( $latest['plugins']['total_count'] ) ); ?></p>
+						<h3><?php esc_html_e( '🔌 Plugins', 'plugin-wpshadow' ); ?></h3>
+						<p><?php printf( esc_html__( 'Active: %1$d | Inactive: %2$d | Total: %3$d', 'plugin-wpshadow' ), intval( $latest['plugins']['active_count'] ), intval( $latest['plugins']['inactive_count'] ), intval( $latest['plugins']['total_count'] ) ); ?></p>
 					</div>
 				</div>
 			<?php endif; ?>
@@ -1131,24 +1131,24 @@ class WPS_Site_Audit {
 		<script>
 		document.getElementById('wps-audit-generate')?.addEventListener('click', function() {
 			this.disabled = true;
-			this.textContent = '<?php esc_html_e( 'Generating Audit...', 'plugin-wp-support-thisismyurl' ); ?>';
+			this.textContent = '<?php esc_html_e( 'Generating Audit...', 'plugin-wpshadow' ); ?>';
 			fetch(ajaxurl, {
 				method: 'POST',
 				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-				body: 'action=WPS_generate_audit&nonce=<?php echo esc_js( wp_create_nonce( 'WPS_audit_nonce' ) ); ?>'
+				body: 'action=WPSHADOW_generate_audit&nonce=<?php echo esc_js( wp_create_nonce( 'wpshadow_audit_nonce' ) ); ?>'
 			})
 			.then(r => r.json())
 			.then(d => {
 				if (d.success) { location.reload(); }
-				else { alert('Error: ' + d.data); this.disabled = false; this.textContent = '<?php esc_html_e( '📋 Generate New Audit', 'plugin-wp-support-thisismyurl' ); ?>'; }
+				else { alert('Error: ' + d.data); this.disabled = false; this.textContent = '<?php esc_html_e( '📋 Generate New Audit', 'plugin-wpshadow' ); ?>'; }
 			})
-			.catch(e => { alert('Error: ' + e); this.disabled = false; this.textContent = '<?php esc_html_e( '📋 Generate New Audit', 'plugin-wp-support-thisismyurl' ); ?>'; });
+			.catch(e => { alert('Error: ' + e); this.disabled = false; this.textContent = '<?php esc_html_e( '📋 Generate New Audit', 'plugin-wpshadow' ); ?>'; });
 		});
 
 		// Handle toggle autoload buttons
 		document.querySelectorAll('.wps-toggle-autoload').forEach(function(btn) {
 			btn.addEventListener('click', function() {
-				if (!confirm('<?php echo esc_js( __( 'Are you sure you want to disable autoload for this option? WordPress will still fetch it when needed, but it won\'t be loaded on every request.', 'plugin-wp-support-thisismyurl' ) ); ?>')) {
+				if (!confirm('<?php echo esc_js( __( 'Are you sure you want to disable autoload for this option? WordPress will still fetch it when needed, but it won\'t be loaded on every request.', 'plugin-wpshadow' ) ); ?>')) {
 					return;
 				}
 				
@@ -1157,31 +1157,31 @@ class WPS_Site_Audit {
 				const button = this;
 				
 				button.disabled = true;
-				button.textContent = '<?php echo esc_js( __( 'Processing...', 'plugin-wp-support-thisismyurl' ) ); ?>';
+				button.textContent = '<?php echo esc_js( __( 'Processing...', 'plugin-wpshadow' ) ); ?>';
 				
 				fetch(ajaxurl, {
 					method: 'POST',
 					headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-					body: 'action=WPS_toggle_autoload&nonce=' + encodeURIComponent(nonce) + '&option_name=' + encodeURIComponent(option)
+					body: 'action=WPSHADOW_toggle_autoload&nonce=' + encodeURIComponent(nonce) + '&option_name=' + encodeURIComponent(option)
 				})
 				.then(r => r.json())
 				.then(d => {
 					if (d.success) {
-						button.textContent = '<?php echo esc_js( __( 'Disabled ✓', 'plugin-wp-support-thisismyurl' ) ); ?>';
+						button.textContent = '<?php echo esc_js( __( 'Disabled ✓', 'plugin-wpshadow' ) ); ?>';
 						button.style.background = '#46b450';
 						button.style.color = 'white';
 						button.style.borderColor = '#46b450';
 						setTimeout(function() { location.reload(); }, 1500);
 					} else {
-						alert('<?php echo esc_js( __( 'Error:', 'plugin-wp-support-thisismyurl' ) ); ?> ' + d.data);
+						alert('<?php echo esc_js( __( 'Error:', 'plugin-wpshadow' ) ); ?> ' + d.data);
 						button.disabled = false;
-						button.textContent = '<?php echo esc_js( __( 'Disable Autoload', 'plugin-wp-support-thisismyurl' ) ); ?>';
+						button.textContent = '<?php echo esc_js( __( 'Disable Autoload', 'plugin-wpshadow' ) ); ?>';
 					}
 				})
 				.catch(e => {
-					alert('<?php echo esc_js( __( 'Error:', 'plugin-wp-support-thisismyurl' ) ); ?> ' + e);
+					alert('<?php echo esc_js( __( 'Error:', 'plugin-wpshadow' ) ); ?> ' + e);
 					button.disabled = false;
-					button.textContent = '<?php echo esc_js( __( 'Disable Autoload', 'plugin-wp-support-thisismyurl' ) ); ?>';
+					button.textContent = '<?php echo esc_js( __( 'Disable Autoload', 'plugin-wpshadow' ) ); ?>';
 				});
 			});
 		});

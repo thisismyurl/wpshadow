@@ -17,11 +17,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Feature_Image_Optimizer
+ * WPSHADOW_Feature_Image_Optimizer
  *
  * Automatic image compression, WebP conversion, and bulk optimization.
  */
-final class WPS_Feature_Image_Optimizer extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Image_Optimizer extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -30,14 +30,14 @@ final class WPS_Feature_Image_Optimizer extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'image-optimizer',
-				'name'               => __( 'Image Optimizer', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Automatic image compression, WebP/AVIF conversion, and bulk optimization for faster page loads', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Image Optimizer', 'plugin-wpshadow' ),
+				'description'        => __( 'Automatic image compression, WebP/AVIF conversion, and bulk optimization for faster page loads', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'media',
-				'widget_label'       => __( 'Media Optimization', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Image and media optimization tools', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Media Optimization', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Image and media optimization tools', 'plugin-wpshadow' ),
 				'license_level'      => 2,
 				'minimum_capability' => 'upload_files',
 				'icon'               => 'dashicons-format-image',
@@ -71,13 +71,13 @@ final class WPS_Feature_Image_Optimizer extends WPS_Abstract_Feature {
 		add_filter( 'bulk_actions-upload', array( $this, 'add_bulk_actions' ) );
 
 		// AJAX handlers.
-		add_action( 'wp_ajax_wps_optimize_image', array( $this, 'ajax_optimize_image' ) );
+		add_action( 'wp_ajax_WPSHADOW_optimize_image', array( $this, 'ajax_optimize_image' ) );
 
 		// Scheduled optimization.
-		if ( ! wp_next_scheduled( 'wps_scheduled_image_optimization' ) ) {
-			wp_schedule_event( time(), 'hourly', 'wps_scheduled_image_optimization' );
+		if ( ! wp_next_scheduled( 'wpshadow_scheduled_image_optimization' ) ) {
+			wp_schedule_event( time(), 'hourly', 'wpshadow_scheduled_image_optimization' );
 		}
-		add_action( 'wps_scheduled_image_optimization', array( $this, 'process_optimization_queue' ) );
+		add_action( 'wpshadow_scheduled_image_optimization', array( $this, 'process_optimization_queue' ) );
 	}
 
 	/**
@@ -106,7 +106,7 @@ final class WPS_Feature_Image_Optimizer extends WPS_Abstract_Feature {
 		$result = $this->compress_image( $upload['file'], $settings['compression_level'] );
 
 		if ( ! is_wp_error( $result ) ) {
-			update_post_meta( $upload['id'], '_wps_optimized', time() );
+			update_post_meta( $upload['id'], '_WPSHADOW_optimized', time() );
 		}
 
 		return $upload;
@@ -119,7 +119,7 @@ final class WPS_Feature_Image_Optimizer extends WPS_Abstract_Feature {
 	 * @return array Modified columns.
 	 */
 	public function add_optimization_column( array $columns ): array {
-		$columns['wps_optimization'] = __( 'Optimized', 'plugin-wp-support-thisismyurl' );
+		$columns['wpshadow_optimization'] = __( 'Optimized', 'plugin-wpshadow' );
 		return $columns;
 	}
 
@@ -131,16 +131,16 @@ final class WPS_Feature_Image_Optimizer extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function render_optimization_column( string $column_name, int $post_id ): void {
-		if ( 'wps_optimization' !== $column_name ) {
+		if ( 'wpshadow_optimization' !== $column_name ) {
 			return;
 		}
 
-		$optimized = get_post_meta( $post_id, '_wps_optimized', true );
+		$optimized = get_post_meta( $post_id, '_WPSHADOW_optimized', true );
 		if ( $optimized ) {
 			echo '<span class="dashicons dashicons-yes-alt" style="color:green;"></span>';
 		} else {
 			echo '<button class="button button-small wps-optimize-btn" data-id="' . esc_attr( (string) $post_id ) . '">' .
-				esc_html__( 'Optimize', 'plugin-wp-support-thisismyurl' ) . '</button>';
+				esc_html__( 'Optimize', 'plugin-wpshadow' ) . '</button>';
 		}
 	}
 
@@ -151,7 +151,7 @@ final class WPS_Feature_Image_Optimizer extends WPS_Abstract_Feature {
 	 * @return array Modified actions.
 	 */
 	public function add_bulk_actions( array $actions ): array {
-		$actions['wps_optimize_images'] = __( 'Optimize Images', 'plugin-wp-support-thisismyurl' );
+		$actions['wpshadow_optimize_images'] = __( 'Optimize Images', 'plugin-wpshadow' );
 		return $actions;
 	}
 
@@ -161,16 +161,16 @@ final class WPS_Feature_Image_Optimizer extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_optimize_image(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps-optimize-image', 'upload_files' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wps-optimize-image', 'upload_files' );
 
-		$attachment_id = \WPS\CoreSupport\wps_get_post_int( 'attachment_id' );
+		$attachment_id = \WPS\CoreSupport\WPSHADOW_get_post_int( 'attachment_id' );
 		if ( ! $attachment_id ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid attachment ID', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid attachment ID', 'plugin-wpshadow' ) ) );
 		}
 
 		$file_path = get_attached_file( $attachment_id );
 		if ( ! $file_path || ! $this->is_image_file( $file_path ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid image file', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid image file', 'plugin-wpshadow' ) ) );
 		}
 
 		$settings = $this->get_optimization_settings();
@@ -187,10 +187,10 @@ final class WPS_Feature_Image_Optimizer extends WPS_Abstract_Feature {
 			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
 		}
 
-		update_post_meta( $attachment_id, '_wps_optimized', time() );
+		update_post_meta( $attachment_id, '_WPSHADOW_optimized', time() );
 
 		wp_send_json_success( array(
-			'message' => __( 'Image optimized successfully', 'plugin-wp-support-thisismyurl' ),
+			'message' => __( 'Image optimized successfully', 'plugin-wpshadow' ),
 		) );
 	}
 
@@ -200,7 +200,7 @@ final class WPS_Feature_Image_Optimizer extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function process_optimization_queue(): void {
-		$queue = get_option( 'wps_optimization_queue', array() );
+		$queue = get_option( 'wpshadow_optimization_queue', array() );
 		
 		if ( empty( $queue ) ) {
 			return;
@@ -217,13 +217,13 @@ final class WPS_Feature_Image_Optimizer extends WPS_Abstract_Feature {
 					$this->backup_image( $file_path );
 				}
 				$this->compress_image( $file_path, $settings['compression_level'] );
-				update_post_meta( $attachment_id, '_wps_optimized', time() );
+				update_post_meta( $attachment_id, '_WPSHADOW_optimized', time() );
 			}
 		}
 
 		// Update queue.
 		$remaining = array_slice( $queue, 10 );
-		update_option( 'wps_optimization_queue', $remaining );
+		update_option( 'wpshadow_optimization_queue', $remaining );
 	}
 
 	/**
@@ -272,7 +272,7 @@ final class WPS_Feature_Image_Optimizer extends WPS_Abstract_Feature {
 		$library = $this->get_available_library();
 
 		if ( ! $library ) {
-			return new \WP_Error( 'no_library', __( 'No image library available (GD or Imagick)', 'plugin-wp-support-thisismyurl' ) );
+			return new \WP_Error( 'no_library', __( 'No image library available (GD or Imagick)', 'plugin-wpshadow' ) );
 		}
 
 		$image_type = wp_check_filetype( $file_path );
@@ -328,11 +328,11 @@ final class WPS_Feature_Image_Optimizer extends WPS_Abstract_Feature {
 				$image = imagecreatefromgif( $file_path );
 				break;
 			default:
-				return new \WP_Error( 'unsupported_type', __( 'Unsupported image type', 'plugin-wp-support-thisismyurl' ) );
+				return new \WP_Error( 'unsupported_type', __( 'Unsupported image type', 'plugin-wpshadow' ) );
 		}
 
 		if ( ! $image ) {
-			return new \WP_Error( 'gd_error', __( 'Failed to load image with GD', 'plugin-wp-support-thisismyurl' ) );
+			return new \WP_Error( 'gd_error', __( 'Failed to load image with GD', 'plugin-wpshadow' ) );
 		}
 
 		// Save compressed image.

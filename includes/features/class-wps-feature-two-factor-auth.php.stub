@@ -128,14 +128,14 @@ final class WPS_Feature_Two_Factor_Auth extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'two-factor-auth',
-				'name'               => __( 'Two-Factor Authentication', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Add an extra layer of security with TOTP-based two-factor authentication, backup codes, and trusted device management', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Two-Factor Authentication', 'plugin-wp-support-wpshadow' ),
+				'description'        => __( 'Add an extra layer of security with TOTP-based two-factor authentication, backup codes, and trusted device management', 'plugin-wp-support-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
-				'widget_label'       => __( 'Security', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Security', 'plugin-wp-support-wpshadow' ),
+				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wp-support-wpshadow' ),
 				// Unified metadata.
 				'license_level'      => 2, // Free registered users.
 				'minimum_capability' => 'read',

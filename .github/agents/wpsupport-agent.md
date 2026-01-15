@@ -1,6 +1,6 @@
 # WPSupport GitHub Copilot Agent
 
-You are an expert WordPress and PHP development assistant specializing in the WPSupport plugin ecosystem. Your role is to implement features, fix bugs, and improve code quality for the plugin-wp-support-thisismyurl repository and its companion modules.
+You are an expert WordPress and PHP development assistant specializing in the WPSupport plugin ecosystem. Your role is to implement features, fix bugs, and improve code quality for the plugin-wpshadow repository and its companion modules.
 
 ## Core Responsibilities
 
@@ -17,20 +17,20 @@ You are an expert WordPress and PHP development assistant specializing in the WP
 The WPSupport plugin uses a modular architecture:
 
 **Core Plugin**:
-- `plugin-wp-support-thisismyurl` - Main functionality and hooks
+- `plugin-wpshadow` - Main functionality and hooks
 
 **Module Repositories** (Issue-specific implementations):
-- `module-login-support-thisismyurl` - Custom authentication, OAuth, SSO/SAML, API auth
-- `module-tool-support-thisismyurl` - WordPress tools and utilities
-- `module-setting-support-thisismyurl` - Settings management and configuration
-- `module-wpadmin-support-thisismyurl` - WordPress admin interface enhancements
-- `module-heartbeat-support-thisismyurl` - Heartbeat API control and optimization
-- `module-agency-support-thisismyurl` - White-label and agency features
-- `module-theme-support-thisismyurl` - Theme configuration and support
-- `module-content-support-thisismyurl` - Content management and block editor
-- `module-license-support-thisismyurl` - Licensing system and activation
-- `module-multisite-support-thisismyurl` - Multisite management and features
-- `module-vault-support-thisismyurl` - Backup, snapshot, staging, and vault systems
+- `module-login-wpshadow` - Custom authentication, OAuth, SSO/SAML, API auth
+- `module-tool-wpshadow` - WordPress tools and utilities
+- `module-setting-wpshadow` - Settings management and configuration
+- `module-wpadmin-wpshadow` - WordPress admin interface enhancements
+- `module-heartbeat-wpshadow` - Heartbeat API control and optimization
+- `module-agency-wpshadow` - White-label and agency features
+- `module-theme-wpshadow` - Theme configuration and support
+- `module-content-wpshadow` - Content management and block editor
+- `module-license-wpshadow` - Licensing system and activation
+- `module-multisite-wpshadow` - Multisite management and features
+- `module-vault-wpshadow` - Backup, snapshot, staging, and vault systems
 
 ### Technology Stack
 
@@ -44,7 +44,7 @@ The WPSupport plugin uses a modular architecture:
 
 ### Key Files
 
-- `wp-support-thisismyurl.php` - Main plugin file with hooks and constants
+- `wpshadow.php` - Main plugin file with hooks and constants
 - `includes/` - Core classes and functionality
 - `modules/` - Module integration points
 - `docs/` - Documentation and guides
@@ -56,17 +56,17 @@ When assigned to an issue with a module-specific label, the issue should be rout
 
 | Label | Target Repository | Purpose |
 |-------|-------------------|---------|
-| `login-support` | module-login-support-thisismyurl | Authentication, OAuth, SAML, LDAP, SSO |
-| `tool-support` | module-tool-support-thisismyurl | Global search, database optimization, tools |
-| `setting-support` | module-setting-support-thisismyurl | Settings UI, validation, import/export |
-| `wpadmin-support` | module-wpadmin-support-thisismyurl | Dashboard, menus, UI improvements |
-| `heartbeat-support` | module-heartbeat-support-thisismyurl | Heartbeat optimization, intervals |
-| `agency-support` | module-agency-support-thisismyurl | White-label, client management, multisite |
-| `theme-support` | module-theme-support-thisismyurl | Theme configuration, i18n, styling |
-| `content-support` | module-content-support-thisismyurl | Block editor, content types, media |
-| `license-support` | module-license-support-thisismyurl | Licensing, activation, registration |
-| `multisite-support` | module-multisite-support-thisismyurl | Network management, cross-site features |
-| `vault-support` | module-vault-support-thisismyurl | Backups, snapshots, staging, recovery |
+| `login-support` | module-login-wpshadow | Authentication, OAuth, SAML, LDAP, SSO |
+| `tool-support` | module-tool-wpshadow | Global search, database optimization, tools |
+| `setting-support` | module-setting-wpshadow | Settings UI, validation, import/export |
+| `wpadmin-support` | module-wpadmin-wpshadow | Dashboard, menus, UI improvements |
+| `heartbeat-support` | module-heartbeat-wpshadow | Heartbeat optimization, intervals |
+| `agency-support` | module-agency-wpshadow | White-label, client management, multisite |
+| `theme-support` | module-theme-wpshadow | Theme configuration, i18n, styling |
+| `content-support` | module-content-wpshadow | Block editor, content types, media |
+| `license-support` | module-license-wpshadow | Licensing, activation, registration |
+| `multisite-support` | module-multisite-wpshadow | Network management, cross-site features |
+| `vault-support` | module-vault-wpshadow | Backups, snapshots, staging, recovery |
 
 ## Working Standards
 
@@ -209,16 +209,16 @@ When an issue has a module-specific label:
 1. Create class file: includes/features/class-wps-feature-name.php
 2. Add `<?php declare(strict_types=1);` at top (strict types required)
 3. Add `namespace WPS\CoreSupport;` immediately after declare
-4. Extend WPS_Feature_Abstract class
-5. Add `require_once wp_support_PATH . 'includes/features/class-wps-feature-name.php';` in wp-support-thisismyurl.php BEFORE instantiation
-6. Register feature in wps_register_core_features() function around line 280
+4. Extend WPSHADOW_Feature_Abstract class
+5. Add `require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-name.php';` in wpshadow.php BEFORE instantiation
+6. Register feature in WPSHADOW_register_core_features() function around line 280
 
 **Correct Feature Template:**
 ```php
 <?php declare(strict_types=1);
 namespace WPS\CoreSupport;
 
-final class WPS_Feature_ExampleName extends WPS_Feature_Abstract {
+final class WPSHADOW_Feature_ExampleName extends WPSHADOW_Feature_Abstract {
     
     public function register_hooks(): void {
         add_action( 'wp_loaded', [ $this, 'initialize' ] );
@@ -234,22 +234,22 @@ final class WPS_Feature_ExampleName extends WPS_Feature_Abstract {
 ```php
 // WRONG - Do NOT do this:
 namespace WPS\CoreSupport\Features;
-class WPS_Feature_ExampleName extends WPS_Feature_Abstract { ... }
-// Result: "Class WPS\CoreSupport\Features\WPS_Abstract_Feature not found"
+class WPSHADOW_Feature_ExampleName extends WPSHADOW_Feature_Abstract { ... }
+// Result: "Class WPS\CoreSupport\Features\WPSHADOW_Abstract_Feature not found"
 ```
 
 **Why This Matters:**
 - PSR-4 autoloader expects `WPS\CoreSupport` → `includes/` directory mapping (see composer.json)
 - Wrong namespace breaks class resolution during feature instantiation
-- Feature instantiation in wps_register_core_features() depends on correct namespace
+- Feature instantiation in WPSHADOW_register_core_features() depends on correct namespace
 - Strict validation via PHPStan level 8 catches violations (run `composer phpstan`)
 - Type errors in features block entire plugin initialization
 
 **Verification:**
 - Check namespace in new feature files before submitting PR
 - Run `composer phpstan` to catch namespace violations
-- Verify require_once statement in wp-support-thisismyurl.php (around line 700-724)
-- Test plugin activation: `wp plugin activate plugin-wp-support-thisismyurl`
+- Verify require_once statement in wpshadow.php (around line 700-724)
+- Test plugin activation: `wp plugin activate plugin-wpshadow`
 - Check debug.log for "fatal" or "Cannot redeclare" errors
 
 ## Feature Registration Pattern (MUST FOLLOW)
@@ -257,13 +257,13 @@ class WPS_Feature_ExampleName extends WPS_Feature_Abstract { ... }
 **The require_once + register workflow is NON-NEGOTIABLE**
 
 When registering a feature class, you MUST:
-1. Add `require_once` statement in wp-support-thisismyurl.php (lines ~700-724)
-2. Instantiate the class in `wps_register_core_features()` function (lines ~280)
+1. Add `require_once` statement in wpshadow.php (lines ~700-724)
+2. Instantiate the class in `WPSHADOW_register_core_features()` function (lines ~280)
 3. Never instantiate a class that hasn't been require_once'd first
 
 **Missing require_once = Plugin Fatal Error:**
 ```
-"Cannot redeclare class WPS\CoreSupport\WPS_Feature_ExampleName"
+"Cannot redeclare class WPS\CoreSupport\WPSHADOW_Feature_ExampleName"
 ```
 
 **Evidence from Latest Session (January 2026):**
@@ -274,17 +274,17 @@ When registering a feature class, you MUST:
 
 **Correct Feature Registration:**
 ```php
-// Step 1: In wp-support-thisismyurl.php around line 700, add:
-require_once wp_support_PATH . 'includes/features/class-wps-feature-example-name.php';
+// Step 1: In wpshadow.php around line 700, add:
+require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-example-name.php';
 
-// Step 2: In wps_register_core_features() around line 280, add:
-register_WPS_feature( new WPS_Feature_ExampleName() );
+// Step 2: In WPSHADOW_register_core_features() around line 280, add:
+register_WPSHADOW_feature( new WPSHADOW_Feature_ExampleName() );
 ```
 
 **Validation:**
-- Before committing: Check wp-support-thisismyurl.php lines 700-724 for ALL registered features
+- Before committing: Check wpshadow.php lines 700-724 for ALL registered features
 - Run `composer phpstan` to catch missing classes
-- Test: `wp plugin activate plugin-wp-support-thisismyurl` with no fatals
+- Test: `wp plugin activate plugin-wpshadow` with no fatals
 - Check debug.log tail for "Cannot redeclare" errors
 
 ## Code Duplication Detection (BEFORE COMMITTING)
@@ -364,8 +364,8 @@ Before submitting ANY pull request, verify:
 
 **1. Namespace & Registration**
 - [ ] All feature classes use `namespace WPS\CoreSupport;`
-- [ ] All feature files have require_once in wp-support-thisismyurl.php
-- [ ] Features registered in wps_register_core_features()
+- [ ] All feature files have require_once in wpshadow.php
+- [ ] Features registered in WPSHADOW_register_core_features()
 - [ ] No uses of `namespace WPS\CoreSupport\Features;`
 
 **2. Code Quality**
@@ -382,7 +382,7 @@ Before submitting ANY pull request, verify:
 - [ ] PHPStan catches no type mismatches
 
 **4. Testing & Activation**
-- [ ] Plugin activates: `wp plugin activate plugin-wp-support-thisismyurl`
+- [ ] Plugin activates: `wp plugin activate plugin-wpshadow`
 - [ ] Debug.log has no fatal errors
 - [ ] Dashboard loads without errors
 - [ ] Module system works (enabled/disabled modules function correctly)
@@ -399,7 +399,7 @@ Before submitting ANY pull request, verify:
 composer phpcs && composer phpstan && composer test
 
 # Test activation:
-wp plugin activate plugin-wp-support-thisismyurl
+wp plugin activate plugin-wpshadow
 Get-Content 'C:\Users\Owner\Local Sites\dev\app\public\wp-content\debug.log' -Tail 10
 ```
 
@@ -443,4 +443,4 @@ Before submitting code:
 
 **Agent Version**: 1.1  
 **Last Updated**: January 2026  
-**Maintained by**: thisismyurl
+**Maintained by**: wpshadow

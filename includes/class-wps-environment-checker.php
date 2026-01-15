@@ -5,7 +5,7 @@
  * Validates WordPress, PHP, and server capabilities to ensure compatibility
  * and provides graceful degradation when constraints are detected.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  * @since 1.2601.73002
  */
 
@@ -19,11 +19,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class WPS_Environment_Checker
+ * Class WPSHADOW_Environment_Checker
  *
  * Checks environment compatibility and provides validation methods.
  */
-class WPS_Environment_Checker {
+class WPSHADOW_Environment_Checker {
 
 	/**
 	 * Minimum PHP version required.
@@ -188,10 +188,10 @@ class WPS_Environment_Checker {
 			'minimum'           => self::MIN_PHP_VERSION,
 			'meets_requirement' => $meets_requirement,
 			'message'           => $meets_requirement
-				? __( 'PHP version is compatible.', 'plugin-wp-support-thisismyurl' )
+				? __( 'PHP version is compatible.', 'plugin-wpshadow' )
 				: sprintf(
 					/* translators: 1: Current PHP version, 2: Minimum required PHP version */
-					__( 'PHP version %1$s is below the minimum required version %2$s.', 'plugin-wp-support-thisismyurl' ),
+					__( 'PHP version %1$s is below the minimum required version %2$s.', 'plugin-wpshadow' ),
 					$current,
 					self::MIN_PHP_VERSION
 				),
@@ -213,10 +213,10 @@ class WPS_Environment_Checker {
 			'minimum'           => self::MIN_WP_VERSION,
 			'meets_requirement' => $meets_requirement,
 			'message'           => $meets_requirement
-				? __( 'WordPress version is compatible.', 'plugin-wp-support-thisismyurl' )
+				? __( 'WordPress version is compatible.', 'plugin-wpshadow' )
 				: sprintf(
 					/* translators: 1: Current WordPress version, 2: Minimum required WordPress version */
-					__( 'WordPress version %1$s is below the minimum required version %2$s.', 'plugin-wp-support-thisismyurl' ),
+					__( 'WordPress version %1$s is below the minimum required version %2$s.', 'plugin-wpshadow' ),
 					$current,
 					self::MIN_WP_VERSION
 				),
@@ -265,18 +265,18 @@ class WPS_Environment_Checker {
 	 */
 	private static function get_memory_limit_message( bool $meets_minimum, bool $meets_recommended ): string {
 		if ( $meets_recommended ) {
-			return __( 'Memory limit meets recommended requirements.', 'plugin-wp-support-thisismyurl' );
+			return __( 'Memory limit meets recommended requirements.', 'plugin-wpshadow' );
 		}
 		if ( $meets_minimum ) {
 			return sprintf(
 				/* translators: %s: Recommended memory limit */
-				__( 'Memory limit meets minimum requirements but %s is recommended for optimal performance.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Memory limit meets minimum requirements but %s is recommended for optimal performance.', 'plugin-wpshadow' ),
 				self::format_bytes( self::RECOMMENDED_MEMORY_LIMIT )
 			);
 		}
 		return sprintf(
 			/* translators: %s: Minimum memory limit */
-			__( 'Memory limit is below the minimum required (%s). Heavy operations will be disabled.', 'plugin-wp-support-thisismyurl' ),
+			__( 'Memory limit is below the minimum required (%s). Heavy operations will be disabled.', 'plugin-wpshadow' ),
 			self::format_bytes( self::MINIMUM_MEMORY_LIMIT )
 		);
 	}
@@ -298,7 +298,7 @@ class WPS_Environment_Checker {
 				'meets_minimum'     => true,
 				'meets_recommended' => true,
 				'level'             => 'good',
-				'message'           => __( 'Execution time is unlimited.', 'plugin-wp-support-thisismyurl' ),
+				'message'           => __( 'Execution time is unlimited.', 'plugin-wpshadow' ),
 			);
 		}
 
@@ -333,18 +333,18 @@ class WPS_Environment_Checker {
 	 */
 	private static function get_execution_time_message( int $current, bool $meets_minimum, bool $meets_recommended ): string {
 		if ( $meets_recommended ) {
-			return __( 'Execution time meets recommended requirements.', 'plugin-wp-support-thisismyurl' );
+			return __( 'Execution time meets recommended requirements.', 'plugin-wpshadow' );
 		}
 		if ( $meets_minimum ) {
 			return sprintf(
 				/* translators: %d: Recommended execution time in seconds */
-				__( 'Execution time meets minimum requirements but %d seconds is recommended.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Execution time meets minimum requirements but %d seconds is recommended.', 'plugin-wpshadow' ),
 				self::RECOMMENDED_EXECUTION_TIME
 			);
 		}
 		return sprintf(
 			/* translators: 1: Current execution time, 2: Minimum execution time */
-			__( 'Execution time (%1$ds) is below minimum (%2$ds). Long-running tasks will be batched.', 'plugin-wp-support-thisismyurl' ),
+			__( 'Execution time (%1$ds) is below minimum (%2$ds). Long-running tasks will be batched.', 'plugin-wpshadow' ),
 			$current,
 			self::MINIMUM_EXECUTION_TIME
 		);
@@ -370,7 +370,7 @@ class WPS_Environment_Checker {
 			'effective_limit'     => min( $upload_bytes, $post_bytes ),
 			'message'             => sprintf(
 				/* translators: 1: Upload max filesize, 2: Post max size */
-				__( 'Upload limit: %1$s (post limit: %2$s)', 'plugin-wp-support-thisismyurl' ),
+				__( 'Upload limit: %1$s (post limit: %2$s)', 'plugin-wpshadow' ),
 				$upload_max,
 				$post_max
 			),
@@ -421,18 +421,18 @@ class WPS_Environment_Checker {
 		if ( ! empty( $required_missing ) ) {
 			return sprintf(
 				/* translators: %s: Comma-separated list of missing extensions */
-				__( 'Required PHP extensions missing: %s', 'plugin-wp-support-thisismyurl' ),
+				__( 'Required PHP extensions missing: %s', 'plugin-wpshadow' ),
 				implode( ', ', $required_missing )
 			);
 		}
 		if ( ! empty( $recommended_missing ) ) {
 			return sprintf(
 				/* translators: %s: Comma-separated list of missing extensions */
-				__( 'Recommended PHP extensions missing: %s. Some features may be limited.', 'plugin-wp-support-thisismyurl' ),
+				__( 'Recommended PHP extensions missing: %s. Some features may be limited.', 'plugin-wpshadow' ),
 				implode( ', ', $recommended_missing )
 			);
 		}
-		return __( 'All required and recommended PHP extensions are loaded.', 'plugin-wp-support-thisismyurl' );
+		return __( 'All required and recommended PHP extensions are loaded.', 'plugin-wpshadow' );
 	}
 
 	/**
@@ -538,7 +538,7 @@ class WPS_Environment_Checker {
 		if ( ! $status['php_version']['meets_requirement'] ) {
 			$issues[] = sprintf(
 				/* translators: 1: Current PHP version, 2: Minimum required PHP version */
-				__( 'PHP version %1$s (minimum: %2$s required)', 'plugin-wp-support-thisismyurl' ),
+				__( 'PHP version %1$s (minimum: %2$s required)', 'plugin-wpshadow' ),
 				$status['php_version']['current'],
 				$status['php_version']['minimum']
 			);
@@ -547,7 +547,7 @@ class WPS_Environment_Checker {
 		if ( ! $status['wp_version']['meets_requirement'] ) {
 			$issues[] = sprintf(
 				/* translators: 1: Current WordPress version, 2: Minimum required WordPress version */
-				__( 'WordPress version %1$s (minimum: %2$s required)', 'plugin-wp-support-thisismyurl' ),
+				__( 'WordPress version %1$s (minimum: %2$s required)', 'plugin-wpshadow' ),
 				$status['wp_version']['current'],
 				$status['wp_version']['minimum']
 			);
@@ -556,7 +556,7 @@ class WPS_Environment_Checker {
 		if ( ! $status['memory_limit']['meets_minimum'] ) {
 			$issues[] = sprintf(
 				/* translators: 1: Current memory limit, 2: Minimum required memory limit */
-				__( 'Memory limit %1$s (minimum: %2$s required)', 'plugin-wp-support-thisismyurl' ),
+				__( 'Memory limit %1$s (minimum: %2$s required)', 'plugin-wpshadow' ),
 				$status['memory_limit']['current'],
 				$status['memory_limit']['minimum']
 			);
@@ -565,7 +565,7 @@ class WPS_Environment_Checker {
 		if ( ! $status['execution_time']['meets_minimum'] ) {
 			$issues[] = sprintf(
 				/* translators: 1: Current execution time, 2: Minimum required execution time */
-				__( 'Execution time %1$ds (minimum: %2$ds required)', 'plugin-wp-support-thisismyurl' ),
+				__( 'Execution time %1$ds (minimum: %2$ds required)', 'plugin-wpshadow' ),
 				$status['execution_time']['current'],
 				$status['execution_time']['minimum']
 			);
@@ -574,7 +574,7 @@ class WPS_Environment_Checker {
 		if ( ! empty( $status['extensions']['required_missing'] ) ) {
 			$issues[] = sprintf(
 				/* translators: %s: Comma-separated list of missing extensions */
-				__( 'Missing required PHP extensions: %s', 'plugin-wp-support-thisismyurl' ),
+				__( 'Missing required PHP extensions: %s', 'plugin-wpshadow' ),
 				implode( ', ', $status['extensions']['required_missing'] )
 			);
 		}
@@ -585,8 +585,8 @@ class WPS_Environment_Checker {
 
 		?>
 		<div class="notice notice-error">
-			<p><strong><?php esc_html_e( 'WordPress Support: Environment Incompatibility Detected', 'plugin-wp-support-thisismyurl' ); ?></strong></p>
-			<p><?php esc_html_e( 'Your server environment does not meet the minimum requirements. Heavy operations have been disabled to prevent errors.', 'plugin-wp-support-thisismyurl' ); ?></p>
+			<p><strong><?php esc_html_e( 'WPShadow: Environment Incompatibility Detected', 'plugin-wpshadow' ); ?></strong></p>
+			<p><?php esc_html_e( 'Your server environment does not meet the minimum requirements. Heavy operations have been disabled to prevent errors.', 'plugin-wpshadow' ); ?></p>
 			<ul style="list-style: disc; margin-left: 20px;">
 				<?php foreach ( $issues as $issue ) : ?>
 					<li><?php echo esc_html( $issue ); ?></li>
@@ -594,7 +594,7 @@ class WPS_Environment_Checker {
 			</ul>
 			<p>
 				<a href="<?php echo esc_url( admin_url( 'site-health.php' ) ); ?>" class="button">
-					<?php esc_html_e( 'View Site Health', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'View Site Health', 'plugin-wpshadow' ); ?>
 				</a>
 			</p>
 		</div>
@@ -613,7 +613,7 @@ class WPS_Environment_Checker {
 		if ( ! $status['memory_limit']['meets_recommended'] ) {
 			$warnings[] = sprintf(
 				/* translators: 1: Current memory limit, 2: Recommended memory limit */
-				__( 'Memory limit is %1$s (recommended: %2$s)', 'plugin-wp-support-thisismyurl' ),
+				__( 'Memory limit is %1$s (recommended: %2$s)', 'plugin-wpshadow' ),
 				$status['memory_limit']['current'],
 				$status['memory_limit']['recommended']
 			);
@@ -622,7 +622,7 @@ class WPS_Environment_Checker {
 		if ( ! $status['execution_time']['meets_recommended'] && 0 !== $status['execution_time']['current'] ) {
 			$warnings[] = sprintf(
 				/* translators: 1: Current execution time, 2: Recommended execution time */
-				__( 'Execution time is %1$ds (recommended: %2$ds)', 'plugin-wp-support-thisismyurl' ),
+				__( 'Execution time is %1$ds (recommended: %2$ds)', 'plugin-wpshadow' ),
 				$status['execution_time']['current'],
 				$status['execution_time']['recommended']
 			);
@@ -631,7 +631,7 @@ class WPS_Environment_Checker {
 		if ( ! empty( $status['extensions']['recommended_missing'] ) ) {
 			$warnings[] = sprintf(
 				/* translators: %s: Comma-separated list of missing extensions */
-				__( 'Recommended extensions missing: %s', 'plugin-wp-support-thisismyurl' ),
+				__( 'Recommended extensions missing: %s', 'plugin-wpshadow' ),
 				implode( ', ', $status['extensions']['recommended_missing'] )
 			);
 		}
@@ -641,15 +641,15 @@ class WPS_Environment_Checker {
 		}
 
 		// Check if notice was dismissed.
-		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Notice_Manager' )
-			&& WPS_Notice_Manager::is_dismissed( 'wps_environment_constraints' ) ) {
+		if ( class_exists( '\\WPShadow\\WPSHADOW_Notice_Manager' )
+			&& WPSHADOW_Notice_Manager::is_dismissed( 'wpshadow_environment_constraints' ) ) {
 			return;
 		}
 
 		?>
-		<div class="notice notice-warning is-dismissible" data-notice-key="wps_environment_constraints">
-			<p><strong><?php esc_html_e( 'WordPress Support: Resource Constraints Detected', 'plugin-wp-support-thisismyurl' ); ?></strong></p>
-			<p><?php esc_html_e( 'Your server is running below recommended specifications. Operations will be batched for optimal performance.', 'plugin-wp-support-thisismyurl' ); ?></p>
+		<div class="notice notice-warning is-dismissible" data-notice-key="wpshadow_environment_constraints">
+			<p><strong><?php esc_html_e( 'WPShadow: Resource Constraints Detected', 'plugin-wpshadow' ); ?></strong></p>
+			<p><?php esc_html_e( 'Your server is running below recommended specifications. Operations will be batched for optimal performance.', 'plugin-wpshadow' ); ?></p>
 			<ul style="list-style: disc; margin-left: 20px;">
 				<?php foreach ( $warnings as $warning ) : ?>
 					<li><?php echo esc_html( $warning ); ?></li>
@@ -665,7 +665,7 @@ class WPS_Environment_Checker {
 	 * @return bool
 	 */
 	private static function is_diagnostic_logging_enabled(): bool {
-		return (bool) get_option( 'wps_diagnostic_logging_enabled', false );
+		return (bool) get_option( 'wpshadow_diagnostic_logging_enabled', false );
 	}
 
 	/**
@@ -674,13 +674,13 @@ class WPS_Environment_Checker {
 	 * @return void
 	 */
 	private static function log_environment_check(): void {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Activity_Logger' ) ) {
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) ) {
 			return;
 		}
 
 		$status = self::$cached_status ?? self::get_environment_status();
 
-		WPS_Activity_Logger::log(
+		WPSHADOW_Activity_Logger::log(
 			'environment_check',
 			'system',
 			array(
@@ -761,7 +761,7 @@ class WPS_Environment_Checker {
 			return array(
 				'supported' => true,
 				'missing'   => array(),
-				'message'   => __( 'No specific requirements for this module.', 'plugin-wp-support-thisismyurl' ),
+				'message'   => __( 'No specific requirements for this module.', 'plugin-wpshadow' ),
 			);
 		}
 
@@ -782,12 +782,12 @@ class WPS_Environment_Checker {
 			'message'   => $supported
 				? sprintf(
 					/* translators: %s: Module name */
-					__( '%s: All requirements met.', 'plugin-wp-support-thisismyurl' ),
+					__( '%s: All requirements met.', 'plugin-wpshadow' ),
 					ucfirst( $module )
 				)
 				: sprintf(
 					/* translators: 1: Module name, 2: Comma-separated list of missing extensions */
-					__( '%1$s: Missing extensions: %2$s', 'plugin-wp-support-thisismyurl' ),
+					__( '%1$s: Missing extensions: %2$s', 'plugin-wpshadow' ),
 					ucfirst( $module ),
 					implode( ', ', $missing )
 				),
@@ -818,7 +818,7 @@ class WPS_Environment_Checker {
 		 * @param string        $module       Module identifier.
 		 */
 		return (array) apply_filters(
-			'wps_module_requirements',
+			'wpshadow_module_requirements',
 			$requirements_map[ $module ] ?? array(),
 			$module
 		);

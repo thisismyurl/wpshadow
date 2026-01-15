@@ -2,7 +2,7 @@
  * WPS Postbox State Handler
  * Custom state saving for postboxes that accounts for hub/spoke context
  *
- * @package WPS_CORE_SUPPORT
+ * @package WPSHADOW_CORE_SUPPORT
  */
 
 (function($) {
@@ -29,7 +29,7 @@
 			
 			// Use our custom AJAX handler
 			$.post(ajaxurl, {
-				action: 'wps_save_postbox_state',
+				action: 'wpshadow_save_postbox_state',
 				page: page,
 				closed: closed,
 				nonce: wpsPostboxState.nonce
@@ -58,7 +58,7 @@
 			
 			// Use our custom AJAX handler
 			$.post(ajaxurl, {
-				action: 'wps_save_postbox_order',
+				action: 'wpshadow_save_postbox_order',
 				page: page,
 				order: order,
 				nonce: wpsPostboxState.nonce

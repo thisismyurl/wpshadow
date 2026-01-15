@@ -5,7 +5,7 @@
  * Handles emergency support incidents without payment processing (MVP).
  * Provides incident form, ticket creation, email notifications, and admin queue.
  *
- * @package WPS_SUPPORT
+ * @package WPSHADOW_SUPPORT
  */
 
 declare(strict_types=1);
@@ -19,17 +19,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * SOS Support Manager
  */
-class WPS_SOS_Support {
+class WPSHADOW_SOS_Support {
 
 	/**
 	 * Incidents option key.
 	 */
-	private const INCIDENTS_KEY = 'wps_sos_incidents';
+	private const INCIDENTS_KEY = 'wpshadow_sos_incidents';
 
 	/**
 	 * Incident counter key.
 	 */
-	private const COUNTER_KEY = 'wps_sos_incident_counter';
+	private const COUNTER_KEY = 'wpshadow_sos_incident_counter';
 
 	/**
 	 * Initialize SOS Support system.
@@ -41,18 +41,18 @@ class WPS_SOS_Support {
 		add_action( 'admin_menu', array( __CLASS__, 'register_admin_menu' ) );
 
 		// Handle form submissions.
-		add_action( 'admin_post_wps_submit_sos', array( __CLASS__, 'handle_sos_submission' ) );
-		add_action( 'admin_post_nopriv_wps_submit_sos', array( __CLASS__, 'handle_sos_submission' ) );
+		add_action( 'admin_post_WPSHADOW_submit_sos', array( __CLASS__, 'handle_sos_submission' ) );
+		add_action( 'admin_post_nopriv_WPSHADOW_submit_sos', array( __CLASS__, 'handle_sos_submission' ) );
 
 		// AJAX handlers for incident management.
-		add_action( 'wp_ajax_wps_update_incident_status', array( __CLASS__, 'ajax_update_incident_status' ) );
-		add_action( 'wp_ajax_wps_add_incident_note', array( __CLASS__, 'ajax_add_incident_note' ) );
+		add_action( 'wp_ajax_WPSHADOW_update_incident_status', array( __CLASS__, 'ajax_update_incident_status' ) );
+		add_action( 'wp_ajax_WPSHADOW_add_incident_note', array( __CLASS__, 'ajax_add_incident_note' ) );
 
 		// Dashboard widget.
 		add_action( 'wp_dashboard_setup', array( __CLASS__, 'register_dashboard_widget' ) );
 
 		// Email notifications on incident creation.
-		add_action( 'wps_sos_incident_created', array( __CLASS__, 'send_incident_notifications' ), 10, 1 );
+		add_action( 'wpshadow_sos_incident_created', array( __CLASS__, 'send_incident_notifications' ), 10, 1 );
 	}
 
 	/**
@@ -63,8 +63,8 @@ class WPS_SOS_Support {
 	public static function register_admin_menu(): void {
 		add_submenu_page(
 			'wp-support',
-			__( '🚨 Emergency SOS', 'plugin-wp-support-thisismyurl' ),
-			__( '🚨 Emergency SOS', 'plugin-wp-support-thisismyurl' ),
+			__( '🚨 Emergency SOS', 'plugin-wpshadow' ),
+			__( '🚨 Emergency SOS', 'plugin-wpshadow' ),
 			'manage_options',
 			'wps-sos-support',
 			array( __CLASS__, 'render_sos_page' )
@@ -88,8 +88,8 @@ class WPS_SOS_Support {
 		}
 
 		wp_add_dashboard_widget(
-			'wps_sos_pending',
-			sprintf( __( '🚨 Emergency SOS: %d Pending', 'plugin-wp-support-thisismyurl' ), $pending ),
+			'wpshadow_sos_pending',
+			sprintf( __( '🚨 Emergency SOS: %d Pending', 'plugin-wpshadow' ), $pending ),
 			array( __CLASS__, 'render_dashboard_widget' )
 		);
 	}
@@ -103,12 +103,12 @@ class WPS_SOS_Support {
 		$incidents = self::get_incidents( array( 'status' => 'pending' ), 5 );
 
 		if ( empty( $incidents ) ) {
-			echo '<p>' . esc_html__( 'No pending incidents.', 'plugin-wp-support-thisismyurl' ) . '</p>';
+			echo '<p>' . esc_html__( 'No pending incidents.', 'plugin-wpshadow' ) . '</p>';
 			return;
 		}
 
 		echo '<div style="margin-bottom: 10px;">';
-		echo '<strong>' . esc_html( sprintf( __( '%d urgent incident(s) need attention:', 'plugin-wp-support-thisismyurl' ), count( $incidents ) ) ) . '</strong>';
+		echo '<strong>' . esc_html( sprintf( __( '%d urgent incident(s) need attention:', 'plugin-wpshadow' ), count( $incidents ) ) ) . '</strong>';
 		echo '</div>';
 
 		foreach ( $incidents as $incident ) {
@@ -116,16 +116,16 @@ class WPS_SOS_Support {
 			$time_ago       = human_time_diff( $incident['created'] ?? time() );
 
 			echo '<div style="border-left: 4px solid ' . esc_attr( $severity_color ) . '; padding: 10px; margin: 10px 0; background: #f9f9f9;">';
-			echo '<p style="margin: 0; font-size: 13px;"><strong>#' . esc_html( $incident['id'] ?? '' ) . '</strong> - ' . esc_html( $incident['subject'] ?? __( 'No subject', 'plugin-wp-support-thisismyurl' ) ) . '</p>';
+			echo '<p style="margin: 0; font-size: 13px;"><strong>#' . esc_html( $incident['id'] ?? '' ) . '</strong> - ' . esc_html( $incident['subject'] ?? __( 'No subject', 'plugin-wpshadow' ) ) . '</p>';
 			echo '<p style="margin: 5px 0 0 0; font-size: 11px; color: #666;">';
-			echo esc_html( sprintf( __( 'Severity: %1$s | %2$s ago', 'plugin-wp-support-thisismyurl' ), ucfirst( $incident['severity'] ?? 'high' ), $time_ago ) );
+			echo esc_html( sprintf( __( 'Severity: %1$s | %2$s ago', 'plugin-wpshadow' ), ucfirst( $incident['severity'] ?? 'high' ), $time_ago ) );
 			echo '</p>';
 			echo '</div>';
 		}
 
 		echo '<div style="margin-top: 15px;">';
 		echo '<a href="' . esc_url( admin_url( 'admin.php?page=wps-sos-support' ) ) . '" class="button button-primary">';
-		echo esc_html__( 'View All Incidents', 'plugin-wp-support-thisismyurl' );
+		echo esc_html__( 'View All Incidents', 'plugin-wpshadow' );
 		echo '</a>';
 		echo '</div>';
 	}
@@ -137,7 +137,7 @@ class WPS_SOS_Support {
 	 */
 	public static function render_sos_page(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Insufficient permissions.', 'plugin-wpshadow' ) );
 		}
 
 		// Check if viewing a specific incident.
@@ -187,7 +187,7 @@ class WPS_SOS_Support {
 		$incident = self::get_incident( $incident_id );
 
 		if ( ! $incident ) {
-			wp_die( esc_html__( 'Incident not found.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Incident not found.', 'plugin-wpshadow' ) );
 		}
 
 		require_once plugin_dir_path( __FILE__ ) . 'views/sos-incident-details.php';
@@ -200,36 +200,36 @@ class WPS_SOS_Support {
 	 */
 	public static function handle_sos_submission(): void {
 		// Verify nonce.
-		if ( empty( $_POST['wps_sos_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wps_sos_nonce'] ) ), 'wps_sos_submit' ) ) {
-			wp_die( esc_html__( 'Security check failed.', 'plugin-wp-support-thisismyurl' ) );
+		if ( empty( $_POST['wpshadow_sos_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wpshadow_sos_nonce'] ) ), 'wpshadow_sos_submit' ) ) {
+			wp_die( esc_html__( 'Security check failed.', 'plugin-wpshadow' ) );
 		}
 
 		// Collect form data.
 		$data = array(
-			'name'        => \WPS\CoreSupport\wps_get_post_text( 'name' ),
-			'email'       => \WPS\CoreSupport\wps_get_post_email( 'email' ),
-			'phone'       => \WPS\CoreSupport\wps_get_post_text( 'phone' ),
-			'subject'     => \WPS\CoreSupport\wps_get_post_text( 'subject' ),
-			'description' => \WPS\CoreSupport\wps_get_post_textarea( 'description' ),
-			'severity'    => \WPS\CoreSupport\wps_get_post_key( 'severity', 'high' ),
-			'category'    => \WPS\CoreSupport\wps_get_post_key( 'category', 'general' ),
+			'name'        => \WPS\CoreSupport\WPSHADOW_get_post_text( 'name' ),
+			'email'       => \WPS\CoreSupport\WPSHADOW_get_post_email( 'email' ),
+			'phone'       => \WPS\CoreSupport\WPSHADOW_get_post_text( 'phone' ),
+			'subject'     => \WPS\CoreSupport\WPSHADOW_get_post_text( 'subject' ),
+			'description' => \WPS\CoreSupport\WPSHADOW_get_post_textarea( 'description' ),
+			'severity'    => \WPS\CoreSupport\WPSHADOW_get_post_key( 'severity', 'high' ),
+			'category'    => \WPS\CoreSupport\WPSHADOW_get_post_key( 'category', 'general' ),
 			'site_url'    => home_url(),
 		);
 
 		// Validate required fields.
 		if ( empty( $data['email'] ) || empty( $data['subject'] ) || empty( $data['description'] ) ) {
-			wp_die( esc_html__( 'Please fill in all required fields.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Please fill in all required fields.', 'plugin-wpshadow' ) );
 		}
 
 		// Create incident.
 		$incident_id = self::create_incident( $data );
 
 		if ( ! $incident_id ) {
-			wp_die( esc_html__( 'Failed to create incident. Please try again.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Failed to create incident. Please try again.', 'plugin-wpshadow' ) );
 		}
 
 		// Trigger notifications.
-		do_action( 'wps_sos_incident_created', $incident_id );
+		do_action( 'wpshadow_sos_incident_created', $incident_id );
 
 		// Redirect to success page.
 		wp_safe_redirect(
@@ -314,9 +314,9 @@ class WPS_SOS_Support {
 			$category         = 'site_down';
 			$estimated_cause  = 'Server error, plugin conflict, or hosting issue';
 			$immediate_action = array(
-				__( 'Check if site loads in incognito/private browsing', 'plugin-wp-support-thisismyurl' ),
-				__( 'Disable plugins via FTP/cPanel', 'plugin-wp-support-thisismyurl' ),
-				__( 'Check server error logs', 'plugin-wp-support-thisismyurl' ),
+				__( 'Check if site loads in incognito/private browsing', 'plugin-wpshadow' ),
+				__( 'Disable plugins via FTP/cPanel', 'plugin-wpshadow' ),
+				__( 'Check server error logs', 'plugin-wpshadow' ),
 			);
 			$estimated_time   = '1-2 hours';
 		}
@@ -326,9 +326,9 @@ class WPS_SOS_Support {
 			$category         = 'database';
 			$estimated_cause  = 'Database connection or corruption';
 			$immediate_action = array(
-				__( 'Check database credentials in wp-config.php', 'plugin-wp-support-thisismyurl' ),
-				__( 'Verify database server is running', 'plugin-wp-support-thisismyurl' ),
-				__( 'Repair database tables', 'plugin-wp-support-thisismyurl' ),
+				__( 'Check database credentials in wp-config.php', 'plugin-wpshadow' ),
+				__( 'Verify database server is running', 'plugin-wpshadow' ),
+				__( 'Repair database tables', 'plugin-wpshadow' ),
 			);
 			$estimated_time   = '1-3 hours';
 		}
@@ -338,9 +338,9 @@ class WPS_SOS_Support {
 			$category         = 'security';
 			$estimated_cause  = 'Security breach or malware';
 			$immediate_action = array(
-				__( 'Change all passwords immediately', 'plugin-wp-support-thisismyurl' ),
-				__( 'Scan for malware', 'plugin-wp-support-thisismyurl' ),
-				__( 'Check for unauthorized admin users', 'plugin-wp-support-thisismyurl' ),
+				__( 'Change all passwords immediately', 'plugin-wpshadow' ),
+				__( 'Scan for malware', 'plugin-wpshadow' ),
+				__( 'Check for unauthorized admin users', 'plugin-wpshadow' ),
 			);
 			$estimated_time   = '3-6 hours';
 		}
@@ -350,9 +350,9 @@ class WPS_SOS_Support {
 			$category         = 'performance';
 			$estimated_cause  = 'Plugin conflict, hosting limits, or database optimization needed';
 			$immediate_action = array(
-				__( 'Enable caching plugin', 'plugin-wp-support-thisismyurl' ),
-				__( 'Disable resource-heavy plugins', 'plugin-wp-support-thisismyurl' ),
-				__( 'Contact hosting provider about limits', 'plugin-wp-support-thisismyurl' ),
+				__( 'Enable caching plugin', 'plugin-wpshadow' ),
+				__( 'Disable resource-heavy plugins', 'plugin-wpshadow' ),
+				__( 'Contact hosting provider about limits', 'plugin-wpshadow' ),
 			);
 			$estimated_time   = '2-4 hours';
 		}
@@ -362,9 +362,9 @@ class WPS_SOS_Support {
 			$category         = 'plugin';
 			$estimated_cause  = 'Plugin or theme conflict';
 			$immediate_action = array(
-				__( 'Deactivate recently installed plugins', 'plugin-wp-support-thisismyurl' ),
-				__( 'Switch to default theme temporarily', 'plugin-wp-support-thisismyurl' ),
-				__( 'Enable WordPress debug mode', 'plugin-wp-support-thisismyurl' ),
+				__( 'Deactivate recently installed plugins', 'plugin-wpshadow' ),
+				__( 'Switch to default theme temporarily', 'plugin-wpshadow' ),
+				__( 'Enable WordPress debug mode', 'plugin-wpshadow' ),
 			);
 			$estimated_time   = '1-2 hours';
 		}
@@ -406,7 +406,7 @@ class WPS_SOS_Support {
 	 */
 	private static function send_user_confirmation( array $incident ): void {
 		$to      = $incident['email'] ?? '';
-		$subject = sprintf( __( 'Emergency SOS Incident #%s Received', 'plugin-wp-support-thisismyurl' ), $incident['id'] ?? '' );
+		$subject = sprintf( __( 'Emergency SOS Incident #%s Received', 'plugin-wpshadow' ), $incident['id'] ?? '' );
 
 		$message = sprintf(
 			"Hello %s,\n\n" .
@@ -426,7 +426,7 @@ class WPS_SOS_Support {
 			"- We'll contact you at: %s\n\n" .
 			"Track your incident: %s\n\n" .
 			"Thank you,\n" .
-			'WordPress Support Team',
+			'WPShadow Team',
 			$incident['name'] ?? 'there',
 			$incident['id'] ?? '',
 			$incident['subject'] ?? '',
@@ -452,7 +452,7 @@ class WPS_SOS_Support {
 	private static function send_admin_notification( array $incident ): void {
 		$admin_email = get_option( 'admin_email' );
 
-		$subject = sprintf( __( '🚨 New Emergency SOS: #%1$s (%2$s)', 'plugin-wp-support-thisismyurl' ), $incident['id'] ?? '', ucfirst( $incident['severity'] ?? 'high' ) );
+		$subject = sprintf( __( '🚨 New Emergency SOS: #%1$s (%2$s)', 'plugin-wpshadow' ), $incident['id'] ?? '', ucfirst( $incident['severity'] ?? 'high' ) );
 
 		$message = sprintf(
 			"New Emergency SOS Incident Received\n\n" .
@@ -602,7 +602,7 @@ class WPS_SOS_Support {
 
 		$incidents[ $incident_id ]['notes'][] = array(
 			'note'      => $note,
-			'user'      => $user ? $user->display_name : __( 'System', 'plugin-wp-support-thisismyurl' ),
+			'user'      => $user ? $user->display_name : __( 'System', 'plugin-wpshadow' ),
 			'timestamp' => time(),
 		);
 
@@ -617,25 +617,25 @@ class WPS_SOS_Support {
 	 * @return void
 	 */
 	public static function ajax_update_incident_status(): void {
-		check_ajax_referer( 'wps_sos_actions', 'nonce' );
+		check_ajax_referer( 'wpshadow_sos_actions', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$incident_id = \WPS\CoreSupport\wps_get_post_text( 'incident_id' );
-		$status      = \WPS\CoreSupport\wps_get_post_key( 'status' );
+		$incident_id = \WPS\CoreSupport\WPSHADOW_get_post_text( 'incident_id' );
+		$status      = \WPS\CoreSupport\WPSHADOW_get_post_key( 'status' );
 
 		if ( empty( $incident_id ) || empty( $status ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid parameters', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid parameters', 'plugin-wpshadow' ) ) );
 		}
 
 		$updated = self::update_incident_status( $incident_id, $status );
 
 		if ( $updated ) {
-			wp_send_json_success( array( 'message' => __( 'Status updated', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_success( array( 'message' => __( 'Status updated', 'plugin-wpshadow' ) ) );
 		} else {
-			wp_send_json_error( array( 'message' => __( 'Failed to update status', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Failed to update status', 'plugin-wpshadow' ) ) );
 		}
 	}
 
@@ -645,25 +645,25 @@ class WPS_SOS_Support {
 	 * @return void
 	 */
 	public static function ajax_add_incident_note(): void {
-		check_ajax_referer( 'wps_sos_actions', 'nonce' );
+		check_ajax_referer( 'wpshadow_sos_actions', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$incident_id = \WPS\CoreSupport\wps_get_post_text( 'incident_id' );
-		$note        = \WPS\CoreSupport\wps_get_post_textarea( 'note' );
+		$incident_id = \WPS\CoreSupport\WPSHADOW_get_post_text( 'incident_id' );
+		$note        = \WPS\CoreSupport\WPSHADOW_get_post_textarea( 'note' );
 
 		if ( empty( $incident_id ) || empty( $note ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid parameters', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid parameters', 'plugin-wpshadow' ) ) );
 		}
 
 		$added = self::add_incident_note( $incident_id, $note );
 
 		if ( $added ) {
-			wp_send_json_success( array( 'message' => __( 'Note added', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_success( array( 'message' => __( 'Note added', 'plugin-wpshadow' ) ) );
 		} else {
-			wp_send_json_error( array( 'message' => __( 'Failed to add note', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Failed to add note', 'plugin-wpshadow' ) ) );
 		}
 	}
 

@@ -22,11 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Feature_Cron_Test
+ * WPSHADOW_Feature_Cron_Test
  *
  * WP-Cron testing and diagnostics.
  */
-final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Cron_Test extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -35,14 +35,14 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'cron-test',
-				'name'               => __( 'Cron Test', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Test WordPress Cron functionality, view scheduled events, and identify issues with background tasks', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Cron Test', 'plugin-wpshadow' ),
+				'description'        => __( 'Test WordPress Cron functionality, view scheduled events, and identify issues with background tasks', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'server-diagnostics',
-				'widget_label'       => __( 'Server Diagnostics', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Server environment and configuration tools', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Server Diagnostics', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Server environment and configuration tools', 'plugin-wpshadow' ),
 				// Unified metadata.
 				'license_level'      => 1, // Free for everyone.
 				'minimum_capability' => 'manage_options',
@@ -70,11 +70,11 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 
 		// AJAX handlers.
-		add_action( 'wp_ajax_wps_run_cron_test', array( $this, 'ajax_run_test' ) );
-		add_action( 'wp_ajax_wps_run_cron_event', array( $this, 'ajax_run_event' ) );
+		add_action( 'wp_ajax_WPSHADOW_run_cron_test', array( $this, 'ajax_run_test' ) );
+		add_action( 'wp_ajax_WPSHADOW_run_cron_event', array( $this, 'ajax_run_event' ) );
 
 		// Test cron hook.
-		add_action( 'wps_test_cron_event', array( $this, 'handle_test_cron' ) );
+		add_action( 'wpshadow_test_cron_event', array( $this, 'handle_test_cron' ) );
 	}
 
 	/**
@@ -85,8 +85,8 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 	public function add_admin_menu(): void {
 		add_submenu_page(
 			'wp-support',
-			__( 'Cron Test', 'plugin-wp-support-thisismyurl' ),
-			__( 'Cron Test', 'plugin-wp-support-thisismyurl' ),
+			__( 'Cron Test', 'plugin-wpshadow' ),
+			__( 'Cron Test', 'plugin-wpshadow' ),
 			'manage_options',
 			'wp-support-cron-test',
 			array( $this, 'render_page' )
@@ -177,8 +177,8 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 		// Check if cron is disabled.
 		if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) {
 			$results['success'] = false;
-			$results['message'] = __( 'WP-Cron is disabled via DISABLE_WP_CRON constant', 'plugin-wp-support-thisismyurl' );
-			$results['details'][] = __( 'You should be using a system cron instead', 'plugin-wp-support-thisismyurl' );
+			$results['message'] = __( 'WP-Cron is disabled via DISABLE_WP_CRON constant', 'plugin-wpshadow' );
+			$results['details'][] = __( 'You should be using a system cron instead', 'plugin-wpshadow' );
 			return $results;
 		}
 
@@ -197,7 +197,7 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 		if ( is_wp_error( $response ) ) {
 			$results['success'] = false;
 			$results['message'] = $response->get_error_message();
-			$results['details'][] = __( 'Failed to spawn cron process', 'plugin-wp-support-thisismyurl' );
+			$results['details'][] = __( 'Failed to spawn cron process', 'plugin-wpshadow' );
 			return $results;
 		}
 
@@ -207,17 +207,17 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 			$results['success'] = false;
 			$results['message'] = sprintf(
 				/* translators: %d: HTTP status code */
-				__( 'Unexpected status code: %d', 'plugin-wp-support-thisismyurl' ),
+				__( 'Unexpected status code: %d', 'plugin-wpshadow' ),
 				$status_code
 			);
-			$results['details'][] = __( 'Cron URL did not return 200 OK', 'plugin-wp-support-thisismyurl' );
+			$results['details'][] = __( 'Cron URL did not return 200 OK', 'plugin-wpshadow' );
 			return $results;
 		}
 
 		// Success.
 		$results['success'] = true;
-		$results['message'] = __( 'Cron spawning test passed', 'plugin-wp-support-thisismyurl' );
-		$results['details'][] = __( 'WP-Cron is able to spawn successfully', 'plugin-wp-support-thisismyurl' );
+		$results['message'] = __( 'Cron spawning test passed', 'plugin-wpshadow' );
+		$results['details'][] = __( 'WP-Cron is able to spawn successfully', 'plugin-wpshadow' );
 
 		return $results;
 	}
@@ -229,7 +229,7 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 	 */
 	public function handle_test_cron(): void {
 		// Store result in transient.
-		set_transient( 'wps_test_cron_result', time(), 60 );
+		set_transient( 'wpshadow_test_cron_result', time(), 60 );
 	}
 
 	/**
@@ -238,10 +238,10 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_run_test(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps-cron-test' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wps-cron-test' );
 
 		// Schedule test event.
-		wp_schedule_single_event( time(), 'wps_test_cron_event' );
+		wp_schedule_single_event( time(), 'wpshadow_test_cron_event' );
 
 		// Wait a moment.
 		sleep( 2 );
@@ -253,20 +253,20 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 		sleep( 3 );
 
 		// Check if event ran.
-		$result = get_transient( 'wps_test_cron_result' );
-		delete_transient( 'wps_test_cron_result' );
+		$result = get_transient( 'wpshadow_test_cron_result' );
+		delete_transient( 'wpshadow_test_cron_result' );
 
 		if ( false !== $result ) {
 			wp_send_json_success(
 				array(
-					'message' => __( 'Test cron event executed successfully', 'plugin-wp-support-thisismyurl' ),
+					'message' => __( 'Test cron event executed successfully', 'plugin-wpshadow' ),
 					'time'    => $result,
 				)
 			);
 		} else {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Test cron event did not execute', 'plugin-wp-support-thisismyurl' ),
+					'message' => __( 'Test cron event did not execute', 'plugin-wpshadow' ),
 				)
 			);
 		}
@@ -278,12 +278,12 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_run_event(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps-cron-test' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wps-cron-test' );
 
-		$hook = \WPS\CoreSupport\wps_get_post_text( 'hook' );
+		$hook = \WPS\CoreSupport\WPSHADOW_get_post_text( 'hook' );
 		
 		if ( empty( $hook ) ) {
-			wp_send_json_error( array( 'message' => __( 'No hook specified', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No hook specified', 'plugin-wpshadow' ) ) );
 			return;
 		}
 
@@ -294,7 +294,7 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 			array(
 				'message' => sprintf(
 					/* translators: %s: Hook name */
-					__( 'Manually executed hook: %s', 'plugin-wp-support-thisismyurl' ),
+					__( 'Manually executed hook: %s', 'plugin-wpshadow' ),
 					$hook
 				),
 			)
@@ -314,39 +314,39 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Cron Test', 'plugin-wp-support-thisismyurl' ); ?></h1>
+			<h1><?php esc_html_e( 'Cron Test', 'plugin-wpshadow' ); ?></h1>
 
 			<div class="card">
-				<h2><?php esc_html_e( 'WP-Cron Configuration', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( 'WP-Cron Configuration', 'plugin-wpshadow' ); ?></h2>
 				<table class="widefat striped">
 					<tbody>
 						<tr>
-							<th style="width: 30%;"><?php esc_html_e( 'WP-Cron Status', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th style="width: 30%;"><?php esc_html_e( 'WP-Cron Status', 'plugin-wpshadow' ); ?></th>
 							<td>
 								<?php if ( $config['disabled'] ) : ?>
 									<span class="dashicons dashicons-warning" style="color: #f0ad4e;"></span>
-									<strong><?php esc_html_e( 'Disabled', 'plugin-wp-support-thisismyurl' ); ?></strong>
-									<p><?php esc_html_e( 'WP-Cron is disabled. You should be using a system cron job.', 'plugin-wp-support-thisismyurl' ); ?></p>
+									<strong><?php esc_html_e( 'Disabled', 'plugin-wpshadow' ); ?></strong>
+									<p><?php esc_html_e( 'WP-Cron is disabled. You should be using a system cron job.', 'plugin-wpshadow' ); ?></p>
 								<?php else : ?>
 									<span class="dashicons dashicons-yes-alt" style="color: #46b450;"></span>
-									<strong><?php esc_html_e( 'Enabled', 'plugin-wp-support-thisismyurl' ); ?></strong>
+									<strong><?php esc_html_e( 'Enabled', 'plugin-wpshadow' ); ?></strong>
 								<?php endif; ?>
 							</td>
 						</tr>
 						<tr>
-							<th><?php esc_html_e( 'Alternate Cron', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th><?php esc_html_e( 'Alternate Cron', 'plugin-wpshadow' ); ?></th>
 							<td>
 								<?php if ( $config['alternate_cron'] ) : ?>
 									<span class="dashicons dashicons-yes-alt" style="color: #46b450;"></span>
-									<?php esc_html_e( 'Enabled', 'plugin-wp-support-thisismyurl' ); ?>
+									<?php esc_html_e( 'Enabled', 'plugin-wpshadow' ); ?>
 								<?php else : ?>
 									<span class="dashicons dashicons-minus"></span>
-									<?php esc_html_e( 'Disabled', 'plugin-wp-support-thisismyurl' ); ?>
+									<?php esc_html_e( 'Disabled', 'plugin-wpshadow' ); ?>
 								<?php endif; ?>
 							</td>
 						</tr>
 						<tr>
-							<th><?php esc_html_e( 'Cron URL', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th><?php esc_html_e( 'Cron URL', 'plugin-wpshadow' ); ?></th>
 							<td><code><?php echo esc_html( $config['cron_url'] ); ?></code></td>
 						</tr>
 					</tbody>
@@ -354,11 +354,11 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 			</div>
 
 			<div class="card">
-				<h2><?php esc_html_e( 'Test Cron Execution', 'plugin-wp-support-thisismyurl' ); ?></h2>
-				<p><?php esc_html_e( 'This will schedule a test event and attempt to execute it:', 'plugin-wp-support-thisismyurl' ); ?></p>
+				<h2><?php esc_html_e( 'Test Cron Execution', 'plugin-wpshadow' ); ?></h2>
+				<p><?php esc_html_e( 'This will schedule a test event and attempt to execute it:', 'plugin-wpshadow' ); ?></p>
 				<p>
 					<button type="button" id="wps-run-cron-test" class="button button-primary">
-						<?php esc_html_e( 'Run Cron Test', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'Run Cron Test', 'plugin-wpshadow' ); ?>
 					</button>
 					<span class="spinner" style="float: none; margin: 0 0 0 10px;"></span>
 				</p>
@@ -366,13 +366,13 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 			</div>
 
 			<div class="card">
-				<h2><?php esc_html_e( 'Available Schedules', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( 'Available Schedules', 'plugin-wpshadow' ); ?></h2>
 				<table class="wp-list-table widefat fixed striped">
 					<thead>
 						<tr>
-							<th style="width: 25%;"><?php esc_html_e( 'Schedule', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th style="width: 25%;"><?php esc_html_e( 'Interval', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Display Name', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th style="width: 25%;"><?php esc_html_e( 'Schedule', 'plugin-wpshadow' ); ?></th>
+							<th style="width: 25%;"><?php esc_html_e( 'Interval', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Display Name', 'plugin-wpshadow' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -388,13 +388,13 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 			</div>
 
 			<div class="card">
-				<h2><?php esc_html_e( 'Scheduled Events', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( 'Scheduled Events', 'plugin-wpshadow' ); ?></h2>
 				<?php if ( ! empty( $events ) ) : ?>
 					<p>
 						<?php
 						printf(
 							/* translators: %d: Number of scheduled events */
-							esc_html( _n( 'There is %d scheduled event.', 'There are %d scheduled events.', count( $events ), 'plugin-wp-support-thisismyurl' ) ),
+							esc_html( _n( 'There is %d scheduled event.', 'There are %d scheduled events.', count( $events ), 'plugin-wpshadow' ) ),
 							count( $events )
 						);
 						?>
@@ -402,11 +402,11 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 					<table class="wp-list-table widefat fixed striped">
 						<thead>
 							<tr>
-								<th style="width: 35%;"><?php esc_html_e( 'Hook', 'plugin-wp-support-thisismyurl' ); ?></th>
-								<th style="width: 20%;"><?php esc_html_e( 'Next Run', 'plugin-wp-support-thisismyurl' ); ?></th>
-								<th style="width: 20%;"><?php esc_html_e( 'Schedule', 'plugin-wp-support-thisismyurl' ); ?></th>
-								<th style="width: 15%;"><?php esc_html_e( 'Instances', 'plugin-wp-support-thisismyurl' ); ?></th>
-								<th style="width: 10%;"><?php esc_html_e( 'Action', 'plugin-wp-support-thisismyurl' ); ?></th>
+								<th style="width: 35%;"><?php esc_html_e( 'Hook', 'plugin-wpshadow' ); ?></th>
+								<th style="width: 20%;"><?php esc_html_e( 'Next Run', 'plugin-wpshadow' ); ?></th>
+								<th style="width: 20%;"><?php esc_html_e( 'Schedule', 'plugin-wpshadow' ); ?></th>
+								<th style="width: 15%;"><?php esc_html_e( 'Instances', 'plugin-wpshadow' ); ?></th>
+								<th style="width: 10%;"><?php esc_html_e( 'Action', 'plugin-wpshadow' ); ?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -425,7 +425,7 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 												<?php
 												printf(
 													/* translators: %d: Number of missed events */
-													esc_html( _n( '%d missed execution', '%d missed executions', $event_data['missed'], 'plugin-wp-support-thisismyurl' ) ),
+													esc_html( _n( '%d missed execution', '%d missed executions', $event_data['missed'], 'plugin-wpshadow' ) ),
 													$event_data['missed']
 												);
 												?>
@@ -436,13 +436,13 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 										<?php if ( $is_missed ) : ?>
 											<span style="color: #dc3232;">
 												<?php echo esc_html( human_time_diff( $first_instance['timestamp'], time() ) ); ?>
-												<?php esc_html_e( 'ago', 'plugin-wp-support-thisismyurl' ); ?>
+												<?php esc_html_e( 'ago', 'plugin-wpshadow' ); ?>
 											</span>
 										<?php else : ?>
 											<?php
 											printf(
 												/* translators: %s: Time until next run */
-												esc_html__( 'In %s', 'plugin-wp-support-thisismyurl' ),
+												esc_html__( 'In %s', 'plugin-wpshadow' ),
 												esc_html( human_time_diff( time(), $first_instance['timestamp'] ) )
 											);
 											?>
@@ -452,13 +452,13 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 										<?php if ( $first_instance['schedule'] ) : ?>
 											<code><?php echo esc_html( $first_instance['schedule'] ); ?></code>
 										<?php else : ?>
-											<?php esc_html_e( 'Single event', 'plugin-wp-support-thisismyurl' ); ?>
+											<?php esc_html_e( 'Single event', 'plugin-wpshadow' ); ?>
 										<?php endif; ?>
 									</td>
 									<td><?php echo esc_html( count( $event_data['instances'] ) ); ?></td>
 									<td>
 										<button type="button" class="button button-small wps-run-event" data-hook="<?php echo esc_attr( $hook ); ?>">
-											<?php esc_html_e( 'Run Now', 'plugin-wp-support-thisismyurl' ); ?>
+											<?php esc_html_e( 'Run Now', 'plugin-wpshadow' ); ?>
 										</button>
 									</td>
 								</tr>
@@ -466,7 +466,7 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 						</tbody>
 					</table>
 				<?php else : ?>
-					<p><?php esc_html_e( 'No scheduled events found.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					<p><?php esc_html_e( 'No scheduled events found.', 'plugin-wpshadow' ); ?></p>
 				<?php endif; ?>
 			</div>
 		</div>
@@ -487,7 +487,7 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 					url: ajaxurl,
 					type: 'POST',
 					data: {
-						action: 'wps_run_cron_test',
+						action: 'wpshadow_run_cron_test',
 						nonce: '<?php echo esc_js( $nonce ); ?>'
 					},
 					success: function(response) {
@@ -516,7 +516,7 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 						$button.prop('disabled', false);
 						$results.show().html(
 							'<div class="notice notice-error inline">' +
-							'<p><?php echo esc_js( __( 'Test failed to execute', 'plugin-wp-support-thisismyurl' ) ); ?></p>' +
+							'<p><?php echo esc_js( __( 'Test failed to execute', 'plugin-wpshadow' ) ); ?></p>' +
 							'</div>'
 						);
 					}
@@ -528,7 +528,7 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 				const $button = $(this);
 				const hook = $button.data('hook');
 				
-				if (!confirm('<?php echo esc_js( __( 'Are you sure you want to run this event now?', 'plugin-wp-support-thisismyurl' ) ); ?>')) {
+				if (!confirm('<?php echo esc_js( __( 'Are you sure you want to run this event now?', 'plugin-wpshadow' ) ); ?>')) {
 					return;
 				}
 
@@ -538,7 +538,7 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 					url: ajaxurl,
 					type: 'POST',
 					data: {
-						action: 'wps_run_cron_event',
+						action: 'wpshadow_run_cron_event',
 						nonce: '<?php echo esc_js( $nonce ); ?>',
 						hook: hook
 					},
@@ -548,12 +548,12 @@ final class WPS_Feature_Cron_Test extends WPS_Abstract_Feature {
 						if (response.success) {
 							alert(response.data.message);
 						} else {
-							alert('<?php echo esc_js( __( 'Failed to run event', 'plugin-wp-support-thisismyurl' ) ); ?>');
+							alert('<?php echo esc_js( __( 'Failed to run event', 'plugin-wpshadow' ) ); ?>');
 						}
 					},
 					error: function() {
 						$button.prop('disabled', false);
-						alert('<?php echo esc_js( __( 'Failed to run event', 'plugin-wp-support-thisismyurl' ) ); ?>');
+						alert('<?php echo esc_js( __( 'Failed to run event', 'plugin-wpshadow' ) ); ?>');
 					}
 				});
 			});

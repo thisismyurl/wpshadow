@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param string $hook The current admin page hook.
  * @return void
  */
-function wp_support_admin_enqueue( string $hook ): void {
+function wpshadow_admin_enqueue( string $hook ): void {
 	// Load on all wp-support related pages (core, hubs, spokes).
 	// Hooks can be: toplevel_page_wp-support, support-hub_page_wp-support-hub-media, etc.
 	if ( false === strpos( $hook, 'wp-support' ) ) {
@@ -31,34 +31,34 @@ function wp_support_admin_enqueue( string $hook ): void {
 	// Enqueue modern design system (shared across all WPS plugins).
 	wp_enqueue_style(
 		'wps-ui-system',
-		wp_support_URL . 'assets/css/wps-ui-system.css',
+		WPSHADOW_URL . 'assets/css/wps-ui-system.css',
 		array(),
 		$cache_bust
 	);
 
 	wp_enqueue_style(
 		'wps-core-admin',
-		wp_support_URL . 'assets/css/admin.css',
+		WPSHADOW_URL . 'assets/css/admin.css',
 		array( 'wps-ui-system' ),
 		$cache_bust
 	);
 
 	wp_enqueue_style(
 		'wps-tab-navigation',
-		wp_support_URL . 'assets/css/tab-navigation.css',
+		WPSHADOW_URL . 'assets/css/tab-navigation.css',
 		array( 'wps-ui-system' ),
 		$cache_bust
 	);
 
 	// Get context once for reuse.
-	$context = WPS_Tab_Navigation::get_current_context();
+	$context = WPSHADOW_Tab_Navigation::get_current_context();
 	$tab     = $context['tab'] ?? '';
 
 	// Enqueue help styles when on help tab.
 	if ( 'help' === $tab ) {
 		wp_enqueue_style(
 			'wps-help',
-			wp_support_URL . 'assets/css/help.css',
+			WPSHADOW_URL . 'assets/css/help.css',
 			array( 'wps-ui-system' ),
 			$cache_bust
 		);
@@ -66,7 +66,7 @@ function wp_support_admin_enqueue( string $hook ): void {
 	// Enqueue responsive design system (mobile-first, touch-friendly).
 	wp_enqueue_style(
 		'wps-responsive',
-		wp_support_URL . 'assets/css/responsive.css',
+		WPSHADOW_URL . 'assets/css/responsive.css',
 		array( 'wps-ui-system', 'wps-core-admin' ),
 		$cache_bust
 	);
@@ -107,7 +107,7 @@ function wp_support_admin_enqueue( string $hook ): void {
 		// Add custom script to handle context-specific state saving.
 		wp_enqueue_script(
 			'wps-postbox-state',
-			wp_support_URL . 'assets/js/postbox-state.js',
+			WPSHADOW_URL . 'assets/js/postbox-state.js',
 			array( 'jquery', 'postbox' ),
 			$cache_bust,
 			true
@@ -122,13 +122,13 @@ function wp_support_admin_enqueue( string $hook ): void {
 			'wpsPostboxState',
 			array(
 				'stateKey' => $state_key,
-				'nonce'    => wp_create_nonce( 'WPS_postbox_state' ),
+				'nonce'    => wp_create_nonce( 'wpshadow_postbox_state' ),
 			)
 		);
 
 		wp_enqueue_style(
 			'wps-dashboard-drag',
-			wp_support_URL . 'assets/css/dashboard-drag.css',
+			WPSHADOW_URL . 'assets/css/dashboard-drag.css',
 			array(),
 			$cache_bust
 		);
@@ -138,7 +138,7 @@ function wp_support_admin_enqueue( string $hook ): void {
 
 	wp_enqueue_script(
 		'wps-core-admin',
-		wp_support_URL . 'assets/js/admin.js',
+		WPSHADOW_URL . 'assets/js/admin.js',
 		array( 'jquery' ),
 		$cache_bust,
 		true
@@ -147,7 +147,7 @@ function wp_support_admin_enqueue( string $hook ): void {
 	// Enqueue responsive navigation script.
 	wp_enqueue_script(
 		'wps-responsive-nav',
-		wp_support_URL . 'assets/js/responsive-nav.js',
+		WPSHADOW_URL . 'assets/js/responsive-nav.js',
 		array( 'jquery' ),
 		$cache_bust,
 		true
@@ -158,18 +158,18 @@ function wp_support_admin_enqueue( string $hook ): void {
 		'wps-core-admin',
 		'wpsAdminData',
 		array(
-			'toggleNonce' => wp_create_nonce( 'WPS_toggle_module' ),
-			'actionNonce' => wp_create_nonce( 'WPS_module_action' ),
+			'toggleNonce' => wp_create_nonce( 'wpshadow_toggle_module' ),
+			'actionNonce' => wp_create_nonce( 'wpshadow_module_action' ),
 			'i18n'        => array(
-				'enabled'      => __( 'Enabled', 'plugin-wp-support-thisismyurl' ),
-				'disabled'     => __( 'Disabled', 'plugin-wp-support-thisismyurl' ),
-				'ajaxError'    => __( 'An error occurred. Please try again.', 'plugin-wp-support-thisismyurl' ),
-				'noResults'    => __( 'No modules match this filter.', 'plugin-wp-support-thisismyurl' ),
-				'installFirst' => __( 'Install the module before enabling it.', 'plugin-wp-support-thisismyurl' ),
-				'installing'   => __( 'Installing...', 'plugin-wp-support-thisismyurl' ),
-				'updating'     => __( 'Updating...', 'plugin-wp-support-thisismyurl' ),
-				'install'      => __( 'Install', 'plugin-wp-support-thisismyurl' ),
-				'update'       => __( 'Update', 'plugin-wp-support-thisismyurl' ),
+				'enabled'      => __( 'Enabled', 'plugin-wpshadow' ),
+				'disabled'     => __( 'Disabled', 'plugin-wpshadow' ),
+				'ajaxError'    => __( 'An error occurred. Please try again.', 'plugin-wpshadow' ),
+				'noResults'    => __( 'No modules match this filter.', 'plugin-wpshadow' ),
+				'installFirst' => __( 'Install the module before enabling it.', 'plugin-wpshadow' ),
+				'installing'   => __( 'Installing...', 'plugin-wpshadow' ),
+				'updating'     => __( 'Updating...', 'plugin-wpshadow' ),
+				'install'      => __( 'Install', 'plugin-wpshadow' ),
+				'update'       => __( 'Update', 'plugin-wpshadow' ),
 			),
 		)
 	);
@@ -177,7 +177,7 @@ function wp_support_admin_enqueue( string $hook ): void {
 	// Enqueue module actions script (install/update/activate).
 	wp_enqueue_script(
 		'wps-module-actions',
-		wp_support_URL . 'assets/js/module-actions.js',
+		WPSHADOW_URL . 'assets/js/module-actions.js',
 		array(),
 		$cache_bust,
 		true
@@ -189,39 +189,39 @@ function wp_support_admin_enqueue( string $hook ): void {
 		'wpsModuleActions',
 		array(
 			'ajaxurl' => admin_url( 'admin-ajax.php' ),
-			'nonce'   => wp_create_nonce( 'WPS_module_actions' ),
+			'nonce'   => wp_create_nonce( 'wpshadow_module_actions' ),
 		)
 	);
 
 	// Register debug tools assets (enqueued conditionally in debug-tools.php).
 	wp_register_style(
 		'wps-debug-tools',
-		wp_support_URL . 'assets/css/debug-tools.css',
+		WPSHADOW_URL . 'assets/css/debug-tools.css',
 		array(),
 		$cache_bust
 	);
 
 	wp_register_script(
 		'wps-debug-tools',
-		wp_support_URL . 'assets/js/debug-tools.js',
+		WPSHADOW_URL . 'assets/js/debug-tools.js',
 		array( 'jquery' ),
 		$cache_bust,
 		true
 	);
 	// Enqueue Spoke Collection assets if on collection tab.
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	$current_tab = isset( $_GET['WPS_tab'] ) ? sanitize_text_field( wp_unslash( $_GET['WPS_tab'] ) ) : 'dashboard';
+	$current_tab = isset( $_GET['wpshadow_tab'] ) ? sanitize_text_field( wp_unslash( $_GET['wpshadow_tab'] ) ) : 'dashboard';
 	if ( 'collection' === $current_tab ) {
 		wp_enqueue_style(
 			'wps-spoke-collection',
-			wp_support_URL . 'assets/css/spoke-collection.css',
+			WPSHADOW_URL . 'assets/css/spoke-collection.css',
 			array( 'wps-ui-system' ),
 			$cache_bust
 		);
 
 		wp_enqueue_script(
 			'wps-spoke-collection',
-			wp_support_URL . 'assets/js/spoke-collection.js',
+			WPSHADOW_URL . 'assets/js/spoke-collection.js',
 			array( 'jquery' ),
 			$cache_bust,
 			true
@@ -232,16 +232,16 @@ function wp_support_admin_enqueue( string $hook ): void {
 			'wps-spoke-collection',
 			'wpsSpokeCollection',
 			array(
-				'nonce' => wp_create_nonce( 'WPS_spoke_collection' ),
+				'nonce' => wp_create_nonce( 'wpshadow_spoke_collection' ),
 				'i18n'  => array(
-					'install'           => __( 'Install This Spoke', 'plugin-wp-support-thisismyurl' ),
-					'activate'          => __( 'Activate', 'plugin-wp-support-thisismyurl' ),
-					'deactivate'        => __( 'Deactivate', 'plugin-wp-support-thisismyurl' ),
-					'notInstalled'      => __( 'Not Installed', 'plugin-wp-support-thisismyurl' ),
-					'readyToActivate'   => __( 'Ready to Activate', 'plugin-wp-support-thisismyurl' ),
-					'activeProcessing'  => __( 'Active & Processing', 'plugin-wp-support-thisismyurl' ),
-					'mastered'          => __( 'Mastered!', 'plugin-wp-support-thisismyurl' ),
-					'confirmDeactivate' => __( 'Are you sure you want to deactivate this spoke?', 'plugin-wp-support-thisismyurl' ),
+					'install'           => __( 'Install This Spoke', 'plugin-wpshadow' ),
+					'activate'          => __( 'Activate', 'plugin-wpshadow' ),
+					'deactivate'        => __( 'Deactivate', 'plugin-wpshadow' ),
+					'notInstalled'      => __( 'Not Installed', 'plugin-wpshadow' ),
+					'readyToActivate'   => __( 'Ready to Activate', 'plugin-wpshadow' ),
+					'activeProcessing'  => __( 'Active & Processing', 'plugin-wpshadow' ),
+					'mastered'          => __( 'Mastered!', 'plugin-wpshadow' ),
+					'confirmDeactivate' => __( 'Are you sure you want to deactivate this spoke?', 'plugin-wpshadow' ),
 				),
 			)
 		);

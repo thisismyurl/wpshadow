@@ -4,7 +4,7 @@
  *
  * Captures site state (plugins, theme, database metadata) for rollback.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
 declare(strict_types=1);
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Snapshot Manager Class
  */
-class WPS_Snapshot_Manager {
+class WPSHADOW_Snapshot_Manager {
 
 	/**
 	 * Maximum snapshots to keep (default 10).
@@ -28,7 +28,7 @@ class WPS_Snapshot_Manager {
 	/**
 	 * Snapshot option key.
 	 */
-	private const SNAPSHOTS_KEY = 'WPS_site_snapshots';
+	private const SNAPSHOTS_KEY = 'wpshadow_site_snapshots';
 
 	/**
 	 * Initialize snapshot manager.
@@ -387,8 +387,8 @@ class WPS_Snapshot_Manager {
 	public static function register_menu(): void {
 		add_submenu_page(
 			'wp-support',
-			__( 'Site Snapshots', 'plugin-wp-support-thisismyurl' ),
-			__( 'Snapshots', 'plugin-wp-support-thisismyurl' ),
+			__( 'Site Snapshots', 'plugin-wpshadow' ),
+			__( 'Snapshots', 'plugin-wpshadow' ),
 			'manage_options',
 			'wps-snapshots',
 			array( __CLASS__, 'render_snapshots_page' )
@@ -402,33 +402,33 @@ class WPS_Snapshot_Manager {
 	 */
 	public static function render_snapshots_page(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'Insufficient permissions.', 'plugin-wpshadow' ) );
 		}
 
 		$snapshots = self::get_snapshots();
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Site Snapshots', 'plugin-wp-support-thisismyurl' ); ?></h1>
-			<p><?php esc_html_e( 'Snapshots capture your site state for rollback capability.', 'plugin-wp-support-thisismyurl' ); ?></p>
+			<h1><?php esc_html_e( 'Site Snapshots', 'plugin-wpshadow' ); ?></h1>
+			<p><?php esc_html_e( 'Snapshots capture your site state for rollback capability.', 'plugin-wpshadow' ); ?></p>
 
 			<button id="wps-snapshot-create" class="button button-primary">
-				<?php esc_html_e( '📸 Create Snapshot Now', 'plugin-wp-support-thisismyurl' ); ?>
+				<?php esc_html_e( '📸 Create Snapshot Now', 'plugin-wpshadow' ); ?>
 			</button>
 
 			<?php if ( empty( $snapshots ) ) : ?>
 				<p style="margin-top: 20px; padding: 15px; background: #f0f0f0; border-left: 4px solid #ffb900;">
-					<?php esc_html_e( 'No snapshots yet. Create one to enable rollback capability.', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'No snapshots yet. Create one to enable rollback capability.', 'plugin-wpshadow' ); ?>
 				</p>
 			<?php else : ?>
 				<table class="wp-list-table widefat striped" style="margin-top: 20px;">
 					<thead>
 						<tr>
-							<th><?php esc_html_e( 'Date', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Description', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Plugins', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Theme', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Database', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<th><?php esc_html_e( 'Actions', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th><?php esc_html_e( 'Date', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Description', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Plugins', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Theme', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Database', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Actions', 'plugin-wpshadow' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -441,10 +441,10 @@ class WPS_Snapshot_Manager {
 								<td><?php echo esc_html( $snapshot['metrics']['database_size'] ); ?></td>
 								<td>
 									<button class="button button-small wps-restore-snapshot" data-snapshot-id="<?php echo esc_attr( $id ); ?>">
-										<?php esc_html_e( 'Restore', 'plugin-wp-support-thisismyurl' ); ?>
+										<?php esc_html_e( 'Restore', 'plugin-wpshadow' ); ?>
 									</button>
 									<button class="button button-small wps-delete-snapshot" data-snapshot-id="<?php echo esc_attr( $id ); ?>">
-										<?php esc_html_e( 'Delete', 'plugin-wp-support-thisismyurl' ); ?>
+										<?php esc_html_e( 'Delete', 'plugin-wpshadow' ); ?>
 									</button>
 								</td>
 							</tr>

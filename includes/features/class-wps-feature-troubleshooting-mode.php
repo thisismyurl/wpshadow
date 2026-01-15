@@ -23,21 +23,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Feature_Troubleshooting_Mode
+ * WPSHADOW_Feature_Troubleshooting_Mode
  *
  * Safe troubleshooting mode implementation.
  */
-final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Troubleshooting_Mode extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Cookie name for troubleshooting mode.
 	 */
-	private const COOKIE_NAME = 'wps_troubleshooting_mode';
+	private const COOKIE_NAME = 'wpshadow_troubleshooting_mode';
 
 	/**
 	 * Transient key for troubleshooting state.
 	 */
-	private const TRANSIENT_KEY = 'wps_troubleshooting_state_';
+	private const TRANSIENT_KEY = 'wpshadow_troubleshooting_state_';
 
 	/**
 	 * Cookie lifetime (24 hours).
@@ -51,14 +51,14 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'troubleshooting-mode',
-				'name'               => __( 'Troubleshooting Mode', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Test your site with default theme and disabled plugins without affecting visitors - perfect for isolating conflicts', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Troubleshooting Mode', 'plugin-wpshadow' ),
+				'description'        => __( 'Test your site with default theme and disabled plugins without affecting visitors - perfect for isolating conflicts', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'debugging',
-				'widget_label'       => __( 'Debugging & Diagnostics', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Tools for diagnosing and resolving site conflicts', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Debugging & Diagnostics', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Tools for diagnosing and resolving site conflicts', 'plugin-wpshadow' ),
 				// Unified metadata.
 				'license_level'      => 1, // Free for everyone.
 				'minimum_capability' => 'manage_options',
@@ -86,9 +86,9 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 
 		// AJAX handlers.
-		add_action( 'wp_ajax_wps_troubleshooting_start', array( $this, 'ajax_start_troubleshooting' ) );
-		add_action( 'wp_ajax_wps_troubleshooting_stop', array( $this, 'ajax_stop_troubleshooting' ) );
-		add_action( 'wp_ajax_wps_troubleshooting_toggle_plugin', array( $this, 'ajax_toggle_plugin' ) );
+		add_action( 'wp_ajax_WPSHADOW_troubleshooting_start', array( $this, 'ajax_start_troubleshooting' ) );
+		add_action( 'wp_ajax_WPSHADOW_troubleshooting_stop', array( $this, 'ajax_stop_troubleshooting' ) );
+		add_action( 'wp_ajax_WPSHADOW_troubleshooting_toggle_plugin', array( $this, 'ajax_toggle_plugin' ) );
 
 		// Apply filters if in troubleshooting mode.
 		if ( $this->is_troubleshooting_active() ) {
@@ -108,8 +108,8 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 	public function add_admin_menu(): void {
 		add_submenu_page(
 			'wp-support',
-			__( 'Troubleshooting Mode', 'plugin-wp-support-thisismyurl' ),
-			__( 'Troubleshooting', 'plugin-wp-support-thisismyurl' ),
+			__( 'Troubleshooting Mode', 'plugin-wpshadow' ),
+			__( 'Troubleshooting', 'plugin-wpshadow' ),
 			'manage_options',
 			'wp-support-troubleshooting',
 			array( $this, 'render_page' )
@@ -202,8 +202,8 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 			return $plugins;
 		}
 
-		// Always keep WP Support active.
-		$keep_plugins = array( 'plugin-wp-support-thisismyurl/wp-support-thisismyurl.php' );
+		// Always keep WPShadow active.
+		$keep_plugins = array( 'plugin-wpshadow/wpshadow.php' );
 
 		// Add enabled plugins from state.
 		if ( ! empty( $state['enabled_plugins'] ) && is_array( $state['enabled_plugins'] ) ) {
@@ -293,12 +293,12 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 		?>
 		<div class="notice notice-warning is-dismissible wps-troubleshooting-notice" style="border-left: 4px solid #f0ad4e;">
 			<p>
-				<strong><?php esc_html_e( '🔧 Troubleshooting Mode Active', 'plugin-wp-support-thisismyurl' ); ?></strong>
+				<strong><?php esc_html_e( '🔧 Troubleshooting Mode Active', 'plugin-wpshadow' ); ?></strong>
 				<br>
 				<?php
 				printf(
 					/* translators: %d: number of plugins */
-					esc_html( _n( '%d plugin enabled', '%d plugins enabled', $enabled_count, 'plugin-wp-support-thisismyurl' ) ),
+					esc_html( _n( '%d plugin enabled', '%d plugins enabled', $enabled_count, 'plugin-wpshadow' ) ),
 					esc_html( $enabled_count )
 				);
 				?>
@@ -306,20 +306,20 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 					<?php
 					printf(
 						/* translators: %s: theme name */
-						esc_html__( ' | Testing with theme: %s', 'plugin-wp-support-thisismyurl' ),
+						esc_html__( ' | Testing with theme: %s', 'plugin-wpshadow' ),
 						esc_html( $state['theme'] )
 					);
 					?>
 				<?php else : ?>
-					<?php esc_html_e( ' | Using default WordPress theme', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( ' | Using default WordPress theme', 'plugin-wpshadow' ); ?>
 				<?php endif; ?>
 			</p>
 			<p>
 				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support-troubleshooting' ) ); ?>" class="button button-small">
-					<?php esc_html_e( 'Manage Troubleshooting', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Manage Troubleshooting', 'plugin-wpshadow' ); ?>
 				</a>
 				<button type="button" id="wps-stop-troubleshooting-quick" class="button button-small button-link-delete">
-					<?php esc_html_e( 'Disable Troubleshooting Mode', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Disable Troubleshooting Mode', 'plugin-wpshadow' ); ?>
 				</button>
 			</p>
 		</div>
@@ -327,10 +327,10 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 		jQuery(document).ready(function($) {
 			$('#wps-stop-troubleshooting-quick').on('click', function(e) {
 				e.preventDefault();
-				if (confirm('<?php echo esc_js( __( 'Exit troubleshooting mode and restore normal site functionality?', 'plugin-wp-support-thisismyurl' ) ); ?>')) {
+				if (confirm('<?php echo esc_js( __( 'Exit troubleshooting mode and restore normal site functionality?', 'plugin-wpshadow' ) ); ?>')) {
 					$.post(ajaxurl, {
-						action: 'wps_troubleshooting_stop',
-						nonce: '<?php echo esc_js( wp_create_nonce( 'wps_troubleshooting' ) ); ?>'
+						action: 'wpshadow_troubleshooting_stop',
+						nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_troubleshooting' ) ); ?>'
 					}, function() {
 						window.location.reload();
 					});
@@ -356,7 +356,7 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 		$wp_admin_bar->add_node(
 			array(
 				'id'    => 'wps-troubleshooting-mode',
-				'title' => '<span style="color: #f0ad4e;">🔧 ' . esc_html__( 'Troubleshooting Mode', 'plugin-wp-support-thisismyurl' ) . '</span>',
+				'title' => '<span style="color: #f0ad4e;">🔧 ' . esc_html__( 'Troubleshooting Mode', 'plugin-wpshadow' ) . '</span>',
 				'href'  => admin_url( 'admin.php?page=wp-support-troubleshooting' ),
 			)
 		);
@@ -368,7 +368,7 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_start_troubleshooting(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_troubleshooting' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_troubleshooting' );
 
 		$user_id = get_current_user_id();
 		$token   = wp_generate_password( 32, false );
@@ -387,7 +387,7 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 
 		wp_send_json_success(
 			array(
-				'message'  => __( 'Troubleshooting mode activated', 'plugin-wp-support-thisismyurl' ),
+				'message'  => __( 'Troubleshooting mode activated', 'plugin-wpshadow' ),
 				'redirect' => admin_url( 'admin.php?page=wp-support-troubleshooting' ),
 			)
 		);
@@ -399,7 +399,7 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_stop_troubleshooting(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_troubleshooting' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_troubleshooting' );
 
 		$user_id = get_current_user_id();
 		delete_transient( self::TRANSIENT_KEY . $user_id );
@@ -409,7 +409,7 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 
 		wp_send_json_success(
 			array(
-				'message'  => __( 'Troubleshooting mode deactivated', 'plugin-wp-support-thisismyurl' ),
+				'message'  => __( 'Troubleshooting mode deactivated', 'plugin-wpshadow' ),
 				'redirect' => admin_url( 'admin.php?page=wp-support-troubleshooting' ),
 			)
 		);
@@ -421,18 +421,18 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_toggle_plugin(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_troubleshooting' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_troubleshooting' );
 
-		$plugin = \WPS\CoreSupport\wps_get_post_text( 'plugin' );
+		$plugin = \WPS\CoreSupport\WPSHADOW_get_post_text( 'plugin' );
 		$enable = ! empty( $_POST['enable'] );
 
 		if ( empty( $plugin ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid plugin', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid plugin', 'plugin-wpshadow' ) ) );
 		}
 
 		$state = $this->get_troubleshooting_state();
 		if ( false === $state ) {
-			wp_send_json_error( array( 'message' => __( 'Troubleshooting mode not active', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Troubleshooting mode not active', 'plugin-wpshadow' ) ) );
 		}
 
 		if ( ! isset( $state['enabled_plugins'] ) ) {
@@ -452,8 +452,8 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 		wp_send_json_success(
 			array(
 				'message' => $enable
-					? __( 'Plugin enabled in troubleshooting mode', 'plugin-wp-support-thisismyurl' )
-					: __( 'Plugin disabled in troubleshooting mode', 'plugin-wp-support-thisismyurl' ),
+					? __( 'Plugin enabled in troubleshooting mode', 'plugin-wpshadow' )
+					: __( 'Plugin disabled in troubleshooting mode', 'plugin-wpshadow' ),
 			)
 		);
 	}
@@ -469,52 +469,52 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Troubleshooting Mode', 'plugin-wp-support-thisismyurl' ); ?></h1>
+			<h1><?php esc_html_e( 'Troubleshooting Mode', 'plugin-wpshadow' ); ?></h1>
 
 			<div class="card">
-				<h2><?php esc_html_e( 'What is Troubleshooting Mode?', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( 'What is Troubleshooting Mode?', 'plugin-wpshadow' ); ?></h2>
 				<p>
-					<?php esc_html_e( 'Troubleshooting Mode allows you to test your site with plugins disabled and a default theme, without affecting your visitors. This is perfect for:', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Troubleshooting Mode allows you to test your site with plugins disabled and a default theme, without affecting your visitors. This is perfect for:', 'plugin-wpshadow' ); ?>
 				</p>
 				<ul style="list-style: disc; margin-left: 20px;">
-					<li><?php esc_html_e( 'Isolating plugin conflicts', 'plugin-wp-support-thisismyurl' ); ?></li>
-					<li><?php esc_html_e( 'Testing theme compatibility', 'plugin-wp-support-thisismyurl' ); ?></li>
-					<li><?php esc_html_e( 'Debugging errors safely', 'plugin-wp-support-thisismyurl' ); ?></li>
-					<li><?php esc_html_e( 'Testing updates before applying site-wide', 'plugin-wp-support-thisismyurl' ); ?></li>
+					<li><?php esc_html_e( 'Isolating plugin conflicts', 'plugin-wpshadow' ); ?></li>
+					<li><?php esc_html_e( 'Testing theme compatibility', 'plugin-wpshadow' ); ?></li>
+					<li><?php esc_html_e( 'Debugging errors safely', 'plugin-wpshadow' ); ?></li>
+					<li><?php esc_html_e( 'Testing updates before applying site-wide', 'plugin-wpshadow' ); ?></li>
 				</ul>
 				<p>
-					<strong><?php esc_html_e( 'Important:', 'plugin-wp-support-thisismyurl' ); ?></strong>
-					<?php esc_html_e( 'Changes only affect your browser session. Visitors see the normal site.', 'plugin-wp-support-thisismyurl' ); ?>
+					<strong><?php esc_html_e( 'Important:', 'plugin-wpshadow' ); ?></strong>
+					<?php esc_html_e( 'Changes only affect your browser session. Visitors see the normal site.', 'plugin-wpshadow' ); ?>
 				</p>
 			</div>
 
 			<?php if ( ! $is_active ) : ?>
 				<div class="card">
-					<h2><?php esc_html_e( 'Enable Troubleshooting Mode', 'plugin-wp-support-thisismyurl' ); ?></h2>
-					<p><?php esc_html_e( 'Click the button below to start troubleshooting mode. All plugins except WP Support will be disabled for your session only.', 'plugin-wp-support-thisismyurl' ); ?></p>
+					<h2><?php esc_html_e( 'Enable Troubleshooting Mode', 'plugin-wpshadow' ); ?></h2>
+					<p><?php esc_html_e( 'Click the button below to start troubleshooting mode. All plugins except WPShadow will be disabled for your session only.', 'plugin-wpshadow' ); ?></p>
 					<p>
 						<button type="button" id="wps-start-troubleshooting" class="button button-primary button-hero">
-							<?php esc_html_e( 'Enable Troubleshooting Mode', 'plugin-wp-support-thisismyurl' ); ?>
+							<?php esc_html_e( 'Enable Troubleshooting Mode', 'plugin-wpshadow' ); ?>
 						</button>
 					</p>
 				</div>
 			<?php else : ?>
 				<div class="notice notice-warning inline" style="margin: 20px 0;">
 					<p>
-						<strong><?php esc_html_e( '🔧 Troubleshooting Mode is Active', 'plugin-wp-support-thisismyurl' ); ?></strong>
+						<strong><?php esc_html_e( '🔧 Troubleshooting Mode is Active', 'plugin-wpshadow' ); ?></strong>
 					</p>
 				</div>
 
 				<div class="card">
-					<h2><?php esc_html_e( 'Manage Plugins', 'plugin-wp-support-thisismyurl' ); ?></h2>
-					<p><?php esc_html_e( 'Enable plugins one at a time to isolate conflicts:', 'plugin-wp-support-thisismyurl' ); ?></p>
+					<h2><?php esc_html_e( 'Manage Plugins', 'plugin-wpshadow' ); ?></h2>
+					<p><?php esc_html_e( 'Enable plugins one at a time to isolate conflicts:', 'plugin-wpshadow' ); ?></p>
 
 					<table class="wp-list-table widefat fixed striped">
 						<thead>
 							<tr>
-								<th style="width: 50px;"><?php esc_html_e( 'Status', 'plugin-wp-support-thisismyurl' ); ?></th>
-								<th><?php esc_html_e( 'Plugin', 'plugin-wp-support-thisismyurl' ); ?></th>
-								<th><?php esc_html_e( 'Action', 'plugin-wp-support-thisismyurl' ); ?></th>
+								<th style="width: 50px;"><?php esc_html_e( 'Status', 'plugin-wpshadow' ); ?></th>
+								<th><?php esc_html_e( 'Plugin', 'plugin-wpshadow' ); ?></th>
+								<th><?php esc_html_e( 'Action', 'plugin-wpshadow' ); ?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -523,8 +523,8 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 							$enabled_plugins = ! empty( $state['enabled_plugins'] ) ? $state['enabled_plugins'] : array();
 
 							foreach ( $all_plugins as $plugin_file => $plugin_data ) :
-								// Skip WP Support itself.
-								if ( strpos( $plugin_file, 'wp-support-thisismyurl' ) !== false ) {
+								// Skip WPShadow itself.
+								if ( strpos( $plugin_file, 'wpshadow' ) !== false ) {
 									continue;
 								}
 
@@ -541,7 +541,7 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 									<td>
 										<strong><?php echo esc_html( $plugin_data['Name'] ); ?></strong>
 										<?php if ( ! empty( $plugin_data['Version'] ) ) : ?>
-											<br><small><?php echo esc_html( sprintf( __( 'Version %s', 'plugin-wp-support-thisismyurl' ), $plugin_data['Version'] ) ); ?></small>
+											<br><small><?php echo esc_html( sprintf( __( 'Version %s', 'plugin-wpshadow' ), $plugin_data['Version'] ) ); ?></small>
 										<?php endif; ?>
 									</td>
 									<td>
@@ -551,7 +551,7 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 											data-plugin="<?php echo esc_attr( $plugin_file ); ?>"
 											data-action="<?php echo $is_enabled ? 'disable' : 'enable'; ?>"
 										>
-											<?php echo $is_enabled ? esc_html__( 'Disable', 'plugin-wp-support-thisismyurl' ) : esc_html__( 'Enable', 'plugin-wp-support-thisismyurl' ); ?>
+											<?php echo $is_enabled ? esc_html__( 'Disable', 'plugin-wpshadow' ) : esc_html__( 'Enable', 'plugin-wpshadow' ); ?>
 										</button>
 									</td>
 								</tr>
@@ -561,11 +561,11 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 				</div>
 
 				<div class="card">
-					<h2><?php esc_html_e( 'Exit Troubleshooting Mode', 'plugin-wp-support-thisismyurl' ); ?></h2>
-					<p><?php esc_html_e( 'When finished troubleshooting, click below to restore normal site functionality:', 'plugin-wp-support-thisismyurl' ); ?></p>
+					<h2><?php esc_html_e( 'Exit Troubleshooting Mode', 'plugin-wpshadow' ); ?></h2>
+					<p><?php esc_html_e( 'When finished troubleshooting, click below to restore normal site functionality:', 'plugin-wpshadow' ); ?></p>
 					<p>
 						<button type="button" id="wps-stop-troubleshooting" class="button button-secondary">
-							<?php esc_html_e( 'Disable Troubleshooting Mode', 'plugin-wp-support-thisismyurl' ); ?>
+							<?php esc_html_e( 'Disable Troubleshooting Mode', 'plugin-wpshadow' ); ?>
 						</button>
 					</p>
 				</div>
@@ -574,23 +574,23 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 
 		<script>
 		jQuery(document).ready(function($) {
-			const nonce = '<?php echo esc_js( wp_create_nonce( 'wps_troubleshooting' ) ); ?>';
+			const nonce = '<?php echo esc_js( wp_create_nonce( 'wpshadow_troubleshooting' ) ); ?>';
 
 			// Start troubleshooting.
 			$('#wps-start-troubleshooting').on('click', function(e) {
 				e.preventDefault();
 				const $button = $(this);
-				$button.prop('disabled', true).text('<?php echo esc_js( __( 'Activating...', 'plugin-wp-support-thisismyurl' ) ); ?>');
+				$button.prop('disabled', true).text('<?php echo esc_js( __( 'Activating...', 'plugin-wpshadow' ) ); ?>');
 
 				$.post(ajaxurl, {
-					action: 'wps_troubleshooting_start',
+					action: 'wpshadow_troubleshooting_start',
 					nonce: nonce
 				}, function(response) {
 					if (response.success) {
 						window.location.reload();
 					} else {
-						alert(response.data.message || '<?php echo esc_js( __( 'Error activating troubleshooting mode', 'plugin-wp-support-thisismyurl' ) ); ?>');
-						$button.prop('disabled', false).text('<?php echo esc_js( __( 'Enable Troubleshooting Mode', 'plugin-wp-support-thisismyurl' ) ); ?>');
+						alert(response.data.message || '<?php echo esc_js( __( 'Error activating troubleshooting mode', 'plugin-wpshadow' ) ); ?>');
+						$button.prop('disabled', false).text('<?php echo esc_js( __( 'Enable Troubleshooting Mode', 'plugin-wpshadow' ) ); ?>');
 					}
 				});
 			});
@@ -598,22 +598,22 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 			// Stop troubleshooting.
 			$('#wps-stop-troubleshooting').on('click', function(e) {
 				e.preventDefault();
-				if (!confirm('<?php echo esc_js( __( 'Exit troubleshooting mode and restore normal site functionality?', 'plugin-wp-support-thisismyurl' ) ); ?>')) {
+				if (!confirm('<?php echo esc_js( __( 'Exit troubleshooting mode and restore normal site functionality?', 'plugin-wpshadow' ) ); ?>')) {
 					return;
 				}
 
 				const $button = $(this);
-				$button.prop('disabled', true).text('<?php echo esc_js( __( 'Deactivating...', 'plugin-wp-support-thisismyurl' ) ); ?>');
+				$button.prop('disabled', true).text('<?php echo esc_js( __( 'Deactivating...', 'plugin-wpshadow' ) ); ?>');
 
 				$.post(ajaxurl, {
-					action: 'wps_troubleshooting_stop',
+					action: 'wpshadow_troubleshooting_stop',
 					nonce: nonce
 				}, function(response) {
 					if (response.success) {
 						window.location.reload();
 					} else {
-						alert(response.data.message || '<?php echo esc_js( __( 'Error deactivating troubleshooting mode', 'plugin-wp-support-thisismyurl' ) ); ?>');
-						$button.prop('disabled', false).text('<?php echo esc_js( __( 'Disable Troubleshooting Mode', 'plugin-wp-support-thisismyurl' ) ); ?>');
+						alert(response.data.message || '<?php echo esc_js( __( 'Error deactivating troubleshooting mode', 'plugin-wpshadow' ) ); ?>');
+						$button.prop('disabled', false).text('<?php echo esc_js( __( 'Disable Troubleshooting Mode', 'plugin-wpshadow' ) ); ?>');
 					}
 				});
 			});
@@ -626,10 +626,10 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 				const action = $button.data('action');
 				const originalText = $button.text();
 
-				$button.prop('disabled', true).text('<?php echo esc_js( __( 'Working...', 'plugin-wp-support-thisismyurl' ) ); ?>');
+				$button.prop('disabled', true).text('<?php echo esc_js( __( 'Working...', 'plugin-wpshadow' ) ); ?>');
 
 				$.post(ajaxurl, {
-					action: 'wps_troubleshooting_toggle_plugin',
+					action: 'wpshadow_troubleshooting_toggle_plugin',
 					nonce: nonce,
 					plugin: plugin,
 					enable: action === 'enable'
@@ -637,7 +637,7 @@ final class WPS_Feature_Troubleshooting_Mode extends WPS_Abstract_Feature {
 					if (response.success) {
 						window.location.reload();
 					} else {
-						alert(response.data.message || '<?php echo esc_js( __( 'Error toggling plugin', 'plugin-wp-support-thisismyurl' ) ); ?>');
+						alert(response.data.message || '<?php echo esc_js( __( 'Error toggling plugin', 'plugin-wpshadow' ) ); ?>');
 						$button.prop('disabled', false).text(originalText);
 					}
 				});

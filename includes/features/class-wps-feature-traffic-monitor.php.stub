@@ -94,14 +94,14 @@ final class WPS_Feature_Traffic_Monitor extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'traffic-monitor',
-				'name'               => __( 'Traffic Monitor', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Monitor live traffic with real-time request logging, visitor analytics, bot detection, and attack monitoring', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Traffic Monitor', 'plugin-wp-support-wpshadow' ),
+				'description'        => __( 'Monitor live traffic with real-time request logging, visitor analytics, bot detection, and attack monitoring', 'plugin-wp-support-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
-				'widget_label'       => __( 'Security', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Security', 'plugin-wp-support-wpshadow' ),
+				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wp-support-wpshadow' ),
 				// Unified metadata.
 				'license_level'      => 3, // Good tier.
 				'minimum_capability' => 'manage_options',

@@ -4,7 +4,7 @@
  *
  * Displays plugin documentation, FAQ, and support resources with dynamic content.
  *
- * @package WPS_WP_SUPPORT_THISISMYURL
+ * @package WPSHADOW_wpshadow_THISISMYURL
  */
 
 declare(strict_types=1);
@@ -19,32 +19,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 $current_tab = isset( $_GET['help_section'] ) ? sanitize_key( $_GET['help_section'] ) : 'overview'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 // Fetch help content.
-$help_content = WPS_Help_Content_API::get_content();
+$help_content = WPSHADOW_Help_Content_API::get_content();
 
 // Define available tabs.
 $tabs = array(
-	'overview'        => __( 'Overview', 'plugin-wp-support-thisismyurl' ),
-	'getting-started' => __( 'Getting Started', 'plugin-wp-support-thisismyurl' ),
-	'modules'         => __( 'Modules', 'plugin-wp-support-thisismyurl' ),
-	'faq'             => __( 'FAQ', 'plugin-wp-support-thisismyurl' ),
+	'overview'        => __( 'Overview', 'plugin-wpshadow' ),
+	'getting-started' => __( 'Getting Started', 'plugin-wpshadow' ),
+	'modules'         => __( 'Modules', 'plugin-wpshadow' ),
+	'faq'             => __( 'FAQ', 'plugin-wpshadow' ),
 );
 
 // Build tab URLs.
-$base_url = add_query_arg( 'WPS_tab', 'help', admin_url( 'admin.php?page=wp-support' ) );
+$base_url = add_query_arg( 'wpshadow_tab', 'help', admin_url( 'admin.php?page=wp-support' ) );
 ?>
 
 <div class="wrap wps-help-page">
-	<h1><?php esc_html_e( 'Help & Documentation', 'plugin-wp-support-thisismyurl' ); ?></h1>
+	<h1><?php esc_html_e( 'Help & Documentation', 'plugin-wpshadow' ); ?></h1>
 
 	<!-- License Widget -->
 	<div class="wps-help-license-row">
-		<div id="wps_license_widget" class="postbox">
-			<?php WPS_License_Widget::render_widget(); ?>
+		<div id="wpshadow_license_widget" class="postbox">
+			<?php WPSHADOW_License_Widget::render_widget(); ?>
 		</div>
 	</div>
 
 	<!-- Help Tab Navigation -->
-	<nav class="wps-help-tabs nav-tab-wrapper wp-clearfix" role="navigation" aria-label="<?php esc_attr_e( 'Help sections', 'plugin-wp-support-thisismyurl' ); ?>">
+	<nav class="wps-help-tabs nav-tab-wrapper wp-clearfix" role="navigation" aria-label="<?php esc_attr_e( 'Help sections', 'plugin-wpshadow' ); ?>">
 		<?php foreach ( $tabs as $tab_id => $tab_label ) : ?>
 			<?php
 			$tab_url      = add_query_arg( 'help_section', $tab_id, $base_url );
@@ -118,30 +118,30 @@ $base_url = add_query_arg( 'WPS_tab', 'help', admin_url( 'admin.php?page=wp-supp
 		<?php else : ?>
 			<!-- Fallback if section not found -->
 			<div class="wps-help-section wps-help-error">
-				<p><?php esc_html_e( 'Help content is currently unavailable. Please try refreshing the page.', 'plugin-wp-support-thisismyurl' ); ?></p>
+				<p><?php esc_html_e( 'Help content is currently unavailable. Please try refreshing the page.', 'plugin-wpshadow' ); ?></p>
 			</div>
 		<?php endif; ?>
 
 		<!-- Support Links -->
 		<div class="wps-help-footer">
-			<h3><?php esc_html_e( 'Additional Resources', 'plugin-wp-support-thisismyurl' ); ?></h3>
+			<h3><?php esc_html_e( 'Additional Resources', 'plugin-wpshadow' ); ?></h3>
 			<ul class="wps-help-links">
 				<li>
 					<span class="dashicons dashicons-book" aria-hidden="true"></span>
-					<a href="https://thisismyurl.com/plugin-wp-support-thisismyurl/" target="_blank" rel="noopener noreferrer">
-						<?php esc_html_e( 'Full Documentation', 'plugin-wp-support-thisismyurl' ); ?>
+					<a href="https://wpshadow.com/plugin-wpshadow/" target="_blank" rel="noopener noreferrer">
+						<?php esc_html_e( 'Full Documentation', 'plugin-wpshadow' ); ?>
 					</a>
 				</li>
 				<li>
 					<span class="dashicons dashicons-admin-generic" aria-hidden="true"></span>
-					<a href="https://github.com/thisismyurl/plugin-wp-support-thisismyurl" target="_blank" rel="noopener noreferrer">
-						<?php esc_html_e( 'GitHub Repository', 'plugin-wp-support-thisismyurl' ); ?>
+					<a href="https://github.com/thisismyurl/plugin-wpshadow" target="_blank" rel="noopener noreferrer">
+						<?php esc_html_e( 'GitHub Repository', 'plugin-wpshadow' ); ?>
 					</a>
 				</li>
 				<li>
 					<span class="dashicons dashicons-sos" aria-hidden="true"></span>
-					<a href="https://thisismyurl.com/support" target="_blank" rel="noopener noreferrer">
-						<?php esc_html_e( 'Professional Support', 'plugin-wp-support-thisismyurl' ); ?>
+					<a href="https://wpshadow.com/support" target="_blank" rel="noopener noreferrer">
+						<?php esc_html_e( 'Professional Support', 'plugin-wpshadow' ); ?>
 					</a>
 				</li>
 			</ul>

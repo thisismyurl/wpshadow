@@ -19,11 +19,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Widget_Registry Class
+ * WPSHADOW_Widget_Registry Class
  *
  * Manages widget discovery, registration, and rendering.
  */
-class WPS_Widget_Registry {
+class WPSHADOW_Widget_Registry {
 
 	/**
 	 * Widget cache.
@@ -35,7 +35,7 @@ class WPS_Widget_Registry {
 	/**
 	 * Cache option name.
 	 */
-	private const CACHE_KEY = 'wps_widgets_cache';
+	private const CACHE_KEY = 'wpshadow_widgets_cache';
 
 	/**
 	 * Cache version for invalidation.
@@ -49,7 +49,7 @@ class WPS_Widget_Registry {
 	 */
 	public static function init(): void {
 		add_action( 'admin_init', array( __CLASS__, 'maybe_refresh_cache' ) );
-		add_action( 'WPS_feature_state_changed', array( __CLASS__, 'clear_cache' ) );
+		add_action( 'wpshadow_feature_state_changed', array( __CLASS__, 'clear_cache' ) );
 	}
 
 	/**
@@ -93,7 +93,7 @@ class WPS_Widget_Registry {
 	 */
 	private static function discover_widgets(): array {
 		$widgets  = array();
-		$features = WPS_Feature_Registry::get_features();
+		$features = WPSHADOW_Feature_Registry::get_features();
 
 		foreach ( $features as $feature_id => $feature ) {
 			// Skip features without widget assignment.
@@ -228,14 +228,14 @@ class WPS_Widget_Registry {
 		// Check license level (get minimum from features).
 		$min_license = 1;
 		foreach ( $widget['features'] as $feature_id ) {
-			$feature = WPS_Feature_Registry::get_feature( $feature_id );
+			$feature = WPSHADOW_Feature_Registry::get_feature( $feature_id );
 			if ( $feature && isset( $feature['license_level'] ) ) {
 				$min_license = max( $min_license, $feature['license_level'] );
 			}
 		}
 
-		if ( class_exists( 'WPS_License' ) ) {
-			$user_license = WPS_License::get_user_level();
+		if ( class_exists( 'wpshadow_License' ) ) {
+			$user_license = WPSHADOW_License::get_user_level();
 			if ( $user_license < $min_license ) {
 				return false;
 			}
@@ -254,7 +254,7 @@ class WPS_Widget_Registry {
 		$widgets = self::get_widgets_for_dashboard( $dashboard_id );
 
 		if ( empty( $widgets ) ) {
-			echo '<p>' . esc_html__( 'No widgets available for this dashboard.', 'plugin-wp-support-thisismyurl' ) . '</p>';
+			echo '<p>' . esc_html__( 'No widgets available for this dashboard.', 'plugin-wpshadow' ) . '</p>';
 			return;
 		}
 
@@ -314,7 +314,7 @@ class WPS_Widget_Registry {
 				</h2>
 				<div class="handle-actions">
 					<button type="button" class="handlediv" aria-expanded="true">
-						<span class="screen-reader-text"><?php esc_html_e( 'Toggle panel', 'plugin-wp-support-thisismyurl' ); ?></span>
+						<span class="screen-reader-text"><?php esc_html_e( 'Toggle panel', 'plugin-wpshadow' ); ?></span>
 						<span class="toggle-indicator" aria-hidden="true"></span>
 					</button>
 				</div>
@@ -340,11 +340,11 @@ class WPS_Widget_Registry {
 	 */
 	private static function render_widget_features( array $widget ): void {
 		if ( empty( $widget['features'] ) ) {
-			echo '<p>' . esc_html__( 'No features available.', 'plugin-wp-support-thisismyurl' ) . '</p>';
+			echo '<p>' . esc_html__( 'No features available.', 'plugin-wpshadow' ) . '</p>';
 			return;
 		}
 
-		$features = WPS_Feature_Registry::get_features();
+		$features = WPSHADOW_Feature_Registry::get_features();
 
 		foreach ( $widget['features'] as $feature_id ) {
 			if ( ! isset( $features[ $feature_id ] ) ) {
@@ -354,8 +354,8 @@ class WPS_Widget_Registry {
 			$feature = $features[ $feature_id ];
 
 			// Check license level.
-			if ( isset( $feature['license_level'] ) && class_exists( 'WPS_License' ) ) {
-				$user_license = WPS_License::get_user_level();
+			if ( isset( $feature['license_level'] ) && class_exists( 'wpshadow_License' ) ) {
+				$user_license = WPSHADOW_License::get_user_level();
 				if ( $user_license < $feature['license_level'] ) {
 					self::render_locked_feature( $feature );
 					continue;
@@ -425,14 +425,14 @@ class WPS_Widget_Registry {
 	 */
 	private static function render_locked_feature( array $feature ): void {
 		$license_names = array(
-			1 => __( 'Free', 'plugin-wp-support-thisismyurl' ),
-			2 => __( 'Free (Registered)', 'plugin-wp-support-thisismyurl' ),
-			3 => __( 'Good', 'plugin-wp-support-thisismyurl' ),
-			4 => __( 'Better', 'plugin-wp-support-thisismyurl' ),
-			5 => __( 'Best', 'plugin-wp-support-thisismyurl' ),
+			1 => __( 'Free', 'plugin-wpshadow' ),
+			2 => __( 'Free (Registered)', 'plugin-wpshadow' ),
+			3 => __( 'Good', 'plugin-wpshadow' ),
+			4 => __( 'Better', 'plugin-wpshadow' ),
+			5 => __( 'Best', 'plugin-wpshadow' ),
 		);
 
-		$required_license = $license_names[ $feature['license_level'] ] ?? __( 'Premium', 'plugin-wp-support-thisismyurl' );
+		$required_license = $license_names[ $feature['license_level'] ] ?? __( 'Premium', 'plugin-wpshadow' );
 
 		?>
 		<div class="wps-feature wps-feature-locked" data-feature-id="<?php echo esc_attr( $feature['id'] ); ?>">
@@ -446,7 +446,7 @@ class WPS_Widget_Registry {
 			<?php endif; ?>
 			<p class="wps-upgrade-prompt">
 				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support-license' ) ); ?>" class="button button-primary">
-					<?php esc_html_e( 'Upgrade License', 'plugin-wp-support-thisismyurl' ); ?>
+					<?php esc_html_e( 'Upgrade License', 'plugin-wpshadow' ); ?>
 				</a>
 			</p>
 		</div>

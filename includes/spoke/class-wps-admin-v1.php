@@ -3,7 +3,7 @@
  * WPS Admin UI Component - WordPress Settings API
  * Shared admin renderer for spoke plugins.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  * @version 1.2601.0819
  */
 
@@ -15,9 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class WPS_Admin_v1 {
+class WPSHADOW_Admin_v1 {
 
-	public function __construct( private readonly WPS_Spoke_Base $core ) {
+	public function __construct( private readonly WPSHADOW_Spoke_Base $core ) {
 		\add_action( 'admin_init', array( $this, 'register_settings_api' ) );
 		\add_action( 'admin_menu', array( $this, 'handle_master_suite_menu' ), 8 );
 		\add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_core_scripts' ) );
@@ -40,13 +40,13 @@ class WPS_Admin_v1 {
 			)
 		);
 
-		$instance_count = \count( WPS_Spoke_Base::$instances ?? array() );
-		$first_slug     = \array_key_first( WPS_Spoke_Base::$instances ?? array() );
+		$instance_count = \count( WPSHADOW_Spoke_Base::$instances ?? array() );
+		$first_slug     = \array_key_first( WPSHADOW_Spoke_Base::$instances ?? array() );
 
 		if ( $instance_count > 1 && $this->core->plugin_slug === $first_slug ) {
 			\register_setting(
-				'WPS_global_group',
-				'WPS_global_options',
+				'wpshadow_global_group',
+				'wpshadow_global_options',
 				array(
 					'type'              => 'object',
 					'sanitize_callback' => array( $this, 'sanitize_global_options' ),
@@ -160,7 +160,7 @@ class WPS_Admin_v1 {
 
 	private function get_dynamic_global_fields(): array {
 		$dynamic_fields = array();
-		$instances      = WPS_Spoke_Base::$instances ?? array();
+		$instances      = WPSHADOW_Spoke_Base::$instances ?? array();
 
 		foreach ( $instances as $instance ) {
 			$blueprint = $instance->settings_blueprint ?? array();
@@ -180,7 +180,7 @@ class WPS_Admin_v1 {
 			return;
 		}
 
-		\update_site_option( 'WPS_network_global_options', $global_settings );
+		\update_site_option( 'wpshadow_network_global_options', $global_settings );
 		$sites = \get_sites( array( 'number' => 0 ) );
 		foreach ( $sites as $site ) {
 			\switch_to_blog( $site->blog_id );
@@ -190,7 +190,7 @@ class WPS_Admin_v1 {
 	}
 
 	private function propagate_global_settings_to_modules( array $global_settings ): void {
-		$instances = WPS_Spoke_Base::$instances ?? array();
+		$instances = WPSHADOW_Spoke_Base::$instances ?? array();
 		foreach ( $instances as $slug => $instance ) {
 			$current_options = (array) \get_option( $slug . '_options', array() );
 			$updated         = false;
@@ -270,12 +270,12 @@ class WPS_Admin_v1 {
 	}
 
 	public function handle_master_suite_menu(): void {
-		// Legacy method - menu system now handled by WPS_Spoke_Base class.
+		// Legacy method - menu system now handled by WPSHADOW_Spoke_Base class.
 		// Do not add old management pages or menus here.
 	}
 
 	public function render_single_plugin_page(): void {
-		$instances       = WPS_Spoke_Base::$instances ?? array();
+		$instances       = WPSHADOW_Spoke_Base::$instances ?? array();
 		$single_instance = \reset( $instances );
 		if ( ! $single_instance ) {
 			echo '<div class="notice notice-error"><p>' . \esc_html( 'No plugin instance found.' ) . '</p></div>';
@@ -307,10 +307,10 @@ class WPS_Admin_v1 {
 			\wp_die( 'Insufficient permissions' );
 		}
 
-		$active_tab = isset( $_GET['tab'] ) ? \sanitize_key( $_GET['tab'] ) : 'image-support-thisismyurl';
-		$instances  = WPS_Spoke_Base::$instances ?? array();
+		$active_tab = isset( $_GET['tab'] ) ? \sanitize_key( $_GET['tab'] ) : 'image-wpshadow';
+		$instances  = WPSHADOW_Spoke_Base::$instances ?? array();
 
-		$asset_plugin = ( 'global' === $active_tab && isset( $instances['image-support-thisismyurl'] ) ) ? $instances['image-support-thisismyurl'] : ( $instances[ $active_tab ] ?? null );
+		$asset_plugin = ( 'global' === $active_tab && isset( $instances['image-wpshadow'] ) ) ? $instances['image-wpshadow'] : ( $instances[ $active_tab ] ?? null );
 		$icon_url     = '';
 		$banner_url   = '';
 		if ( $asset_plugin ) {
@@ -330,21 +330,21 @@ class WPS_Admin_v1 {
 		if ( $icon_url ) {
 			echo '<img src="' . \esc_url( $icon_url ) . '" alt="" style="width:64px;height:64px;">';
 		}
-		echo \esc_html( 'Support Suite by thisismyurl' );
+		echo \esc_html( 'Support Suite by wpshadow' );
 		echo '</h1>';
 
 		echo '<nav class="nav-tab-wrapper">';
-		if ( isset( $instances['image-support-thisismyurl'] ) ) {
-			echo '<a href="' . \esc_url( \admin_url( 'admin.php?page=thisismyurl-support&tab=image-support-thisismyurl' ) ) . '" class="nav-tab ' . ( 'image-support-thisismyurl' === $active_tab ? 'nav-tab-active' : '' ) . '">Dashboard</a>';
+		if ( isset( $instances['image-wpshadow'] ) ) {
+			echo '<a href="' . \esc_url( \admin_url( 'admin.php?page=wpshadow-support&tab=image-wpshadow' ) ) . '" class="nav-tab ' . ( 'image-wpshadow' === $active_tab ? 'nav-tab-active' : '' ) . '">Dashboard</a>';
 		}
 		if ( \count( $instances ) > 1 ) {
-			echo '<a href="' . \esc_url( \admin_url( 'admin.php?page=thisismyurl-support&tab=global' ) ) . '" class="nav-tab ' . ( 'global' === $active_tab ? 'nav-tab-active' : '' ) . '">Global</a>';
+			echo '<a href="' . \esc_url( \admin_url( 'admin.php?page=wpshadow-support&tab=global' ) ) . '" class="nav-tab ' . ( 'global' === $active_tab ? 'nav-tab-active' : '' ) . '">Global</a>';
 		}
 		foreach ( $instances as $slug => $instance ) {
-			if ( 'image-support-thisismyurl' === $slug ) {
+			if ( 'image-wpshadow' === $slug ) {
 				continue;
 			}
-			echo '<a href="' . \esc_url( \add_query_arg( array( 'tab' => \esc_attr( $slug ) ), \admin_url( 'admin.php?page=thisismyurl-support' ) ) ) . '" class="nav-tab ' . ( $active_tab === $slug ? 'nav-tab-active' : '' ) . '">' . \esc_html( \strtoupper( $instance->get_data_prefix() ) ) . '</a>';
+			echo '<a href="' . \esc_url( \add_query_arg( array( 'tab' => \esc_attr( $slug ) ), \admin_url( 'admin.php?page=wpshadow-support' ) ) ) . '" class="nav-tab ' . ( $active_tab === $slug ? 'nav-tab-active' : '' ) . '">' . \esc_html( \strtoupper( $instance->get_data_prefix() ) ) . '</a>';
 		}
 		echo '</nav>';
 
@@ -378,7 +378,7 @@ class WPS_Admin_v1 {
 	}
 
 	private function render_global_settings_form(): void {
-		$instances = WPS_Spoke_Base::$instances ?? array();
+		$instances = WPSHADOW_Spoke_Base::$instances ?? array();
 		if ( \count( $instances ) <= 1 ) {
 			echo '<div class="notice notice-info"><p>' . \esc_html( 'Global settings are only available when multiple plugins are active.' ) . '</p></div>';
 			return;
@@ -389,30 +389,30 @@ class WPS_Admin_v1 {
 			'multisite_scope' => 'site',
 		);
 		if ( \is_multisite() && \current_user_can( 'manage_network_options' ) ) {
-			$network_options = (array) \get_site_option( 'WPS_network_global_options', array() );
-			$local_options   = (array) \get_option( 'WPS_global_options', array() );
+			$network_options = (array) \get_site_option( 'wpshadow_network_global_options', array() );
+			$local_options   = (array) \get_option( 'wpshadow_global_options', array() );
 			$global_options  = \array_merge( $default_options, $local_options, $network_options );
 		} else {
-			$global_options = (array) \get_option( 'WPS_global_options', $default_options );
+			$global_options = (array) \get_option( 'wpshadow_global_options', $default_options );
 		}
 
 		$dynamic_fields = $this->get_dynamic_global_fields();
 		echo '<div class="notice notice-info inline" style="margin:20px 0;"><p><strong>' . \esc_html__( 'Global Settings:', 'wps-core' ) . '</strong> ' . \esc_html__( 'Changes made here apply to all active modules.', 'wps-core' ) . '</p></div>';
 		echo '<form method="post" action="options.php">';
-		\settings_fields( 'WPS_global_group' );
+		\settings_fields( 'wpshadow_global_group' );
 		echo '<div class="postbox"><h2 class="hndle"><span>' . \esc_html( 'Global Settings' ) . '</span></h2><div class="inside"><table class="form-table">';
-		echo '<tr><th scope="row"><label for="wps-global-enabled">' . \esc_html( 'Master Enable' ) . '</label></th><td><label><input type="checkbox" id="wps-global-enabled" name="WPS_global_options[enabled]" value="1" ' . \checked( 1, $global_options['enabled'] ?? 0, false ) . ' /> ' . \esc_html( 'Enable all modules' ) . '</label></td></tr>';
+		echo '<tr><th scope="row"><label for="wps-global-enabled">' . \esc_html( 'Master Enable' ) . '</label></th><td><label><input type="checkbox" id="wps-global-enabled" name="wpshadow_global_options[enabled]" value="1" ' . \checked( 1, $global_options['enabled'] ?? 0, false ) . ' /> ' . \esc_html( 'Enable all modules' ) . '</label></td></tr>';
 		if ( \is_multisite() ) {
 			echo '<tr><th scope="row"><label>' . \esc_html( 'Apply To' ) . '</label></th><td><fieldset>';
-				echo '<label><input type="radio" name="WPS_global_options[multisite_scope]" value="site" ' . \checked( $global_options['multisite_scope'] ?? 'site', 'site', false ) . ' /> ' . \esc_html( 'This site only' ) . '</label><br />';
+				echo '<label><input type="radio" name="wpshadow_global_options[multisite_scope]" value="site" ' . \checked( $global_options['multisite_scope'] ?? 'site', 'site', false ) . ' /> ' . \esc_html( 'This site only' ) . '</label><br />';
 			if ( \current_user_can( 'manage_network_options' ) ) {
-				echo '<label><input type="radio" name="WPS_global_options[multisite_scope]" value="network" ' . \checked( $global_options['multisite_scope'] ?? 'site', 'network', false ) . ' /> ' . \esc_html( 'All sites in network' ) . '</label>';
+				echo '<label><input type="radio" name="wpshadow_global_options[multisite_scope]" value="network" ' . \checked( $global_options['multisite_scope'] ?? 'site', 'network', false ) . ' /> ' . \esc_html( 'All sites in network' ) . '</label>';
 			}
 			echo '</fieldset></td></tr>';
 		}
 		foreach ( $dynamic_fields as $field_id => $field_config ) {
 			$field_value          = $global_options[ $field_id ] ?? ( $field_config['default'] ?? '' );
-			$field_name           = 'WPS_global_options[' . $field_id . ']';
+			$field_name           = 'wpshadow_global_options[' . $field_id . ']';
 			$field_config['id']   = $field_id;
 			$field_config['name'] = $field_name;
 			echo '<tr><th scope="row"><label for="wps-global-' . \esc_attr( $field_id ) . '">' . \esc_html( $field_config['label'] ?? \ucfirst( \str_replace( '_', ' ', $field_id ) ) ) . '</label></th><td>';
@@ -431,7 +431,7 @@ class WPS_Admin_v1 {
 	}
 
 	public function enqueue_core_scripts( string $hook_suffix ): void {
-		if ( false === \strpos( $hook_suffix, 'thisismyurl' ) ) {
+		if ( false === \strpos( $hook_suffix, 'wpshadow' ) ) {
 			return;
 		}
 		\wp_enqueue_style( 'wp-admin' );
@@ -442,7 +442,7 @@ class WPS_Admin_v1 {
 		echo '<p style="margin:0 0 0.5rem 0; font-size:0.875rem; color:#6b7280;">' . \esc_html__( 'Quick Actions', $plugin_slug ) . '</p>';
 		echo '<ul style="list-style:none; padding:0; margin:0;">';
 		echo '<li style="margin:0.25rem 0;"><a href="' . \esc_url( \admin_url( 'admin.php?page=' . $plugin_slug ) ) . '" style="color:#0066cc; text-decoration:none;">' . \esc_html__( 'Plugin Settings', $plugin_slug ) . '</a></li>';
-		echo '<li style="margin:0.25rem 0;"><a href="https://thisismyurl.com/" target="_blank" rel="noopener noreferrer" style="color:#0066cc; text-decoration:none;">' . \esc_html__( 'Support', $plugin_slug ) . '</a></li>';
+		echo '<li style="margin:0.25rem 0;"><a href="https://wpshadow.com/" target="_blank" rel="noopener noreferrer" style="color:#0066cc; text-decoration:none;">' . \esc_html__( 'Support', $plugin_slug ) . '</a></li>';
 		echo '</ul></div>';
 	}
 }

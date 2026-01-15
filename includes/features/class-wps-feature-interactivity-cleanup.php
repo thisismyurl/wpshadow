@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * WPS_Feature_Interactivity_Cleanup
+ * WPSHADOW_Feature_Interactivity_Cleanup
  *
  * Remove Interactivity API and DNS prefetch bloat.
  */
-final class WPS_Feature_Interactivity_Cleanup extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Interactivity_Cleanup extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -27,14 +27,14 @@ final class WPS_Feature_Interactivity_Cleanup extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'interactivity-cleanup',
-				'name'               => __( 'Interactivity API & DNS Cleanup', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Disable Interactivity API and Block Bindings scripts on pages that don\'t need them; remove unnecessary DNS prefetch', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Interactivity API & DNS Cleanup', 'plugin-wpshadow' ),
+				'description'        => __( 'Disable Interactivity API and Block Bindings scripts on pages that don\'t need them; remove unnecessary DNS prefetch', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Performance & Security', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Performance & Security', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wpshadow' ),
 			)
 		);
 	}

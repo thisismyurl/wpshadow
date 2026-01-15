@@ -32,10 +32,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function init_ghost_features_system(): void {
 	// Initialize ghost features.
-	WPS_Ghost_Features::init();
+	WPSHADOW_Ghost_Features::init();
 	
 	// Initialize dashboard widget.
-	WPS_Features_Discovery_Widget::init();
+	WPSHADOW_Features_Discovery_Widget::init();
 	
 	// Register features from catalog.
 	add_action( 'plugins_loaded', __NAMESPACE__ . '\\register_ghost_features_from_catalog', 20 );
@@ -56,13 +56,13 @@ function register_ghost_features_from_catalog(): void {
 	
 	foreach ( $catalog as $module_slug => $features ) {
 		// Check if module is installed.
-		$is_installed = WPS_Module_Registry::is_installed( $module_slug );
+		$is_installed = WPSHADOW_Module_Registry::is_installed( $module_slug );
 		
 		// Get module metadata from registry.
 		$module_data = self::get_module_metadata( $module_slug );
 		
 		foreach ( $features as $feature ) {
-			WPS_Ghost_Features::register_feature(
+			WPSHADOW_Ghost_Features::register_feature(
 				array_merge(
 					$feature,
 					array(
@@ -89,7 +89,7 @@ function register_ghost_features_from_catalog(): void {
  * @return array Module metadata.
  */
 function get_module_metadata( string $module_slug ): array {
-	$catalog = WPS_Module_Registry::get_catalog_modules();
+	$catalog = WPSHADOW_Module_Registry::get_catalog_modules();
 	
 	foreach ( $catalog as $module ) {
 		if ( $module['slug'] === $module_slug ) {
@@ -114,21 +114,21 @@ function get_module_metadata( string $module_slug ): array {
 function example_display_backup_features(): void {
 	?>
 	<div class="wrap">
-		<h1><?php esc_html_e( 'Backup Features', 'plugin-wp-support-thisismyurl' ); ?></h1>
+		<h1><?php esc_html_e( 'Backup Features', 'plugin-wpshadow' ); ?></h1>
 		
 		<!-- Show backup verification (core feature) -->
 		<div class="wps-core-features">
-			<h2><?php esc_html_e( 'Active Backup Features', 'plugin-wp-support-thisismyurl' ); ?></h2>
-			<p><?php esc_html_e( 'These features are currently active in your installation:', 'plugin-wp-support-thisismyurl' ); ?></p>
+			<h2><?php esc_html_e( 'Active Backup Features', 'plugin-wpshadow' ); ?></h2>
+			<p><?php esc_html_e( 'These features are currently active in your installation:', 'plugin-wpshadow' ); ?></p>
 			
 			<!-- Your existing backup UI here -->
 		</div>
 		
 		<!-- Show ghost features for backup category -->
 		<div class="wps-enhanced-features">
-			<h2><?php esc_html_e( 'Enhanced Backup Features', 'plugin-wp-support-thisismyurl' ); ?></h2>
+			<h2><?php esc_html_e( 'Enhanced Backup Features', 'plugin-wpshadow' ); ?></h2>
 			<?php
-			WPS_Ghost_Features::render_category_features(
+			WPSHADOW_Ghost_Features::render_category_features(
 				'backup',
 				array(
 					'include_installed' => false, // Only show unavailable features.
@@ -151,14 +151,14 @@ function example_display_backup_features(): void {
  * @return void
  */
 function example_inline_upgrade_prompt(): void {
-	if ( ! WPS_Feature_Detector::has_vault() ) {
+	if ( ! WPSHADOW_Feature_Detector::has_vault() ) {
 		?>
 		<div class="notice notice-info inline" style="margin: 15px 0;">
 			<p>
-				<strong><?php esc_html_e( '🔒 Want encrypted backups?', 'plugin-wp-support-thisismyurl' ); ?></strong>
-				<?php esc_html_e( 'Install the free Vault module for AES-256 encryption, cloud offload, and file versioning.', 'plugin-wp-support-thisismyurl' ); ?>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-support-thisismyurl' ) ); ?>" class="button button-primary" style="margin-left: 10px;">
-					<?php esc_html_e( 'Install Vault (Free)', 'plugin-wp-support-thisismyurl' ); ?>
+				<strong><?php esc_html_e( '🔒 Want encrypted backups?', 'plugin-wpshadow' ); ?></strong>
+				<?php esc_html_e( 'Install the free Vault module for AES-256 encryption, cloud offload, and file versioning.', 'plugin-wpshadow' ); ?>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-wpshadow' ) ); ?>" class="button button-primary" style="margin-left: 10px;">
+					<?php esc_html_e( 'Install Vault (Free)', 'plugin-wpshadow' ); ?>
 				</a>
 			</p>
 		</div>
@@ -178,39 +178,39 @@ function example_feature_comparison_table(): void {
 	<table class="widefat">
 		<thead>
 			<tr>
-				<th><?php esc_html_e( 'Feature', 'plugin-wp-support-thisismyurl' ); ?></th>
-				<th><?php esc_html_e( 'Core', 'plugin-wp-support-thisismyurl' ); ?></th>
-				<th><?php esc_html_e( 'With Vault', 'plugin-wp-support-thisismyurl' ); ?></th>
+				<th><?php esc_html_e( 'Feature', 'plugin-wpshadow' ); ?></th>
+				<th><?php esc_html_e( 'Core', 'plugin-wpshadow' ); ?></th>
+				<th><?php esc_html_e( 'With Vault', 'plugin-wpshadow' ); ?></th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
-				<td><?php esc_html_e( 'Backup Verification', 'plugin-wp-support-thisismyurl' ); ?></td>
-				<td>✅ <?php esc_html_e( 'Included', 'plugin-wp-support-thisismyurl' ); ?></td>
-				<td>✅ <?php esc_html_e( 'Included', 'plugin-wp-support-thisismyurl' ); ?></td>
+				<td><?php esc_html_e( 'Backup Verification', 'plugin-wpshadow' ); ?></td>
+				<td>✅ <?php esc_html_e( 'Included', 'plugin-wpshadow' ); ?></td>
+				<td>✅ <?php esc_html_e( 'Included', 'plugin-wpshadow' ); ?></td>
 			</tr>
 			<tr>
-				<td><?php esc_html_e( 'Encrypted Storage', 'plugin-wp-support-thisismyurl' ); ?></td>
-				<td>❌ <?php esc_html_e( 'Not available', 'plugin-wp-support-thisismyurl' ); ?></td>
-				<td>✅ <?php esc_html_e( 'AES-256 Encryption', 'plugin-wp-support-thisismyurl' ); ?></td>
+				<td><?php esc_html_e( 'Encrypted Storage', 'plugin-wpshadow' ); ?></td>
+				<td>❌ <?php esc_html_e( 'Not available', 'plugin-wpshadow' ); ?></td>
+				<td>✅ <?php esc_html_e( 'AES-256 Encryption', 'plugin-wpshadow' ); ?></td>
 			</tr>
 			<tr>
-				<td><?php esc_html_e( 'Cloud Offload', 'plugin-wp-support-thisismyurl' ); ?></td>
-				<td>❌ <?php esc_html_e( 'Not available', 'plugin-wp-support-thisismyurl' ); ?></td>
-				<td>✅ <?php esc_html_e( 'S3, Wasabi, Backblaze', 'plugin-wp-support-thisismyurl' ); ?></td>
+				<td><?php esc_html_e( 'Cloud Offload', 'plugin-wpshadow' ); ?></td>
+				<td>❌ <?php esc_html_e( 'Not available', 'plugin-wpshadow' ); ?></td>
+				<td>✅ <?php esc_html_e( 'S3, Wasabi, Backblaze', 'plugin-wpshadow' ); ?></td>
 			</tr>
 			<tr>
-				<td><?php esc_html_e( 'File Versioning', 'plugin-wp-support-thisismyurl' ); ?></td>
-				<td>❌ <?php esc_html_e( 'Not available', 'plugin-wp-support-thisismyurl' ); ?></td>
-				<td>✅ <?php esc_html_e( 'Point-in-time Recovery', 'plugin-wp-support-thisismyurl' ); ?></td>
+				<td><?php esc_html_e( 'File Versioning', 'plugin-wpshadow' ); ?></td>
+				<td>❌ <?php esc_html_e( 'Not available', 'plugin-wpshadow' ); ?></td>
+				<td>✅ <?php esc_html_e( 'Point-in-time Recovery', 'plugin-wpshadow' ); ?></td>
 			</tr>
 		</tbody>
 	</table>
 	
-	<?php if ( ! WPS_Feature_Detector::has_vault() ) : ?>
+	<?php if ( ! WPSHADOW_Feature_Detector::has_vault() ) : ?>
 		<p style="margin-top: 15px;">
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-support-thisismyurl' ) ); ?>" class="button button-primary">
-				<?php esc_html_e( 'Upgrade to Vault (Free)', 'plugin-wp-support-thisismyurl' ); ?>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-wpshadow' ) ); ?>" class="button button-primary">
+				<?php esc_html_e( 'Upgrade to Vault (Free)', 'plugin-wpshadow' ); ?>
 			</a>
 		</p>
 	<?php endif; ?>
@@ -229,29 +229,29 @@ function example_feature_comparison_table(): void {
  * @return void
  */
 function example_register_custom_ghost_features(): void {
-	add_action( 'WPS_register_ghost_features', function() {
+	add_action( 'wpshadow_register_ghost_features', function() {
 		// Example: Register a pro feature that doesn't exist yet.
-		WPS_Ghost_Features::register_feature(
+		WPSHADOW_Ghost_Features::register_feature(
 			array(
 				'key'         => 'multi_cloud_backup',
-				'title'       => __( 'Multi-Cloud Backup Redundancy', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Automatically sync backups to multiple cloud providers for maximum redundancy.', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Multi-Cloud Backup Redundancy', 'plugin-wpshadow' ),
+				'description' => __( 'Automatically sync backups to multiple cloud providers for maximum redundancy.', 'plugin-wpshadow' ),
 				'icon'        => 'dashicons-cloud-saved',
 				'category'    => 'backup',
 				'priority'    => 100,
-				'module_slug' => 'vault-pro-support-thisismyurl', // Future pro version.
+				'module_slug' => 'vault-pro-wpshadow', // Future pro version.
 				'module_name' => 'Vault Pro',
 				'module_type' => 'hub',
 				'is_available' => false, // Not available yet.
 				'benefits'    => array(
-					__( 'Sync to S3, Wasabi, Backblaze simultaneously', 'plugin-wp-support-thisismyurl' ),
-					__( 'Geographic redundancy across continents', 'plugin-wp-support-thisismyurl' ),
-					__( '99.999% availability guarantee', 'plugin-wp-support-thisismyurl' ),
+					__( 'Sync to S3, Wasabi, Backblaze simultaneously', 'plugin-wpshadow' ),
+					__( 'Geographic redundancy across continents', 'plugin-wpshadow' ),
+					__( '99.999% availability guarantee', 'plugin-wpshadow' ),
 				),
 				'use_cases'   => array(
-					__( 'Enterprise clients with strict SLAs', 'plugin-wp-support-thisismyurl' ),
-					__( 'Mission-critical applications', 'plugin-wp-support-thisismyurl' ),
-					__( 'Regulated industries requiring multi-cloud compliance', 'plugin-wp-support-thisismyurl' ),
+					__( 'Enterprise clients with strict SLAs', 'plugin-wpshadow' ),
+					__( 'Mission-critical applications', 'plugin-wpshadow' ),
+					__( 'Regulated industries requiring multi-cloud compliance', 'plugin-wpshadow' ),
 				),
 			)
 		);
@@ -270,7 +270,7 @@ function example_register_custom_ghost_features(): void {
  * 3. ✅ Include ghost-features-catalog.php
  * 4. ✅ Call init_ghost_features_system() in main plugin file
  * 5. ✅ Add ghost_features to catalog JSON in class-wps-module-registry.php
- * 6. ✅ Display features using WPS_Ghost_Features::render_*() methods
+ * 6. ✅ Display features using WPSHADOW_Ghost_Features::render_*() methods
  * 7. ✅ Test with modules installed and uninstalled
  * 8. ✅ Verify install links work correctly
  * 9. ✅ Check feature badges display properly

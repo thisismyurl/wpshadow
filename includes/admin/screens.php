@@ -19,14 +19,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param string $spoke_id Optional spoke id (ignored).
  * @return void
  */
-function wp_support_setup_dashboard_screen( string $hub_id = '', string $spoke_id = '' ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+function wpshadow_setup_dashboard_screen( string $hub_id = '', string $spoke_id = '' ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
 	$screen = get_current_screen();
 	if ( ! $screen ) {
 		return;
 	}
 
 	// Register dashboard metaboxes for all levels (core, hub, spoke) on dashboard tab.
-	$context = WPS_Tab_Navigation::get_current_context();
+	$context = WPSHADOW_Tab_Navigation::get_current_context();
 	$tab     = $context['tab'] ?? 'dashboard';
 	$hub     = $context['hub'] ?? '';
 	$spoke   = $context['spoke'] ?? '';
@@ -49,23 +49,23 @@ function wp_support_setup_dashboard_screen( string $hub_id = '', string $spoke_i
 	// Add Help tabs.
 	$screen->add_help_tab(
 		array(
-			'id'      => 'WPS_overview',
-			'title'   => __( 'Overview', 'plugin-wp-support-thisismyurl' ),
-			'content' => '<p>' . esc_html__( 'This dashboard provides a suite overview, active hubs, recent activity, and quick actions. Use Screen Options to show/hide cards and arrange them.', 'plugin-wp-support-thisismyurl' ) . '</p>',
+			'id'      => 'wpshadow_overview',
+			'title'   => __( 'Overview', 'plugin-wpshadow' ),
+			'content' => '<p>' . esc_html__( 'This dashboard provides a suite overview, active hubs, recent activity, and quick actions. Use Screen Options to show/hide cards and arrange them.', 'plugin-wpshadow' ) . '</p>',
 		)
 	);
 
 	$screen->add_help_tab(
 		array(
-			'id'      => 'WPS_shortcuts',
-			'title'   => __( 'Shortcuts', 'plugin-wp-support-thisismyurl' ),
-			'content' => '<p>' . esc_html__( 'Drag cards to rearrange. Click the toggle arrow to hide/show cards. Use Quick Actions to jump to common tasks.', 'plugin-wp-support-thisismyurl' ) . '</p>',
+			'id'      => 'wpshadow_shortcuts',
+			'title'   => __( 'Shortcuts', 'plugin-wpshadow' ),
+			'content' => '<p>' . esc_html__( 'Drag cards to rearrange. Click the toggle arrow to hide/show cards. Use Quick Actions to jump to common tasks.', 'plugin-wpshadow' ) . '</p>',
 		)
 	);
 
 	$screen->set_help_sidebar(
-		'<p><strong>' . esc_html__( 'More Help', 'plugin-wp-support-thisismyurl' ) . '</strong></p>' .
-		'<p><a href="https://thisismyurl.com/plugin-wp-support-thisismyurl/" target="_blank" rel="noopener">' . esc_html__( 'Documentation', 'plugin-wp-support-thisismyurl' ) . '</a></p>'
+		'<p><strong>' . esc_html__( 'More Help', 'plugin-wpshadow' ) . '</strong></p>' .
+		'<p><a href="https://wpshadow.com/plugin-wpshadow/" target="_blank" rel="noopener">' . esc_html__( 'Documentation', 'plugin-wpshadow' ) . '</a></p>'
 	);
 
 	// Enable Screen Options for number of columns (2 by default).
@@ -78,7 +78,7 @@ function wp_support_setup_dashboard_screen( string $hub_id = '', string $spoke_i
 	);
 
 	// Use dashboard layout manager to setup widgets with proper ordering.
-	WPS_Dashboard_Layout::setup_dashboard_screen( $layout_context, $network );
+	WPSHADOW_Dashboard_Layout::setup_dashboard_screen( $layout_context, $network );
 }
 
 /**
@@ -87,7 +87,7 @@ function wp_support_setup_dashboard_screen( string $hub_id = '', string $spoke_i
  * @param string $hub_id Hub identifier.
  * @return void
  */
-function wp_support_setup_hub_dashboard_screen( string $hub_id ): void {
+function wpshadow_setup_hub_dashboard_screen( string $hub_id ): void {
 	$screen = get_current_screen();
 	if ( ! $screen ) {
 		return;
@@ -99,33 +99,33 @@ function wp_support_setup_hub_dashboard_screen( string $hub_id ): void {
 	switch ( $hub_id ) {
 		case 'media':
 			add_meta_box(
-				'WPS_media_overview',
-				__( 'Media Overview', 'plugin-wp-support-thisismyurl' ),
-				array( '\\WPS\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_media_overview' ),
+				'wpshadow_media_overview',
+				__( 'Media Overview', 'plugin-wpshadow' ),
+				array( '\\WPShadow\\WPSHADOW_Dashboard_Widgets', 'render_metabox_media_overview' ),
 				$screen->id,
 				'normal',
 				'high'
 			);
 			add_meta_box(
-				'WPS_media_activity',
-				__( 'Media Activity', 'plugin-wp-support-thisismyurl' ),
-				array( '\\WPS\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_media_activity' ),
+				'wpshadow_media_activity',
+				__( 'Media Activity', 'plugin-wpshadow' ),
+				array( '\\WPShadow\\WPSHADOW_Dashboard_Widgets', 'render_metabox_media_activity' ),
 				$screen->id,
 				'normal',
 				'default'
 			);
 			add_meta_box(
-				'WPS_media_modules',
-				$hub_name . ' ' . __( 'Modules', 'plugin-wp-support-thisismyurl' ),
-				array( '\\WPS\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_modules' ),
+				'wpshadow_media_modules',
+				$hub_name . ' ' . __( 'Modules', 'plugin-wpshadow' ),
+				array( '\\WPShadow\\WPSHADOW_Dashboard_Widgets', 'render_metabox_modules' ),
 				$screen->id,
 				'normal',
 				'low'
 			);
 			add_meta_box(
-				'WPS_media_quick_actions',
-				__( 'Media Quick Actions', 'plugin-wp-support-thisismyurl' ),
-				array( '\\WPS\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_quick_actions' ),
+				'wpshadow_media_quick_actions',
+				__( 'Media Quick Actions', 'plugin-wpshadow' ),
+				array( '\\WPShadow\\WPSHADOW_Dashboard_Widgets', 'render_metabox_quick_actions' ),
 				$screen->id,
 				'side',
 				'high'
@@ -134,49 +134,49 @@ function wp_support_setup_hub_dashboard_screen( string $hub_id ): void {
 
 		case 'vault':
 			add_meta_box(
-				'WPS_vault_overview',
-				__( 'Vault Overview', 'plugin-wp-support-thisismyurl' ),
-				array( '\\WPS\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_vault_overview' ),
+				'wpshadow_vault_overview',
+				__( 'Vault Overview', 'plugin-wpshadow' ),
+				array( '\\WPShadow\\WPSHADOW_Dashboard_Widgets', 'render_metabox_vault_overview' ),
 				$screen->id,
 				'normal',
 				'high'
 			);
 			add_meta_box(
-				'WPS_vault_activity',
-				__( 'Vault Activity', 'plugin-wp-support-thisismyurl' ),
-				array( '\\WPS\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_vault_activity' ),
+				'wpshadow_vault_activity',
+				__( 'Vault Activity', 'plugin-wpshadow' ),
+				array( '\\WPShadow\\WPSHADOW_Dashboard_Widgets', 'render_metabox_vault_activity' ),
 				$screen->id,
 				'normal',
 				'default'
 			);
 			add_meta_box(
-				'WPS_vault_modules',
-				$hub_name . ' ' . __( 'Modules', 'plugin-wp-support-thisismyurl' ),
-				array( '\\WPS\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_modules' ),
+				'wpshadow_vault_modules',
+				$hub_name . ' ' . __( 'Modules', 'plugin-wpshadow' ),
+				array( '\\WPShadow\\WPSHADOW_Dashboard_Widgets', 'render_metabox_modules' ),
 				$screen->id,
 				'normal',
 				'low'
 			);
 			add_meta_box(
-				'WPS_vault_stats',
-				__( 'Vault Status', 'plugin-wp-support-thisismyurl' ),
-				array( '\\WPS\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_vault_status' ),
+				'wpshadow_vault_stats',
+				__( 'Vault Status', 'plugin-wpshadow' ),
+				array( '\\WPShadow\\WPSHADOW_Dashboard_Widgets', 'render_metabox_vault_status' ),
 				$screen->id,
 				'side',
 				'high'
 			);
 			add_meta_box(
-				'WPS_vault_quick_actions',
-				__( 'Vault Quick Actions', 'plugin-wp-support-thisismyurl' ),
-				array( '\\WPS\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_quick_actions' ),
+				'wpshadow_vault_quick_actions',
+				__( 'Vault Quick Actions', 'plugin-wpshadow' ),
+				array( '\\WPShadow\\WPSHADOW_Dashboard_Widgets', 'render_metabox_quick_actions' ),
 				$screen->id,
 				'side',
 				'default'
 			);
 			add_meta_box(
-				'WPS_vault_health',
-				__( 'Vault Health', 'plugin-wp-support-thisismyurl' ),
-				array( '\\WPS\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_vault_health' ),
+				'wpshadow_vault_health',
+				__( 'Vault Health', 'plugin-wpshadow' ),
+				array( '\\WPShadow\\WPSHADOW_Dashboard_Widgets', 'render_metabox_vault_health' ),
 				$screen->id,
 				'side',
 				'low'
@@ -186,9 +186,9 @@ function wp_support_setup_hub_dashboard_screen( string $hub_id ): void {
 		default:
 			// Generic hub dashboard: always include Modules widget.
 			add_meta_box(
-				'WPS_' . sanitize_html_class( $hub_id ) . '_modules',
-				$hub_name . ' ' . __( 'Modules', 'plugin-wp-support-thisismyurl' ),
-				array( '\\WPS\\CoreSupport\\WPS_Dashboard_Widgets', 'render_metabox_modules' ),
+				'wpshadow_' . sanitize_html_class( $hub_id ) . '_modules',
+				$hub_name . ' ' . __( 'Modules', 'plugin-wpshadow' ),
+				array( '\\WPShadow\\WPSHADOW_Dashboard_Widgets', 'render_metabox_modules' ),
 				$screen->id,
 				'normal',
 				'default'

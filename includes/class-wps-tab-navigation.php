@@ -1,8 +1,8 @@
 <?php
 /**
- * Tab-based navigation system for thisismyurl Suite.
+ * Tab-based navigation system for wpshadow Suite.
  *
- * @package wp_support_Support
+ * @package wpshadow_Support
  * @since 1.0.0
  */
 
@@ -18,11 +18,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Tab Navigation Manager
  * Hierarchical: Core > Hub > Spoke > Format
  */
-class WPS_Tab_Navigation {
-	private const QUERY_VAR_TAB    = 'WPS_tab';
+class WPSHADOW_Tab_Navigation {
+	private const QUERY_VAR_TAB    = 'wpshadow_tab';
 	private const QUERY_VAR_MODULE = 'module';
-	private const QUERY_VAR_HUB    = 'WPS_hub'; // Legacy support
-	private const QUERY_VAR_SPOKE  = 'WPS_spoke'; // Legacy support
+	private const QUERY_VAR_HUB    = 'wpshadow_hub'; // Legacy support
+	private const QUERY_VAR_SPOKE  = 'wpshadow_spoke'; // Legacy support
 	public const TAB_DASHBOARD_SETTINGS = 'dashboard_settings';
 
 	/**
@@ -31,7 +31,7 @@ class WPS_Tab_Navigation {
 	 * @return array{level: string, hub: string, spoke: string, tab: string}
 	 */
 	public static function get_current_context(): array {
-		// Check for new 'module' parameter first, fallback to legacy WPS_hub/WPS_spoke.
+		// Check for new 'module' parameter first, fallback to legacy WPSHADOW_hub/WPSHADOW_spoke.
 		$module = sanitize_text_field( (string) ( $_GET[ self::QUERY_VAR_MODULE ] ?? '' ) );
 		$hub    = sanitize_text_field( (string) ( $_GET[ self::QUERY_VAR_HUB ] ?? '' ) );
 		$spoke  = sanitize_text_field( (string) ( $_GET[ self::QUERY_VAR_SPOKE ] ?? '' ) );
@@ -55,13 +55,13 @@ class WPS_Tab_Navigation {
 	 * @return string 'core'|'hub'|'spoke'|'format'
 	 */
 	private static function determine_level(): string {
-		if ( ! empty( $_GET['WPS_format'] ) ) {
+		if ( ! empty( $_GET['wpshadow_format'] ) ) {
 			return 'format';
 		}
 		if ( ! empty( $_GET[ self::QUERY_VAR_SPOKE ] ) ) {
 			return 'spoke';
 		}
-		// Check both new 'module' param and legacy 'WPS_hub'.
+		// Check both new 'module' param and legacy 'wpshadow_hub'.
 		if ( ! empty( $_GET[ self::QUERY_VAR_MODULE ] ) || ! empty( $_GET[ self::QUERY_VAR_HUB ] ) ) {
 			return 'hub';
 		}
@@ -137,7 +137,7 @@ class WPS_Tab_Navigation {
 	/**
 	 * Build hub navigation URL.
 	 *
-	 * @param string $hub_id Hub identifier (e.g., 'media-support-thisismyurl', 'vault-support-thisismyurl') or short form ('media', 'vault').
+	 * @param string $hub_id Hub identifier (e.g., 'media-wpshadow', 'vault-wpshadow') or short form ('media', 'vault').
 	 * @param string $tab Current tab (default: 'dashboard').
 	 * @return string Hub URL.
 	 */
@@ -156,7 +156,7 @@ class WPS_Tab_Navigation {
 	/**
 	 * Normalize hub ID to short form.
 	 *
-	 * Converts 'media-support-thisismyurl' to 'media', 'vault-support-thisismyurl' to 'vault', etc.
+	 * Converts 'media-wpshadow' to 'media', 'vault-wpshadow' to 'vault', etc.
 	 *
 	 * @param string $hub_id Full or short hub identifier.
 	 * @return string Short hub identifier.
@@ -220,16 +220,16 @@ class WPS_Tab_Navigation {
 	 */
 	public static function get_core_tabs(): array {
 		$tabs = array(
-			self::build_tab( 'dashboard', __( 'Dashboard', 'plugin-wp-support-thisismyurl' ), 'dashicons-dashboard' ),
-			self::build_tab( 'collection', __( 'Spoke Collection', 'plugin-wp-support-thisismyurl' ), 'dashicons-star-filled' ),
-			self::build_tab( 'dashboard_settings', __( 'Settings', 'plugin-wp-support-thisismyurl' ), 'dashicons-admin-generic' ),
-			self::build_tab( 'features', __( 'Features', 'plugin-wp-support-thisismyurl' ), 'dashicons-admin-plugins' ),
-			self::build_tab( 'help', __( 'Help', 'plugin-wp-support-thisismyurl' ), 'dashicons-editor-help' ),
+			self::build_tab( 'dashboard', __( 'Dashboard', 'plugin-wpshadow' ), 'dashicons-dashboard' ),
+			self::build_tab( 'collection', __( 'Spoke Collection', 'plugin-wpshadow' ), 'dashicons-star-filled' ),
+			self::build_tab( 'dashboard_settings', __( 'Settings', 'plugin-wpshadow' ), 'dashicons-admin-generic' ),
+			self::build_tab( 'features', __( 'Features', 'plugin-wpshadow' ), 'dashicons-admin-plugins' ),
+			self::build_tab( 'help', __( 'Help', 'plugin-wpshadow' ), 'dashicons-editor-help' ),
 		);
 
 		// Add register tab only if not licensed.
-		if ( ! WPS_License::is_registered() ) {
-			$tabs[] = self::build_tab( 'register', __( 'Register', 'plugin-wp-support-thisismyurl' ), 'dashicons-unlock' );
+		if ( ! WPSHADOW_License::is_registered() ) {
+			$tabs[] = self::build_tab( 'register', __( 'Register', 'plugin-wpshadow' ), 'dashicons-unlock' );
 		}
 
 		return $tabs;
@@ -243,10 +243,10 @@ class WPS_Tab_Navigation {
 	 */
 	public static function get_hub_tabs( string $hub_id ): array {
 		return array(
-			self::build_tab( 'dashboard', __( 'Dashboard', 'plugin-wp-support-thisismyurl' ), 'dashicons-dashboard' ),
-			self::build_tab( 'dashboard_settings', __( 'Settings', 'plugin-wp-support-thisismyurl' ), 'dashicons-admin-generic' ),
-			self::build_tab( 'features', __( 'Features', 'plugin-wp-support-thisismyurl' ), 'dashicons-admin-plugins' ),
-			self::build_tab( 'help', __( 'Help', 'plugin-wp-support-thisismyurl' ), 'dashicons-editor-help' ),
+			self::build_tab( 'dashboard', __( 'Dashboard', 'plugin-wpshadow' ), 'dashicons-dashboard' ),
+			self::build_tab( 'dashboard_settings', __( 'Settings', 'plugin-wpshadow' ), 'dashicons-admin-generic' ),
+			self::build_tab( 'features', __( 'Features', 'plugin-wpshadow' ), 'dashicons-admin-plugins' ),
+			self::build_tab( 'help', __( 'Help', 'plugin-wpshadow' ), 'dashicons-editor-help' ),
 		);
 	}
 
@@ -259,9 +259,9 @@ class WPS_Tab_Navigation {
 	 */
 	public static function get_spoke_tabs( string $hub_id, string $spoke_id ): array {
 		return array(
-			self::build_tab( 'dashboard', __( 'Dashboard', 'plugin-wp-support-thisismyurl' ), 'dashicons-dashboard' ),
-			self::build_tab( 'features', __( 'Features', 'plugin-wp-support-thisismyurl' ), 'dashicons-admin-plugins' ),
-			self::build_tab( 'help', __( 'Help', 'plugin-wp-support-thisismyurl' ), 'dashicons-editor-help' ),
+			self::build_tab( 'dashboard', __( 'Dashboard', 'plugin-wpshadow' ), 'dashicons-dashboard' ),
+			self::build_tab( 'features', __( 'Features', 'plugin-wpshadow' ), 'dashicons-admin-plugins' ),
+			self::build_tab( 'help', __( 'Help', 'plugin-wpshadow' ), 'dashicons-editor-help' ),
 		);
 	}
 
@@ -274,13 +274,13 @@ class WPS_Tab_Navigation {
 	public static function get_breadcrumbs( array $context ): array {
 		$crumbs = array(
 			array(
-				'label' => __( 'Support', 'plugin-wp-support-thisismyurl' ),
+				'label' => __( 'Support', 'plugin-wpshadow' ),
 				'url'   => admin_url( 'admin.php?page=wp-support' ),
 			),
 		);
 
 		if ( ! empty( $context['hub'] ) ) {
-			$hub_label = ucfirst( $context['hub'] ) . ' ' . __( 'Hub', 'plugin-wp-support-thisismyurl' );
+			$hub_label = ucfirst( $context['hub'] ) . ' ' . __( 'Hub', 'plugin-wpshadow' );
 			$crumbs[]  = array(
 				'label' => $hub_label,
 				'url'   => self::build_hub_url( $context['hub'] ),
@@ -288,7 +288,7 @@ class WPS_Tab_Navigation {
 		}
 
 		if ( ! empty( $context['spoke'] ) ) {
-			$spoke_label = strtoupper( $context['spoke'] ) . ' ' . __( 'Support', 'plugin-wp-support-thisismyurl' );
+			$spoke_label = strtoupper( $context['spoke'] ) . ' ' . __( 'Support', 'plugin-wpshadow' );
 			$crumbs[]    = array(
 				'label' => $spoke_label,
 				'url'   => self::build_spoke_url( $context['hub'], $context['spoke'] ),
@@ -298,12 +298,12 @@ class WPS_Tab_Navigation {
 		// Add Dashboard Settings breadcrumb when on dashboard_settings tab at core level.
 		if ( self::TAB_DASHBOARD_SETTINGS === $context['tab'] && empty( $context['hub'] ) && empty( $context['spoke'] ) ) {
 			$crumbs[] = array(
-				'label' => __( 'Dashboard', 'plugin-wp-support-thisismyurl' ),
-				'url'   => admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard' ),
+				'label' => __( 'Dashboard', 'plugin-wpshadow' ),
+				'url'   => admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=dashboard' ),
 			);
 			$crumbs[] = array(
-				'label' => __( 'Dashboard Settings', 'plugin-wp-support-thisismyurl' ),
-				'url'   => admin_url( 'admin.php?page=wp-support&WPS_tab=dashboard_settings' ),
+				'label' => __( 'Dashboard Settings', 'plugin-wpshadow' ),
+				'url'   => admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=dashboard_settings' ),
 			);
 		}
 
@@ -340,6 +340,6 @@ class WPS_Tab_Navigation {
 	}
 }
 
-/* @changelog Added WPS_Tab_Navigation for hierarchical tab-based admin UI */
+/* @changelog Added WPSHADOW_Tab_Navigation for hierarchical tab-based admin UI */
 
 

@@ -7,7 +7,7 @@ This directory contains GitHub Copilot Agent definitions for the WPSupport plugi
 ### WPSupport Agent (`wpsupport-agent.md`)
 
 The WPSupport Agent is configured to handle issues for:
-- `plugin-wp-support-thisismyurl` (primary repository)
+- `plugin-wpshadow` (primary repository)
 - Related module repositories (via shared knowledge)
 
 ## Using the Copilot Agent

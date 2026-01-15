@@ -73,28 +73,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Feature_Two_Factor_Auth
+ * WPSHADOW_Feature_Two_Factor_Auth
  *
  * Two-factor authentication for enhanced account security.
  *
  * @todo Implement all 2FA features
  */
-final class WPS_Feature_Two_Factor_Auth extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Two_Factor_Auth extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * User meta key for 2FA secret.
 	 */
-	private const SECRET_META_KEY = 'wps_2fa_secret';
+	private const SECRET_META_KEY = 'wpshadow_2fa_secret';
 
 	/**
 	 * User meta key for backup codes.
 	 */
-	private const BACKUP_CODES_KEY = 'wps_2fa_backup_codes';
+	private const BACKUP_CODES_KEY = 'wpshadow_2fa_backup_codes';
 
 	/**
 	 * User meta key for trusted devices.
 	 */
-	private const TRUSTED_DEVICES_KEY = 'wps_2fa_trusted_devices';
+	private const TRUSTED_DEVICES_KEY = 'wpshadow_2fa_trusted_devices';
 
 	/**
 	 * TOTP time step (30 seconds).
@@ -114,7 +114,7 @@ final class WPS_Feature_Two_Factor_Auth extends WPS_Abstract_Feature {
 	/**
 	 * Trusted device cookie name.
 	 */
-	private const TRUSTED_DEVICE_COOKIE = 'wps_2fa_trusted';
+	private const TRUSTED_DEVICE_COOKIE = 'wpshadow_2fa_trusted';
 
 	/**
 	 * Trusted device duration (30 days).
@@ -128,14 +128,14 @@ final class WPS_Feature_Two_Factor_Auth extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'two-factor-auth',
-				'name'               => __( 'Two-Factor Authentication', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Add an extra layer of security with TOTP-based two-factor authentication, backup codes, and trusted device management', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Two-Factor Authentication', 'plugin-wpshadow' ),
+				'description'        => __( 'Add an extra layer of security with TOTP-based two-factor authentication, backup codes, and trusted device management', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
-				'widget_label'       => __( 'Security', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Security', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wpshadow' ),
 				// Unified metadata.
 				'license_level'      => 2, // Free registered users.
 				'minimum_capability' => 'read',
@@ -176,11 +176,11 @@ final class WPS_Feature_Two_Factor_Auth extends WPS_Abstract_Feature {
 		// add_action( 'edit_user_profile_update', array( $this, 'save_2fa_settings' ) );
 
 		// TODO: AJAX handlers
-		// add_action( 'wp_ajax_wps_generate_2fa_secret', array( $this, 'ajax_generate_secret' ) );
-		// add_action( 'wp_ajax_wps_verify_2fa_setup', array( $this, 'ajax_verify_setup' ) );
-		// add_action( 'wp_ajax_wps_generate_backup_codes', array( $this, 'ajax_generate_backup_codes' ) );
-		// add_action( 'wp_ajax_wps_disable_2fa', array( $this, 'ajax_disable_2fa' ) );
-		// add_action( 'wp_ajax_wps_remove_trusted_device', array( $this, 'ajax_remove_trusted_device' ) );
+		// add_action( 'wp_ajax_WPSHADOW_generate_2fa_secret', array( $this, 'ajax_generate_secret' ) );
+		// add_action( 'wp_ajax_WPSHADOW_verify_2fa_setup', array( $this, 'ajax_verify_setup' ) );
+		// add_action( 'wp_ajax_WPSHADOW_generate_backup_codes', array( $this, 'ajax_generate_backup_codes' ) );
+		// add_action( 'wp_ajax_WPSHADOW_disable_2fa', array( $this, 'ajax_disable_2fa' ) );
+		// add_action( 'wp_ajax_WPSHADOW_remove_trusted_device', array( $this, 'ajax_remove_trusted_device' ) );
 
 		// TODO: Admin notices
 		// add_action( 'admin_notices', array( $this, 'show_2fa_notices' ) );

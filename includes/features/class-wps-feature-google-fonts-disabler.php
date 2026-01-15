@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * WPS_Feature_Google_Fonts_Disabler
+ * WPSHADOW_Feature_Google_Fonts_Disabler
  *
  * Remove Google Fonts from frontend output.
  */
-final class WPS_Feature_Google_Fonts_Disabler extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Google_Fonts_Disabler extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -27,14 +27,14 @@ final class WPS_Feature_Google_Fonts_Disabler extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'google-fonts-disabler',
-				'name'               => __( 'Disable Google Fonts', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Remove Google Fonts for better privacy and faster load times', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Disable Google Fonts', 'plugin-wpshadow' ),
+				'description'        => __( 'Remove Google Fonts for better privacy and faster load times', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Resource Optimization', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Optimize how resources are loaded and delivered', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Resource Optimization', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Optimize how resources are loaded and delivered', 'plugin-wpshadow' ),
 			)
 		);
 	}

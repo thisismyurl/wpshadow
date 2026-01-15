@@ -18,11 +18,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Trait WPS_Ajax_Security
+ * Trait WPSHADOW_Ajax_Security
  *
  * Centralized AJAX request verification for security and permissions.
  */
-trait WPS_Ajax_Security {
+trait WPSHADOW_Ajax_Security {
 	/**
 	 * Verify AJAX request with nonce and capability check.
 	 *
@@ -37,7 +37,7 @@ trait WPS_Ajax_Security {
 
 		if ( ! current_user_can( $capability ) ) {
 			wp_send_json_error(
-				array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ),
+				array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ),
 				403
 			);
 		}
@@ -62,7 +62,7 @@ trait WPS_Ajax_Security {
 
 		if ( ! current_user_can( $cap ) ) {
 			wp_send_json_error(
-				array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ),
+				array( 'message' => __( 'Insufficient permissions.', 'plugin-wpshadow' ) ),
 				403
 			);
 		}
@@ -86,7 +86,7 @@ trait WPS_Ajax_Security {
 
 		if ( ! $user_id ) {
 			wp_send_json_error(
-				array( 'message' => __( 'You must be logged in to perform this action.', 'plugin-wp-support-thisismyurl' ) ),
+				array( 'message' => __( 'You must be logged in to perform this action.', 'plugin-wpshadow' ) ),
 				401
 			);
 		}

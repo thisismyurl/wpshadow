@@ -146,7 +146,7 @@
 	}
 
 	function toggleSubmenu(slug, enabled) {
-		const hrefContains = `page=wp-support&module=${slug.replace('-support-thisismyurl','')}`;
+		const hrefContains = `page=wp-support&module=${slug.replace('-wpshadow','')}`;
 		const menus = document.querySelectorAll(`#adminmenu a[href*="${hrefContains}"]`);
 		menus.forEach((link) => {
 			const li = link.closest('li');
@@ -177,7 +177,7 @@
 							'Content-Type': 'application/x-www-form-urlencoded',
 						},
 						body: new URLSearchParams({
-							action: 'wps_module_download_progress',
+							action: 'wpshadow_module_download_progress',
 							nonce: nonce,
 							session_id: sessionId,
 						}),
@@ -233,7 +233,7 @@
 					'Content-Type': 'application/x-www-form-urlencoded',
 				},
 				body: new URLSearchParams({
-					action: 'wps_module_install',
+					action: 'wpshadow_module_install',
 					nonce: nonce,
 					slug: slug,
 				}),
@@ -278,7 +278,7 @@
 					'Content-Type': 'application/x-www-form-urlencoded',
 				},
 				body: new URLSearchParams({
-					action: 'wps_module_update',
+					action: 'wpshadow_module_update',
 					nonce: nonce,
 					slug: slug,
 				}),
@@ -323,7 +323,7 @@
 					'Content-Type': 'application/x-www-form-urlencoded',
 				},
 				body: new URLSearchParams({
-					action: 'wps_module_toggle',
+					action: 'wpshadow_module_toggle',
 					nonce: nonce,
 					slug: slug,
 					enabled: 1,
@@ -374,7 +374,7 @@
 					'Content-Type': 'application/x-www-form-urlencoded',
 				},
 				body: new URLSearchParams({
-					action: 'wps_module_toggle',
+					action: 'wpshadow_module_toggle',
 					nonce: nonce,
 					slug: slug,
 					enabled: 0,

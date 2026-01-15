@@ -5,7 +5,7 @@
  * Manages tiered maintenance subscription plans (Free, Pro, Enterprise).
  * MVP implementation - payment integration deferred.
  *
- * @package WPS_WP_SUPPORT_THISISMYURL
+ * @package WPSHADOW_wpshadow_THISISMYURL
  * @since 1.0.0
  */
 
@@ -18,11 +18,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class WPS_Maintenance_Plans
+ * Class WPSHADOW_Maintenance_Plans
  *
  * Manages maintenance plan tiers and feature access control.
  */
-class WPS_Maintenance_Plans {
+class WPSHADOW_Maintenance_Plans {
 
 	/**
 	 * Plan tier constants
@@ -134,7 +134,7 @@ class WPS_Maintenance_Plans {
 	 * @return string Plan tier (free, pro, or enterprise)
 	 */
 	public static function get_current_tier(): string {
-		return get_option( 'wps_maintenance_plan_tier', self::TIER_FREE );
+		return get_option( 'wpshadow_maintenance_plan_tier', self::TIER_FREE );
 	}
 
 	/**
@@ -148,7 +148,7 @@ class WPS_Maintenance_Plans {
 			return false;
 		}
 
-		return update_option( 'wps_maintenance_plan_tier', $tier );
+		return update_option( 'wpshadow_maintenance_plan_tier', $tier );
 	}
 
 	/**
@@ -214,9 +214,9 @@ class WPS_Maintenance_Plans {
 	public static function get_enrollment_info(): array {
 		return array(
 			'tier'         => self::get_current_tier(),
-			'enrolled_at'  => get_option( 'wps_maintenance_plan_enrolled_at', '' ),
-			'status'       => get_option( 'wps_maintenance_plan_status', 'active' ),
-			'billing_type' => get_option( 'wps_maintenance_plan_billing_type', 'monthly' ),
+			'enrolled_at'  => get_option( 'wpshadow_maintenance_plan_enrolled_at', '' ),
+			'status'       => get_option( 'wpshadow_maintenance_plan_status', 'active' ),
+			'billing_type' => get_option( 'wpshadow_maintenance_plan_billing_type', 'monthly' ),
 		);
 	}
 
@@ -236,13 +236,13 @@ class WPS_Maintenance_Plans {
 			return false;
 		}
 
-		update_option( 'wps_maintenance_plan_tier', $tier );
-		update_option( 'wps_maintenance_plan_billing_type', $billing_type );
-		update_option( 'wps_maintenance_plan_status', 'active' );
+		update_option( 'wpshadow_maintenance_plan_tier', $tier );
+		update_option( 'wpshadow_maintenance_plan_billing_type', $billing_type );
+		update_option( 'wpshadow_maintenance_plan_status', 'active' );
 
 		// Set enrolled_at if not already set.
-		if ( ! get_option( 'wps_maintenance_plan_enrolled_at' ) ) {
-			update_option( 'wps_maintenance_plan_enrolled_at', current_time( 'mysql' ) );
+		if ( ! get_option( 'wpshadow_maintenance_plan_enrolled_at' ) ) {
+			update_option( 'wpshadow_maintenance_plan_enrolled_at', current_time( 'mysql' ) );
 		}
 
 		return true;

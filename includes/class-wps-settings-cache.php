@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages feature settings with intelligent caching and batch loading.
  */
-final class WPS_Settings_Cache {
+final class WPSHADOW_Settings_Cache {
 	/**
 	 * Settings cache storage.
 	 *
@@ -59,25 +59,25 @@ final class WPS_Settings_Cache {
 	/**
 	 * Register default values for a setting.
 	 *
-	 * @param string $option_name Option name (without wps_ prefix).
+	 * @param string $option_name Option name (without WPSHADOW_ prefix).
 	 * @param mixed  $defaults    Default value.
 	 * @return void
 	 */
 	public static function register_defaults( string $option_name, $defaults ): void {
-		$key                     = 'wps_' . $option_name;
+		$key                     = 'wpshadow_' . $option_name;
 		self::$defaults[ $key ] = $defaults;
 	}
 
 	/**
 	 * Get a setting with caching and default value support.
 	 *
-	 * @param string $option_name Option name (without wps_ prefix).
+	 * @param string $option_name Option name (without WPSHADOW_ prefix).
 	 * @param mixed  $default     Default value if not set.
 	 * @param bool   $network     Whether to get network option.
 	 * @return mixed Option value.
 	 */
 	public static function get( string $option_name, $default = null, bool $network = false ) {
-		$key = 'wps_' . $option_name;
+		$key = 'wpshadow_' . $option_name;
 
 		// Use cached value if available.
 		if ( isset( self::$loaded[ $key ] ) ) {
@@ -106,13 +106,13 @@ final class WPS_Settings_Cache {
 	/**
 	 * Update a setting and clear its cache.
 	 *
-	 * @param string $option_name Option name (without wps_ prefix).
+	 * @param string $option_name Option name (without WPSHADOW_ prefix).
 	 * @param mixed  $value       New value.
 	 * @param bool   $network     Whether to update network option.
 	 * @return bool True if update succeeded.
 	 */
 	public static function update( string $option_name, $value, bool $network = false ): bool {
-		$key = 'wps_' . $option_name;
+		$key = 'wpshadow_' . $option_name;
 
 		// Update database.
 		if ( $network && is_multisite() ) {
@@ -133,12 +133,12 @@ final class WPS_Settings_Cache {
 	/**
 	 * Delete a setting and clear its cache.
 	 *
-	 * @param string $option_name Option name (without wps_ prefix).
+	 * @param string $option_name Option name (without WPSHADOW_ prefix).
 	 * @param bool   $network     Whether to delete network option.
 	 * @return bool True if deletion succeeded.
 	 */
 	public static function delete( string $option_name, bool $network = false ): bool {
-		$key = 'wps_' . $option_name;
+		$key = 'wpshadow_' . $option_name;
 
 		// Delete from database.
 		if ( $network && is_multisite() ) {
@@ -158,7 +158,7 @@ final class WPS_Settings_Cache {
 	/**
 	 * Batch load multiple settings at once.
 	 *
-	 * @param array<string> $option_names Array of option names (without wps_ prefix).
+	 * @param array<string> $option_names Array of option names (without WPSHADOW_ prefix).
 	 * @param bool          $network      Whether to load network options.
 	 * @return array<string, mixed> Loaded settings.
 	 */
@@ -167,7 +167,7 @@ final class WPS_Settings_Cache {
 
 		$keys_to_load = array();
 		foreach ( $option_names as $name ) {
-			$key = 'wps_' . $name;
+			$key = 'wpshadow_' . $name;
 			if ( ! isset( self::$loaded[ $key ] ) ) {
 				$keys_to_load[] = $key;
 			}
@@ -177,7 +177,7 @@ final class WPS_Settings_Cache {
 			// All already cached.
 			$result = array();
 			foreach ( $option_names as $name ) {
-				$key             = 'wps_' . $name;
+				$key             = 'wpshadow_' . $name;
 				$result[ $name ] = self::$cache[ $key ];
 			}
 			return $result;
@@ -210,7 +210,7 @@ final class WPS_Settings_Cache {
 		// Return result array.
 		$result = array();
 		foreach ( $option_names as $name ) {
-			$key             = 'wps_' . $name;
+			$key             = 'wpshadow_' . $name;
 			$result[ $name ] = self::$cache[ $key ];
 		}
 
@@ -235,7 +235,7 @@ final class WPS_Settings_Cache {
 	 */
 	public static function clear_cache_on_update( string $option ): void {
 		// Only clear WPS settings.
-		if ( strpos( $option, 'wps_' ) !== 0 && strpos( $option, 'WPS_' ) !== 0 ) {
+		if ( strpos( $option, 'wpshadow_' ) !== 0 && strpos( $option, 'wpshadow_' ) !== 0 ) {
 			return;
 		}
 

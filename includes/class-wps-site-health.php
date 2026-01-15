@@ -2,7 +2,7 @@
 /**
  * Site Health integration for WPS Suite.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
 declare(strict_types=1);
@@ -18,7 +18,7 @@ require_once __DIR__ . '/class-wps-health-renderer.php';
 /**
  * Site Health integration class.
  */
-class WPS_Site_Health {
+class WPSHADOW_Site_Health {
 
 	/**
 	 * Registry of module-specific health checks.
@@ -37,8 +37,8 @@ class WPS_Site_Health {
 		add_filter( 'debug_information', array( __CLASS__, 'add_debug_info' ) );
 
 		// Hook into module state changes to refresh health checks.
-		add_action( 'WPS_module_enabled', array( __CLASS__, 'on_module_state_change' ) );
-		add_action( 'WPS_module_disabled', array( __CLASS__, 'on_module_state_change' ) );
+		add_action( 'wpshadow_module_enabled', array( __CLASS__, 'on_module_state_change' ) );
+		add_action( 'wpshadow_module_disabled', array( __CLASS__, 'on_module_state_change' ) );
 
 		// Register built-in module checks once during init.
 		add_action( 'plugins_loaded', array( __CLASS__, 'register_builtin_module_checks' ), 20 );
@@ -47,7 +47,7 @@ class WPS_Site_Health {
 	/**
 	 * Register health checks for a specific module.
 	 *
-	 * @param string $module_slug Module slug (e.g., 'vault-support-thisismyurl').
+	 * @param string $module_slug Module slug (e.g., 'vault-wpshadow').
 	 * @param array  $checks      Array of health check definitions.
 	 * @return void
 	 */
@@ -74,7 +74,7 @@ class WPS_Site_Health {
 		 *
 		 * @param string $module_slug Module slug.
 		 */
-		do_action( 'WPS_health_checks_updated', $module_slug );
+		do_action( 'wpshadow_health_checks_updated', $module_slug );
 	}
 
 	/**
@@ -93,7 +93,7 @@ class WPS_Site_Health {
 		// Add module-specific tests only for enabled modules.
 		foreach ( self::$module_checks as $module_slug => $module_check_list ) {
 			// Check if module is enabled.
-			if ( ! WPS_Module_Registry::is_enabled( $module_slug ) ) {
+			if ( ! WPSHADOW_Module_Registry::is_enabled( $module_slug ) ) {
 				continue;
 			}
 
@@ -113,40 +113,40 @@ class WPS_Site_Health {
 	 */
 	private static function get_core_checks(): array {
 		return array(
-			'WPS_openssl_extension'         => array(
-				'label' => __( 'OpenSSL extension', 'plugin-wp-support-thisismyurl' ),
+			'wpshadow_openssl_extension'         => array(
+				'label' => __( 'OpenSSL extension', 'plugin-wpshadow' ),
 				'test'  => array( __CLASS__, 'test_openssl_extension' ),
 			),
-			'WPS_php_version'               => array(
-				'label' => __( 'PHP version compliance', 'plugin-wp-support-thisismyurl' ),
+			'wpshadow_php_version'               => array(
+				'label' => __( 'PHP version compliance', 'plugin-wpshadow' ),
 				'test'  => array( __CLASS__, 'test_php_version' ),
 			),
-			'WPS_wordpress_version'         => array(
-				'label' => __( 'WordPress version compliance', 'plugin-wp-support-thisismyurl' ),
+			'wpshadow_wordpress_version'         => array(
+				'label' => __( 'WordPress version compliance', 'plugin-wpshadow' ),
 				'test'  => array( __CLASS__, 'test_wordpress_version' ),
 			),
-			'WPS_module_status'             => array(
-				'label' => __( 'Module status', 'plugin-wp-support-thisismyurl' ),
+			'wpshadow_module_status'             => array(
+				'label' => __( 'Module status', 'plugin-wpshadow' ),
 				'test'  => array( __CLASS__, 'test_module_status' ),
 			),
-			'WPS_environment_compatibility' => array(
-				'label' => __( 'Environment compatibility', 'plugin-wp-support-thisismyurl' ),
+			'wpshadow_environment_compatibility' => array(
+				'label' => __( 'Environment compatibility', 'plugin-wpshadow' ),
 				'test'  => array( __CLASS__, 'test_environment_compatibility' ),
 			),
-			'WPS_memory_limit'              => array(
-				'label' => __( 'Memory limit status', 'plugin-wp-support-thisismyurl' ),
+			'wpshadow_memory_limit'              => array(
+				'label' => __( 'Memory limit status', 'plugin-wpshadow' ),
 				'test'  => array( __CLASS__, 'test_memory_limit' ),
 			),
-			'WPS_execution_time'            => array(
-				'label' => __( 'Execution time limit', 'plugin-wp-support-thisismyurl' ),
+			'wpshadow_execution_time'            => array(
+				'label' => __( 'Execution time limit', 'plugin-wpshadow' ),
 				'test'  => array( __CLASS__, 'test_execution_time' ),
 			),
-			'WPS_required_extensions'       => array(
-				'label' => __( 'Required PHP extensions', 'plugin-wp-support-thisismyurl' ),
+			'wpshadow_required_extensions'       => array(
+				'label' => __( 'Required PHP extensions', 'plugin-wpshadow' ),
 				'test'  => array( __CLASS__, 'test_required_extensions' ),
 			),
-			'WPS_resource_usage'            => array(
-				'label' => __( 'Current resource usage', 'plugin-wp-support-thisismyurl' ),
+			'wpshadow_resource_usage'            => array(
+				'label' => __( 'Current resource usage', 'plugin-wpshadow' ),
 				'test'  => array( __CLASS__, 'test_resource_usage' ),
 			),
 		);
@@ -160,18 +160,18 @@ class WPS_Site_Health {
 	public static function register_builtin_module_checks(): void {
 		// Vault module checks.
 		self::register_module_checks(
-			'vault-support-thisismyurl',
+			'vault-wpshadow',
 			array(
-				'WPS_vault_directory'   => array(
-					'label' => __( 'Vault directory status', 'plugin-wp-support-thisismyurl' ),
+				'wpshadow_vault_directory'   => array(
+					'label' => __( 'Vault directory status', 'plugin-wpshadow' ),
 					'test'  => array( __CLASS__, 'test_vault_directory' ),
 				),
-				'WPS_encryption_config' => array(
-					'label' => __( 'Encryption configuration', 'plugin-wp-support-thisismyurl' ),
+				'wpshadow_encryption_config' => array(
+					'label' => __( 'Encryption configuration', 'plugin-wpshadow' ),
 					'test'  => array( __CLASS__, 'test_encryption_config' ),
 				),
-				'WPS_vault_permissions' => array(
-					'label' => __( 'Vault write permissions', 'plugin-wp-support-thisismyurl' ),
+				'wpshadow_vault_permissions' => array(
+					'label' => __( 'Vault write permissions', 'plugin-wpshadow' ),
 					'test'  => array( __CLASS__, 'test_vault_permissions' ),
 				),
 			)
@@ -180,7 +180,7 @@ class WPS_Site_Health {
 		/**
 		 * Allow other modules to register their health checks.
 		 */
-		do_action( 'WPS_register_health_checks' );
+		do_action( 'wpshadow_register_health_checks' );
 	}
 
 	/**
@@ -214,8 +214,8 @@ class WPS_Site_Health {
 			// Extract method name from test callback.
 			$test_method = self::extract_test_method( $check_config );
 
-			// Convert check_id to test_id (remove WPS_ prefix).
-			$test_id = str_replace( 'WPS_', '', $check_id );
+			// Convert check_id to test_id (remove WPSHADOW_ prefix).
+			$test_id = str_replace( 'wpshadow_', '', $check_id );
 
 			$map[ $test_id ] = array(
 				'label'  => $check_config['label'],
@@ -227,19 +227,19 @@ class WPS_Site_Health {
 		// Add module-specific checks from registry.
 		foreach ( self::$module_checks as $module_slug => $module_check_list ) {
 			// Check if module is enabled.
-			if ( ! WPS_Module_Registry::is_enabled( $module_slug ) ) {
+			if ( ! WPSHADOW_Module_Registry::is_enabled( $module_slug ) ) {
 				continue;
 			}
 
-			// Extract module name from slug (e.g., 'vault-support-thisismyurl' -> 'vault').
-			$module_name = str_replace( '-support-thisismyurl', '', $module_slug );
+			// Extract module name from slug (e.g., 'vault-wpshadow' -> 'vault').
+			$module_name = str_replace( '-wpshadow', '', $module_slug );
 
 			foreach ( $module_check_list as $check_id => $check_config ) {
 				// Extract method name from test callback.
 				$test_method = self::extract_test_method( $check_config );
 
-				// Convert check_id to test_id (remove WPS_ prefix).
-				$test_id = str_replace( 'WPS_', '', $check_id );
+				// Convert check_id to test_id (remove WPSHADOW_ prefix).
+				$test_id = str_replace( 'wpshadow_', '', $check_id );
 
 				$map[ $test_id ] = array(
 					'label'  => $check_config['label'],
@@ -259,14 +259,14 @@ class WPS_Site_Health {
 	 */
 	public static function test_vault_directory(): array {
 		$upload_dir    = wp_upload_dir();
-		$vault_dirname = get_option( 'WPS_vault_dirname' );
+		$vault_dirname = get_option( 'wpshadow_vault_dirname' );
 
 		if ( empty( $vault_dirname ) ) {
-			return WPS_Health_Renderer::build_result(
-				__( 'Vault directory not configured', 'plugin-wp-support-thisismyurl' ),
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'Vault directory not configured', 'plugin-wpshadow' ),
 				'recommended',
-				esc_html__( 'The vault directory has not been created yet. It will be created automatically on first use.', 'plugin-wp-support-thisismyurl' ),
-				'WPS_vault_directory',
+				esc_html__( 'The vault directory has not been created yet. It will be created automatically on first use.', 'plugin-wpshadow' ),
+				'wpshadow_vault_directory',
 				'',
 				'orange'
 			);
@@ -275,29 +275,29 @@ class WPS_Site_Health {
 		$vault_path = $upload_dir['basedir'] . '/' . $vault_dirname;
 
 		if ( ! file_exists( $vault_path ) ) {
-			return WPS_Health_Renderer::build_result(
-				__( 'Vault directory missing', 'plugin-wp-support-thisismyurl' ),
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'Vault directory missing', 'plugin-wpshadow' ),
 				'critical',
 				sprintf(
 					/* translators: %s: vault path */
-					esc_html__( 'The vault directory was configured but does not exist at: %s', 'plugin-wp-support-thisismyurl' ),
+					esc_html__( 'The vault directory was configured but does not exist at: %s', 'plugin-wpshadow' ),
 					'<code>' . esc_html( $vault_path ) . '</code>'
 				),
-				'WPS_vault_directory',
+				'wpshadow_vault_directory',
 				'',
 				'red'
 			);
 		}
 
-		return WPS_Health_Renderer::build_result(
-			__( 'Vault directory configured', 'plugin-wp-support-thisismyurl' ),
+		return WPSHADOW_Health_Renderer::build_result(
+			__( 'Vault directory configured', 'plugin-wpshadow' ),
 			'good',
 			sprintf(
 				/* translators: %s: vault path */
-				esc_html__( 'The vault directory exists at: %s', 'plugin-wp-support-thisismyurl' ),
+				esc_html__( 'The vault directory exists at: %s', 'plugin-wpshadow' ),
 				'<code>' . esc_html( $vault_path ) . '</code>'
 			),
-			'WPS_vault_directory'
+			'wpshadow_vault_directory'
 		);
 	}
 
@@ -309,52 +309,52 @@ class WPS_Site_Health {
 	public static function test_encryption_config(): array {
 		$is_production = 'production' === wp_get_environment_type();
 
-		if ( defined( 'WPS_VAULT_KEY' ) && WPS_VAULT_KEY ) {
-			return WPS_Health_Renderer::build_result(
-				__( 'Encryption key configured in wp-config.php', 'plugin-wp-support-thisismyurl' ),
+		if ( defined( 'wpshadow_VAULT_KEY' ) && WPSHADOW_VAULT_KEY ) {
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'Encryption key configured in wp-config.php', 'plugin-wpshadow' ),
 				'good',
-				esc_html__( 'Encryption key is properly defined in wp-config.php.', 'plugin-wp-support-thisismyurl' ),
-				'WPS_encryption_config'
+				esc_html__( 'Encryption key is properly defined in wp-config.php.', 'plugin-wpshadow' ),
+				'wpshadow_encryption_config'
 			);
 		}
 
-		$stored_key = get_option( 'WPS_vault_encryption_key' );
+		$stored_key = get_option( 'wpshadow_vault_encryption_key' );
 
 		if ( ! empty( $stored_key ) && $is_production ) {
-			return WPS_Health_Renderer::build_result(
-				__( 'Encryption key should be in wp-config.php', 'plugin-wp-support-thisismyurl' ),
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'Encryption key should be in wp-config.php', 'plugin-wpshadow' ),
 				'critical',
 				sprintf(
 					'%s<br><br>%s',
-					esc_html__( 'For production sites, encryption keys must be defined in wp-config.php, not stored in the database.', 'plugin-wp-support-thisismyurl' ),
+					esc_html__( 'For production sites, encryption keys must be defined in wp-config.php, not stored in the database.', 'plugin-wpshadow' ),
 					sprintf(
 						/* translators: %s: example code */
-						esc_html__( 'Add this line to your wp-config.php: %s', 'plugin-wp-support-thisismyurl' ),
-						'<code>define( "WPS_VAULT_KEY", "' . esc_html( $stored_key ) . '" );</code>'
+						esc_html__( 'Add this line to your wp-config.php: %s', 'plugin-wpshadow' ),
+						'<code>define( "wpshadow_VAULT_KEY", "' . esc_html( $stored_key ) . '" );</code>'
 					)
 				),
-				'WPS_encryption_config',
+				'wpshadow_encryption_config',
 				'',
 				'red'
 			);
 		}
 
 		if ( ! empty( $stored_key ) ) {
-			return WPS_Health_Renderer::build_result(
-				__( 'Encryption key in options (development mode)', 'plugin-wp-support-thisismyurl' ),
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'Encryption key in options (development mode)', 'plugin-wpshadow' ),
 				'recommended',
-				esc_html__( 'Encryption key is stored in the database. This is acceptable for development but should be moved to wp-config.php for production.', 'plugin-wp-support-thisismyurl' ),
-				'WPS_encryption_config',
+				esc_html__( 'Encryption key is stored in the database. This is acceptable for development but should be moved to wp-config.php for production.', 'plugin-wpshadow' ),
+				'wpshadow_encryption_config',
 				'',
 				'orange'
 			);
 		}
 
-		return WPS_Health_Renderer::build_result(
-			__( 'Encryption key not configured', 'plugin-wp-support-thisismyurl' ),
+		return WPSHADOW_Health_Renderer::build_result(
+			__( 'Encryption key not configured', 'plugin-wpshadow' ),
 			'recommended',
-			esc_html__( 'No encryption key is configured. An encryption key will be generated automatically when needed.', 'plugin-wp-support-thisismyurl' ),
-			'WPS_encryption_config',
+			esc_html__( 'No encryption key is configured. An encryption key will be generated automatically when needed.', 'plugin-wpshadow' ),
+			'wpshadow_encryption_config',
 			'',
 			'orange'
 		);
@@ -367,19 +367,19 @@ class WPS_Site_Health {
 	 */
 	public static function test_openssl_extension(): array {
 		if ( extension_loaded( 'openssl' ) ) {
-			return WPS_Health_Renderer::build_result(
-				__( 'OpenSSL extension is available', 'plugin-wp-support-thisismyurl' ),
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'OpenSSL extension is available', 'plugin-wpshadow' ),
 				'good',
-				esc_html__( 'The OpenSSL PHP extension is loaded and encryption features are available.', 'plugin-wp-support-thisismyurl' ),
-				'WPS_openssl_extension'
+				esc_html__( 'The OpenSSL PHP extension is loaded and encryption features are available.', 'plugin-wpshadow' ),
+				'wpshadow_openssl_extension'
 			);
 		}
 
-		return WPS_Health_Renderer::build_result(
-			__( 'OpenSSL extension is not available', 'plugin-wp-support-thisismyurl' ),
+		return WPSHADOW_Health_Renderer::build_result(
+			__( 'OpenSSL extension is not available', 'plugin-wpshadow' ),
 			'critical',
-			esc_html__( 'The OpenSSL PHP extension is required for encryption features. Contact your hosting provider to enable it.', 'plugin-wp-support-thisismyurl' ),
-			'WPS_openssl_extension',
+			esc_html__( 'The OpenSSL PHP extension is required for encryption features. Contact your hosting provider to enable it.', 'plugin-wpshadow' ),
+			'wpshadow_openssl_extension',
 			'',
 			'red'
 		);
@@ -391,34 +391,34 @@ class WPS_Site_Health {
 	 * @return array
 	 */
 	public static function test_php_version(): array {
-		if ( version_compare( PHP_VERSION, wp_support_MIN_PHP, '>=' ) ) {
-			return WPS_Health_Renderer::build_result(
+		if ( version_compare( PHP_VERSION, WPSHADOW_MIN_PHP, '>=' ) ) {
+			return WPSHADOW_Health_Renderer::build_result(
 				sprintf(
 					/* translators: %s: PHP version */
-					__( 'PHP version %s meets requirements', 'plugin-wp-support-thisismyurl' ),
+					__( 'PHP version %s meets requirements', 'plugin-wpshadow' ),
 					PHP_VERSION
 				),
 				'good',
 				sprintf(
 					/* translators: 1: current PHP version, 2: minimum required version */
-					esc_html__( 'Your PHP version (%1$s) meets the minimum requirement of %2$s.', 'plugin-wp-support-thisismyurl' ),
+					esc_html__( 'Your PHP version (%1$s) meets the minimum requirement of %2$s.', 'plugin-wpshadow' ),
 					PHP_VERSION,
-					wp_support_MIN_PHP
+					WPSHADOW_MIN_PHP
 				),
-				'WPS_php_version'
+				'wpshadow_php_version'
 			);
 		}
 
-		return WPS_Health_Renderer::build_result(
-			__( 'PHP version below minimum requirement', 'plugin-wp-support-thisismyurl' ),
+		return WPSHADOW_Health_Renderer::build_result(
+			__( 'PHP version below minimum requirement', 'plugin-wpshadow' ),
 			'critical',
 			sprintf(
 				/* translators: 1: current PHP version, 2: minimum required version */
-				esc_html__( 'Your PHP version (%1$s) is below the minimum requirement of %2$s. Contact your hosting provider to upgrade PHP.', 'plugin-wp-support-thisismyurl' ),
+				esc_html__( 'Your PHP version (%1$s) is below the minimum requirement of %2$s. Contact your hosting provider to upgrade PHP.', 'plugin-wpshadow' ),
 				PHP_VERSION,
-				wp_support_MIN_PHP
+				WPSHADOW_MIN_PHP
 			),
-			'WPS_php_version',
+			'wpshadow_php_version',
 			'',
 			'red'
 		);
@@ -432,34 +432,34 @@ class WPS_Site_Health {
 	public static function test_wordpress_version(): array {
 		global $wp_version;
 
-		if ( version_compare( $wp_version, wp_support_MIN_WP, '>=' ) ) {
-			return WPS_Health_Renderer::build_result(
+		if ( version_compare( $wp_version, WPSHADOW_MIN_WP, '>=' ) ) {
+			return WPSHADOW_Health_Renderer::build_result(
 				sprintf(
 					/* translators: %s: WordPress version */
-					__( 'WordPress version %s meets requirements', 'plugin-wp-support-thisismyurl' ),
+					__( 'WordPress version %s meets requirements', 'plugin-wpshadow' ),
 					$wp_version
 				),
 				'good',
 				sprintf(
 					/* translators: 1: current WordPress version, 2: minimum required version */
-					esc_html__( 'Your WordPress version (%1$s) meets the minimum requirement of %2$s.', 'plugin-wp-support-thisismyurl' ),
+					esc_html__( 'Your WordPress version (%1$s) meets the minimum requirement of %2$s.', 'plugin-wpshadow' ),
 					$wp_version,
-					wp_support_MIN_WP
+					WPSHADOW_MIN_WP
 				),
-				'WPS_wordpress_version'
+				'wpshadow_wordpress_version'
 			);
 		}
 
-		return WPS_Health_Renderer::build_result(
-			__( 'WordPress version below minimum requirement', 'plugin-wp-support-thisismyurl' ),
+		return WPSHADOW_Health_Renderer::build_result(
+			__( 'WordPress version below minimum requirement', 'plugin-wpshadow' ),
 			'critical',
 			sprintf(
 				/* translators: 1: current WordPress version, 2: minimum required version */
-				esc_html__( 'Your WordPress version (%1$s) is below the minimum requirement of %2$s. Please update WordPress.', 'plugin-wp-support-thisismyurl' ),
+				esc_html__( 'Your WordPress version (%1$s) is below the minimum requirement of %2$s. Please update WordPress.', 'plugin-wpshadow' ),
 				$wp_version,
-				wp_support_MIN_WP
+				WPSHADOW_MIN_WP
 			),
-			'WPS_wordpress_version',
+			'wpshadow_wordpress_version',
 			'',
 			'red'
 		);
@@ -472,14 +472,14 @@ class WPS_Site_Health {
 	 */
 	public static function test_vault_permissions(): array {
 		$upload_dir    = wp_upload_dir();
-		$vault_dirname = get_option( 'WPS_vault_dirname' );
+		$vault_dirname = get_option( 'wpshadow_vault_dirname' );
 
 		if ( empty( $vault_dirname ) ) {
-			return WPS_Health_Renderer::build_result(
-				__( 'Vault not configured yet', 'plugin-wp-support-thisismyurl' ),
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'Vault not configured yet', 'plugin-wpshadow' ),
 				'recommended',
-				esc_html__( 'Vault directory will be created with appropriate permissions when first needed.', 'plugin-wp-support-thisismyurl' ),
-				'WPS_vault_permissions',
+				esc_html__( 'Vault directory will be created with appropriate permissions when first needed.', 'plugin-wpshadow' ),
+				'wpshadow_vault_permissions',
 				'',
 				'gray'
 			);
@@ -488,36 +488,36 @@ class WPS_Site_Health {
 		$vault_path = $upload_dir['basedir'] . '/' . $vault_dirname;
 
 		if ( ! file_exists( $vault_path ) ) {
-			return WPS_Health_Renderer::build_result(
-				__( 'Vault directory does not exist', 'plugin-wp-support-thisismyurl' ),
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'Vault directory does not exist', 'plugin-wpshadow' ),
 				'critical',
-				esc_html__( 'The vault directory was expected but does not exist. It will be recreated on next use.', 'plugin-wp-support-thisismyurl' ),
-				'WPS_vault_permissions',
+				esc_html__( 'The vault directory was expected but does not exist. It will be recreated on next use.', 'plugin-wpshadow' ),
+				'wpshadow_vault_permissions',
 				'',
 				'red'
 			);
 		}
 
 		if ( ! wp_is_writable( $vault_path ) ) {
-			return WPS_Health_Renderer::build_result(
-				__( 'Vault directory is not writable', 'plugin-wp-support-thisismyurl' ),
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'Vault directory is not writable', 'plugin-wpshadow' ),
 				'critical',
 				sprintf(
 					/* translators: %s: vault path */
-					esc_html__( 'The vault directory exists but is not writable: %s. Check directory permissions.', 'plugin-wp-support-thisismyurl' ),
+					esc_html__( 'The vault directory exists but is not writable: %s. Check directory permissions.', 'plugin-wpshadow' ),
 					'<code>' . esc_html( $vault_path ) . '</code>'
 				),
-				'WPS_vault_permissions',
+				'wpshadow_vault_permissions',
 				'',
 				'red'
 			);
 		}
 
-		return WPS_Health_Renderer::build_result(
-			__( 'Vault directory has correct permissions', 'plugin-wp-support-thisismyurl' ),
+		return WPSHADOW_Health_Renderer::build_result(
+			__( 'Vault directory has correct permissions', 'plugin-wpshadow' ),
 			'good',
-			esc_html__( 'The vault directory is writable and ready for use.', 'plugin-wp-support-thisismyurl' ),
-			'WPS_vault_permissions'
+			esc_html__( 'The vault directory is writable and ready for use.', 'plugin-wpshadow' ),
+			'wpshadow_vault_permissions'
 		);
 	}
 
@@ -527,7 +527,7 @@ class WPS_Site_Health {
 	 * @return array
 	 */
 	public static function test_module_status(): array {
-		$modules      = WPS_Module_Registry::get_catalog_with_status();
+		$modules      = WPSHADOW_Module_Registry::get_catalog_with_status();
 		$active_count = 0;
 		$hub_count    = 0;
 		$spoke_count  = 0;
@@ -548,31 +548,31 @@ class WPS_Site_Health {
 		$module_count = $active_count;
 
 		if ( 0 === $module_count ) {
-			return WPS_Health_Renderer::build_result(
-				__( 'No modules registered', 'plugin-wp-support-thisismyurl' ),
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'No modules registered', 'plugin-wpshadow' ),
 				'recommended',
-				esc_html__( 'No WPS Suite modules have been registered yet. This is normal if no additional modules are installed.', 'plugin-wp-support-thisismyurl' ),
-				'WPS_module_status',
+				esc_html__( 'No WPS Suite modules have been registered yet. This is normal if no additional modules are installed.', 'plugin-wpshadow' ),
+				'wpshadow_module_status',
 				'',
 				'gray'
 			);
 		}
 
-		return WPS_Health_Renderer::build_result(
+		return WPSHADOW_Health_Renderer::build_result(
 			sprintf(
 				/* translators: 1: number of active modules, 2: total modules */
-				__( '%1$d of %2$d modules active', 'plugin-wp-support-thisismyurl' ),
+				__( '%1$d of %2$d modules active', 'plugin-wpshadow' ),
 				$active_count,
 				$module_count
 			),
 			'good',
 			sprintf(
 				/* translators: 1: hub count, 2: spoke count */
-				esc_html__( 'WPS Suite has %1$d hubs and %2$d spokes registered.', 'plugin-wp-support-thisismyurl' ),
+				esc_html__( 'WPS Suite has %1$d hubs and %2$d spokes registered.', 'plugin-wpshadow' ),
 				$hub_count,
 				$spoke_count
 			),
-			'WPS_module_status'
+			'wpshadow_module_status'
 		);
 	}
 
@@ -584,12 +584,12 @@ class WPS_Site_Health {
 	 */
 	public static function add_debug_info( array $info ): array {
 		$upload_dir    = wp_upload_dir();
-		$vault_dirname = get_option( 'WPS_vault_dirname', __( 'Not configured', 'plugin-wp-support-thisismyurl' ) );
+		$vault_dirname = get_option( 'wpshadow_vault_dirname', __( 'Not configured', 'plugin-wpshadow' ) );
 		$vault_path    = ! empty( $vault_dirname ) && 'Not configured' !== $vault_dirname
 			? $upload_dir['basedir'] . '/' . $vault_dirname
-			: __( 'Not configured', 'plugin-wp-support-thisismyurl' );
+			: __( 'Not configured', 'plugin-wpshadow' );
 
-		$modules     = WPS_Module_Registry::get_catalog_with_status();
+		$modules     = WPSHADOW_Module_Registry::get_catalog_with_status();
 		$module_list = array();
 		foreach ( $modules as $slug => $module ) {
 			// Only show enabled modules in the site report.
@@ -599,143 +599,143 @@ class WPS_Site_Health {
 			$module_list[] = sprintf( '%s v%s', $module['name'] ?? $slug, $module['version'] ?? '?' );
 		}
 
-		$encryption_key_source = defined( 'WPS_VAULT_KEY' ) && WPS_VAULT_KEY
-			? __( 'wp-config.php', 'plugin-wp-support-thisismyurl' )
-			: ( get_option( 'WPS_vault_encryption_key' ) ? __( 'Options table', 'plugin-wp-support-thisismyurl' ) : __( 'Not configured', 'plugin-wp-support-thisismyurl' ) );
+		$encryption_key_source = defined( 'wpshadow_VAULT_KEY' ) && WPSHADOW_VAULT_KEY
+			? __( 'wp-config.php', 'plugin-wpshadow' )
+			: ( get_option( 'wpshadow_vault_encryption_key' ) ? __( 'Options table', 'plugin-wpshadow' ) : __( 'Not configured', 'plugin-wpshadow' ) );
 
 		$info['wps-suite'] = array(
-			'label'  => __( 'WPS Suite', 'plugin-wp-support-thisismyurl' ),
+			'label'  => __( 'WPS Suite', 'plugin-wpshadow' ),
 			'fields' => array(
 				'core_version'          => array(
-					'label' => __( 'Core version', 'plugin-wp-support-thisismyurl' ),
-					'value' => wp_support_VERSION,
+					'label' => __( 'Core version', 'plugin-wpshadow' ),
+					'value' => WPSHADOW_VERSION,
 				),
 				'suite_id'              => array(
-					'label' => __( 'Suite ID', 'plugin-wp-support-thisismyurl' ),
-					'value' => WPS_SUITE_ID,
+					'label' => __( 'Suite ID', 'plugin-wpshadow' ),
+					'value' => WPSHADOW_SUITE_ID,
 				),
 				'text_domain'           => array(
-					'label' => __( 'Text domain', 'plugin-wp-support-thisismyurl' ),
-					'value' => wp_support_TEXT_DOMAIN,
+					'label' => __( 'Text domain', 'plugin-wpshadow' ),
+					'value' => WPSHADOW_TEXT_DOMAIN,
 				),
 				'vault_dirname'         => array(
-					'label' => __( 'Vault directory name', 'plugin-wp-support-thisismyurl' ),
+					'label' => __( 'Vault directory name', 'plugin-wpshadow' ),
 					'value' => $vault_dirname,
 				),
 				'vault_path'            => array(
-					'label' => __( 'Vault path', 'plugin-wp-support-thisismyurl' ),
+					'label' => __( 'Vault path', 'plugin-wpshadow' ),
 					'value' => $vault_path,
 				),
 				'encryption_key_source' => array(
-					'label' => __( 'Encryption key source', 'plugin-wp-support-thisismyurl' ),
+					'label' => __( 'Encryption key source', 'plugin-wpshadow' ),
 					'value' => $encryption_key_source,
 				),
 				'openssl_loaded'        => array(
-					'label' => __( 'OpenSSL extension', 'plugin-wp-support-thisismyurl' ),
-					'value' => extension_loaded( 'openssl' ) ? __( 'Loaded', 'plugin-wp-support-thisismyurl' ) : __( 'Not loaded', 'plugin-wp-support-thisismyurl' ),
+					'label' => __( 'OpenSSL extension', 'plugin-wpshadow' ),
+					'value' => extension_loaded( 'openssl' ) ? __( 'Loaded', 'plugin-wpshadow' ) : __( 'Not loaded', 'plugin-wpshadow' ),
 				),
 				'registered_modules'    => array(
-					'label' => __( 'Registered modules', 'plugin-wp-support-thisismyurl' ),
-					'value' => ! empty( $module_list ) ? implode( "\n", $module_list ) : __( 'None', 'plugin-wp-support-thisismyurl' ),
+					'label' => __( 'Registered modules', 'plugin-wpshadow' ),
+					'value' => ! empty( $module_list ) ? implode( "\n", $module_list ) : __( 'None', 'plugin-wpshadow' ),
 				),
 			),
 		);
 
 		// Add environment information.
-		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Environment_Checker' ) ) {
-			$env_status = \WPS\CoreSupport\WPS_Environment_Checker::get_environment_status();
+		if ( class_exists( '\\WPShadow\\WPSHADOW_Environment_Checker' ) ) {
+			$env_status = \WPS\CoreSupport\WPSHADOW_Environment_Checker::get_environment_status();
 
 			$info['wps-environment'] = array(
-				'label'  => __( 'WPS Environment', 'plugin-wp-support-thisismyurl' ),
+				'label'  => __( 'WPS Environment', 'plugin-wpshadow' ),
 				'fields' => array(
 					'compatibility_status'   => array(
-						'label' => __( 'Environment compatibility', 'plugin-wp-support-thisismyurl' ),
-						'value' => $env_status['is_compatible'] ? __( 'Compatible', 'plugin-wp-support-thisismyurl' ) : __( 'Incompatible', 'plugin-wp-support-thisismyurl' ),
+						'label' => __( 'Environment compatibility', 'plugin-wpshadow' ),
+						'value' => $env_status['is_compatible'] ? __( 'Compatible', 'plugin-wpshadow' ) : __( 'Incompatible', 'plugin-wpshadow' ),
 					),
 					'resource_constraints'   => array(
-						'label' => __( 'Resource constraints', 'plugin-wp-support-thisismyurl' ),
-						'value' => $env_status['has_constraints'] ? __( 'Yes', 'plugin-wp-support-thisismyurl' ) : __( 'No', 'plugin-wp-support-thisismyurl' ),
+						'label' => __( 'Resource constraints', 'plugin-wpshadow' ),
+						'value' => $env_status['has_constraints'] ? __( 'Yes', 'plugin-wpshadow' ) : __( 'No', 'plugin-wpshadow' ),
 					),
 					'memory_limit'           => array(
-						'label' => __( 'Memory limit', 'plugin-wp-support-thisismyurl' ),
+						'label' => __( 'Memory limit', 'plugin-wpshadow' ),
 						'value' => $env_status['memory_limit']['current'] . ' (' . $env_status['memory_limit']['level'] . ')',
 					),
 					'execution_time'         => array(
-						'label' => __( 'Max execution time', 'plugin-wp-support-thisismyurl' ),
+						'label' => __( 'Max execution time', 'plugin-wpshadow' ),
 						'value' => 0 === $env_status['execution_time']['current']
-							? __( 'Unlimited', 'plugin-wp-support-thisismyurl' )
+							? __( 'Unlimited', 'plugin-wpshadow' )
 							: $env_status['execution_time']['current'] . 's (' . $env_status['execution_time']['level'] . ')',
 					),
 					'upload_max_filesize'    => array(
-						'label' => __( 'Upload max filesize', 'plugin-wp-support-thisismyurl' ),
+						'label' => __( 'Upload max filesize', 'plugin-wpshadow' ),
 						'value' => $env_status['upload_limit']['upload_max_filesize'],
 					),
 					'post_max_size'          => array(
-						'label' => __( 'Post max size', 'plugin-wp-support-thisismyurl' ),
+						'label' => __( 'Post max size', 'plugin-wpshadow' ),
 						'value' => $env_status['upload_limit']['post_max_size'],
 					),
 					'required_extensions'    => array(
-						'label' => __( 'Required extensions', 'plugin-wp-support-thisismyurl' ),
+						'label' => __( 'Required extensions', 'plugin-wpshadow' ),
 						'value' => $env_status['extensions']['all_required_loaded']
-							? __( 'All loaded', 'plugin-wp-support-thisismyurl' )
-							: __( 'Missing: ', 'plugin-wp-support-thisismyurl' ) . implode( ', ', $env_status['extensions']['required_missing'] ),
+							? __( 'All loaded', 'plugin-wpshadow' )
+							: __( 'Missing: ', 'plugin-wpshadow' ) . implode( ', ', $env_status['extensions']['required_missing'] ),
 					),
 					'recommended_extensions' => array(
-						'label' => __( 'Recommended extensions', 'plugin-wp-support-thisismyurl' ),
+						'label' => __( 'Recommended extensions', 'plugin-wpshadow' ),
 						'value' => empty( $env_status['extensions']['recommended_missing'] )
-							? __( 'All loaded', 'plugin-wp-support-thisismyurl' )
-							: __( 'Missing: ', 'plugin-wp-support-thisismyurl' ) . implode( ', ', $env_status['extensions']['recommended_missing'] ),
+							? __( 'All loaded', 'plugin-wpshadow' )
+							: __( 'Missing: ', 'plugin-wpshadow' ) . implode( ', ', $env_status['extensions']['recommended_missing'] ),
 					),
 					'diagnostic_logging'     => array(
-						'label' => __( 'Diagnostic logging', 'plugin-wp-support-thisismyurl' ),
-						'value' => get_option( 'wps_diagnostic_logging_enabled', false ) ? __( 'Enabled', 'plugin-wp-support-thisismyurl' ) : __( 'Disabled', 'plugin-wp-support-thisismyurl' ),
+						'label' => __( 'Diagnostic logging', 'plugin-wpshadow' ),
+						'value' => get_option( 'wpshadow_diagnostic_logging_enabled', false ) ? __( 'Enabled', 'plugin-wpshadow' ) : __( 'Disabled', 'plugin-wpshadow' ),
 					),
 					'heavy_tasks_disabled'   => array(
-						'label' => __( 'Heavy tasks disabled', 'plugin-wp-support-thisismyurl' ),
-						'value' => \WPS\CoreSupport\WPS_Environment_Checker::should_disable_heavy_tasks() ? __( 'Yes', 'plugin-wp-support-thisismyurl' ) : __( 'No', 'plugin-wp-support-thisismyurl' ),
+						'label' => __( 'Heavy tasks disabled', 'plugin-wpshadow' ),
+						'value' => \WPS\CoreSupport\WPSHADOW_Environment_Checker::should_disable_heavy_tasks() ? __( 'Yes', 'plugin-wpshadow' ) : __( 'No', 'plugin-wpshadow' ),
 					),
 					'batching_enabled'       => array(
-						'label' => __( 'Task batching', 'plugin-wp-support-thisismyurl' ),
-						'value' => \WPS\CoreSupport\WPS_Environment_Checker::should_batch_tasks() ? __( 'Enabled', 'plugin-wp-support-thisismyurl' ) : __( 'Not required', 'plugin-wp-support-thisismyurl' ),
+						'label' => __( 'Task batching', 'plugin-wpshadow' ),
+						'value' => \WPS\CoreSupport\WPSHADOW_Environment_Checker::should_batch_tasks() ? __( 'Enabled', 'plugin-wpshadow' ) : __( 'Not required', 'plugin-wpshadow' ),
 					),
 				),
 			);
 		}
 
 		// Add resource usage information.
-		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Server_Limits' ) ) {
-			$resource_status = WPS_Server_Limits::get_resource_status();
+		if ( class_exists( '\\WPShadow\\WPSHADOW_Server_Limits' ) ) {
+			$resource_status = WPSHADOW_Server_Limits::get_resource_status();
 
 			$info['wps-resources'] = array(
-				'label'  => __( 'WPS Resource Usage', 'plugin-wp-support-thisismyurl' ),
+				'label'  => __( 'WPS Resource Usage', 'plugin-wpshadow' ),
 				'fields' => array(
 					'memory_usage'      => array(
-						'label' => __( 'Current memory usage', 'plugin-wp-support-thisismyurl' ),
-						'value' => \WPS\CoreSupport\WPS_Environment_Checker::format_bytes( $resource_status['memory']['current_usage'] ) . ' / ' . $resource_status['memory']['limit'],
+						'label' => __( 'Current memory usage', 'plugin-wpshadow' ),
+						'value' => \WPS\CoreSupport\WPSHADOW_Environment_Checker::format_bytes( $resource_status['memory']['current_usage'] ) . ' / ' . $resource_status['memory']['limit'],
 					),
 					'memory_percentage' => array(
-						'label' => __( 'Memory usage percentage', 'plugin-wp-support-thisismyurl' ),
+						'label' => __( 'Memory usage percentage', 'plugin-wpshadow' ),
 						'value' => number_format( $resource_status['memory']['usage_percentage'], 2 ) . '%',
 					),
 					'peak_memory'       => array(
-						'label' => __( 'Peak memory usage', 'plugin-wp-support-thisismyurl' ),
-						'value' => \WPS\CoreSupport\WPS_Environment_Checker::format_bytes( $resource_status['memory']['peak_usage'] ),
+						'label' => __( 'Peak memory usage', 'plugin-wpshadow' ),
+						'value' => \WPS\CoreSupport\WPSHADOW_Environment_Checker::format_bytes( $resource_status['memory']['peak_usage'] ),
 					),
 					'time_elapsed'      => array(
-						'label' => __( 'Time elapsed', 'plugin-wp-support-thisismyurl' ),
+						'label' => __( 'Time elapsed', 'plugin-wpshadow' ),
 						'value' => number_format( $resource_status['time']['elapsed'], 2 ) . 's',
 					),
 					'time_percentage'   => array(
-						'label' => __( 'Time usage percentage', 'plugin-wp-support-thisismyurl' ),
+						'label' => __( 'Time usage percentage', 'plugin-wpshadow' ),
 						'value' => number_format( $resource_status['time']['usage_percentage'], 2 ) . '%',
 					),
 					'resource_level'    => array(
-						'label' => __( 'Overall resource level', 'plugin-wp-support-thisismyurl' ),
+						'label' => __( 'Overall resource level', 'plugin-wpshadow' ),
 						'value' => ucfirst( $resource_status['level'] ),
 					),
 					'batch_size'        => array(
-						'label' => __( 'Recommended batch size', 'plugin-wp-support-thisismyurl' ),
-						'value' => (string) \WPS\CoreSupport\WPS_Server_Limits::get_batch_size(),
+						'label' => __( 'Recommended batch size', 'plugin-wpshadow' ),
+						'value' => (string) \WPS\CoreSupport\WPSHADOW_Server_Limits::get_batch_size(),
 					),
 				),
 			);
@@ -826,7 +826,7 @@ class WPS_Site_Health {
 		$self_health = self::get_health_check_results( $module_id );
 
 		// Get dependent modules from registry.
-		$catalog         = \WPS\CoreSupport\WPS_Module_Registry::get_catalog_with_status();
+		$catalog         = \WPS\CoreSupport\WPSHADOW_Module_Registry::get_catalog_with_status();
 		$dependents_data = array();
 
 		foreach ( $catalog as $mod ) {
@@ -863,7 +863,7 @@ class WPS_Site_Health {
 	 * }
 	 */
 	public static function get_health_by_module_type(): array {
-		$modules     = WPS_Module_Registry::get_catalog_with_status();
+		$modules     = WPSHADOW_Module_Registry::get_catalog_with_status();
 		$test_map    = self::build_test_map();
 		$core_tests  = array();
 		$hub_tests   = array();
@@ -889,7 +889,7 @@ class WPS_Site_Health {
 					$core_tests[ $test_id ] = $test_result;
 				} else {
 					// Determine if hub or spoke based on module slug.
-					$module_slug = $module . '-support-thisismyurl';
+					$module_slug = $module . '-wpshadow';
 					$module_info = $modules[ $module_slug ] ?? array();
 					$module_type = $module_info['type'] ?? 'spoke';
 
@@ -921,43 +921,43 @@ class WPS_Site_Health {
 	 * @return array
 	 */
 	public static function test_environment_compatibility(): array {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Environment_Checker' ) ) {
-			return WPS_Health_Renderer::build_result(
-				__( 'Environment checker not available', 'plugin-wp-support-thisismyurl' ),
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Environment_Checker' ) ) {
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'Environment checker not available', 'plugin-wpshadow' ),
 				'recommended',
-				esc_html__( 'Environment checker class is not loaded.', 'plugin-wp-support-thisismyurl' ),
-				'WPS_environment_compatibility'
+				esc_html__( 'Environment checker class is not loaded.', 'plugin-wpshadow' ),
+				'wpshadow_environment_compatibility'
 			);
 		}
 
-		$is_compatible   = \WPS\CoreSupport\WPS_Environment_Checker::is_environment_compatible();
-		$has_constraints = \WPS\CoreSupport\WPS_Environment_Checker::has_resource_constraints();
+		$is_compatible   = \WPS\CoreSupport\WPSHADOW_Environment_Checker::is_environment_compatible();
+		$has_constraints = \WPS\CoreSupport\WPSHADOW_Environment_Checker::has_resource_constraints();
 
 		if ( $is_compatible && ! $has_constraints ) {
-			return WPS_Health_Renderer::build_result(
-				__( 'Environment is fully compatible', 'plugin-wp-support-thisismyurl' ),
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'Environment is fully compatible', 'plugin-wpshadow' ),
 				'good',
-				esc_html__( 'Your server environment meets all requirements and has sufficient resources for optimal performance.', 'plugin-wp-support-thisismyurl' ),
-				'WPS_environment_compatibility'
+				esc_html__( 'Your server environment meets all requirements and has sufficient resources for optimal performance.', 'plugin-wpshadow' ),
+				'wpshadow_environment_compatibility'
 			);
 		}
 
 		if ( $is_compatible && $has_constraints ) {
-			return WPS_Health_Renderer::build_result(
-				__( 'Environment has resource constraints', 'plugin-wp-support-thisismyurl' ),
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'Environment has resource constraints', 'plugin-wpshadow' ),
 				'recommended',
-				esc_html__( 'Your server environment meets minimum requirements but has resource constraints. Heavy operations will be batched automatically.', 'plugin-wp-support-thisismyurl' ),
-				'WPS_environment_compatibility',
+				esc_html__( 'Your server environment meets minimum requirements but has resource constraints. Heavy operations will be batched automatically.', 'plugin-wpshadow' ),
+				'wpshadow_environment_compatibility',
 				'',
 				'orange'
 			);
 		}
 
-		return WPS_Health_Renderer::build_result(
-			__( 'Environment is incompatible', 'plugin-wp-support-thisismyurl' ),
+		return WPSHADOW_Health_Renderer::build_result(
+			__( 'Environment is incompatible', 'plugin-wpshadow' ),
 			'critical',
-			esc_html__( 'Your server environment does not meet minimum requirements. Heavy operations have been disabled to prevent errors.', 'plugin-wp-support-thisismyurl' ),
-			'WPS_environment_compatibility',
+			esc_html__( 'Your server environment does not meet minimum requirements. Heavy operations have been disabled to prevent errors.', 'plugin-wpshadow' ),
+			'wpshadow_environment_compatibility',
 			'',
 			'red'
 		);
@@ -969,54 +969,54 @@ class WPS_Site_Health {
 	 * @return array
 	 */
 	public static function test_memory_limit(): array {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Environment_Checker' ) ) {
-			return WPS_Health_Renderer::build_result(
-				__( 'Memory limit check unavailable', 'plugin-wp-support-thisismyurl' ),
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Environment_Checker' ) ) {
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'Memory limit check unavailable', 'plugin-wpshadow' ),
 				'recommended',
-				esc_html__( 'Environment checker class is not loaded.', 'plugin-wp-support-thisismyurl' ),
-				'WPS_memory_limit'
+				esc_html__( 'Environment checker class is not loaded.', 'plugin-wpshadow' ),
+				'wpshadow_memory_limit'
 			);
 		}
 
-		$status = \WPS\CoreSupport\WPS_Environment_Checker::get_memory_limit_status();
+		$status = \WPS\CoreSupport\WPSHADOW_Environment_Checker::get_memory_limit_status();
 
 		if ( 'good' === $status['level'] ) {
-			return WPS_Health_Renderer::build_result(
+			return WPSHADOW_Health_Renderer::build_result(
 				sprintf(
 					/* translators: %s: Memory limit */
-					__( 'Memory limit is optimal (%s)', 'plugin-wp-support-thisismyurl' ),
+					__( 'Memory limit is optimal (%s)', 'plugin-wpshadow' ),
 					$status['current']
 				),
 				'good',
 				esc_html( $status['message'] ),
-				'WPS_memory_limit'
+				'wpshadow_memory_limit'
 			);
 		}
 
 		if ( 'warning' === $status['level'] ) {
-			return WPS_Health_Renderer::build_result(
+			return WPSHADOW_Health_Renderer::build_result(
 				sprintf(
 					/* translators: %s: Memory limit */
-					__( 'Memory limit is adequate (%s)', 'plugin-wp-support-thisismyurl' ),
+					__( 'Memory limit is adequate (%s)', 'plugin-wpshadow' ),
 					$status['current']
 				),
 				'recommended',
 				esc_html( $status['message'] ),
-				'WPS_memory_limit',
+				'wpshadow_memory_limit',
 				'',
 				'orange'
 			);
 		}
 
-		return WPS_Health_Renderer::build_result(
+		return WPSHADOW_Health_Renderer::build_result(
 			sprintf(
 				/* translators: %s: Memory limit */
-				__( 'Memory limit is insufficient (%s)', 'plugin-wp-support-thisismyurl' ),
+				__( 'Memory limit is insufficient (%s)', 'plugin-wpshadow' ),
 				$status['current']
 			),
 			'critical',
 			esc_html( $status['message'] ),
-			'WPS_memory_limit',
+			'wpshadow_memory_limit',
 			'',
 			'red'
 		);
@@ -1028,58 +1028,58 @@ class WPS_Site_Health {
 	 * @return array
 	 */
 	public static function test_execution_time(): array {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Environment_Checker' ) ) {
-			return WPS_Health_Renderer::build_result(
-				__( 'Execution time check unavailable', 'plugin-wp-support-thisismyurl' ),
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Environment_Checker' ) ) {
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'Execution time check unavailable', 'plugin-wpshadow' ),
 				'recommended',
-				esc_html__( 'Environment checker class is not loaded.', 'plugin-wp-support-thisismyurl' ),
-				'WPS_execution_time'
+				esc_html__( 'Environment checker class is not loaded.', 'plugin-wpshadow' ),
+				'wpshadow_execution_time'
 			);
 		}
 
-		$status = \WPS\CoreSupport\WPS_Environment_Checker::get_execution_time_status();
+		$status = \WPS\CoreSupport\WPSHADOW_Environment_Checker::get_execution_time_status();
 
 		if ( 'good' === $status['level'] ) {
 			$time_display = 0 === $status['current']
-				? __( 'unlimited', 'plugin-wp-support-thisismyurl' )
+				? __( 'unlimited', 'plugin-wpshadow' )
 				: $status['current'] . 's';
 
-			return WPS_Health_Renderer::build_result(
+			return WPSHADOW_Health_Renderer::build_result(
 				sprintf(
 					/* translators: %s: Execution time */
-					__( 'Execution time is optimal (%s)', 'plugin-wp-support-thisismyurl' ),
+					__( 'Execution time is optimal (%s)', 'plugin-wpshadow' ),
 					$time_display
 				),
 				'good',
 				esc_html( $status['message'] ),
-				'WPS_execution_time'
+				'wpshadow_execution_time'
 			);
 		}
 
 		if ( 'warning' === $status['level'] ) {
-			return WPS_Health_Renderer::build_result(
+			return WPSHADOW_Health_Renderer::build_result(
 				sprintf(
 					/* translators: %s: Execution time */
-					__( 'Execution time is adequate (%s)', 'plugin-wp-support-thisismyurl' ),
+					__( 'Execution time is adequate (%s)', 'plugin-wpshadow' ),
 					$status['current'] . 's'
 				),
 				'recommended',
 				esc_html( $status['message'] ),
-				'WPS_execution_time',
+				'wpshadow_execution_time',
 				'',
 				'orange'
 			);
 		}
 
-		return WPS_Health_Renderer::build_result(
+		return WPSHADOW_Health_Renderer::build_result(
 			sprintf(
 				/* translators: %s: Execution time */
-				__( 'Execution time is insufficient (%s)', 'plugin-wp-support-thisismyurl' ),
+				__( 'Execution time is insufficient (%s)', 'plugin-wpshadow' ),
 				$status['current'] . 's'
 			),
 			'critical',
 			esc_html( $status['message'] ),
-			'WPS_execution_time',
+			'wpshadow_execution_time',
 			'',
 			'red'
 		);
@@ -1091,42 +1091,42 @@ class WPS_Site_Health {
 	 * @return array
 	 */
 	public static function test_required_extensions(): array {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Environment_Checker' ) ) {
-			return WPS_Health_Renderer::build_result(
-				__( 'Extensions check unavailable', 'plugin-wp-support-thisismyurl' ),
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Environment_Checker' ) ) {
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'Extensions check unavailable', 'plugin-wpshadow' ),
 				'recommended',
-				esc_html__( 'Environment checker class is not loaded.', 'plugin-wp-support-thisismyurl' ),
-				'WPS_required_extensions'
+				esc_html__( 'Environment checker class is not loaded.', 'plugin-wpshadow' ),
+				'wpshadow_required_extensions'
 			);
 		}
 
-		$status = \WPS\CoreSupport\WPS_Environment_Checker::get_extensions_status();
+		$status = \WPS\CoreSupport\WPSHADOW_Environment_Checker::get_extensions_status();
 
 		if ( $status['all_required_loaded'] && empty( $status['recommended_missing'] ) ) {
-			return WPS_Health_Renderer::build_result(
-				__( 'All required and recommended extensions loaded', 'plugin-wp-support-thisismyurl' ),
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'All required and recommended extensions loaded', 'plugin-wpshadow' ),
 				'good',
 				esc_html( $status['message'] ),
-				'WPS_required_extensions'
+				'wpshadow_required_extensions'
 			);
 		}
 
 		if ( $status['all_required_loaded'] && ! empty( $status['recommended_missing'] ) ) {
-			return WPS_Health_Renderer::build_result(
-				__( 'All required extensions loaded', 'plugin-wp-support-thisismyurl' ),
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'All required extensions loaded', 'plugin-wpshadow' ),
 				'recommended',
 				esc_html( $status['message'] ),
-				'WPS_required_extensions',
+				'wpshadow_required_extensions',
 				'',
 				'orange'
 			);
 		}
 
-		return WPS_Health_Renderer::build_result(
-			__( 'Required extensions missing', 'plugin-wp-support-thisismyurl' ),
+		return WPSHADOW_Health_Renderer::build_result(
+			__( 'Required extensions missing', 'plugin-wpshadow' ),
 			'critical',
 			esc_html( $status['message'] ),
-			'WPS_required_extensions',
+			'wpshadow_required_extensions',
 			'',
 			'red'
 		);
@@ -1138,51 +1138,51 @@ class WPS_Site_Health {
 	 * @return array
 	 */
 	public static function test_resource_usage(): array {
-		if ( ! class_exists( '\\WPS\\CoreSupport\\WPS_Server_Limits' ) ) {
-			return WPS_Health_Renderer::build_result(
-				__( 'Resource usage check unavailable', 'plugin-wp-support-thisismyurl' ),
+		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Server_Limits' ) ) {
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'Resource usage check unavailable', 'plugin-wpshadow' ),
 				'recommended',
-				esc_html__( 'Server limits class is not loaded.', 'plugin-wp-support-thisismyurl' ),
-				'WPS_resource_usage'
+				esc_html__( 'Server limits class is not loaded.', 'plugin-wpshadow' ),
+				'wpshadow_resource_usage'
 			);
 		}
 
-		$status = \WPS\CoreSupport\WPS_Server_Limits::get_resource_status();
+		$status = \WPS\CoreSupport\WPSHADOW_Server_Limits::get_resource_status();
 		$memory = $status['memory'];
 		$time   = $status['time'];
 
 		$description = sprintf(
 			/* translators: 1: Memory usage percentage, 2: Time usage percentage */
-			esc_html__( 'Current resource usage: Memory %1$s%%, Execution time %2$s%%', 'plugin-wp-support-thisismyurl' ),
+			esc_html__( 'Current resource usage: Memory %1$s%%, Execution time %2$s%%', 'plugin-wpshadow' ),
 			number_format( $memory['usage_percentage'], 1 ),
 			number_format( $time['usage_percentage'], 1 )
 		);
 
 		if ( 'good' === $status['level'] ) {
-			return WPS_Health_Renderer::build_result(
-				__( 'Resource usage is optimal', 'plugin-wp-support-thisismyurl' ),
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'Resource usage is optimal', 'plugin-wpshadow' ),
 				'good',
 				$description,
-				'WPS_resource_usage'
+				'wpshadow_resource_usage'
 			);
 		}
 
 		if ( 'warning' === $status['level'] ) {
-			return WPS_Health_Renderer::build_result(
-				__( 'Resource usage is moderate', 'plugin-wp-support-thisismyurl' ),
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'Resource usage is moderate', 'plugin-wpshadow' ),
 				'recommended',
-				$description . ' ' . esc_html__( 'Operations will be batched automatically.', 'plugin-wp-support-thisismyurl' ),
-				'WPS_resource_usage',
+				$description . ' ' . esc_html__( 'Operations will be batched automatically.', 'plugin-wpshadow' ),
+				'wpshadow_resource_usage',
 				'',
 				'orange'
 			);
 		}
 
-		return WPS_Health_Renderer::build_result(
-			__( 'Resource usage is high', 'plugin-wp-support-thisismyurl' ),
+		return WPSHADOW_Health_Renderer::build_result(
+			__( 'Resource usage is high', 'plugin-wpshadow' ),
 			'critical',
-			$description . ' ' . esc_html__( 'Heavy operations should be avoided.', 'plugin-wp-support-thisismyurl' ),
-			'WPS_resource_usage',
+			$description . ' ' . esc_html__( 'Heavy operations should be avoided.', 'plugin-wpshadow' ),
+			'wpshadow_resource_usage',
 			'',
 			'red'
 		);
@@ -1193,20 +1193,20 @@ class WPS_Site_Health {
  * Example: How modules should register their health checks
  *
  * Modules should register health checks during initialization using the
- * 'WPS_register_health_checks' action hook.
+ * 'wpshadow_register_health_checks' action hook.
  *
  * @example
  * ```php
- * add_action( 'WPS_register_health_checks', function() {
- *     \WPS\CoreSupport\WPS_Site_Health::register_module_checks(
- *         'media-support-thisismyurl',
+ * add_action( 'wpshadow_register_health_checks', function() {
+ *     \WPS\CoreSupport\WPSHADOW_Site_Health::register_module_checks(
+ *         'media-wpshadow',
  *         array(
- *             'WPS_imagick_available' => array(
- *                 'label' => __( 'ImageMagick availability', 'media-support-thisismyurl' ),
+ *             'wpshadow_imagick_available' => array(
+ *                 'label' => __( 'ImageMagick availability', 'media-wpshadow' ),
  *                 'test'  => array( 'MediaHub\Health', 'test_imagick' ),
  *             ),
- *             'WPS_gd_available' => array(
- *                 'label' => __( 'GD library availability', 'media-support-thisismyurl' ),
+ *             'wpshadow_gd_available' => array(
+ *                 'label' => __( 'GD library availability', 'media-wpshadow' ),
  *                 'test'  => array( 'MediaHub\Health', 'test_gd' ),
  *             ),
  *         )

@@ -1,10 +1,10 @@
-# WP support (thisismyurl)
+# WPShadow
 
-**The Complete WP support Solution - Standalone Core + Optional Module Ecosystem**
+**The Complete WPShadow Solution - Standalone Core + Optional Module Ecosystem**
 
 ## Description
 
-WP support is a comprehensive WordPress support and diagnostics plugin that works perfectly as a **standalone core** or optionally extends with specialized modules (Image Hub, Media Hub, Vault Storage, and more). It acts as the foundational platform for managing features, diagnostics, emergency recovery, backup verification, and documentation.
+WPShadow is a comprehensive WPShadow and diagnostics plugin that works perfectly as a **standalone core** or optionally extends with specialized modules (Image Hub, Media Hub, Vault Storage, and more). It acts as the foundational platform for managing features, diagnostics, emergency recovery, backup verification, and documentation.
 
 This plugin provides complete functionality on its own and can optionally load hub and spoke plugins for extended capabilities.
 
@@ -59,9 +59,9 @@ This plugin provides complete functionality on its own and can optionally load h
 
 ## Installation
 
-1. Upload the plugin files to `/wp-content/plugins/plugin-wp-support-thisismyurl/`
+1. Upload the plugin files to `/wp-content/plugins/plugin-wpshadow/`
 2. Activate through the 'Plugins' menu in WordPress
-3. Configure settings under 'WP support' in the admin menu
+3. Configure settings under 'WPShadow' in the admin menu
 4. (Optional) Install additional modules from the Modules page for extended functionality
 
 ### Standalone Setup (Core Only)
@@ -113,7 +113,7 @@ For detailed documentation, see [SEAMLESS_REGISTRATION.md](docs/SEAMLESS_REGISTR
 - One-click access to WordPress Site Health
 
 **Emergency Support:**
-- Activate emergency isolation mode (disable all plugins except WP Support)
+- Activate emergency isolation mode (disable all plugins except WPShadow)
 - Automated error log monitoring
 - Quick recovery procedures
 - Network-wide emergency controls (in Network Admin)
@@ -125,7 +125,7 @@ For detailed documentation, see [SEAMLESS_REGISTRATION.md](docs/SEAMLESS_REGISTR
 - Live site remains normal for all visitors
 - Perfect for isolating plugin/theme conflicts without taking site offline
 - Session automatically expires after 24 hours
-- Access via WP support → Conflict Sandbox menu
+- Access via WPShadow → Conflict Sandbox menu
 
 **Backup Verification:**
 - Run automated backup integrity tests
@@ -195,12 +195,12 @@ Core Support includes built-in privacy and GDPR compliance:
   - Local banner with customizable messaging
   - Auto-blocks common trackers (Google Analytics, Facebook Pixel, DoubleClick)
   - Dark mode and mobile responsive
-- **Export Personal Data:** WordPress Tools → Export Personal Data includes WP support and module data
+- **Export Personal Data:** WordPress Tools → Export Personal Data includes WPShadow and module data
 - **Erase Personal Data:** Requests securely erase user data; Vault originals are purged
 - **Data Retention:** Admins set retention policies; old data auto-purges per schedule
 - **Audit Trail:** All export/erase operations are logged
 
-Core WP support includes built-in privacy and GDPR compliance:
+Core WPShadow includes built-in privacy and GDPR compliance:
 
 - **PHP 8.4+** with strict typing, Enums, and Property Hooks
 - **SVE Protocol:** Sanitize inputs, Validate capabilities, Escape outputs
@@ -213,8 +213,8 @@ Core WP support includes built-in privacy and GDPR compliance:
 ### Directory Structure
 
 ```
-plugin-wp-support-thisismyurl/
-├── plugin-wp-support-thisismyurl.php  # Main plugin file
+plugin-wpshadow/
+├── plugin-wpshadow.php  # Main plugin file
 ├── uninstall.php                      # Cleanup on uninstall
 ├── includes/                          # Core functionality
 ├── assets/                            # CSS/JS/Images
@@ -246,15 +246,15 @@ plugin-wp-support-thisismyurl/
 
 ### External Links
 
-- **Online Documentation:** https://thisismyurl.com/plugin-wp-support-thisismyurl/
-- **Support:** https://thisismyurl.com/plugin-wp-support-thisismyurl/#support
-- **GitHub Issues:** https://github.com/thisismyurl/plugin-plugin-wp-support-thisismyurl
+- **Online Documentation:** https://wpshadow.com/plugin-wpshadow/
+- **Support:** https://wpshadow.com/plugin-wpshadow/#support
+- **GitHub Issues:** https://github.com/thisismyurl/plugin-plugin-wpshadow
 
 ## Support
 
-- **Documentation:** https://thisismyurl.com/plugin-wp-support-thisismyurl/
-- **Support:** https://thisismyurl.com/plugin-wp-support-thisismyurl/#support
-- **GitHub:** https://github.com/thisismyurl/plugin-plugin-wp-support-thisismyurl
+- **Documentation:** https://wpshadow.com/plugin-wpshadow/
+- **Support:** https://wpshadow.com/plugin-wpshadow/#support
+- **GitHub:** https://github.com/thisismyurl/plugin-plugin-wpshadow
 
 ## License
 
@@ -263,8 +263,8 @@ GPL2 or later. See LICENSE file for details.
 ## Author
 
 **Christopher Ross**
-Website: https://thisismyurl.com/?source=core-support-thisismyurl
+Website: https://wpshadow.com/?source=core-wpshadow
 
 ---
 
-*Part of the @thisismyurl Support Suite*
+*Part of the @wpshadow Support Suite*

@@ -2,7 +2,7 @@
 /**
  * System Report Generator for comprehensive debug information.
  *
- * @package WPS_WP_SUPPORT_THISISMYURL
+ * @package WPSHADOW_wpshadow_THISISMYURL
  */
 
 declare(strict_types=1);
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * System Report Generator class.
  * Generates comprehensive system reports for support and debugging.
  */
-class WPS_System_Report_Generator {
+class WPSHADOW_System_Report_Generator {
 
 	/**
 	 * Initialize the System Report Generator.
@@ -29,17 +29,17 @@ class WPS_System_Report_Generator {
 		add_action( 'admin_menu', array( __CLASS__, 'register_menu' ) );
 
 		// AJAX handlers.
-		add_action( 'wp_ajax_wps_generate_report', array( __CLASS__, 'ajax_generate_report' ) );
-		add_action( 'wp_ajax_wps_create_shareable_link', array( __CLASS__, 'ajax_create_shareable_link' ) );
+		add_action( 'wp_ajax_WPSHADOW_generate_report', array( __CLASS__, 'ajax_generate_report' ) );
+		add_action( 'wp_ajax_WPSHADOW_create_shareable_link', array( __CLASS__, 'ajax_create_shareable_link' ) );
 
 		// Public report viewing (with token).
 		add_action( 'template_redirect', array( __CLASS__, 'handle_shareable_report' ) );
 
 		// Cron for auto-delete expired links.
-		add_action( 'wps_cleanup_expired_reports', array( __CLASS__, 'cleanup_expired_reports' ) );
+		add_action( 'wpshadow_cleanup_expired_reports', array( __CLASS__, 'cleanup_expired_reports' ) );
 
-		if ( ! wp_next_scheduled( 'wps_cleanup_expired_reports' ) ) {
-			wp_schedule_event( time(), 'daily', 'wps_cleanup_expired_reports' );
+		if ( ! wp_next_scheduled( 'wpshadow_cleanup_expired_reports' ) ) {
+			wp_schedule_event( time(), 'daily', 'wpshadow_cleanup_expired_reports' );
 		}
 	}
 
@@ -51,8 +51,8 @@ class WPS_System_Report_Generator {
 	public static function register_menu(): void {
 		add_submenu_page(
 			'wp-support',
-			__( 'System Report', 'plugin-wp-support-thisismyurl' ),
-			__( 'System Report', 'plugin-wp-support-thisismyurl' ),
+			__( 'System Report', 'plugin-wpshadow' ),
+			__( 'System Report', 'plugin-wpshadow' ),
 			'manage_options',
 			'wps-system-report',
 			array( __CLASS__, 'render_page' )
@@ -66,14 +66,14 @@ class WPS_System_Report_Generator {
 	 */
 	public static function render_page(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wpshadow' ) );
 		}
 
 		wp_enqueue_script(
 			'wps-system-report',
-			wp_support_URL . 'assets/js/system-report.js',
+			WPSHADOW_URL . 'assets/js/system-report.js',
 			array( 'jquery' ),
-			wp_support_VERSION,
+			WPSHADOW_VERSION,
 			true
 		);
 
@@ -82,27 +82,27 @@ class WPS_System_Report_Generator {
 			'wpsSystemReport',
 			array(
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( 'wps_system_report' ),
+				'nonce'   => wp_create_nonce( 'wpshadow_system_report' ),
 				'strings' => array(
-					'generating'   => __( 'Generating report...', 'plugin-wp-support-thisismyurl' ),
-					'generated'    => __( 'Report generated successfully', 'plugin-wp-support-thisismyurl' ),
-					'copied'       => __( 'Copied to clipboard', 'plugin-wp-support-thisismyurl' ),
-					'copyFailed'   => __( 'Failed to copy', 'plugin-wp-support-thisismyurl' ),
-					'creatingLink' => __( 'Creating shareable link...', 'plugin-wp-support-thisismyurl' ),
-					'linkCreated'  => __( 'Link created successfully', 'plugin-wp-support-thisismyurl' ),
-					'error'        => __( 'An error occurred', 'plugin-wp-support-thisismyurl' ),
+					'generating'   => __( 'Generating report...', 'plugin-wpshadow' ),
+					'generated'    => __( 'Report generated successfully', 'plugin-wpshadow' ),
+					'copied'       => __( 'Copied to clipboard', 'plugin-wpshadow' ),
+					'copyFailed'   => __( 'Failed to copy', 'plugin-wpshadow' ),
+					'creatingLink' => __( 'Creating shareable link...', 'plugin-wpshadow' ),
+					'linkCreated'  => __( 'Link created successfully', 'plugin-wpshadow' ),
+					'error'        => __( 'An error occurred', 'plugin-wpshadow' ),
 				),
 			)
 		);
 
 		wp_enqueue_style(
 			'wps-system-report',
-			wp_support_URL . 'assets/css/system-report.css',
+			WPSHADOW_URL . 'assets/css/system-report.css',
 			array(),
-			wp_support_VERSION
+			WPSHADOW_VERSION
 		);
 
-		include wp_support_PATH . 'includes/views/system-report.php';
+		include WPSHADOW_PATH . 'includes/views/system-report.php';
 	}
 
 	/**
@@ -643,11 +643,11 @@ class WPS_System_Report_Generator {
 		);
 
 		// Store in transient (expires automatically).
-		set_transient( 'wps_report_' . $token, $link_data, 7 * DAY_IN_SECONDS );
+		set_transient( 'wpshadow_report_' . $token, $link_data, 7 * DAY_IN_SECONDS );
 
 		$url = add_query_arg(
 			array(
-				'wps_report' => $token,
+				'wpshadow_report' => $token,
 			),
 			home_url( '/' )
 		);
@@ -666,20 +666,20 @@ class WPS_System_Report_Generator {
 	 * @return void
 	 */
 	public static function handle_shareable_report(): void {
-		if ( ! isset( $_GET['wps_report'] ) ) {
+		if ( ! isset( $_GET['wpshadow_report'] ) ) {
 			return;
 		}
 
-		$token     = sanitize_text_field( wp_unslash( $_GET['wps_report'] ) );
-		$link_data = get_transient( 'wps_report_' . $token );
+		$token     = sanitize_text_field( wp_unslash( $_GET['wpshadow_report'] ) );
+		$link_data = get_transient( 'wpshadow_report_' . $token );
 
 		if ( ! $link_data || ! is_array( $link_data ) ) {
-			wp_die( esc_html__( 'This report link is invalid or has expired.', 'plugin-wp-support-thisismyurl' ) );
+			wp_die( esc_html__( 'This report link is invalid or has expired.', 'plugin-wpshadow' ) );
 		}
 
 		// Check if password required.
 		if ( ! empty( $link_data['password'] ) ) {
-			$provided_password = \WPS\CoreSupport\wps_get_post_text( 'report_password' );
+			$provided_password = \WPS\CoreSupport\WPSHADOW_get_post_text( 'report_password' );
 
 			if ( empty( $provided_password ) ) {
 				// Show password form.
@@ -688,7 +688,7 @@ class WPS_System_Report_Generator {
 			}
 
 			if ( ! wp_check_password( $provided_password, $link_data['password'] ) ) {
-				wp_die( esc_html__( 'Incorrect password.', 'plugin-wp-support-thisismyurl' ) );
+				wp_die( esc_html__( 'Incorrect password.', 'plugin-wpshadow' ) );
 			}
 		}
 
@@ -710,7 +710,7 @@ class WPS_System_Report_Generator {
 		<head>
 			<meta charset="<?php bloginfo( 'charset' ); ?>">
 			<meta name="viewport" content="width=device-width, initial-scale=1">
-			<title><?php esc_html_e( 'Protected Report', 'plugin-wp-support-thisismyurl' ); ?></title>
+			<title><?php esc_html_e( 'Protected Report', 'plugin-wpshadow' ); ?></title>
 			<style>
 				body {
 					font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
@@ -763,12 +763,12 @@ class WPS_System_Report_Generator {
 		</head>
 		<body>
 			<div class="password-form-container">
-				<h1><?php esc_html_e( 'Protected Report', 'plugin-wp-support-thisismyurl' ); ?></h1>
-				<p><?php esc_html_e( 'This report is password protected. Please enter the password to view.', 'plugin-wp-support-thisismyurl' ); ?></p>
+				<h1><?php esc_html_e( 'Protected Report', 'plugin-wpshadow' ); ?></h1>
+				<p><?php esc_html_e( 'This report is password protected. Please enter the password to view.', 'plugin-wpshadow' ); ?></p>
 				<form method="post">
-					<label for="report_password"><?php esc_html_e( 'Password:', 'plugin-wp-support-thisismyurl' ); ?></label>
+					<label for="report_password"><?php esc_html_e( 'Password:', 'plugin-wpshadow' ); ?></label>
 					<input type="password" id="report_password" name="report_password" required />
-					<button type="submit"><?php esc_html_e( 'View Report', 'plugin-wp-support-thisismyurl' ); ?></button>
+					<button type="submit"><?php esc_html_e( 'View Report', 'plugin-wpshadow' ); ?></button>
 				</form>
 			</div>
 		</body>
@@ -791,7 +791,7 @@ class WPS_System_Report_Generator {
 		<head>
 			<meta charset="<?php bloginfo( 'charset' ); ?>">
 			<meta name="viewport" content="width=device-width, initial-scale=1">
-			<title><?php esc_html_e( 'System Report', 'plugin-wp-support-thisismyurl' ); ?></title>
+			<title><?php esc_html_e( 'System Report', 'plugin-wpshadow' ); ?></title>
 			<style>
 				body {
 					font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
@@ -852,19 +852,19 @@ class WPS_System_Report_Generator {
 		</head>
 		<body>
 			<div class="report-container">
-				<h1><?php esc_html_e( 'System Report', 'plugin-wp-support-thisismyurl' ); ?></h1>
+				<h1><?php esc_html_e( 'System Report', 'plugin-wpshadow' ); ?></h1>
 				<div class="expiry-notice">
 					<?php
 					printf(
 						/* translators: %s: Expiry date */
-						esc_html__( 'This report link expires on: %s', 'plugin-wp-support-thisismyurl' ),
+						esc_html__( 'This report link expires on: %s', 'plugin-wpshadow' ),
 						'<strong>' . esc_html( date( 'Y-m-d H:i:s', $expires_at ) ) . '</strong>'
 					);
 					?>
 				</div>
 				<div class="actions">
-					<button onclick="copyToClipboard()"><?php esc_html_e( 'Copy to Clipboard', 'plugin-wp-support-thisismyurl' ); ?></button>
-					<button onclick="downloadReport()"><?php esc_html_e( 'Download', 'plugin-wp-support-thisismyurl' ); ?></button>
+					<button onclick="copyToClipboard()"><?php esc_html_e( 'Copy to Clipboard', 'plugin-wpshadow' ); ?></button>
+					<button onclick="downloadReport()"><?php esc_html_e( 'Download', 'plugin-wpshadow' ); ?></button>
 				</div>
 				<pre id="report-content"><?php echo esc_html( $report_text ); ?></pre>
 			</div>
@@ -872,9 +872,9 @@ class WPS_System_Report_Generator {
 				function copyToClipboard() {
 					const content = document.getElementById('report-content').textContent;
 					navigator.clipboard.writeText(content).then(function() {
-						alert('<?php esc_html_e( 'Report copied to clipboard', 'plugin-wp-support-thisismyurl' ); ?>');
+						alert('<?php esc_html_e( 'Report copied to clipboard', 'plugin-wpshadow' ); ?>');
 					}).catch(function() {
-						alert('<?php esc_html_e( 'Failed to copy', 'plugin-wp-support-thisismyurl' ); ?>');
+						alert('<?php esc_html_e( 'Failed to copy', 'plugin-wpshadow' ); ?>');
 					});
 				}
 
@@ -911,7 +911,7 @@ class WPS_System_Report_Generator {
 				"DELETE FROM {$wpdb->options} 
 				WHERE option_name LIKE %s 
 				AND option_value < %d",
-				'_transient_timeout_wps_report_%',
+				'_transient_timeout_WPSHADOW_report_%',
 				time()
 			)
 		);
@@ -923,13 +923,13 @@ class WPS_System_Report_Generator {
 	 * @return void
 	 */
 	public static function ajax_generate_report(): void {
-		check_ajax_referer( 'wps_system_report', 'nonce' );
+		check_ajax_referer( 'wpshadow_system_report', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$format = \WPS\CoreSupport\wps_get_post_text( 'format', 'json' );
+		$format = \WPS\CoreSupport\WPSHADOW_get_post_text( 'format', 'json' );
 
 		$data = self::collect_system_info();
 		$data = self::sanitize_report_data( $data );
@@ -963,13 +963,13 @@ class WPS_System_Report_Generator {
 	 * @return void
 	 */
 	public static function ajax_create_shareable_link(): void {
-		check_ajax_referer( 'wps_system_report', 'nonce' );
+		check_ajax_referer( 'wpshadow_system_report', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$password = \WPS\CoreSupport\wps_get_post_text( 'password' );
+		$password = \WPS\CoreSupport\WPSHADOW_get_post_text( 'password' );
 
 		$data = self::collect_system_info();
 		$data = self::sanitize_report_data( $data );

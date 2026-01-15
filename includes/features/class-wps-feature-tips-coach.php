@@ -5,7 +5,7 @@
  * Provides contextual "next best action" cards in the dashboard,
  * tuned by site type (blog, WooCommerce, LMS), with one-click apply.
  *
- * @package WPS_WP_SUPPORT_THISISMYURL
+ * @package WPSHADOW_wpshadow_THISISMYURL
  * @since 1.2601.74000
  */
 
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects site type and provides contextual action recommendations.
  */
-class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
+class WPSHADOW_Feature_Tips_Coach extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Site type constants
@@ -37,15 +37,15 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                 => 'wps_tips_coach',
-				'name'               => __( 'Tips Coach', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Get smart suggestions customized for your specific type of site', 'plugin-wp-support-thisismyurl' ),
+				'id'                 => 'wpshadow_tips_coach',
+				'name'               => __( 'Tips Coach', 'plugin-wpshadow' ),
+				'description'        => __( 'Get smart suggestions customized for your specific type of site', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'version'            => '1.0.0',
 				'default_enabled'    => true,
 				'widget_group'       => 'diagnostics',
-				'widget_label'       => __( 'Diagnostics & Monitoring', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Health checks and monitoring features', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Diagnostics & Monitoring', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Health checks and monitoring features', 'plugin-wpshadow' ),
 			)
 		);
 	}
@@ -57,8 +57,8 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public static function init(): void {
-		add_action( 'wp_ajax_wps_apply_tip_action', array( __CLASS__, 'ajax_apply_tip_action' ) );
-		add_action( 'wp_ajax_wps_dismiss_tip', array( __CLASS__, 'ajax_dismiss_tip' ) );
+		add_action( 'wp_ajax_WPSHADOW_apply_tip_action', array( __CLASS__, 'ajax_apply_tip_action' ) );
+		add_action( 'wp_ajax_WPSHADOW_dismiss_tip', array( __CLASS__, 'ajax_dismiss_tip' ) );
 	}
 
 	/**
@@ -103,7 +103,7 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 	 * @return array Array of dismissed tip IDs.
 	 */
 	private static function get_dismissed_tips(): array {
-		$dismissed = get_user_meta( get_current_user_id(), 'wps_dismissed_tips', true );
+		$dismissed = get_user_meta( get_current_user_id(), 'wpshadow_dismissed_tips', true );
 		return is_array( $dismissed ) ? $dismissed : array();
 	}
 
@@ -171,10 +171,10 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 			if ( false === $health_data || ( isset( $health_data['critical'] ) && $health_data['critical'] > 0 ) ) {
 				$tips[] = array(
 					'id'           => 'check_site_health',
-					'title'        => __( 'Check Site Health', 'plugin-wp-support-thisismyurl' ),
-					'description'  => __( 'Your site has critical health issues that need attention.', 'plugin-wp-support-thisismyurl' ),
+					'title'        => __( 'Check Site Health', 'plugin-wpshadow' ),
+					'description'  => __( 'Your site has critical health issues that need attention.', 'plugin-wpshadow' ),
 					'action'       => 'open_site_health',
-					'action_label' => __( 'View Issues', 'plugin-wp-support-thisismyurl' ),
+					'action_label' => __( 'View Issues', 'plugin-wpshadow' ),
 					'icon'         => 'dashicons-heart',
 					'priority'     => 100,
 				);
@@ -185,10 +185,10 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 		if ( ! self::is_action_completed( 'setup_backups' ) && ! self::has_backup_plugin() ) {
 			$tips[] = array(
 				'id'           => 'setup_backups',
-				'title'        => __( 'Set Up Backups', 'plugin-wp-support-thisismyurl' ),
-				'description'  => __( 'Protect your site with automated backups.', 'plugin-wp-support-thisismyurl' ),
+				'title'        => __( 'Set Up Backups', 'plugin-wpshadow' ),
+				'description'  => __( 'Protect your site with automated backups.', 'plugin-wpshadow' ),
 				'action'       => 'open_backup_info',
-				'action_label' => __( 'Learn More', 'plugin-wp-support-thisismyurl' ),
+				'action_label' => __( 'Learn More', 'plugin-wpshadow' ),
 				'icon'         => 'dashicons-backup',
 				'priority'     => 90,
 			);
@@ -198,10 +198,10 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 		if ( ! is_ssl() && ! self::is_action_completed( 'enable_ssl' ) ) {
 			$tips[] = array(
 				'id'           => 'enable_ssl',
-				'title'        => __( 'Enable HTTPS', 'plugin-wp-support-thisismyurl' ),
-				'description'  => __( 'Secure your site with HTTPS for better security and SEO.', 'plugin-wp-support-thisismyurl' ),
+				'title'        => __( 'Enable HTTPS', 'plugin-wpshadow' ),
+				'description'  => __( 'Secure your site with HTTPS for better security and SEO.', 'plugin-wpshadow' ),
 				'action'       => 'open_ssl_info',
-				'action_label' => __( 'Learn More', 'plugin-wp-support-thisismyurl' ),
+				'action_label' => __( 'Learn More', 'plugin-wpshadow' ),
 				'icon'         => 'dashicons-lock',
 				'priority'     => 85,
 			);
@@ -222,10 +222,10 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 		if ( ! self::has_seo_plugin() && ! self::is_action_completed( 'install_seo_plugin' ) ) {
 			$tips[] = array(
 				'id'           => 'install_seo_plugin',
-				'title'        => __( 'Optimize for Search Engines', 'plugin-wp-support-thisismyurl' ),
-				'description'  => __( 'Install an SEO plugin to improve your search rankings.', 'plugin-wp-support-thisismyurl' ),
+				'title'        => __( 'Optimize for Search Engines', 'plugin-wpshadow' ),
+				'description'  => __( 'Install an SEO plugin to improve your search rankings.', 'plugin-wpshadow' ),
 				'action'       => 'open_seo_plugins',
-				'action_label' => __( 'Browse Plugins', 'plugin-wp-support-thisismyurl' ),
+				'action_label' => __( 'Browse Plugins', 'plugin-wpshadow' ),
 				'icon'         => 'dashicons-chart-line',
 				'priority'     => 80,
 			);
@@ -235,10 +235,10 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 		if ( ! self::has_caching_plugin() && ! self::is_action_completed( 'enable_caching' ) ) {
 			$tips[] = array(
 				'id'           => 'enable_caching',
-				'title'        => __( 'Speed Up Your Site', 'plugin-wp-support-thisismyurl' ),
-				'description'  => __( 'Enable caching to improve page load times.', 'plugin-wp-support-thisismyurl' ),
+				'title'        => __( 'Speed Up Your Site', 'plugin-wpshadow' ),
+				'description'  => __( 'Enable caching to improve page load times.', 'plugin-wpshadow' ),
 				'action'       => 'open_caching_plugins',
-				'action_label' => __( 'Browse Plugins', 'plugin-wp-support-thisismyurl' ),
+				'action_label' => __( 'Browse Plugins', 'plugin-wpshadow' ),
 				'icon'         => 'dashicons-performance',
 				'priority'     => 75,
 			);
@@ -248,10 +248,10 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 		if ( '1' !== get_option( 'comment_moderation' ) && ! self::is_action_completed( 'enable_comment_moderation' ) ) {
 			$tips[] = array(
 				'id'           => 'enable_comment_moderation',
-				'title'        => __( 'Enable Comment Moderation', 'plugin-wp-support-thisismyurl' ),
-				'description'  => __( 'Prevent spam by requiring approval for new comments.', 'plugin-wp-support-thisismyurl' ),
+				'title'        => __( 'Enable Comment Moderation', 'plugin-wpshadow' ),
+				'description'  => __( 'Prevent spam by requiring approval for new comments.', 'plugin-wpshadow' ),
 				'action'       => 'enable_comment_moderation',
-				'action_label' => __( 'Enable Now', 'plugin-wp-support-thisismyurl' ),
+				'action_label' => __( 'Enable Now', 'plugin-wpshadow' ),
 				'icon'         => 'dashicons-admin-comments',
 				'priority'     => 70,
 			);
@@ -278,10 +278,10 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 				if ( empty( $gateways ) && ! self::is_action_completed( 'setup_payment_gateway' ) ) {
 					$tips[] = array(
 						'id'           => 'setup_payment_gateway',
-						'title'        => __( 'Configure Payment Gateway', 'plugin-wp-support-thisismyurl' ),
-						'description'  => __( 'Set up a payment method to start accepting orders.', 'plugin-wp-support-thisismyurl' ),
+						'title'        => __( 'Configure Payment Gateway', 'plugin-wpshadow' ),
+						'description'  => __( 'Set up a payment method to start accepting orders.', 'plugin-wpshadow' ),
 						'action'       => 'open_woo_payments',
-						'action_label' => __( 'Configure Now', 'plugin-wp-support-thisismyurl' ),
+						'action_label' => __( 'Configure Now', 'plugin-wpshadow' ),
 						'icon'         => 'dashicons-money-alt',
 						'priority'     => 95,
 					);
@@ -294,10 +294,10 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 				if ( empty( $shipping_methods ) && ! self::is_action_completed( 'setup_shipping' ) ) {
 					$tips[] = array(
 						'id'           => 'setup_shipping',
-						'title'        => __( 'Configure Shipping Methods', 'plugin-wp-support-thisismyurl' ),
-						'description'  => __( 'Set up shipping options for your customers.', 'plugin-wp-support-thisismyurl' ),
+						'title'        => __( 'Configure Shipping Methods', 'plugin-wpshadow' ),
+						'description'  => __( 'Set up shipping options for your customers.', 'plugin-wpshadow' ),
 						'action'       => 'open_woo_shipping',
-						'action_label' => __( 'Configure Now', 'plugin-wp-support-thisismyurl' ),
+						'action_label' => __( 'Configure Now', 'plugin-wpshadow' ),
 						'icon'         => 'dashicons-cart',
 						'priority'     => 90,
 					);
@@ -310,10 +310,10 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 				if ( ! $tax_enabled && ! self::is_action_completed( 'setup_taxes' ) ) {
 					$tips[] = array(
 						'id'           => 'setup_taxes',
-						'title'        => __( 'Configure Tax Settings', 'plugin-wp-support-thisismyurl' ),
-						'description'  => __( 'Set up tax rates for your products.', 'plugin-wp-support-thisismyurl' ),
+						'title'        => __( 'Configure Tax Settings', 'plugin-wpshadow' ),
+						'description'  => __( 'Set up tax rates for your products.', 'plugin-wpshadow' ),
 						'action'       => 'open_woo_tax',
-						'action_label' => __( 'Configure Now', 'plugin-wp-support-thisismyurl' ),
+						'action_label' => __( 'Configure Now', 'plugin-wpshadow' ),
 						'icon'         => 'dashicons-calculator',
 						'priority'     => 85,
 					);
@@ -336,10 +336,10 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 		if ( ! self::is_action_completed( 'create_first_course' ) ) {
 			$tips[] = array(
 				'id'           => 'create_first_course',
-				'title'        => __( 'Create Your First Course', 'plugin-wp-support-thisismyurl' ),
-				'description'  => __( 'Start building content for your students.', 'plugin-wp-support-thisismyurl' ),
+				'title'        => __( 'Create Your First Course', 'plugin-wpshadow' ),
+				'description'  => __( 'Start building content for your students.', 'plugin-wpshadow' ),
 				'action'       => 'open_course_creation',
-				'action_label' => __( 'Create Course', 'plugin-wp-support-thisismyurl' ),
+				'action_label' => __( 'Create Course', 'plugin-wpshadow' ),
 				'icon'         => 'dashicons-welcome-learn-more',
 				'priority'     => 95,
 			);
@@ -349,10 +349,10 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 		if ( ! self::is_action_completed( 'setup_email_notifications' ) ) {
 			$tips[] = array(
 				'id'           => 'setup_email_notifications',
-				'title'        => __( 'Configure Email Notifications', 'plugin-wp-support-thisismyurl' ),
-				'description'  => __( 'Set up automated emails for course enrollments and completions.', 'plugin-wp-support-thisismyurl' ),
+				'title'        => __( 'Configure Email Notifications', 'plugin-wpshadow' ),
+				'description'  => __( 'Set up automated emails for course enrollments and completions.', 'plugin-wpshadow' ),
 				'action'       => 'open_email_settings',
-				'action_label' => __( 'Configure Now', 'plugin-wp-support-thisismyurl' ),
+				'action_label' => __( 'Configure Now', 'plugin-wpshadow' ),
 				'icon'         => 'dashicons-email-alt',
 				'priority'     => 85,
 			);
@@ -362,10 +362,10 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 		if ( ! self::is_action_completed( 'enable_certificates' ) ) {
 			$tips[] = array(
 				'id'           => 'enable_certificates',
-				'title'        => __( 'Enable Course Certificates', 'plugin-wp-support-thisismyurl' ),
-				'description'  => __( 'Reward students with certificates upon course completion.', 'plugin-wp-support-thisismyurl' ),
+				'title'        => __( 'Enable Course Certificates', 'plugin-wpshadow' ),
+				'description'  => __( 'Reward students with certificates upon course completion.', 'plugin-wpshadow' ),
 				'action'       => 'open_certificate_settings',
-				'action_label' => __( 'Learn More', 'plugin-wp-support-thisismyurl' ),
+				'action_label' => __( 'Learn More', 'plugin-wpshadow' ),
 				'icon'         => 'dashicons-awards',
 				'priority'     => 80,
 			);
@@ -386,10 +386,10 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 		$tagline = $this->get_setting( 'blogdescription' );
 		if ( 'Just another WordPress site' === $tagline && ! self::is_action_completed( 'update_tagline' ) ) {
 			$tips[] = array(
-				'id'           => 'update_tagline', 'title'        => __( 'Update Site Tagline', 'plugin-wp-support-thisismyurl'  ),
-				'description'  => __( 'Customize your site tagline to describe your website.', 'plugin-wp-support-thisismyurl' ),
+				'id'           => 'update_tagline', 'title'        => __( 'Update Site Tagline', 'plugin-wpshadow'  ),
+				'description'  => __( 'Customize your site tagline to describe your website.', 'plugin-wpshadow' ),
 				'action'       => 'open_general_settings',
-				'action_label' => __( 'Update Now', 'plugin-wp-support-thisismyurl' ),
+				'action_label' => __( 'Update Now', 'plugin-wpshadow' ),
 				'icon'         => 'dashicons-admin-settings',
 				'priority'     => 75,
 			);
@@ -399,10 +399,10 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 		$permalink_structure = $this->get_setting( 'permalink_structure' );
 		if ( empty( $permalink_structure ) && ! self::is_action_completed( 'optimize_permalinks' ) ) {
 			$tips[] = array(
-				'id'           => 'optimize_permalinks', 'title'        => __( 'Optimize Permalinks', 'plugin-wp-support-thisismyurl'  ),
-				'description'  => __( 'Use SEO-friendly URLs for better search rankings.', 'plugin-wp-support-thisismyurl' ),
+				'id'           => 'optimize_permalinks', 'title'        => __( 'Optimize Permalinks', 'plugin-wpshadow'  ),
+				'description'  => __( 'Use SEO-friendly URLs for better search rankings.', 'plugin-wpshadow' ),
 				'action'       => 'open_permalink_settings',
-				'action_label' => __( 'Configure Now', 'plugin-wp-support-thisismyurl' ),
+				'action_label' => __( 'Configure Now', 'plugin-wpshadow' ),
 				'icon'         => 'dashicons-admin-links',
 				'priority'     => 80,
 			);
@@ -418,7 +418,7 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 	 * @return bool True if completed.
 	 */
 	private static function is_action_completed( string $action_id ): bool {
-		$completed = $this->get_setting( 'wps_completed_tips', array( ) );
+		$completed = $this->get_setting( 'wpshadow_completed_tips', array( ) );
 		return is_array( $completed ) && in_array( $action_id, $completed, true );
 	}
 
@@ -429,13 +429,13 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 	 * @return bool True on success.
 	 */
 	private static function mark_action_completed( string $action_id ): bool {
-		$completed = $this->get_setting( 'wps_completed_tips', array( ) );
+		$completed = $this->get_setting( 'wpshadow_completed_tips', array( ) );
 		if ( ! is_array( $completed ) ) {
 			$completed = array();
 		}
 		if ( ! in_array( $action_id, $completed, true ) ) {
 			$completed[] = $action_id;
-			return $this->update_setting( 'wps_completed_tips', $completed  );
+			return $this->update_setting( 'wpshadow_completed_tips', $completed  );
 		}
 		return true;
 	}
@@ -525,13 +525,13 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public static function ajax_apply_tip_action(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_tips_coach' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_tips_coach' );
 
-		$action = \WPS\CoreSupport\wps_get_post_key( 'action_type' );
-		$tip_id = \WPS\CoreSupport\wps_get_post_key( 'tip_id' );
+		$action = \WPS\CoreSupport\WPSHADOW_get_post_key( 'action_type' );
+		$tip_id = \WPS\CoreSupport\WPSHADOW_get_post_key( 'tip_id' );
 
 		if ( empty( $action ) || empty( $tip_id ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid action or tip ID', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid action or tip ID', 'plugin-wpshadow' ) ) );
 		}
 
 		// Process different action types
@@ -558,7 +558,7 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 				$this->update_setting( 'comment_moderation', '1'  );
 				return array(
 					'success'  => true,
-					'message'  => __( 'Comment moderation enabled successfully.', 'plugin-wp-support-thisismyurl' ),
+					'message'  => __( 'Comment moderation enabled successfully.', 'plugin-wpshadow' ),
 					'redirect' => admin_url( 'options-discussion.php' ),
 				);
 
@@ -655,7 +655,7 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 			default:
 				return array(
 					'success' => false,
-					'message' => __( 'Unknown action type', 'plugin-wp-support-thisismyurl' ),
+					'message' => __( 'Unknown action type', 'plugin-wpshadow' ),
 				);
 		}
 	}
@@ -666,21 +666,21 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public static function ajax_dismiss_tip(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps_tips_coach' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_tips_coach' );
 
-		$tip_id = \WPS\CoreSupport\wps_get_post_key( 'tip_id' );
+		$tip_id = \WPS\CoreSupport\WPSHADOW_get_post_key( 'tip_id' );
 
 		if ( empty( $tip_id ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid tip ID', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid tip ID', 'plugin-wpshadow' ) ) );
 		}
 
 		$dismissed = self::get_dismissed_tips();
 		if ( ! in_array( $tip_id, $dismissed, true ) ) {
 			$dismissed[] = $tip_id;
-			update_user_meta( get_current_user_id(), 'wps_dismissed_tips', $dismissed );
+			update_user_meta( get_current_user_id(), 'wpshadow_dismissed_tips', $dismissed );
 		}
 
-		wp_send_json_success( array( 'message' => __( 'Tip dismissed', 'plugin-wp-support-thisismyurl' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Tip dismissed', 'plugin-wpshadow' ) ) );
 	}
 
 	/**
@@ -712,11 +712,11 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 			<div class="wps-tips-header" style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #e5e5e5;">
 				<div style="display: flex; align-items: center; justify-content: space-between;">
 					<div>
-						<h3 style="margin: 0; font-size: 14px; color: #1d2327;"><?php esc_html_e( 'Recommended Actions', 'plugin-wp-support-thisismyurl' ); ?></h3>
+						<h3 style="margin: 0; font-size: 14px; color: #1d2327;"><?php esc_html_e( 'Recommended Actions', 'plugin-wpshadow' ); ?></h3>
 						<p style="margin: 5px 0 0; font-size: 12px; color: #646970;">
 							<?php
 							/* translators: %s: site type label */
-							echo esc_html( sprintf( __( 'Personalized for your %s', 'plugin-wp-support-thisismyurl' ), $site_type_label ) );
+							echo esc_html( sprintf( __( 'Personalized for your %s', 'plugin-wpshadow' ), $site_type_label ) );
 							?>
 						</p>
 					</div>
@@ -748,7 +748,7 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 										class="button button-link wps-dismiss-tip" 
 										data-tip-id="<?php echo esc_attr( $tip['id'] ); ?>"
 										style="font-size: 11px; color: #646970; text-decoration: none;">
-										<?php esc_html_e( 'Dismiss', 'plugin-wp-support-thisismyurl' ); ?>
+										<?php esc_html_e( 'Dismiss', 'plugin-wpshadow' ); ?>
 									</button>
 								</div>
 							</div>
@@ -761,7 +761,7 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 		<script type="text/javascript">
 		jQuery(document).ready(function($) {
 			const ajaxUrl = '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>';
-			const nonce = '<?php echo esc_js( wp_create_nonce( 'wps_tips_coach' ) ); ?>';
+			const nonce = '<?php echo esc_js( wp_create_nonce( 'wpshadow_tips_coach' ) ); ?>';
 
 			// Handle tip action
 			$('.wps-apply-tip').on('click', function(e) {
@@ -771,13 +771,13 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 				const action = $btn.data('action');
 				const $card = $btn.closest('.wps-tip-card');
 
-				$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Processing...', 'plugin-wp-support-thisismyurl' ) ); ?>');
+				$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Processing...', 'plugin-wpshadow' ) ); ?>');
 
 				$.ajax({
 					url: ajaxUrl,
 					type: 'POST',
 					data: {
-						action: 'wps_apply_tip_action',
+						action: 'wpshadow_apply_tip_action',
 						nonce: nonce,
 						tip_id: tipId,
 						action_type: action
@@ -788,13 +788,13 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 						} else if (response.success) {
 							$card.fadeOut(300, function() { $(this).remove(); });
 						} else {
-							alert(response.data.message || '<?php echo esc_js( __( 'An error occurred', 'plugin-wp-support-thisismyurl' ) ); ?>');
-							$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Try Again', 'plugin-wp-support-thisismyurl' ) ); ?>');
+							alert(response.data.message || '<?php echo esc_js( __( 'An error occurred', 'plugin-wpshadow' ) ); ?>');
+							$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Try Again', 'plugin-wpshadow' ) ); ?>');
 						}
 					},
 					error: function() {
-						alert('<?php echo esc_js( __( 'An error occurred. Please try again.', 'plugin-wp-support-thisismyurl' ) ); ?>');
-						$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Try Again', 'plugin-wp-support-thisismyurl' ) ); ?>');
+						alert('<?php echo esc_js( __( 'An error occurred. Please try again.', 'plugin-wpshadow' ) ); ?>');
+						$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Try Again', 'plugin-wpshadow' ) ); ?>');
 					}
 				});
 			});
@@ -812,7 +812,7 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 					url: ajaxUrl,
 					type: 'POST',
 					data: {
-						action: 'wps_dismiss_tip',
+						action: 'wpshadow_dismiss_tip',
 						nonce: nonce,
 						tip_id: tipId
 					},
@@ -826,12 +826,12 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 								}
 							});
 						} else {
-							alert(response.data.message || '<?php echo esc_js( __( 'An error occurred', 'plugin-wp-support-thisismyurl' ) ); ?>');
+							alert(response.data.message || '<?php echo esc_js( __( 'An error occurred', 'plugin-wpshadow' ) ); ?>');
 							$btn.prop('disabled', false);
 						}
 					},
 					error: function() {
-						alert('<?php echo esc_js( __( 'An error occurred. Please try again.', 'plugin-wp-support-thisismyurl' ) ); ?>');
+						alert('<?php echo esc_js( __( 'An error occurred. Please try again.', 'plugin-wpshadow' ) ); ?>');
 						$btn.prop('disabled', false);
 					}
 				});
@@ -850,13 +850,13 @@ class WPS_Feature_Tips_Coach extends WPS_Abstract_Feature {
 	private static function get_site_type_label( string $site_type ): string {
 		switch ( $site_type ) {
 			case self::TYPE_BLOG:
-				return __( 'Blog', 'plugin-wp-support-thisismyurl' );
+				return __( 'Blog', 'plugin-wpshadow' );
 			case self::TYPE_WOOCOMMERCE:
-				return __( 'E-commerce Store', 'plugin-wp-support-thisismyurl' );
+				return __( 'E-commerce Store', 'plugin-wpshadow' );
 			case self::TYPE_LMS:
-				return __( 'Learning Management System', 'plugin-wp-support-thisismyurl' );
+				return __( 'Learning Management System', 'plugin-wpshadow' );
 			default:
-				return __( 'Website', 'plugin-wp-support-thisismyurl' );
+				return __( 'Website', 'plugin-wpshadow' );
 		}
 	}
 }

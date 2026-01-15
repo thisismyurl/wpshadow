@@ -23,11 +23,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Feature_Loopback_Test
+ * WPSHADOW_Feature_Loopback_Test
  *
  * Loopback request testing and diagnostics.
  */
-final class WPS_Feature_Loopback_Test extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Loopback_Test extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -36,14 +36,14 @@ final class WPS_Feature_Loopback_Test extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'loopback-test',
-				'name'               => __( 'Loopback Request Test', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Test if your site can make HTTP requests to itself - critical for cron, updates, and REST API', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Loopback Request Test', 'plugin-wpshadow' ),
+				'description'        => __( 'Test if your site can make HTTP requests to itself - critical for cron, updates, and REST API', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'server-diagnostics',
-				'widget_label'       => __( 'Server Diagnostics', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Server environment and configuration tools', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Server Diagnostics', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Server environment and configuration tools', 'plugin-wpshadow' ),
 				// Unified metadata.
 				'license_level'      => 1, // Free for everyone.
 				'minimum_capability' => 'manage_options',
@@ -71,11 +71,11 @@ final class WPS_Feature_Loopback_Test extends WPS_Abstract_Feature {
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 
 		// AJAX handlers.
-		add_action( 'wp_ajax_wps_run_loopback_test', array( $this, 'ajax_run_test' ) );
+		add_action( 'wp_ajax_WPSHADOW_run_loopback_test', array( $this, 'ajax_run_test' ) );
 
 		// Loopback test endpoint.
-		add_action( 'wp_ajax_nopriv_wps_loopback_test_endpoint', array( $this, 'loopback_endpoint' ) );
-		add_action( 'wp_ajax_wps_loopback_test_endpoint', array( $this, 'loopback_endpoint' ) );
+		add_action( 'wp_ajax_nopriv_WPSHADOW_loopback_test_endpoint', array( $this, 'loopback_endpoint' ) );
+		add_action( 'wp_ajax_WPSHADOW_loopback_test_endpoint', array( $this, 'loopback_endpoint' ) );
 	}
 
 	/**
@@ -86,8 +86,8 @@ final class WPS_Feature_Loopback_Test extends WPS_Abstract_Feature {
 	public function add_admin_menu(): void {
 		add_submenu_page(
 			'wp-support',
-			__( 'Loopback Request Test', 'plugin-wp-support-thisismyurl' ),
-			__( 'Loopback Test', 'plugin-wp-support-thisismyurl' ),
+			__( 'Loopback Request Test', 'plugin-wpshadow' ),
+			__( 'Loopback Test', 'plugin-wpshadow' ),
 			'manage_options',
 			'wp-support-loopback-test',
 			array( $this, 'render_page' )
@@ -129,7 +129,7 @@ final class WPS_Feature_Loopback_Test extends WPS_Abstract_Feature {
 		);
 
 		// Test URL.
-		$test_url = admin_url( 'admin-ajax.php?action=wps_loopback_test_endpoint' );
+		$test_url = admin_url( 'admin-ajax.php?action=WPSHADOW_loopback_test_endpoint' );
 
 		// Record start time.
 		$start_time = microtime( true );
@@ -141,7 +141,7 @@ final class WPS_Feature_Loopback_Test extends WPS_Abstract_Feature {
 				'timeout'     => 10,
 				'sslverify'   => false, // Allow self-signed certs for testing.
 				'redirection' => 0,     // Don't follow redirects.
-				'user-agent'  => 'WP Support Loopback Test',
+				'user-agent'  => 'WPShadow Loopback Test',
 			)
 		);
 
@@ -157,8 +157,8 @@ final class WPS_Feature_Loopback_Test extends WPS_Abstract_Feature {
 			// Add suggestions based on error.
 			$error_code = $response->get_error_code();
 			if ( 'http_request_failed' === $error_code ) {
-				$results['suggestions'][] = __( 'Check if your server firewall is blocking loopback requests', 'plugin-wp-support-thisismyurl' );
-				$results['suggestions'][] = __( 'Verify that your hosting provider allows self-connections', 'plugin-wp-support-thisismyurl' );
+				$results['suggestions'][] = __( 'Check if your server firewall is blocking loopback requests', 'plugin-wpshadow' );
+				$results['suggestions'][] = __( 'Verify that your hosting provider allows self-connections', 'plugin-wpshadow' );
 			}
 
 			return $results;
@@ -173,18 +173,18 @@ final class WPS_Feature_Loopback_Test extends WPS_Abstract_Feature {
 			$results['success'] = false;
 			$results['message'] = sprintf(
 				/* translators: %d: HTTP status code */
-				__( 'Unexpected HTTP status code: %d', 'plugin-wp-support-thisismyurl' ),
+				__( 'Unexpected HTTP status code: %d', 'plugin-wpshadow' ),
 				$results['status_code']
 			);
 			$results['errors'][] = $results['message'];
 
 			// Add suggestions based on status code.
 			if ( 301 === $results['status_code'] || 302 === $results['status_code'] ) {
-				$results['suggestions'][] = __( 'Your site is redirecting. Check your .htaccess file and URL settings', 'plugin-wp-support-thisismyurl' );
+				$results['suggestions'][] = __( 'Your site is redirecting. Check your .htaccess file and URL settings', 'plugin-wpshadow' );
 			} elseif ( 403 === $results['status_code'] ) {
-				$results['suggestions'][] = __( 'Access forbidden. Check server security settings and firewall rules', 'plugin-wp-support-thisismyurl' );
+				$results['suggestions'][] = __( 'Access forbidden. Check server security settings and firewall rules', 'plugin-wpshadow' );
 			} elseif ( 500 === $results['status_code'] ) {
-				$results['suggestions'][] = __( 'Server error. Check your error logs for more details', 'plugin-wp-support-thisismyurl' );
+				$results['suggestions'][] = __( 'Server error. Check your error logs for more details', 'plugin-wpshadow' );
 			}
 
 			return $results;
@@ -197,14 +197,14 @@ final class WPS_Feature_Loopback_Test extends WPS_Abstract_Feature {
 		// Verify response format.
 		if ( ! isset( $data['success'] ) || ! $data['success'] ) {
 			$results['success'] = false;
-			$results['message'] = __( 'Invalid response from loopback test endpoint', 'plugin-wp-support-thisismyurl' );
-			$results['errors'][] = __( 'Response did not contain expected success indicator', 'plugin-wp-support-thisismyurl' );
+			$results['message'] = __( 'Invalid response from loopback test endpoint', 'plugin-wpshadow' );
+			$results['errors'][] = __( 'Response did not contain expected success indicator', 'plugin-wpshadow' );
 			return $results;
 		}
 
 		// Success!
 		$results['success'] = true;
-		$results['message'] = __( 'Loopback test passed successfully', 'plugin-wp-support-thisismyurl' );
+		$results['message'] = __( 'Loopback test passed successfully', 'plugin-wpshadow' );
 
 		return $results;
 	}
@@ -215,7 +215,7 @@ final class WPS_Feature_Loopback_Test extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_run_test(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps-loopback-test' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wps-loopback-test' );
 
 		// Run test.
 		$results = $this->run_loopback_test();
@@ -234,33 +234,33 @@ final class WPS_Feature_Loopback_Test extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function render_page(): void {
-		$test_url = admin_url( 'admin-ajax.php?action=wps_loopback_test_endpoint' );
+		$test_url = admin_url( 'admin-ajax.php?action=WPSHADOW_loopback_test_endpoint' );
 		$nonce    = wp_create_nonce( 'wps-loopback-test' );
 
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Loopback Request Test', 'plugin-wp-support-thisismyurl' ); ?></h1>
+			<h1><?php esc_html_e( 'Loopback Request Test', 'plugin-wpshadow' ); ?></h1>
 
 			<div class="card">
-				<h2><?php esc_html_e( 'What is a Loopback Request?', 'plugin-wp-support-thisismyurl' ); ?></h2>
-				<p><?php esc_html_e( 'A loopback request is when your WordPress site makes an HTTP request to itself. This is critical for many WordPress features including:', 'plugin-wp-support-thisismyurl' ); ?></p>
+				<h2><?php esc_html_e( 'What is a Loopback Request?', 'plugin-wpshadow' ); ?></h2>
+				<p><?php esc_html_e( 'A loopback request is when your WordPress site makes an HTTP request to itself. This is critical for many WordPress features including:', 'plugin-wpshadow' ); ?></p>
 				<ul style="list-style: disc; margin-left: 20px;">
-					<li><?php esc_html_e( 'WP-Cron (scheduled tasks)', 'plugin-wp-support-thisismyurl' ); ?></li>
-					<li><?php esc_html_e( 'Plugin and theme updates', 'plugin-wp-support-thisismyurl' ); ?></li>
-					<li><?php esc_html_e( 'Publishing scheduled posts', 'plugin-wp-support-thisismyurl' ); ?></li>
-					<li><?php esc_html_e( 'REST API functionality', 'plugin-wp-support-thisismyurl' ); ?></li>
-					<li><?php esc_html_e( 'Block editor features', 'plugin-wp-support-thisismyurl' ); ?></li>
-					<li><?php esc_html_e( 'Background processing tasks', 'plugin-wp-support-thisismyurl' ); ?></li>
+					<li><?php esc_html_e( 'WP-Cron (scheduled tasks)', 'plugin-wpshadow' ); ?></li>
+					<li><?php esc_html_e( 'Plugin and theme updates', 'plugin-wpshadow' ); ?></li>
+					<li><?php esc_html_e( 'Publishing scheduled posts', 'plugin-wpshadow' ); ?></li>
+					<li><?php esc_html_e( 'REST API functionality', 'plugin-wpshadow' ); ?></li>
+					<li><?php esc_html_e( 'Block editor features', 'plugin-wpshadow' ); ?></li>
+					<li><?php esc_html_e( 'Background processing tasks', 'plugin-wpshadow' ); ?></li>
 				</ul>
-				<p><?php esc_html_e( 'If loopback requests fail, these features may not work properly.', 'plugin-wp-support-thisismyurl' ); ?></p>
+				<p><?php esc_html_e( 'If loopback requests fail, these features may not work properly.', 'plugin-wpshadow' ); ?></p>
 			</div>
 
 			<div class="card">
-				<h2><?php esc_html_e( 'Run Loopback Test', 'plugin-wp-support-thisismyurl' ); ?></h2>
-				<p><?php esc_html_e( 'Click the button below to test if your site can make HTTP requests to itself:', 'plugin-wp-support-thisismyurl' ); ?></p>
+				<h2><?php esc_html_e( 'Run Loopback Test', 'plugin-wpshadow' ); ?></h2>
+				<p><?php esc_html_e( 'Click the button below to test if your site can make HTTP requests to itself:', 'plugin-wpshadow' ); ?></p>
 				<p>
 					<button type="button" id="wps-run-loopback-test" class="button button-primary">
-						<?php esc_html_e( 'Run Test', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'Run Test', 'plugin-wpshadow' ); ?>
 					</button>
 					<span class="spinner" style="float: none; margin: 0 0 0 10px;"></span>
 				</p>
@@ -271,24 +271,24 @@ final class WPS_Feature_Loopback_Test extends WPS_Abstract_Feature {
 			</div>
 
 			<div class="card">
-				<h2><?php esc_html_e( 'Test Details', 'plugin-wp-support-thisismyurl' ); ?></h2>
+				<h2><?php esc_html_e( 'Test Details', 'plugin-wpshadow' ); ?></h2>
 				<table class="widefat striped">
 					<tbody>
 						<tr>
-							<th style="width: 30%;"><?php esc_html_e( 'Test URL', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th style="width: 30%;"><?php esc_html_e( 'Test URL', 'plugin-wpshadow' ); ?></th>
 							<td><code><?php echo esc_html( $test_url ); ?></code></td>
 						</tr>
 						<tr>
-							<th><?php esc_html_e( 'Site URL', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th><?php esc_html_e( 'Site URL', 'plugin-wpshadow' ); ?></th>
 							<td><code><?php echo esc_html( get_site_url() ); ?></code></td>
 						</tr>
 						<tr>
-							<th><?php esc_html_e( 'Home URL', 'plugin-wp-support-thisismyurl' ); ?></th>
+							<th><?php esc_html_e( 'Home URL', 'plugin-wpshadow' ); ?></th>
 							<td><code><?php echo esc_html( get_home_url() ); ?></code></td>
 						</tr>
 						<tr>
-							<th><?php esc_html_e( 'Server IP', 'plugin-wp-support-thisismyurl' ); ?></th>
-							<td><code><?php echo esc_html( isset( $_SERVER['SERVER_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_ADDR'] ) ) : __( 'Unknown', 'plugin-wp-support-thisismyurl' ) ); ?></code></td>
+							<th><?php esc_html_e( 'Server IP', 'plugin-wpshadow' ); ?></th>
+							<td><code><?php echo esc_html( isset( $_SERVER['SERVER_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_ADDR'] ) ) : __( 'Unknown', 'plugin-wpshadow' ) ); ?></code></td>
 						</tr>
 					</tbody>
 				</table>
@@ -314,7 +314,7 @@ final class WPS_Feature_Loopback_Test extends WPS_Abstract_Feature {
 					url: ajaxurl,
 					type: 'POST',
 					data: {
-						action: 'wps_run_loopback_test',
+						action: 'wpshadow_run_loopback_test',
 						nonce: '<?php echo esc_js( $nonce ); ?>'
 					},
 					success: function(response) {
@@ -326,21 +326,21 @@ final class WPS_Feature_Loopback_Test extends WPS_Abstract_Feature {
 							$output.html(
 								'<div class="notice notice-success inline">' +
 								'<p><span class="dashicons dashicons-yes-alt"></span> <strong>' +
-								'<?php echo esc_js( __( 'Success!', 'plugin-wp-support-thisismyurl' ) ); ?>' +
+								'<?php echo esc_js( __( 'Success!', 'plugin-wpshadow' ) ); ?>' +
 								'</strong> ' + response.data.message + '</p>' +
-								'<p><strong><?php echo esc_js( __( 'Response Time:', 'plugin-wp-support-thisismyurl' ) ); ?></strong> ' + response.data.time + ' ms</p>' +
-								'<p><strong><?php echo esc_js( __( 'Status Code:', 'plugin-wp-support-thisismyurl' ) ); ?></strong> ' + response.data.status_code + '</p>' +
+								'<p><strong><?php echo esc_js( __( 'Response Time:', 'plugin-wpshadow' ) ); ?></strong> ' + response.data.time + ' ms</p>' +
+								'<p><strong><?php echo esc_js( __( 'Status Code:', 'plugin-wpshadow' ) ); ?></strong> ' + response.data.status_code + '</p>' +
 								'</div>'
 							);
 						} else {
 							let errorHtml = '<div class="notice notice-error inline">' +
 								'<p><span class="dashicons dashicons-dismiss"></span> <strong>' +
-								'<?php echo esc_js( __( 'Test Failed', 'plugin-wp-support-thisismyurl' ) ); ?>' +
+								'<?php echo esc_js( __( 'Test Failed', 'plugin-wpshadow' ) ); ?>' +
 								'</strong></p>' +
 								'<p>' + response.data.message + '</p>';
 
 							if (response.data.errors && response.data.errors.length > 0) {
-								errorHtml += '<p><strong><?php echo esc_js( __( 'Errors:', 'plugin-wp-support-thisismyurl' ) ); ?></strong></p><ul>';
+								errorHtml += '<p><strong><?php echo esc_js( __( 'Errors:', 'plugin-wpshadow' ) ); ?></strong></p><ul>';
 								response.data.errors.forEach(function(error) {
 									errorHtml += '<li>' + error + '</li>';
 								});
@@ -348,7 +348,7 @@ final class WPS_Feature_Loopback_Test extends WPS_Abstract_Feature {
 							}
 
 							if (response.data.suggestions && response.data.suggestions.length > 0) {
-								errorHtml += '<p><strong><?php echo esc_js( __( 'Suggestions:', 'plugin-wp-support-thisismyurl' ) ); ?></strong></p><ul>';
+								errorHtml += '<p><strong><?php echo esc_js( __( 'Suggestions:', 'plugin-wpshadow' ) ); ?></strong></p><ul>';
 								response.data.suggestions.forEach(function(suggestion) {
 									errorHtml += '<li>' + suggestion + '</li>';
 								});
@@ -356,11 +356,11 @@ final class WPS_Feature_Loopback_Test extends WPS_Abstract_Feature {
 							}
 
 							if (response.data.time) {
-								errorHtml += '<p><strong><?php echo esc_js( __( 'Response Time:', 'plugin-wp-support-thisismyurl' ) ); ?></strong> ' + response.data.time + ' ms</p>';
+								errorHtml += '<p><strong><?php echo esc_js( __( 'Response Time:', 'plugin-wpshadow' ) ); ?></strong> ' + response.data.time + ' ms</p>';
 							}
 
 							if (response.data.status_code) {
-								errorHtml += '<p><strong><?php echo esc_js( __( 'Status Code:', 'plugin-wp-support-thisismyurl' ) ); ?></strong> ' + response.data.status_code + '</p>';
+								errorHtml += '<p><strong><?php echo esc_js( __( 'Status Code:', 'plugin-wpshadow' ) ); ?></strong> ' + response.data.status_code + '</p>';
 							}
 
 							errorHtml += '</div>';
@@ -374,7 +374,7 @@ final class WPS_Feature_Loopback_Test extends WPS_Abstract_Feature {
 						$output.html(
 							'<div class="notice notice-error inline">' +
 							'<p><span class="dashicons dashicons-dismiss"></span> <strong>' +
-							'<?php echo esc_js( __( 'AJAX Error', 'plugin-wp-support-thisismyurl' ) ); ?>' +
+							'<?php echo esc_js( __( 'AJAX Error', 'plugin-wpshadow' ) ); ?>' +
 							'</strong> ' + error + '</p>' +
 							'</div>'
 						);

@@ -18,11 +18,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Settings_Ajax Class
+ * WPSHADOW_Settings_Ajax Class
  *
  * Manages AJAX operations for settings forms across the plugin.
  */
-class WPS_Settings_Ajax {
+class WPSHADOW_Settings_Ajax {
 
 	/**
 	 * Initialize the settings AJAX handler.
@@ -30,7 +30,7 @@ class WPS_Settings_Ajax {
 	 * @return void
 	 */
 	public static function init(): void {
-		add_action( 'wp_ajax_WPS_save_settings', array( __CLASS__, 'handle_save_settings' ) );
+		add_action( 'wp_ajax_WPSHADOW_save_settings', array( __CLASS__, 'handle_save_settings' ) );
 	}
 
 	/**
@@ -39,7 +39,7 @@ class WPS_Settings_Ajax {
 	 * @return void
 	 */
 	public static function handle_save_settings(): void {
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'WPS_settings_form' ) ) {
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'wpshadow_settings_form' ) ) {
 			wp_send_json_error( array( 'message' => 'Security check failed' ) );
 		}
 
@@ -48,7 +48,7 @@ class WPS_Settings_Ajax {
 		}
 
 		// Parse the form data using wp-json encoded format.
-		$data      = \WPS\CoreSupport\wps_get_post_text( 'data' );
+		$data      = \WPS\CoreSupport\WPSHADOW_get_post_text( 'data' );
 		$form_data = json_decode( $data, true );
 
 		if ( empty( $form_data ) || ! is_array( $form_data ) ) {
@@ -87,7 +87,7 @@ class WPS_Settings_Ajax {
 				wp_send_json_error( array( 'message' => 'Invalid settings group' ) );
 		}
 
-		wp_send_json_success( array( 'message' => __( 'Settings saved successfully', 'plugin-wp-support-thisismyurl' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Settings saved successfully', 'plugin-wpshadow' ) ) );
 	}
 
 	/**
@@ -97,8 +97,8 @@ class WPS_Settings_Ajax {
 	 * @return void
 	 */
 	private static function save_module_registry_settings( array $form_data ): void {
-		update_option( 'WPS_module_discovery_enabled', isset( $form_data['WPS_module_discovery_enabled'] ) ? 1 : 0 );
-		update_option( 'WPS_module_discovery_frequency', sanitize_key( $form_data['WPS_module_discovery_frequency'] ?? 'on-demand' ) );
+		update_option( 'wpshadow_module_discovery_enabled', isset( $form_data['wpshadow_module_discovery_enabled'] ) ? 1 : 0 );
+		update_option( 'wpshadow_module_discovery_frequency', sanitize_key( $form_data['wpshadow_module_discovery_frequency'] ?? 'on-demand' ) );
 	}
 
 	/**
@@ -108,11 +108,11 @@ class WPS_Settings_Ajax {
 	 * @return void
 	 */
 	private static function save_capabilities_settings( array $form_data ): void {
-		update_option( 'WPS_capability_dashboard_role', sanitize_key( $form_data['WPS_capability_dashboard_role'] ?? 'manage_options' ) );
-		$install_roles = isset( $form_data['WPS_capability_install_roles'] ) ? array_map( 'sanitize_key', (array) $form_data['WPS_capability_install_roles'] ) : array();
-		update_option( 'WPS_capability_install_roles', $install_roles );
-		$update_roles = isset( $form_data['WPS_capability_update_roles'] ) ? array_map( 'sanitize_key', (array) $form_data['WPS_capability_update_roles'] ) : array();
-		update_option( 'WPS_capability_update_roles', $update_roles );
+		update_option( 'wpshadow_capability_dashboard_role', sanitize_key( $form_data['wpshadow_capability_dashboard_role'] ?? 'manage_options' ) );
+		$install_roles = isset( $form_data['wpshadow_capability_install_roles'] ) ? array_map( 'sanitize_key', (array) $form_data['wpshadow_capability_install_roles'] ) : array();
+		update_option( 'wpshadow_capability_install_roles', $install_roles );
+		$update_roles = isset( $form_data['wpshadow_capability_update_roles'] ) ? array_map( 'sanitize_key', (array) $form_data['wpshadow_capability_update_roles'] ) : array();
+		update_option( 'wpshadow_capability_update_roles', $update_roles );
 	}
 
 	/**
@@ -122,10 +122,10 @@ class WPS_Settings_Ajax {
 	 * @return void
 	 */
 	private static function save_dashboard_settings( array $form_data ): void {
-		update_option( 'WPS_dashboard_default_columns', absint( $form_data['WPS_dashboard_default_columns'] ?? 2 ) );
-		$sticky_widgets = isset( $form_data['WPS_dashboard_sticky_widgets'] ) ? array_map( 'sanitize_key', (array) $form_data['WPS_dashboard_sticky_widgets'] ) : array();
-		update_option( 'WPS_dashboard_sticky_widgets', $sticky_widgets );
-		update_option( 'WPS_dashboard_widget_sorting', sanitize_key( $form_data['WPS_dashboard_widget_sorting'] ?? 'drag-order' ) );
+		update_option( 'wpshadow_dashboard_default_columns', absint( $form_data['wpshadow_dashboard_default_columns'] ?? 2 ) );
+		$sticky_widgets = isset( $form_data['wpshadow_dashboard_sticky_widgets'] ) ? array_map( 'sanitize_key', (array) $form_data['wpshadow_dashboard_sticky_widgets'] ) : array();
+		update_option( 'wpshadow_dashboard_sticky_widgets', $sticky_widgets );
+		update_option( 'wpshadow_dashboard_widget_sorting', sanitize_key( $form_data['wpshadow_dashboard_widget_sorting'] ?? 'drag-order' ) );
 	}
 
 	/**
@@ -135,11 +135,11 @@ class WPS_Settings_Ajax {
 	 * @return void
 	 */
 	private static function save_license_settings( array $form_data ): void {
-		$license_key = isset( $form_data['WPS_license_key'] ) ? sanitize_text_field( $form_data['WPS_license_key'] ) : '';
-		update_option( 'WPS_license_key', $license_key );
-		$auto_update = isset( $form_data['WPS_license_auto_update_types'] ) ? array_map( 'sanitize_key', (array) $form_data['WPS_license_auto_update_types'] ) : array();
-		update_option( 'WPS_license_auto_update_types', $auto_update );
-		update_option( 'WPS_license_update_channel', sanitize_key( $form_data['WPS_license_update_channel'] ?? 'stable' ) );
+		$license_key = isset( $form_data['wpshadow_license_key'] ) ? sanitize_text_field( $form_data['wpshadow_license_key'] ) : '';
+		update_option( 'wpshadow_license_key', $license_key );
+		$auto_update = isset( $form_data['wpshadow_license_auto_update_types'] ) ? array_map( 'sanitize_key', (array) $form_data['wpshadow_license_auto_update_types'] ) : array();
+		update_option( 'wpshadow_license_auto_update_types', $auto_update );
+		update_option( 'wpshadow_license_update_channel', sanitize_key( $form_data['wpshadow_license_update_channel'] ?? 'stable' ) );
 	}
 
 	/**
@@ -149,14 +149,14 @@ class WPS_Settings_Ajax {
 	 * @return void
 	 */
 	private static function save_privacy_settings( array $form_data ): void {
-		update_option( 'WPS_privacy_log_retention_days', absint( $form_data['WPS_privacy_log_retention_days'] ?? 90 ) );
-		update_option( 'WPS_privacy_auto_delete_enabled', isset( $form_data['WPS_privacy_auto_delete_enabled'] ) ? 1 : 0 );
-		update_option( 'WPS_privacy_auto_delete_days', absint( $form_data['WPS_privacy_auto_delete_days'] ?? 90 ) );
-		update_option( 'WPS_privacy_audit_logging_level', sanitize_key( $form_data['WPS_privacy_audit_logging_level'] ?? 'standard' ) );
-		update_option( 'WPS_privacy_export_format', sanitize_key( $form_data['WPS_privacy_export_format'] ?? 'json' ) );
-		update_option( 'WPS_privacy_contributors_see_user_activity', isset( $form_data['WPS_privacy_contributors_see_user_activity'] ) ? 1 : 0 );
-		update_option( 'WPS_privacy_editors_see_admin_activity', isset( $form_data['WPS_privacy_editors_see_admin_activity'] ) ? 1 : 0 );
-		update_option( 'wps_diagnostic_logging_enabled', isset( $form_data['wps_diagnostic_logging_enabled'] ) ? 1 : 0 );
+		update_option( 'wpshadow_privacy_log_retention_days', absint( $form_data['wpshadow_privacy_log_retention_days'] ?? 90 ) );
+		update_option( 'wpshadow_privacy_auto_delete_enabled', isset( $form_data['wpshadow_privacy_auto_delete_enabled'] ) ? 1 : 0 );
+		update_option( 'wpshadow_privacy_auto_delete_days', absint( $form_data['wpshadow_privacy_auto_delete_days'] ?? 90 ) );
+		update_option( 'wpshadow_privacy_audit_logging_level', sanitize_key( $form_data['wpshadow_privacy_audit_logging_level'] ?? 'standard' ) );
+		update_option( 'wpshadow_privacy_export_format', sanitize_key( $form_data['wpshadow_privacy_export_format'] ?? 'json' ) );
+		update_option( 'wpshadow_privacy_contributors_see_user_activity', isset( $form_data['wpshadow_privacy_contributors_see_user_activity'] ) ? 1 : 0 );
+		update_option( 'wpshadow_privacy_editors_see_admin_activity', isset( $form_data['wpshadow_privacy_editors_see_admin_activity'] ) ? 1 : 0 );
+		update_option( 'wpshadow_diagnostic_logging_enabled', isset( $form_data['wpshadow_diagnostic_logging_enabled'] ) ? 1 : 0 );
 	}
 
 	/**
@@ -167,43 +167,43 @@ class WPS_Settings_Ajax {
 	 */
 	private static function save_database_cleanup_settings( array $form_data ): void {
 		// Get the database cleanup feature instance.
-		$feature = \WPS\CoreSupport\WPS_Feature_Registry::get_feature( 'database-cleanup' );
+		$feature = \WPS\CoreSupport\WPSHADOW_Feature_Registry::get_feature( 'database-cleanup' );
 		if ( ! $feature ) {
 			wp_send_json_error( array( 'message' => 'Database cleanup feature not found' ) );
 		}
 
 		// Update enabled status.
-		$enabled = isset( $form_data['wps_database_cleanup_enabled'] ) ? 1 : 0;
+		$enabled = isset( $form_data['wpshadow_database_cleanup_enabled'] ) ? 1 : 0;
 		$feature->update_setting( 'enabled', $enabled );
 
 		// Update cleanup frequency.
 		$old_frequency = $feature->get_setting( 'cleanup_frequency', 'weekly' );
-		$new_frequency = sanitize_key( $form_data['wps_cleanup_frequency'] ?? 'weekly' );
+		$new_frequency = sanitize_key( $form_data['wpshadow_cleanup_frequency'] ?? 'weekly' );
 		$feature->update_setting( 'cleanup_frequency', $new_frequency );
 
 		// Update cleanup options.
 		$cleanup_options = array(
-			'cleanup_revisions'     => isset( $form_data['wps_cleanup_options']['cleanup_revisions'] ) ? 1 : 0,
-			'cleanup_transients'    => isset( $form_data['wps_cleanup_options']['cleanup_transients'] ) ? 1 : 0,
-			'cleanup_spam'          => isset( $form_data['wps_cleanup_options']['cleanup_spam'] ) ? 1 : 0,
-			'cleanup_orphaned_meta' => isset( $form_data['wps_cleanup_options']['cleanup_orphaned_meta'] ) ? 1 : 0,
-			'cleanup_auto_drafts'   => isset( $form_data['wps_cleanup_options']['cleanup_auto_drafts'] ) ? 1 : 0,
-			'optimize_tables'       => isset( $form_data['wps_cleanup_options']['optimize_tables'] ) ? 1 : 0,
-			'keep_revisions'        => absint( $form_data['wps_cleanup_options']['keep_revisions'] ?? 5 ),
+			'cleanup_revisions'     => isset( $form_data['wpshadow_cleanup_options']['cleanup_revisions'] ) ? 1 : 0,
+			'cleanup_transients'    => isset( $form_data['wpshadow_cleanup_options']['cleanup_transients'] ) ? 1 : 0,
+			'cleanup_spam'          => isset( $form_data['wpshadow_cleanup_options']['cleanup_spam'] ) ? 1 : 0,
+			'cleanup_orphaned_meta' => isset( $form_data['wpshadow_cleanup_options']['cleanup_orphaned_meta'] ) ? 1 : 0,
+			'cleanup_auto_drafts'   => isset( $form_data['wpshadow_cleanup_options']['cleanup_auto_drafts'] ) ? 1 : 0,
+			'optimize_tables'       => isset( $form_data['wpshadow_cleanup_options']['optimize_tables'] ) ? 1 : 0,
+			'keep_revisions'        => absint( $form_data['wpshadow_cleanup_options']['keep_revisions'] ?? 5 ),
 		);
 		$feature->update_setting( 'cleanup_options', $cleanup_options );
 
 		// Reschedule if frequency changed.
 		if ( $old_frequency !== $new_frequency ) {
 			// Clear existing schedule.
-			$timestamp = wp_next_scheduled( 'wps_database_cleanup' );
+			$timestamp = wp_next_scheduled( 'wpshadow_database_cleanup' );
 			if ( $timestamp ) {
-				wp_unschedule_event( $timestamp, 'wps_database_cleanup' );
+				wp_unschedule_event( $timestamp, 'wpshadow_database_cleanup' );
 			}
 
 			// Schedule new event if enabled.
 			if ( $enabled ) {
-				wp_schedule_event( time(), $new_frequency, 'wps_database_cleanup' );
+				wp_schedule_event( time(), $new_frequency, 'wpshadow_database_cleanup' );
 			}
 		}
 	}

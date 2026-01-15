@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * WPS_Feature_Skiplinks
+ * WPSHADOW_Feature_Skiplinks
  *
  * Improves accessibility by adding skip links to bypass navigation.
  */
-final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Skiplinks extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -27,21 +27,21 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'skiplinks',
-				'name'               => __( 'Skip Links Injection', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Help keyboard users jump straight to content, skipping repetitive navigation', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Skip Links Injection', 'plugin-wpshadow' ),
+				'description'        => __( 'Help keyboard users jump straight to content, skipping repetitive navigation', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'accessibility',
-				'widget_label'       => __( 'UX & Accessibility', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Improve user experience and accessibility standards', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'UX & Accessibility', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Improve user experience and accessibility standards', 'plugin-wpshadow' ),
 			)
 		);
 
 		// Register default settings.
 		$this->register_default_settings(
 			array(
-				'wps_skiplinks_options' => $this->get_default_options(),
+				'wpshadow_skiplinks_options' => $this->get_default_options(),
 			)
 		);
 	}
@@ -66,7 +66,7 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function inject_skip_links(): void {
-		$options = (array) $this->get_setting( 'wps_skiplinks_options', $this->get_default_options() );
+		$options = (array) $this->get_setting( 'wpshadow_skiplinks_options', $this->get_default_options() );
 
 		if ( ! ( $options['enable_skiplinks'] ?? true ) ) {
 			return;
@@ -80,7 +80,7 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 			$links[]    = sprintf(
 				'<a href="#%s" class="wps-skip-link wps-skip-to-content">%s</a>',
 				esc_attr( $content_id ),
-				esc_html( $options['content_label'] ?? __( 'Skip to content', 'plugin-wp-support-thisismyurl' ) )
+				esc_html( $options['content_label'] ?? __( 'Skip to content', 'plugin-wpshadow' ) )
 			);
 		}
 
@@ -90,7 +90,7 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 			$links[] = sprintf(
 				'<a href="#%s" class="wps-skip-link wps-skip-to-nav">%s</a>',
 				esc_attr( $nav_id ),
-				esc_html( $options['nav_label'] ?? __( 'Skip to navigation', 'plugin-wp-support-thisismyurl' ) )
+				esc_html( $options['nav_label'] ?? __( 'Skip to navigation', 'plugin-wpshadow' ) )
 			);
 		}
 
@@ -109,7 +109,7 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function enqueue_styles(): void {
-		$options = (array) $this->get_setting( 'wps_skiplinks_options', $this->get_default_options() );
+		$options = (array) $this->get_setting( 'wpshadow_skiplinks_options', $this->get_default_options() );
 
 		if ( ! ( $options['enable_skiplinks'] ?? true ) ) {
 			return;
@@ -118,7 +118,7 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 		// Register and enqueue a minimal style handle for skip links.
 		// We use inline styles only, so no external file is needed.
 		// Version is based on plugin version for cache busting.
-		wp_register_style( 'wps-skiplinks', '', array(), wp_support_VERSION );
+		wp_register_style( 'wps-skiplinks', '', array(), WPSHADOW_VERSION );
 		wp_enqueue_style( 'wps-skiplinks' );
 
 		// Add inline styles for skip links.
@@ -132,11 +132,11 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 	 * @return string CSS code.
 	 */
 	private function get_skip_links_css(): string {
-		$options = (array) $this->get_setting( 'wps_skiplinks_options', $this->get_default_options() );
+		$options = (array) $this->get_setting( 'wpshadow_skiplinks_options', $this->get_default_options() );
 
 		// Allow theme customization via filter.
-		$bg_color   = $this->sanitize_hex_color( apply_filters( 'wps_skiplinks_bg_color', $options['bg_color'] ?? '#21759b' ) );
-		$text_color = $this->sanitize_hex_color( apply_filters( 'wps_skiplinks_text_color', $options['text_color'] ?? '#ffffff' ) );
+		$bg_color   = $this->sanitize_hex_color( apply_filters( 'wpshadow_skiplinks_bg_color', $options['bg_color'] ?? '#21759b' ) );
+		$text_color = $this->sanitize_hex_color( apply_filters( 'wpshadow_skiplinks_text_color', $options['text_color'] ?? '#ffffff' ) );
 
 		return '
 			.wps-skip-links {
@@ -245,12 +245,12 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 	 * Get content element ID based on theme.
 	 *
 	 * Returns a common content ID used by most themes. If the default doesn't match
-	 * your theme, set a custom content_id via the wps_skiplinks_options.
+	 * your theme, set a custom content_id via the WPSHADOW_skiplinks_options.
 	 *
 	 * @return string Content element ID.
 	 */
 	private function get_content_id(): string {
-		$options    = (array) $this->get_setting( 'wps_skiplinks_options', $this->get_default_options() );
+		$options    = (array) $this->get_setting( 'wpshadow_skiplinks_options', $this->get_default_options() );
 		$content_id = $options['content_id'] ?? '';
 
 		if ( ! empty( $content_id ) ) {
@@ -268,12 +268,12 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 	 * Get navigation element ID based on theme.
 	 *
 	 * Returns a common navigation ID used by most themes. If the default doesn't match
-	 * your theme, set a custom nav_id via the wps_skiplinks_options.
+	 * your theme, set a custom nav_id via the WPSHADOW_skiplinks_options.
 	 *
 	 * @return string Navigation element ID.
 	 */
 	private function get_nav_id(): string {
-		$options = (array) $this->get_setting( 'wps_skiplinks_options', $this->get_default_options() );
+		$options = (array) $this->get_setting( 'wpshadow_skiplinks_options', $this->get_default_options() );
 		$nav_id  = $options['nav_id'] ?? '';
 
 		if ( ! empty( $nav_id ) ) {
@@ -292,15 +292,15 @@ final class WPS_Feature_Skiplinks extends WPS_Abstract_Feature {
 	 *
 	 * @return array Default options.
 	 */
-	private function get_default_options(): array {
+	protected function get_default_options(): array {
 		return array(
 			'enable_skiplinks' => true,
 			'skip_to_content'  => true,
 			'skip_to_nav'      => true,
 			'content_id'       => '',  // Auto-detect if empty.
 			'nav_id'           => '',  // Auto-detect if empty.
-			'content_label'    => __( 'Skip to content', 'plugin-wp-support-thisismyurl' ),
-			'nav_label'        => __( 'Skip to navigation', 'plugin-wp-support-thisismyurl' ),
+			'content_label'    => __( 'Skip to content', 'plugin-wpshadow' ),
+			'nav_label'        => __( 'Skip to navigation', 'plugin-wpshadow' ),
 			'bg_color'         => '#21759b',
 			'text_color'       => '#ffffff',
 		);

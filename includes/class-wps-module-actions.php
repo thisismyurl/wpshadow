@@ -2,7 +2,7 @@
 /**
  * AJAX handlers for catalog module install/update/activate actions.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  * @since 1.2601.73000
  */
 
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Admin AJAX request handlers for module management.
  */
-class WPS_Module_Actions {
+class WPSHADOW_Module_Actions {
 	/**
 	 * Verify AJAX nonce and capability, with optional network-awareness.
 	 *
@@ -34,7 +34,7 @@ class WPS_Module_Actions {
 		$network_scope = is_multisite() && is_network_admin();
 		$cap           = $network_scope ? ( $network_cap ?: $site_cap ) : $site_cap;
 		if ( ! current_user_can( $cap ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wp-support-thisismyurl' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wpshadow' ) ), 403 );
 		}
 
 		return array( 'network_scope' => $network_scope );
@@ -68,30 +68,30 @@ class WPS_Module_Actions {
 	 */
 	public static function init(): void {
 		// Install and activate module.
-		add_action( 'wp_ajax_wps_module_install', array( __CLASS__, 'ajax_install_module' ) );
+		add_action( 'wp_ajax_WPSHADOW_module_install', array( __CLASS__, 'ajax_install_module' ) );
 
 		// Update module.
-		add_action( 'wp_ajax_wps_module_update', array( __CLASS__, 'ajax_update_module' ) );
+		add_action( 'wp_ajax_WPSHADOW_module_update', array( __CLASS__, 'ajax_update_module' ) );
 
 		// Activate module.
-		add_action( 'wp_ajax_wps_module_activate', array( __CLASS__, 'ajax_activate_module' ) );
+		add_action( 'wp_ajax_WPSHADOW_module_activate', array( __CLASS__, 'ajax_activate_module' ) );
 
 		// Deactivate module (network).
-		add_action( 'wp_ajax_wps_module_deactivate', array( __CLASS__, 'ajax_deactivate_module' ) );
+		add_action( 'wp_ajax_WPSHADOW_module_deactivate', array( __CLASS__, 'ajax_deactivate_module' ) );
 
 		// Toggle module enabled setting (for bundled/non-plugin modules).
-		add_action( 'wp_ajax_wps_module_toggle', array( __CLASS__, 'ajax_toggle_module_enabled' ) );
+		add_action( 'wp_ajax_WPSHADOW_module_toggle', array( __CLASS__, 'ajax_toggle_module_enabled' ) );
 
 		// Clear remembered deactivations after restoration.
-		add_action( 'wp_ajax_wps_clear_remembered', array( __CLASS__, 'ajax_clear_remembered' ) );
+		add_action( 'wp_ajax_WPSHADOW_clear_remembered', array( __CLASS__, 'ajax_clear_remembered' ) );
 
 		// Refresh dashboard widgets dynamically.
-		add_action( 'wp_ajax_wps_refresh_health_widget', array( __CLASS__, 'ajax_refresh_health_widget' ) );
-		add_action( 'wp_ajax_wps_refresh_events_widget', array( __CLASS__, 'ajax_refresh_events_widget' ) );
-		add_action( 'wp_ajax_wps_refresh_database_stats', array( __CLASS__, 'ajax_refresh_database_stats' ) );
+		add_action( 'wp_ajax_WPSHADOW_refresh_health_widget', array( __CLASS__, 'ajax_refresh_health_widget' ) );
+		add_action( 'wp_ajax_WPSHADOW_refresh_events_widget', array( __CLASS__, 'ajax_refresh_events_widget' ) );
+		add_action( 'wp_ajax_WPSHADOW_refresh_database_stats', array( __CLASS__, 'ajax_refresh_database_stats' ) );
 
 		// Download progress polling.
-		add_action( 'wp_ajax_wps_module_download_progress', array( __CLASS__, 'ajax_download_progress' ) );
+		add_action( 'wp_ajax_WPSHADOW_module_download_progress', array( __CLASS__, 'ajax_download_progress' ) );
 	}
 	/**
 	 * AJAX: Toggle module enabled setting (site or network scope).
@@ -99,26 +99,26 @@ class WPS_Module_Actions {
 	 * @return void
 	 */
 	public static function ajax_toggle_module_enabled(): void {
-		$ctx = self::verify_request( 'WPS_module_actions', 'manage_options', 'manage_network_options' );
+		$ctx = self::verify_request( 'wpshadow_module_actions', 'manage_options', 'manage_network_options' );
 
-		$slug    = \WPS\CoreSupport\wps_get_post_key( 'slug' );
+		$slug    = \WPS\CoreSupport\WPSHADOW_get_post_key( 'slug' );
 		$enabled = isset( $_POST['enabled'] ) ? (bool) intval( wp_unslash( $_POST['enabled'] ) ) : null;
 		if ( empty( $slug ) || null === $enabled ) {
-			self::respond_error( __( 'Missing parameters.', 'plugin-wp-support-thisismyurl' ), 400 );
+			self::respond_error( __( 'Missing parameters.', 'plugin-wpshadow' ), 400 );
 		}
 
-		$ok = WPS_Module_Registry::update_module_settings( $slug, array( 'enabled' => $enabled ), (bool) $ctx['network_scope'] );
+		$ok = WPSHADOW_Module_Registry::update_module_settings( $slug, array( 'enabled' => $enabled ), (bool) $ctx['network_scope'] );
 		if ( ! $ok ) {
-			self::respond_error( __( 'Failed to update settings.', 'plugin-wp-support-thisismyurl' ), 500 );
+			self::respond_error( __( 'Failed to update settings.', 'plugin-wpshadow' ), 500 );
 		}
 
 		// Trigger health check refresh hook.
-		do_action( $enabled ? 'WPS_module_enabled' : 'WPS_module_disabled', $slug );
+		do_action( $enabled ? 'wpshadow_module_enabled' : 'wpshadow_module_disabled', $slug );
 
-		$status = WPS_Module_Registry::get_catalog_with_status();
+		$status = WPSHADOW_Module_Registry::get_catalog_with_status();
 		self::respond_success(
 			array(
-				'message' => __( 'Settings updated.', 'plugin-wp-support-thisismyurl' ),
+				'message' => __( 'Settings updated.', 'plugin-wpshadow' ),
 				'status'  => $status[ $slug ] ?? array(),
 			)
 		);
@@ -131,32 +131,32 @@ class WPS_Module_Actions {
 	 */
 	public static function ajax_install_module(): void {
 		// Verify nonce.
-		check_ajax_referer( 'WPS_module_actions', 'nonce' );
+		check_ajax_referer( 'wpshadow_module_actions', 'nonce' );
 
 		// Check capability.
 		$cap = is_multisite() ? 'manage_network_plugins' : 'install_plugins';
 		if ( ! current_user_can( $cap ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'You do not have permission to install plugins.', 'plugin-wp-support-thisismyurl' ),
+					'message' => __( 'You do not have permission to install plugins.', 'plugin-wpshadow' ),
 				),
 				403
 			);
 		}
 
 		// Get and validate inputs.
-		$slug = \WPS\CoreSupport\wps_get_post_text( 'slug' );
+		$slug = \WPS\CoreSupport\WPSHADOW_get_post_text( 'slug' );
 		if ( empty( $slug ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Module slug is required.', 'plugin-wp-support-thisismyurl' ),
+					'message' => __( 'Module slug is required.', 'plugin-wpshadow' ),
 				),
 				400
 			);
 		}
 
 		// Get catalog entry.
-		$catalog      = WPS_Module_Registry::get_catalog_modules();
+		$catalog      = WPSHADOW_Module_Registry::get_catalog_modules();
 		$module_entry = null;
 
 		foreach ( $catalog as $entry ) {
@@ -169,7 +169,7 @@ class WPS_Module_Actions {
 		if ( empty( $module_entry ) || empty( $module_entry['download_url'] ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Module not found in catalog or missing download URL.', 'plugin-wp-support-thisismyurl' ),
+					'message' => __( 'Module not found in catalog or missing download URL.', 'plugin-wpshadow' ),
 				),
 				404
 			);
@@ -182,7 +182,7 @@ class WPS_Module_Actions {
 		$expected_hash = ! empty( $module_entry['checksum'] ) ? sanitize_text_field( wp_unslash( $module_entry['checksum'] ) ) : null;
 
 		// Perform installation.
-		$upgrader = new WPS_Plugin_Upgrader();
+		$upgrader = new WPSHADOW_Plugin_Upgrader();
 		$result   = $upgrader->install_plugin(
 			$module_entry['download_url'],
 			true,
@@ -209,11 +209,11 @@ class WPS_Module_Actions {
 		}
 
 		// Refresh catalog with status.
-		$status = WPS_Module_Registry::get_catalog_with_status();
+		$status = WPSHADOW_Module_Registry::get_catalog_with_status();
 
 		wp_send_json_success(
 			array(
-				'message'     => __( 'Module installed and activated successfully.', 'plugin-wp-support-thisismyurl' ),
+				'message'     => __( 'Module installed and activated successfully.', 'plugin-wpshadow' ),
 				'plugin_base' => $upgrader->result,
 				'status'      => $status[ $slug ] ?? array(),
 			)
@@ -226,27 +226,27 @@ class WPS_Module_Actions {
 	 * @return void
 	 */
 	public static function ajax_update_module(): void {
-		self::verify_request( 'WPS_module_actions', 'update_plugins', 'manage_network_plugins' );
+		self::verify_request( 'wpshadow_module_actions', 'update_plugins', 'manage_network_plugins' );
 
 		// Get and validate inputs.
-		$slug = \WPS\CoreSupport\wps_get_post_text( 'slug' );
+		$slug = \WPS\CoreSupport\WPSHADOW_get_post_text( 'slug' );
 		if ( empty( $slug ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Module slug is required.', 'plugin-wp-support-thisismyurl' ),
+					'message' => __( 'Module slug is required.', 'plugin-wpshadow' ),
 				),
 				400
 			);
 		}
 
 		// Get installed module.
-		$installed = WPS_Module_Registry::get_modules();
+		$installed = WPSHADOW_Module_Registry::get_modules();
 		if ( empty( $installed[ $slug ] ) ) {
-			self::respond_error( __( 'Module not found.', 'plugin-wp-support-thisismyurl' ), 404 );
+			self::respond_error( __( 'Module not found.', 'plugin-wpshadow' ), 404 );
 		}
 
 		// Get catalog entry.
-		$catalog      = WPS_Module_Registry::get_catalog_modules();
+		$catalog      = WPSHADOW_Module_Registry::get_catalog_modules();
 		$module_entry = null;
 
 		foreach ( $catalog as $entry ) {
@@ -257,7 +257,7 @@ class WPS_Module_Actions {
 		}
 
 		if ( empty( $module_entry ) || empty( $module_entry['download_url'] ) ) {
-			self::respond_error( __( 'Module not found in catalog or missing download URL.', 'plugin-wp-support-thisismyurl' ), 404 );
+			self::respond_error( __( 'Module not found in catalog or missing download URL.', 'plugin-wpshadow' ), 404 );
 		}
 
 		// Build plugin file path (slug/slug.php).
@@ -267,7 +267,7 @@ class WPS_Module_Actions {
 		$expected_hash = ! empty( $module_entry['checksum'] ) ? sanitize_text_field( wp_unslash( $module_entry['checksum'] ) ) : null;
 
 		// Perform update.
-		$upgrader = new WPS_Plugin_Upgrader();
+		$upgrader = new WPSHADOW_Plugin_Upgrader();
 		$result   = $upgrader->update_plugin( $plugin_file, $module_entry['download_url'], $expected_hash, $slug );
 
 		if ( is_wp_error( $result ) ) {
@@ -283,11 +283,11 @@ class WPS_Module_Actions {
 		}
 
 		// Refresh catalog with status.
-		$status = WPS_Module_Registry::get_catalog_with_status();
+		$status = WPSHADOW_Module_Registry::get_catalog_with_status();
 
 		self::respond_success(
 			array(
-				'message'     => __( 'Module updated successfully.', 'plugin-wp-support-thisismyurl' ),
+				'message'     => __( 'Module updated successfully.', 'plugin-wpshadow' ),
 				'plugin_base' => $upgrader->result,
 				'status'      => $status[ $slug ] ?? array(),
 			)
@@ -300,21 +300,21 @@ class WPS_Module_Actions {
 	 * @return void
 	 */
 	public static function ajax_activate_module(): void {
-		self::verify_request( 'WPS_module_actions', 'activate_plugins', 'manage_network_plugins' );
+		self::verify_request( 'wpshadow_module_actions', 'activate_plugins', 'manage_network_plugins' );
 
 		// Get and validate inputs.
-		$slug = \WPS\CoreSupport\wps_get_post_text( 'slug' );
+		$slug = \WPS\CoreSupport\WPSHADOW_get_post_text( 'slug' );
 		if ( empty( $slug ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Module slug is required.', 'plugin-wp-support-thisismyurl' ),
+					'message' => __( 'Module slug is required.', 'plugin-wpshadow' ),
 				),
 				400
 			);
 		}
 
 		// Resolve plugin file path.
-		$requested_file = \WPS\CoreSupport\wps_get_post_text( 'plugin_base' );
+		$requested_file = \WPS\CoreSupport\WPSHADOW_get_post_text( 'plugin_base' );
 		$plugin_file    = self::resolve_plugin_file( $slug, $requested_file );
 
 		// Determine activation scope.
@@ -334,17 +334,17 @@ class WPS_Module_Actions {
 		}
 
 		// Ensure registry enabled flag is set even for module-only entries.
-		WPS_Module_Registry::update_module_settings( $slug, array( 'enabled' => true ), $network_activate );
+		WPSHADOW_Module_Registry::update_module_settings( $slug, array( 'enabled' => true ), $network_activate );
 
 		// Trigger health check refresh hook.
-		do_action( 'WPS_module_enabled', $slug );
+		do_action( 'wpshadow_module_enabled', $slug );
 
 		// Refresh catalog with status.
-		$status = WPS_Module_Registry::get_catalog_with_status();
+		$status = WPSHADOW_Module_Registry::get_catalog_with_status();
 
 		self::respond_success(
 			array(
-				'message' => __( 'Module activated successfully.', 'plugin-wp-support-thisismyurl' ),
+				'message' => __( 'Module activated successfully.', 'plugin-wpshadow' ),
 				'status'  => $status[ $slug ] ?? array(),
 			)
 		);
@@ -356,21 +356,21 @@ class WPS_Module_Actions {
 	 * @return void
 	 */
 	public static function ajax_deactivate_module(): void {
-		$ctx = self::verify_request( 'WPS_module_actions', 'activate_plugins', 'manage_network_plugins' );
+		$ctx = self::verify_request( 'wpshadow_module_actions', 'activate_plugins', 'manage_network_plugins' );
 
 		// Get and validate inputs.
-		$slug = \WPS\CoreSupport\wps_get_post_text( 'slug' );
+		$slug = \WPS\CoreSupport\WPSHADOW_get_post_text( 'slug' );
 		if ( empty( $slug ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Module slug is required.', 'plugin-wp-support-thisismyurl' ),
+					'message' => __( 'Module slug is required.', 'plugin-wpshadow' ),
 				),
 				400
 			);
 		}
 
 		// Resolve plugin file path.
-		$requested_file = \WPS\CoreSupport\wps_get_post_text( 'plugin_base' );
+		$requested_file = \WPS\CoreSupport\WPSHADOW_get_post_text( 'plugin_base' );
 		$plugin_file    = self::resolve_plugin_file( $slug, $requested_file );
 
 		if ( $plugin_file ) {
@@ -379,17 +379,17 @@ class WPS_Module_Actions {
 		}
 
 		// Always disable the module flag (plugin or module-only).
-		WPS_Module_Registry::update_module_settings( $slug, array( 'enabled' => false ), (bool) $ctx['network_scope'] );
+		WPSHADOW_Module_Registry::update_module_settings( $slug, array( 'enabled' => false ), (bool) $ctx['network_scope'] );
 
 		// Trigger health check refresh hook.
-		do_action( 'WPS_module_disabled', $slug );
+		do_action( 'wpshadow_module_disabled', $slug );
 
 		// Refresh catalog with status.
-		$status = WPS_Module_Registry::get_catalog_with_status();
+		$status = WPSHADOW_Module_Registry::get_catalog_with_status();
 
 		self::respond_success(
 			array(
-				'message' => __( 'Module deactivated successfully.', 'plugin-wp-support-thisismyurl' ),
+				'message' => __( 'Module deactivated successfully.', 'plugin-wpshadow' ),
 				'status'  => $status[ $slug ] ?? array(),
 			)
 		);
@@ -410,7 +410,7 @@ class WPS_Module_Actions {
 			$candidates[] = ltrim( $preferred, '\\/' );
 		}
 
-		$module      = WPS_Module_Registry::get_module( $slug ) ?? array();
+		$module      = WPSHADOW_Module_Registry::get_module( $slug ) ?? array();
 		$basename    = (string) ( $module['basename'] ?? '' );
 		$module_file = (string) ( $module['file'] ?? '' );
 		if ( ! empty( $basename ) ) {
@@ -446,15 +446,15 @@ class WPS_Module_Actions {
 	 * @return void
 	 */
 	public static function ajax_clear_remembered(): void {
-		self::verify_request( 'WPS_module_actions', 'manage_options', 'manage_network_options' );
+		self::verify_request( 'wpshadow_module_actions', 'manage_options', 'manage_network_options' );
 
-		$parent_slug = \WPS\CoreSupport\wps_get_post_key( 'parent_slug' );
+		$parent_slug = \WPS\CoreSupport\WPSHADOW_get_post_key( 'parent_slug' );
 		if ( empty( $parent_slug ) ) {
-			self::respond_error( __( 'Missing parent slug.', 'plugin-wp-support-thisismyurl' ), 400 );
+			self::respond_error( __( 'Missing parent slug.', 'plugin-wpshadow' ), 400 );
 		}
 
-		WPS_Module_Toggles::clear_remembered( $parent_slug );
-		self::respond_success( array( 'message' => __( 'Restoration memory cleared.', 'plugin-wp-support-thisismyurl' ) ) );
+		WPSHADOW_Module_Toggles::clear_remembered( $parent_slug );
+		self::respond_success( array( 'message' => __( 'Restoration memory cleared.', 'plugin-wpshadow' ) ) );
 	}
 
 	/**
@@ -463,21 +463,21 @@ class WPS_Module_Actions {
 	 * @return void
 	 */
 	public static function ajax_refresh_health_widget(): void {
-		self::verify_request( 'WPS_module_actions', 'manage_options', 'manage_network_options' );
+		self::verify_request( 'wpshadow_module_actions', 'manage_options', 'manage_network_options' );
 
 		// Get active module slugs.
 		$active_modules = array();
-		$catalog        = WPS_Module_Registry::get_catalog_with_status();
+		$catalog        = WPSHADOW_Module_Registry::get_catalog_with_status();
 		foreach ( $catalog as $module ) {
 			$slug = $module['slug'] ?? '';
-			if ( ! empty( $slug ) && WPS_Module_Registry::is_enabled( $slug ) ) {
+			if ( ! empty( $slug ) && WPSHADOW_Module_Registry::is_enabled( $slug ) ) {
 				$active_modules[] = $slug;
 			}
 		}
 
 		// Get health data (automatically filters by active modules).
-		if ( class_exists( '\\WPS\\CoreSupport\\WPS_Site_Health' ) ) {
-			$health_data = WPS_Site_Health::get_health_check_results();
+		if ( class_exists( '\\WPShadow\\WPSHADOW_Site_Health' ) ) {
+			$health_data = WPSHADOW_Site_Health::get_health_check_results();
 		} else {
 			$health_data = array(
 				'score'   => 0,
@@ -493,7 +493,7 @@ class WPS_Module_Actions {
 
 		// Render widget HTML.
 		ob_start();
-		WPS_Dashboard_Widgets::render_health_widget_html( $health_data );
+		WPSHADOW_Dashboard_Widgets::render_health_widget_html( $health_data );
 		$html = ob_get_clean();
 
 		self::respond_success(
@@ -511,15 +511,15 @@ class WPS_Module_Actions {
 	 * @return void
 	 */
 	public static function ajax_refresh_events_widget(): void {
-		self::verify_request( 'WPS_module_actions', 'manage_options', 'manage_network_options' );
+		self::verify_request( 'wpshadow_module_actions', 'manage_options', 'manage_network_options' );
 
 		// Get active module slugs and their repos.
 		$active_repos = array();
-		$catalog      = WPS_Module_Registry::get_catalog_with_status();
+		$catalog      = WPSHADOW_Module_Registry::get_catalog_with_status();
 		foreach ( $catalog as $module ) {
 			$slug = $module['slug'] ?? '';
-			if ( ! empty( $slug ) && WPS_Module_Registry::is_enabled( $slug ) ) {
-				// Extract repo from slug (e.g., 'vault-support-thisismyurl' → 'plugin-vault-support-thisismyurl').
+			if ( ! empty( $slug ) && WPSHADOW_Module_Registry::is_enabled( $slug ) ) {
+				// Extract repo from slug (e.g., 'vault-wpshadow' → 'plugin-vault-wpshadow').
 				$repo           = 'plugin-' . $slug;
 				$active_repos[] = array(
 					'slug' => $slug,
@@ -531,7 +531,7 @@ class WPS_Module_Actions {
 
 		// Render widget HTML.
 		ob_start();
-		WPS_Dashboard_Widgets::render_events_widget_html( $active_repos );
+		WPSHADOW_Dashboard_Widgets::render_events_widget_html( $active_repos );
 		$html = ob_get_clean();
 
 		self::respond_success(
@@ -549,16 +549,16 @@ class WPS_Module_Actions {
 	 * @return void
 	 */
 	public static function ajax_refresh_database_stats(): void {
-		self::verify_request( 'WPS_module_actions', 'manage_options', 'manage_network_options' );
+		self::verify_request( 'wpshadow_module_actions', 'manage_options', 'manage_network_options' );
 
 		// Clear the cached database stats to force fresh data.
-		delete_transient( 'wps_database_stats' );
+		delete_transient( 'wpshadow_database_stats' );
 
 		// Get fresh database statistics.
-		$stats = WPS_Dashboard_Widgets::get_database_statistics_for_ajax();
+		$stats = WPSHADOW_Dashboard_Widgets::get_database_statistics_for_ajax();
 
 		if ( empty( $stats ) ) {
-			self::respond_error( __( 'Unable to retrieve database statistics.', 'plugin-wp-support-thisismyurl' ), 500 );
+			self::respond_error( __( 'Unable to retrieve database statistics.', 'plugin-wpshadow' ), 500 );
 			return;
 		}
 
@@ -576,16 +576,16 @@ class WPS_Module_Actions {
 	 * @return void
 	 */
 	public static function ajax_download_progress(): void {
-		self::verify_request( 'WPS_module_actions', 'install_plugins', 'manage_network_plugins' );
+		self::verify_request( 'wpshadow_module_actions', 'install_plugins', 'manage_network_plugins' );
 
-		$session_id = \WPS\CoreSupport\wps_get_post_text( 'session_id' );
+		$session_id = \WPS\CoreSupport\WPSHADOW_get_post_text( 'session_id' );
 		if ( empty( $session_id ) ) {
-			self::respond_error( __( 'Session ID is required.', 'plugin-wp-support-thisismyurl' ), 400 );
+			self::respond_error( __( 'Session ID is required.', 'plugin-wpshadow' ), 400 );
 			return;
 		}
 
 		// Get progress from transient.
-		$transient_key = 'wps_dl_progress_' . $session_id;
+		$transient_key = 'wpshadow_dl_progress_' . $session_id;
 		$progress      = get_transient( $transient_key );
 
 		if ( false === $progress ) {
@@ -593,7 +593,7 @@ class WPS_Module_Actions {
 				array(
 					'percent' => 0,
 					'status'  => 'unknown',
-					'message' => __( 'No progress data available.', 'plugin-wp-support-thisismyurl' ),
+					'message' => __( 'No progress data available.', 'plugin-wpshadow' ),
 				)
 			);
 			return;
@@ -603,4 +603,4 @@ class WPS_Module_Actions {
 	}
 }
 
-/* @changelog WPS_Module_Actions class created for AJAX install/update/activate handlers. */
+/* @changelog WPSHADOW_Module_Actions class created for AJAX install/update/activate handlers. */

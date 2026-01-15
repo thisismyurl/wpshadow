@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * WPS_Feature_Critical_CSS
+ * WPSHADOW_Feature_Critical_CSS
  *
  * Inline critical CSS for faster above-the-fold rendering.
  */
-final class WPS_Feature_Critical_CSS extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Critical_CSS extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -27,14 +27,14 @@ final class WPS_Feature_Critical_CSS extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'critical-css',
-				'name'               => __( 'Inline Critical CSS', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Inline above-the-fold CSS for instant page rendering', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Inline Critical CSS', 'plugin-wpshadow' ),
+				'description'        => __( 'Inline above-the-fold CSS for instant page rendering', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Resource Optimization', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Optimize how resources are loaded and delivered', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Resource Optimization', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Optimize how resources are loaded and delivered', 'plugin-wpshadow' ),
 			)
 		);
 	}
@@ -60,10 +60,10 @@ final class WPS_Feature_Critical_CSS extends WPS_Abstract_Feature {
 	 */
 	public function inline_critical_css(): void {
 		// Get critical CSS from options.
-		$critical_css = $this->get_setting( 'wps_critical_css', ''  );
+		$critical_css = $this->get_setting( 'wpshadow_critical_css', ''  );
 
 		// Allow filtering.
-		$critical_css = apply_filters( 'wps_critical_css', $critical_css );
+		$critical_css = apply_filters( 'wpshadow_critical_css', $critical_css );
 
 		if ( empty( $critical_css ) ) {
 			return;
@@ -87,13 +87,13 @@ final class WPS_Feature_Critical_CSS extends WPS_Abstract_Feature {
 	 */
 	public function defer_non_critical_css( string $html, string $handle, string $href, string $media ): string {
 		// Get list of stylesheets to defer.
-		$defer_styles = (array) $this->get_setting( 'wps_defer_stylesheets', array( ) );
+		$defer_styles = (array) $this->get_setting( 'wpshadow_defer_stylesheets', array( ) );
 
 		// Allow filtering.
-		$defer_styles = apply_filters( 'wps_defer_stylesheets', $defer_styles );
+		$defer_styles = apply_filters( 'wpshadow_defer_stylesheets', $defer_styles );
 
 		// Skip if not in defer list and not in auto mode.
-		$auto_defer = $this->get_setting( 'wps_auto_defer_css', false  );
+		$auto_defer = $this->get_setting( 'wpshadow_auto_defer_css', false  );
 
 		if ( ! in_array( $handle, $defer_styles, true ) && ! $auto_defer ) {
 			return $html;

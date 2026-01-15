@@ -5,7 +5,7 @@
  * Manages the gamified collection of format-specific spoke plugins with
  * milestone tracking, unlock states, and progression mechanics.
  *
- * @package WPS_WP_SUPPORT_THISISMYURL
+ * @package WPSHADOW_wpshadow_THISISMYURL
  * @since 1.2601.73002
  */
 
@@ -23,17 +23,17 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles spoke status tracking, milestone detection, and progression mechanics.
  */
-final class WPS_Spoke_Collection {
+final class WPSHADOW_Spoke_Collection {
 
 	/**
 	 * Option key for milestone data storage.
 	 */
-	private const MILESTONE_OPTION = 'wps_spoke_milestones';
+	private const MILESTONE_OPTION = 'wpshadow_spoke_milestones';
 
 	/**
 	 * Option key for metrics data storage.
 	 */
-	private const METRICS_OPTION = 'wps_spoke_metrics';
+	private const METRICS_OPTION = 'wpshadow_spoke_metrics';
 
 	/**
 	 * Spoke definitions with metadata.
@@ -43,7 +43,7 @@ final class WPS_Spoke_Collection {
 	private const SPOKES = array(
 		'avif' => array(
 			'name'            => 'AVIF',
-			'class'           => 'WPS_Module_AVIF',
+			'class'           => 'wpshadow_Module_AVIF',
 			'description'     => 'Next-generation image format with superior compression',
 			'icon'            => 'dashicons-format-image',
 			'benefits'        => '50% smaller than JPEG, excellent quality retention',
@@ -52,7 +52,7 @@ final class WPS_Spoke_Collection {
 		),
 		'webp' => array(
 			'name'            => 'WebP',
-			'class'           => 'WPS_Module_WebP',
+			'class'           => 'wpshadow_Module_WebP',
 			'description'     => 'Modern image format with broad browser support',
 			'icon'            => 'dashicons-format-gallery',
 			'benefits'        => '30% smaller than PNG, widespread compatibility',
@@ -61,7 +61,7 @@ final class WPS_Spoke_Collection {
 		),
 		'svg'  => array(
 			'name'            => 'SVG',
-			'class'           => 'WPS_Module_SVG',
+			'class'           => 'wpshadow_Module_SVG',
 			'description'     => 'Scalable vector graphics for crisp logos and icons',
 			'icon'            => 'dashicons-admin-customizer',
 			'benefits'        => 'Infinite scalability, small file size',
@@ -70,7 +70,7 @@ final class WPS_Spoke_Collection {
 		),
 		'tiff' => array(
 			'name'            => 'TIFF',
-			'class'           => 'WPS_Module_TIFF',
+			'class'           => 'wpshadow_Module_TIFF',
 			'description'     => 'High-quality image format for professional photography',
 			'icon'            => 'dashicons-camera',
 			'benefits'        => 'Lossless compression, excellent for archival',
@@ -79,7 +79,7 @@ final class WPS_Spoke_Collection {
 		),
 		'bmp'  => array(
 			'name'            => 'BMP',
-			'class'           => 'WPS_Module_BMP',
+			'class'           => 'wpshadow_Module_BMP',
 			'description'     => 'Uncompressed bitmap format for legacy compatibility',
 			'icon'            => 'dashicons-images-alt',
 			'benefits'        => 'Universal compatibility, simple format',
@@ -88,7 +88,7 @@ final class WPS_Spoke_Collection {
 		),
 		'gif'  => array(
 			'name'            => 'GIF',
-			'class'           => 'WPS_Module_GIF',
+			'class'           => 'wpshadow_Module_GIF',
 			'description'     => 'Animated image format with palette-based compression',
 			'icon'            => 'dashicons-format-video',
 			'benefits'        => 'Animation support, wide compatibility',
@@ -97,7 +97,7 @@ final class WPS_Spoke_Collection {
 		),
 		'heic' => array(
 			'name'            => 'HEIC',
-			'class'           => 'WPS_Module_HEIC',
+			'class'           => 'wpshadow_Module_HEIC',
 			'description'     => 'Apple\'s modern image format with excellent compression',
 			'icon'            => 'dashicons-smartphone',
 			'benefits'        => 'Better compression than JPEG, iOS native',
@@ -106,7 +106,7 @@ final class WPS_Spoke_Collection {
 		),
 		'raw'  => array(
 			'name'            => 'RAW',
-			'class'           => 'WPS_Module_RAW',
+			'class'           => 'wpshadow_Module_RAW',
 			'description'     => 'Professional camera raw format for maximum quality',
 			'icon'            => 'dashicons-camera-alt',
 			'benefits'        => 'Maximum quality, professional workflow support',
@@ -184,10 +184,10 @@ final class WPS_Spoke_Collection {
 		add_action( 'deactivated_plugin', array( __CLASS__, 'check_spoke_deactivation' ), 10, 2 );
 
 		// Hook into image conversion events (to be implemented by spoke plugins).
-		add_action( 'wps_image_converted', array( __CLASS__, 'track_conversion' ), 10, 3 );
+		add_action( 'wpshadow_image_converted', array( __CLASS__, 'track_conversion' ), 10, 3 );
 
 		// Check for milestone unlocks periodically.
-		add_action( 'wps_check_milestones', array( __CLASS__, 'check_milestone_unlocks' ) );
+		add_action( 'wpshadow_check_milestones', array( __CLASS__, 'check_milestone_unlocks' ) );
 	}
 
 	/**
@@ -275,7 +275,7 @@ final class WPS_Spoke_Collection {
 	 * @return bool True if installed.
 	 */
 	private static function is_spoke_installed( string $spoke ): bool {
-		$spoke_slug  = $spoke . '-support-thisismyurl';
+		$spoke_slug  = $spoke . '-wpshadow';
 		$plugin_file = $spoke_slug . '/' . $spoke_slug . '.php';
 
 		if ( ! function_exists( 'get_plugins' ) ) {
@@ -293,7 +293,7 @@ final class WPS_Spoke_Collection {
 	 * @return bool True if active.
 	 */
 	private static function is_spoke_active( string $spoke ): bool {
-		$spoke_slug  = $spoke . '-support-thisismyurl';
+		$spoke_slug  = $spoke . '-wpshadow';
 		$plugin_file = $spoke_slug . '/' . $spoke_slug . '.php';
 
 		if ( ! function_exists( 'is_plugin_active' ) ) {
@@ -379,7 +379,7 @@ final class WPS_Spoke_Collection {
 			$new_unlocks['first_spoke'] = self::MILESTONES['first_spoke'];
 
 			// Log achievement.
-			WPS_Activity_Logger::log(
+			WPSHADOW_Activity_Logger::log(
 				'milestone',
 				'First Format Unlocked',
 				array(
@@ -394,7 +394,7 @@ final class WPS_Spoke_Collection {
 			$milestones['multi_master']  = time();
 			$new_unlocks['multi_master'] = self::MILESTONES['multi_master'];
 
-			WPS_Activity_Logger::log(
+			WPSHADOW_Activity_Logger::log(
 				'milestone',
 				'Multi-Format Master',
 				array(
@@ -410,7 +410,7 @@ final class WPS_Spoke_Collection {
 			$milestones['full_collection']  = time();
 			$new_unlocks['full_collection'] = self::MILESTONES['full_collection'];
 
-			WPS_Activity_Logger::log(
+			WPSHADOW_Activity_Logger::log(
 				'milestone',
 				'Full Collection Achieved',
 				array(
@@ -425,7 +425,7 @@ final class WPS_Spoke_Collection {
 			$milestones['format_expert']  = time();
 			$new_unlocks['format_expert'] = self::MILESTONES['format_expert'];
 
-			WPS_Activity_Logger::log(
+			WPSHADOW_Activity_Logger::log(
 				'milestone',
 				'Format Expert',
 				array(
@@ -494,13 +494,13 @@ final class WPS_Spoke_Collection {
 	public static function check_spoke_activation( string $plugin, bool $network_wide = false ): void {
 		// Check if this is a spoke plugin.
 		foreach ( array_keys( self::SPOKES ) as $spoke ) {
-			$spoke_slug = $spoke . '-support-thisismyurl';
+			$spoke_slug = $spoke . '-wpshadow';
 			if ( str_contains( $plugin, $spoke_slug ) ) {
 				// Check for milestone unlocks.
 				$unlocks = self::check_milestone_unlocks();
 
 				// Log activation.
-				WPS_Activity_Logger::log(
+				WPSHADOW_Activity_Logger::log(
 					'spoke_activation',
 					sprintf( '%s Spoke Activated', strtoupper( $spoke ) ),
 					array(
@@ -525,10 +525,10 @@ final class WPS_Spoke_Collection {
 	public static function check_spoke_deactivation( string $plugin, bool $network_wide = false ): void {
 		// Check if this is a spoke plugin.
 		foreach ( array_keys( self::SPOKES ) as $spoke ) {
-			$spoke_slug = $spoke . '-support-thisismyurl';
+			$spoke_slug = $spoke . '-wpshadow';
 			if ( str_contains( $plugin, $spoke_slug ) ) {
 				// Log deactivation.
-				WPS_Activity_Logger::log(
+				WPSHADOW_Activity_Logger::log(
 					'spoke_deactivation',
 					sprintf( '%s Spoke Deactivated', strtoupper( $spoke ) ),
 					array(
@@ -591,7 +591,7 @@ final class WPS_Spoke_Collection {
 
 		// Trigger milestone popup if new unlocks.
 		if ( ! empty( $unlocks ) ) {
-			set_transient( 'wps_new_milestones', $unlocks, 300 ); // 5 minutes.
+			set_transient( 'wpshadow_new_milestones', $unlocks, 300 ); // 5 minutes.
 		}
 	}
 

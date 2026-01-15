@@ -2,7 +2,7 @@
 /**
  * WPS Settings API (network + site with overrides).
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  */
 
 declare(strict_types=1);
@@ -16,9 +16,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Settings helper providing network/site inheritance and override control.
  */
-class WPS_Settings {
-	private const SITE_OPTION    = 'WPS_site_settings';
-	private const NETWORK_OPTION = 'WPS_network_settings';
+class WPSHADOW_Settings {
+	private const SITE_OPTION    = 'wpshadow_site_settings';
+	private const NETWORK_OPTION = 'wpshadow_network_settings';
 	private const OVERRIDE_KEY   = '_allow_override';
 
 	/**

@@ -1,7 +1,7 @@
 /**
  * Core Support Admin Scripts
  *
- * @package WPS_CORE_SUPPORT
+ * @package WPSHADOW_CORE_SUPPORT
  */
 
 (function($) {
@@ -10,7 +10,7 @@
 	/**
 	 * Initialize dashboard functionality.
 	 */
-	const TimuDashboard = {
+	const WPShadowDashboard = {
 		/**
 		 * Initialize.
 		 */
@@ -47,7 +47,7 @@
 					return;
 				}
 
-				TimuDashboard.applyModuleState($card, $toggle.is(':checked'));
+				WPShadowDashboard.applyModuleState($card, $toggle.is(':checked'));
 			});
 		},
 
@@ -156,13 +156,13 @@
 
 		if (!slug) {
 			$toggle.prop('checked', false);
-			TimuDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
+			WPShadowDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
 			return;
 		}
 
 		if (!isInstalled) {
 			$toggle.prop('checked', false);
-			TimuDashboard.showNotice('warning', wpsAdminData.i18n.installFirst);
+			WPShadowDashboard.showNotice('warning', wpsAdminData.i18n.installFirst);
 			return;
 
 			// Disable toggle during request.
@@ -176,7 +176,7 @@
 				url: ajaxurl,
 				type: 'POST',
 				data: {
-					action: 'wps_toggle_module',
+					action: 'wpshadow_toggle_module',
 					nonce: wpsAdminData.toggleNonce,
 					slug: slug,
 					enabled: enabled ? 'true' : 'false',
@@ -185,7 +185,7 @@
 				success: function(response) {
 					if (response.success) {
 						// Update card state.
-						TimuDashboard.applyModuleState($card, enabled);
+						WPShadowDashboard.applyModuleState($card, enabled);
 						if (enabled) {
 							$card.find('.wps-badge-disabled')
 								.removeClass('wps-badge-disabled')
@@ -199,16 +199,16 @@
 						}
 
 						// Show success notice.
-						TimuDashboard.showNotice('success', response.data.message);
+						WPShadowDashboard.showNotice('success', response.data.message);
 
 						// Update stats.
-						TimuDashboard.updateStats();
+						WPShadowDashboard.updateStats();
 					} else {
 						// Revert toggle state.
 						$toggle.prop('checked', !enabled);
 
 						// Show error notice.
-						TimuDashboard.showNotice('error', response.data.message);
+						WPShadowDashboard.showNotice('error', response.data.message);
 					}
 				},
 				error: function(xhr, status, error) {
@@ -216,7 +216,7 @@
 					$toggle.prop('checked', !enabled);
 
 					// Show error notice.
-					TimuDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
+					WPShadowDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
 
 					console.error('WPS Toggle Error:', error);
 				},
@@ -242,7 +242,7 @@
 			const isNetwork = window.location.pathname.includes('/wp-admin/network/');
 
 			if (!slug) {
-				TimuDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
+				WPShadowDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
 				return;
 			}
 
@@ -255,14 +255,14 @@
 				url: ajaxurl,
 				type: 'POST',
 				data: {
-					action: 'wps_install_module',
+					action: 'wpshadow_install_module',
 					nonce: wpsAdminData.actionNonce,
 					slug: slug
 				},
 				success: function(response) {
 					if (response.success) {
 						// Show success notice.
-						TimuDashboard.showNotice('success', response.data.message);
+						WPShadowDashboard.showNotice('success', response.data.message);
 
 						// Refresh dashboard after 1.5 seconds.
 						setTimeout(function() {
@@ -270,12 +270,12 @@
 						}, 1500);
 					} else {
 						// Show error notice.
-						TimuDashboard.showNotice('error', response.data.message);
+						WPShadowDashboard.showNotice('error', response.data.message);
 					}
 				},
 				error: function(xhr, status, error) {
 					// Show error notice.
-					TimuDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
+					WPShadowDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
 					console.error('WPS Install Error:', error);
 				},
 				complete: function() {
@@ -300,7 +300,7 @@
 			const isNetwork = window.location.pathname.includes('/wp-admin/network/');
 
 			if (!slug) {
-				TimuDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
+				WPShadowDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
 				return;
 			}
 
@@ -313,14 +313,14 @@
 				url: ajaxurl,
 				type: 'POST',
 				data: {
-					action: 'wps_update_module',
+					action: 'wpshadow_update_module',
 					nonce: wpsAdminData.actionNonce,
 					slug: slug
 				},
 				success: function(response) {
 					if (response.success) {
 						// Show success notice.
-						TimuDashboard.showNotice('success', response.data.message);
+						WPShadowDashboard.showNotice('success', response.data.message);
 
 						// Refresh dashboard after 1.5 seconds.
 						setTimeout(function() {
@@ -328,12 +328,12 @@
 						}, 1500);
 					} else {
 						// Show error notice.
-						TimuDashboard.showNotice('error', response.data.message);
+						WPShadowDashboard.showNotice('error', response.data.message);
 					}
 				},
 				error: function(xhr, status, error) {
 					// Show error notice.
-					TimuDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
+					WPShadowDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
 					console.error('WPS Update Error:', error);
 				},
 				complete: function() {
@@ -359,7 +359,7 @@
 			const isNetwork = window.location.pathname.includes('/wp-admin/network/');
 
 			if (!slug) {
-				TimuDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
+				WPShadowDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
 				return;
 			}
 
@@ -372,7 +372,7 @@
 				url: ajaxurl,
 				type: 'POST',
 				data: {
-					action: 'wps_toggle_module',
+					action: 'wpshadow_toggle_module',
 					nonce: wpsAdminData.toggleNonce,
 					slug: slug,
 					enabled: isActivate ? 'true' : 'false',
@@ -381,7 +381,7 @@
 				success: function(response) {
 					if (response.success) {
 						// Show success notice.
-						TimuDashboard.showNotice('success', response.data.message);
+						WPShadowDashboard.showNotice('success', response.data.message);
 
 						// Refresh dashboard after 1 second.
 						setTimeout(function() {
@@ -389,12 +389,12 @@
 						}, 1000);
 					} else {
 						// Show error notice.
-						TimuDashboard.showNotice('error', response.data.message);
+						WPShadowDashboard.showNotice('error', response.data.message);
 					}
 				},
 				error: function(xhr, status, error) {
 					// Show error notice.
-					TimuDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
+					WPShadowDashboard.showNotice('error', wpsAdminData.i18n.ajaxError);
 					console.error('WPS Toggle Error:', error);
 				},
 				complete: function() {
@@ -428,7 +428,7 @@
 			// Check if any cards are visible.
 			const visibleCount = $cards.filter(':visible').length;
 			if (visibleCount === 0) {
-				TimuDashboard.showNoResults();
+				WPShadowDashboard.showNoResults();
 			} else {
 				$('.wps-no-results').remove();
 			}
@@ -496,7 +496,7 @@
 	$(document).ready(function() {
 		// Initialize if modules grid or dashboard widgets are present.
 		if ($('.wps-dashboard-wrap').length || $('.wps-module-toggle').length || $('#dashboard-widgets').length) {
-			TimuDashboard.init();
+			WPShadowDashboard.init();
 		}
 	});
 
@@ -522,7 +522,7 @@
  * - jQuery-based initialization
  *
  * [1.2601.71712] - 2026-01-07 17:17
- * - Added TimuDashboard module for dashboard functionality
+ * - Added WPShadowDashboard module for dashboard functionality
  * - Implemented module toggle handler with AJAX
  * - Added filter functionality for hub/spoke types
  * - Implemented stats counter updates

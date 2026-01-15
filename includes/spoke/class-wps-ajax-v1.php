@@ -2,7 +2,7 @@
 /**
  * WPS AJAX endpoints for spoke plugins.
  *
- * @package wp_support_SUPPORT
+ * @package wpshadow_SUPPORT
  * @version 1.2601.0819
  */
 
@@ -14,9 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class WPS_Ajax_v1 {
+class WPSHADOW_Ajax_v1 {
 
-	public function __construct( private readonly WPS_Spoke_Base $core ) {
+	public function __construct( private readonly WPSHADOW_Spoke_Base $core ) {
 		\add_action( 'wp_ajax_' . $this->core->plugin_slug . '_clear_cache', array( $this, 'clear_cache' ) );
 		\add_action( 'wp_ajax_' . $this->core->plugin_slug . '_refresh_status', array( $this, 'refresh_status' ) );
 	}

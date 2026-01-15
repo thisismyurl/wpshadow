@@ -17,16 +17,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Cache_Helper
+ * WPSHADOW_Cache_Helper
  *
  * Centralized caching utility for consistent cache management across the plugin.
  */
-final class WPS_Cache_Helper {
+final class WPSHADOW_Cache_Helper {
 
 	/**
 	 * Cache group for plugin data.
 	 */
-	private const CACHE_GROUP = 'wps_core';
+	private const CACHE_GROUP = 'wpshadow_core';
 
 	/**
 	 * Default cache expiration (1 hour).
@@ -133,7 +133,7 @@ final class WPS_Cache_Helper {
 		}
 
 		$deleted      = 0;
-		$prefix_check = 'wps_' . $prefix;
+		$prefix_check = 'wpshadow_' . $prefix;
 
 		foreach ( array_keys( $wp_object_cache->cache[ self::CACHE_GROUP ] ) as $key ) {
 			if ( is_string( $key ) && strpos( $key, $prefix_check ) === 0 ) {

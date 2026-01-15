@@ -9,7 +9,7 @@
  * video generation services (Puppeteer/Playwright-based microservice)
  * for actual screen recording and video encoding.
  *
- * @package WPS_WP_SUPPORT
+ * @package WPSHADOW_WP_SUPPORT
  * @since 1.2601.73002
  */
 
@@ -18,7 +18,7 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * Class WPS_Video_Walkthroughs
+ * Class WPSHADOW_Video_Walkthroughs
  *
  * Manages auto-generated video walkthroughs:
  * - Video library organization
@@ -26,17 +26,17 @@ namespace WPS\CoreSupport;
  * - Download and embed functionality
  * - Update detection and regeneration
  */
-class WPS_Video_Walkthroughs {
+class WPSHADOW_Video_Walkthroughs {
 
 	/**
 	 * Database option key for video library.
 	 */
-	private const VIDEO_LIBRARY_KEY = 'wps_video_library';
+	private const VIDEO_LIBRARY_KEY = 'wpshadow_video_library';
 
 	/**
 	 * Database option key for video settings.
 	 */
-	private const VIDEO_SETTINGS_KEY = 'wps_video_settings';
+	private const VIDEO_SETTINGS_KEY = 'wpshadow_video_settings';
 
 	/**
 	 * Available video types.
@@ -55,10 +55,10 @@ class WPS_Video_Walkthroughs {
 
 		add_action( 'admin_menu', array( __CLASS__, 'register_admin_page' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
-		add_action( 'wp_ajax_wps_generate_video', array( __CLASS__, 'ajax_generate_video' ) );
-		add_action( 'wp_ajax_wps_download_video', array( __CLASS__, 'ajax_download_video' ) );
-		add_action( 'wp_ajax_wps_get_video_embed', array( __CLASS__, 'ajax_get_video_embed' ) );
-		add_action( 'wp_ajax_wps_check_video_service', array( __CLASS__, 'ajax_check_video_service' ) );
+		add_action( 'wp_ajax_WPSHADOW_generate_video', array( __CLASS__, 'ajax_generate_video' ) );
+		add_action( 'wp_ajax_WPSHADOW_download_video', array( __CLASS__, 'ajax_download_video' ) );
+		add_action( 'wp_ajax_WPSHADOW_get_video_embed', array( __CLASS__, 'ajax_get_video_embed' ) );
+		add_action( 'wp_ajax_WPSHADOW_check_video_service', array( __CLASS__, 'ajax_check_video_service' ) );
 	}
 
 	/**
@@ -69,12 +69,12 @@ class WPS_Video_Walkthroughs {
 	private static function register_video_types(): void {
 		self::$video_types = array(
 			'foundation' => array(
-				'label'  => __( 'Foundation Videos', 'plugin-wp-support-thisismyurl' ),
-				'desc'   => __( 'Essential videos for all WordPress sites', 'plugin-wp-support-thisismyurl' ),
+				'label'  => __( 'Foundation Videos', 'plugin-wpshadow' ),
+				'desc'   => __( 'Essential videos for all WordPress sites', 'plugin-wpshadow' ),
 				'videos' => array(
 					'dashboard-overview' => array(
-						'title'       => __( 'Dashboard Overview', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'WordPress dashboard overview, navigation, and basic interface', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Dashboard Overview', 'plugin-wpshadow' ),
+						'description' => __( 'WordPress dashboard overview, navigation, and basic interface', 'plugin-wpshadow' ),
 						'duration'    => '3:42',
 						'steps'       => array(
 							'Show WordPress dashboard overview',
@@ -84,8 +84,8 @@ class WPS_Video_Walkthroughs {
 						),
 					),
 					'add-page'           => array(
-						'title'       => __( 'Adding a Page', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Step-by-step guide to creating a new WordPress page', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Adding a Page', 'plugin-wpshadow' ),
+						'description' => __( 'Step-by-step guide to creating a new WordPress page', 'plugin-wpshadow' ),
 						'duration'    => '2:15',
 						'steps'       => array(
 							'Click Pages → Add New',
@@ -95,8 +95,8 @@ class WPS_Video_Walkthroughs {
 						),
 					),
 					'add-post'           => array(
-						'title'       => __( 'Adding a Blog Post', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Creating and publishing a blog post', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Adding a Blog Post', 'plugin-wpshadow' ),
+						'description' => __( 'Creating and publishing a blog post', 'plugin-wpshadow' ),
 						'duration'    => '2:08',
 						'steps'       => array(
 							'Click Posts → Add New',
@@ -107,8 +107,8 @@ class WPS_Video_Walkthroughs {
 						),
 					),
 					'manage-media'       => array(
-						'title'       => __( 'Managing Media', 'plugin-wp-support-thisismyurl' ),
-						'description' => __( 'Uploading and managing media files in WordPress', 'plugin-wp-support-thisismyurl' ),
+						'title'       => __( 'Managing Media', 'plugin-wpshadow' ),
+						'description' => __( 'Uploading and managing media files in WordPress', 'plugin-wpshadow' ),
 						'duration'    => '1:54',
 						'steps'       => array(
 							'Navigate to Media Library',
@@ -120,8 +120,8 @@ class WPS_Video_Walkthroughs {
 				),
 			),
 			'custom'     => array(
-				'label'  => __( 'Your Custom Videos', 'plugin-wp-support-thisismyurl' ),
-				'desc'   => __( 'Videos based on installed plugins and your site configuration', 'plugin-wp-support-thisismyurl' ),
+				'label'  => __( 'Your Custom Videos', 'plugin-wpshadow' ),
+				'desc'   => __( 'Videos based on installed plugins and your site configuration', 'plugin-wpshadow' ),
 				'videos' => array(),
 			),
 		);
@@ -139,8 +139,8 @@ class WPS_Video_Walkthroughs {
 		// Check for Contact Form 7.
 		if ( is_plugin_active( 'contact-form-7/wp-contact-form-7.php' ) ) {
 			self::$video_types['custom']['videos']['contact-form-7'] = array(
-				'title'       => __( 'Using Contact Forms', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'How Contact Form 7 captures and manages form submissions', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Using Contact Forms', 'plugin-wpshadow' ),
+				'description' => __( 'How Contact Form 7 captures and manages form submissions', 'plugin-wpshadow' ),
 				'duration'    => '1:47',
 				'steps'       => array(
 					'Navigate to Contact Forms',
@@ -155,8 +155,8 @@ class WPS_Video_Walkthroughs {
 		// Check for WooCommerce.
 		if ( class_exists( 'WooCommerce' ) ) {
 			self::$video_types['custom']['videos']['woocommerce-products'] = array(
-				'title'       => __( 'Managing Products', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Adding products, setting prices, and managing inventory', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Managing Products', 'plugin-wpshadow' ),
+				'description' => __( 'Adding products, setting prices, and managing inventory', 'plugin-wpshadow' ),
 				'duration'    => '4:23',
 				'steps'       => array(
 					'Navigate to Products',
@@ -168,8 +168,8 @@ class WPS_Video_Walkthroughs {
 			);
 
 			self::$video_types['custom']['videos']['woocommerce-orders'] = array(
-				'title'       => __( 'Processing Orders', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Managing customer orders and fulfillment', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Processing Orders', 'plugin-wpshadow' ),
+				'description' => __( 'Managing customer orders and fulfillment', 'plugin-wpshadow' ),
 				'duration'    => '3:12',
 				'steps'       => array(
 					'View order list',
@@ -184,8 +184,8 @@ class WPS_Video_Walkthroughs {
 		// Check for Gravity Forms.
 		if ( class_exists( 'GFForms' ) ) {
 			self::$video_types['custom']['videos']['gravity-forms'] = array(
-				'title'       => __( 'Working with Gravity Forms', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Creating forms and processing submissions', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Working with Gravity Forms', 'plugin-wpshadow' ),
+				'description' => __( 'Creating forms and processing submissions', 'plugin-wpshadow' ),
 				'duration'    => '2:34',
 				'steps'       => array(
 					'Create new form',
@@ -200,8 +200,8 @@ class WPS_Video_Walkthroughs {
 		// Check for Elementor.
 		if ( defined( 'ELEMENTOR_VERSION' ) ) {
 			self::$video_types['custom']['videos']['elementor-editing'] = array(
-				'title'       => __( 'Editing with Elementor', 'plugin-wp-support-thisismyurl' ),
-				'description' => __( 'Using Elementor page builder for custom layouts', 'plugin-wp-support-thisismyurl' ),
+				'title'       => __( 'Editing with Elementor', 'plugin-wpshadow' ),
+				'description' => __( 'Using Elementor page builder for custom layouts', 'plugin-wpshadow' ),
 				'duration'    => '3:45',
 				'steps'       => array(
 					'Launch Elementor editor',
@@ -221,8 +221,8 @@ class WPS_Video_Walkthroughs {
 	public static function register_admin_page(): void {
 		add_submenu_page(
 			'wp-support',
-			__( 'Video Library', 'plugin-wp-support-thisismyurl' ),
-			__( 'Video Library', 'plugin-wp-support-thisismyurl' ),
+			__( 'Video Library', 'plugin-wpshadow' ),
+			__( 'Video Library', 'plugin-wpshadow' ),
 			'manage_options',
 			'wps-video-library',
 			array( __CLASS__, 'render_page' )
@@ -248,11 +248,11 @@ class WPS_Video_Walkthroughs {
 			'wpsVideoLibrary',
 			array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonce'    => wp_create_nonce( 'wps_video_library_nonce' ),
+				'nonce'    => wp_create_nonce( 'wpshadow_video_library_nonce' ),
 				'strings'  => array(
-					'generating'      => __( 'Generating video...', 'plugin-wp-support-thisismyurl' ),
-					'generationError' => __( 'Video generation failed. Please check service configuration.', 'plugin-wp-support-thisismyurl' ),
-					'serviceOffline'  => __( 'Video generation service is not configured. Please configure in settings.', 'plugin-wp-support-thisismyurl' ),
+					'generating'      => __( 'Generating video...', 'plugin-wpshadow' ),
+					'generationError' => __( 'Video generation failed. Please check service configuration.', 'plugin-wpshadow' ),
+					'serviceOffline'  => __( 'Video generation service is not configured. Please configure in settings.', 'plugin-wpshadow' ),
 				),
 			)
 		);
@@ -264,15 +264,15 @@ class WPS_Video_Walkthroughs {
 	 * @return void
 	 */
 	public static function ajax_generate_video(): void {
-		check_ajax_referer( 'wps_video_library_nonce', 'nonce' );
+		check_ajax_referer( 'wpshadow_video_library_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$video_id = \WPS\CoreSupport\wps_get_post_key( 'video_id' );
+		$video_id = \WPS\CoreSupport\WPSHADOW_get_post_key( 'video_id' );
 		if ( empty( $video_id ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid video ID', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid video ID', 'plugin-wpshadow' ) ) );
 		}
 
 		$settings    = get_option( self::VIDEO_SETTINGS_KEY, array() );
@@ -281,7 +281,7 @@ class WPS_Video_Walkthroughs {
 		if ( empty( $service_url ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Video generation service not configured. Please configure the service URL in settings.', 'plugin-wp-support-thisismyurl' ),
+					'message' => __( 'Video generation service not configured. Please configure the service URL in settings.', 'plugin-wpshadow' ),
 					'type'    => 'not_configured',
 				)
 			);
@@ -290,7 +290,7 @@ class WPS_Video_Walkthroughs {
 		// Get video configuration.
 		$video_config = self::get_video_config( $video_id );
 		if ( ! $video_config ) {
-			wp_send_json_error( array( 'message' => __( 'Video type not found', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Video type not found', 'plugin-wpshadow' ) ) );
 		}
 
 		// In a real implementation, this would call the external video generation service.
@@ -310,7 +310,7 @@ class WPS_Video_Walkthroughs {
 
 		wp_send_json_success(
 			array(
-				'message' => __( 'Video generation started. This may take a few minutes.', 'plugin-wp-support-thisismyurl' ),
+				'message' => __( 'Video generation started. This may take a few minutes.', 'plugin-wpshadow' ),
 				'video'   => $response,
 			)
 		);
@@ -359,7 +359,7 @@ class WPS_Video_Walkthroughs {
 				'service_error',
 				sprintf(
 					/* translators: %d: HTTP status code */
-					__( 'Video generation service returned error (status %d)', 'plugin-wp-support-thisismyurl' ),
+					__( 'Video generation service returned error (status %d)', 'plugin-wpshadow' ),
 					$status_code
 				)
 			);
@@ -369,7 +369,7 @@ class WPS_Video_Walkthroughs {
 		$data = json_decode( $body, true );
 
 		if ( ! $data ) {
-			return new \WP_Error( 'invalid_response', __( 'Invalid response from video generation service', 'plugin-wp-support-thisismyurl' ) );
+			return new \WP_Error( 'invalid_response', __( 'Invalid response from video generation service', 'plugin-wpshadow' ) );
 		}
 
 		return $data;
@@ -420,17 +420,17 @@ class WPS_Video_Walkthroughs {
 	 * @return void
 	 */
 	public static function ajax_download_video(): void {
-		check_ajax_referer( 'wps_video_library_nonce', 'nonce' );
+		check_ajax_referer( 'wpshadow_video_library_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$video_id = \WPS\CoreSupport\wps_get_post_key( 'video_id' );
+		$video_id = \WPS\CoreSupport\WPSHADOW_get_post_key( 'video_id' );
 		$library  = get_option( self::VIDEO_LIBRARY_KEY, array() );
 
 		if ( ! isset( $library[ $video_id ] ) ) {
-			wp_send_json_error( array( 'message' => __( 'Video not found in library', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Video not found in library', 'plugin-wpshadow' ) ) );
 		}
 
 		$video = $library[ $video_id ];
@@ -448,17 +448,17 @@ class WPS_Video_Walkthroughs {
 	 * @return void
 	 */
 	public static function ajax_get_video_embed(): void {
-		check_ajax_referer( 'wps_video_library_nonce', 'nonce' );
+		check_ajax_referer( 'wpshadow_video_library_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$video_id = \WPS\CoreSupport\wps_get_post_key( 'video_id' );
+		$video_id = \WPS\CoreSupport\WPSHADOW_get_post_key( 'video_id' );
 		$library  = get_option( self::VIDEO_LIBRARY_KEY, array() );
 
 		if ( ! isset( $library[ $video_id ] ) ) {
-			wp_send_json_error( array( 'message' => __( 'Video not found in library', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Video not found in library', 'plugin-wpshadow' ) ) );
 		}
 
 		$video = $library[ $video_id ];
@@ -476,10 +476,10 @@ class WPS_Video_Walkthroughs {
 	 * @return void
 	 */
 	public static function ajax_check_video_service(): void {
-		check_ajax_referer( 'wps_video_library_nonce', 'nonce' );
+		check_ajax_referer( 'wpshadow_video_library_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
 		$settings    = get_option( self::VIDEO_SETTINGS_KEY, array() );
@@ -488,7 +488,7 @@ class WPS_Video_Walkthroughs {
 		if ( empty( $service_url ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Service URL not configured', 'plugin-wp-support-thisismyurl' ),
+					'message' => __( 'Service URL not configured', 'plugin-wpshadow' ),
 					'status'  => 'not_configured',
 				)
 			);
@@ -502,7 +502,7 @@ class WPS_Video_Walkthroughs {
 		if ( is_wp_error( $response ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Service is offline or unreachable', 'plugin-wp-support-thisismyurl' ),
+					'message' => __( 'Service is offline or unreachable', 'plugin-wpshadow' ),
 					'status'  => 'offline',
 				)
 			);
@@ -510,7 +510,7 @@ class WPS_Video_Walkthroughs {
 
 		wp_send_json_success(
 			array(
-				'message' => __( 'Service is online and ready', 'plugin-wp-support-thisismyurl' ),
+				'message' => __( 'Service is online and ready', 'plugin-wpshadow' ),
 				'status'  => 'online',
 			)
 		);
@@ -527,29 +527,29 @@ class WPS_Video_Walkthroughs {
 		$service_configured = ! empty( $settings['service_url'] );
 		?>
 		<div class="wrap wps-video-library-page">
-			<h1><?php esc_html_e( 'Video Library', 'plugin-wp-support-thisismyurl' ); ?></h1>
+			<h1><?php esc_html_e( 'Video Library', 'plugin-wpshadow' ); ?></h1>
 			<p class="description">
-				<?php esc_html_e( 'Auto-generated video walkthroughs of your site functionality. Videos are created on-demand and can be downloaded, shared, or embedded on your help pages.', 'plugin-wp-support-thisismyurl' ); ?>
+				<?php esc_html_e( 'Auto-generated video walkthroughs of your site functionality. Videos are created on-demand and can be downloaded, shared, or embedded on your help pages.', 'plugin-wpshadow' ); ?>
 			</p>
 
 			<?php if ( ! $service_configured ) : ?>
 				<div class="notice notice-warning">
 					<p>
-						<strong><?php esc_html_e( 'Video Generation Service Not Configured', 'plugin-wp-support-thisismyurl' ); ?></strong>
+						<strong><?php esc_html_e( 'Video Generation Service Not Configured', 'plugin-wpshadow' ); ?></strong>
 					</p>
 					<p>
 						<?php
 						echo wp_kses_post(
 							sprintf(
 								/* translators: %s: Settings page URL */
-								__( 'To generate videos, you need to configure a video generation service. This requires an external Puppeteer/Playwright-based microservice for screen recording and video encoding. <a href="%s">Configure in Settings</a>', 'plugin-wp-support-thisismyurl' ),
+								__( 'To generate videos, you need to configure a video generation service. This requires an external Puppeteer/Playwright-based microservice for screen recording and video encoding. <a href="%s">Configure in Settings</a>', 'plugin-wpshadow' ),
 								admin_url( 'admin.php?page=wps-settings' )
 							)
 						);
 						?>
 					</p>
 					<p class="description">
-						<?php esc_html_e( 'Recommended: Deploy a dedicated video generation microservice or use a third-party SaaS solution.', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'Recommended: Deploy a dedicated video generation microservice or use a third-party SaaS solution.', 'plugin-wpshadow' ); ?>
 					</p>
 				</div>
 			<?php endif; ?>
@@ -595,7 +595,7 @@ class WPS_Video_Walkthroughs {
 											<?php
 											printf(
 												/* translators: %s: Time ago string */
-												esc_html__( 'Generated %s ago', 'plugin-wp-support-thisismyurl' ),
+												esc_html__( 'Generated %s ago', 'plugin-wpshadow' ),
 												esc_html( human_time_diff( $library[ $video_id ]['generated_at'] ) )
 											);
 											?>
@@ -607,24 +607,24 @@ class WPS_Video_Walkthroughs {
 									<?php if ( $in_library && 'completed' === $video_status ) : ?>
 										<button type="button" class="button wps-watch-video" data-video-id="<?php echo esc_attr( $video_id ); ?>">
 											<span class="dashicons dashicons-controls-play"></span>
-											<?php esc_html_e( 'Watch', 'plugin-wp-support-thisismyurl' ); ?>
+											<?php esc_html_e( 'Watch', 'plugin-wpshadow' ); ?>
 										</button>
 										<button type="button" class="button wps-download-video" data-video-id="<?php echo esc_attr( $video_id ); ?>">
 											<span class="dashicons dashicons-download"></span>
-											<?php esc_html_e( 'Download', 'plugin-wp-support-thisismyurl' ); ?>
+											<?php esc_html_e( 'Download', 'plugin-wpshadow' ); ?>
 										</button>
 										<button type="button" class="button wps-embed-video" data-video-id="<?php echo esc_attr( $video_id ); ?>">
 											<span class="dashicons dashicons-share"></span>
-											<?php esc_html_e( 'Embed', 'plugin-wp-support-thisismyurl' ); ?>
+											<?php esc_html_e( 'Embed', 'plugin-wpshadow' ); ?>
 										</button>
 										<button type="button" class="button wps-regenerate-video" data-video-id="<?php echo esc_attr( $video_id ); ?>">
 											<span class="dashicons dashicons-update"></span>
-											<?php esc_html_e( 'Regenerate', 'plugin-wp-support-thisismyurl' ); ?>
+											<?php esc_html_e( 'Regenerate', 'plugin-wpshadow' ); ?>
 										</button>
 									<?php else : ?>
 										<button type="button" class="button button-primary wps-generate-video" data-video-id="<?php echo esc_attr( $video_id ); ?>" <?php disabled( ! $service_configured ); ?>>
 											<span class="dashicons dashicons-video-alt3"></span>
-											<?php esc_html_e( 'Generate Video', 'plugin-wp-support-thisismyurl' ); ?>
+											<?php esc_html_e( 'Generate Video', 'plugin-wpshadow' ); ?>
 										</button>
 									<?php endif; ?>
 								</div>
@@ -650,11 +650,11 @@ class WPS_Video_Walkthroughs {
 			<div class="wps-modal-content">
 				<span class="wps-modal-close">&times;</span>
 				<div class="wps-modal-body">
-					<h2><?php esc_html_e( 'Embed Code', 'plugin-wp-support-thisismyurl' ); ?></h2>
-					<p><?php esc_html_e( 'Copy this code to embed the video on your site:', 'plugin-wp-support-thisismyurl' ); ?></p>
+					<h2><?php esc_html_e( 'Embed Code', 'plugin-wpshadow' ); ?></h2>
+					<p><?php esc_html_e( 'Copy this code to embed the video on your site:', 'plugin-wpshadow' ); ?></p>
 					<textarea id="wps-embed-code" readonly rows="5"></textarea>
 					<button type="button" class="button button-primary" id="wps-copy-embed-code">
-						<?php esc_html_e( 'Copy to Clipboard', 'plugin-wp-support-thisismyurl' ); ?>
+						<?php esc_html_e( 'Copy to Clipboard', 'plugin-wpshadow' ); ?>
 					</button>
 				</div>
 			</div>

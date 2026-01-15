@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * WPS_Feature_Head_Cleanup
+ * WPSHADOW_Feature_Head_Cleanup
  *
  * Comprehensive cleanup of WordPress head section.
  */
-final class WPS_Feature_Head_Cleanup extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Head_Cleanup extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -27,14 +27,14 @@ final class WPS_Feature_Head_Cleanup extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'head-cleanup',
-				'name'               => __( 'Head Cleanup & Security Hardening', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Remove clutter from your site and keep your WordPress version private', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Head Cleanup & Security Hardening', 'plugin-wpshadow' ),
+				'description'        => __( 'Remove clutter from your site and keep your WordPress version private', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Performance & Security', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Performance & Security', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wpshadow' ),
 			)
 		);
 
@@ -133,7 +133,7 @@ final class WPS_Feature_Head_Cleanup extends WPS_Abstract_Feature {
 	 *
 	 * @return array Default options.
 	 */
-	private function get_default_options(): array {
+	protected function get_default_options(): array {
 		return array(
 			'remove_emoji'          => true,
 			'remove_generator'      => true,

@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace WPS\CoreSupport;
 
 /**
- * WPS_Feature_Resource_Hints
+ * WPSHADOW_Feature_Resource_Hints
  *
  * Manages DNS prefetch and resource hints.
  */
-final class WPS_Feature_Resource_Hints extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Resource_Hints extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -27,14 +27,14 @@ final class WPS_Feature_Resource_Hints extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'resource-hints',
-				'name'               => __( 'DNS Prefetch & Resource Hints Management', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Tell browsers to prepare for external services, so they load faster', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'DNS Prefetch & Resource Hints Management', 'plugin-wpshadow' ),
+				'description'        => __( 'Tell browsers to prepare for external services, so they load faster', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Resource Optimization', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Optimize how resources are loaded and delivered', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Resource Optimization', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Optimize how resources are loaded and delivered', 'plugin-wpshadow' ),
 			)
 		);
 	}
@@ -65,7 +65,7 @@ final class WPS_Feature_Resource_Hints extends WPS_Abstract_Feature {
 			return $urls;
 		}
 
-		$options = (array) $this->get_setting( 'wps_resource_hints_options', $this->get_default_options( ) );
+		$options = (array) $this->get_setting( 'wpshadow_resource_hints_options', $this->get_default_options( ) );
 
 		// Remove WordPress.org DNS prefetch.
 		if ( $options['remove_s_w_org'] ?? false ) {
@@ -80,7 +80,7 @@ final class WPS_Feature_Resource_Hints extends WPS_Abstract_Feature {
 		}
 
 		// Add custom hints.
-		$custom_hints = (array) $this->get_setting( 'wps_custom_resource_hints', array( ) );
+		$custom_hints = (array) $this->get_setting( 'wpshadow_custom_resource_hints', array( ) );
 		if ( ! empty( $custom_hints ) ) {
 			$urls = array_merge( $urls, array_values( $custom_hints ) );
 			$urls = array_unique( $urls );
@@ -94,7 +94,7 @@ final class WPS_Feature_Resource_Hints extends WPS_Abstract_Feature {
 	 *
 	 * @return array Default options.
 	 */
-	private function get_default_options(): array {
+	protected function get_default_options(): array {
 		return array(
 			'remove_s_w_org' => true,
 		);
@@ -106,10 +106,10 @@ final class WPS_Feature_Resource_Hints extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function add_preload_headers(): void {
-		$preload_resources = (array) $this->get_setting( 'wps_preload_resources', array( ) );
+		$preload_resources = (array) $this->get_setting( 'wpshadow_preload_resources', array( ) );
 
 		// Allow filtering.
-		$preload_resources = apply_filters( 'wps_preload_resources', $preload_resources );
+		$preload_resources = apply_filters( 'wpshadow_preload_resources', $preload_resources );
 
 		foreach ( $preload_resources as $resource ) {
 			if ( ! is_array( $resource ) || empty( $resource['url'] ) || empty( $resource['type'] ) ) {

@@ -17,16 +17,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WPS_Feature_Firewall
+ * WPSHADOW_Feature_Firewall
  *
  * Web Application Firewall for request filtering and IP blocking.
  */
-final class WPS_Feature_Firewall extends WPS_Abstract_Feature {
+final class WPSHADOW_Feature_Firewall extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Blocked IPs option key.
 	 */
-	private const BLOCKED_IPS_KEY = 'wps_firewall_blocked_ips';
+	private const BLOCKED_IPS_KEY = 'wpshadow_firewall_blocked_ips';
 
 	/**
 	 * Rate limit window (seconds).
@@ -45,14 +45,14 @@ final class WPS_Feature_Firewall extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'firewall',
-				'name'               => __( 'Web Application Firewall', 'plugin-wp-support-thisismyurl' ),
-				'description'        => __( 'Block malicious requests with IP blocking, rate limiting, attack pattern detection, and country-based filtering', 'plugin-wp-support-thisismyurl' ),
+				'name'               => __( 'Web Application Firewall', 'plugin-wpshadow' ),
+				'description'        => __( 'Block malicious requests with IP blocking, rate limiting, attack pattern detection, and country-based filtering', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
-				'widget_label'       => __( 'Security', 'plugin-wp-support-thisismyurl' ),
-				'widget_description' => __( 'Advanced security features', 'plugin-wp-support-thisismyurl' ),
+				'widget_label'       => __( 'Security', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Advanced security features', 'plugin-wpshadow' ),
 				'license_level'      => 3,
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-shield',
@@ -79,18 +79,18 @@ final class WPS_Feature_Firewall extends WPS_Abstract_Feature {
 		add_action( 'muplugins_loaded', array( $this, 'check_request' ), 1 );
 
 		// AJAX handlers.
-		add_action( 'wp_ajax_wps_block_ip', array( $this, 'ajax_block_ip' ) );
-		add_action( 'wp_ajax_wps_unblock_ip', array( $this, 'ajax_unblock_ip' ) );
-		add_action( 'wp_ajax_wps_get_blocked_ips', array( $this, 'ajax_get_blocked_ips' ) );
+		add_action( 'wp_ajax_WPSHADOW_block_ip', array( $this, 'ajax_block_ip' ) );
+		add_action( 'wp_ajax_WPSHADOW_unblock_ip', array( $this, 'ajax_unblock_ip' ) );
+		add_action( 'wp_ajax_WPSHADOW_get_blocked_ips', array( $this, 'ajax_get_blocked_ips' ) );
 
 		// Admin bar menu.
 		add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_menu' ), 100 );
 
 		// Cleanup expired rate limits.
-		if ( ! wp_next_scheduled( 'wps_firewall_cleanup' ) ) {
-			wp_schedule_event( time(), 'hourly', 'wps_firewall_cleanup' );
+		if ( ! wp_next_scheduled( 'wpshadow_firewall_cleanup' ) ) {
+			wp_schedule_event( time(), 'hourly', 'wpshadow_firewall_cleanup' );
 		}
-		add_action( 'wps_firewall_cleanup', array( $this, 'cleanup_expired_limits' ) );
+		add_action( 'wpshadow_firewall_cleanup', array( $this, 'cleanup_expired_limits' ) );
 	}
 
 	/**
@@ -219,7 +219,7 @@ final class WPS_Feature_Firewall extends WPS_Abstract_Feature {
 		update_option( self::BLOCKED_IPS_KEY, $blocked_ips );
 
 		// Log the block.
-		error_log( sprintf( 'WP Support Firewall: Blocked IP %s - %s', $ip, $reason ) );
+		error_log( sprintf( 'WPShadow Firewall: Blocked IP %s - %s', $ip, $reason ) );
 
 		return true;
 	}
@@ -242,7 +242,7 @@ final class WPS_Feature_Firewall extends WPS_Abstract_Feature {
 
 		update_option( self::BLOCKED_IPS_KEY, $updated );
 
-		error_log( sprintf( 'WP Support Firewall: Unblocked IP %s', $ip ) );
+		error_log( sprintf( 'WPShadow Firewall: Unblocked IP %s', $ip ) );
 
 		return true;
 	}
@@ -256,7 +256,7 @@ final class WPS_Feature_Firewall extends WPS_Abstract_Feature {
 	 * @return bool True if within limit.
 	 */
 	private function check_rate_limit( string $ip, int $limit, int $window ): bool {
-		$transient_key = 'wps_rate_limit_' . md5( $ip );
+		$transient_key = 'wpshadow_rate_limit_' . md5( $ip );
 		$requests      = get_transient( $transient_key );
 
 		if ( false === $requests ) {
@@ -335,7 +335,7 @@ final class WPS_Feature_Firewall extends WPS_Abstract_Feature {
 	private function block_request( string $reason, array $details = array() ): void {
 		// Log the block.
 		error_log( sprintf(
-			'WP Support Firewall: Blocked request - %s - Details: %s',
+			'WPShadow Firewall: Blocked request - %s - Details: %s',
 			$reason,
 			wp_json_encode( $details )
 		) );
@@ -372,7 +372,7 @@ final class WPS_Feature_Firewall extends WPS_Abstract_Feature {
 		$wp_admin_bar->add_node(
 			array(
 				'id'    => 'wps-firewall',
-				'title' => sprintf( __( 'Firewall (%d blocked)', 'plugin-wp-support-thisismyurl' ), $count ),
+				'title' => sprintf( __( 'Firewall (%d blocked)', 'plugin-wpshadow' ), $count ),
 				'href'  => admin_url( 'admin.php?page=wps-firewall' ),
 			)
 		);
@@ -384,19 +384,19 @@ final class WPS_Feature_Firewall extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_block_ip(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps-firewall' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wps-firewall' );
 
-		$ip     = \WPS\CoreSupport\wps_get_post_text( 'ip' );
-		$reason = \WPS\CoreSupport\wps_get_post_text( 'reason', 'Manual block' );
+		$ip     = \WPS\CoreSupport\WPSHADOW_get_post_text( 'ip' );
+		$reason = \WPS\CoreSupport\WPSHADOW_get_post_text( 'reason', 'Manual block' );
 
 		if ( empty( $ip ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid IP address', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid IP address', 'plugin-wpshadow' ) ) );
 		}
 
 		$this->block_ip( $ip, $reason, 0 );
 
 		wp_send_json_success( array(
-			'message' => sprintf( __( 'IP %s blocked successfully', 'plugin-wp-support-thisismyurl' ), $ip ),
+			'message' => sprintf( __( 'IP %s blocked successfully', 'plugin-wpshadow' ), $ip ),
 		) );
 	}
 
@@ -406,18 +406,18 @@ final class WPS_Feature_Firewall extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_unblock_ip(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps-firewall' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wps-firewall' );
 
-		$ip = \WPS\CoreSupport\wps_get_post_text( 'ip' );
+		$ip = \WPS\CoreSupport\WPSHADOW_get_post_text( 'ip' );
 
 		if ( empty( $ip ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid IP address', 'plugin-wp-support-thisismyurl' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid IP address', 'plugin-wpshadow' ) ) );
 		}
 
 		$this->unblock_ip( $ip );
 
 		wp_send_json_success( array(
-			'message' => sprintf( __( 'IP %s unblocked successfully', 'plugin-wp-support-thisismyurl' ), $ip ),
+			'message' => sprintf( __( 'IP %s unblocked successfully', 'plugin-wpshadow' ), $ip ),
 		) );
 	}
 
@@ -427,7 +427,7 @@ final class WPS_Feature_Firewall extends WPS_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_get_blocked_ips(): void {
-		\WPS\CoreSupport\wps_verify_ajax_request( 'wps-firewall' );
+		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wps-firewall' );
 
 		$blocked_ips = get_option( self::BLOCKED_IPS_KEY, array() );
 
