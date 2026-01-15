@@ -2262,7 +2262,8 @@ class WPS_Dashboard_Widgets {
 		}
 
 		// Get time range from request (default: 7 days).
-		$days = isset( $_GET['perf_days'] ) ? absint( $_GET['perf_days'] ) : 7; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only display, no state change.
+		$days = isset( $_GET['perf_days'] ) ? absint( $_GET['perf_days'] ) : 7;
 		if ( ! in_array( $days, array( 7, 30, 90 ), true ) ) {
 			$days = 7;
 		}
@@ -2446,16 +2447,10 @@ class WPS_Dashboard_Widgets {
 				// Handle time range selector change.
 				$('#wps-history-range-<?php echo esc_js( $chart_id ); ?>').on('change', function() {
 					var days = $(this).val();
-					var url = window.location.href;
-					
-					// Update or add perf_days parameter.
-					if (url.indexOf('perf_days=') !== -1) {
-						url = url.replace(/perf_days=\d+/, 'perf_days=' + days);
-					} else {
-						url += (url.indexOf('?') !== -1 ? '&' : '?') + 'perf_days=' + days;
-					}
-					
-					window.location.href = url;
+					// Safely construct URL using WordPress admin URL.
+					var url = new URL(window.location.href);
+					url.searchParams.set('perf_days', days);
+					window.location.href = url.toString();
 				});
 			});
 		})(jQuery);

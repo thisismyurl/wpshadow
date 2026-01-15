@@ -39,6 +39,18 @@ class WPS_Performance_Monitor {
 	private const CURRENT_METRICS_KEY = 'wps_performance_current';
 
 	/**
+	 * Scoring thresholds and weights for performance calculations.
+	 */
+	private const SCORE_QUERY_TARGET    = 20;
+	private const SCORE_QUERY_PENALTY   = 2;
+	private const SCORE_LOAD_MULTIPLIER = 50;
+	private const SCORE_MEMORY_TARGET   = 50;
+	private const SCORE_MEMORY_PENALTY  = 2;
+	private const SCORE_WEIGHT_QUERIES  = 0.40;
+	private const SCORE_WEIGHT_LOAD     = 0.35;
+	private const SCORE_WEIGHT_MEMORY   = 0.25;
+
+	/**
 	 * Query log storage.
 	 *
 	 * @var array
@@ -403,17 +415,26 @@ class WPS_Performance_Monitor {
 		$formatted = array();
 		
 		foreach ( $history as $timestamp => $metrics ) {
+			// Skip entries with missing critical data.
+			if ( ! isset( $metrics['query_count'], $metrics['load_time'], $metrics['memory_mb'] ) ) {
+				continue;
+			}
+			
 			// Calculate score for each historical entry.
-			$query_count = $metrics['query_count'] ?? 0;
-			$load_time   = (float) ( $metrics['load_time'] ?? 1 );
-			$memory_mb   = (float) ( $metrics['memory_mb'] ?? 50 );
+			$query_count = (int) $metrics['query_count'];
+			$load_time   = (float) $metrics['load_time'];
+			$memory_mb   = (float) $metrics['memory_mb'];
 			
-			// Simplified score calculation (0-100).
-			$query_score  = max( 0, 100 - ( ( $query_count - 20 ) * 2 ) );
-			$load_score   = max( 0, 100 - ( $load_time * 50 ) );
-			$memory_score = max( 0, 100 - ( ( $memory_mb - 50 ) * 2 ) );
+			// Simplified score calculation (0-100) using constants.
+			$query_score  = max( 0, 100 - ( ( $query_count - self::SCORE_QUERY_TARGET ) * self::SCORE_QUERY_PENALTY ) );
+			$load_score   = max( 0, 100 - ( $load_time * self::SCORE_LOAD_MULTIPLIER ) );
+			$memory_score = max( 0, 100 - ( ( $memory_mb - self::SCORE_MEMORY_TARGET ) * self::SCORE_MEMORY_PENALTY ) );
 			
-			$score = round( ( $query_score * 0.40 + $load_score * 0.35 + $memory_score * 0.25 ) );
+			$score = round(
+				$query_score * self::SCORE_WEIGHT_QUERIES +
+				$load_score * self::SCORE_WEIGHT_LOAD +
+				$memory_score * self::SCORE_WEIGHT_MEMORY
+			);
 			$score = max( 0, min( 100, $score ) );
 			
 			$formatted[] = array(

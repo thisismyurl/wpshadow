@@ -82,7 +82,26 @@ function wp_support_admin_enqueue( string $hook ): void {
 			'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js',
 			array(),
 			'4.4.1',
-			true
+			array(
+				'strategy'  => 'defer',
+				'in_footer' => true,
+			)
+		);
+		// Add SRI integrity check for CDN security.
+		add_filter(
+			'script_loader_tag',
+			function ( $tag, $handle ) {
+				if ( 'chartjs' === $handle ) {
+					$tag = str_replace(
+						' src=',
+						' integrity="sha256-743VL1vJV7g1OXmYSXQqnvjQ4nzH3+yOW3P5qp3hQYk=" crossorigin="anonymous" src=',
+						$tag
+					);
+				}
+				return $tag;
+			},
+			10,
+			2
 		);
 
 		// Add custom script to handle context-specific state saving.
