@@ -39,6 +39,18 @@ class WPS_Performance_Monitor {
 	private const CURRENT_METRICS_KEY = 'wps_performance_current';
 
 	/**
+	 * Scoring thresholds and weights for performance calculations.
+	 */
+	private const SCORE_QUERY_TARGET    = 20;
+	private const SCORE_QUERY_PENALTY   = 2;
+	private const SCORE_LOAD_MULTIPLIER = 50;
+	private const SCORE_MEMORY_TARGET   = 50;
+	private const SCORE_MEMORY_PENALTY  = 2;
+	private const SCORE_WEIGHT_QUERIES  = 0.40;
+	private const SCORE_WEIGHT_LOAD     = 0.35;
+	private const SCORE_WEIGHT_MEMORY   = 0.25;
+
+	/**
 	 * Query log storage.
 	 *
 	 * @var array
@@ -385,6 +397,57 @@ class WPS_Performance_Monitor {
 		ksort( $filtered );
 
 		return $filtered;
+	}
+
+	/**
+	 * Get performance history formatted for dashboard widget.
+	 *
+	 * @param int $days Number of days to retrieve (7, 30, or 90).
+	 * @return array Formatted historical data with dates and scores.
+	 */
+	public static function get_performance_history( int $days = 7 ): array {
+		$history = self::get_historical_metrics( $days );
+		
+		if ( empty( $history ) ) {
+			return array();
+		}
+		
+		$formatted = array();
+		
+		foreach ( $history as $timestamp => $metrics ) {
+			// Skip entries with missing critical data.
+			if ( ! isset( $metrics['query_count'], $metrics['load_time'], $metrics['memory_mb'] ) ) {
+				continue;
+			}
+			
+			// Calculate score for each historical entry.
+			$query_count = (int) $metrics['query_count'];
+			$load_time   = (float) $metrics['load_time'];
+			$memory_mb   = (float) $metrics['memory_mb'];
+			
+			// Simplified score calculation (0-100) using constants.
+			$query_score  = max( 0, 100 - ( ( $query_count - self::SCORE_QUERY_TARGET ) * self::SCORE_QUERY_PENALTY ) );
+			$load_score   = max( 0, 100 - ( $load_time * self::SCORE_LOAD_MULTIPLIER ) );
+			$memory_score = max( 0, 100 - ( ( $memory_mb - self::SCORE_MEMORY_TARGET ) * self::SCORE_MEMORY_PENALTY ) );
+			
+			$score = round(
+				$query_score * self::SCORE_WEIGHT_QUERIES +
+				$load_score * self::SCORE_WEIGHT_LOAD +
+				$memory_score * self::SCORE_WEIGHT_MEMORY
+			);
+			$score = max( 0, min( 100, $score ) );
+			
+			$formatted[] = array(
+				'date'        => date_i18n( 'M j', $timestamp ),
+				'timestamp'   => $timestamp,
+				'score'       => $score,
+				'query_count' => $query_count,
+				'load_time'   => $load_time,
+				'memory_mb'   => $memory_mb,
+			);
+		}
+		
+		return $formatted;
 	}
 
 	/**
