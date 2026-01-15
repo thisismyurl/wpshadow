@@ -94,7 +94,7 @@ function wp_support_admin_enqueue( string $hook ): void {
 				if ( 'chartjs' === $handle ) {
 					$tag = str_replace(
 						' src=',
-						' integrity="sha256-743VL1vJV7g1OXmYSXQqnvjQ4nzH3+yOW3P5qp3hQYk=" crossorigin="anonymous" src=',
+						' integrity="sha256-R13eauWpfoMV/hlminLUepT/V0UAXp3cy6/KiBnecnw=" crossorigin="anonymous" src=',
 						$tag
 					);
 				}

@@ -2314,30 +2314,37 @@ class WPS_Dashboard_Widgets {
 			<canvas id="<?php echo esc_attr( $chart_id ); ?>" style="max-height: 250px;"></canvas>
 			
 			<!-- Summary Stats -->
+			<?php
+			// Calculate averages once to avoid redundant computations.
+			$avg_score   = ! empty( $scores ) ? round( array_sum( $scores ) / count( $scores ) ) : 0;
+			$avg_queries = ! empty( $query_counts ) ? round( array_sum( $query_counts ) / count( $query_counts ) ) : 0;
+			$avg_load    = ! empty( $load_times ) ? round( array_sum( $load_times ) / count( $load_times ) ) : 0;
+			$avg_memory  = ! empty( $memory_usages ) ? round( array_sum( $memory_usages ) / count( $memory_usages ), 1 ) : 0;
+			?>
 			<div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e5e5e5;">
 				<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px;">
 					<div style="text-align: center;">
 						<div style="font-size: 11px; color: #666; margin-bottom: 3px; text-transform: uppercase;"><?php esc_html_e( 'Avg Score', 'plugin-wp-support-thisismyurl' ); ?></div>
 						<div style="font-size: 20px; font-weight: 600; color: #2271b1;">
-							<?php echo esc_html( ! empty( $scores ) ? round( array_sum( $scores ) / count( $scores ) ) : 0 ); ?>
+							<?php echo esc_html( $avg_score ); ?>
 						</div>
 					</div>
 					<div style="text-align: center;">
 						<div style="font-size: 11px; color: #666; margin-bottom: 3px; text-transform: uppercase;"><?php esc_html_e( 'Avg Queries', 'plugin-wp-support-thisismyurl' ); ?></div>
 						<div style="font-size: 20px; font-weight: 600; color: #0969da;">
-							<?php echo esc_html( ! empty( $query_counts ) ? round( array_sum( $query_counts ) / count( $query_counts ) ) : 0 ); ?>
+							<?php echo esc_html( $avg_queries ); ?>
 						</div>
 					</div>
 					<div style="text-align: center;">
 						<div style="font-size: 11px; color: #666; margin-bottom: 3px; text-transform: uppercase;"><?php esc_html_e( 'Avg Load', 'plugin-wp-support-thisismyurl' ); ?></div>
 						<div style="font-size: 20px; font-weight: 600; color: #1a7f37;">
-							<?php echo esc_html( ! empty( $load_times ) ? round( array_sum( $load_times ) / count( $load_times ) ) : 0 ); ?><span style="font-size: 12px; font-weight: 400;">ms</span>
+							<?php echo esc_html( $avg_load ); ?><span style="font-size: 12px; font-weight: 400;">ms</span>
 						</div>
 					</div>
 					<div style="text-align: center;">
 						<div style="font-size: 11px; color: #666; margin-bottom: 3px; text-transform: uppercase;"><?php esc_html_e( 'Avg Memory', 'plugin-wp-support-thisismyurl' ); ?></div>
 						<div style="font-size: 20px; font-weight: 600; color: #8250df;">
-							<?php echo esc_html( ! empty( $memory_usages ) ? round( array_sum( $memory_usages ) / count( $memory_usages ), 1 ) : 0 ); ?><span style="font-size: 12px; font-weight: 400;">MB</span>
+							<?php echo esc_html( $avg_memory ); ?><span style="font-size: 12px; font-weight: 400;">MB</span>
 						</div>
 					</div>
 				</div>
