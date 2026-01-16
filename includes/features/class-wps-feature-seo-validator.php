@@ -458,6 +458,7 @@ class WPSHADOW_Feature_SEO_Validator extends WPSHADOW_Abstract_Feature {
 
 		// Validate XML structure with security precautions.
 		$previous_errors = libxml_use_internal_errors( true );
+		$previous_entity_loader = null;
 		
 		// Disable external entity loading to prevent XXE attacks.
 		// Note: libxml_disable_entity_loader() is deprecated in PHP 8.0+
@@ -472,7 +473,7 @@ class WPSHADOW_Feature_SEO_Validator extends WPSHADOW_Abstract_Feature {
 		libxml_use_internal_errors( $previous_errors );
 		
 		// Restore entity loader state for older PHP versions.
-		if ( PHP_VERSION_ID < 80000 && isset( $previous_entity_loader ) ) {
+		if ( PHP_VERSION_ID < 80000 && null !== $previous_entity_loader ) {
 			libxml_disable_entity_loader( $previous_entity_loader );
 		}
 
@@ -674,10 +675,12 @@ class WPSHADOW_Feature_SEO_Validator extends WPSHADOW_Abstract_Feature {
 
 		// Check for sitemap reference.
 		if ( ! preg_match( '/^Sitemap:/mi', $body ) ) {
-			$recommendations[] = sprintf(
-				/* translators: %s: sitemap URL */
-				__( 'Add a Sitemap directive to your robots.txt: <code>Sitemap: %s</code>', 'plugin-wpshadow' ),
-				esc_html( home_url( '/sitemap.xml' ) )
+			$recommendations[] = wp_kses_post(
+				sprintf(
+					/* translators: %s: sitemap URL */
+					__( 'Add a Sitemap directive to your robots.txt: <code>Sitemap: %s</code>', 'plugin-wpshadow' ),
+					esc_html( home_url( '/sitemap.xml' ) )
+				)
 			);
 		}
 
@@ -687,10 +690,16 @@ class WPSHADOW_Feature_SEO_Validator extends WPSHADOW_Abstract_Feature {
 			$recommendations[] = __( 'Remove or modify the "Disallow: /" directive if you want search engines to index your site.', 'plugin-wpshadow' );
 		}
 
-		// Check if wp-content or wp-includes are blocked (which is generally good).
-		$blocks_uploads = preg_match( '/Disallow:.*wp-content\/uploads/i', $body );
+		// Check if uploads directory is blocked (which may affect media indexing).
+		// Get the actual wp-content directory name in case it's been customized.
+		$wp_content_dir = basename( WP_CONTENT_DIR );
+		$blocks_uploads = preg_match( '/Disallow:.*' . preg_quote( $wp_content_dir, '/' ) . '\/uploads/i', $body );
 		if ( $blocks_uploads ) {
-			$recommendations[] = __( 'Your robots.txt blocks wp-content/uploads. This may prevent indexing of media files. Remove this if you want images indexed.', 'plugin-wpshadow' );
+			$recommendations[] = sprintf(
+				/* translators: %s: wp-content directory name */
+				__( 'Your robots.txt blocks %s/uploads. This may prevent indexing of media files. Remove this if you want images indexed.', 'plugin-wpshadow' ),
+				esc_html( $wp_content_dir )
+			);
 		}
 
 		// Set final status.
