@@ -5,13 +5,13 @@
  * Remove unnecessary meta tags, links, and scripts from <head> that expose
  * version info, add bloat, or provide no value for modern sites.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * WPSHADOW_Feature_Head_Cleanup
@@ -27,8 +27,8 @@ final class WPSHADOW_Feature_Head_Cleanup extends WPSHADOW_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'head-cleanup',
-				'name'               => __( 'Head Cleanup & Security Hardening', 'plugin-wpshadow' ),
-				'description'        => __( 'Remove clutter from your site and keep your WordPress version private', 'plugin-wpshadow' ),
+			'name'               => __( 'Remove Unnecessary Page Code', 'plugin-wpshadow' ),
+			'description'        => __( 'Removes unnecessary tags and code that WordPress adds to page headers, reducing weight and revealing less information to potential attackers while keeping required items intact. Trims generator tags, extra feed links, and other noise so pages load cleaner and faster. Works safely with defaults and can be fine tuned, helping performance scores and privacy without affecting normal theme rendering.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',

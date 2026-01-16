@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -60,7 +60,7 @@ class WPSHADOW_License_Widget {
 
 		// Core and hub pages.
 		$wpshadow_pages = array(
-			'wp-support',
+			'wpshadow',
 			'image-hub',
 			'video-hub',
 		);
@@ -152,7 +152,7 @@ class WPSHADOW_License_Widget {
 
 		// Display banner above license widget if it exists
 		if ( class_exists( '\\WPShadow\\Admin\\WPSHADOW_Dashboard_Assets' ) ) {
-			echo \WPS\CoreSupport\Admin\WPSHADOW_Dashboard_Assets::get_banner_html();
+			echo \WPShadow\Admin\WPSHADOW_Dashboard_Assets::get_banner_html();
 		}
 		?>
 		<div class="wps-license-widget wps-license-<?php echo esc_attr( $status_class ); ?>">
@@ -199,18 +199,18 @@ class WPSHADOW_License_Widget {
 						<?php endif; ?>
 					</p>
 					<?php if ( ! $has_license ) : ?>
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=register' ) ); ?>" 
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&WPSHADOW_tab=register' ) ); ?>" 
 							class="button button-primary button-large" 
 							style="width: 100%; text-align: center; margin-bottom: 5px;">
 							<?php esc_html_e( 'Register Your Site (Free)', 'plugin-wpshadow' ); ?>
 						</a>
 					<?php endif; ?>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=dashboard_settings' ) ); ?>" 
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&WPSHADOW_tab=dashboard_settings' ) ); ?>" 
 						class="button <?php echo ! $has_license ? 'button-secondary' : 'button-primary'; ?> button-large" 
 						style="width: 100%; text-align: center; margin-bottom: 5px;">
 						<?php esc_html_e( 'Enter License Key', 'plugin-wpshadow' ); ?>
 					</a>
-					<a href="https://wpshadow.com/wp-support/#pricing" 
+					<a href="https://wpshadow.com/wpshadow/#pricing" 
 						target="_blank" 
 						class="button button-secondary button-large" 
 						style="width: 100%; text-align: center;">
@@ -219,7 +219,7 @@ class WPSHADOW_License_Widget {
 				</div>
 			<?php else : ?>
 				<div class="wps-license-actions" style="padding: 10px 15px; background: #f8f9fa; border-top: 1px solid #ddd; text-align: center;">
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&tab=updates' ) ); ?>" 
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&tab=updates' ) ); ?>" 
 						class="button button-secondary" 
 						style="width: 100%;">
 						<?php esc_html_e( 'Manage License', 'plugin-wpshadow' ); ?>
@@ -456,9 +456,9 @@ class WPSHADOW_License_Widget {
 
 		// Also clear for common WPShadow screen IDs.
 		$wpshadow_screens = array(
-			'toplevel_page_wp-support',
-			'wp-support_page_image-hub',
-			'wp-support_page_video-hub',
+			'toplevel_page_wpshadow',
+			'wpshadow_page_image-hub',
+			'wpshadow_page_video-hub',
 		);
 
 		foreach ( $wpshadow_screens as $screen_id ) {

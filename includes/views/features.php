@@ -5,7 +5,7 @@
  * @package wpshadow_SUPPORT
  */
 
-use WPS\CoreSupport\WPSHADOW_Tab_Navigation;
+use WPShadow\WPSHADOW_Tab_Navigation;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -205,7 +205,7 @@ $GLOBALS['wpshadow_grouped_features'] = $grouped_features;
 				<div id="post-body" class="metabox-holder columns-1">
 					<div id="postbox-container-1" class="postbox-container">
 						<div id="normal-sortables" class="meta-box-sortables ui-sortable">
-							<?php do_meta_boxes( 'toplevel_page_wp-support', 'normal', null ); ?>
+							<?php do_meta_boxes( 'toplevel_page_wpshadow', 'normal', null ); ?>
 						</div>
 					</div>
 				</div>
@@ -245,6 +245,16 @@ $GLOBALS['wpshadow_grouped_features'] = $grouped_features;
 		gap: 0;
 	}
 
+	.postbox .inside {
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+
+	.wp-list-table.widefat.fixed.striped {
+		border: none;
+		box-shadow: none;
+	}
+
 	.wps-feature-widget {
 		background: #fff;
 		border: 1px solid #ddd;
@@ -278,13 +288,73 @@ $GLOBALS['wpshadow_grouped_features'] = $grouped_features;
 	.wps-feature-widget .check-column {
 		text-align: center;
 	}
+
+	/* Toggle Switch Styles */
+	.wps-feature-toggle-label {
+		display: inline-block;
+		position: relative;
+		cursor: pointer;
+		padding-top: 10px;
+	}
+
+	.wps-feature-toggle-input {
+		position: absolute;
+		opacity: 0;
+		width: 0;
+		height: 0;
+	}
+
+	.wps-feature-toggle-switch {
+		display: inline-block;
+		position: relative;
+		width: 44px;
+		height: 24px;
+		background: #dcdcde;
+		border-radius: 12px;
+		transition: background-color 0.3s ease;
+		vertical-align: middle;
+	}
+
+	.wps-feature-toggle-switch::after {
+		content: '';
+		position: absolute;
+		top: 2px;
+		left: 2px;
+		width: 20px;
+		height: 20px;
+		background: #fff;
+		border-radius: 50%;
+		transition: transform 0.3s ease;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+	}
+
+	.wps-feature-toggle-input:checked + .wps-feature-toggle-switch {
+		background: #2271b1;
+	}
+
+	.wps-feature-toggle-input:checked + .wps-feature-toggle-switch::after {
+		transform: translateX(20px);
+	}
+
+	.wps-feature-toggle-input:focus + .wps-feature-toggle-switch {
+		box-shadow: 0 0 0 2px #fff, 0 0 0 4px #2271b1;
+		outline: 2px solid transparent;
+	}
+
+	.wps-feature-toggle-label:hover .wps-feature-toggle-switch {
+		background: #c3c4c7;
+	}
+
+	.wps-feature-toggle-label:hover .wps-feature-toggle-input:checked + .wps-feature-toggle-switch {
+		background: #135e96;
+	}
 </style>
 
 <script>
 jQuery(document).ready(function($) {
 	// Initialize postboxes for features page
 	if (typeof postboxes !== 'undefined') {
-		var screen_id = 'toplevel_page_wp-support';
+		var screen_id = 'toplevel_page_wpshadow';
 		postboxes.add_postbox_toggles(screen_id);
 		
 		// Make metaboxes sortable

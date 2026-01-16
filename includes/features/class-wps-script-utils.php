@@ -4,13 +4,13 @@
  *
  * Shared utilities for script optimization features.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * WPSHADOW_Script_Utils

@@ -5,7 +5,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,74 +31,41 @@ function wpshadow_render_dashboard( string $hub_id = '', string $spoke_id = '' )
 		// Hub-level displays core dashboard content.
 	}
 
-	// Core-level dashboard (shown for all levels).
-	$catalog_modules = WPSHADOW_Module_Registry::get_catalog_with_status();
-	$modules         = $catalog_modules;
+	// TEMPORARILY DISABLED: Module Registry calls - modules are disabled.
+	// $catalog_modules = WPSHADOW_Module_Registry::get_catalog_with_status();
+	// Use empty array instead for now.
+	$modules = array();
 
 	// Top stats derived from catalog with real activation state.
 	$total_count     = count( $modules );
-	$hub_modules     = array_filter(
-		$modules,
-		static function ( $m ) {
-			return ( $m['type'] ?? '' ) === 'hub';
-		}
-	);
-	$spoke_modules   = array_filter(
-		$modules,
-		static function ( $m ) {
-			return ( $m['type'] ?? '' ) === 'spoke';
-		}
-	);
-	$hubs_count      = count( $hub_modules );
-	$spokes_count    = count( $spoke_modules );
-	$available_count = count(
-		array_filter(
-			$modules,
-			static function ( $m ) {
-				return empty( $m['installed'] );
-			}
-		)
-	);
-	$updates_count   = count(
-		array_filter(
-			$modules,
-			static function ( $m ) {
-				return ! empty( $m['update_available'] );
-			}
-		)
-	);
-	$enabled_count   = count(
-		array_filter(
-			$modules,
-			static function ( $m ) {
-				$slug = $m['slug'] ?? null;
-				if ( empty( $m['installed'] ) || ! $slug ) {
-					return false;
-				}
-				$plugin = $slug . '/' . $slug . '.php';
-				return is_plugin_active( $plugin ) || ( is_multisite() && is_plugin_active_for_network( $plugin ) );
-			}
-		)
-	);
+	$hub_modules     = array();
+	$spoke_modules   = array();
+	$hubs_count      = 0;
+	$spokes_count    = 0;
+	$available_count = 0;
+	$updates_count   = 0;
+	$enabled_count   = 0;
 
 	$activity_logs     = WPSHADOW_Vault::get_logs( 0, 10 );
 	$pending_uploads   = WPSHADOW_Vault::get_pending_contributor_uploads( 5 );
-	$schedule_snapshot = WPSHADOW_Module_Registry::get_schedule_snapshot();
+	// TEMPORARILY DISABLED: Module Registry schedule snapshot - modules are disabled.
+	// $schedule_snapshot = WPSHADOW_Module_Registry::get_schedule_snapshot();
+	$schedule_snapshot = array();
 	$run_now_nonce     = wp_create_nonce( 'wpshadow_run_task_now' );
 
-	// Setup metaboxes for dashboard rendering.
-	wpshadow_setup_dashboard_screen( $hub_id, $spoke_id );
-	$screen = get_current_screen();
+	// TEMPORARILY DISABLED: Dashboard metabox setup - modules are disabled.
+	// wpshadow_setup_dashboard_screen( $hub_id, $spoke_id );
+	// Use simple HTML rendering instead.
 
 	// Determine dashboard title based on context.
-	$dashboard_title = __( 'Support Dashboard', 'plugin-wpshadow' );
+	$dashboard_title = __( 'WPShadow Dashboard', 'plugin-wpshadow' );
 	if ( ! empty( $spoke_id ) && ! empty( $hub_id ) ) {
 		$dashboard_title = ucfirst( $spoke_id ) . ' ' . __( 'Dashboard', 'plugin-wpshadow' );
 	} elseif ( ! empty( $hub_id ) ) {
 		$dashboard_title = ucfirst( $hub_id ) . ' ' . __( 'Dashboard', 'plugin-wpshadow' );
 	}
 
-	// Render metabox-based dashboard.
+	// Render simplified dashboard (metaboxes disabled with module system).
 	?>
 	<div class="wrap">
 		<style>
@@ -115,51 +82,49 @@ function wpshadow_render_dashboard( string $hub_id = '', string $spoke_id = '' )
 				vertical-align: middle;
 				margin-right: 4px;
 			}
+			.wps-dashboard-notice {
+				background: #fff8e5;
+				border-left: 4px solid #ffb900;
+				padding: 12px;
+				margin-bottom: 20px;
+			}
+			.wps-dashboard-section {
+				background: #fff;
+				border: 1px solid #ccc;
+				border-radius: 4px;
+				padding: 20px;
+				margin-bottom: 20px;
+			}
+			.wps-dashboard-section h2 {
+				margin-top: 0;
+			}
 		</style>
 		<div class="wps-dashboard-header">
 			<h1><?php echo esc_html( $dashboard_title ); ?></h1>
 			<?php if ( empty( $hub_id ) && empty( $spoke_id ) ) : ?>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=' . \WPS\CoreSupport\WPSHADOW_Tab_Navigation::TAB_DASHBOARD_SETTINGS ) ); ?>" class="button button-secondary">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&WPSHADOW_tab=' . WPSHADOW_Tab_Navigation::TAB_DASHBOARD_SETTINGS ) ); ?>" class="button button-secondary">
 					<span class="dashicons dashicons-admin-generic"></span>
 					<?php esc_html_e( 'Dashboard Settings', 'plugin-wpshadow' ); ?>
 				</a>
 			<?php endif; ?>
 		</div>
 
+		<div class="wps-dashboard-notice">
+			<strong><?php esc_html_e( 'Notice:', 'plugin-wpshadow' ); ?></strong>
+			<?php esc_html_e( 'The module system is temporarily disabled. Core features only are available.', 'plugin-wpshadow' ); ?>
+		</div>
+
 		<div class="wps-dashboard-license-row">
 			<div id="wpshadow_license_widget" class="postbox" style="margin:0 0 16px 0;">
-				<?php \WPS\CoreSupport\WPSHADOW_License_Widget::render_widget(); ?>
+				<?php WPSHADOW_License_Widget::render_widget(); ?>
 			</div>
 		</div>
 
-		<div id="dashboard-widgets" class="metabox-holder wps-dashboard-grid">
-			<div id="postbox-container-1" class="postbox-container">
-				<?php do_meta_boxes( $screen->id, 'normal', null ); ?>
-			</div>
-			<div id="postbox-container-2" class="postbox-container">
-				<?php do_meta_boxes( $screen->id, 'side', null ); ?>
-			</div>
+		<div class="wps-dashboard-section">
+			<h2><?php esc_html_e( 'Dashboard', 'plugin-wpshadow' ); ?></h2>
+			<p><?php esc_html_e( 'Welcome to WPShadow Dashboard. Core diagnostic features are available.', 'plugin-wpshadow' ); ?></p>
 		</div>
 	</div>
-
-	<style>
-		.wps-dashboard-grid {
-			display: grid;
-			grid-template-columns: 2fr 1fr;
-			grid-column-gap: 16px;
-		}
-
-		.wps-dashboard-grid #postbox-container-1,
-		.wps-dashboard-grid #postbox-container-2 {
-			width: 100%;
-		}
-
-		@media (max-width: 1024px) {
-			.wps-dashboard-grid {
-				grid-template-columns: 1fr;
-			}
-		}
-	</style>
 	</div>
 	<?php
 }

@@ -4,13 +4,13 @@
  *
  * Automatically detect and remove stuck maintenance mode files after failed WordPress updates.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.75000
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -40,8 +40,8 @@ final class WPSHADOW_Feature_Maintenance_Cleanup extends WPSHADOW_Abstract_Featu
 		parent::__construct(
 			array(
 				'id'                 => 'maintenance-cleanup',
-				'name'               => __( 'Maintenance Mode Cleanup', 'plugin-wpshadow' ),
-				'description'        => __( 'Automatically detect and remove stuck maintenance mode files after failed WordPress updates', 'plugin-wpshadow' ),
+			'name'               => __( 'Fix Stuck Maintenance Mode', 'plugin-wpshadow' ),
+			'description'        => __( 'Automatically detects when WordPress maintenance mode remains active after an interrupted update and safely clears the maintenance file so visitors can reach your site again. Logs what happened, respects a short safety window, and avoids touching active updates. Reduces downtime risk, gives peace of mind during patching, and keeps administrators from manually digging into files when an update stalls.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true, // Safe to enable by default.
 				'version'            => '1.0.0',

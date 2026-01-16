@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {

@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -50,7 +50,7 @@ class WPSHADOW_Customization_Audit {
 	 */
 	public static function register_menu(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Customization Audit', 'plugin-wpshadow' ),
 			__( 'Customization Audit', 'plugin-wpshadow' ),
 			'manage_options',
@@ -818,8 +818,8 @@ class WPSHADOW_Customization_Audit {
 			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
 		}
 
-		$report_id = \WPS\CoreSupport\WPSHADOW_get_post_text( 'report_id' );
-		$format    = \WPS\CoreSupport\WPSHADOW_get_post_text( 'format', 'json' );
+		$report_id = \WPShadow\WPSHADOW_get_post_text( 'report_id' );
+		$format    = \WPShadow\WPSHADOW_get_post_text( 'format', 'json' );
 
 		$reports = get_option( self::REPORTS_KEY, array() );
 		$report  = $reports[ $report_id ] ?? null;

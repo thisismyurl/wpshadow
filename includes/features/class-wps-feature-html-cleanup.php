@@ -5,13 +5,13 @@
  * Use output buffering to compress HTML by removing comments,
  * excessive whitespace, and empty tags. Reduces HTML size significantly.
  *
- * @package WPS\CoreSupport\Features
+ * @package WPShadow\Features
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * WPSHADOW_Feature_HTML_Cleanup
@@ -28,12 +28,12 @@ final class WPSHADOW_Feature_HTML_Cleanup extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'html-cleanup',
 				'name'               => __( 'HTML Output Buffer Compression', 'plugin-wpshadow' ),
-				'description'        => __( 'Shrink your pages and make them download faster', 'plugin-wpshadow' ),
+				'description'        => __( 'Compresses HTML output before it is sent to visitors, removing extra whitespace and comments to reduce download size without changing how pages look. Helps pages transfer faster over slow connections, pairs well with caching and minification, and reduces bandwidth use. Works automatically once enabled and keeps valid markup intact so analytics, forms, and scripts continue functioning as expected.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
-				'widget_group'       => 'cleanup',
-				'widget_label'       => __( 'Code Cleanup', 'plugin-wpshadow' ),
+			'widget_group'       => 'advanced',
+			'widget_label'       => __( 'Advanced Features', 'plugin-wpshadow' ),
 				'widget_description' => __( 'Remove unnecessary code artifacts and optimize output', 'plugin-wpshadow' ),
 			)
 		);

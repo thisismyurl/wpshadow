@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -293,7 +293,7 @@ class WPSHADOW_Staging_Manager {
 			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
 		}
 
-		$name = \WPS\CoreSupport\WPSHADOW_get_post_text( 'name' );
+		$name = \WPShadow\WPSHADOW_get_post_text( 'name' );
 
 		$staging_id = self::create_staging( $name );
 
@@ -321,7 +321,7 @@ class WPSHADOW_Staging_Manager {
 			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
 		}
 
-		$staging_id = \WPS\CoreSupport\WPSHADOW_get_post_text( 'staging_id' );
+		$staging_id = \WPShadow\WPSHADOW_get_post_text( 'staging_id' );
 
 		if ( ! self::delete_staging( $staging_id ) ) {
 			wp_send_json_error( __( 'Failed to delete staging environment', 'plugin-wpshadow' ) );
@@ -342,7 +342,7 @@ class WPSHADOW_Staging_Manager {
 			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
 		}
 
-		$staging_id = \WPS\CoreSupport\WPSHADOW_get_post_text( 'staging_id' );
+		$staging_id = \WPShadow\WPSHADOW_get_post_text( 'staging_id' );
 
 		if ( ! self::deploy_to_production( $staging_id ) ) {
 			wp_send_json_error( __( 'Failed to deploy staging environment', 'plugin-wpshadow' ) );
@@ -363,7 +363,7 @@ class WPSHADOW_Staging_Manager {
 			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
 		}
 
-		$staging_id = \WPS\CoreSupport\WPSHADOW_get_post_text( 'staging_id' );
+		$staging_id = \WPShadow\WPSHADOW_get_post_text( 'staging_id' );
 
 		if ( ! self::rollback_staging( $staging_id ) ) {
 			wp_send_json_error( __( 'Failed to rollback staging environment', 'plugin-wpshadow' ) );
@@ -379,7 +379,7 @@ class WPSHADOW_Staging_Manager {
 	 */
 	public static function register_menu(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Staging Environments', 'plugin-wpshadow' ),
 			__( 'Staging', 'plugin-wpshadow' ),
 			'manage_options',

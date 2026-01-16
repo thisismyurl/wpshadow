@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -165,6 +165,7 @@ class WPSHADOW_Dashboard_Widgets {
 	}
 
 	public static function render_metabox_modules(): void {
+		// TEMPORARILY DISABLED: Just returns early
 		self::widget_modules();
 	}
 
@@ -194,7 +195,7 @@ class WPSHADOW_Dashboard_Widgets {
 
 			// If we're on a module dashboard, get the module name.
 			if ( ! empty( $module ) ) {
-				$catalog     = \WPS\CoreSupport\WPSHADOW_Module_Registry::get_catalog_with_status();
+				$catalog     = \WPShadow\WPSHADOW_Module_Registry::get_catalog_with_status();
 				$module_slug = str_contains( $module, '-wpshadow' ) ? $module : $module . '-wpshadow';
 				if ( isset( $catalog[ $module_slug ] ) ) {
 					$module_name = $catalog[ $module_slug ]['name'] ?? ucfirst( $module );
@@ -202,7 +203,7 @@ class WPSHADOW_Dashboard_Widgets {
 			}
 
 			// Get health results filtered by module (null means all checks).
-			$health_data = \WPS\CoreSupport\WPSHADOW_Site_Health::get_health_check_results( $module );
+			$health_data = \WPShadow\WPSHADOW_Site_Health::get_health_check_results( $module );
 
 			// Render the health widget with module context.
 			self::render_health_widget( $health_data, $module_name );
@@ -215,7 +216,7 @@ class WPSHADOW_Dashboard_Widgets {
 	private static function widget_activity( ?string $module_filter = null ): void {
 		// Use WPSHADOW_Activity_Logger if available.
 		if ( class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) ) {
-			$events = \WPS\CoreSupport\WPSHADOW_Activity_Logger::get_events( 100 );
+			$events = \WPShadow\WPSHADOW_Activity_Logger::get_events( 100 );
 
 			// Filter events by module if specified.
 			if ( ! empty( $module_filter ) ) {
@@ -287,554 +288,15 @@ class WPSHADOW_Dashboard_Widgets {
 	}
 
 	private static function widget_modules(): void {
-		$context = WPSHADOW_Tab_Navigation::get_current_context();
-		$catalog = \WPS\CoreSupport\WPSHADOW_Module_Registry::get_catalog_with_status();
-		$catalog = self::discover_local_module_entries( $catalog );
-
-		// Determine which modules to show based on current level.
-		$next_level_modules = array();
-		$dependent_hubs     = array(); // Hubs that depend on other hubs.
-
-		if ( 'core' === $context['level'] ) {
-			// On core: show top-level hubs (those without requires_hub dependency).
-			foreach ( $catalog as $module ) {
-				if ( 'hub' !== ( $module['type'] ?? '' ) ) {
-					continue;
-				}
-				if ( ! empty( $module['requires_hub'] ) ) {
-					// This is a dependent hub - store it for nested display.
-					$parent_hub = $module['requires_hub'];
-					if ( ! isset( $dependent_hubs[ $parent_hub ] ) ) {
-						$dependent_hubs[ $parent_hub ] = array();
-					}
-					$dependent_hubs[ $parent_hub ][] = $module;
-				} else {
-					// This is a top-level hub.
-					$next_level_modules[] = $module;
-				}
-			}
-		} elseif ( 'hub' === $context['level'] && ! empty( $context['hub'] ) ) {
-			// On hub: show both dependent hubs and spokes under that hub.
-			$hub_id = $context['hub'];
-
-			// First, collect dependent hubs (child hubs that require this hub).
-			foreach ( $catalog as $module ) {
-				if ( 'hub' !== ( $module['type'] ?? '' ) ) {
-					continue;
-				}
-				$requires = (string) ( $module['requires_hub'] ?? '' );
-				if ( empty( $requires ) ) {
-					continue;
-				}
-				// Normalize requires_hub value to short hub id when comparing.
-				$requires_short = str_contains( $requires, '-wpshadow' ) ? explode( '-wpshadow', $requires )[0] : $requires;
-				if ( $requires_short === $hub_id ) {
-					$next_level_modules[] = $module;
-				}
-			}
-
-			// Then, collect spokes for this hub.
-			$hub_prefix = $hub_id . '-';
-			$spokes     = array_filter(
-				$catalog,
-				function ( $m ) use ( $hub_prefix, $hub_id ) {
-					if ( 'spoke' !== ( $m['type'] ?? '' ) ) {
-						return false;
-					}
-					// Prefer explicit requires_hub when available.
-					$requires = (string) ( $m['requires_hub'] ?? '' );
-					if ( ! empty( $requires ) ) {
-						$requires_short = str_contains( $requires, '-wpshadow' ) ? explode( '-wpshadow', $requires )[0] : $requires;
-						return $requires_short === $hub_id;
-					}
-					// Fallback: slug prefix convention (e.g., media-*, image-*).
-					return str_starts_with( (string) ( $m['slug'] ?? '' ), $hub_prefix );
-				}
-			);
-
-			// Merge spokes into modules list.
-			$next_level_modules = array_merge( $next_level_modules, $spokes );
-		}
-
-		// If there are no modules to render at this level, skip output entirely.
-		if ( empty( $next_level_modules ) ) {
-			return;
-		}
-
-		?>
-		<style>
-			.wps-collapse-toggle {
-				cursor: pointer;
-				user-select: none;
-				transition: background 0.15s;
-			}
-			.wps-collapse-toggle:hover {
-				background: #f0f0f0;
-			}
-			.wps-collapse-toggle .dashicons {
-				transition: transform 0.2s;
-			}
-			.wps-collapse-toggle.collapsed .dashicons {
-				transform: rotate(-90deg);
-			}
-			.wps-collapse-content {
-				transition: max-height 0.3s ease-out, opacity 0.2s;
-				overflow: hidden;
-			}
-			.wps-collapse-content.collapsed {
-				max-height: 0 !important;
-				opacity: 0;
-			}
-		</style>
-		<script>
-			document.addEventListener('DOMContentLoaded', function() {
-				document.querySelectorAll('.wps-collapse-toggle').forEach(function(toggle) {
-					toggle.addEventListener('click', function(e) {
-						e.preventDefault();
-						var target = document.getElementById(this.getAttribute('data-target'));
-						if (target) {
-							this.classList.toggle('collapsed');
-							target.classList.toggle('collapsed');
-						}
-					});
-				});
-				// Toggle handling for dashboard module switches with persistence and submenu updates
-				const ajaxUrl = '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>';
-				const nonce = '<?php echo esc_js( wp_create_nonce( 'wpshadow_module_actions' ) ); ?>';
-				const scope = '<?php echo ( is_multisite() && is_network_admin() ) ? 'network' : 'site'; ?>';
-				const storagePrefix = 'wpsToggleState:' + scope + ':';
-				const pendingPrefix = 'wpsTogglePending:' + scope + ':';
-				function saveToggleState(slug, checked){ try{ localStorage.setItem(storagePrefix + slug, checked ? '1':'0'); }catch(e){} }
-				function getToggleState(slug){ try{ return localStorage.getItem(storagePrefix + slug); }catch(e){ return null; } }
-				function markPending(slug, target){ try{ localStorage.setItem(pendingPrefix + slug, target ? '1':'0'); }catch(e){} }
-				function clearPending(slug){ try{ localStorage.removeItem(pendingPrefix + slug); }catch(e){} }
-				function getPending(slug){ try{ return localStorage.getItem(pendingPrefix + slug); }catch(e){ return null; } }
-				function applyCardState(input, enabled){
-					if (!input) return;
-					const card = input.closest('.wps-widget-module-card');
-					if (!card) return;
-					card.classList.toggle('wps-module-card-inactive', !enabled);
-					card.classList.toggle('wps-module-disabled', !enabled);
-					card.classList.toggle('wps-module-enabled', enabled);
-					const link = card.querySelector('.wps-module-link');
-					if (link) {
-						const storedUrl = link.getAttribute('data-url') || '';
-						if (!enabled) {
-							if (link.getAttribute('href')) {
-								link.setAttribute('data-url', link.getAttribute('href'));
-							}
-							link.removeAttribute('href');
-							link.setAttribute('aria-disabled','true');
-							link.setAttribute('tabindex','-1');
-							link.classList.add('is-link-disabled');
-						} else {
-							if (storedUrl) {
-								link.setAttribute('href', storedUrl);
-							} else {
-								link.removeAttribute('href');
-							}
-							link.removeAttribute('aria-disabled');
-							link.removeAttribute('tabindex');
-							link.classList.remove('is-link-disabled');
-						}
-					}
-				}
-				async function postAction(action, data){
-					const form = new URLSearchParams({ action, nonce });
-					Object.entries(data).forEach(([k,v])=>{ if (v != null) form.append(k,v); });
-					const res = await fetch(ajaxUrl, { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body: form.toString() });
-					const json = await res.json();
-					if (!json || json.success !== true) { throw new Error((json && json.data && json.data.message) ? json.data.message : 'Unexpected error'); }
-					return json.data || {};
-				}
-				async function refreshDashboardWidgets() {
-					// Refresh health widget
-					const healthContainer = document.getElementById('wps-health-widget-container');
-					if (healthContainer) {
-						try {
-							const healthData = await postAction('wpshadow_refresh_health_widget', {});
-							if (healthData && healthData.html) {
-								healthContainer.innerHTML = healthData.html;
-								console.info('Health widget refreshed for active modules:', healthData.active_modules);
-							}
-						} catch (err) {
-							console.error('Failed to refresh health widget:', err);
-						}
-					}
-					
-					// Refresh events/news widget
-					const eventsContainer = document.getElementById('wps-events-news-container');
-					if (eventsContainer) {
-						try {
-							const eventsData = await postAction('wpshadow_refresh_events_widget', {});
-							if (eventsData && eventsData.html) {
-								eventsContainer.innerHTML = eventsData.html;
-								console.info('Events widget refreshed for active repos:', eventsData.active_repos);
-							}
-						} catch (err) {
-							console.error('Failed to refresh events widget:', err);
-						}
-					}
-				}
-				document.addEventListener('change', async function(e){
-					const input = e.target;
-					if (!input.matches('.wps-toggle-switch input')) return;
-					const slug = input.getAttribute('data-module');
-					const turningOn = input.checked;
-					// optimistic persist
-					saveToggleState(slug, turningOn);
-					markPending(slug, turningOn);
-					// reflect submenu immediately for hubs
-					const type = input.getAttribute('data-type') || 'hub';
-					const name = input.getAttribute('data-module-name') || '';
-					if (type === 'hub') { ensureSubmenuFromSlug(slug, name, turningOn); }
-					const pluginBase = input.getAttribute('data-plugin-base') || '';
-					const card = input.closest('div[style*="border"]');
-					const progress = card ? card.querySelector('.wps-progress') : null;
-					input.disabled = true; if (progress) progress.style.display = 'inline-flex';
-					const isPlugin = input.getAttribute('data-is-plugin') === '1';
-					let action = 'wpshadow_module_toggle';
-					const payload = { slug };
-					if (isPlugin) {
-						if (turningOn) { action = (input.getAttribute('data-installed') === '1') ? 'wpshadow_module_activate' : 'wpshadow_module_install'; }
-						else { action = 'wpshadow_module_deactivate'; }
-						if (pluginBase) { payload.plugin_base = pluginBase; }
-					} else {
-						payload.enabled = turningOn ? 1 : 0;
-					}
-					try {
-						const data = await postAction(action, payload);
-						if (action === 'wpshadow_module_install') { input.setAttribute('data-installed','1'); }
-						clearPending(slug);
-						applyCardState(input, turningOn);
-						
-						// Refresh dashboard widgets on module state change
-						refreshDashboardWidgets();
-						
-						// Handle cascade deactivation notification
-						if (!turningOn && data.deactivated && data.deactivated.length > 0) {
-							const names = data.deactivated.map(s => {
-								const elem = document.querySelector(`input[data-module="${s}"]`);
-								return elem ? (elem.getAttribute('data-module-name') || s) : s;
-							}).join(', ');
-							console.info(`Cascade deactivated: ${names}`);
-							// Update UI for deactivated dependents
-							data.deactivated.forEach(depSlug => {
-								const depInput = document.querySelector(`input[data-module="${depSlug}"]`);
-								if (depInput && depInput.checked) {
-									depInput.checked = false;
-									saveToggleState(depSlug, false);
-									applyCardState(depInput, false);
-									if ((depInput.getAttribute('data-type')||'hub') === 'hub') {
-										const depName = depInput.getAttribute('data-module-name') || '';
-										ensureSubmenuFromSlug(depSlug, depName, false);
-									}
-								}
-							});
-						}
-						
-						// Handle restoration prompt
-						if (turningOn && data.remembered && data.remembered.length > 0) {
-							const names = data.remembered.map(s => {
-								const elem = document.querySelector(`input[data-module="${s}"]`);
-								return elem ? (elem.getAttribute('data-module-name') || s) : s;
-							}).join(', ');
-							if (confirm(`${name} was reactivated. Also restore these previously active modules?\n\n${names}`)) {
-								// Restore each remembered module
-								for (const remSlug of data.remembered) {
-									const remInput = document.querySelector(`input[data-module="${remSlug}"]`);
-									if (remInput && !remInput.checked) {
-										remInput.checked = true;
-										saveToggleState(remSlug, true);
-										applyCardState(remInput, true);
-										if ((remInput.getAttribute('data-type')||'hub') === 'hub') {
-											const remName = remInput.getAttribute('data-module-name') || '';
-											ensureSubmenuFromSlug(remSlug, remName, true);
-										}
-										// Send AJAX to persist restoration
-										try {
-											await postAction('wpshadow_module_toggle', { slug: remSlug, enabled: 1 });
-										} catch (restoreErr) {
-											console.error(`Failed to restore ${remSlug}:`, restoreErr);
-										}
-									}
-								}
-								// Clear remembered list after restoration
-								await postAction('wpshadow_clear_remembered', { parent_slug: slug });
-							} else {
-								// User declined, clear memory anyway
-								await postAction('wpshadow_clear_remembered', { parent_slug: slug });
-							}
-						}
-					} catch (err) {
-						input.checked = !turningOn;
-						console.error(err);
-						alert(err.message);
-						// rollback optimistic save but keep pending for recovery
-						saveToggleState(slug, !turningOn);
-						// Revert visual state
-						applyCardState(input, !turningOn);
-						// Revert submenu visibility
-						if (type === 'hub') { ensureSubmenuFromSlug(slug, name, !turningOn); }
-					} finally {
-						input.disabled = false; if (progress) progress.style.display = 'none';
-					}
-				});
-
-				// Restore saved states on load (and submenu entries)
-				document.querySelectorAll('.wps-toggle-switch input[data-module]').forEach(function(input){
-					const slug = input.getAttribute('data-module');
-					const saved = getToggleState(slug);
-					if (saved === '1' || saved === '0') {
-						input.checked = (saved === '1');
-						if ((input.getAttribute('data-type')||'hub') === 'hub'){
-							const name = input.getAttribute('data-module-name') || '';
-							ensureSubmenuFromSlug(slug, name, (saved === '1'));
-						}
-						applyCardState(input, input.checked);
-					}
-				});
-				// Ensure current DOM state is reflected even without saved toggle data.
-				document.querySelectorAll('.wps-toggle-switch input[data-module]').forEach(function(input){
-					applyCardState(input, input.checked);
-				});
-
-				// Sweep existing menu to hide any disabled hubs rendered server-side.
-				(function sweepSubmenusFromStorage(){
-					for (var i = 0; i < localStorage.length; i++){
-						var key = localStorage.key(i);
-						if (!key || key.indexOf(storagePrefix) !== 0) continue;
-						var slug = key.substring(storagePrefix.length);
-						var val = localStorage.getItem(key);
-						if (val === '0'){
-							ensureSubmenuFromSlug(slug, '', false);
-						}
-					}
-				})();
-
-				// Cross-tab sync (and submenu updates)
-				window.addEventListener('storage', function(ev){
-					if (!ev || typeof ev.key !== 'string') return;
-					if (ev.key.startsWith(storagePrefix)){
-						const slug = ev.key.substring(storagePrefix.length);
-						const val = ev.newValue;
-						const input = document.querySelector('.wps-toggle-switch input[data-module="' + slug + '"]');
-						if (input && (val === '1' || val === '0')){
-							input.checked = (val === '1');
-							if ((input.getAttribute('data-type')||'hub') === 'hub'){
-								const name = input.getAttribute('data-module-name') || '';
-								ensureSubmenuFromSlug(slug, name, (val === '1'));
-							}
-							applyCardState(input, input.checked);
-						}
-					}
-				});
-
-				// Utility: add/remove submenu entry for a hub from its slug
-				function ensureSubmenuFromSlug(slug, name, enabled){
-					var moduleId = (slug || '').replace(/-wpshadow$/,'');
-					var label = name || moduleId || 'Module';
-					ensureSubmenu(moduleId, label, enabled);
-				}
-
-				function ensureSubmenu(moduleId, label, enabled){
-					var top = document.getElementById('toplevel_page_wp-support');
-					if (!top){
-						var link = document.querySelector('#adminmenu a.menu-top[href*="page=wp-support"]');
-						if (link) { top = link.closest('li'); }
-					}
-					if (!top) return;
-					var submenu = top.querySelector('ul.wp-submenu-wrap') || top.querySelector('ul.wp-submenu');
-					if (!submenu){
-						// If submenu container is missing, rely on server-rendered menu; do not create here.
-						return;
-					}
-					var target = 'page=wp-support&module=' + encodeURIComponent(moduleId);
-					var anchors = submenu.querySelectorAll('a[href*="' + target + '"]');
-					if (!anchors || anchors.length === 0){
-						// Nothing to toggle; avoid creating to prevent duplicates.
-						return;
-					}
-					anchors.forEach(function(anchor){
-						var li = anchor.closest('li');
-						if (!li) return;
-						li.style.display = enabled ? '' : 'none';
-						anchor.style.display = enabled ? '' : 'none';
-						anchor.setAttribute('aria-hidden', enabled ? 'false' : 'true');
-					});
-				}
-
-				// Retry pending periodically
-				async function processPending(){
-					document.querySelectorAll('.wps-toggle-switch input[data-module]').forEach(async function(input){
-						const slug = input.getAttribute('data-module');
-						const p = getPending(slug);
-						if (p !== '1' && p !== '0') return;
-						const targetOn = (p === '1');
-						const pluginBase = input.getAttribute('data-plugin-base') || '';
-						const isPlugin = input.getAttribute('data-is-plugin') === '1';
-						let action = 'wpshadow_module_toggle';
-						const payload = { slug };
-						if (isPlugin){
-							action = targetOn ? 'wpshadow_module_activate' : 'wpshadow_module_deactivate';
-							if (pluginBase) { payload.plugin_base = pluginBase; }
-						} else {
-							payload.enabled = targetOn ? 1 : 0;
-						}
-						try{
-							await postAction(action, payload);
-							clearPending(slug);
-							saveToggleState(slug, targetOn);
-							input.checked = targetOn;
-							if ((input.getAttribute('data-type')||'hub') === 'hub'){
-								const name = input.getAttribute('data-module-name') || '';
-								ensureSubmenuFromSlug(slug, name, targetOn);
-							}
-							applyCardState(input, targetOn);
-						}catch(e){ /* keep pending */ }
-					});
-				}
-				setInterval(processPending, 5000);
-				
-				// Periodic refresh of dashboard widgets (every 2 minutes for real-time feedback)
-				setInterval(function() {
-					refreshDashboardWidgets();
-				}, 120000); // 2 minutes
-			});
-		</script>
-		<div class="wps-widget-content">
-			<?php if ( empty( $next_level_modules ) ) : ?>
-				<p><?php esc_html_e( 'No modules available at this level.', 'plugin-wpshadow' ); ?></p>
-				<?php
-			else :
-				?>
-				<style>
-				.wps-toggle-switch { display: inline-block; position: relative; width: 44px; height: 22px; }
-				.wps-toggle-switch input { opacity: 0; width: 0; height: 0; }
-				.wps-toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #6a1b1b; transition: .3s; border-radius: 22px; opacity: 0.8; }
-				.wps-toggle-slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
-				input:checked + .wps-toggle-slider { background-color: #00a32a; opacity: 1; }
-				input:focus + .wps-toggle-slider { box-shadow: 0 0 1px #00a32a; }
-				input:checked + .wps-toggle-slider:before { transform: translateX(22px); }
-				.wps-widget-module-card .wps-toggle-switch input:disabled + .wps-toggle-slider { cursor: not-allowed; }
-				.wps-progress { display: none; align-items: center; gap: 8px; margin-left: 8px; }
-				.wps-progress .bar { width: 60px; height: 6px; background: #e5e5e5; border-radius: 6px; overflow: hidden; }
-				.wps-progress .bar .fill { width: 50%; height: 100%; background: linear-gradient(90deg, #2271b1, #00a32a); animation: wpsProgress 1s infinite alternate ease-in-out; }
-				@keyframes wpsProgress { from { width: 30%; } to { width: 90%; } }
-				.wps-widget-module-card.wps-module-card-inactive .wps-module-title,
-				.wps-widget-module-card.wps-module-card-inactive .wps-module-description,
-				.wps-widget-module-card.wps-module-card-inactive .wps-module-icon { opacity: 0.5; }
-				.wps-widget-module-card.wps-module-card-inactive .wps-module-link { pointer-events: none; cursor: default; text-decoration: none; }
-				.wps-widget-module-card .wps-module-link.is-link-disabled { color: inherit; }
-				</style>				<div class="wps-modules-list" style="margin: 0;">
-					<?php foreach ( $next_level_modules as $module ) : ?>
-						<?php
-						$module_slug      = sanitize_key( $module['slug'] ?? '' );
-						$module_type      = $module['type'] ?? '';
-						$module_name      = esc_html( $module['name'] ?? '' );
-						$module_version   = esc_html( $module['version'] ?? '?.?.?' );
-						$is_installed     = ! empty( $module['installed'] );
-						$is_enabled       = \WPS\CoreSupport\WPSHADOW_Module_Registry::is_enabled( $module_slug );
-						$update_available = ! empty( $module['update_available'] );
-						$card_classes     = 'wps-module-card wps-widget-module-card ' . ( $is_enabled ? 'wps-module-enabled' : 'wps-module-disabled wps-module-card-inactive' );
-
-						// Build navigation URL (hub vs spoke) and icon.
-						$icon_class = 'dashicons-networking';
-						$module_url = WPSHADOW_Tab_Navigation::build_hub_url( $module_slug );
-						if ( 'spoke' === $module_type && ! empty( $context['hub'] ) ) {
-							$spoke_id   = str_starts_with( $module_slug, $context['hub'] . '-' ) ? substr( $module_slug, strlen( $context['hub'] ) + 1 ) : $module_slug;
-							$module_url = WPSHADOW_Tab_Navigation::build_spoke_url( $context['hub'], $spoke_id );
-							$icon_class = 'dashicons-hammer';
-						}
-						?>
-						<div class="<?php echo esc_attr( $card_classes ); ?>" style="padding: 12px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 10px; background: #fff;">
-							<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-								<div style="flex: 1;">
-									<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-										<span class="dashicons <?php echo esc_attr( $icon_class ); ?> wps-module-icon" style="font-size: 20px; width: 20px; height: 20px; color: #2271b1;"></span>
-										<strong class="wps-module-title" style="font-size: 14px;">
-											<a class="wps-module-link" data-url="<?php echo esc_url( $module_url ); ?>" href="<?php echo esc_url( $module_url ); ?>" style="text-decoration: none; color: inherit;"><?php echo $module_name; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a>
-										</strong>
-									</div>
-									<div class="wps-module-description" style="font-size: 12px; color: #666; margin-left: 28px;">
-										<?php echo esc_html( $module['description'] ?? '' ); ?>
-									</div>
-								</div>
-								<div style="display: flex; align-items: center; flex-shrink: 0;">
-									<label class="wps-toggle-switch">
-										<input type="checkbox" class="wps-module-toggle" <?php checked( $is_enabled ); ?> data-module="<?php echo esc_attr( $module_slug ); ?>" data-module-name="<?php echo esc_attr( $module_name ); ?>" data-type="<?php echo esc_attr( 'spoke' === $module_type ? 'spoke' : 'hub' ); ?>" data-installed="<?php echo esc_attr( $is_installed ? '1' : '0' ); ?>" data-plugin-base="<?php echo esc_attr( $module['basename'] ?? '' ); ?>" data-is-plugin="<?php echo esc_attr( ( ! empty( $module['basename'] ?? '' ) || ! empty( $module['download_url'] ?? '' ) ) ? '1' : '0' ); ?>" data-slug="<?php echo esc_attr( $module_slug ); ?>">
-										<span class="wps-toggle-slider"></span>
-									</label>
-									<span class="wps-progress" aria-live="polite"><span class="spinner is-active" style="float:none"></span><span class="bar"><span class="fill"></span></span><span class="progress-label"><?php esc_html_e( 'Working…', 'plugin-wpshadow' ); ?></span></span>
-								</div>
-							</div>
-
-							<?php
-							// Show dependent hubs nested under this parent hub.
-							if ( ! empty( $dependent_hubs[ $module_slug ] ) ) :
-								$collapse_id        = 'wps-deps-' . $module_slug;
-								$parent_can_support = $is_installed && $is_enabled; // Parent must be installed AND active.
-								?>
-								<div class="wps-collapse-toggle" data-target="<?php echo esc_attr( $collapse_id ); ?>" style="margin: 12px 0 0 0; padding: 8px 12px; background: #f0f0f0; border: 1px solid #e0e0e0; border-radius: 3px;">
-									<div style="display: flex; align-items: center; gap: 6px;">
-										<span class="dashicons dashicons-arrow-down-alt2" style="font-size: 16px; width: 16px; height: 16px; color: #666;"></span>
-										<span style="font-size: 11px; text-transform: uppercase; color: #666; font-weight: 600; letter-spacing: 0.5px;">
-											<?php
-											/* translators: %d: number of dependent modules */
-											echo esc_html( sprintf( _n( '%d Dependent Module', '%d Dependent Modules', count( $dependent_hubs[ $module_slug ] ), 'plugin-wpshadow' ), count( $dependent_hubs[ $module_slug ] ) ) );
-											?>
-										</span>
-										<?php if ( ! $parent_can_support ) : ?>
-											<span style="font-size: 10px; padding: 2px 6px; background: #999; color: #fff; border-radius: 2px;">
-												<?php esc_html_e( 'Parent Required', 'plugin-wpshadow' ); ?>
-											</span>
-										<?php endif; ?>
-									</div>
-								</div>
-								<div id="<?php echo esc_attr( $collapse_id ); ?>" class="wps-collapse-content" style="margin: 0; padding: 12px; background: #f9f9f9; border: 1px solid #e5e5e5; border-top: none; border-radius: 0 0 3px 3px;">
-									<?php foreach ( $dependent_hubs[ $module_slug ] as $dep_module ) : ?>
-										<?php
-										$dep_slug         = sanitize_key( $dep_module['slug'] ?? '' );
-										$dep_name         = esc_html( $dep_module['name'] ?? '' );
-										$dep_installed    = ! empty( $dep_module['installed'] );
-										$dep_enabled      = \WPS\CoreSupport\WPSHADOW_Module_Registry::is_enabled( $dep_slug );
-										$dep_url          = WPSHADOW_Tab_Navigation::build_hub_url( $dep_slug );
-										$dep_card_classes = 'wps-module-card wps-widget-module-card wps-widget-dependent-card ' . ( $dep_enabled ? 'wps-module-enabled' : 'wps-module-disabled wps-module-card-inactive' );
-										?>
-										<div class="<?php echo esc_attr( $dep_card_classes ); ?>" style="padding: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px; background: #fff; border: 1px solid #e0e0e0; border-radius: 2px; margin-bottom: 6px;">
-											<div style="display: flex; align-items: center; gap: 8px; flex: 1;">
-												<span class="dashicons dashicons-arrow-right-alt2 wps-module-icon" style="font-size: 16px; width: 16px; height: 16px; color: #999;"></span>
-												<span class="wps-module-title" style="font-size: 13px;">
-													<a class="wps-module-link" data-url="<?php echo esc_url( $dep_url ); ?>" href="<?php echo esc_url( $dep_url ); ?>" style="text-decoration: none; color: inherit; font-weight: 500;"><?php echo $dep_name; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a>
-												</span>
-											</div>
-											<div style="display: flex; align-items: center; flex-shrink: 0;">
-												<label class="wps-toggle-switch">
-													<input type="checkbox" <?php checked( $dep_enabled ); ?> data-module="<?php echo esc_attr( $dep_slug ); ?>" data-module-name="<?php echo esc_attr( $dep_name ); ?>" data-type="hub" data-installed="<?php echo esc_attr( $dep_installed ? '1' : '0' ); ?>" data-plugin-base="<?php echo esc_attr( $dep_module['basename'] ?? '' ); ?>" data-is-plugin="<?php echo esc_attr( ( ! empty( $dep_module['basename'] ?? '' ) || ! empty( $dep_module['download_url'] ?? '' ) ) ? '1' : '0' ); ?>" data-slug="<?php echo esc_attr( $dep_slug ); ?>">
-													<span class="wps-toggle-slider"></span>
-												</label>
-												<span class="wps-progress" aria-live="polite"><span class="spinner is-active" style="float:none"></span><span class="bar"><span class="fill"></span></span><span class="progress-label"><?php esc_html_e( 'Working…', 'plugin-wpshadow' ); ?></span></span>
-											</div>
-										</div>
-									<?php endforeach; ?>
-								</div>
-							<?php endif; ?>
-						</div>
-					<?php endforeach; ?>
-				</div>
-			<?php endif; ?>
-		</div>
-		<style>
-			.wps-module-card:hover {
-				box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-			}
-		</style>
-		<?php
+		// TEMPORARILY DISABLED: Modules system is temporarily disabled
+		return;
 	}
 
 	private static function widget_quick_actions(): void {
-		$catalog        = \WPS\CoreSupport\WPSHADOW_Module_Registry::get_catalog_with_status();
-		$inactive_count = count( array_filter( $catalog, fn( $m ) => empty( $m['status']['active'] ) && ! empty( $m['status']['installed'] ) ) );
+		// TEMPORARILY DISABLED: Module catalog check
+		// $catalog        = \WPShadow\WPSHADOW_Module_Registry::get_catalog_with_status();
+		// $inactive_count = count( array_filter( $catalog, fn( $m ) => empty( $m['status']['active'] ) && ! empty( $m['status']['installed'] ) ) );
+		$inactive_count = 0; // Modules disabled temporarily
 		$vault_path     = wp_upload_dir()['basedir'] . '/vault';
 		$vault_exists   = is_dir( $vault_path );
 		$vault_writable = $vault_exists && wp_is_writable( $vault_path );
@@ -902,7 +364,7 @@ class WPSHADOW_Dashboard_Widgets {
 				<h2 class="hndle"><?php esc_html_e( 'Tips Coach', 'plugin-wpshadow' ); ?></h2>
 			</div>
 			<div class="inside">
-				<?php \WPS\CoreSupport\Features\WPSHADOW_Feature_Tips_Coach::render_widget(); ?>
+				<?php \WPShadow\Features\WPSHADOW_Feature_Tips_Coach::render_widget(); ?>
 			</div>
 		</div>
 		<?php
@@ -918,7 +380,7 @@ class WPSHADOW_Dashboard_Widgets {
 			return;
 		}
 
-		$metrics = \WPS\CoreSupport\Features\WPSHADOW_Feature_Weekly_Performance_Report::get_current_week_metrics();
+		$metrics = \WPShadow\Features\WPSHADOW_Feature_Weekly_Performance_Report::get_current_week_metrics();
 
 		$uptime_percentage = 0;
 		if ( $metrics['uptime_checks'] > 0 ) {
@@ -1042,9 +504,9 @@ class WPSHADOW_Dashboard_Widgets {
 			return;
 		}
 
-		$metrics         = \WPS\CoreSupport\WPSHADOW_Performance_Monitor::get_current_metrics();
-		$score_data      = \WPS\CoreSupport\WPSHADOW_Performance_Monitor::calculate_performance_score();
-		$recommendations = \WPS\CoreSupport\WPSHADOW_Performance_Monitor::get_recommendations();
+		$metrics         = \WPShadow\WPSHADOW_Performance_Monitor::get_current_metrics();
+		$score_data      = \WPShadow\WPSHADOW_Performance_Monitor::calculate_performance_score();
+		$recommendations = \WPShadow\WPSHADOW_Performance_Monitor::get_recommendations();
 
 		?>
 		<div class="postbox">
@@ -1174,7 +636,7 @@ class WPSHADOW_Dashboard_Widgets {
 
 					<!-- Quick Actions -->
 					<p style="text-align: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e9ecef;">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=features' ) ); ?>" class="button button-primary">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&WPSHADOW_tab=features' ) ); ?>" class="button button-primary">
 							<?php esc_html_e( 'Performance Features', 'plugin-wpshadow' ); ?>
 						</a>
 					</p>
@@ -1256,7 +718,7 @@ class WPSHADOW_Dashboard_Widgets {
 						</ul>
 
 						<p style="text-align: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e9ecef;">
-							<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=features' ) ); ?>" class="button">
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&WPSHADOW_tab=features' ) ); ?>" class="button">
 								<?php esc_html_e( 'Configure Alert Settings', 'plugin-wpshadow' ); ?>
 							</a>
 						</p>
@@ -1554,7 +1016,7 @@ class WPSHADOW_Dashboard_Widgets {
 		}
 
 		// Get health results (automatically filters by active modules).
-		$health_data = \WPS\CoreSupport\WPSHADOW_Site_Health::get_health_check_results();
+		$health_data = \WPShadow\WPSHADOW_Site_Health::get_health_check_results();
 		?>
 		<div id="wps-health-widget-container">
 			<?php self::render_health_widget( $health_data, '' ); ?>
@@ -1646,10 +1108,10 @@ class WPSHADOW_Dashboard_Widgets {
 	private static function widget_events_and_news(): void {
 		// Get active module repos for filtering.
 		$active_repos = array();
-		$catalog      = \WPS\CoreSupport\WPSHADOW_Module_Registry::get_catalog_with_status();
+		$catalog      = \WPShadow\WPSHADOW_Module_Registry::get_catalog_with_status();
 		foreach ( $catalog as $module ) {
 			$slug = $module['slug'] ?? '';
-			if ( ! empty( $slug ) && \WPS\CoreSupport\WPSHADOW_Module_Registry::is_enabled( $slug ) ) {
+			if ( ! empty( $slug ) && \WPShadow\WPSHADOW_Module_Registry::is_enabled( $slug ) ) {
 				$repo           = 'plugin-' . $slug;
 				$active_repos[] = array(
 					'slug' => $slug,
@@ -1676,7 +1138,7 @@ class WPSHADOW_Dashboard_Widgets {
 	}
 
 	private static function widget_active_spokes( string $hub_id ): void {
-		$catalog = \WPS\CoreSupport\WPSHADOW_Module_Registry::get_catalog_with_status();
+		$catalog = \WPShadow\WPSHADOW_Module_Registry::get_catalog_with_status();
 		$spokes  = array_filter(
 			$catalog,
 			fn( $m ) => 'spoke' === ( $m['type'] ?? '' )
@@ -1798,7 +1260,7 @@ class WPSHADOW_Dashboard_Widgets {
 		}
 
 		// Get hierarchical health data.
-		$health_hierarchy = \WPS\CoreSupport\WPSHADOW_Site_Health::get_hierarchical_health( $hub_id );
+		$health_hierarchy = \WPShadow\WPSHADOW_Site_Health::get_hierarchical_health( $hub_id );
 		$self_health      = $health_hierarchy['self'] ?? array();
 		$dependents       = $health_hierarchy['dependents'] ?? array();
 		?>
@@ -1954,8 +1416,8 @@ class WPSHADOW_Dashboard_Widgets {
 			return;
 		}
 
-		$env_status      = \WPS\CoreSupport\WPSHADOW_Environment_Checker::get_environment_status();
-		$resource_status = \WPS\CoreSupport\WPSHADOW_Server_Limits::get_resource_status();
+		$env_status      = \WPShadow\WPSHADOW_Environment_Checker::get_environment_status();
+		$resource_status = \WPShadow\WPSHADOW_Server_Limits::get_resource_status();
 
 		// Determine overall status icon and message.
 		$status_icon    = '✓';
@@ -2072,7 +1534,7 @@ class WPSHADOW_Dashboard_Widgets {
 						<div style="width: <?php echo esc_attr( min( 100, $resource_status['memory']['usage_percentage'] ) ); ?>%; height: 100%; background: <?php echo esc_attr( $memory_bar_color ); ?>; transition: width 0.3s ease;"></div>
 					</div>
 					<div style="font-size: 11px; color: #666; margin-top: 2px;">
-						<?php echo esc_html( \WPS\CoreSupport\WPSHADOW_Environment_Checker::format_bytes( $resource_status['memory']['current_usage'] ) ); ?> / <?php echo esc_html( $resource_status['memory']['limit'] ); ?>
+						<?php echo esc_html( \WPShadow\WPSHADOW_Environment_Checker::format_bytes( $resource_status['memory']['current_usage'] ) ); ?> / <?php echo esc_html( $resource_status['memory']['limit'] ); ?>
 					</div>
 				</div>
 
@@ -2131,7 +1593,7 @@ class WPSHADOW_Dashboard_Widgets {
 						printf(
 							/* translators: %d: Batch size */
 							esc_html__( 'Batching enabled (%d items/batch)', 'plugin-wpshadow' ),
-							\WPS\CoreSupport\WPSHADOW_Server_Limits::get_batch_size()
+							\WPShadow\WPSHADOW_Server_Limits::get_batch_size()
 						);
 						?>
 					</span>
@@ -2350,7 +1812,7 @@ class WPSHADOW_Dashboard_Widgets {
 						$stats['expired_transients']
 					),
 					'action_label' => __( 'Clean Now', 'plugin-wpshadow' ),
-					'action_url'   => admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=dashboard_settings&action=clean_transients' ),
+					'action_url'   => admin_url( 'admin.php?page=wpshadow&WPSHADOW_tab=dashboard_settings&action=clean_transients' ),
 				);
 			}
 
@@ -2362,7 +1824,7 @@ class WPSHADOW_Dashboard_Widgets {
 						$stats['revisions']
 					),
 					'action_label' => __( 'Manage Revisions', 'plugin-wpshadow' ),
-					'action_url'   => admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=dashboard_settings#revisions' ),
+					'action_url'   => admin_url( 'admin.php?page=wpshadow&WPSHADOW_tab=dashboard_settings#revisions' ),
 				);
 			}
 
@@ -2374,7 +1836,7 @@ class WPSHADOW_Dashboard_Widgets {
 						$stats['autodrafts']
 					),
 					'action_label' => __( 'Clean Auto-Drafts', 'plugin-wpshadow' ),
-					'action_url'   => admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=dashboard_settings#autodrafts' ),
+					'action_url'   => admin_url( 'admin.php?page=wpshadow&WPSHADOW_tab=dashboard_settings#autodrafts' ),
 				);
 			}
 
@@ -2412,7 +1874,7 @@ class WPSHADOW_Dashboard_Widgets {
 		}
 
 		// Get historical metrics for selected time range.
-		$history = \WPS\CoreSupport\WPSHADOW_Performance_Monitor::get_performance_history( $days );
+		$history = \WPShadow\WPSHADOW_Performance_Monitor::get_performance_history( $days );
 		
 		if ( empty( $history ) ) {
 			?>

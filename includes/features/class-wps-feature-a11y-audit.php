@@ -5,13 +5,13 @@
  * Scans common accessibility issues: contrast, focus order, ARIA roles,
  * alt text completeness, keyboard traps; emits fix suggestions or auto-patches when safe.
  *
- * @package WPS\CoreSupport\Features
+ * @package WPShadow\Features
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -32,7 +32,7 @@ final class WPSHADOW_Feature_A11y_Audit extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'a11y-audit',
 				'name'               => __( 'Accessibility Audit', 'plugin-wpshadow' ),
-				'description'        => __( 'Check that people with disabilities can use your site fully and comfortably', 'plugin-wpshadow' ),
+			'description'        => __( 'Reviews pages, navigation, forms, and media to highlight issues that make your site harder to use for people with disabilities. Provides clear guidance to fix problems, supports better compliance with accessibility standards, and improves overall user experience so all visitors can navigate, read, and interact comfortably without needing developer tools.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
@@ -90,11 +90,11 @@ final class WPSHADOW_Feature_A11y_Audit extends WPSHADOW_Abstract_Feature {
 	 */
 	public function add_admin_menu(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Accessibility Audit', 'plugin-wpshadow' ),
 			__( 'A11y Audit', 'plugin-wpshadow' ),
 			'manage_options',
-			'wp-support-a11y-audit',
+			'wpshadow-a11y-audit',
 			array( $this, 'render_audit_page' )
 		);
 	}
@@ -184,7 +184,7 @@ final class WPSHADOW_Feature_A11y_Audit extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_run_audit(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_a11y_audit_nonce' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wpshadow_a11y_audit_nonce' );
 
 		$url = isset( $_POST['url'] ) ? esc_url_raw( wp_unslash( $_POST['url'] ) ) : '';
 
@@ -203,10 +203,10 @@ final class WPSHADOW_Feature_A11y_Audit extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_apply_fix(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_a11y_audit_nonce' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wpshadow_a11y_audit_nonce' );
 
-		$fix_type = \WPS\CoreSupport\WPSHADOW_get_post_key( 'fix_type' );
-		$post_id  = \WPS\CoreSupport\WPSHADOW_get_post_int( 'post_id' );
+		$fix_type = \WPShadow\WPSHADOW_get_post_key( 'fix_type' );
+		$post_id  = \WPShadow\WPSHADOW_get_post_int( 'post_id' );
 
 		if ( empty( $fix_type ) || empty( $post_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid fix parameters.', 'plugin-wpshadow' ) ) );

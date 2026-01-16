@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -36,7 +36,7 @@ $is_licensed = WPSHADOW_License::is_registered();
 			<p><?php esc_html_e( 'You have an active license and are receiving updates and support.', 'plugin-wpshadow' ); ?></p>
 		</div>
 		<p>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=dashboard_settings' ) ); ?>" class="button button-primary">
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&WPSHADOW_tab=dashboard_settings' ) ); ?>" class="button button-primary">
 				<?php esc_html_e( 'Manage License', 'plugin-wpshadow' ); ?>
 			</a>
 		</p>
@@ -203,7 +203,7 @@ $is_licensed = WPSHADOW_License::is_registered();
 			<div class="wps-register-footer">
 				<p>
 					<strong><?php esc_html_e( 'Already have a license key?', 'plugin-wpshadow' ); ?></strong>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=dashboard_settings' ) ); ?>">
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&WPSHADOW_tab=dashboard_settings' ) ); ?>">
 						<?php esc_html_e( 'Enter it in settings instead', 'plugin-wpshadow' ); ?>
 					</a>
 				</p>
@@ -393,7 +393,7 @@ jQuery(document).ready(function($) {
 
 					// Redirect after 2 seconds
 					setTimeout(function() {
-						window.location.href = response.data.redirect || '<?php echo esc_js( admin_url( 'admin.php?page=wp-support' ) ); ?>';
+						window.location.href = response.data.redirect || '<?php echo esc_js( admin_url( 'admin.php?page=wpshadow' ) ); ?>';
 					}, 2000);
 				} else {
 					$message.removeClass('success').addClass('error')

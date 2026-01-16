@@ -5,13 +5,13 @@
  * Remove version query strings from CSS/JS URLs for improved caching
  * and minor security hardening (obscures WordPress/plugin versions).
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * WPSHADOW_Feature_Asset_Version_Removal
@@ -28,12 +28,12 @@ final class WPSHADOW_Feature_Asset_Version_Removal extends WPSHADOW_Abstract_Fea
 			array(
 				'id'                 => 'asset-version-removal',
 				'name'               => __( 'Remove Asset Version Strings', 'plugin-wpshadow' ),
-				'description'        => __( 'Help visitors load files faster by letting their browser remember them longer', 'plugin-wpshadow' ),
+				'description'        => __( 'Removes version query strings from stylesheet and script URLs so browsers cache them longer between visits. Keeps automatic cache busting when files change by respecting WordPress versioning and file modification checks. Improves repeat visitor speed, lowers bandwidth, and reduces requests to your server while keeping assets up to date because changed files still prompt browsers to fetch fresh copies.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
-				'widget_group'       => 'cleanup',
-				'widget_label'       => __( 'Code Cleanup', 'plugin-wpshadow' ),
+			'widget_group'       => 'performance',
+			'widget_label'       => __( 'Performance Options', 'plugin-wpshadow' ),
 				'widget_description' => __( 'Remove unnecessary code and optimize markup', 'plugin-wpshadow' ),
 			)
 		);

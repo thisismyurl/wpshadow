@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -116,7 +116,7 @@ class WPSHADOW_Tab_Navigation {
 	 */
 	public static function build_tab_url( string $tab_id, array $extra_args = array() ): string {
 		$base_url = admin_url( 'admin.php' );
-		$args     = array( 'page' => 'wp-support' );
+		$args     = array( 'page' => 'wpshadow' );
 
 		// Preserve context - prioritize new 'module' param.
 		if ( ! empty( $_GET[ self::QUERY_VAR_MODULE ] ) ) {
@@ -146,7 +146,7 @@ class WPSHADOW_Tab_Navigation {
 		$hub_id   = self::normalize_hub_id( $hub_id );
 		$base_url = admin_url( 'admin.php' );
 		$args     = array(
-			'page'                 => 'wp-support',
+			'page'                 => 'wpshadow',
 			self::QUERY_VAR_MODULE => $hub_id,
 		);
 
@@ -221,7 +221,6 @@ class WPSHADOW_Tab_Navigation {
 	public static function get_core_tabs(): array {
 		$tabs = array(
 			self::build_tab( 'dashboard', __( 'Dashboard', 'plugin-wpshadow' ), 'dashicons-dashboard' ),
-			self::build_tab( 'collection', __( 'Spoke Collection', 'plugin-wpshadow' ), 'dashicons-star-filled' ),
 			self::build_tab( 'dashboard_settings', __( 'Settings', 'plugin-wpshadow' ), 'dashicons-admin-generic' ),
 			self::build_tab( 'features', __( 'Features', 'plugin-wpshadow' ), 'dashicons-admin-plugins' ),
 			self::build_tab( 'help', __( 'Help', 'plugin-wpshadow' ), 'dashicons-editor-help' ),
@@ -275,7 +274,7 @@ class WPSHADOW_Tab_Navigation {
 		$crumbs = array(
 			array(
 				'label' => __( 'Support', 'plugin-wpshadow' ),
-				'url'   => admin_url( 'admin.php?page=wp-support' ),
+				'url'   => admin_url( 'admin.php?page=wpshadow' ),
 			),
 		);
 
@@ -299,11 +298,11 @@ class WPSHADOW_Tab_Navigation {
 		if ( self::TAB_DASHBOARD_SETTINGS === $context['tab'] && empty( $context['hub'] ) && empty( $context['spoke'] ) ) {
 			$crumbs[] = array(
 				'label' => __( 'Dashboard', 'plugin-wpshadow' ),
-				'url'   => admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=dashboard' ),
+				'url'   => admin_url( 'admin.php?page=wpshadow&WPSHADOW_tab=dashboard' ),
 			);
 			$crumbs[] = array(
 				'label' => __( 'Dashboard Settings', 'plugin-wpshadow' ),
-				'url'   => admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=dashboard_settings' ),
+				'url'   => admin_url( 'admin.php?page=wpshadow&WPSHADOW_tab=dashboard_settings' ),
 			);
 		}
 

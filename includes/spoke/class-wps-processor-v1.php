@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\Core\Spoke;
+namespace WPShadow\Core\Spoke;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

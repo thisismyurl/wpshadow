@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -30,7 +30,7 @@ $tabs = array(
 );
 
 // Build tab URLs.
-$base_url = add_query_arg( 'wpshadow_tab', 'help', admin_url( 'admin.php?page=wp-support' ) );
+$base_url = add_query_arg( 'wpshadow_tab', 'help', admin_url( 'admin.php?page=wpshadow' ) );
 ?>
 
 <div class="wrap wps-help-page">

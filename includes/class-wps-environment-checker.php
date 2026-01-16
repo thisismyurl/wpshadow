@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -509,7 +509,7 @@ class WPSHADOW_Environment_Checker {
 	public static function display_environment_notices(): void {
 		// Only show on WPS admin pages.
 		$screen = get_current_screen();
-		if ( ! $screen || false === strpos( $screen->id, 'wp-support' ) ) {
+		if ( ! $screen || false === strpos( $screen->id, 'wpshadow' ) ) {
 			return;
 		}
 

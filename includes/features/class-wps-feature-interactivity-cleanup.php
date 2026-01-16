@@ -5,13 +5,13 @@
  * Disable unnecessary Interactivity API and Block Bindings scripts on pages that don't use them.
  * Also removes DNS prefetch for s.w.org (emoji CDN) since emojis should be disabled separately.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * WPSHADOW_Feature_Interactivity_Cleanup
@@ -28,7 +28,7 @@ final class WPSHADOW_Feature_Interactivity_Cleanup extends WPSHADOW_Abstract_Fea
 			array(
 				'id'                 => 'interactivity-cleanup',
 				'name'               => __( 'Interactivity API & DNS Cleanup', 'plugin-wpshadow' ),
-				'description'        => __( 'Disable Interactivity API and Block Bindings scripts on pages that don\'t need them; remove unnecessary DNS prefetch', 'plugin-wpshadow' ),
+				'description'        => __( 'Prevents Interactivity API and Block Bindings scripts from loading on pages that do not use them, and cleans unnecessary DNS prefetch entries, reducing requests and script execution. Keeps required scripts where features depend on them so functionality stays intact. Helps lower page weight, reduce potential security surface area, and improve speed scores with minimal setup for sites that rely mostly on traditional interactions.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',

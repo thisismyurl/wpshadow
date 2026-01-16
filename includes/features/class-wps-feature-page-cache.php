@@ -4,13 +4,13 @@
  *
  * Full page caching for improved performance.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.75000
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -41,12 +41,12 @@ final class WPSHADOW_Feature_Page_Cache extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'page-cache',
 				'name'               => __( 'Page Cache', 'plugin-wpshadow' ),
-				'description'        => __( 'Full page caching with device detection, automatic invalidation, and cache preloading', 'plugin-wpshadow' ),
+				'description'        => __( 'Creates full page copies that serve instantly to visitors, with device-aware variants, automatic invalidation when content updates, and preload to keep the cache warm. Reduces PHP and database work, lowers server load, and speeds up repeat views. Works alongside logged-in and admin bypass rules so editors see fresh content while visitors enjoy faster page delivery with minimal configuration.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
-				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Performance', 'plugin-wpshadow' ),
+			'widget_group'       => 'advanced',
+			'widget_label'       => __( 'Advanced Features', 'plugin-wpshadow' ),
 				'widget_description' => __( 'Caching and performance optimization', 'plugin-wpshadow' ),
 				'license_level'      => 2,
 				'minimum_capability' => 'manage_options',
@@ -346,7 +346,7 @@ final class WPSHADOW_Feature_Page_Cache extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_purge_cache(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wps-cache' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wps-cache' );
 
 		$this->purge_all_cache();
 

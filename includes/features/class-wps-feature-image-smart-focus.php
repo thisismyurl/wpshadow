@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -19,7 +19,7 @@ class WPSHADOW_Feature_Image_Smart_Focus extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'wpshadow_image_smart_focus',
 				'name'               => __( 'Smart Focus-Point', 'plugin-wpshadow' ),
-				'description'        => __( 'Enables entropy-aware focus regions for mobile crops across image spokes.', 'plugin-wpshadow' ),
+				'description'        => __( 'Analyzes uploaded images to identify the most interesting areas using intelligent content detection, then automatically crops thumbnails and mobile versions to keep important subjects centered. Prevents awkward crops that cut off faces or key details, works with existing WordPress image sizes, and adapts to portrait or landscape orientations for better visual results across all screen sizes.', 'plugin-wpshadow' ),
 				'scope'              => 'spoke',
 				'hub'                => 'media',
 				'spoke'              => 'image',

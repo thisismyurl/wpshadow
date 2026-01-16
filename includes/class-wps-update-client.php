@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *       "name": "WPShadow",
  *       "version": "1.3.0",
  *       "download_url": "https://wpshadow.com/downloads/plugin-wpshadow-1.3.0.zip",
- *       "homepage": "https://wpshadow.com/wp-support/",
+ *       "homepage": "https://wpshadow.com/wpshadow/",
  *       "requires": "6.4",
  *       "requires_php": "8.1",
  *       "tested": "6.9",
@@ -42,12 +42,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  *       "description": "Core support functionality...",
  *       "changelog": "<h3>1.3.0</h3><ul><li>Feature X</li></ul>",
  *       "banners": {
- *         "high": "https://wpshadow.com/banners/wp-support-high.png",
- *         "low": "https://wpshadow.com/banners/wp-support-low.png"
+ *         "high": "https://wpshadow.com/banners/wpshadow-high.png",
+ *         "low": "https://wpshadow.com/banners/wpshadow-low.png"
  *       },
  *       "icons": {
- *         "1x": "https://wpshadow.com/icons/wp-support.png",
- *         "2x": "https://wpshadow.com/icons/wp-support@2x.png"
+ *         "1x": "https://wpshadow.com/icons/wpshadow.png",
+ *         "2x": "https://wpshadow.com/icons/wpshadow@2x.png"
  *       }
  *     },
  *     "plugin-image-hub-wpshadow": { ... },
@@ -292,7 +292,7 @@ class WPSHADOW_Update_Client {
 
 		$all_plugins   = get_plugins();
 		$installed     = array();
-		$wpshadow_prefixes = array( 'plugin-wp-support', 'plugin-image-hub', 'plugin-video-hub' );
+		$wpshadow_prefixes = array( 'plugin-wpshadow', 'plugin-image-hub', 'plugin-video-hub' );
 
 		foreach ( $all_plugins as $plugin_file => $plugin_data ) {
 			$slug = dirname( $plugin_file );
@@ -339,7 +339,7 @@ class WPSHADOW_Update_Client {
 	public static function add_action_links( array $links ): array {
 		$settings_link = sprintf(
 			'<a href="%s">%s</a>',
-			esc_url( admin_url( 'admin.php?page=wp-support&tab=updates' ) ),
+			esc_url( admin_url( 'admin.php?page=wpshadow&tab=updates' ) ),
 			esc_html__( 'Updates & License', 'plugin-wpshadow' )
 		);
 

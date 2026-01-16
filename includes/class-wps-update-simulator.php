@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * Class WPSHADOW_Update_Simulator
@@ -55,7 +55,7 @@ class WPSHADOW_Update_Simulator {
 	 */
 	public static function register_admin_page(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Update Simulator', 'plugin-wpshadow' ),
 			__( 'Update Simulator', 'plugin-wpshadow' ),
 			'manage_options',
@@ -119,7 +119,7 @@ class WPSHADOW_Update_Simulator {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$plugin = \WPS\CoreSupport\WPSHADOW_get_post_text( 'plugin' );
+		$plugin = \WPShadow\WPSHADOW_get_post_text( 'plugin' );
 		if ( empty( $plugin ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid plugin specified', 'plugin-wpshadow' ) ) );
 		}
@@ -164,7 +164,7 @@ class WPSHADOW_Update_Simulator {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$plugin = \WPS\CoreSupport\WPSHADOW_get_post_text( 'plugin' );
+		$plugin = \WPShadow\WPSHADOW_get_post_text( 'plugin' );
 		if ( empty( $plugin ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid plugin specified', 'plugin-wpshadow' ) ) );
 		}
@@ -209,7 +209,7 @@ class WPSHADOW_Update_Simulator {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$snapshot_id = \WPS\CoreSupport\WPSHADOW_get_post_text( 'snapshot_id' );
+		$snapshot_id = \WPShadow\WPSHADOW_get_post_text( 'snapshot_id' );
 		if ( empty( $snapshot_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid snapshot specified', 'plugin-wpshadow' ) ) );
 		}

@@ -5,13 +5,13 @@
  * Selectively dequeue unnecessary CSS/JS from common plugins
  * (Contact Form 7, WooCommerce, Jetpack, RankMath, etc.) that load globally but aren't used on every page.
  *
- * @package WPS\CoreSupport\Features
+ * @package WPShadow\Features
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * WPSHADOW_Feature_Plugin_Cleanup
@@ -35,12 +35,12 @@ final class WPSHADOW_Feature_Plugin_Cleanup extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'plugin-cleanup',
 				'name'               => __( 'Third-Party Plugin Asset Cleanup', 'plugin-wpshadow' ),
-				'description'        => __( 'Stop loading plugin files on pages where they\'re not needed', 'plugin-wpshadow' ),
+				'description'        => __( 'Stops third-party plugin scripts and styles from loading on pages that do not use their features, so visitors avoid extra downloads and processing. Keeps required assets on pages that need them, preserving functionality while trimming bloat elsewhere. Improves speed scores, reduces bandwidth, and can lower conflicts between plugins because fewer files run together on unrelated pages, all without changing admin workflows.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
-				'widget_group'       => 'cleanup',
-				'widget_label'       => __( 'Admin Management', 'plugin-wpshadow' ),
+			'widget_group'       => 'performance',
+			'widget_label'       => __( 'Performance Options', 'plugin-wpshadow' ),
 				'widget_description' => __( 'Clean up admin interface and plugin management', 'plugin-wpshadow' ),
 			)
 		);

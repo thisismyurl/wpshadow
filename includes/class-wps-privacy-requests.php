@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -600,7 +600,7 @@ class WPSHADOW_Privacy_Requests {
 		}
 
 		$user_id      = get_current_user_id();
-		$request_type = \WPS\CoreSupport\WPSHADOW_get_post_key( 'request_type' );
+		$request_type = \WPShadow\WPSHADOW_get_post_key( 'request_type' );
 
 		if ( ! in_array( $request_type, array( 'export', 'erase' ), true ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid request type.', 'plugin-wpshadow' ) ) );
@@ -632,8 +632,8 @@ class WPSHADOW_Privacy_Requests {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wpshadow' ) ) );
 		}
 
-		$request_id = \WPS\CoreSupport\WPSHADOW_get_post_int( 'request_id' );
-		$action     = \WPS\CoreSupport\WPSHADOW_get_post_key( 'request_action' );
+		$request_id = \WPShadow\WPSHADOW_get_post_int( 'request_id' );
+		$action     = \WPShadow\WPSHADOW_get_post_key( 'request_action' );
 
 		$request = self::get_request( $request_id );
 
@@ -656,7 +656,7 @@ class WPSHADOW_Privacy_Requests {
 				break;
 
 			case 'deny':
-				$notes = \WPS\CoreSupport\WPSHADOW_get_post_textarea( 'admin_notes' );
+				$notes = \WPShadow\WPSHADOW_get_post_textarea( 'admin_notes' );
 				self::update_request_status( $request_id, 'denied', get_current_user_id(), $notes );
 				wp_send_json_success( array( 'message' => __( 'Request denied.', 'plugin-wpshadow' ) ) );
 				break;

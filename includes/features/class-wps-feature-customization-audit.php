@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -19,7 +19,7 @@ class WPSHADOW_Feature_Customization_Audit extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'wpshadow_customization_audit',
 				'name'               => __( 'Customization Audit & Risk Assessment', 'plugin-wpshadow' ),
-				'description'        => __( 'Identifies all non-standard customizations and unique configurations, helping site owners understand what makes their site unique vs. what\'s built-in WordPress.', 'plugin-wpshadow' ),
+				'description'        => __( 'Identifies all non-standard customizations and unique configurations, helping site owners understand what makes their site different from a default WordPress installation. Lists custom post types, taxonomies, theme modifications, unusual plugin combinations, and specialized settings so you know exactly what is customized, what depends on specific plugins, and what might break during migrations or major updates.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'version'            => '1.0.0',
 				'default_enabled'    => false,

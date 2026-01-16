@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\API;
+namespace WPShadow\API;
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {

@@ -5,15 +5,15 @@
  * Provides automatic rollback capability for core, theme, and plugin updates.
  * Creates snapshots before updates, validates afterward, and rolls back on failure.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
-use WPS\CoreSupport\WPSHADOW_Snapshot_Manager;
+use WPShadow\WPSHADOW_Snapshot_Manager;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -44,7 +44,7 @@ final class WPSHADOW_Feature_Auto_Rollback extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'auto-rollback',
 				'name'               => __( 'Automatic Update Rollback', 'plugin-wpshadow' ),
-				'description'        => __( 'Automatically create snapshots before updates (core/theme/plugins), validate after completion, and rollback on failure with diff summary', 'plugin-wpshadow' ),
+				'description'        => __( 'Automatically creates snapshots before updates to WordPress core, themes, and plugins, then validates the update succeeded by checking for errors or broken functionality. If problems appear, rolls back to the working version instantly and provides a detailed summary of what changed, protecting your site from bad updates without requiring manual intervention or constant monitoring of update results.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',

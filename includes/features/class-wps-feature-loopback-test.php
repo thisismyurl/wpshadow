@@ -10,13 +10,13 @@
  * - REST API calls
  * - Block editor features
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.74000
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -36,8 +36,8 @@ final class WPSHADOW_Feature_Loopback_Test extends WPSHADOW_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'loopback-test',
-				'name'               => __( 'Loopback Request Test', 'plugin-wpshadow' ),
-				'description'        => __( 'Test if your site can make HTTP requests to itself - critical for cron, updates, and REST API', 'plugin-wpshadow' ),
+			'name'               => __( 'Site Self-Communication Test', 'plugin-wpshadow' ),
+			'description'        => __( 'Verifies that your site can make internal requests to itself, which is required for automatic updates, scheduled tasks, and many plugin features. Detects host blocks, authentication issues, or firewall rules that break loopbacks, and guides you to restore connectivity so background jobs and checks keep running.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
@@ -85,11 +85,11 @@ final class WPSHADOW_Feature_Loopback_Test extends WPSHADOW_Abstract_Feature {
 	 */
 	public function add_admin_menu(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Loopback Request Test', 'plugin-wpshadow' ),
 			__( 'Loopback Test', 'plugin-wpshadow' ),
 			'manage_options',
-			'wp-support-loopback-test',
+			'wpshadow-loopback-test',
 			array( $this, 'render_page' )
 		);
 	}
@@ -215,7 +215,7 @@ final class WPSHADOW_Feature_Loopback_Test extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_run_test(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wps-loopback-test' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wps-loopback-test' );
 
 		// Run test.
 		$results = $this->run_loopback_test();

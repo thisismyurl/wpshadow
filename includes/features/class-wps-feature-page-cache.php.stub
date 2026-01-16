@@ -44,13 +44,13 @@
  * - Support membership plugins (user-specific caching)
  * - Support WPML/Polylang (language-specific caching)
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.75000
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -82,14 +82,14 @@ final class WPS_Feature_Page_Cache extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'page-cache',
-				'name'               => __( 'Page Cache', 'plugin-wp-support-wpshadow' ),
-				'description'        => __( 'Full page caching with device detection, automatic invalidation, and cache preloading for lightning-fast page loads', 'plugin-wp-support-wpshadow' ),
+				'name'               => __( 'Page Cache', 'plugin-wpshadow-wpshadow' ),
+				'description'        => __( 'Full page caching with device detection, automatic invalidation, and cache preloading for lightning-fast page loads', 'plugin-wpshadow-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Performance', 'plugin-wp-support-wpshadow' ),
-				'widget_description' => __( 'Caching and performance optimization', 'plugin-wp-support-wpshadow' ),
+				'widget_label'       => __( 'Performance', 'plugin-wpshadow-wpshadow' ),
+				'widget_description' => __( 'Caching and performance optimization', 'plugin-wpshadow-wpshadow' ),
 				// Unified metadata.
 				'license_level'      => 2, // Free registered users.
 				'minimum_capability' => 'manage_options',

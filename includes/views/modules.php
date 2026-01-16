@@ -297,9 +297,9 @@ input:disabled + .wps-toggle-slider {
 				}
 
 				function ensureSubmenu(moduleId, label, enabled){
-					var top = document.getElementById('toplevel_page_wp-support');
+					var top = document.getElementById('toplevel_page_wpshadow');
 					if (!top){
-						var link = document.querySelector('#adminmenu a.menu-top[href*="page=wp-support"]');
+						var link = document.querySelector('#adminmenu a.menu-top[href*="page=wpshadow"]');
 						if (link) { top = link.closest('li'); }
 					}
 					if (!top) return;
@@ -308,7 +308,7 @@ input:disabled + .wps-toggle-slider {
 						// If submenu container is missing, defer to server-rendered menu; avoid creating.
 						return;
 					}
-					var target = 'page=wp-support&module=' + encodeURIComponent(moduleId);
+					var target = 'page=wpshadow&module=' + encodeURIComponent(moduleId);
 					var anchors = submenu.querySelectorAll('a[href*="' + target + '"]');
 					if (!anchors || anchors.length === 0){
 						// Nothing to toggle; avoid creating to prevent duplicates.

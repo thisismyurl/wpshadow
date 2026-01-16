@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -60,7 +60,7 @@ class WPSHADOW_Update_Settings {
 				);
 
 				// Clear update cache to force license validation.
-				\WPS\CoreSupport\WPSHADOW_Update_Client::clear_cache();
+				\WPShadow\WPSHADOW_Update_Client::clear_cache();
 			} else {
 				delete_option( 'wpshadow_license_key' );
 				add_settings_error(
@@ -96,7 +96,7 @@ class WPSHADOW_Update_Settings {
 		// Check for available updates.
 		if ( ! empty( $update_data['plugins'] ) && is_array( $update_data['plugins'] ) ) {
 			foreach ( $update_data['plugins'] as $slug => $info ) {
-				$basename = \WPS\CoreSupport\WPSHADOW_Update_Client::find_plugin_basename( $slug );
+				$basename = \WPShadow\WPSHADOW_Update_Client::find_plugin_basename( $slug );
 				if ( ! $basename ) {
 					continue;
 				}

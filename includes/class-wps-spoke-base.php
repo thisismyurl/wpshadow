@@ -13,7 +13,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\Core\Spoke;
+namespace WPShadow\Core\Spoke;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -44,16 +44,16 @@ abstract class WPSHADOW_Spoke_Base {
 	/** @var \WP_Filesystem_Base|null The filesystem object. */
 	public $fs = null;
 
-	/** @var \WPS\Core\Spoke\WPSHADOW_Admin_v1|null Administrative UI handler. */
+	/** @var \WPShadow\Core\Spoke\WPSHADOW_Admin_v1|null Administrative UI handler. */
 	public $admin;
 
-	/** @var \WPS\Core\Spoke\WPSHADOW_Ajax_v1|null AJAX endpoint handler. */
+	/** @var \WPShadow\Core\Spoke\WPSHADOW_Ajax_v1|null AJAX endpoint handler. */
 	public $ajax;
 
-	/** @var \WPS\Core\Spoke\WPSHADOW_Processor_v1|null Image processing logic. */
+	/** @var \WPShadow\Core\Spoke\WPSHADOW_Processor_v1|null Image processing logic. */
 	public $processor;
 
-	/** @var \WPS\Core\Spoke\WPSHADOW_Vault_v1|null Backup and recovery handler. */
+	/** @var \WPShadow\Core\Spoke\WPSHADOW_Vault_v1|null Backup and recovery handler. */
 	public $vault;
 
 	/**
@@ -725,7 +725,7 @@ abstract class WPSHADOW_Spoke_Base {
 /**
  * --- SPOKE BASE ARCHITECT METADATA ---
  * Changelog:
- * - [1.2601.073000] Moved wpshadow_v1 from Image's embedded core to Core plugin as WPSHADOW_Spoke_Base. Namespace: WPS\Core\Spoke. Enables DRY principle and simplifies spoke plugin development.
+ * - [1.2601.073000] Moved wpshadow_v1 from Image's embedded core to Core plugin as WPSHADOW_Spoke_Base. Namespace: WPShadow\Core\Spoke. Enables DRY principle and simplifies spoke plugin development.
  * Upgrade Notice: Consolidated spoke framework for cleaner architecture
  * Requires at least: 6.4 | PHP: 8.2
  */

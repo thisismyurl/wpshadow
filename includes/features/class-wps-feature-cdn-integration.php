@@ -4,13 +4,13 @@
  *
  * CDN URL rewriting and provider integration.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.75000
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,12 +31,12 @@ final class WPSHADOW_Feature_CDN_Integration extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'cdn-integration',
 				'name'               => __( 'CDN Integration', 'plugin-wpshadow' ),
-				'description'        => __( 'Automatic CDN URL rewriting for images, CSS, JS with support for CloudFlare, BunnyCDN, and custom CDN providers', 'plugin-wpshadow' ),
+				'description'        => __( 'Rewrites asset URLs automatically to serve images, stylesheets, and scripts from your CDN, with built-in support for CloudFlare, BunnyCDN, and custom providers. Reduces latency for global visitors by distributing files geographically, lowers origin server load, and works transparently without changing file storage, keeping your workflow unchanged while delivering faster downloads worldwide.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
-				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Performance', 'plugin-wpshadow' ),
+			'widget_group'       => 'advanced',
+			'widget_label'       => __( 'Advanced Features', 'plugin-wpshadow' ),
 				'widget_description' => __( 'CDN and delivery optimization', 'plugin-wpshadow' ),
 				'license_level'      => 3,
 				'minimum_capability' => 'manage_options',
@@ -147,7 +147,7 @@ final class WPSHADOW_Feature_CDN_Integration extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_test_cdn_connection(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wps-cdn' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wps-cdn' );
 
 		$cdn_url = isset( $_POST['cdn_url'] ) ? esc_url_raw( wp_unslash( $_POST['cdn_url'] ) ) : '';
 

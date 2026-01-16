@@ -9,13 +9,13 @@
  * - Shows cron configuration
  * - Tests cron execution
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.74000
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -35,8 +35,8 @@ final class WPSHADOW_Feature_Cron_Test extends WPSHADOW_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'cron-test',
-				'name'               => __( 'Cron Test', 'plugin-wpshadow' ),
-				'description'        => __( 'Test WordPress Cron functionality, view scheduled events, and identify issues with background tasks', 'plugin-wpshadow' ),
+			'name'               => __( 'Scheduled Tasks Monitor', 'plugin-wpshadow' ),
+			'description'        => __( 'Checks that WordPress scheduled tasks can run reliably, including publishing queued posts, checking for updates, clearing caches, and sending notifications. Flags blocked loopbacks, host restrictions, or plugin conflicts, and offers guidance to restore normal scheduling so automations keep running without surprises.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
@@ -84,11 +84,11 @@ final class WPSHADOW_Feature_Cron_Test extends WPSHADOW_Abstract_Feature {
 	 */
 	public function add_admin_menu(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Cron Test', 'plugin-wpshadow' ),
 			__( 'Cron Test', 'plugin-wpshadow' ),
 			'manage_options',
-			'wp-support-cron-test',
+			'wpshadow-cron-test',
 			array( $this, 'render_page' )
 		);
 	}
@@ -238,7 +238,7 @@ final class WPSHADOW_Feature_Cron_Test extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_run_test(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wps-cron-test' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wps-cron-test' );
 
 		// Schedule test event.
 		wp_schedule_single_event( time(), 'wpshadow_test_cron_event' );
@@ -278,9 +278,9 @@ final class WPSHADOW_Feature_Cron_Test extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_run_event(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wps-cron-test' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wps-cron-test' );
 
-		$hook = \WPS\CoreSupport\WPSHADOW_get_post_text( 'hook' );
+		$hook = \WPShadow\WPSHADOW_get_post_text( 'hook' );
 		
 		if ( empty( $hook ) ) {
 			wp_send_json_error( array( 'message' => __( 'No hook specified', 'plugin-wpshadow' ) ) );

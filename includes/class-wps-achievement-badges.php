@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -405,7 +405,7 @@ Keep up the great work!
 	 */
 	public static function register_admin_menu(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Achievements', 'plugin-wpshadow' ),
 			__( 'Achievements', 'plugin-wpshadow' ),
 			'read',

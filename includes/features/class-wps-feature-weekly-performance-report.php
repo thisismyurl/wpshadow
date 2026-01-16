@@ -16,7 +16,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -33,8 +33,8 @@ class WPSHADOW_Feature_Weekly_Performance_Report extends WPSHADOW_Abstract_Featu
 		parent::__construct(
 			array(
 				'id'                 => 'wpshadow_weekly_performance_report',
-				'name'               => __( 'Weekly Performance Report', 'plugin-wpshadow' ),
-				'description'        => __( 'Sends weekly email reports with performance metrics and improvements.', 'plugin-wpshadow' ),
+			'name'               => __( 'Weekly Site Health Email Report', 'plugin-wpshadow' ),
+			'description'        => __( 'Emails a weekly snapshot of site speed, uptime signals, and key improvements made, with clear suggestions for what to do next. Keeps stakeholders informed without logging in, highlights trends, and links back to the right settings or tools so you can act on performance opportunities quickly.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'version'            => '1.0.0',
 				'default_enabled'    => false,
@@ -502,7 +502,7 @@ class WPSHADOW_Feature_Weekly_Performance_Report extends WPSHADOW_Abstract_Featu
 
 				<div class="footer">
 					<p><?php esc_html_e( 'Powered by WPShadow', 'plugin-wpshadow' ); ?></p>
-					<p><a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support' ) ); ?>"><?php esc_html_e( 'View Dashboard', 'plugin-wpshadow' ); ?></a></p>
+					<p><a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>"><?php esc_html_e( 'View Dashboard', 'plugin-wpshadow' ); ?></a></p>
 				</div>
 			</div>
 		</body>
@@ -568,7 +568,7 @@ class WPSHADOW_Feature_Weekly_Performance_Report extends WPSHADOW_Abstract_Featu
 	 */
 	public static function add_admin_menu(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Performance Reports', 'plugin-wpshadow' ),
 			__( 'Performance Reports', 'plugin-wpshadow' ),
 			'manage_options',
@@ -633,7 +633,7 @@ class WPSHADOW_Feature_Weekly_Performance_Report extends WPSHADOW_Abstract_Featu
 	 * @return void
 	 */
 	public static function ajax_view_report(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_view_report' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wpshadow_view_report' );
 
 		$metrics     = self::get_current_week_metrics();
 		$report_html = self::generate_report_html( $metrics );

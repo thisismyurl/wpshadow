@@ -5,13 +5,13 @@
  * Automated cleanup of database overhead including post revisions, transients,
  * spam comments, and orphaned metadata for improved database performance.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * WPSHADOW_Feature_Database_Cleanup
@@ -28,9 +28,13 @@ final class WPSHADOW_Feature_Database_Cleanup extends WPSHADOW_Abstract_Feature 
 			array(
 				'id'                 => 'database-cleanup',
 				'name'               => __( 'Database Cleanup & Optimization', 'plugin-wpshadow' ),
-				'description'        => __( 'Clean up post revisions, expired transients, and optimize database tables', 'plugin-wpshadow' ),
+				'description'        => __( 'Removes old post revisions, expired transients, and other clutter, then optimizes database tables to reclaim space and improve query performance. Runs on a schedule you choose with safe defaults, logs actions, and keeps backups optional. Helps pages and admin screens load faster, reduces storage use, and lowers risk of bloat from plugins that leave temporary data behind.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
+				'version'            => '1.0.0',
+				'widget_group'       => 'advanced',
+				'widget_label'       => __( 'Advanced Features', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Advanced optimization and maintenance features', 'plugin-wpshadow' ),
 			)
 		);
 		
@@ -143,7 +147,7 @@ final class WPSHADOW_Feature_Database_Cleanup extends WPSHADOW_Abstract_Feature 
 
 		// Log cleanup activity.
 		if ( class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) ) {
-			\WPS\CoreSupport\WPSHADOW_Activity_Logger::log(
+			\WPShadow\WPSHADOW_Activity_Logger::log(
 				'database_cleanup',
 				__( 'Database cleanup completed', 'plugin-wpshadow' ),
 				$stats
@@ -348,7 +352,7 @@ final class WPSHADOW_Feature_Database_Cleanup extends WPSHADOW_Abstract_Feature 
 
 		// Only show on specific admin pages.
 		$screen = get_current_screen();
-		if ( ! $screen || strpos( $screen->id, 'wp-support' ) === false ) {
+		if ( ! $screen || strpos( $screen->id, 'wpshadow' ) === false ) {
 			return;
 		}
 
@@ -402,7 +406,7 @@ final class WPSHADOW_Feature_Database_Cleanup extends WPSHADOW_Abstract_Feature 
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$screen = get_current_screen();
-		if ( ! $screen || strpos( $screen->id, 'wp-support' ) === false ) {
+		if ( ! $screen || strpos( $screen->id, 'wpshadow' ) === false ) {
 			return;
 		}
 
@@ -433,12 +437,12 @@ final class WPSHADOW_Feature_Database_Cleanup extends WPSHADOW_Abstract_Feature 
 		// Redirect back with success message.
 		// Prefer referer (settings tab), fallback to settings, then dashboard.
 		$referer = wp_get_referer();
-		if ( $referer && strpos( $referer, 'page=wp-support' ) !== false ) {
+		if ( $referer && strpos( $referer, 'page=wpshadow' ) !== false ) {
 			$redirect_url = add_query_arg( array( 'wpshadow_cleanup' => 'success' ), $referer );
 		} else {
 			$redirect_url = add_query_arg(
 				array(
-					'page'        => 'wp-support',
+					'page'        => 'wpshadow',
 					'wpshadow_tab'     => 'settings',
 					'wpshadow_cleanup' => 'success',
 				),

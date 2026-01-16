@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -135,7 +135,7 @@ class WPSHADOW_Magic_Link_Support {
 		);
 
 		// Log creation.
-		if ( class_exists( '\WPS\CoreSupport\WPSHADOW_Activity_Logger' ) ) {
+		if ( class_exists( '\WPShadow\WPSHADOW_Activity_Logger' ) ) {
 			WPSHADOW_Activity_Logger::log(
 				'magic_link_created',
 				sprintf(
@@ -269,7 +269,7 @@ class WPSHADOW_Magic_Link_Support {
 		update_option( self::LINKS_KEY, $links );
 
 		// Log the login.
-		if ( class_exists( '\WPS\CoreSupport\WPSHADOW_Activity_Logger' ) ) {
+		if ( class_exists( '\WPShadow\WPSHADOW_Activity_Logger' ) ) {
 			WPSHADOW_Activity_Logger::log(
 				'magic_link_used',
 				sprintf(
@@ -553,7 +553,7 @@ class WPSHADOW_Magic_Link_Support {
 		update_option( self::SESSIONS_KEY, $sessions );
 
 		// Log session end.
-		if ( class_exists( '\WPS\CoreSupport\WPSHADOW_Activity_Logger' ) ) {
+		if ( class_exists( '\WPShadow\WPSHADOW_Activity_Logger' ) ) {
 			WPSHADOW_Activity_Logger::log(
 				'magic_link_expired',
 				sprintf(
@@ -756,7 +756,7 @@ class WPSHADOW_Magic_Link_Support {
 		update_option( self::LINKS_KEY, $links );
 
 		// Log revocation.
-		if ( class_exists( '\WPS\CoreSupport\WPSHADOW_Activity_Logger' ) ) {
+		if ( class_exists( '\WPShadow\WPSHADOW_Activity_Logger' ) ) {
 			WPSHADOW_Activity_Logger::log(
 				'magic_link_revoked',
 				__( 'Magic link revoked', 'plugin-wpshadow' ),
@@ -799,10 +799,10 @@ class WPSHADOW_Magic_Link_Support {
 			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
 		}
 
-		$developer_name  = \WPS\CoreSupport\WPSHADOW_get_post_text( 'developer_name' );
-		$developer_email = \WPS\CoreSupport\WPSHADOW_get_post_email( 'developer_email' );
-		$owner_email     = \WPS\CoreSupport\WPSHADOW_get_post_email( 'owner_email' );
-		$reason          = \WPS\CoreSupport\WPSHADOW_get_post_text( 'reason' );
+		$developer_name  = \WPShadow\WPSHADOW_get_post_text( 'developer_name' );
+		$developer_email = \WPShadow\WPSHADOW_get_post_email( 'developer_email' );
+		$owner_email     = \WPShadow\WPSHADOW_get_post_email( 'owner_email' );
+		$reason          = \WPShadow\WPSHADOW_get_post_text( 'reason' );
 
 		if ( empty( $developer_name ) || empty( $developer_email ) || empty( $owner_email ) ) {
 			wp_send_json_error( __( 'All fields are required', 'plugin-wpshadow' ) );
@@ -834,7 +834,7 @@ class WPSHADOW_Magic_Link_Support {
 			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
 		}
 
-		$token = \WPS\CoreSupport\WPSHADOW_get_post_text( 'token' );
+		$token = \WPShadow\WPSHADOW_get_post_text( 'token' );
 
 		if ( empty( $token ) ) {
 			wp_send_json_error( __( 'Token is required', 'plugin-wpshadow' ) );
@@ -856,7 +856,7 @@ class WPSHADOW_Magic_Link_Support {
 	 */
 	public static function register_menu(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Magic Link Support', 'plugin-wpshadow' ),
 			__( 'Magic Links', 'plugin-wpshadow' ),
 			'manage_options',

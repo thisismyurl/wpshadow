@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -19,8 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Alias vault-support Vault class into this namespace if available.
 // WPShadow works independently - Vault Support is optional for extended features.
-if ( class_exists( '\\WPS\\VaultSupport\\WPSHADOW_Vault' ) ) {
-	class_alias( '\\WPS\\VaultSupport\\WPSHADOW_Vault', __NAMESPACE__ . '\\WPSHADOW_Vault' );
+if ( class_exists( '\\WPShadow\\VaultSupport\\WPSHADOW_Vault' ) ) {
+	class_alias( '\\WPShadow\\VaultSupport\\WPSHADOW_Vault', __NAMESPACE__ . '\\WPSHADOW_Vault' );
 } else {
 	/**
 	 * Stub WPSHADOW_Vault class when Vault Support plugin is not available.

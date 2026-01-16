@@ -5,13 +5,13 @@
  * Compress and minify CSS/JS assets for improved page load performance.
  * Uses WordPress native minification when available and provides compression hints.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * WPSHADOW_Feature_Asset_Minification
@@ -27,8 +27,8 @@ final class WPSHADOW_Feature_Asset_Minification extends WPSHADOW_Abstract_Featur
 		parent::__construct(
 			array(
 				'id'                 => 'asset-minification',
-				'name'               => __( 'Asset Minification & Compression', 'plugin-wpshadow' ),
-				'description'        => __( 'Minify CSS/JS and enable compression for faster asset delivery', 'plugin-wpshadow' ),
+			'name'               => __( 'Compress Stylesheet and Script Files', 'plugin-wpshadow' ),
+			'description'        => __( 'Compresses stylesheet and script files by removing whitespace and unused code, then serves them in smaller bundles so pages download faster and start rendering sooner. Helps repeat visitors by lowering total bytes transferred, reduces bandwidth costs on heavy pages, and keeps behavior identical because it preserves functionality while trimming bloat. This works automatically once enabled and respects dependency order to avoid breaking features.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',

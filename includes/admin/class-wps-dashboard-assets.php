@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Admin;
+namespace WPShadow\Admin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

@@ -5,13 +5,13 @@
  * Remove jQuery Migrate script which provides backward compatibility for very old jQuery code.
  * Modern WordPress sites don't need this script, and removing it saves bandwidth and processing time.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * WPSHADOW_Feature_jQuery_Cleanup
@@ -28,7 +28,7 @@ final class WPSHADOW_Feature_jQuery_Cleanup extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'jquery-cleanup',
 				'name'               => __( 'jQuery Migrate Removal', 'plugin-wpshadow' ),
-				'description'        => __( 'Remove a script for old code that modern sites don\'t need', 'plugin-wpshadow' ),
+				'description'        => __( 'Removes the jQuery Migrate compatibility script on the front end for modern sites that do not rely on legacy jQuery functions, reducing one extra download and script execution. Keeps it available in admin and can be re-enabled if a plugin truly needs it. Helps improve performance scores and lowers conflict risk from outdated code paths.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',

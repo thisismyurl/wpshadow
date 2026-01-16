@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,8 +31,8 @@ class WPSHADOW_Feature_Smart_Recommendations extends WPSHADOW_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'wpshadow_smart_recommendations',
-				'name'               => __( 'Smart Recommendations Engine', 'plugin-wpshadow' ),
-				'description'        => __( 'Personalized optimization recommendations based on site profile and heuristic analysis. Provides performance, security, and scalability recommendations with priority scoring and ROI estimation.', 'plugin-wpshadow' ),
+			'name'               => __( 'Personalized Improvement Suggestions', 'plugin-wpshadow' ),
+			'description'        => __( 'Analyzes your site type, traffic patterns, and configuration to suggest practical improvements for speed, security, and reliability. Prioritizes the most helpful actions first, explains why they matter, and links to the right tools so you can make progress without digging through settings. Updates over time as your site changes.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'version'            => '1.0.0',
 				'default_enabled'    => true,
@@ -274,13 +274,13 @@ class WPSHADOW_Feature_Smart_Recommendations extends WPSHADOW_Abstract_Feature {
 				'cost'           => 'free',
 				'priority_score' => 85,
 				'action_label'   => __( 'Install Image Hub', 'plugin-wpshadow' ),
-				'action_url'     => admin_url( 'admin.php?page=wp-support&tab=modules' ),
+				'action_url'     => admin_url( 'admin.php?page=wpshadow&tab=modules' ),
 			);
 		}
 
 		// Check for script optimization.
 		$script_deferral_enabled = class_exists( '\\WPShadow\\Features\\WPSHADOW_Feature_Script_Deferral' )
-			&& \WPS\CoreSupport\Features\WPSHADOW_Feature_Registry::is_feature_enabled( 'wpshadow_script_deferral', false );
+			&& \WPShadow\Features\WPSHADOW_Feature_Registry::is_feature_enabled( 'wpshadow_script_deferral', false );
 
 		if ( ! $script_deferral_enabled ) {
 			$recommendations[] = array(
@@ -294,7 +294,7 @@ class WPSHADOW_Feature_Smart_Recommendations extends WPSHADOW_Abstract_Feature {
 				'cost'           => 'free',
 				'priority_score' => 75,
 				'action_label'   => __( 'Enable Feature', 'plugin-wpshadow' ),
-				'action_url'     => admin_url( 'admin.php?page=wp-support&tab=features' ),
+				'action_url'     => admin_url( 'admin.php?page=wpshadow&tab=features' ),
 			);
 		}
 
@@ -453,7 +453,7 @@ class WPSHADOW_Feature_Smart_Recommendations extends WPSHADOW_Abstract_Feature {
 				'cost'           => 'free',
 				'priority_score' => 70,
 				'action_label'   => __( 'Enable Database Cleanup', 'plugin-wpshadow' ),
-				'action_url'     => admin_url( 'admin.php?page=wp-support&tab=features' ),
+				'action_url'     => admin_url( 'admin.php?page=wpshadow&tab=features' ),
 			);
 		}
 
@@ -557,7 +557,7 @@ class WPSHADOW_Feature_Smart_Recommendations extends WPSHADOW_Abstract_Feature {
 
 		// Log refresh.
 		if ( class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) ) {
-			\WPS\CoreSupport\WPSHADOW_Activity_Logger::log(
+			\WPShadow\WPSHADOW_Activity_Logger::log(
 				'system',
 				sprintf(
 					/* translators: %d: number of recommendations */
@@ -643,7 +643,7 @@ class WPSHADOW_Feature_Smart_Recommendations extends WPSHADOW_Abstract_Feature {
 
 		// Log email sent.
 		if ( class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) ) {
-			\WPS\CoreSupport\WPSHADOW_Activity_Logger::log(
+			\WPShadow\WPSHADOW_Activity_Logger::log(
 				'system',
 				__( 'Weekly recommendations digest email sent', 'plugin-wpshadow' ),
 				array(
@@ -774,9 +774,9 @@ class WPSHADOW_Feature_Smart_Recommendations extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public static function ajax_dismiss_recommendation(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_recommendations' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wpshadow_recommendations' );
 
-		$rec_id = \WPS\CoreSupport\WPSHADOW_get_post_key( 'rec_id' );
+		$rec_id = \WPShadow\WPSHADOW_get_post_key( 'rec_id' );
 
 		if ( empty( $rec_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid recommendation ID', 'plugin-wpshadow' ) ) );
@@ -802,7 +802,7 @@ class WPSHADOW_Feature_Smart_Recommendations extends WPSHADOW_Abstract_Feature {
 	 */
 	public static function register_admin_page(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Smart Recommendations', 'plugin-wpshadow' ),
 			__( 'Recommendations', 'plugin-wpshadow' ),
 			'manage_options',

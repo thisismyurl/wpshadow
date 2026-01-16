@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -243,7 +243,7 @@ class WPSHADOW_GitHub_Updater {
 		if ( current_user_can( 'manage_options' ) ) {
 			$settings_link = sprintf(
 				'<a href="%s">%s</a>',
-				esc_url( add_query_arg( 'wpshadow_tab', 'github-updates', admin_url( 'admin.php?page=wp-support' ) ) ),
+				esc_url( add_query_arg( 'wpshadow_tab', 'github-updates', admin_url( 'admin.php?page=wpshadow' ) ) ),
 				esc_html__( 'GitHub Updates', 'plugin-wpshadow' )
 			);
 			array_unshift( $links, $settings_link );

@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -61,14 +61,13 @@ class WPSHADOW_Feature_Registry {
 	public static function init(): void {
 		self::load_toggles();
 
-		// Auto-discover features from includes/features/ directory.
-		add_action( 'plugins_loaded', array( __CLASS__, 'auto_discover_features' ), 5 );
-
-		// If plugins_loaded has already fired, trigger registration immediately
+		// If plugins_loaded has already fired, trigger discovery and registration immediately
 		if ( did_action( 'plugins_loaded' ) ) {
 			self::auto_discover_features();
 			self::trigger_registration();
 		} else {
+			// Schedule discovery and registration for plugins_loaded
+			add_action( 'plugins_loaded', array( __CLASS__, 'auto_discover_features' ), 5 );
 			add_action( 'plugins_loaded', array( __CLASS__, 'trigger_registration' ), 12 );
 		}
 	}
@@ -398,7 +397,7 @@ class WPSHADOW_Feature_Registry {
 	 * @return void
 	 */
 	public static function auto_discover_features(): void {
-		$features_dir = WP_PLUGIN_DIR . '/plugin-wpshadow/includes/features';
+		$features_dir = WPSHADOW_PATH . 'includes/features';
 
 		if ( ! is_dir( $features_dir ) ) {
 			return;
@@ -410,11 +409,21 @@ class WPSHADOW_Feature_Registry {
 		}
 
 		foreach ( $feature_files as $file ) {
+			// Skip abstract and interface files.
+			$basename = basename( $file );
+			if ( strpos( $basename, 'abstract' ) !== false || strpos( $basename, 'interface' ) !== false || $basename === 'class-wps-feature-registry.php' ) {
+				continue;
+			}
+
 			// Extract class name from filename.
-			$basename   = basename( $file, '.php' );
+			// Example: class-wps-feature-asset-minification.php -> WPSHADOW_Feature_Asset_Minification
 			$class_name = str_replace( 'class-', '', $basename );
-			$class_name = str_replace( '-', '_', $class_name );
-			$class_name = 'WPShadow\\' . ucwords( $class_name, '_' );
+			$class_name = str_replace( '.php', '', $class_name );
+			$parts      = explode( '-', $class_name );
+			$parts      = array_map( 'ucfirst', $parts );
+			$class_name = implode( '_', $parts );
+			$class_name = str_replace( 'Wps_', 'WPSHADOW_', $class_name );
+			$class_name = 'WPShadow\\CoreSupport\\' . $class_name;
 
 			// Load the file if not already loaded.
 			if ( ! class_exists( $class_name ) ) {
@@ -422,7 +431,7 @@ class WPSHADOW_Feature_Registry {
 			}
 
 			// Instantiate and register if it implements the interface.
-			if ( class_exists( $class_name ) && is_subclass_of( $class_name, 'WPShadow\\WPSHADOW_Feature_Interface' ) ) {
+			if ( class_exists( $class_name ) && is_subclass_of( $class_name, 'WPShadow\\CoreSupport\\WPSHADOW_Feature_Interface' ) ) {
 				try {
 					$feature = new $class_name();
 					self::register_feature( $feature );

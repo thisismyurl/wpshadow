@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -445,7 +445,7 @@ class WPSHADOW_Widget_Registry {
 				<p class="description"><?php echo esc_html( $feature['description'] ); ?></p>
 			<?php endif; ?>
 			<p class="wps-upgrade-prompt">
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support-license' ) ); ?>" class="button button-primary">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-license' ) ); ?>" class="button button-primary">
 					<?php esc_html_e( 'Upgrade License', 'plugin-wpshadow' ); ?>
 				</a>
 			</p>

@@ -5,13 +5,13 @@
  * Control which DNS prefetch and resource hint links are added to <head>.
  * Remove unnecessary hints and add strategic hints for external resources.
  *
- * @package WPS\CoreSupport\Features
+ * @package WPShadow\Features
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * WPSHADOW_Feature_Resource_Hints
@@ -27,8 +27,8 @@ final class WPSHADOW_Feature_Resource_Hints extends WPSHADOW_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'resource-hints',
-				'name'               => __( 'DNS Prefetch & Resource Hints Management', 'plugin-wpshadow' ),
-				'description'        => __( 'Tell browsers to prepare for external services, so they load faster', 'plugin-wpshadow' ),
+			'name'               => __( 'Pre-Connect to External Services', 'plugin-wpshadow' ),
+			'description'        => __( 'Adds resource hint headers so visitor browsers begin connecting to important external services early, reducing wait time when those scripts, fonts, or APIs are needed. Speeds up perceived load for CDNs, analytics, maps, or payment providers, while keeping the list configurable to avoid unnecessary connections. Helps deliver smoother first impressions on slower networks by starting work before the main request finishes.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',

@@ -4,13 +4,13 @@
  *
  * Real-time traffic monitoring and analytics.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.75000
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -41,7 +41,7 @@ final class WPSHADOW_Feature_Traffic_Monitor extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'traffic-monitor',
 				'name'               => __( 'Traffic Monitor', 'plugin-wpshadow' ),
-				'description'        => __( 'Monitor live traffic with real-time request logging, visitor analytics, bot detection, and attack monitoring', 'plugin-wpshadow' ),
+			'description'        => __( 'Logs live traffic with lightweight request details, highlights bots and suspicious spikes, and shows simple analytics so you can see who is hitting your site. Helps spot attacks or misbehaving crawlers quickly, keeps retention limited to reduce storage, and provides filters so you can focus on meaningful events.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
@@ -293,9 +293,9 @@ final class WPSHADOW_Feature_Traffic_Monitor extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_get_live_traffic(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wps-traffic' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wps-traffic' );
 
-		$limit  = \WPS\CoreSupport\WPSHADOW_get_post_int( 'limit', 50 );
+		$limit  = \WPShadow\WPSHADOW_get_post_int( 'limit', 50 );
 		$traffic = $this->get_live_traffic( $limit );
 
 		wp_send_json_success( array(
@@ -310,9 +310,9 @@ final class WPSHADOW_Feature_Traffic_Monitor extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_get_traffic_stats(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wps-traffic' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wps-traffic' );
 
-		$period = \WPS\CoreSupport\WPSHADOW_get_post_text( 'period', 'day' );
+		$period = \WPShadow\WPSHADOW_get_post_text( 'period', 'day' );
 		$stats  = $this->get_traffic_statistics( $period );
 
 		wp_send_json_success( array( 'stats' => $stats ) );

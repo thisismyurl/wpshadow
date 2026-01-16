@@ -4,7 +4,7 @@
  * Manages cookie consent preferences and banner display.
  * No external dependencies - pure vanilla JavaScript.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  */
 
 (function() {

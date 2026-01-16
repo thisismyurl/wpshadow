@@ -46,13 +46,13 @@
  * - Allow rollback if repair causes issues
  * - Require user confirmation for repairs
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.75000
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -77,8 +77,8 @@ final class WPSHADOW_Feature_Core_Integrity extends WPSHADOW_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'core-integrity',
-				'name'               => __( 'Core File Integrity', 'plugin-wpshadow' ),
-				'description'        => __( 'Verify WordPress core files against official checksums, detect modifications, and repair compromised files automatically', 'plugin-wpshadow' ),
+			'name'               => __( 'WordPress Core File Verification', 'plugin-wpshadow' ),
+			'description'        => __( 'Regularly verifies WordPress core files against official checksums, alerts when differences appear, and can restore clean copies after backing up any changed file. Runs in the background to catch tampering or corruption early, lowers risk of compromised core code, and integrates with dashboards so administrators can repair issues quickly while keeping the site stable.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
@@ -487,7 +487,7 @@ final class WPSHADOW_Feature_Core_Integrity extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_scan_core_files(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_core_integrity' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wpshadow_core_integrity' );
 
 		$results = $this->run_integrity_scan();
 
@@ -515,9 +515,9 @@ final class WPSHADOW_Feature_Core_Integrity extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_repair_core_file(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_core_integrity' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wpshadow_core_integrity' );
 
-		$file_path = \WPS\CoreSupport\WPSHADOW_get_post_text( 'file_path' );
+		$file_path = \WPShadow\WPSHADOW_get_post_text( 'file_path' );
 
 		if ( empty( $file_path ) ) {
 			wp_send_json_error(
@@ -550,7 +550,7 @@ final class WPSHADOW_Feature_Core_Integrity extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_repair_all_core_files(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_core_integrity' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wpshadow_core_integrity' );
 
 		$modified_files = $this->get_modified_files();
 
@@ -688,6 +688,13 @@ final class WPSHADOW_Feature_Core_Integrity extends WPSHADOW_Abstract_Feature {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
+
+		// Prevent duplicate rendering if the hook is registered more than once.
+		static $rendered = false;
+		if ( $rendered ) {
+			return;
+		}
+		$rendered = true;
 
 		if ( ! get_transient( 'wpshadow_core_integrity_issues' ) ) {
 			return;

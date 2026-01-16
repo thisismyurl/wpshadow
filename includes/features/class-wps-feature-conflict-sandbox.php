@@ -6,7 +6,7 @@
  * without affecting visitors. Allows admins to isolate plugin conflicts
  * in real-time while the site remains normal for all visitors.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.73001
  * Feature: Conflict Sandbox
  *
@@ -17,13 +17,13 @@
  *
  * Uses secure cookie-based session tracking to isolate changes per-user.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.73002
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -63,15 +63,13 @@ final class WPSHADOW_Feature_Conflict_Sandbox extends WPSHADOW_Abstract_Feature 
 		parent::__construct(
 			array(
 				'id'                 => 'conflict-sandbox',
-				'name'               => __( 'Conflict Sandbox', 'plugin-wpshadow' ),
-				'description'        => __( 'Per-user plugin deactivation and theme switching for debugging without affecting visitors', 'plugin-wpshadow' ),
-				'description'        => __( 'Per-user conflict isolation: deactivate plugins or switch themes only for your session while visitors see the normal site', 'plugin-wpshadow' ),
+				'name'               => __( 'Safe Plugin Testing Environment', 'plugin-wpshadow' ),
+				'description'        => __( 'Lets you disable plugins or switch themes only for your session while visitors keep seeing the normal site, so you can isolate conflicts safely. Provides quick toggles, clears when you exit, and avoids breaking sales or signups during troubleshooting. Helps pinpoint the cause of errors without needing staging access or disrupting traffic.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'debugging',
 				'widget_label'       => __( 'Debugging & Diagnostics', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Advanced debugging features for troubleshooting', 'plugin-wpshadow' ),
 				'widget_description' => __( 'Tools for diagnosing and resolving site conflicts', 'plugin-wpshadow' ),
 			)
 		);
@@ -117,11 +115,11 @@ final class WPSHADOW_Feature_Conflict_Sandbox extends WPSHADOW_Abstract_Feature 
 	 */
 	public function add_admin_menu(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Conflict Sandbox', 'plugin-wpshadow' ),
 			__( 'Conflict Sandbox', 'plugin-wpshadow' ),
 			'manage_options',
-			'wp-support-conflict-sandbox',
+			'wpshadow-conflict-sandbox',
 			array( $this, 'render_admin_page' )
 		);
 	}
@@ -394,7 +392,7 @@ final class WPSHADOW_Feature_Conflict_Sandbox extends WPSHADOW_Abstract_Feature 
 
 		$message .= sprintf(
 			' <a href="%s">%s</a>',
-			esc_url( admin_url( 'admin.php?page=wp-support-conflict-sandbox' ) ),
+			esc_url( admin_url( 'admin.php?page=wpshadow-conflict-sandbox' ) ),
 			__( 'Manage Sandbox', 'plugin-wpshadow' )
 		);
 
@@ -410,7 +408,7 @@ final class WPSHADOW_Feature_Conflict_Sandbox extends WPSHADOW_Abstract_Feature 
 	 * @return void
 	 */
 	public function ajax_toggle_sandbox(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_sandbox_nonce' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wpshadow_sandbox_nonce' );
 
 		$enable = ! empty( $_POST['enable'] );
 
@@ -438,9 +436,9 @@ final class WPSHADOW_Feature_Conflict_Sandbox extends WPSHADOW_Abstract_Feature 
 	 * @return void
 	 */
 	public function ajax_toggle_plugin(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_sandbox_nonce' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wpshadow_sandbox_nonce' );
 
-		$plugin  = \WPS\CoreSupport\WPSHADOW_get_post_text( 'plugin' );
+		$plugin  = \WPShadow\WPSHADOW_get_post_text( 'plugin' );
 		$disable = ! empty( $_POST['disable'] );
 
 		if ( empty( $plugin ) ) {
@@ -480,9 +478,9 @@ final class WPSHADOW_Feature_Conflict_Sandbox extends WPSHADOW_Abstract_Feature 
 	 * @return void
 	 */
 	public function ajax_switch_theme(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_sandbox_nonce' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wpshadow_sandbox_nonce' );
 
-		$theme = \WPS\CoreSupport\WPSHADOW_get_post_key( 'theme' );
+		$theme = \WPShadow\WPSHADOW_get_post_key( 'theme' );
 
 		$state = $this->get_sandbox_state();
 		if ( false === $state ) {
@@ -519,7 +517,7 @@ final class WPSHADOW_Feature_Conflict_Sandbox extends WPSHADOW_Abstract_Feature 
 	 * @return void
 	 */
 	public function ajax_clear_sandbox(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_sandbox_nonce' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wpshadow_sandbox_nonce' );
 
 		$state = array(
 			'active'           => true,

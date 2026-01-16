@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -109,8 +109,8 @@ class WPSHADOW_Module_Registry {
 		$last_refresh = (int) call_user_func( $get_fn, 'wpshadow_modules_last_refresh', 0 );
 
 		$queue_state = array();
-		if ( class_exists( '\WPS\CoreSupport\WPSHADOW_Vault' ) && method_exists( '\WPS\CoreSupport\WPSHADOW_Vault', 'get_queue_state' ) ) {
-			$queue_state = \WPS\CoreSupport\WPSHADOW_Vault::get_queue_state();
+		if ( class_exists( '\WPShadow\WPSHADOW_Vault' ) && method_exists( '\WPShadow\WPSHADOW_Vault', 'get_queue_state' ) ) {
+			$queue_state = \WPShadow\WPSHADOW_Vault::get_queue_state();
 		}
 		$queue_last   = isset( $queue_state['last_run'] ) ? (int) $queue_state['last_run'] : 0;
 		$queue_status = isset( $queue_state['status'] ) ? (string) $queue_state['status'] : 'idle';
@@ -158,7 +158,7 @@ class WPSHADOW_Module_Registry {
 				'description'  => '',
 				'author'       => '@wpshadow',
 				'author_uri'   => 'https://wpshadow.com',
-				'menu_parent'  => 'wp-support',
+				'menu_parent'  => 'wpshadow',
 				'icon'         => 'dashicons-admin-plugins',
 				'enabled'      => true,
 				'hidden'       => false,

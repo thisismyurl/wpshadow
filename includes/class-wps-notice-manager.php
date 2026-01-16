@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -85,7 +85,7 @@ class WPSHADOW_Notice_Manager {
 	public static function ajax_dismiss_notice(): void {
 		check_ajax_referer( 'wpshadow_dismiss_notice', 'nonce' );
 
-		$notice_key = \WPS\CoreSupport\WPSHADOW_get_post_key( 'notice_key' );
+		$notice_key = \WPShadow\WPSHADOW_get_post_key( 'notice_key' );
 
 		if ( empty( $notice_key ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid notice key.', 'plugin-wpshadow' ) ) );

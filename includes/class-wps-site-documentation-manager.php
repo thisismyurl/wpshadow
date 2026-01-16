@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * Class WPSHADOW_Site_Documentation_Manager
@@ -54,7 +54,7 @@ class WPSHADOW_Site_Documentation_Manager {
 	public static function register_admin_pages(): void {
 		// Site Blueprint page.
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Site Blueprint', 'plugin-wpshadow' ),
 			__( 'Site Blueprint', 'plugin-wpshadow' ),
 			'manage_options',
@@ -64,7 +64,7 @@ class WPSHADOW_Site_Documentation_Manager {
 
 		// Protected Plugins page.
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Protected Plugins', 'plugin-wpshadow' ),
 			__( 'Protected Plugins', 'plugin-wpshadow' ),
 			'manage_options',
@@ -74,7 +74,7 @@ class WPSHADOW_Site_Documentation_Manager {
 
 		// Export Documentation page.
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Export Documentation', 'plugin-wpshadow' ),
 			__( 'Export Documentation', 'plugin-wpshadow' ),
 			'manage_options',
@@ -145,7 +145,7 @@ class WPSHADOW_Site_Documentation_Manager {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$plugin_file = \WPS\CoreSupport\WPSHADOW_get_post_text( 'plugin' );
+		$plugin_file = \WPShadow\WPSHADOW_get_post_text( 'plugin' );
 		if ( empty( $plugin_file ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid plugin specified', 'plugin-wpshadow' ) ) );
 		}
@@ -187,7 +187,7 @@ class WPSHADOW_Site_Documentation_Manager {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$format = \WPS\CoreSupport\WPSHADOW_get_post_text( 'format', 'html' );
+		$format = \WPShadow\WPSHADOW_get_post_text( 'format', 'html' );
 		$export = self::generate_export( $format );
 
 		if ( is_wp_error( $export ) ) {

@@ -4,13 +4,13 @@
  *
  * Automatic image compression and format conversion.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.75000
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,7 +31,7 @@ final class WPSHADOW_Feature_Image_Optimizer extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'image-optimizer',
 				'name'               => __( 'Image Optimizer', 'plugin-wpshadow' ),
-				'description'        => __( 'Automatic image compression, WebP/AVIF conversion, and bulk optimization for faster page loads', 'plugin-wpshadow' ),
+				'description'        => __( 'Compresses uploaded images automatically using modern formats like WebP and AVIF, runs bulk optimization on existing media, and keeps originals safe while serving lighter versions to visitors. Speeds up pages, reduces storage costs, and improves visual quality with smart compression that adapts to image content, so your photos look great while loading faster.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
@@ -161,9 +161,9 @@ final class WPSHADOW_Feature_Image_Optimizer extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_optimize_image(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wps-optimize-image', 'upload_files' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wps-optimize-image', 'upload_files' );
 
-		$attachment_id = \WPS\CoreSupport\WPSHADOW_get_post_int( 'attachment_id' );
+		$attachment_id = \WPShadow\WPSHADOW_get_post_int( 'attachment_id' );
 		if ( ! $attachment_id ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid attachment ID', 'plugin-wpshadow' ) ) );
 		}

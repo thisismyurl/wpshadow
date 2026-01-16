@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 use WP_CLI;
 use WP_CLI\Utils;

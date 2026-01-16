@@ -5,13 +5,13 @@
  * Protects against brute force attacks by rate-limiting failed login attempts.
  * Implements progressive lockout with IP tracking and user tracking.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.73002
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * WPSHADOW_Feature_Brute_Force_Protection
@@ -42,8 +42,8 @@ final class WPSHADOW_Feature_Brute_Force_Protection extends WPSHADOW_Abstract_Fe
 		parent::__construct(
 			array(
 				'id'                 => 'brute-force-protection',
-				'name'               => __( 'Brute Force Protection', 'plugin-wpshadow' ),
-				'description'        => __( 'Protects against brute force login attacks by rate-limiting failed attempts. After 5 failed attempts within 15 minutes, the IP is locked out for 30 minutes.', 'plugin-wpshadow' ),
+			'name'               => __( 'Failed Login Protection', 'plugin-wpshadow' ),
+			'description'        => __( 'Protects the login page by tracking failed attempts per user and IP, applying temporary lockouts with optional whitelists and clear messaging to slow password guessing attacks while allowing genuine visitors to try again. Reduces brute force noise, lowers server load from bots, and gives administrators safer authentication without changing existing accounts or passwords.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
@@ -136,7 +136,7 @@ final class WPSHADOW_Feature_Brute_Force_Protection extends WPSHADOW_Abstract_Fe
 
 			// Log the lockout.
 			if ( class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) ) {
-				\WPS\CoreSupport\WPSHADOW_Activity_Logger::log(
+				\WPShadow\WPSHADOW_Activity_Logger::log(
 					'security',
 					sprintf(
 						/* translators: 1: IP address, 2: number of attempts */
@@ -256,7 +256,7 @@ final class WPSHADOW_Feature_Brute_Force_Protection extends WPSHADOW_Abstract_Fe
 	 */
 	public function add_admin_menu(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Locked IPs', 'plugin-wpshadow' ),
 			__( 'Locked IPs', 'plugin-wpshadow' ),
 			'manage_options',
@@ -411,9 +411,9 @@ final class WPSHADOW_Feature_Brute_Force_Protection extends WPSHADOW_Abstract_Fe
 	 * @return void
 	 */
 	public function ajax_unlock_ip(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_unlock_ip' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wpshadow_unlock_ip' );
 
-		$ip = \WPS\CoreSupport\WPSHADOW_get_post_text( 'ip' );
+		$ip = \WPShadow\WPSHADOW_get_post_text( 'ip' );
 
 		if ( empty( $ip ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid IP address', 'plugin-wpshadow' ) ) );
@@ -429,7 +429,7 @@ final class WPSHADOW_Feature_Brute_Force_Protection extends WPSHADOW_Abstract_Fe
 
 		// Log the unlock.
 		if ( class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) ) {
-			\WPS\CoreSupport\WPSHADOW_Activity_Logger::log(
+			\WPShadow\WPSHADOW_Activity_Logger::log(
 				'security',
 				sprintf(
 					/* translators: %s: IP address */

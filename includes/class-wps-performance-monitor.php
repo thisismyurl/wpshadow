@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -708,8 +708,8 @@ class WPSHADOW_Performance_Monitor {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$format = \WPS\CoreSupport\WPSHADOW_get_post_key( 'format', 'json' );
-		$days   = \WPS\CoreSupport\WPSHADOW_get_post_int( 'days', 30 );
+		$format = \WPShadow\WPSHADOW_get_post_key( 'format', 'json' );
+		$days   = \WPShadow\WPSHADOW_get_post_int( 'days', 30 );
 
 		$data = self::get_historical_metrics( $days );
 

@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -249,7 +249,7 @@ class WPSHADOW_Dashboard_Registry {
 		<h2 class="nav-tab-wrapper wps-dashboard-tabs">
 			<?php foreach ( $dashboards as $dashboard_id => $dashboard ) : ?>
 				<a
-					href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&dashboard=' . $dashboard_id ) ); ?>"
+					href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&dashboard=' . $dashboard_id ) ); ?>"
 					class="nav-tab <?php echo $active_dashboard === $dashboard_id ? 'nav-tab-active' : ''; ?>"
 				>
 					<span class="dashicons <?php echo esc_attr( $dashboard['icon'] ); ?>"></span>

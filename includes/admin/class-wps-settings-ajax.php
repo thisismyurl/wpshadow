@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\Admin;
+namespace WPShadow\Admin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -48,7 +48,7 @@ class WPSHADOW_Settings_Ajax {
 		}
 
 		// Parse the form data using wp-json encoded format.
-		$data      = \WPS\CoreSupport\WPSHADOW_get_post_text( 'data' );
+		$data      = \WPShadow\WPSHADOW_get_post_text( 'data' );
 		$form_data = json_decode( $data, true );
 
 		if ( empty( $form_data ) || ! is_array( $form_data ) ) {
@@ -167,7 +167,7 @@ class WPSHADOW_Settings_Ajax {
 	 */
 	private static function save_database_cleanup_settings( array $form_data ): void {
 		// Get the database cleanup feature instance.
-		$feature = \WPS\CoreSupport\WPSHADOW_Feature_Registry::get_feature( 'database-cleanup' );
+		$feature = \WPShadow\WPSHADOW_Feature_Registry::get_feature( 'database-cleanup' );
 		if ( ! $feature ) {
 			wp_send_json_error( array( 'message' => 'Database cleanup feature not found' ) );
 		}

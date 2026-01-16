@@ -8,13 +8,13 @@
  * - Diagnose common email problems
  * - Test different email configurations
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.74000
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -44,8 +44,8 @@ final class WPSHADOW_Feature_Email_Test extends WPSHADOW_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'email-test',
-				'name'               => __( 'Email Test & Diagnostics', 'plugin-wpshadow' ),
-				'description'        => __( 'Test email delivery, diagnose SMTP issues, and view email logs to ensure notifications work correctly', 'plugin-wpshadow' ),
+			'name'               => __( 'Email Delivery Testing', 'plugin-wpshadow' ),
+			'description'        => __( 'Sends test messages through your site to confirm password resets, notifications, and contact form emails reach inboxes. Captures logs, surfaces SMTP or hosting errors, and suggests fixes so you can trust that critical messages will arrive before customers or members miss important emails.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
@@ -96,11 +96,11 @@ final class WPSHADOW_Feature_Email_Test extends WPSHADOW_Abstract_Feature {
 	 */
 	public function add_admin_menu(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Email Test', 'plugin-wpshadow' ),
 			__( 'Email Test', 'plugin-wpshadow' ),
 			'manage_options',
-			'wp-support-email-test',
+			'wpshadow-email-test',
 			array( $this, 'render_page' )
 		);
 	}
@@ -183,11 +183,11 @@ final class WPSHADOW_Feature_Email_Test extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_send_test_email(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_email_test' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wpshadow_email_test' );
 
-		$to      = \WPS\CoreSupport\WPSHADOW_get_post_email( 'to' );
-		$subject = \WPS\CoreSupport\WPSHADOW_get_post_text( 'subject', __( 'WPShadow Test Email', 'plugin-wpshadow' ) );
-		$message = \WPS\CoreSupport\WPSHADOW_get_post_html( 'message', $this->get_default_test_message() );
+		$to      = \WPShadow\WPSHADOW_get_post_email( 'to' );
+		$subject = \WPShadow\WPSHADOW_get_post_text( 'subject', __( 'WPShadow Test Email', 'plugin-wpshadow' ) );
+		$message = \WPShadow\WPSHADOW_get_post_html( 'message', $this->get_default_test_message() );
 
 		if ( empty( $to ) || ! is_email( $to ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid email address', 'plugin-wpshadow' ) ) );
@@ -243,7 +243,7 @@ final class WPSHADOW_Feature_Email_Test extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_clear_logs(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_email_test' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wpshadow_email_test' );
 
 		delete_option( self::LOG_KEY );
 

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -39,7 +39,7 @@ class WPSHADOW_Feature_Tips_Coach extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'wpshadow_tips_coach',
 				'name'               => __( 'Tips Coach', 'plugin-wpshadow' ),
-				'description'        => __( 'Get smart suggestions customized for your specific type of site', 'plugin-wpshadow' ),
+			'description'        => __( 'Provides tailored, easy to follow tips for your site type, from blogs to stores to course sites. Surfaces quick wins first, explains benefits in plain language, and tracks what you have completed so you can keep improving steadily without needing deep technical knowledge.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'version'            => '1.0.0',
 				'default_enabled'    => true,
@@ -525,10 +525,10 @@ class WPSHADOW_Feature_Tips_Coach extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public static function ajax_apply_tip_action(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_tips_coach' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wpshadow_tips_coach' );
 
-		$action = \WPS\CoreSupport\WPSHADOW_get_post_key( 'action_type' );
-		$tip_id = \WPS\CoreSupport\WPSHADOW_get_post_key( 'tip_id' );
+		$action = \WPShadow\WPSHADOW_get_post_key( 'action_type' );
+		$tip_id = \WPShadow\WPSHADOW_get_post_key( 'tip_id' );
 
 		if ( empty( $action ) || empty( $tip_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid action or tip ID', 'plugin-wpshadow' ) ) );
@@ -666,9 +666,9 @@ class WPSHADOW_Feature_Tips_Coach extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public static function ajax_dismiss_tip(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_tips_coach' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wpshadow_tips_coach' );
 
-		$tip_id = \WPS\CoreSupport\WPSHADOW_get_post_key( 'tip_id' );
+		$tip_id = \WPShadow\WPSHADOW_get_post_key( 'tip_id' );
 
 		if ( empty( $tip_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid tip ID', 'plugin-wpshadow' ) ) );

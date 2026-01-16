@@ -5,13 +5,13 @@
  * Strip excessive WordPress-generated CSS classes from posts, navigation
  * menus, and body tags to reduce HTML bloat.
  *
- * @package WPS\CoreSupport\Features
+ * @package WPShadow\Features
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * WPSHADOW_Feature_CSS_Class_Cleanup
@@ -28,7 +28,7 @@ final class WPSHADOW_Feature_CSS_Class_Cleanup extends WPSHADOW_Abstract_Feature
 			array(
 				'id'                 => 'css-class-cleanup',
 				'name'               => __( 'CSS Class Cleanup (Post/Nav/Body)', 'plugin-wpshadow' ),
-				'description'        => __( 'Streamline your HTML and make your pages lighter with cleaner code', 'plugin-wpshadow' ),
+				'description'        => __( 'Removes redundant or noisy CSS classes from post, navigation, and body markup to produce cleaner HTML that is easier to style and slightly lighter to deliver. Reduces unexpected styling conflicts from excessive class names, improves readability for audits, and can trim a few bytes from every page. Works automatically with sensible defaults and keeps important classes required by themes and accessibility features.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',

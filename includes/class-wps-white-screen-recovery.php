@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -70,6 +70,75 @@ class WPSHADOW_White_Screen_Recovery {
 
 		// Add recovery metabox to emergency support dashboard.
 		add_action( 'wpshadow_emergency_metaboxes', array( __CLASS__, 'register_recovery_metabox' ) );
+
+		// Enqueue recovery mode script on emergency dashboard.
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_recovery_scripts' ) );
+
+		// Handle AJAX exit recovery.
+		add_action( 'wp_ajax_wpshadow_exit_recovery_ajax', array( __CLASS__, 'handle_exit_recovery_ajax' ) );
+	}
+
+	/**
+	 * Enqueue recovery mode JavaScript.
+	 *
+	 * @return void
+	 */
+	public static function enqueue_recovery_scripts(): void {
+		// Only enqueue if recovery mode is active (needed on all admin pages for the notice button)
+		if ( ! self::is_recovery_mode_active() ) {
+			return;
+		}
+
+		wp_enqueue_script(
+			'wpshadow-recovery-mode',
+			WPSHADOW_URL . 'assets/js/recovery-mode.js',
+			array(),
+			WPSHADOW_VERSION,
+			false // Load in header so onclick handlers work on page load
+		);
+	}
+
+	/**
+	 * AJAX handler for exiting recovery mode without page reload.
+	 *
+	 * @return void
+	 */
+	public static function handle_exit_recovery_ajax(): void {
+		// Disable caching for this request
+		header( 'Cache-Control: no-cache, no-store, must-revalidate, private' );
+		header( 'Pragma: no-cache' );
+		header( 'Expires: 0' );
+
+		// Verify nonce
+		check_ajax_referer( 'wpshadow_exit_recovery', 'nonce' );
+
+		// Verify capabilities
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Insufficient permissions.', 'plugin-wpshadow' ) ) );
+		}
+
+		// Clear problematic plugins list if requested
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( isset( $_POST['clear_problematic'] ) ) {
+			delete_option( self::PROBLEMATIC_PLUGINS_KEY );
+		}
+
+		// Deactivate recovery mode
+		self::deactivate_recovery_mode();
+
+		// Clear any relevant transients
+		delete_transient( 'wpshadow_recovery_status' );
+		delete_transient( 'wpshadow_fatal_error_needs_manual_recovery' );
+
+		// Clear object cache if available
+		if ( function_exists( 'wp_cache_flush' ) ) {
+			wp_cache_flush();
+		}
+
+		wp_send_json_success( array( 
+			'message' => esc_html__( 'Recovery mode exited successfully.', 'plugin-wpshadow' ),
+			'timestamp' => current_time( 'mysql' ),
+		) );
 	}
 
 	/**
@@ -435,15 +504,23 @@ class WPSHADOW_White_Screen_Recovery {
 					<strong><?php esc_html_e( '🚨 Recovery Mode Active', 'plugin-wpshadow' ); ?></strong>
 				</p>
 				<p>
-					<?php esc_html_e( 'All plugins except WPShadow have been temporarily disabled due to a critical error. Please review the error details and fix the issue before exiting recovery mode.', 'plugin-wpshadow' ); ?>
+					<?php
+					printf(
+						esc_html__( 'All plugins except WPShadow have been temporarily disabled due to a critical error. Please review the error details in the %s and fix the issue before exiting recovery mode.', 'plugin-wpshadow' ),
+						'<a href="' . esc_url( admin_url( 'admin.php?page=wps-emergency-support' ) ) . '">' . esc_html__( 'Emergency Dashboard', 'plugin-wpshadow' ) . '</a>'
+					);
+					?>
 				</p>
 				<p>
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wps-emergency-support' ) ); ?>" class="button button-primary">
 						<?php esc_html_e( 'Emergency Dashboard', 'plugin-wpshadow' ); ?>
 					</a>
-					<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=wps-emergency-support&action=exit-recovery' ), 'wpshadow_exit_recovery' ) ); ?>" class="button">
-						<?php esc_html_e( 'Exit Recovery Mode', 'plugin-wpshadow' ); ?>
-					</a>
+					<form id="wpshadow-exit-recovery-notice-form" style="display: inline;">
+						<?php wp_nonce_field( 'wpshadow_exit_recovery', 'wpshadow_recovery_nonce', false ); ?>
+						<button type="button" class="button" onclick="WPShadowRecovery.exitRecoveryMode()">
+							<?php esc_html_e( 'Exit Recovery Mode', 'plugin-wpshadow' ); ?>
+						</button>
+					</form>
 				</p>
 			</div>
 			<?php
@@ -543,13 +620,13 @@ class WPSHADOW_White_Screen_Recovery {
 						<li><?php esc_html_e( 'Fix the problematic plugin or remove it', 'plugin-wpshadow' ); ?></li>
 						<li><?php esc_html_e( 'Exit recovery mode to restore normal operation', 'plugin-wpshadow' ); ?></li>
 					</ol>
-					<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=wps-emergency-support' ) ); ?>">
+					<form id="wpshadow-exit-recovery-form" method="post">
 						<?php wp_nonce_field( 'wpshadow_exit_recovery', 'wpshadow_recovery_nonce' ); ?>
 						<input type="hidden" name="action" value="exit_recovery" />
-						<button type="submit" class="button button-primary">
+						<button type="button" class="button button-primary" onclick="WPShadowRecovery.exitRecoveryMode()">
 							<?php esc_html_e( 'Exit Recovery Mode', 'plugin-wpshadow' ); ?>
 						</button>
-						<button type="submit" name="clear_problematic" value="1" class="button">
+						<button type="button" class="button" onclick="WPShadowRecovery.exitRecoveryMode( true )">
 							<?php esc_html_e( 'Clear Problematic Plugins List', 'plugin-wpshadow' ); ?>
 						</button>
 					</form>
@@ -593,8 +670,8 @@ class WPSHADOW_White_Screen_Recovery {
 
 			self::deactivate_recovery_mode();
 
-			wp_safe_redirect( admin_url( 'admin.php?page=wps-emergency-support&recovery=exited' ) );
-			exit;
+			// Stay on the current page - no redirect
+			return;
 		}
 
 		// Check for activate recovery action.

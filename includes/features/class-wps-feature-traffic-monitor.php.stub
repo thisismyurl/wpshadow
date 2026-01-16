@@ -51,13 +51,13 @@
  * - Cache traffic statistics
  * - Automatic log cleanup (older than 30 days)
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.75000
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -94,14 +94,14 @@ final class WPS_Feature_Traffic_Monitor extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'traffic-monitor',
-				'name'               => __( 'Traffic Monitor', 'plugin-wp-support-wpshadow' ),
-				'description'        => __( 'Monitor live traffic with real-time request logging, visitor analytics, bot detection, and attack monitoring', 'plugin-wp-support-wpshadow' ),
+				'name'               => __( 'Traffic Monitor', 'plugin-wpshadow-wpshadow' ),
+				'description'        => __( 'Monitor live traffic with real-time request logging, visitor analytics, bot detection, and attack monitoring', 'plugin-wpshadow-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
-				'widget_label'       => __( 'Security', 'plugin-wp-support-wpshadow' ),
-				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wp-support-wpshadow' ),
+				'widget_label'       => __( 'Security', 'plugin-wpshadow-wpshadow' ),
+				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wpshadow-wpshadow' ),
 				// Unified metadata.
 				'license_level'      => 3, // Good tier.
 				'minimum_capability' => 'manage_options',

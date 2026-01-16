@@ -8,13 +8,13 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\API;
+namespace WPShadow\API;
 
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 use WP_Error;
-use WPS\CoreSupport\WPSHADOW_License;
+use WPShadow\WPSHADOW_License;
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {

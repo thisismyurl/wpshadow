@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -192,7 +192,7 @@ abstract class WPSHADOW_Abstract_Feature implements WPSHADOW_Feature_Interface {
 	protected function get_setting( string $setting_name, $default = null, bool $network = false ) {
 		if ( class_exists( '\\WPShadow\\WPSHADOW_Settings_Cache' ) ) {
 			$option_name = $this->id . '_' . $setting_name;
-			return \WPS\CoreSupport\WPSHADOW_Settings_Cache::get( $option_name, $default, $network );
+			return \WPShadow\WPSHADOW_Settings_Cache::get( $option_name, $default, $network );
 		}
 
 		// Fallback to direct get_option if cache not available.
@@ -211,7 +211,7 @@ abstract class WPSHADOW_Abstract_Feature implements WPSHADOW_Feature_Interface {
 	protected function update_setting( string $setting_name, $value, bool $network = false ): bool {
 		if ( class_exists( '\\WPShadow\\WPSHADOW_Settings_Cache' ) ) {
 			$option_name = $this->id . '_' . $setting_name;
-			return \WPS\CoreSupport\WPSHADOW_Settings_Cache::update( $option_name, $value, $network );
+			return \WPShadow\WPSHADOW_Settings_Cache::update( $option_name, $value, $network );
 		}
 
 		// Fallback to direct update_option if cache not available.
@@ -233,7 +233,7 @@ abstract class WPSHADOW_Abstract_Feature implements WPSHADOW_Feature_Interface {
 
 		foreach ( $defaults as $setting_name => $value ) {
 			$option_name = $this->id . '_' . $setting_name;
-			\WPS\CoreSupport\WPSHADOW_Settings_Cache::register_defaults( $option_name, $value );
+			\WPShadow\WPSHADOW_Settings_Cache::register_defaults( $option_name, $value );
 		}
 	}
 
@@ -321,8 +321,8 @@ abstract class WPSHADOW_Abstract_Feature implements WPSHADOW_Feature_Interface {
 			return false;
 		}
 
-		$cache_key = \WPS\CoreSupport\WPSHADOW_Cache_Helper::generate_key( $this->id, $key );
-		return \WPS\CoreSupport\WPSHADOW_Cache_Helper::get( $cache_key );
+		$cache_key = \WPShadow\WPSHADOW_Cache_Helper::generate_key( $this->id, $key );
+		return \WPShadow\WPSHADOW_Cache_Helper::get( $cache_key );
 	}
 
 	/**
@@ -340,8 +340,8 @@ abstract class WPSHADOW_Abstract_Feature implements WPSHADOW_Feature_Interface {
 			return false;
 		}
 
-		$cache_key = \WPS\CoreSupport\WPSHADOW_Cache_Helper::generate_key( $this->id, $key );
-		return \WPS\CoreSupport\WPSHADOW_Cache_Helper::set( $cache_key, $data, $expiration );
+		$cache_key = \WPShadow\WPSHADOW_Cache_Helper::generate_key( $this->id, $key );
+		return \WPShadow\WPSHADOW_Cache_Helper::set( $cache_key, $data, $expiration );
 	}
 
 	/**
@@ -355,8 +355,8 @@ abstract class WPSHADOW_Abstract_Feature implements WPSHADOW_Feature_Interface {
 			return false;
 		}
 
-		$cache_key = \WPS\CoreSupport\WPSHADOW_Cache_Helper::generate_key( $this->id, $key );
-		return \WPS\CoreSupport\WPSHADOW_Cache_Helper::delete( $cache_key );
+		$cache_key = \WPShadow\WPSHADOW_Cache_Helper::generate_key( $this->id, $key );
+		return \WPShadow\WPSHADOW_Cache_Helper::delete( $cache_key );
 	}
 
 	/**
@@ -369,6 +369,6 @@ abstract class WPSHADOW_Abstract_Feature implements WPSHADOW_Feature_Interface {
 			return 0;
 		}
 
-		return \WPS\CoreSupport\WPSHADOW_Cache_Helper::delete_by_prefix( $this->id );
+		return \WPShadow\WPSHADOW_Cache_Helper::delete_by_prefix( $this->id );
 	}
 }

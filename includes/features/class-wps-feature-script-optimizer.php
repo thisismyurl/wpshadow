@@ -5,13 +5,13 @@
  * Analyze enqueued scripts and provide optimization recommendations.
  * Helps identify opportunities for conditional loading and performance improvements.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * WPSHADOW_Feature_Script_Optimizer
@@ -28,12 +28,12 @@ final class WPSHADOW_Feature_Script_Optimizer extends WPSHADOW_Abstract_Feature 
 			array(
 				'id'                 => 'script-optimizer',
 				'name'               => __( 'Script Optimization Analyzer', 'plugin-wpshadow' ),
-				'description'        => __( 'Analyze scripts and provide optimization recommendations', 'plugin-wpshadow' ),
+				'description'        => __( 'Analyzes scripts loaded on your pages, highlights heavy or duplicated assets, and offers practical suggestions like deferring, combining, or limiting them to specific pages. Helps reduce render-blocking files, cut load time, and lower conflict risk by showing which plugins or themes add each script. Provides a simple action list so you can improve speed without guesswork.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
-				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Resource Optimization', 'plugin-wpshadow' ),
+			'widget_group'       => 'reporting',
+			'widget_label'       => __( 'Reporting', 'plugin-wpshadow' ),
 				'widget_description' => __( 'Optimize how resources are loaded and delivered', 'plugin-wpshadow' ),
 			)
 		);

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * Class WPSHADOW_Guided_Walkthroughs
@@ -209,7 +209,7 @@ class WPSHADOW_Guided_Walkthroughs {
 	 */
 	public static function register_admin_page(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Guided Tasks', 'plugin-wpshadow' ),
 			__( 'Guided Tasks', 'plugin-wpshadow' ),
 			'manage_options',
@@ -254,7 +254,7 @@ class WPSHADOW_Guided_Walkthroughs {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$workflow = \WPS\CoreSupport\WPSHADOW_get_post_key( 'workflow' );
+		$workflow = \WPShadow\WPSHADOW_get_post_key( 'workflow' );
 		if ( ! isset( self::$workflows[ $workflow ] ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid workflow', 'plugin-wpshadow' ) ) );
 		}

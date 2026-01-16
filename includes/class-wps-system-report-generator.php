@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -50,7 +50,7 @@ class WPSHADOW_System_Report_Generator {
 	 */
 	public static function register_menu(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'System Report', 'plugin-wpshadow' ),
 			__( 'System Report', 'plugin-wpshadow' ),
 			'manage_options',
@@ -679,7 +679,7 @@ class WPSHADOW_System_Report_Generator {
 
 		// Check if password required.
 		if ( ! empty( $link_data['password'] ) ) {
-			$provided_password = \WPS\CoreSupport\WPSHADOW_get_post_text( 'report_password' );
+			$provided_password = \WPShadow\WPSHADOW_get_post_text( 'report_password' );
 
 			if ( empty( $provided_password ) ) {
 				// Show password form.
@@ -929,7 +929,7 @@ class WPSHADOW_System_Report_Generator {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$format = \WPS\CoreSupport\WPSHADOW_get_post_text( 'format', 'json' );
+		$format = \WPShadow\WPSHADOW_get_post_text( 'format', 'json' );
 
 		$data = self::collect_system_info();
 		$data = self::sanitize_report_data( $data );
@@ -969,7 +969,7 @@ class WPSHADOW_System_Report_Generator {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$password = \WPS\CoreSupport\WPSHADOW_get_post_text( 'password' );
+		$password = \WPShadow\WPSHADOW_get_post_text( 'password' );
 
 		$data = self::collect_system_info();
 		$data = self::sanitize_report_data( $data );

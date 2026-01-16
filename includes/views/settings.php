@@ -5,15 +5,15 @@
  * @package wpshadow_SUPPORT
  */
 
-use WPS\CoreSupport\WPSHADOW_Vault;
-use WPS\CoreSupport\WPSHADOW_License;
+use WPShadow\WPSHADOW_Vault;
+use WPShadow\WPSHADOW_License;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 $is_network      = is_network_admin();
-$action_url      = $is_network ? network_admin_url( 'admin.php?page=wps-core-network-settings' ) : admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=dashboard_settings' );
+$action_url      = $is_network ? network_admin_url( 'admin.php?page=wps-core-network-settings' ) : admin_url( 'admin.php?page=wpshadow&WPSHADOW_tab=dashboard_settings' );
 $settings        = WPSHADOW_Vault::get_settings();
 $saved           = isset( $_GET['wpshadow_vault_saved'] );
 $locked          = ! $is_network && ! WPSHADOW_Vault::site_override_allowed();
@@ -544,7 +544,7 @@ $license_checked = ! empty( $license_state['checked_at'] ) ? date_i18n( 'M j, Y 
 	<p><?php echo esc_html__( 'Run light, safe maintenance tasks without WP-CLI.', 'plugin-wpshadow' ); ?></p>
 	<form method="post" action="<?php echo esc_url( $action_url ); ?>">
 		<?php wp_nonce_field( 'wpshadow_vault_tools', 'wpshadow_vault_tools_nonce' ); ?>
-		<input type="hidden" name="page" value="<?php echo $is_network ? 'wps-core-network-settings' : 'wp-support'; ?>" />
+		<input type="hidden" name="page" value="<?php echo $is_network ? 'wps-core-network-settings' : 'wpshadow'; ?>" />
 		<p>
 			<button class="button" type="submit" name="wpshadow_vault_tool_action" value="rehydrate_missing"><?php echo esc_html__( 'Rehydrate missing attachments (up to 25)', 'plugin-wpshadow' ); ?></button>
 			<span class="description"><?php echo esc_html__( 'Attempts to restore missing files from the Vault.', 'plugin-wpshadow' ); ?></span>

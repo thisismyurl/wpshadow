@@ -8,14 +8,14 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\API;
+namespace WPShadow\API;
 
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 use WP_Error;
-use WPS\CoreSupport\WPSHADOW_Module_Registry;
-use WPS\CoreSupport\WPSHADOW_Module_Actions;
+use WPShadow\WPSHADOW_Module_Registry;
+use WPShadow\WPSHADOW_Module_Actions;
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -483,7 +483,7 @@ class WPSHADOW_REST_Modules_Controller extends WPSHADOW_REST_Controller_Base {
 
 		// Use settings API to store feature flags.
 		$settings_key = "feature_{$feature}_enabled";
-		$result       = \WPS\CoreSupport\WPSHADOW_Settings::update( $slug, $settings_key, $enabled );
+		$result       = \WPShadow\WPSHADOW_Settings::update( $slug, $settings_key, $enabled );
 
 		if ( ! $result ) {
 			return $this->error_response(

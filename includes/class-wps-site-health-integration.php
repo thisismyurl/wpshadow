@@ -5,13 +5,13 @@
  * Integrates WPS features with WordPress Site Health system.
  * Provides scoring, metrics, and upstream data flow.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.75000
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -134,7 +134,7 @@ final class WPSHADOW_Site_Health_Integration {
 			),
 			'actions'     => sprintf(
 				'<a href="%s">%s</a>',
-				admin_url( 'admin.php?page=wp-support-settings&tab=security' ),
+				admin_url( 'admin.php?page=wpshadow-settings&tab=security' ),
 				__( 'Review Security Settings', 'plugin-wpshadow' )
 			),
 			'test'        => 'wpshadow_security_score',
@@ -179,7 +179,7 @@ final class WPSHADOW_Site_Health_Integration {
 			),
 			'actions'     => sprintf(
 				'<a href="%s">%s</a>',
-				admin_url( 'admin.php?page=wp-support-settings&tab=performance' ),
+				admin_url( 'admin.php?page=wpshadow-settings&tab=performance' ),
 				__( 'Review Performance Settings', 'plugin-wpshadow' )
 			),
 			'test'        => 'wpshadow_performance_score',
@@ -224,7 +224,7 @@ final class WPSHADOW_Site_Health_Integration {
 			),
 			'actions'     => sprintf(
 				'<a href="%s">%s</a>',
-				admin_url( 'admin.php?page=wp-support' ),
+				admin_url( 'admin.php?page=wpshadow' ),
 				__( 'View WPShadow Dashboard', 'plugin-wpshadow' )
 			),
 			'test'        => 'wpshadow_overall_health',
@@ -263,7 +263,7 @@ final class WPSHADOW_Site_Health_Integration {
 			),
 			'actions'     => sprintf(
 				'<a href="%s">%s</a>',
-				admin_url( 'admin.php?page=wp-support-features' ),
+				admin_url( 'admin.php?page=wpshadow-features' ),
 				__( 'Manage Features', 'plugin-wpshadow' )
 			),
 			'test'        => 'wpshadow_feature_status',
@@ -927,10 +927,7 @@ final class WPSHADOW_Site_Health_Integration {
 	 * @return bool True if enabled.
 	 */
 	private static function is_feature_enabled( string $feature_id ): bool {
-		$registry = WPSHADOW_Feature_Registry::get_instance();
-		$feature  = $registry->get_feature( $feature_id );
-
-		return $feature && $feature->is_enabled();
+		return WPSHADOW_Feature_Registry::is_feature_enabled( $feature_id );
 	}
 
 	/**
@@ -962,7 +959,7 @@ final class WPSHADOW_Site_Health_Integration {
 		$enabled_features  = self::get_enabled_features();
 		$category_breakdown = self::get_category_breakdown();
 
-		$info['wp-support'] = array(
+		$info['wpshadow'] = array(
 			'label'  => __( 'WPShadow', 'plugin-wpshadow' ),
 			'fields' => array(
 				'version' => array(
@@ -986,7 +983,7 @@ final class WPSHADOW_Site_Health_Integration {
 
 		// Add category scores.
 		foreach ( $category_breakdown as $category => $data ) {
-			$info['wp-support']['fields'][ $category . '_score' ] = array(
+			$info['wpshadow']['fields'][ $category . '_score' ] = array(
 				'label' => sprintf(
 					/* translators: %s: category name */
 					__( '%s Score', 'plugin-wpshadow' ),

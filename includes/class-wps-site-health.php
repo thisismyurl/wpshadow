@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -643,7 +643,7 @@ class WPSHADOW_Site_Health {
 
 		// Add environment information.
 		if ( class_exists( '\\WPShadow\\WPSHADOW_Environment_Checker' ) ) {
-			$env_status = \WPS\CoreSupport\WPSHADOW_Environment_Checker::get_environment_status();
+			$env_status = \WPShadow\WPSHADOW_Environment_Checker::get_environment_status();
 
 			$info['wps-environment'] = array(
 				'label'  => __( 'WPS Environment', 'plugin-wpshadow' ),
@@ -692,11 +692,11 @@ class WPSHADOW_Site_Health {
 					),
 					'heavy_tasks_disabled'   => array(
 						'label' => __( 'Heavy tasks disabled', 'plugin-wpshadow' ),
-						'value' => \WPS\CoreSupport\WPSHADOW_Environment_Checker::should_disable_heavy_tasks() ? __( 'Yes', 'plugin-wpshadow' ) : __( 'No', 'plugin-wpshadow' ),
+						'value' => \WPShadow\WPSHADOW_Environment_Checker::should_disable_heavy_tasks() ? __( 'Yes', 'plugin-wpshadow' ) : __( 'No', 'plugin-wpshadow' ),
 					),
 					'batching_enabled'       => array(
 						'label' => __( 'Task batching', 'plugin-wpshadow' ),
-						'value' => \WPS\CoreSupport\WPSHADOW_Environment_Checker::should_batch_tasks() ? __( 'Enabled', 'plugin-wpshadow' ) : __( 'Not required', 'plugin-wpshadow' ),
+						'value' => \WPShadow\WPSHADOW_Environment_Checker::should_batch_tasks() ? __( 'Enabled', 'plugin-wpshadow' ) : __( 'Not required', 'plugin-wpshadow' ),
 					),
 				),
 			);
@@ -711,7 +711,7 @@ class WPSHADOW_Site_Health {
 				'fields' => array(
 					'memory_usage'      => array(
 						'label' => __( 'Current memory usage', 'plugin-wpshadow' ),
-						'value' => \WPS\CoreSupport\WPSHADOW_Environment_Checker::format_bytes( $resource_status['memory']['current_usage'] ) . ' / ' . $resource_status['memory']['limit'],
+						'value' => \WPShadow\WPSHADOW_Environment_Checker::format_bytes( $resource_status['memory']['current_usage'] ) . ' / ' . $resource_status['memory']['limit'],
 					),
 					'memory_percentage' => array(
 						'label' => __( 'Memory usage percentage', 'plugin-wpshadow' ),
@@ -719,7 +719,7 @@ class WPSHADOW_Site_Health {
 					),
 					'peak_memory'       => array(
 						'label' => __( 'Peak memory usage', 'plugin-wpshadow' ),
-						'value' => \WPS\CoreSupport\WPSHADOW_Environment_Checker::format_bytes( $resource_status['memory']['peak_usage'] ),
+						'value' => \WPShadow\WPSHADOW_Environment_Checker::format_bytes( $resource_status['memory']['peak_usage'] ),
 					),
 					'time_elapsed'      => array(
 						'label' => __( 'Time elapsed', 'plugin-wpshadow' ),
@@ -735,7 +735,7 @@ class WPSHADOW_Site_Health {
 					),
 					'batch_size'        => array(
 						'label' => __( 'Recommended batch size', 'plugin-wpshadow' ),
-						'value' => (string) \WPS\CoreSupport\WPSHADOW_Server_Limits::get_batch_size(),
+						'value' => (string) \WPShadow\WPSHADOW_Server_Limits::get_batch_size(),
 					),
 				),
 			);
@@ -826,7 +826,7 @@ class WPSHADOW_Site_Health {
 		$self_health = self::get_health_check_results( $module_id );
 
 		// Get dependent modules from registry.
-		$catalog         = \WPS\CoreSupport\WPSHADOW_Module_Registry::get_catalog_with_status();
+		$catalog         = \WPShadow\WPSHADOW_Module_Registry::get_catalog_with_status();
 		$dependents_data = array();
 
 		foreach ( $catalog as $mod ) {
@@ -930,8 +930,8 @@ class WPSHADOW_Site_Health {
 			);
 		}
 
-		$is_compatible   = \WPS\CoreSupport\WPSHADOW_Environment_Checker::is_environment_compatible();
-		$has_constraints = \WPS\CoreSupport\WPSHADOW_Environment_Checker::has_resource_constraints();
+		$is_compatible   = \WPShadow\WPSHADOW_Environment_Checker::is_environment_compatible();
+		$has_constraints = \WPShadow\WPSHADOW_Environment_Checker::has_resource_constraints();
 
 		if ( $is_compatible && ! $has_constraints ) {
 			return WPSHADOW_Health_Renderer::build_result(
@@ -978,7 +978,7 @@ class WPSHADOW_Site_Health {
 			);
 		}
 
-		$status = \WPS\CoreSupport\WPSHADOW_Environment_Checker::get_memory_limit_status();
+		$status = \WPShadow\WPSHADOW_Environment_Checker::get_memory_limit_status();
 
 		if ( 'good' === $status['level'] ) {
 			return WPSHADOW_Health_Renderer::build_result(
@@ -1037,7 +1037,7 @@ class WPSHADOW_Site_Health {
 			);
 		}
 
-		$status = \WPS\CoreSupport\WPSHADOW_Environment_Checker::get_execution_time_status();
+		$status = \WPShadow\WPSHADOW_Environment_Checker::get_execution_time_status();
 
 		if ( 'good' === $status['level'] ) {
 			$time_display = 0 === $status['current']
@@ -1100,7 +1100,7 @@ class WPSHADOW_Site_Health {
 			);
 		}
 
-		$status = \WPS\CoreSupport\WPSHADOW_Environment_Checker::get_extensions_status();
+		$status = \WPShadow\WPSHADOW_Environment_Checker::get_extensions_status();
 
 		if ( $status['all_required_loaded'] && empty( $status['recommended_missing'] ) ) {
 			return WPSHADOW_Health_Renderer::build_result(
@@ -1147,7 +1147,7 @@ class WPSHADOW_Site_Health {
 			);
 		}
 
-		$status = \WPS\CoreSupport\WPSHADOW_Server_Limits::get_resource_status();
+		$status = \WPShadow\WPSHADOW_Server_Limits::get_resource_status();
 		$memory = $status['memory'];
 		$time   = $status['time'];
 
@@ -1198,7 +1198,7 @@ class WPSHADOW_Site_Health {
  * @example
  * ```php
  * add_action( 'wpshadow_register_health_checks', function() {
- *     \WPS\CoreSupport\WPSHADOW_Site_Health::register_module_checks(
+ *     \WPShadow\WPSHADOW_Site_Health::register_module_checks(
  *         'media-wpshadow',
  *         array(
  *             'wpshadow_imagick_available' => array(

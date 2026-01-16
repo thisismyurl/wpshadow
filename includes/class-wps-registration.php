@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -45,35 +45,35 @@ class WPSHADOW_Registration {
 		check_ajax_referer( 'wpshadow_register_site', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			\WPS\CoreSupport\WPSHADOW_ajax_permission_denied();
+			\WPShadow\WPSHADOW_ajax_permission_denied();
 		}
 
 		// Validate and sanitize input data using helpers.
-		$site_name   = \WPS\CoreSupport\WPSHADOW_get_post_text( 'site_name' );
-		$site_url    = \WPS\CoreSupport\WPSHADOW_get_post_url( 'site_url' );
-		$admin_name  = \WPS\CoreSupport\WPSHADOW_get_post_text( 'admin_name' );
-		$admin_email = \WPS\CoreSupport\WPSHADOW_get_post_email( 'admin_email' );
-		$agree_terms = \WPS\CoreSupport\WPSHADOW_get_post_bool( 'agree_terms' );
+		$site_name   = \WPShadow\WPSHADOW_get_post_text( 'site_name' );
+		$site_url    = \WPShadow\WPSHADOW_get_post_url( 'site_url' );
+		$admin_name  = \WPShadow\WPSHADOW_get_post_text( 'admin_name' );
+		$admin_email = \WPShadow\WPSHADOW_get_post_email( 'admin_email' );
+		$agree_terms = \WPShadow\WPSHADOW_get_post_bool( 'agree_terms' );
 
 		// Email preferences.
-		$opt_in_updates    = \WPS\CoreSupport\WPSHADOW_get_post_bool( 'opt_in_updates' );
-		$opt_in_security   = \WPS\CoreSupport\WPSHADOW_get_post_bool( 'opt_in_security' );
-		$opt_in_newsletter = \WPS\CoreSupport\WPSHADOW_get_post_bool( 'opt_in_newsletter' );
-		$opt_in_marketing  = \WPS\CoreSupport\WPSHADOW_get_post_bool( 'opt_in_marketing' );
+		$opt_in_updates    = \WPShadow\WPSHADOW_get_post_bool( 'opt_in_updates' );
+		$opt_in_security   = \WPShadow\WPSHADOW_get_post_bool( 'opt_in_security' );
+		$opt_in_newsletter = \WPShadow\WPSHADOW_get_post_bool( 'opt_in_newsletter' );
+		$opt_in_marketing  = \WPShadow\WPSHADOW_get_post_bool( 'opt_in_marketing' );
 
 		// Validate required fields.
 		if ( empty( $site_name ) || empty( $site_url ) || empty( $admin_name ) || empty( $admin_email ) ) {
-			\WPS\CoreSupport\WPSHADOW_ajax_error( __( 'Please fill in all required fields.', 'plugin-wpshadow' ) );
+			\WPShadow\WPSHADOW_ajax_error( __( 'Please fill in all required fields.', 'plugin-wpshadow' ) );
 		}
 
 		// Validate email.
 		if ( ! is_email( $admin_email ) ) {
-			\WPS\CoreSupport\WPSHADOW_ajax_error( __( 'Please enter a valid email address.', 'plugin-wpshadow' ) );
+			\WPShadow\WPSHADOW_ajax_error( __( 'Please enter a valid email address.', 'plugin-wpshadow' ) );
 		}
 
 		// Validate terms agreement.
 		if ( ! $agree_terms ) {
-			\WPS\CoreSupport\WPSHADOW_ajax_error( __( 'You must agree to the Terms of Service and Privacy Policy.', 'plugin-wpshadow' ) );
+			\WPShadow\WPSHADOW_ajax_error( __( 'You must agree to the Terms of Service and Privacy Policy.', 'plugin-wpshadow' ) );
 		}
 
 		// Prepare registration data.
@@ -147,7 +147,7 @@ class WPSHADOW_Registration {
 		wp_send_json_success(
 			array(
 				'message'  => __( 'Registration successful! You will now receive updates and can access premium features.', 'plugin-wpshadow' ),
-				'redirect' => admin_url( 'admin.php?page=wp-support' ),
+				'redirect' => admin_url( 'admin.php?page=wpshadow' ),
 			)
 		);
 	}

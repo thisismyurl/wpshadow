@@ -53,13 +53,13 @@
  * - Minimal processing overhead
  * - Exit early for blocked requests
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.75000
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -96,14 +96,14 @@ final class WPS_Feature_Firewall extends WPS_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'firewall',
-				'name'               => __( 'Web Application Firewall', 'plugin-wp-support-wpshadow' ),
-				'description'        => __( 'Block malicious requests with IP blocking, rate limiting, attack pattern detection, and country-based filtering', 'plugin-wp-support-wpshadow' ),
+				'name'               => __( 'Web Application Firewall', 'plugin-wpshadow-wpshadow' ),
+				'description'        => __( 'Block malicious requests with IP blocking, rate limiting, attack pattern detection, and country-based filtering', 'plugin-wpshadow-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
-				'widget_label'       => __( 'Security', 'plugin-wp-support-wpshadow' ),
-				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wp-support-wpshadow' ),
+				'widget_label'       => __( 'Security', 'plugin-wpshadow-wpshadow' ),
+				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wpshadow-wpshadow' ),
 				// Unified metadata.
 				'license_level'      => 3, // Good tier.
 				'minimum_capability' => 'manage_options',
@@ -288,8 +288,8 @@ final class WPS_Feature_Firewall extends WPS_Abstract_Feature {
 		// TODO: Exit
 
 		wp_die(
-			esc_html__( 'Access denied by firewall.', 'plugin-wp-support-wpshadow' ),
-			esc_html__( 'Forbidden', 'plugin-wp-support-wpshadow' ),
+			esc_html__( 'Access denied by firewall.', 'plugin-wpshadow-wpshadow' ),
+			esc_html__( 'Forbidden', 'plugin-wpshadow-wpshadow' ),
 			array( 'response' => 403 )
 		);
 	}

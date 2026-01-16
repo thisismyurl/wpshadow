@@ -5,13 +5,13 @@
  * Auto-injects skip-to-content/skip-to-nav links with theme-aware placement;
  * respects your nav-accessibility feature settings.
  *
- * @package WPS\CoreSupport\Features
+ * @package WPShadow\Features
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * WPSHADOW_Feature_Skiplinks
@@ -27,8 +27,8 @@ final class WPSHADOW_Feature_Skiplinks extends WPSHADOW_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'skiplinks',
-				'name'               => __( 'Skip Links Injection', 'plugin-wpshadow' ),
-				'description'        => __( 'Help keyboard users jump straight to content, skipping repetitive navigation', 'plugin-wpshadow' ),
+			'name'               => __( 'Add Skip Navigation Links', 'plugin-wpshadow' ),
+			'description'        => __( 'Adds invisible shortcuts that help keyboard users jump directly to your main content without tabbing through menus, navigation, or sidebars. Appears only when the Tab key is pressed, meets accessibility guidelines, and makes your site easier to navigate for people using assistive technology or keyboard-only navigation, improving usability for everyone without changing your visible layout.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',

@@ -5,13 +5,13 @@
  * Disable Google Fonts loading to improve privacy and performance.
  * Useful when themes load Google Fonts but you prefer system fonts.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * WPSHADOW_Feature_Google_Fonts_Disabler
@@ -27,8 +27,8 @@ final class WPSHADOW_Feature_Google_Fonts_Disabler extends WPSHADOW_Abstract_Fea
 		parent::__construct(
 			array(
 				'id'                 => 'google-fonts-disabler',
-				'name'               => __( 'Disable Google Fonts', 'plugin-wpshadow' ),
-				'description'        => __( 'Remove Google Fonts for better privacy and faster load times', 'plugin-wpshadow' ),
+			'name'               => __( 'Block Google Fonts Loading', 'plugin-wpshadow' ),
+			'description'        => __( 'Stops your theme from loading fonts from Google, improving visitor privacy by preventing third-party tracking and slightly speeding up page rendering. Replaces Google Fonts with system alternatives or allows you to self-host custom fonts locally, keeping your site compliant with privacy regulations while maintaining design consistency and reducing external dependencies that slow down first paint.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',

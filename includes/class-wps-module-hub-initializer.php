@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -214,7 +214,7 @@ class WPSHADOW_Module_Hub_Initializer {
 			return array();
 		}
 
-		$catalog = \WPS\CoreSupport\WPSHADOW_Module_Registry::get_catalog_with_status();
+		$catalog = \WPShadow\WPSHADOW_Module_Registry::get_catalog_with_status();
 		return array_filter(
 			$catalog,
 			static function ( $m ) use ( $hub_slug ) {
@@ -230,10 +230,10 @@ class WPSHADOW_Module_Hub_Initializer {
 	 * @return array Activity log entries
 	 */
 	public static function get_vault_activity_logs( int $limit = 10 ): array {
-		if ( ! class_exists( '\\WPS\\VaultSupport\\WPSHADOW_Vault' ) ) {
+		if ( ! class_exists( '\\WPShadow\\VaultSupport\\WPSHADOW_Vault' ) ) {
 			return array();
 		}
 
-		return \WPS\VaultSupport\WPSHADOW_Vault::get_logs( 0, $limit );
+		return \WPShadow\VaultSupport\WPSHADOW_Vault::get_logs( 0, $limit );
 	}
 }

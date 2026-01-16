@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -37,7 +37,7 @@ class WPSHADOW_Feature_Detector {
 	 * @return bool True if Vault is available.
 	 */
 	public static function has_vault(): bool {
-		return class_exists( '\\WPS\\VaultSupport\\WPSHADOW_Vault' );
+		return class_exists( '\\WPShadow\\VaultSupport\\WPSHADOW_Vault' );
 	}
 
 	/**
@@ -111,37 +111,37 @@ class WPSHADOW_Feature_Detector {
 				'available'   => $has_vault,
 				'level'       => $has_vault ? 'vault' : 'upgrade',
 				'description' => __( 'AES-256 encrypted backup storage for sensitive data', 'plugin-wpshadow' ),
-				'upgrade_url' => admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-wpshadow' ),
+				'upgrade_url' => admin_url( 'admin.php?page=wpshadow&tab=modules&install=vault-wpshadow' ),
 			),
 			'cloud_offload'         => array(
 				'available'   => $has_vault,
 				'level'       => $has_vault ? 'vault' : 'upgrade',
 				'description' => __( 'Automatic offsite backup to cloud storage providers', 'plugin-wpshadow' ),
-				'upgrade_url' => admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-wpshadow' ),
+				'upgrade_url' => admin_url( 'admin.php?page=wpshadow&tab=modules&install=vault-wpshadow' ),
 			),
 			'file_versioning'       => array(
 				'available'   => $has_vault,
 				'level'       => $has_vault ? 'vault' : 'upgrade',
 				'description' => __( 'Keep multiple versions of files with one-click rollback', 'plugin-wpshadow' ),
-				'upgrade_url' => admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-wpshadow' ),
+				'upgrade_url' => admin_url( 'admin.php?page=wpshadow&tab=modules&install=vault-wpshadow' ),
 			),
 			'compression'           => array(
 				'available'   => $has_vault,
 				'level'       => $has_vault ? 'vault' : 'upgrade',
 				'description' => __( 'Intelligent compression reduces storage by up to 70%', 'plugin-wpshadow' ),
-				'upgrade_url' => admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-wpshadow' ),
+				'upgrade_url' => admin_url( 'admin.php?page=wpshadow&tab=modules&install=vault-wpshadow' ),
 			),
 			'deduplication'         => array(
 				'available'   => $has_vault,
 				'level'       => $has_vault ? 'vault' : 'upgrade',
 				'description' => __( 'Eliminate duplicate files to save space', 'plugin-wpshadow' ),
-				'upgrade_url' => admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-wpshadow' ),
+				'upgrade_url' => admin_url( 'admin.php?page=wpshadow&tab=modules&install=vault-wpshadow' ),
 			),
 			'broken_link_guardian'  => array(
 				'available'   => $has_vault,
 				'level'       => $has_vault ? 'vault' : 'upgrade',
 				'description' => __( 'Prevent broken links when media files are deleted', 'plugin-wpshadow' ),
-				'upgrade_url' => admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-wpshadow' ),
+				'upgrade_url' => admin_url( 'admin.php?page=wpshadow&tab=modules&install=vault-wpshadow' ),
 			),
 		);
 
@@ -184,7 +184,7 @@ class WPSHADOW_Feature_Detector {
 			return;
 		}
 
-		$install_url = admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-wpshadow' );
+		$install_url = admin_url( 'admin.php?page=wpshadow&tab=modules&install=vault-wpshadow' );
 		?>
 		<div class="notice notice-info wps-vault-upgrade-prompt" style="border-left-color: #2271b1; padding: 15px;">
 			<h3 style="margin-top: 0;">

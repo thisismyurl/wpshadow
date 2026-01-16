@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,12 +31,12 @@ final class WPSHADOW_Feature_Performance_Alerts extends WPSHADOW_Abstract_Featur
 			array(
 				'id'                 => 'wpshadow_performance_alerts',
 				'name'               => __( 'Performance Alert Thresholds', 'plugin-wpshadow' ),
-				'description'        => __( 'Configure thresholds for performance alerts and monitoring notifications.', 'plugin-wpshadow' ),
+			'description'        => __( 'Lets you set speed and error thresholds, then receive alerts when pages slow down or errors spike. Helps you react before visitors notice, pairs with monitoring data, and keeps a simple settings panel so you can tune sensitivity for stores, membership sites, or blogs without extra tooling.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'version'            => '1.0.0',
 				'default_enabled'    => true,
-				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Performance Features', 'plugin-wpshadow' ),
+			'widget_group'       => 'reporting',
+			'widget_label'       => __( 'Reporting', 'plugin-wpshadow' ),
 				'widget_description' => __( 'Performance monitoring and optimization', 'plugin-wpshadow' ),
 			)
 		);
@@ -63,17 +63,17 @@ final class WPSHADOW_Feature_Performance_Alerts extends WPSHADOW_Abstract_Featur
 		}
 
 		// Get current thresholds.
-		$thresholds = \WPS\CoreSupport\WPSHADOW_Performance_Monitor::get_thresholds();
+		$thresholds = \WPShadow\WPSHADOW_Performance_Monitor::get_thresholds();
 
 		// Handle form submission.
 		if ( isset( $_POST['wpshadow_update_performance_thresholds'] ) && check_admin_referer( 'wpshadow_performance_thresholds' ) ) {
 			$new_thresholds = array(
-				'query_count' => \WPS\CoreSupport\WPSHADOW_get_post_int( 'threshold_query_count', 50 ),
+				'query_count' => \WPShadow\WPSHADOW_get_post_int( 'threshold_query_count', 50 ),
 				'load_time'   => isset( $_POST['threshold_load_time'] ) ? floatval( $_POST['threshold_load_time'] ) : 2,
-				'memory'      => \WPS\CoreSupport\WPSHADOW_get_post_int( 'threshold_memory', 80 ),
+				'memory'      => \WPShadow\WPSHADOW_get_post_int( 'threshold_memory', 80 ),
 			);
 
-			\WPS\CoreSupport\WPSHADOW_Performance_Monitor::update_thresholds( $new_thresholds );
+			\WPShadow\WPSHADOW_Performance_Monitor::update_thresholds( $new_thresholds );
 			$thresholds = $new_thresholds;
 
 			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Alert thresholds updated successfully.', 'plugin-wpshadow' ) . '</p></div>';

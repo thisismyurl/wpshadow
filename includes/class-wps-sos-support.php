@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -62,7 +62,7 @@ class WPSHADOW_SOS_Support {
 	 */
 	public static function register_admin_menu(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( '🚨 Emergency SOS', 'plugin-wpshadow' ),
 			__( '🚨 Emergency SOS', 'plugin-wpshadow' ),
 			'manage_options',
@@ -206,13 +206,13 @@ class WPSHADOW_SOS_Support {
 
 		// Collect form data.
 		$data = array(
-			'name'        => \WPS\CoreSupport\WPSHADOW_get_post_text( 'name' ),
-			'email'       => \WPS\CoreSupport\WPSHADOW_get_post_email( 'email' ),
-			'phone'       => \WPS\CoreSupport\WPSHADOW_get_post_text( 'phone' ),
-			'subject'     => \WPS\CoreSupport\WPSHADOW_get_post_text( 'subject' ),
-			'description' => \WPS\CoreSupport\WPSHADOW_get_post_textarea( 'description' ),
-			'severity'    => \WPS\CoreSupport\WPSHADOW_get_post_key( 'severity', 'high' ),
-			'category'    => \WPS\CoreSupport\WPSHADOW_get_post_key( 'category', 'general' ),
+			'name'        => \WPShadow\WPSHADOW_get_post_text( 'name' ),
+			'email'       => \WPShadow\WPSHADOW_get_post_email( 'email' ),
+			'phone'       => \WPShadow\WPSHADOW_get_post_text( 'phone' ),
+			'subject'     => \WPShadow\WPSHADOW_get_post_text( 'subject' ),
+			'description' => \WPShadow\WPSHADOW_get_post_textarea( 'description' ),
+			'severity'    => \WPShadow\WPSHADOW_get_post_key( 'severity', 'high' ),
+			'category'    => \WPShadow\WPSHADOW_get_post_key( 'category', 'general' ),
 			'site_url'    => home_url(),
 		);
 
@@ -623,8 +623,8 @@ class WPSHADOW_SOS_Support {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$incident_id = \WPS\CoreSupport\WPSHADOW_get_post_text( 'incident_id' );
-		$status      = \WPS\CoreSupport\WPSHADOW_get_post_key( 'status' );
+		$incident_id = \WPShadow\WPSHADOW_get_post_text( 'incident_id' );
+		$status      = \WPShadow\WPSHADOW_get_post_key( 'status' );
 
 		if ( empty( $incident_id ) || empty( $status ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid parameters', 'plugin-wpshadow' ) ) );
@@ -651,8 +651,8 @@ class WPSHADOW_SOS_Support {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$incident_id = \WPS\CoreSupport\WPSHADOW_get_post_text( 'incident_id' );
-		$note        = \WPS\CoreSupport\WPSHADOW_get_post_textarea( 'note' );
+		$incident_id = \WPShadow\WPSHADOW_get_post_text( 'incident_id' );
+		$note        = \WPShadow\WPSHADOW_get_post_textarea( 'note' );
 
 		if ( empty( $incident_id ) || empty( $note ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid parameters', 'plugin-wpshadow' ) ) );

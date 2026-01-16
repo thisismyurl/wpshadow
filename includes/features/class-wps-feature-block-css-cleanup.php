@@ -6,13 +6,13 @@
  * or handle block styling with custom CSS. Block CSS files (style.min.css, theme.min.css) can be
  * 50KB+ of unused styles.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * WPSHADOW_Feature_Block_CSS_Cleanup
@@ -29,7 +29,7 @@ final class WPSHADOW_Feature_Block_CSS_Cleanup extends WPSHADOW_Abstract_Feature
 			array(
 				'id'                 => 'block-css-cleanup',
 				'name'               => __( 'Aggressive Block Library CSS Cleanup', 'plugin-wpshadow' ),
-				'description'        => __( 'Dequeue unnecessary Gutenberg block CSS from front-end', 'plugin-wpshadow' ),
+				'description'        => __( 'Stops block library CSS from loading on front end pages that do not need it, cutting weight and speeding up rendering. Keeps essential styles when blocks are present so layouts stay correct. Reduces cumulative layout shift risk from unused styles, trims requests, and pairs well with caching and minification to deliver leaner pages for visitors on slow connections.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',

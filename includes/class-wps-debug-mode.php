@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -81,7 +81,7 @@ class WPSHADOW_Debug_Mode {
 	 */
 	public static function add_admin_menu(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Debug Tools', 'plugin-wpshadow' ),
 			__( 'Debug Tools', 'plugin-wpshadow' ),
 			'manage_options',
@@ -502,7 +502,7 @@ class WPSHADOW_Debug_Mode {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$setting = \WPS\CoreSupport\WPSHADOW_get_post_key( 'setting' );
+		$setting = \WPShadow\WPSHADOW_get_post_key( 'setting' );
 		$value   = isset( $_POST['value'] ) ? (bool) $_POST['value'] : false;
 
 		if ( empty( $setting ) ) {

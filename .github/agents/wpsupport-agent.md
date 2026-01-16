@@ -181,34 +181,34 @@ When an issue has a module-specific label:
 
 ## Namespace Conventions (CRITICAL)
 
-**RULE_1: ALL feature classes use `WPS\CoreSupport` namespace**
-- CORRECT: `namespace WPS\CoreSupport;` in includes/features/class-wps-feature-*.php
-- WRONG: `namespace WPS\CoreSupport\Features;` (breaks autoloading and class resolution)
+**RULE_1: ALL feature classes use `WPShadow\CoreSupport` namespace**
+- CORRECT: `namespace WPShadow\CoreSupport;` in includes/features/class-wps-feature-*.php
+- WRONG: `namespace WPShadow\Features;` (breaks autoloading and class resolution)
 - Consequence: "Class not found" fatal error during plugin initialization
 - Fixed in commit: Visual-regression and script-utils files corrected (Jan 2026)
 - All 40+ feature files follow this pattern; verify before instantiation
 
-**RULE_2: Core classes use `WPS\CoreSupport` namespace**
-- All includes/class-wps-*.php files MUST declare `namespace WPS\CoreSupport;`
+**RULE_2: Core classes use `WPShadow\CoreSupport` namespace**
+- All includes/class-wps-*.php files MUST declare `namespace WPShadow\CoreSupport;`
 - Examples: class-wps-module-registry.php, class-wps-dashboard-widgets.php, class-wps-feature-registry.php
 - Helpers and utilities: class-wps-script-utils.php, class-wps-notice-manager.php, etc.
-- Extends to API classes: use `namespace WPS\CoreSupport\API;` (see includes/api/)
+- Extends to API classes: use `namespace WPShadow\API;` (see includes/api/)
 
-**RULE_3: Module classes use `WPS\ModuleName` namespace**
-- Replace ModuleName with specific module name (e.g., `namespace WPS\VaultSupport;`)
+**RULE_3: Module classes use `WPShadow\ModuleName` namespace**
+- Replace ModuleName with specific module name (e.g., `namespace WPShadow\VaultSupport;`)
 - Modules in modules/hubs/ or modules/spokes/ follow this pattern
 - Keeps module isolation clean and prevents core/module coupling
 - Do NOT import core classes into modules; use module registry hooks instead
 
-**RULE_4: REST API classes use `WPS\CoreSupport\API` namespace**
+**RULE_4: REST API classes use `WPShadow\API` namespace**
 - Specialized namespace for REST API endpoints
-- Example: includes/api/class-wps-rest-api.php uses `namespace WPS\CoreSupport\API;`
+- Example: includes/api/class-wps-rest-api.php uses `namespace WPShadow\API;`
 - All API-related classes live under includes/api/ and use this namespace
 
 **RULE_5: When adding new feature, follow 5-step process**
 1. Create class file: includes/features/class-wps-feature-name.php
 2. Add `<?php declare(strict_types=1);` at top (strict types required)
-3. Add `namespace WPS\CoreSupport;` immediately after declare
+3. Add `namespace WPShadow\CoreSupport;` immediately after declare
 4. Extend WPSHADOW_Feature_Abstract class
 5. Add `require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-name.php';` in wpshadow.php BEFORE instantiation
 6. Register feature in WPSHADOW_register_core_features() function around line 280
@@ -216,7 +216,7 @@ When an issue has a module-specific label:
 **Correct Feature Template:**
 ```php
 <?php declare(strict_types=1);
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 final class WPSHADOW_Feature_ExampleName extends WPSHADOW_Feature_Abstract {
     
@@ -233,13 +233,13 @@ final class WPSHADOW_Feature_ExampleName extends WPSHADOW_Feature_Abstract {
 **Common Mistake (Causes Fatal Error):**
 ```php
 // WRONG - Do NOT do this:
-namespace WPS\CoreSupport\Features;
+namespace WPShadow\Features;
 class WPSHADOW_Feature_ExampleName extends WPSHADOW_Feature_Abstract { ... }
-// Result: "Class WPS\CoreSupport\Features\WPSHADOW_Abstract_Feature not found"
+// Result: "Class WPShadow\Features\WPSHADOW_Abstract_Feature not found"
 ```
 
 **Why This Matters:**
-- PSR-4 autoloader expects `WPS\CoreSupport` → `includes/` directory mapping (see composer.json)
+- PSR-4 autoloader expects `WPShadow\CoreSupport` → `includes/` directory mapping (see composer.json)
 - Wrong namespace breaks class resolution during feature instantiation
 - Feature instantiation in WPSHADOW_register_core_features() depends on correct namespace
 - Strict validation via PHPStan level 8 catches violations (run `composer phpstan`)
@@ -263,7 +263,7 @@ When registering a feature class, you MUST:
 
 **Missing require_once = Plugin Fatal Error:**
 ```
-"Cannot redeclare class WPS\CoreSupport\WPSHADOW_Feature_ExampleName"
+"Cannot redeclare class WPShadow\WPSHADOW_Feature_ExampleName"
 ```
 
 **Evidence from Latest Session (January 2026):**
@@ -363,10 +363,10 @@ foreach ( $styles as $style ) {
 Before submitting ANY pull request, verify:
 
 **1. Namespace & Registration**
-- [ ] All feature classes use `namespace WPS\CoreSupport;`
+- [ ] All feature classes use `namespace WPShadow\CoreSupport;`
 - [ ] All feature files have require_once in wpshadow.php
 - [ ] Features registered in WPSHADOW_register_core_features()
-- [ ] No uses of `namespace WPS\CoreSupport\Features;`
+- [ ] No uses of `namespace WPShadow\Features;`
 
 **2. Code Quality**
 - [ ] Run `composer phpcs` - no WordPress Standard violations

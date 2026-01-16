@@ -5,13 +5,13 @@
  * Flags third-party scripts that set cookies before consent,
  * provides local banner and auto-block rules (no remote CDNs).
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * WPSHADOW_Feature_Consent_Checks
@@ -28,8 +28,8 @@ final class WPSHADOW_Feature_Consent_Checks extends WPSHADOW_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'consent-checks',
-				'name'               => __( 'Cookie Consent Checks', 'plugin-wpshadow' ),
-				'description'        => __( 'Detect third-party cookies and provide consent management without external dependencies', 'plugin-wpshadow' ),
+			'name'               => __( 'Cookie Consent Management', 'plugin-wpshadow' ),
+			'description'        => __( 'Scans for tracking cookies, blocks nonessential scripts until visitors choose, and records consent so you can align with privacy rules. Provides an easy banner, lets visitors update choices, and keeps a clear audit trail. Helps protect visitor privacy while keeping analytics, ads, and embeds under your control with minimal setup.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',

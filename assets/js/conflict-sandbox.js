@@ -3,7 +3,7 @@
  *
  * Handles AJAX interactions for the Conflict Sandbox feature.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  */
 
 (function($) {

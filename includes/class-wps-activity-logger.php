@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -214,10 +214,10 @@ class WPSHADOW_Activity_Logger {
 		// Prefer canonical Vault implementation when available.
 		if ( class_exists( '\\WPShadow\\WPSHADOW_Vault' ) && method_exists( '\\WPShadow\\WPSHADOW_Vault', 'add_log' ) ) {
 			// Log the intent in Vault logs; real backup is managed by Vault plugin when enabled.
-			\WPS\CoreSupport\WPSHADOW_Vault::add_log( 'info', get_current_user_id(), 'Backing up edited media ID ' . $post_id, 'media_edit_backup' );
+			\WPShadow\WPSHADOW_Vault::add_log( 'info', get_current_user_id(), 'Backing up edited media ID ' . $post_id, 'media_edit_backup' );
 			if ( method_exists( '\\WPShadow\\WPSHADOW_Vault', 'backup_file' ) ) {
 				try {
-					\WPS\CoreSupport\WPSHADOW_Vault::backup_file(
+					\WPShadow\WPSHADOW_Vault::backup_file(
 						$file_path,
 						array(
 							'post_id' => $post_id,
@@ -631,9 +631,9 @@ class WPSHADOW_Activity_Logger {
 	public static function ajax_filter_activity(): void {
 		check_ajax_referer( 'wps-activity-filter', 'nonce' );
 
-		$event_type    = \WPS\CoreSupport\WPSHADOW_get_post_text( 'event_type' );
-		$module_source = \WPS\CoreSupport\WPSHADOW_get_post_text( 'module' );
-		$limit         = \WPS\CoreSupport\WPSHADOW_get_post_int( 'limit', 20 );
+		$event_type    = \WPShadow\WPSHADOW_get_post_text( 'event_type' );
+		$module_source = \WPShadow\WPSHADOW_get_post_text( 'module' );
+		$limit         = \WPShadow\WPSHADOW_get_post_int( 'limit', 20 );
 
 		$events = self::get_events( 100 );
 

@@ -24,7 +24,7 @@
  * @package WPSHADOW_WORDPRESS_SUPPORT
  */
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -74,7 +74,7 @@ class WPSHADOW_Network_License {
 	 */
 	public static function add_submenu_page(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'License Broadcast', 'plugin-wpshadow' ),
 			__( 'License Broadcast', 'plugin-wpshadow' ),
 			'manage_network_options',

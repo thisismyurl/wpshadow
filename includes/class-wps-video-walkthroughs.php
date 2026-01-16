@@ -15,7 +15,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * Class WPSHADOW_Video_Walkthroughs
@@ -220,7 +220,7 @@ class WPSHADOW_Video_Walkthroughs {
 	 */
 	public static function register_admin_page(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Video Library', 'plugin-wpshadow' ),
 			__( 'Video Library', 'plugin-wpshadow' ),
 			'manage_options',
@@ -270,7 +270,7 @@ class WPSHADOW_Video_Walkthroughs {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$video_id = \WPS\CoreSupport\WPSHADOW_get_post_key( 'video_id' );
+		$video_id = \WPShadow\WPSHADOW_get_post_key( 'video_id' );
 		if ( empty( $video_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid video ID', 'plugin-wpshadow' ) ) );
 		}
@@ -426,7 +426,7 @@ class WPSHADOW_Video_Walkthroughs {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$video_id = \WPS\CoreSupport\WPSHADOW_get_post_key( 'video_id' );
+		$video_id = \WPShadow\WPSHADOW_get_post_key( 'video_id' );
 		$library  = get_option( self::VIDEO_LIBRARY_KEY, array() );
 
 		if ( ! isset( $library[ $video_id ] ) ) {
@@ -454,7 +454,7 @@ class WPSHADOW_Video_Walkthroughs {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
 		}
 
-		$video_id = \WPS\CoreSupport\WPSHADOW_get_post_key( 'video_id' );
+		$video_id = \WPShadow\WPSHADOW_get_post_key( 'video_id' );
 		$library  = get_option( self::VIDEO_LIBRARY_KEY, array() );
 
 		if ( ! isset( $library[ $video_id ] ) ) {

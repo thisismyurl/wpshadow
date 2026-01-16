@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -278,7 +278,7 @@ class WPSHADOW_Dashboard_Layout {
 		self::save_layout( $context, $parent_layout, $network );
 
 		// Log activity.
-		if ( class_exists( 'WPS\CoreSupport\WPSHADOW_Activity_Logger' ) ) {
+		if ( class_exists( 'WPShadow\WPSHADOW_Activity_Logger' ) ) {
 			WPSHADOW_Activity_Logger::log(
 				'dashboard',
 				sprintf(
@@ -316,7 +316,7 @@ class WPSHADOW_Dashboard_Layout {
 			$module_id    = $module_parts[0];
 
 			// Get the proper module name from catalog.
-			$catalog     = \WPS\CoreSupport\WPSHADOW_Module_Registry::get_catalog_with_status();
+			$catalog     = \WPShadow\WPSHADOW_Module_Registry::get_catalog_with_status();
 			$module_slug = str_contains( $module_id, '-wpshadow' ) ? $module_id : $module_id . '-wpshadow';
 			if ( isset( $catalog[ $module_slug ] ) ) {
 				$module_name = $catalog[ $module_slug ]['name'] ?? ucfirst( $module_id );
@@ -421,55 +421,56 @@ class WPSHADOW_Dashboard_Layout {
 		return array(
 			'wpshadow_widget_activity'           => array(
 				'title'    => __( 'Activity', 'plugin-wpshadow' ),
-				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_activity' ),
+				'callback' => array( 'WPShadow\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_activity' ),
 			),
 			'wpshadow_widget_scheduled_tasks'    => array(
 				'title'    => __( 'Scheduled Tasks', 'plugin-wpshadow' ),
-				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_scheduled_tasks' ),
+				'callback' => array( 'WPShadow\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_scheduled_tasks' ),
 			),
-			'wpshadow_widget_modules'            => array(
-				'title'    => __( 'Modules', 'plugin-wpshadow' ),
-				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_modules' ),
-			),
+			// TEMPORARILY DISABLED: Modules widget.
+			// 'wpshadow_widget_modules'            => array(
+			// 	'title'    => __( 'Modules', 'plugin-wpshadow' ),
+			// 	'callback' => array( 'WPShadow\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_modules' ),
+			// ),
 			'wpshadow_widget_health'             => array(
 				'title'    => __( 'Health', 'plugin-wpshadow' ),
-				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_health' ),
+				'callback' => array( 'WPShadow\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_health' ),
 			),
 			'wpshadow_widget_quick_actions'      => array(
 				'title'    => __( 'Quick Actions', 'plugin-wpshadow' ),
-				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_quick_actions' ),
+				'callback' => array( 'WPShadow\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_quick_actions' ),
 			),
 			'wpshadow_widget_events_and_news'    => array(
 				'title'    => __( 'Events and News', 'plugin-wpshadow' ),
-				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_events_and_news' ),
+				'callback' => array( 'WPShadow\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_events_and_news' ),
 			),
 			'wpshadow_widget_system_health'      => array(
 				'title'    => __( 'System Health', 'plugin-wpshadow' ),
-				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_system_health' ),
+				'callback' => array( 'WPShadow\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_system_health' ),
 			),
 			'wpshadow_widget_vault_status'       => array(
 				'title'    => __( 'Vault Status', 'plugin-wpshadow' ),
-				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_vault_status' ),
+				'callback' => array( 'WPShadow\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_vault_status' ),
 			),
 			'wpshadow_widget_database_stats'     => array(
 				'title'    => __( 'Database Statistics', 'plugin-wpshadow' ),
-				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_database_stats' ),
+				'callback' => array( 'WPShadow\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_database_stats' ),
 			),
 			'wpshadow_widget_performance_history' => array(
 				'title'    => __( 'Historical Performance', 'plugin-wpshadow' ),
-				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_performance_history' ),
+				'callback' => array( 'WPShadow\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_performance_history' ),
 			),
 			'wpshadow_widget_media_overview'     => array(
 				'title'    => __( 'Media Overview', 'plugin-wpshadow' ),
-				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_media_overview' ),
+				'callback' => array( 'WPShadow\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_media_overview' ),
 			),
 			'wpshadow_widget_vault_overview'     => array(
 				'title'    => __( 'Vault Overview', 'plugin-wpshadow' ),
-				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_vault_overview' ),
+				'callback' => array( 'WPShadow\WPSHADOW_Dashboard_Widgets', 'render_metabox_vault_overview' ),
 			),
 			'wpshadow_widget_environment_status' => array(
 				'title'    => __( 'Environment Status', 'plugin-wpshadow' ),
-				'callback' => array( 'WPS\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_environment_status' ),
+				'callback' => array( 'WPShadow\WPSHADOW_Dashboard_Widgets', 'render_metabox_environment_status' ),
 			),
 		);
 	}

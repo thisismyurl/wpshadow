@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -40,7 +40,7 @@ class WPSHADOW_GitHub_Settings {
 	 */
 	public static function handle_token_submission(): void {
 	// Only process on settings page.
-	if ( ! isset( $_GET['page'] ) || 'wp-support' !== $_GET['page'] ) {
+	if ( ! isset( $_GET['page'] ) || 'wpshadow' !== $_GET['page'] ) {
 		return;
 	}
 
@@ -63,7 +63,7 @@ class WPSHADOW_GitHub_Settings {
 	}
 
 	// Get token from POST.
-	$token = \WPS\CoreSupport\WPSHADOW_get_post_text( 'wpshadow_github_token' );
+	$token = \WPShadow\WPSHADOW_get_post_text( 'wpshadow_github_token' );
 
 	if ( ! empty( $token ) ) {
 		// Validate token format (GitHub tokens are typically 40+ chars).

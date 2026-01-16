@@ -5,13 +5,13 @@
  * Inline above-the-fold CSS in the page head for instant rendering.
  * Defers full stylesheets to load after page render.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * WPSHADOW_Feature_Critical_CSS
@@ -27,8 +27,8 @@ final class WPSHADOW_Feature_Critical_CSS extends WPSHADOW_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'critical-css',
-				'name'               => __( 'Inline Critical CSS', 'plugin-wpshadow' ),
-				'description'        => __( 'Inline above-the-fold CSS for instant page rendering', 'plugin-wpshadow' ),
+			'name'               => __( 'Priority Styles for Instant Display', 'plugin-wpshadow' ),
+			'description'        => __( 'Generates and serves critical CSS for the above-the-fold portion of each page so visitors see a styled layout immediately while remaining styles load in the background. Reduces perceived load time, lowers layout shifts, and improves Core Web Vitals without changing your theme. Works alongside caching and minification, and falls back safely if critical extraction cannot run, keeping pages consistent.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',

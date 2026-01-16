@@ -4,13 +4,13 @@
  *
  * Request filtering, IP blocking, rate limiting, and attack pattern detection.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.75000
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -46,7 +46,7 @@ final class WPSHADOW_Feature_Firewall extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'firewall',
 				'name'               => __( 'Web Application Firewall', 'plugin-wpshadow' ),
-				'description'        => __( 'Block malicious requests with IP blocking, rate limiting, attack pattern detection, and country-based filtering', 'plugin-wpshadow' ),
+				'description'        => __( 'Filters incoming requests with IP blocking, rate limits, user agent and country rules, and pattern detection to stop obvious attacks before they reach WordPress. Limits bursts that stress the server, blocks known bad paths, and can log or block suspicious behavior, improving security without affecting normal visitors, editors, or checkout flows.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
@@ -384,10 +384,10 @@ final class WPSHADOW_Feature_Firewall extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_block_ip(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wps-firewall' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wps-firewall' );
 
-		$ip     = \WPS\CoreSupport\WPSHADOW_get_post_text( 'ip' );
-		$reason = \WPS\CoreSupport\WPSHADOW_get_post_text( 'reason', 'Manual block' );
+		$ip     = \WPShadow\WPSHADOW_get_post_text( 'ip' );
+		$reason = \WPShadow\WPSHADOW_get_post_text( 'reason', 'Manual block' );
 
 		if ( empty( $ip ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid IP address', 'plugin-wpshadow' ) ) );
@@ -406,9 +406,9 @@ final class WPSHADOW_Feature_Firewall extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_unblock_ip(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wps-firewall' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wps-firewall' );
 
-		$ip = \WPS\CoreSupport\WPSHADOW_get_post_text( 'ip' );
+		$ip = \WPShadow\WPSHADOW_get_post_text( 'ip' );
 
 		if ( empty( $ip ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid IP address', 'plugin-wpshadow' ) ) );
@@ -427,7 +427,7 @@ final class WPSHADOW_Feature_Firewall extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public function ajax_get_blocked_ips(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wps-firewall' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wps-firewall' );
 
 		$blocked_ips = get_option( self::BLOCKED_IPS_KEY, array() );
 

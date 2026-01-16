@@ -6,7 +6,7 @@
  * @package WPSHADOW_wpshadow_THISISMYURL
  */
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * Check if WPShadow plugin is active and enabled.
@@ -19,7 +19,7 @@ function WPSHADOW_is_support_enabled(): bool {
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 	}
 
-	$plugin_file = 'plugin-wpshadow/wpshadow.php';
+	$plugin_file = 'wpshadow/wpshadow.php';
 
 	if ( ! is_plugin_active( $plugin_file ) ) {
 		return false;

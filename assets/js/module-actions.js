@@ -146,7 +146,7 @@
 	}
 
 	function toggleSubmenu(slug, enabled) {
-		const hrefContains = `page=wp-support&module=${slug.replace('-wpshadow','')}`;
+		const hrefContains = `page=wpshadow&module=${slug.replace('-wpshadow','')}`;
 		const menus = document.querySelectorAll(`#adminmenu a[href*="${hrefContains}"]`);
 		menus.forEach((link) => {
 			const li = link.closest('li');

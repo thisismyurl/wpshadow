@@ -5,13 +5,13 @@
  * Remove unused Gutenberg and Block Editor CSS/JS for sites not using
  * the block editor or using page builders.
  *
- * @package WPS\CoreSupport\Features
+ * @package WPShadow\Features
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * WPSHADOW_Feature_Block_Cleanup
@@ -26,12 +26,15 @@ final class WPSHADOW_Feature_Block_Cleanup extends WPSHADOW_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'              => 'block-cleanup',
-				'name'            => __( 'Gutenberg/Block Editor Asset Cleanup', 'plugin-wpshadow' ),
-				'description'     => __( 'Remove editor code your visitors don\'t need and lighten your pages', 'plugin-wpshadow' ),
-				'scope'           => 'core',
-				'default_enabled' => false,
-				'version'         => '1.0.0',
+				'id'                 => 'block-cleanup',
+				'name'               => __( 'Gutenberg/Block Editor Asset Cleanup', 'plugin-wpshadow' ),
+				'description'        => __( 'Removes Block Editor and editor-only assets from front end pages that do not use block editing, reducing downloads and execution overhead. Keeps required block assets when content needs them so layouts stay intact. Helps pages feel lighter, improves speed scores, and reduces bandwidth while preserving the editing experience in admin and keeping front end behavior unchanged.', 'plugin-wpshadow' ),
+				'scope'              => 'core',
+				'default_enabled'    => false,
+				'version'            => '1.0.0',
+				'widget_group'       => 'performance',
+				'widget_label'       => __( 'Performance Options', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Performance optimization settings', 'plugin-wpshadow' ),
 			)
 		);
 	}

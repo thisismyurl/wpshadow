@@ -5,13 +5,13 @@
  * Load plugin scripts only on pages where they are needed.
  * Reduces page weight on pages that don't require specific functionality.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * WPSHADOW_Feature_Conditional_Loading
@@ -27,8 +27,8 @@ final class WPSHADOW_Feature_Conditional_Loading extends WPSHADOW_Abstract_Featu
 		parent::__construct(
 			array(
 				'id'                 => 'conditional-loading',
-				'name'               => __( 'Conditional Script Loading', 'plugin-wpshadow' ),
-				'description'        => __( 'Load plugin scripts only on pages where they are needed', 'plugin-wpshadow' ),
+				'name'               => __( 'Smart Resource Loading', 'plugin-wpshadow' ),
+				'description'        => __( 'Loads plugin files only on pages that truly use them, so visitors do not download unnecessary scripts or styles across the entire site. Reduces bandwidth, speeds up the first view, and lowers JavaScript execution cost while keeping features available exactly where they are needed. Uses page context checks to decide when to load assets, leaving the admin experience unchanged.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',

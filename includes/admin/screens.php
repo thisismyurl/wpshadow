@@ -5,7 +5,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -210,7 +210,7 @@ function wpshadow_setup_hub_dashboard_screen( string $hub_id ): void {
 		'admin_print_footer_scripts',
 		static function () use ( $screen, $hub_id ): void {
 			// Use hub-specific state key.
-			$state_key = 'wp-support-' . $hub_id;
+			$state_key = 'wpshadow-' . $hub_id;
 			?>
 			<script>
 			jQuery(document).ready(function($){

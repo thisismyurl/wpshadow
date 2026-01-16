@@ -5,13 +5,13 @@
  * Defer non-critical JavaScript files for improved page load performance.
  * Scripts are deferred only if they have no inline dependencies.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * WPSHADOW_Feature_Script_Deferral
@@ -38,8 +38,8 @@ final class WPSHADOW_Feature_Script_Deferral extends WPSHADOW_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'script-deferral',
-				'name'               => __( 'Script Deferral System', 'plugin-wpshadow' ),
-				'description'        => __( 'Load scripts after your page appears, making pages feel faster', 'plugin-wpshadow' ),
+				'name'               => __( 'Delay Scripts for Faster Display', 'plugin-wpshadow' ),
+				'description'        => __( 'Defers noncritical scripts until after main page content is visible, so visitors see and interact with the page sooner even if total load time is unchanged. Uses safe exclusions for core libraries and critical scripts, keeps dependency order intact, and reduces render-blocking delays that hurt performance scores. Helpful for pages with marketing tags or heavy widgets that can wait until after the initial paint.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.1.0',

@@ -17,7 +17,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -157,7 +157,7 @@ function example_inline_upgrade_prompt(): void {
 			<p>
 				<strong><?php esc_html_e( '🔒 Want encrypted backups?', 'plugin-wpshadow' ); ?></strong>
 				<?php esc_html_e( 'Install the free Vault module for AES-256 encryption, cloud offload, and file versioning.', 'plugin-wpshadow' ); ?>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-wpshadow' ) ); ?>" class="button button-primary" style="margin-left: 10px;">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&tab=modules&install=vault-wpshadow' ) ); ?>" class="button button-primary" style="margin-left: 10px;">
 					<?php esc_html_e( 'Install Vault (Free)', 'plugin-wpshadow' ); ?>
 				</a>
 			</p>
@@ -209,7 +209,7 @@ function example_feature_comparison_table(): void {
 	
 	<?php if ( ! WPSHADOW_Feature_Detector::has_vault() ) : ?>
 		<p style="margin-top: 15px;">
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&tab=modules&install=vault-wpshadow' ) ); ?>" class="button button-primary">
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&tab=modules&install=vault-wpshadow' ) ); ?>" class="button button-primary">
 				<?php esc_html_e( 'Upgrade to Vault (Free)', 'plugin-wpshadow' ); ?>
 			</a>
 		</p>

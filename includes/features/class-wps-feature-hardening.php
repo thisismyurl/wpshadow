@@ -9,13 +9,13 @@
  * - Secure salts validation
  * - File permissions check
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * WPSHADOW_Feature_Hardening
@@ -32,7 +32,7 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'security-hardening',
 				'name'               => __( 'One-Click Security Hardening', 'plugin-wpshadow' ),
-				'description'        => __( 'Comprehensive security hardening: disable XML-RPC, lock down wp-json, prevent directory listing, validate salts, and check file permissions', 'plugin-wpshadow' ),
+				'description'        => __( 'Applies common hardening steps in one toggle: disable XML-RPC if not needed, restrict wp-json exposure, prevent directory listing, validate security salts, and check file permissions. Reduces attack surface, limits information leakage, and aligns with best practices while keeping necessary features available when explicitly required by themes, plugins, or integrations.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',

@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use WPS\CoreSupport\WPSHADOW_Capabilities;
+use WPShadow\WPSHADOW_Capabilities;
 
 $map = WPSHADOW_Capabilities::get_map();
 ?>

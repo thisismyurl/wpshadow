@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport\API;
+namespace WPShadow\API;
 
 use WP_REST_Controller;
 use WP_REST_Request;

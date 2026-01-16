@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -785,7 +785,7 @@ class WPSHADOW_Site_Audit {
 	 */
 	public static function register_menu(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Site Audit', 'plugin-wpshadow' ),
 			__( 'Audit', 'plugin-wpshadow' ),
 			'manage_options',
@@ -822,7 +822,7 @@ class WPSHADOW_Site_Audit {
 			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
 		}
 
-		$option_name = \WPS\CoreSupport\WPSHADOW_get_post_text( 'option_name' );
+		$option_name = \WPShadow\WPSHADOW_get_post_text( 'option_name' );
 
 		if ( empty( $option_name ) ) {
 			wp_send_json_error( __( 'Invalid option name', 'plugin-wpshadow' ) );

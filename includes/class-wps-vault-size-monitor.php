@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -64,7 +64,7 @@ class WPSHADOW_Vault_Size_Monitor {
 		// Exceeded threshold - show notice and set transient to throttle.
 		$settings_url = is_network_admin()
 			? network_admin_url( 'admin.php?page=wps-core-network-settings' )
-			: admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=dashboard_settings' );
+			: admin_url( 'admin.php?page=wpshadow&WPSHADOW_tab=dashboard_settings' );
 
 		$percentage = round( ( $vault_size_mb / $max_size_mb ) * 100 );
 

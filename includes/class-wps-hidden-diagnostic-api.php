@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -184,7 +184,7 @@ class WPSHADOW_Hidden_Diagnostic_API {
 	 * @return void
 	 */
 	private static function handle_audit_report( string $token ): void {
-		if ( ! class_exists( '\WPS\CoreSupport\WPSHADOW_Site_Audit' ) ) {
+		if ( ! class_exists( '\WPShadow\WPSHADOW_Site_Audit' ) ) {
 			wp_send_json_error( 'Audit feature not available', 503 );
 		}
 
@@ -246,7 +246,7 @@ class WPSHADOW_Hidden_Diagnostic_API {
 	 * @return void
 	 */
 	private static function handle_snapshot_list( string $token ): void {
-		if ( ! class_exists( '\WPS\CoreSupport\WPSHADOW_Snapshot_Manager' ) ) {
+		if ( ! class_exists( '\WPShadow\WPSHADOW_Snapshot_Manager' ) ) {
 			wp_send_json_error( 'Snapshots feature not available', 503 );
 		}
 
@@ -374,7 +374,7 @@ class WPSHADOW_Hidden_Diagnostic_API {
 	 */
 	public static function register_menu(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Support Access', 'plugin-wpshadow' ),
 			__( 'Support', 'plugin-wpshadow' ),
 			'manage_options',

@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -127,7 +127,7 @@ class Module_Loader {
 		// Derive slug from directory name using the naming convention: {dirname}-wpshadow
 		// Bundled modules are enabled by default, but can be explicitly disabled.
 		$module_slug = $module_name . '-wpshadow';
-		if ( ! \WPS\CoreSupport\WPSHADOW_Module_Registry::is_enabled( $module_slug ) ) {
+		if ( ! \WPShadow\WPSHADOW_Module_Registry::is_enabled( $module_slug ) ) {
 
 			return;
 		}

@@ -60,13 +60,13 @@
  * - Minimal login overhead
  * - Lazy load QR code generation
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.75000
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -129,7 +129,7 @@ final class WPSHADOW_Feature_Two_Factor_Auth extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'two-factor-auth',
 				'name'               => __( 'Two-Factor Authentication', 'plugin-wpshadow' ),
-				'description'        => __( 'Add an extra layer of security with TOTP-based two-factor authentication, backup codes, and trusted device management', 'plugin-wpshadow' ),
+				'description'        => __( 'Adds a second login step using authenticator app codes, backup codes, and optional trusted devices, reducing account takeover risk from stolen passwords. Guides users through setup with QR codes, enforces rate limits, and stores secrets securely. Keeps the login flow familiar while adding strong protection for administrators, editors, and store staff.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',

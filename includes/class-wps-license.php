@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 // phpcs:disable WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 
@@ -80,7 +80,7 @@ class WPSHADOW_License {
 		if ( 'broadcast' === $action && $network && is_multisite() ) {
 			check_admin_referer( 'wpshadow_license_broadcast', 'wpshadow_license_broadcast_nonce' );
 
-			$key      = \WPS\CoreSupport\WPSHADOW_get_post_text( 'wpshadow_license_key' );
+			$key      = \WPShadow\WPSHADOW_get_post_text( 'wpshadow_license_key' );
 			$site_ids = isset( $_POST['wpshadow_broadcast_site_ids'] ) ? array_map( 'absint', (array) $_POST['wpshadow_broadcast_site_ids'] ) : array();
 			$auto_new = isset( $_POST['wpshadow_auto_broadcast'] ) ? (int) $_POST['wpshadow_auto_broadcast'] : 0;
 
@@ -107,7 +107,7 @@ class WPSHADOW_License {
 
 		check_admin_referer( 'wpshadow_license_settings', 'wpshadow_license_nonce' );
 
-		$key = \WPS\CoreSupport\WPSHADOW_get_post_text( 'wpshadow_license_key' );
+		$key = \WPShadow\WPSHADOW_get_post_text( 'wpshadow_license_key' );
 		self::save_key( $key, $network );
 
 		$result   = self::validate_key( $key, $network );
@@ -115,7 +115,7 @@ class WPSHADOW_License {
 		$message  = $result['message'];
 		$redirect = $network && is_multisite()
 			? network_admin_url( 'admin.php?page=wps-core-network-settings' )
-			: admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=dashboard_settings' );
+			: admin_url( 'admin.php?page=wpshadow&WPSHADOW_tab=dashboard_settings' );
 
 		$redirect = add_query_arg(
 			array(
@@ -326,7 +326,7 @@ class WPSHADOW_License {
 
 		$url     = $use_network && is_multisite()
 			? network_admin_url( 'admin.php?page=wps-core-network-settings' )
-			: admin_url( 'admin.php?page=wp-support&WPSHADOW_tab=dashboard_settings' );
+			: admin_url( 'admin.php?page=wpshadow&WPSHADOW_tab=dashboard_settings' );
 		$message = sprintf(
 			/* translators: %s: license settings URL */
 			__( 'This site is not registered. Please register to receive updates and support. Visit the <a href="%s">license settings</a>.', 'plugin-wpshadow' ),

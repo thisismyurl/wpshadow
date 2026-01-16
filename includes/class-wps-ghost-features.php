@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -127,7 +127,7 @@ class WPSHADOW_Ghost_Features {
 				'wp'   => $feature_data['requires_wp'] ?? '',
 				'hub'  => $feature_data['requires_hub'] ?? '',
 			),
-			'install_url'     => admin_url( 'admin.php?page=wp-support&tab=modules&install=' . $module_slug ),
+			'install_url'     => admin_url( 'admin.php?page=wpshadow&tab=modules&install=' . $module_slug ),
 			'download_url'    => $feature_data['download_url'] ?? '',
 		);
 

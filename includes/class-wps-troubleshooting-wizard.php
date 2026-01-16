@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -160,11 +160,11 @@ class WPSHADOW_Troubleshooting_Wizard {
 	 */
 	public static function register_admin_page(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Troubleshooting Wizard', 'plugin-wpshadow' ),
 			__( 'Troubleshoot', 'plugin-wpshadow' ),
 			'manage_options',
-			'wp-support-troubleshoot',
+			'wpshadow-troubleshoot',
 			array( __CLASS__, 'render_wizard_page' )
 		);
 	}
@@ -176,7 +176,7 @@ class WPSHADOW_Troubleshooting_Wizard {
 	 * @return void
 	 */
 	public static function enqueue_assets( string $hook ): void {
-		if ( 'support_page_wp-support-troubleshoot' !== $hook ) {
+		if ( 'support_page_wpshadow-troubleshoot' !== $hook ) {
 			return;
 		}
 
@@ -263,7 +263,7 @@ class WPSHADOW_Troubleshooting_Wizard {
 		printf(
 		/* translators: %s: Link to support */
 			esc_html__( 'Don\'t see your issue? %s', 'plugin-wpshadow' ),
-			'<a href="' . esc_url( admin_url( 'admin.php?page=wp-support&tab=help' ) ) . '">' . esc_html__( 'Contact Professional Support', 'plugin-wpshadow' ) . '</a>'
+			'<a href="' . esc_url( admin_url( 'admin.php?page=wpshadow&tab=help' ) ) . '">' . esc_html__( 'Contact Professional Support', 'plugin-wpshadow' ) . '</a>'
 		);
 		?>
 </p>
@@ -437,7 +437,7 @@ class WPSHADOW_Troubleshooting_Wizard {
 <div class="wps-contact-support">
 <h4><?php esc_html_e( 'Contact Support', 'plugin-wpshadow' ); ?></h4>
 <p><?php esc_html_e( 'Share this report with your support team or WordPress developer.', 'plugin-wpshadow' ); ?></p>
-<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&tab=help' ) ); ?>" class="button button-secondary">
+<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&tab=help' ) ); ?>" class="button button-secondary">
 		<?php esc_html_e( 'Go to Support Page', 'plugin-wpshadow' ); ?>
 </a>
 </div>
@@ -454,13 +454,13 @@ class WPSHADOW_Troubleshooting_Wizard {
 		check_ajax_referer( 'wpshadow_troubleshoot_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			\WPS\CoreSupport\WPSHADOW_ajax_permission_denied();
+			\WPShadow\WPSHADOW_ajax_permission_denied();
 		}
 
-		$issue = \WPS\CoreSupport\WPSHADOW_get_post_text( 'issue' );
+		$issue = \WPShadow\WPSHADOW_get_post_text( 'issue' );
 
 		if ( empty( $issue ) || ! isset( self::$issue_categories[ $issue ] ) ) {
-			\WPS\CoreSupport\WPSHADOW_ajax_invalid_request( 'issue' );
+			\WPShadow\WPSHADOW_ajax_invalid_request( 'issue' );
 		}
 
 		$session = array(
@@ -475,7 +475,7 @@ class WPSHADOW_Troubleshooting_Wizard {
 		wp_send_json_success(
 			array(
 				'message'  => __( 'Troubleshooting session started.', 'plugin-wpshadow' ),
-				'redirect' => admin_url( 'admin.php?page=wp-support-troubleshoot' ),
+				'redirect' => admin_url( 'admin.php?page=wpshadow-troubleshoot' ),
 			)
 		);
 	}
@@ -489,21 +489,21 @@ class WPSHADOW_Troubleshooting_Wizard {
 		check_ajax_referer( 'wpshadow_troubleshoot_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			\WPS\CoreSupport\WPSHADOW_ajax_permission_denied();
+			\WPShadow\WPSHADOW_ajax_permission_denied();
 		}
 
 		$user_id = get_current_user_id();
 		$session = get_transient( self::SESSION_KEY . '_' . $user_id );
 
 		if ( empty( $session ) ) {
-			\WPS\CoreSupport\WPSHADOW_ajax_error( __( 'No active session found.', 'plugin-wpshadow' ) );
+			\WPShadow\WPSHADOW_ajax_error( __( 'No active session found.', 'plugin-wpshadow' ) );
 		}
 
 		$issue    = $session['issue'];
 		$category = self::$issue_categories[ $issue ] ?? array();
 
 		if ( empty( $category ) ) {
-			\WPS\CoreSupport\WPSHADOW_ajax_error( __( 'Invalid issue category.', 'plugin-wpshadow' ) );
+			\WPShadow\WPSHADOW_ajax_error( __( 'Invalid issue category.', 'plugin-wpshadow' ) );
 		}
 
 		// Perform analysis based on category checks.
@@ -699,7 +699,7 @@ class WPSHADOW_Troubleshooting_Wizard {
 		);
 
 		// Keep last 50 sessions using helper.
-		$history = \WPS\CoreSupport\WPSHADOW_limit_array_size( $history, 50 );
+		$history = \WPShadow\WPSHADOW_limit_array_size( $history, 50 );
 
 		update_option( self::HISTORY_KEY, $history );
 	}
@@ -901,7 +901,7 @@ class WPSHADOW_Troubleshooting_Wizard {
 <div class="wps-troubleshoot-widget">
 <p><?php esc_html_e( 'Having WordPress issues? Let our wizard guide you through diagnosis and fixes.', 'plugin-wpshadow' ); ?></p>
 <p>
-<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support-troubleshoot' ) ); ?>" class="button button-primary">
+<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-troubleshoot' ) ); ?>" class="button button-primary">
 		<?php esc_html_e( 'Start Troubleshooting', 'plugin-wpshadow' ); ?>
 </a>
 </p>

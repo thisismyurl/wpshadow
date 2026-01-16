@@ -5,15 +5,15 @@
  * Captures screenshots before and after updates to detect layout changes.
  * Integrates with auto-rollback to prevent silent layout breakage.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
-use WPS\CoreSupport\WPSHADOW_Snapshot_Manager;
+use WPShadow\WPSHADOW_Snapshot_Manager;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -92,8 +92,8 @@ final class WPSHADOW_Feature_Visual_Regression extends WPSHADOW_Abstract_Feature
 		parent::__construct(
 			array(
 				'id'                 => 'visual-regression',
-				'name'               => __( 'Visual Regression Update Guard', 'plugin-wpshadow' ),
-				'description'        => __( 'Automatically capture screenshots before/after updates and detect visual changes. Flags or rolls back updates with >5% visual difference.', 'plugin-wpshadow' ),
+			'name'               => __( 'Visual Change Detection for Updates', 'plugin-wpshadow' ),
+			'description'        => __( 'Takes before and after screenshots when you update plugins or themes, then compares them to detect layout shifts, color changes, missing elements, or broken styling. Alerts you immediately if an update significantly alters how your site appears to visitors, with visual diffs highlighting exactly what changed so you can decide whether to keep or undo the update.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',

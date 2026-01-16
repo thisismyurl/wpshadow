@@ -3,7 +3,7 @@
  *
  * Handles live updates and interactions for the health score widget.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.75000
  */
 

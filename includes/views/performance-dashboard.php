@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -156,13 +156,13 @@ $db_stats        = WPSHADOW_Performance_Monitor::get_database_stats();
 
 	<!-- Tab Navigation -->
 	<h2 class="nav-tab-wrapper">
-		<a href="?page=wp-support&WPSHADOW_tab=performance&perf_tab=overview" class="nav-tab <?php echo 'overview' === $current_tab ? 'nav-tab-active' : ''; ?>">
+		<a href="?page=wpshadow&WPSHADOW_tab=performance&perf_tab=overview" class="nav-tab <?php echo 'overview' === $current_tab ? 'nav-tab-active' : ''; ?>">
 			<?php esc_html_e( 'Overview', 'plugin-wpshadow' ); ?>
 		</a>
-		<a href="?page=wp-support&WPSHADOW_tab=performance&perf_tab=database" class="nav-tab <?php echo 'database' === $current_tab ? 'nav-tab-active' : ''; ?>">
+		<a href="?page=wpshadow&WPSHADOW_tab=performance&perf_tab=database" class="nav-tab <?php echo 'database' === $current_tab ? 'nav-tab-active' : ''; ?>">
 			<?php esc_html_e( 'Database', 'plugin-wpshadow' ); ?>
 		</a>
-		<a href="?page=wp-support&WPSHADOW_tab=performance&perf_tab=history" class="nav-tab <?php echo 'history' === $current_tab ? 'nav-tab-active' : ''; ?>">
+		<a href="?page=wpshadow&WPSHADOW_tab=performance&perf_tab=history" class="nav-tab <?php echo 'history' === $current_tab ? 'nav-tab-active' : ''; ?>">
 			<?php esc_html_e( 'History', 'plugin-wpshadow' ); ?>
 		</a>
 	</h2>

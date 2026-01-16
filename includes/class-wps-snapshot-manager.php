@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -386,7 +386,7 @@ class WPSHADOW_Snapshot_Manager {
 	 */
 	public static function register_menu(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Site Snapshots', 'plugin-wpshadow' ),
 			__( 'Snapshots', 'plugin-wpshadow' ),
 			'manage_options',

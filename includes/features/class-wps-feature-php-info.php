@@ -9,13 +9,13 @@
  * - Configuration directives
  * - Server environment variables
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.74000
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -36,7 +36,7 @@ final class WPSHADOW_Feature_PHP_Info extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'php-info',
 				'name'               => __( 'PHP Information', 'plugin-wpshadow' ),
-				'description'        => __( 'View detailed PHP configuration, loaded extensions, and server environment information', 'plugin-wpshadow' ),
+			'description'        => __( 'Shows a read only view of PHP version, extensions, limits, and server environment details in one place so you can troubleshoot compatibility or hosting issues. Useful when plugins or support teams need exact configuration without shell access, and safer than exposing phpinfo publicly.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
@@ -77,11 +77,11 @@ final class WPSHADOW_Feature_PHP_Info extends WPSHADOW_Abstract_Feature {
 	 */
 	public function add_admin_menu(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'PHP Information', 'plugin-wpshadow' ),
 			__( 'PHP Info', 'plugin-wpshadow' ),
 			'manage_options',
-			'wp-support-php-info',
+			'wpshadow-php-info',
 			array( $this, 'render_page' )
 		);
 	}

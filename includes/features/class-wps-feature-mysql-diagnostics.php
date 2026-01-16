@@ -9,13 +9,13 @@
  * - InnoDB/MyISAM statistics
  * - Connection status
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.74000
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -36,7 +36,7 @@ final class WPSHADOW_Feature_MySQL_Diagnostics extends WPSHADOW_Abstract_Feature
 			array(
 				'id'                 => 'mysql-diagnostics',
 				'name'               => __( 'MySQL Diagnostics', 'plugin-wpshadow' ),
-				'description'        => __( 'View MySQL/MariaDB server information, table statistics, and database performance metrics', 'plugin-wpshadow' ),
+				'description'        => __( 'Views MySQL or MariaDB server information, table statistics, query performance metrics, and database configuration in a read-only interface. Shows version numbers, storage engine details, table sizes, index usage, and slow query patterns to help you understand database health, identify optimization opportunities, and troubleshoot performance issues without running risky commands or needing command-line access to the database.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
@@ -77,11 +77,11 @@ final class WPSHADOW_Feature_MySQL_Diagnostics extends WPSHADOW_Abstract_Feature
 	 */
 	public function add_admin_menu(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'MySQL Diagnostics', 'plugin-wpshadow' ),
 			__( 'MySQL Info', 'plugin-wpshadow' ),
 			'manage_options',
-			'wp-support-mysql-diagnostics',
+			'wpshadow-mysql-diagnostics',
 			array( $this, 'render_page' )
 		);
 	}

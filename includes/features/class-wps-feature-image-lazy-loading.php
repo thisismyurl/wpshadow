@@ -5,13 +5,13 @@
  * Auto-enable and enhance WordPress native lazy loading for images.
  * Extends WordPress 5.5+ native lazy loading with additional optimization.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.73001
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 /**
  * WPSHADOW_Feature_Image_Lazy_Loading
@@ -28,12 +28,12 @@ final class WPSHADOW_Feature_Image_Lazy_Loading extends WPSHADOW_Abstract_Featur
 			array(
 				'id'                 => 'image-lazy-loading',
 				'name'               => __( 'Enhanced Image Lazy Loading', 'plugin-wpshadow' ),
-				'description'        => __( 'Auto-enable native lazy loading for all images to improve page load performance', 'plugin-wpshadow' ),
+				'description'        => __( 'Enables native lazy loading on images throughout your site so browsers delay downloading offscreen images until visitors scroll near them. Cuts initial page weight, speeds the first paint, and saves bandwidth for mobile users. Works automatically with existing image tags, respects critical images you mark to load eagerly, and pairs well with compression or CDNs for even faster visual delivery.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
-				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Performance Optimization', 'plugin-wpshadow' ),
+			'widget_group'       => 'image-optimization',
+			'widget_label'       => __( 'Image Optimization', 'plugin-wpshadow' ),
 				'widget_description' => __( 'Optimize images and page load performance', 'plugin-wpshadow' ),
 			)
 		);

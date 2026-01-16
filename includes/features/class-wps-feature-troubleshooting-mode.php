@@ -10,13 +10,13 @@
  *
  * Similar to Health Check & Troubleshooting plugin's troubleshooting mode.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.74000
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -51,8 +51,8 @@ final class WPSHADOW_Feature_Troubleshooting_Mode extends WPSHADOW_Abstract_Feat
 		parent::__construct(
 			array(
 				'id'                 => 'troubleshooting-mode',
-				'name'               => __( 'Troubleshooting Mode', 'plugin-wpshadow' ),
-				'description'        => __( 'Test your site with default theme and disabled plugins without affecting visitors - perfect for isolating conflicts', 'plugin-wpshadow' ),
+			'name'               => __( 'Private Testing Mode', 'plugin-wpshadow' ),
+			'description'        => __( 'Tests changes with plugins disabled or different themes applied only to your view while visitors still see your normal site, perfect for finding conflicts or problems without risking downtime. Lets you isolate plugin issues, preview theme changes safely, and debug errors in a live environment without affecting anyone else, so you can troubleshoot confidently on a production site.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
@@ -107,11 +107,11 @@ final class WPSHADOW_Feature_Troubleshooting_Mode extends WPSHADOW_Abstract_Feat
 	 */
 	public function add_admin_menu(): void {
 		add_submenu_page(
-			'wp-support',
+			'wpshadow',
 			__( 'Troubleshooting Mode', 'plugin-wpshadow' ),
 			__( 'Troubleshooting', 'plugin-wpshadow' ),
 			'manage_options',
-			'wp-support-troubleshooting',
+			'wpshadow-troubleshooting',
 			array( $this, 'render_page' )
 		);
 	}
@@ -315,7 +315,7 @@ final class WPSHADOW_Feature_Troubleshooting_Mode extends WPSHADOW_Abstract_Feat
 				<?php endif; ?>
 			</p>
 			<p>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support-troubleshooting' ) ); ?>" class="button button-small">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-troubleshooting' ) ); ?>" class="button button-small">
 					<?php esc_html_e( 'Manage Troubleshooting', 'plugin-wpshadow' ); ?>
 				</a>
 				<button type="button" id="wps-stop-troubleshooting-quick" class="button button-small button-link-delete">
@@ -357,7 +357,7 @@ final class WPSHADOW_Feature_Troubleshooting_Mode extends WPSHADOW_Abstract_Feat
 			array(
 				'id'    => 'wps-troubleshooting-mode',
 				'title' => '<span style="color: #f0ad4e;">🔧 ' . esc_html__( 'Troubleshooting Mode', 'plugin-wpshadow' ) . '</span>',
-				'href'  => admin_url( 'admin.php?page=wp-support-troubleshooting' ),
+				'href'  => admin_url( 'admin.php?page=wpshadow-troubleshooting' ),
 			)
 		);
 	}
@@ -368,7 +368,7 @@ final class WPSHADOW_Feature_Troubleshooting_Mode extends WPSHADOW_Abstract_Feat
 	 * @return void
 	 */
 	public function ajax_start_troubleshooting(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_troubleshooting' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wpshadow_troubleshooting' );
 
 		$user_id = get_current_user_id();
 		$token   = wp_generate_password( 32, false );
@@ -388,7 +388,7 @@ final class WPSHADOW_Feature_Troubleshooting_Mode extends WPSHADOW_Abstract_Feat
 		wp_send_json_success(
 			array(
 				'message'  => __( 'Troubleshooting mode activated', 'plugin-wpshadow' ),
-				'redirect' => admin_url( 'admin.php?page=wp-support-troubleshooting' ),
+				'redirect' => admin_url( 'admin.php?page=wpshadow-troubleshooting' ),
 			)
 		);
 	}
@@ -399,7 +399,7 @@ final class WPSHADOW_Feature_Troubleshooting_Mode extends WPSHADOW_Abstract_Feat
 	 * @return void
 	 */
 	public function ajax_stop_troubleshooting(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_troubleshooting' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wpshadow_troubleshooting' );
 
 		$user_id = get_current_user_id();
 		delete_transient( self::TRANSIENT_KEY . $user_id );
@@ -410,7 +410,7 @@ final class WPSHADOW_Feature_Troubleshooting_Mode extends WPSHADOW_Abstract_Feat
 		wp_send_json_success(
 			array(
 				'message'  => __( 'Troubleshooting mode deactivated', 'plugin-wpshadow' ),
-				'redirect' => admin_url( 'admin.php?page=wp-support-troubleshooting' ),
+				'redirect' => admin_url( 'admin.php?page=wpshadow-troubleshooting' ),
 			)
 		);
 	}
@@ -421,9 +421,9 @@ final class WPSHADOW_Feature_Troubleshooting_Mode extends WPSHADOW_Abstract_Feat
 	 * @return void
 	 */
 	public function ajax_toggle_plugin(): void {
-		\WPS\CoreSupport\WPSHADOW_verify_ajax_request( 'wpshadow_troubleshooting' );
+		\WPShadow\WPSHADOW_verify_ajax_request( 'wpshadow_troubleshooting' );
 
-		$plugin = \WPS\CoreSupport\WPSHADOW_get_post_text( 'plugin' );
+		$plugin = \WPShadow\WPSHADOW_get_post_text( 'plugin' );
 		$enable = ! empty( $_POST['enable'] );
 
 		if ( empty( $plugin ) ) {

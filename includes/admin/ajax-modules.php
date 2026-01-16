@@ -5,7 +5,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -369,9 +369,9 @@ function WPSHADOW_ajax_broadcast_license(): void {
 		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wpshadow' ) ) );
 	}
 
-	$key            = \WPS\CoreSupport\WPSHADOW_get_post_text( 'key' );
-	$site_ids_json  = \WPS\CoreSupport\WPSHADOW_get_post_text( 'site_ids', '[]' );
-	$auto_broadcast = \WPS\CoreSupport\WPSHADOW_get_post_int( 'auto_broadcast' );
+	$key            = \WPShadow\WPSHADOW_get_post_text( 'key' );
+	$site_ids_json  = \WPShadow\WPSHADOW_get_post_text( 'site_ids', '[]' );
+	$auto_broadcast = \WPShadow\WPSHADOW_get_post_int( 'auto_broadcast' );
 
 	if ( empty( $key ) ) {
 		wp_send_json_error( array( 'message' => __( 'License key cannot be empty.', 'plugin-wpshadow' ) ) );

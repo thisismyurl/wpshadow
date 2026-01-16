@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -291,7 +291,7 @@ class WPSHADOW_Features_Discovery_Widget {
 						printf( esc_html__( 'Install free modules to unlock %d additional features. No credit card required.', 'plugin-wpshadow' ), absint( $ghost_count ) );
 						?>
 					</p>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&tab=modules' ) ); ?>" class="wps-cta-button">
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&tab=modules' ) ); ?>" class="wps-cta-button">
 						<?php esc_html_e( 'Browse All Modules', 'plugin-wpshadow' ); ?>
 					</a>
 				</div>
@@ -394,7 +394,7 @@ class WPSHADOW_Features_Discovery_Widget {
 		if ( $total_count > $limit ) {
 			?>
 			<p style="text-align: center; margin-top: 15px;">
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support&tab=modules' ) ); ?>" style="color: #2271b1; text-decoration: none; font-weight: 600;">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&tab=modules' ) ); ?>" style="color: #2271b1; text-decoration: none; font-weight: 600;">
 					<?php
 					/* translators: %d: Number of additional features */
 					printf( esc_html__( 'View %d more features →', 'plugin-wpshadow' ), absint( $total_count - $limit ) );

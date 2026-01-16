@@ -5,7 +5,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -18,9 +18,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return void
  */
 function wpshadow_admin_enqueue( string $hook ): void {
-	// Load on all wp-support related pages (core, hubs, spokes).
-	// Hooks can be: toplevel_page_wp-support, support-hub_page_wp-support-hub-media, etc.
-	if ( false === strpos( $hook, 'wp-support' ) ) {
+	// Load on all wpshadow related pages (core, hubs, spokes).
+	// Hooks can be: toplevel_page_wpshadow, support-hub_page_wpshadow-hub-media, etc.
+	if ( false === strpos( $hook, 'wpshadow' ) ) {
 		return;
 	}
 	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
@@ -71,12 +71,12 @@ function wpshadow_admin_enqueue( string $hook ): void {
 		$cache_bust
 	);
 
-	// Enable drag and drop for dashboard metaboxes on all wp-support pages using WordPress native postboxes.
-	if ( $screen && false !== strpos( $screen->id, 'wp-support' ) ) {
+	// Enable drag and drop for dashboard metaboxes on all wpshadow pages using WordPress native postboxes.
+	if ( $screen && false !== strpos( $screen->id, 'wpshadow' ) ) {
 		// Use WordPress's built-in postbox drag and drop.
 		wp_enqueue_script( 'postbox' );
 
-		// Enqueue Chart.js for performance history visualization on all wp-support pages.
+		// Enqueue Chart.js for performance history visualization on all wpshadow pages.
 		wp_enqueue_script(
 			'chartjs',
 			'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js',
@@ -115,7 +115,7 @@ function wpshadow_admin_enqueue( string $hook ): void {
 
 		// Use cached context from above for unique state key.
 		$hub_id    = $context['hub'] ?? '';
-		$state_key = 'wp-support' . ( $hub_id ? '-' . $hub_id : '' );
+		$state_key = 'wpshadow' . ( $hub_id ? '-' . $hub_id : '' );
 
 		wp_localize_script(
 			'wps-postbox-state',

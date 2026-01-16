@@ -4,13 +4,13 @@
  *
  * Displays health scores on WPShadow dashboard and WordPress dashboard.
  *
- * @package WPS\CoreSupport
+ * @package WPShadow\CoreSupport
  * @since 1.2601.75000
  */
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -133,7 +133,7 @@ final class WPSHADOW_Health_Score_Widget {
 				<a href="<?php echo esc_url( admin_url( 'site-health.php' ) ); ?>" class="button">
 					<?php esc_html_e( 'View Site Health', 'plugin-wpshadow' ); ?>
 				</a>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wp-support' ) ); ?>" class="button button-primary">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>" class="button button-primary">
 					<?php esc_html_e( 'WPShadow Dashboard', 'plugin-wpshadow' ); ?>
 				</a>
 			</div>
@@ -169,7 +169,7 @@ final class WPSHADOW_Health_Score_Widget {
 						$data['total'],
 						$category
 					),
-					'url' => admin_url( 'admin.php?page=wp-support-settings&tab=' . $category ),
+					'url' => admin_url( 'admin.php?page=wpshadow-settings&tab=' . $category ),
 				);
 			}
 		}

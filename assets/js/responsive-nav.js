@@ -120,19 +120,19 @@
 			$navList.find('ul').append(
 				$('<li>').html(
 					$('<a>', {
-						href: 'admin.php?page=wp-support',
+						href: 'admin.php?page=wpshadow',
 						html: '<span class="dashicons dashicons-dashboard"></span> Dashboard'
 					})
 				)
 			);
 
 			// Add Modules link if user can manage options
-			if ($('body').hasClass('admin_page_wp-support-modules') || 
-			    $('#adminmenu a[href*="wp-support-modules"]').length > 0) {
+			if ($('body').hasClass('admin_page_wpshadow-modules') || 
+			    $('#adminmenu a[href*="wpshadow-modules"]').length > 0) {
 				$navList.find('ul').append(
 					$('<li>').html(
 						$('<a>', {
-							href: 'admin.php?page=wp-support-modules',
+							href: 'admin.php?page=wpshadow-modules',
 							html: '<span class="dashicons dashicons-admin-plugins"></span> Modules'
 						})
 					)
@@ -143,7 +143,7 @@
 			$navList.find('ul').append(
 				$('<li>').html(
 					$('<a>', {
-						href: 'admin.php?page=wp-support-settings',
+						href: 'admin.php?page=wpshadow-settings',
 						html: '<span class="dashicons dashicons-admin-settings"></span> Settings'
 					})
 				)
@@ -216,7 +216,7 @@
 	 */
 	$(document).ready(function() {
 		// Only initialize on WPS pages
-		if ($('.wps-core-wrap').length > 0 || $('body[class*="wp-support"]').length > 0) {
+		if ($('.wps-core-wrap').length > 0 || $('body[class*="wpshadow"]').length > 0) {
 			initResponsiveNav();
 		}
 	});

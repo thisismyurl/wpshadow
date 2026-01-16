@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace WPS\CoreSupport;
+namespace WPShadow\CoreSupport;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -144,7 +144,7 @@ class WPSHADOW_Emergency_Support {
 			$error['file'],
 			$error['line'],
 			wp_date( 'Y-m-d H:i:s', $error['timestamp'] ),
-			admin_url( 'admin.php?page=wp-support' ),
+			admin_url( 'admin.php?page=wpshadow' ),
 			'https://wpshadow.com/support'
 		);
 
@@ -334,7 +334,7 @@ class WPSHADOW_Emergency_Support {
 			// Display recovery status metabox.
 			if ( class_exists( '\\WPShadow\\WPSHADOW_White_Screen_Recovery' ) ) {
 				echo '<div style="margin: 20px 0;">';
-				\WPS\CoreSupport\WPSHADOW_White_Screen_Recovery::render_recovery_metabox();
+				\WPShadow\WPSHADOW_White_Screen_Recovery::render_recovery_metabox();
 				echo '</div>';
 			}
 			?>
