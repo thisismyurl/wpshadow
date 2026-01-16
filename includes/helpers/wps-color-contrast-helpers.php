@@ -35,13 +35,14 @@ function WPSHADOW_hex_to_rgb( string $hex ): ?array {
 		return null;
 	}
 
+	// Validate hex string contains only valid hexadecimal characters.
+	if ( ! ctype_xdigit( $hex ) ) {
+		return null;
+	}
+
 	$r = hexdec( substr( $hex, 0, 2 ) );
 	$g = hexdec( substr( $hex, 2, 2 ) );
 	$b = hexdec( substr( $hex, 4, 2 ) );
-
-	if ( $r === false || $g === false || $b === false ) {
-		return null;
-	}
 
 	return array(
 		'r' => $r,

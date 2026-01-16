@@ -169,6 +169,25 @@ final class WPSHADOW_Feature_Color_Contrast_Checker extends WPSHADOW_Abstract_Fe
 	 * @return void
 	 */
 	private function enqueue_assets(): void {
+		// Enqueue a custom script handle for localization.
+		wp_enqueue_script(
+			'wps-color-contrast-checker',
+			'', // Empty source since we'll use inline script.
+			array( 'jquery', 'wp-color-picker' ),
+			'1.0.0',
+			true
+		);
+
+		// Localize script with nonce.
+		wp_localize_script(
+			'wps-color-contrast-checker',
+			'wpsColorContrast',
+			array(
+				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+				'nonce'   => wp_create_nonce( 'wpshadow_check_contrast' ),
+			)
+		);
+
 		// Inline CSS.
 		wp_add_inline_style(
 			'wp-admin',
@@ -258,7 +277,7 @@ final class WPSHADOW_Feature_Color_Contrast_Checker extends WPSHADOW_Abstract_Fe
 
 		// Inline JavaScript.
 		wp_add_inline_script(
-			'wp-color-picker',
+			'wps-color-contrast-checker',
 			"
 			jQuery(document).ready(function($) {
 				// Initialize color pickers
@@ -291,11 +310,11 @@ final class WPSHADOW_Feature_Color_Contrast_Checker extends WPSHADOW_Abstract_Fe
 					var isLargeText = $('#wps-large-text').is(':checked');
 
 					$.ajax({
-						url: ajaxurl,
+						url: wpsColorContrast.ajaxUrl,
 						type: 'POST',
 						data: {
 							action: 'wpshadow_check_contrast',
-							nonce: '" . wp_create_nonce( 'wpshadow_check_contrast' ) . "',
+							nonce: wpsColorContrast.nonce,
 							text_color: textColor,
 							background_color: bgColor,
 							is_large_text: isLargeText ? '1' : '0'
@@ -320,7 +339,12 @@ final class WPSHADOW_Feature_Color_Contrast_Checker extends WPSHADOW_Abstract_Fe
 								$('#wps-aaa-requirement').text('(Required: ' + data.aaa.required + ':1)');
 								
 								$('#wps-results').slideDown();
+							} else {
+								alert('Error: ' + (response.data.message || 'Unknown error'));
 							}
+						},
+						error: function() {
+							alert('AJAX request failed. Please try again.');
 						}
 					});
 				});
@@ -357,6 +381,24 @@ final class WPSHADOW_Feature_Color_Contrast_Checker extends WPSHADOW_Abstract_Fe
 			wp_send_json_error( array( 'message' => __( 'Both colors are required.', 'plugin-wpshadow' ) ) );
 			return;
 		}
+
+		// Validate hex color format.
+		$text_color       = ltrim( $text_color, '#' );
+		$background_color = ltrim( $background_color, '#' );
+
+		if ( ! preg_match( '/^[0-9A-Fa-f]{3}([0-9A-Fa-f]{3})?$/', $text_color ) ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid text color format. Use hex colors (e.g., #FFFFFF).', 'plugin-wpshadow' ) ) );
+			return;
+		}
+
+		if ( ! preg_match( '/^[0-9A-Fa-f]{3}([0-9A-Fa-f]{3})?$/', $background_color ) ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid background color format. Use hex colors (e.g., #FFFFFF).', 'plugin-wpshadow' ) ) );
+			return;
+		}
+
+		// Add back # prefix for helper functions.
+		$text_color       = '#' . $text_color;
+		$background_color = '#' . $background_color;
 
 		// Check contrast using helper functions.
 		$result = WPSHADOW_check_contrast( $text_color, $background_color, $is_large_text );
