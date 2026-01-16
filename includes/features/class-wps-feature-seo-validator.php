@@ -24,6 +24,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WPSHADOW_Feature_SEO_Validator extends WPSHADOW_Abstract_Feature {
 
 	/**
+	 * Expected sitemap namespace URI.
+	 */
+	private const SITEMAP_NAMESPACE = 'http://www.sitemaps.org/schemas/sitemap/0.9';
+
+	/**
+	 * Maximum number of sitemap URLs to validate (performance limit).
+	 */
+	private const MAX_URLS_TO_VALIDATE = 5;
+
+	/**
+	 * Valid robots.txt directives.
+	 */
+	private const VALID_ROBOTS_DIRECTIVES = array(
+		'User-agent',
+		'Disallow',
+		'Allow',
+		'Sitemap',
+		'Crawl-delay',
+	);
+
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
@@ -439,13 +460,13 @@ class WPSHADOW_Feature_SEO_Validator extends WPSHADOW_Abstract_Feature {
 		$previous_errors = libxml_use_internal_errors( true );
 		
 		// Disable external entity loading to prevent XXE attacks.
-		// Note: libxml_disable_entity_loader() is deprecated in PHP 8.0+, but LIBXML_NOENT flag handles this.
+		// Note: libxml_disable_entity_loader() is deprecated in PHP 8.0+
 		if ( PHP_VERSION_ID < 80000 ) {
 			$previous_entity_loader = libxml_disable_entity_loader( true );
 		}
 		
-		// Use LIBXML_NONET to disable network access and prevent XXE.
-		$xml        = simplexml_load_string( $body, 'SimpleXMLElement', LIBXML_NONET | LIBXML_NOCDATA );
+		// Use LIBXML_NONET to disable network access and LIBXML_NOENT to prevent entity expansion.
+		$xml        = simplexml_load_string( $body, 'SimpleXMLElement', LIBXML_NONET | LIBXML_NOENT | LIBXML_NOCDATA );
 		$xml_errors = libxml_get_errors();
 		libxml_clear_errors();
 		libxml_use_internal_errors( $previous_errors );
@@ -489,13 +510,12 @@ class WPSHADOW_Feature_SEO_Validator extends WPSHADOW_Abstract_Feature {
 
 		// Check for required namespaces.
 		$namespaces = $xml->getNamespaces( true );
-		$expected_namespace = 'http://www.sitemaps.org/schemas/sitemap/0.9';
 		
 		// Check if the proper sitemap namespace is present.
 		$has_sitemap_namespace = false;
 		if ( ! empty( $namespaces ) ) {
 			foreach ( $namespaces as $prefix => $uri ) {
-				if ( $uri === $expected_namespace ) {
+				if ( $uri === self::SITEMAP_NAMESPACE ) {
 					$has_sitemap_namespace = true;
 					break;
 				}
@@ -505,14 +525,22 @@ class WPSHADOW_Feature_SEO_Validator extends WPSHADOW_Abstract_Feature {
 		// Also check default namespace.
 		if ( ! $has_sitemap_namespace ) {
 			$default_namespace = $xml->getNamespaces( false );
-			if ( isset( $default_namespace[''] ) && $default_namespace[''] === $expected_namespace ) {
+			if ( isset( $default_namespace[''] ) && $default_namespace[''] === self::SITEMAP_NAMESPACE ) {
 				$has_sitemap_namespace = true;
 			}
 		}
 		
 		if ( ! $has_sitemap_namespace ) {
-			$issues[] = __( 'Missing required sitemap namespace (http://www.sitemaps.org/schemas/sitemap/0.9).', 'plugin-wpshadow' );
-			$recommendations[] = __( 'Sitemap should declare the namespace xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"', 'plugin-wpshadow' );
+			$issues[] = sprintf(
+				/* translators: %s: expected namespace URI */
+				__( 'Missing required sitemap namespace (%s).', 'plugin-wpshadow' ),
+				self::SITEMAP_NAMESPACE
+			);
+			$recommendations[] = sprintf(
+				/* translators: %s: expected namespace URI */
+				__( 'Sitemap should declare the namespace xmlns="%s"', 'plugin-wpshadow' ),
+				esc_html( self::SITEMAP_NAMESPACE )
+			);
 		}
 
 		// Validate URLs if present.
@@ -544,12 +572,11 @@ class WPSHADOW_Feature_SEO_Validator extends WPSHADOW_Abstract_Feature {
 	private function validate_sitemap_urls( \SimpleXMLElement $xml ): array {
 		$issues = array();
 
-		// Check first few URLs for validity.
-		$count       = 0;
-		$max_to_check = 5; // Only check first 5 URLs to avoid performance issues.
+		// Check first few URLs for validity (limit to avoid performance issues).
+		$count = 0;
 
 		foreach ( $xml->url as $url ) {
-			if ( $count >= $max_to_check ) {
+			if ( $count >= self::MAX_URLS_TO_VALIDATE ) {
 				break;
 			}
 
@@ -703,10 +730,9 @@ class WPSHADOW_Feature_SEO_Validator extends WPSHADOW_Abstract_Feature {
 			}
 
 			// Check for valid directives.
-			$valid_directives = array( 'User-agent', 'Disallow', 'Allow', 'Sitemap', 'Crawl-delay' );
 			$has_valid_directive = false;
 
-			foreach ( $valid_directives as $directive ) {
+			foreach ( self::VALID_ROBOTS_DIRECTIVES as $directive ) {
 				if ( stripos( $line, $directive . ':' ) === 0 ) {
 					$has_valid_directive = true;
 					break;
