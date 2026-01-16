@@ -146,7 +146,9 @@ final class WPSHADOW_Feature_Hotlink_Protection extends WPSHADOW_Abstract_Featur
 			if ( 'none' === $referer || 'blocked' === $referer ) {
 				continue;
 			}
-			$htaccess_content .= "    RewriteCond %{HTTP_REFERER} !^https?://([^.]+\\.)?{$referer} [NC]\n";
+			// Escape the domain for safe use in regular expression.
+			$escaped_referer = preg_quote( $referer, '/' );
+			$htaccess_content .= "    RewriteCond %{HTTP_REFERER} !^https?://([^.]+\\.)?{$escaped_referer} [NC]\n";
 		}
 		
 		$htaccess_content .= "    RewriteRule \\.({$extensions})$ - [F,L]\n";
@@ -248,12 +250,21 @@ final class WPSHADOW_Feature_Hotlink_Protection extends WPSHADOW_Abstract_Featur
 			$allowed_domains[] = $site_domain;
 		}
 
-		$extensions = implode( '|', $protected_types );
+		// Sanitize and validate domains for Nginx configuration.
+		$safe_domains = array();
+		foreach ( $allowed_domains as $domain ) {
+			// Only allow valid domain characters: alphanumeric, dots, and hyphens.
+			if ( preg_match( '/^[a-zA-Z0-9.-]+$/', $domain ) ) {
+				$safe_domains[] = esc_html( $domain );
+			}
+		}
+
+		$extensions = implode( '|', array_map( 'esc_html', $protected_types ) );
 		$domain_list = implode( ' ', array_map(
 			function( $domain ) {
-				return esc_html( $domain ) . ' *.' . esc_html( $domain );
+				return $domain . ' *.' . $domain;
 			},
-			$allowed_domains
+			$safe_domains
 		) );
 
 		?>
