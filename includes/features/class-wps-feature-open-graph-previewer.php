@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class WPSHADOW_Feature_Open_Graph_Previewer extends WPSHADOW_Abstract_Feature {
+final class WPSHADOW_Feature_Open_Graph_Previewer extends WPSHADOW_Abstract_Feature {
 	
 	/**
 	 * Initialize feature.
@@ -52,7 +52,6 @@ class WPSHADOW_Feature_Open_Graph_Previewer extends WPSHADOW_Abstract_Feature {
 		$instance = new self();
 		if ( $instance->is_enabled() ) {
 			add_action( 'admin_menu', array( $instance, 'add_admin_menu' ) );
-			add_action( 'wp_ajax_wpshadow_analyze_open_graph', array( $instance, 'ajax_analyze_open_graph' ) );
 		}
 	}
 
@@ -167,30 +166,42 @@ class WPSHADOW_Feature_Open_Graph_Previewer extends WPSHADOW_Abstract_Feature {
 			'twitter:image'       => __( 'Image', 'plugin-wpshadow' ),
 		);
 
-		// Extract Open Graph tags
+		// Extract Open Graph tags with flexible attribute ordering
 		preg_match_all(
-			'/<meta\s+property=["\']og:([^"\']+)["\']\s+content=["\']([^"\']+)["\']/i',
+			'/<meta\s+[^>]*(?:property=["\']og:([^"\']+)["\'][^>]*content=["\']([^"\']+)["\']|content=["\']([^"\']+)["\'][^>]*property=["\']og:([^"\']+)["\'])[^>]*>/i',
 			$html,
 			$og_matches,
 			PREG_SET_ORDER
 		);
 
 		foreach ( $og_matches as $match ) {
-			$property = 'og:' . $match[1];
-			$tags[ $property ] = $match[2];
+			// Handle both attribute orderings
+			if ( ! empty( $match[1] ) && ! empty( $match[2] ) ) {
+				$property = 'og:' . $match[1];
+				$tags[ $property ] = $match[2];
+			} elseif ( ! empty( $match[3] ) && ! empty( $match[4] ) ) {
+				$property = 'og:' . $match[4];
+				$tags[ $property ] = $match[3];
+			}
 		}
 
-		// Extract Twitter Card tags
+		// Extract Twitter Card tags with flexible attribute ordering
 		preg_match_all(
-			'/<meta\s+name=["\']twitter:([^"\']+)["\']\s+content=["\']([^"\']+)["\']/i',
+			'/<meta\s+[^>]*(?:name=["\']twitter:([^"\']+)["\'][^>]*content=["\']([^"\']+)["\']|content=["\']([^"\']+)["\'][^>]*name=["\']twitter:([^"\']+)["\'])[^>]*>/i',
 			$html,
 			$twitter_matches,
 			PREG_SET_ORDER
 		);
 
 		foreach ( $twitter_matches as $match ) {
-			$property = 'twitter:' . $match[1];
-			$tags[ $property ] = $match[2];
+			// Handle both attribute orderings
+			if ( ! empty( $match[1] ) && ! empty( $match[2] ) ) {
+				$property = 'twitter:' . $match[1];
+				$tags[ $property ] = $match[2];
+			} elseif ( ! empty( $match[3] ) && ! empty( $match[4] ) ) {
+				$property = 'twitter:' . $match[4];
+				$tags[ $property ] = $match[3];
+			}
 		}
 
 		// Analyze missing tags
@@ -216,6 +227,36 @@ class WPSHADOW_Feature_Open_Graph_Previewer extends WPSHADOW_Abstract_Feature {
 			'twitter_tags'    => $twitter_tags,
 			'url'             => $url,
 		);
+	}
+
+	/**
+	 * Validate and sanitize image URL.
+	 *
+	 * @param string $url Image URL.
+	 * @return string|null Validated URL or null if invalid.
+	 */
+	private function validate_image_url( string $url ): ?string {
+		if ( empty( $url ) ) {
+			return null;
+		}
+
+		// Validate URL format
+		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
+			return null;
+		}
+
+		// Check if URL has image extension (optional but good practice)
+		$path = wp_parse_url( $url, PHP_URL_PATH );
+		if ( $path ) {
+			$ext = strtolower( pathinfo( $path, PATHINFO_EXTENSION ) );
+			$valid_extensions = array( 'jpg', 'jpeg', 'png', 'gif', 'webp', 'svg' );
+			// Only validate if there is an extension (some URLs don't have extensions)
+			if ( ! empty( $ext ) && ! in_array( $ext, $valid_extensions, true ) ) {
+				return null;
+			}
+		}
+
+		return esc_url( $url );
 	}
 
 	/**
@@ -334,11 +375,15 @@ class WPSHADOW_Feature_Open_Graph_Previewer extends WPSHADOW_Abstract_Feature {
 				<div>
 					<h3><?php esc_html_e( 'LinkedIn / Facebook Preview', 'plugin-wpshadow' ); ?></h3>
 					<div style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: #fff;">
-						<?php if ( ! empty( $tags['og:image'] ) ) : ?>
+						<?php
+						$og_image = $this->validate_image_url( $tags['og:image'] ?? '' );
+						if ( $og_image ) :
+							?>
 							<div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-								<img src="<?php echo esc_url( $tags['og:image'] ); ?>" 
+								<img src="<?php echo esc_url( $og_image ); ?>" 
 									 alt="<?php esc_attr_e( 'Preview image', 'plugin-wpshadow' ); ?>" 
-									 style="max-width: 100%; max-height: 100%; object-fit: cover;" />
+									 style="max-width: 100%; max-height: 100%; object-fit: cover;"
+									 onerror="this.parentElement.innerHTML='<span class=\'dashicons dashicons-format-image\' style=\'font-size: 48px; color: #999;\'></span>';" />
 							</div>
 						<?php else : ?>
 							<div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; color: #999;">
@@ -366,11 +411,15 @@ class WPSHADOW_Feature_Open_Graph_Previewer extends WPSHADOW_Abstract_Feature {
 				<div>
 					<h3><?php esc_html_e( 'X (Twitter) Preview', 'plugin-wpshadow' ); ?></h3>
 					<div style="border: 1px solid #e1e8ed; border-radius: 14px; overflow: hidden; background: #fff;">
-						<?php if ( ! empty( $tags['twitter:image'] ) || ! empty( $tags['og:image'] ) ) : ?>
+						<?php
+						$twitter_image = $this->validate_image_url( $tags['twitter:image'] ?? $tags['og:image'] ?? '' );
+						if ( $twitter_image ) :
+							?>
 							<div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-								<img src="<?php echo esc_url( $tags['twitter:image'] ?? $tags['og:image'] ); ?>" 
+								<img src="<?php echo esc_url( $twitter_image ); ?>" 
 									 alt="<?php esc_attr_e( 'Preview image', 'plugin-wpshadow' ); ?>" 
-									 style="max-width: 100%; max-height: 100%; object-fit: cover;" />
+									 style="max-width: 100%; max-height: 100%; object-fit: cover;"
+									 onerror="this.parentElement.innerHTML='<span class=\'dashicons dashicons-format-image\' style=\'font-size: 48px; color: #999;\'></span>';" />
 							</div>
 						<?php else : ?>
 							<div style="background-color: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; color: #999;">
@@ -416,8 +465,11 @@ class WPSHADOW_Feature_Open_Graph_Previewer extends WPSHADOW_Abstract_Feature {
 								<td><code><?php echo esc_html( $tag ); ?></code></td>
 								<td>
 									<?php
-									if ( strpos( $tag, 'image' ) !== false && filter_var( $content, FILTER_VALIDATE_URL ) ) {
-										echo '<img src="' . esc_url( $content ) . '" alt="" style="max-width: 100px; max-height: 50px; margin-right: 10px; vertical-align: middle;" />';
+									if ( strpos( $tag, 'image' ) !== false ) {
+										$validated_image = $this->validate_image_url( $content );
+										if ( $validated_image ) {
+											echo '<img src="' . esc_url( $validated_image ) . '" alt="" style="max-width: 100px; max-height: 50px; margin-right: 10px; vertical-align: middle;" onerror="this.style.display=\'none\'" />';
+										}
 									}
 									echo esc_html( wp_trim_words( $content, 20 ) );
 									?>
@@ -443,26 +495,5 @@ class WPSHADOW_Feature_Open_Graph_Previewer extends WPSHADOW_Abstract_Feature {
 			</div>
 		<?php endif; ?>
 		<?php
-	}
-
-	/**
-	 * AJAX handler for analyzing Open Graph tags.
-	 *
-	 * @return void
-	 */
-	public function ajax_analyze_open_graph(): void {
-		check_ajax_referer( 'wpshadow_open_graph', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
-		}
-
-		$url = isset( $_POST['url'] ) ? esc_url_raw( wp_unslash( $_POST['url'] ) ) : '';
-		if ( empty( $url ) ) {
-			wp_send_json_error( array( 'message' => __( 'URL is required', 'plugin-wpshadow' ) ) );
-		}
-
-		$analysis = $this->analyze_page( $url );
-		wp_send_json_success( $analysis );
 	}
 }
