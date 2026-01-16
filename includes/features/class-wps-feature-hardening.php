@@ -408,22 +408,7 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 	 */
 	public function redirect_to_https(): void {
 		if ( ! is_ssl() && ! is_admin() ) {
-			// Get current URL components.
-			$http_host   = isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
-			$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '';
-			
-			if ( empty( $http_host ) ) {
-				return;
-			}
-			
-			// Build HTTPS URL.
-			$redirect_url = 'https://' . $http_host . $request_uri;
-			
-			// Validate the URL before redirecting.
-			if ( wp_http_validate_url( $redirect_url ) ) {
-				wp_safe_redirect( esc_url_raw( $redirect_url ), 301 );
-				exit;
-			}
+			$this->perform_https_redirect();
 		}
 	}
 
@@ -434,22 +419,39 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 	 */
 	public function redirect_admin_to_https(): void {
 		if ( ! is_ssl() && is_admin() ) {
-			// Get current URL components.
-			$http_host   = isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
-			$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '';
-			
-			if ( empty( $http_host ) ) {
-				return;
-			}
-			
-			// Build HTTPS URL.
-			$redirect_url = 'https://' . $http_host . $request_uri;
-			
-			// Validate the URL before redirecting.
-			if ( wp_http_validate_url( $redirect_url ) ) {
-				wp_safe_redirect( esc_url_raw( $redirect_url ), 301 );
-				exit;
-			}
+			$this->perform_https_redirect();
+		}
+	}
+
+	/**
+	 * Perform the actual HTTPS redirect with proper security measures.
+	 *
+	 * @return void
+	 */
+	private function perform_https_redirect(): void {
+		// Get current URL components.
+		$http_host   = isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '';
+		
+		if ( empty( $http_host ) ) {
+			return;
+		}
+		
+		// Sanitize REQUEST_URI while preserving URL structure.
+		// filter_var with FILTER_SANITIZE_URL preserves query strings and fragments.
+		$request_uri = filter_var( $request_uri, FILTER_SANITIZE_URL );
+		
+		if ( empty( $request_uri ) ) {
+			$request_uri = '/';
+		}
+		
+		// Build HTTPS URL.
+		$redirect_url = 'https://' . $http_host . $request_uri;
+		
+		// Validate the URL before redirecting.
+		if ( wp_http_validate_url( $redirect_url ) ) {
+			wp_safe_redirect( esc_url_raw( $redirect_url ), 301 );
+			exit;
 		}
 	}
 
