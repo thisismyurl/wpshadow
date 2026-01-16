@@ -67,7 +67,7 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 		add_action( 'admin_init', array( $this, 'protect_directory_listing' ), 5 );
 
 		// Add HSTS (HTTP Strict Transport Security) header.
-		add_action( 'send_headers', array( $this, 'add_hsts_header' ) );
+		add_filter( 'wp_headers', array( $this, 'add_hsts_header' ) );
 	}
 
 	/**
@@ -125,19 +125,22 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 	 * Forces browsers to always use HTTPS for the domain, preventing downgrade attacks.
 	 * Only applied when the site is accessed via HTTPS.
 	 *
-	 * @return void
+	 * @param array $headers The array of HTTP headers to be sent.
+	 * @return array Modified headers array with HSTS header.
 	 */
-	public function add_hsts_header(): void {
+	public function add_hsts_header( array $headers ): array {
 		// Only add HSTS header if site is accessed via HTTPS.
 		if ( ! is_ssl() ) {
-			return;
+			return $headers;
 		}
 
 		// HSTS header with:
 		// - max-age: 31536000 seconds (1 year)
 		// - includeSubDomains: Apply to all subdomains
 		// - preload: Allow inclusion in browser preload lists
-		header( 'Strict-Transport-Security: max-age=31536000; includeSubDomains; preload' );
+		$headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains; preload';
+
+		return $headers;
 	}
 
 	/**
