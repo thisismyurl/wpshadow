@@ -343,7 +343,19 @@ class WPSHADOW_Debug_Mode {
 		}
 
 		$value = wp_create_nonce( 'wpshadow_debug_display_' . get_current_user_id() );
-		setcookie( self::DISPLAY_COOKIE, $value, time() + self::AUTO_DISABLE_TIMEOUT, COOKIEPATH, COOKIE_DOMAIN, is_ssl(), true );
+		setcookie(
+			self::DISPLAY_COOKIE,
+			$value,
+			array(
+				'expires'  => time() + self::AUTO_DISABLE_TIMEOUT,
+				'path'     => COOKIEPATH,
+				'domain'   => COOKIE_DOMAIN,
+				'secure'   => is_ssl(),
+				'httponly' => true,
+				'samesite' => 'Lax',
+			)
+		);
+		setcookie( self::DISPLAY_COOKIE, $value, time() + self::AUTO_DISABLE_TIMEOUT, COOKIEPATH, COOKIE_DOMAIN, true, true );
 	}
 
 	/**
@@ -356,7 +368,19 @@ class WPSHADOW_Debug_Mode {
 			return;
 		}
 
-		setcookie( self::DISPLAY_COOKIE, '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN, is_ssl(), true );
+		setcookie(
+			self::DISPLAY_COOKIE,
+			'',
+			array(
+				'expires'  => time() - 3600,
+				'path'     => COOKIEPATH,
+				'domain'   => COOKIE_DOMAIN,
+				'secure'   => is_ssl(),
+				'httponly' => true,
+				'samesite' => 'Lax',
+			)
+		);
+		setcookie( self::DISPLAY_COOKIE, '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN, true, true );
 	}
 
 	/**

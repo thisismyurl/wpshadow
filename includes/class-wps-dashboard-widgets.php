@@ -173,6 +173,10 @@ class WPSHADOW_Dashboard_Widgets {
 		self::widget_environment_status();
 	}
 
+	public static function render_metabox_favicon_checker(): void {
+		self::widget_favicon_checker();
+	}
+
 	public static function render_metabox_database_stats(): void {
 		self::widget_database_stats();
 	}
@@ -2113,6 +2117,21 @@ class WPSHADOW_Dashboard_Widgets {
 	 */
 	public static function get_database_statistics_for_ajax(): array {
 		return self::get_database_statistics();
+	}
+
+	/**
+	 * Render the Favicon & Touch Icon Checker widget.
+	 *
+	 * @return void
+	 */
+	private static function widget_favicon_checker(): void {
+		// Get the feature instance and render its widget.
+		$feature = WPSHADOW_Feature_Registry::get_feature( 'wpshadow_favicon_checker' );
+		if ( $feature && method_exists( $feature, 'render_widget' ) ) {
+			$feature->render_widget();
+		} else {
+			echo '<div class="wps-widget-content"><p><em>' . esc_html__( 'Favicon checker unavailable.', 'plugin-wpshadow' ) . '</em></p></div>';
+		}
 	}
 }
 

@@ -36,6 +36,7 @@ use WPShadow\CoreSupport\WPSHADOW_Feature_Plugin_Cleanup;
 use WPShadow\CoreSupport\WPSHADOW_Feature_HTML_Cleanup;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Resource_Hints;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Nav_Accessibility;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Color_Contrast_Checker;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Skiplinks;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Embed_Disable;
 use WPShadow\CoreSupport\WPSHADOW_Feature_jQuery_Cleanup;
@@ -44,6 +45,7 @@ use WPShadow\CoreSupport\WPSHADOW_Feature_Interactivity_Cleanup;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Consent_Checks;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Hardening;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Iframe_Busting;
+use WPShadow\CoreSupport\WPSHADOW_Feature_HTTP_SSL_Audit;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Registry;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Image_Lazy_Loading;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Asset_Minification;
@@ -57,6 +59,15 @@ use WPShadow\CoreSupport\WPSHADOW_Feature_Critical_CSS;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Script_Optimizer;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Conflict_Sandbox;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Smart_Recommendations;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Core_Integrity;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Firewall;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Malware_Scanner;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Traffic_Monitor;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Image_Optimizer;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Page_Cache;
+use WPShadow\CoreSupport\WPSHADOW_Feature_CDN_Integration;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Maintenance_Cleanup;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Performance_Alerts;
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -279,6 +290,7 @@ function WPSHADOW_register_core_features(): void {
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Vault_Audit() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Vulnerability_Watch() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Image_Smart_Focus() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Favicon_Checker() );
 
 	// Performance optimization features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Script_Deferral() );
@@ -290,6 +302,7 @@ function WPSHADOW_register_core_features(): void {
 	register_WPSHADOW_feature( new WPSHADOW_Feature_HTML_Cleanup() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Resource_Hints() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Nav_Accessibility() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Color_Contrast_Checker() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Skiplinks() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Embed_Disable() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_jQuery_Cleanup() );
@@ -312,13 +325,22 @@ function WPSHADOW_register_core_features(): void {
 
 	// Privacy and compliance features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Consent_Checks() );
+	
+	// Accessibility and mobile features.
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Mobile_Friendliness() );
+	
 	// Security features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Hardening() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Iframe_Busting() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_HTTP_SSL_Audit() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Hotlink_Protection() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Core_Integrity() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Firewall() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Malware_Scanner() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Traffic_Monitor() );
+	
+	// Monitoring features.
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Uptime_Monitor() );
 
 	// Advanced performance features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Image_Optimizer() );
@@ -327,11 +349,17 @@ function WPSHADOW_register_core_features(): void {
 
 	// Tool features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Maintenance_Cleanup() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_SEO_Validator() );
 	// Safety features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Auto_Rollback() );
 	// Debugging features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Conflict_Sandbox() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Visual_Regression() );
+	
+	// SEO and social media features.
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Open_Graph_Previewer() );
+	// SEO and monitoring features.
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Broken_Link_Checker() );
 }
 
 /**
@@ -524,6 +552,7 @@ function wpshadow_init(): void {
 	require_once WPSHADOW_PATH . 'includes/helpers/wps-input-helpers.php';
 	require_once WPSHADOW_PATH . 'includes/helpers/wps-ajax-helpers.php';
 	require_once WPSHADOW_PATH . 'includes/helpers/wps-array-helpers.php';
+	require_once WPSHADOW_PATH . 'includes/helpers/wps-color-contrast-helpers.php';
 	require_once WPSHADOW_PATH . 'includes/traits/trait-wps-ajax-security.php';
 
 	// Load update server client for automatic updates.
@@ -704,6 +733,7 @@ function wpshadow_init(): void {
 	require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-cdn-integration.php';
 	require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-malware-scanner.php';
 	require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-traffic-monitor.php';
+	require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-uptime-monitor.php';
 
 	// Load System Report Generator for comprehensive debug information.
 	require_once WPSHADOW_PATH . 'includes/class-wps-system-report-generator.php';
@@ -787,7 +817,9 @@ function wpshadow_init(): void {
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-consent-checks.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-hardening.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-iframe-busting.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-hotlink-protection.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-a11y-audit.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-mobile-friendliness.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-tips-coach.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-image-lazy-loading.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-asset-minification.php' );
@@ -802,6 +834,10 @@ function wpshadow_init(): void {
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-script-optimizer.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-conflict-sandbox.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-visual-regression.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-open-graph-previewer.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-broken-link-checker.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-seo-validator.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-favicon-checker.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/wps-feature-functions.php' );
 	
 	// Initialize Registry System.
@@ -816,6 +852,11 @@ function wpshadow_init(): void {
 
 	// Initialize Weekly Performance Report feature
 	\WPShadow\CoreSupport\WPSHADOW_Feature_Weekly_Performance_Report::init();
+
+	// Initialize Open Graph Previewer feature
+	\WPShadow\CoreSupport\WPSHADOW_Feature_Open_Graph_Previewer::init();
+	// Initialize Broken Link Checker feature
+	\WPShadow\CoreSupport\WPSHADOW_Feature_Broken_Link_Checker::init();
 
 	// Load Spoke Base for spoke plugins (Image, Media, etc).
 	require_once WPSHADOW_PATH . 'includes/class-wps-spoke-base.php';

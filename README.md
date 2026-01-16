@@ -47,6 +47,23 @@ This plugin provides complete functionality on its own and can optionally load h
   - Critical CSS Inline for instant rendering
   - Resource Preloading for fonts, scripts, and images
   - Script Optimization Analyzer with recommendations
+- **Cross-Origin Isolation:** Security headers to protect against Spectre-like attacks (see [CROSS_ORIGIN_ISOLATION.md](docs/CROSS_ORIGIN_ISOLATION.md))
+  - Cross-Origin-Opener-Policy (COOP) header
+  - Cross-Origin-Embedder-Policy (COEP) header
+  - Isolates browsing context from untrusted third-party content
+  - Enables advanced web platform features
+- **Uptime Monitoring:** External service integration for site availability monitoring (see [docs/UPTIME_MONITORING.md](docs/UPTIME_MONITORING.md))
+  - Public health check endpoint for external monitoring services
+  - Immediate email and SMS alerts when site goes down
+  - Dashboard widget with uptime statistics
+  - Optional access token security
+  - Works with UptimeRobot, Pingdom, StatusCake, and others
+- **Hotlink Protection:** Prevent bandwidth theft from unauthorized media embedding
+  - Automatic Apache/LiteSpeed .htaccess configuration
+  - Nginx configuration guidance
+  - CDN-level blocking recommendations (Cloudflare, KeyCDN, BunnyCDN)
+  - Configurable allowed domains and file types
+  - Automatic cleanup on feature disable
 
 ### Optional Hub & Spoke Architecture (When Modules Installed)
 
