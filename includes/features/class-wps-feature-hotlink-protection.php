@@ -51,7 +51,7 @@ final class WPSHADOW_Feature_Hotlink_Protection extends WPSHADOW_Abstract_Featur
 		// Always check for cleanup, even if disabled.
 		add_action( 'admin_init', array( $this, 'check_cleanup' ), 1 );
 
-		if ( ! $this->is_enabled() ) {
+		if ( ! static::is_enabled() ) {
 			return;
 		}
 
@@ -72,7 +72,7 @@ final class WPSHADOW_Feature_Hotlink_Protection extends WPSHADOW_Abstract_Featur
 	 */
 	public function check_cleanup(): void {
 		// Check if feature is disabled but was previously configured.
-		if ( ! $this->is_enabled() && $this->get_setting( 'apache_configured', false ) ) {
+		if ( ! static::is_enabled() && $this->get_setting( 'apache_configured', false ) ) {
 			$this->remove_apache_protection();
 			$this->update_setting( 'apache_configured', false );
 			delete_transient( 'wpshadow_hotlink_protection_last_config' );
@@ -366,24 +366,5 @@ final class WPSHADOW_Feature_Hotlink_Protection extends WPSHADOW_Abstract_Featur
 				);
 			}
 		);
-	}
-
-	/**
-	 * Update a feature setting using the centralized cache.
-	 *
-	 * @param string $setting_name Setting name.
-	 * @param mixed  $value        Setting value.
-	 * @param bool   $network      Whether to update network option.
-	 * @return bool True on success.
-	 */
-	protected function update_setting( string $setting_name, $value, bool $network = false ): bool {
-		if ( class_exists( '\\WPShadow\\WPSHADOW_Settings_Cache' ) ) {
-			$option_name = $this->id . '_' . $setting_name;
-			return \WPShadow\WPSHADOW_Settings_Cache::set( $option_name, $value, $network );
-		}
-
-		// Fallback to direct update_option if cache not available.
-		$option_name = 'wpshadow_' . $this->id . '_' . $setting_name;
-		return $network && is_multisite() ? update_site_option( $option_name, $value ) : update_option( $option_name, $value );
 	}
 }
