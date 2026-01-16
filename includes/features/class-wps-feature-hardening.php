@@ -8,6 +8,7 @@
  * - Directory listing protection
  * - Secure salts validation
  * - File permissions check
+ * - Cross-Origin Isolation headers (COOP and COEP)
  *
  * @package WPShadow\CoreSupport
  * @since 1.2601.73001
@@ -32,7 +33,7 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'security-hardening',
 				'name'               => __( 'One-Click Security Hardening', 'plugin-wpshadow' ),
-				'description'        => __( 'Applies common hardening steps in one toggle: disable XML-RPC if not needed, restrict wp-json exposure, prevent directory listing, validate security salts, and check file permissions. Reduces attack surface, limits information leakage, and aligns with best practices while keeping necessary features available when explicitly required by themes, plugins, or integrations.', 'plugin-wpshadow' ),
+				'description'        => __( 'Applies common hardening steps in one toggle: disable XML-RPC if not needed, restrict wp-json exposure, prevent directory listing, validate security salts, check file permissions, and enable Cross-Origin Isolation headers. Reduces attack surface, limits information leakage, and aligns with best practices while keeping necessary features available when explicitly required by themes, plugins, or integrations.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
@@ -64,6 +65,9 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 
 		// Apply directory listing protection.
 		add_action( 'admin_init', array( $this, 'protect_directory_listing' ), 5 );
+
+		// Add Cross-Origin Isolation headers.
+		add_action( 'send_headers', array( $this, 'add_cross_origin_isolation_headers' ) );
 	}
 
 	/**
@@ -356,5 +360,28 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 				);
 			}
 		);
+	}
+
+	/**
+	 * Add Cross-Origin Isolation headers to protect against spectre-like attacks.
+	 *
+	 * This adds Cross-Origin-Opener-Policy (COOP) and Cross-Origin-Embedder-Policy (COEP)
+	 * headers to isolate the site's browsing context from untrusted third-party content.
+	 *
+	 * @return void
+	 */
+	public function add_cross_origin_isolation_headers(): void {
+		// Don't send headers if already sent or if headers already sent.
+		if ( headers_sent() ) {
+			return;
+		}
+
+		// Cross-Origin-Opener-Policy: Isolates the browsing context exclusively to same-origin documents.
+		// This prevents cross-origin documents from being able to access the window object.
+		header( 'Cross-Origin-Opener-Policy: same-origin' );
+
+		// Cross-Origin-Embedder-Policy: Requires resources to explicitly opt-in to being loaded.
+		// This ensures that cross-origin resources have either CORS or CORP headers.
+		header( 'Cross-Origin-Embedder-Policy: require-corp' );
 	}
 }
