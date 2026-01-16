@@ -48,6 +48,9 @@ final class WPSHADOW_Feature_Hotlink_Protection extends WPSHADOW_Abstract_Featur
 	 * @return void
 	 */
 	public function register(): void {
+		// Always check for cleanup, even if disabled.
+		add_action( 'admin_init', array( $this, 'check_cleanup' ), 1 );
+
 		if ( ! $this->is_enabled() ) {
 			return;
 		}
@@ -60,6 +63,20 @@ final class WPSHADOW_Feature_Hotlink_Protection extends WPSHADOW_Abstract_Featur
 
 		// Add settings page actions.
 		add_action( 'admin_init', array( $this, 'handle_settings_update' ) );
+	}
+
+	/**
+	 * Check if feature was disabled and perform cleanup.
+	 *
+	 * @return void
+	 */
+	public function check_cleanup(): void {
+		// Check if feature is disabled but was previously configured.
+		if ( ! $this->is_enabled() && $this->get_setting( 'apache_configured', false ) ) {
+			$this->remove_apache_protection();
+			$this->update_setting( 'apache_configured', false );
+			delete_transient( 'wpshadow_hotlink_protection_last_config' );
+		}
 	}
 
 	/**
