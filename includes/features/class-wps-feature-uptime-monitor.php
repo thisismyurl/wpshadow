@@ -137,7 +137,13 @@ final class WPSHADOW_Feature_Uptime_Monitor extends WPSHADOW_Abstract_Feature {
 		// Verify access token if configured.
 		$access_token = $this->get_setting( 'access_token', '' );
 		if ( ! empty( $access_token ) ) {
-			$provided_token = $_SERVER['HTTP_X_WPSHADOW_TOKEN'] ?? $_GET['token'] ?? '';
+			$provided_token = '';
+			if ( isset( $_SERVER['HTTP_X_WPSHADOW_TOKEN'] ) ) {
+				$provided_token = sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_WPSHADOW_TOKEN'] ) );
+			} elseif ( isset( $_GET['token'] ) ) {
+				$provided_token = sanitize_text_field( wp_unslash( $_GET['token'] ) );
+			}
+			
 			if ( ! hash_equals( $access_token, $provided_token ) ) {
 				$this->log_check( 'unauthorized', 'Invalid or missing access token' );
 				wp_send_json_error( array( 'message' => 'Unauthorized' ), 401 );
@@ -265,6 +271,13 @@ final class WPSHADOW_Feature_Uptime_Monitor extends WPSHADOW_Abstract_Feature {
 		foreach ( $ip_keys as $key ) {
 			if ( ! empty( $_SERVER[ $key ] ) ) {
 				$ip = sanitize_text_field( wp_unslash( $_SERVER[ $key ] ) );
+				
+				// Handle comma-separated IPs in X-Forwarded-For header.
+				if ( 'HTTP_X_FORWARDED_FOR' === $key && strpos( $ip, ',' ) !== false ) {
+					$ip_parts = explode( ',', $ip );
+					$ip       = trim( $ip_parts[0] );
+				}
+				
 				if ( filter_var( $ip, FILTER_VALIDATE_IP ) ) {
 					return $ip;
 				}
@@ -568,16 +581,12 @@ final class WPSHADOW_Feature_Uptime_Monitor extends WPSHADOW_Abstract_Feature {
 		
 		// Get total checks in last 30 days.
 		$total_checks = (int) $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$table_name} WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 30 DAY) AND status != 'unauthorized'"
-			)
+			"SELECT COUNT(*) FROM {$table_name} WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 30 DAY) AND status != 'unauthorized'"
 		);
 
 		// Get failed checks in last 30 days.
 		$failed_checks = (int) $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$table_name} WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 30 DAY) AND status = 'error'"
-			)
+			"SELECT COUNT(*) FROM {$table_name} WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 30 DAY) AND status = 'error'"
 		);
 
 		// Calculate uptime percentage.
