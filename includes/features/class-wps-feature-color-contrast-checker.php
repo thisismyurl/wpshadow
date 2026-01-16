@@ -169,18 +169,9 @@ final class WPSHADOW_Feature_Color_Contrast_Checker extends WPSHADOW_Abstract_Fe
 	 * @return void
 	 */
 	private function enqueue_assets(): void {
-		// Enqueue a custom script handle for localization.
-		wp_enqueue_script(
-			'wps-color-contrast-checker',
-			'', // Empty source since we'll use inline script.
-			array( 'jquery', 'wp-color-picker' ),
-			'1.0.0',
-			true
-		);
-
-		// Localize script with nonce.
+		// Localize script with nonce using wp-color-picker as base.
 		wp_localize_script(
-			'wps-color-contrast-checker',
+			'wp-color-picker',
 			'wpsColorContrast',
 			array(
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
@@ -277,7 +268,7 @@ final class WPSHADOW_Feature_Color_Contrast_Checker extends WPSHADOW_Abstract_Fe
 
 		// Inline JavaScript.
 		wp_add_inline_script(
-			'wps-color-contrast-checker',
+			'wp-color-picker',
 			"
 			jQuery(document).ready(function($) {
 				// Initialize color pickers
