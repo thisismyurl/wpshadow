@@ -287,8 +287,142 @@ class WPSHADOW_Dashboard_Widgets {
 	}
 
 	private static function widget_scheduled_tasks(): void {
-		// Hide widget entirely since there's no scheduled tasks functionality yet.
-		return;
+		// Get all scheduled cron events
+		$cron_array = _get_cron_array();
+		$wpshadow_tasks = array();
+
+		if ( $cron_array ) {
+			foreach ( $cron_array as $timestamp => $cron_jobs ) {
+				foreach ( $cron_jobs as $hook => $jobs ) {
+					// Only show wpshadow-related tasks
+					if ( strpos( $hook, 'wpshadow_' ) === 0 ) {
+						foreach ( $jobs as $key => $job ) {
+							$wpshadow_tasks[] = array(
+								'hook' => $hook,
+								'timestamp' => $timestamp,
+								'schedule' => isset( $job['schedule'] ) ? $job['schedule'] : 'once',
+								'args' => isset( $job['args'] ) ? $job['args'] : array(),
+								'key' => $key,
+							);
+						}
+					}
+				}
+			}
+		}
+
+		// Check for paused tasks
+		$paused_tasks = get_option( 'wpshadow_paused_tasks', array() );
+
+		// Get available schedules for display names
+		$schedules = wp_get_schedules();
+		?>
+		<div class="wps-widget-content">
+			<?php if ( empty( $wpshadow_tasks ) && empty( $paused_tasks ) ) : ?>
+				<p><em><?php esc_html_e( 'No scheduled tasks found.', 'plugin-wpshadow' ); ?></em></p>
+			<?php else : ?>
+				<table class="widefat wps-scheduled-tasks-table" style="margin-top: 0;">
+					<thead>
+						<tr>
+							<th><?php esc_html_e( 'Task', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Next Run', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Frequency', 'plugin-wpshadow' ); ?></th>
+							<th><?php esc_html_e( 'Actions', 'plugin-wpshadow' ); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ( $wpshadow_tasks as $task ) : ?>
+							<?php
+							$task_name = str_replace( array( 'wpshadow_', '_' ), array( '', ' ' ), $task['hook'] );
+							$task_name = ucwords( $task_name );
+							$next_run = $task['timestamp'];
+							$time_until = human_time_diff( time(), $next_run );
+							$is_past = $next_run < time();
+							$schedule_label = isset( $schedules[ $task['schedule'] ] ) ? $schedules[ $task['schedule'] ]['display'] : ucfirst( $task['schedule'] );
+							?>
+							<tr>
+								<td>
+									<strong><?php echo esc_html( $task_name ); ?></strong>
+									<br><code style="font-size: 11px; color: #666;"><?php echo esc_html( $task['hook'] ); ?></code>
+								</td>
+								<td>
+									<?php if ( $is_past ) : ?>
+										<span style="color: #d63638;">
+											<?php echo esc_html( sprintf( __( '%s ago (missed)', 'plugin-wpshadow' ), $time_until ) ); ?>
+										</span>
+									<?php else : ?>
+										<?php echo esc_html( sprintf( __( 'In %s', 'plugin-wpshadow' ), $time_until ) ); ?>
+									<?php endif; ?>
+									<br><small style="color: #666;"><?php echo esc_html( wp_date( 'Y-m-d H:i:s', $next_run ) ); ?></small>
+								</td>
+								<td><?php echo esc_html( $schedule_label ); ?></td>
+								<td>
+									<button type="button" class="button button-small wps-pause-task" data-hook="<?php echo esc_attr( $task['hook'] ); ?>" data-timestamp="<?php echo esc_attr( $task['timestamp'] ); ?>" data-key="<?php echo esc_attr( md5( serialize( $task['args'] ) ) ); ?>">
+										<?php esc_html_e( 'Pause', 'plugin-wpshadow' ); ?>
+									</button>
+									<button type="button" class="button button-small button-link-delete wps-remove-task" data-hook="<?php echo esc_attr( $task['hook'] ); ?>" data-timestamp="<?php echo esc_attr( $task['timestamp'] ); ?>" data-key="<?php echo esc_attr( md5( serialize( $task['args'] ) ) ); ?>">
+										<?php esc_html_e( 'Remove', 'plugin-wpshadow' ); ?>
+									</button>
+								</td>
+							</tr>
+						<?php endforeach; ?>
+
+						<?php if ( ! empty( $paused_tasks ) ) : ?>
+							<?php foreach ( $paused_tasks as $paused_hook => $paused_data ) : ?>
+								<?php
+								$task_name = str_replace( array( 'wpshadow_', '_' ), array( '', ' ' ), $paused_hook );
+								$task_name = ucwords( $task_name );
+								$schedule_label = isset( $schedules[ $paused_data['schedule'] ] ) ? $schedules[ $paused_data['schedule'] ]['display'] : ucfirst( $paused_data['schedule'] );
+								?>
+								<tr style="background-color: #f0f0f1;">
+									<td>
+										<strong><?php echo esc_html( $task_name ); ?></strong>
+										<br><code style="font-size: 11px; color: #666;"><?php echo esc_html( $paused_hook ); ?></code>
+										<br><span class="dashicons dashicons-controls-pause" style="color: #d63638; font-size: 14px;"></span> <em style="color: #d63638;"><?php esc_html_e( 'Paused', 'plugin-wpshadow' ); ?></em>
+									</td>
+									<td colspan="2">
+										<?php
+										/* translators: %s: formatted date and time */
+										echo esc_html( sprintf( __( 'Paused on %s', 'plugin-wpshadow' ), wp_date( 'Y-m-d H:i:s', $paused_data['paused_at'] ) ) );
+										?>
+									</td>
+									<td>
+										<button type="button" class="button button-small wps-resume-task" data-hook="<?php echo esc_attr( $paused_hook ); ?>">
+											<?php esc_html_e( 'Resume', 'plugin-wpshadow' ); ?>
+										</button>
+										<button type="button" class="button button-small button-link-delete wps-remove-paused-task" data-hook="<?php echo esc_attr( $paused_hook ); ?>">
+											<?php esc_html_e( 'Delete', 'plugin-wpshadow' ); ?>
+										</button>
+									</td>
+								</tr>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</tbody>
+				</table>
+
+				<div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
+					<p style="margin: 0 0 10px 0; color: #666;">
+						<strong><?php esc_html_e( 'Cron Method:', 'plugin-wpshadow' ); ?></strong>
+						<?php if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) : ?>
+							<span style="color: #d63638;"><?php esc_html_e( 'System Cron (WP-Cron disabled)', 'plugin-wpshadow' ); ?></span>
+						<?php else : ?>
+							<span style="color: #00a32a;"><?php esc_html_e( 'WP-Cron (WordPress internal)', 'plugin-wpshadow' ); ?></span>
+						<?php endif; ?>
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-features&feature=cron-test' ) ); ?>" style="margin-left: 10px;">
+							<?php esc_html_e( 'Test Cron →', 'plugin-wpshadow' ); ?>
+						</a>
+					</p>
+				</div>
+			<?php endif; ?>
+		</div>
+
+		<style>
+			.wps-scheduled-tasks-table { border-collapse: collapse; }
+			.wps-scheduled-tasks-table th { font-weight: 600; background: #f9f9f9; padding: 8px 10px; }
+			.wps-scheduled-tasks-table td { padding: 10px; border-bottom: 1px solid #e5e5e5; vertical-align: middle; }
+			.wps-scheduled-tasks-table tr:last-child td { border-bottom: none; }
+			.wps-scheduled-tasks-table .button-small { padding: 2px 8px; font-size: 12px; height: auto; line-height: 1.5; }
+		</style>
+		<?php
 	}
 
 	private static function widget_modules(): void {

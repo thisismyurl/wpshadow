@@ -109,6 +109,11 @@ function wpshadow_render_dashboard( string $hub_id = '', string $spoke_id = '' )
 			<?php endif; ?>
 		</div>
 
+		<?php
+		// Render feature search component (Issues #447 & #448).
+		WPSHADOW_Feature_Search::render_search_component();
+		?>
+
 		<div class="wps-dashboard-notice">
 			<strong><?php esc_html_e( 'Notice:', 'plugin-wpshadow' ); ?></strong>
 			<?php esc_html_e( 'The module system is temporarily disabled. Core features only are available.', 'plugin-wpshadow' ); ?>

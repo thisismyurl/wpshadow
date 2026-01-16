@@ -420,13 +420,18 @@ final class WPSHADOW_Feature_Core_Integrity extends WPSHADOW_Abstract_Feature {
 
 		$official_files = array_keys( $checksums );
 
-		// Scan wp-admin directory.
+		// Scan ONLY core directories (wp-admin and wp-includes).
+		// NEVER scan wp-content, plugins, themes, or uploads.
 		$wp_admin_files = $this->scan_directory( ABSPATH . 'wp-admin', ABSPATH );
-
-		// Scan wp-includes directory.
 		$wp_includes_files = $this->scan_directory( ABSPATH . 'wp-includes', ABSPATH );
 
 		$found_files = array_merge( $wp_admin_files, $wp_includes_files );
+
+		// Filter out any files that somehow got through that are in wp-content.
+		$found_files = array_filter( $found_files, function( $file ) {
+			// Ensure we never flag files in wp-content.
+			return strpos( $file, 'wp-content' ) === false;
+		});
 
 		// Find files not in official list.
 		foreach ( $found_files as $file ) {
@@ -452,6 +457,17 @@ final class WPSHADOW_Feature_Core_Integrity extends WPSHADOW_Abstract_Feature {
 			return $files;
 		}
 
+		// Files/directories to exclude from scanning.
+		$exclude_patterns = array(
+			'.git',
+			'.svn',
+			'.htaccess',
+			'.maintenance',
+			'node_modules',
+			'.DS_Store',
+			'Thumbs.db',
+		);
+
 		$iterator = new \RecursiveIteratorIterator(
 			new \RecursiveDirectoryIterator( $dir, \RecursiveDirectoryIterator::SKIP_DOTS ),
 			\RecursiveIteratorIterator::SELF_FIRST
@@ -461,7 +477,36 @@ final class WPSHADOW_Feature_Core_Integrity extends WPSHADOW_Abstract_Feature {
 			if ( $file->isFile() ) {
 				$absolute_path = $file->getPathname();
 				$relative_path = str_replace( $base_path, '', $absolute_path );
-				$files[]       = ltrim( $relative_path, '/' );
+				$relative_path = ltrim( $relative_path, '/' );
+				
+				// Skip excluded patterns.
+				$should_exclude = false;
+				foreach ( $exclude_patterns as $pattern ) {
+					if ( strpos( $relative_path, $pattern ) !== false ) {
+						$should_exclude = true;
+						break;
+					}
+				}
+				
+				if ( $should_exclude ) {
+					continue;
+				}
+				
+				// Skip backup files and temporary files.
+				if ( preg_match( '/\.(bak|tmp|backup|old|orig|swp|swo)$/i', $relative_path ) ) {
+					continue;
+				}
+				
+				// Only include PHP and other core file types.
+				// WordPress core only contains: php, js, css, png, jpg, gif, svg, woff, woff2, ttf, eot, txt, html, xml, json.
+				$extension = pathinfo( $relative_path, PATHINFO_EXTENSION );
+				$allowed_extensions = array( 'php', 'js', 'css', 'png', 'jpg', 'jpeg', 'gif', 'svg', 'woff', 'woff2', 'ttf', 'eot', 'txt', 'html', 'xml', 'json', 'pot', 'mo' );
+				
+				if ( ! empty( $extension ) && ! in_array( strtolower( $extension ), $allowed_extensions, true ) ) {
+					continue;
+				}
+				
+				$files[] = $relative_path;
 			}
 		}
 

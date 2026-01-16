@@ -909,8 +909,14 @@ function wpshadow_init(): void {
 	require_once WPSHADOW_PATH . 'includes/class-wps-dashboard-layout.php';
 	require_once WPSHADOW_PATH . 'includes/class-wps-feature-details-page.php';
 	\WPShadow\CoreSupport\WPSHADOW_Feature_Details_Page::init();
+	require_once WPSHADOW_PATH . 'includes/class-wps-feature-search.php';
+	\WPShadow\CoreSupport\WPSHADOW_Feature_Search::init();
 	require_once WPSHADOW_PATH . 'includes/admin/class-wps-settings-ajax.php';
 	\WPShadow\Admin\WPSHADOW_Settings_Ajax::init();
+	require_once WPSHADOW_PATH . 'includes/admin/class-wps-scheduled-tasks-ajax.php';
+	\WPShadow\Admin\WPSHADOW_Scheduled_Tasks_Ajax::init();
+	require_once WPSHADOW_PATH . 'includes/class-wps-smart-suggestions.php';
+	\WPShadow\CoreSupport\WPSHADOW_Smart_Suggestions::init();
 	require_once WPSHADOW_PATH . 'includes/wps-capability-helpers.php';
 
 	// Load extracted admin assets, screens, dashboard view, and AJAX handlers.

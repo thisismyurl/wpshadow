@@ -116,6 +116,11 @@ class WPSHADOW_Feature_Details_Page {
 			wp_die( esc_html__( 'Feature not found.', 'plugin-wpshadow' ) );
 		}
 
+		// Track feature access for commonly accessed list (Issues #447 & #448).
+		if ( class_exists( '\\WPShadow\\CoreSupport\\WPSHADOW_Feature_Search' ) ) {
+			WPSHADOW_Feature_Search::track_feature_access( $feature_id );
+		}
+
 		$is_enabled    = $feature::is_enabled();
 		$feature_obj   = $feature;
 		$sub_features  = $feature_obj->get_sub_features();
