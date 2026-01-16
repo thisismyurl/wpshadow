@@ -1,0 +1,270 @@
+/**
+ * Cookie Consent Banner Styles
+ *
+ * Local styles for GDPR/privacy consent banner.
+ * No external dependencies or CDNs.
+ *
+ * @package WPShadow\CoreSupport
+ */
+
+.wps-consent-banner {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: #ffffff;
+	border-top: 3px solid #0073aa;
+	box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+	z-index: 999999;
+	padding: 20px;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	font-size: 14px;
+	line-height: 1.6;
+	color: #23282d;
+	animation: wps-consent-slide-up 0.3s ease-out;
+}
+
+@keyframes wps-consent-slide-up {
+	from {
+		transform: translateY(100%);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+.wps-consent-banner.wps-consent-hidden {
+	display: none !important;
+}
+
+.wps-consent-content {
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.wps-consent-content h3 {
+	margin: 0 0 10px 0;
+	font-size: 18px;
+	font-weight: 600;
+	color: #23282d;
+}
+
+.wps-consent-content p {
+	margin: 0 0 15px 0;
+	color: #50575e;
+}
+
+.wps-consent-privacy-link {
+	font-size: 13px;
+	margin: 10px 0;
+}
+
+.wps-consent-privacy-link a {
+	color: #0073aa;
+	text-decoration: none;
+	border-bottom: 1px solid transparent;
+	transition: border-color 0.2s;
+}
+
+.wps-consent-privacy-link a:hover {
+	border-bottom-color: #0073aa;
+}
+
+.wps-consent-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 15px;
+}
+
+.wps-consent-btn {
+	padding: 10px 20px;
+	border: none;
+	border-radius: 4px;
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	white-space: nowrap;
+}
+
+.wps-consent-accept {
+	background: #0073aa;
+	color: #ffffff;
+}
+
+.wps-consent-accept:hover {
+	background: #005a87;
+	transform: translateY(-1px);
+	box-shadow: 0 2px 4px rgba(0, 115, 170, 0.3);
+}
+
+.wps-consent-reject {
+	background: #f0f0f1;
+	color: #50575e;
+	border: 1px solid #c3c4c7;
+}
+
+.wps-consent-reject:hover {
+	background: #e5e5e5;
+	border-color: #a7aaad;
+}
+
+.wps-consent-manage {
+	background: transparent;
+	color: #0073aa;
+	border: 1px solid #0073aa;
+}
+
+.wps-consent-manage:hover {
+	background: #0073aa;
+	color: #ffffff;
+}
+
+.wps-consent-preferences {
+	margin-top: 20px;
+	padding-top: 20px;
+	border-top: 1px solid #dcdcde;
+}
+
+.wps-consent-preferences h4 {
+	margin: 0 0 15px 0;
+	font-size: 16px;
+	font-weight: 600;
+	color: #23282d;
+}
+
+.wps-consent-preferences label {
+	display: block;
+	margin-bottom: 15px;
+	padding: 10px;
+	background: #f6f7f7;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+
+.wps-consent-preferences label:hover {
+	background: #f0f0f1;
+}
+
+.wps-consent-preferences input[type="checkbox"] {
+	margin-right: 10px;
+	vertical-align: middle;
+}
+
+.wps-consent-preferences input[type="checkbox"]:disabled {
+	opacity: 0.6;
+}
+
+.wps-consent-preferences strong {
+	display: block;
+	margin-bottom: 5px;
+	color: #23282d;
+}
+
+.wps-consent-preferences .wps-consent-desc {
+	display: block;
+	font-size: 13px;
+	color: #646970;
+	margin-left: 24px;
+}
+
+.wps-consent-save {
+	margin-top: 10px;
+	background: #0073aa;
+	color: #ffffff;
+}
+
+.wps-consent-save:hover {
+	background: #005a87;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+	.wps-consent-banner {
+		padding: 15px;
+	}
+
+	.wps-consent-content h3 {
+		font-size: 16px;
+	}
+
+	.wps-consent-actions {
+		flex-direction: column;
+	}
+
+	.wps-consent-btn {
+		width: 100%;
+		text-align: center;
+	}
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+	.wps-consent-banner {
+		background: #1e1e1e;
+		border-top-color: #3582c4;
+		color: #f0f0f1;
+	}
+
+	.wps-consent-content h3,
+	.wps-consent-content p,
+	.wps-consent-preferences h4 {
+		color: #f0f0f1;
+	}
+
+	.wps-consent-content p {
+		color: #c3c4c7;
+	}
+
+	.wps-consent-preferences label {
+		background: #2c2c2c;
+	}
+
+	.wps-consent-preferences label:hover {
+		background: #383838;
+	}
+
+	.wps-consent-preferences .wps-consent-desc {
+		color: #a7aaad;
+	}
+
+	.wps-consent-reject {
+		background: #2c2c2c;
+		color: #f0f0f1;
+		border-color: #646970;
+	}
+
+	.wps-consent-reject:hover {
+		background: #383838;
+		border-color: #a7aaad;
+	}
+}
+
+/* Accessibility: Focus states */
+.wps-consent-btn:focus,
+.wps-consent-preferences input[type="checkbox"]:focus {
+	outline: 2px solid #0073aa;
+	outline-offset: 2px;
+}
+
+/* Accessibility: Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	.wps-consent-banner {
+		animation: none;
+	}
+
+	.wps-consent-btn {
+		transition: none;
+	}
+}
+
+/* Print styles: Hide banner when printing */
+@media print {
+	.wps-consent-banner {
+		display: none !important;
+	}
+}

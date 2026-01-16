@@ -1,0 +1,281 @@
+/**
+ * Feature Details Page Styles
+ *
+ * @package WPShadow\CoreSupport
+ * @since 1.2601.76000
+ */
+
+.wpshadow-feature-details {
+	max-width: 1400px;
+	margin: 20px auto;
+}
+
+.wpshadow-feature-details h1 {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 20px;
+}
+
+.wpshadow-feature-details h1 .dashicons {
+	font-size: 32px;
+	width: 32px;
+	height: 32px;
+}
+
+.wpshadow-feature-details-container {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 20px;
+	margin-bottom: 20px;
+}
+
+@media (max-width: 1200px) {
+	.wpshadow-feature-details-container {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* Feature Info Widget */
+.wpshadow-feature-info-widget .feature-description {
+	margin-bottom: 20px;
+	padding: 15px;
+	background: #f0f0f1;
+	border-left: 4px solid #2271b1;
+	border-radius: 4px;
+}
+
+.wpshadow-feature-info-widget .feature-meta table {
+	margin-bottom: 20px;
+}
+
+.wpshadow-feature-info-widget .feature-meta th {
+	width: 30%;
+	font-weight: 600;
+}
+
+/* Toggle Switch */
+.wpshadow-toggle-switch {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+	cursor: pointer;
+	user-select: none;
+}
+
+.wpshadow-toggle-switch input[type="checkbox"] {
+	position: absolute;
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.wpshadow-toggle-slider {
+	position: relative;
+	display: inline-block;
+	width: 50px;
+	height: 26px;
+	background-color: #ccc;
+	border-radius: 26px;
+	transition: background-color 0.3s;
+}
+
+.wpshadow-toggle-slider::before {
+	content: "";
+	position: absolute;
+	height: 20px;
+	width: 20px;
+	left: 3px;
+	bottom: 3px;
+	background-color: white;
+	border-radius: 50%;
+	transition: transform 0.3s;
+}
+
+.wpshadow-toggle-switch input[type="checkbox"]:checked + .wpshadow-toggle-slider {
+	background-color: #2271b1;
+}
+
+.wpshadow-toggle-switch input[type="checkbox"]:checked + .wpshadow-toggle-slider::before {
+	transform: translateX(24px);
+}
+
+.wpshadow-toggle-switch input[type="checkbox"]:disabled + .wpshadow-toggle-slider {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.wpshadow-toggle-label {
+	font-weight: 500;
+	font-size: 14px;
+}
+
+/* Feature Toggle Section */
+.feature-toggle-section {
+	padding: 20px;
+	background: #f9f9f9;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	margin-bottom: 20px;
+}
+
+.feature-toggle-section h3 {
+	margin-top: 0;
+	margin-bottom: 15px;
+}
+
+/* Sub-Features Section */
+.feature-sub-features-section {
+	padding: 20px;
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+}
+
+.feature-sub-features-section h3 {
+	margin-top: 0;
+	margin-bottom: 10px;
+}
+
+.feature-sub-features-section .description {
+	margin-bottom: 15px;
+	color: #666;
+}
+
+.sub-features-list {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.sub-feature-item {
+	padding: 12px;
+	background: #f9f9f9;
+	border-radius: 4px;
+	border: 1px solid #e0e0e0;
+}
+
+/* Activity Log Widget */
+.wpshadow-feature-log-widget .postbox-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.wpshadow-feature-log-widget .postbox-actions {
+	display: flex;
+	gap: 8px;
+}
+
+.wpshadow-refresh-log {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.wpshadow-refresh-log .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+.feature-activity-log {
+	max-height: 500px;
+	overflow-y: auto;
+}
+
+.activity-log-table {
+	margin: 0;
+}
+
+.activity-log-table .log-time {
+	width: 180px;
+	font-family: monospace;
+	font-size: 12px;
+	color: #666;
+}
+
+.activity-log-table .log-action {
+	width: 150px;
+}
+
+.log-level {
+	display: inline-block;
+	padding: 3px 8px;
+	border-radius: 3px;
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+}
+
+.log-level-info {
+	background: #e7f3ff;
+	color: #0071a1;
+}
+
+.log-level-success {
+	background: #e6f4ea;
+	color: #1e7e34;
+}
+
+.log-level-warning {
+	background: #fff3cd;
+	color: #856404;
+}
+
+.log-level-error {
+	background: #f8d7da;
+	color: #721c24;
+}
+
+.activity-log-table .log-details {
+	font-size: 13px;
+}
+
+.no-activity {
+	text-align: center;
+	padding: 40px 20px;
+	color: #666;
+	font-style: italic;
+}
+
+/* Back Link */
+.back-link {
+	margin-top: 20px;
+}
+
+.back-link a {
+	text-decoration: none;
+	color: #2271b1;
+	font-weight: 500;
+}
+
+.back-link a:hover {
+	color: #135e96;
+}
+
+/* Loading State */
+.wpshadow-toggle-switch.loading .wpshadow-toggle-slider {
+	opacity: 0.6;
+	pointer-events: none;
+}
+
+/* Success/Error Messages */
+.wpshadow-message {
+	padding: 12px;
+	margin: 15px 0;
+	border-radius: 4px;
+	border-left: 4px solid;
+}
+
+.wpshadow-message.success {
+	background: #e6f4ea;
+	border-color: #1e7e34;
+	color: #1e7e34;
+}
+
+.wpshadow-message.error {
+	background: #f8d7da;
+	border-color: #721c24;
+	color: #721c24;
+}

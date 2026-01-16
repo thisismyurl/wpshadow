@@ -1,0 +1,647 @@
+<?php
+/**
+ * Debug Mode Manager for WPS Suite.
+ *
+ * Provides one-click toggles for WordPress debug features without editing wp-config.php.
+ * Supports both backend logging (safe for production) and frontend display (admin-only).
+ *
+ * @package WPSHADOW_CoreSupport
+ * @since 1.2601.73002
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\CoreSupport;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Debug Mode Manager Class
+ *
+ * Manages WordPress debug constants via WPShadow-managed configuration file.
+ */
+class WPSHADOW_Debug_Mode {
+
+	/**
+	 * Config file path in wp-content.
+	 */
+	private const CONFIG_FILE = 'wps-debug-config.php';
+
+	/**
+	 * Cookie name for admin-only display.
+	 */
+	private const DISPLAY_COOKIE = 'wpshadow_debug_display';
+
+	/**
+	 * Option key for debug settings.
+	 */
+	private const OPTION_KEY = 'wpshadow_debug_settings';
+
+	/**
+	 * Option key for debug mode timestamp.
+	 */
+	private const TIMESTAMP_KEY = 'wpshadow_debug_timestamp';
+
+	/**
+	 * Auto-disable timeout (1 hour in seconds).
+	 */
+	private const AUTO_DISABLE_TIMEOUT = 3600;
+
+	/**
+	 * Initialize the debug mode manager.
+	 *
+	 * @return void
+	 */
+	public static function init(): void {
+		// Add submenu under Help.
+		add_action( 'admin_menu', array( __CLASS__, 'add_admin_menu' ), 20 );
+
+		// AJAX handlers.
+		add_action( 'wp_ajax_WPSHADOW_toggle_debug', array( __CLASS__, 'ajax_toggle_debug' ) );
+		add_action( 'wp_ajax_WPSHADOW_get_error_log', array( __CLASS__, 'ajax_get_error_log' ) );
+		add_action( 'wp_ajax_WPSHADOW_clear_error_log', array( __CLASS__, 'ajax_clear_error_log' ) );
+
+		// Check for auto-disable timeout.
+		add_action( 'admin_init', array( __CLASS__, 'check_auto_disable' ) );
+
+		// Display errors for admins if enabled.
+		add_action( 'init', array( __CLASS__, 'maybe_enable_display' ) );
+
+		// Add floating error bar if display enabled.
+		add_action( 'wp_footer', array( __CLASS__, 'render_error_bar' ), 999 );
+		add_action( 'admin_footer', array( __CLASS__, 'render_error_bar' ), 999 );
+	}
+
+	/**
+	 * Add Debug Tools submenu under Help.
+	 *
+	 * @return void
+	 */
+	public static function add_admin_menu(): void {
+		add_submenu_page(
+			'wpshadow',
+			__( 'Debug Tools', 'plugin-wpshadow' ),
+			__( 'Debug Tools', 'plugin-wpshadow' ),
+			'manage_options',
+			'wps-debug-tools',
+			array( __CLASS__, 'render_page' )
+		);
+	}
+
+	/**
+	 * Render the Debug Tools page.
+	 *
+	 * @return void
+	 */
+	public static function render_page(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wpshadow' ) );
+		}
+
+		$settings       = self::get_settings();
+		$timestamp      = get_option( self::TIMESTAMP_KEY, 0 );
+		$time_remaining = 0;
+		if ( $timestamp > 0 ) {
+			$time_remaining = max( 0, self::AUTO_DISABLE_TIMEOUT - ( time() - (int) $timestamp ) );
+		}
+
+		wp_enqueue_script( 'wps-debug-tools' );
+		wp_enqueue_style( 'wps-debug-tools' );
+
+		require WPSHADOW_PATH . 'includes/views/debug-tools.php';
+	}
+
+	/**
+	 * Get current debug settings.
+	 *
+	 * @return array
+	 */
+	public static function get_settings(): array {
+		$defaults = array(
+			'wp_debug'      => false,
+			'wp_debug_log'  => false,
+			'script_debug'  => false,
+			'savequeries'   => false,
+			'debug_display' => false,
+			'query_info'    => false,
+			'memory_usage'  => false,
+		);
+
+		$settings = get_option( self::OPTION_KEY, array() );
+		return is_array( $settings ) ? wp_parse_args( $settings, $defaults ) : $defaults;
+	}
+
+	/**
+	 * Update debug settings.
+	 *
+	 * @param array $settings New settings.
+	 * @return bool
+	 */
+	public static function update_settings( array $settings ): bool {
+		$current = self::get_settings();
+		$updated = wp_parse_args( $settings, $current );
+
+		// Update option.
+		update_option( self::OPTION_KEY, $updated );
+
+		// Update timestamp if any backend setting is enabled.
+		if ( $updated['wp_debug'] || $updated['wp_debug_log'] || $updated['script_debug'] || $updated['savequeries'] ) {
+			update_option( self::TIMESTAMP_KEY, time() );
+		} else {
+			delete_option( self::TIMESTAMP_KEY );
+		}
+
+		// Write config file.
+		self::write_config_file( $updated );
+
+		// Set/clear display cookie.
+		if ( $updated['debug_display'] ) {
+			self::set_display_cookie();
+		} else {
+			self::clear_display_cookie();
+		}
+
+		// Log activity.
+		WPSHADOW_Activity_Logger::log(
+			'settings_changed',
+			'Debug mode settings updated',
+			array(
+				'context'  => 'debug_mode',
+				'settings' => $updated,
+				'user_id'  => get_current_user_id(),
+			),
+			'debug'
+		);
+
+		return true;
+	}
+
+	/**
+	 * Write debug configuration file.
+	 *
+	 * @param array $settings Debug settings.
+	 * @return bool
+	 */
+	private static function write_config_file( array $settings ): bool {
+		$config_path = WP_CONTENT_DIR . '/' . self::CONFIG_FILE;
+
+		$content  = "<?php\n";
+		$content .= "/**\n";
+		$content .= " * WPS Debug Configuration\n";
+		$content .= " * Auto-generated by WPShadow Plugin\n";
+		$content .= " * DO NOT EDIT MANUALLY\n";
+		$content .= " */\n\n";
+
+		$content .= "if ( ! defined( 'ABSPATH' ) ) {\n";
+		$content .= "\texit;\n";
+		$content .= "}\n\n";
+
+		// Backend logging constants.
+		if ( $settings['wp_debug'] ) {
+			$content .= "define( 'WP_DEBUG', true );\n";
+		}
+
+		if ( $settings['wp_debug_log'] ) {
+			$content .= "define( 'WP_DEBUG_LOG', true );\n";
+		}
+
+		if ( $settings['script_debug'] ) {
+			$content .= "define( 'SCRIPT_DEBUG', true );\n";
+		}
+
+		if ( $settings['savequeries'] ) {
+			$content .= "define( 'SAVEQUERIES', true );\n";
+		}
+
+		// Frontend display (only for admins with cookie).
+		if ( $settings['debug_display'] && isset( $_COOKIE[ self::DISPLAY_COOKIE ] ) ) {
+			$content .= "define( 'WP_DEBUG_DISPLAY', true );\n";
+			$content .= "@ini_set( 'display_errors', '1' );\n";
+		} else {
+			$content .= "define( 'WP_DEBUG_DISPLAY', false );\n";
+			$content .= "@ini_set( 'display_errors', '0' );\n";
+		}
+
+		// Write file.
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
+		$result = file_put_contents( $config_path, $content );
+
+		if ( false === $result ) {
+			return false;
+		}
+
+		// Create auto-loader in mu-plugins if it doesn't exist.
+		self::create_mu_plugin_loader();
+
+		return true;
+	}
+
+	/**
+	 * Create mu-plugin loader to auto-require debug config.
+	 *
+	 * @return bool
+	 */
+	private static function create_mu_plugin_loader(): bool {
+		$mu_plugins_dir = WP_CONTENT_DIR . '/mu-plugins';
+		if ( ! is_dir( $mu_plugins_dir ) ) {
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_mkdir
+			if ( ! mkdir( $mu_plugins_dir, 0755, true ) ) {
+				return false;
+			}
+		}
+
+		$loader_path = $mu_plugins_dir . '/wps-debug-loader.php';
+
+		// Don't overwrite if it already exists.
+		if ( file_exists( $loader_path ) ) {
+			return true;
+		}
+
+		$content  = "<?php\n";
+		$content .= "/**\n";
+		$content .= " * WPS Debug Config Loader\n";
+		$content .= " * Auto-generated by WPShadow Plugin\n";
+		$content .= " * Loads debug configuration before other plugins\n";
+		$content .= " */\n\n";
+
+		$content .= "\$WPSHADOW_debug_config = WP_CONTENT_DIR . '/" . self::CONFIG_FILE . "';\n";
+		$content .= "if ( file_exists( \$WPSHADOW_debug_config ) ) {\n";
+		$content .= "\trequire_once \$WPSHADOW_debug_config;\n";
+		$content .= "}\n";
+
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
+		return false !== file_put_contents( $loader_path, $content );
+	}
+
+	/**
+	 * Check for auto-disable timeout.
+	 *
+	 * @return void
+	 */
+	public static function check_auto_disable(): void {
+		$timestamp = get_option( self::TIMESTAMP_KEY, 0 );
+		if ( ! $timestamp ) {
+			return;
+		}
+
+		$elapsed = time() - (int) $timestamp;
+		if ( $elapsed >= self::AUTO_DISABLE_TIMEOUT ) {
+			// Auto-disable all backend settings.
+			$settings                 = self::get_settings();
+			$settings['wp_debug']     = false;
+			$settings['wp_debug_log'] = false;
+			$settings['script_debug'] = false;
+			$settings['savequeries']  = false;
+
+			self::update_settings( $settings );
+
+			// Log auto-disable.
+			WPSHADOW_Activity_Logger::log(
+				'settings_changed',
+				'Debug mode auto-disabled due to timeout',
+				array(
+					'context'         => 'debug_mode_auto_disabled',
+					'reason'          => 'timeout',
+					'elapsed_seconds' => $elapsed,
+				),
+				'debug'
+			);
+		}
+	}
+
+	/**
+	 * Maybe enable frontend display for admins.
+	 *
+	 * @return void
+	 */
+	public static function maybe_enable_display(): void {
+		$settings = self::get_settings();
+		if ( ! $settings['debug_display'] ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		// Check for cookie.
+		if ( ! isset( $_COOKIE[ self::DISPLAY_COOKIE ] ) ) {
+			self::set_display_cookie();
+		}
+	}
+
+	/**
+	 * Set display cookie for current admin.
+	 *
+	 * @return void
+	 */
+	private static function set_display_cookie(): void {
+		if ( headers_sent() ) {
+			return;
+		}
+
+		$value = wp_create_nonce( 'wpshadow_debug_display_' . get_current_user_id() );
+		setcookie(
+			self::DISPLAY_COOKIE,
+			$value,
+			array(
+				'expires'  => time() + self::AUTO_DISABLE_TIMEOUT,
+				'path'     => COOKIEPATH,
+				'domain'   => COOKIE_DOMAIN,
+				'secure'   => is_ssl(),
+				'httponly' => true,
+				'samesite' => 'Lax',
+			)
+		);
+		setcookie( self::DISPLAY_COOKIE, $value, time() + self::AUTO_DISABLE_TIMEOUT, COOKIEPATH, COOKIE_DOMAIN, true, true );
+	}
+
+	/**
+	 * Clear display cookie.
+	 *
+	 * @return void
+	 */
+	private static function clear_display_cookie(): void {
+		if ( headers_sent() ) {
+			return;
+		}
+
+		setcookie(
+			self::DISPLAY_COOKIE,
+			'',
+			array(
+				'expires'  => time() - 3600,
+				'path'     => COOKIEPATH,
+				'domain'   => COOKIE_DOMAIN,
+				'secure'   => is_ssl(),
+				'httponly' => true,
+				'samesite' => 'Lax',
+			)
+		);
+		setcookie( self::DISPLAY_COOKIE, '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN, true, true );
+	}
+
+	/**
+	 * Render floating error bar for admins.
+	 *
+	 * @return void
+	 */
+	public static function render_error_bar(): void {
+		$settings = self::get_settings();
+		if ( ! $settings['debug_display'] && ! $settings['query_info'] && ! $settings['memory_usage'] ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$error_count  = 0;
+		$query_count  = 0;
+		$query_time   = 0;
+		$memory_usage = 0;
+
+		// Get error count if available.
+		if ( function_exists( 'error_get_last' ) ) {
+			$last_error = error_get_last();
+			if ( $last_error ) {
+				$error_count = 1;
+			}
+		}
+
+		// Get query info if SAVEQUERIES is defined.
+		if ( $settings['query_info'] && defined( 'SAVEQUERIES' ) && SAVEQUERIES ) {
+			global $wpdb;
+			if ( isset( $wpdb->queries ) && is_array( $wpdb->queries ) ) {
+				$query_count = count( $wpdb->queries );
+				$query_time  = array_sum( array_column( $wpdb->queries, 1 ) );
+			}
+		}
+
+		// Get memory usage.
+		if ( $settings['memory_usage'] ) {
+			$memory_usage = memory_get_peak_usage( true );
+		}
+
+		?>
+		<div id="wps-debug-bar" class="wps-debug-bar">
+			<div class="wps-debug-bar-inner">
+				<span class="wps-debug-bar-label">Debug:</span>
+				<?php if ( $settings['debug_display'] ) : ?>
+					<span class="wps-debug-bar-item wps-debug-errors">
+						<span class="dashicons dashicons-warning"></span>
+						<?php
+						// translators: %d: number of issues
+						printf( esc_html__( '%d Issues', 'plugin-wpshadow' ), (int) $error_count );
+						?>
+					</span>
+				<?php endif; ?>
+				<?php if ( $settings['query_info'] ) : ?>
+					<span class="wps-debug-bar-item wps-debug-queries">
+						<span class="dashicons dashicons-database"></span>
+						<?php
+						// translators: 1: number of queries, 2: query time
+						printf( esc_html__( '%1$d Queries (%2$ss)', 'plugin-wpshadow' ), (int) $query_count, number_format_i18n( $query_time, 4 ) );
+						?>
+					</span>
+				<?php endif; ?>
+				<?php if ( $settings['memory_usage'] ) : ?>
+					<span class="wps-debug-bar-item wps-debug-memory">
+						<span class="dashicons dashicons-dashboard"></span>
+						<?php
+						// translators: %s: memory usage in MB
+						printf( esc_html__( '%s MB', 'plugin-wpshadow' ), number_format_i18n( $memory_usage / 1024 / 1024, 2 ) );
+						?>
+					</span>
+				<?php endif; ?>
+			</div>
+		</div>
+		<style>
+		.wps-debug-bar {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			background: #23282d;
+			color: #fff;
+			padding: 8px 16px;
+			z-index: 99999;
+			font-size: 13px;
+			line-height: 1.4;
+			box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+		}
+		.wps-debug-bar-inner {
+			display: flex;
+			align-items: center;
+			gap: 20px;
+			max-width: 1200px;
+			margin: 0 auto;
+		}
+		.wps-debug-bar-label {
+			font-weight: 600;
+			color: #0073aa;
+		}
+		.wps-debug-bar-item {
+			display: flex;
+			align-items: center;
+			gap: 4px;
+		}
+		.wps-debug-bar-item .dashicons {
+			font-size: 16px;
+			width: 16px;
+			height: 16px;
+		}
+		.wps-debug-errors .dashicons {
+			color: #dc3232;
+		}
+		.wps-debug-queries .dashicons {
+			color: #46b450;
+		}
+		.wps-debug-memory .dashicons {
+			color: #00a0d2;
+		}
+		body.admin-bar .wps-debug-bar {
+			top: 32px;
+		}
+		@media screen and (max-width: 782px) {
+			body.admin-bar .wps-debug-bar {
+				top: 46px;
+			}
+		}
+		</style>
+		<?php
+	}
+
+	/**
+	 * AJAX handler to toggle debug settings.
+	 *
+	 * @return void
+	 */
+	public static function ajax_toggle_debug(): void {
+		check_ajax_referer( 'wpshadow_debug_tools', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that.', 'plugin-wpshadow' ) ) );
+		}
+
+		$setting = \WPShadow\WPSHADOW_get_post_key( 'setting' );
+		$value   = isset( $_POST['value'] ) ? (bool) $_POST['value'] : false;
+
+		if ( empty( $setting ) ) {
+			wp_send_json_error( array( 'message' => __( 'That setting doesn\'t exist', 'plugin-wpshadow' ) ) );
+		}
+
+		$settings             = self::get_settings();
+		$settings[ $setting ] = $value;
+
+		if ( self::update_settings( $settings ) ) {
+			wp_send_json_success(
+				array(
+					'message'  => __( 'Debug setting updated', 'plugin-wpshadow' ),
+					'settings' => self::get_settings(),
+				)
+			);
+		} else {
+			wp_send_json_error( array( 'message' => __( 'Couldn\'t update that debug setting', 'plugin-wpshadow' ) ) );
+		}
+	}
+
+	/**
+	 * AJAX handler to get error log.
+	 *
+	 * @return void
+	 */
+	public static function ajax_get_error_log(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
+		}
+
+		$log_file = WP_CONTENT_DIR . '/debug.log';
+		if ( ! file_exists( $log_file ) ) {
+			wp_send_json_success(
+				array(
+					'content' => __( 'No error log file found.', 'plugin-wpshadow' ),
+					'size'    => 0,
+				)
+			);
+		}
+
+		// Get last 100 lines.
+		$lines = array();
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
+		$file = fopen( $log_file, 'r' );
+		if ( $file ) {
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fseek
+			fseek( $file, -1, SEEK_END );
+			$position   = ftell( $file );
+			$line_count = 0;
+
+			while ( $position >= 0 && $line_count < 100 ) {
+				$char = fgetc( $file );
+				if ( "\n" === $char ) {
+					++$line_count;
+				}
+				--$position;
+				// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fseek
+				fseek( $file, $position, SEEK_SET );
+			}
+
+			while ( ! feof( $file ) ) {
+				$line = fgets( $file );
+				if ( $line ) {
+					$lines[] = $line;
+				}
+			}
+
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
+			fclose( $file );
+		}
+
+		$content = implode( '', $lines );
+		$size    = filesize( $log_file );
+
+		wp_send_json_success(
+			array(
+				'content' => $content,
+				'size'    => size_format( $size ),
+			)
+		);
+	}
+
+	/**
+	 * AJAX handler to clear error log.
+	 *
+	 * @return void
+	 */
+	public static function ajax_clear_error_log(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
+		}
+
+		$log_file = WP_CONTENT_DIR . '/debug.log';
+		if ( ! file_exists( $log_file ) ) {
+			wp_send_json_success( array( 'message' => __( 'No error log file found.', 'plugin-wpshadow' ) ) );
+		}
+
+		// Clear the log file.
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
+		if ( file_put_contents( $log_file, '' ) !== false ) {
+			// Log activity.
+			WPSHADOW_Activity_Logger::log(
+				'settings_changed',
+				'Debug log file cleared',
+				array(
+					'context' => 'debug_log_cleared',
+					'user_id' => get_current_user_id(),
+				),
+				'debug'
+			);
+
+			wp_send_json_success( array( 'message' => __( 'Error log cleared', 'plugin-wpshadow' ) ) );
+		} else {
+			wp_send_json_error( array( 'message' => __( 'Couldn\'t clear the error log', 'plugin-wpshadow' ) ) );
+		}
+	}
+}

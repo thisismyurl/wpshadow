@@ -1,0 +1,239 @@
+/**
+ * WPS Guided Tasks Styles
+ *
+ * @package WPSHADOW_WP_SUPPORT
+ * @since 1.2601.1111
+ */
+
+.wps-guided-tasks-page .wps-workflow-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	gap: 20px;
+	margin-top: 20px;
+}
+
+.wps-workflow-card {
+	background: #fff;
+	border: 1px solid #ccd0d4;
+	border-radius: 4px;
+	padding: 20px;
+	transition: box-shadow 0.2s;
+}
+
+.wps-workflow-card:hover {
+	box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.wps-workflow-card h3 {
+	margin-top: 0;
+	color: #0073aa;
+}
+
+.wps-workflow-card .description {
+	min-height: 40px;
+}
+
+.wps-step-count {
+	color: #646970;
+	font-size: 13px;
+	margin: 10px 0;
+}
+
+.wps-start-workflow {
+	width: 100%;
+}
+
+.wps-active-walkthrough {
+	background: #fff;
+	border: 1px solid #ccd0d4;
+	border-radius: 4px;
+	padding: 30px;
+	margin: 20px 0;
+}
+
+.wps-progress-bar {
+	background: #f0f0f1;
+	height: 20px;
+	border-radius: 10px;
+	overflow: hidden;
+	margin: 20px 0;
+}
+
+.wps-progress-fill {
+	background: linear-gradient(90deg, #0073aa, #46b450);
+	height: 100%;
+	transition: width 0.3s ease;
+}
+
+.wps-progress-text {
+	text-align: center;
+	font-size: 14px;
+	color: #646970;
+	margin: 10px 0;
+}
+
+.wps-current-step {
+	background: #f5f5f5;
+	border-left: 4px solid #0073aa;
+	padding: 20px;
+	margin: 20px 0;
+	border-radius: 4px;
+}
+
+.wps-current-step h3 {
+	margin-top: 0;
+	color: #0073aa;
+}
+
+.wps-step-actions {
+	margin-top: 20px;
+	display: flex;
+	gap: 10px;
+}
+
+.wps-step-actions .button {
+	flex: 0 0 auto;
+}
+
+.wps-step-actions .button-primary {
+	order: 2;
+}
+
+.wps-step-actions .wps-undo-step {
+	order: 1;
+}
+
+.wps-step-actions .wps-cancel-walkthrough {
+	order: 3;
+	margin-left: auto;
+}
+
+.wps-steps-list {
+	margin-top: 30px;
+	padding-top: 20px;
+	border-top: 1px solid #dcdcde;
+}
+
+.wps-steps-list h4 {
+	color: #646970;
+	margin-bottom: 15px;
+}
+
+.wps-steps-list ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.wps-steps-list li {
+	padding: 10px 15px;
+	margin: 5px 0;
+	background: #f5f5f5;
+	border-radius: 4px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.wps-steps-list li.completed {
+	background: #e6f4ea;
+	color: #046b3f;
+}
+
+.wps-steps-list li.completed .dashicons {
+	color: #46b450;
+}
+
+.wps-steps-list li.active {
+	background: #e5f5fa;
+	color: #005a87;
+	font-weight: 600;
+	border-left: 4px solid #0073aa;
+}
+
+.wps-steps-list li.active .dashicons {
+	color: #0073aa;
+}
+
+.wps-steps-list li .dashicons {
+	flex-shrink: 0;
+}
+
+.wps-finish-walkthrough {
+	margin-top: 15px;
+}
+
+@media (max-width: 640px) {
+	/* Mobile: Single column */
+	.wps-workflow-grid {
+		grid-template-columns: 1fr;
+	}
+
+	/* Step actions stack vertically */
+	.wps-step-actions {
+		flex-direction: column;
+	}
+
+	.wps-step-actions .button {
+		width: 100%;
+		min-height: 48px;
+	}
+
+	.wps-step-actions .wps-cancel-walkthrough {
+		margin-left: 0;
+	}
+
+	/* Workflow cards more compact */
+	.wps-workflow-card {
+		padding: 16px;
+	}
+
+	.wps-workflow-card h3 {
+		font-size: 18px;
+	}
+
+	/* Active walkthrough more compact */
+	.wps-active-walkthrough {
+		padding: 20px;
+	}
+
+	.wps-current-step {
+		padding: 16px;
+	}
+
+	/* Steps list more compact */
+	.wps-steps-list li {
+		padding: 8px 12px;
+		font-size: 14px;
+	}
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+	/* Tablet: 2 columns */
+	.wps-workflow-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.wps-step-actions {
+		flex-wrap: wrap;
+	}
+
+	.wps-step-actions .button {
+		flex: 1 1 calc(50% - 5px);
+		min-width: 120px;
+	}
+}
+
+@media (max-width: 768px) {
+	.wps-workflow-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.wps-step-actions {
+		flex-direction: column;
+	}
+
+	.wps-step-actions .wps-cancel-walkthrough {
+		margin-left: 0;
+	}
+}

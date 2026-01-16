@@ -1,0 +1,676 @@
+/**
+ * WPS Responsive Design System
+ * Mobile-first approach with comprehensive breakpoint coverage
+ *
+ * @package WPSHADOW_CORE_SUPPORT
+ * @since 1.2601.71920
+ */
+
+/* ========== CSS Custom Properties for Responsive Design ========== */
+:root {
+	/* Breakpoints (matches requirements: 320px, 640px, 1024px, 1280px) */
+	--wps-breakpoint-xs: 320px;
+	--wps-breakpoint-sm: 640px;
+	--wps-breakpoint-md: 1024px;
+	--wps-breakpoint-lg: 1280px;
+
+	/* Touch Target Sizes (minimum 48px for touch devices) */
+	--wps-touch-target-min: 48px;
+	--wps-touch-spacing: 12px;
+
+	/* Mobile-specific spacing */
+	--wps-mobile-padding: 16px;
+	--wps-mobile-margin: 16px;
+}
+
+/* ========== Base Mobile-First Styles ========== */
+/* These styles apply to all screen sizes (starting at 320px) */
+
+/* Ensure all admin pages are responsive */
+.wrap.wps-core-wrap {
+	width: 100%;
+	max-width: 100%;
+	margin: 0 auto;
+	padding: var(--wps-mobile-padding);
+	box-sizing: border-box;
+}
+
+/* Mobile-first: Stack by default */
+.wps-core-header {
+	flex-direction: column;
+	gap: var(--wps-space-md);
+	text-align: center;
+	padding: var(--wps-mobile-padding);
+}
+
+/* Ensure touch targets are minimum 48px */
+.wps-core-wrap button,
+.wps-core-wrap .button,
+.wps-core-wrap .wps-btn,
+.wps-core-wrap a.button,
+.wps-core-wrap input[type="submit"],
+.wps-core-wrap input[type="button"] {
+	min-height: var(--wps-touch-target-min);
+	min-width: var(--wps-touch-target-min);
+	padding: 12px 20px;
+	font-size: 16px; /* Prevent iOS zoom on focus */
+	touch-action: manipulation; /* Prevent double-tap zoom */
+}
+
+/* Touch-friendly form inputs */
+.wps-core-wrap input[type="text"],
+.wps-core-wrap input[type="email"],
+.wps-core-wrap input[type="password"],
+.wps-core-wrap input[type="number"],
+.wps-core-wrap input[type="search"],
+.wps-core-wrap select,
+.wps-core-wrap textarea {
+	min-height: var(--wps-touch-target-min);
+	font-size: 16px; /* Prevent iOS zoom on focus */
+	padding: 12px 16px;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+/* Touch-friendly spacing between interactive elements */
+.wps-core-wrap button + button,
+.wps-core-wrap .button + .button {
+	margin-top: var(--wps-touch-spacing);
+}
+
+/* Mobile-first grid: Single column by default */
+.wps-core-grid,
+.wps-dashboard-stats,
+.wps-grid,
+.wps-workflow-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--wps-space-md);
+	width: 100%;
+}
+
+/* Cards stack on mobile */
+.wps-core-card,
+.wps-card,
+.wps-stat-card,
+.wps-workflow-card {
+	margin-bottom: var(--wps-space-md);
+	width: 100%;
+	box-sizing: border-box;
+}
+
+/* ========== Mobile Navigation (Hamburger Menu Pattern) ========== */
+/* Mobile navigation toggle button */
+.wps-mobile-nav-toggle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--wps-touch-target-min);
+	height: var(--wps-touch-target-min);
+	background: var(--wps-accent-primary);
+	color: var(--wps-text-inverted);
+	border: none;
+	border-radius: var(--wps-radius-md);
+	cursor: pointer;
+	position: fixed;
+	top: 32px; /* Below WordPress admin bar */
+	right: var(--wps-mobile-padding);
+	z-index: 9998;
+	box-shadow: var(--wps-shadow-lg);
+	transition: all var(--wps-transition-fast);
+}
+
+.wps-mobile-nav-toggle:hover {
+	background: var(--wps-accent-primary-hover);
+	transform: scale(1.05);
+}
+
+.wps-mobile-nav-toggle:focus {
+	outline: 2px solid var(--wps-accent-primary);
+	outline-offset: 2px;
+}
+
+/* Hamburger icon */
+.wps-mobile-nav-toggle .dashicons {
+	font-size: 24px;
+	width: 24px;
+	height: 24px;
+}
+
+/* Mobile navigation drawer */
+.wps-mobile-nav-drawer {
+	position: fixed;
+	top: 0;
+	right: -100%;
+	width: 280px;
+	max-width: 85%;
+	height: 100vh;
+	background: var(--wps-bg-primary);
+	box-shadow: var(--wps-shadow-xl);
+	z-index: 9999;
+	transition: right var(--wps-transition-base);
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+	padding: var(--wps-space-2xl) var(--wps-space-lg);
+}
+
+.wps-mobile-nav-drawer.is-open {
+	right: 0;
+}
+
+/* Mobile nav overlay */
+.wps-mobile-nav-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 9997;
+	opacity: 0;
+	visibility: hidden;
+	transition: all var(--wps-transition-base);
+}
+
+.wps-mobile-nav-overlay.is-visible {
+	opacity: 1;
+	visibility: visible;
+}
+
+/* Mobile navigation links */
+.wps-mobile-nav-drawer nav ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.wps-mobile-nav-drawer nav li {
+	margin-bottom: var(--wps-touch-spacing);
+}
+
+.wps-mobile-nav-drawer nav a {
+	display: flex;
+	align-items: center;
+	min-height: var(--wps-touch-target-min);
+	padding: 12px 16px;
+	color: var(--wps-text-primary);
+	text-decoration: none;
+	border-radius: var(--wps-radius-md);
+	transition: all var(--wps-transition-fast);
+}
+
+.wps-mobile-nav-drawer nav a:hover,
+.wps-mobile-nav-drawer nav a:focus {
+	background: var(--wps-bg-secondary);
+	color: var(--wps-accent-primary);
+}
+
+/* ========== Responsive Tables ========== */
+/* Mobile-first: Tables scroll horizontally */
+.wps-table-responsive {
+	width: 100%;
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+	margin-bottom: var(--wps-space-lg);
+}
+
+.wps-table-responsive table {
+	min-width: 600px; /* Ensure table doesn't collapse too much */
+}
+
+/* For very small screens, consider card-based layout for tables */
+@media (max-width: 640px) {
+	.wps-table-mobile-cards {
+		display: block;
+	}
+
+	.wps-table-mobile-cards thead {
+		display: none;
+	}
+
+	.wps-table-mobile-cards tbody,
+	.wps-table-mobile-cards tr {
+		display: block;
+		width: 100%;
+	}
+
+	.wps-table-mobile-cards tr {
+		margin-bottom: var(--wps-space-md);
+		border: 1px solid var(--wps-border-primary);
+		border-radius: var(--wps-radius-md);
+		padding: var(--wps-space-md);
+		background: var(--wps-bg-primary);
+	}
+
+	.wps-table-mobile-cards td {
+		display: block;
+		text-align: left;
+		padding: var(--wps-space-sm) 0;
+		border: none;
+	}
+
+	.wps-table-mobile-cards td:before {
+		content: attr(data-label);
+		font-weight: var(--wps-font-semibold);
+		display: block;
+		margin-bottom: var(--wps-space-xs);
+		color: var(--wps-text-secondary);
+		font-size: var(--wps-text-sm);
+	}
+}
+
+/* ========== Flexible Layouts: Stacking and Wrapping ========== */
+/* Metabox holder: Stack on mobile */
+.wps-metabox-holder {
+	flex-direction: column;
+	gap: var(--wps-space-md);
+}
+
+/* Tab navigation: Horizontal scroll on mobile */
+.wps-tab-navigation {
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+	white-space: nowrap;
+	margin-bottom: var(--wps-space-lg);
+}
+
+.wps-tab-navigation .nav-tab {
+	min-height: var(--wps-touch-target-min);
+	padding: 12px 20px;
+	display: inline-flex;
+	align-items: center;
+	white-space: nowrap;
+}
+
+/* Form actions: Stack on mobile */
+.wps-form-actions,
+.wps-step-actions,
+.wps-card-footer {
+	display: flex;
+	flex-direction: column;
+	gap: var(--wps-touch-spacing);
+}
+
+.wps-form-actions .button,
+.wps-step-actions .button,
+.wps-card-footer .button {
+	width: 100%;
+	justify-content: center;
+}
+
+/* ========== Breakpoint: 640px (Small Tablets, Large Phones) ========== */
+@media (min-width: 640px) {
+	/* Enable 2-column layouts */
+	.wps-dashboard-stats {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.wps-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.wps-workflow-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	/* Header can be horizontal */
+	.wps-core-header {
+		flex-direction: row;
+		justify-content: space-between;
+		text-align: left;
+	}
+
+	/* Form actions can be horizontal */
+	.wps-form-actions,
+	.wps-step-actions {
+		flex-direction: row;
+		justify-content: flex-start;
+	}
+
+	.wps-form-actions .button,
+	.wps-step-actions .button {
+		width: auto;
+		flex: 0 1 auto;
+	}
+
+	/* Card footer buttons can be horizontal */
+	.wps-card-footer {
+		flex-direction: row;
+		justify-content: flex-end;
+	}
+
+	.wps-card-footer .button {
+		width: auto;
+	}
+
+	/* Metabox holder can be 2 columns */
+	.wps-metabox-holder {
+		flex-direction: row;
+	}
+
+	.wps-metabox-container {
+		flex: 1;
+	}
+}
+
+/* ========== Breakpoint: 1024px (Tablets, Small Laptops) ========== */
+@media (min-width: 1024px) {
+	/* Hide mobile navigation elements */
+	.wps-mobile-nav-toggle {
+		display: none;
+	}
+
+	.wps-mobile-nav-drawer {
+		display: none;
+	}
+
+	/* Increase to 3-column layouts */
+	.wps-dashboard-stats {
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	}
+
+	.wps-grid-3,
+	.wps-workflow-grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	/* Core wrap can have more horizontal space */
+	.wps-core-wrap {
+		padding: var(--wps-space-xl);
+		max-width: 1200px;
+	}
+
+	/* Tables don't need mobile card layout */
+	.wps-table-mobile-cards thead {
+		display: table-header-group;
+	}
+
+	.wps-table-mobile-cards tbody,
+	.wps-table-mobile-cards tr {
+		display: table-row;
+	}
+
+	.wps-table-mobile-cards td {
+		display: table-cell;
+		text-align: left;
+		padding: var(--wps-space-md);
+		border: 1px solid var(--wps-border-secondary);
+	}
+
+	.wps-table-mobile-cards td:before {
+		display: none;
+	}
+}
+
+/* ========== Breakpoint: 1280px (Desktops, Large Screens) ========== */
+@media (min-width: 1280px) {
+	/* Maximum 4-column layouts */
+	.wps-dashboard-stats {
+		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	}
+
+	/* Core wrap can be wider */
+	.wps-core-wrap {
+		max-width: 1400px;
+	}
+
+	/* More generous spacing */
+	.wps-core-grid,
+	.wps-grid {
+		gap: var(--wps-space-xl);
+	}
+}
+
+/* ========== Performance Optimizations ========== */
+/* Reduce animations on low-end devices */
+@media (prefers-reduced-motion: reduce) {
+	* {
+		animation-duration: 0ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0ms !important;
+	}
+}
+
+/* Optimize for printing */
+@media print {
+	.wps-mobile-nav-toggle,
+	.wps-mobile-nav-drawer,
+	.wps-mobile-nav-overlay {
+		display: none !important;
+	}
+
+	.wps-core-wrap {
+		max-width: 100%;
+		padding: 0;
+	}
+
+	.wps-card,
+	.wps-core-card {
+		page-break-inside: avoid;
+		box-shadow: none;
+		border: 1px solid #000;
+	}
+}
+
+/* ========== Accessibility Enhancements for Mobile ========== */
+/* Focus indicators must be visible on touch devices */
+.wps-core-wrap *:focus-visible {
+	outline: 3px solid var(--wps-accent-primary);
+	outline-offset: 2px;
+}
+
+/* Skip to content link for keyboard navigation */
+.wps-skip-to-content {
+	position: absolute;
+	top: -9999px;
+	left: -9999px;
+	z-index: 999999;
+	padding: 12px 20px;
+	background: var(--wps-accent-primary);
+	color: var(--wps-text-inverted);
+	text-decoration: none;
+	border-radius: var(--wps-radius-md);
+}
+
+.wps-skip-to-content:focus {
+	position: fixed;
+	top: 10px;
+	left: 10px;
+	z-index: 999999;
+}
+
+/* ========== Landscape Orientation Optimizations ========== */
+@media (max-width: 1024px) and (orientation: landscape) {
+	/* Reduce vertical spacing in landscape */
+	.wps-core-wrap {
+		padding: var(--wps-space-md);
+	}
+
+	.wps-card,
+	.wps-core-card {
+		padding: var(--wps-space-md);
+	}
+
+	/* Make better use of horizontal space */
+	.wps-dashboard-stats {
+		grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+	}
+}
+
+/* ========== High DPI / Retina Displays ========== */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+	/* Adjust for sharper rendering */
+	.wps-core-wrap {
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+}
+
+/* ========== Small Screens (320px baseline) ========== */
+@media (max-width: 320px) {
+	/* Extra small devices: Ensure minimum usability */
+	.wps-core-wrap {
+		padding: var(--wps-space-sm);
+	}
+
+	.wps-core-wrap h1 {
+		font-size: var(--wps-text-xl);
+	}
+
+	.wps-core-wrap h2 {
+		font-size: var(--wps-text-lg);
+	}
+
+	/* Ensure buttons don't overflow */
+	.wps-core-wrap button,
+	.wps-core-wrap .button {
+		font-size: 14px;
+		padding: 10px 16px;
+		width: 100%;
+	}
+}
+
+/* ========== No Horizontal Scrolling ========== */
+/* Ensure nothing causes horizontal scroll within WPS pages */
+.wps-core-wrap * {
+	box-sizing: border-box;
+}
+
+.wps-core-wrap *::before,
+.wps-core-wrap *::after {
+	box-sizing: border-box;
+}
+
+.wps-core-wrap img,
+.wps-core-wrap video,
+.wps-core-wrap iframe {
+	max-width: 100%;
+	height: auto;
+}
+
+.wps-core-wrap pre,
+.wps-core-wrap code {
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+/* ========== Touch Device Optimizations ========== */
+@media (hover: none) and (pointer: coarse) {
+	/* Remove hover effects on touch devices */
+	.wps-card:hover,
+	.wps-stat-card:hover {
+		transform: none;
+		box-shadow: var(--wps-shadow-xs);
+	}
+
+	/* Increase tap target sizes slightly */
+	.wps-core-wrap button,
+	.wps-core-wrap .button,
+	.wps-core-wrap a {
+		padding: 14px 20px;
+	}
+
+	/* Remove subtle animations that don't work well on touch */
+	.wps-btn::after,
+	.button::after {
+		display: none;
+	}
+}
+
+/* ========== Utility Classes for Responsive Control ========== */
+.wps-hide-mobile {
+	display: none;
+}
+
+.wps-show-mobile {
+	display: block;
+}
+
+@media (min-width: 640px) {
+	.wps-hide-mobile {
+		display: block;
+	}
+
+	.wps-show-mobile {
+		display: none;
+	}
+}
+
+.wps-hide-tablet {
+	display: block;
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+	.wps-hide-tablet {
+		display: none;
+	}
+}
+
+.wps-hide-desktop {
+	display: block;
+}
+
+@media (min-width: 1024px) {
+	.wps-hide-desktop {
+		display: none;
+	}
+}
+
+/* ========== Responsive Stat Cards Enhancements ========== */
+.wps-stat-card {
+	flex-direction: column;
+	text-align: center;
+	padding: var(--wps-space-md);
+}
+
+@media (min-width: 640px) {
+	.wps-stat-card {
+		flex-direction: row;
+		text-align: left;
+	}
+}
+
+/* ========== Responsive Dashboard Improvements ========== */
+.wps-dashboard-col-container {
+	display: flex;
+	flex-direction: column;
+	gap: var(--wps-space-md);
+}
+
+@media (min-width: 640px) {
+	.wps-dashboard-col-container {
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+
+	.wps-dashboard-col {
+		flex: 1 1 calc(50% - var(--wps-space-md));
+		min-width: 280px;
+	}
+}
+
+@media (min-width: 1024px) {
+	.wps-dashboard-col {
+		flex: 1 1 calc(33.333% - var(--wps-space-md));
+	}
+}
+
+/* ========== WordPress Admin Bar Adjustments ========== */
+@media (max-width: 782px) {
+	/* Adjust for WordPress mobile admin bar (46px) */
+	.wps-mobile-nav-toggle {
+		top: 46px;
+	}
+
+	/* WordPress collapses admin menu on mobile */
+	.wps-core-wrap {
+		margin-left: 0;
+	}
+}
+
+@media (max-width: 600px) {
+	/* Very small screens: WordPress admin bar gets smaller */
+	.wps-mobile-nav-toggle {
+		top: 46px;
+	}
+}

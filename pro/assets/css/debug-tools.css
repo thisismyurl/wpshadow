@@ -1,0 +1,48 @@
+/**
+ * Debug Tools CSS
+ * Additional styles for the Debug Tools page.
+ *
+ * @package WPSHADOW_CoreSupport
+ * @since 1.2601.73002
+ */
+
+/* Additional responsive styles */
+@media screen and (max-width: 782px) {
+	.wps-debug-tools-container {
+		padding: 10px;
+	}
+
+	.wps-debug-section {
+		padding: 15px;
+	}
+
+	.wps-debug-status-row {
+		flex-direction: column;
+		gap: 15px;
+		align-items: flex-start;
+	}
+
+	.wps-debug-log-actions {
+		flex-direction: column;
+	}
+
+	.wps-debug-log-actions .button {
+		width: 100%;
+	}
+}
+
+/* Print styles */
+@media print {
+	.wps-debug-section h2 {
+		page-break-after: avoid;
+	}
+
+	.wps-debug-log-content {
+		max-height: none;
+		page-break-inside: avoid;
+	}
+
+	.wps-debug-log-actions {
+		display: none;
+	}
+}

@@ -1,0 +1,274 @@
+/* Tab-based Navigation Styles */
+.wps-tab-navigation {
+	margin: 20px 0 30px;
+	border-bottom: 1px solid #ccd0d4;
+}
+
+.wps-tab-navigation .nav-tab {
+	margin-bottom: -1px;
+	transition: all 0.2s ease;
+}
+
+.wps-tab-navigation .nav-tab .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	vertical-align: text-bottom;
+	margin-right: 5px;
+}
+
+.wps-tab-navigation .nav-tab:hover {
+	background: #f0f0f1;
+}
+
+.wps-tab-navigation .nav-tab-active {
+	background: #fff;
+	border-bottom-color: #fff;
+	color: #2271b1;
+}
+
+/* Breadcrumbs */
+.wps-breadcrumbs {
+	margin: 15px 0;
+	padding: 10px 15px;
+	background: #f6f7f7;
+	border-left: 4px solid #2271b1;
+	font-size: 14px;
+}
+
+.wps-breadcrumbs a {
+	color: #2271b1;
+	text-decoration: none;
+}
+
+.wps-breadcrumbs a:hover {
+	color: #135e96;
+	text-decoration: underline;
+}
+
+.wps-breadcrumbs .separator {
+	margin: 0 8px;
+	color: #646970;
+}
+
+.wps-breadcrumbs .current {
+	font-weight: 600;
+	color: #1d2327;
+}
+
+/* Dashboard Widgets */
+.wps-dashboard {
+	margin-top: 20px;
+}
+
+.wps-dashboard-widgets-wrap {
+	max-width: 1800px;
+}
+
+.wps-dashboard-col-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+}
+
+.wps-dashboard-col {
+	flex: 1;
+	min-width: 400px;
+}
+
+.wps-dashboard-widget {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+	margin-bottom: 20px;
+}
+
+.wps-dashboard-widget h2 {
+	margin: 0;
+	padding: 12px 15px;
+	background: #f6f7f7;
+	border-bottom: 1px solid #c3c4c7;
+	font-size: 14px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.wps-widget-content {
+	padding: 15px;
+}
+
+.wps-widget-content p {
+	margin: 0 0 10px;
+}
+
+.wps-widget-content p:last-child {
+	margin-bottom: 0;
+}
+
+/* Stats Lists */
+.wps-stats-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.wps-stats-list li {
+	padding: 8px 0;
+	border-bottom: 1px solid #f0f0f1;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.wps-stats-list li:last-child {
+	border-bottom: none;
+}
+
+.wps-stats-list .dashicons {
+	color: #2271b1;
+	font-size: 18px;
+	width: 18px;
+	height: 18px;
+}
+
+/* Hub and Spoke Lists */
+.wps-hub-list,
+.wps-spoke-list,
+.wps-features-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.wps-hub-list li,
+.wps-spoke-list li,
+.wps-features-list li {
+	padding: 8px 0;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+.wps-hub-list li:last-child,
+.wps-spoke-list li:last-child,
+.wps-features-list li:last-child {
+	border-bottom: none;
+}
+
+.wps-hub-list a,
+.wps-spoke-list a {
+	text-decoration: none;
+	color: #2271b1;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	transition: color 0.2s ease;
+}
+
+.wps-hub-list a:hover,
+.wps-spoke-list a:hover {
+	color: #135e96;
+}
+
+.wps-hub-list .dashicons,
+.wps-spoke-list .dashicons,
+.wps-features-list .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 640px) {
+	/* Mobile: Horizontal scrolling tabs */
+	.wps-tab-navigation {
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		white-space: nowrap;
+		margin-bottom: 16px;
+		padding-bottom: 8px;
+	}
+
+	.wps-tab-navigation .nav-tab {
+		min-height: 48px;
+		padding: 12px 16px;
+		display: inline-flex;
+		align-items: center;
+		font-size: 14px;
+	}
+
+	/* Breadcrumbs stack better on mobile */
+	.wps-breadcrumbs {
+		font-size: 13px;
+		padding: 8px 12px;
+	}
+
+	.wps-breadcrumbs .separator {
+		margin: 0 4px;
+	}
+
+	/* Dashboard widgets stack on mobile */
+	.wps-dashboard-col-container {
+		flex-direction: column;
+	}
+
+	.wps-dashboard-col {
+		min-width: 100%;
+		width: 100%;
+	}
+
+	/* Widget content adjustments */
+	.wps-widget-content .button {
+		width: 100%;
+		justify-content: center;
+		min-height: 48px;
+	}
+
+	/* Stats lists more compact on mobile */
+	.wps-stats-list li {
+		padding: 10px 0;
+		font-size: 14px;
+	}
+}
+
+@media (min-width: 641px) and (max-width: 900px) {
+	/* Tablet: 2-column layout */
+	.wps-dashboard-col-container {
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	.wps-dashboard-col {
+		flex: 1 1 calc(50% - 10px);
+		min-width: 280px;
+	}
+}
+
+@media (max-width: 900px) {
+	.wps-dashboard-col-container {
+		flex-direction: column;
+	}
+
+	.wps-dashboard-col {
+		min-width: 100%;
+	}
+}
+
+/* Button Alignment in Widgets */
+.wps-widget-content .button {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.wps-widget-content .button .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+/* Empty State */
+.wps-widget-content p em {
+	color: #646970;
+}
+
+/* @changelog Added tab-based navigation and dashboard widget styles */
+

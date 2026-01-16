@@ -1,0 +1,144 @@
+/**
+ * WPS Update Simulator Styles
+ *
+ * @package WPSHADOW_WP_SUPPORT
+ * @since 1.2601.1111
+ */
+
+.wps-update-simulator-page .wps-updates-available {
+	background: #fff;
+	border: 1px solid #ccd0d4;
+	border-radius: 4px;
+	padding: 20px;
+	margin: 20px 0;
+}
+
+.wps-updates-table {
+	margin-top: 15px;
+}
+
+.wps-updates-table th {
+	background: #f0f0f1;
+	font-weight: 600;
+}
+
+.wps-simulate-btn {
+	cursor: pointer;
+}
+
+.wps-simulate-btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.wps-view-changelog {
+	color: #2271b1;
+	text-decoration: none;
+}
+
+.wps-view-changelog:hover {
+	text-decoration: underline;
+}
+
+.wps-simulation-history {
+	background: #fff;
+	border: 1px solid #ccd0d4;
+	border-radius: 4px;
+	padding: 20px;
+	margin: 20px 0;
+}
+
+.wps-badge-success {
+	background: #46b450;
+	color: #fff;
+	padding: 3px 8px;
+	border-radius: 3px;
+	font-size: 11px;
+	font-weight: 600;
+}
+
+.wps-badge-pending {
+	background: #dba617;
+	color: #fff;
+	padding: 3px 8px;
+	border-radius: 3px;
+	font-size: 11px;
+	font-weight: 600;
+}
+
+.wps-badge-neutral {
+	background: #646970;
+	color: #fff;
+	padding: 3px 8px;
+	border-radius: 3px;
+	font-size: 11px;
+	font-weight: 600;
+}
+
+.wps-rollback-btn {
+	color: #d63638;
+	border-color: #d63638;
+}
+
+.wps-rollback-btn:hover {
+	background: #d63638;
+	color: #fff;
+	border-color: #d63638;
+}
+
+#wps-changelog-modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 100000;
+}
+
+.wps-modal-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.7);
+}
+
+.wps-modal-content {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: #fff;
+	border-radius: 4px;
+	padding: 30px;
+	max-width: 700px;
+	width: 90%;
+	max-height: 80vh;
+	overflow-y: auto;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.wps-modal-close {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	background: none;
+	border: none;
+	font-size: 24px;
+	cursor: pointer;
+	color: #646970;
+}
+
+.wps-modal-close:hover {
+	color: #d63638;
+}
+
+.wps-changelog-content {
+	margin-top: 20px;
+}
+
+.wps-changelog-content ul {
+	list-style: disc;
+	padding-left: 25px;
+}
