@@ -364,20 +364,18 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Enforce HTTPS everywhere on the site.
-	 * Redirects HTTP requests to HTTPS and forces SSL for admin area.
+	 * 
+	 * This method:
+	 * - Forces SSL for admin and login areas using the force_ssl_admin filter
+	 * - Redirects all HTTP requests to HTTPS (frontend and admin)
+	 * - Filters WordPress URLs to use HTTPS scheme
+	 * - Displays admin notices when HTTPS is not properly configured
 	 *
 	 * @return void
 	 */
 	private function enforce_https(): void {
 		// Check if site is already using HTTPS.
-		$site_url = get_option( 'siteurl' );
-		$home_url = get_option( 'home' );
-		
-		if ( ! is_string( $site_url ) || ! is_string( $home_url ) ) {
-			return;
-		}
-
-		$is_https = strpos( $site_url, 'https://' ) === 0 && strpos( $home_url, 'https://' ) === 0;
+		$is_https = $this->is_site_using_https();
 
 		// Force SSL for admin and logins using WordPress hooks.
 		// Note: FORCE_SSL_ADMIN constant should be defined in wp-config.php for best results.
@@ -485,5 +483,21 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 		}
 
 		return $url;
+	}
+
+	/**
+	 * Check if the site is configured to use HTTPS.
+	 *
+	 * @return bool True if both site_url and home_url use HTTPS, false otherwise.
+	 */
+	private function is_site_using_https(): bool {
+		$site_url = get_option( 'siteurl' );
+		$home_url = get_option( 'home' );
+		
+		if ( ! is_string( $site_url ) || ! is_string( $home_url ) ) {
+			return false;
+		}
+
+		return strpos( $site_url, 'https://' ) === 0 && strpos( $home_url, 'https://' ) === 0;
 	}
 }
