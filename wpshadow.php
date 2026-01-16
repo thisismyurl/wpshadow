@@ -353,6 +353,8 @@ function WPSHADOW_register_core_features(): void {
 	// Debugging features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Conflict_Sandbox() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Visual_Regression() );
+	// SEO and monitoring features.
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Broken_Link_Checker() );
 }
 
 /**
@@ -826,6 +828,7 @@ function wpshadow_init(): void {
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-script-optimizer.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-conflict-sandbox.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-visual-regression.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-broken-link-checker.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-seo-validator.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-favicon-checker.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/wps-feature-functions.php' );
@@ -842,6 +845,9 @@ function wpshadow_init(): void {
 
 	// Initialize Weekly Performance Report feature
 	\WPShadow\CoreSupport\WPSHADOW_Feature_Weekly_Performance_Report::init();
+
+	// Initialize Broken Link Checker feature
+	\WPShadow\CoreSupport\WPSHADOW_Feature_Broken_Link_Checker::init();
 
 	// Load Spoke Base for spoke plugins (Image, Media, etc).
 	require_once WPSHADOW_PATH . 'includes/class-wps-spoke-base.php';
