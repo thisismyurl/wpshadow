@@ -398,6 +398,18 @@ class WPSHADOW_Site_Health {
 		$site_url = get_option( 'siteurl' );
 		$home_url = get_option( 'home' );
 		
+		// Type safety checks.
+		if ( ! is_string( $site_url ) || ! is_string( $home_url ) ) {
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'Cannot check HTTPS status', 'plugin-wpshadow' ),
+				'recommended',
+				esc_html__( 'Site URL or Home URL is not properly configured.', 'plugin-wpshadow' ),
+				'wpshadow_https_enforcement',
+				'',
+				'orange'
+			);
+		}
+		
 		$is_https = strpos( $site_url, 'https://' ) === 0 && strpos( $home_url, 'https://' ) === 0;
 		$is_ssl   = is_ssl();
 		

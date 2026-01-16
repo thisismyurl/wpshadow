@@ -373,7 +373,7 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 		$site_url = get_option( 'siteurl' );
 		$home_url = get_option( 'home' );
 		
-		if ( ! $site_url || ! $home_url ) {
+		if ( ! is_string( $site_url ) || ! is_string( $home_url ) ) {
 			return;
 		}
 

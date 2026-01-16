@@ -212,15 +212,19 @@ class WPSHADOW_Site_Audit {
 		// Check SSL/HTTPS.
 		$site_url = get_option( 'siteurl' );
 		$home_url = get_option( 'home' );
-		$has_ssl = strpos( $site_url, 'https://' ) === 0 && strpos( $home_url, 'https://' ) === 0;
 		
-		if ( ! $has_ssl ) {
-			$issues[] = array(
-				'level'       => 'critical',
-				'title'       => 'HTTPS Not Enabled',
-				'description' => 'Site does not use HTTPS. Modern browsers may flag non-HTTPS sites as "Not Secure".',
-				'fix'         => 'Obtain an SSL certificate from your hosting provider, update WordPress Address and Site Address URLs to use https:// in Settings → General, and enable HTTPS enforcement in WPS Security Hardening.',
-			);
+		// Type safety check.
+		if ( is_string( $site_url ) && is_string( $home_url ) ) {
+			$has_ssl = strpos( $site_url, 'https://' ) === 0 && strpos( $home_url, 'https://' ) === 0;
+			
+			if ( ! $has_ssl ) {
+				$issues[] = array(
+					'level'       => 'critical',
+					'title'       => 'HTTPS Not Enabled',
+					'description' => 'Site does not use HTTPS. Modern browsers may flag non-HTTPS sites as "Not Secure".',
+					'fix'         => 'Obtain an SSL certificate from your hosting provider, update WordPress Address and Site Address URLs to use https:// in Settings → General, and enable HTTPS enforcement in WPS Security Hardening.',
+				);
+			}
 		}
 
 		// Check for WordPress core updates.
