@@ -268,6 +268,11 @@ final class WPSHADOW_Feature_Conflict_Sandbox extends WPSHADOW_Abstract_Feature 
 				'httponly' => true,
 				'samesite' => 'Lax',
 			)
+			time() + DAY_IN_SECONDS,
+			COOKIEPATH,
+			COOKIE_DOMAIN,
+			true,
+			true // HTTP only.
 		);
 	}
 
@@ -288,6 +293,11 @@ final class WPSHADOW_Feature_Conflict_Sandbox extends WPSHADOW_Abstract_Feature 
 				'httponly' => true,
 				'samesite' => 'Lax',
 			)
+			time() - 3600,
+			COOKIEPATH,
+			COOKIE_DOMAIN,
+			true,
+			true
 		);
 	}
 

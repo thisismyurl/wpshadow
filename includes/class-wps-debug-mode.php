@@ -355,6 +355,7 @@ class WPSHADOW_Debug_Mode {
 				'samesite' => 'Lax',
 			)
 		);
+		setcookie( self::DISPLAY_COOKIE, $value, time() + self::AUTO_DISABLE_TIMEOUT, COOKIEPATH, COOKIE_DOMAIN, true, true );
 	}
 
 	/**
@@ -379,6 +380,7 @@ class WPSHADOW_Debug_Mode {
 				'samesite' => 'Lax',
 			)
 		);
+		setcookie( self::DISPLAY_COOKIE, '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN, true, true );
 	}
 
 	/**
