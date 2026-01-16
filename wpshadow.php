@@ -44,6 +44,7 @@ use WPShadow\CoreSupport\WPSHADOW_Feature_Block_CSS_Cleanup;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Interactivity_Cleanup;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Consent_Checks;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Hardening;
+use WPShadow\CoreSupport\WPSHADOW_Feature_HTTP_SSL_Audit;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Registry;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Image_Lazy_Loading;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Asset_Minification;
@@ -57,6 +58,15 @@ use WPShadow\CoreSupport\WPSHADOW_Feature_Critical_CSS;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Script_Optimizer;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Conflict_Sandbox;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Smart_Recommendations;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Core_Integrity;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Firewall;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Malware_Scanner;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Traffic_Monitor;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Image_Optimizer;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Page_Cache;
+use WPShadow\CoreSupport\WPSHADOW_Feature_CDN_Integration;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Maintenance_Cleanup;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Performance_Alerts;
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -320,6 +330,7 @@ function WPSHADOW_register_core_features(): void {
 	
 	// Security features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Hardening() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_HTTP_SSL_Audit() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Hotlink_Protection() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Core_Integrity() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Firewall() );
