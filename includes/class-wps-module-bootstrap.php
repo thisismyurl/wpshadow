@@ -134,12 +134,12 @@ class WPSHADOW_Module_Bootstrap {
 		$module = isset( $_REQUEST['module'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['module'] ) ) : '';
 
 		if ( ! wp_verify_nonce( $nonce, 'wpshadow_module_action' ) ) {
-			wp_die( esc_html__( 'Invalid nonce.', 'plugin-wpshadow' ) );
+			wp_die( esc_html__( 'Your session expired.', 'plugin-wpshadow' ) );
 		}
 
 		$all_modules = array_merge( self::REQUIRED_MODULES, self::OPTIONAL_MODULES );
 		if ( ! isset( $all_modules[ $module ] ) ) {
-			wp_die( esc_html__( 'Invalid module.', 'plugin-wpshadow' ) );
+			wp_die( esc_html__( 'We couldn\'t find that module.', 'plugin-wpshadow' ) );
 		}
 
 		// Check if already installed locally before attempting remote install.
@@ -198,12 +198,12 @@ class WPSHADOW_Module_Bootstrap {
 		$module = isset( $_REQUEST['module'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['module'] ) ) : '';
 
 		if ( ! wp_verify_nonce( $nonce, 'wpshadow_module_action' ) ) {
-			wp_die( esc_html__( 'Invalid nonce.', 'plugin-wpshadow' ) );
+			wp_die( esc_html__( 'Your session expired.', 'plugin-wpshadow' ) );
 		}
 
 		$all_modules = array_merge( self::REQUIRED_MODULES, self::OPTIONAL_MODULES );
 		if ( ! isset( $all_modules[ $module ] ) ) {
-			wp_die( esc_html__( 'Invalid module.', 'plugin-wpshadow' ) );
+			wp_die( esc_html__( 'We couldn\'t find that module.', 'plugin-wpshadow' ) );
 		}
 
 		if ( ! self::is_plugin_installed( $module ) ) {

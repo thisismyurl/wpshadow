@@ -221,11 +221,11 @@ class WPSHADOW_Features_Discovery_Widget {
 			<div class="wps-features-stats">
 				<div class="wps-stat-box" style="background: #f0f9f1; border: 1px solid #46b450;">
 					<div class="wps-stat-number" style="color: #46b450;"><?php echo absint( $active_count ); ?></div>
-					<div class="wps-stat-label"><?php esc_html_e( 'Active Features', 'plugin-wpshadow' ); ?></div>
+					<div class="wps-stat-label"><?php esc_html_e( 'Features You\'re Using', 'plugin-wpshadow' ); ?></div>
 				</div>
 				<div class="wps-stat-box" style="background: #fef8e7; border: 1px solid #dba617;">
 					<div class="wps-stat-number" style="color: #dba617;"><?php echo absint( $ghost_count ); ?></div>
-					<div class="wps-stat-label"><?php esc_html_e( 'Available to Install', 'plugin-wpshadow' ); ?></div>
+					<div class="wps-stat-label"><?php esc_html_e( 'Ready to Add', 'plugin-wpshadow' ); ?></div>
 				</div>
 			</div>
 
@@ -353,11 +353,11 @@ class WPSHADOW_Features_Discovery_Widget {
 						<?php echo esc_html( $feature['title'] ); ?>
 						<?php if ( $is_available ) : ?>
 							<span style="display: inline-block; padding: 2px 6px; background: #46b450; color: white; font-size: 10px; border-radius: 3px; font-weight: 700;">
-								<?php esc_html_e( 'ACTIVE', 'plugin-wpshadow' ); ?>
+							<?php esc_html_e( 'YOU HAVE THIS', 'plugin-wpshadow' ); ?>
 							</span>
 						<?php else : ?>
 							<span style="display: inline-block; padding: 2px 6px; background: #dba617; color: white; font-size: 10px; border-radius: 3px; font-weight: 700;">
-								<?php esc_html_e( 'INSTALL', 'plugin-wpshadow' ); ?>
+							<?php esc_html_e( 'GET THIS', 'plugin-wpshadow' ); ?>
 							</span>
 						<?php endif; ?>
 					</div>

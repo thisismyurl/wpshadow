@@ -28,7 +28,7 @@ final class WPSHADOW_Feature_Resource_Hints extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'resource-hints',
 			'name'               => __( 'Pre-Connect to External Services', 'plugin-wpshadow' ),
-			'description'        => __( 'Adds resource hint headers so visitor browsers begin connecting to important external services early, reducing wait time when those scripts, fonts, or APIs are needed. Speeds up perceived load for CDNs, analytics, maps, or payment providers, while keeping the list configurable to avoid unnecessary connections. Helps deliver smoother first impressions on slower networks by starting work before the main request finishes.', 'plugin-wpshadow' ),
+			'description'        => __( 'Speed up external services - tell browsers to start connecting early.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',

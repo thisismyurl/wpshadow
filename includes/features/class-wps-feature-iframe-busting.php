@@ -35,7 +35,7 @@ final class WPSHADOW_Feature_Iframe_Busting extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'iframe-busting',
 				'name'               => __( 'Iframe Busting (Clickjacking Protection)', 'plugin-wpshadow' ),
-				'description'        => __( 'Protects against clickjacking attacks by preventing your site from being embedded in malicious iframes. Uses Content-Security-Policy frame-ancestors (modern standard), X-Frame-Options header (legacy support), and optional JavaScript frame-buster fallback. Prevents attackers from tricking users into clicking hidden elements by overlaying your site on malicious pages.', 'plugin-wpshadow' ),
+				'description'        => __( 'Stop hackers from hiding your site in a malicious frame to trick your visitors.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',

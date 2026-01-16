@@ -46,12 +46,12 @@ final class WPSHADOW_Feature_Firewall extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'firewall',
 				'name'               => __( 'Web Application Firewall', 'plugin-wpshadow' ),
-				'description'        => __( 'Filters incoming requests with IP blocking, rate limits, user agent and country rules, and pattern detection to stop obvious attacks before they reach WordPress. Limits bursts that stress the server, blocks known bad paths, and can log or block suspicious behavior, improving security without affecting normal visitors, editors, or checkout flows.', 'plugin-wpshadow' ),
+				'description'        => __( 'Stop attackers with smart request filtering - we block suspicious IPs, rate limit spam, and recognize attack patterns. All without affecting your visitors.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
-				'license_level'      => 3,
+				'license_level'      => 4,
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-shield',
 				'category'           => 'security',
@@ -389,13 +389,13 @@ final class WPSHADOW_Feature_Firewall extends WPSHADOW_Abstract_Feature {
 		$reason = \WPShadow\WPSHADOW_get_post_text( 'reason', 'Manual block' );
 
 		if ( empty( $ip ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid IP address', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That IP address doesn\'t look right', 'plugin-wpshadow' ) ) );
 		}
 
 		$this->block_ip( $ip, $reason, 0 );
 
 		wp_send_json_success( array(
-			'message' => sprintf( __( 'IP %s blocked successfully', 'plugin-wpshadow' ), $ip ),
+			'message' => sprintf( __( 'IP %s blocked', 'plugin-wpshadow' ), $ip ),
 		) );
 	}
 
@@ -410,13 +410,13 @@ final class WPSHADOW_Feature_Firewall extends WPSHADOW_Abstract_Feature {
 		$ip = \WPShadow\WPSHADOW_get_post_text( 'ip' );
 
 		if ( empty( $ip ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid IP address', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That IP address doesn\'t look right', 'plugin-wpshadow' ) ) );
 		}
 
 		$this->unblock_ip( $ip );
 
 		wp_send_json_success( array(
-			'message' => sprintf( __( 'IP %s unblocked successfully', 'plugin-wpshadow' ), $ip ),
+			'message' => sprintf( __( 'IP %s unblocked', 'plugin-wpshadow' ), $ip ),
 		) );
 	}
 

@@ -25,7 +25,7 @@ final class WPSHADOW_Feature_Broken_Link_Checker extends WPSHADOW_Abstract_Featu
 			array(
 				'id'                 => 'broken-link-checker',
 				'name'               => __( 'Broken Link Checker', 'plugin-wpshadow' ),
-				'description'        => __( 'Automatically crawls your HTML and CSS to find "404 Not Found" errors or non-working outbound links. Prevents "link rot" which frustrates users and negatively impacts search rankings.', 'plugin-wpshadow' ),
+				'description'        => __( 'Find and fix broken links that frustrate visitors and hurt your search rankings "404 Not Found" errors or non-working outbound links. Prevents "link rot" which frustrates users and negatively impacts search rankings.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'version'            => '1.0.0',
 				'default_enabled'    => false,
@@ -318,7 +318,7 @@ final class WPSHADOW_Feature_Broken_Link_Checker extends WPSHADOW_Abstract_Featu
 			wp_send_json_success();
 		}
 
-		wp_send_json_error( array( 'message' => __( 'Invalid link ID.', 'plugin-wpshadow' ) ) );
+		wp_send_json_error( array( 'message' => __( 'That link doesn\'t exist.', 'plugin-wpshadow' ) ) );
 	}
 
 	/**

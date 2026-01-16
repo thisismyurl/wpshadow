@@ -85,11 +85,11 @@ class WPSHADOW_System_Report_Generator {
 				'nonce'   => wp_create_nonce( 'wpshadow_system_report' ),
 				'strings' => array(
 					'generating'   => __( 'Generating report...', 'plugin-wpshadow' ),
-					'generated'    => __( 'Report generated successfully', 'plugin-wpshadow' ),
+					'generated'    => __( 'Report generated', 'plugin-wpshadow' ),
 					'copied'       => __( 'Copied to clipboard', 'plugin-wpshadow' ),
-					'copyFailed'   => __( 'Failed to copy', 'plugin-wpshadow' ),
+					'copyFailed'   => __( 'Couldn\'t copy', 'plugin-wpshadow' ),
 					'creatingLink' => __( 'Creating shareable link...', 'plugin-wpshadow' ),
-					'linkCreated'  => __( 'Link created successfully', 'plugin-wpshadow' ),
+					'linkCreated'  => __( 'Link created', 'plugin-wpshadow' ),
 					'error'        => __( 'An error occurred', 'plugin-wpshadow' ),
 				),
 			)
@@ -926,7 +926,7 @@ class WPSHADOW_System_Report_Generator {
 		check_ajax_referer( 'wpshadow_system_report', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$format = \WPShadow\WPSHADOW_get_post_text( 'format', 'json' );
@@ -966,7 +966,7 @@ class WPSHADOW_System_Report_Generator {
 		check_ajax_referer( 'wpshadow_system_report', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$password = \WPShadow\WPSHADOW_get_post_text( 'password' );

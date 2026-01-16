@@ -52,7 +52,7 @@ class WPSHADOW_Feature_SEO_Validator extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'seo-validator',
 				'name'               => __( 'Sitemap & Robots.txt Validator', 'plugin-wpshadow' ),
-				'description'        => __( 'Confirms that your sitemap.xml and robots.txt files are correctly formatted and accessible to search engine crawlers.', 'plugin-wpshadow' ),
+				'description'        => __( 'Make sure search engines can find and index your site properly.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'version'            => '1.0.0',
 				'default_enabled'    => true,
@@ -613,7 +613,7 @@ class WPSHADOW_Feature_SEO_Validator extends WPSHADOW_Abstract_Feature {
 			if ( ! filter_var( $loc, FILTER_VALIDATE_URL ) ) {
 				$issues[] = sprintf(
 					/* translators: %s: invalid URL */
-					__( 'Invalid URL format: %s', 'plugin-wpshadow' ),
+					__( 'That URL doesn\'t look right: %s', 'plugin-wpshadow' ),
 					esc_html( $loc )
 				);
 			}

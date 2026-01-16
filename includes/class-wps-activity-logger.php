@@ -881,7 +881,7 @@ class WPSHADOW_Activity_Logger {
 					__( 'License verified: %s', 'plugin-wpshadow' ),
 					$license_type
 				)
-				: __( 'License verified successfully', 'plugin-wpshadow' );
+				: __( 'License verified', 'plugin-wpshadow' );
 		} else {
 			$description = __( 'Couldn\'t verify your license. Let\'s check that again.', 'plugin-wpshadow' );
 		}

@@ -530,7 +530,7 @@ class WPSHADOW_Debug_Mode {
 		$value   = isset( $_POST['value'] ) ? (bool) $_POST['value'] : false;
 
 		if ( empty( $setting ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid setting', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That setting doesn\'t exist', 'plugin-wpshadow' ) ) );
 		}
 
 		$settings             = self::get_settings();
@@ -544,7 +544,7 @@ class WPSHADOW_Debug_Mode {
 				)
 			);
 		} else {
-			wp_send_json_error( array( 'message' => __( 'Failed to update debug setting', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Couldn\'t update that debug setting', 'plugin-wpshadow' ) ) );
 		}
 	}
 
@@ -555,7 +555,7 @@ class WPSHADOW_Debug_Mode {
 	 */
 	public static function ajax_get_error_log(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$log_file = WP_CONTENT_DIR . '/debug.log';
@@ -617,7 +617,7 @@ class WPSHADOW_Debug_Mode {
 	 */
 	public static function ajax_clear_error_log(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$log_file = WP_CONTENT_DIR . '/debug.log';
@@ -641,7 +641,7 @@ class WPSHADOW_Debug_Mode {
 
 			wp_send_json_success( array( 'message' => __( 'Error log cleared', 'plugin-wpshadow' ) ) );
 		} else {
-			wp_send_json_error( array( 'message' => __( 'Failed to clear error log', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Couldn\'t clear the error log', 'plugin-wpshadow' ) ) );
 		}
 	}
 }

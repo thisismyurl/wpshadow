@@ -497,7 +497,7 @@ class WPSHADOW_Dashboard_Layout {
 		$layout  = json_decode( wp_unslash( $_POST['layout'] ?? '{}' ), true );
 
 		if ( ! is_array( $layout ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid layout data.', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That layout data isn\'t valid.', 'plugin-wpshadow' ) ) );
 		}
 
 		if ( self::save_layout( $context, $layout, $network ) ) {
@@ -525,7 +525,7 @@ class WPSHADOW_Dashboard_Layout {
 		$layout  = json_decode( wp_unslash( $_POST['layout'] ?? '{}' ), true );
 
 		if ( ! is_array( $layout ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid layout data.', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That layout data isn\'t valid.', 'plugin-wpshadow' ) ) );
 		}
 
 		$result = self::apply_layout_to_scope( $context, $layout, $scope, $network );

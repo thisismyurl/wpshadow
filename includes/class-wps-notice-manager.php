@@ -88,7 +88,7 @@ class WPSHADOW_Notice_Manager {
 		$notice_key = \WPShadow\WPSHADOW_get_post_key( 'notice_key' );
 
 		if ( empty( $notice_key ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid notice key.', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That notice doesn\'t exist.', 'plugin-wpshadow' ) ) );
 		}
 
 		self::dismiss_notice( $notice_key );

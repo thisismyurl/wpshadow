@@ -35,7 +35,7 @@ final class WPSHADOW_Feature_Plugin_Cleanup extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'plugin-cleanup',
 				'name'               => __( 'Third-Party Plugin Asset Cleanup', 'plugin-wpshadow' ),
-				'description'        => __( 'Stops third-party plugin scripts and styles from loading on pages that do not use their features, so visitors avoid extra downloads and processing. Keeps required assets on pages that need them, preserving functionality while trimming bloat elsewhere. Improves speed scores, reduces bandwidth, and can lower conflicts between plugins because fewer files run together on unrelated pages, all without changing admin workflows.', 'plugin-wpshadow' ),
+				'description'        => __( 'Stop loading plugin files where they're not needed - speed up pages by removing bloat.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',

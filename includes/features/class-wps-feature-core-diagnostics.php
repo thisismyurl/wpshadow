@@ -19,7 +19,7 @@ class WPSHADOW_Feature_Core_Diagnostics extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'wpshadow_core_diagnostics',
 				'name'               => __( 'Core Diagnostics', 'plugin-wpshadow' ),
-				'description'        => __( 'Runs automatic health checks on core WordPress functions, storage, and background processes, alerting you when something drifts out of normal. Suggests fixes, links to the right tools, and can trigger safe recovery steps, helping you spot small issues before they become downtime for visitors or editors.', 'plugin-wpshadow' ),
+				'description'        => __( 'Catch problems early - we monitor WordPress health and alert you when something goes wrong.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'version'            => '1.0.0',
 				'default_enabled'    => true,

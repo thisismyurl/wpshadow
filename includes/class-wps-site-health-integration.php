@@ -1040,7 +1040,7 @@ final class WPSHADOW_Site_Health_Integration {
 		check_ajax_referer( 'wps-health', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$overall            = self::calculate_overall_health();

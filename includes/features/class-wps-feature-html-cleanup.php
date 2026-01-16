@@ -28,7 +28,7 @@ final class WPSHADOW_Feature_HTML_Cleanup extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'html-cleanup',
 				'name'               => __( 'HTML Output Buffer Compression', 'plugin-wpshadow' ),
-				'description'        => __( 'Compresses HTML output before it is sent to visitors, removing extra whitespace and comments to reduce download size without changing how pages look. Helps pages transfer faster over slow connections, pairs well with caching and minification, and reduces bandwidth use. Works automatically once enabled and keeps valid markup intact so analytics, forms, and scripts continue functioning as expected.', 'plugin-wpshadow' ),
+				'description'        => __( 'Shrink your HTML to make pages load faster without breaking anything.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',

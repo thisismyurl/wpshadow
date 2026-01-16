@@ -85,14 +85,14 @@ class WPSHADOW_Scheduled_Tasks_Ajax {
 		check_ajax_referer( 'wpshadow_scheduled_tasks', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$hook = isset( $_POST['hook'] ) ? sanitize_text_field( wp_unslash( $_POST['hook'] ) ) : '';
 		$timestamp = isset( $_POST['timestamp'] ) ? absint( $_POST['timestamp'] ) : 0;
 
 		if ( empty( $hook ) || empty( $timestamp ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid task data', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That task data doesn\'t look right', 'plugin-wpshadow' ) ) );
 		}
 
 		// Get the task details before unscheduling
@@ -146,13 +146,13 @@ class WPSHADOW_Scheduled_Tasks_Ajax {
 		check_ajax_referer( 'wpshadow_scheduled_tasks', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$hook = isset( $_POST['hook'] ) ? sanitize_text_field( wp_unslash( $_POST['hook'] ) ) : '';
 
 		if ( empty( $hook ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid task data', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That task data doesn\'t look right', 'plugin-wpshadow' ) ) );
 		}
 
 		// Get paused task information
@@ -208,14 +208,14 @@ class WPSHADOW_Scheduled_Tasks_Ajax {
 		check_ajax_referer( 'wpshadow_scheduled_tasks', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$hook = isset( $_POST['hook'] ) ? sanitize_text_field( wp_unslash( $_POST['hook'] ) ) : '';
 		$timestamp = isset( $_POST['timestamp'] ) ? absint( $_POST['timestamp'] ) : 0;
 
 		if ( empty( $hook ) || empty( $timestamp ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid task data', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That task data doesn\'t look right', 'plugin-wpshadow' ) ) );
 		}
 
 		// Get task details for logging
@@ -256,13 +256,13 @@ class WPSHADOW_Scheduled_Tasks_Ajax {
 		check_ajax_referer( 'wpshadow_scheduled_tasks', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$hook = isset( $_POST['hook'] ) ? sanitize_text_field( wp_unslash( $_POST['hook'] ) ) : '';
 
 		if ( empty( $hook ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid task data', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That task data doesn\'t look right', 'plugin-wpshadow' ) ) );
 		}
 
 		// Get paused tasks

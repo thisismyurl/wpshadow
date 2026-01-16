@@ -28,7 +28,7 @@ final class WPSHADOW_Feature_Skiplinks extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'skiplinks',
 			'name'               => __( 'Add Skip Navigation Links', 'plugin-wpshadow' ),
-			'description'        => __( 'Adds invisible shortcuts that help keyboard users jump directly to your main content without tabbing through menus, navigation, or sidebars. Appears only when the Tab key is pressed, meets accessibility guidelines, and makes your site easier to navigate for people using assistive technology or keyboard-only navigation, improving usability for everyone without changing your visible layout.', 'plugin-wpshadow' ),
+			'description'        => __( 'Help keyboard users navigate faster - add hidden skip links to main content.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',

@@ -87,7 +87,7 @@ class WPSHADOW_Magic_Link_Support {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return array(
 				'success' => false,
-				'error'   => __( 'Insufficient permissions', 'plugin-wpshadow' ),
+				'error'   => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ),
 			);
 		}
 
@@ -98,7 +98,7 @@ class WPSHADOW_Magic_Link_Support {
 		if ( ! is_email( $developer_email ) || ! is_email( $owner_email ) ) {
 			return array(
 				'success' => false,
-				'error'   => __( 'Invalid email address', 'plugin-wpshadow' ),
+				'error'   => __( 'Please enter a valid email address', 'plugin-wpshadow' ),
 			);
 		}
 
@@ -796,7 +796,7 @@ class WPSHADOW_Magic_Link_Support {
 		check_ajax_referer( 'wpshadow_magic_link_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
+			wp_send_json_error( __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) );
 		}
 
 		$developer_name  = \WPShadow\WPSHADOW_get_post_text( 'developer_name' );
@@ -818,7 +818,7 @@ class WPSHADOW_Magic_Link_Support {
 				)
 			);
 		} else {
-			wp_send_json_error( $result['error'] ?? __( 'Failed to create magic link', 'plugin-wpshadow' ) );
+			wp_send_json_error( $result['error'] ?? __( 'Couldn\'t create that magic link', 'plugin-wpshadow' ) );
 		}
 	}
 
@@ -831,7 +831,7 @@ class WPSHADOW_Magic_Link_Support {
 		check_ajax_referer( 'wpshadow_magic_link_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
+			wp_send_json_error( __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) );
 		}
 
 		$token = \WPShadow\WPSHADOW_get_post_text( 'token' );
@@ -845,7 +845,7 @@ class WPSHADOW_Magic_Link_Support {
 		if ( $result ) {
 			wp_send_json_success( array( 'revoked' => true ) );
 		} else {
-			wp_send_json_error( __( 'Failed to revoke magic link', 'plugin-wpshadow' ) );
+			wp_send_json_error( __( 'Couldn\'t revoke that magic link', 'plugin-wpshadow' ) );
 		}
 	}
 

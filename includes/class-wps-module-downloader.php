@@ -90,7 +90,7 @@ class WPSHADOW_Module_Downloader {
 	public function download( string $url, string $destination, ?string $expected_hash = null ) {
 		// Validate URL.
 		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
-			return new WP_Error( 'invalid_url', __( 'Invalid download URL.', 'plugin-wpshadow' ) );
+			return new WP_Error( 'invalid_url', __( 'That download URL doesn\'t look right.', 'plugin-wpshadow' ) );
 		}
 
 		// Ensure destination directory exists.

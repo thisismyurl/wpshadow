@@ -810,7 +810,7 @@ class WPSHADOW_Site_Audit {
 		check_ajax_referer( 'wpshadow_audit_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
+			wp_send_json_error( __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) );
 		}
 
 		$report = self::generate_audit();
@@ -826,13 +826,13 @@ class WPSHADOW_Site_Audit {
 		check_ajax_referer( 'wpshadow_audit_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
+			wp_send_json_error( __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) );
 		}
 
 		$option_name = \WPShadow\WPSHADOW_get_post_text( 'option_name' );
 
 		if ( empty( $option_name ) ) {
-			wp_send_json_error( __( 'Invalid option name', 'plugin-wpshadow' ) );
+			wp_send_json_error( __( 'That option doesn\'t exist', 'plugin-wpshadow' ) );
 		}
 
 		global $wpdb;
@@ -847,7 +847,7 @@ class WPSHADOW_Site_Audit {
 		);
 
 		if ( false === $result ) {
-			wp_send_json_error( __( 'Failed to update option', 'plugin-wpshadow' ) );
+			wp_send_json_error( __( 'Couldn\'t update that option', 'plugin-wpshadow' ) );
 		}
 
 		// Clear cache to ensure the change is reflected.
@@ -857,7 +857,7 @@ class WPSHADOW_Site_Audit {
 			array(
 				'message' => sprintf(
 					/* translators: %s: option name */
-					__( 'Successfully disabled autoload for %s', 'plugin-wpshadow' ),
+					__( 'Disabled autoload for %s', 'plugin-wpshadow' ),
 					$option_name
 				),
 			)
@@ -1180,13 +1180,13 @@ class WPSHADOW_Site_Audit {
 						button.style.borderColor = '#46b450';
 						setTimeout(function() { location.reload(); }, 1500);
 					} else {
-						alert('<?php echo esc_js( __( 'Error:', 'plugin-wpshadow' ) ); ?> ' + d.data);
+						alert('<?php echo esc_js( __( 'Oops:', 'plugin-wpshadow' ) ); ?> ' + d.data);
 						button.disabled = false;
 						button.textContent = '<?php echo esc_js( __( 'Disable Autoload', 'plugin-wpshadow' ) ); ?>';
 					}
 				})
 				.catch(e => {
-					alert('<?php echo esc_js( __( 'Error:', 'plugin-wpshadow' ) ); ?> ' + e);
+					alert('<?php echo esc_js( __( 'Oops:', 'plugin-wpshadow' ) ); ?> ' + e);
 					button.disabled = false;
 					button.textContent = '<?php echo esc_js( __( 'Disable Autoload', 'plugin-wpshadow' ) ); ?>';
 				});

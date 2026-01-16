@@ -164,7 +164,7 @@ final class WPSHADOW_Health_Score_Widget {
 					),
 					'text' => sprintf(
 						/* translators: 1: enabled count, 2: total count, 3: category */
-						__( 'Enable more %3$s features (%1$d of %2$d active).', 'plugin-wpshadow' ),
+					__( 'Turn on more %3$s features (you have %1$d of %2$d enabled).', 'plugin-wpshadow' ),
 						$data['enabled'],
 						$data['total'],
 						$category
@@ -176,8 +176,8 @@ final class WPSHADOW_Health_Score_Widget {
 
 		if ( $overall >= 80 ) {
 			$recommendations[] = array(
-				'title' => __( 'Excellent Configuration', 'plugin-wpshadow' ),
-				'text'  => __( 'Your site is well optimized. Keep monitoring for continued health.', 'plugin-wpshadow' ),
+			'title' => __( 'Great Job!', 'plugin-wpshadow' ),
+			'text'  => __( 'Your site is looking great. Keep an eye on things to stay healthy.', 'plugin-wpshadow' ),
 				'url'   => admin_url( 'site-health.php' ),
 			);
 		}

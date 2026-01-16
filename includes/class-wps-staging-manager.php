@@ -290,7 +290,7 @@ class WPSHADOW_Staging_Manager {
 		check_ajax_referer( 'wpshadow_staging_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
+			wp_send_json_error( __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) );
 		}
 
 		$name = \WPShadow\WPSHADOW_get_post_text( 'name' );
@@ -298,7 +298,7 @@ class WPSHADOW_Staging_Manager {
 		$staging_id = self::create_staging( $name );
 
 		if ( ! $staging_id ) {
-			wp_send_json_error( __( 'Failed to create staging environment', 'plugin-wpshadow' ) );
+			wp_send_json_error( __( 'Couldn\'t create the staging environment', 'plugin-wpshadow' ) );
 		}
 
 		wp_send_json_success(
@@ -318,13 +318,13 @@ class WPSHADOW_Staging_Manager {
 		check_ajax_referer( 'wpshadow_staging_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
+			wp_send_json_error( __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) );
 		}
 
 		$staging_id = \WPShadow\WPSHADOW_get_post_text( 'staging_id' );
 
 		if ( ! self::delete_staging( $staging_id ) ) {
-			wp_send_json_error( __( 'Failed to delete staging environment', 'plugin-wpshadow' ) );
+			wp_send_json_error( __( 'Couldn\'t delete the staging environment', 'plugin-wpshadow' ) );
 		}
 
 		wp_send_json_success();
@@ -339,13 +339,13 @@ class WPSHADOW_Staging_Manager {
 		check_ajax_referer( 'wpshadow_staging_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
+			wp_send_json_error( __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) );
 		}
 
 		$staging_id = \WPShadow\WPSHADOW_get_post_text( 'staging_id' );
 
 		if ( ! self::deploy_to_production( $staging_id ) ) {
-			wp_send_json_error( __( 'Failed to deploy staging environment', 'plugin-wpshadow' ) );
+			wp_send_json_error( __( 'Couldn\'t deploy the staging environment', 'plugin-wpshadow' ) );
 		}
 
 		wp_send_json_success();
@@ -360,13 +360,13 @@ class WPSHADOW_Staging_Manager {
 		check_ajax_referer( 'wpshadow_staging_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
+			wp_send_json_error( __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) );
 		}
 
 		$staging_id = \WPShadow\WPSHADOW_get_post_text( 'staging_id' );
 
 		if ( ! self::rollback_staging( $staging_id ) ) {
-			wp_send_json_error( __( 'Failed to rollback staging environment', 'plugin-wpshadow' ) );
+			wp_send_json_error( __( 'Couldn\'t roll back the staging environment', 'plugin-wpshadow' ) );
 		}
 
 		wp_send_json_success();

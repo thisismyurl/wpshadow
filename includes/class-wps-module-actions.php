@@ -109,7 +109,7 @@ class WPSHADOW_Module_Actions {
 
 		$ok = WPSHADOW_Module_Registry::update_module_settings( $slug, array( 'enabled' => $enabled ), (bool) $ctx['network_scope'] );
 		if ( ! $ok ) {
-			self::respond_error( __( 'Failed to update settings.', 'plugin-wpshadow' ), 500 );
+			self::respond_error( __( 'Couldn\'t save settings.', 'plugin-wpshadow' ), 500 );
 		}
 
 		// Trigger health check refresh hook.
@@ -558,7 +558,7 @@ class WPSHADOW_Module_Actions {
 		$stats = WPSHADOW_Dashboard_Widgets::get_database_statistics_for_ajax();
 
 		if ( empty( $stats ) ) {
-			self::respond_error( __( 'Unable to retrieve database statistics.', 'plugin-wpshadow' ), 500 );
+			self::respond_error( __( 'Couldn\'t get database statistics.', 'plugin-wpshadow' ), 500 );
 			return;
 		}
 

@@ -26,7 +26,7 @@ final class WPSHADOW_Feature_Open_Graph_Previewer extends WPSHADOW_Abstract_Feat
 			array(
 				'id'                 => 'wpshadow_open_graph_previewer',
 				'name'               => __( 'Social Media Open Graph Previewer', 'plugin-wpshadow' ),
-				'description'        => __( 'Analyzes how your website links appear when shared on platforms like LinkedIn or X (formerly Twitter). Checks for missing Open Graph tags that control shared images, titles, and descriptions.', 'plugin-wpshadow' ),
+				'description'        => __( 'See exactly how your links look when shared on social media - fix missing images, titles, and descriptions.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'version'            => '1.0.0',
 				'default_enabled'    => true,

@@ -29,7 +29,7 @@ final class WPSHADOW_Feature_Consent_Checks extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'consent-checks',
 			'name'               => __( 'Cookie Consent Management', 'plugin-wpshadow' ),
-			'description'        => __( 'Scans for tracking cookies, blocks nonessential scripts until visitors choose, and records consent so you can align with privacy rules. Provides an easy banner, lets visitors update choices, and keeps a clear audit trail. Helps protect visitor privacy while keeping analytics, ads, and embeds under your control with minimal setup.', 'plugin-wpshadow' ),
+			'description'        => __( 'Make your site compliant with privacy laws - manage cookies and tracking with consent checks.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',

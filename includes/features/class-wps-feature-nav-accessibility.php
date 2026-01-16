@@ -28,7 +28,7 @@ final class WPSHADOW_Feature_Nav_Accessibility extends WPSHADOW_Abstract_Feature
 			array(
 				'id'                 => 'nav-accessibility',
 				'name'               => __( 'Navigation Menu Accessibility & Class Simplification', 'plugin-wpshadow' ),
-				'description'        => __( 'Makes your navigation easier for everyone to use by adding proper ARIA labels, keyboard support, focus indicators, and screen-reader hints to menus and dropdowns. Ensures people using assistive technology can understand your site structure, navigate submenus, and know where they are, meeting accessibility standards while working with existing menu code and popular themes.', 'plugin-wpshadow' ),
+				'description'        => __( 'Make your menus accessible - add screen reader support and keyboard navigation.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',

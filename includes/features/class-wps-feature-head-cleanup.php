@@ -28,7 +28,7 @@ final class WPSHADOW_Feature_Head_Cleanup extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'head-cleanup',
 			'name'               => __( 'Remove Unnecessary Page Code', 'plugin-wpshadow' ),
-			'description'        => __( 'Removes unnecessary tags and code that WordPress adds to page headers, reducing weight and revealing less information to potential attackers while keeping required items intact. Trims generator tags, extra feed links, and other noise so pages load cleaner and faster. Works safely with defaults and can be fine tuned, helping performance scores and privacy without affecting normal theme rendering.', 'plugin-wpshadow' ),
+			'description'        => __( 'Clean up your page headers - remove clutter that slows you down and reveals too much about your site.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',

@@ -31,7 +31,7 @@ final class WPSHADOW_Feature_Hotlink_Protection extends WPSHADOW_Abstract_Featur
 			array(
 				'id'                 => 'hotlink-protection',
 				'name'               => __( 'Hotlink Protection', 'plugin-wpshadow' ),
-				'description'        => __( 'Prevents other sites from embedding your images or media directly from your server, protecting your bandwidth. Automatically configures Apache .htaccess rules, provides Nginx configuration guidance, and includes CDN-level blocking recommendations for Cloudflare, KeyCDN, and other providers.', 'plugin-wpshadow' ),
+				'description'        => __( 'Stop other sites from stealing your bandwidth - protect your images and files.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',

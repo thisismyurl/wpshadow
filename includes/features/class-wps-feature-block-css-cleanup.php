@@ -29,7 +29,7 @@ final class WPSHADOW_Feature_Block_CSS_Cleanup extends WPSHADOW_Abstract_Feature
 			array(
 				'id'                 => 'block-css-cleanup',
 				'name'               => __( 'Aggressive Block Library CSS Cleanup', 'plugin-wpshadow' ),
-				'description'        => __( 'Stops block library CSS from loading on front end pages that do not need it, cutting weight and speeding up rendering. Keeps essential styles when blocks are present so layouts stay correct. Reduces cumulative layout shift risk from unused styles, trims requests, and pairs well with caching and minification to deliver leaner pages for visitors on slow connections.', 'plugin-wpshadow' ),
+				'description'        => __( 'Stop loading unused block styles - make pages faster by removing CSS you don't need.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',

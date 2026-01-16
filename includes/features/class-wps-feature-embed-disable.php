@@ -28,7 +28,7 @@ final class WPSHADOW_Feature_Embed_Disable extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'embed-disable',
 				'name'               => __( 'Embed Script Disabling & Optimization', 'plugin-wpshadow' ),
-				'description'        => __( 'Disables WordPress oEmbed and related scripts when you do not need to embed external content, reducing extra requests and script execution on every page. Keeps embeds working if you choose to allow them on specific areas while trimming bloat elsewhere. Improves performance and reduces privacy exposure to third party providers by limiting automatic embed discovery.', 'plugin-wpshadow' ),
+				'description'        => __( 'Stop loading embed code you don't use - speed up pages and protect privacy.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',

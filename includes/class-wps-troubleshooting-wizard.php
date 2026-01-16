@@ -503,7 +503,7 @@ class WPSHADOW_Troubleshooting_Wizard {
 		$category = self::$issue_categories[ $issue ] ?? array();
 
 		if ( empty( $category ) ) {
-			\WPShadow\WPSHADOW_ajax_error( __( 'Invalid issue category.', 'plugin-wpshadow' ) );
+			\WPShadow\WPSHADOW_ajax_error( __( 'That issue type doesn\'t exist.', 'plugin-wpshadow' ) );
 		}
 
 		// Perform analysis based on category checks.
@@ -719,7 +719,7 @@ class WPSHADOW_Troubleshooting_Wizard {
 		$fix = sanitize_text_field( wp_unslash( $_POST['fix'] ?? '' ) );
 
 		if ( empty( $fix ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid fix action.', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That fix doesn\'t exist.', 'plugin-wpshadow' ) ) );
 		}
 
 		// Apply the fix based on type.

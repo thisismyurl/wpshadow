@@ -36,7 +36,7 @@ final class WPSHADOW_Feature_PHP_Info extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'php-info',
 				'name'               => __( 'PHP Information', 'plugin-wpshadow' ),
-			'description'        => __( 'Shows a read only view of PHP version, extensions, limits, and server environment details in one place so you can troubleshoot compatibility or hosting issues. Useful when plugins or support teams need exact configuration without shell access, and safer than exposing phpinfo publicly.', 'plugin-wpshadow' ),
+			'description'        => __( 'Check your PHP version and extensions - see what your server can do.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',

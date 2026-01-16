@@ -142,7 +142,7 @@ class WPSHADOW_License_Widget {
 			$status_class = 'invalid';
 			$status_icon  = 'warning';
 			$status_color = '#f0b849';
-			$status_text  = __( 'License Invalid', 'plugin-wpshadow' );
+			$status_text  = __( 'License isn\'t valid', 'plugin-wpshadow' );
 		} else {
 			$status_class = 'unlicensed';
 			$status_icon  = 'lock';
@@ -195,7 +195,7 @@ class WPSHADOW_License_Widget {
 						<?php if ( ! $has_license ) : ?>
 							<?php esc_html_e( 'Register your site for free to receive automatic updates and unlock premium features.', 'plugin-wpshadow' ); ?>
 						<?php else : ?>
-							<?php esc_html_e( 'Your license key is invalid or expired. Please check your key or contact support.', 'plugin-wpshadow' ); ?>
+							<?php esc_html_e( 'That license key doesn\'t work. Double-check your key or get in touch with us.', 'plugin-wpshadow' ); ?>
 						<?php endif; ?>
 					</p>
 					<?php if ( ! $has_license ) : ?>

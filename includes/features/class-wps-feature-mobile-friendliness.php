@@ -62,7 +62,7 @@ final class WPSHADOW_Feature_Mobile_Friendliness extends WPSHADOW_Abstract_Featu
 			array(
 				'id'                 => 'mobile-friendliness',
 				'name'               => __( 'Mobile-Friendliness Test', 'plugin-wpshadow' ),
-				'description'        => __( 'Analyzes if your content layout is device-adjustable, ensuring buttons are large enough for touch targets and text remains readable on small screens.', 'plugin-wpshadow' ),
+				'description'        => __( 'Check that your site works great on phones and tablets.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',

@@ -142,12 +142,12 @@ class WPSHADOW_Site_Documentation_Manager {
 		check_ajax_referer( 'wpshadow_documentation_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$plugin_file = \WPShadow\WPSHADOW_get_post_text( 'plugin' );
 		if ( empty( $plugin_file ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid plugin specified', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Please select a valid plugin', 'plugin-wpshadow' ) ) );
 		}
 
 		$protected_plugins = self::get_protected_plugins();
@@ -184,7 +184,7 @@ class WPSHADOW_Site_Documentation_Manager {
 		check_ajax_referer( 'wpshadow_documentation_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$format = \WPShadow\WPSHADOW_get_post_text( 'format', 'html' );
@@ -540,7 +540,7 @@ class WPSHADOW_Site_Documentation_Manager {
 	 */
 	private static function generate_export( string $format ): array|\WP_Error {
 		if ( ! in_array( $format, array( 'html', 'markdown', 'text' ), true ) ) {
-			return new \WP_Error( 'invalid_format', __( 'Invalid export format', 'plugin-wpshadow' ) );
+			return new \WP_Error( 'invalid_format', __( 'That export format isn\'t supported', 'plugin-wpshadow' ) );
 		}
 
 		$content = '';

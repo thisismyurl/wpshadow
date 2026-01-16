@@ -20,7 +20,7 @@ function WPSHADOW_ajax_toggle_module(): void {
 	check_ajax_referer( 'wpshadow_toggle_module', 'nonce' );
 
 	if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'manage_network_options' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wpshadow' ) ) );
+		wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that.', 'plugin-wpshadow' ) ) );
 	}
 
 	$slug    = sanitize_text_field( wp_unslash( $_POST['slug'] ?? '' ) );
@@ -121,7 +121,7 @@ function WPSHADOW_ajax_install_module(): void {
 	check_ajax_referer( 'wpshadow_module_action', 'nonce' );
 
 	if ( ! WPSHADOW_can_install_modules() ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wpshadow' ) ) );
+		wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that.', 'plugin-wpshadow' ) ) );
 	}
 
 	$slug      = sanitize_text_field( wp_unslash( $_POST['slug'] ?? '' ) );
@@ -242,7 +242,7 @@ function WPSHADOW_ajax_update_module(): void {
 	check_ajax_referer( 'wpshadow_module_action', 'nonce' );
 
 	if ( ! WPSHADOW_can_update_modules() ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wpshadow' ) ) );
+		wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that.', 'plugin-wpshadow' ) ) );
 	}
 
 	$slug      = sanitize_text_field( wp_unslash( $_POST['slug'] ?? '' ) );
@@ -366,7 +366,7 @@ function WPSHADOW_ajax_broadcast_license(): void {
 	}
 
 	if ( ! current_user_can( 'manage_network_options' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wpshadow' ) ) );
+		wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that.', 'plugin-wpshadow' ) ) );
 	}
 
 	$key            = \WPShadow\WPSHADOW_get_post_text( 'key' );

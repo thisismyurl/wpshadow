@@ -88,7 +88,7 @@ class WPSHADOW_Feature_Details_Page {
 					'disabling' => __( 'Disabling...', 'plugin-wpshadow' ),
 					'enabled'   => __( 'Enabled', 'plugin-wpshadow' ),
 					'disabled'  => __( 'Disabled', 'plugin-wpshadow' ),
-					'error'     => __( 'Error: ', 'plugin-wpshadow' ),
+					'error'     => __( 'Oops: ', 'plugin-wpshadow' ),
 				),
 			)
 		);
@@ -293,7 +293,7 @@ class WPSHADOW_Feature_Details_Page {
 		$enabled    = isset( $_POST['enabled'] ) && 'true' === $_POST['enabled'];
 
 		if ( empty( $feature_id ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid feature ID.', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That feature doesn\'t exist.', 'plugin-wpshadow' ) ) );
 		}
 
 		// Toggle feature state
@@ -317,7 +317,7 @@ class WPSHADOW_Feature_Details_Page {
 				'enabled' => $enabled,
 			) );
 		} else {
-			wp_send_json_error( array( 'message' => __( 'Failed to toggle feature.', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Couldn\'t toggle that feature.', 'plugin-wpshadow' ) ) );
 		}
 	}
 
@@ -338,7 +338,7 @@ class WPSHADOW_Feature_Details_Page {
 		$enabled     = isset( $_POST['enabled'] ) && 'true' === $_POST['enabled'];
 
 		if ( empty( $feature_id ) || empty( $setting_key ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid parameters.', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Something\'s not right with those settings.', 'plugin-wpshadow' ) ) );
 		}
 
 		// Update setting
@@ -379,7 +379,7 @@ class WPSHADOW_Feature_Details_Page {
 		$feature_id = isset( $_POST['feature_id'] ) ? sanitize_key( $_POST['feature_id'] ) : '';
 
 		if ( empty( $feature_id ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid feature ID.', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That feature doesn\'t exist.', 'plugin-wpshadow' ) ) );
 		}
 
 		$log = self::get_feature_activity_log( $feature_id );

@@ -34,12 +34,12 @@ class WPSHADOW_Feature_Weekly_Performance_Report extends WPSHADOW_Abstract_Featu
 			array(
 				'id'                 => 'wpshadow_weekly_performance_report',
 			'name'               => __( 'Weekly Site Health Email Report', 'plugin-wpshadow' ),
-			'description'        => __( 'Emails a weekly snapshot of site speed, uptime signals, and key improvements made, with clear suggestions for what to do next. Keeps stakeholders informed without logging in, highlights trends, and links back to the right settings or tools so you can act on performance opportunities quickly.', 'plugin-wpshadow' ),
+			'description'        => __( 'Get weekly performance reports - stay informed about your site speed and health.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'version'            => '1.0.0',
 				'default_enabled'    => false,
 				'widget_group'       => 'diagnostics',
-				'license_level'      => 2,
+				'license_level'      => 4,
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-email',
 				'category'           => 'monitoring',
@@ -564,7 +564,7 @@ class WPSHADOW_Feature_Weekly_Performance_Report extends WPSHADOW_Abstract_Featu
 
 		$subject = sprintf(
 			/* translators: %s: site name */
-			__( 'Weekly Performance Report - %s', 'plugin-wpshadow' ),
+			__( 'Your Weekly Site Report - %s', 'plugin-wpshadow' ),
 			get_bloginfo( 'name' )
 		);
 

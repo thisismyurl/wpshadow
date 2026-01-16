@@ -39,13 +39,13 @@ final class WPSHADOW_Feature_Script_Deferral extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'script-deferral',
 				'name'               => __( 'Delay Scripts for Faster Display', 'plugin-wpshadow' ),
-				'description'        => __( 'Defers noncritical scripts until after main page content is visible, so visitors see and interact with the page sooner even if total load time is unchanged. Uses safe exclusions for core libraries and critical scripts, keeps dependency order intact, and reduces render-blocking delays that hurt performance scores. Helpful for pages with marketing tags or heavy widgets that can wait until after the initial paint.', 'plugin-wpshadow' ),
+				'description'        => __( 'Let visitors see your page faster - we load heavy scripts after the main content.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.1.0',
 				'widget_group'       => 'performance',
 				// New unified metadata fields.
-				'license_level'      => 2, // Free registered users.
+				'license_level'      => 3, // Free registered users.
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-performance',
 				'category'           => 'performance',

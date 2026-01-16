@@ -603,13 +603,13 @@ class WPSHADOW_Privacy_Requests {
 		$request_type = \WPShadow\WPSHADOW_get_post_key( 'request_type' );
 
 		if ( ! in_array( $request_type, array( 'export', 'erase' ), true ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid request type.', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That request type isn\'t recognized.', 'plugin-wpshadow' ) ) );
 		}
 
 		$request_id = self::submit_request( $user_id, $request_type );
 
 		if ( ! $request_id ) {
-			wp_send_json_error( array( 'message' => __( 'Failed to submit request.', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Couldn\'t submit that request.', 'plugin-wpshadow' ) ) );
 		}
 
 		wp_send_json_success(
@@ -662,7 +662,7 @@ class WPSHADOW_Privacy_Requests {
 				break;
 
 			default:
-				wp_send_json_error( array( 'message' => __( 'Invalid action.', 'plugin-wpshadow' ) ) );
+				wp_send_json_error( array( 'message' => __( 'That action doesn\'t exist.', 'plugin-wpshadow' ) ) );
 		}
 	}
 

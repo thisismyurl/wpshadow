@@ -37,7 +37,7 @@ final class WPSHADOW_Feature_Loopback_Test extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'loopback-test',
 			'name'               => __( 'Site Self-Communication Test', 'plugin-wpshadow' ),
-			'description'        => __( 'Verifies that your site can make internal requests to itself, which is required for automatic updates, scheduled tasks, and many plugin features. Detects host blocks, authentication issues, or firewall rules that break loopbacks, and guides you to restore connectivity so background jobs and checks keep running.', 'plugin-wpshadow' ),
+			'description'        => __( 'Make sure your site can talk to itself - we test whether automatic updates and background tasks will work.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
@@ -188,14 +188,14 @@ final class WPSHADOW_Feature_Loopback_Test extends WPSHADOW_Abstract_Feature {
 		// Verify response format.
 		if ( ! isset( $data['success'] ) || ! $data['success'] ) {
 			$results['success'] = false;
-			$results['message'] = __( 'Invalid response from loopback test endpoint', 'plugin-wpshadow' );
+			$results['message'] = __( 'Got an unexpected response from the loopback test', 'plugin-wpshadow' );
 			$results['errors'][] = __( 'Response did not contain expected success indicator', 'plugin-wpshadow' );
 			return $results;
 		}
 
 		// Success!
 		$results['success'] = true;
-		$results['message'] = __( 'Loopback test passed successfully', 'plugin-wpshadow' );
+		$results['message'] = __( 'Loopback test passed', 'plugin-wpshadow' );
 
 		return $results;
 	}

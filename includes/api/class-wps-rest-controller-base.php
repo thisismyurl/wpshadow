@@ -100,7 +100,7 @@ abstract class WPSHADOW_REST_Controller_Base extends WP_REST_Controller {
 		if ( empty( $sanitized ) ) {
 			return $this->error_response(
 				'invalid_slug',
-				__( 'Invalid slug parameter.', 'plugin-wpshadow' ),
+				__( 'That slug isn\'t valid.', 'plugin-wpshadow' ),
 				400
 			);
 		}

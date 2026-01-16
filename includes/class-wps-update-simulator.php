@@ -116,12 +116,12 @@ class WPSHADOW_Update_Simulator {
 		check_ajax_referer( 'wpshadow_update_simulator_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$plugin = \WPShadow\WPSHADOW_get_post_text( 'plugin' );
 		if ( empty( $plugin ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid plugin specified', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That plugin doesn\'t exist', 'plugin-wpshadow' ) ) );
 		}
 
 		// Get update information.
@@ -145,7 +145,7 @@ class WPSHADOW_Update_Simulator {
 
 		wp_send_json_success(
 			array(
-				'message'     => __( 'Simulation prepared successfully', 'plugin-wpshadow' ),
+				'message'     => __( 'Simulation prepared', 'plugin-wpshadow' ),
 				'update_info' => $update_info,
 				'snapshot_id' => $snapshot ?? null,
 			)
@@ -161,12 +161,12 @@ class WPSHADOW_Update_Simulator {
 		check_ajax_referer( 'wpshadow_update_simulator_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'update_plugins' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$plugin = \WPShadow\WPSHADOW_get_post_text( 'plugin' );
 		if ( empty( $plugin ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid plugin specified', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That plugin doesn\'t exist', 'plugin-wpshadow' ) ) );
 		}
 
 		// Create pre-deployment snapshot.
@@ -191,7 +191,7 @@ class WPSHADOW_Update_Simulator {
 
 		wp_send_json_success(
 			array(
-				'message'     => __( 'Update deployed successfully', 'plugin-wpshadow' ),
+				'message'     => __( 'Update deployed', 'plugin-wpshadow' ),
 				'snapshot_id' => $snapshot_id,
 			)
 		);
@@ -206,12 +206,12 @@ class WPSHADOW_Update_Simulator {
 		check_ajax_referer( 'wpshadow_update_simulator_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$snapshot_id = \WPShadow\WPSHADOW_get_post_text( 'snapshot_id' );
 		if ( empty( $snapshot_id ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid snapshot specified', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That snapshot doesn\'t exist', 'plugin-wpshadow' ) ) );
 		}
 
 		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Snapshot_Manager' ) ) {

@@ -705,7 +705,7 @@ class WPSHADOW_Performance_Monitor {
 		check_ajax_referer( 'wpshadow_performance_export', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$format = \WPShadow\WPSHADOW_get_post_key( 'format', 'json' );
@@ -765,7 +765,7 @@ class WPSHADOW_Performance_Monitor {
 		check_ajax_referer( 'wpshadow_performance_clear', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		delete_option( self::HISTORY_OPTION_KEY );

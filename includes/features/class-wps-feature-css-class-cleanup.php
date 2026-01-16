@@ -28,7 +28,7 @@ final class WPSHADOW_Feature_CSS_Class_Cleanup extends WPSHADOW_Abstract_Feature
 			array(
 				'id'                 => 'css-class-cleanup',
 				'name'               => __( 'CSS Class Cleanup (Post/Nav/Body)', 'plugin-wpshadow' ),
-				'description'        => __( 'Removes redundant or noisy CSS classes from post, navigation, and body markup to produce cleaner HTML that is easier to style and slightly lighter to deliver. Reduces unexpected styling conflicts from excessive class names, improves readability for audits, and can trim a few bytes from every page. Works automatically with sensible defaults and keeps important classes required by themes and accessibility features.', 'plugin-wpshadow' ),
+				'description'        => __( 'Clean up your HTML - remove unnecessary CSS classes and make your site code cleaner.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',

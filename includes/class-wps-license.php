@@ -480,7 +480,7 @@ class WPSHADOW_License {
 				self::log_broadcast_event( $site_id, $broadcast_id, $user_id, true, $result['message'] );
 			} else {
 				++$failed;
-				$error_msg = $result['message'] ?? __( 'Unknown error', 'plugin-wpshadow' );
+				$error_msg = $result['message'] ?? __( 'Something went wrong', 'plugin-wpshadow' );
 				$errors[]  = sprintf( __( 'Site %1$d: %2$s', 'plugin-wpshadow' ), $site_id, $error_msg );
 				self::log_broadcast_event( $site_id, $broadcast_id, $user_id, false, $error_msg );
 			}

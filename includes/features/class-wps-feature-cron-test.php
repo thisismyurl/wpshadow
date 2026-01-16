@@ -36,7 +36,7 @@ final class WPSHADOW_Feature_Cron_Test extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'cron-test',
 				'name'               => __( 'Scheduled Tasks Monitor', 'plugin-wpshadow' ),
-				'description'        => __( 'Checks that WordPress scheduled tasks can run reliably, including publishing queued posts, checking for updates, clearing caches, and sending notifications. Flags blocked loopbacks, host restrictions, or plugin conflicts, and offers guidance to restore normal scheduling so automations keep running without surprises.', 'plugin-wpshadow' ),
+				'description'        => __( 'Make sure background tasks run - we test WordPress scheduling so automations don't break.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
@@ -188,7 +188,7 @@ final class WPSHADOW_Feature_Cron_Test extends WPSHADOW_Abstract_Feature {
 		if ( is_wp_error( $response ) ) {
 			$results['success'] = false;
 			$results['message'] = $response->get_error_message();
-			$results['details'][] = __( 'Failed to spawn cron process', 'plugin-wpshadow' );
+			$results['details'][] = __( 'Couldn\'t run the cron task', 'plugin-wpshadow' );
 			return $results;
 		}
 
@@ -208,7 +208,7 @@ final class WPSHADOW_Feature_Cron_Test extends WPSHADOW_Abstract_Feature {
 		// Success.
 		$results['success'] = true;
 		$results['message'] = __( 'Cron spawning test passed', 'plugin-wpshadow' );
-		$results['details'][] = __( 'WP-Cron is able to spawn successfully', 'plugin-wpshadow' );
+		$results['details'][] = __( 'WP-Cron is able to spawn', 'plugin-wpshadow' );
 
 		return $results;
 	}
@@ -250,7 +250,7 @@ final class WPSHADOW_Feature_Cron_Test extends WPSHADOW_Abstract_Feature {
 		if ( false !== $result ) {
 			wp_send_json_success(
 				array(
-					'message' => __( 'Test cron event executed successfully', 'plugin-wpshadow' ),
+					'message' => __( 'Test cron event executed', 'plugin-wpshadow' ),
 					'time'    => $result,
 				)
 			);
@@ -539,12 +539,12 @@ final class WPSHADOW_Feature_Cron_Test extends WPSHADOW_Abstract_Feature {
 						if (response.success) {
 							alert(response.data.message);
 						} else {
-							alert('<?php echo esc_js( __( 'Failed to run event', 'plugin-wpshadow' ) ); ?>');
+							alert('<?php echo esc_js( __( 'Couldn\'t run the event', 'plugin-wpshadow' ) ); ?>');
 						}
 					},
 					error: function() {
 						$button.prop('disabled', false);
-						alert('<?php echo esc_js( __( 'Failed to run event', 'plugin-wpshadow' ) ); ?>');
+						alert('<?php echo esc_js( __( 'Couldn\'t run the event', 'plugin-wpshadow' ) ); ?>');
 					}
 				});
 			});

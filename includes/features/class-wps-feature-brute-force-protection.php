@@ -43,12 +43,12 @@ final class WPSHADOW_Feature_Brute_Force_Protection extends WPSHADOW_Abstract_Fe
 			array(
 				'id'                 => 'brute-force-protection',
 			'name'               => __( 'Failed Login Protection', 'plugin-wpshadow' ),
-			'description'        => __( 'Protects the login page by tracking failed attempts per user and IP, applying temporary lockouts with optional whitelists and clear messaging to slow password guessing attacks while allowing genuine visitors to try again. Reduces brute force noise, lowers server load from bots, and gives administrators safer authentication without changing existing accounts or passwords.', 'plugin-wpshadow' ),
+			'description'        => __( 'Stop hackers from guessing passwords - we'll lock suspicious login attempts automatically per user and IP, applying temporary lockouts with optional whitelists and clear messaging to slow password guessing attacks while allowing genuine visitors to try again. Reduces brute force noise, lowers server load from bots, and gives administrators safer authentication without changing existing accounts or passwords.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
-				'license_level'      => 1,
+				'license_level'      => 3,
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-shield',
 				'category'           => 'security',
@@ -482,7 +482,7 @@ final class WPSHADOW_Feature_Brute_Force_Protection extends WPSHADOW_Abstract_Fe
 		$ip = \WPShadow\WPSHADOW_get_post_text( 'ip' );
 
 		if ( empty( $ip ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid IP address', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That IP address doesn\'t look right', 'plugin-wpshadow' ) ) );
 		}
 
 		// Delete lockout transient.
@@ -509,7 +509,7 @@ final class WPSHADOW_Feature_Brute_Force_Protection extends WPSHADOW_Abstract_Fe
 			);
 		}
 
-		wp_send_json_success( array( 'message' => __( 'IP unlocked successfully', 'plugin-wpshadow' ) ) );
+		wp_send_json_success( array( 'message' => __( 'IP unlocked', 'plugin-wpshadow' ) ) );
 	}
 
 	/**

@@ -36,7 +36,7 @@ final class WPSHADOW_Feature_Image_Optimizer extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'media',
-				'license_level'      => 2,
+				'license_level'      => 3,
 				'minimum_capability' => 'upload_files',
 				'icon'               => 'dashicons-format-image',
 				'category'           => 'performance',
@@ -204,12 +204,12 @@ final class WPSHADOW_Feature_Image_Optimizer extends WPSHADOW_Abstract_Feature {
 
 		$attachment_id = \WPShadow\WPSHADOW_get_post_int( 'attachment_id' );
 		if ( ! $attachment_id ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid attachment ID', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That image doesn\'t exist', 'plugin-wpshadow' ) ) );
 		}
 
 		$file_path = get_attached_file( $attachment_id );
 		if ( ! $file_path || ! $this->is_image_file( $file_path ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid image file', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That file isn\'t an image', 'plugin-wpshadow' ) ) );
 		}
 
 		$settings = $this->get_optimization_settings();
@@ -229,7 +229,7 @@ final class WPSHADOW_Feature_Image_Optimizer extends WPSHADOW_Abstract_Feature {
 		update_post_meta( $attachment_id, '_WPSHADOW_optimized', time() );
 
 		wp_send_json_success( array(
-			'message' => __( 'Image optimized successfully', 'plugin-wpshadow' ),
+			'message' => __( 'Image optimized', 'plugin-wpshadow' ),
 		) );
 	}
 
@@ -367,11 +367,11 @@ final class WPSHADOW_Feature_Image_Optimizer extends WPSHADOW_Abstract_Feature {
 				$image = imagecreatefromgif( $file_path );
 				break;
 			default:
-				return new \WP_Error( 'unsupported_type', __( 'Unsupported image type', 'plugin-wpshadow' ) );
+				return new \WP_Error( 'unsupported_type', __( 'We can\'t optimize that image type', 'plugin-wpshadow' ) );
 		}
 
 		if ( ! $image ) {
-			return new \WP_Error( 'gd_error', __( 'Failed to load image with GD', 'plugin-wpshadow' ) );
+			return new \WP_Error( 'gd_error', __( 'Couldn\'t load that image', 'plugin-wpshadow' ) );
 		}
 
 		// Save compressed image.

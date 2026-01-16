@@ -36,7 +36,7 @@ final class WPSHADOW_Feature_MySQL_Diagnostics extends WPSHADOW_Abstract_Feature
 			array(
 				'id'                 => 'mysql-diagnostics',
 				'name'               => __( 'MySQL Diagnostics', 'plugin-wpshadow' ),
-				'description'        => __( 'Views MySQL or MariaDB server information, table statistics, query performance metrics, and database configuration in a read-only interface. Shows version numbers, storage engine details, table sizes, index usage, and slow query patterns to help you understand database health, identify optimization opportunities, and troubleshoot performance issues without running risky commands or needing command-line access to the database.', 'plugin-wpshadow' ),
+				'description'        => __( 'Understand your database health - see table sizes, performance metrics, and optimization tips.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',

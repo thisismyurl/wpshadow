@@ -39,7 +39,7 @@ class WPSHADOW_Feature_Tips_Coach extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'wpshadow_tips_coach',
 				'name'               => __( 'Tips Coach', 'plugin-wpshadow' ),
-			'description'        => __( 'Provides tailored, easy to follow tips for your site type, from blogs to stores to course sites. Surfaces quick wins first, explains benefits in plain language, and tracks what you have completed so you can keep improving steadily without needing deep technical knowledge.', 'plugin-wpshadow' ),
+			'description'        => __( 'Get smart tips for your site - personalized suggestions you can act on right away.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'version'            => '1.0.0',
 				'default_enabled'    => true,
@@ -534,7 +534,7 @@ class WPSHADOW_Feature_Tips_Coach extends WPSHADOW_Abstract_Feature {
 		$tip_id = \WPShadow\WPSHADOW_get_post_key( 'tip_id' );
 
 		if ( empty( $action ) || empty( $tip_id ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid action or tip ID', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That action or tip doesn\'t exist', 'plugin-wpshadow' ) ) );
 		}
 
 		// Process different action types
@@ -674,7 +674,7 @@ class WPSHADOW_Feature_Tips_Coach extends WPSHADOW_Abstract_Feature {
 		$tip_id = \WPShadow\WPSHADOW_get_post_key( 'tip_id' );
 
 		if ( empty( $tip_id ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid tip ID', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That tip doesn\'t exist', 'plugin-wpshadow' ) ) );
 		}
 
 		$dismissed = self::get_dismissed_tips();

@@ -187,7 +187,7 @@ class WPSHADOW_Dashboard_Widgets {
 
 	private static function widget_health(): void {
 		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Site_Health' ) ) {
-			echo '<div class="wps-widget-content"><p><em>' . esc_html__( 'Health checks unavailable.', 'plugin-wpshadow' ) . '</em></p></div>';
+			echo '<div class="wps-widget-content"><p><em>' . esc_html__( 'Health info isn\'t available right now.', 'plugin-wpshadow' ) . '</em></p></div>';
 			return;
 		}
 
@@ -986,7 +986,7 @@ class WPSHADOW_Dashboard_Widgets {
 					'slug'             => $slug,
 					'type'             => $type,
 					'name'             => $name,
-					'description'      => __( 'Discovered local module', 'plugin-wpshadow' ),
+					'description'      => __( 'Found a new module', 'plugin-wpshadow' ),
 					'installed'        => true,
 					'enabled'          => false,
 					'update_available' => false,
@@ -1072,12 +1072,12 @@ class WPSHADOW_Dashboard_Widgets {
 		// Determine overall vault health status.
 		$status_issues = array();
 		if ( ! $vault_exists ) {
-			$status_issues[] = __( 'Vault directory missing', 'plugin-wpshadow' );
+			$status_issues[] = __( 'We can\'t find your vault folder', 'plugin-wpshadow' );
 		} elseif ( ! $vault_writable ) {
-			$status_issues[] = __( 'Vault not writable', 'plugin-wpshadow' );
+			$status_issues[] = __( 'We can\'t save to your vault folder', 'plugin-wpshadow' );
 		}
 		if ( ! $has_encryption ) {
-			$status_issues[] = __( 'Encryption not configured', 'plugin-wpshadow' );
+			$status_issues[] = __( 'Encryption isn\'t set up yet', 'plugin-wpshadow' );
 		}
 
 		$is_healthy = empty( $status_issues );
@@ -1200,7 +1200,7 @@ class WPSHADOW_Dashboard_Widgets {
 
 	private static function widget_system_health(): void {
 		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Site_Health' ) ) {
-			echo '<div class="wps-widget-content"><p><em>' . esc_html__( 'Health checks unavailable.', 'plugin-wpshadow' ) . '</em></p></div>';
+			echo '<div class="wps-widget-content"><p><em>' . esc_html__( 'Health info isn\'t available right now.', 'plugin-wpshadow' ) . '</em></p></div>';
 			return;
 		}
 

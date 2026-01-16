@@ -52,13 +52,13 @@ final class WPSHADOW_Feature_Troubleshooting_Mode extends WPSHADOW_Abstract_Feat
 			array(
 				'id'                 => 'troubleshooting-mode',
 			'name'               => __( 'Private Testing Mode', 'plugin-wpshadow' ),
-			'description'        => __( 'Tests changes with plugins disabled or different themes applied only to your view while visitors still see your normal site, perfect for finding conflicts or problems without risking downtime. Lets you isolate plugin issues, preview theme changes safely, and debug errors in a live environment without affecting anyone else, so you can troubleshoot confidently on a production site.', 'plugin-wpshadow' ),
+			'description'        => __( 'Test plugins and themes without letting visitors see the mess - troubleshoot safely without affecting your live site.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'debugging',
 				// Unified metadata.
-				'license_level'      => 1, // Free for everyone.
+				'license_level'      => 4, // Free for everyone.
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-admin-tools',
 				'category'           => 'debugging',

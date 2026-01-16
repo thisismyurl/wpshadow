@@ -41,7 +41,7 @@ final class WPSHADOW_Feature_Maintenance_Cleanup extends WPSHADOW_Abstract_Featu
 			array(
 				'id'                 => 'maintenance-cleanup',
 			'name'               => __( 'Fix Stuck Maintenance Mode', 'plugin-wpshadow' ),
-			'description'        => __( 'Automatically detects when WordPress maintenance mode remains active after an interrupted update and safely clears the maintenance file so visitors can reach your site again. Logs what happened, respects a short safety window, and avoids touching active updates. Reduces downtime risk, gives peace of mind during patching, and keeps administrators from manually digging into files when an update stalls.', 'plugin-wpshadow' ),
+			'description'        => __( 'If an update gets stuck in maintenance mode, we'll automatically get your site back online.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true, // Safe to enable by default.
 				'version'            => '1.0.0',
@@ -138,7 +138,7 @@ final class WPSHADOW_Feature_Maintenance_Cleanup extends WPSHADOW_Abstract_Featu
 		if ( ! $deleted && file_exists( self::MAINTENANCE_FILE ) ) {
 			return new \WP_Error(
 				'deletion_failed',
-				__( 'Failed to delete maintenance file', 'plugin-wpshadow' )
+				__( 'Couldn\'t delete the maintenance file', 'plugin-wpshadow' )
 			);
 		}
 

@@ -267,12 +267,12 @@ class WPSHADOW_Video_Walkthroughs {
 		check_ajax_referer( 'wpshadow_video_library_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$video_id = \WPShadow\WPSHADOW_get_post_key( 'video_id' );
 		if ( empty( $video_id ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid video ID', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That video isn\'t available', 'plugin-wpshadow' ) ) );
 		}
 
 		$settings    = get_option( self::VIDEO_SETTINGS_KEY, array() );
@@ -369,7 +369,7 @@ class WPSHADOW_Video_Walkthroughs {
 		$data = json_decode( $body, true );
 
 		if ( ! $data ) {
-			return new \WP_Error( 'invalid_response', __( 'Invalid response from video generation service', 'plugin-wpshadow' ) );
+			return new \WP_Error( 'invalid_response', __( 'We had trouble generating your video', 'plugin-wpshadow' ) );
 		}
 
 		return $data;
@@ -423,7 +423,7 @@ class WPSHADOW_Video_Walkthroughs {
 		check_ajax_referer( 'wpshadow_video_library_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$video_id = \WPShadow\WPSHADOW_get_post_key( 'video_id' );
@@ -451,7 +451,7 @@ class WPSHADOW_Video_Walkthroughs {
 		check_ajax_referer( 'wpshadow_video_library_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$video_id = \WPShadow\WPSHADOW_get_post_key( 'video_id' );
@@ -479,7 +479,7 @@ class WPSHADOW_Video_Walkthroughs {
 		check_ajax_referer( 'wpshadow_video_library_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$settings    = get_option( self::VIDEO_SETTINGS_KEY, array() );

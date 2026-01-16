@@ -64,12 +64,12 @@ final class WPSHADOW_Feature_Conflict_Sandbox extends WPSHADOW_Abstract_Feature 
 			array(
 				'id'                 => 'conflict-sandbox',
 				'name'               => __( 'Safe Plugin Testing Environment', 'plugin-wpshadow' ),
-				'description'        => __( 'Lets you disable plugins or switch themes only for your session while visitors keep seeing the normal site, so you can isolate conflicts safely. Provides quick toggles, clears when you exit, and avoids breaking sales or signups during troubleshooting. Helps pinpoint the cause of errors without needing staging access or disrupting traffic.', 'plugin-wpshadow' ),
+				'description'        => __( 'Isolate plugin conflicts safely - disable just for you while visitors see your normal site.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'debugging',
-				'license_level'      => 2,
+				'license_level'      => 4,
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-admin-tools',
 				'category'           => 'diagnostics',
@@ -443,7 +443,7 @@ final class WPSHADOW_Feature_Conflict_Sandbox extends WPSHADOW_Abstract_Feature 
 		$disable = ! empty( $_POST['disable'] );
 
 		if ( empty( $plugin ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid plugin', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That plugin doesn\'t exist', 'plugin-wpshadow' ) ) );
 		}
 
 		$state = $this->get_sandbox_state();
@@ -496,7 +496,7 @@ final class WPSHADOW_Feature_Conflict_Sandbox extends WPSHADOW_Abstract_Feature 
 		if ( ! empty( $theme ) ) {
 			$theme_obj = wp_get_theme( $theme );
 			if ( ! $theme_obj->exists() ) {
-				wp_send_json_error( array( 'message' => __( 'Invalid theme', 'plugin-wpshadow' ) ) );
+				wp_send_json_error( array( 'message' => __( 'That theme doesn\'t exist', 'plugin-wpshadow' ) ) );
 			}
 		}
 

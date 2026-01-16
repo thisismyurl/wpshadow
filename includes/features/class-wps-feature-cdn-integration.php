@@ -31,7 +31,7 @@ final class WPSHADOW_Feature_CDN_Integration extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'cdn-integration',
 				'name'               => __( 'CDN Integration', 'plugin-wpshadow' ),
-				'description'        => __( 'Rewrites asset URLs automatically to serve images, stylesheets, and scripts from your CDN, with built-in support for CloudFlare, BunnyCDN, and custom providers. Reduces latency for global visitors by distributing files geographically, lowers origin server load, and works transparently without changing file storage, keeping your workflow unchanged while delivering faster downloads worldwide.', 'plugin-wpshadow' ),
+				'description'        => __( 'Deliver your images and files faster to visitors around the world, stylesheets, and scripts from your CDN, with built-in support for CloudFlare, BunnyCDN, and custom providers. Reduces latency for global visitors by distributing files geographically, lowers origin server load, and works transparently without changing file storage, keeping your workflow unchanged while delivering faster downloads worldwide.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
@@ -222,7 +222,7 @@ final class WPSHADOW_Feature_CDN_Integration extends WPSHADOW_Abstract_Feature {
 		$cdn_url = isset( $_POST['cdn_url'] ) ? esc_url_raw( wp_unslash( $_POST['cdn_url'] ) ) : '';
 
 		if ( empty( $cdn_url ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid CDN URL', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That CDN URL doesn\'t look right', 'plugin-wpshadow' ) ) );
 		}
 
 		// Test connection.
@@ -273,7 +273,7 @@ final class WPSHADOW_Feature_CDN_Integration extends WPSHADOW_Abstract_Feature {
 			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
 		}
 
-		wp_send_json_success( array( 'message' => __( 'CDN cache purged successfully', 'plugin-wpshadow' ) ) );
+		wp_send_json_success( array( 'message' => __( 'CDN cache purged', 'plugin-wpshadow' ) ) );
 	}
 
 	/**

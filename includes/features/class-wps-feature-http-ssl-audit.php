@@ -110,7 +110,7 @@ final class WPSHADOW_Feature_HTTP_SSL_Audit extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'http-ssl-audit',
 				'name'               => __( 'HTTP Header & SSL Audit', 'plugin-wpshadow' ),
-				'description'        => __( 'Scans for critical security headers (like HSTS and CSP) and verifies that your SSL certificate is valid and not nearing expiration. Runs automated daily checks and alerts administrators of security misconfigurations or expiring certificates before they impact users.', 'plugin-wpshadow' ),
+				'description'        => __( 'Check your SSL certificate and security headers - we alert you before problems hit.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
@@ -400,7 +400,7 @@ final class WPSHADOW_Feature_HTTP_SSL_Audit extends WPSHADOW_Abstract_Feature {
 				$issues[] = array(
 					'type'        => 'ssl_invalid',
 					'severity'    => 'critical',
-					'description' => $results['ssl']['error'] ?? __( 'SSL certificate is invalid', 'plugin-wpshadow' ),
+					'description' => $results['ssl']['error'] ?? __( 'SSL certificate isn\'t valid', 'plugin-wpshadow' ),
 				);
 			} elseif ( $results['ssl']['expiring_soon'] ) {
 				$issues[] = array(
@@ -436,13 +436,13 @@ final class WPSHADOW_Feature_HTTP_SSL_Audit extends WPSHADOW_Abstract_Feature {
 		$site_name   = get_bloginfo( 'name' );
 		$subject     = sprintf(
 			/* translators: %s: site name */
-			__( '[%s] Security Alert: HTTP/SSL Issues Detected', 'plugin-wpshadow' ),
+			__( '[%s] Heads Up: We Found Some Security Things to Fix', 'plugin-wpshadow' ),
 			$site_name
 		);
 
 		$message = sprintf(
 			/* translators: %s: site name */
-			__( 'Security issues have been detected on %s:', 'plugin-wpshadow' ),
+			__( 'We noticed a few security things you should fix on %s:', 'plugin-wpshadow' ),
 			$site_name
 		) . "\n\n";
 
@@ -456,7 +456,7 @@ final class WPSHADOW_Feature_HTTP_SSL_Audit extends WPSHADOW_Abstract_Feature {
 
 		$message .= "\n" . sprintf(
 			/* translators: %s: admin URL */
-			__( 'Please review the security audit in your dashboard: %s', 'plugin-wpshadow' ),
+			__( 'Check your dashboard to see the details: %s', 'plugin-wpshadow' ),
 			admin_url( 'index.php' )
 		);
 
@@ -603,7 +603,7 @@ final class WPSHADOW_Feature_HTTP_SSL_Audit extends WPSHADOW_Abstract_Feature {
 		check_ajax_referer( 'wpshadow_http_ssl_audit', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$results = $this->run_full_audit();

@@ -700,7 +700,7 @@ $license_checked = ! empty( $license_state['checked_at'] ) ? date_i18n( 'M j, Y 
 				<?php if ( 'zip_missing' === $err ) : ?>
 					<?php echo esc_html__( 'The ZipArchive PHP extension is not available.', 'plugin-wpshadow' ); ?>
 				<?php elseif ( 'zip_open' === $err ) : ?>
-					<?php echo esc_html__( 'Failed to open a ZIP archive for writing.', 'plugin-wpshadow' ); ?>
+					<?php echo esc_html__( 'We couldn\'t create a backup file.', 'plugin-wpshadow' ); ?>
 				<?php endif; ?>
 			</p>
 		</div>

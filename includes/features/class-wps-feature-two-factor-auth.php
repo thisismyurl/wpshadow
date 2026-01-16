@@ -129,13 +129,13 @@ final class WPSHADOW_Feature_Two_Factor_Auth extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'two-factor-auth',
 				'name'               => __( 'Two-Factor Authentication', 'plugin-wpshadow' ),
-				'description'        => __( 'Adds a second login step using authenticator app codes, backup codes, and optional trusted devices, reducing account takeover risk from stolen passwords. Guides users through setup with QR codes, enforces rate limits, and stores secrets securely. Keeps the login flow familiar while adding strong protection for administrators, editors, and store staff.', 'plugin-wpshadow' ),
+				'description'        => __( 'Stop hackers from stealing login passwords - add an extra verification step.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
 				// Unified metadata.
-				'license_level'      => 2, // Free registered users.
+				'license_level'      => 5, // Free registered users.
 				'minimum_capability' => 'read',
 				'icon'               => 'dashicons-lock',
 				'category'           => 'security',
@@ -925,7 +925,7 @@ final class WPSHADOW_Feature_Two_Factor_Auth extends WPSHADOW_Abstract_Feature {
 		$secret = get_transient( 'wpshadow_2fa_setup_' . $user_id );
 
 		if ( ! $secret || ! $this->verify_totp( $code, $secret ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid code', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That code doesn\'t work', 'plugin-wpshadow' ) ) );
 		}
 
 		// Save secret.

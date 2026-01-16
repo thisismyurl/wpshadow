@@ -32,7 +32,7 @@ final class WPSHADOW_Feature_A11y_Audit extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'a11y-audit',
 				'name'               => __( 'Accessibility Audit', 'plugin-wpshadow' ),
-			'description'        => __( 'Reviews pages, navigation, forms, and media to highlight issues that make your site harder to use for people with disabilities. Provides clear guidance to fix problems, supports better compliance with accessibility standards, and improves overall user experience so all visitors can navigate, read, and interact comfortably without needing developer tools.', 'plugin-wpshadow' ),
+			'description'        => __( 'Make sure everyone can use your site - we'll find accessibility issues and show you how to fix them.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
@@ -218,7 +218,7 @@ final class WPSHADOW_Feature_A11y_Audit extends WPSHADOW_Abstract_Feature {
 		$post_id  = \WPShadow\WPSHADOW_get_post_int( 'post_id' );
 
 		if ( empty( $fix_type ) || empty( $post_id ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid fix parameters.', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Something\'s not right with that fix. Try again?', 'plugin-wpshadow' ) ) );
 		}
 
 		$result = $this->apply_fix( $fix_type, $post_id );
@@ -226,7 +226,7 @@ final class WPSHADOW_Feature_A11y_Audit extends WPSHADOW_Abstract_Feature {
 		if ( $result ) {
 			wp_send_json_success( array( 'message' => __( 'Fix applied successfully.', 'plugin-wpshadow' ) ) );
 		} else {
-			wp_send_json_error( array( 'message' => __( 'Failed to apply fix.', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Couldn\'t apply that fix. Give it another try?', 'plugin-wpshadow' ) ) );
 		}
 	}
 
@@ -408,7 +408,7 @@ final class WPSHADOW_Feature_A11y_Audit extends WPSHADOW_Abstract_Feature {
 					'severity'   => 'high',
 					'message'    => sprintf(
 						/* translators: %s: Invalid ARIA role name */
-						__( 'Invalid ARIA role: %s', 'plugin-wpshadow' ),
+						__( 'That ARIA role doesn\'t work: %s', 'plugin-wpshadow' ),
 						esc_html( $role )
 					),
 					'element'    => $role,

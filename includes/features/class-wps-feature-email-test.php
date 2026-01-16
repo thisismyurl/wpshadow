@@ -181,7 +181,7 @@ final class WPSHADOW_Feature_Email_Test extends WPSHADOW_Abstract_Feature {
 		$message = \WPShadow\WPSHADOW_get_post_html( 'message', $this->get_default_test_message() );
 
 		if ( empty( $to ) || ! is_email( $to ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid email address', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That email address doesn\'t look right', 'plugin-wpshadow' ) ) );
 		}
 
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
@@ -221,7 +221,7 @@ final class WPSHADOW_Feature_Email_Test extends WPSHADOW_Abstract_Feature {
 
 			wp_send_json_error(
 				array(
-					'message' => __( 'Failed to send test email', 'plugin-wpshadow' ),
+					'message' => __( 'Couldn\'t send the test email', 'plugin-wpshadow' ),
 					'details' => $this->get_email_diagnostics(),
 				)
 			);

@@ -28,7 +28,7 @@ final class WPSHADOW_Feature_jQuery_Cleanup extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'jquery-cleanup',
 				'name'               => __( 'jQuery Migrate Removal', 'plugin-wpshadow' ),
-				'description'        => __( 'Removes the jQuery Migrate compatibility script on the front end for modern sites that do not rely on legacy jQuery functions, reducing one extra download and script execution. Keeps it available in admin and can be re-enabled if a plugin truly needs it. Helps improve performance scores and lowers conflict risk from outdated code paths.', 'plugin-wpshadow' ),
+				'description'        => __( 'Speed up sites that don't need old jQuery code - we remove the compatibility script.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',

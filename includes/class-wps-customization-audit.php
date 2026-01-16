@@ -793,14 +793,14 @@ class WPSHADOW_Customization_Audit {
 		check_ajax_referer( 'wp_ajax', '_ajax_nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
+			wp_send_json_error( __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) );
 		}
 
 		$report = self::generate_audit();
 
 		wp_send_json_success(
 			array(
-				'message' => __( 'Audit generated successfully', 'plugin-wpshadow' ),
+				'message' => __( 'Audit generated', 'plugin-wpshadow' ),
 				'report'  => $report,
 			)
 		);
@@ -815,7 +815,7 @@ class WPSHADOW_Customization_Audit {
 		check_ajax_referer( 'wp_ajax', '_ajax_nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
+			wp_send_json_error( __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) );
 		}
 
 		$report_id = \WPShadow\WPSHADOW_get_post_text( 'report_id' );

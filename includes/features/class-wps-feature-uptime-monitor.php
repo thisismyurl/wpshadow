@@ -47,12 +47,12 @@ final class WPSHADOW_Feature_Uptime_Monitor extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'uptime-monitor',
 				'name'               => __( 'Uptime Monitoring', 'plugin-wpshadow' ),
-				'description'        => __( 'External monitoring services can ping your site at regular intervals (e.g., every 5 minutes) to verify availability. Receives immediate alerts via email or SMS if the site goes down. Includes a public health check endpoint, incident tracking, and uptime statistics dashboard.', 'plugin-wpshadow' ),
+				'description'        => __( 'Get instant alerts if your site goes down so you can fix it right away.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'monitoring',
-				'license_level'      => 2,
+				'license_level'      => 4,
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-heart',
 				'category'           => 'monitoring',
@@ -353,13 +353,13 @@ final class WPSHADOW_Feature_Uptime_Monitor extends WPSHADOW_Abstract_Feature {
 
 		$subject = sprintf(
 			/* translators: %s: Site name */
-			__( '[WPShadow Alert] Site Down: %s', 'plugin-wpshadow' ),
+			__( '[WPShadow] Hey - Your Site Might Be Down: %s', 'plugin-wpshadow' ),
 			get_bloginfo( 'name' )
 		);
 
 		$message = sprintf(
 			/* translators: 1: Site name, 2: Site URL, 3: Timestamp */
-			__( "Your site %s (%s) appears to be down.\n\nTimestamp: %s\n\nThis is an automated alert from WPShadow Uptime Monitor.", 'plugin-wpshadow' ),
+			__( "We couldn't reach your site %s (%s) just now.\n\nTime: %s\n\nThis might be a temporary issue, but you should check on it.\n\nSent by WPShadow Uptime Monitor.", 'plugin-wpshadow' ),
 			get_bloginfo( 'name' ),
 			home_url(),
 			current_time( 'mysql' )

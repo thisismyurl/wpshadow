@@ -33,7 +33,7 @@ final class WPSHADOW_Feature_Critical_CSS extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'license_level'      => 2,
+				'license_level'      => 3,
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-performance',
 				'category'           => 'performance',

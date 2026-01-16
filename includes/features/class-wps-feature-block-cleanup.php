@@ -28,7 +28,7 @@ final class WPSHADOW_Feature_Block_Cleanup extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'block-cleanup',
 				'name'               => __( 'Gutenberg/Block Editor Asset Cleanup', 'plugin-wpshadow' ),
-				'description'        => __( 'Removes Block Editor and editor-only assets from front end pages that do not use block editing, reducing downloads and execution overhead. Keeps required block assets when content needs them so layouts stay intact. Helps pages feel lighter, improves speed scores, and reduces bandwidth while preserving the editing experience in admin and keeping front end behavior unchanged.', 'plugin-wpshadow' ),
+				'description'        => __( 'Stop loading block editor stuff on pages that don't use it - speed up your site.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',

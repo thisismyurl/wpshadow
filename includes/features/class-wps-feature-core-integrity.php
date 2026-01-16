@@ -237,7 +237,7 @@ final class WPSHADOW_Feature_Core_Integrity extends WPSHADOW_Abstract_Feature {
 				'api_error',
 				sprintf(
 					/* translators: %d: HTTP response code */
-					__( 'Failed to fetch checksums from WordPress.org (HTTP %d)', 'plugin-wpshadow' ),
+					__( 'Couldn\'t get file signatures from WordPress (HTTP %d)', 'plugin-wpshadow' ),
 					$response_code
 				)
 			);
@@ -249,7 +249,7 @@ final class WPSHADOW_Feature_Core_Integrity extends WPSHADOW_Abstract_Feature {
 		if ( ! is_array( $data ) || ! isset( $data['checksums'] ) ) {
 			return new \WP_Error(
 				'parse_error',
-				__( 'Failed to parse checksums response', 'plugin-wpshadow' )
+				__( 'Couldn\'t read the signatures', 'plugin-wpshadow' )
 			);
 		}
 
@@ -312,7 +312,7 @@ final class WPSHADOW_Feature_Core_Integrity extends WPSHADOW_Abstract_Feature {
 		// Backup current file.
 		$backup_path = $absolute_path . '.wps-backup-' . time();
 		if ( ! copy( $absolute_path, $backup_path ) ) {
-			return new \WP_Error( 'backup_failed', __( 'Failed to backup file before repair', 'plugin-wpshadow' ) );
+			return new \WP_Error( 'backup_failed', __( 'Couldn\'t create a backup before repairing', 'plugin-wpshadow' ) );
 		}
 
 		// Download fresh copy from WordPress.org.
@@ -340,7 +340,7 @@ final class WPSHADOW_Feature_Core_Integrity extends WPSHADOW_Abstract_Feature {
 				'download_failed',
 				sprintf(
 					/* translators: %d: HTTP response code */
-					__( 'Failed to download file from WordPress.org (HTTP %d)', 'plugin-wpshadow' ),
+					__( 'Couldn\'t download the file (HTTP %d)', 'plugin-wpshadow' ),
 					$response_code
 				)
 			);
@@ -362,7 +362,7 @@ final class WPSHADOW_Feature_Core_Integrity extends WPSHADOW_Abstract_Feature {
 			// Restore backup.
 			copy( $backup_path, $absolute_path );
 			wp_delete_file( $backup_path );
-			return new \WP_Error( 'write_failed', __( 'Failed to write repaired file', 'plugin-wpshadow' ) );
+			return new \WP_Error( 'write_failed', __( 'Couldn\'t save the repaired file', 'plugin-wpshadow' ) );
 		}
 
 		// Verify repair was successful.
@@ -563,7 +563,7 @@ final class WPSHADOW_Feature_Core_Integrity extends WPSHADOW_Abstract_Feature {
 		if ( empty( $file_path ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Invalid file path.', 'plugin-wpshadow' ),
+					'message' => __( 'That file path doesn\'t work.', 'plugin-wpshadow' ),
 				)
 			);
 		}

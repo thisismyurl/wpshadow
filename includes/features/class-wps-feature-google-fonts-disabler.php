@@ -28,7 +28,7 @@ final class WPSHADOW_Feature_Google_Fonts_Disabler extends WPSHADOW_Abstract_Fea
 			array(
 				'id'                 => 'google-fonts-disabler',
 			'name'               => __( 'Block Google Fonts Loading', 'plugin-wpshadow' ),
-			'description'        => __( 'Stops your theme from loading fonts from Google, improving visitor privacy by preventing third-party tracking and slightly speeding up page rendering. Replaces Google Fonts with system alternatives or allows you to self-host custom fonts locally, keeping your site compliant with privacy regulations while maintaining design consistency and reducing external dependencies that slow down first paint.', 'plugin-wpshadow' ),
+			'description'        => __( 'Protect your visitors' privacy - we block Google Fonts tracking and keep your fonts loading fast.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',

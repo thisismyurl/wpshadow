@@ -64,8 +64,8 @@ function WPSHADOW_ajax_auth_required(): void {
  */
 function WPSHADOW_ajax_invalid_request( string $field = '' ): void {
 	$message = $field
-		? sprintf( __( 'Invalid or missing field: %s', 'plugin-wpshadow' ), $field )
-		: __( 'Invalid request', 'plugin-wpshadow' );
+		? sprintf( __( 'Please fill in the required field: %s', 'plugin-wpshadow' ), $field )
+		: __( 'That request didn\'t work', 'plugin-wpshadow' );
 
 	WPSHADOW_ajax_error( $message, 400 );
 }

@@ -366,7 +366,7 @@ jQuery(document).ready(function($) {
 					// Update current mode display.
 					updateModeDisplay(response.data.settings);
 				} else {
-					alert(response.data.message || '<?php echo esc_js( __( 'Failed to update setting', 'plugin-wpshadow' ) ); ?>');
+					alert(response.data.message || '<?php echo esc_js( __( 'Couldn\'t save your setting', 'plugin-wpshadow' ) ); ?>');
 					$checkbox.prop('checked', !value);
 				}
 			},
@@ -408,7 +408,7 @@ jQuery(document).ready(function($) {
 					$('#WPSHADOW_log_viewer').text(response.data.content || '<?php echo esc_js( __( 'No errors logged', 'plugin-wpshadow' ) ); ?>');
 					$('#WPSHADOW_log_size').text('<?php echo esc_js( __( 'Log size:', 'plugin-wpshadow' ) ); ?> ' + response.data.size);
 				} else {
-					$('#WPSHADOW_log_viewer').text(response.data.message || '<?php echo esc_js( __( 'Failed to load log', 'plugin-wpshadow' ) ); ?>');
+					$('#WPSHADOW_log_viewer').text(response.data.message || '<?php echo esc_js( __( 'Couldn\'t load the log', 'plugin-wpshadow' ) ); ?>');
 				}
 			},
 			error: function() {
@@ -439,7 +439,7 @@ jQuery(document).ready(function($) {
 				if (response.success) {
 					loadErrorLog();
 				} else {
-					alert(response.data.message || '<?php echo esc_js( __( 'Failed to clear log', 'plugin-wpshadow' ) ); ?>');
+					alert(response.data.message || '<?php echo esc_js( __( 'Couldn\'t clear the log', 'plugin-wpshadow' ) ); ?>');
 				}
 			},
 			error: function() {

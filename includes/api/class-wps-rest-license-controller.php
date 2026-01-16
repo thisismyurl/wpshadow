@@ -238,7 +238,7 @@ class WPSHADOW_REST_License_Controller extends WPSHADOW_REST_Controller_Base {
 		if ( ! $result ) {
 			return $this->error_response(
 				'removal_failed',
-				__( 'Failed to remove license.', 'plugin-wpshadow' ),
+				__( 'Couldn\'t remove the license.', 'plugin-wpshadow' ),
 				500
 			);
 		}

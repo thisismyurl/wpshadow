@@ -29,7 +29,7 @@ final class WPSHADOW_Feature_Color_Contrast_Checker extends WPSHADOW_Abstract_Fe
 			array(
 				'id'                 => 'color-contrast-checker',
 				'name'               => __( 'Color Contrast Checker', 'plugin-wpshadow' ),
-				'description'        => __( 'Ensures your text and background colors meet WCAG accessibility standards. This utility is vital for readability and legal compliance regarding inclusive web design. Test color combinations in real-time and get instant feedback on AA and AAA compliance levels.', 'plugin-wpshadow' ),
+				'description'        => __( 'Check your text colors are readable and meet accessibility standards.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
@@ -373,12 +373,12 @@ final class WPSHADOW_Feature_Color_Contrast_Checker extends WPSHADOW_Abstract_Fe
 		$background_color = ltrim( $background_color, '#' );
 
 		if ( ! preg_match( '/^[0-9A-Fa-f]{3}([0-9A-Fa-f]{3})?$/', $text_color ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid text color format. Use hex colors (e.g., #FFFFFF).', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That text color doesn\'t look right. Try a hex color like #FFFFFF.', 'plugin-wpshadow' ) ) );
 			return;
 		}
 
 		if ( ! preg_match( '/^[0-9A-Fa-f]{3}([0-9A-Fa-f]{3})?$/', $background_color ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid background color format. Use hex colors (e.g., #FFFFFF).', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That background color doesn\'t look right. Try a hex color like #FFFFFF.', 'plugin-wpshadow' ) ) );
 			return;
 		}
 

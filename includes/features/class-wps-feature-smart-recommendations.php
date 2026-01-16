@@ -32,12 +32,12 @@ class WPSHADOW_Feature_Smart_Recommendations extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'wpshadow_smart_recommendations',
 			'name'               => __( 'Personalized Improvement Suggestions', 'plugin-wpshadow' ),
-			'description'        => __( 'Analyzes your site type, traffic patterns, and configuration to suggest practical improvements for speed, security, and reliability. Prioritizes the most helpful actions first, explains why they matter, and links to the right tools so you can make progress without digging through settings. Updates over time as your site changes.', 'plugin-wpshadow' ),
+			'description'        => __( 'Get personalized suggestions for making your site faster and more secure.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'version'            => '1.0.0',
 				'default_enabled'    => true,
 				'widget_group'       => 'analytics-features',
-				'license_level'      => 2,
+				'license_level'      => 5,
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-lightbulb',
 				'category'           => 'diagnostics',
@@ -793,7 +793,7 @@ class WPSHADOW_Feature_Smart_Recommendations extends WPSHADOW_Abstract_Feature {
 		$rec_id = \WPShadow\WPSHADOW_get_post_key( 'rec_id' );
 
 		if ( empty( $rec_id ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid recommendation ID', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That recommendation doesn\'t exist', 'plugin-wpshadow' ) ) );
 		}
 
 		$dismissed = $this->get_setting( 'wpshadow_dismissed_recommendations', array( ) );

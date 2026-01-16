@@ -44,11 +44,12 @@ final class WPSHADOW_Feature_Auto_Rollback extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'auto-rollback',
 				'name'               => __( 'Automatic Update Rollback', 'plugin-wpshadow' ),
-				'description'        => __( 'Automatically creates snapshots before updates to WordPress core, themes, and plugins, then validates the update succeeded by checking for errors or broken functionality. If problems appear, rolls back to the working version instantly and provides a detailed summary of what changed, protecting your site from bad updates without requiring manual intervention or constant monitoring of update results.', 'plugin-wpshadow' ),
+				'description'        => __( 'Stay safe with updates - we'll automatically restore your site if something breaks, themes, and plugins, then validates the update succeeded by checking for errors or broken functionality. If problems appear, rolls back to the working version instantly and provides a detailed summary of what changed, protecting your site from bad updates without requiring manual intervention or constant monitoring of update results.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'advanced',
+				'license_level'      => 5,
 			)
 		);
 		

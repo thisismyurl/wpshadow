@@ -406,23 +406,23 @@ class WPSHADOW_SOS_Support {
 	 */
 	private static function send_user_confirmation( array $incident ): void {
 		$to      = $incident['email'] ?? '';
-		$subject = sprintf( __( 'Emergency SOS Incident #%s Received', 'plugin-wpshadow' ), $incident['id'] ?? '' );
+		$subject = sprintf( __( 'We Got Your Support Request #%s - Help Is On The Way', 'plugin-wpshadow' ), $incident['id'] ?? '' );
 
 		$message = sprintf(
 			"Hello %s,\n\n" .
-			"We've received your emergency support request.\n\n" .
-			"Incident ID: #%s\n" .
+			"We got your support request and we're on it.\n\n" .
+			"Request ID: #%s\n" .
 			"Subject: %s\n" .
-			"Severity: %s\n" .
+			"Priority: %s\n" .
 			"Status: %s\n\n" .
-			"Auto-Triage Results:\n" .
-			"- Issue Type: %s\n" .
-			"- Estimated Cause: %s\n" .
-			"- Estimated Resolution Time: %s\n\n" .
-			"Immediate Actions You Can Take:\n%s\n\n" .
-			"Our team has been notified and will respond according to your severity level.\n\n" .
-			"For critical issues (site down, data loss, security breach):\n" .
-			"- Expected response: Within 2 hours\n" .
+			"What We Think Is Happening:\n" .
+			"- Type: %s\n" .
+			"- Likely Cause: %s\n" .
+			"- Time To Fix: %s\n\n" .
+			"Things You Can Try Right Now:\n%s\n\n" .
+			"Our team knows about this and will get back to you based on your priority level.\n\n" .
+			"For urgent issues (site down, security problems):\n" .
+			"- We'll respond within: 2 hours\n" .
 			"- We'll contact you at: %s\n\n" .
 			"Track your incident: %s\n\n" .
 			"Thank you,\n" .
@@ -620,14 +620,14 @@ class WPSHADOW_SOS_Support {
 		check_ajax_referer( 'wpshadow_sos_actions', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$incident_id = \WPShadow\WPSHADOW_get_post_text( 'incident_id' );
 		$status      = \WPShadow\WPSHADOW_get_post_key( 'status' );
 
 		if ( empty( $incident_id ) || empty( $status ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid parameters', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Something went wrong with your request', 'plugin-wpshadow' ) ) );
 		}
 
 		$updated = self::update_incident_status( $incident_id, $status );
@@ -635,7 +635,7 @@ class WPSHADOW_SOS_Support {
 		if ( $updated ) {
 			wp_send_json_success( array( 'message' => __( 'Status updated', 'plugin-wpshadow' ) ) );
 		} else {
-			wp_send_json_error( array( 'message' => __( 'Failed to update status', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Couldn\'t update the status', 'plugin-wpshadow' ) ) );
 		}
 	}
 
@@ -648,14 +648,14 @@ class WPSHADOW_SOS_Support {
 		check_ajax_referer( 'wpshadow_sos_actions', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$incident_id = \WPShadow\WPSHADOW_get_post_text( 'incident_id' );
 		$note        = \WPShadow\WPSHADOW_get_post_textarea( 'note' );
 
 		if ( empty( $incident_id ) || empty( $note ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid parameters', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Something went wrong with your request', 'plugin-wpshadow' ) ) );
 		}
 
 		$added = self::add_incident_note( $incident_id, $note );
@@ -663,7 +663,7 @@ class WPSHADOW_SOS_Support {
 		if ( $added ) {
 			wp_send_json_success( array( 'message' => __( 'Note added', 'plugin-wpshadow' ) ) );
 		} else {
-			wp_send_json_error( array( 'message' => __( 'Failed to add note', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Couldn\'t add that note', 'plugin-wpshadow' ) ) );
 		}
 	}
 

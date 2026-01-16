@@ -363,7 +363,7 @@ class WPSHADOW_Feature_Search {
 		$feature_id = isset( $_POST['feature_id'] ) ? sanitize_key( $_POST['feature_id'] ) : '';
 
 		if ( empty( $feature_id ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid feature ID.', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That feature doesn\'t exist.', 'plugin-wpshadow' ) ) );
 		}
 
 		self::track_feature_access( $feature_id );

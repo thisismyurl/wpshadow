@@ -41,12 +41,12 @@ final class WPSHADOW_Feature_Page_Cache extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'page-cache',
 				'name'               => __( 'Page Cache', 'plugin-wpshadow' ),
-				'description'        => __( 'Creates full page copies that serve instantly to visitors, with device-aware variants, automatic invalidation when content updates, and preload to keep the cache warm. Reduces PHP and database work, lowers server load, and speeds up repeat views. Works alongside logged-in and admin bypass rules so editors see fresh content while visitors enjoy faster page delivery with minimal configuration.', 'plugin-wpshadow' ),
+				'description'        => __( 'Serve pages in a flash - cache them so repeat visitors load your site instantly.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 			'widget_group'       => 'advanced',
-				'license_level'      => 2,
+				'license_level'      => 3,
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-performance',
 				'category'           => 'performance',
@@ -352,7 +352,7 @@ final class WPSHADOW_Feature_Page_Cache extends WPSHADOW_Abstract_Feature {
 		$this->purge_all_cache();
 
 		wp_send_json_success( array(
-			'message' => __( 'Cache purged successfully', 'plugin-wpshadow' ),
+			'message' => __( 'Cache purged', 'plugin-wpshadow' ),
 		) );
 	}
 

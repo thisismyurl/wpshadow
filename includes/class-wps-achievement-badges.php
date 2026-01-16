@@ -199,7 +199,7 @@ class WPSHADOW_Achievement_Badges {
 
 		$subject = sprintf(
 			/* translators: 1: Site name, 2: Badge title */
-			__( '[%1$s] Achievement Unlocked: %2$s', 'plugin-wpshadow' ),
+			__( '[%1$s] You Did It! You Earned: %2$s', 'plugin-wpshadow' ),
 			get_bloginfo( 'name' ),
 			$badge['title']
 		);
@@ -207,15 +207,15 @@ class WPSHADOW_Achievement_Badges {
 		$message = sprintf(
 			/* translators: 1: User display name, 2: Badge title, 3: Badge description, 4: Site URL */
 			__(
-				'Congratulations %1$s!
+				'Nice work, %1$s!
 
-You have earned the "%2$s" badge!
+You just earned the "%2$s" badge!
 
 %3$s
 
-View your achievements: %4$s
+See all your badges: %4$s
 
-Keep up the great work!
+Keep going - you\'re doing great!
 
 -- The WPShadow Team',
 				'plugin-wpshadow'

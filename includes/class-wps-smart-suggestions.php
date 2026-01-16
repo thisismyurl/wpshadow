@@ -502,13 +502,13 @@ class WPSHADOW_Smart_Suggestions {
 		check_ajax_referer( 'wpshadow_suggestions', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$suggestion_id = isset( $_POST['suggestion_id'] ) ? sanitize_text_field( wp_unslash( $_POST['suggestion_id'] ) ) : '';
 
 		if ( empty( $suggestion_id ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid suggestion ID', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That suggestion doesn\'t exist', 'plugin-wpshadow' ) ) );
 		}
 
 		$dismissed = get_option( 'wpshadow_dismissed_suggestions', array() );

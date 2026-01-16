@@ -338,7 +338,7 @@ class WPSHADOW_REST_Vault_Controller extends WPSHADOW_REST_Controller_Base {
 		if ( ! $restored ) {
 			return $this->error_response(
 				'restore_failed',
-				__( 'Failed to restore file from vault.', 'plugin-wpshadow' ),
+				__( 'Couldn\'t restore the file.', 'plugin-wpshadow' ),
 				500
 			);
 		}

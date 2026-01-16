@@ -488,7 +488,7 @@ class WPSHADOW_REST_Modules_Controller extends WPSHADOW_REST_Controller_Base {
 		if ( ! $result ) {
 			return $this->error_response(
 				'toggle_failed',
-				__( 'Failed to toggle feature flag.', 'plugin-wpshadow' ),
+				__( 'Couldn\'t toggle that feature.', 'plugin-wpshadow' ),
 				500
 			);
 		}

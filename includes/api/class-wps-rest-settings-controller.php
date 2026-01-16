@@ -199,7 +199,7 @@ class WPSHADOW_REST_Settings_Controller extends WPSHADOW_REST_Controller_Base {
 		if ( 0 === $updated_count ) {
 			return $this->error_response(
 				'update_failed',
-				__( 'Failed to update settings.', 'plugin-wpshadow' ),
+				__( 'Couldn\'t save settings.', 'plugin-wpshadow' ),
 				500
 			);
 		}
@@ -248,7 +248,7 @@ class WPSHADOW_REST_Settings_Controller extends WPSHADOW_REST_Controller_Base {
 			if ( ! $result ) {
 				return $this->error_response(
 					'reset_failed',
-					__( 'Failed to reset module settings.', 'plugin-wpshadow' ),
+					__( 'Couldn\'t reset module settings.', 'plugin-wpshadow' ),
 					500
 				);
 			}
@@ -269,7 +269,7 @@ class WPSHADOW_REST_Settings_Controller extends WPSHADOW_REST_Controller_Base {
 		if ( ! $result ) {
 			return $this->error_response(
 				'reset_failed',
-				__( 'Failed to reset all settings.', 'plugin-wpshadow' ),
+				__( 'Couldn\'t reset all settings.', 'plugin-wpshadow' ),
 				500
 			);
 		}

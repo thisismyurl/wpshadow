@@ -251,12 +251,12 @@ class WPSHADOW_Guided_Walkthroughs {
 		check_ajax_referer( 'wpshadow_guided_tasks_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$workflow = \WPShadow\WPSHADOW_get_post_key( 'workflow' );
 		if ( ! isset( self::$workflows[ $workflow ] ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid workflow', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That walkthrough isn\'t available', 'plugin-wpshadow' ) ) );
 		}
 
 		$progress = array(
@@ -286,7 +286,7 @@ class WPSHADOW_Guided_Walkthroughs {
 		check_ajax_referer( 'wpshadow_guided_tasks_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$progress = get_option( self::PROGRESS_KEY . '_' . get_current_user_id(), array() );
@@ -323,7 +323,7 @@ class WPSHADOW_Guided_Walkthroughs {
 		check_ajax_referer( 'wpshadow_guided_tasks_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that', 'plugin-wpshadow' ) ) );
 		}
 
 		$progress = get_option( self::PROGRESS_KEY . '_' . get_current_user_id(), array() );
