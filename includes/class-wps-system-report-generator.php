@@ -2,7 +2,7 @@
 /**
  * System Report Generator for comprehensive debug information.
  *
- * @package WPSHADOW_wpshadow_THISISMYURL
+ * @package WPShadow
  */
 
 declare(strict_types=1);

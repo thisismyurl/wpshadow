@@ -44,20 +44,46 @@ final class WPSHADOW_Feature_Skiplinks extends WPSHADOW_Abstract_Feature {
 				'wpshadow_skiplinks_options' => $this->get_default_options(),
 			)
 		);
+		
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'skip_to_content'     => __( 'Skip to Content Link', 'plugin-wpshadow' ),
+					'skip_to_nav'         => __( 'Skip to Navigation Link', 'plugin-wpshadow' ),
+					'skip_to_footer'      => __( 'Skip to Footer Link', 'plugin-wpshadow' ),
+					'custom_styling'      => __( 'Custom Skip Link Styling', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'skip_to_content'     => true,
+						'skip_to_nav'         => true,
+						'skip_to_footer'      => false,
+						'custom_styling'      => true,
+					)
+				);
+			}
+		}
+		
+		$this->log_activity( 'feature_initialized', 'Skiplinks feature initialized', 'info' );
 	}
 
 	/**
-	 * Register hooks when feature is enabled.
+	 * Indicate this feature has a details page.
 	 *
-	 * @return void
+	 * @return bool
 	 */
-	public function register(): void {
-		if ( ! $this->is_enabled() ) {
-			return;
-		}
-
+	public function has_details_page(): bool {
+		return true;
 		add_action( 'wp_body_open', array( $this, 'inject_skip_links' ), 1 );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+		
+		if ( get_option( 'wpshadow_skiplinks_custom_styling', true ) ) {
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+		}
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**
@@ -285,6 +311,64 @@ final class WPSHADOW_Feature_Skiplinks extends WPSHADOW_Abstract_Feature {
 		$common_ids = array( 'site-navigation', 'primary-navigation', 'nav', 'navigation', 'primary-menu' );
 
 		return $common_ids[0];
+	}
+
+	/**
+	 * Register Site Health test.
+	 *
+	 * @param array $tests Array of Site Health tests.
+	 * @return array Modified tests array.
+	 */
+	public function register_site_health_test( array $tests ): array {
+		$tests['direct']['skiplinks'] = array(
+			'label' => __( 'Skip Links Accessibility', 'plugin-wpshadow' ),
+			'test'  => array( $this, 'test_skiplinks' ),
+		);
+
+		return $tests;
+	}
+
+	/**
+	 * Site Health test for skip links.
+	 *
+	 * @return array Test result.
+	 */
+	public function test_skiplinks(): array {
+		$enabled_features = 0;
+
+		if ( get_option( 'wpshadow_skiplinks_skip_to_content', true ) ) {
+			$enabled_features++;
+		}
+		if ( get_option( 'wpshadow_skiplinks_skip_to_nav', true ) ) {
+			$enabled_features++;
+		}
+		if ( get_option( 'wpshadow_skiplinks_skip_to_footer', false ) ) {
+			$enabled_features++;
+		}
+
+		$status = $enabled_features >= 1 ? 'good' : 'recommended';
+		$label  = $enabled_features >= 1 ?
+			__( 'Skip links are active', 'plugin-wpshadow' ) :
+			__( 'Skip links should be enabled', 'plugin-wpshadow' );
+
+		return array(
+			'label'       => $label,
+			'status'      => $status,
+			'badge'       => array(
+				'label' => __( 'Accessibility', 'plugin-wpshadow' ),
+				'color' => 'blue',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				sprintf(
+					/* translators: %d: number of enabled skip links */
+					__( '%d skip link types are enabled, improving keyboard navigation accessibility.', 'plugin-wpshadow' ),
+					$enabled_features
+				)
+			),
+			'actions'     => '',
+			'test'        => 'skiplinks',
+		);
 	}
 
 	/**

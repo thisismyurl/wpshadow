@@ -37,6 +37,38 @@ final class WPSHADOW_Feature_Nav_Accessibility extends WPSHADOW_Abstract_Feature
 				'widget_description' => __( 'Improve site accessibility for all users', 'plugin-wpshadow' ),
 			)
 		);
+		
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'add_aria_current'   => __( 'Add ARIA Current Attribute', 'plugin-wpshadow' ),
+					'simplify_classes'   => __( 'Simplify Menu Classes', 'plugin-wpshadow' ),
+					'remove_nav_ids'     => __( 'Remove Navigation IDs', 'plugin-wpshadow' ),
+					'keyboard_support'   => __( 'Enhanced Keyboard Support', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'add_aria_current'   => true,
+						'simplify_classes'   => true,
+						'remove_nav_ids'     => true,
+						'keyboard_support'   => false,
+					)
+				);
+			}
+		}
+		
+		$this->log_activity( 'feature_initialized', 'Nav Accessibility feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -50,7 +82,13 @@ final class WPSHADOW_Feature_Nav_Accessibility extends WPSHADOW_Abstract_Feature
 		}
 
 		add_filter( 'wp_nav_menu_objects', array( $this, 'optimize_menu_output' ), 10, 2 );
-		add_filter( 'nav_menu_item_id', '__return_false' );
+		
+		if ( get_option( 'wpshadow_nav-accessibility_remove_nav_ids', true ) ) {
+			add_filter( 'nav_menu_item_id', '__return_false' );
+		}
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**
@@ -91,6 +129,64 @@ final class WPSHADOW_Feature_Nav_Accessibility extends WPSHADOW_Abstract_Feature
 		return array(
 			'add_aria_current' => true,
 			'simplify_classes' => true,
+		);
+	}
+
+	/**
+	 * Register Site Health test.
+	 *
+	 * @param array $tests Array of Site Health tests.
+	 * @return array Modified tests array.
+	 */
+	public function register_site_health_test( array $tests ): array {
+		$tests['direct']['nav_accessibility'] = array(
+			'label' => __( 'Navigation Accessibility', 'plugin-wpshadow' ),
+			'test'  => array( $this, 'test_nav_accessibility' ),
+		);
+
+		return $tests;
+	}
+
+	/**
+	 * Site Health test for navigation accessibility.
+	 *
+	 * @return array Test result.
+	 */
+	public function test_nav_accessibility(): array {
+		$enabled_features = 0;
+
+		if ( get_option( 'wpshadow_nav-accessibility_add_aria_current', true ) ) {
+			$enabled_features++;
+		}
+		if ( get_option( 'wpshadow_nav-accessibility_simplify_classes', true ) ) {
+			$enabled_features++;
+		}
+		if ( get_option( 'wpshadow_nav-accessibility_remove_nav_ids', true ) ) {
+			$enabled_features++;
+		}
+
+		$status = $enabled_features >= 2 ? 'good' : 'recommended';
+		$label  = $enabled_features >= 2 ?
+			__( 'Navigation accessibility is enhanced', 'plugin-wpshadow' ) :
+			__( 'Navigation accessibility could be improved', 'plugin-wpshadow' );
+
+		return array(
+			'label'       => $label,
+			'status'      => $status,
+			'badge'       => array(
+				'label' => __( 'Accessibility', 'plugin-wpshadow' ),
+				'color' => 'blue',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				sprintf(
+					/* translators: %d: number of enabled accessibility features */
+					__( '%d navigation accessibility features are enabled, improving menu usability for all users.', 'plugin-wpshadow' ),
+					$enabled_features
+				)
+			),
+			'actions'     => '',
+			'test'        => 'nav_accessibility',
 		);
 	}
 }

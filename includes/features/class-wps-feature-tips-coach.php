@@ -5,7 +5,7 @@
  * Provides contextual "next best action" cards in the dashboard,
  * tuned by site type (blog, WooCommerce, LMS), with one-click apply.
  *
- * @package WPSHADOW_wpshadow_THISISMYURL
+ * @package WPShadow
  * @since 1.2601.74000
  */
 

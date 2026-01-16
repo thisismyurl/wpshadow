@@ -40,6 +40,40 @@ final class WPSHADOW_Feature_Hotlink_Protection extends WPSHADOW_Abstract_Featur
 				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wpshadow' ),
 			)
 		);
+		
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'apache_protection'   => __( 'Apache .htaccess Protection', 'plugin-wpshadow' ),
+					'nginx_guidance'      => __( 'Nginx Configuration Guidance', 'plugin-wpshadow' ),
+					'cdn_recommendations' => __( 'CDN-Level Blocking', 'plugin-wpshadow' ),
+					'image_protection'    => __( 'Protect Images', 'plugin-wpshadow' ),
+					'media_protection'    => __( 'Protect Media Files', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'apache_protection'   => true,
+						'nginx_guidance'      => true,
+						'cdn_recommendations' => false,
+						'image_protection'    => true,
+						'media_protection'    => true,
+					)
+				);
+			}
+		}
+		
+		$this->log_activity( 'feature_initialized', 'Hotlink Protection feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -56,13 +90,20 @@ final class WPSHADOW_Feature_Hotlink_Protection extends WPSHADOW_Abstract_Featur
 		}
 
 		// Initialize on admin_init to configure hotlink protection.
-		add_action( 'admin_init', array( $this, 'configure_hotlink_protection' ), 5 );
+		if ( get_option( 'wpshadow_hotlink-protection_apache_protection', true ) ) {
+			add_action( 'admin_init', array( $this, 'configure_hotlink_protection' ), 5 );
+		}
 
 		// Add admin notice for Nginx users.
-		add_action( 'admin_notices', array( $this, 'show_nginx_guidance' ) );
+		if ( get_option( 'wpshadow_hotlink-protection_nginx_guidance', true ) ) {
+			add_action( 'admin_notices', array( $this, 'show_nginx_guidance' ) );
+		}
 
 		// Add settings page actions.
 		add_action( 'admin_init', array( $this, 'handle_settings_update' ) );
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**

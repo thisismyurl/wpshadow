@@ -5,7 +5,7 @@
  * Analyzes how website links appear when shared on social media platforms
  * like LinkedIn and X (Twitter). Checks for missing Open Graph tags.
  *
- * @package wpshadow_SUPPORT
+ * @package WPShadow\CoreSupport
  */
 
 declare(strict_types=1);
@@ -44,6 +44,31 @@ final class WPSHADOW_Feature_Open_Graph_Previewer extends WPSHADOW_Abstract_Feat
 	}
 
 	/**
+	 * Enable details page for this feature.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
+	}
+
+	/**
+	 * Register hooks when feature is enabled.
+	 *
+	 * @return void
+	 */
+	public function register(): void {
+		if ( ! $this->is_enabled() ) {
+			return;
+		}
+
+		// Register Site Health test.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
+
+		$this->log_activity( 'feature_initialized', 'Open Graph Previewer initialized', 'info' );
+	}
+
+	/**
 	 * Initialize the feature.
 	 *
 	 * @return void
@@ -51,24 +76,8 @@ final class WPSHADOW_Feature_Open_Graph_Previewer extends WPSHADOW_Abstract_Feat
 	public static function init(): void {
 		$instance = new self();
 		if ( $instance->is_enabled() ) {
-			add_action( 'admin_menu', array( $instance, 'add_admin_menu' ) );
+			$instance->log_activity( 'feature_initialized', 'Open Graph Previewer initialized', 'info' );
 		}
-	}
-
-	/**
-	 * Add admin menu item.
-	 *
-	 * @return void
-	 */
-	public function add_admin_menu(): void {
-		add_submenu_page(
-			'wpshadow',
-			__( 'Open Graph Previewer', 'plugin-wpshadow' ),
-			__( 'Open Graph', 'plugin-wpshadow' ),
-			'manage_options',
-			'wpshadow-open-graph',
-			array( $this, 'render_admin_page' )
-		);
 	}
 
 	/**

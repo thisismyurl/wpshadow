@@ -338,6 +338,57 @@ class WPSHADOW_Dashboard_Widgets {
 				</a>
 			</div>
 			
+			<!-- Feature Quick Links -->
+			<div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
+				<h4 style="margin: 0 0 10px 0; font-size: 13px; color: #666;">
+					<?php esc_html_e( 'Feature Quick Links:', 'plugin-wpshadow' ); ?>
+				</h4>
+				<div style="display: flex; flex-direction: column; gap: 5px; max-height: 200px; overflow-y: auto;">
+					<?php
+					$features = WPSHADOW_Feature_Registry::get_all_features();
+					$feature_links = array();
+					
+					foreach ( $features as $feature ) {
+						if ( ! method_exists( $feature, 'has_details_page' ) || ! $feature->has_details_page() ) {
+							continue;
+						}
+						
+						$feature_links[] = array(
+							'id' => $feature->get_id(),
+							'name' => $feature->get_name(),
+							'icon' => $feature->get_icon(),
+							'url' => \WPShadow\CoreSupport\WPSHADOW_Feature_Details_Page::get_feature_url( $feature->get_id() ),
+						);
+					}
+					
+					// Sort by name
+					usort( $feature_links, function( $a, $b ) {
+						return strcmp( $a['name'], $b['name'] );
+					});
+					
+					if ( ! empty( $feature_links ) ) {
+						foreach ( $feature_links as $link ) {
+							?>
+							<a href="<?php echo esc_url( $link['url'] ); ?>" 
+							   style="display: flex; align-items: center; gap: 5px; padding: 5px; text-decoration: none; color: #2271b1; font-size: 12px; border-radius: 3px;"
+							   onmouseover="this.style.backgroundColor='#f0f0f1'"
+							   onmouseout="this.style.backgroundColor='transparent'">
+								<span class="dashicons <?php echo esc_attr( $link['icon'] ); ?>" style="font-size: 16px; width: 16px; height: 16px;"></span>
+								<span><?php echo esc_html( $link['name'] ); ?></span>
+							</a>
+							<?php
+						}
+					} else {
+						?>
+						<p style="margin: 0; font-size: 12px; color: #666; font-style: italic;">
+							<?php esc_html_e( 'No feature details pages available.', 'plugin-wpshadow' ); ?>
+						</p>
+						<?php
+					}
+					?>
+				</div>
+			</div>
+			
 			<!-- Configure Dashboard Text Link -->
 			<div style="margin-top: 15px; text-align: center;">
 				<a href="<?php echo esc_url( WPSHADOW_Tab_Navigation::build_tab_url( 'dashboard_settings' ) ); ?>" style="color: #2271b1; text-decoration: none; font-size: 13px;">

@@ -35,15 +35,59 @@ final class WPSHADOW_Feature_Head_Cleanup extends WPSHADOW_Abstract_Feature {
 				'widget_group'       => 'performance',
 				'widget_label'       => __( 'Performance & Security', 'plugin-wpshadow' ),
 				'widget_description' => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wpshadow' ),
+				'sub_features'       => array(
+					'remove_emoji'          => __( 'Remove Emoji Scripts (Improves performance)', 'plugin-wpshadow' ),
+					'remove_generator'      => __( 'Remove WP Generator Meta Tag (Security)', 'plugin-wpshadow' ),
+					'remove_shortlink'      => __( 'Remove Shortlink Tag', 'plugin-wpshadow' ),
+					'remove_rsd'            => __( 'Remove RSD Link (Really Simple Discovery)', 'plugin-wpshadow' ),
+					'remove_wlw'            => __( 'Remove Windows Live Writer Manifest', 'plugin-wpshadow' ),
+					'remove_rest_link'      => __( 'Remove REST API Link (May break REST clients)', 'plugin-wpshadow' ),
+					'remove_oembed'         => __( 'Remove oEmbed Discovery Links', 'plugin-wpshadow' ),
+					'remove_feeds'          => __( 'Remove Feed Links (May break RSS readers)', 'plugin-wpshadow' ),
+					'remove_comments_style' => __( 'Remove Recent Comments Inline Styles', 'plugin-wpshadow' ),
+					'disable_xmlrpc'        => __( 'Disable XML-RPC (Security)', 'plugin-wpshadow' ),
+				),
 			)
 		);
 
-		// Register default settings.
-		$this->register_default_settings(
-			array(
-				'cleanup_options' => $this->get_default_options(),
-			)
+		// Set default values for new installations
+		$this->set_default_sub_features();
+	}
+
+	/**
+	 * Set default values for sub-features if not already set.
+	 *
+	 * @return void
+	 */
+	private function set_default_sub_features(): void {
+		$defaults = array(
+			'remove_emoji'          => true,
+			'remove_generator'      => true,
+			'remove_shortlink'      => true,
+			'remove_rsd'            => true,
+			'remove_wlw'            => true,
+			'remove_rest_link'      => false,
+			'remove_oembed'         => true,
+			'remove_feeds'          => false,
+			'remove_comments_style' => true,
+			'disable_xmlrpc'        => true,
 		);
+
+		foreach ( $defaults as $key => $default_value ) {
+			$option_name = 'wpshadow_head-cleanup_' . $key;
+			if ( false === get_option( $option_name ) ) {
+				update_option( $option_name, $default_value, false );
+			}
+		}
+	}
+
+	/**
+	 * Enable details page for this feature.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -57,6 +101,9 @@ final class WPSHADOW_Feature_Head_Cleanup extends WPSHADOW_Abstract_Feature {
 		}
 
 		add_action( 'init', array( $this, 'cleanup_head_elements' ) );
+		
+		// Register Site Health checks
+		add_filter( 'site_status_tests', array( $this, 'add_site_health_tests' ) );
 	}
 
 	/**
@@ -65,86 +112,331 @@ final class WPSHADOW_Feature_Head_Cleanup extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public function cleanup_head_elements(): void {
-		// Get options for granular control.
-		$cleanup_options = (array) $this->get_setting( 'cleanup_options', $this->get_default_options() );
-
-		// Emojis.
-		if ( $cleanup_options['remove_emoji'] ?? false ) {
+		// Emojis - Remove emoji detection script and styles
+		if ( get_option( 'wpshadow_head-cleanup_remove_emoji', true ) ) {
 			remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 			remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
 			remove_action( 'wp_print_styles', 'print_emoji_styles' );
 			remove_action( 'admin_print_styles', 'print_emoji_styles' );
+			
+			$this->log_activity(
+				'emoji_removed',
+				'Emoji detection scripts and styles removed from page head',
+				'info'
+			);
 		}
 
-		// Meta tags and generators.
-		if ( $cleanup_options['remove_generator'] ?? false ) {
+		// Meta tags and generators - Remove version information
+		if ( get_option( 'wpshadow_head-cleanup_remove_generator', true ) ) {
 			remove_action( 'wp_head', 'wp_generator' );
 			add_filter( 'the_generator', '__return_false' );
+			
+			$this->log_activity(
+				'generator_removed',
+				'WordPress generator meta tag removed (security improvement)',
+				'success'
+			);
 		}
 
-		if ( $cleanup_options['remove_shortlink'] ?? false ) {
+		// Shortlink - Remove shortlink tag
+		if ( get_option( 'wpshadow_head-cleanup_remove_shortlink', true ) ) {
 			remove_action( 'wp_head', 'wp_shortlink_wp_head' );
+			
+			$this->log_activity(
+				'shortlink_removed',
+				'Shortlink tag removed from page head',
+				'info'
+			);
 		}
 
-		// Discovery links.
-		if ( $cleanup_options['remove_rsd'] ?? false ) {
+		// Discovery links - RSD (Really Simple Discovery)
+		if ( get_option( 'wpshadow_head-cleanup_remove_rsd', true ) ) {
 			remove_action( 'wp_head', 'rsd_link' );
+			
+			$this->log_activity(
+				'rsd_removed',
+				'RSD (Really Simple Discovery) link removed',
+				'info'
+			);
 		}
 
-		if ( $cleanup_options['remove_wlw'] ?? false ) {
+		// Windows Live Writer - Remove manifest link
+		if ( get_option( 'wpshadow_head-cleanup_remove_wlw', true ) ) {
 			remove_action( 'wp_head', 'wlwmanifest_link' );
+			
+			$this->log_activity(
+				'wlw_removed',
+				'Windows Live Writer manifest link removed',
+				'info'
+			);
 		}
 
-		if ( $cleanup_options['remove_rest_link'] ?? false ) {
+		// REST API - Remove REST API link from head
+		if ( get_option( 'wpshadow_head-cleanup_remove_rest_link', false ) ) {
 			remove_action( 'wp_head', 'rest_output_link_wp_head', 10 );
+			
+			$this->log_activity(
+				'rest_link_removed',
+				'REST API link removed (May affect REST clients)',
+				'warning'
+			);
 		}
 
-		// Embeds.
-		if ( $cleanup_options['remove_oembed'] ?? false ) {
+		// oEmbed - Remove discovery links
+		if ( get_option( 'wpshadow_head-cleanup_remove_oembed', true ) ) {
 			remove_action( 'wp_head', 'wp_oembed_add_discovery_links' );
 			remove_action( 'wp_head', 'wp_oembed_add_host_js' );
+			
+			$this->log_activity(
+				'oembed_removed',
+				'oEmbed discovery links removed',
+				'info'
+			);
 		}
 
-		// Feeds.
-		if ( $cleanup_options['remove_feeds'] ?? false ) {
+		// Feeds - Remove feed links
+		if ( get_option( 'wpshadow_head-cleanup_remove_feeds', false ) ) {
 			remove_action( 'wp_head', 'feed_links_extra', 3 );
 			remove_action( 'wp_head', 'feed_links', 2 );
+			
+			$this->log_activity(
+				'feeds_removed',
+				'Feed links removed from page head',
+				'warning'
+			);
 		}
 
-		// Recent comments style.
-		if ( $cleanup_options['remove_comments_style'] ?? false ) {
+		// Recent comments style - Remove inline styles
+		if ( get_option( 'wpshadow_head-cleanup_remove_comments_style', true ) ) {
 			global $wp_widget_factory;
 			if ( isset( $wp_widget_factory->widgets['WP_Widget_Recent_Comments'] ) ) {
 				remove_action(
 					'wp_head',
 					array( $wp_widget_factory->widgets['WP_Widget_Recent_Comments'], 'recent_comments_style' )
 				);
+				
+				$this->log_activity(
+					'comments_style_removed',
+					'Recent comments inline styles removed',
+					'info'
+				);
 			}
 		}
 
-		// Security.
-		if ( $cleanup_options['disable_xmlrpc'] ?? false ) {
+		// Security - Disable XML-RPC
+		if ( get_option( 'wpshadow_head-cleanup_disable_xmlrpc', true ) ) {
 			add_filter( 'xmlrpc_enabled', '__return_false' );
+			
+			$this->log_activity(
+				'xmlrpc_disabled',
+				'XML-RPC disabled for security',
+				'success'
+			);
 		}
 	}
 
 	/**
-	 * Get default cleanup options.
+	 * Add Site Health tests for head cleanup features.
 	 *
-	 * @return array Default options.
+	 * @param array $tests Existing tests.
+	 * @return array Modified tests.
 	 */
-	protected function get_default_options(): array {
+	public function add_site_health_tests( array $tests ): array {
+		$tests['direct']['wpshadow_head_cleanup_emoji'] = array(
+			'label' => __( 'WPShadow: Emoji Scripts', 'plugin-wpshadow' ),
+			'test'  => array( $this, 'test_emoji_removal' ),
+		);
+
+		$tests['direct']['wpshadow_head_cleanup_generator'] = array(
+			'label' => __( 'WPShadow: XML-RPC Security', 'plugin-wpshadow' ),
+			'test'  => array( $this, 'test_xmlrpc_disabled' ),
+		);
+
+		$tests['direct']['wpshadow_head_cleanup_oembed'] = array(
+			'label' => __( 'WPShadow: oEmbed Links', 'plugin-wpshadow' ),
+			'test'  => array( $this, 'test_oembed_removal' ),
+		);
+
+		return $tests;
+	}
+
+	/**
+	 * Test if emoji scripts are removed.
+	 *
+	 * @return array Test results.
+	 */
+	public function test_emoji_removal(): array {
+		$is_removed = get_option( 'wpshadow_head-cleanup_remove_emoji', true );
+
+		if ( $is_removed ) {
+			return array(
+				'label'       => __( 'Emoji scripts are disabled', 'plugin-wpshadow' ),
+				'status'      => 'good',
+				'badge'       => array(
+					'label' => __( 'Performance', 'plugin-wpshadow' ),
+					'color' => 'blue',
+				),
+				'description' => sprintf(
+					'<p>%s</p>',
+					__( 'WordPress emoji detection scripts and styles have been removed from your pages, improving page load performance. Modern browsers support emojis natively without needing these scripts.', 'plugin-wpshadow' )
+				),
+				'actions'     => '',
+				'test'        => 'wpshadow_head_cleanup_emoji',
+			);
+		}
+
 		return array(
-			'remove_emoji'          => true,
-			'remove_generator'      => true,
-			'remove_shortlink'      => true,
-			'remove_rsd'            => true,
-			'remove_wlw'            => true,
-			'remove_rest_link'      => false, // Keep by default (might break REST clients).
-			'remove_oembed'         => true,
-			'remove_feeds'          => false, // Keep by default (might be needed).
-			'remove_comments_style' => true,
-			'disable_xmlrpc'        => true,
+			'label'       => __( 'Emoji scripts are still loading', 'plugin-wpshadow' ),
+			'status'      => 'recommended',
+			'badge'       => array(
+				'label' => __( 'Performance', 'plugin-wpshadow' ),
+				'color' => 'orange',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				__( 'WordPress is loading emoji detection scripts on every page. These scripts are unnecessary for most sites as modern browsers support emojis natively. Removing them can improve page load performance.', 'plugin-wpshadow' )
+			),
+			'actions'     => sprintf(
+				'<p><a href="%s">%s</a></p>',
+				esc_url( $this->get_details_url() ),
+				__( 'Enable emoji script removal', 'plugin-wpshadow' )
+			),
+			'test'        => 'wpshadow_head_cleanup_emoji',
+		);
+	}
+
+	/**
+	 * Test if generator tag is removed.
+	 *
+	 * @return array Test results.
+	 */
+	public function test_generator_removal(): array {
+		$is_removed = get_option( 'wpshadow_head-cleanup_remove_generator', true );
+
+		if ( $is_removed ) {
+			return array(
+				'label'       => __( 'WordPress version is hidden', 'plugin-wpshadow' ),
+				'status'      => 'good',
+				'badge'       => array(
+					'label' => __( 'Security', 'plugin-wpshadow' ),
+					'color' => 'blue',
+				),
+				'description' => sprintf(
+					'<p>%s</p>',
+					__( 'The WordPress generator meta tag has been removed from your pages, preventing attackers from easily identifying your WordPress version. This is a recommended security practice.', 'plugin-wpshadow' )
+				),
+				'actions'     => '',
+				'test'        => 'wpshadow_head_cleanup_generator',
+			);
+		}
+
+		return array(
+			'label'       => __( 'WordPress version is publicly visible', 'plugin-wpshadow' ),
+			'status'      => 'recommended',
+			'badge'       => array(
+				'label' => __( 'Security', 'plugin-wpshadow' ),
+				'color' => 'orange',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				__( 'Your WordPress version is visible in the page source via the generator meta tag. This information can help attackers target known vulnerabilities in specific WordPress versions. Consider removing this tag for better security.', 'plugin-wpshadow' )
+			),
+			'actions'     => sprintf(
+				'<p><a href="%s">%s</a></p>',
+				esc_url( $this->get_details_url() ),
+				__( 'Enable generator tag removal', 'plugin-wpshadow' )
+			),
+			'test'        => 'wpshadow_head_cleanup_generator',
+		);
+	}
+
+	/**
+	 * Test if XML-RPC is disabled.
+	 *
+	 * @return array Test results.
+	 */
+	public function test_xmlrpc_disabled(): array {
+		$is_disabled = get_option( 'wpshadow_head-cleanup_disable_xmlrpc', true );
+
+		if ( $is_disabled ) {
+			return array(
+				'label'       => __( 'XML-RPC is disabled', 'plugin-wpshadow' ),
+				'status'      => 'good',
+				'badge'       => array(
+					'label' => __( 'Security', 'plugin-wpshadow' ),
+					'color' => 'blue',
+				),
+				'description' => sprintf(
+					'<p>%s</p>',
+					__( 'XML-RPC has been disabled, closing a common attack vector. XML-RPC is rarely needed on modern WordPress sites and is frequently targeted by brute-force attacks and DDoS amplification attacks.', 'plugin-wpshadow' )
+				),
+				'actions'     => '',
+				'test'        => 'wpshadow_head_cleanup_xmlrpc',
+			);
+		}
+
+		return array(
+			'label'       => __( 'XML-RPC is enabled', 'plugin-wpshadow' ),
+			'status'      => 'recommended',
+			'badge'       => array(
+				'label' => __( 'Security', 'plugin-wpshadow' ),
+				'color' => 'orange',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				__( 'XML-RPC is currently enabled on your site. This legacy feature is frequently targeted by attackers for brute-force login attempts and DDoS amplification attacks. Unless you specifically need XML-RPC for mobile apps or remote publishing, it is recommended to disable it.', 'plugin-wpshadow' )
+			),
+			'actions'     => sprintf(
+				'<p><a href="%s">%s</a></p>',
+				esc_url( $this->get_details_url() ),
+				__( 'Enable XML-RPC blocking', 'plugin-wpshadow' )
+			),
+			'test'        => 'wpshadow_head_cleanup_xmlrpc',
+		);
+	}
+
+	/**
+	 * Test if oEmbed links are removed.
+	 *
+	 * @return array Test results.
+	 */
+	public function test_oembed_removal(): array {
+		$is_removed = get_option( 'wpshadow_head-cleanup_remove_oembed', true );
+
+		if ( $is_removed ) {
+			return array(
+				'label'       => __( 'oEmbed discovery links removed', 'plugin-wpshadow' ),
+				'status'      => 'good',
+				'badge'       => array(
+					'label' => __( 'Performance', 'plugin-wpshadow' ),
+					'color' => 'blue',
+				),
+				'description' => sprintf(
+					'<p>%s</p>',
+					__( 'oEmbed discovery links and scripts have been removed from your page head, reducing page weight and load time. These are only needed if you want external sites to automatically embed your content.', 'plugin-wpshadow' )
+				),
+				'actions'     => '',
+				'test'        => 'wpshadow_head_cleanup_oembed',
+			);
+		}
+
+		return array(
+			'label'       => __( 'oEmbed discovery links present', 'plugin-wpshadow' ),
+			'status'      => 'recommended',
+			'badge'       => array(
+				'label' => __( 'Performance', 'plugin-wpshadow' ),
+				'color' => 'orange',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				__( 'WordPress is adding oEmbed discovery links and scripts to your page head. Unless you need external sites to automatically embed your content, these can be safely removed to improve page performance.', 'plugin-wpshadow' )
+			),
+			'actions'     => sprintf(
+				'<p><a href="%s">%s</a></p>',
+				esc_url( $this->get_details_url() ),
+				__( 'Enable oEmbed link removal', 'plugin-wpshadow' )
+			),
+			'test'        => 'wpshadow_head_cleanup_oembed',
 		);
 	}
 }

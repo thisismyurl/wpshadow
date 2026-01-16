@@ -38,11 +38,45 @@ final class WPSHADOW_Feature_Conditional_Loading extends WPSHADOW_Abstract_Featu
 			)
 		);
 
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'contact_forms'     => __( 'Conditional Contact Form Scripts', 'plugin-wpshadow' ),
+					'woocommerce'       => __( 'Conditional WooCommerce Assets', 'plugin-wpshadow' ),
+					'social_sharing'    => __( 'Conditional Social Sharing', 'plugin-wpshadow' ),
+					'analytics'         => __( 'Conditional Analytics Scripts', 'plugin-wpshadow' ),
+					'custom_rules'      => __( 'Enable Custom Loading Rules', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'contact_forms'     => true,
+						'woocommerce'       => true,
+						'social_sharing'    => true,
+						'analytics'         => false,
+						'custom_rules'      => false,
+					)
+				);
+			}
+		}
+
 		$this->register_default_settings(
 			array(
 				'conditional_loading_rules' => array(),
 			)
 		);
+		
+		$this->log_activity( 'feature_initialized', 'Conditional Loading feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -56,6 +90,9 @@ final class WPSHADOW_Feature_Conditional_Loading extends WPSHADOW_Abstract_Featu
 		}
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'conditional_script_loading' ), 999 );
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**
@@ -191,5 +228,76 @@ final class WPSHADOW_Feature_Conditional_Loading extends WPSHADOW_Abstract_Featu
 	 */
 	private function detect_plugin_from_handle( string $handle ): ?string {
 		return WPSHADOW_Script_Utils::detect_plugin_from_handle( $handle );
+	}
+
+	/**
+	 * Register Site Health test.
+	 *
+	 * @param array<string, mixed> $tests Site Health tests.
+	 * @return array<string, mixed>
+	 */
+	public function register_site_health_test( array $tests ): array {
+		$tests['direct']['WPSHADOW_conditional_loading'] = array(
+			'label' => __( 'Conditional Loading', 'plugin-wpshadow' ),
+			'test'  => array( $this, 'test_conditional_loading' ),
+		);
+		return $tests;
+	}
+
+	/**
+	 * Site Health test for conditional loading.
+	 *
+	 * @return array<string, mixed>
+	 */
+	public function test_conditional_loading(): array {
+		if ( ! $this->is_enabled() ) {
+			return array(
+				'label'       => __( 'Conditional Loading', 'plugin-wpshadow' ),
+				'status'      => 'recommended',
+				'badge'       => array(
+					'label' => __( 'Performance', 'plugin-wpshadow' ),
+					'color' => 'gray',
+				),
+				'description' => sprintf( '<p>%s</p>', __( 'Conditional Loading is not enabled. Enabling conditional loading can reduce page weight by loading scripts only where needed.', 'plugin-wpshadow' ) ),
+				'actions'     => '',
+				'test'        => 'WPSHADOW_conditional_loading',
+			);
+		}
+
+		// Count enabled sub-features.
+		$enabled_features = 0;
+		if ( get_option( 'wpshadow_conditional-loading_contact_forms', true ) ) {
+			++$enabled_features;
+		}
+		if ( get_option( 'wpshadow_conditional-loading_woocommerce', true ) ) {
+			++$enabled_features;
+		}
+		if ( get_option( 'wpshadow_conditional-loading_social_sharing', true ) ) {
+			++$enabled_features;
+		}
+
+		// Count custom rules.
+		$rules = (array) $this->get_setting( 'conditional_loading_rules', array() );
+		$rule_count = count( $rules );
+
+		return array(
+			'label'       => __( 'Conditional Loading', 'plugin-wpshadow' ),
+			'status'      => 'good',
+			'badge'       => array(
+				'label' => __( 'Performance', 'plugin-wpshadow' ),
+				'color' => 'blue',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				/* translators: 1: number of enabled features, 2: number of custom rules */
+				sprintf(
+					__( 'Conditional Loading is active with %1$d preset rules enabled and %2$d custom loading rules configured.', 'plugin-wpshadow' ),
+					$enabled_features,
+					$rule_count
+				)
+			),
+			'actions'     => '',
+			'test'        => 'WPSHADOW_conditional_loading',
+		);
 	}
 }

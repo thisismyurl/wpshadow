@@ -5,7 +5,7 @@
  * Allows Super Admin to register a license once in Network Admin and push
  * that key to all sites in the network (or a selected subset).
  *
- * Author:              Christopher Ross
+ * Author:              WPShadow
  * Author URI:          https://wpshadow.com/?source=plugin-wpshadow
  * Plugin Name:         WPShadow - wpshadow
  * Plugin URI:          https://wpshadow.com/plugin-wpshadow/?source=plugin-wpshadow

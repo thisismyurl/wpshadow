@@ -371,4 +371,48 @@ abstract class WPSHADOW_Abstract_Feature implements WPSHADOW_Feature_Interface {
 
 		return \WPShadow\WPSHADOW_Cache_Helper::delete_by_prefix( $this->id );
 	}
+
+	/**
+	 * Check if feature has a details page.
+	 * Override in child classes to enable details page.
+	 *
+	 * @return bool True if feature has details page.
+	 */
+	public function has_details_page(): bool {
+		return false;
+	}
+
+	/**
+	 * Log activity for this feature.
+	 *
+	 * @param string $action  Action performed.
+	 * @param string $message Log message.
+	 * @param string $level   Log level (info, warning, error, success).
+	 * @return bool True on success.
+	 */
+	protected function log_activity( string $action, string $message, string $level = 'info' ): bool {
+		if ( ! class_exists( '\\WPShadow\\CoreSupport\\WPSHADOW_Feature_Details_Page' ) ) {
+			return false;
+		}
+
+		return \WPShadow\CoreSupport\WPSHADOW_Feature_Details_Page::log_feature_activity(
+			$this->id,
+			$action,
+			$message,
+			$level
+		);
+	}
+
+	/**
+	 * Get feature details page URL.
+	 *
+	 * @return string Feature details page URL.
+	 */
+	public function get_details_url(): string {
+		if ( ! class_exists( '\\WPShadow\\CoreSupport\\WPSHADOW_Feature_Details_Page' ) ) {
+			return '';
+		}
+
+		return \WPShadow\CoreSupport\WPSHADOW_Feature_Details_Page::get_feature_url( $this->id );
+	}
 }

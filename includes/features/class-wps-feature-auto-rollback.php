@@ -53,6 +53,42 @@ final class WPSHADOW_Feature_Auto_Rollback extends WPSHADOW_Abstract_Feature {
 				'widget_description' => __( 'Advanced safety and recovery features to protect your WordPress installation', 'plugin-wpshadow' ),
 			)
 		);
+		
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'auto_snapshot'       => __( 'Auto Snapshot Before Updates', 'plugin-wpshadow' ),
+					'validate_updates'    => __( 'Validate After Updates', 'plugin-wpshadow' ),
+					'auto_rollback'       => __( 'Auto Rollback on Failure', 'plugin-wpshadow' ),
+					'core_updates'        => __( 'Monitor Core Updates', 'plugin-wpshadow' ),
+					'plugin_updates'      => __( 'Monitor Plugin Updates', 'plugin-wpshadow' ),
+					'theme_updates'       => __( 'Monitor Theme Updates', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'auto_snapshot'       => true,
+						'validate_updates'    => true,
+						'auto_rollback'       => true,
+						'core_updates'        => true,
+						'plugin_updates'      => true,
+						'theme_updates'       => true,
+					)
+				);
+			}
+		}
+		
+		$this->log_activity( 'feature_initialized', 'Auto Rollback feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -76,6 +112,9 @@ final class WPSHADOW_Feature_Auto_Rollback extends WPSHADOW_Abstract_Feature {
 
 		// Admin notice for rollback results.
 		add_action( 'admin_notices', array( $this, 'display_rollback_notice' ) );
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**

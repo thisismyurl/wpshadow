@@ -5,7 +5,7 @@
  * Automatically crawls HTML and CSS to find "404 Not Found" errors
  * or non-working outbound links.
  *
- * @package wpshadow_SUPPORT
+ * @package WPShadow\CoreSupport
  */
 
 declare(strict_types=1);
@@ -40,6 +40,31 @@ final class WPSHADOW_Feature_Broken_Link_Checker extends WPSHADOW_Abstract_Featu
 	}
 
 	/**
+	 * Enable details page for this feature.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
+	}
+
+	/**
+	 * Register hooks when feature is enabled.
+	 *
+	 * @return void
+	 */
+	public function register(): void {
+		if ( ! $this->is_enabled() ) {
+			return;
+		}
+
+		// Register Site Health test.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
+
+		$this->log_activity( 'feature_initialized', 'Broken Link Checker initialized', 'info' );
+	}
+
+	/**
 	 * Initialize the broken link checker.
 	 *
 	 * @return void
@@ -53,9 +78,6 @@ final class WPSHADOW_Feature_Broken_Link_Checker extends WPSHADOW_Abstract_Featu
 		// Schedule periodic link checking
 		add_action( 'wpshadow_check_broken_links', array( __CLASS__, 'check_all_links' ) );
 		
-		// Add admin menu
-		add_action( 'admin_menu', array( __CLASS__, 'add_admin_menu' ) );
-		
 		// Register AJAX handlers
 		add_action( 'wp_ajax_wpshadow_check_links_now', array( __CLASS__, 'ajax_check_links_now' ) );
 		add_action( 'wp_ajax_wpshadow_dismiss_broken_link', array( __CLASS__, 'ajax_dismiss_broken_link' ) );
@@ -64,22 +86,6 @@ final class WPSHADOW_Feature_Broken_Link_Checker extends WPSHADOW_Abstract_Featu
 		if ( ! wp_next_scheduled( 'wpshadow_check_broken_links' ) ) {
 			wp_schedule_event( time(), 'daily', 'wpshadow_check_broken_links' );
 		}
-	}
-
-	/**
-	 * Add admin menu for broken link checker.
-	 *
-	 * @return void
-	 */
-	public static function add_admin_menu(): void {
-		add_submenu_page(
-			'wpshadow',
-			__( 'Broken Links', 'plugin-wpshadow' ),
-			__( 'Broken Links', 'plugin-wpshadow' ),
-			'manage_options',
-			'wpshadow-broken-links',
-			array( __CLASS__, 'render_admin_page' )
-		);
 	}
 
 	/**

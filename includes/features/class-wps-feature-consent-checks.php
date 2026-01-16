@@ -38,6 +38,40 @@ final class WPSHADOW_Feature_Consent_Checks extends WPSHADOW_Abstract_Feature {
 				'widget_description' => __( 'Tools for GDPR and privacy compliance', 'plugin-wpshadow' ),
 			)
 		);
+		
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'cookie_scanning'      => __( 'Cookie Scanning', 'plugin-wpshadow' ),
+					'consent_banner'       => __( 'Consent Banner', 'plugin-wpshadow' ),
+					'script_blocking'      => __( 'Auto-Block Scripts', 'plugin-wpshadow' ),
+					'audit_trail'          => __( 'Consent Audit Trail', 'plugin-wpshadow' ),
+					'customizable_banner'  => __( 'Customizable Banner Text', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'cookie_scanning'      => true,
+						'consent_banner'       => true,
+						'script_blocking'      => true,
+						'audit_trail'          => true,
+						'customizable_banner'  => true,
+					)
+				);
+			}
+		}
+		
+		$this->log_activity( 'feature_initialized', 'Consent Checks feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -51,16 +85,21 @@ final class WPSHADOW_Feature_Consent_Checks extends WPSHADOW_Abstract_Feature {
 		}
 
 		// Hook early in head to inject blocking script before any other scripts load.
-		add_action( 'wp_head', array( $this, 'inject_consent_checker' ), 1 );
+		if ( get_option( 'wpshadow_consent-checks_script_blocking', true ) ) {
+			add_action( 'wp_head', array( $this, 'inject_consent_checker' ), 1 );
+		}
 
 		// Enqueue consent banner styles and scripts.
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_consent_assets' ), 1 );
-
-		// Add consent banner to footer.
-		add_action( 'wp_footer', array( $this, 'render_consent_banner' ), 1 );
+		if ( get_option( 'wpshadow_consent-checks_consent_banner', true ) ) {
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_consent_assets' ), 1 );
+			add_action( 'wp_footer', array( $this, 'render_consent_banner' ), 1 );
+		}
 
 		// Add settings page integration.
 		add_filter( 'wpshadow_feature_settings_consent-checks', array( $this, 'render_settings' ) );
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**

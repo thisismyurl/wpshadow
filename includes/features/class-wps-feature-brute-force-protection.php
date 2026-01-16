@@ -50,8 +50,49 @@ final class WPSHADOW_Feature_Brute_Force_Protection extends WPSHADOW_Abstract_Fe
 				'widget_group'       => 'security',
 				'widget_label'       => __( 'Security', 'plugin-wpshadow' ),
 				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wpshadow' ),
+				'sub_features'       => array(
+					'enable_rate_limiting'  => __( 'Enable Rate Limiting (Recommended)', 'plugin-wpshadow' ),
+					'track_failed_logins'   => __( 'Track Failed Login Attempts', 'plugin-wpshadow' ),
+					'ip_lockout'            => __( 'IP-Based Lockouts', 'plugin-wpshadow' ),
+					'log_lockouts'          => __( 'Log Lockout Events', 'plugin-wpshadow' ),
+					'auto_cleanup'          => __( 'Auto-Cleanup Old Records (Daily)', 'plugin-wpshadow' ),
+				),
 			)
 		);
+
+		// Set default values for new installations
+		$this->set_default_sub_features();
+	}
+
+	/**
+	 * Set default values for sub-features if not already set.
+	 *
+	 * @return void
+	 */
+	private function set_default_sub_features(): void {
+		$defaults = array(
+			'enable_rate_limiting' => true,
+			'track_failed_logins'  => true,
+			'ip_lockout'           => true,
+			'log_lockouts'         => true,
+			'auto_cleanup'         => true,
+		);
+
+		foreach ( $defaults as $key => $default_value ) {
+			$option_name = 'wpshadow_brute-force-protection_' . $key;
+			if ( false === get_option( $option_name ) ) {
+				update_option( $option_name, $default_value, false );
+			}
+		}
+	}
+
+	/**
+	 * Enable details page for this feature.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -65,22 +106,30 @@ final class WPSHADOW_Feature_Brute_Force_Protection extends WPSHADOW_Abstract_Fe
 		}
 
 		// Track failed login attempts.
-		add_action( 'wp_login_failed', array( $this, 'handle_failed_login' ) );
+		if ( get_option( 'wpshadow_brute-force-protection_track_failed_logins', true ) ) {
+			add_action( 'wp_login_failed', array( $this, 'handle_failed_login' ) );
+		}
 
 		// Check if IP is locked out before authentication.
-		add_filter( 'authenticate', array( $this, 'check_lockout' ), 30 );
+		if ( get_option( 'wpshadow_brute-force-protection_ip_lockout', true ) ) {
+			add_filter( 'authenticate', array( $this, 'check_lockout' ), 30 );
+		}
 
 		// Clear attempts on successful login.
 		add_action( 'wp_login', array( $this, 'clear_attempts' ), 10, 2 );
-
-		// Admin menu for locked IPs.
-		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 
 		// AJAX handler for unlocking IPs.
 		add_action( 'wp_ajax_WPSHADOW_unlock_ip', array( $this, 'ajax_unlock_ip' ) );
 
 		// Cleanup old records daily.
-		add_action( 'wpshadow_daily_cleanup', array( $this, 'cleanup_old_records' ) );
+		if ( get_option( 'wpshadow_brute-force-protection_auto_cleanup', true ) ) {
+			add_action( 'wpshadow_daily_cleanup', array( $this, 'cleanup_old_records' ) );
+		}
+
+		// Register Site Health checks.
+		add_filter( 'site_status_tests', array( $this, 'add_site_health_tests' ) );
+
+		$this->log_activity( 'feature_initialized', 'Brute Force Protection feature initialized', 'success' );
 	}
 
 	/**
@@ -134,7 +183,21 @@ final class WPSHADOW_Feature_Brute_Force_Protection extends WPSHADOW_Abstract_Fe
 			$lockout_until = time() + self::LOCKOUT_DURATION;
 			set_transient( $lockout_key, $lockout_until, self::LOCKOUT_DURATION );
 
-			// Log the lockout.
+			// Log the lockout using feature logging system.
+			if ( get_option( 'wpshadow_brute-force-protection_log_lockouts', true ) ) {
+				$this->log_activity(
+					'ip_locked_out',
+					sprintf(
+						/* translators: 1: IP address, 2: number of attempts */
+						__( 'IP address %1$s locked out after %2$d failed login attempts', 'plugin-wpshadow' ),
+						$ip,
+						count( $attempts )
+					),
+					'warning'
+				);
+			}
+
+			// Also log via activity logger if available.
 			if ( class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) ) {
 				\WPShadow\WPSHADOW_Activity_Logger::log(
 					'security',
@@ -473,6 +536,79 @@ final class WPSHADOW_Feature_Brute_Force_Protection extends WPSHADOW_Abstract_Fe
 				$wpdb->esc_like( '_transient_timeout_WPSHADOW_lockout_' ) . '%',
 				$now
 			)
+		);
+	}
+
+	/**
+	 * Add Site Health tests for brute force protection.
+	 *
+	 * @param array $tests Existing tests.
+	 * @return array Modified tests.
+	 */
+	public function add_site_health_tests( array $tests ): array {
+		$tests['direct']['wpshadow_brute_force_protection'] = array(
+			'label' => __( 'WPShadow: Brute Force Protection', 'plugin-wpshadow' ),
+			'test'  => array( $this, 'test_brute_force_protection' ),
+		);
+
+		return $tests;
+	}
+
+	/**
+	 * Test if brute force protection is active.
+	 *
+	 * @return array Test results.
+	 */
+	public function test_brute_force_protection(): array {
+		$is_enabled = $this->is_enabled();
+		$rate_limiting = get_option( 'wpshadow_brute-force-protection_enable_rate_limiting', true );
+
+		if ( $is_enabled && $rate_limiting ) {
+			$locked_ips_count = count( $this->get_locked_ips() );
+
+			return array(
+				'label'       => __( 'Brute force protection is active', 'plugin-wpshadow' ),
+				'status'      => 'good',
+				'badge'       => array(
+					'label' => __( 'Security', 'plugin-wpshadow' ),
+					'color' => 'blue',
+				),
+				'description' => sprintf(
+					'<p>%s</p>',
+					sprintf(
+						/* translators: 1: number of locked IPs, 2: max attempts */
+						_n(
+							'Your site is protected against brute force login attacks. %1$d IP address is currently locked out after exceeding %2$d failed login attempts.',
+							'Your site is protected against brute force login attacks. %1$d IP addresses are currently locked out after exceeding %2$d failed login attempts.',
+							$locked_ips_count,
+							'plugin-wpshadow'
+						),
+						$locked_ips_count,
+						self::MAX_ATTEMPTS
+					)
+				),
+				'actions'     => '',
+				'test'        => 'wpshadow_brute_force_protection',
+			);
+		}
+
+		return array(
+			'label'       => __( 'Brute force protection is not enabled', 'plugin-wpshadow' ),
+			'status'      => 'recommended',
+			'badge'       => array(
+				'label' => __( 'Security', 'plugin-wpshadow' ),
+				'color' => 'orange',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				__( 'Your site is vulnerable to brute force login attacks. Attackers can make unlimited login attempts to guess passwords. Enable brute force protection to rate-limit failed login attempts and automatically lock out attacking IP addresses.', 'plugin-wpshadow' )
+			),
+			'actions'     => sprintf(
+				'<p><a href="%s">%s</a></p>',
+				esc_url( $this->get_details_url() ),
+				__( 'Enable brute force protection', 'plugin-wpshadow' )
+			),
+			'test'        => 'wpshadow_brute_force_protection',
 		);
 	}
 }

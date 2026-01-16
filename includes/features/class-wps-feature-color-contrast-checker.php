@@ -6,7 +6,7 @@
  * colors to ensure WCAG accessibility compliance. Essential for readability
  * and legal compliance regarding inclusive web design.
  *
- * @package WPShadow\Features
+ * @package WPShadow\CoreSupport
  * @since 1.2601.75001
  */
 
@@ -44,6 +44,15 @@ final class WPSHADOW_Feature_Color_Contrast_Checker extends WPSHADOW_Abstract_Fe
 	}
 
 	/**
+	 * Enable details page for this feature.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
+	}
+
+	/**
 	 * Register hooks when feature is enabled.
 	 *
 	 * @return void
@@ -53,27 +62,13 @@ final class WPSHADOW_Feature_Color_Contrast_Checker extends WPSHADOW_Abstract_Fe
 			return;
 		}
 
-		// Add admin menu page.
-		add_action( 'admin_menu', array( $this, 'add_menu_page' ) );
-
 		// Register AJAX handler for checking contrast.
 		add_action( 'wp_ajax_wpshadow_check_contrast', array( $this, 'ajax_check_contrast' ) );
-	}
 
-	/**
-	 * Add menu page for the color contrast checker.
-	 *
-	 * @return void
-	 */
-	public function add_menu_page(): void {
-		add_submenu_page(
-			'wpshadow',
-			__( 'Color Contrast Checker', 'plugin-wpshadow' ),
-			__( 'Contrast Checker', 'plugin-wpshadow' ),
-			'manage_options',
-			'wpshadow-color-contrast',
-			array( $this, 'render_checker_page' )
-		);
+		// Register Site Health test.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
+
+		$this->log_activity( 'feature_initialized', 'Color Contrast Checker initialized', 'info' );
 	}
 
 	/**

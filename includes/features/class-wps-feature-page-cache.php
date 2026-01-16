@@ -73,11 +73,13 @@ final class WPSHADOW_Feature_Page_Cache extends WPSHADOW_Abstract_Feature {
 		// Output buffering for cache generation.
 		add_action( 'template_redirect', array( $this, 'start_output_buffering' ), 0 );
 
-		// Cache invalidation hooks.
-		add_action( 'save_post', array( $this, 'invalidate_post_cache' ), 10, 2 );
-		add_action( 'deleted_post', array( $this, 'invalidate_post_cache' ) );
-		add_action( 'comment_post', array( $this, 'invalidate_comment_cache' ), 10, 3 );
-		add_action( 'switch_theme', array( $this, 'purge_all_cache' ) );
+		// Cache invalidation hooks if auto-invalidation is enabled.
+		if ( get_option( 'wpshadow_page-cache_auto_invalidation', true ) ) {
+			add_action( 'save_post', array( $this, 'invalidate_post_cache' ), 10, 2 );
+			add_action( 'deleted_post', array( $this, 'invalidate_post_cache' ) );
+			add_action( 'comment_post', array( $this, 'invalidate_comment_cache' ), 10, 3 );
+			add_action( 'switch_theme', array( $this, 'purge_all_cache' ) );
+		}
 
 		// Admin bar menu.
 		add_action( 'admin_bar_menu', array( $this, 'add_admin_bar_menu' ), 90 );
@@ -93,6 +95,9 @@ final class WPSHADOW_Feature_Page_Cache extends WPSHADOW_Abstract_Feature {
 
 		// Ensure cache directory exists.
 		$this->ensure_cache_directory();
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**
@@ -388,5 +393,81 @@ final class WPSHADOW_Feature_Page_Cache extends WPSHADOW_Abstract_Feature {
 				file_put_contents( $htaccess, "# Cache files\n<Files *.html>\n\tRequire all granted\n</Files>\n" );
 			}
 		}
+	}
+
+	/**
+	 * Register Site Health test.
+	 *
+	 * @param array<string, mixed> $tests Site Health tests.
+	 * @return array<string, mixed>
+	 */
+	public function register_site_health_test( array $tests ): array {
+		$tests['direct']['WPSHADOW_page_cache'] = array(
+			'label' => __( 'Page Cache', 'plugin-wpshadow' ),
+			'test'  => array( $this, 'test_page_cache' ),
+		);
+		return $tests;
+	}
+
+	/**
+	 * Site Health test for page cache.
+	 *
+	 * @return array<string, mixed>
+	 */
+	public function test_page_cache(): array {
+		if ( ! $this->is_enabled() ) {
+			return array(
+				'label'       => __( 'Page Cache', 'plugin-wpshadow' ),
+				'status'      => 'recommended',
+				'badge'       => array(
+					'label' => __( 'Performance', 'plugin-wpshadow' ),
+					'color' => 'orange',
+				),
+				'description' => sprintf( '<p>%s</p>', __( 'Page Cache is not enabled. Enabling page caching can significantly improve site performance and reduce server load.', 'plugin-wpshadow' ) ),
+				'actions'     => '',
+				'test'        => 'WPSHADOW_page_cache',
+			);
+		}
+
+		// Count cached files.
+		$cached_files = 0;
+		if ( is_dir( self::CACHE_DIR ) ) {
+			$files = glob( self::CACHE_DIR . '*.html' );
+			if ( is_array( $files ) ) {
+				$cached_files = count( $files );
+			}
+		}
+
+		// Count enabled sub-features.
+		$enabled_features = 0;
+		if ( get_option( 'wpshadow_page-cache_device_detection', true ) ) {
+			++$enabled_features;
+		}
+		if ( get_option( 'wpshadow_page-cache_auto_invalidation', true ) ) {
+			++$enabled_features;
+		}
+		if ( get_option( 'wpshadow_page-cache_gzip_compression', true ) ) {
+			++$enabled_features;
+		}
+
+		return array(
+			'label'       => __( 'Page Cache', 'plugin-wpshadow' ),
+			'status'      => 'good',
+			'badge'       => array(
+				'label' => __( 'Performance', 'plugin-wpshadow' ),
+				'color' => 'blue',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				/* translators: 1: number of cached files, 2: number of enabled features */
+				sprintf(
+					__( 'Page Cache is active with %1$d cached pages and %2$d optimization features enabled.', 'plugin-wpshadow' ),
+					$cached_files,
+					$enabled_features
+				)
+			),
+			'actions'     => '',
+			'test'        => 'WPSHADOW_page_cache',
+		);
 	}
 }

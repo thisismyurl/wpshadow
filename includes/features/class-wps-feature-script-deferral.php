@@ -58,6 +58,29 @@ final class WPSHADOW_Feature_Script_Deferral extends WPSHADOW_Abstract_Feature {
 			)
 		);
 
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'defer_third_party'  => __( 'Defer Third-Party Scripts', 'plugin-wpshadow' ),
+					'defer_analytics'    => __( 'Defer Analytics Scripts', 'plugin-wpshadow' ),
+					'defer_social'       => __( 'Defer Social Media Scripts', 'plugin-wpshadow' ),
+					'exclude_jquery'     => __( 'Never Defer jQuery', 'plugin-wpshadow' ),
+					'preserve_order'     => __( 'Preserve Execution Order', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'defer_third_party'  => true,
+						'defer_analytics'    => true,
+						'defer_social'       => true,
+						'exclude_jquery'     => true,
+						'preserve_order'     => true,
+					)
+				);
+			}
+		}
+
 		// Register default settings.
 		$this->register_default_settings(
 			array(
@@ -66,6 +89,17 @@ final class WPSHADOW_Feature_Script_Deferral extends WPSHADOW_Abstract_Feature {
 				'defer_script_handles'   => array(),
 			)
 		);
+		
+		$this->log_activity( 'feature_initialized', 'Script Deferral feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -79,6 +113,9 @@ final class WPSHADOW_Feature_Script_Deferral extends WPSHADOW_Abstract_Feature {
 		}
 
 		add_filter( 'script_loader_tag', array( $this, 'defer_scripts' ), 10, 3 );
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**
@@ -152,5 +189,74 @@ final class WPSHADOW_Feature_Script_Deferral extends WPSHADOW_Abstract_Feature {
 	 */
 	public function get_default_excluded(): array {
 		return $this->default_excluded;
+	}
+
+	/**
+	 * Register Site Health test.
+	 *
+	 * @param array<string, mixed> $tests Site Health tests.
+	 * @return array<string, mixed>
+	 */
+	public function register_site_health_test( array $tests ): array {
+		$tests['direct']['WPSHADOW_script_deferral'] = array(
+			'label' => __( 'Script Deferral', 'plugin-wpshadow' ),
+			'test'  => array( $this, 'test_script_deferral' ),
+		);
+		return $tests;
+	}
+
+	/**
+	 * Site Health test for script deferral.
+	 *
+	 * @return array<string, mixed>
+	 */
+	public function test_script_deferral(): array {
+		if ( ! $this->is_enabled() ) {
+			return array(
+				'label'       => __( 'Script Deferral', 'plugin-wpshadow' ),
+				'status'      => 'recommended',
+				'badge'       => array(
+					'label' => __( 'Performance', 'plugin-wpshadow' ),
+					'color' => 'gray',
+				),
+				'description' => sprintf( '<p>%s</p>', __( 'Script Deferral is not enabled. Deferring non-critical JavaScript can improve page load times.', 'plugin-wpshadow' ) ),
+				'actions'     => '',
+				'test'        => 'WPSHADOW_script_deferral',
+			);
+		}
+
+		// Count enabled sub-features.
+		$enabled_features = 0;
+		if ( get_option( 'wpshadow_script-deferral_defer_third_party', true ) ) {
+			++$enabled_features;
+		}
+		if ( get_option( 'wpshadow_script-deferral_defer_analytics', true ) ) {
+			++$enabled_features;
+		}
+		if ( get_option( 'wpshadow_script-deferral_defer_social', true ) ) {
+			++$enabled_features;
+		}
+
+		$defer_mode = $this->get_setting( 'defer_mode', 'auto' );
+
+		return array(
+			'label'       => __( 'Script Deferral', 'plugin-wpshadow' ),
+			'status'      => 'good',
+			'badge'       => array(
+				'label' => __( 'Performance', 'plugin-wpshadow' ),
+				'color' => 'blue',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				/* translators: 1: defer mode, 2: number of enabled features */
+				sprintf(
+					__( 'Script Deferral is active in %1$s mode with %2$d defer rules enabled.', 'plugin-wpshadow' ),
+					$defer_mode,
+					$enabled_features
+				)
+			),
+			'actions'     => '',
+			'test'        => 'WPSHADOW_script_deferral',
+		);
 	}
 }

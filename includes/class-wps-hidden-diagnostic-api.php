@@ -404,7 +404,7 @@ class WPSHADOW_Hidden_Diagnostic_API {
 				<form id="wps-create-token" style="max-width: 500px;">
 					<div style="margin: 10px 0;">
 						<label><?php esc_html_e( 'Support Agent Name', 'plugin-wpshadow' ); ?></label><br/>
-						<input type="text" name="support_name" placeholder="e.g., Christopher Ross" style="width: 100%; padding: 8px; margin: 5px 0;">
+					<input type="text" name="support_name" placeholder="e.g., WPShadow Support" style="width: 100%; padding: 8px; margin: 5px 0;">
 					</div>
 					<div style="margin: 10px 0;">
 						<label><?php esc_html_e( 'Reason for Access', 'plugin-wpshadow' ); ?></label><br/>

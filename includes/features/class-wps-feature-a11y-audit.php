@@ -39,8 +39,23 @@ final class WPSHADOW_Feature_A11y_Audit extends WPSHADOW_Abstract_Feature {
 				'widget_group'       => 'accessibility',
 				'widget_label'       => __( 'UX & Accessibility', 'plugin-wpshadow' ),
 				'widget_description' => __( 'Improve user experience and accessibility standards', 'plugin-wpshadow' ),
+				'sub_features'       => array(
+					'auto_fix_images'   => __( 'Auto-fix Images (Add alt attributes)', 'plugin-wpshadow' ),
+					'auto_fix_contrast' => __( 'Auto-fix Contrast (CSS improvements)', 'plugin-wpshadow' ),
+					'auto_fix_focus'    => __( 'Auto-fix Focus Indicators', 'plugin-wpshadow' ),
+					'auto_fix_aria'     => __( 'Auto-fix ARIA Labels', 'plugin-wpshadow' ),
+				),
 			)
 		);
+	}
+
+	/**
+	 * Enable details page for this feature.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -53,50 +68,41 @@ final class WPSHADOW_Feature_A11y_Audit extends WPSHADOW_Abstract_Feature {
 			return;
 		}
 
-		// Add admin menu for accessibility audit dashboard.
-		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
-
 		// Register settings.
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 
 		// Auto-fix filters when enabled in options.
-		$options = $this->get_options();
+		$auto_fix_images = get_option( 'wpshadow_a11y-audit_auto_fix_images', false );
+		$auto_fix_contrast = get_option( 'wpshadow_a11y-audit_auto_fix_contrast', false );
+		$auto_fix_focus = get_option( 'wpshadow_a11y-audit_auto_fix_focus', true );
+		$auto_fix_aria = get_option( 'wpshadow_a11y-audit_auto_fix_aria', false );
 
-		if ( $options['auto_fix_images'] ?? false ) {
+		if ( $auto_fix_images ) {
 			add_filter( 'the_content', array( $this, 'auto_fix_images_in_content' ), 20 );
+			$this->log_activity( 'auto_fix_enabled', 'Auto-fix images enabled', 'info' );
 		}
 
-		if ( $options['auto_fix_contrast'] ?? false ) {
+		if ( $auto_fix_contrast ) {
 			add_action( 'wp_head', array( $this, 'add_contrast_fixes' ) );
+			$this->log_activity( 'auto_fix_enabled', 'Auto-fix contrast enabled', 'info' );
 		}
 
-		if ( $options['auto_fix_focus'] ?? true ) {
+		if ( $auto_fix_focus ) {
 			add_action( 'wp_footer', array( $this, 'add_focus_indicators' ) );
+			$this->log_activity( 'auto_fix_enabled', 'Auto-fix focus indicators enabled', 'info' );
 		}
 
-		if ( $options['auto_fix_aria'] ?? false ) {
+		if ( $auto_fix_aria ) {
 			add_filter( 'the_content', array( $this, 'auto_fix_aria_in_content' ), 20 );
+			$this->log_activity( 'auto_fix_enabled', 'Auto-fix ARIA labels enabled', 'info' );
 		}
 
 		// AJAX handlers for manual audit.
 		add_action( 'wp_ajax_WPSHADOW_run_a11y_audit', array( $this, 'ajax_run_audit' ) );
-		add_action( 'wp_ajax_WPSHADOW_apply_a11y_fix', array( $this, 'ajax_apply_fix' ) );
-	}
+		add_action( 'wp_ajax_WPSHADOW_apply_a11y_fix', array( $this, 'ajax_apply_a11y_fix' ) );
 
-	/**
-	 * Add admin menu for accessibility audit.
-	 *
-	 * @return void
-	 */
-	public function add_admin_menu(): void {
-		add_submenu_page(
-			'wpshadow',
-			__( 'Accessibility Audit', 'plugin-wpshadow' ),
-			__( 'A11y Audit', 'plugin-wpshadow' ),
-			'manage_options',
-			'wpshadow-a11y-audit',
-			array( $this, 'render_audit_page' )
-		);
+		// Register Site Health test.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**

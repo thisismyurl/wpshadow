@@ -5,7 +5,7 @@
  * Manages tiered maintenance subscription plans (Free, Pro, Enterprise).
  * MVP implementation - payment integration deferred.
  *
- * @package WPSHADOW_wpshadow_THISISMYURL
+ * @package WPShadow
  * @since 1.0.0
  */
 

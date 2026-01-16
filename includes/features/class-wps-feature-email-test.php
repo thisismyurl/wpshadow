@@ -66,6 +66,15 @@ final class WPSHADOW_Feature_Email_Test extends WPSHADOW_Abstract_Feature {
 	}
 
 	/**
+	 * Enable details page for this feature.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
+	}
+
+	/**
 	 * Register hooks when feature is enabled.
 	 *
 	 * @return void
@@ -74,9 +83,6 @@ final class WPSHADOW_Feature_Email_Test extends WPSHADOW_Abstract_Feature {
 		if ( ! $this->is_enabled() ) {
 			return;
 		}
-
-		// Admin menu.
-		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 
 		// AJAX handlers.
 		add_action( 'wp_ajax_WPSHADOW_send_test_email', array( $this, 'ajax_send_test_email' ) );
@@ -87,22 +93,11 @@ final class WPSHADOW_Feature_Email_Test extends WPSHADOW_Abstract_Feature {
 			add_action( 'wp_mail_succeeded', array( $this, 'log_email_success' ) );
 			add_action( 'wp_mail_failed', array( $this, 'log_email_failure' ) );
 		}
-	}
 
-	/**
-	 * Add admin menu.
-	 *
-	 * @return void
-	 */
-	public function add_admin_menu(): void {
-		add_submenu_page(
-			'wpshadow',
-			__( 'Email Test', 'plugin-wpshadow' ),
-			__( 'Email Test', 'plugin-wpshadow' ),
-			'manage_options',
-			'wpshadow-email-test',
-			array( $this, 'render_page' )
-		);
+		// Register Site Health test.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
+
+		$this->log_activity( 'feature_initialized', 'Email Test feature initialized', 'info' );
 	}
 
 	/**

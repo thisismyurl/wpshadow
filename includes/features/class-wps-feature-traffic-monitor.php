@@ -85,6 +85,9 @@ final class WPSHADOW_Feature_Traffic_Monitor extends WPSHADOW_Abstract_Feature {
 
 		// Create database table if needed.
 		$this->maybe_create_table();
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**

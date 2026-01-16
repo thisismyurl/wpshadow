@@ -40,6 +40,38 @@ final class WPSHADOW_Feature_Performance_Alerts extends WPSHADOW_Abstract_Featur
 				'widget_description' => __( 'Performance monitoring and optimization', 'plugin-wpshadow' ),
 			)
 		);
+		
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'query_alerts'     => __( 'Database Query Alerts', 'plugin-wpshadow' ),
+					'load_time_alerts' => __( 'Page Load Time Alerts', 'plugin-wpshadow' ),
+					'memory_alerts'    => __( 'Memory Usage Alerts', 'plugin-wpshadow' ),
+					'email_alerts'     => __( 'Email Notifications', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'query_alerts'     => true,
+						'load_time_alerts' => true,
+						'memory_alerts'    => true,
+						'email_alerts'     => false,
+					)
+				);
+			}
+		}
+		
+		$this->log_activity( 'feature_initialized', 'Performance Alerts feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**

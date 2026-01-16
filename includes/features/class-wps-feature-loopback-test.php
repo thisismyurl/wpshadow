@@ -58,6 +58,15 @@ final class WPSHADOW_Feature_Loopback_Test extends WPSHADOW_Abstract_Feature {
 	}
 
 	/**
+	 * Enable details page for this feature.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
+	}
+
+	/**
 	 * Register hooks when feature is enabled.
 	 *
 	 * @return void
@@ -67,31 +76,17 @@ final class WPSHADOW_Feature_Loopback_Test extends WPSHADOW_Abstract_Feature {
 			return;
 		}
 
-		// Admin menu.
-		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
-
 		// AJAX handlers.
 		add_action( 'wp_ajax_WPSHADOW_run_loopback_test', array( $this, 'ajax_run_test' ) );
 
 		// Loopback test endpoint.
 		add_action( 'wp_ajax_nopriv_WPSHADOW_loopback_test_endpoint', array( $this, 'loopback_endpoint' ) );
 		add_action( 'wp_ajax_WPSHADOW_loopback_test_endpoint', array( $this, 'loopback_endpoint' ) );
-	}
 
-	/**
-	 * Add admin menu.
-	 *
-	 * @return void
-	 */
-	public function add_admin_menu(): void {
-		add_submenu_page(
-			'wpshadow',
-			__( 'Loopback Request Test', 'plugin-wpshadow' ),
-			__( 'Loopback Test', 'plugin-wpshadow' ),
-			'manage_options',
-			'wpshadow-loopback-test',
-			array( $this, 'render_page' )
-		);
+		// Register Site Health test.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
+
+		$this->log_activity( 'feature_initialized', 'Loopback Test feature initialized', 'info' );
 	}
 
 	/**

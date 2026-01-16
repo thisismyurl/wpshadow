@@ -37,6 +37,36 @@ final class WPSHADOW_Feature_jQuery_Cleanup extends WPSHADOW_Abstract_Feature {
 				'widget_description' => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wpshadow' ),
 			)
 		);
+		
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'remove_migrate_frontend' => __( 'Remove jQuery Migrate on Frontend', 'plugin-wpshadow' ),
+					'keep_admin'             => __( 'Keep jQuery Migrate in Admin', 'plugin-wpshadow' ),
+					'log_removals'           => __( 'Log jQuery Migrate Removals', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'remove_migrate_frontend' => true,
+						'keep_admin'             => true,
+						'log_removals'           => false,
+					)
+				);
+			}
+		}
+		
+		$this->log_activity( 'feature_initialized', 'jQuery Cleanup feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -50,6 +80,9 @@ final class WPSHADOW_Feature_jQuery_Cleanup extends WPSHADOW_Abstract_Feature {
 		}
 
 		add_action( 'wp_default_scripts', array( $this, 'remove_jquery_migrate' ) );
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**

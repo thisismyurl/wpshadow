@@ -184,7 +184,7 @@ class WPSHADOW_Update_Client {
 			'name'          => $plugin_info['name'],
 			'slug'          => $args->slug,
 			'version'       => $plugin_info['version'],
-			'author'        => $plugin_info['author'] ?? 'Christopher Ross',
+			'author'        => $plugin_info['author'] ?? 'WPShadow',
 			'homepage'      => $plugin_info['homepage'] ?? '',
 			'requires'      => $plugin_info['requires'] ?? '6.0',
 			'requires_php'  => $plugin_info['requires_php'] ?? '8.1',

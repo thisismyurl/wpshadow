@@ -1,6 +1,6 @@
-# WPSupport GitHub Copilot Agent
+# WPShadow GitHub Copilot Agent
 
-You are an expert WordPress and PHP development assistant specializing in the WPSupport plugin ecosystem. Your role is to implement features, fix bugs, and improve code quality for the plugin-wpshadow repository and its companion modules.
+You are an expert WordPress and PHP development assistant specializing in the WPShadow plugin ecosystem. Your role is to implement features, fix bugs, and improve code quality for the plugin-wpshadow repository (WPShadow) and its companion modules.
 
 ## Core Responsibilities
 
@@ -14,10 +14,10 @@ You are an expert WordPress and PHP development assistant specializing in the WP
 
 ### Plugin Architecture
 
-The WPSupport plugin uses a modular architecture:
+The WPShadow plugin uses a modular architecture:
 
 **Core Plugin**:
-- `plugin-wpshadow` - Main functionality and hooks
+- `plugin-wpshadow` (branded as WPShadow) - Main functionality and hooks
 
 **Module Repositories** (Issue-specific implementations):
 - `module-login-wpshadow` - Custom authentication, OAuth, SSO/SAML, API auth
@@ -34,21 +34,47 @@ The WPSupport plugin uses a modular architecture:
 
 ### Technology Stack
 
-- **Language**: PHP 8.0+
-- **Framework**: WordPress 6.0+
-- **Standards**: WordPress Coding Standards (WPCS)
+- **Language**: PHP 8.1.29+ (minimum required, 8.4+ in composer.json dev)
+- **Framework**: WordPress 6.4+
+- **Standards**: WordPress Coding Standards (WPCS via WordPress-Extra)
 - **Static Analysis**: PHPStan (Level 5+)
-- **Testing**: PHPUnit with WordPress test utilities
+- **Testing**: PHPUnit 11.0 with WordPress test utilities
 - **Build Tools**: Composer, PHPCS, PHPCBF
 - **CI/CD**: GitHub Actions
+- **Namespace**: `WPShadow\CoreSupport` (changed from `WPS\CoreSupport`)
 
-### Key Files
+### Key Files & Structure
 
-- `wpshadow.php` - Main plugin file with hooks and constants
+- `wpshadow.php` - Main plugin file with hooks and constants (2812 lines, renamed from wp-support-thisismyurl.php)
 - `includes/` - Core classes and functionality
+  - `abstracts/` - Abstract base classes (WPSHADOW_Abstract_Feature, validators)
+  - `admin/` - Admin-specific classes (assets, AJAX, screens)
+  - `api/` - REST API controllers (namespace: WPShadow\CoreSupport\API)
+  - `features/` - Feature implementations (66+ feature classes)
+  - `helpers/` - Helper functions and utilities
+  - `spoke/` - Spoke plugin support
+  - `traits/` - Reusable traits
+  - `views/` - Template files
 - `modules/` - Module integration points
+  - `hubs/` - Hub module integrations
+  - `missing-modules.json` - Module catalog
+- `assets/` - CSS, JS, and image assets
 - `docs/` - Documentation and guides
 - `composer.json` - Dependencies and scripts
+
+### New Features (v1.2601.75000+)
+
+**10 New Feature Classes Added:**
+1. **Uptime Monitor** (`class-wps-feature-uptime-monitor.php`) - External monitoring services integration with health check endpoint
+2. **SEO Validator** (`class-wps-feature-seo-validator.php`) - Validates sitemap.xml and robots.txt for search engine compatibility
+3. **Mobile Friendliness** (`class-wps-feature-mobile-friendliness.php`) - Mobile responsiveness testing and validation
+4. **Broken Link Checker** (`class-wps-feature-broken-link-checker.php`) - Scans content for broken links
+5. **Open Graph Previewer** (`class-wps-feature-open-graph-previewer.php`) - Social media preview validation
+6. **Favicon Checker** (`class-wps-feature-favicon-checker.php`) - Validates favicon across all platforms
+7. **Color Contrast Checker** (`class-wps-feature-color-contrast-checker.php`) - WCAG accessibility validation
+8. **Hotlink Protection** (`class-wps-feature-hotlink-protection.php`) - Prevents bandwidth theft
+9. **Iframe Busting** (`class-wps-feature-iframe-busting.php`) - Clickjacking protection
+10. **HTTP/SSL Audit** (`class-wps-feature-http-ssl-audit.php`) - SSL/TLS configuration validator
 
 ## Module Routing Guide
 
@@ -73,11 +99,12 @@ When assigned to an issue with a module-specific label, the issue should be rout
 ### Code Style
 
 1. **Follow WordPress Coding Standards**:
-   - Use PHPCS to check: `vendor/bin/phpcs --standard=WordPress-Core includes/`
-   - Fix issues automatically: `vendor/bin/phpcbf --standard=WordPress-Core includes/`
+   - Use PHPCS to check: `composer phpcs` or `vendor/bin/phpcs --standard=WordPress-Extra`
+   - Fix issues automatically: `composer phpcbf` or `vendor/bin/phpcbf --standard=WordPress-Extra`
+   - Standard used: WordPress-Extra (not WordPress-Core)
 
 2. **Static Analysis**:
-   - Run PHPStan: `vendor/bin/phpstan analyse --memory-limit=512M`
+   - Run PHPStan: `composer phpstan` or `vendor/bin/phpstan analyse --memory-limit=512M`
    - Target Level 5 or higher
    - Document any type issues with comments
 
@@ -85,6 +112,45 @@ When assigned to an issue with a module-specific label, the issue should be rout
    - Add PHPDoc blocks to all functions and classes
    - Use `@param`, `@return`, `@throws` tags
    - Reference WordPress hooks with `@action` and `@filter` tags
+
+### File Naming Conventions
+
+1. **Core Classes**: `class-wps-{name}.php`
+   - Example: `class-wps-module-registry.php`, `class-wps-dashboard-widgets.php`
+   - Located in: `includes/`
+   - Namespace: `WPShadow\CoreSupport`
+
+2. **Feature Classes**: `class-wps-feature-{name}.php`
+   - Example: `class-wps-feature-hardening.php`, `class-wps-feature-uptime-monitor.php`
+   - Located in: `includes/features/`
+   - Namespace: `WPShadow\CoreSupport`
+   - Extends: `WPSHADOW_Abstract_Feature`
+
+3. **Abstract Classes**: `class-wps-{name}.php`
+   - Example: `class-wps-feature-abstract.php`, `class-wps-feature-validator.php`
+   - Located in: `includes/abstracts/`
+   - Namespace: `WPShadow\CoreSupport`
+
+4. **API Classes**: `class-wps-rest-{name}.php`
+   - Example: `class-wps-rest-api.php`, `class-wps-rest-modules-controller.php`
+   - Located in: `includes/api/`
+   - Namespace: `WPShadow\CoreSupport\API`
+
+5. **Admin Classes**: `class-wps-{name}.php`
+   - Example: `class-wps-dashboard-assets.php`, `class-wps-settings-ajax.php`
+   - Located in: `includes/admin/`
+   - Namespace: `WPShadow\CoreSupport\Admin`
+
+6. **Helper Functions**: `wps-{purpose}-{type}.php`
+   - Example: `wps-capability-helpers.php`, `wps-feature-functions.php`
+   - Located in: `includes/`
+   - Namespace: `WPShadow\CoreSupport`
+
+7. **Traits**: `trait-wps-{name}.php`
+   - Example: `trait-wps-ajax-security.php`
+   - Located in: `includes/traits/`
+   - Namespace: `WPShadow\CoreSupport`
+   - Usage: Reusable code patterns across classes
 
 ### Testing Requirements
 
@@ -155,10 +221,10 @@ When assigned to an issue:
 
 ```php
 // Action hook
-do_action( 'wpsupport_after_init', $this );
+do_action( 'wpshadow_after_init', $this );
 
 // Filter hook
-$value = apply_filters( 'wpsupport_sanitize_value', $value, $type );
+$value = apply_filters( 'wpshadow_sanitize_value', $value, $type );
 ```
 
 Always document hooks in code and in documentation.
@@ -181,44 +247,12 @@ When an issue has a module-specific label:
 
 ## Namespace Conventions (CRITICAL)
 
-**RULE_1: ALL feature classes use `WPShadow\CoreSupport` namespace**
-- CORRECT: `namespace WPShadow\CoreSupport;` in includes/features/class-wps-feature-*.php
-- WRONG: `namespace WPShadow\Features;` (breaks autoloading and class resolution)
-- Consequence: "Class not found" fatal error during plugin initialization
-- Fixed in commit: Visual-regression and script-utils files corrected (Jan 2026)
-- All 40+ feature files follow this pattern; verify before instantiation
-
-**RULE_2: Core classes use `WPShadow\CoreSupport` namespace**
-- All includes/class-wps-*.php files MUST declare `namespace WPShadow\CoreSupport;`
-- Examples: class-wps-module-registry.php, class-wps-dashboard-widgets.php, class-wps-feature-registry.php
-- Helpers and utilities: class-wps-script-utils.php, class-wps-notice-manager.php, etc.
-- Extends to API classes: use `namespace WPShadow\API;` (see includes/api/)
-
-**RULE_3: Module classes use `WPShadow\ModuleName` namespace**
-- Replace ModuleName with specific module name (e.g., `namespace WPShadow\VaultSupport;`)
-- Modules in modules/hubs/ or modules/spokes/ follow this pattern
-- Keeps module isolation clean and prevents core/module coupling
-- Do NOT import core classes into modules; use module registry hooks instead
-
-**RULE_4: REST API classes use `WPShadow\API` namespace**
-- Specialized namespace for REST API endpoints
-- Example: includes/api/class-wps-rest-api.php uses `namespace WPShadow\API;`
-- All API-related classes live under includes/api/ and use this namespace
-
-**RULE_5: When adding new feature, follow 5-step process**
-1. Create class file: includes/features/class-wps-feature-name.php
-2. Add `<?php declare(strict_types=1);` at top (strict types required)
-3. Add `namespace WPShadow\CoreSupport;` immediately after declare
-4. Extend WPSHADOW_Feature_Abstract class
-5. Add `require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-name.php';` in wpshadow.php BEFORE instantiation
-6. Register feature in WPSHADOW_register_core_features() function around line 280
-
 **Correct Feature Template:**
 ```php
 <?php declare(strict_types=1);
 namespace WPShadow\CoreSupport;
 
-final class WPSHADOW_Feature_ExampleName extends WPSHADOW_Feature_Abstract {
+final class WPSHADOW_Feature_ExampleName extends WPSHADOW_Abstract_Feature {
     
     public function register_hooks(): void {
         add_action( 'wp_loaded', [ $this, 'initialize' ] );
@@ -233,9 +267,9 @@ final class WPSHADOW_Feature_ExampleName extends WPSHADOW_Feature_Abstract {
 **Common Mistake (Causes Fatal Error):**
 ```php
 // WRONG - Do NOT do this:
-namespace WPShadow\Features;
-class WPSHADOW_Feature_ExampleName extends WPSHADOW_Feature_Abstract { ... }
-// Result: "Class WPShadow\Features\WPSHADOW_Abstract_Feature not found"
+namespace WPShadow\CoreSupport\Features;
+class WPSHADOW_Feature_ExampleName extends WPSHADOW_Abstract_Feature { ... }
+// Result: "Class WPShadow\CoreSupport\Features\WPSHADOW_Abstract_Feature not found"
 ```
 
 **Why This Matters:**
@@ -248,9 +282,75 @@ class WPSHADOW_Feature_ExampleName extends WPSHADOW_Feature_Abstract { ... }
 **Verification:**
 - Check namespace in new feature files before submitting PR
 - Run `composer phpstan` to catch namespace violations
-- Verify require_once statement in wpshadow.php (around line 700-724)
+- Verify require_once statement in wpshadow.php (around line 730-931)
 - Test plugin activation: `wp plugin activate plugin-wpshadow`
 - Check debug.log for "fatal" or "Cannot redeclare" errors
+
+## Critical Class Naming (BREAKING CHANGE WARNING)
+
+**The abstract feature class is named `WPSHADOW_Abstract_Feature`, NOT `WPSHADOW_Feature_Abstract`**
+
+- **Correct**: `class WPSHADOW_Feature_ExampleName extends WPSHADOW_Abstract_Feature { ... }`
+- **WRONG**: `class WPSHADOW_Feature_ExampleName extends WPSHADOW_Feature_Abstract { ... }`
+
+**File locations:**
+- Abstract class: `includes/features/class-wps-feature-abstract.php`
+- Interface: `includes/features/interface-wps-feature.php`
+- Implementation: All feature files extend `WPSHADOW_Abstract_Feature`
+
+**Evidence from codebase (January 2026):**
+- All 66+ feature files use `extends WPSHADOW_Abstract_Feature`
+- Class declaration in class-wps-feature-abstract.php: `abstract class WPSHADOW_Abstract_Feature implements WPSHADOW_Feature_Interface`
+- Grep results show 100% consistency: `extends WPSHADOW_Abstract_Feature`
+
+**Why this matters:**
+- Using wrong class name = Fatal "Class not found" error
+- PSR-4 autoloader expects exact class name match
+- All existing features follow this pattern - new features must match
+
+## Function Naming Conventions
+
+**Global Helper Functions** (in `includes/wps-*.php` files):
+
+1. **Settings Functions**: `WPSHADOW_{action}_{object}()`
+   - Examples: `WPSHADOW_get_setting()`, `WPSHADOW_update_setting()`, `WPSHADOW_delete_setting()`
+   - Capital WPSHADOW prefix for global settings API
+
+2. **Capability Functions**: `WPSHADOW_can_{action}()` or `wpshadow_{verb}_{object}()`
+   - Examples: `wpshadow_can_access_dashboard()`, `wpshadow_is_support_enabled()`
+   - Lowercase wpshadow prefix for permission checks
+
+3. **Feature Registry**: `register_WPSHADOW_feature()`, `has_WPSHADOW_feature()`
+   - Capital WPSHADOW in middle for feature system functions
+
+4. **Core Functions**: `wpshadow_{action}()`
+   - Examples: `wpshadow_init()`, `wpshadow_admin_menu()`, `wpshadow_guard_disabled_modules()`
+   - Lowercase wpshadow prefix for internal core functions
+
+5. **Registration Function**: `WPSHADOW_register_core_features()`
+   - Capital WPSHADOW prefix for feature registration
+
+6. **Namespaced Functions**: All in `WPShadow\\CoreSupport` namespace
+   - Helper functions are namespaced, not global
+   - Import with `use function WPShadow\\CoreSupport\\function_name;`
+
+## Plugin Constants
+
+Defined in wpshadow.php (lines 392-460):
+
+```php
+WPSHADOW_VERSION       // Plugin version number ('1.2601.73001')
+WPSHADOW_FILE          // Full path to main plugin file
+WPSHADOW_PATH          // Plugin directory path (with trailing slash)
+WPSHADOW_URL           // Plugin directory URL
+WPSHADOW_BASENAME      // Plugin basename (for activation hooks)
+WPSHADOW_TEXT_DOMAIN   // Text domain for translations ('plugin-wpshadow')
+WPSHADOW_MIN_PHP       // Minimum PHP version (8.1.29)
+WPSHADOW_MIN_WP        // Minimum WordPress version (6.4.0)
+WPSHADOW_SUITE_ID      // Suite identifier for module compatibility
+```
+
+Use these constants instead of hardcoding paths or versions.
 
 ## Feature Registration Pattern (MUST FOLLOW)
 
@@ -274,15 +374,22 @@ When registering a feature class, you MUST:
 
 **Correct Feature Registration:**
 ```php
-// Step 1: In wpshadow.php around line 700, add:
+// Step 1: In wpshadow.php around line 730-931, add:
 require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-example-name.php';
 
-// Step 2: In WPSHADOW_register_core_features() around line 280, add:
+// Step 2: In WPSHADOW_register_core_features() around line 287-367, add:
 register_WPSHADOW_feature( new WPSHADOW_Feature_ExampleName() );
 ```
 
+**Location Guide for require_once statements:**
+- Lines 730-931 in wpshadow.php contain all feature file includes
+- Features are organized by category (performance, security, tools, monitoring, etc.)
+- Use `str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . '...' )` for cross-platform compatibility
+- Core classes use: `require_once WPSHADOW_PATH . 'includes/class-wps-{name}.php';`
+- Feature classes use: `require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-{name}.php' );`
+
 **Validation:**
-- Before committing: Check wpshadow.php lines 700-724 for ALL registered features
+- Before committing: Check wpshadow.php lines 730-931 for ALL registered features
 - Run `composer phpstan` to catch missing classes
 - Test: `wp plugin activate plugin-wpshadow` with no fatals
 - Check debug.log tail for "Cannot redeclare" errors
@@ -394,13 +501,78 @@ Before submitting ANY pull request, verify:
 - [ ] Hooks/filters documented in code
 
 **CI/CD Pipeline Check:**
-```powershell
+```bash
 # Run before committing:
 composer phpcs && composer phpstan && composer test
 
-# Test activation:
+# Test activation (Linux/Codespaces):
+wp plugin activate plugin-wpshadow
+tail -n 20 /path/to/debug.log
+
+# Test activation (Windows PowerShell):
 wp plugin activate plugin-wpshadow
 Get-Content 'C:\Users\Owner\Local Sites\dev\app\public\wp-content\debug.log' -Tail 10
+```
+
+## Code Organization Patterns
+
+### Directory Structure Best Practices
+
+1. **Core Plugin Files** (`includes/`)
+   - Single-purpose classes for core functionality
+   - Each class in its own file following `class-wps-{name}.php` pattern
+   - Namespace: `WPShadow\\CoreSupport`
+
+2. **Feature System** (`includes/features/`)
+   - 66+ feature classes implementing optional functionality
+   - All extend `WPSHADOW_Abstract_Feature`
+   - File pattern: `class-wps-feature-{name}.php`
+   - Stub files (`.php.stub`) for planned features
+   - 10 new features added in v1.2601.75000
+
+3. **Admin Layer** (`includes/admin/`)
+   - Admin-specific functionality separate from core
+   - Assets management, AJAX handlers, screen definitions
+   - Namespace: `WPShadow\\CoreSupport\\Admin`
+
+4. **API Layer** (`includes/api/`)
+   - REST API controllers and endpoints
+   - Base controller: `class-wps-rest-controller-base.php`
+   - Specific controllers: modules, vault, license, settings
+   - Namespace: `WPShadow\\CoreSupport\\API`
+
+5. **Helper Files** (`includes/helpers/`, root of `includes/`)
+   - Function libraries without classes
+   - Examples: `wps-capability-helpers.php`, `wps-feature-functions.php`
+   - Load early in plugin initialization
+
+6. **Abstracts** (`includes/abstracts/`)
+   - Abstract base classes and validators
+   - Example: `class-wps-feature-validator.php`
+   - Used for validation and normalization
+
+7. **Traits** (`includes/traits/`)
+   - Reusable code patterns
+   - Example: `trait-wps-ajax-security.php` (AJAX security verification)
+   - Include security checks, common utilities
+
+### Class Hierarchy
+
+```
+WPSHADOW_Feature_Interface (interface)
+└── WPSHADOW_Abstract_Feature (abstract class)
+    └── WPSHADOW_Feature_* (concrete feature implementations)
+        ├── WPSHADOW_Feature_Hardening
+        ├── WPSHADOW_Feature_Uptime_Monitor (NEW)
+        ├── WPSHADOW_Feature_SEO_Validator (NEW)
+        ├── WPSHADOW_Feature_Mobile_Friendliness (NEW)
+        └── ... (63+ more features)
+
+WPSHADOW_REST_Controller_Base (abstract class)
+└── WPSHADOW_REST_*_Controller (concrete controllers)
+    ├── WPSHADOW_REST_Modules_Controller
+    ├── WPSHADOW_REST_Vault_Controller
+    └── WPSHADOW_REST_License_Controller
 ```
 
 ### Updating Documentation
@@ -441,6 +613,56 @@ Before submitting code:
 
 ---
 
-**Agent Version**: 1.1  
-**Last Updated**: January 2026  
-**Maintained by**: wpshadow
+**Agent Version**: 2.0  
+**Last Updated**: January 16, 2026  
+**Maintained by**: WPShadow
+
+## Changelog
+
+### Version 2.0 (January 16, 2026) - WPShadow Rebranding Release
+- 🔥 **BREAKING CHANGE**: Complete rebranding from WPSupport to WPShadow
+- ✅ **Plugin Renamed**: wp-support-thisismyurl.php → wpshadow.php (2812 lines)
+- ✅ **Namespace Changed**: `WPS\\CoreSupport` → `WPShadow\\CoreSupport`
+- ✅ **Constants Updated**: WPS_ prefix → WPSHADOW_ prefix (9 constants)
+- ✅ **Function Prefixes**: Mixed WPS_ and wps_ → WPSHADOW_ and wpshadow_
+- ✅ **Class Prefixes**: WPS_ → WPSHADOW_ for all classes
+- ✅ **10 New Features Added**:
+  1. Uptime Monitor (external monitoring integration)
+  2. SEO Validator (sitemap/robots.txt validation)
+  3. Mobile Friendliness (responsive testing)
+  4. Broken Link Checker
+  5. Open Graph Previewer
+  6. Favicon Checker
+  7. Color Contrast Checker (WCAG)
+  8. Hotlink Protection
+  9. Iframe Busting (clickjacking protection)
+  10. HTTP/SSL Audit
+- ✅ Feature count increased from 54 to 66
+- ✅ Updated line references (feature registration: 287-367, requires: 730-931)
+- ✅ Added function naming conventions (5 categories)
+- ✅ Added plugin constants documentation (9 constants)
+- ✅ Updated composer.json namespace: WPShadow\\
+- ✅ Verified all 66 features follow WPSHADOW_Abstract_Feature pattern
+- ✅ Updated module repositories to -wpshadow suffix
+
+### Version 1.2 (January 16, 2026) - Pre-Rebranding
+- ✅ **CRITICAL FIX**: Corrected abstract class name from `WPS_Feature_Abstract` to `WPS_Abstract_Feature`
+- ✅ **CRITICAL FIX**: Corrected PHP version to 8.1.29+ minimum (header file) vs 8.4+ (composer.json dev)
+- ✅ Updated WordPress version requirement to 6.4+ (from 6.0+)
+- ✅ Updated PHPUnit version to 11.0 in technology stack
+- ✅ Updated PHPCS standard from WordPress-Core to WordPress-Extra
+- ✅ Added comprehensive file naming conventions section
+- ✅ Added directory structure and class hierarchy documentation
+- ✅ Added namespace documentation for Admin and Spoke layers
+- ✅ Updated line number references
+- ✅ Added cross-platform path handling notes
+- ✅ Added detailed file structure with subdirectories
+- ✅ Verified all namespace patterns against actual codebase
+- ✅ Added Linux/Codespaces command examples alongside Windows commands
+
+### Version 1.1 (January 2026)
+- Initial comprehensive documentation
+- Namespace conventions established
+- Feature registration patterns documented
+- Type safety patterns added
+- Pre-commit validation checklist created

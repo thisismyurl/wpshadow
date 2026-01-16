@@ -57,6 +57,15 @@ final class WPSHADOW_Feature_MySQL_Diagnostics extends WPSHADOW_Abstract_Feature
 	}
 
 	/**
+	 * Enable details page for this feature.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
+	}
+
+	/**
 	 * Register hooks when feature is enabled.
 	 *
 	 * @return void
@@ -66,24 +75,10 @@ final class WPSHADOW_Feature_MySQL_Diagnostics extends WPSHADOW_Abstract_Feature
 			return;
 		}
 
-		// Admin menu.
-		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
-	}
+		// Register Site Health test.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 
-	/**
-	 * Add admin menu.
-	 *
-	 * @return void
-	 */
-	public function add_admin_menu(): void {
-		add_submenu_page(
-			'wpshadow',
-			__( 'MySQL Diagnostics', 'plugin-wpshadow' ),
-			__( 'MySQL Info', 'plugin-wpshadow' ),
-			'manage_options',
-			'wpshadow-mysql-diagnostics',
-			array( $this, 'render_page' )
-		);
+		$this->log_activity( 'feature_initialized', 'MySQL Diagnostics feature initialized', 'info' );
 	}
 
 	/**

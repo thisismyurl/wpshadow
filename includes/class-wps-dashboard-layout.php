@@ -3,7 +3,7 @@
  * Dashboard Layout Manager
  * Handles widget ordering, inheritance, and bulk operations.
  *
- * @package WPSHADOW_wpshadow_THISISMYURL
+ * @package WPShadow
  * @since 1.2601.74000
  */
 

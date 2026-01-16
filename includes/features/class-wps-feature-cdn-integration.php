@@ -48,6 +48,42 @@ final class WPSHADOW_Feature_CDN_Integration extends WPSHADOW_Abstract_Feature {
 				'widget_priority'    => 20,
 			)
 		);
+		
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'rewrite_images'   => __( 'CDN for Images', 'plugin-wpshadow' ),
+					'rewrite_css'      => __( 'CDN for CSS Files', 'plugin-wpshadow' ),
+					'rewrite_js'       => __( 'CDN for JavaScript', 'plugin-wpshadow' ),
+					'rewrite_fonts'    => __( 'CDN for Web Fonts', 'plugin-wpshadow' ),
+					'cloudflare_api'   => __( 'CloudFlare API Integration', 'plugin-wpshadow' ),
+					'auto_purge'       => __( 'Auto-Purge on Updates', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'rewrite_images'   => true,
+						'rewrite_css'      => true,
+						'rewrite_js'       => true,
+						'rewrite_fonts'    => true,
+						'cloudflare_api'   => false,
+						'auto_purge'       => false,
+					)
+				);
+			}
+		}
+		
+		$this->log_activity( 'feature_initialized', 'CDN Integration feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -60,12 +96,28 @@ final class WPSHADOW_Feature_CDN_Integration extends WPSHADOW_Abstract_Feature {
 			return;
 		}
 
+		// Check if any rewriting is enabled.
+		$has_rewriting = get_option( 'wpshadow_cdn-integration_rewrite_images', true )
+			|| get_option( 'wpshadow_cdn-integration_rewrite_css', true )
+			|| get_option( 'wpshadow_cdn-integration_rewrite_js', true )
+			|| get_option( 'wpshadow_cdn-integration_rewrite_fonts', true );
+
 		// Output buffering for URL rewriting.
-		add_action( 'template_redirect', array( $this, 'start_output_buffering' ), 1 );
+		if ( $has_rewriting ) {
+			add_action( 'template_redirect', array( $this, 'start_output_buffering' ), 1 );
+		}
+
+		// Auto-purge on post update.
+		if ( get_option( 'wpshadow_cdn-integration_auto_purge', false ) ) {
+			add_action( 'save_post', array( $this, 'handle_auto_purge' ), 10, 3 );
+		}
 
 		// AJAX handlers.
 		add_action( 'wp_ajax_WPSHADOW_test_cdn', array( $this, 'ajax_test_cdn_connection' ) );
 		add_action( 'wp_ajax_WPSHADOW_purge_cdn', array( $this, 'ajax_purge_cdn_cache' ) );
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**
@@ -98,9 +150,31 @@ final class WPSHADOW_Feature_CDN_Integration extends WPSHADOW_Abstract_Feature {
 		$site_url = site_url();
 		$home_url = home_url();
 
-		// Build patterns for assets.
-		$extensions = array( 'jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'css', 'js', 'woff', 'woff2', 'ttf', 'eot' );
-		$pattern    = '#(' . preg_quote( $site_url, '#' ) . '|' . preg_quote( $home_url, '#' ) . ')([^\'"]+\.(' . implode( '|', $extensions ) . '))#i';
+		// Build file type arrays based on sub-feature settings.
+		$extensions = array();
+		
+		if ( get_option( 'wpshadow_cdn-integration_rewrite_images', true ) ) {
+			$extensions = array_merge( $extensions, array( 'jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'ico', 'avif' ) );
+		}
+		
+		if ( get_option( 'wpshadow_cdn-integration_rewrite_css', true ) ) {
+			$extensions[] = 'css';
+		}
+		
+		if ( get_option( 'wpshadow_cdn-integration_rewrite_js', true ) ) {
+			$extensions[] = 'js';
+		}
+		
+		if ( get_option( 'wpshadow_cdn-integration_rewrite_fonts', true ) ) {
+			$extensions = array_merge( $extensions, array( 'woff', 'woff2', 'ttf', 'eot', 'otf' ) );
+		}
+		
+		if ( empty( $extensions ) ) {
+			return $html;
+		}
+
+		// Build pattern for assets.
+		$pattern = '#(' . preg_quote( $site_url, '#' ) . '|' . preg_quote( $home_url, '#' ) . ')([^\'"]+(\.' . implode( '|\\.',  $extensions ) . '))#i';
 
 		// Replace with CDN URL.
 		$html = preg_replace_callback( $pattern, function( $matches ) use ( $cdn_hostname ) {
@@ -241,6 +315,139 @@ final class WPSHADOW_Feature_CDN_Integration extends WPSHADOW_Abstract_Feature {
 			return new \WP_Error( 'api_error', __( 'CloudFlare API error', 'plugin-wpshadow' ) );
 		}
 
+		$this->log_activity( 'cloudflare_purge', 'CloudFlare cache purged successfully', 'success' );
+
 		return true;
+	}
+
+	/**
+	 * Handle auto-purge on post update.
+	 *
+	 * @param int      $post_id Post ID.
+	 * @param \WP_Post $post Post object.
+	 * @param bool     $update Whether this is an update.
+	 * @return void
+	 */
+	public function handle_auto_purge( int $post_id, \WP_Post $post, bool $update ): void {
+		// Only purge on published post updates.
+		if ( ! $update || 'publish' !== $post->post_status ) {
+			return;
+		}
+
+		// Only if CloudFlare API is enabled.
+		if ( ! get_option( 'wpshadow_cdn-integration_cloudflare_api', false ) ) {
+			return;
+		}
+
+		// Purge cache.
+		$result = $this->cloudflare_purge_cache();
+		
+		if ( ! is_wp_error( $result ) ) {
+			$this->log_activity(
+				'auto_purge',
+				sprintf( __( 'CDN cache auto-purged for post #%d', 'plugin-wpshadow' ), $post_id ),
+				'info'
+			);
+		}
+	}
+
+	/**
+	 * Register CDN Integration Site Health test.
+	 *
+	 * @param array $tests Site Health tests.
+	 * @return array Modified tests.
+	 */
+	public function register_site_health_test( array $tests ): array {
+		$tests['direct']['wpshadow_cdn_integration'] = array(
+			'label' => __( 'CDN Integration', 'plugin-wpshadow' ),
+			'test'  => array( $this, 'test_cdn_integration' ),
+		);
+		return $tests;
+	}
+
+	/**
+	 * Test CDN Integration configuration and status.
+	 *
+	 * @return array Test result.
+	 */
+	public function test_cdn_integration(): array {
+		$is_enabled = $this->is_enabled();
+		$cdn_hostname = get_option( 'wpshadow_cdn_hostname', '' );
+		
+		$enabled_count = 0;
+		if ( get_option( 'wpshadow_cdn-integration_rewrite_images', true ) ) {
+			++$enabled_count;
+		}
+		if ( get_option( 'wpshadow_cdn-integration_rewrite_css', true ) ) {
+			++$enabled_count;
+		}
+		if ( get_option( 'wpshadow_cdn-integration_rewrite_js', true ) ) {
+			++$enabled_count;
+		}
+		if ( get_option( 'wpshadow_cdn-integration_rewrite_fonts', true ) ) {
+			++$enabled_count;
+		}
+
+		if ( $is_enabled && ! empty( $cdn_hostname ) && $enabled_count > 0 ) {
+			return array(
+				'label'       => __( 'CDN integration is active', 'plugin-wpshadow' ),
+				'status'      => 'good',
+				'badge'       => array(
+					'label' => __( 'Performance', 'plugin-wpshadow' ),
+					'color' => 'blue',
+				),
+				'description' => sprintf(
+					'<p>%s</p>',
+					wp_kses_post(
+						sprintf(
+							/* translators: 1: CDN hostname, 2: Number of enabled asset types */
+							__( 'CDN is configured for %1$s with %2$d asset types being served from CDN.', 'plugin-wpshadow' ),
+							'<code>' . esc_html( $cdn_hostname ) . '</code>',
+							$enabled_count
+						)
+					)
+				),
+				'actions'     => sprintf(
+					'<p><a href="%s">%s</a></p>',
+					esc_url( admin_url( 'admin.php?page=wpshadow-feature-details&feature=cdn-integration' ) ),
+					esc_html__( 'View CDN Settings', 'plugin-wpshadow' )
+				),
+				'test'        => 'wpshadow_cdn_integration',
+			);
+		}
+
+		if ( $is_enabled && empty( $cdn_hostname ) ) {
+			return array(
+				'label'       => __( 'CDN integration is enabled but not configured', 'plugin-wpshadow' ),
+				'status'      => 'recommended',
+				'badge'       => array(
+					'label' => __( 'Performance', 'plugin-wpshadow' ),
+					'color' => 'orange',
+				),
+				'description' => '<p>' . __( 'CDN integration is enabled but no CDN hostname is configured. Add your CDN hostname to start serving assets faster.', 'plugin-wpshadow' ) . '</p>',
+				'actions'     => sprintf(
+					'<p><a href="%s">%s</a></p>',
+					esc_url( admin_url( 'admin.php?page=wpshadow-feature-details&feature=cdn-integration' ) ),
+					esc_html__( 'Configure CDN', 'plugin-wpshadow' )
+				),
+				'test'        => 'wpshadow_cdn_integration',
+			);
+		}
+
+		return array(
+			'label'       => __( 'CDN integration is not enabled', 'plugin-wpshadow' ),
+			'status'      => 'recommended',
+			'badge'       => array(
+				'label' => __( 'Performance', 'plugin-wpshadow' ),
+				'color' => 'gray',
+			),
+			'description' => '<p>' . __( 'Enable CDN integration to serve static assets faster to global visitors and reduce server load.', 'plugin-wpshadow' ) . '</p>',
+			'actions'     => sprintf(
+				'<p><a href="%s">%s</a></p>',
+				esc_url( admin_url( 'admin.php?page=wpshadow-feature-details&feature=cdn-integration' ) ),
+				esc_html__( 'Enable CDN Integration', 'plugin-wpshadow' )
+			),
+			'test'        => 'wpshadow_cdn_integration',
+		);
 	}
 }

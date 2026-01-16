@@ -91,6 +91,9 @@ final class WPSHADOW_Feature_Firewall extends WPSHADOW_Abstract_Feature {
 			wp_schedule_event( time(), 'hourly', 'wpshadow_firewall_cleanup' );
 		}
 		add_action( 'wpshadow_firewall_cleanup', array( $this, 'cleanup_expired_limits' ) );
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**

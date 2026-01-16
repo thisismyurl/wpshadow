@@ -44,6 +44,15 @@ class WPSHADOW_Feature_Smart_Recommendations extends WPSHADOW_Abstract_Feature {
 	}
 
 	/**
+	 * Enable details page for this feature.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
+	}
+
+	/**
 	 * Register hooks when feature is enabled.
 	 *
 	 * @return void
@@ -68,11 +77,13 @@ class WPSHADOW_Feature_Smart_Recommendations extends WPSHADOW_Abstract_Feature {
 		// Dashboard widget registration.
 		add_action( 'wp_dashboard_setup', array( __CLASS__, 'register_dashboard_widget' ) );
 
-		// Admin page for detailed recommendations view.
-		add_action( 'admin_menu', array( __CLASS__, 'register_admin_page' ) );
-
 		// AJAX handler for dismissing recommendations.
 		add_action( 'wp_ajax_WPSHADOW_dismiss_recommendation', array( __CLASS__, 'ajax_dismiss_recommendation' ) );
+
+		// Register Site Health test.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
+
+		$this->log_activity( 'feature_initialized', 'Smart Recommendations initialized', 'info' );
 	}
 
 	/**

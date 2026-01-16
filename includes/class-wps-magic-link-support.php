@@ -5,7 +5,7 @@
  * Provides secure, time-limited (24-hour) login URLs for developers with
  * session tracking and email summaries of changes made during the session.
  *
- * @package WPSHADOW_wpshadow_THISISMYURL
+ * @package WPShadow
  */
 
 declare(strict_types=1);

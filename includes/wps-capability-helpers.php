@@ -3,7 +3,7 @@
  * Capability Helper Functions
  * Centralized permission checks based on stored settings
  *
- * @package WPSHADOW_wpshadow_THISISMYURL
+ * @package WPShadow
  */
 
 namespace WPShadow\CoreSupport;

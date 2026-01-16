@@ -102,6 +102,42 @@ final class WPSHADOW_Feature_Visual_Regression extends WPSHADOW_Abstract_Feature
 				'widget_description' => __( 'Advanced safety and recovery features to protect your WordPress installation', 'plugin-wpshadow' ),
 			)
 		);
+		
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'pre_update_capture'    => __( 'Pre-Update Screenshot Capture', 'plugin-wpshadow' ),
+					'post_update_compare'   => __( 'Post-Update Comparison', 'plugin-wpshadow' ),
+					'layout_detection'      => __( 'Layout Shift Detection', 'plugin-wpshadow' ),
+					'color_change_detect'   => __( 'Color Change Detection', 'plugin-wpshadow' ),
+					'auto_rollback_trigger' => __( 'Auto-Rollback on Changes', 'plugin-wpshadow' ),
+					'visual_diff_reports'   => __( 'Visual Diff Reports', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'pre_update_capture'    => true,
+						'post_update_compare'   => true,
+						'layout_detection'      => true,
+						'color_change_detect'   => true,
+						'auto_rollback_trigger' => false,
+						'visual_diff_reports'   => true,
+					)
+				);
+			}
+		}
+		
+		$this->log_activity( 'feature_initialized', 'Visual Regression feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -115,16 +151,23 @@ final class WPSHADOW_Feature_Visual_Regression extends WPSHADOW_Abstract_Feature
 		}
 
 		// Hook before any update starts.
-		add_filter( 'upgrader_pre_install', array( $this, 'capture_pre_update_screenshots' ), 10, 2 );
+		if ( get_option( 'wpshadow_visual-regression_pre_update_capture', true ) ) {
+			add_filter( 'upgrader_pre_install', array( $this, 'capture_pre_update_screenshots' ), 10, 2 );
+		}
 
 		// Hook after update completes to validate visual changes.
-		add_action( 'upgrader_process_complete', array( $this, 'validate_visual_changes' ), 998, 2 );
+		if ( get_option( 'wpshadow_visual-regression_post_update_compare', true ) ) {
+			add_action( 'upgrader_process_complete', array( $this, 'validate_visual_changes' ), 998, 2 );
+		}
 
 		// Admin notice for visual regression results.
 		add_action( 'admin_notices', array( $this, 'display_visual_regression_notice' ) );
 
 		// Settings for threshold configuration.
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**

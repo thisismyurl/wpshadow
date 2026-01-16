@@ -6,7 +6,7 @@
  * situations by detecting fatal errors, identifying problematic plugins, and
  * automatically attempting recovery.
  *
- * @package WPSHADOW_wpshadow_THISISMYURL
+ * @package WPShadow
  */
 
 declare(strict_types=1);

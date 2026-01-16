@@ -5,7 +5,7 @@
  * Verifies that site icons display correctly across browsers and devices.
  * Checks for proper favicon formats, dimensions, and aspect ratios.
  *
- * @package WPSHADOW_SUPPORT
+ * @package WPShadow\CoreSupport
  */
 
 declare(strict_types=1);
@@ -40,6 +40,31 @@ class WPSHADOW_Feature_Favicon_Checker extends WPSHADOW_Abstract_Feature {
 				'priority'           => 20,
 			)
 		);
+	}
+
+	/**
+	 * Enable details page for this feature.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
+	}
+
+	/**
+	 * Register hooks when feature is enabled.
+	 *
+	 * @return void
+	 */
+	public function register(): void {
+		if ( ! $this->is_enabled() ) {
+			return;
+		}
+
+		// Register Site Health test.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
+
+		$this->log_activity( 'feature_initialized', 'Favicon Checker initialized', 'info' );
 	}
 
 	/**

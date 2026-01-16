@@ -38,6 +38,38 @@ final class WPSHADOW_Feature_Block_CSS_Cleanup extends WPSHADOW_Abstract_Feature
 				'widget_description' => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wpshadow' ),
 			)
 		);
+		
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'remove_block_library'       => __( 'Remove Block Library Styles', 'plugin-wpshadow' ),
+					'remove_block_theme'         => __( 'Remove Block Theme Styles', 'plugin-wpshadow' ),
+					'remove_global_styles'       => __( 'Remove Global Styles', 'plugin-wpshadow' ),
+					'remove_woocommerce_blocks'  => __( 'Remove WooCommerce Block Styles', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'remove_block_library'       => true,
+						'remove_block_theme'         => true,
+						'remove_global_styles'       => true,
+						'remove_woocommerce_blocks'  => true,
+					)
+				);
+			}
+		}
+		
+		$this->log_activity( 'feature_initialized', 'Block CSS Cleanup feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -51,7 +83,13 @@ final class WPSHADOW_Feature_Block_CSS_Cleanup extends WPSHADOW_Abstract_Feature
 		}
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'remove_block_library_css' ), 100 );
-		add_action( 'wp_enqueue_scripts', array( $this, 'remove_block_theme_css' ), 100 );
+		
+		if ( get_option( 'wpshadow_block-css-cleanup_remove_block_theme', true ) || get_option( 'wpshadow_block-css-cleanup_remove_global_styles', true ) ) {
+			add_action( 'wp_enqueue_scripts', array( $this, 'remove_block_theme_css' ), 100 );
+		}
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**
@@ -72,5 +110,66 @@ final class WPSHADOW_Feature_Block_CSS_Cleanup extends WPSHADOW_Abstract_Feature
 	 */
 	public function remove_block_theme_css(): void {
 		wp_dequeue_style( 'global-styles' );
+	}
+
+	/**
+	 * Register Site Health test.
+	 *
+	 * @param array $tests Array of Site Health tests.
+	 * @return array Modified tests array.
+	 */
+	public function register_site_health_test( array $tests ): array {
+		$tests['direct']['block_css_cleanup'] = array(
+			'label' => __( 'Block CSS Cleanup', 'plugin-wpshadow' ),
+			'test'  => array( $this, 'test_block_css_cleanup' ),
+		);
+
+		return $tests;
+	}
+
+	/**
+	 * Site Health test for block CSS cleanup.
+	 *
+	 * @return array Test result.
+	 */
+	public function test_block_css_cleanup(): array {
+		$enabled_features = 0;
+		
+		if ( get_option( 'wpshadow_block-css-cleanup_remove_block_library', true ) ) {
+			$enabled_features++;
+		}
+		if ( get_option( 'wpshadow_block-css-cleanup_remove_block_theme', true ) ) {
+			$enabled_features++;
+		}
+		if ( get_option( 'wpshadow_block-css-cleanup_remove_global_styles', true ) ) {
+			$enabled_features++;
+		}
+		if ( get_option( 'wpshadow_block-css-cleanup_remove_woocommerce_blocks', true ) ) {
+			$enabled_features++;
+		}
+
+		$status = $enabled_features > 0 ? 'good' : 'recommended';
+		$label  = $enabled_features > 0 ?
+			__( 'Block CSS cleanup is enabled', 'plugin-wpshadow' ) :
+			__( 'Block CSS cleanup is not configured', 'plugin-wpshadow' );
+
+		return array(
+			'label'       => $label,
+			'status'      => $status,
+			'badge'       => array(
+				'label' => __( 'Performance', 'plugin-wpshadow' ),
+				'color' => 'blue',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				sprintf(
+					/* translators: %d: number of enabled cleanup features */
+					__( '%d block CSS cleanup features are enabled, reducing frontend CSS bloat.', 'plugin-wpshadow' ),
+					$enabled_features
+				)
+			),
+			'actions'     => '',
+			'test'        => 'block_css_cleanup',
+		);
 	}
 }

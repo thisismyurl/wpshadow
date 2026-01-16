@@ -147,6 +147,40 @@ final class WPSHADOW_Feature_Two_Factor_Auth extends WPSHADOW_Abstract_Feature {
 				'widget_priority'    => 15,
 			)
 		);
+		
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'totp_authentication' => __( 'TOTP Authenticator App', 'plugin-wpshadow' ),
+					'backup_codes'        => __( 'Backup Codes', 'plugin-wpshadow' ),
+					'email_2fa'           => __( 'Email Verification Fallback', 'plugin-wpshadow' ),
+					'trusted_devices'     => __( 'Remember Trusted Devices', 'plugin-wpshadow' ),
+					'force_admin_2fa'     => __( 'Require 2FA for Administrators', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'totp_authentication' => true,
+						'backup_codes'        => true,
+						'email_2fa'           => true,
+						'trusted_devices'     => false,
+						'force_admin_2fa'     => false,
+					)
+				);
+			}
+		}
+		
+		$this->log_activity( 'feature_initialized', 'Two Factor Auth feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**

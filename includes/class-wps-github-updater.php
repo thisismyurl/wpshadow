@@ -134,7 +134,7 @@ class WPSHADOW_GitHub_Updater {
 			'name'           => 'WPShadow',
 			'slug'           => 'plugin-wpshadow',
 			'version'        => ltrim( $release_data['tag_name'], 'v' ),
-			'author'         => 'Christopher Ross',
+			'author'         => 'WPShadow',
 			'author_profile' => 'https://github.com/thisismyurl',
 			'download_link'  => $release_data['zipball_url'],
 			'description'    => $release_data['body'] ?? 'The foundational support plugin for WordPress with comprehensive diagnostics, emergency recovery, and backup verification.',

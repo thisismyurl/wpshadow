@@ -48,6 +48,42 @@ final class WPSHADOW_Feature_Image_Optimizer extends WPSHADOW_Abstract_Feature {
 				'widget_priority'    => 15,
 			)
 		);
+		
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'auto_optimize'     => __( 'Auto-Optimize on Upload', 'plugin-wpshadow' ),
+					'webp_conversion'   => __( 'WebP Format Conversion', 'plugin-wpshadow' ),
+					'avif_conversion'   => __( 'AVIF Format Conversion', 'plugin-wpshadow' ),
+					'retain_originals'  => __( 'Keep Original Files', 'plugin-wpshadow' ),
+					'bulk_optimization' => __( 'Enable Bulk Optimization', 'plugin-wpshadow' ),
+					'resize_large'      => __( 'Resize Oversized Images', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'auto_optimize'     => true,
+						'webp_conversion'   => true,
+						'avif_conversion'   => false,
+						'retain_originals'  => true,
+						'bulk_optimization' => true,
+						'resize_large'      => false,
+					)
+				);
+			}
+		}
+		
+		$this->log_activity( 'feature_initialized', 'Image Optimizer feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -60,15 +96,19 @@ final class WPSHADOW_Feature_Image_Optimizer extends WPSHADOW_Abstract_Feature {
 			return;
 		}
 
-		// Hook into upload process.
-		add_filter( 'wp_handle_upload', array( $this, 'optimize_on_upload' ), 10, 2 );
+		// Hook into upload process if auto-optimize is enabled.
+		if ( get_option( 'wpshadow_image-optimizer_auto_optimize', true ) ) {
+			add_filter( 'wp_handle_upload', array( $this, 'optimize_on_upload' ), 10, 2 );
+		}
 
 		// Media Library columns.
 		add_filter( 'manage_media_columns', array( $this, 'add_optimization_column' ) );
 		add_action( 'manage_media_custom_column', array( $this, 'render_optimization_column' ), 10, 2 );
 
-		// Bulk actions.
-		add_filter( 'bulk_actions-upload', array( $this, 'add_bulk_actions' ) );
+		// Bulk actions if enabled.
+		if ( get_option( 'wpshadow_image-optimizer_bulk_optimization', true ) ) {
+			add_filter( 'bulk_actions-upload', array( $this, 'add_bulk_actions' ) );
+		}
 
 		// AJAX handlers.
 		add_action( 'wp_ajax_WPSHADOW_optimize_image', array( $this, 'ajax_optimize_image' ) );
@@ -78,6 +118,9 @@ final class WPSHADOW_Feature_Image_Optimizer extends WPSHADOW_Abstract_Feature {
 			wp_schedule_event( time(), 'hourly', 'wpshadow_scheduled_image_optimization' );
 		}
 		add_action( 'wpshadow_scheduled_image_optimization', array( $this, 'process_optimization_queue' ) );
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**
@@ -373,5 +416,78 @@ final class WPSHADOW_Feature_Image_Optimizer extends WPSHADOW_Abstract_Feature {
 	private function is_image_file( string $file_path ): bool {
 		$image_type = wp_check_filetype( $file_path );
 		return strpos( $image_type['type'], 'image/' ) === 0;
+	}
+
+	/**
+	 * Register Site Health test.
+	 *
+	 * @param array<string, mixed> $tests Site Health tests.
+	 * @return array<string, mixed>
+	 */
+	public function register_site_health_test( array $tests ): array {
+		$tests['direct']['WPSHADOW_image_optimizer'] = array(
+			'label' => __( 'Image Optimization', 'plugin-wpshadow' ),
+			'test'  => array( $this, 'test_image_optimizer' ),
+		);
+		return $tests;
+	}
+
+	/**
+	 * Site Health test for image optimization.
+	 *
+	 * @return array<string, mixed>
+	 */
+	public function test_image_optimizer(): array {
+		if ( ! $this->is_enabled() ) {
+			return array(
+				'label'       => __( 'Image Optimization', 'plugin-wpshadow' ),
+				'status'      => 'recommended',
+				'badge'       => array(
+					'label' => __( 'Performance', 'plugin-wpshadow' ),
+					'color' => 'orange',
+				),
+				'description' => sprintf( '<p>%s</p>', __( 'Image Optimization is not enabled. Enabling image optimization can reduce file sizes and improve page load times.', 'plugin-wpshadow' ) ),
+				'actions'     => '',
+				'test'        => 'WPSHADOW_image_optimizer',
+			);
+		}
+
+		// Count enabled sub-features.
+		$enabled_features = 0;
+		if ( get_option( 'wpshadow_image-optimizer_auto_optimize', true ) ) {
+			++$enabled_features;
+		}
+		if ( get_option( 'wpshadow_image-optimizer_webp_conversion', true ) ) {
+			++$enabled_features;
+		}
+		if ( get_option( 'wpshadow_image-optimizer_bulk_optimization', true ) ) {
+			++$enabled_features;
+		}
+
+		// Get optimization statistics.
+		global $wpdb;
+		$optimized_count = (int) $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE meta_key = '_wps_optimized' AND meta_value = '1'"
+		);
+
+		return array(
+			'label'       => __( 'Image Optimization', 'plugin-wpshadow' ),
+			'status'      => 'good',
+			'badge'       => array(
+				'label' => __( 'Performance', 'plugin-wpshadow' ),
+				'color' => 'blue',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				/* translators: 1: number of enabled features, 2: number of optimized images */
+				sprintf(
+					__( 'Image Optimization is active with %1$d optimization features enabled. %2$d images have been optimized.', 'plugin-wpshadow' ),
+					$enabled_features,
+					$optimized_count
+				)
+			),
+			'actions'     => '',
+			'test'        => 'WPSHADOW_image_optimizer',
+		);
 	}
 }

@@ -37,6 +37,40 @@ final class WPSHADOW_Feature_CSS_Class_Cleanup extends WPSHADOW_Abstract_Feature
 				'widget_description' => __( 'Remove unnecessary code artifacts and optimize output', 'plugin-wpshadow' ),
 			)
 		);
+		
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'clean_post_classes'   => __( 'Clean Post Classes', 'plugin-wpshadow' ),
+					'clean_nav_classes'    => __( 'Clean Navigation Classes', 'plugin-wpshadow' ),
+					'remove_nav_ids'       => __( 'Remove Navigation IDs', 'plugin-wpshadow' ),
+					'clean_body_classes'   => __( 'Clean Body Classes', 'plugin-wpshadow' ),
+					'remove_block_classes' => __( 'Remove Block-Related Classes', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'clean_post_classes'   => true,
+						'clean_nav_classes'    => true,
+						'remove_nav_ids'       => true,
+						'clean_body_classes'   => true,
+						'remove_block_classes' => true,
+					)
+				);
+			}
+		}
+		
+		$this->log_activity( 'feature_initialized', 'CSS Class Cleanup feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -49,10 +83,24 @@ final class WPSHADOW_Feature_CSS_Class_Cleanup extends WPSHADOW_Abstract_Feature
 			return;
 		}
 
-		add_filter( 'post_class', array( $this, 'clean_post_classes' ), 999 );
-		add_filter( 'nav_menu_css_class', array( $this, 'cleanup_nav_classes' ), 10 );
-		add_filter( 'nav_menu_item_id', '__return_false' );
-		add_filter( 'body_class', array( $this, 'remove_block_body_classes' ) );
+		if ( get_option( 'wpshadow_css-class-cleanup_clean_post_classes', true ) ) {
+			add_filter( 'post_class', array( $this, 'clean_post_classes' ), 999 );
+		}
+		
+		if ( get_option( 'wpshadow_css-class-cleanup_clean_nav_classes', true ) ) {
+			add_filter( 'nav_menu_css_class', array( $this, 'cleanup_nav_classes' ), 10 );
+		}
+		
+		if ( get_option( 'wpshadow_css-class-cleanup_remove_nav_ids', true ) ) {
+			add_filter( 'nav_menu_item_id', '__return_false' );
+		}
+		
+		if ( get_option( 'wpshadow_css-class-cleanup_clean_body_classes', true ) ) {
+			add_filter( 'body_class', array( $this, 'remove_block_body_classes' ) );
+		}
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**
@@ -89,6 +137,70 @@ final class WPSHADOW_Feature_CSS_Class_Cleanup extends WPSHADOW_Abstract_Feature
 			static function ( $class ) {
 				return strpos( $class, 'wp-block-' ) === false;
 			}
+		);
+	}
+
+	/**
+	 * Register Site Health test.
+	 *
+	 * @param array $tests Array of Site Health tests.
+	 * @return array Modified tests array.
+	 */
+	public function register_site_health_test( array $tests ): array {
+		$tests['direct']['css_class_cleanup'] = array(
+			'label' => __( 'CSS Class Cleanup', 'plugin-wpshadow' ),
+			'test'  => array( $this, 'test_css_class_cleanup' ),
+		);
+
+		return $tests;
+	}
+
+	/**
+	 * Site Health test for CSS class cleanup.
+	 *
+	 * @return array Test result.
+	 */
+	public function test_css_class_cleanup(): array {
+		$enabled_features = 0;
+		
+		if ( get_option( 'wpshadow_css-class-cleanup_clean_post_classes', true ) ) {
+			$enabled_features++;
+		}
+		if ( get_option( 'wpshadow_css-class-cleanup_clean_nav_classes', true ) ) {
+			$enabled_features++;
+		}
+		if ( get_option( 'wpshadow_css-class-cleanup_remove_nav_ids', true ) ) {
+			$enabled_features++;
+		}
+		if ( get_option( 'wpshadow_css-class-cleanup_clean_body_classes', true ) ) {
+			$enabled_features++;
+		}
+		if ( get_option( 'wpshadow_css-class-cleanup_remove_block_classes', true ) ) {
+			$enabled_features++;
+		}
+
+		$status = $enabled_features >= 3 ? 'good' : 'recommended';
+		$label  = $enabled_features >= 3 ?
+			__( 'CSS class cleanup is active', 'plugin-wpshadow' ) :
+			__( 'CSS class cleanup could be improved', 'plugin-wpshadow' );
+
+		return array(
+			'label'       => $label,
+			'status'      => $status,
+			'badge'       => array(
+				'label' => __( 'Performance', 'plugin-wpshadow' ),
+				'color' => 'blue',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				sprintf(
+					/* translators: %d: number of enabled cleanup features */
+					__( '%d CSS class cleanup features are enabled, reducing HTML bloat.', 'plugin-wpshadow' ),
+					$enabled_features
+				)
+			),
+			'actions'     => '',
+			'test'        => 'css_class_cleanup',
 		);
 	}
 }

@@ -27,8 +27,8 @@ final class WPSHADOW_Feature_Critical_CSS extends WPSHADOW_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'critical-css',
-			'name'               => __( 'Priority Styles for Instant Display', 'plugin-wpshadow' ),
-			'description'        => __( 'Generates and serves critical CSS for the above-the-fold portion of each page so visitors see a styled layout immediately while remaining styles load in the background. Reduces perceived load time, lowers layout shifts, and improves Core Web Vitals without changing your theme. Works alongside caching and minification, and falls back safely if critical extraction cannot run, keeping pages consistent.', 'plugin-wpshadow' ),
+				'name'               => __( 'Priority Styles for Instant Display', 'plugin-wpshadow' ),
+				'description'        => __( 'Generates and serves critical CSS for the above-the-fold portion of each page so visitors see a styled layout immediately while remaining styles load in the background. Reduces perceived load time, lowers layout shifts, and improves Core Web Vitals without changing your theme. Works alongside caching and minification, and falls back safely if critical extraction cannot run, keeping pages consistent.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
@@ -37,6 +37,38 @@ final class WPSHADOW_Feature_Critical_CSS extends WPSHADOW_Abstract_Feature {
 				'widget_description' => __( 'Optimize how resources are loaded and delivered', 'plugin-wpshadow' ),
 			)
 		);
+		
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'inline_critical'    => __( 'Inline Critical CSS', 'plugin-wpshadow' ),
+					'defer_stylesheets'  => __( 'Defer Non-Critical CSS', 'plugin-wpshadow' ),
+					'auto_detection'     => __( 'Auto-Detect Critical Styles', 'plugin-wpshadow' ),
+					'mobile_specific'    => __( 'Mobile-Specific Critical CSS', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'inline_critical'    => true,
+						'defer_stylesheets'  => true,
+						'auto_detection'     => false,
+						'mobile_specific'    => false,
+					)
+				);
+			}
+		}
+		
+		$this->log_activity( 'feature_initialized', 'Critical CSS feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -49,8 +81,16 @@ final class WPSHADOW_Feature_Critical_CSS extends WPSHADOW_Abstract_Feature {
 			return;
 		}
 
-		add_action( 'wp_head', array( $this, 'inline_critical_css' ), 2 );
-		add_filter( 'style_loader_tag', array( $this, 'defer_non_critical_css' ), 10, 4 );
+		if ( get_option( 'wpshadow_critical-css_inline_critical', true ) ) {
+			add_action( 'wp_head', array( $this, 'inline_critical_css' ), 2 );
+		}
+		
+		if ( get_option( 'wpshadow_critical-css_defer_stylesheets', true ) ) {
+			add_filter( 'style_loader_tag', array( $this, 'defer_non_critical_css' ), 10, 4 );
+		}
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**
@@ -142,5 +182,87 @@ final class WPSHADOW_Feature_Critical_CSS extends WPSHADOW_Abstract_Feature {
 		$css = preg_replace( '/\s+/', ' ', $css );
 
 		return trim( $css );
+	}
+
+	/**
+	 * Register Site Health test.
+	 *
+	 * @param array<string, mixed> $tests Site Health tests.
+	 * @return array<string, mixed>
+	 */
+	public function register_site_health_test( array $tests ): array {
+		$tests['direct']['WPSHADOW_critical_css'] = array(
+			'label' => __( 'Critical CSS', 'plugin-wpshadow' ),
+			'test'  => array( $this, 'test_critical_css' ),
+		);
+		return $tests;
+	}
+
+	/**
+	 * Site Health test for critical CSS.
+	 *
+	 * @return array<string, mixed>
+	 */
+	public function test_critical_css(): array {
+		if ( ! $this->is_enabled() ) {
+			return array(
+				'label'       => __( 'Critical CSS', 'plugin-wpshadow' ),
+				'status'      => 'recommended',
+				'badge'       => array(
+					'label' => __( 'Performance', 'plugin-wpshadow' ),
+					'color' => 'gray',
+				),
+				'description' => sprintf( '<p>%s</p>', __( 'Critical CSS is not enabled. Enabling critical CSS can improve perceived page load speed by rendering above-the-fold content instantly.', 'plugin-wpshadow' ) ),
+				'actions'     => '',
+				'test'        => 'WPSHADOW_critical_css',
+			);
+		}
+
+		// Check if critical CSS is configured.
+		$critical_css = $this->get_setting( 'wpshadow_critical_css', '' );
+		$has_critical_css = ! empty( $critical_css );
+
+		// Count enabled sub-features.
+		$enabled_features = 0;
+		if ( get_option( 'wpshadow_critical-css_inline_critical', true ) ) {
+			++$enabled_features;
+		}
+		if ( get_option( 'wpshadow_critical-css_defer_stylesheets', true ) ) {
+			++$enabled_features;
+		}
+
+		if ( ! $has_critical_css ) {
+			return array(
+				'label'       => __( 'Critical CSS', 'plugin-wpshadow' ),
+				'status'      => 'recommended',
+				'badge'       => array(
+					'label' => __( 'Performance', 'plugin-wpshadow' ),
+					'color' => 'orange',
+				),
+				'description' => sprintf( '<p>%s</p>', __( 'Critical CSS is enabled but no critical CSS is configured. Add critical CSS to improve first paint performance.', 'plugin-wpshadow' ) ),
+				'actions'     => '',
+				'test'        => 'WPSHADOW_critical_css',
+			);
+		}
+
+		return array(
+			'label'       => __( 'Critical CSS', 'plugin-wpshadow' ),
+			'status'      => 'good',
+			'badge'       => array(
+				'label' => __( 'Performance', 'plugin-wpshadow' ),
+				'color' => 'blue',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				/* translators: 1: size of critical CSS in bytes, 2: number of enabled features */
+				sprintf(
+					__( 'Critical CSS is active with %1$d bytes configured and %2$d optimization features enabled.', 'plugin-wpshadow' ),
+					strlen( $critical_css ),
+					$enabled_features
+				)
+			),
+			'actions'     => '',
+			'test'        => 'WPSHADOW_critical_css',
+		);
 	}
 }

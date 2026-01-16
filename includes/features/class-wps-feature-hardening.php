@@ -44,6 +44,46 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wpshadow' ),
 			)
 		);
+		
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'disable_xmlrpc'        => __( 'Disable XML-RPC', 'plugin-wpshadow' ),
+					'restrict_rest_api'     => __( 'Restrict REST API Access', 'plugin-wpshadow' ),
+					'directory_listing'     => __( 'Prevent Directory Listing', 'plugin-wpshadow' ),
+					'check_salts'           => __( 'Validate Security Salts', 'plugin-wpshadow' ),
+					'file_permissions'      => __( 'Check File Permissions', 'plugin-wpshadow' ),
+					'cross_origin_headers'  => __( 'Cross-Origin Isolation Headers', 'plugin-wpshadow' ),
+					'hsts_header'           => __( 'HSTS Security Header', 'plugin-wpshadow' ),
+					'enforce_https'         => __( 'Enforce HTTPS Everywhere', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'disable_xmlrpc'        => true,
+						'restrict_rest_api'     => true,
+						'directory_listing'     => true,
+						'check_salts'           => true,
+						'file_permissions'      => true,
+						'cross_origin_headers'  => true,
+						'hsts_header'           => true,
+						'enforce_https'         => false,
+					)
+				);
+			}
+		}
+		
+		$this->log_activity( 'feature_initialized', 'Security Hardening feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -57,23 +97,43 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 		}
 
 		// XML-RPC disabling.
-		add_filter( 'xmlrpc_enabled', '__return_false' );
+		if ( get_option( 'wpshadow_security-hardening_disable_xmlrpc', true ) ) {
+			add_filter( 'xmlrpc_enabled', '__return_false' );
+			$this->log_activity( 'disable_xmlrpc', 'XML-RPC disabled', 'info' );
+		}
 
 		// Selective wp-json lockdown.
-		add_filter( 'rest_authentication_errors', array( $this, 'restrict_rest_api_access' ) );
+		if ( get_option( 'wpshadow_security-hardening_restrict_rest_api', true ) ) {
+			add_filter( 'rest_authentication_errors', array( $this, 'restrict_rest_api_access' ) );
+		}
 
 		// Initialize on admin_init for checks that need admin context.
-		add_action( 'admin_init', array( $this, 'perform_security_checks' ) );
+		if ( get_option( 'wpshadow_security-hardening_check_salts', true ) || get_option( 'wpshadow_security-hardening_file_permissions', true ) ) {
+			add_action( 'admin_init', array( $this, 'perform_security_checks' ) );
+		}
 
 		// Apply directory listing protection.
-		add_action( 'admin_init', array( $this, 'protect_directory_listing' ), 5 );
+		if ( get_option( 'wpshadow_security-hardening_directory_listing', true ) ) {
+			add_action( 'admin_init', array( $this, 'protect_directory_listing' ), 5 );
+		}
 
 		// Add Cross-Origin Isolation headers.
-		add_action( 'send_headers', array( $this, 'add_cross_origin_isolation_headers' ) );
+		if ( get_option( 'wpshadow_security-hardening_cross_origin_headers', true ) ) {
+			add_action( 'send_headers', array( $this, 'add_cross_origin_isolation_headers' ) );
+		}
+		
 		// Add HSTS (HTTP Strict Transport Security) header.
-		add_filter( 'wp_headers', array( $this, 'add_hsts_header' ) );
+		if ( get_option( 'wpshadow_security-hardening_hsts_header', true ) ) {
+			add_filter( 'wp_headers', array( $this, 'add_hsts_header' ) );
+		}
+		
 		// HTTPS enforcement.
-		$this->enforce_https();
+		if ( get_option( 'wpshadow_security-hardening_enforce_https', false ) ) {
+			$this->enforce_https();
+		}
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**
@@ -413,6 +473,9 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 		// Cross-Origin-Embedder-Policy: Requires resources to explicitly opt-in to being loaded.
 		// This ensures that cross-origin resources have either CORS or CORP headers.
 		header( 'Cross-Origin-Embedder-Policy: require-corp' );
+	}
+
+	/**
 	 * Enforce HTTPS everywhere on the site.
 	 * 
 	 * This method:
@@ -549,5 +612,97 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 		}
 
 		return strpos( $site_url, 'https://' ) === 0 && strpos( $home_url, 'https://' ) === 0;
+	}
+
+	/**
+	 * Register Security Hardening Site Health test.
+	 *
+	 * @param array $tests Site Health tests.
+	 * @return array Modified tests.
+	 */
+	public function register_site_health_test( array $tests ): array {
+		$tests['direct']['wpshadow_security_hardening'] = array(
+			'label' => __( 'Security Hardening', 'plugin-wpshadow' ),
+			'test'  => array( $this, 'test_security_hardening' ),
+		);
+		return $tests;
+	}
+
+	/**
+	 * Test Security Hardening configuration.
+	 *
+	 * @return array Test result.
+	 */
+	public function test_security_hardening(): array {
+		$is_enabled = $this->is_enabled();
+		$enabled_count = 0;
+		
+		if ( get_option( 'wpshadow_security-hardening_disable_xmlrpc', true ) ) {
+			++$enabled_count;
+		}
+		if ( get_option( 'wpshadow_security-hardening_restrict_rest_api', true ) ) {
+			++$enabled_count;
+		}
+		if ( get_option( 'wpshadow_security-hardening_directory_listing', true ) ) {
+			++$enabled_count;
+		}
+		if ( get_option( 'wpshadow_security-hardening_check_salts', true ) ) {
+			++$enabled_count;
+		}
+		if ( get_option( 'wpshadow_security-hardening_file_permissions', true ) ) {
+			++$enabled_count;
+		}
+		if ( get_option( 'wpshadow_security-hardening_cross_origin_headers', true ) ) {
+			++$enabled_count;
+		}
+		if ( get_option( 'wpshadow_security-hardening_hsts_header', true ) ) {
+			++$enabled_count;
+		}
+		if ( get_option( 'wpshadow_security-hardening_enforce_https', false ) ) {
+			++$enabled_count;
+		}
+
+		if ( $is_enabled && $enabled_count > 0 ) {
+			return array(
+				'label'       => __( 'Security hardening is active', 'plugin-wpshadow' ),
+				'status'      => 'good',
+				'badge'       => array(
+					'label' => __( 'Security', 'plugin-wpshadow' ),
+					'color' => 'blue',
+				),
+				'description' => sprintf(
+					'<p>%s</p>',
+					wp_kses_post(
+						sprintf(
+							/* translators: %d: Number of enabled security measures */
+							__( 'Security hardening is enabled with %d security measures active, protecting your site from common attacks.', 'plugin-wpshadow' ),
+							$enabled_count
+						)
+					)
+				),
+				'actions'     => sprintf(
+					'<p><a href="%s">%s</a></p>',
+					esc_url( admin_url( 'admin.php?page=wpshadow-feature-details&feature=security-hardening' ) ),
+					esc_html__( 'View Security Settings', 'plugin-wpshadow' )
+				),
+				'test'        => 'wpshadow_security_hardening',
+			);
+		}
+
+		return array(
+			'label'       => __( 'Security hardening is not configured', 'plugin-wpshadow' ),
+			'status'      => 'recommended',
+			'badge'       => array(
+				'label' => __( 'Security', 'plugin-wpshadow' ),
+				'color' => 'red',
+			),
+			'description' => '<p>' . __( 'Enabling security hardening protects your site from common attack vectors and improves overall security posture.', 'plugin-wpshadow' ) . '</p>',
+			'actions'     => sprintf(
+				'<p><a href="%s">%s</a></p>',
+				esc_url( admin_url( 'admin.php?page=wpshadow-feature-details&feature=security-hardening' ) ),
+				esc_html__( 'Enable Security Hardening', 'plugin-wpshadow' )
+			),
+			'test'        => 'wpshadow_security_hardening',
+		);
 	}
 }

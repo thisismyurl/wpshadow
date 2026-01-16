@@ -38,6 +38,31 @@ final class WPSHADOW_Feature_Database_Cleanup extends WPSHADOW_Abstract_Feature 
 			)
 		);
 		
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'cleanup_revisions'     => __( 'Clean Post Revisions', 'plugin-wpshadow' ),
+					'cleanup_transients'    => __( 'Remove Expired Transients', 'plugin-wpshadow' ),
+					'cleanup_spam'          => __( 'Delete Spam Comments', 'plugin-wpshadow' ),
+					'cleanup_orphaned_meta' => __( 'Remove Orphaned Metadata', 'plugin-wpshadow' ),
+					'cleanup_auto_drafts'   => __( 'Delete Auto-Drafts', 'plugin-wpshadow' ),
+					'optimize_tables'       => __( 'Optimize Database Tables', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'cleanup_revisions'     => true,
+						'cleanup_transients'    => true,
+						'cleanup_spam'          => true,
+						'cleanup_orphaned_meta' => true,
+						'cleanup_auto_drafts'   => true,
+						'optimize_tables'       => false,
+					)
+				);
+			}
+		}
+		
 		$this->register_default_settings(
 			array(
 				'cleanup_frequency' => 'weekly',
@@ -52,6 +77,17 @@ final class WPSHADOW_Feature_Database_Cleanup extends WPSHADOW_Abstract_Feature 
 				),
 			)
 		);
+		
+		$this->log_activity( 'feature_initialized', 'Database Cleanup feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -64,8 +100,17 @@ final class WPSHADOW_Feature_Database_Cleanup extends WPSHADOW_Abstract_Feature 
 			return;
 		}
 
-		// Schedule cleanup events.
-		add_action( 'init', array( $this, 'schedule_cleanup' ) );
+		// Schedule cleanup events only if at least one cleanup option is enabled.
+		$has_any_enabled = get_option( 'wpshadow_database-cleanup_cleanup_revisions', true )
+			|| get_option( 'wpshadow_database-cleanup_cleanup_transients', true )
+			|| get_option( 'wpshadow_database-cleanup_cleanup_spam', true )
+			|| get_option( 'wpshadow_database-cleanup_cleanup_orphaned_meta', true )
+			|| get_option( 'wpshadow_database-cleanup_cleanup_auto_drafts', true )
+			|| get_option( 'wpshadow_database-cleanup_optimize_tables', false );
+		
+		if ( $has_any_enabled ) {
+			add_action( 'init', array( $this, 'schedule_cleanup' ) );
+		}
 
 		// Register cleanup hooks.
 		add_action( 'wpshadow_database_cleanup', array( $this, 'run_cleanup' ) );
@@ -113,33 +158,73 @@ final class WPSHADOW_Feature_Database_Cleanup extends WPSHADOW_Abstract_Feature 
 		$options = $this->get_cleanup_options();
 
 		// Clean up post revisions.
-		if ( $options['cleanup_revisions'] ?? true ) {
+		if ( ( $options['cleanup_revisions'] ?? true ) && get_option( 'wpshadow_database-cleanup_cleanup_revisions', true ) ) {
 			$stats['revisions_deleted'] = $this->cleanup_revisions( $options['keep_revisions'] ?? 5 );
+			if ( $stats['revisions_deleted'] > 0 ) {
+				$this->log_activity(
+					'cleanup_revisions',
+					sprintf( __( 'Deleted %d post revisions', 'plugin-wpshadow' ), $stats['revisions_deleted'] ),
+					'success'
+				);
+			}
 		}
 
 		// Clean up expired transients.
-		if ( $options['cleanup_transients'] ?? true ) {
+		if ( ( $options['cleanup_transients'] ?? true ) && get_option( 'wpshadow_database-cleanup_cleanup_transients', true ) ) {
 			$stats['transients_deleted'] = $this->cleanup_transients();
+			if ( $stats['transients_deleted'] > 0 ) {
+				$this->log_activity(
+					'cleanup_transients',
+					sprintf( __( 'Removed %d expired transients', 'plugin-wpshadow' ), $stats['transients_deleted'] ),
+					'success'
+				);
+			}
 		}
 
 		// Clean up spam comments.
-		if ( $options['cleanup_spam'] ?? true ) {
+		if ( ( $options['cleanup_spam'] ?? true ) && get_option( 'wpshadow_database-cleanup_cleanup_spam', true ) ) {
 			$stats['spam_comments_deleted'] = $this->cleanup_spam_comments();
+			if ( $stats['spam_comments_deleted'] > 0 ) {
+				$this->log_activity(
+					'cleanup_spam',
+					sprintf( __( 'Deleted %d spam comments', 'plugin-wpshadow' ), $stats['spam_comments_deleted'] ),
+					'success'
+				);
+			}
 		}
 
 		// Clean up orphaned metadata.
-		if ( $options['cleanup_orphaned_meta'] ?? true ) {
+		if ( ( $options['cleanup_orphaned_meta'] ?? true ) && get_option( 'wpshadow_database-cleanup_cleanup_orphaned_meta', true ) ) {
 			$stats['orphaned_meta_deleted'] = $this->cleanup_orphaned_meta();
+			if ( $stats['orphaned_meta_deleted'] > 0 ) {
+				$this->log_activity(
+					'cleanup_orphaned_meta',
+					sprintf( __( 'Removed %d orphaned metadata entries', 'plugin-wpshadow' ), $stats['orphaned_meta_deleted'] ),
+					'success'
+				);
+			}
 		}
 
 		// Clean up auto-drafts.
-		if ( $options['cleanup_auto_drafts'] ?? true ) {
+		if ( ( $options['cleanup_auto_drafts'] ?? true ) && get_option( 'wpshadow_database-cleanup_cleanup_auto_drafts', true ) ) {
 			$stats['auto_drafts_deleted'] = $this->cleanup_auto_drafts();
+			if ( $stats['auto_drafts_deleted'] > 0 ) {
+				$this->log_activity(
+					'cleanup_auto_drafts',
+					sprintf( __( 'Deleted %d auto-drafts', 'plugin-wpshadow' ), $stats['auto_drafts_deleted'] ),
+					'success'
+				);
+			}
 		}
 
 		// Optimize tables if enabled.
-		if ( $options['optimize_tables'] ?? false ) {
+		if ( ( $options['optimize_tables'] ?? false ) && get_option( 'wpshadow_database-cleanup_optimize_tables', false ) ) {
 			$this->optimize_database_tables();
+			$this->log_activity(
+				'optimize_tables',
+				__( 'Optimized database tables', 'plugin-wpshadow' ),
+				'success'
+			);
 		}
 
 		// Store last cleanup timestamp.
@@ -452,5 +537,105 @@ final class WPSHADOW_Feature_Database_Cleanup extends WPSHADOW_Abstract_Feature 
 
 		wp_safe_redirect( $redirect_url );
 		exit;
+	}
+
+	/**
+	 * Add Site Health tests.
+	 *
+	 * @return void
+	 */
+	public function add_site_health_tests(): void {
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
+	}
+
+	/**
+	 * Register Database Cleanup Site Health test.
+	 *
+	 * @param array $tests Site Health tests.
+	 * @return array Modified tests.
+	 */
+	public function register_site_health_test( array $tests ): array {
+		$tests['direct']['wpshadow_database_cleanup'] = array(
+			'label' => __( 'Database Cleanup', 'plugin-wpshadow' ),
+			'test'  => array( $this, 'test_database_cleanup' ),
+		);
+		return $tests;
+	}
+
+	/**
+	 * Test Database Cleanup configuration.
+	 *
+	 * @return array Test result.
+	 */
+	public function test_database_cleanup(): array {
+		$is_enabled = $this->is_enabled();
+		$last_cleanup = get_option( 'wpshadow_last_database_cleanup', 0 );
+		$enabled_count = 0;
+		
+		if ( get_option( 'wpshadow_database-cleanup_cleanup_revisions', true ) ) {
+			++$enabled_count;
+		}
+		if ( get_option( 'wpshadow_database-cleanup_cleanup_transients', true ) ) {
+			++$enabled_count;
+		}
+		if ( get_option( 'wpshadow_database-cleanup_cleanup_spam', true ) ) {
+			++$enabled_count;
+		}
+		if ( get_option( 'wpshadow_database-cleanup_cleanup_orphaned_meta', true ) ) {
+			++$enabled_count;
+		}
+		if ( get_option( 'wpshadow_database-cleanup_cleanup_auto_drafts', true ) ) {
+			++$enabled_count;
+		}
+		if ( get_option( 'wpshadow_database-cleanup_optimize_tables', false ) ) {
+			++$enabled_count;
+		}
+
+		if ( $is_enabled && $enabled_count > 0 ) {
+			$days_since_cleanup = $last_cleanup > 0 ? floor( ( time() - $last_cleanup ) / DAY_IN_SECONDS ) : 999;
+			$status_label = $days_since_cleanup < 7 ? 'good' : 'recommended';
+			
+			return array(
+				'label'       => __( 'Database cleanup is active', 'plugin-wpshadow' ),
+				'status'      => $status_label,
+				'badge'       => array(
+					'label' => __( 'Performance', 'plugin-wpshadow' ),
+					'color' => 'blue',
+				),
+				'description' => sprintf(
+					'<p>%s</p>',
+					wp_kses_post(
+						sprintf(
+							/* translators: 1: Number of enabled cleanup types, 2: Days since last cleanup */
+							__( 'Database cleanup is enabled with %1$d cleanup types active. Last cleanup was %2$d days ago.', 'plugin-wpshadow' ),
+							$enabled_count,
+							$days_since_cleanup
+						)
+					)
+				),
+				'actions'     => sprintf(
+					'<p><a href="%s">%s</a></p>',
+					esc_url( admin_url( 'admin.php?page=wpshadow-feature-details&feature=database-cleanup' ) ),
+					esc_html__( 'View Database Cleanup Settings', 'plugin-wpshadow' )
+				),
+				'test'        => 'wpshadow_database_cleanup',
+			);
+		}
+
+		return array(
+			'label'       => __( 'Database cleanup is not configured', 'plugin-wpshadow' ),
+			'status'      => 'recommended',
+			'badge'       => array(
+				'label' => __( 'Performance', 'plugin-wpshadow' ),
+				'color' => 'orange',
+			),
+			'description' => '<p>' . __( 'Enabling database cleanup removes unnecessary data and improves query performance.', 'plugin-wpshadow' ) . '</p>',
+			'actions'     => sprintf(
+				'<p><a href="%s">%s</a></p>',
+				esc_url( admin_url( 'admin.php?page=wpshadow-feature-details&feature=database-cleanup' ) ),
+				esc_html__( 'Configure Database Cleanup', 'plugin-wpshadow' )
+			),
+			'test'        => 'wpshadow_database_cleanup',
+		);
 	}
 }

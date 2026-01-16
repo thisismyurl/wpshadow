@@ -47,6 +47,38 @@ final class WPSHADOW_Feature_Iframe_Busting extends WPSHADOW_Abstract_Feature {
 				'icon'               => 'dashicons-shield-alt',
 			)
 		);
+		
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'csp_header'         => __( 'Content-Security-Policy Header', 'plugin-wpshadow' ),
+					'xfo_header'         => __( 'X-Frame-Options Header', 'plugin-wpshadow' ),
+					'js_framebuster'     => __( 'JavaScript Frame-Buster', 'plugin-wpshadow' ),
+					'custom_origins'     => __( 'Allow Custom Origins', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'csp_header'         => true,
+						'xfo_header'         => true,
+						'js_framebuster'     => true,
+						'custom_origins'     => false,
+					)
+				);
+			}
+		}
+		
+		$this->log_activity( 'feature_initialized', 'Iframe Busting feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -59,14 +91,19 @@ final class WPSHADOW_Feature_Iframe_Busting extends WPSHADOW_Abstract_Feature {
 			return;
 		}
 
-		// Add security headers.
-		add_action( 'send_headers', array( $this, 'add_security_headers' ) );
+		// Add security headers if CSP or XFO enabled.
+		if ( get_option( 'wpshadow_iframe-busting_csp_header', true ) || get_option( 'wpshadow_iframe-busting_xfo_header', true ) ) {
+			add_action( 'send_headers', array( $this, 'add_security_headers' ) );
+		}
 
 		// Add JavaScript frame-buster if enabled.
-		if ( $this->get_setting( 'enable_js_framebuster', true ) ) {
+		if ( get_option( 'wpshadow_iframe-busting_js_framebuster', true ) ) {
 			add_action( 'wp_head', array( $this, 'add_frame_buster_script' ), 1 );
 			add_action( 'admin_head', array( $this, 'add_frame_buster_script' ), 1 );
 		}
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**
@@ -235,5 +272,63 @@ final class WPSHADOW_Feature_Iframe_Busting extends WPSHADOW_Abstract_Feature {
 		}
 
 		return array_unique( $validated );
+	}
+
+	/**
+	 * Register Site Health test.
+	 *
+	 * @param array $tests Array of Site Health tests.
+	 * @return array Modified tests array.
+	 */
+	public function register_site_health_test( array $tests ): array {
+		$tests['direct']['iframe_busting'] = array(
+			'label' => __( 'Clickjacking Protection', 'plugin-wpshadow' ),
+			'test'  => array( $this, 'test_iframe_busting' ),
+		);
+
+		return $tests;
+	}
+
+	/**
+	 * Site Health test for iframe busting.
+	 *
+	 * @return array Test result.
+	 */
+	public function test_iframe_busting(): array {
+		$protection_layers = 0;
+
+		if ( get_option( 'wpshadow_iframe-busting_csp_header', true ) ) {
+			$protection_layers++;
+		}
+		if ( get_option( 'wpshadow_iframe-busting_xfo_header', true ) ) {
+			$protection_layers++;
+		}
+		if ( get_option( 'wpshadow_iframe-busting_js_framebuster', true ) ) {
+			$protection_layers++;
+		}
+
+		$status = $protection_layers >= 2 ? 'good' : 'recommended';
+		$label  = $protection_layers >= 2 ?
+			__( 'Clickjacking protection is active', 'plugin-wpshadow' ) :
+			__( 'Clickjacking protection could be stronger', 'plugin-wpshadow' );
+
+		return array(
+			'label'       => $label,
+			'status'      => $status,
+			'badge'       => array(
+				'label' => __( 'Security', 'plugin-wpshadow' ),
+				'color' => 'blue',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				sprintf(
+					/* translators: %d: number of protection layers */
+					__( '%d layers of clickjacking protection are enabled, preventing your site from being embedded in malicious iframes.', 'plugin-wpshadow' ),
+					$protection_layers
+				)
+			),
+			'actions'     => '',
+			'test'        => 'iframe_busting',
+		);
 	}
 }

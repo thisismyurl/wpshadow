@@ -87,6 +87,32 @@ class WPSHADOW_Feature_SEO_Validator extends WPSHADOW_Abstract_Feature {
 		
 		// Register AJAX handlers.
 		add_action( 'wp_ajax_wpshadow_validate_seo', array( $this, 'ajax_validate_seo' ) );
+
+		// Register Site Health test.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
+	}
+
+	/**
+	 * Register hooks when feature is enabled (implements abstract method).
+	 *
+	 * @return void
+	 */
+	public function register(): void {
+		if ( ! $this->is_enabled() ) {
+			return;
+		}
+
+		$this->register_hooks();
+		$this->log_activity( 'feature_initialized', 'SEO Validator initialized', 'info' );
+	}
+
+	/**
+	 * Enable details page for this feature.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**

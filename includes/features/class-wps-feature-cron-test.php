@@ -35,8 +35,8 @@ final class WPSHADOW_Feature_Cron_Test extends WPSHADOW_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'                 => 'cron-test',
-			'name'               => __( 'Scheduled Tasks Monitor', 'plugin-wpshadow' ),
-			'description'        => __( 'Checks that WordPress scheduled tasks can run reliably, including publishing queued posts, checking for updates, clearing caches, and sending notifications. Flags blocked loopbacks, host restrictions, or plugin conflicts, and offers guidance to restore normal scheduling so automations keep running without surprises.', 'plugin-wpshadow' ),
+				'name'               => __( 'Scheduled Tasks Monitor', 'plugin-wpshadow' ),
+				'description'        => __( 'Checks that WordPress scheduled tasks can run reliably, including publishing queued posts, checking for updates, clearing caches, and sending notifications. Flags blocked loopbacks, host restrictions, or plugin conflicts, and offers guidance to restore normal scheduling so automations keep running without surprises.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
@@ -57,6 +57,15 @@ final class WPSHADOW_Feature_Cron_Test extends WPSHADOW_Abstract_Feature {
 	}
 
 	/**
+	 * Enable details page for this feature.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
+	}
+
+	/**
 	 * Register hooks when feature is enabled.
 	 *
 	 * @return void
@@ -66,31 +75,17 @@ final class WPSHADOW_Feature_Cron_Test extends WPSHADOW_Abstract_Feature {
 			return;
 		}
 
-		// Admin menu.
-		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
-
 		// AJAX handlers.
 		add_action( 'wp_ajax_WPSHADOW_run_cron_test', array( $this, 'ajax_run_test' ) );
 		add_action( 'wp_ajax_WPSHADOW_run_cron_event', array( $this, 'ajax_run_event' ) );
 
 		// Test cron hook.
 		add_action( 'wpshadow_test_cron_event', array( $this, 'handle_test_cron' ) );
-	}
 
-	/**
-	 * Add admin menu.
-	 *
-	 * @return void
-	 */
-	public function add_admin_menu(): void {
-		add_submenu_page(
-			'wpshadow',
-			__( 'Cron Test', 'plugin-wpshadow' ),
-			__( 'Cron Test', 'plugin-wpshadow' ),
-			'manage_options',
-			'wpshadow-cron-test',
-			array( $this, 'render_page' )
-		);
+		// Register Site Health test.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
+
+		$this->log_activity( 'feature_initialized', 'Cron Test feature initialized', 'info' );
 	}
 
 	/**

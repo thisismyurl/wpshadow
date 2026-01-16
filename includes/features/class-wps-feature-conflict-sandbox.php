@@ -76,6 +76,15 @@ final class WPSHADOW_Feature_Conflict_Sandbox extends WPSHADOW_Abstract_Feature 
 	}
 
 	/**
+	 * Enable details page for this feature.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
+	}
+
+	/**
 	 * Register hooks when feature is enabled.
 	 *
 	 * @return void
@@ -84,9 +93,6 @@ final class WPSHADOW_Feature_Conflict_Sandbox extends WPSHADOW_Abstract_Feature 
 		if ( ! $this->is_enabled() ) {
 			return;
 		}
-
-		// Admin menu for sandbox controls.
-		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 
 		// Handle AJAX actions for sandbox management.
 		add_action( 'wp_ajax_WPSHADOW_sandbox_toggle', array( $this, 'ajax_toggle_sandbox' ) );
@@ -106,22 +112,8 @@ final class WPSHADOW_Feature_Conflict_Sandbox extends WPSHADOW_Abstract_Feature 
 
 		// Initialize sandbox session on login.
 		add_action( 'init', array( $this, 'init_sandbox_session' ), 5 );
-	}
 
-	/**
-	 * Add admin menu for sandbox controls.
-	 *
-	 * @return void
-	 */
-	public function add_admin_menu(): void {
-		add_submenu_page(
-			'wpshadow',
-			__( 'Conflict Sandbox', 'plugin-wpshadow' ),
-			__( 'Conflict Sandbox', 'plugin-wpshadow' ),
-			'manage_options',
-			'wpshadow-conflict-sandbox',
-			array( $this, 'render_admin_page' )
-		);
+		$this->log_activity( 'feature_initialized', 'Conflict Sandbox initialized', 'info' );
 	}
 
 	/**
@@ -268,11 +260,6 @@ final class WPSHADOW_Feature_Conflict_Sandbox extends WPSHADOW_Abstract_Feature 
 				'httponly' => true,
 				'samesite' => 'Lax',
 			)
-			time() + DAY_IN_SECONDS,
-			COOKIEPATH,
-			COOKIE_DOMAIN,
-			true,
-			true // HTTP only.
 		);
 	}
 
@@ -293,11 +280,6 @@ final class WPSHADOW_Feature_Conflict_Sandbox extends WPSHADOW_Abstract_Feature 
 				'httponly' => true,
 				'samesite' => 'Lax',
 			)
-			time() - 3600,
-			COOKIEPATH,
-			COOKIE_DOMAIN,
-			true,
-			true
 		);
 	}
 

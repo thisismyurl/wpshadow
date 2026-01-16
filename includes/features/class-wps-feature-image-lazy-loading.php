@@ -37,6 +37,40 @@ final class WPSHADOW_Feature_Image_Lazy_Loading extends WPSHADOW_Abstract_Featur
 				'widget_description' => __( 'Optimize images and page load performance', 'plugin-wpshadow' ),
 			)
 		);
+		
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'lazy_images'        => __( 'Lazy Load Images', 'plugin-wpshadow' ),
+					'lazy_iframes'       => __( 'Lazy Load Iframes', 'plugin-wpshadow' ),
+					'lazy_avatars'       => __( 'Lazy Load Avatars', 'plugin-wpshadow' ),
+					'lazy_thumbnails'    => __( 'Lazy Load Post Thumbnails', 'plugin-wpshadow' ),
+					'exclude_first_image' => __( 'Exclude First Content Image', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'lazy_images'        => true,
+						'lazy_iframes'       => true,
+						'lazy_avatars'       => true,
+						'lazy_thumbnails'    => true,
+						'exclude_first_image' => false,
+					)
+				);
+			}
+		}
+		
+		$this->log_activity( 'feature_initialized', 'Image Lazy Loading feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -49,17 +83,28 @@ final class WPSHADOW_Feature_Image_Lazy_Loading extends WPSHADOW_Abstract_Featur
 			return;
 		}
 
-		// Force lazy loading for all images.
-		add_filter( 'wp_lazy_loading_enabled', array( $this, 'enable_lazy_loading' ), 10, 2 );
+		// Force lazy loading for all images and iframes if enabled.
+		if ( get_option( 'wpshadow_image-lazy-loading_lazy_images', true ) || get_option( 'wpshadow_image-lazy-loading_lazy_iframes', true ) ) {
+			add_filter( 'wp_lazy_loading_enabled', array( $this, 'enable_lazy_loading' ), 10, 2 );
+		}
 
-		// Add loading attribute to content images.
-		add_filter( 'the_content', array( $this, 'add_loading_attribute_to_images' ), 20 );
+		// Add loading attribute to content images if enabled.
+		if ( get_option( 'wpshadow_image-lazy-loading_lazy_images', true ) ) {
+			add_filter( 'the_content', array( $this, 'add_loading_attribute_to_images' ), 20 );
+		}
 
-		// Add loading attribute to post thumbnails.
-		add_filter( 'post_thumbnail_html', array( $this, 'add_loading_lazy' ), 10, 1 );
+		// Add loading attribute to post thumbnails if enabled.
+		if ( get_option( 'wpshadow_image-lazy-loading_lazy_thumbnails', true ) ) {
+			add_filter( 'post_thumbnail_html', array( $this, 'add_loading_lazy' ), 10, 1 );
+		}
 
-		// Add loading attribute to avatar images.
-		add_filter( 'get_avatar', array( $this, 'add_loading_lazy' ), 10, 1 );
+		// Add loading attribute to avatar images if enabled.
+		if ( get_option( 'wpshadow_image-lazy-loading_lazy_avatars', true ) ) {
+			add_filter( 'get_avatar', array( $this, 'add_loading_lazy' ), 10, 1 );
+		}
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**
@@ -124,5 +169,74 @@ final class WPSHADOW_Feature_Image_Lazy_Loading extends WPSHADOW_Abstract_Featur
 
 		// Add loading="lazy" to img tags.
 		return str_replace( '<img', '<img loading="lazy"', $html );
+	}
+
+	/**
+	 * Register Site Health test.
+	 *
+	 * @param array<string, mixed> $tests Site Health tests.
+	 * @return array<string, mixed>
+	 */
+	public function register_site_health_test( array $tests ): array {
+		$tests['direct']['WPSHADOW_image_lazy_loading'] = array(
+			'label' => __( 'Image Lazy Loading', 'plugin-wpshadow' ),
+			'test'  => array( $this, 'test_image_lazy_loading' ),
+		);
+		return $tests;
+	}
+
+	/**
+	 * Site Health test for image lazy loading.
+	 *
+	 * @return array<string, mixed>
+	 */
+	public function test_image_lazy_loading(): array {
+		if ( ! $this->is_enabled() ) {
+			return array(
+				'label'       => __( 'Image Lazy Loading', 'plugin-wpshadow' ),
+				'status'      => 'recommended',
+				'badge'       => array(
+					'label' => __( 'Performance', 'plugin-wpshadow' ),
+					'color' => 'orange',
+				),
+				'description' => sprintf( '<p>%s</p>', __( 'Image Lazy Loading is not enabled. Enabling lazy loading can improve page load times by deferring offscreen images.', 'plugin-wpshadow' ) ),
+				'actions'     => '',
+				'test'        => 'WPSHADOW_image_lazy_loading',
+			);
+		}
+
+		// Count enabled sub-features.
+		$enabled_features = 0;
+		if ( get_option( 'wpshadow_image-lazy-loading_lazy_images', true ) ) {
+			++$enabled_features;
+		}
+		if ( get_option( 'wpshadow_image-lazy-loading_lazy_iframes', true ) ) {
+			++$enabled_features;
+		}
+		if ( get_option( 'wpshadow_image-lazy-loading_lazy_avatars', true ) ) {
+			++$enabled_features;
+		}
+		if ( get_option( 'wpshadow_image-lazy-loading_lazy_thumbnails', true ) ) {
+			++$enabled_features;
+		}
+
+		return array(
+			'label'       => __( 'Image Lazy Loading', 'plugin-wpshadow' ),
+			'status'      => 'good',
+			'badge'       => array(
+				'label' => __( 'Performance', 'plugin-wpshadow' ),
+				'color' => 'blue',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				/* translators: %d: number of enabled lazy loading features */
+				sprintf(
+					__( 'Image Lazy Loading is active with %d element types being lazy loaded.', 'plugin-wpshadow' ),
+					$enabled_features
+				)
+			),
+			'actions'     => '',
+			'test'        => 'WPSHADOW_image_lazy_loading',
+		);
 	}
 }

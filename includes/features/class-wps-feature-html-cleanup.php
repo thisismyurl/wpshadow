@@ -37,6 +37,40 @@ final class WPSHADOW_Feature_HTML_Cleanup extends WPSHADOW_Abstract_Feature {
 				'widget_description' => __( 'Remove unnecessary code artifacts and optimize output', 'plugin-wpshadow' ),
 			)
 		);
+		
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'remove_comments'    => __( 'Remove HTML Comments', 'plugin-wpshadow' ),
+					'remove_whitespace'  => __( 'Remove Excessive Whitespace', 'plugin-wpshadow' ),
+					'remove_empty_tags'  => __( 'Remove Empty Tags', 'plugin-wpshadow' ),
+					'minify_inline_css'  => __( 'Minify Inline CSS', 'plugin-wpshadow' ),
+					'minify_inline_js'   => __( 'Minify Inline JavaScript', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'remove_comments'    => true,
+						'remove_whitespace'  => true,
+						'remove_empty_tags'  => false,
+						'minify_inline_css'  => true,
+						'minify_inline_js'   => false,
+					)
+				);
+			}
+		}
+		
+		$this->log_activity( 'feature_initialized', 'HTML Cleanup feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -56,6 +90,9 @@ final class WPSHADOW_Feature_HTML_Cleanup extends WPSHADOW_Abstract_Feature {
 
 		add_action( 'wp_head', array( $this, 'start_buffer' ), 1 );
 		add_action( 'wp_footer', array( $this, 'end_buffer' ), 999 );
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**

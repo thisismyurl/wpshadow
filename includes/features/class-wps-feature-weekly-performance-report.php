@@ -73,6 +73,31 @@ class WPSHADOW_Feature_Weekly_Performance_Report extends WPSHADOW_Abstract_Featu
 	private const CRON_HOOK = 'wpshadow_send_weekly_performance_report';
 
 	/**
+	 * Enable details page for this feature.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
+	}
+
+	/**
+	 * Register hooks when feature is enabled.
+	 *
+	 * @return void
+	 */
+	public function register(): void {
+		if ( ! $this->is_enabled() ) {
+			return;
+		}
+
+		// Register Site Health test.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
+
+		$this->log_activity( 'feature_initialized', 'Weekly Performance Report initialized', 'info' );
+	}
+
+	/**
 	 * Initialize the feature.
 	 *
 	 * @return void
@@ -98,8 +123,7 @@ class WPSHADOW_Feature_Weekly_Performance_Report extends WPSHADOW_Abstract_Featu
 		add_action( 'wpshadow_issue_resolved', array( __CLASS__, 'track_issue_resolved' ), 10, 1 );
 		add_action( 'wpshadow_performance_improvement', array( __CLASS__, 'track_performance_improvement' ), 10, 2 );
 
-		// Admin interface hooks.
-		add_action( 'admin_menu', array( __CLASS__, 'add_admin_menu' ) );
+		// AJAX handler.
 		add_action( 'wp_ajax_WPSHADOW_view_weekly_report', array( __CLASS__, 'ajax_view_report' ) );
 	}
 

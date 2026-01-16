@@ -4,7 +4,7 @@
  *
  * Displays plugin documentation, FAQ, and support resources with dynamic content.
  *
- * @package WPSHADOW_wpshadow_THISISMYURL
+ * @package WPShadow
  */
 
 declare(strict_types=1);

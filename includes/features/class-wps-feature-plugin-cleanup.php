@@ -50,6 +50,40 @@ final class WPSHADOW_Feature_Plugin_Cleanup extends WPSHADOW_Abstract_Feature {
 			'contact_form_7' => function_exists( 'wpcf7_contact_form' ),
 			'woocommerce'    => function_exists( 'is_woocommerce' ),
 		);
+		
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'jetpack_cleanup'     => __( 'Jetpack Asset Cleanup', 'plugin-wpshadow' ),
+					'rankmath_cleanup'    => __( 'RankMath Asset Cleanup', 'plugin-wpshadow' ),
+					'cf7_cleanup'         => __( 'Contact Form 7 Cleanup', 'plugin-wpshadow' ),
+					'woocommerce_cleanup' => __( 'WooCommerce Asset Cleanup', 'plugin-wpshadow' ),
+					'yoast_cleanup'       => __( 'Yoast SEO Cleanup', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'jetpack_cleanup'     => true,
+						'rankmath_cleanup'    => true,
+						'cf7_cleanup'         => true,
+						'woocommerce_cleanup' => false,
+						'yoast_cleanup'       => true,
+					)
+				);
+			}
+		}
+		
+		$this->log_activity( 'feature_initialized', 'Plugin Cleanup feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -63,6 +97,9 @@ final class WPSHADOW_Feature_Plugin_Cleanup extends WPSHADOW_Abstract_Feature {
 		}
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'cleanup_plugin_assets' ), 10 );
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**
@@ -237,6 +274,70 @@ final class WPSHADOW_Feature_Plugin_Cleanup extends WPSHADOW_Abstract_Feature {
 			'contact_form_7' => false,
 			'woocommerce'    => false,
 			'theme_cleanup'  => false,
+		);
+	}
+
+	/**
+	 * Register Site Health test.
+	 *
+	 * @param array $tests Array of Site Health tests.
+	 * @return array Modified tests array.
+	 */
+	public function register_site_health_test( array $tests ): array {
+		$tests['direct']['plugin_cleanup'] = array(
+			'label' => __( 'Plugin Asset Cleanup', 'plugin-wpshadow' ),
+			'test'  => array( $this, 'test_plugin_cleanup' ),
+		);
+
+		return $tests;
+	}
+
+	/**
+	 * Site Health test for plugin cleanup.
+	 *
+	 * @return array Test result.
+	 */
+	public function test_plugin_cleanup(): array {
+		$enabled_features = 0;
+		
+		if ( get_option( 'wpshadow_plugin-cleanup_jetpack_cleanup', true ) ) {
+			$enabled_features++;
+		}
+		if ( get_option( 'wpshadow_plugin-cleanup_rankmath_cleanup', true ) ) {
+			$enabled_features++;
+		}
+		if ( get_option( 'wpshadow_plugin-cleanup_cf7_cleanup', true ) ) {
+			$enabled_features++;
+		}
+		if ( get_option( 'wpshadow_plugin-cleanup_woocommerce_cleanup', false ) ) {
+			$enabled_features++;
+		}
+		if ( get_option( 'wpshadow_plugin-cleanup_yoast_cleanup', true ) ) {
+			$enabled_features++;
+		}
+
+		$status = $enabled_features >= 3 ? 'good' : 'recommended';
+		$label  = $enabled_features >= 3 ?
+			__( 'Plugin asset cleanup is active', 'plugin-wpshadow' ) :
+			__( 'Plugin asset cleanup could be improved', 'plugin-wpshadow' );
+
+		return array(
+			'label'       => $label,
+			'status'      => $status,
+			'badge'       => array(
+				'label' => __( 'Performance', 'plugin-wpshadow' ),
+				'color' => 'blue',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				sprintf(
+					/* translators: %d: number of enabled cleanup features */
+					__( '%d plugin asset cleanup features are enabled, preventing unnecessary scripts and styles from loading.', 'plugin-wpshadow' ),
+					$enabled_features
+				)
+			),
+			'actions'     => '',
+			'test'        => 'plugin_cleanup',
 		);
 	}
 }

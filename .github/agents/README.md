@@ -1,12 +1,12 @@
 # GitHub Copilot Agent Setup
 
-This directory contains GitHub Copilot Agent definitions for the WPSupport plugin ecosystem.
+This directory contains GitHub Copilot Agent definitions for the WPShadow plugin ecosystem.
 
 ## Available Agents
 
-### WPSupport Agent (`wpsupport-agent.md`)
+### WPShadow Agent (`wpsupport-agent.md`)
 
-The WPSupport Agent is configured to handle issues for:
+The WPShadow Agent is configured to handle issues for:
 - `plugin-wpshadow` (primary repository)
 - Related module repositories (via shared knowledge)
 

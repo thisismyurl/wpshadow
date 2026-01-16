@@ -37,6 +37,36 @@ final class WPSHADOW_Feature_Asset_Version_Removal extends WPSHADOW_Abstract_Fea
 				'widget_description' => __( 'Remove unnecessary code and optimize markup', 'plugin-wpshadow' ),
 			)
 		);
+		
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'remove_css_versions'    => __( 'Remove CSS Versions', 'plugin-wpshadow' ),
+					'remove_js_versions'     => __( 'Remove JavaScript Versions', 'plugin-wpshadow' ),
+					'preserve_plugin_versions' => __( 'Preserve Plugin Versions', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'remove_css_versions'    => true,
+						'remove_js_versions'     => true,
+						'preserve_plugin_versions' => false,
+					)
+				);
+			}
+		}
+		
+		$this->log_activity( 'feature_initialized', 'Asset Version Removal feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -49,8 +79,16 @@ final class WPSHADOW_Feature_Asset_Version_Removal extends WPSHADOW_Abstract_Fea
 			return;
 		}
 
-		add_filter( 'style_loader_src', array( $this, 'remove_version_strings' ), 10 );
-		add_filter( 'script_loader_src', array( $this, 'remove_version_strings' ), 10 );
+		if ( get_option( 'wpshadow_asset-version-removal_remove_css_versions', true ) ) {
+			add_filter( 'style_loader_src', array( $this, 'remove_version_strings' ), 10 );
+		}
+		
+		if ( get_option( 'wpshadow_asset-version-removal_remove_js_versions', true ) ) {
+			add_filter( 'script_loader_src', array( $this, 'remove_version_strings' ), 10 );
+		}
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**
@@ -67,5 +105,50 @@ final class WPSHADOW_Feature_Asset_Version_Removal extends WPSHADOW_Abstract_Fea
 
 		// Remove the version query parameter.
 		return remove_query_arg( 'ver', $src );
+	}
+
+	/**
+	 * Register Site Health test.
+	 *
+	 * @param array $tests Array of Site Health tests.
+	 * @return array Modified tests array.
+	 */
+	public function register_site_health_test( array $tests ): array {
+		$tests['direct']['asset_version_removal'] = array(
+			'label' => __( 'Asset Version Removal', 'plugin-wpshadow' ),
+			'test'  => array( $this, 'test_asset_version_removal' ),
+		);
+
+		return $tests;
+	}
+
+	/**
+	 * Site Health test for asset version removal.
+	 *
+	 * @return array Test result.
+	 */
+	public function test_asset_version_removal(): array {
+		$remove_css = get_option( 'wpshadow_asset-version-removal_remove_css_versions', true );
+		$remove_js  = get_option( 'wpshadow_asset-version-removal_remove_js_versions', true );
+
+		$status = ( $remove_css && $remove_js ) ? 'good' : 'recommended';
+		$label  = ( $remove_css && $remove_js ) ?
+			__( 'Asset version strings are being removed', 'plugin-wpshadow' ) :
+			__( 'Asset version removal could be improved', 'plugin-wpshadow' );
+
+		return array(
+			'label'       => $label,
+			'status'      => $status,
+			'badge'       => array(
+				'label' => __( 'Performance', 'plugin-wpshadow' ),
+				'color' => 'blue',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				__( 'Removing version strings from CSS and JavaScript URLs improves browser caching and page load times.', 'plugin-wpshadow' )
+			),
+			'actions'     => '',
+			'test'        => 'asset_version_removal',
+		);
 	}
 }

@@ -37,6 +37,42 @@ final class WPSHADOW_Feature_Asset_Minification extends WPSHADOW_Abstract_Featur
 				'widget_description' => __( 'Optimize images and page load performance', 'plugin-wpshadow' ),
 			)
 		);
+		
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'minify_css'         => __( 'Minify CSS Files', 'plugin-wpshadow' ),
+					'minify_js'          => __( 'Minify JavaScript Files', 'plugin-wpshadow' ),
+					'combine_css'        => __( 'Combine CSS Files', 'plugin-wpshadow' ),
+					'combine_js'         => __( 'Combine JavaScript Files', 'plugin-wpshadow' ),
+					'remove_query_strings' => __( 'Remove Version Query Strings', 'plugin-wpshadow' ),
+					'minify_inline'      => __( 'Minify Inline Styles/Scripts', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'minify_css'         => true,
+						'minify_js'          => true,
+						'combine_css'        => false,
+						'combine_js'         => false,
+						'remove_query_strings' => true,
+						'minify_inline'      => true,
+					)
+				);
+			}
+		}
+		
+		$this->log_activity( 'feature_initialized', 'Asset Minification feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -49,30 +85,37 @@ final class WPSHADOW_Feature_Asset_Minification extends WPSHADOW_Abstract_Featur
 			return;
 		}
 
-		// Enable script concatenation if available.
-		if ( ! defined( 'CONCATENATE_SCRIPTS' ) ) {
+		// Enable script concatenation if combining is enabled.
+		if ( get_option( 'wpshadow_asset-minification_combine_js', false ) && ! defined( 'CONCATENATE_SCRIPTS' ) ) {
 			define( 'CONCATENATE_SCRIPTS', true );
 		}
 
-		// Enable CSS compression.
-		if ( ! defined( 'COMPRESS_CSS' ) ) {
+		// Enable CSS compression if minification is enabled.
+		if ( get_option( 'wpshadow_asset-minification_minify_css', true ) && ! defined( 'COMPRESS_CSS' ) ) {
 			define( 'COMPRESS_CSS', true );
 		}
 
-		// Enable script compression.
-		if ( ! defined( 'COMPRESS_SCRIPTS' ) ) {
+		// Enable script compression if minification is enabled.
+		if ( get_option( 'wpshadow_asset-minification_minify_js', true ) && ! defined( 'COMPRESS_SCRIPTS' ) ) {
 			define( 'COMPRESS_SCRIPTS', true );
 		}
 
-		// Remove query strings from static resources.
-		add_filter( 'script_loader_src', array( $this, 'remove_query_strings' ), 15, 1 );
-		add_filter( 'style_loader_src', array( $this, 'remove_query_strings' ), 15, 1 );
+		// Remove query strings from static resources if enabled.
+		if ( get_option( 'wpshadow_asset-minification_remove_query_strings', true ) ) {
+			add_filter( 'script_loader_src', array( $this, 'remove_query_strings' ), 15, 1 );
+			add_filter( 'style_loader_src', array( $this, 'remove_query_strings' ), 15, 1 );
+		}
 
 		// Add async/defer attributes to scripts.
 		add_filter( 'script_loader_tag', array( $this, 'optimize_script_loading' ), 10, 3 );
 
 		// Minify inline CSS and JS if option is enabled.
-		add_filter( 'wp_inline_style', array( $this, 'minify_css' ), 10, 1 );
+		if ( get_option( 'wpshadow_asset-minification_minify_inline', true ) ) {
+			add_filter( 'wp_inline_style', array( $this, 'minify_css' ), 10, 1 );
+		}
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**
@@ -153,5 +196,74 @@ final class WPSHADOW_Feature_Asset_Minification extends WPSHADOW_Abstract_Featur
 		$css = preg_replace( '/\s+/', ' ', $css );
 
 		return trim( $css );
+	}
+
+	/**
+	 * Register Site Health test.
+	 *
+	 * @param array<string, mixed> $tests Site Health tests.
+	 * @return array<string, mixed>
+	 */
+	public function register_site_health_test( array $tests ): array {
+		$tests['direct']['WPSHADOW_asset_minification'] = array(
+			'label' => __( 'Asset Minification', 'plugin-wpshadow' ),
+			'test'  => array( $this, 'test_asset_minification' ),
+		);
+		return $tests;
+	}
+
+	/**
+	 * Site Health test for asset minification.
+	 *
+	 * @return array<string, mixed>
+	 */
+	public function test_asset_minification(): array {
+		if ( ! $this->is_enabled() ) {
+			return array(
+				'label'       => __( 'Asset Minification', 'plugin-wpshadow' ),
+				'status'      => 'recommended',
+				'badge'       => array(
+					'label' => __( 'Performance', 'plugin-wpshadow' ),
+					'color' => 'orange',
+				),
+				'description' => sprintf( '<p>%s</p>', __( 'Asset Minification is not enabled. Minifying CSS and JavaScript can reduce file sizes and improve page load times.', 'plugin-wpshadow' ) ),
+				'actions'     => '',
+				'test'        => 'WPSHADOW_asset_minification',
+			);
+		}
+
+		// Count enabled sub-features.
+		$enabled_features = 0;
+		if ( get_option( 'wpshadow_asset-minification_minify_css', true ) ) {
+			++$enabled_features;
+		}
+		if ( get_option( 'wpshadow_asset-minification_minify_js', true ) ) {
+			++$enabled_features;
+		}
+		if ( get_option( 'wpshadow_asset-minification_remove_query_strings', true ) ) {
+			++$enabled_features;
+		}
+		if ( get_option( 'wpshadow_asset-minification_minify_inline', true ) ) {
+			++$enabled_features;
+		}
+
+		return array(
+			'label'       => __( 'Asset Minification', 'plugin-wpshadow' ),
+			'status'      => 'good',
+			'badge'       => array(
+				'label' => __( 'Performance', 'plugin-wpshadow' ),
+				'color' => 'blue',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				/* translators: %d: number of enabled minification features */
+				sprintf(
+					__( 'Asset Minification is active with %d compression features enabled.', 'plugin-wpshadow' ),
+					$enabled_features
+				)
+			),
+			'actions'     => '',
+			'test'        => 'WPSHADOW_asset_minification',
+		);
 	}
 }

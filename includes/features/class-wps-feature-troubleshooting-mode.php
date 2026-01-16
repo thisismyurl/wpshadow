@@ -73,6 +73,15 @@ final class WPSHADOW_Feature_Troubleshooting_Mode extends WPSHADOW_Abstract_Feat
 	}
 
 	/**
+	 * Enable details page for this feature.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
+	}
+
+	/**
 	 * Register hooks when feature is enabled.
 	 *
 	 * @return void
@@ -81,9 +90,6 @@ final class WPSHADOW_Feature_Troubleshooting_Mode extends WPSHADOW_Abstract_Feat
 		if ( ! $this->is_enabled() ) {
 			return;
 		}
-
-		// Admin menu.
-		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 
 		// AJAX handlers.
 		add_action( 'wp_ajax_WPSHADOW_troubleshooting_start', array( $this, 'ajax_start_troubleshooting' ) );
@@ -98,22 +104,8 @@ final class WPSHADOW_Feature_Troubleshooting_Mode extends WPSHADOW_Abstract_Feat
 			add_action( 'admin_notices', array( $this, 'troubleshooting_notice' ) );
 			add_action( 'admin_bar_menu', array( $this, 'admin_bar_notice' ), 1000 );
 		}
-	}
 
-	/**
-	 * Add admin menu.
-	 *
-	 * @return void
-	 */
-	public function add_admin_menu(): void {
-		add_submenu_page(
-			'wpshadow',
-			__( 'Troubleshooting Mode', 'plugin-wpshadow' ),
-			__( 'Troubleshooting', 'plugin-wpshadow' ),
-			'manage_options',
-			'wpshadow-troubleshooting',
-			array( $this, 'render_page' )
-		);
+		$this->log_activity( 'feature_initialized', 'Troubleshooting Mode initialized', 'info' );
 	}
 
 	/**

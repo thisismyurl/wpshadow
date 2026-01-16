@@ -5,7 +5,7 @@
  * Analyzes if your content layout is device-adjustable, ensuring buttons are
  * large enough for touch targets and text remains readable on small screens.
  *
- * @package WPShadow\Features
+ * @package WPShadow\CoreSupport
  * @since 1.2601.75001
  */
 
@@ -76,6 +76,15 @@ final class WPSHADOW_Feature_Mobile_Friendliness extends WPSHADOW_Abstract_Featu
 	}
 
 	/**
+	 * Enable details page for this feature.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
+	}
+
+	/**
 	 * Register hooks when feature is enabled.
 	 *
 	 * @return void
@@ -84,9 +93,6 @@ final class WPSHADOW_Feature_Mobile_Friendliness extends WPSHADOW_Abstract_Featu
 		if ( ! $this->is_enabled() ) {
 			return;
 		}
-
-		// Add admin menu for mobile-friendliness test.
-		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 
 		// Register settings.
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
@@ -97,22 +103,11 @@ final class WPSHADOW_Feature_Mobile_Friendliness extends WPSHADOW_Abstract_Featu
 
 		// Add to dashboard widget if available.
 		add_action( 'wp_dashboard_setup', array( $this, 'add_dashboard_widget' ) );
-	}
 
-	/**
-	 * Add admin menu for mobile-friendliness test.
-	 *
-	 * @return void
-	 */
-	public function add_admin_menu(): void {
-		add_submenu_page(
-			'wpshadow',
-			__( 'Mobile-Friendliness Test', 'plugin-wpshadow' ),
-			__( 'Mobile Test', 'plugin-wpshadow' ),
-			'manage_options',
-			'wpshadow-mobile-test',
-			array( $this, 'render_test_page' )
-		);
+		// Register Site Health test.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
+
+		$this->log_activity( 'feature_initialized', 'Mobile Friendliness Test initialized', 'info' );
 	}
 
 	/**

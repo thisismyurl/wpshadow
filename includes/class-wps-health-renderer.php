@@ -2,7 +2,7 @@
 /**
  * Health item renderer for standardized health check output.
  *
- * @package WPSHADOW_wpshadow_THISISMYURL
+ * @package WPShadow
  */
 
 declare(strict_types=1);

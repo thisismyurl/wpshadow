@@ -37,6 +37,38 @@ final class WPSHADOW_Feature_Interactivity_Cleanup extends WPSHADOW_Abstract_Fea
 				'widget_description' => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wpshadow' ),
 			)
 		);
+		
+		if ( method_exists( $this, 'register_sub_features' ) ) {
+			$this->register_sub_features(
+				array(
+					'disable_interactivity_api' => __( 'Disable Interactivity API', 'plugin-wpshadow' ),
+					'disable_block_bindings'    => __( 'Disable Block Bindings', 'plugin-wpshadow' ),
+					'remove_dns_prefetch'       => __( 'Remove s.w.org DNS Prefetch', 'plugin-wpshadow' ),
+					'conditional_loading'       => __( 'Conditional Script Loading', 'plugin-wpshadow' ),
+				)
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
+				$this->set_default_sub_features(
+					array(
+						'disable_interactivity_api' => true,
+						'disable_block_bindings'    => true,
+						'remove_dns_prefetch'       => true,
+						'conditional_loading'       => true,
+					)
+				);
+			}
+		}
+		
+		$this->log_activity( 'feature_initialized', 'Interactivity Cleanup feature initialized', 'info' );
+	}
+
+	/**
+	 * Indicate this feature has a details page.
+	 *
+	 * @return bool
+	 */
+	public function has_details_page(): bool {
+		return true;
 	}
 
 	/**
@@ -50,10 +82,17 @@ final class WPSHADOW_Feature_Interactivity_Cleanup extends WPSHADOW_Abstract_Fea
 		}
 
 		// Remove Interactivity API on frontend if not needed.
-		add_action( 'wp_enqueue_scripts', array( $this, 'disable_interactivity_api' ), 100 );
+		if ( get_option( 'wpshadow_interactivity-cleanup_disable_interactivity_api', true ) || get_option( 'wpshadow_interactivity-cleanup_disable_block_bindings', true ) ) {
+			add_action( 'wp_enqueue_scripts', array( $this, 'disable_interactivity_api' ), 100 );
+		}
 
 		// Remove DNS prefetch.
-		add_filter( 'wp_resource_hints', array( $this, 'remove_dns_prefetch' ), 10, 2 );
+		if ( get_option( 'wpshadow_interactivity-cleanup_remove_dns_prefetch', true ) ) {
+			add_filter( 'wp_resource_hints', array( $this, 'remove_dns_prefetch' ), 10, 2 );
+		}
+		
+		// Add Site Health tests.
+		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**
@@ -175,5 +214,63 @@ final class WPSHADOW_Feature_Interactivity_Cleanup extends WPSHADOW_Abstract_Fea
 
 		// Check for blocks with bindings in content.
 		return (bool) preg_match( '/metadata":\s*{[^}]*"bindings"/', $post->post_content );
+	}
+
+	/**
+	 * Register Site Health test.
+	 *
+	 * @param array $tests Array of Site Health tests.
+	 * @return array Modified tests array.
+	 */
+	public function register_site_health_test( array $tests ): array {
+		$tests['direct']['interactivity_cleanup'] = array(
+			'label' => __( 'Interactivity API Cleanup', 'plugin-wpshadow' ),
+			'test'  => array( $this, 'test_interactivity_cleanup' ),
+		);
+
+		return $tests;
+	}
+
+	/**
+	 * Site Health test for interactivity cleanup.
+	 *
+	 * @return array Test result.
+	 */
+	public function test_interactivity_cleanup(): array {
+		$enabled_features = 0;
+
+		if ( get_option( 'wpshadow_interactivity-cleanup_disable_interactivity_api', true ) ) {
+			$enabled_features++;
+		}
+		if ( get_option( 'wpshadow_interactivity-cleanup_disable_block_bindings', true ) ) {
+			$enabled_features++;
+		}
+		if ( get_option( 'wpshadow_interactivity-cleanup_remove_dns_prefetch', true ) ) {
+			$enabled_features++;
+		}
+
+		$status = $enabled_features >= 2 ? 'good' : 'recommended';
+		$label  = $enabled_features >= 2 ?
+			__( 'Interactivity cleanup is active', 'plugin-wpshadow' ) :
+			__( 'Interactivity cleanup could be improved', 'plugin-wpshadow' );
+
+		return array(
+			'label'       => $label,
+			'status'      => $status,
+			'badge'       => array(
+				'label' => __( 'Performance', 'plugin-wpshadow' ),
+				'color' => 'blue',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				sprintf(
+					/* translators: %d: number of enabled cleanup features */
+					__( '%d interactivity cleanup features are enabled, reducing unnecessary scripts.', 'plugin-wpshadow' ),
+					$enabled_features
+				)
+			),
+			'actions'     => '',
+			'test'        => 'interactivity_cleanup',
+		);
 	}
 }

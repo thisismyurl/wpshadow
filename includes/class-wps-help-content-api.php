@@ -5,7 +5,7 @@
  * Fetches plugin documentation and help content dynamically from wpshadow.com
  * with local caching and fallback content.
  *
- * @package WPSHADOW_wpshadow_THISISMYURL
+ * @package WPShadow
  */
 
 declare(strict_types=1);

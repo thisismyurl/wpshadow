@@ -2,7 +2,7 @@
 /**
  * Centralized router guard for disabled modules.
  *
- * @package WPSHADOW_wpshadow_THISISMYURL
+ * @package WPShadow
  */
 
 declare(strict_types=1);

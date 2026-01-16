@@ -71,14 +71,20 @@ final class WPSHADOW_Feature_Maintenance_Cleanup extends WPSHADOW_Abstract_Featu
 			return;
 		}
 
-		// Check for stuck maintenance mode on admin init.
-		add_action( 'admin_init', array( $this, 'check_maintenance_mode' ) );
+		// Check for stuck maintenance mode on admin init if auto-detect is enabled.
+		if ( get_option( 'wpshadow_maintenance-cleanup_auto_detect', true ) ) {
+			add_action( 'admin_init', array( $this, 'check_maintenance_mode' ) );
+		}
 
-		// Admin notice if maintenance mode is stuck.
-		add_action( 'admin_notices', array( $this, 'show_maintenance_notice' ) );
+		// Admin notice if enabled.
+		if ( get_option( 'wpshadow_maintenance-cleanup_admin_notices', true ) ) {
+			add_action( 'admin_notices', array( $this, 'show_maintenance_notice' ) );
+		}
 
-		// Add to Site Health tests.
-		add_filter( 'site_status_tests', array( $this, 'add_site_health_test' ) );
+		// Add to Site Health tests if enabled.
+		if ( get_option( 'wpshadow_maintenance-cleanup_site_health', true ) ) {
+			add_filter( 'site_status_tests', array( $this, 'add_site_health_test' ) );
+		}
 
 		// AJAX handler for manual cleanup.
 		add_action( 'wp_ajax_WPSHADOW_cleanup_maintenance', array( $this, 'ajax_cleanup_maintenance' ) );
