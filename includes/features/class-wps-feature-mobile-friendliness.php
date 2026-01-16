@@ -35,6 +35,26 @@ final class WPSHADOW_Feature_Mobile_Friendliness extends WPSHADOW_Abstract_Featu
 	private const MIN_FONT_SIZE = 12;
 
 	/**
+	 * Maximum file size for header.php (1MB)
+	 */
+	private const MAX_HEADER_FILE_SIZE = 1000000;
+
+	/**
+	 * Maximum bytes to read from header.php (10KB)
+	 */
+	private const MAX_HEADER_READ_SIZE = 10240;
+
+	/**
+	 * Maximum file size for main stylesheet (500KB)
+	 */
+	private const MAX_STYLESHEET_SIZE = 512000;
+
+	/**
+	 * Maximum file size for responsive CSS (200KB)
+	 */
+	private const MAX_RESPONSIVE_CSS_SIZE = 204800;
+
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
@@ -123,7 +143,14 @@ final class WPSHADOW_Feature_Mobile_Friendliness extends WPSHADOW_Abstract_Featu
 	/**
 	 * Sanitize plugin options.
 	 *
-	 * @param array<string, mixed> $input Input options.
+	 * @param array<string, mixed> $input Input options with keys:
+	 *                                    - check_viewport (bool): Enable viewport checks
+	 *                                    - check_touch_targets (bool): Enable touch target checks
+	 *                                    - check_font_sizes (bool): Enable font size checks
+	 *                                    - check_tap_spacing (bool): Enable tap spacing checks
+	 *                                    - min_touch_size (int): Minimum touch target size in pixels
+	 *                                    - min_font_size (int): Minimum font size in pixels
+	 *                                    - auto_check_on_save (bool): Auto-run on post save
 	 * @return array<string, mixed> Sanitized options.
 	 */
 	public function sanitize_options( array $input ): array {
@@ -149,6 +176,14 @@ final class WPSHADOW_Feature_Mobile_Friendliness extends WPSHADOW_Abstract_Featu
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wpshadow' ) );
 		}
+
+		// Enqueue admin styles.
+		wp_enqueue_style(
+			'wpshadow-mobile-test',
+			plugin_dir_url( WPSHADOW_FILE ) . 'assets/css/mobile-test.css',
+			array(),
+			WPSHADOW_VERSION
+		);
 
 		// Enqueue admin scripts.
 		wp_enqueue_script(
@@ -291,8 +326,7 @@ final class WPSHADOW_Feature_Mobile_Friendliness extends WPSHADOW_Abstract_Featu
 	 * @return array<string, mixed> Test results.
 	 */
 	private function run_mobile_test( string $url ): array {
-		$options = get_option( 'wpshadow_mobile_test_options', array() );
-		$options = array_merge( $this->sanitize_options( array() ), $options );
+		$options = $this->get_options();
 
 		$results = array(
 			'url'       => $url,
@@ -394,8 +428,8 @@ final class WPSHADOW_Feature_Mobile_Friendliness extends WPSHADOW_Abstract_Featu
 		$has_viewport = false;
 		
 		// Check header.php for viewport meta tag (limit to first 10KB for performance).
-		if ( file_exists( $theme_header ) && filesize( $theme_header ) < 1000000 ) { // Limit to 1MB
-			$header_content = file_get_contents( $theme_header, false, null, 0, 10240 );
+		if ( file_exists( $theme_header ) && filesize( $theme_header ) < self::MAX_HEADER_FILE_SIZE ) {
+			$header_content = file_get_contents( $theme_header, false, null, 0, self::MAX_HEADER_READ_SIZE );
 			if ( $header_content && preg_match( '/viewport.*width=device-width/i', $header_content ) ) {
 				$has_viewport = true;
 			}
@@ -568,7 +602,7 @@ final class WPSHADOW_Feature_Mobile_Friendliness extends WPSHADOW_Abstract_Featu
 		$stylesheet = get_stylesheet_directory() . '/style.css';
 		if ( file_exists( $stylesheet ) ) {
 			$filesize = filesize( $stylesheet );
-			if ( $filesize > 0 && $filesize < 512000 ) { // 500KB limit
+			if ( $filesize > 0 && $filesize < self::MAX_STYLESHEET_SIZE ) {
 				$content = file_get_contents( $stylesheet );
 				if ( $content !== false ) {
 					$css .= $content;
@@ -580,7 +614,7 @@ final class WPSHADOW_Feature_Mobile_Friendliness extends WPSHADOW_Abstract_Featu
 		$responsive_css = get_stylesheet_directory() . '/responsive.css';
 		if ( file_exists( $responsive_css ) ) {
 			$filesize = filesize( $responsive_css );
-			if ( $filesize > 0 && $filesize < 204800 ) { // 200KB limit
+			if ( $filesize > 0 && $filesize < self::MAX_RESPONSIVE_CSS_SIZE ) {
 				$content = file_get_contents( $responsive_css );
 				if ( $content !== false ) {
 					$css .= $content;
