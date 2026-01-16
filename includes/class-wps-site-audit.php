@@ -209,14 +209,17 @@ class WPSHADOW_Site_Audit {
 			);
 		}
 
-		// Check SSL.
-		$has_ssl = strpos( home_url(), 'https://' ) !== false;
+		// Check SSL/HTTPS.
+		$site_url = get_option( 'siteurl' );
+		$home_url = get_option( 'home' );
+		$has_ssl = strpos( $site_url, 'https://' ) === 0 && strpos( $home_url, 'https://' ) === 0;
+		
 		if ( ! $has_ssl ) {
 			$issues[] = array(
 				'level'       => 'critical',
-				'title'       => 'SSL Not Enabled',
-				'description' => 'Site does not use HTTPS. Enable SSL for security.',
-				'fix'         => 'Enable SSL in hosting control panel and update WordPress Address.',
+				'title'       => 'HTTPS Not Enabled',
+				'description' => 'Site does not use HTTPS. Modern browsers may flag non-HTTPS sites as "Not Secure".',
+				'fix'         => 'Obtain an SSL certificate from your hosting provider, update WordPress Address and Site Address URLs to use https:// in Settings → General, and enable HTTPS enforcement in WPS Security Hardening.',
 			);
 		}
 

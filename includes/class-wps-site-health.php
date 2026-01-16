@@ -129,6 +129,10 @@ class WPSHADOW_Site_Health {
 				'label' => __( 'Module status', 'plugin-wpshadow' ),
 				'test'  => array( __CLASS__, 'test_module_status' ),
 			),
+			'wpshadow_https_enforcement'         => array(
+				'label' => __( 'HTTPS enforcement', 'plugin-wpshadow' ),
+				'test'  => array( __CLASS__, 'test_https_enforcement' ),
+			),
 			'wpshadow_environment_compatibility' => array(
 				'label' => __( 'Environment compatibility', 'plugin-wpshadow' ),
 				'test'  => array( __CLASS__, 'test_environment_compatibility' ),
@@ -380,6 +384,66 @@ class WPSHADOW_Site_Health {
 			'critical',
 			esc_html__( 'The OpenSSL PHP extension is required for encryption features. Contact your hosting provider to enable it.', 'plugin-wpshadow' ),
 			'wpshadow_openssl_extension',
+			'',
+			'red'
+		);
+	}
+
+	/**
+	 * Test HTTPS enforcement.
+	 *
+	 * @return array
+	 */
+	public static function test_https_enforcement(): array {
+		$site_url = get_option( 'siteurl' );
+		$home_url = get_option( 'home' );
+		
+		$is_https = strpos( $site_url, 'https://' ) === 0 && strpos( $home_url, 'https://' ) === 0;
+		$is_ssl   = is_ssl();
+		
+		// Check if hardening feature is enabled.
+		$hardening_enabled = false;
+		if ( class_exists( '\\WPShadow\\CoreSupport\\WPSHADOW_Feature_Registry' ) ) {
+			$feature = \WPShadow\CoreSupport\WPSHADOW_Feature_Registry::get_feature( 'security-hardening' );
+			if ( $feature ) {
+				$hardening_enabled = $feature->is_enabled();
+			}
+		}
+
+		if ( $is_https && $is_ssl ) {
+			$description = esc_html__( 'Your site is configured to use HTTPS. All traffic is encrypted and secure.', 'plugin-wpshadow' );
+			if ( $hardening_enabled ) {
+				$description .= ' ' . esc_html__( 'HTTPS enforcement is active via WPS Security Hardening.', 'plugin-wpshadow' );
+			}
+			
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'HTTPS is properly configured', 'plugin-wpshadow' ),
+				'good',
+				$description,
+				'wpshadow_https_enforcement'
+			);
+		}
+
+		if ( $is_https && ! $is_ssl ) {
+			return WPSHADOW_Health_Renderer::build_result(
+				__( 'HTTPS is configured but current request is not secure', 'plugin-wpshadow' ),
+				'recommended',
+				esc_html__( 'Your WordPress URLs are set to HTTPS, but the current page was loaded over HTTP. Enable HTTPS enforcement in WPS Security Hardening to redirect all HTTP traffic to HTTPS.', 'plugin-wpshadow' ),
+				'wpshadow_https_enforcement',
+				'',
+				'orange'
+			);
+		}
+
+		// Site is not using HTTPS at all.
+		$description = esc_html__( 'Your site is not using HTTPS. Modern browsers may flag non-HTTPS sites as "Not Secure", which can reduce visitor trust and harm SEO rankings.', 'plugin-wpshadow' );
+		$description .= ' ' . esc_html__( 'To fix this: 1) Obtain an SSL certificate from your hosting provider, 2) Update WordPress Address and Site Address URLs to use https:// in Settings → General, 3) Enable HTTPS enforcement in WPS Security Hardening.', 'plugin-wpshadow' );
+
+		return WPSHADOW_Health_Renderer::build_result(
+			__( 'HTTPS is not enabled', 'plugin-wpshadow' ),
+			'critical',
+			$description,
+			'wpshadow_https_enforcement',
 			'',
 			'red'
 		);
