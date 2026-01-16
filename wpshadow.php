@@ -36,6 +36,7 @@ use WPShadow\CoreSupport\WPSHADOW_Feature_Plugin_Cleanup;
 use WPShadow\CoreSupport\WPSHADOW_Feature_HTML_Cleanup;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Resource_Hints;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Nav_Accessibility;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Color_Contrast_Checker;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Skiplinks;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Embed_Disable;
 use WPShadow\CoreSupport\WPSHADOW_Feature_jQuery_Cleanup;
@@ -289,6 +290,7 @@ function WPSHADOW_register_core_features(): void {
 	register_WPSHADOW_feature( new WPSHADOW_Feature_HTML_Cleanup() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Resource_Hints() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Nav_Accessibility() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Color_Contrast_Checker() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Skiplinks() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Embed_Disable() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_jQuery_Cleanup() );
@@ -522,6 +524,7 @@ function wpshadow_init(): void {
 	require_once WPSHADOW_PATH . 'includes/helpers/wps-input-helpers.php';
 	require_once WPSHADOW_PATH . 'includes/helpers/wps-ajax-helpers.php';
 	require_once WPSHADOW_PATH . 'includes/helpers/wps-array-helpers.php';
+	require_once WPSHADOW_PATH . 'includes/helpers/wps-color-contrast-helpers.php';
 	require_once WPSHADOW_PATH . 'includes/traits/trait-wps-ajax-security.php';
 
 	// Load update server client for automatic updates.
