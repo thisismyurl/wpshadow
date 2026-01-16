@@ -41,6 +41,11 @@ This plugin provides complete functionality on its own and can optionally load h
   - Critical CSS Inline for instant rendering
   - Resource Preloading for fonts, scripts, and images
   - Script Optimization Analyzer with recommendations
+- **Cross-Origin Isolation:** Security headers to protect against Spectre-like attacks (see [CROSS_ORIGIN_ISOLATION.md](docs/CROSS_ORIGIN_ISOLATION.md))
+  - Cross-Origin-Opener-Policy (COOP) header
+  - Cross-Origin-Embedder-Policy (COEP) header
+  - Isolates browsing context from untrusted third-party content
+  - Enables advanced web platform features
 
 ### Optional Hub & Spoke Architecture (When Modules Installed)
 
