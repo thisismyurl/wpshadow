@@ -382,8 +382,21 @@ final class WPSHADOW_Feature_Troubleshooting_Mode extends WPSHADOW_Abstract_Feat
 
 		$this->save_troubleshooting_state( $state );
 
+		// Set cookie with SameSite attribute to prevent CSRF.
+		setcookie(
+			self::COOKIE_NAME,
+			$token,
+			array(
+				'expires'  => time() + self::COOKIE_LIFETIME,
+				'path'     => COOKIEPATH,
+				'domain'   => COOKIE_DOMAIN,
+				'secure'   => is_ssl(),
+				'httponly' => true,
+				'samesite' => 'Lax',
+			)
+		);
 		// Set cookie.
-		setcookie( self::COOKIE_NAME, $token, time() + self::COOKIE_LIFETIME, COOKIEPATH, COOKIE_DOMAIN, is_ssl(), true );
+		setcookie( self::COOKIE_NAME, $token, time() + self::COOKIE_LIFETIME, COOKIEPATH, COOKIE_DOMAIN, true, true );
 
 		wp_send_json_success(
 			array(
@@ -404,8 +417,21 @@ final class WPSHADOW_Feature_Troubleshooting_Mode extends WPSHADOW_Abstract_Feat
 		$user_id = get_current_user_id();
 		delete_transient( self::TRANSIENT_KEY . $user_id );
 
+		// Clear cookie with SameSite attribute.
+		setcookie(
+			self::COOKIE_NAME,
+			'',
+			array(
+				'expires'  => time() - 3600,
+				'path'     => COOKIEPATH,
+				'domain'   => COOKIE_DOMAIN,
+				'secure'   => is_ssl(),
+				'httponly' => true,
+				'samesite' => 'Lax',
+			)
+		);
 		// Clear cookie.
-		setcookie( self::COOKIE_NAME, '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN, is_ssl(), true );
+		setcookie( self::COOKIE_NAME, '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN, true, true );
 
 		wp_send_json_success(
 			array(

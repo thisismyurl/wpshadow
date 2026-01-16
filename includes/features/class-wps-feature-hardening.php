@@ -9,6 +9,8 @@
  * - Secure salts validation
  * - File permissions check
  * - Cross-Origin Isolation headers (COOP and COEP)
+ * - HTTP Strict Transport Security (HSTS) header
+ * - HTTPS enforcement (Enforce HTTPS Everywhere)
  *
  * @package WPShadow\CoreSupport
  * @since 1.2601.73001
@@ -33,7 +35,7 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'security-hardening',
 				'name'               => __( 'One-Click Security Hardening', 'plugin-wpshadow' ),
-				'description'        => __( 'Applies common hardening steps in one toggle: disable XML-RPC if not needed, restrict wp-json exposure, prevent directory listing, validate security salts, check file permissions, and enable Cross-Origin Isolation headers. Reduces attack surface, limits information leakage, and aligns with best practices while keeping necessary features available when explicitly required by themes, plugins, or integrations.', 'plugin-wpshadow' ),
+				'description'        => __( 'Applies common hardening steps in one toggle: disable XML-RPC if not needed, restrict wp-json exposure, prevent directory listing, validate security salts, check file permissions, and enforce HTTPS everywhere. Reduces attack surface, limits information leakage, and aligns with best practices while keeping necessary features available when explicitly required by themes, plugins, or integrations.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
@@ -68,6 +70,10 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 
 		// Add Cross-Origin Isolation headers.
 		add_action( 'send_headers', array( $this, 'add_cross_origin_isolation_headers' ) );
+		// Add HSTS (HTTP Strict Transport Security) header.
+		add_filter( 'wp_headers', array( $this, 'add_hsts_header' ) );
+		// HTTPS enforcement.
+		$this->enforce_https();
 	}
 
 	/**
@@ -117,6 +123,30 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 			__( 'You are not currently logged in.', 'plugin-wpshadow' ),
 			array( 'status' => 401 )
 		);
+	}
+
+	/**
+	 * Add HTTP Strict Transport Security (HSTS) header.
+	 *
+	 * Forces browsers to always use HTTPS for the domain, preventing downgrade attacks.
+	 * Only applied when the site is accessed via HTTPS.
+	 *
+	 * @param array $headers The array of HTTP headers to be sent.
+	 * @return array Modified headers array with HSTS header.
+	 */
+	public function add_hsts_header( array $headers ): array {
+		// Only add HSTS header if site is accessed via HTTPS.
+		if ( ! is_ssl() ) {
+			return $headers;
+		}
+
+		// HSTS header with:
+		// - max-age: 31536000 seconds (1 year)
+		// - includeSubDomains: Apply to all subdomains
+		// - preload: Allow inclusion in browser preload lists
+		$headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains; preload';
+
+		return $headers;
 	}
 
 	/**
@@ -383,5 +413,141 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 		// Cross-Origin-Embedder-Policy: Requires resources to explicitly opt-in to being loaded.
 		// This ensures that cross-origin resources have either CORS or CORP headers.
 		header( 'Cross-Origin-Embedder-Policy: require-corp' );
+	 * Enforce HTTPS everywhere on the site.
+	 * 
+	 * This method:
+	 * - Forces SSL for admin and login areas using the force_ssl_admin filter
+	 * - Redirects all HTTP requests to HTTPS (frontend and admin)
+	 * - Filters WordPress URLs to use HTTPS scheme
+	 * - Displays admin notices when HTTPS is not properly configured
+	 *
+	 * @return void
+	 */
+	private function enforce_https(): void {
+		// Check if site is already using HTTPS.
+		$is_https = $this->is_site_using_https();
+
+		// Force SSL for admin and logins using WordPress hooks.
+		// Note: FORCE_SSL_ADMIN constant should be defined in wp-config.php for best results.
+		add_filter( 'force_ssl_admin', '__return_true' );
+
+		// Redirect HTTP to HTTPS for all requests.
+		add_action( 'template_redirect', array( $this, 'redirect_to_https' ), 1 );
+		add_action( 'admin_init', array( $this, 'redirect_admin_to_https' ), 1 );
+
+		// Add HTTPS check to admin notices if not yet using HTTPS.
+		if ( ! $is_https ) {
+			add_action( 'admin_notices', array( $this, 'https_warning_notice' ) );
+		}
+
+		// Filter home and site URL to use HTTPS.
+		add_filter( 'home_url', array( $this, 'force_https_url' ), 10, 1 );
+		add_filter( 'site_url', array( $this, 'force_https_url' ), 10, 1 );
+		add_filter( 'admin_url', array( $this, 'force_https_url' ), 10, 1 );
+		add_filter( 'wp_redirect', array( $this, 'force_https_url' ), 10, 1 );
+		add_filter( 'content_url', array( $this, 'force_https_url' ), 10, 1 );
+		add_filter( 'plugins_url', array( $this, 'force_https_url' ), 10, 1 );
+	}
+
+	/**
+	 * Redirect HTTP requests to HTTPS on the frontend.
+	 *
+	 * @return void
+	 */
+	public function redirect_to_https(): void {
+		if ( ! is_ssl() && ! is_admin() ) {
+			$this->perform_https_redirect();
+		}
+	}
+
+	/**
+	 * Redirect HTTP requests to HTTPS in the admin area.
+	 *
+	 * @return void
+	 */
+	public function redirect_admin_to_https(): void {
+		if ( ! is_ssl() && is_admin() ) {
+			$this->perform_https_redirect();
+		}
+	}
+
+	/**
+	 * Perform the actual HTTPS redirect with proper security measures.
+	 *
+	 * @return void
+	 */
+	private function perform_https_redirect(): void {
+		// Get current URL components.
+		$http_host = isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
+		
+		if ( empty( $http_host ) ) {
+			return;
+		}
+		
+		// Get and sanitize REQUEST_URI immediately.
+		// Use esc_url_raw for sanitization while preserving URL structure.
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '/';
+		
+		// Build HTTPS URL.
+		$redirect_url = 'https://' . $http_host . $request_uri;
+		
+		// Validate the URL before redirecting.
+		if ( wp_http_validate_url( $redirect_url ) ) {
+			wp_safe_redirect( $redirect_url, 301 );
+			exit;
+		}
+	}
+
+	/**
+	 * Display admin notice warning about HTTP usage.
+	 *
+	 * @return void
+	 */
+	public function https_warning_notice(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		printf(
+			'<div class="notice notice-warning is-dismissible"><p><strong>%s</strong> %s <a href="https://wordpress.org/support/article/https-for-wordpress/" target="_blank">%s</a></p></div>',
+			esc_html__( 'WPS Security Warning:', 'plugin-wpshadow' ),
+			esc_html__( 'Your site is not fully configured for HTTPS. Modern browsers may flag non-HTTPS sites as "Not Secure". Update your WordPress Address (URL) and Site Address (URL) to use HTTPS in Settings → General.', 'plugin-wpshadow' ),
+			esc_html__( 'Learn more about HTTPS', 'plugin-wpshadow' )
+		);
+	}
+
+	/**
+	 * Force URLs to use HTTPS scheme.
+	 *
+	 * @param string $url The URL to filter.
+	 * @return string The URL with HTTPS scheme.
+	 */
+	public function force_https_url( string $url ): string {
+		if ( empty( $url ) ) {
+			return $url;
+		}
+
+		// Convert http:// to https://.
+		if ( strpos( $url, 'http://' ) === 0 ) {
+			$url = 'https://' . substr( $url, 7 );
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Check if the site is configured to use HTTPS.
+	 *
+	 * @return bool True if both site_url and home_url use HTTPS, false otherwise.
+	 */
+	private function is_site_using_https(): bool {
+		$site_url = get_option( 'siteurl' );
+		$home_url = get_option( 'home' );
+		
+		if ( ! is_string( $site_url ) || ! is_string( $home_url ) ) {
+			return false;
+		}
+
+		return strpos( $site_url, 'https://' ) === 0 && strpos( $home_url, 'https://' ) === 0;
 	}
 }
