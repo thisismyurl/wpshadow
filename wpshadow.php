@@ -325,6 +325,9 @@ function WPSHADOW_register_core_features(): void {
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Firewall() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Malware_Scanner() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Traffic_Monitor() );
+	
+	// Monitoring features.
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Uptime_Monitor() );
 
 	// Advanced performance features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Image_Optimizer() );
@@ -711,6 +714,7 @@ function wpshadow_init(): void {
 	require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-cdn-integration.php';
 	require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-malware-scanner.php';
 	require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-traffic-monitor.php';
+	require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-uptime-monitor.php';
 
 	// Load System Report Generator for comprehensive debug information.
 	require_once WPSHADOW_PATH . 'includes/class-wps-system-report-generator.php';
