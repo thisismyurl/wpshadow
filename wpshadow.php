@@ -330,6 +330,9 @@ function WPSHADOW_register_core_features(): void {
 	// Debugging features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Conflict_Sandbox() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Visual_Regression() );
+	
+	// SEO and social media features.
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Open_Graph_Previewer() );
 }
 
 /**
@@ -799,6 +802,7 @@ function wpshadow_init(): void {
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-script-optimizer.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-conflict-sandbox.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-visual-regression.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-open-graph-previewer.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/wps-feature-functions.php' );
 	
 	// Initialize Registry System.
@@ -813,6 +817,9 @@ function wpshadow_init(): void {
 
 	// Initialize Weekly Performance Report feature
 	\WPShadow\CoreSupport\WPSHADOW_Feature_Weekly_Performance_Report::init();
+
+	// Initialize Open Graph Previewer feature
+	\WPShadow\CoreSupport\WPSHADOW_Feature_Open_Graph_Previewer::init();
 
 	// Load Spoke Base for spoke plugins (Image, Media, etc).
 	require_once WPSHADOW_PATH . 'includes/class-wps-spoke-base.php';
