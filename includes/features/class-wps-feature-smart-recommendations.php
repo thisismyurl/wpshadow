@@ -37,8 +37,11 @@ class WPSHADOW_Feature_Smart_Recommendations extends WPSHADOW_Abstract_Feature {
 				'version'            => '1.0.0',
 				'default_enabled'    => true,
 				'widget_group'       => 'analytics-features',
-				'widget_label'       => __( 'Analytics & Recommendations', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Intelligent site analysis and recommendation features', 'plugin-wpshadow' ),
+				'license_level'      => 2,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-lightbulb',
+				'category'           => 'diagnostics',
+				'priority'           => 35,
 			)
 		);
 	}

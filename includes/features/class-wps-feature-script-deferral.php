@@ -44,17 +44,13 @@ final class WPSHADOW_Feature_Script_Deferral extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => false,
 				'version'            => '1.1.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Performance Optimization', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Speed and resource loading improvements', 'plugin-wpshadow' ),
 				// New unified metadata fields.
 				'license_level'      => 2, // Free registered users.
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-performance',
 				'category'           => 'performance',
 				'priority'           => 20,
-				'dashboard'          => 'performance',
-				'widget_column'      => 'left',
-				'widget_priority'    => 10,
+
 			)
 		);
 

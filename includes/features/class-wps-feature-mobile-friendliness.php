@@ -67,10 +67,11 @@ final class WPSHADOW_Feature_Mobile_Friendliness extends WPSHADOW_Abstract_Featu
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'accessibility',
-				'widget_label'       => __( 'UX & Accessibility', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Improve user experience and accessibility standards', 'plugin-wpshadow' ),
 				'icon'               => 'dashicons-smartphone',
 				'category'           => 'diagnostics',
+				'license_level'      => 1,
+				'minimum_capability' => 'manage_options',
+				'priority'           => 25,
 			)
 		);
 	}

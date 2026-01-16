@@ -27,17 +27,20 @@ final class WPSHADOW_Feature_Asset_Minification extends WPSHADOW_Abstract_Featur
 		parent::__construct(
 			array(
 				'id'                 => 'asset-minification',
-			'name'               => __( 'Compress Stylesheet and Script Files', 'plugin-wpshadow' ),
-			'description'        => __( 'Compresses stylesheet and script files by removing whitespace and unused code, then serves them in smaller bundles so pages download faster and start rendering sooner. Helps repeat visitors by lowering total bytes transferred, reduces bandwidth costs on heavy pages, and keeps behavior identical because it preserves functionality while trimming bloat. This works automatically once enabled and respects dependency order to avoid breaking features.', 'plugin-wpshadow' ),
+				'name'               => __( 'Compress Stylesheet and Script Files', 'plugin-wpshadow' ),
+				'description'        => __( 'Compresses stylesheet and script files by removing whitespace and unused code, then serves them in smaller bundles so pages download faster and start rendering sooner. Helps repeat visitors by lowering total bytes transferred, reduces bandwidth costs on heavy pages, and keeps behavior identical because it preserves functionality while trimming bloat. This works automatically once enabled and respects dependency order to avoid breaking features.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Performance Optimization', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Optimize images and page load performance', 'plugin-wpshadow' ),
+				'license_level'      => 1,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-performance',
+				'category'           => 'performance',
+				'priority'           => 20,
 			)
 		);
-		
+
 		if ( method_exists( $this, 'register_sub_features' ) ) {
 			$this->register_sub_features(
 				array(
@@ -49,18 +52,19 @@ final class WPSHADOW_Feature_Asset_Minification extends WPSHADOW_Abstract_Featur
 					'minify_inline'      => __( 'Minify Inline Styles/Scripts', 'plugin-wpshadow' ),
 				)
 			);
-			if ( method_exists( $this, 'set_default_sub_features' ) ) {
-				$this->set_default_sub_features(
-					array(
-						'minify_css'         => true,
-						'minify_js'          => true,
-						'combine_css'        => false,
-						'combine_js'         => false,
-						'remove_query_strings' => true,
-						'minify_inline'      => true,
-					)
-				);
-			}
+		}
+
+		if ( method_exists( $this, 'set_default_sub_features' ) ) {
+			$this->set_default_sub_features(
+				array(
+					'minify_css'         => true,
+					'minify_js'          => true,
+					'combine_css'        => false,
+					'combine_js'         => false,
+					'remove_query_strings' => true,
+					'minify_inline'      => true,
+				)
+			);
 		}
 		
 		$this->log_activity( 'feature_initialized', 'Asset Minification feature initialized', 'info' );

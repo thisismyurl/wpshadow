@@ -33,8 +33,11 @@ final class WPSHADOW_Feature_Google_Fonts_Disabler extends WPSHADOW_Abstract_Fea
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Resource Optimization', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Optimize how resources are loaded and delivered', 'plugin-wpshadow' ),
+				'license_level'      => 1,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-editor-removeformatting',
+				'category'           => 'performance',
+				'priority'           => 20,
 			)
 		);
 		

@@ -57,17 +57,13 @@ final class WPSHADOW_Feature_Troubleshooting_Mode extends WPSHADOW_Abstract_Feat
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'debugging',
-				'widget_label'       => __( 'Debugging & Diagnostics', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Tools for diagnosing and resolving site conflicts', 'plugin-wpshadow' ),
 				// Unified metadata.
 				'license_level'      => 1, // Free for everyone.
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-admin-tools',
 				'category'           => 'debugging',
 				'priority'           => 5, // High priority.
-				'dashboard'          => 'overview',
-				'widget_column'      => 'left',
-				'widget_priority'    => 5,
+
 			)
 		);
 	}

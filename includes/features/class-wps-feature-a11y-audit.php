@@ -37,8 +37,11 @@ final class WPSHADOW_Feature_A11y_Audit extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'accessibility',
-				'widget_label'       => __( 'UX & Accessibility', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Improve user experience and accessibility standards', 'plugin-wpshadow' ),
+				'license_level'      => 2,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-universal-access',
+				'category'           => 'accessibility',
+				'priority'           => 20,
 				'sub_features'       => array(
 					'auto_fix_images'   => __( 'Auto-fix Images (Add alt attributes)', 'plugin-wpshadow' ),
 					'auto_fix_contrast' => __( 'Auto-fix Contrast (CSS improvements)', 'plugin-wpshadow' ),

@@ -794,6 +794,7 @@ function wpshadow_init(): void {
 
 	// Load Registry System (Unified Metadata System).
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/class-wps-feature-registry.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/class-wps-widget-groups.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/class-wps-widget-registry.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/class-wps-dashboard-registry.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-core-diagnostics.php' );

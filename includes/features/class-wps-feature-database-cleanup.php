@@ -33,8 +33,11 @@ final class WPSHADOW_Feature_Database_Cleanup extends WPSHADOW_Abstract_Feature 
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'advanced',
-				'widget_label'       => __( 'Advanced Features', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Advanced optimization and maintenance features', 'plugin-wpshadow' ),
+				'license_level'      => 2,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-database',
+				'category'           => 'maintenance',
+				'priority'           => 70,
 			)
 		);
 		

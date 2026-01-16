@@ -46,17 +46,13 @@ final class WPSHADOW_Feature_Maintenance_Cleanup extends WPSHADOW_Abstract_Featu
 				'default_enabled'    => true, // Safe to enable by default.
 				'version'            => '1.0.0',
 				'widget_group'       => 'tools',
-				'widget_label'       => __( 'Tools', 'plugin-wpshadow' ),
-				'widget_description' => __( 'WordPress utility tools and helpers', 'plugin-wpshadow' ),
 				// Unified metadata.
 				'license_level'      => 1, // Free for everyone.
 				'minimum_capability' => 'update_core',
 				'icon'               => 'dashicons-admin-tools',
 				'category'           => 'tools',
 				'priority'           => 50,
-				'dashboard'          => 'tools',
-				'widget_column'      => 'left',
-				'widget_priority'    => 50,
+
 			)
 		);
 	}

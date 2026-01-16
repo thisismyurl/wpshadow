@@ -33,8 +33,6 @@ final class WPSHADOW_Feature_Asset_Version_Removal extends WPSHADOW_Abstract_Fea
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 			'widget_group'       => 'performance',
-			'widget_label'       => __( 'Performance Options', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Remove unnecessary code and optimize markup', 'plugin-wpshadow' ),
 			)
 		);
 		

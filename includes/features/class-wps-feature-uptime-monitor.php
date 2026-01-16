@@ -52,16 +52,12 @@ final class WPSHADOW_Feature_Uptime_Monitor extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'monitoring',
-				'widget_label'       => __( 'Monitoring', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Site health and availability monitoring', 'plugin-wpshadow' ),
 				'license_level'      => 2,
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-heart',
 				'category'           => 'monitoring',
 				'priority'           => 15,
-				'dashboard'          => 'overview',
-				'widget_column'      => 'left',
-				'widget_priority'    => 15,
+
 			)
 		);
 	}

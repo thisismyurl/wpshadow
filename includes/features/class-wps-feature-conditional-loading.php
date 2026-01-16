@@ -33,8 +33,11 @@ final class WPSHADOW_Feature_Conditional_Loading extends WPSHADOW_Abstract_Featu
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Resource Optimization', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Optimize how resources are loaded and delivered', 'plugin-wpshadow' ),
+				'license_level'      => 1,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-randomize',
+				'category'           => 'performance',
+				'priority'           => 20,
 			)
 		);
 
@@ -48,17 +51,18 @@ final class WPSHADOW_Feature_Conditional_Loading extends WPSHADOW_Abstract_Featu
 					'custom_rules'      => __( 'Enable Custom Loading Rules', 'plugin-wpshadow' ),
 				)
 			);
-			if ( method_exists( $this, 'set_default_sub_features' ) ) {
-				$this->set_default_sub_features(
-					array(
-						'contact_forms'     => true,
-						'woocommerce'       => true,
-						'social_sharing'    => true,
-						'analytics'         => false,
-						'custom_rules'      => false,
-					)
-				);
-			}
+		}
+
+		if ( method_exists( $this, 'set_default_sub_features' ) ) {
+			$this->set_default_sub_features(
+				array(
+					'contact_forms'     => true,
+					'woocommerce'       => true,
+					'social_sharing'    => true,
+					'analytics'         => false,
+					'custom_rules'      => false,
+				)
+			);
 		}
 
 		$this->register_default_settings(

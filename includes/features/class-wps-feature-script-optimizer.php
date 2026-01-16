@@ -33,8 +33,11 @@ final class WPSHADOW_Feature_Script_Optimizer extends WPSHADOW_Abstract_Feature 
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 			'widget_group'       => 'reporting',
-			'widget_label'       => __( 'Reporting', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Optimize how resources are loaded and delivered', 'plugin-wpshadow' ),
+				'license_level'      => 2,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-chart-bar',
+				'category'           => 'diagnostics',
+				'priority'           => 40,
 			)
 		);
 		

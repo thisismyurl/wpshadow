@@ -33,11 +33,14 @@ final class WPSHADOW_Feature_Embed_Disable extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Performance & Security', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wpshadow' ),
+				'license_level'      => 1,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-format-video',
+				'category'           => 'performance',
+				'priority'           => 20,
 			)
 		);
-		
+
 		if ( method_exists( $this, 'register_sub_features' ) ) {
 			$this->register_sub_features(
 				array(
@@ -47,16 +50,17 @@ final class WPSHADOW_Feature_Embed_Disable extends WPSHADOW_Abstract_Feature {
 					'remove_embed_rewrite' => __( 'Remove Embed Rewrite Rules', 'plugin-wpshadow' ),
 				)
 			);
-			if ( method_exists( $this, 'set_default_sub_features' ) ) {
-				$this->set_default_sub_features(
-					array(
-						'disable_embed_script' => true,
-						'remove_oembed_links'  => true,
-						'disable_rest_oembed'  => false,
-						'remove_embed_rewrite' => true,
-					)
-				);
-			}
+		}
+
+		if ( method_exists( $this, 'set_default_sub_features' ) ) {
+			$this->set_default_sub_features(
+				array(
+					'disable_embed_script' => true,
+					'remove_oembed_links'  => true,
+					'disable_rest_oembed'  => false,
+					'remove_embed_rewrite' => true,
+				)
+			);
 		}
 		
 		$this->log_activity( 'feature_initialized', 'Embed Disable feature initialized', 'info' );

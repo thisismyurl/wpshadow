@@ -40,6 +40,8 @@ final class WPSHADOW_Feature_Iframe_Busting extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
+				'widget_label'       => __( 'Security', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wpshadow' ),
 				'license_level'      => 1,
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-shield-alt',
@@ -47,17 +49,8 @@ final class WPSHADOW_Feature_Iframe_Busting extends WPSHADOW_Abstract_Feature {
 				'priority'           => 5,
 			)
 		);
-
-	if ( method_exists( $this, 'register_sub_features' ) ) {
-		$this->register_sub_features(
-			array(
-				'csp_header'         => __( 'Content-Security-Policy Header', 'plugin-wpshadow' ),
-				'xfo_header'         => __( 'X-Frame-Options Header', 'plugin-wpshadow' ),
-				'js_framebuster'     => __( 'JavaScript Frame-Buster', 'plugin-wpshadow' ),
-			'custom_origins'     => __( 'Allow Custom Origins', 'plugin-wpshadow' ),
-		)
-	);
-	if ( method_exists( $this, 'set_default_sub_features' ) ) {
+			);
+			if ( method_exists( $this, 'set_default_sub_features' ) ) {
 				$this->set_default_sub_features(
 					array(
 						'csp_header'         => true,

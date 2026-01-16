@@ -115,16 +115,12 @@ final class WPSHADOW_Feature_HTTP_SSL_Audit extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
-				'widget_label'       => __( 'Security', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wpshadow' ),
 				'license_level'      => 1,
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-shield',
 				'category'           => 'security',
 				'priority'           => 8,
-				'dashboard'          => 'overview',
-				'widget_column'      => 'right',
-				'widget_priority'    => 8,
+
 			)
 		);
 	}

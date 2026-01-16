@@ -60,13 +60,9 @@ class WPSHADOW_Feature_SEO_Validator extends WPSHADOW_Abstract_Feature {
 				'icon'               => 'dashicons-search',
 				'priority'           => 60,
 				'widget_group'       => 'seo',
-				'widget_label'       => __( 'SEO Tools', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Search engine optimization tools and validators', 'plugin-wpshadow' ),
 				'license_level'      => 1,
 				'minimum_capability' => 'manage_options',
-				'dashboard'          => 'overview',
-				'widget_column'      => 'left',
-				'widget_priority'    => 60,
+
 			)
 		);
 

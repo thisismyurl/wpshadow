@@ -40,11 +40,14 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
-				'widget_label'       => __( 'Security', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wpshadow' ),
+				'license_level'      => 1,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-shield',
+				'category'           => 'security',
+				'priority'           => 10,
 			)
 		);
-		
+
 		if ( method_exists( $this, 'register_sub_features' ) ) {
 			$this->register_sub_features(
 				array(
@@ -58,20 +61,21 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 					'enforce_https'         => __( 'Enforce HTTPS Everywhere', 'plugin-wpshadow' ),
 				)
 			);
-			if ( method_exists( $this, 'set_default_sub_features' ) ) {
-				$this->set_default_sub_features(
-					array(
-						'disable_xmlrpc'        => true,
-						'restrict_rest_api'     => true,
-						'directory_listing'     => true,
-						'check_salts'           => true,
-						'file_permissions'      => true,
-						'cross_origin_headers'  => true,
-						'hsts_header'           => true,
-						'enforce_https'         => false,
-					)
-				);
-			}
+		}
+
+		if ( method_exists( $this, 'set_default_sub_features' ) ) {
+			$this->set_default_sub_features(
+				array(
+					'disable_xmlrpc'        => true,
+					'restrict_rest_api'     => true,
+					'directory_listing'     => true,
+					'check_salts'           => true,
+					'file_permissions'      => true,
+					'cross_origin_headers'  => true,
+					'hsts_header'           => true,
+					'enforce_https'         => false,
+				)
+			);
 		}
 		
 		$this->log_activity( 'feature_initialized', 'Security Hardening feature initialized', 'info' );

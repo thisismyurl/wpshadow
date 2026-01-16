@@ -33,8 +33,6 @@ final class WPSHADOW_Feature_Nav_Accessibility extends WPSHADOW_Abstract_Feature
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'accessibility',
-				'widget_label'       => __( 'Accessibility', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Improve site accessibility for all users', 'plugin-wpshadow' ),
 			)
 		);
 		

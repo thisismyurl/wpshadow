@@ -36,8 +36,11 @@ final class WPSHADOW_Feature_Performance_Alerts extends WPSHADOW_Abstract_Featur
 				'version'            => '1.0.0',
 				'default_enabled'    => true,
 			'widget_group'       => 'reporting',
-			'widget_label'       => __( 'Reporting', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Performance monitoring and optimization', 'plugin-wpshadow' ),
+				'license_level'      => 2,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-warning',
+				'category'           => 'monitoring',
+				'priority'           => 40,
 			)
 		);
 		

@@ -83,17 +83,13 @@ final class WPSHADOW_Feature_Core_Integrity extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
-				'widget_label'       => __( 'Security', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wpshadow' ),
 				// Unified metadata.
 				'license_level'      => 1, // Free for everyone.
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-shield-alt',
 				'category'           => 'security',
 				'priority'           => 5,
-				'dashboard'          => 'overview',
-				'widget_column'      => 'right',
-				'widget_priority'    => 5,
+
 			)
 		);
 	}

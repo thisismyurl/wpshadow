@@ -41,17 +41,13 @@ final class WPSHADOW_Feature_MySQL_Diagnostics extends WPSHADOW_Abstract_Feature
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'server-diagnostics',
-				'widget_label'       => __( 'Server Diagnostics', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Server environment and configuration tools', 'plugin-wpshadow' ),
 				// Unified metadata.
 				'license_level'      => 1, // Free for everyone.
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-database',
 				'category'           => 'debugging',
 				'priority'           => 25,
-				'dashboard'          => 'overview',
-				'widget_column'      => 'left',
-				'widget_priority'    => 25,
+
 			)
 		);
 	}

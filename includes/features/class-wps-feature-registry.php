@@ -376,8 +376,7 @@ class WPSHADOW_Feature_Registry {
 			'default_enabled'    => $feature->get_default_state(),
 			'enabled'            => self::get_toggle_state( $feature->get_id(), $feature->get_default_state(), $network ),
 			'widget_group'       => $feature->get_widget_group(),
-			'widget_label'       => $feature->get_widget_label(),
-			'widget_description' => $feature->get_widget_description(),
+
 		);
 	}
 }

@@ -24,8 +24,11 @@ class WPSHADOW_Feature_Customization_Audit extends WPSHADOW_Abstract_Feature {
 				'version'            => '1.0.0',
 				'default_enabled'    => false,
 				'widget_group'       => 'advanced-features',
-				'widget_label'       => __( 'Advanced Features', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Powerful features for diagnostics and specialized functionality', 'plugin-wpshadow' ),
+				'license_level'      => 2,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-admin-tools',
+				'category'           => 'diagnostics',
+				'priority'           => 40,
 			)
 		);
 	}

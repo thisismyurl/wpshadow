@@ -46,16 +46,12 @@ final class WPSHADOW_Feature_Traffic_Monitor extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
-				'widget_label'       => __( 'Security', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Advanced security features', 'plugin-wpshadow' ),
 				'license_level'      => 3,
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-networking',
 				'category'           => 'security',
 				'priority'           => 20,
-				'dashboard'          => 'overview',
-				'widget_column'      => 'left',
-				'widget_priority'    => 20,
+
 			)
 		);
 	}

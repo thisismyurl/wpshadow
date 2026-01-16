@@ -33,8 +33,11 @@ final class WPSHADOW_Feature_Interactivity_Cleanup extends WPSHADOW_Abstract_Fea
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Performance & Security', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wpshadow' ),
+				'license_level'      => 1,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-performance',
+				'category'           => 'performance',
+				'priority'           => 20,
 			)
 		);
 		

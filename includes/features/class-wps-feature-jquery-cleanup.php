@@ -33,11 +33,14 @@ final class WPSHADOW_Feature_jQuery_Cleanup extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Performance & Security', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wpshadow' ),
+				'license_level'      => 1,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-editor-code',
+				'category'           => 'performance',
+				'priority'           => 20,
 			)
 		);
-		
+
 		if ( method_exists( $this, 'register_sub_features' ) ) {
 			$this->register_sub_features(
 				array(
@@ -46,15 +49,16 @@ final class WPSHADOW_Feature_jQuery_Cleanup extends WPSHADOW_Abstract_Feature {
 					'log_removals'           => __( 'Log jQuery Migrate Removals', 'plugin-wpshadow' ),
 				)
 			);
-			if ( method_exists( $this, 'set_default_sub_features' ) ) {
-				$this->set_default_sub_features(
-					array(
-						'remove_migrate_frontend' => true,
-						'keep_admin'             => true,
-						'log_removals'           => false,
-					)
-				);
-			}
+		}
+
+		if ( method_exists( $this, 'set_default_sub_features' ) ) {
+			$this->set_default_sub_features(
+				array(
+					'remove_migrate_frontend' => true,
+					'keep_admin'             => true,
+					'log_removals'           => false,
+				)
+			);
 		}
 		
 		$this->log_activity( 'feature_initialized', 'jQuery Cleanup feature initialized', 'info' );

@@ -48,8 +48,11 @@ final class WPSHADOW_Feature_Brute_Force_Protection extends WPSHADOW_Abstract_Fe
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
-				'widget_label'       => __( 'Security', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wpshadow' ),
+				'license_level'      => 1,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-shield',
+				'category'           => 'security',
+				'priority'           => 10,
 				'sub_features'       => array(
 					'enable_rate_limiting'  => __( 'Enable Rate Limiting (Recommended)', 'plugin-wpshadow' ),
 					'track_failed_logins'   => __( 'Track Failed Login Attempts', 'plugin-wpshadow' ),

@@ -98,8 +98,11 @@ final class WPSHADOW_Feature_Visual_Regression extends WPSHADOW_Abstract_Feature
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'safety',
-				'widget_label'       => __( 'Safety Features', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Advanced safety and recovery features to protect your WordPress installation', 'plugin-wpshadow' ),
+			'license_level'      => 3,
+			'minimum_capability' => 'manage_options',
+			'icon'               => 'dashicons-format-gallery',
+			'category'           => 'diagnostics',
+			'priority'           => 50,
 			)
 		);
 		

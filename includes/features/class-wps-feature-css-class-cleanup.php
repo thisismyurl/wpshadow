@@ -33,8 +33,11 @@ final class WPSHADOW_Feature_CSS_Class_Cleanup extends WPSHADOW_Abstract_Feature
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'cleanup',
-				'widget_label'       => __( 'Code Cleanup', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Remove unnecessary code artifacts and optimize output', 'plugin-wpshadow' ),
+				'license_level'      => 1,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-editor-removeformatting',
+				'category'           => 'performance',
+				'priority'           => 20,
 			)
 		);
 		

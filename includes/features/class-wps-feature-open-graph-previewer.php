@@ -31,14 +31,12 @@ final class WPSHADOW_Feature_Open_Graph_Previewer extends WPSHADOW_Abstract_Feat
 				'version'            => '1.0.0',
 				'default_enabled'    => true,
 				'widget_group'       => 'seo',
-				'widget_label'       => __( 'SEO & Social Media', 'plugin-wpshadow' ),
-				'widget_description' => __( 'SEO and social media optimization features', 'plugin-wpshadow' ),
+				'license_level'      => 1,
+				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-share',
 				'category'           => 'seo',
 				'priority'           => 15,
-				'dashboard'          => 'overview',
-				'widget_column'      => 'left',
-				'widget_priority'    => 20,
+
 			)
 		);
 	}

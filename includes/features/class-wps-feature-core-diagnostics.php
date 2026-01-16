@@ -24,8 +24,11 @@ class WPSHADOW_Feature_Core_Diagnostics extends WPSHADOW_Abstract_Feature {
 				'version'            => '1.0.0',
 				'default_enabled'    => true,
 				'widget_group'       => 'diagnostics',
-				'widget_label'       => __( 'Diagnostics & Monitoring', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Health checks and monitoring features', 'plugin-wpshadow' ),
+				'license_level'      => 1,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-admin-tools',
+				'category'           => 'diagnostics',
+				'priority'           => 30,
 			)
 		);
 	}

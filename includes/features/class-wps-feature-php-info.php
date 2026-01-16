@@ -41,17 +41,13 @@ final class WPSHADOW_Feature_PHP_Info extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'server-diagnostics',
-				'widget_label'       => __( 'Server Diagnostics', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Server environment and configuration tools', 'plugin-wpshadow' ),
 				// Unified metadata.
 				'license_level'      => 1, // Free for everyone.
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-admin-generic',
 				'category'           => 'debugging',
 				'priority'           => 20,
-				'dashboard'          => 'overview',
-				'widget_column'      => 'left',
-				'widget_priority'    => 20,
+
 			)
 		);
 	}

@@ -33,8 +33,11 @@ final class WPSHADOW_Feature_Critical_CSS extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Resource Optimization', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Optimize how resources are loaded and delivered', 'plugin-wpshadow' ),
+				'license_level'      => 2,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-performance',
+				'category'           => 'performance',
+				'priority'           => 15,
 			)
 		);
 		

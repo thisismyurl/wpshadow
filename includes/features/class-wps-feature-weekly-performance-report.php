@@ -39,8 +39,11 @@ class WPSHADOW_Feature_Weekly_Performance_Report extends WPSHADOW_Abstract_Featu
 				'version'            => '1.0.0',
 				'default_enabled'    => false,
 				'widget_group'       => 'diagnostics',
-				'widget_label'       => __( 'Diagnostics & Monitoring', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Health checks and monitoring features', 'plugin-wpshadow' ),
+				'license_level'      => 2,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-email',
+				'category'           => 'monitoring',
+				'priority'           => 45,
 			)
 		);
 

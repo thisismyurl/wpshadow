@@ -134,17 +134,13 @@ final class WPSHADOW_Feature_Two_Factor_Auth extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
-				'widget_label'       => __( 'Security', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wpshadow' ),
 				// Unified metadata.
 				'license_level'      => 2, // Free registered users.
 				'minimum_capability' => 'read',
 				'icon'               => 'dashicons-lock',
 				'category'           => 'security',
 				'priority'           => 15,
-				'dashboard'          => 'overview',
-				'widget_column'      => 'right',
-				'widget_priority'    => 15,
+
 			)
 		);
 		

@@ -34,8 +34,6 @@ final class WPSHADOW_Feature_Consent_Checks extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
-				'widget_label'       => __( 'Privacy & Compliance', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Tools for GDPR and privacy compliance', 'plugin-wpshadow' ),
 			)
 		);
 		

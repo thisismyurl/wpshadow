@@ -36,8 +36,6 @@ final class WPSHADOW_Feature_Hotlink_Protection extends WPSHADOW_Abstract_Featur
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'security',
-				'widget_label'       => __( 'Security', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wpshadow' ),
 			)
 		);
 		

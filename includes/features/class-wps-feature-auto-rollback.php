@@ -49,8 +49,6 @@ final class WPSHADOW_Feature_Auto_Rollback extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'advanced',
-				'widget_label'       => __( 'Safety Features', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Advanced safety and recovery features to protect your WordPress installation', 'plugin-wpshadow' ),
 			)
 		);
 		

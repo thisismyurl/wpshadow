@@ -50,17 +50,13 @@ final class WPSHADOW_Feature_Email_Test extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'debugging',
-				'widget_label'       => __( 'Debugging & Diagnostics', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Tools for diagnosing and resolving site issues', 'plugin-wpshadow' ),
 				// Unified metadata.
 				'license_level'      => 1, // Free for everyone.
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-email',
 				'category'           => 'debugging',
 				'priority'           => 15,
-				'dashboard'          => 'overview',
-				'widget_column'      => 'right',
-				'widget_priority'    => 15,
+
 			)
 		);
 	}

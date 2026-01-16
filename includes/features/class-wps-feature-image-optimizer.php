@@ -36,16 +36,12 @@ final class WPSHADOW_Feature_Image_Optimizer extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'media',
-				'widget_label'       => __( 'Media Optimization', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Image and media optimization tools', 'plugin-wpshadow' ),
 				'license_level'      => 2,
 				'minimum_capability' => 'upload_files',
 				'icon'               => 'dashicons-format-image',
 				'category'           => 'performance',
 				'priority'           => 15,
-				'dashboard'          => 'overview',
-				'widget_column'      => 'left',
-				'widget_priority'    => 15,
+
 			)
 		);
 		

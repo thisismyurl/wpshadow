@@ -44,8 +44,11 @@ class WPSHADOW_Feature_Tips_Coach extends WPSHADOW_Abstract_Feature {
 				'version'            => '1.0.0',
 				'default_enabled'    => true,
 				'widget_group'       => 'diagnostics',
-				'widget_label'       => __( 'Diagnostics & Monitoring', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Health checks and monitoring features', 'plugin-wpshadow' ),
+				'license_level'      => 1,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-welcome-learn-more',
+				'category'           => 'diagnostics',
+				'priority'           => 40,
 			)
 		);
 	}

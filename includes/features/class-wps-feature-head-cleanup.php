@@ -33,8 +33,11 @@ final class WPSHADOW_Feature_Head_Cleanup extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Performance & Security', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Remove bloat and unnecessary scripts that impact security and page speed', 'plugin-wpshadow' ),
+				'license_level'      => 1,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-editor-removeformatting',
+				'category'           => 'performance',
+				'priority'           => 20,
 				'sub_features'       => array(
 					'remove_emoji'          => __( 'Remove Emoji Scripts (Improves performance)', 'plugin-wpshadow' ),
 					'remove_generator'      => __( 'Remove WP Generator Meta Tag (Security)', 'plugin-wpshadow' ),

@@ -36,16 +36,12 @@ final class WPSHADOW_Feature_CDN_Integration extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 			'widget_group'       => 'advanced',
-			'widget_label'       => __( 'Advanced Features', 'plugin-wpshadow' ),
-				'widget_description' => __( 'CDN and delivery optimization', 'plugin-wpshadow' ),
 				'license_level'      => 3,
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-networking',
 				'category'           => 'performance',
 				'priority'           => 20,
-				'dashboard'          => 'overview',
-				'widget_column'      => 'right',
-				'widget_priority'    => 20,
+
 			)
 		);
 		

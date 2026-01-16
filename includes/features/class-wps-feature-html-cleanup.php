@@ -33,8 +33,6 @@ final class WPSHADOW_Feature_HTML_Cleanup extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 			'widget_group'       => 'advanced',
-			'widget_label'       => __( 'Advanced Features', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Remove unnecessary code artifacts and optimize output', 'plugin-wpshadow' ),
 			)
 		);
 		

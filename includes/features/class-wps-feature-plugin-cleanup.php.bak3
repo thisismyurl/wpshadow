@@ -40,6 +40,8 @@ final class WPSHADOW_Feature_Plugin_Cleanup extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 			'widget_group'       => 'performance',
+			'widget_label'       => __( 'Performance Options', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Clean up admin interface and plugin management', 'plugin-wpshadow' ),
 			'license_level'      => 1,
 			'minimum_capability' => 'manage_options',
 			'icon'               => 'dashicons-admin-plugins',
@@ -47,8 +49,6 @@ final class WPSHADOW_Feature_Plugin_Cleanup extends WPSHADOW_Abstract_Feature {
 			'priority'           => 20,
 		)
 	);
-
-	$this->plugin_availability = array(
 			'contact_form_7' => function_exists( 'wpcf7_contact_form' ),
 			'woocommerce'    => function_exists( 'is_woocommerce' ),
 		);

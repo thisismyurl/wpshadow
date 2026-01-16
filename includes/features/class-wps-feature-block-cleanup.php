@@ -33,8 +33,6 @@ final class WPSHADOW_Feature_Block_Cleanup extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'performance',
-				'widget_label'       => __( 'Performance Options', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Performance optimization settings', 'plugin-wpshadow' ),
 			)
 		);
 		

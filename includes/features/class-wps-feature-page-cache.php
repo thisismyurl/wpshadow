@@ -46,16 +46,12 @@ final class WPSHADOW_Feature_Page_Cache extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 			'widget_group'       => 'advanced',
-			'widget_label'       => __( 'Advanced Features', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Caching and performance optimization', 'plugin-wpshadow' ),
 				'license_level'      => 2,
 				'minimum_capability' => 'manage_options',
 				'icon'               => 'dashicons-performance',
 				'category'           => 'performance',
 				'priority'           => 10,
-				'dashboard'          => 'overview',
-				'widget_column'      => 'left',
-				'widget_priority'    => 10,
+
 			)
 		);
 	}

@@ -69,8 +69,11 @@ final class WPSHADOW_Feature_Conflict_Sandbox extends WPSHADOW_Abstract_Feature 
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
 				'widget_group'       => 'debugging',
-				'widget_label'       => __( 'Debugging & Diagnostics', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Tools for diagnosing and resolving site conflicts', 'plugin-wpshadow' ),
+				'license_level'      => 2,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-admin-tools',
+				'category'           => 'diagnostics',
+				'priority'           => 50,
 			)
 		);
 	}

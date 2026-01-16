@@ -33,8 +33,11 @@ final class WPSHADOW_Feature_Skiplinks extends WPSHADOW_Abstract_Feature {
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 				'widget_group'       => 'accessibility',
-				'widget_label'       => __( 'UX & Accessibility', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Improve user experience and accessibility standards', 'plugin-wpshadow' ),
+				'license_level'      => 1,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-universal-access',
+				'category'           => 'accessibility',
+				'priority'           => 20,
 			)
 		);
 

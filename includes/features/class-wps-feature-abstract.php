@@ -69,17 +69,31 @@ abstract class WPSHADOW_Abstract_Feature implements WPSHADOW_Feature_Interface {
 		$this->version            = (string) ( $config['version'] ?? '1.0.0' );
 		$this->default_enabled    = (bool) ( $config['default_enabled'] ?? false );
 		$this->widget_group       = sanitize_key( (string) ( $config['widget_group'] ?? 'general' ) );
-		$this->widget_label       = (string) ( $config['widget_label'] ?? __( 'General Features', 'plugin-wpshadow' ) );
-		$this->widget_description = (string) ( $config['widget_description'] ?? __( 'Miscellaneous features.', 'plugin-wpshadow' ) );
+		
+		// Get widget label and description from centralized config if not explicitly provided.
+		if ( isset( $config['widget_label'] ) ) {
+			$this->widget_label = (string) $config['widget_label'];
+		} else {
+			$this->widget_label = \WPShadow\CoreSupport\WPSHADOW_Widget_Groups::get_label( $this->widget_group );
+		}
+		
+		if ( isset( $config['widget_description'] ) ) {
+			$this->widget_description = (string) $config['widget_description'];
+		} else {
+			$this->widget_description = \WPShadow\CoreSupport\WPSHADOW_Widget_Groups::get_description( $this->widget_group );
+		}
+		
 		$this->license_level      = max( 1, min( 5, (int) ( $config['license_level'] ?? 1 ) ) );
 		$this->minimum_capability = (string) ( $config['minimum_capability'] ?? 'manage_options' );
 		$this->sub_features       = (array) ( $config['sub_features'] ?? array() );
 		$this->icon               = (string) ( $config['icon'] ?? 'dashicons-admin-generic' );
 		$this->category           = sanitize_key( (string) ( $config['category'] ?? 'general' ) );
 		$this->priority           = (int) ( $config['priority'] ?? 10 );
-		$this->dashboard          = sanitize_key( (string) ( $config['dashboard'] ?? 'overview' ) );
-		$this->widget_column      = (string) ( $config['widget_column'] ?? 'left' );
-		$this->widget_priority    = (int) ( $config['widget_priority'] ?? 10 );
+		
+		// Get default dashboard, column, and widget priority from centralized config if not provided.
+		$this->dashboard       = isset( $config['dashboard'] ) ? sanitize_key( (string) $config['dashboard'] ) : \WPShadow\CoreSupport\WPSHADOW_Widget_Groups::get_dashboard( $this->widget_group );
+		$this->widget_column   = isset( $config['widget_column'] ) ? (string) $config['widget_column'] : \WPShadow\CoreSupport\WPSHADOW_Widget_Groups::get_column( $this->widget_group );
+		$this->widget_priority = isset( $config['widget_priority'] ) ? (int) $config['widget_priority'] : \WPShadow\CoreSupport\WPSHADOW_Widget_Groups::get_priority( $this->widget_group );
 	}
 
 	public function get_id(): string {

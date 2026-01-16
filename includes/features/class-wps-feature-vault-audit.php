@@ -25,8 +25,11 @@ class WPSHADOW_Feature_Vault_Audit extends WPSHADOW_Abstract_Feature {
 				'version'            => '1.0.0',
 				'default_enabled'    => true,
 				'widget_group'       => 'advanced',
-				'widget_label'       => __( 'Advanced Features', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Powerful features for diagnostics and specialized functionality', 'plugin-wpshadow' ),
+				'license_level'      => 2,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-backup',
+				'category'           => 'diagnostics',
+				'priority'           => 30,
 			)
 		);
 	}

@@ -33,8 +33,11 @@ final class WPSHADOW_Feature_Image_Lazy_Loading extends WPSHADOW_Abstract_Featur
 				'default_enabled'    => true,
 				'version'            => '1.0.0',
 			'widget_group'       => 'image-optimization',
-			'widget_label'       => __( 'Image Optimization', 'plugin-wpshadow' ),
-				'widget_description' => __( 'Optimize images and page load performance', 'plugin-wpshadow' ),
+				'license_level'      => 1,
+				'minimum_capability' => 'manage_options',
+				'icon'               => 'dashicons-format-image',
+				'category'           => 'performance',
+				'priority'           => 25,
 			)
 		);
 		
