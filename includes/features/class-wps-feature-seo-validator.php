@@ -426,12 +426,34 @@ class WPSHADOW_Feature_SEO_Validator extends WPSHADOW_Abstract_Feature {
 			return $result;
 		}
 
-		// Validate XML structure.
+		// Validate content type if present.
+		if ( ! empty( $content_type ) && false === stripos( $content_type, 'xml' ) && false === stripos( $content_type, 'text' ) ) {
+			$result['issues'][] = sprintf(
+				/* translators: %s: content type */
+				__( 'Unexpected content type: %s (expected XML)', 'plugin-wpshadow' ),
+				esc_html( $content_type )
+			);
+		}
+
+		// Validate XML structure with security precautions.
 		$previous_errors = libxml_use_internal_errors( true );
-		$xml             = simplexml_load_string( $body );
-		$xml_errors      = libxml_get_errors();
+		
+		// Disable external entity loading to prevent XXE attacks.
+		// Note: libxml_disable_entity_loader() is deprecated in PHP 8.0+, but LIBXML_NOENT flag handles this.
+		if ( PHP_VERSION_ID < 80000 ) {
+			$previous_entity_loader = libxml_disable_entity_loader( true );
+		}
+		
+		// Use LIBXML_NONET to disable network access and prevent XXE.
+		$xml        = simplexml_load_string( $body, 'SimpleXMLElement', LIBXML_NONET | LIBXML_NOCDATA );
+		$xml_errors = libxml_get_errors();
 		libxml_clear_errors();
 		libxml_use_internal_errors( $previous_errors );
+		
+		// Restore entity loader state for older PHP versions.
+		if ( PHP_VERSION_ID < 80000 && isset( $previous_entity_loader ) ) {
+			libxml_disable_entity_loader( $previous_entity_loader );
+		}
 
 		if ( false === $xml || ! empty( $xml_errors ) ) {
 			$result['status']  = 'error';
@@ -467,8 +489,29 @@ class WPSHADOW_Feature_SEO_Validator extends WPSHADOW_Abstract_Feature {
 
 		// Check for required namespaces.
 		$namespaces = $xml->getNamespaces( true );
-		if ( empty( $namespaces ) || ! isset( $namespaces[''] ) ) {
-			$issues[] = __( 'Missing required XML namespace declaration.', 'plugin-wpshadow' );
+		$expected_namespace = 'http://www.sitemaps.org/schemas/sitemap/0.9';
+		
+		// Check if the proper sitemap namespace is present.
+		$has_sitemap_namespace = false;
+		if ( ! empty( $namespaces ) ) {
+			foreach ( $namespaces as $prefix => $uri ) {
+				if ( $uri === $expected_namespace ) {
+					$has_sitemap_namespace = true;
+					break;
+				}
+			}
+		}
+		
+		// Also check default namespace.
+		if ( ! $has_sitemap_namespace ) {
+			$default_namespace = $xml->getNamespaces( false );
+			if ( isset( $default_namespace[''] ) && $default_namespace[''] === $expected_namespace ) {
+				$has_sitemap_namespace = true;
+			}
+		}
+		
+		if ( ! $has_sitemap_namespace ) {
+			$issues[] = __( 'Missing required sitemap namespace (http://www.sitemaps.org/schemas/sitemap/0.9).', 'plugin-wpshadow' );
 			$recommendations[] = __( 'Sitemap should declare the namespace xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"', 'plugin-wpshadow' );
 		}
 
