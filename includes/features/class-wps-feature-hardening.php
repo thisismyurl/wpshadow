@@ -8,6 +8,7 @@
  * - Directory listing protection
  * - Secure salts validation
  * - File permissions check
+ * - HTTP Strict Transport Security (HSTS) header
  *
  * @package WPShadow\CoreSupport
  * @since 1.2601.73001
@@ -32,7 +33,7 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 			array(
 				'id'                 => 'security-hardening',
 				'name'               => __( 'One-Click Security Hardening', 'plugin-wpshadow' ),
-				'description'        => __( 'Applies common hardening steps in one toggle: disable XML-RPC if not needed, restrict wp-json exposure, prevent directory listing, validate security salts, and check file permissions. Reduces attack surface, limits information leakage, and aligns with best practices while keeping necessary features available when explicitly required by themes, plugins, or integrations.', 'plugin-wpshadow' ),
+				'description'        => __( 'Applies common hardening steps in one toggle: disable XML-RPC if not needed, restrict wp-json exposure, prevent directory listing, validate security salts, check file permissions, and enable HTTP Strict Transport Security (HSTS) to force HTTPS connections. Reduces attack surface, limits information leakage, prevents downgrade attacks, and aligns with best practices while keeping necessary features available when explicitly required by themes, plugins, or integrations.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
 				'default_enabled'    => false,
 				'version'            => '1.0.0',
@@ -64,6 +65,9 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 
 		// Apply directory listing protection.
 		add_action( 'admin_init', array( $this, 'protect_directory_listing' ), 5 );
+
+		// Add HSTS (HTTP Strict Transport Security) header.
+		add_action( 'send_headers', array( $this, 'add_hsts_header' ) );
 	}
 
 	/**
@@ -113,6 +117,27 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 			__( 'You are not currently logged in.', 'plugin-wpshadow' ),
 			array( 'status' => 401 )
 		);
+	}
+
+	/**
+	 * Add HTTP Strict Transport Security (HSTS) header.
+	 *
+	 * Forces browsers to always use HTTPS for the domain, preventing downgrade attacks.
+	 * Only applied when the site is accessed via HTTPS.
+	 *
+	 * @return void
+	 */
+	public function add_hsts_header(): void {
+		// Only add HSTS header if site is accessed via HTTPS.
+		if ( ! is_ssl() ) {
+			return;
+		}
+
+		// HSTS header with:
+		// - max-age: 31536000 seconds (1 year)
+		// - includeSubDomains: Apply to all subdomains
+		// - preload: Allow inclusion in browser preload lists
+		header( 'Strict-Transport-Security: max-age=31536000; includeSubDomains; preload' );
 	}
 
 	/**
