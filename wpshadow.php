@@ -24,10 +24,11 @@ declare(strict_types=1);
 namespace WPShadow;
 
 use WPShadow\CoreSupport\WPSHADOW_Feature_Core_Diagnostics;
-use WPShadow\CoreSupport\WPSHADOW_Feature_Image_Smart_Focus;
-use WPShadow\CoreSupport\WPSHADOW_Feature_Vault_Audit;
-use WPShadow\CoreSupport\WPSHADOW_Feature_Vulnerability_Watch;
-use WPShadow\CoreSupport\WPSHADOW_Feature_Script_Deferral;
+// ========================================================
+// FREE FEATURES - use statements below
+// PAID FEATURES - moved to wpshadow-pro.php
+// ========================================================
+
 use WPShadow\CoreSupport\WPSHADOW_Feature_Asset_Version_Removal;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Head_Cleanup;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Block_Cleanup;
@@ -43,31 +44,13 @@ use WPShadow\CoreSupport\WPSHADOW_Feature_jQuery_Cleanup;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Block_CSS_Cleanup;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Interactivity_Cleanup;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Consent_Checks;
-use WPShadow\CoreSupport\WPSHADOW_Feature_Hardening;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Iframe_Busting;
 use WPShadow\CoreSupport\WPSHADOW_Feature_HTTP_SSL_Audit;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Registry;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Image_Lazy_Loading;
-use WPShadow\CoreSupport\WPSHADOW_Feature_Asset_Minification;
-use WPShadow\CoreSupport\WPSHADOW_Feature_Database_Cleanup;
-use WPShadow\CoreSupport\WPSHADOW_Feature_Auto_Rollback;
-use WPShadow\CoreSupport\WPSHADOW_Feature_Visual_Regression;
-use WPShadow\CoreSupport\WPSHADOW_Feature_Weekly_Performance_Report;
-use WPShadow\CoreSupport\WPSHADOW_Feature_Conditional_Loading;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Google_Fonts_Disabler;
-use WPShadow\CoreSupport\WPSHADOW_Feature_Critical_CSS;
-use WPShadow\CoreSupport\WPSHADOW_Feature_Script_Optimizer;
-use WPShadow\CoreSupport\WPSHADOW_Feature_Conflict_Sandbox;
-use WPShadow\CoreSupport\WPSHADOW_Feature_Smart_Recommendations;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Core_Integrity;
-use WPShadow\CoreSupport\WPSHADOW_Feature_Firewall;
-use WPShadow\CoreSupport\WPSHADOW_Feature_Malware_Scanner;
-use WPShadow\CoreSupport\WPSHADOW_Feature_Traffic_Monitor;
-use WPShadow\CoreSupport\WPSHADOW_Feature_Image_Optimizer;
-use WPShadow\CoreSupport\WPSHADOW_Feature_Page_Cache;
-use WPShadow\CoreSupport\WPSHADOW_Feature_CDN_Integration;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Maintenance_Cleanup;
-use WPShadow\CoreSupport\WPSHADOW_Feature_Performance_Alerts;
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -285,15 +268,15 @@ function wpshadow_hide_disabled_submenus(): void {
  * @return void
  */
 function WPSHADOW_register_core_features(): void {
-	// Sample features.
+	// ====================================================================
+	// FREE FEATURES (License Level 1-2)
+	// ====================================================================
+
+	// Core diagnostics.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Core_Diagnostics() );
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Vault_Audit() );
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Vulnerability_Watch() );
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Image_Smart_Focus() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Favicon_Checker() );
 
 	// Performance optimization features.
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Script_Deferral() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Asset_Version_Removal() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Head_Cleanup() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Block_Cleanup() );
@@ -309,19 +292,9 @@ function WPSHADOW_register_core_features(): void {
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Block_CSS_Cleanup() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Interactivity_Cleanup() );
 	
-	// New performance optimization features.
+	// Free performance optimization features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Image_Lazy_Loading() );
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Asset_Minification() );
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Database_Cleanup() );
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Conditional_Loading() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Google_Fonts_Disabler() );
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Critical_CSS() );
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Script_Optimizer() );
-
-	// Reporting and analytics features.
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Weekly_Performance_Report() );
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Performance_Alerts() );
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Smart_Recommendations() );
 
 	// Privacy and compliance features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Consent_Checks() );
@@ -329,38 +302,25 @@ function WPSHADOW_register_core_features(): void {
 	// Accessibility and mobile features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Mobile_Friendliness() );
 	
-	// Security features.
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Hardening() );
+	// Security features (free tier).
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Iframe_Busting() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_HTTP_SSL_Audit() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Hotlink_Protection() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Core_Integrity() );
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Firewall() );
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Malware_Scanner() );
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Traffic_Monitor() );
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Two_Factor_Auth() );
-	
-	// Monitoring features.
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Uptime_Monitor() );
-
-	// Advanced performance features.
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Image_Optimizer() );
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Page_Cache() );
-	register_WPSHADOW_feature( new WPSHADOW_Feature_CDN_Integration() );
 
 	// Tool features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Maintenance_Cleanup() );
-	register_WPSHADOW_feature( new WPSHADOW_Feature_SEO_Validator() );
-	// Safety features.
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Auto_Rollback() );
-	// Debugging features.
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Conflict_Sandbox() );
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Visual_Regression() );
 	
 	// SEO and social media features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Open_Graph_Previewer() );
-	// SEO and monitoring features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Broken_Link_Checker() );
+
+	// ====================================================================
+	// PAID FEATURES (License Level 3+)
+	// ====================================================================
+	// Paid features are now loaded by wpshadow-pro.php via hook:
+	// do_action( 'wpshadow_pro_register_features' );
+	// See _PAID_FEATURES_BACKUP.php for reference
 }
 
 /**
@@ -717,26 +677,6 @@ function wpshadow_init(): void {
 	require_once WPSHADOW_PATH . 'includes/class-wps-health-score-widget.php';
 	\WPShadow\CoreSupport\WPSHADOW_Health_Score_Widget::init();
 
-	// Load feature interface and abstract class before feature implementations.
-	require_once WPSHADOW_PATH . 'includes/features/interface-wps-feature.php';
-	require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-abstract.php';
-
-	// Load Maintenance Cleanup feature.
-	require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-maintenance-cleanup.php';
-
-	// Load Core Integrity feature.
-	require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-core-integrity.php';
-
-	// Load advanced performance features.
-	require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-image-optimizer.php';
-	require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-firewall.php';
-	require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-page-cache.php';
-	require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-cdn-integration.php';
-	require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-malware-scanner.php';
-	require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-traffic-monitor.php';
-	require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-two-factor-auth.php';
-	require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-uptime-monitor.php';
-
 	// Load System Report Generator for comprehensive debug information.
 	require_once WPSHADOW_PATH . 'includes/class-wps-system-report-generator.php';
 	\WPShadow\CoreSupport\WPSHADOW_System_Report_Generator::init();
@@ -799,11 +739,11 @@ function wpshadow_init(): void {
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/class-wps-widget-groups.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/class-wps-widget-registry.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/class-wps-dashboard-registry.php' );
+
+	// ========================================================================
+	// FREE FEATURES (License Level 1-2)
+	// ========================================================================
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-core-diagnostics.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-vault-audit.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-vulnerability-watch.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-image-smart-focus.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-script-deferral.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-asset-version-removal.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-head-cleanup.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-block-cleanup.php' );
@@ -818,29 +758,25 @@ function wpshadow_init(): void {
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-block-css-cleanup.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-interactivity-cleanup.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-consent-checks.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-hardening.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-iframe-busting.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-hotlink-protection.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-a11y-audit.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-mobile-friendliness.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-tips-coach.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-image-lazy-loading.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-asset-minification.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-database-cleanup.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-auto-rollback.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-weekly-performance-report.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-performance-alerts.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-smart-recommendations.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-conditional-loading.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-google-fonts-disabler.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-critical-css.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-script-optimizer.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-conflict-sandbox.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-visual-regression.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-open-graph-previewer.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-broken-link-checker.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-seo-validator.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-favicon-checker.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-color-contrast-checker.php' );
+
+	// ========================================================================
+	// PAID FEATURES - Now loaded by wpshadow-pro.php
+	// ========================================================================
+	// License Level 3+ features moved to wpshadow-pro.php
+	// - See _PAID_FEATURES_BACKUP.php for reference
+	// - wpshadow-pro.php registers them via wpshadow_register_features hook
+
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/wps-feature-functions.php' );
 	
 	// Initialize Registry System.
@@ -848,13 +784,18 @@ function wpshadow_init(): void {
 	\WPShadow\CoreSupport\WPSHADOW_Widget_Registry::init();
 	\WPShadow\CoreSupport\WPSHADOW_Dashboard_Registry::init();
 	
+	// Register free features and trigger Pro plugin to register paid features
 	add_action( 'wpshadow_register_features', __NAMESPACE__ . '\\WPSHADOW_register_core_features' );
+	
+	// ====================================================================
+	// ALLOW PRO PLUGIN TO REGISTER PAID FEATURES
+	// ====================================================================
+	// wpshadow-pro.php hooks into this action to register paid features
+	// Fire the registration hook to load both free and paid features
+	do_action( 'wpshadow_register_features' );
 	
 	// Initialize Tips Coach feature
 	\WPShadow\CoreSupport\WPSHADOW_Feature_Tips_Coach::init();
-
-	// Initialize Weekly Performance Report feature
-	\WPShadow\CoreSupport\WPSHADOW_Feature_Weekly_Performance_Report::init();
 
 	// Initialize Open Graph Previewer feature
 	\WPShadow\CoreSupport\WPSHADOW_Feature_Open_Graph_Previewer::init();
