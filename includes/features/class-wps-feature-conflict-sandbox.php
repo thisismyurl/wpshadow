@@ -260,11 +260,14 @@ final class WPSHADOW_Feature_Conflict_Sandbox extends WPSHADOW_Abstract_Feature 
 		setcookie(
 			self::COOKIE_NAME,
 			$session_id,
-			time() + DAY_IN_SECONDS,
-			COOKIEPATH,
-			COOKIE_DOMAIN,
-			is_ssl(),
-			true // HTTP only.
+			array(
+				'expires'  => time() + DAY_IN_SECONDS,
+				'path'     => COOKIEPATH,
+				'domain'   => COOKIE_DOMAIN,
+				'secure'   => is_ssl(),
+				'httponly' => true,
+				'samesite' => 'Lax',
+			)
 		);
 	}
 
@@ -277,11 +280,14 @@ final class WPSHADOW_Feature_Conflict_Sandbox extends WPSHADOW_Abstract_Feature 
 		setcookie(
 			self::COOKIE_NAME,
 			'',
-			time() - 3600,
-			COOKIEPATH,
-			COOKIE_DOMAIN,
-			is_ssl(),
-			true
+			array(
+				'expires'  => time() - 3600,
+				'path'     => COOKIEPATH,
+				'domain'   => COOKIE_DOMAIN,
+				'secure'   => is_ssl(),
+				'httponly' => true,
+				'samesite' => 'Lax',
+			)
 		);
 	}
 
