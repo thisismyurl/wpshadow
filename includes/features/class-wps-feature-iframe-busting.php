@@ -166,7 +166,7 @@ final class WPSHADOW_Feature_Iframe_Busting extends WPSHADOW_Abstract_Feature {
 		/* WPShadow Frame-Buster */
 		(function() {
 			if (top !== self) {
-				top.location.replace(location);
+				top.location.href = self.location.href;
 			}
 		})();
 		</script>
