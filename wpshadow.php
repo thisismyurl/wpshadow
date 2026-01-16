@@ -313,6 +313,7 @@ function WPSHADOW_register_core_features(): void {
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Consent_Checks() );
 	// Security features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Hardening() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Hotlink_Protection() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Core_Integrity() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Firewall() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Malware_Scanner() );
@@ -784,6 +785,7 @@ function wpshadow_init(): void {
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-interactivity-cleanup.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-consent-checks.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-hardening.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-hotlink-protection.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-a11y-audit.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-tips-coach.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-image-lazy-loading.php' );
