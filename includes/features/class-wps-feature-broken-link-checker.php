@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class WPSHADOW_Feature_Broken_Link_Checker extends WPSHADOW_Abstract_Feature {
+final class WPSHADOW_Feature_Broken_Link_Checker extends WPSHADOW_Abstract_Feature {
 	/**
 	 * Initialize the feature.
 	 */
@@ -365,7 +365,7 @@ class WPSHADOW_Feature_Broken_Link_Checker extends WPSHADOW_Abstract_Feature {
 
 				if ( $status['is_broken'] ) {
 					$broken_links[] = array(
-						'id'          => md5( $url . $post_id . time() ),
+						'id'          => md5( $url . $post_id ),
 						'url'         => $url,
 						'post_id'     => $post_id,
 						'source'      => 'content',
@@ -383,14 +383,18 @@ class WPSHADOW_Feature_Broken_Link_Checker extends WPSHADOW_Abstract_Feature {
 		// Log activity
 		if ( class_exists( '\\WPShadow\\CoreSupport\\WPSHADOW_Activity_Logger' ) ) {
 			\WPShadow\CoreSupport\WPSHADOW_Activity_Logger::log(
-				'info',
 				'broken_link_checker',
 				sprintf(
 					/* translators: 1: number of links checked, 2: number of broken links */
 					__( 'Checked %1$d links and found %2$d broken links.', 'plugin-wpshadow' ),
 					$checked,
 					count( $broken_links )
-				)
+				),
+				array(
+					'links_checked' => $checked,
+					'broken_links'  => count( $broken_links ),
+				),
+				'broken_link_checker'
 			);
 		}
 
