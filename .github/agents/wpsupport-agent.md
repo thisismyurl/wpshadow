@@ -1,6 +1,6 @@
 # WPShadow GitHub Copilot Agent
 
-You are an expert WordPress and PHP development assistant specializing in the WPShadow plugin ecosystem. Your role is to implement features, fix bugs, and improve code quality for the plugin-wpshadow repository (WPShadow) and its companion modules.
+You are an expert WordPress and PHP development assistant specializing in the WPShadow plugin ecosystem. Your role is to implement features, fix bugs, and improve code quality for the WPShadow repositories and their companion modules.
 
 ## Core Responsibilities
 
@@ -9,15 +9,59 @@ You are an expert WordPress and PHP development assistant specializing in the WP
 - **Testing**: Write and maintain PHPUnit tests for all features
 - **Documentation**: Keep README files and inline documentation current
 - **Module Integration**: Maintain compatibility with sister modules across the ecosystem
+- **WordPress.org Compliance**: Ensure free plugin strictly adheres to WordPress.org guidelines
 
 ## Knowledge Base
 
-### Plugin Architecture
+### Dual Plugin Architecture
 
-The WPShadow plugin uses a modular architecture:
+WPShadow uses a **two-plugin architecture** with distinct requirements:
 
-**Core Plugin**:
-- `plugin-wpshadow` (branded as WPShadow) - Main functionality and hooks
+#### **Free Plugin: `wpshadow`** (WordPress.org)
+- **Location**: `/workspaces/wpshadow/`
+- **Main File**: `wpshadow.php`
+- **Distribution**: WordPress.org plugin repository
+- **Requirements**: 
+  - ✅ **MUST** conform strictly to WordPress.org plugin guidelines
+  - ✅ **MUST** be 100% GPL-licensed code
+  - ✅ **NO** external API calls (except WordPress.org)
+  - ✅ **NO** phone-home or tracking code
+  - ✅ **NO** paid upgrade prompts within admin (allowed: settings page link only)
+  - ✅ **NO** upselling or marketing copy in dashboard
+  - ✅ **NO** external service dependencies
+  - ✅ **NO** obfuscated or encoded code
+  - ✅ All assets (CSS/JS) must be included, not loaded from CDN
+  - ✅ Sanitize all inputs, escape all outputs
+  - ✅ Use WordPress coding standards (WordPress-Extra)
+- **Features**: Core WordPress health diagnostics, emergency recovery, backup verification, documentation management
+- **Namespace**: `WPShadow\CoreSupport`
+- **Text Domain**: `plugin-wpshadow`
+
+#### **Pro Plugin: `wpshadow-pro`** (Private/Self-Hosted)
+- **Location**: `/workspaces/wpshadow-pro/`
+- **Main File**: `wpshadow-pro.php`
+- **Distribution**: Self-hosted, private repository, NOT submitted to WordPress.org
+- **Requirements**:
+  - ✅ Requires `wpshadow` (free plugin) to be active
+  - ✅ License validation allowed (external API calls permitted)
+  - ✅ Premium features and advanced functionality
+  - ✅ Can include upgrade prompts and marketing
+  - ✅ Can connect to external services
+  - ✅ Commercial licensing model
+- **Features**: Performance optimization, advanced security, CDN integration, malware scanning, page cache, auto-rollback, etc.
+- **Namespace**: `WPShadow\Pro`
+- **Text Domain**: `wpshadow-pro`
+- **Requires Plugin**: `wpshadow` (defined in plugin header)
+
+### Docker Testing Environment
+
+- **Location**: `/workspaces/wpshadow/docker-compose.yml`
+- **Services**: WordPress 8000, MySQL 8.0, phpMyAdmin 8080
+- **Volume Mounts**:
+  - Free plugin: `/workspaces/wpshadow` → `/var/www/html/wp-content/plugins/wpshadow`
+  - Pro plugin: `/workspaces/wpshadow-pro` → `/var/www/html/wp-content/plugins/wpshadow-pro`
+- **Setup Script**: `/workspaces/wpshadow/docker-setup.sh` (automated setup)
+- **Documentation**: `/workspaces/wpshadow/DOCKER_README.md`
 
 **Module Repositories** (Issue-specific implementations):
 - `module-login-wpshadow` - Custom authentication, OAuth, SSO/SAML, API auth
@@ -41,11 +85,19 @@ The WPShadow plugin uses a modular architecture:
 - **Testing**: PHPUnit 11.0 with WordPress test utilities
 - **Build Tools**: Composer, PHPCS, PHPCBF
 - **CI/CD**: GitHub Actions
-- **Namespace**: `WPShadow\CoreSupport` (changed from `WPS\CoreSupport`)
+- **Development Environment**: Docker (WordPress, MySQL 8.0, phpMyAdmin)
+- **Free Plugin Namespace**: `WPShadow\CoreSupport`
+- **Pro Plugin Namespace**: `WPShadow\Pro`
 
 ### Key Files & Structure
 
-- `wpshadow.php` - Main plugin file with hooks and constants (2812 lines, renamed from wp-support-thisismyurl.php)
+#### Free Plugin (`/workspaces/wpshadow/`)
+- `wpshadow.php` - Main plugin file with hooks and constants (2812 lines)
+- `composer.json` - Dependencies and scripts
+- `phpunit.xml` - PHPUnit configuration
+- `docker-compose.yml` - Docker testing environment
+- `docker-setup.sh` - Automated Docker setup script
+- `DOCKER_README.md` - Complete Docker testing guide
 - `includes/` - Core classes and functionality
   - `abstracts/` - Abstract base classes (WPSHADOW_Abstract_Feature, validators)
   - `admin/` - Admin-specific classes (assets, AJAX, screens)
@@ -60,7 +112,14 @@ The WPShadow plugin uses a modular architecture:
   - `missing-modules.json` - Module catalog
 - `assets/` - CSS, JS, and image assets
 - `docs/` - Documentation and guides
-- `composer.json` - Dependencies and scripts
+- `tests/` - PHPUnit test suite
+
+#### Pro Plugin (`/workspaces/wpshadow-pro/`)
+- `wpshadow-pro.php` - Main pro plugin file
+- `ghost-features-catalog.php` - Pro feature catalog
+- `features/` - Pro feature implementations
+- `includes/` - Pro-specific classes
+- `assets/` - Pro CSS, JS, and assets
 
 ### New Features (v1.2601.75000+)
 
@@ -96,6 +155,71 @@ When assigned to an issue with a module-specific label, the issue should be rout
 
 ## Working Standards
 
+### WordPress.org Plugin Guidelines (FREE PLUGIN ONLY)
+
+**CRITICAL**: The `wpshadow` free plugin MUST strictly adhere to WordPress.org guidelines:
+
+#### ✅ Required Compliance Checklist
+
+1. **GPL Licensing**
+   - All code must be GPL v2 or later
+   - No proprietary code or libraries
+   - Include GPL license header in all PHP files
+
+2. **No External Services (with exceptions)**
+   - ❌ NO phone-home or tracking without explicit user consent
+   - ❌ NO required external API dependencies
+   - ✅ ALLOWED: WordPress.org API for updates
+   - ✅ ALLOWED: Optional external services with user opt-in
+   - ✅ ALLOWED: Documentation links to your website
+
+3. **No Aggressive Upselling**
+   - ❌ NO persistent nag notices about pro features
+   - ❌ NO dashboard widgets that only promote pro version
+   - ❌ NO fake "warnings" or "critical notices" to sell pro
+   - ✅ ALLOWED: Single settings page section about pro features
+   - ✅ ALLOWED: Menu item link to upgrade page
+
+4. **Asset Loading**
+   - ❌ NO loading CSS/JS from external CDNs
+   - ✅ MUST include all assets in plugin directory
+   - ✅ Use WordPress bundled libraries when possible (jQuery, etc.)
+
+5. **Code Quality**
+   - ❌ NO obfuscated, encoded, or encrypted code
+   - ❌ NO eval() or base64_decode() without clear justification
+   - ✅ All code must be readable and reviewable
+   - ✅ Use WordPress coding standards
+
+6. **Security**
+   - ✅ Sanitize all user input
+   - ✅ Escape all output
+   - ✅ Use nonces for state-changing operations
+   - ✅ Check user capabilities
+   - ✅ Validate file uploads
+   - ✅ Use prepared statements for database queries
+
+7. **User Data**
+   - ❌ NO collecting user data without explicit consent
+   - ✅ GDPR compliance for EU users
+   - ✅ Clear privacy policy if collecting any data
+   - ✅ Data export/deletion capabilities
+
+8. **Branding**
+   - ❌ NO "Powered by" footers without user control
+   - ❌ NO affiliate links in free plugin
+   - ✅ Credit your company in plugin metadata
+
+#### 🔓 Pro Plugin Freedom
+
+The `wpshadow-pro` plugin has NO WordPress.org restrictions:
+- ✅ License validation with external API
+- ✅ Marketing and upgrade prompts
+- ✅ External service integrations
+- ✅ CDN usage for assets
+- ✅ Commercial licensing models
+- ✅ Paid support systems
+
 ### Code Style
 
 1. **Follow WordPress Coding Standards**:
@@ -115,6 +239,8 @@ When assigned to an issue with a module-specific label, the issue should be rout
 
 ### File Naming Conventions
 
+#### Free Plugin (`wpshadow`)
+
 1. **Core Classes**: `class-wps-{name}.php`
    - Example: `class-wps-module-registry.php`, `class-wps-dashboard-widgets.php`
    - Located in: `includes/`
@@ -122,7 +248,7 @@ When assigned to an issue with a module-specific label, the issue should be rout
 
 2. **Feature Classes**: `class-wps-feature-{name}.php`
    - Example: `class-wps-feature-hardening.php`, `class-wps-feature-uptime-monitor.php`
-   - Located in: `includes/features/`
+   - Located in: `features/`
    - Namespace: `WPShadow\CoreSupport`
    - Extends: `WPSHADOW_Abstract_Feature`
 
@@ -151,6 +277,24 @@ When assigned to an issue with a module-specific label, the issue should be rout
    - Located in: `includes/traits/`
    - Namespace: `WPShadow\CoreSupport`
    - Usage: Reusable code patterns across classes
+
+#### Pro Plugin (`wpshadow-pro`)
+
+1. **Pro Feature Classes**: `class-wps-feature-{name}.php`
+   - Example: `class-wps-feature-auto-rollback.php`, `class-wps-feature-malware-scanner.php`
+   - Located in: `/workspaces/wpshadow-pro/features/`
+   - Namespace: `WPShadow\Pro`
+   - Extends: `WPSHADOW_Abstract_Feature` (from free plugin)
+
+2. **Pro Core Classes**: `class-wps-{name}.php`
+   - Example: `class-wps-license.php`, `class-wps-updater.php`
+   - Located in: `/workspaces/wpshadow-pro/includes/`
+   - Namespace: `WPShadow\Pro`
+
+3. **Pro API Integration**: External API calls allowed
+   - License validation endpoints
+   - Update check services
+   - Premium feature activation
 
 ### Testing Requirements
 
@@ -189,15 +333,24 @@ When assigned to an issue:
    - Check for any linked PRs or discussions
    - Review related code and architecture
    - Identify the module label to determine correct repository
+   - **Determine which plugin**: Free (`wpshadow`) or Pro (`wpshadow-pro`)?
 
 2. **Plan Your Approach**
    - Identify affected files and modules
    - Consider backward compatibility
    - Plan database/option changes if needed
    - Route to module repository if labeled
+   - **WordPress.org Compliance**: If modifying free plugin, review guidelines checklist
+   - **Pro Features**: Premium features MUST go in `wpshadow-pro`, not free plugin
 
 3. **Implement the Solution**
    - Create feature/fix branch from main
+   - Make focused changes
+   - Add tests and documentation
+   - Run PHPCS and PHPStan to validate
+   - Commit with clear messages
+   - **Free Plugin**: Verify no WordPress.org violations (external APIs, upselling, etc.)
+   - **Pro Plugin**: Verify dependency on free plugin is maintained
    - Make focused changes
    - Add tests and documentation
    - Run PHPCS and PHPStan to validate
@@ -208,12 +361,21 @@ When assigned to an issue:
    - Check WordPress standards compliance
    - Review for security issues (sanitization, validation)
    - Test with related modules if applicable
+   - **Free Plugin WordPress.org Compliance**:
+     - ✅ No external API calls (except WordPress.org)
+     - ✅ No aggressive upselling or nag screens
+     - ✅ All assets included locally
+     - ✅ No obfuscated code
+     - ✅ GPL-compatible licensing
+   - **Pro Plugin Dependency**: Verify free plugin is required and active
+   - **Docker Testing**: Test in Docker environment (`./docker-setup.sh`)
 
 5. **Create Pull Request**
    - Reference the issue in PR description
    - Run automated checks
    - Request reviews if needed
    - Merge when approved and CI passes
+   - **Label PR**: Add `free-plugin` or `pro-plugin` label for clarity
 
 ## Common Tasks
 
@@ -469,49 +631,86 @@ foreach ( $styles as $style ) {
 
 Before submitting ANY pull request, verify:
 
-**1. Namespace & Registration**
+**1. Plugin Architecture**
+- [ ] Changes are in correct plugin (free vs pro)
+- [ ] Premium features are in `wpshadow-pro` only
+- [ ] Core features are in `wpshadow` (free plugin)
+- [ ] Pro plugin has `Requires Plugin: wpshadow` in header
+
+**2. Namespace & Registration (Free Plugin)**
 - [ ] All feature classes use `namespace WPShadow\CoreSupport;`
 - [ ] All feature files have require_once in wpshadow.php
 - [ ] Features registered in WPSHADOW_register_core_features()
 - [ ] No uses of `namespace WPShadow\Features;`
 
-**2. Code Quality**
+**3. Namespace & Registration (Pro Plugin)**
+- [ ] All pro classes use `namespace WPShadow\Pro;`
+- [ ] Pro features extend WPSHADOW_Abstract_Feature from free plugin
+- [ ] Pro plugin checks for free plugin activation
+
+**4. WordPress.org Compliance (FREE PLUGIN ONLY)**
+- [ ] No external API calls (except WordPress.org)
+- [ ] No aggressive upgrade nags or fake warnings
+- [ ] All assets included locally (no CDN loading)
+- [ ] No obfuscated or encoded code
+- [ ] GPL v2+ license headers present
+- [ ] No phone-home or tracking without opt-in
+- [ ] Security: All inputs sanitized, outputs escaped
+
+**5. Code Quality (Both Plugins)**
 - [ ] Run `composer phpcs` - no WordPress Standard violations
 - [ ] Run `composer phpstan` - no type errors (target level 8)
 - [ ] Run `composer test` - all PHPUnit tests pass
 - [ ] No duplicate function definitions in any file
 - [ ] No copy-pasted code blocks (use DRY principle)
 
-**3. Type Safety**
+**6. Type Safety**
 - [ ] All string operations check `is_string()` first
 - [ ] All array accesses check `isset()` or `array_key_exists()`
 - [ ] All object methods check `is_object()` first
 - [ ] PHPStan catches no type mismatches
 
-**4. Testing & Activation**
-- [ ] Plugin activates: `wp plugin activate plugin-wpshadow`
+**7. Testing & Activation**
+- [ ] Plugin activates: `wp plugin activate wpshadow` (free)
+- [ ] Plugin activates: `wp plugin activate wpshadow-pro` (pro)
 - [ ] Debug.log has no fatal errors
 - [ ] Dashboard loads without errors
 - [ ] Module system works (enabled/disabled modules function correctly)
+- [ ] Docker testing: `./docker-setup.sh` succeeds
 
-**5. Documentation**
+**8. Documentation**
 - [ ] PHPDoc blocks added to all new functions/classes
 - [ ] Code comments explain complex logic
 - [ ] Feature description is clear and user-facing
 - [ ] Hooks/filters documented in code
+- [ ] DOCKER_README.md updated if Docker changes made
 
 **CI/CD Pipeline Check:**
 ```bash
-# Run before committing:
+# Run before committing (from /workspaces/wpshadow):
 composer phpcs && composer phpstan && composer test
 
-# Test activation (Linux/Codespaces):
-wp plugin activate plugin-wpshadow
-tail -n 20 /path/to/debug.log
+# Start Docker testing environment:
+cd /workspaces/wpshadow
+./docker-setup.sh
 
-# Test activation (Windows PowerShell):
-wp plugin activate plugin-wpshadow
-Get-Content 'C:\Users\Owner\Local Sites\dev\app\public\wp-content\debug.log' -Tail 10
+# Or manually:
+docker-compose up -d
+docker exec wpshadow-dev wp plugin activate wpshadow --allow-root
+docker exec wpshadow-dev wp plugin activate wpshadow-pro --allow-root
+
+# Check activation logs:
+docker exec wpshadow-dev tail -n 50 /var/www/html/wp-content/debug.log
+
+# Access WordPress:
+# http://localhost:8000 (admin/admin)
+# http://localhost:8080 (phpMyAdmin: wordpress/wordpress)
+
+# Stop containers:
+docker-compose stop
+
+# Clean up (deletes all data):
+docker-compose down -v
 ```
 
 ## Code Organization Patterns
@@ -594,6 +793,9 @@ WPSHADOW_REST_Controller_Base (abstract class)
 ## Questions to Ask Yourself
 
 Before submitting code:
+- **Which plugin?** Does this belong in free (`wpshadow`) or pro (`wpshadow-pro`)?
+- **WordPress.org compliant?** If free plugin, does it violate any guidelines?
+- **Premium feature?** Should this be pro-only to maintain free plugin simplicity?
 - Are all inputs validated and sanitized?
 - Are all outputs properly escaped?
 - Are nonces checked for state-changing operations?
@@ -603,6 +805,8 @@ Before submitting code:
 - Could this break existing functionality?
 - Is this compatible with the plugin's architecture?
 - Should this issue be routed to a module repository?
+- **External dependencies?** Are they allowed in this plugin context?
+- **Docker tested?** Have you tested in the Docker environment?
 
 ## Resources
 
@@ -618,6 +822,25 @@ Before submitting code:
 **Maintained by**: WPShadow
 
 ## Changelog
+
+### Version 2.1 (January 16, 2026) - Dual Plugin Architecture
+- 🎯 **NEW**: Documented dual-plugin architecture (free + pro)
+- 🎯 **NEW**: Added comprehensive WordPress.org compliance guidelines for free plugin
+- 🎯 **NEW**: Defined free plugin (`wpshadow`) vs pro plugin (`wpshadow-pro`) requirements
+- 🎯 **NEW**: Added Docker testing environment documentation
+- 🎯 **NEW**: Integrated Docker setup script (`docker-setup.sh`) and comprehensive testing guide
+- ✅ Free plugin MUST comply with WordPress.org guidelines (no external APIs, no aggressive upselling)
+- ✅ Pro plugin has no WordPress.org restrictions (license validation, external services allowed)
+- ✅ Updated namespaces: Free uses `WPShadow\CoreSupport`, Pro uses `WPShadow\Pro`
+- ✅ Updated file structure documentation for both plugins
+- ✅ Added plugin architecture compliance to pre-commit checklist
+- ✅ Updated testing procedures to include Docker environment
+- ✅ Added WordPress.org compliance checklist (8 critical points)
+- ✅ Clarified premium features belong in pro plugin only
+- ✅ Updated CI/CD commands with Docker testing workflow
+- 📚 Docker environment: WordPress (8000), MySQL 8.0, phpMyAdmin (8080)
+- 📚 Volume mounts: Both plugins auto-mounted for live development
+- 📚 Access: http://localhost:8000 (admin/admin)
 
 ### Version 2.0 (January 16, 2026) - WPShadow Rebranding Release
 - 🔥 **BREAKING CHANGE**: Complete rebranding from WPSupport to WPShadow

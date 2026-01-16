@@ -2,13 +2,30 @@
 
 This directory contains GitHub Copilot Agent definitions for the WPShadow plugin ecosystem.
 
+## Plugin Architecture
+
+WPShadow uses a **dual-plugin architecture**:
+
+1. **Free Plugin** (`wpshadow`) - WordPress.org compliant, GPL-licensed
+2. **Pro Plugin** (`wpshadow-pro`) - Self-hosted, commercial licensing
+
+See [ARCHITECTURE_SUMMARY.md](ARCHITECTURE_SUMMARY.md) for complete details.
+
 ## Available Agents
 
 ### WPShadow Agent (`wpsupport-agent.md`)
 
 The WPShadow Agent is configured to handle issues for:
-- `plugin-wpshadow` (primary repository)
+- `wpshadow` (free plugin - WordPress.org)
+- `wpshadow-pro` (pro plugin - self-hosted)
 - Related module repositories (via shared knowledge)
+
+**Key Features**:
+- WordPress.org compliance checking for free plugin
+- Dual-plugin architecture awareness
+- Docker testing environment integration
+- Comprehensive code quality standards
+- Security and performance best practices
 
 ## Using the Copilot Agent
 

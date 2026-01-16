@@ -15,8 +15,12 @@ services:
       WORDPRESS_DEBUG_LOG: /var/www/html/wp-content/debug.log
       WORDPRESS_DEBUG_DISPLAY: 'false'
     volumes:
-      - ./free:/var/www/html/wp-content/plugins/plugin-wpshadow
-      - ./pro:/var/www/html/wp-content/plugins/plugin-wpshadow-pro
+      # Mount the actual plugin directories from workspace
+      - /workspaces/wpshadow:/var/www/html/wp-content/plugins/wpshadow
+      - /workspaces/wpshadow-pro:/var/www/html/wp-content/plugins/wpshadow-pro
+      # Add themes directory for theme testing
+      - wp_themes:/var/www/html/wp-content/themes
+      # Persist WordPress core files
       - wp_data:/var/www/html
     depends_on:
       - mysql
@@ -63,6 +67,7 @@ services:
 volumes:
   db_data:
   wp_data:
+  wp_themes:
 
 networks:
   wpshadow-network:
