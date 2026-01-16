@@ -221,7 +221,7 @@ final class WPSHADOW_Feature_HTTP_SSL_Audit extends WPSHADOW_Abstract_Feature {
 			array(
 				'timeout'     => 10,
 				'redirection' => 0,
-				'sslverify'   => false, // We check SSL separately.
+				'sslverify'   => true,
 			)
 		);
 
@@ -279,7 +279,7 @@ final class WPSHADOW_Feature_HTTP_SSL_Audit extends WPSHADOW_Abstract_Feature {
 		);
 
 		// Check if site is using HTTPS.
-		if ( ! str_starts_with( $site_url, 'https://' ) ) {
+		if ( ! ( strpos( $site_url, 'https://' ) === 0 ) ) {
 			$results['error'] = __( 'Site is not using HTTPS', 'plugin-wpshadow' );
 			return $results;
 		}
@@ -307,9 +307,10 @@ final class WPSHADOW_Feature_HTTP_SSL_Audit extends WPSHADOW_Abstract_Feature {
 			)
 		);
 
-		// Suppress warnings as we'll handle errors gracefully.
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-		$stream = @stream_socket_client(
+		// Attempt connection and capture any errors.
+		$errno  = 0;
+		$errstr = '';
+		$stream = stream_socket_client(
 			"ssl://{$host}:{$port}",
 			$errno,
 			$errstr,
@@ -576,9 +577,9 @@ final class WPSHADOW_Feature_HTTP_SSL_Audit extends WPSHADOW_Abstract_Feature {
 	private function add_widget_script(): void {
 		?>
 		<script>
-		function wpshadowRunHttpSslAudit() {
+		function wpshadowRunHttpSslAudit(event) {
 			if (typeof jQuery === 'undefined') return;
-			var button = event.target;
+			var button = event ? event.target : this;
 			button.disabled = true;
 			button.textContent = '<?php echo esc_js( __( 'Running...', 'plugin-wpshadow' ) ); ?>';
 
