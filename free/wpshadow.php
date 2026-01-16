@@ -159,13 +159,7 @@ function wpshadow_render_settings( string $hub_id = '' ): void {
 		'side'
 	);
 
-	add_meta_box(
-		'wpshadow_settings_license',
-		__( 'License & Updates', 'plugin-wpshadow' ),
-		__NAMESPACE__ . '\\render_settings_license',
-		$screen->id,
-		'side'
-	);
+	// License settings moved to Pro plugin
 
 	// Initialize postboxes on this screen (drag/toggle) in footer.
 	add_action(
@@ -474,29 +468,6 @@ function wpshadow_deactivate(): void {
 }
 
 /**
- * Setup the vault directory for secure original storage.
- *
- * @return bool True on success, false on failure.
- */
-// Vault helpers moved to the Vault module. Keep a thin compatibility wrapper
-// for dashboard widgets that display key presence.
-function wpshadow_get_vault_key(): ?string {
-	if ( class_exists( '\\WPShadow\\VaultSupport\\WPSHADOW_Vault' ) ) {
-		// Prefer module-provided key.
-		if ( method_exists( '\\WPShadow\\VaultSupport\\WPSHADOW_Vault', 'get_current_key' ) ) {
-			$key = \WPShadow\VaultSupport\WPSHADOW_Vault::get_current_key();
-			return ! empty( $key ) ? (string) $key : null;
-		}
-	}
-	// Fallback to legacy storage if module not loaded yet.
-	if ( defined( 'wpshadow_VAULT_KEY' ) && WPSHADOW_VAULT_KEY ) {
-		return (string) WPSHADOW_VAULT_KEY;
-	}
-	$stored_key = get_option( 'wpshadow_vault_enc_key', '' );
-	return ! empty( $stored_key ) ? (string) $stored_key : null;
-}
-
-/**
  * Initialize the plugin.
  *
  * @return void
@@ -516,13 +487,7 @@ function wpshadow_init(): void {
 	require_once WPSHADOW_PATH . 'includes/helpers/wps-color-contrast-helpers.php';
 	require_once WPSHADOW_PATH . 'includes/traits/trait-wps-ajax-security.php';
 
-	// Load update server client for automatic updates.
-	require_once WPSHADOW_PATH . 'includes/class-wps-update-client.php';
-	\WPShadow\CoreSupport\WPSHADOW_Update_Client::init( WPSHADOW_BASENAME );
-
-	// Load license widget for dashboard.
-	require_once WPSHADOW_PATH . 'includes/class-wps-license-widget.php';
-	\WPShadow\CoreSupport\WPSHADOW_License_Widget::init();
+	// License widget moved to Pro plugin
 
 	// Load help content API for dynamic documentation.
 	require_once WPSHADOW_PATH . 'includes/class-wps-help-content-api.php';
@@ -549,23 +514,7 @@ function wpshadow_init(): void {
 	require_once WPSHADOW_PATH . 'includes/class-wps-feature-registry.php';
 	\WPShadow\CoreSupport\WPSHADOW_Feature_Registry::init();
 
-	// Load Ghost Features system for module feature discovery.
-	require_once WPSHADOW_PATH . 'includes/class-wps-ghost-features.php';
-	require_once WPSHADOW_PATH . 'includes/class-wps-feature-detector.php';
-	require_once WPSHADOW_PATH . 'includes/class-wps-features-discovery-widget.php';
-	require_once WPSHADOW_PATH . 'includes/ghost-features-catalog.php';
-	\WPShadow\CoreSupport\WPSHADOW_Ghost_Features::init();
-	\WPShadow\CoreSupport\WPSHADOW_Features_Discovery_Widget::init();
-
-	// TEMPORARILY DISABLED: DRY Hub initializer before loading modules.
-	// require_once WPSHADOW_PATH . 'includes/class-wps-module-hub-initializer.php';
-
-	// TEMPORARILY DISABLED: Module loader (manages independent module repositories).
-	// require_once WPSHADOW_PATH . 'includes/class-wps-module-loader.php';
-	// \WPShadow\CoreSupport\Module_Loader::init();
-
-	// Ghost features registration removed (function no longer exists).
-	// TODO: Re-implement ghost features if needed.
+	// Ghost Features and Module system moved to Pro plugin
 
 	// Load settings API (network + site with overrides).
 	require_once WPSHADOW_PATH . 'includes/class-wps-settings.php';
@@ -709,9 +658,7 @@ function wpshadow_init(): void {
 		}
 	);
 
-	// Load license utilities.
-	require_once WPSHADOW_PATH . 'includes/class-wps-license.php';
-	\WPShadow\CoreSupport\WPSHADOW_License::init();
+	// License utilities moved to Pro plugin
 
 	// Load registration handler.
 	require_once WPSHADOW_PATH . 'includes/class-wps-registration.php';
@@ -810,39 +757,12 @@ function wpshadow_init(): void {
 	// Load Spoke Base for spoke plugins (Image, Media, etc).
 	require_once WPSHADOW_PATH . 'includes/class-wps-spoke-base.php';
 
-	// Load Vault service (canonical implementation in vault-support plugin).
-	// Core aliases it for backward compatibility.
-	if ( ! class_exists( '\\WPShadow\\VaultSupport\\WPSHADOW_Vault' ) ) {
-		// Vault plugin not loaded yet; defer to vault-support plugin.
-		// If vault-support is active, it will provide WPSHADOW_Vault.
-		// Core will alias it when available.
-	}
+	// Vault moved to Pro plugin
 
-	// Always load the alias file which will create the alias if vault-support is available.
-	if ( file_exists( WPSHADOW_PATH . 'includes/class-wps-vault.php' ) ) {
-		require_once WPSHADOW_PATH . 'includes/class-wps-vault.php';
-	}
-
-	// Initialize Vault if available (via vault-support's implementation).
-	if ( class_exists( '\\WPShadow\\VaultSupport\\WPSHADOW_Vault' ) ) {
-		\WPShadow\VaultSupport\WPSHADOW_Vault::init();
-	}
-
-	// Load vault size monitoring (real-time alerts) - only if Vault is available.
-	if ( class_exists( '\\WPShadow\\VaultSupport\\WPSHADOW_Vault' ) ) {
-		require_once WPSHADOW_PATH . 'includes/class-wps-vault-size-monitor.php';
-		\WPShadow\CoreSupport\WPSHADOW_Vault_Size_Monitor::init();
-	}
-
-	// Load network license broadcaster for multisite (Super Admin push to all sites).
-	require_once WPSHADOW_PATH . 'includes/class-wps-network-license.php';
-	\WPShadow\CoreSupport\WPSHADOW_Network_License::init();
+	// Network license broadcaster moved to Pro plugin
 
 	// Load module downloader for resilient downloads.
 	require_once WPSHADOW_PATH . 'includes/class-wps-module-downloader.php';
-
-	// Load plugin upgrader for install/update flows.
-	require_once WPSHADOW_PATH . 'includes/class-wps-plugin-upgrader.php';
 
 	// Load module action handlers for AJAX install/update/activate.
 	require_once WPSHADOW_PATH . 'includes/class-wps-module-actions.php';
@@ -904,7 +824,7 @@ function wpshadow_init(): void {
 	add_action( 'wp_ajax_WPSHADOW_toggle_module', __NAMESPACE__ . '\\WPSHADOW_ajax_toggle_module' );
 	add_action( 'wp_ajax_WPSHADOW_install_module', __NAMESPACE__ . '\\WPSHADOW_ajax_install_module' );
 	add_action( 'wp_ajax_WPSHADOW_update_module', __NAMESPACE__ . '\\WPSHADOW_ajax_update_module' );
-	add_action( 'wp_ajax_WPSHADOW_broadcast_license', __NAMESPACE__ . '\\WPSHADOW_ajax_broadcast_license' );
+	// License broadcast AJAX action moved to Pro plugin
 	add_action( 'wp_ajax_WPSHADOW_save_metabox_state', __NAMESPACE__ . '\\WPSHADOW_ajax_save_metabox_state' );
 	add_action( 'wp_ajax_WPSHADOW_save_postbox_order', __NAMESPACE__ . '\\WPSHADOW_ajax_save_postbox_order' );
 	add_action( 'wp_ajax_WPSHADOW_save_postbox_state', __NAMESPACE__ . '\\WPSHADOW_ajax_save_postbox_state' );
@@ -2479,56 +2399,7 @@ function render_settings_dashboard(): void {
  *
  * @return void
  */
-function render_settings_license(): void {
-	$license_key    = get_option( 'wpshadow_license_key', '' );
-	$is_licensed    = ! empty( $license_key );
-	$auto_update    = (array) get_option( 'wpshadow_license_auto_update_types', array( 'minor', 'patch' ) );
-	$update_channel = get_option( 'wpshadow_license_update_channel', 'stable' );
-	?>
-	<form method="post" class="wps-settings-form" data-settings-group="license" style="max-width: 600px;">
-		<?php wp_nonce_field( 'wpshadow_settings_license', 'wpshadow_settings_nonce' ); ?>
-		<table class="form-table" role="presentation">
-			<tbody>
-				<tr>
-					<th scope="row"><?php esc_html_e( 'License Status', 'plugin-wpshadow' ); ?></th>
-					<td>
-						<p><?php echo $is_licensed ? '<span style="color: green;">✓ ' . esc_html__( 'Licensed', 'plugin-wpshadow' ) . '</span>' : '<span style="color: #999;">' . esc_html__( 'Not Licensed', 'plugin-wpshadow' ) . '</span>'; ?></p>
-						<p class="description"><?php esc_html_e( 'Updates are pulled from GitHub releases.', 'plugin-wpshadow' ); ?></p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><label for="wpshadow_license_key"><?php esc_html_e( 'License Key', 'plugin-wpshadow' ); ?></label></th>
-					<td>
-						<input type="password" id="wpshadow_license_key" name="wpshadow_license_key" value="<?php echo esc_attr( $license_key ); ?>" placeholder="<?php esc_attr_e( 'Enter license key', 'plugin-wpshadow' ); ?>" style="width: 100%; max-width: 300px;" />
-						<p class="description"><?php esc_html_e( 'Masked for security. Leave empty to disable licensing.', 'plugin-wpshadow' ); ?></p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><?php esc_html_e( 'Auto-Update', 'plugin-wpshadow' ); ?></th>
-					<td>
-						<label><input type="checkbox" name="wpshadow_license_auto_update_types[]" value="major" <?php checked( in_array( 'major', $auto_update, true ) ); ?> /> <?php esc_html_e( 'Major Versions', 'plugin-wpshadow' ); ?></label><br/>
-						<label><input type="checkbox" name="wpshadow_license_auto_update_types[]" value="minor" <?php checked( in_array( 'minor', $auto_update, true ) ); ?> /> <?php esc_html_e( 'Minor Versions', 'plugin-wpshadow' ); ?></label><br/>
-						<label><input type="checkbox" name="wpshadow_license_auto_update_types[]" value="patch" <?php checked( in_array( 'patch', $auto_update, true ) ); ?> /> <?php esc_html_e( 'Patch Updates', 'plugin-wpshadow' ); ?></label><br/>
-						<p class="description"><?php esc_html_e( 'Which update types to install automatically.', 'plugin-wpshadow' ); ?></p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><label for="wpshadow_license_update_channel"><?php esc_html_e( 'Update Channel', 'plugin-wpshadow' ); ?></label></th>
-					<td>
-						<select id="wpshadow_license_update_channel" name="wpshadow_license_update_channel">
-							<option value="stable" <?php selected( $update_channel, 'stable' ); ?>><?php esc_html_e( 'Stable', 'plugin-wpshadow' ); ?></option>
-							<option value="beta" <?php selected( $update_channel, 'beta' ); ?>><?php esc_html_e( 'Beta', 'plugin-wpshadow' ); ?></option>
-							<option value="dev" <?php selected( $update_channel, 'dev' ); ?>><?php esc_html_e( 'Development', 'plugin-wpshadow' ); ?></option>
-						</select>
-						<p class="description"><?php esc_html_e( 'Release channel for updates.', 'plugin-wpshadow' ); ?></p>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<div class="wps-settings-save-status" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
-	</form>
-	<?php
-}
+// License settings function moved to Pro plugin
 
 /**
  * Render Privacy & GDPR settings widget.

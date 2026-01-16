@@ -319,5 +319,3 @@ class WPSHADOW_Network_License {
 	- Nonce verification and capability checks for security
 	- Automatic option update for each site (WPSHADOW_license_key)
 */
-
-

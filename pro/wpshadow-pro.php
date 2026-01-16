@@ -69,11 +69,68 @@ add_action( 'wpshadow_register_features', __NAMESPACE__ . '\\load_pro_features',
  */
 function load_pro_features(): void {
 	// ====================================================================
+	// LOAD FREE INFRASTRUCTURE (required by Pro)
+	// ====================================================================
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/helpers/wps-input-helpers.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/helpers/wps-ajax-helpers.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/helpers/wps-array-helpers.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/helpers/wps-color-contrast-helpers.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/traits/trait-wps-ajax-security.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/traits/trait-wps-json-response.php' );
+
+	// ====================================================================
+	// GITHUB & UPDATE LOGIC (Pro Only)
+	// ====================================================================
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'includes/class-wps-github-settings.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'includes/class-wps-github-updater.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'includes/class-wps-update-client.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'includes/class-wps-update-settings.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'includes/class-wps-update-simulator.php' );
+	\WPShadow\CoreSupport\WPSHADOW_Update_Client::init( WPSHADOW_PRO_BASENAME );
+
+	// ====================================================================
+	// GHOST FEATURES & MODULE SYSTEM (Pro Only)
+	// ====================================================================
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'includes/class-wps-ghost-features.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'includes/ghost-features-catalog.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'includes/class-wps-module-actions.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'includes/class-wps-module-bootstrap.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'includes/class-wps-module-downloader.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'includes/class-wps-module-hub-initializer.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'includes/class-wps-module-loader.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'includes/class-wps-module-registry.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'includes/class-wps-module-toggles.php' );
+
+	\WPShadow\CoreSupport\WPSHADOW_Ghost_Features::init();
+
+	// ====================================================================
+	// VAULT SYSTEM (Backup, Snapshots, Staging)
+	// ====================================================================
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'includes/class-wps-vault.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'includes/wps-vault-helpers.php' );
+
+	// ====================================================================
+	// LICENSE SYSTEM (Licensing & Updates)
+	// ====================================================================
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'includes/class-wps-license.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'includes/class-wps-license-widget.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'includes/class-wps-network-license.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'includes/api/class-wps-rest-license-controller.php' );
+	\WPShadow\CoreSupport\WPSHADOW_License::init();
+	\WPShadow\CoreSupport\WPSHADOW_License_Widget::init();
+	\WPShadow\CoreSupport\WPSHADOW_Network_License::init();
+
+	// ====================================================================
+	// PLUGIN INSTALLER & MODULE MANAGEMENT
+	// ====================================================================
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'includes/class-wps-plugin-upgrader.php' );
+
+	// ====================================================================
 	// LICENSE LEVEL 3+ FEATURES (27 Paid Features)
 	// ====================================================================
-	// Base classes (shared with Core)
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'features/interface-wps-feature.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'features/class-wps-feature-abstract.php' );
+	// Base classes (shared with Free)
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/interface-wps-feature.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-abstract.php' );
 
 	// License Level 3 (Business - 11 features)
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PRO_PATH . 'features/class-wps-feature-asset-minification.php' );
