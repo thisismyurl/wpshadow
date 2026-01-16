@@ -8,6 +8,7 @@
  * - Directory listing protection
  * - Secure salts validation
  * - File permissions check
+ * - HTTP Strict Transport Security (HSTS) header
  * - HTTPS enforcement (Enforce HTTPS Everywhere)
  *
  * @package WPShadow\CoreSupport
@@ -66,6 +67,8 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 		// Apply directory listing protection.
 		add_action( 'admin_init', array( $this, 'protect_directory_listing' ), 5 );
 
+		// Add HSTS (HTTP Strict Transport Security) header.
+		add_filter( 'wp_headers', array( $this, 'add_hsts_header' ) );
 		// HTTPS enforcement.
 		$this->enforce_https();
 	}
@@ -117,6 +120,30 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 			__( 'You are not currently logged in.', 'plugin-wpshadow' ),
 			array( 'status' => 401 )
 		);
+	}
+
+	/**
+	 * Add HTTP Strict Transport Security (HSTS) header.
+	 *
+	 * Forces browsers to always use HTTPS for the domain, preventing downgrade attacks.
+	 * Only applied when the site is accessed via HTTPS.
+	 *
+	 * @param array $headers The array of HTTP headers to be sent.
+	 * @return array Modified headers array with HSTS header.
+	 */
+	public function add_hsts_header( array $headers ): array {
+		// Only add HSTS header if site is accessed via HTTPS.
+		if ( ! is_ssl() ) {
+			return $headers;
+		}
+
+		// HSTS header with:
+		// - max-age: 31536000 seconds (1 year)
+		// - includeSubDomains: Apply to all subdomains
+		// - preload: Allow inclusion in browser preload lists
+		$headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains; preload';
+
+		return $headers;
 	}
 
 	/**
