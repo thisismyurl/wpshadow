@@ -383,7 +383,7 @@ final class WPSHADOW_Feature_Troubleshooting_Mode extends WPSHADOW_Abstract_Feat
 		$this->save_troubleshooting_state( $state );
 
 		// Set cookie.
-		setcookie( self::COOKIE_NAME, $token, time() + self::COOKIE_LIFETIME, COOKIEPATH, COOKIE_DOMAIN, is_ssl(), true );
+		setcookie( self::COOKIE_NAME, $token, time() + self::COOKIE_LIFETIME, COOKIEPATH, COOKIE_DOMAIN, true, true );
 
 		wp_send_json_success(
 			array(
@@ -405,7 +405,7 @@ final class WPSHADOW_Feature_Troubleshooting_Mode extends WPSHADOW_Abstract_Feat
 		delete_transient( self::TRANSIENT_KEY . $user_id );
 
 		// Clear cookie.
-		setcookie( self::COOKIE_NAME, '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN, is_ssl(), true );
+		setcookie( self::COOKIE_NAME, '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN, true, true );
 
 		wp_send_json_success(
 			array(
