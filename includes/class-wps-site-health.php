@@ -401,7 +401,7 @@ class WPSHADOW_Site_Health {
 		// Type safety checks.
 		if ( ! is_string( $site_url ) || ! is_string( $home_url ) ) {
 			return WPSHADOW_Health_Renderer::build_result(
-				__( 'Cannot check HTTPS status', 'plugin-wpshadow' ),
+				__( 'Couldn\'t check HTTPS status', 'plugin-wpshadow' ),
 				'recommended',
 				esc_html__( 'Site URL or Home URL is not properly configured.', 'plugin-wpshadow' ),
 				'wpshadow_https_enforcement',
@@ -1032,7 +1032,7 @@ class WPSHADOW_Site_Health {
 		return WPSHADOW_Health_Renderer::build_result(
 			__( 'Environment is incompatible', 'plugin-wpshadow' ),
 			'critical',
-			esc_html__( 'Your server environment does not meet minimum requirements. Heavy operations have been disabled to prevent errors.', 'plugin-wpshadow' ),
+			esc_html__( 'Your server needs to be updated to run all features safely. Some features are temporarily turned off.', 'plugin-wpshadow' ),
 			'wpshadow_environment_compatibility',
 			'',
 			'red'

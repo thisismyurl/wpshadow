@@ -373,8 +373,8 @@ class WPSHADOW_Dashboard_Layout {
 				'applyAll'       => __( 'All dashboards', 'plugin-wpshadow' ),
 				'cancel'         => __( 'Cancel', 'plugin-wpshadow' ),
 				'apply'          => __( 'Apply', 'plugin-wpshadow' ),
-				'refreshSuccess' => __( 'Database statistics refreshed successfully.', 'plugin-wpshadow' ),
-				'refreshError'   => __( 'Failed to refresh database statistics.', 'plugin-wpshadow' ),
+				'refreshSuccess' => __( 'Your stats are up to date.', 'plugin-wpshadow' ),
+				'refreshError'   => __( 'Stats didn\'t update. Try again?', 'plugin-wpshadow' ),
 			)
 		);
 	}
@@ -503,7 +503,7 @@ class WPSHADOW_Dashboard_Layout {
 		if ( self::save_layout( $context, $layout, $network ) ) {
 			wp_send_json_success( array( 'message' => __( 'Layout saved.', 'plugin-wpshadow' ) ) );
 		} else {
-			wp_send_json_error( array( 'message' => __( 'Failed to save layout.', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Layout didn\'t save. Try again?', 'plugin-wpshadow' ) ) );
 		}
 	}
 

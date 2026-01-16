@@ -212,7 +212,7 @@ class WPSHADOW_Dashboard_Widgets {
 			// Render the health widget with module context.
 			self::render_health_widget( $health_data, $module_name );
 		} catch ( \Exception $e ) {
-			echo '<div class="wps-widget-content"><p style="color: #d63638;"><strong>' . esc_html__( 'Error:', 'plugin-wpshadow' ) . '</strong> ' . esc_html( $e->getMessage() ) . '</p></div>';
+			echo '<div class="wps-widget-content"><p style="color: #d63638;"><strong>' . esc_html__( 'Looks like something didn\'t load:', 'plugin-wpshadow' ) . '</strong> ' . esc_html( $e->getMessage() ) . '</p></div>';
 
 		}
 	}
@@ -1235,7 +1235,7 @@ class WPSHADOW_Dashboard_Widgets {
 
 		// Color coding.
 		$health_color = 'critical' === $status ? '#d63638' : ( 'recommended' === $status ? '#dba617' : '#00a32a' );
-		$health_label = 'critical' === $status ? __( 'Critical', 'plugin-wpshadow' ) : ( 'recommended' === $status ? __( 'Warning', 'plugin-wpshadow' ) : __( 'Good', 'plugin-wpshadow' ) );
+		$health_label = 'critical' === $status ? __( 'Needs Attention', 'plugin-wpshadow' ) : ( 'recommended' === $status ? __( 'Could Be Better', 'plugin-wpshadow' ) : __( 'Looking Good', 'plugin-wpshadow' ) );
 		?>
 		<div class="wps-widget-content wps-system-health">
 			<!-- Health Score Badge -->
@@ -1258,11 +1258,11 @@ class WPSHADOW_Dashboard_Widgets {
 				</div>
 				<div style="text-align: center; padding: 10px; background: #f6f7f7; border-radius: 4px;">
 					<div style="font-size: 20px; font-weight: bold; color: #dba617;"><?php echo esc_html( $warning_count ); ?></div>
-					<div style="font-size: 11px; color: #666; margin-top: 2px;"><?php esc_html_e( 'Warnings', 'plugin-wpshadow' ); ?></div>
+					<div style="font-size: 11px; color: #666; margin-top: 2px;"><?php esc_html_e( 'To Review', 'plugin-wpshadow' ); ?></div>
 				</div>
 				<div style="text-align: center; padding: 10px; background: #f6f7f7; border-radius: 4px;">
 					<div style="font-size: 20px; font-weight: bold; color: #d63638;"><?php echo esc_html( $critical_count ); ?></div>
-					<div style="font-size: 11px; color: #666; margin-top: 2px;"><?php esc_html_e( 'Critical', 'plugin-wpshadow' ); ?></div>
+					<div style="font-size: 11px; color: #666; margin-top: 2px;"><?php esc_html_e( 'Needs Attention', 'plugin-wpshadow' ); ?></div>
 				</div>
 			</div>
 
@@ -1510,10 +1510,10 @@ class WPSHADOW_Dashboard_Widgets {
 				<div style="display: flex; gap: 10px; font-size: 12px; color: #666;">
 					<span><strong><?php echo esc_html( $counts['good'] ?? 0 ); ?></strong> <?php esc_html_e( 'Passed', 'plugin-wpshadow' ); ?></span>
 					<?php if ( ( $counts['warning'] ?? 0 ) > 0 ) : ?>
-						<span><strong style="color: #dba617;"><?php echo esc_html( $counts['warning'] ); ?></strong> <?php esc_html_e( 'Warnings', 'plugin-wpshadow' ); ?></span>
+						<span><strong style="color: #dba617;"><?php echo esc_html( $counts['warning'] ); ?></strong> <?php esc_html_e( 'To Review', 'plugin-wpshadow' ); ?></span>
 					<?php endif; ?>
 					<?php if ( ( $counts['critical'] ?? 0 ) > 0 ) : ?>
-						<span><strong style="color: #d63638;"><?php echo esc_html( $counts['critical'] ); ?></strong> <?php esc_html_e( 'Critical', 'plugin-wpshadow' ); ?></span>
+						<span><strong style="color: #d63638;"><?php echo esc_html( $counts['critical'] ); ?></strong> <?php esc_html_e( 'Needs Attention', 'plugin-wpshadow' ); ?></span>
 					<?php endif; ?>
 				</div>
 			</div>
@@ -1624,7 +1624,7 @@ class WPSHADOW_Dashboard_Widgets {
 		} elseif ( 'critical' === $resource_status['level'] ) {
 			$status_icon    = '✗';
 			$status_color   = '#d63638';
-			$status_message = __( 'Critical resource usage', 'plugin-wpshadow' );
+			$status_message = __( 'Your site is working hard right now', 'plugin-wpshadow' );
 		}
 
 		?>

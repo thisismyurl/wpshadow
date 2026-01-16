@@ -511,7 +511,7 @@ final class WPSHADOW_Feature_Database_Cleanup extends WPSHADOW_Abstract_Feature 
 	public function handle_manual_cleanup(): void {
 		// Verify nonce.
 		if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'wpshadow_run_database_cleanup' ) ) {
-			wp_die( esc_html__( 'Security check failed.', 'plugin-wpshadow' ) );
+			wp_die( esc_html__( 'Your session expired. Please refresh and try again.', 'plugin-wpshadow' ) );
 		}
 
 		// Verify permissions.

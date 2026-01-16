@@ -674,7 +674,7 @@ class WPSHADOW_System_Report_Generator {
 		$link_data = get_transient( 'wpshadow_report_' . $token );
 
 		if ( ! $link_data || ! is_array( $link_data ) ) {
-			wp_die( esc_html__( 'This report link is invalid or has expired.', 'plugin-wpshadow' ) );
+			wp_die( esc_html__( 'That report link didn\'t work. Please request a new one.', 'plugin-wpshadow' ) );
 		}
 
 		// Check if password required.

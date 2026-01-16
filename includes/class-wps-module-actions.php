@@ -213,7 +213,7 @@ class WPSHADOW_Module_Actions {
 
 		wp_send_json_success(
 			array(
-				'message'     => __( 'Module installed and activated successfully.', 'plugin-wpshadow' ),
+				'message'     => __( 'Module installed and activated.', 'plugin-wpshadow' ),
 				'plugin_base' => $upgrader->result,
 				'status'      => $status[ $slug ] ?? array(),
 			)
@@ -287,7 +287,7 @@ class WPSHADOW_Module_Actions {
 
 		self::respond_success(
 			array(
-				'message'     => __( 'Module updated successfully.', 'plugin-wpshadow' ),
+				'message'     => __( 'Module updated.', 'plugin-wpshadow' ),
 				'plugin_base' => $upgrader->result,
 				'status'      => $status[ $slug ] ?? array(),
 			)
@@ -344,7 +344,7 @@ class WPSHADOW_Module_Actions {
 
 		self::respond_success(
 			array(
-				'message' => __( 'Module activated successfully.', 'plugin-wpshadow' ),
+				'message' => __( 'Module activated.', 'plugin-wpshadow' ),
 				'status'  => $status[ $slug ] ?? array(),
 			)
 		);
@@ -389,7 +389,7 @@ class WPSHADOW_Module_Actions {
 
 		self::respond_success(
 			array(
-				'message' => __( 'Module deactivated successfully.', 'plugin-wpshadow' ),
+				'message' => __( 'Module deactivated.', 'plugin-wpshadow' ),
 				'status'  => $status[ $slug ] ?? array(),
 			)
 		);

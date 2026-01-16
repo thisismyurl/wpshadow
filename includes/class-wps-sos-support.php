@@ -201,7 +201,7 @@ class WPSHADOW_SOS_Support {
 	public static function handle_sos_submission(): void {
 		// Verify nonce.
 		if ( empty( $_POST['wpshadow_sos_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wpshadow_sos_nonce'] ) ), 'wpshadow_sos_submit' ) ) {
-			wp_die( esc_html__( 'Security check failed.', 'plugin-wpshadow' ) );
+			wp_die( esc_html__( 'Your session expired. Please refresh and try again.', 'plugin-wpshadow' ) );
 		}
 
 		// Collect form data.
@@ -225,7 +225,7 @@ class WPSHADOW_SOS_Support {
 		$incident_id = self::create_incident( $data );
 
 		if ( ! $incident_id ) {
-			wp_die( esc_html__( 'Failed to create incident. Please try again.', 'plugin-wpshadow' ) );
+			wp_die( esc_html__( 'Couldn\'t create your support request. Let\'s try again.', 'plugin-wpshadow' ) );
 		}
 
 		// Trigger notifications.

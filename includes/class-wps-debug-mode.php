@@ -433,8 +433,8 @@ class WPSHADOW_Debug_Mode {
 					<span class="wps-debug-bar-item wps-debug-errors">
 						<span class="dashicons dashicons-warning"></span>
 						<?php
-						// translators: %d: number of errors
-						printf( esc_html__( '%d Errors', 'plugin-wpshadow' ), (int) $error_count );
+						// translators: %d: number of issues
+						printf( esc_html__( '%d Issues', 'plugin-wpshadow' ), (int) $error_count );
 						?>
 					</span>
 				<?php endif; ?>
@@ -523,7 +523,7 @@ class WPSHADOW_Debug_Mode {
 		check_ajax_referer( 'wpshadow_debug_tools', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that.', 'plugin-wpshadow' ) ) );
 		}
 
 		$setting = \WPShadow\WPSHADOW_get_post_key( 'setting' );

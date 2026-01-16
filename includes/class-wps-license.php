@@ -444,7 +444,7 @@ class WPSHADOW_License {
 			return array(
 				'success'      => 0,
 				'failed'       => 0,
-				'errors'       => array( __( 'License key cannot be empty.', 'plugin-wpshadow' ) ),
+				'errors'       => array( __( 'Please enter your license key.', 'plugin-wpshadow' ) ),
 				'broadcast_id' => '',
 			);
 		}

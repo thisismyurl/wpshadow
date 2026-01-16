@@ -328,7 +328,7 @@ class WPSHADOW_Guided_Walkthroughs {
 
 		$progress = get_option( self::PROGRESS_KEY . '_' . get_current_user_id(), array() );
 		if ( empty( $progress ) || $progress['current_step'] <= 0 ) {
-			wp_send_json_error( array( 'message' => __( 'Cannot undo', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You\'re at the first step already.', 'plugin-wpshadow' ) ) );
 		}
 
 		$progress['current_step'] -= 1;

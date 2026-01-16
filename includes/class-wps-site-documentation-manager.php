@@ -637,7 +637,7 @@ class WPSHADOW_Site_Documentation_Manager {
 		$output .= '<ul>';
 		$output .= '<li>' . esc_html__( 'Check for plugin updates', 'plugin-wpshadow' ) . '</li>';
 		$output .= '<li>' . esc_html__( 'Run site audit', 'plugin-wpshadow' ) . '</li>';
-		$output .= '<li>' . esc_html__( 'Review error logs', 'plugin-wpshadow' ) . '</li>';
+		$output .= '<li>' . esc_html__( 'Check activity logs', 'plugin-wpshadow' ) . '</li>';
 		$output .= '<li>' . esc_html__( 'Verify backups working', 'plugin-wpshadow' ) . '</li>';
 		$output .= '</ul>';
 		$output .= '<p><em>' . esc_html__( 'Expected time: 1-2 hours', 'plugin-wpshadow' ) . '</em></p>';

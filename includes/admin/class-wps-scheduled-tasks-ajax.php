@@ -66,10 +66,10 @@ class WPSHADOW_Scheduled_Tasks_Ajax {
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'wpshadow_scheduled_tasks' ),
 				'strings' => array(
-					'confirmRemove' => __( 'Are you sure you want to remove this scheduled task? This action cannot be undone.', 'plugin-wpshadow' ),
+					'confirmRemove' => __( 'Remove this scheduled task? You\'ll need to set it up again if you change your mind.', 'plugin-wpshadow' ),
 					'confirmPause'  => __( 'Pause this scheduled task? It will not run until you resume it.', 'plugin-wpshadow' ),
-					'confirmDelete' => __( 'Delete this paused task permanently? This action cannot be undone.', 'plugin-wpshadow' ),
-					'error'         => __( 'An error occurred. Please try again.', 'plugin-wpshadow' ),
+					'confirmDelete' => __( 'Delete this paused task? You\'ll need to set it up again if you change your mind.', 'plugin-wpshadow' ),
+					'error'         => __( 'Something didn\'t work. Let\'s try again.', 'plugin-wpshadow' ),
 					'success'       => __( 'Task updated successfully.', 'plugin-wpshadow' ),
 				),
 			)
@@ -112,7 +112,7 @@ class WPSHADOW_Scheduled_Tasks_Ajax {
 		$result = wp_unschedule_event( $timestamp, $hook, $args );
 
 		if ( $result === false ) {
-			wp_send_json_error( array( 'message' => __( 'Failed to pause task', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Couldn\'t pause that task. Try again?', 'plugin-wpshadow' ) ) );
 		}
 
 		// Store paused task information
@@ -180,7 +180,7 @@ class WPSHADOW_Scheduled_Tasks_Ajax {
 		$result = wp_schedule_event( time(), $task_data['schedule'], $hook, $task_data['args'] );
 
 		if ( $result === false ) {
-			wp_send_json_error( array( 'message' => __( 'Failed to resume task', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Couldn\'t start that task again. Try again?', 'plugin-wpshadow' ) ) );
 		}
 
 		// Remove from paused list
@@ -233,7 +233,7 @@ class WPSHADOW_Scheduled_Tasks_Ajax {
 		$result = wp_unschedule_event( $timestamp, $hook, $args );
 
 		if ( $result === false ) {
-			wp_send_json_error( array( 'message' => __( 'Failed to remove task', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Couldn\'t remove that task. Try again?', 'plugin-wpshadow' ) ) );
 		}
 
 		// Log the action

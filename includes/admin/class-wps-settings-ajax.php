@@ -40,7 +40,7 @@ class WPSHADOW_Settings_Ajax {
 	 */
 	public static function handle_save_settings(): void {
 		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'wpshadow_settings_form' ) ) {
-			wp_send_json_error( array( 'message' => 'Security check failed' ) );
+			wp_send_json_error( array( 'message' => 'Your session expired. Please refresh and try again.' ) );
 		}
 
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -52,7 +52,7 @@ class WPSHADOW_Settings_Ajax {
 		$form_data = json_decode( $data, true );
 
 		if ( empty( $form_data ) || ! is_array( $form_data ) ) {
-			wp_send_json_error( array( 'message' => 'Invalid form data' ) );
+			wp_send_json_error( array( 'message' => 'Please check your form and try again.' ) );
 		}
 
 		$group = isset( $form_data['group'] ) ? sanitize_key( $form_data['group'] ) : '';
@@ -84,7 +84,7 @@ class WPSHADOW_Settings_Ajax {
 				break;
 
 			default:
-				wp_send_json_error( array( 'message' => 'Invalid settings group' ) );
+				wp_send_json_error( array( 'message' => 'Please select a settings group.' ) );
 		}
 
 		wp_send_json_success( array( 'message' => __( 'Settings saved successfully', 'plugin-wpshadow' ) ) );

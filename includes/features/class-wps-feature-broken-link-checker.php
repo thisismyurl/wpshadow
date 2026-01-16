@@ -95,7 +95,7 @@ final class WPSHADOW_Feature_Broken_Link_Checker extends WPSHADOW_Abstract_Featu
 	 */
 	public static function render_admin_page(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wpshadow' ) );
+			wp_die( esc_html__( 'You don\'t have permission to access this page.', 'plugin-wpshadow' ) );
 		}
 
 		$broken_links = self::get_broken_links();

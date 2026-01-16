@@ -178,7 +178,7 @@ class WPSHADOW_Magic_Link_Support {
 		// Validate token exists.
 		if ( ! isset( $links[ $token ] ) ) {
 			wp_die(
-				esc_html__( 'Invalid magic link.', 'plugin-wpshadow' ),
+				esc_html__( 'That link didn\'t work. Please request a new one.', 'plugin-wpshadow' ),
 				esc_html__( 'Access Denied', 'plugin-wpshadow' ),
 				array( 'response' => 403 )
 			);
@@ -223,7 +223,7 @@ class WPSHADOW_Magic_Link_Support {
 			if ( is_wp_error( $user_id ) ) {
 				wp_die(
 					esc_html( $user_id->get_error_message() ),
-					esc_html__( 'Login Error', 'plugin-wpshadow' ),
+					esc_html__( 'Login Issue', 'plugin-wpshadow' ),
 					array( 'response' => 500 )
 				);
 			}

@@ -79,7 +79,7 @@ class WPSHADOW_Troubleshooting_Wizard {
 				'fixes'       => array( 'enable_debug', 'increase_memory', 'disable_plugins', 'switch_theme' ),
 			),
 			'login_issues'      => array(
-				'title'       => __( 'Cannot Login', 'plugin-wpshadow' ),
+				'title'       => __( 'Login Issues', 'plugin-wpshadow' ),
 				'description' => __( 'Login page not working or redirecting', 'plugin-wpshadow' ),
 				'icon'        => 'dashicons-lock',
 				'patterns'    => array( 'wp-login.php', 'redirect loop', 'cookies are blocked', 'invalid username', 'too many redirects' ),
@@ -104,7 +104,7 @@ class WPSHADOW_Troubleshooting_Wizard {
 			),
 			'upload_fails'      => array(
 				'title'       => __( 'Upload Fails', 'plugin-wpshadow' ),
-				'description' => __( 'Cannot upload images or files', 'plugin-wpshadow' ),
+				'description' => __( 'Trouble uploading images or files', 'plugin-wpshadow' ),
 				'icon'        => 'dashicons-upload',
 				'patterns'    => array( 'upload', 'post_max_size', 'upload_max_filesize', 'permission denied', 'failed to write' ),
 				'checks'      => array( 'check_upload_limits', 'check_directory_permissions' ),

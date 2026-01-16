@@ -28,7 +28,7 @@ function WPSHADOW_ajax_toggle_module(): void {
 	$network = isset( $_POST['network'] ) && 'true' === $_POST['network'] && is_multisite();
 
 	if ( empty( $slug ) ) {
-		wp_send_json_error( array( 'message' => __( 'Invalid module slug.', 'plugin-wpshadow' ) ) );
+		wp_send_json_error( array( 'message' => __( 'We couldn\'t find that module.', 'plugin-wpshadow' ) ) );
 	}
 
 	// Update WPSHADOW_module_toggles array (unified toggle system).
@@ -108,7 +108,7 @@ function WPSHADOW_ajax_toggle_module(): void {
 				'user_id' => (int) $user->ID,
 			)
 		);
-		wp_send_json_error( array( 'message' => __( 'Failed to update settings.', 'plugin-wpshadow' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Settings didn\'t save. Let\'s try that again.', 'plugin-wpshadow' ) ) );
 	}
 }
 
@@ -129,8 +129,8 @@ function WPSHADOW_ajax_install_module(): void {
 	$user_name = $user && $user->exists() ? $user->display_name : __( 'System', 'plugin-wpshadow' );
 
 	if ( empty( $slug ) ) {
-		WPSHADOW_Vault::add_log( 'error', 0, __( 'Install failed: empty slug.', 'plugin-wpshadow' ), 'module_install' );
-		wp_send_json_error( array( 'message' => __( 'Invalid module slug.', 'plugin-wpshadow' ) ) );
+		WPSHADOW_Vault::add_log( 'error', 0, __( 'Please select a module to install.', 'plugin-wpshadow' ), 'module_install' );
+		wp_send_json_error( array( 'message' => __( 'Please select a module to install.', 'plugin-wpshadow' ) ) );
 	}
 
 	$catalog = WPSHADOW_Module_Registry::get_catalog_with_status();
@@ -178,7 +178,7 @@ function WPSHADOW_ajax_install_module(): void {
 	$result   = $upgrader->install( $download );
 
 	if ( is_wp_error( $result ) || ! $result ) {
-		$message = is_wp_error( $result ) ? $result->get_error_message() : __( 'Installation failed.', 'plugin-wpshadow' );
+		$message = is_wp_error( $result ) ? $result->get_error_message() : __( 'Installation didn\'t finish. Let\'s try again.', 'plugin-wpshadow' );
 		WPSHADOW_Vault::add_log(
 			'error',
 			0,
@@ -250,8 +250,8 @@ function WPSHADOW_ajax_update_module(): void {
 	$user_name = $user && $user->exists() ? $user->display_name : __( 'System', 'plugin-wpshadow' );
 
 	if ( empty( $slug ) ) {
-		WPSHADOW_Vault::add_log( 'error', 0, __( 'Update failed: empty slug.', 'plugin-wpshadow' ), 'module_update' );
-		wp_send_json_error( array( 'message' => __( 'Invalid module slug.', 'plugin-wpshadow' ) ) );
+		WPSHADOW_Vault::add_log( 'error', 0, __( 'Please select a module to update.', 'plugin-wpshadow' ), 'module_update' );
+		wp_send_json_error( array( 'message' => __( 'Please select a module to update.', 'plugin-wpshadow' ) ) );
 	}
 
 	$catalog   = WPSHADOW_Module_Registry::get_catalog_with_status();
@@ -311,7 +311,7 @@ function WPSHADOW_ajax_update_module(): void {
 	remove_filter( 'upgrader_package_options', $filter );
 
 	if ( is_wp_error( $result ) || ! $result ) {
-		$message = is_wp_error( $result ) ? $result->get_error_message() : __( 'Update failed.', 'plugin-wpshadow' );
+		$message = is_wp_error( $result ) ? $result->get_error_message() : __( 'Update didn\'t complete. Let\'s try again.', 'plugin-wpshadow' );
 		WPSHADOW_Vault::add_log(
 			'error',
 			0,
@@ -354,11 +354,11 @@ function WPSHADOW_ajax_update_module(): void {
  */
 function WPSHADOW_ajax_broadcast_license(): void {
 	if ( empty( $_POST['nonce'] ) ) {
-		wp_send_json_error( array( 'message' => __( 'Nonce failed.', 'plugin-wpshadow' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Your session expired. Please refresh and try again.', 'plugin-wpshadow' ) ) );
 	}
 
 	if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'wpshadow_broadcast_license' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Nonce verification failed.', 'plugin-wpshadow' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Your session expired. Please refresh and try again.', 'plugin-wpshadow' ) ) );
 	}
 
 	if ( ! is_multisite() ) {
@@ -374,7 +374,7 @@ function WPSHADOW_ajax_broadcast_license(): void {
 	$auto_broadcast = \WPShadow\WPSHADOW_get_post_int( 'auto_broadcast' );
 
 	if ( empty( $key ) ) {
-		wp_send_json_error( array( 'message' => __( 'License key cannot be empty.', 'plugin-wpshadow' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Please enter your license key.', 'plugin-wpshadow' ) ) );
 	}
 
 	// Parse site IDs from JSON.

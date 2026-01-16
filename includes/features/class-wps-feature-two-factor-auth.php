@@ -654,12 +654,7 @@ final class WPSHADOW_Feature_Two_Factor_Auth extends WPSHADOW_Abstract_Feature {
 			if ( $this->is_2fa_required( $user->ID ) ) {
 				return new \WP_Error(
 					'2fa_required',
-					__( '2FA is required for your account. Please set it up in your profile.', 'plugin-wpshadow' )
-				);
-			}
-			return $user;
-		}
-
+						__( 'Your account needs an extra security step. Let\'s set that up now in your profile.', 'plugin-wpshadow' )
 		// Check if device is trusted.
 		if ( $this->is_trusted_device( $user->ID ) ) {
 			return $user;
@@ -673,12 +668,7 @@ final class WPSHADOW_Feature_Two_Factor_Auth extends WPSHADOW_Abstract_Feature {
 			$_SESSION['wpshadow_2fa_user_id'] = $user->ID;
 			return new \WP_Error(
 				'2fa_required',
-				__( 'Please enter your two-factor authentication code.', 'plugin-wpshadow' )
-			);
-		}
-
-		// Verify TOTP code.
-		$secret = get_user_meta( $user->ID, self::SECRET_META_KEY, true );
+					__( 'Please enter your security code from your authenticator app.', 'plugin-wpshadow' )
 		if ( $this->verify_totp( $code, $secret ) ) {
 			// Success - mark device as trusted if requested.
 			if ( isset( $_POST['wpshadow_2fa_trust'] ) && get_option( 'wpshadow_two-factor-auth_trusted_devices', false ) ) {
@@ -711,7 +701,7 @@ final class WPSHADOW_Feature_Two_Factor_Auth extends WPSHADOW_Abstract_Feature {
 
 		return new \WP_Error(
 			'invalid_2fa_code',
-			__( 'Invalid two-factor authentication code.', 'plugin-wpshadow' )
+			__( 'That code didn\'t work. Let\'s try that again.', 'plugin-wpshadow' )
 		);
 	}
 
@@ -735,14 +725,14 @@ final class WPSHADOW_Feature_Two_Factor_Auth extends WPSHADOW_Abstract_Feature {
 	public function add_2fa_login_field(): void {
 		?>
 		<p class="wpshadow-2fa-field" style="display: none;">
-			<label for="wpshadow_2fa_code"><?php esc_html_e( '2FA Code', 'plugin-wpshadow' ); ?></label>
+			<label for="wpshadow_2fa_code"><?php esc_html_e( 'Security Code', 'plugin-wpshadow' ); ?></label>
 			<input type="text" name="wpshadow_2fa_code" id="wpshadow_2fa_code" class="input" size="20" autocomplete="off" pattern="[0-9]{6}" inputmode="numeric" />
 		</p>
 		<?php if ( get_option( 'wpshadow_two-factor-auth_trusted_devices', false ) ) : ?>
 		<p class="wpshadow-2fa-trust" style="display: none;">
 			<label>
 				<input type="checkbox" name="wpshadow_2fa_trust" value="1" />
-				<?php esc_html_e( 'Trust this device for 30 days', 'plugin-wpshadow' ); ?>
+				<?php esc_html_e( 'Remember this device for 30 days', 'plugin-wpshadow' ); ?>
 			</label>
 		</p>
 		<?php endif; ?>
@@ -782,7 +772,7 @@ final class WPSHADOW_Feature_Two_Factor_Auth extends WPSHADOW_Abstract_Feature {
 		$is_enabled = $this->is_2fa_enabled( $user->ID );
 		$stats = $this->get_user_statistics( $user->ID );
 		?>
-		<h2><?php esc_html_e( 'Two-Factor Authentication', 'plugin-wpshadow' ); ?></h2>
+		<h2><?php esc_html_e( 'Login Security', 'plugin-wpshadow' ); ?></h2>
 		<table class="form-table">
 			<tr>
 				<th><?php esc_html_e( 'Status', 'plugin-wpshadow' ); ?></th>
@@ -800,43 +790,42 @@ final class WPSHADOW_Feature_Two_Factor_Auth extends WPSHADOW_Abstract_Feature {
 			</tr>
 			<?php if ( $is_enabled ) : ?>
 			<tr>
-				<th><?php esc_html_e( 'Statistics', 'plugin-wpshadow' ); ?></th>
+				<th><?php esc_html_e( 'Activity', 'plugin-wpshadow' ); ?></th>
 				<td>
-					<p><?php echo esc_html( sprintf( __( 'Successful logins: %d', 'plugin-wpshadow' ), $stats['successful_logins'] ) ); ?></p>
-					<p><?php echo esc_html( sprintf( __( 'Failed attempts: %d', 'plugin-wpshadow' ), $stats['failed_attempts'] ) ); ?></p>
-					<p><?php echo esc_html( sprintf( __( 'Backup codes remaining: %d', 'plugin-wpshadow' ), $stats['remaining_backup_codes'] ) ); ?></p>
-					<p><?php echo esc_html( sprintf( __( 'Trusted devices: %d', 'plugin-wpshadow' ), $stats['trusted_devices'] ) ); ?></p>
+					<p><?php echo esc_html( sprintf( __( 'Times you\'ve logged in: %d', 'plugin-wpshadow' ), $stats['successful_logins'] ) ); ?></p>
+					<p><?php echo esc_html( sprintf( __( 'Emergency codes you have left: %d', 'plugin-wpshadow' ), $stats['remaining_backup_codes'] ) ); ?></p>
+					<p><?php echo esc_html( sprintf( __( 'Remembered devices: %d', 'plugin-wpshadow' ), $stats['trusted_devices'] ) ); ?></p>
 					<?php if ( $stats['last_login'] ) : ?>
-					<p><?php echo esc_html( sprintf( __( 'Last login: %s', 'plugin-wpshadow' ), wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $stats['last_login'] ) ) ); ?></p>
+					<p><?php echo esc_html( sprintf( __( 'Last time you logged in: %s', 'plugin-wpshadow' ), wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $stats['last_login'] ) ) ); ?></p>
 					<?php endif; ?>
 				</td>
 			</tr>
 			<tr>
-				<th><?php esc_html_e( 'Backup Codes', 'plugin-wpshadow' ); ?></th>
+				<th><?php esc_html_e( 'Emergency Codes', 'plugin-wpshadow' ); ?></th>
 				<td>
-					<button type="button" class="button" id="wpshadow-regenerate-backup-codes"><?php esc_html_e( 'Regenerate Backup Codes', 'plugin-wpshadow' ); ?></button>
-					<p class="description"><?php esc_html_e( 'Generate new backup codes. This will invalidate all existing codes.', 'plugin-wpshadow' ); ?></p>
+					<button type="button" class="button" id="wpshadow-regenerate-backup-codes"><?php esc_html_e( 'Get New Emergency Codes', 'plugin-wpshadow' ); ?></button>
+					<p class="description"><?php esc_html_e( 'Create a fresh set of emergency codes. Your old ones will stop working.', 'plugin-wpshadow' ); ?></p>
 				</td>
 			</tr>
 			<?php endif; ?>
 		</table>
 		
 		<div id="wpshadow-2fa-setup-modal" style="display: none;">
-			<h3><?php esc_html_e( 'Setup Two-Factor Authentication', 'plugin-wpshadow' ); ?></h3>
+			<h3><?php esc_html_e( 'Add Extra Security to Your Account', 'plugin-wpshadow' ); ?></h3>
 			<ol>
-				<li><?php esc_html_e( 'Install an authenticator app (Google Authenticator, Authy, etc.)', 'plugin-wpshadow' ); ?></li>
-				<li><?php esc_html_e( 'Scan the QR code below:', 'plugin-wpshadow' ); ?></li>
+				<li><?php esc_html_e( 'Get an authenticator app on your phone (like Google Authenticator or Authy)', 'plugin-wpshadow' ); ?></li>
+				<li><?php esc_html_e( 'Scan this code with your app:', 'plugin-wpshadow' ); ?></li>
 			</ol>
 			<div id="wpshadow-qr-code"></div>
-			<p><strong><?php esc_html_e( 'Secret Key:', 'plugin-wpshadow' ); ?></strong> <code id="wpshadow-secret-key"></code></p>
+			<p><strong><?php esc_html_e( 'Or enter this code manually:', 'plugin-wpshadow' ); ?></strong> <code id="wpshadow-secret-key"></code></p>
 			<p>
-				<label for="wpshadow-verify-code"><?php esc_html_e( 'Enter code from your app to verify:', 'plugin-wpshadow' ); ?></label>
+				<label for="wpshadow-verify-code"><?php esc_html_e( 'Now enter the 6-digit code from your app:', 'plugin-wpshadow' ); ?></label>
 				<input type="text" id="wpshadow-verify-code" pattern="[0-9]{6}" maxlength="6" />
-				<button type="button" class="button button-primary" id="wpshadow-verify-2fa"><?php esc_html_e( 'Verify', 'plugin-wpshadow' ); ?></button>
+				<button type="button" class="button button-primary" id="wpshadow-verify-2fa"><?php esc_html_e( 'Confirm', 'plugin-wpshadow' ); ?></button>
 			</p>
 			<div id="wpshadow-backup-codes-display" style="display: none;">
-				<h4><?php esc_html_e( 'Backup Codes', 'plugin-wpshadow' ); ?></h4>
-				<p><?php esc_html_e( 'Save these codes in a safe place. Each code can only be used once.', 'plugin-wpshadow' ); ?></p>
+				<h4><?php esc_html_e( 'Your Emergency Codes', 'plugin-wpshadow' ); ?></h4>
+				<p><?php esc_html_e( 'Save these somewhere safe. Each one works only once if you can\'t access your authenticator app.', 'plugin-wpshadow' ); ?></p>
 				<pre id="wpshadow-backup-codes"></pre>
 			</div>
 		</div>
@@ -859,16 +848,16 @@ final class WPSHADOW_Feature_Two_Factor_Auth extends WPSHADOW_Abstract_Feature {
 					if (response.success) {
 						$('#wpshadow-backup-codes').text(response.data.backup_codes.join('\\n'));
 						$('#wpshadow-backup-codes-display').show();
-						alert('2FA enabled successfully!');
+						alert('Great! Your account is now more secure.');
 						location.reload();
 					} else {
-						alert('Invalid code. Please try again.');
+						alert('That code didn\'t work. Let\'s try again.');
 					}
 				});
 			});
 
 			$('#wpshadow-disable-2fa').on('click', function() {
-				if (confirm('Are you sure you want to disable 2FA?')) {
+				if (confirm('Are you sure you want to turn this off?')) {
 					$.post(ajaxurl, { action: 'WPSHADOW_disable_2fa', _wpnonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_2fa' ) ); ?>' }, function(response) {
 						if (response.success) {
 							location.reload();
@@ -878,7 +867,7 @@ final class WPSHADOW_Feature_Two_Factor_Auth extends WPSHADOW_Abstract_Feature {
 			});
 
 			$('#wpshadow-regenerate-backup-codes').on('click', function() {
-				if (confirm('This will invalidate all existing backup codes. Continue?')) {
+				if (confirm('Your old codes will stop working. Get new ones?')) {
 					$.post(ajaxurl, { action: 'WPSHADOW_generate_backup_codes', _wpnonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_2fa' ) ); ?>' }, function(response) {
 						if (response.success) {
 							alert('Backup codes:\\n\\n' + response.data.codes.join('\\n'));

@@ -547,7 +547,7 @@ class WPSHADOW_Activity_Logger {
 			self::EVENT_MEDIA_FILE_ADDED   => __( 'Media File Uploaded', 'plugin-wpshadow' ),
 			self::EVENT_MEDIA_FILE_EDITED  => __( 'Media File Edited', 'plugin-wpshadow' ),
 			self::EVENT_MEDIA_FILE_DELETED => __( 'Media File Deleted', 'plugin-wpshadow' ),
-			self::EVENT_ERROR              => __( 'Error', 'plugin-wpshadow' ),
+			self::EVENT_ERROR              => __( 'Issue', 'plugin-wpshadow' ),
 		);
 
 		return $labels[ $event_type ] ?? ucwords( str_replace( '_', ' ', $event_type ) );
@@ -841,8 +841,8 @@ class WPSHADOW_Activity_Logger {
 	public static function log_vault_verified( int $files_verified, int $files_failed = 0, string $module_source = 'vault' ): bool {
 		if ( $files_failed > 0 ) {
 			$description = sprintf(
-				/* translators: 1: Files verified, 2: Files failed */
-				__( 'Vault verified: %1$d files passed, %2$d failed', 'plugin-wpshadow' ),
+				/* translators: 1: Files verified, 2: Files that need review */
+				__( 'Vault check: %1$d files confirmed, %2$d need review', 'plugin-wpshadow' ),
 				$files_verified,
 				$files_failed
 			);
@@ -883,7 +883,7 @@ class WPSHADOW_Activity_Logger {
 				)
 				: __( 'License verified successfully', 'plugin-wpshadow' );
 		} else {
-			$description = __( 'License verification failed', 'plugin-wpshadow' );
+			$description = __( 'Couldn\'t verify your license. Let\'s check that again.', 'plugin-wpshadow' );
 		}
 
 		return self::log(

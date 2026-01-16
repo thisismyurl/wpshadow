@@ -441,12 +441,12 @@ final class WPSHADOW_Feature_Troubleshooting_Mode extends WPSHADOW_Abstract_Feat
 		$enable = ! empty( $_POST['enable'] );
 
 		if ( empty( $plugin ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid plugin', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Please select a plugin.', 'plugin-wpshadow' ) ) );
 		}
 
 		$state = $this->get_troubleshooting_state();
 		if ( false === $state ) {
-			wp_send_json_error( array( 'message' => __( 'Troubleshooting mode not active', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Turn on troubleshooting mode first.', 'plugin-wpshadow' ) ) );
 		}
 
 		if ( ! isset( $state['enabled_plugins'] ) ) {

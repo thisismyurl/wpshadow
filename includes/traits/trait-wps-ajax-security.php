@@ -37,7 +37,7 @@ trait WPSHADOW_Ajax_Security {
 
 		if ( ! current_user_can( $capability ) ) {
 			wp_send_json_error(
-				array( 'message' => __( 'Insufficient permissions', 'plugin-wpshadow' ) ),
+				array( 'message' => __( 'You don\'t have permission to do that.', 'plugin-wpshadow' ) ),
 				403
 			);
 		}

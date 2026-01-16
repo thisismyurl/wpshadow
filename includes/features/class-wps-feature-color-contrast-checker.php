@@ -347,13 +347,13 @@ final class WPSHADOW_Feature_Color_Contrast_Checker extends WPSHADOW_Abstract_Fe
 	public function ajax_check_contrast(): void {
 		// Verify nonce.
 		if ( ! check_ajax_referer( 'wpshadow_check_contrast', 'nonce', false ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid nonce.', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Your session expired. Please refresh and try again.', 'plugin-wpshadow' ) ) );
 			return;
 		}
 
 		// Check capabilities.
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You don\'t have permission to do that.', 'plugin-wpshadow' ) ) );
 			return;
 		}
 
@@ -364,7 +364,7 @@ final class WPSHADOW_Feature_Color_Contrast_Checker extends WPSHADOW_Abstract_Fe
 
 		// Validate colors.
 		if ( empty( $text_color ) || empty( $background_color ) ) {
-			wp_send_json_error( array( 'message' => __( 'Both colors are required.', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Please enter both colors.', 'plugin-wpshadow' ) ) );
 			return;
 		}
 

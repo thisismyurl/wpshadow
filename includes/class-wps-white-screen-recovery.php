@@ -446,7 +446,7 @@ class WPSHADOW_White_Screen_Recovery {
 		$nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
 
 		if ( ! empty( $nonce ) && ! wp_verify_nonce( $nonce, 'wpshadow_recovery' ) ) {
-			wp_die( esc_html__( 'Invalid recovery link.', 'plugin-wpshadow' ) );
+			wp_die( esc_html__( 'That recovery link didn\'t work. Please request a new one.', 'plugin-wpshadow' ) );
 		}
 
 		// Activate recovery mode.

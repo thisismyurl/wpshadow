@@ -358,7 +358,7 @@ class WPSHADOW_Backup_Verification {
 		check_ajax_referer( 'wpshadow_backup_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'Insufficient permissions', 'plugin-wpshadow' ) );
+			wp_send_json_error( __( 'You don\'t have permission to do that.', 'plugin-wpshadow' ) );
 		}
 
 		$result = self::run_verification_test();
@@ -388,7 +388,7 @@ class WPSHADOW_Backup_Verification {
 	 */
 	public static function render_verification_page(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Insufficient permissions.', 'plugin-wpshadow' ) );
+			wp_die( esc_html__( 'You don\'t have permission to access this page.', 'plugin-wpshadow' ) );
 		}
 
 		$results = self::get_results();

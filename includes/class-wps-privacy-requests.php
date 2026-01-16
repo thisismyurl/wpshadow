@@ -614,7 +614,7 @@ class WPSHADOW_Privacy_Requests {
 
 		wp_send_json_success(
 			array(
-				'message'    => __( 'Request submitted successfully.', 'plugin-wpshadow' ),
+				'message'    => __( 'Request submitted.', 'plugin-wpshadow' ),
 				'request_id' => $request_id,
 			)
 		);
@@ -680,7 +680,7 @@ class WPSHADOW_Privacy_Requests {
 		$request    = self::get_request( $request_id );
 
 		if ( ! $request || $request->user_id !== get_current_user_id() ) {
-			wp_die( esc_html__( 'Invalid request or access denied.', 'plugin-wpshadow' ) );
+			wp_die( esc_html__( 'You don\'t have access to that request.', 'plugin-wpshadow' ) );
 		}
 
 		if ( empty( $request->export_file ) ) {
