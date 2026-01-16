@@ -403,8 +403,8 @@ class WPSHADOW_Site_Health {
 		
 		// Check if hardening feature is enabled.
 		$hardening_enabled = false;
-		if ( class_exists( '\\WPShadow\\CoreSupport\\WPSHADOW_Feature_Registry' ) ) {
-			$feature = \WPShadow\CoreSupport\WPSHADOW_Feature_Registry::get_feature( 'security-hardening' );
+		if ( class_exists( 'WPShadow\CoreSupport\WPSHADOW_Feature_Registry' ) ) {
+			$feature = WPSHADOW_Feature_Registry::get_feature( 'security-hardening' );
 			if ( $feature ) {
 				$hardening_enabled = $feature->is_enabled();
 			}

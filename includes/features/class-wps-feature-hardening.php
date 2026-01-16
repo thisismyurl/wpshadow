@@ -379,10 +379,9 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 
 		$is_https = strpos( $site_url, 'https://' ) === 0 && strpos( $home_url, 'https://' ) === 0;
 
-		// Force SSL for admin and logins.
-		if ( ! defined( 'FORCE_SSL_ADMIN' ) ) {
-			define( 'FORCE_SSL_ADMIN', true );
-		}
+		// Force SSL for admin and logins using WordPress hooks.
+		// Note: FORCE_SSL_ADMIN constant should be defined in wp-config.php for best results.
+		add_filter( 'force_ssl_admin', '__return_true' );
 
 		// Redirect HTTP to HTTPS for all requests.
 		add_action( 'template_redirect', array( $this, 'redirect_to_https' ), 1 );
@@ -409,9 +408,22 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 	 */
 	public function redirect_to_https(): void {
 		if ( ! is_ssl() && ! is_admin() ) {
-			$redirect_url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-			wp_safe_redirect( $redirect_url, 301 );
-			exit;
+			// Get current URL components.
+			$http_host   = isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
+			$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '';
+			
+			if ( empty( $http_host ) ) {
+				return;
+			}
+			
+			// Build HTTPS URL.
+			$redirect_url = 'https://' . $http_host . $request_uri;
+			
+			// Validate the URL before redirecting.
+			if ( wp_http_validate_url( $redirect_url ) ) {
+				wp_safe_redirect( esc_url_raw( $redirect_url ), 301 );
+				exit;
+			}
 		}
 	}
 
@@ -422,9 +434,22 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 	 */
 	public function redirect_admin_to_https(): void {
 		if ( ! is_ssl() && is_admin() ) {
-			$redirect_url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-			wp_safe_redirect( $redirect_url, 301 );
-			exit;
+			// Get current URL components.
+			$http_host   = isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
+			$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '';
+			
+			if ( empty( $http_host ) ) {
+				return;
+			}
+			
+			// Build HTTPS URL.
+			$redirect_url = 'https://' . $http_host . $request_uri;
+			
+			// Validate the URL before redirecting.
+			if ( wp_http_validate_url( $redirect_url ) ) {
+				wp_safe_redirect( esc_url_raw( $redirect_url ), 301 );
+				exit;
+			}
 		}
 	}
 
