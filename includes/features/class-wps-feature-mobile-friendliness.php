@@ -169,6 +169,7 @@ final class WPSHADOW_Feature_Mobile_Friendliness extends WPSHADOW_Abstract_Featu
 					'testing'    => __( 'Running tests...', 'plugin-wpshadow' ),
 					'complete'   => __( 'Tests complete!', 'plugin-wpshadow' ),
 					'error'      => __( 'An error occurred while running tests.', 'plugin-wpshadow' ),
+					'homeUrl'    => home_url(),
 				),
 			)
 		);
@@ -379,15 +380,22 @@ final class WPSHADOW_Feature_Mobile_Friendliness extends WPSHADOW_Abstract_Featu
 	 * @return array<string, mixed> Check result.
 	 */
 	private function check_viewport( string $url ): array {
+		// Check cache first.
+		$cache_key = 'wpshadow_viewport_check_' . md5( get_template() );
+		$cached = get_transient( $cache_key );
+		if ( false !== $cached ) {
+			return $cached;
+		}
+
 		// Check if viewport meta tag is present in the theme.
 		$theme_functions = get_template_directory() . '/functions.php';
 		$theme_header = get_template_directory() . '/header.php';
 		
 		$has_viewport = false;
 		
-		// Check header.php for viewport meta tag.
-		if ( file_exists( $theme_header ) ) {
-			$header_content = file_get_contents( $theme_header );
+		// Check header.php for viewport meta tag (limit to first 10KB for performance).
+		if ( file_exists( $theme_header ) && filesize( $theme_header ) < 1000000 ) { // Limit to 1MB
+			$header_content = file_get_contents( $theme_header, false, null, 0, 10240 );
 			if ( $header_content && preg_match( '/viewport.*width=device-width/i', $header_content ) ) {
 				$has_viewport = true;
 			}
@@ -398,18 +406,24 @@ final class WPSHADOW_Feature_Mobile_Friendliness extends WPSHADOW_Abstract_Featu
 			$has_viewport = true;
 		}
 
+		$result = array();
 		if ( ! $has_viewport ) {
-			return array(
+			$result = array(
 				'pass'    => false,
 				'message' => __( 'Viewport meta tag is missing or not properly configured.', 'plugin-wpshadow' ),
 				'recommendation' => __( 'Add <meta name="viewport" content="width=device-width, initial-scale=1.0"> to your theme\'s header.php or enable HTML5 theme support.', 'plugin-wpshadow' ),
 			);
+		} else {
+			$result = array(
+				'pass'    => true,
+				'message' => __( 'Viewport meta tag is properly configured.', 'plugin-wpshadow' ),
+			);
 		}
 
-		return array(
-			'pass'    => true,
-			'message' => __( 'Viewport meta tag is properly configured.', 'plugin-wpshadow' ),
-		);
+		// Cache for 1 hour.
+		set_transient( $cache_key, $result, HOUR_IN_SECONDS );
+
+		return $result;
 	}
 
 	/**
@@ -430,13 +444,18 @@ final class WPSHADOW_Feature_Mobile_Friendliness extends WPSHADOW_Abstract_Featu
 		// Check common button/link classes in the theme.
 		$theme_css = $this->get_theme_css();
 		
-		$button_selectors = array( 'button', '.button', '.btn', 'input[type="submit"]', 'a.wp-block-button__link' );
+		// Simplified button selectors for basic checking.
+		$button_patterns = array(
+			'/button\s*\{[^}]*(?:min-height|height)\s*:\s*(\d+)px/i',
+			'/\.button\s*\{[^}]*(?:min-height|height)\s*:\s*(\d+)px/i',
+			'/\.btn\s*\{[^}]*(?:min-height|height)\s*:\s*(\d+)px/i',
+			'/input\[type=["\']?submit["\']?\]\s*\{[^}]*(?:min-height|height)\s*:\s*(\d+)px/i',
+		);
 		
 		$small_buttons = 0;
 		
-		foreach ( $button_selectors as $selector ) {
-			// Look for button styles in CSS.
-			if ( preg_match( '/' . preg_quote( $selector, '/' ) . '\s*\{[^}]*(?:min-height|height)\s*:\s*(\d+)px/i', $theme_css, $matches ) ) {
+		foreach ( $button_patterns as $pattern ) {
+			if ( preg_match( $pattern, $theme_css, $matches ) ) {
 				$height = (int) $matches[1];
 				if ( $height < $min_size ) {
 					$small_buttons++;
@@ -536,25 +555,41 @@ final class WPSHADOW_Feature_Mobile_Friendliness extends WPSHADOW_Abstract_Featu
 	 * @return string CSS content.
 	 */
 	private function get_theme_css(): string {
+		// Check cache first.
+		$cache_key = 'wpshadow_theme_css_' . md5( get_template() . get_stylesheet() );
+		$cached = get_transient( $cache_key );
+		if ( false !== $cached ) {
+			return $cached;
+		}
+
 		$css = '';
 		
-		// Get main theme stylesheet.
+		// Get main theme stylesheet (limit to 500KB for performance).
 		$stylesheet = get_stylesheet_directory() . '/style.css';
 		if ( file_exists( $stylesheet ) ) {
-			$content = file_get_contents( $stylesheet );
-			if ( $content !== false ) {
-				$css .= $content;
+			$filesize = filesize( $stylesheet );
+			if ( $filesize > 0 && $filesize < 512000 ) { // 500KB limit
+				$content = file_get_contents( $stylesheet );
+				if ( $content !== false ) {
+					$css .= $content;
+				}
 			}
 		}
 
-		// Get additional CSS files if they exist.
+		// Get additional CSS files if they exist (limit to 200KB each).
 		$responsive_css = get_stylesheet_directory() . '/responsive.css';
 		if ( file_exists( $responsive_css ) ) {
-			$content = file_get_contents( $responsive_css );
-			if ( $content !== false ) {
-				$css .= $content;
+			$filesize = filesize( $responsive_css );
+			if ( $filesize > 0 && $filesize < 204800 ) { // 200KB limit
+				$content = file_get_contents( $responsive_css );
+				if ( $content !== false ) {
+					$css .= $content;
+				}
 			}
 		}
+
+		// Cache for 1 hour.
+		set_transient( $cache_key, $css, HOUR_IN_SECONDS );
 
 		return $css;
 	}
