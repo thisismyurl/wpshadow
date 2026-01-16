@@ -263,7 +263,7 @@ final class WPSHADOW_Feature_Conflict_Sandbox extends WPSHADOW_Abstract_Feature 
 			time() + DAY_IN_SECONDS,
 			COOKIEPATH,
 			COOKIE_DOMAIN,
-			is_ssl(),
+			true,
 			true // HTTP only.
 		);
 	}
@@ -280,7 +280,7 @@ final class WPSHADOW_Feature_Conflict_Sandbox extends WPSHADOW_Abstract_Feature 
 			time() - 3600,
 			COOKIEPATH,
 			COOKIE_DOMAIN,
-			is_ssl(),
+			true,
 			true
 		);
 	}

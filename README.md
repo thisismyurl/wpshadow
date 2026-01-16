@@ -47,6 +47,12 @@ This plugin provides complete functionality on its own and can optionally load h
   - Dashboard widget with uptime statistics
   - Optional access token security
   - Works with UptimeRobot, Pingdom, StatusCake, and others
+- **Hotlink Protection:** Prevent bandwidth theft from unauthorized media embedding
+  - Automatic Apache/LiteSpeed .htaccess configuration
+  - Nginx configuration guidance
+  - CDN-level blocking recommendations (Cloudflare, KeyCDN, BunnyCDN)
+  - Configurable allowed domains and file types
+  - Automatic cleanup on feature disable
 
 ### Optional Hub & Spoke Architecture (When Modules Installed)
 
