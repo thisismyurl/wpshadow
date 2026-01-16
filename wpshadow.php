@@ -44,6 +44,7 @@ use WPShadow\CoreSupport\WPSHADOW_Feature_Block_CSS_Cleanup;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Interactivity_Cleanup;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Consent_Checks;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Hardening;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Iframe_Busting;
 use WPShadow\CoreSupport\WPSHADOW_Feature_HTTP_SSL_Audit;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Registry;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Image_Lazy_Loading;
@@ -330,6 +331,7 @@ function WPSHADOW_register_core_features(): void {
 	
 	// Security features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Hardening() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Iframe_Busting() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_HTTP_SSL_Audit() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Hotlink_Protection() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Core_Integrity() );
@@ -814,6 +816,7 @@ function wpshadow_init(): void {
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-interactivity-cleanup.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-consent-checks.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-hardening.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-iframe-busting.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-hotlink-protection.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-a11y-audit.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-mobile-friendliness.php' );

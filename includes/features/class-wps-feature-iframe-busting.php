@@ -1,0 +1,239 @@
+<?php
+/**
+ * Feature: Iframe Busting (Clickjacking Protection)
+ *
+ * Protects against clickjacking attacks by preventing the site from being
+ * embedded in iframes using multiple layers of protection:
+ * - Content-Security-Policy frame-ancestors directive (modern standard)
+ * - X-Frame-Options header (legacy browser support)
+ * - JavaScript frame-buster (fallback for old browsers)
+ *
+ * @package WPShadow\CoreSupport
+ * @since 1.2601.75001
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\CoreSupport;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * WPSHADOW_Feature_Iframe_Busting
+ *
+ * Implements clickjacking protection through multiple layers.
+ */
+final class WPSHADOW_Feature_Iframe_Busting extends WPSHADOW_Abstract_Feature {
+
+	/**
+	 * Constructor.
+	 */
+	public function __construct() {
+		parent::__construct(
+			array(
+				'id'                 => 'iframe-busting',
+				'name'               => __( 'Iframe Busting (Clickjacking Protection)', 'plugin-wpshadow' ),
+				'description'        => __( 'Protects against clickjacking attacks by preventing your site from being embedded in malicious iframes. Uses Content-Security-Policy frame-ancestors (modern standard), X-Frame-Options header (legacy support), and optional JavaScript frame-buster fallback. Prevents attackers from tricking users into clicking hidden elements by overlaying your site on malicious pages.', 'plugin-wpshadow' ),
+				'scope'              => 'core',
+				'default_enabled'    => false,
+				'version'            => '1.0.0',
+				'widget_group'       => 'security',
+				'widget_label'       => __( 'Security', 'plugin-wpshadow' ),
+				'widget_description' => __( 'Advanced security features to protect your WordPress installation', 'plugin-wpshadow' ),
+				'category'           => 'security',
+				'priority'           => 5,
+				'icon'               => 'dashicons-shield-alt',
+			)
+		);
+	}
+
+	/**
+	 * Register hooks when feature is enabled.
+	 *
+	 * @return void
+	 */
+	public function register(): void {
+		if ( ! $this->is_enabled() ) {
+			return;
+		}
+
+		// Add security headers.
+		add_action( 'send_headers', array( $this, 'add_security_headers' ) );
+
+		// Add JavaScript frame-buster if enabled.
+		if ( $this->get_setting( 'enable_js_framebuster', true ) ) {
+			add_action( 'wp_head', array( $this, 'add_frame_buster_script' ), 1 );
+			add_action( 'admin_head', array( $this, 'add_frame_buster_script' ), 1 );
+		}
+	}
+
+	/**
+	 * Add clickjacking protection headers.
+	 *
+	 * @return void
+	 */
+	public function add_security_headers(): void {
+		// Only add headers if not already sent.
+		if ( headers_sent() ) {
+			return;
+		}
+
+		// Get configuration.
+		$policy = $this->get_setting( 'frame_policy', 'sameorigin' );
+
+		// Add Content-Security-Policy header (modern standard).
+		$csp_value = $this->get_csp_value( $policy );
+		if ( ! empty( $csp_value ) ) {
+			header( 'Content-Security-Policy: ' . $csp_value, true );
+		}
+
+		// Add X-Frame-Options header (legacy browser support).
+		$xfo_value = $this->get_xfo_value( $policy );
+		if ( ! empty( $xfo_value ) ) {
+			header( 'X-Frame-Options: ' . $xfo_value, true );
+		}
+	}
+
+	/**
+	 * Get Content-Security-Policy frame-ancestors value.
+	 *
+	 * @param string $policy Frame policy setting.
+	 * @return string CSP header value.
+	 */
+	private function get_csp_value( string $policy ): string {
+		switch ( $policy ) {
+			case 'deny':
+				return "frame-ancestors 'none'";
+
+			case 'sameorigin':
+				return "frame-ancestors 'self'";
+
+			case 'custom':
+				$allowed_origins = $this->get_setting( 'allowed_origins', array() );
+				if ( ! empty( $allowed_origins ) && is_array( $allowed_origins ) ) {
+					// Sanitize and format origins.
+					$origins = array_map( 'esc_url_raw', $allowed_origins );
+					$origins = array_filter( $origins );
+					if ( ! empty( $origins ) ) {
+						return "frame-ancestors 'self' " . implode( ' ', $origins );
+					}
+				}
+				// Fallback to self if no valid custom origins.
+				return "frame-ancestors 'self'";
+
+			default:
+				return "frame-ancestors 'self'";
+		}
+	}
+
+	/**
+	 * Get X-Frame-Options header value.
+	 *
+	 * @param string $policy Frame policy setting.
+	 * @return string X-Frame-Options header value.
+	 */
+	private function get_xfo_value( string $policy ): string {
+		switch ( $policy ) {
+			case 'deny':
+				return 'DENY';
+
+			case 'sameorigin':
+				return 'SAMEORIGIN';
+
+			case 'custom':
+				// X-Frame-Options doesn't support multiple origins like CSP does.
+				// Fall back to SAMEORIGIN for custom policy.
+				return 'SAMEORIGIN';
+
+			default:
+				return 'SAMEORIGIN';
+		}
+	}
+
+	/**
+	 * Add JavaScript frame-buster script.
+	 *
+	 * This is a fallback for older browsers that don't support
+	 * Content-Security-Policy or X-Frame-Options headers.
+	 *
+	 * @return void
+	 */
+	public function add_frame_buster_script(): void {
+		?>
+		<script type="text/javascript">
+		/* WPShadow Frame-Buster */
+		(function() {
+			if (top !== self) {
+				top.location.href = self.location.href;
+			}
+		})();
+		</script>
+		<?php
+	}
+
+	/**
+	 * Get available frame policies.
+	 *
+	 * @return array Array of policy options.
+	 */
+	public static function get_available_policies(): array {
+		return array(
+			'deny'       => array(
+				'label'       => __( 'Deny All', 'plugin-wpshadow' ),
+				'description' => __( 'Blocks all framing (most secure). Use if your site should never be embedded.', 'plugin-wpshadow' ),
+			),
+			'sameorigin' => array(
+				'label'       => __( 'Same Origin Only', 'plugin-wpshadow' ),
+				'description' => __( 'Allows framing only by your own site (recommended). Permits embedding on your own domain.', 'plugin-wpshadow' ),
+			),
+			'custom'     => array(
+				'label'       => __( 'Custom Origins', 'plugin-wpshadow' ),
+				'description' => __( 'Allow specific trusted domains to embed your site. Requires configuration.', 'plugin-wpshadow' ),
+			),
+		);
+	}
+
+	/**
+	 * Validate custom origin URLs.
+	 *
+	 * @param array $origins Array of origin URLs to validate.
+	 * @return array Validated and sanitized origins.
+	 */
+	public static function validate_custom_origins( array $origins ): array {
+		$validated = array();
+
+		foreach ( $origins as $origin ) {
+			$origin = trim( $origin );
+
+			// Skip empty values.
+			if ( empty( $origin ) ) {
+				continue;
+			}
+
+			// Parse URL to validate.
+			$parsed = wp_parse_url( $origin );
+
+			// Must have scheme and host.
+			if ( empty( $parsed['scheme'] ) || empty( $parsed['host'] ) ) {
+				continue;
+			}
+
+			// Only allow http and https schemes.
+			if ( ! in_array( $parsed['scheme'], array( 'http', 'https' ), true ) ) {
+				continue;
+			}
+
+			// Reconstruct clean origin (scheme + host + optional port).
+			$clean_origin = $parsed['scheme'] . '://' . $parsed['host'];
+			if ( ! empty( $parsed['port'] ) ) {
+				$clean_origin .= ':' . $parsed['port'];
+			}
+
+			$validated[] = $clean_origin;
+		}
+
+		return array_unique( $validated );
+	}
+}
