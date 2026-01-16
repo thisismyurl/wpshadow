@@ -33,6 +33,12 @@ This plugin provides complete functionality on its own and can optionally load h
   - Floating debug bar with query info and memory usage
   - Error log viewer with refresh and clear functionality
   - Auto-disable after 1 hour for safety
+- **Iframe Busting (Clickjacking Protection):** Multi-layer protection against clickjacking attacks (see [IFRAME_BUSTING.md](docs/IFRAME_BUSTING.md))
+  - Content-Security-Policy frame-ancestors directive (modern standard)
+  - X-Frame-Options header (legacy browser support)
+  - Optional JavaScript frame-buster fallback
+  - Configurable policies: DENY (block all framing), SAMEORIGIN (same domain only), or Custom (specific trusted origins)
+  - Prevents malicious sites from embedding your pages in hidden iframes
 - **Spoke Collection System:** Gamified interface for discovering and managing format-specific plugins with milestones, achievements, and visual progression tracking (see [SPOKE_COLLECTION.md](docs/SPOKE_COLLECTION.md))
 - **Script Loading Optimization:** Comprehensive performance optimization system (see [SCRIPT_OPTIMIZATION.md](SCRIPT_OPTIMIZATION.md))
   - Enhanced Script Deferral with auto-detection
