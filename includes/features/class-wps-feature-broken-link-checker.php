@@ -45,10 +45,8 @@ final class WPSHADOW_Feature_Broken_Link_Checker extends WPSHADOW_Abstract_Featu
 	 * @return void
 	 */
 	public static function init(): void {
-		$instance = new self();
-		
 		// Register hooks only if feature is enabled
-		if ( ! $instance->is_enabled() ) {
+		if ( ! self::is_enabled() ) {
 			return;
 		}
 
@@ -66,15 +64,6 @@ final class WPSHADOW_Feature_Broken_Link_Checker extends WPSHADOW_Abstract_Featu
 		if ( ! wp_next_scheduled( 'wpshadow_check_broken_links' ) ) {
 			wp_schedule_event( time(), 'daily', 'wpshadow_check_broken_links' );
 		}
-	}
-
-	/**
-	 * Check if the feature is enabled.
-	 *
-	 * @return bool
-	 */
-	private function is_enabled(): bool {
-		return (bool) get_option( 'wpshadow_feature_broken_link_checker_enabled', false );
 	}
 
 	/**
