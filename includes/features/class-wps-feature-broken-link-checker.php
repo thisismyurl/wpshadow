@@ -316,9 +316,9 @@ class WPSHADOW_Feature_Broken_Link_Checker extends WPSHADOW_Abstract_Feature {
 			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'plugin-wpshadow' ) ) );
 		}
 
-		$link_id = isset( $_POST['link_id'] ) ? intval( $_POST['link_id'] ) : 0;
+		$link_id = isset( $_POST['link_id'] ) ? sanitize_text_field( wp_unslash( $_POST['link_id'] ) ) : '';
 
-		if ( $link_id > 0 ) {
+		if ( ! empty( $link_id ) ) {
 			self::dismiss_broken_link( $link_id );
 			wp_send_json_success();
 		}
@@ -365,7 +365,7 @@ class WPSHADOW_Feature_Broken_Link_Checker extends WPSHADOW_Abstract_Feature {
 
 				if ( $status['is_broken'] ) {
 					$broken_links[] = array(
-						'id'          => count( $broken_links ) + 1,
+						'id'          => md5( $url . $post_id . time() ),
 						'url'         => $url,
 						'post_id'     => $post_id,
 						'source'      => 'content',
@@ -488,14 +488,14 @@ class WPSHADOW_Feature_Broken_Link_Checker extends WPSHADOW_Abstract_Feature {
 	/**
 	 * Dismiss a broken link.
 	 *
-	 * @param int $link_id Link ID to dismiss.
+	 * @param string $link_id Link ID to dismiss.
 	 * @return void
 	 */
-	private static function dismiss_broken_link( int $link_id ): void {
+	private static function dismiss_broken_link( string $link_id ): void {
 		$broken_links = self::get_broken_links();
 
 		foreach ( $broken_links as $key => $link ) {
-			if ( isset( $link['id'] ) && (int) $link['id'] === $link_id ) {
+			if ( isset( $link['id'] ) && $link['id'] === $link_id ) {
 				unset( $broken_links[ $key ] );
 				break;
 			}
