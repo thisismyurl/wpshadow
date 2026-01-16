@@ -183,52 +183,112 @@ final class WPSHADOW_Feature_Two_Factor_Auth extends WPSHADOW_Abstract_Feature {
 	 * Register hooks when feature is enabled.
 	 *
 	 * @return void
-	 *
-	 * @todo Implement hook registration
 	 */
 	public function register(): void {
 		if ( ! $this->is_enabled() ) {
 			return;
 		}
 
-		// TODO: Authentication hooks
-		// add_filter( 'authenticate', array( $this, 'authenticate_2fa' ), 30, 3 );
-		// add_action( 'wp_login', array( $this, 'handle_successful_login' ), 10, 2 );
+		// Authentication hooks.
+		add_filter( 'authenticate', array( $this, 'authenticate_2fa' ), 30, 3 );
+		add_action( 'wp_login', array( $this, 'handle_successful_login' ), 10, 2 );
 
-		// TODO: Login form modifications
-		// add_action( 'login_form', array( $this, 'add_2fa_login_field' ) );
-		// add_action( 'login_enqueue_scripts', array( $this, 'enqueue_login_assets' ) );
+		// Login form modifications.
+		add_action( 'login_form', array( $this, 'add_2fa_login_field' ) );
+		add_action( 'login_enqueue_scripts', array( $this, 'enqueue_login_assets' ) );
 
-		// TODO: Profile settings
-		// add_action( 'show_user_profile', array( $this, 'show_2fa_settings' ) );
-		// add_action( 'edit_user_profile', array( $this, 'show_2fa_settings' ) );
-		// add_action( 'personal_options_update', array( $this, 'save_2fa_settings' ) );
-		// add_action( 'edit_user_profile_update', array( $this, 'save_2fa_settings' ) );
+		// Profile settings.
+		add_action( 'show_user_profile', array( $this, 'show_2fa_settings' ) );
+		add_action( 'edit_user_profile', array( $this, 'show_2fa_settings' ) );
+		add_action( 'personal_options_update', array( $this, 'save_2fa_settings' ) );
+		add_action( 'edit_user_profile_update', array( $this, 'save_2fa_settings' ) );
 
-		// TODO: AJAX handlers
-		// add_action( 'wp_ajax_WPSHADOW_generate_2fa_secret', array( $this, 'ajax_generate_secret' ) );
-		// add_action( 'wp_ajax_WPSHADOW_verify_2fa_setup', array( $this, 'ajax_verify_setup' ) );
-		// add_action( 'wp_ajax_WPSHADOW_generate_backup_codes', array( $this, 'ajax_generate_backup_codes' ) );
-		// add_action( 'wp_ajax_WPSHADOW_disable_2fa', array( $this, 'ajax_disable_2fa' ) );
-		// add_action( 'wp_ajax_WPSHADOW_remove_trusted_device', array( $this, 'ajax_remove_trusted_device' ) );
+		// AJAX handlers.
+		add_action( 'wp_ajax_WPSHADOW_generate_2fa_secret', array( $this, 'ajax_generate_secret' ) );
+		add_action( 'wp_ajax_WPSHADOW_verify_2fa_setup', array( $this, 'ajax_verify_setup' ) );
+		add_action( 'wp_ajax_WPSHADOW_generate_backup_codes', array( $this, 'ajax_generate_backup_codes' ) );
+		add_action( 'wp_ajax_WPSHADOW_disable_2fa', array( $this, 'ajax_disable_2fa' ) );
+		add_action( 'wp_ajax_WPSHADOW_remove_trusted_device', array( $this, 'ajax_remove_trusted_device' ) );
 
-		// TODO: Admin notices
-		// add_action( 'admin_notices', array( $this, 'show_2fa_notices' ) );
+		// Admin notices.
+		add_action( 'admin_notices', array( $this, 'show_2fa_notices' ) );
 	}
 
 	/**
 	 * Generate a secret key for TOTP.
 	 *
 	 * @return string Base32-encoded secret key.
-	 *
-	 * @todo Implement secret generation
 	 */
 	private function generate_secret(): string {
-		// TODO: Generate random bytes
-		// TODO: Base32 encode
-		// TODO: Return secret key
+		// Generate 20 random bytes (160 bits for strong security).
+		$random_bytes = random_bytes( 20 );
+		
+		// Base32 encode the secret.
+		return $this->base32_encode( $random_bytes );
+	}
 
-		return '';
+	/**
+	 * Base32 encode a string.
+	 *
+	 * @param string $data Data to encode.
+	 * @return string Base32-encoded string.
+	 */
+	private function base32_encode( string $data ): string {
+		$alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+		$encoded = '';
+		$n = 0;
+		$bits_remaining = 0;
+		
+		for ( $i = 0, $len = strlen( $data ); $i < $len; ++$i ) {
+			$n = ( $n << 8 ) | ord( $data[ $i ] );
+			$bits_remaining += 8;
+			
+			while ( $bits_remaining >= 5 ) {
+				$bits_remaining -= 5;
+				$encoded .= $alphabet[ ( $n >> $bits_remaining ) & 0x1F ];
+			}
+		}
+		
+		if ( $bits_remaining > 0 ) {
+			$n <<= ( 5 - $bits_remaining );
+			$encoded .= $alphabet[ $n & 0x1F ];
+		}
+		
+		return $encoded;
+	}
+
+	/**
+	 * Base32 decode a string.
+	 *
+	 * @param string $data Base32-encoded data.
+	 * @return string Decoded binary data.
+	 */
+	private function base32_decode( string $data ): string {
+		$alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+		$decoded = '';
+		$n = 0;
+		$bits_remaining = 0;
+		
+		$data = strtoupper( $data );
+		
+		for ( $i = 0, $len = strlen( $data ); $i < $len; ++$i ) {
+			$char = $data[ $i ];
+			$pos = strpos( $alphabet, $char );
+			
+			if ( $pos === false ) {
+				continue;
+			}
+			
+			$n = ( $n << 5 ) | $pos;
+			$bits_remaining += 5;
+			
+			if ( $bits_remaining >= 8 ) {
+				$bits_remaining -= 8;
+				$decoded .= chr( ( $n >> $bits_remaining ) & 0xFF );
+			}
+		}
+		
+		return $decoded;
 	}
 
 	/**
@@ -237,171 +297,37 @@ final class WPSHADOW_Feature_Two_Factor_Auth extends WPSHADOW_Abstract_Feature {
 	 * @param int    $user_id User ID.
 	 * @param string $secret  Secret key.
 	 * @return string QR code data URL.
-	 *
-	 * @todo Implement QR code generation
 	 */
 	private function generate_qr_code( int $user_id, string $secret ): string {
-		// TODO: Get user email
-		// TODO: Build TOTP URI (otpauth://totp/...)
-		// TODO: Generate QR code image
-		// TODO: Return data URL
-
-		return '';
-	}
-
-	/**
-	 * Verify TOTP code.
-	 *
-	 * @param string $code   6-digit code.
-	 * @param string $secret Secret key.
-	 * @return bool True if valid, false otherwise.
-	 *
-	 * @todo Implement TOTP verification
-	 */
-	private function verify_totp( string $code, string $secret ): bool {
-		// TODO: Get current timestamp
-		// TODO: Calculate TOTP value for current time window
-		// TODO: Check previous and next time windows (clock drift)
-		// TODO: Compare with provided code
-		// TODO: Check if code was already used (replay prevention)
-		// TODO: Return result
-
-		return false;
-	}
-
-	/**
-	 * Generate backup codes.
-	 *
-	 * @return array Array of backup codes.
-	 *
-	 * @todo Implement backup code generation
-	 */
-	private function generate_backup_codes(): array {
-		// TODO: Generate random codes (10 codes)
-		// TODO: Hash codes for storage
-		// TODO: Return unhashed codes (display once)
-
-		return array();
-	}
-
-	/**
-	 * Verify backup code.
-	 *
-	 * @param int    $user_id User ID.
-	 * @param string $code    Backup code.
-	 * @return bool True if valid, false otherwise.
-	 *
-	 * @todo Implement backup code verification
-	 */
-	private function verify_backup_code( int $user_id, string $code ): bool {
-		// TODO: Get user's backup codes
-		// TODO: Hash provided code
-		// TODO: Check if hash matches any backup code
-		// TODO: Remove used code from list
-		// TODO: Update user meta
-		// TODO: Return result
-
-		return false;
-	}
-
-	/**
-	 * Check if 2FA is enabled for user.
-	 *
-	 * @param int $user_id User ID.
-	 * @return bool True if enabled, false otherwise.
-	 *
-	 * @todo Implement 2FA status check
-	 */
-	private function is_2fa_enabled( int $user_id ): bool {
-		// TODO: Get user's 2FA secret
-		// TODO: Return true if secret exists
-
-		return false;
-	}
-
-	/**
-	 * Check if 2FA is required for user's role.
-	 *
-	 * @param int $user_id User ID.
-	 * @return bool True if required, false otherwise.
-	 *
-	 * @todo Implement role-based 2FA requirement
-	 */
-	private function is_2fa_required( int $user_id ): bool {
-		// TODO: Get user roles
-		// TODO: Check plugin settings for required roles
-		// TODO: Return true if any role requires 2FA
-
-		return false;
-	}
-
-	/**
-	 * Check if device is trusted.
-	 *
-	 * @param int $user_id User ID.
-	 * @return bool True if trusted, false otherwise.
-	 *
-	 * @todo Implement trusted device check
-	 */
-	private function is_trusted_device( int $user_id ): bool {
-		// TODO: Check for trusted device cookie
-		// TODO: Validate cookie signature
-		// TODO: Check if device ID exists in user meta
-		// TODO: Return result
-
-		return false;
-	}
-
-	/**
-	 * Mark device as trusted.
-	 *
-	 * @param int $user_id User ID.
-	 * @return bool True on success, false on failure.
-	 *
-	 * @todo Implement trusted device marking
-	 */
-	private function mark_device_trusted( int $user_id ): bool {
-		// TODO: Generate device ID
-		// TODO: Store device ID in user meta
-		// TODO: Set secure cookie
-		// TODO: Return result
-
-		return false;
-	}
-
-	/**
-	 * Remove trusted device.
-	 *
-	 * @param int    $user_id   User ID.
-	 * @param string $device_id Device ID.
-	 * @return bool True on success, false on failure.
-	 *
-	 * @todo Implement trusted device removal
-	 */
-	private function remove_trusted_device( int $user_id, string $device_id ): bool {
-		// TODO: Get user's trusted devices
-		// TODO: Remove specified device
-		// TODO: Update user meta
-		// TODO: Return result
-
-		return false;
-	}
-
-	/**
-	 * Send 2FA code via email (fallback method).
-	 *
-	 * @param int $user_id User ID.
-	 * @return bool True on success, false on failure.
-	 *
-	 * @todo Implement email-based 2FA
-	 */
-	private function send_email_code( int $user_id ): bool {
-		// TODO: Generate temporary code
-		// TODO: Store code in transient (5 minutes)
-		// TODO: Send email to user
-		// TODO: Return result
-
-		return false;
+		$user = get_userdata( $user_id );
+		if ( ! $user ) {
+			return '';
+		}
+		
+		$site_name = get_bloginfo( 'name' );
+		$email = $user->user_email;
+		
+		// Build TOTP URI (RFC 6238).
+		$uri = sprintf(
+			'otpauth://totp/%s:%s?secret=%s&issuer=%s',
+			rawurlencode( $site_name ),
+			rawurlencode( $email ),
+			$secret,
+			rawurlencode( $site_name )
+		);
+		
+		// Generate QR code using Google Charts API.
+		$qr_url = add_query_arg(
+			array(
+				'chs' => '200x200',
+				'cht' => 'qr',
+				'chl' => $uri,
+				'choe' => 'UTF-8',
+			),
+			'https://chart.googleapis.com/chart'
+		);
+		
+		return $qr_url;
 	}
 
 	/**
@@ -410,17 +336,282 @@ final class WPSHADOW_Feature_Two_Factor_Auth extends WPSHADOW_Abstract_Feature {
 	 * @param string $secret    Secret key.
 	 * @param int    $timestamp Timestamp.
 	 * @return string 6-digit TOTP code.
-	 *
-	 * @todo Implement TOTP calculation (RFC 6238)
 	 */
 	private function calculate_totp( string $secret, int $timestamp ): string {
-		// TODO: Calculate time counter (timestamp / time_step)
-		// TODO: Base32 decode secret
-		// TODO: Calculate HMAC-SHA1
-		// TODO: Dynamic truncation
-		// TODO: Return 6-digit code
+		// Calculate time counter (30-second window).
+		$time_counter = floor( $timestamp / self::TOTP_TIME_STEP );
+		
+		// Base32 decode secret.
+		$decoded_secret = $this->base32_decode( $secret );
+		
+		// Pack time counter as 8-byte big-endian.
+		$time_bytes = pack( 'N*', 0 ) . pack( 'N*', $time_counter );
+		
+		// Calculate HMAC-SHA1.
+		$hash = hash_hmac( 'sha1', $time_bytes, $decoded_secret, true );
+		
+		// Dynamic truncation (RFC 4226).
+		$offset = ord( $hash[ strlen( $hash ) - 1 ] ) & 0x0F;
+		$truncated = (
+			( ( ord( $hash[ $offset ] ) & 0x7F ) << 24 ) |
+			( ( ord( $hash[ $offset + 1 ] ) & 0xFF ) << 16 ) |
+			( ( ord( $hash[ $offset + 2 ] ) & 0xFF ) << 8 ) |
+			( ord( $hash[ $offset + 3 ] ) & 0xFF )
+		);
+		
+		// Generate 6-digit code.
+		$code = $truncated % pow( 10, self::TOTP_CODE_LENGTH );
+		
+		return str_pad( (string) $code, self::TOTP_CODE_LENGTH, '0', STR_PAD_LEFT );
+	}
 
-		return '';
+	/**
+	 * Verify TOTP code.
+	 *
+	 * @param string $code   6-digit code.
+	 * @param string $secret Secret key.
+	 * @return bool True if valid, false otherwise.
+	 */
+	private function verify_totp( string $code, string $secret ): bool {
+		$timestamp = time();
+		
+		// Check current, previous, and next time windows (handle clock drift).
+		for ( $i = -1; $i <= 1; ++$i ) {
+			$window_time = $timestamp + ( $i * self::TOTP_TIME_STEP );
+			$expected_code = $this->calculate_totp( $secret, $window_time );
+			
+			if ( hash_equals( $expected_code, $code ) ) {
+				// Check if code was already used (replay prevention).
+				$used_key = 'wpshadow_2fa_used_' . md5( $code . $window_time );
+				if ( get_transient( $used_key ) ) {
+					return false;
+				}
+				
+				// Mark code as used for this time window.
+				set_transient( $used_key, true, self::TOTP_TIME_STEP * 2 );
+				
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
+	/**
+	 * Generate backup codes.
+	 *
+	 * @return array Array of backup codes.
+	 */
+	private function generate_backup_codes(): array {
+		$codes = array();
+		
+		// Generate 10 random backup codes.
+		for ( $i = 0; $i < self::BACKUP_CODE_COUNT; ++$i ) {
+			// Generate 8-character alphanumeric code.
+			$code = strtoupper( substr( bin2hex( random_bytes( 4 ) ), 0, 8 ) );
+			$codes[] = $code;
+		}
+		
+		return $codes;
+	}
+
+	/**
+	 * Verify backup code.
+	 *
+	 * @param int    $user_id User ID.
+	 * @param string $code    Backup code.
+	 * @return bool True if valid, false otherwise.
+	 */
+	private function verify_backup_code( int $user_id, string $code ): bool {
+		// Get user's backup codes (stored as hashes).
+		$backup_codes = get_user_meta( $user_id, self::BACKUP_CODES_KEY, true );
+		
+		if ( ! is_array( $backup_codes ) || empty( $backup_codes ) ) {
+			return false;
+		}
+		
+		$code_hash = wp_hash_password( strtoupper( $code ) );
+		
+		// Check if code matches any stored hash.
+		foreach ( $backup_codes as $index => $stored_hash ) {
+			if ( wp_check_password( strtoupper( $code ), $stored_hash ) ) {
+				// Remove used code.
+				unset( $backup_codes[ $index ] );
+				update_user_meta( $user_id, self::BACKUP_CODES_KEY, array_values( $backup_codes ) );
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
+	/**
+	 * Check if 2FA is enabled for user.
+	 *
+	 * @param int $user_id User ID.
+	 * @return bool True if enabled, false otherwise.
+	 */
+	private function is_2fa_enabled( int $user_id ): bool {
+		$secret = get_user_meta( $user_id, self::SECRET_META_KEY, true );
+		return ! empty( $secret );
+	}
+
+	/**
+	 * Check if 2FA is required for user's role.
+	 *
+	 * @param int $user_id User ID.
+	 * @return bool True if required, false otherwise.
+	 */
+	private function is_2fa_required( int $user_id ): bool {
+		$user = get_userdata( $user_id );
+		
+		if ( ! $user ) {
+			return false;
+		}
+		
+		// Check if force_admin_2fa is enabled and user is admin.
+		if ( get_option( 'wpshadow_two-factor-auth_force_admin_2fa', false ) ) {
+			if ( in_array( 'administrator', $user->roles, true ) ) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
+	/**
+	 * Check if device is trusted.
+	 *
+	 * @param int $user_id User ID.
+	 * @return bool True if trusted, false otherwise.
+	 */
+	private function is_trusted_device( int $user_id ): bool {
+		if ( ! get_option( 'wpshadow_two-factor-auth_trusted_devices', false ) ) {
+			return false;
+		}
+		
+		// Check for trusted device cookie.
+		if ( ! isset( $_COOKIE[ self::TRUSTED_DEVICE_COOKIE ] ) ) {
+			return false;
+		}
+		
+		$device_id = sanitize_text_field( wp_unslash( $_COOKIE[ self::TRUSTED_DEVICE_COOKIE ] ) );
+		
+		// Get user's trusted devices.
+		$trusted_devices = get_user_meta( $user_id, self::TRUSTED_DEVICES_KEY, true );
+		
+		if ( ! is_array( $trusted_devices ) ) {
+			return false;
+		}
+		
+		// Check if device ID exists and is not expired.
+		if ( isset( $trusted_devices[ $device_id ] ) ) {
+			$expiry = $trusted_devices[ $device_id ]['expiry'] ?? 0;
+			if ( $expiry > time() ) {
+				return true;
+			}
+			// Remove expired device.
+			unset( $trusted_devices[ $device_id ] );
+			update_user_meta( $user_id, self::TRUSTED_DEVICES_KEY, $trusted_devices );
+		}
+		
+		return false;
+	}
+
+	/**
+	 * Mark device as trusted.
+	 *
+	 * @param int $user_id User ID.
+	 * @return bool True on success, false on failure.
+	 */
+	private function mark_device_trusted( int $user_id ): bool {
+		// Generate unique device ID.
+		$device_id = wp_generate_password( 32, false );
+		
+		// Get current trusted devices.
+		$trusted_devices = get_user_meta( $user_id, self::TRUSTED_DEVICES_KEY, true );
+		
+		if ( ! is_array( $trusted_devices ) ) {
+			$trusted_devices = array();
+		}
+		
+		// Add new device.
+		$trusted_devices[ $device_id ] = array(
+			'created' => time(),
+			'expiry'  => time() + self::TRUSTED_DEVICE_DURATION,
+			'ip'      => $_SERVER['REMOTE_ADDR'] ?? '',
+			'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
+		);
+		
+		update_user_meta( $user_id, self::TRUSTED_DEVICES_KEY, $trusted_devices );
+		
+		// Set secure cookie.
+		setcookie(
+			self::TRUSTED_DEVICE_COOKIE,
+			$device_id,
+			time() + self::TRUSTED_DEVICE_DURATION,
+			COOKIEPATH,
+			COOKIE_DOMAIN,
+			is_ssl(),
+			true
+		);
+		
+		return true;
+	}
+
+	/**
+	 * Remove trusted device.
+	 *
+	 * @param int    $user_id   User ID.
+	 * @param string $device_id Device ID.
+	 * @return bool True on success, false on failure.
+	 */
+	private function remove_trusted_device( int $user_id, string $device_id ): bool {
+		$trusted_devices = get_user_meta( $user_id, self::TRUSTED_DEVICES_KEY, true );
+		
+		if ( ! is_array( $trusted_devices ) || ! isset( $trusted_devices[ $device_id ] ) ) {
+			return false;
+		}
+		
+		unset( $trusted_devices[ $device_id ] );
+		update_user_meta( $user_id, self::TRUSTED_DEVICES_KEY, $trusted_devices );
+		
+		return true;
+	}
+
+	/**
+	 * Send 2FA code via email (fallback method).
+	 *
+	 * @param int $user_id User ID.
+	 * @return bool True on success, false on failure.
+	 */
+	private function send_email_code( int $user_id ): bool {
+		$user = get_userdata( $user_id );
+		
+		if ( ! $user ) {
+			return false;
+		}
+		
+		// Generate 6-digit code.
+		$code = str_pad( (string) wp_rand( 100000, 999999 ), 6, '0', STR_PAD_LEFT );
+		
+		// Store code in transient (5 minutes).
+		set_transient( 'wpshadow_2fa_email_' . $user_id, wp_hash_password( $code ), 5 * MINUTE_IN_SECONDS );
+		
+		// Send email.
+		$subject = sprintf(
+			/* translators: %s: Site name */
+			__( 'Two-Factor Authentication Code for %s', 'plugin-wpshadow' ),
+			get_bloginfo( 'name' )
+		);
+		
+		$message = sprintf(
+			/* translators: %s: 6-digit code */
+			__( 'Your two-factor authentication code is: %s\n\nThis code will expire in 5 minutes.\n\nIf you did not request this code, please contact the site administrator.', 'plugin-wpshadow' ),
+			$code
+		);
+		
+		return wp_mail( $user->user_email, $subject, $message );
 	}
 
 	/**
@@ -428,23 +619,405 @@ final class WPSHADOW_Feature_Two_Factor_Auth extends WPSHADOW_Abstract_Feature {
 	 *
 	 * @param int $user_id User ID.
 	 * @return array 2FA statistics.
-	 *
-	 * @todo Implement statistics collection
 	 */
 	private function get_user_statistics( int $user_id ): array {
-		// TODO: Count successful 2FA logins
-		// TODO: Count failed 2FA attempts
-		// TODO: Get last successful login
-		// TODO: Count remaining backup codes
-		// TODO: Count trusted devices
-		// TODO: Return statistics
-
+		$backup_codes = get_user_meta( $user_id, self::BACKUP_CODES_KEY, true );
+		$trusted_devices = get_user_meta( $user_id, self::TRUSTED_DEVICES_KEY, true );
+		
 		return array(
-			'enabled'               => false,
-			'successful_logins'     => 0,
-			'failed_attempts'       => 0,
-			'remaining_backup_codes' => 0,
-			'trusted_devices'       => 0,
+			'enabled'                => $this->is_2fa_enabled( $user_id ),
+			'successful_logins'      => (int) get_user_meta( $user_id, 'wpshadow_2fa_successful_logins', true ),
+			'failed_attempts'        => (int) get_user_meta( $user_id, 'wpshadow_2fa_failed_attempts', true ),
+			'remaining_backup_codes' => is_array( $backup_codes ) ? count( $backup_codes ) : 0,
+			'trusted_devices'        => is_array( $trusted_devices ) ? count( $trusted_devices ) : 0,
+			'last_login'             => get_user_meta( $user_id, 'wpshadow_2fa_last_login', true ),
 		);
+	}
+
+	/**
+	 * Authentication filter for 2FA.
+	 *
+	 * @param \WP_User|\WP_Error|null $user     User object or error.
+	 * @param string                  $username Username.
+	 * @param string                  $password Password.
+	 * @return \WP_User|\WP_Error User object or error.
+	 */
+	public function authenticate_2fa( $user, string $username, string $password ) {
+		// Only proceed if authentication succeeded.
+		if ( ! ( $user instanceof \WP_User ) ) {
+			return $user;
+		}
+
+		// Skip if 2FA not enabled for this user.
+		if ( ! $this->is_2fa_enabled( $user->ID ) ) {
+			// Check if 2FA is required.
+			if ( $this->is_2fa_required( $user->ID ) ) {
+				return new \WP_Error(
+					'2fa_required',
+					__( '2FA is required for your account. Please set it up in your profile.', 'plugin-wpshadow' )
+				);
+			}
+			return $user;
+		}
+
+		// Check if device is trusted.
+		if ( $this->is_trusted_device( $user->ID ) ) {
+			return $user;
+		}
+
+		// Check if 2FA code was provided.
+		$code = isset( $_POST['wpshadow_2fa_code'] ) ? sanitize_text_field( wp_unslash( $_POST['wpshadow_2fa_code'] ) ) : '';
+
+		if ( empty( $code ) ) {
+			// Store user ID in session for 2FA prompt.
+			$_SESSION['wpshadow_2fa_user_id'] = $user->ID;
+			return new \WP_Error(
+				'2fa_required',
+				__( 'Please enter your two-factor authentication code.', 'plugin-wpshadow' )
+			);
+		}
+
+		// Verify TOTP code.
+		$secret = get_user_meta( $user->ID, self::SECRET_META_KEY, true );
+		if ( $this->verify_totp( $code, $secret ) ) {
+			// Success - mark device as trusted if requested.
+			if ( isset( $_POST['wpshadow_2fa_trust'] ) && get_option( 'wpshadow_two-factor-auth_trusted_devices', false ) ) {
+				$this->mark_device_trusted( $user->ID );
+			}
+
+			// Update statistics.
+			$successful = (int) get_user_meta( $user->ID, 'wpshadow_2fa_successful_logins', true );
+			update_user_meta( $user->ID, 'wpshadow_2fa_successful_logins', $successful + 1 );
+			update_user_meta( $user->ID, 'wpshadow_2fa_last_login', time() );
+
+			return $user;
+		}
+
+		// Try backup code if TOTP failed.
+		if ( get_option( 'wpshadow_two-factor-auth_backup_codes', true ) ) {
+			if ( $this->verify_backup_code( $user->ID, $code ) ) {
+				// Success with backup code.
+				$successful = (int) get_user_meta( $user->ID, 'wpshadow_2fa_successful_logins', true );
+				update_user_meta( $user->ID, 'wpshadow_2fa_successful_logins', $successful + 1 );
+				update_user_meta( $user->ID, 'wpshadow_2fa_last_login', time() );
+
+				return $user;
+			}
+		}
+
+		// Failed - update statistics.
+		$failed = (int) get_user_meta( $user->ID, 'wpshadow_2fa_failed_attempts', true );
+		update_user_meta( $user->ID, 'wpshadow_2fa_failed_attempts', $failed + 1 );
+
+		return new \WP_Error(
+			'invalid_2fa_code',
+			__( 'Invalid two-factor authentication code.', 'plugin-wpshadow' )
+		);
+	}
+
+	/**
+	 * Handle successful login.
+	 *
+	 * @param string   $username Username.
+	 * @param \WP_User $user     User object.
+	 * @return void
+	 */
+	public function handle_successful_login( string $username, \WP_User $user ): void {
+		// Clean up session.
+		unset( $_SESSION['wpshadow_2fa_user_id'] );
+	}
+
+	/**
+	 * Add 2FA field to login form.
+	 *
+	 * @return void
+	 */
+	public function add_2fa_login_field(): void {
+		?>
+		<p class="wpshadow-2fa-field" style="display: none;">
+			<label for="wpshadow_2fa_code"><?php esc_html_e( '2FA Code', 'plugin-wpshadow' ); ?></label>
+			<input type="text" name="wpshadow_2fa_code" id="wpshadow_2fa_code" class="input" size="20" autocomplete="off" pattern="[0-9]{6}" inputmode="numeric" />
+		</p>
+		<?php if ( get_option( 'wpshadow_two-factor-auth_trusted_devices', false ) ) : ?>
+		<p class="wpshadow-2fa-trust" style="display: none;">
+			<label>
+				<input type="checkbox" name="wpshadow_2fa_trust" value="1" />
+				<?php esc_html_e( 'Trust this device for 30 days', 'plugin-wpshadow' ); ?>
+			</label>
+		</p>
+		<?php endif; ?>
+		<?php
+	}
+
+	/**
+	 * Enqueue login assets.
+	 *
+	 * @return void
+	 */
+	public function enqueue_login_assets(): void {
+		?>
+		<style>
+			.wpshadow-2fa-field input { letter-spacing: 0.3em; font-size: 18px; }
+		</style>
+		<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			var errorMsg = document.querySelector('.login .message');
+			if (errorMsg && (errorMsg.textContent.indexOf('two-factor') > -1 || errorMsg.textContent.indexOf('2FA') > -1)) {
+				document.querySelector('.wpshadow-2fa-field').style.display = 'block';
+				var trustField = document.querySelector('.wpshadow-2fa-trust');
+				if (trustField) trustField.style.display = 'block';
+			}
+		});
+		</script>
+		<?php
+	}
+
+	/**
+	 * Show 2FA settings in user profile.
+	 *
+	 * @param \WP_User $user User object.
+	 * @return void
+	 */
+	public function show_2fa_settings( \WP_User $user ): void {
+		$is_enabled = $this->is_2fa_enabled( $user->ID );
+		$stats = $this->get_user_statistics( $user->ID );
+		?>
+		<h2><?php esc_html_e( 'Two-Factor Authentication', 'plugin-wpshadow' ); ?></h2>
+		<table class="form-table">
+			<tr>
+				<th><?php esc_html_e( 'Status', 'plugin-wpshadow' ); ?></th>
+				<td>
+					<?php if ( $is_enabled ) : ?>
+						<span class="dashicons dashicons-yes" style="color: #00a32a;"></span>
+						<?php esc_html_e( 'Enabled', 'plugin-wpshadow' ); ?>
+						<button type="button" class="button" id="wpshadow-disable-2fa"><?php esc_html_e( 'Disable 2FA', 'plugin-wpshadow' ); ?></button>
+					<?php else : ?>
+						<span class="dashicons dashicons-no" style="color: #d63638;"></span>
+						<?php esc_html_e( 'Disabled', 'plugin-wpshadow' ); ?>
+						<button type="button" class="button button-primary" id="wpshadow-setup-2fa"><?php esc_html_e( 'Setup 2FA', 'plugin-wpshadow' ); ?></button>
+					<?php endif; ?>
+				</td>
+			</tr>
+			<?php if ( $is_enabled ) : ?>
+			<tr>
+				<th><?php esc_html_e( 'Statistics', 'plugin-wpshadow' ); ?></th>
+				<td>
+					<p><?php echo esc_html( sprintf( __( 'Successful logins: %d', 'plugin-wpshadow' ), $stats['successful_logins'] ) ); ?></p>
+					<p><?php echo esc_html( sprintf( __( 'Failed attempts: %d', 'plugin-wpshadow' ), $stats['failed_attempts'] ) ); ?></p>
+					<p><?php echo esc_html( sprintf( __( 'Backup codes remaining: %d', 'plugin-wpshadow' ), $stats['remaining_backup_codes'] ) ); ?></p>
+					<p><?php echo esc_html( sprintf( __( 'Trusted devices: %d', 'plugin-wpshadow' ), $stats['trusted_devices'] ) ); ?></p>
+					<?php if ( $stats['last_login'] ) : ?>
+					<p><?php echo esc_html( sprintf( __( 'Last login: %s', 'plugin-wpshadow' ), wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $stats['last_login'] ) ) ); ?></p>
+					<?php endif; ?>
+				</td>
+			</tr>
+			<tr>
+				<th><?php esc_html_e( 'Backup Codes', 'plugin-wpshadow' ); ?></th>
+				<td>
+					<button type="button" class="button" id="wpshadow-regenerate-backup-codes"><?php esc_html_e( 'Regenerate Backup Codes', 'plugin-wpshadow' ); ?></button>
+					<p class="description"><?php esc_html_e( 'Generate new backup codes. This will invalidate all existing codes.', 'plugin-wpshadow' ); ?></p>
+				</td>
+			</tr>
+			<?php endif; ?>
+		</table>
+		
+		<div id="wpshadow-2fa-setup-modal" style="display: none;">
+			<h3><?php esc_html_e( 'Setup Two-Factor Authentication', 'plugin-wpshadow' ); ?></h3>
+			<ol>
+				<li><?php esc_html_e( 'Install an authenticator app (Google Authenticator, Authy, etc.)', 'plugin-wpshadow' ); ?></li>
+				<li><?php esc_html_e( 'Scan the QR code below:', 'plugin-wpshadow' ); ?></li>
+			</ol>
+			<div id="wpshadow-qr-code"></div>
+			<p><strong><?php esc_html_e( 'Secret Key:', 'plugin-wpshadow' ); ?></strong> <code id="wpshadow-secret-key"></code></p>
+			<p>
+				<label for="wpshadow-verify-code"><?php esc_html_e( 'Enter code from your app to verify:', 'plugin-wpshadow' ); ?></label>
+				<input type="text" id="wpshadow-verify-code" pattern="[0-9]{6}" maxlength="6" />
+				<button type="button" class="button button-primary" id="wpshadow-verify-2fa"><?php esc_html_e( 'Verify', 'plugin-wpshadow' ); ?></button>
+			</p>
+			<div id="wpshadow-backup-codes-display" style="display: none;">
+				<h4><?php esc_html_e( 'Backup Codes', 'plugin-wpshadow' ); ?></h4>
+				<p><?php esc_html_e( 'Save these codes in a safe place. Each code can only be used once.', 'plugin-wpshadow' ); ?></p>
+				<pre id="wpshadow-backup-codes"></pre>
+			</div>
+		</div>
+
+		<script>
+		jQuery(document).ready(function($) {
+			$('#wpshadow-setup-2fa').on('click', function() {
+				$.post(ajaxurl, { action: 'WPSHADOW_generate_2fa_secret', _wpnonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_2fa' ) ); ?>' }, function(response) {
+					if (response.success) {
+						$('#wpshadow-qr-code').html('<img src="' + response.data.qr_code + '" alt="QR Code" />');
+						$('#wpshadow-secret-key').text(response.data.secret);
+						$('#wpshadow-2fa-setup-modal').show();
+					}
+				});
+			});
+
+			$('#wpshadow-verify-2fa').on('click', function() {
+				var code = $('#wpshadow-verify-code').val();
+				$.post(ajaxurl, { action: 'WPSHADOW_verify_2fa_setup', code: code, _wpnonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_2fa' ) ); ?>' }, function(response) {
+					if (response.success) {
+						$('#wpshadow-backup-codes').text(response.data.backup_codes.join('\\n'));
+						$('#wpshadow-backup-codes-display').show();
+						alert('2FA enabled successfully!');
+						location.reload();
+					} else {
+						alert('Invalid code. Please try again.');
+					}
+				});
+			});
+
+			$('#wpshadow-disable-2fa').on('click', function() {
+				if (confirm('Are you sure you want to disable 2FA?')) {
+					$.post(ajaxurl, { action: 'WPSHADOW_disable_2fa', _wpnonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_2fa' ) ); ?>' }, function(response) {
+						if (response.success) {
+							location.reload();
+						}
+					});
+				}
+			});
+
+			$('#wpshadow-regenerate-backup-codes').on('click', function() {
+				if (confirm('This will invalidate all existing backup codes. Continue?')) {
+					$.post(ajaxurl, { action: 'WPSHADOW_generate_backup_codes', _wpnonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_2fa' ) ); ?>' }, function(response) {
+						if (response.success) {
+							alert('Backup codes:\\n\\n' + response.data.codes.join('\\n'));
+						}
+					});
+				}
+			});
+		});
+		</script>
+		<?php
+	}
+
+	/**
+	 * Save 2FA settings.
+	 *
+	 * @param int $user_id User ID.
+	 * @return void
+	 */
+	public function save_2fa_settings( int $user_id ): void {
+		// Settings are saved via AJAX.
+	}
+
+	/**
+	 * AJAX: Generate 2FA secret.
+	 *
+	 * @return void
+	 */
+	public function ajax_generate_secret(): void {
+		check_ajax_referer( 'wpshadow_2fa' );
+
+		$user_id = get_current_user_id();
+		$secret = $this->generate_secret();
+
+		// Store temporarily in transient.
+		set_transient( 'wpshadow_2fa_setup_' . $user_id, $secret, 15 * MINUTE_IN_SECONDS );
+
+		wp_send_json_success(
+			array(
+				'secret'  => $secret,
+				'qr_code' => $this->generate_qr_code( $user_id, $secret ),
+			)
+		);
+	}
+
+	/**
+	 * AJAX: Verify 2FA setup.
+	 *
+	 * @return void
+	 */
+	public function ajax_verify_setup(): void {
+		check_ajax_referer( 'wpshadow_2fa' );
+
+		$user_id = get_current_user_id();
+		$code = isset( $_POST['code'] ) ? sanitize_text_field( wp_unslash( $_POST['code'] ) ) : '';
+		$secret = get_transient( 'wpshadow_2fa_setup_' . $user_id );
+
+		if ( ! $secret || ! $this->verify_totp( $code, $secret ) ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid code', 'plugin-wpshadow' ) ) );
+		}
+
+		// Save secret.
+		update_user_meta( $user_id, self::SECRET_META_KEY, $secret );
+		delete_transient( 'wpshadow_2fa_setup_' . $user_id );
+
+		// Generate backup codes.
+		$backup_codes = $this->generate_backup_codes();
+		$hashed_codes = array_map( 'wp_hash_password', $backup_codes );
+		update_user_meta( $user_id, self::BACKUP_CODES_KEY, $hashed_codes );
+
+		wp_send_json_success( array( 'backup_codes' => $backup_codes ) );
+	}
+
+	/**
+	 * AJAX: Generate backup codes.
+	 *
+	 * @return void
+	 */
+	public function ajax_generate_backup_codes(): void {
+		check_ajax_referer( 'wpshadow_2fa' );
+
+		$user_id = get_current_user_id();
+		$backup_codes = $this->generate_backup_codes();
+		$hashed_codes = array_map( 'wp_hash_password', $backup_codes );
+		update_user_meta( $user_id, self::BACKUP_CODES_KEY, $hashed_codes );
+
+		wp_send_json_success( array( 'codes' => $backup_codes ) );
+	}
+
+	/**
+	 * AJAX: Disable 2FA.
+	 *
+	 * @return void
+	 */
+	public function ajax_disable_2fa(): void {
+		check_ajax_referer( 'wpshadow_2fa' );
+
+		$user_id = get_current_user_id();
+		delete_user_meta( $user_id, self::SECRET_META_KEY );
+		delete_user_meta( $user_id, self::BACKUP_CODES_KEY );
+		delete_user_meta( $user_id, self::TRUSTED_DEVICES_KEY );
+
+		wp_send_json_success();
+	}
+
+	/**
+	 * AJAX: Remove trusted device.
+	 *
+	 * @return void
+	 */
+	public function ajax_remove_trusted_device(): void {
+		check_ajax_referer( 'wpshadow_2fa' );
+
+		$user_id = get_current_user_id();
+		$device_id = isset( $_POST['device_id'] ) ? sanitize_text_field( wp_unslash( $_POST['device_id'] ) ) : '';
+
+		if ( $this->remove_trusted_device( $user_id, $device_id ) ) {
+			wp_send_json_success();
+		} else {
+			wp_send_json_error();
+		}
+	}
+
+	/**
+	 * Show admin notices for 2FA.
+	 *
+	 * @return void
+	 */
+	public function show_2fa_notices(): void {
+		$user_id = get_current_user_id();
+
+		if ( $this->is_2fa_required( $user_id ) && ! $this->is_2fa_enabled( $user_id ) ) {
+			?>
+			<div class="notice notice-warning">
+				<p>
+					<?php esc_html_e( 'Two-factor authentication is required for your account.', 'plugin-wpshadow' ); ?>
+					<a href="<?php echo esc_url( admin_url( 'profile.php#wpshadow-2fa' ) ); ?>"><?php esc_html_e( 'Set it up now', 'plugin-wpshadow' ); ?></a>
+				</p>
+			</div>
+			<?php
+		}
 	}
 }
