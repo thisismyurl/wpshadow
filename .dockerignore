@@ -1,0 +1,8 @@
+.git
+.gitignore
+*.md
+.DS_Store
+node_modules
+.editorconfig
+.env
+.env.example

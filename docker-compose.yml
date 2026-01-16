@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  wordpress:
+    image: wordpress:latest
+    container_name: wpshadow-dev
+    ports:
+      - "8000:80"
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DEBUG: 'true'
+      WORDPRESS_DEBUG_LOG: /var/www/html/wp-content/debug.log
+      WORDPRESS_DEBUG_DISPLAY: 'false'
+    volumes:
+      - ./free:/var/www/html/wp-content/plugins/plugin-wpshadow
+      - ./pro:/var/www/html/wp-content/plugins/plugin-wpshadow-pro
+      - wp_data:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - wpshadow-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/wp-admin/admin-ajax.php"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mysql:
+    image: mysql:8.0
+    container_name: wpshadow-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - wpshadow-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: wpshadow-phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: wordpress
+      PMA_PASSWORD: wordpress
+    depends_on:
+      - mysql
+    networks:
+      - wpshadow-network
+
+volumes:
+  db_data:
+  wp_data:
+
+networks:
+  wpshadow-network:
+    driver: bridge
