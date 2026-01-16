@@ -23,7 +23,7 @@ final class WPSHADOW_Feature_Broken_Link_Checker extends WPSHADOW_Abstract_Featu
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'                 => 'wpshadow_broken_link_checker',
+				'id'                 => 'broken-link-checker',
 				'name'               => __( 'Broken Link Checker', 'plugin-wpshadow' ),
 				'description'        => __( 'Automatically crawls your HTML and CSS to find "404 Not Found" errors or non-working outbound links. Prevents "link rot" which frustrates users and negatively impacts search rankings.', 'plugin-wpshadow' ),
 				'scope'              => 'core',
