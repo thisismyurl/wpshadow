@@ -314,6 +314,10 @@ function WPSHADOW_register_core_features(): void {
 
 	// Privacy and compliance features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Consent_Checks() );
+	
+	// Accessibility and mobile features.
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Mobile_Friendliness() );
+	
 	// Security features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Hardening() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Hotlink_Protection() );
@@ -791,6 +795,7 @@ function wpshadow_init(): void {
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-hardening.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-hotlink-protection.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-a11y-audit.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-mobile-friendliness.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-tips-coach.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-image-lazy-loading.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-asset-minification.php' );
