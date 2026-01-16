@@ -278,6 +278,7 @@ function WPSHADOW_register_core_features(): void {
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Vault_Audit() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Vulnerability_Watch() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Image_Smart_Focus() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Favicon_Checker() );
 
 	// Performance optimization features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Script_Deferral() );
@@ -801,6 +802,7 @@ function wpshadow_init(): void {
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-script-optimizer.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-conflict-sandbox.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-visual-regression.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-favicon-checker.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/wps-feature-functions.php' );
 	
 	// Initialize Registry System.
