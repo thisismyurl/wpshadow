@@ -94,8 +94,12 @@ final class WPSHADOW_Feature_Hotlink_Protection extends WPSHADOW_Abstract_Featur
 		// Set transient for 24 hours.
 		set_transient( 'wpshadow_hotlink_protection_last_config', time(), DAY_IN_SECONDS );
 
-		// Detect server type.
+		// Detect server type with strict validation.
 		$server_software = isset( $_SERVER['SERVER_SOFTWARE'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ) : '';
+		// Only proceed if server software string contains expected characters.
+		if ( ! preg_match( '/^[a-zA-Z0-9.\/_\- ]+$/', $server_software ) ) {
+			return; // Invalid server software string.
+		}
 		$is_apache       = stripos( $server_software, 'apache' ) !== false || stripos( $server_software, 'litespeed' ) !== false;
 		$is_nginx        = stripos( $server_software, 'nginx' ) !== false;
 
@@ -133,8 +137,17 @@ final class WPSHADOW_Feature_Hotlink_Protection extends WPSHADOW_Abstract_Featur
 			$valid_referers[] = '*.' . sanitize_text_field( $domain );
 		}
 
-		// Build file extensions pattern.
-		$extensions = implode( '|', array_map( 'preg_quote', $protected_types ) );
+		// Build file extensions pattern with safe escaping.
+		$safe_extensions = array_map(
+			function( $ext ) {
+				// Only allow alphanumeric extensions.
+				return preg_match( '/^[a-z0-9]+$/i', $ext ) ? preg_quote( $ext, '/' ) : '';
+			},
+			$protected_types
+		);
+		// Filter out empty values.
+		$safe_extensions = array_filter( $safe_extensions );
+		$extensions = implode( '|', $safe_extensions );
 
 		// Build .htaccess content.
 		$htaccess_content  = "\n# BEGIN WPShadow Hotlink Protection\n";
@@ -176,9 +189,11 @@ final class WPSHADOW_Feature_Hotlink_Protection extends WPSHADOW_Abstract_Featur
 
 		// Attempt to write the file.
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
-		$result = @file_put_contents( $htaccess_file, $new_content );
+		$result = file_put_contents( $htaccess_file, $new_content );
 
 		if ( false === $result ) {
+			// Log the error for debugging.
+			error_log( 'WPShadow Hotlink Protection: Failed to write .htaccess file at ' . $htaccess_file );
 			$this->add_admin_notice(
 				'htaccess_write_failed',
 				__( 'Hotlink Protection: Could not write to uploads/.htaccess. Please check file permissions.', 'plugin-wpshadow' ),
@@ -221,7 +236,11 @@ final class WPSHADOW_Feature_Hotlink_Protection extends WPSHADOW_Abstract_Featur
 
 		if ( $new_content !== $existing_content ) {
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
-			@file_put_contents( $htaccess_file, $new_content );
+			$result = file_put_contents( $htaccess_file, $new_content );
+			if ( false === $result ) {
+				// Log the error for debugging.
+				error_log( 'WPShadow Hotlink Protection: Failed to remove rules from .htaccess file at ' . $htaccess_file );
+			}
 		}
 	}
 
