@@ -363,7 +363,7 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 	}
 
 	/**
-	 * Add Cross-Origin Isolation headers to protect against spectre-like attacks.
+	 * Add Cross-Origin Isolation headers to protect against Spectre-like attacks.
 	 *
 	 * This adds Cross-Origin-Opener-Policy (COOP) and Cross-Origin-Embedder-Policy (COEP)
 	 * headers to isolate the site's browsing context from untrusted third-party content.
@@ -371,7 +371,7 @@ final class WPSHADOW_Feature_Hardening extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public function add_cross_origin_isolation_headers(): void {
-		// Don't send headers if already sent or if headers already sent.
+		// Don't send headers if headers already sent.
 		if ( headers_sent() ) {
 			return;
 		}
