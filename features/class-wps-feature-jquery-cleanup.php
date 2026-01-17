@@ -38,29 +38,15 @@ final class WPSHADOW_Feature_jQuery_Cleanup extends WPSHADOW_Abstract_Feature {
 				'icon'               => 'dashicons-editor-code',
 				'category'           => 'performance',
 				'priority'           => 20,
-			)
-		);
-
-		if ( method_exists( $this, 'register_sub_features' ) ) {
-			$this->register_sub_features(
-				array(
+				'sub_features'       => array(
 					'remove_migrate_frontend' => __( 'Remove jQuery Migrate on Frontend', 'plugin-wpshadow' ),
 					'keep_admin'             => __( 'Keep jQuery Migrate in Admin', 'plugin-wpshadow' ),
 					'log_removals'           => __( 'Log jQuery Migrate Removals', 'plugin-wpshadow' ),
-				)
-			);
-		}
+				),
+			)
+		);
 
-		if ( method_exists( $this, 'set_default_sub_features' ) ) {
-			$this->set_default_sub_features(
-				array(
-					'remove_migrate_frontend' => true,
-					'keep_admin'             => true,
-					'log_removals'           => false,
-				)
-			);
-		}
-		
+		$this->seed_default_sub_feature_options();
 		$this->log_activity( 'feature_initialized', 'jQuery Cleanup feature initialized', 'info' );
 	}
 
@@ -83,24 +69,86 @@ final class WPSHADOW_Feature_jQuery_Cleanup extends WPSHADOW_Abstract_Feature {
 			return;
 		}
 
-		add_action( 'wp_default_scripts', array( $this, 'remove_jquery_migrate' ) );
-		
 		// Add Site Health tests.
 		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
 	/**
-	 * Remove jQuery Migrate dependency from jQuery core.
+	 * Register Site Health test.
 	 *
-	 * @param \WP_Scripts $scripts The WP_Scripts object.
+	 * @param array $tests Site Health tests.
+	 * @return array Modified tests array.
+	 */
+	public function register_site_health_test( array $tests ): array {
+		$tests['direct']['jquery_cleanup'] = array(
+			'label' => __( 'jQuery Migrate Cleanup', 'plugin-wpshadow' ),
+			'test'  => array( $this, 'test_jquery_cleanup' ),
+		);
+
+		return $tests;
+	}
+
+	/**
+	 * Site Health test for jQuery cleanup.
+	 *
+	 * @return array Test result.
+	 */
+	public function test_jquery_cleanup(): array {
+		$enabled_features = 0;
+
+		if ( get_option( 'wpshadow_jquery-cleanup_remove_migrate_frontend', true ) ) {
+			$enabled_features++;
+		}
+		if ( get_option( 'wpshadow_jquery-cleanup_keep_admin', true ) ) {
+			$enabled_features++;
+		}
+		if ( get_option( 'wpshadow_jquery-cleanup_log_removals', false ) ) {
+			$enabled_features++;
+		}
+
+		$status = $enabled_features >= 2 ? 'good' : 'recommended';
+		$label  = $enabled_features >= 2 ?
+			__( 'jQuery Migrate cleanup is active', 'plugin-wpshadow' ) :
+			__( 'jQuery Migrate cleanup could be improved', 'plugin-wpshadow' );
+
+		return array(
+			'label'       => $label,
+			'status'      => $status,
+			'badge'       => array(
+				'label' => __( 'Performance', 'plugin-wpshadow' ),
+				'color' => 'blue',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				sprintf(
+					/* translators: %d: number of enabled cleanup features */
+					__( '%d jQuery cleanup options are enabled.', 'plugin-wpshadow' ),
+					$enabled_features
+				)
+			),
+			'actions'     => '',
+			'test'        => 'jquery_cleanup',
+		);
+	}
+
+	/**
+	 * Seed default sub-feature options when absent.
+	 *
 	 * @return void
 	 */
-	public function remove_jquery_migrate( \WP_Scripts $scripts ): void {
-		if ( ! is_admin() && isset( $scripts->registered['jquery'] ) ) {
-			$script = $scripts->registered['jquery'];
-			if ( $script->deps ) {
-				// Remove jquery-migrate from dependencies.
-				$script->deps = array_diff( (array) $script->deps, array( 'jquery-migrate' ) );
+	private function seed_default_sub_feature_options(): void {
+		$defaults = array(
+			'remove_migrate_frontend' => true,
+			'keep_admin'             => true,
+			'log_removals'           => false,
+		);
+
+		foreach ( $defaults as $key => $default_value ) {
+			$option_name   = 'wpshadow_jquery-cleanup_' . $key;
+			$current_value = get_option( $option_name, null );
+
+			if ( null === $current_value ) {
+				update_option( $option_name, $default_value, false );
 			}
 		}
 	}

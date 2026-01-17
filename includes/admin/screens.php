@@ -133,54 +133,8 @@ function wpshadow_setup_hub_dashboard_screen( string $hub_id ): void {
 			break;
 
 		case 'vault':
-			add_meta_box(
-				'wpshadow_vault_overview',
-				__( 'Vault Overview', 'plugin-wpshadow' ),
-				array( '\\WPShadow\\WPSHADOW_Dashboard_Widgets', 'render_metabox_vault_overview' ),
-				$screen->id,
-				'normal',
-				'high'
-			);
-			add_meta_box(
-				'wpshadow_vault_activity',
-				__( 'Vault Activity', 'plugin-wpshadow' ),
-				array( '\\WPShadow\\WPSHADOW_Dashboard_Widgets', 'render_metabox_vault_activity' ),
-				$screen->id,
-				'normal',
-				'default'
-			);
-			add_meta_box(
-				'wpshadow_vault_modules',
-				$hub_name . ' ' . __( 'Modules', 'plugin-wpshadow' ),
-				array( '\\WPShadow\\WPSHADOW_Dashboard_Widgets', 'render_metabox_modules' ),
-				$screen->id,
-				'normal',
-				'low'
-			);
-			add_meta_box(
-				'wpshadow_vault_stats',
-				__( 'Vault Status', 'plugin-wpshadow' ),
-				array( '\\WPShadow\\WPSHADOW_Dashboard_Widgets', 'render_metabox_vault_status' ),
-				$screen->id,
-				'side',
-				'high'
-			);
-			add_meta_box(
-				'wpshadow_vault_quick_actions',
-				__( 'Vault Quick Actions', 'plugin-wpshadow' ),
-				array( '\\WPShadow\\WPSHADOW_Dashboard_Widgets', 'render_metabox_quick_actions' ),
-				$screen->id,
-				'side',
-				'default'
-			);
-			add_meta_box(
-				'wpshadow_vault_health',
-				__( 'Vault Health', 'plugin-wpshadow' ),
-				array( '\\WPShadow\\WPSHADOW_Dashboard_Widgets', 'render_metabox_vault_health' ),
-				$screen->id,
-				'side',
-				'low'
-			);
+			// NOTE: Vault screens moved to module-vault-wpshadow
+			// This case is kept for backward compatibility but does nothing
 			break;
 
 		default:

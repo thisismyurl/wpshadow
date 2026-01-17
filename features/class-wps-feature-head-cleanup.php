@@ -58,6 +58,21 @@ final class WPSHADOW_Feature_Head_Cleanup extends WPSHADOW_Abstract_Feature {
 	}
 
 	/**
+	 * Register hooks for head cleanup parent feature.
+	 *
+	 * Only attaches Site Health tests; child features handle cleanup actions.
+	 *
+	 * @return void
+	 */
+	public function register(): void {
+		if ( ! $this->is_enabled() ) {
+			return;
+		}
+
+		add_filter( 'site_status_tests', array( $this, 'add_site_health_tests' ) );
+	}
+
+	/**
 	 * Set default values for sub-features if not already set.
 	 *
 	 * @return void
@@ -77,164 +92,12 @@ final class WPSHADOW_Feature_Head_Cleanup extends WPSHADOW_Abstract_Feature {
 		);
 
 		foreach ( $defaults as $key => $default_value ) {
-			$option_name = 'wpshadow_head-cleanup_' . $key;
-			if ( false === get_option( $option_name ) ) {
+			$option_name   = 'wpshadow_head-cleanup_' . $key;
+			$current_value = get_option( $option_name, null );
+
+			if ( null === $current_value ) {
 				update_option( $option_name, $default_value, false );
 			}
-		}
-	}
-
-	/**
-	 * Enable details page for this feature.
-	 *
-	 * @return bool
-	 */
-	public function has_details_page(): bool {
-		return true;
-	}
-
-	/**
-	 * Register hooks when feature is enabled.
-	 *
-	 * @return void
-	 */
-	public function register(): void {
-		if ( ! $this->is_enabled() ) {
-			return;
-		}
-
-		add_action( 'init', array( $this, 'cleanup_head_elements' ) );
-		
-		// Register Site Health checks
-		add_filter( 'site_status_tests', array( $this, 'add_site_health_tests' ) );
-	}
-
-	/**
-	 * Remove unnecessary head elements.
-	 *
-	 * @return void
-	 */
-	public function cleanup_head_elements(): void {
-		// Emojis - Remove emoji detection script and styles
-		if ( get_option( 'wpshadow_head-cleanup_remove_emoji', true ) ) {
-			remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
-			remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
-			remove_action( 'wp_print_styles', 'print_emoji_styles' );
-			remove_action( 'admin_print_styles', 'print_emoji_styles' );
-			
-			$this->log_activity(
-				'emoji_removed',
-				'Emoji detection scripts and styles removed from page head',
-				'info'
-			);
-		}
-
-		// Meta tags and generators - Remove version information
-		if ( get_option( 'wpshadow_head-cleanup_remove_generator', true ) ) {
-			remove_action( 'wp_head', 'wp_generator' );
-			add_filter( 'the_generator', '__return_false' );
-			
-			$this->log_activity(
-				'generator_removed',
-				'WordPress generator meta tag removed (security improvement)',
-				'success'
-			);
-		}
-
-		// Shortlink - Remove shortlink tag
-		if ( get_option( 'wpshadow_head-cleanup_remove_shortlink', true ) ) {
-			remove_action( 'wp_head', 'wp_shortlink_wp_head' );
-			
-			$this->log_activity(
-				'shortlink_removed',
-				'Shortlink tag removed from page head',
-				'info'
-			);
-		}
-
-		// Discovery links - RSD (Really Simple Discovery)
-		if ( get_option( 'wpshadow_head-cleanup_remove_rsd', true ) ) {
-			remove_action( 'wp_head', 'rsd_link' );
-			
-			$this->log_activity(
-				'rsd_removed',
-				'RSD (Really Simple Discovery) link removed',
-				'info'
-			);
-		}
-
-		// Windows Live Writer - Remove manifest link
-		if ( get_option( 'wpshadow_head-cleanup_remove_wlw', true ) ) {
-			remove_action( 'wp_head', 'wlwmanifest_link' );
-			
-			$this->log_activity(
-				'wlw_removed',
-				'Windows Live Writer manifest link removed',
-				'info'
-			);
-		}
-
-		// REST API - Remove REST API link from head
-		if ( get_option( 'wpshadow_head-cleanup_remove_rest_link', false ) ) {
-			remove_action( 'wp_head', 'rest_output_link_wp_head', 10 );
-			
-			$this->log_activity(
-				'rest_link_removed',
-				'REST API link removed (May affect REST clients)',
-				'warning'
-			);
-		}
-
-		// oEmbed - Remove discovery links
-		if ( get_option( 'wpshadow_head-cleanup_remove_oembed', true ) ) {
-			remove_action( 'wp_head', 'wp_oembed_add_discovery_links' );
-			remove_action( 'wp_head', 'wp_oembed_add_host_js' );
-			
-			$this->log_activity(
-				'oembed_removed',
-				'oEmbed discovery links removed',
-				'info'
-			);
-		}
-
-		// Feeds - Remove feed links
-		if ( get_option( 'wpshadow_head-cleanup_remove_feeds', false ) ) {
-			remove_action( 'wp_head', 'feed_links_extra', 3 );
-			remove_action( 'wp_head', 'feed_links', 2 );
-			
-			$this->log_activity(
-				'feeds_removed',
-				'Feed links removed from page head',
-				'warning'
-			);
-		}
-
-		// Recent comments style - Remove inline styles
-		if ( get_option( 'wpshadow_head-cleanup_remove_comments_style', true ) ) {
-			global $wp_widget_factory;
-			if ( isset( $wp_widget_factory->widgets['WP_Widget_Recent_Comments'] ) ) {
-				remove_action(
-					'wp_head',
-					array( $wp_widget_factory->widgets['WP_Widget_Recent_Comments'], 'recent_comments_style' )
-				);
-				
-				$this->log_activity(
-					'comments_style_removed',
-					'Recent comments inline styles removed',
-					'info'
-				);
-			}
-		}
-
-		// Security - Disable XML-RPC
-		if ( get_option( 'wpshadow_head-cleanup_disable_xmlrpc', true ) ) {
-			add_filter( 'xmlrpc_enabled', '__return_false' );
-			
-			$this->log_activity(
-				'xmlrpc_disabled',
-				'XML-RPC disabled for security',
-				'success'
-			);
 		}
 	}
 

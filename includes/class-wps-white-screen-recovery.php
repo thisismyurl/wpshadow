@@ -123,12 +123,15 @@ class WPSHADOW_White_Screen_Recovery {
 			delete_option( self::PROBLEMATIC_PLUGINS_KEY );
 		}
 
-		// Deactivate recovery mode
+		// Deactivate recovery mode - this clears recovery options
 		self::deactivate_recovery_mode();
 
-		// Clear any relevant transients
+		// Clear ALL related transients and options
 		delete_transient( 'wpshadow_recovery_status' );
 		delete_transient( 'wpshadow_fatal_error_needs_manual_recovery' );
+		delete_option( self::PROBLEMATIC_PLUGINS_KEY );
+		delete_option( 'wpshadow_last_fatal_error' );
+		delete_option( 'wpshadow_recovery_timestamp' );
 
 		// Clear object cache if available
 		if ( function_exists( 'wp_cache_flush' ) ) {
@@ -136,7 +139,7 @@ class WPSHADOW_White_Screen_Recovery {
 		}
 
 		wp_send_json_success( array( 
-			'message' => esc_html__( 'Recovery mode exited successfully.', 'plugin-wpshadow' ),
+			'message' => esc_html__( 'Recovery mode exited successfully. Reloading page...', 'plugin-wpshadow' ),
 			'timestamp' => current_time( 'mysql' ),
 		) );
 	}
@@ -356,8 +359,21 @@ class WPSHADOW_White_Screen_Recovery {
 	 * @return void
 	 */
 	public static function deactivate_recovery_mode(): void {
+		// Delete all recovery-related options
 		delete_option( self::RECOVERY_MODE_KEY );
 		delete_option( self::RECOVERY_ATTEMPTS_KEY );
+		delete_option( self::PROBLEMATIC_PLUGINS_KEY );
+		
+		// Clear recovery-related transients
+		delete_transient( 'wpshadow_recovery_status' );
+		delete_transient( 'wpshadow_fatal_error_needs_manual_recovery' );
+		
+		// Clear any cached recovery state
+		if ( function_exists( 'wp_cache_delete' ) ) {
+			wp_cache_delete( self::RECOVERY_MODE_KEY, 'options' );
+			wp_cache_delete( self::RECOVERY_ATTEMPTS_KEY, 'options' );
+			wp_cache_delete( self::PROBLEMATIC_PLUGINS_KEY, 'options' );
+		}
 	}
 
 	/**

@@ -130,16 +130,14 @@ class WPSHADOW_Settings_Ajax {
 
 	/**
 	 * Save license settings.
+	 * NOTE: Licensing removed from free plugin - this method is deprecated.
 	 *
 	 * @param array $form_data Form data.
 	 * @return void
 	 */
 	private static function save_license_settings( array $form_data ): void {
-		$license_key = isset( $form_data['wpshadow_license_key'] ) ? sanitize_text_field( $form_data['wpshadow_license_key'] ) : '';
-		update_option( 'wpshadow_license_key', $license_key );
-		$auto_update = isset( $form_data['wpshadow_license_auto_update_types'] ) ? array_map( 'sanitize_key', (array) $form_data['wpshadow_license_auto_update_types'] ) : array();
-		update_option( 'wpshadow_license_auto_update_types', $auto_update );
-		update_option( 'wpshadow_license_update_channel', sanitize_key( $form_data['wpshadow_license_update_channel'] ?? 'stable' ) );
+		// NOTE: License settings removed - licensing is PRO plugin only
+		// Method kept for backward compatibility but does nothing
 	}
 
 	/**

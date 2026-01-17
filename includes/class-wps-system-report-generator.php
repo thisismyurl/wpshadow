@@ -50,7 +50,7 @@ class WPSHADOW_System_Report_Generator {
 	 */
 	public static function register_menu(): void {
 		add_submenu_page(
-			'wpshadow',
+			null, // Hidden from menu - accessible via QuickLinks
 			__( 'System Report', 'plugin-wpshadow' ),
 			__( 'System Report', 'plugin-wpshadow' ),
 			'manage_options',

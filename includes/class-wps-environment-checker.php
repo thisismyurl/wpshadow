@@ -165,10 +165,19 @@ class WPSHADOW_Environment_Checker {
 			'upload_limit'     => self::get_upload_limit_status(),
 			'extensions'       => self::get_extensions_status(),
 			'environment_type' => wp_get_environment_type(),
-			'is_compatible'    => self::is_environment_compatible(),
-			'has_constraints'  => self::has_resource_constraints(),
 			'checked_at'       => current_time( 'mysql' ),
 		);
+
+		// Compute compatibility after building the base status array
+		$result['is_compatible']   = $result['php_version']['meets_requirement']
+			&& $result['wp_version']['meets_requirement']
+			&& $result['memory_limit']['meets_minimum']
+			&& $result['execution_time']['meets_minimum']
+			&& $result['extensions']['all_required_loaded'];
+		
+		$result['has_constraints'] = ! $result['memory_limit']['meets_recommended']
+			|| ! $result['execution_time']['meets_recommended']
+			|| ! empty( $result['extensions']['recommended_missing'] );
 
 		$getting = false;
 		return $result;
@@ -640,14 +649,20 @@ class WPSHADOW_Environment_Checker {
 			return;
 		}
 
-		// Check if notice was dismissed.
-		if ( class_exists( '\\WPShadow\\WPSHADOW_Notice_Manager' )
-			&& WPSHADOW_Notice_Manager::is_dismissed( 'wpshadow_environment_constraints' ) ) {
-			return;
+		// Check if notice was dismissed (suppress for 1 hour).
+		$user_id = get_current_user_id();
+		if ( $user_id ) {
+			$transient_key = 'wpshadow_environment_constraints_dismissed_' . $user_id;
+			$dismissed_time = get_transient( $transient_key );
+			// Temporary debug
+			error_log( 'WPShadow: Checking transient ' . $transient_key . ' = ' . var_export( $dismissed_time, true ) );
+			if ( $dismissed_time !== false ) {
+				return;
+			}
 		}
 
 		?>
-		<div class="notice notice-warning is-dismissible" data-notice-key="wpshadow_environment_constraints">
+		<div class="notice notice-warning is-dismissible" data-notice-key="wpshadow_environment_constraints" data-dismiss-duration="3600">
 			<p><strong><?php esc_html_e( 'WPShadow: Resource Constraints Detected', 'plugin-wpshadow' ); ?></strong></p>
 			<p><?php esc_html_e( 'Your server is running below recommended specifications. Operations will be batched for optimal performance.', 'plugin-wpshadow' ); ?></p>
 			<ul style="list-style: disc; margin-left: 20px;">
@@ -655,7 +670,33 @@ class WPSHADOW_Environment_Checker {
 					<li><?php echo esc_html( $warning ); ?></li>
 				<?php endforeach; ?>
 			</ul>
+			<button type="button" class="notice-dismiss">
+				<span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'plugin-wpshadow' ); ?></span>
+			</button>
 		</div>
+		<script type="text/javascript">
+		jQuery(document).ready(function($) {
+			$('.notice[data-notice-key="wpshadow_environment_constraints"] .notice-dismiss').on('click', function(e) {
+				e.preventDefault();
+				var $notice = $(this).closest('.notice');
+				$.post(ajaxurl, {
+					action: 'wpshadow_dismiss_notice',
+					nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_dismiss_notice' ) ); ?>',
+					notice_key: 'wpshadow_environment_constraints',
+					duration: 3600
+				}, function(response) {
+					console.log('Notice dismissed:', response);
+				}).fail(function(xhr, status, error) {
+					console.error('Failed to dismiss notice:', error, xhr.responseText);
+				});
+				$notice.fadeTo(100, 0, function() {
+					$notice.slideUp(100, function() {
+						$notice.remove();
+					});
+				});
+			});
+		});
+		</script>
 		<?php
 	}
 

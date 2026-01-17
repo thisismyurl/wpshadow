@@ -792,7 +792,7 @@ class WPSHADOW_Site_Audit {
 	 */
 	public static function register_menu(): void {
 		add_submenu_page(
-			'wpshadow',
+			null, // Hidden from menu - accessible via QuickLinks
 			__( 'Site Audit', 'plugin-wpshadow' ),
 			__( 'Audit', 'plugin-wpshadow' ),
 			'manage_options',

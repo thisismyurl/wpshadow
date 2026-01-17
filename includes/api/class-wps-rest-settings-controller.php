@@ -361,15 +361,15 @@ class WPSHADOW_REST_Settings_Controller extends WPSHADOW_REST_Controller_Base {
 
 	/**
 	 * Check licensing system
+	 * NOTE: Licensing removed from free plugin - always returns not available.
 	 *
 	 * @return array
 	 */
 	private function check_licensing(): array {
-		$available = class_exists( '\\WPShadow\\WPSHADOW_License' );
-
+		// NOTE: Licensing is PRO plugin only
 		return array(
-			'status'  => $available ? 'ok' : 'warning',
-			'message' => $available ? 'Licensing system is available' : 'Licensing system not loaded',
+			'status'  => 'info',
+			'message' => 'Licensing is available in WPShadow PRO',
 		);
 	}
 }

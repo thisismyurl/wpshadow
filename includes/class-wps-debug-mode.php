@@ -81,7 +81,7 @@ class WPSHADOW_Debug_Mode {
 	 */
 	public static function add_admin_menu(): void {
 		add_submenu_page(
-			'wpshadow',
+			null, // Hidden from menu - accessible via QuickLinks
 			__( 'Debug Tools', 'plugin-wpshadow' ),
 			__( 'Debug Tools', 'plugin-wpshadow' ),
 			'manage_options',

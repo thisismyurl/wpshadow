@@ -856,7 +856,7 @@ class WPSHADOW_Magic_Link_Support {
 	 */
 	public static function register_menu(): void {
 		add_submenu_page(
-			'wpshadow',
+			null, // Hidden from menu - accessible via QuickLinks
 			__( 'Magic Link Support', 'plugin-wpshadow' ),
 			__( 'Magic Links', 'plugin-wpshadow' ),
 			'manage_options',

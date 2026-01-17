@@ -40,8 +40,24 @@ $GLOBALS['wpshadow_grouped_features'] = $grouped_features;
 
 	<?php
 	// Check if wizard should be shown (not dismissed and not completed)
-	$wizard_dismissed = get_user_meta( get_current_user_id(), 'wpshadow_setup_wizard_dismissed', true );
-	$wizard_completed = get_user_meta( get_current_user_id(), 'wpshadow_setup_wizard_completed', true );
+	$user_id = get_current_user_id();
+	$wizard_dismissed_raw = get_user_meta( $user_id, 'wpshadow_setup_wizard_dismissed', true );
+	$wizard_completed_raw = get_user_meta( $user_id, 'wpshadow_setup_wizard_completed', true );
+	$wizard_dismissed = (bool) $wizard_dismissed_raw;
+	$wizard_completed = (bool) $wizard_completed_raw;
+	
+	// Debug: Log the values (remove after testing)
+	if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+		error_log( sprintf( 
+			'WPShadow Wizard Check - User: %d, Dismissed Raw: %s (%s), Completed Raw: %s (%s), Show Wizard: %s',
+			$user_id,
+			var_export( $wizard_dismissed_raw, true ),
+			var_export( $wizard_dismissed, true ),
+			var_export( $wizard_completed_raw, true ),
+			var_export( $wizard_completed, true ),
+			var_export( ( ! $wizard_dismissed && ! $wizard_completed && ! empty( $features ) ), true )
+		) );
+	}
 
 	if ( ! $wizard_dismissed && ! $wizard_completed && ! empty( $features ) ) :
 		// Define plain English explanations for each feature
@@ -192,6 +208,8 @@ $GLOBALS['wpshadow_grouped_features'] = $grouped_features;
 	<div class="wps-features-container">
 		<form method="post" id="wps-features-form">
 			<?php wp_nonce_field( 'wpshadow_save_features', 'wpshadow_features_nonce' ); ?>
+			<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
+			<?php wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
 			<input type="hidden" name="wpshadow_features_context[level]" value="<?php echo esc_attr( $level ); ?>" />
 			<input type="hidden" name="wpshadow_features_context[hub]" value="<?php echo esc_attr( $hub_id ); ?>" />
 			<input type="hidden" name="wpshadow_features_context[spoke]" value="<?php echo esc_attr( $spoke_id ); ?>" />
@@ -222,18 +240,20 @@ $GLOBALS['wpshadow_grouped_features'] = $grouped_features;
 							<?php echo esc_html__( 'Network scope', 'plugin-wpshadow' ); ?>
 						</span>
 					<?php endif; ?>
-					<?php
-					// Show rerun wizard link if wizard was completed or dismissed
-					if ( $wizard_dismissed || $wizard_completed ) :
-						?>
-						<a href="#" class="wps-rerun-wizard" style="color: #667eea; text-decoration: none; font-weight: 500; cursor: pointer;">
-							<?php esc_html_e( 'Rerun Setup Wizard', 'plugin-wpshadow' ); ?>
-						</a>
-						<?php
-						endif;
-					?>
 				</div>
 			</p>
+			<?php
+			// Show rerun wizard link below save button if wizard was completed or dismissed
+			if ( $wizard_dismissed || $wizard_completed ) :
+				?>
+				<p style="margin-top: 0; padding-top: 0;">
+					<a href="#" class="wps-rerun-wizard" style="color: #667eea; text-decoration: none; font-size: 13px;">
+						<?php esc_html_e( 'Rerun Setup Wizard', 'plugin-wpshadow' ); ?>
+					</a>
+				</p>
+				<?php
+				endif;
+			?>
 		</form>
 	</div>
 </div>
@@ -352,20 +372,8 @@ $GLOBALS['wpshadow_grouped_features'] = $grouped_features;
 
 <script>
 jQuery(document).ready(function($) {
-	// Initialize postboxes for features page
-	if (typeof postboxes !== 'undefined') {
-		var screen_id = 'toplevel_page_wpshadow';
-		postboxes.add_postbox_toggles(screen_id);
-		
-		// Make metaboxes sortable
-		$('.meta-box-sortables').sortable({
-			handle: '.hndle',
-			cursor: 'move',
-			update: function() {
-				postboxes.save_order(screen_id);
-			}
-		});
-	}
+	// Feature toggle handlers will be attached by feature-details.js
+	// Postbox script has been removed to prevent History API SecurityError
 });
 </script>
 
@@ -753,10 +761,15 @@ jQuery(document).ready(function($) {
 		var enabled = $(this).is(':checked');
 		saveFeatureState(featureId, enabled);
 	});
-	
-	// Rerun wizard link
+});
+</script>
+
+<script>
+jQuery(document).ready(function($) {
+	// Rerun wizard link (separate from wizard script so it works when wizard is hidden)
 	$('.wps-rerun-wizard').on('click', function(e) {
 		e.preventDefault();
+		console.log('Rerun wizard clicked');
 		var link = $(this);
 		var originalText = link.text();
 		link.css('opacity', '0.5').css('pointer-events', 'none');
@@ -768,14 +781,25 @@ jQuery(document).ready(function($) {
 				action: 'wpshadow_wizard_reset',
 				nonce: '<?php echo wp_create_nonce( 'wpshadow_wizard_reset' ); ?>'
 			},
-			success: function() {
-				location.reload();
+			success: function(response) {
+				console.log('Wizard reset response:', response);
+				// Force reload with timestamp to bypass cache
+				window.location.href = window.location.href.split('?')[0] + '?page=wpshadow&wpshadow_tab=features&_=' + Date.now();
 			},
-			error: function() {
+			error: function(xhr, status, error) {
+				console.error('Wizard reset error:', error, xhr.responseText);
 				link.css('opacity', '1').css('pointer-events', 'auto');
 				alert('<?php esc_html_e( 'Failed to reset wizard. Please try again.', 'plugin-wpshadow' ); ?>');
 			}
 		});
 	});
+});
+</script>
+<script>
+jQuery(document).ready(function($){
+	// Initialize WordPress postboxes (drag/drop, collapse/expand, remember state)
+	if (typeof postboxes !== 'undefined') {
+		postboxes.add_postbox_toggles('toplevel_page_wpshadow');
+	}
 });
 </script>

@@ -73,11 +73,20 @@ const WPShadowRecovery = {
 			} )
 			.then( function( data ) {
 				if ( data.success ) {
-					// Reload the current page to reflect recovery mode being disabled
-					// Add cache-busting parameter to ensure fresh page load
+					// Force a hard reload without cache
+					// Remove any recovery-related URL parameters
 					const url = new URL( window.location );
-					url.searchParams.set( '_nocache', Date.now() );
-					window.location.href = url.toString();
+					url.searchParams.delete( 'recovery' );
+					url.searchParams.delete( 'error' );
+					url.searchParams.set( '_reload', Date.now() );
+					
+					// Use location.replace to prevent back button issues
+					window.location.replace( url.toString() );
+					
+					// Fallback: force reload if replace doesn't work
+					setTimeout( function() {
+						window.location.reload( true );
+					}, 100 );
 				} else {
 					console.error( 'Failed to exit recovery mode:', data.data?.message );
 					// Re-enable buttons

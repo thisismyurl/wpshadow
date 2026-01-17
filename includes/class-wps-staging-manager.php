@@ -379,7 +379,7 @@ class WPSHADOW_Staging_Manager {
 	 */
 	public static function register_menu(): void {
 		add_submenu_page(
-			'wpshadow',
+			null, // Hidden from menu - accessible via QuickLinks
 			__( 'Staging Environments', 'plugin-wpshadow' ),
 			__( 'Staging', 'plugin-wpshadow' ),
 			'manage_options',

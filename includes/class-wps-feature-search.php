@@ -68,6 +68,44 @@ class WPSHADOW_Feature_Search {
 	}
 
 	/**
+	 * Normalize feature data to a consistent array structure.
+	 *
+	 * @param string                                   $feature_id Feature identifier.
+	 * @param array<string, mixed>|object|null         $feature    Feature array or object.
+	 * @return array{id:string,name:string,description:string,icon:string,url:string}
+	 */
+	private static function normalize_feature_data( string $feature_id, $feature ): array {
+		// Object shape (older callers expected object methods).
+		if ( is_object( $feature ) ) {
+			return array(
+				'id'          => $feature_id,
+				'name'        => method_exists( $feature, 'get_name' ) ? (string) $feature->get_name() : $feature_id,
+				'description' => method_exists( $feature, 'get_description' ) ? (string) $feature->get_description() : '',
+				'icon'        => method_exists( $feature, 'get_icon' ) ? (string) $feature->get_icon() : 'dashicons-admin-generic',
+				'url'         => method_exists( $feature, 'get_details_url' ) ? (string) $feature->get_details_url() : '',
+			);
+		}
+
+		// Array shape (current registry output).
+		$name        = isset( $feature['name'] ) ? (string) $feature['name'] : ucfirst( str_replace( '-', ' ', $feature_id ) );
+		$description = isset( $feature['description'] ) ? (string) $feature['description'] : '';
+		$icon        = isset( $feature['icon'] ) ? (string) $feature['icon'] : 'dashicons-admin-generic';
+		$url         = isset( $feature['details_url'] ) ? (string) $feature['details_url'] : '';
+
+		if ( '' === $url && class_exists( '\\WPShadow\\CoreSupport\\WPSHADOW_Feature_Details_Page' ) ) {
+			$url = WPSHADOW_Feature_Details_Page::get_feature_url( $feature_id );
+		}
+
+		return array(
+			'id'          => $feature_id,
+			'name'        => $name,
+			'description' => $description,
+			'icon'        => $icon,
+			'url'         => $url,
+		);
+	}
+
+	/**
 	 * Enqueue search assets.
 	 *
 	 * @param string $hook Current admin page hook.
@@ -156,13 +194,14 @@ class WPSHADOW_Feature_Search {
 						if ( ! $feature ) {
 							continue;
 						}
-						$feature_obj = $feature;
-						$name        = $feature_obj->get_name();
-						$url         = $feature_obj->get_details_url();
+						$feature_data = self::normalize_feature_data( $feature_id, $feature );
+						$name         = $feature_data['name'];
+						$url          = $feature_data['url'];
+						$icon         = $feature_data['icon'];
 						?>
 						<li>
 							<a href="<?php echo esc_url( $url ); ?>" class="wpshadow-accessed-link">
-								<span class="dashicons <?php echo esc_attr( $feature_obj->get_icon() ); ?>"></span>
+								<span class="dashicons <?php echo esc_attr( $icon ); ?>"></span>
 								<?php echo esc_html( $name ); ?>
 								<span class="wpshadow-access-count"><?php echo esc_html( $count ); ?></span>
 							</a>
@@ -298,14 +337,8 @@ class WPSHADOW_Feature_Search {
 			foreach ( $suggestions as $feature_id ) {
 				$feature = WPSHADOW_Feature_Registry::get_feature( $feature_id );
 				if ( $feature ) {
-					$feature_obj = $feature;
-					$results[]   = array(
-						'id'          => $feature_id,
-						'name'        => $feature_obj->get_name(),
-						'description' => $feature_obj->get_description(),
-						'url'         => $feature_obj->get_details_url(),
-						'icon'        => $feature_obj->get_icon(),
-					);
+					$feature_data = self::normalize_feature_data( $feature_id, $feature );
+					$results[]    = $feature_data;
 				}
 			}
 
@@ -313,13 +346,13 @@ class WPSHADOW_Feature_Search {
 		}
 
 		// Search features.
-		$all_features = WPSHADOW_Feature_Registry::get_all_features();
+		$all_features = WPSHADOW_Feature_Registry::get_features();
 		$results      = array();
 
 		foreach ( $all_features as $feature_id => $feature ) {
-			$feature_obj = $feature;
-			$name        = $feature_obj->get_name();
-			$description = $feature_obj->get_description();
+			$feature_data = self::normalize_feature_data( $feature_id, $feature );
+			$name         = $feature_data['name'];
+			$description  = $feature_data['description'];
 
 			// Simple search match.
 			if ( false !== stripos( $name, $query ) || false !== stripos( $description, $query ) || false !== stripos( $feature_id, $query ) ) {
@@ -327,8 +360,8 @@ class WPSHADOW_Feature_Search {
 					'id'          => $feature_id,
 					'name'        => $name,
 					'description' => $description,
-					'url'         => $feature_obj->get_details_url(),
-					'icon'        => $feature_obj->get_icon(),
+					'url'         => $feature_data['url'],
+					'icon'        => $feature_data['icon'],
 					'relevance'   => false !== stripos( $name, $query ) ? 10 : 5, // Name match = higher relevance.
 				);
 			}

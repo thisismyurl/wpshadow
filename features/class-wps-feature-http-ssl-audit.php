@@ -120,7 +120,18 @@ final class WPSHADOW_Feature_HTTP_SSL_Audit extends WPSHADOW_Abstract_Feature {
 				'icon'               => 'dashicons-shield',
 				'category'           => 'security',
 				'priority'           => 8,
-
+				'aliases'            => array(
+					'ssl certificate',
+					'https',
+					'tls',
+					'encryption',
+					'security headers',
+					'certificate validation',
+					'protocol',
+					'hsts',
+					'csp',
+					'certificate expiry',
+				),
 			)
 		);
 	}

@@ -220,7 +220,7 @@ class WPSHADOW_Video_Walkthroughs {
 	 */
 	public static function register_admin_page(): void {
 		add_submenu_page(
-			'wpshadow',
+			null, // Hidden from menu - accessible via QuickLinks
 			__( 'Video Library', 'plugin-wpshadow' ),
 			__( 'Video Library', 'plugin-wpshadow' ),
 			'manage_options',

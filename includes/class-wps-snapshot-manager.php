@@ -386,7 +386,7 @@ class WPSHADOW_Snapshot_Manager {
 	 */
 	public static function register_menu(): void {
 		add_submenu_page(
-			'wpshadow',
+			null, // Hidden from menu - accessible via QuickLinks
 			__( 'Site Snapshots', 'plugin-wpshadow' ),
 			__( 'Snapshots', 'plugin-wpshadow' ),
 			'manage_options',

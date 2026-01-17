@@ -227,19 +227,8 @@ class WPSHADOW_Widget_Registry {
 
 		// Check license level (get minimum from features).
 		$min_license = 1;
-		foreach ( $widget['features'] as $feature_id ) {
-			$feature = WPSHADOW_Feature_Registry::get_feature( $feature_id );
-			if ( $feature && isset( $feature['license_level'] ) ) {
-				$min_license = max( $min_license, $feature['license_level'] );
-			}
-		}
-
-		if ( class_exists( 'wpshadow_License' ) ) {
-			$user_license = WPSHADOW_License::get_user_level();
-			if ( $user_license < $min_license ) {
-				return false;
-			}
-		}
+		// NOTE: License level checks removed - licensing is PRO plugin only
+		// All features in free plugin are available to all users
 
 		return true;
 	}
@@ -353,14 +342,7 @@ class WPSHADOW_Widget_Registry {
 
 			$feature = $features[ $feature_id ];
 
-			// Check license level.
-			if ( isset( $feature['license_level'] ) && class_exists( 'wpshadow_License' ) ) {
-				$user_license = WPSHADOW_License::get_user_level();
-				if ( $user_license < $feature['license_level'] ) {
-					self::render_locked_feature( $feature );
-					continue;
-				}
-			}
+			// NOTE: License level checks removed - licensing is PRO plugin only
 
 			// Check capability.
 			if ( isset( $feature['minimum_capability'] ) && ! current_user_can( $feature['minimum_capability'] ) ) {

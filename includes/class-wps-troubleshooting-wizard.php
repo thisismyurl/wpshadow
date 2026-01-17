@@ -160,7 +160,7 @@ class WPSHADOW_Troubleshooting_Wizard {
 	 */
 	public static function register_admin_page(): void {
 		add_submenu_page(
-			'wpshadow',
+			null, // Hidden from menu - accessible via QuickLinks
 			__( 'Troubleshooting Wizard', 'plugin-wpshadow' ),
 			__( 'Troubleshoot', 'plugin-wpshadow' ),
 			'manage_options',

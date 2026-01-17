@@ -38,20 +38,9 @@ class WPSHADOW_REST_API {
 		// Load base controller.
 		require_once __DIR__ . '/class-wps-rest-controller-base.php';
 
-		// Load and register modules controller.
-		require_once __DIR__ . '/class-wps-rest-modules-controller.php';
-		$modules_controller = new WPSHADOW_REST_Modules_Controller();
-		$modules_controller->register_routes();
-
-		// Load and register vault controller.
-		require_once __DIR__ . '/class-wps-rest-vault-controller.php';
-		$vault_controller = new WPSHADOW_REST_Vault_Controller();
-		$vault_controller->register_routes();
-
-		// Load and register license controller.
-		require_once __DIR__ . '/class-wps-rest-license-controller.php';
-		$license_controller = new WPSHADOW_REST_License_Controller();
-		$license_controller->register_routes();
+		// NOTE: Modules controller removed - modules are temporarily disabled
+		// NOTE: Vault controller removed - moved to module-vault-wpshadow
+		// NOTE: License controller removed - licensing is PRO plugin only
 
 		// Load and register settings controller.
 		require_once __DIR__ . '/class-wps-rest-settings-controller.php';

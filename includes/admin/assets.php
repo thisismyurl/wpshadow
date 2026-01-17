@@ -72,7 +72,9 @@ function wpshadow_admin_enqueue( string $hook ): void {
 	);
 
 	// Enable drag and drop for dashboard metaboxes on all wpshadow pages using WordPress native postboxes.
-	if ( $screen && false !== strpos( $screen->id, 'wpshadow' ) ) {
+	// EXCLUDE features tab due to History API SecurityError on GitHub Codespaces
+	$current_tab = isset( $_GET['wpshadow_tab'] ) ? sanitize_key( (string) $_GET['wpshadow_tab'] ) : '';
+	if ( $screen && false !== strpos( $screen->id, 'wpshadow' ) && 'features' !== $current_tab ) {
 		// Use WordPress's built-in postbox drag and drop.
 		wp_enqueue_script( 'postbox' );
 

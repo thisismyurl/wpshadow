@@ -162,24 +162,7 @@ class WPSHADOW_Site_Health {
 	 * @return void
 	 */
 	public static function register_builtin_module_checks(): void {
-		// Vault module checks.
-		self::register_module_checks(
-			'vault-wpshadow',
-			array(
-				'wpshadow_vault_directory'   => array(
-					'label' => __( 'Vault directory status', 'plugin-wpshadow' ),
-					'test'  => array( __CLASS__, 'test_vault_directory' ),
-				),
-				'wpshadow_encryption_config' => array(
-					'label' => __( 'Encryption configuration', 'plugin-wpshadow' ),
-					'test'  => array( __CLASS__, 'test_encryption_config' ),
-				),
-				'wpshadow_vault_permissions' => array(
-					'label' => __( 'Vault write permissions', 'plugin-wpshadow' ),
-					'test'  => array( __CLASS__, 'test_vault_permissions' ),
-				),
-			)
-		);
+		// NOTE: Vault module checks removed - module-vault-wpshadow registers its own checks
 
 		/**
 		 * Allow other modules to register their health checks.
@@ -256,113 +239,10 @@ class WPSHADOW_Site_Health {
 		return $map;
 	}
 
-	/**
-	 * Test vault directory status.
-	 *
-	 * @return array
-	 */
-	public static function test_vault_directory(): array {
-		$upload_dir    = wp_upload_dir();
-		$vault_dirname = get_option( 'wpshadow_vault_dirname' );
-
-		if ( empty( $vault_dirname ) ) {
-			return WPSHADOW_Health_Renderer::build_result(
-				__( 'Vault directory not configured', 'plugin-wpshadow' ),
-				'recommended',
-				esc_html__( 'The vault directory has not been created yet. It will be created automatically on first use.', 'plugin-wpshadow' ),
-				'wpshadow_vault_directory',
-				'',
-				'orange'
-			);
-		}
-
-		$vault_path = $upload_dir['basedir'] . '/' . $vault_dirname;
-
-		if ( ! file_exists( $vault_path ) ) {
-			return WPSHADOW_Health_Renderer::build_result(
-				__( 'Vault directory missing', 'plugin-wpshadow' ),
-				'critical',
-				sprintf(
-					/* translators: %s: vault path */
-					esc_html__( 'The vault directory was configured but does not exist at: %s', 'plugin-wpshadow' ),
-					'<code>' . esc_html( $vault_path ) . '</code>'
-				),
-				'wpshadow_vault_directory',
-				'',
-				'red'
-			);
-		}
-
-		return WPSHADOW_Health_Renderer::build_result(
-			__( 'Vault directory configured', 'plugin-wpshadow' ),
-			'good',
-			sprintf(
-				/* translators: %s: vault path */
-				esc_html__( 'The vault directory exists at: %s', 'plugin-wpshadow' ),
-				'<code>' . esc_html( $vault_path ) . '</code>'
-			),
-			'wpshadow_vault_directory'
-		);
-	}
-
-	/**
-	 * Test encryption configuration.
-	 *
-	 * @return array
-	 */
-	public static function test_encryption_config(): array {
-		$is_production = 'production' === wp_get_environment_type();
-
-		if ( defined( 'wpshadow_VAULT_KEY' ) && WPSHADOW_VAULT_KEY ) {
-			return WPSHADOW_Health_Renderer::build_result(
-				__( 'Encryption key configured in wp-config.php', 'plugin-wpshadow' ),
-				'good',
-				esc_html__( 'Encryption key is properly defined in wp-config.php.', 'plugin-wpshadow' ),
-				'wpshadow_encryption_config'
-			);
-		}
-
-		$stored_key = get_option( 'wpshadow_vault_encryption_key' );
-
-		if ( ! empty( $stored_key ) && $is_production ) {
-			return WPSHADOW_Health_Renderer::build_result(
-				__( 'Encryption key should be in wp-config.php', 'plugin-wpshadow' ),
-				'critical',
-				sprintf(
-					'%s<br><br>%s',
-					esc_html__( 'For production sites, encryption keys must be defined in wp-config.php, not stored in the database.', 'plugin-wpshadow' ),
-					sprintf(
-						/* translators: %s: example code */
-						esc_html__( 'Add this line to your wp-config.php: %s', 'plugin-wpshadow' ),
-						'<code>define( "wpshadow_VAULT_KEY", "' . esc_html( $stored_key ) . '" );</code>'
-					)
-				),
-				'wpshadow_encryption_config',
-				'',
-				'red'
-			);
-		}
-
-		if ( ! empty( $stored_key ) ) {
-			return WPSHADOW_Health_Renderer::build_result(
-				__( 'Encryption key in options (development mode)', 'plugin-wpshadow' ),
-				'recommended',
-				esc_html__( 'Encryption key is stored in the database. This is acceptable for development but should be moved to wp-config.php for production.', 'plugin-wpshadow' ),
-				'wpshadow_encryption_config',
-				'',
-				'orange'
-			);
-		}
-
-		return WPSHADOW_Health_Renderer::build_result(
-			__( 'Encryption key not configured', 'plugin-wpshadow' ),
-			'recommended',
-			esc_html__( 'No encryption key is configured. An encryption key will be generated automatically when needed.', 'plugin-wpshadow' ),
-			'wpshadow_encryption_config',
-			'',
-			'orange'
-		);
-	}
+	// NOTE: Vault health check methods removed - moved to module-vault-wpshadow:
+	// - test_vault_directory()
+	// - test_encryption_config()  
+	// - test_vault_permissions()
 
 	/**
 	 * Test OpenSSL extension.
@@ -541,61 +421,7 @@ class WPSHADOW_Site_Health {
 		);
 	}
 
-	/**
-	 * Test vault write permissions.
-	 *
-	 * @return array
-	 */
-	public static function test_vault_permissions(): array {
-		$upload_dir    = wp_upload_dir();
-		$vault_dirname = get_option( 'wpshadow_vault_dirname' );
-
-		if ( empty( $vault_dirname ) ) {
-			return WPSHADOW_Health_Renderer::build_result(
-				__( 'Vault not configured yet', 'plugin-wpshadow' ),
-				'recommended',
-				esc_html__( 'Vault directory will be created with appropriate permissions when first needed.', 'plugin-wpshadow' ),
-				'wpshadow_vault_permissions',
-				'',
-				'gray'
-			);
-		}
-
-		$vault_path = $upload_dir['basedir'] . '/' . $vault_dirname;
-
-		if ( ! file_exists( $vault_path ) ) {
-			return WPSHADOW_Health_Renderer::build_result(
-				__( 'Vault directory does not exist', 'plugin-wpshadow' ),
-				'critical',
-				esc_html__( 'The vault directory was expected but does not exist. It will be recreated on next use.', 'plugin-wpshadow' ),
-				'wpshadow_vault_permissions',
-				'',
-				'red'
-			);
-		}
-
-		if ( ! wp_is_writable( $vault_path ) ) {
-			return WPSHADOW_Health_Renderer::build_result(
-				__( 'Vault directory is not writable', 'plugin-wpshadow' ),
-				'critical',
-				sprintf(
-					/* translators: %s: vault path */
-					esc_html__( 'The vault directory exists but is not writable: %s. Check directory permissions.', 'plugin-wpshadow' ),
-					'<code>' . esc_html( $vault_path ) . '</code>'
-				),
-				'wpshadow_vault_permissions',
-				'',
-				'red'
-			);
-		}
-
-		return WPSHADOW_Health_Renderer::build_result(
-			__( 'Vault directory has correct permissions', 'plugin-wpshadow' ),
-			'good',
-			esc_html__( 'The vault directory is writable and ready for use.', 'plugin-wpshadow' ),
-			'wpshadow_vault_permissions'
-		);
-	}
+	// NOTE: test_vault_permissions() removed - moved to module-vault-wpshadow
 
 	/**
 	 * Test module status.

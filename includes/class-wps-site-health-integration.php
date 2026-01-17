@@ -529,14 +529,7 @@ final class WPSHADOW_Site_Health_Integration {
 				'enabled'      => self::is_feature_enabled( 'database-cleanup' ),
 				'score'        => self::calculate_database_cleanup_score(),
 				'category'     => 'performance',
-				'sub_features' => array(
-					'revisions'       => array( 'enabled' => get_option( 'wpshadow_cleanup_revisions', false ), 'points' => 25 ),
-					'auto_drafts'     => array( 'enabled' => get_option( 'wpshadow_cleanup_autodrafts', false ), 'points' => 20 ),
-					'trashed_posts'   => array( 'enabled' => get_option( 'wpshadow_cleanup_trash', false ), 'points' => 15 ),
-					'spam_comments'   => array( 'enabled' => get_option( 'wpshadow_cleanup_spam', false ), 'points' => 15 ),
-					'transients'      => array( 'enabled' => get_option( 'wpshadow_cleanup_transients', false ), 'points' => 15 ),
-					'optimize_tables' => array( 'enabled' => get_option( 'wpshadow_optimize_tables', false ), 'points' => 10 ),
-				),
+				'sub_features' => self::get_database_cleanup_sub_features(),
 			),
 			'image-lazy-loading' => array(
 				'enabled'      => self::is_feature_enabled( 'image-lazy-loading' ),
@@ -560,17 +553,7 @@ final class WPSHADOW_Site_Health_Integration {
 				'enabled'      => self::is_feature_enabled( 'head-cleanup' ),
 				'score'        => self::calculate_head_cleanup_score(),
 				'category'     => 'performance',
-				'sub_features' => array(
-					'rsd_link'         => array( 'enabled' => get_option( 'wpshadow_remove_rsd_link', false ), 'points' => 5 ),
-					'wlwmanifest_link' => array( 'enabled' => get_option( 'wpshadow_remove_wlwmanifest', false ), 'points' => 5 ),
-					'shortlink'        => array( 'enabled' => get_option( 'wpshadow_remove_shortlink', false ), 'points' => 5 ),
-					'wp_generator'     => array( 'enabled' => get_option( 'wpshadow_remove_wp_version', false ), 'points' => 10 ),
-					'feed_links'       => array( 'enabled' => get_option( 'wpshadow_remove_feed_links', false ), 'points' => 10 ),
-					'rest_api_link'    => array( 'enabled' => get_option( 'wpshadow_remove_rest_api_link', false ), 'points' => 10 ),
-					'oembed_links'     => array( 'enabled' => get_option( 'wpshadow_remove_oembed', false ), 'points' => 15 ),
-					'emoji_scripts'    => array( 'enabled' => get_option( 'wpshadow_disable_emojis', false ), 'points' => 20 ),
-					'dns_prefetch'     => array( 'enabled' => get_option( 'wpshadow_remove_dns_prefetch', false ), 'points' => 20 ),
-				),
+				'sub_features' => self::get_head_cleanup_sub_features(),
 			),
 			'resource-hints' => array(
 				'enabled'      => self::is_feature_enabled( 'resource-hints' ),
@@ -887,7 +870,7 @@ final class WPSHADOW_Site_Health_Integration {
 		}
 
 		$score = 0;
-		$sub_features = self::get_all_feature_scores()['head-cleanup']['sub_features'];
+		$sub_features = self::get_head_cleanup_sub_features();
 
 		foreach ( $sub_features as $sub ) {
 			if ( $sub['enabled'] ) {
@@ -909,7 +892,7 @@ final class WPSHADOW_Site_Health_Integration {
 		}
 
 		$score = 0;
-		$sub_features = self::get_all_feature_scores()['database-cleanup']['sub_features'];
+		$sub_features = self::get_database_cleanup_sub_features();
 
 		foreach ( $sub_features as $sub ) {
 			if ( $sub['enabled'] ) {
@@ -918,6 +901,41 @@ final class WPSHADOW_Site_Health_Integration {
 		}
 
 		return min( 100, $score );
+	}
+
+	/**
+	 * Get head cleanup sub-feature states and points.
+	 *
+	 * @return array<string, array{enabled:bool,points:int}>
+	 */
+	private static function get_head_cleanup_sub_features(): array {
+		return array(
+			'rsd_link'         => array( 'enabled' => (bool) get_option( 'wpshadow_remove_rsd_link', false ), 'points' => 5 ),
+			'wlwmanifest_link' => array( 'enabled' => (bool) get_option( 'wpshadow_remove_wlwmanifest', false ), 'points' => 5 ),
+			'shortlink'        => array( 'enabled' => (bool) get_option( 'wpshadow_remove_shortlink', false ), 'points' => 5 ),
+			'wp_generator'     => array( 'enabled' => (bool) get_option( 'wpshadow_remove_wp_version', false ), 'points' => 10 ),
+			'feed_links'       => array( 'enabled' => (bool) get_option( 'wpshadow_remove_feed_links', false ), 'points' => 10 ),
+			'rest_api_link'    => array( 'enabled' => (bool) get_option( 'wpshadow_remove_rest_api_link', false ), 'points' => 10 ),
+			'oembed_links'     => array( 'enabled' => (bool) get_option( 'wpshadow_remove_oembed', false ), 'points' => 15 ),
+			'emoji_scripts'    => array( 'enabled' => (bool) get_option( 'wpshadow_disable_emojis', false ), 'points' => 20 ),
+			'dns_prefetch'     => array( 'enabled' => (bool) get_option( 'wpshadow_remove_dns_prefetch', false ), 'points' => 20 ),
+		);
+	}
+
+	/**
+	 * Get database cleanup sub-feature states and points.
+	 *
+	 * @return array<string, array{enabled:bool,points:int}>
+	 */
+	private static function get_database_cleanup_sub_features(): array {
+		return array(
+			'revisions'       => array( 'enabled' => (bool) get_option( 'wpshadow_cleanup_revisions', false ), 'points' => 25 ),
+			'auto_drafts'     => array( 'enabled' => (bool) get_option( 'wpshadow_cleanup_autodrafts', false ), 'points' => 20 ),
+			'trashed_posts'   => array( 'enabled' => (bool) get_option( 'wpshadow_cleanup_trash', false ), 'points' => 15 ),
+			'spam_comments'   => array( 'enabled' => (bool) get_option( 'wpshadow_cleanup_spam', false ), 'points' => 15 ),
+			'transients'      => array( 'enabled' => (bool) get_option( 'wpshadow_cleanup_transients', false ), 'points' => 15 ),
+			'optimize_tables' => array( 'enabled' => (bool) get_option( 'wpshadow_optimize_tables', false ), 'points' => 10 ),
+		);
 	}
 
 	/**

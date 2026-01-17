@@ -38,32 +38,17 @@ final class WPSHADOW_Feature_CSS_Class_Cleanup extends WPSHADOW_Abstract_Feature
 				'icon'               => 'dashicons-editor-removeformatting',
 				'category'           => 'performance',
 				'priority'           => 20,
-			)
-		);
-		
-		if ( method_exists( $this, 'register_sub_features' ) ) {
-			$this->register_sub_features(
-				array(
+				'sub_features'       => array(
 					'clean_post_classes'   => __( 'Clean Post Classes', 'plugin-wpshadow' ),
 					'clean_nav_classes'    => __( 'Clean Navigation Classes', 'plugin-wpshadow' ),
 					'remove_nav_ids'       => __( 'Remove Navigation IDs', 'plugin-wpshadow' ),
 					'clean_body_classes'   => __( 'Clean Body Classes', 'plugin-wpshadow' ),
 					'remove_block_classes' => __( 'Remove Block-Related Classes', 'plugin-wpshadow' ),
-				)
-			);
-			if ( method_exists( $this, 'set_default_sub_features' ) ) {
-				$this->set_default_sub_features(
-					array(
-						'clean_post_classes'   => true,
-						'clean_nav_classes'    => true,
-						'remove_nav_ids'       => true,
-						'clean_body_classes'   => true,
-						'remove_block_classes' => true,
-					)
-				);
-			}
-		}
-		
+				),
+			)
+		);
+
+		$this->seed_default_sub_feature_options();
 		$this->log_activity( 'feature_initialized', 'CSS Class Cleanup feature initialized', 'info' );
 	}
 
@@ -79,6 +64,8 @@ final class WPSHADOW_Feature_CSS_Class_Cleanup extends WPSHADOW_Abstract_Feature
 	/**
 	 * Register hooks when feature is enabled.
 	 *
+	 * Only exposes Site Health; child features perform cleanup.
+	 *
 	 * @return void
 	 */
 	public function register(): void {
@@ -86,61 +73,8 @@ final class WPSHADOW_Feature_CSS_Class_Cleanup extends WPSHADOW_Abstract_Feature
 			return;
 		}
 
-		if ( get_option( 'wpshadow_css-class-cleanup_clean_post_classes', true ) ) {
-			add_filter( 'post_class', array( $this, 'clean_post_classes' ), 999 );
-		}
-		
-		if ( get_option( 'wpshadow_css-class-cleanup_clean_nav_classes', true ) ) {
-			add_filter( 'nav_menu_css_class', array( $this, 'cleanup_nav_classes' ), 10 );
-		}
-		
-		if ( get_option( 'wpshadow_css-class-cleanup_remove_nav_ids', true ) ) {
-			add_filter( 'nav_menu_item_id', '__return_false' );
-		}
-		
-		if ( get_option( 'wpshadow_css-class-cleanup_clean_body_classes', true ) ) {
-			add_filter( 'body_class', array( $this, 'remove_block_body_classes' ) );
-		}
-		
 		// Add Site Health tests.
 		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
-	}
-
-	/**
-	 * Clean up post classes.
-	 *
-	 * @param array $classes Array of post classes.
-	 * @return array Filtered classes.
-	 */
-	public function clean_post_classes( array $classes ): array {
-		$keep_classes = (array) $this->get_setting( 'wpshadow_post_class_whitelist', array( 'has-post-thumbnail', 'post', 'hentry'  ) );
-		return array_intersect( $classes, $keep_classes );
-	}
-
-	/**
-	 * Clean up navigation menu classes.
-	 *
-	 * @param array $classes Array of nav classes.
-	 * @return array Filtered classes.
-	 */
-	public function cleanup_nav_classes( array $classes ): array {
-		$keep = array( 'current-menu-item', 'menu-item-has-children', 'current-menu-ancestor' );
-		return array_intersect( $classes, $keep );
-	}
-
-	/**
-	 * Remove block-related classes from body tag.
-	 *
-	 * @param array $classes Array of body classes.
-	 * @return array Filtered classes.
-	 */
-	public function remove_block_body_classes( array $classes ): array {
-		return array_filter(
-			$classes,
-			static function ( $class ) {
-				return strpos( $class, 'wp-block-' ) === false;
-			}
-		);
 	}
 
 	/**
@@ -205,5 +139,29 @@ final class WPSHADOW_Feature_CSS_Class_Cleanup extends WPSHADOW_Abstract_Feature
 			'actions'     => '',
 			'test'        => 'css_class_cleanup',
 		);
+	}
+
+	/**
+	 * Seed default sub-feature options when absent.
+	 *
+	 * @return void
+	 */
+	private function seed_default_sub_feature_options(): void {
+		$defaults = array(
+			'clean_post_classes'   => true,
+			'clean_nav_classes'    => true,
+			'remove_nav_ids'       => true,
+			'clean_body_classes'   => true,
+			'remove_block_classes' => true,
+		);
+
+		foreach ( $defaults as $key => $default_value ) {
+			$option_name   = 'wpshadow_css-class-cleanup_' . $key;
+			$current_value = get_option( $option_name, null );
+
+			if ( null === $current_value ) {
+				update_option( $option_name, $default_value, false );
+			}
+		}
 	}
 }

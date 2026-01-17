@@ -50,7 +50,7 @@ class WPSHADOW_Notice_Manager {
 	 */
 	public static function init(): void {
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_dismissal_script' ) );
-		add_action( 'wp_ajax_WPSHADOW_dismiss_notice', array( __CLASS__, 'ajax_dismiss_notice' ) );
+		add_action( 'wp_ajax_wpshadow_dismiss_notice', array( __CLASS__, 'ajax_dismiss_notice' ) );
 	}
 
 	/**
@@ -85,10 +85,23 @@ class WPSHADOW_Notice_Manager {
 	public static function ajax_dismiss_notice(): void {
 		check_ajax_referer( 'wpshadow_dismiss_notice', 'nonce' );
 
-		$notice_key = \WPShadow\WPSHADOW_get_post_key( 'notice_key' );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$notice_key = isset( $_POST['notice_key'] ) ? sanitize_key( $_POST['notice_key'] ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$duration = isset( $_POST['duration'] ) ? absint( $_POST['duration'] ) : 0;
 
 		if ( empty( $notice_key ) ) {
 			wp_send_json_error( array( 'message' => __( 'That notice doesn\'t exist.', 'plugin-wpshadow' ) ) );
+		}
+
+		// If custom duration provided, use transient instead of user meta
+		if ( $duration > 0 ) {
+			$user_id = get_current_user_id();
+			$transient_key = $notice_key . '_dismissed_' . $user_id;
+			$result = set_transient( $transient_key, time(), $duration );
+			// Temporary debug
+			error_log( 'WPShadow: Setting transient ' . $transient_key . ' for ' . $duration . ' seconds. Result: ' . var_export( $result, true ) );
+			wp_send_json_success( array( 'message' => __( 'Notice dismissed temporarily.', 'plugin-wpshadow' ) ) );
 		}
 
 		self::dismiss_notice( $notice_key );

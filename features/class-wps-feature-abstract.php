@@ -38,6 +38,8 @@ abstract class WPSHADOW_Abstract_Feature implements WPSHADOW_Feature_Interface {
 
 	protected string $widget_description;
 
+	protected ?string $parent;
+
 	protected int $license_level;
 
 	protected string $minimum_capability;
@@ -55,6 +57,8 @@ abstract class WPSHADOW_Abstract_Feature implements WPSHADOW_Feature_Interface {
 	protected string $widget_column;
 
 	protected int $widget_priority;
+
+	protected array $aliases;
 
 	/**
 	 * @param array<string, mixed> $config Feature configuration.
@@ -85,6 +89,7 @@ abstract class WPSHADOW_Abstract_Feature implements WPSHADOW_Feature_Interface {
 		
 		$this->license_level      = max( 1, min( 5, (int) ( $config['license_level'] ?? 1 ) ) );
 		$this->minimum_capability = (string) ( $config['minimum_capability'] ?? 'manage_options' );
+		$this->parent             = isset( $config['parent'] ) ? sanitize_key( (string) $config['parent'] ) : null;
 		$this->sub_features       = (array) ( $config['sub_features'] ?? array() );
 		$this->icon               = (string) ( $config['icon'] ?? 'dashicons-admin-generic' );
 		$this->category           = sanitize_key( (string) ( $config['category'] ?? 'general' ) );
@@ -94,6 +99,10 @@ abstract class WPSHADOW_Abstract_Feature implements WPSHADOW_Feature_Interface {
 		$this->dashboard       = isset( $config['dashboard'] ) ? sanitize_key( (string) $config['dashboard'] ) : \WPShadow\CoreSupport\WPSHADOW_Widget_Groups::get_dashboard( $this->widget_group );
 		$this->widget_column   = isset( $config['widget_column'] ) ? (string) $config['widget_column'] : \WPShadow\CoreSupport\WPSHADOW_Widget_Groups::get_column( $this->widget_group );
 		$this->widget_priority = isset( $config['widget_priority'] ) ? (int) $config['widget_priority'] : \WPShadow\CoreSupport\WPSHADOW_Widget_Groups::get_priority( $this->widget_group );
+		
+		// Parse aliases for command palette search
+		$aliases = (array) ( $config['aliases'] ?? array() );
+		$this->aliases = array_filter( array_map( 'trim', $aliases ) );
 	}
 
 	public function get_id(): string {
@@ -144,6 +153,10 @@ abstract class WPSHADOW_Abstract_Feature implements WPSHADOW_Feature_Interface {
 		return $this->license_level;
 	}
 
+	public function get_parent(): ?string {
+		return $this->parent;
+	}
+
 	public function get_minimum_capability(): string {
 		return $this->minimum_capability;
 	}
@@ -174,6 +187,10 @@ abstract class WPSHADOW_Abstract_Feature implements WPSHADOW_Feature_Interface {
 
 	public function get_widget_priority(): int {
 		return $this->widget_priority;
+	}
+
+	public function get_aliases(): array {
+		return $this->aliases;
 	}
 
 	public static function is_enabled( bool $network = false ): bool {

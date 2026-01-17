@@ -36,12 +36,7 @@ $base_url = add_query_arg( 'wpshadow_tab', 'help', admin_url( 'admin.php?page=wp
 <div class="wrap wps-help-page">
 	<h1><?php esc_html_e( 'Help & Documentation', 'plugin-wpshadow' ); ?></h1>
 
-	<!-- License Widget -->
-	<div class="wps-help-license-row">
-		<div id="wpshadow_license_widget" class="postbox">
-			<?php WPSHADOW_License_Widget::render_widget(); ?>
-		</div>
-	</div>
+	<!-- NOTE: License widget removed - licensing is PRO plugin only -->
 
 	<!-- Help Tab Navigation -->
 	<nav class="wps-help-tabs nav-tab-wrapper wp-clearfix" role="navigation" aria-label="<?php esc_attr_e( 'Help sections', 'plugin-wpshadow' ); ?>">

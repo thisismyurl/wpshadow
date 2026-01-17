@@ -45,6 +45,21 @@ final class WPSHADOW_Feature_Iframe_Busting extends WPSHADOW_Abstract_Feature {
 				'icon'               => 'dashicons-shield-alt',
 				'category'           => 'security',
 				'priority'           => 5,
+				'aliases'            => array(
+					'iframe',
+					'iframes',
+					'frame',
+					'frames',
+					'clickjacking',
+					'clickjacking protection',
+					'iframe hacker',
+					'frame busting',
+					'frame breaking',
+					'x-frame-options',
+					'csp header',
+					'embedding protection',
+					'malicious frames',
+				),
 			)
 		);
 

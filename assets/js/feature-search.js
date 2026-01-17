@@ -84,15 +84,6 @@
 			clearAccessedPages();
 		});
 
-		// Track feature access when navigating to feature details.
-		$(document).on('click', 'a[href*="wpshadow-feature-details"]', function() {
-			const url = $(this).attr('href');
-			const match = url.match(/feature=([^&]+)/);
-			
-			if (match && match[1]) {
-				trackFeatureAccess(match[1]);
-			}
-		});
 	}
 
 	/**
@@ -216,7 +207,6 @@
 	 * @param {Object} result - Selected result.
 	 */
 	function selectResult(result) {
-		trackFeatureAccess(result.id);
 		window.location.href = result.url;
 	}
 
@@ -229,23 +219,6 @@
 			.attr('aria-expanded', 'false')
 			.removeAttr('aria-activedescendant');
 		currentFocusIndex = -1;
-	}
-
-	/**
-	 * Track feature access.
-	 *
-	 * @param {string} featureId - Feature ID.
-	 */
-	function trackFeatureAccess(featureId) {
-		$.ajax({
-			url: wpshadowFeatureSearch.ajaxUrl,
-			type: 'POST',
-			data: {
-				action: 'wpshadow_track_feature_access',
-				nonce: wpshadowFeatureSearch.nonce,
-				feature_id: featureId
-			}
-		});
 	}
 
 	/**

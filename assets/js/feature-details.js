@@ -1,234 +1,328 @@
 /**
  * Feature Details Page JavaScript
  *
+ * Handles feature toggle auto-save functionality on the features page.
+ * Listens for checkbox changes and sends AJAX requests to save state.
+ *
  * @package WPShadow\CoreSupport
- * @since 1.2601.76000
  */
-
 (function($) {
 	'use strict';
 
-	const FeatureDetails = {
-		init: function() {
-			this.bindEvents();
-		},
-
-		bindEvents: function() {
-			// Main feature toggle
-			$(document).on('change', '.wpshadow-feature-toggle', this.handleFeatureToggle);
-			
-			// Sub-feature/setting toggles
-			$(document).on('change', '.wpshadow-sub-feature-toggle', this.handleSettingToggle);
-			
-			// Refresh log button
-			$(document).on('click', '.wpshadow-refresh-log', this.handleRefreshLog);
-		},
-
-		handleFeatureToggle: function(e) {
-			const $toggle = $(this);
-			const $label = $toggle.closest('.wpshadow-toggle-switch').find('.wpshadow-toggle-label');
-			const featureId = $toggle.data('feature-id');
-			const enabled = $toggle.is(':checked');
-			
-			// Disable toggle during request
-			$toggle.prop('disabled', true);
-			$label.text(wpshadowFeatureDetails.strings.enabling);
-
-			$.ajax({
-				url: wpshadowFeatureDetails.ajaxurl,
-				type: 'POST',
-				data: {
-					action: 'wpshadow_toggle_feature',
-					nonce: wpshadowFeatureDetails.nonce,
-					feature_id: featureId,
-					enabled: enabled ? 'true' : 'false'
-				},
-				success: function(response) {
-					if (response.success) {
-						$label.text(enabled ? wpshadowFeatureDetails.strings.enabled : wpshadowFeatureDetails.strings.disabled);
-						
-						// Enable/disable sub-feature toggles
-						$('.wpshadow-sub-feature-toggle').prop('disabled', !enabled);
-						
-						FeatureDetails.showMessage('success', response.data.message);
-						
-						// Refresh log after a short delay
-						setTimeout(function() {
-							FeatureDetails.refreshLog(featureId);
-						}, 500);
-					} else {
-						// Revert toggle on error
-						$toggle.prop('checked', !enabled);
-						$label.text(!enabled ? wpshadowFeatureDetails.strings.enabled : wpshadowFeatureDetails.strings.disabled);
-						FeatureDetails.showMessage('error', response.data.message || wpshadowFeatureDetails.strings.error);
-					}
-				},
-				error: function(xhr) {
-					// Revert toggle on error
-					$toggle.prop('checked', !enabled);
-					$label.text(!enabled ? wpshadowFeatureDetails.strings.enabled : wpshadowFeatureDetails.strings.disabled);
-					FeatureDetails.showMessage('error', wpshadowFeatureDetails.strings.error + xhr.statusText);
-				},
-				complete: function() {
-					$toggle.prop('disabled', false);
-				}
-			});
-		},
-
-		handleSettingToggle: function(e) {
-			const $toggle = $(this);
-			const $label = $toggle.closest('.wpshadow-toggle-switch').find('.wpshadow-toggle-label');
-			const featureId = $toggle.data('feature-id');
-			const settingKey = $toggle.data('setting-key');
-			const enabled = $toggle.is(':checked');
-			
-			// Disable toggle during request
-			$toggle.prop('disabled', true);
-
-			$.ajax({
-				url: wpshadowFeatureDetails.ajaxurl,
-				type: 'POST',
-				data: {
-					action: 'wpshadow_toggle_feature_setting',
-					nonce: wpshadowFeatureDetails.nonce,
-					feature_id: featureId,
-					setting_key: settingKey,
-					enabled: enabled ? 'true' : 'false'
-				},
-				success: function(response) {
-					if (response.success) {
-						FeatureDetails.showMessage('success', response.data.message);
-						
-						// Refresh log after a short delay
-						setTimeout(function() {
-							FeatureDetails.refreshLog(featureId);
-						}, 500);
-					} else {
-						// Revert toggle on error
-						$toggle.prop('checked', !enabled);
-						FeatureDetails.showMessage('error', response.data.message || wpshadowFeatureDetails.strings.error);
-					}
-				},
-				error: function(xhr) {
-					// Revert toggle on error
-					$toggle.prop('checked', !enabled);
-					FeatureDetails.showMessage('error', wpshadowFeatureDetails.strings.error + xhr.statusText);
-				},
-				complete: function() {
-					$toggle.prop('disabled', false);
-				}
-			});
-		},
-
-		handleRefreshLog: function(e) {
-			e.preventDefault();
-			const $button = $(this);
-			const featureId = $button.data('feature-id');
-			
-			FeatureDetails.refreshLog(featureId, $button);
-		},
-
-		refreshLog: function(featureId, $button) {
-			const $logContainer = $('.feature-activity-log[data-feature-id="' + featureId + '"]');
-			
-			if ($button) {
-				$button.prop('disabled', true);
-				$button.find('.dashicons').addClass('dashicons-update-spin');
-			}
-
-			$.ajax({
-				url: wpshadowFeatureDetails.ajaxurl,
-				type: 'POST',
-				data: {
-					action: 'wpshadow_get_feature_log',
-					nonce: wpshadowFeatureDetails.nonce,
-					feature_id: featureId
-				},
-				success: function(response) {
-					if (response.success && response.data.log) {
-						FeatureDetails.updateLogDisplay($logContainer, response.data.log);
-					}
-				},
-				error: function(xhr) {
-					console.error('Failed to refresh log:', xhr);
-				},
-				complete: function() {
-					if ($button) {
-						$button.prop('disabled', false);
-						$button.find('.dashicons').removeClass('dashicons-update-spin');
-					}
-				}
-			});
-		},
-
-		updateLogDisplay: function($container, log) {
-			if (!log || log.length === 0) {
-				$container.html('<p class="no-activity">No activity recorded yet.</p>');
-				return;
-			}
-
-			let html = '<table class="widefat striped activity-log-table">';
-			html += '<thead><tr>';
-			html += '<th>Time</th>';
-			html += '<th>Action</th>';
-			html += '<th>Details</th>';
-			html += '</tr></thead><tbody>';
-
-			// Reverse to show newest first
-			log.reverse().forEach(function(entry) {
-				const date = new Date(entry.timestamp * 1000);
-				const timeStr = date.toISOString().slice(0, 19).replace('T', ' ');
-				const level = entry.level || 'info';
-
-				html += '<tr>';
-				html += '<td class="log-time">' + FeatureDetails.escapeHtml(timeStr) + '</td>';
-				html += '<td class="log-action"><span class="log-level log-level-' + level + '">' + 
-						FeatureDetails.escapeHtml(entry.action) + '</span></td>';
-				html += '<td class="log-details">' + FeatureDetails.escapeHtml(entry.message) + '</td>';
-				html += '</tr>';
-			});
-
-			html += '</tbody></table>';
-			$container.html(html);
-		},
-
-		showMessage: function(type, message) {
-			const $container = $('.wpshadow-feature-details');
-			const $existing = $container.find('.wpshadow-message');
-			
-			// Remove existing messages
-			$existing.fadeOut(function() {
-				$(this).remove();
-			});
-
-			// Add new message
-			const $message = $('<div class="wpshadow-message ' + type + '">' + 
-							 FeatureDetails.escapeHtml(message) + '</div>');
-			$container.prepend($message);
-
-			// Auto-hide after 5 seconds
-			setTimeout(function() {
-				$message.fadeOut(function() {
-					$(this).remove();
-				});
-			}, 5000);
-		},
-
-		escapeHtml: function(text) {
-			const map = {
-				'&': '&amp;',
-				'<': '&lt;',
-				'>': '&gt;',
-				'"': '&quot;',
-				"'": '&#039;'
-			};
-			return text.replace(/[&<>"']/g, function(m) { return map[m]; });
-		}
-	};
-
-	// Initialize when document is ready
 	$(document).ready(function() {
-		FeatureDetails.init();
+		initializeFeatureToggles();
+		initializeSubFeatureToggles();
+		initializeParentChildToggles();
 	});
+
+	/**
+	 * Initialize feature toggle handlers.
+	 */
+	function initializeFeatureToggles() {
+		var toggles = $('.wps-feature-toggle-input');
+
+		toggles.on('change', function() {
+			var $toggle = $(this);
+			var featureId = extractFeatureId($toggle);
+			var featureName = extractFeatureName($toggle);
+			var isEnabled = $toggle.is(':checked');
+
+			saveFeatureState(featureId, featureName, isEnabled);
+		});
+	}
+
+	/**
+	 * Initialize sub-feature toggle handlers.
+	 */
+	function initializeSubFeatureToggles() {
+		var subToggles = $('.wpshadow-sub-feature-toggle');
+
+		subToggles.on('change', function() {
+			var $toggle = $(this);
+			var featureId = $toggle.data('feature-id');
+			var settingKey = $toggle.data('setting-key');
+			var isEnabled = $toggle.is(':checked');
+			
+			// Extract setting name from the label
+			var $row = $toggle.closest('tr');
+			var settingName = $row.find('strong').text().trim();
+
+			saveSubFeatureState(featureId, settingKey, settingName, isEnabled);
+		});
+	}
+
+	/**
+	 * Initialize parent-child feature toggle handlers for hierarchical features.
+	 * When a parent feature is toggled off, all child features are automatically disabled.
+	 */
+	function initializeParentChildToggles() {
+		// Handle parent feature toggles
+		$(document).on('change', '.wpshadow-parent-toggle', function() {
+			var $parentToggle = $(this);
+			var parentId = $parentToggle.data('parent-id');
+			var isParentEnabled = $parentToggle.is(':checked');
+
+			// Find all child rows for this parent
+			var $childRows = $('.wpshadow-child-of-' + parentId);
+			var $childToggles = $childRows.find('.wpshadow-child-toggle');
+
+			if (!isParentEnabled) {
+				// If parent is disabled, disable all children
+				$childToggles.each(function() {
+					var $childToggle = $(this);
+					if ($childToggle.is(':checked')) {
+						$childToggle.prop('checked', false).trigger('change');
+					}
+					$childToggle.prop('disabled', true).css('opacity', '0.5');
+				});
+
+				// Visual feedback: slightly fade child rows
+				$childRows.css('opacity', '0.6');
+			} else {
+				// If parent is enabled, re-enable child toggles (they can be individually controlled)
+				$childToggles.each(function() {
+					$(this).prop('disabled', false).css('opacity', '1');
+				});
+
+				// Visual feedback: restore child rows to full opacity
+				$childRows.css('opacity', '1');
+			}
+		});
+
+		// Disable children if parent is unchecked on page load
+		$('.wpshadow-parent-toggle').each(function() {
+			var $parentToggle = $(this);
+			var parentId = $parentToggle.data('parent-id');
+			var isParentEnabled = $parentToggle.is(':checked');
+
+			if (!isParentEnabled) {
+				var $childRows = $('.wpshadow-child-of-' + parentId);
+				var $childToggles = $childRows.find('.wpshadow-child-toggle');
+
+				$childToggles.each(function() {
+					$(this).prop('disabled', true).css('opacity', '0.5');
+				});
+
+				$childRows.css('opacity', '0.6');
+			}
+		});
+	}
+
+	/**
+	 * Extract feature ID from toggle element's name attribute.
+	 *
+	 * @param {jQuery} $toggle The toggle element
+	 * @returns {string} Feature ID or 'unknown'
+	 */
+	function extractFeatureId($toggle) {
+		var name = $toggle.attr('name');
+		if (!name) {
+			return 'unknown';
+		}
+
+		// Extract from name like "features[feature-id]"
+		var match = name.match(/\[([^\]]+)\]/);
+		return match ? match[1] : 'unknown';
+	}
+
+	/**
+	 * Extract feature name from the row.
+	 *
+	 * @param {jQuery} $toggle The toggle element
+	 * @returns {string} Feature name or 'Feature'
+	 */
+	function extractFeatureName($toggle) {
+		// Find the closest row, then find the feature name link or strong text
+		var $row = $toggle.closest('tr');
+		if ($row.length) {
+			// Try to find the link first (features with settings pages)
+			var $link = $row.find('strong a');
+			if ($link.length) {
+				return $link.text().trim();
+			}
+			// Otherwise find the strong text (features without settings)
+			var $strong = $row.find('strong').first();
+			if ($strong.length) {
+				return $strong.text().trim();
+			}
+		}
+		return 'Feature';
+	}
+
+	/**
+	 * Save feature state via AJAX request.
+	 *
+	 * @param {string} featureId The feature ID to save
+	 * @param {string} featureName The feature name to display
+	 * @param {boolean} isEnabled Whether the feature is enabled
+	 */
+	function saveFeatureState(featureId, featureName, isEnabled) {
+		// Validate localized data availability
+		if (typeof wpshadowFeatureDetails === 'undefined' || !wpshadowFeatureDetails.nonce) {
+			console.error('[WPShadow] Feature toggle nonce not available');
+			return;
+		}
+
+		var data = {
+			action: 'wpshadow_toggle_feature',
+			nonce: wpshadowFeatureDetails.nonce,
+			feature_id: featureId,
+			enabled: isEnabled ? 'true' : 'false'
+		};
+
+		$.ajax({
+			type: 'POST',
+			url: wpshadowFeatureDetails.ajaxurl,
+			data: data,
+			success: function(response) {
+				if (response.success) {
+					var message = featureName + ' ' + (isEnabled ? 'enabled.' : 'disabled.');
+					var type = isEnabled ? 'success' : 'disabled';
+					showToast(message, type, featureId);
+					
+					// Toggle settings section disabled state (on feature details page)
+					var $settingsSection = $('.feature-sub-features-section');
+					if ($settingsSection.length) {
+						if (isEnabled) {
+							$settingsSection.removeClass('feature-settings-disabled');
+							$settingsSection.find('.wpshadow-sub-feature-toggle').prop('disabled', false);
+						} else {
+							$settingsSection.addClass('feature-settings-disabled');
+							$settingsSection.find('.wpshadow-sub-feature-toggle').prop('disabled', true);
+						}
+					}
+					
+					// Toggle settings button on features list page
+					var $row = $('.wps-feature-toggle-input[name="features[' + featureId + ']"]').closest('tr');
+					if ($row.length) {
+						var $settingsBtn = $row.find('.wps-feature-settings-btn');
+						var $healthBadge = $row.find('.wps-health-score-badge');
+						
+						if (isEnabled) {
+							// Enable settings button
+							if ($settingsBtn.length) {
+								$settingsBtn.removeAttr('disabled').css({'pointer-events': '', 'opacity': ''});
+							}
+							// Show health badge with animation
+							if ($healthBadge.length) {
+								$healthBadge.css({
+									'display': 'inline-flex',
+									'animation': 'fadeIn 0.3s ease'
+								});
+							}
+						} else {
+							// Disable settings button
+							if ($settingsBtn.length) {
+								$settingsBtn.attr('disabled', 'disabled').css({'pointer-events': 'none', 'opacity': '0.5'});
+							}
+							// Hide health badge
+							if ($healthBadge.length) {
+								$healthBadge.css('display', 'none');
+							}
+						}
+					}
+				}
+			},
+			error: function(xhr, status, error) {
+				console.error('[WPShadow] Error saving feature state:', error);
+				showToast('Error saving ' + featureName + '.', 'error', featureId);
+			}
+		});
+	}
+
+	/**
+	 * Save sub-feature setting state via AJAX request.
+	 *
+	 * @param {string} featureId The parent feature ID
+	 * @param {string} settingKey The setting key
+	 * @param {string} settingName The setting name to display
+	 * @param {boolean} isEnabled Whether the setting is enabled
+	 */
+	function saveSubFeatureState(featureId, settingKey, settingName, isEnabled) {
+		// Validate localized data availability
+		if (typeof wpshadowFeatureDetails === 'undefined' || !wpshadowFeatureDetails.nonce) {
+			console.error('[WPShadow] Feature details nonce not available');
+			return;
+		}
+
+		var data = {
+			action: 'wpshadow_toggle_feature_setting',
+			nonce: wpshadowFeatureDetails.nonce,
+			feature_id: featureId,
+			setting_key: settingKey,
+			enabled: isEnabled ? 'true' : 'false'
+		};
+
+		$.ajax({
+			type: 'POST',
+			url: wpshadowFeatureDetails.ajaxurl,
+			data: data,
+			success: function(response) {
+				if (response.success) {
+					var message = settingName + ' ' + (isEnabled ? 'enabled.' : 'disabled.');
+					var type = isEnabled ? 'success' : 'disabled';
+					showToast(message, type, featureId);
+				}
+			},
+			error: function(xhr, status, error) {
+				console.error('[WPShadow] Error saving sub-feature setting:', error);
+				showToast('Error saving ' + settingName + '.', 'error', featureId);
+			}
+		});
+	}
+
+	/**
+	 * Display a modern toast notification.
+	 *
+	 * @param {string} message The message to display
+	 * @param {string} type The toast type: 'success', 'disabled', or 'error'
+	 * @param {string} featureId Optional feature ID for context
+	 */
+	function showToast(message, type, featureId) {
+		type = type || 'success';
+
+		// Create toast container if it doesn't exist
+		var container = $('#wpshadow-toast-container');
+		if (!container.length) {
+			container = $('<div id="wpshadow-toast-container"></div>').appendTo('body');
+		}
+
+		// Create toast element with appropriate icon
+		var icon = type === 'success' ? '✓' : (type === 'disabled' ? '○' : '✕');
+		var toast = $(
+			'<div class="wpshadow-toast wpshadow-toast-' + type + '" role="alert">' +
+				'<span class="wpshadow-toast-icon">' + icon + '</span>' +
+				'<span class="wpshadow-toast-message">' + escapeHtml(message) + '</span>' +
+			'</div>'
+		);
+
+		// Add to container
+		container.append(toast);
+
+		// Trigger animation
+		setTimeout(function() {
+			toast.addClass('wpshadow-toast-show');
+		}, 10);
+
+		// Auto-dismiss after 4 seconds
+		setTimeout(function() {
+			toast.removeClass('wpshadow-toast-show');
+			setTimeout(function() {
+				toast.remove();
+			}, 300);
+		}, 4000);
+	}
+
+	/**
+	 * Escape HTML to prevent XSS.
+	 *
+	 * @param {string} text The text to escape
+	 * @returns {string} Escaped text
+	 */
+	function escapeHtml(text) {
+		var div = document.createElement('div');
+		div.textContent = text;
+		return div.innerHTML;
+	}
 
 })(jQuery);

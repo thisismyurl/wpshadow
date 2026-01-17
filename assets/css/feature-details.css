@@ -45,6 +45,30 @@
 	border-radius: 4px;
 }
 
+/* Disabled feature settings section */
+.feature-settings-disabled {
+	opacity: 0.5;
+	pointer-events: none;
+	position: relative;
+}
+
+.feature-settings-disabled::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(255, 255, 255, 0.7);
+	z-index: 1;
+	pointer-events: none;
+}
+
+.feature-settings-disabled h3,
+.feature-settings-disabled .description {
+	opacity: 0.7;
+}
+
 .wpshadow-feature-info-widget .feature-meta table {
 	margin-bottom: 20px;
 }
@@ -54,7 +78,68 @@
 	font-weight: 600;
 }
 
-/* Toggle Switch */
+/* Toggle Switch - Matching Features Page Style */
+.wps-feature-toggle-label {
+	position: relative;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.wps-feature-toggle-input {
+	position: absolute;
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.wps-feature-toggle-switch {
+	position: relative;
+	display: inline-block;
+	width: 44px;
+	height: 24px;
+	background-color: #dcdcde;
+	border-radius: 12px;
+	transition: background-color 0.2s ease;
+	vertical-align: middle;
+}
+
+.wps-feature-toggle-switch::after {
+	content: '';
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	width: 20px;
+	height: 20px;
+	background-color: #fff;
+	border-radius: 50%;
+	transition: transform 0.2s ease;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.wps-feature-toggle-input:checked + .wps-feature-toggle-switch {
+	background-color: #2271b1;
+}
+
+.wps-feature-toggle-input:checked + .wps-feature-toggle-switch::after {
+	transform: translateX(20px);
+}
+
+.wps-feature-toggle-input:focus + .wps-feature-toggle-switch {
+	box-shadow: 0 0 0 2px #fff, 0 0 0 4px #2271b1;
+	outline: 2px solid transparent;
+	outline-offset: 2px;
+}
+
+.wps-feature-toggle-input:disabled + .wps-feature-toggle-switch {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.wps-feature-toggle-input:disabled + .wps-feature-toggle-switch::after {
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Legacy Toggle Switch Classes (kept for backwards compatibility) */
 .wpshadow-toggle-switch {
 	display: inline-flex;
 	align-items: center;
@@ -279,3 +364,191 @@
 	border-color: #721c24;
 	color: #721c24;
 }
+
+/* Toast Notifications */
+#wpshadow-toast-container {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	z-index: 999999;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	pointer-events: none;
+	max-width: 400px;
+}
+
+.wpshadow-toast {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 14px 18px;
+	border-radius: 8px;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+	min-width: 280px;
+	max-width: 400px;
+	opacity: 0;
+	transform: translateX(400px);
+	transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+	pointer-events: all;
+	border-left: 4px solid;
+	font-weight: 500;
+	font-size: 14px;
+	color: #fff;
+}
+
+.wpshadow-toast-show {
+	opacity: 1;
+	transform: translateX(0);
+}
+
+.wpshadow-toast-success {
+	background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+	border-left-color: #065f46;
+}
+
+.wpshadow-toast-disabled {
+	background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+	border-left-color: #334155;
+}
+
+.wpshadow-toast-error {
+	background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+	border-left-color: #7f1d1d;
+}
+
+.wpshadow-toast-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	font-weight: bold;
+	font-size: 16px;
+	flex-shrink: 0;
+	background: rgba(255, 255, 255, 0.25);
+}
+
+.wpshadow-toast-success .wpshadow-toast-icon {
+	background: rgba(255, 255, 255, 0.25);
+	color: #fff;
+}
+
+.wpshadow-toast-disabled .wpshadow-toast-icon {
+	background: rgba(255, 255, 255, 0.25);
+	color: #fff;
+}
+
+.wpshadow-toast-error .wpshadow-toast-icon {
+	background: rgba(255, 255, 255, 0.25);
+	color: #fff;
+}
+
+.wpshadow-toast-message {
+	font-size: 14px;
+	color: #fff;
+	flex: 1;
+	line-height: 1.4;
+}
+
+@media (max-width: 782px) {
+	#wpshadow-toast-container {
+		top: 70px;
+		right: 12px;
+		left: 12px;
+		max-width: none;
+	}
+	
+	.wpshadow-toast {
+		min-width: auto;
+		max-width: none;
+	}
+}
+
+/* Accessibility: Respect Prefers Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+	.wpshadow-toast {
+		transition: none;
+		opacity: 1;
+		transform: translateX(0);
+	}
+
+	.wpshadow-toast:not(.wpshadow-toast-show) {
+		display: none;
+	}
+}
+
+/**
+ * Hierarchical Features Display Styles
+ * 
+ * Styling for parent-child feature relationships
+ */
+
+.wpshadow-features-list .wpshadow-parent-feature {
+	font-weight: 600;
+	background-color: #fff;
+}
+
+.wpshadow-features-list .wpshadow-parent-feature strong {
+	font-size: 14px;
+}
+
+.wpshadow-features-list .wpshadow-child-feature {
+	background-color: #fafafa;
+	border-top: 1px solid #f0f0f0;
+}
+
+.wpshadow-features-list .wpshadow-child-feature strong {
+	font-size: 13px;
+	color: #666;
+	font-weight: 500;
+}
+
+/* Indent child feature checkboxes and add visual hierarchy */
+.wpshadow-features-list .wpshadow-child-feature .check-column {
+	padding-left: 50px !important;
+	position: relative;
+}
+
+/* Add a small arrow/bullet to indicate child features */
+.wpshadow-features-list .wpshadow-child-feature .check-column::before {
+	content: '↳';
+	position: absolute;
+	left: 68px;
+	top: 50%;
+	transform: translateY(-50%);
+	font-size: 12px;
+	color: #999;
+	opacity: 0.7;
+}
+
+/* Smooth opacity transition for disabled children */
+.wpshadow-features-list .wpshadow-child-feature {
+	transition: opacity 0.3s ease;
+}
+
+/* Disabled child features visual state */
+.wpshadow-features-list .wpshadow-child-toggle:disabled {
+	cursor: not-allowed;
+	opacity: 0.5;
+}
+
+/* Parent toggle with pointer to indicate it controls children */
+.wpshadow-parent-toggle {
+	cursor: pointer;
+}
+
+.wpshadow-parent-toggle:after {
+	content: '▼';
+	display: none;
+	font-size: 10px;
+	margin-left: 4px;
+	opacity: 0.5;
+}
+
+/* Add spacing between parent groups */
+.wpshadow-features-list .wpshadow-parent-feature:not(:first-child) {
+	border-top: 2px solid #f0f0f0;
+}
+

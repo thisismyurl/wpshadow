@@ -206,6 +206,27 @@ class WPSHADOW_Feature_Registry {
 	}
 
 	/**
+	 * Enable or disable a single feature.
+	 *
+	 * @param string $feature_id Feature identifier.
+	 * @param bool   $enabled    Whether to enable or disable the feature.
+	 * @param bool   $network    Whether to update network scope.
+	 * @return bool True on success, false on failure.
+	 */
+	public static function set_feature_enabled( string $feature_id, bool $enabled, bool $network = false ): bool {
+		if ( empty( $feature_id ) ) {
+			return false;
+		}
+
+		$toggles = $network && is_multisite() ? self::$network_toggles : self::$site_toggles;
+		$toggles[ $feature_id ] = $enabled ? 1 : 0;
+		
+		self::persist_toggles( $toggles, $network );
+		
+		return true;
+	}
+
+	/**
 	 * Get a specific feature's metadata and resolved state.
 	 *
 	 * @param string $feature_id Feature identifier.
@@ -230,6 +251,16 @@ class WPSHADOW_Feature_Registry {
 		);
 
 		return $feature;
+	}
+
+	/**
+	 * Get a feature object when the class instance is required.
+	 *
+	 * @param string $feature_id Feature identifier.
+	 * @return WPSHADOW_Feature_Interface|null
+	 */
+	public static function get_feature_object( string $feature_id ) {
+		return self::$feature_objects[ $feature_id ] ?? null;
 	}
 
 	/**
@@ -262,6 +293,16 @@ class WPSHADOW_Feature_Registry {
 		}
 
 		return $features;
+	}
+
+	/**
+	 * Backward compatibility alias for get_features().
+	 *
+	 * @param bool $network Whether to read network scope.
+	 * @return array<string, array<string, mixed>>
+	 */
+	public static function get_all_features( bool $network = false ): array {
+		return self::get_features( $network );
 	}
 
 	/**
@@ -367,6 +408,7 @@ class WPSHADOW_Feature_Registry {
 
 		return array(
 			'id'                 => $feature->get_id(),
+			'parent'             => method_exists( $feature, 'get_parent' ) ? $feature->get_parent() : null,
 			'name'               => $feature->get_name(),
 			'description'        => $feature->get_description(),
 			'scope'              => $scope,

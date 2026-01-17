@@ -62,7 +62,7 @@ class WPSHADOW_SOS_Support {
 	 */
 	public static function register_admin_menu(): void {
 		add_submenu_page(
-			'wpshadow',
+			null, // Hidden from menu - accessible via QuickLinks
 			__( '🚨 Emergency SOS', 'plugin-wpshadow' ),
 			__( '🚨 Emergency SOS', 'plugin-wpshadow' ),
 			'manage_options',

@@ -54,7 +54,7 @@ class WPSHADOW_Site_Documentation_Manager {
 	public static function register_admin_pages(): void {
 		// Site Blueprint page.
 		add_submenu_page(
-			'wpshadow',
+			null, // Hidden from menu - accessible via QuickLinks
 			__( 'Site Blueprint', 'plugin-wpshadow' ),
 			__( 'Site Blueprint', 'plugin-wpshadow' ),
 			'manage_options',
@@ -64,7 +64,7 @@ class WPSHADOW_Site_Documentation_Manager {
 
 		// Protected Plugins page.
 		add_submenu_page(
-			'wpshadow',
+			null, // Hidden from menu - accessible via QuickLinks
 			__( 'Protected Plugins', 'plugin-wpshadow' ),
 			__( 'Protected Plugins', 'plugin-wpshadow' ),
 			'manage_options',
@@ -74,7 +74,7 @@ class WPSHADOW_Site_Documentation_Manager {
 
 		// Export Documentation page.
 		add_submenu_page(
-			'wpshadow',
+			null, // Hidden from menu - accessible via QuickLinks
 			__( 'Export Documentation', 'plugin-wpshadow' ),
 			__( 'Export Documentation', 'plugin-wpshadow' ),
 			'manage_options',

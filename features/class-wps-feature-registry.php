@@ -206,6 +206,37 @@ class WPSHADOW_Feature_Registry {
 	}
 
 	/**
+	 * Set a single feature's enabled state.
+	 *
+	 * @param string $feature_id Feature identifier.
+	 * @param bool   $enabled    Whether to enable the feature.
+	 * @param bool   $network    Whether to store network-wide.
+	 * @return bool True on success, false on failure.
+	 */
+	public static function set_feature_enabled( string $feature_id, bool $enabled, bool $network = false ): bool {
+		$feature_id = sanitize_key( $feature_id );
+		
+		if ( ! self::has_feature( $feature_id ) ) {
+			return false;
+		}
+
+		$toggles     = $network && is_multisite() ? self::$network_toggles : self::$site_toggles;
+		$old_state   = isset( $toggles[ $feature_id ] ) ? (bool) $toggles[ $feature_id ] : false;
+		$new_state   = $enabled ? 1 : 0;
+
+		// Fire action when feature is newly enabled.
+		if ( $enabled && ! $old_state ) {
+			$user_id = get_current_user_id();
+			do_action( 'wpshadow_feature_enabled', $feature_id, $user_id );
+		}
+
+		$toggles[ $feature_id ] = $new_state;
+		self::persist_toggles( $toggles, $network );
+
+		return true;
+	}
+
+	/**
 	 * Get a specific feature's metadata and resolved state.
 	 *
 	 * @param string $feature_id Feature identifier.

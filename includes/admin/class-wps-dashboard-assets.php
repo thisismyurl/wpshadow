@@ -56,7 +56,8 @@ final class WPSHADOW_Dashboard_Assets {
 
 		if ( is_admin() ) {
 			add_action( 'admin_head', array( __CLASS__, 'inject_icon_css' ) );
-			add_filter( 'plugin_row_meta', array( __CLASS__, 'inject_banner_in_list' ), 10, 2 );
+			// Banner injection removed per requirements
+			// add_filter( 'plugin_row_meta', array( __CLASS__, 'inject_banner_in_list' ), 10, 2 );
 		}
 	}
 

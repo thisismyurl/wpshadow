@@ -14,6 +14,8 @@
  * GitHub Plugin URI:   https://github.com/thisismyurl/plugin-wpshadow
  * Primary Branch:      main
  * Text Domain:         plugin-wpshadow
+ * Domain Path:         /languages
+ * Network:             true
  * License:             GPL2
  * License URI:         https://www.gnu.org/licenses/gpl-2.0.html
  * @package WPSHADOW
@@ -23,6 +25,7 @@ declare(strict_types=1);
 
 namespace WPShadow;
 
+use function WPShadow\CoreSupport\register_WPSHADOW_feature;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Core_Diagnostics;
 // ========================================================
 // FREE FEATURES - use statements below
@@ -30,9 +33,33 @@ use WPShadow\CoreSupport\WPSHADOW_Feature_Core_Diagnostics;
 // ========================================================
 
 use WPShadow\CoreSupport\WPSHADOW_Feature_Asset_Version_Removal;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Asset_Version_Removal_Remove_CSS;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Asset_Version_Removal_Remove_JS;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Asset_Version_Removal_Preserve_Plugin_Versions;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Head_Cleanup;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Head_Cleanup_Remove_Emoji;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Head_Cleanup_Remove_Generator;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Head_Cleanup_Remove_Shortlink;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Head_Cleanup_Remove_RSD;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Head_Cleanup_Remove_WLW;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Head_Cleanup_Remove_Rest_Link;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Head_Cleanup_Remove_Oembed;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Head_Cleanup_Remove_Feeds;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Head_Cleanup_Remove_Comments_Style;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Head_Cleanup_Disable_XMLRPC;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Block_Cleanup;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Block_Cleanup_Disable_SVG_Filters;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Block_Cleanup_Remove_Block_Library;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Block_Cleanup_Remove_Classic_Styles;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Block_Cleanup_Remove_Global_Styles;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Block_Cleanup_Remove_WC_Blocks;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Block_Cleanup_Separate_Block_Assets;
 use WPShadow\CoreSupport\WPSHADOW_Feature_CSS_Class_Cleanup;
+use WPShadow\CoreSupport\WPSHADOW_Feature_CSS_Class_Cleanup_Clean_Body_Classes;
+use WPShadow\CoreSupport\WPSHADOW_Feature_CSS_Class_Cleanup_Clean_Nav_Classes;
+use WPShadow\CoreSupport\WPSHADOW_Feature_CSS_Class_Cleanup_Clean_Post_Classes;
+use WPShadow\CoreSupport\WPSHADOW_Feature_CSS_Class_Cleanup_Remove_Block_Classes;
+use WPShadow\CoreSupport\WPSHADOW_Feature_CSS_Class_Cleanup_Remove_Nav_IDs;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Plugin_Cleanup;
 use WPShadow\CoreSupport\WPSHADOW_Feature_HTML_Cleanup;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Resource_Hints;
@@ -41,16 +68,32 @@ use WPShadow\CoreSupport\WPSHADOW_Feature_Color_Contrast_Checker;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Skiplinks;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Embed_Disable;
 use WPShadow\CoreSupport\WPSHADOW_Feature_jQuery_Cleanup;
+use WPShadow\CoreSupport\WPSHADOW_Feature_jQuery_Cleanup_Keep_Admin;
+use WPShadow\CoreSupport\WPSHADOW_Feature_jQuery_Cleanup_Log_Removals;
+use WPShadow\CoreSupport\WPSHADOW_Feature_jQuery_Cleanup_Remove_Migrate_Frontend;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Block_CSS_Cleanup;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Block_CSS_Cleanup_Remove_Block_Library;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Block_CSS_Cleanup_Remove_Block_Theme;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Block_CSS_Cleanup_Remove_Global_Styles;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Block_CSS_Cleanup_Remove_WooCommerce_Blocks;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Interactivity_Cleanup;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Consent_Checks;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Iframe_Busting;
 use WPShadow\CoreSupport\WPSHADOW_Feature_HTTP_SSL_Audit;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Registry;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Image_Lazy_Loading;
-use WPShadow\CoreSupport\WPSHADOW_Feature_Google_Fonts_Disabler;
+use WPShadow\CoreSupport\WPSHADOW_Feature_External_Fonts_Disabler;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Core_Integrity;
 use WPShadow\CoreSupport\WPSHADOW_Feature_Maintenance_Cleanup;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Favicon_Checker;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Hotlink_Protection;
+use WPShadow\CoreSupport\WPSHADOW_Feature_A11y_Audit;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Mobile_Friendliness;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Dark_Mode;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Tips_Coach;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Open_Graph_Previewer;
+use WPShadow\CoreSupport\WPSHADOW_Feature_Broken_Link_Checker;
+use WPShadow\CoreSupport\WPSHADOW_Feature_SEO_Validator;
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -272,9 +315,33 @@ function WPSHADOW_register_core_features(): void {
 
 	// Performance optimization features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Asset_Version_Removal() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Asset_Version_Removal_Remove_CSS() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Asset_Version_Removal_Remove_JS() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Asset_Version_Removal_Preserve_Plugin_Versions() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Head_Cleanup() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Head_Cleanup_Remove_Emoji() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Head_Cleanup_Remove_Generator() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Head_Cleanup_Remove_Shortlink() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Head_Cleanup_Remove_RSD() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Head_Cleanup_Remove_WLW() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Head_Cleanup_Remove_Rest_Link() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Head_Cleanup_Remove_Oembed() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Head_Cleanup_Remove_Feeds() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Head_Cleanup_Remove_Comments_Style() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Head_Cleanup_Disable_XMLRPC() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Block_Cleanup() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Block_Cleanup_Remove_Block_Library() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Block_Cleanup_Remove_Global_Styles() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Block_Cleanup_Remove_Classic_Styles() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Block_Cleanup_Remove_WC_Blocks() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Block_Cleanup_Disable_SVG_Filters() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Block_Cleanup_Separate_Block_Assets() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_CSS_Class_Cleanup() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_CSS_Class_Cleanup_Clean_Post_Classes() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_CSS_Class_Cleanup_Clean_Nav_Classes() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_CSS_Class_Cleanup_Remove_Nav_IDs() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_CSS_Class_Cleanup_Clean_Body_Classes() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_CSS_Class_Cleanup_Remove_Block_Classes() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Plugin_Cleanup() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_HTML_Cleanup() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Resource_Hints() );
@@ -283,18 +350,26 @@ function WPSHADOW_register_core_features(): void {
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Skiplinks() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Embed_Disable() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_jQuery_Cleanup() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_jQuery_Cleanup_Remove_Migrate_Frontend() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_jQuery_Cleanup_Keep_Admin() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_jQuery_Cleanup_Log_Removals() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Block_CSS_Cleanup() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Block_CSS_Cleanup_Remove_Block_Library() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Block_CSS_Cleanup_Remove_Block_Theme() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Block_CSS_Cleanup_Remove_Global_Styles() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Block_CSS_Cleanup_Remove_WooCommerce_Blocks() );
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Interactivity_Cleanup() );
 	
 	// Free performance optimization features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Image_Lazy_Loading() );
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Google_Fonts_Disabler() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_External_Fonts_Disabler() );
 
 	// Privacy and compliance features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Consent_Checks() );
 	
 	// Accessibility and mobile features.
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Mobile_Friendliness() );
+	register_WPSHADOW_feature( new WPSHADOW_Feature_Dark_Mode() );
 	
 	// Security features (free tier).
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Iframe_Busting() );
@@ -473,13 +548,6 @@ function wpshadow_deactivate(): void {
  * @return void
  */
 function wpshadow_init(): void {
-	// Load text domain for translations.
-	load_plugin_textdomain(
-		WPSHADOW_TEXT_DOMAIN,
-		false,
-		dirname( WPSHADOW_BASENAME ) . '/languages'
-	);
-
 	// Load DRY helper functions and traits.
 	require_once WPSHADOW_PATH . 'includes/helpers/wps-input-helpers.php';
 	require_once WPSHADOW_PATH . 'includes/helpers/wps-ajax-helpers.php';
@@ -509,9 +577,10 @@ function wpshadow_init(): void {
 	// \WPShadow\CoreSupport\WPSHADOW_Module_Registry::init();
 
 	// Load Feature Registry and base feature classes (independent of modules).
-	require_once WPSHADOW_PATH . 'includes/features/interface-wps-feature.php';
-	require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-abstract.php';
+	require_once WPSHADOW_PATH . 'features/interface-wps-feature.php';
+	require_once WPSHADOW_PATH . 'features/class-wps-feature-abstract.php';
 	require_once WPSHADOW_PATH . 'includes/class-wps-feature-registry.php';
+	require_once WPSHADOW_PATH . 'includes/wps-feature-functions.php';
 	\WPShadow\CoreSupport\WPSHADOW_Feature_Registry::init();
 
 	// Ghost Features and Module system moved to Pro plugin
@@ -520,6 +589,7 @@ function wpshadow_init(): void {
 	require_once WPSHADOW_PATH . 'includes/class-wps-settings.php';
 	\WPShadow\CoreSupport\WPSHADOW_Settings::init();
 	require_once WPSHADOW_PATH . 'includes/wps-settings-functions.php';
+	require_once WPSHADOW_PATH . 'includes/wps-widget-functions.php';
 
 	// Load capability manager.
 	require_once WPSHADOW_PATH . 'includes/class-wps-capabilities.php';
@@ -576,20 +646,7 @@ function wpshadow_init(): void {
 	require_once WPSHADOW_PATH . 'includes/class-wps-white-screen-recovery.php';
 	\WPShadow\CoreSupport\WPSHADOW_White_Screen_Recovery::init();
 
-	// Register emergency support admin menu.
-	add_action(
-		'admin_menu',
-		static function (): void {
-			add_submenu_page(
-				'wpshadow',
-				__( 'Emergency Support', 'plugin-wpshadow' ),
-				__( 'Emergency', 'plugin-wpshadow' ),
-				'manage_options',
-				'wps-emergency-support',
-				array( '\\WPShadow\\CoreSupport\\WPSHADOW_Emergency_Support', 'render_emergency_page' )
-			);
-		}
-	);
+	// Emergency support page is accessible directly at ?page=wps-emergency-support but not shown in menu
 
 	// Handle recovery actions from emergency dashboard.
 	add_action( 'admin_init', array( '\\WPShadow\\CoreSupport\\WPSHADOW_White_Screen_Recovery', 'handle_recovery_actions' ) );
@@ -599,8 +656,9 @@ function wpshadow_init(): void {
 	\WPShadow\CoreSupport\WPSHADOW_Site_Documentation_Manager::init();
 
 	// Load Update Simulator for safe plugin/theme update testing.
-	require_once WPSHADOW_PATH . 'includes/class-wps-update-simulator.php';
-	\WPShadow\CoreSupport\WPSHADOW_Update_Simulator::init();
+	// DISABLED: File does not exist
+	// require_once WPSHADOW_PATH . 'includes/class-wps-update-simulator.php';
+	// \WPShadow\CoreSupport\WPSHADOW_Update_Simulator::init();
 
 	// Load Guided Walkthroughs for step-by-step task assistance.
 	require_once WPSHADOW_PATH . 'includes/class-wps-guided-walkthroughs.php';
@@ -664,6 +722,10 @@ function wpshadow_init(): void {
 	require_once WPSHADOW_PATH . 'includes/class-wps-registration.php';
 	\WPShadow\CoreSupport\WPSHADOW_Registration::init();
 
+	// Load core Command Palette bridge (integrates WPShadow features into WordPress core palette).
+	require_once WPSHADOW_PATH . 'includes/admin/class-wps-core-command-bridge.php';
+	\WPShadow\CoreSupport\Admin\WPSHADOW_Core_Command_Bridge::init();
+
 	// Load dashboard assets on 'init' hook instead of here.
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/admin/class-wps-dashboard-assets.php' );
 	add_action(
@@ -674,9 +736,8 @@ function wpshadow_init(): void {
 
 	// Load feature registry for flexible plugin dependencies.
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/class-wps-settings-cache.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/interface-wps-feature.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-feature-abstract.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/features/class-wps-script-utils.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/interface-wps-feature.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-abstract.php' );
 	
 	// Initialize settings cache early.
 	\WPShadow\CoreSupport\WPSHADOW_Settings_Cache::init();
@@ -694,12 +755,36 @@ function wpshadow_init(): void {
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/interface-wps-feature.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-abstract.php' );
 
-	// Free features (27 features)
+	// Free features (26 features)
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-core-diagnostics.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-asset-version-removal.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-asset-version-removal-remove-css.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-asset-version-removal-remove-js.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-asset-version-removal-preserve-plugin-versions.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-head-cleanup.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-head-cleanup-remove-emoji.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-head-cleanup-remove-generator.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-head-cleanup-remove-shortlink.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-head-cleanup-remove-rsd.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-head-cleanup-remove-wlw.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-head-cleanup-remove-rest-link.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-head-cleanup-remove-oembed.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-head-cleanup-remove-feeds.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-head-cleanup-remove-comments-style.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-head-cleanup-disable-xmlrpc.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-block-cleanup.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-block-cleanup-remove-block-library.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-block-cleanup-remove-global-styles.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-block-cleanup-remove-classic-styles.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-block-cleanup-remove-wc-blocks.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-block-cleanup-disable-svg-filters.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-block-cleanup-separate-block-assets.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-css-class-cleanup.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-css-class-cleanup-clean-post-classes.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-css-class-cleanup-clean-nav-classes.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-css-class-cleanup-remove-nav-ids.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-css-class-cleanup-clean-body-classes.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-css-class-cleanup-remove-block-classes.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-plugin-cleanup.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-html-cleanup.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-resource-hints.php' );
@@ -707,7 +792,14 @@ function wpshadow_init(): void {
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-skiplinks.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-embed-disable.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-jquery-cleanup.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-jquery-cleanup-remove-migrate-frontend.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-jquery-cleanup-keep-admin.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-jquery-cleanup-log-removals.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-block-css-cleanup.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-block-css-cleanup-remove-block-library.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-block-css-cleanup-remove-block-theme.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-block-css-cleanup-remove-global-styles.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-block-css-cleanup-remove-woocommerce-blocks.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-interactivity-cleanup.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-consent-checks.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-iframe-busting.php' );
@@ -716,11 +808,16 @@ function wpshadow_init(): void {
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-mobile-friendliness.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-tips-coach.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-image-lazy-loading.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-external-fonts-disabler.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-core-integrity.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-maintenance-cleanup.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-http-ssl-audit.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-open-graph-previewer.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-broken-link-checker.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-seo-validator.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-favicon-checker.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-color-contrast-checker.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-dark-mode.php' );
 
 	// ========================================================================
 	// PAID FEATURES - Now loaded by wpshadow-pro.php
@@ -761,12 +858,12 @@ function wpshadow_init(): void {
 
 	// Network license broadcaster moved to Pro plugin
 
-	// Load module downloader for resilient downloads.
-	require_once WPSHADOW_PATH . 'includes/class-wps-module-downloader.php';
+	// DISABLED: Module downloader - file does not exist
+	// require_once WPSHADOW_PATH . 'includes/class-wps-module-downloader.php';
 
-	// Load module action handlers for AJAX install/update/activate.
-	require_once WPSHADOW_PATH . 'includes/class-wps-module-actions.php';
-	\WPShadow\CoreSupport\WPSHADOW_Module_Actions::init();
+	// DISABLED: Module action handlers - file does not exist
+	// require_once WPSHADOW_PATH . 'includes/class-wps-module-actions.php';
+	// \WPShadow\CoreSupport\WPSHADOW_Module_Actions::init();
 
 	// Centralized router guard for disabled modules.
 	require_once WPSHADOW_PATH . 'includes/class-wps-router-guard.php';
@@ -777,6 +874,8 @@ function wpshadow_init(): void {
 	require_once WPSHADOW_PATH . 'includes/class-wps-dashboard-layout.php';
 	require_once WPSHADOW_PATH . 'includes/class-wps-feature-details-page.php';
 	\WPShadow\CoreSupport\WPSHADOW_Feature_Details_Page::init();
+	require_once WPSHADOW_PATH . 'includes/class-wps-wizard-handler.php';
+	\WPShadow\CoreSupport\WPSHADOW_Wizard_Handler::init();
 	require_once WPSHADOW_PATH . 'includes/class-wps-feature-search.php';
 	\WPShadow\CoreSupport\WPSHADOW_Feature_Search::init();
 	require_once WPSHADOW_PATH . 'includes/admin/class-wps-settings-ajax.php';
@@ -791,7 +890,8 @@ function wpshadow_init(): void {
 	require_once WPSHADOW_PATH . 'includes/admin/assets.php';
 	require_once WPSHADOW_PATH . 'includes/admin/screens.php';
 	require_once WPSHADOW_PATH . 'includes/views/dashboard-renderer.php';
-	require_once WPSHADOW_PATH . 'includes/admin/ajax-modules.php';
+	// DISABLED: ajax-modules file does not exist
+	// require_once WPSHADOW_PATH . 'includes/admin/ajax-modules.php';
 	// Load CLI commands when WP-CLI present.
 	if ( defined( 'WP_CLI' ) && WP_CLI ) {
 		require_once WPSHADOW_PATH . 'includes/class-wps-cli.php';
@@ -862,7 +962,7 @@ function wpshadow_init(): void {
  */
 function wpshadow_network_admin_menu(): void {
 	add_menu_page(
-		__( 'WPShadow Dashboard', 'plugin-wpshadow' ),
+		__( 'WPShadow', 'plugin-wpshadow' ),
 		__( 'WPShadow', 'plugin-wpshadow' ),
 		'manage_network_options',
 		'wpshadow',
@@ -871,6 +971,7 @@ function wpshadow_network_admin_menu(): void {
 		999
 	);
 
+	// Add dashboard submenu first to ensure menu links to dashboard
 	add_submenu_page(
 		'wpshadow',
 		__( 'WPShadow Dashboard', 'plugin-wpshadow' ),
@@ -880,8 +981,7 @@ function wpshadow_network_admin_menu(): void {
 		__NAMESPACE__ . '\\wpshadow_render_tab_router'
 	);
 
-	// TEMPORARILY DISABLED: Dynamically register module submenu items (Vault, Media, etc.).
-	// wpshadow_register_module_submenus( 'manage_network_options' );
+	// Features create QuickLinks in dashboard instead of submenus
 
 	// Initialize dashboard screen extras (Screen Options, Help) and metaboxes.
 	add_action( 'load-toplevel_page_wpshadow', 'WPShadow\\CoreSupport\\wpshadow_setup_dashboard_screen' );
@@ -894,7 +994,7 @@ function wpshadow_network_admin_menu(): void {
  */
 function wpshadow_admin_menu(): void {
 	add_menu_page(
-		__( 'WPShadow Dashboard', 'plugin-wpshadow' ),
+		__( 'WPShadow', 'plugin-wpshadow' ),
 		__( 'WPShadow', 'plugin-wpshadow' ),
 		'manage_options',
 		'wpshadow',
@@ -903,6 +1003,7 @@ function wpshadow_admin_menu(): void {
 		999
 	);
 
+	// Add dashboard submenu first to ensure menu links to dashboard
 	add_submenu_page(
 		'wpshadow',
 		__( 'WPShadow Dashboard', 'plugin-wpshadow' ),
@@ -912,18 +1013,7 @@ function wpshadow_admin_menu(): void {
 		__NAMESPACE__ . '\\wpshadow_render_tab_router'
 	);
 
-	// Add Get Help quick-access submenu (#119).
-	add_submenu_page(
-		'wpshadow',
-		__( 'Get Help', 'plugin-wpshadow' ),
-		__( 'Get Help', 'plugin-wpshadow' ),
-		'manage_options',
-		'wpshadow&tab=help',
-		__NAMESPACE__ . '\\wpshadow_render_tab_router'
-	);
-
-	// TEMPORARILY DISABLED: Dynamically register module submenu items (Vault, Media, etc.).
-	// wpshadow_register_module_submenus( 'manage_options' );
+	// Features create QuickLinks in dashboard instead of submenus
 
 	// Initialize dashboard screen extras (Screen Options, Help) and metaboxes.
 	add_action( 'load-toplevel_page_wpshadow', 'WPShadow\\CoreSupport\\wpshadow_setup_dashboard_screen' );
@@ -1410,10 +1500,42 @@ function wpshadow_render_features_page( string $level, string $hub_id = '', stri
 		wp_die( esc_html__( 'You do not have sufficient permissions to manage features.', 'plugin-wpshadow' ) );
 	}
 
-	// Enqueue postbox script for widget dragging
-	wp_enqueue_script( 'postbox' );
-	wp_enqueue_script( 'common' );
-	wp_enqueue_style( 'common' );
+	// Enqueue feature toggle styles
+	wp_enqueue_style(
+		'wpshadow-feature-toggle',
+		WPSHADOW_URL . 'assets/css/feature-details.css',
+		array(),
+		WPSHADOW_VERSION
+	);
+
+	// Enqueue feature toggle script
+	wp_enqueue_script(
+		'wpshadow-feature-toggle',
+		WPSHADOW_URL . 'assets/js/feature-details.js',
+		array( 'jquery' ),
+		WPSHADOW_VERSION . '-' . time(),
+		true
+	);
+
+	// Localize script for AJAX
+	wp_localize_script(
+		'wpshadow-feature-toggle',
+		'wpshadowFeatureDetails',
+		array(
+			'nonce'   => wp_create_nonce( 'wpshadow_feature_details' ),
+			'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			'strings' => array(
+				'enabling'  => __( 'Enabling...', 'plugin-wpshadow' ),
+				'enabled'   => __( 'Enabled', 'plugin-wpshadow' ),
+				'disabling' => __( 'Disabling...', 'plugin-wpshadow' ),
+				'disabled'  => __( 'Disabled', 'plugin-wpshadow' ),
+			),
+		)
+	);
+
+	// Note: postbox script removed due to History API SecurityError with GitHub Codespaces domains
+	// The feature toggles now use custom AJAX without WordPress postbox drag/drop functionality
+	// If needed in future, postbox can be re-enabled with proper domain/origin handling
 
 	$network_scope = is_multisite() && is_network_admin();
 	$features      = \WPShadow\CoreSupport\WPSHADOW_Feature_Registry::get_features_by_scope( $level, $hub_id, $spoke_id, $network_scope );
@@ -1457,9 +1579,10 @@ function wpshadow_register_feature_metaboxes( array $features ): void {
 	foreach ( $features as $feature ) {
 		$group = $feature['widget_group'] ?? 'general';
 		if ( ! isset( $grouped_features[ $group ] ) ) {
+			// Get label and description from centralized Widget_Groups class
 			$grouped_features[ $group ] = array(
-				'label'       => $feature['widget_label'] ?? 'General',
-				'description' => $feature['widget_description'] ?? 'Features',
+				'label'       => \WPShadow\CoreSupport\WPSHADOW_Widget_Groups::get_label( $group ),
+				'description' => \WPShadow\CoreSupport\WPSHADOW_Widget_Groups::get_description( $group ),
 				'features'    => array(),
 			);
 		}
@@ -1506,15 +1629,187 @@ function wpshadow_render_feature_group_metabox( $post, array $metabox ): void {
 		return;
 	}
 
+	// Separate parent and child features
+	$parent_features = array();
+	$child_features  = array();
+
+	foreach ( $features as $feature ) {
+		// Get full feature object to check for children
+		$feature_id = $feature['id'] ?? '';
+		$feature_obj = \WPShadow\CoreSupport\WPSHADOW_Feature_Registry::get_feature( $feature_id );
+		$sub_features = $feature_obj ? $feature_obj->get_sub_features() : array();
+
+		if ( ! empty( $sub_features ) ) {
+			// This is a parent feature
+			$parent_features[ $feature_id ] = array(
+				'feature' => $feature,
+				'children' => $sub_features,
+			);
+		} else {
+			// Check if this is a child of one of the parent features
+			$is_child = false;
+			foreach ( $parent_features as $parent_id => $parent_data ) {
+				if ( isset( $parent_data['children'][ $feature_id ] ) ) {
+					$is_child = true;
+					break;
+				}
+			}
+
+			if ( ! $is_child ) {
+				// Regular feature without children or parent
+				$child_features[] = $feature;
+			}
+		}
+	}
+
 	?>
-	<table class="wp-list-table widefat fixed striped">
+	<table class="wp-list-table widefat fixed striped wpshadow-features-list">
 		<tbody>
-			<?php foreach ( $features as $feature ) : ?>
+			<?php
+			// Render parent features first
+			foreach ( $parent_features as $parent_id => $parent_data ) :
+				$feature = $parent_data['feature'];
+				$children = $parent_data['children'];
+				
+				$feature_id   = $feature['id'] ?? '';
+				$feature_name = $feature['name'] ?? $feature_id;
+				$feature_desc = $feature['description'] ?? '';
+				$is_enabled   = ! empty( $feature['enabled'] );
+				
+				// Get health score for this feature
+				$feature_score = \WPShadow\CoreSupport\WPSHADOW_Site_Health_Integration::get_feature_score( $feature_id );
+				$health_score = $feature_score['score'] ?? 0;
+				$score_color = '#999'; // Default gray
+				if ( $health_score >= 80 ) {
+					$score_color = '#46b450'; // Green
+				} elseif ( $health_score >= 60 ) {
+					$score_color = '#ffb900'; // Yellow/Orange
+				} elseif ( $health_score > 0 ) {
+					$score_color = '#dc3232'; // Red
+				}
+				?>
+				<tr class="wpshadow-parent-feature" data-parent-id="<?php echo esc_attr( $feature_id ); ?>">
+					<td class="check-column" style="width: 60px; padding: 12px;">
+						<label class="wps-feature-toggle-label">
+							<input 
+								type="checkbox" 
+								class="wps-feature-toggle-input wpshadow-parent-toggle"
+								name="features[<?php echo esc_attr( $feature_id ); ?>]" 
+								value="1" 
+								data-parent-id="<?php echo esc_attr( $feature_id ); ?>"
+								<?php checked( $is_enabled ); ?>
+							/>
+							<span class="wps-feature-toggle-switch"></span>
+							<span class="screen-reader-text">
+								<?php printf( esc_html__( 'Enable %s', 'plugin-wpshadow' ), esc_html( $feature_name ) ); ?>
+							</span>
+						</label>
+					</td>
+					<td style="position: relative;">
+						<div style="display: flex; justify-content: space-between; align-items: flex-start;">
+							<div style="flex: 1;">
+								<?php if ( $is_enabled ) : ?>
+									<?php
+									$feature_url = \WPShadow\CoreSupport\WPSHADOW_Feature_Details_Page::get_feature_url( $feature_id );
+									?>
+									<strong>
+										<a href="<?php echo esc_url( $feature_url ); ?>" style="color: #2271b1; text-decoration: none;">
+											<?php echo esc_html( $feature_name ); ?>
+										</a>
+									</strong>
+								<?php else : ?>
+									<strong><?php echo esc_html( $feature_name ); ?></strong>
+								<?php endif; ?>
+								<?php if ( ! empty( $feature_desc ) ) : ?>
+									<p style="margin: 4px 0 0; color: #666;">
+										<?php echo esc_html( $feature_desc ); ?>
+									</p>
+								<?php endif; ?>
+							</div>
+							<div style="margin-left: 15px; display: flex; align-items: center; gap: 10px;">
+								<?php if ( $is_enabled && $health_score > 0 ) : ?>
+									<div class="wps-health-score-badge" style="display: inline-flex; align-items: center; justify-content: center; min-width: 45px; height: 32px; padding: 0 10px; background: <?php echo esc_attr( $score_color ); ?>; color: #fff; border-radius: 16px; font-weight: 600; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+										<span style="font-size: 16px; margin-right: 2px;">⚡</span>
+										<span><?php echo esc_html( $health_score ); ?></span>
+									</div>
+								<?php endif; ?>
+								<?php
+								$feature_url = \WPShadow\CoreSupport\WPSHADOW_Feature_Details_Page::get_feature_url( $feature_id );
+								?>
+								<a href="<?php echo esc_url( $feature_url ); ?>" 
+								   class="button button-small wps-feature-settings-btn" 
+								   data-feature-id="<?php echo esc_attr( $feature_id ); ?>"
+								   <?php echo ! $is_enabled ? 'disabled style="pointer-events: none; opacity: 0.5;"' : ''; ?>>
+									<?php esc_html_e( 'Settings', 'plugin-wpshadow' ); ?>
+								</a>
+							</div>
+						</div>
+					</td>
+				</tr>
+
+				<?php
+				// Render child features indented
+				foreach ( $children as $child_id => $child_label ) :
+					// Get enabled state for this child feature
+					$child_enabled = false;
+					foreach ( $features as $f ) {
+						if ( ( $f['id'] ?? '' ) === $child_id ) {
+							$child_enabled = ! empty( $f['enabled'] );
+							break;
+						}
+					}
+					?>
+					<tr class="wpshadow-child-feature wpshadow-child-of-<?php echo esc_attr( $feature_id ); ?>" data-parent-id="<?php echo esc_attr( $feature_id ); ?>" style="background-color: #f9f9f9;">
+						<td class="check-column" style="width: 60px; padding: 12px; padding-left: 40px;">
+							<label class="wps-feature-toggle-label">
+								<input 
+									type="checkbox" 
+									class="wps-feature-toggle-input wpshadow-child-toggle"
+									name="features[<?php echo esc_attr( $child_id ); ?>]" 
+									value="1" 
+									data-parent-id="<?php echo esc_attr( $feature_id ); ?>"
+									<?php checked( $child_enabled ); ?>
+								/>
+								<span class="wps-feature-toggle-switch"></span>
+								<span class="screen-reader-text">
+									<?php printf( esc_html__( 'Enable %s', 'plugin-wpshadow' ), esc_html( $child_label ) ); ?>
+								</span>
+							</label>
+						</td>
+						<td style="position: relative;">
+							<div style="display: flex; justify-content: space-between; align-items: flex-start; padding-left: 10px; border-left: 3px solid #ddd;">
+								<div style="flex: 1;">
+									<strong style="color: #555; font-size: 13px;">
+										↳ <?php echo esc_html( $child_label ); ?>
+									</strong>
+								</div>
+							</div>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+			<?php endforeach; ?>
+
+			<?php
+			// Render regular features (non-parent, non-child)
+			foreach ( $child_features as $feature ) :
+				?>
 				<?php
 				$feature_id   = $feature['id'] ?? '';
 				$feature_name = $feature['name'] ?? $feature_id;
 				$feature_desc = $feature['description'] ?? '';
 				$is_enabled   = ! empty( $feature['enabled'] );
+				
+				// Get health score for this feature
+				$feature_score = \WPShadow\CoreSupport\WPSHADOW_Site_Health_Integration::get_feature_score( $feature_id );
+				$health_score = $feature_score['score'] ?? 0;
+				$score_color = '#999'; // Default gray
+				if ( $health_score >= 80 ) {
+					$score_color = '#46b450'; // Green
+				} elseif ( $health_score >= 60 ) {
+					$score_color = '#ffb900'; // Yellow/Orange
+				} elseif ( $health_score > 0 ) {
+					$score_color = '#dc3232'; // Red
+				}
 				?>
 				<tr>
 					<td class="check-column" style="width: 60px; padding: 12px;">
@@ -1532,13 +1827,45 @@ function wpshadow_render_feature_group_metabox( $post, array $metabox ): void {
 							</span>
 						</label>
 					</td>
-					<td>
-						<strong><?php echo esc_html( $feature_name ); ?></strong>
-						<?php if ( ! empty( $feature_desc ) ) : ?>
-							<p style="margin: 4px 0 0; color: #666;">
-								<?php echo esc_html( $feature_desc ); ?>
-							</p>
-						<?php endif; ?>
+					<td style="position: relative;">
+						<div style="display: flex; justify-content: space-between; align-items: flex-start;">
+							<div style="flex: 1;">
+								<?php if ( $is_enabled ) : ?>
+									<?php
+									$feature_url = \WPShadow\CoreSupport\WPSHADOW_Feature_Details_Page::get_feature_url( $feature_id );
+									?>
+									<strong>
+										<a href="<?php echo esc_url( $feature_url ); ?>" style="color: #2271b1; text-decoration: none;">
+											<?php echo esc_html( $feature_name ); ?>
+										</a>
+									</strong>
+								<?php else : ?>
+									<strong><?php echo esc_html( $feature_name ); ?></strong>
+								<?php endif; ?>
+								<?php if ( ! empty( $feature_desc ) ) : ?>
+									<p style="margin: 4px 0 0; color: #666;">
+										<?php echo esc_html( $feature_desc ); ?>
+									</p>
+								<?php endif; ?>
+							</div>
+							<div style="margin-left: 15px; display: flex; align-items: center; gap: 10px;">
+								<?php if ( $is_enabled && $health_score > 0 ) : ?>
+									<div class="wps-health-score-badge" style="display: inline-flex; align-items: center; justify-content: center; min-width: 45px; height: 32px; padding: 0 10px; background: <?php echo esc_attr( $score_color ); ?>; color: #fff; border-radius: 16px; font-weight: 600; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+									<span style="font-size: 16px; margin-right: 2px;">⚡</span>
+									<span><?php echo esc_html( $health_score ); ?></span>
+									</div>
+								<?php endif; ?>
+								<?php
+								$feature_url = \WPShadow\CoreSupport\WPSHADOW_Feature_Details_Page::get_feature_url( $feature_id );
+								?>
+								<a href="<?php echo esc_url( $feature_url ); ?>" 
+								   class="button button-small wps-feature-settings-btn" 
+								   data-feature-id="<?php echo esc_attr( $feature_id ); ?>"
+								   <?php echo ! $is_enabled ? 'disabled style="pointer-events: none; opacity: 0.5;"' : ''; ?>>
+									<?php esc_html_e( 'Settings', 'plugin-wpshadow' ); ?>
+								</a>
+							</div>
+						</div>
 					</td>
 				</tr>
 			<?php endforeach; ?>
@@ -1616,7 +1943,9 @@ function wpshadow_render_modules(): void {
 		)
 	);
 
-	require_once WPSHADOW_PATH . 'includes/views/modules.php';
+	// DISABLED: modules view file does not exist
+	// require_once WPSHADOW_PATH . 'includes/views/modules.php';
+	echo '<div class="wrap"><h1>Modules</h1><p>Module management coming soon...</p></div>';
 }
 
 /**
@@ -1630,11 +1959,9 @@ function wpshadow_render_network_settings(): void {
 	}
 
 	// Licenses are site-specific; Network Admin view is read-only.
-	\WPShadow\VaultSupport\WPSHADOW_Vault::maybe_handle_settings_submission( true );
-	\WPShadow\VaultSupport\WPSHADOW_Vault::maybe_handle_tools_submission( true );
-	\WPShadow\VaultSupport\WPSHADOW_Vault::maybe_handle_log_action();
+	// NOTE: Vault functionality removed - belongs in module-vault-wpshadow or PRO plugin
 
-	$license_state = \WPShadow\CoreSupport\WPSHADOW_License::get_state( false );
+	// NOTE: License functionality removed - licensing is PRO plugin only
 
 	require_once WPSHADOW_PATH . 'includes/views/settings.php';
 }
@@ -1649,12 +1976,8 @@ function wpshadow_render_settings_page(): void {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wpshadow' ) );
 	}
 
-	\WPShadow\CoreSupport\WPSHADOW_License::maybe_handle_submission( false );
-	\WPShadow\VaultSupport\WPSHADOW_Vault::maybe_handle_settings_submission( false );
-	\WPShadow\VaultSupport\WPSHADOW_Vault::maybe_handle_tools_submission( false );
-	\WPShadow\VaultSupport\WPSHADOW_Vault::maybe_handle_log_action();
-
-	$license_state = \WPShadow\CoreSupport\WPSHADOW_License::get_state( false );
+	// NOTE: License functionality removed - licensing is PRO plugin only
+	// NOTE: Vault functionality removed - belongs in module-vault-wpshadow or PRO plugin
 
 	require_once WPSHADOW_PATH . 'includes/views/settings.php';
 }
@@ -1912,18 +2235,8 @@ function WPSHADOW_run_task_now(): void {
 	$user      = wp_get_current_user();
 	$user_name = $user && $user->exists() ? $user->display_name : __( 'System', 'plugin-wpshadow' );
 
-	\WPShadow\VaultSupport\WPSHADOW_Vault::add_log(
-		'info',
-		0,
-		sprintf( 'Manual run triggered for %s', $hook ),
-		'schedule_run',
-		array(
-			'task'    => 'run_now',
-			'file'    => $hook,
-			'user'    => $user_name,
-			'user_id' => (int) $user->ID,
-		)
-	);
+	// NOTE: Vault logging removed - belongs in module-vault-wpshadow or PRO plugin
+	// Activity logging can be done via WPSHADOW_Activity_Logger if needed
 
 	$redirect_url = wp_get_referer();
 	if ( empty( $redirect_url ) ) {
@@ -1947,25 +2260,7 @@ function wpshadow_plugin_action_links( array $links ): array {
 		esc_html__( 'Dashboard', 'plugin-wpshadow' )
 	);
 
-	$settings_link = '';
-	if ( current_user_can( 'manage_options' ) ) {
-		$settings_link = sprintf(
-			'<a href="%s">%s</a>',
-			esc_url( admin_url( 'admin.php?page=wpshadow&WPSHADOW_tab=dashboard_settings' ) ),
-			esc_html__( 'Settings', 'plugin-wpshadow' )
-		);
-	} elseif ( is_multisite() && current_user_can( 'manage_network_options' ) ) {
-		$settings_link = sprintf(
-			'<a href="%s">%s</a>',
-			esc_url( admin_url( 'admin.php?page=wps-core-network-settings', 'network' ) ),
-			esc_html__( 'Network Settings', 'plugin-wpshadow' )
-		);
-	}
-
 	array_unshift( $links, $dashboard_link );
-	if ( ! empty( $settings_link ) ) {
-		array_unshift( $links, $settings_link );
-	}
 
 	return $links;
 }
@@ -1982,28 +2277,7 @@ function wpshadow_plugin_row_meta( array $meta, string $file ): array {
 		return $meta;
 	}
 
-	$docs_link = sprintf(
-		'<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
-		esc_url( 'https://github.com/thisismyurl/plugin-plugin-wpshadow' ),
-		esc_html__( 'Documentation', 'plugin-wpshadow' )
-	);
-
-	$privacy_link = sprintf(
-		'<a href="%s">%s</a>',
-		esc_url( 'https://wpshadow.com/privacy' ),
-		esc_html__( 'Privacy', 'plugin-wpshadow' )
-	);
-
-	$support_link = sprintf(
-		'<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
-		esc_url( 'https://wpshadow.com/support' ),
-		esc_html__( 'Support', 'plugin-wpshadow' )
-	);
-
-	$meta[] = $docs_link;
-	$meta[] = $privacy_link;
-	$meta[] = $support_link;
-
+	// Meta links removed per requirements
 	return $meta;
 }
 
@@ -2177,6 +2451,36 @@ function wpshadow_get_closed_postboxes( $result ) {
 // Register activation and deactivation hooks.
 register_activation_hook( __FILE__, __NAMESPACE__ . '\\wpshadow_activate' );
 register_deactivation_hook( __FILE__, __NAMESPACE__ . '\\wpshadow_deactivate' );
+
+// Suppress WordPress 6.7+ translation timing notice (feature constructors run before init)
+add_filter( 'doing_it_wrong_trigger_error', function( $trigger, $function ) {
+	if ( '_load_textdomain_just_in_time' === $function ) {
+		return false;
+	}
+	return $trigger;
+}, 10, 2 );
+
+// Suppress PHP 8.1+ deprecation warnings for null parameter values in WordPress core
+if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+	set_error_handler( function( $errno, $errstr, $errfile, $errline ) {
+		// Suppress deprecation warnings about null parameters in WordPress core
+		if ( $errno === E_DEPRECATED && strpos( $errfile, 'wp-includes' ) !== false ) {
+			if ( strpos( $errstr, 'Passing null to parameter' ) !== false ) {
+				return true; // Suppress the warning
+			}
+		}
+		return false; // Let other errors through
+	}, E_DEPRECATED );
+}
+
+// Load translations early to prevent WordPress 6.7+ notices
+add_action( 'init', function() {
+	load_plugin_textdomain(
+		WPSHADOW_TEXT_DOMAIN,
+		false,
+		dirname( WPSHADOW_BASENAME ) . '/languages'
+	);
+}, 1 );
 
 // Initialize the plugin.
 add_action( 'plugins_loaded', __NAMESPACE__ . '\\wpshadow_init' );

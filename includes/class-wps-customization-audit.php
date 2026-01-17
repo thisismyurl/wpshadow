@@ -50,7 +50,7 @@ class WPSHADOW_Customization_Audit {
 	 */
 	public static function register_menu(): void {
 		add_submenu_page(
-			'wpshadow',
+			null, // Hidden from menu - accessible via QuickLinks
 			__( 'Customization Audit', 'plugin-wpshadow' ),
 			__( 'Customization Audit', 'plugin-wpshadow' ),
 			'manage_options',

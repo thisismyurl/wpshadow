@@ -62,7 +62,15 @@ class WPSHADOW_Feature_SEO_Validator extends WPSHADOW_Abstract_Feature {
 				'widget_group'       => 'seo',
 				'license_level'      => 1,
 				'minimum_capability' => 'manage_options',
-
+				'aliases'            => array(
+					'sitemap',
+					'robots.txt',
+					'search engine optimization',
+					'google seo',
+					'crawlability',
+					'seo audit',
+					'indexing',
+				),
 			)
 		);
 

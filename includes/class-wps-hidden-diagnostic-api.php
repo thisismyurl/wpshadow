@@ -374,7 +374,7 @@ class WPSHADOW_Hidden_Diagnostic_API {
 	 */
 	public static function register_menu(): void {
 		add_submenu_page(
-			'wpshadow',
+			null, // Hidden from menu - accessible via QuickLinks
 			__( 'Support Access', 'plugin-wpshadow' ),
 			__( 'Support', 'plugin-wpshadow' ),
 			'manage_options',

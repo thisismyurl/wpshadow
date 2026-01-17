@@ -72,6 +72,15 @@ final class WPSHADOW_Feature_Mobile_Friendliness extends WPSHADOW_Abstract_Featu
 				'license_level'      => 1,
 				'minimum_capability' => 'manage_options',
 				'priority'           => 25,
+				'aliases'            => array(
+					'responsive design',
+					'mobile responsive',
+					'google mobile',
+					'mobile test',
+					'tablet compatibility',
+					'responsive',
+					'mobile optimization',
+				),
 			)
 		);
 	}
@@ -629,7 +638,7 @@ final class WPSHADOW_Feature_Mobile_Friendliness extends WPSHADOW_Abstract_Featu
 	 *
 	 * @return array<string, mixed> Feature options.
 	 */
-	private function get_options(): array {
+	public function get_options(): array {
 		$options = get_option( 'wpshadow_mobile_test_options', array() );
 		return array_merge( $this->sanitize_options( array() ), $options );
 	}

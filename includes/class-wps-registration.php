@@ -105,21 +105,8 @@ class WPSHADOW_Registration {
 			);
 		}
 
-		// Store license key if provided.
-		if ( ! empty( $result['license_key'] ) ) {
-			WPSHADOW_License::save_key( $result['license_key'], false );
-
-			// Validate the key immediately.
-			$validation = WPSHADOW_License::validate_key( $result['license_key'], false );
-
-			if ( 'valid' !== $validation['status'] ) {
-				wp_send_json_error(
-					array(
-						'message' => __( 'Registration successful, but license validation failed. Please contact support.', 'plugin-wpshadow' ),
-					)
-				);
-			}
-		}
+		// NOTE: License key storage removed - licensing is PRO plugin only
+		// If license key provided, it's ignored in free version
 
 		// Log the registration event.
 		if ( class_exists( '\\WPShadow\\WPSHADOW_Activity_Logger' ) ) {

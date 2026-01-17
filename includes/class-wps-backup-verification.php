@@ -372,7 +372,7 @@ class WPSHADOW_Backup_Verification {
 	 */
 	public static function register_menu(): void {
 		add_submenu_page(
-			'wpshadow',
+			null, // Hidden from menu - accessible via QuickLinks
 			__( 'Backup Verification', 'plugin-wpshadow' ),
 			__( 'Verification', 'plugin-wpshadow' ),
 			'manage_options',

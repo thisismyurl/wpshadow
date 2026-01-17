@@ -89,7 +89,16 @@ final class WPSHADOW_Feature_Core_Integrity extends WPSHADOW_Abstract_Feature {
 				'icon'               => 'dashicons-shield-alt',
 				'category'           => 'security',
 				'priority'           => 5,
-
+				'aliases'            => array(
+					'file integrity',
+					'tamper detection',
+					'malware detection',
+					'hacked wordpress',
+					'file modification',
+					'security scan',
+					'checksum verification',
+					'core files',
+				),
 			)
 		);
 	}

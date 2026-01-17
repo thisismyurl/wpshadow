@@ -15,6 +15,7 @@
 		$(document).on('click', '.notice.is-dismissible[data-notice-key] .notice-dismiss', function(e) {
 			const $notice = $(this).closest('.notice');
 			const noticeKey = $notice.data('notice-key');
+			const dismissDuration = $notice.data('dismiss-duration'); // Custom duration in seconds
 
 			if (!noticeKey) {
 				return;
@@ -27,7 +28,8 @@
 				data: {
 					action: 'wpshadow_dismiss_notice',
 					nonce: wpsNotices.nonce,
-					notice_key: noticeKey
+					notice_key: noticeKey,
+					duration: dismissDuration || null
 				},
 				success: function(response) {
 					if (response.success) {

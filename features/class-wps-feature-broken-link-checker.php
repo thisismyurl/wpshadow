@@ -35,6 +35,15 @@ final class WPSHADOW_Feature_Broken_Link_Checker extends WPSHADOW_Abstract_Featu
 				'category'           => 'seo',
 				'icon'               => 'dashicons-admin-links',
 				'priority'           => 15,
+				'aliases'            => array(
+					'dead links',
+					'404 errors',
+					'link validation',
+					'url checking',
+					'seo audit',
+					'broken urls',
+					'link rot',
+				),
 			)
 		);
 	}

@@ -226,10 +226,7 @@ class WPSHADOW_Tab_Navigation {
 			self::build_tab( 'help', __( 'Help', 'plugin-wpshadow' ), 'dashicons-editor-help' ),
 		);
 
-		// Add register tab only if not licensed.
-		if ( ! WPSHADOW_License::is_registered() ) {
-			$tabs[] = self::build_tab( 'register', __( 'Register', 'plugin-wpshadow' ), 'dashicons-unlock' );
-		}
+		// NOTE: Licensing tabs removed - licensing is PRO plugin only
 
 		return $tabs;
 	}

@@ -1,0 +1,59 @@
+<?php
+/**
+ * Head Cleanup - Remove oEmbed Discovery
+ *
+ * @package WPShadow\CoreSupport
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\CoreSupport;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+final class WPSHADOW_Feature_Head_Cleanup_Remove_Oembed extends WPSHADOW_Abstract_Feature {
+
+	public function __construct() {
+		parent::__construct(
+			array(
+				'id'                 => 'head-cleanup-remove-oembed',
+				'name'               => __( 'Remove oEmbed Discovery', 'plugin-wpshadow' ),
+				'description'        => __( 'Remove oEmbed discovery links and host JS from page headers.', 'plugin-wpshadow' ),
+				'scope'              => 'core',
+				'default_enabled'    => true,
+				'parent'             => 'head-cleanup',
+				'icon'               => 'dashicons-admin-site',
+				'category'           => 'performance',
+				'license_level'      => 1,
+				'minimum_capability' => 'manage_options',
+			)
+		);
+	}
+
+	public function register(): void {
+		if ( ! $this->is_enabled() ) {
+			return;
+		}
+
+		if ( ! WPSHADOW_Feature_Registry::is_feature_enabled( 'head-cleanup' ) ) {
+			return;
+		}
+
+		$option_name = 'wpshadow_head-cleanup_remove_oembed';
+		if ( false === get_option( $option_name ) ) {
+			update_option( $option_name, true, false );
+		}
+		if ( ! get_option( $option_name, true ) ) {
+			return;
+		}
+
+		add_action( 'init', array( $this, 'remove_oembed_links' ) );
+	}
+
+	public function remove_oembed_links(): void {
+		remove_action( 'wp_head', 'wp_oembed_add_discovery_links' );
+		remove_action( 'wp_head', 'wp_oembed_add_host_js' );
+	}
+}

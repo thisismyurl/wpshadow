@@ -405,7 +405,7 @@ Keep going - you\'re doing great!
 	 */
 	public static function register_admin_menu(): void {
 		add_submenu_page(
-			'wpshadow',
+			null, // Hidden from menu - accessible via QuickLinks
 			__( 'Achievements', 'plugin-wpshadow' ),
 			__( 'Achievements', 'plugin-wpshadow' ),
 			'read',

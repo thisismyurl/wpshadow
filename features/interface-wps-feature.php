@@ -55,4 +55,6 @@ interface WPSHADOW_Feature_Interface {
 	public function get_widget_column(): string;
 
 	public function get_widget_priority(): int;
+
+	public function get_aliases(): array;
 }

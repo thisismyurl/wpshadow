@@ -1,9 +1,9 @@
 <?php
 /**
- * Feature: Google Fonts Disabler
+ * Feature: External Fonts Disabler
  *
- * Disable Google Fonts loading to improve privacy and performance.
- * Useful when themes load Google Fonts but you prefer system fonts.
+ * Disable external font loading (Google Fonts, Adobe Typekit, etc.) to improve privacy and performance.
+ * Useful when themes load external fonts but you prefer system fonts.
  *
  * @package WPShadow\CoreSupport
  * @since 1.2601.73001
@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace WPShadow\CoreSupport;
 
 /**
- * WPSHADOW_Feature_Google_Fonts_Disabler
+ * WPSHADOW_Feature_External_Fonts_Disabler
  *
- * Remove Google Fonts from frontend output.
+ * Remove external fonts from frontend output.
  */
-final class WPSHADOW_Feature_Google_Fonts_Disabler extends WPSHADOW_Abstract_Feature {
+final class WPSHADOW_Feature_External_Fonts_Disabler extends WPSHADOW_Abstract_Feature {
 
 	/**
 	 * Constructor.
@@ -38,6 +38,16 @@ final class WPSHADOW_Feature_Google_Fonts_Disabler extends WPSHADOW_Abstract_Fea
 				'icon'               => 'dashicons-editor-removeformatting',
 				'category'           => 'performance',
 				'priority'           => 20,
+				'aliases'            => array(
+					'privacy',
+					'fonts optimization',
+					'external scripts',
+					'local fonts',
+					'gdpr compliance',
+					'performance',
+					'tracking prevention',
+					'google analytics',
+				),
 			)
 		);
 		

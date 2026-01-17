@@ -173,6 +173,12 @@ class WPSHADOW_Performance_Monitor {
 	 * @return void
 	 */
 	private static function store_metrics( array $metrics ): void {
+		// Trim heavy data before storing to avoid bloating the option payload.
+		if ( isset( $metrics['slow_queries'] ) && is_array( $metrics['slow_queries'] ) ) {
+			// Keep only the top 5 slow queries and drop the rest.
+			$metrics['slow_queries'] = array_slice( $metrics['slow_queries'], 0, 5 );
+		}
+
 		$history = get_option( self::HISTORY_OPTION_KEY, array() );
 
 		// Add new entry.
@@ -395,6 +401,11 @@ class WPSHADOW_Performance_Monitor {
 
 		// Sort by timestamp.
 		ksort( $filtered );
+
+		// Keep only the most recent 200 records to prevent memory exhaustion.
+		if ( count( $filtered ) > 200 ) {
+			$filtered = array_slice( $filtered, -200, null, true );
+		}
 
 		return $filtered;
 	}

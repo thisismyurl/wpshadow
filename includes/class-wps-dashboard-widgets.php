@@ -82,6 +82,7 @@ class WPSHADOW_Dashboard_Widgets {
 				array( __CLASS__, 'widget_database_stats_boxed' ),
 			),
 			array(
+				array( __CLASS__, 'widget_dark_mode' ),
 				array( __CLASS__, 'widget_tips_coach' ),
 				array( __CLASS__, 'widget_quick_actions' ),
 				array( __CLASS__, 'widget_performance_history_boxed' ),
@@ -534,6 +535,28 @@ class WPSHADOW_Dashboard_Widgets {
 			<div id="wps-action-feedback" style="margin-top: 10px; display: none;"></div>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Dark Mode Widget - Control appearance of WPShadow admin pages.
+	 *
+	 * @return void
+	 */
+	private static function widget_dark_mode(): void {
+		$dark_mode_feature = \WPShadow\CoreSupport\WPSHADOW_Feature_Registry::get_feature_object( 'dark-mode' );
+
+		if ( ! $dark_mode_feature ) {
+			return;
+		}
+
+		$feature_state = \WPShadow\CoreSupport\WPSHADOW_Feature_Registry::get_feature( 'dark-mode' );
+		if ( empty( $feature_state['enabled'] ) ) {
+			return;
+		}
+
+		if ( method_exists( $dark_mode_feature, 'render_dashboard_widget' ) ) {
+			$dark_mode_feature->render_dashboard_widget();
+		}
 	}
 
 	/**

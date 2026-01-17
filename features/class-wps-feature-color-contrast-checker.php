@@ -39,6 +39,15 @@ final class WPSHADOW_Feature_Color_Contrast_Checker extends WPSHADOW_Abstract_Fe
 				'icon'               => 'dashicons-admin-appearance',
 				'category'           => 'accessibility',
 				'priority'           => 15,
+				'aliases'            => array(
+					'accessibility',
+					'wcag',
+					'readable text',
+					'ada compliance',
+					'vision impaired',
+					'color blindness',
+					'contrast ratio',
+				),
 			)
 		);
 	}

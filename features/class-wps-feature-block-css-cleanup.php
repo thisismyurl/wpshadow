@@ -39,30 +39,16 @@ final class WPSHADOW_Feature_Block_CSS_Cleanup extends WPSHADOW_Abstract_Feature
 				'icon'               => 'dashicons-editor-table',
 				'category'           => 'performance',
 				'priority'           => 20,
+				'sub_features'       => array(
+					'remove_block_library'      => __( 'Remove Block Library Styles', 'plugin-wpshadow' ),
+					'remove_block_theme'        => __( 'Remove Block Theme Styles', 'plugin-wpshadow' ),
+					'remove_global_styles'      => __( 'Remove Global Styles', 'plugin-wpshadow' ),
+					'remove_woocommerce_blocks' => __( 'Remove WooCommerce Block Styles', 'plugin-wpshadow' ),
+				),
 			)
 		);
-		
-		if ( method_exists( $this, 'register_sub_features' ) ) {
-			$this->register_sub_features(
-				array(
-					'remove_block_library'       => __( 'Remove Block Library Styles', 'plugin-wpshadow' ),
-					'remove_block_theme'         => __( 'Remove Block Theme Styles', 'plugin-wpshadow' ),
-					'remove_global_styles'       => __( 'Remove Global Styles', 'plugin-wpshadow' ),
-					'remove_woocommerce_blocks'  => __( 'Remove WooCommerce Block Styles', 'plugin-wpshadow' ),
-				)
-			);
-			if ( method_exists( $this, 'set_default_sub_features' ) ) {
-				$this->set_default_sub_features(
-					array(
-						'remove_block_library'       => true,
-						'remove_block_theme'         => true,
-						'remove_global_styles'       => true,
-						'remove_woocommerce_blocks'  => true,
-					)
-				);
-			}
-		}
-		
+
+		$this->seed_default_sub_feature_options();
 		$this->log_activity( 'feature_initialized', 'Block CSS Cleanup feature initialized', 'info' );
 	}
 
@@ -78,6 +64,8 @@ final class WPSHADOW_Feature_Block_CSS_Cleanup extends WPSHADOW_Abstract_Feature
 	/**
 	 * Register hooks when feature is enabled.
 	 *
+	 * Only attaches Site Health; child features perform cleanup.
+	 *
 	 * @return void
 	 */
 	public function register(): void {
@@ -85,34 +73,7 @@ final class WPSHADOW_Feature_Block_CSS_Cleanup extends WPSHADOW_Abstract_Feature
 			return;
 		}
 
-		add_action( 'wp_enqueue_scripts', array( $this, 'remove_block_library_css' ), 100 );
-		
-		if ( get_option( 'wpshadow_block-css-cleanup_remove_block_theme', true ) || get_option( 'wpshadow_block-css-cleanup_remove_global_styles', true ) ) {
-			add_action( 'wp_enqueue_scripts', array( $this, 'remove_block_theme_css' ), 100 );
-		}
-		
-		// Add Site Health tests.
 		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
-	}
-
-	/**
-	 * Remove core block library styles.
-	 *
-	 * @return void
-	 */
-	public function remove_block_library_css(): void {
-		wp_dequeue_style( 'wp-block-library' );
-		wp_dequeue_style( 'wp-block-library-theme' );
-		wp_dequeue_style( 'wc-block-style' ); // WooCommerce blocks.
-	}
-
-	/**
-	 * Remove block editor theme styles.
-	 *
-	 * @return void
-	 */
-	public function remove_block_theme_css(): void {
-		wp_dequeue_style( 'global-styles' );
 	}
 
 	/**
@@ -174,5 +135,28 @@ final class WPSHADOW_Feature_Block_CSS_Cleanup extends WPSHADOW_Abstract_Feature
 			'actions'     => '',
 			'test'        => 'block_css_cleanup',
 		);
+	}
+
+	/**
+	 * Seed default sub-feature options when absent.
+	 *
+	 * @return void
+	 */
+	private function seed_default_sub_feature_options(): void {
+		$defaults = array(
+			'remove_block_library'      => true,
+			'remove_block_theme'        => true,
+			'remove_global_styles'      => true,
+			'remove_woocommerce_blocks' => true,
+		);
+
+		foreach ( $defaults as $key => $default_value ) {
+			$option_name   = 'wpshadow_block-css-cleanup_' . $key;
+			$current_value = get_option( $option_name, null );
+
+			if ( null === $current_value ) {
+				update_option( $option_name, $default_value, false );
+			}
+		}
 	}
 }

@@ -46,8 +46,9 @@ function wpshadow_render_dashboard( string $hub_id = '', string $spoke_id = '' )
 	$updates_count   = 0;
 	$enabled_count   = 0;
 
-	$activity_logs     = WPSHADOW_Vault::get_logs( 0, 10 );
-	$pending_uploads   = WPSHADOW_Vault::get_pending_contributor_uploads( 5 );
+	// NOTE: Vault functionality removed - belongs in module-vault-wpshadow or PRO plugin
+	$activity_logs     = array();
+	$pending_uploads   = array();
 	// TEMPORARILY DISABLED: Module Registry schedule snapshot - modules are disabled.
 	// $schedule_snapshot = WPSHADOW_Module_Registry::get_schedule_snapshot();
 	$schedule_snapshot = array();
@@ -114,16 +115,6 @@ function wpshadow_render_dashboard( string $hub_id = '', string $spoke_id = '' )
 		WPSHADOW_Feature_Search::render_search_component();
 		?>
 
-		<div class="wps-dashboard-notice">
-			<strong><?php esc_html_e( 'Notice:', 'plugin-wpshadow' ); ?></strong>
-			<?php esc_html_e( 'The module system is temporarily disabled. Core features only are available.', 'plugin-wpshadow' ); ?>
-		</div>
-
-		<div class="wps-dashboard-license-row">
-			<div id="wpshadow_license_widget" class="postbox" style="margin:0 0 16px 0;">
-				<?php WPSHADOW_License_Widget::render_widget(); ?>
-			</div>
-		</div>
 
 		<div class="wps-dashboard-section">
 			<h2><?php esc_html_e( 'Dashboard', 'plugin-wpshadow' ); ?></h2>

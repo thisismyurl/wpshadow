@@ -353,51 +353,42 @@ final class WPSHADOW_Feature_Consent_Checks extends WPSHADOW_Abstract_Feature {
 	/**
 	 * Render settings for this feature.
 	 *
+	 * Uses shared settings rendering functions from wps-settings-functions.php
+	 * to ensure consistent HTML markup across all features.
+	 *
 	 * @return void
 	 */
 	public function render_settings(): void {
 		$banner_text          = $this->get_setting( 'wpshadow_consent_banner_text', $this->get_default_banner_text( ) );
 		$custom_patterns      = $this->get_setting( 'wpshadow_consent_blocked_patterns', array( ) );
 		$custom_patterns_text = is_array( $custom_patterns ) ? implode( "\n", $custom_patterns ) : '';
-		?>
-		<h3><?php echo esc_html__( 'Cookie Consent Settings', 'plugin-wpshadow' ); ?></h3>
-		<table class="form-table">
-			<tr>
-				<th scope="row">
-					<label for="wpshadow_consent_banner_text"><?php echo esc_html__( 'Banner Text', 'plugin-wpshadow' ); ?></label>
-				</th>
-				<td>
-					<textarea 
-						id="wpshadow_consent_banner_text" 
-						name="wpshadow_consent_banner_text" 
-						rows="4" 
-						cols="50" 
-						class="large-text"
-					><?php echo esc_textarea( $banner_text ); ?></textarea>
-					<p class="description">
-						<?php echo esc_html__( 'The message displayed to visitors in the consent banner.', 'plugin-wpshadow' ); ?>
-					</p>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">
-					<label for="wpshadow_consent_blocked_patterns"><?php echo esc_html__( 'Custom Blocked Patterns', 'plugin-wpshadow' ); ?></label>
-				</th>
-				<td>
-					<textarea 
-						id="wpshadow_consent_blocked_patterns" 
-						name="wpshadow_consent_blocked_patterns" 
-						rows="8" 
-						cols="50" 
-						class="large-text"
-						placeholder="^custom_cookie_prefix&#10;^third_party_"
-					><?php echo esc_textarea( $custom_patterns_text ); ?></textarea>
-					<p class="description">
-						<?php echo esc_html__( 'One regex pattern per line. These patterns will be blocked until consent is given. Default patterns include Google Analytics, Facebook Pixel, and DoubleClick.', 'plugin-wpshadow' ); ?>
-					</p>
-				</td>
-			</tr>
-		</table>
-		<?php
+
+		// Use shared rendering functions for consistent HTML generation.
+		WPSHADOW_render_settings_heading( __( 'Cookie Consent Settings', 'plugin-wpshadow' ) );
+		WPSHADOW_render_settings_table_open();
+
+		// Render banner text textarea field.
+		WPSHADOW_render_textarea_field(
+			'wpshadow_consent_banner_text',
+			__( 'Banner Text', 'plugin-wpshadow' ),
+			$banner_text,
+			__( 'The message displayed to visitors in the consent banner.', 'plugin-wpshadow' ),
+			array( 'rows' => 4, 'cols' => 50 )
+		);
+
+		// Render custom blocked patterns textarea field.
+		WPSHADOW_render_textarea_field(
+			'wpshadow_consent_blocked_patterns',
+			__( 'Custom Blocked Patterns', 'plugin-wpshadow' ),
+			$custom_patterns_text,
+			__( 'One regex pattern per line. These patterns will be blocked until consent is given. Default patterns include Google Analytics, Facebook Pixel, and DoubleClick.', 'plugin-wpshadow' ),
+			array(
+				'rows'        => 8,
+				'cols'        => 50,
+				'placeholder' => "^custom_cookie_prefix\n^third_party_",
+			)
+		);
+
+		WPSHADOW_render_settings_table_close();
 	}
 }
