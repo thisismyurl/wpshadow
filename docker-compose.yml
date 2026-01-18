@@ -6,8 +6,6 @@ services:
     container_name: wpshadow-dev
     ports:
       - "8000:80"
-    entrypoint: /init.sh
-    command: apache2-foreground
     environment:
       WORDPRESS_DB_HOST: mysql
       WORDPRESS_DB_NAME: wordpress
@@ -26,8 +24,7 @@ services:
       - wp_themes:/var/www/html/wp-content/themes
       # Persist WordPress core files
       - wp_data:/var/www/html
-      # Mount initialization script and extra config
-      - /workspaces/wpshadow/docker-init.sh:/init.sh
+      # Mount extra config
       - /workspaces/wpshadow/wp-config-extra.php:/var/www/html/wp-config-extra.php
       # Mount .htaccess for HTTP forcing at web server level
       - /workspaces/wpshadow/.htaccess:/var/www/html/.htaccess

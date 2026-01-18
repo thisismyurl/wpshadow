@@ -608,7 +608,8 @@ class WPSHADOW_Troubleshooting_Wizard {
 		}
 
 		if ( file_exists( $error_log ) && is_readable( $error_log ) ) {
-			$content = file_get_contents( $error_log );
+			// Reading local debug log file to display error history - documented exception.
+			$content = file_get_contents( $error_log ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local debug log file
 			if ( $content ) {
 				$lines = explode( "\n", $content );
 				$logs  = array_slice( $lines, -100 ); // Last 100 lines.

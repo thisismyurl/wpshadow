@@ -48,7 +48,7 @@ $base_url = add_query_arg( 'wpshadow_tab', 'help', admin_url( 'admin.php?page=wp
 			?>
 			<a href="<?php echo esc_url( $tab_url ); ?>" 
 				class="nav-tab<?php echo $is_current ? ' nav-tab-active' : ''; ?>"
-				<?php echo $aria_current; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+			<?php echo wp_kses_post( $aria_current ); ?>>
 				<?php echo esc_html( $tab_label ); ?>
 			</a>
 		<?php endforeach; ?>

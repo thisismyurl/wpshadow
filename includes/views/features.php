@@ -171,7 +171,7 @@ $metabox_screen_id = $GLOBALS['wpshadow_details_page_screen_id'] ?? 'toplevel_pa
 					$is_enabled  = ! empty( $feature['enabled'] );
 					++$step_index;
 					?>
-					<div class="wps-wizard-step wps-wizard-feature" data-feature-id="<?php echo esc_attr( $feature_id ); ?>" data-step="<?php echo $step_index; ?>">
+					<div class="wps-wizard-step wps-wizard-feature" data-feature-id="<?php echo esc_attr( $feature_id ); ?>" data-step="<?php echo esc_attr( (string) $step_index ); ?>">
 						<div class="wps-wizard-step-number"><?php printf( esc_html__( 'Feature %1$d of %2$d', 'wpshadow' ), $step_index, count( $features ) ); ?></div>
 						<h2><?php echo esc_html( $explanation['title'] ); ?></h2>
 						<?php if ( $explanation['recommended'] ) : ?>

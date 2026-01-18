@@ -1020,8 +1020,7 @@ class WPSHADOW_Dashboard_Widgets {
 		// Merge placeholders from modules/missing-modules.json so the widget lists not-yet-downloaded modules.
 		$missing_file = trailingslashit( WPSHADOW_PATH ) . 'modules/missing-modules.json';
 		if ( file_exists( $missing_file ) && is_readable( $missing_file ) ) {
-			// Reading local bundled module manifest, not remote content - documented exception.
-			$missing_json = file_get_contents( $missing_file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local bundled module manifest
+			$missing_json = file_get_contents( $missing_file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			$missing_data = json_decode( (string) $missing_json, true );
 
 			if ( is_array( $missing_data ) ) {
