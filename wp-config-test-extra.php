@@ -1,8 +1,8 @@
 <?php
 /**
- * Extra WordPress configuration for Codespaces and Local Development
+ * Extra WordPress configuration for Test WordPress Environment (Port 8080)
  * 
- * This file is auto-loaded by docker-compose.yml volume mount.
+ * This file is auto-loaded by docker-compose.yml volume mount for the test container only.
  * CRITICAL: This must disable HTTPS forcing and enforce HTTP-only mode.
  */
 
@@ -41,7 +41,7 @@ if ( getenv( 'CODESPACES' ) === 'true' ) {
 
 	if ( $codespace_name ) {
 		// Use HTTP for Codespaces preview URLs (avoids SSL certificate warnings)
-		$codespace_url = 'http://' . $codespace_name . '-8000.preview.app.github.dev';
+		$codespace_url = 'http://' . $codespace_name . '-8080.preview.app.github.dev';
 
 		if ( ! defined( 'WP_HOME' ) ) {
 			define( 'WP_HOME', $codespace_url );
@@ -53,33 +53,10 @@ if ( getenv( 'CODESPACES' ) === 'true' ) {
 } else {
 	// Fallback to localhost for non-Codespace environments (Docker local development)
 	if ( ! defined( 'WP_HOME' ) ) {
-		define( 'WP_HOME', 'http://localhost:8000' );
+		define( 'WP_HOME', 'http://localhost:8080' );
 	}
 	if ( ! defined( 'WP_SITEURL' ) ) {
-		define( 'WP_SITEURL', 'http://localhost:8000' );
+		define( 'WP_SITEURL', 'http://localhost:8080' );
 	}
-}
-
-// Use dynamic URLs with proper Codespaces support
-if ( isset( $_SERVER['HTTP_HOST'] ) ) {
-	$host = $_SERVER['HTTP_HOST'];
-	define( 'WP_HOME', 'https://' . $host );
-	define( 'WP_SITEURL', 'https://' . $host );
-}
-
-// Prevent history.replaceState SecurityError in Codespaces by filtering admin_url
-if ( function_exists( 'add_filter' ) ) {
-	add_filter(
-		'admin_url',
-		function ( $url ) {
-			// In Codespaces, replace localhost references with actual host
-			if ( isset( $_SERVER['HTTP_HOST'] ) && false !== strpos( $_SERVER['HTTP_HOST'], 'app.github.dev' ) ) {
-				$url = str_replace( 'localhost', $_SERVER['HTTP_HOST'], $url );
-			}
-			return $url;
-		},
-		10,
-		1
-	);
 }
 

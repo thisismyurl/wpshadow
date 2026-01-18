@@ -10,8 +10,6 @@
  * Version:             1.2601.75000
  * Requires at least:   6.4
  * Requires PHP:        8.1.29
- * Update URI:          https://github.com/thisismyurl/plugin-wpshadow
- * GitHub Plugin URI:   https://github.com/thisismyurl/plugin-wpshadow
  * Primary Branch:      main
  * Text Domain:         plugin-wpshadow
  * Domain Path:         /languages
@@ -493,54 +491,42 @@ function wpshadow_init(): void {
 	// License widget moved to Pro plugin
 
 	// Load help content API for dynamic documentation.
-	require_once WPSHADOW_PATH . 'includes/class-wps-help-content-api.php';
+	require_once WPSHADOW_PATH . 'includes/utilities/class-wps-help-content-api.php';
 	\WPShadow\CoreSupport\WPSHADOW_Help_Content_API::init();
 	// Load REST API.
 	require_once WPSHADOW_PATH . 'includes/api/class-wps-rest-api.php';
 	\WPShadow\API\WPSHADOW_REST_API::init();
 
-	// TEMPORARILY DISABLED: Module bootstrap for child plugin installation and activation.
-	// require_once WPSHADOW_PATH . 'includes/class-wps-module-bootstrap.php';
-	// \WPShadow\CoreSupport\WPSHADOW_Module_Bootstrap::init();
-
-	// TEMPORARILY DISABLED: Module toggles for feature flags.
-	// require_once WPSHADOW_PATH . 'includes/class-wps-module-toggles.php';
-	// \WPShadow\CoreSupport\WPSHADOW_Module_Toggles::init();
-
-	// TEMPORARILY DISABLED: Module registry.
-	// require_once WPSHADOW_PATH . 'includes/class-wps-module-registry.php';
-	// \WPShadow\CoreSupport\WPSHADOW_Module_Registry::init();
-
 	// Load Feature Registry and base feature classes (independent of modules).
 	require_once WPSHADOW_PATH . 'features/interface-wps-feature.php';
 	require_once WPSHADOW_PATH . 'features/class-wps-feature-abstract.php';
-	require_once WPSHADOW_PATH . 'includes/class-wps-feature-registry.php';
+	require_once WPSHADOW_PATH . 'includes/core/class-wps-feature-registry.php';
 	require_once WPSHADOW_PATH . 'includes/wps-feature-functions.php';
 	\WPShadow\CoreSupport\WPSHADOW_Feature_Registry::init();
 
 	// Ghost Features and Module system moved to Pro plugin
 
 	// Load settings API (network + site with overrides).
-	require_once WPSHADOW_PATH . 'includes/class-wps-settings.php';
+	require_once WPSHADOW_PATH . 'includes/settings/class-wps-settings.php';
 	\WPShadow\CoreSupport\WPSHADOW_Settings::init();
 	require_once WPSHADOW_PATH . 'includes/wps-settings-functions.php';
 	require_once WPSHADOW_PATH . 'includes/wps-widget-functions.php';
 
 	// Load capability manager.
-	require_once WPSHADOW_PATH . 'includes/class-wps-capabilities.php';
+	require_once WPSHADOW_PATH . 'includes/core/class-wps-capabilities.php';
 
 	// Environment Checker and Server Limits are excluded in this build (moved to backup).
 
 	// Load Site Health integration.
-	require_once WPSHADOW_PATH . 'includes/class-wps-site-health.php';
+	require_once WPSHADOW_PATH . 'includes/health/class-wps-site-health.php';
 	\WPShadow\CoreSupport\WPSHADOW_Site_Health::init();
 
 	// Load Activity Logger.
-	require_once WPSHADOW_PATH . 'includes/class-wps-activity-logger.php';
+	require_once WPSHADOW_PATH . 'includes/monitoring/class-wps-activity-logger.php';
 	\WPShadow\CoreSupport\WPSHADOW_Activity_Logger::init();
 
 	// Load Publishing Assistant for pre-publish content review framework.
-	require_once WPSHADOW_PATH . 'includes/class-wps-publishing-assistant.php';
+	require_once WPSHADOW_PATH . 'includes/features/class-wps-publishing-assistant.php';
 	\WPShadow\CoreSupport\WPSHADOW_Publishing_Assistant::init();
 
 	// Load Publishing Assistant REST API.
@@ -548,70 +534,68 @@ function wpshadow_init(): void {
 	\WPShadow\CoreSupport\WPSHADOW_Publishing_Assistant_API::init();
 
 	// Load Performance Monitor for real-time performance tracking.
-	require_once WPSHADOW_PATH . 'includes/class-wps-performance-monitor.php';
+	require_once WPSHADOW_PATH . 'includes/monitoring/class-wps-performance-monitor.php';
 	\WPShadow\CoreSupport\WPSHADOW_Performance_Monitor::init();
 
 	// Load Achievement Badges system.
-	require_once WPSHADOW_PATH . 'includes/class-wps-achievement-badges.php';
+	require_once WPSHADOW_PATH . 'includes/features/class-wps-achievement-badges.php';
 	\WPShadow\CoreSupport\WPSHADOW_Achievement_Badges::init();
 
 	// Load Snapshot Manager for site snapshots and rollback.
-	require_once WPSHADOW_PATH . 'includes/class-wps-snapshot-manager.php';
+	require_once WPSHADOW_PATH . 'includes/support/class-wps-snapshot-manager.php';
 	\WPShadow\CoreSupport\WPSHADOW_Snapshot_Manager::init();
 
 	// Load Site Audit for performance, security, and optimization analysis.
-	require_once WPSHADOW_PATH . 'includes/class-wps-site-audit.php';
+	require_once WPSHADOW_PATH . 'includes/health/class-wps-site-audit.php';
 	\WPShadow\CoreSupport\WPSHADOW_Site_Audit::init();
 
 	// Load Hidden Diagnostic API for secure support access.
-	require_once WPSHADOW_PATH . 'includes/class-wps-hidden-diagnostic-api.php';
+	require_once WPSHADOW_PATH . 'includes/utilities/class-wps-hidden-diagnostic-api.php';
 	\WPShadow\CoreSupport\WPSHADOW_Hidden_Diagnostic_API::init();
 
 	// Load Safe Staging Manager for isolated testing environments.
-	require_once WPSHADOW_PATH . 'includes/class-wps-staging-manager.php';
+	require_once WPSHADOW_PATH . 'includes/support/class-wps-staging-manager.php';
 	\WPShadow\CoreSupport\WPSHADOW_Staging_Manager::init();
 
 	// Load Backup Verification for recovery drills and integrity testing.
-	require_once WPSHADOW_PATH . 'includes/class-wps-backup-verification.php';
+	require_once WPSHADOW_PATH . 'includes/support/class-wps-backup-verification.php';
 	\WPShadow\CoreSupport\WPSHADOW_Backup_Verification::init();
 
 	// Emergency Support and White Screen Auto-Recovery are excluded in this build (moved to backup).
 
 	// Load Site Documentation Manager for blueprint, protected plugins, and export.
-	require_once WPSHADOW_PATH . 'includes/class-wps-site-documentation-manager.php';
+	require_once WPSHADOW_PATH . 'includes/onboarding/class-wps-site-documentation-manager.php';
 	\WPShadow\CoreSupport\WPSHADOW_Site_Documentation_Manager::init();
 
 	// Load Update Simulator for safe plugin/theme update testing.
 	// DISABLED: File does not exist
-	// require_once WPSHADOW_PATH . 'includes/class-wps-update-simulator.php';
-	// \WPShadow\CoreSupport\WPSHADOW_Update_Simulator::init();
 
 	// Load Guided Walkthroughs for step-by-step task assistance.
-	require_once WPSHADOW_PATH . 'includes/class-wps-guided-walkthroughs.php';
+	require_once WPSHADOW_PATH . 'includes/onboarding/class-wps-guided-walkthroughs.php';
 	\WPShadow\CoreSupport\WPSHADOW_Guided_Walkthroughs::init();
 
 	// Load Video Walkthroughs for auto-generated video tutorials.
-	require_once WPSHADOW_PATH . 'includes/class-wps-video-walkthroughs.php';
+	require_once WPSHADOW_PATH . 'includes/features/class-wps-video-walkthroughs.php';
 	\WPShadow\CoreSupport\WPSHADOW_Video_Walkthroughs::init();
 
 	// Load Magic Link Support for secure time-limited developer access.
-	require_once WPSHADOW_PATH . 'includes/class-wps-magic-link-support.php';
+	require_once WPSHADOW_PATH . 'includes/support/class-wps-magic-link-support.php';
 	\WPShadow\CoreSupport\WPSHADOW_Magic_Link_Support::init();
 
 	// Load Debug Mode Manager for one-click debug toggles.
-	require_once WPSHADOW_PATH . 'includes/class-wps-debug-mode.php';
+	require_once WPSHADOW_PATH . 'includes/utilities/class-wps-debug-mode.php';
 	\WPShadow\CoreSupport\WPSHADOW_Debug_Mode::init();
 
 	// Load Site Health Integration for scoring and WordPress integration.
-	require_once WPSHADOW_PATH . 'includes/class-wps-site-health-integration.php';
+	require_once WPSHADOW_PATH . 'includes/health/class-wps-site-health-integration.php';
 	\WPShadow\CoreSupport\WPSHADOW_Site_Health_Integration::init();
 
 	// Load Health Score Dashboard Widget.
-	require_once WPSHADOW_PATH . 'includes/class-wps-health-score-widget.php';
+	require_once WPSHADOW_PATH . 'includes/health/class-wps-health-score-widget.php';
 	\WPShadow\CoreSupport\WPSHADOW_Health_Score_Widget::init();
 
 	// Load System Report Generator for comprehensive debug information.
-	require_once WPSHADOW_PATH . 'includes/class-wps-system-report-generator.php';
+	require_once WPSHADOW_PATH . 'includes/health/class-wps-system-report-generator.php';
 	\WPShadow\CoreSupport\WPSHADOW_System_Report_Generator::init();
 
 	// Register AJAX handlers for Diagnostic API.
@@ -645,7 +629,7 @@ function wpshadow_init(): void {
 	// License utilities moved to Pro plugin
 
 	// Load registration handler.
-	require_once WPSHADOW_PATH . 'includes/class-wps-registration.php';
+	require_once WPSHADOW_PATH . 'includes/onboarding/class-wps-registration.php';
 	\WPShadow\CoreSupport\WPSHADOW_Registration::init();
 
 	// DISABLED: Load core Command Palette bridge - non-existent assets causing console errors
@@ -661,7 +645,7 @@ function wpshadow_init(): void {
 	);
 
 	// Load feature registry for flexible plugin dependencies.
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/class-wps-settings-cache.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/core/class-wps-settings-cache.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/interface-wps-feature.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-abstract.php' );
 	
@@ -669,10 +653,10 @@ function wpshadow_init(): void {
 	\WPShadow\CoreSupport\WPSHADOW_Settings_Cache::init();
 
 	// Load Registry System (Unified Metadata System).
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/class-wps-feature-registry.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/class-wps-widget-groups.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/class-wps-widget-registry.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/class-wps-dashboard-registry.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/core/class-wps-feature-registry.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/admin/class-wps-widget-groups.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/admin/class-wps-widget-registry.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/admin/class-wps-dashboard-registry.php' );
 
 	// ========================================================================
 	// FREE FEATURES (License Level 1-2)
@@ -711,7 +695,7 @@ function wpshadow_init(): void {
 	do_action( 'wpshadow_register_features' );
 	
 	// Load Spoke Base for spoke plugins (Image, Media, etc).
-	require_once WPSHADOW_PATH . 'includes/class-wps-spoke-base.php';
+	require_once WPSHADOW_PATH . 'includes/core/class-wps-spoke-base.php';
 
 	// Vault moved to Pro plugin
 
@@ -725,25 +709,25 @@ function wpshadow_init(): void {
 	// \WPShadow\CoreSupport\WPSHADOW_Module_Actions::init();
 
 	// Centralized router guard for disabled modules.
-	require_once WPSHADOW_PATH . 'includes/class-wps-router-guard.php';
+	require_once WPSHADOW_PATH . 'includes/core/class-wps-router-guard.php';
 
 	// Load tab navigation system.
-	require_once WPSHADOW_PATH . 'includes/class-wps-tab-navigation.php';
-	require_once WPSHADOW_PATH . 'includes/class-wps-dashboard-widgets.php';
-	require_once WPSHADOW_PATH . 'includes/class-wps-dashboard-layout.php';
-	require_once WPSHADOW_PATH . 'includes/class-wps-feature-details-page.php';
+	require_once WPSHADOW_PATH . 'includes/admin/class-wps-tab-navigation.php';
+	require_once WPSHADOW_PATH . 'includes/admin/class-wps-dashboard-widgets.php';
+	require_once WPSHADOW_PATH . 'includes/admin/class-wps-dashboard-layout.php';
+	require_once WPSHADOW_PATH . 'includes/settings/class-wps-feature-details-page.php';
 	\WPShadow\CoreSupport\WPSHADOW_Feature_Details_Page::init();
-	require_once WPSHADOW_PATH . 'includes/class-wps-wizard-handler.php';
+	require_once WPSHADOW_PATH . 'includes/admin/class-wps-wizard-handler.php';
 	\WPShadow\CoreSupport\WPSHADOW_Wizard_Handler::init();
 	// DISABLED: Feature search - non-existent assets causing console errors
-	// require_once WPSHADOW_PATH . 'includes/class-wps-feature-search.php';
+	// require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-search.php';
 	// \WPShadow\CoreSupport\WPSHADOW_Feature_Search::init();
 	require_once WPSHADOW_PATH . 'includes/admin/class-wps-settings-ajax.php';
 	\WPShadow\Admin\WPSHADOW_Settings_Ajax::init();
 	// DISABLED: Scheduled tasks AJAX - non-existent assets causing console errors
 	// require_once WPSHADOW_PATH . 'includes/admin/class-wps-scheduled-tasks-ajax.php';
 	// \WPShadow\Admin\WPSHADOW_Scheduled_Tasks_Ajax::init();
-	require_once WPSHADOW_PATH . 'includes/class-wps-smart-suggestions.php';
+	require_once WPSHADOW_PATH . 'includes/onboarding/class-wps-smart-suggestions.php';
 	\WPShadow\CoreSupport\WPSHADOW_Smart_Suggestions::init();
 	require_once WPSHADOW_PATH . 'includes/wps-capability-helpers.php';
 
@@ -755,13 +739,13 @@ function wpshadow_init(): void {
 	// require_once WPSHADOW_PATH . 'includes/admin/ajax-modules.php';
 	// Load CLI commands when WP-CLI present.
 	if ( defined( 'WP_CLI' ) && WP_CLI ) {
-		require_once WPSHADOW_PATH . 'includes/class-wps-cli.php';
+		require_once WPSHADOW_PATH . 'includes/utilities/class-wps-cli.php';
 		\WP_CLI::add_command( 'wps modules', '\\WPShadow\\CoreSupport\\WPSHADOW_CLI_Modules' );
 		\WP_CLI::add_command( 'wps settings', '\\WPShadow\\CoreSupport\\WPSHADOW_CLI_Settings' );
 	}
 
 	// Load notice manager for persistent dismissal.
-	require_once WPSHADOW_PATH . 'includes/class-wps-notice-manager.php';
+	require_once WPSHADOW_PATH . 'includes/core/class-wps-notice-manager.php';
 	\WPShadow\CoreSupport\WPSHADOW_Notice_Manager::init();
 
 	// Initialize multisite support if applicable.

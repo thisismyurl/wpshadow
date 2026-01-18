@@ -14,5 +14,10 @@ if [ -f /var/www/html/wp-config.php ] && ! grep -q "wp-config-extra.php" /var/ww
     sed -i "/\/\* That's all, stop editing!/i require_once( dirname( __FILE__ ) . '/wp-config-extra.php' );" /var/www/html/wp-config.php
 fi
 
-# Keep the original process running
-wait $ORIGINAL_PID
+# Copy mu-plugins into wp-content if the source directory exists
+if [ -d /var/www/html/wp-content/plugins/wpshadow/assets/mu-plugins ]; then
+    mkdir -p /var/www/html/wp-content/mu-plugins
+    cp -r /var/www/html/wp-content/plugins/wpshadow/assets/mu-plugins/* /var/www/html/wp-content/mu-plugins/ 2>/dev/null || true
+    chmod -R 755 /var/www/html/wp-content/mu-plugins
+fi
+

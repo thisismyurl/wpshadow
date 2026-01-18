@@ -20,6 +20,8 @@ services:
       # Mount the actual plugin directories from workspace
       - /workspaces/wpshadow:/var/www/html/wp-content/plugins/wpshadow
       - /workspaces/wpshadow-pro:/var/www/html/wp-content/plugins/wpshadow-pro
+      # Mount must-use plugins for critical functionality
+      - /workspaces/wpshadow/assets/mu-plugins:/var/www/html/wp-content/mu-plugins
       # Add themes directory for theme testing
       - wp_themes:/var/www/html/wp-content/themes
       # Persist WordPress core files
@@ -27,6 +29,8 @@ services:
       # Mount initialization script and extra config
       - /workspaces/wpshadow/docker-init.sh:/init.sh
       - /workspaces/wpshadow/wp-config-extra.php:/var/www/html/wp-config-extra.php
+      # Mount .htaccess for HTTP forcing at web server level
+      - /workspaces/wpshadow/.htaccess:/var/www/html/.htaccess
     depends_on:
       - mysql
     networks:
@@ -85,8 +89,12 @@ services:
     volumes:
       # Mount the plugin for testing
       - /workspaces/wpshadow:/var/www/html/wp-content/plugins/wpshadow
+      # Mount must-use plugins for critical functionality
+      - /workspaces/wpshadow/assets/mu-plugins:/var/www/html/wp-content/mu-plugins
       # Mount test config
-      - /workspaces/wpshadow/wp-config-extra.php:/var/www/html/wp-config-extra.php
+      - /workspaces/wpshadow/wp-config-test-extra.php:/var/www/html/wp-config-extra.php
+      # Mount .htaccess for HTTP forcing at web server level
+      - /workspaces/wpshadow/.htaccess:/var/www/html/.htaccess
       # Separate WordPress installation
       - wp_test_data:/var/www/html
     depends_on:
