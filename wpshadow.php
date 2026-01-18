@@ -51,7 +51,7 @@ function wpshadow_init_dashboard_assets(): void {
 	wp_register_script( 'wpshadow-feature-toggle', false, array( 'jquery' ), WPSHADOW_VERSION, true );
 	wp_register_style( 'wpshadow-feature-toggle', false, array(), WPSHADOW_VERSION );
 	
-	$inline_css = '.wpshadow-toast-container{position:fixed;top:46px;right:16px;z-index:9999;display:flex;flex-direction:column;gap:8px;align-items:flex-end;pointer-events:none;}.wpshadow-toast{min-width:240px;max-width:320px;padding:12px 14px;border-radius:6px;color:#0b1220;background:#f6f7f7;border:1px solid #c3c4c7;box-shadow:0 8px 20px rgba(0,0,0,0.08);opacity:0;transform:translateY(-6px);transition:opacity 0.2s ease,transform 0.2s ease;pointer-events:auto;font-weight:500;}.wpshadow-toast.is-visible{opacity:1;transform:translateY(0);}.wpshadow-toast.success{border-color:#00a32a;background:#ecfbf1;color:#123524;}.wpshadow-toast.error{border-color:#b9bec5;background:#f1f2f3;color:#32373c;}.wpshadow-child-feature.wpshadow-disabled{opacity:0.5;}.wpshadow-child-feature.wpshadow-disabled td{color:#999;}';
+	$inline_css = '.wpshadow-toast-container{position:fixed;top:46px;right:16px;z-index:9999;display:flex;flex-direction:column;gap:8px;align-items:flex-end;pointer-events:none;}.wpshadow-toast{min-width:240px;max-width:320px;padding:12px 14px;border-radius:6px;color:#0b1220;background:#f6f7f7;border:1px solid #c3c4c7;box-shadow:0 8px 20px rgba(0,0,0,0.08);opacity:0;transform:translateY(-6px);transition:opacity 0.2s ease,transform 0.2s ease;pointer-events:auto;font-weight:500;}.wpshadow-toast.is-visible{opacity:1;transform:translateY(0);}.wpshadow-toast.success{border-color:#00a32a;background:#ecfbf1;color:#123524;}.wpshadow-toast.error{border-color:#b9bec5;background:#f1f2f3;color:#32373c;}.wpshadow-child-feature.wpshadow-disabled{opacity:0.5;}.wpshadow-child-feature.wpshadow-disabled td{color:#999;}.wpshealth-circle{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:9px;color:#fff;box-shadow:0 2px 4px rgba(0,0,0,0.12);background:#c3c4c7;transition:background 0.35s ease,color 0.35s ease;}.wpshealth-circle .wps-score-value{display:none;}.wpshealth-circle[data-score]{background:conic-gradient(#2d9cdb 0deg,#e5e7eb 0deg);}';
 	wp_add_inline_style( 'wpshadow-feature-toggle', $inline_css );
 
 	$inline_js = <<<'JS'
@@ -62,9 +62,18 @@ jQuery(function($){
 
 	function showToast(message,type){ ensureToastContainer(); var toast=$('<div class="wpshadow-toast"></div>').addClass(type||'').text(message||''); $('#wpshadow-toast-container').append(toast); setTimeout(function(){ toast.addClass('is-visible'); },20); setTimeout(function(){ toast.removeClass('is-visible'); },3800); setTimeout(function(){ toast.remove(); },4300); }
 
+	function colorForScore(score){ if(score>=80){return '#46b450';} if(score>=60){return '#ffb900';} if(score>0){return '#dc3232';} return '#c3c4c7'; }
+
+	function applyBadgeVisual(badge, score, targetColor){ var color=targetColor||colorForScore(score); var bg='conic-gradient('+color+' '+(score*3.6)+'deg, #e5e7eb 0deg)'; badge.css({background:bg,color:'#fff'}); badge.attr({'data-score':score,'aria-label':'Health score '+score}); badge.find('.wps-score-value').text(score); }
+
+	function animateBadge(badge, targetScore){ if(!badge.length){return;} var startScore=parseInt(badge.attr('data-score'),10); if(isNaN(startScore)){ startScore=0; } var endScore=parseInt(targetScore,10)||0; var start=null; var duration=400; var color=colorForScore(endScore);
+		function step(ts){ if(start===null){ start=ts; } var progress=Math.min((ts-start)/duration,1); var current=Math.round(startScore + (endScore-startScore)*progress); applyBadgeVisual(badge, current, color); if(progress<1){ requestAnimationFrame(step); } }
+		requestAnimationFrame(step);
+	}
+
 	function setSubRowsVisibility(parentId, enabled){ var rows=$('.wpshadow-child-of-' + parentId); rows.css('display', enabled ? 'table-row' : 'none'); }
 
-	function syncSubToggles(parentId, parentEnabled){ var toggles=$('.wpshadow-child-toggle[data-parent-id="'+parentId+'"]'); if(!parentEnabled){ previousStates[parentId]={}; toggles.each(function(){ var el=$(this); var row=el.closest('tr'); var subId=el.data('feature-id'); previousStates[parentId][subId]=el.is(':checked'); el.prop('checked', false); row.addClass('wpshadow-disabled'); }); return; } var prevMap=previousStates[parentId]||{}; toggles.each(function(){ var el=$(this); var row=el.closest('tr'); var subId=el.data('feature-id'); var defaultEnabled=parseInt(el.data('default-enabled'),10)===1; var target=(subId in prevMap)?prevMap[subId]:defaultEnabled; el.prop('checked', !!target); if(target){ row.removeClass('wpshadow-disabled'); } else { row.addClass('wpshadow-disabled'); } }); delete previousStates[parentId]; }
+	function syncSubToggles(parentId, parentEnabled){ var toggles=$('.wpshadow-child-toggle[data-parent-id="'+parentId+'"]'); if(!parentEnabled){ previousStates[parentId]={}; toggles.each(function(){ var el=$(this); var row=el.closest('tr'); var subId=el.data('feature-id'); previousStates[parentId][subId]=el.is(':checked'); el.prop('checked', false); row.addClass('wpshadow-disabled'); updateChildBadge(el, true); }); return; } var prevMap=previousStates[parentId]||{}; toggles.each(function(){ var el=$(this); var row=el.closest('tr'); var subId=el.data('feature-id'); var defaultEnabled=parseInt(el.data('default-enabled'),10)===1; var target=(subId in prevMap)?prevMap[subId]:defaultEnabled; el.prop('checked', !!target); if(target){ row.removeClass('wpshadow-disabled'); } else { row.addClass('wpshadow-disabled'); } updateChildBadge(el, true); }); delete previousStates[parentId]; }
 
 	function saveParentToggle(featureId, enabled){
 		if(!window.wpshadowFeatureDetails){ console.log('[wpshadow] No featureDetails localization, skip save'); return; }
@@ -91,8 +100,14 @@ jQuery(function($){
 		.fail(function(xhr){ console.error('[wpshadow] Save child failed', xhr.responseText); });
 	}
 
-	function updateParentState(el){ var featureId=el.data('parent-id'); var enabled=el.is(':checked'); var name=el.data('feature-name')||'Feature'; var row=$('.wpshadow-parent-feature[data-parent-id="'+featureId+'"]'); if(enabled){ row.removeClass('wpshadow-disabled'); } else { row.addClass('wpshadow-disabled'); } setSubRowsVisibility(featureId, enabled); syncSubToggles(featureId, enabled); showToast(enabled ? name + ' activated' : name + ' deactivated', enabled ? 'success' : 'error'); saveParentToggle(featureId, enabled); }
-	function updateChildState(el){ var enabled=el.is(':checked'); var row=el.closest('tr'); var name=el.data('feature-name')||'Sub-feature'; var parentId=el.data('parent-id'); var subId=el.data('feature-id'); if(enabled){ row.removeClass('wpshadow-disabled'); } else { row.addClass('wpshadow-disabled'); } showToast(enabled ? name + ' activated' : name + ' deactivated', enabled ? 'success' : 'error'); saveChildToggle(parentId, subId, enabled); }
+	function setBadgeScore(featureId, score){ var badge=$('.wps-health-score-badge[data-feature-id="'+featureId+'"], .wpshealth-circle[data-feature-id="'+featureId+'"]').first(); if(!badge.length){return;} var target=parseInt(score,10)||0; animateBadge(badge, target); }
+
+	function computeAssetVersionScore(){ var parentEnabled=$('.wpshadow-parent-toggle[data-parent-id="asset-version-removal"]').is(':checked'); if(!parentEnabled){ setBadgeScore('asset-version-removal', 0); return; } var cssOn=$('.wpshadow-child-toggle[data-feature-id="remove_css_versions"]').is(':checked'); var jsOn=$('.wpshadow-child-toggle[data-feature-id="remove_js_versions"]').is(':checked'); var preserveOn=$('.wpshadow-child-toggle[data-feature-id="preserve_plugin_versions"]').is(':checked'); var score=(cssOn?40:0)+(jsOn?40:0)+(preserveOn?20:0); setBadgeScore('asset-version-removal', score); }
+
+	function updateChildBadge(el, instant){ var on=el.is(':checked'); var childId=el.data('feature-id'); var badge=el.closest('tr').find('.wpshealth-circle[data-feature-id="'+childId+'"]'); if(!badge.length){return;} var score=on?100:0; if(instant){ applyBadgeVisual(badge, score); return; } animateBadge(badge, score); }
+
+	function updateParentState(el){ var featureId=el.data('parent-id'); var enabled=el.is(':checked'); var name=el.data('feature-name')||'Feature'; var row=$('.wpshadow-parent-feature[data-parent-id="'+featureId+'"]'); if(enabled){ row.removeClass('wpshadow-disabled'); } else { row.addClass('wpshadow-disabled'); } setSubRowsVisibility(featureId, enabled); syncSubToggles(featureId, enabled); showToast(enabled ? name + ' activated' : name + ' deactivated', enabled ? 'success' : 'error'); saveParentToggle(featureId, enabled); setBadgeScore(featureId, enabled ? parseInt(row.find('.wps-score-value').text()||'0',10) : 0); if(featureId==='asset-version-removal'){ computeAssetVersionScore(); } }
+	function updateChildState(el){ var enabled=el.is(':checked'); var row=el.closest('tr'); var name=el.data('feature-name')||'Sub-feature'; var parentId=el.data('parent-id'); var subId=el.data('feature-id'); if(enabled){ row.removeClass('wpshadow-disabled'); } else { row.addClass('wpshadow-disabled'); } showToast(enabled ? name + ' activated' : name + ' deactivated', enabled ? 'success' : 'error'); saveChildToggle(parentId, subId, enabled); updateChildBadge(el); if(parentId==='asset-version-removal'){ computeAssetVersionScore(); } }
 	// Init
 	setTimeout(function(){ 
 		$('.wpshadow-parent-toggle').each(function(){ 
@@ -103,7 +118,9 @@ jQuery(function($){
 			if(!enabled){
 				$('.wpshadow-child-of-' + featureId).addClass('wpshadow-disabled');
 			}
-		}); 
+		});
+		$('.wpshadow-child-toggle').each(function(){ updateChildBadge($(this)); });
+		computeAssetVersionScore();
 	}, 50);
 	$(document).on('change', '.wpshadow-parent-toggle', function(){ updateParentState($(this)); });
 	$(document).on('change', '.wpshadow-child-toggle', function(){ updateChildState($(this)); });
@@ -1535,6 +1552,9 @@ function wpshadow_render_features_page( string $level, string $hub_id = '', stri
 	// Enqueue the pre-registered handles (inline CSS/JS attached in wpshadow_init_dashboard_assets)
 	wp_enqueue_style( 'wpshadow-feature-toggle' );
 	wp_enqueue_script( 'wpshadow-feature-toggle' );
+	// Enable WordPress postbox drag/drop persistence on the Features screen.
+	wp_enqueue_script( 'postbox' );
+	wp_enqueue_script( 'jquery-ui-sortable' );
 
 	// Localize script for AJAX
 	wp_localize_script(
@@ -1563,10 +1583,9 @@ function wpshadow_render_features_page( string $level, string $hub_id = '', stri
 	foreach ( $features as &$feature ) {
 		if ( ! empty( $feature['sub_features'] ) ) {
 			foreach ( $feature['sub_features'] as $sub_key => &$sub_data ) {
-				$option_name = 'wpshadow_' . $feature['id'] . '_' . $sub_key;
-				$is_enabled = get_option( $option_name, (bool) ( $sub_data['default_enabled'] ?? false ) );
+				$option_name       = 'wpshadow_' . $feature['id'] . '_' . $sub_key;
+				$is_enabled        = get_option( $option_name, (bool) ( $sub_data['default_enabled'] ?? false ) );
 				$sub_data['enabled'] = (bool) $is_enabled;
-				error_log( "WPShadow: Loading sub-feature {$option_name} = " . ( $is_enabled ? '1' : '0' ) );
 			}
 			unset( $sub_data );
 		}
@@ -1592,9 +1611,6 @@ function wpshadow_render_features_page( string $level, string $hub_id = '', stri
 			}
 		}
 		
-		// DEBUG: Log sub-features map
-		error_log( 'WPShadow sub_features_map: ' . print_r( $sub_features_map, true ) );
-		
 		if ( isset( $_POST['features'] ) && is_array( $_POST['features'] ) ) {
 			foreach ( $_POST['features'] as $feature_id => $flag ) {
 				$feature_id = sanitize_key( (string) $feature_id );
@@ -1602,10 +1618,9 @@ function wpshadow_render_features_page( string $level, string $hub_id = '', stri
 				// Check if this is a sub-feature ID
 				if ( isset( $sub_features_map[ $feature_id ] ) ) {
 					// Save as a sub-feature option
-					$sub_map = $sub_features_map[ $feature_id ];
+					$sub_map     = $sub_features_map[ $feature_id ];
 					$option_name = 'wpshadow_' . $sub_map['parent_id'] . '_' . $sub_map['sub_key'];
-					$is_enabled = ! empty( $flag );
-					error_log( "WPShadow: Saving sub-feature option: {$option_name} = " . ( $is_enabled ? '1' : '0' ) );
+					$is_enabled  = ! empty( $flag );
 					update_option( $option_name, $is_enabled ? 1 : 0 );
 				} else {
 					// Regular feature toggle
@@ -1801,12 +1816,9 @@ function wpshadow_render_feature_group_metabox( $post, array $metabox ): void {
 								<?php endif; ?>
 							</div>
 							<div style="margin-left: 15px; display: flex; align-items: center; gap: 10px;">
-								<?php if ( $is_enabled && $health_score > 0 ) : ?>
-									<div class="wps-health-score-badge" style="display: inline-flex; align-items: center; justify-content: center; min-width: 45px; height: 32px; padding: 0 10px; background: <?php echo esc_attr( $score_color ); ?>; color: #fff; border-radius: 16px; font-weight: 600; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-										<span style="font-size: 16px; margin-right: 2px;">⚡</span>
-										<span><?php echo esc_html( $health_score ); ?></span>
-									</div>
-								<?php endif; ?>
+								<div class="wpshealth-circle wps-health-score-badge" data-feature-id="<?php echo esc_attr( $feature_id ); ?>" data-score="<?php echo esc_attr( (int) $health_score ); ?>">
+									<span class="wps-score-value"><?php echo esc_html( $health_score ); ?></span>
+								</div>
 								<?php
 								$feature_url = \WPShadow\CoreSupport\WPSHADOW_Feature_Details_Page::get_feature_url( $feature_id );
 								?>
@@ -1828,8 +1840,8 @@ function wpshadow_render_feature_group_metabox( $post, array $metabox ): void {
 					$child_desc  = is_array( $child_data ) ? ( $child_data['description'] ?? '' ) : '';
 					$child_enabled = is_array( $child_data ) && isset( $child_data['enabled'] ) ? (bool) $child_data['enabled'] : (bool) ( $child_data['default_enabled'] ?? false );
 					?>
-					<tr class="wpshadow-child-feature wpshadow-child-of-<?php echo esc_attr( $feature_id ); ?>" data-parent-id="<?php echo esc_attr( $feature_id ); ?>" style="background-color: #f9f9f9;">
-						<td class="check-column" style="width: 60px; padding: 12px; padding-left: 40px;">
+					<tr class="wpshadow-child-feature wpshadow-child-of-<?php echo esc_attr( $feature_id ); ?>" data-parent-id="<?php echo esc_attr( $feature_id ); ?>" style="background-color: #f9f9f9; --wps-child-indent: 5%;">
+						<td class="check-column" style="width: 60px; padding: 12px; padding-left: calc(var(--wps-child-indent, 5%) + 10px);">
 							<label class="wps-feature-toggle-label">
 								<input 
 									type="checkbox" 
@@ -1849,10 +1861,10 @@ function wpshadow_render_feature_group_metabox( $post, array $metabox ): void {
 							</label>
 						</td>
 						<td style="position: relative;">
-							<div style="display: flex; justify-content: space-between; align-items: flex-start; padding-left: 10px; border-left: 3px solid #ddd;">
+							<div style="display: flex; justify-content: space-between; align-items: flex-start; padding-left: var(--wps-child-indent, 5%); border-left: 3px solid #ddd;">
 								<div style="flex: 1;">
 									<strong style="color: #555; font-size: 13px;">
-										↳ <?php echo esc_html( $child_label ); ?>
+										<?php echo esc_html( $child_label ); ?>
 									</strong>
 									<?php if ( ! empty( $child_desc ) ) : ?>
 										<p style="margin: 4px 0 0; color: #666; font-size: 12px;">
@@ -1860,7 +1872,10 @@ function wpshadow_render_feature_group_metabox( $post, array $metabox ): void {
 										</p>
 									<?php endif; ?>
 								</div>
-								<div style="margin-left: 12px; display: flex; align-items: center;">
+								<div style="margin-left: 12px; display: flex; align-items: center; gap: 10px;">
+									<div class="wpshealth-circle" data-feature-id="<?php echo esc_attr( $child_id ); ?>" data-score="<?php echo esc_attr( $child_enabled ? 100 : 0 ); ?>" aria-label="<?php esc_attr_e( 'Health score', 'wpshadow' ); ?>">
+										<span class="wps-score-value"><?php echo esc_html( $child_enabled ? 100 : 0 ); ?></span>
+									</div>
 									<?php
 									$child_url = \WPShadow\CoreSupport\WPSHADOW_Feature_Details_Page::get_feature_url( $child_id );
 									?>

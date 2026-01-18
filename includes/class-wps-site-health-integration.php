@@ -585,12 +585,31 @@ final class WPSHADOW_Site_Health_Integration {
 				'category'     => 'performance',
 				'sub_features' => array(),
 			),
-			'asset-version-removal' => array(
-				'enabled'      => self::is_feature_enabled( 'asset-version-removal' ),
-				'score'        => self::is_feature_enabled( 'asset-version-removal' ) ? 100 : 0,
-				'category'     => 'performance',
-				'sub_features' => array(),
-			),
+			'asset-version-removal' => (function() {
+				$parent_enabled = self::is_feature_enabled( 'asset-version-removal' );
+				$remove_css     = \WPShadow\CoreSupport\WPSHADOW_Asset_Version_Helpers::is_sub_feature_enabled( 'asset-version-removal', 'remove_css_versions' );
+				$remove_js      = \WPShadow\CoreSupport\WPSHADOW_Asset_Version_Helpers::is_sub_feature_enabled( 'asset-version-removal', 'remove_js_versions' );
+				$preserve       = \WPShadow\CoreSupport\WPSHADOW_Asset_Version_Helpers::is_sub_feature_enabled( 'asset-version-removal', 'preserve_plugin_versions' );
+
+				// Points sum to 100 when all three sub-features are enabled.
+				$score = 0;
+				if ( $parent_enabled ) {
+					$score += $remove_css ? 40 : 0;
+					$score += $remove_js ? 40 : 0;
+					$score += $preserve ? 20 : 0;
+				}
+
+				return array(
+					'enabled'      => $parent_enabled,
+					'score'        => $score,
+					'category'     => 'performance',
+					'sub_features' => array(
+						'remove_css_versions'      => array( 'enabled' => $remove_css, 'points' => 40 ),
+						'remove_js_versions'       => array( 'enabled' => $remove_js, 'points' => 40 ),
+						'preserve_plugin_versions' => array( 'enabled' => $preserve, 'points' => 20 ),
+					),
+				);
+			})(),
 			'block-cleanup' => array(
 				'enabled'      => self::is_feature_enabled( 'block-cleanup' ),
 				'score'        => self::is_feature_enabled( 'block-cleanup' ) ? 100 : 0,
