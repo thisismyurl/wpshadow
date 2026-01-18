@@ -144,6 +144,12 @@ class WPSHADOW_Feature_Details_Page {
 
 		// Note: postbox script removed to prevent History API SecurityError on GitHub Codespaces
 
+		// Enqueue the feature toggle styles and scripts (for badge animations and feature toggles)
+		wp_enqueue_style( 'wpshadow-feature-toggle' );
+		wp_enqueue_script( 'wpshadow-feature-toggle' );
+		wp_enqueue_script( 'postbox' );
+		wp_enqueue_script( 'jquery-ui-sortable' );
+
 		wp_enqueue_style(
 			'wpshadow-feature-details',
 			WPSHADOW_URL . 'assets/css/feature-details.css',
@@ -177,6 +183,80 @@ class WPSHADOW_Feature_Details_Page {
 	}
 
 	/**
+	 * Handle form submission for feature settings.
+	 *
+	 * @param array $features Features array.
+	 * @return void
+	 */
+	private static function handle_form_submit( array $features ): void {
+		// Check for form submission
+		if ( ! isset( $_POST['wpshadow_nonce'] ) ) {
+			return;
+		}
+
+		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wpshadow_nonce'] ) ), 'wpshadow_features_nonce' ) ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		// Process submitted data (identical logic to features.php)
+		$submitted_data = isset( $_POST['wpshadow_features'] ) ? wp_unslash( $_POST['wpshadow_features'] ) : array();
+
+		if ( ! is_array( $submitted_data ) ) {
+			return;
+		}
+
+		foreach ( $features as $feature ) {
+			$feature_id = $feature['id'] ?? '';
+			$feature_key = 'feature_' . $feature_id;
+
+			if ( ! isset( $submitted_data[ $feature_key ] ) ) {
+				continue;
+			}
+
+			$is_enabled = ! empty( $submitted_data[ $feature_key ] );
+			update_option( 'wpshadow_feature_' . $feature_id . '_enabled', $is_enabled );
+
+			// Track the change in feature activity log
+			if ( class_exists( '\\WPShadow\\CoreSupport\\WPSHADOW_Feature_Logger' ) ) {
+				$action = $is_enabled ? 'enabled' : 'disabled';
+				WPSHADOW_Feature_Logger::log_feature_activity( $feature_id, $action );
+			}
+		}
+	}
+
+	/**
+	 * Build filtered feature list containing only target feature and its children.
+	 *
+	 * @param array  $all_features All features.
+	 * @param string $feature_id   Target feature ID.
+	 * @return array Filtered features array.
+	 */
+	private static function build_filtered_feature_list( array $all_features, string $feature_id ): array {
+		$filtered = array();
+
+		// Find the target feature
+		foreach ( $all_features as $feature ) {
+			if ( $feature['id'] === $feature_id ) {
+				$filtered[] = $feature;
+
+				// Add any child features
+				foreach ( $all_features as $potential_child ) {
+					if ( isset( $potential_child['parent'] ) && $potential_child['parent'] === $feature_id ) {
+						$filtered[] = $potential_child;
+					}
+				}
+				break;
+			}
+		}
+
+		return $filtered;
+	}
+
+	/**
 	 * Render feature details page.
 	 *
 	 * @return void
@@ -192,92 +272,168 @@ class WPSHADOW_Feature_Details_Page {
 			wp_die( esc_html__( 'No feature specified.', 'wpshadow' ) );
 		}
 
+		// First, try to get as a top-level feature
 		$feature = WPSHADOW_Feature_Registry::get_feature( $feature_id );
-		
+		$is_sub_feature = false;
+		$parent_feature_id = null;
+
+		// If not found as top-level, search for it as a sub-feature
+		if ( ! $feature ) {
+			$all_features = WPSHADOW_Feature_Registry::get_all_features();
+			foreach ( $all_features as $potential_parent ) {
+				if ( isset( $potential_parent['sub_features'][ $feature_id ] ) ) {
+					$feature = $potential_parent;
+					$parent_feature_id = $potential_parent['id'];
+					$is_sub_feature = true;
+					break;
+				}
+			}
+		}
+
 		if ( ! $feature ) {
 			wp_die( esc_html__( 'Feature not found.', 'wpshadow' ) );
 		}
 
 		// Track feature access for commonly accessed list (Issues #447 & #448).
+		$track_id = $is_sub_feature ? $parent_feature_id : $feature_id;
 		if ( class_exists( '\\WPShadow\\CoreSupport\\WPSHADOW_Feature_Search' ) ) {
-			WPSHADOW_Feature_Search::track_feature_access( $feature_id );
+			WPSHADOW_Feature_Search::track_feature_access( $track_id );
 		}
 
-		// Store feature data in global for metabox callbacks
-		$GLOBALS['wpshadow_feature_details'] = $feature;
-		$GLOBALS['wpshadow_feature_id'] = $feature_id;
-		
-		// Get current screen for proper metabox registration
-		$screen = get_current_screen();
-		$screen_id = $screen ? $screen->id : 'admin_page_wpshadow-feature-details';
+		// Get all features from registry
+		$all_features = WPSHADOW_Feature_Registry::get_all_features();
 
-		// Register metaboxes
-		add_meta_box(
-			'wpshadow-feature-info',
-			__( 'Feature Information', 'wpshadow' ),
-			array( __CLASS__, 'render_feature_info_metabox' ),
-			$screen_id,
-			'normal',
-			'high'
+		// Handle form submission using the same logic as the Features tab
+		if ( 'POST' === $_SERVER['REQUEST_METHOD'] && isset( $_POST['wpshadow_features_nonce'] ) ) {
+			check_admin_referer( 'wpshadow_save_features', 'wpshadow_features_nonce' );
+
+			$enabled_ids      = array();
+			$sub_features_map = array();
+
+			// Build a map of sub-feature IDs to their parent and key (based on the full registry)
+			foreach ( $all_features as $feat ) {
+				if ( ! empty( $feat['sub_features'] ) ) {
+					$parent_id = $feat['id'] ?? '';
+					foreach ( $feat['sub_features'] as $sub_key => $sub_data ) {
+						$sub_features_map[ $sub_key ] = array(
+							'parent_id' => $parent_id,
+							'sub_key'   => $sub_key,
+						);
+					}
+				}
+			}
+
+			if ( isset( $_POST['features'] ) && is_array( $_POST['features'] ) ) {
+				foreach ( $_POST['features'] as $posted_id => $flag ) {
+					$posted_id = sanitize_key( (string) $posted_id );
+
+					// Check if this is a sub-feature ID
+					if ( isset( $sub_features_map[ $posted_id ] ) ) {
+						$sub_map     = $sub_features_map[ $posted_id ];
+						$option_name = 'wpshadow_' . $sub_map['parent_id'] . '_' . $sub_map['sub_key'];
+						$is_enabled  = ! empty( $flag );
+						update_option( $option_name, $is_enabled ? 1 : 0 );
+					} else {
+						// Regular feature toggle
+						$enabled_ids[] = $posted_id;
+					}
+				}
+			}
+
+			// Save unchecked sub-features as disabled (they won't be in POST data)
+			foreach ( $sub_features_map as $sub_id => $sub_map ) {
+				if ( ! isset( $_POST['features'][ $sub_id ] ) ) {
+					$option_name = 'wpshadow_' . $sub_map['parent_id'] . '_' . $sub_map['sub_key'];
+					update_option( $option_name, 0 );
+				}
+			}
+
+			// Save parent features enabled state
+			$all_feature_ids = wp_list_pluck( $all_features, 'id' );
+			foreach ( $all_feature_ids as $id ) {
+				$option_name = 'wpshadow_feature_' . $id . '_enabled';
+				$is_enabled  = in_array( $id, $enabled_ids, true );
+				update_option( $option_name, $is_enabled ? 1 : 0 );
+			}
+		}
+
+		// If it's a sub-feature, render the parent and its children (keeps original UI/JS intact)
+		if ( $is_sub_feature && $parent_feature_id ) {
+			$features    = self::build_filtered_feature_list( $all_features, $parent_feature_id );
+			$feature_id  = $parent_feature_id; // ensure template/JS see the parent context
+		} else {
+			$features = self::build_filtered_feature_list( $all_features, $feature_id );
+		}
+
+		// Enrich features with enabled status
+		foreach ( $features as &$f ) {
+			$enabled = get_option( 'wpshadow_feature_' . $f['id'] . '_enabled', true );
+			$f['enabled'] = $enabled;
+		}
+		unset( $f );
+
+		// Set up variables expected by features.php template
+		$level            = 'core';
+		$hub_id           = '';
+		$spoke_id         = '';
+		$network_scope    = is_multisite() && is_network_admin();
+		$form_action      = add_query_arg(
+			array(
+				'page'    => 'wpshadow-feature-details',
+				'feature' => $feature_id,
+			),
+			admin_url( 'admin.php' )
 		);
 
-		add_meta_box(
-			'wpshadow-feature-log',
-			__( 'Activity Log', 'wpshadow' ),
-			array( __CLASS__, 'render_activity_log_metabox' ),
-			$screen_id,
-			'normal',
-			'default'
-		);
+		// Group features by widget group (same logic as in wpshadow_render_features_page)
+		$grouped_features = array();
+		foreach ( $features as $feature_item ) {
+			$group = $feature_item['widget_group'] ?? 'general';
+			if ( ! isset( $grouped_features[ $group ] ) ) {
+				$grouped_features[ $group ] = array(
+					'label'       => $feature_item['widget_label'] ?? 'General',
+					'description' => $feature_item['widget_description'] ?? 'Features',
+					'features'    => array(),
+				);
+			}
+			$grouped_features[ $group ]['features'][] = $feature_item;
+		}
 
-		/**
-		 * Allow features to register additional metaboxes on the feature details page.
-		 *
-		 * @param string   $feature_id Feature ID.
-		 * @param string   $screen_id  Screen ID for registering metaboxes.
-		 * @param array    $feature    Feature data array.
-		 */
-		do_action( 'wpshadow_feature_details_metaboxes', $feature_id, $screen_id, $feature );
+		// Store grouped_features in global for metabox callbacks
+		$GLOBALS['wpshadow_grouped_features'] = $grouped_features;
 
-		$feature_name  = $feature['name'] ?? $feature_id;
-		$feature_icon  = $feature['icon'] ?? 'dashicons-admin-generic';
-		
-		?>
-		<div class="wrap wpshadow-feature-details">
-			<h1>
-				<span class="dashicons <?php echo esc_attr( $feature_icon ); ?>"></span>
-				<?php echo esc_html( $feature_name ); ?>
-			</h1>
+		// Register metaboxes using the same screen ID as the Features tab to reuse drag/drop + JS
+		$screen_id = 'toplevel_page_wpshadow';
+		foreach ( $grouped_features as $group_id => $group_data ) {
+			add_meta_box(
+				'wpshadow_features_' . sanitize_key( $group_id ),
+				esc_html( $group_data['label'] ),
+				'\\WPShadow\\wpshadow_render_feature_group_metabox',
+				$screen_id,
+				'normal',
+				'default',
+				array( 'group_id' => $group_id )
+			);
+		}
 
-			<form method="post" action="">
-				<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
-				<?php wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
-				
-				<div class="wpshadow-feature-details-container">
-					<div id="poststuff">
-						<div id="post-body" class="metabox-holder columns-1">
-							<div id="postbox-container-1" class="postbox-container">
-								<?php do_meta_boxes( $screen_id, 'normal', null ); ?>
-							</div>
-						</div>
-					</div>
-				</div>
-			</form>
+		// Include the shared features template with filtered list
+		$views_file = WPSHADOW_PATH . 'includes/views/features.php';
+		if ( file_exists( $views_file ) ) {
+			// Override the screen ID for template use
+			global $screen_base;
+			$original_screen_base = $screen_base ?? null;
+			$screen_base = $screen_id;
 
-			<p class="back-link">
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>">
-					&larr; <?php esc_html_e( 'Back to Dashboard', 'wpshadow' ); ?>
-				</a>
-			</p>
-		</div>
+			// Temporarily modify the template to use our screen ID by setting it in global
+			$GLOBALS['wpshadow_details_page_screen_id'] = $screen_id;
 
-		<script type="text/javascript">
-		jQuery(document).ready(function($) {
-			// Postbox initialization removed - handled by feature-details.js
-			// Note: postbox script no longer enqueued due to History API SecurityError fix
-		});
-		</script>
-		<?php
+			include $views_file;
+
+			// Restore original screen base
+			if ( $original_screen_base ) {
+				$screen_base = $original_screen_base;
+			}
+		}
 	}
 
 	/**
@@ -650,6 +806,20 @@ class WPSHADOW_Feature_Details_Page {
 	}
 
 	/**
+	 * Check if we're on the feature details page for a specific feature.
+	 *
+	 * @param string $feature_id Feature ID to check.
+	 * @return bool True if we're on the details page for this feature.
+	 */
+	public static function is_details_page( string $feature_id ): bool {
+		$current_page   = sanitize_key( $_GET['page'] ?? '' );
+		$current_tab    = sanitize_key( $_GET['wpshadow_tab'] ?? '' );
+		$current_feature = sanitize_key( $_GET['feature'] ?? '' );
+
+		return ( 'wpshadow' === $current_page && 'features' === $current_tab && $feature_id === $current_feature );
+	}
+
+	/**
 	 * Get feature details URL.
 	 *
 	 * @param string $feature_id Feature ID.
@@ -658,8 +828,9 @@ class WPSHADOW_Feature_Details_Page {
 	public static function get_feature_url( string $feature_id ): string {
 		return add_query_arg(
 			array(
-				'page'    => 'wpshadow-feature-details',
-				'feature' => $feature_id,
+				'page'         => 'wpshadow',
+				'wpshadow_tab' => 'features',
+				'feature'      => $feature_id,
 			),
 			admin_url( 'admin.php' )
 		);

@@ -1579,6 +1579,12 @@ function wpshadow_render_features_page( string $level, string $hub_id = '', stri
 	$network_scope = is_multisite() && is_network_admin();
 	$features      = \WPShadow\CoreSupport\WPSHADOW_Feature_Registry::get_features_by_scope( $level, $hub_id, $spoke_id, $network_scope );
 
+	// Optional feature filter (?feature=some-id) to reuse the same page for focused view
+	$feature_filter = isset( $_GET['feature'] ) ? sanitize_key( (string) $_GET['feature'] ) : '';
+	if ( ! empty( $feature_filter ) ) {
+		$features = wpshadow_filter_features_for_focus( $features, $feature_filter );
+	}
+
 	// Enrich parent features with sub-feature enabled states
 	foreach ( $features as &$feature ) {
 		if ( ! empty( $feature['sub_features'] ) ) {
@@ -1668,6 +1674,47 @@ function wpshadow_render_features_page( string $level, string $hub_id = '', stri
 }
 
 /**
+ * Filter the features array to a specific feature (or its parent if a sub-feature ID is provided).
+ * Keeps the parent + its children so the existing UI/JS continue to function identically.
+ *
+ * @param array  $features       Full feature list.
+ * @param string $target_feature Target feature or sub-feature ID.
+ * @return array Filtered features.
+ */
+function wpshadow_filter_features_for_focus( array $features, string $target_feature ): array {
+	$GLOBALS['wpshadow_focus_feature_id'] = '';
+	$parent_id        = null;
+	$filtered_parent  = null;
+
+	// Identify whether target is a parent or a sub-feature and capture the parent
+	foreach ( $features as $feat ) {
+		$fid = $feat['id'] ?? '';
+		if ( $fid === $target_feature ) {
+			$parent_id       = $fid;
+			$filtered_parent = $feat;
+			break;
+		}
+		if ( isset( $feat['sub_features'][ $target_feature ] ) ) {
+			$parent_id       = $fid;
+			// clone parent but keep only the requested child sub-feature
+			$parent_clone                 = $feat;
+			$parent_clone['sub_features'] = array( $target_feature => $feat['sub_features'][ $target_feature ] );
+			$filtered_parent              = $parent_clone;
+			$GLOBALS['wpshadow_focus_feature_id'] = $target_feature;
+			break;
+		}
+	}
+
+	if ( ! $parent_id || ! $filtered_parent ) {
+		$GLOBALS['wpshadow_focus_feature_id'] = '';
+		return $features; // fallback: no filtering if not found
+	}
+
+	// Return only the parent (with possibly trimmed sub-features) so the list shows only the target
+	return array( $filtered_parent );
+}
+
+/**
  * Register metaboxes for grouped features.
  *
  * @param array $features Array of feature definitions.
@@ -1723,6 +1770,7 @@ function wpshadow_render_feature_group_metabox( $post, array $metabox ): void {
 
 	$group_data = $grouped_features[ $group_id ];
 	$features   = $group_data['features'] ?? array();
+	$focus_feature_id = $GLOBALS['wpshadow_focus_feature_id'] ?? '';
 
 	if ( empty( $features ) ) {
 		echo '<p>' . esc_html__( 'No features in this group.', 'wpshadow' ) . '</p>';
@@ -1785,52 +1833,61 @@ function wpshadow_render_feature_group_metabox( $post, array $metabox ): void {
 				} elseif ( $health_score > 0 ) {
 					$score_color = '#dc3232'; // Red
 				}
+
+				$render_parent_row = true;
+				if ( $focus_feature_id && $focus_feature_id !== $feature_id && isset( $children[ $focus_feature_id ] ) ) {
+					$render_parent_row = false;
+				}
 				?>
-				<tr class="wpshadow-parent-feature" data-parent-id="<?php echo esc_attr( $feature_id ); ?>">
-					<td class="check-column" style="width: 60px; padding: 12px;">
-						<label class="wps-feature-toggle-label">
-							<input 
-								type="checkbox" 
-								class="wps-feature-toggle-input wpshadow-parent-toggle"
-								name="features[<?php echo esc_attr( $feature_id ); ?>]" 
-								value="1" 
-								data-parent-id="<?php echo esc_attr( $feature_id ); ?>"
-								data-feature-name="<?php echo esc_attr( $feature_name ); ?>"
-								data-default-enabled="<?php echo esc_attr( (int) $is_enabled ); ?>"
-								<?php checked( $is_enabled ); ?>
-							/>
-							<span class="wps-feature-toggle-switch"></span>
-							<span class="screen-reader-text">
-								<?php printf( esc_html__( 'Enable %s', 'wpshadow' ), esc_html( $feature_name ) ); ?>
-							</span>
-						</label>
-					</td>
-					<td style="position: relative;">
-						<div style="display: flex; justify-content: space-between; align-items: flex-start;">
-							<div style="flex: 1;">
-								<strong><?php echo esc_html( $feature_name ); ?></strong>
-								<?php if ( ! empty( $feature_desc ) ) : ?>
-									<p style="margin: 4px 0 0; color: #666;">
-										<?php echo esc_html( $feature_desc ); ?>
-									</p>
-								<?php endif; ?>
-							</div>
-							<div style="margin-left: 15px; display: flex; align-items: center; gap: 10px;">
-								<div class="wpshealth-circle wps-health-score-badge" data-feature-id="<?php echo esc_attr( $feature_id ); ?>" data-score="<?php echo esc_attr( (int) $health_score ); ?>">
-									<span class="wps-score-value"><?php echo esc_html( $health_score ); ?></span>
+				<?php if ( $render_parent_row ) : ?>
+					<tr class="wpshadow-parent-feature" data-parent-id="<?php echo esc_attr( $feature_id ); ?>">
+						<td class="check-column" style="width: 60px; padding: 12px;">
+							<label class="wps-feature-toggle-label">
+								<input 
+									type="checkbox" 
+									class="wps-feature-toggle-input wpshadow-parent-toggle"
+									name="features[<?php echo esc_attr( $feature_id ); ?>]" 
+									value="1" 
+									data-parent-id="<?php echo esc_attr( $feature_id ); ?>"
+									data-feature-name="<?php echo esc_attr( $feature_name ); ?>"
+									data-default-enabled="<?php echo esc_attr( (int) $is_enabled ); ?>"
+									<?php checked( $is_enabled ); ?>
+								/>
+								<span class="wps-feature-toggle-switch"></span>
+								<span class="screen-reader-text">
+									<?php printf( esc_html__( 'Enable %s', 'wpshadow' ), esc_html( $feature_name ) ); ?>
+								</span>
+							</label>
+						</td>
+						<td style="position: relative;">
+							<div style="display: flex; justify-content: space-between; align-items: flex-start;">
+								<div style="flex: 1;">
+									<strong><?php echo esc_html( $feature_name ); ?></strong>
+									<?php if ( ! empty( $feature_desc ) ) : ?>
+										<p style="margin: 4px 0 0; color: #666;">
+											<?php echo esc_html( $feature_desc ); ?>
+										</p>
+									<?php endif; ?>
 								</div>
-								<?php
-								$feature_url = \WPShadow\CoreSupport\WPSHADOW_Feature_Details_Page::get_feature_url( $feature_id );
-								?>
-								<a href="<?php echo esc_url( $feature_url ); ?>" 
-								   class="button button-small wps-feature-settings-btn" 
-								   data-feature-id="<?php echo esc_attr( $feature_id ); ?>">
-									<?php esc_html_e( 'Details', 'wpshadow' ); ?>
-								</a>
+								<div style="margin-left: 15px; display: flex; align-items: center; gap: 10px;">
+									<div class="wpshealth-circle wps-health-score-badge" data-feature-id="<?php echo esc_attr( $feature_id ); ?>" data-score="<?php echo esc_attr( (int) $health_score ); ?>">
+										<span class="wps-score-value"><?php echo esc_html( $health_score ); ?></span>
+									</div>
+									<?php if ( ! \WPShadow\CoreSupport\WPSHADOW_Feature_Details_Page::is_details_page( $feature_id ) ) : ?>
+										<?php
+										$feature_url = \WPShadow\CoreSupport\WPSHADOW_Feature_Details_Page::get_feature_url( $feature_id );
+										?>
+										<a href="<?php echo esc_url( $feature_url ); ?>" 
+										   class="button button-small wps-feature-settings-btn" 
+										   data-feature-id="<?php echo esc_attr( $feature_id ); ?>">
+											<?php esc_html_e( 'Details', 'wpshadow' ); ?>
+										</a>
+									<?php endif; ?>
+								</div>
 							</div>
-						</div>
-					</td>
-				</tr>
+						</td>
+					</tr>
+				<?php endif; ?>
 
 				<?php
 				// Render child features indented
@@ -1873,15 +1930,17 @@ function wpshadow_render_feature_group_metabox( $post, array $metabox ): void {
 									<?php endif; ?>
 								</div>
 								<div style="margin-left: 12px; display: flex; align-items: center; gap: 10px;">
-									<div class="wpshealth-circle" data-feature-id="<?php echo esc_attr( $child_id ); ?>" data-score="<?php echo esc_attr( $child_enabled ? 100 : 0 ); ?>" aria-label="<?php esc_attr_e( 'Health score', 'wpshadow' ); ?>">
+									<div class="wpshealth-circle wps-health-score-badge" data-feature-id="<?php echo esc_attr( $child_id ); ?>" data-score="<?php echo esc_attr( $child_enabled ? 100 : 0 ); ?>" aria-label="<?php esc_attr_e( 'Health score', 'wpshadow' ); ?>">
 										<span class="wps-score-value"><?php echo esc_html( $child_enabled ? 100 : 0 ); ?></span>
 									</div>
-									<?php
-									$child_url = \WPShadow\CoreSupport\WPSHADOW_Feature_Details_Page::get_feature_url( $child_id );
-									?>
-									<a href="<?php echo esc_url( $child_url ); ?>" class="button button-small wps-feature-settings-btn">
-										<?php esc_html_e( 'Details', 'wpshadow' ); ?>
-									</a>
+									<?php if ( ! \WPShadow\CoreSupport\WPSHADOW_Feature_Details_Page::is_details_page( $child_id ) ) : ?>
+										<?php
+										$child_url = \WPShadow\CoreSupport\WPSHADOW_Feature_Details_Page::get_feature_url( $child_id );
+										?>
+										<a href="<?php echo esc_url( $child_url ); ?>" class="button button-small wps-feature-settings-btn">
+											<?php esc_html_e( 'Details', 'wpshadow' ); ?>
+										</a>
+									<?php endif; ?>
 								</div>
 							</div>
 						</td>

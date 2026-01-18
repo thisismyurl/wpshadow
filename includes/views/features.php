@@ -33,6 +33,9 @@ foreach ( $features as $feature ) {
 // Store grouped_features in global for use in metabox callbacks
 $GLOBALS['wpshadow_grouped_features'] = $grouped_features;
 
+// Determine which screen ID to use for metaboxes (feature details page or features tab)
+$metabox_screen_id = $GLOBALS['wpshadow_details_page_screen_id'] ?? 'toplevel_page_wpshadow';
+
 ?>
 <div class="wrap">
 	<h1><?php echo esc_html__( 'Features', 'wpshadow' ); ?></h1>
@@ -224,7 +227,7 @@ $GLOBALS['wpshadow_grouped_features'] = $grouped_features;
 				<div id="post-body" class="metabox-holder columns-1">
 					<div id="postbox-container-1" class="postbox-container">
 						<div id="normal-sortables" class="meta-box-sortables ui-sortable">
-							<?php do_meta_boxes( 'toplevel_page_wpshadow', 'normal', null ); ?>
+							<?php do_meta_boxes( $metabox_screen_id, 'normal', null ); ?>
 						</div>
 					</div>
 				</div>
