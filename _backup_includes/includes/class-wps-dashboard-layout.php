@@ -34,7 +34,6 @@ class WPSHADOW_Dashboard_Layout {
 			),
 			'side'   => array(
 				'wpshadow_widget_health',
-				'wpshadow_widget_favicon_checker',
 				'wpshadow_widget_environment_status',
 				'wpshadow_widget_database_stats',
 				'wpshadow_widget_performance_history',
@@ -468,15 +467,8 @@ class WPSHADOW_Dashboard_Layout {
 			'wpshadow_widget_vault_overview'     => array(
 				'title'    => __( 'Vault Overview', 'wpshadow' ),
 				'callback' => array( 'WPShadow\WPSHADOW_Dashboard_Widgets', 'render_metabox_vault_overview' ),
-			),
-			'wpshadow_widget_environment_status' => array(
-				'title'    => __( 'Environment Status', 'wpshadow' ),
-				'callback' => array( 'WPShadow\WPSHADOW_Dashboard_Widgets', 'render_metabox_environment_status' ),
-			),
-			'wpshadow_widget_favicon_checker'    => array(
-				'title'    => __( 'Favicon & Touch Icon Checker', 'wpshadow' ),
-				'callback' => array( 'WPShadow\CoreSupport\WPSHADOW_Dashboard_Widgets', 'render_metabox_favicon_checker' ),
-			),
+			)
+
 		);
 	}
 

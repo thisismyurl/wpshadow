@@ -23,8 +23,6 @@ declare(strict_types=1);
 
 namespace WPShadow;
 
-use function WPShadow\CoreSupport\register_WPSHADOW_feature;
-
 // ========================================================
 // FREE FEATURES (limited build)
 // ========================================================
@@ -46,6 +44,30 @@ define( 'WPSHADOW_BASENAME', plugin_basename( __FILE__ ) );
 define( 'WPSHADOW_TEXT_DOMAIN', 'wpshadow' );
 define( 'WPSHADOW_MIN_PHP', '8.1.29' );
 define( 'WPSHADOW_MIN_WP', '6.4.0' );
+
+/**
+ * Enqueue admin assets for WPShadow pages.
+ *
+ * @return void
+ */
+function wpshadow_enqueue_admin_assets(): void {
+	// Only load on WPShadow admin pages
+	$screen = get_current_screen();
+	if ( ! $screen || strpos( $screen->id, 'wpshadow' ) === false ) {
+		return;
+	}
+	
+	// Enqueue WordPress core admin styles
+	wp_enqueue_style( 'dashboard' );
+	wp_enqueue_style( 'common' );
+	wp_enqueue_style( 'forms' );
+	wp_enqueue_script( 'postbox' );
+	wp_enqueue_script( 'jquery' );
+	
+	// Enqueue our feature toggle styles and scripts
+	wp_enqueue_style( 'wpshadow-feature-toggle' );
+	wp_enqueue_script( 'wpshadow-feature-toggle' );
+}
 
 /**
  * Initialize dashboard assets on init hook
@@ -187,8 +209,6 @@ function wpshadow_render_settings(): void {
 	// Module Discovery removed - features auto-loaded from directory
 	// Note: All settings widgets are only used by features not loaded in this simplified
 	// single-feature build. The settings page shows basic information only.
-	}
-
 
 	// Initialize postboxes on this screen (drag/toggle) in footer.
 	add_action(
@@ -223,16 +243,6 @@ function wpshadow_render_settings(): void {
 	<?php
 }
 
-
-/**
- * Register core features with the feature registry.
- *
- * @return void
- */
-function wpshadow_register_core_features(): void {
-	// Performance optimization (limited build).
-	register_WPSHADOW_feature( new WPSHADOW_Feature_Asset_Version_Removal() );
-}
 
 /**
  * Filter parent_file to ensure correct parent menu is set.
@@ -299,7 +309,6 @@ function wpshadow_activate(): void {
 		);
 	}
 
-	// Vault setup moved to Vault module; handled when module initializes.
 
 	// Flush rewrite rules.
 	flush_rewrite_rules();
@@ -325,9 +334,16 @@ function wpshadow_init(): void {
 	// ASSET VERSION REMOVAL FEATURE (Simplified Single-Feature Build)
 	// ========================================================================
 	
+	// Load widget groups configuration (required by abstract feature class)
+	require_once WPSHADOW_PATH . 'includes/admin/class-wps-widget-groups.php';
+	
 	// Load feature base classes
 	require_once WPSHADOW_PATH . 'features/interface-wps-feature.php';
 	require_once WPSHADOW_PATH . 'features/class-wps-feature-abstract.php';
+	
+	// Load feature registry for managing feature toggles
+	require_once WPSHADOW_PATH . 'includes/core/class-wps-feature-registry.php';
+	\WPShadow\CoreSupport\WPSHADOW_Feature_Registry::init();
 	
 	// Load the single feature: Asset Version Removal
 	require_once WPSHADOW_PATH . 'features/class-wps-asset-version-helpers.php';
@@ -343,9 +359,34 @@ function wpshadow_init(): void {
 	// MINIMAL ADMIN INFRASTRUCTURE
 	// ========================================================================
 
+	// Load capability helpers (permission checks)
+	require_once WPSHADOW_PATH . 'includes/core/wps-capability-helpers.php';
+
 	// Load notice manager for persistent dismissal.
 	require_once WPSHADOW_PATH . 'includes/core/class-wps-notice-manager.php';
 	\WPShadow\CoreSupport\WPSHADOW_Notice_Manager::init();
+
+	// Load help content API
+	require_once WPSHADOW_PATH . 'includes/core/class-wps-help-content-api.php';
+
+	// Load admin infrastructure for dashboard screens
+	require_once WPSHADOW_PATH . 'includes/admin/class-wps-dashboard-assets.php';
+	\WPShadow\Admin\WPSHADOW_Dashboard_Assets::init( WPSHADOW_PATH, WPSHADOW_URL );
+	
+	// Load dashboard widgets - DISABLED: Using unified dashboard renderer instead
+	// require_once WPSHADOW_PATH . 'includes/admin/class-wps-dashboard-widgets.php';
+	require_once WPSHADOW_PATH . 'includes/admin/class-wps-tab-navigation.php';
+	// Load dashboard layout - DISABLED: Using unified dashboard renderer instead
+	// require_once WPSHADOW_PATH . 'includes/admin/class-wps-dashboard-layout.php';
+	require_once WPSHADOW_PATH . 'includes/admin/screens.php';
+	require_once WPSHADOW_PATH . 'includes/views/dashboard-renderer.php';
+	
+	// Enqueue dashboard assets on admin pages
+	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\wpshadow_enqueue_admin_assets' );
+
+	// Register AJAX handlers for meta box state saving
+	add_action( 'wp_ajax_meta-box-order', __NAMESPACE__ . '\\wpshadow_ajax_save_meta_box_order' );
+	add_action( 'wp_ajax_closed-postboxes', __NAMESPACE__ . '\\wpshadow_ajax_save_closed_postboxes' );
 
 	// Initialize multisite support if applicable.
 	if ( is_multisite() ) {
@@ -366,6 +407,103 @@ function wpshadow_init(): void {
 	// Phase 3 Optimization: Clear plugins cache on activation/deactivation
 	add_action( 'activated_plugin', __NAMESPACE__ . '\\wpshadow_clear_plugins_cache' );
 	add_action( 'deactivated_plugin', __NAMESPACE__ . '\\wpshadow_clear_plugins_cache' );
+	
+	// Enable saving of metabox order and state for WPShadow screens
+	add_filter( 'screen_settings', __NAMESPACE__ . '\\wpshadow_screen_settings', 10, 2 );
+	add_filter( 'set-screen-option', __NAMESPACE__ . '\\wpshadow_set_screen_option', 10, 3 );
+}
+
+/**
+ * Filter screen settings to add our custom options.
+ *
+ * @param string    $settings Screen settings HTML.
+ * @param WP_Screen $screen   Current screen object.
+ * @return string Modified settings HTML.
+ */
+function wpshadow_screen_settings( string $settings, $screen ): string {
+	if ( ! $screen || strpos( $screen->id, 'wpshadow' ) === false ) {
+		return $settings;
+	}
+	
+	return $settings;
+}
+
+/**
+ * Filter to save screen options.
+ *
+ * @param mixed  $status Screen option value. Default false to skip.
+ * @param string $option The option name.
+ * @param mixed  $value  The option value.
+ * @return mixed The option value to save.
+ */
+function wpshadow_set_screen_option( $status, string $option, $value ) {
+	if ( 'layout_columns' === $option ) {
+		return $value;
+	}
+	return $status;
+}
+
+/**
+ * AJAX handler to save meta box order for WPShadow pages.
+ *
+ * @return void
+ */
+function wpshadow_ajax_save_meta_box_order(): void {
+	check_ajax_referer( 'meta-box-order' );
+
+	if ( ! current_user_can( 'edit_dashboard' ) ) {
+		wp_die( -1 );
+	}
+
+	$page = isset( $_POST['page'] ) ? sanitize_key( $_POST['page'] ) : '';
+	$order = isset( $_POST['order'] ) ? (array) $_POST['order'] : array();
+
+	// Only handle WPShadow pages
+	if ( empty( $page ) || ! str_starts_with( $page, 'toplevel_page_wpshadow' ) ) {
+		wp_die( 0 );
+	}
+
+	// Sanitize the order array
+	$sanitized_order = array();
+	foreach ( $order as $key => $value ) {
+		$sanitized_order[ sanitize_key( $key ) ] = sanitize_text_field( $value );
+	}
+
+	// Save to user meta
+	$user_id = get_current_user_id();
+	update_user_meta( $user_id, 'meta-box-order_' . $page, $sanitized_order );
+
+	wp_die( 1 );
+}
+
+/**
+ * AJAX handler to save closed postboxes state for WPShadow pages.
+ *
+ * @return void
+ */
+function wpshadow_ajax_save_closed_postboxes(): void {
+	check_ajax_referer( 'closedpostboxes', 'closedpostboxesnonce' );
+
+	if ( ! current_user_can( 'edit_dashboard' ) ) {
+		wp_die( -1 );
+	}
+
+	$page = isset( $_POST['page'] ) ? sanitize_key( $_POST['page'] ) : '';
+	$closed = isset( $_POST['closed'] ) ? explode( ',', sanitize_text_field( $_POST['closed'] ) ) : array();
+
+	// Only handle WPShadow pages
+	if ( empty( $page ) || ! str_starts_with( $page, 'toplevel_page_wpshadow' ) ) {
+		wp_die( 0 );
+	}
+
+	// Sanitize closed boxes
+	$sanitized_closed = array_map( 'sanitize_key', $closed );
+
+	// Save to user meta
+	$user_id = get_current_user_id();
+	update_user_meta( $user_id, 'closedpostboxes_' . $page, $sanitized_closed );
+
+	wp_die( 1 );
 }
 
 /**
@@ -608,13 +746,6 @@ function wpshadow_render_core_content( string $tab ): void {
 		case 'register':
 			require_once WPSHADOW_PATH . 'includes/views/register.php';
 			break;
-		case 'help':
-			wpshadow_render_help_layout();
-			break;
-		case 'features':
-			wpshadow_render_features_page( 'core' );
-			break;
-		// Collection tab removed - spoke management in Modules tab.
 		case 'modules':
 			wpshadow_render_modules();
 			break;
@@ -628,10 +759,12 @@ function wpshadow_render_core_content( string $tab ): void {
 			}
 			wpshadow_render_settings();
 			break;
+		case 'help':
+		case 'features':
 		case 'dashboard':
 		default:
-			// Route to unified dashboard renderer.
-			\WPShadow\CoreSupport\wpshadow_render_dashboard();
+			// Route to unified two-column widget layout for all main tabs.
+			\WPShadow\CoreSupport\wpshadow_render_unified_layout( $tab );
 			break;
 	}
 }
@@ -1224,11 +1357,6 @@ function wpshadow_render_modules(): void {
 	<?php
 }
 
-	// DISABLED: modules view file does not exist
-	// require_once WPSHADOW_PATH . 'includes/views/modules.php';
-	echo '<div class="wrap"><h1>Modules</h1><p>Module management coming soon...</p></div>';
-}
-
 /**
  * Render network settings page.
  *
@@ -1239,10 +1367,6 @@ function wpshadow_render_network_settings(): void {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'wpshadow' ) );
 	}
 
-	// Licenses are site-specific; Network Admin view is read-only.
-	// NOTE: Vault functionality removed - belongs in module-vault-wpshadow or PRO plugin
-
-	// NOTE: License functionality removed - licensing is PRO plugin only
 
 	require_once WPSHADOW_PATH . 'includes/views/settings.php';
 }
@@ -1256,9 +1380,6 @@ function wpshadow_render_settings_page(): void {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'wpshadow' ) );
 	}
-
-	// NOTE: License functionality removed - licensing is PRO plugin only
-	// NOTE: Vault functionality removed - belongs in module-vault-wpshadow or PRO plugin
 
 	require_once WPSHADOW_PATH . 'includes/views/settings.php';
 }
@@ -1477,9 +1598,6 @@ function WPSHADOW_run_task_now(): void {
 	$user      = wp_get_current_user();
 	$user_name = $user && $user->exists() ? $user->display_name : __( 'System', 'wpshadow' );
 
-	// NOTE: Vault logging removed - belongs in module-vault-wpshadow or PRO plugin
-	// Activity logging can be done via WPSHADOW_Activity_Logger if needed
-
 	$redirect_url = wp_get_referer();
 	if ( empty( $redirect_url ) ) {
 		$redirect_url = admin_url();
@@ -1696,13 +1814,6 @@ function wpshadow_get_closed_postboxes( $result ) {
  */
 // Moved to includes/admin/assets.php
 
-/**
- * Register the Vault exporter with WordPress Personal Data Export.
- *
- * @param array $exporters Existing exporters.
- * @return array Modified exporters.
- */
-// Vault privacy exporters/erasers moved to the Vault module.
 
 // Register activation and deactivation hooks.
 register_activation_hook( __FILE__, __NAMESPACE__ . '\\wpshadow_activate' );

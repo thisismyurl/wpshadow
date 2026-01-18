@@ -1,0 +1,127 @@
+version: '3.8'
+
+services:
+  wordpress:
+    image: wordpress:latest
+    container_name: wpshadow-dev
+    ports:
+      - "8000:80"
+      - "8443:443"
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DEBUG: 'true'
+      WORDPRESS_DEBUG_LOG: /var/www/html/wp-content/debug.log
+      WORDPRESS_DEBUG_DISPLAY: 'false'
+    volumes:
+      # Mount the actual plugin directories from workspace
+      - /workspaces/wpshadow:/var/www/html/wp-content/plugins/wpshadow
+      - /workspaces/wpshadow-pro:/var/www/html/wp-content/plugins/wpshadow-pro
+      # Mount must-use plugins for critical functionality
+      - /workspaces/wpshadow/assets/mu-plugins:/var/www/html/wp-content/mu-plugins
+      # Add themes directory for theme testing
+      - wp_themes:/var/www/html/wp-content/themes
+      # Persist WordPress core files
+      - wp_data:/var/www/html
+      # Mount extra config
+      - /workspaces/wpshadow/wp-config-extra.php:/var/www/html/wp-config-extra.php
+      # Mount .htaccess for HTTP forcing at web server level
+      - /workspaces/wpshadow/.htaccess:/var/www/html/.htaccess
+      # Mount SSL certificates
+      - /workspaces/wpshadow/certs/preview.app.github.dev.crt:/etc/ssl/certs/preview.app.github.dev.crt:ro
+      - /workspaces/wpshadow/certs/preview.app.github.dev.key:/etc/ssl/private/preview.app.github.dev.key:ro
+      # Mount Apache SSL configuration
+      - /workspaces/wpshadow/default-ssl.conf:/etc/apache2/sites-available/default-ssl.conf:ro
+    depends_on:
+      - mysql
+    networks:
+      - wpshadow-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mysql:
+    image: mysql:8.0
+    container_name: wpshadow-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - wpshadow-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: wpshadow-phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: wordpress
+      PMA_PASSWORD: wordpress
+    depends_on:
+      - mysql
+    networks:
+      - wpshadow-network
+
+  wordpress-test:
+    image: wordpress:latest
+    container_name: wpshadow-test
+    ports:
+      - "8080:80"
+      - "8453:443"
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_NAME: wordpress_test
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DEBUG: 'true'
+      WORDPRESS_DEBUG_LOG: /var/www/html/wp-content/debug.log
+      WORDPRESS_DEBUG_DISPLAY: 'false'
+    volumes:
+      # Mount the plugin for testing
+      - /workspaces/wpshadow:/var/www/html/wp-content/plugins/wpshadow
+      # Mount must-use plugins for critical functionality
+      - /workspaces/wpshadow/assets/mu-plugins:/var/www/html/wp-content/mu-plugins
+      # Mount test config
+      - /workspaces/wpshadow/wp-config-test-extra.php:/var/www/html/wp-config-extra.php
+      # Mount .htaccess for HTTP forcing at web server level
+      - /workspaces/wpshadow/.htaccess:/var/www/html/.htaccess
+      # Mount SSL certificates
+      - /workspaces/wpshadow/certs/preview.app.github.dev.crt:/etc/ssl/certs/preview.app.github.dev.crt:ro
+      - /workspaces/wpshadow/certs/preview.app.github.dev.key:/etc/ssl/private/preview.app.github.dev.key:ro
+      # Mount Apache SSL configuration
+      - /workspaces/wpshadow/default-ssl.conf:/etc/apache2/sites-available/default-ssl.conf:ro
+      # Separate WordPress installation
+      - wp_test_data:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - wpshadow-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db_data:
+  wp_data:
+  wp_themes:
+  wp_test_data:
+
+networks:
+  wpshadow-network:
+    driver: bridge

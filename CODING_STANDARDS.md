@@ -95,7 +95,6 @@ namespace WPShadow;
 namespace WPShadow\CoreSupport;
 namespace WPShadow\Admin;
 namespace WPShadow\API;
-namespace WPShadow\VaultSupport;  // For modules/plugins
 namespace WPShadow\HealthSupport; // For health features
 ```
 

@@ -174,9 +174,6 @@ class WPSHADOW_Dashboard_Widgets {
 		self::widget_environment_status();
 	}
 
-	public static function render_metabox_favicon_checker(): void {
-		self::widget_favicon_checker();
-	}
 
 	public static function render_metabox_database_stats(): void {
 		self::widget_database_stats();
@@ -439,7 +436,6 @@ class WPSHADOW_Dashboard_Widgets {
 		$vault_path     = wp_upload_dir()['basedir'] . '/vault';
 		$vault_exists   = is_dir( $vault_path );
 		$vault_writable = $vault_exists && wp_is_writable( $vault_path );
-		$encryption_key = wpshadow_get_vault_key();
 		$health_url     = admin_url( 'site-health.php?tab=debug' );
 		?>
 		<div class="wps-widget-content wps-quick-actions">
@@ -1071,8 +1067,6 @@ class WPSHADOW_Dashboard_Widgets {
 
 		$vault_exists   = ! empty( $vault_path ) && is_dir( $vault_path );
 		$vault_writable = $vault_exists && wp_is_writable( $vault_path );
-		$encryption_key = wpshadow_get_vault_key();
-		$has_encryption = ! empty( $encryption_key );
 		$key_source     = defined( 'wpshadow_VAULT_KEY' ) && WPSHADOW_VAULT_KEY ? 'wp-config.php' : 'Options';
 
 		// Calculate vault size if it exists.
@@ -1613,209 +1607,6 @@ class WPSHADOW_Dashboard_Widgets {
 	}
 
 	/**
-	 * Widget: Environment Status
-	 * Shows current server environment status and resource usage.
-	 *
-	 * @return void
-	 */
-	private static function widget_environment_status(): void {
-		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Environment_Checker' ) || ! class_exists( '\\WPShadow\\WPSHADOW_Server_Limits' ) ) {
-			?>
-			<div class="wps-widget-content">
-				<p><em><?php esc_html_e( 'Environment checker unavailable.', 'wpshadow' ); ?></em></p>
-			</div>
-			<?php
-			return;
-		}
-
-		$env_status      = \WPShadow\WPSHADOW_Environment_Checker::get_environment_status();
-		$resource_status = \WPShadow\WPSHADOW_Server_Limits::get_resource_status();
-
-		// Determine overall status icon and message.
-		$status_icon    = '✓';
-		$status_color   = '#46b450';
-		$status_message = __( 'Environment is optimal', 'wpshadow' );
-
-		if ( ! $env_status['is_compatible'] ) {
-			$status_icon    = '✗';
-			$status_color   = '#d63638';
-			$status_message = __( 'Environment is incompatible', 'wpshadow' );
-		} elseif ( $env_status['has_constraints'] || 'warning' === $resource_status['level'] ) {
-			$status_icon    = '⚠';
-			$status_color   = '#dba617';
-			$status_message = __( 'Resource constraints detected', 'wpshadow' );
-		} elseif ( 'critical' === $resource_status['level'] ) {
-			$status_icon    = '✗';
-			$status_color   = '#d63638';
-			$status_message = __( 'Your site is working hard right now', 'wpshadow' );
-		}
-
-		?>
-		<div class="wps-widget-content">
-			<!-- Overall Status -->
-			<div style="display: flex; align-items: center; margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 4px; border-left: 4px solid <?php echo esc_attr( $status_color ); ?>;">
-				<div style="font-size: 32px; margin-right: 15px; line-height: 1;"><?php echo esc_html( $status_icon ); ?></div>
-				<div>
-					<div style="font-size: 16px; font-weight: 600; color: <?php echo esc_attr( $status_color ); ?>;">
-						<?php echo esc_html( $status_message ); ?>
-					</div>
-					<div style="font-size: 13px; color: #666; margin-top: 4px;">
-						<?php
-						if ( $env_status['is_compatible'] && ! $env_status['has_constraints'] ) {
-							esc_html_e( 'All systems operational', 'wpshadow' );
-						} elseif ( $env_status['has_constraints'] ) {
-							esc_html_e( 'Operations will be batched automatically', 'wpshadow' );
-						} else {
-							esc_html_e( 'Heavy operations disabled', 'wpshadow' );
-						}
-						?>
-					</div>
-				</div>
-			</div>
-
-			<!-- Environment Details -->
-			<div style="margin-bottom: 20px;">
-				<h4 style="margin: 0 0 10px 0; font-size: 14px; color: #23282d;"><?php esc_html_e( 'Environment', 'wpshadow' ); ?></h4>
-				<table style="width: 100%; font-size: 13px;">
-					<tr>
-						<td style="padding: 6px 0; color: #666;"><?php esc_html_e( 'PHP Version:', 'wpshadow' ); ?></td>
-						<td style="padding: 6px 0; text-align: right; font-weight: 500;">
-							<?php echo esc_html( $env_status['php_version']['current'] ); ?>
-							<?php if ( ! $env_status['php_version']['meets_requirement'] ) : ?>
-								<span style="color: #d63638;">⚠</span>
-							<?php endif; ?>
-						</td>
-					</tr>
-					<tr>
-						<td style="padding: 6px 0; color: #666;"><?php esc_html_e( 'WordPress Version:', 'wpshadow' ); ?></td>
-						<td style="padding: 6px 0; text-align: right; font-weight: 500;">
-							<?php echo esc_html( $env_status['wp_version']['current'] ); ?>
-							<?php if ( ! $env_status['wp_version']['meets_requirement'] ) : ?>
-								<span style="color: #d63638;">⚠</span>
-							<?php endif; ?>
-						</td>
-					</tr>
-					<tr>
-						<td style="padding: 6px 0; color: #666;"><?php esc_html_e( 'Memory Limit:', 'wpshadow' ); ?></td>
-						<td style="padding: 6px 0; text-align: right; font-weight: 500;">
-							<?php echo esc_html( $env_status['memory_limit']['current'] ); ?>
-							<?php if ( 'critical' === $env_status['memory_limit']['level'] ) : ?>
-								<span style="color: #d63638;">⚠</span>
-							<?php elseif ( 'warning' === $env_status['memory_limit']['level'] ) : ?>
-								<span style="color: #dba617;">⚠</span>
-							<?php endif; ?>
-						</td>
-					</tr>
-					<tr>
-						<td style="padding: 6px 0; color: #666;"><?php esc_html_e( 'Execution Time:', 'wpshadow' ); ?></td>
-						<td style="padding: 6px 0; text-align: right; font-weight: 500;">
-							<?php
-							echo 0 === $env_status['execution_time']['current']
-								? esc_html__( 'Unlimited', 'wpshadow' )
-								: esc_html( $env_status['execution_time']['current'] . 's' );
-							?>
-							<?php if ( 'critical' === $env_status['execution_time']['level'] ) : ?>
-								<span style="color: #d63638;">⚠</span>
-							<?php elseif ( 'warning' === $env_status['execution_time']['level'] ) : ?>
-								<span style="color: #dba617;">⚠</span>
-							<?php endif; ?>
-						</td>
-					</tr>
-				</table>
-			</div>
-
-			<!-- Resource Usage -->
-			<div style="margin-bottom: 20px;">
-				<h4 style="margin: 0 0 10px 0; font-size: 14px; color: #23282d;"><?php esc_html_e( 'Current Usage', 'wpshadow' ); ?></h4>
-				
-				<!-- Memory Usage Bar -->
-				<div style="margin-bottom: 12px;">
-					<div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12px;">
-						<span style="color: #666;"><?php esc_html_e( 'Memory', 'wpshadow' ); ?></span>
-						<span style="font-weight: 500;"><?php echo esc_html( number_format( $resource_status['memory']['usage_percentage'], 1 ) ); ?>%</span>
-					</div>
-					<div style="height: 8px; background: #e5e5e5; border-radius: 4px; overflow: hidden;">
-						<?php
-						$memory_bar_color = '#46b450';
-						if ( $resource_status['memory']['usage_percentage'] >= 90 ) {
-							$memory_bar_color = '#d63638';
-						} elseif ( $resource_status['memory']['usage_percentage'] >= 80 ) {
-							$memory_bar_color = '#dba617';
-						}
-						?>
-						<div style="width: <?php echo esc_attr( min( 100, $resource_status['memory']['usage_percentage'] ) ); ?>%; height: 100%; background: <?php echo esc_attr( $memory_bar_color ); ?>; transition: width 0.3s ease;"></div>
-					</div>
-					<div style="font-size: 11px; color: #666; margin-top: 2px;">
-						<?php echo esc_html( \WPShadow\WPSHADOW_Environment_Checker::format_bytes( $resource_status['memory']['current_usage'] ) ); ?> / <?php echo esc_html( $resource_status['memory']['limit'] ); ?>
-					</div>
-				</div>
-
-				<!-- Time Usage Bar (if not unlimited) -->
-				<?php if ( 0 !== $resource_status['time']['max_execution_time'] ) : ?>
-					<div style="margin-bottom: 12px;">
-						<div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12px;">
-							<span style="color: #666;"><?php esc_html_e( 'Execution Time', 'wpshadow' ); ?></span>
-							<span style="font-weight: 500;"><?php echo esc_html( number_format( $resource_status['time']['usage_percentage'], 1 ) ); ?>%</span>
-						</div>
-						<div style="height: 8px; background: #e5e5e5; border-radius: 4px; overflow: hidden;">
-							<?php
-							$time_bar_color = '#46b450';
-							if ( $resource_status['time']['usage_percentage'] >= 85 ) {
-								$time_bar_color = '#d63638';
-							} elseif ( $resource_status['time']['usage_percentage'] >= 75 ) {
-								$time_bar_color = '#dba617';
-							}
-							?>
-							<div style="width: <?php echo esc_attr( min( 100, $resource_status['time']['usage_percentage'] ) ); ?>%; height: 100%; background: <?php echo esc_attr( $time_bar_color ); ?>; transition: width 0.3s ease;"></div>
-						</div>
-						<div style="font-size: 11px; color: #666; margin-top: 2px;">
-							<?php echo esc_html( number_format( $resource_status['time']['elapsed'], 1 ) ); ?>s / <?php echo esc_html( $resource_status['time']['max_execution_time'] ); ?>s
-						</div>
-					</div>
-				<?php endif; ?>
-			</div>
-
-			<!-- PHP Extensions -->
-			<?php if ( ! empty( $env_status['extensions']['required_missing'] ) || ! empty( $env_status['extensions']['recommended_missing'] ) ) : ?>
-				<div style="margin-bottom: 15px;">
-					<h4 style="margin: 0 0 10px 0; font-size: 14px; color: #23282d;"><?php esc_html_e( 'Extensions', 'wpshadow' ); ?></h4>
-					<?php if ( ! empty( $env_status['extensions']['required_missing'] ) ) : ?>
-						<div style="padding: 8px 10px; background: #fff3cd; border-left: 3px solid #d63638; font-size: 12px; margin-bottom: 8px;">
-							<strong><?php esc_html_e( 'Missing required:', 'wpshadow' ); ?></strong>
-							<?php echo esc_html( implode( ', ', $env_status['extensions']['required_missing'] ) ); ?>
-						</div>
-					<?php endif; ?>
-					<?php if ( ! empty( $env_status['extensions']['recommended_missing'] ) ) : ?>
-						<div style="padding: 8px 10px; background: #f8f9fa; border-left: 3px solid #dba617; font-size: 12px;">
-							<strong><?php esc_html_e( 'Missing recommended:', 'wpshadow' ); ?></strong>
-							<?php echo esc_html( implode( ', ', $env_status['extensions']['recommended_missing'] ) ); ?>
-						</div>
-					<?php endif; ?>
-				</div>
-			<?php endif; ?>
-
-			<!-- Actions -->
-			<div style="padding-top: 15px; border-top: 1px solid #e5e5e5;">
-				<a href="<?php echo esc_url( admin_url( 'site-health.php' ) ); ?>" class="button button-secondary" style="margin-right: 8px;">
-					<?php esc_html_e( 'Site Health', 'wpshadow' ); ?>
-				</a>
-				<?php if ( $resource_status['should_batch'] ) : ?>
-					<span style="font-size: 12px; color: #666;">
-						<?php
-						printf(
-							/* translators: %d: Batch size */
-							esc_html__( 'Batching enabled (%d items/batch)', 'wpshadow' ),
-							\WPShadow\WPSHADOW_Server_Limits::get_batch_size()
-						);
-						?>
-					</span>
-				<?php endif; ?>
-			</div>
-		</div>
-		<?php
-	}
-
-	/**
 	 * Render database statistics widget.
 	 *
 	 * @return void
@@ -2327,20 +2118,7 @@ class WPSHADOW_Dashboard_Widgets {
 		return self::get_database_statistics();
 	}
 
-	/**
-	 * Render the Favicon & Touch Icon Checker widget.
-	 *
-	 * @return void
-	 */
-	private static function widget_favicon_checker(): void {
-		// Get the feature instance and render its widget.
-		$feature = WPSHADOW_Feature_Registry::get_feature( 'wpshadow_favicon_checker' );
-		if ( $feature && method_exists( $feature, 'render_widget' ) ) {
-			$feature->render_widget();
-		} else {
-			echo '<div class="wps-widget-content"><p><em>' . esc_html__( 'Favicon checker unavailable.', 'wpshadow' ) . '</em></p></div>';
-		}
-	}
+
 }
 
 /* @changelog */

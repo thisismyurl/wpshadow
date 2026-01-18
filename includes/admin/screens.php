@@ -77,8 +77,8 @@ function wpshadow_setup_dashboard_screen( string $hub_id = '', string $spoke_id 
 		)
 	);
 
-	// Use dashboard layout manager to setup widgets with proper ordering.
-	WPSHADOW_Dashboard_Layout::setup_dashboard_screen( $layout_context, $network );
+	// Widget setup is handled by the unified dashboard renderer in dashboard-renderer.php
+	// No longer using WPSHADOW_Dashboard_Layout class
 }
 
 /**
