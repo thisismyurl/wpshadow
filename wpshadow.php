@@ -649,6 +649,13 @@ function wpshadow_init(): void {
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/interface-wps-feature.php' );
 	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-abstract.php' );
 	
+	// Load helper functions (Phase 2: DRY consolidation).
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/helpers/wps-file-helpers.php' );
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/helpers/wps-array-helpers.php' );
+	
+	// Load session manager (Phase 4: Advanced caching).
+	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/core/class-wps-session-manager.php' );
+	
 	// Initialize settings cache early.
 	\WPShadow\CoreSupport\WPSHADOW_Settings_Cache::init();
 
@@ -811,6 +818,10 @@ function wpshadow_init(): void {
 	// Register GDPR Personal Data Exporter and Eraser.
 	// Moved to Vault module: privacy exporters/erasers are registered
 	// by WPShadow\VaultSupport when the module is enabled.
+
+	// Phase 3 Optimization: Clear plugins cache on activation/deactivation
+	add_action( 'activated_plugin', __NAMESPACE__ . '\\wpshadow_clear_plugins_cache' );
+	add_action( 'deactivated_plugin', __NAMESPACE__ . '\\wpshadow_clear_plugins_cache' );
 }
 
 /**
@@ -2436,6 +2447,20 @@ function wpshadow_save_screen_option( $status, string $option, $value ) {
 		return $value;
 	}
 	return $status;
+}
+
+/**
+ * Clear plugins list cache on plugin activation/deactivation.
+ *
+ * Phase 3 Optimization: Invalidate cached plugins list when
+ * plugins are activated or deactivated.
+ *
+ * @return void
+ */
+function wpshadow_clear_plugins_cache(): void {
+	if ( function_exists( 'WPShadow\\Helpers\\wpshadow_clear_plugins_cache' ) ) {
+		\WPShadow\Helpers\wpshadow_clear_plugins_cache();
+	}
 }
 
 /**

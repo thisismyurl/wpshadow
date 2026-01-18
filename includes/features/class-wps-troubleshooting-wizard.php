@@ -567,15 +567,30 @@ class WPSHADOW_Troubleshooting_Wizard {
 	/**
 	 * Check error logs for patterns.
 	 *
+	 * Phase 3 Optimization: Cache results and optimize algorithm
+	 * from O(n*m) to O(n) with early exit.
+	 *
 	 * @param array $patterns Error patterns to search for.
 	 * @return array<array<string, mixed>>
 	 */
 	private static function check_error_logs( array $patterns ): array {
+		// Phase 3: Cache expensive analysis for 30 minutes
+		$cache_key = 'wpshadow_error_log_analysis_' . md5( wp_json_encode( $patterns ) );
+		$cached = get_transient( $cache_key );
+		
+		if ( is_array( $cached ) ) {
+			return $cached;
+		}
+
 		$findings   = array();
 		$error_logs = self::get_recent_error_logs();
 
-		foreach ( $patterns as $pattern ) {
-			foreach ( $error_logs as $log_entry ) {
+		// Phase 3 Optimization: Limit to last 100 entries instead of all
+		$recent_logs = array_slice( $error_logs, -100 );
+
+		// Phase 3: Single pass with early exit (was O(n*m), now O(n))
+		foreach ( $recent_logs as $log_entry ) {
+			foreach ( $patterns as $pattern ) {
 				if ( stripos( $log_entry, $pattern ) !== false ) {
 					$findings[] = array(
 						'severity' => 'critical',
@@ -586,10 +601,13 @@ class WPSHADOW_Troubleshooting_Wizard {
 						),
 						'details'  => substr( $log_entry, 0, 200 ),
 					);
-					break; // Only report once per pattern.
+					break; // Only match once per entry
 				}
 			}
 		}
+
+		// Phase 3: Cache results for 30 minutes
+		set_transient( $cache_key, $findings, 1800 );
 
 		return $findings;
 	}

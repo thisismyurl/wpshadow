@@ -6,6 +6,7 @@ services:
     container_name: wpshadow-dev
     ports:
       - "8000:80"
+      - "8443:443"
     environment:
       WORDPRESS_DB_HOST: mysql
       WORDPRESS_DB_NAME: wordpress
@@ -28,6 +29,11 @@ services:
       - /workspaces/wpshadow/wp-config-extra.php:/var/www/html/wp-config-extra.php
       # Mount .htaccess for HTTP forcing at web server level
       - /workspaces/wpshadow/.htaccess:/var/www/html/.htaccess
+      # Mount SSL certificates
+      - /workspaces/wpshadow/certs/preview.app.github.dev.crt:/etc/ssl/certs/preview.app.github.dev.crt:ro
+      - /workspaces/wpshadow/certs/preview.app.github.dev.key:/etc/ssl/private/preview.app.github.dev.key:ro
+      # Mount Apache SSL configuration
+      - /workspaces/wpshadow/default-ssl.conf:/etc/apache2/sites-available/default-ssl.conf:ro
     depends_on:
       - mysql
     networks:
@@ -75,6 +81,7 @@ services:
     container_name: wpshadow-test
     ports:
       - "8080:80"
+      - "8453:443"
     environment:
       WORDPRESS_DB_HOST: mysql
       WORDPRESS_DB_NAME: wordpress_test
@@ -92,6 +99,11 @@ services:
       - /workspaces/wpshadow/wp-config-test-extra.php:/var/www/html/wp-config-extra.php
       # Mount .htaccess for HTTP forcing at web server level
       - /workspaces/wpshadow/.htaccess:/var/www/html/.htaccess
+      # Mount SSL certificates
+      - /workspaces/wpshadow/certs/preview.app.github.dev.crt:/etc/ssl/certs/preview.app.github.dev.crt:ro
+      - /workspaces/wpshadow/certs/preview.app.github.dev.key:/etc/ssl/private/preview.app.github.dev.key:ro
+      # Mount Apache SSL configuration
+      - /workspaces/wpshadow/default-ssl.conf:/etc/apache2/sites-available/default-ssl.conf:ro
       # Separate WordPress installation
       - wp_test_data:/var/www/html
     depends_on:

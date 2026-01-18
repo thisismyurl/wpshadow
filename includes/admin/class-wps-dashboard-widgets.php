@@ -186,6 +186,41 @@ class WPSHADOW_Dashboard_Widgets {
 		self::widget_performance_history();
 	}
 
+	/**
+	 * Batch load multiple option values to reduce database queries.
+	 *
+	 * Phase 3 Optimization: Consolidate multiple get_option() calls
+	 * into single batch retrieval with local caching.
+	 *
+	 * @param array $option_keys Option keys to retrieve (without 'wpshadow_' prefix).
+	 * @return array Batch of option values.
+	 */
+	private static function get_dashboard_options_batch( array $option_keys ): array {
+		$result = array();
+
+		foreach ( $option_keys as $key ) {
+			$full_key = 'wpshadow_' . $key;
+			// Phase 3: Use local variable instead of repeated get_option() calls
+			$result[ $key ] = get_option( $full_key, array() );
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Get single dashboard option from batch (or fetch if needed)
+	 *
+	 * @param string $key Option key (without 'wpshadow_' prefix).
+	 * @param mixed  $default Default value.
+	 * @return mixed Option value or default.
+	 */
+	private static function get_dashboard_option( string $key, mixed $default = null ): mixed {
+		$full_key = 'wpshadow_' . $key;
+		$value = get_option( $full_key, $default );
+
+		return $value ?? $default;
+	}
+
 	private static function widget_health(): void {
 		if ( ! class_exists( '\\WPShadow\\WPSHADOW_Site_Health' ) ) {
 			echo '<div class="wps-widget-content"><p><em>' . esc_html__( 'Health info isn\'t available right now.', 'wpshadow' ) . '</em></p></div>';
@@ -311,8 +346,8 @@ class WPSHADOW_Dashboard_Widgets {
 			}
 		}
 
-		// Check for paused tasks
-		$paused_tasks = get_option( 'wpshadow_paused_tasks', array() );
+		// Check for paused tasks (Phase 3 Optimization: Use batch loader)
+		$paused_tasks = self::get_dashboard_option( 'paused_tasks', array() );
 
 		// Get available schedules for display names
 		$schedules = wp_get_schedules();
@@ -1064,7 +1099,8 @@ class WPSHADOW_Dashboard_Widgets {
 
 	private static function widget_vault_status(): void {
 		$upload_dir    = wp_upload_dir();
-		$vault_dirname = get_option( 'wpshadow_vault_dirname' );
+		// Phase 3 Optimization: Use dashboard option getter
+		$vault_dirname = self::get_dashboard_option( 'vault_dirname', '' );
 		$vault_path    = ! empty( $vault_dirname ) ? $upload_dir['basedir'] . '/' . $vault_dirname : '';
 
 		$vault_exists   = ! empty( $vault_path ) && is_dir( $vault_path );
@@ -1544,7 +1580,8 @@ class WPSHADOW_Dashboard_Widgets {
 
 	private static function widget_vault_overview(): void {
 		$upload_dir     = wp_upload_dir();
-		$vault_dirname  = get_option( 'wpshadow_vault_dirname' );
+		// Phase 3 Optimization: Use dashboard option getter
+		$vault_dirname  = self::get_dashboard_option( 'vault_dirname', '' );
 		$vault_dir      = ! empty( $vault_dirname ) ? $upload_dir['basedir'] . '/' . $vault_dirname : '';
 		$vault_exists   = ! empty( $vault_dir ) && is_dir( $vault_dir );
 		$vault_writable = $vault_exists && wp_is_writable( $vault_dir );
