@@ -6,6 +6,8 @@ services:
     container_name: wpshadow-dev
     ports:
       - "8000:80"
+    entrypoint: /init.sh
+    command: apache2-foreground
     environment:
       WORDPRESS_DB_HOST: mysql
       WORDPRESS_DB_NAME: wordpress
@@ -22,12 +24,15 @@ services:
       - wp_themes:/var/www/html/wp-content/themes
       # Persist WordPress core files
       - wp_data:/var/www/html
+      # Mount initialization script and extra config
+      - /workspaces/wpshadow/docker-init.sh:/init.sh
+      - /workspaces/wpshadow/wp-config-extra.php:/var/www/html/wp-config-extra.php
     depends_on:
       - mysql
     networks:
       - wpshadow-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/wp-admin/admin-ajax.php"]
+      test: ["CMD", "curl", "-f", "http://localhost/"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -54,7 +59,7 @@ services:
     image: phpmyadmin:latest
     container_name: wpshadow-phpmyadmin
     ports:
-      - "8080:80"
+      - "8081:80"
     environment:
       PMA_HOST: mysql
       PMA_USER: wordpress
@@ -64,10 +69,41 @@ services:
     networks:
       - wpshadow-network
 
+  wordpress-test:
+    image: wordpress:latest
+    container_name: wpshadow-test
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_NAME: wordpress_test
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DEBUG: 'true'
+      WORDPRESS_DEBUG_LOG: /var/www/html/wp-content/debug.log
+      WORDPRESS_DEBUG_DISPLAY: 'false'
+    volumes:
+      # Mount the plugin for testing
+      - /workspaces/wpshadow:/var/www/html/wp-content/plugins/wpshadow
+      # Mount test config
+      - /workspaces/wpshadow/wp-config-extra.php:/var/www/html/wp-config-extra.php
+      # Separate WordPress installation
+      - wp_test_data:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - wpshadow-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 volumes:
   db_data:
   wp_data:
   wp_themes:
+  wp_test_data:
 
 networks:
   wpshadow-network:

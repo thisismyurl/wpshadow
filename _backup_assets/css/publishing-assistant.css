@@ -1,0 +1,197 @@
+/**
+ * WPShadow Publishing Assistant Styles
+ *
+ * @package WPSHADOW
+ */
+
+/* Publishing Assistant Panel */
+.wps-publishing-assistant {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+.wps-publishing-assistant p {
+	margin-bottom: 12px;
+	color: #555;
+}
+
+/* Review Results Container */
+.wps-review-results {
+	margin-top: 12px;
+}
+
+/* Individual Review Item */
+.wps-review-results > div {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 12px;
+	border-radius: 4px;
+	overflow: hidden;
+}
+
+/* Review Status Indicator */
+.wps-review-status-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	color: white;
+	margin-right: 8px;
+	font-size: 14px;
+	font-weight: bold;
+	flex-shrink: 0;
+}
+
+.wps-review-status-success {
+	background-color: #28a745;
+}
+
+.wps-review-status-warning {
+	background-color: #ffc107;
+}
+
+.wps-review-status-error {
+	background-color: #dc3545;
+}
+
+.wps-review-status-info {
+	background-color: #17a2b8;
+}
+
+/* Review Header */
+.wps-review-header {
+	display: flex;
+	align-items: center;
+	margin-bottom: 8px;
+}
+
+.wps-review-header strong {
+	margin: 0;
+	font-size: 14px;
+}
+
+/* Review Message */
+.wps-review-message {
+	margin: 0 0 8px 32px;
+	font-size: 13px;
+	color: #333;
+	line-height: 1.4;
+}
+
+/* Review Items (Issues) */
+.wps-review-items {
+	margin-left: 32px;
+	margin-bottom: 8px;
+	font-size: 12px;
+}
+
+.wps-review-items details {
+	cursor: pointer;
+}
+
+.wps-review-items summary {
+	cursor: pointer;
+	margin-bottom: 4px;
+	padding: 4px 0;
+	user-select: none;
+}
+
+.wps-review-items summary:hover {
+	text-decoration: underline;
+}
+
+.wps-review-items ul {
+	margin: 4px 0 0 16px;
+	padding-left: 0;
+	list-style: none;
+}
+
+.wps-review-items li {
+	list-style: disc;
+	margin-list-style-position: inside;
+	margin-bottom: 4px;
+	word-break: break-word;
+}
+
+.wps-review-items a {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.wps-review-items a:hover {
+	text-decoration: none;
+}
+
+/* Review Actions */
+.wps-review-actions {
+	margin-left: 32px;
+	margin-top: 8px;
+}
+
+.wps-review-actions .button {
+	font-size: 12px;
+	padding: 4px 12px;
+	height: auto;
+}
+
+/* Status Colors */
+.wps-review-status-success-bg {
+	background-color: rgba(40, 167, 69, 0.1);
+	border-color: #28a745;
+}
+
+.wps-review-status-warning-bg {
+	background-color: rgba(255, 193, 7, 0.1);
+	border-color: #ffc107;
+}
+
+.wps-review-status-error-bg {
+	background-color: rgba(220, 53, 69, 0.1);
+	border-color: #dc3545;
+}
+
+.wps-review-status-info-bg {
+	background-color: rgba(23, 162, 184, 0.1);
+	border-color: #17a2b8;
+}
+
+/* Block Editor Specific Styles */
+.block-editor-block-lock__menu .button,
+.components-button.wps-publishing-assistant {
+	font-size: 13px;
+}
+
+/* Spinner Animation */
+.wps-publishing-assistant .spinner {
+	background: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="none" stroke="%23999" stroke-width="2" opacity="0.3"/><circle cx="10" cy="10" r="8" fill="none" stroke="%230073aa" stroke-width="2" stroke-dasharray="5" opacity="0.8" style="animation: spin 1s linear infinite;"/></svg>') no-repeat center;
+	background-size: 20px 20px;
+	width: 20px;
+	height: 20px;
+	opacity: 1;
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+	.wps-review-items {
+		margin-left: 24px;
+	}
+
+	.wps-review-message {
+		margin-left: 24px;
+	}
+
+	.wps-review-actions {
+		margin-left: 24px;
+	}
+
+	.wps-publishing-assistant p {
+		font-size: 12px;
+	}
+}

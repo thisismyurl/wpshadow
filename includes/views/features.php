@@ -2,7 +2,7 @@
 /**
  * Features management view with widget grouping.
  *
- * @package wpshadow_SUPPORT
+ * @package WPShadow
  */
 
 use WPShadow\WPSHADOW_Tab_Navigation;
@@ -35,7 +35,7 @@ $GLOBALS['wpshadow_grouped_features'] = $grouped_features;
 
 ?>
 <div class="wrap">
-	<h1><?php echo esc_html__( 'Features', 'plugin-wpshadow' ); ?></h1>
+	<h1><?php echo esc_html__( 'Features', 'wpshadow' ); ?></h1>
 	<?php settings_errors( 'wpshadow_features' ); ?>
 
 	<?php
@@ -141,20 +141,20 @@ $GLOBALS['wpshadow_grouped_features'] = $grouped_features;
 		?>
 		<div id="wps-setup-wizard" class="wps-wizard" data-current-step="0" data-total-features="<?php echo count( $features ); ?>">
 			<div class="wps-wizard-header">
-				<button type="button" class="wps-wizard-dismiss" title="<?php esc_attr_e( 'Dismiss wizard', 'plugin-wpshadow' ); ?>">
+				<button type="button" class="wps-wizard-dismiss" title="<?php esc_attr_e( 'Dismiss wizard', 'wpshadow' ); ?>">
 					<span class="dashicons dashicons-no-alt"></span>
 				</button>
 			</div>
 			<div class="wps-wizard-content">
 				<div class="wps-wizard-step wps-wizard-welcome active">
-					<h2><?php esc_html_e( 'Welcome! Let\'s Set Up Your Site Features', 'plugin-wpshadow' ); ?></h2>
+					<h2><?php esc_html_e( 'Welcome! Let\'s Set Up Your Site Features', 'wpshadow' ); ?></h2>
 					<p style="font-size: 16px; line-height: 1.6; max-width: 700px; margin: 0 auto 24px;">
-						<?php esc_html_e( 'We\'ll walk you through each feature one at a time and explain what it does in plain English. You can turn features on or off as we go, and your choices will be saved automatically.', 'plugin-wpshadow' ); ?>
+						<?php esc_html_e( 'We\'ll walk you through each feature one at a time and explain what it does in plain English. You can turn features on or off as we go, and your choices will be saved automatically.', 'wpshadow' ); ?>
 					</p>
 					<p style="font-size: 14px; color: #fff; font-weight: 600; margin-bottom: 24px;">
-						<?php printf( esc_html__( 'This will take about %d minutes. You can skip or dismiss this anytime.', 'plugin-wpshadow' ), ceil( count( $features ) / 10 ) ); ?>
+						<?php printf( esc_html__( 'This will take about %d minutes. You can skip or dismiss this anytime.', 'wpshadow' ), ceil( count( $features ) / 10 ) ); ?>
 					</p>
-					<button type="button" class="button button-primary button-hero wps-wizard-start"><?php esc_html_e( 'Get Started', 'plugin-wpshadow' ); ?></button>
+					<button type="button" class="button button-primary button-hero wps-wizard-start"><?php esc_html_e( 'Get Started', 'wpshadow' ); ?></button>
 				</div>
 				<?php
 				$step_index = 0;
@@ -169,10 +169,10 @@ $GLOBALS['wpshadow_grouped_features'] = $grouped_features;
 					++$step_index;
 					?>
 					<div class="wps-wizard-step wps-wizard-feature" data-feature-id="<?php echo esc_attr( $feature_id ); ?>" data-step="<?php echo $step_index; ?>">
-						<div class="wps-wizard-step-number"><?php printf( esc_html__( 'Feature %1$d of %2$d', 'plugin-wpshadow' ), $step_index, count( $features ) ); ?></div>
+						<div class="wps-wizard-step-number"><?php printf( esc_html__( 'Feature %1$d of %2$d', 'wpshadow' ), $step_index, count( $features ) ); ?></div>
 						<h2><?php echo esc_html( $explanation['title'] ); ?></h2>
 						<?php if ( $explanation['recommended'] ) : ?>
-							<span class="wps-wizard-badge wps-recommended"><?php esc_html_e( 'Recommended', 'plugin-wpshadow' ); ?></span>
+							<span class="wps-wizard-badge wps-recommended"><?php esc_html_e( 'Recommended', 'wpshadow' ); ?></span>
 						<?php endif; ?>
 						<p style="font-size: 16px; line-height: 1.6; max-width: 650px; margin: 20px auto 32px;">
 							<?php echo esc_html( $explanation['description'] ); ?>
@@ -181,22 +181,22 @@ $GLOBALS['wpshadow_grouped_features'] = $grouped_features;
 							<label class="wps-wizard-toggle-label">
 								<input type="checkbox" class="wps-wizard-feature-toggle" data-feature-id="<?php echo esc_attr( $feature_id ); ?>" <?php checked( $is_enabled ); ?> />
 								<span class="wps-toggle-switch"></span>
-								<span class="wps-toggle-text"><?php esc_html_e( 'Enable this feature', 'plugin-wpshadow' ); ?></span>
+								<span class="wps-toggle-text"><?php esc_html_e( 'Enable this feature', 'wpshadow' ); ?></span>
 							</label>
 						</div>
 						<div class="wps-wizard-actions">
-							<button type="button" class="button wps-wizard-prev"><?php esc_html_e( 'Previous', 'plugin-wpshadow' ); ?></button>
-							<button type="button" class="button button-primary wps-wizard-next"><?php esc_html_e( 'Next', 'plugin-wpshadow' ); ?></button>
+							<button type="button" class="button wps-wizard-prev"><?php esc_html_e( 'Previous', 'wpshadow' ); ?></button>
+							<button type="button" class="button button-primary wps-wizard-next"><?php esc_html_e( 'Next', 'wpshadow' ); ?></button>
 						</div>
 					</div>
 				<?php endforeach; ?>
 				<div class="wps-wizard-step wps-wizard-complete">
 					<div class="dashicons dashicons-yes-alt" style="font-size: 80px; width: 80px; height: 80px; color: #46b450; margin: 0 auto 24px;"></div>
-					<h2><?php esc_html_e( 'All Set!', 'plugin-wpshadow' ); ?></h2>
+					<h2><?php esc_html_e( 'All Set!', 'wpshadow' ); ?></h2>
 					<p style="font-size: 16px; line-height: 1.6; max-width: 600px; margin: 0 auto 32px;">
-						<?php esc_html_e( 'Your features are configured and ready to go. You can always change these settings later from the features list below.', 'plugin-wpshadow' ); ?>
+						<?php esc_html_e( 'Your features are configured and ready to go. You can always change these settings later from the features list below.', 'wpshadow' ); ?>
 					</p>
-					<button type="button" class="button button-primary button-hero wps-wizard-finish"><?php esc_html_e( 'Finish Setup', 'plugin-wpshadow' ); ?></button>
+					<button type="button" class="button button-primary button-hero wps-wizard-finish"><?php esc_html_e( 'Finish Setup', 'wpshadow' ); ?></button>
 				</div>
 			</div>
 			<div class="wps-wizard-progress">
@@ -206,7 +206,8 @@ $GLOBALS['wpshadow_grouped_features'] = $grouped_features;
 	<?php endif; ?>
 
 	<div class="wps-features-container">
-		<form method="post" id="wps-features-form">
+		<?php $form_action = \WPShadow\CoreSupport\WPSHADOW_Tab_Navigation::build_tab_url( 'features' ); ?>
+		<form method="post" id="wps-features-form" action="<?php echo esc_url( $form_action ); ?>">
 			<?php wp_nonce_field( 'wpshadow_save_features', 'wpshadow_features_nonce' ); ?>
 			<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
 			<?php wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
@@ -216,7 +217,7 @@ $GLOBALS['wpshadow_grouped_features'] = $grouped_features;
 
 			<?php if ( empty( $features ) ) : ?>
 				<div class="notice notice-info">
-					<p><?php esc_html_e( 'No features registered for this context yet.', 'plugin-wpshadow' ); ?></p>
+					<p><?php esc_html_e( 'No features registered for this context yet.', 'wpshadow' ); ?></p>
 				</div>
 			<?php else : ?>
 			<div id="poststuff">
@@ -232,12 +233,12 @@ $GLOBALS['wpshadow_grouped_features'] = $grouped_features;
 
 			<p class="submit">
 				<button type="submit" class="button button-primary">
-					<?php echo esc_html__( 'Save features', 'plugin-wpshadow' ); ?>
+					<?php echo esc_html__( 'Save features', 'wpshadow' ); ?>
 				</button>
 				<div style="display: inline-flex; align-items: center; gap: 15px; margin-left: 15px;">
 					<?php if ( $network ) : ?>
 						<span style="color:#666; font-size:12px;">
-							<?php echo esc_html__( 'Network scope', 'plugin-wpshadow' ); ?>
+							<?php echo esc_html__( 'Network scope', 'wpshadow' ); ?>
 						</span>
 					<?php endif; ?>
 				</div>
@@ -248,7 +249,7 @@ $GLOBALS['wpshadow_grouped_features'] = $grouped_features;
 				?>
 				<p style="margin-top: 0; padding-top: 0;">
 					<a href="#" class="wps-rerun-wizard" style="color: #667eea; text-decoration: none; font-size: 13px;">
-						<?php esc_html_e( 'Rerun Setup Wizard', 'plugin-wpshadow' ); ?>
+						<?php esc_html_e( 'Rerun Setup Wizard', 'wpshadow' ); ?>
 					</a>
 				</p>
 				<?php
@@ -662,7 +663,7 @@ jQuery(document).ready(function($) {
 
 		// Update next button text on last feature
 		if (index === totalSteps - 2) {
-			wizard.find('.wps-wizard-next').text('<?php esc_html_e( 'Finish', 'plugin-wpshadow' ); ?>');
+			wizard.find('.wps-wizard-next').text('<?php esc_html_e( 'Finish', 'wpshadow' ); ?>');
 		}
 	}
 
@@ -750,7 +751,7 @@ jQuery(document).ready(function($) {
 
 	// Dismiss button
 	wizard.find('.wps-wizard-dismiss').on('click', function() {
-		if (confirm('<?php esc_html_e( 'Are you sure you want to dismiss the setup wizard?', 'plugin-wpshadow' ); ?>')) {
+		if (confirm('<?php esc_html_e( 'Are you sure you want to dismiss the setup wizard?', 'wpshadow' ); ?>')) {
 			dismissWizard();
 		}
 	});
@@ -789,7 +790,7 @@ jQuery(document).ready(function($) {
 			error: function(xhr, status, error) {
 				console.error('Wizard reset error:', error, xhr.responseText);
 				link.css('opacity', '1').css('pointer-events', 'auto');
-				alert('<?php esc_html_e( 'Failed to reset wizard. Please try again.', 'plugin-wpshadow' ); ?>');
+				alert('<?php esc_html_e( 'Failed to reset wizard. Please try again.', 'wpshadow' ); ?>');
 			}
 		});
 	});

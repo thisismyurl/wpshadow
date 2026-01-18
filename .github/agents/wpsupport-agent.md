@@ -506,7 +506,7 @@ WPSHADOW_FILE          // Full path to main plugin file
 WPSHADOW_PATH          // Plugin directory path (with trailing slash)
 WPSHADOW_URL           // Plugin directory URL
 WPSHADOW_BASENAME      // Plugin basename (for activation hooks)
-WPSHADOW_TEXT_DOMAIN   // Text domain for translations ('plugin-wpshadow')
+WPSHADOW_TEXT_DOMAIN   // Text domain for translations ('wpshadow')
 WPSHADOW_MIN_PHP       // Minimum PHP version (8.1.29)
 WPSHADOW_MIN_WP        // Minimum WordPress version (6.4.0)
 WPSHADOW_SUITE_ID      // Suite identifier for module compatibility

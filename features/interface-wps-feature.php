@@ -4,7 +4,7 @@
  *
  * Defines the contract for feature objects managed by the registry.
  *
- * @package wpshadow_SUPPORT
+ * @package WPShadow
  */
 
 declare(strict_types=1);
@@ -43,6 +43,8 @@ interface WPSHADOW_Feature_Interface {
 	public function get_minimum_capability(): string;
 
 	public function get_sub_features(): array;
+
+	public function get_sub_feature_descriptions(): array;
 
 	public function get_icon(): string;
 

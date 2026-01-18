@@ -4,7 +4,7 @@
  *
  * Provides common storage and helpers for feature metadata and state.
  *
- * @package wpshadow_SUPPORT
+ * @package WPShadow
  */
 
 declare(strict_types=1);
@@ -45,6 +45,8 @@ abstract class WPSHADOW_Abstract_Feature implements WPSHADOW_Feature_Interface {
 	protected string $minimum_capability;
 
 	protected array $sub_features;
+
+	protected array $sub_feature_descriptions;
 
 	protected string $icon;
 
@@ -91,6 +93,7 @@ abstract class WPSHADOW_Abstract_Feature implements WPSHADOW_Feature_Interface {
 		$this->minimum_capability = (string) ( $config['minimum_capability'] ?? 'manage_options' );
 		$this->parent             = isset( $config['parent'] ) ? sanitize_key( (string) $config['parent'] ) : null;
 		$this->sub_features       = (array) ( $config['sub_features'] ?? array() );
+		$this->sub_feature_descriptions = (array) ( $config['sub_feature_descriptions'] ?? array() );
 		$this->icon               = (string) ( $config['icon'] ?? 'dashicons-admin-generic' );
 		$this->category           = sanitize_key( (string) ( $config['category'] ?? 'general' ) );
 		$this->priority           = (int) ( $config['priority'] ?? 10 );
@@ -163,6 +166,10 @@ abstract class WPSHADOW_Abstract_Feature implements WPSHADOW_Feature_Interface {
 
 	public function get_sub_features(): array {
 		return $this->sub_features;
+	}
+
+	public function get_sub_feature_descriptions(): array {
+		return $this->sub_feature_descriptions;
 	}
 
 	public function get_icon(): string {

@@ -59,22 +59,23 @@ class WPSHADOW_Notice_Manager {
 	 * @return void
 	 */
 	public static function enqueue_dismissal_script(): void {
-		wp_enqueue_script(
-			'wps-notice-dismissal',
-			WPSHADOW_URL . 'assets/js/notice-dismissal.js',
-			array( 'jquery' ),
-			WPSHADOW_VERSION,
-			true
-		);
+		// DISABLED: Non-existent asset causing console errors
+		// wp_enqueue_script(
+		// 	'wps-notice-dismissal',
+		// 	WPSHADOW_URL . 'assets/js/notice-dismissal.js',
+		// 	array( 'jquery' ),
+		// 	WPSHADOW_VERSION,
+		// 	true
+		// );
 
-		wp_localize_script(
-			'wps-notice-dismissal',
-			'wpsNotices',
-			array(
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( 'wpshadow_dismiss_notice' ),
-			)
-		);
+		// wp_localize_script(
+		// 	'wps-notice-dismissal',
+		// 	'wpsNotices',
+		// 	array(
+		// 		'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+		// 		'nonce'   => wp_create_nonce( 'wpshadow_dismiss_notice' ),
+		// 	)
+		// );
 	}
 
 	/**
@@ -91,7 +92,7 @@ class WPSHADOW_Notice_Manager {
 		$duration = isset( $_POST['duration'] ) ? absint( $_POST['duration'] ) : 0;
 
 		if ( empty( $notice_key ) ) {
-			wp_send_json_error( array( 'message' => __( 'That notice doesn\'t exist.', 'plugin-wpshadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'That notice doesn\'t exist.', 'wpshadow' ) ) );
 		}
 
 		// If custom duration provided, use transient instead of user meta
@@ -101,12 +102,12 @@ class WPSHADOW_Notice_Manager {
 			$result = set_transient( $transient_key, time(), $duration );
 			// Temporary debug
 			error_log( 'WPShadow: Setting transient ' . $transient_key . ' for ' . $duration . ' seconds. Result: ' . var_export( $result, true ) );
-			wp_send_json_success( array( 'message' => __( 'Notice dismissed temporarily.', 'plugin-wpshadow' ) ) );
+			wp_send_json_success( array( 'message' => __( 'Notice dismissed temporarily.', 'wpshadow' ) ) );
 		}
 
 		self::dismiss_notice( $notice_key );
 
-		wp_send_json_success( array( 'message' => __( 'Notice dismissed.', 'plugin-wpshadow' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Notice dismissed.', 'wpshadow' ) ) );
 	}
 
 	/**

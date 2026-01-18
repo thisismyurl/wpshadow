@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function wpshadow_render_dashboard( string $hub_id = '', string $spoke_id = '' ): void {
 	if ( ! WPSHADOW_can_access_dashboard() ) {
-		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'plugin-wpshadow' ) );
+		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'wpshadow' ) );
 	}
 
 	// Route to appropriate dashboard renderer.
@@ -59,11 +59,11 @@ function wpshadow_render_dashboard( string $hub_id = '', string $spoke_id = '' )
 	// Use simple HTML rendering instead.
 
 	// Determine dashboard title based on context.
-	$dashboard_title = __( 'WPShadow Dashboard', 'plugin-wpshadow' );
+	$dashboard_title = __( 'WPShadow Dashboard', 'wpshadow' );
 	if ( ! empty( $spoke_id ) && ! empty( $hub_id ) ) {
-		$dashboard_title = ucfirst( $spoke_id ) . ' ' . __( 'Dashboard', 'plugin-wpshadow' );
+		$dashboard_title = ucfirst( $spoke_id ) . ' ' . __( 'Dashboard', 'wpshadow' );
 	} elseif ( ! empty( $hub_id ) ) {
-		$dashboard_title = ucfirst( $hub_id ) . ' ' . __( 'Dashboard', 'plugin-wpshadow' );
+		$dashboard_title = ucfirst( $hub_id ) . ' ' . __( 'Dashboard', 'wpshadow' );
 	}
 
 	// Render simplified dashboard (metaboxes disabled with module system).
@@ -105,20 +105,22 @@ function wpshadow_render_dashboard( string $hub_id = '', string $spoke_id = '' )
 			<?php if ( empty( $hub_id ) && empty( $spoke_id ) ) : ?>
 				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&WPSHADOW_tab=' . WPSHADOW_Tab_Navigation::TAB_DASHBOARD_SETTINGS ) ); ?>" class="button button-secondary">
 					<span class="dashicons dashicons-admin-generic"></span>
-					<?php esc_html_e( 'Dashboard Settings', 'plugin-wpshadow' ); ?>
+					<?php esc_html_e( 'Dashboard Settings', 'wpshadow' ); ?>
 				</a>
 			<?php endif; ?>
 		</div>
 
 		<?php
-		// Render feature search component (Issues #447 & #448).
-		WPSHADOW_Feature_Search::render_search_component();
+		// Render feature search component only when available to avoid fatals if assets/classes are missing.
+		if ( class_exists( '\\WPShadow\\CoreSupport\\WPSHADOW_Feature_Search' ) ) {
+			WPSHADOW_Feature_Search::render_search_component();
+		}
 		?>
 
 
 		<div class="wps-dashboard-section">
-			<h2><?php esc_html_e( 'Dashboard', 'plugin-wpshadow' ); ?></h2>
-			<p><?php esc_html_e( 'Welcome to WPShadow Dashboard. Core diagnostic features are available.', 'plugin-wpshadow' ); ?></p>
+			<h2><?php esc_html_e( 'Dashboard', 'wpshadow' ); ?></h2>
+			<p><?php esc_html_e( 'Welcome to WPShadow Dashboard. Core diagnostic features are available.', 'wpshadow' ); ?></p>
 		</div>
 	</div>
 	</div>
