@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param string $hex Hex color code (with or without #).
  * @return array{r: int, g: int, b: int}|null RGB values array or null on failure.
  */
-function WPSHADOW_hex_to_rgb( string $hex ): ?array {
+function wpshadow_hex_to_rgb( string $hex ): ?array {
 	$hex = ltrim( $hex, '#' );
 
 	// Support both 3 and 6 character hex codes.
@@ -62,7 +62,7 @@ function WPSHADOW_hex_to_rgb( string $hex ): ?array {
  * @param int $b Blue component (0-255).
  * @return float Relative luminance (0-1).
  */
-function WPSHADOW_calculate_luminance( int $r, int $g, int $b ): float {
+function wpshadow_calculate_luminance( int $r, int $g, int $b ): float {
 	// Convert to 0-1 range.
 	$r_srgb = $r / 255.0;
 	$g_srgb = $g / 255.0;
@@ -87,7 +87,7 @@ function WPSHADOW_calculate_luminance( int $r, int $g, int $b ): float {
  * @param string $color2 Second color (hex).
  * @return float|null Contrast ratio (1-21) or null on failure.
  */
-function WPSHADOW_calculate_contrast_ratio( string $color1, string $color2 ): ?float {
+function wpshadow_calculate_contrast_ratio( string $color1, string $color2 ): ?float {
 	$rgb1 = WPSHADOW_hex_to_rgb( $color1 );
 	$rgb2 = WPSHADOW_hex_to_rgb( $color2 );
 
@@ -121,7 +121,7 @@ function WPSHADOW_calculate_contrast_ratio( string $color1, string $color2 ): ?f
  * @param bool   $is_large_text    Whether text is large (18pt+ or 14pt+ bold).
  * @return array{passes: bool, ratio: float|null, required: float} Result array.
  */
-function WPSHADOW_check_wcag_aa( string $text_color, string $background_color, bool $is_large_text = false ): array {
+function wpshadow_check_wcag_aa( string $text_color, string $background_color, bool $is_large_text = false ): array {
 	$required_ratio = $is_large_text ? 3.0 : 4.5;
 	$ratio          = WPSHADOW_calculate_contrast_ratio( $text_color, $background_color );
 
@@ -144,7 +144,7 @@ function WPSHADOW_check_wcag_aa( string $text_color, string $background_color, b
  * @param bool   $is_large_text    Whether text is large (18pt+ or 14pt+ bold).
  * @return array{passes: bool, ratio: float|null, required: float} Result array.
  */
-function WPSHADOW_check_wcag_aaa( string $text_color, string $background_color, bool $is_large_text = false ): array {
+function wpshadow_check_wcag_aaa( string $text_color, string $background_color, bool $is_large_text = false ): array {
 	$required_ratio = $is_large_text ? 4.5 : 7.0;
 	$ratio          = WPSHADOW_calculate_contrast_ratio( $text_color, $background_color );
 
@@ -163,7 +163,7 @@ function WPSHADOW_check_wcag_aaa( string $text_color, string $background_color, 
  * @param bool   $is_large_text    Whether text is large (18pt+ or 14pt+ bold).
  * @return array{ratio: float|null, aa: array{passes: bool, ratio: float|null, required: float}, aaa: array{passes: bool, ratio: float|null, required: float}, formatted_ratio: string} Comprehensive results.
  */
-function WPSHADOW_check_contrast( string $text_color, string $background_color, bool $is_large_text = false ): array {
+function wpshadow_check_contrast( string $text_color, string $background_color, bool $is_large_text = false ): array {
 	$ratio = WPSHADOW_calculate_contrast_ratio( $text_color, $background_color );
 	$aa    = WPSHADOW_check_wcag_aa( $text_color, $background_color, $is_large_text );
 	$aaa   = WPSHADOW_check_wcag_aaa( $text_color, $background_color, $is_large_text );

@@ -1,0 +1,582 @@
+{
+  "analysis_date": "2026-01-18",
+  "plugin": "wpshadow",
+  "scope": "Asset Version Removal Feature (Simplified Single-Feature Build)",
+  "summary": {
+    "description": "Complete analysis of unused functions, files, and dependencies for cleanup",
+    "note": "This analysis identifies what can be safely removed from the plugin to keep only the asset version removal feature"
+  },
+  "section_1": {
+    "title": "UNUSED FUNCTIONS IN wpshadow.php",
+    "description": "Functions defined but NOT used as WordPress hooks, NOT called internally, and NOT exported",
+    "count": 11,
+    "functions": [
+      {
+        "name": "wpshadow_register_core_features",
+        "line": 232,
+        "reason": "Never called - feature initialization done inline in wpshadow_init()",
+        "usage": "No add_action, add_filter, or internal calls found",
+        "safe_to_remove": true
+      },
+      {
+        "name": "wpshadow_filter_parent_file",
+        "line": 243,
+        "reason": "Registered as filter but deprecated - tab routing removed",
+        "usage": "add_filter( 'parent_file', ... ) at line 359 - related to old menu system",
+        "safe_to_remove": true,
+        "note": "Can remove corresponding add_filter call at line 359"
+      },
+      {
+        "name": "wpshadow_filter_submenu_file",
+        "line": 260,
+        "reason": "Registered as filter but deprecated - tab routing removed",
+        "usage": "add_filter( 'submenu_file', ... ) at line 360 - related to old menu system",
+        "safe_to_remove": true,
+        "note": "Can remove corresponding add_filter call at line 360"
+      },
+      {
+        "name": "wpshadow_render_settings",
+        "line": 148,
+        "reason": "Complex settings page not used in asset version removal feature",
+        "usage": "Called in wpshadow_render_core_content() line 625 for 'dashboard_settings' tab",
+        "safe_to_remove": true,
+        "note": "Tab routing related - keep if keeping settings UI"
+      },
+      {
+        "name": "wpshadow_render_capabilities_page",
+        "line": 502,
+        "reason": "Capabilities management unrelated to asset version removal",
+        "usage": "Not called anywhere in current codebase",
+        "safe_to_remove": true
+      },
+      {
+        "name": "wpshadow_handle_capabilities_post",
+        "line": 517,
+        "reason": "Handles capability form posts - unused feature",
+        "usage": "Not called anywhere in current codebase",
+        "safe_to_remove": true
+      },
+      {
+        "name": "wpshadow_render_tab_router",
+        "line": 569,
+        "reason": "Complex router for multi-tab interface - can simplify",
+        "usage": "Callback for add_menu_page and add_submenu_page at lines 414, 418, 429, 433",
+        "safe_to_remove": false,
+        "note": "KEEP - Required for admin UI routing. Would need complete UI refactor to remove"
+      },
+      {
+        "name": "wpshadow_render_hub_content",
+        "line": 646,
+        "reason": "Hub management unrelated to asset version removal",
+        "usage": "Never called in simplified build",
+        "safe_to_remove": true
+      },
+      {
+        "name": "wpshadow_render_spoke_content",
+        "line": 670,
+        "reason": "Spoke management unrelated to asset version removal",
+        "usage": "Never called in simplified build",
+        "safe_to_remove": true
+      },
+      {
+        "name": "wpshadow_render_performance_dashboard",
+        "line": 706,
+        "reason": "Performance dashboard not used in asset version removal feature",
+        "usage": "Never called in current simplified codebase",
+        "safe_to_remove": true
+      },
+      {
+        "name": "wpshadow_render_modules",
+        "line": 1218,
+        "reason": "Module management disabled in simplified build",
+        "usage": "Called in wpshadow_render_core_content() line 619 for 'modules' tab",
+        "safe_to_remove": true,
+        "note": "Tab-related, can be removed if removing modules UI"
+      }
+    ]
+  },
+  "section_2": {
+    "title": "UNUSED FILES TO MOVE TO _BACKUP",
+    "description": "Files not loaded in wpshadow_init() or required by active code paths",
+    "count": 47,
+    "categories": {
+      "admin_files": {
+        "description": "Admin dashboard and tab management not used in simplified build",
+        "files": [
+          "includes/admin/class-wps-dashboard-layout.php",
+          "includes/admin/class-wps-dashboard-registry.php",
+          "includes/admin/class-wps-dashboard-widgets.php",
+          "includes/admin/class-wps-widget-registry.php",
+          "includes/admin/class-wps-widget-groups.php",
+          "includes/admin/class-wps-wizard-handler.php",
+          "includes/admin/class-wps-scheduled-tasks-ajax.php",
+          "includes/admin/class-wps-settings-ajax.php",
+          "includes/admin/class-wps-core-command-bridge.php",
+          "includes/admin/assets.php",
+          "includes/admin/screens.php"
+        ],
+        "note": "These are loaded implicitly or referenced but not required in wpshadow_init()"
+      },
+      "view_files": {
+        "description": "View templates for removed/unused features",
+        "files": [
+          "includes/views/register.php",
+          "includes/views/help.php",
+          "includes/views/features.php",
+          "includes/views/settings.php",
+          "includes/views/performance-dashboard.php",
+          "includes/views/dashboard-renderer.php",
+          "includes/views/system-report.php",
+          "includes/views/a11y-audit-page.php",
+          "includes/views/capabilities.php",
+          "includes/views/debug-tools.php",
+          "includes/views/guided-setup.php",
+          "includes/views/mobile-test.php"
+        ]
+      },
+      "core_files": {
+        "description": "Core infrastructure for full plugin not used in asset removal",
+        "files": [
+          "includes/core/class-wps-capabilities.php",
+          "includes/core/class-wps-feature-registry.php",
+          "includes/core/class-wps-router-guard.php",
+          "includes/core/class-wps-session-manager.php",
+          "includes/core/class-wps-settings-cache.php",
+          "includes/core/class-wps-spoke-base.php"
+        ],
+        "note": "EXCEPTION: class-wps-notice-manager.php is REQUIRED - used in wpshadow_init()"
+      },
+      "support_infrastructure": {
+        "description": "Support, monitoring, auditing, and utility files",
+        "files": [
+          "includes/admin/class-wps-dashboard-assets.php",
+          "includes/health/",
+          "includes/monitoring/",
+          "includes/audits/",
+          "includes/onboarding/",
+          "includes/settings/",
+          "includes/support/",
+          "includes/utilities/"
+        ]
+      },
+      "feature_files": {
+        "description": "Other feature implementations",
+        "files": [
+          "features/ (except asset-version-removal)",
+          "_backup_features/ (completely unused)"
+        ]
+      }
+    }
+  },
+  "section_3": {
+    "title": "MINIMUM FILES REQUIRED FOR ASSET VERSION REMOVAL FEATURE",
+    "description": "Complete list of files absolutely needed for the feature to work",
+    "count": 9,
+    "required_files": [
+      {
+        "path": "wpshadow.php",
+        "type": "Main Entry Point",
+        "required_because": "Plugin bootstrap, initialization, menu registration, hooks"
+      },
+      {
+        "path": "features/interface-wps-feature.php",
+        "type": "Interface",
+        "required_because": "Defines WPSHADOW_Feature interface that all features extend"
+      },
+      {
+        "path": "features/class-wps-feature-abstract.php",
+        "type": "Abstract Base Class",
+        "required_because": "WPSHADOW_Abstract_Feature base class for asset-version-removal feature"
+      },
+      {
+        "path": "features/class-wps-asset-version-helpers.php",
+        "type": "Helper Class",
+        "required_because": "WPSHADOW_Asset_Version_Helpers - utility functions for version removal"
+      },
+      {
+        "path": "features/class-wps-feature-asset-version-removal.php",
+        "type": "Feature Class",
+        "required_because": "WPSHADOW_Feature_Asset_Version_Removal - main feature implementation"
+      },
+      {
+        "path": "includes/core/class-wps-notice-manager.php",
+        "type": "Notice Manager",
+        "required_because": "WPSHADOW_Notice_Manager - initialized in wpshadow_init() for persistent notices"
+      },
+      {
+        "path": "includes/admin/class-wps-tab-navigation.php",
+        "type": "Tab Navigation",
+        "required_because": "WPSHADOW_Tab_Navigation - used by wpshadow_render_tab_router()",
+        "note": "Can be simplified or removed if removing features page UI"
+      },
+      {
+        "path": "includes/admin/class-wps-dashboard-assets.php",
+        "type": "Asset Management",
+        "required_because": "WPSHADOW_Dashboard_Assets - handles CSS/JS for feature toggles on features page",
+        "note": "Only needed if keeping features management page"
+      },
+      {
+        "path": "includes/admin/assets.php",
+        "type": "Admin Assets",
+        "required_because": "Enqueues admin CSS/JS for dashboard and UI",
+        "note": "Can be simplified - contains unused code for module management"
+      }
+    ]
+  },
+  "section_4": {
+    "title": "COMMENTS TO REMOVE",
+    "description": "Outdated documentation, TODO comments, and phase-related comments",
+    "count": 22,
+    "comments_to_remove": [
+      {
+        "location": "wpshadow.php line 29-31",
+        "text": "// FREE FEATURES (limited build) comment block",
+        "type": "Outdated documentation",
+        "reason": "Feature list is now hardcoded as single feature"
+      },
+      {
+        "location": "wpshadow.php line 47",
+        "text": "// ======== PLUGIN CONSTANTS ========",
+        "type": "Section header",
+        "reason": "Can be removed - not a TODO or outdated comment"
+      },
+      {
+        "location": "wpshadow.php line 193-215",
+        "text": "// Module Discovery removed - features auto-loaded from directory",
+        "type": "Explanation comment",
+        "reason": "Outdated - features are now explicitly loaded"
+      },
+      {
+        "location": "wpshadow.php line 161-162",
+        "text": "// Note: All settings widgets are only used by features not loaded...",
+        "type": "Outdated note",
+        "reason": "Settings widgets system no longer relevant"
+      },
+      {
+        "location": "wpshadow.php line 328-330",
+        "text": "// ======= ASSET VERSION REMOVAL FEATURE (Simplified Single-Feature Build) ===",
+        "type": "Section header",
+        "reason": "Keep for clarity - useful documentation"
+      },
+      {
+        "location": "wpshadow.php line 335-338",
+        "text": "// ======= MINIMAL ADMIN INFRASTRUCTURE ===",
+        "type": "Section header",
+        "reason": "Keep for clarity - useful documentation"
+      },
+      {
+        "location": "wpshadow.php line 347-351",
+        "text": "// Phase 3 Optimization: Clear plugins cache...",
+        "type": "Phase-related comment",
+        "reason": "Outdated - phase system no longer used"
+      },
+      {
+        "location": "wpshadow.php line 376-378",
+        "text": "// Features create QuickLinks in dashboard...",
+        "type": "Outdated documentation",
+        "reason": "Features system no longer relevant to simplified build"
+      },
+      {
+        "location": "wpshadow.php line 597-598",
+        "text": "// Moved to includes/admin/screens.php (as comment)",
+        "type": "Moved function comment",
+        "reason": "Function never moved - just documented as moved"
+      },
+      {
+        "location": "wpshadow.php line 617-618",
+        "text": "// Collection tab removed - spoke management in Modules tab",
+        "type": "Outdated note",
+        "reason": "Outdated - collection and spoke system disabled"
+      },
+      {
+        "location": "wpshadow.php line 739-741",
+        "text": "// Note: postbox script removed due to History API SecurityError...",
+        "type": "Explanation note",
+        "reason": "Keep - useful for understanding history of UI changes"
+      },
+      {
+        "location": "wpshadow.php line 1000-1003",
+        "text": "// Get health score for this feature...",
+        "type": "Implementation comment",
+        "reason": "Keep - useful for understanding feature scoring logic"
+      },
+      {
+        "location": "wpshadow.php line 1217-1221",
+        "text": "// DISABLED: modules view file does not exist",
+        "type": "Disabled code comment",
+        "reason": "Can remove - dead code"
+      },
+      {
+        "location": "wpshadow.php line 1224-1226",
+        "text": "// require_once WPSHADOW_PATH . 'includes/views/modules.php';",
+        "type": "Commented out code",
+        "reason": "Remove - dead code"
+      },
+      {
+        "location": "wpshadow.php line 1238-1241",
+        "text": "// NOTE: Vault functionality removed...",
+        "type": "Outdated note",
+        "reason": "Informational but no longer relevant"
+      },
+      {
+        "location": "wpshadow.php line 1244-1245",
+        "text": "// NOTE: License functionality removed...",
+        "type": "Outdated note",
+        "reason": "Informational but no longer relevant"
+      },
+      {
+        "location": "wpshadow.php line 1270-1281",
+        "text": "// Moved to includes/admin/ajax-modules.php (comments for multiple handlers)",
+        "type": "Moved function comments",
+        "reason": "Functions never moved, just documented as moved"
+      },
+      {
+        "location": "wpshadow.php line 1318-1331",
+        "text": "// NOTE: Vault logging removed...",
+        "type": "Outdated note",
+        "reason": "Informational but no longer relevant"
+      },
+      {
+        "location": "wpshadow.php line 1710-1720",
+        "text": "// Suppress WordPress 6.7+ translation timing notice...",
+        "type": "Workaround comment",
+        "reason": "Keep - explains why error suppression is needed"
+      },
+      {
+        "location": "wpshadow.php line 1722-1732",
+        "text": "// Suppress PHP 8.1+ deprecation warnings...",
+        "type": "Workaround comment",
+        "reason": "Keep - explains why error suppression is needed"
+      }
+    ]
+  },
+  "section_5": {
+    "title": "SIMPLIFICATION RECOMMENDATIONS",
+    "description": "How to further simplify the plugin while maintaining functionality",
+    "recommendations": [
+      {
+        "priority": "HIGH",
+        "action": "Remove unused render functions",
+        "description": "Delete wpshadow_render_settings, wpshadow_render_capabilities_page, wpshadow_handle_capabilities_post, wpshadow_render_hub_content, wpshadow_render_spoke_content, wpshadow_render_performance_dashboard, wpshadow_render_modules",
+        "impact": "Significantly reduces codebase size"
+      },
+      {
+        "priority": "HIGH",
+        "action": "Simplify menu registration",
+        "description": "Remove wpshadow_network_admin_menu and consolidate with wpshadow_admin_menu",
+        "impact": "Reduces duplication, network admin support not needed for single feature"
+      },
+      {
+        "priority": "MEDIUM",
+        "action": "Replace complex tab router",
+        "description": "Simplify wpshadow_render_tab_router to direct only to features page",
+        "impact": "Easier to maintain, faster UI"
+      },
+      {
+        "priority": "MEDIUM",
+        "action": "Remove unused feature rendering",
+        "description": "Delete or simplify wpshadow_render_feature_group_metabox and related metabox registration",
+        "impact": "Simpler features display if not using drag-drop"
+      },
+      {
+        "priority": "LOW",
+        "action": "Remove postbox/metabox system",
+        "description": "Simplify dashboard to not use WordPress postbox system (drag-drop functionality)",
+        "impact": "Cleaner HTML, simpler JS"
+      },
+      {
+        "priority": "LOW",
+        "action": "Clean up AJAX handlers",
+        "description": "Remove unused AJAX handlers for postbox state, metabox saving, etc.",
+        "impact": "Reduces unnecessary API surface"
+      }
+    ]
+  },
+  "section_6": {
+    "title": "DEPENDENCY MAP",
+    "description": "How files depend on each other",
+    "core_dependencies": {
+      "wpshadow.php": {
+        "requires": [
+          "features/interface-wps-feature.php",
+          "features/class-wps-feature-abstract.php",
+          "features/class-wps-asset-version-helpers.php",
+          "features/class-wps-feature-asset-version-removal.php",
+          "includes/core/class-wps-notice-manager.php"
+        ],
+        "optional_for_admin_ui": [
+          "includes/admin/class-wps-tab-navigation.php",
+          "includes/admin/class-wps-dashboard-assets.php",
+          "includes/admin/assets.php"
+        ]
+      },
+      "class-wps-feature-asset-version-removal.php": {
+        "requires": [
+          "features/class-wps-feature-abstract.php",
+          "features/class-wps-asset-version-helpers.php"
+        ]
+      },
+      "class-wps-feature-abstract.php": {
+        "requires": [
+          "features/interface-wps-feature.php"
+        ]
+      }
+    }
+  },
+  "section_7": {
+    "title": "FUNCTION USAGE ANALYSIS",
+    "description": "Which wpshadow_* functions are actually called",
+    "used_functions": [
+      {
+        "name": "wpshadow_activate",
+        "called_by": "register_activation_hook",
+        "usage": "Plugin activation - KEEP"
+      },
+      {
+        "name": "wpshadow_deactivate",
+        "called_by": "register_deactivation_hook",
+        "usage": "Plugin deactivation - KEEP"
+      },
+      {
+        "name": "wpshadow_init",
+        "called_by": "add_action( 'plugins_loaded' )",
+        "usage": "Main initialization hook - KEEP"
+      },
+      {
+        "name": "wpshadow_init_dashboard_assets",
+        "called_by": "add_action( 'init' )",
+        "usage": "Asset enqueuing - KEEP"
+      },
+      {
+        "name": "wpshadow_admin_menu",
+        "called_by": "add_action( 'admin_menu' )",
+        "usage": "Menu registration - KEEP"
+      },
+      {
+        "name": "wpshadow_network_admin_menu",
+        "called_by": "add_action( 'network_admin_menu' )",
+        "usage": "Network menu registration - Can be REMOVED"
+      },
+      {
+        "name": "wpshadow_render_admin_notice",
+        "called_by": "add_action( 'admin_notices' )",
+        "usage": "Notice display - KEEP"
+      },
+      {
+        "name": "wpshadow_render_tab_router",
+        "called_by": "add_menu_page/add_submenu_page callback",
+        "usage": "Page routing - KEEP but simplify"
+      },
+      {
+        "name": "wpshadow_render_core_content",
+        "called_by": "wpshadow_render_tab_router",
+        "usage": "Tab content routing - KEEP but simplify"
+      },
+      {
+        "name": "wpshadow_render_features_page",
+        "called_by": "wpshadow_render_core_content",
+        "usage": "Features management UI - KEEP"
+      },
+      {
+        "name": "wpshadow_render_help_layout",
+        "called_by": "wpshadow_render_core_content",
+        "usage": "Help page - Can be REMOVED"
+      },
+      {
+        "name": "wpshadow_filter_parent_file",
+        "called_by": "add_filter( 'parent_file' )",
+        "usage": "Menu highlighting - Can be REMOVED"
+      },
+      {
+        "name": "wpshadow_filter_submenu_file",
+        "called_by": "add_filter( 'submenu_file' )",
+        "usage": "Submenu highlighting - Can be REMOVED"
+      },
+      {
+        "name": "wpshadow_plugin_action_links",
+        "called_by": "add_filter( 'plugin_action_links_' )",
+        "usage": "Plugin list links - KEEP"
+      },
+      {
+        "name": "wpshadow_plugin_row_meta",
+        "called_by": "add_filter( 'plugin_row_meta' )",
+        "usage": "Plugin metadata - KEEP"
+      },
+      {
+        "name": "wpshadow_clear_plugins_cache",
+        "called_by": "add_action( 'activated_plugin' )",
+        "usage": "Cache clearing - Can be REMOVED"
+      },
+      {
+        "name": "wpshadow_add_admin_notice",
+        "called_by": "Internal functions",
+        "usage": "Notice creation - Can be REMOVED"
+      }
+    ]
+  },
+  "cleanup_checklist": {
+    "phase_1_remove_unused_functions": [
+      "wpshadow_register_core_features",
+      "wpshadow_filter_parent_file + add_filter call",
+      "wpshadow_filter_submenu_file + add_filter call",
+      "wpshadow_render_capabilities_page",
+      "wpshadow_handle_capabilities_post",
+      "wpshadow_render_hub_content",
+      "wpshadow_render_spoke_content",
+      "wpshadow_render_performance_dashboard",
+      "wpshadow_render_modules",
+      "wpshadow_add_admin_notice",
+      "wpshadow_find_plugin_file_by_slug",
+      "WPSHADOW_run_task_now"
+    ],
+    "phase_2_remove_unused_files": [
+      "_backup_features/",
+      "_backup_includes/",
+      "_backup_root/",
+      "includes/admin/class-wps-dashboard-layout.php",
+      "includes/admin/class-wps-dashboard-registry.php",
+      "includes/admin/class-wps-dashboard-widgets.php",
+      "includes/admin/class-wps-widget-registry.php",
+      "includes/admin/class-wps-widget-groups.php",
+      "includes/admin/class-wps-wizard-handler.php",
+      "includes/admin/class-wps-scheduled-tasks-ajax.php",
+      "includes/admin/class-wps-settings-ajax.php",
+      "includes/views/ (except features.php and essential views)",
+      "includes/core/ (except class-wps-notice-manager.php)",
+      "includes/health/",
+      "includes/monitoring/",
+      "includes/audits/",
+      "includes/onboarding/",
+      "includes/settings/",
+      "includes/support/",
+      "includes/utilities/"
+    ],
+    "phase_3_clean_comments": [
+      "Remove outdated phase comments",
+      "Remove 'Moved to' comments",
+      "Remove NOTE comments about removed features",
+      "Remove disabled code blocks",
+      "Keep explanatory comments for complex logic"
+    ],
+    "phase_4_simplify_ui": [
+      "Simplify wpshadow_render_tab_router to minimal routing",
+      "Simplify wpshadow_render_core_content to single features tab",
+      "Remove postbox/metabox drag-drop if not needed",
+      "Simplify CSS/JS in assets",
+      "Remove network admin support"
+    ]
+  },
+  "estimated_file_reduction": {
+    "current_state": {
+      "total_files": "~88 PHP files in includes/",
+      "main_file_lines": 1745,
+      "total_codebase_lines": "~15000+"
+    },
+    "after_cleanup": {
+      "estimate": "~20-30 PHP files",
+      "main_file_lines": "~400-500",
+      "total_codebase_lines": "~3000-4000",
+      "reduction_percentage": "75-80%"
+    }
+  }
+}

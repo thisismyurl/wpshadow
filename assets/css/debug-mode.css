@@ -1,0 +1,104 @@
+/* WPShadow Debug Mode Styles */
+
+.wps-debug-panel {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.wps-debug-section {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.wps-debug-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.wps-debug-heading {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0073aa;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.wps-debug-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.wps-debug-label {
+  font-weight: 500;
+  color: #333;
+}
+
+.wps-debug-value {
+  color: #666;
+  font-family: 'Courier New', monospace;
+}
+
+.wps-debug-value.success {
+  color: #46b450;
+}
+
+.wps-debug-value.warning {
+  color: #ffb900;
+}
+
+.wps-debug-value.error {
+  color: #dc3232;
+}
+
+.wps-debug-code {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 12px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  overflow-x: auto;
+  margin-top: 8px;
+}
+
+.wps-debug-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.wps-debug-table th {
+  background: #f0f0f0;
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 13px;
+  color: #333;
+}
+
+.wps-debug-table td {
+  border-bottom: 1px solid #e8e8e8;
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.wps-debug-table tbody tr:nth-child(odd) {
+  background: #fafafa;
+}
+
+.wps-debug-table tbody tr:hover {
+  background: #f0f0f0;
+}

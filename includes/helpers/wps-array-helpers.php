@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param int   $max   Maximum number of entries (default: 50).
  * @return array Limited array.
  */
-function WPSHADOW_limit_array_size( array $array, int $max = 50 ): array {
+function wpshadow_limit_array_size( array $array, int $max = 50 ): array {
 	while ( count( $array ) > $max ) {
 		array_shift( $array );
 	}
@@ -40,7 +40,7 @@ function WPSHADOW_limit_array_size( array $array, int $max = 50 ): array {
  * @param mixed  $default Default value if key doesn't exist.
  * @return mixed Value from array or default.
  */
-function WPSHADOW_array_get( array $array, string $key, $default = null ) {
+function wpshadow_array_get( array $array, string $key, $default = null ) {
 	return $array[ $key ] ?? $default;
 }
 
@@ -52,7 +52,7 @@ function WPSHADOW_array_get( array $array, string $key, $default = null ) {
  * @param mixed  $default Default value if path doesn't exist.
  * @return mixed Value from array or default.
  */
-function WPSHADOW_array_get_nested( array $array, string $path, $default = null ) {
+function wpshadow_array_get_nested( array $array, string $path, $default = null ) {
 	$keys = explode( '.', $path );
 
 	foreach ( $keys as $key ) {
@@ -72,7 +72,7 @@ function WPSHADOW_array_get_nested( array $array, string $path, $default = null 
  * @param array $keys  Keys to keep.
  * @return array Filtered array.
  */
-function WPSHADOW_array_only( array $array, array $keys ): array {
+function wpshadow_array_only( array $array, array $keys ): array {
 	return array_intersect_key( $array, array_flip( $keys ) );
 }
 
@@ -83,6 +83,6 @@ function WPSHADOW_array_only( array $array, array $keys ): array {
  * @param array $keys  Keys to remove.
  * @return array Filtered array.
  */
-function WPSHADOW_array_except( array $array, array $keys ): array {
+function wpshadow_array_except( array $array, array $keys ): array {
 	return array_diff_key( $array, array_flip( $keys ) );
 }

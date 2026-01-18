@@ -5,8 +5,8 @@
  * Plugin Name:         WPShadow
  * Plugin URI:          https://wpshadow.com/
  * Donate link:         https://wpshadow.com/
- * Description:         The foundational WordPress plugin with comprehensive health diagnostics, emergency recovery, backup verification, and documentation management. Optionally extends with module ecosystem (Media Hub, Image Formats, Vault Storage, and more).The foundational platform for WordPress health, featuring intelligent emergency recovery, real-time diagnostics, and visual regression protection. Effortlessly scale performance and security with the optional module ecosystem, including Media Hub and Vault Storage.
- * Tags:                WordPress, plugin, foundation, hub, architecture, management, suite, diagnostics, health, backup
+ * Description:         WordPress plugin featuring comprehensive health diagnostics, emergency recovery, backup verification, and documentation management with intelligent real-time diagnostics and visual regression protection.
+ * Tags:                WordPress, plugin, foundation, diagnostics, health, backup, emergency, recovery
  * Version:             1.2601.75000
  * Requires at least:   6.4
  * Requires PHP:        8.1.29
@@ -34,6 +34,18 @@ use WPShadow\CoreSupport\WPSHADOW_Feature_Asset_Version_Removal;
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+// ========================================================
+// PLUGIN CONSTANTS
+// ========================================================
+define( 'WPSHADOW_VERSION', '1.2601.73001' );
+define( 'WPSHADOW_FILE', __FILE__ );
+define( 'WPSHADOW_PATH', str_replace( '/', DIRECTORY_SEPARATOR, trailingslashit( plugin_dir_path( __FILE__ ) ) ) );
+define( 'WPSHADOW_URL', plugin_dir_url( __FILE__ ) );
+define( 'WPSHADOW_BASENAME', plugin_basename( __FILE__ ) );
+define( 'WPSHADOW_TEXT_DOMAIN', 'wpshadow' );
+define( 'WPSHADOW_MIN_PHP', '8.1.29' );
+define( 'WPSHADOW_MIN_WP', '6.4.0' );
 
 /**
  * Initialize dashboard assets on init hook
@@ -128,13 +140,12 @@ JS;
 }
 
 /**
- * Render Settings view (Core or Hub) using the same metabox layout as the dashboard.
- * Widgets here represent settings groups for the current context.
+ * Render Settings view using the same metabox layout as the dashboard.
+ * Widgets here represent settings groups.
  *
- * @param string $hub_id Optional hub identifier for hub-level settings.
  * @return void
  */
-function wpshadow_render_settings( string $hub_id = '' ): void {
+function wpshadow_render_settings(): void {
 	if ( ! WPSHADOW_can_manage_settings() ) {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'wpshadow' ) );
 	}
@@ -171,61 +182,20 @@ function wpshadow_render_settings( string $hub_id = '' ): void {
 
 	// Title mirrors dashboard style.
 	$settings_title = __( 'Support Settings', 'wpshadow' );
-	if ( ! empty( $hub_id ) ) {
-		$settings_title = ucfirst( $hub_id ) . ' ' . __( 'Settings', 'wpshadow' );
+
+	// Register metaboxes for settings.
+	// Module Discovery removed - features auto-loaded from directory
+	// Note: All settings widgets are only used by features not loaded in this simplified
+	// single-feature build. The settings page shows basic information only.
 	}
 
-	// Register metaboxes for core-level settings.
-	if ( empty( $hub_id ) ) {
-		add_meta_box(
-			'wpshadow_settings_module_registry',
-			__( 'Module Discovery', 'wpshadow' ),
-			__NAMESPACE__ . '\\render_settings_module_registry',
-			$screen->id,
-			'normal'
-		);
-
-		add_meta_box(
-			'wpshadow_settings_capabilities',
-			__( 'Capability Mapping', 'wpshadow' ),
-			__NAMESPACE__ . '\\render_settings_capabilities',
-			$screen->id,
-			'normal'
-		);
-
-		add_meta_box(
-			'wpshadow_settings_privacy',
-			__( 'Privacy & GDPR', 'wpshadow' ),
-			__NAMESPACE__ . '\\render_settings_privacy',
-			$screen->id,
-			'normal'
-		);
-
-		add_meta_box(
-			'wpshadow_settings_database_cleanup',
-			__( 'Database Cleanup', 'wpshadow' ),
-			__NAMESPACE__ . '\\render_settings_database_cleanup',
-			$screen->id,
-			'normal'
-		);
-	}
-
-	add_meta_box(
-		'wpshadow_settings_dashboard',
-		__( 'Dashboard & UI', 'wpshadow' ),
-		__NAMESPACE__ . '\\render_settings_dashboard',
-		$screen->id,
-		'side'
-	);
-
-	// License settings moved to Pro plugin
 
 	// Initialize postboxes on this screen (drag/toggle) in footer.
 	add_action(
 		'admin_print_footer_scripts',
-		static function () use ( $screen, $hub_id ): void {
-			// Use hub-specific state key for settings.
-			$state_key = 'wpshadow-settings' . ( $hub_id ? '-' . $hub_id : '' );
+		static function () use ( $screen ): void {
+			// State key for settings.
+			$state_key = 'wpshadow-settings';
 			?>
 			<script>
 			jQuery(document).ready(function($){
@@ -253,111 +223,16 @@ function wpshadow_render_settings( string $hub_id = '' ): void {
 	<?php
 }
 
-/**
- * Early guard to hide disabled module submenus based on localStorage state.
- * Runs in admin_head to reduce initial hover flicker.
- *
- * @return void
- */
-function wpshadow_hide_disabled_submenus(): void {
-	?>
-	<script>
-	(function(){
-		var scope = (document.documentElement.classList.contains('network-admin') ? 'network' : 'site');
-		var storagePrefix = 'wpsToggleState:' + scope + ':';
-		function applyHide(){
-			var top = document.getElementById('toplevel_page_wpshadow');
-			if (!top){
-				var link = document.querySelector('#adminmenu a.menu-top[href*="page=wpshadow"]');
-				if (link) { top = link.closest('li'); }
-			}
-			if (!top) return;
-			var submenu = top.querySelector('ul.wp-submenu-wrap') || top.querySelector('ul.wp-submenu');
-			if (!submenu) return;
-			var hideSlugs = [];
-			for (var i = 0; i < localStorage.length; i++){
-				var key = localStorage.key(i);
-				if (!key || key.indexOf(storagePrefix) !== 0) continue;
-				if (localStorage.getItem(key) === '0'){
-					hideSlugs.push(key.substring(storagePrefix.length));
-				}
-			}
-			if (!hideSlugs.length) return;
-			hideSlugs.forEach(function(slug){
-				var target = 'page=wpshadow&module=' + encodeURIComponent(slug.replace(/-wpshadow$/, ''));
-				submenu.querySelectorAll('a[href*="' + target + '"]').forEach(function(anchor){
-					var li = anchor.closest('li');
-					if (li){ li.style.display = 'none'; }
-					anchor.style.display = 'none';
-					anchor.setAttribute('aria-hidden','true');
-				});
-			});
-			var anyVisible = Array.from(submenu.querySelectorAll('li')).some(function(li){ return li.style.display !== 'none'; });
-			submenu.style.display = anyVisible ? '' : 'none';
-		}
-		if (document.readyState === 'loading'){
-			var tries = 0;
-			var waiter = function(){
-				tries++;
-				applyHide();
-				if (tries < 10) { requestAnimationFrame(waiter); }
-			};
-			waiter();
-		} else {
-			applyHide();
-		}
-		window.addEventListener('storage', function(ev){
-			if (!ev || typeof ev.key !== 'string') return;
-			if (ev.key.indexOf(storagePrefix) === 0) { applyHide(); }
-		});
-	})();
-	</script>
-	<?php
-}
 
 /**
  * Register core features with the feature registry.
  *
  * @return void
  */
-function WPSHADOW_register_core_features(): void {
+function wpshadow_register_core_features(): void {
 	// Performance optimization (limited build).
 	register_WPSHADOW_feature( new WPSHADOW_Feature_Asset_Version_Removal() );
 }
-
-/**
- * Admin guard: if a module is disabled, redirect to the parent dashboard when accessed directly.
- *
- * @return void
- */
-function wpshadow_guard_disabled_modules(): void {
-	if ( ! is_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
-		return;
-	}
-	$raw_module = isset( $_GET['module'] ) ? sanitize_key( wp_unslash( $_GET['module'] ) ) : '';
-	if ( empty( $raw_module ) ) {
-		return;
-	}
-	// Normalize to full slug regardless of whether the suffix is included in the query param.
-	$slug = str_contains( $raw_module, '-wpshadow' ) ? $raw_module : $raw_module . '-wpshadow';
-
-	// Use live is_enabled() check instead of cached catalog to ensure accurate state.
-	if ( \WPShadow\CoreSupport\WPSHADOW_Module_Registry::is_enabled( $slug ) ) {
-		return;
-	}
-
-	$target = is_network_admin() ? network_admin_url( 'admin.php?page=wpshadow' ) : admin_url( 'admin.php?page=wpshadow' );
-	wp_safe_redirect( $target );
-	exit;
-}
-
-// Plugin constants.
-define( 'WPSHADOW_VERSION', '1.2601.73001' );
-define( 'WPSHADOW_FILE', __FILE__ );
-define( 'WPSHADOW_PATH', str_replace( '/', DIRECTORY_SEPARATOR, trailingslashit( plugin_dir_path( __FILE__ ) ) ) );
-define( 'WPSHADOW_URL', plugin_dir_url( __FILE__ ) );
-define( 'WPSHADOW_BASENAME', plugin_basename( __FILE__ ) );
-define( 'WPSHADOW_TEXT_DOMAIN', 'wpshadow' );
 
 /**
  * Filter parent_file to ensure correct parent menu is set.
@@ -373,54 +248,19 @@ function wpshadow_filter_parent_file( string $parent_file ): string {
 		return $parent_file;
 	}
 
-	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	$module = isset( $_GET['module'] ) ? sanitize_key( wp_unslash( $_GET['module'] ) ) : '';
-
-	if ( ! empty( $module ) ) {
-		$submenu_file = 'wpshadow&module=' . $module;
-
-	}
-
 	return 'wpshadow';
 }
 
 /**
- * Filter submenu_file to highlight the correct submenu item when viewing module dashboards.
- * WordPress only checks the "page" parameter by default, but we use "module" to route to different dashboards.
- * This filter ensures the correct submenu (Vault, Media, etc.) is highlighted when active.
+ * Filter submenu_file to highlight the correct submenu item.
  *
  * @param string|null $submenu_file The submenu file.
- * @return string|null The potentially modified submenu file.
+ * @return string|null The submenu file.
  */
 function wpshadow_filter_submenu_file( ?string $submenu_file ): ?string {
-	// Only apply when we're on the wpshadow admin page.
-	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	if ( empty( $_GET['page'] ) || 'wpshadow' !== $_GET['page'] ) {
-		return $submenu_file;
-	}
-
-	// Check if there's a module parameter that specifies which dashboard we're viewing.
-	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	$module = isset( $_GET['module'] ) ? sanitize_key( wp_unslash( $_GET['module'] ) ) : '';
-	if ( empty( $module ) ) {
-		// No module param means we're on the main dashboard, don't override.
-		return $submenu_file;
-	}
-
-	// Return the submenu file that matches the module parameter.
-	// The submenu items are registered with slugs like 'wpshadow&module=media', 'wpshadow&module=vault', etc.
-	$target = 'wpshadow&module=' . $module;
-
-	return $target;
+	// Simple pass-through - features are auto-loaded, no manual routing needed.
+	return $submenu_file;
 }
-
-
-// Suite Identifier for Hub & Spoke handshake.
-define( 'WPSHADOW_SUITE_ID', 'wpshadow-media-suite-2026' );
-
-// Minimum requirements.
-define( 'WPSHADOW_MIN_PHP', '8.1.29' );
-define( 'WPSHADOW_MIN_WP', '6.4.0' );
 
 /**
  * Plugin activation hook.
@@ -481,275 +321,27 @@ function wpshadow_deactivate(): void {
  * @return void
  */
 function wpshadow_init(): void {
-	// Load DRY helper functions and traits.
-	require_once WPSHADOW_PATH . 'includes/helpers/wps-input-helpers.php';
-	require_once WPSHADOW_PATH . 'includes/helpers/wps-ajax-helpers.php';
-	require_once WPSHADOW_PATH . 'includes/helpers/wps-array-helpers.php';
-	require_once WPSHADOW_PATH . 'includes/helpers/wps-color-contrast-helpers.php';
-	require_once WPSHADOW_PATH . 'includes/traits/trait-wps-ajax-security.php';
-
-	// License widget moved to Pro plugin
-
-	// Load help content API for dynamic documentation.
-	require_once WPSHADOW_PATH . 'includes/utilities/class-wps-help-content-api.php';
-	\WPShadow\CoreSupport\WPSHADOW_Help_Content_API::init();
-	// Load REST API.
-	require_once WPSHADOW_PATH . 'includes/api/class-wps-rest-api.php';
-	\WPShadow\API\WPSHADOW_REST_API::init();
-
-	// Load Feature Registry and base feature classes (independent of modules).
+	// ========================================================================
+	// ASSET VERSION REMOVAL FEATURE (Simplified Single-Feature Build)
+	// ========================================================================
+	
+	// Load feature base classes
 	require_once WPSHADOW_PATH . 'features/interface-wps-feature.php';
 	require_once WPSHADOW_PATH . 'features/class-wps-feature-abstract.php';
-	require_once WPSHADOW_PATH . 'includes/core/class-wps-feature-registry.php';
-	require_once WPSHADOW_PATH . 'includes/wps-feature-functions.php';
-	\WPShadow\CoreSupport\WPSHADOW_Feature_Registry::init();
-
-	// Ghost Features and Module system moved to Pro plugin
-
-	// Load settings API (network + site with overrides).
-	require_once WPSHADOW_PATH . 'includes/settings/class-wps-settings.php';
-	\WPShadow\CoreSupport\WPSHADOW_Settings::init();
-	require_once WPSHADOW_PATH . 'includes/wps-settings-functions.php';
-	require_once WPSHADOW_PATH . 'includes/wps-widget-functions.php';
-
-	// Load capability manager.
-	require_once WPSHADOW_PATH . 'includes/core/class-wps-capabilities.php';
-
-	// Environment Checker and Server Limits are excluded in this build (moved to backup).
-
-	// Load Site Health integration.
-	require_once WPSHADOW_PATH . 'includes/health/class-wps-site-health.php';
-	\WPShadow\CoreSupport\WPSHADOW_Site_Health::init();
-
-	// Load Activity Logger.
-	require_once WPSHADOW_PATH . 'includes/monitoring/class-wps-activity-logger.php';
-	\WPShadow\CoreSupport\WPSHADOW_Activity_Logger::init();
-
-	// Load Publishing Assistant for pre-publish content review framework.
-	require_once WPSHADOW_PATH . 'includes/features/class-wps-publishing-assistant.php';
-	\WPShadow\CoreSupport\WPSHADOW_Publishing_Assistant::init();
-
-	// Load Publishing Assistant REST API.
-	require_once WPSHADOW_PATH . 'includes/api/class-wps-publishing-assistant-api.php';
-	\WPShadow\CoreSupport\WPSHADOW_Publishing_Assistant_API::init();
-
-	// Load Performance Monitor for real-time performance tracking.
-	require_once WPSHADOW_PATH . 'includes/monitoring/class-wps-performance-monitor.php';
-	\WPShadow\CoreSupport\WPSHADOW_Performance_Monitor::init();
-
-	// Load Achievement Badges system.
-	require_once WPSHADOW_PATH . 'includes/features/class-wps-achievement-badges.php';
-	\WPShadow\CoreSupport\WPSHADOW_Achievement_Badges::init();
-
-	// Load Snapshot Manager for site snapshots and rollback.
-	require_once WPSHADOW_PATH . 'includes/support/class-wps-snapshot-manager.php';
-	\WPShadow\CoreSupport\WPSHADOW_Snapshot_Manager::init();
-
-	// Load Site Audit for performance, security, and optimization analysis.
-	require_once WPSHADOW_PATH . 'includes/health/class-wps-site-audit.php';
-	\WPShadow\CoreSupport\WPSHADOW_Site_Audit::init();
-
-	// Load Hidden Diagnostic API for secure support access.
-	require_once WPSHADOW_PATH . 'includes/utilities/class-wps-hidden-diagnostic-api.php';
-	\WPShadow\CoreSupport\WPSHADOW_Hidden_Diagnostic_API::init();
-
-	// Load Safe Staging Manager for isolated testing environments.
-	require_once WPSHADOW_PATH . 'includes/support/class-wps-staging-manager.php';
-	\WPShadow\CoreSupport\WPSHADOW_Staging_Manager::init();
-
-	// Load Backup Verification for recovery drills and integrity testing.
-	require_once WPSHADOW_PATH . 'includes/support/class-wps-backup-verification.php';
-	\WPShadow\CoreSupport\WPSHADOW_Backup_Verification::init();
-
-	// Emergency Support and White Screen Auto-Recovery are excluded in this build (moved to backup).
-
-	// Load Site Documentation Manager for blueprint, protected plugins, and export.
-	require_once WPSHADOW_PATH . 'includes/onboarding/class-wps-site-documentation-manager.php';
-	\WPShadow\CoreSupport\WPSHADOW_Site_Documentation_Manager::init();
-
-	// Load Update Simulator for safe plugin/theme update testing.
-	// DISABLED: File does not exist
-
-	// Load Guided Walkthroughs for step-by-step task assistance.
-	require_once WPSHADOW_PATH . 'includes/onboarding/class-wps-guided-walkthroughs.php';
-	\WPShadow\CoreSupport\WPSHADOW_Guided_Walkthroughs::init();
-
-	// Load Video Walkthroughs for auto-generated video tutorials.
-	require_once WPSHADOW_PATH . 'includes/features/class-wps-video-walkthroughs.php';
-	\WPShadow\CoreSupport\WPSHADOW_Video_Walkthroughs::init();
-
-	// Load Magic Link Support for secure time-limited developer access.
-	require_once WPSHADOW_PATH . 'includes/support/class-wps-magic-link-support.php';
-	\WPShadow\CoreSupport\WPSHADOW_Magic_Link_Support::init();
-
-	// Load Debug Mode Manager for one-click debug toggles.
-	require_once WPSHADOW_PATH . 'includes/utilities/class-wps-debug-mode.php';
-	\WPShadow\CoreSupport\WPSHADOW_Debug_Mode::init();
-
-	// Load Site Health Integration for scoring and WordPress integration.
-	require_once WPSHADOW_PATH . 'includes/health/class-wps-site-health-integration.php';
-	\WPShadow\CoreSupport\WPSHADOW_Site_Health_Integration::init();
-
-	// Load Health Score Dashboard Widget.
-	require_once WPSHADOW_PATH . 'includes/health/class-wps-health-score-widget.php';
-	\WPShadow\CoreSupport\WPSHADOW_Health_Score_Widget::init();
-
-	// Load System Report Generator for comprehensive debug information.
-	require_once WPSHADOW_PATH . 'includes/health/class-wps-system-report-generator.php';
-	\WPShadow\CoreSupport\WPSHADOW_System_Report_Generator::init();
-
-	// Register AJAX handlers for Diagnostic API.
-	add_action(
-		'wp_ajax_WPSHADOW_create_diagnostic_token',
-		static function (): void {
-			check_ajax_referer( 'wp_ajax' );
-			if ( ! current_user_can( 'manage_options' ) ) {
-				\WPShadow\CoreSupport\WPSHADOW_ajax_permission_denied();
-			}
-			$name   = \WPShadow\CoreSupport\WPSHADOW_get_post_text( 'name' );
-			$reason = \WPShadow\CoreSupport\WPSHADOW_get_post_text( 'reason' );
-			$token  = WPSHADOW_Hidden_Diagnostic_API::create_token( $name, $reason );
-			\WPShadow\CoreSupport\WPSHADOW_ajax_success( array( 'token' => $token ) );
-		}
-	);
-
-	add_action(
-		'wp_ajax_WPSHADOW_revoke_diagnostic_token',
-		static function (): void {
-			check_ajax_referer( 'wp_ajax' );
-			if ( ! current_user_can( 'manage_options' ) ) {
-				\WPShadow\CoreSupport\WPSHADOW_ajax_permission_denied();
-			}
-			$token  = \WPShadow\CoreSupport\WPSHADOW_get_post_text( 'token' );
-			$result = WPSHADOW_Hidden_Diagnostic_API::revoke_token( $token );
-			\WPShadow\CoreSupport\WPSHADOW_ajax_success( array( 'revoked' => $result ) );
-		}
-	);
-
-	// License utilities moved to Pro plugin
-
-	// Load registration handler.
-	require_once WPSHADOW_PATH . 'includes/onboarding/class-wps-registration.php';
-	\WPShadow\CoreSupport\WPSHADOW_Registration::init();
-
-	// DISABLED: Load core Command Palette bridge - non-existent assets causing console errors
-	// require_once WPSHADOW_PATH . 'includes/admin/class-wps-core-command-bridge.php';
-	// \WPShadow\CoreSupport\Admin\WPSHADOW_Core_Command_Bridge::init();
-
-	// Load dashboard assets on 'init' hook instead of here.
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/admin/class-wps-dashboard-assets.php' );
-	add_action(
-		'init',
-		__NAMESPACE__ . '\\wpshadow_init_dashboard_assets',
-		11
-	);
-
-	// Load feature registry for flexible plugin dependencies.
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/core/class-wps-settings-cache.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/interface-wps-feature.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-abstract.php' );
 	
-	// Load helper functions (Phase 2: DRY consolidation).
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/helpers/wps-file-helpers.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/helpers/wps-array-helpers.php' );
+	// Load the single feature: Asset Version Removal
+	require_once WPSHADOW_PATH . 'features/class-wps-asset-version-helpers.php';
+	require_once WPSHADOW_PATH . 'features/class-wps-feature-asset-version-removal.php';
 	
-	// Load session manager (Phase 4: Advanced caching).
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/core/class-wps-session-manager.php' );
-	
-	// Initialize settings cache early.
-	\WPShadow\CoreSupport\WPSHADOW_Settings_Cache::init();
-
-	// Load Registry System (Unified Metadata System).
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/core/class-wps-feature-registry.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/admin/class-wps-widget-groups.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/admin/class-wps-widget-registry.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/admin/class-wps-dashboard-registry.php' );
-
-	// ========================================================================
-	// FREE FEATURES (License Level 1-2)
-	// ========================================================================
-	// Base classes (shared with Pro)
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/interface-wps-feature.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-abstract.php' );
-
-	// Free features (26 features)
-	// Limited feature set: asset version removal only.
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-asset-version-helpers.php' );
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'features/class-wps-feature-asset-version-removal.php' );
-
-	// ========================================================================
-	// PAID FEATURES - Now loaded by wpshadow-pro.php
-	// ========================================================================
-	// License Level 3+ features moved to wpshadow-pro.php
-	// - See _PAID_FEATURES_BACKUP.php for reference
-	// - wpshadow-pro.php registers them via wpshadow_register_features hook
-
-	require_once str_replace( '/', DIRECTORY_SEPARATOR, WPSHADOW_PATH . 'includes/wps-feature-functions.php' );
-	
-	// Initialize Registry System.
-	\WPShadow\CoreSupport\WPSHADOW_Feature_Registry::init();
-	\WPShadow\CoreSupport\WPSHADOW_Widget_Registry::init();
-	\WPShadow\CoreSupport\WPSHADOW_Dashboard_Registry::init();
-	
-	// Register free features and trigger Pro plugin to register paid features
-	add_action( 'wpshadow_register_features', __NAMESPACE__ . '\\WPSHADOW_register_core_features' );
-	
-	// ====================================================================
-	// ALLOW PRO PLUGIN TO REGISTER PAID FEATURES
-	// ====================================================================
-	// wpshadow-pro.php hooks into this action to register paid features
-	// Fire the registration hook to load both free and paid features
-	do_action( 'wpshadow_register_features' );
-	
-	// Load Spoke Base for spoke plugins (Image, Media, etc).
-	require_once WPSHADOW_PATH . 'includes/core/class-wps-spoke-base.php';
-
-	// Vault moved to Pro plugin
-
-	// Network license broadcaster moved to Pro plugin
-
-	// DISABLED: Module downloader - file does not exist
-	// require_once WPSHADOW_PATH . 'includes/class-wps-module-downloader.php';
-
-	// DISABLED: Module action handlers - file does not exist
-	// require_once WPSHADOW_PATH . 'includes/class-wps-module-actions.php';
-	// \WPShadow\CoreSupport\WPSHADOW_Module_Actions::init();
-
-	// Centralized router guard for disabled modules.
-	require_once WPSHADOW_PATH . 'includes/core/class-wps-router-guard.php';
-
-	// Load tab navigation system.
-	require_once WPSHADOW_PATH . 'includes/admin/class-wps-tab-navigation.php';
-	require_once WPSHADOW_PATH . 'includes/admin/class-wps-dashboard-widgets.php';
-	require_once WPSHADOW_PATH . 'includes/admin/class-wps-dashboard-layout.php';
-	require_once WPSHADOW_PATH . 'includes/settings/class-wps-feature-details-page.php';
-	\WPShadow\CoreSupport\WPSHADOW_Feature_Details_Page::init();
-	require_once WPSHADOW_PATH . 'includes/admin/class-wps-wizard-handler.php';
-	\WPShadow\CoreSupport\WPSHADOW_Wizard_Handler::init();
-	// DISABLED: Feature search - non-existent assets causing console errors
-	// require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-search.php';
-	// \WPShadow\CoreSupport\WPSHADOW_Feature_Search::init();
-	require_once WPSHADOW_PATH . 'includes/admin/class-wps-settings-ajax.php';
-	\WPShadow\Admin\WPSHADOW_Settings_Ajax::init();
-	// DISABLED: Scheduled tasks AJAX - non-existent assets causing console errors
-	// require_once WPSHADOW_PATH . 'includes/admin/class-wps-scheduled-tasks-ajax.php';
-	// \WPShadow\Admin\WPSHADOW_Scheduled_Tasks_Ajax::init();
-	require_once WPSHADOW_PATH . 'includes/onboarding/class-wps-smart-suggestions.php';
-	\WPShadow\CoreSupport\WPSHADOW_Smart_Suggestions::init();
-	require_once WPSHADOW_PATH . 'includes/wps-capability-helpers.php';
-
-	// Load extracted admin assets, screens, dashboard view, and AJAX handlers.
-	require_once WPSHADOW_PATH . 'includes/admin/assets.php';
-	require_once WPSHADOW_PATH . 'includes/admin/screens.php';
-	require_once WPSHADOW_PATH . 'includes/views/dashboard-renderer.php';
-	// DISABLED: ajax-modules file does not exist
-	// require_once WPSHADOW_PATH . 'includes/admin/ajax-modules.php';
-	// Load CLI commands when WP-CLI present.
-	if ( defined( 'WP_CLI' ) && WP_CLI ) {
-		require_once WPSHADOW_PATH . 'includes/utilities/class-wps-cli.php';
-		\WP_CLI::add_command( 'wps modules', '\\WPShadow\\CoreSupport\\WPSHADOW_CLI_Modules' );
-		\WP_CLI::add_command( 'wps settings', '\\WPShadow\\CoreSupport\\WPSHADOW_CLI_Settings' );
+	// Initialize the feature
+	$asset_version_feature = new WPSHADOW_Feature_Asset_Version_Removal();
+	if ( method_exists( $asset_version_feature, 'init' ) ) {
+		$asset_version_feature->init();
 	}
+
+	// ========================================================================
+	// MINIMAL ADMIN INFRASTRUCTURE
+	// ========================================================================
 
 	// Load notice manager for persistent dismissal.
 	require_once WPSHADOW_PATH . 'includes/core/class-wps-notice-manager.php';
@@ -762,62 +354,14 @@ function wpshadow_init(): void {
 
 	// Register admin menu.
 	add_action( 'admin_menu', __NAMESPACE__ . '\\wpshadow_admin_menu' );
-	add_action( 'admin_head', __NAMESPACE__ . '\\wpshadow_hide_disabled_submenus' );
-	add_action( 'admin_init', __NAMESPACE__ . '\wpshadow_guard_disabled_modules' );
 
-	// Fix sidebar menu active state for module navigation (#174).
+	// Fix sidebar menu active state.
 	add_filter( 'parent_file', __NAMESPACE__ . '\\wpshadow_filter_parent_file', 10 );
 	add_filter( 'submenu_file', __NAMESPACE__ . '\\wpshadow_filter_submenu_file', 10 );
-
-	// Handle capability mapping submissions.
-	add_action( 'admin_init', __NAMESPACE__ . '\\wpshadow_handle_capabilities_post' );
-
-	// Comprehensive localhost:8000 URL replacement for development environments.
-	// These filters ensure no localhost URLs reach the browser in Codespaces/Docker.
-	add_filter( 'admin_canonical_url', __NAMESPACE__ . '\\wpshadow_fix_canonical_url' );
-	add_filter( 'admin_url', __NAMESPACE__ . '\\wpshadow_fix_admin_url' );
-	add_filter( 'site_url', __NAMESPACE__ . '\\wpshadow_fix_site_url' );
-	add_filter( 'home_url', __NAMESPACE__ . '\\wpshadow_fix_home_url' );
-	add_filter( 'includes_url', __NAMESPACE__ . '\\wpshadow_fix_asset_url' );
-	add_filter( 'content_url', __NAMESPACE__ . '\\wpshadow_fix_asset_url' );
-	add_filter( 'plugins_url', __NAMESPACE__ . '\\wpshadow_fix_asset_url' );
-	add_filter( 'script_loader_src', __NAMESPACE__ . '\\wpshadow_fix_asset_url' );
-	add_filter( 'style_loader_src', __NAMESPACE__ . '\\wpshadow_fix_asset_url' );
-	add_action( 'admin_init', __NAMESPACE__ . '\\wpshadow_start_url_buffer', 1 );
-
-	// Handle AJAX actions.
-	add_action( 'wp_ajax_WPSHADOW_toggle_module', __NAMESPACE__ . '\\WPSHADOW_ajax_toggle_module' );
-	add_action( 'wp_ajax_WPSHADOW_install_module', __NAMESPACE__ . '\\WPSHADOW_ajax_install_module' );
-	add_action( 'wp_ajax_WPSHADOW_update_module', __NAMESPACE__ . '\\WPSHADOW_ajax_update_module' );
-	// License broadcast AJAX action moved to Pro plugin
-	add_action( 'wp_ajax_WPSHADOW_save_metabox_state', __NAMESPACE__ . '\\WPSHADOW_ajax_save_metabox_state' );
-	add_action( 'wp_ajax_WPSHADOW_save_postbox_order', __NAMESPACE__ . '\\WPSHADOW_ajax_save_postbox_order' );
-	add_action( 'wp_ajax_WPSHADOW_save_postbox_state', __NAMESPACE__ . '\\WPSHADOW_ajax_save_postbox_state' );
-	add_action( 'wp_ajax_WPSHADOW_save_dashboard_layout', array( 'WPShadow\\WPSHADOW_Dashboard_Layout', 'ajax_save_layout' ) );
-	add_action( 'wp_ajax_WPSHADOW_apply_dashboard_layout', array( 'WPShadow\\WPSHADOW_Dashboard_Layout', 'ajax_apply_layout' ) );
-
-	// Admin-post action to force scheduled tasks to run immediately.
-	add_action( 'admin_post_WPSHADOW_run_task_now', __NAMESPACE__ . '\WPSHADOW_run_task_now' );
 
 	// Plugin page links and meta.
 	add_filter( 'plugin_action_links_' . WPSHADOW_BASENAME, __NAMESPACE__ . '\\wpshadow_plugin_action_links' );
 	add_filter( 'plugin_row_meta', __NAMESPACE__ . '\\wpshadow_plugin_row_meta', 10, 2 );
-
-	// Enqueue admin scripts and styles.
-	// TODO: Re-implement wpshadow_admin_enqueue if global admin assets are needed.
-	// add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\wpshadow_admin_enqueue' );
-
-	// Save screen options for dashboard.
-	add_filter( 'set-screen-option', __NAMESPACE__ . '\\wpshadow_save_screen_option', 10, 3 );
-
-	// Filter postbox classes to load state from custom keys.
-	add_filter( 'postbox_classes_toplevel_page_wpshadow', __NAMESPACE__ . '\\wpshadow_postbox_classes', 10, 2 );
-	add_filter( 'get_user_option_meta-box-order_toplevel_page_wpshadow', __NAMESPACE__ . '\\wpshadow_get_metabox_order' );
-	add_filter( 'get_user_option_closedpostboxes_toplevel_page_wpshadow', __NAMESPACE__ . '\\wpshadow_get_closed_postboxes' );
-
-	// Register GDPR Personal Data Exporter and Eraser.
-	// Moved to Vault module: privacy exporters/erasers are registered
-	// by WPShadow\VaultSupport when the module is enabled.
 
 	// Phase 3 Optimization: Clear plugins cache on activation/deactivation
 	add_action( 'activated_plugin', __NAMESPACE__ . '\\wpshadow_clear_plugins_cache' );
@@ -888,97 +432,6 @@ function wpshadow_admin_menu(): void {
 	add_action( 'load-toplevel_page_wpshadow', 'WPShadow\\CoreSupport\\wpshadow_setup_dashboard_screen' );
 }
 
-/**
- * Register submenu items for active top-level modules (children of wpshadow).
- *
- * @param string $capability Required capability (manage_options or manage_network_options).
- * @return void
- */
-function wpshadow_register_module_submenus( string $capability ): void {
-	$catalog = \WPShadow\CoreSupport\WPSHADOW_Module_Registry::get_catalog_with_status();
-	$modules = array_filter(
-		$catalog,
-		function ( $m ) {
-			// Only include active hub modules that are direct children of wpshadow
-			// AND have actual module folders (not just catalog entries).
-			if ( 'hub' !== ( $m['type'] ?? '' )
-				|| empty( $m['installed'] )
-				|| ! empty( $m['requires_hub'] )
-			) {
-				return false;
-			}
-
-			// Verify module folder actually exists.
-			$module_id   = sanitize_key( str_replace( '-wpshadow', '', $m['slug'] ?? '' ) );
-			$module_path = WPSHADOW_PATH . 'modules/hubs/' . $module_id . '/';
-
-			if ( ! is_dir( $module_path ) ) {
-				return false;
-			}
-
-			// Always register if installed; pruning will handle visibility.
-			return true;
-		}
-	);
-
-	foreach ( $modules as $module ) {
-		$module_id   = sanitize_key( str_replace( '-wpshadow', '', $module['slug'] ?? '' ) );
-		$module_name = esc_html( $module['name'] ?? ucfirst( $module_id ) );
-
-		add_submenu_page(
-			'wpshadow',
-			$module_name,
-			$module_name,
-			$capability,
-			'wpshadow&module=' . $module_id,
-			__NAMESPACE__ . '\\wpshadow_render_tab_router'
-		);
-	}
-}
-
-/**
- * TEMPORARILY DISABLED: Prune Support submenus to only allow hub modules (vault, media) and core screens.
- *
- * This removes legacy/experimental submenu entries registered elsewhere.
- *
- * @return void
- */
-/*
-function wpshadow_prune_submenus(): void {
-	// Parent menu slug.
-	$parent = 'wpshadow';
-
-	// Allowed submenu slugs under wpshadow (core screens always allowed).
-	$allowed = array(
-		'wpshadow',         // Dashboard
-		'wpshadow-modules', // Modules grid
-	);
-
-	// Only allow hub submenus when the module is enabled.
-	if ( \WPShadow\CoreSupport\WPSHADOW_Module_Registry::is_enabled( 'vault-wpshadow' ) ) {
-		$allowed[] = 'wpshadow&module=vault';
-	}
-	if ( \WPShadow\CoreSupport\WPSHADOW_Module_Registry::is_enabled( 'media-wpshadow' ) ) {
-		$allowed[] = 'wpshadow&module=media';
-	}
-
-	// Nothing to do if submenu is empty.
-	if ( empty( $GLOBALS['submenu'][ $parent ] ) || ! is_array( $GLOBALS['submenu'][ $parent ] ) ) {
-		return;
-	}
-
-	foreach ( $GLOBALS['submenu'][ $parent ] as $index => $item ) {
-		// $item structure: [0] => title, [1] => capability, [2] => slug, ...
-		$slug = $item[2] ?? '';
-		if ( ! in_array( $slug, $allowed, true ) ) {
-			remove_submenu_page( $parent, $slug );
-		}
-	}
-}
-
-// Run pruning after all menus are registered.
-add_action( 'admin_menu', __NAMESPACE__ . '\\wpshadow_prune_submenus', 999 );
-*/
 /**
  * Add a one-time admin notice, shown on next page load.
  *
@@ -1057,181 +510,6 @@ function wpshadow_render_capabilities_page(): void {
 }
 
 /**
- * Get the actual request host for URL replacement.
- *
- * Returns the actual HTTP_HOST from the request, which is used to replace
- * localhost:8000 URLs that may be generated by WordPress in development
- * environments like GitHub Codespaces or Docker.
- *
- * @return string|null The sanitized request host, or null if not available.
- */
-function wpshadow_get_actual_host(): ?string {
-	static $host = null;
-	
-	if ( null === $host && isset( $_SERVER['HTTP_HOST'] ) ) {
-		$host = sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) );
-	}
-	
-	return $host;
-}
-
-/**
- * Fix any URL that contains localhost:8000 to use actual request host.
- *
- * This is a comprehensive URL fixer that prevents localhost:8000 from reaching
- * the browser in ANY context - canonical URLs, admin URLs, site URLs, AJAX URLs,
- * script URLs, etc. This is critical for environments like GitHub Codespaces
- * where the actual domain differs from WP_SITEURL.
- *
- * @param string $url The URL to fix.
- * @return string The fixed URL with actual request host.
- */
-function wpshadow_fix_localhost_url( string $url ): string {
-	$actual_host = wpshadow_get_actual_host();
-	
-	if ( ! $actual_host || empty( $url ) ) {
-		return $url;
-	}
-	
-	$parsed_url = wp_parse_url( $url );
-	
-	// Only fix if URL has localhost:8000 or doesn't match actual host.
-	if ( isset( $parsed_url['host'] ) && 
-	     ( 'localhost' === $parsed_url['host'] || 
-	       ( $parsed_url['host'] !== $actual_host && false !== strpos( $url, 'localhost' ) ) ) ) {
-		
-		$scheme = isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http';
-		$url    = $scheme . '://' . $actual_host;
-		
-		// Add port if specified and not standard.
-		if ( ! empty( $parsed_url['port'] ) && 
-		     ! in_array( $parsed_url['port'], [ 80, 443 ], true ) ) {
-			// Don't add port for GitHub Codespaces URLs as they're already proxied.
-			if ( false === strpos( $actual_host, 'github.dev' ) ) {
-				$url .= ':' . $parsed_url['port'];
-			}
-		}
-		
-		// Add path, query, and fragment.
-		if ( ! empty( $parsed_url['path'] ) ) {
-			$url .= $parsed_url['path'];
-		}
-		
-		if ( ! empty( $parsed_url['query'] ) ) {
-			$url .= '?' . $parsed_url['query'];
-		}
-		
-		if ( ! empty( $parsed_url['fragment'] ) ) {
-			$url .= '#' . $parsed_url['fragment'];
-		}
-	}
-	
-	return $url;
-}
-
-/**
- * Fix canonical URL for GitHub Codespaces to prevent History API SecurityError.
- *
- * WordPress generates canonical URLs using WP_SITEURL (localhost:8000) but in
- * GitHub Codespaces the actual domain is different (*.app.github.dev). This causes
- * a SecurityError when WordPress core tries to use history.replaceState with the
- * mismatched URL, which can break JavaScript execution on the page.
- *
- * @param string $url The canonical URL.
- * @return string Modified canonical URL using actual request host.
- */
-function wpshadow_fix_canonical_url( string $url ): string {
-	return wpshadow_fix_localhost_url( $url );
-}
-
-/**
- * Fix admin URL to use actual request host instead of localhost.
- *
- * @param string $url The admin URL.
- * @return string Modified admin URL.
- */
-function wpshadow_fix_admin_url( string $url ): string {
-	return wpshadow_fix_localhost_url( $url );
-}
-
-/**
- * Fix site URL to use actual request host instead of localhost.
- *
- * @param string $url The site URL.
- * @return string Modified site URL.
- */
-function wpshadow_fix_site_url( string $url ): string {
-	return wpshadow_fix_localhost_url( $url );
-}
-
-/**
- * Fix home URL to use actual request host instead of localhost.
- *
- * @param string $url The home URL.
- * @return string Modified home URL.
- */
-function wpshadow_fix_home_url( string $url ): string {
-	return wpshadow_fix_localhost_url( $url );
-}
-
-/**
- * Fix script and style URLs to use actual request host.
- *
- * @param string $url The asset URL.
- * @return string Modified asset URL.
- */
-function wpshadow_fix_asset_url( string $url ): string {
-	return wpshadow_fix_localhost_url( $url );
-}
-
-/**
- * Start output buffering to catch and fix any remaining localhost:8000 URLs.
- *
- * This is the final safety net to ensure no localhost URLs reach the browser.
- *
- * @return void
- */
-function wpshadow_start_url_buffer(): void {
-	if ( is_admin() ) {
-		ob_start( __NAMESPACE__ . '\\wpshadow_fix_output_urls' );
-	}
-}
-
-/**
- * Output buffer callback to replace localhost:8000 in final HTML.
- *
- * @param string $buffer The output buffer content.
- * @return string Modified buffer with fixed URLs.
- */
-function wpshadow_fix_output_urls( string $buffer ): string {
-	$actual_host = wpshadow_get_actual_host();
-	
-	if ( ! $actual_host ) {
-		return $buffer;
-	}
-	
-	// Replace any remaining localhost:8000 URLs in the HTML.
-	// This catches URLs in inline scripts, data attributes, etc.
-	$patterns = [
-		'https://localhost:8000',
-		'http://localhost:8000',
-		'https:\/\/localhost:8000',  // JSON-encoded.
-		'http:\/\/localhost:8000',   // JSON-encoded.
-	];
-	
-	$scheme = isset( $_SERVER['HTTPS'] ) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http';
-	$replacement = $scheme . '://' . $actual_host;
-	
-	foreach ( $patterns as $pattern ) {
-		$json_encoded_replacement = str_replace( '/', '\/', $replacement );
-		$replace_with = false !== strpos( $pattern, '\/' ) ? $json_encoded_replacement : $replacement;
-		$buffer = str_replace( $pattern, $replace_with, $buffer );
-	}
-	
-	return $buffer;
-}
-
-/**
  * Handle capability mapping submissions.
  *
  * @return void
@@ -1293,47 +571,15 @@ function wpshadow_render_tab_router(): void {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'wpshadow' ) );
 	}
 
-	// Apply centralized router guard (raw module, hub, and spoke checks).
-	\WPShadow\CoreSupport\WPSHADOW_Router_Guard::execute();
-
 	$context = \WPShadow\CoreSupport\WPSHADOW_Tab_Navigation::get_current_context();
-	$hub     = $context['hub'];
-	$spoke   = $context['spoke'];
 	$tab     = $context['tab'];
-	$level   = $context['level'];
 
-	// Render breadcrumbs (except at Core level, unless on dashboard_settings tab).
-	if ( 'core' !== $level || \WPShadow\CoreSupport\WPSHADOW_Tab_Navigation::TAB_DASHBOARD_SETTINGS === $tab ) {
-		\WPShadow\CoreSupport\WPSHADOW_Tab_Navigation::render_breadcrumbs( $context );
-	}
+	// Render tabs
+	$tabs = \WPShadow\CoreSupport\WPSHADOW_Tab_Navigation::get_core_tabs();
+	\WPShadow\CoreSupport\WPSHADOW_Tab_Navigation::render_tabs( $tabs, $tab );
 
-	// Determine tabs based on level.
-	if ( 'spoke' === $level && ! empty( $hub ) && ! empty( $spoke ) ) {
-		$tabs        = \WPShadow\CoreSupport\WPSHADOW_Tab_Navigation::get_spoke_tabs( $hub, $spoke );
-		$active_tabs = array_merge( $tabs, WPSHADOW_get_hub_tabs_for_spoke( $hub, $spoke ) );
-		\WPShadow\CoreSupport\WPSHADOW_Tab_Navigation::render_tabs( $active_tabs, $tab );
-	} elseif ( 'hub' === $level && ! empty( $hub ) ) {
-		$tabs        = \WPShadow\CoreSupport\WPSHADOW_Tab_Navigation::get_hub_tabs( $hub );
-		// TEMPORARILY DISABLED: Spoke tabs from module registry
-		// $active_tabs = array_merge( $tabs, WPSHADOW_get_spoke_tabs_for_hub( $hub ) );
-		$active_tabs = $tabs; // Only show hub tabs with modules disabled
-		\WPShadow\CoreSupport\WPSHADOW_Tab_Navigation::render_tabs( $active_tabs, $tab );
-	} else {
-		$tabs        = \WPShadow\CoreSupport\WPSHADOW_Tab_Navigation::get_core_tabs();
-		// TEMPORARILY DISABLED: Hub tabs from module registry
-		// $active_tabs = array_merge( $tabs, WPSHADOW_get_active_hub_tabs() );
-		$active_tabs = $tabs; // Only show core tabs with modules disabled
-		\WPShadow\CoreSupport\WPSHADOW_Tab_Navigation::render_tabs( $active_tabs, $tab );
-	}
-
-	// Route to appropriate content based on level and tab.
-	if ( 'spoke' === $level && ! empty( $hub ) && ! empty( $spoke ) ) {
-		wpshadow_render_spoke_content( $hub, $spoke, $tab );
-	} elseif ( 'hub' === $level && ! empty( $hub ) ) {
-		wpshadow_render_hub_content( $hub, $tab );
-	} else {
-		wpshadow_render_core_content( $tab );
-	}
+	// Route to core content
+	wpshadow_render_core_content( $tab );
 }
 
 /**
@@ -1435,79 +681,10 @@ function wpshadow_render_spoke_content( string $hub_id, string $spoke_id, string
 }
 
 /**
- * TEMPORARILY DISABLED: Get active Hub tabs dynamically based on installed hubs.
- * These functions require the Module Registry which is temporarily disabled.
+ * Render dashboard.
  *
- * @return array<array{id: string, label: string, icon: string, url: string}>
- */
-/*
-function WPSHADOW_get_active_hub_tabs(): array {
-	$catalog = \WPShadow\CoreSupport\WPSHADOW_Module_Registry::get_catalog_with_status();
-	$hubs    = array_filter( $catalog, fn( $m ) => 'hub' === ( $m['type'] ?? '' ) && ! empty( $m['status']['active'] ) );
-	$tabs    = array();
-
-	foreach ( $hubs as $hub ) {
-		$hub_id = sanitize_key( str_replace( '-wpshadow', '', $hub['id'] ?? '' ) );
-		$tabs[] = array(
-			'id'    => $hub_id,
-			'label' => esc_html( $hub['name'] ?? ucfirst( $hub_id ) ),
-			'icon'  => 'dashicons-networking',
-			'url'   => \WPShadow\CoreSupport\WPSHADOW_Tab_Navigation::build_hub_url( $hub_id ),
-		);
-	}
-
-	return $tabs;
-}
-
-/**
- * Get Spoke tabs for a specific Hub.
- *
- * @param string $hub_id Hub identifier.
- * @return array<array{id: string, label: string, icon: string, url: string}>
- */
-function WPSHADOW_get_spoke_tabs_for_hub( string $hub_id ): array {
-	$catalog = \WPShadow\CoreSupport\WPSHADOW_Module_Registry::get_catalog_with_status();
-	$spokes  = array_filter(
-		$catalog,
-		fn( $m ) => 'spoke' === ( $m['type'] ?? '' )
-			&& ! empty( $m['status']['active'] )
-			&& str_starts_with( $m['id'] ?? '', $hub_id )
-	);
-	$tabs    = array();
-
-	foreach ( $spokes as $spoke ) {
-		$full_id  = $spoke['id'] ?? '';
-		$spoke_id = sanitize_key( str_replace( $hub_id . '-wpshadow', '', $full_id ) );
-		$spoke_id = str_replace( '-', '', $spoke_id );
-		$tabs[]   = array(
-			'id'    => $spoke_id,
-			'label' => esc_html( $spoke['name'] ?? strtoupper( $spoke_id ) ),
-			'icon'  => 'dashicons-hammer',
-			'url'   => \WPShadow\CoreSupport\WPSHADOW_Tab_Navigation::build_spoke_url( $hub_id, $spoke_id ),
-		);
-	}
-
-	return $tabs;
-}
-
-/**
- * Get Hub tabs for breadcrumb context when in Spoke view.
- *
- * @param string $hub_id Hub identifier.
- * @param string $spoke_id Spoke identifier.
- * @return array<array{id: string, label: string, icon: string, url: string}>
- */
-/*
-function WPSHADOW_get_hub_tabs_for_spoke( string $hub_id, string $spoke_id ): array {
-	return WPSHADOW_get_spoke_tabs_for_hub( $hub_id );
-}
-*/
-
-/**
- * Render dashboard (Core, Hub, or Spoke).
- *
- * @param string $hub_id Optional hub identifier for hub-level dashboards.
- * @param string $spoke_id Optional spoke identifier for spoke-level dashboards.
+ * @param string $hub_id Deprecated - kept for compatibility.
+ * @param string $spoke_id Deprecated - kept for compatibility.
  * @return void
  */
 // Moved to includes/views/dashboard.php
@@ -2028,7 +1205,7 @@ function wpshadow_render_feature_group_metabox( $post, array $metabox ): void {
 }
 
 /**
- * Render modules view.
+ * Render modules view (deprecated - features are auto-loaded).
  *
  * @return void
  */
@@ -2037,64 +1214,15 @@ function wpshadow_render_modules(): void {
 		wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'wpshadow' ) );
 	}
 
-	// Display informational notice about modules being optional.
-	\WPShadow\CoreSupport\WPSHADOW_Notice_Manager::render_notice(
-		'wpshadow_modules_are_optional',
-		wp_kses_post(
-			__( '<strong>Modules are optional enhancements.</strong> WPShadow works perfectly as a standalone core with full diagnostics, emergency recovery, backup verification, and documentation management. Install modules only if you need specialized features like media optimization or vault storage.', 'wpshadow' )
-		),
-		'info',
-		array( 'capability' => 'manage_options' )
-	);
-
-	$catalog_modules = \WPShadow\CoreSupport\WPSHADOW_Module_Registry::get_catalog_with_status();
-	$modules         = $catalog_modules;
-
-	// Top stats derived from catalog with real activation state.
-	$total_count     = count( $modules );
-	$hub_modules     = array_filter(
-		$modules,
-		static function ( $m ) {
-			return ( $m['type'] ?? '' ) === 'hub';
-		}
-	);
-	$spoke_modules   = array_filter(
-		$modules,
-		static function ( $m ) {
-			return ( $m['type'] ?? '' ) === 'spoke';
-		}
-	);
-	$hubs_count      = count( $hub_modules );
-	$spokes_count    = count( $spoke_modules );
-	$available_count = count(
-		array_filter(
-			$modules,
-			static function ( $m ) {
-				return empty( $m['installed'] );
-			}
-		)
-	);
-	$updates_count   = count(
-		array_filter(
-			$modules,
-			static function ( $m ) {
-				return ! empty( $m['update_available'] );
-			}
-		)
-	);
-	$enabled_count   = count(
-		array_filter(
-			$modules,
-			static function ( $m ) {
-				$slug = $m['slug'] ?? null;
-				if ( empty( $m['installed'] ) || ! $slug ) {
-					return false;
-				}
-				$plugin = $slug . '/' . $slug . '.php';
-				return is_plugin_active( $plugin ) || ( is_multisite() && is_plugin_active_for_network( $plugin ) );
-			}
-		)
-	);
+	// Features are automatically loaded from the features directory.
+	// Module system has been removed in favor of a simpler feature-based architecture.
+	?>
+	<div class="wrap">
+		<h1><?php esc_html_e( 'WPShadow Features', 'wpshadow' ); ?></h1>
+		<p><?php esc_html_e( 'Features are automatically loaded from the features directory. No manual installation required.', 'wpshadow' ); ?></p>
+	</div>
+	<?php
+}
 
 	// DISABLED: modules view file does not exist
 	// require_once WPSHADOW_PATH . 'includes/views/modules.php';
@@ -2306,45 +1434,6 @@ function wpshadow_find_plugin_file_by_slug( string $slug ): ?string {
 	}
 
 	return null;
-}
-
-/**
- * Resolve a module's download URL to a direct ZIP when possible.
- *
- * Supports GitHub release pages by converting to the latest asset download URL
- * following a convention of {slug}.zip.
- *
- * @param array $module Module data including 'download_url' and 'slug'.
- * @return string Resolved URL suitable for Plugin_Upgrader::install().
- */
-function wpshadow_resolve_download_url( array $module ): string {
-	$url  = isset( $module['download_url'] ) ? (string) $module['download_url'] : '';
-	$slug = isset( $module['slug'] ) ? (string) $module['slug'] : '';
-
-	if ( empty( $url ) ) {
-		return '';
-	}
-
-	$parts = wp_parse_url( $url );
-	$host  = $parts['host'] ?? '';
-	$path  = $parts['path'] ?? '';
-
-	// Convert GitHub release page to direct asset download if following suite convention.
-	if ( strpos( strtolower( $host ), 'github.com' ) !== false && str_ends_with( (string) $path, '/releases/latest' ) && ! empty( $slug ) ) {
-		// Build /releases/latest/download/{slug}.zip
-		$base = rtrim( $url, '/' );
-		$url  = $base . '/download/' . rawurlencode( $slug ) . '.zip';
-	}
-
-	/**
-	 * Filter to customize download URL resolution.
-	 *
-	 * @param string $url    Resolved URL.
-	 * @param array  $module Module data.
-	 */
-	$url = (string) apply_filters( 'wpshadow_resolve_download_url', $url, $module );
-
-	return esc_url_raw( $url );
 }
 
 /**
@@ -2652,460 +1741,4 @@ add_action( 'init', function() {
 // Initialize the plugin.
 add_action( 'plugins_loaded', __NAMESPACE__ . '\\wpshadow_init' );
 
-/* @changelog
- * [1.2601.72060] - 2026-01-08 20:06
- * - Added dashboard activity log with task/file/user context
- * - Surfaced scheduled task snapshots for catalog refresh and Vault queue
- * - Flagged contributor uploads for Editor+ review while keeping them optimized
- * - Logged module install/update/toggle outcomes for auditability
- * - Dashboard now lists pending contributor uploads for review
- *
- * [1.2601.71920] - 2026-01-07 19:35
- * - Issue #33: In-dashboard install/update flows
- * - Added AJAX handlers: WPSHADOW_ajax_install_module and WPSHADOW_ajax_update_module
- * - Implement WP_Plugin_Upgrader for direct installation from catalog
- * - Auto-activate installed modules after installation
- * - Support for multisite with network-wide install/update
- * - Permission checks for install_plugins and update_plugins capabilities
- * - Helper function wpshadow_find_plugin_file_by_slug() for plugin location
- * - Cache invalidation and module discovery after install/update
- * - Added actionNonce for install/update AJAX requests
- * - Dashboard provides Install button for available modules
- * - Dashboard provides Update button for modules with updates
- * - Localized i18n strings for button labels and status messages
- * - Files Modified:
- *   - core-wpshadow.php: Added install/update handlers + helpers
- *   - assets/js/admin.js: Added handleInstall() and handleUpdate() methods
- *   - includes/views/dashboard.php: Install/Update buttons for available/updateable modules
- *   - assets/css/admin.css: Styling for install/update buttons
- *
- * [1.2601.71910] - 2026-01-07 19:05
- * - Added remote catalog fetch with retries, timeouts, and allowed-host guard
- * - Added checksum validation for catalog payload with fallback to bundled JSON
- * - Filterable catalog URL and cache TTL; logging hook on fetch failures
- * - Maintains bundled catalog as authoritative fallback for offline/resilience
- * - Issue #32: Catalog reliability and integrity improvements
- *
- * [1.2601.71900] - 2026-01-07 18:45
- * - Added bundled catalog for hubs/spokes with optional remote override
- * - Catalog drives dashboard with available/update states and GitHub release links
- * - Dashboard shows Available/Updates stats and status badges per module
- * - Prevent enable toggles for non-installed modules; added notices
- * - Catalog merged with installed modules (even if missing from catalog)
- * - Issue #31: Bundled JSON catalog + updater integration groundwork
- *
- * [1.2601.71818] - 2026-01-07 18:18
- * - Completed Issue #1: Support Menu & Modules Dashboard
- * - Created WPSHADOW_Module_Registry class for action-based module discovery
- * - Implemented Support top-level menu in both site and network admin
- * - Built responsive modules dashboard with stats, filters, and toggle controls
- * - Added AJAX handler for module enable/disable with multisite support
- * - Created dashboard view template with module cards (hub/spoke differentiation)
- * - Implemented JavaScript dashboard controller with filter persistence
- * - Added toggle switch UI with loading states and notifications
- * - Module settings persist at site-level and network-level via options
- * - Module registry includes 5-minute transient caching
- * - Dashboard shows: Total Modules, Enabled, Hubs, Spokes
- * - Acceptance Criteria Met:
- *   ✓ Support menu appears once Core is active (site + network)
- *   ✓ Modules list shows locally installed add-ons (via action hook)
- *   ✓ Module status and toggles persist correctly at site and network scope
- *   ✓ Feature toggles work via AJAX with visual feedback
- * - Files Modified:
- *   - core-wpshadow.php: Added menu structure, AJAX handlers
- * - includes/class-wps-module-registry.php: Full registry implementation
- *   - includes/views/dashboard.php: Dashboard template with module cards
- *   - assets/css/admin.css: Extended with toggle, grid, and loading styles
- *   - assets/js/admin.js: Dashboard controller with AJAX and filtering
- *
- * - Completed Issue #24: Internationalization Baseline
- * - Created languages/ directory with placeholder POT file
- * - Verified all user-facing strings use gettext functions (__(), _e(), esc_html__())
- * - Confirmed text domain 'wpshadow' loads via load_plugin_textdomain()
- * - Ready for WP-CLI i18n make-pot to generate complete translation template
- * - Minimum PHP version updated to 8.1.29
- *
- * [1.2601.71701] - 2026-01-07 17:17
- * - Initial plugin structure created
- */
 
-/**
- * Render Module Registry / Discovery settings widget.
- *
- * @return void
- */
-function render_settings_module_registry(): void {
-	$enabled   = (bool) get_option( 'wpshadow_module_discovery_enabled', true );
-	$frequency = get_option( 'wpshadow_module_discovery_frequency', 'on-demand' );
-	?>
-	<form method="post" class="wps-settings-form" data-settings-group="module_registry" style="max-width: 600px;">
-		<?php wp_nonce_field( 'wpshadow_settings_module_registry', 'wpshadow_settings_nonce' ); ?>
-		<table class="form-table" role="presentation">
-			<tbody>
-				<tr>
-					<th scope="row"><label for="wpshadow_module_discovery_enabled"><?php esc_html_e( 'Auto-Discovery', 'wpshadow' ); ?></label></th>
-					<td>
-						<input type="checkbox" id="wpshadow_module_discovery_enabled" name="wpshadow_module_discovery_enabled" value="1" <?php checked( $enabled, true ); ?> />
-						<label for="wpshadow_module_discovery_enabled"><?php esc_html_e( 'Automatically discover modules from installed plugins', 'wpshadow' ); ?></label>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><label for="wpshadow_module_discovery_frequency"><?php esc_html_e( 'Discovery Frequency', 'wpshadow' ); ?></label></th>
-					<td>
-						<select id="wpshadow_module_discovery_frequency" name="wpshadow_module_discovery_frequency">
-							<option value="on-demand" <?php selected( $frequency, 'on-demand' ); ?>><?php esc_html_e( 'On-Demand (Manual)', 'wpshadow' ); ?></option>
-							<option value="daily" <?php selected( $frequency, 'daily' ); ?>><?php esc_html_e( 'Daily', 'wpshadow' ); ?></option>
-							<option value="weekly" <?php selected( $frequency, 'weekly' ); ?>><?php esc_html_e( 'Weekly', 'wpshadow' ); ?></option>
-						</select>
-						<p class="description"><?php esc_html_e( 'How often the module catalog should refresh.', 'wpshadow' ); ?></p>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<div class="wps-settings-save-status" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
-	</form>
-	<hr style="margin-top: 20px;">
-	<p>
-		<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?action=WPSHADOW_rescan_modules' ), 'wpshadow_rescan_modules' ) ); ?>" class="button"><?php esc_html_e( 'Rescan Modules Now', 'wpshadow' ); ?></a>
-	</p>
-	<?php
-}
-
-/**
- * Render Capability Mapping settings widget.
- *
- * @return void
- */
-function render_settings_capabilities(): void {
-	$dashboard_role = get_option( 'wpshadow_capability_dashboard_role', 'manage_options' );
-	$install_roles  = (array) get_option( 'wpshadow_capability_install_roles', array( 'manage_options' ) );
-	$update_roles   = (array) get_option( 'wpshadow_capability_update_roles', array( 'manage_options' ) );
-	?>
-	<form method="post" class="wps-settings-form" data-settings-group="capabilities" style="max-width: 600px;">
-		<?php wp_nonce_field( 'wpshadow_settings_capabilities', 'wpshadow_settings_nonce' ); ?>
-		<table class="form-table" role="presentation">
-			<tbody>
-				<tr>
-					<th scope="row"><label for="wpshadow_capability_dashboard_role"><?php esc_html_e( 'Dashboard Access', 'wpshadow' ); ?></label></th>
-					<td>
-						<select id="wpshadow_capability_dashboard_role" name="wpshadow_capability_dashboard_role">
-							<option value="manage_options" <?php selected( $dashboard_role, 'manage_options' ); ?>><?php esc_html_e( 'Admin (manage_options)', 'wpshadow' ); ?></option>
-							<option value="manage_network_options" <?php selected( $dashboard_role, 'manage_network_options' ); ?>><?php esc_html_e( 'Super Admin (manage_network_options)', 'wpshadow' ); ?></option>
-						</select>
-						<p class="description"><?php esc_html_e( 'Minimum capability to access the WPShadow dashboard.', 'wpshadow' ); ?></p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><?php esc_html_e( 'Install Permissions', 'wpshadow' ); ?></th>
-					<td>
-						<label><input type="checkbox" name="wpshadow_capability_install_roles[]" value="manage_options" <?php checked( in_array( 'manage_options', $install_roles, true ) ); ?> /> <?php esc_html_e( 'Admin', 'wpshadow' ); ?></label><br/>
-						<label><input type="checkbox" name="wpshadow_capability_install_roles[]" value="manage_network_options" <?php checked( in_array( 'manage_network_options', $install_roles, true ) ); ?> /> <?php esc_html_e( 'Super Admin', 'wpshadow' ); ?></label><br/>
-						<p class="description"><?php esc_html_e( 'Which roles can install modules.', 'wpshadow' ); ?></p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><?php esc_html_e( 'Update Permissions', 'wpshadow' ); ?></th>
-					<td>
-						<label><input type="checkbox" name="wpshadow_capability_update_roles[]" value="manage_options" <?php checked( in_array( 'manage_options', $update_roles, true ) ); ?> /> <?php esc_html_e( 'Admin', 'wpshadow' ); ?></label><br/>
-						<label><input type="checkbox" name="wpshadow_capability_update_roles[]" value="manage_network_options" <?php checked( in_array( 'manage_network_options', $update_roles, true ) ); ?> /> <?php esc_html_e( 'Super Admin', 'wpshadow' ); ?></label><br/>
-						<p class="description"><?php esc_html_e( 'Which roles can update modules.', 'wpshadow' ); ?></p>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<div class="wps-settings-save-status" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
-	</form>
-	<?php
-}
-
-/**
- * Render Dashboard & UI settings widget.
- *
- * @return void
- */
-function render_settings_dashboard(): void {
-	$default_cols   = (int) get_option( 'wpshadow_dashboard_default_columns', 2 );
-	$sticky_widgets = (array) get_option( 'wpshadow_dashboard_sticky_widgets', array() );
-	$widget_sorting = get_option( 'wpshadow_dashboard_widget_sorting', 'drag-order' );
-	?>
-	<form method="post" class="wps-settings-form" data-settings-group="dashboard" style="max-width: 600px;">
-		<?php wp_nonce_field( 'wpshadow_settings_dashboard', 'wpshadow_settings_nonce' ); ?>
-		<table class="form-table" role="presentation">
-			<tbody>
-				<tr>
-					<th scope="row"><?php esc_html_e( 'Default Column Layout', 'wpshadow' ); ?></th>
-					<td>
-						<label><input type="radio" name="wpshadow_dashboard_default_columns" value="1" <?php checked( $default_cols, 1 ); ?> /> <?php esc_html_e( '1 Column', 'wpshadow' ); ?></label><br/>
-						<label><input type="radio" name="wpshadow_dashboard_default_columns" value="2" <?php checked( $default_cols, 2 ); ?> /> <?php esc_html_e( '2 Columns', 'wpshadow' ); ?></label><br/>
-						<p class="description"><?php esc_html_e( 'Default dashboard layout for new users.', 'wpshadow' ); ?></p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><?php esc_html_e( 'Sticky Widgets', 'wpshadow' ); ?></th>
-					<td>
-						<label><input type="checkbox" name="wpshadow_dashboard_sticky_widgets[]" value="wpshadow_quick_actions" <?php checked( in_array( 'wpshadow_quick_actions', $sticky_widgets, true ) ); ?> /> <?php esc_html_e( 'Always show Quick Actions', 'wpshadow' ); ?></label><br/>
-						<label><input type="checkbox" name="wpshadow_dashboard_sticky_widgets[]" value="wpshadow_modules" <?php checked( in_array( 'wpshadow_modules', $sticky_widgets, true ) ); ?> /> <?php esc_html_e( 'Always show Modules', 'wpshadow' ); ?></label><br/>
-						<p class="description"><?php esc_html_e( 'Widgets that cannot be hidden by users.', 'wpshadow' ); ?></p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><label for="wpshadow_dashboard_widget_sorting"><?php esc_html_e( 'Widget Sorting', 'wpshadow' ); ?></label></th>
-					<td>
-						<select id="wpshadow_dashboard_widget_sorting" name="wpshadow_dashboard_widget_sorting">
-							<option value="drag-order" <?php selected( $widget_sorting, 'drag-order' ); ?>><?php esc_html_e( 'Allow Drag & Drop', 'wpshadow' ); ?></option>
-							<option value="locked" <?php selected( $widget_sorting, 'locked' ); ?>><?php esc_html_e( 'Locked (Fixed Order)', 'wpshadow' ); ?></option>
-						</select>
-						<p class="description"><?php esc_html_e( 'Allow users to rearrange dashboard widgets.', 'wpshadow' ); ?></p>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<div class="wps-settings-save-status" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
-	</form>
-	<?php
-}
-
-/**
- * Render License & Updates settings widget.
- *
- * @return void
- */
-// License settings function moved to Pro plugin
-
-/**
- * Render Privacy & GDPR settings widget.
- *
- * @return void
- */
-function render_settings_privacy(): void {
-	$log_retention       = (int) get_option( 'wpshadow_privacy_log_retention_days', 90 );
-	$auto_delete_enabled = (bool) get_option( 'wpshadow_privacy_auto_delete_enabled', false );
-	$auto_delete_days    = (int) get_option( 'wpshadow_privacy_auto_delete_days', 90 );
-	$audit_level         = get_option( 'wpshadow_privacy_audit_logging_level', 'standard' );
-	$export_format       = get_option( 'wpshadow_privacy_export_format', 'json' );
-	$contrib_see_user    = (bool) get_option( 'wpshadow_privacy_contributors_see_user_activity', false );
-	$editor_see_admin    = (bool) get_option( 'wpshadow_privacy_editors_see_admin_activity', false );
-	$diagnostic_logging  = (bool) get_option( 'wpshadow_diagnostic_logging_enabled', false );
-	?>
-	<form method="post" class="wps-settings-form" data-settings-group="privacy" style="max-width: 600px;">
-		<?php wp_nonce_field( 'wpshadow_settings_privacy', 'wpshadow_settings_nonce' ); ?>
-		<table class="form-table" role="presentation">
-			<tbody>
-				<tr>
-					<th scope="row"><label for="wpshadow_privacy_log_retention_days"><?php esc_html_e( 'Activity Log Retention', 'wpshadow' ); ?></label></th>
-					<td>
-						<input type="number" id="wpshadow_privacy_log_retention_days" name="wpshadow_privacy_log_retention_days" value="<?php echo esc_attr( $log_retention ); ?>" min="1" max="3650" /> <?php esc_html_e( 'days', 'wpshadow' ); ?>
-						<p class="description"><?php esc_html_e( 'How long to keep activity logs.', 'wpshadow' ); ?></p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><?php esc_html_e( 'Auto-Delete Old Logs', 'wpshadow' ); ?></th>
-					<td>
-						<label><input type="checkbox" name="wpshadow_privacy_auto_delete_enabled" value="1" <?php checked( $auto_delete_enabled, true ); ?> /> <?php esc_html_e( 'Automatically delete logs older than', 'wpshadow' ); ?></label>
-						<input type="number" name="wpshadow_privacy_auto_delete_days" value="<?php echo esc_attr( $auto_delete_days ); ?>" min="1" max="3650" style="width: 80px;" /> <?php esc_html_e( 'days', 'wpshadow' ); ?>
-						<p class="description"><?php esc_html_e( 'Clean up old activity records automatically.', 'wpshadow' ); ?></p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><label for="wpshadow_privacy_audit_logging_level"><?php esc_html_e( 'Audit Logging Level', 'wpshadow' ); ?></label></th>
-					<td>
-						<select id="wpshadow_privacy_audit_logging_level" name="wpshadow_privacy_audit_logging_level">
-							<option value="minimal" <?php selected( $audit_level, 'minimal' ); ?>><?php esc_html_e( 'Minimal', 'wpshadow' ); ?></option>
-							<option value="standard" <?php selected( $audit_level, 'standard' ); ?>><?php esc_html_e( 'Standard', 'wpshadow' ); ?></option>
-							<option value="verbose" <?php selected( $audit_level, 'verbose' ); ?>><?php esc_html_e( 'Verbose', 'wpshadow' ); ?></option>
-						</select>
-						<p class="description"><?php esc_html_e( 'How detailed the activity logs should be.', 'wpshadow' ); ?></p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><?php esc_html_e( 'Diagnostic Logging', 'wpshadow' ); ?></th>
-					<td>
-						<label><input type="checkbox" name="wpshadow_diagnostic_logging_enabled" value="1" <?php checked( $diagnostic_logging, true ); ?> /> <?php esc_html_e( 'Enable diagnostic logging for support', 'wpshadow' ); ?></label>
-						<p class="description"><?php esc_html_e( 'Log environment checks and resource usage for troubleshooting. Recommended for debugging performance issues.', 'wpshadow' ); ?></p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><label for="wpshadow_privacy_export_format"><?php esc_html_e( 'GDPR Export Format', 'wpshadow' ); ?></label></th>
-					<td>
-						<select id="wpshadow_privacy_export_format" name="wpshadow_privacy_export_format">
-							<option value="json" <?php selected( $export_format, 'json' ); ?>><?php esc_html_e( 'JSON', 'wpshadow' ); ?></option>
-							<option value="csv" <?php selected( $export_format, 'csv' ); ?>><?php esc_html_e( 'CSV', 'wpshadow' ); ?></option>
-							<option value="zip" <?php selected( $export_format, 'zip' ); ?>><?php esc_html_e( 'ZIP Archive', 'wpshadow' ); ?></option>
-						</select>
-						<p class="description"><?php esc_html_e( 'Format for data exports (privacy requests).', 'wpshadow' ); ?></p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><?php esc_html_e( 'Activity Visibility', 'wpshadow' ); ?></th>
-					<td>
-						<label><input type="checkbox" name="wpshadow_privacy_contributors_see_user_activity" value="1" <?php checked( $contrib_see_user, true ); ?> /> <?php esc_html_e( 'Contributors can view other user activity', 'wpshadow' ); ?></label><br/>
-						<label><input type="checkbox" name="wpshadow_privacy_editors_see_admin_activity" value="1" <?php checked( $editor_see_admin, true ); ?> /> <?php esc_html_e( 'Editors can view admin activity', 'wpshadow' ); ?></label><br/>
-						<p class="description"><?php esc_html_e( 'Control who can see activity logs from other roles.', 'wpshadow' ); ?></p>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<div class="wps-settings-save-status" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
-	</form>
-	<?php
-}
-
-/**
- * Render Database Cleanup settings widget.
- *
- * @return void
- */
-function render_settings_database_cleanup(): void {
-// Get the database cleanup feature instance
-$feature = \WPShadow\CoreSupport\WPSHADOW_Feature_Registry::get_feature( 'database-cleanup' );
-
-if ( ! $feature ) {
-echo '<p>' . esc_html__( 'Database cleanup feature is not available.', 'wpshadow' ) . '</p>';
-return;
-}
-
-$enabled            = $feature->is_enabled();
-$cleanup_frequency  = $feature->get_setting( 'cleanup_frequency', 'weekly' );
-$cleanup_options    = $feature->get_setting( 'cleanup_options', array() );
-
-// Default options if not set
-$default_options = array(
-'cleanup_revisions'     => true,
-'cleanup_transients'    => true,
-'cleanup_spam'          => true,
-'cleanup_orphaned_meta' => true,
-'cleanup_auto_drafts'   => true,
-'optimize_tables'       => false,
-'keep_revisions'        => 5,
-);
-
-$cleanup_options = array_merge( $default_options, $cleanup_options );
-
-// Calculate next scheduled run
-$next_run = wp_next_scheduled( 'wpshadow_database_cleanup' );
-$next_run_text = $next_run ? wp_date( 'F j, Y g:i A', $next_run ) : __( 'Not scheduled', 'wpshadow' );
-
-// Get last cleanup from activity log if available
-$last_cleanup = get_option( 'wpshadow_last_database_cleanup', 0 );
-$last_cleanup_text = $last_cleanup ? wp_date( 'F j, Y g:i A', $last_cleanup ) : __( 'Never', 'wpshadow' );
-
-?>
-<form method="post" class="wps-settings-form" data-settings-group="database_cleanup" style="max-width: 600px;">
-<?php wp_nonce_field( 'wpshadow_settings_database_cleanup', 'wpshadow_settings_nonce' ); ?>
-<table class="form-table" role="presentation">
-<tbody>
-<tr>
-<th scope="row"><?php esc_html_e( 'Automatic Cleanup', 'wpshadow' ); ?></th>
-<td>
-<label>
-<input type="checkbox" name="wpshadow_database_cleanup_enabled" value="1" <?php checked( $enabled, true ); ?> />
-<?php esc_html_e( 'Enable automatic database cleanup', 'wpshadow' ); ?>
-</label>
-<p class="description">
-<?php esc_html_e( 'Automatically clean up database overhead on a scheduled basis.', 'wpshadow' ); ?>
-</p>
-</td>
-</tr>
-
-<tr>
-<th scope="row"><label for="wpshadow_cleanup_frequency"><?php esc_html_e( 'Schedule', 'wpshadow' ); ?></label></th>
-<td>
-<select id="wpshadow_cleanup_frequency" name="wpshadow_cleanup_frequency">
-<option value="daily" <?php selected( $cleanup_frequency, 'daily' ); ?>><?php esc_html_e( 'Daily', 'wpshadow' ); ?></option>
-<option value="weekly" <?php selected( $cleanup_frequency, 'weekly' ); ?>><?php esc_html_e( 'Weekly', 'wpshadow' ); ?></option>
-<option value="monthly" <?php selected( $cleanup_frequency, 'monthly' ); ?>><?php esc_html_e( 'Monthly', 'wpshadow' ); ?></option>
-</select>
-<p class="description">
-<?php esc_html_e( 'How often to run automatic cleanup.', 'wpshadow' ); ?>
-</p>
-</td>
-</tr>
-
-<tr>
-<th scope="row"><?php esc_html_e( 'Cleanup Status', 'wpshadow' ); ?></th>
-<td>
-<p><strong><?php esc_html_e( 'Last Cleanup:', 'wpshadow' ); ?></strong> <?php echo esc_html( $last_cleanup_text ); ?></p>
-<p><strong><?php esc_html_e( 'Next Scheduled:', 'wpshadow' ); ?></strong> <?php echo esc_html( $next_run_text ); ?></p>
-</td>
-</tr>
-
-<tr>
-<th scope="row"><?php esc_html_e( 'Cleanup Options', 'wpshadow' ); ?></th>
-<td>
-<label>
-<input type="checkbox" name="wpshadow_cleanup_options[cleanup_revisions]" value="1" <?php checked( $cleanup_options['cleanup_revisions'], true ); ?> />
-<?php esc_html_e( 'Clean up post revisions', 'wpshadow' ); ?>
-</label>
-<br/>
-<label style="margin-left: 24px;">
-<?php esc_html_e( 'Keep', 'wpshadow' ); ?>
-<input type="number" name="wpshadow_cleanup_options[keep_revisions]" value="<?php echo esc_attr( $cleanup_options['keep_revisions'] ); ?>" min="0" max="50" style="width: 60px;" />
-<?php esc_html_e( 'most recent revisions per post', 'wpshadow' ); ?>
-</label>
-<br/><br/>
-
-<label>
-<input type="checkbox" name="wpshadow_cleanup_options[cleanup_transients]" value="1" <?php checked( $cleanup_options['cleanup_transients'], true ); ?> />
-<?php esc_html_e( 'Clean up expired transients', 'wpshadow' ); ?>
-</label>
-<br/>
-
-<label>
-<input type="checkbox" name="wpshadow_cleanup_options[cleanup_spam]" value="1" <?php checked( $cleanup_options['cleanup_spam'], true ); ?> />
-<?php esc_html_e( 'Clean up spam comments', 'wpshadow' ); ?>
-</label>
-<br/>
-
-<label>
-<input type="checkbox" name="wpshadow_cleanup_options[cleanup_orphaned_meta]" value="1" <?php checked( $cleanup_options['cleanup_orphaned_meta'], true ); ?> />
-<?php esc_html_e( 'Clean up orphaned post metadata', 'wpshadow' ); ?>
-</label>
-<br/>
-
-<label>
-<input type="checkbox" name="wpshadow_cleanup_options[cleanup_auto_drafts]" value="1" <?php checked( $cleanup_options['cleanup_auto_drafts'], true ); ?> />
-<?php esc_html_e( 'Clean up old auto-drafts', 'wpshadow' ); ?>
-</label>
-<br/>
-
-<label>
-<input type="checkbox" name="wpshadow_cleanup_options[optimize_tables]" value="1" <?php checked( $cleanup_options['optimize_tables'], true ); ?> />
-<?php esc_html_e( 'Optimize database tables', 'wpshadow' ); ?>
-</label>
-
-<p class="description">
-<?php esc_html_e( 'Select which cleanup tasks to perform automatically.', 'wpshadow' ); ?>
-</p>
-</td>
-</tr>
-
-<tr>
-<th scope="row"><?php esc_html_e( 'Manual Cleanup', 'wpshadow' ); ?></th>
-<td>
-<?php
-$cleanup_url = wp_nonce_url(
-admin_url( 'admin-post.php?action=WPSHADOW_run_database_cleanup' ),
-'wpshadow_run_database_cleanup'
-);
-?>
-<a href="<?php echo esc_url( $cleanup_url ); ?>" class="button button-secondary">
-<?php esc_html_e( 'Run Cleanup Now', 'wpshadow' ); ?>
-</a>
-<p class="description">
-<?php esc_html_e( 'Manually trigger a database cleanup immediately.', 'wpshadow' ); ?>
-</p>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="wps-settings-save-status" style="margin-top: 10px; font-size: 13px; color: #666;"></div>
-</form>
-<?php
-}
-
-/**
- * Render Database Cleanup settings widget.
- *
- * @return void
- */
-// Placeholder - implementation to be added

@@ -1,8 +1,8 @@
 <?php
 /**
- * Extra WordPress configuration for Test WordPress Environment (Port 8080)
+ * Extra WordPress configuration for Codespaces and Local Development
  * 
- * This file is auto-loaded by docker-compose.yml volume mount for the test container only.
+ * This file is auto-loaded by docker-compose.yml volume mount.
  * CRITICAL: This must disable HTTPS forcing and enforce HTTP-only mode.
  */
 
@@ -41,7 +41,7 @@ if ( getenv( 'CODESPACES' ) === 'true' ) {
 
 	if ( $codespace_name ) {
 		// Use HTTP for Codespaces preview URLs (avoids SSL certificate warnings)
-		$codespace_url = 'http://' . $codespace_name . '-8080.preview.app.github.dev';
+		$codespace_url = 'http://' . $codespace_name . '-8000.preview.app.github.dev';
 
 		if ( ! defined( 'WP_HOME' ) ) {
 			define( 'WP_HOME', $codespace_url );
@@ -53,10 +53,10 @@ if ( getenv( 'CODESPACES' ) === 'true' ) {
 } else {
 	// Fallback to localhost for non-Codespace environments (Docker local development)
 	if ( ! defined( 'WP_HOME' ) ) {
-		define( 'WP_HOME', 'http://localhost:8080' );
+		define( 'WP_HOME', 'http://localhost:8000' );
 	}
 	if ( ! defined( 'WP_SITEURL' ) ) {
-		define( 'WP_SITEURL', 'http://localhost:8080' );
+		define( 'WP_SITEURL', 'http://localhost:8000' );
 	}
 }
 
