@@ -32,12 +32,75 @@ class WPSHADOW_Asset_Version_Helpers {
 			return $src;
 		}
 
+		// Check against ignore lists.
+		if ( self::should_ignore_asset( $src ) ) {
+			return $src;
+		}
+
 		// Honor preserve-plugin-versions setting.
 		if ( self::should_preserve_plugin_version( $src ) ) {
 			return $src;
 		}
 
 		return remove_query_arg( 'ver', $src );
+	}
+
+	/**
+	 * Check if an asset URL should be ignored based on ignore rules and plugin list.
+	 *
+	 * @param string $src Asset URL to check.
+	 * @return bool True if asset should be ignored.
+	 */
+	public static function should_ignore_asset( string $src ): bool {
+		// Check CSS ignore rules for .css files.
+		if ( strpos( $src, '.css' ) !== false ) {
+			$css_patterns = get_option( 'wpshadow_asset-version-removal_css_ignore_patterns', array() );
+			foreach ( $css_patterns as $pattern ) {
+				if ( self::match_pattern( $src, $pattern ) ) {
+					return true;
+				}
+			}
+		}
+
+		// Check JS ignore rules for .js files.
+		if ( strpos( $src, '.js' ) !== false ) {
+			$js_patterns = get_option( 'wpshadow_asset-version-removal_js_ignore_patterns', array() );
+			foreach ( $js_patterns as $pattern ) {
+				if ( self::match_pattern( $src, $pattern ) ) {
+					return true;
+				}
+			}
+		}
+
+		// Check plugin ignore list.
+		$ignored_plugins = get_option( 'wpshadow_asset-version-removal_ignored_plugins', array() );
+		if ( ! empty( $ignored_plugins ) && strpos( $src, '/plugins/' ) !== false ) {
+			foreach ( $ignored_plugins as $plugin_slug ) {
+				if ( strpos( $src, '/plugins/' . $plugin_slug . '/' ) !== false ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Match a URL against a pattern (supports simple wildcards and regex).
+	 *
+	 * @param string $url URL to check.
+	 * @param string $pattern Pattern to match against.
+	 * @return bool True if URL matches pattern.
+	 */
+	private static function match_pattern( string $url, string $pattern ): bool {
+		// If pattern starts and ends with /, treat as regex.
+		if ( preg_match( '/^\/.*\/[gimsuvy]*$/', $pattern ) ) {
+			return (bool) preg_match( $pattern, $url );
+		}
+
+		// Otherwise use simple wildcard matching.
+		$pattern = str_replace( '*', '.*', preg_quote( $pattern, '/' ) );
+		return (bool) preg_match( '/^' . $pattern . '$/', $url );
 	}
 
 	/**

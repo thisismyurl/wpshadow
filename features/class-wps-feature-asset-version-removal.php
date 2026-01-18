@@ -52,6 +52,27 @@ final class WPSHADOW_Feature_Asset_Version_Removal extends WPSHADOW_Abstract_Fea
 						'default_enabled' => false,
 						'version'         => '1.0.0',
 					),
+					'css_ignore_rules' => array(
+						'name'            => __( 'CSS Ignore Rules', 'wpshadow' ),
+						'description'     => __( 'Specify CSS files to exclude from version removal using regex patterns.', 'wpshadow' ),
+						'default_enabled' => true,
+						'version'         => '1.0.0',
+						'has_settings'    => true,
+					),
+					'js_ignore_rules' => array(
+						'name'            => __( 'JavaScript Ignore Rules', 'wpshadow' ),
+						'description'     => __( 'Specify JavaScript files to exclude from version removal using regex patterns.', 'wpshadow' ),
+						'default_enabled' => true,
+						'version'         => '1.0.0',
+						'has_settings'    => true,
+					),
+					'plugin_ignore_list' => array(
+						'name'            => __( 'Plugin Ignore List', 'wpshadow' ),
+						'description'     => __( 'Select specific plugins to exclude from version string removal.', 'wpshadow' ),
+						'default_enabled' => true,
+						'version'         => '1.0.0',
+						'has_settings'    => true,
+					),
 				),
 			)
 		);
@@ -62,9 +83,23 @@ final class WPSHADOW_Feature_Asset_Version_Removal extends WPSHADOW_Abstract_Fea
 				'remove_css_versions'      => true,
 				'remove_js_versions'       => true,
 				'preserve_plugin_versions' => false,
+				'css_ignore_rules'         => true,
+				'js_ignore_rules'          => true,
+				'plugin_ignore_list'       => true,
 			),
 			'asset-version-removal'
 		);
+
+		// Initialize storage options for ignore rules and plugin list
+		if ( ! get_option( 'wpshadow_asset-version-removal_css_ignore_patterns' ) ) {
+			update_option( 'wpshadow_asset-version-removal_css_ignore_patterns', array() );
+		}
+		if ( ! get_option( 'wpshadow_asset-version-removal_js_ignore_patterns' ) ) {
+			update_option( 'wpshadow_asset-version-removal_js_ignore_patterns', array() );
+		}
+		if ( ! get_option( 'wpshadow_asset-version-removal_ignored_plugins' ) ) {
+			update_option( 'wpshadow_asset-version-removal_ignored_plugins', array() );
+		}
 
 		$this->log_activity( 'feature_initialized', 'Asset Version Removal feature initialized', 'info' );
 	}
@@ -92,6 +127,11 @@ final class WPSHADOW_Feature_Asset_Version_Removal extends WPSHADOW_Abstract_Fea
 		if ( WPSHADOW_Asset_Version_Helpers::is_sub_feature_enabled( 'asset-version-removal', 'remove_js_versions' ) ) {
 			add_filter( 'script_loader_src', array( $this, 'remove_js_version' ), 10 );
 		}
+
+		// Register AJAX handlers for ignore rules
+		add_action( 'wp_ajax_wpshadow_save_css_ignore_rules', array( $this, 'ajax_save_css_ignore_rules' ) );
+		add_action( 'wp_ajax_wpshadow_save_js_ignore_rules', array( $this, 'ajax_save_js_ignore_rules' ) );
+		add_action( 'wp_ajax_wpshadow_save_plugin_ignore_list', array( $this, 'ajax_save_plugin_ignore_list' ) );
 
 		// Preserve plugin versions is handled via option check in the helpers
 	}
@@ -159,5 +199,62 @@ final class WPSHADOW_Feature_Asset_Version_Removal extends WPSHADOW_Abstract_Fea
 	 */
 	public function remove_js_version( $src ) {
 		return WPSHADOW_Asset_Version_Helpers::remove_version( $src );
+	}
+
+	/**
+	 * Save CSS ignore rules via AJAX.
+	 *
+	 * @return void
+	 */
+	public function ajax_save_css_ignore_rules(): void {
+		check_ajax_referer( 'wpshadow_save_css_ignore_rules' );
+		
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'wpshadow' ) ) );
+		}
+
+		$patterns = isset( $_POST['patterns'] ) ? array_map( 'sanitize_text_field', (array) wp_unslash( $_POST['patterns'] ) ) : array();
+		$patterns = array_filter( $patterns );
+
+		update_option( 'wpshadow_asset-version-removal_css_ignore_patterns', $patterns );
+		wp_send_json_success( array( 'message' => __( 'CSS ignore rules saved successfully.', 'wpshadow' ) ) );
+	}
+
+	/**
+	 * Save JavaScript ignore rules via AJAX.
+	 *
+	 * @return void
+	 */
+	public function ajax_save_js_ignore_rules(): void {
+		check_ajax_referer( 'wpshadow_save_js_ignore_rules' );
+		
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'wpshadow' ) ) );
+		}
+
+		$patterns = isset( $_POST['patterns'] ) ? array_map( 'sanitize_text_field', (array) wp_unslash( $_POST['patterns'] ) ) : array();
+		$patterns = array_filter( $patterns );
+
+		update_option( 'wpshadow_asset-version-removal_js_ignore_patterns', $patterns );
+		wp_send_json_success( array( 'message' => __( 'JavaScript ignore rules saved successfully.', 'wpshadow' ) ) );
+	}
+
+	/**
+	 * Save plugin ignore list via AJAX.
+	 *
+	 * @return void
+	 */
+	public function ajax_save_plugin_ignore_list(): void {
+		check_ajax_referer( 'wpshadow_save_plugin_ignore_list' );
+		
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'wpshadow' ) ) );
+		}
+
+		$plugins = isset( $_POST['plugins'] ) ? array_map( 'sanitize_text_field', (array) wp_unslash( $_POST['plugins'] ) ) : array();
+		$plugins = array_filter( $plugins );
+
+		update_option( 'wpshadow_asset-version-removal_ignored_plugins', $plugins );
+		wp_send_json_success( array( 'message' => __( 'Plugin ignore list saved successfully.', 'wpshadow' ) ) );
 	}
 }
