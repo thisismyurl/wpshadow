@@ -16,16 +16,18 @@ if ( isset( $_SERVER['HTTP_HOST'] ) ) {
 }
 
 // Prevent history.replaceState SecurityError in Codespaces by filtering admin_url
-add_filter(
-	'admin_url',
-	function ( $url ) {
-		// In Codespaces, replace localhost references with actual host
-		if ( isset( $_SERVER['HTTP_HOST'] ) && false !== strpos( $_SERVER['HTTP_HOST'], 'app.github.dev' ) ) {
-			$url = str_replace( 'localhost', $_SERVER['HTTP_HOST'], $url );
-		}
-		return $url;
-	},
-	10,
-	1
-);
+if ( function_exists( 'add_filter' ) ) {
+	add_filter(
+		'admin_url',
+		function ( $url ) {
+			// In Codespaces, replace localhost references with actual host
+			if ( isset( $_SERVER['HTTP_HOST'] ) && false !== strpos( $_SERVER['HTTP_HOST'], 'app.github.dev' ) ) {
+				$url = str_replace( 'localhost', $_SERVER['HTTP_HOST'], $url );
+			}
+			return $url;
+		},
+		10,
+		1
+	);
+}
 

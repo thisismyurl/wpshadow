@@ -51,7 +51,7 @@ function wpshadow_init_dashboard_assets(): void {
 	wp_register_script( 'wpshadow-feature-toggle', false, array( 'jquery' ), WPSHADOW_VERSION, true );
 	wp_register_style( 'wpshadow-feature-toggle', false, array(), WPSHADOW_VERSION );
 	
-	$inline_css = '.wpshadow-toast-container{position:fixed;top:46px;right:16px;z-index:9999;display:flex;flex-direction:column;gap:8px;align-items:flex-end;pointer-events:none;}.wpshadow-toast{min-width:240px;max-width:320px;padding:12px 14px;border-radius:6px;color:#0b1220;background:#f6f7f7;border:1px solid #c3c4c7;box-shadow:0 8px 20px rgba(0,0,0,0.08);opacity:0;transform:translateY(-6px);transition:opacity 0.2s ease,transform 0.2s ease;pointer-events:auto;font-weight:500;}.wpshadow-toast.is-visible{opacity:1;transform:translateY(0);}.wpshadow-toast.success{border-color:#00a32a;background:#ecfbf1;color:#123524;}.wpshadow-toast.error{border-color:#d63638;background:#fbeaea;color:#4a1f1f;}.wpshadow-child-feature.wpshadow-disabled{opacity:0.5;}.wpshadow-child-feature.wpshadow-disabled td{color:#999;}';
+	$inline_css = '.wpshadow-toast-container{position:fixed;top:46px;right:16px;z-index:9999;display:flex;flex-direction:column;gap:8px;align-items:flex-end;pointer-events:none;}.wpshadow-toast{min-width:240px;max-width:320px;padding:12px 14px;border-radius:6px;color:#0b1220;background:#f6f7f7;border:1px solid #c3c4c7;box-shadow:0 8px 20px rgba(0,0,0,0.08);opacity:0;transform:translateY(-6px);transition:opacity 0.2s ease,transform 0.2s ease;pointer-events:auto;font-weight:500;}.wpshadow-toast.is-visible{opacity:1;transform:translateY(0);}.wpshadow-toast.success{border-color:#00a32a;background:#ecfbf1;color:#123524;}.wpshadow-toast.error{border-color:#b9bec5;background:#f1f2f3;color:#32373c;}.wpshadow-child-feature.wpshadow-disabled{opacity:0.5;}.wpshadow-child-feature.wpshadow-disabled td{color:#999;}';
 	wp_add_inline_style( 'wpshadow-feature-toggle', $inline_css );
 
 	$inline_js = <<<'JS'
@@ -66,8 +66,33 @@ jQuery(function($){
 
 	function syncSubToggles(parentId, parentEnabled){ var toggles=$('.wpshadow-child-toggle[data-parent-id="'+parentId+'"]'); if(!parentEnabled){ previousStates[parentId]={}; toggles.each(function(){ var el=$(this); var row=el.closest('tr'); var subId=el.data('feature-id'); previousStates[parentId][subId]=el.is(':checked'); el.prop('checked', false); row.addClass('wpshadow-disabled'); }); return; } var prevMap=previousStates[parentId]||{}; toggles.each(function(){ var el=$(this); var row=el.closest('tr'); var subId=el.data('feature-id'); var defaultEnabled=parseInt(el.data('default-enabled'),10)===1; var target=(subId in prevMap)?prevMap[subId]:defaultEnabled; el.prop('checked', !!target); if(target){ row.removeClass('wpshadow-disabled'); } else { row.addClass('wpshadow-disabled'); } }); delete previousStates[parentId]; }
 
-	function updateParentState(el){ var featureId=el.data('parent-id'); var enabled=el.is(':checked'); var name=el.data('feature-name')||'Feature'; var row=$('.wpshadow-parent-feature[data-parent-id="'+featureId+'"]'); if(enabled){ row.removeClass('wpshadow-disabled'); } else { row.addClass('wpshadow-disabled'); } setSubRowsVisibility(featureId, enabled); syncSubToggles(featureId, enabled); showToast(enabled ? name + ' activated' : name + ' deactivated', enabled ? 'success' : 'error'); }
-	function updateChildState(el){ var enabled=el.is(':checked'); var row=el.closest('tr'); var name=el.data('feature-name')||'Sub-feature'; if(enabled){ row.removeClass('wpshadow-disabled'); } else { row.addClass('wpshadow-disabled'); } showToast(enabled ? name + ' activated' : name + ' deactivated', enabled ? 'success' : 'error'); }
+	function saveParentToggle(featureId, enabled){
+		if(!window.wpshadowFeatureDetails){ console.log('[wpshadow] No featureDetails localization, skip save'); return; }
+		console.log('[wpshadow] Saving parent', featureId, 'enabled=', enabled);
+		$.post(wpshadowFeatureDetails.ajaxurl, {
+			action: 'wpshadow_toggle_feature',
+			nonce: wpshadowFeatureDetails.nonce,
+			feature_id: featureId,
+			enabled: enabled ? 'true' : 'false'
+		}).done(function(resp){ console.log('[wpshadow] Save parent response', resp); })
+		.fail(function(xhr){ console.error('[wpshadow] Save parent failed', xhr.responseText); });
+	}
+
+	function saveChildToggle(parentId, subId, enabled){
+		if(!window.wpshadowFeatureDetails){ console.log('[wpshadow] No featureDetails localization, skip save'); return; }
+		console.log('[wpshadow] Saving child', subId, 'of', parentId, 'enabled=', enabled);
+		$.post(wpshadowFeatureDetails.ajaxurl, {
+			action: 'wpshadow_toggle_feature_setting',
+			nonce: wpshadowFeatureDetails.nonce,
+			feature_id: parentId,
+			setting_key: subId,
+			enabled: enabled ? 'true' : 'false'
+		}).done(function(resp){ console.log('[wpshadow] Save child response', resp); })
+		.fail(function(xhr){ console.error('[wpshadow] Save child failed', xhr.responseText); });
+	}
+
+	function updateParentState(el){ var featureId=el.data('parent-id'); var enabled=el.is(':checked'); var name=el.data('feature-name')||'Feature'; var row=$('.wpshadow-parent-feature[data-parent-id="'+featureId+'"]'); if(enabled){ row.removeClass('wpshadow-disabled'); } else { row.addClass('wpshadow-disabled'); } setSubRowsVisibility(featureId, enabled); syncSubToggles(featureId, enabled); showToast(enabled ? name + ' activated' : name + ' deactivated', enabled ? 'success' : 'error'); saveParentToggle(featureId, enabled); }
+	function updateChildState(el){ var enabled=el.is(':checked'); var row=el.closest('tr'); var name=el.data('feature-name')||'Sub-feature'; var parentId=el.data('parent-id'); var subId=el.data('feature-id'); if(enabled){ row.removeClass('wpshadow-disabled'); } else { row.addClass('wpshadow-disabled'); } showToast(enabled ? name + ' activated' : name + ' deactivated', enabled ? 'success' : 'error'); saveChildToggle(parentId, subId, enabled); }
 	// Init
 	setTimeout(function(){ 
 		$('.wpshadow-parent-toggle').each(function(){ 
@@ -1768,18 +1793,7 @@ function wpshadow_render_feature_group_metabox( $post, array $metabox ): void {
 					<td style="position: relative;">
 						<div style="display: flex; justify-content: space-between; align-items: flex-start;">
 							<div style="flex: 1;">
-								<?php if ( $is_enabled ) : ?>
-									<?php
-									$feature_url = \WPShadow\CoreSupport\WPSHADOW_Feature_Details_Page::get_feature_url( $feature_id );
-									?>
-									<strong>
-										<a href="<?php echo esc_url( $feature_url ); ?>" style="color: #2271b1; text-decoration: none;">
-											<?php echo esc_html( $feature_name ); ?>
-										</a>
-									</strong>
-								<?php else : ?>
-									<strong><?php echo esc_html( $feature_name ); ?></strong>
-								<?php endif; ?>
+								<strong><?php echo esc_html( $feature_name ); ?></strong>
 								<?php if ( ! empty( $feature_desc ) ) : ?>
 									<p style="margin: 4px 0 0; color: #666;">
 										<?php echo esc_html( $feature_desc ); ?>
@@ -1845,6 +1859,14 @@ function wpshadow_render_feature_group_metabox( $post, array $metabox ): void {
 											<?php echo esc_html( $child_desc ); ?>
 										</p>
 									<?php endif; ?>
+								</div>
+								<div style="margin-left: 12px; display: flex; align-items: center;">
+									<?php
+									$child_url = \WPShadow\CoreSupport\WPSHADOW_Feature_Details_Page::get_feature_url( $child_id );
+									?>
+									<a href="<?php echo esc_url( $child_url ); ?>" class="button button-small wps-feature-settings-btn">
+										<?php esc_html_e( 'Details', 'wpshadow' ); ?>
+									</a>
 								</div>
 							</div>
 						</td>
