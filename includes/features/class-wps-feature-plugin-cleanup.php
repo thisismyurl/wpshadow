@@ -15,14 +15,14 @@ final class WPSHADOW_Feature_Plugin_Cleanup extends WPSHADOW_Abstract_Feature {
 	public function __construct() {
 		parent::__construct( array(
 			'id'          => 'plugin-cleanup',
-			'name'        => __( 'Third-Party Plugin Asset Cleanup', 'wpshadow' ),
-			'description' => __( 'Remove unnecessary plugin assets that load globally.', 'wpshadow' ),
+			'name'        => __( 'Stop Unused Plugin Code', 'wpshadow' ),
+			'description' => __( 'Remove extra code from popular plugins that loads on every page but isn\'t always needed.', 'wpshadow' ),
 			'sub_features' => array(
-				'jetpack_cleanup'     => __( 'Jetpack Cleanup', 'wpshadow' ),
-				'rankmath_cleanup'    => __( 'RankMath Cleanup', 'wpshadow' ),
-				'cf7_cleanup'         => __( 'Contact Form 7 Cleanup', 'wpshadow' ),
-				'woocommerce_cleanup' => __( 'WooCommerce Cleanup', 'wpshadow' ),
-				'yoast_cleanup'       => __( 'Yoast SEO Cleanup', 'wpshadow' ),
+				'jetpack_cleanup'     => __( 'Remove unused Jetpack code', 'wpshadow' ),
+				'rankmath_cleanup'    => __( 'Remove unused RankMath code', 'wpshadow' ),
+				'cf7_cleanup'         => __( 'Remove unused Contact Form 7 code', 'wpshadow' ),
+				'woocommerce_cleanup' => __( 'Remove unused WooCommerce code', 'wpshadow' ),
+				'yoast_cleanup'       => __( 'Remove unused Yoast SEO code', 'wpshadow' ),
 			),
 		) );
 

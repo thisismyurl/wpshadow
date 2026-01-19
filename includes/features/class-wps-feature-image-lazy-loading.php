@@ -15,14 +15,14 @@ final class WPSHADOW_Feature_Image_Lazy_Loading extends WPSHADOW_Abstract_Featur
 	public function __construct() {
 		parent::__construct( array(
 			'id'          => 'image-lazy-loading',
-			'name'        => __( 'Enhanced Image Lazy Loading', 'wpshadow' ),
-			'description' => __( 'Enable native lazy loading for images and iframes.', 'wpshadow' ),
+			'name'        => __( 'Load Images As Needed', 'wpshadow' ),
+			'description' => __( 'Only load pictures when people scroll down to see them. Makes pages appear faster, especially on slow connections.', 'wpshadow' ),
 			'sub_features' => array(
-				'lazy_images'        => __( 'Lazy Load Images', 'wpshadow' ),
-				'lazy_iframes'       => __( 'Lazy Load Iframes', 'wpshadow' ),
-				'lazy_avatars'       => __( 'Lazy Load Avatars', 'wpshadow' ),
-				'lazy_thumbnails'    => __( 'Lazy Load Thumbnails', 'wpshadow' ),
-				'exclude_first_image' => __( 'Exclude First Image', 'wpshadow' ),
+				'lazy_images'        => __( 'Delay loading regular images', 'wpshadow' ),
+				'lazy_iframes'       => __( 'Delay loading embedded videos', 'wpshadow' ),
+				'lazy_avatars'       => __( 'Delay loading user pictures', 'wpshadow' ),
+				'lazy_thumbnails'    => __( 'Delay loading preview images', 'wpshadow' ),
+				'exclude_first_image' => __( 'Always show first image immediately', 'wpshadow' ),
 			),
 		) );
 

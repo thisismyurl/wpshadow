@@ -26,8 +26,8 @@ final class WPSHADOW_Feature_Emergency_Support extends WPSHADOW_Abstract_Feature
 		parent::__construct(
 			array(
 				'id'              => 'emergency-support',
-				'name'            => __( 'Emergency Support on Critical Errors', 'wpshadow' ),
-				'description'     => __( 'Monitor for critical PHP errors and surface support options automatically.', 'wpshadow' ),
+				'name'            => __( 'Crash Alert System', 'wpshadow' ),
+				'description'     => __( 'Watch for serious errors that break your site and show you easy ways to get help fixing them.', 'wpshadow' ),
 				'scope'           => 'core',
 				'default_enabled' => true,
 				'version'         => '1.0.0',

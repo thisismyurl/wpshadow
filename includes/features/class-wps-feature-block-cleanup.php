@@ -26,19 +26,19 @@ final class WPSHADOW_Feature_Block_Cleanup extends WPSHADOW_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'              => 'block-cleanup',
-				'name'            => __( 'Gutenberg/Block Editor Asset Cleanup', 'wpshadow' ),
-				'description'     => __( 'Stop loading block editor stuff on pages that don\'t use it - speed up your site.', 'wpshadow' ),
+				'name'            => __( 'Remove Block Editor Code', 'wpshadow' ),
+				'description'     => __( 'Stop loading block editor code on pages that don\'t use it. Makes your site faster when you use classic themes.', 'wpshadow' ),
 				'scope'           => 'core',
 				'default_enabled' => false,
 				'version'         => '1.0.0',
 				'widget_group'    => 'performance',
 				'sub_features'    => array(
-					'remove_block_library'   => __( 'Remove Block Library Assets', 'wpshadow' ),
-					'remove_global_styles'   => __( 'Remove Global Styles', 'wpshadow' ),
-					'remove_classic_styles'  => __( 'Remove Classic Theme Styles', 'wpshadow' ),
-					'remove_wc_blocks'       => __( 'Remove WooCommerce Block Styles', 'wpshadow' ),
-					'disable_svg_filters'    => __( 'Disable SVG Filters', 'wpshadow' ),
-					'separate_block_assets'  => __( 'Disable Separate Block Assets', 'wpshadow' ),
+					'remove_block_library'   => __( 'Remove block styling code', 'wpshadow' ),
+					'remove_global_styles'   => __( 'Remove global theme styles', 'wpshadow' ),
+					'remove_classic_styles'  => __( 'Remove classic theme styles', 'wpshadow' ),
+					'remove_wc_blocks'       => __( 'Remove WooCommerce block styles', 'wpshadow' ),
+					'disable_svg_filters'    => __( 'Remove image filter code', 'wpshadow' ),
+					'separate_block_assets'  => __( 'Load all block code together', 'wpshadow' ),
 				),
 			)
 		);

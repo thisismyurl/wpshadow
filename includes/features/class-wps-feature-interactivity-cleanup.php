@@ -15,13 +15,13 @@ final class WPSHADOW_Feature_Interactivity_Cleanup extends WPSHADOW_Abstract_Fea
 	public function __construct() {
 		parent::__construct( array(
 			'id'          => 'interactivity-cleanup',
-			'name'        => __( 'Interactivity API & DNS Cleanup', 'wpshadow' ),
-			'description' => __( 'Disable unused Interactivity API and Block Bindings.', 'wpshadow' ),
+			'name'        => __( 'Remove Modern Block Code', 'wpshadow' ),
+			'description' => __( 'Remove new interactive features code if you don\'t use modern blocks. Makes your site faster.', 'wpshadow' ),
 			'sub_features' => array(
-				'disable_interactivity_api' => __( 'Disable Interactivity API', 'wpshadow' ),
-				'disable_block_bindings'    => __( 'Disable Block Bindings', 'wpshadow' ),
-				'remove_dns_prefetch'       => __( 'Remove s.w.org DNS', 'wpshadow' ),
-				'conditional_loading'       => __( 'Conditional Loading', 'wpshadow' ),
+				'disable_interactivity_api' => __( 'Remove interactive block code', 'wpshadow' ),
+				'disable_block_bindings'    => __( 'Remove block connection code', 'wpshadow' ),
+				'remove_dns_prefetch'       => __( 'Stop connecting to WordPress.org', 'wpshadow' ),
+				'conditional_loading'       => __( 'Only load code when needed', 'wpshadow' ),
 			),
 		) );
 

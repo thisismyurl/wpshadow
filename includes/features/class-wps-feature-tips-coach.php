@@ -21,13 +21,13 @@ final class WPSHADOW_Feature_Tips_Coach extends WPSHADOW_Abstract_Feature {
 	public function __construct() {
 		parent::__construct( array(
 			'id'          => 'tips-coach',
-			'name'        => __( 'Tips Coach', 'wpshadow' ),
-			'description' => __( 'Get smart personalized tips and recommendations for your site type.', 'wpshadow' ),
+			'name'        => __( 'Smart Tips Helper', 'wpshadow' ),
+			'description' => __( 'Get helpful suggestions customized for your type of website (blog, online store, or course site).', 'wpshadow' ),
 			'sub_features' => array(
-				'enable_tips'        => __( 'Enable Tips Display', 'wpshadow' ),
-				'show_site_specific' => __( 'Site-Specific Tips', 'wpshadow' ),
-				'auto_dismiss'       => __( 'Auto-Dismiss Completed', 'wpshadow' ),
-				'show_priorities'    => __( 'Show Priority Order', 'wpshadow' ),
+				'enable_tips'        => __( 'Show helpful tips', 'wpshadow' ),
+				'show_site_specific' => __( 'Customize tips for my site type', 'wpshadow' ),
+				'auto_dismiss'       => __( 'Hide tips after I complete them', 'wpshadow' ),
+				'show_priorities'    => __( 'Show which tips matter most', 'wpshadow' ),
 			),
 		) );
 

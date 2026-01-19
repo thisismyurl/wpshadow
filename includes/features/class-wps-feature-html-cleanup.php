@@ -27,18 +27,18 @@ final class WPSHADOW_Feature_HTML_Cleanup extends WPSHADOW_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'              => 'html-cleanup',
-				'name'            => __( 'HTML Output Buffer Compression', 'wpshadow' ),
-				'description'     => __( 'Shrink your HTML to make pages load faster without breaking anything.', 'wpshadow' ),
+				'name'            => __( 'Shrink Page Code', 'wpshadow' ),
+				'description'     => __( 'Remove extra spaces and comments from your page code to make it smaller and load faster.', 'wpshadow' ),
 				'scope'           => 'core',
 				'default_enabled' => false,
 				'version'         => '1.0.0',
 				'widget_group'    => 'advanced',
 				'sub_features'    => array(
-					'remove_comments'    => __( 'Remove HTML Comments', 'wpshadow' ),
-					'remove_whitespace'  => __( 'Remove Excessive Whitespace', 'wpshadow' ),
-					'remove_empty_tags'  => __( 'Remove Empty Tags', 'wpshadow' ),
-					'minify_inline_css'  => __( 'Minify Inline CSS', 'wpshadow' ),
-					'minify_inline_js'   => __( 'Minify Inline JavaScript', 'wpshadow' ),
+					'remove_comments'    => __( 'Remove hidden notes in code', 'wpshadow' ),
+					'remove_whitespace'  => __( 'Remove extra blank spaces', 'wpshadow' ),
+					'remove_empty_tags'  => __( 'Remove empty code tags', 'wpshadow' ),
+					'minify_inline_css'  => __( 'Shrink styling code', 'wpshadow' ),
+					'minify_inline_js'   => __( 'Shrink interactive code', 'wpshadow' ),
 				),
 			)
 		);

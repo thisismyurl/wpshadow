@@ -15,13 +15,13 @@ final class WPSHADOW_Feature_Broken_Link_Checker extends WPSHADOW_Abstract_Featu
 	public function __construct() {
 		parent::__construct( array(
 			'id'          => 'broken-link-checker',
-			'name'        => __( 'Broken Link Checker', 'wpshadow' ),
-			'description' => __( 'Find and track broken links that harm SEO and user experience.', 'wpshadow' ),
+			'name'        => __( 'Find Broken Links', 'wpshadow' ),
+			'description' => __( 'Find links that don\'t work anymore so visitors don\'t get error pages. Helps your site rank better in Google.', 'wpshadow' ),
 			'sub_features' => array(
-				'check_internal'    => __( 'Check Internal Links', 'wpshadow' ),
-				'check_external'    => __( 'Check External Links', 'wpshadow' ),
-				'check_css'         => __( 'Check CSS Resources', 'wpshadow' ),
-				'log_broken_links'  => __( 'Log Broken Links', 'wpshadow' ),
+				'check_internal'    => __( 'Check links to your own pages', 'wpshadow' ),
+				'check_external'    => __( 'Check links to other websites', 'wpshadow' ),
+				'check_css'         => __( 'Check links in styling files', 'wpshadow' ),
+				'log_broken_links'  => __( 'Keep a list of broken links', 'wpshadow' ),
 			),
 		) );
 

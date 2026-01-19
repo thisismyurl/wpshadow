@@ -15,14 +15,14 @@ final class WPSHADOW_Feature_A11y_Audit extends WPSHADOW_Abstract_Feature {
 	public function __construct() {
 		parent::__construct( array(
 			'id'          => 'a11y-audit',
-			'name'        => __( 'Accessibility Audit', 'wpshadow' ),
-			'description' => __( 'Detect and fix WCAG accessibility violations.', 'wpshadow' ),
+			'name'        => __( 'Accessibility Checker', 'wpshadow' ),
+			'description' => __( 'Find and fix problems that make your site hard to use for people with disabilities.', 'wpshadow' ),
 			'sub_features' => array(
-				'alt_text_check'     => __( 'Missing Alt Text', 'wpshadow' ),
-				'aria_validation'    => __( 'ARIA Validation', 'wpshadow' ),
-				'keyboard_navigation' => __( 'Keyboard Navigation', 'wpshadow' ),
-				'contrast_checking'  => __( 'Contrast Ratio Check', 'wpshadow' ),
-				'auto_fixes'         => __( 'Auto-Fix Issues', 'wpshadow' ),
+				'alt_text_check'     => __( 'Check for missing image descriptions', 'wpshadow' ),
+				'aria_validation'    => __( 'Check screen reader labels', 'wpshadow' ),
+				'keyboard_navigation' => __( 'Check keyboard navigation works', 'wpshadow' ),
+				'contrast_checking'  => __( 'Check text colors are readable', 'wpshadow' ),
+				'auto_fixes'         => __( 'Fix problems automatically', 'wpshadow' ),
 			),
 		) );
 

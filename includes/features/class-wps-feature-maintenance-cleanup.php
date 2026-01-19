@@ -17,13 +17,13 @@ final class WPSHADOW_Feature_Maintenance_Cleanup extends WPSHADOW_Abstract_Featu
 	public function __construct() {
 		parent::__construct( array(
 			'id'          => 'maintenance-cleanup',
-			'name'        => __( 'Maintenance Cleanup', 'wpshadow' ),
-			'description' => __( 'Monitor and auto-cleanup stuck maintenance mode, temp files, and cache bloat.', 'wpshadow' ),
+			'name'        => __( 'Fix Stuck Updates', 'wpshadow' ),
+			'description' => __( 'Watch for and fix problems when updates get stuck, leaving your site showing a "maintenance mode" message.', 'wpshadow' ),
 			'sub_features' => array(
-				'cleanup_maintenance'  => __( 'Cleanup Maintenance Mode', 'wpshadow' ),
-				'cleanup_upgrade_temp' => __( 'Cleanup Upgrade Temp', 'wpshadow' ),
-				'cleanup_cache'        => __( 'Cleanup Old Cache', 'wpshadow' ),
-				'auto_alerts'          => __( 'Alert on Stuck Mode', 'wpshadow' ),
+				'cleanup_maintenance'  => __( 'Remove stuck maintenance mode', 'wpshadow' ),
+				'cleanup_upgrade_temp' => __( 'Remove leftover update files', 'wpshadow' ),
+				'cleanup_cache'        => __( 'Remove old temporary files', 'wpshadow' ),
+				'auto_alerts'          => __( 'Alert when updates get stuck', 'wpshadow' ),
 			),
 		) );
 

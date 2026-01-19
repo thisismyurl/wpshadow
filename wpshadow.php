@@ -875,12 +875,12 @@ function wpshadow_init(): void {
 	// Load widget groups configuration (required by abstract feature class)
 	require_once WPSHADOW_PATH . 'includes/admin/class-wps-widget-groups.php';
 	
-	// Load feature base classes
-	require_once WPSHADOW_PATH . 'features/interface-wps-feature.php';
-	require_once WPSHADOW_PATH . 'features/class-wps-feature-abstract.php';
+	// Load feature base classes from includes/features/
+	require_once WPSHADOW_PATH . 'includes/features/interface-wps-feature.php';
+	require_once WPSHADOW_PATH . 'includes/features/class-wps-feature-abstract.php';
 	
 	// Load helper classes before feature registry auto-discovery
-	require_once WPSHADOW_PATH . 'features/class-wps-asset-version-helpers.php';
+	require_once WPSHADOW_PATH . 'includes/features/class-wps-asset-version-helpers.php';
 	
 	// Load feature registry for managing feature toggles (auto-discovery will run)
 	require_once WPSHADOW_PATH . 'includes/core/class-wps-feature-registry.php';

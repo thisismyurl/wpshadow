@@ -18,13 +18,13 @@ final class WPSHADOW_Feature_Mobile_Friendliness extends WPSHADOW_Abstract_Featu
 	public function __construct() {
 		parent::__construct( array(
 			'id'          => 'mobile-friendliness',
-			'name'        => __( 'Mobile Friendliness', 'wpshadow' ),
-			'description' => __( 'Validate mobile responsiveness and touch-friendly design.', 'wpshadow' ),
+			'name'        => __( 'Mobile Phone Checker', 'wpshadow' ),
+			'description' => __( 'Check if your site works well on phones and tablets - text should be readable and buttons easy to tap.', 'wpshadow' ),
 			'sub_features' => array(
-				'viewport_check'    => __( 'Viewport Meta Tag', 'wpshadow' ),
-				'touch_targets'     => __( 'Touch Target Sizes', 'wpshadow' ),
-				'font_sizes'        => __( 'Font Size Readability', 'wpshadow' ),
-				'tap_spacing'       => __( 'Tap Spacing Check', 'wpshadow' ),
+				'viewport_check'    => __( 'Check if site fits phone screens', 'wpshadow' ),
+				'touch_targets'     => __( 'Check if buttons are big enough to tap', 'wpshadow' ),
+				'font_sizes'        => __( 'Check if text is readable', 'wpshadow' ),
+				'tap_spacing'       => __( 'Check if buttons aren\'t too close together', 'wpshadow' ),
 			),
 		) );
 

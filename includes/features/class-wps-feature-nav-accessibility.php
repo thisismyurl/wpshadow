@@ -27,17 +27,17 @@ final class WPSHADOW_Feature_Nav_Accessibility extends WPSHADOW_Abstract_Feature
 		parent::__construct(
 			array(
 				'id'              => 'nav-accessibility',
-				'name'            => __( 'Navigation Menu Accessibility & Class Simplification', 'wpshadow' ),
-				'description'     => __( 'Make your menus accessible - add screen reader support and keyboard navigation.', 'wpshadow' ),
+				'name'            => __( 'Better Navigation for Everyone', 'wpshadow' ),
+				'description'     => __( 'Make your menus work better for people using screen readers and keyboards instead of a mouse.', 'wpshadow' ),
 				'scope'           => 'core',
 				'default_enabled' => true,
 				'version'         => '1.0.0',
 				'widget_group'    => 'accessibility',
 				'sub_features'    => array(
-					'add_aria_current'   => __( 'Add ARIA Current Attribute', 'wpshadow' ),
-					'simplify_classes'   => __( 'Simplify Menu Classes', 'wpshadow' ),
-					'remove_nav_ids'     => __( 'Remove Navigation IDs', 'wpshadow' ),
-					'keyboard_support'   => __( 'Enhanced Keyboard Support', 'wpshadow' ),
+					'add_aria_current'   => __( 'Show which page is currently open', 'wpshadow' ),
+					'simplify_classes'   => __( 'Remove extra code from menus', 'wpshadow' ),
+					'remove_nav_ids'     => __( 'Remove duplicate tracking codes', 'wpshadow' ),
+					'keyboard_support'   => __( 'Better keyboard navigation', 'wpshadow' ),
 				),
 			)
 		);

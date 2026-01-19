@@ -27,18 +27,18 @@ final class WPSHADOW_Feature_CSS_Class_Cleanup extends WPSHADOW_Abstract_Feature
 		parent::__construct(
 			array(
 				'id'              => 'css-class-cleanup',
-				'name'            => __( 'CSS Class Cleanup (Post/Nav/Body)', 'wpshadow' ),
-				'description'     => __( 'Clean up your HTML - remove unnecessary CSS classes and make your site code cleaner.', 'wpshadow' ),
+				'name'            => __( 'Remove Extra Code Labels', 'wpshadow' ),
+				'description'     => __( 'Remove extra labels in your site code that you don\'t need. Makes pages smaller and load faster.', 'wpshadow' ),
 				'scope'           => 'core',
 				'default_enabled' => false,
 				'version'         => '1.0.0',
 				'widget_group'    => 'cleanup',
 				'sub_features'    => array(
-					'clean_post_classes'   => __( 'Clean Post Classes', 'wpshadow' ),
-					'clean_nav_classes'    => __( 'Clean Navigation Classes', 'wpshadow' ),
-					'remove_nav_ids'       => __( 'Remove Navigation IDs', 'wpshadow' ),
-					'clean_body_classes'   => __( 'Clean Body Classes', 'wpshadow' ),
-					'remove_block_classes' => __( 'Remove Block-Related Classes', 'wpshadow' ),
+					'clean_post_classes'   => __( 'Remove extra post labels', 'wpshadow' ),
+					'clean_nav_classes'    => __( 'Remove extra menu labels', 'wpshadow' ),
+					'remove_nav_ids'       => __( 'Remove menu tracking codes', 'wpshadow' ),
+					'clean_body_classes'   => __( 'Remove extra page labels', 'wpshadow' ),
+					'remove_block_classes' => __( 'Remove block editor labels', 'wpshadow' ),
 				),
 			)
 		);

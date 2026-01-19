@@ -17,12 +17,12 @@ final class WPSHADOW_Feature_Http_SSL_Audit extends WPSHADOW_Abstract_Feature {
 	public function __construct() {
 		parent::__construct( array(
 			'id'          => 'http-ssl-audit',
-			'name'        => __( 'HTTP & SSL Audit', 'wpshadow' ),
-			'description' => __( 'Validate security headers and SSL certificate health.', 'wpshadow' ),
+			'name'        => __( 'Security Lock Checker', 'wpshadow' ),
+			'description' => __( 'Check if your site\'s padlock icon is working and your security settings are correct.', 'wpshadow' ),
 			'sub_features' => array(
-				'ssl_check'           => __( 'SSL Certificate Check', 'wpshadow' ),
-				'security_headers'    => __( 'Security Headers Audit', 'wpshadow' ),
-				'alert_notifications' => __( 'Alert Notifications', 'wpshadow' ),
+				'ssl_check'           => __( 'Check security certificate status', 'wpshadow' ),
+				'security_headers'    => __( 'Check security settings', 'wpshadow' ),
+				'alert_notifications' => __( 'Alert me about security problems', 'wpshadow' ),
 			),
 		) );
 

@@ -27,16 +27,16 @@ final class WPSHADOW_Feature_jQuery_Cleanup extends WPSHADOW_Abstract_Feature {
 		parent::__construct(
 			array(
 				'id'              => 'jquery-cleanup',
-				'name'            => __( 'jQuery Migrate Removal', 'wpshadow' ),
-				'description'     => __( 'Speed up sites that don\'t need old jQuery code - we remove the compatibility script.', 'wpshadow' ),
+				'name'            => __( 'Remove Old jQuery Code', 'wpshadow' ),
+				'description'     => __( 'Speed up your site by removing code that only old websites need. Your site will work the same but load faster.', 'wpshadow' ),
 				'scope'           => 'core',
 				'default_enabled' => true,
 				'version'         => '1.0.0',
 				'widget_group'    => 'performance',
 				'sub_features'    => array(
-					'remove_migrate_frontend' => __( 'Remove jQuery Migrate on Frontend', 'wpshadow' ),
-					'keep_admin'              => __( 'Keep jQuery Migrate in Admin', 'wpshadow' ),
-					'log_removals'            => __( 'Log jQuery Migrate Removals', 'wpshadow' ),
+					'remove_migrate_frontend' => __( 'Remove old jQuery code from visitor pages', 'wpshadow' ),
+					'keep_admin'              => __( 'Keep old jQuery code in admin area', 'wpshadow' ),
+					'log_removals'            => __( 'Record when old code is removed', 'wpshadow' ),
 				),
 			)
 		);

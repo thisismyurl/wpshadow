@@ -15,13 +15,13 @@ final class WPSHADOW_Feature_Embed_Disable extends WPSHADOW_Abstract_Feature {
 	public function __construct() {
 		parent::__construct( array(
 			'id'          => 'embed-disable',
-			'name'        => __( 'Embed Script Disabling', 'wpshadow' ),
-			'description' => __( 'Disable unused embed functionality to improve performance.', 'wpshadow' ),
+			'name'        => __( 'Stop Extra Embed Code', 'wpshadow' ),
+			'description' => __( 'Remove code that lets people embed your posts elsewhere. Makes your site load faster if you don\'t need this feature.', 'wpshadow' ),
 			'sub_features' => array(
-				'disable_embed_script' => __( 'Disable wp-embed.js', 'wpshadow' ),
-				'remove_oembed_links'  => __( 'Remove oEmbed Discovery', 'wpshadow' ),
-				'disable_rest_oembed'  => __( 'Disable REST oEmbed', 'wpshadow' ),
-				'remove_embed_rewrite' => __( 'Remove Embed Rewrites', 'wpshadow' ),
+				'disable_embed_script' => __( 'Remove embed loading code', 'wpshadow' ),
+				'remove_oembed_links'  => __( 'Hide embed discovery links', 'wpshadow' ),
+				'disable_rest_oembed'  => __( 'Turn off embed connections', 'wpshadow' ),
+				'remove_embed_rewrite' => __( 'Remove embed URL patterns', 'wpshadow' ),
 			),
 		) );
 

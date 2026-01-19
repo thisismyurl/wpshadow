@@ -15,12 +15,12 @@ final class WPSHADOW_Feature_Magic_Link_Support extends WPSHADOW_Abstract_Featur
 	public function __construct() {
 		parent::__construct( array(
 			'id'          => 'magic-link-support',
-			'name'        => __( 'Magic Link Support Access', 'wpshadow' ),
-			'description' => __( 'Generate secure, time-limited login URLs for developer support.', 'wpshadow' ),
+			'name'        => __( 'Temporary Support Login', 'wpshadow' ),
+			'description' => __( 'Create secure, temporary login links so developers can help fix your site without needing your password.', 'wpshadow' ),
 			'sub_features' => array(
-				'log_sessions'        => __( 'Log Sessions', 'wpshadow' ),
-				'email_notifications' => __( 'Email Notifications', 'wpshadow' ),
-				'role_restriction'    => __( 'Role Restriction', 'wpshadow' ),
+				'log_sessions'        => __( 'Record who logged in', 'wpshadow' ),
+				'email_notifications' => __( 'Email me when support logs in', 'wpshadow' ),
+				'role_restriction'    => __( 'Limit what support can access', 'wpshadow' ),
 			),
 		) );
 

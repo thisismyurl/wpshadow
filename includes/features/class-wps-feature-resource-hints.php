@@ -15,14 +15,14 @@ final class WPSHADOW_Feature_Resource_Hints extends WPSHADOW_Abstract_Feature {
 	public function __construct() {
 		parent::__construct( array(
 			'id'          => 'resource-hints',
-			'name'        => __( 'Pre-Connect to External Services', 'wpshadow' ),
-			'description' => __( 'Speed up external services with DNS prefetch and preconnect.', 'wpshadow' ),
+			'name'        => __( 'Prepare External Connections', 'wpshadow' ),
+			'description' => __( 'Start connecting to fonts, scripts, and services early so they load faster when needed.', 'wpshadow' ),
 			'sub_features' => array(
-				'dns_prefetch'      => __( 'DNS Prefetch', 'wpshadow' ),
-				'preconnect'        => __( 'Preconnect', 'wpshadow' ),
-				'preload_fonts'     => __( 'Preload Fonts', 'wpshadow' ),
-				'preload_scripts'   => __( 'Preload Scripts', 'wpshadow' ),
-				'remove_s_w_org'    => __( 'Remove WordPress.org DNS', 'wpshadow' ),
+				'dns_prefetch'      => __( 'Prepare website addresses early', 'wpshadow' ),
+				'preconnect'        => __( 'Connect to services early', 'wpshadow' ),
+				'preload_fonts'     => __( 'Start loading fonts early', 'wpshadow' ),
+				'preload_scripts'   => __( 'Start loading scripts early', 'wpshadow' ),
+				'remove_s_w_org'    => __( 'Stop connecting to WordPress.org', 'wpshadow' ),
 			),
 		) );
 
