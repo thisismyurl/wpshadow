@@ -67,7 +67,9 @@ function wpshadow_render_unified_layout( string $tab = 'dashboard', string $hub_
 				if ( ! empty( $feature['sub_features'] ) ) {
 					foreach ( $feature['sub_features'] as $sub_key => $sub_feature ) {
 						if ( $sub_key === $current_feature ) {
-							$page_title = $sub_feature['name'] ?? ucwords( str_replace( array( '_', '-' ), ' ', $current_feature ) );
+							// Handle both string values and array values (with 'name' key)
+							$sub_feature_name = is_array( $sub_feature ) ? ( $sub_feature['name'] ?? $sub_key ) : $sub_feature;
+							$page_title = $sub_feature_name ?? ucwords( str_replace( array( '_', '-' ), ' ', $current_feature ) );
 							break 2;
 						}
 					}
@@ -260,6 +262,26 @@ function wpshadow_register_features_metaboxes( string $screen_id ): void {
 		'wpshadow_features_info',
 		__( 'Feature Information', 'wpshadow' ),
 		__NAMESPACE__ . '\\wpshadow_render_features_info_widget',
+		$screen_id,
+		'side',
+		'high'
+	);
+
+	// Add Quick Links widget to the right sidebar
+	add_meta_box(
+		'wpshadow_features_quick_links',
+		__( 'Quick Links', 'wpshadow' ),
+		__NAMESPACE__ . '\\wpshadow_render_dashboard_quick_actions_widget',
+		$screen_id,
+		'side',
+		'high'
+	);
+
+	// Add System Health widget to the right sidebar
+	add_meta_box(
+		'wpshadow_features_system_health',
+		__( 'System Health', 'wpshadow' ),
+		__NAMESPACE__ . '\\wpshadow_render_dashboard_health_widget',
 		$screen_id,
 		'side',
 		'high'
@@ -502,7 +524,7 @@ function wpshadow_render_dashboard_health_widget(): void {
 					<div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0;">
 						<div style="display: flex; align-items: center; gap: 8px;">
 							<span style="font-size: 16px;">
-								<?php echo $diagnostic_data['status_icon']; ?>
+								<?php echo wp_kses_post( $diagnostic_data['status_icon'] ); ?>
 							</span>
 							<span style="font-size: 12px; color: #646970; font-weight: 600;">
 								<?php esc_html_e( 'System Diagnostics', 'wpshadow' ); ?>
@@ -527,7 +549,7 @@ function wpshadow_render_dashboard_health_widget(): void {
 					<div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0;">
 						<div style="display: flex; align-items: center; gap: 8px;">
 							<span style="font-size: 16px;">
-								<?php echo $integrity_data['status_icon']; ?>
+								<?php echo wp_kses_post( $integrity_data['status_icon'] ); ?>
 							</span>
 							<span style="font-size: 12px; color: #646970; font-weight: 600;">
 								<?php esc_html_e( 'Core File Integrity', 'wpshadow' ); ?>
@@ -556,7 +578,7 @@ function wpshadow_render_dashboard_health_widget(): void {
 				<span style="font-size: 12px; color: #646970; font-weight: 600; display: flex; align-items: center; gap: 6px;">
 					<?php esc_html_e( 'PHP Memory', 'wpshadow' ); ?>
 					<span class="wpshadow-health-indicator" data-indicator="memory" title="<?php echo esc_attr( $indicators['memory']['tooltip'] ); ?>" style="cursor: help; font-size: 14px;">
-						<?php echo $indicators['memory']['icon']; ?>
+						<?php echo wp_kses_post( $indicators['memory']['icon'] ); ?>
 					</span>
 				</span>
 				<span data-metric="memory-usage" style="font-size: 12px; color: #1d2327; font-weight: 500;">
@@ -573,7 +595,7 @@ function wpshadow_render_dashboard_health_widget(): void {
 				<span style="font-size: 12px; color: #646970; font-weight: 600; display: flex; align-items: center; gap: 6px;">
 					<?php esc_html_e( 'Disk Space', 'wpshadow' ); ?>
 					<span class="wpshadow-health-indicator" data-indicator="disk" title="<?php echo esc_attr( $indicators['disk']['tooltip'] ); ?>" style="cursor: help; font-size: 14px;">
-						<?php echo $indicators['disk']['icon']; ?>
+						<?php echo wp_kses_post( $indicators['disk']['icon'] ); ?>
 					</span>
 				</span>
 				<span data-metric="disk-usage" style="font-size: 12px; color: #1d2327; font-weight: 500;">
@@ -595,7 +617,7 @@ function wpshadow_render_dashboard_health_widget(): void {
 		<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; padding-top: 15px; border-top: 1px solid #dcdcde;">
 			<div style="background: #f6f7f7; padding: 10px; border-radius: 4px; text-align: center; position: relative;">
 				<span class="wpshadow-health-indicator" data-indicator="php-version" title="<?php echo esc_attr( $indicators['php_version']['tooltip'] ); ?>" style="position: absolute; top: 8px; right: 8px; cursor: help; font-size: 12px;">
-					<?php echo $indicators['php_version']['icon']; ?>
+					<?php echo wp_kses_post( $indicators['php_version']['icon'] ); ?>
 				</span>
 				<div style="font-size: 11px; color: #646970; margin-bottom: 4px;">
 					<?php esc_html_e( 'PHP Version', 'wpshadow' ); ?>
@@ -607,7 +629,7 @@ function wpshadow_render_dashboard_health_widget(): void {
 			
 			<div style="background: #f6f7f7; padding: 10px; border-radius: 4px; text-align: center; position: relative;">
 				<span class="wpshadow-health-indicator" data-indicator="wp-version" title="<?php echo esc_attr( $indicators['wp_version']['tooltip'] ); ?>" style="position: absolute; top: 8px; right: 8px; cursor: help; font-size: 12px;">
-					<?php echo $indicators['wp_version']['icon']; ?>
+					<?php echo wp_kses_post( $indicators['wp_version']['icon'] ); ?>
 				</span>
 				<div style="font-size: 11px; color: #646970; margin-bottom: 4px;">
 					<?php esc_html_e( 'WP Version', 'wpshadow' ); ?>
@@ -619,7 +641,7 @@ function wpshadow_render_dashboard_health_widget(): void {
 			
 			<div style="background: #f6f7f7; padding: 10px; border-radius: 4px; text-align: center; position: relative;">
 				<span class="wpshadow-health-indicator" data-indicator="max-upload" title="<?php echo esc_attr( $indicators['max_upload']['tooltip'] ); ?>" style="position: absolute; top: 8px; right: 8px; cursor: help; font-size: 12px;">
-					<?php echo $indicators['max_upload']['icon']; ?>
+					<?php echo wp_kses_post( $indicators['max_upload']['icon'] ); ?>
 				</span>
 				<div style="font-size: 11px; color: #646970; margin-bottom: 4px;">
 					<?php esc_html_e( 'Max Upload', 'wpshadow' ); ?>
@@ -631,7 +653,7 @@ function wpshadow_render_dashboard_health_widget(): void {
 			
 			<div style="background: #f6f7f7; padding: 10px; border-radius: 4px; text-align: center; position: relative;">
 				<span class="wpshadow-health-indicator" data-indicator="max-execution" title="<?php echo esc_attr( $indicators['max_execution']['tooltip'] ); ?>" style="position: absolute; top: 8px; right: 8px; cursor: help; font-size: 12px;">
-					<?php echo $indicators['max_execution']['icon']; ?>
+					<?php echo wp_kses_post( $indicators['max_execution']['icon'] ); ?>
 				</span>
 				<div style="font-size: 11px; color: #646970; margin-bottom: 4px;">
 					<?php esc_html_e( 'Max Execution', 'wpshadow' ); ?>
@@ -648,7 +670,7 @@ function wpshadow_render_dashboard_health_widget(): void {
 				<span style="font-size: 12px; color: #646970; display: flex; align-items: center; gap: 6px;">
 					<?php esc_html_e( 'Database Size:', 'wpshadow' ); ?>
 					<span class="wpshadow-health-indicator" data-indicator="db-size" title="<?php echo esc_attr( $indicators['db_size']['tooltip'] ); ?>" style="cursor: help; font-size: 12px;">
-						<?php echo $indicators['db_size']['icon']; ?>
+						<?php echo wp_kses_post( $indicators['db_size']['icon'] ); ?>
 					</span>
 				</span>
 				<span data-metric="db-size" style="font-size: 12px; color: #1d2327; font-weight: 500;"><?php echo esc_html( $metrics['db_size'] ); ?></span>
@@ -657,7 +679,7 @@ function wpshadow_render_dashboard_health_widget(): void {
 				<span style="font-size: 12px; color: #646970; display: flex; align-items: center; gap: 6px;">
 					<?php esc_html_e( 'Active Plugins:', 'wpshadow' ); ?>
 					<span class="wpshadow-health-indicator" data-indicator="plugins" title="<?php echo esc_attr( $indicators['plugins']['tooltip'] ); ?>" style="cursor: help; font-size: 12px;">
-						<?php echo $indicators['plugins']['icon']; ?>
+						<?php echo wp_kses_post( $indicators['plugins']['icon'] ); ?>
 					</span>
 				</span>
 				<span data-metric="active-plugins" style="font-size: 12px; color: #1d2327; font-weight: 500;"><?php echo esc_html( $metrics['active_plugins'] ); ?></span>
@@ -666,7 +688,7 @@ function wpshadow_render_dashboard_health_widget(): void {
 				<span style="font-size: 12px; color: #646970; display: flex; align-items: center; gap: 6px;">
 					<?php esc_html_e( 'Active Theme:', 'wpshadow' ); ?>
 					<span class="wpshadow-health-indicator" data-indicator="theme" title="<?php echo esc_attr( $indicators['theme']['tooltip'] ); ?>" style="cursor: help; font-size: 12px;">
-						<?php echo $indicators['theme']['icon']; ?>
+						<?php echo wp_kses_post( $indicators['theme']['icon'] ); ?>
 					</span>
 				</span>
 				<span data-metric="active-theme" style="font-size: 12px; color: #1d2327; font-weight: 500;"><?php echo esc_html( $metrics['active_theme'] ); ?></span>

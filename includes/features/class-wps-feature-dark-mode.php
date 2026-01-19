@@ -13,6 +13,11 @@ declare(strict_types=1);
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 /**
  * WPSHADOW_Feature_Dark_Mode
  *

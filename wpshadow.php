@@ -11,7 +11,7 @@
  * Requires at least:   6.4
  * Requires PHP:        8.1.29
  * Primary Branch:      main
- * Text Domain:         plugin-wpshadow
+ * Text Domain:         wpshadow
  * Domain Path:         /languages
  * Network:             true
  * License:             GPL2
@@ -885,6 +885,22 @@ function wpshadow_init(): void {
 	// Load feature registry for managing feature toggles (auto-discovery will run)
 	require_once WPSHADOW_PATH . 'includes/core/class-wps-feature-registry.php';
 	\WPShadow\CoreSupport\WPSHADOW_Feature_Registry::init();
+
+	// ========================================================================
+	// PRIVACY & GDPR COMPLIANCE
+	// ========================================================================
+
+	// Initialize WordPress privacy integration (exporters and erasers)
+	require_once WPSHADOW_PATH . 'includes/core/class-wps-privacy-handler.php';
+	\WPShadow\Core\WPSHADOW_Privacy_Handler::init();
+
+	// ========================================================================
+	// GAMIFICATION SYSTEM
+	// ========================================================================
+
+	// Initialize gamification engine (core achievement and badge system)
+	require_once WPSHADOW_PATH . 'includes/core/class-wps-gamification.php';
+	\WPShadow\CoreSupport\WPShadow_Gamification::init();
 
 	// ========================================================================
 	// MINIMAL ADMIN INFRASTRUCTURE

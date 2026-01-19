@@ -10,6 +10,11 @@
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 final class WPSHADOW_Feature_Core_Integrity extends WPSHADOW_Abstract_Feature {
 
 	public function __construct() {

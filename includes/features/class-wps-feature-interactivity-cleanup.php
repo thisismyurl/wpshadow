@@ -10,6 +10,11 @@
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 final class WPSHADOW_Feature_Interactivity_Cleanup extends WPSHADOW_Abstract_Feature {
 
 	public function __construct() {
@@ -19,9 +24,27 @@ final class WPSHADOW_Feature_Interactivity_Cleanup extends WPSHADOW_Abstract_Fea
 			'description' => __( 'Remove new interactive features code if you don\'t use modern blocks. Makes your site faster.', 'wpshadow' ),
 			'aliases'     => array( 'interactivity api', 'block bindings', 'modern blocks', 'interactive blocks', 'wordpress 6.5', 'gutenberg features', 'block editor scripts', 'wp interactivity', 'dynamic blocks', 'interactive features', 'block api', 'modern wordpress' ),
 			'sub_features' => array(
-				'disable_interactivity_api' => __( 'Remove interactive block code', 'wpshadow' ),
-				'disable_block_bindings'    => __( 'Remove block connection code', 'wpshadow' ),
-				'remove_dns_prefetch'       => __( 'Stop connecting to WordPress.org', 'wpshadow' ),
+				'disable_interactivity_api' => array(
+					'name'               => __( 'Disable Interactivity API', 'wpshadow' ),
+					'description_short'  => __( 'Remove WordPress Interactivity API code', 'wpshadow' ),
+					'description_long'   => __( 'Removes the WordPress Interactivity API script (wp-interactivity) that was introduced in WordPress 6.5. This API enables interactive blocks that respond to user actions. If you don\'t use interactive blocks, this code is unused overhead. Disabling it saves bandwidth and improves performance on sites that only use basic or static block content.', 'wpshadow' ),
+					'description_wizard' => __( 'New interactive block features added in WordPress 6.5. Remove this if you don\'t use interactive blocks, saving bandwidth and improving performance.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'disable_block_bindings'    => array(
+					'name'               => __( 'Disable Block Bindings', 'wpshadow' ),
+					'description_short'  => __( 'Remove block bindings connection code', 'wpshadow' ),
+					'description_long'   => __( 'Disables block bindings, a WordPress feature that allows blocks to dynamically connect to data sources. This is an advanced feature used by developers to build dynamic content blocks. Most sites don\'t use this feature. Disabling removes unnecessary code that loads even when not used.', 'wpshadow' ),
+					'description_wizard' => __( 'Advanced block feature for dynamic content connections. Safe to disable unless you specifically use block bindings in your theme or content.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'remove_dns_prefetch'       => array(
+					'name'               => __( 'Remove DNS Prefetch to WordPress.org', 'wpshadow' ),
+					'description_short'  => __( 'Stop connecting early to WordPress.org', 'wpshadow' ),
+					'description_long'   => __( 'Removes DNS prefetch hints for s.w.org, which WordPress automatically adds. DNS prefetch tells browsers to start connecting to WordPress.org in advance, assuming your site will load resources from there. This creates unnecessary connections to external domains. Disabling it improves performance and privacy by reducing external dependencies.', 'wpshadow' ),
+					'description_wizard' => __( 'WordPress tries to pre-connect to its own servers for resources you might not use. Remove this connection hint to improve performance and privacy.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
 			),
 		) );
 

@@ -12,6 +12,10 @@ declare(strict_types=1);
 
 namespace WPShadow\Helpers;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Safely check if file exists and is readable
  *
@@ -20,6 +24,11 @@ namespace WPShadow\Helpers;
  * @param string $path File path to check.
  * @return bool True if file exists and is readable, false otherwise.
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 function wpshadow_file_readable( string $path ): bool {
 	return is_string( $path ) && file_exists( $path ) && is_readable( $path );
 }

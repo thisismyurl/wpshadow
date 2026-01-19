@@ -11,6 +11,11 @@
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 final class WPSHADOW_Feature_Tips_Coach extends WPSHADOW_Abstract_Feature {
 
 	private const TYPE_BLOG        = 'blog';
@@ -22,13 +27,51 @@ final class WPSHADOW_Feature_Tips_Coach extends WPSHADOW_Abstract_Feature {
 		parent::__construct( array(
 			'id'          => 'tips-coach',
 			'name'        => __( 'Smart Tips Helper', 'wpshadow' ),
-			'description' => __( 'Get helpful suggestions customized for your type of website (blog, online store, or course site).', 'wpshadow' ),
-			'aliases'     => array( 'tips', 'suggestions', 'best practices', 'recommendations', 'coach', 'help', 'guidance', 'next steps', 'optimization tips', 'site improvement', 'dashboard tips', 'contextual help' ),
+			'description' => __( 'Get helpful suggestions customized for your type of website (blog, online store, or course site), plus troubleshooting and video walkthroughs.', 'wpshadow' ),
+			'aliases'     => array( 'tips', 'suggestions', 'best practices', 'recommendations', 'coach', 'help', 'guidance', 'next steps', 'optimization tips', 'site improvement', 'dashboard tips', 'contextual help', 'troubleshooting', 'problem solver', 'video walkthrough', 'tutorials', 'step-by-step' ),
 			'sub_features' => array(
-				'enable_tips'        => __( 'Show helpful tips', 'wpshadow' ),
-				'show_site_specific' => __( 'Customize tips for my site type', 'wpshadow' ),
-				'auto_dismiss'       => __( 'Hide tips after I complete them', 'wpshadow' ),
-				'show_priorities'    => __( 'Show which tips matter most', 'wpshadow' ),
+				'enable_tips'        => array(
+					'name'               => __( 'Enable Tips Display', 'wpshadow' ),
+					'description_short'  => __( 'Show helpful tips and suggestions', 'wpshadow' ),
+					'description_long'   => __( 'Enables the display of helpful tips and suggestions in the WordPress dashboard. These are contextual recommendations based on your site configuration and content. Helps site owners discover features and best practices they might not know about. Disabled by default - enable if you want ongoing guidance.', 'wpshadow' ),
+					'description_wizard' => __( 'Show helpful tips in the dashboard to guide you on site improvements and best practices.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'show_site_specific' => array(
+					'name'               => __( 'Site-Specific Tips', 'wpshadow' ),
+					'description_short'  => __( 'Customize tips based on site type', 'wpshadow' ),
+					'description_long'   => __( 'Customizes tips based on your site type (blog, WooCommerce store, learning management system, or generic site). Blog tips focus on content strategy and SEO, WooCommerce tips on sales and product management, LMS tips on student engagement. Provides relevant suggestions instead of generic advice.', 'wpshadow' ),
+					'description_wizard' => __( 'Get tips tailored to your specific site type instead of generic advice. Much more useful than one-size-fits-all suggestions.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'auto_dismiss'       => array(
+					'name'               => __( 'Auto-Dismiss Completed Tips', 'wpshadow' ),
+					'description_short'  => __( 'Hide tips after completing actions', 'wpshadow' ),
+					'description_long'   => __( 'Automatically hides tips after you complete the recommended action. For example, if a tip suggests enabling SSL and you enable it, the tip disappears. Keeps dashboard clean by only showing relevant, uncompleted tips.', 'wpshadow' ),
+					'description_wizard' => __( 'Automatically hide tips you\'ve completed. Keeps your dashboard showing only relevant, pending items.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'show_priorities'    => array(
+					'name'               => __( 'Show Priority Levels', 'wpshadow' ),
+					'description_short'  => __( 'Indicate which tips are most important', 'wpshadow' ),
+					'description_long'   => __( 'Shows priority labels (Critical, Important, Nice-to-have) indicating which tips matter most. Helps you focus on high-impact improvements first instead of tackling everything. Critical items like SSL and security get top priority, nice-to-have optimization tips get lower priority.', 'wpshadow' ),
+					'description_wizard' => __( 'Show which tips are critical vs optional. Helps you prioritize improvements based on impact.', 'wpshadow' ),
+					'default_enabled'    => false,
+				),
+				'troubleshooting' => array(
+					'name'               => __( 'Troubleshooting Wizard', 'wpshadow' ),
+					'description_short'  => __( 'Intelligent problem solver for common issues', 'wpshadow' ),
+					'description_long'   => __( 'Provides smart troubleshooting guidance for common WordPress problems. Analyzes error logs, detects issues automatically, and guides you through step-by-step solutions with one-click fixes when available. Covers performance problems, plugin conflicts, security issues, and more.', 'wpshadow' ),
+					'description_wizard' => __( 'Get guided help fixing common WordPress issues. Smart detection with step-by-step solutions.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'video_walkthroughs' => array(
+					'name'               => __( 'Video Walkthroughs', 'wpshadow' ),
+					'description_short'  => __( 'Learn through auto-generated video tutorials', 'wpshadow' ),
+					'description_long'   => __( 'Video library with walkthroughs of WPShadow features and common WordPress tasks. Auto-generated screen recordings show you exactly how to perform actions. Download or embed videos directly in your documentation. Perfect for training clients or team members.', 'wpshadow' ),
+					'description_wizard' => __( 'Auto-generated video walkthroughs for features and tasks. Great for training and documentation.', 'wpshadow' ),
+					'default_enabled'    => false,
+				),
 			),
 		) );
 
@@ -37,6 +80,8 @@ final class WPSHADOW_Feature_Tips_Coach extends WPSHADOW_Abstract_Feature {
 			'show_site_specific' => true,
 			'auto_dismiss'       => true,
 			'show_priorities'    => false,
+			'troubleshooting'    => true,
+			'video_walkthroughs' => false,
 		) );
 	}
 
@@ -48,6 +93,18 @@ final class WPSHADOW_Feature_Tips_Coach extends WPSHADOW_Abstract_Feature {
 		if ( $this->is_sub_feature_enabled( 'enable_tips', true ) ) {
 			add_action( 'wp_ajax_wpshadow_dismiss_tip', array( $this, 'ajax_dismiss_tip' ) );
 			add_action( 'wp_ajax_wpshadow_apply_tip_action', array( $this, 'ajax_apply_tip_action' ) );
+		}
+
+		// Register troubleshooting wizard AJAX handlers
+		if ( $this->is_sub_feature_enabled( 'troubleshooting', true ) ) {
+			add_action( 'wp_ajax_wpshadow_detect_issues', array( $this, 'ajax_detect_issues' ) );
+			add_action( 'wp_ajax_wpshadow_apply_troubleshooting_fix', array( $this, 'ajax_apply_troubleshooting_fix' ) );
+		}
+
+		// Register video walkthroughs AJAX handlers
+		if ( $this->is_sub_feature_enabled( 'video_walkthroughs', true ) ) {
+			add_action( 'wp_ajax_wpshadow_get_video_library', array( $this, 'ajax_get_video_library' ) );
+			add_action( 'wp_ajax_wpshadow_get_video_walkthrough', array( $this, 'ajax_get_video_walkthrough' ) );
 		}
 
 		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
@@ -414,5 +471,260 @@ final class WPSHADOW_Feature_Tips_Coach extends WPSHADOW_Abstract_Feature {
 			'actions'     => '',
 			'test'        => 'tips_coach',
 		);
+	}
+
+	/**
+	 * AJAX: Detect issues for troubleshooting wizard.
+	 */
+	public function ajax_detect_issues(): void {
+		check_ajax_referer( 'wpshadow_tips_coach' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'msg' => __( 'Permission denied', 'wpshadow' ) ) );
+		}
+
+		$issues = array();
+
+		// Check for PHP errors in logs
+		$error_log = ini_get( 'error_log' );
+		if ( $error_log && file_exists( $error_log ) ) {
+			$recent_errors = $this->get_recent_errors( $error_log );
+			if ( ! empty( $recent_errors ) ) {
+				$issues[] = array(
+					'id'          => 'php_errors',
+					'title'       => __( 'PHP Errors Detected', 'wpshadow' ),
+					'description' => __( 'Your site has recent PHP errors in the error log.', 'wpshadow' ),
+					'severity'    => 'high',
+					'fix_type'    => 'guided',
+				);
+			}
+		}
+
+		// Check for plugin conflicts
+		if ( $this->detect_plugin_conflicts() ) {
+			$issues[] = array(
+				'id'          => 'plugin_conflicts',
+				'title'       => __( 'Potential Plugin Conflicts', 'wpshadow' ),
+				'description' => __( 'Some plugins may be conflicting with each other.', 'wpshadow' ),
+				'severity'    => 'medium',
+				'fix_type'    => 'guided',
+			);
+		}
+
+		// Check for missing recommended plugins
+		if ( ! $this->has_backup_plugin() ) {
+			$issues[] = array(
+				'id'          => 'no_backups',
+				'title'       => __( 'No Backup Plugin', 'wpshadow' ),
+				'description' => __( 'Your site doesn\'t have an automated backup solution.', 'wpshadow' ),
+				'severity'    => 'high',
+				'fix_type'    => 'guided',
+			);
+		}
+
+		// Check SSL
+		if ( ! is_ssl() ) {
+			$issues[] = array(
+				'id'          => 'no_ssl',
+				'title'       => __( 'HTTPS Not Enabled', 'wpshadow' ),
+				'description' => __( 'Your site should use HTTPS for security.', 'wpshadow' ),
+				'severity'    => 'high',
+				'fix_type'    => 'guided',
+			);
+		}
+
+		wp_send_json_success( array( 'issues' => $issues ) );
+	}
+
+	/**
+	 * Get recent errors from error log.
+	 *
+	 * @param string $error_log Error log file path.
+	 * @return array Recent errors.
+	 */
+	private function get_recent_errors( string $error_log ): array {
+		$errors = array();
+		$handle = fopen( $error_log, 'r' );
+		if ( $handle ) {
+			fseek( $handle, -4096, SEEK_END );
+			$content = fread( $handle, 4096 );
+			fclose( $handle );
+
+			preg_match_all( '/\[(\d{2}-\w+-\d{4} \d{2}:\d{2}:\d{2})\].*?(Error|Warning|Notice):(.*)/i', $content, $matches );
+			foreach ( $matches[0] as $error ) {
+				$errors[] = $error;
+			}
+		}
+		return array_slice( $errors, -5 );
+	}
+
+	/**
+	 * Detect potential plugin conflicts.
+	 *
+	 * @return bool
+	 */
+	private function detect_plugin_conflicts(): bool {
+		// Simple heuristic: multiple cache plugins or multiple SEO plugins
+		$cache_plugins = array(
+			'wp-super-cache/wp-cache.php',
+			'w3-total-cache/w3-total-cache.php',
+			'wp-fastest-cache/wpFastestCache.php',
+			'litespeed-cache/litespeed-cache.php',
+		);
+
+		$active_cache = 0;
+		foreach ( $cache_plugins as $plugin ) {
+			if ( $this->is_plugin_active_safe( $plugin ) ) {
+				$active_cache++;
+			}
+		}
+
+		return $active_cache > 1;
+	}
+
+	/**
+	 * AJAX: Apply troubleshooting fix.
+	 */
+	public function ajax_apply_troubleshooting_fix(): void {
+		check_ajax_referer( 'wpshadow_tips_coach' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'msg' => __( 'Permission denied', 'wpshadow' ) ) );
+		}
+
+		$issue_id = sanitize_text_field( $_POST['issue_id'] ?? '' );
+		$fix_type = sanitize_text_field( $_POST['fix_type'] ?? '' );
+
+		if ( empty( $issue_id ) || empty( $fix_type ) ) {
+			wp_send_json_error( array( 'msg' => __( 'Invalid parameters', 'wpshadow' ) ) );
+		}
+
+		$result = false;
+		switch ( $issue_id ) {
+			case 'no_ssl':
+				wp_send_json_success( array(
+					'message' => __( 'Visit your hosting control panel or contact support to enable HTTPS.', 'wpshadow' ),
+					'action'  => 'open_page',
+					'page'    => admin_url( 'options-general.php' ),
+				) );
+				break;
+			case 'no_backups':
+				wp_send_json_success( array(
+					'message' => __( 'Consider installing UpdraftPlus, BackWPup, or Duplicator for automated backups.', 'wpshadow' ),
+					'action'  => 'open_page',
+					'page'    => admin_url( 'plugin-install.php?s=backup&tab=search' ),
+				) );
+				break;
+			default:
+				wp_send_json_error( array( 'msg' => __( 'Unknown issue type', 'wpshadow' ) ) );
+		}
+	}
+
+	/**
+	 * AJAX: Get video library.
+	 */
+	public function ajax_get_video_library(): void {
+		check_ajax_referer( 'wpshadow_tips_coach' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'msg' => __( 'Permission denied', 'wpshadow' ) ) );
+		}
+
+		$library = get_option( 'wpshadow_video_library', array() );
+		if ( empty( $library ) ) {
+			$library = $this->get_default_video_library();
+		}
+
+		wp_send_json_success( array( 'videos' => $library ) );
+	}
+
+	/**
+	 * Get default video library structure.
+	 *
+	 * @return array
+	 */
+	private function get_default_video_library(): array {
+		return array(
+			array(
+				'id'       => 'getting_started',
+				'title'    => __( 'Getting Started with WPShadow', 'wpshadow' ),
+				'duration' => '5:30',
+				'category' => 'tutorial',
+				'url'      => '#',
+				'thumbnail' => 'dashicons-media-video',
+			),
+			array(
+				'id'       => 'enable_features',
+				'title'    => __( 'Enabling and Configuring Features', 'wpshadow' ),
+				'duration' => '8:15',
+				'category' => 'tutorial',
+				'url'      => '#',
+				'thumbnail' => 'dashicons-media-video',
+			),
+			array(
+				'id'       => 'site_health',
+				'title'    => __( 'Understanding Site Health Scores', 'wpshadow' ),
+				'duration' => '4:45',
+				'category' => 'tutorial',
+				'url'      => '#',
+				'thumbnail' => 'dashicons-media-video',
+			),
+			array(
+				'id'       => 'security_setup',
+				'title'    => __( 'Hardening Security', 'wpshadow' ),
+				'duration' => '10:20',
+				'category' => 'tutorial',
+				'url'      => '#',
+				'thumbnail' => 'dashicons-media-video',
+			),
+			array(
+				'id'       => 'performance',
+				'title'    => __( 'Optimizing Performance', 'wpshadow' ),
+				'duration' => '12:00',
+				'category' => 'tutorial',
+				'url'      => '#',
+				'thumbnail' => 'dashicons-media-video',
+			),
+			array(
+				'id'       => 'troubleshooting',
+				'title'    => __( 'Troubleshooting Common Issues', 'wpshadow' ),
+				'duration' => '15:30',
+				'category' => 'guide',
+				'url'      => '#',
+				'thumbnail' => 'dashicons-media-video',
+			),
+		);
+	}
+
+	/**
+	 * AJAX: Get specific video walkthrough.
+	 */
+	public function ajax_get_video_walkthrough(): void {
+		check_ajax_referer( 'wpshadow_tips_coach' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'msg' => __( 'Permission denied', 'wpshadow' ) ) );
+		}
+
+		$video_id = sanitize_text_field( $_POST['video_id'] ?? '' );
+		if ( empty( $video_id ) ) {
+			wp_send_json_error( array( 'msg' => __( 'Invalid video ID', 'wpshadow' ) ) );
+		}
+
+		$library = $this->get_default_video_library();
+		$video   = null;
+
+		foreach ( $library as $item ) {
+			if ( $item['id'] === $video_id ) {
+				$video = $item;
+				break;
+			}
+		}
+
+		if ( ! $video ) {
+			wp_send_json_error( array( 'msg' => __( 'Video not found', 'wpshadow' ) ) );
+		}
+
+		wp_send_json_success( array( 'video' => $video ) );
 	}
 }

@@ -19,7 +19,7 @@ A brand new **Feature Log widget** that displays a VS Code Source Control-style 
 - Added `wpshadow_ajax_load_more_logs()` function (lines 562-622)
 - Existing logging already integrated into toggle handlers (lines 493, 543)
 
-### 3. `/workspaces/wpshadow/features/class-wps-feature-external-fonts-disabler.php`
+### 3. `/workspaces/wpshadow/includes/features/class-wps-feature-external-fonts-disabler.php`
 - Added logging to `ajax_save_settings()` method (lines 522-528)
 
 ### 4. `/workspaces/wpshadow/assets/css/wpshadow-admin.css`

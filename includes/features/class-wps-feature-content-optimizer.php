@@ -15,6 +15,11 @@ declare(strict_types=1);
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 /**
  * WPSHADOW_Feature_Content_Optimizer
  *
@@ -28,14 +33,15 @@ final class WPSHADOW_Feature_Content_Optimizer extends WPSHADOW_Abstract_Feature
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'              => 'content-optimizer',
-				'name'            => __( 'Complete Content Quality Optimizer', 'wpshadow' ),
-				'description'     => __( 'Get 35+ real-time checks to create perfect content: SEO, readability, accessibility, images, social media, categories, and more. Your all-in-one content quality assistant.', 'wpshadow' ),
-				'scope'           => 'core',
-				'default_enabled' => true,
-				'version'         => '2.0.0',
-				'widget_group'    => 'content',
-				'aliases'         => array(
+				'id'                 => 'content-optimizer',
+				'name'               => __( 'Complete Content Quality Optimizer', 'wpshadow' ),
+				'description'        => __( 'Get 35+ real-time checks to create perfect content: SEO, readability, accessibility, images, social media, categories, and more. Your all-in-one content quality assistant.', 'wpshadow' ),
+				'scope'              => 'core',
+				'default_enabled'    => true,
+				'version'            => '2.0.0',
+				'widget_group'       => 'content',
+				'minimum_capability' => 'edit_posts',
+				'aliases'            => array(
 					'search engine optimization',
 					'google ranking',
 					'seo helper',
@@ -57,46 +63,223 @@ final class WPSHADOW_Feature_Content_Optimizer extends WPSHADOW_Abstract_Feature
 					'content score',
 				),
 				'sub_features'    => array(
-					// Core SEO Checks
-					'check_title_length'        => __( 'Check if title is the right length for Google', 'wpshadow' ),
-					'check_meta_description'    => __( 'Check if summary text exists', 'wpshadow' ),
-					'check_heading_structure'   => __( 'Check if section titles are organized correctly', 'wpshadow' ),
-					'check_keyword_density'     => __( 'Check if important words appear enough times', 'wpshadow' ),
-					'check_content_length'      => __( 'Check if content is long enough', 'wpshadow' ),
-					'check_internal_links'      => __( 'Check for links to other pages on your site', 'wpshadow' ),
-					'check_external_links'      => __( 'Check for links to other websites', 'wpshadow' ),
-					'suggest_publish_time'      => __( 'Suggest best day and time to publish', 'wpshadow' ),
-					// Content Quality Checks
-					'check_readability'         => __( 'Calculate Flesch-Kincaid readability score', 'wpshadow' ),
-					'check_empty_tags'          => __( 'Check for empty paragraphs and breaks', 'wpshadow' ),
-					'check_paragraph_length'    => __( 'Check if paragraphs are too long', 'wpshadow' ),
-					'check_sentence_length'     => __( 'Check if sentences are too long', 'wpshadow' ),
-					'check_passive_voice'       => __( 'Detect excessive passive voice usage', 'wpshadow' ),
-					'check_duplicate_content'   => __( 'Check for duplicate content on your site', 'wpshadow' ),
-					// Media & Visual Checks
-					'check_featured_image'      => __( 'Check if featured image is set and optimized', 'wpshadow' ),
-					'check_image_optimization'  => __( 'Check if images are compressed and optimized', 'wpshadow' ),
-					'check_image_filenames'     => __( 'Check if image filenames are descriptive', 'wpshadow' ),
-					'check_image_alt_text'      => __( 'Check if all images have alt text', 'wpshadow' ),
-					'check_video_embeds'        => __( 'Validate video embeds and URLs', 'wpshadow' ),
-					// Taxonomy & Organization
-					'check_categories'          => __( 'Check if at least one category is assigned', 'wpshadow' ),
-					'check_tags'                => __( 'Check if tags are assigned', 'wpshadow' ),
-					'check_manual_excerpt'      => __( 'Check if manual excerpt is provided', 'wpshadow' ),
-					// URL & Technical SEO
-					'check_url_slug'            => __( 'Check if URL is SEO-friendly', 'wpshadow' ),
-					'check_focus_keyword'       => __( 'Check keyword placement in title, content, URL', 'wpshadow' ),
-					'check_schema_markup'       => __( 'Validate JSON-LD schema markup', 'wpshadow' ),
-					// Social Media
-					'check_social_preview'      => __( 'Validate Open Graph and Twitter Card data', 'wpshadow' ),
-					// Accessibility
-					'check_table_accessibility' => __( 'Check if tables have headers and captions', 'wpshadow' ),
-					'check_link_anchor_text'    => __( 'Check link anchor text quality', 'wpshadow' ),
-					// Conversion & Engagement
-					'check_call_to_action'      => __( 'Check if content has a call-to-action', 'wpshadow' ),
-					'check_publication_date'    => __( 'Warn about backdating or future dating', 'wpshadow' ),
-					// Advanced Checks
-					'check_grammar'             => __( 'Check grammar and spelling (requires API)', 'wpshadow' ),
+					'check_title_length'        => array(
+						'name'               => __( 'Title Length Check', 'wpshadow' ),
+						'description_short'  => __( 'Verify title is right length for Google', 'wpshadow' ),
+						'description_long'   => __( 'Google displays titles between 50-60 characters on desktop. This check ensures your post title is in the optimal range so it displays fully in search results without being cut off or too short to stand out.', 'wpshadow' ),
+						'description_wizard' => __( 'Make sure your post title shows fully in Google search results.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_meta_description'    => array(
+						'name'               => __( 'Meta Description Check', 'wpshadow' ),
+						'description_short'  => __( 'Verify summary text is provided', 'wpshadow' ),
+						'description_long'   => __( 'Meta descriptions are the summary text that appears under your title in Google search results. This check ensures you\'ve written a description for your post to make people want to click on it.', 'wpshadow' ),
+						'description_wizard' => __( 'Create a summary that appears in search results to encourage people to click on your post.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_heading_structure'   => array(
+						'name'               => __( 'Heading Structure Check', 'wpshadow' ),
+						'description_short'  => __( 'Verify section titles are organized correctly', 'wpshadow' ),
+						'description_long'   => __( 'Headings should flow logically from H1 to H2 to H3, like an outline. This helps both Google and screen readers understand your content structure. Properly organized headings improve both search rankings and accessibility.', 'wpshadow' ),
+						'description_wizard' => __( 'Make sure your section titles are organized properly, like a good outline.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_keyword_density'     => array(
+						'name'               => __( 'Keyword Density Check', 'wpshadow' ),
+						'description_short'  => __( 'Verify main words appear enough times', 'wpshadow' ),
+						'description_long'   => __( 'Uses your focus keyword to check if you mention your main topic enough times throughout the post. Too few mentions means Google might not understand what your post is about. Too many repetitions looks like spam.', 'wpshadow' ),
+						'description_wizard' => __( 'Make sure you mention your main topic enough times for Google to notice.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_content_length'      => array(
+						'name'               => __( 'Content Length Check', 'wpshadow' ),
+						'description_short'  => __( 'Verify content is long enough', 'wpshadow' ),
+						'description_long'   => __( 'Longer posts (800+ words) typically rank better in Google. This check ensures your post is comprehensive enough to be considered an authoritative source on the topic and valuable to readers.', 'wpshadow' ),
+						'description_wizard' => __( 'Write enough content (800+ words) to rank well in Google search results.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_internal_links'      => array(
+						'name'               => __( 'Internal Links Check', 'wpshadow' ),
+						'description_short'  => __( 'Verify links to other pages exist', 'wpshadow' ),
+						'description_long'   => __( 'Internal links help Google find your other pages and understand your site structure. Links also keep visitors on your site longer by offering related content. This check ensures you\'re linking to relevant pages on your own site.', 'wpshadow' ),
+						'description_wizard' => __( 'Link to other pages on your site to help Google and readers find more content.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_external_links'      => array(
+						'name'               => __( 'External Links Check', 'wpshadow' ),
+						'description_short'  => __( 'Verify links to other websites exist', 'wpshadow' ),
+						'description_long'   => __( 'Linking to reputable external sources shows your content is well-researched and adds credibility. Google looks for outbound links as a signal of quality content. This check ensures you\'re citing sources appropriately.', 'wpshadow' ),
+						'description_wizard' => __( 'Link to trusted external sources to back up your content and build credibility.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'suggest_publish_time'      => array(
+						'name'               => __( 'Publish Time Suggestion', 'wpshadow' ),
+						'description_short'  => __( 'Suggest best day and time to publish', 'wpshadow' ),
+						'description_long'   => __( 'Analyzes when your audience is most active and suggests optimal publishing times. Publishing when more people are online increases views and engagement. Takes into account your audience\'s timezone and browsing patterns.', 'wpshadow' ),
+						'description_wizard' => __( 'Get suggestions for the best time to publish for maximum visibility.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_readability'         => array(
+						'name'               => __( 'Readability Score', 'wpshadow' ),
+						'description_short'  => __( 'Calculate readability using Flesch-Kincaid', 'wpshadow' ),
+						'description_long'   => __( 'Analyzes your content using the Flesch-Kincaid readability formula to determine if it\'s easy to understand. Aims for a score that\'s readable by most adults (60+). Simpler language means more people can understand your content and higher engagement.', 'wpshadow' ),
+						'description_wizard' => __( 'Measure how easy your content is to read and understand.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_empty_tags'          => array(
+						'name'               => __( 'Empty Tags Check', 'wpshadow' ),
+						'description_short'  => __( 'Check for empty paragraphs and breaks', 'wpshadow' ),
+						'description_long'   => __( 'Detects empty or unnecessary HTML tags that clutter your code and waste space. Cleaning these up improves page load speed and makes the HTML cleaner and easier to maintain.', 'wpshadow' ),
+						'description_wizard' => __( 'Remove empty paragraphs and unnecessary spacing that wastes space and slows page load.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_paragraph_length'    => array(
+						'name'               => __( 'Paragraph Length Check', 'wpshadow' ),
+						'description_short'  => __( 'Check if paragraphs are too long', 'wpshadow' ),
+						'description_long'   => __( 'Long paragraphs are hard to read, especially on phones. This check flags paragraphs that are too long and suggests breaking them up. Shorter paragraphs improve readability and keep readers engaged.', 'wpshadow' ),
+						'description_wizard' => __( 'Make sure your paragraphs aren\'t too long and hard to read.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_sentence_length'     => array(
+						'name'               => __( 'Sentence Length Check', 'wpshadow' ),
+						'description_short'  => __( 'Check if sentences are too long', 'wpshadow' ),
+						'description_long'   => __( 'Long, complex sentences are hard to understand. This check identifies sentences that are too long and suggests breaking them into shorter, punchier sentences. Shorter sentences make your writing clearer and more persuasive.', 'wpshadow' ),
+						'description_wizard' => __( 'Keep your sentences short and easy to understand.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_passive_voice'       => array(
+						'name'               => __( 'Passive Voice Check', 'wpshadow' ),
+						'description_short'  => __( 'Detect excessive passive voice usage', 'wpshadow' ),
+						'description_long'   => __( 'Passive voice (\"the article was written\") is weaker than active voice (\"I wrote the article\"). This check flags excessive passive voice and suggests rewriting in active voice. Active voice is more engaging, persuasive, and easier to understand.', 'wpshadow' ),
+						'description_wizard' => __( 'Use active voice instead of passive voice to make your writing stronger and clearer.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_duplicate_content'   => array(
+						'name'               => __( 'Duplicate Content Check', 'wpshadow' ),
+						'description_short'  => __( 'Check for duplicate content on your site', 'wpshadow' ),
+						'description_long'   => __( 'Scans your site to find posts or pages with very similar content. Duplicate content confuses Google about which version to rank. This check helps you find and consolidate similar content to improve rankings.', 'wpshadow' ),
+						'description_wizard' => __( 'Find posts that are too similar to help Google rank your best content.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
+					'check_featured_image'      => array(
+						'name'               => __( 'Featured Image Check', 'wpshadow' ),
+						'description_short'  => __( 'Verify featured image is set and optimized', 'wpshadow' ),
+						'description_long'   => __( 'A good featured image makes your post stand out in search results and social media. This check ensures you have a featured image set and that it\'s the right size and format for best performance and appearance.', 'wpshadow' ),
+						'description_wizard' => __( 'Add an eye-catching featured image to make your post stand out on social media.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_image_optimization'  => array(
+						'name'               => __( 'Image Optimization Check', 'wpshadow' ),
+						'description_short'  => __( 'Check if images are compressed and optimized', 'wpshadow' ),
+						'description_long'   => __( 'Large, unoptimized images slow down your page. This check verifies images are compressed and in the right format (WEBP is better than JPEG). Optimized images load faster, improve user experience, and help your rankings.', 'wpshadow' ),
+						'description_wizard' => __( 'Make sure your images are compressed to load faster and improve site speed.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_image_filenames'     => array(
+						'name'               => __( 'Image Filename Check', 'wpshadow' ),
+						'description_short'  => __( 'Check if image filenames are descriptive', 'wpshadow' ),
+						'description_long'   => __( 'Google can\'t see images, but it can read the filename. Using descriptive filenames (like \"apple-pie-recipe.jpg\" instead of \"IMG_1234.jpg\") helps Google understand what the image shows and can improve rankings in image search.', 'wpshadow' ),
+						'description_wizard' => __( 'Name your image files descriptively so Google understands what they show.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_image_alt_text'      => array(
+						'name'               => __( 'Image Alt Text Check', 'wpshadow' ),
+						'description_short'  => __( 'Check if all images have alt text', 'wpshadow' ),
+						'description_long'   => __( 'Alt text describes images for people using screen readers and helps Google understand images. Every image should have descriptive alt text. It\'s both good for accessibility and SEO - a win-win for your site.', 'wpshadow' ),
+						'description_wizard' => __( 'Add descriptions to all images so everyone can understand what they show.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_video_embeds'        => array(
+						'name'               => __( 'Video Embeds Check', 'wpshadow' ),
+						'description_short'  => __( 'Validate video embeds and URLs', 'wpshadow' ),
+						'description_long'   => __( 'Videos increase engagement and time on page, which improves rankings. This check validates that embedded videos are working properly and that video URLs are valid. Broken videos hurt user experience and rankings.', 'wpshadow' ),
+						'description_wizard' => __( 'Make sure embedded videos are working properly for better engagement.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_categories'          => array(
+						'name'               => __( 'Categories Check', 'wpshadow' ),
+						'description_short'  => __( 'Check if at least one category is assigned', 'wpshadow' ),
+						'description_long'   => __( 'Categories organize your content and help Google understand your site structure. Every post should belong to at least one category. This helps both visitors and search engines navigate your site.', 'wpshadow' ),
+						'description_wizard' => __( 'Organize your post into categories so visitors can find related content.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_tags'                => array(
+						'name'               => __( 'Tags Check', 'wpshadow' ),
+						'description_short'  => __( 'Check if tags are assigned', 'wpshadow' ),
+						'description_long'   => __( 'Tags are like labels that describe your post topic. While optional, tags help organize content and create topic pages that improve navigation. Using 3-5 relevant tags per post is a good practice.', 'wpshadow' ),
+						'description_wizard' => __( 'Add tags to help organize your content by topic.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
+					'check_manual_excerpt'      => array(
+						'name'               => __( 'Manual Excerpt Check', 'wpshadow' ),
+						'description_short'  => __( 'Check if manual excerpt is provided', 'wpshadow' ),
+						'description_long'   => __( 'Excerpts are summaries that appear in archives and on the homepage. Writing a custom excerpt gives you control over what preview text people see instead of WordPress automatically truncating your content.', 'wpshadow' ),
+						'description_wizard' => __( 'Write a custom excerpt for better control over how your post appears on archive pages.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
+					'check_url_slug'            => array(
+						'name'               => __( 'URL Slug Check', 'wpshadow' ),
+						'description_short'  => __( 'Check if URL is SEO-friendly', 'wpshadow' ),
+						'description_long'   => __( 'Your post URL should be short, descriptive, and include your main keyword. Good URL: \"how-to-bake-cookies\" vs Bad URL: \"post123abc\". Descriptive URLs help Google and visitors understand what the page is about.', 'wpshadow' ),
+						'description_wizard' => __( 'Use short, descriptive URLs that include your main topic.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_focus_keyword'       => array(
+						'name'               => __( 'Focus Keyword Placement', 'wpshadow' ),
+						'description_short'  => __( 'Check keyword placement in title, content, URL', 'wpshadow' ),
+						'description_long'   => __( 'Includes your focus keyword in important places (title, first paragraph, headings, URL) tells Google what your post is about. This check ensures good keyword placement without overdoing it (which looks like spam).', 'wpshadow' ),
+						'description_wizard' => __( 'Include your main keyword in important places like the title and first paragraph.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_schema_markup'       => array(
+						'name'               => __( 'Schema Markup Check', 'wpshadow' ),
+						'description_short'  => __( 'Validate JSON-LD schema markup', 'wpshadow' ),
+						'description_long'   => __( 'Schema markup is code that helps Google understand your content better. It can enable rich results like star ratings, prices, and author info in search results. Valid schema markup improves CTR and SEO performance.', 'wpshadow' ),
+						'description_wizard' => __( 'Add schema markup so Google can show your content better in search results.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_social_preview'      => array(
+						'name'               => __( 'Social Preview Check', 'wpshadow' ),
+						'description_short'  => __( 'Validate Open Graph and Twitter Card data', 'wpshadow' ),
+						'description_long'   => __( 'When your post is shared on Facebook, Twitter, LinkedIn, etc., it shows a preview with your title, description, and image. This check ensures proper Open Graph and Twitter Card markup so your posts look professional when shared.', 'wpshadow' ),
+						'description_wizard' => __( 'Make sure your post looks great when people share it on Facebook and Twitter.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_table_accessibility' => array(
+						'name'               => __( 'Table Accessibility Check', 'wpshadow' ),
+						'description_short'  => __( 'Check if tables have headers and captions', 'wpshadow' ),
+						'description_long'   => __( 'Tables need proper headers and captions to be understandable by screen readers and to convey meaning to all users. This check ensures your data tables are accessible to everyone.', 'wpshadow' ),
+						'description_wizard' => __( 'Add headers and captions to tables so everyone can understand the data.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_link_anchor_text'    => array(
+						'name'               => __( 'Link Anchor Text Check', 'wpshadow' ),
+						'description_short'  => __( 'Check link anchor text quality', 'wpshadow' ),
+						'description_long'   => __( 'Link text tells Google and readers what the linked page is about. Generic text like \"click here\" doesn\'t help. Descriptive anchor text improves both SEO and user experience.', 'wpshadow' ),
+						'description_wizard' => __( 'Use descriptive link text instead of generic \"click here\" phrases.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_call_to_action'      => array(
+						'name'               => __( 'Call-to-Action Check', 'wpshadow' ),
+						'description_short'  => __( 'Check if content has a call-to-action', 'wpshadow' ),
+						'description_long'   => __( 'A clear call-to-action (CTA) tells readers what to do next: subscribe, buy, contact, etc. Posts without CTAs miss conversion opportunities. This check ensures your content guides readers toward desired actions.', 'wpshadow' ),
+						'description_wizard' => __( 'Add a clear instruction telling readers what to do next (subscribe, buy, contact, etc.).', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_publication_date'    => array(
+						'name'               => __( 'Publication Date Check', 'wpshadow' ),
+						'description_short'  => __( 'Warn about backdating or future dating', 'wpshadow' ),
+						'description_long'   => __( 'Manipulating publication dates can confuse Google and analytics. This check warns if you\'re publishing old content as new or setting dates far in the future. Always use honest publication dates.', 'wpshadow' ),
+						'description_wizard' => __( 'Use real publication dates to avoid confusing search engines and analytics.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
+					'check_grammar'             => array(
+						'name'               => __( 'Grammar Check', 'wpshadow' ),
+						'description_short'  => __( 'Check grammar and spelling', 'wpshadow' ),
+						'description_long'   => __( 'Errors in grammar and spelling hurt credibility and user experience. This advanced check looks for common mistakes and suggests corrections to make your content professional and polished.', 'wpshadow' ),
+						'description_wizard' => __( 'Catch grammar and spelling mistakes to keep your content professional.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
 					'check_mobile_preview'      => __( 'Validate mobile responsiveness', 'wpshadow' ),
 					'check_load_time'           => __( 'Estimate page load time', 'wpshadow' ),
 					'check_legal_compliance'    => __( 'Check for affiliate/sponsored disclosures', 'wpshadow' ),
@@ -291,7 +474,7 @@ final class WPSHADOW_Feature_Content_Optimizer extends WPSHADOW_Abstract_Feature
 	 * @return string
 	 */
 	private function get_content_panel_script(): string {
-		return "
+		return <<<'JAVASCRIPT'
 (function() {
 	if (!window.wpshadowContentOptimizer || !window.wpshadowContentOptimizer.enabled) {
 		return;
@@ -549,7 +732,7 @@ final class WPSHADOW_Feature_Content_Optimizer extends WPSHADOW_Abstract_Feature
 		icon: 'chart-line'
 	});
 })();
-";
+JAVASCRIPT;
 	}
 
 	/**
@@ -558,7 +741,7 @@ final class WPSHADOW_Feature_Content_Optimizer extends WPSHADOW_Abstract_Feature
 	 * @return string
 	 */
 	private function get_seo_panel_styles(): string {
-		return "
+		return <<<'CSS'
 .wpshadow-seo-panel {
 	padding: 4px 0;
 }
@@ -572,7 +755,7 @@ final class WPSHADOW_Feature_Content_Optimizer extends WPSHADOW_Abstract_Feature
 .wpshadow-seo-suggestions ul {
 	list-style-type: disc;
 }
-";
+CSS;
 	}
 
 	/**

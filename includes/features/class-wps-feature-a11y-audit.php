@@ -10,6 +10,11 @@
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 final class WPSHADOW_Feature_A11y_Audit extends WPSHADOW_Abstract_Feature {
 
 	public function __construct() {
@@ -19,11 +24,26 @@ final class WPSHADOW_Feature_A11y_Audit extends WPSHADOW_Abstract_Feature {
 			'description' => __( 'Find and fix problems that make your site hard to use for people with disabilities.', 'wpshadow' ),
 			'aliases'     => array( 'accessibility audit', 'wcag', 'a11y', 'accessibility check', 'alt text', 'aria', 'keyboard navigation', 'screen reader', 'disability access', 'ada compliance', 'accessibility validation', 'inclusive design' ),
 			'sub_features' => array(
-				'alt_text_check'     => __( 'Check for missing image descriptions', 'wpshadow' ),
-				'aria_validation'    => __( 'Check screen reader labels', 'wpshadow' ),
-				'keyboard_navigation' => __( 'Check keyboard navigation works', 'wpshadow' ),
-				'contrast_checking'  => __( 'Check text colors are readable', 'wpshadow' ),
-				'auto_fixes'         => __( 'Fix problems automatically', 'wpshadow' ),
+				'alt_text_check'     => array(
+					'name'        => __( 'Image Descriptions for Accessibility', 'wpshadow' ),
+					'description' => __( 'Ensures all images have alt text so people using screen readers can understand what\'s in them. Essential for visitors who are blind or have low vision.', 'wpshadow' ),
+				),
+				'aria_validation'    => array(
+					'name'        => __( 'Screen Reader Compatibility', 'wpshadow' ),
+					'description' => __( 'Checks that interactive elements are properly labeled for screen readers. This helps people with disabilities navigate and use your site correctly.', 'wpshadow' ),
+				),
+				'keyboard_navigation' => array(
+					'name'        => __( 'Keyboard Navigation Support', 'wpshadow' ),
+					'description' => __( 'Verifies that everything on your site can be used with a keyboard alone. Many people can\'t use a mouse, so this is crucial for accessibility.', 'wpshadow' ),
+				),
+				'contrast_checking'  => array(
+					'name'        => __( 'Text Readability & Color Contrast', 'wpshadow' ),
+					'description' => __( 'Ensures text colors are dark enough against their background so everyone can read them. People with low vision or color blindness depend on this.', 'wpshadow' ),
+				),
+				'auto_fixes'         => array(
+					'name'        => __( 'Automatic Problem Fixes', 'wpshadow' ),
+					'description' => __( 'Automatically corrects common accessibility issues like adding missing focus indicators and fixing keyboard navigation problems. Saves you time while improving usability.', 'wpshadow' ),
+				),
 			),
 		) );
 

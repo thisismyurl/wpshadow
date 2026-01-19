@@ -12,6 +12,11 @@ declare(strict_types=1);
 
 namespace WPShadow\Core;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 /**
  * Session Manager for user-specific data storage
  *

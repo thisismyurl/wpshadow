@@ -13,6 +13,11 @@ declare(strict_types=1);
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 /**
  * WPSHADOW_Feature_Paste_Cleanup
  *
@@ -26,14 +31,15 @@ final class WPSHADOW_Feature_Paste_Cleanup extends WPSHADOW_Abstract_Feature {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'              => 'paste-cleanup',
-				'name'            => __( 'Clean Up Pasted Content', 'wpshadow' ),
-				'description'     => __( 'Remove extra code and formatting when you copy and paste from Word documents or other websites. Keeps your content clean and consistent.', 'wpshadow' ),
-				'scope'           => 'core',
-				'default_enabled' => true,
-				'version'         => '1.0.0',
-				'widget_group'    => 'content',
-				'aliases'         => array(
+				'id'                 => 'paste-cleanup',
+				'name'               => __( 'Clean Up Pasted Content', 'wpshadow' ),
+				'description'        => __( 'Remove extra code and formatting when you copy and paste from Word documents or other websites. Keeps your content clean and consistent.', 'wpshadow' ),
+				'scope'              => 'core',
+				'default_enabled'    => true,
+				'version'            => '1.0.0',
+				'widget_group'       => 'content',
+				'minimum_capability' => 'edit_posts',
+				'aliases'            => array(
 					'word formatting',
 					'copy paste',
 					'messy content',
@@ -46,19 +52,97 @@ final class WPSHADOW_Feature_Paste_Cleanup extends WPSHADOW_Abstract_Feature {
 					'clean content',
 				),
 				'sub_features'    => array(
-					'remove_inline_styles'  => __( 'Remove colored text and fancy fonts', 'wpshadow' ),
-					'remove_classes'        => __( 'Remove hidden code labels', 'wpshadow' ),
-					'remove_empty_tags'     => __( 'Remove empty spaces and breaks', 'wpshadow' ),
-					'remove_word_metadata'  => __( 'Remove Microsoft Word tracking data', 'wpshadow' ),
-					'clean_links'           => __( 'Clean up messy link addresses', 'wpshadow' ),
-					'preserve_formatting'   => __( 'Keep bold, italic, and basic formatting', 'wpshadow' ),
-					'image_cleanup'         => __( 'Clean or resize pasted images', 'wpshadow' ),
-					'table_formatting'      => __( 'Normalize tables from documents', 'wpshadow' ),
-					'list_normalization'    => __( 'Standardize bullet and number lists', 'wpshadow' ),
-					'heading_hierarchy'     => __( 'Enforce clean heading order (H2→H3→H4)', 'wpshadow' ),
-					'character_encoding'    => __( 'Fix smart quotes and special characters', 'wpshadow' ),
-					'whitespace_cleanup'    => __( 'Collapse extra spaces and line breaks', 'wpshadow' ),
-					'preview_before_after'  => __( 'Show before/after cleaned content preview', 'wpshadow' ),
+					'remove_inline_styles'  => array(
+						'name'               => __( 'Remove Inline Styles', 'wpshadow' ),
+						'description_short'  => __( 'Strip color and formatting from pasted text', 'wpshadow' ),
+						'description_long'   => __( 'Removes inline CSS styles that Microsoft Word and other programs add when you copy and paste content. These styles often include colors, fonts, spacing, and formatting that don\'t match your site design and bloat the HTML. Removing them keeps your content clean and consistent with your theme\'s styling.', 'wpshadow' ),
+						'description_wizard' => __( 'Word and other programs add lots of hidden formatting. Remove it to keep your content clean and matching your site style.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'remove_classes'        => array(
+						'name'               => __( 'Remove CSS Classes', 'wpshadow' ),
+						'description_short'  => __( 'Strip CSS class names from pasted content', 'wpshadow' ),
+						'description_long'   => __( 'Removes CSS class names that Word and other programs embed in HTML when pasting. These classes are usually based on Word\'s internal style names and are meaningless for web content. They add HTML bloat and can cause unexpected styling if your site has CSS rules that match these class names.', 'wpshadow' ),
+						'description_wizard' => __( 'Word adds CSS class names like MsoNormal and style123 that serve no purpose on the web. Remove them to clean up your HTML.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'remove_empty_tags'     => array(
+						'name'               => __( 'Remove Empty Tags', 'wpshadow' ),
+						'description_short'  => __( 'Delete empty paragraph and span tags', 'wpshadow' ),
+						'description_long'   => __( 'Removes HTML tags that contain no content, which Word often adds when cleaning formatting. Empty paragraphs, spans, and divs add HTML size without contributing anything to the page. Removing them reduces the amount of cleanup needed.', 'wpshadow' ),
+						'description_wizard' => __( 'Word leaves behind empty tags when converting formatting. Remove them to clean up HTML size.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'remove_word_metadata'  => array(
+						'name'               => __( 'Remove Word Metadata', 'wpshadow' ),
+						'description_short'  => __( 'Strip Microsoft Word tracking and metadata', 'wpshadow' ),
+						'description_long'   => __( 'Removes metadata and tracking information that Microsoft Word embeds in HTML. This includes revision markers, comments, tracked changes, and Word-specific XML. These tags are often invisible but can reveal information about document history and edits. Removing them improves security and privacy.', 'wpshadow' ),
+						'description_wizard' => __( 'Word embeds invisible metadata about edits and changes. Remove this to clean up the HTML and improve security.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'clean_links'           => array(
+						'name'               => __( 'Clean Link URLs', 'wpshadow' ),
+						'description_short'  => __( 'Simplify and fix pasted link addresses', 'wpshadow' ),
+						'description_long'   => __( 'Cleans up link URLs that often get mangled when pasted from documents. Word often adds unnecessary parameters and tracking codes to links. This removes those extras and ensures links are properly formatted for the web.', 'wpshadow' ),
+						'description_wizard' => __( 'Links from documents often have unnecessary tracking codes. This cleans them up to simple, proper URLs.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'preserve_formatting'   => array(
+						'name'               => __( 'Preserve Basic Formatting', 'wpshadow' ),
+						'description_short'  => __( 'Keep bold, italic, and underline formatting', 'wpshadow' ),
+						'description_long'   => __( 'Preserves essential text formatting like bold, italic, and underline that are important to content meaning. While removing Word\'s bloated styles, this keeps meaningful formatting using semantic HTML tags. Most sites want to keep emphasis formatting but remove the unnecessary styling.', 'wpshadow' ),
+						'description_wizard' => __( 'Keep important text formatting like bold and italic while removing Word\'s unnecessary styling.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'image_cleanup'         => array(
+						'name'               => __( 'Clean Pasted Images', 'wpshadow' ),
+						'description_short'  => __( 'Resize and optimize images from documents', 'wpshadow' ),
+						'description_long'   => __( 'Cleans up images pasted directly from documents. Word often pastes images at huge resolutions with unnecessary metadata. This feature resizes them to reasonable web dimensions and removes embedded metadata. Disabled by default as it requires image processing overhead.', 'wpshadow' ),
+						'description_wizard' => __( 'Images from Word are often huge and bloated. Enable to automatically resize and optimize them for the web. Requires image processing.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
+					'table_formatting'      => array(
+						'name'               => __( 'Clean Table Formatting', 'wpshadow' ),
+						'description_short'  => __( 'Normalize table structure and remove styles', 'wpshadow' ),
+						'description_long'   => __( 'Cleans up table formatting when copying tables from Word documents. Removes excessive cell padding, backgrounds, and styling while preserving table structure. Makes pasted tables compatible with your site\'s table CSS. Disabled by default.', 'wpshadow' ),
+						'description_wizard' => __( 'Tables from Word need cleanup to match your site design. Enable to automatically normalize table formatting.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
+					'list_normalization'    => array(
+						'name'               => __( 'Normalize Lists', 'wpshadow' ),
+						'description_short'  => __( 'Standardize bullet and number lists', 'wpshadow' ),
+						'description_long'   => __( 'Standardizes list formatting from pasted content. Word often creates broken or nested lists with excessive formatting. This normalizes them into proper HTML lists. Disabled by default.', 'wpshadow' ),
+						'description_wizard' => __( 'Lists from Word are often broken or over-nested. Enable to fix list structure automatically.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
+					'heading_hierarchy'     => array(
+						'name'               => __( 'Fix Heading Hierarchy', 'wpshadow' ),
+						'description_short'  => __( 'Enforce proper heading levels (H1, H2, H3...)', 'wpshadow' ),
+						'description_long'   => __( 'Ensures headings follow proper semantic hierarchy (H1, then H2, then H3, etc.). Documents often have skipped levels or improper nesting. Proper hierarchy is important for accessibility and SEO. Disabled by default.', 'wpshadow' ),
+						'description_wizard' => __( 'Word often has broken heading hierarchies. Enable to automatically fix them for better accessibility and SEO.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
+					'character_encoding'    => array(
+						'name'               => __( 'Fix Special Characters', 'wpshadow' ),
+						'description_short'  => __( 'Convert smart quotes and special characters', 'wpshadow' ),
+						'description_long'   => __( 'Converts Word\'s smart quotes, em-dashes, and other special characters to proper HTML entities. Word uses proprietary characters that don\'t always display correctly on the web. This converts them to standard characters that work everywhere. Disabled by default.', 'wpshadow' ),
+						'description_wizard' => __( 'Word\'s smart quotes and special characters don\'t always work on the web. Enable to convert them to standard characters.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
+					'whitespace_cleanup'    => array(
+						'name'               => __( 'Clean Whitespace', 'wpshadow' ),
+						'description_short'  => __( 'Collapse extra spaces and line breaks', 'wpshadow' ),
+						'description_long'   => __( 'Removes excessive whitespace from pasted content including multiple spaces, unnecessary line breaks, and indentation. Documents often have formatting whitespace that doesn\'t make sense on the web. Disabled by default.', 'wpshadow' ),
+						'description_wizard' => __( 'Extra spaces and line breaks from documents waste HTML space. Enable to clean them up.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
+					'preview_before_after'  => array(
+						'name'               => __( 'Show Preview', 'wpshadow' ),
+						'description_short'  => __( 'Display before/after cleanup preview', 'wpshadow' ),
+						'description_long'   => __( 'Shows a side-by-side preview of content before and after cleanup, so you can review what will be cleaned and reject changes if needed. Disabled by default to keep the editor lightweight.', 'wpshadow' ),
+						'description_wizard' => __( 'See what cleanup will do before it\'s applied. Useful for troubleshooting or disabling specific cleanup steps.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
 				),
 			)
 		);

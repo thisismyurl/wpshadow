@@ -13,6 +13,11 @@ declare(strict_types=1);
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 /**
  * WPSHADOW_Feature_Pre_Publish_Review
  *
@@ -21,19 +26,27 @@ namespace WPShadow\CoreSupport;
 final class WPSHADOW_Feature_Pre_Publish_Review extends WPSHADOW_Abstract_Feature {
 
 	/**
+	 * Registered external reviewers from other features.
+	 *
+	 * @var array
+	 */
+	private static array $external_reviewers = array();
+
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
 		parent::__construct(
 			array(
-				'id'              => 'pre-publish-review',
-				'name'            => __( 'Check Content Before Publishing', 'wpshadow' ),
-				'description'     => __( 'Automatically check your posts for problems before they go live. Finds broken links, messy formatting, and missing information.', 'wpshadow' ),
-				'scope'           => 'core',
-				'default_enabled' => false,
-				'version'         => '1.0.0',
-				'widget_group'    => 'content',
-				'aliases'         => array(
+				'id'                 => 'pre-publish-review',
+				'name'               => __( 'Check Content Before Publishing', 'wpshadow' ),
+				'description'        => __( 'Automatically check your posts for problems before they go live. Finds broken links, messy formatting, and missing information.', 'wpshadow' ),
+				'scope'              => 'core',
+				'default_enabled'    => false,
+				'version'            => '1.0.0',
+				'widget_group'       => 'content',
+				'minimum_capability' => 'edit_posts',
+				'aliases'            => array(
 					'content review',
 					'quality check',
 					'broken link checker',
@@ -48,15 +61,69 @@ final class WPSHADOW_Feature_Pre_Publish_Review extends WPSHADOW_Abstract_Featur
 					'publish wizard',
 				),
 				'sub_features'    => array(
-					'check_broken_links'     => __( 'Check for broken web links', 'wpshadow' ),
-					'check_paste_cleanup'    => __( 'Check for messy pasted content', 'wpshadow' ),
-					'check_missing_alt_text' => __( 'Check for images without descriptions', 'wpshadow' ),
-					'check_empty_headings'   => __( 'Check for empty section titles', 'wpshadow' ),
-					'check_word_count'       => __( 'Check if content is too short', 'wpshadow' ),
-					'show_editor_panel'      => __( 'Show review panel in editor sidebar', 'wpshadow' ),
-					'block_on_errors'        => __( 'Require fixing problems before publishing', 'wpshadow' ),
-					'allow_user_preferences' => __( 'Let users turn off individual checks for themselves', 'wpshadow' ),
-					'show_dismiss_option'    => __( 'Show "never show again" checkbox in editor', 'wpshadow' ),
+					'check_broken_links'     => array(
+						'name'               => __( 'Check for Broken Links', 'wpshadow' ),
+						'description_short'  => __( 'Verify all links in content are working', 'wpshadow' ),
+						'description_long'   => __( 'Scans your post for links and verifies they all work and don\'t return 404 errors. Broken links hurt SEO and provide a poor user experience. Finding and fixing them before publishing ensures visitors won\'t hit dead links.', 'wpshadow' ),
+						'description_wizard' => __( 'Check for broken links before publishing so readers don\'t hit dead links.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_paste_cleanup'    => array(
+						'name'               => __( 'Check for Messy Paste Content', 'wpshadow' ),
+						'description_short'  => __( 'Detect poorly-formatted pasted content', 'wpshadow' ),
+						'description_long'   => __( 'Detects if your post contains content that appears to have been pasted from Word or other documents without cleanup. Looks for signatures of poor paste like excessive inline styles, Word classes, or unusual HTML structure. Warns you to review or clean up the content for consistency.', 'wpshadow' ),
+						'description_wizard' => __( 'Warn if you have messy pasted content that should be cleaned up before publishing.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_missing_alt_text' => array(
+						'name'               => __( 'Check for Missing Alt Text', 'wpshadow' ),
+						'description_short'  => __( 'Verify all images have descriptions', 'wpshadow' ),
+						'description_long'   => __( 'Verifies all images in your post have alt text for accessibility. Screen reader users rely on alt text to understand images. Google also uses alt text for image search rankings. Missing alt text is both an accessibility violation and SEO miss.', 'wpshadow' ),
+						'description_wizard' => __( 'Missing alt text hurts both accessibility and SEO. Check before publishing so all images are properly described.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_empty_headings'   => array(
+						'name'               => __( 'Check for Empty Headings', 'wpshadow' ),
+						'description_short'  => __( 'Find headings with no text', 'wpshadow' ),
+						'description_long'   => __( 'Detects heading tags that have no text content. Empty headings create confusion for screen reader users and hurt SEO. They often indicate formatting mistakes or incomplete content that should be fixed before publishing.', 'wpshadow' ),
+						'description_wizard' => __( 'Empty headings break accessibility and look like mistakes. Find and fix them before publishing.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'check_word_count'       => array(
+						'name'               => __( 'Check Content Length', 'wpshadow' ),
+						'description_short'  => __( 'Warn if content is too short', 'wpshadow' ),
+						'description_long'   => __( 'Checks that your post meets a minimum word count (default 300 words). Thin content performs poorly in search results. This warning helps you remember to write substantial posts with enough information for readers and search engines to find valuable. Disabled by default - enable based on your content strategy.', 'wpshadow' ),
+						'description_wizard' => __( 'Warn if posts are too short. Google generally prefers longer, more detailed content. Set minimum word count based on your site\'s content strategy.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
+					'show_editor_panel'      => array(
+						'name'               => __( 'Show Review Panel', 'wpshadow' ),
+						'description_short'  => __( 'Display review panel in editor sidebar', 'wpshadow' ),
+						'description_long'   => __( 'Shows a sidebar panel in the block editor displaying all active review checks and their status. You can run checks, see results, and fix issues directly in the editor. The panel updates in real-time as you edit.', 'wpshadow' ),
+						'description_wizard' => __( 'Show check results in the editor sidebar so you can see and fix issues while writing.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'block_on_errors'        => array(
+						'name'               => __( 'Block Publishing on Errors', 'wpshadow' ),
+						'description_short'  => __( 'Prevent publishing with critical issues', 'wpshadow' ),
+						'description_long'   => __( 'Prevents you from publishing posts that have critical issues found by review checks. This is a strict mode that ensures only quality content gets published. You can still override if needed but the default is to require fixes first.', 'wpshadow' ),
+						'description_wizard' => __( 'Force quality by preventing publishing of content with critical issues. Good for sites with content standards. Disabled by default.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
+					'allow_user_preferences' => array(
+						'name'               => __( 'Allow User Preferences', 'wpshadow' ),
+						'description_short'  => __( 'Let users customize checks', 'wpshadow' ),
+						'description_long'   => __( 'Allows individual users to customize which checks run for their own posts. Different authors may have different needs - some might want word count checks while others don\'t. This lets each user customize their checks independently.', 'wpshadow' ),
+						'description_wizard' => __( 'Allow authors to customize which checks apply to their own posts. Useful for sites with varied content types and authors.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'show_dismiss_option'    => array(
+						'name'               => __( 'Show Dismiss Option', 'wpshadow' ),
+						'description_short'  => __( 'Allow hiding review warnings', 'wpshadow' ),
+						'description_long'   => __( 'Shows a "never show again" checkbox in the review panel so users can hide warnings they don\'t find useful. Keeps the UI clean for authors who don\'t want to see certain checks repeated.', 'wpshadow' ),
+						'description_wizard' => __( 'Let users dismiss checks they don\'t find useful. Reduces notification fatigue.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
 				),
 			)
 		);
@@ -163,7 +230,7 @@ final class WPSHADOW_Feature_Pre_Publish_Review extends WPSHADOW_Abstract_Featur
 	 * @return string
 	 */
 	private function get_editor_panel_script(): string {
-		return "
+		return <<<'JAVASCRIPT'
 (function() {
 	if (!window.wpshadowPrePublish || !window.wpshadowPrePublish.enabled) {
 		return;
@@ -459,7 +526,7 @@ final class WPSHADOW_Feature_Pre_Publish_Review extends WPSHADOW_Abstract_Featur
 		});
 	}
 })();
-";
+JAVASCRIPT;
 	}
 
 	/**
@@ -468,7 +535,7 @@ final class WPSHADOW_Feature_Pre_Publish_Review extends WPSHADOW_Abstract_Featur
 	 * @return string
 	 */
 	private function get_editor_panel_styles(): string {
-		return "
+		return <<<'CSS'
 .wpshadow-pre-publish-review {
 	padding: 12px;
 }
@@ -490,7 +557,7 @@ final class WPSHADOW_Feature_Pre_Publish_Review extends WPSHADOW_Abstract_Featur
 .wpshadow-issue-warning {
 	list-style-type: '⚡ ';
 }
-";
+CSS;
 	}
 
 	/**
@@ -556,7 +623,20 @@ final class WPSHADOW_Feature_Pre_Publish_Review extends WPSHADOW_Abstract_Featur
 			$issues            = array_merge( $issues, $word_count_issues );
 		}
 
-		// Allow other features to add their checks (e.g., SEO optimizer)
+		// Run external reviewers registered by other features
+		if ( $post_id > 0 ) {
+			$post = get_post( $post_id );
+			if ( $post ) {
+				$external_reviews = self::run_external_reviews( $post );
+				foreach ( $external_reviews as $review ) {
+					if ( ! empty( $review['issues'] ) && is_array( $review['issues'] ) ) {
+						$issues = array_merge( $issues, $review['issues'] );
+					}
+				}
+			}
+		}
+
+		// Allow other features to add their checks (legacy filter)
 		$issues = apply_filters( 'wpshadow_pre_publish_checks', $issues, $post_id );
 
 		return $issues;
@@ -997,5 +1077,127 @@ final class WPSHADOW_Feature_Pre_Publish_Review extends WPSHADOW_Abstract_Featur
 			'message'     => __( 'Preference saved.', 'wpshadow' ),
 			'preferences' => $prefs,
 		) );
+	}
+
+	/**
+	 * Register an external content reviewer from another feature.
+	 *
+	 * Allows other WPShadow features to add custom checks to the pre-publish review system.
+	 *
+	 * @param string $reviewer_id Unique reviewer identifier (e.g., 'seo-analyzer').
+	 * @param array  $config      Reviewer configuration.
+	 *                            - name (string) Display name for the reviewer
+	 *                            - description (string) Description of what it checks
+	 *                            - priority (int) Display priority (lower = higher priority)
+	 *                            - callback (callable) Function to execute review
+	 *                            - post_types (array) Post types to show reviewer for
+	 *                            - severity (string) Default severity: 'info', 'warning', 'error'
+	 *
+	 * @return bool True if registered successfully.
+	 */
+	public static function register_external_reviewer( string $reviewer_id, array $config ): bool {
+		if ( empty( $reviewer_id ) || empty( $config['callback'] ) || ! is_callable( $config['callback'] ) ) {
+			return false;
+		}
+
+		$reviewer = array_merge(
+			array(
+				'id'          => $reviewer_id,
+				'name'        => $config['name'] ?? $reviewer_id,
+				'description' => $config['description'] ?? '',
+				'priority'    => $config['priority'] ?? 10,
+				'post_types'  => $config['post_types'] ?? array( 'post', 'page' ),
+				'callback'    => $config['callback'],
+				'severity'    => $config['severity'] ?? 'info',
+			),
+			$config
+		);
+
+		self::$external_reviewers[ $reviewer_id ] = $reviewer;
+		return true;
+	}
+
+	/**
+	 * Get registered external reviewers for a post type.
+	 *
+	 * @param string $post_type Post type to get reviewers for.
+	 * @return array Array of registered reviewers for the post type.
+	 */
+	public static function get_external_reviewers_for_post_type( string $post_type ): array {
+		$reviewers = array_filter(
+			self::$external_reviewers,
+			function ( $reviewer ) use ( $post_type ) {
+				return in_array( $post_type, (array) $reviewer['post_types'], true );
+			}
+		);
+
+		// Sort by priority
+		uasort(
+			$reviewers,
+			function ( $a, $b ) {
+				return $a['priority'] <=> $b['priority'];
+			}
+		);
+
+		return $reviewers;
+	}
+
+	/**
+	 * Run external reviewers for a post.
+	 *
+	 * Executes all registered external reviewer callbacks and aggregates results.
+	 *
+	 * @param \WP_Post $post Post object to review.
+	 * @return array Array of external review results.
+	 */
+	public static function run_external_reviews( \WP_Post $post ): array {
+		$reviewers = self::get_external_reviewers_for_post_type( $post->post_type );
+		$reviews   = array();
+
+		foreach ( $reviewers as $reviewer ) {
+			try {
+				$result = call_user_func( $reviewer['callback'], $post );
+
+				if ( is_array( $result ) ) {
+					$reviews[ $reviewer['id'] ] = array_merge(
+						array(
+							'id'       => $reviewer['id'],
+							'name'     => $reviewer['name'],
+							'severity' => $reviewer['severity'],
+							'issues'   => array(),
+							'passed'   => true,
+						),
+						$result
+					);
+				}
+			} catch ( \Exception $e ) {
+				// Log error but don't break the review process
+				error_log( sprintf(
+					'WPShadow Pre-Publish Review: External reviewer %s failed: %s',
+					$reviewer['id'],
+					$e->getMessage()
+				) );
+			}
+		}
+
+		return $reviews;
+	}
+
+	/**
+	 * Get all registered external reviewers.
+	 *
+	 * @return array All registered reviewers sorted by priority.
+	 */
+	public static function get_all_external_reviewers(): array {
+		$reviewers = self::$external_reviewers;
+		
+		uasort(
+			$reviewers,
+			function ( $a, $b ) {
+				return $a['priority'] <=> $b['priority'];
+			}
+		);
+		
+		return $reviewers;
 	}
 }

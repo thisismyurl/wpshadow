@@ -3,6 +3,13 @@
  * WPShadow Test Environment - WordPress Configuration Override
  * 
  * This file handles GitHub Codespaces port forwarding and ensures WordPress
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
  * uses the correct URLs when accessed through the Codespaces domain.
  * 
  * It is automatically mounted into the WordPress container at:
@@ -43,8 +50,8 @@ if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
 // If WordPress redirects to the wrong URL (e.g., port 443), update these.
 
 // CHANGE THESE TO YOUR CODESPACES DOMAIN:
-define('WP_HOME', 'https://stunning-fishstick-j69p5j559jqcpw79-9000.app.github.dev');
-define('WP_SITEURL', 'https://stunning-fishstick-j69p5j559jqcpw79-9000.app.github.dev');
+define('WP_HOME', 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev');
+define('WP_SITEURL', 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev');
 
 // ============================================================
 // Database URLs (from docker-compose-test.yml)

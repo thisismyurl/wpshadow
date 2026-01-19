@@ -13,6 +13,11 @@ declare(strict_types=1);
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 /**
  * WPSHADOW_Feature_CSS_Class_Cleanup
  *
@@ -35,11 +40,41 @@ final class WPSHADOW_Feature_CSS_Class_Cleanup extends WPSHADOW_Abstract_Feature
 				'widget_group'    => 'cleanup',
 				'aliases'         => array( 'css classes', 'clean classes', 'body classes', 'post classes', 'nav classes', 'html cleanup', 'class bloat', 'css optimization', 'class removal', 'html bloat', 'remove classes', 'simplify markup' ),
 				'sub_features'    => array(
-					'clean_post_classes'   => __( 'Remove extra post labels', 'wpshadow' ),
-					'clean_nav_classes'    => __( 'Remove extra menu labels', 'wpshadow' ),
-					'remove_nav_ids'       => __( 'Remove menu tracking codes', 'wpshadow' ),
-					'clean_body_classes'   => __( 'Remove extra page labels', 'wpshadow' ),
-					'remove_block_classes' => __( 'Remove block editor labels', 'wpshadow' ),
+					'clean_post_classes'   => array(
+						'name'               => __( 'Clean Post Classes', 'wpshadow' ),
+						'description_short'  => __( 'Remove extra classes from post elements', 'wpshadow' ),
+						'description_long'   => __( 'Removes unnecessary CSS classes from post elements that WordPress adds automatically. WordPress adds dozens of classes to posts for functionality that often isn\'t needed, including post IDs, format information, and status classes. This reduction can save 5-10% of HTML size on post-heavy pages. Keeps only essential classes that themes actually use.', 'wpshadow' ),
+						'description_wizard' => __( 'WordPress adds many unnecessary classes to posts. Removing them makes HTML cleaner and slightly smaller. Most themes don\'t need all of them.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'clean_nav_classes'    => array(
+						'name'               => __( 'Clean Menu Item Classes', 'wpshadow' ),
+						'description_short'  => __( 'Remove extra classes from menu items', 'wpshadow' ),
+						'description_long'   => __( 'Removes unnecessary CSS classes from menu items that WordPress adds automatically. Menu items get classes for depth levels, activity states, and parent-child relationships. Many of these can be simplified since modern CSS can handle styling without all these classes. Reduces HTML size and makes menus easier to style with CSS.', 'wpshadow' ),
+						'description_wizard' => __( 'Simplify navigation menu HTML by removing extra classes. Makes CSS easier to write and HTML smaller.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'remove_nav_ids'       => array(
+						'name'               => __( 'Remove Menu Item IDs', 'wpshadow' ),
+						'description_short'  => __( 'Remove ID attributes from menu items', 'wpshadow' ),
+						'description_long'   => __( 'Removes ID attributes from menu items that WordPress adds automatically for tracking purposes. These IDs are rarely used and mostly add HTML bloat. Removing them has no impact on functionality in modern setups. Reduces page size and removes unnecessary attributes that might be exploited to fingerprint or track the site.', 'wpshadow' ),
+						'description_wizard' => __( 'Menu item IDs serve little purpose in modern WordPress. Remove them to reduce HTML size and improve privacy slightly.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'clean_body_classes'   => array(
+						'name'               => __( 'Clean Body Tag Classes', 'wpshadow' ),
+						'description_short'  => __( 'Remove extra classes from body element', 'wpshadow' ),
+						'description_long'   => __( 'Removes unnecessary CSS classes from the body tag that WordPress adds automatically. WordPress adds many classes for page type detection, browser detection, and site state. Modern sites often don\'t need all of these since media queries and feature detection have replaced many use cases. Reduces the body tag size while keeping commonly-used classes.', 'wpshadow' ),
+						'description_wizard' => __( 'The body tag gets many auto-generated classes most sites don\'t need. This keeps only the useful ones while removing bloat.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'remove_block_classes' => array(
+						'name'               => __( 'Remove Block Editor Classes', 'wpshadow' ),
+						'description_short'  => __( 'Remove Gutenberg-specific body classes', 'wpshadow' ),
+						'description_long'   => __( 'Removes CSS classes that WordPress adds to the body tag specifically for the block editor (Gutenberg) presence. These classes are used for JavaScript selectors and editor-specific styling in WordPress 5.0+. If you don\'t need to style differently when the block editor is available, these classes are unnecessary bloat. Removes classes like wp-has-current-submenu.', 'wpshadow' ),
+						'description_wizard' => __( 'Remove block editor-specific classes from the body tag if you don\'t need them for styling or JavaScript.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
 				),
 			)
 		);

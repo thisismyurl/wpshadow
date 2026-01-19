@@ -10,6 +10,11 @@
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 final class WPSHADOW_Feature_Resource_Hints extends WPSHADOW_Abstract_Feature {
 
 	public function __construct() {
@@ -19,11 +24,41 @@ final class WPSHADOW_Feature_Resource_Hints extends WPSHADOW_Abstract_Feature {
 			'description' => __( 'Start connecting to fonts, scripts, and services early so they load faster when needed.', 'wpshadow' ),
 			'aliases'     => array( 'dns prefetch', 'preconnect', 'preload', 'resource hints', 'dns optimization', 'early hints', 'prefetch', 'preload fonts', 'preload scripts', 'connection optimization', 'link headers', 'performance hints' ),
 			'sub_features' => array(
-				'dns_prefetch'      => __( 'Prepare website addresses early', 'wpshadow' ),
-				'preconnect'        => __( 'Connect to services early', 'wpshadow' ),
-				'preload_fonts'     => __( 'Start loading fonts early', 'wpshadow' ),
-				'preload_scripts'   => __( 'Start loading scripts early', 'wpshadow' ),
-				'remove_s_w_org'    => __( 'Stop connecting to WordPress.org', 'wpshadow' ),
+				'dns_prefetch'      => array(
+					'name'               => __( 'DNS Prefetch', 'wpshadow' ),
+					'description_short'  => __( 'Start resolving external domains early', 'wpshadow' ),
+					'description_long'   => __( 'Tells browsers to start DNS lookups early for external domains your site uses (like CDNs, analytics, fonts). DNS resolution adds latency before content can load. By prefetching early, the domain is already resolved when content actually loads, reducing delays. Safe for any external domain you use.', 'wpshadow' ),
+					'description_wizard' => __( 'Speed up external connections by resolving domain names early. Recommended for sites using external services and CDNs.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'preconnect'        => array(
+					'name'               => __( 'Preconnect', 'wpshadow' ),
+					'description_short'  => __( 'Establish connections to external services early', 'wpshadow' ),
+					'description_long'   => __( 'Preconnects to important external domains like CDNs and font services by establishing full connections (DNS lookup, TCP handshake, TLS negotiation) before content loads. Much more powerful than DNS prefetch. Use sparingly for only the most important external resources to avoid slowing down other connections.', 'wpshadow' ),
+					'description_wizard' => __( 'Establish connections to critical external services early. Use carefully - preconnecting uses resources. Best for your main CDN or font service.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'preload_fonts'     => array(
+					'name'               => __( 'Preload Fonts', 'wpshadow' ),
+					'description_short'  => __( 'Start loading fonts before they\'re needed', 'wpshadow' ),
+					'description_long'   => __( 'Tells browsers to start loading important web fonts early before the CSS that references them is parsed. Fonts are critical for rendering text, so preloading them reduces text rendering delays and makes the page appear to load faster. Only preload fonts actually used on the page.', 'wpshadow' ),
+					'description_wizard' => __( 'Speed up font loading so text appears sooner. Particularly helpful for custom fonts that affect page rendering time.', 'wpshadow' ),
+					'default_enabled'    => false,
+				),
+				'preload_scripts'   => array(
+					'name'               => __( 'Preload Scripts', 'wpshadow' ),
+					'description_short'  => __( 'Start loading critical scripts early', 'wpshadow' ),
+					'description_long'   => __( 'Tells browsers to start loading critical JavaScript files early. Useful for large scripts that are essential to page functionality and you want loaded as soon as possible. Disabled by default - only enable for truly critical scripts.', 'wpshadow' ),
+					'description_wizard' => __( 'Load critical JavaScript early if it\'s important for core functionality. Use sparingly for best results.', 'wpshadow' ),
+					'default_enabled'    => false,
+				),
+				'remove_s_w_org'    => array(
+					'name'               => __( 'Remove WordPress.org DNS Prefetch', 'wpshadow' ),
+					'description_short'  => __( 'Stop prefetch to WordPress.org', 'wpshadow' ),
+					'description_long'   => __( 'Removes DNS prefetch for s.w.org that WordPress adds by default. This assumes your site will load resources from WordPress.org, but most sites don\'t. Removing it saves a DNS lookup and reduces external dependencies. Safe for any WordPress site that doesn\'t load critical resources from WordPress.org.', 'wpshadow' ),
+					'description_wizard' => __( 'Most sites don\'t need WordPress.org resources. Remove this prefetch to save a DNS lookup.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
 			),
 		) );
 

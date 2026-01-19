@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class WPSHADOW_Dashboard_Layout {
 	/**
-	 * Default widget order for core dashboard.
+	 * Default widget order for core dashboard and features tab.
 	 * Matches WordPress core layout for familiarity.
 	 *
 	 * @return array<string, array<string>>
@@ -39,6 +39,30 @@ class WPSHADOW_Dashboard_Layout {
 				'wpshadow_widget_performance_history',
 				'wpshadow_widget_quick_actions',
 				'wpshadow_widget_events_and_news',
+			),
+		);
+	}
+
+	/**
+	 * Get default widget order for Features tab.
+	 * Displays available features, settings, and activity information.
+	 * Left: Available Features, Feature Settings, Scheduled Activity, Activity History
+	 * Right: Quick Links, Feature Details, System Health
+	 *
+	 * @return array<string, array<string>>
+	 */
+	public static function get_features_default_order(): array {
+		return array(
+			'normal' => array(
+				'wpshadow_features_list',
+				'wpshadow_feature_settings',
+				'wpshadow_features_scheduled_activity',
+				'wpshadow_features_activity_history',
+			),
+			'side'   => array(
+				'wpshadow_features_quick_links',
+				'wpshadow_features_info',
+				'wpshadow_features_system_health',
 			),
 		);
 	}

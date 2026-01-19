@@ -13,6 +13,11 @@ declare(strict_types=1);
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 /**
  * WPSHADOW_Feature_Head_Cleanup
  *
@@ -35,16 +40,76 @@ final class WPSHADOW_Feature_Head_Cleanup extends WPSHADOW_Abstract_Feature {
 				'widget_group'    => 'performance',
 				'aliases'         => array( 'remove emoji', 'wp head', 'version hiding', 'security hardening', 'xmlrpc disable', 'rsd link', 'generator tag', 'head optimization', 'remove feeds', 'rest api', 'oembed', 'shortlink' ),
 				'sub_features'    => array(
-					'remove_emoji'          => __( 'Remove emoji code (makes site faster)', 'wpshadow' ),
-					'remove_generator'      => __( 'Hide WordPress version (better security)', 'wpshadow' ),
-					'remove_shortlink'      => __( 'Remove short link tags', 'wpshadow' ),
-					'remove_rsd'            => __( 'Remove old blog tool links', 'wpshadow' ),
-					'remove_wlw'            => __( 'Remove Windows blog editor link', 'wpshadow' ),
-					'remove_rest_link'      => __( 'Remove connection link (may affect apps)', 'wpshadow' ),
-					'remove_oembed'         => __( 'Remove embed discovery code', 'wpshadow' ),
-					'remove_feeds'          => __( 'Remove feed links (may affect RSS readers)', 'wpshadow' ),
-					'remove_comments_style' => __( 'Remove comment styling code', 'wpshadow' ),
-					'disable_xmlrpc'        => __( 'Turn off old remote access (better security)', 'wpshadow' ),
+					'remove_emoji'          => array(
+						'name'               => __( 'Emoji Code Removal', 'wpshadow' ),
+						'description_short'  => __( 'Remove emoji detection script to reduce page size', 'wpshadow' ),
+						'description_long'   => __( 'Removes WordPress\'s automatic emoji detection script that loads on every page. While convenient for sites that use emojis, this script adds unnecessary bytes to pages that don\'t need it. Disabling it saves 2-5KB per page load and improves performance, especially on mobile connections. You can still use emojis by typing them directly.', 'wpshadow' ),
+						'description_wizard' => __( 'Removes the emoji detection script that WordPress loads by default. Most sites don\'t need this, and disabling it improves page speed. Enable to make your site faster and lighter.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'remove_generator'      => array(
+						'name'               => __( 'WordPress Version Hiding', 'wpshadow' ),
+						'description_short'  => __( 'Hide WordPress version number from visitors', 'wpshadow' ),
+						'description_long'   => __( 'Removes the WordPress version meta tag that advertises which version of WordPress powers your site. This meta tag is visible in page source code and HTTP headers, helping attackers identify vulnerable installations. By hiding it, you make your site less of a target for automated attacks. This doesn\'t prevent the version from being discovered through other means, but it eliminates the easy way.', 'wpshadow' ),
+						'description_wizard' => __( 'WordPress version numbers help hackers find sites running old, vulnerable versions. Hide yours to reduce your attack surface. This is basic security hardening recommended by all WordPress security guides.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'remove_shortlink'      => array(
+						'name'               => __( 'Remove Short Link Tag', 'wpshadow' ),
+						'description_short'  => __( 'Remove WordPress short URL link tag', 'wpshadow' ),
+						'description_long'   => __( 'Removes the WordPress short URL link tag from page heads. This tag provides WordPress\'s built-in short URL feature, but most sites use third-party URL shorteners like Bit.ly if they need short links. Removing this unused link tag reduces HTML bloat and has no impact on site functionality.', 'wpshadow' ),
+						'description_wizard' => __( 'Most sites don\'t use WordPress\'s built-in short URL feature. This removes the unused link tag from your page code, making your pages slightly smaller and cleaner.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'remove_rsd'            => array(
+						'name'               => __( 'Remove Really Simple Discovery Link', 'wpshadow' ),
+						'description_short'  => __( 'Remove RSD link for old blogging tools', 'wpshadow' ),
+						'description_long'   => __( 'Removes the Really Simple Discovery (RSD) link that enables old desktop blogging applications like Windows Live Writer to discover your blog\'s capabilities. These tools are deprecated and rarely used today, making this link obsolete for most sites. Removing it reduces HTML bloat with zero impact on functionality.', 'wpshadow' ),
+						'description_wizard' => __( 'RSD is for old blogging tools that nobody uses anymore. Safe to remove unless you\'re using legacy desktop blogging software.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'remove_wlw'            => array(
+						'name'               => __( 'Remove Windows Live Writer Link', 'wpshadow' ),
+						'description_short'  => __( 'Remove Windows Live Writer manifest link', 'wpshadow' ),
+						'description_long'   => __( 'Removes the Windows Live Writer manifest link that enables Windows Live Writer blogging tool integration. Windows Live Writer was discontinued by Microsoft over a decade ago. This link has no purpose for modern sites and removing it reduces unnecessary HTML markup.', 'wpshadow' ),
+						'description_wizard' => __( 'Windows Live Writer was discontinued years ago. Safe to remove unless you\'re using an extremely old blogging setup.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'remove_rest_link'      => array(
+						'name'               => __( 'Remove REST API Link', 'wpshadow' ),
+						'description_short'  => __( 'Remove connection link for REST API', 'wpshadow' ),
+						'description_long'   => __( 'Removes the WordPress REST API discovery link from page heads. The REST API is essential for WordPress mobile apps and block editor functionality. Disabling this may break official WordPress apps or cause issues with modern page builders. Only disable if you have a specific reason and don\'t use mobile apps.', 'wpshadow' ),
+						'description_wizard' => __( 'Warning: Disabling this may break WordPress mobile apps and the block editor. Only disable if you don\'t use these features and understand the consequences.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
+					'remove_oembed'         => array(
+						'name'               => __( 'Remove Embed Discovery', 'wpshadow' ),
+						'description_short'  => __( 'Remove embed discovery and wp-embed script', 'wpshadow' ),
+						'description_long'   => __( 'Removes WordPress oEmbed discovery links and the wp-embed.js script that enables embedding WordPress posts on other sites. If your content is frequently embedded elsewhere, keep this enabled. If you don\'t use this feature, disabling saves 2-3KB per page. This also blocks other sites from embedding your posts, which some prefer for privacy reasons.', 'wpshadow' ),
+						'description_wizard' => __( 'Disables the feature that lets other sites embed your posts. Saves bandwidth and improves privacy if you don\'t want your content embedded elsewhere.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'remove_feeds'          => array(
+						'name'               => __( 'Remove Feed Links', 'wpshadow' ),
+						'description_short'  => __( 'Remove RSS feed discovery links', 'wpshadow' ),
+						'description_long'   => __( 'Removes WordPress RSS feed discovery links from page heads. Feed readers and aggregators use these links to find your blog feeds. If you actively promote your RSS feed or use feed-based distribution, keep this enabled. If you don\'t use RSS, disabling saves a tiny amount of HTML and reduces unnecessary link references.', 'wpshadow' ),
+						'description_wizard' => __( 'Only disable if you don\'t care about RSS readers accessing your feed. Most sites benefit from keeping this enabled for feed subscribers.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
+					'remove_comments_style' => array(
+						'name'               => __( 'Remove Comments Styling', 'wpshadow' ),
+						'description_short'  => __( 'Remove recent comments widget CSS', 'wpshadow' ),
+						'description_long'   => __( 'Removes the CSS styling that WordPress loads for the Recent Comments widget. If you don\'t use the Recent Comments widget, this CSS is unused bloat. If you do use this widget and rely on WordPress styling, keep this disabled. Most modern themes style comments themselves anyway.', 'wpshadow' ),
+						'description_wizard' => __( 'Only remove if you don\'t use the Recent Comments widget. Most themes handle comment styling themselves.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'disable_xmlrpc'        => array(
+						'name'               => __( 'Disable XML-RPC', 'wpshadow' ),
+						'description_short'  => __( 'Disable old remote access protocol', 'wpshadow' ),
+						'description_long'   => __( 'Disables XML-RPC, an old protocol that allowed remote applications to interact with WordPress before the REST API existed. XML-RPC is a major attack vector for brute force login attempts and is rarely needed for modern WordPress setups. Disabling it significantly improves security. Most WordPress apps use REST API now, so disabling this has minimal impact.', 'wpshadow' ),
+						'description_wizard' => __( 'XML-RPC is an old, security-vulnerable protocol that opens your site to brute force attacks. Modern WordPress apps use REST API instead. Disable this for better security with no downside for most sites.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
 				),
 			)
 		);

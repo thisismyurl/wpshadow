@@ -12,6 +12,11 @@ declare(strict_types=1);
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 /**
  * WPSHADOW_Feature_Block_Cleanup
  *
@@ -34,12 +39,30 @@ final class WPSHADOW_Feature_Block_Cleanup extends WPSHADOW_Abstract_Feature {
 				'widget_group'    => 'performance',
 				'aliases'         => array( 'gutenberg', 'block editor', 'remove blocks', 'gutenberg cleanup', 'block styles', 'editor cleanup', 'block assets', 'gutenberg optimization', 'classic editor', 'disable gutenberg', 'block library', 'editor performance' ),
 				'sub_features'    => array(
-					'remove_block_library'   => __( 'Remove block styling code', 'wpshadow' ),
-					'remove_global_styles'   => __( 'Remove global theme styles', 'wpshadow' ),
-					'remove_classic_styles'  => __( 'Remove classic theme styles', 'wpshadow' ),
-					'remove_wc_blocks'       => __( 'Remove WooCommerce block styles', 'wpshadow' ),
-					'disable_svg_filters'    => __( 'Remove image filter code', 'wpshadow' ),
-					'separate_block_assets'  => __( 'Load all block code together', 'wpshadow' ),
+					'remove_block_library'   => array(
+						'name'        => __( 'Block Library Styles', 'wpshadow' ),
+						'description' => __( 'Removes the WordPress block library CSS files if you don\'t use Gutenberg blocks. Saves 2-5KB on every page load.', 'wpshadow' ),
+					),
+					'remove_global_styles'   => array(
+						'name'        => __( 'Global Theme Styles', 'wpshadow' ),
+						'description' => __( 'Disables WordPress global theme CSS that only affects the block editor. Saves 3-8KB and reduces style conflicts.', 'wpshadow' ),
+					),
+					'remove_classic_styles'  => array(
+						'name'        => __( 'Classic Theme Styles', 'wpshadow' ),
+						'description' => __( 'Removes styles that only apply to the old classic WordPress editor. Not needed if you use modern block editor or custom themes.', 'wpshadow' ),
+					),
+					'remove_wc_blocks'       => array(
+						'name'        => __( 'WooCommerce Block Styles', 'wpshadow' ),
+						'description' => __( 'Removes WooCommerce block CSS on non-store pages. Useful if you have WooCommerce but don\'t use its blocks everywhere.', 'wpshadow' ),
+					),
+					'disable_svg_filters'    => array(
+						'name'        => __( 'SVG Filter Code', 'wpshadow' ),
+						'description' => __( 'Removes advanced SVG filter effects that WordPress loads automatically. Most sites don\'t need this, saving 1-2KB per page.', 'wpshadow' ),
+					),
+					'separate_block_assets'  => array(
+						'name'        => __( 'Combined Block Assets', 'wpshadow' ),
+						'description' => __( 'Bundles all block editor code together instead of loading it separately. Fewer files = faster loading, especially on slow connections.', 'wpshadow' ),
+					),
 				),
 			)
 		);

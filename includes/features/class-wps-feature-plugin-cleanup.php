@@ -10,6 +10,11 @@
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 final class WPSHADOW_Feature_Plugin_Cleanup extends WPSHADOW_Abstract_Feature {
 
 	public function __construct() {
@@ -19,11 +24,41 @@ final class WPSHADOW_Feature_Plugin_Cleanup extends WPSHADOW_Abstract_Feature {
 			'description' => __( 'Remove extra code from popular plugins that loads on every page but isn\'t always needed.', 'wpshadow' ),
 			'aliases'     => array( 'plugin optimization', 'jetpack cleanup', 'rankmath cleanup', 'yoast cleanup', 'contact form 7', 'woocommerce optimization', 'plugin bloat', 'dequeue scripts', 'plugin performance', 'third party cleanup', 'plugin assets', 'script optimization' ),
 			'sub_features' => array(
-				'jetpack_cleanup'     => __( 'Remove unused Jetpack code', 'wpshadow' ),
-				'rankmath_cleanup'    => __( 'Remove unused RankMath code', 'wpshadow' ),
-				'cf7_cleanup'         => __( 'Remove unused Contact Form 7 code', 'wpshadow' ),
-				'woocommerce_cleanup' => __( 'Remove unused WooCommerce code', 'wpshadow' ),
-				'yoast_cleanup'       => __( 'Remove unused Yoast SEO code', 'wpshadow' ),
+				'jetpack_cleanup'     => array(
+					'name'               => __( 'Remove Jetpack Assets', 'wpshadow' ),
+					'description_short'  => __( 'Disable unused Jetpack plugin code', 'wpshadow' ),
+					'description_long'   => __( 'Removes CSS and JavaScript from Jetpack that loads on every page. Jetpack is a popular plugin but often loads code even when specific features aren\'t used. This removes related posts CSS, sharing buttons CSS, and other Jetpack assets from pages that don\'t need them. Significantly improves performance on sites with Jetpack installed but unused features.', 'wpshadow' ),
+					'description_wizard' => __( 'Jetpack loads lots of code by default. If you don\'t use its features, removing them saves bandwidth and speeds up your site.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'rankmath_cleanup'    => array(
+					'name'               => __( 'Remove RankMath Assets', 'wpshadow' ),
+					'description_short'  => __( 'Disable unused RankMath SEO code', 'wpshadow' ),
+					'description_long'   => __( 'Removes CSS and JavaScript from RankMath SEO plugin that isn\'t needed on the frontend. RankMath is a powerful SEO tool but can load code for features not in use. This removes block CSS, FAQ block CSS, and JSON-LD scripts that only apply to specific features.', 'wpshadow' ),
+					'description_wizard' => __( 'RankMath loads SEO code on every page. Remove it from pages where you don\'t use RankMath features to improve performance.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'cf7_cleanup'         => array(
+					'name'               => __( 'Remove Contact Form 7', 'wpshadow' ),
+					'description_short'  => __( 'Disable Contact Form 7 assets on non-form pages', 'wpshadow' ),
+					'description_long'   => __( 'Removes Contact Form 7 CSS and JavaScript from pages that don\'t contain contact forms. By default, Contact Form 7 loads its CSS and JavaScript on every page. This optimization only loads it on pages that actually use contact forms, significantly improving performance on form-light sites.', 'wpshadow' ),
+					'description_wizard' => __( 'Contact Form 7 loads on every page even if there\'s no form. This removes it from pages without forms to save bandwidth.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'woocommerce_cleanup' => array(
+					'name'               => __( 'Remove WooCommerce Assets', 'wpshadow' ),
+					'description_short'  => __( 'Disable WooCommerce code on non-store pages', 'wpshadow' ),
+					'description_long'   => __( 'Removes WooCommerce CSS and JavaScript from non-store pages. WooCommerce loads cart and product code on every page by default. This optimization only loads it on product pages and cart/checkout pages. Significant bandwidth savings on content-heavy sites with minimal e-commerce.', 'wpshadow' ),
+					'description_wizard' => __( 'WooCommerce loads store code everywhere by default. If you only sell on specific pages, this removes the overhead from blog posts and other content pages.', 'wpshadow' ),
+					'default_enabled'    => false,
+				),
+				'yoast_cleanup'       => array(
+					'name'               => __( 'Remove Yoast SEO', 'wpshadow' ),
+					'description_short'  => __( 'Disable Yoast SEO frontend code', 'wpshadow' ),
+					'description_long'   => __( 'Removes frontend CSS and JavaScript from Yoast SEO plugin. Yoast is primarily an admin tool but loads some frontend code. This optimization removes unnecessary frontend assets while keeping the SEO features working in the admin area where they\'re actually used.', 'wpshadow' ),
+					'description_wizard' => __( 'Yoast is an admin tool but loads code on the frontend unnecessarily. Remove it from visitor pages to improve speed.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
 			),
 		) );
 

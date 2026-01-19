@@ -10,6 +10,11 @@
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 final class WPSHADOW_Feature_Image_Lazy_Loading extends WPSHADOW_Abstract_Feature {
 
 	/**
@@ -26,11 +31,41 @@ final class WPSHADOW_Feature_Image_Lazy_Loading extends WPSHADOW_Abstract_Featur
 			'description' => __( 'Only load pictures when people scroll down to see them. Makes pages appear faster, especially on slow connections.', 'wpshadow' ),
 			'aliases'     => array( 'lazy load', 'image optimization', 'defer images', 'loading attribute', 'image performance', 'lazy loading images', 'defer loading', 'image speed', 'page speed', 'lazy iframes', 'image delay', 'deferred images' ),
 			'sub_features' => array(
-				'lazy_images'        => __( 'Delay loading regular images', 'wpshadow' ),
-				'lazy_iframes'       => __( 'Delay loading embedded videos', 'wpshadow' ),
-				'lazy_avatars'       => __( 'Delay loading user pictures', 'wpshadow' ),
-				'lazy_thumbnails'    => __( 'Delay loading preview images', 'wpshadow' ),
-				'exclude_first_image' => __( 'Always show first image immediately', 'wpshadow' ),
+				'lazy_images'        => array(
+					'name'               => __( 'Lazy Load Images', 'wpshadow' ),
+					'description_short'  => __( 'Delay loading images until needed', 'wpshadow' ),
+					'description_long'   => __( 'Delays loading images until they become visible in the viewport when users scroll down. This is a standard web performance optimization that significantly speeds up initial page load, especially on pages with many images. Images below the fold don\'t load until needed, saving bandwidth for users who don\'t scroll all the way down.', 'wpshadow' ),
+					'description_wizard' => __( 'Speed up page load by waiting to load images until they\'re about to appear on screen. Saves bandwidth and makes pages feel faster.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'lazy_iframes'       => array(
+					'name'               => __( 'Lazy Load iFrames', 'wpshadow' ),
+					'description_short'  => __( 'Delay loading embedded videos and content', 'wpshadow' ),
+					'description_long'   => __( 'Delays loading of iframes (embedded videos, maps, social media widgets) until they\'re visible on screen. Embedded content often requires additional HTTP requests and JavaScript execution that can slow page load. Lazy loading iframes significantly improves performance, especially pages with multiple videos or embeds.', 'wpshadow' ),
+					'description_wizard' => __( 'Embedded videos and widgets slow down initial page load. Load them only when users scroll down to see them.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'lazy_avatars'       => array(
+					'name'               => __( 'Lazy Load User Avatars', 'wpshadow' ),
+					'description_short'  => __( 'Delay loading user profile pictures', 'wpshadow' ),
+					'description_long'   => __( 'Delays loading of user avatars and profile pictures, which often come from external services like Gravatar. Comment sections and user lists can have many avatars. Lazy loading them reduces initial page load time and external requests. Users will still see all avatars - they just load when needed rather than blocking page rendering.', 'wpshadow' ),
+					'description_wizard' => __( 'User avatars and profile pictures slow down page load, especially when they come from external services. Load them lazily to speed up the page.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'lazy_thumbnails'    => array(
+					'name'               => __( 'Lazy Load Thumbnails', 'wpshadow' ),
+					'description_short'  => __( 'Delay loading featured/post images', 'wpshadow' ),
+					'description_long'   => __( 'Delays loading of featured images and post thumbnails that appear in archives, blog listings, and related posts sections. These images often appear below-the-fold and can significantly slow down initial page display. Lazy loading them speeds up perceived page load time without affecting visual quality.', 'wpshadow' ),
+					'description_wizard' => __( 'Archive page thumbnails don\'t need to load immediately. Enable lazy loading to make listing pages feel faster.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'exclude_first_image' => array(
+					'name'               => __( 'Exclude First Image', 'wpshadow' ),
+					'description_short'  => __( 'Always load first image immediately', 'wpshadow' ),
+					'description_long'   => __( 'Always loads the first image on a page immediately instead of lazily. The first image is usually the hero or featured image that\'s visible above-the-fold (without scrolling). Loading it immediately improves perceived page load time since visitors see the main image instantly. This is an above-the-fold optimization best practice.', 'wpshadow' ),
+					'description_wizard' => __( 'The first image is usually visible without scrolling. Loading it immediately improves how fast the page appears to load. Recommended for best perceived performance.', 'wpshadow' ),
+					'default_enabled'    => false,
+				),
 			),
 		) );
 

@@ -10,6 +10,11 @@
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 final class WPSHADOW_Feature_Mobile_Friendliness extends WPSHADOW_Abstract_Feature {
 
 	const MAX_HEADER_SIZE = 10240;
@@ -22,10 +27,34 @@ final class WPSHADOW_Feature_Mobile_Friendliness extends WPSHADOW_Abstract_Featu
 			'description' => __( 'Check if your site works well on phones and tablets - text should be readable and buttons easy to tap.', 'wpshadow' ),
 			'aliases'     => array( 'responsive', 'mobile check', 'mobile test', 'responsive design', 'mobile optimization', 'viewport', 'touch targets', 'mobile friendly', 'phone optimization', 'tablet optimization', 'responsive check', 'mobile usability' ),
 			'sub_features' => array(
-				'viewport_check'    => __( 'Check if site fits phone screens', 'wpshadow' ),
-				'touch_targets'     => __( 'Check if buttons are big enough to tap', 'wpshadow' ),
-				'font_sizes'        => __( 'Check if text is readable', 'wpshadow' ),
-				'tap_spacing'       => __( 'Check if buttons aren\'t too close together', 'wpshadow' ),
+				'viewport_check'    => array(
+					'name'               => __( 'Viewport Configuration Check', 'wpshadow' ),
+					'description_short'  => __( 'Verify site fits on phone screens', 'wpshadow' ),
+					'description_long'   => __( 'Checks that your site has proper viewport meta tags so it displays correctly on mobile devices. The viewport tag tells mobile browsers how to scale your content. Without it, phones zoom out to show the full page width, making content tiny and unreadable. This check verifies the tag is present and properly configured.', 'wpshadow' ),
+					'description_wizard' => __( 'Essential for mobile displays. Without viewport tags, your site will be zoomed out and unreadable on phones. This verifies it\'s configured correctly.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'touch_targets'     => array(
+					'name'               => __( 'Touch Target Size Check', 'wpshadow' ),
+					'description_short'  => __( 'Verify buttons are large enough to tap', 'wpshadow' ),
+					'description_long'   => __( 'Checks that interactive elements (buttons, links, form fields) are large enough to tap accurately on touch screens. Minimum recommended size is 48x48 pixels for touch targets. Too-small buttons are frustrating on phones and violate accessibility standards. This detects buttons that are too small for easy mobile use.', 'wpshadow' ),
+					'description_wizard' => __( 'Small buttons are hard to tap on phones. This checks that your interactive elements meet the 48px minimum size for easy touch interaction.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'font_sizes'        => array(
+					'name'               => __( 'Font Size Readability Check', 'wpshadow' ),
+					'description_short'  => __( 'Verify text is readable on phones', 'wpshadow' ),
+					'description_long'   => __( 'Checks that your base font size is large enough to read on mobile screens without zooming. Minimum recommended size is 14px for comfortable reading. Text smaller than this requires visitors to zoom in, which is a poor mobile experience. This helps identify readability issues.', 'wpshadow' ),
+					'description_wizard' => __( 'Text too small to read on phones is a common mobile usability problem. This verifies your text size is large enough for comfortable reading.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'tap_spacing'       => array(
+					'name'               => __( 'Tap Spacing Check', 'wpshadow' ),
+					'description_short'  => __( 'Verify buttons aren\'t too close together', 'wpshadow' ),
+					'description_long'   => __( 'Checks that interactive elements have sufficient spacing between them so touches don\'t accidentally hit the wrong button. Buttons too close together cause user frustration. Recommended minimum spacing is about 8px between touch targets. Helps prevent accidental clicks and improves mobile usability.', 'wpshadow' ),
+					'description_wizard' => __( 'Buttons crammed too close together cause accidental clicks on phones. This verifies adequate spacing for accurate touch targets.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
 			),
 		) );
 

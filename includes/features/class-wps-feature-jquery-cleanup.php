@@ -13,6 +13,11 @@ declare(strict_types=1);
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 /**
  * WPSHADOW_Feature_jQuery_Cleanup
  *
@@ -35,9 +40,27 @@ final class WPSHADOW_Feature_jQuery_Cleanup extends WPSHADOW_Abstract_Feature {
 				'widget_group'    => 'performance',
 				'aliases'         => array( 'jquery migrate', 'remove jquery', 'javascript cleanup', 'jquery optimization', 'legacy jquery', 'old javascript', 'jquery performance', 'remove migrate', 'js optimization', 'javascript performance', 'jquery bloat', 'legacy scripts' ),
 				'sub_features'    => array(
-					'remove_migrate_frontend' => __( 'Remove old jQuery code from visitor pages', 'wpshadow' ),
-					'keep_admin'              => __( 'Keep old jQuery code in admin area', 'wpshadow' ),
-					'log_removals'            => __( 'Record when old code is removed', 'wpshadow' ),
+					'remove_migrate_frontend' => array(
+						'name'               => __( 'Remove jQuery Migrate', 'wpshadow' ),
+						'description_short'  => __( 'Remove backwards-compatibility jQuery code', 'wpshadow' ),
+						'description_long'   => __( 'Removes jQuery Migrate, a compatibility library that allows old jQuery code to run on current jQuery versions. Modern sites don\'t need this backwards-compatibility layer since they don\'t use extremely old jQuery syntax. jQuery Migrate adds 3-5KB of unnecessary code. Removing it improves performance without affecting modern jQuery code.', 'wpshadow' ),
+						'description_wizard' => __( 'jQuery Migrate is only needed for very old websites. Modern sites don\'t use the old syntax it supports. Remove it to reduce page size with no downside for new WordPress sites.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'keep_admin'              => array(
+						'name'               => __( 'Keep Migrate in Admin', 'wpshadow' ),
+						'description_short'  => __( 'Keep jQuery Migrate in WordPress admin area', 'wpshadow' ),
+						'description_long'   => __( 'Keeps jQuery Migrate in the WordPress admin area even if it\'s removed from the frontend. The WordPress admin uses jQuery extensively and may rely on older jQuery patterns. Keeping Migrate in admin prevents potential admin functionality issues while still removing it from visitor-facing pages.', 'wpshadow' ),
+						'description_wizard' => __( 'Safe option that removes jQuery Migrate from visitor pages but keeps it in the admin area to prevent functionality issues.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'log_removals'            => array(
+						'name'               => __( 'Log jQuery Removals', 'wpshadow' ),
+						'description_short'  => __( 'Record when jQuery Migrate is removed', 'wpshadow' ),
+						'description_long'   => __( 'Enables logging of when jQuery Migrate is removed and what other jQuery dependencies exist. This helps with debugging if any site functionality appears to break. Logs are recorded in the WPShadow activity log and can help identify plugins that might be using old jQuery syntax.', 'wpshadow' ),
+						'description_wizard' => __( 'Enable for troubleshooting if you suspect plugins need jQuery Migrate. Helps identify which plugins use old jQuery code that might break.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
 				),
 			)
 		);

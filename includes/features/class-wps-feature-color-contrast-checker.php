@@ -14,6 +14,11 @@ declare(strict_types=1);
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 /**
  * WPSHADOW_Feature_Color_Contrast_Checker
  *
@@ -36,9 +41,27 @@ final class WPSHADOW_Feature_Color_Contrast_Checker extends WPSHADOW_Abstract_Fe
 				'widget_group'    => 'accessibility',
 				'aliases'         => array( 'accessibility', 'wcag', 'readability', 'contrast ratio', 'color contrast', 'text contrast', 'a11y', 'color accessibility', 'wcag compliance', 'contrast checker', 'color legibility', 'ada compliance' ),
 				'sub_features'    => array(
-					'report_wcag_aaa'   => __( 'Use strictest readability standards', 'wpshadow' ),
-					'log_violations'    => __( 'Record readability problems', 'wpshadow' ),
-					'suggest_compliant' => __( 'Suggest better color choices', 'wpshadow' ),
+					'report_wcag_aaa'   => array(
+						'name'               => __( 'Strictest Standards', 'wpshadow' ),
+						'description_short'  => __( 'Use the highest readability requirements', 'wpshadow' ),
+						'description_long'   => __( 'Check colors against WCAG AAA standards, which are the strictest accessibility guidelines. These rules ensure text is readable by people with different types of color blindness and weak eyesight. Most websites use AA standards, but AAA is better for maximum accessibility.', 'wpshadow' ),
+						'description_wizard' => __( 'Use the strictest readability standards (WCAG AAA) for maximum accessibility.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
+					'log_violations'    => array(
+						'name'               => __( 'Record Problems', 'wpshadow' ),
+						'description_short'  => __( 'Save a log of readability issues', 'wpshadow' ),
+						'description_long'   => __( 'Keeps detailed records of color contrast problems found on your site, including where they are, what the colors are, and why they don\'t meet accessibility standards. Useful for tracking which areas need color adjustments and for proving you\'re working to fix accessibility issues.', 'wpshadow' ),
+						'description_wizard' => __( 'Keep records of readability problems found on your site.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
+					'suggest_compliant' => array(
+						'name'               => __( 'Suggest Better Colors', 'wpshadow' ),
+						'description_short'  => __( 'Recommend colors that meet standards', 'wpshadow' ),
+						'description_long'   => __( 'When readability problems are found, automatically suggests alternative colors that would meet accessibility standards. Takes the guesswork out of finding colors that work together while looking good and being accessible to everyone.', 'wpshadow' ),
+						'description_wizard' => __( 'Get suggestions for colors that would work better.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
 				),
 			)
 		);

@@ -10,6 +10,11 @@
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 final class WPSHADOW_Feature_Broken_Link_Checker extends WPSHADOW_Abstract_Feature {
 
 	public function __construct() {
@@ -19,10 +24,34 @@ final class WPSHADOW_Feature_Broken_Link_Checker extends WPSHADOW_Abstract_Featu
 			'description' => __( 'Find links that don\'t work anymore so visitors don\'t get error pages. Helps your site rank better in Google.', 'wpshadow' ),
 			'aliases'     => array( 'broken links', 'link checker', 'dead links', '404 errors', 'link validation', 'link monitoring', 'seo links', 'link health', 'url checker', 'link audit', 'external links', 'internal links' ),
 			'sub_features' => array(
-				'check_internal'    => __( 'Check links to your own pages', 'wpshadow' ),
-				'check_external'    => __( 'Check links to other websites', 'wpshadow' ),
-				'check_css'         => __( 'Check links in styling files', 'wpshadow' ),
-				'log_broken_links'  => __( 'Keep a list of broken links', 'wpshadow' ),
+				'check_internal'    => array(
+					'name'               => __( 'Check Internal Links', 'wpshadow' ),
+					'description_short'  => __( 'Test links to your own pages', 'wpshadow' ),
+					'description_long'   => __( 'Scans all links pointing to pages and posts on your website to make sure they still work. Catches broken internal links that could hurt visitors\' experience and your Google ranking.', 'wpshadow' ),
+					'description_wizard' => __( 'Check links to your own pages to make sure they work.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'check_external'    => array(
+					'name'               => __( 'Check External Links', 'wpshadow' ),
+					'description_short'  => __( 'Test links to other websites', 'wpshadow' ),
+					'description_long'   => __( 'Checks links pointing to other websites and services to see if they still available. Finds when other sites go down or move so you can update or remove broken references. Helps prevent sending visitors to dead links.', 'wpshadow' ),
+					'description_wizard' => __( 'Check links to other websites to make sure they still work.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'check_css'         => array(
+					'name'               => __( 'Check CSS Links', 'wpshadow' ),
+					'description_short'  => __( 'Test links in your styling files', 'wpshadow' ),
+					'description_long'   => __( 'Scans URLs referenced in your CSS stylesheets (fonts, images, etc.) to ensure they still working. Broken CSS links can cause visual issues like missing fonts or images on the page.', 'wpshadow' ),
+					'description_wizard' => __( 'Check links in your CSS files.', 'wpshadow' ),
+					'default_enabled'    => false,
+				),
+				'log_broken_links'  => array(
+					'name'               => __( 'Record Broken Links', 'wpshadow' ),
+					'description_short'  => __( 'Keep a log of broken links found', 'wpshadow' ),
+					'description_long'   => __( 'Saves records of all broken links discovered with details about what went wrong, when they were found, and where they were found. Creates a history you can use to track which links need attention and fix them over time.', 'wpshadow' ),
+					'description_wizard' => __( 'Keep a record of broken links for your review.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
 			),
 		) );
 

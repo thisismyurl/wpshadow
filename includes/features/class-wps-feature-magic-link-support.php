@@ -10,6 +10,11 @@
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 final class WPSHADOW_Feature_Magic_Link_Support extends WPSHADOW_Abstract_Feature {
 
 	public function __construct() {
@@ -19,9 +24,27 @@ final class WPSHADOW_Feature_Magic_Link_Support extends WPSHADOW_Abstract_Featur
 			'description' => __( 'Create secure, temporary login links so developers can help fix your site without needing your password.', 'wpshadow' ),
 			'aliases'     => array( 'magic link', 'support access', 'temporary login', 'developer access', 'passwordless login', 'emergency access', 'support link', 'secure access', 'time-limited login', 'temporary access', 'support token', 'developer login' ),
 			'sub_features' => array(
-				'log_sessions'        => __( 'Record who logged in', 'wpshadow' ),
-				'email_notifications' => __( 'Email me when support logs in', 'wpshadow' ),
-				'role_restriction'    => __( 'Limit what support can access', 'wpshadow' ),
+				'log_sessions'        => array(
+					'name'               => __( 'Log Sessions', 'wpshadow' ),
+					'description_short'  => __( 'Record who logs in with magic links', 'wpshadow' ),
+					'description_long'   => __( 'Keeps detailed logs of every developer who uses a magic link to access your site, including when they logged in, how long they stayed, and what actions they took. This creates an audit trail for security purposes and helps you monitor who has access to your site. Essential for compliance and security tracking.', 'wpshadow' ),
+					'description_wizard' => __( 'Track who accessed your site via magic link. Essential for security audits and compliance. Highly recommended to keep enabled.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'email_notifications' => array(
+					'name'               => __( 'Email Notifications', 'wpshadow' ),
+					'description_short'  => __( 'Email when support logs in', 'wpshadow' ),
+					'description_long'   => __( 'Sends an email notification to your admin email address whenever a developer logs in with a magic link. This alerts you immediately when someone accesses your site and lets you verify it was authorized. Disabled by default but recommended for security-conscious sites.', 'wpshadow' ),
+					'description_wizard' => __( 'Get notified immediately when support accesses your site. Recommended for security - you can verify the access was authorized.', 'wpshadow' ),
+					'default_enabled'    => false,
+				),
+				'role_restriction'    => array(
+					'name'               => __( 'Role Restriction', 'wpshadow' ),
+					'description_short'  => __( 'Limit support access permissions', 'wpshadow' ),
+					'description_long'   => __( 'Restricts support developers to Editor role instead of Administrator. Editors have broad capabilities but cannot manage users, plugins, or core settings. This limits potential damage if the account is compromised or abused. Disabled by default for convenience - enable if you want developers to have limited permissions for security.', 'wpshadow' ),
+					'description_wizard' => __( 'Restrict developers to Editor role for limited access. More secure but less convenient. Enable for sensitive sites that need to minimize access.', 'wpshadow' ),
+					'default_enabled'    => false,
+				),
 			),
 		) );
 

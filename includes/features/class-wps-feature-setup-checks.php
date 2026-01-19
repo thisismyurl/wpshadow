@@ -12,6 +12,11 @@
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 final class WPSHADOW_Feature_Setup_Checks extends WPSHADOW_Abstract_Feature {
 
 	public function __construct() {
@@ -21,13 +26,55 @@ final class WPSHADOW_Feature_Setup_Checks extends WPSHADOW_Abstract_Feature {
 			'description' => __( 'Guide for essential WordPress configuration: user account, site name, timezone, permalinks, and search visibility.', 'wpshadow' ),
 			'aliases'     => array( 'setup', 'onboarding', 'configuration', 'initial setup', 'wordpress setup', 'site setup', 'first time setup', 'setup checklist', 'configuration guide', 'wordpress guide' ),
 			'sub_features' => array(
-				'check_admin_user'       => __( 'Verify admin account is secure', 'wpshadow' ),
-				'check_site_name'        => __( 'Verify site title and tagline', 'wpshadow' ),
-				'check_timezone'         => __( 'Verify timezone matches server', 'wpshadow' ),
-				'check_permalinks'       => __( 'Verify pretty URL structure', 'wpshadow' ),
-				'check_search_indexing'  => __( 'Verify search engines can index site', 'wpshadow' ),
-				'check_admin_email'      => __( 'Verify admin email is correct', 'wpshadow' ),
-				'show_setup_wizard'      => __( 'Show setup wizard on first visit', 'wpshadow' ),
+				'check_admin_user'       => array(
+					'name'               => __( 'Admin Account Security', 'wpshadow' ),
+					'description_short'  => __( 'Verify admin account uses secure username', 'wpshadow' ),
+					'description_long'   => __( 'Checks that your main admin account doesn\'t use the default "admin" username, which is a major security vulnerability. Default admin usernames are brute-force targets. If using "admin", this warning recommends creating a new admin and deleting the default account.', 'wpshadow' ),
+					'description_wizard' => __( 'Using "admin" as your username is a massive security risk. This checks and alerts you to change it to something random.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'check_site_name'        => array(
+					'name'               => __( 'Site Title Setup', 'wpshadow' ),
+					'description_short'  => __( 'Verify site title and tagline are set', 'wpshadow' ),
+					'description_long'   => __( 'Checks that your site has a meaningful title and tagline configured. These appear in browser tabs, search results, and feeds. Many new sites are left with default values like "Just another WordPress site". This helps you set proper branding information.', 'wpshadow' ),
+					'description_wizard' => __( 'Your site title and tagline are important for branding and SEO. This checks if you\'ve set them up properly.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'check_timezone'         => array(
+					'name'               => __( 'Timezone Configuration', 'wpshadow' ),
+					'description_short'  => __( 'Verify timezone matches your server', 'wpshadow' ),
+					'description_long'   => __( 'Checks that your WordPress timezone setting matches your server timezone. Mismatched timezones cause scheduling issues with posts, backups, and cron tasks. Post publication times appear wrong and automated tasks run at unexpected times. This helps ensure correct time handling.', 'wpshadow' ),
+					'description_wizard' => __( 'Timezone mismatch causes scheduled posts and backups to run at wrong times. Verify they match.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'check_permalinks'       => array(
+					'name'               => __( 'Permalink Structure', 'wpshadow' ),
+					'description_short'  => __( 'Verify pretty URLs are enabled', 'wpshadow' ),
+					'description_long'   => __( 'Checks that permalinks are configured with a pretty structure (like /2024/01/post-title/ instead of /?p=123). Pretty permalinks are much better for SEO and user experience. Default plain URLs hurt search ranking and look ugly in addresses.', 'wpshadow' ),
+					'description_wizard' => __( 'Pretty URLs are essential for SEO and user experience. Most new sites still use plain URLs like /?p=123. This reminds you to enable pretty URLs.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'check_search_indexing'  => array(
+					'name'               => __( 'Search Engine Indexing', 'wpshadow' ),
+					'description_short'  => __( 'Verify search engines can index your site', 'wpshadow' ),
+					'description_long'   => __( 'Checks the "Discourage search engines from indexing this site" setting. Some sites accidentally enable this and then wonder why they don\'t appear in Google. This setting is sometimes enabled during development and forgotten. This check alerts you if it\'s accidentally enabled on a live site.', 'wpshadow' ),
+					'description_wizard' => __( 'Accidentally disabling search indexing is common during testing. This checks if your live site is accidentally hidden from Google.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'check_admin_email'      => array(
+					'name'               => __( 'Admin Email Address', 'wpshadow' ),
+					'description_short'  => __( 'Verify admin email is correct', 'wpshadow' ),
+					'description_long'   => __( 'Checks that your admin email address is correctly configured and monitored. WordPress sends important notifications to this address (new users, security alerts, updates). If the email is wrong or unmonitored, you might miss critical information about your site.', 'wpshadow' ),
+					'description_wizard' => __( 'WordPress uses the admin email for important notifications. Verify it\'s a real, monitored email address.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'show_setup_wizard'      => array(
+					'name'               => __( 'Show Setup Wizard', 'wpshadow' ),
+					'description_short'  => __( 'Display setup checklist on first admin visit', 'wpshadow' ),
+					'description_long'   => __( 'Shows an admin notice with a setup wizard checklist when admin first visits the dashboard. The wizard guides through essential configuration steps. Disabled by default to avoid nagging experienced users.', 'wpshadow' ),
+					'description_wizard' => __( 'Show setup checklist to new site administrators. Helpful for guiding through initial configuration steps.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
 			),
 		) );
 

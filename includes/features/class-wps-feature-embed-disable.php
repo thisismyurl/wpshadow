@@ -10,6 +10,11 @@
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 final class WPSHADOW_Feature_Embed_Disable extends WPSHADOW_Abstract_Feature {
 
 	public function __construct() {
@@ -19,10 +24,34 @@ final class WPSHADOW_Feature_Embed_Disable extends WPSHADOW_Abstract_Feature {
 			'description' => __( 'Remove code that lets people embed your posts elsewhere. Makes your site load faster if you don\'t need this feature.', 'wpshadow' ),
 			'aliases'     => array( 'oembed', 'wp-embed', 'embed disable', 'embed cleanup', 'oembed disable', 'remove embeds', 'embed optimization', 'embed script', 'embed performance', 'disable oembed', 'embed links', 'rest oembed' ),
 			'sub_features' => array(
-				'disable_embed_script' => __( 'Remove embed loading code', 'wpshadow' ),
-				'remove_oembed_links'  => __( 'Hide embed discovery links', 'wpshadow' ),
-				'disable_rest_oembed'  => __( 'Turn off embed connections', 'wpshadow' ),
-				'remove_embed_rewrite' => __( 'Remove embed URL patterns', 'wpshadow' ),
+				'disable_embed_script' => array(
+					'name'               => __( 'Disable wp-embed.js Script', 'wpshadow' ),
+					'description_short'  => __( 'Remove WordPress embed loading script', 'wpshadow' ),
+					'description_long'   => __( 'Removes the wp-embed.js JavaScript file that WordPress loads to enable embedding your posts on other websites. If nobody ever embeds your content on external sites, this script is unused overhead. Disabling it saves 1-2KB per page load and one HTTP request. The oEmbed feature will still work in the WordPress admin, just not on the frontend.', 'wpshadow' ),
+					'description_wizard' => __( 'Save bandwidth by removing code that enables other sites to embed your posts. Enable if you don\'t use the embedding feature or want to prevent your content from being embedded elsewhere.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'remove_oembed_links'  => array(
+					'name'               => __( 'Remove oEmbed Discovery Links', 'wpshadow' ),
+					'description_short'  => __( 'Hide oEmbed discovery link tags', 'wpshadow' ),
+					'description_long'   => __( 'Removes the link tags that advertise oEmbed capabilities to the rest of the internet. These tags in your page source tell other sites how to request and embed your content. If you don\'t want your content embedded, removing these prevents external discovery of your oEmbed endpoint. Has minimal performance impact but improves privacy.', 'wpshadow' ),
+					'description_wizard' => __( 'Prevents external sites from easily discovering how to embed your content. Good for privacy if you want to restrict content reuse.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'disable_rest_oembed'  => array(
+					'name'               => __( 'Disable REST API oEmbed Endpoint', 'wpshadow' ),
+					'description_short'  => __( 'Disable /oembed REST endpoint', 'wpshadow' ),
+					'description_long'   => __( 'Disables the WordPress REST API endpoint that serves oEmbed data. This endpoint provides embed information for external applications. Disabling it prevents the REST API from serving embed data, though the basic HTML-based oEmbed discovery still works. This is disabled by default because many legitimate tools use this endpoint.', 'wpshadow' ),
+					'description_wizard' => __( 'Advanced option: Disables JSON-based embed discovery via REST API. Only disable if you understand you may break third-party tools that use this endpoint.', 'wpshadow' ),
+					'default_enabled'    => false,
+				),
+				'remove_embed_rewrite' => array(
+					'name'               => __( 'Remove Embed Rewrite Rules', 'wpshadow' ),
+					'description_short'  => __( 'Remove special URLs for embedded content', 'wpshadow' ),
+					'description_long'   => __( 'Removes WordPress rewrite rules that handle embedding URLs (like /embed/). These special URLs provide an optimized page specifically for embedding your content on other sites. Disabling them prevents external sites from accessing this optimized embed view, though they can still use standard post URLs. Minimal performance impact.', 'wpshadow' ),
+					'description_wizard' => __( 'Removes special URLs WordPress uses for embedded content. Good for privacy and restricting how your content can be reused elsewhere.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
 			),
 		) );
 

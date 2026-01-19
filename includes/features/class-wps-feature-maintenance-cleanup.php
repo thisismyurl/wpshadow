@@ -10,6 +10,11 @@
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 final class WPSHADOW_Feature_Maintenance_Cleanup extends WPSHADOW_Abstract_Feature {
 
 	const MAX_MAINT_DURATION = 120; // 2 hours
@@ -21,10 +26,34 @@ final class WPSHADOW_Feature_Maintenance_Cleanup extends WPSHADOW_Abstract_Featu
 			'description' => __( 'Watch for and fix problems when updates get stuck, leaving your site showing a "maintenance mode" message.', 'wpshadow' ),
 			'aliases'     => array( 'maintenance mode', 'stuck update', 'update stuck', 'maintenance file', 'update problems', 'upgrade temp', 'stuck maintenance', 'update cleanup', 'cache cleanup', 'update errors', 'maintenance alert', 'update monitoring' ),
 			'sub_features' => array(
-				'cleanup_maintenance'  => __( 'Remove stuck maintenance mode', 'wpshadow' ),
-				'cleanup_upgrade_temp' => __( 'Remove leftover update files', 'wpshadow' ),
-				'cleanup_cache'        => __( 'Remove old temporary files', 'wpshadow' ),
-				'auto_alerts'          => __( 'Alert when updates get stuck', 'wpshadow' ),
+				'cleanup_maintenance'  => array(
+					'name'               => __( 'Auto-Cleanup Maintenance Mode', 'wpshadow' ),
+					'description_short'  => __( 'Automatically remove stuck maintenance files', 'wpshadow' ),
+					'description_long'   => __( 'Monitors for and automatically removes stuck WordPress maintenance files that prevent your site from being accessible. When WordPress updates, it creates a .maintenance file. If the update process fails or crashes, this file isn\'t deleted, leaving your site showing a "maintenance mode" message to visitors. This feature automatically cleans it up after 2+ hours of being stuck.', 'wpshadow' ),
+					'description_wizard' => __( 'If updates fail and leave your site stuck in maintenance mode, this automatically fixes it. Very helpful for preventing downtime from stuck updates.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'cleanup_upgrade_temp' => array(
+					'name'               => __( 'Remove Upgrade Temp Files', 'wpshadow' ),
+					'description_short'  => __( 'Clean up leftover update files', 'wpshadow' ),
+					'description_long'   => __( 'Removes temporary files and directories left behind by WordPress update processes. Upgrades create temp files in wp-content/upgrade directory that should be cleaned up automatically but sometimes aren\'t. This leaves old backup files and temporary upgrade directories cluttering your server. This feature cleans them up to free disk space and improve security.', 'wpshadow' ),
+					'description_wizard' => __( 'Upgrade temp files can accumulate and waste disk space. This automatically cleans them up after a few hours.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'cleanup_cache'        => array(
+					'name'               => __( 'Remove Old Cache Files', 'wpshadow' ),
+					'description_short'  => __( 'Delete expired temporary files', 'wpshadow' ),
+					'description_long'   => __( 'Removes expired cache files and old temporary files that accumulate on your server over time. WordPress and plugins create temporary files for caching, backup generation, and other processes. If these aren\'t cleaned up, they can waste significant disk space and slow down your server. This runs periodically to keep your server clean.', 'wpshadow' ),
+					'description_wizard' => __( 'Cache and temp files build up over time and waste disk space. This automatically removes old, expired files.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'auto_alerts'          => array(
+					'name'               => __( 'Auto-Alerts for Stuck Updates', 'wpshadow' ),
+					'description_short'  => __( 'Alert when updates get stuck', 'wpshadow' ),
+					'description_long'   => __( 'Sends email and site notifications when the maintenance mode file is stuck, indicating an update process failed to complete. This early warning lets you address the issue quickly before it causes too much downtime. The notification includes guidance on how to fix the issue and how long the file will be left before auto-cleanup occurs.', 'wpshadow' ),
+					'description_wizard' => __( 'Get alerted immediately when updates get stuck, so you can investigate and fix issues quickly.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
 			),
 		) );
 

@@ -14,6 +14,10 @@ declare(strict_types=1);
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * WPSHADOW_Feature_Simple_Cache
  *
@@ -61,19 +65,97 @@ final class WPSHADOW_Feature_Simple_Cache extends WPSHADOW_Abstract_Feature {
 					'quick pages',
 				),
 				'sub_features'    => array(
-					'cache_pages'         => __( 'Speed up your main pages', 'wpshadow' ),
-					'cache_posts'         => __( 'Speed up your blog articles', 'wpshadow' ),
-					'cache_archives'      => __( 'Speed up list and archive pages', 'wpshadow' ),
-					'skip_logged_in'      => __( 'Show fresh content when you\'re editing', 'wpshadow' ),
-					'skip_query_strings'  => __( 'Don\'t save search and filter results', 'wpshadow' ),
-					'auto_clear_on_save'  => __( 'Update saved copy when you publish changes', 'wpshadow' ),
-					'advanced_cache_keys' => __( 'Use advanced cache keys by device/role/cookies', 'wpshadow' ),
-					'partial_cache'       => __( 'Cache selected page sections (fragments)', 'wpshadow' ),
-					'cache_preload'       => __( 'Preload cache for popular pages', 'wpshadow' ),
-					'cache_cdn'           => __( 'Enable CDN integration for cached files', 'wpshadow' ),
-					'cache_warming'       => __( 'Warm cache in background when expired', 'wpshadow' ),
-					'cache_compression'   => __( 'Compress cached HTML files (gzip)', 'wpshadow' ),
-					'cache_mobile_split'  => __( 'Use separate cache for mobile visitors', 'wpshadow' ),
+					'cache_pages'         => array(
+						'name'               => __( 'Cache Static Pages', 'wpshadow' ),
+						'description_short'  => __( 'Save copies of front page and static pages', 'wpshadow' ),
+						'description_long'   => __( 'Caches static pages like your homepage and policy pages. These pages change infrequently, so caching them as static HTML provides massive speed improvements. Visitors see pre-built HTML instead of WordPress needing to build the page from scratch every time.', 'wpshadow' ),
+						'description_wizard' => __( 'Speed up your main pages by serving them as pre-built HTML. Big performance gain with minimal configuration needed.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'cache_posts'         => array(
+						'name'               => __( 'Cache Blog Posts', 'wpshadow' ),
+						'description_short'  => __( 'Save copies of published blog articles', 'wpshadow' ),
+						'description_long'   => __( 'Caches individual blog posts after publishing. Once cached, visitors see the static version instead of WordPress rebuilding the page. Works great for blog content that rarely changes after publication. Comments on cached posts still load dynamically, ensuring readers see current feedback.', 'wpshadow' ),
+						'description_wizard' => __( 'Cache published blog posts for fast loading. Readers still see live comments while enjoying page speed benefits.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'cache_archives'      => array(
+						'name'               => __( 'Cache Archive Pages', 'wpshadow' ),
+						'description_short'  => __( 'Save copies of category and date archives', 'wpshadow' ),
+						'description_long'   => __( 'Caches archive pages like category listings, tag clouds, and date archives. These pages display lists of posts and change when new content is published. Caching helps even though they change, especially on high-traffic sites with many requests to same archive page.', 'wpshadow' ),
+						'description_wizard' => __( 'Speed up archive and listing pages by serving cached versions. Automatically updates when new content is published.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'skip_logged_in'      => array(
+						'name'               => __( 'Skip Cache for Logged-In Users', 'wpshadow' ),
+						'description_short'  => __( 'Always show fresh content when editing', 'wpshadow' ),
+						'description_long'   => __( 'Disables caching when you\'re logged into WordPress. Logged-in users (especially editors and admins) see fresh content so edits take effect immediately. Without this, you might edit a post and still see the old cached version, which is confusing. Essential for content creators.', 'wpshadow' ),
+						'description_wizard' => __( 'Very important: Disable caching for logged-in users so you see your edits immediately. Always keep this enabled.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'skip_query_strings'  => array(
+						'name'               => __( 'Skip Cache for Search/Filters', 'wpshadow' ),
+						'description_short'  => __( 'Don\'t cache search results or filter results', 'wpshadow' ),
+						'description_long'   => __( 'Disables caching for pages with query strings (?search=keyword, ?filter=value). Search results and filter results vary for each query, so caching them doesn\'t make sense and can cause wrong results to display. These pages are typically uncached anyway due to dynamic content.', 'wpshadow' ),
+						'description_wizard' => __( 'Don\'t cache search results and filters - they\'re too dynamic. Keep this enabled to prevent wrong results.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'auto_clear_on_save'  => array(
+						'name'               => __( 'Auto-Clear on Publish', 'wpshadow' ),
+						'description_short'  => __( 'Update cache when content is published', 'wpshadow' ),
+						'description_long'   => __( 'Automatically clears and refreshes cache when you publish or update content. Ensures visitors always see the latest version. Without this, old cached content stays displayed until cache expires or is manually cleared, showing stale content to readers.', 'wpshadow' ),
+						'description_wizard' => __( 'Essential: Automatically update cache when you publish changes. Without this, visitors see old content until cache expires.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'advanced_cache_keys' => array(
+						'name'               => __( 'Advanced Cache Keys', 'wpshadow' ),
+						'description_short'  => __( 'Create separate cache for different devices/roles', 'wpshadow' ),
+						'description_long'   => __( 'Creates separate cache entries for different device types (mobile vs desktop) and user roles. Useful if your site displays different content based on device or who\'s viewing. Requires more cache space but prevents showing desktop version to mobile users. Advanced option disabled by default.', 'wpshadow' ),
+						'description_wizard' => __( 'Advanced: Cache different versions for mobile vs desktop. Only enable if your site shows different content to different devices or roles.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
+					'partial_cache'       => array(
+						'name'               => __( 'Partial/Fragment Caching', 'wpshadow' ),
+						'description_short'  => __( 'Cache page sections instead of whole pages', 'wpshadow' ),
+						'description_long'   => __( 'Enables fragment caching where parts of pages are cached separately. Useful for pages with both static content (sidebar, header) and dynamic content (comments, user data). Allows caching the static parts while keeping dynamic parts fresh. Advanced technique disabled by default.', 'wpshadow' ),
+						'description_wizard' => __( 'Advanced: Cache page fragments separately. Only for experienced users who understand cache invalidation.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
+					'cache_preload'       => array(
+						'name'               => __( 'Cache Preloading', 'wpshadow' ),
+						'description_short'  => __( 'Pre-generate cache for popular pages', 'wpshadow' ),
+						'description_long'   => __( 'Automatically pre-generates and warms up cache for your most popular pages before visitors request them. Ensures these pages are always cached and ready instantly. Useful for traffic spikes or promoting popular content. Advanced option disabled by default.', 'wpshadow' ),
+						'description_wizard' => __( 'Advanced: Pre-cache your most popular pages so they\'re instantly ready. Good for high-traffic sites.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
+					'cache_cdn'           => array(
+						'name'               => __( 'CDN Integration', 'wpshadow' ),
+						'description_short'  => __( 'Serve cached files from CDN', 'wpshadow' ),
+						'description_long'   => __( 'Enables CDN integration where cached files are served from a content delivery network for faster global distribution. CDN makes pages load faster for visitors in different geographic regions by serving content from servers closer to them. Requires CDN account configuration. Advanced option disabled by default.', 'wpshadow' ),
+						'description_wizard' => __( 'Advanced: Use a CDN to serve cached content globally faster. Requires CDN account setup.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
+					'cache_warming'       => array(
+						'name'               => __( 'Background Cache Warming', 'wpshadow' ),
+						'description_short'  => __( 'Refresh cache in background before expiry', 'wpshadow' ),
+						'description_long'   => __( 'Refreshes expired cache in the background before visitors request it. Instead of visitors waiting for cache to rebuild, old cache serves while new cache builds in background. Provides seamless experience without the first-visitor-after-expiry slowdown. Advanced option disabled by default.', 'wpshadow' ),
+						'description_wizard' => __( 'Advanced: Rebuild cache in the background so visitors never wait for cache refresh.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
+					'cache_compression'   => array(
+						'name'               => __( 'Cache Compression', 'wpshadow' ),
+						'description_short'  => __( 'Compress cached files with gzip', 'wpshadow' ),
+						'description_long'   => __( 'Compresses cached HTML files with gzip compression to reduce disk space requirements. Works great for sites with huge amounts of cached content. Compression saves 50-70% of cache size on disk. Decompression is handled automatically. Advanced option disabled by default.', 'wpshadow' ),
+						'description_wizard' => __( 'Advanced: Compress cache files to save disk space. Good for sites with lots of cached content.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
+					'cache_mobile_split'  => array(
+						'name'               => __( 'Mobile-Specific Cache', 'wpshadow' ),
+						'description_short'  => __( 'Cache mobile and desktop separately', 'wpshadow' ),
+						'description_long'   => __( 'Creates separate cache for mobile vs desktop visitors. Useful if your site displays significantly different layouts or content for mobile and desktop. Prevents showing desktop layout to mobile users. Requires detecting device type and managing separate cache. Advanced option disabled by default.', 'wpshadow' ),
+						'description_wizard' => __( 'Advanced: Cache mobile and desktop versions separately if your site displays them differently.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
 				),
 			)
 		);

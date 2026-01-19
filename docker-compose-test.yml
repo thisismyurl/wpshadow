@@ -1,68 +1,22 @@
-# WPShadow Testing Environment - Docker Compose Configuration
-# ============================================================
-# This file defines a complete WordPress testing environment with:
-# - WordPress 6.9+ running on port 9000
-# - MySQL 8.0 database
-# - Live plugin code mounting (auto-reload on file changes)
-# - Custom configuration override via wp-config-extra.php
-#
-# Usage:
-#   docker-compose -f docker-compose-test.yml up -d      # Start
-#   docker-compose -f docker-compose-test.yml down        # Stop
-#   docker-compose -f docker-compose-test.yml down -v     # Stop and delete data
-#
-# Access:
-#   Web: https://[CODESPACE_DOMAIN]-9000.app.github.dev
-#   Admin: https://[CODESPACE_DOMAIN]-9000.app.github.dev/wp-admin
-#   Credentials: admin / admin123
-#
-# See TESTING_SETUP.md for complete setup instructions
-
 version: '3.8'
 
 services:
   wordpress:
     image: wordpress:latest
     container_name: wpshadow-test-wordpress
-    
-    # Port 9000 is used (not 8888) to avoid caching issues in Codespaces
     ports:
       - "9000:80"
-    
-    # Database credentials - must match MySQL service below
     environment:
-      WORDPRESS_DB_HOST: db:3306          # Database hostname (Docker service name)
-      WORDPRESS_DB_USER: wordpress        # Database user
-      WORDPRESS_DB_PASSWORD: wordpress    # Database password
-      WORDPRESS_DB_NAME: wordpress        # Database name
-      WORDPRESS_DEBUG: 'true'             # Enable WordPress debug mode
-      WORDPRESS_DEBUG_DISPLAY: 'false'    # Log errors instead of displaying them
-    
-    # Volume mounts:
-    # 1. Plugin directory: live mount allows code changes to appear instantly
-    # 2. Config override: applies wp-config-extra.php for Codespaces URLs
-    # 3. WordPress data: persists WordPress files and uploads
-    # 4. WP-CLI installer: runs on container startup to install WP-CLI
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DEBUG: 'true'
+      WORDPRESS_DEBUG_DISPLAY: 'false'
     volumes:
-      - ./:/var/www/html/wp-content/plugins/wpshadow              # Live plugin code mount
-      - ./wp-config-extra.php:/var/www/html/wp-config-extra.php   # Config override
-      - wp_test_data:/var/www/html                                # Persistent WordPress data
-      - ./install-wpcli.sh:/docker-entrypoint-initwp.d/install-wpcli.sh  # WP-CLI installer
-    
-    # Run WP-CLI installer before starting WordPress
-    entrypoint: >
-      sh -c "
-      if [ ! -f /usr/local/bin/wp ]; then
-        echo 'Installing WP-CLI...' &&
-        curl -s -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar &&
-        chmod +x wp-cli.phar &&
-        mv wp-cli.phar /usr/local/bin/wp &&
-        echo '✓ WP-CLI installed'
-      fi &&
-      docker-entrypoint.sh apache2-foreground
-      "
-    
-    # Wait for MySQL to be healthy before starting WordPress
+      - ./:/var/www/html/wp-content/plugins/wpshadow
+      - ./wp-config-extra.php:/var/www/html/wp-config-extra.php
+      - wp_test_data:/var/www/html
     depends_on:
       db:
         condition: service_healthy
@@ -70,28 +24,19 @@ services:
   db:
     image: mysql:8.0
     container_name: wpshadow-test-db
-    
-    # Database initialization credentials
     environment:
-      MYSQL_DATABASE: wordpress           # Database name to create
-      MYSQL_ROOT_PASSWORD: wordpress      # Root password
-      MYSQL_USER: wordpress               # Database user
-      MYSQL_PASSWORD: wordpress           # Database user password
-    
-    # Persistent database storage
+      MYSQL_DATABASE: wordpress
+      MYSQL_ROOT_PASSWORD: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
     volumes:
       - wp_test_db:/var/lib/mysql
-    
-    # Health check ensures WordPress waits for MySQL to be ready
-    # Without this, WordPress might connect before tables are created
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 5s
       timeout: 3s
       retries: 5
 
-# Named volumes persist data across container restarts
-# Delete with: docker volume rm wpshadow_wp_test_db wpshadow_wp_test_data
 volumes:
-  wp_test_data:   # WordPress files, plugins, uploads
-  wp_test_db:     # MySQL database files
+  wp_test_data:
+  wp_test_db:

@@ -3,6 +3,13 @@
  * Extra WordPress configuration for Codespaces and Local Development
  * 
  * This file is auto-loaded by docker-compose.yml volume mount.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
  * CRITICAL: This must disable HTTPS forcing and enforce HTTP-only mode.
  */
 

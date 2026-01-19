@@ -13,6 +13,11 @@ namespace WPShadow\CoreSupport;
  *
  * @return bool True if active and enabled, false otherwise.
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 function WPSHADOW_is_support_enabled(): bool {
 	// Check if plugin is active.
 	if ( ! function_exists( 'is_plugin_active' ) ) {

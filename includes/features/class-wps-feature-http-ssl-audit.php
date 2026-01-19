@@ -10,6 +10,11 @@
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 final class WPSHADOW_Feature_Http_SSL_Audit extends WPSHADOW_Abstract_Feature {
 
 	const SSL_WARNING_DAYS = 30;
@@ -21,9 +26,27 @@ final class WPSHADOW_Feature_Http_SSL_Audit extends WPSHADOW_Abstract_Feature {
 			'description' => __( 'Check if your site\'s padlock icon is working and your security settings are correct.', 'wpshadow' ),
 			'aliases'     => array( 'https', 'ssl certificate', 'security', 'mixed content', 'ssl check', 'https check', 'certificate check', 'secure connection', 'tls', 'ssl audit', 'security headers', 'padlock icon' ),
 			'sub_features' => array(
-				'ssl_check'           => __( 'Check security certificate status', 'wpshadow' ),
-				'security_headers'    => __( 'Check security settings', 'wpshadow' ),
-				'alert_notifications' => __( 'Alert me about security problems', 'wpshadow' ),
+				'ssl_check'           => array(
+					'name'               => __( 'SSL Certificate Check', 'wpshadow' ),
+					'description_short'  => __( 'Verify SSL certificate is valid and not expiring', 'wpshadow' ),
+					'description_long'   => __( 'Regularly checks your SSL certificate to ensure it\'s valid, properly installed, and won\'t expire soon. A certificate expiring without renewal takes your site offline and breaks the padlock icon for visitors. This feature alerts you 30 days before expiration so you can renew in time. Also validates that your certificate matches your domain name and is properly signed.', 'wpshadow' ),
+					'description_wizard' => __( 'Monitor your SSL certificate status to prevent it from expiring and breaking your site. You\'ll be warned before expiration so you have time to renew.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'security_headers'    => array(
+					'name'               => __( 'Security Headers Check', 'wpshadow' ),
+					'description_short'  => __( 'Check for important security headers', 'wpshadow' ),
+					'description_long'   => __( 'Checks if your site sends important security headers that protect visitors from various attacks. These include X-Frame-Options (clickjacking protection), X-Content-Type-Options (MIME sniffing protection), and Content-Security-Policy (XSS protection). Missing headers leave your site vulnerable to common attacks. This feature helps you identify which headers need to be added for better security.', 'wpshadow' ),
+					'description_wizard' => __( 'Security headers protect your visitors from attacks like clickjacking and content injection. This checks if your site has the important ones configured.', 'wpshadow' ),
+					'default_enabled'    => true,
+				),
+				'alert_notifications' => array(
+					'name'               => __( 'Alert Notifications', 'wpshadow' ),
+					'description_short'  => __( 'Send email alerts for security problems', 'wpshadow' ),
+					'description_long'   => __( 'Sends email notifications to your admin email address when security problems are detected, such as SSL certificates expiring soon or critical security headers missing. This ensures you don\'t miss important security issues even if you don\'t regularly check the site. Helps you respond quickly to security threats.', 'wpshadow' ),
+					'description_wizard' => __( 'Get email alerts when security problems are detected so you can fix them quickly. Disabled by default - enable if you want proactive notifications.', 'wpshadow' ),
+					'default_enabled'    => false,
+				),
 			),
 		) );
 

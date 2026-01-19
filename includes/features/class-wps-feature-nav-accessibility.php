@@ -13,6 +13,11 @@ declare(strict_types=1);
 
 namespace WPShadow\CoreSupport;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 /**
  * WPSHADOW_Feature_Nav_Accessibility
  *
@@ -35,10 +40,34 @@ final class WPSHADOW_Feature_Nav_Accessibility extends WPSHADOW_Abstract_Feature
 				'widget_group'    => 'accessibility',
 				'aliases'         => array( 'menu accessibility', 'navigation', 'aria current', 'keyboard navigation', 'nav menu', 'menu classes', 'screen reader navigation', 'accessible menus', 'menu optimization', 'nav cleanup', 'menu aria', 'keyboard menu' ),
 				'sub_features'    => array(
-					'add_aria_current'   => __( 'Show which page is currently open', 'wpshadow' ),
-					'simplify_classes'   => __( 'Remove extra code from menus', 'wpshadow' ),
-					'remove_nav_ids'     => __( 'Remove duplicate tracking codes', 'wpshadow' ),
-					'keyboard_support'   => __( 'Better keyboard navigation', 'wpshadow' ),
+					'add_aria_current'   => array(
+						'name'               => __( 'Add ARIA Current Indicator', 'wpshadow' ),
+						'description_short'  => __( 'Show which page is currently active in menus', 'wpshadow' ),
+						'description_long'   => __( 'Adds ARIA current page attributes to menu items that match the current page being viewed. This helps screen reader users understand where they are in the site structure. Also adds visual focus indicators so keyboard and screen reader users can clearly see which menu item represents the current page.', 'wpshadow' ),
+						'description_wizard' => __( 'Screen reader users need to know which menu item represents the current page. This adds ARIA attributes that announce it.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'simplify_classes'   => array(
+						'name'               => __( 'Simplify Menu Classes', 'wpshadow' ),
+						'description_short'  => __( 'Remove extra CSS classes from menu items', 'wpshadow' ),
+						'description_long'   => __( 'Removes unnecessary CSS classes from menu items that most sites don\'t need. WordPress adds classes for depth levels, parent indicators, and menu structure. Many themes don\'t use all of these classes, so removing them reduces HTML size and makes CSS cleaner and easier to write. Keeps classes that have accessibility value.', 'wpshadow' ),
+						'description_wizard' => __( 'Reduce menu HTML bloat by removing unused CSS classes. Most themes can style menus without all the extra classes.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'remove_nav_ids'     => array(
+						'name'               => __( 'Remove Menu Item IDs', 'wpshadow' ),
+						'description_short'  => __( 'Remove ID attributes from menu items', 'wpshadow' ),
+						'description_long'   => __( 'Removes ID attributes from menu items that WordPress adds for tracking. These IDs are rarely used by themes and mostly add HTML bloat. Removing them reduces page size and improves privacy slightly by not exposing unique identifiers to external trackers.', 'wpshadow' ),
+						'description_wizard' => __( 'Menu item IDs serve little purpose and add HTML size. Safe to remove for most sites.', 'wpshadow' ),
+						'default_enabled'    => true,
+					),
+					'keyboard_support'   => array(
+						'name'               => __( 'Enhanced Keyboard Navigation', 'wpshadow' ),
+						'description_short'  => __( 'Better support for keyboard-only navigation', 'wpshadow' ),
+						'description_long'   => __( 'Improves keyboard navigation for dropdown menus with additional JavaScript support. Makes submenu navigation easier for keyboard-only users by adding focus indicators and keyboard event handling. Enables arrow keys and other keyboard shortcuts for navigating nested menus. Improves accessibility for users who cannot use mice.', 'wpshadow' ),
+						'description_wizard' => __( 'Enhanced keyboard support makes navigation much easier for keyboard-only users and screen reader users. Disabled by default but recommended for accessibility.', 'wpshadow' ),
+						'default_enabled'    => false,
+					),
 				),
 			)
 		);
