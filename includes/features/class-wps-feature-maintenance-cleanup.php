@@ -19,6 +19,7 @@ final class WPSHADOW_Feature_Maintenance_Cleanup extends WPSHADOW_Abstract_Featu
 			'id'          => 'maintenance-cleanup',
 			'name'        => __( 'Fix Stuck Updates', 'wpshadow' ),
 			'description' => __( 'Watch for and fix problems when updates get stuck, leaving your site showing a "maintenance mode" message.', 'wpshadow' ),
+			'aliases'     => array( 'maintenance mode', 'stuck update', 'update stuck', 'maintenance file', 'update problems', 'upgrade temp', 'stuck maintenance', 'update cleanup', 'cache cleanup', 'update errors', 'maintenance alert', 'update monitoring' ),
 			'sub_features' => array(
 				'cleanup_maintenance'  => __( 'Remove stuck maintenance mode', 'wpshadow' ),
 				'cleanup_upgrade_temp' => __( 'Remove leftover update files', 'wpshadow' ),
@@ -64,11 +65,30 @@ final class WPSHADOW_Feature_Maintenance_Cleanup extends WPSHADOW_Abstract_Featu
 		if ( $age_hours > 2 && $this->is_sub_feature_enabled( 'cleanup_maintenance', true ) ) {
 			if ( $this->is_sub_feature_enabled( 'auto_alerts', true ) ) {
 				set_transient( 'wpshadow_maint_stuck_alert', true, HOUR_IN_SECONDS );
+
+				// Send email notification (once per stuck event)
+				if ( ! get_transient( 'wpshadow_maint_email_sent' ) ) {
+					$admin_email = get_option( 'admin_email' );
+					$subject = sprintf(
+						'[%s] Maintenance Mode Stuck',
+						get_bloginfo( 'name' )
+					);
+					$message = sprintf(
+						"Your WordPress site has been in maintenance mode for %.1f hours.\n\nThis usually means an update process didn't complete properly.\n\nWPShadow will automatically remove the maintenance file if it remains stuck for more than 6 hours.\n\nSite: %s\nTime Detected: %s",
+						$age_hours,
+						home_url(),
+						wp_date( 'Y-m-d H:i:s' )
+					);
+					wp_mail( $admin_email, $subject, $message );
+					set_transient( 'wpshadow_maint_email_sent', true, 6 * HOUR_IN_SECONDS );
+				}
 			}
 
 			// Auto-cleanup if stuck too long
 			if ( $age_hours > 6 ) {
 				@unlink( $maint_file );
+				// Clear email sent flag after cleanup
+				delete_transient( 'wpshadow_maint_email_sent' );
 			}
 		}
 	}

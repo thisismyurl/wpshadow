@@ -900,6 +900,9 @@ function wpshadow_init(): void {
 	// Load help content API
 	require_once WPSHADOW_PATH . 'includes/core/class-wps-help-content-api.php';
 
+	// Load feature search and command palette integration
+	require_once WPSHADOW_PATH . 'includes/class-wps-feature-search.php';
+
 	// Load feature history logging
 	require_once WPSHADOW_PATH . 'includes/feature-history.php';
 	// Load admin infrastructure for dashboard screens

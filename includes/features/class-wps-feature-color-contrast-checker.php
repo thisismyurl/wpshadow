@@ -34,6 +34,7 @@ final class WPSHADOW_Feature_Color_Contrast_Checker extends WPSHADOW_Abstract_Fe
 				'default_enabled' => true,
 				'version'         => '1.0.0',
 				'widget_group'    => 'accessibility',
+				'aliases'         => array( 'accessibility', 'wcag', 'readability', 'contrast ratio', 'color contrast', 'text contrast', 'a11y', 'color accessibility', 'wcag compliance', 'contrast checker', 'color legibility', 'ada compliance' ),
 				'sub_features'    => array(
 					'report_wcag_aaa'   => __( 'Use strictest readability standards', 'wpshadow' ),
 					'log_violations'    => __( 'Record readability problems', 'wpshadow' ),

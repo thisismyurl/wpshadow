@@ -23,6 +23,7 @@ final class WPSHADOW_Feature_Tips_Coach extends WPSHADOW_Abstract_Feature {
 			'id'          => 'tips-coach',
 			'name'        => __( 'Smart Tips Helper', 'wpshadow' ),
 			'description' => __( 'Get helpful suggestions customized for your type of website (blog, online store, or course site).', 'wpshadow' ),
+			'aliases'     => array( 'tips', 'suggestions', 'best practices', 'recommendations', 'coach', 'help', 'guidance', 'next steps', 'optimization tips', 'site improvement', 'dashboard tips', 'contextual help' ),
 			'sub_features' => array(
 				'enable_tips'        => __( 'Show helpful tips', 'wpshadow' ),
 				'show_site_specific' => __( 'Customize tips for my site type', 'wpshadow' ),

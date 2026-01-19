@@ -32,6 +32,11 @@ class WPSHADOW_Dashboard_Widgets {
 		<div class="wrap wps-dashboard">
 			<h1><?php echo esc_html( $title ); ?></h1>
 
+			<?php
+			// Hook for search bar and other header content
+			do_action( 'wpshadow_dashboard_header' );
+			?>
+
 			<style>
 				.wps-dashboard { margin-top: 20px; }
 				.wps-dashboard-widgets-wrap { max-width: 1800px; }

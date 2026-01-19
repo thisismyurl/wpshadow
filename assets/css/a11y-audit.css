@@ -1,0 +1,131 @@
+/* WPShadow A11y Audit - On-demand Scanning UI */
+
+/* Modal styles */
+.wpshadow-modal {
+	display: none;
+	position: fixed;
+	z-index: 999999;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba( 0, 0, 0, 0.4 );
+	align-items: center;
+	justify-content: center;
+	animation: wpshadow-fade-in 0.2s ease-in-out;
+}
+
+.wpshadow-audit-modal .wpshadow-modal-content {
+	background-color: #fff;
+	padding: 2rem;
+	border-radius: 8px;
+	max-width: 500px;
+	width: 90%;
+	max-height: 80vh;
+	overflow-y: auto;
+	box-shadow: 0 4px 20px rgba( 0, 0, 0, 0.15 );
+	position: relative;
+}
+
+.wpshadow-modal-close {
+	position: absolute;
+	right: 1rem;
+	top: 1rem;
+	background: none;
+	border: none;
+	font-size: 2rem;
+	cursor: pointer;
+	color: #666;
+	padding: 0;
+	line-height: 1;
+	transition: color 0.2s;
+}
+
+.wpshadow-modal-close:hover {
+	color: #000;
+}
+
+/* Audit results */
+.wpshadow-audit-success {
+	color: #2e7d32;
+	padding: 1rem;
+	background-color: #e8f5e9;
+	border-left: 4px solid #2e7d32;
+	border-radius: 4px;
+	margin-bottom: 1rem;
+}
+
+.wpshadow-audit-count {
+	color: #d32f2f;
+	padding: 0.5rem 0;
+	margin-bottom: 1rem;
+}
+
+.wpshadow-audit-issues {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.wpshadow-audit-issues li {
+	padding: 0.75rem;
+	margin-bottom: 0.5rem;
+	background-color: #fff3cd;
+	border-left: 4px solid #ffc107;
+	border-radius: 4px;
+	font-size: 0.95rem;
+	line-height: 1.4;
+}
+
+.wpshadow-audit-issues li:last-child {
+	margin-bottom: 0;
+}
+
+/* Button states */
+.wpshadow-audit-page-btn {
+	background-color: #2271b1;
+	border: 1px solid #2271b1;
+	color: #fff;
+	padding: 0.5rem 1rem;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 0.9rem;
+	transition: all 0.2s;
+	text-decoration: none;
+	display: inline-block;
+}
+
+.wpshadow-audit-page-btn:hover:not( :disabled ) {
+	background-color: #135e96;
+	border-color: #135e96;
+}
+
+.wpshadow-audit-page-btn:disabled,
+.wpshadow-audit-page-btn.wpshadow-auditing {
+	opacity: 0.7;
+	cursor: not-allowed;
+}
+
+/* Animation */
+@keyframes wpshadow-fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+/* Responsive */
+@media ( max-width: 600px ) {
+	.wpshadow-audit-modal .wpshadow-modal-content {
+		max-width: 95vw;
+		padding: 1.5rem;
+	}
+
+	.wpshadow-audit-page-btn {
+		display: block;
+		width: 100%;
+		text-align: center;
+	}
+}

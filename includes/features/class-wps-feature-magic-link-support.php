@@ -17,6 +17,7 @@ final class WPSHADOW_Feature_Magic_Link_Support extends WPSHADOW_Abstract_Featur
 			'id'          => 'magic-link-support',
 			'name'        => __( 'Temporary Support Login', 'wpshadow' ),
 			'description' => __( 'Create secure, temporary login links so developers can help fix your site without needing your password.', 'wpshadow' ),
+			'aliases'     => array( 'magic link', 'support access', 'temporary login', 'developer access', 'passwordless login', 'emergency access', 'support link', 'secure access', 'time-limited login', 'temporary access', 'support token', 'developer login' ),
 			'sub_features' => array(
 				'log_sessions'        => __( 'Record who logged in', 'wpshadow' ),
 				'email_notifications' => __( 'Email me when support logs in', 'wpshadow' ),
@@ -36,6 +37,7 @@ final class WPSHADOW_Feature_Magic_Link_Support extends WPSHADOW_Abstract_Featur
 			return;
 		}
 
+		add_action( 'init', array( $this, 'handle_magic_link_login' ) );
 		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 	}
 
@@ -78,6 +80,96 @@ final class WPSHADOW_Feature_Magic_Link_Support extends WPSHADOW_Abstract_Featur
 			'link'    => $link,
 			'token'   => $token,
 		);
+	}
+
+	/**
+	 * Handle magic link authentication.
+	 */
+	public function handle_magic_link_login(): void {
+		if ( ! isset( $_GET['magic_link_token'] ) ) {
+			return;
+		}
+
+		$token = sanitize_text_field( wp_unslash( $_GET['magic_link_token'] ) );
+		$verification = $this->verify_magic_link( $token );
+
+		if ( ! $verification['valid'] ) {
+			wp_die(
+				esc_html( $verification['message'] ),
+				esc_html__( 'Invalid Magic Link', 'wpshadow' ),
+				array( 'response' => 403 )
+			);
+		}
+
+		$data = $verification['data'];
+
+		// Create temporary support user
+		$username = 'wpshadow_support_' . substr( $token, 0, 8 );
+		$user_id = username_exists( $username );
+
+		if ( ! $user_id ) {
+			$user_id = wp_create_user(
+				$username,
+				wp_generate_password( 32, true, true ),
+				$data['developer_email']
+			);
+
+			if ( is_wp_error( $user_id ) ) {
+				wp_die(
+					esc_html__( 'Unable to create support user.', 'wpshadow' ),
+					esc_html__( 'Login Failed', 'wpshadow' ),
+					array( 'response' => 500 )
+				);
+			}
+
+			// Set role based on restriction setting
+			if ( $this->is_sub_feature_enabled( 'role_restriction', false ) ) {
+				$user = new \WP_User( $user_id );
+				$user->set_role( 'editor' );
+			} else {
+				$user = new \WP_User( $user_id );
+				$user->set_role( 'administrator' );
+			}
+		}
+
+		// Log the access
+		if ( $this->is_sub_feature_enabled( 'log_sessions', true ) ) {
+			$this->log_activity(
+				'Magic Link Used',
+				sprintf(
+					'Developer logged in: %s (%s)',
+					$data['developer_name'],
+					$data['developer_email']
+				),
+				'security'
+			);
+		}
+
+		// Send email notification
+		if ( $this->is_sub_feature_enabled( 'email_notifications', false ) ) {
+			$admin_email = get_option( 'admin_email' );
+			wp_mail(
+				$admin_email,
+				__( 'Developer Support Access Granted', 'wpshadow' ),
+				sprintf(
+					__( "A developer has accessed your site using a magic link.\n\nDeveloper: %s\nEmail: %s\nTime: %s\n\nThis session will expire in 24 hours.", 'wpshadow' ),
+					$data['developer_name'],
+					$data['developer_email'],
+					wp_date( 'Y-m-d H:i:s' )
+				)
+			);
+		}
+
+		// Delete the one-time token
+		delete_transient( 'wpshadow_magic_link_' . $token );
+
+		// Log the user in
+		wp_set_current_user( $user_id );
+		wp_set_auth_cookie( $user_id, true );
+
+		// Redirect to admin
+		wp_safe_redirect( admin_url() );
+		exit;
 	}
 
 	/**

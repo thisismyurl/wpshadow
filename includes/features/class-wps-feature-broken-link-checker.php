@@ -17,6 +17,7 @@ final class WPSHADOW_Feature_Broken_Link_Checker extends WPSHADOW_Abstract_Featu
 			'id'          => 'broken-link-checker',
 			'name'        => __( 'Find Broken Links', 'wpshadow' ),
 			'description' => __( 'Find links that don\'t work anymore so visitors don\'t get error pages. Helps your site rank better in Google.', 'wpshadow' ),
+			'aliases'     => array( 'broken links', 'link checker', 'dead links', '404 errors', 'link validation', 'link monitoring', 'seo links', 'link health', 'url checker', 'link audit', 'external links', 'internal links' ),
 			'sub_features' => array(
 				'check_internal'    => __( 'Check links to your own pages', 'wpshadow' ),
 				'check_external'    => __( 'Check links to other websites', 'wpshadow' ),

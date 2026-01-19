@@ -19,6 +19,7 @@ final class WPSHADOW_Feature_Http_SSL_Audit extends WPSHADOW_Abstract_Feature {
 			'id'          => 'http-ssl-audit',
 			'name'        => __( 'Security Lock Checker', 'wpshadow' ),
 			'description' => __( 'Check if your site\'s padlock icon is working and your security settings are correct.', 'wpshadow' ),
+			'aliases'     => array( 'https', 'ssl certificate', 'security', 'mixed content', 'ssl check', 'https check', 'certificate check', 'secure connection', 'tls', 'ssl audit', 'security headers', 'padlock icon' ),
 			'sub_features' => array(
 				'ssl_check'           => __( 'Check security certificate status', 'wpshadow' ),
 				'security_headers'    => __( 'Check security settings', 'wpshadow' ),

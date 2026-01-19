@@ -17,6 +17,7 @@ final class WPSHADOW_Feature_Resource_Hints extends WPSHADOW_Abstract_Feature {
 			'id'          => 'resource-hints',
 			'name'        => __( 'Prepare External Connections', 'wpshadow' ),
 			'description' => __( 'Start connecting to fonts, scripts, and services early so they load faster when needed.', 'wpshadow' ),
+			'aliases'     => array( 'dns prefetch', 'preconnect', 'preload', 'resource hints', 'dns optimization', 'early hints', 'prefetch', 'preload fonts', 'preload scripts', 'connection optimization', 'link headers', 'performance hints' ),
 			'sub_features' => array(
 				'dns_prefetch'      => __( 'Prepare website addresses early', 'wpshadow' ),
 				'preconnect'        => __( 'Connect to services early', 'wpshadow' ),
@@ -43,30 +44,51 @@ final class WPSHADOW_Feature_Resource_Hints extends WPSHADOW_Abstract_Feature {
 		add_filter( 'wp_resource_hints', array( $this, 'filter_resource_hints' ), 10, 2 );
 		add_action( 'wp_head', array( $this, 'add_preload_headers' ), 2 );
 		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
+
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			\WP_CLI::add_command( 'wpshadow resource-hints', array( $this, 'handle_cli_command' ) );
+		}
 	}
 
 	/**
 	 * Filter resource hints.
 	 */
 	public function filter_resource_hints( array $urls, string $relation_type ): array {
-		if ( 'dns-prefetch' !== $relation_type ) {
-			return $urls;
+		// Handle DNS prefetch.
+		if ( 'dns-prefetch' === $relation_type ) {
+			// Remove WordPress.org DNS prefetch.
+			if ( $this->is_sub_feature_enabled( 'remove_s_w_org', true ) ) {
+				$urls = array_diff(
+					$urls,
+					array( 'https://s.w.org', '//s.w.org', 'http://s.w.org' )
+				);
+			}
+
+			// Add custom DNS prefetch hints.
+			if ( $this->is_sub_feature_enabled( 'dns_prefetch', true ) ) {
+				$custom_hints = $this->get_setting( 'custom_hints', array() );
+				if ( ! empty( $custom_hints ) ) {
+					$urls = array_merge( $urls, (array) $custom_hints );
+					$urls = array_unique( $urls );
+				}
+			}
 		}
 
-		// Remove WordPress.org DNS prefetch
-		if ( $this->is_sub_feature_enabled( 'remove_s_w_org', true ) ) {
-			$urls = array_diff(
-				$urls,
-				array( 'https://s.w.org', '//s.w.org', 'http://s.w.org' )
+		// Handle preconnect.
+		if ( 'preconnect' === $relation_type && $this->is_sub_feature_enabled( 'preconnect', true ) ) {
+			// Add common CDN and service preconnects.
+			$preconnects = array(
+				'https://fonts.googleapis.com',
+				'https://fonts.gstatic.com',
 			);
-		}
 
-		// Add custom hints
-		$custom_hints = $this->get_setting( 'custom_hints', array() );
-		if ( ! empty( $custom_hints ) ) {
-			$urls = array_merge( $urls, (array) $custom_hints );
+			// Allow filtering.
+			$preconnects = apply_filters( 'wpshadow_preconnect_urls', $preconnects );
+			$urls = array_merge( $urls, $preconnects );
 			$urls = array_unique( $urls );
 		}
+
+		do_action( 'wpshadow_resource_hints_filtered', $urls, $relation_type );
 
 		return $urls;
 	}
@@ -75,11 +97,21 @@ final class WPSHADOW_Feature_Resource_Hints extends WPSHADOW_Abstract_Feature {
 	 * Add preload headers.
 	 */
 	public function add_preload_headers(): void {
-		$preload_resources = $this->get_setting( 'preload_resources', array() );
+		// Auto-preload fonts if enabled.
+		if ( $this->is_sub_feature_enabled( 'preload_fonts', false ) ) {
+			$this->preload_theme_fonts();
+		}
 
+		// Auto-preload scripts if enabled.
+		if ( $this->is_sub_feature_enabled( 'preload_scripts', false ) ) {
+			$this->preload_critical_scripts();
+		}
+
+		// Custom preload resources.
+		$preload_resources = $this->get_setting( 'preload_resources', array() );
 		$preload_resources = apply_filters( 'wpshadow_preload_resources', $preload_resources );
 
-		if ( ! is_array( $preload_resources ) ) {
+		if ( ! is_array( $preload_resources ) || empty( $preload_resources ) ) {
 			return;
 		}
 
@@ -102,7 +134,85 @@ final class WPSHADOW_Feature_Resource_Hints extends WPSHADOW_Abstract_Feature {
 			}
 
 			echo '<link ' . $attrs . '>' . "\n";
+			do_action( 'wpshadow_resource_preload_output', $resource );
 		}
+	}
+
+	/**
+	 * Preload theme fonts.
+	 */
+	private function preload_theme_fonts(): void {
+		// This would scan theme CSS for font-face declarations.
+		// Simplified implementation - allows filtering.
+		$fonts = apply_filters( 'wpshadow_preload_fonts', array() );
+
+		foreach ( $fonts as $font_url ) {
+			if ( ! empty( $font_url ) ) {
+				echo sprintf(
+					'<link rel="preload" href="%s" as="font" type="font/woff2" crossorigin>' . "\n",
+					esc_url( $font_url )
+				);
+				do_action( 'wpshadow_resource_font_preload', $font_url );
+			}
+		}
+	}
+
+	/**
+	 * Preload critical scripts.
+	 */
+	private function preload_critical_scripts(): void {
+		// Simplified implementation - allows filtering.
+		$scripts = apply_filters( 'wpshadow_preload_scripts', array() );
+
+		foreach ( $scripts as $script_url ) {
+			if ( ! empty( $script_url ) ) {
+				echo sprintf(
+					'<link rel="preload" href="%s" as="script">' . "\n",
+					esc_url( $script_url )
+				);
+				do_action( 'wpshadow_resource_script_preload', $script_url );
+			}
+		}
+	}
+
+	/**
+	 * Handle WP-CLI command for resource hints.
+	 *
+	 * @param array $args       Positional arguments.
+	 * @param array $assoc_args Associative arguments.
+	 *
+	 * @return void
+	 */
+	public function handle_cli_command( array $args, array $assoc_args ): void {
+		$action = $args[0] ?? 'status';
+
+		if ( 'status' !== $action ) {
+			\WP_CLI::error( __( 'Unknown subcommand. Try: wp wpshadow resource-hints status', 'wpshadow' ) );
+			return;
+		}
+
+		\WP_CLI::log( __( 'Resource Hints status:', 'wpshadow' ) );
+		\WP_CLI::log( sprintf( '  %s: %s', __( 'Feature enabled', 'wpshadow' ), $this->is_enabled() ? 'yes' : 'no' ) );
+
+		$subs = array(
+			'dns_prefetch',
+			'preconnect',
+			'preload_fonts',
+			'preload_scripts',
+			'remove_s_w_org',
+		);
+
+		foreach ( $subs as $sub ) {
+			$enabled = $this->is_sub_feature_enabled( $sub, false );
+			\WP_CLI::log( sprintf( '  - %s: %s', $sub, $enabled ? 'on' : 'off' ) );
+		}
+
+		$custom_hints   = $this->get_setting( 'custom_hints', array() );
+		$preload_custom = $this->get_setting( 'preload_resources', array() );
+
+		\WP_CLI::log( sprintf( '  %s: %d', __( 'Custom hints', 'wpshadow' ), is_array( $custom_hints ) ? count( $custom_hints ) : 0 ) );
+		\WP_CLI::log( sprintf( '  %s: %d', __( 'Custom preloads', 'wpshadow' ), is_array( $preload_custom ) ? count( $preload_custom ) : 0 ) );
+		\WP_CLI::success( __( 'Resource hints inspected.', 'wpshadow' ) );
 	}
 
 	public function register_site_health_test( array $tests ): array {

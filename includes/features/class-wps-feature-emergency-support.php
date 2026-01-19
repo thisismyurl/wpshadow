@@ -32,8 +32,16 @@ final class WPSHADOW_Feature_Emergency_Support extends WPSHADOW_Abstract_Feature
 				'default_enabled' => true,
 				'version'         => '1.0.0',
 				'widget_group'    => 'maintenance-tools',
+				'aliases'         => array( 'emergency mode', 'white screen', 'fatal error', 'recovery', 'site down', 'crash recovery', 'error monitoring', 'critical errors', 'wsod', 'white screen of death', 'site broken', 'error alerts' ),
+				'sub_features'    => array(
+					'email_notifications' => __( 'Email me about critical errors', 'wpshadow' ),
+				),
 			)
 		);
+
+		$this->register_default_settings( array(
+			'email_notifications' => false,
+		) );
 
 		$this->log_activity( 'feature_initialized', 'Emergency Support feature initialized', 'info' );
 	}
@@ -97,6 +105,24 @@ final class WPSHADOW_Feature_Emergency_Support extends WPSHADOW_Abstract_Feature
 		update_option( $errors_key, $errors );
 
 		$this->log_activity( 'critical_error', $critical['message'], 'error' );
+
+		// Send email notification
+		if ( $this->is_sub_feature_enabled( 'email_notifications', false ) ) {
+			$admin_email = get_option( 'admin_email' );
+			$subject = sprintf(
+				'[%s] Critical Error Detected',
+				get_bloginfo( 'name' )
+			);
+			$message = sprintf(
+				"A critical error was detected on your site.\n\nSeverity: %s\nMessage: %s\nFile: %s\nLine: %d\nTime: %s\n\nPlease check your site immediately.",
+				$critical['severity'],
+				$critical['message'],
+				$critical['file'],
+				$critical['line'],
+				wp_date( 'Y-m-d H:i:s' )
+			);
+			wp_mail( $admin_email, $subject, $message );
+		}
 	}
 
 	/**

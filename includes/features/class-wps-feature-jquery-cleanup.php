@@ -33,6 +33,7 @@ final class WPSHADOW_Feature_jQuery_Cleanup extends WPSHADOW_Abstract_Feature {
 				'default_enabled' => true,
 				'version'         => '1.0.0',
 				'widget_group'    => 'performance',
+				'aliases'         => array( 'jquery migrate', 'remove jquery', 'javascript cleanup', 'jquery optimization', 'legacy jquery', 'old javascript', 'jquery performance', 'remove migrate', 'js optimization', 'javascript performance', 'jquery bloat', 'legacy scripts' ),
 				'sub_features'    => array(
 					'remove_migrate_frontend' => __( 'Remove old jQuery code from visitor pages', 'wpshadow' ),
 					'keep_admin'              => __( 'Keep old jQuery code in admin area', 'wpshadow' ),
@@ -62,7 +63,42 @@ final class WPSHADOW_Feature_jQuery_Cleanup extends WPSHADOW_Abstract_Feature {
 			return;
 		}
 
+		add_action( 'wp_enqueue_scripts', array( $this, 'remove_jquery_migrate' ), 100 );
 		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
+
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			\WP_CLI::add_command( 'wpshadow jquery-cleanup', array( $this, 'handle_cli_command' ) );
+		}
+	}
+
+	/**
+	 * Remove jQuery Migrate from frontend.
+	 *
+	 * @return void
+	 */
+	public function remove_jquery_migrate(): void {
+		// Keep in admin if enabled.
+		if ( is_admin() && $this->is_sub_feature_enabled( 'keep_admin', true ) ) {
+			do_action( 'wpshadow_jquery_cleanup_kept_admin' );
+			return;
+		}
+
+		// Remove jQuery Migrate on frontend.
+		if ( ! is_admin() && $this->is_sub_feature_enabled( 'remove_migrate_frontend', true ) ) {
+			global $wp_scripts;
+
+			if ( isset( $wp_scripts->registered['jquery'] ) ) {
+				$jquery_dependencies = $wp_scripts->registered['jquery']->deps;
+				$wp_scripts->registered['jquery']->deps = array_diff( $jquery_dependencies, array( 'jquery-migrate' ) );
+			}
+
+			wp_deregister_script( 'jquery-migrate' );
+			do_action( 'wpshadow_jquery_cleanup_removed' );
+
+			if ( $this->is_sub_feature_enabled( 'log_removals', false ) ) {
+				$this->log_activity( 'jquery_migrate_removed', 'jQuery Migrate removed from frontend', 'info' );
+			}
+		}
 	}
 
 	/**
@@ -126,5 +162,38 @@ final class WPSHADOW_Feature_jQuery_Cleanup extends WPSHADOW_Abstract_Feature {
 			),
 			'test'        => 'jquery_cleanup',
 		);
+	}
+
+	/**
+	 * Handle WP-CLI command for jQuery cleanup.
+	 *
+	 * @param array $args       Positional args.
+	 * @param array $assoc_args Named args (unused).
+	 *
+	 * @return void
+	 */
+	public function handle_cli_command( array $args, array $assoc_args ): void {
+		$action = $args[0] ?? 'status';
+
+		if ( 'status' !== $action ) {
+			\WP_CLI::error( __( 'Unknown subcommand. Try: wp wpshadow jquery-cleanup status', 'wpshadow' ) );
+			return;
+		}
+
+		\WP_CLI::log( __( 'jQuery Cleanup status:', 'wpshadow' ) );
+		\WP_CLI::log( sprintf( '  %s: %s', __( 'Feature enabled', 'wpshadow' ), $this->is_enabled() ? 'yes' : 'no' ) );
+
+		$subs = array(
+			'remove_migrate_frontend',
+			'keep_admin',
+			'log_removals',
+		);
+
+		foreach ( $subs as $sub ) {
+			$enabled = $this->is_sub_feature_enabled( $sub, false );
+			\WP_CLI::log( sprintf( '  - %s: %s', $sub, $enabled ? 'on' : 'off' ) );
+		}
+
+		\WP_CLI::success( __( 'jQuery cleanup inspected.', 'wpshadow' ) );
 	}
 }

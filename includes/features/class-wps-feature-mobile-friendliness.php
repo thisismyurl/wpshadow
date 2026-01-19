@@ -20,6 +20,7 @@ final class WPSHADOW_Feature_Mobile_Friendliness extends WPSHADOW_Abstract_Featu
 			'id'          => 'mobile-friendliness',
 			'name'        => __( 'Mobile Phone Checker', 'wpshadow' ),
 			'description' => __( 'Check if your site works well on phones and tablets - text should be readable and buttons easy to tap.', 'wpshadow' ),
+			'aliases'     => array( 'responsive', 'mobile check', 'mobile test', 'responsive design', 'mobile optimization', 'viewport', 'touch targets', 'mobile friendly', 'phone optimization', 'tablet optimization', 'responsive check', 'mobile usability' ),
 			'sub_features' => array(
 				'viewport_check'    => __( 'Check if site fits phone screens', 'wpshadow' ),
 				'touch_targets'     => __( 'Check if buttons are big enough to tap', 'wpshadow' ),

@@ -17,6 +17,7 @@ final class WPSHADOW_Feature_Embed_Disable extends WPSHADOW_Abstract_Feature {
 			'id'          => 'embed-disable',
 			'name'        => __( 'Stop Extra Embed Code', 'wpshadow' ),
 			'description' => __( 'Remove code that lets people embed your posts elsewhere. Makes your site load faster if you don\'t need this feature.', 'wpshadow' ),
+			'aliases'     => array( 'oembed', 'wp-embed', 'embed disable', 'embed cleanup', 'oembed disable', 'remove embeds', 'embed optimization', 'embed script', 'embed performance', 'disable oembed', 'embed links', 'rest oembed' ),
 			'sub_features' => array(
 				'disable_embed_script' => __( 'Remove embed loading code', 'wpshadow' ),
 				'remove_oembed_links'  => __( 'Hide embed discovery links', 'wpshadow' ),
@@ -40,16 +41,23 @@ final class WPSHADOW_Feature_Embed_Disable extends WPSHADOW_Abstract_Feature {
 
 		add_action( 'init', array( $this, 'disable_embeds' ) );
 		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
+
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			\WP_CLI::add_command( 'wpshadow embed-disable', array( $this, 'handle_cli_command' ) );
+		}
 	}
 
 	/**
 	 * Disable embed functionality.
 	 */
 	public function disable_embeds(): void {
+		$removed = array();
+
 		// Disable wp-embed.js on frontend
 		if ( $this->is_sub_feature_enabled( 'disable_embed_script', true ) ) {
 			if ( ! is_admin() ) {
 				wp_deregister_script( 'wp-embed' );
+				$removed[] = 'embed_script';
 			}
 		}
 
@@ -57,17 +65,39 @@ final class WPSHADOW_Feature_Embed_Disable extends WPSHADOW_Abstract_Feature {
 		if ( $this->is_sub_feature_enabled( 'remove_oembed_links', true ) ) {
 			remove_action( 'wp_head', 'wp_oembed_add_discovery_links' );
 			remove_action( 'wp_head', 'wp_oembed_add_host_js' );
+			$removed[] = 'oembed_links';
 		}
 
 		// Disable REST oEmbed endpoint
 		if ( $this->is_sub_feature_enabled( 'disable_rest_oembed', false ) ) {
 			add_filter(
 				'rest_endpoints',
-				static function ( $endpoints ) {
+				static function ( $endpoints ) use ( &$removed ) {
 					unset( $endpoints['/oembed/1.0/embed'] );
+					$removed[] = 'rest_endpoint';
 					return $endpoints;
 				}
 			);
+		}
+
+		// Remove embed rewrite rules
+		if ( $this->is_sub_feature_enabled( 'remove_embed_rewrite', true ) ) {
+			add_filter(
+				'rewrite_rules_array',
+				static function ( $rules ) use ( &$removed ) {
+					foreach ( $rules as $rule => $rewrite ) {
+						if ( is_string( $rewrite ) && strpos( $rewrite, 'embed=true' ) !== false ) {
+							unset( $rules[ $rule ] );
+							$removed[] = 'rewrite_rule';
+						}
+					}
+					return $rules;
+				}
+			);
+		}
+
+		if ( ! empty( $removed ) ) {
+			do_action( 'wpshadow_embed_disable_applied', array_unique( $removed ) );
 		}
 	}
 
@@ -111,5 +141,39 @@ final class WPSHADOW_Feature_Embed_Disable extends WPSHADOW_Abstract_Feature {
 			'actions'     => '',
 			'test'        => 'embed_disable',
 		);
+	}
+
+	/**
+	 * Handle WP-CLI command for embed disable.
+	 *
+	 * @param array $args       Positional args.
+	 * @param array $assoc_args Named args (unused).
+	 *
+	 * @return void
+	 */
+	public function handle_cli_command( array $args, array $assoc_args ): void {
+		$action = $args[0] ?? 'status';
+
+		if ( 'status' !== $action ) {
+			\WP_CLI::error( __( 'Unknown subcommand. Try: wp wpshadow embed-disable status', 'wpshadow' ) );
+			return;
+		}
+
+		\WP_CLI::log( __( 'Embed Disable status:', 'wpshadow' ) );
+		\WP_CLI::log( sprintf( '  %s: %s', __( 'Feature enabled', 'wpshadow' ), $this->is_enabled() ? 'yes' : 'no' ) );
+
+		$subs = array(
+			'disable_embed_script',
+			'remove_oembed_links',
+			'disable_rest_oembed',
+			'remove_embed_rewrite',
+		);
+
+		foreach ( $subs as $sub ) {
+			$enabled = $this->is_sub_feature_enabled( $sub, false );
+			\WP_CLI::log( sprintf( '  - %s: %s', $sub, $enabled ? 'on' : 'off' ) );
+		}
+
+		\WP_CLI::success( __( 'Embed disable inspected.', 'wpshadow' ) );
 	}
 }

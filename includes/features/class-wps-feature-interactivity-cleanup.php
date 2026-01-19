@@ -17,11 +17,11 @@ final class WPSHADOW_Feature_Interactivity_Cleanup extends WPSHADOW_Abstract_Fea
 			'id'          => 'interactivity-cleanup',
 			'name'        => __( 'Remove Modern Block Code', 'wpshadow' ),
 			'description' => __( 'Remove new interactive features code if you don\'t use modern blocks. Makes your site faster.', 'wpshadow' ),
+			'aliases'     => array( 'interactivity api', 'block bindings', 'modern blocks', 'interactive blocks', 'wordpress 6.5', 'gutenberg features', 'block editor scripts', 'wp interactivity', 'dynamic blocks', 'interactive features', 'block api', 'modern wordpress' ),
 			'sub_features' => array(
 				'disable_interactivity_api' => __( 'Remove interactive block code', 'wpshadow' ),
 				'disable_block_bindings'    => __( 'Remove block connection code', 'wpshadow' ),
 				'remove_dns_prefetch'       => __( 'Stop connecting to WordPress.org', 'wpshadow' ),
-				'conditional_loading'       => __( 'Only load code when needed', 'wpshadow' ),
 			),
 		) );
 
@@ -29,7 +29,6 @@ final class WPSHADOW_Feature_Interactivity_Cleanup extends WPSHADOW_Abstract_Fea
 			'disable_interactivity_api' => true,
 			'disable_block_bindings'    => true,
 			'remove_dns_prefetch'       => true,
-			'conditional_loading'       => true,
 		) );
 	}
 
@@ -47,6 +46,10 @@ final class WPSHADOW_Feature_Interactivity_Cleanup extends WPSHADOW_Abstract_Fea
 		}
 
 		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
+
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			\WP_CLI::add_command( 'wpshadow interactivity-cleanup', array( $this, 'handle_cli_command' ) );
+		}
 	}
 
 	/**
@@ -74,10 +77,12 @@ final class WPSHADOW_Feature_Interactivity_Cleanup extends WPSHADOW_Abstract_Fea
 		if ( ! $has_interactive && $this->is_sub_feature_enabled( 'disable_interactivity_api', true ) ) {
 			wp_dequeue_script( 'wp-interactivity' );
 			wp_dequeue_script( 'wp-interactivity-data' );
+			do_action( 'wpshadow_interactivity_cleanup_disabled_api' );
 		}
 
 		if ( ! preg_match( '/metadata":\s*{[^}]*"bindings"/', $post->post_content ?? '' ) && $this->is_sub_feature_enabled( 'disable_block_bindings', true ) ) {
 			wp_dequeue_script( 'wp-block-bindings' );
+			do_action( 'wpshadow_interactivity_cleanup_disabled_bindings' );
 		}
 	}
 
@@ -104,12 +109,16 @@ final class WPSHADOW_Feature_Interactivity_Cleanup extends WPSHADOW_Abstract_Fea
 			return $urls;
 		}
 
-		return array_filter(
+		$filtered = array_filter(
 			$urls,
 			function ( $url ) {
 				return ! ( is_string( $url ) && str_contains( $url, 's.w.org' ) );
 			}
 		);
+
+		do_action( 'wpshadow_interactivity_cleanup_dns_prefetch', $filtered );
+
+		return $filtered;
 	}
 
 	public function register_site_health_test( array $tests ): array {
@@ -152,5 +161,38 @@ final class WPSHADOW_Feature_Interactivity_Cleanup extends WPSHADOW_Abstract_Fea
 			'actions'     => '',
 			'test'        => 'interactivity_cleanup',
 		);
+	}
+
+	/**
+	 * Handle WP-CLI command for interactivity cleanup.
+	 *
+	 * @param array $args       Positional args.
+	 * @param array $assoc_args Named args (unused).
+	 *
+	 * @return void
+	 */
+	public function handle_cli_command( array $args, array $assoc_args ): void {
+		$action = $args[0] ?? 'status';
+
+		if ( 'status' !== $action ) {
+			\WP_CLI::error( __( 'Unknown subcommand. Try: wp wpshadow interactivity-cleanup status', 'wpshadow' ) );
+			return;
+		}
+
+		\WP_CLI::log( __( 'Interactivity Cleanup status:', 'wpshadow' ) );
+		\WP_CLI::log( sprintf( '  %s: %s', __( 'Feature enabled', 'wpshadow' ), $this->is_enabled() ? 'yes' : 'no' ) );
+
+		$subs = array(
+			'disable_interactivity_api',
+			'disable_block_bindings',
+			'remove_dns_prefetch',
+		);
+
+		foreach ( $subs as $sub ) {
+			$enabled = $this->is_sub_feature_enabled( $sub, false );
+			\WP_CLI::log( sprintf( '  - %s: %s', $sub, $enabled ? 'on' : 'off' ) );
+		}
+
+		\WP_CLI::success( __( 'Interactivity cleanup inspected.', 'wpshadow' ) );
 	}
 }

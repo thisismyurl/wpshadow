@@ -33,6 +33,7 @@ final class WPSHADOW_Feature_HTML_Cleanup extends WPSHADOW_Abstract_Feature {
 				'default_enabled' => false,
 				'version'         => '1.0.0',
 				'widget_group'    => 'advanced',
+				'aliases'         => array( 'clean code', 'remove scripts', 'cleanup html', 'minify html', 'compress html', 'optimize code', 'reduce html size', 'whitespace removal', 'html minification', 'code compression', 'html optimization', 'reduce page size' ),
 				'sub_features'    => array(
 					'remove_comments'    => __( 'Remove hidden notes in code', 'wpshadow' ),
 					'remove_whitespace'  => __( 'Remove extra blank spaces', 'wpshadow' ),
@@ -74,6 +75,10 @@ final class WPSHADOW_Feature_HTML_Cleanup extends WPSHADOW_Abstract_Feature {
 		add_action( 'wp_head', array( $this, 'start_buffer' ), 1 );
 		add_action( 'wp_footer', array( $this, 'end_buffer' ), 999 );
 		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
+
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			\WP_CLI::add_command( 'wpshadow html-cleanup', array( $this, 'handle_cli_command' ) );
+		}
 	}
 
 	/**
@@ -83,6 +88,7 @@ final class WPSHADOW_Feature_HTML_Cleanup extends WPSHADOW_Abstract_Feature {
 	 */
 	public function start_buffer(): void {
 		ob_start( array( $this, 'compress_html' ) );
+		do_action( 'wpshadow_html_cleanup_buffer_started' );
 	}
 
 	/**
@@ -93,6 +99,7 @@ final class WPSHADOW_Feature_HTML_Cleanup extends WPSHADOW_Abstract_Feature {
 	public function end_buffer(): void {
 		if ( ob_get_level() > 0 ) {
 			ob_end_flush();
+			do_action( 'wpshadow_html_cleanup_buffer_flushed' );
 		}
 	}
 
@@ -123,7 +130,72 @@ final class WPSHADOW_Feature_HTML_Cleanup extends WPSHADOW_Abstract_Feature {
 			$buffer = $this->remove_empty_tags( $buffer );
 		}
 
+		// 4. Minify inline CSS.
+		if ( $this->is_sub_feature_enabled( 'minify_inline_css', true ) ) {
+			$buffer = $this->minify_inline_css( $buffer );
+		}
+
+		// 5. Minify inline JS (optional, can break code).
+		if ( $this->is_sub_feature_enabled( 'minify_inline_js', false ) ) {
+			$buffer = $this->minify_inline_js( $buffer );
+		}
+
+		do_action( 'wpshadow_html_cleanup_processed', $buffer );
+
 		return $buffer;
+	}
+
+	/**
+	 * Minify inline CSS.
+	 *
+	 * @param string $buffer The HTML buffer.
+	 * @return string Modified buffer.
+	 */
+	private function minify_inline_css( string $buffer ): string {
+		return preg_replace_callback(
+			'/<style[^>]*>(.+?)<\/style>/is',
+			static function ( $matches ) {
+				$css = $matches[1];
+				// Remove CSS comments.
+				$css = preg_replace( '/\/\*[^*]*\*+([^\/][^*]*\*+)*\//', '', $css );
+				// Remove whitespace.
+				$css = preg_replace( '/\s+/', ' ', $css );
+				// Remove spaces around certain characters.
+				$css = preg_replace( '/\s*([{}:;,])\s*/', '$1', $css );
+				// Remove last semicolon before }.
+				$css = preg_replace( '/;}/','}',$css );
+				return '<style' . substr( $matches[0], 6, strpos( $matches[0], '>' ) - 6 ) . '>' . trim( $css ) . '</style>';
+			},
+			$buffer
+		);
+	}
+
+	/**
+	 * Minify inline JavaScript (basic minification).
+	 *
+	 * @param string $buffer The HTML buffer.
+	 * @return string Modified buffer.
+	 */
+	private function minify_inline_js( string $buffer ): string {
+		return preg_replace_callback(
+			'/<script([^>]*)>(.+?)<\/script>/is',
+			static function ( $matches ) {
+				// Skip if src attribute exists (external script).
+				if ( str_contains( $matches[1], 'src=' ) ) {
+					return $matches[0];
+				}
+
+				$js = $matches[2];
+				// Remove single-line comments (be careful with URLs).
+				$js = preg_replace( '/(?<!:)\/\/.*$/m', '', $js );
+				// Remove multi-line comments.
+				$js = preg_replace( '/\/\*[^*]*\*+([^\/][^*]*\*+)*\//', '', $js );
+				// Remove excessive whitespace.
+				$js = preg_replace( '/\s+/', ' ', $js );
+				return '<script' . $matches[1] . '>' . trim( $js ) . '</script>';
+			},
+			$buffer
+		);
 	}
 
 	/**
@@ -207,5 +279,40 @@ final class WPSHADOW_Feature_HTML_Cleanup extends WPSHADOW_Abstract_Feature {
 			),
 			'test'        => 'html_cleanup',
 		);
+	}
+
+	/**
+	 * Handle WP-CLI command for HTML cleanup.
+	 *
+	 * @param array $args       Positional args.
+	 * @param array $assoc_args Named args (unused).
+	 *
+	 * @return void
+	 */
+	public function handle_cli_command( array $args, array $assoc_args ): void {
+		$action = $args[0] ?? 'status';
+
+		if ( 'status' !== $action ) {
+			\WP_CLI::error( __( 'Unknown subcommand. Try: wp wpshadow html-cleanup status', 'wpshadow' ) );
+			return;
+		}
+
+		\WP_CLI::log( __( 'HTML Cleanup status:', 'wpshadow' ) );
+		\WP_CLI::log( sprintf( '  %s: %s', __( 'Feature enabled', 'wpshadow' ), $this->is_enabled() ? 'yes' : 'no' ) );
+
+		$subs = array(
+			'remove_comments',
+			'remove_whitespace',
+			'remove_empty_tags',
+			'minify_inline_css',
+			'minify_inline_js',
+		);
+
+		foreach ( $subs as $sub ) {
+			$enabled = $this->is_sub_feature_enabled( $sub, false );
+			\WP_CLI::log( sprintf( '  - %s: %s', $sub, $enabled ? 'on' : 'off' ) );
+		}
+
+		\WP_CLI::success( __( 'HTML cleanup inspected.', 'wpshadow' ) );
 	}
 }

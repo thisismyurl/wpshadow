@@ -33,6 +33,7 @@ final class WPSHADOW_Feature_Head_Cleanup extends WPSHADOW_Abstract_Feature {
 				'default_enabled' => true,
 				'version'         => '1.0.0',
 				'widget_group'    => 'performance',
+				'aliases'         => array( 'remove emoji', 'wp head', 'version hiding', 'security hardening', 'xmlrpc disable', 'rsd link', 'generator tag', 'head optimization', 'remove feeds', 'rest api', 'oembed', 'shortlink' ),
 				'sub_features'    => array(
 					'remove_emoji'          => __( 'Remove emoji code (makes site faster)', 'wpshadow' ),
 					'remove_generator'      => __( 'Hide WordPress version (better security)', 'wpshadow' ),
@@ -76,6 +77,10 @@ final class WPSHADOW_Feature_Head_Cleanup extends WPSHADOW_Abstract_Feature {
 
 		add_action( 'init', array( $this, 'apply_head_cleanup' ) );
 		add_filter( 'site_status_tests', array( $this, 'register_site_health_tests' ) );
+
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			\WP_CLI::add_command( 'wpshadow head-cleanup', array( $this, 'handle_cli_command' ) );
+		}
 	}
 
 	/**
@@ -84,42 +89,52 @@ final class WPSHADOW_Feature_Head_Cleanup extends WPSHADOW_Abstract_Feature {
 	 * @return void
 	 */
 	public function apply_head_cleanup(): void {
+		$removed = array();
+
 		if ( $this->is_sub_feature_enabled( 'remove_emoji', true ) ) {
 			remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 			remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
 			remove_action( 'wp_print_styles', 'print_emoji_styles' );
 			remove_action( 'admin_print_styles', 'print_emoji_styles' );
+			$removed[] = 'emoji';
 		}
 
 		if ( $this->is_sub_feature_enabled( 'remove_generator', true ) ) {
 			remove_action( 'wp_head', 'wp_generator' );
 			add_filter( 'the_generator', '__return_false' );
+			$removed[] = 'generator';
 		}
 
 		if ( $this->is_sub_feature_enabled( 'remove_shortlink', true ) ) {
 			remove_action( 'wp_head', 'wp_shortlink_wp_head' );
+			$removed[] = 'shortlink';
 		}
 
 		if ( $this->is_sub_feature_enabled( 'remove_rsd', true ) ) {
 			remove_action( 'wp_head', 'rsd_link' );
+			$removed[] = 'rsd';
 		}
 
 		if ( $this->is_sub_feature_enabled( 'remove_wlw', true ) ) {
 			remove_action( 'wp_head', 'wlwmanifest_link' );
+			$removed[] = 'wlw';
 		}
 
 		if ( $this->is_sub_feature_enabled( 'remove_rest_link', false ) ) {
 			remove_action( 'wp_head', 'rest_output_link_wp_head', 10 );
+			$removed[] = 'rest_link';
 		}
 
 		if ( $this->is_sub_feature_enabled( 'remove_oembed', true ) ) {
 			remove_action( 'wp_head', 'wp_oembed_add_discovery_links' );
 			remove_action( 'wp_head', 'wp_oembed_add_host_js' );
+			$removed[] = 'oembed';
 		}
 
 		if ( $this->is_sub_feature_enabled( 'remove_feeds', false ) ) {
 			remove_action( 'wp_head', 'feed_links_extra', 3 );
 			remove_action( 'wp_head', 'feed_links', 2 );
+			$removed[] = 'feeds';
 		}
 
 		if ( $this->is_sub_feature_enabled( 'remove_comments_style', true ) ) {
@@ -127,10 +142,16 @@ final class WPSHADOW_Feature_Head_Cleanup extends WPSHADOW_Abstract_Feature {
 			if ( isset( $wp_widget_factory->widgets['WP_Widget_Recent_Comments'] ) ) {
 				remove_action( 'wp_head', array( $wp_widget_factory->widgets['WP_Widget_Recent_Comments'], 'recent_comments_style' ) );
 			}
+			$removed[] = 'comments_style';
 		}
 
 		if ( $this->is_sub_feature_enabled( 'disable_xmlrpc', true ) ) {
 			add_filter( 'xmlrpc_enabled', '__return_false' );
+			$removed[] = 'xmlrpc';
+		}
+
+		if ( ! empty( $removed ) ) {
+			do_action( 'wpshadow_head_cleanup_applied', array_unique( $removed ) );
 		}
 	}
 
@@ -295,5 +316,45 @@ final class WPSHADOW_Feature_Head_Cleanup extends WPSHADOW_Abstract_Feature {
 			'description' => __( 'WordPress is adding oEmbed discovery links to your page head. These can be safely removed if external sites do not need to embed your content.', 'wpshadow' ),
 			'test'        => 'head_cleanup_oembed',
 		);
+	}
+
+	/**
+	 * Handle WP-CLI command for head cleanup.
+	 *
+	 * @param array $args       Positional args.
+	 * @param array $assoc_args Named args (unused).
+	 *
+	 * @return void
+	 */
+	public function handle_cli_command( array $args, array $assoc_args ): void {
+		$action = $args[0] ?? 'status';
+
+		if ( 'status' !== $action ) {
+			\WP_CLI::error( __( 'Unknown subcommand. Try: wp wpshadow head-cleanup status', 'wpshadow' ) );
+			return;
+		}
+
+		\WP_CLI::log( __( 'Head Cleanup status:', 'wpshadow' ) );
+		\WP_CLI::log( sprintf( '  %s: %s', __( 'Feature enabled', 'wpshadow' ), $this->is_enabled() ? 'yes' : 'no' ) );
+
+		$subs = array(
+			'remove_emoji',
+			'remove_generator',
+			'remove_shortlink',
+			'remove_rsd',
+			'remove_wlw',
+			'remove_rest_link',
+			'remove_oembed',
+			'remove_feeds',
+			'remove_comments_style',
+			'disable_xmlrpc',
+		);
+
+		foreach ( $subs as $sub ) {
+			$enabled = $this->is_sub_feature_enabled( $sub, false );
+			\WP_CLI::log( sprintf( '  - %s: %s', $sub, $enabled ? 'on' : 'off' ) );
+		}
+
+		\WP_CLI::success( __( 'Head cleanup inspected.', 'wpshadow' ) );
 	}
 }

@@ -33,6 +33,7 @@ final class WPSHADOW_Feature_Nav_Accessibility extends WPSHADOW_Abstract_Feature
 				'default_enabled' => true,
 				'version'         => '1.0.0',
 				'widget_group'    => 'accessibility',
+				'aliases'         => array( 'menu accessibility', 'navigation', 'aria current', 'keyboard navigation', 'nav menu', 'menu classes', 'screen reader navigation', 'accessible menus', 'menu optimization', 'nav cleanup', 'menu aria', 'keyboard menu' ),
 				'sub_features'    => array(
 					'add_aria_current'   => __( 'Show which page is currently open', 'wpshadow' ),
 					'simplify_classes'   => __( 'Remove extra code from menus', 'wpshadow' ),
@@ -72,9 +73,75 @@ final class WPSHADOW_Feature_Nav_Accessibility extends WPSHADOW_Abstract_Feature
 			add_filter( 'nav_menu_item_id', '__return_false' );
 		}
 
+		if ( $this->is_sub_feature_enabled( 'keyboard_support', false ) ) {
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_keyboard_support' ) );
+		}
+
 		add_filter( 'site_status_tests', array( $this, 'register_site_health_test' ) );
 
 		$this->log_activity( 'feature_registered', 'Nav Accessibility hooks registered', 'info' );
+
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			\WP_CLI::add_command( 'wpshadow nav-accessibility', array( $this, 'handle_cli_command' ) );
+		}
+	}
+
+	/**
+	 * Enqueue keyboard navigation support.
+	 *
+	 * @return void
+	 */
+	public function enqueue_keyboard_support(): void {
+		if ( is_admin() ) {
+			return;
+		}
+
+		// Inline keyboard navigation script.
+		wp_add_inline_script(
+			'jquery',
+			"
+			(function($) {
+				$(document).ready(function() {
+					// Handle keyboard navigation for dropdown menus
+					$('.menu-item-has-children > a, .has-children > a').on('focus', function() {
+						$(this).parent().addClass('focus');
+					}).on('blur', function() {
+						$(this).parent().removeClass('focus');
+					});
+
+					// Tab navigation
+					$('.menu-item a').on('keydown', function(e) {
+						if (e.which === 9) { // Tab key
+							var parent = $(this).closest('.menu-item-has-children, .has-children');
+							if (e.shiftKey) {
+								parent.removeClass('focus');
+							} else {
+								parent.addClass('focus');
+							}
+						}
+					});
+
+					// Escape key closes submenus
+					$('.menu-item a').on('keydown', function(e) {
+						if (e.which === 27) { // Escape key
+							$(this).closest('.menu-item-has-children, .has-children').removeClass('focus');
+							$(this).blur();
+						}
+					});
+				});
+			})(jQuery);
+			"
+		);
+
+		// Add focus styles.
+		wp_add_inline_style(
+			'wp-block-navigation',
+			"
+			.menu-item.focus > .sub-menu,
+			.menu-item:focus-within > .sub-menu { display: block; visibility: visible; opacity: 1; }
+			.menu-item a:focus { outline: 2px solid currentColor; outline-offset: 2px; }
+			"
+		);
 	}
 
 	/**
@@ -100,6 +167,8 @@ final class WPSHADOW_Feature_Nav_Accessibility extends WPSHADOW_Abstract_Feature
 				$item->classes = array_filter( array( 'nav-item', $active_class, $has_children ) );
 			}
 		}
+
+		do_action( 'wpshadow_nav_accessibility_optimized', $items );
 
 		return $items;
 	}
@@ -172,5 +241,39 @@ final class WPSHADOW_Feature_Nav_Accessibility extends WPSHADOW_Abstract_Feature
 			),
 			'test'        => 'nav_accessibility',
 		);
+	}
+
+	/**
+	 * Handle WP-CLI command for navigation accessibility.
+	 *
+	 * @param array $args       Positional args.
+	 * @param array $assoc_args Named args (unused).
+	 *
+	 * @return void
+	 */
+	public function handle_cli_command( array $args, array $assoc_args ): void {
+		$action = $args[0] ?? 'status';
+
+		if ( 'status' !== $action ) {
+			\WP_CLI::error( __( 'Unknown subcommand. Try: wp wpshadow nav-accessibility status', 'wpshadow' ) );
+			return;
+		}
+
+		\WP_CLI::log( __( 'Navigation Accessibility status:', 'wpshadow' ) );
+		\WP_CLI::log( sprintf( '  %s: %s', __( 'Feature enabled', 'wpshadow' ), $this->is_enabled() ? 'yes' : 'no' ) );
+
+		$subs = array(
+			'add_aria_current',
+			'simplify_classes',
+			'remove_nav_ids',
+			'keyboard_support',
+		);
+
+		foreach ( $subs as $sub ) {
+			$enabled = $this->is_sub_feature_enabled( $sub, false );
+			\WP_CLI::log( sprintf( '  - %s: %s', $sub, $enabled ? 'on' : 'off' ) );
+		}
+
+		\WP_CLI::success( __( 'Navigation accessibility inspected.', 'wpshadow' ) );
 	}
 }
