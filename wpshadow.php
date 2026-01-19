@@ -21,9 +21,283 @@
 
 declare(strict_types=1);
 
-namespace WPShadow;
+namespace {
+	// ========================================================================
+	// GLOBAL-SCOPE AJAX HANDLERS (Must be in global namespace block)
+	// These are defined in the global namespace so WordPress can find them
+	// when routing AJAX requests
+	// ========================================================================
 
-// ========================================================
+	/**
+	 * AJAX handler to toggle feature on/off.
+	 *
+	 * @return void
+	 */
+	function wpshadow_ajax_toggle_feature(): void {
+	// Verify nonce from the request
+	$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( $_POST['nonce'] ) : '';
+	if ( ! wp_verify_nonce( $nonce, 'wpshadow_toggle_feature' ) ) {
+		wp_send_json_error( __( 'Invalid nonce. Please refresh the page and try again.', 'wpshadow' ) );
+	}
+
+	// Check user capability
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( __( 'Insufficient permissions to manage features.', 'wpshadow' ) );
+	}
+
+	// Get feature ID from request
+	$feature_id = isset( $_POST['feature_id'] ) ? sanitize_key( $_POST['feature_id'] ) : '';
+	if ( empty( $feature_id ) ) {
+		wp_send_json_error( __( 'Invalid feature ID.', 'wpshadow' ) );
+	}
+
+	// Get the enabled state from request
+	$enabled = isset( $_POST['enabled'] ) ? (bool) intval( $_POST['enabled'] ) : false;
+
+	// Try to set the feature state
+	try {
+		$result = \WPShadow\CoreSupport\WPSHADOW_Feature_Registry::set_feature_enabled( $feature_id, $enabled );
+		
+		if ( ! $result ) {
+			wp_send_json_error( __( 'Failed to update feature state. Feature not found or unable to save.', 'wpshadow' ) );
+		}
+
+		// Log the activity
+		if ( function_exists( 'WPShadow\\CoreSupport\\wpshadow_log_feature_activity' ) ) {
+			\WPShadow\CoreSupport\wpshadow_log_feature_activity( $feature_id, $enabled ? 'enabled' : 'disabled' );
+		}
+
+		// Return success with updated state
+		wp_send_json_success( array(
+			'feature_id' => $feature_id,
+			'enabled'    => $enabled,
+			'message'    => $enabled ? __( 'Feature enabled successfully.', 'wpshadow' ) : __( 'Feature disabled successfully.', 'wpshadow' ),
+		) );
+	} catch ( \Exception $e ) {
+		wp_send_json_error( sprintf( __( 'Error updating feature: %s', 'wpshadow' ), $e->getMessage() ) );
+	}
+}
+
+/**
+ * AJAX handler to toggle sub-feature.
+ *
+ * @return void
+ */
+function wpshadow_ajax_toggle_subfeature(): void {
+	// Verify nonce from the request
+	$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( $_POST['nonce'] ) : '';
+	if ( ! wp_verify_nonce( $nonce, 'wpshadow_toggle_subfeature' ) ) {
+		wp_send_json_error( __( 'Invalid nonce. Please refresh the page and try again.', 'wpshadow' ) );
+	}
+
+	// Check user capability
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( __( 'Insufficient permissions to manage features.', 'wpshadow' ) );
+	}
+
+	// Get feature ID and sub-feature ID from request
+	// Note: JavaScript sends 'subfeature_key' not 'sub_key'
+	$feature_id = isset( $_POST['feature_id'] ) ? sanitize_key( $_POST['feature_id'] ) : '';
+	$sub_key = isset( $_POST['subfeature_key'] ) ? sanitize_key( $_POST['subfeature_key'] ) : '';
+	
+	if ( empty( $feature_id ) || empty( $sub_key ) ) {
+		wp_send_json_error( __( 'Invalid feature or sub-feature ID.', 'wpshadow' ) );
+	}
+
+	// Get the enabled state from request
+	$enabled = isset( $_POST['enabled'] ) ? (bool) intval( $_POST['enabled'] ) : false;
+
+	// Save sub-feature state as a WordPress option
+	// Format: wpshadow_{feature_id}_{sub_key}
+	$option_key = "wpshadow_{$feature_id}_{$sub_key}";
+	update_option( $option_key, $enabled ? 1 : 0 );
+
+	// Log the activity
+	if ( function_exists( 'WPShadow\\CoreSupport\\wpshadow_log_feature_activity' ) ) {
+		\WPShadow\CoreSupport\wpshadow_log_feature_activity( 
+			"{$feature_id}/{$sub_key}", 
+			$enabled ? 'enabled' : 'disabled' 
+		);
+	}
+
+	// Return success - must return with feature_id so the JavaScript can trigger custom events
+	wp_send_json_success( array(
+		'feature_id' => $feature_id,
+		'subfeature_key' => $sub_key,
+		'enabled'    => $enabled,
+		'message'    => $enabled ? __( 'Sub-feature enabled successfully.', 'wpshadow' ) : __( 'Sub-feature disabled successfully.', 'wpshadow' ),
+	) );
+}
+
+/**
+ * AJAX handler to save meta box order.
+ *
+ * @return void
+ */
+function wpshadow_ajax_save_meta_box_order(): void {
+	check_ajax_referer( 'meta-box-order' );
+
+	if ( ! current_user_can( 'edit_dashboard' ) ) {
+		wp_die( -1 );
+	}
+
+	$page = isset( $_POST['page'] ) ? sanitize_key( $_POST['page'] ) : '';
+	
+	// Only handle WPShadow pages
+	if ( empty( $page ) || ! str_starts_with( $page, 'wpshadow' ) ) {
+		wp_die( 0 );
+	}
+
+	$order = isset( $_POST['order'] ) ? (array) $_POST['order'] : array();
+
+	// Sanitize the order array
+	$sanitized_order = array();
+	foreach ( $order as $key => $value ) {
+		$sanitized_order[ sanitize_key( $key ) ] = sanitize_text_field( $value );
+	}
+
+	// Save to user meta
+	$user_id = get_current_user_id();
+	update_user_meta( $user_id, "meta-box-order_" . $page, $sanitized_order );
+	wp_die( 1 );
+}
+
+/**
+ * AJAX handler to save closed postboxes.
+ *
+ * @return void
+ */
+function wpshadow_ajax_save_closed_postboxes(): void {
+	check_ajax_referer( 'closed-postboxes' );
+
+	if ( ! current_user_can( 'edit_dashboard' ) ) {
+		wp_die( -1 );
+	}
+
+	$page = isset( $_POST['page'] ) ? sanitize_key( $_POST['page'] ) : '';
+	
+	// Only handle WPShadow pages
+	if ( empty( $page ) || ! str_starts_with( $page, 'wpshadow' ) ) {
+		wp_die( 0 );
+	}
+
+	$closed = isset( $_POST['closed'] ) ? sanitize_text_field( $_POST['closed'] ) : '';
+
+	// Save to user meta
+	$user_id = get_current_user_id();
+	update_user_meta( $user_id, "closedpostboxes_" . $page, explode( ',', $closed ) );
+	wp_die( 1 );
+}
+
+/**
+ * AJAX handler to load more logs.
+ *
+ * @return void
+ */
+function wpshadow_ajax_load_more_logs(): void {
+	check_ajax_referer( 'wpshadow_load_more_logs', 'nonce' );
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( __( 'Insufficient permissions.', 'wpshadow' ) );
+	}
+
+	$feature_id = isset( $_POST['feature_id'] ) ? sanitize_key( $_POST['feature_id'] ) : '';
+	$offset = isset( $_POST['offset'] ) ? intval( $_POST['offset'] ) : 0;
+
+	if ( empty( $feature_id ) ) {
+		wp_send_json_error( __( 'Invalid feature ID.', 'wpshadow' ) );
+	}
+
+	// Get logs for this feature
+	if ( function_exists( 'WPShadow\\CoreSupport\\wpshadow_get_feature_logs' ) ) {
+		$logs = \WPShadow\CoreSupport\wpshadow_get_feature_logs( $feature_id, 10, $offset );
+	} else {
+		$logs = array();
+	}
+
+	if ( empty( $logs ) ) {
+		wp_send_json_success( array(
+			'logs' => array(),
+			'has_more' => false,
+		) );
+	}
+
+	// Build HTML for logs
+	ob_start();
+	foreach ( $logs as $log ) {
+		?>
+		<div class="wpshadow-log-entry" data-action="<?php echo esc_attr( $log['action'] ?? 'unknown' ); ?>">
+			<div class="wpshadow-log-dot"></div>
+			<div class="wpshadow-log-line"></div>
+			<div class="wpshadow-log-content">
+				<div class="wpshadow-log-header">
+					<span class="wpshadow-log-action"><?php echo esc_html( $log['action_label'] ?? $log['action'] ?? 'Unknown' ); ?></span>
+					<span class="wpshadow-log-time" title="<?php echo esc_attr( $log['timestamp_full'] ?? '' ); ?>">
+						<?php echo esc_html( $log['timestamp_human'] ?? date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $log['timestamp'] ?? current_time( 'timestamp' ) ) ); ?>
+					</span>
+				</div>
+				<?php if ( ! empty( $log['message'] ) ) : ?>
+					<div class="wpshadow-log-message"><?php echo esc_html( $log['message'] ); ?></div>
+				<?php endif; ?>
+				<?php if ( ! empty( $log['user'] ) ) : ?>
+					<div class="wpshadow-log-user">by <?php echo esc_html( $log['user'] ); ?></div>
+				<?php endif; ?>
+			</div>
+		</div>
+		<?php
+	}
+	$html = ob_get_clean();
+
+	wp_send_json_success( array(
+		'html' => $html,
+		'has_more' => count( $logs ) >= 10,
+	) );
+}
+
+/**
+ * AJAX handler to get feature history.
+ *
+ * @return void
+ */
+function wpshadow_ajax_get_feature_history(): void {
+	check_ajax_referer( 'wpshadow_get_feature_history', 'nonce' );
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( __( 'Insufficient permissions.', 'wpshadow' ) );
+	}
+
+	$feature_id = isset( $_POST['feature_id'] ) ? sanitize_key( $_POST['feature_id'] ) : '';
+
+	if ( empty( $feature_id ) ) {
+		wp_send_json_error( __( 'Invalid feature ID.', 'wpshadow' ) );
+	}
+
+	// Get history for this feature
+	if ( function_exists( 'WPShadow\\CoreSupport\\wpshadow_get_feature_history' ) ) {
+		$history = \WPShadow\CoreSupport\wpshadow_get_feature_history( $feature_id );
+	} else {
+		$history = array();
+	}
+
+	wp_send_json_success( array(
+		'history' => $history,
+		'total' => count( $history ),
+	) );
+}
+
+// ========================================================================
+// Register AJAX handlers immediately (must happen before WordPress routes requests)
+// ========================================================================
+add_action( 'wp_ajax_meta-box-order', 'wpshadow_ajax_save_meta_box_order' );
+add_action( 'wp_ajax_closed-postboxes', 'wpshadow_ajax_save_closed_postboxes' );
+add_action( 'wp_ajax_wpshadow_toggle_feature', 'wpshadow_ajax_toggle_feature' );
+add_action( 'wp_ajax_wpshadow_toggle_subfeature', 'wpshadow_ajax_toggle_subfeature' );
+	add_action( 'wp_ajax_wpshadow_load_more_logs', 'wpshadow_ajax_load_more_logs' );
+	add_action( 'wp_ajax_wpshadow_get_feature_history', 'wpshadow_ajax_get_feature_history' );
+}
+
+namespace WPShadow {
+	// ========================================================
 // FREE FEATURES (limited build)
 // ========================================================
 use WPShadow\CoreSupport\WPSHADOW_Feature_Asset_Version_Removal;
@@ -64,13 +338,30 @@ function wpshadow_enqueue_admin_assets(): void {
 	wp_enqueue_script( 'postbox' );
 	wp_enqueue_script( 'jquery' );
 	
-	// Enqueue WPShadow admin CSS
+	// Enqueue WPShadow admin CSS with cache-busting version
 	wp_enqueue_style(
 		'wpshadow-admin',
-		WPSHADOW_URL . 'assets/css/wpshadow-admin.css',
+		WPSHADOW_URL . 'assets/css/admin.css',
 		array(),
 		WPSHADOW_VERSION
 	);
+	
+	// Add inline CSS to enforce layout (backup)
+	$inline_css = '
+		@media screen and (min-width: 800px) {
+			body.toplevel_page_wpshadow #dashboard-widgets #postbox-container-1,
+			body.wpshadow_page_wpshadow #dashboard-widgets #postbox-container-1 {
+				width: 66% !important;
+				float: left !important;
+			}
+			body.toplevel_page_wpshadow #dashboard-widgets #postbox-container-2,
+			body.wpshadow_page_wpshadow #dashboard-widgets #postbox-container-2 {
+				width: 33% !important;
+				float: right !important;
+			}
+		}
+	';
+	wp_add_inline_style( 'wpshadow-admin', $inline_css );
 }
 
 /**
@@ -264,20 +555,12 @@ function wpshadow_init(): void {
 	require_once WPSHADOW_PATH . 'features/interface-wps-feature.php';
 	require_once WPSHADOW_PATH . 'features/class-wps-feature-abstract.php';
 	
-	// Load feature registry for managing feature toggles
+	// Load helper classes before feature registry auto-discovery
+	require_once WPSHADOW_PATH . 'features/class-wps-asset-version-helpers.php';
+	
+	// Load feature registry for managing feature toggles (auto-discovery will run)
 	require_once WPSHADOW_PATH . 'includes/core/class-wps-feature-registry.php';
 	\WPShadow\CoreSupport\WPSHADOW_Feature_Registry::init();
-	
-	// Load the single feature: Asset Version Removal
-	require_once WPSHADOW_PATH . 'features/class-wps-asset-version-helpers.php';
-	require_once WPSHADOW_PATH . 'features/class-wps-feature-asset-version-removal.php';
-	
-	// Register and initialize the feature
-	$asset_version_feature = new \WPShadow\CoreSupport\WPSHADOW_Feature_Asset_Version_Removal();
-	\WPShadow\CoreSupport\WPSHADOW_Feature_Registry::register_feature( $asset_version_feature );
-	if ( method_exists( $asset_version_feature, 'init' ) ) {
-		$asset_version_feature->init();
-	}
 
 	// ========================================================================
 	// MINIMAL ADMIN INFRASTRUCTURE
@@ -306,18 +589,6 @@ function wpshadow_init(): void {
 	// require_once WPSHADOW_PATH . 'includes/admin/class-wps-dashboard-layout.php';
 	require_once WPSHADOW_PATH . 'includes/admin/screens.php';
 	require_once WPSHADOW_PATH . 'includes/views/dashboard-renderer.php';
-	
-	// Enqueue dashboard assets on admin pages
-	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\wpshadow_enqueue_admin_assets' );
-
-	// Register AJAX handlers for meta box state saving
-	add_action( 'wp_ajax_meta-box-order', 'wpshadow_ajax_save_meta_box_order' );
-	add_action( 'wp_ajax_closed-postboxes', 'wpshadow_ajax_save_closed_postboxes' );
-
-	// Register AJAX handlers for feature toggles
-	add_action( 'wp_ajax_wpshadow_toggle_feature', 'wpshadow_ajax_toggle_feature' );
-	add_action( 'wp_ajax_wpshadow_toggle_subfeature', 'wpshadow_ajax_toggle_subfeature' );
-	add_action( 'wp_ajax_wpshadow_get_feature_history', 'wpshadow_ajax_get_feature_history' );
 
 	// Initialize multisite support if applicable.
 	if ( is_multisite() ) {
@@ -372,138 +643,6 @@ function wpshadow_set_screen_option( $status, string $option, $value ) {
 		return $value;
 	}
 	return $status;
-}
-
-/**
- * AJAX handler to save meta box order for WPShadow pages.
- *
- * @return void
- */
-function wpshadow_ajax_save_meta_box_order(): void {
-	check_ajax_referer( 'meta-box-order' );
-
-	if ( ! current_user_can( 'edit_dashboard' ) ) {
-		wp_die( -1 );
-	}
-
-	$page = isset( $_POST['page'] ) ? sanitize_key( $_POST['page'] ) : '';
-	$order = isset( $_POST['order'] ) ? (array) $_POST['order'] : array();
-
-	// Only handle WPShadow pages
-	if ( empty( $page ) || ! str_starts_with( $page, 'toplevel_page_wpshadow' ) ) {
-		wp_die( 0 );
-	}
-
-	// Sanitize the order array
-	$sanitized_order = array();
-	foreach ( $order as $key => $value ) {
-		$sanitized_order[ sanitize_key( $key ) ] = sanitize_text_field( $value );
-	}
-
-	// Save to user meta
-	$user_id = get_current_user_id();
-	update_user_meta( $user_id, 'meta-box-order_' . $page, $sanitized_order );
-
-	wp_die( 1 );
-}
-
-/**
- * AJAX handler to save closed postboxes state for WPShadow pages.
- *
- * @return void
- */
-function wpshadow_ajax_save_closed_postboxes(): void {
-	check_ajax_referer( 'closedpostboxes', 'closedpostboxesnonce' );
-
-	if ( ! current_user_can( 'edit_dashboard' ) ) {
-		wp_die( -1 );
-	}
-
-	$page = isset( $_POST['page'] ) ? sanitize_key( $_POST['page'] ) : '';
-	$closed = isset( $_POST['closed'] ) ? explode( ',', sanitize_text_field( $_POST['closed'] ) ) : array();
-
-	// Only handle WPShadow pages
-	if ( empty( $page ) || ! str_starts_with( $page, 'toplevel_page_wpshadow' ) ) {
-		wp_die( 0 );
-	}
-
-	// Sanitize closed boxes
-	$sanitized_closed = array_map( 'sanitize_key', $closed );
-
-	// Save to user meta
-	$user_id = get_current_user_id();
-	update_user_meta( $user_id, 'closedpostboxes_' . $page, $sanitized_closed );
-
-	wp_die( 1 );
-}
-
-/**
- * AJAX handler to toggle feature on/off.
- *
- * @return void
- */
-function wpshadow_ajax_toggle_feature(): void {
-	check_ajax_referer( 'wpshadow_toggle_feature', 'nonce' );
-
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( __( 'Insufficient permissions.', 'wpshadow' ) );
-	}
-
-	$feature_id = isset( $_POST['feature_id'] ) ? sanitize_key( $_POST['feature_id'] ) : '';
-	$enabled = isset( $_POST['enabled'] ) ? (bool) intval( $_POST['enabled'] ) : false;
-
-	if ( empty( $feature_id ) ) {
-		wp_send_json_error( __( 'Invalid feature ID.', 'wpshadow' ) );
-	}
-
-	$network_scope = is_multisite() && is_network_admin();
-	
-	try {
-		\WPShadow\CoreSupport\WPSHADOW_Feature_Registry::set_feature_toggle( $feature_id, $enabled, $network_scope );
-		
-		// Log the activity
-		wpshadow_log_feature_activity( $feature_id, $enabled ? 'enabled' : 'disabled', '' );
-		
-		wp_send_json_success( array(
-			'message' => $enabled ? __( 'Feature enabled.', 'wpshadow' ) : __( 'Feature disabled.', 'wpshadow' ),
-			'feature_id' => $feature_id,
-		) );
-	} catch ( \Exception $e ) {
-		wp_send_json_error( $e->getMessage() );
-	}
-}
-
-/**
- * AJAX handler to toggle sub-feature on/off.
- *
- * @return void
- */
-function wpshadow_ajax_toggle_subfeature(): void {
-	check_ajax_referer( 'wpshadow_toggle_subfeature', 'nonce' );
-
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( __( 'Insufficient permissions.', 'wpshadow' ) );
-	}
-
-	$feature_id = isset( $_POST['feature_id'] ) ? sanitize_key( $_POST['feature_id'] ) : '';
-	$subfeature_key = isset( $_POST['subfeature_key'] ) ? sanitize_key( $_POST['subfeature_key'] ) : '';
-	$enabled = isset( $_POST['enabled'] ) ? (bool) intval( $_POST['enabled'] ) : false;
-
-	if ( empty( $feature_id ) || empty( $subfeature_key ) ) {
-		wp_send_json_error( __( 'Invalid feature or sub-feature ID.', 'wpshadow' ) );
-		return;
-	}
-
-	$option_name = "wpshadow_{$feature_id}_{$subfeature_key}";
-	update_option( $option_name, $enabled, false );
-	
-	// Log the activity for the sub-feature
-	wpshadow_log_feature_activity( $subfeature_key, $enabled ? 'enabled' : 'disabled', sprintf( 'Part of %s', $feature_id ) );
-
-	wp_send_json_success( array(
-		'message' => $enabled ? __( 'Sub-feature enabled.', 'wpshadow' ) : __( 'Sub-feature disabled.', 'wpshadow' ),
-		'feature_id' => $subfeature_key,
-	) );
 }
 
 /**
@@ -1831,7 +1970,9 @@ add_action( 'init', function() {
 	);
 }, 1 );
 
+// Enqueue admin assets on WPShadow pages.
+add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\wpshadow_enqueue_admin_assets' );
+
 // Initialize the plugin.
 add_action( 'plugins_loaded', __NAMESPACE__ . '\\wpshadow_init' );
-
-
+}

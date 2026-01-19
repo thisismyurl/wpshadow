@@ -9,33 +9,39 @@
 	padding: 0;
 }
 
-/* Two-column layout: 66% / 33% */
-#dashboard-widgets .postbox-container {
+/* Two-column layout: 66% / 33% - Force with high specificity */
+body.toplevel_page_wpshadow #dashboard-widgets .postbox-container,
+body.wpshadow_page_wpshadow #dashboard-widgets .postbox-container {
 	width: 100% !important;
 	float: none !important;
 }
 
 @media screen and (min-width: 800px) {
-	#dashboard-widgets #postbox-container-1 {
+	body.toplevel_page_wpshadow #dashboard-widgets #postbox-container-1,
+	body.wpshadow_page_wpshadow #dashboard-widgets #postbox-container-1 {
 		width: 66% !important;
 		float: left !important;
 		margin-right: 0 !important;
 	}
 	
-	#dashboard-widgets #postbox-container-2 {
+	body.toplevel_page_wpshadow #dashboard-widgets #postbox-container-2,
+	body.wpshadow_page_wpshadow #dashboard-widgets #postbox-container-2 {
 		width: 33% !important;
 		float: right !important;
 		margin-left: 0 !important;
 	}
 }
 
-#dashboard-widgets .postbox-container {
+body.toplevel_page_wpshadow #dashboard-widgets .postbox-container,
+body.wpshadow_page_wpshadow #dashboard-widgets .postbox-container {
 	padding: 0 8px !important;
 	box-sizing: border-box !important;
 }
 
-#dashboard-widgets {
+body.toplevel_page_wpshadow #dashboard-widgets,
+body.wpshadow_page_wpshadow #dashboard-widgets {
 	overflow: hidden;
+	clear: both;
 }
 
 .wpshadow-widget-content {
@@ -62,9 +68,9 @@
 	margin: 0 !important;
 }
 
-/* Sub-feature (child) rows - indent by 20px */
+/* Sub-feature (child) rows - indent by 40px */
 .wpshadow_tab_features .wp-list-table tbody tr[style*="background: #f9f9f9"] td:first-child {
-	padding-left: 20px !important;
+	padding-left: 40px !important;
 }
 
 /* Feature title links */
@@ -91,7 +97,7 @@
 }
 
 .wpshadow-child-feature.wpshadow-current-feature td:first-child {
-	padding-left: 29px !important; /* 32px indent - 3px border */
+	padding-left: 49px !important; /* 52px indent (40px + 12px base) - 3px border */
 }
 
 /* Toggle Switch Styles */
@@ -152,4 +158,125 @@ border-bottom: none !important;
 
 .wpshadow-history-entry:hover {
 background-color: #f6f7f7;
+}
+
+/* Feature Log Timeline - VS Code SCM Style */
+.wpshadow-feature-log-timeline {
+	position: relative;
+	padding: 0;
+	margin: 0;
+}
+
+.wpshadow-log-entry {
+	position: relative;
+	padding-left: 30px;
+	padding-bottom: 20px;
+	min-height: 40px;
+}
+
+.wpshadow-log-entry:last-child {
+	padding-bottom: 0;
+}
+
+.wpshadow-log-entry:last-child .wpshadow-log-line {
+	display: none;
+}
+
+.wpshadow-log-dot {
+	position: absolute;
+	left: 6px;
+	top: 4px;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background-color: #646970;
+	border: 2px solid #fff;
+	box-shadow: 0 0 0 1px #dcdcde;
+	z-index: 2;
+}
+
+/* Action-specific dot colors */
+.wpshadow-log-entry[data-action="enabled"] .wpshadow-log-dot {
+	background-color: #00a32a;
+}
+
+.wpshadow-log-entry[data-action="disabled"] .wpshadow-log-dot {
+	background-color: #d63638;
+}
+
+.wpshadow-log-entry[data-action="settings_updated"] .wpshadow-log-dot,
+.wpshadow-log-entry[data-action="sub_feature_enabled"] .wpshadow-log-dot,
+.wpshadow-log-entry[data-action="sub_feature_disabled"] .wpshadow-log-dot {
+	background-color: #2271b1;
+}
+
+.wpshadow-log-entry[data-action="error"] .wpshadow-log-dot {
+	background-color: #d63638;
+	animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+	0%, 100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.5;
+	}
+}
+
+.wpshadow-log-line {
+	position: absolute;
+	left: 10px;
+	top: 18px;
+	bottom: -6px;
+	width: 2px;
+	background-color: #dcdcde;
+	z-index: 1;
+}
+
+.wpshadow-log-content {
+	font-size: 13px;
+	line-height: 1.5;
+}
+
+.wpshadow-log-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	margin-bottom: 4px;
+	gap: 8px;
+}
+
+.wpshadow-log-action {
+	font-weight: 600;
+	color: #1d2327;
+	flex-shrink: 0;
+}
+
+.wpshadow-log-time {
+	font-size: 12px;
+	color: #646970;
+	white-space: nowrap;
+	flex-shrink: 0;
+}
+
+.wpshadow-log-message {
+	color: #50575e;
+	margin-bottom: 4px;
+	word-wrap: break-word;
+}
+
+.wpshadow-log-user {
+	font-size: 12px;
+	color: #787c82;
+	font-style: italic;
+}
+
+/* Hover effect */
+.wpshadow-log-entry:hover .wpshadow-log-content {
+	background-color: #f6f7f7;
+	margin-left: -8px;
+	margin-right: -8px;
+	padding: 4px 8px;
+	border-radius: 3px;
 }

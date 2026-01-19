@@ -434,52 +434,58 @@ class WPSHADOW_Feature_Registry {
 	}
 
 	/**
-	 * Auto-discover feature classes from includes/features/ directory.
+	 * Auto-discover feature classes from includes/features/ and features/ directories.
 	 *
 	 * @return void
 	 */
 	public static function auto_discover_features(): void {
-		$features_dir = WPSHADOW_PATH . 'includes/features';
+		// Check both includes/features/ and features/ directories
+		$features_dirs = array(
+			WPSHADOW_PATH . 'includes/features',
+			WPSHADOW_PATH . 'features',
+		);
 
-		if ( ! is_dir( $features_dir ) ) {
-			return;
-		}
-
-		$feature_files = glob( $features_dir . '/class-wps-feature-*.php' );
-		if ( false === $feature_files ) {
-			return;
-		}
-
-		foreach ( $feature_files as $file ) {
-			// Skip abstract and interface files.
-			$basename = basename( $file );
-			if ( strpos( $basename, 'abstract' ) !== false || strpos( $basename, 'interface' ) !== false || $basename === 'class-wps-feature-registry.php' ) {
+		foreach ( $features_dirs as $features_dir ) {
+			if ( ! is_dir( $features_dir ) ) {
 				continue;
 			}
 
-			// Extract class name from filename.
-			// Example: class-wps-feature-asset-minification.php -> WPSHADOW_Feature_Asset_Minification
-			$class_name = str_replace( 'class-', '', $basename );
-			$class_name = str_replace( '.php', '', $class_name );
-			$parts      = explode( '-', $class_name );
-			$parts      = array_map( 'ucfirst', $parts );
-			$class_name = implode( '_', $parts );
-			$class_name = str_replace( 'Wps_', 'WPSHADOW_', $class_name );
-			$class_name = 'WPShadow\\CoreSupport\\' . $class_name;
-
-			// Load the file if not already loaded.
-			if ( ! class_exists( $class_name ) ) {
-				require_once $file;
+			$feature_files = glob( $features_dir . '/class-wps-feature-*.php' );
+			if ( false === $feature_files ) {
+				continue;
 			}
 
-			// Instantiate and register if it implements the interface.
-			if ( class_exists( $class_name ) && is_subclass_of( $class_name, 'WPShadow\\CoreSupport\\WPSHADOW_Feature_Interface' ) ) {
-				try {
-					$feature = new $class_name();
-					self::register_feature( $feature );
-				} catch ( \Exception $e ) {
-					// Silent failure for features that can't be instantiated.
+			foreach ( $feature_files as $file ) {
+				// Skip abstract and interface files.
+				$basename = basename( $file );
+				if ( strpos( $basename, 'abstract' ) !== false || strpos( $basename, 'interface' ) !== false || $basename === 'class-wps-feature-registry.php' ) {
 					continue;
+				}
+
+				// Extract class name from filename.
+				// Example: class-wps-feature-asset-minification.php -> WPSHADOW_Feature_Asset_Minification
+				$class_name = str_replace( 'class-', '', $basename );
+				$class_name = str_replace( '.php', '', $class_name );
+				$parts      = explode( '-', $class_name );
+				$parts      = array_map( 'ucfirst', $parts );
+				$class_name = implode( '_', $parts );
+				$class_name = str_replace( 'Wps_', 'WPSHADOW_', $class_name );
+				$class_name = 'WPShadow\\CoreSupport\\' . $class_name;
+
+				// Load the file if not already loaded.
+				if ( ! class_exists( $class_name ) ) {
+					require_once $file;
+				}
+
+				// Instantiate and register if it implements the interface.
+				if ( class_exists( $class_name ) && is_subclass_of( $class_name, 'WPShadow\\CoreSupport\\WPSHADOW_Feature_Interface' ) ) {
+					try {
+						$feature = new $class_name();
+						self::register_feature( $feature );
+					} catch ( \Exception $e ) {
+						// Silent failure for features that can't be instantiated.
+						continue;
+					}
 				}
 			}
 		}
