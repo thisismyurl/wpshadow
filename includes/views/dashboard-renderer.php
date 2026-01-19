@@ -183,21 +183,20 @@ function wpshadow_register_tab_metaboxes( string $tab, string $screen_id ): void
  * @return void
  */
 function wpshadow_register_dashboard_metaboxes( string $screen_id ): void {
-	// Left column (66%) - Main content.
-	add_meta_box(
-		'wpshadow_dashboard_overview',
-		__( 'Dashboard Overview', 'wpshadow' ),
-		__NAMESPACE__ . '\\wpshadow_render_dashboard_overview_widget',
-		$screen_id,
-		'normal',
-		'high'
-	);
-
 	// Right column (33%) - Sidebar widgets.
 	add_meta_box(
 		'wpshadow_dashboard_health',
 		__( 'System Health', 'wpshadow' ),
 		__NAMESPACE__ . '\\wpshadow_render_dashboard_health_widget',
+		$screen_id,
+		'side',
+		'high'
+	);
+
+	add_meta_box(
+		'wpshadow_dashboard_scheduled_activity',
+		__( 'Scheduled Activity', 'wpshadow' ),
+		__NAMESPACE__ . '\\wpshadow_render_dashboard_scheduled_activity_widget',
 		$screen_id,
 		'side',
 		'high'
@@ -265,6 +264,41 @@ function wpshadow_register_features_metaboxes( string $screen_id ): void {
 		'side',
 		'high'
 	);
+
+	// Add Activity History widget to the right sidebar on the main features list
+	add_meta_box(
+		'wpshadow_features_activity_history',
+		__( 'Activity History', 'wpshadow' ),
+		__NAMESPACE__ . '\\wpshadow_render_all_features_activity_widget',
+		$screen_id,
+		'side',
+		'default'
+	);
+
+	// Add Scheduled Activity widget
+	if ( ! empty( $current_feature ) ) {
+		// For specific feature page, show only that feature's scheduled events
+		add_meta_box(
+			'wpshadow_feature_scheduled_activity',
+			__( 'Scheduled Activity', 'wpshadow' ),
+			function() use ( $current_feature ) {
+				wpshadow_render_feature_scheduled_activity_widget( $current_feature );
+			},
+			$screen_id,
+			'side',
+			'default'
+		);
+	} else {
+		// For main features list, show all scheduled events
+		add_meta_box(
+			'wpshadow_features_scheduled_activity',
+			__( 'Scheduled Activity', 'wpshadow' ),
+			__NAMESPACE__ . '\\wpshadow_render_dashboard_scheduled_activity_widget',
+			$screen_id,
+			'side',
+			'default'
+		);
+	}
 }
 
 /**
@@ -311,6 +345,18 @@ function wpshadow_register_feature_detail_metaboxes( string $screen_id ): void {
 			'normal',
 			'default'
 		);
+		
+		// Add Activity History below Feature Settings
+		add_meta_box(
+			'wpshadow_feature_log',
+			__( 'Activity History', 'wpshadow' ),
+			function() use ( $current_feature ) {
+				wpshadow_render_feature_log_widget( $current_feature );
+			},
+			$screen_id,
+			'normal',
+			'low'
+		);
 	}
 	
 	// Left column (66%) - Use EXACT SAME widget as features list page
@@ -320,32 +366,8 @@ function wpshadow_register_feature_detail_metaboxes( string $screen_id ): void {
 		__NAMESPACE__ . '\\wpshadow_render_features_list_widget',
 		$screen_id,
 		'normal',
-		'high'
+		'default'
 	);
-
-	// Right column (33%) - Feature info (same as features list page)
-	add_meta_box(
-		'wpshadow_features_info',
-		__( 'Feature Information', 'wpshadow' ),
-		__NAMESPACE__ . '\\wpshadow_render_features_info_widget',
-		$screen_id,
-		'side',
-		'high'
-	);
-	
-	// Right column (33%) - Feature Log (only on feature detail pages)
-	if ( ! empty( $current_feature ) ) {
-		add_meta_box(
-			'wpshadow_feature_log',
-			__( 'Feature Log', 'wpshadow' ),
-			function() use ( $current_feature ) {
-				wpshadow_render_feature_log_widget( $current_feature );
-			},
-			$screen_id,
-			'side',
-			'default'
-		);
-	}
 }
 
 /**
@@ -418,9 +440,13 @@ function wpshadow_render_dashboard_activity_widget(): void {
  * @return void
  */
 function wpshadow_render_dashboard_health_widget(): void {
+	// Get diagnostic feature data
+	$diagnostic_data = wpshadow_get_diagnostic_feature_data();
+	$integrity_data = wpshadow_get_integrity_feature_data();
+	
 	// Gather system metrics
 	$metrics = wpshadow_get_system_metrics();
-	$health_score = wpshadow_calculate_health_score( $metrics );
+	$health_score = wpshadow_calculate_health_score( $metrics, $diagnostic_data, $integrity_data );
 	$health_status = wpshadow_get_health_status( $health_score );
 	$indicators = wpshadow_get_health_indicators( $metrics );
 	
@@ -468,6 +494,61 @@ function wpshadow_render_dashboard_health_widget(): void {
 				<?php echo esc_html( $health_status['label'] ); ?>
 			</p>
 		</div>
+		
+		<!-- Feature Health Status -->
+		<?php if ( $diagnostic_data['enabled'] || $integrity_data['enabled'] ) : ?>
+			<div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #dcdcde;">
+				<?php if ( $diagnostic_data['enabled'] ) : ?>
+					<div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0;">
+						<div style="display: flex; align-items: center; gap: 8px;">
+							<span style="font-size: 16px;">
+								<?php echo $diagnostic_data['status_icon']; ?>
+							</span>
+							<span style="font-size: 12px; color: #646970; font-weight: 600;">
+								<?php esc_html_e( 'System Diagnostics', 'wpshadow' ); ?>
+							</span>
+						</div>
+						<span style="font-size: 11px; color: <?php echo esc_attr( $diagnostic_data['status_color'] ); ?>; font-weight: 600;">
+							<?php echo esc_html( $diagnostic_data['status_text'] ); ?>
+						</span>
+					</div>
+					<?php if ( ! empty( $diagnostic_data['issues'] ) ) : ?>
+						<div style="margin-top: 4px; padding-left: 24px;">
+							<?php foreach ( $diagnostic_data['issues'] as $issue ) : ?>
+								<div style="font-size: 11px; color: #787c82; margin-bottom: 2px;">
+									• <?php echo esc_html( $issue ); ?>
+								</div>
+							<?php endforeach; ?>
+						</div>
+					<?php endif; ?>
+				<?php endif; ?>
+				
+				<?php if ( $integrity_data['enabled'] ) : ?>
+					<div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0;">
+						<div style="display: flex; align-items: center; gap: 8px;">
+							<span style="font-size: 16px;">
+								<?php echo $integrity_data['status_icon']; ?>
+							</span>
+							<span style="font-size: 12px; color: #646970; font-weight: 600;">
+								<?php esc_html_e( 'Core File Integrity', 'wpshadow' ); ?>
+							</span>
+						</div>
+						<span style="font-size: 11px; color: <?php echo esc_attr( $integrity_data['status_color'] ); ?>; font-weight: 600;">
+							<?php echo esc_html( $integrity_data['status_text'] ); ?>
+						</span>
+					</div>
+					<?php if ( ! empty( $integrity_data['issues'] ) ) : ?>
+						<div style="margin-top: 4px; padding-left: 24px;">
+							<?php foreach ( $integrity_data['issues'] as $issue ) : ?>
+								<div style="font-size: 11px; color: #787c82; margin-bottom: 2px;">
+									• <?php echo esc_html( $issue ); ?>
+								</div>
+							<?php endforeach; ?>
+						</div>
+					<?php endif; ?>
+				<?php endif; ?>
+			</div>
+		<?php endif; ?>
 		
 		<!-- System Metrics -->
 		<div style="margin-bottom: 12px;">
@@ -808,8 +889,10 @@ function wpshadow_render_feature_settings_widget( string $feature_id ): void {
 	<div class="wpshadow-widget-content">
 		<?php foreach ( $config_sub_features as $sub_key => $sub_feature ) :
 			$sub_enabled = (bool) get_option( "wpshadow_{$feature['id']}_{$sub_key}", $sub_feature['default_enabled'] ?? true );
+			$is_settings_only = ! empty( $sub_feature['settings_only'] );
 		?>
 			<div style="padding: 16px; border-bottom: 1px solid #e5e5e5;">
+				<?php if ( ! $is_settings_only ) : ?>
 				<div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-start;">
 					<div style="flex: 1;">
 						<div style="margin-bottom: 4px;">
@@ -832,6 +915,20 @@ function wpshadow_render_feature_settings_widget( string $feature_id ): void {
 						<span class="wpshadow-feature-toggle-slider"></span>
 					</label>
 				</div>
+				<?php else : ?>
+				<div style="margin-bottom: 12px;">
+					<div style="margin-bottom: 4px;">
+						<strong style="font-size: 13px;">
+							<?php echo esc_html( $sub_feature['name'] ?? $sub_key ); ?>
+						</strong>
+					</div>
+					<?php if ( ! empty( $sub_feature['description'] ) ) : ?>
+						<div style="color: #646970; font-size: 12px;">
+							<?php echo esc_html( $sub_feature['description'] ); ?>
+						</div>
+					<?php endif; ?>
+				</div>
+				<?php endif; ?>
 				<?php
 				$config_renderers = array(
 					__NAMESPACE__ . '\wpshadow_render_' . $feature['id'] . '_' . $sub_key . '_config',
@@ -858,15 +955,8 @@ function wpshadow_get_configurable_sub_features( array $feature ): array {
 		return array();
 	}
 
-	$configurable = array();
-	foreach ( $feature['sub_features'] as $sub_key => $sub_feature ) {
-		// Check if this sub-feature declares it has settings
-		if ( ! empty( $sub_feature['has_settings'] ) ) {
-			$configurable[ $sub_key ] = $sub_feature;
-		}
-	}
-
-	return $configurable;
+	// Return all sub-features (both toggleable and settings-only)
+	return $feature['sub_features'];
 }
 
 /**
@@ -878,10 +968,7 @@ function wpshadow_get_configurable_sub_features( array $feature ): array {
 function wpshadow_render_css_ignore_rules_config( bool $enabled ): void {
 	$patterns = get_option( 'wpshadow_asset-version-removal_css_ignore_patterns', array() );
 	?>
-	<div style="margin-top: 12px; padding: 12px; background: #f5f5f5; border-radius: 4px;">
-		<?php if ( ! $enabled ) : ?>
-			<p style="margin: 0 0 8px 0; font-size: 12px; color: #d63638;"><strong><?php esc_html_e( 'This setting is currently disabled, but you can update its values below.', 'wpshadow' ); ?></strong></p>
-		<?php endif; ?>
+	<div class="wpshadow-settings-container" data-subfeature="remove_css_versions" style="margin-top: 12px; padding: 12px; background: #f5f5f5; border-radius: 4px;">
 		<p style="margin: 0 0 8px 0; font-size: 12px; color: #646970;"><strong><?php esc_html_e( 'Ignore Patterns (one per line):', 'wpshadow' ); ?></strong></p>
 		<textarea id="wpshadow-css-ignore-patterns" 
 			style="width: 100%; height: 100px; font-family: monospace; font-size: 12px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
@@ -924,6 +1011,10 @@ function wpshadow_render_css_ignore_rules_config( bool $enabled ): void {
 								console.log('CSS patterns saved successfully');
 							}
 						}
+						// Refresh parent Activity History widget
+						if (typeof window.refreshActivityHistoryWidget === 'function') {
+							window.refreshActivityHistoryWidget('asset-version-removal');
+						}
 					} else {
 						$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Save CSS Rules', 'wpshadow' ) ); ?>');
 						try {
@@ -957,10 +1048,7 @@ function wpshadow_render_css_ignore_rules_config( bool $enabled ): void {
 function wpshadow_render_js_ignore_rules_config( bool $enabled ): void {
 	$patterns = get_option( 'wpshadow_asset-version-removal_js_ignore_patterns', array() );
 	?>
-	<div style="margin-top: 12px; padding: 12px; background: #f5f5f5; border-radius: 4px;">
-		<?php if ( ! $enabled ) : ?>
-			<p style="margin: 0 0 8px 0; font-size: 12px; color: #d63638;"><strong><?php esc_html_e( 'This setting is currently disabled, but you can update its values below.', 'wpshadow' ); ?></strong></p>
-		<?php endif; ?>
+	<div class="wpshadow-settings-container" data-subfeature="remove_js_versions" style="margin-top: 12px; padding: 12px; background: #f5f5f5; border-radius: 4px;">
 		<p style="margin: 0 0 8px 0; font-size: 12px; color: #646970;"><strong><?php esc_html_e( 'Ignore Patterns (one per line):', 'wpshadow' ); ?></strong></p>
 		<textarea id="wpshadow-js-ignore-patterns" 
 			style="width: 100%; height: 100px; font-family: monospace; font-size: 12px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"
@@ -997,6 +1085,10 @@ function wpshadow_render_js_ignore_rules_config( bool $enabled ): void {
 							showToast('<?php echo esc_js( __( 'JavaScript ignore patterns saved', 'wpshadow' ) ); ?>', true, 3000);
 						} catch (e) {
 							console.log('JS patterns saved successfully');
+						}
+						// Refresh parent Activity History widget
+						if (typeof window.refreshActivityHistoryWidget === 'function') {
+							window.refreshActivityHistoryWidget('asset-version-removal');
 						}
 					} else {
 						$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Save JS Rules', 'wpshadow' ) ); ?>');
@@ -1042,10 +1134,7 @@ function wpshadow_render_plugin_ignore_list_config( bool $enabled ): void {
 	
 	asort( $plugin_list );
 	?>
-	<div style="margin-top: 12px; padding: 12px; background: #f5f5f5; border-radius: 4px;">
-		<?php if ( ! $enabled ) : ?>
-			<p style="margin: 0 0 8px 0; font-size: 12px; color: #d63638;"><strong><?php esc_html_e( 'This setting is currently disabled, but you can update its values below.', 'wpshadow' ); ?></strong></p>
-		<?php endif; ?>
+	<div class="wpshadow-settings-container" data-subfeature="preserve_plugin_versions" style="margin-top: 12px; padding: 12px; background: #f5f5f5; border-radius: 4px;">
 		<p style="margin: 0 0 12px 0; font-size: 12px; color: #646970;"><strong><?php esc_html_e( 'Select plugins to ignore:', 'wpshadow' ); ?></strong></p>
 		<div id="wpshadow-plugin-ignore-list" style="max-height: 200px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px; padding: 8px;">
 			<?php foreach ( $plugin_list as $plugin_slug => $plugin_name ) : 
@@ -1094,6 +1183,10 @@ function wpshadow_render_plugin_ignore_list_config( bool $enabled ): void {
 						} catch (e) {
 							console.log('Plugin list saved successfully');
 						}
+						// Refresh parent Activity History widget
+						if (typeof window.refreshActivityHistoryWidget === 'function') {
+							window.refreshActivityHistoryWidget('asset-version-removal');
+						}
 					} else {
 						$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Save Plugin List', 'wpshadow' ) ); ?>');
 						try {
@@ -1130,11 +1223,7 @@ function wpshadow_render_advanced_settings_config( bool $enabled ): void {
 	$admin_only = get_option( 'wpshadow_external_fonts_admin_only', false );
 	$log_blocked = get_option( 'wpshadow_external_fonts_log_blocked', false );
 	?>
-	<div style="margin-top: 12px; padding: 12px; background: #f5f5f5; border-radius: 4px;">
-		<?php if ( ! $enabled ) : ?>
-			<p style="margin: 0 0 8px 0; font-size: 12px; color: #d63638;"><strong><?php esc_html_e( 'This setting is currently disabled, but you can update its values below.', 'wpshadow' ); ?></strong></p>
-		<?php endif; ?>
-		
+	<div class="wpshadow-settings-container" data-subfeature="advanced_settings" style="margin-top: 12px; padding: 12px; background: #f5f5f5; border-radius: 4px;">
 		<div style="margin-bottom: 16px;">
 			<p style="margin: 0 0 8px 0; font-size: 12px; color: #646970;"><strong><?php esc_html_e( 'Allowed Font URLs (Whitelist):', 'wpshadow' ); ?></strong></p>
 			<textarea id="wpshadow-external-fonts-whitelist" 
@@ -1331,44 +1420,10 @@ function wpshadow_render_features_list_widget(): void {
 								</label>
 							</td>
 						</tr>
-						<?php if ( ! empty( $sub_features ) ) :
-							// Filter out configurable settings from the list display using the declared has_settings flag.
-							$configurable_keys        = array_keys( wpshadow_get_configurable_sub_features( $feature ) );
-							$sub_features_to_display = array_filter( $sub_features, function( $key ) use ( $configurable_keys ) {
-								return ! in_array( $key, $configurable_keys, true );
-							}, ARRAY_FILTER_USE_KEY );
+						<?php 
+						// Note: Child features are not displayed in the features list.
+						// They can be accessed via the parent feature's detail page.
 						?>
-							<?php foreach ( $sub_features_to_display as $sub_key => $sub_feature ) : 
-								$sub_enabled = get_option( "wpshadow_{$feature_id}_{$sub_key}", $sub_feature['default_enabled'] ?? true );
-							?>
-								<tr class="wpshadow-child-feature" data-parent-feature="<?php echo esc_attr( $feature_id ); ?>" data-subfeature-key="<?php echo esc_attr( $sub_key ); ?>" data-default-enabled="<?php echo esc_attr( $sub_feature['default_enabled'] ?? true ? '1' : '0' ); ?>" style="background: #f9f9f9;">
-									<td style="padding: 12px 16px 12px 48px;">
-										<div style="margin-bottom: 2px;">
-											<span style="font-size: 13px; font-weight: 500;">
-												<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&wpshadow_tab=features&feature=' . urlencode( $sub_key ) ) ); ?>" style="color: #2271b1; text-decoration: none;">
-													<?php echo esc_html( $sub_feature['name'] ?? $sub_key ); ?>
-												</a>
-											</span>
-										</div>
-										<?php if ( ! empty( $sub_feature['description'] ) ) : ?>
-											<div style="color: #646970; font-size: 12px;">
-												<?php echo esc_html( $sub_feature['description'] ); ?>
-											</div>
-										<?php endif; ?>
-									</td>
-									<td style="width: 60px; text-align: center; vertical-align: top; padding: 12px;">
-										<label class="wpshadow-feature-toggle">
-											<input type="checkbox" 
-												   class="wpshadow-subfeature-toggle-input" 
-												   data-feature-id="<?php echo esc_attr( $feature_id ); ?>"
-												   data-subfeature-key="<?php echo esc_attr( $sub_key ); ?>"
-												   <?php checked( $sub_enabled ); ?>>
-											<span class="wpshadow-feature-toggle-slider"></span>
-										</label>
-									</td>
-								</tr>
-							<?php endforeach; ?>
-						<?php endif; ?>
 					<?php endforeach; ?>
 				</tbody>
 			</table>
@@ -1378,7 +1433,7 @@ function wpshadow_render_features_list_widget(): void {
 		<script>
 		jQuery(document).ready(function($) {
 			// Toast notification system
-			function showToast(message, enabled = true, duration = 3000) {
+			window.showToast = function(message, enabled = true, duration = 3000) {
 				// Create toast container if it doesn't exist
 				if ($('#wpshadow-toast-container').length === 0) {
 					$('body').append('<div id="wpshadow-toast-container"></div>');
@@ -1431,24 +1486,7 @@ function wpshadow_render_features_list_widget(): void {
 				var enabled = $toggle.is(':checked');
 				var $childRows = $('.wpshadow-child-feature[data-parent-feature="' + featureId + '"]');
 				
-				if (enabled) {
-					// Parent turned ON: show children and restore their states
-					$childRows.show();
-					$childRows.each(function() {
-						var $row = $(this);
-						var subKey = $row.data('subfeature-key');
-						var stateKey = featureId + '_' + subKey;
-						var $childToggle = $row.find('.wpshadow-subfeature-toggle-input');
-						
-						// Restore saved state or use default
-						if (childStates.hasOwnProperty(stateKey)) {
-							$childToggle.prop('checked', childStates[stateKey]);
-						} else {
-							var defaultEnabled = $row.data('default-enabled') == '1';
-							$childToggle.prop('checked', defaultEnabled);
-						}
-					});
-				} else {
+				if (!enabled) {
 					// Parent turned OFF: save child states, turn them off, and hide them
 					$childRows.each(function() {
 						var $row = $(this);
@@ -1466,6 +1504,7 @@ function wpshadow_render_features_list_widget(): void {
 					});
 					$childRows.hide();
 				}
+				// Note: Children stay hidden when parent is activated - they don't auto-expand
 				
 				$.post(ajaxurl, {
 					action: 'wpshadow_toggle_feature',
@@ -1501,6 +1540,20 @@ function wpshadow_render_features_list_widget(): void {
 				var subfeatureKey = $toggle.data('subfeature-key');
 				var enabled = $toggle.is(':checked');
 				
+				// Toggle associated settings container visibility
+				var $settingsContainer = $('.wpshadow-settings-container[data-subfeature="' + subfeatureKey + '"]');
+				if ($settingsContainer.length > 0) {
+					if (enabled) {
+						// Remove inline display:none and slide down
+						$settingsContainer.css('display', '').stop(true, true).slideDown(300);
+					} else {
+						// Slide up and set inline display:none
+						$settingsContainer.stop(true, true).slideUp(300, function() {
+							$(this).css('display', 'none');
+						});
+					}
+				}
+				
 				$.post(ajaxurl, {
 					action: 'wpshadow_toggle_subfeature',
 					feature_id: featureId,
@@ -1522,12 +1575,80 @@ function wpshadow_render_features_list_widget(): void {
 						// Revert toggle on error
 						$toggle.prop('checked', !enabled);
 						
+						// Revert visibility change
+						if ($settingsContainer.length > 0) {
+							if (enabled) {
+								// Was trying to show, so hide again
+								$settingsContainer.stop(true, true).slideUp(300, function() {
+									$(this).css('display', 'none');
+								});
+							} else {
+								// Was trying to hide, so show again
+								$settingsContainer.css('display', '').stop(true, true).slideDown(300);
+							}
+						}
+						
 						// Show error toast
 						var errorMsg = (response.data && typeof response.data === 'string') ? response.data : '<?php echo esc_js( __( 'Failed to update sub-feature', 'wpshadow' ) ); ?>';
 						showToast(errorMsg, false, 5000);
 					}
 				});
 			});
+			
+			// Refresh Activity History widget with latest logs
+			window.refreshActivityHistoryWidget = function(featureId) {
+				var $widget = $('#wpshadow_feature_log');
+				if ($widget.length === 0) {
+					// Widget not visible in this view
+					return;
+				}
+				
+				// Fetch fresh widget HTML
+				$.post(ajaxurl, {
+					action: 'wpshadow_refresh_activity_history',
+					feature_id: featureId,
+					nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_refresh_activity_history' ) ); ?>'
+				}, function(response) {
+					if (response.success && response.data) {
+						// Update widget content with fresh HTML
+						var $widgetContent = $widget.find('.inside');
+						if ($widgetContent.length > 0) {
+							$widgetContent.html(response.data);
+						}
+						
+
+					// Listen for feature toggle events and refresh Activity History when present
+					$(document).on('wpshadow:feature_toggled', function(event, featureId) {
+						if (typeof refreshActivityHistoryWidget === 'function' && featureId) {
+							refreshActivityHistoryWidget(featureId);
+						}
+					});
+						// Re-attach event handlers to "Load More" button if present
+						var $loadMoreBtn = $widget.find('.wpshadow-load-more-logs');
+						if ($loadMoreBtn.length > 0) {
+							$loadMoreBtn.off('click').on('click', function() {
+								// Load more logs functionality
+								var $btn = $(this);
+								var offset = parseInt($btn.data('offset'), 10) || 0;
+								var limit = 10;
+								
+								$.post(ajaxurl, {
+									action: 'wpshadow_load_more_logs',
+									feature_id: featureId,
+									offset: offset + limit,
+									limit: limit,
+									nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_load_more_logs' ) ); ?>'
+								}, function(data) {
+									if (data.success && data.data) {
+										$widget.find('.wpshadow-feature-log-timeline').append(data.data);
+										$btn.data('offset', offset + limit);
+									}
+								}, 'json');
+							});
+						}
+					}
+				}, 'json');
+			};
 		});
 		</script>
 	</div>
@@ -1580,17 +1701,17 @@ function wpshadow_render_features_info_widget(): void {
 			$version     = $detail['version'] ?? '';
 
 			?>
-			<div class="wpshadow-widget-content" style="margin: 15px; padding: 12px;">
-				<h2 style="margin: 0 0 6px 0; font-size: 18px;">
+			<div class="wpshadow-widget-content" style="margin: 0; padding: 0;">
+				<h2 style="margin: 0 0 6px 0; font-size: 18px; font-weight: 700; padding: 15px 15px 0 15px;">
 					<?php echo esc_html( $title ); ?>
 				</h2>
 				<?php if ( ! empty( $description ) ) : ?>
-					<p style="margin: 0 0 10px 0; color: #444; line-height: 1.6;">
+					<p style="margin: 0 0 10px 0; color: #444; line-height: 1.6; padding: 0 15px;">
 						<?php echo esc_html( $description ); ?>
 					</p>
 				<?php endif; ?>
 				<?php if ( ! empty( $version ) ) : ?>
-					<p style="margin: 0; color: #646970;">
+					<p style="margin: 0; color: #646970; padding: 0 15px 15px 15px;">
 						<strong><?php esc_html_e( 'Version:', 'wpshadow' ); ?></strong> <?php echo esc_html( $version ); ?>
 					</p>
 				<?php endif; ?>
@@ -1611,26 +1732,26 @@ function wpshadow_render_features_info_widget(): void {
 	}
 
 	?>
-	<div class="wpshadow-widget-content" style="margin: 15px; padding: 12px;">
-		<h4 style="margin-top: 0;"><?php esc_html_e( 'About Features', 'wpshadow' ); ?></h4>
-		<p><?php esc_html_e( 'Features extend WPShadow functionality. Enable or disable features based on your needs.', 'wpshadow' ); ?></p>
+	<div class="wpshadow-widget-content" style="margin: 0; padding: 0;">
+		<h4 style="margin-top: 0; padding: 15px 15px 0 15px;"><?php esc_html_e( 'About Features', 'wpshadow' ); ?></h4>
+		<p style="padding: 0 15px;"><?php esc_html_e( 'Features extend WPShadow functionality. Enable or disable features based on your needs.', 'wpshadow' ); ?></p>
 		
-		<div style="background: #f6f7f7; padding: 12px; border-radius: 4px; margin: 15px 0;">
+		<div style="background: #f6f7f7; padding: 12px; border-radius: 4px; margin: 15px;">
 			<p style="margin: 0 0 8px 0;"><strong><?php esc_html_e( 'System Statistics:', 'wpshadow' ); ?></strong></p>
 			<p style="margin: 0 0 5px 0;"><?php echo esc_html( sprintf( __( 'Total Features: %d', 'wpshadow' ), $total_count ) ); ?></p>
 			<p style="margin: 0 0 5px 0; color: #2271b1;"><?php echo esc_html( sprintf( __( 'Enabled: %d', 'wpshadow' ), $enabled_count ) ); ?></p>
 			<p style="margin: 0; color: #646970;"><?php echo esc_html( sprintf( __( 'Disabled: %d', 'wpshadow' ), $total_count - $enabled_count ) ); ?></p>
 		</div>
 		
-		<h4><?php esc_html_e( 'How to Activate Features', 'wpshadow' ); ?></h4>
-		<ol style="padding-left: 20px;">
+		<h4 style="padding: 0 15px;"><?php esc_html_e( 'How to Activate Features', 'wpshadow' ); ?></h4>
+		<ol style="padding-left: 35px; padding-right: 15px;">
 			<li><?php esc_html_e( 'Browse the features list in the main panel', 'wpshadow' ); ?></li>
 			<li><?php esc_html_e( 'Click the toggle switch to enable or disable a feature', 'wpshadow' ); ?></li>
 			<li><?php esc_html_e( 'Click on a feature name to view detailed settings', 'wpshadow' ); ?></li>
 			<li><?php esc_html_e( 'Configure sub-features for advanced customization', 'wpshadow' ); ?></li>
 		</ol>
 		
-		<p style="background: #fff3cd; border-left: 3px solid #ffc107; padding: 10px; margin: 15px 0 0 0;">
+		<p style="background: #fff3cd; border-left: 3px solid #ffc107; padding: 10px; margin: 15px;">
 			<strong><?php esc_html_e( 'Tip:', 'wpshadow' ); ?></strong> <?php esc_html_e( 'Some features have sub-features that can be toggled independently for fine-grained control.', 'wpshadow' ); ?>
 		</p>
 	</div>
@@ -1738,6 +1859,110 @@ function wpshadow_render_feature_log_widget( string $feature_id ): void {
 }
 
 /**
+ * Render activity history widget showing logs from ALL features.
+ *
+ * @return void
+ */
+function wpshadow_render_all_features_activity_widget(): void {
+	$logs = wpshadow_get_all_feature_logs( 15, 0 );
+	
+	if ( empty( $logs ) ) {
+		?>
+		<div class="wpshadow-widget-content" style="margin: 15px; padding: 12px;">
+			<p style="color: #646970; font-style: italic; margin: 0;">
+				<?php esc_html_e( 'No activity logged yet.', 'wpshadow' ); ?>
+			</p>
+		</div>
+		<?php
+		return;
+	}
+	
+	?>
+	<div class="wpshadow-widget-content" style="margin: 15px;">
+		<div class="wpshadow-feature-log-timeline">
+			<?php foreach ( $logs as $log ) : ?>
+				<div class="wpshadow-log-entry" data-action="<?php echo esc_attr( $log['action'] ); ?>" data-feature="<?php echo esc_attr( $log['feature_id'] ); ?>">
+					<div class="wpshadow-log-dot"></div>
+					<div class="wpshadow-log-line"></div>
+					<div class="wpshadow-log-content">
+						<div class="wpshadow-log-header">
+							<span class="wpshadow-log-action"><?php echo esc_html( $log['action_label'] ); ?></span>
+							<span class="wpshadow-log-time" title="<?php echo esc_attr( $log['timestamp_full'] ); ?>">
+								<?php echo esc_html( $log['timestamp_human'] ); ?>
+							</span>
+						</div>
+						<?php if ( ! empty( $log['message'] ) ) : ?>
+							<div class="wpshadow-log-message"><?php echo esc_html( $log['message'] ); ?></div>
+						<?php else : ?>
+							<div class="wpshadow-log-message">
+								<?php echo esc_html( $log['feature_name'] ); ?> <?php echo esc_html( strtolower( $log['action_label'] ) ); ?>.
+							</div>
+						<?php endif; ?>
+						<div class="wpshadow-log-feature" style="color: #646970; font-size: 12px; margin-top: 4px;">
+							<?php echo esc_html( $log['feature_name'] ); ?>
+						</div>
+						<?php if ( ! empty( $log['user'] ) ) : ?>
+							<div class="wpshadow-log-user">by <?php echo esc_html( $log['user'] ); ?></div>
+						<?php endif; ?>
+					</div>
+				</div>
+			<?php endforeach; ?>
+		</div>
+		
+		<?php if ( count( $logs ) >= 15 ) : ?>
+			<div class="wpshadow-log-load-more-container" style="text-align: center; padding-top: 10px; border-top: 1px solid #dcdcde;">
+				<button type="button" class="button button-small wpshadow-load-more-all-logs" data-offset="15">
+					<?php esc_html_e( 'Load More', 'wpshadow' ); ?>
+				</button>
+			</div>
+		<?php endif; ?>
+	</div>
+	
+	<script>
+	jQuery(document).ready(function($) {
+		var currentOffset = 15;
+		
+		$(document).on('click', '.wpshadow-load-more-all-logs', function() {
+			var $btn = $(this);
+			var offset = $btn.data('offset');
+			
+			$.ajax({
+				url: ajaxurl,
+				type: 'POST',
+				data: {
+					action: 'wpshadow_load_more_all_logs',
+					offset: offset,
+					nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_load_more_all_logs' ) ); ?>'
+				},
+				beforeSend: function() {
+					$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Loading...', 'wpshadow' ) ); ?>');
+				},
+				success: function(response) {
+					if (response.success && response.data.html) {
+						$('.wpshadow-feature-log-timeline').append(response.data.html);
+						
+						if (response.data.has_more) {
+							currentOffset += 15;
+							$btn.data('offset', currentOffset).prop('disabled', false).text('<?php echo esc_js( __( 'Load More', 'wpshadow' ) ); ?>');
+						} else {
+							$btn.parent().remove();
+						}
+					} else {
+						$btn.parent().remove();
+					}
+				},
+				error: function() {
+					$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Load More', 'wpshadow' ) ); ?>');
+					alert('<?php echo esc_js( __( 'Failed to load logs. Please try again.', 'wpshadow' ) ); ?>');
+				}
+			});
+		});
+	});
+	</script>
+	<?php
+}
+
+/**
  * Get feature logs for a specific feature.
  *
  * @param string $feature_id The feature ID.
@@ -1753,6 +1978,22 @@ function wpshadow_get_feature_logs( string $feature_id, int $limit = 10, int $of
 	}
 	
 	$feature_logs = $all_logs[ $feature_id ];
+
+	// Resolve a friendly feature name (handles parent/child IDs like "parent/child")
+	$feature_name = ucwords( str_replace( array( '-', '_' ), ' ', $feature_id ) );
+	$feature_obj  = WPSHADOW_Feature_Registry::get_feature_object( $feature_id );
+
+	if ( $feature_obj ) {
+		$feature_name = $feature_obj->get_name();
+	} elseif ( strpos( $feature_id, '/' ) !== false ) {
+		list( $parent_id, $child_id ) = explode( '/', $feature_id, 2 );
+		$parent_feature = WPSHADOW_Feature_Registry::get_feature( $parent_id );
+		if ( $parent_feature && ! empty( $parent_feature['sub_features'][ $child_id ]['name'] ) ) {
+			$feature_name = $parent_feature['sub_features'][ $child_id ]['name'];
+		} elseif ( $parent_feature && ! empty( $parent_feature['name'] ) ) {
+			$feature_name = $parent_feature['name'];
+		}
+	}
 	
 	// Sort by timestamp descending (newest first)
 	usort( $feature_logs, function( $a, $b ) {
@@ -1767,6 +2008,46 @@ function wpshadow_get_feature_logs( string $feature_id, int $limit = 10, int $of
 		$log['timestamp_full'] = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $log['timestamp'] );
 		$log['timestamp_human'] = human_time_diff( $log['timestamp'], current_time( 'timestamp' ) ) . ' ago';
 		$log['action_label'] = wpshadow_get_log_action_label( $log['action'] );
+		$log['feature_name']  = $feature_name;
+
+		$log_display_name = $feature_name;
+		$detail_text      = isset( $log['details'] ) ? trim( (string) $log['details'] ) : '';
+		$is_child         = strpos( $feature_id, '/' ) !== false;
+		$child_name       = $feature_name;
+
+		if ( $is_child ) {
+			list( $parent_id, $child_id ) = explode( '/', $feature_id, 2 );
+			$parent_feature = WPSHADOW_Feature_Registry::get_feature( $parent_id );
+			if ( $parent_feature && ! empty( $parent_feature['sub_features'][ $child_id ]['name'] ) ) {
+				$child_name = $parent_feature['sub_features'][ $child_id ]['name'];
+			} else {
+				$tokens = preg_split( '/[-_\s]+/', $child_id );
+				$tokens = array_map( 'trim', $tokens );
+				$normalized_tokens = array_map( function( $token ) {
+					if ( $token === '' ) {
+						return '';
+					}
+					$upper = strtoupper( $token );
+					if ( in_array( $upper, array( 'CSS', 'JS', 'CDN', 'API', 'HTML', 'XML', 'SVG', 'JSON' ), true ) ) {
+						return $upper;
+					}
+					if ( preg_match( '/[A-Z]/', $token ) ) {
+						return $token;
+					}
+					return ucfirst( strtolower( $token ) );
+				}, $tokens );
+				$child_name = implode( ' ', array_filter( $normalized_tokens ) );
+			}
+			$log_display_name = $child_name;
+		}
+
+		if ( $is_child && $detail_text !== '' ) {
+			$log['message'] = sprintf( '%s: %s.', $log_display_name, rtrim( $detail_text, '.' ) );
+		} elseif ( $detail_text !== '' ) {
+			$log['message'] = sprintf( '%s %s.', $detail_text, strtolower( $log['action_label'] ) );
+		} else {
+			$log['message'] = sprintf( '%s %s.', $log_display_name, strtolower( $log['action_label'] ) );
+		}
 	}
 	
 	return $feature_logs;
@@ -2287,10 +2568,28 @@ function wpshadow_get_system_metrics(): array {
  * Calculate overall health score based on metrics.
  *
  * @param array $metrics System metrics.
+ * @param array $diagnostic_data Diagnostic feature data.
+ * @param array $integrity_data Integrity feature data.
  * @return int Health score (0-100).
  */
-function wpshadow_calculate_health_score( array $metrics ): int {
+function wpshadow_calculate_health_score( array $metrics, array $diagnostic_data = array(), array $integrity_data = array() ): int {
 	$score = 100;
+	
+	// Deduct points based on diagnostic feature results
+	if ( ! empty( $diagnostic_data['enabled'] ) && ! empty( $diagnostic_data['critical_count'] ) ) {
+		$score -= ( $diagnostic_data['critical_count'] * 15 ); // 15 points per critical issue
+	}
+	if ( ! empty( $diagnostic_data['enabled'] ) && ! empty( $diagnostic_data['warning_count'] ) ) {
+		$score -= ( $diagnostic_data['warning_count'] * 5 ); // 5 points per warning
+	}
+	
+	// Deduct points based on integrity feature results
+	if ( ! empty( $integrity_data['enabled'] ) && ! empty( $integrity_data['modified_count'] ) ) {
+		$score -= min( 30, $integrity_data['modified_count'] * 10 ); // Up to 30 points for modified files
+	}
+	if ( ! empty( $integrity_data['enabled'] ) && ! empty( $integrity_data['unknown_count'] ) ) {
+		$score -= min( 20, $integrity_data['unknown_count'] * 5 ); // Up to 20 points for unknown files
+	}
 	
 	// Deduct points for high memory usage
 	if ( $metrics['memory_percent'] >= 75 ) {
@@ -2386,6 +2685,175 @@ function wpshadow_get_health_status( int $score ): array {
  * @return string Hex color code.
  */
 /**
+ * Get diagnostic feature data for health widget.
+ *
+ * @return array Diagnostic data including status and issues.
+ */
+function wpshadow_get_diagnostic_feature_data(): array {
+	// Check if System Diagnostics feature is enabled
+	$feature = \WPShadow\CoreSupport\WPSHADOW_Feature_Registry::get_feature( 'core-diagnostics' );
+	if ( ! $feature || empty( $feature['enabled'] ) ) {
+		return array(
+			'enabled' => false,
+		);
+	}
+	
+	// Get cached diagnostic results
+	$results = get_transient( 'wpshadow_diagnostics_results' );
+	
+	if ( empty( $results ) || ! is_array( $results ) ) {
+		return array(
+			'enabled'        => true,
+			'status_text'    => __( 'Not Scanned', 'wpshadow' ),
+			'status_color'   => '#646970',
+			'status_icon'    => '<span style="color: #646970;">○</span>',
+			'issues'         => array(),
+			'critical_count' => 0,
+			'warning_count'  => 0,
+		);
+	}
+	
+	// Count issues by severity
+	$critical_count = 0;
+	$warning_count = 0;
+	$issues = array();
+	
+	foreach ( $results as $check_id => $check_result ) {
+		if ( ! is_array( $check_result ) || ! isset( $check_result['status'] ) ) {
+			continue;
+		}
+		
+		$status = $check_result['status'];
+		$label = $check_result['label'] ?? ucwords( str_replace( '_', ' ', $check_id ) );
+		
+		if ( 'critical' === $status ) {
+			$critical_count++;
+			$issues[] = $label;
+		} elseif ( 'warning' === $status ) {
+			$warning_count++;
+			if ( count( $issues ) < 3 ) { // Limit to 3 issues displayed
+				$issues[] = $label;
+			}
+		}
+	}
+	
+	// Determine overall status
+	if ( $critical_count > 0 ) {
+		$status_text = sprintf(
+			/* translators: %d: Number of critical issues */
+			_n( '%d Critical Issue', '%d Critical Issues', $critical_count, 'wpshadow' ),
+			$critical_count
+		);
+		$status_color = '#d63638';
+		$status_icon = '<span style="color: #d63638;">✗</span>';
+	} elseif ( $warning_count > 0 ) {
+		$status_text = sprintf(
+			/* translators: %d: Number of warnings */
+			_n( '%d Warning', '%d Warnings', $warning_count, 'wpshadow' ),
+			$warning_count
+		);
+		$status_color = '#f0b849';
+		$status_icon = '<span style="color: #f0b849;">⚠</span>';
+	} else {
+		$status_text = __( 'All Checks Passed', 'wpshadow' );
+		$status_color = '#00a32a';
+		$status_icon = '<span style="color: #00a32a;">✓</span>';
+	}
+	
+	return array(
+		'enabled'        => true,
+		'status_text'    => $status_text,
+		'status_color'   => $status_color,
+		'status_icon'    => $status_icon,
+		'issues'         => array_slice( $issues, 0, 3 ), // Max 3 issues
+		'critical_count' => $critical_count,
+		'warning_count'  => $warning_count,
+	);
+}
+
+/**
+ * Get core integrity feature data for health widget.
+ *
+ * @return array Integrity data including scan results.
+ */
+function wpshadow_get_integrity_feature_data(): array {
+	// Check if Core Integrity feature is enabled
+	$feature = \WPShadow\CoreSupport\WPSHADOW_Feature_Registry::get_feature( 'core-integrity' );
+	if ( ! $feature || empty( $feature['enabled'] ) ) {
+		return array(
+			'enabled' => false,
+		);
+	}
+	
+	// Get the last scan results from transient
+	$scan_results = get_transient( 'wpshadow_core_integrity_results' );
+	
+	if ( empty( $scan_results ) || ! is_array( $scan_results ) ) {
+		return array(
+			'enabled'        => true,
+			'status_text'    => __( 'Not Scanned', 'wpshadow' ),
+			'status_color'   => '#646970',
+			'status_icon'    => '<span style="color: #646970;">○</span>',
+			'issues'         => array(),
+			'modified_count' => 0,
+			'unknown_count'  => 0,
+		);
+	}
+	
+	$modified_count = isset( $scan_results['modified_files'] ) ? count( $scan_results['modified_files'] ) : 0;
+	$missing_count = isset( $scan_results['missing_files'] ) ? count( $scan_results['missing_files'] ) : 0;
+	$unknown_count = isset( $scan_results['unknown_files'] ) ? count( $scan_results['unknown_files'] ) : 0;
+	
+	$issues = array();
+	if ( $modified_count > 0 ) {
+		$issues[] = sprintf(
+			/* translators: %d: Number of modified files */
+			_n( '%d Modified File', '%d Modified Files', $modified_count, 'wpshadow' ),
+			$modified_count
+		);
+	}
+	if ( $missing_count > 0 ) {
+		$issues[] = sprintf(
+			/* translators: %d: Number of missing files */
+			_n( '%d Missing File', '%d Missing Files', $missing_count, 'wpshadow' ),
+			$missing_count
+		);
+	}
+	if ( $unknown_count > 0 ) {
+		$issues[] = sprintf(
+			/* translators: %d: Number of unknown files */
+			_n( '%d Unknown File', '%d Unknown Files', $unknown_count, 'wpshadow' ),
+			$unknown_count
+		);
+	}
+	
+	// Determine status
+	if ( $modified_count > 0 || $missing_count > 0 ) {
+		$status_text = __( 'Issues Detected', 'wpshadow' );
+		$status_color = '#d63638';
+		$status_icon = '<span style="color: #d63638;">✗</span>';
+	} elseif ( $unknown_count > 0 ) {
+		$status_text = __( 'Unknown Files', 'wpshadow' );
+		$status_color = '#f0b849';
+		$status_icon = '<span style="color: #f0b849;">⚠</span>';
+	} else {
+		$status_text = __( 'Files Verified', 'wpshadow' );
+		$status_color = '#00a32a';
+		$status_icon = '<span style="color: #00a32a;">✓</span>';
+	}
+	
+	return array(
+		'enabled'        => true,
+		'status_text'    => $status_text,
+		'status_color'   => $status_color,
+		'status_icon'    => $status_icon,
+		'issues'         => $issues,
+		'modified_count' => $modified_count,
+		'unknown_count'  => $unknown_count,
+	);
+}
+
+/**
  * Get color for metric based on percentage.
  *
  * @param int|float $percent Percentage value.
@@ -2403,4 +2871,216 @@ function wpshadow_get_metric_color( $percent ): string {
 	} else {
 		return '#00a32a'; // Green
 	}
+}
+
+/**
+ * Render dashboard scheduled activity widget (all scheduled events).
+ *
+ * @return void
+ */
+function wpshadow_render_dashboard_scheduled_activity_widget(): void {
+	$scheduled_events = wpshadow_get_scheduled_events();
+	
+	?>
+	<div class="wpshadow-widget-content" style="padding: 15px;">
+		<?php if ( ! empty( $scheduled_events ) ) : ?>
+			<div style="max-height: 400px; overflow-y: auto;">
+				<?php foreach ( $scheduled_events as $event ) : ?>
+					<div style="padding: 12px; margin-bottom: 10px; background: #f6f7f7; border-left: 3px solid <?php echo esc_attr( $event['color'] ); ?>; border-radius: 3px;">
+						<div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 5px;">
+							<strong style="font-size: 13px; color: #2c3338;">
+								<?php echo esc_html( $event['name'] ); ?>
+							</strong>
+							<?php if ( ! empty( $event['feature_label'] ) ) : ?>
+								<span style="font-size: 11px; padding: 2px 8px; background: #dcdcde; border-radius: 10px; color: #50575e;">
+									<?php echo esc_html( $event['feature_label'] ); ?>
+								</span>
+							<?php endif; ?>
+						</div>
+						<div style="font-size: 12px; color: #646970; margin-bottom: 4px;">
+							<span style="font-weight: 500;"><?php esc_html_e( 'Next Run:', 'wpshadow' ); ?></span>
+							<?php echo esc_html( $event['next_run_formatted'] ); ?>
+						</div>
+						<div style="font-size: 11px; color: #787c82;">
+							<span style="font-weight: 500;"><?php esc_html_e( 'Recurrence:', 'wpshadow' ); ?></span>
+							<?php echo esc_html( $event['recurrence'] ); ?>
+						</div>
+					</div>
+				<?php endforeach; ?>
+			</div>
+		<?php else : ?>
+			<p style="color: #646970; margin: 0; font-size: 13px;">
+				<?php esc_html_e( 'No scheduled activities found.', 'wpshadow' ); ?>
+			</p>
+		<?php endif; ?>
+	</div>
+	<?php
+}
+
+/**
+ * Render feature-specific scheduled activity widget.
+ *
+ * @param string $feature_id Feature ID to filter events by.
+ * @return void
+ */
+function wpshadow_render_feature_scheduled_activity_widget( string $feature_id ): void {
+	$scheduled_events = wpshadow_get_scheduled_events( $feature_id );
+	
+	?>
+	<div class="wpshadow-widget-content" style="padding: 15px;">
+		<?php if ( ! empty( $scheduled_events ) ) : ?>
+			<div style="max-height: 300px; overflow-y: auto;">
+				<?php foreach ( $scheduled_events as $event ) : ?>
+					<div style="padding: 12px; margin-bottom: 10px; background: #f6f7f7; border-left: 3px solid <?php echo esc_attr( $event['color'] ); ?>; border-radius: 3px;">
+						<div style="margin-bottom: 5px;">
+							<strong style="font-size: 13px; color: #2c3338;">
+								<?php echo esc_html( $event['name'] ); ?>
+							</strong>
+						</div>
+						<div style="font-size: 12px; color: #646970; margin-bottom: 4px;">
+							<span style="font-weight: 500;"><?php esc_html_e( 'Next Run:', 'wpshadow' ); ?></span>
+							<?php echo esc_html( $event['next_run_formatted'] ); ?>
+						</div>
+						<div style="font-size: 11px; color: #787c82;">
+							<span style="font-weight: 500;"><?php esc_html_e( 'Recurrence:', 'wpshadow' ); ?></span>
+							<?php echo esc_html( $event['recurrence'] ); ?>
+						</div>
+					</div>
+				<?php endforeach; ?>
+			</div>
+		<?php else : ?>
+			<p style="color: #646970; margin: 0; font-size: 13px;">
+				<?php esc_html_e( 'No scheduled activities for this feature.', 'wpshadow' ); ?>
+			</p>
+		<?php endif; ?>
+	</div>
+	<?php
+}
+
+/**
+ * Get scheduled WordPress cron events, optionally filtered by feature.
+ *
+ * @param string $feature_id Optional feature ID to filter events by.
+ * @return array Array of scheduled events with formatted data.
+ */
+function wpshadow_get_scheduled_events( string $feature_id = '' ): array {
+	$cron_array = _get_cron_array();
+	$scheduled_events = array();
+	
+	if ( empty( $cron_array ) ) {
+		return $scheduled_events;
+	}
+	
+	// Get schedules for recurrence labels
+	$schedules = wp_get_schedules();
+	
+	// Define feature-to-hook mapping
+	$feature_hooks = array(
+		'core-integrity'     => array( 'wpshadow_core_integrity_scan', 'wpshadow_delete_backup_file' ),
+		'core-diagnostics'   => array( 'wpshadow_daily_diagnostics' ),
+		'backup-automation'  => array( 'wpshadow_scheduled_backup' ),
+		'malware-scanner'    => array( 'wpshadow_malware_scan' ),
+		'uptime-monitor'     => array( 'wpshadow_uptime_check' ),
+		'broken-link-checker' => array( 'wpshadow_check_broken_links' ),
+	);
+	
+	// Process each cron event
+	foreach ( $cron_array as $timestamp => $cron_events ) {
+		foreach ( $cron_events as $hook => $cron_event ) {
+			// Filter by feature if specified
+			if ( ! empty( $feature_id ) ) {
+				$feature_match = false;
+				if ( isset( $feature_hooks[ $feature_id ] ) ) {
+					if ( in_array( $hook, $feature_hooks[ $feature_id ], true ) ) {
+						$feature_match = true;
+					}
+				}
+				// Also check if hook starts with wpshadow and matches feature ID pattern
+				if ( ! $feature_match && strpos( $hook, 'wpshadow' ) === 0 ) {
+					$normalized_hook = str_replace( array( 'wpshadow_', '_' ), array( '', '-' ), $hook );
+					if ( strpos( $normalized_hook, str_replace( '_', '-', $feature_id ) ) !== false ) {
+						$feature_match = true;
+					}
+				}
+				
+				if ( ! $feature_match ) {
+					continue;
+				}
+			}
+			
+			// Only include WPShadow events (starts with wpshadow_)
+			if ( strpos( $hook, 'wpshadow_' ) !== 0 ) {
+				continue;
+			}
+			
+			foreach ( $cron_event as $event_key => $event_data ) {
+				$schedule = $event_data['schedule'] ?? false;
+				$recurrence = __( 'Once', 'wpshadow' );
+				
+				if ( $schedule && isset( $schedules[ $schedule ] ) ) {
+					$recurrence = $schedules[ $schedule ]['display'];
+				}
+				
+				// Format event name (remove wpshadow_ prefix and make readable)
+				$event_name = str_replace( 'wpshadow_', '', $hook );
+				$event_name = str_replace( '_', ' ', $event_name );
+				$event_name = ucwords( $event_name );
+				
+				// Try to determine which feature this belongs to
+				$feature_label = '';
+				foreach ( $feature_hooks as $fid => $hooks ) {
+					if ( in_array( $hook, $hooks, true ) ) {
+						$feature_label = ucwords( str_replace( '-', ' ', $fid ) );
+						break;
+					}
+				}
+				
+				// Determine color based on recurrence
+				$color = '#2271b1'; // Default blue
+				if ( strpos( $recurrence, 'hour' ) !== false ) {
+					$color = '#d63638'; // Red for hourly
+				} elseif ( strpos( $recurrence, 'day' ) !== false || strpos( $recurrence, 'daily' ) !== false ) {
+					$color = '#00a32a'; // Green for daily
+				} elseif ( strpos( $recurrence, 'week' ) !== false ) {
+					$color = '#f0b849'; // Yellow for weekly
+				}
+				
+				// Calculate time until next run
+				$time_until = $timestamp - time();
+				$next_run_formatted = human_time_diff( time(), $timestamp );
+				
+				if ( $time_until < 0 ) {
+					$next_run_formatted = sprintf(
+						/* translators: %s: Time difference */
+						__( '%s ago (pending)', 'wpshadow' ),
+						human_time_diff( $timestamp, time() )
+					);
+				} else {
+					$next_run_formatted = sprintf(
+						/* translators: %s: Time difference */
+						__( 'in %s', 'wpshadow' ),
+						$next_run_formatted
+					);
+				}
+				
+				$scheduled_events[] = array(
+					'hook'                => $hook,
+					'name'                => $event_name,
+					'timestamp'           => $timestamp,
+					'next_run_formatted'  => $next_run_formatted,
+					'recurrence'          => $recurrence,
+					'schedule'            => $schedule,
+					'feature_label'       => $feature_label,
+					'color'               => $color,
+				);
+			}
+		}
+	}
+	
+	// Sort by timestamp (next run time)
+	usort( $scheduled_events, function( $a, $b ) {
+		return $a['timestamp'] - $b['timestamp'];
+	} );
+	
+	return $scheduled_events;
 }

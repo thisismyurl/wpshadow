@@ -203,7 +203,7 @@ background-color: #f6f7f7;
 .wpshadow-log-dot {
 	position: absolute;
 	left: 4px;
-	top: 2px;
+	top: 0px;
 	width: 8px;
 	height: 8px;
 	border-radius: 50%;

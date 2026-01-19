@@ -224,10 +224,15 @@ $metabox_screen_id = $GLOBALS['wpshadow_details_page_screen_id'] ?? 'toplevel_pa
 				</div>
 			<?php else : ?>
 			<div id="poststuff">
-				<div id="post-body" class="metabox-holder columns-1">
-					<div id="postbox-container-1" class="postbox-container">
+				<div id="post-body" class="metabox-holder columns-2">
+					<div id="post-body-content">
 						<div id="normal-sortables" class="meta-box-sortables ui-sortable">
 							<?php do_meta_boxes( $metabox_screen_id, 'normal', null ); ?>
+						</div>
+					</div>
+					<div id="postbox-container-1" class="postbox-container">
+						<div id="side-sortables" class="meta-box-sortables ui-sortable">
+							<?php do_meta_boxes( $metabox_screen_id, 'side', null ); ?>
 						</div>
 					</div>
 				</div>

@@ -200,6 +200,37 @@ abstract class WPSHADOW_Abstract_Feature implements WPSHADOW_Feature_Interface {
 		return $this->aliases;
 	}
 
+	/**
+	 * Determine whether a sub-feature is enabled.
+	 *
+	 * Falls back to the configured default when no option is stored.
+	 * Options are stored per-site using the convention `wpshadow_{feature_id}_{sub_feature_key}`.
+	 *
+	 * @since 1.0.0
+	 * @param string $sub_feature_key Sub-feature key (sanitized).
+	 * @param bool   $default Default value when no option exists.
+	 * @return bool Whether the sub-feature is enabled.
+	 */
+	public function is_sub_feature_enabled( string $sub_feature_key, bool $default = true ): bool {
+		$sub_feature_key = sanitize_key( $sub_feature_key );
+
+		// Determine default state from configuration if provided.
+		$default_state = $default;
+		$sub_features  = $this->get_sub_features();
+		if ( isset( $sub_features[ $sub_feature_key ]['default_enabled'] ) ) {
+			$default_state = (bool) $sub_features[ $sub_feature_key ]['default_enabled'];
+		}
+
+		$option_name  = "wpshadow_{$this->id}_{$sub_feature_key}";
+		$option_value = is_multisite() ? get_site_option( $option_name, null ) : get_option( $option_name, null );
+
+		if ( null === $option_value ) {
+			return $default_state;
+		}
+
+		return (bool) $option_value;
+	}
+
 	public static function is_enabled( bool $network = false ): bool {
 		// For static calls, we need to derive the feature ID from the class name
 		// WPSHADOW_Feature_FeatureName -> feature-name

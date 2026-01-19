@@ -109,6 +109,7 @@ final class WPSHADOW_Feature_External_Fonts_Disabler extends WPSHADOW_Abstract_F
 						'description'         => __( 'Configure whitelist, system fonts, and debug options.', 'wpshadow' ),
 						'default_enabled'     => true,
 						'has_settings'        => true,
+						'settings_only'       => true,
 					),
 				),
 			)
