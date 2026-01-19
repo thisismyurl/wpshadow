@@ -62,6 +62,10 @@ namespace {
 			wp_send_json_error( __( 'Failed to update feature state. Feature not found or unable to save.', 'wpshadow' ) );
 		}
 
+		// Get feature name from registry
+		$feature = \WPShadow\CoreSupport\WPSHADOW_Feature_Registry::get_feature( $feature_id );
+		$feature_name = ( $feature && ! empty( $feature['name'] ) ) ? $feature['name'] : ucwords( str_replace( array( '_', '-' ), ' ', $feature_id ) );
+
 		// Log the activity
 		if ( function_exists( 'WPShadow\\CoreSupport\\wpshadow_log_feature_activity' ) ) {
 			\WPShadow\CoreSupport\wpshadow_log_feature_activity( $feature_id, $enabled ? 'enabled' : 'disabled' );
@@ -70,8 +74,9 @@ namespace {
 		// Return success with updated state
 		wp_send_json_success( array(
 			'feature_id' => $feature_id,
+			'feature_name' => $feature_name,
 			'enabled'    => $enabled,
-			'message'    => $enabled ? __( 'Feature enabled successfully.', 'wpshadow' ) : __( 'Feature disabled successfully.', 'wpshadow' ),
+			'message'    => $enabled ? sprintf( __( '%s enabled', 'wpshadow' ), $feature_name ) : sprintf( __( '%s disabled', 'wpshadow' ), $feature_name ),
 		) );
 	} catch ( \Exception $e ) {
 		wp_send_json_error( sprintf( __( 'Error updating feature: %s', 'wpshadow' ), $e->getMessage() ) );
@@ -107,6 +112,13 @@ function wpshadow_ajax_toggle_subfeature(): void {
 	// Get the enabled state from request
 	$enabled = isset( $_POST['enabled'] ) ? (bool) intval( $_POST['enabled'] ) : false;
 
+	// Get sub-feature name from registry
+	$feature = \WPShadow\CoreSupport\WPSHADOW_Feature_Registry::get_feature( $feature_id );
+	$subfeature_name = $sub_key;
+	if ( $feature && ! empty( $feature['sub_features'][ $sub_key ] ) ) {
+		$subfeature_name = $feature['sub_features'][ $sub_key ]['name'] ?? $sub_key;
+	}
+
 	// Save sub-feature state as a WordPress option
 	// Format: wpshadow_{feature_id}_{sub_key}
 	$option_key = "wpshadow_{$feature_id}_{$sub_key}";
@@ -123,9 +135,10 @@ function wpshadow_ajax_toggle_subfeature(): void {
 	// Return success - must return with feature_id so the JavaScript can trigger custom events
 	wp_send_json_success( array(
 		'feature_id' => $feature_id,
+		'subfeature_name' => $subfeature_name,
 		'subfeature_key' => $sub_key,
 		'enabled'    => $enabled,
-		'message'    => $enabled ? __( 'Sub-feature enabled successfully.', 'wpshadow' ) : __( 'Sub-feature disabled successfully.', 'wpshadow' ),
+		'message'    => $enabled ? sprintf( __( '%s enabled', 'wpshadow' ), $subfeature_name ) : sprintf( __( '%s disabled', 'wpshadow' ), $subfeature_name ),
 	) );
 }
 
@@ -285,6 +298,152 @@ function wpshadow_ajax_get_feature_history(): void {
 	) );
 }
 
+/**
+ * AJAX handler to refresh activity history widget data.
+ *
+ * @return void
+ */
+function wpshadow_ajax_refresh_activity(): void {
+	check_ajax_referer( 'wpshadow_refresh_activity', 'nonce' );
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( __( 'Insufficient permissions.', 'wpshadow' ) );
+	}
+
+	// Get fresh activity logs
+	if ( ! function_exists( 'WPShadow\\CoreSupport\\wpshadow_get_all_feature_logs' ) ) {
+		wp_send_json_error( __( 'Activity logs function not available.', 'wpshadow' ) );
+	}
+
+	$logs = \WPShadow\CoreSupport\wpshadow_get_all_feature_logs( 15 );
+
+	// Format logs for JavaScript consumption
+	$formatted_logs = array();
+	foreach ( $logs as $log ) {
+		$formatted_logs[] = array(
+			'action' => $log['action'],
+			'action_label' => $log['action_label'],
+			'feature_id' => $log['feature_id'],
+			'feature_name' => $log['feature_name'],
+			'feature_url' => admin_url( 'admin.php?page=wpshadow&wpshadow_tab=features&feature=' . urlencode( $log['feature_id'] ) ),
+			'timestamp_full' => $log['timestamp_full'],
+			'timestamp_human' => $log['timestamp_human'],
+			'message' => isset( $log['message'] ) ? $log['message'] : '',
+			'user' => isset( $log['user'] ) ? $log['user'] : '',
+		);
+	}
+
+	wp_send_json_success( array(
+		'logs' => $formatted_logs,
+		'has_more' => count( $logs ) >= 15,
+		'view_all_url' => admin_url( 'admin.php?page=wpshadow&wpshadow_tab=features' ),
+		'view_all_label' => __( 'View All Activity', 'wpshadow' ),
+		'empty_message' => __( 'No activity logged yet.', 'wpshadow' ),
+	) );
+}
+
+/**
+ * AJAX handler to refresh health widget.
+ *
+ * @return void
+ */
+function wpshadow_ajax_refresh_health_widget(): void {
+	check_ajax_referer( 'wpshadow_health_refresh', 'nonce' );
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( __( 'Insufficient permissions.', 'wpshadow' ) );
+	}
+
+	// Get system metrics and render widget content
+	if ( function_exists( 'WPShadow\\CoreSupport\\wpshadow_get_system_metrics' ) &&
+	     function_exists( 'WPShadow\\CoreSupport\\wpshadow_calculate_health_score' ) &&
+	     function_exists( 'WPShadow\\CoreSupport\\wpshadow_get_health_status' ) &&
+	     function_exists( 'WPShadow\\CoreSupport\\wpshadow_get_health_indicators' ) ) {
+		
+		$metrics = \WPShadow\CoreSupport\wpshadow_get_system_metrics();
+		$health_score = \WPShadow\CoreSupport\wpshadow_calculate_health_score( $metrics );
+		$health_status = \WPShadow\CoreSupport\wpshadow_get_health_status( $health_score );
+		$indicators = \WPShadow\CoreSupport\wpshadow_get_health_indicators( $metrics );
+
+		// Calculate stroke dash offset for circular progress
+		$radius = 30;
+		$circumference = 2 * pi() * $radius;
+		$offset = $circumference - ( $health_score / 100 ) * $circumference;
+
+		wp_send_json_success( array(
+			'score' => $health_score,
+			'status_label' => $health_status['label'],
+			'status_color' => $health_status['color'],
+			'circumference' => $circumference,
+			'offset' => $offset,
+			'metrics' => $metrics,
+			'indicators' => $indicators,
+		) );
+	} else {
+		wp_send_json_error( __( 'Health functions not available.', 'wpshadow' ) );
+	}
+}
+
+/**
+ * AJAX handler to save CSS ignore rules.
+ *
+ * @return void
+ */
+function wpshadow_ajax_save_css_ignore_rules(): void {
+	check_ajax_referer( 'wpshadow_save_css_ignore_rules', 'nonce' );
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( __( 'Insufficient permissions.', 'wpshadow' ) );
+	}
+
+	$patterns = isset( $_POST['patterns'] ) ? array_map( 'sanitize_text_field', (array) wp_unslash( $_POST['patterns'] ) ) : array();
+	update_option( 'wpshadow_asset-version-removal_css_ignore_patterns', $patterns );
+
+	wp_send_json_success( array(
+		'message' => __( 'CSS ignore patterns saved', 'wpshadow' ),
+	) );
+}
+
+/**
+ * AJAX handler to save JavaScript ignore rules.
+ *
+ * @return void
+ */
+function wpshadow_ajax_save_js_ignore_rules(): void {
+	check_ajax_referer( 'wpshadow_save_js_ignore_rules', 'nonce' );
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( __( 'Insufficient permissions.', 'wpshadow' ) );
+	}
+
+	$patterns = isset( $_POST['patterns'] ) ? array_map( 'sanitize_text_field', (array) wp_unslash( $_POST['patterns'] ) ) : array();
+	update_option( 'wpshadow_asset-version-removal_js_ignore_patterns', $patterns );
+
+	wp_send_json_success( array(
+		'message' => __( 'JavaScript ignore patterns saved', 'wpshadow' ),
+	) );
+}
+
+/**
+ * AJAX handler to save plugin ignore list.
+ *
+ * @return void
+ */
+function wpshadow_ajax_save_plugin_ignore_list(): void {
+	check_ajax_referer( 'wpshadow_save_plugin_ignore_list', 'nonce' );
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( __( 'Insufficient permissions.', 'wpshadow' ) );
+	}
+
+	$plugins = isset( $_POST['plugins'] ) ? array_map( 'sanitize_text_field', (array) wp_unslash( $_POST['plugins'] ) ) : array();
+	update_option( 'wpshadow_asset-version-removal_ignored_plugins', $plugins );
+
+	wp_send_json_success( array(
+		'message' => __( 'Plugin ignore list saved', 'wpshadow' ),
+	) );
+}
+
 // ========================================================================
 // Register AJAX handlers immediately (must happen before WordPress routes requests)
 // ========================================================================
@@ -294,6 +453,11 @@ add_action( 'wp_ajax_wpshadow_toggle_feature', 'wpshadow_ajax_toggle_feature' );
 add_action( 'wp_ajax_wpshadow_toggle_subfeature', 'wpshadow_ajax_toggle_subfeature' );
 	add_action( 'wp_ajax_wpshadow_load_more_logs', 'wpshadow_ajax_load_more_logs' );
 	add_action( 'wp_ajax_wpshadow_get_feature_history', 'wpshadow_ajax_get_feature_history' );
+	add_action( 'wp_ajax_wpshadow_refresh_health_widget', 'wpshadow_ajax_refresh_health_widget' );
+	add_action( 'wp_ajax_wpshadow_refresh_activity', 'wpshadow_ajax_refresh_activity' );
+	add_action( 'wp_ajax_wpshadow_save_css_ignore_rules', 'wpshadow_ajax_save_css_ignore_rules' );
+	add_action( 'wp_ajax_wpshadow_save_js_ignore_rules', 'wpshadow_ajax_save_js_ignore_rules' );
+	add_action( 'wp_ajax_wpshadow_save_plugin_ignore_list', 'wpshadow_ajax_save_plugin_ignore_list' );
 }
 
 namespace WPShadow {
@@ -345,6 +509,44 @@ function wpshadow_enqueue_admin_assets(): void {
 		array(),
 		WPSHADOW_VERSION
 	);
+	
+	// Enqueue dashboard health refresh script only on dashboard tab
+	$current_tab = isset( $_GET['wpshadow_tab'] ) ? sanitize_key( $_GET['wpshadow_tab'] ) : 'dashboard';
+	if ( 'dashboard' === $current_tab ) {
+		wp_enqueue_script(
+			'wpshadow-health-refresh',
+			WPSHADOW_URL . 'assets/js/dashboard-health-refresh.js',
+			array( 'jquery' ),
+			WPSHADOW_VERSION,
+			true
+		);
+		
+		wp_enqueue_script(
+			'wpshadow-activity-refresh',
+			WPSHADOW_URL . 'assets/js/dashboard-activity-refresh.js',
+			array( 'jquery' ),
+			WPSHADOW_VERSION,
+			true
+		);
+		
+		wp_localize_script(
+			'wpshadow-health-refresh',
+			'wpshadowHealth',
+			array(
+				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+				'nonce' => wp_create_nonce( 'wpshadow_health_refresh' ),
+			)
+		);
+		
+		wp_localize_script(
+			'wpshadow-activity-refresh',
+			'wpshadowActivity',
+			array(
+				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+				'nonce' => wp_create_nonce( 'wpshadow_refresh_activity' ),
+			)
+		);
+	}
 	
 	// Add inline CSS to enforce layout (backup)
 	$inline_css = '
