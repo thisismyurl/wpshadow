@@ -11,31 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Diagnostic_Asset_Versions extends Diagnostic_Base {
 
-	protected function get_id(): string {
-		return 'asset-versions';
-	}
+	protected static $slug = 'asset-versions';
+	protected static $title = 'Asset Version Strings';
+	protected static $description = 'Checks for version query strings (?ver=) on CSS and JavaScript files that can be removed to improve caching.';
 
-	protected function get_title(): string {
-		return __( 'Asset Version Strings', 'wpshadow' );
-	}
-
-	protected function get_description(): string {
-		return __( 'Checks for version query strings (?ver=) on CSS and JavaScript files that can be removed to improve caching.', 'wpshadow' );
-	}
-
-	protected function get_category(): string {
-		return 'performance';
-	}
-
-	protected function get_severity(): string {
-		return 'low';
-	}
-
-	protected function is_auto_fixable(): bool {
-		return true;
-	}
-
-	public function check(): ?array {
+	public static function check(): ?array {
 		if ( get_option( 'wpshadow_asset_version_removal_enabled', false ) ) {
 			return null;
 		}
@@ -73,18 +53,19 @@ class Diagnostic_Asset_Versions extends Diagnostic_Base {
 		}
 
 		return array(
-			'finding_id'   => $this->get_id(),
-			'title'        => $this->get_title(),
+			'finding_id'   => self::$slug,
+			'title'        => self::$title,
 			'description'  => sprintf(
 				__( 'Found %d assets with version query strings (?ver=) that could be removed. Examples: %s', 'wpshadow' ),
 				$versioned_assets,
 				implode( ', ', $sample_assets )
 			),
-			'category'     => $this->get_category(),
-			'severity'     => $this->get_severity(),
+			'category'     => 'performance',
+			'severity'     => 'low',
 			'threat_level' => 15,
-			'auto_fixable' => $this->is_auto_fixable(),
+			'auto_fixable' => true,
 			'timestamp'    => current_time( 'mysql' ),
 		);
 	}
 }
+

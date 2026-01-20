@@ -30,6 +30,8 @@ class Treatment_Registry {
 		'Treatment_Iframe_Busting',
 		'Treatment_Image_Lazy_Load',
 		'Treatment_External_Fonts',
+		'Treatment_JQuery_Migrate',
+		'Treatment_Block_Analytics_Hosts',
 		'Treatment_Plugin_Auto_Updates',
 		'Treatment_Error_Log',
 		'Treatment_Skiplinks',
@@ -38,6 +40,16 @@ class Treatment_Registry {
 		'Treatment_Maintenance',
 		'Treatment_Nav_ARIA',
 		'Treatment_Search_Indexing',
+		'Treatment_Content_Optimizer',
+		'Treatment_Paste_Cleanup',
+		'Treatment_HTML_Cleanup',
+		'Treatment_Pre_Publish_Review',
+		'Treatment_Embed_Disable',
+		'Treatment_Interactivity_Cleanup',
+		'Treatment_Strip_Resource_Hints',
+		'Treatment_Strip_SpeculationRules',
+		'Treatment_Strip_JSON_LD',
+		'Treatment_Strip_Social_Meta',
 	);
 	
 	/**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Workflow Wizard View (IFTTT-style step-by-step)
+ * Workflow Wizard View (Workflow Builder step-by-step)
  *
  * @package WPShadow
  */
@@ -58,22 +58,22 @@ if ( $action === 'edit' && $workflow_id ) {
 		<?php
 		switch ( $step ) {
 			case 'trigger':
-				include __DIR__ . '/wizard-steps/trigger-selection.php';
+				include __DIR__ . '/workflow-wizard-steps/trigger-selection.php';
 				break;
 			case 'trigger-config':
-				include __DIR__ . '/wizard-steps/trigger-config.php';
+				include __DIR__ . '/workflow-wizard-steps/trigger-config.php';
 				break;
 			case 'action':
-				include __DIR__ . '/wizard-steps/action-selection.php';
+				include __DIR__ . '/workflow-wizard-steps/action-selection.php';
 				break;
 			case 'action-config':
-				include __DIR__ . '/wizard-steps/action-config.php';
+				include __DIR__ . '/workflow-wizard-steps/action-config.php';
 				break;
 			case 'review':
-				include __DIR__ . '/wizard-steps/review.php';
+				include __DIR__ . '/workflow-wizard-steps/review.php';
 				break;
 			default:
-				include __DIR__ . '/wizard-steps/trigger-selection.php';
+				include __DIR__ . '/workflow-wizard-steps/trigger-selection.php';
 		}
 		?>
 	</div>

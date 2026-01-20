@@ -34,6 +34,7 @@ class Diagnostic_Registry {
 		'Diagnostic_Iframe_Busting',
 		'Diagnostic_Image_Lazy_Load',
 		'Diagnostic_External_Fonts',
+		'Diagnostic_Jquery_Migrate',
 		'Diagnostic_Plugin_Auto_Updates',
 		'Diagnostic_Error_Log',
 		'Diagnostic_Core_Integrity',
@@ -46,6 +47,16 @@ class Diagnostic_Registry {
 		'Diagnostic_Search_Indexing',
 		'Diagnostic_Admin_Email',
 		'Diagnostic_Timezone',
+		'Diagnostic_Content_Optimizer',
+		'Diagnostic_Paste_Cleanup',
+		'Diagnostic_HTML_Cleanup',
+		'Diagnostic_Pre_Publish_Review',
+		'Diagnostic_Embed_Disable',
+		'Diagnostic_Interactivity_Cleanup',
+		'Diagnostic_PHP_Version',
+		'Diagnostic_Database_Health',
+		'Diagnostic_File_Permissions',
+		'Diagnostic_Security_Headers',
 	);
 	
 	/**

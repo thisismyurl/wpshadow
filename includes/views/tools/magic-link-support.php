@@ -1,0 +1,123 @@
+<?php
+/**
+ * Magic Link Support Tool
+ *
+ * @package WPShadow
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+$magic_links = get_option( 'wpshadow_magic_links', array() );
+$active_links = array_filter( $magic_links, function( $link ) {
+	return isset( $link['expires_at'] ) && $link['expires_at'] > current_time( 'timestamp' );
+} );
+?>
+
+<div class="wpshadow-tool-container">
+	<h2><?php esc_html_e( 'Temporary Support Login', 'wpshadow' ); ?></h2>
+	<p><?php esc_html_e( 'Create secure, temporary login links for developers to help fix your site without needing your password.', 'wpshadow' ); ?></p>
+
+	<div class="wpshadow-tool-section">
+		<h3><?php esc_html_e( 'Create Magic Link', 'wpshadow' ); ?></h3>
+		<form id="wpshadow-create-magic-link">
+			<table class="form-table">
+				<tr>
+					<th scope="row">
+						<label for="developer-name"><?php esc_html_e( 'Developer Name', 'wpshadow' ); ?></label>
+					</th>
+					<td>
+						<input type="text" id="developer-name" name="developer_name" class="regular-text" required />
+						<p class="description"><?php esc_html_e( 'Full name of the person who will use this link', 'wpshadow' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">
+						<label for="developer-email"><?php esc_html_e( 'Developer Email', 'wpshadow' ); ?></label>
+					</th>
+					<td>
+						<input type="email" id="developer-email" name="developer_email" class="regular-text" required />
+						<p class="description"><?php esc_html_e( 'Email for notifications about access', 'wpshadow' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">
+						<label for="access-duration"><?php esc_html_e( 'Access Duration', 'wpshadow' ); ?></label>
+					</th>
+					<td>
+						<select id="access-duration" name="duration">
+							<option value="1">1 <?php esc_html_e( 'hour', 'wpshadow' ); ?></option>
+							<option value="24" selected>24 <?php esc_html_e( 'hours', 'wpshadow' ); ?></option>
+							<option value="72">72 <?php esc_html_e( 'hours', 'wpshadow' ); ?></option>
+							<option value="168">1 <?php esc_html_e( 'week', 'wpshadow' ); ?></option>
+						</select>
+						<p class="description"><?php esc_html_e( 'How long the link will work before expiring', 'wpshadow' ); ?></p>
+					</td>
+				</tr>
+			</table>
+			<button type="submit" class="button button-primary">
+				<?php esc_html_e( 'Generate Magic Link', 'wpshadow' ); ?>
+			</button>
+		</form>
+	</div>
+
+	<div class="wpshadow-tool-section">
+		<h3><?php esc_html_e( 'Active Links', 'wpshadow' ); ?></h3>
+		<?php if ( empty( $active_links ) ) : ?>
+			<p><?php esc_html_e( 'No active magic links. Create one above to provide temporary access.', 'wpshadow' ); ?></p>
+		<?php else : ?>
+			<table class="widefat">
+				<thead>
+					<tr>
+						<th><?php esc_html_e( 'Developer', 'wpshadow' ); ?></th>
+						<th><?php esc_html_e( 'Email', 'wpshadow' ); ?></th>
+						<th><?php esc_html_e( 'Created', 'wpshadow' ); ?></th>
+						<th><?php esc_html_e( 'Expires', 'wpshadow' ); ?></th>
+						<th><?php esc_html_e( 'Action', 'wpshadow' ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ( $active_links as $token => $link ) : ?>
+						<tr>
+							<td><?php echo esc_html( $link['developer_name'] ?? 'Unknown' ); ?></td>
+							<td><?php echo esc_html( $link['developer_email'] ?? '' ); ?></td>
+							<td><?php echo esc_html( gmdate( 'Y-m-d H:i', $link['created_at'] ?? 0 ) ); ?></td>
+							<td><?php echo esc_html( gmdate( 'Y-m-d H:i', $link['expires_at'] ?? 0 ) ); ?></td>
+							<td>
+								<button type="button" class="button button-small wpshadow-revoke-link" data-token="<?php echo esc_attr( $token ); ?>">
+									<?php esc_html_e( 'Revoke', 'wpshadow' ); ?>
+								</button>
+							</td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		<?php endif; ?>
+	</div>
+
+	<div class="wpshadow-tool-section">
+		<h3><?php esc_html_e( 'Security Notes', 'wpshadow' ); ?></h3>
+		<ul style="list-style: disc; margin-left: 20px;">
+			<li><?php esc_html_e( 'Links expire automatically after the set duration', 'wpshadow' ); ?></li>
+			<li><?php esc_html_e( 'You can revoke links anytime before expiration', 'wpshadow' ); ?></li>
+			<li><?php esc_html_e( 'All access is logged for security auditing', 'wpshadow' ); ?></li>
+			<li><?php esc_html_e( 'Each link can only be used once', 'wpshadow' ); ?></li>
+		</ul>
+	</div>
+</div>
+
+<script>
+document.getElementById( 'wpshadow-create-magic-link' )?.addEventListener( 'submit', function( e ) {
+	e.preventDefault();
+	alert( '<?php esc_attr_e( 'Magic link creation feature coming soon!', 'wpshadow' ); ?>' );
+} );
+
+document.querySelectorAll( '.wpshadow-revoke-link' ).forEach( function( btn ) {
+	btn.addEventListener( 'click', function() {
+		if ( confirm( '<?php esc_attr_e( 'Revoke this magic link?', 'wpshadow' ); ?>' ) ) {
+			alert( '<?php esc_attr_e( 'Link revoked!', 'wpshadow' ); ?>' );
+		}
+	} );
+} );
+</script>

@@ -1,6 +1,6 @@
 <?php
 /**
- * IFTTT-style Workflow Wizard
+ * Workflow Builder Wizard
  *
  * @package WPShadow
  * @subpackage Workflow
@@ -28,20 +28,10 @@ class Workflow_Wizard {
 				'label' => 'Schedule',
 				'icon'  => 'clock',
 				'triggers' => array(
-					'time_daily' => array(
-						'label' => 'Every Day',
-						'description' => 'Run at a specific time every day',
+					'schedule' => array(
+						'label' => 'On a Schedule',
+						'description' => 'Run at specific times - daily, weekly, or hourly',
 						'icon' => 'clock',
-					),
-					'time_weekly' => array(
-						'label' => 'Every Week',
-						'description' => 'Run on specific days at a specific time',
-						'icon' => 'calendar',
-					),
-					'time_hourly' => array(
-						'label' => 'Every Hour',
-						'description' => 'Run at the top of every hour',
-						'icon' => 'backup',
 					),
 				),
 			),
@@ -49,35 +39,10 @@ class Workflow_Wizard {
 				'label' => 'Page Load',
 				'icon'  => 'desktop',
 				'triggers' => array(
-					'page_load_all' => array(
-						'label' => 'Every Page Load',
-						'description' => 'Runs on every page load (frontend and admin)',
-						'icon' => 'admin-site',
-					),
-					'page_load_frontend' => array(
-						'label' => 'Frontend Page Load',
-						'description' => 'Runs on frontend page loads only',
-						'icon' => 'visibility',
-					),
-					'page_load_admin' => array(
-						'label' => 'Admin Page Load',
-						'description' => 'Runs on admin page loads only',
-						'icon' => 'admin-settings',
-					),
-					'page_load_single' => array(
-						'label' => 'Single Post/Page Load',
-						'description' => 'Runs when viewing a single post or page',
-						'icon' => 'admin-post',
-					),
-					'page_load_archive' => array(
-						'label' => 'Archive Page Load',
-						'description' => 'Runs on archive, category, or tag pages',
-						'icon' => 'category',
-					),
-					'page_load_home' => array(
-						'label' => 'Homepage Load',
-						'description' => 'Runs only on the homepage',
-						'icon' => 'admin-home',
+					'page_load' => array(
+						'label' => 'When Page Loads',
+						'description' => 'Run when specific pages or areas of your site load',
+						'icon' => 'desktop',
 					),
 				),
 			),
@@ -200,39 +165,103 @@ class Workflow_Wizard {
 					),
 				),
 			),
-			'treatments' => array(
-				'label' => 'Fixes',
-				'icon'  => 'admin-tools',
+			'performance' => array(
+				'label' => 'Performance',
+				'icon'  => 'performance',
 				'actions' => array(
-					'block_external_fonts' => array(
+					'external_fonts' => array(
 						'label' => 'Block External Fonts',
-						'description' => 'Disable external font loading',
+						'description' => 'Disable external font loading for faster pages',
 						'icon' => 'admin-appearance',
 					),
-					'increase_memory' => array(
+					'image_lazy_load' => array(
+						'label' => 'Enable Lazy Loading',
+						'description' => 'Load images only when needed',
+						'icon' => 'format-image',
+					),
+					'html_cleanup' => array(
+						'label' => 'Minify HTML',
+						'description' => 'Remove whitespace and comments from HTML',
+						'icon' => 'editor-code',
+					),
+					'head_cleanup' => array(
+						'label' => 'Clean Up Head',
+						'description' => 'Remove unnecessary tags from HTML head',
+						'icon' => 'editor-removeformatting',
+					),
+					'embed_disable' => array(
+						'label' => 'Disable Embeds',
+						'description' => 'Remove WordPress embed scripts',
+						'icon' => 'format-video',
+					),
+					'css_classes' => array(
+						'label' => 'Clean CSS Classes',
+						'description' => 'Simplify body, post, and nav classes',
+						'icon' => 'admin-appearance',
+					),
+					'memory_limit' => array(
 						'label' => 'Increase Memory Limit',
 						'description' => 'Increase PHP memory limit',
 						'icon' => 'performance',
 					),
-					'disable_debug' => array(
+				),
+			),
+			'content' => array(
+				'label' => 'Content Quality',
+				'icon'  => 'edit',
+				'actions' => array(
+					'content_optimizer' => array(
+						'label' => 'Content Optimizer',
+						'description' => 'Check SEO, readability, and quality',
+						'icon' => 'yes-alt',
+					),
+					'paste_cleanup' => array(
+						'label' => 'Paste Cleanup',
+						'description' => 'Remove inline styles from pasted content',
+						'icon' => 'editor-paste-text',
+					),
+				),
+			),
+			'accessibility' => array(
+				'label' => 'Accessibility',
+				'icon'  => 'universal-access',
+				'actions' => array(
+					'nav_aria' => array(
+						'label' => 'Navigation ARIA',
+						'description' => 'Add ARIA attributes to navigation menus',
+						'icon' => 'menu',
+					),
+				),
+			),
+			'security' => array(
+				'label' => 'Security',
+				'icon'  => 'shield',
+				'actions' => array(
+					'debug_mode' => array(
 						'label' => 'Disable Debug Mode',
 						'description' => 'Turn off WP_DEBUG',
 						'icon' => 'warning',
 					),
-					'fix_ssl' => array(
+					'ssl' => array(
 						'label' => 'Fix SSL Issues',
 						'description' => 'Correct SSL configuration',
 						'icon' => 'lock',
 					),
-					'cleanup_plugins' => array(
+				),
+			),
+			'maintenance' => array(
+				'label' => 'Maintenance',
+				'icon'  => 'admin-tools',
+				'actions' => array(
+					'inactive_plugins' => array(
 						'label' => 'Clean Inactive Plugins',
 						'description' => 'Remove inactive plugins',
 						'icon' => 'admin-plugins',
 					),
-					'block_ip' => array(
-						'label' => 'Block IP Address',
-						'description' => 'Block the current IP',
-						'icon' => 'dismiss',
+					'outdated_plugins' => array(
+						'label' => 'Update Plugins',
+						'description' => 'Update outdated plugins',
+						'icon' => 'update',
 					),
 				),
 			),
@@ -288,7 +317,19 @@ class Workflow_Wizard {
 	 */
 	public static function get_trigger_config( $trigger_id ) {
 		$configs = array(
-			'time_daily' => array(
+			'schedule' => array(
+				array(
+					'id'       => 'frequency',
+					'type'     => 'select',
+					'label'    => 'How often?',
+					'options'  => array(
+						'hourly' => 'Every Hour',
+						'daily'  => 'Daily',
+						'weekly' => 'Weekly',
+					),
+					'default'  => 'daily',
+					'required' => true,
+				),
 				array(
 					'id'          => 'time',
 					'type'        => 'time',
@@ -296,9 +337,11 @@ class Workflow_Wizard {
 					'placeholder' => '14:00',
 					'default'     => '02:00',
 					'required'    => true,
+					'show_if'     => array(
+						'field' => 'frequency',
+						'value' => array( 'daily', 'weekly' ),
+					),
 				),
-			),
-			'time_weekly' => array(
 				array(
 					'id'       => 'days',
 					'type'     => 'checkbox_group',
@@ -314,31 +357,28 @@ class Workflow_Wizard {
 					),
 					'default'  => array( 'sunday' ),
 					'required' => true,
-				),
-				array(
-					'id'          => 'time',
-					'type'        => 'time',
-					'label'       => 'What time?',
-					'placeholder' => '14:00',
-					'default'     => '14:00',
-					'required'    => true,
-				),
-			),
-			'page_load_frontend' => array(
-				array(
-					'id'       => 'post_types',
-					'type'     => 'checkbox_group',
-					'label'    => 'Which post types? (optional)',
-					'options'  => array(
-						'post' => 'Posts',
-						'page' => 'Pages',
-						'all'  => 'All Types',
+					'show_if'  => array(
+						'field' => 'frequency',
+						'value' => 'weekly',
 					),
-					'default'  => array( 'all' ),
-					'required' => false,
 				),
 			),
-			'page_load_single' => array(
+			'page_load' => array(
+				array(
+					'id'       => 'page_type',
+					'type'     => 'select',
+					'label'    => 'Which pages?',
+					'options'  => array(
+						'all'      => 'All Pages (Frontend & Admin)',
+						'frontend' => 'Frontend Pages Only',
+						'admin'    => 'Admin Pages Only',
+						'single'   => 'Single Posts/Pages',
+						'archive'  => 'Archive/Category Pages',
+						'home'     => 'Homepage Only',
+					),
+					'default'  => 'all',
+					'required' => true,
+				),
 				array(
 					'id'       => 'post_types',
 					'type'     => 'checkbox_group',
@@ -349,7 +389,11 @@ class Workflow_Wizard {
 						'all'  => 'All Types',
 					),
 					'default'  => array( 'all' ),
-					'required' => true,
+					'required' => false,
+					'show_if'  => array(
+						'field' => 'page_type',
+						'value' => array( 'frontend', 'single' ),
+					),
 				),
 			),
 			'user_login' => array(
@@ -624,5 +668,56 @@ class Workflow_Wizard {
 			'type'   => $executor_type,
 			'config' => $config,
 		);
+	}
+
+	/**
+	 * Get dynamically discovered treatment actions as a category
+	 *
+	 * @return array Discovered treatments organized by category
+	 */
+	public static function get_discovered_treatments(): array {
+		$treatments = Workflow_Discovery::discover_treatments();
+
+		if ( empty( $treatments ) ) {
+			return array();
+		}
+
+		return array(
+			'discovered_treatments' => array(
+				'label'   => 'Available Fixes',
+				'icon'    => 'admin-tools',
+				'actions' => $treatments,
+			),
+		);
+	}
+
+	/**
+	 * Get dynamically discovered diagnostic actions as a category
+	 *
+	 * @return array Discovered diagnostics organized by category
+	 */
+	public static function get_discovered_diagnostics(): array {
+		$diagnostics = Workflow_Discovery::discover_diagnostics();
+
+		if ( empty( $diagnostics ) ) {
+			return array();
+		}
+
+		return array(
+			'discovered_diagnostics' => array(
+				'label'   => 'Available Checks',
+				'icon'    => 'search',
+				'actions' => $diagnostics,
+			),
+		);
+	}
+
+	/**
+	 * Clear the discovery cache when files are updated
+	 *
+	 * Called by admin or when files are synced
+	 */
+	public static function refresh_discovery_cache(): void {
+		Workflow_Discovery::clear_cache();
 	}
 }

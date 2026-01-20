@@ -1,6 +1,6 @@
 <?php
 /**
- * Workflow List View (IFTTT-style dashboard)
+ * Workflow List View (Workflow Builder dashboard)
  *
  * @package WPShadow
  */
@@ -15,7 +15,7 @@ $workflows = \WPShadow\Workflow\Workflow_Manager::get_workflows();
 <div class="wrap wpshadow-workflow-list">
 	<h1>
 		<?php esc_html_e( 'Automation Workflows', 'wpshadow' ); ?>
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automation&action=create' ) ); ?>" class="page-title-action">
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>" class="page-title-action">
 			<?php esc_html_e( 'Create Workflow', 'wpshadow' ); ?>
 		</a>
 	</h1>
@@ -43,7 +43,7 @@ $workflows = \WPShadow\Workflow\Workflow_Manager::get_workflows();
 				</ul>
 			</div>
 
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automation&action=create' ) ); ?>" class="button button-primary button-hero">
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>" class="button button-primary button-hero">
 				<?php esc_html_e( 'Create Your First Workflow', 'wpshadow' ); ?>
 			</a>
 		</div>
@@ -83,7 +83,7 @@ $workflows = \WPShadow\Workflow\Workflow_Manager::get_workflows();
 					</div>
 
 					<div class="workflow-actions">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automation&action=edit&workflow=' . $workflow['id'] ) ); ?>" class="button button-small">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=edit&workflow=' . $workflow['id'] ) ); ?>" class="button button-small">
 							<?php esc_html_e( 'Edit', 'wpshadow' ); ?>
 						</a>
 						<button class="button button-small workflow-run-btn" data-workflow-id="<?php echo esc_attr( $workflow['id'] ); ?>">

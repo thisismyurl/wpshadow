@@ -418,21 +418,27 @@ add_action( 'admin_menu', function() {
 	);
 } );
 
+// Load core interfaces and base classes first
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-diagnostic-base.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-treatment-interface.php';
+
 // Load diagnostic registry
 require_once plugin_dir_path( __FILE__ ) . 'includes/diagnostics/class-diagnostic-registry.php';
 
 // Load treatment registry
 require_once plugin_dir_path( __FILE__ ) . 'includes/treatments/class-treatment-registry.php';
 
-// Load core classes
-require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-diagnostic-base.php';
+// Load remaining core classes
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-finding-status-manager.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-kpi-tracker.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-block-registry.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-manager.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-discovery.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-discovery-hooks.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-wizard.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-ajax.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-executor.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-treatment-hooks.php';
 
 /**
  * Initialize diagnostics system.
@@ -441,217 +447,8 @@ add_action( 'plugins_loaded', function() {
 	\WPShadow\Diagnostics\Diagnostic_Registry::init();
 	\WPShadow\Treatments\Treatment_Registry::init();
 	\WPShadow\Workflow\Workflow_Executor::init();
-	wpshadow_apply_enforcements();
+	\WPShadow\Core\Treatment_Hooks::init();
 } );
-
-/**
- * Apply enforced options for treatments that persist via options.
- */
-function wpshadow_apply_enforcements() {
-	// Head cleanup.
-	if ( get_option( 'wpshadow_head_cleanup_enabled' ) ) {
-		remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
-		remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
-		remove_action( 'wp_print_styles', 'print_emoji_styles' );
-		remove_action( 'admin_print_styles', 'print_emoji_styles' );
-		remove_action( 'wp_head', 'wp_oembed_add_discovery_links' );
-		remove_action( 'wp_head', 'rsd_link' );
-		remove_action( 'wp_head', 'wp_shortlink_wp_head' );
-	}
-
-	// Clickjacking protection.
-	if ( get_option( 'wpshadow_iframe_busting_enabled' ) ) {
-		add_action( 'send_headers', 'wpshadow_send_iframe_busting_headers' );
-	}
-
-	// Force image lazy loading.
-	if ( get_option( 'wpshadow_force_lazyload' ) ) {
-		add_filter( 'wp_lazy_loading_enabled', 'wpshadow_force_lazyload', 10, 3 );
-	}
-
-	// Block external Google-hosted fonts.
-	if ( get_option( 'wpshadow_block_external_fonts' ) ) {
-		add_filter( 'style_loader_src', 'wpshadow_block_external_font_src', 10, 2 );
-	}
-
-	// Skiplinks.
-	if ( get_option( 'wpshadow_skiplinks_enabled' ) ) {
-		add_action( 'wp_body_open', 'wpshadow_render_skiplinks', 5 );
-	}
-
-	// Asset version removal.
-	if ( get_option( 'wpshadow_asset_version_removal_enabled' ) ) {
-		add_filter( 'style_loader_src', 'wpshadow_remove_asset_version', 15, 1 );
-		add_filter( 'script_loader_src', 'wpshadow_remove_asset_version', 15, 1 );
-	}
-
-	// CSS class cleanup.
-	if ( get_option( 'wpshadow_css_class_cleanup_enabled' ) ) {
-		add_filter( 'body_class', 'wpshadow_simplify_body_classes', 10, 1 );
-		add_filter( 'post_class', 'wpshadow_simplify_post_classes', 10, 3 );
-		add_filter( 'nav_menu_css_class', 'wpshadow_simplify_nav_classes', 10, 4 );
-		add_filter( 'nav_menu_item_id', '__return_false' );
-	}
-
-	// Navigation accessibility.
-	if ( get_option( 'wpshadow_nav_accessibility_enabled' ) ) {
-		add_filter( 'wp_nav_menu_objects', 'wpshadow_add_nav_aria', 10, 2 );
-	}
-}
-
-/**
- * Send clickjacking protection headers.
- */
-function wpshadow_send_iframe_busting_headers() {
-	header( 'X-Frame-Options: SAMEORIGIN' );
-	header( "Content-Security-Policy: frame-ancestors 'self'" );
-}
-
-/**
- * Enforce lazy loading for images.
- */
-function wpshadow_force_lazyload( $default, $tag_name, $context ) {
-	if ( 'img' === $tag_name ) {
-		return true;
-	}
-
-	return $default;
-}
-
-/**
- * Block Google-hosted font sources.
- */
-function wpshadow_block_external_font_src( $src, $handle ) {
-	if ( false !== stripos( $src, 'fonts.googleapis.com' ) || false !== stripos( $src, 'fonts.gstatic.com' ) ) {
-		return false;
-	}
-
-	return $src;
-}
-
-/**
- * Render skiplinks for accessibility.
- */
-function wpshadow_render_skiplinks() {
-	echo '<a class="wpshadow-skiplink" href="#main" style="position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to content</a>';
-}
-
-/**
- * Remove version query strings from asset URLs.
- *
- * @param string $src Asset source URL.
- * @return string Modified URL without version parameter.
- */
-function wpshadow_remove_asset_version( $src ) {
-	if ( ! is_string( $src ) || strpos( $src, 'ver=' ) === false ) {
-		return $src;
-	}
-
-	return remove_query_arg( 'ver', $src );
-}
-
-/**
- * Simplify body classes to essential only.
- *
- * @param array $classes Original body classes.
- * @return array Filtered classes.
- */
-function wpshadow_simplify_body_classes( $classes ) {
-	$essential = array(
-		'home',
-		'blog',
-		'archive',
-		'single',
-		'page',
-		'search',
-		'error404',
-		'logged-in',
-		'admin-bar',
-	);
-
-	$keep = array();
-	foreach ( $classes as $class ) {
-		if ( in_array( $class, $essential, true ) ) {
-			$keep[] = $class;
-		} elseif ( str_starts_with( $class, 'post-type-' ) || str_starts_with( $class, 'page-template-' ) ) {
-			$keep[] = $class;
-		}
-	}
-
-	return array_unique( $keep );
-}
-
-/**
- * Simplify post classes to essential only.
- *
- * @param array $classes Original post classes.
- * @param mixed $class Additional class parameter.
- * @param int   $post_id Post ID.
- * @return array Filtered classes.
- */
-function wpshadow_simplify_post_classes( $classes, $class, $post_id ) {
-	$essential = array( 'post', 'entry', 'hentry' );
-	$keep      = array();
-
-	foreach ( $classes as $css_class ) {
-		if ( in_array( $css_class, $essential, true ) ) {
-			$keep[] = $css_class;
-		} elseif ( str_starts_with( $css_class, 'type-' ) || str_starts_with( $css_class, 'format-' ) ) {
-			$keep[] = $css_class;
-		} elseif ( in_array( $css_class, array( 'sticky', 'has-post-thumbnail' ), true ) ) {
-			$keep[] = $css_class;
-		}
-	}
-
-	return array_unique( $keep );
-}
-
-/**
- * Simplify navigation menu classes.
- *
- * @param array  $classes Original nav item classes.
- * @param object $item Menu item object.
- * @param object $args Menu args.
- * @param int    $depth Menu depth.
- * @return array Filtered classes.
- */
-function wpshadow_simplify_nav_classes( $classes, $item, $args, $depth ) {
-	$keep = array( 'menu-item' );
-
-	if ( in_array( 'current-menu-item', $classes, true ) || in_array( 'current_page_item', $classes, true ) ) {
-		$keep[] = 'current';
-	}
-
-	if ( in_array( 'menu-item-has-children', $classes, true ) ) {
-		$keep[] = 'has-children';
-	}
-
-	if ( in_array( 'current-menu-ancestor', $classes, true ) ) {
-		$keep[] = 'ancestor';
-	}
-
-	return array_unique( $keep );
-}
-
-/**
- * Add ARIA current-page attribute to active nav items.
- *
- * @param array  $items Menu items.
- * @param object $args Menu args.
- * @return array Modified menu items.
- */
-function wpshadow_add_nav_aria( $items, $args ) {
-	foreach ( $items as $item ) {
-		if ( $item->current ) {
-			if ( ! isset( $item->attributes ) ) {
-				$item->attributes = array();
-			}
-			$item->attributes['aria-current'] = 'page';
-		}
-	}
-
-	return $items;
-}
 
 /**
  * Enqueue Kanban board assets.
@@ -698,7 +495,7 @@ add_action( 'admin_enqueue_scripts', function( $hook ) {
 } );
 
 /**
- * Render Workflow Builder page (IFTTT-style).
+ * Render Workflow Builder page.
  */
 function wpshadow_render_workflow_builder() {
 	if ( ! current_user_can( 'read' ) ) {
@@ -1385,6 +1182,16 @@ function wpshadow_get_finding_category( $finding ) {
 		'debug-mode-enabled' => 'settings',
 		'wordpress-outdated' => 'settings',
 		'plugin-count-high'  => 'settings',
+		'content-optimizer' => 'content',
+		'paste-cleanup' => 'content',
+		'html-cleanup' => 'performance',
+		'pre-publish-review' => 'content',
+		'embed-disable' => 'performance',
+		'interactivity-cleanup' => 'performance',
+		'php-version' => 'security',
+		'database-health' => 'performance',
+		'file-permissions' => 'security',
+		'security-headers' => 'security',
 	);
 
 	$finding_id = isset( $finding['id'] ) ? $finding['id'] : '';

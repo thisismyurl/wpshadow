@@ -9,7 +9,7 @@
 - Modules are loaded by wpshadow-pro: wpshadow-pro-vault, wpshadow-pro-integration, wpshadow-pro-wpadmin-media
 
 **UX Model Direction:**
-- Adopt a visual IF → THEN rule builder (Zapier/IFTTT style) as the primary interaction model for low-tech users.
+- Adopt the Workflow Builder visual IF → THEN rule builder as the primary interaction model for low-tech users.
 - Use the same rule-based UI for feature automation and for scheduling/cron tasks (e.g., reports, scans, cleanups), so novices get one consistent control surface and power users get flexible scoping and timing.
 - Legacy settings remain during rollout; rules become the preferred front door once proven.
 

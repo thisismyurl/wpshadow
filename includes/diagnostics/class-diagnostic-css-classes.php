@@ -11,31 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Diagnostic_CSS_Classes extends Diagnostic_Base {
 
-	protected function get_id(): string {
-		return 'css-classes';
-	}
+	protected static $slug = 'css-classes';
+	protected static $title = 'Excessive CSS Classes';
+	protected static $description = 'Checks for excessive CSS classes on body, post, and navigation elements that can be simplified.';
 
-	protected function get_title(): string {
-		return __( 'Excessive CSS Classes', 'wpshadow' );
-	}
-
-	protected function get_description(): string {
-		return __( 'Checks for excessive CSS classes on body, post, and navigation elements that can be simplified.', 'wpshadow' );
-	}
-
-	protected function get_category(): string {
-		return 'performance';
-	}
-
-	protected function get_severity(): string {
-		return 'low';
-	}
-
-	protected function is_auto_fixable(): bool {
-		return true;
-	}
-
-	public function check(): ?array {
+	public static function check(): ?array {
 		if ( get_option( 'wpshadow_css_class_cleanup_enabled', false ) ) {
 			return null;
 		}
@@ -48,16 +28,16 @@ class Diagnostic_CSS_Classes extends Diagnostic_Base {
 		}
 
 		return array(
-			'finding_id'   => $this->get_id(),
-			'title'        => $this->get_title(),
+			'finding_id'   => self::$slug,
+			'title'        => self::$title,
 			'description'  => sprintf(
 				__( 'Found %d CSS classes on body element. Simplifying classes reduces HTML size and improves performance. WordPress often adds unnecessary classes for post types, templates, and browser detection.', 'wpshadow' ),
 				$class_count
 			),
-			'category'     => $this->get_category(),
-			'severity'     => $this->get_severity(),
+			'category'     => 'performance',
+			'severity'     => 'low',
 			'threat_level' => 20,
-			'auto_fixable' => $this->is_auto_fixable(),
+			'auto_fixable' => true,
 			'timestamp'    => current_time( 'mysql' ),
 		);
 	}

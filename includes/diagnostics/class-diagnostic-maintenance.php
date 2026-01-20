@@ -11,31 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Diagnostic_Maintenance extends Diagnostic_Base {
 
-	protected function get_id(): string {
-		return 'maintenance';
-	}
+	protected static $slug = 'maintenance';
+	protected static $title = 'Stuck Maintenance Mode';
+	protected static $description = 'Checks for stuck .maintenance file that prevents site access after failed updates.';
 
-	protected function get_title(): string {
-		return __( 'Stuck Maintenance Mode', 'wpshadow' );
-	}
-
-	protected function get_description(): string {
-		return __( 'Checks for stuck .maintenance file that prevents site access after failed updates.', 'wpshadow' );
-	}
-
-	protected function get_category(): string {
-		return 'stability';
-	}
-
-	protected function get_severity(): string {
-		return 'critical';
-	}
-
-	protected function is_auto_fixable(): bool {
-		return true;
-	}
-
-	public function check(): ?array {
+	public static function check(): ?array {
 		$maint_file = ABSPATH . '.maintenance';
 
 		if ( ! file_exists( $maint_file ) ) {
@@ -61,16 +41,16 @@ class Diagnostic_Maintenance extends Diagnostic_Base {
 		}
 
 		return array(
-			'finding_id'   => $this->get_id(),
-			'title'        => $this->get_title(),
+			'finding_id'   => self::$slug,
+			'title'        => self::$title,
 			'description'  => sprintf(
 				__( 'Site has been in maintenance mode for %.1f hours. This usually means an update process failed. The site is currently inaccessible to visitors.', 'wpshadow' ),
 				$age_hours
 			),
-			'category'     => $this->get_category(),
+			'category'     => 'stability',
 			'severity'     => $severity,
 			'threat_level' => $threat,
-			'auto_fixable' => $this->is_auto_fixable(),
+			'auto_fixable' => true,
 			'timestamp'    => current_time( 'mysql' ),
 		);
 	}
