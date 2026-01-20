@@ -10,8 +10,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $trigger_id = isset( $_GET['trigger'] ) ? sanitize_key( $_GET['trigger'] ) : '';
+$workflow_id = isset( $_GET['workflow'] ) ? sanitize_key( $_GET['workflow'] ) : '';
 if ( empty( $trigger_id ) ) {
-	wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) );
+	if ( ! empty( $workflow_id ) ) {
+		wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-workflows&action=edit&workflow=' . $workflow_id . '&step=action' ) );
+	} else {
+		wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) );
+	}
 	exit;
 }
 ?>
@@ -42,7 +47,7 @@ if ( empty( $trigger_id ) ) {
 		</div>
 
 		<div class="form-actions">
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create&step=action&trigger=' . $trigger_id ) ); ?>" class="button button-large">
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=action&trigger=' . $trigger_id ) ); ?>" class="button button-large">
 				<span class="dashicons dashicons-arrow-left-alt2"></span>
 				<?php esc_html_e( 'Back to Actions', 'wpshadow' ); ?>
 			</a>
@@ -193,13 +198,15 @@ if ( empty( $trigger_id ) ) {
 <script>
 jQuery(document).ready(function($) {
 	const triggerId = '<?php echo esc_js( $trigger_id ); ?>';
+	const workflowId = '<?php echo esc_js( $workflow_id ); ?>';
+	const baseUrl = workflowId ? '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=edit' ) ); ?>&workflow=' + workflowId : '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>';
 	
 	// Load workflow data from sessionStorage
 	const triggerConfig = JSON.parse(sessionStorage.getItem('workflow_trigger_config') || '{}');
 	const actions = JSON.parse(sessionStorage.getItem('workflow_actions') || '[]');
 	
 	if (actions.length === 0) {
-			window.location.href = '<?php echo admin_url( 'admin.php?page=wpshadow-workflows&action=create&step=action' ); ?>&trigger=' + triggerId;
+		window.location.href = baseUrl + '&step=action&trigger=' + triggerId;
 		return;
 	}
 	
@@ -308,9 +315,9 @@ jQuery(document).ready(function($) {
 				// Show success message
 				$('#save-result').addClass('success').text('<?php esc_html_e( 'Workflow saved successfully!', 'wpshadow' ); ?>');
 				
-				// Redirect after 1 second
-				setTimeout(function() {
-					window.location.href = '<?php echo admin_url( 'admin.php?page=wpshadow-workflows' ); ?>';
+			// Redirect after 1 second - go back to list
+			setTimeout(function() {
+				window.location.href = '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows' ) ); ?>';
 				}, 1000);
 			} else {
 				$('#save-result').addClass('error').text(response.data.message || '<?php esc_html_e( 'Error saving workflow', 'wpshadow' ); ?>');

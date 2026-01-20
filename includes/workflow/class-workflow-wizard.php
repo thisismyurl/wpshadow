@@ -25,39 +25,47 @@ class Workflow_Wizard {
 	public static function get_trigger_categories() {
 		return array(
 			'schedule' => array(
-				'label' => 'Schedule',
+				'label' => 'Scheduled Tasks',
+				'description' => 'Run tasks on a regular schedule - daily, weekly, or hourly',
 				'icon'  => 'clock',
 				'triggers' => array(
-					'schedule' => array(
+					'time_daily' => array(
 						'label' => 'On a Schedule',
 						'description' => 'Run at specific times - daily, weekly, or hourly',
 						'icon' => 'clock',
 					),
 				),
 			),
-			'page_load' => array(
-				'label' => 'Page Load',
-				'icon'  => 'desktop',
+			'content_events' => array(
+				'label' => 'Content Events',
+				'description' => 'Respond to changes in your content and comments',
+				'icon'  => 'edit',
 				'triggers' => array(
-					'page_load' => array(
+					'page_load_trigger' => array(
 						'label' => 'When Page Loads',
 						'description' => 'Run when specific pages or areas of your site load',
 						'icon' => 'desktop',
 					),
+					'post_status_changed' => array(
+						'label' => 'Post/Page Status Changed',
+						'description' => 'When a post/page status changes (published, draft, scheduled, etc)',
+						'icon' => 'edit',
+					),
+					'comment_posted' => array(
+						'label' => 'Comment Posted',
+						'description' => 'When a comment is posted on your site',
+						'icon' => 'admin-comments',
+					),
 				),
 			),
-			'events' => array(
-				'label' => 'Events',
-				'icon'  => 'controls-play',
+			'system_events' => array(
+				'label' => 'System & Admin Events',
+				'description' => 'Respond to plugin, theme, and user management events',
+				'icon'  => 'admin-tools',
 				'triggers' => array(
-					'plugin_activated' => array(
-						'label' => 'Plugin Activated',
-						'description' => 'When any plugin is activated',
-						'icon' => 'admin-plugins',
-					),
-					'plugin_deactivated' => array(
-						'label' => 'Plugin Deactivated',
-						'description' => 'When any plugin is deactivated',
+					'plugin_state_changed' => array(
+						'label' => 'Plugin Changed',
+						'description' => 'When any plugin is activated or deactivated',
 						'icon' => 'admin-plugins',
 					),
 					'theme_switched' => array(
@@ -75,20 +83,11 @@ class Workflow_Wizard {
 						'description' => 'When a new user registers',
 						'icon' => 'admin-users',
 					),
-					'post_published' => array(
-						'label' => 'Post Published',
-						'description' => 'When a post is published',
-						'icon' => 'edit',
-					),
-					'comment_posted' => array(
-						'label' => 'Comment Posted',
-						'description' => 'When a comment is posted',
-						'icon' => 'admin-comments',
-					),
 				),
 			),
 			'conditions' => array(
-				'label' => 'Conditions',
+				'label' => 'System Conditions',
+				'description' => 'Trigger on specific system issues or thresholds',
 				'icon'  => 'shield',
 				'triggers' => array(
 					'high_memory' => array(
@@ -118,6 +117,18 @@ class Workflow_Wizard {
 					),
 				),
 			),
+			'manual' => array(
+				'label' => 'Manual & External',
+				'description' => 'Trigger workflows externally via URL or API',
+				'icon'  => 'admin-links',
+				'triggers' => array(
+					'manual_cron_trigger' => array(
+						'label' => 'Manual or External Trigger',
+						'description' => 'Trigger via URL - perfect for external CRON jobs, webhooks, and scheduled external services',
+						'icon' => 'admin-links',
+					),
+				),
+			),
 		);
 	}
 
@@ -125,9 +136,28 @@ class Workflow_Wizard {
 	 * Get actions suitable for a specific trigger
 	 *
 	 * @param string $trigger_type Trigger type
-	 * @return array Available actions
+	 * @return array Available actions filtered and ordered by relevance
 	 */
 	public static function get_available_actions( $trigger_type = '' ) {
+		$all_actions = self::get_all_actions();
+
+		// If no trigger specified, return all actions
+		if ( empty( $trigger_type ) ) {
+			return $all_actions;
+		}
+
+		// Filter and order actions based on trigger type
+		$filtered_actions = self::filter_actions_by_trigger( $all_actions, $trigger_type );
+
+		return $filtered_actions;
+	}
+
+	/**
+	 * Get all available actions (unfiltered)
+	 *
+	 * @return array All actions
+	 */
+	private static function get_all_actions() {
 		$all_actions = array(
 			'diagnostics' => array(
 				'label' => 'Diagnostics',
@@ -279,11 +309,6 @@ class Workflow_Wizard {
 						'description' => 'Show notification in WordPress admin',
 						'icon' => 'bell',
 					),
-					'send_slack' => array(
-						'label' => 'Send Slack Message',
-						'description' => 'Post message to Slack channel',
-						'icon' => 'share',
-					),
 				),
 			),
 			'logging' => array(
@@ -302,11 +327,536 @@ class Workflow_Wizard {
 					),
 				),
 			),
+			'site_maintenance' => array(
+				'label' => 'Site Maintenance',
+				'icon'  => 'tools',
+				'actions' => array(
+					'clear_transients' => array(
+						'label' => 'Clear Transients',
+						'description' => 'Clear all temporary cached data',
+						'icon' => 'trash',
+						'tier' => 'free',
+					),
+					'purge_object_cache' => array(
+						'label' => 'Purge Object Cache',
+						'description' => 'Clear object cache (Redis/Memcached)',
+						'icon' => 'performance',
+						'tier' => 'free',
+					),
+					'optimize_database' => array(
+						'label' => 'Optimize Database',
+						'description' => 'Cleanup and optimize database tables',
+						'icon' => 'database',
+						'tier' => 'pro',
+					),
+					'remove_spam_comments' => array(
+						'label' => 'Remove Spam Comments',
+						'description' => 'Delete comments marked as spam',
+						'icon' => 'dismiss',
+						'tier' => 'pro',
+					),
+					'delete_revisions' => array(
+						'label' => 'Clean Post Revisions',
+						'description' => 'Remove old post revision history',
+						'icon' => 'history',
+						'tier' => 'pro',
+					),
+					'clean_orphaned_postmeta' => array(
+						'label' => 'Clean Orphaned Post Meta',
+						'description' => 'Remove orphaned post metadata',
+						'icon' => 'admin-tools',
+						'tier' => 'pro',
+					),
+				),
+			),
+			'user_management' => array(
+				'label' => 'User Management',
+				'icon'  => 'admin-users',
+				'actions' => array(
+					'notify_inactive_users' => array(
+						'label' => 'Notify Inactive Users',
+						'description' => 'Send reminder emails to inactive users',
+						'icon' => 'email',
+						'tier' => 'pro',
+					),
+					'disable_inactive_accounts' => array(
+						'label' => 'Disable Inactive Accounts',
+						'description' => 'Automatically disable accounts after period of inactivity',
+						'icon' => 'admin-users',
+						'tier' => 'pro',
+					),
+					'reset_user_passwords' => array(
+						'label' => 'Force Password Reset',
+						'description' => 'Require users to reset passwords on next login',
+						'icon' => 'lock',
+						'tier' => 'pro',
+					),
+				),
+			),
+			'security_hardening' => array(
+				'label' => 'Security Hardening',
+				'icon'  => 'shield',
+				'actions' => array(
+					'block_malicious_ips' => array(
+						'label' => 'Block Malicious IPs',
+						'description' => 'Auto-block IPs with suspicious activity',
+						'icon' => 'dismiss',
+						'tier' => 'pro',
+					),
+					'disable_file_editors' => array(
+						'label' => 'Disable File Editors',
+						'description' => 'Prevent direct theme/plugin file editing',
+						'icon' => 'lock',
+						'tier' => 'free',
+					),
+					'enforce_two_factor' => array(
+						'label' => 'Enforce 2FA for Admins',
+						'description' => 'Require two-factor authentication for admin users',
+						'icon' => 'shield',
+						'tier' => 'pro',
+					),
+					'scan_malware' => array(
+						'label' => 'Run Malware Scan',
+						'description' => 'Scan site for malicious code and vulnerabilities',
+						'icon' => 'warning',
+						'tier' => 'pro',
+					),
+				),
+			),
+			'content_management' => array(
+				'label' => 'Content Management',
+				'icon'  => 'edit',
+				'actions' => array(
+					'publish_scheduled_posts' => array(
+						'label' => 'Publish Scheduled Posts',
+						'description' => 'Auto-publish posts scheduled for specific time',
+						'icon' => 'calendar',
+						'tier' => 'pro',
+					),
+					'update_post_status' => array(
+						'label' => 'Update Post Status Bulk',
+						'description' => 'Change status of multiple posts at once',
+						'icon' => 'admin-post',
+						'tier' => 'pro',
+					),
+					'archive_old_posts' => array(
+						'label' => 'Archive Old Posts',
+						'description' => 'Automatically archive posts older than specified date',
+						'icon' => 'archive',
+						'tier' => 'pro',
+					),
+					'clear_draft_posts' => array(
+						'label' => 'Delete Draft Posts',
+						'description' => 'Remove draft posts older than specified period',
+						'icon' => 'trash',
+						'tier' => 'free',
+					),
+				),
+			),
+			'backup_recovery' => array(
+				'label' => 'Backup & Recovery',
+				'icon'  => 'backup',
+				'actions' => array(
+					'create_full_backup' => array(
+						'label' => 'Create Full Site Backup',
+						'description' => 'Backup database, files, and configuration',
+						'icon' => 'backup',
+						'tier' => 'pro',
+					),
+					'backup_database' => array(
+						'label' => 'Backup Database',
+						'description' => 'Backup WordPress database only',
+						'icon' => 'database',
+						'tier' => 'pro',
+					),
+					'sync_backups_offsite' => array(
+						'label' => 'Sync Backups Offsite',
+						'description' => 'Push backups to AWS S3, Google Drive, or Dropbox',
+						'icon' => 'cloud',
+						'tier' => 'pro',
+					),
+				),
+			),
+			'monitoring_alerts' => array(
+				'label' => 'Monitoring & Alerts',
+				'icon'  => 'visibility',
+				'actions' => array(
+					'check_site_uptime' => array(
+						'label' => 'Check Site Uptime',
+						'description' => 'Verify site is online and responsive',
+						'icon' => 'thumbs-up',
+						'tier' => 'pro',
+					),
+					'monitor_ssl_cert' => array(
+						'label' => 'Monitor SSL Certificate',
+						'description' => 'Alert when SSL certificate nearing expiration',
+						'icon' => 'lock',
+						'tier' => 'pro',
+					),
+					'check_plugin_updates' => array(
+						'label' => 'Check Plugin Updates',
+						'description' => 'Scan for available plugin and theme updates',
+						'icon' => 'update',
+						'tier' => 'free',
+					),
+					'check_php_version' => array(
+						'label' => 'Check PHP Version',
+						'description' => 'Alert if PHP version is outdated',
+						'icon' => 'admin-tools',
+						'tier' => 'free',
+					),
+					'monitor_disk_space' => array(
+						'label' => 'Monitor Disk Space',
+						'description' => 'Alert when disk usage exceeds threshold',
+						'icon' => 'storage',
+						'tier' => 'pro',
+					),
+				),
+			),
+			'wordpress_settings_core' => array(
+				'label' => 'WordPress Settings (Core)',
+				'icon'  => 'admin-settings',
+				'actions' => array(
+					'set_site_title' => array(
+						'label' => 'Set Site Title',
+						'description' => 'Update blog name and tagline',
+						'icon' => 'edit',
+						'tier' => 'free',
+					),
+					'set_timezone' => array(
+						'label' => 'Set Timezone',
+						'description' => 'Update site timezone setting',
+						'icon' => 'clock',
+						'tier' => 'free',
+					),
+					'set_date_format' => array(
+						'label' => 'Set Date Format',
+						'description' => 'Update date and time display format',
+						'icon' => 'calendar',
+						'tier' => 'free',
+					),
+					'set_permalink_structure' => array(
+						'label' => 'Set Permalink Structure',
+						'description' => 'Update URL structure for posts and pages',
+						'icon' => 'link',
+						'tier' => 'free',
+					),
+				),
+			),
+			'wordpress_settings_pro' => array(
+				'label' => 'WordPress Settings (Pro)',
+				'icon'  => 'admin-settings',
+				'description' => 'Unlock with WPShadow Pro',
+				'actions' => array(
+					'set_discussion_settings' => array(
+						'label' => 'Configure Comments & Discussions',
+						'description' => 'Control comment moderation, notifications, threading',
+						'icon' => 'admin-comments',
+						'tier' => 'pro',
+					),
+					'set_media_settings' => array(
+						'label' => 'Configure Media Settings',
+						'description' => 'Set image sizes, thumbnails, media organization',
+						'icon' => 'format-image',
+						'tier' => 'pro',
+					),
+					'set_reading_settings' => array(
+						'label' => 'Configure Reading Settings',
+						'description' => 'Set blog visibility, posts per page, feed settings',
+						'icon' => 'book',
+						'tier' => 'pro',
+					),
+					'set_privacy_settings' => array(
+						'label' => 'Configure Privacy & Policies',
+						'description' => 'Set privacy policy page, GDPR compliance options',
+						'icon' => 'shield',
+						'tier' => 'pro',
+					),
+				),
+			),
+		);
+	}
+
+	/**
+	 * Filter and order actions based on trigger type
+	 *
+	 * @param array  $all_actions All available actions
+	 * @param string $trigger_type The current trigger type
+	 * @return array Filtered and prioritized actions
+	 */
+	private static function filter_actions_by_trigger( $all_actions, $trigger_type ) {
+		// Define which action categories are relevant for each trigger
+		$trigger_action_map = array(
+			// Schedule: maintenance, diagnostics, backups, monitoring - things that should run automatically
+			'schedule' => array(
+				'priority' => array(
+					'monitoring_alerts',
+					'backup_recovery',
+					'site_maintenance',
+					'diagnostics',
+					'wordpress_settings_core',
+					'content_management',
+				),
+				'allowed' => array(
+					'monitoring_alerts', 'backup_recovery', 'site_maintenance',
+					'diagnostics', 'wordpress_settings_core', 'wordpress_settings_pro',
+					'content_management', 'security_hardening', 'notifications',
+					'logging',
+				),
+				'disallowed_actions' => array(
+					'external_fonts', 'image_lazy_load', 'html_cleanup', 'head_cleanup',
+					'embed_disable', 'css_classes', 'nav_aria', 'paste_cleanup',
+					'content_optimizer', 'check_external_fonts',
+				),
+			),
+			// Page Load: frontend optimization, diagnostics, caching - things that run per-page
+			'page_load' => array(
+				'priority' => array(
+					'performance',
+					'diagnostics',
+					'security',
+					'accessibility',
+					'content',
+					'notifications',
+				),
+				'allowed' => array(
+					'performance', 'diagnostics', 'security', 'accessibility',
+					'content', 'notifications', 'logging',
+				),
+				'disallowed_actions' => array(
+					'clear_transients', 'purge_object_cache', 'optimize_database',
+					'remove_spam_comments', 'delete_revisions', 'clean_orphaned_postmeta',
+					'notify_inactive_users', 'disable_inactive_accounts', 'reset_user_passwords',
+					'block_malicious_ips', 'enforce_two_factor', 'scan_malware',
+					'publish_scheduled_posts', 'update_post_status', 'archive_old_posts',
+					'clear_draft_posts', 'create_full_backup', 'backup_database', 'sync_backups_offsite',
+					'check_site_uptime', 'monitor_ssl_cert', 'monitor_disk_space',
+					'check_plugin_updates', 'check_php_version', 'inactive_plugins',
+					'outdated_plugins',
+				),
+			),
+			// Plugin State Changed: maintenance, security, notifications
+			'plugin_state_changed' => array(
+				'priority' => array(
+					'diagnostics',
+					'security_hardening',
+					'notifications',
+					'site_maintenance',
+					'logging',
+				),
+				'allowed' => array(
+					'diagnostics', 'security_hardening', 'notifications',
+					'site_maintenance', 'logging', 'maintenance',
+				),
+				'disallowed_actions' => array(
+					'external_fonts', 'image_lazy_load', 'html_cleanup', 'head_cleanup',
+					'embed_disable', 'css_classes', 'nav_aria', 'paste_cleanup',
+					'content_optimizer', 'content_management', 'user_management',
+					'backup_recovery',
+				),
+			),
+			// Theme Switched: maintenance, diagnostics, caching
+			'theme_switched' => array(
+				'priority' => array(
+					'diagnostics',
+					'site_maintenance',
+					'security_hardening',
+					'notifications',
+				),
+				'allowed' => array(
+					'diagnostics', 'site_maintenance', 'security_hardening',
+					'notifications', 'logging', 'performance',
+				),
+				'disallowed_actions' => array(
+					'user_management', 'content_management', 'backup_recovery',
+					'user_login',
+				),
+			),
+			// User Login: security, notifications, user management
+			'user_login' => array(
+				'priority' => array(
+					'security_hardening',
+					'notifications',
+					'logging',
+				),
+				'allowed' => array(
+					'security_hardening', 'notifications', 'logging',
+					'diagnostics', 'security',
+				),
+				'disallowed_actions' => array(
+					'performance', 'content', 'accessibility', 'site_maintenance',
+					'user_management', 'content_management', 'backup_recovery',
+					'monitoring_alerts', 'maintenance',
+				),
+			),
+			// User Registration: notifications, user management, security
+			'user_register' => array(
+				'priority' => array(
+					'notifications',
+					'user_management',
+					'security_hardening',
+					'logging',
+				),
+				'allowed' => array(
+					'notifications', 'user_management', 'security_hardening',
+					'logging', 'diagnostics',
+				),
+				'disallowed_actions' => array(
+					'performance', 'content', 'accessibility', 'site_maintenance',
+					'content_management', 'backup_recovery', 'monitoring_alerts',
+					'maintenance',
+				),
+			),
+			// Post Status Changed: content management, notifications, diagnostics
+			'post_status_changed' => array(
+				'priority' => array(
+					'content_management',
+					'notifications',
+					'logging',
+					'content',
+				),
+				'allowed' => array(
+					'content_management', 'notifications', 'logging', 'content',
+					'diagnostics',
+				),
+				'disallowed_actions' => array(
+					'performance', 'accessibility', 'site_maintenance', 'user_management',
+					'security_hardening', 'backup_recovery', 'monitoring_alerts',
+					'maintenance', 'wordpress_settings_core', 'wordpress_settings_pro',
+				),
+			),
+			// Comment Posted: content moderation, notifications, security
+			'comment_posted' => array(
+				'priority' => array(
+					'notifications',
+					'content',
+					'security_hardening',
+					'logging',
+				),
+				'allowed' => array(
+					'notifications', 'content', 'security_hardening', 'logging',
+					'diagnostics',
+				),
+				'disallowed_actions' => array(
+					'performance', 'accessibility', 'site_maintenance', 'user_management',
+					'backup_recovery', 'monitoring_alerts', 'maintenance',
+					'content_management', 'wordpress_settings_core', 'wordpress_settings_pro',
+				),
+			),
+			// Conditions (memory, debug, ssl, plugins, IP): diagnostics, notifications, security
+			'high_memory' => array(
+				'priority' => array(
+					'diagnostics',
+					'security_hardening',
+					'notifications',
+					'site_maintenance',
+				),
+				'allowed' => array(
+					'diagnostics', 'security_hardening', 'notifications',
+					'site_maintenance', 'logging', 'maintenance',
+				),
+			),
+			'debug_mode_on' => array(
+				'priority' => array(
+					'security',
+					'security_hardening',
+					'notifications',
+				),
+				'allowed' => array(
+					'security', 'security_hardening', 'notifications', 'logging',
+				),
+			),
+			'ssl_issue' => array(
+				'priority' => array(
+					'diagnostics',
+					'security',
+					'security_hardening',
+					'notifications',
+				),
+				'allowed' => array(
+					'diagnostics', 'security', 'security_hardening',
+					'notifications', 'logging',
+				),
+			),
+			'too_many_plugins' => array(
+				'priority' => array(
+					'maintenance',
+					'diagnostics',
+					'notifications',
+				),
+				'allowed' => array(
+					'maintenance', 'diagnostics', 'notifications', 'logging',
+				),
+			),
+			'ip_banned' => array(
+				'priority' => array(
+					'security_hardening',
+					'security',
+					'notifications',
+					'logging',
+				),
+				'allowed' => array(
+					'security_hardening', 'security', 'notifications', 'logging',
+				),
+			),
 		);
 
-		// Filter actions based on trigger type (optional)
-		// For now, return all actions
-		return $all_actions;
+		// If no mapping exists for this trigger, return all actions
+		if ( ! isset( $trigger_action_map[ $trigger_type ] ) ) {
+			return $all_actions;
+		}
+
+		$config = $trigger_action_map[ $trigger_type ];
+		$priority_categories = isset( $config['priority'] ) ? $config['priority'] : array();
+		$allowed_categories = isset( $config['allowed'] ) ? $config['allowed'] : array();
+		$disallowed_actions = isset( $config['disallowed_actions'] ) ? $config['disallowed_actions'] : array();
+
+		$result = array();
+
+		// First, add categories in priority order
+		foreach ( $priority_categories as $category ) {
+			if ( isset( $all_actions[ $category ] ) ) {
+				$filtered_category = self::filter_category_actions( $all_actions[ $category ], $disallowed_actions );
+				if ( ! empty( $filtered_category['actions'] ) ) {
+					$result[ $category ] = $filtered_category;
+				}
+			}
+		}
+
+		// Then add remaining allowed categories
+		foreach ( $all_actions as $category => $data ) {
+			if ( ! isset( $result[ $category ] ) && in_array( $category, $allowed_categories, true ) ) {
+				$filtered_category = self::filter_category_actions( $data, $disallowed_actions );
+				if ( ! empty( $filtered_category['actions'] ) ) {
+					$result[ $category ] = $filtered_category;
+				}
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Filter individual actions in a category
+	 *
+	 * @param array $category Category data
+	 * @param array $disallowed_actions Action IDs to exclude
+	 * @return array Filtered category
+	 */
+	private static function filter_category_actions( $category, $disallowed_actions ) {
+		if ( ! isset( $category['actions'] ) ) {
+			return $category;
+		}
+
+		$filtered_actions = array();
+		foreach ( $category['actions'] as $action_id => $action ) {
+			if ( ! in_array( $action_id, $disallowed_actions, true ) ) {
+				$filtered_actions[ $action_id ] = $action;
+			}
+		}
+
+		$category['actions'] = $filtered_actions;
+		return $category;
 	}
 
 	/**
@@ -316,6 +866,27 @@ class Workflow_Wizard {
 	 * @return array Configuration fields
 	 */
 	public static function get_trigger_config( $trigger_id ) {
+		// Map trigger IDs to their config groups
+		$trigger_to_config = array(
+			'time_daily' => 'schedule',
+			'page_load_trigger' => 'page_load',
+			'post_status_changed' => 'post_status',
+			'comment_posted' => 'comment',
+			'plugin_state_changed' => 'plugin',
+			'theme_switched' => 'theme',
+			'user_login' => 'user_login',
+			'user_register' => 'user_register',
+			'high_memory' => 'memory',
+			'debug_mode_on' => 'debug',
+			'ssl_issue' => 'ssl',
+			'too_many_plugins' => 'plugins',
+			'ip_banned' => 'ip_ban',
+			'manual_cron_trigger' => 'manual',
+		);
+
+		// Get the config group key for this trigger
+		$config_key = isset( $trigger_to_config[ $trigger_id ] ) ? $trigger_to_config[ $trigger_id ] : $trigger_id;
+
 		$configs = array(
 			'schedule' => array(
 				array(
@@ -458,7 +1029,7 @@ class Workflow_Wizard {
 			),
 		);
 
-		return isset( $configs[ $trigger_id ] ) ? $configs[ $trigger_id ] : array();
+		return isset( $configs[ $config_key ] ) ? $configs[ $config_key ] : array();
 	}
 
 	/**
@@ -468,15 +1039,19 @@ class Workflow_Wizard {
 	 * @return array Configuration fields
 	 */
 	public static function get_action_config( $action_id ) {
+		// Load the email recipient manager
+		require_once WPSHADOW_INCLUDES . 'workflow/class-email-recipient-manager.php';
+
 		$configs = array(
 			'send_email' => array(
 				array(
-					'id'          => 'to',
-					'type'        => 'text',
+					'id'          => 'recipient',
+					'type'        => 'select',
 					'label'       => 'Send to',
-					'placeholder' => 'admin@example.com',
-					'default'     => get_option( 'admin_email' ),
+					'options'     => self::get_approved_email_options(),
+					'default'     => 'admin',
 					'required'    => true,
+					'note'        => 'Manage pre-approved recipients in Settings',
 				),
 				array(
 					'id'          => 'subject',
@@ -519,25 +1094,6 @@ class Workflow_Wizard {
 					'required' => true,
 				),
 			),
-			'send_slack' => array(
-				array(
-					'id'          => 'webhook_url',
-					'type'        => 'text',
-					'label'       => 'Slack Webhook URL',
-					'placeholder' => 'https://hooks.slack.com/...',
-					'default'     => '',
-					'required'    => true,
-				),
-				array(
-					'id'          => 'message',
-					'type'        => 'textarea',
-					'label'       => 'Message',
-					'placeholder' => 'Enter your message here...',
-					'default'     => '',
-					'required'    => true,
-					'rows'        => 3,
-				),
-			),
 			'log_activity' => array(
 				array(
 					'id'          => 'message',
@@ -556,6 +1112,492 @@ class Workflow_Wizard {
 					'placeholder' => 'Leave blank to block current visitor',
 					'default'     => '',
 					'required'    => false,
+				),
+			),
+			'set_site_title' => array(
+				array(
+					'id'          => 'blog_name',
+					'type'        => 'text',
+					'label'       => 'Site Title',
+					'placeholder' => get_option( 'blogname' ),
+					'default'     => get_option( 'blogname' ),
+					'required'    => false,
+				),
+				array(
+					'id'          => 'blog_description',
+					'type'        => 'text',
+					'label'       => 'Site Tagline',
+					'placeholder' => get_option( 'blogdescription' ),
+					'default'     => get_option( 'blogdescription' ),
+					'required'    => false,
+				),
+			),
+			'set_timezone' => array(
+				array(
+					'id'       => 'timezone_string',
+					'type'     => 'select',
+					'label'    => 'Timezone',
+					'options'  => self::get_timezone_options(),
+					'default'  => get_option( 'timezone_string' ) ?: 'UTC',
+					'required' => true,
+				),
+			),
+			'set_date_format' => array(
+				array(
+					'id'       => 'date_format',
+					'type'     => 'select',
+					'label'    => 'Date Format',
+					'options'  => array(
+						'F j, Y'          => 'January 30, 2026',
+						'Y-m-d'           => '2026-01-30',
+						'j F Y'           => '30 January 2026',
+						'd/m/Y'           => '30/01/2026',
+						'm/d/Y'           => '01/30/2026',
+					),
+					'default'  => get_option( 'date_format' ) ?: 'F j, Y',
+					'required' => true,
+				),
+				array(
+					'id'       => 'time_format',
+					'type'     => 'select',
+					'label'    => 'Time Format',
+					'options'  => array(
+						'g:i a'  => '2:30 pm',
+						'H:i'    => '14:30',
+						'g:i A'  => '2:30 PM',
+					),
+					'default'  => get_option( 'time_format' ) ?: 'g:i a',
+					'required' => true,
+				),
+			),
+			'set_permalink_structure' => array(
+				array(
+					'id'       => 'permalink_structure',
+					'type'     => 'select',
+					'label'    => 'Permalink Structure',
+					'options'  => array(
+						''                    => 'Plain (/?p=123)',
+						'/%year%/%monthnum%/%postname%/' => 'Date and Name (/2026/01/sample-post/)',
+						'/%postname%/'        => 'Post Name (/sample-post/)',
+						'/archives/%post_id%' => 'Numeric (/archives/123/)',
+					),
+					'default'  => get_option( 'permalink_structure' ) ?: '',
+					'required' => true,
+				),
+			),
+			'set_discussion_settings' => array(
+				array(
+					'id'       => 'default_comment_status',
+					'type'     => 'select',
+					'label'    => 'Default Comment Status',
+					'options'  => array(
+						'open'   => 'Allow Comments',
+						'closed' => 'Disallow Comments',
+					),
+					'default'  => get_option( 'default_comment_status' ) ?: 'open',
+					'required' => true,
+					'note'     => 'Pro Feature',
+				),
+				array(
+					'id'       => 'default_ping_status',
+					'type'     => 'select',
+					'label'    => 'Default Ping Status',
+					'options'  => array(
+						'open'   => 'Allow Pingbacks',
+						'closed' => 'Disallow Pingbacks',
+					),
+					'default'  => get_option( 'default_ping_status' ) ?: 'open',
+					'required' => true,
+					'note'     => 'Pro Feature',
+				),
+				array(
+					'id'       => 'comment_moderation',
+					'type'     => 'select',
+					'label'    => 'Comment Moderation',
+					'options'  => array(
+						'0' => 'No Moderation',
+						'1' => 'Manual Review',
+					),
+					'default'  => get_option( 'comment_moderation' ) ? '1' : '0',
+					'required' => true,
+					'note'     => 'Pro Feature',
+				),
+			),
+			'set_media_settings' => array(
+				array(
+					'id'          => 'large_size_w',
+					'type'        => 'number',
+					'label'       => 'Large Image Width (px)',
+					'default'     => get_option( 'large_size_w' ) ?: 1024,
+					'required'    => false,
+					'note'        => 'Pro Feature',
+				),
+				array(
+					'id'          => 'large_size_h',
+					'type'        => 'number',
+					'label'       => 'Large Image Height (px)',
+					'default'     => get_option( 'large_size_h' ) ?: 1024,
+					'required'    => false,
+					'note'        => 'Pro Feature',
+				),
+				array(
+					'id'       => 'thumbnail_size_w',
+					'type'     => 'number',
+					'label'    => 'Thumbnail Width (px)',
+					'default'  => get_option( 'thumbnail_size_w' ) ?: 150,
+					'required' => false,
+					'note'     => 'Pro Feature',
+				),
+			),
+			'set_reading_settings' => array(
+				array(
+					'id'       => 'posts_per_page',
+					'type'     => 'number',
+					'label'    => 'Posts Per Page',
+					'default'  => get_option( 'posts_per_page' ) ?: 10,
+					'required' => true,
+					'note'     => 'Pro Feature',
+				),
+				array(
+					'id'       => 'blog_public',
+					'type'     => 'select',
+					'label'    => 'Site Visibility',
+					'options'  => array(
+						'1' => 'Public (visible to search engines)',
+						'0' => 'Private (ask search engines not to index)',
+					),
+					'default'  => get_option( 'blog_public' ) ?: '1',
+					'required' => true,
+					'note'     => 'Pro Feature',
+				),
+			),
+			'set_privacy_settings' => array(
+				array(
+					'id'       => 'wp_page_for_privacy_policy',
+					'type'     => 'select',
+					'label'    => 'Privacy Policy Page',
+					'options'  => self::get_pages_options(),
+					'default'  => get_option( 'wp_page_for_privacy_policy' ) ?: '',
+					'required' => false,
+					'note'     => 'Pro Feature',
+				),
+			),
+			'clear_transients' => array(
+				array(
+					'id'    => 'confirm',
+					'type'  => 'checkbox',
+					'label' => 'Confirm clearing all transients',
+					'note'  => 'This removes all temporary cached data',
+				),
+			),
+			'purge_object_cache' => array(
+				array(
+					'id'    => 'confirm',
+					'type'  => 'checkbox',
+					'label' => 'Confirm clearing object cache',
+					'note'  => 'Redis/Memcached will be cleared if available',
+				),
+			),
+			'disable_file_editors' => array(
+				array(
+					'id'    => 'confirm',
+					'type'  => 'checkbox',
+					'label' => 'Confirm disabling file editors',
+					'note'  => 'This prevents direct editing of theme and plugin files',
+				),
+			),
+			'clear_draft_posts' => array(
+				array(
+					'id'       => 'days_old',
+					'type'     => 'number',
+					'label'    => 'Delete drafts older than (days)',
+					'default'  => 30,
+					'required' => true,
+					'note'     => 'Drafts older than this will be permanently deleted',
+				),
+			),
+			'check_plugin_updates' => array(
+				array(
+					'id'    => 'notify_admin',
+					'type'  => 'checkbox',
+					'label' => 'Notify admin when updates available',
+					'note'  => 'Send email to admin email address',
+				),
+			),
+			'check_php_version' => array(
+				array(
+					'id'       => 'minimum_version',
+					'type'     => 'text',
+					'label'    => 'Minimum PHP Version (e.g., 8.1)',
+					'default'  => PHP_VERSION,
+					'required' => true,
+				),
+				array(
+					'id'    => 'alert_if_below',
+					'type'  => 'checkbox',
+					'label' => 'Alert if version is below minimum',
+				),
+			),
+			'optimize_database' => array(
+				array(
+					'id'    => 'confirm',
+					'type'  => 'checkbox',
+					'label' => 'Confirm database optimization',
+					'note'  => 'Pro Feature - Backs up database before optimizing',
+				),
+			),
+			'remove_spam_comments' => array(
+				array(
+					'id'       => 'older_than_days',
+					'type'     => 'number',
+					'label'    => 'Only remove spam older than (days)',
+					'default'  => 0,
+					'required' => false,
+					'note'     => 'Pro Feature - Leave empty to remove all spam',
+				),
+			),
+			'delete_revisions' => array(
+				array(
+					'id'       => 'keep_recent',
+					'type'     => 'number',
+					'label'    => 'Keep most recent revisions',
+					'default'  => 3,
+					'required' => true,
+					'note'     => 'Pro Feature - How many recent revisions to keep per post',
+				),
+			),
+			'clean_orphaned_postmeta' => array(
+				array(
+					'id'    => 'confirm',
+					'type'  => 'checkbox',
+					'label' => 'Confirm cleaning orphaned metadata',
+					'note'  => 'Pro Feature - Removes meta for non-existent posts',
+				),
+			),
+			'notify_inactive_users' => array(
+				array(
+					'id'       => 'inactive_days',
+					'type'     => 'number',
+					'label'    => 'Inactive for (days)',
+					'default'  => 90,
+					'required' => true,
+					'note'     => 'Pro Feature - Users not active for this long will be notified',
+				),
+				array(
+					'id'          => 'message',
+					'type'        => 'textarea',
+					'label'       => 'Email message',
+					'placeholder' => 'Your account has been inactive...',
+					'rows'        => 4,
+				),
+			),
+			'disable_inactive_accounts' => array(
+				array(
+					'id'       => 'inactive_days',
+					'type'     => 'number',
+					'label'    => 'Disable after (days)',
+					'default'  => 180,
+					'required' => true,
+					'note'     => 'Pro Feature - Users inactive this long will be disabled',
+				),
+			),
+			'reset_user_passwords' => array(
+				array(
+					'id'       => 'user_role',
+					'type'     => 'select',
+					'label'    => 'User role to reset',
+					'options'  => array(
+						'administrator' => 'Administrators',
+						'editor'        => 'Editors',
+						'author'        => 'Authors',
+						'all'           => 'All users',
+					),
+					'default'  => 'administrator',
+					'required' => true,
+					'note'     => 'Pro Feature',
+				),
+			),
+			'block_malicious_ips' => array(
+				array(
+					'id'    => 'enable_auto_block',
+					'type'  => 'checkbox',
+					'label' => 'Auto-block after failed attempts',
+					'note'  => 'Pro Feature - Block IPs after X failed login attempts',
+				),
+				array(
+					'id'       => 'failed_attempts',
+					'type'     => 'number',
+					'label'    => 'Failed attempts before block',
+					'default'  => 5,
+					'required' => true,
+				),
+			),
+			'enforce_two_factor' => array(
+				array(
+					'id'       => 'grace_period_hours',
+					'type'     => 'number',
+					'label'    => 'Grace period (hours)',
+					'default'  => 24,
+					'required' => true,
+					'note'     => 'Pro Feature - Time before 2FA is required',
+				),
+			),
+			'scan_malware' => array(
+				array(
+					'id'    => 'quarantine_threats',
+					'type'  => 'checkbox',
+					'label' => 'Quarantine detected threats',
+					'note'  => 'Pro Feature - Move suspicious files to quarantine',
+				),
+				array(
+					'id'    => 'notify_on_threat',
+					'type'  => 'checkbox',
+					'label' => 'Email notification when threats found',
+					'note'  => 'Send alert to admin email',
+				),
+			),
+			'create_full_backup' => array(
+				array(
+					'id'       => 'backup_location',
+					'type'     => 'select',
+					'label'    => 'Backup storage',
+					'options'  => array(
+						'local'      => 'Local server storage',
+						's3'        => 'Amazon S3',
+						'gdrive'    => 'Google Drive',
+						'dropbox'   => 'Dropbox',
+					),
+					'default'  => 'local',
+					'required' => true,
+					'note'     => 'Pro Feature',
+				),
+				array(
+					'id'    => 'notify_on_complete',
+					'type'  => 'checkbox',
+					'label' => 'Email notification when backup completes',
+				),
+			),
+			'backup_database' => array(
+				array(
+					'id'       => 'compression',
+					'type'     => 'select',
+					'label'    => 'Compression type',
+					'options'  => array(
+						'none'   => 'None',
+						'gzip'   => 'GZIP',
+						'bzip2'  => 'BZIP2',
+					),
+					'default'  => 'gzip',
+					'required' => true,
+					'note'     => 'Pro Feature',
+				),
+			),
+			'sync_backups_offsite' => array(
+				array(
+					'id'       => 'remote_provider',
+					'type'     => 'select',
+					'label'    => 'Remote provider',
+					'options'  => array(
+						's3'        => 'Amazon S3',
+						'gdrive'    => 'Google Drive',
+						'dropbox'   => 'Dropbox',
+						'b2'        => 'Backblaze B2',
+					),
+					'default'  => 's3',
+					'required' => true,
+					'note'     => 'Pro Feature',
+				),
+				array(
+					'id'    => 'keep_local_backup',
+					'type'  => 'checkbox',
+					'label' => 'Keep local copy after sync',
+				),
+			),
+			'check_site_uptime' => array(
+				array(
+					'id'    => 'alert_on_down',
+					'type'  => 'checkbox',
+					'label' => 'Alert if site is down',
+					'note'  => 'Pro Feature - Send notification if unreachable',
+				),
+				array(
+					'id'       => 'timeout_seconds',
+					'type'     => 'number',
+					'label'    => 'Request timeout (seconds)',
+					'default'  => 10,
+					'required' => true,
+				),
+			),
+			'monitor_ssl_cert' => array(
+				array(
+					'id'       => 'alert_before_days',
+					'type'     => 'number',
+					'label'    => 'Alert before expiration (days)',
+					'default'  => 30,
+					'required' => true,
+					'note'     => 'Pro Feature',
+				),
+			),
+			'monitor_disk_space' => array(
+				array(
+					'id'       => 'alert_threshold_percent',
+					'type'     => 'number',
+					'label'    => 'Alert when disk usage exceeds (%)',
+					'default'  => 80,
+					'required' => true,
+					'note'     => 'Pro Feature',
+				),
+			),
+			'publish_scheduled_posts' => array(
+				array(
+					'id'    => 'confirm',
+					'type'  => 'checkbox',
+					'label' => 'Publish all scheduled posts',
+					'note'  => 'Pro Feature - Posts scheduled before now will be published',
+				),
+			),
+			'update_post_status' => array(
+				array(
+					'id'       => 'status',
+					'type'     => 'select',
+					'label'    => 'Set post status to',
+					'options'  => array(
+						'publish' => 'Published',
+						'draft'   => 'Draft',
+						'private' => 'Private',
+						'trash'   => 'Trash',
+					),
+					'default'  => 'draft',
+					'required' => true,
+					'note'     => 'Pro Feature',
+				),
+				array(
+					'id'       => 'post_type',
+					'type'     => 'select',
+					'label'    => 'Post type',
+					'options'  => array(
+						'post' => 'Posts',
+						'page' => 'Pages',
+						'all'  => 'All',
+					),
+					'default'  => 'post',
+				),
+			),
+			'archive_old_posts' => array(
+				array(
+					'id'       => 'older_than_days',
+					'type'     => 'number',
+					'label'    => 'Archive posts older than (days)',
+					'default'  => 365,
+					'required' => true,
+					'note'     => 'Pro Feature',
+				),
+				array(
+					'id'       => 'archive_category',
+					'type'     => 'text',
+					'label'    => 'Archive category slug',
+					'placeholder' => 'archive',
+					'note'     => 'Posts will be moved to this category',
 				),
 			),
 		);
@@ -600,27 +1642,26 @@ class Workflow_Wizard {
 
 		// Map wizard trigger types to executor trigger types
 		$type_map = array(
-			'time_daily'            => 'time_trigger',
-			'time_weekly'           => 'time_trigger',
-			'time_hourly'           => 'time_trigger',
-			'page_load_all'         => 'page_load_trigger',
-			'page_load_frontend'    => 'page_load_trigger',
-			'page_load_admin'       => 'page_load_trigger',
-			'page_load_single'      => 'page_load_trigger',
-			'page_load_archive'     => 'page_load_trigger',
-			'page_load_home'        => 'page_load_trigger',
-			'plugin_activated'      => 'event_trigger',
-			'plugin_deactivated'    => 'event_trigger',
-			'theme_switched'        => 'event_trigger',
-			'user_login'            => 'event_trigger',
-			'user_register'         => 'event_trigger',
-			'post_published'        => 'event_trigger',
-			'comment_posted'        => 'event_trigger',
-			'high_memory'           => 'condition_trigger',
-			'debug_mode_on'         => 'condition_trigger',
-			'ssl_issue'             => 'condition_trigger',
-			'too_many_plugins'      => 'condition_trigger',
-			'ip_banned'             => 'condition_trigger',
+			'time_daily'             => 'time_trigger',
+			'time_weekly'            => 'time_trigger',
+			'time_hourly'            => 'time_trigger',
+			'page_load_all'          => 'page_load_trigger',
+			'page_load_frontend'     => 'page_load_trigger',
+			'page_load_admin'        => 'page_load_trigger',
+			'page_load_single'       => 'page_load_trigger',
+			'page_load_archive'      => 'page_load_trigger',
+			'page_load_home'         => 'page_load_trigger',
+			'plugin_state_changed'   => 'event_trigger',
+			'theme_switched'         => 'event_trigger',
+			'user_login'             => 'event_trigger',
+			'user_register'          => 'event_trigger',
+			'post_status_changed'    => 'event_trigger',
+			'comment_posted'         => 'event_trigger',
+			'high_memory'            => 'condition_trigger',
+			'debug_mode_on'          => 'condition_trigger',
+			'ssl_issue'              => 'condition_trigger',
+			'too_many_plugins'       => 'condition_trigger',
+			'ip_banned'              => 'condition_trigger',
 		);
 
 		$executor_type = isset( $type_map[ $type ] ) ? $type_map[ $type ] : $type;
@@ -657,7 +1698,6 @@ class Workflow_Wizard {
 			'block_ip'              => 'apply_treatment',
 			'send_email'            => 'email_action',
 			'send_notification'     => 'notification_action',
-			'send_slack'            => 'slack_action',
 			'log_activity'          => 'log_action',
 			'create_backup'         => 'backup_action',
 		);
@@ -719,5 +1759,70 @@ class Workflow_Wizard {
 	 */
 	public static function refresh_discovery_cache(): void {
 		Workflow_Discovery::clear_cache();
+	}
+
+	/**
+	 * Get timezone options for dropdown
+	 *
+	 * @return array Timezone options
+	 */
+	private static function get_timezone_options(): array {
+		$timezones = timezone_identifiers_list();
+		$options = array();
+
+		foreach ( $timezones as $timezone ) {
+			$options[ $timezone ] = $timezone;
+		}
+
+		return $options;
+	}
+
+	/**
+	 * Get pages options for dropdown
+	 *
+	 * @return array Page ID => Title pairs
+	 */
+	private static function get_pages_options(): array {
+		$pages = get_pages( array(
+			'number' => 100,
+			'sort_column' => 'post_title',
+		) );
+
+		$options = array( '' => '- Select a Page -' );
+
+		foreach ( $pages as $page ) {
+			$options[ $page->ID ] = $page->post_title ?: '(no title)';
+		}
+
+		return $options;
+	}
+
+	/**
+	 * Get approved email recipients as options for select field
+	 *
+	 * @return array Options array for select field
+	 */
+	private static function get_approved_email_options() {
+		require_once WPSHADOW_INCLUDES . 'workflow/class-email-recipient-manager.php';
+
+		$recipients = Email_Recipient_Manager::get_approved_recipients();
+		$options = array();
+
+		// Always include admin email
+		$options['admin'] = 'Admin Email (' . get_option( 'admin_email' ) . ')';
+
+		// Add approved recipients
+		foreach ( $recipients as $email => $data ) {
+			if ( isset( $data['approved'] ) && $data['approved'] ) {
+				$options[ $email ] = $email;
+			}
+		}
+
+		// If no approved recipients, at least show admin
+		if ( count( $options ) === 1 ) {
+			$options['_manage'] = '- Manage Approved Recipients -';
+		}
+
+		return $options;
 	}
 }

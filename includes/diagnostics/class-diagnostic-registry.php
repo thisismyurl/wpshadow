@@ -14,11 +14,11 @@ namespace WPShadow\Diagnostics;
  */
 class Diagnostic_Registry {
 	/**
-	 * List of diagnostic classes.
+	 * Quick scan diagnostic classes (previously all checks).
 	 *
 	 * @var array
 	 */
-	private static $diagnostics = array(
+	private static $quick_diagnostics = array(
 		'Diagnostic_Memory_Limit',
 		'Diagnostic_Backup',
 		'Diagnostic_Permalinks',
@@ -57,6 +57,21 @@ class Diagnostic_Registry {
 		'Diagnostic_Database_Health',
 		'Diagnostic_File_Permissions',
 		'Diagnostic_Security_Headers',
+		'Diagnostic_Initial_Setup',
+		'Diagnostic_Comments_Disabled',
+		'Diagnostic_Howdy_Greeting',
+	);
+
+	/**
+	 * Deep scan only diagnostic classes (run in addition to quick set).
+	 *
+	 * @var array
+	 */
+	private static $deep_diagnostics = array(
+		'Diagnostic_Database_Health',
+		'Diagnostic_File_Permissions',
+		'Diagnostic_Core_Integrity',
+		'Diagnostic_Security_Headers',
 	);
 	
 	/**
@@ -79,7 +94,9 @@ class Diagnostic_Registry {
 			require_once $base_file;
 		}
 		
-		foreach ( self::$diagnostics as $diagnostic ) {
+		$all = array_unique( array_merge( self::$quick_diagnostics, self::$deep_diagnostics ) );
+		
+		foreach ( $all as $diagnostic ) {
 			$file = $diagnostics_dir . 'class-' . str_replace( '_', '-', strtolower( $diagnostic ) ) . '.php';
 			if ( file_exists( $file ) ) {
 				require_once $file;
@@ -88,14 +105,14 @@ class Diagnostic_Registry {
 	}
 	
 	/**
-	 * Run all diagnostic checks.
+	 * Run quick scan checks (default set, matches Quick Scan button).
 	 *
 	 * @return array Array of findings.
 	 */
-	public static function run_all_checks() {
+	public static function run_quickscan_checks() {
 		$findings = array();
 		
-		foreach ( self::$diagnostics as $diagnostic ) {
+		foreach ( self::$quick_diagnostics as $diagnostic ) {
 			$class_name = __NAMESPACE__ . '\\' . $diagnostic;
 			if ( class_exists( $class_name ) && method_exists( $class_name, 'check' ) ) {
 				$result = call_user_func( array( $class_name, 'check' ) );
@@ -107,6 +124,29 @@ class Diagnostic_Registry {
 		
 		return $findings;
 	}
+
+	/**
+	 * Run deep scan checks (quick set plus deep-only diagnostics).
+	 *
+	 * @return array Array of findings.
+	 */
+	public static function run_deepscan_checks() {
+		$findings = array();
+		$deep_extras = apply_filters( 'wpshadow_deep_scan_diagnostics', self::$deep_diagnostics );
+		$diagnostics = array_unique( array_merge( self::$quick_diagnostics, $deep_extras ) );
+
+		foreach ( $diagnostics as $diagnostic ) {
+			$class_name = __NAMESPACE__ . '\\' . $diagnostic;
+			if ( class_exists( $class_name ) && method_exists( $class_name, 'check' ) ) {
+				$result = call_user_func( array( $class_name, 'check' ) );
+				if ( null !== $result ) {
+					$findings[] = $result;
+				}
+			}
+		}
+
+		return $findings;
+	}
 	
 	/**
 	 * Get list of registered diagnostic classes.
@@ -114,7 +154,7 @@ class Diagnostic_Registry {
 	 * @return array List of diagnostic class names.
 	 */
 	public static function get_diagnostics() {
-		return self::$diagnostics;
+		return self::$quick_diagnostics;
 	}
 	
 	/**
@@ -123,8 +163,8 @@ class Diagnostic_Registry {
 	 * @param string $class_name Diagnostic class name.
 	 */
 	public static function register( $class_name ) {
-		if ( ! in_array( $class_name, self::$diagnostics, true ) ) {
-			self::$diagnostics[] = $class_name;
+		if ( ! in_array( $class_name, self::$quick_diagnostics, true ) ) {
+			self::$quick_diagnostics[] = $class_name;
 		}
 	}
 	
@@ -134,10 +174,10 @@ class Diagnostic_Registry {
 	 * @param string $class_name Diagnostic class name.
 	 */
 	public static function unregister( $class_name ) {
-		$key = array_search( $class_name, self::$diagnostics, true );
+		$key = array_search( $class_name, self::$quick_diagnostics, true );
 		if ( false !== $key ) {
-			unset( self::$diagnostics[ $key ] );
-			self::$diagnostics = array_values( self::$diagnostics );
+			unset( self::$quick_diagnostics[ $key ] );
+			self::$quick_diagnostics = array_values( self::$quick_diagnostics );
 		}
 	}
 }

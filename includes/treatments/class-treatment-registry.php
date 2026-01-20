@@ -50,6 +50,8 @@ class Treatment_Registry {
 		'Treatment_Strip_SpeculationRules',
 		'Treatment_Strip_JSON_LD',
 		'Treatment_Strip_Social_Meta',
+		'Treatment_Remove_Comments_Menu',
+		'Treatment_Remove_Howdy',
 	);
 	
 	/**

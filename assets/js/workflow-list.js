@@ -63,6 +63,33 @@ jQuery(document).ready(function($) {
 		});
 	});
 	
+	// Test workflow (dry run)
+	$('.workflow-test-btn').on('click', function() {
+		const $btn = $(this);
+		const workflowId = $btn.data('workflow-id');
+		const $card = $btn.closest('.workflow-card');
+		const workflowName = $card.find('.workflow-name').text();
+		
+		$btn.prop('disabled', true).text('Testing...');
+		
+		$.post(ajaxurl, {
+			action: 'wpshadow_test_workflow',
+			nonce: wpshadowWorkflow.nonce,
+			workflow_id: workflowId
+		}, function(response) {
+			$btn.prop('disabled', false).text('Test');
+			
+			if (response.success) {
+				showNotice('Test completed! Workflow runs successfully (no changes made).', 'success');
+			} else {
+				showNotice(response.data.message || 'Test found issues in workflow', 'error');
+			}
+		}).fail(function() {
+			$btn.prop('disabled', false).text('Test');
+			showNotice('Error testing workflow', 'error');
+		});
+	});
+	
 	// Delete workflow
 	$('.workflow-delete-btn').on('click', function() {
 		const $btn = $(this);

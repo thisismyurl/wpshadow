@@ -10,9 +10,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $trigger_id = isset( $_GET['trigger'] ) ? sanitize_key( $_GET['trigger'] ) : '';
+$workflow_id = isset( $_GET['workflow'] ) ? sanitize_key( $_GET['workflow'] ) : '';
+
+// If no trigger specified or trigger not found, show trigger selection
 if ( empty( $trigger_id ) ) {
-	wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) );
-	exit;
+	// Show trigger selection instead of redirecting
+	include __DIR__ . '/trigger-selection.php';
+	return;
 }
 
 // Get all triggers to find the selected one
@@ -26,8 +30,9 @@ foreach ( $categories as $category ) {
 }
 
 if ( ! $trigger_data ) {
-	wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) );
-	exit;
+	// Trigger not found, show trigger selection instead of redirecting
+	include __DIR__ . '/trigger-selection.php';
+	return;
 }
 
 $config_fields = \WPShadow\Workflow\Workflow_Wizard::get_trigger_config( $trigger_id );
@@ -36,7 +41,7 @@ $has_config = ! empty( $config_fields );
 
 <div class="wizard-step trigger-config">
 	<div class="step-header">
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create&step=trigger' ) ); ?>" class="back-button">
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=trigger' ) ); ?>" class="back-button">
 			<span class="dashicons dashicons-arrow-left-alt2"></span>
 			<?php esc_html_e( 'Back', 'wpshadow' ); ?>
 		</a>
@@ -50,6 +55,7 @@ $has_config = ! empty( $config_fields );
 	<?php if ( $has_config ) : ?>
 		<form id="trigger-config-form" class="config-form">
 			<input type="hidden" name="trigger_id" value="<?php echo esc_attr( $trigger_id ); ?>">
+			<input type="hidden" name="workflow_id" value="<?php echo esc_attr( $workflow_id ); ?>">
 			
 			<?php foreach ( $config_fields as $field ) : ?>
 				<div class="form-field">
@@ -170,7 +176,10 @@ $has_config = ! empty( $config_fields );
 		<!-- No configuration needed - Auto-advance to action selection -->
 		<script>
 			// Auto-advance to action selection step since this trigger doesn't need configuration
-			window.location.href = '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create&step=action&trigger=' . $trigger_id ) ); ?>';
+			const workflowId = '<?php echo esc_js( $workflow_id ); ?>';
+			const triggerId = '<?php echo esc_js( $trigger_id ); ?>';
+			const baseUrl = workflowId ? '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=edit' ) ); ?>&workflow=' + workflowId : '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>';
+			window.location.href = baseUrl + '&step=action&trigger=' + triggerId;
 		</script>
 		<p><?php esc_html_e( 'This trigger doesn\'t need any additional configuration. Proceeding to actions...', 'wpshadow' ); ?></p>
 	<?php endif; ?>
@@ -302,9 +311,11 @@ jQuery(document).ready(function($) {
 		// Store in sessionStorage
 		sessionStorage.setItem('workflow_trigger_config', JSON.stringify(formData));
 		
-		// Navigate to action selection
+		// Navigate to action selection - preserve workflow ID if editing
 		const triggerId = formData.trigger_id;
-		window.location.href = '<?php echo admin_url( 'admin.php?page=wpshadow-workflows&action=create&step=action' ); ?>&trigger=' + triggerId;
+		const workflowId = formData.workflow_id;
+		const baseUrl = workflowId ? '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=edit' ) ); ?>&workflow=' + workflowId : '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>';
+		window.location.href = baseUrl + '&step=action&trigger=' + triggerId;
 	});
 });
 </script>

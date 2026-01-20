@@ -418,6 +418,341 @@ add_action( 'admin_menu', function() {
 	);
 } );
 
+// Tools page cards: render individual boxes for each WPShadow section.
+add_action( 'tool_box', function () {
+	// Gate visibility to users who can see WP admin Tools. Using 'read' keeps
+	// consistency with plugin menus while relying on WP to enforce deeper caps.
+	if ( ! current_user_can( 'read' ) ) {
+		return;
+	}
+
+	$is_network = is_multisite() && is_network_admin();
+	$settings_cap = $is_network ? 'manage_network_options' : 'manage_options';
+
+	$items = array(
+		array(
+			'slug'  => 'wpshadow',
+			'title' => __( 'WPShadow Dashboard', 'wpshadow' ),
+			'desc'  => __( 'Open the WPShadow dashboard for site insights.', 'wpshadow' ),
+			'cap'   => 'read',
+		),
+		array(
+			'slug'  => 'wpshadow-workflows',
+			'title' => __( 'Automation Builder', 'wpshadow' ),
+			'desc'  => __( 'Create and manage WPShadow workflows.', 'wpshadow' ),
+			'cap'   => 'read',
+		),
+		array(
+			'slug'  => 'wpshadow-features',
+			'title' => __( 'WPShadow Features', 'wpshadow' ),
+			'desc'  => __( 'Browse and manage WPShadow features.', 'wpshadow' ),
+			'cap'   => 'read',
+		),
+		array(
+			'slug'  => 'wpshadow-rules-poc',
+			'title' => __( 'WPShadow Rules (POC)', 'wpshadow' ),
+			'desc'  => __( 'Explore the rules proof-of-concept.', 'wpshadow' ),
+			'cap'   => 'read',
+		),
+		array(
+			'slug'  => 'wpshadow-settings',
+			'title' => __( 'WPShadow Settings', 'wpshadow' ),
+			'desc'  => __( 'Configure WPShadow options and behaviors.', 'wpshadow' ),
+			'cap'   => $settings_cap,
+		),
+		array(
+			'slug'  => 'wpshadow-help',
+			'title' => __( 'WPShadow Help', 'wpshadow' ),
+			'desc'  => __( 'Get help, docs, and guidance for WPShadow.', 'wpshadow' ),
+			'cap'   => 'read',
+		),
+	);
+
+	foreach ( $items as $item ) {
+		if ( ! current_user_can( $item['cap'] ) ) {
+			continue;
+		}
+
+		$url = admin_url( 'admin.php?page=' . $item['slug'] );
+
+		echo '<div class="card">';
+		echo '<h3>' . esc_html( $item['title'] ) . '</h3>';
+		echo '<p>' . esc_html( $item['desc'] ) . '</p>';
+		echo '<p><a class="button button-primary" href="' . esc_url( $url ) . '">' . esc_html__( 'Open', 'wpshadow' ) . '</a></p>';
+		echo '</div>';
+	}
+} );
+
+// Integrate WPShadow measurements with WordPress Site Health (Tools → Site Health).
+add_filter( 'site_status_tests', function ( $tests ) {
+	if ( ! is_array( $tests ) ) {
+		$tests = array();
+	}
+
+	$badge = array(
+		'label' => __( 'WPShadow', 'wpshadow' ),
+		'color' => 'blue',
+	);
+
+	$tests['direct']['wpshadow_quick_scan'] = array(
+		'label' => __( 'WPShadow Quick Scan', 'wpshadow' ),
+		'test'  => 'wpshadow_site_health_test_quick_scan',
+	);
+
+	$tests['direct']['wpshadow_deep_scan'] = array(
+		'label' => __( 'WPShadow Deep Scan', 'wpshadow' ),
+		'test'  => 'wpshadow_site_health_test_deep_scan',
+	);
+
+	// Optional summary test to reflect overall WPShadow status.
+	$tests['direct']['wpshadow_overall'] = array(
+		'label' => __( 'WPShadow Overall Status', 'wpshadow' ),
+		'test'  => 'wpshadow_site_health_test_overall',
+	);
+
+	// Store badge for callbacks to reference consistently.
+	$GLOBALS['wpshadow_site_health_badge'] = $badge;
+
+	return $tests;
+} );
+
+/**
+ * Site Health test: Quick Scan recency.
+ */
+function wpshadow_site_health_test_quick_scan() {
+	$badge = $GLOBALS['wpshadow_site_health_badge'] ?? array( 'label' => 'WPShadow', 'color' => 'blue' );
+	$last  = get_option( 'wpshadow_last_quick_checks', 0 );
+
+	$now   = time();
+	$label = __( 'WPShadow Quick Scan', 'wpshadow' );
+	$desc  = __( 'WPShadow provides a fast, lightweight scan of common issues. Run it regularly to keep your site in shape.', 'wpshadow' );
+	$action_url = admin_url( 'admin.php?page=wpshadow' );
+
+	if ( empty( $last ) ) {
+		return array(
+			'label'       => $label,
+			'status'      => 'recommended',
+			'badge'       => $badge,
+			'description' => __( 'Quick Scan has not been run yet. Open WPShadow to run a Quick Scan.', 'wpshadow' ),
+			'actions'     => array(
+				array(
+					'label' => __( 'Open WPShadow Dashboard', 'wpshadow' ),
+					'url'   => $action_url,
+				),
+			),
+			'test'        => 'wpshadow_site_health_test_quick_scan',
+		);
+	}
+
+	$age = $now - (int) $last;
+	$age_str = sprintf( __( 'Last run %s ago.', 'wpshadow' ), human_time_diff( $last, $now ) );
+
+	if ( $age > DAY_IN_SECONDS * 2 ) {
+		return array(
+			'label'       => $label,
+			'status'      => 'recommended',
+			'badge'       => $badge,
+			'description' => $age_str . ' ' . __( 'Consider running a new Quick Scan.', 'wpshadow' ),
+			'actions'     => array(
+				array(
+					'label' => __( 'Run Quick Scan', 'wpshadow' ),
+					'url'   => $action_url,
+				),
+			),
+			'test'        => 'wpshadow_site_health_test_quick_scan',
+		);
+	}
+
+	return array(
+		'label'       => $label,
+		'status'      => 'good',
+		'badge'       => $badge,
+		'description' => $age_str,
+		'test'        => 'wpshadow_site_health_test_quick_scan',
+	);
+}
+
+/**
+ * Site Health test: Deep Scan recency.
+ */
+function wpshadow_site_health_test_deep_scan() {
+	$badge = $GLOBALS['wpshadow_site_health_badge'] ?? array( 'label' => 'WPShadow', 'color' => 'blue' );
+	$last  = get_option( 'wpshadow_last_heavy_tests', 0 );
+
+	$now   = time();
+	$label = __( 'WPShadow Deep Scan', 'wpshadow' );
+	$action_url = admin_url( 'admin.php?page=wpshadow' );
+
+	if ( empty( $last ) ) {
+		return array(
+			'label'       => $label,
+			'status'      => 'recommended',
+			'badge'       => $badge,
+			'description' => __( 'Deep Scan has not been run yet. Open WPShadow to run a Deep Scan.', 'wpshadow' ),
+			'actions'     => array(
+				array(
+					'label' => __( 'Open WPShadow Dashboard', 'wpshadow' ),
+					'url'   => $action_url,
+				),
+			),
+			'test'        => 'wpshadow_site_health_test_deep_scan',
+		);
+	}
+
+	$age = $now - (int) $last;
+	$age_str = sprintf( __( 'Last run %s ago.', 'wpshadow' ), human_time_diff( $last, $now ) );
+
+	if ( $age > WEEK_IN_SECONDS ) {
+		return array(
+			'label'       => $label,
+			'status'      => 'recommended',
+			'badge'       => $badge,
+			'description' => $age_str . ' ' . __( 'Consider running a new Deep Scan.', 'wpshadow' ),
+			'actions'     => array(
+				array(
+					'label' => __( 'Run Deep Scan', 'wpshadow' ),
+					'url'   => $action_url,
+				),
+			),
+			'test'        => 'wpshadow_site_health_test_deep_scan',
+		);
+	}
+
+	return array(
+		'label'       => $label,
+		'status'      => 'good',
+		'badge'       => $badge,
+		'description' => $age_str,
+		'test'        => 'wpshadow_site_health_test_deep_scan',
+	);
+}
+
+/**
+ * Site Health test: Overall WPShadow summary.
+ */
+function wpshadow_site_health_test_overall() {
+	$badge = $GLOBALS['wpshadow_site_health_badge'] ?? array( 'label' => 'WPShadow', 'color' => 'blue' );
+	$label = __( 'WPShadow Overall Status', 'wpshadow' );
+
+	// If we have recent scans, mark good; otherwise recommend action.
+	$quick = (int) get_option( 'wpshadow_last_quick_checks', 0 );
+	$deep  = (int) get_option( 'wpshadow_last_heavy_tests', 0 );
+
+	$action_url = admin_url( 'admin.php?page=wpshadow' );
+
+	if ( empty( $quick ) && empty( $deep ) ) {
+		return array(
+			'label'       => $label,
+			'status'      => 'recommended',
+			'badge'       => $badge,
+			'description' => __( 'No WPShadow scans have been recorded yet. Run Quick or Deep Scan in the WPShadow dashboard.', 'wpshadow' ),
+			'actions'     => array(
+				array(
+					'label' => __( 'Open WPShadow Dashboard', 'wpshadow' ),
+					'url'   => $action_url,
+				),
+			),
+			'test'        => 'wpshadow_site_health_test_overall',
+		);
+	}
+
+	return array(
+		'label'       => $label,
+		'status'      => 'good',
+		'badge'       => $badge,
+		'description' => __( 'WPShadow scans are active. See the WPShadow dashboard for detailed category health.', 'wpshadow' ),
+		'actions'     => array(
+			array(
+				'label' => __( 'Open WPShadow Dashboard', 'wpshadow' ),
+				'url'   => $action_url,
+			),
+		),
+		'test'        => 'wpshadow_site_health_test_overall',
+	);
+}
+
+// Add WPShadow section to Site Health → Info (debug tab).
+add_filter( 'debug_information', function ( $info ) {
+	if ( ! is_array( $info ) ) {
+		$info = array();
+	}
+
+	$current_user_id = get_current_user_id();
+	$quick_hidden = (bool) get_user_meta( $current_user_id, 'wpshadow_hide_quick_scan', true );
+	$deep_hidden  = (bool) get_user_meta( $current_user_id, 'wpshadow_hide_deep_scan', true );
+
+	$quick_last = (int) get_option( 'wpshadow_last_quick_checks', 0 );
+	$deep_last  = (int) get_option( 'wpshadow_last_heavy_tests', 0 );
+
+	$autofix_all = (bool) get_option( 'wpshadow_allow_all_autofixes', false );
+	$autofix_types = get_option( 'wpshadow_autofix_permissions', array() );
+	$autofix_count = is_array( $autofix_types ) ? count( $autofix_types ) : 0;
+
+	$finding_log = get_option( 'wpshadow_finding_log', array() );
+	$finding_count = is_array( $finding_log ) ? count( $finding_log ) : 0;
+
+	$section = array(
+		'label'  => __( 'WPShadow', 'wpshadow' ),
+		'fields' => array(
+			array(
+				'label'  => __( 'Quick Scan last run', 'wpshadow' ),
+				'value'  => $quick_last ? sprintf( __( '%s ago', 'wpshadow' ), human_time_diff( $quick_last, time() ) ) : __( 'Not yet', 'wpshadow' ),
+				'private'=> false,
+			),
+			array(
+				'label'  => __( 'Deep Scan last run', 'wpshadow' ),
+				'value'  => $deep_last ? sprintf( __( '%s ago', 'wpshadow' ), human_time_diff( $deep_last, time() ) ) : __( 'Not yet', 'wpshadow' ),
+				'private'=> false,
+			),
+			array(
+				'label'  => __( 'Panels hidden (current user)', 'wpshadow' ),
+				'value'  => sprintf( __( 'Quick: %s, Deep: %s', 'wpshadow' ), $quick_hidden ? __( 'Yes', 'wpshadow' ) : __( 'No', 'wpshadow' ), $deep_hidden ? __( 'Yes', 'wpshadow' ) : __( 'No', 'wpshadow' ) ),
+				'private'=> false,
+			),
+			array(
+				'label'  => __( 'Auto-fix (global allow)', 'wpshadow' ),
+				'value'  => $autofix_all ? __( 'Enabled', 'wpshadow' ) : __( 'Disabled', 'wpshadow' ),
+				'private'=> false,
+			),
+			array(
+				'label'  => __( 'Auto-fix types enabled', 'wpshadow' ),
+				'value'  => (string) $autofix_count,
+				'private'=> false,
+			),
+			array(
+				'label'  => __( 'Finding log entries', 'wpshadow' ),
+				'value'  => (string) $finding_count,
+				'private'=> false,
+			),
+		),
+	);
+
+	$info['wpshadow'] = $section;
+	return $info;
+} );
+
+/**
+ * Add WPShadow entries to WordPress Tools page (tools.php).
+ * Displays a card linking to WPShadow Tools and Help screens.
+ */
+add_action( 'tool_box', function() {
+	// Respect multisite/network contexts and plugin capability conventions
+	$can_view = is_network_admin() ? current_user_can( 'manage_network_options' ) : current_user_can( 'read' );
+	if ( ! $can_view ) {
+		return;
+	}
+
+	$tools_url = admin_url( 'admin.php?page=wpshadow-tools' );
+	$help_url  = admin_url( 'admin.php?page=wpshadow-help' );
+
+	echo '<div class="card">';
+	echo '<h2>' . esc_html__( 'WPShadow Tools', 'wpshadow' ) . '</h2>';
+	echo '<p>' . esc_html__( 'Access WPShadow utilities for diagnostics, workflows, and support.', 'wpshadow' ) . '</p>';
+	echo '<p><a class="button button-primary" href="' . esc_url( $tools_url ) . '">' . esc_html__( 'Open WPShadow Tools', 'wpshadow' ) . '</a> ';
+	echo '<a class="button" href="' . esc_url( $help_url ) . '">' . esc_html__( 'WPShadow Help', 'wpshadow' ) . '</a></p>';
+	echo '</div>';
+} );
+
 // Load core interfaces and base classes first
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-diagnostic-base.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-treatment-interface.php';
@@ -438,6 +773,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-dis
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-wizard.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-ajax.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-executor.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-kanban-workflow-helper.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-treatment-hooks.php';
 
 /**

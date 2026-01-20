@@ -10,8 +10,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $trigger_id = isset( $_GET['trigger'] ) ? sanitize_key( $_GET['trigger'] ) : '';
+$workflow_id = isset( $_GET['workflow'] ) ? sanitize_key( $_GET['workflow'] ) : '';
 if ( empty( $trigger_id ) ) {
-	wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) );
+	if ( ! empty( $workflow_id ) ) {
+		wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-workflows&action=edit&workflow=' . $workflow_id . '&step=action' ) );
+	} else {
+		wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) );
+	}
 	exit;
 }
 
@@ -32,7 +37,7 @@ foreach ( $trigger_categories as $category ) {
 
 <div class="wizard-step action-selection">
 	<div class="step-header">
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create&step=trigger-config&trigger=' . $trigger_id ) ); ?>" class="back-button">
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) . '&step=trigger-config&trigger=' . $trigger_id ) ); ?>" class="back-button">
 			<span class="dashicons dashicons-arrow-left-alt2"></span>
 			<?php esc_html_e( 'Back', 'wpshadow' ); ?>
 		</a>
@@ -356,10 +361,10 @@ jQuery(document).ready(function($) {
 			
 			if (hasConfig === true || hasConfig === 'true') {
 				// Action has configuration - go to action config screen
-				window.location.href = '<?php echo admin_url( 'admin.php?page=wpshadow-workflows&action=create&step=action-config' ); ?>&trigger=' + triggerId + '&action_index=0';
+				window.location.href = '<?php echo admin_url( 'admin.php?page=wpshadow-workflows' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) ); ?>&step=action-config&trigger=' + triggerId + '&action_index=0';
 			} else {
 				// No configuration needed - go straight to review
-				window.location.href = '<?php echo admin_url( 'admin.php?page=wpshadow-workflows&action=create&step=review' ); ?>&trigger=' + triggerId;
+				window.location.href = '<?php echo admin_url( 'admin.php?page=wpshadow-workflows' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) ); ?>&step=review&trigger=' + triggerId;
 			}
 		}, 200); // Small delay for UI feedback
 	});
@@ -410,8 +415,8 @@ jQuery(document).ready(function($) {
 		// Store selected actions
 		sessionStorage.setItem('workflow_actions', JSON.stringify(selectedActions));
 		
-		// Navigate to action config (single action in free tier)
-		window.location.href = '<?php echo admin_url( 'admin.php?page=wpshadow-workflows&action=create&step=action-config' ); ?>&trigger=' + triggerId + '&action_index=0';
+		// Navigate to action config (single action in free tier) - preserve workflow ID if editing
+		window.location.href = '<?php echo admin_url( 'admin.php?page=wpshadow-workflows' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) ); ?>&step=action-config&trigger=' + triggerId + '&action_index=0';
 	});
 });
 </script>

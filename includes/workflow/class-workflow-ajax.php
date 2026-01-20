@@ -272,3 +272,49 @@ add_action( 'wp_ajax_wpshadow_run_workflow', function() {
 		'result'  => $result,
 	) );
 } );
+
+/**
+ * Create workflow from example template
+ */
+add_action( 'wp_ajax_wpshadow_create_from_example', function() {
+	check_ajax_referer( 'wpshadow_workflow', 'nonce' );
+	
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
+	}
+	
+	$example_key = isset( $_POST['example_key'] ) ? sanitize_key( $_POST['example_key'] ) : '';
+	
+	if ( empty( $example_key ) ) {
+		wp_send_json_error( array( 'message' => 'Invalid example key.' ) );
+	}
+	
+	$result = Workflow_Examples::create_from_example( $example_key );
+	
+	if ( isset( $result['error'] ) ) {
+		wp_send_json_error( array( 'message' => $result['error'] ) );
+	}
+	
+	wp_send_json_success( array(
+		'message'  => 'Workflow created from example successfully.',
+		'workflow' => $result,
+	) );
+} );
+
+/**
+ * Get available examples to display
+ */
+add_action( 'wp_ajax_wpshadow_get_examples', function() {
+	check_ajax_referer( 'wpshadow_workflow', 'nonce' );
+	
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
+	}
+	
+	$examples = Workflow_Examples::get_display_examples();
+	
+	wp_send_json_success( array(
+		'examples' => $examples,
+		'count'    => count( $examples ),
+	) );
+} );

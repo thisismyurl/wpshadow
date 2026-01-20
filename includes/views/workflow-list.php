@@ -10,6 +10,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $workflows = \WPShadow\Workflow\Workflow_Manager::get_workflows();
+
+// Filter out temporary Kanban workflows
+$hidden_workflow_ids = \WPShadow\Workflow\Kanban_Workflow_Helper::get_hidden_workflow_ids();
+$workflows = array_filter( $workflows, function( $workflow ) use ( $hidden_workflow_ids ) {
+	return ! in_array( $workflow['id'], $hidden_workflow_ids, true );
+} );
 ?>
 
 <div class="wrap wpshadow-workflow-list">
@@ -25,35 +31,35 @@ $workflows = \WPShadow\Workflow\Workflow_Manager::get_workflows();
 	</p>
 
 	<?php if ( empty( $workflows ) ) : ?>
+		<!-- Create Workflow Button Section -->
+		<div class="workflow-cta-section">
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>" class="button button-primary button-hero">
+				<?php esc_html_e( 'Create a Workflow', 'wpshadow' ); ?>
+			</a>
+		</div>
+
 		<!-- Empty State -->
 		<div class="wpshadow-empty-state">
 			<div class="empty-state-icon">
 				<span class="dashicons dashicons-networking"></span>
 			</div>
 			<h2><?php esc_html_e( 'No Workflows Yet', 'wpshadow' ); ?></h2>
-			<p><?php esc_html_e( 'Create your first workflow to automate site maintenance, security checks, and notifications.', 'wpshadow' ); ?></p>
+			<p><?php esc_html_e( 'Get started with one of these popular workflow examples or build your own.', 'wpshadow' ); ?></p>
 			
 			<div class="empty-state-examples">
-				<h3><?php esc_html_e( 'Popular Examples:', 'wpshadow' ); ?></h3>
-				<ul>
-					<li><strong><?php esc_html_e( 'Daily Health Check:', 'wpshadow' ); ?></strong> <?php esc_html_e( 'Every day at 2am, run diagnostics and email results', 'wpshadow' ); ?></li>
-					<li><strong><?php esc_html_e( 'Block External Fonts:', 'wpshadow' ); ?></strong> <?php esc_html_e( 'On every page load, check and block external fonts', 'wpshadow' ); ?></li>
-					<li><strong><?php esc_html_e( 'Security Alert:', 'wpshadow' ); ?></strong> <?php esc_html_e( 'When a plugin is activated, run security scan', 'wpshadow' ); ?></li>
-					<li><strong><?php esc_html_e( 'Login Notification:', 'wpshadow' ); ?></strong> <?php esc_html_e( 'When admin logs in, send Slack notification', 'wpshadow' ); ?></li>
-				</ul>
+				<h3><?php esc_html_e( 'Quick Start Examples:', 'wpshadow' ); ?></h3>
+				<div id="example-list" class="example-list">
+					<!-- Populated by JavaScript -->
+				</div>
 			</div>
-
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>" class="button button-primary button-hero">
-				<?php esc_html_e( 'Create Your First Workflow', 'wpshadow' ); ?>
-			</a>
 		</div>
 	<?php else : ?>
 		<!-- Workflow List -->
 		<div class="wpshadow-workflows">
 			<?php foreach ( $workflows as $workflow ) : ?>
 				<?php
-				$trigger_label = self::get_trigger_summary( $workflow );
-				$action_count = ! empty( $workflow['actions'] ) ? count( $workflow['actions'] ) : 0;
+				$trigger_label = get_trigger_summary( $workflow );
+				$action_label = get_action_summary( $workflow );
 				$is_enabled = ! isset( $workflow['enabled'] ) || $workflow['enabled'];
 				?>
 				<div class="workflow-card <?php echo $is_enabled ? 'enabled' : 'disabled'; ?>" data-workflow-id="<?php echo esc_attr( $workflow['id'] ); ?>">
@@ -73,19 +79,19 @@ $workflows = \WPShadow\Workflow\Workflow_Manager::get_workflows();
 								</span>
 								<span class="workflow-actions">
 									<span class="dashicons dashicons-admin-tools"></span>
-									<?php
-									/* translators: %d: number of actions */
-									echo esc_html( sprintf( _n( '%d action', '%d actions', $action_count, 'wpshadow' ), $action_count ) );
-									?>
+									<?php echo esc_html( $action_label ); ?>
 								</span>
 							</p>
 						</div>
 					</div>
 
-					<div class="workflow-actions">
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=edit&workflow=' . $workflow['id'] ) ); ?>" class="button button-small">
+				<div class="workflow-buttons">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=edit&workflow=' . $workflow['id'] ) ); ?>" class="button button-small button-primary">
 							<?php esc_html_e( 'Edit', 'wpshadow' ); ?>
 						</a>
+						<button class="button button-small workflow-test-btn" data-workflow-id="<?php echo esc_attr( $workflow['id'] ); ?>">
+							<?php esc_html_e( 'Test', 'wpshadow' ); ?>
+						</button>
 						<button class="button button-small workflow-run-btn" data-workflow-id="<?php echo esc_attr( $workflow['id'] ); ?>">
 							<?php esc_html_e( 'Run Now', 'wpshadow' ); ?>
 						</button>
@@ -95,6 +101,15 @@ $workflows = \WPShadow\Workflow\Workflow_Manager::get_workflows();
 					</div>
 				</div>
 			<?php endforeach; ?>
+		</div>
+
+		<!-- Examples Section Below Workflows -->
+		<div class="wpshadow-empty-state" style="margin-top: 40px;">
+			<h3><?php esc_html_e( 'Quick Start Examples:', 'wpshadow' ); ?></h3>
+			<p><?php esc_html_e( 'Create workflows based on these popular templates:', 'wpshadow' ); ?></p>
+			<div id="example-list" class="example-list">
+				<!-- Populated by JavaScript -->
+			</div>
 		</div>
 	<?php endif; ?>
 </div>
@@ -137,13 +152,23 @@ $workflows = \WPShadow\Workflow\Workflow_Manager::get_workflows();
 	margin-bottom: 30px;
 }
 
+/* Create Workflow CTA */
+.workflow-cta-section {
+	text-align: center;
+	margin: 30px 0;
+}
+
+.workflow-cta-section .button-hero {
+	padding: 20px 40px;
+	font-size: 16px;
+	height: auto;
+	line-height: 1.5;
+}
+
 .empty-state-examples {
-	max-width: 600px;
-	margin: 30px auto;
+	max-width: 100%;
+	margin: 30px 0 0 0;
 	text-align: left;
-	background: #f7f7f7;
-	padding: 20px;
-	border-radius: 4px;
 }
 
 .empty-state-examples h3 {
@@ -151,21 +176,98 @@ $workflows = \WPShadow\Workflow\Workflow_Manager::get_workflows();
 	font-size: 14px;
 	text-transform: uppercase;
 	color: #666;
+	margin-bottom: 20px;
 }
 
-.empty-state-examples ul {
-	list-style: none;
-	padding: 0;
-	margin: 15px 0 0 0;
+/* Example List */
+.example-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+	gap: 15px;
 }
 
-.empty-state-examples li {
-	padding: 10px 0;
-	border-bottom: 1px solid #ddd;
+.example-item {
+	background: #f9f9f9;
+	border: 2px solid #ddd;
+	border-radius: 6px;
+	padding: 16px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
 }
 
-.empty-state-examples li:last-child {
-	border-bottom: none;
+.example-item:hover {
+	border-color: #2271b1;
+	background: #fff;
+	box-shadow: 0 2px 6px rgba(34, 113, 177, 0.15);
+}
+
+.example-item-header {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+}
+
+.example-item-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	background: #e7f3ff;
+	border-radius: 4px;
+	flex-shrink: 0;
+	color: #2271b1;
+	font-size: 18px;
+}
+
+.example-item-icon .dashicons {
+	width: 18px;
+	height: 18px;
+	font-size: 18px;
+}
+
+.example-item-title {
+	font-weight: 600;
+	margin: 0;
+	font-size: 14px;
+	color: #333;
+}
+
+.example-item-description {
+	font-size: 12px;
+	color: #666;
+	margin: 0;
+	line-height: 1.4;
+}
+
+.example-item-button {
+	background: #2271b1;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	padding: 6px 12px;
+	font-size: 12px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background 0.2s ease;
+	margin-top: auto;
+	width: 100%;
+}
+
+.example-item-button:hover {
+	background: #135e96;
+}
+
+.example-item-button:active {
+	opacity: 0.8;
+}
+
+.example-item-loading .example-item-button {
+	opacity: 0.6;
+	cursor: not-allowed;
 }
 
 /* Workflow Cards */
@@ -279,39 +381,295 @@ $workflows = \WPShadow\Workflow\Workflow_Manager::get_workflows();
 	font-size: 16px;
 }
 
-.workflow-actions {
+.workflow-buttons {
 	display: flex;
 	gap: 8px;
 	padding-top: 15px;
 	border-top: 1px solid #f0f0f0;
+	justify-content: center;
 }
 
-.workflow-actions .button {
-	flex: 1;
+.workflow-buttons .button {
+	min-width: 70px;
+}
+
+.workflow-buttons .button-primary {
+	order: -1;
 }
 </style>
 
 <?php
 /**
- * Get human-readable trigger summary
+ * Get human-readable trigger summary with trigger name or schedule
  *
  * @param array $workflow Workflow data
  * @return string Trigger summary
  */
 function get_trigger_summary( $workflow ) {
-	if ( empty( $workflow['trigger'] ) ) {
+	// Try to get from blocks format (new format)
+	$trigger_block = null;
+	if ( ! empty( $workflow['blocks'] ) && is_array( $workflow['blocks'] ) ) {
+		foreach ( $workflow['blocks'] as $block ) {
+			if ( 'trigger' === $block['type'] ) {
+				$trigger_block = $block;
+				break;
+			}
+		}
+	}
+	
+	// Fallback to direct trigger key (legacy format)
+	if ( ! $trigger_block && ! empty( $workflow['trigger'] ) ) {
+		$trigger_block = $workflow['trigger'];
+	}
+	
+	if ( ! $trigger_block ) {
 		return __( 'No trigger configured', 'wpshadow' );
 	}
 
-	$trigger = $workflow['trigger'];
-	$type = $trigger['type'];
-
-	$summaries = array(
-		'time_trigger'      => __( 'On schedule', 'wpshadow' ),
-		'page_load_trigger' => __( 'On page load', 'wpshadow' ),
-		'event_trigger'     => __( 'On event', 'wpshadow' ),
-		'condition_trigger' => __( 'When condition met', 'wpshadow' ),
-	);
-
-	return isset( $summaries[ $type ] ) ? $summaries[ $type ] : $type;
+	$trigger_id = isset( $trigger_block['id'] ) ? $trigger_block['id'] : '';
+	$config = isset( $trigger_block['config'] ) ? $trigger_block['config'] : array();
+	
+	// For time triggers, show the schedule
+	if ( 'time_daily' === $trigger_id || ( isset( $trigger_block['type'] ) && 'time_trigger' === $trigger_block['type'] ) ) {
+		$frequency = isset( $config['frequency'] ) ? $config['frequency'] : 'daily';
+		$time = isset( $config['time'] ) ? $config['time'] : '02:00';
+		
+		// Convert time format (24-hour to 12-hour with AM/PM)
+		$time_parts = explode( ':', $time );
+		$hour = intval( $time_parts[0] );
+		$minute = isset( $time_parts[1] ) ? $time_parts[1] : '00';
+		$ampm = $hour >= 12 ? 'PM' : 'AM';
+		$display_hour = $hour % 12;
+		if ( 0 === $display_hour ) {
+			$display_hour = 12;
+		}
+		
+		$time_display = sprintf( '%d:%s %s', $display_hour, $minute, $ampm );
+		
+		if ( 'daily' === $frequency ) {
+			return sprintf( __( 'Daily at %s', 'wpshadow' ), $time_display );
+		} elseif ( 'weekly' === $frequency ) {
+			$day = isset( $config['day'] ) ? ucfirst( $config['day'] ) : 'Sunday';
+			return sprintf( __( 'Weekly on %s at %s', 'wpshadow' ), $day, $time_display );
+		} elseif ( 'monthly' === $frequency ) {
+			$day = isset( $config['day'] ) ? $config['day'] : '1';
+			return sprintf( __( 'Monthly on day %s at %s', 'wpshadow' ), $day, $time_display );
+		}
+	}
+	
+	// For other triggers, get label from registry
+	$all_triggers = \WPShadow\Workflow\Block_Registry::get_triggers();
+	
+	if ( ! empty( $trigger_id ) && isset( $all_triggers[ $trigger_id ] ) ) {
+		$trigger_block_data = $all_triggers[ $trigger_id ];
+		return $trigger_block_data['label'];
+	}
+	
+	// Fallback to type-based summary
+	if ( isset( $trigger_block['type'] ) ) {
+		$type = $trigger_block['type'];
+		$summaries = array(
+			'time_trigger'      => __( 'On schedule', 'wpshadow' ),
+			'page_load_trigger' => __( 'On page load', 'wpshadow' ),
+			'event_trigger'     => __( 'On event', 'wpshadow' ),
+			'condition_trigger' => __( 'When condition met', 'wpshadow' ),
+		);
+		return isset( $summaries[ $type ] ) ? $summaries[ $type ] : $type;
+	}
+	
+	return __( 'Unknown trigger', 'wpshadow' );
 }
+
+/**
+ * Get human-readable action summary with first (and only) action name
+ * Note: This version of the plugin supports only one action per trigger
+ *
+ * @param array $workflow Workflow data
+ * @return string Action summary
+ */
+function get_action_summary( $workflow ) {
+	$action_blocks = array();
+	
+	// Try to get from blocks format (new format)
+	if ( ! empty( $workflow['blocks'] ) && is_array( $workflow['blocks'] ) ) {
+		foreach ( $workflow['blocks'] as $block ) {
+			if ( 'action' === $block['type'] ) {
+				$action_blocks[] = $block;
+			}
+		}
+	}
+	
+	// Fallback to direct actions key (legacy format)
+	if ( empty( $action_blocks ) && ! empty( $workflow['actions'] ) && is_array( $workflow['actions'] ) ) {
+		$action_blocks = $workflow['actions'];
+	}
+	
+	if ( empty( $action_blocks ) ) {
+		return __( 'No actions configured', 'wpshadow' );
+	}
+
+	$first_action = $action_blocks[0];
+	$action_id = isset( $first_action['id'] ) ? $first_action['id'] : '';
+	
+	// Get action from registry to get the label
+	$all_actions = \WPShadow\Workflow\Block_Registry::get_actions();
+	
+	if ( ! empty( $action_id ) && isset( $all_actions[ $action_id ] ) ) {
+		$action_block_data = $all_actions[ $action_id ];
+		return $action_block_data['label'];
+	}
+
+	// Fallback - just count (shouldn't happen with one-action-per-trigger rule)
+	return __( '1 action', 'wpshadow' );
+}
+?>
+
+<script>
+jQuery(document).ready(function($) {
+	const $exampleList = $('#example-list');
+	
+	if ($exampleList.length === 0) {
+		return;
+	}
+
+	/**
+	 * Load and render examples
+	 */
+	function loadExamples() {
+		$.post(ajaxurl, {
+			action: 'wpshadow_get_examples',
+			nonce: wpshadowWorkflow.nonce
+		}, function(response) {
+			if (response.success) {
+				renderExamples(response.data.examples);
+			}
+		});
+	}
+
+	/**
+	 * Render examples in the list
+	 */
+	function renderExamples(examples) {
+		$exampleList.empty();
+
+		if (!examples || Object.keys(examples).length === 0) {
+			$exampleList.html('<p><?php esc_html_e( 'No more examples available.', 'wpshadow' ); ?></p>');
+			return;
+		}
+
+		Object.entries(examples).forEach(function([exampleKey, example]) {
+			const $item = $('<div class="example-item" data-example-key="' + exampleKey + '">');
+			
+			// Icon mapping
+			const iconMap = {
+				'heart': 'heart',
+				'admin-appearance': 'admin-appearance',
+				'shield': 'shield',
+				'admin-users': 'admin-users',
+				'lock': 'lock',
+				'download': 'download',
+				'admin-tools': 'admin-tools',
+				'image-rotate': 'image-rotate',
+				'database': 'database'
+			};
+			
+			const icon = iconMap[example.icon] || 'admin-tools';
+
+			const html = `
+				<div class="example-item-header">
+					<div class="example-item-icon">
+						<span class="dashicons dashicons-${icon}"></span>
+					</div>
+					<h4 class="example-item-title">${$('<div>').text(example.name).html()}</h4>
+				</div>
+				<p class="example-item-description">${$('<div>').text(example.description).html()}</p>
+				<button type="button" class="example-item-button">
+					<?php esc_html_e( 'Use Example', 'wpshadow' ); ?>
+				</button>
+			`;
+
+			$item.html(html);
+			$exampleList.append($item);
+		});
+
+		// Bind click handlers
+		attachExampleHandlers();
+	}
+
+	/**
+	 * Attach event handlers to example items
+	 */
+	function attachExampleHandlers() {
+		$exampleList.on('click', '.example-item-button', function(e) {
+			e.preventDefault();
+			const $button = $(this);
+			const $item = $button.closest('.example-item');
+			const exampleKey = $item.data('example-key');
+
+			createFromExample(exampleKey, $button, $item);
+		});
+
+		// Also allow clicking the whole item to trigger the button
+		$exampleList.on('click', '.example-item', function(e) {
+			if (e.target.classList.contains('example-item-button')) {
+				return;
+			}
+			$(this).find('.example-item-button').click();
+		});
+	}
+
+	/**
+	 * Create a workflow from the selected example
+	 */
+	function createFromExample(exampleKey, $button, $item) {
+		if ($button.prop('disabled')) {
+			return;
+		}
+
+		$item.addClass('example-item-loading');
+		$button.prop('disabled', true).text('<?php esc_html_e( 'Creating...', 'wpshadow' ); ?>');
+
+		$.post(ajaxurl, {
+			action: 'wpshadow_create_from_example',
+			nonce: wpshadowWorkflow.nonce,
+			example_key: exampleKey
+		}, function(response) {
+			if (response.success) {
+				// Reload the examples to show updated list
+				loadExamples();
+				
+				// Show success message
+				showNotice('<?php esc_html_e( 'Workflow created successfully! Reload the page to see it.', 'wpshadow' ); ?>', 'success');
+				
+				// Reload page after 1 second
+				setTimeout(function() {
+					location.reload();
+				}, 1000);
+			} else {
+				$item.removeClass('example-item-loading');
+				$button.prop('disabled', false).text('<?php esc_html_e( 'Use Example', 'wpshadow' ); ?>');
+				showNotice(response.data.message || '<?php esc_html_e( 'Error creating workflow', 'wpshadow' ); ?>', 'error');
+			}
+		});
+	}
+
+	/**
+	 * Show a notice message
+	 */
+	function showNotice(message, type) {
+		const className = 'notice notice-' + (type === 'success' ? 'success' : 'error') + ' is-dismissible';
+		const $notice = $('<div class="' + className + '"><p>' + message + '</p></div>');
+		$('.wrap').prepend($notice);
+		
+		// Auto-dismiss after 5 seconds
+		setTimeout(function() {
+			$notice.fadeOut(function() {
+				$(this).remove();
+			});
+		}, 5000);
+	}
+
+	// Initial load
+	loadExamples();
+});
+</script>

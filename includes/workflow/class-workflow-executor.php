@@ -2,6 +2,14 @@
 /**
  * Workflow Execution Engine - Evaluates triggers and executes actions
  *
+ * Handles trigger detection and fires matching workflows with appropriate context.
+ * 
+ * SECURITY NOTES:
+ * - Manual/External CRON triggers use random 32-char hex tokens (128-bit entropy)
+ * - Token validation uses hash_equals() to prevent timing attacks
+ * - Tokens are auto-generated on workflow save, never expose workflow IDs
+ * - Query string format: ?wpshadow_trigger=RANDOM_TOKEN_HERE
+ *
  * @package WPShadow
  * @subpackage Workflow
  */
@@ -33,9 +41,26 @@ class Workflow_Executor {
 		add_action( 'deactivated_plugin', array( __CLASS__, 'handle_plugin_deactivated' ), 10, 2 );
 		add_action( 'switch_theme', array( __CLASS__, 'handle_theme_changed' ), 10, 3 );
 		add_action( 'user_register', array( __CLASS__, 'handle_user_registered' ) );
-		add_action( 'publish_post', array( __CLASS__, 'handle_post_published' ) );
+		add_action( 'transition_post_status', array( __CLASS__, 'handle_post_status_changed' ), 10, 3 );
 		add_action( 'delete_post', array( __CLASS__, 'handle_post_deleted' ) );
 		add_action( 'comment_post', array( __CLASS__, 'handle_comment_posted' ) );
+		
+		// Plugin/Theme update triggers
+		add_action( 'load-update.php', array( __CLASS__, 'handle_update_check' ) );
+		add_action( 'load-plugins.php', array( __CLASS__, 'handle_update_check' ) );
+		add_action( 'load-themes.php', array( __CLASS__, 'handle_update_check' ) );
+		
+		// Backup completion triggers
+		add_action( 'wpshadow_backup_completed', array( __CLASS__, 'handle_backup_completed' ), 10, 1 );
+		
+		// Database issue triggers
+		add_action( 'wpshadow_database_check', array( __CLASS__, 'handle_database_check' ) );
+		
+		// Error log triggers
+		add_action( 'wpshadow_error_log_entry', array( __CLASS__, 'handle_error_logged' ), 10, 2 );
+		
+		// Manual/CRON trigger via query string
+		add_action( 'wp', array( __CLASS__, 'handle_query_string_trigger' ), 1 );
 		
 		// Schedule cron if not already scheduled
 		if ( ! wp_next_scheduled( 'wpshadow_workflow_cron' ) ) {
@@ -132,10 +157,11 @@ class Workflow_Executor {
 	 */
 	public static function handle_plugin_activated( $plugin, $network_wide ) {
 		$context = array(
-			'trigger_type' => 'event',
-			'event_type'   => 'plugin_activated',
-			'plugin'       => $plugin,
-			'network_wide' => $network_wide,
+			'trigger_type'   => 'event',
+			'event_type'     => 'plugin_state_changed',
+			'plugin_action'  => 'activated',
+			'plugin'         => $plugin,
+			'network_wide'   => $network_wide,
 		);
 
 		self::execute_matching_workflows( 'event_trigger', $context );
@@ -146,10 +172,11 @@ class Workflow_Executor {
 	 */
 	public static function handle_plugin_deactivated( $plugin, $network_wide ) {
 		$context = array(
-			'trigger_type' => 'event',
-			'event_type'   => 'plugin_deactivated',
-			'plugin'       => $plugin,
-			'network_wide' => $network_wide,
+			'trigger_type'   => 'event',
+			'event_type'     => 'plugin_state_changed',
+			'plugin_action'  => 'deactivated',
+			'plugin'         => $plugin,
+			'network_wide'   => $network_wide,
 		);
 
 		self::execute_matching_workflows( 'event_trigger', $context );
@@ -183,14 +210,21 @@ class Workflow_Executor {
 	}
 
 	/**
-	 * Handle post published event
+	 * Handle post status changed event
 	 */
-	public static function handle_post_published( $post_id ) {
+	public static function handle_post_status_changed( $new_status, $old_status, $post ) {
+		// Skip auto-draft and other intermediate statuses
+		if ( in_array( $new_status, array( 'auto-draft', 'inherit' ), true ) ) {
+			return;
+		}
+
 		$context = array(
 			'trigger_type' => 'event',
-			'event_type'   => 'post_published',
-			'post_id'      => $post_id,
-			'post_type'    => get_post_type( $post_id ),
+			'event_type'   => 'post_status_changed',
+			'post_status'  => $new_status,
+			'old_status'   => $old_status,
+			'post_id'      => $post->ID,
+			'post_type'    => $post->post_type,
 		);
 
 		self::execute_matching_workflows( 'event_trigger', $context );
@@ -271,10 +305,43 @@ class Workflow_Executor {
 				if ( ! isset( $config['event_type'], $context['event_type'] ) ) {
 					return false;
 				}
-				return $config['event_type'] === $context['event_type'];
 
-			case 'condition_trigger':
-				return self::condition_matches( $config );
+			// First check if event type matches
+			if ( $config['event_type'] !== $context['event_type'] ) {
+				return false;
+			}
+
+			// For plugin state changes, check the plugin_action config
+			if ( 'plugin_state_changed' === $context['event_type'] ) {
+				$plugin_action = isset( $config['plugin_action'] ) ? $config['plugin_action'] : 'any';
+				if ( 'any' !== $plugin_action && $plugin_action !== $context['plugin_action'] ) {
+					return false;
+				}
+			}
+
+			// For post status changes, check the post_status config
+			if ( 'post_status_changed' === $context['event_type'] ) {
+				$post_status = isset( $config['post_status'] ) ? $config['post_status'] : 'any';
+				if ( 'any' !== $post_status && $post_status !== $context['post_status'] ) {
+					return false;
+				}
+			}
+
+			return true;
+			case 'plugin_update_trigger':
+				return self::plugin_update_matches( $config, $context );
+
+			case 'backup_completion_trigger':
+				return self::backup_completion_matches( $config, $context );
+
+			case 'database_trigger':
+				return self::database_issue_matches( $config, $context );
+
+			case 'error_log_trigger':
+				return self::error_log_matches( $config, $context );
+
+			case 'manual_cron_trigger':
+				return true; // Already validated in handle_query_string_trigger
 
 			default:
 				return true;
@@ -357,6 +424,102 @@ class Workflow_Executor {
 	}
 
 	/**
+	 * Check if plugin/theme update trigger matches
+	 */
+	private static function plugin_update_matches( $config, $context ) {
+		if ( ! isset( $context['available_updates'] ) ) {
+			return false;
+		}
+
+		$target_type = isset( $config['target_type'] ) ? $config['target_type'] : 'any';
+		$specific_slug = isset( $config['specific_slug'] ) ? $config['specific_slug'] : '';
+
+		if ( 'any' === $target_type ) {
+			return ! empty( $context['available_updates'] );
+		}
+
+		if ( 'specific' === $target_type && ! empty( $specific_slug ) ) {
+			foreach ( $context['available_updates'] as $update ) {
+				if ( $update['slug'] === $specific_slug ) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		// Filter by plugin or theme
+		foreach ( $context['available_updates'] as $update ) {
+			if ( $update['type'] === $target_type ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if backup completion trigger matches
+	 */
+	private static function backup_completion_matches( $config, $context ) {
+		if ( ! isset( $context['backup_status'] ) ) {
+			return false;
+		}
+
+		$status = isset( $config['backup_status'] ) ? $config['backup_status'] : 'any';
+
+		if ( 'any' === $status ) {
+			return true;
+		}
+
+		return $status === $context['backup_status'];
+	}
+
+	/**
+	 * Check if database issue trigger matches
+	 */
+	private static function database_issue_matches( $config, $context ) {
+		if ( ! isset( $context['issues'] ) || empty( $context['issues'] ) ) {
+			return false;
+		}
+
+		$issue_type = isset( $config['database_issue'] ) ? $config['database_issue'] : '';
+		$size_threshold = isset( $config['size_mb'] ) ? (float) $config['size_mb'] : 500;
+
+		foreach ( $context['issues'] as $issue ) {
+			if ( 'size_threshold' === $issue_type && 'size' === $issue['type'] ) {
+				if ( $issue['size'] >= $size_threshold ) {
+					return true;
+				}
+			} elseif ( $issue_type === $issue['type'] ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if error log trigger matches
+	 */
+	private static function error_log_matches( $config, $context ) {
+		if ( ! isset( $context['error_level'] ) ) {
+			return false;
+		}
+
+		$level = isset( $config['error_level'] ) ? $config['error_level'] : 'any';
+
+		if ( 'any' === $level ) {
+			return true;
+		}
+
+		$severity_order = array( 'warning' => 1, 'error' => 2, 'critical' => 3 );
+		$config_level = isset( $severity_order[ $level ] ) ? $severity_order[ $level ] : 0;
+		$context_level = isset( $severity_order[ $context['error_level'] ] ) ? $severity_order[ $context['error_level'] ] : 0;
+
+		return $context_level >= $config_level;
+	}
+
+	/**
 	 * Execute a complete workflow
 	 */
 	public static function execute_workflow( $workflow, $context = array() ) {
@@ -416,6 +579,9 @@ class Workflow_Executor {
 			case 'send_notification':
 				return self::execute_notification( $config, $context );
 
+			case 'kanban_note':
+				return self::execute_kanban_note( $config, $context );
+
 			default:
 				return array(
 					'success' => false,
@@ -456,7 +622,7 @@ class Workflow_Executor {
 
 		switch ( $diagnostic_type ) {
 			case 'full':
-				$findings = \WPShadow\Diagnostics\Diagnostic_Registry::run_all_checks();
+				$findings = \WPShadow\Diagnostics\Diagnostic_Registry::run_deepscan_checks();
 				break;
 
 			case 'memory':
@@ -531,16 +697,31 @@ class Workflow_Executor {
 	 * Send email notification
 	 */
 	private static function execute_email( $config, $context ) {
-		$recipient = isset( $config['recipient'] ) ? $config['recipient'] : 'admin';
-		$subject = isset( $config['subject'] ) ? $config['subject'] : 'WPShadow Workflow Notification';
+		// Load the email recipient manager
+		require_once dirname( __FILE__ ) . '/class-email-recipient-manager.php';
+
+		$recipient = isset( $config['recipient'] ) ? sanitize_text_field( $config['recipient'] ) : 'admin';
+		$subject = isset( $config['subject'] ) ? sanitize_text_field( $config['subject'] ) : 'WPShadow Workflow Notification';
 		$message = isset( $config['message'] ) ? $config['message'] : '';
 
-		$to = $recipient === 'admin' ? get_option( 'admin_email' ) : $config['custom_email'];
+		// Determine the actual email address
+		if ( 'admin' === $recipient ) {
+			$to = get_option( 'admin_email' );
+		} else {
+			// Verify the email is in the approved list
+			if ( ! Email_Recipient_Manager::is_approved( $recipient ) ) {
+				return array(
+					'success' => false,
+					'message' => 'Email recipient is not approved: ' . sanitize_email( $recipient ),
+				);
+			}
+			$to = sanitize_email( $recipient );
+		}
 
 		if ( empty( $to ) ) {
 			return array(
 				'success' => false,
-				'message' => 'No recipient email address.',
+				'message' => 'No valid recipient email address.',
 			);
 		}
 
@@ -551,7 +732,7 @@ class Workflow_Executor {
 
 		return array(
 			'success' => $sent,
-			'message' => $sent ? 'Email sent successfully.' : 'Failed to send email.',
+			'message' => $sent ? 'Email sent to ' . sanitize_email( $to ) . '.' : 'Failed to send email.',
 		);
 	}
 
@@ -608,6 +789,33 @@ class Workflow_Executor {
 	}
 
 	/**
+	 * Execute Kanban note creation
+	 */
+	private static function execute_kanban_note( $config, $context ) {
+		if ( ! class_exists( '\\WPShadow\\Workflow\\Kanban_Note_Action' ) ) {
+			return array(
+				'success' => false,
+				'message' => 'Kanban Note Action class not found.',
+			);
+		}
+
+		$note_config = array(
+			'title'       => isset( $config['title'] ) ? self::replace_variables( $config['title'], $context ) : 'Workflow Alert',
+			'description' => isset( $config['description'] ) ? self::replace_variables( $config['description'], $context ) : '',
+			'status'      => isset( $config['status'] ) ? $config['status'] : 'detected',
+			'severity'    => isset( $config['severity'] ) ? $config['severity'] : 'medium',
+			'category'    => isset( $config['category'] ) ? $config['category'] : 'settings',
+			'auto_dismiss' => isset( $config['auto_dismiss'] ) ? (int) $config['auto_dismiss'] : 0,
+			'workflow_id' => isset( $context['workflow_id'] ) ? $context['workflow_id'] : '',
+			'trigger_at'  => isset( $context['trigger_name'] ) ? $context['trigger_name'] : current_time( 'mysql' ),
+		);
+
+		$result = \WPShadow\Workflow\Kanban_Note_Action::create( $note_config );
+
+		return $result;
+	}
+
+	/**
 	 * Get diagnostic class name from slug
 	 */
 	private static function get_diagnostic_class( $slug ) {
@@ -654,5 +862,215 @@ class Workflow_Executor {
 		}
 
 		update_option( 'wpshadow_workflow_executions', $log );
+	}
+
+	/**
+	 * Handle plugin/theme update check
+	 */
+	public static function handle_update_check() {
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		// Get available updates
+		$updates = self::check_updates();
+
+		if ( ! empty( $updates ) ) {
+			$context = array(
+				'trigger_type'      => 'plugin_update',
+				'available_updates' => $updates,
+				'count'             => count( $updates ),
+			);
+
+			self::execute_matching_workflows( 'plugin_update_trigger', $context );
+		}
+	}
+
+	/**
+	 * Check for available plugin/theme updates
+	 */
+	private static function check_updates() {
+		$updates = array();
+
+		// Check plugin updates
+		$plugin_updates = get_site_transient( 'update_plugins' );
+		if ( ! empty( $plugin_updates->response ) ) {
+			foreach ( $plugin_updates->response as $plugin => $data ) {
+				$updates[] = array(
+					'type'    => 'plugin',
+					'slug'    => $plugin,
+					'version' => $data->new_version,
+				);
+			}
+		}
+
+		// Check theme updates
+		$theme_updates = get_site_transient( 'update_themes' );
+		if ( ! empty( $theme_updates->response ) ) {
+			foreach ( $theme_updates->response as $theme => $data ) {
+				$updates[] = array(
+					'type'    => 'theme',
+					'slug'    => $theme,
+					'version' => $data['new_version'],
+				);
+			}
+		}
+
+		return $updates;
+	}
+
+	/**
+	 * Handle backup completion event
+	 */
+	public static function handle_backup_completed( $status ) {
+		$context = array(
+			'trigger_type'    => 'backup_completion',
+			'backup_status'   => $status,
+			'timestamp'       => current_time( 'timestamp' ),
+		);
+
+		self::execute_matching_workflows( 'backup_completion_trigger', $context );
+	}
+
+	/**
+	 * Handle database issues
+	 */
+	public static function handle_database_check() {
+		global $wpdb;
+
+		$issues = array();
+
+		// Check database size
+		$db_size = self::get_database_size();
+		if ( $db_size ) {
+			$issues[] = array(
+				'type' => 'size',
+				'size' => $db_size,
+			);
+		}
+
+		// Check for corruption
+		$corruption_check = $wpdb->get_results( 'CHECK TABLE ' . $wpdb->prefix . 'posts' );
+		if ( ! empty( $corruption_check ) ) {
+			foreach ( $corruption_check as $check ) {
+				if ( 'error' === $check->Msg_type || 'warning' === $check->Msg_type ) {
+					$issues[] = array(
+						'type'    => 'corruption',
+						'message' => $check->Msg_text,
+					);
+				}
+			}
+		}
+
+		if ( ! empty( $issues ) ) {
+			$context = array(
+				'trigger_type' => 'database_issue',
+				'issues'       => $issues,
+			);
+
+			self::execute_matching_workflows( 'database_trigger', $context );
+		}
+	}
+
+	/**
+	 * Get database size in MB
+	 */
+	private static function get_database_size() {
+		global $wpdb;
+
+		$size_query = "SELECT ROUND( SUM( data_length + index_length ) / 1024 / 1024, 2 ) AS 'size' 
+						FROM information_schema.TABLES WHERE table_schema = '" . DB_NAME . "'";
+		
+		$result = $wpdb->get_var( $size_query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		
+		return $result ? (float) $result : 0;
+	}
+
+	/**
+	 * Handle error log entry
+	 */
+	public static function handle_error_logged( $error_level, $message ) {
+		$context = array(
+			'trigger_type'  => 'error_log',
+			'error_level'   => $error_level,
+			'message'       => $message,
+			'timestamp'     => current_time( 'timestamp' ),
+		);
+
+		self::execute_matching_workflows( 'error_log_trigger', $context );
+	}
+
+	/**
+	 * Handle query string trigger (external CRON / manual trigger)
+	 * Uses secure random token instead of predictable workflow ID
+	 * URL format: ?wpshadow_trigger=random_hash_token
+	 */
+	public static function handle_query_string_trigger() {
+		if ( is_admin() ) {
+			return;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! isset( $_GET['wpshadow_trigger'] ) ) {
+			return;
+		}
+
+		$provided_token = sanitize_text_field( wp_unslash( $_GET['wpshadow_trigger'] ) );
+		$triggered = false;
+
+		// Get all workflows with manual_cron_trigger
+		$workflows = Workflow_Manager::get_workflows();
+
+		foreach ( $workflows as $workflow ) {
+			if ( ! $workflow['enabled'] ) {
+				continue;
+			}
+
+			foreach ( $workflow['blocks'] as $block ) {
+				if ( $block['type'] !== 'trigger' || $block['id'] !== 'manual_cron_trigger' ) {
+					continue;
+				}
+
+				$config = isset( $block['config'] ) ? $block['config'] : array();
+				$stored_token = isset( $config['trigger_token'] ) ? $config['trigger_token'] : '';
+				$require_auth = isset( $config['require_auth'] ) ? $config['require_auth'] : true;
+				$allowed_ips = isset( $config['allowed_ips'] ) ? $config['allowed_ips'] : '';
+
+				// Compare tokens using hash_equals for timing attack resistance
+				if ( empty( $stored_token ) || ! hash_equals( $stored_token, $provided_token ) ) {
+					continue;
+				}
+
+				// Check authentication if required
+				if ( $require_auth && ! is_user_logged_in() ) {
+					continue;
+				}
+
+				// Check IP allowlist if configured
+				if ( ! empty( $allowed_ips ) ) {
+					$allowed_ips_arr = array_map( 'trim', explode( ',', $allowed_ips ) );
+					$client_ip = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
+					
+					if ( ! in_array( $client_ip, $allowed_ips_arr, true ) ) {
+						continue;
+					}
+				}
+
+				// Execute the workflow
+				$context = array(
+					'trigger_type' => 'manual_cron',
+					'triggered_at' => current_time( 'timestamp' ),
+					'method'       => 'query_string',
+				);
+
+				self::execute_workflow( $workflow, $context );
+				$triggered = true;
+			}
+		}
+
+		// Optional: Prevent index from being cached/served
+		if ( $triggered ) {
+			nocache_headers();
+		}
 	}
 }

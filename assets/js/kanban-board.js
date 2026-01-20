@@ -6,6 +6,44 @@
 jQuery(document).ready(function ($) {
 	let draggedElement = null;
 	let dragSource = null;
+	const $statusBox = $('#wpshadow-kanban-status');
+
+	function setStatus(message, tone = 'info') {
+		if (!$statusBox.length) {
+			return;
+		}
+
+		const tones = {
+			info: { bg: '#eff6ff', border: '#dbeafe', color: '#0b5cad' },
+			success: { bg: '#ecfdf3', border: '#bbf7d0', color: '#166534' },
+			error: { bg: '#fef2f2', border: '#fecdd3', color: '#b91c1c' }
+		};
+
+		const palette = tones[tone] || tones.info;
+		$statusBox.css({
+			display: 'block',
+			background: palette.bg,
+			border: '1px solid ' + palette.border,
+			color: palette.color
+		}).text(message);
+	}
+
+	function getKanbanNonce() {
+		if (window.wpshadowKanban && window.wpshadowKanban.kanban_nonce) {
+			return window.wpshadowKanban.kanban_nonce;
+		}
+		return $('[name="wpshadow_kanban_nonce"]').val() || '';
+	}
+
+	function getAjaxUrl() {
+		if (window.wpshadowKanban && window.wpshadowKanban.ajax_url) {
+			return window.wpshadowKanban.ajax_url;
+		}
+		if (typeof ajaxurl !== 'undefined') {
+			return ajaxurl;
+		}
+		return '';
+	}
 
 	/**
 	 * Initialize Kanban board
@@ -15,6 +53,273 @@ jQuery(document).ready(function ($) {
 		setupCardActions();
 		updateAllColumnCounts();
 	}
+
+	/**
+	 * Auto-run Quick Scan on dashboard load to populate kanban
+	 */
+	function autoRunQuickScanOnLoad() {
+		const nonce = getKanbanNonce();
+		const ajaxUrl = getAjaxUrl();
+
+		if (!ajaxUrl || !nonce) {
+			return; // Silently skip if config missing
+		}
+
+		// Only auto-run if quick scan has never been run (Last scanned: not yet)
+		const lastRunElement = $('span').filter(function() {
+			return $(this).text().includes('Last scanned: not yet');
+		});
+
+		if (lastRunElement.length === 0) {
+			return; // Last run exists, don't auto-run
+		}
+
+		setStatus('Refreshing findings with quick scan...', 'info');
+		$.post(ajaxUrl, {
+			action: 'wpshadow_run_quick_checks',
+			nonce: nonce
+		}, function (response) {
+			if (response.success) {
+				setStatus('Quick scan complete. Board is current.', 'success');
+				setTimeout(() => window.location.reload(), 1000);
+			}
+		}).fail(function () {
+			// Silent fail - board will use existing findings
+		});
+	}
+
+	// Quick checks (low impact)
+	$(document).on('click', '#wpshadow-kanban-run-quick', function (e) {
+		e.preventDefault();
+		const nonce = getKanbanNonce();
+		if (!ajaxUrl || !nonce) {
+			setStatus('Missing AJAX configuration for quick checks.', 'error');
+							$targetColumn.find('.kanban-column-content .kanban-empty-message').remove();
+							$targetColumn.find('.kanban-column-content').append($card);
+			return;
+		}
+
+		const $btn = $(this);
+		$btn.prop('disabled', true).text('Running quick checks...');
+		setStatus('Running quick checks now. This keeps the board fresh.', 'info');
+
+		$.post(ajaxUrl, {
+			action: 'wpshadow_run_quick_checks',
+			nonce: nonce
+		}, function (response) {
+			if (response.success) {
+				setStatus('Quick checks finished. Refreshing board...', 'success');
+				// Wait a moment for option to persist, then reload
+				setTimeout(() => window.location.reload(), 1500);
+			} else {
+				const message = response.data && response.data.message ? response.data.message : 'Could not run quick checks.';
+				setStatus(message, 'error');
+			}
+		}).fail(function () {
+			setStatus('Connection error while running quick checks.', 'error');
+		}).always(function () {
+			$btn.prop('disabled', false).text('Run quick checks');
+		});
+	});
+
+	// Schedule Deep Scan button handler - creates persistent workflow
+	$(document).on('click', '#wpshadow-kanban-schedule-deep', function (e) {
+		e.preventDefault();
+		const nonce = getKanbanNonce();
+		const ajaxUrl = getAjaxUrl();
+		const $btn = $(this);
+
+		if (!ajaxUrl || !nonce) {
+			setStatus('Missing AJAX configuration for scheduling deep scan.', 'error');
+			return;
+		}
+
+		// Create workflow
+		$btn.prop('disabled', true).text('Creating workflow...');
+		setStatus('Creating automated deep scan workflow...', 'info');
+
+		$.post(ajaxUrl, {
+			action: 'wpshadow_create_heavy_test_workflow',
+			nonce: nonce,
+			schedule_time: '02:00',
+			user_email: (window.wpshadowKanban && window.wpshadowKanban.user_email) || ''
+		}, function (response) {
+			if (response.success) {
+				setStatus('✓ Workflow created! Deep scans will run automatically at 2:00 AM daily. Check Automation Builder to customize.', 'success');
+			} else {
+				const message = response.data && response.data.message ? response.data.message : 'Could not create workflow.';
+				setStatus(message, 'error');
+			}
+		}).fail(function () {
+			setStatus('Connection error while creating workflow.', 'error');
+		}).always(function () {
+			$btn.prop('disabled', false).text('Schedule Deep Scan (recommended)');
+		});
+	});
+
+	// Run Deep Scan button handler - runs immediately with off-peak check
+	$(document).on('click', '#wpshadow-kanban-run-deep', function (e) {
+		e.preventDefault();
+		const nonce = getKanbanNonce();
+		const ajaxUrl = getAjaxUrl();
+		const $btn = $(this);
+
+		if (!ajaxUrl || !nonce) {
+			setStatus('Missing AJAX configuration for deep scan.', 'error');
+			return;
+		}
+
+		// Run once now with off-peak check
+		const runHeavyNow = function () {
+			$btn.prop('disabled', true).text('Running deep scan...');
+			setStatus('Running deep scan now. This may take a moment.', 'info');
+
+			$.post(ajaxUrl, {
+				action: 'wpshadow_run_heavy_tests',
+				nonce: nonce
+			}, function (response) {
+				if (response.success) {
+					setStatus('Deep scan completed. Refreshing board...', 'success');
+					setTimeout(() => window.location.reload(), 1500);
+				} else {
+					const message = response.data && response.data.message ? response.data.message : 'Could not run deep scan.';
+					setStatus(message, 'error');
+				}
+			}).fail(function () {
+				setStatus('Connection error while running deep scan.', 'error');
+			}).always(function () {
+				$btn.prop('disabled', false).text('Run Deep Scan');
+			});
+		};
+
+		if (typeof window.wpshadowCheckSlowdown === 'function') {
+			const intercepted = window.wpshadowCheckSlowdown('deep-scan', runHeavyNow);
+			if (intercepted) {
+				setStatus('Deep scan queued for off-peak. Confirm in the modal.', 'info');
+				$btn.prop('disabled', false).text('Run Deep Scan');
+				return;
+			}
+		}
+
+		runHeavyNow();
+	});
+
+	$(document).on('wpshadow:offpeakScheduled', function (event, op) {
+		const label = op && op.type ? op.type.replace(/-/g, ' ') : 'heavy tests';
+		setStatus('Scheduled ' + label + ' for off-peak. We will email results.', 'success');
+	});
+
+	$(document).on('wpshadow:offpeakRunNow', function (event, op) {
+		const label = op && op.type ? op.type.replace(/-/g, ' ') : 'heavy tests';
+		setStatus('Running ' + label + ' now as requested.', 'info');
+	});
+
+	/**
+	 * Show autofix modal for workflow options
+	 */
+	let pendingAutofixData = null;
+
+	function showAutofixModal(findingId, $card, $targetColumn) {
+		pendingAutofixData = { findingId, $card, $targetColumn };
+		$('#wpshadow-autofix-modal').fadeIn(200);
+	}
+
+	// Autofix modal - Always button
+	$(document).on('click', '#wpshadow-autofix-always', function() {
+		if (!pendingAutofixData) return;
+
+		const { findingId, $card, $targetColumn } = pendingAutofixData;
+		const $btn = $(this);
+
+		$btn.prop('disabled', true).text('Creating workflow...');
+		$('#wpshadow-autofix-modal').fadeOut(200);
+
+		setStatus('Creating persistent auto-fix workflow...', 'info');
+
+		$.post(getAjaxUrl(), {
+			action: 'wpshadow_create_autofix_workflow',
+			nonce: getKanbanNonce(),
+			finding_id: findingId,
+			is_persistent: true,
+			user_email: (window.wpshadowKanban && window.wpshadowKanban.user_email) || ''
+		}, function(response) {
+			if (response.success) {
+				if (response.data.already_exists) {
+					setStatus('Persistent workflow already exists. Issue will be auto-fixed automatically.', 'success');
+				} else {
+					setStatus('Persistent auto-fix workflow created! This issue will be fixed automatically from now on.', 'success');
+				}
+
+				// Mark card as automated
+				$card.find('.finding-card-actions').html(
+					'<span style="color: #4caf50; font-weight: 500;">✓ Auto-fix enabled</span>'
+				);
+
+				// Update status
+				changeKanbanStatus(findingId, 'automated', 'detected', $card, $targetColumn, false);
+			} else {
+				setStatus('Error creating workflow: ' + (response.data?.message || 'Unknown error'), 'error');
+			}
+		}).fail(function() {
+			setStatus('Connection error creating workflow.', 'error');
+		}).always(function() {
+			$btn.prop('disabled', false).text('Create Workflow');
+			pendingAutofixData = null;
+		});
+	});
+
+	// Autofix modal - Just Once button
+	$(document).on('click', '#wpshadow-autofix-once', function() {
+		if (!pendingAutofixData) return;
+
+		const { findingId, $card, $targetColumn } = pendingAutofixData;
+		const $btn = $(this);
+
+		$btn.prop('disabled', true).text('Scheduling...');
+		$('#wpshadow-autofix-modal').fadeOut(200);
+
+		setStatus('Scheduling one-time auto-fix...', 'info');
+
+		$.post(getAjaxUrl(), {
+			action: 'wpshadow_create_autofix_workflow',
+			nonce: getKanbanNonce(),
+			finding_id: findingId,
+			is_persistent: false,
+			user_email: (window.wpshadowKanban && window.wpshadowKanban.user_email) || ''
+		}, function(response) {
+			if (response.success) {
+				setStatus('One-time fix scheduled. Will run in the background shortly.', 'success');
+
+				// Mark card as fixing
+				$card.find('.finding-card-actions').html(
+					'<span style="color: #ff9800; font-weight: 500;">⟳ Fixing soon...</span>'
+				);
+
+				// Update status
+				changeKanbanStatus(findingId, 'automated', 'detected', $card, $targetColumn, false);
+
+				// Check status after 60 seconds
+				setTimeout(() => {
+					setStatus('One-time fix should be complete. Refresh to see results.', 'info');
+				}, 60000);
+			} else {
+				setStatus('Error scheduling fix: ' + (response.data?.message || 'Unknown error'), 'error');
+			}
+		}).fail(function() {
+			setStatus('Connection error scheduling fix.', 'error');
+		}).always(function() {
+			$btn.prop('disabled', false).text('Just Once');
+			pendingAutofixData = null;
+		});
+	});
+
+	// Close autofix modal
+	$(document).on('click', '.wpshadow-autofix-modal-close, #wpshadow-autofix-modal', function(e) {
+		if (e.target === this) {
+			$('#wpshadow-autofix-modal').fadeOut(200);
+			pendingAutofixData = null;
+		}
+	});
 
 	/**
 	 * Setup drag and drop event listeners
@@ -87,9 +392,12 @@ jQuery(document).ready(function ($) {
 				return;
 			}
 
-			// If dragged to auto-fix column, trigger the fix
+			// If dragged to auto-fix column, execute one-time fix
 			if (newStatus === 'automated') {
-				triggerAutoFix(findingId, $card, $column);
+				executeOnetimeFix(findingId, $card, $column, oldStatus);
+			} else if (newStatus === 'fixed') {
+				// If dragged to workflows column, show workflow creation modal
+				showWorkflowCreationModal(findingId, $card, $column, oldStatus);
 			} else {
 				// Save status change via AJAX
 				changeKanbanStatus(
@@ -129,19 +437,16 @@ jQuery(document).ready(function ($) {
 			const $card = $(this).closest('.finding-card');
 			const currentStatus = $card.closest('.kanban-column').data('status');
 
-			if (confirm('Remove this finding from the board?')) {
-				changeKanbanStatus(
-					findingId,
-					'ignored',
-					currentStatus,
-					$card,
-					null,
-					true // isRemove
-				);
-			}
-		});
-
-		// Auto-fix from card
+		if (confirm('Remove this finding from the board?\n\nThis will hide it from view but the finding will still be recorded.')) {
+			// Just hide the card from UI
+			$card.fadeOut(300, function() {
+				$(this).remove();
+				// Update column count
+				const $column = $('.kanban-column[data-status="' + currentStatus + '"]');
+				const count = $column.find('.finding-card').length;
+				$column.find('h3 span[style*="float: right"]').text(count);
+			});
+			setStatus('Finding removed from view.', 'success');
 		$(document).on('click', '.finding-autofix', function (e) {
 			e.preventDefault();
 			e.stopPropagation();
@@ -215,9 +520,9 @@ jQuery(document).ready(function ($) {
 	}
 
 	/**
-	 * Trigger auto-fix when dropped in automated column
+	 * Execute one-time auto-fix when dropped in automated column
 	 */
-	function triggerAutoFix(findingId, $card, $targetColumn) {
+	function executeOnetimeFix(findingId, $card, $targetColumn, oldStatus) {
 		// Move card to column first
 		$card.css('opacity', '1').detach();
 		$targetColumn.find('.kanban-column-content .kanban-empty-message').hide();
@@ -225,74 +530,77 @@ jQuery(document).ready(function ($) {
 		updateAllColumnCounts();
 		resetDragState();
 
-		// Show fixing state
-		$card.css('opacity', '0.6');
-		$card.find('.finding-card-actions').html(
-			'<span style="color: #ff9800; font-weight: 500;">⟳ Fixing...</span>'
-		);
+		// Execute one-time fix immediately
+		setStatus('Scheduling one-time auto-fix...', 'info');
 
-		// Check if it's a "big" fix (for demo, check if threat > 60)
-		const threat = parseInt($card.data('threat') || 50);
-		const isBigFix = threat > 60;
-
-		if (isBigFix) {
-			const runOvernight = confirm(
-				'This is a significant fix that may take time.\n\n' +
-				'Would you like to schedule it to run overnight?\n' +
-				'We\'ll send you an email when it\'s complete.'
-			);
-
-			if (runOvernight) {
-				// Schedule overnight
-				$.post(ajaxurl, {
-					action: 'wpshadow_schedule_overnight_fix',
-					nonce: $('[name="wpshadow_kanban_nonce"]').val(),
-					finding_id: findingId
-				}, function (response) {
-					if (response.success) {
-						$card.css('opacity', '1');
-						$card.find('.finding-card-actions').html(
-							'<span style="color: #2196f3;">📅 Scheduled for overnight</span>'
-						);
-						alert('Fix scheduled! We\'ll email you when it\'s done.');
-					} else {
-						$card.css('opacity', '1');
-						$card.find('.finding-card-actions').html('');
-						alert('Error scheduling fix: ' + (response.data?.message || 'Unknown error'));
-					}
-				});
-				return;
-			}
-		}
-
-		// Run fix immediately
-		$.post(ajaxurl, {
-			action: 'wpshadow_autofix_finding',
-			nonce: $('[name="wpshadow_kanban_nonce"]').val(),
-			finding_id: findingId
-		}, function (response) {
+		$.post(getAjaxUrl(), {
+			action: 'wpshadow_create_autofix_workflow',
+			nonce: getKanbanNonce(),
+			finding_id: findingId,
+			is_persistent: false,
+			user_email: (window.wpshadowKanban && window.wpshadowKanban.user_email) || ''
+		}, function(response) {
 			if (response.success) {
-				// Move to fixed column
-				const $fixedColumn = $('.kanban-column[data-status="fixed"]');
-				$card.css('opacity', '1').detach();
-				$fixedColumn.find('.kanban-column-content .kanban-empty-message').hide();
-				$fixedColumn.find('.kanban-column-content').append($card);
-				$card.find('.finding-card-actions').html(
-					'<span style="color: #4caf50; font-weight: 500;">✓ Fixed</span>'
-				);
-				updateAllColumnCounts();
+				setStatus('One-time fix scheduled. Will run in the background shortly.', 'success');
 
-				// Update status in backend
-				changeKanbanStatus(findingId, 'fixed', 'automated', $card, $fixedColumn, false);
+				// Mark card as fixing
+				$card.find('.finding-card-actions').html(
+					'<span style="color: #ff9800; font-weight: 500;">⟳ Fixing soon...</span>'
+				);
+
+				// Update status
+				changeKanbanStatus(findingId, 'automated', oldStatus, $card, $targetColumn, false);
+
+				// Check status after 60 seconds
+				setTimeout(() => {
+					setStatus('One-time fix should be complete. Refresh to see results.', 'info');
+				}, 60000);
 			} else {
-				$card.css('opacity', '1');
-				$card.find('.finding-card-actions').html('');
-				alert('Auto-fix failed: ' + (response.data?.message || 'Unknown error'));
+				setStatus('Error scheduling fix: ' + (response.data?.message || 'Unknown error'), 'error');
 			}
-		}).fail(() => {
-			$card.css('opacity', '1');
-			$card.find('.finding-card-actions').html('');
-			alert('Connection error during auto-fix');
+		}).fail(function() {
+			setStatus('Connection error scheduling fix.', 'error');
+		});
+	}
+
+	/**
+	 * Show workflow creation modal when dropped in Workflows column
+	 */
+	function showWorkflowCreationModal(findingId, $card, $targetColumn, oldStatus) {
+		// Move card to column first
+		$card.css('opacity', '1').detach();
+		$targetColumn.find('.kanban-column-content .kanban-empty-message').remove();
+		$targetColumn.find('.kanban-column-content').append($card);
+		updateAllColumnCounts();
+		resetDragState();
+
+		// Create regular workflow with default settings
+		setStatus('Creating workflow...', 'info');
+
+		$.post(getAjaxUrl(), {
+			action: 'wpshadow_create_regular_workflow',
+			nonce: getKanbanNonce(),
+			finding_id: findingId,
+			user_email: (window.wpshadowKanban && window.wpshadowKanban.user_email) || ''
+		}, function(response) {
+			if (response.success) {
+				const workflow = response.data.workflow;
+				const needsConfiguration = response.data.needs_configuration;
+
+				if (needsConfiguration) {
+					setStatus('Workflow created (settings needed). Opening configuration...', 'info');
+					// Open workflow edit page
+					window.location.href = workflow.edit_url;
+				} else {
+					setStatus('Workflow created with default settings!', 'success');
+					// Update status to fixed
+					changeKanbanStatus(findingId, 'fixed', oldStatus, $card, $targetColumn, false);
+				}
+			} else {
+				setStatus('Error creating workflow: ' + (response.data?.message || 'Unknown error'), 'error');
+			}
+		}).fail(function() {
+			setStatus('Connection error creating workflow.', 'error');
 		});
 	}
 
@@ -321,9 +629,10 @@ jQuery(document).ready(function ($) {
 						updateAllColumnCounts();
 					});
 				} else if ($targetColumn) {
+					// Remove empty message if it exists
+					$targetColumn.find('.kanban-column-content .kanban-empty-message').remove();
 					// Move to target column
 					$card.css('opacity', '1').detach();
-					$targetColumn.find('.kanban-column-content .kanban-empty-message').hide();
 					$targetColumn.find('.kanban-column-content').append($card);
 					updateAllColumnCounts();
 				}
@@ -386,6 +695,202 @@ jQuery(document).ready(function ($) {
 	$(document).on('wpshadow-kanban-updated', function () {
 		initKanban();
 	});
+
+	// Dismiss scan panels (per-user)
+	$(document).on('click', '.wpshadow-dismiss-scan', function(e) {
+		e.preventDefault();
+		const scan = $(this).data('scan');
+		const $panel = $(this).closest('div[style*="border-radius: 6px"]');
+		$.post(ajaxurl, {
+			action: 'wpshadow_dismiss_scan_panel',
+			nonce: $('[name="wpshadow_kanban_nonce"]').val() || '',
+			scan: scan
+		}, function(response) {
+			if (response.success) {
+				$panel.slideUp(200, function(){ $(this).remove(); });
+			} else {
+				alert('Could not dismiss: ' + (response.data && response.data.message ? response.data.message : 'Unknown error'));
+			}
+		}).fail(function(){
+			alert('Connection error.');
+		});
+	});
+
+	// Restore scan panels link
+	$(document).on('click', '#wpshadow-restore-panels', function(e) {
+		e.preventDefault();
+		$.post(ajaxurl, {
+			action: 'wpshadow_restore_scan_panels',
+			nonce: $('[name="wpshadow_kanban_nonce"]').val() || ''
+		}, function(response){
+			if (response.success) {
+				location.reload();
+			} else {
+				alert('Could not restore: ' + (response.data && response.data.message ? response.data.message : 'Unknown error'));
+			}
+		}).fail(function(){
+			alert('Connection error.');
+		});
+	});
+
+	/**
+	 * Auto-refresh Kanban board to check for changes
+	 * - Verifies tasks are still outstanding
+	 * - Auto-closes resolved issues
+	 * - Adds newly discovered issues
+	 */
+	function autoRefreshKanban() {
+		const nonce = getKanbanNonce();
+		const ajaxUrl = getAjaxUrl();
+
+		if (!ajaxUrl || !nonce) {
+			return;
+		}
+
+		$.post(ajaxUrl, {
+			action: 'wpshadow_refresh_kanban_board',
+			nonce: nonce
+		}, function(response) {
+			if (response.success && response.data) {
+				const currentFindings = response.data.findings || {};
+				const statusManager = response.data.status_manager || {};
+
+				// Track changes
+				let changesDetected = false;
+				const addedFindings = [];
+				const resolvedFindings = [];
+				const currentFindingIds = [];
+
+				// Check each status column
+				$('.kanban-column').each(function() {
+					const $column = $(this);
+					const status = $column.data('status');
+					const $cards = $column.find('.finding-card');
+
+					// Get current card IDs in this column
+					$cards.each(function() {
+						const cardId = $(this).data('finding-id');
+						currentFindingIds.push(cardId);
+
+						// Check if this finding is still valid
+						if (currentFindings[status]) {
+							const stillExists = currentFindings[status].some(f => f.id === cardId);
+							if (!stillExists) {
+								// Finding resolved - move to fixed or remove
+								resolvedFindings.push({ id: cardId, from: status });
+								changesDetected = true;
+							}
+						}
+					});
+				});
+
+				// Check for new findings
+				Object.keys(currentFindings).forEach(function(status) {
+					if (currentFindings[status] && Array.isArray(currentFindings[status])) {
+						currentFindings[status].forEach(function(finding) {
+							if (!currentFindingIds.includes(finding.id)) {
+								addedFindings.push({ finding: finding, status: status });
+								changesDetected = true;
+							}
+						});
+					}
+				});
+
+				// Apply changes if detected
+				if (changesDetected) {
+					// Auto-close resolved findings
+					resolvedFindings.forEach(function(resolved) {
+						const $card = $('.finding-card[data-finding-id="' + resolved.id + '"]');
+						if ($card.length) {
+							$card.fadeOut(400, function() {
+								$(this).remove();
+								updateColumnCounts();
+							});
+						}
+					});
+
+					// Add new findings
+					addedFindings.forEach(function(item) {
+						addFindingCard(item.finding, item.status);
+					});
+
+					// Update counts
+					updateColumnCounts();
+
+					// Show notification
+					if (resolvedFindings.length > 0 || addedFindings.length > 0) {
+						let message = '';
+						if (resolvedFindings.length > 0) {
+							message += resolvedFindings.length + ' issue(s) resolved. ';
+						}
+						if (addedFindings.length > 0) {
+							message += addedFindings.length + ' new issue(s) detected.';
+						}
+						setStatus(message.trim(), 'success');
+					}
+				}
+			}
+		}).fail(function() {
+			// Silently fail - don't interrupt user workflow
+		});
+	}
+
+	/**
+	 * Add a finding card to a column
+	 */
+	function addFindingCard(finding, status) {
+		const $column = $('.kanban-column[data-status="' + status + '"]');
+		const $content = $column.find('.kanban-column-content');
+
+		if (!$content.length) return;
+
+		// Build card HTML
+		const threatLevel = finding.threat_level || 50;
+		const threatColor = finding.color || '#2196f3';
+		const category = finding.category || 'general';
+		const title = escapeHtml(finding.title || 'Issue');
+		const description = escapeHtml(finding.description || '');
+
+		const cardHtml = 
+			'<div class="finding-card" data-finding-id="' + finding.id + '" draggable="true" style="' +
+			'background: white; border-left: 4px solid ' + threatColor + '; padding: 12px; margin-bottom: 10px; ' +
+			'border-radius: 4px; cursor: move; box-shadow: 0 1px 3px rgba(0,0,0,0.1); animation: slideIn 0.3s ease-out;">' +
+			'<div style="font-weight: 600; color: #333; margin-bottom: 6px; font-size: 13px;">' + title + '</div>' +
+			'<div style="font-size: 12px; color: #666; margin-bottom: 8px; line-height: 1.4;">' + description + '</div>' +
+			'<div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">' +
+			'<span style="font-size: 11px; padding: 3px 8px; background: #f3f4f6; border-radius: 3px; color: #6b7280;">' +
+			category + '</span>' +
+			'<span style="font-size: 11px; padding: 3px 8px; background: ' + threatColor + '20; border-radius: 3px; color: ' + threatColor + ';">' +
+			'Threat: ' + threatLevel + '</span>' +
+			'</div>' +
+			'</div>';
+
+		$content.append(cardHtml);
+	}
+
+	/**
+	 * Update column counts
+	 */
+	function updateColumnCounts() {
+		$('.kanban-column').each(function() {
+			const $column = $(this);
+			const count = $column.find('.finding-card').length;
+			$column.find('h3 span[style*="float: right"]').text(count);
+		});
+	}
+
+	// Start auto-refresh every 2 minutes
+	setInterval(autoRefreshKanban, 120000); // 120000ms = 2 minutes
+
+	// Also refresh when page becomes visible (user returns to tab)
+	$(document).on('visibilitychange', function() {
+		if (!document.hidden) {
+			setTimeout(autoRefreshKanban, 2000); // Wait 2 seconds after tab becomes visible
+		}
+	});
+
+	// Auto-run quick scan on page load
+	autoRunQuickScanOnLoad();
 });
 
 /**

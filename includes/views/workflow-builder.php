@@ -32,7 +32,22 @@ $actions = \WPShadow\Workflow\Block_Registry::get_actions();
 			<h3>Triggers (IF)</h3>
 			<div class="wpshadow-block-list">
 				<?php foreach ( $triggers as $id => $block ) : ?>
-					<div class="wpshadow-block-item" draggable="true" data-block-id="<?php echo esc_attr( $id ); ?>" data-block-type="trigger" style="background-color: <?php echo esc_attr( $block['color'] ); ?>;">
+					<?php 
+					// Check if this is the current trigger when editing
+					$is_current_trigger = false;
+					if ( ! empty( $_GET['workflow'] ) && ! empty( $blocks ) ) {
+						foreach ( $blocks as $block_item ) {
+							if ( 'trigger' === $block_item['type'] && $id === $block_item['id'] ) {
+								$is_current_trigger = true;
+								break;
+							}
+						}
+					}
+					?>
+					<div class="wpshadow-block-item <?php echo $is_current_trigger ? 'wpshadow-block-current' : ''; ?>" draggable="true" data-block-id="<?php echo esc_attr( $id ); ?>" data-block-type="trigger" style="background-color: <?php echo esc_attr( $block['color'] ); ?>; position: relative;">
+						<?php if ( $is_current_trigger ) : ?>
+							<span class="dashicons dashicons-yes" style="position: absolute; top: 8px; right: 8px; background: #2271b1; color: white; border-radius: 50%; font-size: 14px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;"></span>
+						<?php endif; ?>
 						<span class="dashicons <?php echo esc_attr( $block['icon'] ); ?>" style="margin-right: 8px;"></span>
 						<strong><?php echo esc_html( $block['label'] ); ?></strong>
 						<small><?php echo esc_html( $block['description'] ); ?></small>
@@ -156,6 +171,11 @@ $actions = \WPShadow\Workflow\Block_Registry::get_actions();
 .wpshadow-block-item:hover {
 	transform: translateX(4px);
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.wpshadow-block-item.wpshadow-block-current {
+	border: 2px solid #fff;
+	box-shadow: 0 0 0 3px rgba(34, 113, 177, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.3);
 }
 
 .wpshadow-block-item strong {

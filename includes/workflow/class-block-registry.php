@@ -128,6 +128,13 @@ class Block_Registry {
 					),
 				),
 			),
+			'manual_cron_trigger' => array(
+				'label'       => 'Manual or External Trigger',
+				'description' => 'Trigger via URL (for external CRON jobs, webhooks, etc)',
+				'icon'        => 'dashicons-admin-links',
+				'color'       => '#f59e0b',
+				'fields'      => array(),
+			),
 		);
 	}
 
@@ -344,6 +351,65 @@ class Block_Registry {
 						'label'   => 'Log Message',
 						'type'    => 'textarea',
 						'default' => 'Workflow action executed',
+					),
+				),
+			),
+			'kanban_note' => array(
+				'label'       => 'Add Kanban Note',
+				'description' => 'Create a note/item in the Kanban board',
+				'icon'        => 'dashicons-postcard',
+				'color'       => '#ec4899',
+				'fields'      => array(
+					'title' => array(
+						'label'   => 'Note Title',
+						'type'    => 'text',
+						'default' => 'Workflow Alert',
+					),
+					'description' => array(
+						'label'   => 'Note Description',
+						'type'    => 'textarea',
+						'default' => '',
+					),
+					'status' => array(
+						'label'   => 'Kanban Status',
+						'type'    => 'select',
+						'options' => array(
+							'detected'  => 'Detected (New)',
+							'manual'    => 'User to Fix',
+							'automated' => 'Auto-fix',
+							'fixed'     => 'Fixed',
+						),
+						'default' => 'detected',
+					),
+					'severity' => array(
+						'label'   => 'Severity Level',
+						'type'    => 'select',
+						'options' => array(
+							'critical' => 'Critical',
+							'high'     => 'High',
+							'medium'   => 'Medium',
+							'low'      => 'Low',
+							'info'     => 'Info',
+						),
+						'default' => 'medium',
+					),
+					'category' => array(
+						'label'   => 'Category',
+						'type'    => 'select',
+						'options' => array(
+							'settings'    => 'Settings',
+							'security'    => 'Security',
+							'performance' => 'Performance',
+							'seo'         => 'SEO',
+							'design'      => 'Design',
+							'admin-ux'    => 'Admin UX',
+						),
+						'default' => 'settings',
+					),
+					'auto_dismiss' => array(
+						'label'   => 'Auto-dismiss after (seconds, 0 = never)',
+						'type'    => 'number',
+						'default' => 0,
 					),
 				),
 			),

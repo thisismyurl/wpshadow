@@ -71,6 +71,18 @@ class Workflow_Manager {
 	/**
 	 * Save a workflow
 	 */
+	/**
+	 * Save or update a workflow
+	 * 
+	 * Automatically generates secure tokens for manual_cron_trigger blocks.
+	 * Each token is a 32-character random hex string (128-bit entropy from random_bytes).
+	 * Tokens persist across edits unless manually regenerated.
+	 *
+	 * @param string $name Workflow name
+	 * @param array  $blocks Array of trigger/action blocks
+	 * @param string $workflow_id Optional workflow ID (auto-generated if not provided)
+	 * @return array Saved workflow array
+	 */
 	public static function save_workflow( $name, $blocks, $workflow_id = null ) {
 		$workflows = self::get_workflows();
 
@@ -81,6 +93,18 @@ class Workflow_Manager {
 		if ( ! $name || empty( trim( $name ) ) ) {
 			$name = self::generate_silly_name();
 		}
+
+		// Generate security tokens for manual_cron_trigger blocks if not present
+		// Uses bin2hex(random_bytes(16)) = 32 char hex = 128-bit entropy
+		// Token persists across edits (only generated if missing/empty)
+		foreach ( $blocks as &$block ) {
+			if ( $block['type'] === 'trigger' && $block['id'] === 'manual_cron_trigger' ) {
+				if ( ! isset( $block['config']['trigger_token'] ) || empty( $block['config']['trigger_token'] ) ) {
+					$block['config']['trigger_token'] = bin2hex( random_bytes( 16 ) );
+				}
+			}
+		}
+		unset( $block );
 
 		$workflows[ $workflow_id ] = array(
 			'id'         => $workflow_id,
@@ -214,5 +238,44 @@ class Workflow_Manager {
 		}
 
 		return $treatments;
+	}
+
+	/**
+	 * Regenerate security token for manual_cron_trigger
+	 * 
+	 * Used if token is compromised or needs to be reset.
+	 * Generates new 32-char random hex token (128-bit entropy).
+	 *
+	 * @param string $workflow_id Workflow ID
+	 * @param int    $block_index Index of trigger block to regenerate
+	 * @return string|false New token or false on failure
+	 */
+	public static function regenerate_cron_token( $workflow_id, $block_index = 0 ) {
+		$workflows = self::get_workflows();
+
+		if ( ! isset( $workflows[ $workflow_id ] ) ) {
+			return false;
+		}
+
+		$workflow = $workflows[ $workflow_id ];
+		$cron_count = 0;
+
+		foreach ( $workflow['blocks'] as $idx => &$block ) {
+			if ( $block['type'] === 'trigger' && $block['id'] === 'manual_cron_trigger' ) {
+				if ( $cron_count === $block_index ) {
+					$new_token = bin2hex( random_bytes( 16 ) );
+					$block['config']['trigger_token'] = $new_token;
+					
+					$workflows[ $workflow_id ]['blocks'] = $workflow['blocks'];
+					$workflows[ $workflow_id ]['updated'] = current_time( 'mysql' );
+					update_option( self::WORKFLOWS_OPTION, $workflows );
+					
+					return $new_token;
+				}
+				$cron_count++;
+			}
+		}
+
+		return false;
 	}
 }

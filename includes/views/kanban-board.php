@@ -1,7 +1,7 @@
 <?php
 /**
  * Kanban Board UI for organizing findings by status.
- * Displays findings in 5 columns: Detected, Ignore, Manual, Automated, Fixed
+ * Displays findings in 4 columns: Detected, Manual, Automated, Fixed
  *
  * @package WPShadow
  */
@@ -16,17 +16,31 @@ $status_manager = new \WPShadow\Core\Finding_Status_Manager();
 // Get all findings
 $all_findings = wpshadow_get_site_findings();
 
+// Get all workflows for the Workflows column
+if ( class_exists( '\WPShadow\Workflow\Workflow_Manager' ) ) {
+	$workflows = \WPShadow\Workflow\Workflow_Manager::get_workflows();
+} else {
+	$workflows = array();
+}
+
 // Organize findings by status
 $findings_by_status = array(
 	'detected'  => array(),
-	'ignored'   => array(),
 	'manual'    => array(),
 	'automated' => array(),
-	'fixed'     => array(),
+	'fixed'     => $workflows, // Workflows column shows workflows instead of findings
 );
 
 foreach ( $all_findings as $finding ) {
-	$status = $status_manager->get_finding_status( $finding['id'] );
+	$finding_id = isset( $finding['id'] ) ? $finding['id'] : '';
+	if ( empty( $finding_id ) ) {
+		// Generate a stable fallback ID from title/description to avoid undefined index notices
+		$seed = isset( $finding['title'] ) ? $finding['title'] : ( isset( $finding['description'] ) ? $finding['description'] : '' );
+		$finding_id = 'finding-' . md5( $seed );
+		$finding['id'] = $finding_id;
+	}
+
+	$status = $status_manager->get_finding_status( $finding_id );
 	if ( ! $status ) {
 		// New findings default to 'detected'
 		$status = 'detected';
@@ -37,15 +51,13 @@ foreach ( $all_findings as $finding ) {
 
 $status_labels = array(
 	'detected'  => 'Detected',
-	'ignored'   => 'Ignore',
-	'manual'    => 'Manual Fix',
-	'automated' => 'Auto-fix',
-	'fixed'     => 'Fixed',
+	'manual'    => 'User to Fix',
+	'automated' => 'Fix Now',
+	'fixed'     => 'Workflows',
 );
 
 $status_colors = array(
 	'detected'  => '#2196f3', // Blue
-	'ignored'   => '#9e9e9e', // Gray
 	'manual'    => '#ff9800', // Orange
 	'automated' => '#4caf50', // Green
 	'fixed'     => '#8bc34a', // Light green
@@ -91,26 +103,109 @@ $severity_legend = array(
 );
 ?>
 
-<div class="wpshadow-kanban-container" style="margin: 30px 0;">
-	<h2 style="margin-top: 0;">Organize Your Findings</h2>
-	<p style="color: #666; margin: 0 0 20px 0;">
-		Drag findings between columns to decide how to handle them. 
-		<a href="https://wpshadow.com/kb/kanban-workflow/?utm_source=wpshadow" target="_blank">Learn about the workflow</a>
-	</p>
+<div class="wpshadow-kanban-container" id="wpshadow-kanban-board" style="margin: 30px 0;">
+	<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin: 0 0 20px 0;">
+		<?php $wpshadow_hide_quick = get_user_meta( get_current_user_id(), 'wpshadow_hide_quick_scan', true ); if ( empty( $wpshadow_hide_quick ) ) : ?>
+		<div style="background: #f7fbff; border: 1px solid #d6e9ff; border-radius: 6px; padding: 12px 14px; position: relative;">
+			<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
+				<div style="flex: 1;">
+					<p style="margin: 0 0 8px 0; font-weight: 700; color: #0b5cad;">Quick Scan (low impact)</p>
+					<p style="margin: 0; color: #315070; font-size: 13px;">Run the safe checks now: cache-light diagnostics and a single page render. This keeps the board aligned with the latest findings without slowing editors.</p>
+				</div>
+				<?php endif; ?>
+				<button type="button" class="wpshadow-dismiss-scan" data-scan="quick" style="background: none; border: none; font-size: 20px; cursor: pointer; padding: 0; color: #999; flex-shrink: 0; line-height: 1;" title="Dismiss">✕</button>
+			</div>
+			<div style="display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: wrap;">
+				<button type="button" id="wpshadow-kanban-run-quick" class="button button-primary">Run Quick Scan</button>
+				<span style="font-size: 12px; color: #315070;">~15 seconds, safe to run live</span>
+				<?php 
+			$last_quick = get_option( 'wpshadow_last_quick_checks' );
+			if ( !empty( $last_quick ) && (int) $last_quick > 0 ) : ?>
+				<span style="font-size: 12px; color: #1e3a8a; font-weight: 600;">Last scanned: <?php echo wp_kses_post( wpshadow_format_time_with_tooltip( (int) $last_quick ) ); ?></span>
+				<?php else : ?>
+					<span style="font-size: 12px; color: #6b7280;">Last scanned: not yet</span>
+				<?php endif; ?>
+			</div>
+		</div>
+		<?php $wpshadow_hide_deep = get_user_meta( get_current_user_id(), 'wpshadow_hide_deep_scan', true ); if ( empty( $wpshadow_hide_deep ) ) : ?>
+		<div style="background: #fff8f3; border: 1px solid #ffd7b5; border-radius: 6px; padding: 12px 14px; position: relative;">
+			<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
+				<div style="flex: 1;">
+					<p style="margin: 0 0 8px 0; font-weight: 700; color: #c05c00;">Deep Scan (potential impact)</p>
+					<p style="margin: 0; color: #704620; font-size: 13px;">After you reshuffle items, schedule the higher-impact scans (full crawls, performance sweeps) during a quiet window so editors are not interrupted.</p>
+				</div>
+				<?php endif; ?>
+				<button type="button" class="wpshadow-dismiss-scan" data-scan="deep" style="background: none; border: none; font-size: 20px; cursor: pointer; padding: 0; color: #999; flex-shrink: 0; line-height: 1;" title="Dismiss">✕</button>
+			</div>
+			<div style="display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: wrap;">
+				<button type="button" id="wpshadow-kanban-schedule-deep" class="button button-primary">Schedule Deep Scan (recommended)</button>
+				<button type="button" id="wpshadow-kanban-run-deep" class="button">Run Deep Scan</button>
+				<?php 
+			$last_heavy = get_option( 'wpshadow_last_heavy_tests' );
+			if ( !empty( $last_heavy ) && (int) $last_heavy > 0 ) : ?>
+				<span style="font-size: 12px; color: #92400e; font-weight: 600;">Last run: <?php echo wp_kses_post( wpshadow_format_time_with_tooltip( (int) $last_heavy ) ); ?></span>
+				<?php else : ?>
+					<span style="font-size: 12px; color: #6b7280;">Last run: not yet</span>
+				<?php endif; ?>
+			</div>
+		</div>
+	</div>
+	<div style="margin: 20px 0; padding: 15px 20px; background: #f9fafb; border-left: 4px solid #3b82f6; border-radius: 4px;">
+		<h3 style="margin: 0 0 8px 0; color: #1e40af; font-size: 15px; font-weight: 600;">Organize Your Findings</h3>
+		<p style="color: #4b5563; margin: 0; font-size: 14px; line-height: 1.5;">
+			Drag findings between columns to decide how to handle them. 
+			<a href="https://wpshadow.com/kb/kanban-workflow/?utm_source=wpshadow" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 500;">Learn about the workflow →</a>
+		</p>
+	</div>
+	<div id="wpshadow-kanban-status" style="display: none; margin: 0 0 16px 0; padding: 10px 12px; border: 1px solid #dbeafe; background: #eff6ff; color: #0b5cad; border-radius: 6px; font-size: 13px;"></div>
 	<?php wp_nonce_field( 'wpshadow_kanban', 'wpshadow_kanban_nonce' ); ?>
+
+	<!-- Workflow Creation Modal -->
+	<div id="wpshadow-autofix-modal" style="display: none; position: fixed; z-index: 999999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6);">
+		<div style="background: #fff; margin: 10% auto; padding: 30px; border-radius: 8px; max-width: 500px; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+			<button class="wpshadow-autofix-modal-close" style="position: absolute; top: 15px; right: 15px; background: transparent; border: none; font-size: 28px; cursor: pointer; color: #999; line-height: 1;">×</button>
+			<h2 style="margin-top: 0; color: #4caf50;">
+				<span class="dashicons dashicons-update" style="font-size: 28px; width: 28px; height: 28px;"></span>
+				Create Workflow
+			</h2>
+			<p style="color: #555; line-height: 1.6; margin: 15px 0;">
+				Create a workflow to automatically handle this issue. Choose how you want it to work:
+			</p>
+			<div style="background: #f0f9ff; border-left: 4px solid #3b82f6; padding: 15px; margin: 15px 0; border-radius: 4px;">
+				<p style="margin: 0 0 10px 0; font-weight: 600; color: #1e40af;">
+					<strong>Always Auto-fix:</strong>
+				</p>
+				<p style="margin: 0; font-size: 13px; color: #1e3a8a;">
+					Creates a persistent workflow that will automatically fix this issue whenever it's detected. Visible in the Automation Builder.
+				</p>
+			</div>
+			<div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 15px 0; border-radius: 4px;">
+				<p style="margin: 0 0 10px 0; font-weight: 600; color: #92400e;">
+					<strong>Just Once:</strong>
+				</p>
+				<p style="margin: 0; font-size: 13px; color: #78350f;">
+					Fixes this specific issue now. A temporary workflow will run in the background (won't appear in your workflow list).
+				</p>
+			</div>
+			<div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+				<button id="wpshadow-autofix-once" class="button" style="padding: 10px 20px;">Just Once</button>
+				<button id="wpshadow-autofix-always" class="button button-primary" style="padding: 10px 20px;">Create Workflow</button>
+			</div>
+		</div>
+	</div>
 
 	
 
 	<div class="wpshadow-kanban-board" style="
 		display: grid;
-		grid-template-columns: repeat(5, 1fr);
+		grid-template-columns: repeat(4, 1fr);
 		gap: 15px;
 		padding: 20px;
 		background: #f5f5f5;
 		border-radius: 8px;
 		min-height: 500px;
 	">
-		<?php foreach ( array( 'detected', 'ignored', 'manual', 'automated', 'fixed' ) as $status ) : ?>
+		<?php foreach ( array( 'detected', 'manual', 'automated', 'fixed' ) as $status ) : ?>
 			<div class="kanban-column" data-status="<?php echo esc_attr( $status ); ?>" style="
 				background: white;
 				border-radius: 6px;
@@ -138,6 +233,50 @@ $severity_legend = array(
 				</h3>
 
 				<div class="kanban-column-content" style="min-height: 400px;">
+					<?php if ( $status === 'fixed' ) : // Workflows column - show workflows ?>
+						<?php foreach ( $findings_by_status[ $status ] as $workflow_id => $workflow ) : 
+							$workflow_name = isset( $workflow['name'] ) ? $workflow['name'] : 'Unnamed Workflow';
+							$workflow_enabled = isset( $workflow['enabled'] ) ? $workflow['enabled'] : false;
+							$workflow_triggers = isset( $workflow['triggers'] ) ? count( $workflow['triggers'] ) : 0;
+							$workflow_actions = isset( $workflow['actions'] ) ? count( $workflow['actions'] ) : 0;
+						?>
+							<div class="workflow-card" 
+								data-workflow-id="<?php echo esc_attr( $workflow_id ); ?>" 
+								style="
+									background: #f0f9ff;
+									border: 1px solid #8bc34a;
+									border-left: 4px solid #8bc34a;
+									border-radius: 4px;
+									padding: 12px;
+									margin-bottom: 10px;
+									transition: all 0.2s;
+								"
+								onmouseover="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'"
+								onmouseout="this.style.boxShadow='none'"
+							>
+								<!-- Workflow Title -->
+								<div style="font-weight: 600; font-size: 13px; margin: 0 0 6px 0; color: #333; display: flex; align-items: center; gap: 8px;">
+									<span class="dashicons dashicons-update" style="font-size: 16px; width: 16px; height: 16px; color: #8bc34a;"></span>
+									<?php echo esc_html( $workflow_name ); ?>
+									<?php if ( ! $workflow_enabled ) : ?>
+										<span style="font-size: 10px; padding: 2px 6px; background: #fee; color: #c00; border-radius: 3px;">Disabled</span>
+									<?php endif; ?>
+								</div>
+
+								<!-- Workflow Stats -->
+								<div style="font-size: 11px; color: #666; margin-bottom: 8px;">
+									<?php echo (int) $workflow_triggers; ?> trigger<?php echo $workflow_triggers !== 1 ? 's' : ''; ?> • 
+									<?php echo (int) $workflow_actions; ?> action<?php echo $workflow_actions !== 1 ? 's' : ''; ?>
+								</div>
+
+								<!-- Edit Link -->
+								<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflow-builder&workflow_id=' . $workflow_id ) ); ?>" 
+									style="font-size: 12px; color: #2271b1; text-decoration: none;">
+									Edit Workflow →
+								</a>
+							</div>
+						<?php endforeach; ?>
+					<?php else : // Regular findings columns ?>
 					<?php foreach ( $findings_by_status[ $status ] as $finding ) : 
 						$threat_level = isset( $finding['threat_level'] ) ? $finding['threat_level'] : 50;
 						$threat_label = wpshadow_get_threat_label( $threat_level );
@@ -179,48 +318,6 @@ $severity_legend = array(
 							onmouseover="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'"
 							onmouseout="this.style.boxShadow='none'"
 						>
-					<!-- Meta -->
-					<div class="finding-meta" style="
-						display: flex;
-						align-items: center;
-						flex-wrap: wrap;
-						gap: 8px;
-						margin: 0 0 8px 0;
-					">
-						<span style="
-							display: inline-flex;
-							align-items: center;
-							gap: 6px;
-							padding: 5px 8px;
-							border-radius: 999px;
-							border: 1px solid <?php echo esc_attr( $category['color'] ); ?>;
-							background: <?php echo esc_attr( $category['bg'] ); ?>;
-							color: <?php echo esc_attr( $category['color'] ); ?>;
-							font-size: 11px;
-							font-weight: 600;
-							letter-spacing: 0.2px;
-						">
-							<span class="dashicons <?php echo esc_attr( $category['icon'] ); ?>" style="width: 16px; height: 16px; font-size: 14px;"></span>
-							<span><?php echo esc_html( $category['label'] ); ?></span>
-						</span>
-						<span style="
-							display: inline-flex;
-							align-items: center;
-							gap: 6px;
-							padding: 4px 7px;
-							border-radius: 999px;
-							border: 1px solid <?php echo esc_attr( $card_border ); ?>;
-							color: <?php echo esc_attr( $card_border ); ?>;
-							background: #fff;
-							font-size: 11px;
-							text-transform: uppercase;
-							letter-spacing: 0.3px;
-						">
-							<span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: <?php echo esc_attr( $card_border ); ?>;"></span>
-							<span><?php echo esc_html( ucfirst( $card_severity ) ); ?></span>
-						</span>
-					</div>
-
 					<!-- Title -->
 					<div class="finding-title" style="
 						font-weight: 600;
@@ -270,6 +367,7 @@ $severity_legend = array(
 						<?php endif; ?>
 					</div>
 					<?php endforeach; ?>
+					<?php endif; // End if fixed (workflows) vs regular findings ?>
 
 					<?php if ( empty( $findings_by_status[ $status ] ) ) : ?>
 						<div class="kanban-empty-message" style="
@@ -278,13 +376,18 @@ $severity_legend = array(
 							padding: 40px 10px;
 							font-size: 12px;
 						">
-							No findings yet
+							<?php if ( $status === 'fixed' ) : ?>
+								No workflows yet. Drag findings here to create workflows.
+							<?php else : ?>
+								No findings yet
+							<?php endif; ?>
 						</div>
 					<?php endif; ?>
 				</div>
 			</div>
 		<?php endforeach; ?>
         <div class="wpshadow-kanban-legend" style="
+		grid-column: 1 / -1;
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
