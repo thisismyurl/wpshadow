@@ -14,9 +14,9 @@ services:
       WORDPRESS_DEBUG: 'true'
       WORDPRESS_DEBUG_DISPLAY: 'false'
     volumes:
+      - wp_test_data:/var/www/html
       - ./:/var/www/html/wp-content/plugins/wpshadow
       - ./wp-config-extra.php:/var/www/html/wp-config-extra.php
-      - wp_test_data:/var/www/html
     depends_on:
       db:
         condition: service_healthy
