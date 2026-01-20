@@ -1,0 +1,254 @@
+[
+  {
+    "id": "nav-posts",
+    "selector": "#menu-posts > a",
+    "title": "Blog posts",
+    "message": "Manage your blog posts, or add a new one.",
+    "category": "content",
+    "level": "beginner",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/posts"
+  },
+  {
+    "id": "nav-posts-all",
+    "selector": "#menu-posts li a[href=\"edit.php\"], #menu-posts li a[href*=\"edit.php?post_type=post\"]",
+    "title": "All Posts",
+    "message": "See all your published and draft posts in a list.",
+    "category": "content",
+    "level": "beginner",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/posts/all-posts"
+  },
+  {
+    "id": "nav-posts-add",
+    "selector": "#menu-posts li a[href*=\"post-new.php\"]",
+    "title": "Add a new post",
+    "message": "Create and publish a new blog post.",
+    "category": "content",
+    "level": "beginner",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/content/create-post"
+  },
+  {
+    "id": "nav-posts-categories",
+    "selector": "#menu-posts li a[href*=\"edit-tags.php?taxonomy=category\"]",
+    "title": "Organize posts",
+    "message": "Create and manage categories to organize your posts.",
+    "category": "content",
+    "level": "intermediate",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/posts/categories"
+  },
+  {
+    "id": "nav-posts-tags",
+    "selector": "#menu-posts li a[href*=\"edit-tags.php?taxonomy=post_tag\"]",
+    "title": "Add tags",
+    "message": "Use tags to label your posts for better discovery.",
+    "category": "content",
+    "level": "intermediate",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/posts/tags"
+  },
+  {
+    "id": "nav-media",
+    "selector": "#menu-media > a",
+    "title": "Media",
+    "message": "Upload and manage images, videos, and files for your site.",
+    "category": "content",
+    "level": "beginner",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/media"
+  },
+  {
+    "id": "nav-media-library",
+    "selector": "#menu-media li a[href=\"upload.php\"], #menu-media li a[href*=\"upload.php\"]",
+    "title": "Library",
+    "message": "View and manage all your uploaded images, videos, and media files.",
+    "category": "content",
+    "level": "beginner",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/media/library"
+  },
+  {
+    "id": "nav-media-add",
+    "selector": "#menu-media li a[href*=\"media-new.php\"]",
+    "title": "Add New",
+    "message": "Upload new images, videos, or files to your media library.",
+    "category": "content",
+    "level": "beginner",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/media/add-media"
+  },
+  {
+    "id": "nav-pages",
+    "selector": "#menu-pages > a",
+    "title": "Pages",
+    "message": "Create and manage static pages like Home, About, and Contact.",
+    "category": "content",
+    "level": "beginner",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/pages"
+  },
+  {
+    "id": "nav-pages-all",
+    "selector": "#menu-pages li a[href=\"edit.php?post_type=page\"], #menu-pages li a[href*=\"edit.php?post_type=page\"]",
+    "title": "All Pages",
+    "message": "See all your published and draft pages.",
+    "category": "content",
+    "level": "beginner",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/pages/all-pages"
+  },
+  {
+    "id": "nav-pages-add",
+    "selector": "#menu-pages li a[href*=\"post-new.php?post_type=page\"]",
+    "title": "Create new page",
+    "message": "Add a new static page to your site.",
+    "category": "content",
+    "level": "beginner",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/pages/add-page"
+  },
+  {
+    "id": "nav-comments",
+    "selector": "#menu-comments > a",
+    "title": "Comments",
+    "message": "Moderate, approve, and respond to comments from your visitors.",
+    "category": "content",
+    "level": "beginner",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/comments"
+  },
+  {
+    "id": "editor-publish",
+    "selector": ".editor-post-publish-button__button, .edit-post-header__settings .components-button.is-primary",
+    "title": "Publish",
+    "message": "Click to publish your post. You can edit it anytime after publishing.",
+    "category": "content",
+    "level": "beginner",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/editor/publish"
+  },
+  {
+    "id": "editor-sidebar",
+    "selector": ".wp-block-editor__sidebar, .block-editor-sidebar",
+    "title": "Content settings",
+    "message": "Adjust post settings like categories, tags, featured image, and more.",
+    "category": "content",
+    "level": "intermediate",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/content/post-settings"
+  },
+  {
+    "id": "editor-save-draft",
+    "selector": ".editor-post-save-draft, button[aria-label*=\"Save draft\"]",
+    "title": "Save draft",
+    "message": "Save your work without publishing. You can finish editing later.",
+    "category": "content",
+    "level": "beginner",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/editor/draft"
+  },
+  {
+    "id": "editor-preview",
+    "selector": ".editor-post-preview, button[aria-label*=\"Preview\"]",
+    "title": "Preview",
+    "message": "See how your post or page will look before publishing.",
+    "category": "content",
+    "level": "intermediate",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/editor/preview"
+  },
+  {
+    "id": "table-edit-link",
+    "selector": "span.edit > a, div.row-actions span.edit > a",
+    "title": "Edit item",
+    "message": "Open this item for editing.",
+    "category": "content",
+    "level": "beginner",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/content/table-edit-link"
+  },
+  {
+    "id": "table-delete-link",
+    "selector": "span.delete > a, div.row-actions span.delete > a",
+    "title": "Delete item",
+    "message": "Permanently remove this item. This action cannot be undone.",
+    "category": "content",
+    "level": "intermediate",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/content/table-delete-link"
+  },
+  {
+    "id": "form-submit",
+    "selector": "button[type=\"submit\"].button-primary, button[type=\"submit\"].button:first-of-type",
+    "title": "Save changes",
+    "message": "Submit this form and save your changes.",
+    "category": "content",
+    "level": "beginner",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/navigation/submit"
+  },
+  {
+    "id": "featured-image",
+    "selector": ".set-post-thumbnail, button[aria-label*=\"Featured\"]",
+    "title": "Featured image",
+    "message": "Set or change the main image for this post.",
+    "category": "content",
+    "level": "beginner",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/content/featured-image"
+  },
+  {
+    "id": "edit-permalink",
+    "selector": ".edit-slug-button, button[aria-label*=\"Edit\"]",
+    "title": "Edit URL",
+    "message": "Change the web address (URL) of this post or page.",
+    "category": "content",
+    "level": "intermediate",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/content/edit-permalink"
+  },
+  {
+    "id": "category-select",
+    "selector": "#categorychecklist, .editor-post-taxonomies .components-panel__body",
+    "title": "Categories",
+    "message": "Organize this post by selecting one or more categories.",
+    "category": "content",
+    "level": "beginner",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/content/category-select"
+  },
+  {
+    "id": "tag-input",
+    "selector": "#new-tag-post_tag, input[aria-label*=\"Add new tag\"]",
+    "title": "Add tags",
+    "message": "Add keywords to help readers find and understand this post.",
+    "category": "content",
+    "level": "beginner",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/content/tag-input"
+  },
+  {
+    "id": "list-checkbox-select",
+    "selector": "input[type=\"checkbox\"][name^=\"post\"]",
+    "title": "Select items",
+    "message": "Check these to select items for bulk actions.",
+    "category": "content",
+    "level": "beginner",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/content/list-checkbox-select"
+  },
+  {
+    "id": "list-title-link",
+    "selector": "td.title a, td.column-title a",
+    "title": "Item title",
+    "message": "Click to edit the title or view the full item details.",
+    "category": "content",
+    "level": "beginner",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/content/list-title-link"
+  },
+  {
+    "id": "list-category",
+    "selector": "td.categories a, td.column-categories a",
+    "title": "Category",
+    "message": "Click to view all posts in this category.",
+    "category": "content",
+    "level": "beginner",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/content/list-category"
+  },
+  {
+    "id": "list-date",
+    "selector": "td.date, td.column-date",
+    "title": "Date",
+    "message": "The date the item was created or published.",
+    "category": "content",
+    "level": "beginner",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/content/list-date"
+  },
+  {
+    "id": "list-status-badge",
+    "selector": "span.post-state, span.status-badge",
+    "title": "Status",
+    "message": "Shows whether the item is published, draft, or has other status.",
+    "category": "content",
+    "level": "beginner",
+    "kb_url": "https://wpshadow.com/docs/wordpress-basics/content/list-status-badge"
+  }
+]

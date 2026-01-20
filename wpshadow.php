@@ -616,340 +616,78 @@ add_action( 'wp_ajax_wpshadow_theme_contrast', function() {
 	/**
 	 * Tooltip catalog for Tips & Guidance.
 	 */
-	function wpshadow_get_tooltip_catalog() {
-		return array(
-			// Dashboard
-			array(
-				'id'       => 'nav-dashboard',
-				'selector' => '#menu-dashboard > a',
-				'title'    => __( 'Dashboard overview', 'wpshadow' ),
-				'message'  => __( 'Visit the Dashboard for health, updates, and a high-level view of your site.', 'wpshadow' ),
-				'category' => 'navigation',
-				'level'    => 'beginner',
-			),
-			// Posts section
-			array(
-				'id'       => 'nav-posts',
-				'selector' => '#menu-posts > a',
-				'title'    => __( 'Blog posts', 'wpshadow' ),
-				'message'  => __( 'Manage your blog posts, or add a new one.', 'wpshadow' ),
-				'category' => 'content',
-				'level'    => 'beginner',
-			),
-			array(
-				'id'       => 'nav-posts-all',
-				'selector' => '#menu-posts li a[href*="edit.php?post_type=post"]',
-				'title'    => __( 'View all posts', 'wpshadow' ),
-				'message'  => __( 'See all your published and draft posts in a list.', 'wpshadow' ),
-				'category' => 'content',
-				'level'    => 'beginner',
-			),
-			array(
-				'id'       => 'nav-posts-add',
-				'selector' => '#menu-posts li a[href*="post-new.php"]',
-				'title'    => __( 'Add a new post', 'wpshadow' ),
-				'message'  => __( 'Create and publish a new blog post.', 'wpshadow' ),
-				'category' => 'content',
-				'level'    => 'beginner',
-			),
-			array(
-				'id'       => 'nav-posts-categories',
-				'selector' => '#menu-posts li a[href*="edit-tags.php?taxonomy=category"]',
-				'title'    => __( 'Organize posts', 'wpshadow' ),
-				'message'  => __( 'Create and manage categories to organize your posts.', 'wpshadow' ),
-				'category' => 'content',
-				'level'    => 'intermediate',
-			),
-			array(
-				'id'       => 'nav-posts-tags',
-				'selector' => '#menu-posts li a[href*="edit-tags.php?taxonomy=post_tag"]',
-				'title'    => __( 'Add tags', 'wpshadow' ),
-				'message'  => __( 'Use tags to label your posts for better discovery.', 'wpshadow' ),
-				'category' => 'content',
-				'level'    => 'intermediate',
-			),
-			// Media section
-			array(
-				'id'       => 'nav-media',
-				'selector' => '#menu-media > a',
-				'title'    => __( 'Media library', 'wpshadow' ),
-				'message'  => __( 'Upload and manage images, videos, and files for your site.', 'wpshadow' ),
-				'category' => 'content',
-				'level'    => 'beginner',
-			),
-			array(
-				'id'       => 'nav-media-add',
-				'selector' => '#menu-media li a[href*="media-new.php"]',
-				'title'    => __( 'Upload media', 'wpshadow' ),
-				'message'  => __( 'Add new images, videos, or files to your media library.', 'wpshadow' ),
-				'category' => 'content',
-				'level'    => 'beginner',
-			),
-			// Pages section
-			array(
-				'id'       => 'nav-pages',
-				'selector' => '#menu-pages > a',
-				'title'    => __( 'Site pages', 'wpshadow' ),
-				'message'  => __( 'Create and manage static pages like Home, About, and Contact.', 'wpshadow' ),
-				'category' => 'content',
-				'level'    => 'beginner',
-			),
-			array(
-				'id'       => 'nav-pages-all',
-				'selector' => '#menu-pages li a[href*="edit.php?post_type=page"]',
-				'title'    => __( 'View all pages', 'wpshadow' ),
-				'message'  => __( 'See all your published and draft pages.', 'wpshadow' ),
-				'category' => 'content',
-				'level'    => 'beginner',
-			),
-			array(
-				'id'       => 'nav-pages-add',
-				'selector' => '#menu-pages li a[href*="post-new.php?post_type=page"]',
-				'title'    => __( 'Create new page', 'wpshadow' ),
-				'message'  => __( 'Add a new static page to your site.', 'wpshadow' ),
-				'category' => 'content',
-				'level'    => 'beginner',
-			),
-			// Comments
-			array(
-				'id'       => 'nav-comments',
-				'selector' => '#menu-comments > a',
-				'title'    => __( 'Comments', 'wpshadow' ),
-				'message'  => __( 'Moderate, approve, and respond to comments from your visitors.', 'wpshadow' ),
-				'category' => 'content',
-				'level'    => 'beginner',
-			),
-			// Appearance section
-			array(
-				'id'       => 'nav-appearance',
-				'selector' => '#menu-appearance > a',
-				'title'    => __( 'Site design', 'wpshadow' ),
-				'message'  => __( 'Customize your site appearance with themes, colors, menus, and widgets.', 'wpshadow' ),
-				'category' => 'design',
-				'level'    => 'beginner',
-			),
-			array(
-				'id'       => 'nav-appearance-themes',
-				'selector' => '#menu-appearance li a[href*="themes.php"]',
-				'title'    => __( 'Choose a theme', 'wpshadow' ),
-				'message'  => __( 'Browse and activate themes to change your site layout and style.', 'wpshadow' ),
-				'category' => 'design',
-				'level'    => 'beginner',
-			),
-			array(
-				'id'       => 'nav-appearance-customize',
-				'selector' => '#menu-appearance li a[href*="customize.php"]',
-				'title'    => __( 'Live customizer', 'wpshadow' ),
-				'message'  => __( 'Preview changes to colors, fonts, and layout in real-time before publishing.', 'wpshadow' ),
-				'category' => 'design',
-				'level'    => 'intermediate',
-			),
-			array(
-				'id'       => 'nav-appearance-menus',
-				'selector' => '#menu-appearance li a[href*="nav-menus.php"]',
-				'title'    => __( 'Edit menus', 'wpshadow' ),
-				'message'  => __( 'Create and organize navigation menus for your site.', 'wpshadow' ),
-				'category' => 'design',
-				'level'    => 'intermediate',
-			),
-			array(
-				'id'       => 'nav-appearance-widgets',
-				'selector' => '#menu-appearance li a[href*="widgets.php"]',
-				'title'    => __( 'Manage widgets', 'wpshadow' ),
-				'message'  => __( 'Add and arrange widgets in your site sidebar and other areas.', 'wpshadow' ),
-				'category' => 'design',
-				'level'    => 'intermediate',
-			),
-			// Plugins section
-			array(
-				'id'       => 'nav-plugins',
-				'selector' => '#menu-plugins > a',
-				'title'    => __( 'Extend functionality', 'wpshadow' ),
-				'message'  => __( 'Browse, install, and manage plugins to add features to your site.', 'wpshadow' ),
-				'category' => 'extensions',
-				'level'    => 'beginner',
-			),
-			array(
-				'id'       => 'nav-plugins-list',
-				'selector' => '#menu-plugins li a[href*="plugins.php"]',
-				'title'    => __( 'Installed plugins', 'wpshadow' ),
-				'message'  => __( 'See all your installed plugins, activate, deactivate, or delete them.', 'wpshadow' ),
-				'category' => 'extensions',
-				'level'    => 'beginner',
-			),
-			array(
-				'id'       => 'nav-plugins-add',
-				'selector' => '#menu-plugins li a[href*="plugin-install.php"]',
-				'title'    => __( 'Add new plugins', 'wpshadow' ),
-				'message'  => __( 'Search and install plugins from the WordPress plugin directory.', 'wpshadow' ),
-				'category' => 'extensions',
-				'level'    => 'beginner',
-			),
-			// Users section
-			array(
-				'id'       => 'nav-users',
-				'selector' => '#menu-users > a',
-				'title'    => __( 'Manage team', 'wpshadow' ),
-				'message'  => __( 'Add users and manage their roles to control site access.', 'wpshadow' ),
-				'category' => 'people',
-				'level'    => 'beginner',
-			),
-			array(
-				'id'       => 'nav-users-all',
-				'selector' => '#menu-users li a[href*="users.php"]',
-				'title'    => __( 'All users', 'wpshadow' ),
-				'message'  => __( 'View, edit, or remove user accounts from your site.', 'wpshadow' ),
-				'category' => 'people',
-				'level'    => 'intermediate',
-			),
-			array(
-				'id'       => 'nav-users-add',
-				'selector' => '#menu-users li a[href*="user-new.php"]',
-				'title'    => __( 'Invite user', 'wpshadow' ),
-				'message'  => __( 'Add a new user to your site with a specific role.', 'wpshadow' ),
-				'category' => 'people',
-				'level'    => 'beginner',
-			),
-			array(
-				'id'       => 'nav-users-profile',
-				'selector' => '#menu-users li a[href*="profile.php"]',
-				'title'    => __( 'Your profile', 'wpshadow' ),
-				'message'  => __( 'Update your personal information, password, and settings.', 'wpshadow' ),
-				'category' => 'people',
-				'level'    => 'beginner',
-			),
-			// Tools section
-			array(
-				'id'       => 'nav-tools',
-				'selector' => '#menu-tools > a',
-				'title'    => __( 'Site tools', 'wpshadow' ),
-				'message'  => __( 'Access tools for importing, exporting, and analyzing your site.', 'wpshadow' ),
-				'category' => 'navigation',
-				'level'    => 'intermediate',
-			),
-			array(
-				'id'       => 'nav-tools-available',
-				'selector' => '#menu-tools li a[href*="tools.php"]',
-				'title'    => __( 'Available tools', 'wpshadow' ),
-				'message'  => __( 'Browse available tools for site maintenance and optimization.', 'wpshadow' ),
-				'category' => 'navigation',
-				'level'    => 'intermediate',
-			),
-			array(
-				'id'       => 'nav-tools-import',
-				'selector' => '#menu-tools li a[href*="import.php"]',
-				'title'    => __( 'Import content', 'wpshadow' ),
-				'message'  => __( 'Import posts, pages, and other content from another site.', 'wpshadow' ),
-				'category' => 'navigation',
-				'level'    => 'intermediate',
-			),
-			array(
-				'id'       => 'nav-tools-export',
-				'selector' => '#menu-tools li a[href*="export.php"]',
-				'title'    => __( 'Export content', 'wpshadow' ),
-				'message'  => __( 'Back up your posts, pages, and other content as an XML file.', 'wpshadow' ),
-				'category' => 'navigation',
-				'level'    => 'intermediate',
-			),
-			array(
-				'id'       => 'nav-tools-site-health',
-				'selector' => '#menu-tools li a[href*="site-health.php"]',
-				'title'    => __( 'Site health', 'wpshadow' ),
-				'message'  => __( 'Check your site status and get recommendations for improvements.', 'wpshadow' ),
-				'category' => 'maintenance',
-				'level'    => 'intermediate',
-			),
-			// Settings section
-			array(
-				'id'       => 'nav-settings',
-				'selector' => '#menu-settings > a',
-				'title'    => __( 'Site settings', 'wpshadow' ),
-				'message'  => __( 'Configure your site name, timezone, and other important settings.', 'wpshadow' ),
-				'category' => 'settings',
-				'level'    => 'beginner',
-			),
-			array(
-				'id'       => 'nav-settings-general',
-				'selector' => '#menu-settings li a[href*="options-general.php"]',
-				'title'    => __( 'General settings', 'wpshadow' ),
-				'message'  => __( 'Set site title, tagline, timezone, and date format.', 'wpshadow' ),
-				'category' => 'settings',
-				'level'    => 'beginner',
-			),
-			array(
-				'id'       => 'nav-settings-writing',
-				'selector' => '#menu-settings li a[href*="options-writing.php"]',
-				'title'    => __( 'Writing settings', 'wpshadow' ),
-				'message'  => __( 'Configure default post format, category, and post settings.', 'wpshadow' ),
-				'category' => 'settings',
-				'level'    => 'intermediate',
-			),
-			array(
-				'id'       => 'nav-settings-reading',
-				'selector' => '#menu-settings li a[href*="options-reading.php"]',
-				'title'    => __( 'Reading settings', 'wpshadow' ),
-				'message'  => __( 'Set your homepage and how many posts to display.', 'wpshadow' ),
-				'category' => 'settings',
-				'level'    => 'intermediate',
-			),
-			array(
-				'id'       => 'nav-settings-discussion',
-				'selector' => '#menu-settings li a[href*="options-discussion.php"]',
-				'title'    => __( 'Comments settings', 'wpshadow' ),
-				'message'  => __( 'Control comment moderation, notifications, and avatar settings.', 'wpshadow' ),
-				'category' => 'settings',
-				'level'    => 'intermediate',
-			),
-			array(
-				'id'       => 'nav-settings-media',
-				'selector' => '#menu-settings li a[href*="options-media.php"]',
-				'title'    => __( 'Image settings', 'wpshadow' ),
-				'message'  => __( 'Configure automatic image sizes and thumbnail settings.', 'wpshadow' ),
-				'category' => 'settings',
-				'level'    => 'intermediate',
-			),
-			array(
-				'id'       => 'nav-settings-permalink',
-				'selector' => '#menu-settings li a[href*="options-permalink.php"]',
-				'title'    => __( 'Permalink structure', 'wpshadow' ),
-				'message'  => __( 'Set how your post URLs are formatted for better SEO.', 'wpshadow' ),
-				'category' => 'settings',
-				'level'    => 'intermediate',
-			),
-			array(
-				'id'       => 'nav-settings-privacy',
-				'selector' => '#menu-settings li a[href*="options-privacy.php"]',
-				'title'    => __( 'Privacy settings', 'wpshadow' ),
-				'message'  => __( 'Configure your site privacy and search engine visibility.', 'wpshadow' ),
-				'category' => 'settings',
-				'level'    => 'intermediate',
-			),
-			// Admin bar and editor
-			array(
-				'id'       => 'bar-new',
-				'selector' => '#wp-admin-bar-new-content',
-				'title'    => __( 'Quick add', 'wpshadow' ),
-				'message'  => __( 'Quickly create posts, pages, or upload media from anywhere in admin.', 'wpshadow' ),
-				'category' => 'navigation',
-				'level'    => 'intermediate',
-			),
-			array(
-				'id'       => 'bar-updates',
-				'selector' => '#wp-admin-bar-updates',
-				'title'    => __( 'Updates available', 'wpshadow' ),
-				'message'  => __( 'Install WordPress, plugin, and theme updates to stay secure.', 'wpshadow' ),
-				'category' => 'maintenance',
-				'level'    => 'intermediate',
-			),
-			array(
-				'id'       => 'editor-publish',
-				'selector' => '.editor-post-publish-button__button, .edit-post-header__settings .components-button.is-primary',
-				'title'    => __( 'Publish', 'wpshadow' ),
-				'message'  => __( 'Click to publish your post. You can edit it anytime after publishing.', 'wpshadow' ),
-				'category' => 'content',
-				'level'    => 'beginner',
-			),
-		);
+	function wpshadow_get_tooltip_catalog( $category = null ) {
+		// Use static caching to avoid loading and parsing JSON repeatedly
+		static $tooltips = array();
+		
+		// If no category specified, load all categories
+		if ( null === $category ) {
+			// Return cached all-tooltips if available
+			if ( isset( $tooltips['_all'] ) ) {
+				return $tooltips['_all'];
+			}
+
+			// Load all category files
+			$all_tooltips = array();
+			$data_dir = plugin_dir_path( __FILE__ ) . 'includes/data/';
+			
+			$categories = array( 'navigation', 'content', 'design', 'extensions', 'maintenance', 'people', 'settings' );
+			
+			foreach ( $categories as $cat ) {
+				$category_tooltips = wpshadow_get_tooltip_catalog( $cat );
+				$all_tooltips = array_merge( $all_tooltips, $category_tooltips );
+			}
+			
+			// Cache all tooltips
+			$tooltips['_all'] = $all_tooltips;
+			return $all_tooltips;
+		}
+
+		// Return cached category if available
+		if ( isset( $tooltips[ $category ] ) ) {
+			return $tooltips[ $category ];
+		}
+
+		// Path to category-specific JSON file
+		$json_file = plugin_dir_path( __FILE__ ) . 'includes/data/tooltips-' . $category . '.json';
+
+		// Check if file exists
+		if ( ! file_exists( $json_file ) ) {
+			// Log error only for debugging
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( 'WPShadow: tooltips-' . $category . '.json file not found at ' . $json_file );
+			}
+			$tooltips[ $category ] = array();
+			return array();
+		}
+
+		// Load and decode JSON
+		$json_content = file_get_contents( $json_file );
+		$data = json_decode( $json_content, true );
+
+		// Check if JSON is valid
+		if ( null === $data || ! is_array( $data ) ) {
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( 'WPShadow: Invalid JSON structure in tooltips-' . $category . '.json' );
+			}
+			$tooltips[ $category ] = array();
+			return array();
+		}
+
+		// Apply translations to title and message fields
+		foreach ( $data as &$tooltip ) {
+			if ( isset( $tooltip['title'] ) ) {
+				$tooltip['title'] = __( $tooltip['title'], 'wpshadow' );
+			}
+			if ( isset( $tooltip['message'] ) ) {
+				$tooltip['message'] = __( $tooltip['message'], 'wpshadow' );
+			}
+		}
+
+		// Cache the result
+		$tooltips[ $category ] = $data;
+
+		return $data;
 	}
 
 	function wpshadow_get_tip_categories() {
@@ -1917,6 +1655,9 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-treatment-interf
 // Load diagnostic registry
 require_once plugin_dir_path( __FILE__ ) . 'includes/diagnostics/class-diagnostic-registry.php';
 
+// Load WordPress Settings Scan
+require_once plugin_dir_path( __FILE__ ) . 'includes/diagnostics/class-wordpress-settings-scan.php';
+
 // Load treatment registry
 require_once plugin_dir_path( __FILE__ ) . 'includes/treatments/class-treatment-registry.php';
 
@@ -2152,6 +1893,7 @@ add_action( 'admin_enqueue_scripts', function() {
 			'message'  => $tip['message'],
 			'category' => $tip['category'],
 			'level'    => $tip['level'],
+			'kb_url'   => ! empty( $tip['kb_url'] ) ? $tip['kb_url'] : '',  // Include KB URL if available
 		);
 	}
 
@@ -3054,6 +2796,14 @@ function wpshadow_get_site_findings() {
 		}
 	}
 	unset( $finding );
+
+	// Add WordPress Settings scan
+	if ( class_exists( '\WPShadow\Diagnostics\WordPress_Settings_Scan' ) ) {
+		$settings_findings = \WPShadow\Diagnostics\WordPress_Settings_Scan::run_scan();
+		if ( ! empty( $settings_findings ) ) {
+			$findings = array_merge( $findings, $settings_findings );
+		}
+	}
 
 	// Add mobile friendliness issues
 	$mobile_issues = \WPShadow\Diagnostics\Diagnostic_Mobile_Friendliness::get_all_issues();

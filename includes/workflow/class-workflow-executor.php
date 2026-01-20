@@ -42,6 +42,7 @@ class Workflow_Executor {
 		add_action( 'switch_theme', array( __CLASS__, 'handle_theme_changed' ), 10, 3 );
 		add_action( 'user_register', array( __CLASS__, 'handle_user_registered' ) );
 		add_action( 'transition_post_status', array( __CLASS__, 'handle_post_status_changed' ), 10, 3 );
+		add_action( 'pre_post_update', array( __CLASS__, 'handle_pre_publish_review' ) );
 		add_action( 'delete_post', array( __CLASS__, 'handle_post_deleted' ) );
 		add_action( 'comment_post', array( __CLASS__, 'handle_comment_posted' ) );
 		
@@ -231,6 +232,32 @@ class Workflow_Executor {
 	}
 
 	/**
+	 * Handle pre-publish review trigger
+	 * Fires before a post is saved/published, allowing for validation or blocking
+	 *
+	 * @param int $post_id Post ID
+	 */
+	public static function handle_pre_publish_review( $post_id ) {
+		$post = get_post( $post_id );
+		
+		// Only trigger for actual post types, not auto-drafts
+		if ( ! $post || in_array( $post->post_status, array( 'auto-draft', 'inherit' ), true ) ) {
+			return;
+		}
+
+		$context = array(
+			'trigger_type' => 'event',
+			'event_type'   => 'pre_publish_review',
+			'post_id'      => $post_id,
+			'post_type'    => $post->post_type,
+			'post_title'   => $post->post_title,
+			'post_status'  => $post->post_status,
+		);
+
+		self::execute_matching_workflows( 'event_trigger', $context );
+	}
+
+	/**
 	 * Handle post deleted event
 	 */
 	public static function handle_post_deleted( $post_id ) {
@@ -325,6 +352,12 @@ class Workflow_Executor {
 				if ( 'any' !== $post_status && $post_status !== $context['post_status'] ) {
 					return false;
 				}
+			}
+
+			// For pre-publish review, match all pre-publish reviews
+			if ( 'pre_publish_review' === $context['event_type'] ) {
+				// Additional filtering can be added here for post types if needed
+				return true;
 			}
 
 			return true;

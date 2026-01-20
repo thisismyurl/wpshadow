@@ -50,19 +50,77 @@
 
 				elements.forEach( function( el ) {
 					self.createTooltipForElement( el, tip );
+					
+					// Add help icon next to label if KB URL exists
+					if ( tip.kb_url && tip.kb_url.trim() !== '' ) {
+						self.addHelpIcon( el, tip );
+					}
 				} );
 			} );
+		},
+
+		addHelpIcon: function( element, tipData ) {
+			// Find associated label - prioritize labels in <th> (table header)
+			var label = null;
+			
+			// If element is a label, use it directly
+			if ( element.tagName === 'LABEL' ) {
+				label = element;
+			} else if ( element.id ) {
+				// First, look for label in <th> with for attribute matching element ID
+				label = document.querySelector( 'th label[for="' + element.id + '"]' );
+				
+				// If not found in <th>, look anywhere in the document
+				if ( !label ) {
+					label = document.querySelector( 'label[for="' + element.id + '"]' );
+				}
+			} else if ( element.name ) {
+				// First, look for label in <th> with for attribute matching element name
+				label = document.querySelector( 'th label[for="' + element.name + '"]' );
+				
+				// If not found in <th>, look anywhere in the document
+				if ( !label ) {
+					label = document.querySelector( 'label[for="' + element.name + '"]' );
+				}
+			}
+			
+			// If still no label found, try finding parent label
+			if ( !label && element.closest ) {
+				label = element.closest( 'label' );
+			}
+			
+			if ( !label ) {
+				return; // No label found, skip
+			}
+			
+			// Create help icon
+			var helpIcon = document.createElement( 'a' );
+			helpIcon.className = 'wpshadow-help-icon';
+			helpIcon.href = tipData.kb_url;
+			helpIcon.target = '_blank';
+			helpIcon.rel = 'noopener noreferrer';
+			helpIcon.title = 'Learn more about ' + this.escapeHtml( tipData.title );
+			helpIcon.setAttribute( 'aria-label', 'Learn more about ' + this.escapeHtml( tipData.title ) );
+			helpIcon.innerHTML = '?';
+			
+			// Insert after label text, at the end of <th>
+			label.appendChild( helpIcon );
 		},
 
 		createTooltipForElement: function( element, tipData ) {
 			var tooltipEl = document.createElement( 'div' );
 			tooltipEl.className = 'wpshadow-tooltip ' + tipData.level;
 			tooltipEl.setAttribute( 'data-tip-id', tipData.id );
-			tooltipEl.innerHTML = '<span class="wpshadow-tooltip-title">' +
+			
+			// Build tooltip HTML
+			var tooltipHTML = '<span class="wpshadow-tooltip-title">' +
 				this.escapeHtml( tipData.title ) +
 				'</span><p class="wpshadow-tooltip-message">' +
 				this.escapeHtml( tipData.message ) +
-				'</p><button class="wpshadow-tooltip-dismiss" aria-label="Dismiss tip"></button>';
+				'</p>';
+			
+			tooltipHTML += '<button class="wpshadow-tooltip-dismiss" aria-label="Dismiss tip"></button>';
+			tooltipEl.innerHTML = tooltipHTML;
 
 			document.body.appendChild( tooltipEl );
 

@@ -46,6 +46,11 @@ class Workflow_Wizard {
 						'description' => 'Run when specific pages or areas of your site load',
 						'icon' => 'desktop',
 					),
+					'pre_publish_review' => array(
+						'label' => 'Pre Publish Review',
+						'description' => 'Run after Publish is clicked but before content is published - perfect for final checks',
+						'icon' => 'yes-alt',
+					),
 					'post_status_changed' => array(
 						'label' => 'Post/Page Status Changed',
 						'description' => 'When a post/page status changes (published, draft, scheduled, etc)',
@@ -776,6 +781,24 @@ class Workflow_Wizard {
 					'maintenance', 'wordpress_settings_core', 'wordpress_settings_pro',
 				),
 			),
+			// Pre Publish Review: content validation, notifications, security checks
+			'pre_publish_review' => array(
+				'priority' => array(
+					'content_management',
+					'notifications',
+					'security_hardening',
+					'logging',
+				),
+				'allowed' => array(
+					'content_management', 'notifications', 'security_hardening', 'logging',
+					'content', 'diagnostics',
+				),
+				'disallowed_actions' => array(
+					'performance', 'accessibility', 'site_maintenance', 'user_management',
+					'backup_recovery', 'monitoring_alerts', 'maintenance',
+					'wordpress_settings_core', 'wordpress_settings_pro',
+				),
+			),
 			// Comment Posted: content moderation, notifications, security
 			'comment_posted' => array(
 				'priority' => array(
@@ -922,6 +945,7 @@ class Workflow_Wizard {
 			'time_daily' => 'schedule',
 			'page_load_trigger' => 'page_load',
 			'post_status_changed' => 'post_status',
+			'pre_publish_review' => 'pre_publish_review',
 			'comment_posted' => 'comment',
 			'plugin_state_changed' => 'plugin',
 			'theme_switched' => 'theme',
