@@ -1,0 +1,172 @@
+/* Styles for the Color Contrast Checker tool */
+.wpshadow-contrast-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 16px;
+	margin-top: 16px;
+}
+
+.wpshadow-contrast-panel {
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	padding: 16px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.02);
+}
+
+.wpshadow-contrast-preview {
+	border: 1px dashed #ccc;
+	border-radius: 4px;
+	padding: 24px;
+	text-align: center;
+	transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.wpshadow-contrast-badges {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: 10px;
+	margin-top: 12px;
+}
+
+.wpshadow-contrast-badge {
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	padding: 10px;
+	background: #f8f9f9;
+	font-weight: 600;
+	text-align: center;
+}
+
+.wpshadow-contrast-badge.is-pass {
+	border-color: #3aa45f;
+	color: #1f7a3c;
+	background: #edf8f1;
+}
+
+.wpshadow-contrast-badge.is-fail {
+	border-color: #d63638;
+	color: #8a1c1c;
+	background: #fbeaea;
+}
+
+.wpshadow-contrast-samples {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.wpshadow-contrast-samples .button {
+	margin: 0;
+}
+
+#wpshadow-contrast-error {
+	display: none;
+	margin-top: 12px;
+}
+
+.wpshadow-contrast-results.is-hidden {
+	display: none;
+}
+
+/* Theme scan results */
+.wpshadow-theme-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 12px;
+}
+
+.wpshadow-theme-color {
+	display: grid;
+	grid-template-columns: 48px 1fr;
+	grid-template-rows: auto auto;
+	gap: 6px 10px;
+	align-items: center;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	padding: 10px;
+	background: #fff;
+}
+
+.wpshadow-theme-swatch {
+	width: 40px;
+	height: 40px;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+	background: #000;
+	grid-row: 1 / span 2;
+}
+
+.wpshadow-theme-label {
+	font-weight: 600;
+}
+
+.wpshadow-theme-ratio {
+	color: #555;
+	font-size: 13px;
+}
+
+.wpshadow-theme-status {
+	justify-self: start;
+	padding: 4px 8px;
+	border-radius: 999px;
+	font-weight: 700;
+	font-size: 12px;
+	border: 1px solid #dcdcde;
+}
+
+.wpshadow-theme-status.is-pass {
+	background: #edf8f1;
+	border-color: #3aa45f;
+	color: #1f7a3c;
+}
+
+.wpshadow-theme-status.is-warn {
+	background: #fff8e5;
+	border-color: #e0b200;
+	color: #8a6d00;
+}
+
+.wpshadow-theme-status.is-fail {
+	background: #fbeaea;
+	border-color: #d63638;
+	color: #8a1c1c;
+}
+
+.wpshadow-theme-contexts {
+	list-style: none;
+	margin: 12px 0 0;
+	padding: 0;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 12px;
+}
+
+.wpshadow-theme-context {
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	padding: 10px;
+	background: #fff;
+	display: grid;
+	grid-template-columns: 1fr auto;
+	gap: 6px;
+	align-items: center;
+}
+
+.wpshadow-theme-context .wpshadow-theme-label {
+	grid-column: 1 / span 1;
+}
+
+.wpshadow-theme-context .wpshadow-theme-ratio {
+	grid-column: 1 / span 1;
+	color: #555;
+	font-size: 13px;
+}
+
+.wpshadow-theme-context .wpshadow-theme-status {
+	grid-row: 1 / span 2;
+	justify-self: end;
+}

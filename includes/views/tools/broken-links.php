@@ -72,20 +72,61 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 		var $btn = $('#run-link-scan');
 		var $results = $('#link-scan-results');
+		var formData = {
+			action: 'wpshadow_check_broken_links',
+			nonce: '<?php echo wp_create_nonce( 'wpshadow_link_check' ); ?>',
+			check_internal: $('input[name="check_internal"]').is(':checked') ? 1 : 0,
+			check_external: $('input[name="check_external"]').is(':checked') ? 1 : 0,
+			check_images: $('input[name="check_images"]').is(':checked') ? 1 : 0
+		};
 		
 		$btn.prop('disabled', true).text('<?php esc_js( esc_html_e( 'Scanning...', 'wpshadow' ) ); ?>');
 		$results.html('<p><?php esc_js( esc_html_e( 'Scanning site for broken links...', 'wpshadow' ) ); ?></p>').show();
 		
-		setTimeout(function() {
-			$results.html(
-				'<h3><?php esc_js( esc_html_e( 'Scan Complete', 'wpshadow' ) ); ?></h3>' +
-				'<div style="border-left: 4px solid #00a32a; padding: 15px; background: #f0f6fc; margin: 15px 0;">' +
-				'<strong><?php esc_js( esc_html_e( 'This feature is coming soon!', 'wpshadow' ) ); ?></strong><br>' +
-				'<?php esc_js( esc_html_e( 'Full broken link checking will be added in a future update.', 'wpshadow' ) ); ?>' +
-				'</div>'
-			);
+		$.post(ajaxurl, formData, function(response) {
+			if (response.success) {
+				var data = response.data;
+				var html = '<h3><?php esc_js( esc_html_e( 'Scan Complete', 'wpshadow' ) ); ?></h3>';
+				
+				if (data.broken_links.length === 0) {
+					html += '<div style="border-left: 4px solid #00a32a; padding: 15px; background: #f0f6fc; margin: 15px 0;">' +
+						'<strong><?php esc_js( esc_html_e( 'Great! No broken links found.', 'wpshadow' ) ); ?></strong>' +
+						'</div>';
+				} else {
+					html += '<div style="border-left: 4px solid #dc3545; padding: 15px; background: #fff8f9; margin: 15px 0;">' +
+						'<strong><?php esc_js( esc_html_e( 'Found', 'wpshadow' ) ); ?> ' + data.broken_links.length + ' <?php esc_js( esc_html_e( 'broken link(s)', 'wpshadow' ) ); ?></strong>' +
+						'</div>';
+					
+					html += '<table class="wp-list-table widefat striped" style="margin-top: 15px;">' +
+						'<thead><tr>' +
+						'<th><?php esc_js( esc_html_e( 'URL', 'wpshadow' ) ); ?></th>' +
+						'<th><?php esc_js( esc_html_e( 'Found In', 'wpshadow' ) ); ?></th>' +
+						'<th><?php esc_js( esc_html_e( 'Status Code', 'wpshadow' ) ); ?></th>' +
+						'</tr></thead><tbody>';
+					
+					$.each(data.broken_links, function(i, link) {
+						html += '<tr>' +
+							'<td><code style="word-break: break-all; font-size: 12px;">' + link.url + '</code></td>' +
+							'<td><a href="' + link.edit_url + '" target="_blank">' + link.post_title + '</a></td>' +
+							'<td><span style="background: #ffebee; padding: 4px 8px; border-radius: 3px;">' + link.status_code + '</span></td>' +
+							'</tr>';
+					});
+					
+					html += '</tbody></table>';
+				}
+				
+				html += '<p style="margin-top: 15px;"><strong><?php esc_js( esc_html_e( 'Summary', 'wpshadow' ) ); ?>:</strong><br>' +
+					'<?php esc_js( esc_html_e( 'Posts checked:', 'wpshadow' ) ); ?> ' + data.posts_checked + '<br>' +
+					'<?php esc_js( esc_html_e( 'Links checked:', 'wpshadow' ) ); ?> ' + data.links_checked + '</p>';
+				
+				$results.html(html);
+			} else {
+				$results.html('<div style="border-left: 4px solid #dc3545; padding: 15px; background: #fff8f9;">' +
+					'<strong><?php esc_js( esc_html_e( 'Error:', 'wpshadow' ) ); ?></strong> ' + response.data + '</div>');
+			}
+			
 			$btn.prop('disabled', false).text('<?php esc_js( esc_html_e( 'Start Link Scan', 'wpshadow' ) ); ?>');
-		}, 2000);
+		});
 	});
 });
 </script>

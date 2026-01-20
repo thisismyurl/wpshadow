@@ -327,6 +327,57 @@ class Workflow_Wizard {
 					),
 				),
 			),
+			'tools' => array(
+				'label'   => 'WPShadow Tools',
+				'icon'    => 'admin-tools',
+				'actions' => array(
+					'run_tool_a11y_audit' => array(
+						'label'       => 'Run Accessibility Audit',
+						'description' => 'Execute WPShadow Accessibility Audit tool',
+						'icon'        => 'universal-access',
+					),
+					'run_tool_broken_links' => array(
+						'label'       => 'Run Broken Link Checker',
+						'description' => 'Execute WPShadow Broken Links tool',
+						'icon'        => 'admin-links',
+					),
+					'run_tool_color_contrast' => array(
+						'label'       => 'Run Color Contrast Checker',
+						'description' => 'Execute color contrast tool',
+						'icon'        => 'art',
+					),
+					'run_tool_dark_mode' => array(
+						'label'       => 'Apply Dark Mode Preference',
+						'description' => 'Set or sync dark mode preference',
+						'icon'        => 'visibility',
+					),
+					'run_tool_mobile_friendliness' => array(
+						'label'       => 'Run Mobile Friendliness Check',
+						'description' => 'Execute mobile readiness scan',
+						'icon'        => 'smartphone',
+					),
+					'run_tool_customization_audit' => array(
+						'label'       => 'Run Customization Audit',
+						'description' => 'Check customization best practices',
+						'icon'        => 'admin-customizer',
+					),
+					'run_tool_timezone_alignment' => array(
+						'label'       => 'Run Timezone Alignment',
+						'description' => 'Check timezone consistency',
+						'icon'        => 'clock',
+					),
+					'run_tool_simple_cache' => array(
+						'label'       => 'Run Simple Cache Check',
+						'description' => 'Validate simple cache settings',
+						'icon'        => 'admin-settings',
+					),
+					'run_tool_magic_link_support' => array(
+						'label'       => 'Run Magic Link Support',
+						'description' => 'Generate support magic link',
+						'icon'        => 'admin-users',
+					),
+				),
+			),
 			'site_maintenance' => array(
 				'label' => 'Site Maintenance',
 				'icon'  => 'tools',
@@ -1598,6 +1649,185 @@ class Workflow_Wizard {
 					'label'    => 'Archive category slug',
 					'placeholder' => 'archive',
 					'note'     => 'Posts will be moved to this category',
+				),
+			),
+			'run_tool_a11y_audit' => array(
+				array(
+					'id'       => 'scan_mode',
+					'type'     => 'select',
+					'label'    => 'Scan Mode',
+					'options'  => array(
+						'specific' => 'Scan a specific URL',
+						'cluster'  => 'Scan a cluster of URLs',
+						'all'      => 'Scan all posts & pages (in batches)',
+					),
+					'default'  => 'specific',
+					'required' => true,
+					'note'     => 'Choose how many pages to scan',
+				),
+				array(
+					'id'          => 'url',
+					'type'        => 'text',
+					'label'       => 'URL to scan',
+					'placeholder' => 'https://example.com/about',
+					'required'    => true,
+					'show_if'     => array(
+						'field' => 'scan_mode',
+						'value' => 'specific',
+					),
+					'note'        => 'Must be from your own domain',
+				),
+				array(
+					'id'          => 'urls',
+					'type'        => 'textarea',
+					'label'       => 'URLs to scan (one per line)',
+					'placeholder' => 'https://example.com/about' . "\n" . 'https://example.com/contact',
+					'rows'        => 5,
+					'required'    => true,
+					'show_if'     => array(
+						'field' => 'scan_mode',
+						'value' => 'cluster',
+					),
+					'note'        => 'All URLs must be from your own domain',
+				),
+				array(
+					'id'       => 'batch_size',
+					'type'     => 'number',
+					'label'    => 'URLs per batch',
+					'default'  => 10,
+					'min'      => 1,
+					'max'      => 50,
+					'required' => true,
+					'show_if'  => array(
+						'field' => 'scan_mode',
+						'value' => 'all',
+					),
+					'note'     => 'How many pages to scan at once',
+				),
+			),
+			'run_tool_broken_links' => array(
+				array(
+					'id'       => 'scan_mode',
+					'type'     => 'select',
+					'label'    => 'Scan Mode',
+					'options'  => array(
+						'specific' => 'Scan a specific URL',
+						'all'      => 'Scan all site content',
+					),
+					'default'  => 'all',
+					'required' => true,
+					'note'     => 'Scan a single page or entire site',
+				),
+				array(
+					'id'          => 'url',
+					'type'        => 'text',
+					'label'       => 'URL to scan',
+					'placeholder' => 'https://example.com/about',
+					'required'    => false,
+					'show_if'     => array(
+						'field' => 'scan_mode',
+						'value' => 'specific',
+					),
+					'note'        => 'Must be from your own domain',
+				),
+			),
+			'run_tool_mobile_friendliness' => array(
+				array(
+					'id'       => 'scan_mode',
+					'type'     => 'select',
+					'label'    => 'Scan Mode',
+					'options'  => array(
+						'specific' => 'Scan a specific URL',
+						'all'      => 'Scan all posts & pages',
+					),
+					'default'  => 'specific',
+					'required' => true,
+					'note'     => 'Check mobile responsiveness',
+				),
+				array(
+					'id'          => 'url',
+					'type'        => 'text',
+					'label'       => 'URL to scan',
+					'placeholder' => 'https://example.com',
+					'required'    => true,
+					'show_if'     => array(
+						'field' => 'scan_mode',
+						'value' => 'specific',
+					),
+					'note'        => 'Must be from your own domain',
+				),
+			),
+			'run_tool_simple_cache' => array(
+				array(
+					'id'       => 'action',
+					'type'     => 'select',
+					'label'    => 'Cache Action',
+					'options'  => array(
+						'status'      => 'Check status',
+						'clear'       => 'Clear cache',
+						'save_options' => 'Save options',
+					),
+					'default'  => 'status',
+					'required' => true,
+				),
+				array(
+					'id'    => 'confirm',
+					'type'  => 'checkbox',
+					'label' => 'Confirm clearing cache',
+					'show_if' => array(
+						'field' => 'action',
+						'value' => 'clear',
+					),
+					'note'  => 'This will clear all cached pages',
+				),
+			),
+			'run_tool_magic_link_support' => array(
+				array(
+					'id'       => 'action',
+					'type'     => 'select',
+					'label'    => 'Magic Link Action',
+					'options'  => array(
+						'create' => 'Create new link',
+						'revoke' => 'Revoke link',
+					),
+					'default'  => 'create',
+					'required' => true,
+				),
+				array(
+					'id'          => 'expiry_hours',
+					'type'        => 'number',
+					'label'       => 'Expires in (hours)',
+					'default'     => 24,
+					'min'         => 1,
+					'max'         => 720,
+					'required'    => true,
+					'show_if'     => array(
+						'field' => 'action',
+						'value' => 'create',
+					),
+					'note'        => 'Link will automatically expire after this time',
+				),
+				array(
+					'id'          => 'description',
+					'type'        => 'text',
+					'label'       => 'Link description',
+					'placeholder' => 'Workflow-generated support link',
+					'required'    => false,
+					'show_if'     => array(
+						'field' => 'action',
+						'value' => 'create',
+					),
+				),
+				array(
+					'id'          => 'token',
+					'type'        => 'text',
+					'label'       => 'Token to revoke',
+					'placeholder' => 'Paste the token to revoke',
+					'required'    => true,
+					'show_if'     => array(
+						'field' => 'action',
+						'value' => 'revoke',
+					),
 				),
 			),
 		);

@@ -22,6 +22,7 @@ $active_links = array_filter( $magic_links, function( $link ) {
 	<div class="wpshadow-tool-section">
 		<h3><?php esc_html_e( 'Create Magic Link', 'wpshadow' ); ?></h3>
 		<form id="wpshadow-create-magic-link">
+			<?php wp_nonce_field( 'wpshadow_magic_link_nonce', 'wpshadow_magic_link_nonce' ); ?>
 			<table class="form-table">
 				<tr>
 					<th scope="row">
@@ -59,6 +60,7 @@ $active_links = array_filter( $magic_links, function( $link ) {
 			<button type="submit" class="button button-primary">
 				<?php esc_html_e( 'Generate Magic Link', 'wpshadow' ); ?>
 			</button>
+			<div id="wpshadow-magic-link-message" style="margin-top: 15px; display: none;"></div>
 		</form>
 	</div>
 
@@ -82,10 +84,10 @@ $active_links = array_filter( $magic_links, function( $link ) {
 						<tr>
 							<td><?php echo esc_html( $link['developer_name'] ?? 'Unknown' ); ?></td>
 							<td><?php echo esc_html( $link['developer_email'] ?? '' ); ?></td>
-							<td><?php echo esc_html( gmdate( 'Y-m-d H:i', $link['created_at'] ?? 0 ) ); ?></td>
-							<td><?php echo esc_html( gmdate( 'Y-m-d H:i', $link['expires_at'] ?? 0 ) ); ?></td>
+							<td><?php echo esc_html( wp_date( get_option( 'date_format' ), $link['created_at'] ?? 0 ) ); ?></td>
+							<td><?php echo esc_html( wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $link['expires_at'] ?? 0 ) ); ?></td>
 							<td>
-								<button type="button" class="button button-small wpshadow-revoke-link" data-token="<?php echo esc_attr( $token ); ?>">
+								<button type="button" class="button button-small wpshadow-revoke-link" data-token="<?php echo esc_attr( $token ); ?>" data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_magic_link_nonce' ) ); ?>">
 									<?php esc_html_e( 'Revoke', 'wpshadow' ); ?>
 								</button>
 							</td>
@@ -108,16 +110,88 @@ $active_links = array_filter( $magic_links, function( $link ) {
 </div>
 
 <script>
-document.getElementById( 'wpshadow-create-magic-link' )?.addEventListener( 'submit', function( e ) {
-	e.preventDefault();
-	alert( '<?php esc_attr_e( 'Magic link creation feature coming soon!', 'wpshadow' ); ?>' );
-} );
+jQuery(document).ready(function($) {
+	// Create magic link
+	$('#wpshadow-create-magic-link').on('submit', function(e) {
+		e.preventDefault();
+		var $form = $(this);
+		var $btn = $form.find('button[type="submit"]');
+		var $message = $('#wpshadow-magic-link-message');
 
-document.querySelectorAll( '.wpshadow-revoke-link' ).forEach( function( btn ) {
-	btn.addEventListener( 'click', function() {
-		if ( confirm( '<?php esc_attr_e( 'Revoke this magic link?', 'wpshadow' ); ?>' ) ) {
-			alert( '<?php esc_attr_e( 'Link revoked!', 'wpshadow' ); ?>' );
+		var data = {
+			action: 'wpshadow_create_magic_link',
+			nonce: $form.find('[name="wpshadow_magic_link_nonce"]').val(),
+			developer_name: $form.find('[name="developer_name"]').val(),
+			developer_email: $form.find('[name="developer_email"]').val(),
+			duration: $form.find('[name="duration"]').val()
+		};
+
+		$btn.prop('disabled', true).text('<?php esc_attr_e( 'Generating...', 'wpshadow' ); ?>');
+
+		$.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			data: data,
+			success: function(response) {
+				if (response.success) {
+					var html = '<div class="notice notice-success"><p><strong><?php esc_attr_e( 'Magic Link Created!', 'wpshadow' ); ?></strong></p>' +
+						'<p><?php esc_attr_e( 'Link:', 'wpshadow' ); ?></p>' +
+						'<code style="display: block; padding: 10px; background: #f5f5f5; word-break: break-all; margin: 10px 0;">' + response.data.magic_link + '</code>' +
+						'<p><?php esc_attr_e( 'Expires:', 'wpshadow' ); ?> ' + response.data.expires_at + '</p>' +
+						'<button type="button" class="button" onclick="var text = \'' + response.data.magic_link + '\'; navigator.clipboard.writeText(text); alert(\'<?php esc_attr_e( 'Link copied to clipboard!', 'wpshadow' ); ?>\');"><?php esc_attr_e( 'Copy Link', 'wpshadow' ); ?></button>' +
+						'</div>';
+					$message.html(html).show();
+					$form[0].reset();
+					// Reload page after 5 seconds to show new link in active links
+					setTimeout(function() {
+						location.reload();
+					}, 5000);
+				} else {
+					$message.html('<div class="notice notice-error"><p>' + (response.data && response.data.message ? response.data.message : '<?php esc_attr_e( 'Error creating magic link.', 'wpshadow' ); ?>') + '</p></div>').show();
+				}
+				$btn.prop('disabled', false).text('<?php esc_attr_e( 'Generate Magic Link', 'wpshadow' ); ?>');
+			},
+			error: function() {
+				$message.html('<div class="notice notice-error"><p><?php esc_attr_e( 'Error creating magic link.', 'wpshadow' ); ?></p></div>').show();
+				$btn.prop('disabled', false).text('<?php esc_attr_e( 'Generate Magic Link', 'wpshadow' ); ?>');
+			}
+		});
+	});
+
+	// Revoke magic link
+	$('.wpshadow-revoke-link').on('click', function() {
+		var $btn = $(this);
+		var token = $btn.data('token');
+		var nonce = $btn.data('nonce');
+
+		if (!confirm('<?php esc_attr_e( 'Revoke this magic link?', 'wpshadow' ); ?>')) {
+			return;
 		}
-	} );
-} );
+
+		$btn.prop('disabled', true).text('<?php esc_attr_e( 'Revoking...', 'wpshadow' ); ?>');
+
+		$.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			data: {
+				action: 'wpshadow_revoke_magic_link',
+				nonce: nonce,
+				token: token
+			},
+			success: function(response) {
+				if (response.success) {
+					alert(response.data.message);
+					location.reload();
+				} else {
+					alert(response.data && response.data.message ? response.data.message : '<?php esc_attr_e( 'Error revoking link.', 'wpshadow' ); ?>');
+					$btn.prop('disabled', false).text('<?php esc_attr_e( 'Revoke', 'wpshadow' ); ?>');
+				}
+			},
+			error: function() {
+				alert('<?php esc_attr_e( 'Error revoking link.', 'wpshadow' ); ?>');
+				$btn.prop('disabled', false).text('<?php esc_attr_e( 'Revoke', 'wpshadow' ); ?>');
+			}
+		});
+	});
+});
 </script>

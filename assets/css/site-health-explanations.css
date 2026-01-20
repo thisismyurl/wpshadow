@@ -1,0 +1,79 @@
+/* WPShadow Site Health Explanations Styling */
+
+.wpshadow-site-health-explanation {
+	margin-top: 12px;
+	padding: 12px 12px 12px 12px;
+	background: linear-gradient(135deg, #f0f7ff 0%, #f5f0ff 100%);
+	border-left: 4px solid #7c3aed;
+	border-radius: 4px;
+	color: #374151;
+	font-size: 13px;
+	line-height: 1.5;
+}
+
+.wpshadow-site-health-explanation p {
+	margin: 8px 0;
+	padding: 0;
+}
+
+.wpshadow-site-health-explanation p:last-child {
+	margin-bottom: 0;
+}
+
+.wpshadow-site-health-explanation a {
+	color: #7c3aed;
+	text-decoration: none;
+	font-weight: 500;
+}
+
+.wpshadow-site-health-explanation a:hover {
+	color: #6d28d9;
+	text-decoration: underline;
+}
+
+.wpshadow-site-health-explanation strong {
+	color: #1f2937;
+	font-weight: 600;
+}
+
+/* Good status (green) */
+.site-status-good .wpshadow-site-health-explanation {
+	background: linear-gradient(135deg, #f0fdf4 0%, #f0fff4 100%);
+	border-left-color: #16a34a;
+}
+
+.site-status-good .wpshadow-site-health-explanation a {
+	color: #16a34a;
+}
+
+.site-status-good .wpshadow-site-health-explanation a:hover {
+	color: #15803d;
+}
+
+/* Recommended status (blue) */
+.site-status-recommended .wpshadow-site-health-explanation {
+	background: linear-gradient(135deg, #eff6ff 0%, #f0f7ff 100%);
+	border-left-color: #2563eb;
+}
+
+.site-status-recommended .wpshadow-site-health-explanation a {
+	color: #2563eb;
+}
+
+.site-status-recommended .wpshadow-site-health-explanation a:hover {
+	color: #1d4ed8;
+}
+
+/* Critical status (red) */
+.site-status-critical .wpshadow-site-health-explanation {
+	background: linear-gradient(135deg, #fef2f2 0%, #fff5f5 100%);
+	border-left-color: #dc2626;
+}
+
+.site-status-critical .wpshadow-site-health-explanation a {
+	color: #dc2626;
+}
+
+.site-status-critical .wpshadow-site-health-explanation a:hover {
+	color: #b91c1c;
+}

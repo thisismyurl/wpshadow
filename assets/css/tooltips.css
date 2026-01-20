@@ -1,0 +1,161 @@
+/**
+ * WPShadow Tooltips - Core Styles
+ */
+
+.wpshadow-tooltip {
+	position: absolute;
+	background: #333;
+	color: #fff;
+	padding: 10px 14px;
+	border-radius: 4px;
+	font-size: 13px;
+	line-height: 1.5;
+	max-width: 280px;
+	z-index: 999999;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.2s ease, visibility 0.2s ease;
+	pointer-events: none;
+	word-wrap: break-word;
+	white-space: normal;
+}
+
+.wpshadow-tooltip.visible {
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
+}
+
+.wpshadow-tooltip::before {
+	content: '';
+	position: absolute;
+	width: 8px;
+	height: 8px;
+	background: #333;
+	transform: rotate(45deg);
+	z-index: -1;
+}
+
+/* Arrow positioning for different directions */
+.wpshadow-tooltip.arrow-top::before {
+	bottom: -4px;
+	left: 50%;
+	transform: translateX(-50%) rotate(45deg);
+}
+
+.wpshadow-tooltip.arrow-bottom::before {
+	top: -4px;
+	left: 50%;
+	transform: translateX(-50%) rotate(45deg);
+}
+
+.wpshadow-tooltip.arrow-left::before {
+	right: -4px;
+	top: 50%;
+	transform: translateY(-50%) rotate(45deg);
+}
+
+.wpshadow-tooltip.arrow-right::before {
+	left: -4px;
+	top: 50%;
+	transform: translateY(-50%) rotate(45deg);
+}
+
+.wpshadow-tooltip-title {
+	font-weight: 600;
+	margin-bottom: 6px;
+	display: block;
+}
+
+.wpshadow-tooltip-message {
+	font-weight: 400;
+	margin: 0;
+}
+
+.wpshadow-tooltip-dismiss {
+	position: absolute;
+	top: 4px;
+	right: 6px;
+	width: 18px;
+	height: 18px;
+	padding: 0;
+	border: none;
+	background: transparent;
+	color: rgba(255, 255, 255, 0.7);
+	cursor: pointer;
+	font-size: 14px;
+	line-height: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: color 0.2s ease;
+}
+
+.wpshadow-tooltip-dismiss:hover {
+	color: #fff;
+}
+
+.wpshadow-tooltip-dismiss::before {
+	content: '×';
+	display: block;
+}
+
+/* Tooltip trigger marker (optional subtle indicator) */
+.wpshadow-tooltip-trigger {
+	position: relative;
+}
+
+/* Beginner level tips - lighter blue */
+.wpshadow-tooltip.beginner {
+	background: #0073aa;
+}
+
+.wpshadow-tooltip.beginner::before {
+	background: #0073aa;
+}
+
+/* Intermediate level tips - darker blue */
+.wpshadow-tooltip.intermediate {
+	background: #1e5ba8;
+}
+
+.wpshadow-tooltip.intermediate::before {
+	background: #1e5ba8;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+	.wpshadow-tooltip {
+		background: #444;
+	}
+
+	.wpshadow-tooltip::before {
+		background: #444;
+	}
+
+	.wpshadow-tooltip.beginner {
+		background: #0085ba;
+	}
+
+	.wpshadow-tooltip.beginner::before {
+		background: #0085ba;
+	}
+
+	.wpshadow-tooltip.intermediate {
+		background: #2272ab;
+	}
+
+	.wpshadow-tooltip.intermediate::before {
+		background: #2272ab;
+	}
+}
+
+/* Responsive: hide tooltips on very small screens */
+@media screen and (max-width: 600px) {
+	.wpshadow-tooltip {
+		max-width: 200px;
+		font-size: 12px;
+		padding: 8px 12px;
+	}
+}

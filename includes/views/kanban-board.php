@@ -82,6 +82,12 @@ $category_meta = array(
 		'color' => '#4b5563',
 		'bg'    => '#eef2f7',
 	),
+	'mobile'   => array(
+		'label' => 'Mobile',
+		'icon'  => 'dashicons-smartphone',
+		'color' => '#009688',
+		'bg'    => '#e0f2f1',
+	),
 );
 
 $severity_legend = array(
@@ -176,7 +182,7 @@ $severity_legend = array(
 					<strong>Always Auto-fix:</strong>
 				</p>
 				<p style="margin: 0; font-size: 13px; color: #1e3a8a;">
-					Creates a persistent workflow that will automatically fix this issue whenever it's detected. Visible in the Automation Builder.
+					Creates a persistent workflow that will automatically fix this issue whenever it's detected. Visible in the Workflow Manager.
 				</p>
 			</div>
 			<div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 15px 0; border-radius: 4px;">

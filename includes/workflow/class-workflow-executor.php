@@ -567,6 +567,9 @@ class Workflow_Executor {
 			case 'run_diagnostic':
 				return self::execute_diagnostic( $config, $context );
 
+			case 'run_tool':
+				return self::execute_tool( $config, $context );
+
 			case 'apply_treatment':
 				return self::execute_treatment( $config, $context );
 
@@ -760,6 +763,395 @@ class Workflow_Executor {
 		return array(
 			'success' => true,
 			'message' => 'Logged: ' . $log_message,
+		);
+	}
+
+	/**
+	 * Execute a WPShadow tool action.
+	 */
+	private static function execute_tool( $config, $context ) {
+		$tool = isset( $config['tool'] ) ? $config['tool'] : '';
+
+		switch ( $tool ) {
+			case 'a11y-audit':
+				return self::execute_a11y_audit( $config, $context );
+
+			case 'broken-links':
+				return self::execute_broken_links( $config, $context );
+
+			case 'mobile-friendliness':
+				return self::execute_mobile_friendliness( $config, $context );
+
+			case 'simple-cache':
+				return self::execute_simple_cache( $config, $context );
+
+			case 'magic-link-support':
+				return self::execute_magic_link_support( $config, $context );
+
+			case 'dark-mode':
+				$pref = get_user_meta( get_current_user_id(), 'wpshadow_dark_mode_preference', true );
+				return array(
+					'success'    => true,
+					'message'    => 'Dark mode preference read',
+					'preference' => $pref,
+				);
+
+			default:
+				return array(
+					'success' => false,
+					'message' => 'Tool not supported for automation: ' . $tool,
+				);
+		}
+	}
+
+	/**
+	 * Execute accessibility audit tool
+	 */
+	private static function execute_a11y_audit( $config, $context ) {
+		$scan_mode = isset( $config['scan_mode'] ) ? $config['scan_mode'] : 'specific';
+		$url = isset( $config['url'] ) ? esc_url_raw( $config['url'] ) : home_url();
+
+		if ( 'specific' === $scan_mode ) {
+			// Scan a specific URL
+			if ( ! wp_http_validate_url( $url ) ) {
+				return array(
+					'success' => false,
+					'message' => 'Invalid URL provided.',
+				);
+			}
+
+			// Validate same-site
+			$site_host = wp_parse_url( home_url(), PHP_URL_HOST );
+			$url_host = wp_parse_url( $url, PHP_URL_HOST );
+			if ( $url_host !== $site_host ) {
+				return array(
+					'success' => false,
+					'message' => 'Can only scan pages from your own site.',
+				);
+			}
+
+			// Fetch and analyze
+			$response = wp_remote_get( $url, array(
+				'timeout' => 10,
+				'headers' => array( 'User-Agent' => 'WPShadow-Workflow-A11y' ),
+			) );
+
+			if ( is_wp_error( $response ) ) {
+				return array(
+					'success' => false,
+					'message' => 'Failed to fetch URL: ' . $response->get_error_message(),
+				);
+			}
+
+			$body = wp_remote_retrieve_body( $response );
+			if ( empty( $body ) ) {
+				return array(
+					'success' => false,
+					'message' => 'Empty response from URL.',
+				);
+			}
+
+			if ( function_exists( 'wpshadow_analyze_a11y_html' ) ) {
+				$issues = wpshadow_analyze_a11y_html( $body );
+				$summary = array( 'pass' => 0, 'warn' => 0, 'fail' => 0 );
+				foreach ( $issues as $issue ) {
+					$status = $issue['status'] ?? '';
+					if ( isset( $summary[ $status ] ) ) {
+						$summary[ $status ]++;
+					}
+				}
+				return array(
+					'success' => true,
+					'message' => 'Accessibility audit completed.',
+					'url'     => $url,
+					'summary' => $summary,
+					'issues'  => $issues,
+				);
+			}
+		} elseif ( 'cluster' === $scan_mode ) {
+			// Scan a cluster of URLs
+			$urls = isset( $config['urls'] ) ? (array) $config['urls'] : array( home_url() );
+			$results = array();
+
+			foreach ( $urls as $page_url ) {
+				$page_url = esc_url_raw( $page_url );
+				if ( ! wp_http_validate_url( $page_url ) ) {
+					continue;
+				}
+
+				$response = wp_remote_get( $page_url, array(
+					'timeout' => 10,
+					'headers' => array( 'User-Agent' => 'WPShadow-Workflow-A11y' ),
+				) );
+
+				if ( is_wp_error( $response ) ) {
+					continue;
+				}
+
+				$body = wp_remote_retrieve_body( $response );
+				if ( ! empty( $body ) && function_exists( 'wpshadow_analyze_a11y_html' ) ) {
+					$issues = wpshadow_analyze_a11y_html( $body );
+					$summary = array( 'pass' => 0, 'warn' => 0, 'fail' => 0 );
+					foreach ( $issues as $issue ) {
+						$status = $issue['status'] ?? '';
+						if ( isset( $summary[ $status ] ) ) {
+							$summary[ $status ]++;
+						}
+					}
+					$results[ $page_url ] = $summary;
+				}
+			}
+
+			return array(
+				'success' => true,
+				'message' => 'Accessibility audit cluster scan completed.',
+				'urls_scanned' => count( $results ),
+				'results' => $results,
+			);
+
+		} elseif ( 'all' === $scan_mode ) {
+			// Scan all posts/pages in batches
+			$paged = isset( $config['batch_number'] ) ? (int) $config['batch_number'] : 1;
+			$per_page = isset( $config['batch_size'] ) ? (int) $config['batch_size'] : 10;
+
+			$posts = get_posts( array(
+				'posts_per_page' => $per_page,
+				'paged'          => $paged,
+				'post_type'      => array( 'post', 'page' ),
+				'post_status'    => 'publish',
+			) );
+
+			if ( empty( $posts ) ) {
+				return array(
+					'success' => true,
+					'message' => 'No more posts to scan.',
+					'batch_number' => $paged,
+					'urls_scanned' => 0,
+				);
+			}
+
+			$results = array();
+			foreach ( $posts as $post ) {
+				$post_url = get_permalink( $post->ID );
+				$response = wp_remote_get( $post_url, array(
+					'timeout' => 10,
+					'headers' => array( 'User-Agent' => 'WPShadow-Workflow-A11y' ),
+				) );
+
+				if ( ! is_wp_error( $response ) ) {
+					$body = wp_remote_retrieve_body( $response );
+					if ( ! empty( $body ) && function_exists( 'wpshadow_analyze_a11y_html' ) ) {
+						$issues = wpshadow_analyze_a11y_html( $body );
+						$summary = array( 'pass' => 0, 'warn' => 0, 'fail' => 0 );
+						foreach ( $issues as $issue ) {
+							$status = $issue['status'] ?? '';
+							if ( isset( $summary[ $status ] ) ) {
+								$summary[ $status ]++;
+							}
+						}
+						$results[ $post_url ] = $summary;
+					}
+				}
+			}
+
+			return array(
+				'success' => true,
+				'message' => 'Batch ' . $paged . ' scanned.',
+				'batch_number' => $paged,
+				'urls_scanned' => count( $results ),
+				'results' => $results,
+				'has_more' => count( $posts ) >= $per_page,
+			);
+		}
+
+		return array(
+			'success' => false,
+			'message' => 'Invalid scan mode.',
+		);
+	}
+
+	/**
+	 * Execute broken links tool
+	 */
+	private static function execute_broken_links( $config, $context ) {
+		$scan_mode = isset( $config['scan_mode'] ) ? $config['scan_mode'] : 'all';
+
+		if ( 'specific' === $scan_mode ) {
+			$url = isset( $config['url'] ) ? esc_url_raw( $config['url'] ) : home_url();
+			if ( ! wp_http_validate_url( $url ) ) {
+				return array(
+					'success' => false,
+					'message' => 'Invalid URL provided.',
+				);
+			}
+		}
+
+		if ( function_exists( 'wpshadow_run_broken_links_scan' ) ) {
+			$result = wpshadow_run_broken_links_scan( array(
+				'check_internal' => true,
+				'check_external' => true,
+				'check_images'   => true,
+				'scan_mode'      => $scan_mode,
+				'url'            => isset( $config['url'] ) ? esc_url_raw( $config['url'] ) : null,
+			) );
+			return array(
+				'success' => true,
+				'message' => 'Broken links scan completed',
+				'scan_mode' => $scan_mode,
+				'data'    => $result,
+			);
+		}
+
+		return array(
+			'success' => false,
+			'message' => 'Tool handler unavailable.',
+		);
+	}
+
+	/**
+	 * Execute mobile friendliness tool
+	 */
+	private static function execute_mobile_friendliness( $config, $context ) {
+		$scan_mode = isset( $config['scan_mode'] ) ? $config['scan_mode'] : 'specific';
+		$url = isset( $config['url'] ) ? esc_url_raw( $config['url'] ) : home_url();
+
+		if ( 'specific' === $scan_mode ) {
+			if ( ! wp_http_validate_url( $url ) ) {
+				return array(
+					'success' => false,
+					'message' => 'Invalid URL provided.',
+				);
+			}
+
+			// Validate same-site
+			$site_host = wp_parse_url( home_url(), PHP_URL_HOST );
+			$url_host = wp_parse_url( $url, PHP_URL_HOST );
+			if ( $url_host !== $site_host ) {
+				return array(
+					'success' => false,
+					'message' => 'Can only scan pages from your own site.',
+				);
+			}
+		}
+
+		if ( function_exists( 'wpshadow_run_mobile_friendliness' ) ) {
+			$result = wpshadow_run_mobile_friendliness( $url, $scan_mode );
+			return array(
+				'success' => true,
+				'message' => 'Mobile friendliness scan completed',
+				'scan_mode' => $scan_mode,
+				'findings' => $result,
+			);
+		}
+
+		return array(
+			'success' => false,
+			'message' => 'Tool handler unavailable.',
+		);
+	}
+
+	/**
+	 * Execute simple cache tool
+	 */
+	private static function execute_simple_cache( $config, $context ) {
+		$action = isset( $config['action'] ) ? $config['action'] : 'status';
+
+		if ( 'clear' === $action ) {
+			// Clear cache directory
+			$cache_dir = WP_CONTENT_DIR . '/wpshadow-cache';
+			if ( file_exists( $cache_dir ) ) {
+				array_map( 'unlink', glob( "$cache_dir/*.*" ) );
+				rmdir( $cache_dir );
+			}
+
+			// Flush object cache
+			if ( function_exists( 'wp_cache_flush' ) ) {
+				wp_cache_flush();
+			}
+
+			return array(
+				'success' => true,
+				'message' => 'Cache cleared successfully.',
+			);
+		}
+
+		if ( 'save_options' === $action ) {
+			// Save cache options
+			$options = isset( $config['options'] ) ? (array) $config['options'] : array();
+			foreach ( $options as $option => $value ) {
+				update_option( 'wpshadow_cache_' . $option, $value );
+			}
+
+			return array(
+				'success' => true,
+				'message' => 'Cache options saved.',
+				'options' => $options,
+			);
+		}
+
+		return array(
+			'success' => true,
+			'message' => 'Cache tool executed.',
+		);
+	}
+
+	/**
+	 * Execute magic link support tool
+	 */
+	private static function execute_magic_link_support( $config, $context ) {
+		$action = isset( $config['action'] ) ? $config['action'] : 'create';
+
+		if ( 'create' === $action ) {
+			// Generate secure token
+			$token = bin2hex( random_bytes( 16 ) );
+			$expiry = isset( $config['expiry_hours'] ) ? (int) $config['expiry_hours'] : 24;
+			$expires_at = time() + ( $expiry * HOUR_IN_SECONDS );
+
+			$links = get_option( 'wpshadow_magic_links', array() );
+			$links[ $token ] = array(
+				'created_at' => current_time( 'timestamp' ),
+				'expires_at' => $expires_at,
+				'created_by' => get_current_user_id(),
+				'description' => isset( $config['description'] ) ? sanitize_text_field( $config['description'] ) : 'Workflow-generated link',
+			);
+
+			update_option( 'wpshadow_magic_links', $links );
+
+			$magic_url = add_query_arg( 'wpshadow_magic_token', $token, home_url() );
+
+			return array(
+				'success' => true,
+				'message' => 'Magic link created.',
+				'token' => $token,
+				'url' => $magic_url,
+				'expires_at' => $expires_at,
+			);
+		}
+
+		if ( 'revoke' === $action ) {
+			$token = isset( $config['token'] ) ? sanitize_text_field( $config['token'] ) : '';
+			if ( empty( $token ) ) {
+				return array(
+					'success' => false,
+					'message' => 'No token provided.',
+				);
+			}
+
+			$links = get_option( 'wpshadow_magic_links', array() );
+			if ( isset( $links[ $token ] ) ) {
+				unset( $links[ $token ] );
+				update_option( 'wpshadow_magic_links', $links );
+			}
+
+			return array(
+				'success' => true,
+				'message' => 'Magic link revoked.',
+			);
+		}
+
+		return array(
+			'success' => true,
+			'message' => 'Magic link tool executed.',
 		);
 	}
 

@@ -60,6 +60,8 @@ class Diagnostic_Registry {
 		'Diagnostic_Initial_Setup',
 		'Diagnostic_Comments_Disabled',
 		'Diagnostic_Howdy_Greeting',
+		'Diagnostic_Dark_Mode',
+		'Diagnostic_Mobile_Friendliness',
 	);
 
 	/**
@@ -72,6 +74,7 @@ class Diagnostic_Registry {
 		'Diagnostic_File_Permissions',
 		'Diagnostic_Core_Integrity',
 		'Diagnostic_Security_Headers',
+		'Diagnostic_Broken_Links',
 	);
 	
 	/**
@@ -146,6 +149,15 @@ class Diagnostic_Registry {
 		}
 
 		return $findings;
+	}
+
+	/**
+	 * Run all checks (alias for run_deepscan_checks).
+	 *
+	 * @return array Array of findings.
+	 */
+	public static function run_all_checks() {
+		return self::run_deepscan_checks();
 	}
 	
 	/**

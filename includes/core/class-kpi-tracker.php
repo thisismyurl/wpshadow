@@ -185,4 +185,23 @@ class KPI_Tracker {
 	public static function reset() {
 		delete_option( 'wpshadow_kpi_tracking' );
 	}
+
+	/**
+	 * Get dark mode adoption metrics
+	 *
+	 * @return array Dark mode adoption data.
+	 */
+	public static function get_dark_mode_adoption() {
+		$adoption_data = get_option( 'wpshadow_dark_mode_adoption', array() );
+		
+		// Return with defaults if empty
+		return wp_parse_args( $adoption_data, array(
+			'total_users'       => 0,
+			'dark_mode_users'   => 0,
+			'auto_mode_users'   => 0,
+			'light_mode_users'  => 0,
+			'last_updated'      => 'Never',
+			'adoption_rate'     => 0,
+		) );
+	}
 }

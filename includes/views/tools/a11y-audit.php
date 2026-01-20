@@ -28,12 +28,15 @@ if ( ! current_user_can( 'read' ) ) {
 			<table class="form-table">
 				<tr>
 					<th scope="row">
-						<label for="page_url"><?php esc_html_e( 'Page URL', 'wpshadow' ); ?></label>
+						<label for="page_path"><?php esc_html_e( 'Page Path', 'wpshadow' ); ?></label>
 					</th>
 					<td>
-						<input type="url" name="page_url" id="page_url" class="regular-text" 
-							value="<?php echo esc_attr( home_url() ); ?>" required>
-						<p class="description"><?php esc_html_e( 'Enter the full URL of the page to scan.', 'wpshadow' ); ?></p>
+						<div style="display: flex; align-items: center; gap: 10px;">
+							<span style="background: #f5f5f5; padding: 8px 12px; border-radius: 3px; border: 1px solid #ddd; font-weight: 500;" id="a11y-site-domain"><?php echo esc_html( untrailingslashit( home_url() ) ); ?></span>
+							<input type="text" name="page_path" id="page_path" class="regular-text" 
+								value="/" placeholder="/about" required>
+						</div>
+						<p class="description"><?php esc_html_e( 'Enter the page path (e.g., /about, /contact). You can also paste a full URL and it will auto-clean.', 'wpshadow' ); ?></p>
 					</td>
 				</tr>
 			</table>
@@ -62,25 +65,101 @@ if ( ! current_user_can( 'read' ) ) {
 
 <script>
 jQuery(document).ready(function($) {
+	var siteUrl = '<?php echo esc_js( untrailingslashit( home_url() ) ); ?>';
+	var siteUrlObj = new URL(siteUrl);
+	var siteHost = siteUrlObj.hostname;
+	
+	// Auto-clean URLs pasted into path field
+	$('#page_path').on('blur', function() {
+		var value = $(this).val().trim();
+		
+		// If it looks like a full URL, extract the path
+		if (value.match(/^https?:\/\//i)) {
+			try {
+				var urlObj = new URL(value);
+				
+				// Validate same-site
+				if (urlObj.hostname !== siteHost) {
+					$(this).val('/');
+					alert('<?php esc_attr_e( 'You can only test your own site. Please enter a path from your domain.', 'wpshadow' ); ?>');
+					return;
+				}
+				
+				// Extract path + query
+				var path = urlObj.pathname + urlObj.search;
+				$(this).val(path || '/');
+			} catch (e) {
+				$(this).val('/');
+				alert('<?php esc_attr_e( 'Invalid URL format. Please enter a valid path or URL.', 'wpshadow' ); ?>');
+			}
+		} else if (!value.startsWith('/')) {
+			// Ensure path starts with /
+			$(this).val('/' + value);
+		}
+	});
+	
 	$('#wpshadow-a11y-scan-form').on('submit', function(e) {
 		e.preventDefault();
 		var $btn = $('#run-scan');
 		var $results = $('#scan-results');
 		
+		var path = $('input[name="page_path"]').val().trim();
+		if (!path.startsWith('/')) {
+			path = '/' + path;
+		}
+		
+		// Reconstruct full URL
+		var fullUrl = siteUrl + path;
+		
+		var formData = {
+			action: 'wpshadow_a11y_scan',
+			nonce: '<?php echo wp_create_nonce( 'wpshadow_a11y_scan' ); ?>',
+			page_url: fullUrl
+		};
+		
 		$btn.prop('disabled', true).text('<?php esc_js( esc_html_e( 'Scanning...', 'wpshadow' ) ); ?>');
 		$results.html('<p><?php esc_js( esc_html_e( 'Scanning page for accessibility issues...', 'wpshadow' ) ); ?></p>').show();
 		
-		// Simulate scan (would be real AJAX in production)
-		setTimeout(function() {
-			$results.html(
-				'<h3><?php esc_js( esc_html_e( 'Scan Complete', 'wpshadow' ) ); ?></h3>' +
-				'<div style="border-left: 4px solid #00a32a; padding: 15px; background: #f0f6fc; margin: 15px 0;">' +
-				'<strong><?php esc_js( esc_html_e( 'This feature is coming soon!', 'wpshadow' ) ); ?></strong><br>' +
-				'<?php esc_js( esc_html_e( 'Full accessibility scanning functionality will be added in a future update.', 'wpshadow' ) ); ?>' +
-				'</div>'
-			);
+		$.post(ajaxurl, formData, function(response) {
+			if (response.success) {
+				var data = response.data;
+				var html = '<h3><?php esc_js( esc_html_e( 'Scan Results', 'wpshadow' ) ); ?></h3>';
+				
+				// Summary
+				var summary = data.summary || {};
+				html += '<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px;">' +
+					'<div style="border: 1px solid #28a745; padding: 15px; border-radius: 4px; background: #f0f6f2;">' +
+					'<strong><?php esc_js( esc_html_e( 'Pass', 'wpshadow' ) ); ?>:</strong> ' + (summary.pass || 0) +
+					'</div>' +
+					'<div style="border: 1px solid #ffc107; padding: 15px; border-radius: 4px; background: #fffbf0;">' +
+					'<strong><?php esc_js( esc_html_e( 'Warnings', 'wpshadow' ) ); ?>:</strong> ' + (summary.warn || 0) +
+					'</div>' +
+					'<div style="border: 1px solid #dc3545; padding: 15px; border-radius: 4px; background: #fdf7f7;">' +
+					'<strong><?php esc_js( esc_html_e( 'Issues', 'wpshadow' ) ); ?>:</strong> ' + (summary.fail || 0) +
+					'</div>' +
+					'</div>';
+				
+				// Issues
+				if (data.issues && data.issues.length > 0) {
+					html += '<h4><?php esc_js( esc_html_e( 'Detailed Findings', 'wpshadow' ) ); ?></h4>';
+					$.each(data.issues, function(i, issue) {
+						var statusColor = issue.status === 'pass' ? '#28a745' : (issue.status === 'warn' ? '#ffc107' : '#dc3545');
+						var statusBg = issue.status === 'pass' ? '#f0f6f2' : (issue.status === 'warn' ? '#fffbf0' : '#fdf7f7');
+						html += '<div style="border-left: 4px solid ' + statusColor + '; padding: 15px; background: ' + statusBg + '; margin-bottom: 15px; border-radius: 3px;">' +
+							'<h5 style="margin-top: 0;">' + issue.label + '</h5>' +
+							'<p style="margin: 0;">' + issue.details + '</p>' +
+							'</div>';
+					});
+				}
+				
+				$results.html(html);
+			} else {
+				$results.html('<div style="border-left: 4px solid #dc3545; padding: 15px; background: #fff8f9;">' +
+					'<strong><?php esc_js( esc_html_e( 'Error:', 'wpshadow' ) ); ?></strong> ' + (response.data && response.data.message ? response.data.message : '<?php esc_js( esc_html_e( 'Unable to scan page.', 'wpshadow' ) ); ?>') + '</div>');
+			}
+			
 			$btn.prop('disabled', false).text('<?php esc_js( esc_html_e( 'Run Accessibility Scan', 'wpshadow' ) ); ?>');
-		}, 1500);
+		});
 	});
 });
 </script>
