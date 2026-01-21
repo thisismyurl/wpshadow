@@ -9,18 +9,15 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
+use WPShadow\Core\Treatment_Base;
 use WPShadow\Core\KPI_Tracker;
 
 /**
  * Treatment to remove common head cruft (emoji, oEmbed discovery, RSD, shortlink).
  */
-class Treatment_Head_Cleanup implements Treatment_Interface {
+class Treatment_Head_Cleanup extends Treatment_Base {
 	public static function get_finding_id() {
 		return 'head-cleanup-needed';
-	}
-	
-	public static function can_apply() {
-		return true;
 	}
 	
 	public static function apply() {

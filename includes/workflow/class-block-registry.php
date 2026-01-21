@@ -413,6 +413,70 @@ class Block_Registry {
 					),
 				),
 			),
+			'enable_guardian' => array(
+				'label'       => 'Enable Guardian',
+				'description' => 'Activate Guardian automated health monitoring',
+				'icon'        => 'dashicons-shield-alt',
+				'color'       => '#06b6d4',
+				'fields'      => array(
+					'auto_fix_enabled' => array(
+						'label'   => 'Enable Auto-Fixes',
+						'type'    => 'checkbox',
+						'default' => false,
+					),
+					'notification_enabled' => array(
+						'label'   => 'Enable Notifications',
+						'type'    => 'checkbox',
+						'default' => true,
+					),
+				),
+			),
+			'configure_guardian' => array(
+				'label'       => 'Configure Guardian',
+				'description' => 'Update Guardian settings and behavior',
+				'icon'        => 'dashicons-admin-generic',
+				'color'       => '#8b5cf6',
+				'fields'      => array(
+					'enabled' => array(
+						'label'   => 'Guardian Status',
+						'type'    => 'select',
+						'options' => array(
+							'enable'  => 'Enable Guardian',
+							'disable' => 'Disable Guardian',
+						),
+					),
+					'health_check_interval' => array(
+						'label'   => 'Health Check Frequency',
+						'type'    => 'select',
+						'options' => array(
+							'hourly' => 'Hourly',
+							'daily'  => 'Daily',
+							'weekly' => 'Weekly',
+						),
+						'default' => 'daily',
+					),
+					'auto_fix_enabled' => array(
+						'label'   => 'Enable Auto-Fixes',
+						'type'    => 'checkbox',
+						'default' => false,
+					),
+					'backup_before_fix' => array(
+						'label'   => 'Backup Before Fixes',
+						'type'    => 'checkbox',
+						'default' => true,
+					),
+					'notification_level' => array(
+						'label'   => 'Notification Level',
+						'type'    => 'select',
+						'options' => array(
+							'all'      => 'All Issues',
+							'warnings' => 'Warnings & Critical',
+							'critical' => 'Critical Only',
+						),
+						'default' => 'critical',
+					),
+				),
+			),
 		);
 	}
 

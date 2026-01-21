@@ -51,18 +51,19 @@ Dashboard proves: "We fixed 8 issues in 2 hours"
 ### 1. DIAGNOSTICS (Detection Layer)
 **What:** Individual check classes
 **Where:** `includes/diagnostics/`
-**Count:** 9 checks (easily extendable)
+**Count:** 57 checks (covering security, performance, configuration)
 
+**Examples:**
 ```
 Diagnostic_Memory_Limit           → Checks PHP memory config
-Diagnostic_Backup                 → Checks for backup plugin
-Diagnostic_Permalinks             → Checks URL structure
-Diagnostic_Tagline                → Checks site description
 Diagnostic_SSL                    → Checks HTTPS status
 Diagnostic_Outdated_Plugins       → Checks for updates
 Diagnostic_Debug_Mode             → Checks debug setting
-Diagnostic_WordPress_Version      → Checks WP core version
-Diagnostic_Plugin_Count           → Checks plugin count
+Diagnostic_Post_Via_Email         → Checks Post via Email security
+Diagnostic_File_Permissions       → Checks file/directory permissions
+Diagnostic_Admin_Username         → Checks for 'admin' username
+Diagnostic_Backup                 → Checks for backup solution
+... (57 total diagnostic classes)
 ```
 
 Each diagnostic:
@@ -75,11 +76,19 @@ Each diagnostic:
 ### 2. TREATMENTS (Solution Layer)
 **What:** Fix implementations
 **Where:** `includes/treatments/`
-**Count:** 2 treatments (more added as needed)
+**Count:** 44 treatments (safe, reversible fixes)
 
+**Examples:**
 ```
 Treatment_Permalinks              → Sets SEO-friendly structure
 Treatment_Memory_Limit            → Increases memory in wp-config
+Treatment_File_Editors            → Disables theme/plugin editors
+Treatment_SSL                     → Forces HTTPS connections
+Treatment_Debug_Mode              → Disables debug mode
+Treatment_Outdated_Plugins        → Updates plugins safely
+Treatment_Head_Cleanup            → Removes unnecessary <head> bloat
+Treatment_Emoji_Scripts           → Removes emoji scripts
+... (44 total treatment classes)
 ```
 
 Each treatment:
@@ -283,16 +292,18 @@ Register in `Treatment_Registry::$treatments`.
 - Justify monthly fees
 - Show value in reports
 
-## What's Missing (Intentional)
+## Completed Core Features
 
-**NOT included in this phase:**
-- ❌ Guardian background job system (future)
-- ❌ Kanban board UI (coming next)
-- ❌ KPI dashboard widget (coming next)
-- ❌ Email notifications (future)
-- ❌ Slack integration (future)
+**NOW included in this release:**
+- ✅ Kanban board UI (kanban-board.php - drag-drop finding management)
+- ✅ KPI tracking system (class-kpi-tracker.php - metrics dashboard)
 
-**WHY:** Build rock-solid foundation first, UI second.
+## Future Roadmap
+
+**Planned for future phases:**
+- ⏳ Guardian background job system
+- ⏳ Email notifications
+- ⏳ Slack integration
 
 ## What's Included
 

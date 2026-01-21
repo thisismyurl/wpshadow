@@ -9,12 +9,13 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
+use WPShadow\Core\Treatment_Base;
 use WPShadow\Core\KPI_Tracker;
 
 /**
  * Treatment for updating outdated plugins.
  */
-class Treatment_Outdated_Plugins implements Treatment_Interface {
+class Treatment_Outdated_Plugins extends Treatment_Base {
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *

@@ -9,12 +9,13 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
+use WPShadow\Core\Treatment_Base;
 use WPShadow\Core\KPI_Tracker;
 
 /**
  * Treatment to disable theme/plugin file editors by setting DISALLOW_FILE_EDIT.
  */
-class Treatment_File_Editors implements Treatment_Interface {
+class Treatment_File_Editors extends Treatment_Base {
 	/**
 	 * Finding ID this treatment addresses.
 	 *

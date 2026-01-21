@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
+use WPShadow\Core\Treatment_Base;
 use WPShadow\Core\KPI_Tracker;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -23,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Implements the treatment to remove the "Howdy" greeting from admin bar.
  */
-class Treatment_Remove_Howdy implements Treatment_Interface {
+class Treatment_Remove_Howdy extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment applies to.
@@ -33,17 +34,6 @@ class Treatment_Remove_Howdy implements Treatment_Interface {
 	public static function get_finding_id(): string {
 		return 'howdy-greeting-visible';
 	}
-
-	/**
-	 * Check if this treatment can be applied.
-	 *
-	 * @return bool True if can apply, false otherwise.
-	 */
-	public static function can_apply(): bool {
-		// Can always apply - no dependencies
-		return true;
-	}
-
 	/**
 	 * Apply the treatment.
 	 *

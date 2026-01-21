@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
-use WPShadow\Core\Treatment_Interface;
+use WPShadow\Core\Treatment_Base;
 use WPShadow\Core\KPI_Tracker;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -19,14 +19,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Remove Google Fonts from WordPress admin.
  */
-class Treatment_Admin_Fonts implements Treatment_Interface {
+class Treatment_Admin_Fonts extends Treatment_Base {
 
 	public static function get_finding_id() {
 		return 'admin-fonts';
-	}
-
-	public static function can_apply() {
-		return current_user_can( 'manage_options' );
 	}
 
 	public static function apply() {

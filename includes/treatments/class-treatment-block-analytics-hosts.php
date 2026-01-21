@@ -9,11 +9,13 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
+use WPShadow\Core\Treatment_Base;
+
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Treatment_Block_Analytics_Hosts implements Treatment_Interface {
+class Treatment_Block_Analytics_Hosts extends Treatment_Base {
     /**
      * Finding ID this treatment addresses
      *
@@ -21,18 +23,6 @@ class Treatment_Block_Analytics_Hosts implements Treatment_Interface {
      */
     public static function get_finding_id() {
         return 'block_analytics_hosts';
-    }
-
-    /**
-     * Check capability to apply treatment
-     *
-     * @return bool
-     */
-    public static function can_apply() {
-        if ( is_multisite() && is_network_admin() ) {
-            return current_user_can( 'manage_network_options' );
-        }
-        return current_user_can( 'manage_options' );
     }
 
     /**

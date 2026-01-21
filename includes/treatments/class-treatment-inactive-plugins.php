@@ -9,12 +9,13 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
+use WPShadow\Core\Treatment_Base;
 use WPShadow\Core\KPI_Tracker;
 
 /**
  * Treatment for deleting inactive plugins.
  */
-class Treatment_Inactive_Plugins implements Treatment_Interface {
+class Treatment_Inactive_Plugins extends Treatment_Base {
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *

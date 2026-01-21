@@ -9,15 +9,12 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
+use WPShadow\Core\Treatment_Base;
 use WPShadow\Core\KPI_Tracker;
 
-class Treatment_JQuery_Migrate implements Treatment_Interface {
+class Treatment_JQuery_Migrate extends Treatment_Base {
     public static function get_finding_id() {
         return 'jquery-migrate-enabled';
-    }
-
-    public static function can_apply() {
-        return true;
     }
 
     public static function apply() {

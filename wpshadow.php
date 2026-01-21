@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WPShadow
  * Description: Minimal bootstrap to show WPShadow menu and Settings link.
- * Version: 0.0.1
+ * Version: 1.2601.2112
  * Author: thisismyurl
  */
 
@@ -10,195 +10,44 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'WPSHADOW_VERSION', '0.0.1' );
+define( 'WPSHADOW_VERSION', '1.2601.2112' );
 define( 'WPSHADOW_BASENAME', plugin_basename( __FILE__ ) );
 define( 'WPSHADOW_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WPSHADOW_URL', plugin_dir_url( __FILE__ ) );
 
-// AJAX handlers for dismissing findings and auto-fixing
-add_action( 'wp_ajax_wpshadow_dismiss_finding', function() {
-	check_ajax_referer( 'wpshadow_dismiss_finding', 'nonce' );
-	
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( 'Insufficient permissions' );
-	}
-	
-	$finding_id = isset( $_POST['finding_id'] ) ? sanitize_text_field( $_POST['finding_id'] ) : '';
-	if ( empty( $finding_id ) ) {
-		wp_send_json_error( 'Invalid finding ID' );
-	}
-	
-	$dismissed = get_option( 'wpshadow_dismissed_findings', array() );
-	$dismissed[ $finding_id ] = current_time( 'timestamp' );
-	update_option( 'wpshadow_dismissed_findings', $dismissed );
-	
-	wp_send_json_success( array( 'message' => 'Finding dismissed' ) );
-} );
+// Load base classes first (required by handlers)
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-ajax-handler-base.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-color-utils.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-theme-data-provider.php';
 
-add_action( 'wp_ajax_wpshadow_autofix_finding', function() {
-	check_ajax_referer( 'wpshadow_autofix', 'nonce' );
-	
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( 'Insufficient permissions' );
-	}
-	
-	$finding_id = isset( $_POST['finding_id'] ) ? sanitize_text_field( $_POST['finding_id'] ) : '';
+// AJAX handlers moved to classes (security centralized)
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-dismiss-finding-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-autofix-finding-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-save-tagline-handler.php';
 
-	$result = wpshadow_attempt_autofix( $finding_id );
-
-	if ( $result['success'] ) {
-		// Log the fix
-		wpshadow_log_finding_action( $finding_id, 'auto_fixed', $result['message'] );
-		wp_send_json_success( $result );
-	} else {
-		wp_send_json_error( $result );
-	}
-} );
+\WPShadow\Admin\Ajax\Dismiss_Finding_Handler::register();
+\WPShadow\Admin\Ajax\Autofix_Finding_Handler::register();
+\WPShadow\Admin\Ajax\Save_Tagline_Handler::register();
 
 // Toggle auto-fix permission for specific finding type.
-add_action( 'wp_ajax_wpshadow_toggle_autofix_permission', function() {
-	check_ajax_referer( 'wpshadow_autofix_permission', 'nonce' );
-	
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
-	}
-	
-	$finding_id = sanitize_key( $_POST['finding_id'] ?? '' );
-	$enabled = filter_var( $_POST['enabled'] ?? false, FILTER_VALIDATE_BOOLEAN );
-	
-	if ( empty( $finding_id ) ) {
-		wp_send_json_error( array( 'message' => 'Invalid finding ID.' ) );
-	}
-	
-	$permissions = get_option( 'wpshadow_autofix_permissions', array() );
-	
-	if ( $enabled ) {
-		$permissions[ $finding_id ] = true;
-	} else {
-		unset( $permissions[ $finding_id ] );
-	}
-	
-	update_option( 'wpshadow_autofix_permissions', $permissions );
-	
-	wp_send_json_success( array( 
-		'message' => $enabled ? 'Auto-fix enabled for this type.' : 'Auto-fix disabled for this type.',
-		'enabled' => $enabled,
-	) );
-} );
+// Toggle autofix permission handler moved to class
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-toggle-autofix-permission-handler.php';
+\WPShadow\Admin\Ajax\Toggle_Autofix_Permission_Handler::register();
 
 // Allow all auto-fixes.
-add_action( 'wp_ajax_wpshadow_allow_all_autofixes', function() {
-	check_ajax_referer( 'wpshadow_allow_all_autofixes', 'nonce' );
-	
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
-	}
-	
-	$enabled = filter_var( $_POST['enabled'] ?? false, FILTER_VALIDATE_BOOLEAN );
-	update_option( 'wpshadow_allow_all_autofixes', $enabled );
-	
-	wp_send_json_success( array( 
-		'message' => $enabled ? 'All auto-fixes enabled.' : 'All auto-fixes disabled.',
-		'enabled' => $enabled,
-	) );
-} );
+// Allow all autofixes handler moved to class
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-allow-all-autofixes-handler.php';
+\WPShadow\Admin\Ajax\Allow_All_Autofixes_Handler::register();
 
-// Save tagline AJAX handler.
-add_action( 'wp_ajax_wpshadow_save_tagline', function() {
-	check_ajax_referer( 'wpshadow_save_tagline', 'nonce' );
-	
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
-	}
-	
-	$tagline = sanitize_text_field( $_POST['tagline'] ?? '' );
-	
-	if ( empty( $tagline ) ) {
-		wp_send_json_error( array( 'message' => 'Please enter a tagline.' ) );
-	}
-	
-	if ( strlen( $tagline ) > 200 ) {
-		wp_send_json_error( array( 'message' => 'Tagline is too long.' ) );
-	}
-	
-	update_option( 'blogdescription', $tagline );
-	
-	wp_send_json_success( array( 'message' => 'Tagline saved successfully!' ) );
-} );
 
 // Change finding status in Kanban board.
-add_action( 'wp_ajax_wpshadow_change_finding_status', function() {
-	check_ajax_referer( 'wpshadow_kanban', 'nonce' );
-	
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
-	}
-	
-	$finding_id = sanitize_key( $_POST['finding_id'] ?? '' );
-	$new_status = sanitize_key( $_POST['new_status'] ?? '' );
-	
-	if ( empty( $finding_id ) || empty( $new_status ) ) {
-		wp_send_json_error( array( 'message' => 'Invalid finding or status.' ) );
-	}
-	
-	// Valid statuses
-	$valid_statuses = array( 'detected', 'ignored', 'manual', 'automated', 'fixed' );
-	if ( ! in_array( $new_status, $valid_statuses, true ) ) {
-		wp_send_json_error( array( 'message' => 'Invalid status.' ) );
-	}
-	
-	// Update finding status using Status Manager
-	$status_manager = new \WPShadow\Core\Finding_Status_Manager();
-	$status_manager->set_finding_status( $finding_id, $new_status );
-	
-	// Log the action
-	wpshadow_log_finding_action( $finding_id, 'status_changed', "Status changed to: {$new_status}" );
-	
-	wp_send_json_success( array( 
-		'message' => 'Finding status updated.',
-		'finding_id' => $finding_id,
-		'new_status' => $new_status,
-	) );
-} );
+// Change finding status handler moved to class
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-change-finding-status-handler.php';
+\WPShadow\Admin\Ajax\Change_Finding_Status_Handler::register();
 
-// Schedule overnight fix
-add_action( 'wp_ajax_wpshadow_schedule_overnight_fix', function() {
-	check_ajax_referer( 'wpshadow_kanban', 'nonce' );
-	
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
-	}
-	
-	$finding_id = sanitize_key( $_POST['finding_id'] ?? '' );
-	
-	if ( empty( $finding_id ) ) {
-		wp_send_json_error( array( 'message' => 'Invalid finding ID.' ) );
-	}
-	
-	// Get scheduled fixes option
-	$scheduled = get_option( 'wpshadow_scheduled_fixes', array() );
-	
-	// Add this finding to overnight queue
-	$scheduled[] = array(
-		'finding_id' => $finding_id,
-		'scheduled_at' => current_time( 'timestamp' ),
-		'user_email' => wp_get_current_user()->user_email,
-	);
-	
-	update_option( 'wpshadow_scheduled_fixes', $scheduled );
-	
-	// Schedule cron job if not already scheduled
-	if ( ! wp_next_scheduled( 'wpshadow_run_overnight_fixes' ) ) {
-		// Schedule for 2 AM
-		$tomorrow_2am = strtotime( 'tomorrow 2:00' );
-		wp_schedule_single_event( $tomorrow_2am, 'wpshadow_run_overnight_fixes' );
-	}
-
-	wp_send_json_success( array( 
-		'message' => 'Fix scheduled for overnight processing.',
-		'finding_id' => $finding_id,
-	) );
-} );
+// Schedule overnight fix handler moved to class
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-schedule-overnight-fix-handler.php';
+\WPShadow\Admin\Ajax\Schedule_Overnight_Fix_Handler::register();
 
 // Handle overnight fixes cron
 add_action( 'wpshadow_run_overnight_fixes', function() {
@@ -248,45 +97,9 @@ add_action( 'wpshadow_run_overnight_fixes', function() {
 	delete_option( 'wpshadow_scheduled_fixes' );
 } );
 
-// Schedule off-peak operation
-add_action( 'wp_ajax_wpshadow_schedule_offpeak', function() {
-	check_ajax_referer( 'wpshadow_offpeak', 'nonce' );
-	
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
-	}
-	
-	$operation_type = sanitize_key( $_POST['operation_type'] ?? '' );
-	$email = sanitize_email( $_POST['email'] ?? '' );
-	
-	if ( empty( $operation_type ) || empty( $email ) ) {
-		wp_send_json_error( array( 'message' => 'Invalid operation or email.' ) );
-	}
-	
-	// Get scheduled operations
-	$scheduled = get_option( 'wpshadow_scheduled_offpeak', array() );
-	
-	// Add this operation to queue
-	$scheduled[] = array(
-		'operation_type' => $operation_type,
-		'scheduled_at' => current_time( 'timestamp' ),
-		'user_email' => $email,
-	);
-	
-	update_option( 'wpshadow_scheduled_offpeak', $scheduled );
-	
-	// Schedule cron job if not already scheduled
-	if ( ! wp_next_scheduled( 'wpshadow_run_offpeak_operations' ) ) {
-		// Schedule for 2 AM
-		$tomorrow_2am = strtotime( 'tomorrow 2:00' );
-		wp_schedule_single_event( $tomorrow_2am, 'wpshadow_run_offpeak_operations' );
-	}
-	
-	wp_send_json_success( array( 
-		'message' => 'Operation scheduled for off-peak hours.',
-		'operation_type' => $operation_type,
-	) );
-} );
+// Schedule off-peak operation handler moved to class
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-schedule-offpeak-handler.php';
+\WPShadow\Admin\Ajax\Schedule_Offpeak_Handler::register();
 
 /**
  * Analyze HTML for basic mobile-friendly signals.
@@ -410,285 +223,131 @@ function wpshadow_run_mobile_friendliness() {
 
 /**
  * Convert hex color to RGB array.
+ *
+ * @deprecated Use \WPShadow\Core\Color_Utils::hex_to_rgb() instead.
  */
 function wpshadow_hex_to_rgb( $hex ) {
-	$normalized = ltrim( trim( $hex ), '#' );
-	if ( strlen( $normalized ) === 3 ) {
-		$normalized = $normalized[0] . $normalized[0] . $normalized[1] . $normalized[1] . $normalized[2] . $normalized[2];
-	}
-	if ( strlen( $normalized ) !== 6 ) {
-		return null;
-	}
-	$int = hexdec( $normalized );
-	return array(
-		'r' => ( $int >> 16 ) & 255,
-		'g' => ( $int >> 8 ) & 255,
-		'b' => $int & 255,
-	);
+	return \WPShadow\Core\Color_Utils::hex_to_rgb( $hex );
 }
 
 /**
  * Calculate contrast ratio between two hex colors.
+ *
+ * @deprecated Use \WPShadow\Core\Color_Utils::contrast_ratio() instead.
  */
 function wpshadow_contrast_ratio( $fg_hex, $bg_hex ) {
-	$fg = wpshadow_hex_to_rgb( $fg_hex );
-	$bg = wpshadow_hex_to_rgb( $bg_hex );
-	if ( ! $fg || ! $bg ) {
-		return 0;
-	}
-
-	$rel_lum = function( $c ) {
-		$transform = function( $channel ) {
-			$v = $channel / 255;
-			return ( $v <= 0.03928 ) ? ( $v / 12.92 ) : pow( ( $v + 0.055 ) / 1.055, 2.4 );
-		};
-		return ( 0.2126 * $transform( $c['r'] ) ) + ( 0.7152 * $transform( $c['g'] ) ) + ( 0.0722 * $transform( $c['b'] ) );
-	};
-
-	$l1 = $rel_lum( $fg );
-	$l2 = $rel_lum( $bg );
-	$light = max( $l1, $l2 );
-	$dark = min( $l1, $l2 );
-
-	return ( $light + 0.05 ) / ( $dark + 0.05 );
+	return \WPShadow\Core\Color_Utils::contrast_ratio( $fg_hex, $bg_hex );
 }
 
 /**
  * Derive key theme color usages (text, links, buttons, headings).
  */
+/**
+ * Get color context combinations for a11y testing.
+ *
+ * @deprecated Use \WPShadow\Core\Theme_Data_Provider::get_color_contexts() instead.
+ */
 function wpshadow_get_theme_color_contexts() {
-	$settings   = wp_get_global_settings();
-	$background = wpshadow_get_theme_background_color();
-
-	$text        = $settings['color']['text'] ?? '';
-	$link        = $settings['elements']['link']['color']['text'] ?? ( $settings['elements']['link']['color'] ?? '' );
-	$heading     = $settings['elements']['heading']['color']['text'] ?? '';
-	$button_bg   = $settings['elements']['button']['color']['background'] ?? '';
-	$button_text = $settings['elements']['button']['color']['text'] ?? '';
-
-	$contexts = array();
-
-	if ( $text ) {
-		$contexts[] = array(
-			'label' => __( 'Body text on background', 'wpshadow' ),
-			'fg'    => $text,
-			'bg'    => $background,
-		);
-	}
-
-	if ( $heading ) {
-		$contexts[] = array(
-			'label' => __( 'Headings on background', 'wpshadow' ),
-			'fg'    => $heading,
-			'bg'    => $background,
-		);
-	}
-
-	if ( $link ) {
-		$contexts[] = array(
-			'label' => __( 'Links on background', 'wpshadow' ),
-			'fg'    => $link,
-			'bg'    => $background,
-		);
-	}
-
-	if ( $button_bg && $button_text ) {
-		$contexts[] = array(
-			'label' => __( 'Button text on button', 'wpshadow' ),
-			'fg'    => $button_text,
-			'bg'    => $button_bg,
-		);
-	}
-
-	return $contexts;
+	return \WPShadow\Core\Theme_Data_Provider::get_color_contexts();
 }
 
 /**
  * Return active theme palette colors.
+ *
+ * @deprecated Use \WPShadow\Core\Theme_Data_Provider::get_palette() instead.
  */
 function wpshadow_get_theme_palette_colors() {
-	$palette = array();
-
-	$settings_palette = wp_get_global_settings( array( 'color', 'palette', 'theme' ) );
-	if ( is_array( $settings_palette ) && ! empty( $settings_palette ) ) {
-		$palette = $settings_palette;
-	}
-
-	if ( empty( $palette ) ) {
-		$support_palette = get_theme_support( 'editor-color-palette' );
-		if ( is_array( $support_palette ) && isset( $support_palette[0] ) ) {
-			$palette = $support_palette[0];
-		}
-	}
-
-	if ( empty( $palette ) ) {
-		$palette = array(
-			array( 'name' => 'Black', 'slug' => 'black', 'color' => '#000000' ),
-			array( 'name' => 'White', 'slug' => 'white', 'color' => '#ffffff' ),
-			array( 'name' => 'Gray', 'slug' => 'gray', 'color' => '#666666' ),
-		);
-	}
-
-	return array_values( array_filter( $palette, function( $item ) {
-		return ! empty( $item['color'] );
-	} ) );
+	return \WPShadow\Core\Theme_Data_Provider::get_palette();
 }
 
 /**
  * Get theme background color if defined.
+ *
+ * @deprecated Use \WPShadow\Core\Theme_Data_Provider::get_background_color() instead.
  */
 function wpshadow_get_theme_background_color() {
-	$settings_background = wp_get_global_settings( array( 'color', 'background' ) );
-	if ( ! empty( $settings_background ) ) {
-		return $settings_background;
-	}
-
-	$theme_mod_bg = get_theme_mod( 'background_color' );
-	if ( ! empty( $theme_mod_bg ) ) {
-		return '#' . ltrim( $theme_mod_bg, '#' );
-	}
-
-	return '#ffffff';
+	return \WPShadow\Core\Theme_Data_Provider::get_background_color();
 }
 
 // AJAX: Report theme palette contrast against the theme background.
-add_action( 'wp_ajax_wpshadow_theme_contrast', function() {
-	check_ajax_referer( 'wpshadow_theme_contrast', 'nonce' );
+// Theme contrast handler will be migrated to class
 
-	if ( ! current_user_can( 'read' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'wpshadow' ) ) );
-	}
-
-	$palette    = wpshadow_get_theme_palette_colors();
-	$background = wpshadow_get_theme_background_color();
-	$results   = array();
-	$contexts  = wpshadow_get_theme_color_contexts();
-
-	foreach ( $palette as $item ) {
-		$color  = $item['color'];
-		$ratio  = wpshadow_contrast_ratio( $color, $background );
-		$status = 'fail';
-
-		if ( $ratio >= 4.5 ) {
-			$status = 'pass';
-		} elseif ( $ratio >= 3 ) {
-			$status = 'warn';
-		}
-
-		$results[] = array(
-			'name'   => $item['name'] ?? '',
-			'slug'   => $item['slug'] ?? '',
-			'color'  => $color,
-			'ratio'  => round( $ratio, 2 ),
-			'status' => $status,
-		);
-	}
-
-	$context_results = array();
-	foreach ( $contexts as $context ) {
-		$fg    = $context['fg'];
-		$bg    = $context['bg'];
-		$ratio = wpshadow_contrast_ratio( $fg, $bg );
-
-		$status = 'fail';
-		if ( $ratio >= 4.5 ) {
-			$status = 'pass';
-		} elseif ( $ratio >= 3 ) {
-			$status = 'warn';
-		}
-
-		$context_results[] = array(
-			'label'  => $context['label'],
-			'fg'     => $fg,
-			'bg'     => $bg,
-			'ratio'  => round( $ratio, 2 ),
-			'status' => $status,
-		);
-	}
-
-	wp_send_json_success( array(
-		'background' => $background,
-		'colors'     => $results,
-		'contexts'   => $context_results,
-	) );
-} );
-
-	/**
-	 * Tooltip catalog for Tips & Guidance.
-	 */
-	function wpshadow_get_tooltip_catalog( $category = null ) {
-		// Use static caching to avoid loading and parsing JSON repeatedly
-		static $tooltips = array();
+/**
+ * Tooltip catalog for Tips & Guidance.
+ */
+function wpshadow_get_tooltip_catalog( $category = null ) {
+	// Use transient caching for persistent, cross-request caching (24 hour TTL)
+	
+	// If no category specified, load all categories
+	if ( null === $category ) {
+		$cache_key = 'wpshadow_tooltips_all';
+		$cached = get_transient( $cache_key );
 		
-		// If no category specified, load all categories
-		if ( null === $category ) {
-			// Return cached all-tooltips if available
-			if ( isset( $tooltips['_all'] ) ) {
-				return $tooltips['_all'];
-			}
-
-			// Load all category files
-			$all_tooltips = array();
-			$data_dir = plugin_dir_path( __FILE__ ) . 'includes/data/';
-			
-			$categories = array( 'navigation', 'content', 'design', 'extensions', 'maintenance', 'people', 'settings' );
-			
-			foreach ( $categories as $cat ) {
-				$category_tooltips = wpshadow_get_tooltip_catalog( $cat );
-				$all_tooltips = array_merge( $all_tooltips, $category_tooltips );
-			}
-			
-			// Cache all tooltips
-			$tooltips['_all'] = $all_tooltips;
-			return $all_tooltips;
+		if ( false !== $cached ) {
+			return $cached;
 		}
 
-		// Return cached category if available
-		if ( isset( $tooltips[ $category ] ) ) {
-			return $tooltips[ $category ];
+		// Load all category files
+		$all_tooltips = array();
+		$categories = array( 'navigation', 'content', 'design', 'extensions', 'maintenance', 'people', 'settings' );
+		
+		foreach ( $categories as $cat ) {
+			$category_tooltips = wpshadow_get_tooltip_catalog( $cat );
+			$all_tooltips = array_merge( $all_tooltips, $category_tooltips );
 		}
-
-		// Path to category-specific JSON file
-		$json_file = plugin_dir_path( __FILE__ ) . 'includes/data/tooltips-' . $category . '.json';
-
-		// Check if file exists
-		if ( ! file_exists( $json_file ) ) {
-			// Log error only for debugging
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-				error_log( 'WPShadow: tooltips-' . $category . '.json file not found at ' . $json_file );
-			}
-			$tooltips[ $category ] = array();
-			return array();
-		}
-
-		// Load and decode JSON
-		$json_content = file_get_contents( $json_file );
-		$data = json_decode( $json_content, true );
-
-		// Check if JSON is valid
-		if ( null === $data || ! is_array( $data ) ) {
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-				error_log( 'WPShadow: Invalid JSON structure in tooltips-' . $category . '.json' );
-			}
-			$tooltips[ $category ] = array();
-			return array();
-		}
-
-		// Apply translations to title and message fields
-		foreach ( $data as &$tooltip ) {
-			if ( isset( $tooltip['title'] ) ) {
-				$tooltip['title'] = __( $tooltip['title'], 'wpshadow' );
-			}
-			if ( isset( $tooltip['message'] ) ) {
-				$tooltip['message'] = __( $tooltip['message'], 'wpshadow' );
-			}
-		}
-
-		// Cache the result
-		$tooltips[ $category ] = $data;
-
-		return $data;
+		
+		// Cache all tooltips for 24 hours
+		set_transient( $cache_key, $all_tooltips, 24 * HOUR_IN_SECONDS );
+		return $all_tooltips;
 	}
+
+	// Check transient cache for category
+	$cache_key = 'wpshadow_tooltips_' . sanitize_key( $category );
+	$cached = get_transient( $cache_key );
+	
+	if ( false !== $cached ) {
+		return $cached;
+	}
+
+	// Path to category-specific JSON file
+	$json_file = plugin_dir_path( __FILE__ ) . 'includes/data/tooltips-' . sanitize_file_name( $category ) . '.json';
+
+	// Check if file exists
+	if ( ! file_exists( $json_file ) ) {
+		// Log error only for debugging
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log( 'WPShadow: tooltips-' . $category . '.json file not found at ' . $json_file );
+		}
+		return array();
+	}
+
+	// Load and decode JSON
+	$json_content = file_get_contents( $json_file );
+	$data = json_decode( $json_content, true );
+
+	// Check if JSON is valid
+	if ( null === $data || ! is_array( $data ) ) {
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log( 'WPShadow: Invalid JSON structure in tooltips-' . $category . '.json' );
+		}
+		return array();
+	}
+
+	// Apply translations to title and message fields
+	foreach ( $data as &$tooltip ) {
+		if ( isset( $tooltip['title'] ) ) {
+			$tooltip['title'] = __( $tooltip['title'], 'wpshadow' );
+		}
+		if ( isset( $tooltip['message'] ) ) {
+			$tooltip['message'] = __( $tooltip['message'], 'wpshadow' );
+		}
+	}
+
+	// Cache the result for 24 hours
+	set_transient( $cache_key, $data, 24 * HOUR_IN_SECONDS );
+
+	return $data;
+}
 
 	function wpshadow_get_tip_categories() {
 		return array(
@@ -727,167 +386,20 @@ add_action( 'wp_ajax_wpshadow_theme_contrast', function() {
 	}
 
 // AJAX: Accessibility audit scan
-add_action( 'wp_ajax_wpshadow_a11y_scan', function() {
-	check_ajax_referer( 'wpshadow_a11y_scan', 'nonce' );
+// A11y scan handler will be migrated to class
 
-	if ( ! current_user_can( 'read' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'wpshadow' ) ) );
-	}
-
-	$url = isset( $_POST['page_url'] ) ? esc_url_raw( wp_unslash( $_POST['page_url'] ) ) : '';
-	if ( empty( $url ) ) {
-		$url = home_url();
-	}
-
-	if ( ! wp_http_validate_url( $url ) ) {
-		wp_send_json_error( array( 'message' => __( 'Please enter a valid URL (http/https).', 'wpshadow' ) ) );
-	}
-
-	// Validate same-site: ensure URL is from this site's domain
-	$site_host = wp_parse_url( home_url(), PHP_URL_HOST );
-	$url_host = wp_parse_url( $url, PHP_URL_HOST );
-
-	if ( $url_host !== $site_host ) {
-		wp_send_json_error( array( 'message' => __( 'You can only test pages from your own site.', 'wpshadow' ) ) );
-	}
-
-	$response = wp_remote_get( $url, array(
-		'timeout' => 10,
-		'headers' => array( 'User-Agent' => 'WPShadow-A11y-Audit' ),
-	) );
-
-	if ( is_wp_error( $response ) ) {
-		wp_send_json_error( array( 'message' => $response->get_error_message() ) );
-	}
-
-	$code = wp_remote_retrieve_response_code( $response );
-	if ( $code < 200 || $code >= 300 ) {
-		wp_send_json_error( array( 'message' => sprintf( __( 'Request returned status %d.', 'wpshadow' ), (int) $code ) ) );
-	}
-
-	$body = wp_remote_retrieve_body( $response );
-	if ( empty( $body ) ) {
-		wp_send_json_error( array( 'message' => __( 'Empty response received.', 'wpshadow' ) ) );
-	}
-
-	// Analyze HTML for accessibility issues
-	$issues = wpshadow_analyze_a11y_html( $body );
-	$summary = array( 'pass' => 0, 'warn' => 0, 'fail' => 0 );
-	foreach ( $issues as $issue ) {
-		$status = $issue['status'] ?? '';
-		if ( isset( $summary[ $status ] ) ) {
-			$summary[ $status ]++;
-		}
-	}
-
-	wp_send_json_success( array(
-		'url'     => $url,
-		'summary' => $summary,
-		'issues'  => $issues,
-	) );
-} );
-
-// AJAX: Clear site cache
-add_action( 'wp_ajax_wpshadow_clear_cache', function() {
-	check_ajax_referer( 'wpshadow_cache_nonce', 'nonce' );
-
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'wpshadow' ) ) );
-	}
-
-	$cache_dir = WP_CONTENT_DIR . '/cache/wpshadow';
-
-	// Delete cache directory if it exists
-	if ( is_dir( $cache_dir ) ) {
-		require_once ABSPATH . 'wp-admin/includes/file.php';
-		WP_Filesystem();
-		global $wp_filesystem;
-		if ( $wp_filesystem->is_dir( $cache_dir ) ) {
-			$wp_filesystem->delete( $cache_dir, true );
-		}
-	}
-
-	// Clear transients and object cache
-	wp_cache_flush();
-
-	wp_send_json_success( array( 'message' => __( 'Cache cleared successfully.', 'wpshadow' ) ) );
-} );
+// Clear site cache handler moved to class
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-clear-cache-handler.php';
+\WPShadow\Admin\Ajax\Clear_Cache_Handler::register();
 
 // AJAX: Generate magic link
-add_action( 'wp_ajax_wpshadow_create_magic_link', function() {
-	check_ajax_referer( 'wpshadow_magic_link_nonce', 'nonce' );
+// Create magic link handler moved to class
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-create-magic-link-handler.php';
+\WPShadow\Admin\Ajax\Create_Magic_Link_Handler::register();
 
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'wpshadow' ) ) );
-	}
-
-	$developer_name = sanitize_text_field( $_POST['developer_name'] ?? '' );
-	$developer_email = sanitize_email( $_POST['developer_email'] ?? '' );
-	$duration_hours = (int) ( $_POST['duration'] ?? 24 );
-
-	if ( empty( $developer_name ) || empty( $developer_email ) ) {
-		wp_send_json_error( array( 'message' => __( 'Developer name and email are required.', 'wpshadow' ) ) );
-	}
-
-	if ( ! is_email( $developer_email ) ) {
-		wp_send_json_error( array( 'message' => __( 'Invalid email address.', 'wpshadow' ) ) );
-	}
-
-	// Generate token
-	$token = wp_generate_password( 32, false );
-	$created_at = current_time( 'timestamp' );
-	$expires_at = $created_at + ( $duration_hours * HOUR_IN_SECONDS );
-
-	// Store magic link
-	$magic_links = get_option( 'wpshadow_magic_links', array() );
-	$magic_links[ $token ] = array(
-		'developer_name' => $developer_name,
-		'developer_email' => $developer_email,
-		'created_at' => $created_at,
-		'expires_at' => $expires_at,
-		'used' => false,
-	);
-
-	update_option( 'wpshadow_magic_links', $magic_links );
-
-	// Generate magic link URL
-	$magic_link_url = add_query_arg(
-		array( 'wpshadow_magic_link' => $token ),
-		home_url()
-	);
-
-	wp_send_json_success( array(
-		'message' => __( 'Magic link generated successfully.', 'wpshadow' ),
-		'magic_link' => $magic_link_url,
-		'token' => $token,
-		'expires_at' => wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $expires_at ),
-	) );
-} );
-
-// AJAX: Revoke magic link
-add_action( 'wp_ajax_wpshadow_revoke_magic_link', function() {
-	check_ajax_referer( 'wpshadow_magic_link_nonce', 'nonce' );
-
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'wpshadow' ) ) );
-	}
-
-	$token = sanitize_key( $_POST['token'] ?? '' );
-
-	if ( empty( $token ) ) {
-		wp_send_json_error( array( 'message' => __( 'Invalid token.', 'wpshadow' ) ) );
-	}
-
-	$magic_links = get_option( 'wpshadow_magic_links', array() );
-	if ( isset( $magic_links[ $token ] ) ) {
-		unset( $magic_links[ $token ] );
-		update_option( 'wpshadow_magic_links', $magic_links );
-
-		wp_send_json_success( array( 'message' => __( 'Magic link revoked successfully.', 'wpshadow' ) ) );
-	} else {
-		wp_send_json_error( array( 'message' => __( 'Magic link not found.', 'wpshadow' ) ) );
-	}
-} );
+// Revoke magic link handler moved to class
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-revoke-magic-link-handler.php';
+\WPShadow\Admin\Ajax\Revoke_Magic_Link_Handler::register();
 
 /**
  * Analyze HTML for accessibility issues.
@@ -966,265 +478,25 @@ function wpshadow_analyze_a11y_html( $html ) {
 	return $issues;
 }
 
-// AJAX: Save cache options
-add_action( 'wp_ajax_wpshadow_save_cache_options', function() {
-	check_ajax_referer( 'wpshadow_cache_options', 'nonce' );
+// Save cache options handler moved to class
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-save-cache-options-handler.php';
+\WPShadow\Admin\Ajax\Save_Cache_Options_Handler::register();
 
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'wpshadow' ) ) );
-	}
+// Mobile check handler moved to class
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-mobile-check-handler.php';
+\WPShadow\Admin\Ajax\Mobile_Check_Handler::register();
 
-	$cache_pages = isset( $_POST['cache_pages'] ) ? (int) $_POST['cache_pages'] : 0;
-	$cache_posts = isset( $_POST['cache_posts'] ) ? (int) $_POST['cache_posts'] : 0;
-	$skip_logged_in = isset( $_POST['skip_logged_in'] ) ? (int) $_POST['skip_logged_in'] : 0;
-	$auto_clear = isset( $_POST['auto_clear_on_save'] ) ? (int) $_POST['auto_clear_on_save'] : 0;
+// Save tip preferences handler moved to class
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-save-tip-prefs-handler.php';
+\WPShadow\Admin\Ajax\Save_Tip_Prefs_Handler::register();
 
-	update_option( 'wpshadow_cache_pages', (bool) $cache_pages );
-	update_option( 'wpshadow_cache_posts', (bool) $cache_posts );
-	update_option( 'wpshadow_skip_logged_in', (bool) $skip_logged_in );
-	update_option( 'wpshadow_auto_clear_on_save', (bool) $auto_clear );
+// Dismiss tip handler moved to class
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-dismiss-tip-handler.php';
+\WPShadow\Admin\Ajax\Dismiss_Tip_Handler::register();
 
-	wp_send_json_success( array( 'message' => __( 'Cache settings saved successfully.', 'wpshadow' ) ) );
-} );
-
-// AJAX: Mobile check
-add_action( 'wp_ajax_wpshadow_mobile_check', function() {
-	check_ajax_referer( 'wpshadow_mobile_check', 'nonce' );
-
-	if ( ! current_user_can( 'read' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'wpshadow' ) ) );
-	}
-
-	$url = isset( $_POST['url'] ) ? esc_url_raw( wp_unslash( $_POST['url'] ) ) : '';
-	if ( empty( $url ) ) {
-		$url = home_url();
-	}
-
-	if ( ! wp_http_validate_url( $url ) ) {
-		wp_send_json_error( array( 'message' => __( 'Please enter a valid URL (http/https).', 'wpshadow' ) ) );
-	}
-
-	$response = wp_remote_get( $url, array(
-		'timeout' => 10,
-		'headers' => array( 'User-Agent' => 'WPShadow-Mobile-Check' ),
-	) );
-
-	if ( is_wp_error( $response ) ) {
-		wp_send_json_error( array( 'message' => $response->get_error_message() ) );
-	}
-
-	$code = wp_remote_retrieve_response_code( $response );
-	if ( $code < 200 || $code >= 300 ) {
-		wp_send_json_error( array( 'message' => sprintf( __( 'Request returned status %d.', 'wpshadow' ), (int) $code ) ) );
-	}
-
-	$body = wp_remote_retrieve_body( $response );
-	if ( empty( $body ) ) {
-		wp_send_json_error( array( 'message' => __( 'Empty response received.', 'wpshadow' ) ) );
-	}
-
-	$checks = wpshadow_analyze_mobile_html( $body );
-	$summary = array( 'pass' => 0, 'warn' => 0, 'fail' => 0 );
-	foreach ( $checks as $check ) {
-		$status = $check['status'] ?? '';
-		if ( isset( $summary[ $status ] ) ) {
-			$summary[ $status ]++;
-		}
-	}
-
-	wp_send_json_success( array(
-		'url'     => $url,
-		'summary' => $summary,
-		'checks'  => $checks,
-	) );
-} );
-
-// Save user tooltip preferences (tip categories enable/disable).
-add_action( 'wp_ajax_wpshadow_save_tip_prefs', function() {
-	check_ajax_referer( 'wpshadow_tip_prefs', 'nonce' );
-
-	if ( ! current_user_can( 'read' ) ) {
-		wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
-	}
-
-	$user_id = get_current_user_id();
-	if ( ! $user_id ) {
-		wp_send_json_error( array( 'message' => 'User not authenticated.' ) );
-	}
-
-	$disabled_categories = isset( $_POST['disabled_categories'] ) ? (array) $_POST['disabled_categories'] : array();
-	$disabled_categories = array_map( 'sanitize_key', $disabled_categories );
-
-	$prefs = array(
-		'disabled_categories' => $disabled_categories,
-	);
-
-	wpshadow_save_user_tip_prefs( $user_id, $prefs );
-
-	wp_send_json_success( array(
-		'message' => 'Tip preferences saved.',
-	) );
-} );
-
-// AJAX handler for dismissing a tip (user dismissal).
-add_action( 'wp_ajax_wpshadow_dismiss_tip', function() {
-	check_ajax_referer( 'wpshadow_tip_dismiss', 'nonce' );
-
-	if ( ! current_user_can( 'read' ) ) {
-		wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
-	}
-
-	$user_id = get_current_user_id();
-	if ( ! $user_id ) {
-		wp_send_json_error( array( 'message' => 'User not authenticated.' ) );
-	}
-
-	$tip_id = sanitize_key( $_POST['tip_id'] ?? '' );
-	if ( ! $tip_id ) {
-		wp_send_json_error( array( 'message' => 'Invalid tip ID.' ) );
-	}
-
-	$prefs = wpshadow_get_user_tip_prefs( $user_id );
-	if ( ! isset( $prefs['dismissed_tips'] ) ) {
-		$prefs['dismissed_tips'] = array();
-	}
-
-	// Add to dismissed list if not already there
-	if ( ! in_array( $tip_id, $prefs['dismissed_tips'], true ) ) {
-		$prefs['dismissed_tips'][] = $tip_id;
-	}
-
-	wpshadow_save_user_tip_prefs( $user_id, $prefs );
-
-	wp_send_json_success( array(
-		'message' => 'Tip dismissed.',
-		'tip_id'  => $tip_id,
-	) );
-} );
-
-add_action( 'wp_ajax_wpshadow_check_broken_links', function() {
-	check_ajax_referer( 'wpshadow_link_check', 'nonce' );
-
-	if ( ! current_user_can( 'read' ) ) {
-		wp_send_json_error( __( 'Insufficient permissions.', 'wpshadow' ) );
-	}
-
-	$check_internal = isset( $_POST['check_internal'] ) ? (int) $_POST['check_internal'] : 1;
-	$check_external = isset( $_POST['check_external'] ) ? (int) $_POST['check_external'] : 1;
-	$check_images   = isset( $_POST['check_images'] ) ? (int) $_POST['check_images'] : 0;
-
-	$broken_links = array();
-	$posts_checked = 0;
-	$links_checked = 0;
-
-	// Get all published posts and pages
-	$args = array(
-		'post_type'      => array( 'post', 'page' ),
-		'posts_per_page' => -1,
-		'post_status'    => 'publish',
-	);
-
-	$posts = get_posts( $args );
-	$posts_checked = count( $posts );
-
-	foreach ( $posts as $post ) {
-		$content = $post->post_content;
-		
-		// Extract links from content
-		preg_match_all( '/<a\s+(?:[^>]*?\s+)?href=["\']([^"\']+)["\']/', $content, $matches );
-		if ( ! empty( $matches[1] ) ) {
-			foreach ( $matches[1] as $url ) {
-				$links_checked++;
-				
-				// Skip anchors
-				if ( strpos( $url, '#' ) === 0 ) {
-					continue;
-				}
-
-				// Determine if link is internal
-				$is_internal = strpos( $url, home_url() ) === 0 || strpos( $url, '/' ) === 0;
-
-				if ( $is_internal && ! $check_internal ) {
-					continue;
-				}
-
-				if ( ! $is_internal && ! $check_external ) {
-					continue;
-				}
-
-				// Convert relative URLs to absolute
-				if ( strpos( $url, '/' ) === 0 ) {
-					$url = home_url( $url );
-				}
-
-				// Check link
-				$response = wp_remote_head( $url, array(
-					'timeout'     => 5,
-					'redirection' => 2,
-				) );
-
-				if ( is_wp_error( $response ) ) {
-					$broken_links[] = array(
-						'url'       => $url,
-						'post_title' => $post->post_title,
-						'edit_url'   => get_edit_post_link( $post->ID, 'raw' ),
-						'status_code' => 'ERROR',
-					);
-				} else {
-					$code = wp_remote_retrieve_response_code( $response );
-					if ( $code >= 400 ) {
-						$broken_links[] = array(
-							'url'        => $url,
-							'post_title' => $post->post_title,
-							'edit_url'   => get_edit_post_link( $post->ID, 'raw' ),
-							'status_code' => $code,
-						);
-					}
-				}
-			}
-		}
-
-		// Check image URLs if requested
-		if ( $check_images ) {
-			preg_match_all( '/<img\s+(?:[^>]*?\s+)?src=["\']([^"\']+)["\']/', $content, $img_matches );
-			if ( ! empty( $img_matches[1] ) ) {
-				foreach ( $img_matches[1] as $img_url ) {
-					$links_checked++;
-					
-					$response = wp_remote_head( $img_url, array(
-						'timeout'     => 5,
-						'redirection' => 2,
-					) );
-
-					if ( is_wp_error( $response ) ) {
-						$broken_links[] = array(
-							'url'        => $img_url,
-							'post_title' => $post->post_title . ' (image)',
-							'edit_url'   => get_edit_post_link( $post->ID, 'raw' ),
-							'status_code' => 'ERROR',
-						);
-					} else {
-						$code = wp_remote_retrieve_response_code( $response );
-						if ( $code >= 400 ) {
-							$broken_links[] = array(
-								'url'        => $img_url,
-								'post_title' => $post->post_title . ' (image)',
-								'edit_url'   => get_edit_post_link( $post->ID, 'raw' ),
-								'status_code' => $code,
-							);
-						}
-					}
-				}
-			}
-		}
-	}
-
-	wp_send_json_success( array(
-		'broken_links'  => $broken_links,
-		'posts_checked' => $posts_checked,
-		'links_checked' => $links_checked,
-	) );
-} );
+// Check broken links handler moved to class
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-check-broken-links-handler.php';
+\WPShadow\Admin\Ajax\Check_Broken_Links_Handler::register();
 
 // Handle off-peak operations cron
 add_action( 'wpshadow_run_offpeak_operations', function() {
@@ -1651,6 +923,9 @@ add_action( 'tool_box', function() {
 // Load core interfaces and base classes first
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-diagnostic-base.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-treatment-interface.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-treatment-base.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-ajax-handler-base.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-abstract-registry.php';
 
 // Load diagnostic registry
 require_once plugin_dir_path( __FILE__ ) . 'includes/diagnostics/class-diagnostic-registry.php';
@@ -1670,8 +945,30 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-dis
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-discovery-hooks.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-wizard.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-ajax.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-command-registry.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-executor.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-kanban-workflow-helper.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-user-preferences-manager.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-color-utils.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-theme-data-provider.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/knowledge-base/class-kb-formatter.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/knowledge-base/class-kb-article-generator.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/knowledge-base/class-kb-library.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/knowledge-base/class-kb-search.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/knowledge-base/class-training-provider.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/knowledge-base/class-training-progress.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/privacy/class-privacy-policy-manager.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/privacy/class-consent-preferences.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/privacy/class-first-run-consent.php';
+
+// Phase 7: Cloud Features & SaaS Integration
+require_once plugin_dir_path( __FILE__ ) . 'includes/cloud/class-cloud-client.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/cloud/class-registration-manager.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/cloud/class-notification-manager.php';
+
+// Phase 8: Guardian & Automation (placeholder - will add as we build)
+// Guardian classes will be required here when implemented
+
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-treatment-hooks.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-site-health-explanations.php';
 
@@ -3696,20 +2993,9 @@ add_action( 'admin_enqueue_scripts', function( $hook ) {
 	) );
 } );
 
-/**
- * AJAX handler to generate a new friendly password on demand.
- */
-add_action( 'wp_ajax_wpshadow_generate_password', function() {
-	check_ajax_referer( 'wpshadow_generate_password', 'nonce' );
-	
-	if ( ! current_user_can( 'create_users' ) ) {
-		wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
-	}
-	
-	wp_send_json_success( array(
-		'password' => wpshadow_generate_friendly_password(),
-	) );
-} );
+// Generate password handler moved to class
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-generate-password-handler.php';
+\WPShadow\Admin\Ajax\Generate_Password_Handler::register();
 
 /**
  * Override wp_mail From Name if WPShadow setting is configured.

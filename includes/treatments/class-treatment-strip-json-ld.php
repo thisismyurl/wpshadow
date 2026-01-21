@@ -9,15 +9,12 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
+use WPShadow\Core\Treatment_Base;
 use WPShadow\Core\KPI_Tracker;
 
-class Treatment_Strip_JSON_LD implements Treatment_Interface {
+class Treatment_Strip_JSON_LD extends Treatment_Base {
     public static function get_finding_id() {
         return 'json-ld-present';
-    }
-
-    public static function can_apply() {
-        return true;
     }
 
     public static function apply() {

@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
-use WPShadow\Core\Treatment_Interface;
+use WPShadow\Core\Treatment_Base;
 use WPShadow\Core\KPI_Tracker;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -19,14 +19,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Remove emoji detection scripts.
  */
-class Treatment_Emoji_Scripts implements Treatment_Interface {
+class Treatment_Emoji_Scripts extends Treatment_Base {
 
 	public static function get_finding_id() {
 		return 'emoji-scripts';
-	}
-
-	public static function can_apply() {
-		return current_user_can( 'manage_options' );
 	}
 
 	public static function apply() {

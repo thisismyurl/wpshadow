@@ -2,7 +2,7 @@
 
 ## What Changed?
 
-The tooltip system now uses **split JSON files per category** instead of one monolithic file, with **"Learn More" links to the knowledge base**.
+The tooltip system now uses **split JSON files per category** with **KB URL integration** instead of old `/docs/wordpress-basics/` links. All tooltips now link to `https://wpshadow.com/kb/{context}-{slug}` format.
 
 ## Quick Facts
 
@@ -45,7 +45,7 @@ $settings_tips = wpshadow_get_tooltip_catalog( 'settings' );
 - `extensions` (7 tips)
 - `maintenance` (3 tips)
 
-## Tooltip Structure (Now Includes KB URL)
+## Tooltip Structure (KB URL Format)
 
 ```json
 {
@@ -55,11 +55,18 @@ $settings_tips = wpshadow_get_tooltip_catalog( 'settings' );
   "message": "Visit the Dashboard for health, updates, and a high-level view of your site.",
   "category": "navigation",
   "level": "beginner",
-  "kb_url": "https://wpshadow.com/docs/wordpress-basics/dashboard"
+  "kb_url": "https://wpshadow.com/kb/navigation-dashboard"
 }
 ```
 
-**New Field**: `kb_url` - Link to knowledge base article (optional, but recommended)
+**KB URL Format:** `https://wpshadow.com/kb/{context}-{slug}`
+- `context`: Page context (navigation, settings, user-new, profile, etc.)
+- `slug`: Auto-generated from title or field ID
+
+**Example URLs:**
+- `settings-general-site-title` - Settings page, General tab, Site Title field
+- `user-new-user-password` - New User page, Password field
+- `navigation-dashboard` - Navigation menu, Dashboard link
 
 ## JavaScript Rendering
 

@@ -10,9 +10,9 @@ This document establishes consistent naming conventions and coding patterns for 
 Used for plugin-wide constants that don't change during runtime.
 
 ```php
-define( 'WPSHADOW_VERSION', '1.2601.75000' );
+define( 'WPSHADOW_VERSION', '1.2601.2112' );
 define( 'WPSHADOW_PATH', plugin_dir_path( __FILE__ ) );
-define( 'WPSHADOW_MIN_PHP', '8.1.29' );
+define( 'WPSHADOW_MIN_PHP', '8.1' );
 define( 'WPSHADOW_TEXT_DOMAIN', 'wpshadow' );
 ```
 
@@ -63,46 +63,58 @@ function WPSHADOW_ajax_save_metabox_state(): void { ... }
 ---
 
 ### Classes
-**Pattern:** `WPSHADOW_Noun_Style` (SCREAMING_SNAKE + PascalCase words)
+**Pattern:** `Noun_Style` (PascalCase with underscores, namespaced)
 
-Main plugin classes use the `WPSHADOW_` prefix with PascalCase words.
+Core classes use PascalCase with namespaces for organization:
 
 ```php
-class WPSHADOW_Module_Registry { ... }
-class WPSHADOW_Settings_Cache { ... }
-class WPSHADOW_Dashboard_Widgets { ... }
-class WPSHADOW_Feature_Registry { ... }
-class WPSHADOW_Session_Manager { ... }
-class WPSHADOW_Site_Health { ... }
-class WPSHADOW_Activity_Logger { ... }
+namespace WPShadow\Diagnostics;
+class Diagnostic_Memory_Limit { ... }
+
+namespace WPShadow\Treatments;
+class Treatment_Memory_Limit { ... }
+
+namespace WPShadow\Core;
+class Abstract_Registry { ... }
+class Diagnostic_Base { ... }
+class Treatment_Base { ... }
+```
+
+**File Naming Convention:**
+```
+includes/diagnostics/class-diagnostic-memory-limit.php
+includes/treatments/class-treatment-memory-limit.php
+includes/core/class-abstract-registry.php
 ```
 
 **Rationale:**
-- Globally unique (WPSHADOW_ prefix prevents collisions)
-- Descriptive (Noun_Style clarifies purpose)
-- Consistent across similar systems (all registry classes use Registry suffix)
-- Easy to locate in filesystem: `class-wps-module-registry.php` → `WPSHADOW_Module_Registry`
+- Namespaces provide logical organization
+- File names match class names for easy discovery
+- Consistent with modern PHP standards
+- Registry suffix clarifies central management classes
 
 ---
 
 ### Namespaces
-**Pattern:** `WPShadow\Subspace` (PascalCase only, no SCREAMING_SNAKE)
+**Pattern:** `WPShadow\Category` (PascalCase, mirrors folder structure)
 
-Namespaces use PascalCase without screaming case or underscores.
+Namespaces organize code by function and match directory structure:
 
 ```php
-namespace WPShadow;
-namespace WPShadow\CoreSupport;
-namespace WPShadow\Admin;
-namespace WPShadow\API;
-namespace WPShadow\HealthSupport; // For health features
+namespace WPShadow\Diagnostics;        // includes/diagnostics/
+namespace WPShadow\Treatments;         // includes/treatments/
+namespace WPShadow\Workflow;           // includes/workflow/
+namespace WPShadow\Core;               // includes/core/
+namespace WPShadow\Admin;              // includes/admin/
+namespace WPShadow\Detectors;          // includes/detectors/
+namespace WPShadow\Helpers;            // includes/helpers/
 ```
 
 **Rationale:**
-- Standard PHP namespace convention
-- Logical hierarchy mirrors folder structure
-- Cleanly separates namespaced vs global scope
-- Easier to read `WPShadow\CoreSupport\WPSHADOW_Registry` than if namespace used underscores
+- Standard PHP PSR-4 namespace convention
+- Folder structure exactly mirrors namespace hierarchy
+- Cleaner than old `WPShadow\_` prefix pattern
+- Auto-loaded via Composer
 
 ---
 
@@ -171,7 +183,7 @@ add_action( 'wp_ajax_WPSHADOW_install_module', 'WPSHADOW_ajax_install_module' );
 
 ```php
 apply_filters( 'wpshadow_health_check_results', $results );
-apply_filters( 'wpshadow_dashboard_widget_content', $content, $widget_id );
+apply_filters( 'wpshadow_dashboard_init', $dashboard_config );
 apply_filters( 'wpshadow_module_enabled', true, $module_slug );
 ```
 
@@ -187,7 +199,7 @@ apply_filters( 'wpshadow_module_enabled', true, $module_slug );
 Classes:
 ```
 includes/core/class-wps-module-registry.php → class WPSHADOW_Module_Registry
-includes/admin/class-wps-dashboard-widgets.php → class WPSHADOW_Dashboard_Widgets
+includes/admin/ajax/class-autofix-finding-handler.php → class WPSHADOW_Autofix_Finding_Handler
 includes/helpers/class-wps-session-manager.php → class WPSHADOW_Session_Manager
 ```
 
@@ -195,12 +207,9 @@ Function files:
 ```
 includes/helpers/wps-file-helpers.php → wpshadow_file_exists(), wpshadow_safe_get_contents(), etc.
 includes/helpers/wps-array-helpers.php → wpshadow_array_validate(), etc.
-includes/wps-widget-functions.php → wpshadow_render_widget(), etc.
 ```
 
 **Rationale:** Follows WordPress plugin standards; clear distinction between classes and functions.
-
----
 
 ## 4. Architecture Pattern
 

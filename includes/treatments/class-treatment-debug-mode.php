@@ -11,12 +11,13 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
+use WPShadow\Core\Treatment_Base;
 use WPShadow\Core\KPI_Tracker;
 
 /**
  * Treatment for disabling WordPress debug mode.
  */
-class Treatment_Debug_Mode implements Treatment_Interface {
+class Treatment_Debug_Mode extends Treatment_Base {
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *

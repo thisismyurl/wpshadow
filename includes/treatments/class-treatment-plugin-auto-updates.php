@@ -9,18 +9,15 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
+use WPShadow\Core\Treatment_Base;
 use WPShadow\Core\KPI_Tracker;
 
 /**
  * Treatment to enable plugin auto-updates.
  */
-class Treatment_Plugin_Auto_Updates implements Treatment_Interface {
+class Treatment_Plugin_Auto_Updates extends Treatment_Base {
 	public static function get_finding_id() {
 		return 'plugin-auto-updates-disabled';
-	}
-	
-	public static function can_apply() {
-		return true;
 	}
 	
 	public static function apply() {

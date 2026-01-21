@@ -9,18 +9,15 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
+use WPShadow\Core\Treatment_Base;
 use WPShadow\Core\KPI_Tracker;
 
 /**
  * Treatment to block Google-hosted fonts for privacy/performance.
  */
-class Treatment_External_Fonts implements Treatment_Interface {
+class Treatment_External_Fonts extends Treatment_Base {
 	public static function get_finding_id() {
 		return 'external-fonts-loading';
-	}
-	
-	public static function can_apply() {
-		return true;
 	}
 	
 	public static function apply() {

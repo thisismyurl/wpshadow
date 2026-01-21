@@ -9,18 +9,15 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
+use WPShadow\Core\Treatment_Base;
 use WPShadow\Core\KPI_Tracker;
 
 /**
  * Treatment to dequeue block assets on the front-end when not needed.
  */
-class Treatment_Block_Cleanup implements Treatment_Interface {
+class Treatment_Block_Cleanup extends Treatment_Base {
 	public static function get_finding_id() {
 		return 'block-assets-loaded';
-	}
-	
-	public static function can_apply() {
-		return true;
 	}
 	
 	public static function apply() {

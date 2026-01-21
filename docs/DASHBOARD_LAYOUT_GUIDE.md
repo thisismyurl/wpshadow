@@ -2,6 +2,8 @@
 
 ## Current Dashboard Structure
 
+> **Note:** This guide describes the intended Kanban-based dashboard layout. Some features may be in development or phase-gated. Core site health display and recent activity sections are implemented and active.
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    WPShadow Site Health Diagnostic           │

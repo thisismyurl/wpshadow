@@ -9,19 +9,15 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
+use WPShadow\Core\Treatment_Base;
 use WPShadow\Core\KPI_Tracker;
 
 /**
  * Treatment to rotate/truncate debug.log.
  */
-class Treatment_Error_Log implements Treatment_Interface {
+class Treatment_Error_Log extends Treatment_Base {
 	public static function get_finding_id() {
 		return 'error-log-large';
-	}
-	
-	public static function can_apply() {
-		$path = self::get_log_path();
-		return $path && file_exists( $path ) && is_writable( $path );
 	}
 	
 	public static function apply() {

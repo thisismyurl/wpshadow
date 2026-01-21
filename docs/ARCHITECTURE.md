@@ -2,50 +2,34 @@
 
 ## Overview
 
-WPShadow is a WordPress plugin designed to provide comprehensive site health diagnostics, emergency recovery features, and performance optimization tools. The plugin follows WordPress coding standards and uses a feature-based architecture pattern.
+WPShadow is a WordPress plugin providing comprehensive site health diagnostics, automated fixes, workflow automation, and performance optimization. Built with strict separation between detection and remediation layers.
 
 **Plugin**: wpshadow  
-**Version**: 1.2601.75000+  
-**Minimum PHP**: 8.1.29  
-**Minimum WordPress**: 6.4.0  
+**Version**: 1.2601.2112  
+**Minimum PHP**: 8.1  
+**Minimum WordPress**: 6.4  
 **License**: GPL v2 or later  
 
 ---
 
-## Core Design Principles
+## Core Design Philosophy
 
-### 1. **Feature Registry Pattern**
-Features are self-contained, independently toggleable modules. The plugin loads features on-demand based on settings.
-
-**Key Classes**:
-- `WPSHADOW_Feature_Registry` - Central registry for all features
-- `WPSHADOW_Abstract_Feature` - Base class for all features
-- `WPSHADOW_Feature_Interface` - Contract for feature implementations
-
-**Feature Lifecycle**:
+### Separation of Concerns
 ```
-register_feature() → enabled? → initialize() → register_hooks() → active
+DETECT (Diagnostics) → ORGANIZE (Kanban) → FIX (Treatments) → TRACK (KPIs)
 ```
 
-### 2. **Settings Inheritance**
-Network-aware settings system with automatic fallback to network settings for multisite installations.
+**Diagnostics:**
+- Read-only checks
+- Return structured findings
+- Never modify anything
+- Include threat levels (0-100)
 
-- `WPSHADOW_Settings` - Central settings manager
-- `get_option_with_network_fallback()` - Hierarchical option retrieval
-- Per-site overrides with network defaults
-
-### 3. **Health System**
-Integrated health checks provide site diagnostic data through WordPress Site Health integration.
-
-- `WPSHADOW_Site_Health` - Core health checks manager
-- Individual feature health contributions
-- REST API health endpoints
-
-### 4. **Developer Filters**
-Strategic action and filter hooks for extensibility without modifying core code.
-
-- Action hooks: `wpshadow_feature_initialized`, `wpshadow_settings_saved`
-- Filter hooks: `wpshadow_asset_version_preserve`, `wpshadow_feature_enabled`
+**Treatments:**
+- Apply safe fixes
+- Create automatic backups
+- Fully reversible
+- Log KPI metrics
 
 ---
 
@@ -53,564 +37,494 @@ Strategic action and filter hooks for extensibility without modifying core code.
 
 ```
 /wpshadow
-├── wpshadow.php                          # Main plugin file
+├── wpshadow.php                          # Main plugin file (bootstrap)
 ├── composer.json                         # PHP dependencies & autoloader
-├── phpunit.xml                           # PHPUnit configuration
 ├── assets/
-│   ├── css/
-│   │   ├── dashboard-widgets.css        # Common UI styles
-│   │   └── debug-mode.css               # Debug panel styles
-│   ├── js/
-│   │   └── admin.js                     # Admin interactivity
-│   └── images/
-├── docs/
-│   ├── ARCHITECTURE.md                  # This file
-│   ├── DEVELOPER_FILTERS.md             # Developer hook documentation
-│   └── README.md                        # Feature guide
+│   ├── css/                             # Admin styles
+│   ├── js/                              # Admin scripts (tooltips, dashboard, etc.)
+│   └── images/                          # Icons and graphics
+├── docs/                                # Documentation (architecture, guides, etc.)
+│   └── archive/                         # Historical documentation
 ├── includes/
-│   ├── abstracts/
-│   │   ├── class-wps-feature-abstract.php       # Base feature class
-│   │   └── class-wps-feature-validator.php      # Validation utilities
-│   ├── admin/
-│   │   ├── class-wps-dashboard-assets.php       # Asset management
-│   │   ├── class-wps-dashboard-widgets.php      # Dashboard widgets
-│   │   └── class-wps-feature-details-page.php   # Feature editor
-│   ├── api/
-│   │   ├── class-wps-rest-controller-base.php   # Base REST controller
-│   │   └── class-wps-rest-settings-controller.php # Settings API
-│   ├── helpers/
-│   │   ├── wps-capability-helpers.php           # Permission checks
-│   │   ├── wps-feature-functions.php            # Feature utilities
-│   │   └── wps-asset-version-helpers.php        # Asset version logic
-│   ├── views/
-│   │   └── class-wps-view-components.php        # Reusable UI components
-│   ├── traits/
-│   │   └── trait-wps-ajax-security.php          # AJAX security patterns
-│   ├── class-wps-feature-registry.php           # Feature management
-│   ├── class-wps-settings.php                   # Settings API
-│   ├── class-wps-site-health.php                # Health system
-│   ├── class-wps-health-renderer.php            # Health UI renderer
-│   └── [other core classes]
-├── features/
-│   ├── class-wps-feature-asset-version-removal.php     # Asset versioning
-│   ├── class-wps-feature-hardening.php                 # Security hardening
-│   ├── class-wps-feature-uptime-monitor.php            # Uptime tracking
-│   └── [66+ feature implementations]
-├── modules/
-│   ├── hubs/                            # Hub module integrations
-│   └── missing-modules.json             # Feature catalog
-└── tests/
-    └── [PHPUnit test suite]
+│   ├── admin/                           # Admin UI (dashboard, AJAX, screens)
+│   ├── core/                            # Base classes (registries, interfaces, helpers)
+│   ├── data/                            # JSON data files (tooltips, KB mappings)
+│   ├── diagnostics/                     # Detection layer (57 diagnostic classes)
+│   ├── treatments/                      # Solution layer (44 treatment classes)
+│   ├── workflow/                        # Workflow automation system (11 files)
+│   ├── views/                           # PHP view templates
+│   ├── detectors/                       # Environment detection utilities
+│   └── helpers/                         # Shared helper functions
+├── wpshadow-pro/                        # Pro addon (separate repository)
+│   └── See: https://github.com/thisismyurl/wpshadow-pro
+└── vendor/                              # Composer dependencies (gitignored)
 ```
+
+**Key Directories:**
+- `includes/diagnostics/` - 57 read-only checks (security, performance, config)
+- `includes/treatments/` - 44 safe, reversible fixes with backup/undo
+- `includes/workflow/` - Workflow automation with triggers and actions
+- `includes/data/` - Tooltip JSON files with KB URL mappings
+- Pro addon in separate repository: https://github.com/thisismyurl/wpshadow-pro
 
 ---
 
-## Key Components
+## Core Systems
 
-### **1. Feature System**
+### 1. Diagnostics System
 
-#### Feature Registry (`class-wps-feature-registry.php`)
-Central registry that manages all features:
+**Location:** `includes/diagnostics/`  
+**Count:** 57 checks  
+**Pattern:** Each diagnostic extends `\WPShadow\Core\Diagnostic_Base`
 
+**Example Diagnostic:**
 ```php
-// Register a feature
-register_WPSHADOW_feature( new WPSHADOW_Feature_Custom() );
+namespace WPShadow\Diagnostics;
 
-// Check if feature is enabled
-if ( has_WPSHADOW_feature( 'custom' ) ) {
-    // Feature is active
+class Diagnostic_Memory_Limit extends \WPShadow\Core\Diagnostic_Base {
+    public function run(): array {
+        $limit = ini_get( 'memory_limit' );
+        $limit_bytes = $this->convert_to_bytes( $limit );
+        
+        if ( $limit_bytes < 256 * 1024 * 1024 ) {
+            return $this->create_finding(
+                id: 'memory-limit-low',
+                title: 'PHP Memory Limit Too Low',
+                description: "Current: {$limit}, Recommended: 256M+",
+                threat_level: 25,
+                severity: 'medium',
+                auto_fixable: true
+            );
+        }
+        
+        return []; // No issue found
+    }
 }
-
-// Enable/disable feature
-WPSHADOW_Feature_Registry::set_feature_enabled( 'custom', true );
 ```
 
-#### Abstract Feature Class (`class-wps-feature-abstract.php`)
-Base class for all features:
+**Key Diagnostics:**
+- `Diagnostic_Memory_Limit` - PHP memory configuration
+- `Diagnostic_SSL` - HTTPS/SSL status
+- `Diagnostic_Debug_Mode` - WP_DEBUG settings
+- `Diagnostic_Outdated_Plugins` - Plugin updates needed
+- `Diagnostic_Post_Via_Email` - Post via Email security
+- `Diagnostic_File_Permissions` - File/directory permissions
+- `Diagnostic_Admin_Username` - Checks for 'admin' username
+- `Diagnostic_Backup` - Backup solution detection
+- ... (57 total)
 
+**Registry:**
 ```php
-final class WPSHADOW_Feature_Custom extends WPSHADOW_Abstract_Feature {
-    public function register_hooks(): void {
-        add_action( 'wp_loaded', [ $this, 'initialize' ] );
+// includes/diagnostics/class-diagnostic-registry.php
+namespace WPShadow\Diagnostics;
+
+class Diagnostic_Registry extends \WPShadow\Core\Abstract_Registry {
+    public static function init(): void {
+        self::register( 'memory-limit', Diagnostic_Memory_Limit::class );
+        self::register( 'ssl', Diagnostic_SSL::class );
+        // ... all 57 diagnostics registered
+    }
+}
+```
+
+### 2. Treatments System
+
+**Location:** `includes/treatments/`  
+**Count:** 44 treatments  
+**Pattern:** Each treatment implements `\WPShadow\Treatments\Interface_Treatment`
+
+**Example Treatment:**
+```php
+namespace WPShadow\Treatments;
+
+class Treatment_Memory_Limit extends \WPShadow\Core\Treatment_Base {
+    public function apply(): bool {
+        // Create backup first
+        $this->create_wp_config_backup();
+        
+        // Apply fix
+        $result = $this->update_wp_config_constant(
+            'WP_MEMORY_LIMIT',
+            '256M'
+        );
+        
+        if ( $result ) {
+            // Track KPI metrics
+            $this->log_kpi( 'memory-limit-increased', 15 ); // 15 min saved
+            return true;
+        }
+        
+        return false;
     }
     
-    public function initialize(): void {
-        // Feature initialization
+    public function undo(): bool {
+        // Restore from backup
+        return $this->restore_wp_config_from_backup();
     }
 }
 ```
 
-**Naming Convention**:
-- Files: `class-wps-feature-{name}.php`
-- Classes: `WPSHADOW_Feature_{CamelCase}`
-- Namespace: `WPShadow\CoreSupport`
+**Key Treatments:**
+- `Treatment_Permalinks` - SEO-friendly URL structure
+- `Treatment_Memory_Limit` - PHP memory increase
+- `Treatment_File_Editors` - Disable theme/plugin editors
+- `Treatment_SSL` - Force HTTPS
+- `Treatment_Debug_Mode` - Disable debug output
+- `Treatment_Outdated_Plugins` - Safe plugin updates
+- `Treatment_Head_Cleanup` - Remove <head> bloat
+- `Treatment_Emoji_Scripts` - Remove emoji scripts
+- ... (44 total)
 
-### **2. Settings System**
-
-#### Settings Manager (`class-wps-settings.php`)
-Hierarchical settings with network fallback:
-
+**Registry:**
 ```php
-// Get setting with network fallback
-$value = WPSHADOW_Settings::get( 'feature_id', 'setting_key' );
+// includes/treatments/class-treatment-registry.php
+namespace WPShadow\Treatments;
 
-// Update setting
-WPSHADOW_Settings::update( 'feature_id', 'setting_key', $value );
-
-// Delete setting
-WPSHADOW_Settings::delete( 'feature_id', 'setting_key' );
+class Treatment_Registry extends \WPShadow\Core\Abstract_Registry {
+    public static function init(): void {
+        self::register( 'memory-limit', Treatment_Memory_Limit::class );
+        self::register( 'file-editors', Treatment_File_Editors::class );
+        // ... all 44 treatments registered
+    }
+}
 ```
 
-#### Multisite Inheritance
-Network administrators can set defaults; individual sites can override:
+### 3. Workflow System
 
+**Location:** `includes/workflow/`  
+**Files:** 11 workflow components
+
+**Components:**
+- `class-workflow-manager.php` - Central workflow engine
+- `class-workflow-wizard.php` - Step-by-step workflow builder UI
+- `class-workflow-triggers.php` - Trigger definitions
+- `class-workflow-actions.php` - Action definitions
+- Trigger/action implementations
+
+**Workflow Structure:**
+```
+Trigger (IF) → Conditions (optional) → Actions (THEN)
+```
+
+**Example Triggers:**
+- Schedule (daily, weekly, hourly)
+- Page load (frontend, admin, specific pages)
+- Events (user login, post published, plugin activated)
+- Conditions (high memory, debug mode, SSL issues)
+
+**Example Actions:**
+- Apply treatment
+- Send notification
+- Log event
+- Run diagnostic
+
+**Example Workflow:**
+```
+IF: User logs in (Event Trigger)
+AND: Username is 'admin' (Condition)
+THEN: Send security alert + Log warning
+```
+
+### 4. Tooltip System
+
+**Location:** `includes/data/tooltips-*.json`  
+**Files:** 8 JSON files (general, settings, people, etc.)
+
+**Features:**
+- Context-sensitive help tooltips
+- KB article integration
+- Page-specific filtering
+- Admin bar exclusions
+
+**KB URL Format:**
+```
+https://wpshadow.com/kb/{context}-{slug}
+
+Examples:
+- settings-general-site-title
+- user-new-user-password
+- profile-personal-options
+```
+
+**Implementation:**
+```javascript
+// assets/js/tooltips.js
+// Loads JSON, filters by page, adds ? icons with KB links
+```
+
+### 5. Dashboard & Kanban Board
+
+**Location:** `includes/admin/` + `includes/views/kanban-board.php`
+
+**Dashboard Features:**
+- Site Health Summary
+- Recent Diagnostics
+- Quick Actions (auto-fix buttons)
+- Finding categorization
+- Crisis-mode alerting
+
+**Kanban Board:**
+- Organize findings by status (Detected → Fixed)
+- Drag-and-drop interface
+- Priority ordering
+- Quick-fix actions
+- KPI Metrics display
+
+### 6. KPI Tracking
+
+**Location:** `includes/core/class-kpi-tracker.php`
+
+**Metrics Tracked:**
+- Findings detected (count, severity)
+- Fixes applied (auto vs manual)
+- Time saved (15 min per fix default)
+- Success rate (% fixes successful)
+
+**Example:**
 ```php
-// In helpers: get_option_with_network_fallback()
-$value = get_option_with_network_fallback( 
-    'wpshadow_setting_key',
-    null,  // site value
-    true   // fall back to network
+// After applying treatment
+\WPShadow\Core\KPI_Tracker::log_fix(
+    finding_id: 'memory-limit-low',
+    method: 'auto',
+    time_saved: 15,
+    success: true
 );
 ```
 
-### **3. Admin Interface**
-
-#### Dashboard Widgets (`class-wps-dashboard-widgets.php`)
-- Performance metrics display
-- Recent activity log
-- Health status summary
-- Database statistics
-
-#### Feature Details Page (`class-wps-feature-details-page.php`)
-- Feature enablement toggles
-- Feature-specific settings UI
-- Activity logging
-- Allow-list management (for features like Asset Version Removal)
-
-#### View Components (`class-wps-view-components.php`)
-Reusable UI rendering:
-
-```php
-$renderer = new WPSHADOW_View_Components();
-$renderer->render_health_badge( $score );
-$renderer->render_alert( $message, 'warning' );
-$renderer->render_feature_row( $name, $status );
-```
-
-### **4. Health System**
-
-#### Site Health Integration (`class-wps-site-health.php`)
-Registers health checks with WordPress Site Health:
-
-```php
-// Each feature can contribute health check
-add_filter( 'site_status_tests', function( $tests ) {
-    $tests['direct'][] = [
-        'test' => 'wpshadow_feature_check',
-    ];
-    return $tests;
-});
-```
-
-#### Health Renderer (`class-wps-health-renderer.php`)
-Centralized health UI rendering:
-
-```php
-$score = 85;
-$class = $renderer->get_score_class( $score );    // 'good', 'warning', etc.
-$color = $renderer->get_score_color( $score );    // Hex color
-$label = $renderer->get_score_label( $score );    // Localized label
-```
-
-### **5. REST API**
-
-#### Base Controller (`class-wps-rest-controller-base.php`)
-Abstract base for all REST endpoints:
-
-```php
-protected function check_permission( string $capability ): bool | WP_Error
-protected function validate_slug( string $slug ): string | WP_Error  
-protected function check_rate_limit( string $operation ): bool | WP_Error
-protected function success_response( array $data, string $message = '' ): WP_REST_Response
-protected function error_response( string $code, string $message, int $status ): WP_Error
-```
-
-#### Settings Controller (`class-wps-rest-settings-controller.php`)
-Handles settings CRUD operations:
-
-- `GET /wp-json/wpshadow/v1/settings` - Retrieve settings
-- `POST /wp-json/wpshadow/v1/settings` - Update settings
-- `POST /wp-json/wpshadow/v1/settings/reset` - Reset to defaults
-- `GET /wp-json/wpshadow/v1/health` - Health check
-
 ---
 
-## Data Flow
+## Naming Conventions
 
-### **Feature Initialization Flow**
-
+### Files
 ```
-wpshadow_init()
-├── Load core classes (requires_once)
-├── Fire: wpshadow_core_loaded hook
-├── Register features (WPSHADOW_register_core_features)
-│   └── For each feature:
-│       ├── Instantiate WPSHADOW_Feature_* class
-│       ├── Call register_hooks()
-│       └── Fire: wpshadow_feature_registered hook
-├── Initialize active features
-│   └── Call initialize() for enabled features
-└── Fire: wpshadow_initialized hook
+includes/diagnostics/class-diagnostic-{name}.php
+includes/treatments/class-treatment-{name}.php
+includes/workflow/class-workflow-{name}.php
+includes/core/class-{name}.php
 ```
 
-### **Settings Retrieval Flow**
+### Classes & Namespaces
+```php
+namespace WPShadow\Diagnostics;
+class Diagnostic_Memory_Limit { }
 
-```
-WPSHADOW_Settings::get('feature_id', 'key')
-├── Check request cache (static)
-├── Build option name: wpshadow_feature_id_key
-├── get_option() - site level
-├── If multisite && empty:
-│   └── get_site_option() - network level
-└── Return value with cache
+namespace WPShadow\Treatments;
+class Treatment_Memory_Limit { }
+
+namespace WPShadow\Core;
+class Abstract_Registry { }
 ```
 
-### **Admin Request Flow**
+### Functions
+```php
+// Global functions (lowercase prefix)
+function wpshadow_init(): void { }
+function wpshadow_admin_menu(): void { }
 
+// AJAX handlers (SCREAMING_SNAKE_CASE prefix)
+function WPSHADOW_ajax_toggle_module(): void { }
+function WPSHADOW_ajax_save_settings(): void { }
 ```
-WordPress Admin Load
-├── Enqueue dashboard assets (wpshadow-dashboard-widgets.css, admin.js)
-├── Output dashboard widgets
-│   ├── Render via class-wps-dashboard-widgets.php
-│   ├── Fetch data via WPSHADOW_Site_Health methods
-│   └── Use WPSHADOW_View_Components for UI
-├── Load feature details page on feature.php?page=wpshadow-feature-details
-│   ├── Check nonce (wpshadow_feature_details)
-│   ├── Render settings form
-│   ├── Handle POST (save settings)
-│   └── Output activity log
-└── AJAX handlers (jQuery)
-    ├── Toggle feature enabled/disabled
-    ├── Update individual settings
-    └── Refresh activity log
+
+### Constants
+```php
+define( 'WPSHADOW_VERSION', '1.2601.2112' );
+define( 'WPSHADOW_PATH', plugin_dir_path( __FILE__ ) );
+define( 'WPSHADOW_MIN_PHP', '8.1' );
 ```
 
 ---
 
-## Security Patterns
+## Multisite Support
 
-### **Nonce Verification**
-All state-changing operations use nonces:
+### Network Admin
+- Network-wide settings
+- Default configurations for all sites
+- Bulk operations
 
+### Site Admin
+- Inherits network defaults
+- Can override per-site
+- Respects network restrictions
+
+### Capability Checks
 ```php
-// In form
-wp_nonce_field( 'wpshadow_feature_details', 'nonce' );
+// Network context
+if ( current_user_can( 'manage_network_options' ) ) {
+    // Network admin actions
+}
 
-// In handler
-check_ajax_referer( 'wpshadow_feature_details', 'nonce' );
-```
-
-### **Capability Checking**
-All admin operations require `manage_options`:
-
-```php
-if ( ! current_user_can( 'manage_options' ) ) {
-    wp_send_json_error( 'Permission denied' );
+// Site context
+if ( current_user_can( 'manage_options' ) ) {
+    // Site admin actions
 }
 ```
 
-### **Input Sanitization**
-All user input is sanitized:
-
-```php
-$feature_id = sanitize_key( $_POST['feature_id'] ?? '' );
-$patterns = sanitize_textarea_field( $_POST['patterns'] ?? '' );
-$enable = rest_sanitize_boolean( $_POST['enable'] ?? false );
-```
-
-### **Output Escaping**
-All output is escaped:
-
-```php
-echo esc_html( $text );           // HTML context
-echo esc_url( $link );            // URL context
-echo esc_attr( $attribute );      // HTML attribute
-echo wp_kses_post( $html );       // Allow safe HTML
-```
-
 ---
 
-## Developer Extensibility
+## Extension Points
 
-### **Developer Filters**
+### Hooks & Filters
 
-#### Asset Version Removal Filters
+**Action Hooks:**
+```php
+do_action( 'wpshadow_diagnostic_registered', $diagnostic_id );
+do_action( 'wpshadow_treatment_applied', $treatment_id, $success );
+do_action( 'wpshadow_workflow_executed', $workflow_id );
+```
+
+**Filter Hooks:**
+```php
+apply_filters( 'wpshadow_diagnostic_enabled', true, $diagnostic_id );
+apply_filters( 'wpshadow_treatment_targets', [], $treatment_id );
+apply_filters( 'wpshadow_kb_url_format', $url, $context, $slug );
+```
+
+### Custom Diagnostics
 
 ```php
-// Override preserve logic
-apply_filters( 'wpshadow_asset_version_preserve', $preserve, $src, $type )
+namespace MyPlugin\Diagnostics;
 
-// Override CSS allow patterns
-apply_filters( 'wpshadow_asset_version_allow_css_patterns', $patterns )
-
-// Override JS allow patterns
-apply_filters( 'wpshadow_asset_version_allow_js_patterns', $patterns )
-
-// Override selected plugins
-apply_filters( 'wpshadow_asset_version_selected_plugins', $slugs )
-```
-
-#### Core Hooks
-
-```php
-// Fires after core is loaded
-do_action( 'wpshadow_core_loaded' )
-
-// Fires after all features registered
-do_action( 'wpshadow_features_registered' )
-
-// Fires when feature registered
-do_action( 'wpshadow_feature_registered', $feature_id, $feature_class )
-
-// Fires after initialization complete
-do_action( 'wpshadow_initialized' )
-
-// Fires when settings saved
-do_action( 'wpshadow_settings_saved', $feature_id, $settings )
-```
-
-### **Adding Custom Hooks**
-
-Feature developers should add strategic hooks:
-
-```php
-// Allow customization of feature behavior
-$result = apply_filters( 'wpshadow_' . $this->feature_id . '_process', $data );
-
-// Allow logging of actions
-do_action( 'wpshadow_' . $this->feature_id . '_action', $action_type, $details );
-
-// Allow validation before save
-$valid = apply_filters( 'wpshadow_validate_' . $this->feature_id, true, $settings );
-```
-
----
-
-## WordPress.org Compliance
-
-### **Required Restrictions**
-
-The free plugin must strictly comply with WordPress.org guidelines:
-
-✅ **Allowed**:
-- GPL v2+ licensing
-- WordPress.org API calls (updates)
-- Optional external services (user opt-in)
-- Documentation links to website
-
-❌ **NOT Allowed**:
-- External API calls without user consent
-- Aggressive upgrade nags or fake warnings
-- Loading CSS/JS from CDN
-- Obfuscated or encoded code
-- Affiliate links
-- Phone-home or tracking without opt-in
-
-### **Code Standards**
-
-- Use `WordPress-Extra` PHPCS standard
-- Add return type hints (PHP 8.1+)
-- Use strict_types declaration: `declare(strict_types=1);`
-- PSR-4 namespacing: `WPShadow\CoreSupport`
-- All strings translatable: `__()`, `_e()`, `esc_html_e()`
-
-### **Accessibility**
-
-- Use WordPress dashicons for UI icons
-- Semantic HTML structure
-- ARIA labels for interactive elements
-- Color contrast compliance (WCAG AA minimum)
-
----
-
-## Testing
-
-### **Running Tests**
-
-```bash
-# Run all tests
-composer test
-
-# Run specific test file
-composer test -- tests/test-feature-registry.php
-
-# Run with coverage
-composer test -- --coverage-html=coverage/
-```
-
-### **Code Quality Checks**
-
-```bash
-# PHPCS standards
-composer phpcs
-
-# Fix standards automatically
-composer phpcbf
-
-# PHPStan static analysis (Level 8)
-composer phpstan
-```
-
-### **Required Test Coverage**
-
-- All new functions must have unit tests
-- Bug fixes should have regression tests
-- Critical paths (settings, health) require integration tests
-- REST endpoints require functional tests
-
----
-
-## Module Integration
-
-WPShadow features can integrate with optional module packages:
-
-### **Module Pattern**
-
-```php
-// In feature initialize()
-if ( class_exists( 'Module_Custom_Class' ) ) {
-    // Use module functionality
-    Module_Custom_Class::register_hooks();
+class Custom_Check extends \WPShadow\Core\Diagnostic_Base {
+    public function run(): array {
+        // Your logic here
+        return $this->create_finding( /* ... */ );
+    }
 }
+
+// Register it
+add_action( 'wpshadow_diagnostics_init', function() {
+    \WPShadow\Diagnostics\Diagnostic_Registry::register(
+        'my-custom-check',
+        Custom_Check::class
+    );
+} );
 ```
 
-### **Available Modules**
+### Custom Treatments
 
-- `module-login-wpshadow` - Authentication/OAuth integration
-- `module-vault-wpshadow` - Advanced backup/staging
-- `module-license-wpshadow` - Premium licensing
-- [See full module list in docs/]
+```php
+namespace MyPlugin\Treatments;
+
+class Custom_Fix extends \WPShadow\Core\Treatment_Base {
+    public function apply(): bool {
+        // Your fix logic
+    }
+    
+    public function undo(): bool {
+        // Revert logic
+    }
+}
+
+// Register it
+add_action( 'wpshadow_treatments_init', function() {
+    \WPShadow\Treatments\Treatment_Registry::register(
+        'my-custom-fix',
+        Custom_Fix::class
+    );
+} );
+```
 
 ---
 
 ## Performance Considerations
 
-### **Request-Level Caching**
+### Diagnostic Execution
+- Run on-demand (not every page load)
+- Quick Scan: ~10 critical checks (~2 seconds)
+- Full Scan: All 57 checks (~5-10 seconds)
+- Results cached for 5 minutes
 
-Features use static variables for request-level caching:
+### Treatment Application
+- One at a time (not batched by default)
+- Backup before each change
+- Rollback on failure
+- KPI logging is async
 
+### Asset Loading
+- Admin assets only on WPShadow pages
+- Tooltips loaded conditionally by page
+- Dashboard widgets lazy-loaded
+- No frontend impact
+
+---
+
+## Security
+
+### Capability Requirements
+- View diagnostics: `read` (basic access)
+- Apply treatments: `manage_options` (site admin)
+- Network settings: `manage_network_options` (network admin)
+
+### Nonce Verification
+All AJAX handlers and form submissions verify nonces:
 ```php
-public function matches_allow_patterns( $url, $patterns ): bool {
-    static $cache = [];
-    
-    if ( isset( $cache[ $url ] ) ) {
-        return $cache[ $url ];
-    }
-    
-    $result = $this->expensive_matching_logic( $url, $patterns );
-    $cache[ $url ] = $result;
-    
-    return $result;
-}
+check_ajax_referer( 'wpshadow-action' );
 ```
 
-### **Option Caching**
-
-Network-aware options use transient caching:
-
+### Input Sanitization
 ```php
-$value = get_transient( 'wpshadow_feature_data' );
-if ( false === $value ) {
-    $value = expensive_calculation();
-    set_transient( 'wpshadow_feature_data', $value, 1 DAY_IN_SECONDS );
-}
+$value = sanitize_text_field( $_POST['input'] );
+$slug = sanitize_key( $_POST['slug'] );
 ```
 
-### **Database Query Optimization**
-
-- Use `$wpdb->prepare()` for all queries
-- Avoid N+1 queries in loops
-- Use `wp_cache_set()` for repeated queries
-- Consider batch operations for bulk updates
-
----
-
-## Debugging
-
-### **Error Logging**
-
-The plugin logs to `wp-content/debug.log` when `WP_DEBUG` is enabled:
-
+### Output Escaping
 ```php
-if ( WP_DEBUG ) {
-    error_log( '[WPShadow] Operation result: ' . $result );
-}
+echo esc_html( $title );
+echo esc_attr( $class );
+echo wp_kses_post( $description );
 ```
 
-### **Debug Bar Integration**
+### File Operations
+- Backups before wp-config.php changes
+- Atomic file writes
+- Permission checks before modification
 
-Features can integrate with WordPress Debug Bar:
+---
 
-```php
-do_action( 'qm/debug', 'wpshadow_feature_data', $data );
+## Testing
+
+### Development Environment
+```bash
+# Install dependencies
+composer install
+
+# Run PHPCS
+composer phpcs
+
+# Run PHPStan
+composer phpstan
+
+# Run tests (if configured)
+composer test
 ```
 
-### **Health Check Debugging**
+### Manual Testing
+1. Activate plugin
+2. Navigate to WPShadow menu
+3. Run Quick Scan
+4. Review findings
+5. Apply treatment (test undo)
+6. Check KPI tracking
 
-The Site Health page shows feature health status and messages:
-
-- Check WordPress Admin > Tools > Site Health
-- Feature issues appear in "Critical" or "Recommended" sections
-- Hover for detailed descriptions
-
----
-
-## Troubleshooting
-
-### **Feature Not Loading**
-
-1. Check feature is registered in `wpshadow.php` (line ~730-931)
-2. Verify `require_once` statement exists
-3. Check feature is enabled: Settings → WPShadow → Feature name
-4. Verify `register_hooks()` is called
-
-### **Settings Not Saving**
-
-1. Check nonce: `check_ajax_referer()` in handler
-2. Verify `manage_options` capability
-3. Check WordPress core `update_option()` returns true
-4. Look for PHP errors in debug.log
-
-### **REST API 403 Errors**
-
-1. Verify user has `manage_options` capability
-2. Check REST authentication (cookie/token)
-3. Verify rate limit not exceeded (10 requests per 5 min default)
-4. Check firewall isn't blocking `/wp-json/` routes
+### Multisite Testing
+1. Enable multisite
+2. Network activate plugin
+3. Test network settings
+4. Test site-level overrides
+5. Verify capability checks
 
 ---
 
-## Contributing
+## Related Documentation
 
-When contributing to WPShadow:
-
-1. Follow this architecture guide
-2. Use established patterns (feature registry, settings, health)
-3. Add strategic hooks for extensibility
-4. Write tests for new functionality
-5. Run `composer phpcs` and `composer phpstan` before submitting
-6. Update relevant documentation
+- [SYSTEM_OVERVIEW.md](SYSTEM_OVERVIEW.md) - High-level system design
+- [CODING_STANDARDS.md](CODING_STANDARDS.md) - Code style guide
+- [FILE_STRUCTURE_GUIDE.md](FILE_STRUCTURE_GUIDE.md) - File organization
+- [WORKFLOW_BUILDER.md](WORKFLOW_BUILDER.md) - Workflow automation
+- [TOOLTIP_QUICK_REFERENCE.md](TOOLTIP_QUICK_REFERENCE.md) - Tooltip system
+- [README.md](README.md) - Feature overview
 
 ---
 
-## Resources
-
-- [WordPress Coding Standards](https://developer.wordpress.org/coding-standards/)
-- [WordPress Plugin Handbook](https://developer.wordpress.org/plugins/)
-- [PHPStan Handbook](https://phpstan.org/)
-- [Site Health API](https://developer.wordpress.org/plugins/wordpress-org/how-your-plugin-gets-reviewed/#plugin-requirements)
-
----
-
-**Last Updated**: January 2026  
-**Maintained by**: WPShadow Development Team
+*Last Updated: January 21, 2026*

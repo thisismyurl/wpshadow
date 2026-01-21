@@ -9,10 +9,12 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
+use WPShadow\Core\Abstract_Registry;
+
 /**
  * Registry for managing treatments/fixes
  */
-class Treatment_Registry {
+class Treatment_Registry extends Abstract_Registry {
 	/**
 	 * List of treatment classes
 	 *
@@ -54,6 +56,24 @@ class Treatment_Registry {
 		'Treatment_Remove_Howdy',
 		'Treatment_File_Editors',
 	);
+
+	/**
+	 * Get the list of registered items.
+	 *
+	 * @return array Array of class names.
+	 */
+	protected static function get_registered_items() {
+		return self::$treatments;
+	}
+
+	/**
+	 * Get the namespace for registered items.
+	 *
+	 * @return string Namespace prefix.
+	 */
+	protected static function get_namespace() {
+		return __NAMESPACE__ . '\\';
+	}
 	
 	/**
 	 * Initialize and load all treatment classes

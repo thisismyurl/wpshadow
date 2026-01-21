@@ -3,21 +3,17 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
-use WPShadow\Core\Treatment_Interface;
+use WPShadow\Core\Treatment_Base;
 use WPShadow\Core\KPI_Tracker;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class Treatment_Asset_Versions implements Treatment_Interface {
+class Treatment_Asset_Versions extends Treatment_Base {
 
 	public static function get_finding_id(): string {
 		return 'asset-versions';
-	}
-
-	public static function can_apply(): bool {
-		return current_user_can( 'manage_options' );
 	}
 
 	public static function apply(): array {

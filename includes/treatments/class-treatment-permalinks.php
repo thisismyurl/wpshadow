@@ -11,12 +11,13 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
+use WPShadow\Core\Treatment_Base;
 use WPShadow\Core\KPI_Tracker;
 
 /**
  * Treatment for configuring friendly permalinks
  */
-class Treatment_Permalinks implements Treatment_Interface {
+class Treatment_Permalinks extends Treatment_Base {
 	/**
 	 * Get the finding ID this treatment addresses
 	 *

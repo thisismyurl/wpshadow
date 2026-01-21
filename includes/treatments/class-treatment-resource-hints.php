@@ -9,18 +9,15 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
+use WPShadow\Core\Treatment_Base;
 use WPShadow\Core\KPI_Tracker;
 
 /**
  * Treatment to enable preconnect/preload hints for known hosts.
  */
-class Treatment_Resource_Hints implements Treatment_Interface {
+class Treatment_Resource_Hints extends Treatment_Base {
 	public static function get_finding_id() {
 		return 'resource-hints-missing';
-	}
-	
-	public static function can_apply() {
-		return true;
 	}
 	
 	public static function apply() {

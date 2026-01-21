@@ -9,18 +9,15 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
+use WPShadow\Core\Treatment_Base;
 use WPShadow\Core\KPI_Tracker;
 
 /**
  * Treatment to dequeue jQuery on front-end pages.
  */
-class Treatment_jQuery_Cleanup implements Treatment_Interface {
+class Treatment_jQuery_Cleanup extends Treatment_Base {
 	public static function get_finding_id() {
 		return 'jquery-front-loading';
-	}
-	
-	public static function can_apply() {
-		return true;
 	}
 	
 	public static function apply() {

@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
+use WPShadow\Core\Treatment_Base;
 use WPShadow\Core\KPI_Tracker;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -20,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Treatment for removing comments menu when disabled
  */
-class Treatment_Remove_Comments_Menu implements Treatment_Interface {
+class Treatment_Remove_Comments_Menu extends Treatment_Base {
 	/**
 	 * Get the finding ID this treatment addresses
 	 *
@@ -31,8 +32,6 @@ class Treatment_Remove_Comments_Menu implements Treatment_Interface {
 	}
 
 	/**
-	 * Check if this treatment can be applied
-	 *
 	 * @return bool True if comments are disabled globally
 	 */
 	public static function can_apply() {

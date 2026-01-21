@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
-use WPShadow\Core\Treatment_Interface;
+use WPShadow\Core\Treatment_Base;
 use WPShadow\Core\KPI_Tracker;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -19,14 +19,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Remove WordPress generator meta tag.
  */
-class Treatment_WP_Generator implements Treatment_Interface {
+class Treatment_WP_Generator extends Treatment_Base {
 
 	public static function get_finding_id() {
 		return 'wp-generator';
-	}
-
-	public static function can_apply() {
-		return current_user_can( 'manage_options' );
 	}
 
 	public static function apply() {

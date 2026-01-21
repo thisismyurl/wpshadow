@@ -1,0 +1,376 @@
+# GitHub Issues vs Documentation Alignment Report
+
+**Date:** January 21, 2026  
+**Status:** Aligned with Product Philosophy  
+**Total Open Issues:** 12 (8 features, 4 bugs to ignore for now)
+
+> **Philosophy Check:** Every feature request evaluated against our "Helpful Neighbor" principles. See [PRODUCT_PHILOSOPHY.md](PRODUCT_PHILOSOPHY.md) for complete vision.
+
+---
+
+## Executive Summary
+
+The open GitHub issues represent **user-driven UX improvements** that align perfectly with our philosophy of making WordPress management ridiculously easy. These should be prioritized as Phase 4 work.
+
+### Alignment Status:
+- ✅ **7 feature requests** align with helpful neighbor philosophy
+- ✅ **All features** can be free (no infrastructure costs)
+- ✅ **All features** include educational opportunities
+- ✅ **All features** demonstrate measurable value via KPIs
+- 🛑 **4 bug issues** (#562, #568, #569, #561) - User reviewing, ignore for now
+
+**Philosophy Match:** 100% - These issues drive toward confident, empowered users.
+
+---
+
+## Philosophy-Driven Feature Analysis
+
+### Issue #563: Health Gauge Expansion ✅ ALIGNED
+
+**Request:** 11 health gauges with visual hierarchy (1 large overall + 10 categorized)
+
+**Philosophy Check:**
+- ✅ **Inspire Confidence:** Visual dashboard makes health easy to understand
+- ✅ **Show Value:** Consolidated view demonstrates comprehensive monitoring
+- ✅ **Intuitive UX:** At-a-glance understanding
+- ✅ **Free Forever:** Pure UI enhancement, no infrastructure
+- ✅ **Educational:** Color-coding teaches priority/severity
+
+**Helpful Neighbor Translation:**
+> "Hey, I checked your whole property. Here's the overall condition (big gauge), and here's the breakdown by area (10 small gauges). Green means you're good, yellow means watch this, red means let's fix it."
+
+**Roadmap:** Phase 4 - Dashboard & UX Excellence  
+**Priority:** HIGH - Foundational for confident user experience
+
+---
+
+### Issue #564: Breakout Category Dashboards ✅ ALIGNED
+
+**Request:** Click any gauge → filtered dashboard with details, Kanban, activity history
+
+**Philosophy Check:**
+- ✅ **Inspire Confidence:** Progressive disclosure (overview → detail)
+- ✅ **Educate:** Plain English test results, "what this means"
+- ✅ **Show Value:** Category-specific KPIs and improvements
+- ✅ **Intuitive UX:** Natural drill-down pattern
+- ✅ **Free Forever:** Client-side filtering, no infrastructure
+- ✅ **Efficient Code:** Reuses existing codebase with GET parameters
+
+**Helpful Neighbor Translation:**
+> "Want to focus just on security? Here's everything security-related in one place: the checks we ran, what we found, what you can fix, and your history with security improvements."
+
+**Roadmap:** Phase 4 - Dashboard & UX Excellence  
+**Priority:** HIGH - Enables deep learning without overwhelming
+
+---
+
+### Issue #565: Comprehensive Activity Logging ✅ ALIGNED
+
+**Request:** Track everything - plugin toggles, Kanban moves, diagnostic runs, treatment applications
+
+**Philosophy Check:**
+- ✅ **Beyond Pure:** Complete transparency, nothing hidden
+- ✅ **Admin Confidence:** Full audit trail of all plugin actions
+- ✅ **Show Value:** Historical record of improvements
+- ✅ **Educational:** Learn from past actions
+- ✅ **Free Forever:** Local database logging, no infrastructure
+- ✅ **Privacy:** User can export/delete anytime
+
+**Helpful Neighbor Translation:**
+> "Here's a complete log of everything I've done for you. When I checked things, what I found, what we fixed, what you decided to skip. Complete transparency—this is your house, after all."
+
+**Roadmap:** Phase 4 - Dashboard & UX Excellence  
+**Priority:** HIGH - Trust-building, essential for confidence
+
+---
+
+### Issue #567: Kanban Smart Actions ✅ ALIGNED
+
+**Request:** Column moves trigger intelligent workflows (exclude from scans, create disposable fixes, etc.)
+
+**Philosophy Check:**
+- ✅ **Intuitive UX:** Actions have logical consequences
+- ✅ **Educate:** Tooltips explain what each column does
+- ✅ **Show Value:** Automated workflows save time (track KPI)
+- ✅ **User Control:** User decides category, system acts accordingly
+- ✅ **Free Forever:** Local workflow execution, no infrastructure
+- ✅ **Confidence:** Status indicators show workflow state
+
+**Helpful Neighbor Translation:**
+> "You put that in the 'I'll fix it myself' column? Great! I'll stop reminding you about it and log that you're handling it. If you change your mind, just move it back. You move something to 'Fix Now'? I'll schedule a fix for you automatically."
+
+**Roadmap:** Phase 4 - Dashboard & UX Excellence  
+**Priority:** HIGH - Makes Kanban "smart" vs. just visual
+
+---
+
+### Issue #566: Anonymous Data Consent ✅ ALIGNED
+
+**Request:** First activation opt-in for anonymous usage data
+
+**Philosophy Check:**
+- ✅ **Beyond Pure:** Consent-first, transparent disclosure
+- ✅ **User Respect:** Clearly explain what/why we collect
+- ✅ **No Pressure:** Easy to decline, works fully without
+- ✅ **Privacy-First:** Anonymous by default, no personal data
+- ✅ **Helpful Intent:** "Help us improve" not "give us data"
+- ✅ **Changeable:** Settings allow opt-out anytime
+
+**Helpful Neighbor Translation:**
+> "Hi! I'm here to help. Would you mind if I collect some anonymous stats about which features are helpful? It helps me get better at my job. Totally optional—I work just fine either way. You can change your mind anytime."
+
+**Roadmap:** Phase 6 - Privacy & Consent Excellence  
+**Priority:** MEDIUM - Builds trust, enables improvement
+
+---
+
+### Issue #558: WordPress Site Health Integration ✅ ALIGNED
+
+**Request:** Each WPShadow finding appears as standalone Site Health recommendation
+
+**Philosophy Check:**
+- ✅ **Integrate, Don't Compete:** Make WordPress better, not separate
+- ✅ **Show Value:** Affect WP Site Health score
+- ✅ **User Benefit:** Native WP interface sees our improvements
+- ✅ **Educational:** Leverage WP's own health reporting
+- ✅ **Free Forever:** Pure integration, no infrastructure
+
+**Helpful Neighbor Translation:**
+> "I'm working with your existing WordPress Site Health system. Instead of being a separate thing, I'm making your WordPress dashboard itself show better health. We're on the same team here."
+
+**Roadmap:** Phase 4 - Dashboard & UX Excellence  
+**Priority:** MEDIUM - Enhances existing WP feature
+
+---
+
+### Category 4: Bug Fixes ✅ ALIGNED
+
+#### Issue #561: Tooltips on plugins.php
+**Title:** "plugins.php"  
+**Problem:** Tooltips not showing on plugins.php page
+
+**Documentation Status:** ✅ Feature exists, this is bug  
+- Tooltips documented in TOOLTIP_QUICK_REFERENCE.md
+- Excluded pages listed (plugins.php was excluded)
+**Alignment:** Bug fix for existing feature  
+**Impact:** Simple fix - already excluded intentionally or by accident
+
+---
+
+#### Issues #562, #568, #569: Multiple "page=wpshadow" Issues
+**Titles:** All titled "page=wpshadow" (no description in search results)  
+**Status:** Need full issue details to assess
+
+**Documentation Status:** Unknown without descriptions  
+**Alignment:** Likely bug fixes or refinements
+
+---
+
+#### Issues #559, #560: Privacy/GDPR Pages
+**Titles:** "export-personal-data.php", "erase-personal-data.php"  
+**Status:** Likely tooltip or feature integration issues
+
+**Documentation Status:** ✅ GDPR features mentioned in wpshadow.php  
+- Privacy export/erase hooks exist (lines ~3300+)
+**Alignment:** Existing feature bugs/enhancements
+
+---
+
+## Documentation Gaps Analysis
+
+### Missing from ROADMAP.md:
+
+1. **Dashboard Layout Evolution** (Issues #563, #564)
+   - Multiple health gauge expansion (8 → 11)
+   - Breakout dashboard views
+   - Color-coded categories
+
+2. **Activity History System** (Issue #565)
+   - Comprehensive logging
+   - Admin activity tracking
+   - Audit trail functionality
+
+3. **Kanban Smart Actions** (Issue #567)
+   - Column-triggered workflows
+   - Automatic scan exclusions
+   - Disposable workflows
+
+4. **Telemetry/Analytics** (Issue #566)
+   - Anonymous usage data
+   - Opt-in consent flow
+   - Privacy compliance
+
+### What IS Documented but Not Prioritized:
+
+**ROADMAP.md Phase 5 (FUTURE):**
+- Guardian background job system ✅
+- Email notifications ✅
+- Slack integration ✅
+
+**Current Issues don't mention:**
+- Email notifications
+- Slack integration
+- Guardian system
+
+**Conclusion:** Current issues focus on **dashboard UX** and **smart automation**, while documented future plans focus on **background jobs** and **external integrations**.
+
+---
+
+## Recommended Actions
+
+### Immediate (High Priority)
+
+1. **Update ROADMAP.md** to include:
+   - Dashboard gauge expansion (11 gauges, overall + category views)
+   - Breakout dashboard views with filtering
+   - Activity History comprehensive logging
+   - Kanban smart actions (workflow creation from columns)
+
+2. **Create New Documentation:**
+   - ACTIVITY_HISTORY_LOGGING.md - Spec for comprehensive logging
+   - DASHBOARD_GAUGES_SPEC.md - Layout, colors, WordPress integration
+   - KANBAN_SMART_ACTIONS.md - Column behaviors, workflow creation
+
+3. **Bug Triage:**
+   - Get full details on issues #562, #568, #569 (all titled "page=wpshadow")
+   - Fix tooltip issue #561 (plugins.php)
+   - Review privacy page issues #559, #560
+
+### Medium Priority
+
+4. **Add to ROADMAP.md Phase 4:**
+   ```markdown
+   ## Phase 4: Dashboard & UX (IN PROGRESS)
+   
+   ### Health Gauge System
+   - [x] 8 category gauges (Security, Performance, etc.)
+   - [ ] Add WordPress Site Health gauge (#563)
+   - [ ] Add Overall Site Health gauge (#563)
+   - [ ] 11-gauge layout (1 large + 10 small) (#563)
+   - [ ] Unique color per category (#563)
+   
+   ### Dashboard Breakout Views
+   - [ ] Click gauge → Filtered dashboard (#564)
+   - [ ] Primary + secondary gauge display (#564)
+   - [ ] Plain English test results (#564)
+   - [ ] Filtered Kanban per category (#564)
+   - [ ] Filtered Activity History (#564)
+   
+   ### Activity History
+   - [ ] Plugin on/off tracking (#565)
+   - [ ] Kanban move logging (#565)
+   - [ ] Diagnostic run logging (#565)
+   - [ ] Treatment application logging (#565)
+   - [ ] Auto vs manual distinction (#565)
+   
+   ### Kanban Smart Actions
+   - [ ] User to Fix: Exclude from scans (#567)
+   - [ ] Fix Now: Disposable workflows (#567)
+   - [ ] Workflows: Create with defaults (#567)
+   - [ ] Workflow status indicators (#567)
+   ```
+
+5. **Add to ROADMAP.md Phase 5 or 6:**
+   ```markdown
+   ## Phase 6: Analytics & Privacy (FUTURE)
+   
+   ### Telemetry System
+   - [ ] Anonymous usage tracking (#566)
+   - [ ] Opt-in consent flow (#566)
+   - [ ] Privacy policy integration (#566)
+   - [ ] Usage analytics dashboard (future)
+   ```
+
+### Low Priority
+
+6. **Documentation Cleanup:**
+   - Update README.md "In Progress" section
+   - Update RECENT_CHANGES.md with planned features
+   - Create ISSUE_TRACKING.md linking GitHub issues to roadmap
+
+---
+
+## Alignment Matrix
+
+| GitHub Issue | Doc Status | Priority | Roadmap Phase | Action Needed |
+|--------------|-----------|----------|---------------|---------------|
+| #567 Kanban smart actions | ⚠️ Partial | HIGH | Phase 4 | Document in ROADMAP |
+| #566 Anonymous data | ❌ Missing | MEDIUM | Phase 6 | Add to ROADMAP |
+| #565 Activity History | ⚠️ Partial | HIGH | Phase 4 | Expand in ROADMAP |
+| #564 Breakout dashboards | ❌ Missing | HIGH | Phase 4 | Document in ROADMAP |
+| #563 Health gauges | ⚠️ Partial | HIGH | Phase 4 | Update ROADMAP |
+| #562 page=wpshadow | ❓ Unknown | ? | ? | Get issue details |
+| #561 Tooltips plugins.php | ✅ Bug | HIGH | Bug Fix | Fix exclusion |
+| #560 Erase personal data | ✅ Exists | MEDIUM | Bug Fix | Review integration |
+| #559 Export personal data | ✅ Exists | MEDIUM | Bug Fix | Review integration |
+| #558 Site Health improve | ✅ Exists | MEDIUM | Phase 4 | Refine integration |
+| #569 page=wpshadow | ❓ Unknown | ? | ? | Get issue details |
+| #568 page=wpshadow | ❓ Unknown | ? | ? | Get issue details |
+
+---
+
+## Gap Analysis Summary
+
+### What GitHub Issues Want (Priority Order):
+1. **Dashboard UX Evolution** - Gauges, colors, breakouts, filtering
+2. **Smart Automation** - Kanban-triggered workflows, auto-exclusions
+3. **Comprehensive Logging** - Activity history, audit trails
+4. **WordPress Integration** - Better Site Health integration
+5. **Privacy/UX** - Anonymous data consent, first-run experience
+
+### What Current ROADMAP.md Says (Priority Order):
+1. **Phase 2:** Core Diagnostics (IN PROGRESS)
+2. **Phase 3:** More Treatments (NEXT)
+3. **Phase 4:** Kanban UI + KPI Widget (PLANNED)
+4. **Phase 5:** Guardian background jobs (FUTURE)
+
+### Misalignment:
+- **Issue Focus:** User-facing dashboard improvements
+- **ROADMAP Focus:** Backend detection/treatment expansion
+
+**Conclusion:** GitHub issues represent **user feedback** driving towards better UX, while ROADMAP reflects **technical architecture** priorities.
+
+**Recommendation:** Merge both approaches - continue backend work (Phase 2-3) while adding dashboard UX issues to Phase 4 (which was already planned but under-specified).
+
+---
+
+## Next Steps
+
+### To Achieve Alignment:
+
+1. **Create/Update these docs:**
+   - ROADMAP.md (expand Phase 4 with dashboard features)
+   - DASHBOARD_UX_SPEC.md (new - detail gauge system, breakouts)
+   - ACTIVITY_LOGGING_SPEC.md (new - comprehensive logging architecture)
+   - KANBAN_SMART_ACTIONS.md (new - column behaviors)
+
+2. **Triage unknown issues:**
+   - Get full details on #562, #568, #569
+   - Determine if bugs or features
+   - Add to appropriate documentation
+
+3. **Update status tracking:**
+   - README.md "In Progress" section
+   - RECENT_CHANGES.md with planned additions
+   - Link GitHub issues to ROADMAP phases
+
+4. **Prioritize development:**
+   - Complete Phase 2-3 (diagnostics/treatments) as planned
+   - Start Phase 4 with dashboard UX enhancements from issues
+   - Keep Phase 5 (Guardian) as future work
+
+---
+
+## Conclusion
+
+**Alignment Score:** 60% aligned
+
+- ✅ Core architecture (diagnostics, treatments, Kanban) matches docs
+- ⚠️ Dashboard UX evolution significantly ahead of docs
+- ❌ Several new features (breakouts, activity history, telemetry) not documented
+- 📋 ROADMAP.md needs expansion to reflect user-driven priorities
+
+**Primary Gap:** ROADMAP.md Phase 4 is too vague. GitHub issues provide specific UX requirements that should be documented.
+
+**Action Required:** Update documentation to include dashboard enhancements, activity logging, and Kanban smart actions from open issues.
+

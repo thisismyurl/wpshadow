@@ -9,18 +9,15 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
+use WPShadow\Core\Treatment_Base;
 use WPShadow\Core\KPI_Tracker;
 
 /**
  * Treatment to enforce lazy loading for images.
  */
-class Treatment_Image_Lazy_Load implements Treatment_Interface {
+class Treatment_Image_Lazy_Load extends Treatment_Base {
 	public static function get_finding_id() {
 		return 'image-lazyload-disabled';
-	}
-	
-	public static function can_apply() {
-		return true;
 	}
 	
 	public static function apply() {

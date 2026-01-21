@@ -9,12 +9,13 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
+use WPShadow\Core\Treatment_Base;
 use WPShadow\Core\KPI_Tracker;
 
 /**
  * Treatment for adding basic hotlink protection rules to .htaccess.
  */
-class Treatment_Hotlink_Protection implements Treatment_Interface {
+class Treatment_Hotlink_Protection extends Treatment_Base {
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *

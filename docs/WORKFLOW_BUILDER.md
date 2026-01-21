@@ -2,7 +2,14 @@
 
 ## Overview
 
-Transformed the workflow automation system from a Scratch-style drag-and-drop interface to the **Workflow Builder step-by-step wizard**. This provides a much more intuitive user experience with guided workflows.
+Workflow automation system enabling automated triggers and actions. Users can define conditional workflows using triggers (schedule, events, conditions) and actions (diagnostics, treatments, notifications).
+
+**System Files:**
+- `includes/workflow/class-workflow-manager.php` - Central workflow engine
+- `includes/workflow/class-workflow-executor.php` - Execution and trigger handling
+- `includes/workflow/class-workflow-discovery.php` - Trigger/action registration
+- `includes/workflow/class-email-recipient-manager.php` - Email notifications
+- `includes/workflow/class-workflow-examples.php` - Built-in workflow templates
 
 ## User Flow
 

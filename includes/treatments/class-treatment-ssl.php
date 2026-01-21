@@ -9,12 +9,13 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
+use WPShadow\Core\Treatment_Base;
 use WPShadow\Core\KPI_Tracker;
 
 /**
  * Treatment for enabling HTTPS URLs and forcing admin SSL.
  */
-class Treatment_SSL implements Treatment_Interface {
+class Treatment_SSL extends Treatment_Base {
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
