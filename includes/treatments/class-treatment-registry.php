@@ -52,6 +52,7 @@ class Treatment_Registry {
 		'Treatment_Strip_Social_Meta',
 		'Treatment_Remove_Comments_Menu',
 		'Treatment_Remove_Howdy',
+		'Treatment_File_Editors',
 	);
 	
 	/**

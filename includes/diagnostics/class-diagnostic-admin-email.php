@@ -63,6 +63,26 @@ class Diagnostic_Admin_Email extends Diagnostic_Base {
 			);
 		}
 
+		// Check if using default WordPress from email
+		$wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home_url(), PHP_URL_HOST ) );
+		$from_email    = get_option( 'wpshadow_email_from_email', '' );
+		
+		if ( empty( $from_email ) || $from_email === $wp_from_email ) {
+			return array(
+				'finding_id'   => self::$slug . '-from',
+				'title'        => __( 'Email From Address Not Configured', 'wpshadow' ),
+				'description'  => sprintf(
+					__( 'Your site is using the default WordPress from address (%s). Many email providers will reject emails from this address, causing delivery failures. Configure a proper from email address using the Email Test tool under WPShadow → Tools.', 'wpshadow' ),
+					esc_html( $wp_from_email )
+				),
+				'category'     => 'settings',
+				'severity'     => 'medium',
+				'threat_level' => 55,
+				'auto_fixable' => false,
+				'timestamp'    => current_time( 'mysql' ),
+			);
+		}
+
 		return null;
 	}
 }

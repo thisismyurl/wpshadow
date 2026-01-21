@@ -1,29 +1,29 @@
 [
-  {
-    "id": "nav-dashboard-updates",
-    "selector": "#menu-dashboard li a[href*=\"update-core.php\"]",
-    "title": "Updates",
-    "message": "Check and install updates for WordPress, plugins, and themes to keep your site secure and running smoothly.",
-    "category": "maintenance",
-    "level": "beginner",
-    "kb_url": "https://wpshadow.com/docs/maintenance/updates"
-  },
-  {
-    "id": "nav-tools-site-health",
-    "selector": "#menu-tools li a[href*=\"site-health.php\"]",
-    "title": "Site health",
-    "message": "Check your site status and get recommendations for improvements.",
-    "category": "maintenance",
-    "level": "intermediate",
-    "kb_url": "https://wpshadow.com/docs/maintenance/site-health"
-  },
-  {
-    "id": "bar-updates",
-    "selector": "#wp-admin-bar-updates",
-    "title": "Updates available",
-    "message": "Install WordPress, plugin, and theme updates to stay secure.",
-    "category": "maintenance",
-    "level": "intermediate",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/maintenance/updates"
-  }
+    {
+        "id": "nav-dashboard-updates",
+        "selector": "#menu-dashboard li a[href*=\"update-core.php\"]",
+        "title": "Updates",
+        "message": "Check and install updates for WordPress, plugins, and themes to keep your site secure and running smoothly.",
+        "category": "maintenance",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-updates"
+    },
+    {
+        "id": "nav-tools-site-health",
+        "selector": "#menu-tools li a[href*=\"site-health.php\"]",
+        "title": "Site health",
+        "message": "Check your site status and get recommendations for improvements.",
+        "category": "maintenance",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-site-health"
+    },
+    {
+        "id": "bar-updates",
+        "selector": "#wp-admin-bar-updates",
+        "title": "Updates available",
+        "message": "Install WordPress, plugin, and theme updates to stay secure.",
+        "category": "maintenance",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-updates-available"
+    }
 ]

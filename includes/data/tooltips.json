@@ -1,1250 +1,1415 @@
 [
-  {
-    "id": "nav-wpshadow",
-    "selector": "#menu-wpshadow > a",
-    "title": "WPShadow",
-    "message": "Central hub for site health monitoring, analysis tools, and optimization features.",
-    "category": "navigation",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-wpshadow-dashboard",
-    "selector": "#menu-wpshadow li a[href*=\"page=wpshadow\"], #menu-wpshadow li a[href*=\"page=wpshadow&\"]",
-    "title": "WPShadow Dashboard",
-    "message": "View your site health status, recent findings, and quick improvement recommendations.",
-    "category": "navigation",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-wpshadow-workflows",
-    "selector": "#menu-wpshadow li a[href*=\"page=wpshadow-workflows\"]",
-    "title": "Workflow Manager",
-    "message": "Create and manage automated workflows to standardize site maintenance tasks.",
-    "category": "navigation",
-    "level": "intermediate"
-  },
-  {
-    "id": "nav-wpshadow-tools",
-    "selector": "#menu-wpshadow li a[href*=\"page=wpshadow-tools\"]",
-    "title": "WPShadow Tools",
-    "message": "Access specialized analysis tools including accessibility audits, link checks, and color contrast analysis.",
-    "category": "navigation",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-wpshadow-help",
-    "selector": "#menu-wpshadow li a[href*=\"page=wpshadow-help\"]",
-    "title": "Help & Guidance",
-    "message": "Learn tips, configure tooltips, and access helpful resources for your site.",
-    "category": "navigation",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-dashboard",
-    "selector": "#menu-dashboard > a",
-    "title": "Dashboard home",
-    "message": "Visit the Dashboard for health, updates, and a high-level view of your site.",
-    "category": "navigation",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-dashboard-updates",
-    "selector": "#menu-dashboard li a[href*=\"update-core.php\"]",
-    "title": "Updates",
-    "message": "Check and install updates for WordPress, plugins, and themes to keep your site secure and running smoothly.",
-    "category": "maintenance",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-posts",
-    "selector": "#menu-posts > a",
-    "title": "Blog posts",
-    "message": "Manage your blog posts, or add a new one.",
-    "category": "content",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-posts-all",
-    "selector": "#menu-posts li a[href=\"edit.php\"], #menu-posts li a[href*=\"edit.php?post_type=post\"]",
-    "title": "All Posts",
-    "message": "See all your published and draft posts in a list.",
-    "category": "content",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-posts-add",
-    "selector": "#menu-posts li a[href*=\"post-new.php\"]",
-    "title": "Add a new post",
-    "message": "Create and publish a new blog post.",
-    "category": "content",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-posts-categories",
-    "selector": "#menu-posts li a[href*=\"edit-tags.php?taxonomy=category\"]",
-    "title": "Organize posts",
-    "message": "Create and manage categories to organize your posts.",
-    "category": "content",
-    "level": "intermediate"
-  },
-  {
-    "id": "nav-posts-tags",
-    "selector": "#menu-posts li a[href*=\"edit-tags.php?taxonomy=post_tag\"]",
-    "title": "Add tags",
-    "message": "Use tags to label your posts for better discovery.",
-    "category": "content",
-    "level": "intermediate"
-  },
-  {
-    "id": "nav-media",
-    "selector": "#menu-media > a",
-    "title": "Media",
-    "message": "Upload and manage images, videos, and files for your site.",
-    "category": "content",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-media-library",
-    "selector": "#menu-media li a[href=\"upload.php\"], #menu-media li a[href*=\"upload.php\"]",
-    "title": "Library",
-    "message": "View and manage all your uploaded images, videos, and media files.",
-    "category": "content",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-media-add",
-    "selector": "#menu-media li a[href*=\"media-new.php\"]",
-    "title": "Add New",
-    "message": "Upload new images, videos, or files to your media library.",
-    "category": "content",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-pages",
-    "selector": "#menu-pages > a",
-    "title": "Pages",
-    "message": "Create and manage static pages like Home, About, and Contact.",
-    "category": "content",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-pages-all",
-    "selector": "#menu-pages li a[href=\"edit.php?post_type=page\"], #menu-pages li a[href*=\"edit.php?post_type=page\"]",
-    "title": "All Pages",
-    "message": "See all your published and draft pages.",
-    "category": "content",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-pages-add",
-    "selector": "#menu-pages li a[href*=\"post-new.php?post_type=page\"]",
-    "title": "Create new page",
-    "message": "Add a new static page to your site.",
-    "category": "content",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-comments",
-    "selector": "#menu-comments > a",
-    "title": "Comments",
-    "message": "Moderate, approve, and respond to comments from your visitors.",
-    "category": "content",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-appearance",
-    "selector": "#menu-appearance > a",
-    "title": "Site design",
-    "message": "Customize your site appearance with themes, colors, menus, and widgets.",
-    "category": "design",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-appearance-themes",
-    "selector": "#menu-appearance li a[href*=\"themes.php\"]",
-    "title": "Choose a theme",
-    "message": "Browse and activate themes to change your site layout and style.",
-    "category": "design",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-appearance-customize",
-    "selector": "#menu-appearance li a[href*=\"customize.php\"]",
-    "title": "Live customizer",
-    "message": "Preview changes to colors, fonts, and layout in real-time before publishing.",
-    "category": "design",
-    "level": "intermediate"
-  },
-  {
-    "id": "nav-appearance-menus",
-    "selector": "#menu-appearance li a[href*=\"nav-menus.php\"]",
-    "title": "Edit menus",
-    "message": "Create and organize navigation menus for your site.",
-    "category": "design",
-    "level": "intermediate"
-  },
-  {
-    "id": "nav-appearance-widgets",
-    "selector": "#menu-appearance li a[href*=\"widgets.php\"]",
-    "title": "Manage widgets",
-    "message": "Add and arrange widgets in your site sidebar and other areas.",
-    "category": "design",
-    "level": "intermediate"
-  },
-  {
-    "id": "nav-plugins",
-    "selector": "#menu-plugins > a",
-    "title": "Extend functionality",
-    "message": "Browse, install, and manage plugins to add features to your site.",
-    "category": "extensions",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-plugins-list",
-    "selector": "#menu-plugins li a[href*=\"plugins.php\"]",
-    "title": "Installed plugins",
-    "message": "See all your installed plugins, activate, deactivate, or delete them.",
-    "category": "extensions",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-plugins-add",
-    "selector": "#menu-plugins li a[href*=\"plugin-install.php\"]",
-    "title": "Add new plugins",
-    "message": "Search and install plugins from the WordPress plugin directory.",
-    "category": "extensions",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-users",
-    "selector": "#menu-users > a",
-    "title": "Manage team",
-    "message": "Add users and manage their roles to control site access.",
-    "category": "people",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-users-all",
-    "selector": "#menu-users li a[href*=\"users.php\"]",
-    "title": "All users",
-    "message": "View, edit, or remove user accounts from your site.",
-    "category": "people",
-    "level": "intermediate"
-  },
-  {
-    "id": "nav-users-add",
-    "selector": "#menu-users li a[href*=\"user-new.php\"]",
-    "title": "Invite user",
-    "message": "Add a new user to your site with a specific role.",
-    "category": "people",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-users-profile",
-    "selector": "#menu-users li a[href*=\"profile.php\"]",
-    "title": "Your profile",
-    "message": "Update your personal information, password, and settings.",
-    "category": "people",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-tools",
-    "selector": "#menu-tools > a",
-    "title": "Site tools",
-    "message": "Access tools for importing, exporting, and analyzing your site.",
-    "category": "navigation",
-    "level": "intermediate"
-  },
-  {
-    "id": "nav-tools-available",
-    "selector": "#menu-tools li a[href*=\"tools.php\"]",
-    "title": "Available tools",
-    "message": "Browse available tools for site maintenance and optimization.",
-    "category": "navigation",
-    "level": "intermediate"
-  },
-  {
-    "id": "nav-tools-import",
-    "selector": "#menu-tools li a[href*=\"import.php\"]",
-    "title": "Import content",
-    "message": "Import posts, pages, and other content from another site.",
-    "category": "navigation",
-    "level": "intermediate"
-  },
-  {
-    "id": "nav-tools-export",
-    "selector": "#menu-tools li a[href*=\"export.php\"]",
-    "title": "Export content",
-    "message": "Back up your posts, pages, and other content as an XML file.",
-    "category": "navigation",
-    "level": "intermediate"
-  },
-  {
-    "id": "nav-tools-site-health",
-    "selector": "#menu-tools li a[href*=\"site-health.php\"]",
-    "title": "Site health",
-    "message": "Check your site status and get recommendations for improvements.",
-    "category": "maintenance",
-    "level": "intermediate"
-  },
-  {
-    "id": "nav-settings",
-    "selector": "#menu-settings > a",
-    "title": "Site settings",
-    "message": "Configure your site name, timezone, and other important settings.",
-    "category": "settings",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-settings-general",
-    "selector": "#menu-settings li a[href*=\"options-general.php\"]",
-    "title": "General settings",
-    "message": "Set site title, tagline, timezone, and date format.",
-    "category": "settings",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-settings-writing",
-    "selector": "#menu-settings li a[href*=\"options-writing.php\"]",
-    "title": "Writing settings",
-    "message": "Configure default post format, category, and post settings.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "nav-settings-reading",
-    "selector": "#menu-settings li a[href*=\"options-reading.php\"]",
-    "title": "Reading settings",
-    "message": "Set your homepage and how many posts to display.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "nav-settings-discussion",
-    "selector": "#menu-settings li a[href*=\"options-discussion.php\"]",
-    "title": "Comments settings",
-    "message": "Control comment moderation, notifications, and avatar settings.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "nav-settings-media",
-    "selector": "#menu-settings li a[href*=\"options-media.php\"]",
-    "title": "Image settings",
-    "message": "Configure automatic image sizes and thumbnail settings.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "nav-settings-permalink",
-    "selector": "#menu-settings li a[href*=\"options-permalink.php\"]",
-    "title": "Permalink structure",
-    "message": "Set how your post URLs are formatted for better SEO.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "nav-settings-privacy",
-    "selector": "#menu-settings li a[href*=\"options-privacy.php\"]",
-    "title": "Privacy settings",
-    "message": "Configure your site privacy and search engine visibility.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "bar-new",
-    "selector": "#wp-admin-bar-new-content",
-    "title": "Quick add",
-    "message": "Quickly create posts, pages, or upload media from anywhere in admin.",
-    "category": "navigation",
-    "level": "intermediate"
-  },
-  {
-    "id": "bar-updates",
-    "selector": "#wp-admin-bar-updates",
-    "title": "Updates available",
-    "message": "Install WordPress, plugin, and theme updates to stay secure.",
-    "category": "maintenance",
-    "level": "intermediate"
-  },
-  {
-    "id": "editor-publish",
-    "selector": ".editor-post-publish-button__button, .edit-post-header__settings .components-button.is-primary",
-    "title": "Publish",
-    "message": "Click to publish your post. You can edit it anytime after publishing.",
-    "category": "content",
-    "level": "beginner"
-  },
-  {
-    "id": "bar-user",
-    "selector": "#wp-admin-bar-my-account",
-    "title": "Your profile",
-    "message": "Access your account settings, edit your profile, or log out.",
-    "category": "people",
-    "level": "beginner"
-  },
-  {
-    "id": "bar-user-edit",
-    "selector": "#wp-admin-bar-my-account li a[href*=\"profile.php\"]",
-    "title": "Edit profile",
-    "message": "Update your personal information, email, and password.",
-    "category": "people",
-    "level": "beginner"
-  },
-  {
-    "id": "bar-logout",
-    "selector": "#wp-admin-bar-logout",
-    "title": "Log out",
-    "message": "End your session and log out from the WordPress admin.",
-    "category": "navigation",
-    "level": "beginner"
-  },
-  {
-    "id": "bar-site-name",
-    "selector": "#wp-admin-bar-site-name",
-    "title": "Site name",
-    "message": "Visit your site home page or access site-level settings.",
-    "category": "navigation",
-    "level": "beginner"
-  },
-  {
-    "id": "collapse-menu",
-    "selector": "#collapse-button, .wp-responsive-open #collapse-button",
-    "title": "Toggle menu",
-    "message": "Collapse or expand the sidebar menu for more screen space.",
-    "category": "navigation",
-    "level": "beginner"
-  },
-  {
-    "id": "screen-options",
-    "selector": "#screen-options-link",
-    "title": "Screen options",
-    "message": "Customize what columns and items appear on this page.",
-    "category": "navigation",
-    "level": "intermediate"
-  },
-  {
-    "id": "help-tab",
-    "selector": "#contextual-help-link",
-    "title": "Get help",
-    "message": "Learn more about this WordPress admin page and its features.",
-    "category": "navigation",
-    "level": "beginner"
-  },
-  {
-    "id": "admin-search",
-    "selector": ".wp-admin-search__wrapper input[type=\"search\"]",
-    "title": "Search admin",
-    "message": "Quickly search for posts, pages, settings, and more from anywhere in the admin.",
-    "category": "navigation",
-    "level": "intermediate"
-  },
-  {
-    "id": "editor-sidebar",
-    "selector": ".wp-block-editor__sidebar, .block-editor-sidebar",
-    "title": "Content settings",
-    "message": "Adjust post settings like categories, tags, featured image, and more.",
-    "category": "content",
-    "level": "intermediate"
-  },
-  {
-    "id": "editor-save-draft",
-    "selector": ".editor-post-save-draft, button[aria-label*=\"Save draft\"]",
-    "title": "Save draft",
-    "message": "Save your work without publishing. You can finish editing later.",
-    "category": "content",
-    "level": "beginner"
-  },
-  {
-    "id": "editor-preview",
-    "selector": ".editor-post-preview, button[aria-label*=\"Preview\"]",
-    "title": "Preview",
-    "message": "See how your post or page will look before publishing.",
-    "category": "content",
-    "level": "intermediate"
-  },
-  {
-    "id": "bulk-actions",
-    "selector": ".bulkactions select[name=\"action\"], .bulkactions select[name=\"action2\"]",
-    "title": "Bulk actions",
-    "message": "Select an action and check boxes above to perform the same action on multiple items.",
-    "category": "navigation",
-    "level": "intermediate"
-  },
-  {
-    "id": "table-edit-link",
-    "selector": "span.edit > a, div.row-actions span.edit > a",
-    "title": "Edit item",
-    "message": "Open this item for editing.",
-    "category": "content",
-    "level": "beginner"
-  },
-  {
-    "id": "table-delete-link",
-    "selector": "span.delete > a, div.row-actions span.delete > a",
-    "title": "Delete item",
-    "message": "Permanently remove this item. This action cannot be undone.",
-    "category": "content",
-    "level": "intermediate"
-  },
-  {
-    "id": "plugin-editor",
-    "selector": "a[href*=\"plugin-editor.php\"]",
-    "title": "Edit code",
-    "message": "Edit plugin or theme files directly. Be careful—errors can break your site.",
-    "category": "extensions",
-    "level": "intermediate"
-  },
-  {
-    "id": "plugin-activate",
-    "selector": "span.activate > a, div.row-actions span.activate > a",
-    "title": "Activate plugin",
-    "message": "Turn on this plugin to enable its features on your site.",
-    "category": "extensions",
-    "level": "intermediate"
-  },
-  {
-    "id": "plugin-deactivate",
-    "selector": "span.deactivate > a, div.row-actions span.deactivate > a",
-    "title": "Deactivate plugin",
-    "message": "Turn off this plugin. Its features will no longer be available.",
-    "category": "extensions",
-    "level": "intermediate"
-  },
-  {
-    "id": "theme-activate",
-    "selector": ".theme-actions .activate-theme, .activate a",
-    "title": "Activate theme",
-    "message": "Set this as your active theme and apply it to your site.",
-    "category": "design",
-    "level": "beginner"
-  },
-  {
-    "id": "theme-customize",
-    "selector": ".theme-actions .customize-theme, .customize a",
-    "title": "Live preview",
-    "message": "Preview changes to this theme in real-time before applying.",
-    "category": "design",
-    "level": "beginner"
-  },
-  {
-    "id": "form-submit",
-    "selector": "button[type=\"submit\"].button-primary, button[type=\"submit\"].button:first-of-type",
-    "title": "Save changes",
-    "message": "Submit this form and save your changes.",
-    "category": "content",
-    "level": "beginner"
-  },
-  {
-    "id": "form-cancel",
-    "selector": "a.button-secondary[href*=\"admin.php\"], a.button:contains(\"Cancel\")",
-    "title": "Cancel",
-    "message": "Go back without saving changes.",
-    "category": "navigation",
-    "level": "beginner"
-  },
-  {
-    "id": "featured-image",
-    "selector": ".set-post-thumbnail, button[aria-label*=\"Featured\"]",
-    "title": "Featured image",
-    "message": "Set or change the main image for this post.",
-    "category": "content",
-    "level": "beginner"
-  },
-  {
-    "id": "page-template",
-    "selector": "select[name=\"page_template\"], .editor-page-attributes__template select",
-    "title": "Page template",
-    "message": "Choose a custom layout template for this page if available.",
-    "category": "design",
-    "level": "intermediate"
-  },
-  {
-    "id": "edit-permalink",
-    "selector": ".edit-slug-button, button[aria-label*=\"Edit\"]",
-    "title": "Edit URL",
-    "message": "Change the web address (URL) of this post or page.",
-    "category": "content",
-    "level": "intermediate"
-  },
-  {
-    "id": "category-select",
-    "selector": "#categorychecklist, .editor-post-taxonomies .components-panel__body",
-    "title": "Categories",
-    "message": "Organize this post by selecting one or more categories.",
-    "category": "content",
-    "level": "beginner"
-  },
-  {
-    "id": "tag-input",
-    "selector": "#new-tag-post_tag, input[aria-label*=\"Add new tag\"]",
-    "title": "Add tags",
-    "message": "Add keywords to help readers find and understand this post.",
-    "category": "content",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-site-title",
-    "selector": "#blogname",
-    "title": "Site title",
-    "message": "The name of your website, displayed in browser tabs and search results.",
-    "category": "settings",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-tagline",
-    "selector": "#blogdescription",
-    "title": "Site tagline",
-    "message": "A short description of your site. Leave blank if you don't want one.",
-    "category": "settings",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-site-url",
-    "selector": "#siteurl",
-    "title": "Site URL",
-    "message": "The URL where your site is located. Changing this requires careful attention.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-admin-url",
-    "selector": "#home",
-    "title": "Home URL",
-    "message": "The main page of your site. Usually the same as your Site URL.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-admin-email",
-    "selector": "#admin_email",
-    "title": "Admin email",
-    "message": "All notifications and site updates are sent to this email address.",
-    "category": "settings",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-membership-section",
-    "selector": "label[for=\"users_can_register\"]",
-    "title": "Membership",
-    "message": "Allow new users to register and create accounts on your site.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-membership",
-    "selector": "#users_can_register",
-    "title": "Allow registrations",
-    "message": "When checked, visitors can create user accounts. When unchecked, only administrators can create users.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-default-role",
-    "selector": "#default_role",
-    "title": "New User Default Role",
-    "message": "The permission level automatically assigned to newly registered users. Choose Subscriber for read-only access.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-timezone",
-    "selector": "#timezone_string",
-    "title": "Timezone",
-    "message": "Select your timezone. This affects when scheduled posts are published and when cron jobs run.",
-    "category": "settings",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-date-format",
-    "selector": "#date_format_custom, input[name=\"date_format\"]",
-    "title": "Date format",
-    "message": "Choose how dates appear throughout your site. Select a preset format or create a custom one using PHP date codes.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-time-format",
-    "selector": "#time_format_custom, input[name=\"time_format\"]",
-    "title": "Time format",
-    "message": "Choose how times appear throughout your site. Select 12-hour, 24-hour, or create a custom format.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-week-start",
-    "selector": "#start_of_week",
-    "title": "Week starts on",
-    "message": "Set which day the week starts on in post calendars and scheduling interfaces. Affects calendar display only.",
-    "category": "settings",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-language",
-    "selector": "#WPLANG",
-    "title": "Site Language",
-    "message": "Select the language for the WordPress admin interface and site. Change requires language packs to be installed.",
-    "category": "settings",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-general-page-title",
-    "selector": "h1.wp-heading-inline, h1:contains(\"General Settings\")",
-    "title": "General Settings",
-    "message": "Configure your site's basic information: title, URL, timezone, and language. These are core settings that affect your entire site.",
-    "category": "settings",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-default-post-category",
-    "selector": "#default_post_category",
-    "title": "Default post category",
-    "message": "Posts are automatically assigned to this category if none is selected.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-default-post-format",
-    "selector": "#default_post_format",
-    "title": "Default post format",
-    "message": "Choose the default format for new posts (Standard, Aside, Gallery, etc).",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-post-via-email",
-    "selector": "#enable_post_by_email",
-    "title": "Post via email",
-    "message": "Allow posting new content by sending emails to a special address.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-homepage-displays",
-    "selector": "#show_on_front",
-    "title": "Homepage displays",
-    "message": "Choose to show your latest posts or a static page as the homepage.",
-    "category": "settings",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-homepage",
-    "selector": "#page_on_front",
-    "title": "Homepage",
-    "message": "Select the page to display as your site homepage.",
-    "category": "settings",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-posts-page",
-    "selector": "#page_for_posts",
-    "title": "Posts page",
-    "message": "Select the page to display your blog posts list.",
-    "category": "settings",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-posts-per-page",
-    "selector": "#posts_per_page",
-    "title": "Posts per page",
-    "message": "Number of posts to display on each page of your blog.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-posts-rss",
-    "selector": "#posts_per_rss",
-    "title": "RSS posts",
-    "message": "Number of posts to include in your RSS feed.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-rss-excerpt",
-    "selector": "#rss_use_excerpt",
-    "title": "RSS content",
-    "message": "Choose whether to show full post or excerpt in RSS feeds.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-allow-comments",
-    "selector": "#default_comment_status",
-    "title": "Allow comments",
-    "message": "Allow visitors to post comments on new posts by default.",
-    "category": "settings",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-allow-pingbacks",
-    "selector": "#default_ping_status",
-    "title": "Allow pingbacks",
-    "message": "Allow other sites to notify you when they link to your content.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-comment-moderation",
-    "selector": "#comment_moderation",
-    "title": "Comment moderation",
-    "message": "Hold comments for review before they appear on your site.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-moderation-hold",
-    "selector": "#comment_max_links",
-    "title": "Hold for review",
-    "message": "Hold comments for moderation if they contain more than this many links.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-blacklist-keys",
-    "selector": "#blacklist_keys",
-    "title": "Comment blocklist",
-    "message": "Comments containing any of these words will be marked as spam or blocked.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-notify-comments",
-    "selector": "#comments_notify",
-    "title": "Notify on comments",
-    "message": "Send email when someone posts a new comment.",
-    "category": "settings",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-notify-moderation",
-    "selector": "#moderation_notify",
-    "title": "Notify on moderation",
-    "message": "Send email when a comment is held for moderation.",
-    "category": "settings",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-comment-author-approval",
-    "selector": "#require_name_email",
-    "title": "Require name and email",
-    "message": "Commenters must provide a name and email address.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-comment-nesting",
-    "selector": "#thread_comments",
-    "title": "Enable nesting",
-    "message": "Allow replies to specific comments to be nested under them.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-nesting-level",
-    "selector": "#thread_comments_depth",
-    "title": "Nesting levels",
-    "message": "How many levels deep comments can be nested.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-avatar-display",
-    "selector": "#show_avatars",
-    "title": "Show avatars",
-    "message": "Display user profile images next to their comments and posts.",
-    "category": "settings",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-avatar-rating",
-    "selector": "#avatar_rating",
-    "title": "Avatar rating",
-    "message": "Choose the maximum content rating for displayed avatars.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-image-thumbsize-w",
-    "selector": "#thumbnail_size_w",
-    "title": "Thumbnail width",
-    "message": "Width of automatically generated thumbnail images (pixels).",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-image-thumbsize-h",
-    "selector": "#thumbnail_size_h",
-    "title": "Thumbnail height",
-    "message": "Height of automatically generated thumbnail images (pixels).",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-image-thumbsize-crop",
-    "selector": "#thumbnail_crop",
-    "title": "Crop thumbnails",
-    "message": "Crop images to exact size or scale and letterbox them.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-image-mediumsize-w",
-    "selector": "#medium_size_w",
-    "title": "Medium size width",
-    "message": "Width of medium-sized images (pixels).",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-image-mediumsize-h",
-    "selector": "#medium_size_h",
-    "title": "Medium size height",
-    "message": "Height of medium-sized images (pixels).",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-image-largesize-w",
-    "selector": "#large_size_w",
-    "title": "Large size width",
-    "message": "Width of large-sized images (pixels).",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-image-largesize-h",
-    "selector": "#large_size_h",
-    "title": "Large size height",
-    "message": "Height of large-sized images (pixels).",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-image-upload-folder",
-    "selector": "#upload_path",
-    "title": "Upload folder",
-    "message": "Where media files are stored on your server. Default: wp-content/uploads",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-image-organize-month",
-    "selector": "#uploads_use_yearmonth_folders",
-    "title": "Organize by month/year",
-    "message": "Organize uploads into folders by year and month.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-permalink-structure",
-    "selector": "input[name=\"permalink_structure\"]",
-    "title": "Permalink structure",
-    "message": "Choose how your post URLs are formatted. Important for SEO.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-category-base",
-    "selector": "#category_base",
-    "title": "Category prefix",
-    "message": "The URL prefix for category pages. Default: category",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-tag-base",
-    "selector": "#tag_base",
-    "title": "Tag prefix",
-    "message": "The URL prefix for tag pages. Default: tag",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-blog-visibility",
-    "selector": "input[name=\"blog_public\"]",
-    "title": "Site visibility",
-    "message": "Control whether search engines can index your site.",
-    "category": "settings",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-privacy-policy",
-    "selector": "#wp-page-for-privacy-policy",
-    "title": "Privacy policy",
-    "message": "Select the page to use as your privacy policy.",
-    "category": "settings",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-profile-firstname",
-    "selector": "#first_name",
-    "title": "First name",
-    "message": "Your first name (optional, displayed in some areas).",
-    "category": "people",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-profile-lastname",
-    "selector": "#last_name",
-    "title": "Last name",
-    "message": "Your last name (optional, displayed in some areas).",
-    "category": "people",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-profile-nickname",
-    "selector": "#nickname",
-    "title": "Nickname",
-    "message": "How your name is displayed publicly.",
-    "category": "people",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-profile-display-name",
-    "selector": "#display_name",
-    "title": "Display name",
-    "message": "How your name appears when you publish or comment.",
-    "category": "people",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-profile-email",
-    "selector": "#email",
-    "title": "Email address",
-    "message": "Your email address for account recovery and notifications.",
-    "category": "people",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-profile-website",
-    "selector": "#url",
-    "title": "Website",
-    "message": "Your personal website URL (optional).",
-    "category": "people",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-profile-bio",
-    "selector": "#description",
-    "title": "Biographical info",
-    "message": "Your bio or about information displayed on author pages.",
-    "category": "people",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-profile-color-scheme",
-    "selector": "input[name=\"admin_color\"]",
-    "title": "Admin color scheme",
-    "message": "Choose your preferred color scheme for the admin interface.",
-    "category": "settings",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-profile-keyboard-shortcuts",
-    "selector": "#keyboard_shortcuts",
-    "title": "Keyboard shortcuts",
-    "message": "Enable keyboard shortcuts for faster navigation.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-profile-toolbar",
-    "selector": "#show_admin_bar",
-    "title": "Admin bar",
-    "message": "Show the WordPress admin bar when viewing the site.",
-    "category": "settings",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-profile-comments",
-    "selector": "#comment_shortcuts",
-    "title": "Comment shortcuts",
-    "message": "Enable keyboard shortcuts for comment moderation.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "settings-user-username",
-    "selector": "#user_login",
-    "title": "Username",
-    "message": "Your login username (cannot be changed).",
-    "category": "people",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-user-password",
-    "selector": ".user-pass1-wrap .wp-pwd, #pass1",
-    "title": "Password",
-    "message": "Your login password. Use a strong password with letters, numbers, and symbols.",
-    "category": "people",
-    "level": "beginner"
-  },
-  {
-    "id": "settings-user-role",
-    "selector": "#role",
-    "title": "User role",
-    "message": "The permission level determines what this user can do on the site.",
-    "category": "people",
-    "level": "intermediate"
-  },
-  {
-    "id": "list-checkbox-select",
-    "selector": "input[type=\"checkbox\"][name^=\"post\"]",
-    "title": "Select items",
-    "message": "Check these to select items for bulk actions.",
-    "category": "content",
-    "level": "beginner"
-  },
-  {
-    "id": "list-title-link",
-    "selector": "td.title a, td.column-title a",
-    "title": "Item title",
-    "message": "Click to edit the title or view the full item details.",
-    "category": "content",
-    "level": "beginner"
-  },
-  {
-    "id": "list-author",
-    "selector": "td.author a, td.column-author a",
-    "title": "Author",
-    "message": "Click to see all content by this author.",
-    "category": "people",
-    "level": "beginner"
-  },
-  {
-    "id": "list-category",
-    "selector": "td.categories a, td.column-categories a",
-    "title": "Category",
-    "message": "Click to view all posts in this category.",
-    "category": "content",
-    "level": "beginner"
-  },
-  {
-    "id": "list-date",
-    "selector": "td.date, td.column-date",
-    "title": "Date",
-    "message": "The date the item was created or published.",
-    "category": "content",
-    "level": "beginner"
-  },
-  {
-    "id": "list-status-badge",
-    "selector": "span.post-state, span.status-badge",
-    "title": "Status",
-    "message": "Shows whether the item is published, draft, or has other status.",
-    "category": "content",
-    "level": "beginner"
-  },
-  {
-    "id": "list-search-box",
-    "selector": "input[type=\"search\"], .search-box input[type=\"text\"]",
-    "title": "Search items",
-    "message": "Type to search for items by title or content.",
-    "category": "navigation",
-    "level": "beginner"
-  },
-  {
-    "id": "list-search-button",
-    "selector": ".search-box button, .search-box input[type=\"submit\"]",
-    "title": "Search",
-    "message": "Click to search for items matching your keywords.",
-    "category": "navigation",
-    "level": "beginner"
-  },
-  {
-    "id": "list-filter-by-date",
-    "selector": "select[name=\"m\"], #filter-by-date",
-    "title": "Filter by date",
-    "message": "Show only items from a specific month or year.",
-    "category": "navigation",
-    "level": "beginner"
-  },
-  {
-    "id": "list-filter-by-category",
-    "selector": "select[name=\"cat\"]",
-    "title": "Filter by category",
-    "message": "Show only items in a specific category.",
-    "category": "navigation",
-    "level": "beginner"
-  },
-  {
-    "id": "list-filter-by-status",
-    "selector": ".subsubsub a, .status-filter a",
-    "title": "Filter by status",
-    "message": "Show items with a specific status (Published, Draft, Scheduled, etc).",
-    "category": "navigation",
-    "level": "beginner"
-  },
-  {
-    "id": "list-filter-button",
-    "selector": "button#post-query-submit, .button.button-primary",
-    "title": "Filter",
-    "message": "Apply the selected filters to update the list.",
-    "category": "navigation",
-    "level": "beginner"
-  },
-  {
-    "id": "list-pagination",
-    "selector": ".tablenav-pages a, .pagination a",
-    "title": "Navigate pages",
-    "message": "Click to go to a different page of items.",
-    "category": "navigation",
-    "level": "beginner"
-  },
-  {
-    "id": "list-items-per-page",
-    "selector": ".tablenav-pages span.displaying-num",
-    "title": "Items per page",
-    "message": "Shows how many items are displayed per page. Adjust in Screen Options.",
-    "category": "navigation",
-    "level": "intermediate"
-  },
-  {
-    "id": "list-column-header-sortable",
-    "selector": "th a, th.sortable a",
-    "title": "Sort column",
-    "message": "Click to sort items by this column. Click again to reverse order.",
-    "category": "navigation",
-    "level": "beginner"
-  },
-  {
-    "id": "nav-tools-export-personal-data",
-    "selector": "#menu-tools li a[href*=\"export-personal-data.php\"]",
-    "title": "Export Personal Data",
-    "message": "Generate and download a data export file containing all personal information for a user account. Required by GDPR and privacy regulations.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "nav-tools-erase-personal-data",
-    "selector": "#menu-tools li a[href*=\"erase-personal-data.php\"]",
-    "title": "Erase Personal Data",
-    "message": "Remove all personal data associated with a user account, complying with privacy deletion requests and regulations like GDPR.",
-    "category": "settings",
-    "level": "intermediate"
-  },
-  {
-    "id": "nav-appearance-theme-editor",
-    "selector": "#menu-appearance li a[href*=\"theme-editor.php\"]",
-    "title": "Theme File Editor",
-    "message": "Edit theme template and CSS files directly. Be careful—errors can break your site. Consider using a child theme instead.",
-    "category": "design",
-    "level": "intermediate"
-  },
-  {
-    "id": "nav-plugins-plugin-editor",
-    "selector": "#menu-plugins li a[href*=\"plugin-editor.php\"]",
-    "title": "Plugin File Editor",
-    "message": "Edit plugin PHP files directly. Be careful—syntax errors can break your site and disable the plugin.",
-    "category": "extensions",
-    "level": "intermediate"
-  },
-  {
-    "id": "nav-appearance-site-editor",
-    "selector": "#menu-appearance li a[href*=\"site-editor.php\"], #menu-appearance li a[href*=\"customize.php\"]",
-    "title": "Site/Theme Editor",
-    "message": "Edit your site design, templates, and styles with a visual editor. Make changes with live preview before publishing.",
-    "category": "design",
-    "level": "intermediate"
-  }
+    {
+        "id": "nav-wpshadow",
+        "selector": "#menu-wpshadow > a",
+        "title": "WPShadow",
+        "message": "Central hub for site health monitoring, analysis tools, and optimization features.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-wpshadow"
+    },
+    {
+        "id": "nav-wpshadow-dashboard",
+        "selector": "#menu-wpshadow li a[href*=\"page=wpshadow\"], #menu-wpshadow li a[href*=\"page=wpshadow&\"]",
+        "title": "WPShadow Dashboard",
+        "message": "View your site health status, recent findings, and quick improvement recommendations.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-wpshadow-dashboard"
+    },
+    {
+        "id": "nav-wpshadow-workflows",
+        "selector": "#menu-wpshadow li a[href*=\"page=wpshadow-workflows\"]",
+        "title": "Workflow Manager",
+        "message": "Create and manage automated workflows to standardize site maintenance tasks.",
+        "category": "navigation",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-workflow-manager"
+    },
+    {
+        "id": "nav-wpshadow-tools",
+        "selector": "#menu-wpshadow li a[href*=\"page=wpshadow-tools\"]",
+        "title": "WPShadow Tools",
+        "message": "Access specialized analysis tools including accessibility audits, link checks, and color contrast analysis.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-wpshadow-tools"
+    },
+    {
+        "id": "nav-wpshadow-help",
+        "selector": "#menu-wpshadow li a[href*=\"page=wpshadow-help\"]",
+        "title": "Help & Guidance",
+        "message": "Learn tips, configure tooltips, and access helpful resources for your site.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-help-guidance"
+    },
+    {
+        "id": "nav-dashboard",
+        "selector": "#menu-dashboard > a",
+        "title": "Dashboard home",
+        "message": "Visit the Dashboard for health, updates, and a high-level view of your site.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-dashboard-home"
+    },
+    {
+        "id": "nav-dashboard-updates",
+        "selector": "#menu-dashboard li a[href*=\"update-core.php\"]",
+        "title": "Updates",
+        "message": "Check and install updates for WordPress, plugins, and themes to keep your site secure and running smoothly.",
+        "category": "maintenance",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-updates"
+    },
+    {
+        "id": "nav-posts",
+        "selector": "#menu-posts > a",
+        "title": "Blog posts",
+        "message": "Manage your blog posts, or add a new one.",
+        "category": "content",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-blog-posts"
+    },
+    {
+        "id": "nav-posts-all",
+        "selector": "#menu-posts li a[href=\"edit.php\"], #menu-posts li a[href*=\"edit.php?post_type=post\"]",
+        "title": "All Posts",
+        "message": "See all your published and draft posts in a list.",
+        "category": "content",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/edit-posts-all-posts"
+    },
+    {
+        "id": "nav-posts-add",
+        "selector": "#menu-posts li a[href*=\"post-new.php\"]",
+        "title": "Add a new post",
+        "message": "Create and publish a new blog post.",
+        "category": "content",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/post-new-add-a-new-post"
+    },
+    {
+        "id": "nav-posts-categories",
+        "selector": "#menu-posts li a[href*=\"edit-tags.php?taxonomy=category\"]",
+        "title": "Organize posts",
+        "message": "Create and manage categories to organize your posts.",
+        "category": "content",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-organize-posts"
+    },
+    {
+        "id": "nav-posts-tags",
+        "selector": "#menu-posts li a[href*=\"edit-tags.php?taxonomy=post_tag\"]",
+        "title": "Add tags",
+        "message": "Use tags to label your posts for better discovery.",
+        "category": "content",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-add-tags"
+    },
+    {
+        "id": "nav-media",
+        "selector": "#menu-media > a",
+        "title": "Media",
+        "message": "Upload and manage images, videos, and files for your site.",
+        "category": "content",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-media"
+    },
+    {
+        "id": "nav-media-library",
+        "selector": "#menu-media li a[href=\"upload.php\"], #menu-media li a[href*=\"upload.php\"]",
+        "title": "Library",
+        "message": "View and manage all your uploaded images, videos, and media files.",
+        "category": "content",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-library"
+    },
+    {
+        "id": "nav-media-add",
+        "selector": "#menu-media li a[href*=\"media-new.php\"]",
+        "title": "Add New",
+        "message": "Upload new images, videos, or files to your media library.",
+        "category": "content",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-add-new"
+    },
+    {
+        "id": "nav-pages",
+        "selector": "#menu-pages > a",
+        "title": "Pages",
+        "message": "Create and manage static pages like Home, About, and Contact.",
+        "category": "content",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-pages"
+    },
+    {
+        "id": "nav-pages-all",
+        "selector": "#menu-pages li a[href=\"edit.php?post_type=page\"], #menu-pages li a[href*=\"edit.php?post_type=page\"]",
+        "title": "All Pages",
+        "message": "See all your published and draft pages.",
+        "category": "content",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/edit-pages-all-pages"
+    },
+    {
+        "id": "nav-pages-add",
+        "selector": "#menu-pages li a[href*=\"post-new.php?post_type=page\"]",
+        "title": "Create new page",
+        "message": "Add a new static page to your site.",
+        "category": "content",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/post-new-create-new-page"
+    },
+    {
+        "id": "nav-comments",
+        "selector": "#menu-comments > a",
+        "title": "Comments",
+        "message": "Moderate, approve, and respond to comments from your visitors.",
+        "category": "content",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-comments"
+    },
+    {
+        "id": "nav-appearance",
+        "selector": "#menu-appearance > a",
+        "title": "Site design",
+        "message": "Customize your site appearance with themes, colors, menus, and widgets.",
+        "category": "design",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-site-design"
+    },
+    {
+        "id": "nav-appearance-themes",
+        "selector": "#menu-appearance li a[href*=\"themes.php\"]",
+        "title": "Choose a theme",
+        "message": "Browse and activate themes to change your site layout and style.",
+        "category": "design",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/themes-choose-a-theme"
+    },
+    {
+        "id": "nav-appearance-customize",
+        "selector": "#menu-appearance li a[href*=\"customize.php\"]",
+        "title": "Live customizer",
+        "message": "Preview changes to colors, fonts, and layout in real-time before publishing.",
+        "category": "design",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/customize-live-customizer"
+    },
+    {
+        "id": "nav-appearance-menus",
+        "selector": "#menu-appearance li a[href*=\"nav-menus.php\"]",
+        "title": "Edit menus",
+        "message": "Create and organize navigation menus for your site.",
+        "category": "design",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/menus-edit-menus"
+    },
+    {
+        "id": "nav-appearance-widgets",
+        "selector": "#menu-appearance li a[href*=\"widgets.php\"]",
+        "title": "Manage widgets",
+        "message": "Add and arrange widgets in your site sidebar and other areas.",
+        "category": "design",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/widgets-manage-widgets"
+    },
+    {
+        "id": "nav-plugins",
+        "selector": "#menu-plugins > a",
+        "title": "Extend functionality",
+        "message": "Browse, install, and manage plugins to add features to your site.",
+        "category": "extensions",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-extend-functionality"
+    },
+    {
+        "id": "nav-plugins-list",
+        "selector": "#menu-plugins li a[href*=\"plugins.php\"]",
+        "title": "Installed plugins",
+        "message": "See all your installed plugins, activate, deactivate, or delete them.",
+        "category": "extensions",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/plugins-installed-plugins"
+    },
+    {
+        "id": "nav-plugins-add",
+        "selector": "#menu-plugins li a[href*=\"plugin-install.php\"]",
+        "title": "Add new plugins",
+        "message": "Search and install plugins from the WordPress plugin directory.",
+        "category": "extensions",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/plugin-install-add-new-plugins"
+    },
+    {
+        "id": "nav-users",
+        "selector": "#menu-users > a",
+        "title": "Manage team",
+        "message": "Add users and manage their roles to control site access.",
+        "category": "people",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-manage-team"
+    },
+    {
+        "id": "nav-users-all",
+        "selector": "#menu-users li a[href*=\"users.php\"]",
+        "title": "All users",
+        "message": "View, edit, or remove user accounts from your site.",
+        "category": "people",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/users-all-users"
+    },
+    {
+        "id": "nav-users-add",
+        "selector": "#menu-users li a[href*=\"user-new.php\"]",
+        "title": "Invite user",
+        "message": "Add a new user to your site with a specific role.",
+        "category": "people",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/user-new-invite-user"
+    },
+    {
+        "id": "nav-users-profile",
+        "selector": "#menu-users li a[href*=\"profile.php\"]",
+        "title": "Your profile",
+        "message": "Update your personal information, password, and settings.",
+        "category": "people",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/profile-your-profile"
+    },
+    {
+        "id": "nav-tools",
+        "selector": "#menu-tools > a",
+        "title": "Site tools",
+        "message": "Access tools for importing, exporting, and analyzing your site.",
+        "category": "navigation",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-site-tools"
+    },
+    {
+        "id": "nav-tools-available",
+        "selector": "#menu-tools li a[href*=\"tools.php\"]",
+        "title": "Available tools",
+        "message": "Browse available tools for site maintenance and optimization.",
+        "category": "navigation",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-available-tools"
+    },
+    {
+        "id": "nav-tools-import",
+        "selector": "#menu-tools li a[href*=\"import.php\"]",
+        "title": "Import content",
+        "message": "Import posts, pages, and other content from another site.",
+        "category": "navigation",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-import-content"
+    },
+    {
+        "id": "nav-tools-export",
+        "selector": "#menu-tools li a[href*=\"export.php\"]",
+        "title": "Export content",
+        "message": "Back up your posts, pages, and other content as an XML file.",
+        "category": "navigation",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-export-content"
+    },
+    {
+        "id": "nav-tools-site-health",
+        "selector": "#menu-tools li a[href*=\"site-health.php\"]",
+        "title": "Site health",
+        "message": "Check your site status and get recommendations for improvements.",
+        "category": "maintenance",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-site-health"
+    },
+    {
+        "id": "nav-settings",
+        "selector": "#menu-settings > a",
+        "title": "Site settings",
+        "message": "Configure your site name, timezone, and other important settings.",
+        "category": "settings",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-site-settings"
+    },
+    {
+        "id": "nav-settings",
+        "selector": "#menu-settings > a",
+        "title": "Site settings",
+        "message": "Configure your site name, timezone, and other important settings.",
+        "category": "settings",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-site-settings"
+    },
+    {
+        "id": "nav-settings-general",
+        "selector": "#menu-settings li a[href*=\"options-general.php\"]",
+        "title": "General settings",
+        "message": "Set site title, tagline, timezone, and date format.",
+        "category": "settings",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/settings-general-general-settings"
+    },
+    {
+        "id": "nav-settings-writing",
+        "selector": "#menu-settings li a[href*=\"options-writing.php\"]",
+        "title": "Writing settings",
+        "message": "Configure default post format, category, and post settings.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/settings-writing-writing-settings"
+    },
+    {
+        "id": "nav-settings-reading",
+        "selector": "#menu-settings li a[href*=\"options-reading.php\"]",
+        "title": "Reading settings",
+        "message": "Set your homepage and how many posts to display.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/settings-reading-reading-settings"
+    },
+    {
+        "id": "nav-settings-discussion",
+        "selector": "#menu-settings li a[href*=\"options-discussion.php\"]",
+        "title": "Comments settings",
+        "message": "Control comment moderation, notifications, and avatar settings.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/settings-discussion-comments-settings"
+    },
+    {
+        "id": "nav-settings-media",
+        "selector": "#menu-settings li a[href*=\"options-media.php\"]",
+        "title": "Image settings",
+        "message": "Configure automatic image sizes and thumbnail settings.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/settings-media-image-settings"
+    },
+    {
+        "id": "nav-settings-permalink",
+        "selector": "#menu-settings li a[href*=\"options-permalink.php\"]",
+        "title": "Permalink structure",
+        "message": "Set how your post URLs are formatted for better SEO.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/settings-permalink-permalink-structure"
+    },
+    {
+        "id": "nav-settings-privacy",
+        "selector": "#menu-settings li a[href*=\"options-privacy.php\"]",
+        "title": "Privacy settings",
+        "message": "Configure your site privacy and search engine visibility.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/settings-privacy-privacy-settings"
+    },
+    {
+        "id": "bar-new",
+        "selector": "#wp-admin-bar-new-content",
+        "title": "Quick add",
+        "message": "Quickly create posts, pages, or upload media from anywhere in admin.",
+        "category": "navigation",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-quick-add"
+    },
+    {
+        "id": "bar-updates",
+        "selector": "#wp-admin-bar-updates",
+        "title": "Updates available",
+        "message": "Install WordPress, plugin, and theme updates to stay secure.",
+        "category": "maintenance",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-updates-available"
+    },
+    {
+        "id": "editor-publish",
+        "selector": ".editor-post-publish-button__button, .edit-post-header__settings .components-button.is-primary",
+        "title": "Publish",
+        "message": "Click to publish your post. You can edit it anytime after publishing.",
+        "category": "content",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-publish"
+    },
+    {
+        "id": "bar-user",
+        "selector": "#wp-admin-bar-my-account",
+        "title": "Your profile",
+        "message": "Access your account settings, edit your profile, or log out.",
+        "category": "people",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-your-profile"
+    },
+    {
+        "id": "bar-user-edit",
+        "selector": "#wp-admin-bar-my-account li a[href*=\"profile.php\"]",
+        "title": "Edit profile",
+        "message": "Update your personal information, email, and password.",
+        "category": "people",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/profile-edit-profile"
+    },
+    {
+        "id": "bar-logout",
+        "selector": "#wp-admin-bar-logout",
+        "title": "Log out",
+        "message": "End your session and log out from the WordPress admin.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-log-out"
+    },
+    {
+        "id": "bar-site-name",
+        "selector": "#wp-admin-bar-site-name",
+        "title": "Site name",
+        "message": "Visit your site home page or access site-level settings.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-site-name"
+    },
+    {
+        "id": "collapse-menu",
+        "selector": "#collapse-button, .wp-responsive-open #collapse-button",
+        "title": "Toggle menu",
+        "message": "Collapse or expand the sidebar menu for more screen space.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-toggle-menu"
+    },
+    {
+        "id": "screen-options",
+        "selector": "#screen-options-link",
+        "title": "Screen options",
+        "message": "Customize what columns and items appear on this page.",
+        "category": "navigation",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-screen-options"
+    },
+    {
+        "id": "help-tab",
+        "selector": "#contextual-help-link",
+        "title": "Get help",
+        "message": "Learn more about this WordPress admin page and its features.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-get-help"
+    },
+    {
+        "id": "admin-search",
+        "selector": ".wp-admin-search__wrapper input[type=\"search\"]",
+        "title": "Search admin",
+        "message": "Quickly search for posts, pages, settings, and more from anywhere in the admin.",
+        "category": "navigation",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-search-admin"
+    },
+    {
+        "id": "editor-sidebar",
+        "selector": ".wp-block-editor__sidebar, .block-editor-sidebar",
+        "title": "Content settings",
+        "message": "Adjust post settings like categories, tags, featured image, and more.",
+        "category": "content",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-content-settings"
+    },
+    {
+        "id": "editor-save-draft",
+        "selector": ".editor-post-save-draft, button[aria-label*=\"Save draft\"]",
+        "title": "Save draft",
+        "message": "Save your work without publishing. You can finish editing later.",
+        "category": "content",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-save-draft"
+    },
+    {
+        "id": "editor-preview",
+        "selector": ".editor-post-preview, button[aria-label*=\"Preview\"]",
+        "title": "Preview",
+        "message": "See how your post or page will look before publishing.",
+        "category": "content",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-preview"
+    },
+    {
+        "id": "bulk-actions",
+        "selector": ".bulkactions select[name=\"action\"], .bulkactions select[name=\"action2\"]",
+        "title": "Bulk actions",
+        "message": "Select an action and check boxes above to perform the same action on multiple items.",
+        "category": "navigation",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-bulk-actions"
+    },
+    {
+        "id": "table-edit-link",
+        "selector": "span.edit > a, div.row-actions span.edit > a",
+        "title": "Edit item",
+        "message": "Open this item for editing.",
+        "category": "content",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-edit-item"
+    },
+    {
+        "id": "table-delete-link",
+        "selector": "span.delete > a, div.row-actions span.delete > a",
+        "title": "Delete item",
+        "message": "Permanently remove this item. This action cannot be undone.",
+        "category": "content",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-delete-item"
+    },
+    {
+        "id": "plugin-editor",
+        "selector": "a[href*=\"plugin-editor.php\"]",
+        "title": "Edit code",
+        "message": "Edit plugin or theme files directly. Be careful—errors can break your site.",
+        "category": "extensions",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/plugin-editor-edit-code"
+    },
+    {
+        "id": "plugin-activate",
+        "selector": "span.activate > a, div.row-actions span.activate > a",
+        "title": "Activate plugin",
+        "message": "Turn on this plugin to enable its features on your site.",
+        "category": "extensions",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-activate-plugin"
+    },
+    {
+        "id": "plugin-deactivate",
+        "selector": "span.deactivate > a, div.row-actions span.deactivate > a",
+        "title": "Deactivate plugin",
+        "message": "Turn off this plugin. Its features will no longer be available.",
+        "category": "extensions",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-deactivate-plugin"
+    },
+    {
+        "id": "theme-activate",
+        "selector": ".theme-actions .activate-theme, .activate a",
+        "title": "Activate theme",
+        "message": "Set this as your active theme and apply it to your site.",
+        "category": "design",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-activate-theme"
+    },
+    {
+        "id": "theme-customize",
+        "selector": ".theme-actions .customize-theme, .customize a",
+        "title": "Live preview",
+        "message": "Preview changes to this theme in real-time before applying.",
+        "category": "design",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-live-preview"
+    },
+    {
+        "id": "form-submit",
+        "selector": "button[type=\"submit\"].button-primary, button[type=\"submit\"].button:first-of-type",
+        "title": "Save changes",
+        "message": "Submit this form and save your changes.",
+        "category": "content",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-save-changes"
+    },
+    {
+        "id": "form-cancel",
+        "selector": "a.button-secondary[href*=\"admin.php\"], a.button:contains(\"Cancel\")",
+        "title": "Cancel",
+        "message": "Go back without saving changes.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-cancel"
+    },
+    {
+        "id": "featured-image",
+        "selector": ".set-post-thumbnail, button[aria-label*=\"Featured\"]",
+        "title": "Featured image",
+        "message": "Set or change the main image for this post.",
+        "category": "content",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-featured-image"
+    },
+    {
+        "id": "page-template",
+        "selector": "select[name=\"page_template\"], .editor-page-attributes__template select",
+        "title": "Page template",
+        "message": "Choose a custom layout template for this page if available.",
+        "category": "design",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-page-template"
+    },
+    {
+        "id": "edit-permalink",
+        "selector": ".edit-slug-button, button[aria-label*=\"Edit\"]",
+        "title": "Edit URL",
+        "message": "Change the web address (URL) of this post or page.",
+        "category": "content",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-edit-url"
+    },
+    {
+        "id": "category-select",
+        "selector": "#categorychecklist, .editor-post-taxonomies .components-panel__body",
+        "title": "Categories",
+        "message": "Organize this post by selecting one or more categories.",
+        "category": "content",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-categories"
+    },
+    {
+        "id": "tag-input",
+        "selector": "#new-tag-post_tag, input[aria-label*=\"Add new tag\"]",
+        "title": "Add tags",
+        "message": "Add keywords to help readers find and understand this post.",
+        "category": "content",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-add-tags"
+    },
+    {
+        "id": "settings-site-title",
+        "selector": "#blogname",
+        "title": "Site title",
+        "message": "The name of your website, displayed in browser tabs and search results.",
+        "category": "settings",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/settings-general-site-title"
+    },
+    {
+        "id": "settings-tagline",
+        "selector": "#blogdescription",
+        "title": "Site tagline",
+        "message": "A short description of your site. Leave blank if you don't want one.",
+        "category": "settings",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/settings-general-site-tagline"
+    },
+    {
+        "id": "settings-site-url",
+        "selector": "#siteurl",
+        "title": "Site URL",
+        "message": "The URL where your site is located. Changing this requires careful attention.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/settings-general-site-url"
+    },
+    {
+        "id": "settings-admin-url",
+        "selector": "#home",
+        "title": "Home URL",
+        "message": "The main page of your site. Usually the same as your Site URL.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/settings-general-home-url"
+    },
+    {
+        "id": "settings-admin-email",
+        "selector": "#admin_email",
+        "title": "Admin email",
+        "message": "All notifications and site updates are sent to this email address.",
+        "category": "settings",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/settings-general-admin-email"
+    },
+    {
+        "id": "settings-membership-section",
+        "selector": "label[for=\"users_can_register\"]",
+        "title": "Membership",
+        "message": "Allow new users to register and create accounts on your site.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-membership"
+    },
+    {
+        "id": "settings-membership",
+        "selector": "#users_can_register",
+        "title": "Allow registrations",
+        "message": "When checked, visitors can create user accounts. When unchecked, only administrators can create users.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-allow-registrations"
+    },
+    {
+        "id": "settings-default-role",
+        "selector": "#default_role",
+        "title": "New User Default Role",
+        "message": "The permission level automatically assigned to newly registered users. Choose Subscriber for read-only access.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-new-user-default-role"
+    },
+    {
+        "id": "settings-timezone",
+        "selector": "#timezone_string",
+        "title": "Timezone",
+        "message": "Select your timezone. This affects when scheduled posts are published and when cron jobs run.",
+        "category": "settings",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-timezone"
+    },
+    {
+        "id": "settings-date-format",
+        "selector": "#date_format_custom, input[name=\"date_format\"]",
+        "title": "Date format",
+        "message": "Choose how dates appear throughout your site. Select a preset format or create a custom one using PHP date codes.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-date-format"
+    },
+    {
+        "id": "settings-time-format",
+        "selector": "#time_format_custom, input[name=\"time_format\"]",
+        "title": "Time format",
+        "message": "Choose how times appear throughout your site. Select 12-hour, 24-hour, or create a custom format.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-time-format"
+    },
+    {
+        "id": "settings-week-start",
+        "selector": "#start_of_week",
+        "title": "Week starts on",
+        "message": "Set which day the week starts on in post calendars and scheduling interfaces. Affects calendar display only.",
+        "category": "settings",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/settings-general-week-starts-on"
+    },
+    {
+        "id": "settings-language",
+        "selector": "#WPLANG",
+        "title": "Site Language",
+        "message": "Select the language for the WordPress admin interface and site. Change requires language packs to be installed.",
+        "category": "settings",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-site-language"
+    },
+    {
+        "id": "settings-general-page-title",
+        "selector": "h1.wp-heading-inline, h1:contains(\"General Settings\")",
+        "title": "General Settings",
+        "message": "Configure your site's basic information: title, URL, timezone, and language. These are core settings that affect your entire site.",
+        "category": "settings",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-general-settings"
+    },
+    {
+        "id": "settings-default-post-category",
+        "selector": "#default_post_category",
+        "title": "Default post category",
+        "message": "Posts are automatically assigned to this category if none is selected.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/settings-writing-default-post-category"
+    },
+    {
+        "id": "settings-default-post-format",
+        "selector": "#default_post_format",
+        "title": "Default post format",
+        "message": "Choose the default format for new posts (Standard, Aside, Gallery, etc).",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/settings-writing-default-post-format"
+    },
+    {
+        "id": "settings-post-via-email",
+        "selector": "#enable_post_by_email",
+        "title": "Post via email",
+        "message": "Allow posting new content by sending emails to a special address.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-post-via-email"
+    },
+    {
+        "id": "settings-homepage-displays",
+        "selector": "#show_on_front",
+        "title": "Homepage displays",
+        "message": "Choose to show your latest posts or a static page as the homepage.",
+        "category": "settings",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/settings-reading-homepage-displays"
+    },
+    {
+        "id": "settings-homepage",
+        "selector": "#page_on_front",
+        "title": "Homepage",
+        "message": "Select the page to display as your site homepage.",
+        "category": "settings",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/settings-reading-homepage"
+    },
+    {
+        "id": "settings-posts-page",
+        "selector": "#page_for_posts",
+        "title": "Posts page",
+        "message": "Select the page to display your blog posts list.",
+        "category": "settings",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/settings-reading-posts-page"
+    },
+    {
+        "id": "settings-posts-per-page",
+        "selector": "#posts_per_page",
+        "title": "Posts per page",
+        "message": "Number of posts to display on each page of your blog.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/settings-reading-posts-per-page"
+    },
+    {
+        "id": "settings-posts-rss",
+        "selector": "#posts_per_rss",
+        "title": "RSS posts",
+        "message": "Number of posts to include in your RSS feed.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-rss-posts"
+    },
+    {
+        "id": "settings-rss-excerpt",
+        "selector": "#rss_use_excerpt",
+        "title": "RSS content",
+        "message": "Choose whether to show full post or excerpt in RSS feeds.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-rss-content"
+    },
+    {
+        "id": "settings-allow-comments",
+        "selector": "#default_comment_status",
+        "title": "Allow comments",
+        "message": "Allow visitors to post comments on new posts by default.",
+        "category": "settings",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/settings-discussion-allow-comments"
+    },
+    {
+        "id": "settings-allow-pingbacks",
+        "selector": "#default_ping_status",
+        "title": "Allow pingbacks",
+        "message": "Allow other sites to notify you when they link to your content.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-allow-pingbacks"
+    },
+    {
+        "id": "settings-comment-moderation",
+        "selector": "#comment_moderation",
+        "title": "Comment moderation",
+        "message": "Hold comments for review before they appear on your site.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/settings-discussion-comment-moderation"
+    },
+    {
+        "id": "settings-moderation-hold",
+        "selector": "#comment_max_links",
+        "title": "Hold for review",
+        "message": "Hold comments for moderation if they contain more than this many links.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-hold-for-review"
+    },
+    {
+        "id": "settings-blacklist-keys",
+        "selector": "#blacklist_keys",
+        "title": "Comment blocklist",
+        "message": "Comments containing any of these words will be marked as spam or blocked.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-comment-blocklist"
+    },
+    {
+        "id": "settings-notify-comments",
+        "selector": "#comments_notify",
+        "title": "Notify on comments",
+        "message": "Send email when someone posts a new comment.",
+        "category": "settings",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-notify-on-comments"
+    },
+    {
+        "id": "settings-notify-moderation",
+        "selector": "#moderation_notify",
+        "title": "Notify on moderation",
+        "message": "Send email when a comment is held for moderation.",
+        "category": "settings",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-notify-on-moderation"
+    },
+    {
+        "id": "settings-comment-author-approval",
+        "selector": "#require_name_email",
+        "title": "Require name and email",
+        "message": "Commenters must provide a name and email address.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/settings-discussion-require-name-and-email"
+    },
+    {
+        "id": "settings-comment-nesting",
+        "selector": "#thread_comments",
+        "title": "Enable nesting",
+        "message": "Allow replies to specific comments to be nested under them.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/settings-discussion-enable-nesting"
+    },
+    {
+        "id": "settings-nesting-level",
+        "selector": "#thread_comments_depth",
+        "title": "Nesting levels",
+        "message": "How many levels deep comments can be nested.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-nesting-levels"
+    },
+    {
+        "id": "settings-avatar-display",
+        "selector": "#show_avatars",
+        "title": "Show avatars",
+        "message": "Display user profile images next to their comments and posts.",
+        "category": "settings",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-show-avatars"
+    },
+    {
+        "id": "settings-avatar-rating",
+        "selector": "#avatar_rating",
+        "title": "Avatar rating",
+        "message": "Choose the maximum content rating for displayed avatars.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-avatar-rating"
+    },
+    {
+        "id": "settings-image-thumbsize-w",
+        "selector": "#thumbnail_size_w",
+        "title": "Thumbnail width",
+        "message": "Width of automatically generated thumbnail images (pixels).",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/settings-media-thumbnail-width"
+    },
+    {
+        "id": "settings-image-thumbsize-h",
+        "selector": "#thumbnail_size_h",
+        "title": "Thumbnail height",
+        "message": "Height of automatically generated thumbnail images (pixels).",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/settings-media-thumbnail-height"
+    },
+    {
+        "id": "settings-image-thumbsize-crop",
+        "selector": "#thumbnail_crop",
+        "title": "Crop thumbnails",
+        "message": "Crop images to exact size or scale and letterbox them.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-crop-thumbnails"
+    },
+    {
+        "id": "settings-image-mediumsize-w",
+        "selector": "#medium_size_w",
+        "title": "Medium size width",
+        "message": "Width of medium-sized images (pixels).",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/settings-media-medium-size-width"
+    },
+    {
+        "id": "settings-image-mediumsize-h",
+        "selector": "#medium_size_h",
+        "title": "Medium size height",
+        "message": "Height of medium-sized images (pixels).",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/settings-media-medium-size-height"
+    },
+    {
+        "id": "settings-image-largesize-w",
+        "selector": "#large_size_w",
+        "title": "Large size width",
+        "message": "Width of large-sized images (pixels).",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/settings-media-large-size-width"
+    },
+    {
+        "id": "settings-image-largesize-h",
+        "selector": "#large_size_h",
+        "title": "Large size height",
+        "message": "Height of large-sized images (pixels).",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/settings-media-large-size-height"
+    },
+    {
+        "id": "settings-image-upload-folder",
+        "selector": "#upload_path",
+        "title": "Upload folder",
+        "message": "Where media files are stored on your server. Default: wp-content/uploads",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-upload-folder"
+    },
+    {
+        "id": "settings-image-organize-month",
+        "selector": "#uploads_use_yearmonth_folders",
+        "title": "Organize by month/year",
+        "message": "Organize uploads into folders by year and month.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-organize-by-month-year"
+    },
+    {
+        "id": "settings-permalink-structure",
+        "selector": "input[name=\"permalink_structure\"]",
+        "title": "Permalink structure",
+        "message": "Choose how your post URLs are formatted. Important for SEO.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-permalink-structure"
+    },
+    {
+        "id": "settings-category-base",
+        "selector": "#category_base",
+        "title": "Category prefix",
+        "message": "The URL prefix for category pages. Default: category",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-category-prefix"
+    },
+    {
+        "id": "settings-tag-base",
+        "selector": "#tag_base",
+        "title": "Tag prefix",
+        "message": "The URL prefix for tag pages. Default: tag",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-tag-prefix"
+    },
+    {
+        "id": "settings-blog-visibility",
+        "selector": "input[name=\"blog_public\"]",
+        "title": "Site visibility",
+        "message": "Control whether search engines can index your site.",
+        "category": "settings",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-site-visibility"
+    },
+    {
+        "id": "settings-privacy-policy",
+        "selector": "#wp-page-for-privacy-policy",
+        "title": "Privacy policy",
+        "message": "Select the page to use as your privacy policy.",
+        "category": "settings",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-privacy-policy"
+    },
+    {
+        "id": "settings-profile-firstname",
+        "selector": "#first_name",
+        "title": "First name",
+        "message": "Your first name (optional, displayed in some areas).",
+        "category": "people",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/profile-first-name"
+    },
+    {
+        "id": "settings-profile-lastname",
+        "selector": "#last_name",
+        "title": "Last name",
+        "message": "Your last name (optional, displayed in some areas).",
+        "category": "people",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/profile-last-name"
+    },
+    {
+        "id": "settings-profile-nickname",
+        "selector": "#nickname",
+        "title": "Nickname",
+        "message": "How your name is displayed publicly.",
+        "category": "people",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/profile-nickname"
+    },
+    {
+        "id": "settings-profile-display-name",
+        "selector": "#display_name",
+        "title": "Display name",
+        "message": "How your name appears when you publish or comment.",
+        "category": "people",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/profile-display-name"
+    },
+    {
+        "id": "settings-profile-email",
+        "selector": "#email",
+        "title": "Email address",
+        "message": "Your email address for account recovery and notifications.",
+        "category": "people",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/profile-email-address"
+    },
+    {
+        "id": "settings-profile-website",
+        "selector": "#url",
+        "title": "Website",
+        "message": "Your personal website URL (optional).",
+        "category": "people",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/profile-website"
+    },
+    {
+        "id": "settings-profile-bio",
+        "selector": "#description",
+        "title": "Biographical info",
+        "message": "Your bio or about information displayed on author pages.",
+        "category": "people",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/profile-biographical-info"
+    },
+    {
+        "id": "settings-profile-color-scheme",
+        "selector": "input[name=\"admin_color\"]",
+        "title": "Admin color scheme",
+        "message": "Choose your preferred color scheme for the admin interface.",
+        "category": "settings",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-admin-color-scheme"
+    },
+    {
+        "id": "settings-profile-keyboard-shortcuts",
+        "selector": "#keyboard_shortcuts",
+        "title": "Keyboard shortcuts",
+        "message": "Enable keyboard shortcuts for faster navigation.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-keyboard-shortcuts"
+    },
+    {
+        "id": "settings-profile-toolbar",
+        "selector": "#show_admin_bar",
+        "title": "Admin bar",
+        "message": "Show the WordPress admin bar when viewing the site.",
+        "category": "settings",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-admin-bar"
+    },
+    {
+        "id": "settings-profile-comments",
+        "selector": "#comment_shortcuts",
+        "title": "Comment shortcuts",
+        "message": "Enable keyboard shortcuts for comment moderation.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-comment-shortcuts"
+    },
+    {
+        "id": "settings-user-username",
+        "selector": "#user_login",
+        "title": "Username",
+        "message": "Your login username (cannot be changed).",
+        "category": "people",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/user-new-username"
+    },
+    {
+        "id": "settings-user-password",
+        "selector": ".user-pass1-wrap .wp-pwd, #pass1",
+        "title": "Password",
+        "message": "Your login password. Use a strong password with letters, numbers, and symbols.",
+        "category": "people",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/user-new-password"
+    },
+    {
+        "id": "settings-user-role",
+        "selector": "#role",
+        "title": "User role",
+        "message": "The permission level determines what this user can do on the site.",
+        "category": "people",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/user-new-user-role"
+    },
+    {
+        "id": "list-checkbox-select",
+        "selector": "input[type=\"checkbox\"][name^=\"post\"]",
+        "title": "Select items",
+        "message": "Check these to select items for bulk actions.",
+        "category": "content",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-select-items"
+    },
+    {
+        "id": "list-title-link",
+        "selector": "td.title a, td.column-title a",
+        "title": "Item title",
+        "message": "Click to edit the title or view the full item details.",
+        "category": "content",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-item-title"
+    },
+    {
+        "id": "list-author",
+        "selector": "td.author a, td.column-author a",
+        "title": "Author",
+        "message": "Click to see all content by this author.",
+        "category": "people",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-author"
+    },
+    {
+        "id": "list-category",
+        "selector": "td.categories a, td.column-categories a",
+        "title": "Category",
+        "message": "Click to view all posts in this category.",
+        "category": "content",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-category"
+    },
+    {
+        "id": "list-date",
+        "selector": "td.date, td.column-date",
+        "title": "Date",
+        "message": "The date the item was created or published.",
+        "category": "content",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-date"
+    },
+    {
+        "id": "list-status-badge",
+        "selector": "span.post-state, span.status-badge",
+        "title": "Status",
+        "message": "Shows whether the item is published, draft, or has other status.",
+        "category": "content",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-status"
+    },
+    {
+        "id": "list-search-box",
+        "selector": "input[type=\"search\"], .search-box input[type=\"text\"]",
+        "title": "Search items",
+        "message": "Type to search for items by title or content.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-search-items"
+    },
+    {
+        "id": "list-search-button",
+        "selector": ".search-box button, .search-box input[type=\"submit\"]",
+        "title": "Search",
+        "message": "Click to search for items matching your keywords.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-search"
+    },
+    {
+        "id": "list-filter-by-date",
+        "selector": "select[name=\"m\"], #filter-by-date",
+        "title": "Filter by date",
+        "message": "Show only items from a specific month or year.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-filter-by-date"
+    },
+    {
+        "id": "list-filter-by-category",
+        "selector": "select[name=\"cat\"]",
+        "title": "Filter by category",
+        "message": "Show only items in a specific category.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-filter-by-category"
+    },
+    {
+        "id": "list-filter-by-status",
+        "selector": ".subsubsub a, .status-filter a",
+        "title": "Filter by status",
+        "message": "Show items with a specific status (Published, Draft, Scheduled, etc).",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-filter-by-status"
+    },
+    {
+        "id": "list-filter-button",
+        "selector": "button#post-query-submit, .button.button-primary",
+        "title": "Filter",
+        "message": "Apply the selected filters to update the list.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-filter"
+    },
+    {
+        "id": "list-pagination",
+        "selector": ".tablenav-pages a, .pagination a",
+        "title": "Navigate pages",
+        "message": "Click to go to a different page of items.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-navigate-pages"
+    },
+    {
+        "id": "list-items-per-page",
+        "selector": ".tablenav-pages span.displaying-num",
+        "title": "Items per page",
+        "message": "Shows how many items are displayed per page. Adjust in Screen Options.",
+        "category": "navigation",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-items-per-page"
+    },
+    {
+        "id": "list-column-header-sortable",
+        "selector": "th a, th.sortable a",
+        "title": "Sort column",
+        "message": "Click to sort items by this column. Click again to reverse order.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-sort-column"
+    },
+    {
+        "id": "nav-tools-export-personal-data",
+        "selector": "#menu-tools li a[href*=\"export-personal-data.php\"]",
+        "title": "Export Personal Data",
+        "message": "Generate and download a data export file containing all personal information for a user account. Required by GDPR and privacy regulations.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-export-personal-data"
+    },
+    {
+        "id": "nav-tools-erase-personal-data",
+        "selector": "#menu-tools li a[href*=\"erase-personal-data.php\"]",
+        "title": "Erase Personal Data",
+        "message": "Remove all personal data associated with a user account, complying with privacy deletion requests and regulations like GDPR.",
+        "category": "settings",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-erase-personal-data"
+    },
+    {
+        "id": "nav-appearance-theme-editor",
+        "selector": "#menu-appearance li a[href*=\"theme-editor.php\"]",
+        "title": "Theme File Editor",
+        "message": "Edit theme template and CSS files directly. Be careful—errors can break your site. Consider using a child theme instead.",
+        "category": "design",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/theme-editor-theme-file-editor"
+    },
+    {
+        "id": "nav-plugins-plugin-editor",
+        "selector": "#menu-plugins li a[href*=\"plugin-editor.php\"]",
+        "title": "Plugin File Editor",
+        "message": "Edit plugin PHP files directly. Be careful—syntax errors can break your site and disable the plugin.",
+        "category": "extensions",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/plugin-editor-plugin-file-editor"
+    },
+    {
+        "id": "nav-appearance-site-editor",
+        "selector": "#menu-appearance li a[href*=\"site-editor.php\"], #menu-appearance li a[href*=\"customize.php\"]",
+        "title": "Site/Theme Editor",
+        "message": "Edit your site design, templates, and styles with a visual editor. Make changes with live preview before publishing.",
+        "category": "design",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/customize-site-theme-editor"
+    }
 ]

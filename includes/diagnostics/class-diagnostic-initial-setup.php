@@ -61,9 +61,10 @@ class Diagnostic_Initial_Setup extends Diagnostic_Base {
 		// Theme/Plugin Editors check
 		if ( ! defined( 'DISALLOW_FILE_EDIT' ) || ! DISALLOW_FILE_EDIT ) {
 			$findings[] = array(
-				'type' => 'file-editors-enabled',
-				'issue' => 'Theme and Plugin file editors are enabled. Disable by adding "define( \'DISALLOW_FILE_EDIT\', true );" to wp-config.php for security.',
-				'severity' => 'medium',
+				'type'         => 'file-editors-enabled',
+				'issue'        => 'Theme and Plugin file editors are enabled. Disable by adding "define( \'DISALLOW_FILE_EDIT\', true );" to wp-config.php for security.',
+				'severity'     => 'medium',
+				'auto_fixable' => true,
 			);
 		}
 
@@ -119,20 +120,6 @@ class Diagnostic_Initial_Setup extends Diagnostic_Base {
 				'issue' => 'Week start day not configured. May affect calendar displays.',
 				'severity' => 'info',
 			);
-		}
-
-		// Post via Email checks
-		$post_via_email = get_option( 'mailserver_url' );
-		if ( ! empty( $post_via_email ) ) {
-			// If enabled, check primary category isn't "Uncategorized"
-			$default_category = get_option( 'default_post_category' );
-			if ( '1' === $default_category ) { // 1 is Uncategorized
-				$findings[] = array(
-					'type' => 'post-via-email-category',
-					'issue' => 'Post via Email enabled but default category is "Uncategorized". Set a specific category for email posts.',
-					'severity' => 'low',
-				);
-			}
 		}
 
 		// Update Services (deprecated but sometimes still configured)

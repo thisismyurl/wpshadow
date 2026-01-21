@@ -200,38 +200,39 @@
 	height: 18px;
 	line-height: 18px;
 	text-align: center;
-	background: #0073aa;
-	color: #fff;
+	background: #e0e5ec;
+	color: #3a3f47;
 	border-radius: 50%;
 	font-size: 12px;
 	font-weight: bold;
 	text-decoration: none;
 	margin-left: 6px;
 	cursor: pointer;
-	transition: background-color 0.2s ease, transform 0.2s ease;
+	transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
 	vertical-align: middle;
 	flex-shrink: 0;
 }
 
 .wpshadow-help-icon:hover {
-	background: #005a87;
+	background: #cfd4dc;
+	color: #2b3037;
 	transform: scale(1.1);
 	text-decoration: none;
 }
 
 .wpshadow-help-icon:focus {
-	outline: 2px solid #4f94d4;
+	outline: 2px solid #8a95a6;
 	outline-offset: 2px;
 }
 
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
 	.wpshadow-help-icon {
-		background: #0073aa;
+		background: #d5d9e0;
 	}
 
 	.wpshadow-help-icon:hover {
-		background: #005a87;
+		background: #c4c9d1;
 	}
 }
 

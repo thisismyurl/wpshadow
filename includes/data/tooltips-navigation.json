@@ -1,254 +1,254 @@
 [
-  {
-    "id": "nav-wpshadow",
-    "selector": "#menu-wpshadow > a",
-    "title": "WPShadow",
-    "message": "Central hub for site health monitoring, analysis tools, and optimization features.",
-    "category": "navigation",
-    "level": "beginner",
-    "kb_url": "https://wpshadow.com/docs/getting-started/wpshadow-dashboard"
-  },
-  {
-    "id": "nav-wpshadow-dashboard",
-    "selector": "#menu-wpshadow li a[href*=\"page=wpshadow\"], #menu-wpshadow li a[href*=\"page=wpshadow&\"]",
-    "title": "WPShadow Dashboard",
-    "message": "View your site health status, recent findings, and quick improvement recommendations.",
-    "category": "navigation",
-    "level": "beginner",
-    "kb_url": "https://wpshadow.com/docs/features/dashboard"
-  },
-  {
-    "id": "nav-wpshadow-workflows",
-    "selector": "#menu-wpshadow li a[href*=\"page=wpshadow-workflows\"]",
-    "title": "Workflow Manager",
-    "message": "Create and manage automated workflows to standardize site maintenance tasks.",
-    "category": "navigation",
-    "level": "intermediate",
-    "kb_url": "https://wpshadow.com/docs/features/workflows"
-  },
-  {
-    "id": "nav-wpshadow-tools",
-    "selector": "#menu-wpshadow li a[href*=\"page=wpshadow-tools\"]",
-    "title": "WPShadow Tools",
-    "message": "Access specialized analysis tools including accessibility audits, link checks, and color contrast analysis.",
-    "category": "navigation",
-    "level": "beginner",
-    "kb_url": "https://wpshadow.com/docs/features/tools"
-  },
-  {
-    "id": "nav-wpshadow-help",
-    "selector": "#menu-wpshadow li a[href*=\"page=wpshadow-help\"]",
-    "title": "Help & Guidance",
-    "message": "Learn tips, configure tooltips, and access helpful resources for your site.",
-    "category": "navigation",
-    "level": "beginner",
-    "kb_url": "https://wpshadow.com/docs/getting-started/help-and-guidance"
-  },
-  {
-    "id": "nav-dashboard",
-    "selector": "#menu-dashboard > a",
-    "title": "Dashboard home",
-    "message": "Visit the Dashboard for health, updates, and a high-level view of your site.",
-    "category": "navigation",
-    "level": "beginner",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/dashboard"
-  },
-  {
-    "id": "nav-tools",
-    "selector": "#menu-tools > a",
-    "title": "Site tools",
-    "message": "Access tools for importing, exporting, and analyzing your site.",
-    "category": "navigation",
-    "level": "intermediate",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/tools"
-  },
-  {
-    "id": "nav-tools-available",
-    "selector": "#menu-tools li a[href*=\"tools.php\"]",
-    "title": "Available tools",
-    "message": "Browse available tools for site maintenance and optimization.",
-    "category": "navigation",
-    "level": "intermediate",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/tools/available"
-  },
-  {
-    "id": "nav-tools-import",
-    "selector": "#menu-tools li a[href*=\"import.php\"]",
-    "title": "Import content",
-    "message": "Import posts, pages, and other content from another site.",
-    "category": "navigation",
-    "level": "intermediate",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/tools/import"
-  },
-  {
-    "id": "nav-tools-export",
-    "selector": "#menu-tools li a[href*=\"export.php\"]",
-    "title": "Export content",
-    "message": "Back up your posts, pages, and other content as an XML file.",
-    "category": "navigation",
-    "level": "intermediate",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/tools/export"
-  },
-  {
-    "id": "bar-new",
-    "selector": "#wp-admin-bar-new-content",
-    "title": "Quick add",
-    "message": "Quickly create posts, pages, or upload media from anywhere in admin.",
-    "category": "navigation",
-    "level": "intermediate",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/navigation/quick-add"
-  },
-  {
-    "id": "bar-logout",
-    "selector": "#wp-admin-bar-logout",
-    "title": "Log out",
-    "message": "End your session and log out from the WordPress admin.",
-    "category": "navigation",
-    "level": "beginner",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/navigation/logout"
-  },
-  {
-    "id": "bar-site-name",
-    "selector": "#wp-admin-bar-site-name",
-    "title": "Site name",
-    "message": "Visit your site home page or access site-level settings.",
-    "category": "navigation",
-    "level": "beginner",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/navigation/bar-site-name"
-  },
-  {
-    "id": "collapse-menu",
-    "selector": "#collapse-button, .wp-responsive-open #collapse-button",
-    "title": "Toggle menu",
-    "message": "Collapse or expand the sidebar menu for more screen space.",
-    "category": "navigation",
-    "level": "beginner",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/navigation/collapse-menu"
-  },
-  {
-    "id": "screen-options",
-    "selector": "#screen-options-link",
-    "title": "Screen options",
-    "message": "Customize what columns and items appear on this page.",
-    "category": "navigation",
-    "level": "intermediate",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/navigation/screen-options"
-  },
-  {
-    "id": "help-tab",
-    "selector": "#contextual-help-link",
-    "title": "Get help",
-    "message": "Learn more about this WordPress admin page and its features.",
-    "category": "navigation",
-    "level": "beginner",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/navigation/help-tab"
-  },
-  {
-    "id": "admin-search",
-    "selector": ".wp-admin-search__wrapper input[type=\"search\"]",
-    "title": "Search admin",
-    "message": "Quickly search for posts, pages, settings, and more from anywhere in the admin.",
-    "category": "navigation",
-    "level": "intermediate",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/navigation/admin-search"
-  },
-  {
-    "id": "bulk-actions",
-    "selector": ".bulkactions select[name=\"action\"], .bulkactions select[name=\"action2\"]",
-    "title": "Bulk actions",
-    "message": "Select an action and check boxes above to perform the same action on multiple items.",
-    "category": "navigation",
-    "level": "intermediate",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/navigation/bulk-actions"
-  },
-  {
-    "id": "form-cancel",
-    "selector": "a.button-secondary[href*=\"admin.php\"]",
-    "title": "Cancel",
-    "message": "Go back without saving changes.",
-    "category": "navigation",
-    "level": "beginner",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/navigation/cancel"
-  },
-  {
-    "id": "list-search-box",
-    "selector": "input[type=\"search\"], .search-box input[type=\"text\"]",
-    "title": "Search items",
-    "message": "Type to search for items by title or content.",
-    "category": "navigation",
-    "level": "beginner",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/navigation/list-search-box"
-  },
-  {
-    "id": "list-search-button",
-    "selector": ".search-box button, .search-box input[type=\"submit\"]",
-    "title": "Search",
-    "message": "Click to search for items matching your keywords.",
-    "category": "navigation",
-    "level": "beginner",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/navigation/list-search-button"
-  },
-  {
-    "id": "list-filter-by-date",
-    "selector": "select[name=\"m\"], #filter-by-date",
-    "title": "Filter by date",
-    "message": "Show only items from a specific month or year.",
-    "category": "navigation",
-    "level": "beginner",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/navigation/list-filter-by-date"
-  },
-  {
-    "id": "list-filter-by-category",
-    "selector": "select[name=\"cat\"]",
-    "title": "Filter by category",
-    "message": "Show only items in a specific category.",
-    "category": "navigation",
-    "level": "beginner",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/navigation/list-filter-by-category"
-  },
-  {
-    "id": "list-filter-by-status",
-    "selector": ".subsubsub a, .status-filter a",
-    "title": "Filter by status",
-    "message": "Show items with a specific status (Published, Draft, Scheduled, etc).",
-    "category": "navigation",
-    "level": "beginner",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/navigation/list-filter-by-status"
-  },
-  {
-    "id": "list-filter-button",
-    "selector": "button#post-query-submit, .button.button-primary",
-    "title": "Filter",
-    "message": "Apply the selected filters to update the list.",
-    "category": "navigation",
-    "level": "beginner",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/navigation/list-filter-button"
-  },
-  {
-    "id": "list-pagination",
-    "selector": ".tablenav-pages a, .pagination a",
-    "title": "Navigate pages",
-    "message": "Click to go to a different page of items.",
-    "category": "navigation",
-    "level": "beginner",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/navigation/list-pagination"
-  },
-  {
-    "id": "list-items-per-page",
-    "selector": ".tablenav-pages span.displaying-num",
-    "title": "Items per page",
-    "message": "Shows how many items are displayed per page. Adjust in Screen Options.",
-    "category": "navigation",
-    "level": "intermediate",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/navigation/list-items-per-page"
-  },
-  {
-    "id": "list-column-header-sortable",
-    "selector": "th a, th.sortable a",
-    "title": "Sort column",
-    "message": "Click to sort items by this column. Click again to reverse order.",
-    "category": "navigation",
-    "level": "beginner",
-    "kb_url": "https://wpshadow.com/docs/wordpress-basics/navigation/list-column-header-sortable"
-  }
+    {
+        "id": "nav-wpshadow",
+        "selector": "#menu-wpshadow > a",
+        "title": "WPShadow",
+        "message": "Central hub for site health monitoring, analysis tools, and optimization features.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-wpshadow"
+    },
+    {
+        "id": "nav-wpshadow-dashboard",
+        "selector": "#menu-wpshadow li a[href*=\"page=wpshadow\"], #menu-wpshadow li a[href*=\"page=wpshadow&\"]",
+        "title": "WPShadow Dashboard",
+        "message": "View your site health status, recent findings, and quick improvement recommendations.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-wpshadow-dashboard"
+    },
+    {
+        "id": "nav-wpshadow-workflows",
+        "selector": "#menu-wpshadow li a[href*=\"page=wpshadow-workflows\"]",
+        "title": "Workflow Manager",
+        "message": "Create and manage automated workflows to standardize site maintenance tasks.",
+        "category": "navigation",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-workflow-manager"
+    },
+    {
+        "id": "nav-wpshadow-tools",
+        "selector": "#menu-wpshadow li a[href*=\"page=wpshadow-tools\"]",
+        "title": "WPShadow Tools",
+        "message": "Access specialized analysis tools including accessibility audits, link checks, and color contrast analysis.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-wpshadow-tools"
+    },
+    {
+        "id": "nav-wpshadow-help",
+        "selector": "#menu-wpshadow li a[href*=\"page=wpshadow-help\"]",
+        "title": "Help & Guidance",
+        "message": "Learn tips, configure tooltips, and access helpful resources for your site.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-help-guidance"
+    },
+    {
+        "id": "nav-dashboard",
+        "selector": "#menu-dashboard > a",
+        "title": "Dashboard home",
+        "message": "Visit the Dashboard for health, updates, and a high-level view of your site.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-dashboard-home"
+    },
+    {
+        "id": "nav-tools",
+        "selector": "#menu-tools > a",
+        "title": "Site tools",
+        "message": "Access tools for importing, exporting, and analyzing your site.",
+        "category": "navigation",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-site-tools"
+    },
+    {
+        "id": "nav-tools-available",
+        "selector": "#menu-tools li a[href*=\"tools.php\"]",
+        "title": "Available tools",
+        "message": "Browse available tools for site maintenance and optimization.",
+        "category": "navigation",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-available-tools"
+    },
+    {
+        "id": "nav-tools-import",
+        "selector": "#menu-tools li a[href*=\"import.php\"]",
+        "title": "Import content",
+        "message": "Import posts, pages, and other content from another site.",
+        "category": "navigation",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-import-content"
+    },
+    {
+        "id": "nav-tools-export",
+        "selector": "#menu-tools li a[href*=\"export.php\"]",
+        "title": "Export content",
+        "message": "Back up your posts, pages, and other content as an XML file.",
+        "category": "navigation",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-export-content"
+    },
+    {
+        "id": "bar-new",
+        "selector": "#wp-admin-bar-new-content",
+        "title": "Quick add",
+        "message": "Quickly create posts, pages, or upload media from anywhere in admin.",
+        "category": "navigation",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-quick-add"
+    },
+    {
+        "id": "bar-logout",
+        "selector": "#wp-admin-bar-logout",
+        "title": "Log out",
+        "message": "End your session and log out from the WordPress admin.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-log-out"
+    },
+    {
+        "id": "bar-site-name",
+        "selector": "#wp-admin-bar-site-name",
+        "title": "Site name",
+        "message": "Visit your site home page or access site-level settings.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-site-name"
+    },
+    {
+        "id": "collapse-menu",
+        "selector": "#collapse-button, .wp-responsive-open #collapse-button",
+        "title": "Toggle menu",
+        "message": "Collapse or expand the sidebar menu for more screen space.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-toggle-menu"
+    },
+    {
+        "id": "screen-options",
+        "selector": "#screen-options-link",
+        "title": "Screen options",
+        "message": "Customize what columns and items appear on this page.",
+        "category": "navigation",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-screen-options"
+    },
+    {
+        "id": "help-tab",
+        "selector": "#contextual-help-link",
+        "title": "Get help",
+        "message": "Learn more about this WordPress admin page and its features.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-get-help"
+    },
+    {
+        "id": "admin-search",
+        "selector": ".wp-admin-search__wrapper input[type=\"search\"]",
+        "title": "Search admin",
+        "message": "Quickly search for posts, pages, settings, and more from anywhere in the admin.",
+        "category": "navigation",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-search-admin"
+    },
+    {
+        "id": "bulk-actions",
+        "selector": ".bulkactions select[name=\"action\"], .bulkactions select[name=\"action2\"]",
+        "title": "Bulk actions",
+        "message": "Select an action and check boxes above to perform the same action on multiple items.",
+        "category": "navigation",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-bulk-actions"
+    },
+    {
+        "id": "form-cancel",
+        "selector": "a.button-secondary[href*=\"admin.php\"]",
+        "title": "Cancel",
+        "message": "Go back without saving changes.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-cancel"
+    },
+    {
+        "id": "list-search-box",
+        "selector": "input[type=\"search\"], .search-box input[type=\"text\"]",
+        "title": "Search items",
+        "message": "Type to search for items by title or content.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-search-items"
+    },
+    {
+        "id": "list-search-button",
+        "selector": ".search-box button, .search-box input[type=\"submit\"]",
+        "title": "Search",
+        "message": "Click to search for items matching your keywords.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-search"
+    },
+    {
+        "id": "list-filter-by-date",
+        "selector": "select[name=\"m\"], #filter-by-date",
+        "title": "Filter by date",
+        "message": "Show only items from a specific month or year.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-filter-by-date"
+    },
+    {
+        "id": "list-filter-by-category",
+        "selector": "select[name=\"cat\"]",
+        "title": "Filter by category",
+        "message": "Show only items in a specific category.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-filter-by-category"
+    },
+    {
+        "id": "list-filter-by-status",
+        "selector": ".subsubsub a, .status-filter a",
+        "title": "Filter by status",
+        "message": "Show items with a specific status (Published, Draft, Scheduled, etc).",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-filter-by-status"
+    },
+    {
+        "id": "list-filter-button",
+        "selector": "button#post-query-submit, .button.button-primary",
+        "title": "Filter",
+        "message": "Apply the selected filters to update the list.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-filter"
+    },
+    {
+        "id": "list-pagination",
+        "selector": ".tablenav-pages a, .pagination a",
+        "title": "Navigate pages",
+        "message": "Click to go to a different page of items.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-navigate-pages"
+    },
+    {
+        "id": "list-items-per-page",
+        "selector": ".tablenav-pages span.displaying-num",
+        "title": "Items per page",
+        "message": "Shows how many items are displayed per page. Adjust in Screen Options.",
+        "category": "navigation",
+        "level": "intermediate",
+        "kb_url": "https://wpshadow.com/kb/general-items-per-page"
+    },
+    {
+        "id": "list-column-header-sortable",
+        "selector": "th a, th.sortable a",
+        "title": "Sort column",
+        "message": "Click to sort items by this column. Click again to reverse order.",
+        "category": "navigation",
+        "level": "beginner",
+        "kb_url": "https://wpshadow.com/kb/general-sort-column"
+    }
 ]

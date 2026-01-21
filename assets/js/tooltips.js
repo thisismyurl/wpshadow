@@ -60,37 +60,40 @@
 		},
 
 		addHelpIcon: function( element, tipData ) {
-			// Find associated label - prioritize labels in <th> (table header)
+			// Prefer the row header label so the icon sits at the end of the primary setting label.
 			var label = null;
-			
-			// If element is a label, use it directly
-			if ( element.tagName === 'LABEL' ) {
-				label = element;
-			} else if ( element.id ) {
-				// First, look for label in <th> with for attribute matching element ID
-				label = document.querySelector( 'th label[for="' + element.id + '"]' );
-				
-				// If not found in <th>, look anywhere in the document
-				if ( !label ) {
+			var row = element.closest ? element.closest( 'tr' ) : null;
+
+			if ( row ) {
+				label = row.querySelector( 'th label' ) || row.querySelector( 'th' );
+			}
+
+			// If no header label, fall back to specific associations.
+			if ( !label ) {
+				if ( element.id ) {
 					label = document.querySelector( 'label[for="' + element.id + '"]' );
 				}
-			} else if ( element.name ) {
-				// First, look for label in <th> with for attribute matching element name
-				label = document.querySelector( 'th label[for="' + element.name + '"]' );
-				
-				// If not found in <th>, look anywhere in the document
-				if ( !label ) {
+				if ( !label && element.name ) {
 					label = document.querySelector( 'label[for="' + element.name + '"]' );
 				}
+				if ( !label && element.tagName === 'LABEL' ) {
+					label = element;
+				}
+				if ( !label && element.closest ) {
+					label = element.closest( 'label' );
+				}
 			}
-			
-			// If still no label found, try finding parent label
-			if ( !label && element.closest ) {
-				label = element.closest( 'label' );
-			}
-			
+
 			if ( !label ) {
 				return; // No label found, skip
+			}
+
+			// Avoid duplicate icons per row/label.
+			if ( row && row.querySelector( '.wpshadow-help-icon' ) ) {
+				return;
+			}
+			if ( !row && label.querySelector( '.wpshadow-help-icon' ) ) {
+				return;
 			}
 			
 			// Create help icon
@@ -182,8 +185,15 @@
 		},
 
 		positionTooltip: function( tooltipEl, triggerEl ) {
+			// Measure tooltip even when hidden to choose correct arrow placement.
 			var triggerRect = triggerEl.getBoundingClientRect();
+			var prevVisibility = tooltipEl.style.visibility;
+			var prevDisplay = tooltipEl.style.display;
+			tooltipEl.style.visibility = 'hidden';
+			tooltipEl.style.display = 'block';
 			var tooltipRect = tooltipEl.getBoundingClientRect();
+			tooltipEl.style.visibility = prevVisibility;
+			tooltipEl.style.display = prevDisplay;
 			var viewportWidth = window.innerWidth;
 			var viewportHeight = window.innerHeight;
 			var offset = 10;
@@ -191,11 +201,11 @@
 			var y = 0;
 			var arrowClass = 'arrow-top';
 
-			// Prefer showing below the trigger
-			y = triggerRect.bottom + offset + window.scrollY;
-
-			// If not enough space below, show above
-			if ( y + tooltipRect.height > viewportHeight + window.scrollY ) {
+			var canShowBelow = ( triggerRect.bottom + offset + tooltipRect.height ) <= ( viewportHeight + window.scrollY );
+			if ( canShowBelow ) {
+				y = triggerRect.bottom + offset + window.scrollY;
+				arrowClass = 'arrow-top';
+			} else {
 				y = triggerRect.top - offset - tooltipRect.height + window.scrollY;
 				arrowClass = 'arrow-bottom';
 			}

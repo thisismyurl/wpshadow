@@ -1853,6 +1853,13 @@ add_action( 'admin_init', function() {
  * Enqueue Tooltip assets across wp-admin (except login/front-end).
  */
 add_action( 'admin_enqueue_scripts', function() {
+	global $pagenow;
+	
+	// Skip tooltips on specific pages
+	if ( in_array( $pagenow, array( 'plugins.php', 'edit-comments.php', 'edit.php' ), true ) ) {
+		return;
+	}
+	
 	$user_id = get_current_user_id();
 	if ( ! $user_id ) {
 		return;
@@ -1883,9 +1890,14 @@ add_action( 'admin_enqueue_scripts', function() {
 	// Get full tooltip catalog
 	$catalog = wpshadow_get_tooltip_catalog();
 
-	// Build tooltip data object
+	// Build tooltip data object, excluding admin bar tooltips
 	$tooltip_data = array();
 	foreach ( $catalog as $tip ) {
+		// Skip admin bar tooltips
+		if ( strpos( $tip['selector'], '#wp-admin-bar-' ) === 0 ) {
+			continue;
+		}
+		
 		$tooltip_data[ $tip['id'] ] = array(
 			'id'       => $tip['id'],
 			'selector' => $tip['selector'],
@@ -1943,6 +1955,62 @@ add_action( 'admin_enqueue_scripts', function( $hook ) {
 } );
 
 /**
+ * Add WPShadow Dark Mode field to user profile.
+ */
+add_action( 'show_user_profile', 'wpshadow_add_dark_mode_profile_field' );
+add_action( 'edit_user_profile', 'wpshadow_add_dark_mode_profile_field' );
+
+function wpshadow_add_dark_mode_profile_field( $user ) {
+	$dark_mode_pref = get_user_meta( $user->ID, 'wpshadow_dark_mode_preference', true ) ?: 'auto';
+	?>
+	<table class="form-table" role="presentation">
+		<tr class="wpshadow-dark-mode-wrap">
+			<th scope="row"><?php esc_html_e( 'WPShadow Dark Mode', 'wpshadow' ); ?></th>
+			<td>
+				<fieldset>
+					<legend class="screen-reader-text"><span><?php esc_html_e( 'WPShadow Dark Mode', 'wpshadow' ); ?></span></legend>
+					<label>
+						<input type="radio" name="wpshadow_dark_mode" value="auto" <?php checked( $dark_mode_pref, 'auto' ); ?>>
+						<?php esc_html_e( 'Auto (follow system preference)', 'wpshadow' ); ?>
+					</label><br>
+					<label>
+						<input type="radio" name="wpshadow_dark_mode" value="light" <?php checked( $dark_mode_pref, 'light' ); ?>>
+						<?php esc_html_e( 'Light', 'wpshadow' ); ?>
+					</label><br>
+					<label>
+						<input type="radio" name="wpshadow_dark_mode" value="dark" <?php checked( $dark_mode_pref, 'dark' ); ?>>
+						<?php esc_html_e( 'Dark', 'wpshadow' ); ?>
+					</label>
+					<p class="description">
+						<?php esc_html_e( 'Choose your preferred dark mode setting for WPShadow admin pages.', 'wpshadow' ); ?>
+					</p>
+				</fieldset>
+			</td>
+		</tr>
+	</table>
+	<?php
+}
+
+/**
+ * Save WPShadow Dark Mode profile field.
+ */
+add_action( 'personal_options_update', 'wpshadow_save_dark_mode_profile_field' );
+add_action( 'edit_user_profile_update', 'wpshadow_save_dark_mode_profile_field' );
+
+function wpshadow_save_dark_mode_profile_field( $user_id ) {
+	if ( ! current_user_can( 'edit_user', $user_id ) ) {
+		return;
+	}
+
+	if ( isset( $_POST['wpshadow_dark_mode'] ) ) {
+		$dark_mode = sanitize_text_field( $_POST['wpshadow_dark_mode'] );
+		if ( in_array( $dark_mode, array( 'auto', 'light', 'dark' ), true ) ) {
+			update_user_meta( $user_id, 'wpshadow_dark_mode_preference', $dark_mode );
+		}
+	}
+}
+
+/**
  * Render Workflow Builder page.
  */
 function wpshadow_render_workflow_builder() {
@@ -1987,6 +2055,12 @@ function wpshadow_get_tools_catalog() {
 			'title'   => __( 'Dark Mode', 'wpshadow' ),
 			'desc'    => __( 'Enable dark mode for the WordPress admin interface.', 'wpshadow' ),
 			'tool'    => 'dark-mode',
+			'enabled' => true,
+		),
+		array(
+			'title'   => __( 'Email Test & Configuration', 'wpshadow' ),
+			'desc'    => __( 'Test email delivery and configure From Name/Email to ensure emails are sent properly.', 'wpshadow' ),
+			'tool'    => 'email-test',
 			'enabled' => true,
 		),
 		array(
@@ -3349,3 +3423,338 @@ function wpshadow_calculate_eco_score() {
 	);
 }
 
+/**
+ * Register WPShadow personal data exporter.
+ */
+add_filter( 'wp_privacy_personal_data_exporters', function( $exporters ) {
+	$exporters['wpshadow'] = array(
+		'exporter_friendly_name' => __( 'WPShadow User Preferences', 'wpshadow' ),
+		'callback'               => 'wpshadow_privacy_exporter',
+	);
+	return $exporters;
+} );
+
+/**
+ * Export WPShadow user data for privacy requests.
+ *
+ * @param string $email_address User email.
+ * @param int    $page          Page number.
+ * @return array Export data.
+ */
+function wpshadow_privacy_exporter( $email_address, $page = 1 ) {
+	$user = get_user_by( 'email', $email_address );
+	if ( ! $user ) {
+		return array(
+			'data' => array(),
+			'done' => true,
+		);
+	}
+
+	$user_id = $user->ID;
+	$export_items = array();
+
+	// Tooltip preferences
+	$tip_prefs = get_user_meta( $user_id, 'wpshadow_tip_prefs', true );
+	if ( ! empty( $tip_prefs ) && is_array( $tip_prefs ) ) {
+		$tip_data = array();
+		if ( ! empty( $tip_prefs['disabled_categories'] ) ) {
+			$tip_data[] = array(
+				'name'  => __( 'Disabled Tooltip Categories', 'wpshadow' ),
+				'value' => implode( ', ', $tip_prefs['disabled_categories'] ),
+			);
+		}
+		if ( ! empty( $tip_prefs['dismissed_tips'] ) ) {
+			$tip_data[] = array(
+				'name'  => __( 'Dismissed Tips', 'wpshadow' ),
+				'value' => implode( ', ', $tip_prefs['dismissed_tips'] ),
+			);
+		}
+		if ( ! empty( $tip_data ) ) {
+			$export_items[] = array(
+				'group_id'    => 'wpshadow_tooltip_prefs',
+				'group_label' => __( 'WPShadow Tooltip Preferences', 'wpshadow' ),
+				'item_id'     => "wpshadow-tooltips-{$user_id}",
+				'data'        => $tip_data,
+			);
+		}
+	}
+
+	// Dark mode preference
+	$dark_mode_pref = get_user_meta( $user_id, 'wpshadow_dark_mode_preference', true );
+	if ( ! empty( $dark_mode_pref ) ) {
+		$export_items[] = array(
+			'group_id'    => 'wpshadow_display_prefs',
+			'group_label' => __( 'WPShadow Display Preferences', 'wpshadow' ),
+			'item_id'     => "wpshadow-darkmode-{$user_id}",
+			'data'        => array(
+				array(
+					'name'  => __( 'Dark Mode Preference', 'wpshadow' ),
+					'value' => $dark_mode_pref,
+				),
+			),
+		);
+	}
+
+	// Hidden widget preferences
+	$quick_hidden = get_user_meta( $user_id, 'wpshadow_hide_quick_scan', true );
+	$deep_hidden  = get_user_meta( $user_id, 'wpshadow_hide_deep_scan', true );
+	if ( $quick_hidden || $deep_hidden ) {
+		$widget_data = array();
+		if ( $quick_hidden ) {
+			$widget_data[] = array(
+				'name'  => __( 'Quick Scan Widget Hidden', 'wpshadow' ),
+				'value' => __( 'Yes', 'wpshadow' ),
+			);
+		}
+		if ( $deep_hidden ) {
+			$widget_data[] = array(
+				'name'  => __( 'Deep Scan Widget Hidden', 'wpshadow' ),
+				'value' => __( 'Yes', 'wpshadow' ),
+			);
+		}
+		$export_items[] = array(
+			'group_id'    => 'wpshadow_widget_prefs',
+			'group_label' => __( 'WPShadow Dashboard Widget Preferences', 'wpshadow' ),
+			'item_id'     => "wpshadow-widgets-{$user_id}",
+			'data'        => $widget_data,
+		);
+	}
+
+	return array(
+		'data' => $export_items,
+		'done' => true,
+	);
+}
+
+/**
+ * Register WPShadow personal data eraser.
+ */
+add_filter( 'wp_privacy_personal_data_erasers', function( $erasers ) {
+	$erasers['wpshadow'] = array(
+		'eraser_friendly_name' => __( 'WPShadow User Preferences', 'wpshadow' ),
+		'callback'             => 'wpshadow_privacy_eraser',
+	);
+	return $erasers;
+} );
+
+/**
+ * Erase WPShadow user data for privacy requests.
+ *
+ * @param string $email_address User email.
+ * @param int    $page          Page number.
+ * @return array Erasure result.
+ */
+function wpshadow_privacy_eraser( $email_address, $page = 1 ) {
+	$user = get_user_by( 'email', $email_address );
+	if ( ! $user ) {
+		return array(
+			'items_removed'  => false,
+			'items_retained' => false,
+			'messages'       => array(),
+			'done'           => true,
+		);
+	}
+
+	$user_id = $user->ID;
+	$items_removed = false;
+
+	// Remove tooltip preferences
+	if ( delete_user_meta( $user_id, 'wpshadow_tip_prefs' ) ) {
+		$items_removed = true;
+	}
+
+	// Remove dark mode preference
+	if ( delete_user_meta( $user_id, 'wpshadow_dark_mode_preference' ) ) {
+		$items_removed = true;
+	}
+
+	// Remove widget visibility preferences
+	if ( delete_user_meta( $user_id, 'wpshadow_hide_quick_scan' ) ) {
+		$items_removed = true;
+	}
+	if ( delete_user_meta( $user_id, 'wpshadow_hide_deep_scan' ) ) {
+		$items_removed = true;
+	}
+
+	return array(
+		'items_removed'  => $items_removed,
+		'items_retained' => false,
+		'messages'       => array(),
+		'done'           => true,
+	);
+}
+
+/**
+ * Add WPShadow privacy policy content suggestion.
+ */
+add_action( 'admin_init', function() {
+	if ( ! function_exists( 'wp_add_privacy_policy_content' ) ) {
+		return;
+	}
+
+	$content = sprintf(
+		'<h2>%s</h2><p>%s</p><h3>%s</h3><ul><li>%s</li><li>%s</li><li>%s</li></ul><h3>%s</h3><p>%s</p>',
+		__( 'WPShadow Plugin', 'wpshadow' ),
+		__( 'This site uses the WPShadow plugin to enhance the WordPress admin experience. WPShadow stores the following user preferences locally on this site:', 'wpshadow' ),
+		__( 'What We Collect', 'wpshadow' ),
+		__( '<strong>Tooltip Preferences:</strong> Which admin tooltips you have dismissed or disabled, to avoid showing you the same tip repeatedly.', 'wpshadow' ),
+		__( '<strong>Display Preferences:</strong> Your dark mode preference (light, dark, or automatic) for the WPShadow admin interface.', 'wpshadow' ),
+		__( '<strong>Dashboard Widget Preferences:</strong> Which dashboard widgets you have chosen to hide or show.', 'wpshadow' ),
+		__( 'Your Rights', 'wpshadow' ),
+		__( 'You can request to export or erase your WPShadow preferences at any time using the WordPress privacy tools under Tools > Export Personal Data or Tools > Erase Personal Data.', 'wpshadow' )
+	);
+
+	wp_add_privacy_policy_content(
+		'WPShadow',
+		wp_kses_post( wpautop( $content, false ) )
+	);
+} );
+
+/**
+ * Generate a friendly, memorable strong password using word combinations.
+ *
+ * @return string Generated password.
+ */
+function wpshadow_generate_friendly_password() {
+	$json_file = WPSHADOW_PATH . 'includes/data/password-words.json';
+	
+	if ( ! file_exists( $json_file ) ) {
+		// Fallback to WordPress default if JSON file missing
+		return wp_generate_password( 16, true, true );
+	}
+	
+	$word_sets = json_decode( file_get_contents( $json_file ), true );
+	
+	if ( empty( $word_sets ) || ! is_array( $word_sets ) ) {
+		return wp_generate_password( 16, true, true );
+	}
+	
+	// Pick a random word set
+	$word_set = $word_sets[ array_rand( $word_sets ) ];
+	
+	// Combine words with first letter capitalized
+	$password = implode( '', $word_set );
+	
+	// Character substitutions to make it stronger
+	$substitutions = array(
+		'a' => '@',
+		'A' => '@',
+		'e' => '3',
+		'E' => '3',
+		'i' => '1',
+		'I' => '1',
+		'o' => '0',
+		'O' => '0',
+		's' => '$',
+		'S' => '$',
+		't' => '7',
+		'T' => '7',
+	);
+	
+	// Apply substitutions to 2-3 random positions
+	$chars = str_split( $password );
+	$positions_to_substitute = array_rand( $chars, min( 3, count( $chars ) ) );
+	
+	if ( ! is_array( $positions_to_substitute ) ) {
+		$positions_to_substitute = array( $positions_to_substitute );
+	}
+	
+	foreach ( $positions_to_substitute as $pos ) {
+		$char = $chars[ $pos ];
+		if ( isset( $substitutions[ $char ] ) ) {
+			$chars[ $pos ] = $substitutions[ $char ];
+		}
+	}
+	
+	$password = implode( '', $chars );
+	
+	// Add ! at the end for extra strength
+	$password .= '!';
+	
+	return $password;
+}
+
+/**
+ * Override default password generation on user-new.php with friendly password.
+ */
+add_action( 'admin_enqueue_scripts', function( $hook ) {
+	if ( $hook !== 'user-new.php' ) {
+		return;
+	}
+	
+	wp_enqueue_script(
+		'wpshadow-friendly-password',
+		WPSHADOW_URL . 'assets/js/friendly-password.js',
+		array( 'jquery', 'user-profile' ),
+		WPSHADOW_VERSION,
+		true
+	);
+	
+	wp_localize_script( 'wpshadow-friendly-password', 'wpshadowPassword', array(
+		'password' => wpshadow_generate_friendly_password(),
+		'nonce'    => wp_create_nonce( 'wpshadow_generate_password' ),
+	) );
+} );
+
+/**
+ * AJAX handler to generate a new friendly password on demand.
+ */
+add_action( 'wp_ajax_wpshadow_generate_password', function() {
+	check_ajax_referer( 'wpshadow_generate_password', 'nonce' );
+	
+	if ( ! current_user_can( 'create_users' ) ) {
+		wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
+	}
+	
+	wp_send_json_success( array(
+		'password' => wpshadow_generate_friendly_password(),
+	) );
+} );
+
+/**
+ * Override wp_mail From Name if WPShadow setting is configured.
+ */
+add_filter( 'wp_mail_from_name', function( $from_name ) {
+	$custom_from_name = get_option( 'wpshadow_email_from_name', '' );
+	
+	if ( ! empty( $custom_from_name ) ) {
+		return $custom_from_name;
+	}
+	
+	return $from_name;
+}, 999 );
+
+/**
+ * Override wp_mail From Email if WPShadow setting is configured.
+ */
+add_filter( 'wp_mail_from', function( $from_email ) {
+	$custom_from_email = get_option( 'wpshadow_email_from_email', '' );
+	
+	if ( ! empty( $custom_from_email ) && is_email( $custom_from_email ) ) {
+		return $custom_from_email;
+	}
+	
+	return $from_email;
+}, 999 );
+
+/**
+ * Uncheck "Send user notification email" by default for privacy law compliance (CASL).
+ */
+add_action( 'admin_enqueue_scripts', function( $hook ) {
+	if ( $hook !== 'user-new.php' ) {
+		return;
+	}
+
+	$should_uncheck = get_option( 'wpshadow_user_email_unchecked_by_default', false );
+	if ( ! $should_uncheck ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'wpshadow-user-email-compliance',
+		WPSHADOW_URL . 'assets/js/user-email-compliance.js',
+		array(),
+		WPSHADOW_VERSION,
+		true
+	);
+} );
