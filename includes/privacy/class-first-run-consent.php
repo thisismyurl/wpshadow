@@ -131,7 +131,7 @@ class First_Run_Consent {
 				">' . esc_html( __( 'Save preferences', 'wpshadow' ) ) . '</button>
 			</div>
 			<p style="margin: 10px 0 0; font-size: 12px;">
-				<a href="https://wpshadow.com/kb/privacy/?utm_source=wpshadow&utm_medium=plugin&utm_campaign=consent" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 600;">
+				<a href="https://wpshadow.com/privacy/?utm_source=wpshadow&utm_medium=plugin&utm_campaign=consent" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 600;">
 					' . esc_html( __( 'Read our privacy approach', 'wpshadow' ) ) . '
 				</a>
 			</p>

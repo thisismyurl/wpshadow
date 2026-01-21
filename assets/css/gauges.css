@@ -1,0 +1,238 @@
+/**
+ * WPShadow Health Gauges Stylesheet
+ * 
+ * Implements the 11-gauge health dashboard with 3-column responsive layout.
+ * Philosophy: Show value (#9) - Visual health at a glance
+ * 
+ * @package WPShadow
+ */
+
+/* Gauge Container - 3-Column Layout */
+.wpshadow-health-dashboard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin: 30px 0;
+}
+
+/* Left Column: Large Overall Health Gauge */
+.wpshadow-gauge-column-left {
+    grid-column: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.wpshadow-gauge-large {
+    border-radius: 12px;
+    padding: 24px;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.wpshadow-gauge-large:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.wpshadow-gauge-large h3 {
+    margin: 0 0 16px 0;
+    font-size: 20px;
+    color: #333;
+    font-weight: 600;
+}
+
+.wpshadow-gauge-large .wpshadow-gauge-svg {
+    margin: 0 auto;
+    display: block;
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.2));
+}
+
+.wpshadow-gauge-large p {
+    margin: 16px 0 0 0;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+}
+
+/* Quick Scan & Deep Scan Buttons */
+.wpshadow-scan-buttons {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.wpshadow-scan-buttons .button {
+    width: 100%;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.wpshadow-scan-buttons .button-primary {
+    background-color: #0073aa;
+    color: white;
+}
+
+.wpshadow-scan-buttons .button-primary:hover {
+    background-color: #005a87;
+    box-shadow: 0 2px 8px rgba(0, 115, 170, 0.3);
+}
+
+.wpshadow-scan-buttons .button {
+    background-color: #f3f3f3;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.wpshadow-scan-buttons .button:hover {
+    background-color: #e8e8e8;
+    border-color: #999;
+}
+
+/* Right Columns: Small Category Gauges */
+.wpshadow-gauge-column-right {
+    grid-column: 2 / 4;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.wpshadow-gauge-small {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 12px 14px;
+    background: #ffffff;
+    text-decoration: none !important;
+    color: inherit !important;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    height: 90px;
+    min-width: 0;
+}
+
+.wpshadow-gauge-small:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: #bbb;
+    transform: translateY(-1px);
+}
+
+.wpshadow-gauge-small-icon {
+    flex-shrink: 0;
+}
+
+.wpshadow-gauge-small-icon svg {
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.1));
+}
+
+.wpshadow-gauge-small-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.wpshadow-gauge-small-text-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.wpshadow-gauge-small-text-header .dashicons {
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.wpshadow-gauge-small-text-header h4 {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.wpshadow-gauge-small-text-status {
+    font-weight: 600;
+    font-size: 11px;
+}
+
+.wpshadow-gauge-small-text-count {
+    color: #666;
+    font-size: 10px;
+    margin-top: 2px;
+}
+
+/* Responsive Design */
+@media (max-width: 1400px) {
+    .wpshadow-health-dashboard {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .wpshadow-gauge-column-left {
+        grid-column: 1;
+    }
+
+    .wpshadow-gauge-column-right {
+        grid-column: 1;
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .wpshadow-health-dashboard {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .wpshadow-gauge-column-right {
+        grid-template-columns: 1fr;
+    }
+
+    .wpshadow-gauge-large {
+        padding: 16px;
+    }
+
+    .wpshadow-gauge-large h3 {
+        font-size: 18px;
+        margin-bottom: 12px;
+    }
+
+    .wpshadow-scan-buttons {
+        margin-top: 12px;
+        gap: 8px;
+    }
+
+    .wpshadow-scan-buttons .button {
+        padding: 8px;
+        font-size: 13px;
+    }
+}
+
+/* Gauge SVG Animations */
+svg circle[class*="gauge-progress"] {
+    transition: stroke-dasharray 0.5s ease, stroke 0.3s ease;
+}
+
+/* Color Utilities for Category Gauges */
+.wpshadow-gauge-security { --gauge-color: #dc2626; }
+.wpshadow-gauge-performance { --gauge-color: #0891b2; }
+.wpshadow-gauge-code-quality { --gauge-color: #7c3aed; }
+.wpshadow-gauge-seo { --gauge-color: #2563eb; }
+.wpshadow-gauge-design { --gauge-color: #8e44ad; }
+.wpshadow-gauge-settings { --gauge-color: #4b5563; }
+.wpshadow-gauge-wordpress-config { --gauge-color: #0073aa; }
+.wpshadow-gauge-monitoring { --gauge-color: #059669; }
+.wpshadow-gauge-workflows { --gauge-color: #ea580c; }
+.wpshadow-gauge-site-health { --gauge-color: #db2777; }
+.wpshadow-gauge-wordpress-health { --gauge-color: #2d5016; }
+.wpshadow-gauge-overall { --gauge-color: #1976d2; }

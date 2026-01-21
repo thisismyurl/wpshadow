@@ -1,0 +1,6 @@
+{
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  "github.copilot.chat.maxRequests": 200,
+  "github.copilot.chat.autoApproveFileWrites": true
+}

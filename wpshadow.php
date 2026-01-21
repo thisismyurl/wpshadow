@@ -1329,12 +1329,20 @@ add_action( 'plugins_loaded', function() {
 } );
 
 /**
- * Enqueue Kanban board assets.
+ * Enqueue Kanban board assets and gauges CSS.
  */
 add_action( 'admin_enqueue_scripts', function( $hook ) {
 	if ( strpos( $hook, 'wpshadow' ) === false ) {
 		return;
 	}
+
+	// Enqueue gauges CSS for health dashboard (#563)
+	wp_enqueue_style(
+		'wpshadow-gauges',
+		WPSHADOW_URL . 'assets/css/gauges.css',
+		array(),
+		WPSHADOW_VERSION
+	);
 
 	wp_enqueue_style(
 		'wpshadow-kanban-board',
@@ -2091,6 +2099,7 @@ function wpshadow_render_dashboard() {
 				'monitoring' => array( 'label' => __( 'Monitoring', 'wpshadow' ), 'icon' => 'dashicons-chart-line', 'color' => '#059669' ),
 				'workflows' => array( 'label' => __( 'Workflows', 'wpshadow' ), 'icon' => 'dashicons-update', 'color' => '#ea580c' ),
 				'site_health' => array( 'label' => __( 'Site Health', 'wpshadow' ), 'icon' => 'dashicons-heart', 'color' => '#db2777' ),
+				'wordpress_health' => array( 'label' => __( 'WordPress Site Health', 'wpshadow' ), 'icon' => 'dashicons-wordpress-alt', 'color' => '#2d5016' ),
 			);
 			$cat_meta = $category_meta[ $filter_category ] ?? array( 'label' => ucfirst( $filter_category ), 'icon' => 'dashicons-admin-generic', 'color' => '#666' );
 		?>
@@ -2347,6 +2356,12 @@ function wpshadow_render_dashboard() {
 				'color' => '#db2777',
 				'bg'    => '#fce7f3',
 			),
+			'wordpress_health' => array(
+				'label' => __( 'WordPress Site Health', 'wpshadow' ),
+				'icon'  => 'dashicons-wordpress-alt',
+				'color' => '#2d5016',
+				'bg'    => '#f0f9f0',
+			),
 		);
 
 		// Calculate overall health score (or category-specific if filtering)
@@ -2465,53 +2480,64 @@ function wpshadow_render_dashboard() {
 					</div>
 				</div>
 				
-				<!-- Right: 10 Small Category Gauges in 2x5 Grid (2 columns, 5 rows) -->
+				<!-- Right: 11 Small Category Gauges in 2x6 Grid (2 columns, 6 rows) -->
 				<div style="flex: 1; min-width: 0;">
 					<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
 						<?php foreach ( $category_meta as $cat_key => $meta ) :
-							$cat_findings = $findings_by_category[ $cat_key ] ?? array();
-							$total = count( $cat_findings );
-							
-							// Calculate category health score
-							$critical_count = count( array_filter( $cat_findings, function( $f ) { return isset( $f['color'] ) && $f['color'] === '#f44336'; } ) );
-							$passed = $total - $critical_count;
-							
-							// Determine status
-							if ( $total === 0 ) {
-								$status_text = __( 'Excellent', 'wpshadow' );
-								$status_icon = '✓';
-								$status_color = '#2e7d32';
-							} elseif ( $critical_count === 0 ) {
-								$status_text = __( 'Good', 'wpshadow' );
-								$status_icon = '✓';
-								$status_color = '#2e7d32';
-							} elseif ( $critical_count < $total / 2 ) {
-								$status_text = __( 'Fair', 'wpshadow' );
-								$status_icon = '◐';
-								$status_color = '#f57c00';
+							// Special handling for WordPress Site Health gauge (#563)
+							if ( $cat_key === 'wordpress_health' ) {
+								$wp_health = wpshadow_get_wordpress_site_health();
+								$gauge_percent = $wp_health['score'];
+								$status_text = $wp_health['status'];
+								$gauge_color = $wp_health['color'];
+								$status_icon = $gauge_percent >= 80 ? '✓' : ( $gauge_percent >= 50 ? '◐' : '✕' );
+								$status_color = $gauge_percent >= 80 ? '#2e7d32' : ( $gauge_percent >= 50 ? '#f57c00' : '#c62828' );
 							} else {
-								$status_text = __( 'Needs Work', 'wpshadow' );
-								$status_icon = '✕';
-								$status_color = '#c62828';
+								$cat_findings = $findings_by_category[ $cat_key ] ?? array();
+								$total = count( $cat_findings );
+								
+								// Calculate category health score
+								$critical_count = count( array_filter( $cat_findings, function( $f ) { return isset( $f['color'] ) && $f['color'] === '#f44336'; } ) );
+								$passed = $total - $critical_count;
+								
+								// Determine status
+								if ( $total === 0 ) {
+									$status_text = __( 'Excellent', 'wpshadow' );
+									$status_icon = '✓';
+									$status_color = '#2e7d32';
+								} elseif ( $critical_count === 0 ) {
+									$status_text = __( 'Good', 'wpshadow' );
+									$status_icon = '✓';
+									$status_color = '#2e7d32';
+								} elseif ( $critical_count < $total / 2 ) {
+									$status_text = __( 'Fair', 'wpshadow' );
+									$status_icon = '◐';
+									$status_color = '#f57c00';
+								} else {
+									$status_text = __( 'Needs Work', 'wpshadow' );
+									$status_icon = '✕';
+									$status_color = '#c62828';
+								}
+								
+								// Calculate threat gauge percentage
+								$threat_total = 0;
+								foreach ( $cat_findings as $finding ) {
+									$threat_total += isset( $finding['threat_level'] ) ? $finding['threat_level'] : 50;
+								}
+								$gauge_percent = $total > 0 ? min( 100, ( $threat_total / $total ) / 100 * 100 ) : 0;
+								$gauge_percent = 100 - $gauge_percent; // Invert: higher is better
+								$gauge_color = wpshadow_get_threat_gauge_color( 100 - $gauge_percent );
 							}
-							
-							// Calculate threat gauge percentage
-							$threat_total = 0;
-							foreach ( $cat_findings as $finding ) {
-								$threat_total += isset( $finding['threat_level'] ) ? $finding['threat_level'] : 50;
-							}
-							$gauge_percent = $total > 0 ? min( 100, ( $threat_total / $total ) / 100 * 100 ) : 0;
-							$gauge_percent = 100 - $gauge_percent; // Invert: higher is better
 						?>
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&category=' . $cat_key ) ); ?>" style="text-decoration: none; color: inherit;" title="<?php echo esc_attr( sprintf( __( 'Click to view %s details', 'wpshadow' ), $meta['label'] ) ); ?>">
-							<div style="display: flex; align-items: center; gap: 14px; border: 1px solid #ddd; border-radius: 6px; padding: 12px 14px; background: #ffffff; transition: all 0.2s ease; cursor: pointer; height: 90px;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'; this.style.borderColor='#bbb';" onmouseout="this.style.boxShadow='none'; this.style.borderColor='#ddd';">
+							<div style="display: flex; align-items: center; gap: 14px; border: 2px solid <?php echo esc_attr( $meta['color'] ); ?>; border-radius: 6px; padding: 12px 14px; background: #ffffff; transition: all 0.2s ease; cursor: pointer; height: 90px;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'; this.style.borderColor='<?php echo esc_js( $meta['color'] ); ?>';" onmouseout="this.style.boxShadow='none'; this.style.borderColor='<?php echo esc_js( $meta['color'] ); ?>';">
 								<!-- Gauge on Left -->
 								<div style="flex-shrink: 0;">
 									<svg width="70" height="70" viewBox="0 0 100 100" style="filter: drop-shadow(0 1px 3px rgba(0,0,0,0.1));">
 										<!-- Gauge background -->
 										<circle cx="50" cy="50" r="40" fill="none" stroke="#e0e0e0" stroke-width="8" />
 										<!-- Gauge progress -->
-										<circle cx="50" cy="50" r="40" fill="none" stroke="<?php echo esc_attr( wpshadow_get_threat_gauge_color( 100 - $gauge_percent ) ); ?>" stroke-width="8"
+										<circle cx="50" cy="50" r="40" fill="none" stroke="<?php echo esc_attr( $gauge_color ); ?>" stroke-width="8"
 											stroke-dasharray="<?php echo (int) ( $gauge_percent / 100 * 251 ); ?> 251"
 											stroke-linecap="round" transform="rotate(-90 50 50)"
 											style="transition: stroke-dasharray 0.3s ease;" />
@@ -2535,11 +2561,14 @@ function wpshadow_render_dashboard() {
 										</span>
 										<div style="color: #666; font-size: 10px; margin-top: 2px;">
 											<?php 
-											// Show "No issues" instead of "0 of 0"
-											if ( $total === 0 ) {
-												echo esc_html( __( 'No issues', 'wpshadow' ) );
-											} else {
-												echo esc_html( sprintf( __( '%d of %d', 'wpshadow' ), $passed, $total ) );
+											if ( $cat_key === 'wordpress_health' ) {
+												echo esc_html( __( 'WordPress native', 'wpshadow' ) );
+											} elseif ( isset( $total ) ) {
+												if ( $total === 0 ) {
+													echo esc_html( __( 'No issues', 'wpshadow' ) );
+												} else {
+													echo esc_html( sprintf( __( '%d of %d', 'wpshadow' ), $passed, $total ) );
+												}
 											}
 											?>
 										</div>
@@ -3140,6 +3169,64 @@ function wpshadow_format_time_with_tooltip( $timestamp ) {
 		'<span title="%s">%s</span>',
 		esc_attr( $precise ),
 		esc_html( $relative )
+	);
+}
+
+/**
+ * Get WordPress Site Health status.
+ * 
+ * Philosophy: Show value (#9) - Track WordPress native health indicators
+ * 
+ * @return array Array with 'score' (0-100), 'status' (Good/Fair/Critical), 'color'.
+ */
+function wpshadow_get_wordpress_site_health() {
+	// Try to use native WordPress Site Health if available
+	if ( function_exists( 'wp_get_site_health_status' ) ) {
+		$health = wp_get_site_health_status();
+		$status = isset( $health['status'] ) ? $health['status'] : 'good';
+		$score = isset( $health['percentage'] ) ? (int) $health['percentage'] : 75;
+	} else {
+		// Fallback: Use basic checks
+		$score = 75;
+		$status = 'good';
+		
+		// Check for SSL
+		if ( ! is_ssl() ) {
+			$score -= 20;
+		}
+		
+		// Check for REST API
+		if ( ! rest_get_url_prefix() ) {
+			$score -= 10;
+		}
+		
+		// Check for debug mode
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			$score -= 15;
+		}
+		
+		if ( $score <= 50 ) {
+			$status = 'critical';
+		} elseif ( $score <= 75 ) {
+			$status = 'recommended';
+		}
+	}
+	
+	// Map status to color
+	$color_map = array(
+		'good'        => '#2d5016',  // Green
+		'recommended' => '#f57c00',  // Orange
+		'critical'    => '#c62828',  // Red
+	);
+	
+	$color = $color_map[ $status ] ?? '#2d5016';
+	
+	return array(
+		'score'  => max( 0, min( 100, $score ) ),
+		'status' => ucfirst( $status ),
+		'color'  => $color,
+		'label'  => __( 'WordPress Site Health', 'wpshadow' ),
+		'icon'   => 'dashicons-wordpress-alt',
 	);
 }
 
