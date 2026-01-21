@@ -15,43 +15,43 @@ use WPShadow\Core\Command_Base;
  * Endpoint is admin-only and requires nonce verification.
  */
 class Register_Cloud_Command extends Command_Base {
-	
 	/**
-	 * Register AJAX hook
+	 * Use dedicated nonce for registration.
+	 *
+	 * @var string
 	 */
-	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_register_cloud', [ __CLASS__, 'handle' ] );
+	protected static $nonce_action = 'wpshadow_register_nonce';
+
+	/**
+	 * Get command name
+	 *
+	 * @return string
+	 */
+	public function get_name(): string {
+		return 'register_cloud';
 	}
-	
+
 	/**
-	 * Handle registration AJAX request
-	 * 
-	 * POST parameters:
-	 * - nonce: wpshadow_register_nonce
-	 * - email: (optional) Registration email (defaults to admin email)
+	 * Handle registration request.
+	 *
+	 * @return array Result payload.
 	 */
-	public static function handle(): void {
-		// Security checks (admin-only)
-		self::verify_request( 'wpshadow_register_nonce', 'manage_options' );
-		
-		// Get and sanitize email
-		$email = self::get_post_param( 'email', 'email', '', false );
+	protected function execute(): array {
+		$email = sanitize_email( $this->get_param( 'email' ) );
 		if ( empty( $email ) ) {
 			$email = get_option( 'admin_email' );
 		}
-		
-		// Register with cloud service
+
 		$result = Registration_Manager::register_user( $email );
-		
+
 		if ( isset( $result['error'] ) ) {
-			self::send_error( $result['error'] );
-			return;
+			return $this->error( $result['error'] );
 		}
-		
-		self::send_success( [
-			'message'              => $result['message'] ?? __( 'Registration successful', 'wpshadow' ),
-			'cloud_dashboard_url'  => $result['cloud_dashboard_url'] ?? '',
-			'site_id'              => $result['site_id'] ?? '',
+
+		return $this->success( [
+			'message'             => $result['message'] ?? __( 'Registration successful', 'wpshadow' ),
+			'cloud_dashboard_url' => $result['cloud_dashboard_url'] ?? '',
+			'site_id'             => $result['site_id'] ?? '',
 		] );
 	}
 }

@@ -18,6 +18,14 @@ use WPShadow\Core\KPI_Tracker;
  * - include_warnings (optional): Include anomaly warnings
  */
 class Preview_Auto_Fixes_Command extends Command_Base {
+	/**
+	 * Get command name
+	 *
+	 * @return string
+	 */
+	public function get_name(): string {
+		return 'preview_auto_fixes';
+	}
 	
 	/**
 	 * Execute the command
@@ -58,15 +66,6 @@ class Preview_Auto_Fixes_Command extends Command_Base {
 		} catch ( \Exception $e ) {
 			return $this->error( 'Preview error: ' . $e->getMessage() );
 		}
-	}
-	
-	/**
-	 * Get command name
-	 * 
-	 * @return string
-	 */
-	public function get_name(): string {
-		return 'preview_auto_fixes';
 	}
 	
 	/**

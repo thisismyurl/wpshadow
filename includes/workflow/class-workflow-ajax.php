@@ -1,9 +1,37 @@
 <?php
 /**
- * Workflow AJAX Handlers
+ * Workflow AJAX Handlers (DEPRECATED)
  *
  * @package WPShadow
  * @subpackage Workflow
+ * 
+ * NOTE: All AJAX handlers have been migrated to class-based handlers in Phase 3.5.1
+ * See: includes/admin/ajax/class-*-workflow-*-handler.php
+ * 
+ * These handlers now extend AJAX_Handler_Base for centralized security and error handling.
+ * This file is retained for reference and can be safely removed.
+ * 
+ * Migration Status:
+ * ✅ Save_Workflow_Handler (handles both block and wizard formats)
+ * ✅ Load_Workflows_Handler
+ * ✅ Get_Workflow_Handler
+ * ✅ Delete_Workflow_Handler
+ * ✅ Toggle_Workflow_Handler
+ * ✅ Generate_Workflow_Name_Handler
+ * ✅ Get_Available_Actions_Handler
+ * ✅ Get_Action_Config_Handler
+ * ✅ Run_Workflow_Handler
+ * ✅ Create_From_Example_Handler
+ * ✅ Get_Examples_Handler (in Load_Workflows_Handler)
+ * 
+ * Benefits of Migration:
+ * - Centralized nonce verification via AJAX_Handler_Base::verify_request()
+ * - Centralized parameter handling via AJAX_Handler_Base::get_post_param()
+ * - Consistent error responses via AJAX_Handler_Base::send_error()
+ * - Consistent success responses via AJAX_Handler_Base::send_success()
+ * - Type-safe parameter handling
+ * - Easier testing and maintenance
+ * - ~120 lines of duplicate code eliminated
  */
 
 namespace WPShadow\Workflow;
@@ -12,309 +40,44 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-/**
- * Save a workflow
- */
-add_action( 'wp_ajax_wpshadow_save_workflow', function() {
-	check_ajax_referer( 'wpshadow_workflow', 'nonce' );
-	
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
-	}
-	
-	$name        = isset( $_POST['name'] ) ? sanitize_text_field( $_POST['name'] ) : '';
-	$blocks      = isset( $_POST['blocks'] ) ? json_decode( wp_unslash( $_POST['blocks'] ), true ) : array();
-	$workflow_id = isset( $_POST['workflow_id'] ) ? sanitize_key( $_POST['workflow_id'] ) : null;
-	
-	if ( empty( $blocks ) ) {
-		wp_send_json_error( array( 'message' => 'Workflow must contain at least one block.' ) );
-	}
-	
-	// Validate blocks
-	foreach ( $blocks as $block ) {
-		$result = Block_Registry::validate_block( $block );
-		if ( ! $result['valid'] ) {
-			wp_send_json_error( array( 'message' => 'Invalid block: ' . $result['error'] ) );
-		}
-	}
-	
-	$workflow = Workflow_Manager::save_workflow( $name, $blocks, $workflow_id );
-	
-	wp_send_json_success( array(
-		'message'  => 'Workflow saved successfully.',
-		'workflow' => $workflow,
-	) );
-} );
+// All handlers now registered in wpshadow.php via plugins_loaded hook
+// Old inline handlers commented out below for reference only
 
-/**
- * Load all workflows
- */
-add_action( 'wp_ajax_wpshadow_load_workflows', function() {
-	check_ajax_referer( 'wpshadow_workflow', 'nonce' );
-	
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
-	}
-	
-	$workflows = Workflow_Manager::get_workflows();
-	
-	wp_send_json_success( array(
-		'workflows' => $workflows,
-		'count'     => count( $workflows ),
-	) );
-} );
+/*
+// MIGRATION HISTORY - Old inline handlers (no longer active)
 
-/**
- * Load a single workflow
- */
-add_action( 'wp_ajax_wpshadow_get_workflow', function() {
-	check_ajax_referer( 'wpshadow_workflow', 'nonce' );
-	
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
-	}
-	
-	$workflow_id = isset( $_POST['workflow_id'] ) ? sanitize_key( $_POST['workflow_id'] ) : '';
-	
-	if ( empty( $workflow_id ) ) {
-		wp_send_json_error( array( 'message' => 'Invalid workflow ID.' ) );
-	}
-	
-	$workflow = Workflow_Manager::get_workflow( $workflow_id );
-	
-	if ( ! $workflow ) {
-		wp_send_json_error( array( 'message' => 'Workflow not found.' ) );
-	}
-	
-	wp_send_json_success( array( 'workflow' => $workflow ) );
-} );
+// Previous Save_Workflow Handler (MIGRATED to class-save-workflow-handler.php)
+// add_action( 'wp_ajax_wpshadow_save_workflow', function() { ... } );
 
-/**
- * Delete a workflow
- */
-add_action( 'wp_ajax_wpshadow_delete_workflow', function() {
-	check_ajax_referer( 'wpshadow_workflow', 'nonce' );
-	
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
-	}
-	
-	$workflow_id = isset( $_POST['workflow_id'] ) ? sanitize_key( $_POST['workflow_id'] ) : '';
-	
-	if ( empty( $workflow_id ) ) {
-		wp_send_json_error( array( 'message' => 'Invalid workflow ID.' ) );
-	}
-	
-	$result = Workflow_Manager::delete_workflow( $workflow_id );
-	
-	if ( ! $result ) {
-		wp_send_json_error( array( 'message' => 'Could not delete workflow.' ) );
-	}
-	
-	wp_send_json_success( array( 'message' => 'Workflow deleted successfully.' ) );
-} );
+// Previous Load_Workflows Handler (MIGRATED to class-load-workflows-handler.php)
+// add_action( 'wp_ajax_wpshadow_load_workflows', function() { ... } );
 
-/**
- * Toggle workflow enabled status
- */
-add_action( 'wp_ajax_wpshadow_toggle_workflow', function() {
-	check_ajax_referer( 'wpshadow_workflow', 'nonce' );
-	
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
-	}
-	
-	$workflow_id = isset( $_POST['workflow_id'] ) ? sanitize_key( $_POST['workflow_id'] ) : '';
-	$enabled     = isset( $_POST['enabled'] ) ? (bool) $_POST['enabled'] : null;
-	
-	if ( empty( $workflow_id ) ) {
-		wp_send_json_error( array( 'message' => 'Invalid workflow ID.' ) );
-	}
-	
-	$workflow = Workflow_Manager::toggle_workflow( $workflow_id, $enabled );
-	
-	if ( ! $workflow ) {
-		wp_send_json_error( array( 'message' => 'Could not toggle workflow.' ) );
-	}
-	
-	wp_send_json_success( array(
-		'message'  => 'Workflow updated.',
-		'workflow' => $workflow,
-	) );
-} );
+// Previous Get_Workflow Handler (MIGRATED to class-get-workflow-handler.php)
+// add_action( 'wp_ajax_wpshadow_get_workflow', function() { ... } );
 
-/**
- * Generate a silly default workflow name
- */
-add_action( 'wp_ajax_wpshadow_generate_workflow_name', function() {
-	check_ajax_referer( 'wpshadow_workflow', 'nonce' );
-	
-	$name = Workflow_Manager::generate_silly_name();
-	
-	wp_send_json_success( array( 'name' => $name ) );
-} );
+// Previous Delete_Workflow Handler (MIGRATED to class-delete-workflow-handler.php)
+// add_action( 'wp_ajax_wpshadow_delete_workflow', function() { ... } );
 
-/**
- * Get available diagnostics and treatments
- */
-add_action( 'wp_ajax_wpshadow_get_available_actions', function() {
-	check_ajax_referer( 'wpshadow_workflow', 'nonce' );
-	
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
-	}
-	
-	$diagnostics = Workflow_Manager::get_available_diagnostics();
-	$treatments  = Workflow_Manager::get_available_treatments();
-	
-	wp_send_json_success( array(
-		'diagnostics' => $diagnostics,
-		'treatments'  => $treatments,
-	) );
-} );
+// Previous Toggle_Workflow Handler (MIGRATED to class-toggle-workflow-handler.php)
+// add_action( 'wp_ajax_wpshadow_toggle_workflow', function() { ... } );
 
-/**
- * Get action configuration fields (for wizard)
- */
-add_action( 'wp_ajax_wpshadow_get_action_config', function() {
-	check_ajax_referer( 'wpshadow_workflow', 'nonce' );
-	
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
-	}
-	
-	$action_id = isset( $_POST['action_id'] ) ? sanitize_key( $_POST['action_id'] ) : '';
-	
-	if ( empty( $action_id ) ) {
-		wp_send_json_error( array( 'message' => 'Invalid action ID.' ) );
-	}
-	
-	$fields = Workflow_Wizard::get_action_config( $action_id );
-	
-	wp_send_json_success( array( 'fields' => $fields ) );
-} );
+// Previous Generate_Workflow_Name Handler (MIGRATED to class-generate-workflow-name-handler.php)
+// add_action( 'wp_ajax_wpshadow_generate_workflow_name', function() { ... } );
 
-/**
- * Save workflow from wizard (new format)
- */
-add_action( 'wp_ajax_wpshadow_save_workflow', function() {
-	check_ajax_referer( 'wpshadow_workflow', 'nonce' );
-	
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
-	}
-	
-	$workflow_json = isset( $_POST['workflow'] ) ? wp_unslash( $_POST['workflow'] ) : '';
-	
-	if ( empty( $workflow_json ) ) {
-		wp_send_json_error( array( 'message' => 'No workflow data provided.' ) );
-	}
-	
-	$wizard_data = json_decode( $workflow_json, true );
-	
-	if ( ! $wizard_data ) {
-		wp_send_json_error( array( 'message' => 'Invalid workflow data.' ) );
-	}
-	
-	// Convert wizard format to executor format
-	$workflow = Workflow_Wizard::convert_to_executor_format( $wizard_data );
-	
-	// Save workflow
-	$workflows = get_option( 'wpshadow_workflows', array() );
-	
-	// Generate silly name if empty
-	if ( empty( $workflow['name'] ) ) {
-		$workflow['name'] = Workflow_Manager::generate_silly_name();
-	}
-	
-	$workflows[ $workflow['id'] ] = $workflow;
-	update_option( 'wpshadow_workflows', $workflows );
-	
-	wp_send_json_success( array(
-		'message'  => 'Workflow saved successfully.',
-		'workflow' => $workflow,
-	) );
-} );
+// Previous Get_Available_Actions Handler (MIGRATED to class-get-available-actions-handler.php)
+// add_action( 'wp_ajax_wpshadow_get_available_actions', function() { ... } );
 
-/**
- * Run workflow manually
- */
-add_action( 'wp_ajax_wpshadow_run_workflow', function() {
-	check_ajax_referer( 'wpshadow_workflow', 'nonce' );
-	
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
-	}
-	
-	$workflow_id = isset( $_POST['workflow_id'] ) ? sanitize_key( $_POST['workflow_id'] ) : '';
-	
-	if ( empty( $workflow_id ) ) {
-		wp_send_json_error( array( 'message' => 'Invalid workflow ID.' ) );
-	}
-	
-	$workflow = Workflow_Manager::get_workflow( $workflow_id );
-	
-	if ( ! $workflow ) {
-		wp_send_json_error( array( 'message' => 'Workflow not found.' ) );
-	}
-	
-	// Execute workflow with manual trigger context
-	$context = array(
-		'trigger_type' => 'manual',
-		'user_id'      => get_current_user_id(),
-		'timestamp'    => time(),
-	);
-	
-	$result = Workflow_Executor::execute_workflow( $workflow, $context );
-	
-	wp_send_json_success( array(
-		'message' => 'Workflow executed successfully.',
-		'result'  => $result,
-	) );
-} );
+// Previous Get_Action_Config Handler (MIGRATED to class-get-action-config-handler.php)
+// add_action( 'wp_ajax_wpshadow_get_action_config', function() { ... } );
 
-/**
- * Create workflow from example template
- */
-add_action( 'wp_ajax_wpshadow_create_from_example', function() {
-	check_ajax_referer( 'wpshadow_workflow', 'nonce' );
-	
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
-	}
-	
-	$example_key = isset( $_POST['example_key'] ) ? sanitize_key( $_POST['example_key'] ) : '';
-	
-	if ( empty( $example_key ) ) {
-		wp_send_json_error( array( 'message' => 'Invalid example key.' ) );
-	}
-	
-	$result = Workflow_Examples::create_from_example( $example_key );
-	
-	if ( isset( $result['error'] ) ) {
-		wp_send_json_error( array( 'message' => $result['error'] ) );
-	}
-	
-	wp_send_json_success( array(
-		'message'  => 'Workflow created from example successfully.',
-		'workflow' => $result,
-	) );
-} );
+// Previous Run_Workflow Handler (MIGRATED to class-run-workflow-handler.php)
+// add_action( 'wp_ajax_wpshadow_run_workflow', function() { ... } );
 
-/**
- * Get available examples to display
- */
-add_action( 'wp_ajax_wpshadow_get_examples', function() {
-	check_ajax_referer( 'wpshadow_workflow', 'nonce' );
-	
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_send_json_error( array( 'message' => 'Insufficient permissions.' ) );
-	}
-	
-	$examples = Workflow_Examples::get_display_examples();
-	
-	wp_send_json_success( array(
-		'examples' => $examples,
-		'count'    => count( $examples ),
-	) );
-} );
+// Previous Create_From_Example Handler (MIGRATED to class-create-from-example-handler.php)
+// add_action( 'wp_ajax_wpshadow_create_from_example', function() { ... } );
+
+// Previous Get_Examples Handler (MIGRATED to class-load-workflows-handler.php)
+// add_action( 'wp_ajax_wpshadow_get_examples', function() { ... } );
+
+*/
+

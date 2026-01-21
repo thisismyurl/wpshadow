@@ -1,0 +1,219 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║              WPShadow Docker Environment - Quick Reference                ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+🚀 QUICK START
+═══════════════════════════════════════════════════════════════════════════
+
+  ./setup-docker.sh              # Run setup script (first time)
+  docker-compose up -d           # Start all services
+  docker-compose down            # Stop all services
+
+🌐 ACCESS POINTS
+═══════════════════════════════════════════════════════════════════════════
+
+  Main Site:       http://localhost:8080
+  Test Site:       http://localhost:9000
+  phpMyAdmin:      http://localhost:8081
+  MailHog:         http://localhost:8025
+
+  Database Credentials (both):
+    Username: wordpress
+    Password: wordpress
+
+🎨 THEME DEVELOPMENT
+═══════════════════════════════════════════════════════════════════════════
+
+  Theme Location: /workspaces/theme-wpshadow/
+  
+  Activate Theme:
+    docker-compose exec wordpress-site wp --allow-root theme activate theme-wpshadow
+  
+  Check Theme Status:
+    docker-compose exec wordpress-site wp --allow-root theme list
+  
+  Install Theme from Git:
+    cd /workspaces
+    git clone <your-theme-repo> theme-wpshadow
+    docker-compose restart wordpress-site
+
+🔌 PLUGIN DEVELOPMENT
+═══════════════════════════════════════════════════════════════════════════
+
+  Plugin Location: /workspaces/wpshadow/
+  
+  Activate in Main Site:
+    docker-compose exec wordpress-site wp --allow-root plugin activate wpshadow
+  
+  Activate in Test Site:
+    docker-compose exec wordpress-test wp --allow-root plugin activate wpshadow
+  
+  Check Plugin Status:
+    docker-compose exec wordpress-site wp --allow-root plugin list
+
+📊 DATABASE MANAGEMENT
+═══════════════════════════════════════════════════════════════════════════
+
+  phpMyAdmin: http://localhost:8081
+    Server: db-site or db-test
+    User:   wordpress
+    Pass:   wordpress
+  
+  Command Line Access:
+    docker-compose exec db-site mysql -u wordpress -pwordpress wpshadow_site
+    docker-compose exec db-test mysql -u wordpress -pwordpress wpshadow_test
+  
+  Export Database:
+    docker-compose exec db-site mysqldump -u wordpress -pwordpress wpshadow_site > backup.sql
+  
+  Import Database:
+    docker-compose exec -T db-site mysql -u wordpress -pwordpress wpshadow_site < backup.sql
+
+📧 EMAIL TESTING
+═══════════════════════════════════════════════════════════════════════════
+
+  MailHog UI: http://localhost:8025
+  SMTP Server: localhost:1025
+  
+  All WordPress emails are automatically caught by MailHog
+  No configuration needed - just send emails normally
+
+📝 WP-CLI COMMANDS
+═══════════════════════════════════════════════════════════════════════════
+
+  Main Site Commands:
+    docker-compose exec wordpress-site wp --allow-root [command]
+  
+  Test Site Commands:
+    docker-compose exec wordpress-test wp --allow-root [command]
+  
+  Common Commands:
+    wp plugin list                    # List plugins
+    wp theme list                     # List themes
+    wp user create john john@example.com --role=editor
+    wp post create --post_title="Test" --post_content="Content"
+    wp cache flush                    # Flush cache
+    wp rewrite flush                  # Flush permalinks
+
+🔍 LOGS & DEBUGGING
+═══════════════════════════════════════════════════════════════════════════
+
+  View All Logs:
+    docker-compose logs -f
+  
+  View Specific Service:
+    docker-compose logs -f wordpress-site
+    docker-compose logs -f db-site
+  
+  WordPress Debug Log:
+    docker-compose exec wordpress-site tail -f /var/www/html/wp-content/debug.log
+  
+  PHP Errors:
+    docker-compose exec wordpress-site tail -f /var/log/apache2/error.log
+
+🔧 TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════════════
+
+  Container Won't Start:
+    docker-compose down
+    docker-compose up -d
+    docker-compose logs [service-name]
+  
+  Database Connection Error:
+    docker-compose restart wordpress-site
+    docker-compose logs db-site
+  
+  Theme Not Showing:
+    docker-compose exec wordpress-site ls -la /var/www/html/wp-content/themes/
+    docker-compose exec wordpress-site wp --allow-root theme activate theme-wpshadow
+  
+  Permission Issues:
+    docker-compose exec wordpress-site chown -R www-data:www-data /var/www/html
+  
+  Reset Everything (DESTRUCTIVE):
+    docker-compose down -v
+    ./setup-docker.sh
+
+🧹 CLEANUP
+═══════════════════════════════════════════════════════════════════════════
+
+  Stop Containers:
+    docker-compose down
+  
+  Remove Volumes (deletes databases):
+    docker-compose down -v
+  
+  Remove Specific Volume:
+    docker volume rm wpshadow_wp_site_data
+    docker volume rm wpshadow_wp_site_db
+  
+  Clean Docker System:
+    docker system prune -a
+
+⚡ PERFORMANCE
+═══════════════════════════════════════════════════════════════════════════
+
+  Check Container Status:
+    docker-compose ps
+  
+  Check Resource Usage:
+    docker stats
+  
+  Restart Specific Service:
+    docker-compose restart wordpress-site
+  
+  Rebuild Container:
+    docker-compose up -d --build wordpress-site
+
+📂 FILE STRUCTURE
+═══════════════════════════════════════════════════════════════════════════
+
+  /workspaces/wpshadow/           # Plugin files (auto-mounted)
+  /workspaces/theme-wpshadow/     # Theme files (auto-mounted)
+  
+  In Container:
+    /var/www/html/                               # WordPress root
+    /var/www/html/wp-content/plugins/wpshadow/   # Plugin
+    /var/www/html/wp-content/themes/theme-wpshadow/  # Theme
+
+💡 WORKFLOW TIPS
+═══════════════════════════════════════════════════════════════════════════
+
+  1. Edit files locally in /workspaces/wpshadow or /workspaces/theme-wpshadow
+  2. Changes appear immediately in containers
+  3. Refresh browser to see changes
+  4. No need to rebuild containers for code changes
+  5. Use main site (8080) for production-like testing
+  6. Use test site (9000) for experimental features
+  7. Check MailHog (8025) for all WordPress emails
+  8. Use phpMyAdmin (8081) for database inspection
+
+🎯 COMMON TASKS
+═══════════════════════════════════════════════════════════════════════════
+
+  Setup New Site:
+    1. docker-compose up -d
+    2. Open http://localhost:8080
+    3. Complete WordPress installation
+    4. Activate theme and plugin
+
+  Test Plugin Feature:
+    1. Edit plugin code in /workspaces/wpshadow
+    2. Refresh WordPress admin
+    3. Test feature in both sites (8080 and 9000)
+
+  Develop Theme:
+    1. Edit theme files in /workspaces/theme-wpshadow
+    2. Refresh site to see changes
+    3. Use browser DevTools for debugging
+
+  Import Production Database:
+    1. docker-compose exec -T db-site mysql -u wordpress -pwordpress wpshadow_site < production.sql
+    2. docker-compose exec wordpress-site wp --allow-root search-replace 'https://wpshadow.com' 'http://localhost:8080'
+
+═══════════════════════════════════════════════════════════════════════════
+
+For detailed documentation, see: docker-compose.README.md
+For help, run: docker-compose --help
+
+═══════════════════════════════════════════════════════════════════════════

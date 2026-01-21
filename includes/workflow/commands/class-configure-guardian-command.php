@@ -35,7 +35,7 @@ class Configure_Guardian_Command extends Command {
 	 * @return string
 	 */
 	public static function get_name(): string {
-		return __( 'Configure Guardian', 'wpshadow' );
+		return 'configure_guardian';
 	}
 	
 	/**
@@ -104,62 +104,59 @@ class Configure_Guardian_Command extends Command {
 	
 	/**
 	 * Execute the command
+	 * Execute the command
 	 * 
-	 * @param array $parameters Command parameters
-	 * 
-	 * @return array Result with status and message
+	 * @return void JSON response
 	 */
-	public static function execute( array $parameters ): array {
+	public function execute() {
+		if ( ! $this->verify_request() ) {
+			return;
+		}
+
 		try {
-			// Get current settings
 			$current = Guardian_Manager::get_settings();
-			
-			// Build update payload
 			$updates = [];
-			
-			if ( isset( $parameters['enabled'] ) ) {
-				if ( $parameters['enabled'] ) {
+
+			$enabled = $this->get_post_var( 'enabled', null );
+			if ( null !== $enabled ) {
+				$enabled_bool = rest_sanitize_boolean( $enabled );
+				if ( $enabled_bool ) {
 					Guardian_Manager::enable();
 				} else {
 					Guardian_Manager::disable();
 				}
-				$updates['enabled'] = (bool) $parameters['enabled'];
+				$updates['enabled'] = $enabled_bool;
 			}
-			
-			if ( isset( $parameters['health_check_interval'] ) ) {
-				$updates['health_check_interval'] = sanitize_key( $parameters['health_check_interval'] );
+
+			$health = $this->get_post_var( 'health_check_interval', '' );
+			if ( $health !== '' ) {
+				$updates['health_check_interval'] = sanitize_key( $health );
 			}
-			
-			if ( isset( $parameters['auto_fix_enabled'] ) ) {
-				$updates['auto_fix_enabled'] = (bool) $parameters['auto_fix_enabled'];
+
+			$auto_fix = $this->get_post_var( 'auto_fix_enabled', null );
+			if ( null !== $auto_fix ) {
+				$updates['auto_fix_enabled'] = rest_sanitize_boolean( $auto_fix );
 			}
-			
-			if ( isset( $parameters['backup_before_fix'] ) ) {
-				$updates['backup_before_fix'] = (bool) $parameters['backup_before_fix'];
+
+			$backup_before_fix = $this->get_post_var( 'backup_before_fix', null );
+			if ( null !== $backup_before_fix ) {
+				$updates['backup_before_fix'] = rest_sanitize_boolean( $backup_before_fix );
 			}
-			
-			if ( isset( $parameters['notification_level'] ) ) {
-				$updates['notification_level'] = sanitize_key( $parameters['notification_level'] );
+
+			$notification_level = $this->get_post_var( 'notification_level', '' );
+			if ( $notification_level !== '' ) {
+				$updates['notification_level'] = sanitize_key( $notification_level );
 			}
-			
-			// Apply updates
-			if ( ! empty( $updates ) ) {
-				Guardian_Manager::update_settings( $updates );
-			}
-			
-			return [
-				'success' => true,
-				'message' => __( 'Guardian settings updated successfully', 'wpshadow' ),
-				'updated_settings' => $updates,
-			];
+
+			$payload = array_merge( $current, $updates );
+			Guardian_Manager::update_settings( $payload );
+
+			$this->success( [
+				'settings' => $payload,
+				'message'  => __( 'Guardian settings updated', 'wpshadow' ),
+			] );
 		} catch ( \Exception $e ) {
-			return [
-				'success' => false,
-				'message' => sprintf(
-					__( 'Failed to configure Guardian: %s', 'wpshadow' ),
-					$e->getMessage()
-				),
-			];
+			$this->error( sprintf( __( 'Failed to update Guardian settings: %s', 'wpshadow' ), $e->getMessage() ) );
 		}
 	}
 }

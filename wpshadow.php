@@ -17,6 +17,7 @@ define( 'WPSHADOW_URL', plugin_dir_url( __FILE__ ) );
 
 // Load base classes first (required by handlers)
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-ajax-handler-base.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-command-base.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-color-utils.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-theme-data-provider.php';
 
@@ -401,6 +402,18 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-create-mag
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-revoke-magic-link-handler.php';
 \WPShadow\Admin\Ajax\Revoke_Magic_Link_Handler::register();
 
+// Workflow AJAX handlers moved to classes (Phase 3.5.1 - Refactoring)
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-save-workflow-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-load-workflows-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-get-workflow-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-delete-workflow-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-toggle-workflow-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-generate-workflow-name-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-get-available-actions-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-get-action-config-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-run-workflow-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-create-from-example-handler.php';
+
 /**
  * Analyze HTML for accessibility issues.
  */
@@ -624,6 +637,51 @@ add_action( 'admin_menu', function() {
 		'read',
 		'wpshadow-help',
 		'wpshadow_render_help'
+	);
+
+	// Guardian System submenu pages
+	add_submenu_page(
+		'wpshadow',
+		__( 'Guardian Dashboard', 'wpshadow' ),
+		__( 'Guardian Dashboard', 'wpshadow' ),
+		'manage_options',
+		'wpshadow-guardian',
+		function() {
+			echo \WPShadow\Admin\Guardian_Dashboard::render();
+		}
+	);
+
+	add_submenu_page(
+		'wpshadow',
+		__( 'Guardian Settings', 'wpshadow' ),
+		__( 'Guardian Settings', 'wpshadow' ),
+		'manage_options',
+		'wpshadow-guardian-settings',
+		function() {
+			echo \WPShadow\Admin\Guardian_Settings::render();
+		}
+	);
+
+	add_submenu_page(
+		'wpshadow',
+		__( 'Reports', 'wpshadow' ),
+		__( 'Reports', 'wpshadow' ),
+		'manage_options',
+		'wpshadow-guardian-reports',
+		function() {
+			echo \WPShadow\Admin\Report_Form::render();
+		}
+	);
+
+	add_submenu_page(
+		'wpshadow',
+		__( 'Notification Settings', 'wpshadow' ),
+		__( 'Notification Settings', 'wpshadow' ),
+		'manage_options',
+		'wpshadow-guardian-notifications',
+		function() {
+			echo \WPShadow\Admin\Notification_Preferences_Form::render();
+		}
 	);
 } );
 
@@ -949,8 +1007,6 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-command-regi
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-executor.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-kanban-workflow-helper.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-user-preferences-manager.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-color-utils.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-theme-data-provider.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/knowledge-base/class-kb-formatter.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/knowledge-base/class-kb-article-generator.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/knowledge-base/class-kb-library.php';
@@ -966,14 +1022,47 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/cloud/class-cloud-client.ph
 require_once plugin_dir_path( __FILE__ ) . 'includes/cloud/class-registration-manager.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/cloud/class-notification-manager.php';
 
-// Phase 8: Guardian & Automation (placeholder - will add as we build)
-// Guardian classes will be required here when implemented
+// Phase 8: Guardian & Automation System
+// Core managers (Priority 1) - Located in includes/guardian/
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-guardian-manager.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-guardian-activity-logger.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-baseline-manager.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-backup-manager.php';
+
+// Auto-Fix System (Priority 2)
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-auto-fix-policy-manager.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-anomaly-detector.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-auto-fix-executor.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-recovery-system.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-compliance-checker.php';
+
+// Admin UI Components (Priority 3)
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-guardian-dashboard.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-guardian-settings.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-report-form.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-notification-preferences-form.php';
+
+// AJAX Command Handlers (Priorities 1-3)
+// Priority 1 commands
+require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/commands/class-enable-guardian-command.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/commands/class-configure-guardian-command.php';
+
+// Priority 2 commands
+require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/commands/class-get-scan-results-command.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/commands/class-execute-auto-fix-command.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/commands/class-preview-auto-fixes-command.php';
+
+// Priority 3 commands
+require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/commands/class-update-auto-fix-policy-command.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/commands/class-generate-report-command.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/commands/class-send-report-command.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/commands/class-manage-notifications-command.php';
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-treatment-hooks.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-site-health-explanations.php';
 
 /**
- * Initialize diagnostics system.
+ * Initialize diagnostics system and Guardian components.
  */
 add_action( 'plugins_loaded', function() {
 	\WPShadow\Diagnostics\Diagnostic_Registry::init();
@@ -981,6 +1070,37 @@ add_action( 'plugins_loaded', function() {
 	\WPShadow\Workflow\Workflow_Executor::init();
 	\WPShadow\Core\Treatment_Hooks::init();
 	\WPShadow\Core\Site_Health_Explanations::init();
+
+	// Register workflow AJAX handlers (Phase 3.5.1 - Refactoring)
+	\WPShadow\Admin\Ajax\Save_Workflow_Handler::register();
+	\WPShadow\Admin\Ajax\Load_Workflows_Handler::register();
+	\WPShadow\Admin\Ajax\Get_Workflow_Handler::register();
+	\WPShadow\Admin\Ajax\Delete_Workflow_Handler::register();
+	\WPShadow\Admin\Ajax\Toggle_Workflow_Handler::register();
+	\WPShadow\Admin\Ajax\Generate_Workflow_Name_Handler::register();
+	\WPShadow\Admin\Ajax\Get_Available_Actions_Handler::register();
+	\WPShadow\Admin\Ajax\Get_Action_Config_Handler::register();
+	\WPShadow\Admin\Ajax\Run_Workflow_Handler::register();
+	\WPShadow\Admin\Ajax\Create_From_Example_Handler::register();
+
+	// Initialize Guardian system (Phase 8)
+	\WPShadow\Guardian\Guardian_Manager::init();
+
+	// Register Guardian AJAX command handlers (Phase 8)
+	// Priority 1 handlers
+	\WPShadow\Workflow\Commands\Enable_Guardian_Command::register();
+	\WPShadow\Workflow\Commands\Configure_Guardian_Command::register();
+
+	// Priority 2 handlers
+	\WPShadow\Workflow\Commands\Get_Scan_Results_Command::register();
+	\WPShadow\Workflow\Commands\Execute_Auto_Fix_Command::register();
+	\WPShadow\Workflow\Commands\Preview_Auto_Fixes_Command::register();
+
+	// Priority 3 handlers
+	\WPShadow\Workflow\Commands\Update_Auto_Fix_Policy_Command::register();
+	\WPShadow\Workflow\Commands\Generate_Report_Command::register();
+	\WPShadow\Workflow\Commands\Send_Report_Command::register();
+	\WPShadow\Workflow\Commands\Manage_Notifications_Command::register();
 } );
 
 /**
@@ -1023,6 +1143,30 @@ add_action( 'admin_enqueue_scripts', function( $hook ) {
 		
 		wp_localize_script( 'wpshadow-workflow-list', 'wpshadowWorkflow', array(
 			'nonce' => wp_create_nonce( 'wpshadow_workflow' ),
+		) );
+	}
+
+	// Guardian Dashboard and Settings assets (Phase 8)
+	if ( strpos( $hook, 'wpshadow-guardian' ) !== false ) {
+		wp_enqueue_style(
+			'wpshadow-guardian-dashboard-settings',
+			WPSHADOW_URL . 'assets/css/guardian-dashboard-settings.css',
+			array(),
+			WPSHADOW_VERSION
+		);
+
+		wp_enqueue_script(
+			'wpshadow-guardian-dashboard-settings',
+			WPSHADOW_URL . 'assets/js/guardian-dashboard-settings.js',
+			array( 'jquery' ),
+			WPSHADOW_VERSION,
+			true
+		);
+
+		// Localize script for AJAX
+		wp_localize_script( 'wpshadow-guardian-dashboard-settings', 'wpshadow', array(
+			'ajax_url' => admin_url( 'admin-ajax.php' ),
+			'nonce' => wp_create_nonce( 'wpshadow_guardian_nonce' )
 		) );
 	}
 } );

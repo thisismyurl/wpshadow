@@ -19,6 +19,14 @@ use WPShadow\Core\KPI_Tracker;
  * - alert_type (optional): Specific alert to manage
  */
 class Manage_Notifications_Command extends Command_Base {
+	/**
+	 * Get command name
+	 *
+	 * @return string
+	 */
+	public function get_name(): string {
+		return 'manage_notifications';
+	}
 	
 	/**
 	 * Execute the command
@@ -128,15 +136,6 @@ class Manage_Notifications_Command extends Command_Base {
 		$stats = Notification_Manager::get_statistics();
 		
 		return $this->success( $stats );
-	}
-	
-	/**
-	 * Get command name
-	 * 
-	 * @return string
-	 */
-	public function get_name(): string {
-		return 'manage_notifications';
 	}
 	
 	/**

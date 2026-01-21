@@ -31,7 +31,7 @@ class Enable_Guardian_Command extends Command {
 	 * @return string
 	 */
 	public static function get_name(): string {
-		return __( 'Enable Guardian', 'wpshadow' );
+		return 'enable_guardian';
 	}
 	
 	/**
@@ -77,38 +77,32 @@ class Enable_Guardian_Command extends Command {
 	/**
 	 * Execute the command
 	 * 
-	 * @param array $parameters Command parameters
-	 * 
-	 * @return array Result with status and message
+	 * @return void JSON response
 	 */
-	public static function execute( array $parameters ): array {
+	public function execute() {
+		if ( ! $this->verify_request() ) {
+			return;
+		}
+
+		$auto_fix = rest_sanitize_boolean( $this->get_post_var( 'auto_fix_enabled', false ) );
+		$notify   = rest_sanitize_boolean( $this->get_post_var( 'notification_enabled', true ) );
+
 		try {
-			$auto_fix = (bool) ( $parameters['auto_fix_enabled'] ?? false );
-			$notify = (bool) ( $parameters['notification_enabled'] ?? true );
-			
-			// Update settings
 			Guardian_Manager::update_settings( [
 				'enabled'              => true,
 				'auto_fix_enabled'     => $auto_fix,
 				'notification_enabled' => $notify,
 			] );
-			
-			// Enable Guardian
+
 			Guardian_Manager::enable();
-			
-			return [
-				'success' => true,
-				'message' => __( 'Guardian enabled successfully', 'wpshadow' ),
+
+			$this->success( [
 				'auto_fix_enabled' => $auto_fix,
-			];
+				'notification_enabled' => $notify,
+				'message' => __( 'Guardian enabled successfully', 'wpshadow' ),
+			] );
 		} catch ( \Exception $e ) {
-			return [
-				'success' => false,
-				'message' => sprintf(
-					__( 'Failed to enable Guardian: %s', 'wpshadow' ),
-					$e->getMessage()
-				),
-			];
+			$this->error( sprintf( __( 'Failed to enable Guardian: %s', 'wpshadow' ), $e->getMessage() ) );
 		}
 	}
 }

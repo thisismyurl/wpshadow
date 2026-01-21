@@ -799,6 +799,251 @@ We trust users, but verify. Fair exchange means both sides benefit.
 **Philosophy:**
 Status should feel exclusive but achievable. Diamond is aspirational, not impossible.
 
+---
+
+### Physical Rewards (Surprise & Delight)
+
+**The Philosophy:**
+Nothing is more "talk-worthy" (Commandment #11) than receiving **unexpected swag in the mail**. Physical items create emotional connection and turn users into walking billboards.
+
+**Mailing Address Collection:**
+- **When:** Optional field in user profile
+- **Why:** "Help us send you surprise thank-you gifts!"
+- **Privacy:** Opt-in only, never required, can be removed anytime
+- **Storage:** Encrypted, never shared, GDPR-compliant deletion
+
+**Swag Tiers (Surprise Delivery):**
+
+**Bronze Status (500 pts) - Welcome Pack** 📦
+- High-quality WPShadow stickers (3 designs)
+- "WordPress Security Champion" badge button
+- Handwritten thank-you note
+- Cost: ~$3-5 shipped
+
+**Silver Status (2000 pts) - Power User Pack** 📦
+- Premium WPShadow t-shirt (soft cotton, modern design)
+- Laptop stickers (holographic, die-cut)
+- Coffee mug: "Powered by WPShadow" ☕
+- Field notebook (for site planning)
+- Handwritten note from founder
+- Cost: ~$15-20 shipped
+
+**Gold Status (5000 pts) - Champion Pack** 📦
+- Premium hoodie (embroidered WPShadow logo)
+- Premium quality backpack/messenger bag
+- Enamel pin collection (limited edition)
+- Insulated water bottle (laser-etched)
+- Desk accessory (mouse pad, phone stand, or cable organizer)
+- Personalized certificate of achievement (frameable)
+- Video message from founder
+- Cost: ~$40-60 shipped
+
+**Platinum Status (10000 pts) - VIP Pack** 📦
+- Premium leather portfolio/folio
+- High-end tech accessory (wireless charger, USB hub, or AirPods case)
+- Custom name badge for conferences
+- Exclusive "Platinum Member" jacket or vest
+- WPShadow "challenge coin" (collectible)
+- Personal phone call from founder (scheduled)
+- Cost: ~$80-120 shipped
+
+**Diamond Status (25000 pts) - Elite Pack** 📦
+- Custom WPShadow jersey (like a sports team, with their name)
+- Premium tech bundle (choose: noise-canceling headphones, mechanical keyboard, or tablet)
+- Framed limited-edition artwork (numbered, signed by founder)
+- Lifetime physical swag subscription (quarterly surprise boxes)
+- In-person meeting with founder (if attending same conference)
+- Name on physical plaque in office
+- Cost: ~$200-300 shipped + ongoing
+
+**Why This Works:**
+✅ **Surprise:** Users don't expect physical rewards  
+✅ **Tangible:** Digital points → Physical items = real  
+✅ **Shareable:** "Look what I got!" social posts  
+✅ **Collectible:** Users want complete sets  
+✅ **Billboard Effect:** Wearing swag = marketing  
+✅ **Emotional Connection:** Handwritten notes = personal touch  
+✅ **Talk-Worthy:** Story to tell at meetups/WordCamps
+
+**Distribution Strategy:**
+- Ship within 7 days of reaching milestone (fast = impressive)
+- Track packages (users can't wait to receive)
+- Include surprise bonus item (exceed expectations)
+- Use eco-friendly packaging (brand values)
+- Include "share your unboxing" card (+50 pts if they do)
+
+**Unboxing Incentive:**
+- Share unboxing photo/video: **100 points**
+- Post gets 50+ likes: **50 points bonus**
+- YouTube unboxing video: **500 points**
+- Result: User-generated content + authentic marketing
+
+---
+
+### WordCamp Pass Program (Community Investment)
+
+**The Philosophy:**
+WordCamps are the heart of WordPress community. Sending top contributors for **free** builds loyalty, creates advocates, and generates authentic content.
+
+**Program Structure:**
+
+**Eligibility Requirements:**
+- Must have reached **Silver status** (2000+ points) minimum
+- Must have mailing address on file (for ticket delivery)
+- Must be active in last 90 days (not dormant account)
+- Must be within 200 miles of WordCamp location (local attendance)
+
+**Pass Distribution:**
+
+**Silver Status (2000+ pts):**
+- **1 free WordCamp ticket per year** (standard pass, ~$40 value)
+- Local WordCamps only (within 200 miles)
+- First-come, first-served (limited quantity per event)
+
+**Gold Status (5000+ pts):**
+- **2 free WordCamp tickets per year** (any WordCamp in country)
+- Can bring a friend (expand community)
+- Workshop day included if available
+- WPShadow t-shirt to wear at event
+
+**Platinum Status (10000+ pts):**
+- **3 free WordCamp tickets per year** (any WordCamp worldwide)
+- VIP/Sponsor lounge access (networking)
+- Travel stipend consideration ($200-500 for airfare/hotel)
+- WPShadow booth volunteer opportunity (meet team)
+- Speaker coaching if they want to present
+
+**Diamond Status (25000+ pts):**
+- **Unlimited free WordCamp tickets** (any WordCamp worldwide)
+- Full travel expenses covered (flight, hotel, meals)
+- Speaker slot introduction (we help get them speaking)
+- Private dinner with WPShadow team/founder
+- Booth representative role (official team member experience)
+
+**Implementation:**
+
+**Request Process:**
+1. User sees local WordCamp announced
+2. Clicks "Request Free Pass" in dashboard
+3. System checks: Status tier, tickets remaining, eligibility
+4. Auto-approves (instant) or adds to waitlist
+5. Email with instructions: "Your pass is waiting!"
+
+**At The Event:**
+- User wears WPShadow swag (we provide)
+- Takes photos at event (encouraged, not required)
+- Shares experience on social (+100 pts)
+- Meets other WPShadow users (community building)
+- Optional: Volunteers at WPShadow booth for 2 hours (+200 pts)
+
+**Post-Event:**
+- Share recap blog post: **300 points**
+- Share photo album (10+ photos): **150 points**
+- Tag 3+ WPShadow users met: **100 points**
+- Write "What I Learned" article: **500 points** (if we publish on blog)
+
+**Why This Works:**
+✅ **Community Building:** Face-to-face > online only  
+✅ **Brand Presence:** Users wear our swag, talk about us  
+✅ **Authentic Advocacy:** Real users, real stories  
+✅ **User-Generated Content:** Recap posts, photos, videos  
+✅ **Network Effect:** They meet more potential users  
+✅ **Loyalty:** Paying for someone's experience = deep gratitude  
+✅ **Speaker Pipeline:** We create WordPress thought leaders
+
+**Budget Considerations:**
+
+**Annual Estimate (for 10,000 active users):**
+- Assume 500 users reach Silver+ annually
+- 30% request WordCamp passes (150 requests)
+- Average ticket value: $40
+- Total ticket cost: **$6,000/year**
+
+**Additional costs:**
+- Travel stipends (Platinum): 20 users × $300 = $6,000
+- VIP upgrades: 10 users × $100 = $1,000
+- Swag for attendees: 150 × $25 = $3,750
+
+**Total WordCamp Program:** ~$16,750/year
+
+**ROI:**
+- 150 users at WordCamps = ~1,500 conversations
+- Each wears WPShadow swag (walking billboard)
+- Photo/video content = ~100 pieces UGC
+- Recap posts = ~30 blog posts (SEO, authenticity)
+- Speaker sessions = ~10 talks mentioning WPShadow
+
+**Marketing Value Equivalent:** $50,000-100,000+ (PR, advertising, content)  
+**Actual Cost:** ~$16,750  
+**ROI:** ~3-6x minimum
+
+**Plus Intangibles:**
+- Community goodwill (priceless)
+- Brand loyalty (users feel valued)
+- Network effects (users recruit users)
+- Speaker authority (they become our advocates)
+
+---
+
+### Combined Physical + Digital Rewards (Status Tiers)
+
+**Updated Status Rewards:**
+
+**500 points: Bronze Status** 🥉
+- Digital: Bronze badge, forum access
+- **Physical: Welcome Pack** (stickers, button, note)
+
+**2000 points: Silver Status** 🥈
+- Digital: Silver badge, priority email, early access
+- **Physical: Power User Pack** (t-shirt, mug, notebook)
+- **WordCamp: 1 free pass/year** (local)
+
+**5000 points: Gold Status** 🥇
+- Digital: Gold badge, 100 Guardian tokens, 24hr support, roadmap voting
+- **Physical: Champion Pack** (hoodie, bag, pins, bottle)
+- **WordCamp: 2 free passes/year** (any in country)
+
+**10000 points: Platinum Status** 💎
+- Digital: Platinum badge, 1 month Pro, direct team access, beta features
+- **Physical: VIP Pack** (leather portfolio, tech, badge, jacket)
+- **WordCamp: 3 free passes/year + travel stipend** ($200-500)
+
+**25000 points: Diamond Status** 💠
+- Digital: Diamond badge, 1 year Pro, advisory board, lifetime priority
+- **Physical: Elite Pack** (custom jersey, premium tech, framed art, quarterly boxes)
+- **WordCamp: Unlimited passes + full travel + speaker opportunities**
+
+**The Complete Journey:**
+
+A user who reaches **Diamond status** will have received:
+- 5 physical packages (Bronze → Diamond)
+- ~$500+ in physical goods
+- Unlimited WordCamp access worldwide
+- Full travel coverage to events
+- Speaking opportunities at conferences
+- Personal relationship with founder
+- Name in credits and on office plaque
+
+**Cost to WPShadow:** ~$600-800 total  
+**Value to User:** $2,000+ tangible + priceless intangibles  
+**User Investment:** 25,000 points of genuine engagement
+
+**They've likely:**
+- Referred 10+ friends (1,000+ pts)
+- Written reviews & testimonials (500+ pts)
+- Completed multiple courses (500+ pts)
+- Enabled anonymous usage data (750+ pts)
+- Created social content (1,000+ pts)
+- Fixed hundreds of site issues (2,000+ pts)
+- Helped in forums (1,000+ pts)
+- Beta tested releases (500+ pts)
+- Attended WordCamps (earned more points)
+
+**Marketing Value Delivered:** $10,000-50,000+  
+**Loyalty Created:** Lifetime brand champion
+
+This is **Commandment #7 (Ridiculously Good)** on steroids: "People should question why this is free."
+
 #### Leaderboard System
 
 **Leaderboard Types:**
@@ -1203,6 +1448,91 @@ Silver • 2,450 pts • 7-day streak 🔥
 - [ ] 10% referral participation (at least 1 referral)
 - [ ] 40% anonymous usage data opt-in rate
 - [ ] 15% WordPress.org review rate (from active users)
+
+**Physical Rewards Infrastructure (NEW):**
+- [ ] Mailing address collection (opt-in, encrypted, GDPR-compliant)
+- [ ] Address verification system (format validation, PO box detection)
+- [ ] Swag inventory management system
+- [ ] Automated shipping triggers (on milestone achievement)
+- [ ] Package tracking integration (users see delivery status)
+- [ ] Fulfillment partner integration (Printful, Printify, or custom)
+- [ ] Swag design system (5 tiers of physical goods)
+- [ ] Unboxing photo/video submission (+100 pts bonus)
+- [ ] Cost tracking & ROI analytics (swag spend vs user value)
+
+**Physical Rewards - Swag Tiers (5 packages):**
+- [ ] Bronze Pack: Stickers, button, handwritten note (~$3-5)
+- [ ] Silver Pack: T-shirt, mug, notebook, stickers (~$15-20)
+- [ ] Gold Pack: Hoodie, bag, pins, bottle, certificate (~$40-60)
+- [ ] Platinum Pack: Portfolio, tech accessory, badge, jacket (~$80-120)
+- [ ] Diamond Pack: Jersey, premium tech, art, quarterly boxes (~$200-300)
+
+**WordCamp Pass Program (NEW):**
+- [ ] WordCamp event tracking (dates, locations, ticket availability)
+- [ ] Geographic eligibility calculation (user location vs event location)
+- [ ] Pass request system (in-dashboard "Request Free Pass" button)
+- [ ] Auto-approval workflow (check tier, availability, eligibility)
+- [ ] Ticket fulfillment integration (partner with WordCamp organizers)
+- [ ] Event attendance tracking (check-in confirmation)
+- [ ] Post-event content rewards (recap post +300 pts, photos +150 pts)
+- [ ] Travel stipend management (Platinum/Diamond reimbursement)
+- [ ] Speaker opportunity coordination (help users get speaking slots)
+- [ ] WPShadow booth volunteer scheduling (optional +200 pts)
+
+**WordCamp Pass Eligibility:**
+- [ ] Silver: 1 pass/year (local, <200 miles, ~$40 value)
+- [ ] Gold: 2 passes/year (any in country, workshop included)
+- [ ] Platinum: 3 passes/year (worldwide, +$200-500 travel stipend)
+- [ ] Diamond: Unlimited passes (worldwide, full travel, speaker opportunities)
+
+**WordCamp Integration Points:**
+- [ ] Event calendar API (fetch upcoming WordCamps)
+- [ ] Distance calculation (user location → event location)
+- [ ] Ticket inventory (track passes distributed per event)
+- [ ] Attendance verification (QR code check-in or photo proof)
+- [ ] Post-event survey (gather feedback, measure impact)
+- [ ] User-generated content collection (photos, videos, recap posts)
+- [ ] Volunteer scheduling (booth coverage, session assistance)
+- [ ] Speaker coaching program (help users prepare talks)
+
+**Shipping & Fulfillment:**
+- [ ] Eco-friendly packaging sourcing
+- [ ] Fast shipping partners (7-day delivery target)
+- [ ] International shipping support (40+ countries)
+- [ ] Customs documentation (for international)
+- [ ] Tracking number email notifications
+- [ ] "Where's my package?" dashboard widget
+- [ ] Surprise bonus item inclusion (random delight)
+- [ ] "Share your unboxing" card in package (+100 pts incentive)
+
+**Budget & ROI Tracking:**
+- [ ] Swag cost per tier tracking
+- [ ] Shipping cost analytics (domestic vs international)
+- [ ] WordCamp ticket budget allocation ($6k/year estimated)
+- [ ] Travel stipend budget tracking ($6k/year estimated)
+- [ ] Marketing value calculation (UGC, social shares, reviews)
+- [ ] User lifetime value comparison (swag recipients vs non-recipients)
+- [ ] Churn rate analysis (do physical rewards reduce churn?)
+- [ ] Advocacy score (do recipients refer more friends?)
+
+**Privacy & Compliance:**
+- [ ] Mailing address storage encryption (AES-256)
+- [ ] Address data retention policy (delete on request)
+- [ ] GDPR Article 17 compliance (right to erasure)
+- [ ] CCPA compliance (California residents)
+- [ ] International shipping restrictions (embargoed countries)
+- [ ] Age verification (18+ for physical goods in some regions)
+- [ ] Parental consent (if under 18, rare but possible)
+
+**Communication & Expectations:**
+- [ ] "Swag is on the way!" email notification
+- [ ] Estimated delivery date display
+- [ ] Package tracking link in email & dashboard
+- [ ] "Did you receive it?" follow-up (3 days after delivery)
+- [ ] "Share your unboxing" reminder (with +100 pts incentive)
+- [ ] WordCamp pass approval email (instant confirmation)
+- [ ] Pre-event checklist email (what to bring, where to meet us)
+- [ ] Post-event thank-you email (with content submission links)
 
 **Est. Development Time:** 6-8 weeks  
 **Priority:** HIGH (drives retention, advocacy, growth)
