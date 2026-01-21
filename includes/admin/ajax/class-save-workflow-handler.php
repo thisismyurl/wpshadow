@@ -7,6 +7,7 @@ use WPShadow\Core\AJAX_Handler_Base;
 use WPShadow\Workflow\Workflow_Manager;
 use WPShadow\Workflow\Workflow_Wizard;
 use WPShadow\Workflow\Block_Registry;
+use WPShadow\Core\Activity_Logger;
 
 /**
  * AJAX Handler: Save Workflow
@@ -80,6 +81,14 @@ class Save_Workflow_Handler extends AJAX_Handler_Base {
 		$workflows[ $workflow['id'] ] = $workflow;
 		update_option( 'wpshadow_workflows', $workflows );
 
+		// Log activity (#565: Activity Logging Expansion)
+		Activity_Logger::log(
+			'workflow_saved',
+			sprintf( __( 'Workflow saved: "%s"', 'wpshadow' ), $workflow['name'] ),
+			'workflows',
+			array( 'workflow_id' => $workflow['id'], 'blocks_count' => count( $workflow['blocks'] ?? [] ) )
+		);
+
 		self::send_success( [
 			'message'  => 'Workflow saved successfully.',
 			'workflow' => $workflow,
@@ -109,6 +118,14 @@ class Save_Workflow_Handler extends AJAX_Handler_Base {
 		}
 
 		$workflow = Workflow_Manager::save_workflow( $name, $blocks, $workflow_id );
+
+		// Log activity (#565: Activity Logging Expansion)
+		Activity_Logger::log(
+			'workflow_saved',
+			sprintf( __( 'Workflow saved: "%s" with %d blocks', 'wpshadow' ), $workflow['name'], count( $blocks ) ),
+			'workflows',
+			array( 'workflow_id' => $workflow['id'], 'blocks_count' => count( $blocks ) )
+		);
 
 		self::send_success( [
 			'message'  => 'Workflow saved successfully.',

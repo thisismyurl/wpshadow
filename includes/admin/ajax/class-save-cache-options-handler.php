@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
+use WPShadow\Core\Activity_Logger;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -32,6 +33,25 @@ class Save_Cache_Options_Handler extends AJAX_Handler_Base {
         update_option( 'wpshadow_cache_posts', (bool) $cache_posts );
         update_option( 'wpshadow_skip_logged_in', (bool) $skip_logged_in );
         update_option( 'wpshadow_auto_clear_on_save', (bool) $auto_clear );
+
+        // Log activity (#565: Activity Logging Expansion)
+        Activity_Logger::log(
+            'cache_settings_changed',
+            sprintf(
+                __( 'Cache settings updated: pages=%s, posts=%s, skip_logged_in=%s, auto_clear=%s', 'wpshadow' ),
+                $cache_pages ? __( 'enabled', 'wpshadow' ) : __( 'disabled', 'wpshadow' ),
+                $cache_posts ? __( 'enabled', 'wpshadow' ) : __( 'disabled', 'wpshadow' ),
+                $skip_logged_in ? __( 'enabled', 'wpshadow' ) : __( 'disabled', 'wpshadow' ),
+                $auto_clear ? __( 'enabled', 'wpshadow' ) : __( 'disabled', 'wpshadow' )
+            ),
+            'performance',
+            array(
+                'cache_pages'     => (bool) $cache_pages,
+                'cache_posts'     => (bool) $cache_posts,
+                'skip_logged_in'  => (bool) $skip_logged_in,
+                'auto_clear'      => (bool) $auto_clear,
+            )
+        );
 
         self::send_success( array( 'message' => __( 'Cache settings saved successfully.', 'wpshadow' ) ) );
     }

@@ -5,6 +5,7 @@ namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
 use WPShadow\Workflow\Workflow_Manager;
+use WPShadow\Core\Activity_Logger;
 
 /**
  * AJAX Handler: Delete Workflow
@@ -42,6 +43,14 @@ class Delete_Workflow_Handler extends AJAX_Handler_Base {
 			self::send_error( 'Could not delete workflow.' );
 			return;
 		}
+
+		// Log activity (#565: Activity Logging Expansion)
+		Activity_Logger::log(
+			'workflow_deleted',
+			sprintf( __( 'Workflow deleted: %s', 'wpshadow' ), $workflow_id ),
+			'workflows',
+			array( 'workflow_id' => $workflow_id )
+		);
 
 		self::send_success( [ 'message' => 'Workflow deleted successfully.' ] );
 	}

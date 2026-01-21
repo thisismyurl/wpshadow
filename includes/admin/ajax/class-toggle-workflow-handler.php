@@ -5,6 +5,7 @@ namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
 use WPShadow\Workflow\Workflow_Manager;
+use WPShadow\Core\Activity_Logger;
 
 /**
  * AJAX Handler: Toggle Workflow
@@ -45,6 +46,18 @@ class Toggle_Workflow_Handler extends AJAX_Handler_Base {
 			self::send_error( 'Could not toggle workflow.' );
 			return;
 		}
+
+		// Log activity (#565: Activity Logging Expansion)
+		Activity_Logger::log(
+			'workflow_' . ( $workflow['enabled'] ? 'enabled' : 'disabled' ),
+			sprintf(
+				__( 'Workflow "%s" %s', 'wpshadow' ),
+				$workflow['name'] ?? $workflow_id,
+				$workflow['enabled'] ? __( 'enabled', 'wpshadow' ) : __( 'disabled', 'wpshadow' )
+			),
+			'workflows',
+			array( 'workflow_id' => $workflow_id, 'enabled' => (bool) $workflow['enabled'] )
+		);
 
 		self::send_success( [
 			'message'  => 'Workflow updated.',

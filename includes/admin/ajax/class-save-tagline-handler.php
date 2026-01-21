@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
+use WPShadow\Core\Activity_Logger;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -32,6 +33,15 @@ class Save_Tagline_Handler extends AJAX_Handler_Base {
         }
 
         update_option( 'blogdescription', $tagline );
+        
+        // Log activity (#565: Activity Logging Expansion)
+        Activity_Logger::log(
+            'site_settings_changed',
+            sprintf( __( 'Site tagline updated to: "%s"', 'wpshadow' ), $tagline ),
+            'wordpress_config',
+            array( 'tagline' => $tagline )
+        );
+        
         self::send_success( array( 'message' => __( 'Tagline saved successfully!', 'wpshadow' ) ) );
     }
 }

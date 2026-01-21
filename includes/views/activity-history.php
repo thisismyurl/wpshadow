@@ -61,16 +61,27 @@ $category_meta = array(
 
 // Action type labels
 $action_labels = array(
-	'diagnostic_run'        => __( 'Diagnostic Run', 'wpshadow' ),
-	'treatment_applied'     => __( 'Treatment Applied', 'wpshadow' ),
-	'treatment_undone'      => __( 'Treatment Undone', 'wpshadow' ),
-	'finding_dismissed'     => __( 'Finding Dismissed', 'wpshadow' ),
-	'finding_status_change' => __( 'Status Changed', 'wpshadow' ),
-	'plugin_activated'      => __( 'Plugin Activated', 'wpshadow' ),
-	'plugin_deactivated'    => __( 'Plugin Deactivated', 'wpshadow' ),
-	'workflow_created'      => __( 'Workflow Created', 'wpshadow' ),
-	'workflow_executed'     => __( 'Workflow Executed', 'wpshadow' ),
-	'settings_changed'      => __( 'Settings Changed', 'wpshadow' ),
+	'diagnostic_run'                  => __( 'Diagnostic Run', 'wpshadow' ),
+	'treatment_applied'               => __( 'Treatment Applied', 'wpshadow' ),
+	'treatment_undone'                => __( 'Treatment Undone', 'wpshadow' ),
+	'finding_dismissed'               => __( 'Finding Dismissed', 'wpshadow' ),
+	'finding_status_change'           => __( 'Status Changed', 'wpshadow' ),
+	'finding_excluded'                => __( 'Finding Excluded', 'wpshadow' ),
+	'finding_resolved'                => __( 'Finding Resolved', 'wpshadow' ),
+	'plugin_activated'                => __( 'Plugin Activated', 'wpshadow' ),
+	'plugin_deactivated'              => __( 'Plugin Deactivated', 'wpshadow' ),
+	'workflow_created'                => __( 'Workflow Created', 'wpshadow' ),
+	'workflow_executed'               => __( 'Workflow Executed', 'wpshadow' ),
+	'workflow_enabled'                => __( 'Workflow Enabled', 'wpshadow' ),
+	'workflow_disabled'               => __( 'Workflow Disabled', 'wpshadow' ),
+	'workflow_saved'                  => __( 'Workflow Saved', 'wpshadow' ),
+	'workflow_deleted'                => __( 'Workflow Deleted', 'wpshadow' ),
+	'settings_changed'                => __( 'Settings Changed', 'wpshadow' ),
+	'site_settings_changed'           => __( 'Site Settings Changed', 'wpshadow' ),
+	'cache_settings_changed'          => __( 'Cache Settings Changed', 'wpshadow' ),
+	'autofix_permission_enabled'      => __( 'Auto-fix Enabled', 'wpshadow' ),
+	'autofix_permission_disabled'     => __( 'Auto-fix Disabled', 'wpshadow' ),
+	'user_preferences_changed'        => __( 'User Preferences Changed', 'wpshadow' ),
 );
 ?>
 

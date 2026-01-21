@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
+use WPShadow\Core\Activity_Logger;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -35,6 +36,18 @@ class Toggle_Autofix_Permission_Handler extends AJAX_Handler_Base {
         }
 
         update_option( 'wpshadow_autofix_permissions', $permissions );
+
+        // Log activity (#565: Activity Logging Expansion)
+        Activity_Logger::log(
+            'autofix_permission_' . ( $enabled ? 'enabled' : 'disabled' ),
+            sprintf(
+                __( 'Auto-fix %s for finding type: %s', 'wpshadow' ),
+                $enabled ? __( 'enabled', 'wpshadow' ) : __( 'disabled', 'wpshadow' ),
+                $finding_id
+            ),
+            'workflows',
+            array( 'finding_id' => $finding_id, 'enabled' => (bool) $enabled )
+        );
 
         self::send_success( array(
             'message' => $enabled ? __( 'Auto-fix enabled for this type.', 'wpshadow' ) : __( 'Auto-fix disabled for this type.', 'wpshadow' ),
