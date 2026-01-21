@@ -32,12 +32,14 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-autofix-fi
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-save-tagline-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-consent-preferences-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-error-report-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-first-scan-handler.php';
 
 \WPShadow\Admin\Ajax\Dismiss_Finding_Handler::register();
 \WPShadow\Admin\Ajax\Autofix_Finding_Handler::register();
 \WPShadow\Admin\Ajax\Save_Tagline_Handler::register();
 \WPShadow\Admin\Ajax\Consent_Preferences_Handler::register();
 \WPShadow\Admin\Ajax\Error_Report_Handler::register();
+\WPShadow\Admin\Ajax\First_Scan_Handler::register();
 
 // Show consent banner for admins (Phase 6: consent-first)
 add_action( 'admin_footer', function() {
@@ -2220,6 +2222,36 @@ function wpshadow_render_dashboard() {
 				});
 			});
 			
+			// First scan (Issue #562)
+			$('#wpshadow-start-first-scan').on('click', function(e) {
+				e.preventDefault();
+				var $btn = $(this);
+				var $prompt = $('#wpshadow-first-scan-prompt');
+				
+				$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Starting...', 'wpshadow' ) ); ?>');
+				
+				$.post(ajaxurl, {
+					action: 'wpshadow_first_scan',
+					nonce: '<?php echo wp_create_nonce( 'wpshadow_first_scan_nonce' ); ?>'
+				}, function(response) {
+					if (response.success) {
+						$prompt.fadeOut(300, function() {
+							location.reload();
+						});
+					} else {
+						alert('Error: ' + (response.data && response.data.message ? response.data.message : 'Unknown error'));
+						$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Start Quick Scan', 'wpshadow' ) ); ?>');
+					}
+				});
+			});
+			
+			// Skip first scan prompt
+			$('#wpshadow-skip-first-scan').on('click', function(e) {
+				e.preventDefault();
+				var $prompt = $('#wpshadow-first-scan-prompt');
+				$prompt.fadeOut(300);
+			});
+			
 			// Schedule deep scan
 			$('#wpshadow-schedule-scan-form').on('submit', function(e) {
 				e.preventDefault();
@@ -2443,7 +2475,62 @@ function wpshadow_render_dashboard() {
 			?>
 		
 		<div style="margin: 30px 0;">
-			<h2><?php esc_html_e( 'Site Health Dashboard', 'wpshadow' ); ?></h2>
+			
+			<?php
+			// Issue #562: Check last Quick Scan time and show prompt if needed
+			$last_scan_time = get_option( 'wpshadow_last_quick_scan', 0 );
+			$current_time = time();
+			$scan_interval = 5 * 60; // 5 minutes
+			$time_since_scan = $current_time - (int) $last_scan_time;
+			
+			if ( $last_scan_time === 0 ) {
+				// Never scanned - show permission prompt
+				?>
+				<div id="wpshadow-first-scan-prompt" style="background: #e3f2fd; border-left: 4px solid #0073aa; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
+					<h2 style="margin-top: 0; color: #0073aa; display: flex; align-items: center; gap: 10px;">
+						<span class="dashicons dashicons-shield-alt" style="font-size: 24px;"></span>
+						<?php esc_html_e( 'Let\'s Get Started', 'wpshadow' ); ?>
+					</h2>
+					<p style="margin: 10px 0; font-size: 15px; color: #333; line-height: 1.6;">
+						<?php esc_html_e( 'We need to run a Quick Scan to analyze your site. This is quick, painless, and won\'t hurt your website or visitors.', 'wpshadow' ); ?>
+					</p>
+					<div style="display: flex; gap: 10px; margin-top: 15px;">
+						<button id="wpshadow-start-first-scan" class="button button-primary" style="padding: 8px 16px; cursor: pointer;">
+							<?php esc_html_e( 'Start Quick Scan', 'wpshadow' ); ?>
+						</button>
+						<button id="wpshadow-skip-first-scan" class="button" style="padding: 8px 16px; cursor: pointer;">
+							<?php esc_html_e( 'Maybe Later', 'wpshadow' ); ?>
+						</button>
+					</div>
+				</div>
+				<?php
+			} elseif ( $time_since_scan > $scan_interval ) {
+				// Scan is stale (> 5 min ago) - show progress bar
+				?>
+				<div id="wpshadow-stale-scan-notice" style="background: #fff3e0; border-left: 4px solid #f57c00; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
+					<h2 style="margin-top: 0; color: #f57c00; display: flex; align-items: center; gap: 10px;">
+						<span class="dashicons dashicons-update" style="font-size: 24px; animation: spin 2s linear infinite;"></span>
+						<?php esc_html_e( 'Running Quick Scan', 'wpshadow' ); ?>
+					</h2>
+					<p style="margin: 10px 0; font-size: 14px; color: #666;">
+						<?php esc_html_e( 'Analyzing your site...', 'wpshadow' ); ?>
+					</p>
+					<div id="wpshadow-scan-progress-bar" style="background: #e0e0e0; border-radius: 4px; height: 8px; margin: 15px 0; overflow: hidden;">
+						<div style="background: #f57c00; height: 100%; width: 0%; transition: width 0.3s ease;" id="wpshadow-progress-fill"></div>
+					</div>
+					<p id="wpshadow-scan-current-task" style="margin: 10px 0 0 0; font-size: 12px; color: #999;">
+						<?php esc_html_e( 'Starting scan...', 'wpshadow' ); ?>
+					</p>
+				</div>
+				<style>
+					@keyframes spin {
+						from { transform: rotate(0deg); }
+						to { transform: rotate(360deg); }
+					}
+				</style>
+				<?php
+			}
+			?>
 			
 			<div style="display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap;">
 				<!-- Left: Large Overall Health Gauge + Scan Buttons -->
