@@ -326,7 +326,15 @@ When adding new code, verify:
 
 ---
 
-## 9. Future Updates
+## 9. Extensibility & WP-CLI Access
+
+- Expose hooks for major operations (before/after) so developers can extend behaviors without patching core.
+- Keep outputs and error handling compatible with WP-CLI: prefer returning data/`WP_Error` over `wp_die()` in shared logic; isolate UI-only concerns to view/controller layers.
+- When adding new flows, register matching CLI commands (or stubs) that call the same underlying services used by admin/AJAX, not duplicated logic.
+- Document filters/actions in code comments (inline `apply_filters`/`do_action` notes) to aid discovery.
+- Avoid hard dependencies on admin-only globals in reusable services; pass context (user, capability, transport) explicitly so CLI can call them.
+
+## 10. Future Updates
 
 This document is a living standard. Updates should be made when:
 - New architectural patterns emerge
