@@ -8,7 +8,7 @@ use WPShadow\Core\KPI_Tracker;
 /**
  * Event Logger for Reporting System
  * 
- * Logs all Guardian and auto-fix events for reporting.
+ * Logs all WPShadow Guardian and auto-fix events for reporting.
  * Tracks: diagnostics, treatments, auto-fixes, recoveries, anomalies.
  * 
  * Features:

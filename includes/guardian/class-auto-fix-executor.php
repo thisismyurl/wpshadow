@@ -7,7 +7,7 @@ use WPShadow\Treatments\Treatment_Registry;
 use WPShadow\Core\KPI_Tracker;
 
 /**
- * Guardian Auto-Fix Executor
+ * WPShadow Guardian Auto-Fix Executor
  * 
  * Safely executes approved treatments with full safeguards.
  * Manages backup creation, execution, and rollback.

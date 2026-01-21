@@ -20,15 +20,85 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-ajax-handler-bas
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-command-base.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-color-utils.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-theme-data-provider.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-activity-logger.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-activity-logger.php';
 
 // AJAX handlers moved to classes (security centralized)
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-dismiss-finding-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-autofix-finding-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-save-tagline-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-consent-preferences-handler.php';
 
 \WPShadow\Admin\Ajax\Dismiss_Finding_Handler::register();
 \WPShadow\Admin\Ajax\Autofix_Finding_Handler::register();
 \WPShadow\Admin\Ajax\Save_Tagline_Handler::register();
+\WPShadow\Admin\Ajax\Consent_Preferences_Handler::register();
+
+// Show consent banner for admins (Phase 6: consent-first)
+add_action( 'admin_footer', function() {
+	if ( ! is_admin() || wp_doing_ajax() ) {
+		return;
+	}
+
+	$current_user = get_current_user_id();
+	if ( ! $current_user || ! function_exists( 'current_user_can' ) || ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	if ( ! class_exists( '\\WPShadow\\Privacy\\First_Run_Consent' ) ) {
+		return;
+	}
+
+	if ( ! \WPShadow\Privacy\First_Run_Consent::should_show_consent( $current_user ) ) {
+		return;
+	}
+
+	echo \WPShadow\Privacy\First_Run_Consent::get_consent_html();
+
+	$nonce = wp_create_nonce( 'wpshadow_consent' );
+	$ajax_url = admin_url( 'admin-ajax.php' );
+	?>
+	<script>
+	(function($){
+		$(function(){
+			var $banner = $('#wpshadow-consent-banner');
+			if(!$banner.length){return;}
+			var ajaxUrl = '<?php echo esc_js( $ajax_url ); ?>';
+			var nonce = '<?php echo esc_js( $nonce ); ?>';
+
+			$banner.on('click', '.wpshadow-consent-accept', function(){
+				var telemetry = $banner.find('input[name="anonymized_telemetry"]').prop('checked');
+				var $btn = $(this);
+				$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Saving...', 'wpshadow' ) ); ?>');
+				$.post(ajaxUrl, {
+					action: 'wpshadow_save_consent',
+					nonce: nonce,
+					telemetry: telemetry
+				}, function(response){
+					if(response && response.success){
+						$banner.fadeOut(200);
+					} else {
+						alert(response && response.data && response.data.message ? response.data.message : '<?php echo esc_js( __( 'Could not save consent.', 'wpshadow' ) ); ?>');
+						$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Save preferences', 'wpshadow' ) ); ?>');
+					}
+				});
+			});
+
+			$banner.on('click', '.wpshadow-consent-dismiss', function(){
+				var $btn = $(this);
+				$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Hiding...', 'wpshadow' ) ); ?>');
+				$.post(ajaxUrl, {
+					action: 'wpshadow_dismiss_consent',
+					nonce: nonce
+				}, function(){
+					$banner.fadeOut(200);
+				});
+			});
+		});
+	})(jQuery);
+	</script>
+	<?php
+});
 
 // Toggle auto-fix permission for specific finding type.
 // Toggle autofix permission handler moved to class
@@ -72,6 +142,9 @@ add_action( 'wpshadow_run_overnight_fixes', function() {
 			$status_manager->set_finding_status( $finding_id, 'fixed' );
 			wpshadow_log_finding_action( $finding_id, 'auto_fixed_overnight', $result['message'] );
 			
+			// Log activity
+			\WPShadow\Core\Activity_Logger::log( 'treatment_applied', "Overnight fix completed: {$finding_id}", '', array( 'finding_id' => $finding_id ) );
+			
 			$results[] = array(
 				'finding_id' => $finding_id,
 				'success' => true,
@@ -96,6 +169,49 @@ add_action( 'wpshadow_run_overnight_fixes', function() {
 	
 	// Clear scheduled fixes
 	delete_option( 'wpshadow_scheduled_fixes' );
+} );
+
+// Handle automated fixes cron (Issue #567)
+add_action( 'wpshadow_run_automated_fixes', function() {
+	$scheduled = get_option( 'wpshadow_scheduled_automated_fixes', array() );
+	
+	if ( empty( $scheduled ) ) {
+		return;
+	}
+	
+	foreach ( $scheduled as $finding_id => $item ) {
+		if ( $item['status'] !== 'pending' ) {
+			continue;
+		}
+		
+		// Attempt auto-fix
+		$result = wpshadow_attempt_autofix( $finding_id );
+		
+		// Update status
+		$scheduled[ $finding_id ]['status'] = $result['success'] ? 'completed' : 'failed';
+		$scheduled[ $finding_id ]['completed'] = current_time( 'timestamp' );
+		$scheduled[ $finding_id ]['message'] = $result['message'] ?? '';
+		
+		if ( $result['success'] ) {
+			// Mark as fixed
+			$status_manager = new \WPShadow\Core\Finding_Status_Manager();
+			$status_manager->set_finding_status( $finding_id, 'fixed' );
+			
+			// Track KPI
+			if ( class_exists( '\WPShadow\Core\KPI_Tracker' ) ) {
+				\WPShadow\Core\KPI_Tracker::record_treatment_applied( $finding_id, 5 );
+			}
+			
+			// Log activity
+			\WPShadow\Core\Activity_Logger::log( 'treatment_applied', "Automated fix completed: {$finding_id}", '', array( 'finding_id' => $finding_id ) );
+		} else {
+			// Log failure
+			\WPShadow\Core\Activity_Logger::log( 'workflow_executed', "Automated fix failed: {$finding_id} - {$result['message']}", '', array( 'finding_id' => $finding_id, 'error' => $result['message'] ) );
+		}
+	}
+	
+	// Save updated statuses
+	update_option( 'wpshadow_scheduled_automated_fixes', $scheduled );
 } );
 
 // Schedule off-peak operation handler moved to class
@@ -639,6 +755,16 @@ add_action( 'admin_menu', function() {
 		'wpshadow_render_help'
 	);
 
+	// Activity History submenu (Issue #565)
+	add_submenu_page(
+		'wpshadow',
+		__( 'Activity History', 'wpshadow' ),
+		__( 'Activity History', 'wpshadow' ),
+		'read',
+		'wpshadow-activity',
+		'wpshadow_render_activity_page'
+	);
+
 	// Guardian System submenu pages
 	add_submenu_page(
 		'wpshadow',
@@ -712,6 +838,22 @@ add_filter( 'site_status_tests', function ( $tests ) {
 		'label' => __( 'WPShadow Overall Status', 'wpshadow' ),
 		'test'  => 'wpshadow_site_health_test_overall',
 	);
+
+	// Issue #558: Add individual critical findings as Site Health tests
+	$findings = wpshadow_get_site_findings();
+	$critical_findings = array_filter( $findings, function( $f ) {
+		return isset( $f['threat_level'] ) && $f['threat_level'] >= 75;
+	} );
+
+	foreach ( array_slice( $critical_findings, 0, 5 ) as $finding ) {
+		$finding_id = isset( $finding['id'] ) ? $finding['id'] : md5( $finding['title'] ?? '' );
+		$tests['direct'][ 'wpshadow_finding_' . $finding_id ] = array(
+			'label' => $finding['title'] ?? __( 'Security Issue', 'wpshadow' ),
+			'test'  => function() use ( $finding, $badge, $finding_id ) {
+				return wpshadow_site_health_test_finding( $finding, $badge, $finding_id );
+			},
+		);
+	}
 
 	// Store badge for callbacks to reference consistently.
 	$GLOBALS['wpshadow_site_health_badge'] = $badge;
@@ -877,6 +1019,84 @@ function wpshadow_site_health_test_overall() {
 			),
 		),
 		'test'        => 'wpshadow_site_health_test_overall',
+	);
+}
+
+/**
+ * Site Health test: Individual WPShadow finding (Issue #558)
+ * 
+ * @param array  $finding Finding data
+ * @param array  $badge Site Health badge
+ * @param string $finding_id Finding identifier
+ * @return array Site Health test result
+ */
+function wpshadow_site_health_test_finding( $finding, $badge, $finding_id ) {
+	$action_url = admin_url( 'admin.php?page=wpshadow' );
+	$threat_level = isset( $finding['threat_level'] ) ? $finding['threat_level'] : 50;
+	
+	// Check if already fixed
+	$status_manager = new \WPShadow\Core\Finding_Status_Manager();
+	$status = $status_manager->get_finding_status( $finding_id );
+	
+	if ( $status === 'fixed' ) {
+		return array(
+			'label'       => $finding['title'] ?? __( 'Security Issue', 'wpshadow' ),
+			'status'      => 'good',
+			'badge'       => $badge,
+			'description' => __( '✓ This issue has been resolved by WPShadow.', 'wpshadow' ),
+			'test'        => 'wpshadow_finding_' . $finding_id,
+		);
+	}
+	
+	// Determine status based on threat level
+	$site_status = 'recommended';
+	if ( $threat_level >= 90 ) {
+		$site_status = 'critical';
+	} elseif ( $threat_level >= 75 ) {
+		$site_status = 'recommended';
+	}
+	
+	$description = isset( $finding['description'] ) ? wp_strip_all_tags( $finding['description'] ) : '';
+	$category = isset( $finding['category'] ) ? $finding['category'] : '';
+	$slug = sanitize_title( (string) ( $finding_id ?? ( $finding['title'] ?? '' ) ) );
+	$kb_link = ! empty( $slug ) ? wpshadow_get_kb_link( $slug ) : '';
+	$training_link = ! empty( $slug ) ? wpshadow_get_training_link( $slug ) : '';
+	
+	if ( ! empty( $category ) ) {
+		$description .= ' ' . sprintf( __( '(Category: %s)', 'wpshadow' ), ucfirst( $category ) );
+	}
+	
+	$actions = array(
+		sprintf(
+			'<a href="%s">%s</a>',
+			esc_url( $action_url ),
+			__( 'View in WPShadow', 'wpshadow' )
+		),
+	);
+
+	if ( ! empty( $kb_link ) ) {
+		$actions[] = sprintf(
+			'<a href="%s" target="_blank">%s</a>',
+			esc_url( $kb_link ),
+			__( 'Learn more (KB)', 'wpshadow' )
+		);
+	}
+
+	if ( ! empty( $training_link ) ) {
+		$actions[] = sprintf(
+			'<a href="%s" target="_blank">%s</a>',
+			esc_url( $training_link ),
+			__( 'Watch training', 'wpshadow' )
+		);
+	}
+	
+	return array(
+		'label'       => $finding['title'] ?? __( 'Security Issue', 'wpshadow' ),
+		'status'      => $site_status,
+		'badge'       => $badge,
+		'description' => $description,
+		'actions'     => $actions,
+		'test'        => 'wpshadow_finding_' . $finding_id,
 	);
 }
 
@@ -1768,6 +1988,45 @@ function wpshadow_render_help() {
 }
 
 /**
+ * Render activity history page (Issue #565)
+ */
+function wpshadow_render_activity_page() {
+	if ( ! current_user_can( 'read' ) ) {
+		wp_die( 'Insufficient permissions.' );
+	}
+
+	// Handle CSV export
+	if ( isset( $_GET['export'] ) && 'csv' === $_GET['export'] ) {
+		// Build filters for export
+		$filters = array();
+		if ( ! empty( $_GET['activity_category'] ) ) {
+			$filters['category'] = sanitize_key( $_GET['activity_category'] );
+		}
+		if ( ! empty( $_GET['activity_action'] ) ) {
+			$filters['action'] = sanitize_key( $_GET['activity_action'] );
+		}
+		if ( ! empty( $_GET['activity_search'] ) ) {
+			$filters['search'] = sanitize_text_field( $_GET['activity_search'] );
+		}
+
+		// Generate CSV
+		$csv = \WPShadow\Core\Activity_Logger::export_csv( $filters );
+
+		// Send headers
+		header( 'Content-Type: text/csv' );
+		header( 'Content-Disposition: attachment; filename="wpshadow-activity-' . date( 'Y-m-d-His' ) . '.csv"' );
+		header( 'Pragma: no-cache' );
+		header( 'Expires: 0' );
+
+		echo $csv;
+		exit;
+	}
+
+	// Render activity history view
+	include WPSHADOW_PATH . 'includes/views/activity-history.php';
+}
+
+/**
  * Render health diagnostic dashboard.
  */
 function wpshadow_render_dashboard() {
@@ -1778,6 +2037,9 @@ function wpshadow_render_dashboard() {
 	// Save report snapshot
 	wpshadow_save_health_snapshot();
 
+	// Check if filtering by category (Issue #564)
+	$filter_category = isset( $_GET['category'] ) ? sanitize_key( $_GET['category'] ) : '';
+	
 	$health = wpshadow_get_health_status();
 	$all_findings = wpshadow_get_site_findings();
 	$dismissed = get_option( 'wpshadow_dismissed_findings', array() );
@@ -1786,6 +2048,13 @@ function wpshadow_render_dashboard() {
 	$all_findings = array_filter( $all_findings, function( $f ) use ( $dismissed ) {
 		return ! isset( $f['id'] ) || ! isset( $dismissed[ $f['id'] ] );
 	} );
+	
+	// Apply category filter if present
+	if ( ! empty( $filter_category ) ) {
+		$all_findings = array_filter( $all_findings, function( $f ) use ( $filter_category ) {
+			return isset( $f['category'] ) && $f['category'] === $filter_category;
+		} );
+	}
 	
 	$critical_findings = array_filter( $all_findings, function( $f ) {
 		return isset( $f['color'] ) && $f['color'] === '#f44336'; // Red = critical
@@ -1804,7 +2073,44 @@ function wpshadow_render_dashboard() {
 	}
 	?>
 	<div class="wrap">
-		<h1>WPShadow Site Health Diagnostic</h1>
+		<?php if ( ! empty( $filter_category ) ) : 
+			// Get category metadata for filtered view
+			$category_meta = array(
+				'security' => array( 'label' => __( 'Security', 'wpshadow' ), 'icon' => 'dashicons-shield-alt', 'color' => '#dc2626' ),
+				'performance' => array( 'label' => __( 'Performance', 'wpshadow' ), 'icon' => 'dashicons-dashboard', 'color' => '#0891b2' ),
+				'code_quality' => array( 'label' => __( 'Code Quality', 'wpshadow' ), 'icon' => 'dashicons-editor-code', 'color' => '#7c3aed' ),
+				'seo' => array( 'label' => __( 'SEO', 'wpshadow' ), 'icon' => 'dashicons-search', 'color' => '#2563eb' ),
+				'design' => array( 'label' => __( 'Design', 'wpshadow' ), 'icon' => 'dashicons-admin-appearance', 'color' => '#8e44ad' ),
+				'settings' => array( 'label' => __( 'Settings', 'wpshadow' ), 'icon' => 'dashicons-admin-settings', 'color' => '#4b5563' ),
+				'wordpress_config' => array( 'label' => __( 'WordPress Config', 'wpshadow' ), 'icon' => 'dashicons-wordpress-alt', 'color' => '#0073aa' ),
+				'monitoring' => array( 'label' => __( 'Monitoring', 'wpshadow' ), 'icon' => 'dashicons-chart-line', 'color' => '#059669' ),
+				'workflows' => array( 'label' => __( 'Workflows', 'wpshadow' ), 'icon' => 'dashicons-update', 'color' => '#ea580c' ),
+				'site_health' => array( 'label' => __( 'Site Health', 'wpshadow' ), 'icon' => 'dashicons-heart', 'color' => '#db2777' ),
+			);
+			$cat_meta = $category_meta[ $filter_category ] ?? array( 'label' => ucfirst( $filter_category ), 'icon' => 'dashicons-admin-generic', 'color' => '#666' );
+		?>
+		<div style="margin-bottom: 20px;">
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: #f0f0f0; border-radius: 4px; color: #333; transition: all 0.2s ease;" onmouseover="this.style.background='#e0e0e0'" onmouseout="this.style.background='#f0f0f0'">
+				<span class="dashicons dashicons-arrow-left-alt2" style="font-size: 16px;"></span>
+				<?php esc_html_e( 'Back to All Categories', 'wpshadow' ); ?>
+			</a>
+		</div>
+		<h1 style="display: flex; align-items: center; gap: 12px;">
+			<span class="<?php echo esc_attr( $cat_meta['icon'] ); ?>" style="font-size: 32px; color: <?php echo esc_attr( $cat_meta['color'] ); ?>;"></span>
+			<?php echo esc_html( sprintf( __( '%s Dashboard', 'wpshadow' ), $cat_meta['label'] ) ); ?>
+		</h1>
+		<p style="font-size: 16px; color: #666; margin-top: 8px;">
+			<?php 
+			$finding_count = count( $all_findings );
+			echo esc_html( sprintf( 
+				_n( 'Showing %d finding in this category', 'Showing %d findings in this category', $finding_count, 'wpshadow' ), 
+				$finding_count 
+			) ); 
+			?>
+		</p>
+		<?php else : ?>
+		<h1><?php esc_html_e( 'WPShadow Site Health Diagnostic', 'wpshadow' ); ?></h1>
+		<?php endif; ?>
 
 		<script>
 		jQuery(document).ready(function($) {
@@ -1824,6 +2130,7 @@ function wpshadow_render_dashboard() {
 						$card.fadeOut(300, function() { $(this).remove(); });
 					}
 				});
+
 			});
 			
 			// Auto-fix finding
@@ -1975,117 +2282,281 @@ function wpshadow_render_dashboard() {
 		</script>
 		<?php
 		$category_meta = array(
+			'security' => array(
+				'label' => __( 'Security', 'wpshadow' ),
+				'icon'  => 'dashicons-shield-alt',
+				'color' => '#dc2626',
+				'bg'    => '#ffe0e0',
+			),
+			'performance' => array(
+				'label' => __( 'Performance', 'wpshadow' ),
+				'icon'  => 'dashicons-dashboard',
+				'color' => '#0891b2',
+				'bg'    => '#e0f7ff',
+			),
+			'code_quality' => array(
+				'label' => __( 'Code Quality', 'wpshadow' ),
+				'icon'  => 'dashicons-editor-code',
+				'color' => '#7c3aed',
+				'bg'    => '#f3e8ff',
+			),
 			'seo' => array(
-				'label' => 'SEO',
+				'label' => __( 'SEO', 'wpshadow' ),
 				'icon'  => 'dashicons-search',
 				'color' => '#2563eb',
 				'bg'    => '#e7f1ff',
 			),
 			'design' => array(
-				'label' => 'Design',
+				'label' => __( 'Design', 'wpshadow' ),
 				'icon'  => 'dashicons-admin-appearance',
 				'color' => '#8e44ad',
 				'bg'    => '#f2e9fb',
 			),
 			'settings' => array(
-				'label' => 'Settings',
-				'icon'  => 'dashicons-admin-generic',
+				'label' => __( 'Settings', 'wpshadow' ),
+				'icon'  => 'dashicons-admin-settings',
 				'color' => '#4b5563',
 				'bg'    => '#eef2f7',
 			),
-			'performance' => array(
-				'label' => 'Performance',
-				'icon'  => 'dashicons-dashboard',
-				'color' => '#0891b2',
-				'bg'    => '#e0f7ff',
+			'wordpress_config' => array(
+				'label' => __( 'WordPress Config', 'wpshadow' ),
+				'icon'  => 'dashicons-wordpress-alt',
+				'color' => '#0073aa',
+				'bg'    => '#e5f5fa',
 			),
-			'security' => array(
-				'label' => 'Security',
-				'icon'  => 'dashicons-shield-alt',
-				'color' => '#dc2626',
-				'bg'    => '#ffe0e0',
+			'monitoring' => array(
+				'label' => __( 'Monitoring', 'wpshadow' ),
+				'icon'  => 'dashicons-chart-line',
+				'color' => '#059669',
+				'bg'    => '#d1fae5',
+			),
+			'workflows' => array(
+				'label' => __( 'Workflows', 'wpshadow' ),
+				'icon'  => 'dashicons-update',
+				'color' => '#ea580c',
+				'bg'    => '#ffedd5',
+			),
+			'site_health' => array(
+				'label' => __( 'Site Health', 'wpshadow' ),
+				'icon'  => 'dashicons-heart',
+				'color' => '#db2777',
+				'bg'    => '#fce7f3',
 			),
 		);
 
-		if ( ! empty( $findings_by_category ) ) : ?>
-		<div style="margin: 30px 0;">
-			<h2>Category Health</h2>
-			<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 16px;">
-				<?php foreach ( $findings_by_category as $cat_key => $cat_findings ) : 
-					$meta = $category_meta[ $cat_key ] ?? array( 'label' => ucfirst( $cat_key ), 'icon' => 'dashicons-admin-generic', 'color' => '#666', 'bg' => '#f0f0f0' );
-					$total = count( $cat_findings );
-					
-					// Calculate category health score
-					$critical_count = count( array_filter( $cat_findings, function( $f ) { return isset( $f['color'] ) && $f['color'] === '#f44336'; } ) );
-					$passed = $total - $critical_count;
-					
-					// Determine status
-					if ( $total === 0 ) {
-						$status_text = 'Excellent';
-						$status_icon = '✓';
-						$status_color = '#2e7d32';
-					} elseif ( $critical_count === 0 ) {
-						$status_text = 'Good';
-						$status_icon = '✓';
-						$status_color = '#2e7d32';
-					} elseif ( $critical_count < $total / 2 ) {
-						$status_text = 'Fair';
-						$status_icon = '◐';
-						$status_color = '#f57c00';
-					} else {
-						$status_text = 'Needs Work';
-						$status_icon = '✕';
-						$status_color = '#c62828';
-					}
-					
-					// Calculate threat gauge percentage
-					$threat_total = 0;
-					foreach ( $cat_findings as $finding ) {
-						$threat_total += isset( $finding['threat_level'] ) ? $finding['threat_level'] : 50;
-					}
-					$gauge_percent = $total > 0 ? min( 100, ( $threat_total / $total ) / 100 * 100 ) : 0;
-					$gauge_percent = 100 - $gauge_percent; // Invert: higher is better
-				?>
-				<div style="border: 1px solid <?php echo esc_attr( $meta['color'] ); ?>; border-radius: 8px; overflow: hidden; display: flex; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-					<!-- Left Column: Info -->
-					<div style="flex: 1; padding: 20px; border-right: 1px solid <?php echo esc_attr( $meta['color'] ); ?>; background: <?php echo esc_attr( $meta['bg'] ); ?>;">
-						<!-- Header with Icon and Title -->
-						<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-							<span class="<?php echo esc_attr( $meta['icon'] ); ?>" style="font-size: 24px; color: <?php echo esc_attr( $meta['color'] ); ?>;"></span>
-							<h3 style="margin: 0; font-size: 18px; color: <?php echo esc_attr( $meta['color'] ); ?>; font-weight: 600;"><?php echo esc_html( $meta['label'] ); ?></h3>
+		// Calculate overall health score (or category-specific if filtering)
+		if ( ! empty( $filter_category ) && isset( $category_meta[ $filter_category ] ) ) {
+			// Filtered view: Show single large category gauge
+			$cat_findings = $findings_by_category[ $filter_category ] ?? array();
+			$total = count( $cat_findings );
+			
+			// Calculate category health score
+			$threat_total = 0;
+			foreach ( $cat_findings as $finding ) {
+				$threat_total += isset( $finding['threat_level'] ) ? $finding['threat_level'] : 50;
+			}
+			$gauge_percent = $total > 0 ? min( 100, ( $threat_total / $total ) / 100 * 100 ) : 100;
+			$gauge_percent = 100 - $gauge_percent; // Invert: higher is better
+			
+			// Determine status
+			if ( $gauge_percent >= 80 ) {
+				$status = __( 'Excellent', 'wpshadow' );
+				$color = '#2e7d32';
+				$bg = '#e8f5e9';
+			} elseif ( $gauge_percent >= 60 ) {
+				$status = __( 'Good', 'wpshadow' );
+				$color = '#2e7d32';
+				$bg = '#e8f5e9';
+			} elseif ( $gauge_percent >= 40 ) {
+				$status = __( 'Fair', 'wpshadow' );
+				$color = '#f57c00';
+				$bg = '#fff3e0';
+			} else {
+				$status = __( 'Needs Attention', 'wpshadow' );
+				$color = '#c62828';
+				$bg = '#ffebee';
+			}
+			
+			$filtered_meta = $category_meta[ $filter_category ];
+			?>
+			<div style="margin: 30px 0;">
+				<h2><?php echo esc_html( sprintf( __( '%s Health', 'wpshadow' ), $filtered_meta['label'] ) ); ?></h2>
+				
+				<div style="max-width: 400px; margin: 20px auto;">
+					<div style="border: 2px solid <?php echo esc_attr( $color ); ?>; border-radius: 12px; padding: 32px; background: linear-gradient(135deg, #fff 0%, <?php echo esc_attr( $bg ); ?> 100%); box-shadow: 0 4px 12px rgba(0,0,0,0.15); text-align: center;">
+						<div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px;">
+							<span class="<?php echo esc_attr( $filtered_meta['icon'] ); ?>" style="font-size: 32px; color: <?php echo esc_attr( $filtered_meta['color'] ); ?>;"></span>
+							<h3 style="margin: 0; font-size: 24px; color: <?php echo esc_attr( $filtered_meta['color'] ); ?>;"><?php echo esc_html( $filtered_meta['label'] ); ?></h3>
 						</div>
 						
-						<!-- Status, Tests on Single Line -->
-						<div style="display: flex; align-items: center; gap: 16px; margin-top: 12px; font-size: 16px; color: #333;">
-							<span style="color: <?php echo esc_attr( $status_color ); ?>; font-weight: 600; display: flex; align-items: center; gap: 6px;">
-								<span style="font-weight: bold;"><?php echo esc_html( $status_icon ); ?></span> <?php echo esc_html( $status_text ); ?>
-							</span>
-							<span style="color: #666; font-size: 14px;">Passes <?php echo esc_html( $passed ); ?> of <?php echo esc_html( $total ); ?> tests</span>
+						<svg width="250" height="250" viewBox="0 0 250 250" style="margin: 0 auto; display: block; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.2));">
+							<!-- Outer decorative circle -->
+							<circle cx="125" cy="125" r="115" fill="none" stroke="<?php echo esc_attr( $color ); ?>" stroke-width="2" opacity="0.2" />
+							<!-- Gauge background -->
+							<circle cx="125" cy="125" r="100" fill="none" stroke="#e0e0e0" stroke-width="20" />
+							<!-- Gauge progress -->
+							<circle cx="125" cy="125" r="100" fill="none" stroke="<?php echo esc_attr( $color ); ?>" stroke-width="20"
+								stroke-dasharray="<?php echo (int) ( $gauge_percent / 100 * 628 ); ?> 628"
+								stroke-linecap="round" transform="rotate(-90 125 125)"
+								style="transition: stroke-dasharray 0.5s ease;" />
+							<!-- Center text -->
+							<text x="125" y="120" text-anchor="middle" font-size="56" font-weight="bold" fill="<?php echo esc_attr( $color ); ?>"><?php echo (int) $gauge_percent; ?>%</text>
+							<text x="125" y="150" text-anchor="middle" font-size="18" fill="#666"><?php echo esc_html( $status ); ?></text>
+						</svg>
+						
+						<div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(0,0,0,0.1);">
+							<p style="margin: 0; font-size: 16px; color: #666;">
+								<?php 
+								$critical_count = count( array_filter( $cat_findings, function( $f ) { return isset( $f['color'] ) && $f['color'] === '#f44336'; } ) );
+								$passed = $total - $critical_count;
+								echo esc_html( sprintf( __( 'Passes %d of %d tests', 'wpshadow' ), $passed, $total ) ); 
+								?>
+							</p>
 						</div>
 					</div>
-
-					<!-- Right Column: Gas Gauge -->
-					<div style="width: 140px; display: flex; align-items: center; justify-content: center; padding: 20px; background: #fafafa;">
-						<svg width="100" height="100" viewBox="0 0 100 100" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
+				</div>
+			</div>
+			<?php
+		} else {
+			// Normal view: Show all gauges
+			$overall_health = wpshadow_calculate_overall_health( $findings_by_category, $category_meta );
+			?>
+		
+		<div style="margin: 30px 0;">
+			<h2><?php esc_html_e( 'Site Health Dashboard', 'wpshadow' ); ?></h2>
+			
+			<div style="display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap;">
+				<!-- Left: Large Overall Health Gauge + Scan Buttons -->
+				<div style="flex: 0 0 280px;">
+					<div style="border: 2px solid <?php echo esc_attr( $overall_health['color'] ); ?>; border-radius: 12px; padding: 24px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.15); text-align: center;">
+						<h3 style="margin: 0 0 16px 0; font-size: 20px; color: #333;"><?php esc_html_e( 'Overall Site Health', 'wpshadow' ); ?></h3>
+						
+						<svg width="200" height="200" viewBox="0 0 200 200" style="margin: 0 auto; display: block; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.2));">
+							<!-- Outer decorative circle -->
+							<circle cx="100" cy="100" r="95" fill="none" stroke="<?php echo esc_attr( $overall_health['color'] ); ?>" stroke-width="2" opacity="0.2" />
 							<!-- Gauge background -->
-							<circle cx="50" cy="50" r="45" fill="none" stroke="#e0e0e0" stroke-width="8" />
+							<circle cx="100" cy="100" r="85" fill="none" stroke="#e0e0e0" stroke-width="16" />
 							<!-- Gauge progress -->
-							<circle cx="50" cy="50" r="45" fill="none" stroke="<?php echo esc_attr( wpshadow_get_threat_gauge_color( 100 - $gauge_percent ) ); ?>" stroke-width="8" 
-								stroke-dasharray="<?php echo (int) ( $gauge_percent / 100 * 282.7 ); ?> 282.7" 
-								stroke-linecap="round" transform="rotate(-90 50 50)" 
-								style="transition: stroke-dasharray 0.3s ease;" />
-							<!-- Percentage text at bottom -->
-							<text x="50" y="70" text-anchor="middle" font-size="20" font-weight="bold" fill="#333"><?php echo (int) $gauge_percent; ?>%</text>
+							<circle cx="100" cy="100" r="85" fill="none" stroke="<?php echo esc_attr( $overall_health['color'] ); ?>" stroke-width="16"
+								stroke-dasharray="<?php echo (int) ( $overall_health['score'] / 100 * 534 ); ?> 534"
+								stroke-linecap="round" transform="rotate(-90 100 100)"
+								style="transition: stroke-dasharray 0.5s ease;" />
+							<!-- Center text -->
+							<text x="100" y="95" text-anchor="middle" font-size="48" font-weight="bold" fill="<?php echo esc_attr( $overall_health['color'] ); ?>"><?php echo (int) $overall_health['score']; ?>%</text>
+							<text x="100" y="120" text-anchor="middle" font-size="16" fill="#666"><?php echo esc_html( $overall_health['status'] ); ?></text>
 						</svg>
+						
+						<p style="margin: 16px 0 0 0; font-size: 14px; color: #666; line-height: 1.5;"><?php echo esc_html( $overall_health['message'] ); ?></p>
+					</div>
+					
+					<!-- Quick Scan and Deep Scan Buttons -->
+					<div style="margin-top: 16px; display: flex; flex-direction: column; gap: 10px;">
+						<button id="wpshadow-quick-scan-btn" class="button button-primary" style="width: 100%; padding: 10px; cursor: pointer;">
+							<?php esc_html_e( 'Quick Scan', 'wpshadow' ); ?>
+						</button>
+						<button id="wpshadow-deep-scan-btn" class="button" style="width: 100%; padding: 10px; cursor: pointer;">
+							<?php esc_html_e( 'Deep Scan', 'wpshadow' ); ?>
+						</button>
 					</div>
 				</div>
-				<?php endforeach; ?>
+				
+				<!-- Right: 10 Small Category Gauges in 2x5 Grid (2 columns, 5 rows) -->
+				<div style="flex: 1; min-width: 0;">
+					<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+						<?php foreach ( $category_meta as $cat_key => $meta ) :
+							$cat_findings = $findings_by_category[ $cat_key ] ?? array();
+							$total = count( $cat_findings );
+							
+							// Calculate category health score
+							$critical_count = count( array_filter( $cat_findings, function( $f ) { return isset( $f['color'] ) && $f['color'] === '#f44336'; } ) );
+							$passed = $total - $critical_count;
+							
+							// Determine status
+							if ( $total === 0 ) {
+								$status_text = __( 'Excellent', 'wpshadow' );
+								$status_icon = '✓';
+								$status_color = '#2e7d32';
+							} elseif ( $critical_count === 0 ) {
+								$status_text = __( 'Good', 'wpshadow' );
+								$status_icon = '✓';
+								$status_color = '#2e7d32';
+							} elseif ( $critical_count < $total / 2 ) {
+								$status_text = __( 'Fair', 'wpshadow' );
+								$status_icon = '◐';
+								$status_color = '#f57c00';
+							} else {
+								$status_text = __( 'Needs Work', 'wpshadow' );
+								$status_icon = '✕';
+								$status_color = '#c62828';
+							}
+							
+							// Calculate threat gauge percentage
+							$threat_total = 0;
+							foreach ( $cat_findings as $finding ) {
+								$threat_total += isset( $finding['threat_level'] ) ? $finding['threat_level'] : 50;
+							}
+							$gauge_percent = $total > 0 ? min( 100, ( $threat_total / $total ) / 100 * 100 ) : 0;
+							$gauge_percent = 100 - $gauge_percent; // Invert: higher is better
+						?>
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&category=' . $cat_key ) ); ?>" style="text-decoration: none; color: inherit;" title="<?php echo esc_attr( sprintf( __( 'Click to view %s details', 'wpshadow' ), $meta['label'] ) ); ?>">
+							<div style="display: flex; align-items: center; gap: 14px; border: 1px solid #ddd; border-radius: 6px; padding: 12px 14px; background: #ffffff; transition: all 0.2s ease; cursor: pointer; height: 90px;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'; this.style.borderColor='#bbb';" onmouseout="this.style.boxShadow='none'; this.style.borderColor='#ddd';">
+								<!-- Gauge on Left -->
+								<div style="flex-shrink: 0;">
+									<svg width="70" height="70" viewBox="0 0 100 100" style="filter: drop-shadow(0 1px 3px rgba(0,0,0,0.1));">
+										<!-- Gauge background -->
+										<circle cx="50" cy="50" r="40" fill="none" stroke="#e0e0e0" stroke-width="8" />
+										<!-- Gauge progress -->
+										<circle cx="50" cy="50" r="40" fill="none" stroke="<?php echo esc_attr( wpshadow_get_threat_gauge_color( 100 - $gauge_percent ) ); ?>" stroke-width="8"
+											stroke-dasharray="<?php echo (int) ( $gauge_percent / 100 * 251 ); ?> 251"
+											stroke-linecap="round" transform="rotate(-90 50 50)"
+											style="transition: stroke-dasharray 0.3s ease;" />
+										<!-- Percentage text -->
+										<text x="50" y="58" text-anchor="middle" font-size="18" font-weight="bold" fill="#333"><?php echo (int) $gauge_percent; ?>%</text>
+									</svg>
+								</div>
+								
+								<!-- Text on Right -->
+								<div style="flex: 1; min-width: 0;">
+									<!-- Icon and Title -->
+									<div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+										<span class="<?php echo esc_attr( $meta['icon'] ); ?>" style="font-size: 16px; color: <?php echo esc_attr( $meta['color'] ); ?>;"></span>
+										<h4 style="margin: 0; font-size: 13px; color: <?php echo esc_attr( $meta['color'] ); ?>; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?php echo esc_html( $meta['label'] ); ?></h4>
+									</div>
+									
+									<!-- Status -->
+									<div>
+										<span style="color: <?php echo esc_attr( $status_color ); ?>; font-weight: 600; font-size: 11px;">
+											<?php echo esc_html( $status_icon . ' ' . $status_text ); ?>
+										</span>
+										<div style="color: #666; font-size: 10px; margin-top: 2px;">
+											<?php 
+											// Show "No issues" instead of "0 of 0"
+											if ( $total === 0 ) {
+												echo esc_html( __( 'No issues', 'wpshadow' ) );
+											} else {
+												echo esc_html( sprintf( __( '%d of %d', 'wpshadow' ), $passed, $total ) );
+											}
+											?>
+										</div>
+									</div>
+								</div>
+							</div>
+						</a>
+						<?php endforeach; ?>
+					</div>
+				</div>
 			</div>
 		</div>
-		<?php endif; ?>
+		<?php } // End if/else for filtered vs normal view ?>
 
 		<!-- Kanban Board for Organizing Findings -->
-		<?php include WPSHADOW_PATH . 'includes/views/kanban-board.php'; ?>
+		<?php 
+		// Pass category filter to Kanban board if present
+		if ( ! empty( $filter_category ) ) {
+			$_GET['kanban_category'] = $filter_category;
+		}
+		include WPSHADOW_PATH . 'includes/views/kanban-board.php'; 
+		?>
 
 
 		<!-- Recent Activity -->
@@ -2249,6 +2720,87 @@ function wpshadow_render_dashboard() {
 /**
  * Get site health status.
  */
+/**
+ * Calculate overall site health score from all category findings.
+ * 
+ * Philosophy: Show value (#9) - Aggregate category health into single metric
+ * 
+ * @param array $findings_by_category Findings grouped by category
+ * @param array $category_meta Category metadata (colors, labels)
+ * @return array Overall health data (score, status, color, bg, message)
+ */
+function wpshadow_calculate_overall_health( $findings_by_category, $category_meta ) {
+	if ( empty( $findings_by_category ) ) {
+		return array(
+			'score'   => 100,
+			'status'  => __( 'Excellent', 'wpshadow' ),
+			'color'   => '#2e7d32',
+			'bg'      => '#e8f5e9',
+			'message' => __( 'Your site is in perfect shape! All critical checks passed.', 'wpshadow' ),
+		);
+	}
+	
+	// Calculate weighted average across all categories
+	$total_score = 0;
+	$category_count = 0;
+	
+	foreach ( $category_meta as $cat_key => $meta ) {
+		$cat_findings = $findings_by_category[ $cat_key ] ?? array();
+		$total = count( $cat_findings );
+		
+		if ( $total === 0 ) {
+			$total_score += 100; // Perfect score if no findings
+			$category_count++;
+			continue;
+		}
+		
+		// Calculate threat-based score for this category
+		$threat_total = 0;
+		foreach ( $cat_findings as $finding ) {
+			$threat_total += isset( $finding['threat_level'] ) ? $finding['threat_level'] : 50;
+		}
+		
+		// Invert threat to health score (lower threat = higher health)
+		$category_score = 100 - min( 100, ( $threat_total / $total ) / 100 * 100 );
+		$total_score += $category_score;
+		$category_count++;
+	}
+	
+	// Calculate average
+	$overall_score = $category_count > 0 ? round( $total_score / $category_count ) : 0;
+	
+	// Determine status and color
+	if ( $overall_score >= 80 ) {
+		$status = __( 'Excellent', 'wpshadow' );
+		$color = '#2e7d32';
+		$bg = '#e8f5e9';
+		$message = __( 'Your site is running smoothly. Guardian will continue watching for potential issues.', 'wpshadow' );
+	} elseif ( $overall_score >= 60 ) {
+		$status = __( 'Good', 'wpshadow' );
+		$color = '#2e7d32';
+		$bg = '#e8f5e9';
+		$message = __( 'Your site is in good shape with minor issues to monitor.', 'wpshadow' );
+	} elseif ( $overall_score >= 40 ) {
+		$status = __( 'Fair', 'wpshadow' );
+		$color = '#f57c00';
+		$bg = '#fff3e0';
+		$message = __( 'Your site has some issues that should be addressed soon.', 'wpshadow' );
+	} else {
+		$status = __( 'Needs Attention', 'wpshadow' );
+		$color = '#c62828';
+		$bg = '#ffebee';
+		$message = __( 'Your site has critical issues that need immediate attention.', 'wpshadow' );
+	}
+	
+	return array(
+		'score'   => $overall_score,
+		'status'  => $status,
+		'color'   => $color,
+		'bg'      => $bg,
+		'message' => $message,
+	);
+}
+
 function wpshadow_get_health_status() {
 	// Get all findings and calculate weighted score
 	$findings = wpshadow_get_site_findings();
@@ -2296,6 +2848,46 @@ function wpshadow_get_health_status() {
 		'color'   => $color,
 		'message' => $message,
 	);
+}
+
+/**
+ * Get KB link for a finding/diagnostic slug.
+ * Falls back to a slug-based URL if not mapped.
+ *
+ * @param string $slug Finding/diagnostic slug.
+ * @return string KB URL.
+ */
+function wpshadow_get_kb_link( string $slug ): string {
+	$map = array(
+		'backup-missing'      => 'https://wpshadow.com/kb/how-to-set-up-automated-backups/',
+		'ssl-missing'         => 'https://wpshadow.com/kb/enable-https-ssl-on-your-site/',
+		'outdated-plugins'    => 'https://wpshadow.com/kb/how-to-safely-update-plugins/',
+		'memory-limit-low'    => 'https://wpshadow.com/kb/increase-php-memory-limit/',
+		'permalinks-plain'    => 'https://wpshadow.com/kb/configure-wordpress-permalinks-for-seo/',
+		'tagline-empty'       => 'https://wpshadow.com/kb/write-an-effective-site-tagline/',
+		'debug-mode-enabled'  => 'https://wpshadow.com/kb/disable-wordpress-debug-mode/',
+		'wordpress-outdated'  => 'https://wpshadow.com/kb/how-to-update-wordpress-safely/',
+		'plugin-count-high'   => 'https://wpshadow.com/kb/audit-and-optimize-your-wordpress-plugins/',
+	);
+
+	if ( isset( $map[ $slug ] ) ) {
+		return $map[ $slug ];
+	}
+
+	$slug = sanitize_title( $slug );
+	return 'https://wpshadow.com/kb/' . $slug . '/';
+}
+
+/**
+ * Get training link for a treatment slug.
+ * Falls back to slug-based training URL.
+ *
+ * @param string $slug Treatment/finding slug.
+ * @return string Training video URL.
+ */
+function wpshadow_get_training_link( string $slug ): string {
+	$slug = sanitize_title( $slug );
+	return 'https://wpshadow.com/training/' . $slug . '/';
 }
 
 /**
@@ -2347,6 +2939,15 @@ function wpshadow_get_site_findings() {
 			}
 		}
 	}
+
+	// Enrich with KB and training links (Phase 5)
+	foreach ( $findings as &$finding ) {
+		$slug = $finding['id'] ?? ( $finding['title'] ?? '' );
+		$slug = sanitize_title( (string) $slug );
+		$finding['kb_link'] = wpshadow_get_kb_link( $slug );
+		$finding['training_link'] = wpshadow_get_training_link( $slug );
+	}
+	unset( $finding );
 
 	return $findings;
 }

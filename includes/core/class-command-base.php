@@ -2,7 +2,7 @@
 /**
  * Command Base
  *
- * Shared utilities for command-style AJAX handlers (Guardian/Cloud commands).
+ * Shared utilities for command-style AJAX handlers (WPShadow Guardian/Cloud commands).
  * Provides centralized nonce/capability checks, parameter access, and
  * normalized success/error responses.
  *

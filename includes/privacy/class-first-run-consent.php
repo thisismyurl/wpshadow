@@ -52,17 +52,17 @@ class First_Run_Consent {
 	 */
 	public static function get_consent_html() {
 		return '
-		<div class="wpshadow-consent-flow" style="
+		<div id="wpshadow-consent-banner" class="wpshadow-consent-flow" style="
 			position: fixed;
 			bottom: 0;
 			right: 0;
-			width: 400px;
+			width: 420px;
 			background: white;
 			border: 1px solid #ddd;
-			border-radius: 8px 8px 0 0;
-			box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
-			padding: 20px;
-			z-index: 9999;
+			border-radius: 10px 10px 0 0;
+			box-shadow: 0 -6px 18px rgba(0,0,0,0.18);
+			padding: 22px;
+			z-index: 99999;
 		">
 			<div class="wpshadow-consent-header">
 				<h3 style="margin-top: 0;">' . esc_html( __( 'Your Privacy Matters', 'wpshadow' ) ) . '</h3>
@@ -118,7 +118,7 @@ class First_Run_Consent {
 					border: 1px solid #ddd;
 					border-radius: 4px;
 					cursor: pointer;
-				">' . esc_html( __( 'Learn More', 'wpshadow' ) ) . '</button>
+				">' . esc_html( __( 'Not now', 'wpshadow' ) ) . '</button>
 				<button class="wpshadow-consent-accept" style="
 					flex: 1;
 					padding: 10px;
@@ -128,8 +128,13 @@ class First_Run_Consent {
 					border-radius: 4px;
 					cursor: pointer;
 					font-weight: bold;
-				">' . esc_html( __( 'Save Preferences', 'wpshadow' ) ) . '</button>
+				">' . esc_html( __( 'Save preferences', 'wpshadow' ) ) . '</button>
 			</div>
+			<p style="margin: 10px 0 0; font-size: 12px;">
+				<a href="https://wpshadow.com/kb/privacy/?utm_source=wpshadow&utm_medium=plugin&utm_campaign=consent" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 600;">
+					' . esc_html( __( 'Read our privacy approach', 'wpshadow' ) ) . '
+				</a>
+			</p>
 		</div>
 		';
 	}

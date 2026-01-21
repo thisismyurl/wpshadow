@@ -16,7 +16,7 @@ namespace WPShadow\Guardian;
  * - PHP version
  * - WordPress version
  * 
- * Used by Guardian to alert on unexpected changes.
+ * Used by WPShadow Guardian to alert on unexpected changes.
  * 
  * Data Storage:
  * - wpshadow_site_baseline: Initial snapshot
@@ -27,7 +27,7 @@ class Baseline_Manager {
 	/**
 	 * Create initial baseline (first run)
 	 * 
-	 * Called when Guardian first enabled.
+	 * Called when WPShadow Guardian first enabled.
 	 * Captures current site state as baseline.
 	 */
 	public static function create_baseline(): void {

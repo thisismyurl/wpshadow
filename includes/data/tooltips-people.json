@@ -1,164 +1,164 @@
 [
-    {
-        "id": "nav-users",
-        "selector": "#menu-users > a",
-        "title": "Manage team",
-        "message": "Add users and manage their roles to control site access.",
-        "category": "people",
-        "level": "beginner",
-        "kb_url": "https://wpshadow.com/kb/general-manage-team"
-    },
-    {
-        "id": "nav-users-all",
-        "selector": "#menu-users li a[href*=\"users.php\"]",
-        "title": "All users",
-        "message": "View, edit, or remove user accounts from your site.",
-        "category": "people",
-        "level": "intermediate",
-        "kb_url": "https://wpshadow.com/kb/users-all-users"
-    },
-    {
-        "id": "nav-users-add",
-        "selector": "#menu-users li a[href*=\"user-new.php\"]",
-        "title": "Invite user",
-        "message": "Add a new user to your site with a specific role.",
-        "category": "people",
-        "level": "beginner",
-        "kb_url": "https://wpshadow.com/kb/user-new-invite-user"
-    },
-    {
-        "id": "nav-users-profile",
-        "selector": "#menu-users li a[href*=\"profile.php\"]",
-        "title": "Your profile",
-        "message": "Update your personal information, password, and settings.",
-        "category": "people",
-        "level": "beginner",
-        "kb_url": "https://wpshadow.com/kb/profile-your-profile"
-    },
-    {
-        "id": "bar-user",
-        "selector": "#wp-admin-bar-my-account",
-        "title": "Your profile",
-        "message": "Access your account settings, edit your profile, or log out.",
-        "category": "people",
-        "level": "beginner",
-        "kb_url": "https://wpshadow.com/kb/general-your-profile"
-    },
-    {
-        "id": "bar-user-edit",
-        "selector": "#wp-admin-bar-my-account li a[href*=\"profile.php\"]",
-        "title": "Edit profile",
-        "message": "Update your personal information, email, and password.",
-        "category": "people",
-        "level": "beginner",
-        "kb_url": "https://wpshadow.com/kb/profile-edit-profile"
-    },
-    {
-        "id": "settings-profile-firstname",
-        "selector": "#first_name",
-        "title": "First name",
-        "message": "Your first name (optional, displayed in some areas).",
-        "category": "people",
-        "level": "beginner",
-        "kb_url": "https://wpshadow.com/kb/profile-first-name"
-    },
-    {
-        "id": "settings-profile-lastname",
-        "selector": "#last_name",
-        "title": "Last name",
-        "message": "Your last name (optional, displayed in some areas).",
-        "category": "people",
-        "level": "beginner",
-        "kb_url": "https://wpshadow.com/kb/profile-last-name"
-    },
-    {
-        "id": "settings-profile-nickname",
-        "selector": "#nickname",
-        "title": "Nickname",
-        "message": "How your name is displayed publicly.",
-        "category": "people",
-        "level": "beginner",
-        "kb_url": "https://wpshadow.com/kb/profile-nickname"
-    },
-    {
-        "id": "settings-profile-display-name",
-        "selector": "#display_name",
-        "title": "Display name",
-        "message": "How your name appears when you publish or comment.",
-        "category": "people",
-        "level": "beginner",
-        "kb_url": "https://wpshadow.com/kb/profile-display-name"
-    },
-    {
-        "id": "settings-profile-email",
-        "selector": "#email",
-        "title": "Email address",
-        "message": "Your email address for account recovery and notifications.",
-        "category": "people",
-        "level": "beginner",
-        "kb_url": "https://wpshadow.com/kb/profile-email-address"
-    },
-    {
-        "id": "settings-profile-website",
-        "selector": "#url",
-        "title": "Website",
-        "message": "Your personal website URL (optional).",
-        "category": "people",
-        "level": "beginner",
-        "kb_url": "https://wpshadow.com/kb/profile-website"
-    },
-    {
-        "id": "settings-profile-bio",
-        "selector": "#description",
-        "title": "Biographical info",
-        "message": "Your bio or about information displayed on author pages.",
-        "category": "people",
-        "level": "beginner",
-        "kb_url": "https://wpshadow.com/kb/profile-biographical-info"
-    },
-    {
-        "id": "settings-user-username",
-        "selector": "#user_login",
-        "title": "Username",
-        "message": "Your login username (cannot be changed).",
-        "category": "people",
-        "level": "beginner",
-        "kb_url": "https://wpshadow.com/kb/user-new-username"
-    },
-    {
-        "id": "settings-user-password",
-        "selector": ".user-pass1-wrap .wp-pwd, #pass1",
-        "title": "Password",
-        "message": "Your login password. Use a strong password with letters, numbers, and symbols.",
-        "category": "people",
-        "level": "beginner",
-        "kb_url": "https://wpshadow.com/kb/user-new-password"
-    },
-    {
-        "id": "settings-user-role",
-        "selector": "#role",
-        "title": "User role",
-        "message": "The permission level determines what this user can do on the site.",
-        "category": "people",
-        "level": "intermediate",
-        "kb_url": "https://wpshadow.com/kb/user-new-user-role"
-    },
-    {
-        "id": "settings-user-send-notification",
-        "selector": "#send_user_notification",
-        "title": "Send user notification",
-        "message": "Email the new user their login credentials and welcome message.",
-        "category": "people",
-        "level": "beginner",
-        "kb_url": "https://wpshadow.com/kb/user-new-send-user-notification"
-    },
-    {
-        "id": "list-author",
-        "selector": "td.author a, td.column-author a",
-        "title": "Author",
-        "message": "Click to see all content by this author.",
-        "category": "people",
-        "level": "beginner",
-        "kb_url": "https://wpshadow.com/kb/general-author"
-    }
+  {
+    "id": "nav-users",
+    "selector": "#menu-users > a",
+    "title": "Manage team",
+    "message": "Add users and manage their roles to control site access.",
+    "category": "people",
+    "level": "beginner",
+    "kb_url": "https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-manage-team"
+  },
+  {
+    "id": "nav-users-all",
+    "selector": "#menu-users li a[href*=\"users.php\"]",
+    "title": "All users",
+    "message": "View, edit, or remove user accounts from your site.",
+    "category": "people",
+    "level": "intermediate",
+    "kb_url": "https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/users-all-users"
+  },
+  {
+    "id": "nav-users-add",
+    "selector": "#menu-users li a[href*=\"user-new.php\"]",
+    "title": "Invite user",
+    "message": "Add a new user to your site with a specific role.",
+    "category": "people",
+    "level": "beginner",
+    "kb_url": "https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/user-new-invite-user"
+  },
+  {
+    "id": "nav-users-profile",
+    "selector": "#menu-users li a[href*=\"profile.php\"]",
+    "title": "Your profile",
+    "message": "Update your personal information, password, and settings.",
+    "category": "people",
+    "level": "beginner",
+    "kb_url": "https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/profile-your-profile"
+  },
+  {
+    "id": "bar-user",
+    "selector": "#wp-admin-bar-my-account",
+    "title": "Your profile",
+    "message": "Access your account settings, edit your profile, or log out.",
+    "category": "people",
+    "level": "beginner",
+    "kb_url": "https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-your-profile"
+  },
+  {
+    "id": "bar-user-edit",
+    "selector": "#wp-admin-bar-my-account li a[href*=\"profile.php\"]",
+    "title": "Edit profile",
+    "message": "Update your personal information, email, and password.",
+    "category": "people",
+    "level": "beginner",
+    "kb_url": "https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/profile-edit-profile"
+  },
+  {
+    "id": "settings-profile-firstname",
+    "selector": "#first_name",
+    "title": "First name",
+    "message": "Your first name (optional, displayed in some areas).",
+    "category": "people",
+    "level": "beginner",
+    "kb_url": "https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/profile-first-name"
+  },
+  {
+    "id": "settings-profile-lastname",
+    "selector": "#last_name",
+    "title": "Last name",
+    "message": "Your last name (optional, displayed in some areas).",
+    "category": "people",
+    "level": "beginner",
+    "kb_url": "https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/profile-last-name"
+  },
+  {
+    "id": "settings-profile-nickname",
+    "selector": "#nickname",
+    "title": "Nickname",
+    "message": "How your name is displayed publicly.",
+    "category": "people",
+    "level": "beginner",
+    "kb_url": "https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/profile-nickname"
+  },
+  {
+    "id": "settings-profile-display-name",
+    "selector": "#display_name",
+    "title": "Display name",
+    "message": "How your name appears when you publish or comment.",
+    "category": "people",
+    "level": "beginner",
+    "kb_url": "https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/profile-display-name"
+  },
+  {
+    "id": "settings-profile-email",
+    "selector": "#email",
+    "title": "Email address",
+    "message": "Your email address for account recovery and notifications.",
+    "category": "people",
+    "level": "beginner",
+    "kb_url": "https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/profile-email-address"
+  },
+  {
+    "id": "settings-profile-website",
+    "selector": "#url",
+    "title": "Website",
+    "message": "Your personal website URL (optional).",
+    "category": "people",
+    "level": "beginner",
+    "kb_url": "https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/profile-website"
+  },
+  {
+    "id": "settings-profile-bio",
+    "selector": "#description",
+    "title": "Biographical info",
+    "message": "Your bio or about information displayed on author pages.",
+    "category": "people",
+    "level": "beginner",
+    "kb_url": "https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/profile-biographical-info"
+  },
+  {
+    "id": "settings-user-username",
+    "selector": "#user_login",
+    "title": "Username",
+    "message": "Your login username (cannot be changed).",
+    "category": "people",
+    "level": "beginner",
+    "kb_url": "https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/user-new-username"
+  },
+  {
+    "id": "settings-user-password",
+    "selector": ".user-pass1-wrap .wp-pwd, #pass1",
+    "title": "Password",
+    "message": "Your login password. Use a strong password with letters, numbers, and symbols.",
+    "category": "people",
+    "level": "beginner",
+    "kb_url": "https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/user-new-password"
+  },
+  {
+    "id": "settings-user-role",
+    "selector": "#role",
+    "title": "User role",
+    "message": "The permission level determines what this user can do on the site.",
+    "category": "people",
+    "level": "intermediate",
+    "kb_url": "https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/user-new-user-role"
+  },
+  {
+    "id": "settings-user-send-notification",
+    "selector": "#send_user_notification",
+    "title": "Send user notification",
+    "message": "Email the new user their login credentials and welcome message.",
+    "category": "people",
+    "level": "beginner",
+    "kb_url": "https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/user-new-send-user-notification"
+  },
+  {
+    "id": "list-author",
+    "selector": "td.author a, td.column-author a",
+    "title": "Author",
+    "message": "Click to see all content by this author.",
+    "category": "people",
+    "level": "beginner",
+    "kb_url": "https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-author"
+  }
 ]

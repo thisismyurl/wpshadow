@@ -31,17 +31,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 // GitHub Codespaces Port Forwarding Configuration
 // ============================================================
 // GitHub Codespaces uses a proxy that forwards HTTPS traffic to port 80.
-// We need to preserve the original port (9000) in URLs.
+// Force HTTPS and set the correct host
 
-if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
-    // Detect if the original request was HTTPS based on proxy headers
-    $_SERVER['HTTPS'] = ($_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') ? 'on' : 'off';
-}
+// Always force HTTPS for Codespaces
+$_SERVER['HTTPS'] = 'on';
 
-if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
-    // Preserve the forwarded host header (includes port 9000)
-    $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_FORWARDED_HOST'];
-}
+// Force the correct Codespaces hostname
+$_SERVER['HTTP_HOST'] = 'fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev';
+$_SERVER['SERVER_NAME'] = 'fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev';
+$_SERVER['SERVER_PORT'] = '443';
 
 // ============================================================
 // WordPress Site URL Configuration

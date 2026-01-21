@@ -7,7 +7,7 @@ use WPShadow\Core\KPI_Tracker;
 use WPShadow\Guardian\Guardian_Activity_Logger;
 
 /**
- * Report Generator for Guardian & Auto-Fix System
+ * Report Generator for WPShadow Guardian & Auto-Fix System
  * 
  * Generates comprehensive reports on:
  * - Diagnostics run

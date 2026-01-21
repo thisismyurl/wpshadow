@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace WPShadow\Guardian;
 
 /**
- * Guardian Activity Logger
+ * WPShadow Guardian Activity Logger
  * 
- * Logs all Guardian actions for transparency and auditing.
+ * Logs all WPShadow Guardian actions for transparency and auditing.
  * Maintains activity history for dashboard display.
  * Keeps last 500 entries (memory-efficient).
  * 
@@ -86,7 +86,7 @@ class Guardian_Activity_Logger {
 	}
 	
 	/**
-	 * Log guardian settings change
+	 * Log WPShadow Guardian settings change
 	 * 
 	 * @param array $settings New settings
 	 */
@@ -163,7 +163,7 @@ class Guardian_Activity_Logger {
 	/**
 	 * Clear activity log
 	 * 
-	 * Called manually or when uninstalling Guardian.
+	 * Called manually or when uninstalling WPShadow Guardian.
 	 */
 	public static function clear_log(): void {
 		delete_option( 'wpshadow_guardian_activity_log' );

@@ -32,6 +32,9 @@ class Dismiss_Finding_Handler extends AJAX_Handler_Base {
         $dismissed[ $finding_id ] = current_time( 'timestamp' );
         update_option( 'wpshadow_dismissed_findings', $dismissed );
 
+        // Log activity (Issue #565)
+        \WPShadow\Core\Activity_Logger::log( 'finding_dismissed', "Finding dismissed: {$finding_id}", '', array( 'finding_id' => $finding_id ) );
+
         self::send_success( array( 'message' => __( 'Finding dismissed', 'wpshadow' ) ) );
     }
 }

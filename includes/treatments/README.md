@@ -69,7 +69,7 @@ KPI_Tracker::log_fix_applied( $finding_id, $method );
 ```
 
 Supported methods:
-- `'auto'` - Automated fix by Guardian
+- `'auto'` - Automated fix by WPShadow Guardian
 - `'manual'` - User manually applied fix
 - `'user'` - User triggered the fix
 - `'api'` - Applied via API/external system

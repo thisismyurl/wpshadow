@@ -16,6 +16,14 @@ $status_manager = new \WPShadow\Core\Finding_Status_Manager();
 // Get all findings
 $all_findings = wpshadow_get_site_findings();
 
+// Apply category filter if present (Issue #564)
+$kanban_category = isset( $_GET['kanban_category'] ) ? sanitize_key( $_GET['kanban_category'] ) : '';
+if ( ! empty( $kanban_category ) ) {
+	$all_findings = array_filter( $all_findings, function( $f ) use ( $kanban_category ) {
+		return isset( $f['category'] ) && $f['category'] === $kanban_category;
+	} );
+}
+
 // Get all workflows for the Workflows column
 if ( class_exists( '\WPShadow\Workflow\Workflow_Manager' ) ) {
 	$workflows = \WPShadow\Workflow\Workflow_Manager::get_workflows();
@@ -110,52 +118,6 @@ $severity_legend = array(
 ?>
 
 <div class="wpshadow-kanban-container" id="wpshadow-kanban-board" style="margin: 30px 0;">
-	<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin: 0 0 20px 0;">
-		<?php $wpshadow_hide_quick = get_user_meta( get_current_user_id(), 'wpshadow_hide_quick_scan', true ); if ( empty( $wpshadow_hide_quick ) ) : ?>
-		<div style="background: #f7fbff; border: 1px solid #d6e9ff; border-radius: 6px; padding: 12px 14px; position: relative;">
-			<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
-				<div style="flex: 1;">
-					<p style="margin: 0 0 8px 0; font-weight: 700; color: #0b5cad;">Quick Scan (low impact)</p>
-					<p style="margin: 0; color: #315070; font-size: 13px;">Run the safe checks now: cache-light diagnostics and a single page render. This keeps the board aligned with the latest findings without slowing editors.</p>
-				</div>
-				<?php endif; ?>
-				<button type="button" class="wpshadow-dismiss-scan" data-scan="quick" style="background: none; border: none; font-size: 20px; cursor: pointer; padding: 0; color: #999; flex-shrink: 0; line-height: 1;" title="Dismiss">✕</button>
-			</div>
-			<div style="display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: wrap;">
-				<button type="button" id="wpshadow-kanban-run-quick" class="button button-primary">Run Quick Scan</button>
-				<span style="font-size: 12px; color: #315070;">~15 seconds, safe to run live</span>
-				<?php 
-			$last_quick = get_option( 'wpshadow_last_quick_checks' );
-			if ( !empty( $last_quick ) && (int) $last_quick > 0 ) : ?>
-				<span style="font-size: 12px; color: #1e3a8a; font-weight: 600;">Last scanned: <?php echo wp_kses_post( wpshadow_format_time_with_tooltip( (int) $last_quick ) ); ?></span>
-				<?php else : ?>
-					<span style="font-size: 12px; color: #6b7280;">Last scanned: not yet</span>
-				<?php endif; ?>
-			</div>
-		</div>
-		<?php $wpshadow_hide_deep = get_user_meta( get_current_user_id(), 'wpshadow_hide_deep_scan', true ); if ( empty( $wpshadow_hide_deep ) ) : ?>
-		<div style="background: #fff8f3; border: 1px solid #ffd7b5; border-radius: 6px; padding: 12px 14px; position: relative;">
-			<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
-				<div style="flex: 1;">
-					<p style="margin: 0 0 8px 0; font-weight: 700; color: #c05c00;">Deep Scan (potential impact)</p>
-					<p style="margin: 0; color: #704620; font-size: 13px;">After you reshuffle items, schedule the higher-impact scans (full crawls, performance sweeps) during a quiet window so editors are not interrupted.</p>
-				</div>
-				<?php endif; ?>
-				<button type="button" class="wpshadow-dismiss-scan" data-scan="deep" style="background: none; border: none; font-size: 20px; cursor: pointer; padding: 0; color: #999; flex-shrink: 0; line-height: 1;" title="Dismiss">✕</button>
-			</div>
-			<div style="display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: wrap;">
-				<button type="button" id="wpshadow-kanban-schedule-deep" class="button button-primary">Schedule Deep Scan (recommended)</button>
-				<button type="button" id="wpshadow-kanban-run-deep" class="button">Run Deep Scan</button>
-				<?php 
-			$last_heavy = get_option( 'wpshadow_last_heavy_tests' );
-			if ( !empty( $last_heavy ) && (int) $last_heavy > 0 ) : ?>
-				<span style="font-size: 12px; color: #92400e; font-weight: 600;">Last run: <?php echo wp_kses_post( wpshadow_format_time_with_tooltip( (int) $last_heavy ) ); ?></span>
-				<?php else : ?>
-					<span style="font-size: 12px; color: #6b7280;">Last run: not yet</span>
-				<?php endif; ?>
-			</div>
-		</div>
-	</div>
 	<div style="margin: 20px 0; padding: 15px 20px; background: #f9fafb; border-left: 4px solid #3b82f6; border-radius: 4px;">
 		<h3 style="margin: 0 0 8px 0; color: #1e40af; font-size: 15px; font-weight: 600;">Organize Your Findings</h3>
 		<p style="color: #4b5563; margin: 0; font-size: 14px; line-height: 1.5;">
@@ -306,6 +268,42 @@ $severity_legend = array(
 						$note = $status_manager->get_finding_note( $finding['id'] );
 						$category_key = isset( $finding['category'] ) ? $finding['category'] : 'settings';
 						$category = isset( $category_meta[ $category_key ] ) ? $category_meta[ $category_key ] : $category_meta['settings'];
+						
+						// Smart Action Status (Issue #567)
+						$smart_status = '';
+						$smart_icon = '';
+						$smart_color = '';
+						
+						if ( $status === 'ignored' ) {
+							$smart_status = __( 'Excluded from scans', 'wpshadow' );
+							$smart_icon = '🚫';
+							$smart_color = '#999';
+						} elseif ( $status === 'manual' ) {
+							$manual_fixes = get_option( 'wpshadow_manual_fixes', array() );
+							if ( isset( $manual_fixes[ $finding['id'] ] ) ) {
+								$smart_status = __( 'Manual fix assigned', 'wpshadow' );
+								$smart_icon = '👤';
+								$smart_color = '#ff9800';
+							}
+						} elseif ( $status === 'automated' ) {
+							$automated = get_option( 'wpshadow_scheduled_automated_fixes', array() );
+							if ( isset( $automated[ $finding['id'] ] ) ) {
+								$auto_status = $automated[ $finding['id'] ]['status'];
+								if ( $auto_status === 'pending' ) {
+									$smart_status = __( 'Fix scheduled', 'wpshadow' );
+									$smart_icon = '⏱️';
+									$smart_color = '#2196f3';
+								} elseif ( $auto_status === 'completed' ) {
+									$smart_status = __( 'Fix completed', 'wpshadow' );
+									$smart_icon = '✅';
+									$smart_color = '#4caf50';
+								} elseif ( $auto_status === 'failed' ) {
+									$smart_status = __( 'Fix failed', 'wpshadow' );
+									$smart_icon = '⚠️';
+									$smart_color = '#f44336';
+								}
+							}
+						}
 					?>
 						<div class="finding-card" 
 							data-finding-id="<?php echo esc_attr( $finding['id'] ); ?>" 
@@ -334,6 +332,15 @@ $severity_legend = array(
 					">
 						<?php echo esc_html( $finding['title'] ); ?>
 					</div>
+					
+					<!-- Smart Action Status Badge (Issue #567) -->
+					<?php if ( ! empty( $smart_status ) ) : ?>
+					<div style="margin: 0 0 8px 0;">
+						<span style="display: inline-block; padding: 4px 8px; background: <?php echo esc_attr( $smart_color ); ?>; color: #fff; border-radius: 3px; font-size: 10px; font-weight: 600;" title="<?php echo esc_attr( $smart_status ); ?>">
+							<?php echo esc_html( $smart_icon . ' ' . $smart_status ); ?>
+						</span>
+					</div>
+					<?php endif; ?>
 
 					<!-- Description (truncated) -->
 					<p style="
@@ -344,14 +351,21 @@ $severity_legend = array(
 					">
 						<?php echo esc_html( substr( $finding['description'], 0, 100 ) ); ?>
 						<?php if ( strlen( $finding['description'] ) > 100 ) echo '...'; ?>
+					</p>
+					<?php if ( ! empty( $finding['kb_link'] ) || ! empty( $finding['training_link'] ) ) : ?>
+					<div style="margin-top: 6px; display: flex; gap: 10px; flex-wrap: wrap; font-size: 11px;">
 						<?php if ( ! empty( $finding['kb_link'] ) ) : ?>
-							<a href="<?php echo esc_url( $finding['kb_link'] ); ?>" 
-								target="_blank" 
-								style="color: #2271b1; text-decoration: none; margin-left: 4px;">
-								Learn more
+							<a href="<?php echo esc_url( $finding['kb_link'] ); ?>" target="_blank" style="color: #2271b1; text-decoration: none; font-weight: 600;">
+								<?php esc_html_e( 'Learn more (KB)', 'wpshadow' ); ?>
 							</a>
 						<?php endif; ?>
-					</p>
+						<?php if ( ! empty( $finding['training_link'] ) ) : ?>
+							<a href="<?php echo esc_url( $finding['training_link'] ); ?>" target="_blank" style="color: #0f9d58; text-decoration: none; font-weight: 600;">
+								<?php esc_html_e( 'Watch training', 'wpshadow' ); ?>
+							</a>
+						<?php endif; ?>
+					</div>
+					<?php endif; ?>
 					<!-- Status note (if exists) -->
 					<?php
 							if ( $note ) : 

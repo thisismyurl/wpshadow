@@ -7,13 +7,13 @@ use WPShadow\Guardian\Guardian_Manager;
 use WPShadow\Guardian\Auto_Fix_Policy_Manager;
 
 /**
- * Guardian Settings Panel
+ * WPShadow Guardian Settings Panel
  * 
- * Settings UI for Guardian system configuration.
+ * Settings UI for WPShadow Guardian system configuration.
  * Manage auto-fix policies, anomaly thresholds, schedules.
  * 
  * Features:
- * - Enable/disable Guardian
+ * - Enable/disable WPShadow Guardian
  * - Treatment whitelist management
  * - Execution frequency control
  * - Max treatments per run
@@ -30,7 +30,7 @@ class Guardian_Settings {
 		ob_start();
 		?>
 		<div class="wrap wpshadow-guardian-settings">
-			<h1><?php esc_html_e( 'Guardian Settings', 'wpshadow' ); ?></h1>
+			<h1><?php esc_html_e( 'WPShadow Guardian Settings', 'wpshadow' ); ?></h1>
 			
 			<form method="post" action="options.php" class="guardian-settings-form">
 				<?php settings_fields( 'wpshadow_guardian_settings' ); ?>
@@ -95,12 +95,12 @@ class Guardian_Settings {
 		$html = '<table class="form-table guardian-settings-table">
 			<tr>
 				<th scope="row">
-					<label for="guardian_enabled">' . esc_html__( 'Enable Guardian System', 'wpshadow' ) . '</label>
+						<label for="guardian_enabled">' . esc_html__( 'Enable WPShadow Guardian', 'wpshadow' ) . '</label>
 				</th>
 				<td>
 					<label>
 						<input type="checkbox" id="guardian_enabled" name="guardian_enabled" value="1" ' . checked( $is_enabled, true, false ) . ' />
-						' . esc_html__( 'Activate Guardian monitoring and auto-fixes', 'wpshadow' ) . '
+							' . esc_html__( 'Activate WPShadow Guardian monitoring and auto-fixes', 'wpshadow' ) . '
 					</label>
 					<p class="description">' . esc_html__( 'Enables automated health monitoring and intelligent fix suggestions', 'wpshadow' ) . '</p>
 				</td>
@@ -124,7 +124,7 @@ class Guardian_Settings {
 				<td>
 					<label>
 						<input type="checkbox" name="guardian_activity_logging" value="1" checked />
-						' . esc_html__( 'Log all Guardian actions and events', 'wpshadow' ) . '
+							' . esc_html__( 'Log all WPShadow Guardian actions and events', 'wpshadow' ) . '
 					</label>
 					<p class="description">' . esc_html__( 'Comprehensive audit trail for all system actions', 'wpshadow' ) . '</p>
 				</td>
@@ -307,7 +307,7 @@ class Guardian_Settings {
 				</th>
 				<td>
 					<input type="email" id="notification_email" name="notification_email" value="' . esc_attr( get_option( 'admin_email' ) ) . '" />
-					<p class="description">' . esc_html__( 'Email address to receive Guardian notifications', 'wpshadow' ) . '</p>
+						<p class="description">' . esc_html__( 'Email address to receive WPShadow Guardian notifications', 'wpshadow' ) . '</p>
 				</td>
 			</tr>
 		</table>';

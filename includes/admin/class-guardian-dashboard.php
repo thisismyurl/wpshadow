@@ -11,9 +11,9 @@ use WPShadow\Guardian\Recovery_System;
 use WPShadow\Reporting\Event_Logger;
 
 /**
- * Guardian Dashboard Tab
+ * WPShadow Guardian Dashboard Tab
  * 
- * Main dashboard for Guardian system.
+ * Main dashboard for WPShadow Guardian system.
  * Shows KPIs, recent activity, auto-fix stats, recovery points.
  * 
  * Features:
@@ -36,7 +36,7 @@ class Guardian_Dashboard {
 		<div class="wpshadow-guardian-dashboard">
 			<!-- Header -->
 			<div class="guardian-header">
-				<h1><?php esc_html_e( 'Guardian System Dashboard', 'wpshadow' ); ?></h1>
+				<h1><?php esc_html_e( 'WPShadow Guardian Dashboard', 'wpshadow' ); ?></h1>
 				<p class="subtitle"><?php esc_html_e( 'Automated health monitoring and intelligent fixes', 'wpshadow' ); ?></p>
 			</div>
 			
@@ -79,7 +79,7 @@ class Guardian_Dashboard {
 	private static function render_status_badge(): string {
 		$is_enabled = Guardian_Manager::is_enabled();
 		$status_class = $is_enabled ? 'status-enabled' : 'status-disabled';
-		$status_text = $is_enabled ? __( 'Guardian Active', 'wpshadow' ) : __( 'Guardian Inactive', 'wpshadow' );
+		$status_text = $is_enabled ? __( 'WPShadow Guardian Active', 'wpshadow' ) : __( 'WPShadow Guardian Inactive', 'wpshadow' );
 		
 		return sprintf(
 			'<div class="guardian-status-badge %s"><span class="status-dot"></span>%s</div>',

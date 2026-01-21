@@ -25,7 +25,7 @@ class Diagnostic_Tagline {
 			$finding = array(
 				'id'           => 'tagline-empty',
 				'title'        => 'Site Tagline is Empty',
-				'description'  => 'Add a tagline (Settings → General) to improve SEO and help visitors understand your site quickly.' . ( ! $is_registered ? ' 💡 Register with WPShadow and our free AI Support Guardian can recommend the perfect tagline for your site!' : '' ),
+				'description'  => 'Add a tagline (Settings → General) to improve SEO and help visitors understand your site quickly.' . ( ! $is_registered ? ' 💡 Register with WPShadow and get AI-powered suggestions for the perfect tagline!' : '' ),
 				'color'        => '#2196f3',
 				'bg_color'     => '#e3f2fd',
 				'kb_link'      => 'https://wpshadow.com/kb/write-an-effective-site-tagline/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=tagline',
