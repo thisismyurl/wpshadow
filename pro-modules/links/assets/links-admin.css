@@ -1,0 +1,98 @@
+/* WPShadow Links Admin Styles */
+
+/* Link Meta Box */
+.wpshadow-link-settings {
+	line-height: 1.6;
+}
+
+.wpshadow-link-settings label {
+	display: block;
+	margin-top: 12px;
+	font-weight: 500;
+}
+
+.wpshadow-link-settings input[type="text"],
+.wpshadow-link-settings input[type="url"],
+.wpshadow-link-settings textarea {
+	width: 100%;
+	padding: 8px 12px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	font-family: inherit;
+	box-sizing: border-box;
+}
+
+.wpshadow-link-settings textarea {
+	font-family: 'Courier New', monospace;
+	resize: vertical;
+}
+
+.wpshadow-link-settings input[type="checkbox"] {
+	margin-right: 6px;
+}
+
+.wpshadow-link-settings input[type="url"]:invalid {
+	border-color: #dc3545;
+}
+
+.wpshadow-link-settings p {
+	margin: 4px 0 0 0;
+	font-size: 12px;
+	color: #666;
+	line-height: 1.4;
+}
+
+.wpshadow-link-settings div + div {
+	margin-top: 15px;
+}
+
+/* Affiliate Section */
+.wpshadow-link-settings > div:has(input[name="wpshadow_link_is_affiliate"]) {
+	padding: 12px;
+	background: #fff8e5;
+	border-left: 4px solid #ffb81c;
+	border-radius: 4px;
+	margin: 15px 0;
+}
+
+#wpshadow-affiliate-text-box {
+	padding: 12px;
+	background: #f9f9f9;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+}
+
+/* Link List Column */
+.column-link_url {
+	width: 250px;
+	word-break: break-all;
+	font-size: 12px;
+}
+
+.column-link_clicks {
+	width: 80px;
+	text-align: center;
+}
+
+.link-clicks-badge {
+	display: inline-block;
+	background: #0073aa;
+	color: #fff;
+	padding: 4px 8px;
+	border-radius: 12px;
+	font-size: 11px;
+	font-weight: 600;
+	min-width: 40px;
+	text-align: center;
+}
+
+.link-affiliate-badge {
+	display: inline-block;
+	background: #ffb81c;
+	color: #333;
+	padding: 3px 8px;
+	border-radius: 12px;
+	font-size: 11px;
+	font-weight: 600;
+	margin-left: 5px;
+}

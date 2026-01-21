@@ -127,8 +127,27 @@ class Workflow_Manager {
 		$workflows = self::get_workflows();
 
 		if ( isset( $workflows[ $workflow_id ] ) ) {
+			$workflow = $workflows[ $workflow_id ];
+
+			/**
+			 * Fires before a workflow is deleted.
+			 *
+			 * @param string $workflow_id Workflow identifier.
+			 * @param array  $workflow    Workflow data.
+			 */
+			do_action( 'wpshadow_before_workflow_delete', $workflow_id, $workflow );
+
 			unset( $workflows[ $workflow_id ] );
 			update_option( self::WORKFLOWS_OPTION, $workflows );
+
+			/**
+			 * Fires after a workflow is deleted.
+			 *
+			 * @param string $workflow_id Workflow identifier.
+			 * @param array  $workflow    Workflow data.
+			 */
+			do_action( 'wpshadow_after_workflow_delete', $workflow_id, $workflow );
+
 			return true;
 		}
 

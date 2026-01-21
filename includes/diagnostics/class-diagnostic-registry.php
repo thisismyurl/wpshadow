@@ -29,6 +29,8 @@ class Diagnostic_Registry {
 		'Diagnostic_WordPress_Version',
 		'Diagnostic_Plugin_Count',
 		'Diagnostic_Inactive_Plugins',
+		'Diagnostic_Theme_Update_Noise',
+		'Diagnostic_Plugin_Update_Noise',
 		'Diagnostic_Hotlink_Protection',
 		'Diagnostic_Head_Cleanup',
 		'Diagnostic_Iframe_Busting',
@@ -55,7 +57,6 @@ class Diagnostic_Registry {
 		'Diagnostic_Embed_Disable',
 		'Diagnostic_Interactivity_Cleanup',
 		'Diagnostic_PHP_Version',
-		'Diagnostic_Database_Health',
 		'Diagnostic_File_Permissions',
 		'Diagnostic_Security_Headers',
 		'Diagnostic_Post_Via_Email',
@@ -65,6 +66,29 @@ class Diagnostic_Registry {
 		'Diagnostic_Howdy_Greeting',
 		'Diagnostic_Dark_Mode',
 		'Diagnostic_Mobile_Friendliness',
+		'Diagnostic_Database_Indexes',
+		'Diagnostic_PHP_Compatibility',
+		'Diagnostic_Theme_Performance',
+		'Diagnostic_Font_Optimization',
+		'Diagnostic_Monitoring_Status',
+		'Diagnostic_Backup_Verification',
+		'Diagnostic_Automation_Readiness',
+		'Diagnostic_Object_Cache',
+		'Diagnostic_Heartbeat_Throttling',
+		'Diagnostic_XML_Sitemap',
+		'Diagnostic_Robots_Txt',
+		'Diagnostic_Favicon',
+		'Diagnostic_Two_Factor',
+		'Diagnostic_Disallow_File_Edit',
+		'Diagnostic_Webhooks_Readiness',
+		'Diagnostic_Resource_Hints',
+		'Diagnostic_REST_API',
+		'Diagnostic_RSS_Feeds',
+		'Diagnostic_WP_Generator',
+		'Diagnostic_Block_Cleanup',
+		'Diagnostic_Consent_Checks',
+		'Diagnostic_Emoji_Scripts',
+		'Diagnostic_JQuery_Cleanup',
 	);
 
 	/**
@@ -73,11 +97,20 @@ class Diagnostic_Registry {
 	 * @var array
 	 */
 	private static $deep_diagnostics = array(
+		// Heavier or more intrusive checks (network/database intensive)
 		'Diagnostic_Database_Health',
-		'Diagnostic_File_Permissions',
 		'Diagnostic_Core_Integrity',
-		'Diagnostic_Security_Headers',
 		'Diagnostic_Broken_Links',
+		'Diagnostic_Database_Indexes',
+		'Diagnostic_File_Permissions',
+		// Extended coverage
+		'Diagnostic_Security_Headers',
+		'Diagnostic_Object_Cache',
+		'Diagnostic_XML_Sitemap',
+		'Diagnostic_Robots_Txt',
+		'Diagnostic_Two_Factor',
+		'Diagnostic_Disallow_File_Edit',
+		'Diagnostic_Webhooks_Readiness',
 	);
 	
 	/**

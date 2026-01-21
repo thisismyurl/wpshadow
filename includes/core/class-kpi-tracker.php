@@ -40,6 +40,15 @@ class KPI_Tracker {
 		}
 		
 		$tracking['findings_detected'][ $key ]['count']++;
+
+		/**
+		 * Fires when a finding is detected.
+		 *
+		 * @param string $finding_id Finding identifier.
+		 * @param string $severity   Severity level.
+		 */
+		do_action( 'wpshadow_finding_detected', $finding_id, $severity );
+
 		self::save_tracking_data( $tracking );
 	}
 	

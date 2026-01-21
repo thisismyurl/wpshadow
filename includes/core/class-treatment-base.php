@@ -59,6 +59,46 @@ abstract class Treatment_Base implements Treatment_Interface {
 	abstract public static function apply();
 
 	/**
+	 * Execute treatment with hooks.
+	 *
+	 * Wraps apply() with before/after actions for extensibility.
+	 *
+	 * @return array Result array.
+	 */
+	public static function execute() {
+		$class = get_called_class();
+		$finding_id = static::get_finding_id();
+
+		/**
+		 * Fires before a treatment is applied.
+		 *
+		 * @param string $class      Treatment class name.
+		 * @param string $finding_id Finding identifier.
+		 */
+		do_action( 'wpshadow_before_treatment_apply', $class, $finding_id );
+
+		$result = static::apply();
+
+		/**
+		 * Fires after a treatment is applied.
+		 *
+		 * @param string $class      Treatment class name.
+		 * @param string $finding_id Finding identifier.
+		 * @param array  $result     Treatment result.
+		 */
+		do_action( 'wpshadow_after_treatment_apply', $class, $finding_id, $result );
+
+		/**
+		 * Filter treatment result.
+		 *
+		 * @param array  $result     Result array.
+		 * @param string $class      Treatment class name.
+		 * @param string $finding_id Finding identifier.
+		 */
+		return apply_filters( 'wpshadow_treatment_result', $result, $class, $finding_id );
+	}
+
+	/**
 	 * Undo the treatment.
 	 *
 	 * Must be implemented by child classes.

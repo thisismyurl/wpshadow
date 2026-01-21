@@ -15,6 +15,8 @@ class Post_Types {
     public static function init() {
         add_action( 'init', [ __CLASS__, 'register_product' ] );
         add_action( 'init', [ __CLASS__, 'register_kb_article' ] );
+        add_action( 'init', [ __CLASS__, 'register_kb_taxonomies' ] );
+        add_action( 'init', [ __CLASS__, 'register_kb_meta' ] );
         add_action( 'init', [ __CLASS__, 'register_success_story' ] );
         add_action( 'init', [ __CLASS__, 'register_changelog' ] );
         
@@ -112,6 +114,96 @@ class Post_Types {
         ];
         
         register_post_type( 'wpshadow_kb', $args );
+    }
+
+    /**
+     * Register KB taxonomies (keywords, glossary) for better SEO and tooltips.
+     */
+    public static function register_kb_taxonomies() {
+        $keyword_labels = [
+            'name'          => __( 'KB Keywords', 'wpshadow-site' ),
+            'singular_name' => __( 'KB Keyword', 'wpshadow-site' ),
+            'search_items'  => __( 'Search Keywords', 'wpshadow-site' ),
+            'all_items'     => __( 'All Keywords', 'wpshadow-site' ),
+            'edit_item'     => __( 'Edit Keyword', 'wpshadow-site' ),
+            'update_item'   => __( 'Update Keyword', 'wpshadow-site' ),
+            'add_new_item'  => __( 'Add New Keyword', 'wpshadow-site' ),
+            'new_item_name' => __( 'New Keyword Name', 'wpshadow-site' ),
+            'menu_name'     => __( 'KB Keywords', 'wpshadow-site' ),
+        ];
+
+        register_taxonomy(
+            'kb_keyword',
+            [ 'wpshadow_kb' ],
+            [
+                'hierarchical'      => false,
+                'labels'            => $keyword_labels,
+                'show_ui'           => true,
+                'show_admin_column' => true,
+                'query_var'         => true,
+                'show_in_rest'      => true,
+                'rewrite'           => [ 'slug' => 'kb-keyword' ],
+            ]
+        );
+
+        $glossary_labels = [
+            'name'          => __( 'KB Glossary', 'wpshadow-site' ),
+            'singular_name' => __( 'Glossary Term', 'wpshadow-site' ),
+            'search_items'  => __( 'Search Glossary Terms', 'wpshadow-site' ),
+            'all_items'     => __( 'All Glossary Terms', 'wpshadow-site' ),
+            'edit_item'     => __( 'Edit Glossary Term', 'wpshadow-site' ),
+            'update_item'   => __( 'Update Glossary Term', 'wpshadow-site' ),
+            'add_new_item'  => __( 'Add New Glossary Term', 'wpshadow-site' ),
+            'new_item_name' => __( 'New Glossary Term', 'wpshadow-site' ),
+            'menu_name'     => __( 'KB Glossary', 'wpshadow-site' ),
+        ];
+
+        register_taxonomy(
+            'kb_glossary',
+            [ 'wpshadow_kb' ],
+            [
+                'hierarchical'      => false,
+                'labels'            => $glossary_labels,
+                'show_ui'           => true,
+                'show_admin_column' => true,
+                'query_var'         => true,
+                'show_in_rest'      => true,
+                'rewrite'           => [ 'slug' => 'kb-glossary' ],
+            ]
+        );
+    }
+
+    /**
+     * Register KB meta fields for excerpts, snippets, and social previews.
+     */
+    public static function register_kb_meta() {
+        $meta_keys = [
+            'wpshadow_google_snippet'   => 'string',
+            'wpshadow_social_title'     => 'string',
+            'wpshadow_social_description' => 'string',
+            'wpshadow_social_image'     => 'string',
+            '_wpshadow_read_time'       => 'string',
+            '_wpshadow_difficulty'      => 'string',
+            '_wpshadow_category'        => 'string',
+            '_wpshadow_last_updated'    => 'string',
+            '_wpshadow_points'          => 'string',
+        ];
+
+        foreach ( $meta_keys as $key => $type ) {
+            register_post_meta(
+                'wpshadow_kb',
+                $key,
+                [
+                    'single'        => true,
+                    'type'          => $type,
+                    'show_in_rest'  => true,
+                    'sanitize_callback' => 'sanitize_text_field',
+                    'auth_callback' => function() {
+                        return current_user_can( 'edit_posts' );
+                    },
+                ]
+            );
+        }
     }
     
     /**

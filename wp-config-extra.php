@@ -48,8 +48,15 @@ $_SERVER['SERVER_PORT'] = '443';
 // If WordPress redirects to the wrong URL (e.g., port 443), update these.
 
 // CHANGE THESE TO YOUR CODESPACES DOMAIN:
-define('WP_HOME', 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev');
-define('WP_SITEURL', 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev');
+define( 'WP_HOME', 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev' );
+define( 'WP_SITEURL', 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev' );
+
+// ============================================================
+// WPShadow Development Mode
+// ============================================================
+// Enable Pro module loading from staging area (pro-modules/)
+// This allows testing FAQ/KB features before moving to Pro plugin
+define( 'WPSHADOW_DEV_MODE', true );
 
 // ============================================================
 // Database URLs (from docker-compose-test.yml)

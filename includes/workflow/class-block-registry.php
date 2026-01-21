@@ -18,6 +18,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Block_Registry {
 
 	/**
+	 * Default days helper (all days)
+	 *
+	 * @return array
+	 */
+	public static function get_default_days(): array {
+		return array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' );
+	}
+
+	/**
 	 * Get all available trigger blocks
 	 */
 	public static function get_triggers() {
@@ -28,6 +37,16 @@ class Block_Registry {
 				'icon'        => 'dashicons-clock',
 				'color'       => '#3b82f6',
 				'fields'      => array(
+					'frequency' => array(
+						'label'   => 'Frequency',
+						'type'    => 'select',
+						'options' => array(
+							'hourly' => 'Hourly',
+							'daily'  => 'Daily',
+							'weekly' => 'Weekly',
+						),
+						'default' => 'daily',
+					),
 					'time' => array(
 						'label'   => 'Time (24-hour format)',
 						'type'    => 'time',
@@ -45,7 +64,7 @@ class Block_Registry {
 							'saturday'  => 'Saturday',
 							'sunday'    => 'Sunday',
 						),
-						'default' => array( 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ),
+						'default' => self::get_default_days(),
 					),
 				),
 			),
@@ -99,6 +118,7 @@ class Block_Registry {
 							'post_published'     => 'Post Published',
 							'post_deleted'       => 'Post Deleted',
 							'comment_posted'     => 'Comment Posted',
+							'pre_publish_review' => 'Pre-Publish Review',
 						),
 						'default' => 'post_published',
 					),

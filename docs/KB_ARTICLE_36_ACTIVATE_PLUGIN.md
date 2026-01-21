@@ -63,8 +63,10 @@
 1. In WP Admin, go to **Plugins → Installed Plugins**.
 2. Find the plugin in the list (use search if needed).
 3. Click **Activate**.  
-   - You’ll see a success notice.  
-   - The plugin may add a new menu, settings page, or blocks.
+  - A green success notice means the plugin is active.  
+  - A red error like “Plugin could not be activated because it triggered a fatal error” means it failed; leave it deactivated, review the error text, and check error logs.  
+  - A “missing header” or “stylesheet missing” message usually means the upload was not a valid plugin zip.
+  - The plugin may add a new menu, settings page, or blocks.
 4. Verify the site: open a page in the **Block Editor** and confirm the plugin’s blocks/settings appear.
 
 ### If you’re installing a new plugin from the directory
@@ -171,6 +173,7 @@ A: No. Activation works in WP Admin, and this guide assumes Block Editor. Most m
 
 **YouTube Tutorials:**  
 - [Activate WordPress plugins safely](https://www.youtube.com/results?search_query=activate+wordpress+plugin+safely)
+- [Watch: Safe plugin activation (3-min video)](https://www.youtube.com/watch?v=2a3EGNYrJ0E)
 
 ---
 
@@ -185,9 +188,3 @@ Take the **“Plugin Management Essentials”** course on WPShadow Academy:
 - **Points:** 50 points + "Plugin Pro" badge
 
 [Enroll in Plugin Management Essentials](https://academy.wpshadow.com/courses/plugin-management-essentials)
-
----
-
-_This article earned you **+5 points** for reading the TLDR. Keep learning to unlock badges and achievements!_
-
-**[← Back to KB Home](/kb)** | **[Next Article: Deactivate & Uninstall Plugins →](/kb/deactivate-plugin)**

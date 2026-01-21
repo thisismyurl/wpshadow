@@ -38,6 +38,10 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-save-tagli
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-consent-preferences-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-error-report-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-first-scan-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-get-dashboard-data-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-quick-scan-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-deep-scan-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-dismiss-scan-notice-handler.php';
 
 \WPShadow\Admin\Ajax\Dismiss_Finding_Handler::register();
 \WPShadow\Admin\Ajax\Autofix_Finding_Handler::register();
@@ -45,6 +49,10 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-first-scan
 \WPShadow\Admin\Ajax\Consent_Preferences_Handler::register();
 \WPShadow\Admin\Ajax\Error_Report_Handler::register();
 \WPShadow\Admin\Ajax\First_Scan_Handler::register();
+\WPShadow\Admin\Ajax\Get_Dashboard_Data_Handler::register();
+\WPShadow\Admin\Ajax\Quick_Scan_Handler::register();
+\WPShadow\Admin\Ajax\Deep_Scan_Handler::register();
+\WPShadow\Admin\Ajax\Dismiss_Scan_Notice_Handler::register();
 
 // Show consent banner for admins (Phase 6: consent-first)
 add_action( 'admin_footer', function() {
@@ -108,6 +116,100 @@ add_action( 'admin_footer', function() {
 			});
 		});
 	})(jQuery);
+	</script>
+	<?php
+});
+
+// Show scan reminder notice (Phase 4: helpful neighbor)
+add_action( 'admin_notices', function() {
+	if ( ! is_admin() || wp_doing_ajax() ) {
+		return;
+	}
+
+	$current_user = get_current_user_id();
+	if ( ! $current_user || ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	// Check last quick scan time FIRST
+	$last_scan = get_option( 'wpshadow_last_quick_scan', 0 );
+	
+	// If no scan has been run yet, show notice (user should run initial scan)
+	// But if a scan HAS been run, only show if more than 15 minutes ago
+	if ( $last_scan !== 0 ) {
+		$time_since_scan = time() - $last_scan;
+		
+		// Only show if last scan was more than 15 minutes ago
+		if ( $time_since_scan < ( 15 * MINUTE_IN_SECONDS ) ) {
+			return;
+		}
+	}
+
+	// Check if we're on WPShadow dashboard
+	$screen = get_current_screen();
+	$is_wpshadow_page = $screen && strpos( $screen->id, 'wpshadow' ) !== false;
+
+	// If not on WPShadow page, check if dismissed
+	if ( ! $is_wpshadow_page ) {
+		$dismissed_until = get_user_meta( $current_user, 'wpshadow_scan_notice_dismissed_until', true );
+		if ( $dismissed_until && $dismissed_until > time() ) {
+			return; // Still dismissed
+		}
+	}
+
+	// Calculate friendly time string
+	if ( $last_scan === 0 ) {
+		$time_string = __( 'never', 'wpshadow' );
+	} else {
+		$time_since_scan = time() - $last_scan;
+		if ( $time_since_scan < HOUR_IN_SECONDS ) {
+			$minutes = floor( $time_since_scan / MINUTE_IN_SECONDS );
+			$time_string = sprintf( _n( '%d minute ago', '%d minutes ago', $minutes, 'wpshadow' ), $minutes );
+		} elseif ( $time_since_scan < DAY_IN_SECONDS ) {
+			$hours = floor( $time_since_scan / HOUR_IN_SECONDS );
+			$time_string = sprintf( _n( '%d hour ago', '%d hours ago', $hours, 'wpshadow' ), $hours );
+		} else {
+			$days = floor( $time_since_scan / DAY_IN_SECONDS );
+			$time_string = sprintf( _n( '%d day ago', '%d days ago', $days, 'wpshadow' ), $days );
+		}
+	}
+
+	// Show notice
+	?>
+	<div id="wpshadow-scan-notice" class="notice notice-info is-dismissible" style="position: relative;">
+		<p>
+			<span class="dashicons dashicons-shield-alt" style="color: #2196f3; font-size: 20px; vertical-align: middle; margin-right: 5px;"></span>
+			<strong><?php esc_html_e( 'WPShadow:', 'wpshadow' ); ?></strong>
+			<?php
+			printf(
+				/* translators: %s: time since last scan */
+				esc_html__( 'Your last scan was %s. Run a fresh scan to check for new issues.', 'wpshadow' ),
+				'<strong>' . esc_html( $time_string ) . '</strong>'
+			);
+			?>
+			<button id="wpshadow-scan-notice-run-btn" class="button button-primary" style="margin-left: 10px; vertical-align: middle;">
+				<?php esc_html_e( 'Run Quick Scan', 'wpshadow' ); ?>
+			</button>
+		</p>
+	</div>
+	<script>
+	jQuery(document).ready(function($) {
+		// Admin notice Quick Scan button
+		$('#wpshadow-scan-notice-run-btn').on('click', function(e) {
+			e.preventDefault();
+			// Redirect to WPShadow dashboard and trigger scan
+			window.location.href = '<?php echo esc_js( admin_url( 'admin.php?page=wpshadow&action=quick_scan' ) ); ?>';
+		});
+		
+		// Handle dismiss button click
+		$('#wpshadow-scan-notice').on('click', '.notice-dismiss', function() {
+			// Send AJAX to record dismiss
+			$.post(ajaxurl, {
+				action: 'wpshadow_dismiss_scan_notice',
+				nonce: '<?php echo wp_create_nonce( 'wpshadow_scan_notice_nonce' ); ?>'
+			});
+		});
+	});
 	</script>
 	<?php
 });
@@ -1244,20 +1346,64 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-man
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-discovery.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-discovery-hooks.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-wizard.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-suggestions.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-ajax.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-command-registry.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-create-suggested-workflow-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-executor.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-kanban-workflow-helper.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-user-preferences-manager.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/knowledge-base/class-kb-formatter.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/knowledge-base/class-kb-article-generator.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/knowledge-base/class-kb-library.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/knowledge-base/class-kb-search.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/knowledge-base/class-training-provider.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/knowledge-base/class-training-progress.php';
+
+// FAQ and Knowledge Base features moved to WPShadow Pro modules:
+// - FAQ Module (wpshadow-pro/modules/faq/)
+// - KB Module (wpshadow-pro/modules/kb/)
+// - Academy Module (wpshadow-pro/modules/academy/)
+// - TOC Module (wpshadow-pro/modules/toc/)
+// - SEO Module (wpshadow-pro/modules/seo/)
+// These are activated via Module Manager in WPShadow Pro.
+
+// TEMPORARY: Development mode loads modules from staging area
+// Enable by adding: define('WPSHADOW_DEV_MODE', true); to wp-config.php
+if ( defined( 'WPSHADOW_DEV_MODE' ) && WPSHADOW_DEV_MODE ) {
+	// FAQ Module (staged in pro-modules/faq/)
+	if ( file_exists( plugin_dir_path( __FILE__ ) . 'pro-modules/faq/module.php' ) ) {
+		require_once plugin_dir_path( __FILE__ ) . 'pro-modules/faq/module.php';
+		\WPShadow_Pro\Modules\FAQ\Module::init();
+	}
+	
+	// KB Module (staged in pro-modules/kb/)
+	if ( file_exists( plugin_dir_path( __FILE__ ) . 'pro-modules/kb/module.php' ) ) {
+		require_once plugin_dir_path( __FILE__ ) . 'pro-modules/kb/module.php';
+		\WPShadow_Pro\Modules\KB\Module::init();
+	}
+	
+	// LMS Module (staged in pro-modules/lms/)
+	if ( file_exists( plugin_dir_path( __FILE__ ) . 'pro-modules/lms/module.php' ) ) {
+		require_once plugin_dir_path( __FILE__ ) . 'pro-modules/lms/module.php';
+		\WPShadow_Pro\Modules\LMS\Module::init();
+	}
+	
+	// Glossary Module (staged in pro-modules/glossary/)
+	// if ( file_exists( plugin_dir_path( __FILE__ ) . 'pro-modules/glossary/module.php' ) ) {
+	// 	require_once plugin_dir_path( __FILE__ ) . 'pro-modules/glossary/module.php';
+	// 	\WPShadow_Pro\Modules\Glossary\Module::init();
+	// }
+	
+	// Links Module (staged in pro-modules/links/)
+	// if ( file_exists( plugin_dir_path( __FILE__ ) . 'pro-modules/links/module.php' ) ) {
+	// 	require_once plugin_dir_path( __FILE__ ) . 'pro-modules/links/module.php';
+	// 	\WPShadow_Pro\Modules\Links\Module::init();
+	// }
+}
+
+// Hook for separate plugins to register themselves
+do_action( 'wpshadow_core_loaded' );
 require_once plugin_dir_path( __FILE__ ) . 'includes/privacy/class-privacy-policy-manager.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/privacy/class-consent-preferences.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/privacy/class-first-run-consent.php';
+
+// Load Update Notification Manager early (needed by diagnostics)
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-update-notification-manager.php';
 
 // Phase 7: Cloud Features & SaaS Integration
 require_once plugin_dir_path( __FILE__ ) . 'includes/cloud/class-cloud-client.php';
@@ -1307,6 +1453,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-site-health-expl
  * Initialize diagnostics system and Guardian components.
  */
 add_action( 'plugins_loaded', function() {
+	\WPShadow\Admin\Update_Notification_Manager::init();
 	\WPShadow\Diagnostics\Diagnostic_Registry::init();
 	\WPShadow\Treatments\Treatment_Registry::init();
 	\WPShadow\Workflow\Workflow_Executor::init();
@@ -1362,11 +1509,41 @@ add_action( 'admin_enqueue_scripts', function( $hook ) {
 	);
 
 	wp_enqueue_style(
+		'wpshadow-safety-warnings',
+		WPSHADOW_URL . 'assets/css/safety-warnings.css',
+		array(),
+		WPSHADOW_VERSION
+	);
+
+	wp_enqueue_style(
 		'wpshadow-kanban-board',
 		WPSHADOW_URL . 'assets/css/kanban-board.css',
 		array(),
 		WPSHADOW_VERSION
 	);
+
+	// Real-time dashboard updates and fullscreen mode (new feature)
+	wp_enqueue_style(
+		'wpshadow-dashboard-fullscreen',
+		WPSHADOW_URL . 'assets/css/wpshadow-dashboard-fullscreen.css',
+		array(),
+		WPSHADOW_VERSION
+	);
+
+	wp_enqueue_script(
+		'wpshadow-dashboard-realtime',
+		WPSHADOW_URL . 'assets/js/wpshadow-dashboard-realtime.js',
+		array( 'jquery' ),
+		WPSHADOW_VERSION,
+		false // Load in header so inline scripts can use jQuery
+	);
+
+	// Localize dashboard script with nonce
+	wp_localize_script( 'wpshadow-dashboard-realtime', 'wpshadow', array(
+		'dashboard_nonce' => wp_create_nonce( 'wpshadow_dashboard_nonce' ),
+		'first_scan_nonce' => wp_create_nonce( 'wpshadow_first_scan_nonce' ),
+		'scan_nonce' => wp_create_nonce( 'wpshadow_scan_nonce' ),
+	) );
 
 	wp_enqueue_script(
 		'wpshadow-kanban-board',
@@ -2123,10 +2300,8 @@ function wpshadow_render_dashboard() {
 				'seo' => array( 'label' => __( 'SEO', 'wpshadow' ), 'icon' => 'dashicons-search', 'color' => '#2563eb' ),
 				'design' => array( 'label' => __( 'Design', 'wpshadow' ), 'icon' => 'dashicons-admin-appearance', 'color' => '#8e44ad' ),
 				'settings' => array( 'label' => __( 'Settings', 'wpshadow' ), 'icon' => 'dashicons-admin-settings', 'color' => '#4b5563' ),
-				'wordpress_config' => array( 'label' => __( 'WordPress Config', 'wpshadow' ), 'icon' => 'dashicons-wordpress-alt', 'color' => '#0073aa' ),
 				'monitoring' => array( 'label' => __( 'Monitoring', 'wpshadow' ), 'icon' => 'dashicons-chart-line', 'color' => '#059669' ),
 				'workflows' => array( 'label' => __( 'Workflows', 'wpshadow' ), 'icon' => 'dashicons-update', 'color' => '#ea580c' ),
-				'site_health' => array( 'label' => __( 'Site Health', 'wpshadow' ), 'icon' => 'dashicons-heart', 'color' => '#db2777' ),
 				'wordpress_health' => array( 'label' => __( 'WordPress Site Health', 'wpshadow' ), 'icon' => 'dashicons-wordpress-alt', 'color' => '#2d5016' ),
 			);
 			$cat_meta = $category_meta[ $filter_category ] ?? array( 'label' => ucfirst( $filter_category ), 'icon' => 'dashicons-admin-generic', 'color' => '#666' );
@@ -2252,26 +2427,128 @@ function wpshadow_render_dashboard() {
 				});
 			});
 			
-			// First scan (Issue #562)
+			// First scan (Issue #562) - with progress tracking
 			$('#wpshadow-start-first-scan').on('click', function(e) {
 				e.preventDefault();
 				var $btn = $(this);
 				var $prompt = $('#wpshadow-first-scan-prompt');
 				
+				// Trigger event for real-time dashboard updates
+				$(document).trigger('wpshadow:quickscan:started');
+				$(document).trigger('wpshadow:scan:start');
+				
 				$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Starting...', 'wpshadow' ) ); ?>');
 				
-				$.post(ajaxurl, {
-					action: 'wpshadow_first_scan',
-					nonce: '<?php echo wp_create_nonce( 'wpshadow_first_scan_nonce' ); ?>'
-				}, function(response) {
-					if (response.success) {
-						$prompt.fadeOut(300, function() {
-							location.reload();
+				// Replace prompt with progress bar
+				$prompt.fadeOut(200, function() {
+					var $progressNotice = $('<div id="wpshadow-scan-progress-notice" style="background: #e3f2fd; border-left: 4px solid #0073aa; padding: 20px; border-radius: 4px; margin-bottom: 20px;">' +
+						'<h2 style="margin-top: 0; color: #0073aa; display: flex; align-items: center; gap: 10px;">' +
+							'<span class="dashicons dashicons-update wpshadow-spin" style="font-size: 24px;"></span>' +
+							'<?php echo esc_js( __( 'Running Quick Scan', 'wpshadow' ) ); ?>' +
+						'</h2>' +
+						'<p style="margin: 10px 0; font-size: 14px; color: #666;">' +
+							'<?php echo esc_js( __( 'Analyzing your site...', 'wpshadow' ) ); ?>' +
+						'</p>' +
+						'<div style="background: #e0e0e0; border-radius: 4px; height: 10px; margin: 15px 0; overflow: hidden;">' +
+							'<div id="wpshadow-progress-fill" style="background: #0073aa; height: 100%; width: 0%; transition: width 0.3s ease;"></div>' +
+						'</div>' +
+						'<p id="wpshadow-scan-status" style="margin: 10px 0 0 0; font-size: 13px; color: #555; font-weight: 500;">' +
+							'<?php echo esc_js( __( 'Starting scan...', 'wpshadow' ) ); ?>' +
+						'</p>' +
+					'</div>');
+					
+					$progressNotice.hide().insertBefore($prompt.next()).fadeIn(300);
+					
+					// Add spinning animation
+					if (!$('#wpshadow-spin-style').length) {
+						$('<style id="wpshadow-spin-style">@keyframes wpshadow-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } .wpshadow-spin { animation: wpshadow-spin 2s linear infinite; }</style>').appendTo('head');
+					}
+					
+					// Start the scan
+					$.ajax({
+						url: ajaxurl,
+						type: 'POST',
+						data: {
+							action: 'wpshadow_first_scan',
+							nonce: '<?php echo wp_create_nonce( 'wpshadow_first_scan_nonce' ); ?>'
+						},
+						timeout: 60000, // 60 second timeout for diagnostics
+						success: function(response) {
+							if (response.success) {
+								var data = response.data;
+							
+							// Simulate progress updates (since we get all at once)
+							if (data.progress_steps && data.progress_steps.length > 0) {
+								var currentStep = 0;
+								var steps = data.progress_steps;
+								
+								var updateInterval = setInterval(function() {
+									if (currentStep >= steps.length) {
+										clearInterval(updateInterval);
+										
+										// Trigger scan complete event for real-time updates
+										$(document).trigger('wpshadow:scan:complete');
+										
+										// Show completion message
+										$('#wpshadow-progress-fill').css('width', '100%');
+										var issueText = '';
+										if (data.findings_count > 0) {
+											issueText = ' <?php echo esc_js( __( 'Found', 'wpshadow' ) ); ?> ' + data.findings_count + ' <?php echo esc_js( __( 'issues.', 'wpshadow' ) ); ?>';
+										} else {
+											issueText = ' <?php echo esc_js( __( 'No issues found!', 'wpshadow' ) ); ?>';
+										}
+										$('#wpshadow-scan-status').html('<strong><?php echo esc_js( __( 'Scan complete!', 'wpshadow' ) ); ?></strong>' + issueText);
+										$('.wpshadow-spin').removeClass('wpshadow-spin');
+										
+										// Reload after 1.5 seconds
+										setTimeout(function() {
+											location.reload();
+										}, 1500);
+										return;
+									}
+									
+									var step = steps[currentStep];
+									$('#wpshadow-progress-fill').css('width', step.progress + '%');
+									$('#wpshadow-scan-status').text('<?php echo esc_js( __( 'Checking', 'wpshadow' ) ); ?>: ' + step.diagnostic + ' (' + step.step + '/' + step.total + ')');
+									
+									currentStep++;
+								}, 50); // Fast updates for smooth progress
+							} else {
+								// Fallback if no progress steps
+								$('#wpshadow-progress-fill').css('width', '100%');
+								$('#wpshadow-scan-status').text(data.message);
+								setTimeout(function() { location.reload(); }, 1000);
+							}
+						} else {
+							$('#wpshadow-scan-progress-notice').fadeOut(300, function() {
+								$prompt.fadeIn(300);
+							});
+							alert('<?php echo esc_js( __( 'Error:', 'wpshadow' ) ); ?> ' + (response.data && response.data.message ? response.data.message : '<?php echo esc_js( __( 'Unknown error', 'wpshadow' ) ); ?>'));
+							$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Start Quick Scan', 'wpshadow' ) ); ?>');
+						}
+					},
+					error: function(xhr, status, error) {
+						console.error('AJAX error:', status, error, xhr.responseText);
+						$('#wpshadow-scan-progress-notice').fadeOut(300, function() {
+							$prompt.fadeIn(300);
 						});
-					} else {
-						alert('Error: ' + (response.data && response.data.message ? response.data.message : 'Unknown error'));
+						
+						var errorMsg = '<?php echo esc_js( __( 'Network error. Please try again.', 'wpshadow' ) ); ?>';
+						if (xhr.responseText) {
+							try {
+								var resp = JSON.parse(xhr.responseText);
+								if (resp.data && resp.data.message) {
+									errorMsg = resp.data.message;
+								}
+							} catch(e) {
+								// If response isn't JSON, show first 200 chars
+								errorMsg += '\n\nDetails: ' + xhr.responseText.substring(0, 200);
+							}
+						}
+						alert(errorMsg);
 						$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Start Quick Scan', 'wpshadow' ) ); ?>');
 					}
+				});
 				});
 			});
 			
@@ -2355,6 +2632,8 @@ function wpshadow_render_dashboard() {
 				}
 			});
 		});
+		
+		}); // End jQuery(document).ready
 		</script>
 		<?php
 		$category_meta = array(
@@ -2394,12 +2673,6 @@ function wpshadow_render_dashboard() {
 				'color' => '#4b5563',
 				'bg'    => '#eef2f7',
 			),
-			'wordpress_config' => array(
-				'label' => __( 'WordPress Config', 'wpshadow' ),
-				'icon'  => 'dashicons-wordpress-alt',
-				'color' => '#0073aa',
-				'bg'    => '#e5f5fa',
-			),
 			'monitoring' => array(
 				'label' => __( 'Monitoring', 'wpshadow' ),
 				'icon'  => 'dashicons-chart-line',
@@ -2411,12 +2684,6 @@ function wpshadow_render_dashboard() {
 				'icon'  => 'dashicons-update',
 				'color' => '#ea580c',
 				'bg'    => '#ffedd5',
-			),
-			'site_health' => array(
-				'label' => __( 'Site Health', 'wpshadow' ),
-				'icon'  => 'dashicons-heart',
-				'color' => '#db2777',
-				'bg'    => '#fce7f3',
 			),
 			'wordpress_health' => array(
 				'label' => __( 'WordPress Site Health', 'wpshadow' ),
@@ -2471,19 +2738,20 @@ function wpshadow_render_dashboard() {
 							<h3 style="margin: 0; font-size: 24px; color: <?php echo esc_attr( $filtered_meta['color'] ); ?>;"><?php echo esc_html( $filtered_meta['label'] ); ?></h3>
 						</div>
 						
-						<svg width="250" height="250" viewBox="0 0 250 250" style="margin: 0 auto; display: block; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.2));">
-							<!-- Outer decorative circle -->
-							<circle cx="125" cy="125" r="115" fill="none" stroke="<?php echo esc_attr( $color ); ?>" stroke-width="2" opacity="0.2" />
-							<!-- Gauge background -->
-							<circle cx="125" cy="125" r="100" fill="none" stroke="#e0e0e0" stroke-width="20" />
-							<!-- Gauge progress -->
-							<circle cx="125" cy="125" r="100" fill="none" stroke="<?php echo esc_attr( $color ); ?>" stroke-width="20"
-								stroke-dasharray="<?php echo (int) ( $gauge_percent / 100 * 628 ); ?> 628"
-								stroke-linecap="round" transform="rotate(-90 125 125)"
-								style="transition: stroke-dasharray 0.5s ease;" />
-							<!-- Center text -->
-							<text x="125" y="120" text-anchor="middle" font-size="56" font-weight="bold" fill="<?php echo esc_attr( $color ); ?>"><?php echo (int) $gauge_percent; ?>%</text>
-							<text x="125" y="150" text-anchor="middle" font-size="18" fill="#666"><?php echo esc_html( $status ); ?></text>
+<svg width="250" height="250" viewBox="0 0 250 250" style="margin: 0 auto; display: block; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.2));" id="wpshadow-main-gauge">
+						<!-- Outer decorative circle -->
+						<circle cx="125" cy="125" r="115" fill="none" stroke="<?php echo esc_attr( $color ); ?>" stroke-width="2" opacity="0.2" />
+						<!-- Gauge background -->
+						<circle cx="125" cy="125" r="100" fill="none" stroke="#e0e0e0" stroke-width="20" />
+						<!-- Gauge progress -->
+						<circle cx="125" cy="125" r="100" fill="none" stroke="<?php echo esc_attr( $color ); ?>" stroke-width="20"
+							class="gauge-progress"
+							stroke-dasharray="<?php echo (int) ( $gauge_percent / 100 * 628 ); ?> 628"
+							stroke-linecap="round" transform="rotate(-90 125 125)"
+							style="transition: stroke-dasharray 0.5s ease;" />
+						<!-- Center text -->
+						<text x="125" y="120" text-anchor="middle" font-size="56" font-weight="bold" fill="<?php echo esc_attr( $color ); ?>" class="gauge-percent"><?php echo (int) $gauge_percent; ?>%</text>
+						<text x="125" y="150" text-anchor="middle" font-size="18" fill="#666" class="gauge-status"><?php echo esc_html( $status ); ?></text>
 						</svg>
 						
 						<div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(0,0,0,0.1);">
@@ -2504,7 +2772,15 @@ function wpshadow_render_dashboard() {
 			$overall_health = wpshadow_calculate_overall_health( $findings_by_category, $category_meta );
 			?>
 		
-		<div style="margin: 30px 0;">
+		<div style="margin: 30px 0; position: relative;">
+			
+<!-- Dashboard Controls removed (Fullscreen button moved to scan buttons section) -->
+			
+			<!-- Dashboard Status Indicator -->
+			<div id="wpshadow-dashboard-status" style="display: none; margin-bottom: 15px;"></div>
+			
+			<!-- Dashboard Wrapper for Real-Time Updates -->
+			<div id="wpshadow-dashboard-wrapper">
 			
 			<?php
 			// Issue #562: Check last Quick Scan time and show prompt if needed
@@ -2534,37 +2810,12 @@ function wpshadow_render_dashboard() {
 					</div>
 				</div>
 				<?php
-			} elseif ( $time_since_scan > $scan_interval ) {
-				// Scan is stale (> 5 min ago) - show progress bar
-				?>
-				<div id="wpshadow-stale-scan-notice" style="background: #fff3e0; border-left: 4px solid #f57c00; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
-					<h2 style="margin-top: 0; color: #f57c00; display: flex; align-items: center; gap: 10px;">
-						<span class="dashicons dashicons-update" style="font-size: 24px; animation: spin 2s linear infinite;"></span>
-						<?php esc_html_e( 'Running Quick Scan', 'wpshadow' ); ?>
-					</h2>
-					<p style="margin: 10px 0; font-size: 14px; color: #666;">
-						<?php esc_html_e( 'Analyzing your site...', 'wpshadow' ); ?>
-					</p>
-					<div id="wpshadow-scan-progress-bar" style="background: #e0e0e0; border-radius: 4px; height: 8px; margin: 15px 0; overflow: hidden;">
-						<div style="background: #f57c00; height: 100%; width: 0%; transition: width 0.3s ease;" id="wpshadow-progress-fill"></div>
-					</div>
-					<p id="wpshadow-scan-current-task" style="margin: 10px 0 0 0; font-size: 12px; color: #999;">
-						<?php esc_html_e( 'Starting scan...', 'wpshadow' ); ?>
-					</p>
-				</div>
-				<style>
-					@keyframes spin {
-						from { transform: rotate(0deg); }
-						to { transform: rotate(360deg); }
-					}
-				</style>
-				<?php
 			}
 			?>
 			
 			<div style="display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap;">
 				<!-- Left: Large Overall Health Gauge + Scan Buttons -->
-				<div style="flex: 0 0 280px;">
+				<div style="flex: 0 0 calc(280px); min-width: 280px;">
 					<div style="border: 2px solid <?php echo esc_attr( $overall_health['color'] ); ?>; border-radius: 12px; padding: 24px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.15); text-align: center;">
 						<h3 style="margin: 0 0 16px 0; font-size: 20px; color: #333;"><?php esc_html_e( 'Overall Site Health', 'wpshadow' ); ?></h3>
 						
@@ -2586,20 +2837,23 @@ function wpshadow_render_dashboard() {
 						<p style="margin: 16px 0 0 0; font-size: 14px; color: #666; line-height: 1.5;"><?php echo esc_html( $overall_health['message'] ); ?></p>
 					</div>
 					
-					<!-- Quick Scan and Deep Scan Buttons -->
-					<div style="margin-top: 16px; display: flex; flex-direction: column; gap: 10px;">
-						<button id="wpshadow-quick-scan-btn" class="button button-primary" style="width: 100%; padding: 10px; cursor: pointer;">
-							<?php esc_html_e( 'Quick Scan', 'wpshadow' ); ?>
-						</button>
-						<button id="wpshadow-deep-scan-btn" class="button" style="width: 100%; padding: 10px; cursor: pointer;">
-							<?php esc_html_e( 'Deep Scan', 'wpshadow' ); ?>
-						</button>
-					</div>
+				<!-- Quick Scan and Deep Scan Buttons -->
+				<div style="margin-top: 16px; display: flex; flex-direction: column; gap: 10px;">
+					<button id="wpshadow-quick-scan-btn" class="button button-primary" style="width: 100%; padding: 10px; cursor: pointer;">
+						<?php esc_html_e( 'Quick Scan', 'wpshadow' ); ?>
+					</button>
+					<button id="wpshadow-deep-scan-btn" class="button" style="width: 100%; padding: 10px; cursor: pointer;">
+						<?php esc_html_e( 'Deep Scan', 'wpshadow' ); ?>
+					</button>
+					<button id="wpshadow-fullscreen-toggle" class="button" style="width: 100%; padding: 10px; cursor: pointer; color: #888; border-color: #ccc; background: #f5f5f5;" title="<?php esc_attr_e( 'View dashboard in fullscreen mode (great for office displays)', 'wpshadow' ); ?>">
+						<?php esc_html_e( 'Full Screen', 'wpshadow' ); ?>
+					</button>
+				</div>
 				</div>
 				
 				<!-- Right: 11 Small Category Gauges in 2x6 Grid (2 columns, 6 rows) -->
-				<div style="flex: 1; min-width: 0;">
-					<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+				<div style="flex: 1; min-width: 600px;">
+					<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px;">
 						<?php foreach ( $category_meta as $cat_key => $meta ) :
 							// Special handling for WordPress Site Health gauge (#563)
 							if ( $cat_key === 'wordpress_health' ) {
@@ -2647,27 +2901,27 @@ function wpshadow_render_dashboard() {
 							}
 						?>
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&category=' . $cat_key ) ); ?>" style="text-decoration: none; color: inherit;" title="<?php echo esc_attr( sprintf( __( 'Click to view %s details', 'wpshadow' ), $meta['label'] ) ); ?>">
-							<div style="display: flex; align-items: center; gap: 14px; border: 2px solid <?php echo esc_attr( $meta['color'] ); ?>; border-radius: 6px; padding: 12px 14px; background: #ffffff; transition: all 0.2s ease; cursor: pointer; height: 90px;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'; this.style.borderColor='<?php echo esc_js( $meta['color'] ); ?>';" onmouseout="this.style.boxShadow='none'; this.style.borderColor='<?php echo esc_js( $meta['color'] ); ?>';">
-								<!-- Gauge on Left -->
-								<div style="flex-shrink: 0;">
-									<svg width="70" height="70" viewBox="0 0 100 100" style="filter: drop-shadow(0 1px 3px rgba(0,0,0,0.1));">
-										<!-- Gauge background -->
-										<circle cx="50" cy="50" r="40" fill="none" stroke="#e0e0e0" stroke-width="8" />
-										<!-- Gauge progress -->
-										<circle cx="50" cy="50" r="40" fill="none" stroke="<?php echo esc_attr( $gauge_color ); ?>" stroke-width="8"
-											stroke-dasharray="<?php echo (int) ( $gauge_percent / 100 * 251 ); ?> 251"
-											stroke-linecap="round" transform="rotate(-90 50 50)"
-											style="transition: stroke-dasharray 0.3s ease;" />
-										<!-- Percentage text -->
-										<text x="50" y="58" text-anchor="middle" font-size="18" font-weight="bold" fill="#333"><?php echo (int) $gauge_percent; ?>%</text>
-									</svg>
-								</div>
-								
-								<!-- Text on Right -->
-								<div style="flex: 1; min-width: 0;">
-									<!-- Icon and Title -->
+						<div class="wpshadow-category-gauge" data-category="<?php echo esc_attr( $cat_key ); ?>" style="display: flex; align-items: center; gap: 14px; border: 2px solid <?php echo esc_attr( $meta['color'] ); ?>; border-radius: 6px; padding: 12px 14px; background: #ffffff; transition: all 0.2s ease; cursor: pointer; height: 90px;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'; this.style.borderColor='<?php echo esc_js( $meta['color'] ); ?>';" onmouseout="this.style.boxShadow='none'; this.style.borderColor='<?php echo esc_js( $meta['color'] ); ?>';">
+							<!-- Gauge on Left -->
+							<div style="flex-shrink: 0;">
+								<svg width="70" height="70" viewBox="0 0 100 100" style="filter: drop-shadow(0 1px 3px rgba(0,0,0,0.1));">
+									<!-- Gauge background -->
+									<circle cx="50" cy="50" r="40" fill="none" stroke="#e0e0e0" stroke-width="8" />
+									<!-- Gauge progress -->
+									<circle cx="50" cy="50" r="40" fill="none" stroke="<?php echo esc_attr( $gauge_color ); ?>" stroke-width="8"
+										class="gauge-progress"
+										stroke-dasharray="<?php echo (int) ( $gauge_percent / 100 * 251 ); ?> 251"
+										stroke-linecap="round" transform="rotate(-90 50 50)"
+										style="transition: stroke-dasharray 0.3s ease;" />
+									<!-- Percentage text -->
+									<text x="50" y="58" text-anchor="middle" font-size="18" font-weight="bold" fill="#333" class="gauge-percent"><?php echo (int) $gauge_percent; ?>%</text>
+								</svg>
+							</div>
+							
+							<!-- Text on Right -->
+							<div style="flex: 1; min-width: 0;">
+									<!-- Title (icon removed) -->
 									<div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
-										<span class="<?php echo esc_attr( $meta['icon'] ); ?>" style="font-size: 16px; color: <?php echo esc_attr( $meta['color'] ); ?>;"></span>
 										<h4 style="margin: 0; font-size: 13px; color: <?php echo esc_attr( $meta['color'] ); ?>; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?php echo esc_html( $meta['label'] ); ?></h4>
 									</div>
 									
@@ -2684,7 +2938,8 @@ function wpshadow_render_dashboard() {
 												if ( $total === 0 ) {
 													echo esc_html( __( 'No issues', 'wpshadow' ) );
 												} else {
-													echo esc_html( sprintf( __( '%d of %d', 'wpshadow' ), $passed, $total ) );
+													// Show category finding counts (simpler display)
+													echo esc_html( sprintf( __( '%d issues found', 'wpshadow' ), $total ) );
 												}
 											}
 											?>
@@ -2698,6 +2953,7 @@ function wpshadow_render_dashboard() {
 				</div>
 			</div>
 		</div>
+		</div><!-- End #wpshadow-dashboard-wrapper -->
 		<?php } // End if/else for filtered vs normal view ?>
 
 		<!-- Kanban Board for Organizing Findings -->
@@ -2743,6 +2999,48 @@ function wpshadow_render_dashboard() {
 			</table>
 		</div>
 		<?php endif; ?>
+
+		<!-- Quick Scan Modal -->
+		<div id="wpshadow-quick-scan-modal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:100000; align-items:center; justify-content:center;">
+			<div style="background:#fff; border-radius:8px; max-width:500px; width:90%; padding:30px; box-shadow:0 10px 40px rgba(0,0,0,0.3);">
+				<h2 style="margin-top:0; color:#2196f3; display:flex; align-items:center; gap:10px;">
+					<span class="dashicons dashicons-update" style="font-size:28px;"></span>
+					Quick Scan Options
+				</h2>
+				<p style="color:#555; line-height:1.6; margin:0 0 20px 0;">
+					Would you like to run a Quick Scan now, or schedule it to run automatically on a regular basis?
+				</p>
+				<p style="color:#666; font-size:13px; background:#f5f5f5; padding:12px; border-radius:4px; margin:0 0 20px 0;">
+					<strong>Regular Schedule:</strong> Quick Scans will run daily at 3:00 AM to keep your site healthy.
+				</p>
+				<div style="display:flex; gap:10px; justify-content:flex-end;">
+					<button id="wpshadow-quick-scan-cancel" class="button">Cancel</button>
+					<button id="wpshadow-quick-scan-now" class="button">Run Now</button>
+					<button id="wpshadow-quick-scan-schedule" class="button button-primary">Schedule Regularly</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Deep Scan Modal -->
+		<div id="wpshadow-deep-scan-modal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:100000; align-items:center; justify-content:center;">
+			<div style="background:#fff; border-radius:8px; max-width:500px; width:90%; padding:30px; box-shadow:0 10px 40px rgba(0,0,0,0.3);">
+				<h2 style="margin-top:0; color:#e65100; display:flex; align-items:center; gap:10px;">
+					<span class="dashicons dashicons-warning" style="font-size:28px;"></span>
+					Deep Scan - Server Load Warning
+				</h2>
+				<p style="color:#555; line-height:1.6; margin:0 0 20px 0;">
+					Deep Scans run comprehensive diagnostics which can temporarily increase server load. We recommend scheduling them during slower periods.
+				</p>
+				<p style="color:#666; font-size:13px; background:#fff3e0; padding:12px; border-radius:4px; margin:0 0 20px 0; border-left:3px solid #e65100;">
+					<strong>⚠️ Caution:</strong> Running now may impact site performance during peak traffic. Scheduled scans run weekly on Sundays at 2:00 AM.
+				</p>
+				<div style="display:flex; gap:10px; justify-content:flex-end;">
+					<button id="wpshadow-deep-scan-cancel" class="button">Cancel</button>
+					<button id="wpshadow-deep-scan-now" class="button">Run Now Anyway</button>
+					<button id="wpshadow-deep-scan-schedule" class="button button-primary">Schedule Off-Peak</button>
+				</div>
+			</div>
+		</div>
 
 		<!-- Off-Peak Scheduling Modal -->
 		<div id="wpshadow-offpeak-modal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:100000; align-items:center; justify-content:center;">
@@ -2813,9 +3111,281 @@ function wpshadow_render_dashboard() {
 
 		<script>
 		jQuery(document).ready(function($) {
+		// Check URL for action=quick_scan and auto-open modal
+		const urlParams = new URLSearchParams(window.location.search);
+		if (urlParams.get('action') === 'quick_scan') {
+			$('#wpshadow-quick-scan-modal').css('display', 'flex');
+			// Remove the action parameter from URL without reload
+			window.history.replaceState({}, document.title, window.location.pathname + '?page=wpshadow');
+		}
+		
+			$('#wpshadow-quick-scan-btn').on('click', function() {
+				$('#wpshadow-quick-scan-modal').css('display', 'flex');
+			});
+
+			// Quick Scan - Cancel
+			$('#wpshadow-quick-scan-cancel').on('click', function() {
+				$('#wpshadow-quick-scan-modal').hide();
+			});
+
+			// Quick Scan - Run Now
+			$('#wpshadow-quick-scan-now').on('click', function() {
+				const $btn = $(this);
+				$btn.prop('disabled', true).text('Running...');
+				
+				// Close modal
+				$('#wpshadow-quick-scan-modal').hide();
+				
+				// Show "Scanning..." status without clearing gauges
+				const $mainStatus = $('#wpshadow-main-gauge text.gauge-status');
+				if ($mainStatus.length) {
+					$mainStatus.text('Scanning...');
+				}
+				
+				// Run scan
+				$.ajax({
+					type: 'POST',
+					url: ajaxurl,
+					data: {
+						action: 'wpshadow_quick_scan',
+						nonce: wpshadow.scan_nonce,
+						mode: 'now'
+					},
+					dataType: 'json',
+					success: function(response) {
+						if (response.success) {
+							// Reload to display updated results
+							location.reload();
+						} else {
+							console.error('Quick Scan error:', response.data?.message || 'Unknown error');
+							$btn.prop('disabled', false).text('Run Now');
+						}
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						console.error('Quick Scan AJAX Error:', textStatus, errorThrown, jqXHR.responseText);
+						alert('Network error during scan: ' + textStatus);
+						$btn.prop('disabled', false).text('Run Now');
+					}
+				});
+			});
+
+			// Quick Scan - Schedule Regularly
+			$('#wpshadow-quick-scan-schedule').on('click', function() {
+				const $btn = $(this);
+				$btn.prop('disabled', true).text('Scheduling...');
+
+				$.post(ajaxurl, {
+					action: 'wpshadow_quick_scan',
+					nonce: wpshadow.scan_nonce,
+					mode: 'schedule'
+				}, function(response) {
+					$('#wpshadow-quick-scan-modal').hide();
+					if (response.success) {
+						alert(response.data.message);
+					} else {
+						alert('Error: ' + (response.data?.message || 'Could not schedule'));
+					}
+					$btn.prop('disabled', false).text('Schedule Regularly');
+				});
+			});
+
+			// Deep Scan button handler
+			$('#wpshadow-deep-scan-btn').on('click', function() {
+				$('#wpshadow-deep-scan-modal').css('display', 'flex');
+			});
+
+			// Deep Scan - Cancel
+			$('#wpshadow-deep-scan-cancel').on('click', function() {
+				$('#wpshadow-deep-scan-modal').hide();
+			});
+
+			// Deep Scan - Run Now Anyway
+			$('#wpshadow-deep-scan-now').on('click', function() {
+				const $btn = $(this);
+				$btn.prop('disabled', true).text('Running...');
+			
+				// Close modal
+				$('#wpshadow-deep-scan-modal').hide();
+				
+				// Show "Scanning..." status without clearing gauges
+				const $mainStatus = $('#wpshadow-main-gauge text.gauge-status');
+				if ($mainStatus.length) {
+					$mainStatus.text('Scanning...');
+				}
+
+				// Run scan
+				$.ajax({
+					type: 'POST',
+					url: ajaxurl,
+					data: {
+						action: 'wpshadow_deep_scan',
+						nonce: wpshadow.scan_nonce,
+						mode: 'now'
+					},
+					dataType: 'json',
+					success: function(response) {
+						if (response.success) {
+							// Reload to display updated results
+							location.reload();
+						} else {
+							console.error('Deep Scan error:', response.data?.message || 'Unknown error');
+							$btn.prop('disabled', false).text('Run Now Anyway');
+						}
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						console.error('Deep Scan AJAX Error:', textStatus, errorThrown, jqXHR.responseText);
+						alert('Network error during scan: ' + textStatus);
+						$btn.prop('disabled', false).text('Run Now Anyway');
+					}
+				});
+			});
+
+			// Deep Scan - Schedule Off-Peak
+			$('#wpshadow-deep-scan-schedule').on('click', function() {
+				const $btn = $(this);
+				$btn.prop('disabled', true).text('Scheduling...');
+
+				$.post(ajaxurl, {
+					action: 'wpshadow_deep_scan',
+					nonce: wpshadow.scan_nonce,
+					mode: 'schedule'
+				}, function(response) {
+					$('#wpshadow-deep-scan-modal').hide();
+					if (response.success) {
+						alert(response.data.message);
+					} else {
+						alert('Error: ' + (response.data?.message || 'Could not schedule'));
+					}
+					$btn.prop('disabled', false).text('Schedule Off-Peak');
+				});
+			});
+
+			// Close modals on background click
+			$('#wpshadow-quick-scan-modal, #wpshadow-deep-scan-modal').on('click', function(e) {
+				if (e.target === this) {
+					$(this).hide();
+				}
+			});
+
+			// Off-peak modal handlers
 			let pendingOperation = null;
 
-			// Function to check if operation could cause slowdown
+		/**
+		 * Reset all gauges to 0 and show scanning status
+		 */
+		function resetGauges(scanType) {
+			// Reset main gauge
+			const $mainGauge = $('#wpshadow-main-gauge circle.gauge-progress');
+			const $mainPercent = $('#wpshadow-main-gauge text.gauge-percent');
+			const $mainStatus = $('#wpshadow-main-gauge text.gauge-status');
+			
+			if ($mainGauge.length) {
+				$mainGauge.css({
+					'stroke-dasharray': '0 628',
+					'stroke': '#ccc',
+					'transition': 'stroke-dasharray 0.3s ease, stroke 0.3s ease'
+				});
+			}
+			if ($mainPercent.length) {
+				$mainPercent.text('0%');
+			}
+			if ($mainStatus.length) {
+				$mainStatus.text('Scanning...');
+			}
+			
+			// Reset category gauges
+			$('.wpshadow-category-gauge').each(function() {
+				const $gauge = $(this).find('circle.gauge-progress');
+				const $percent = $(this).find('text.gauge-percent');
+				const $count = $(this).find('text.gauge-count');
+				
+				if ($gauge.length) {
+					$gauge.css({
+						'stroke-dasharray': '0 251',
+						'stroke': '#ccc',
+						'transition': 'stroke-dasharray 0.3s ease, stroke 0.3s ease'
+					});
+				}
+				if ($percent.length) {
+					$percent.text('0%');
+				}
+				if ($count.length) {
+					$count.text('0 of 0');
+				}
+			});
+		}
+
+		/**
+		 * Animate gauges to completion values
+		 */
+		function animateGaugesCompletion(completed, total, callback) {
+			let step = 0;
+			const steps = 20; // Number of animation steps
+			const interval = 50; // ms per step
+			
+			const animation = setInterval(function() {
+				step++;
+				const progress = Math.min(1, step / steps);
+				
+				// Animate main gauge
+				const mainPercent = Math.round(progress * 100);
+				const mainDashArray = Math.round((mainPercent / 100) * 628);
+				
+				const $mainGauge = $('#wpshadow-main-gauge circle.gauge-progress');
+				const $mainPercent = $('#wpshadow-main-gauge text.gauge-percent');
+				const $mainStatus = $('#wpshadow-main-gauge text.gauge-status');
+				
+				if ($mainGauge.length) {
+					// Color based on progress
+					let color = '#4caf50'; // green
+					if (mainPercent < 60) color = '#f44336'; // red
+					else if (mainPercent < 80) color = '#ff9800'; // orange
+					
+					$mainGauge.css({
+						'stroke-dasharray': mainDashArray + ' 628',
+						'stroke': color
+					});
+				}
+				if ($mainPercent.length) {
+					$mainPercent.text(mainPercent + '%');
+				}
+				if ($mainStatus.length) {
+					$mainStatus.text(Math.round(progress * completed) + ' of ' + total);
+				}
+				
+				// Animate category gauges proportionally
+				$('.wpshadow-category-gauge').each(function() {
+					const $gauge = $(this).find('circle.gauge-progress');
+					const $percent = $(this).find('text.gauge-percent');
+					const $count = $(this).find('text.gauge-count');
+					
+					const categoryPercent = Math.round(progress * 100);
+					const categoryDashArray = Math.round((categoryPercent / 100) * 251);
+					
+					if ($gauge.length) {
+						let catColor = '#4caf50';
+						if (categoryPercent < 60) catColor = '#f44336';
+						else if (categoryPercent < 80) catColor = '#ff9800';
+						
+						$gauge.css({
+							'stroke-dasharray': categoryDashArray + ' 251',
+							'stroke': catColor
+						});
+					}
+					if ($percent.length) {
+						$percent.text(categoryPercent + '%');
+					}
+					// Note: Real counts would come from backend, using simulated progress
+				});
+				
+				if (step >= steps) {
+					clearInterval(animation);
+					if (callback) callback();
+				}
+			}, interval);
+		}
+
+		// Off-peak modal handlers
 			window.wpshadowCheckSlowdown = function(operationType, callback) {
 				// Operations that could cause slowdowns
 				const heavyOperations = ['deep-scan', 'database-optimization', 'full-security-scan', 'cache-warmup', 'bulk-autofix'];
@@ -3953,6 +4523,18 @@ add_action( 'admin_enqueue_scripts', function( $hook ) {
 		'password' => wpshadow_generate_friendly_password(),
 		'nonce'    => wp_create_nonce( 'wpshadow_generate_password' ),
 	) );
+});
+
+/**
+ * Enqueue safety warnings CSS on frontend for KB pages and posts.
+ */
+add_action( 'wp_enqueue_scripts', function() {
+	wp_enqueue_style(
+		'wpshadow-safety-warnings-frontend',
+		WPSHADOW_URL . 'assets/css/safety-warnings.css',
+		array(),
+		WPSHADOW_VERSION
+	);
 } );
 
 // Generate password handler moved to class

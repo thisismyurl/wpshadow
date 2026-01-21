@@ -1,6 +1,6 @@
 # WPShadow Treatment Features - Complete Matrix
 
-**Total Treatments:** 44  
+**Total Treatments:** 46  
 **Last Updated:** January 21, 2026  
 **Location:** `includes/treatments/`
 
@@ -11,7 +11,7 @@
 | **Security** | 8 | SSL, File Editors, Remove Howdy, Comments Menu |
 | **Performance** | 14 | Asset Versions, Image Lazy Load, jQuery Cleanup, Head Cleanup |
 | **Code Cleanup** | 12 | Emoji Scripts, WP Generator, Interactivity Cleanup |
-| **WordPress Config** | 7 | Permalinks, Memory Limit, Debug Mode, RSS Feeds |
+| **WordPress Config** | 9 | Permalinks, Memory Limit, Debug Mode, RSS Feeds, Update Noise |
 | **System/Workflow** | 3 | Registry, Maintenance, Pre-Publish Review |
 
 ---
@@ -67,10 +67,10 @@
 | 33 | `strip-resource-hints` | Clean up resource hints | Yes | Yes |
 | 34 | `strip-speculationrules` | Remove speculation rules | Yes | Yes |
 
-### WordPress Config Treatments (7)
+### WordPress Config Treatments (9)
 
 | ID | Treatment | Purpose | Auto-Applicable | Reversible |
-|----|-----------|---------|-----------------|-----------|
+|----|-----------|---------|-----------------|-----------|  
 | 35 | `permalinks` | Set SEO-friendly URL structure | Yes | Yes |
 | 36 | `debug-mode` | Disable WP_DEBUG output | Yes | Yes |
 | 37 | `error-log` | Configure error logging | Yes | Yes |
@@ -78,25 +78,23 @@
 | 39 | `search-indexing` | Ensure site is searchable | Yes | Yes |
 | 40 | `skiplinks` | Add accessibility skiplinks | Yes | Yes |
 | 41 | `nav-aria` | Add ARIA attributes to navigation | Yes | Yes |
+| 42 | `theme-update-noise` | Hide update nags for inactive themes | Yes | Yes |
+| 43 | `plugin-update-noise` | Hide update nags for inactive plugins | Yes | Yes |
 
 ### System/Workflow Treatments (3)
 
 | ID | Treatment | Purpose | Auto-Applicable | Reversible |
 |----|-----------|---------|-----------------|-----------|
-| 42 | `registry` | System registry management | No | No |
-| 43 | `maintenance` | Maintenance mode activation | Yes | Yes |
-| 44 | `pre-publish-review` | Content review workflow | Yes | Yes |
-| 45 | `consent-checks` | User consent management | Yes | Yes |
+| 44 | `registry` | System registry management | No | No |
+| 45 | `maintenance` | Maintenance mode activation | Yes | Yes |
+| 46 | `pre-publish-review` | Content review workflow | Yes | Yes |
+| 47 | `consent-checks` | User consent management | Yes | Yes |
 
 ---
 
 ## Treatment Reversibility
 
-**All 44 treatments are fully reversible:**
-
-- Create backup before applying
-- Store original values
-- Implement `undo()` method
+**All 46 treatments are fully reversible:**
 - Log all changes for audit
 
 **Example:**
@@ -139,6 +137,8 @@ $treatment->undo();  // Restores from backup
 | `search-indexing` | `search-indexing` | ✅ Yes |
 | `post-via-email` | `file-editors` | ✅ Yes |
 | `consent-checks` | `consent-checks` | ✅ Yes |
+| `theme-update-noise` | `theme-update-noise` | ✅ Yes |
+| `plugin-update-noise` | `plugin-update-noise` | ✅ Yes |
 
 ---
 

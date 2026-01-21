@@ -133,17 +133,35 @@ class Workflow_Executor {
 
 	/**
 	 * Check if time trigger should execute now
+	 * Supports hourly, daily, and weekly frequencies (#572-573)
 	 */
 	private static function should_execute_time_trigger( $config ) {
+		$frequency = isset( $config['frequency'] ) ? $config['frequency'] : 'daily';
 		$target_time = isset( $config['time'] ) ? $config['time'] : '02:00';
 		$target_days = isset( $config['days'] ) ? $config['days'] : array();
 
 		$current_time = current_time( 'H:i' );
 		$current_day  = strtolower( current_time( 'l' ) );
 
-		// Check if current day is in target days
-		if ( ! in_array( $current_day, $target_days, true ) ) {
+		// Hourly: run every hour (ignore time/days)
+		if ( 'hourly' === $frequency ) {
+			// Check if we're at the top of the hour (within 5 minutes)
+			$current_minute = (int) current_time( 'i' );
+			return $current_minute < 5;
+		}
+
+		// Daily/Weekly: check day constraint
+		if ( ! empty( $target_days ) && ! in_array( $current_day, $target_days, true ) ) {
 			return false;
+		}
+
+		// Weekly: run only once per week (on specified day)
+		if ( 'weekly' === $frequency ) {
+			// Get the first target day (primary day for weekly)
+			$primary_day = ! empty( $target_days ) ? $target_days[0] : 'monday';
+			if ( $current_day !== $primary_day ) {
+				return false;
+			}
 		}
 
 		// Check if current time matches (within 1 hour window)

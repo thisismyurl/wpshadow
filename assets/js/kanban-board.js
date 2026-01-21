@@ -447,7 +447,10 @@ jQuery(document).ready(function ($) {
 				$column.find('h3 span[style*="float: right"]').text(count);
 			});
 			setStatus('Finding removed from view.', 'success');
-		$(document).on('click', '.finding-autofix', function (e) {
+		}
+	});
+
+	$(document).on('click', '.finding-autofix', function (e) {
 			e.preventDefault();
 			e.stopPropagation();
 
@@ -891,36 +894,35 @@ jQuery(document).ready(function ($) {
 
 	// Auto-run quick scan on page load
 	autoRunQuickScanOnLoad();
-});
 
-/**
- * Update Recent Activity log
- */
-function updateRecentActivity() {
-	$.post(ajaxurl, {
-		action: 'wpshadow_get_recent_activity',
-		nonce: $('[name="wpshadow_kanban_nonce"]').val()
-	}, function(response) {
-		if (response.success && response.data.activity) {
-			const $tbody = $('#wpshadow-activity-log tbody');
-			$tbody.empty();
-			response.data.activity.forEach(function(entry) {
-				$tbody.append(
-					'<tr style="border-bottom: 1px solid #e9ecef;">' +
-					'<td style="padding: 12px; color: #495057;">' + entry.action + '</td>' +
-					'<td style="padding: 12px; color: #6c757d; font-size: 13px;">' + entry.time + '</td>' +
-					'</tr>'
-				);
-			});
+	/**
+	 * Update Recent Activity log
+	 */
+	function updateRecentActivity() {
+		$.post(ajaxurl, {
+			action: 'wpshadow_get_recent_activity',
+			nonce: $('[name="wpshadow_kanban_nonce"]').val()
+		}, function(response) {
+			if (response.success && response.data.activity) {
+				const $tbody = $('#wpshadow-activity-log tbody');
+				$tbody.empty();
+				response.data.activity.forEach(function(entry) {
+					$tbody.append(
+						'<tr style="border-bottom: 1px solid #e9ecef;">' +
+						'<td style="padding: 12px; color: #495057;">' + entry.action + '</td>' +
+						'<td style="padding: 12px; color: #6c757d; font-size: 13px;">' + entry.time + '</td>' +
+						'</tr>'
+					);
+				});
+			}
+		});
+	}
+	window.changeKanbanStatus = changeKanbanStatus;
+
+	// Call update activity on status change
+	$(document).ajaxComplete(function(event, xhr, settings) {
+		if (settings.data && settings.data.indexOf('wpshadow_change_finding_status') > -1) {
+			updateRecentActivity();
 		}
 	});
-}
-
-// Call update activity on status change
-const originalChangeKanbanStatus = window.changeKanbanStatus || changeKanbanStatus;
-window.changeKanbanStatus = changeKanbanStatus;
-$(document).ajaxComplete(function(event, xhr, settings) {
-	if (settings.data && settings.data.indexOf('wpshadow_change_finding_status') > -1) {
-		updateRecentActivity();
-	}
 });

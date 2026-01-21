@@ -1,6 +1,6 @@
 # WPShadow Diagnostic Features - Complete Matrix
 
-**Total Diagnostics:** 57  
+**Total Diagnostics:** 59  
 **Last Updated:** January 21, 2026  
 **Location:** `includes/diagnostics/`
 
@@ -11,7 +11,7 @@
 | **Security** | 12 | SSL, Security Headers, Admin Username, Hotlink Protection |
 | **Performance** | 15 | Memory Limit, Image Lazy Load, External Fonts, jQuery Migrate |
 | **Code Quality** | 12 | Error Log, Debug Mode, Emoji Scripts, WP Generator |
-| **WordPress Config** | 10 | WordPress Version, PHP Version, Permalinks, Tagline |
+| **WordPress Config** | 12 | WordPress Version, PHP Version, Permalinks, Tagline, Theme/Plugin Update Noise |
 | **Monitoring** | 5 | Database Health, Broken Links, Plugin Count, Mobile Friendliness |
 | **Workflow/System** | 3 | Initial Setup, Registry, Maintenance |
 
@@ -73,10 +73,10 @@
 | 38 | `strip-json-ld` | Manages JSON-LD schema output | Low | Yes |
 | 39 | `strip-social-meta` | Removes social meta tags | Low | Yes |
 
-### WordPress Configuration Diagnostics (10)
+### WordPress Configuration Diagnostics (12)
 
 | ID | Diagnostic | Purpose | Threat Level | Auto-Fixable |
-|----|-----------|---------|--------------|--------------|
+|----|-----------|---------|--------------|--------------|  
 | 40 | `wordpress-version` | Checks WP core is current | Medium | No |
 | 41 | `php-version` | Verifies PHP meets minimum | High | No |
 | 42 | `permalinks` | Checks URL structure | Low | Yes |
@@ -87,25 +87,27 @@
 | 47 | `plugin-auto-updates` | Enables automatic plugin updates | Low | Yes |
 | 48 | `content-optimizer` | Analyzes content quality | Low | No |
 | 49 | `pre-publish-review` | Validates content before publishing | Low | Yes |
+| 50 | `theme-update-noise` | Flags inactive themes causing update nags | Low | Yes |
+| 51 | `plugin-update-noise` | Flags inactive plugins causing update nags | Low | Yes |
 
 ### Monitoring Diagnostics (5)
 
 | ID | Diagnostic | Purpose | Threat Level | Auto-Fixable |
 |----|-----------|---------|--------------|--------------|
-| 50 | `database-health` | Overall database status | Medium | No |
-| 51 | `broken-links` | Detects broken internal links | Low | No |
-| 52 | `plugin-count` | Monitors active plugin count | Low | No |
-| 53 | `mobile-friendliness` | Checks mobile optimization | Low | No |
-| 54 | `timezone` | Verifies timezone configuration | Low | No |
+| 52 | `database-health` | Overall database status | Medium | No |
+| 53 | `broken-links` | Detects broken internal links | Low | No |
+| 54 | `plugin-count` | Monitors active plugin count | Low | No |
+| 55 | `mobile-friendliness` | Checks mobile optimization | Low | No |
+| 56 | `timezone` | Verifies timezone configuration | Low | No |
 
-### System/Workflow Diagnostics (5)
+### System/Workflow Diagnostics (4)
 
 | ID | Diagnostic | Purpose | Threat Level | Auto-Fixable |
 |----|-----------|---------|--------------|--------------|
-| 55 | `initial-setup` | Bundle check for initial config | Medium | Partial |
-| 56 | `registry` | Internal diagnostic registry check | Low | No |
-| 57 | `core-integrity` | Validates core plugin integrity | Medium | No |
-| 58 | `user-notification-email` | Email notification system status | Low | No |
+| 57 | `initial-setup` | Bundle check for initial config | Medium | Partial |
+| 58 | `registry` | Internal diagnostic registry check | Low | No |
+| 59 | `core-integrity` | Validates core plugin integrity | Medium | No |
+| 60 | `user-notification-email` | Email notification system status | Low | No |
 
 ---
 
@@ -153,6 +155,8 @@ THEN: Apply Treatment_Memory_Limit
 2. **`post-via-email-category`** - Uncategorized default routing (threat level: 12)
 3. **`initial-setup` update** - Now marks file-editors as auto-fixable
 4. **`consent-checks`** - User consent validation
+5. **`theme-update-noise`** - Detects inactive themes generating update notifications (threat level: 25)
+6. **`plugin-update-noise`** - Detects inactive plugins generating update notifications (threat level: 25)
 
 ---
 

@@ -1,0 +1,115 @@
+/* WPShadow Glossary Styles */
+
+.wpshadow-glossary-term {
+	position: relative;
+	border-bottom: 1px dotted #0073aa;
+	cursor: help;
+	color: #0073aa;
+	font-weight: 500;
+	transition: background-color 0.2s ease;
+}
+
+.wpshadow-glossary-term:hover {
+	background-color: rgba(0, 115, 170, 0.05);
+}
+
+/* Tooltip Container */
+.wpshadow-glossary-tooltip {
+	position: fixed;
+	z-index: 99999;
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	min-width: 250px;
+	max-width: 400px;
+	animation: wpshadow-fade-in 0.2s ease-in;
+}
+
+@keyframes wpshadow-fade-in {
+	from {
+		opacity: 0;
+		transform: translateY(-5px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Tooltip Content */
+.wpshadow-glossary-tooltip-content {
+	padding: 12px 14px;
+	font-size: 13px;
+	line-height: 1.5;
+	color: #333;
+}
+
+.wpshadow-glossary-tooltip-content p {
+	margin: 0 0 8px 0;
+	padding: 0;
+}
+
+.wpshadow-glossary-tooltip-content p:last-child {
+	margin-bottom: 0;
+}
+
+/* Tooltip Link */
+.wpshadow-glossary-link {
+	display: inline-block;
+	color: #0073aa;
+	text-decoration: none;
+	font-weight: 500;
+	font-size: 12px;
+	transition: color 0.2s ease;
+}
+
+.wpshadow-glossary-link:hover {
+	color: #005a87;
+	text-decoration: underline;
+}
+
+/* Tooltip Arrow */
+.wpshadow-glossary-tooltip-arrow {
+	position: absolute;
+	width: 0;
+	height: 0;
+	border-left: 6px solid transparent;
+	border-right: 6px solid transparent;
+	border-top: 6px solid #fff;
+	bottom: -5px;
+	left: 50%;
+	margin-left: -6px;
+	filter: drop-shadow(0 -1px 0 #ddd);
+}
+
+.wpshadow-glossary-tooltip-bottom .wpshadow-glossary-tooltip-arrow {
+	bottom: auto;
+	top: -5px;
+	border-top: none;
+	border-bottom: 6px solid #fff;
+	filter: drop-shadow(0 1px 0 #ddd);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+	.wpshadow-glossary-tooltip {
+		min-width: 200px;
+		max-width: 300px;
+	}
+
+	.wpshadow-glossary-tooltip-content {
+		font-size: 12px;
+		padding: 10px 12px;
+	}
+}
+
+/* Admin Styles */
+.wpshadow-glossary-term-count {
+	background: #0073aa;
+	color: #fff;
+	border-radius: 12px;
+	padding: 2px 8px;
+	font-size: 11px;
+	margin-left: 5px;
+}

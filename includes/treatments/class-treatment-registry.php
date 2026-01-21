@@ -27,6 +27,8 @@ class Treatment_Registry extends Abstract_Registry {
 		'Treatment_SSL',
 		'Treatment_Inactive_Plugins',
 		'Treatment_Outdated_Plugins',
+		'Treatment_Theme_Update_Noise',
+		'Treatment_Plugin_Update_Noise',
 		'Treatment_Hotlink_Protection',
 		'Treatment_Head_Cleanup',
 		'Treatment_Iframe_Busting',

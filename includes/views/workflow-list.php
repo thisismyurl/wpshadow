@@ -16,18 +16,27 @@ $hidden_workflow_ids = \WPShadow\Workflow\Kanban_Workflow_Helper::get_hidden_wor
 $workflows = array_filter( $workflows, function( $workflow ) use ( $hidden_workflow_ids ) {
 	return ! in_array( $workflow['id'], $hidden_workflow_ids, true );
 } );
+
+$suggestions = \WPShadow\Workflow\Workflow_Suggestions::get_suggestions();
+$suggestions = array_slice( $suggestions, 0, 6 );
 ?>
 
 <div class="wrap wpshadow-workflow-list">
 	<h1>
-		<?php esc_html_e( 'Automation Workflows', 'wpshadow' ); ?>
+		<?php esc_html_e( 'Workflow Manager', 'wpshadow' ); ?>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>" class="page-title-action">
-			<?php esc_html_e( 'Create Workflow', 'wpshadow' ); ?>
+			<?php esc_html_e( 'Build Your Own', 'wpshadow' ); ?>
 		</a>
 	</h1>
 
 	<p class="description">
-		<?php esc_html_e( 'Create automated workflows that trigger actions based on events, schedules, or conditions.', 'wpshadow' ); ?>
+		<?php
+		printf(
+			/* translators: %s: link to knowledge base article */
+			esc_html__( 'Automate your WordPress management with smart workflows. %s', 'wpshadow' ),
+			'<a href="https://wpshadow.com/kb/workflow-manager" target="_blank">' . esc_html__( 'Learn about workflows →', 'wpshadow' ) . '</a>'
+		);
+		?>
 	</p>
 
 	<?php if ( empty( $workflows ) ) : ?>
@@ -44,17 +53,67 @@ $workflows = array_filter( $workflows, function( $workflow ) use ( $hidden_workf
 				<span class="dashicons dashicons-networking"></span>
 			</div>
 			<h2><?php esc_html_e( 'No Workflows Yet', 'wpshadow' ); ?></h2>
-			<p><?php esc_html_e( 'Get started with one of these popular workflow examples or build your own.', 'wpshadow' ); ?></p>
-			
-			<div class="empty-state-examples">
-				<h3><?php esc_html_e( 'Quick Start Examples:', 'wpshadow' ); ?></h3>
-				<div id="example-list" class="example-list">
-					<!-- Populated by JavaScript -->
+			<p><?php esc_html_e( 'Start with a smart suggestion tailored to your site, or build your own workflow.', 'wpshadow' ); ?></p>
+
+			<?php if ( ! empty( $suggestions ) ) : ?>
+				<div class="suggested-workflows">
+					<h3><?php esc_html_e( 'Suggested Workflows', 'wpshadow' ); ?></h3>
+					<p class="suggested-intro"><?php esc_html_e( 'Ready-to-run automations based on your site signals. One click to create.', 'wpshadow' ); ?></p>
+					<div class="suggested-grid suggested-workflows-grid">
+						<?php foreach ( $suggestions as $suggestion ) : ?>
+							<div class="suggested-card" data-trigger="<?php echo esc_attr( $suggestion['trigger'] ); ?>" data-actions='<?php echo esc_attr( wp_json_encode( $suggestion['actions'] ) ); ?>'>
+								<div class="suggested-card-header">
+									<span class="suggested-icon" style="background: <?php echo esc_attr( $suggestion['color'] ); ?>;">
+										<span class="dashicons <?php echo esc_attr( $suggestion['icon'] ); ?>"></span>
+									</span>
+									<div class="suggested-meta">
+										<h4><?php echo esc_html( $suggestion['title'] ); ?></h4>
+										<span class="suggested-reason"><?php echo esc_html( $suggestion['reason'] ); ?></span>
+									</div>
+								</div>
+								<p class="suggested-description"><?php echo esc_html( $suggestion['description'] ); ?></p>
+								<button type="button" class="button button-primary create-suggested-workflow" data-title="<?php echo esc_attr( $suggestion['title'] ); ?>" data-label="<?php esc_attr_e( 'Create from suggestion', 'wpshadow' ); ?>">
+									<?php esc_html_e( 'Create from suggestion', 'wpshadow' ); ?>
+								</button>
+							</div>
+						<?php endforeach; ?>
+					</div>
 				</div>
-			</div>
+			<?php endif; ?>
 		</div>
 	<?php else : ?>
 		<!-- Workflow List -->
+		<?php if ( ! empty( $suggestions ) ) : ?>
+			<div class="suggested-workflows compact">
+				<div class="suggested-header">
+					<div>
+						<h3><?php esc_html_e( 'Suggested Workflows', 'wpshadow' ); ?></h3>
+						<p class="suggested-intro"><?php esc_html_e( 'High-impact automations tuned to your site. Add any with one click.', 'wpshadow' ); ?></p>
+					</div>
+					<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>"><?php esc_html_e( 'Build your own', 'wpshadow' ); ?></a>
+				</div>
+				<div class="suggested-grid suggested-workflows-grid">
+					<?php foreach ( $suggestions as $suggestion ) : ?>
+						<div class="suggested-card" data-trigger="<?php echo esc_attr( $suggestion['trigger'] ); ?>" data-actions='<?php echo esc_attr( wp_json_encode( $suggestion['actions'] ) ); ?>'>
+							<div class="suggested-card-header">
+								<span class="suggested-icon" style="background: <?php echo esc_attr( $suggestion['color'] ); ?>;">
+									<span class="dashicons <?php echo esc_attr( $suggestion['icon'] ); ?>"></span>
+								</span>
+								<div class="suggested-meta">
+									<h4><?php echo esc_html( $suggestion['title'] ); ?></h4>
+									<span class="suggested-reason"><?php echo esc_html( $suggestion['reason'] ); ?></span>
+								</div>
+							</div>
+							<p class="suggested-description"><?php echo esc_html( $suggestion['description'] ); ?></p>
+							<button type="button" class="button create-suggested-workflow" data-title="<?php echo esc_attr( $suggestion['title'] ); ?>" data-label="<?php esc_attr_e( 'Add suggestion', 'wpshadow' ); ?>">
+								<?php esc_html_e( 'Add suggestion', 'wpshadow' ); ?>
+							</button>
+						</div>
+					<?php endforeach; ?>
+				</div>
+			</div>
+		<?php endif; ?>
+
 		<div class="wpshadow-workflows">
 			<?php foreach ( $workflows as $workflow ) : ?>
 				<?php
@@ -103,14 +162,6 @@ $workflows = array_filter( $workflows, function( $workflow ) use ( $hidden_workf
 			<?php endforeach; ?>
 		</div>
 
-		<!-- Examples Section Below Workflows -->
-		<div class="wpshadow-empty-state" style="margin-top: 40px;">
-			<h3><?php esc_html_e( 'Quick Start Examples:', 'wpshadow' ); ?></h3>
-			<p><?php esc_html_e( 'Create workflows based on these popular templates:', 'wpshadow' ); ?></p>
-			<div id="example-list" class="example-list">
-				<!-- Populated by JavaScript -->
-			</div>
-		</div>
 	<?php endif; ?>
 </div>
 
@@ -268,6 +319,98 @@ $workflows = array_filter( $workflows, function( $workflow ) use ( $hidden_workf
 .example-item-loading .example-item-button {
 	opacity: 0.6;
 	cursor: not-allowed;
+}
+
+/* Suggested Workflows */
+.suggested-workflows {
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	padding: 20px;
+	margin-top: 20px;
+}
+
+.suggested-workflows.compact {
+	padding: 16px 20px;
+}
+
+.suggested-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+.suggested-intro {
+	margin: 4px 0 12px 0;
+	color: #555;
+}
+
+.suggested-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+	gap: 12px;
+}
+
+.suggested-card {
+	border: 1px solid #e3e3e3;
+	border-radius: 8px;
+	padding: 14px;
+	background: #fdfdfd;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.suggested-card:hover {
+	border-color: #2271b1;
+	box-shadow: 0 2px 6px rgba(34, 113, 177, 0.12);
+}
+
+.suggested-card-header {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 8px;
+}
+
+.suggested-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	border-radius: 6px;
+	color: #fff;
+}
+
+.suggested-icon .dashicons {
+	width: 20px;
+	height: 20px;
+	font-size: 20px;
+}
+
+.suggested-meta h4 {
+	margin: 0;
+	font-size: 15px;
+	font-weight: 600;
+}
+
+.suggested-reason {
+	display: inline-block;
+	margin-top: 4px;
+	font-size: 12px;
+	color: #555;
+}
+
+.suggested-description {
+	margin: 0 0 12px 0;
+	color: #444;
+	font-size: 13px;
+	line-height: 1.5;
+}
+
+.suggested-card .button {
+	width: 100%;
 }
 
 /* Workflow Cards */
@@ -527,10 +670,58 @@ function get_action_summary( $workflow ) {
 <script>
 jQuery(document).ready(function($) {
 	const $exampleList = $('#example-list');
-	
-	if ($exampleList.length === 0) {
-		return;
-	}
+	const $suggestedButtons = $('.create-suggested-workflow');
+
+	$suggestedButtons.on('click', function(e) {
+		e.preventDefault();
+		const $btn = $(this);
+		if ($btn.prop('disabled')) {
+			return;
+		}
+
+		const $card = $btn.closest('.suggested-card');
+		const title = $btn.data('title');
+		const trigger = $card.data('trigger');
+		const actionsRaw = $card.data('actions');
+		let actions = [];
+		if (Array.isArray(actionsRaw)) {
+			actions = actionsRaw;
+		} else if (typeof actionsRaw === 'string') {
+			try {
+				const parsed = JSON.parse(actionsRaw);
+				if (Array.isArray(parsed)) {
+					actions = parsed;
+				}
+			} catch (e) {
+				actions = [];
+			}
+		}
+
+		const defaultLabel = $btn.data('label') || '<?php esc_html_e( 'Create from suggestion', 'wpshadow' ); ?>';
+		$btn.prop('disabled', true).text('<?php esc_html_e( 'Creating...', 'wpshadow' ); ?>');
+
+		$.post(ajaxurl, {
+			action: 'wpshadow_create_suggested_workflow',
+			nonce: wpshadowWorkflow.nonce,
+			title: title,
+			trigger: trigger,
+			actions: JSON.stringify(actions)
+		}, function(response) {
+			if (response.success) {
+				showNotice(response.data.message || '<?php esc_html_e( 'Workflow created successfully!', 'wpshadow' ); ?>', 'success');
+				setTimeout(function() {
+					window.location = response.data.redirect || window.location.href;
+				}, 800);
+			} else {
+				$btn.prop('disabled', false).text(defaultLabel);
+				const message = response.data && response.data.message ? response.data.message : '<?php esc_html_e( 'Could not create workflow', 'wpshadow' ); ?>';
+				showNotice(message, 'error');
+			}
+		}).fail(function() {
+			$btn.prop('disabled', false).text(defaultLabel);
+			showNotice('<?php esc_html_e( 'Network error. Please try again.', 'wpshadow' ); ?>', 'error');
+		});
+	});
 
 	/**
 	 * Load and render examples
@@ -670,6 +861,8 @@ jQuery(document).ready(function($) {
 	}
 
 	// Initial load
-	loadExamples();
+	if ($exampleList.length) {
+		loadExamples();
+	}
 });
 </script>

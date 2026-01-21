@@ -1,1 +1,7 @@
+# Development features (work in progress)
 /features/
+
+# Pro modules staging area
+# These are for development only and will move to wpshadow-pro repository
+# Uncomment to exclude from commits:
+# /pro-modules/
