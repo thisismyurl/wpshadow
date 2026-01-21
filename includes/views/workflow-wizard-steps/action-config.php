@@ -40,7 +40,7 @@ jQuery(document).ready(function($) {
 	const triggerId = '<?php echo esc_js( $trigger_id ); ?>';
 	const workflowId = '<?php echo esc_js( $workflow_id ); ?>';
 	const actionIndex = <?php echo $action_index; ?>;
-	const baseUrl = workflowId ? '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=edit' ) ); ?>&workflow=' + workflowId : '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>';
+	const baseUrl = workflowId ? '<?php echo esc_url_raw( admin_url( 'admin.php?page=wpshadow-workflows&action=edit' ) ); ?>&workflow=' + workflowId : '<?php echo esc_url_raw( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>';
 	
 	// Load actions from sessionStorage
 	if (!actions || actions.length === 0) {

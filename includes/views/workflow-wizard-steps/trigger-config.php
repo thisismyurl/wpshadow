@@ -314,7 +314,7 @@ jQuery(document).ready(function($) {
 		// Navigate to action selection - preserve workflow ID if editing
 		const triggerId = formData.trigger_id;
 		const workflowId = formData.workflow_id;
-		const baseUrl = workflowId ? '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=edit' ) ); ?>&workflow=' + workflowId : '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>';
+		const baseUrl = workflowId ? '<?php echo esc_url_raw( admin_url( 'admin.php?page=wpshadow-workflows&action=edit' ) ); ?>&workflow=' + workflowId : '<?php echo esc_url_raw( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>';
 		window.location.href = baseUrl + '&step=action&trigger=' + triggerId;
 	});
 });

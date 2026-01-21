@@ -21,18 +21,23 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-command-base.php
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-color-utils.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-theme-data-provider.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-activity-logger.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-activity-logger.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-error-handler.php';
+
+// Initialize error handler (#586 - enhance fatal error pages)
+\WPShadow\Core\Error_Handler::init();
 
 // AJAX handlers moved to classes (security centralized)
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-dismiss-finding-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-autofix-finding-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-save-tagline-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-consent-preferences-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-error-report-handler.php';
 
 \WPShadow\Admin\Ajax\Dismiss_Finding_Handler::register();
 \WPShadow\Admin\Ajax\Autofix_Finding_Handler::register();
 \WPShadow\Admin\Ajax\Save_Tagline_Handler::register();
 \WPShadow\Admin\Ajax\Consent_Preferences_Handler::register();
+\WPShadow\Admin\Ajax\Error_Report_Handler::register();
 
 // Show consent banner for admins (Phase 6: consent-first)
 add_action( 'admin_footer', function() {

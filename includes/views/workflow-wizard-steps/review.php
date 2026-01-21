@@ -199,7 +199,7 @@ if ( empty( $trigger_id ) ) {
 jQuery(document).ready(function($) {
 	const triggerId = '<?php echo esc_js( $trigger_id ); ?>';
 	const workflowId = '<?php echo esc_js( $workflow_id ); ?>';
-	const baseUrl = workflowId ? '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=edit' ) ); ?>&workflow=' + workflowId : '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>';
+	const baseUrl = workflowId ? '<?php echo esc_url_raw( admin_url( 'admin.php?page=wpshadow-workflows&action=edit' ) ); ?>&workflow=' + workflowId : '<?php echo esc_url_raw( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>';
 	
 	// Load workflow data from sessionStorage
 	const triggerConfig = JSON.parse(sessionStorage.getItem('workflow_trigger_config') || '{}');
