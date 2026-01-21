@@ -2105,11 +2105,15 @@ function wpshadow_render_dashboard() {
 			);
 			$cat_meta = $category_meta[ $filter_category ] ?? array( 'label' => ucfirst( $filter_category ), 'icon' => 'dashicons-admin-generic', 'color' => '#666' );
 		?>
-		<div style="margin-bottom: 20px;">
+		<div style="margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: #f0f0f0; border-radius: 4px; color: #333; transition: all 0.2s ease;" onmouseover="this.style.background='#e0e0e0'" onmouseout="this.style.background='#f0f0f0'">
 				<span class="dashicons dashicons-arrow-left-alt2" style="font-size: 16px;"></span>
 				<?php esc_html_e( 'Back to All Categories', 'wpshadow' ); ?>
 			</a>
+			<span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: <?php echo esc_attr( $cat_meta['color'] ); ?>; color: white; border-radius: 20px; font-size: 12px; font-weight: 600;">
+				<span class="dashicons" style="font-size: 14px; width: 14px; height: 14px;"></span>
+				<?php echo esc_html( __( 'Filtered', 'wpshadow' ) ); ?>
+			</span>
 		</div>
 		<h1 style="display: flex; align-items: center; gap: 12px;">
 			<span class="<?php echo esc_attr( $cat_meta['icon'] ); ?>" style="font-size: 32px; color: <?php echo esc_attr( $cat_meta['color'] ); ?>;"></span>
@@ -2683,10 +2687,18 @@ function wpshadow_render_dashboard() {
 		<!-- Recent Activity -->
 		<?php 
 		$activity = wpshadow_get_recent_activity();
+		
+		// Filter activity by category if in drill-down view (#564)
+		if ( ! empty( $filter_category ) && ! empty( $activity ) ) {
+			$activity = array_filter( $activity, function( $entry ) use ( $filter_category ) {
+				return isset( $entry['category'] ) && $entry['category'] === $filter_category;
+			} );
+		}
+		
 		if ( ! empty( $activity ) ) : 
 		?>
 		<div style="margin: 30px 0;">
-			<h2>Recent Activity</h2>
+			<h2><?php echo ! empty( $filter_category ) ? esc_html( sprintf( __( '%s Activity', 'wpshadow' ), $category_meta[ $filter_category ]['label'] ?? ucfirst( $filter_category ) ) ) : esc_html_e( 'Recent Activity', 'wpshadow' ); ?></h2>
 			<table class="wp-list-table widefat">
 				<thead>
 					<tr>
