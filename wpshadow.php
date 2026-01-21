@@ -23,6 +23,11 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-theme-data-provi
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-activity-logger.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-error-handler.php';
 
+// WP-CLI commands
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	require_once plugin_dir_path( __FILE__ ) . 'includes/cli/class-wpshadow-cli.php';
+}
+
 // Initialize error handler (#586 - enhance fatal error pages)
 \WPShadow\Core\Error_Handler::init();
 

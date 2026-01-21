@@ -44,6 +44,17 @@ class Activity_Logger {
 			'timestamp' => current_time( 'timestamp' ),
 			'date'      => current_time( 'mysql' ),
 		);
+
+		/**
+		 * Filter a log entry before it is persisted.
+		 *
+		 * @param array  $activity Activity payload.
+		 * @param string $action   Action key.
+		 * @param string $details  Description.
+		 * @param string $category Category slug.
+		 * @param array  $metadata Metadata array.
+		 */
+		$activity = apply_filters( 'wpshadow_activity_entry', $activity, $action, $details, $category, $metadata );
 		
 		// Get existing log
 		$log = get_option( self::OPTION_NAME, array() );
@@ -59,7 +70,16 @@ class Activity_Logger {
 			$log = array_slice( $log, 0, self::MAX_ACTIVITIES );
 		}
 		
-		return update_option( self::OPTION_NAME, $log );
+		$updated = update_option( self::OPTION_NAME, $log );
+
+		/**
+		 * Fires after an activity entry is stored.
+		 *
+		 * @param array $activity Activity payload.
+		 */
+		do_action( 'wpshadow_activity_logged', $activity );
+
+		return $updated;
 	}
 	
 	/**
