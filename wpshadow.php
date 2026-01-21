@@ -816,6 +816,16 @@ add_action( 'admin_menu', function() {
 			echo \WPShadow\Admin\Notification_Preferences_Form::render();
 		}
 	);
+
+	// Privacy & consent settings (Issue #566)
+	add_submenu_page(
+		'wpshadow',
+		__( 'Privacy & Consent', 'wpshadow' ),
+		__( 'Privacy & Consent', 'wpshadow' ),
+		'manage_options',
+		'wpshadow-privacy',
+		'wpshadow_render_privacy_page'
+	);
 } );
 
 
@@ -2039,6 +2049,17 @@ function wpshadow_render_activity_page() {
 
 	// Render activity history view
 	include WPSHADOW_PATH . 'includes/views/activity-history.php';
+}
+
+/**
+ * Render privacy & consent settings page (Issue #566)
+ */
+function wpshadow_render_privacy_page() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( 'Insufficient permissions.' );
+	}
+
+	include WPSHADOW_PATH . 'includes/views/privacy-consent.php';
 }
 
 /**
