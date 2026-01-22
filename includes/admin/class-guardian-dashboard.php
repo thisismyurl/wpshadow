@@ -33,34 +33,38 @@ class Guardian_Dashboard {
 	public static function render(): string {
 		ob_start();
 		?>
-		<div class="wpshadow-guardian-dashboard">
-			<!-- Header -->
-			<div class="guardian-header">
-				<h1><?php esc_html_e( 'WPShadow Guardian Dashboard', 'wpshadow' ); ?></h1>
-				<p class="subtitle"><?php esc_html_e( 'Automated health monitoring and intelligent fixes', 'wpshadow' ); ?></p>
+		<div style="padding: 0;">
+			<!-- Page Header -->
+			<div style="padding: 24px 0; margin-bottom: 24px;">
+				<h1 style="margin: 0 0 8px; font-size: 28px; color: #1d2327;">
+					<?php esc_html_e( 'WPShadow Guardian Dashboard', 'wpshadow' ); ?>
+				</h1>
+				<p style="margin: 0; color: #666; font-size: 15px;">
+					<?php esc_html_e( 'Automated health monitoring and intelligent fixes', 'wpshadow' ); ?>
+				</p>
 			</div>
-			
-			<!-- Status Row -->
-			<div class="guardian-status-row">
+
+			<!-- Status and Actions Bar -->
+			<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; gap: 16px;">
 				<?php echo wp_kses_post( self::render_status_badge() ); ?>
 				<?php echo wp_kses_post( self::render_quick_actions() ); ?>
 			</div>
-			
-			<!-- KPI Cards -->
-			<div class="guardian-kpi-cards">
+
+			<!-- KPI Cards Grid -->
+			<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px;">
 				<?php echo wp_kses_post( self::render_kpi_cards() ); ?>
 			</div>
-			
-			<!-- Main Content -->
-			<div class="guardian-main-content">
+
+			<!-- Main Content Grid -->
+			<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
 				<!-- Left Column: Activity & Stats -->
-				<div class="guardian-left-column">
+				<div>
 					<?php echo wp_kses_post( self::render_activity_timeline() ); ?>
 					<?php echo wp_kses_post( self::render_auto_fix_stats() ); ?>
 				</div>
-				
+
 				<!-- Right Column: Recovery & Health -->
-				<div class="guardian-right-column">
+				<div>
 					<?php echo wp_kses_post( self::render_recovery_widget() ); ?>
 					<?php echo wp_kses_post( self::render_system_health() ); ?>
 				</div>
@@ -78,12 +82,15 @@ class Guardian_Dashboard {
 	 */
 	private static function render_status_badge(): string {
 		$is_enabled = Guardian_Manager::is_enabled();
-		$status_class = $is_enabled ? 'status-enabled' : 'status-disabled';
 		$status_text = $is_enabled ? __( 'WPShadow Guardian Active', 'wpshadow' ) : __( 'WPShadow Guardian Inactive', 'wpshadow' );
-		$click_text = $is_enabled ? __( 'Click to disable', 'wpshadow' ) : __( 'Click to enable', 'wpshadow' );
+		$status_icon = $is_enabled ? 'dashicons-yes-alt' : 'dashicons-dismiss';
+		$status_color = $is_enabled ? '#10b981' : '#6b7280';
 		
 		return sprintf(
-			'<div class="guardian-status-badge %s" style="cursor: pointer;" onclick="wpshadowToggleGuardian()" title="%s"><span class="status-dot"></span>%s</div>
+			'<div style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #f3f4f6; border-radius: 8px; border: 1px solid #e5e7eb; cursor: pointer;" onclick="wpshadowToggleGuardian()" title="%s">
+				<span class="dashicons %s" style="font-size: 20px; width: 20px; height: 20px; color: %s;"></span>
+				<span style="font-weight: 600; color: #1f2937;">%s</span>
+			</div>
 			<script>
 			function wpshadowToggleGuardian() {
 				if (confirm("%s")) {
@@ -101,8 +108,9 @@ class Guardian_Dashboard {
 				}
 			}
 			</script>',
-			esc_attr( $status_class ),
-			esc_attr( $click_text ),
+			esc_attr( $is_enabled ? __( 'Click to disable Guardian', 'wpshadow' ) : __( 'Click to enable Guardian', 'wpshadow' ) ),
+			esc_attr( $status_icon ),
+			esc_attr( $status_color ),
 			esc_html( $status_text ),
 			esc_js( $is_enabled ? __( 'Are you sure you want to disable Guardian automated health monitoring?', 'wpshadow' ) : __( 'Enable Guardian to automatically monitor and fix issues?', 'wpshadow' ) ),
 			esc_js( wp_create_nonce( 'wpshadow_toggle_guardian' ) ),
@@ -116,15 +124,15 @@ class Guardian_Dashboard {
 	 * @return string HTML
 	 */
 	private static function render_quick_actions(): string {
-		$html = '<div class="guardian-quick-actions">';
+		$html = '<div style="display: flex; gap: 12px;">';
 		
 		$html .= sprintf(
-			'<button class="button" data-action="preview-fixes">%s</button>',
+			'<button class="wps-btn wps-btn-secondary" data-action="preview-fixes">%s</button>',
 			esc_html__( 'Preview Fixes', 'wpshadow' )
 		);
 		
 		$html .= sprintf(
-			'<a href="%s" class="button">%s</a>',
+			'<a href="%s" class="wps-btn wps-btn-secondary">%s</a>',
 			esc_url( admin_url( 'admin.php?page=wpshadow-guardian-settings' ) ),
 			esc_html__( 'Settings', 'wpshadow' )
 		);
@@ -146,41 +154,43 @@ class Guardian_Dashboard {
 			[
 				'label'  => __( 'Issues Found', 'wpshadow' ),
 				'value'  => $kpis['findings_detected'] ?? 0,
-				'icon'   => '🔍',
-				'color'  => 'warning',
+				'icon'   => 'dashicons-search',
+				'color'  => '#f59e0b',
 			],
 			[
 				'label'  => __( 'Issues Fixed', 'wpshadow' ),
 				'value'  => $kpis['issues_fixed'] ?? 0,
-				'icon'   => '✅',
-				'color'  => 'success',
+				'icon'   => 'dashicons-yes-alt',
+				'color'  => '#10b981',
 			],
 			[
 				'label'  => __( 'Time Saved', 'wpshadow' ),
 				'value'  => $kpis['time_saved_display'] ?? '0m',
-				'icon'   => '⏱️',
-				'color'  => 'info',
+				'icon'   => 'dashicons-clock',
+				'color'  => '#3b82f6',
 			],
 			[
 				'label'  => __( 'Value Generated', 'wpshadow' ),
 				'value'  => '$' . ( $kpis['labor_cost_avoided'] ?? 0 ),
-				'icon'   => '💰',
-				'color'  => 'success',
+				'icon'   => 'dashicons-chart-area',
+				'color'  => '#8b5cf6',
 			],
 		];
 		
 		$html = '';
 		foreach ( $cards as $card ) {
 			$html .= sprintf(
-				'<div class="guardian-kpi-card card-%s">
-					<div class="card-icon">%s</div>
-					<div class="card-content">
-						<div class="card-label">%s</div>
-						<div class="card-value">%s</div>
+				'<div class="wps-card">
+					<div class="wps-card-body" style="display: flex; align-items: center; gap: 16px;">
+						<span class="dashicons %s" style="font-size: 40px; width: 40px; height: 40px; color: %s;"></span>
+						<div>
+							<div style="font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">%s</div>
+							<div style="font-size: 24px; font-weight: 700; color: #1f2937; margin-top: 4px;">%s</div>
+						</div>
 					</div>
 				</div>',
+				esc_attr( $card['icon'] ),
 				esc_attr( $card['color'] ),
-				$card['icon'],
 				esc_html( $card['label'] ),
 				esc_html( (string) $card['value'] )
 			);
@@ -198,18 +208,22 @@ class Guardian_Dashboard {
 		$activities = Guardian_Activity_Logger::get_activity_log( 10 );
 		
 		if ( empty( $activities ) ) {
-			return '<div class="guardian-widget"><p>' . esc_html__( 'No recent activity', 'wpshadow' ) . '</p></div>';
+			return '<div class="wps-card"><div class="wps-card-body"><p style="margin: 0; color: #6b7280;">' . esc_html__( 'No recent activity', 'wpshadow' ) . '</p></div></div>';
 		}
 		
-		$html = '<div class="guardian-widget guardian-activity-timeline">
-			<h3>' . esc_html__( 'Recent Activity', 'wpshadow' ) . '</h3>
-			<div class="timeline">';
+		$html = '<div class="wps-card">
+			<div class="wps-card-header">
+				<h3 class="wps-card-title" style="margin: 0;">
+					<span class="dashicons dashicons-clock" style="margin-right: 8px;"></span>
+					' . esc_html__( 'Recent Activity', 'wpshadow' ) . '
+				</h3>
+			</div>
+			<div class="wps-card-body">
+				<div style="display: flex; flex-direction: column; gap: 16px;">';
 		
 		foreach ( $activities as $activity ) {
-			// Format activity description based on type
 			$action_text = self::format_activity_action( $activity );
 			
-			// Safely handle timestamp
 			$time_text = 'Unknown';
 			if ( ! empty( $activity['timestamp'] ) ) {
 				$timestamp = strtotime( $activity['timestamp'] );
@@ -219,19 +233,16 @@ class Guardian_Dashboard {
 			}
 			
 			$html .= sprintf(
-				'<div class="timeline-item">
-					<div class="timeline-dot"></div>
-					<div class="timeline-content">
-						<div class="timeline-action">%s</div>
-						<div class="timeline-time">%s</div>
-					</div>
+				'<div style="padding-bottom: 12px; border-bottom: 1px solid #e5e7eb;">
+					<div style="font-weight: 500; color: #1f2937;">%s</div>
+					<div style="font-size: 12px; color: #6b7280; margin-top: 4px;">%s</div>
 				</div>',
 				esc_html( $action_text ),
 				esc_html( $time_text )
 			);
 		}
 		
-		$html .= '</div></div>';
+		$html .= '</div></div></div>';
 		
 		return $html;
 	}
@@ -287,9 +298,15 @@ class Guardian_Dashboard {
 	private static function render_auto_fix_stats(): string {
 		$stats = Auto_Fix_Executor::get_statistics();
 		
-		$html = '<div class="guardian-widget guardian-auto-fix-stats">
-			<h3>' . esc_html__( 'Auto-Fix Statistics', 'wpshadow' ) . '</h3>
-			<div class="stats-grid">';
+		$html = '<div class="wps-card" style="margin-top: 16px;">
+			<div class="wps-card-header">
+				<h3 class="wps-card-title" style="margin: 0;">
+					<span class="dashicons dashicons-chart-bar" style="margin-right: 8px;"></span>
+					' . esc_html__( 'Auto-Fix Statistics', 'wpshadow' ) . '
+				</h3>
+			</div>
+			<div class="wps-card-body">
+				<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">';
 		
 		$stat_items = [
 			__( 'Executions', 'wpshadow' ) => $stats['total_executions'] ?? 0,
@@ -300,16 +317,16 @@ class Guardian_Dashboard {
 		
 		foreach ( $stat_items as $label => $value ) {
 			$html .= sprintf(
-				'<div class="stat-item">
-					<div class="stat-label">%s</div>
-					<div class="stat-value">%s</div>
+				'<div>
+					<div style="font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">%s</div>
+					<div style="font-size: 18px; font-weight: 700; color: #1f2937; margin-top: 4px;">%s</div>
 				</div>',
 				esc_html( $label ),
 				esc_html( (string) $value )
 			);
 		}
 		
-		$html .= '</div></div>';
+		$html .= '</div></div></div>';
 		
 		return $html;
 	}
@@ -322,22 +339,28 @@ class Guardian_Dashboard {
 	private static function render_recovery_widget(): string {
 		$recovery_points = Recovery_System::get_recovery_points( 5 );
 		
-		$html = '<div class="guardian-widget guardian-recovery-widget">
-			<h3>' . esc_html__( 'Recovery Points', 'wpshadow' ) . '</h3>';
+		$html = '<div class="wps-card">
+			<div class="wps-card-header">
+				<h3 class="wps-card-title" style="margin: 0;">
+					<span class="dashicons dashicons-backup" style="margin-right: 8px;"></span>
+					' . esc_html__( 'Recovery Points', 'wpshadow' ) . '
+				</h3>
+			</div>
+			<div class="wps-card-body">';
 		
 		if ( empty( $recovery_points ) ) {
-			$html .= '<p>' . esc_html__( 'No recovery points yet', 'wpshadow' ) . '</p>';
+			$html .= '<p style="margin: 0; color: #6b7280;">' . esc_html__( 'No recovery points yet', 'wpshadow' ) . '</p>';
 		} else {
-			$html .= '<div class="recovery-list">';
+			$html .= '<div style="display: flex; flex-direction: column; gap: 12px;">';
 			
 			foreach ( $recovery_points as $point ) {
 				$html .= sprintf(
-					'<div class="recovery-item">
-						<div class="recovery-info">
-							<div class="recovery-reason">%s</div>
-							<div class="recovery-time">%s</div>
+					'<div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f3f4f6; border-radius: 6px;">
+						<div>
+							<div style="font-weight: 500; color: #1f2937;">%s</div>
+							<div style="font-size: 12px; color: #6b7280; margin-top: 4px;">%s</div>
 						</div>
-						<button class="button button-small" data-recovery-id="%s" data-action="restore">
+						<button class="wps-btn wps-btn-secondary" data-recovery-id="%s" data-action="restore" style="padding: 4px 12px; font-size: 12px;">
 							%s
 						</button>
 					</div>',
@@ -351,7 +374,7 @@ class Guardian_Dashboard {
 			$html .= '</div>';
 		}
 		
-		$html .= '</div>';
+		$html .= '</div></div>';
 		
 		return $html;
 	}

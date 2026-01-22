@@ -590,6 +590,16 @@ add_action( 'admin_menu', function() {
 		'wpshadow_render_settings'
 	);
 
+	// Tools (Utilities & Features)
+	add_submenu_page(
+		'wpshadow',
+		__( 'Tools', 'wpshadow' ),
+		__( 'Tools', 'wpshadow' ),
+		'read',
+		'wpshadow-tools',
+		'wpshadow_render_tools'
+	);
+
 	// Help & Documentation
 	add_submenu_page(
 		'wpshadow',
@@ -1427,7 +1437,223 @@ function wpshadow_render_workflow_builder() {
  * Returned structure is reused for both the WPShadow Tools page and the core Tools page mirror.
  */
 
-// Tools catalog and rendering moved to class-tools-page-module.php
+/**
+ * Render WPShadow Tools page
+ */
+function wpshadow_render_tools() {
+	if ( ! current_user_can( 'read' ) ) {
+		wp_die( 'Insufficient permissions.' );
+	}
+
+	// Define all available tools
+	$tools = array(
+		array(
+			'id'          => 'email-test',
+			'title'       => __( 'Email Test', 'wpshadow' ),
+			'description' => __( 'Test email delivery and configuration including From Name/Email settings', 'wpshadow' ),
+			'icon'        => 'dashicons-email',
+			'category'    => 'communication',
+			'capability'  => 'manage_options',
+		),
+		array(
+			'id'          => 'broken-links',
+			'title'       => __( 'Broken Links', 'wpshadow' ),
+			'description' => __( 'Scan your site for broken internal and external links', 'wpshadow' ),
+			'icon'        => 'dashicons-admin-links',
+			'category'    => 'monitoring',
+			'capability'  => 'read',
+		),
+		array(
+			'id'          => 'color-contrast',
+			'title'       => __( 'Color Contrast Checker', 'wpshadow' ),
+			'description' => __( 'Check color contrast ratios for accessibility compliance (WCAG)', 'wpshadow' ),
+			'icon'        => 'dashicons-art',
+			'category'    => 'accessibility',
+			'capability'  => 'read',
+		),
+		array(
+			'id'          => 'a11y-audit',
+			'title'       => __( 'Accessibility Audit', 'wpshadow' ),
+			'description' => __( 'Comprehensive accessibility audit of your site', 'wpshadow' ),
+			'icon'        => 'dashicons-universal-access',
+			'category'    => 'accessibility',
+			'capability'  => 'read',
+		),
+		array(
+			'id'          => 'mobile-friendliness',
+			'title'       => __( 'Mobile Friendliness', 'wpshadow' ),
+			'description' => __( 'Test how mobile-friendly your site is', 'wpshadow' ),
+			'icon'        => 'dashicons-smartphone',
+			'category'    => 'performance',
+			'capability'  => 'read',
+		),
+		array(
+			'id'          => 'dark-mode',
+			'title'       => __( 'Dark Mode Tester', 'wpshadow' ),
+			'description' => __( 'Test your site in dark mode and check compatibility', 'wpshadow' ),
+			'icon'        => 'dashicons-visibility',
+			'category'    => 'design',
+			'capability'  => 'read',
+		),
+		array(
+			'id'          => 'timezone-alignment',
+			'title'       => __( 'Timezone Alignment', 'wpshadow' ),
+			'description' => __( 'Check and align timezone settings across WordPress, PHP, and database', 'wpshadow' ),
+			'icon'        => 'dashicons-clock',
+			'category'    => 'configuration',
+			'capability'  => 'manage_options',
+		),
+		array(
+			'id'          => 'simple-cache',
+			'title'       => __( 'Simple Cache Manager', 'wpshadow' ),
+			'description' => __( 'Manage WordPress object cache, transients, and page cache', 'wpshadow' ),
+			'icon'        => 'dashicons-database',
+			'category'    => 'performance',
+			'capability'  => 'manage_options',
+		),
+		array(
+			'id'          => 'customization-audit',
+			'title'       => __( 'Customization Audit', 'wpshadow' ),
+			'description' => __( 'Review theme customizations and custom code', 'wpshadow' ),
+			'icon'        => 'dashicons-admin-appearance',
+			'category'    => 'development',
+			'capability'  => 'read',
+		),
+		array(
+			'id'          => 'tips-coach',
+			'title'       => __( 'Tips & Coach', 'wpshadow' ),
+			'description' => __( 'Get personalized tips and guidance for improving your site', 'wpshadow' ),
+			'icon'        => 'dashicons-lightbulb',
+			'category'    => 'education',
+			'capability'  => 'read',
+		),
+		array(
+			'id'          => 'magic-link-support',
+			'title'       => __( 'Magic Link Support', 'wpshadow' ),
+			'description' => __( 'Generate secure magic links for temporary admin access', 'wpshadow' ),
+			'icon'        => 'dashicons-admin-network',
+			'category'    => 'support',
+			'capability'  => 'manage_options',
+		),
+	);
+
+	// Filter tools by user capability
+	$available_tools = array_filter( $tools, function( $tool ) {
+		return current_user_can( $tool['capability'] );
+	});
+
+	// Group tools by category
+	$categories = array(
+		'communication'  => __( 'Communication', 'wpshadow' ),
+		'monitoring'     => __( 'Monitoring', 'wpshadow' ),
+		'accessibility'  => __( 'Accessibility', 'wpshadow' ),
+		'performance'    => __( 'Performance', 'wpshadow' ),
+		'design'         => __( 'Design', 'wpshadow' ),
+		'configuration'  => __( 'Configuration', 'wpshadow' ),
+		'development'    => __( 'Development', 'wpshadow' ),
+		'education'      => __( 'Education', 'wpshadow' ),
+		'support'        => __( 'Support', 'wpshadow' ),
+	);
+
+	?>
+	<div class="wrap wpshadow-tools-page">
+		<h1><?php esc_html_e( 'WPShadow Tools', 'wpshadow' ); ?></h1>
+		<p class="description">
+			<?php esc_html_e( 'Powerful utilities to help you manage, optimize, and troubleshoot your WordPress site.', 'wpshadow' ); ?>
+		</p>
+
+		<?php foreach ( $categories as $category_key => $category_name ) : ?>
+			<?php
+			$category_tools = array_filter( $available_tools, function( $tool ) use ( $category_key ) {
+				return $tool['category'] === $category_key;
+			});
+
+			if ( empty( $category_tools ) ) {
+				continue;
+			}
+			?>
+
+			<h2><?php echo esc_html( $category_name ); ?></h2>
+			<div class="wpshadow-tools-grid">
+				<?php foreach ( $category_tools as $tool ) : ?>
+					<div class="wpshadow-tool-card">
+						<div class="wpshadow-tool-card-header">
+							<span class="dashicons <?php echo esc_attr( $tool['icon'] ); ?>"></span>
+							<h3><?php echo esc_html( $tool['title'] ); ?></h3>
+						</div>
+						<p class="wpshadow-tool-description">
+							<?php echo esc_html( $tool['description'] ); ?>
+						</p>
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-tools&tool=' . $tool['id'] ) ); ?>" class="button button-primary">
+							<?php esc_html_e( 'Launch Tool', 'wpshadow' ); ?>
+						</a>
+					</div>
+				<?php endforeach; ?>
+			</div>
+		<?php endforeach; ?>
+
+		<style>
+		.wpshadow-tools-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+			gap: 20px;
+			margin: 20px 0 40px;
+		}
+		.wpshadow-tool-card {
+			background: #fff;
+			border: 1px solid #ddd;
+			border-radius: 4px;
+			padding: 20px;
+			transition: box-shadow 0.2s;
+		}
+		.wpshadow-tool-card:hover {
+			box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+		}
+		.wpshadow-tool-card-header {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			margin-bottom: 12px;
+		}
+		.wpshadow-tool-card-header .dashicons {
+			font-size: 24px;
+			width: 24px;
+			height: 24px;
+			color: #2271b1;
+		}
+		.wpshadow-tool-card-header h3 {
+			margin: 0;
+			font-size: 16px;
+		}
+		.wpshadow-tool-description {
+			color: #666;
+			font-size: 13px;
+			margin: 0 0 15px;
+			line-height: 1.5;
+		}
+		</style>
+	</div>
+	<?php
+
+	// Check if a specific tool is requested
+	$tool_id = isset( $_GET['tool'] ) ? sanitize_key( $_GET['tool'] ) : '';
+	if ( ! empty( $tool_id ) ) {
+		$tool_file = WPSHADOW_PATH . 'includes/views/tools/' . $tool_id . '.php';
+		if ( file_exists( $tool_file ) ) {
+			// Check capability for the specific tool
+			$tool_data = array_filter( $available_tools, function( $t ) use ( $tool_id ) {
+				return $t['id'] === $tool_id;
+			});
+			$tool_data = reset( $tool_data );
+
+			if ( $tool_data && current_user_can( $tool_data['capability'] ) ) {
+				echo '<div class="wpshadow-tool-content">';
+				include $tool_file;
+				echo '</div>';
+			}
+		}
+	}
+}
 
 /**
  * Render health diagnostic dashboard.
