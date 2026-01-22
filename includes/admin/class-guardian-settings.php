@@ -306,7 +306,7 @@ class Guardian_Settings {
 					<label for="notification_email">' . esc_html__( 'Notification Email', 'wpshadow' ) . '</label>
 				</th>
 				<td>
-					<input type="email" id="notification_email" name="notification_email" value="' . esc_attr( get_option( 'admin_email' ) ) . '" />
+					<input type="email" id="notification_email" name="notification_email" value="' . esc_attr( get_option( 'admin_email', '' ) ) . '" />
 						<p class="description">' . esc_html__( 'Email address to receive WPShadow Guardian notifications', 'wpshadow' ) . '</p>
 				</td>
 			</tr>

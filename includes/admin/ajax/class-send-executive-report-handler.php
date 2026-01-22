@@ -36,7 +36,7 @@ class Send_Executive_Report_Handler extends AJAX_Handler_Base {
 		self::verify_request( 'wpshadow_admin_nonce', 'manage_options' );
 		
 		// Get email parameter (optional, defaults to admin_email)
-		$email = self::get_post_param( 'email', 'email', get_option( 'admin_email' ), false );
+		$email = self::get_post_param( 'email', 'email', get_option( 'admin_email', '' ), false );
 		
 		// Send report
 		$result = KPI_Advanced_Features::send_executive_report( $email, 'monthly' );

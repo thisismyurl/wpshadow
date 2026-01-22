@@ -263,7 +263,15 @@ class KPI_Tracker {
 		// Calculate improvement
 		$improvement = $score_today - $score_30_days_ago;
 		$improvement_percentage = $score_30_days_ago > 0 ? round( ( $improvement / $score_30_days_ago ) * 100, 1 ) : 0;
-		$confidence_change = $improvement >= 0 ? '+' . $improvement . '%' : (string) $improvement . '%';
+		
+		// Ensure confidence_change is never empty or just '%'
+		if ( $improvement > 0 ) {
+			$confidence_change = '+' . $improvement . '%';
+		} elseif ( $improvement < 0 ) {
+			$confidence_change = $improvement . '%';
+		} else {
+			$confidence_change = '0%';
+		}
 		
 		return array(
 			'score_today'            => $score_today,

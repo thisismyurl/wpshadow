@@ -175,25 +175,25 @@ function wpshadow_render_health_gauges() : void {
 	<div style="display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap;">
 		<!-- Left: Large Overall Health Gauge + Scan Buttons -->
 		<div style="flex: 0 0 calc(280px); min-width: 280px;">
-			<div style="border: 2px solid <?php echo esc_attr( $overall_health['color'] ); ?>; border-radius: 12px; padding: 24px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.15); text-align: center;">
+			<div style="border: 2px solid <?php echo esc_attr( isset( $overall_health['color'] ) ? $overall_health['color'] : '#ccc' ); ?>; border-radius: 12px; padding: 24px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.15); text-align: center;">
 				<h3 style="margin: 0 0 16px 0; font-size: 20px; color: #333;"><?php esc_html_e( 'Overall Site Health', 'wpshadow' ); ?></h3>
 				
 				<svg width="200" height="200" viewBox="0 0 200 200" style="margin: 0 auto; display: block; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.2));">
 					<!-- Outer decorative circle -->
-					<circle cx="100" cy="100" r="95" fill="none" stroke="<?php echo esc_attr( $overall_health['color'] ); ?>" stroke-width="2" opacity="0.2" />
+					<circle cx="100" cy="100" r="95" fill="none" stroke="<?php echo esc_attr( isset( $overall_health['color'] ) ? $overall_health['color'] : '#ccc' ); ?>" stroke-width="2" opacity="0.2" />
 					<!-- Gauge background -->
 					<circle cx="100" cy="100" r="85" fill="none" stroke="#e0e0e0" stroke-width="16" />
 					<!-- Gauge progress -->
-					<circle cx="100" cy="100" r="85" fill="none" stroke="<?php echo esc_attr( $overall_health['color'] ); ?>" stroke-width="16"
-						stroke-dasharray="<?php echo (int) ( $overall_health['score'] / 100 * 534 ); ?> 534"
+					<circle cx="100" cy="100" r="85" fill="none" stroke="<?php echo esc_attr( isset( $overall_health['color'] ) ? $overall_health['color'] : '#ccc' ); ?>" stroke-width="16"
+						stroke-dasharray="<?php echo (int) ( ( isset( $overall_health['score'] ) ? $overall_health['score'] : 0 ) / 100 * 534 ); ?> 534"
 						stroke-linecap="round" transform="rotate(-90 100 100)"
 						style="transition: stroke-dasharray 0.5s ease;" />
 					<!-- Center text -->
-					<text x="100" y="95" text-anchor="middle" font-size="48" font-weight="bold" fill="<?php echo esc_attr( $overall_health['color'] ); ?>"><?php echo (int) $overall_health['score']; ?>%</text>
-					<text x="100" y="120" text-anchor="middle" font-size="16" fill="#666"><?php echo esc_html( $overall_health['status'] ); ?></text>
+					<text x="100" y="95" text-anchor="middle" font-size="48" font-weight="bold" fill="<?php echo esc_attr( isset( $overall_health['color'] ) ? $overall_health['color'] : '#ccc' ); ?>"><?php echo isset( $overall_health['score'] ) ? (int) $overall_health['score'] : 0; ?>%</text>
+					<text x="100" y="120" text-anchor="middle" font-size="16" fill="#666"><?php echo esc_html( isset( $overall_health['status'] ) && $overall_health['status'] ? $overall_health['status'] : 'Unknown' ); ?></text>
 				</svg>
 				
-				<p style="margin: 16px 0 0 0; font-size: 14px; color: #666; line-height: 1.5;"><?php echo esc_html( $overall_health['message'] ); ?></p>
+				<p style="margin: 16px 0 0 0; font-size: 14px; color: #666; line-height: 1.5;"><?php echo esc_html( isset( $overall_health['message'] ) && $overall_health['message'] ? $overall_health['message'] : '' ); ?></p>
 			</div>
 			
 		<!-- Quick Scan and Deep Scan Buttons -->
@@ -245,8 +245,8 @@ function wpshadow_render_health_gauges() : void {
 						$gauge_percent = 100 - $gauge_percent; // Invert: higher is better
 						$gauge_color = $get_threat_gauge_color( 100 - $gauge_percent );
 					?>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&category=' . $cat_key ) ); ?>" style="text-decoration: none; color: inherit;" title="<?php echo esc_attr( sprintf( __( 'Click to view %s details', 'wpshadow' ), $meta['label'] ) ); ?>">
-					<div class="wpshadow-category-gauge" data-category="<?php echo esc_attr( $cat_key ); ?>" style="display: flex; align-items: center; gap: 14px; border: 2px solid <?php echo esc_attr( $meta['color'] ); ?>; border-radius: 6px; padding: 12px 14px; background: #ffffff; transition: all 0.2s ease; cursor: pointer; height: 90px;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'; this.style.borderColor='<?php echo esc_js( $meta['color'] ); ?>';" onmouseout="this.style.boxShadow='none'; this.style.borderColor='<?php echo esc_js( $meta['color'] ); ?>';">
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&category=' . $cat_key ) ); ?>" style="text-decoration: none; color: inherit;" title="<?php echo esc_attr( sprintf( __( 'Click to view %s details', 'wpshadow' ), isset( $meta['label'] ) ? $meta['label'] : 'category' ) ); ?>">
+					<div class="wpshadow-category-gauge" data-category="<?php echo esc_attr( $cat_key ); ?>" style="display: flex; align-items: center; gap: 14px; border: 2px solid <?php echo esc_attr( isset( $meta['color'] ) ? $meta['color'] : '#ccc' ); ?>; border-radius: 6px; padding: 12px 14px; background: #ffffff; transition: all 0.2s ease; cursor: pointer; height: 90px;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'; this.style.borderColor='<?php echo esc_js( isset( $meta['color'] ) ? $meta['color'] : '#ccc' ); ?>';" onmouseout="this.style.boxShadow='none'; this.style.borderColor='<?php echo esc_js( isset( $meta['color'] ) ? $meta['color'] : '#ccc' ); ?>';">
 						<!-- Gauge on Left -->
 						<div style="flex-shrink: 0;">
 							<svg width="70" height="70" viewBox="0 0 100 100" style="filter: drop-shadow(0 1px 3px rgba(0,0,0,0.1));">
@@ -267,7 +267,7 @@ function wpshadow_render_health_gauges() : void {
 						<div style="flex: 1; min-width: 0;">
 								<!-- Title (icon removed) -->
 								<div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
-									<h4 style="margin: 0; font-size: 13px; color: <?php echo esc_attr( $meta['color'] ); ?>; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?php echo esc_html( $meta['label'] ); ?></h4>
+										<h4 style="margin: 0; font-size: 13px; color: <?php echo esc_attr( isset( $meta['color'] ) ? $meta['color'] : '#333' ); ?>; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?php echo esc_html( isset( $meta['label'] ) ? $meta['label'] : ucfirst( $cat_key ) ); ?></h4>
 								</div>
 								
 								<!-- Status -->

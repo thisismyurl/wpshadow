@@ -91,7 +91,7 @@ function wpshadow_format_time_with_tooltip( int $timestamp ) : string {
         $relative = sprintf( _n( '%d day ago', '%d days ago', $days, 'wpshadow' ), $days );
     }
 
-    $precise = wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $timestamp );
+    $precise = wp_date( get_option( 'date_format', 'Y-m-d' ) . ' ' . get_option( 'time_format', 'H:i:s' ), $timestamp );
 
     return sprintf(
         '<span title="%s">%s</span>',

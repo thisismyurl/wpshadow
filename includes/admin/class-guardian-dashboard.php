@@ -208,7 +208,15 @@ class Guardian_Dashboard {
 		foreach ( $activities as $activity ) {
 			// Format activity description based on type
 			$action_text = self::format_activity_action( $activity );
-			$time_text = isset( $activity['timestamp'] ) ? human_time_diff( strtotime( $activity['timestamp'] ), current_time( 'timestamp' ) ) . ' ago' : 'Unknown';
+			
+			// Safely handle timestamp
+			$time_text = 'Unknown';
+			if ( ! empty( $activity['timestamp'] ) ) {
+				$timestamp = strtotime( $activity['timestamp'] );
+				if ( $timestamp !== false ) {
+					$time_text = human_time_diff( $timestamp, current_time( 'timestamp' ) ) . ' ago';
+				}
+			}
 			
 			$html .= sprintf(
 				'<div class="timeline-item">
@@ -235,31 +243,35 @@ class Guardian_Dashboard {
 	 * @return string Formatted action text
 	 */
 	private static function format_activity_action( array $activity ): string {
+		if ( empty( $activity ) ) {
+			return __( 'Unknown activity', 'wpshadow' );
+		}
+		
 		$type = $activity['type'] ?? 'unknown';
 		
 		switch ( $type ) {
 			case 'health_check':
-				$findings = $activity['findings_total'] ?? 0;
-				$critical = $activity['critical_count'] ?? 0;
+				$findings = isset( $activity['findings_total'] ) ? (int) $activity['findings_total'] : 0;
+				$critical = isset( $activity['critical_count'] ) ? (int) $activity['critical_count'] : 0;
 				if ( $critical > 0 ) {
 					return sprintf( __( 'Health check: %d findings (%d critical)', 'wpshadow' ), $findings, $critical );
 				}
 				return sprintf( __( 'Health check: %d findings', 'wpshadow' ), $findings );
 				
 			case 'auto_fix':
-				$treatment = $activity['treatment'] ?? 'Unknown';
-				$success = $activity['success'] ?? false;
+				$treatment = ! empty( $activity['treatment'] ) ? $activity['treatment'] : __( 'Unknown', 'wpshadow' );
+				$success = ! empty( $activity['success'] );
 				if ( $success ) {
 					return sprintf( __( 'Auto-fixed: %s ✓', 'wpshadow' ), $treatment );
 				}
 				return sprintf( __( 'Auto-fix failed: %s', 'wpshadow' ), $treatment );
 				
 			case 'anomaly_detected':
-				$count = $activity['anomalies_count'] ?? 0;
+				$count = isset( $activity['anomalies_count'] ) ? (int) $activity['anomalies_count'] : 0;
 				return sprintf( __( 'Anomaly detected: %d issues', 'wpshadow' ), $count );
 				
 			case 'settings_changed':
-				$enabled = $activity['enabled'] ?? false;
+				$enabled = ! empty( $activity['enabled'] );
 				return $enabled ? __( 'Guardian enabled', 'wpshadow' ) : __( 'Guardian disabled', 'wpshadow' );
 				
 			default:

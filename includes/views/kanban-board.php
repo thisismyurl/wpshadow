@@ -57,6 +57,15 @@ foreach ( $all_findings as $finding ) {
 	$findings_by_status[ $status ][] = $finding;
 }
 
+// Sort DETECTED column by priority (threat_level DESC) and limit to 10 visible
+if ( ! empty( $findings_by_status['detected'] ) ) {
+	usort( $findings_by_status['detected'], function( $a, $b ) {
+		$threat_a = isset( $a['threat_level'] ) ? (int) $a['threat_level'] : 50;
+		$threat_b = isset( $b['threat_level'] ) ? (int) $b['threat_level'] : 50;
+		return $threat_b - $threat_a; // Descending order (highest priority first)
+	} );
+}
+
 $status_labels = array(
 	'detected'  => 'Detected',
 	'manual'    => 'User to Fix',
@@ -277,7 +286,14 @@ $severity_legend = array(
 							</div>
 						<?php endforeach; ?>
 					<?php else : // Regular findings columns ?>
-					<?php foreach ( $findings_by_status[ $status ] as $finding ) : 
+					<?php 
+					$findings = $findings_by_status[ $status ];
+					$total_findings = count( $findings );
+					foreach ( $findings as $idx => $finding ) :
+						// For DETECTED column, only show first 10 items
+						$is_hidden = ( $status === 'detected' && $idx >= 10 );
+						$hidden_class = $is_hidden ? ' wpshadow-hidden-finding' : '';
+					?> 
 						$threat_level = isset( $finding['threat_level'] ) ? $finding['threat_level'] : 50;
 						$threat_label = wpshadow_get_threat_label( $threat_level );
 						$threat_color = wpshadow_get_threat_gauge_color( $threat_level );
@@ -337,19 +353,20 @@ $severity_legend = array(
 							}
 						}
 					?>
-						<div class="finding-card" 
-							data-finding-id="<?php echo esc_attr( $finding['id'] ); ?>" 
-							draggable="true"
-							style="
-								background: <?php echo esc_attr( $card_bg ); ?>;
-								border: 1px solid <?php echo esc_attr( $card_border ); ?>;
-								border-left: 4px solid <?php echo esc_attr( $card_border ); ?>;
-								border-radius: 4px;
-								padding: 12px;
-								margin-bottom: 10px;
-								cursor: move;
-								transition: all 0.2s;
-								user-select: none;
+					<div class="finding-card<?php echo esc_attr( $hidden_class ); ?>" 
+						data-finding-id="<?php echo esc_attr( $finding['id'] ); ?>" 
+						draggable="true"
+						style="
+							background: <?php echo esc_attr( $card_bg ); ?>;
+							border: 1px solid <?php echo esc_attr( $card_border ); ?>;
+							border-left: 4px solid <?php echo esc_attr( $card_border ); ?>;
+							border-radius: 4px;
+							padding: 12px;
+							margin-bottom: 10px;
+							cursor: move;
+							transition: all 0.2s;
+							user-select: none;
+							<?php if ( $is_hidden ) echo 'display: none;'; ?>
 							"
 							onmouseover="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'"
 							onmouseout="this.style.boxShadow='none'"
@@ -472,6 +489,14 @@ $severity_legend = array(
 
 <script>
 jQuery(document).ready(function($) {
+	// Add CSS for hidden findings
+	$('<style>')
+		.text('.wpshadow-hidden-finding { display: none !important; }')
+		.appendTo('head');
+	
+	// Initialize column counts on page load
+	updateColumnCounts();
+	
 	// Drag and drop functionality
 	let draggedElement = null;
 
@@ -513,8 +538,21 @@ jQuery(document).ready(function($) {
 			}, function(response) {
 				if (response.success) {
 					// Move card to new column
+					const $oldColumn = $(draggedElement).closest('.kanban-column');
+					const oldStatus = $oldColumn.data('status');
+					
 					$(draggedElement).css('opacity', '1').detach();
 					$column.find('.kanban-column-content').append(draggedElement);
+					
+					// Auto-fill DETECTED column: show next hidden item if item was moved out
+					if (oldStatus === 'detected') {
+						const $detectedColumn = $('.kanban-column[data-status="detected"]');
+						const $hiddenItems = $detectedColumn.find('.wpshadow-hidden-finding');
+						if ($hiddenItems.length > 0) {
+							$hiddenItems.first().removeClass('wpshadow-hidden-finding').fadeIn(300);
+						}
+					}
+					
 					updateColumnCounts();
 				} else {
 					alert('Error: ' + (response.data.message || 'Could not update status'));
@@ -571,11 +609,27 @@ jQuery(document).ready(function($) {
 		alert('Finding details modal: ' + findingId); // TODO: Implement details modal
 	});
 
-	// Update column counts
+	// Update column counts (only count visible items)
 	function updateColumnCounts() {
 		$('.kanban-column').each(function() {
-			const count = $(this).find('.finding-card').length;
-			$(this).find('h3').find('span:last').text(count);
+			const $column = $(this);
+			const status = $column.data('status');
+			let count;
+			
+			if (status === 'detected') {
+				// For detected column, show visible count / total count
+				const visibleCount = $column.find('.finding-card:not(.wpshadow-hidden-finding)').length;
+				const totalCount = $column.find('.finding-card').length;
+				count = visibleCount;
+				if (totalCount > visibleCount) {
+					count = visibleCount + ' / ' + totalCount;
+				}
+			} else {
+				// Other columns show total count
+				count = $column.find('.finding-card').length;
+			}
+			
+			$column.find('h3').find('span:last').text(count);
 		});
 	}
 });

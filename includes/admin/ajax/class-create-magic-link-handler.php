@@ -53,7 +53,7 @@ class Create_Magic_Link_Handler extends AJAX_Handler_Base {
             'message'    => __( 'Magic link generated successfully.', 'wpshadow' ),
             'magic_link' => $magic_link_url,
             'token'      => $token,
-            'expires_at' => wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $expires_at ),
+            'expires_at' => wp_date( get_option( 'date_format', 'Y-m-d' ) . ' ' . get_option( 'time_format', 'H:i:s' ), $expires_at ),
         ) );
     }
 }

@@ -57,10 +57,10 @@ class KPI_Summary_Card {
 						<?php esc_html_e( '⏱️ Time Saved', 'wpshadow' ); ?>
 					</div>
 					<div style="font-size: 28px; font-weight: bold; margin-bottom: 4px;">
-						<?php echo esc_html( $kpis['time_saved_display'] ); ?>
+					<?php echo esc_html( isset( $kpis['time_saved_display'] ) && $kpis['time_saved_display'] ? $kpis['time_saved_display'] : '0m' ); ?>
 					</div>
 					<div style="font-size: 13px; opacity: 0.8;">
-						<?php echo esc_html( sprintf( __( 'That\'s %d hours of manual work avoided', 'wpshadow' ), $kpis['time_saved_hours'] ) ); ?>
+					<?php echo esc_html( sprintf( __( 'That\'s %d hours of manual work avoided', 'wpshadow' ), isset( $kpis['time_saved_hours'] ) ? (int) $kpis['time_saved_hours'] : 0 ) ); ?>
 					</div>
 				</div>
 				
@@ -70,7 +70,7 @@ class KPI_Summary_Card {
 						<?php esc_html_e( '🛡️ Issues Fixed', 'wpshadow' ); ?>
 					</div>
 					<div style="font-size: 28px; font-weight: bold; margin-bottom: 4px;">
-						<?php echo (int) $kpis['issues_fixed']; ?>
+					<?php echo isset( $kpis['issues_fixed'] ) ? (int) $kpis['issues_fixed'] : 0; ?>
 					</div>
 					<div style="font-size: 13px; opacity: 0.8;">
 						<?php echo esc_html( __( 'Problems you fixed or auto-fixed', 'wpshadow' ) ); ?>
@@ -83,7 +83,7 @@ class KPI_Summary_Card {
 						<?php esc_html_e( '🔒 Security Wins', 'wpshadow' ); ?>
 					</div>
 					<div style="font-size: 28px; font-weight: bold; margin-bottom: 4px;">
-						<?php echo (int) $kpis['security_improvements']; ?>
+					<?php echo isset( $kpis['security_improvements'] ) ? (int) $kpis['security_improvements'] : 0; ?>
 					</div>
 					<div style="font-size: 13px; opacity: 0.8;">
 						<?php echo esc_html( __( 'Vulnerabilities eliminated', 'wpshadow' ) ); ?>
@@ -96,7 +96,7 @@ class KPI_Summary_Card {
 						<?php esc_html_e( '📈 Health Trend', 'wpshadow' ); ?>
 					</div>
 					<div style="font-size: 28px; font-weight: bold; margin-bottom: 4px;">
-						<?php echo esc_html( $kpis['confidence_trend'] ); ?>
+					<?php echo esc_html( isset( $kpis['confidence_trend'] ) && $kpis['confidence_trend'] ? $kpis['confidence_trend'] : '0%' ); ?>
 					</div>
 					<div style="font-size: 13px; opacity: 0.8;">
 						<?php echo esc_html( __( 'Better than 30 days ago', 'wpshadow' ) ); ?>
@@ -114,7 +114,7 @@ class KPI_Summary_Card {
 						<?php esc_html_e( '💰 Labor Cost Avoided', 'wpshadow' ); ?>
 					</div>
 					<div style="font-size: 28px; font-weight: bold; margin-bottom: 4px;">
-						$<?php echo number_format( $kpis['labor_cost_avoided'] ); ?>
+					$<?php echo isset( $kpis['labor_cost_avoided'] ) ? number_format( (int) $kpis['labor_cost_avoided'] ) : '0'; ?>
 					</div>
 					<div style="font-size: 13px; opacity: 0.8;">
 						<?php echo esc_html( sprintf( __( '%d hours @ $50/hr', 'wpshadow' ), $kpis['time_saved_hours'] ) ); ?>
@@ -127,7 +127,7 @@ class KPI_Summary_Card {
 						<?php esc_html_e( '⚠️ Critical Risks Mitigated', 'wpshadow' ); ?>
 					</div>
 					<div style="font-size: 28px; font-weight: bold; margin-bottom: 4px;">
-						<?php echo (int) $kpis['critical_risks_mitigated']; ?>
+					<?php echo isset( $kpis['critical_risks_mitigated'] ) ? (int) $kpis['critical_risks_mitigated'] : 0; ?>
 					</div>
 					<div style="font-size: 13px; opacity: 0.8;">
 						<?php echo esc_html( __( 'High-severity vulnerabilities resolved', 'wpshadow' ) ); ?>
@@ -140,7 +140,7 @@ class KPI_Summary_Card {
 						<?php esc_html_e( '⚡ Performance Gains', 'wpshadow' ); ?>
 					</div>
 					<div style="font-size: 28px; font-weight: bold; margin-bottom: 4px;">
-						<?php echo (int) $kpis['performance_optimizations']; ?>
+					<?php echo isset( $kpis['performance_optimizations'] ) ? (int) $kpis['performance_optimizations'] : 0; ?>
 					</div>
 					<div style="font-size: 13px; opacity: 0.8;">
 						<?php echo esc_html( __( 'Optimizations implemented', 'wpshadow' ) ); ?>
@@ -153,7 +153,7 @@ class KPI_Summary_Card {
 						<?php esc_html_e( '📊 Health Score Growth', 'wpshadow' ); ?>
 					</div>
 					<div style="font-size: 28px; font-weight: bold; margin-bottom: 4px;">
-						<?php echo esc_html( $kpis['health_improvement'] ); ?>%
+						<?php echo esc_html( isset( $kpis['health_improvement'] ) ? $kpis['health_improvement'] : 0 ); ?>%
 					</div>
 					<div style="font-size: 13px; opacity: 0.8;">
 						<?php echo esc_html( sprintf( __( '%d → %d score in 30 days', 'wpshadow' ), $kpis['health_score_30_days_ago'], $kpis['health_score_today'] ) ); ?>

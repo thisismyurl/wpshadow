@@ -149,6 +149,10 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-toggle-aut
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-allow-all-autofixes-handler.php';
 \WPShadow\Admin\Ajax\Allow_All_Autofixes_Handler::register();
 
+// Toggle Guardian on/off
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-toggle-guardian-handler.php';
+\WPShadow\Admin\Ajax\Toggle_Guardian_Handler::register();
+
 
 // Change finding status in Kanban board.
 // Change finding status handler moved to class
@@ -461,13 +465,69 @@ add_action( 'admin_menu', function() {
 		'wpshadow_render_dashboard'
 	);
 
+	// Action Items (Kanban Board)
 	add_submenu_page(
 		'wpshadow',
-		'Workflow Manager',
-		'Workflow Manager',
+		__( 'Action Items', 'wpshadow' ),
+		__( 'Action Items', 'wpshadow' ),
+		'read',
+		'wpshadow-action-items',
+		'wpshadow_render_action_items'
+	);
+
+	// Guardian System submenu pages
+	add_submenu_page(
+		'wpshadow',
+		__( 'Guardian', 'wpshadow' ),
+		__( 'Guardian', 'wpshadow' ),
+		'manage_options',
+		'wpshadow-guardian',
+		function() {
+			echo \WPShadow\Admin\Guardian_Dashboard::render();
+		}
+	);
+
+	add_submenu_page(
+		'wpshadow',
+		'Workflows',
+		'Workflows',
 		'read',
 		'wpshadow-workflows',
 		'wpshadow_render_workflow_builder'
+	);
+
+	// Guardian Settings - hidden from submenu but accessible via direct URL
+	add_submenu_page(
+		null, // Hidden from menu
+		__( 'Guardian Settings', 'wpshadow' ),
+		__( 'Guardian Settings', 'wpshadow' ),
+		'manage_options',
+		'wpshadow-guardian-settings',
+		function() {
+			echo \WPShadow\Admin\Guardian_Settings::render();
+		}
+	);
+
+	add_submenu_page(
+		'wpshadow',
+		__( 'Generate Reports', 'wpshadow' ),
+		__( 'Generate Reports', 'wpshadow' ),
+		'manage_options',
+		'wpshadow-guardian-reports',
+		function() {
+			echo \WPShadow\Admin\Report_Form::render();
+		}
+	);
+
+	add_submenu_page(
+		'wpshadow',
+		__( 'Notifications', 'wpshadow' ),
+		__( 'Notifications', 'wpshadow' ),
+		'manage_options',
+		'wpshadow-guardian-notifications',
+		function() {
+			echo \WPShadow\Admin\Notification_Preferences_Form::render();
+		}
 	);
 
 	add_submenu_page(
@@ -486,64 +546,6 @@ add_action( 'admin_menu', function() {
 		'read',
 		'wpshadow-help',
 		'wpshadow_render_help'
-	);
-
-
-
-	// Guardian System submenu pages
-	add_submenu_page(
-		'wpshadow',
-		__( 'Guardian Dashboard', 'wpshadow' ),
-		__( 'Guardian Dashboard', 'wpshadow' ),
-		'manage_options',
-		'wpshadow-guardian',
-		function() {
-			echo \WPShadow\Admin\Guardian_Dashboard::render();
-		}
-	);
-
-	// Guardian Settings - hidden from submenu but accessible via direct URL
-	add_submenu_page(
-		null, // Hidden from menu
-		__( 'Guardian Settings', 'wpshadow' ),
-		__( 'Guardian Settings', 'wpshadow' ),
-		'manage_options',
-		'wpshadow-guardian-settings',
-		function() {
-			echo \WPShadow\Admin\Guardian_Settings::render();
-		}
-	);
-
-	add_submenu_page(
-		'wpshadow',
-		__( 'Reports', 'wpshadow' ),
-		__( 'Reports', 'wpshadow' ),
-		'manage_options',
-		'wpshadow-guardian-reports',
-		function() {
-			echo \WPShadow\Admin\Report_Form::render();
-		}
-	);
-
-	add_submenu_page(
-		'wpshadow',
-		__( 'Notification Settings', 'wpshadow' ),
-		__( 'Notification Settings', 'wpshadow' ),
-		'manage_options',
-		'wpshadow-guardian-notifications',
-		function() {
-			echo \WPShadow\Admin\Notification_Preferences_Form::render();
-		}
-	);
-
-	// Privacy & consent settings (Issue #566)
-	add_submenu_page(
-		'wpshadow',
-		__( 'Privacy & Consent', 'wpshadow' ),
-		__( 'Privacy & Consent', 'wpshadow' ),
-		'manage_options',
-		'wpshadow-privacy',
-		'wpshadow_render_privacy_page'
 	);
 } );
 
@@ -915,7 +917,7 @@ add_action( 'wpshadow_diagnostic_executed', function( $diagnostic_id, $result ) 
  * Enqueue Kanban board assets and gauges CSS.
  */
 add_action( 'admin_enqueue_scripts', function( $hook ) {
-	if ( strpos( $hook, 'wpshadow' ) === false ) {
+	if ( ! is_string( $hook ) || strpos( $hook, 'wpshadow' ) === false ) {
 		return;
 	}
 
@@ -978,7 +980,7 @@ add_action( 'admin_enqueue_scripts', function( $hook ) {
 	) );
 	
 	// Workflow list scripts
-	if ( $hook === 'toplevel_page_wpshadow' || strpos( $hook, 'wpshadow-workflows' ) !== false ) {
+	if ( is_string( $hook ) && ( $hook === 'toplevel_page_wpshadow' || strpos( $hook, 'wpshadow-workflows' ) !== false ) ) {
 		wp_enqueue_script(
 			'wpshadow-workflow-list',
 			WPSHADOW_URL . 'assets/js/workflow-list.js',
@@ -993,7 +995,7 @@ add_action( 'admin_enqueue_scripts', function( $hook ) {
 	}
 
 	// Guardian Dashboard and Settings assets (Phase 8)
-	if ( strpos( $hook, 'wpshadow-guardian' ) !== false ) {
+	if ( is_string( $hook ) && strpos( $hook, 'wpshadow-guardian' ) !== false ) {
 		wp_enqueue_style(
 			'wpshadow-guardian-dashboard-settings',
 			WPSHADOW_URL . 'assets/css/guardian-dashboard-settings.css',
@@ -1019,7 +1021,7 @@ add_action( 'admin_enqueue_scripts', function( $hook ) {
 
 // Enqueue assets for the Color Contrast Checker tool.
 add_action( 'admin_enqueue_scripts', function( $hook ) {
-	if ( strpos( $hook, 'wpshadow-tools' ) === false ) {
+	if ( ! is_string( $hook ) || strpos( $hook, 'wpshadow-tools' ) === false ) {
 		return;
 	}
 
@@ -1058,7 +1060,7 @@ add_action( 'admin_enqueue_scripts', function( $hook ) {
 
 // Enqueue assets for the Mobile Friendliness Checker tool.
 add_action( 'admin_enqueue_scripts', function( $hook ) {
-	if ( strpos( $hook, 'wpshadow-tools' ) === false ) {
+	if ( ! is_string( $hook ) || strpos( $hook, 'wpshadow-tools' ) === false ) {
 		return;
 	}
 
@@ -1097,7 +1099,7 @@ add_action( 'admin_enqueue_scripts', function( $hook ) {
  */
 add_action( 'admin_enqueue_scripts', function( $hook ) {
 	// Site Health page is 'site-health.php' or in Tools menu
-	if ( $hook !== 'site-health.php' && strpos( $hook, 'tools.php' ) === false ) {
+	if ( ! is_string( $hook ) || ( $hook !== 'site-health.php' && strpos( $hook, 'tools.php' ) === false ) ) {
 		return;
 	}
 
@@ -1207,7 +1209,7 @@ add_action( 'admin_enqueue_scripts', function() {
  * Enqueue dark mode CSS for WPShadow admin pages.
  */
 add_action( 'admin_enqueue_scripts', function( $hook ) {
-	if ( strpos( $hook, 'wpshadow' ) === false ) {
+	if ( ! is_string( $hook ) || strpos( $hook, 'wpshadow' ) === false ) {
 		return;
 	}
 
@@ -1380,6 +1382,15 @@ function wpshadow_render_dashboard() {
 				'monitoring' => array( 'label' => __( 'Monitoring', 'wpshadow' ), 'icon' => 'dashicons-chart-line', 'color' => '#059669' ),
 				'workflows' => array( 'label' => __( 'Workflows', 'wpshadow' ), 'icon' => 'dashicons-update', 'color' => '#ea580c' ),
 				'wordpress_health' => array( 'label' => __( 'WordPress Site Health', 'wpshadow' ), 'icon' => 'dashicons-wordpress-alt', 'color' => '#2d5016' ),
+				// Philosophy-driven trusted advisor categories (Phase 4+)
+				'developer_experience' => array( 'label' => __( 'Developer Experience', 'wpshadow' ), 'icon' => 'dashicons-code-alt', 'color' => '#0ea5e9' ),
+				'marketing_growth' => array( 'label' => __( 'Marketing & Growth', 'wpshadow' ), 'icon' => 'dashicons-trending-up', 'color' => '#f97316' ),
+				'customer_retention' => array( 'label' => __( 'Customer Retention', 'wpshadow' ), 'icon' => 'dashicons-smiley', 'color' => '#14b8a6' ),
+				'ai_readiness' => array( 'label' => __( 'AI Readiness', 'wpshadow' ), 'icon' => 'dashicons-lightbulb', 'color' => '#a855f7' ),
+				// Impact & Operations categories (Phase 4.5+)
+				'environment' => array( 'label' => __( 'Environment & Impact', 'wpshadow' ), 'icon' => 'dashicons-leaf', 'color' => '#10b981' ),
+				'users' => array( 'label' => __( 'Users & Team', 'wpshadow' ), 'icon' => 'dashicons-groups', 'color' => '#3b82f6' ),
+				'content_publishing' => array( 'label' => __( 'Content Publishing', 'wpshadow' ), 'icon' => 'dashicons-edit', 'color' => '#f59e0b' ),
 			);
 			$cat_meta = $category_meta[ $filter_category ] ?? array( 'label' => ucfirst( $filter_category ), 'icon' => 'dashicons-admin-generic', 'color' => '#666' );
 		?>
@@ -1407,7 +1418,7 @@ function wpshadow_render_dashboard() {
 			?>
 		</p>
 		<?php else : ?>
-		<h1><?php esc_html_e( 'WPShadow Site Health Diagnostic', 'wpshadow' ); ?></h1>
+		<h1><?php esc_html_e( 'WPShadow Site Health', 'wpshadow' ); ?></h1>
 		<?php endif; ?>
 
 		<script>
@@ -1768,6 +1779,50 @@ function wpshadow_render_dashboard() {
 				'color' => '#2d5016',
 				'bg'    => '#f0f9f0',
 			),
+			// Philosophy-driven trusted advisor categories (Phase 4+)
+			'developer_experience' => array(
+				'label' => __( 'Developer Experience', 'wpshadow' ),
+				'icon'  => 'dashicons-code-alt',
+				'color' => '#0ea5e9',
+				'bg'    => '#e0f2fe',
+			),
+			'marketing_growth' => array(
+				'label' => __( 'Marketing & Growth', 'wpshadow' ),
+				'icon'  => 'dashicons-trending-up',
+				'color' => '#f97316',
+				'bg'    => '#ffedd5',
+			),
+			'customer_retention' => array(
+				'label' => __( 'Customer Retention', 'wpshadow' ),
+				'icon'  => 'dashicons-smiley',
+				'color' => '#14b8a6',
+				'bg'    => '#ccfbf1',
+			),
+			'ai_readiness' => array(
+				'label' => __( 'AI Readiness', 'wpshadow' ),
+				'icon'  => 'dashicons-lightbulb',
+				'color' => '#a855f7',
+				'bg'    => '#f3e8ff',
+			),
+			// Impact & Operations categories (Phase 4.5+)
+			'environment' => array(
+				'label' => __( 'Environment & Impact', 'wpshadow' ),
+				'icon'  => 'dashicons-leaf',
+				'color' => '#10b981',
+				'bg'    => '#d1fae5',
+			),
+			'users' => array(
+				'label' => __( 'Users & Team', 'wpshadow' ),
+				'icon'  => 'dashicons-groups',
+				'color' => '#3b82f6',
+				'bg'    => '#dbeafe',
+			),
+			'content_publishing' => array(
+				'label' => __( 'Content Publishing', 'wpshadow' ),
+				'icon'  => 'dashicons-edit',
+				'color' => '#f59e0b',
+				'bg'    => '#fef3c7',
+			),
 		);
 
 		// Calculate overall health score (or category-specific if filtering)
@@ -2012,11 +2067,18 @@ function wpshadow_render_dashboard() {
 											if ( $cat_key === 'wordpress_health' ) {
 												echo esc_html( __( 'WordPress native', 'wpshadow' ) );
 											} elseif ( isset( $total ) ) {
+												// Count total diagnostics in this category
+												$total_tests = wpshadow_count_diagnostics_by_category( $cat_key );
+												
 												if ( $total === 0 ) {
-													echo esc_html( __( 'No issues', 'wpshadow' ) );
+													echo esc_html( sprintf( __( 'No issues | %d tests', 'wpshadow' ), $total_tests ) );
 												} else {
-													// Show category finding counts (simpler display)
-													echo esc_html( sprintf( __( '%d issues found', 'wpshadow' ), $total ) );
+													// Show issues found | total tests available
+													echo esc_html( sprintf( 
+														_n( '%1$d issue | %2$d tests', '%1$d issues | %2$d tests', $total, 'wpshadow' ), 
+														$total, 
+														$total_tests 
+													) );
 												}
 											}
 											?>
@@ -2035,18 +2097,6 @@ function wpshadow_render_dashboard() {
 
 		<!-- KPI Summary Card (Phase 1) -->
 		<?php WPShadow\Core\KPI_Summary_Card::render(); ?>
-
-		<!-- Recommendation Engine Widget (Phase 1) -->
-		<?php WPShadow\Core\Recommendation_Engine::render_recommendation_widget(); ?>
-
-		<!-- Kanban Board for Organizing Findings -->
-		<?php 
-		// Pass category filter to Kanban board if present
-		if ( ! empty( $filter_category ) ) {
-			$_GET['kanban_category'] = $filter_category;
-		}
-		include WPSHADOW_PATH . 'includes/views/kanban-board.php'; 
-		?>
 
 		<!-- Trend Chart (Phase 1) -->
 		<?php WPShadow\Core\Trend_Chart::render_trend_chart(); ?>
@@ -2573,6 +2623,34 @@ function wpshadow_render_dashboard() {
 }
 
 /**
+ * Render Action Items (Kanban Board) page.
+ */
+function wpshadow_render_action_items() {
+	if ( ! current_user_can( 'read' ) ) {
+		wp_die( 'Insufficient permissions.' );
+	}
+
+	// Check if filtering by category
+	$filter_category = isset( $_GET['category'] ) ? sanitize_key( $_GET['category'] ) : '';
+	?>
+	<div class="wrap">
+		<h1><?php esc_html_e( 'Action Items', 'wpshadow' ); ?></h1>
+		<p style="font-size: 16px; color: #666; margin: 16px 0 24px 0;">
+			<?php esc_html_e( 'Organize and prioritize your site improvements. Drag items between columns to manage your workflow.', 'wpshadow' ); ?>
+		</p>
+
+		<?php 
+		// Pass category filter to Kanban board if present
+		if ( ! empty( $filter_category ) ) {
+			$_GET['kanban_category'] = $filter_category;
+		}
+		include WPSHADOW_PATH . 'includes/views/kanban-board.php'; 
+		?>
+	</div>
+	<?php
+}
+
+/**
  * Get site health status.
  */
 /**
@@ -2654,6 +2732,72 @@ function wpshadow_calculate_overall_health( $findings_by_category, $category_met
 		'bg'      => $bg,
 		'message' => $message,
 	);
+}
+
+/**
+ * Count total diagnostic test files by category.
+ * 
+ * Scans the diagnostics directory for test stub files matching the category.
+ * Used to show "X issues found | Y tests available" on dashboard gauges.
+ * 
+ * @param string $category Category slug (e.g., 'security', 'performance')
+ * @return int Number of diagnostic test files for this category
+ */
+function wpshadow_count_diagnostics_by_category( $category ) {
+	static $category_counts = null;
+	
+	// Cache the counts to avoid repeated file scans
+	if ( $category_counts === null ) {
+		$category_counts = array();
+		
+		// Scan diagnostics directory for all test files
+		$diagnostics_dir = WPSHADOW_PATH . 'includes/diagnostics/';
+		if ( is_dir( $diagnostics_dir ) ) {
+			$files = glob( $diagnostics_dir . 'class-diagnostic-*.php' );
+			
+			// Count files by category prefix
+			$category_prefixes = array(
+				'security' => array( 'sec-', 'security-' ),
+				'performance' => array( 'perf-', 'performance-' ),
+				'code_quality' => array( 'code-', 'quality-' ),
+				'seo' => array( 'seo-' ),
+				'design' => array( 'ux-', 'design-' ),
+				'settings' => array( 'settings-', 'config-' ),
+				'monitoring' => array( 'mon-', 'monitoring-' ),
+				'workflows' => array( 'workflow-', 'wf-' ),
+				'wordpress_health' => array( 'wp-', 'health-' ),
+				'developer_experience' => array( 'dx-', 'dev-' ),
+				'marketing_growth' => array( 'mkt-', 'marketing-', 'growth-' ),
+				'customer_retention' => array( 'retention-', 'customer-' ),
+				'ai_readiness' => array( 'ai-' ),
+				'environment' => array( 'env-', 'environment-' ),
+				'users' => array( 'users-', 'team-' ),
+				'content_publishing' => array( 'pub-', 'content-', 'publishing-' ),
+				'compliance' => array( 'comp-', 'compliance-', 'legal-' ),
+			);
+			
+			// Initialize all categories to 0
+			foreach ( array_keys( $category_prefixes ) as $cat ) {
+				$category_counts[ $cat ] = 0;
+			}
+			
+			// Count files by matching prefixes
+			foreach ( $files as $file ) {
+				$basename = basename( $file );
+				
+				foreach ( $category_prefixes as $cat => $prefixes ) {
+					foreach ( $prefixes as $prefix ) {
+						if ( strpos( $basename, 'class-diagnostic-' . $prefix ) === 0 ) {
+							$category_counts[ $cat ]++;
+							break 2; // Found match, move to next file
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	return isset( $category_counts[ $category ] ) ? $category_counts[ $category ] : 0;
 }
 
 /**

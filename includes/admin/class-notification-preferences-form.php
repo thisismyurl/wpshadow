@@ -74,7 +74,7 @@ class Notification_Preferences_Form {
 						</th>
 						<td>
 							<input type="email" id="notification_email" name="notification_email" 
-								value="<?php echo esc_attr( get_option( 'admin_email' ) ); ?>" />
+							value="<?php echo esc_attr( get_option( 'admin_email', '' ) ); ?>" />
 							<p class="description">
 								<?php esc_html_e( 'Primary email for notifications', 'wpshadow' ); ?>
 							</p>
@@ -205,7 +205,7 @@ class Notification_Preferences_Form {
 		
 		// Sample subscriptions
 		$subscriptions = [
-			['email' => get_option( 'admin_email' ), 'frequency' => 'weekly', 'status' => 'active'],
+			['email' => get_option( 'admin_email', '' ), 'frequency' => 'weekly', 'status' => 'active'],
 		];
 		
 		foreach ( $subscriptions as $sub ) {
