@@ -40,6 +40,26 @@ class Diagnostic_Test_Runner {
 		// System diagnostics
 		$results['disk-space']                 = self::test_disk_space();
 
+		// Security diagnostics (batch 2)
+		$results['ssl']                        = self::test_ssl();
+		$results['security-headers']           = self::test_security_headers();
+		$results['file-permissions']           = self::test_file_permissions();
+		$results['secret-keys']                = self::test_secret_keys();
+		$results['two-factor']                 = self::test_two_factor();
+		$results['login-protection']           = self::test_login_protection();
+		$results['malware-scan']               = self::test_malware_scan();
+		$results['vulnerable-plugins']         = self::test_vulnerable_plugins();
+
+		// Performance diagnostics (batch 3)
+		$results['page-speed']                 = self::test_page_speed();
+		$results['image-optimization']         = self::test_image_optimization();
+		$results['caching']                    = self::test_caching();
+		$results['database-optimization']      = self::test_database_optimization();
+		$results['memory-limit']               = self::test_memory_limit();
+		$results['slow-queries']               = self::test_slow_queries();
+		$results['render-blocking']            = self::test_render_blocking();
+		$results['font-optimization']          = self::test_font_optimization();
+
 		return $results;
 	}
 
@@ -408,6 +428,282 @@ class Diagnostic_Test_Runner {
 			return self::test_result(
 				$has_space_info,
 				$has_space_info ? 'Disk space monitoring working' : 'Disk space info missing',
+				microtime( true ) - $start_time,
+				$result
+			);
+
+		} catch ( \Exception $e ) {
+			return self::test_result( false, 'Exception: ' . $e->getMessage(), microtime( true ) - $start_time );
+		}
+	}
+
+	/**
+	 * Test: SSL Certificate
+	 *
+	 * Verifies SSL/HTTPS configuration and certificate validity.
+	 * Tests secure connection enforcement.
+	 */
+	private static function test_ssl(): array {
+		$start_time = microtime( true );
+
+		try {
+			$diagnostic_class = '\WPShadow\Diagnostics\Diagnostic_SSL';
+
+			if ( ! class_exists( $diagnostic_class ) ) {
+				return self::test_result( false, 'Diagnostic class not found', 0 );
+			}
+
+			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+
+			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
+				return self::test_result( false, 'Invalid result structure', microtime( true ) - $start_time );
+			}
+
+			$has_ssl_check = null === $result || ( isset( $result['title'] ) && strpos( strtolower( $result['title'] ), 'ssl' ) !== false );
+
+			return self::test_result(
+				$has_ssl_check,
+				$has_ssl_check ? 'SSL check completed' : 'SSL check incomplete',
+				microtime( true ) - $start_time,
+				$result
+			);
+
+		} catch ( \Exception $e ) {
+			return self::test_result( false, 'Exception: ' . $e->getMessage(), microtime( true ) - $start_time );
+		}
+	}
+
+	/**
+	 * Test: Security Headers
+	 *
+	 * Verifies security header implementation (CSP, HSTS, etc.).
+	 * Tests HTTP header analysis.
+	 */
+	private static function test_security_headers(): array {
+		$start_time = microtime( true );
+
+		try {
+			$diagnostic_class = '\WPShadow\Diagnostics\Diagnostic_Security_Headers';
+
+			if ( ! class_exists( $diagnostic_class ) ) {
+				return self::test_result( false, 'Diagnostic class not found', 0 );
+			}
+
+			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+
+			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
+				return self::test_result( false, 'Invalid result structure', microtime( true ) - $start_time );
+			}
+
+			return self::test_result(
+				true,
+				'Security headers check completed',
+				microtime( true ) - $start_time,
+				$result
+			);
+
+		} catch ( \Exception $e ) {
+			return self::test_result( false, 'Exception: ' . $e->getMessage(), microtime( true ) - $start_time );
+		}
+	}
+
+	/**
+	 * Test: File Permissions
+	 *
+	 * Verifies WordPress file and directory permissions.
+	 * Tests filesystem security.
+	 */
+	private static function test_file_permissions(): array {
+		$start_time = microtime( true );
+
+		try {
+			$diagnostic_class = '\WPShadow\Diagnostics\Diagnostic_File_Permissions';
+
+			if ( ! class_exists( $diagnostic_class ) ) {
+				return self::test_result( false, 'Diagnostic class not found', 0 );
+			}
+
+			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+
+			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
+				return self::test_result( false, 'Invalid result structure', microtime( true ) - $start_time );
+			}
+
+			return self::test_result(
+				true,
+				'File permissions check completed',
+				microtime( true ) - $start_time,
+				$result
+			);
+
+		} catch ( \Exception $e ) {
+			return self::test_result( false, 'Exception: ' . $e->getMessage(), microtime( true ) - $start_time );
+		}
+	}
+
+	/**
+	 * Test: Secret Keys
+	 *
+	 * Verifies WordPress secret keys and salts configuration.
+	 * Tests wp-config.php security constants.
+	 */
+	private static function test_secret_keys(): array {
+		$start_time = microtime( true );
+
+		try {
+			$diagnostic_class = '\WPShadow\Diagnostics\Diagnostic_Secret_Keys';
+
+			if ( ! class_exists( $diagnostic_class ) ) {
+				return self::test_result( false, 'Diagnostic class not found', 0 );
+			}
+
+			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+
+			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
+				return self::test_result( false, 'Invalid result structure', microtime( true ) - $start_time );
+			}
+
+			$has_key_validation = null === $result || ( isset( $result['description'] ) && strpos( strtolower( $result['description'] ), 'key' ) !== false );
+
+			return self::test_result(
+				$has_key_validation,
+				$has_key_validation ? 'Secret keys validated' : 'Key validation incomplete',
+				microtime( true ) - $start_time,
+				$result
+			);
+
+		} catch ( \Exception $e ) {
+			return self::test_result( false, 'Exception: ' . $e->getMessage(), microtime( true ) - $start_time );
+		}
+	}
+
+	/**
+	 * Test: Two-Factor Authentication
+	 *
+	 * Verifies 2FA implementation and usage.
+	 * Tests authentication security.
+	 */
+	private static function test_two_factor(): array {
+		$start_time = microtime( true );
+
+		try {
+			$diagnostic_class = '\WPShadow\Diagnostics\Diagnostic_Two_Factor';
+
+			if ( ! class_exists( $diagnostic_class ) ) {
+				return self::test_result( false, 'Diagnostic class not found', 0 );
+			}
+
+			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+
+			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
+				return self::test_result( false, 'Invalid result structure', microtime( true ) - $start_time );
+			}
+
+			return self::test_result(
+				true,
+				'2FA check completed',
+				microtime( true ) - $start_time,
+				$result
+			);
+
+		} catch ( \Exception $e ) {
+			return self::test_result( false, 'Exception: ' . $e->getMessage(), microtime( true ) - $start_time );
+		}
+	}
+
+	/**
+	 * Test: Login Protection
+	 *
+	 * Verifies login security measures (rate limiting, captcha, etc.).
+	 * Tests brute force protection.
+	 */
+	private static function test_login_protection(): array {
+		$start_time = microtime( true );
+
+		try {
+			$diagnostic_class = '\WPShadow\Diagnostics\Diagnostic_Login_Rate_Limiting';
+
+			if ( ! class_exists( $diagnostic_class ) ) {
+				return self::test_result( false, 'Diagnostic class not found', 0 );
+			}
+
+			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+
+			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
+				return self::test_result( false, 'Invalid result structure', microtime( true ) - $start_time );
+			}
+
+			return self::test_result(
+				true,
+				'Login protection check completed',
+				microtime( true ) - $start_time,
+				$result
+			);
+
+		} catch ( \Exception $e ) {
+			return self::test_result( false, 'Exception: ' . $e->getMessage(), microtime( true ) - $start_time );
+		}
+	}
+
+	/**
+	 * Test: Malware Scan
+	 *
+	 * Verifies malware detection and file scanning.
+	 * Tests security monitoring.
+	 */
+	private static function test_malware_scan(): array {
+		$start_time = microtime( true );
+
+		try {
+			$diagnostic_class = '\WPShadow\Diagnostics\Diagnostic_Malware_Scan';
+
+			if ( ! class_exists( $diagnostic_class ) ) {
+				return self::test_result( false, 'Diagnostic class not found', 0 );
+			}
+
+			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+
+			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
+				return self::test_result( false, 'Invalid result structure', microtime( true ) - $start_time );
+			}
+
+			return self::test_result(
+				true,
+				'Malware scan completed',
+				microtime( true ) - $start_time,
+				$result
+			);
+
+		} catch ( \Exception $e ) {
+			return self::test_result( false, 'Exception: ' . $e->getMessage(), microtime( true ) - $start_time );
+		}
+	}
+
+	/**
+	 * Test: Vulnerable Plugins
+	 *
+	 * Verifies detection of known vulnerable plugin versions.
+	 * Tests security update monitoring.
+	 */
+	private static function test_vulnerable_plugins(): array {
+		$start_time = microtime( true );
+
+		try {
+			$diagnostic_class = '\WPShadow\Diagnostics\Diagnostic_Known_Vulnerable_Plugin_Versions';
+
+			if ( ! class_exists( $diagnostic_class ) ) {
+				return self::test_result( false, 'Diagnostic class not found', 0 );
+			}
+
+			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+
+			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
+				return self::test_result( false, 'Invalid result structure', microtime( true ) - $start_time );
+			}
+
+			return self::test_result(
+				true,
+				'Vulnerable plugins check completed',
 				microtime( true ) - $start_time,
 				$result
 			);

@@ -42,11 +42,14 @@ class CSS_Analyzer {
 		}
 
 		$results = array(
-			'complex_count'    => 0,
-			'total_selectors'  => 0,
-			'files_scanned'    => 0,
-			'complex_examples' => array(),
-			'timestamp'        => time(),
+			'complex_count'       => 0,
+			'total_selectors'     => 0,
+			'files_scanned'       => 0,
+			'complex_examples'    => array(),
+			'css_variables_count' => 0,
+			'import_count'        => 0,
+			'animation_count'     => 0,
+			'timestamp'           => time(),
 		);
 
 		// Get CSS files to scan
@@ -59,8 +62,11 @@ class CSS_Analyzer {
 
 			$file_results = self::analyze_file( $file_path );
 
-			$results['complex_count']   += $file_results['complex_count'];
-			$results['total_selectors'] += $file_results['total_selectors'];
+			$results['complex_count']       += $file_results['complex_count'];
+			$results['total_selectors']     += $file_results['total_selectors'];
+			$results['css_variables_count'] += $file_results['css_variables_count'];
+			$results['import_count']        += $file_results['import_count'];
+			$results['animation_count']     += $file_results['animation_count'];
 			$results['files_scanned']++;
 
 			// Keep top 10 most complex examples
@@ -84,8 +90,11 @@ class CSS_Analyzer {
 		} );
 		$results['complex_examples'] = array_slice( $results['complex_examples'], 0, 10 );
 
-		// Store results in transients
+		// Store results in transients for diagnostics to consume
 		set_transient( 'wpshadow_complex_selector_count', $results['complex_count'], DAY_IN_SECONDS );
+		set_transient( 'wpshadow_css_custom_properties_count', $results['css_variables_count'], DAY_IN_SECONDS );
+		set_transient( 'wpshadow_css_import_count', $results['import_count'], DAY_IN_SECONDS );
+		set_transient( 'wpshadow_css_animation_count', $results['animation_count'], DAY_IN_SECONDS );
 		set_transient( 'wpshadow_css_analysis_details', $results, DAY_IN_SECONDS );
 
 		return $results;
@@ -204,12 +213,11 @@ class CSS_Analyzer {
 	/**
 	 * Analyze single CSS file
 	 *
-	 * Parses CSS and counts selector complexity.
-	 * Complexity = number of descendant combinators (spaces between selectors).
-	 *
-	 * Examples:
-	 * - ".header .nav" = 2 levels (OK)
-	 * - ".header .nav ul li a" = 5 levels (COMPLEX)
+	 * Parses CSS and collects metrics:
+	 * - Selector complexity (descendant combinators)
+	 * - CSS custom properties (--var-name)
+	 * - @import statements
+	 * - @keyframes animations
 	 *
 	 * @param string $file_path Full path to CSS file
 	 *
@@ -217,15 +225,32 @@ class CSS_Analyzer {
 	 */
 	private static function analyze_file( string $file_path ): array {
 		$results = array(
-			'complex_count'      => 0,
-			'total_selectors'    => 0,
-			'complex_selectors'  => array(),
+			'complex_count'        => 0,
+			'total_selectors'      => 0,
+			'complex_selectors'    => array(),
+			'css_variables_count'  => 0,
+			'import_count'         => 0,
+			'animation_count'      => 0,
 		);
 
 		$content = file_get_contents( $file_path );
 		if ( empty( $content ) ) {
 			return $results;
 		}
+
+		$original_content = $content;
+
+		// Count @import statements (before removing comments)
+		preg_match_all( '#@import\s+#i', $original_content, $import_matches );
+		$results['import_count'] = count( $import_matches[0] );
+
+		// Count @keyframes animations
+		preg_match_all( '#@keyframes\s+[\w-]+#i', $original_content, $animation_matches );
+		$results['animation_count'] = count( $animation_matches[0] );
+
+		// Count CSS custom properties (--variable-name)
+		preg_match_all( '#--[\w-]+\s*:#', $original_content, $css_var_matches );
+		$results['css_variables_count'] = count( array_unique( $css_var_matches[0] ) );
 
 		// Remove comments
 		$content = preg_replace( '#/\*.*?\*/#s', '', $content );
@@ -327,6 +352,9 @@ class CSS_Analyzer {
 	 */
 	public static function clear_cache(): void {
 		delete_transient( 'wpshadow_complex_selector_count' );
+		delete_transient( 'wpshadow_css_custom_properties_count' );
+		delete_transient( 'wpshadow_css_import_count' );
+		delete_transient( 'wpshadow_css_animation_count' );
 		delete_transient( 'wpshadow_css_analysis_details' );
 	}
 }

@@ -334,60 +334,12 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-schedule-o
 
 
 
-/**
- * Convert hex color to RGB array.
- *
- * @deprecated Use \WPShadow\Core\Color_Utils::hex_to_rgb() instead.
- */
-function wpshadow_hex_to_rgb( $hex ) {
-	return \WPShadow\Core\Color_Utils::hex_to_rgb( $hex );
-}
-
-/**
- * Calculate contrast ratio between two hex colors.
- *
- * @deprecated Use \WPShadow\Core\Color_Utils::contrast_ratio() instead.
- */
-function wpshadow_contrast_ratio( $fg_hex, $bg_hex ) {
-	return \WPShadow\Core\Color_Utils::contrast_ratio( $fg_hex, $bg_hex );
-}
-
-/**
- * Derive key theme color usages (text, links, buttons, headings).
- */
-/**
- * Get color context combinations for a11y testing.
- *
- * @deprecated Use \WPShadow\Core\Theme_Data_Provider::get_color_contexts() instead.
- */
-function wpshadow_get_theme_color_contexts() {
-	return \WPShadow\Core\Theme_Data_Provider::get_color_contexts();
-}
-
-/**
- * Return active theme palette colors.
- *
- * @deprecated Use \WPShadow\Core\Theme_Data_Provider::get_palette() instead.
- */
-function wpshadow_get_theme_palette_colors() {
-	return \WPShadow\Core\Theme_Data_Provider::get_palette();
-}
-
-/**
- * Get theme background color if defined.
- *
- * @deprecated Use \WPShadow\Core\Theme_Data_Provider::get_background_color() instead.
- */
-function wpshadow_get_theme_background_color() {
-	return \WPShadow\Core\Theme_Data_Provider::get_background_color();
-}
-
-// AJAX: Report theme palette contrast against the theme background.
-// Theme contrast handler will be migrated to class
-
-
-// AJAX: Accessibility audit scan
-// A11y scan handler will be migrated to class
+// Deprecated wrappers removed - use class methods directly:
+// - \WPShadow\Core\Color_Utils::hex_to_rgb()
+// - \WPShadow\Core\Color_Utils::contrast_ratio()
+// - \WPShadow\Core\Theme_Data_Provider::get_color_contexts()
+// - \WPShadow\Core\Theme_Data_Provider::get_palette()
+// - \WPShadow\Core\Theme_Data_Provider::get_background_color()
 
 // Clear site cache handler moved to class
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-clear-cache-handler.php';
