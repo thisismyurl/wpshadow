@@ -878,6 +878,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-live-chat-pe
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-ab-test-overhead-analyzer.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-block-rendering-performance-analyzer.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-bot-traffic-analyzer.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-browser-compatibility-analyzer.php';
 
 // Auto-Fix System (Priority 2)
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-auto-fix-policy-manager.php';
@@ -948,6 +949,7 @@ add_action( 'plugins_loaded', function() {
 	\WPShadow\Guardian\API_Latency_Analyzer::init();
 	\WPShadow\Guardian\Block_Rendering_Performance_Analyzer::init();
 	\WPShadow\Guardian\Bot_Traffic_Analyzer::init();
+	\WPShadow\Guardian\Browser_Compatibility_Analyzer::init();
 
 	// Register Guardian AJAX command handlers (Phase 8)
 	// Priority 1 handlers
