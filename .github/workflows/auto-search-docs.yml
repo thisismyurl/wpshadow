@@ -4,6 +4,10 @@ on:
   issues:
     types: [opened, edited]
 
+permissions:
+  contents: read
+  issues: write
+
 jobs:
   search_docs:
     # Only run on Clarification Question issues (has '[QUESTION]' in title or 'question'/'documentation' label)
