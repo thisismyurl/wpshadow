@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Design_DESIGN_AUTHOR_TEMPLATE_CONSISTENCY extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'design-author-template-consistency',
             'title' => __('Author Template Consistency', 'wpshadow'),
             'description' => __('Checks author pages inherit global styles.', 'wpshadow'),

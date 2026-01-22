@@ -13,10 +13,26 @@ use WPShadow\Core\Diagnostic_Base;
 
 class Diagnostic_SEO_Author_Sitemap_Disabled extends Diagnostic_Base {
     public static function check(): ?array {
+        // Count active authors
+        $author_count = count(get_users(array('who' => 'authors')));
+        
+        // Only flag if single author site
+        if ($author_count > 1) {
+            return null;
+        }
+        
+        // Check if Yoast SEO is active and has author sitemap disabled
+        if (is_plugin_active('wordpress-seo/wp-seo.php')) {
+            $options = get_option('wpseo_xml');
+            if (isset($options['disable_author_sitemap']) && $options['disable_author_sitemap']) {
+                return null; // Already disabled
+            }
+        }
+        
         return [
             'id' => 'seo-author-sitemap-disabled',
-            'title' => 'Disable Author Sitemap on Single-Author Sites',
-            'description' => 'Single-author sites should consider disabling author archive sitemaps to reduce low-value indexation.',
+            'title' => 'Consider Disabling Author Sitemap',
+            'description' => 'Single-author site detected. Consider disabling author archive sitemaps.',
             'severity' => 'low',
             'category' => 'seo',
             'kb_link' => 'https://wpshadow.com/kb/author-archives-seo/',

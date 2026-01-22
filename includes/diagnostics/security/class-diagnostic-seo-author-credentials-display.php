@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
 
 class Diagnostic_SEO_Author_Credentials_Display extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'seo-author-credentials-display',
             'title' => 'Author Credentials Visibility',
             'description' => 'Display author credentials, certifications, and professional background prominently on content.',

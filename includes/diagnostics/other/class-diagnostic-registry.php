@@ -53,6 +53,8 @@ class Diagnostic_Registry {
 		'Diagnostic_Maintenance',
 		'Diagnostic_Nav_ARIA',
 		'Diagnostic_Admin_Username',
+		'Diagnostic_Admin_Font_Bloat',
+		'Diagnostic_Admin_Theme_Assets',
 		'Diagnostic_Search_Indexing',
 		'Diagnostic_Admin_Email',
 		'Diagnostic_User_Notification_Email',

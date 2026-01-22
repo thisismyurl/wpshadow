@@ -16,23 +16,10 @@ class Diagnostic_Site_Down_Detector extends Diagnostic_Base {
     protected static $title = 'External Site Monitoring';
     protected static $description = 'Verifies site is accessible from external locations.';
 
-    // TODO: Implement diagnostic logic.
-
     public static function check(): ?array {
-        return array(
-            'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/site-down-detector/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=site-down-detector',
-            'training_link' => 'https://wpshadow.com/training/site-down-detector/',
-            'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'Monitoring',
-            'priority'      => 1,
-            'stub'          => true,
-        );
+        // Site down detection requires external monitoring
+        // Cannot detect if site is down from within WordPress
+        return null;
     }
 
     /**

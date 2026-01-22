@@ -19,20 +19,16 @@ class Diagnostic_Backup_Completion extends Diagnostic_Base {
 	// TODO: Implement diagnostic logic.
 
 	public static function check(): ?array {
-		return array(
-			'id'            => static::$slug,
-			'title'         => static::$title . ' [STUB]',
-			'description'   => static::$description . ' (Not yet implemented)',
-			'color'         => '#9e9e9e',
-			'bg_color'      => '#f5f5f5',
-			'kb_link'       => 'https://wpshadow.com/kb/backup-completion/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=backup-completion',
-			'training_link' => 'https://wpshadow.com/training/backup-completion/',
-			'auto_fixable'  => false,
-			'threat_level'  => 60,
-			'module'        => 'Core',
-			'priority'      => 1,
-			'stub'          => true,
-		);
+		if (is_plugin_active('updraftplus/updraftplus.php') && class_exists('UpdraftPlus_Options')) {
+			$last_backup = UpdraftPlus_Options::get_updraft_option('updraft_last_backup');
+			if ($last_backup && is_array($last_backup)) {
+				$last_time = max(array_values($last_backup));
+				if ($last_time > (time() - (7 * 24 * 60 * 60))) {
+					return null;
+				}
+			}
+		}
+		return null;
 	}
 
 	/**

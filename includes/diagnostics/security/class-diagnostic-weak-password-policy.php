@@ -52,23 +52,44 @@ class Diagnostic_Weak_Password_Policy extends Diagnostic_Base {
      * @return array|null Finding data or null if no issue
      */
     public static function check(): ?array {
-        // ⚠️ STUB IMPLEMENTATION - NOT PRODUCTION READY
-        // This is a placeholder for future development
+        // Check if password strength enforcement is active
+        $has_policy = false;
         
-        return array(
-            'id'           => static::$slug,
-            'title'        => static::$title . ' [STUB]',
-            'description'  => static::$description . ' (Not yet implemented)',
-            'color'        => '#9e9e9e',
-            'bg_color'     => '#f5f5f5',
-            'kb_link'      => 'https://wpshadow.com/kb/weak-passwords/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=weak-passwords',
-            'training_link' => 'https://wpshadow.com/training/weak-passwords/',
-            'auto_fixable' => false,
-            'threat_level' => 75,
-            'module'       => 'Guardian',
-            'priority'     => 2,
-            'stub'         => true,
+        // Check for common password policy plugins
+        $policy_plugins = array(
+            'password-policy-manager/password-policy-manager.php',
+            'force-strong-passwords/force-strong-passwords.php',
+            'wp-password-policy-manager/wp-password-policy-manager.php',
         );
+        
+        foreach ($policy_plugins as $plugin) {
+            if (is_plugin_active($plugin)) {
+                $has_policy = true;
+                break;
+            }
+        }
+        
+        // Check if WordPress application passwords are enabled (WP 5.6+)
+        $app_passwords_enabled = get_option('wp_application_passwords_enabled', true);
+        
+        // No password policy enforcement detected
+        if (!$has_policy) {
+            return array(
+                'id'           => static::$slug,
+                'title'        => static::$title,
+                'description'  => 'No password policy enforcement detected. Users can set weak passwords.',
+                'severity'     => 'medium',
+                'category'     => 'security',
+                'kb_link'      => 'https://wpshadow.com/kb/weak-passwords/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=weak-passwords',
+                'training_link' => 'https://wpshadow.com/training/weak-passwords/',
+                'auto_fixable' => false,
+                'threat_level' => 75,
+                'module'       => 'Guardian',
+                'priority'     => 2,
+            );
+        }
+        
+        return null;
     }
     
     /**

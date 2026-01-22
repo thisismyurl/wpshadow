@@ -16,22 +16,40 @@ class Diagnostic_GTM_Installed extends Diagnostic_Base {
     protected static $title = 'Google Tag Manager Installed?';
     protected static $description = 'Verifies GTM container is present and firing.';
 
-    // TODO: Implement diagnostic logic.
-
     public static function check(): ?array {
+        // Check for GTM plugins
+        $gtm_plugins = array(
+            'duracelltomi-google-tag-manager/duracelltomi-google-tag-manager-for-wordpress.php',
+            'google-site-kit/google-site-kit.php',
+        );
+        
+        foreach ($gtm_plugins as $plugin) {
+            if (is_plugin_active($plugin)) {
+                return null; // Pass - GTM plugin active
+            }
+        }
+        
+        // Check for GTM code in header (GTM-XXXXXXX format)
+        ob_start();
+        wp_head();
+        $header_content = ob_get_clean();
+        
+        if (preg_match('/GTM-[A-Z0-9]+/', $header_content)) {
+            return null; // Pass - GTM container detected
+        }
+        
         return array(
             'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
+            'title'         => static::$title,
+            'description'   => 'Google Tag Manager not detected.',
+            'color'         => '#ff9800',
+            'bg_color'      => '#fff3e0',
             'kb_link'       => 'https://wpshadow.com/kb/gtm-installed/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=gtm-installed',
             'training_link' => 'https://wpshadow.com/training/gtm-installed/',
             'auto_fixable'  => false,
             'threat_level'  => 60,
             'module'        => 'Marketing',
             'priority'      => 1,
-            'stub'          => true,
         );
     }
 

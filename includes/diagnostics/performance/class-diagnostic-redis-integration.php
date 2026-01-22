@@ -19,20 +19,29 @@ class Diagnostic_Redis_Integration extends Diagnostic_Base {
     // TODO: Implement diagnostic logic.
 
     public static function check(): ?array {
-        return array(
-            'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/redis-integration/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=redis-integration',
-            'training_link' => 'https://wpshadow.com/training/redis-integration/',
-            'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'Performance',
-            'priority'      => 1,
-            'stub'          => true,
-        );
+        if (!is_plugin_active('redis-cache/redis-cache.php')) {
+            return null;
+        }
+        if (class_exists('RedisObjectCache') && method_exists('RedisObjectCache', 'get_redis_status')) {
+            $status = RedisObjectCache::get_redis_status();
+            if ($status && isset($status['connected']) && $status['connected']) {
+                return null;
+            }
+            return array(
+                'id'            => static::$slug,
+                'title'         => static::$title,
+                'description'   => 'Redis plugin active but not connected.',
+                'color'         => '#f44336',
+                'bg_color'      => '#ffebee',
+                'kb_link'       => 'https://wpshadow.com/kb/redis-integration/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=redis-integration',
+                'training_link' => 'https://wpshadow.com/training/redis-integration/',
+                'auto_fixable'  => false,
+                'threat_level'  => 60,
+                'module'        => 'Performance',
+                'priority'      => 1,
+            );
+        }
+        return null;
     }
 
     /**

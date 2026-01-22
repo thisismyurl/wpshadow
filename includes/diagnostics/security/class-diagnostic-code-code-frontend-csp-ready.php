@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Code_CODE_FRONTEND_CSP_READY extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'code-frontend-csp-ready',
             'title' => __('CSP Inline Dependencies', 'wpshadow'),
             'description' => __('Flags unsafe-inline scripts/styles blocking CSP compliance.', 'wpshadow'),

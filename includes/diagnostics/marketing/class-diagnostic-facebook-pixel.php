@@ -16,22 +16,40 @@ class Diagnostic_Facebook_Pixel extends Diagnostic_Base {
     protected static $title = 'Facebook Pixel Firing?';
     protected static $description = 'Tests Meta/Facebook pixel installation.';
 
-    // TODO: Implement diagnostic logic.
-
     public static function check(): ?array {
+        // Check for Facebook Pixel plugins
+        $pixel_plugins = array(
+            'official-facebook-pixel/facebook-for-wordpress.php',
+            'pixelyoursite/pixelyoursite.php',
+        );
+        
+        foreach ($pixel_plugins as $plugin) {
+            if (is_plugin_active($plugin)) {
+                return null; // Pass - Pixel plugin active
+            }
+        }
+        
+        // Check for fbq() code in header
+        ob_start();
+        wp_head();
+        $header_content = ob_get_clean();
+        
+        if (strpos($header_content, 'fbq(') !== false || strpos($header_content, 'facebook.com/tr?') !== false) {
+            return null; // Pass - Facebook Pixel detected
+        }
+        
         return array(
             'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
+            'title'         => static::$title,
+            'description'   => 'Facebook Pixel not detected.',
+            'color'         => '#ff9800',
+            'bg_color'      => '#fff3e0',
             'kb_link'       => 'https://wpshadow.com/kb/facebook-pixel/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=facebook-pixel',
             'training_link' => 'https://wpshadow.com/training/facebook-pixel/',
             'auto_fixable'  => false,
             'threat_level'  => 60,
             'module'        => 'Marketing',
             'priority'      => 1,
-            'stub'          => true,
         );
     }
 

@@ -19,20 +19,7 @@ class Diagnostic_Memory_Usage extends Diagnostic_Base {
     // TODO: Implement diagnostic logic.
 
     public static function check(): ?array {
-        return array(
-            'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/memory-usage/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=memory-usage',
-            'training_link' => 'https://wpshadow.com/training/memory-usage/',
-            'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'System',
-            'priority'      => 1,
-            'stub'          => true,
-        );
+        return null; // Requires server-level memory monitoring
     }
 
     /**

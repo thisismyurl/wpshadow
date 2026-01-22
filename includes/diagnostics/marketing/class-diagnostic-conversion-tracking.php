@@ -16,23 +16,43 @@ class Diagnostic_Conversion_Tracking extends Diagnostic_Base {
     protected static $title = 'Conversion Tracking Working?';
     protected static $description = 'Tests if goal completions are tracked.';
 
-    // TODO: Implement diagnostic logic.
-
     public static function check(): ?array {
-        return array(
-            'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/conversion-tracking/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=conversion-tracking',
-            'training_link' => 'https://wpshadow.com/training/conversion-tracking/',
-            'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'Marketing',
-            'priority'      => 1,
-            'stub'          => true,
+        // Check if any conversion tracking is configured
+        // This is informational - checks for common conversion tracking patterns
+        ob_start();
+        wp_head();
+        $header_content = ob_get_clean();
+        
+        $conversion_patterns = array(
+            'gtag.*event.*conversion',
+            'fbq.*Purchase',
+            'AW-[0-9]+/[A-Za-z0-9_-]+', // Google Ads conversion label
         );
+        
+        foreach ($conversion_patterns as $pattern) {
+            if (preg_match('/' . $pattern . '/i', $header_content)) {
+                return null; // Pass - conversion tracking detected
+            }
+        }
+        
+        // Check if WooCommerce or EDD active (would typically have conversion tracking)
+        if (class_exists('WooCommerce') || class_exists('Easy_Digital_Downloads')) {
+            return array(
+                'id'            => static::$slug,
+                'title'         => static::$title,
+                'description'   => 'E-commerce active but no conversion tracking detected.',
+                'color'         => '#ff9800',
+                'bg_color'      => '#fff3e0',
+                'kb_link'       => 'https://wpshadow.com/kb/conversion-tracking/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=conversion-tracking',
+                'training_link' => 'https://wpshadow.com/training/conversion-tracking/',
+                'auto_fixable'  => false,
+                'threat_level'  => 60,
+                'module'        => 'Marketing',
+                'priority'      => 1,
+            );
+        }
+        
+        return null;
     }
 
     /**

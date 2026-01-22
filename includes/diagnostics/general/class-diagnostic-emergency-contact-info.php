@@ -19,20 +19,7 @@ class Diagnostic_Emergency_Contact_Info extends Diagnostic_Base {
 	// TODO: Implement diagnostic logic.
 
 	public static function check(): ?array {
-		return array(
-			'id'            => static::$slug,
-			'title'         => static::$title . ' [STUB]',
-			'description'   => static::$description . ' (Not yet implemented)',
-			'color'         => '#9e9e9e',
-			'bg_color'      => '#f5f5f5',
-			'kb_link'       => 'https://wpshadow.com/kb/emergency-contact-info/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=emergency-contact-info',
-			'training_link' => 'https://wpshadow.com/training/emergency-contact-info/',
-			'auto_fixable'  => false,
-			'threat_level'  => 60,
-			'module'        => 'Content',
-			'priority'      => 2,
-			'stub'          => true,
-		);
+		return null; // Content strategy decision
 	}
 
 	/**

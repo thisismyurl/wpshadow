@@ -16,22 +16,34 @@ class Diagnostic_Email_Capture extends Diagnostic_Base {
     protected static $title = 'Email Capture Forms Working?';
     protected static $description = 'Tests newsletter signup and lead magnets.';
 
-    // TODO: Implement diagnostic logic.
-
     public static function check(): ?array {
+        // Check for email capture/popup plugins
+        $email_plugins = array(
+            'mailchimp-for-wp/mailchimp-for-wp.php',
+            'optinmonster/optin-monster-wp-api.php',
+            'mailpoet/mailpoet.php',
+            'popup-maker/popup-maker.php',
+            'hustle/opt-in.php',
+        );
+        
+        foreach ($email_plugins as $plugin) {
+            if (is_plugin_active($plugin)) {
+                return null; // Pass - email capture plugin active
+            }
+        }
+        
         return array(
             'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
+            'title'         => static::$title,
+            'description'   => 'No email capture or popup plugin detected.',
+            'color'         => '#ff9800',
+            'bg_color'      => '#fff3e0',
             'kb_link'       => 'https://wpshadow.com/kb/email-capture/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=email-capture',
             'training_link' => 'https://wpshadow.com/training/email-capture/',
             'auto_fixable'  => false,
             'threat_level'  => 60,
             'module'        => 'Marketing',
-            'priority'      => 1,
-            'stub'          => true,
+            'priority'      => 2,
         );
     }
 

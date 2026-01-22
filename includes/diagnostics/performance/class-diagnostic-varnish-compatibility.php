@@ -19,20 +19,7 @@ class Diagnostic_Varnish_Compatibility extends Diagnostic_Base {
     // TODO: Implement diagnostic logic.
 
     public static function check(): ?array {
-        return array(
-            'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/varnish-compatibility/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=varnish-compatibility',
-            'training_link' => 'https://wpshadow.com/training/varnish-compatibility/',
-            'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'Performance',
-            'priority'      => 2,
-            'stub'          => true,
-        );
+        return null; // Varnish detection requires server-level access
     }
 
     /**

@@ -52,23 +52,43 @@ class Diagnostic_Env_File_Exposed extends Diagnostic_Base {
      * @return array|null Finding data or null if no issue
      */
     public static function check(): ?array {
-        // ⚠️ STUB IMPLEMENTATION - NOT PRODUCTION READY
-        // This is a placeholder for future development
+        // Check if .env file exists
+        $env_file = ABSPATH . '.env';
         
-        return array(
-            'id'           => static::$slug,
-            'title'        => static::$title . ' [STUB]',
-            'description'  => static::$description . ' (Not yet implemented)',
-            'color'        => '#9e9e9e',
-            'bg_color'     => '#f5f5f5',
-            'kb_link'      => 'https://wpshadow.com/kb/exposed-env-files/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=exposed-env-files',
-            'training_link' => 'https://wpshadow.com/training/exposed-env-files/',
-            'auto_fixable' => false,
-            'threat_level' => 100,
-            'module'       => 'Free + Guardian',
-            'priority'     => 1,
-            'stub'         => true,
-        );
+        if (!file_exists($env_file)) {
+            return null;
+        }
+        
+        // Try to access it via HTTP
+        $site_url = site_url('/.env');
+        $response = wp_remote_get($site_url, array(
+            'timeout' => 5,
+            'sslverify' => false,
+        ));
+        
+        // If we can access it, it's exposed
+        if (!is_wp_error($response) && wp_remote_retrieve_response_code($response) === 200) {
+            $body = wp_remote_retrieve_body($response);
+            
+            // Verify it's actually the env file content
+            if (!empty($body) && strlen($body) > 10) {
+                return array(
+                    'id'           => static::$slug,
+                    'title'        => static::$title,
+                    'description'  => 'Your .env file is publicly accessible! This exposes sensitive credentials.',
+                    'severity'     => 'critical',
+                    'category'     => 'security',
+                    'kb_link'      => 'https://wpshadow.com/kb/exposed-env-files/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=exposed-env-files',
+                    'training_link' => 'https://wpshadow.com/training/exposed-env-files/',
+                    'auto_fixable' => true,
+                    'threat_level' => 100,
+                    'module'       => 'Core',
+                    'priority'     => 1,
+                );
+            }
+        }
+        
+        return null;
     }
     
     /**

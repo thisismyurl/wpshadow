@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Code_CODE_SECURITY_WEAK_CRYPTO extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'code-security-weak-crypto',
             'title' => __('Weak Random/Crypto', 'wpshadow'),
             'description' => __('Detects rand() or weak random generation instead of wp_rand/wp_hash.', 'wpshadow'),

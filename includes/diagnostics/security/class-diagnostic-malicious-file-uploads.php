@@ -52,22 +52,56 @@ class Diagnostic_Malicious_File_Uploads extends Diagnostic_Base {
      * @return array|null Finding data or null if no issue
      */
     public static function check(): ?array {
-        // ⚠️ STUB IMPLEMENTATION - NOT PRODUCTION READY
-        // This is a placeholder for future development
+        $upload_dir = wp_upload_dir();
+        $suspicious_files = array();
+        
+        // Check uploads directory for PHP files (should never be there)
+        if (!is_dir($upload_dir['basedir'])) {
+            return null;
+        }
+        
+        $files = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($upload_dir['basedir']),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+        
+        $scan_count = 0;
+        foreach ($files as $file) {
+            if ($file->isFile()) {
+                // Limit scan to avoid timeouts
+                if (++$scan_count > 5000) {
+                    break;
+                }
+                
+                $ext = strtolower($file->getExtension());
+                
+                // PHP files in uploads = suspicious
+                if (in_array($ext, array('php', 'phtml', 'php3', 'php4', 'php5', 'phar'))) {
+                    $suspicious_files[] = str_replace($upload_dir['basedir'] . '/', '', $file->getPathname());
+                }
+            }
+        }
+        
+        if (empty($suspicious_files)) {
+            return null;
+        }
         
         return array(
             'id'           => static::$slug,
-            'title'        => static::$title . ' [STUB]',
-            'description'  => static::$description . ' (Not yet implemented)',
-            'color'        => '#9e9e9e',
-            'bg_color'     => '#f5f5f5',
+            'title'        => static::$title,
+            'description'  => sprintf(
+                'Found %d suspicious file(s) in uploads directory: %s',
+                count($suspicious_files),
+                implode(', ', array_slice($suspicious_files, 0, 5))
+            ),
+            'severity'     => 'critical',
+            'category'     => 'security',
             'kb_link'      => 'https://wpshadow.com/kb/malicious-uploads/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=malicious-uploads',
             'training_link' => 'https://wpshadow.com/training/malicious-uploads/',
             'auto_fixable' => false,
             'threat_level' => 100,
             'module'       => 'Guardian',
             'priority'     => 1,
-            'stub'         => true,
         );
     }
     

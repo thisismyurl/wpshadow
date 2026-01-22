@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Code_CODE_SECURITY_OPEN_REDIRECT extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'code-security-open-redirect',
             'title' => __('Open Redirect Risks', 'wpshadow'),
             'description' => __('Detects unvalidated redirect targets in functions/plugins.', 'wpshadow'),

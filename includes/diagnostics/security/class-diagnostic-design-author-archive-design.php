@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Design_AUTHOR_ARCHIVE_DESIGN extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'design-author-archive-design',
             'title' => __('Author Archive Design', 'wpshadow'),
             'description' => __('Checks author pages styled professionally.', 'wpshadow'),

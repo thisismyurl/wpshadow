@@ -19,19 +19,29 @@ class Diagnostic_Caching_Effectiveness extends Diagnostic_Base {
     // TODO: Implement diagnostic logic.
 
     public static function check(): ?array {
+        $cache_plugins = array(
+            'wp-rocket/wp-rocket.php',
+            'w3-total-cache/w3-total-cache.php',
+            'wp-super-cache/wp-super-cache.php',
+            'litespeed-cache/litespeed-cache.php',
+        );
+        foreach ($cache_plugins as $plugin) {
+            if (is_plugin_active($plugin)) {
+                return null;
+            }
+        }
         return array(
             'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
+            'title'         => static::$title,
+            'description'   => 'No caching plugin detected.',
+            'color'         => '#ff9800',
+            'bg_color'      => '#fff3e0',
             'kb_link'       => 'https://wpshadow.com/kb/caching-effectiveness/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=caching-effectiveness',
             'training_link' => 'https://wpshadow.com/training/caching-effectiveness/',
             'auto_fixable'  => false,
             'threat_level'  => 60,
             'module'        => 'Performance',
             'priority'      => 1,
-            'stub'          => true,
         );
     }
 

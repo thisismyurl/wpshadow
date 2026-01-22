@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Code_CODE_SECURITY_SENSITIVE_LOGGING extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'code-security-sensitive-logging',
             'title' => __('Sensitive Data Logged', 'wpshadow'),
             'description' => __('Detects tokens, keys, or PII in error logs.', 'wpshadow'),

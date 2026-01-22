@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Code_CODE_SECURITY_XSS_SINKS extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'code-security-xss-sinks',
             'title' => __('XSS Sinks in Localization', 'wpshadow'),
             'description' => __('Flags untrusted data in wp_localize_script arrays.', 'wpshadow'),

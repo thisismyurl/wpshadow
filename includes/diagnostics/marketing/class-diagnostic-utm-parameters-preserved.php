@@ -16,23 +16,55 @@ class Diagnostic_UTM_Parameters_Preserved extends Diagnostic_Base {
     protected static $title = 'UTM Parameters Tracked?';
     protected static $description = 'Verifies campaign tracking parameters work.';
 
-    // TODO: Implement diagnostic logic.
-
     public static function check(): ?array {
-        return array(
-            'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/utm-parameters-preserved/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=utm-parameters-preserved',
-            'training_link' => 'https://wpshadow.com/training/utm-parameters-preserved/',
-            'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'Marketing',
-            'priority'      => 1,
-            'stub'          => true,
+        // Check if UTM parameters are being captured/preserved
+        // This checks for plugins or custom code that handle UTMs
+        $utm_plugins = array(
+            'utm-dot-codes/utm-dot-codes.php',
+            'ga-google-analytics/ga-google-analytics.php',
         );
+        
+        foreach ($utm_plugins as $plugin) {
+            if (is_plugin_active($plugin)) {
+                return null; // Pass - UTM handling plugin active
+            }
+        }
+        
+        // Check if form plugins are active (they often handle UTMs)
+        $form_plugins = array(
+            'gravityforms/gravityforms.php',
+            'wpforms/wpforms.php',
+            'ninja-forms/ninja-forms.php',
+        );
+        
+        foreach ($form_plugins as $plugin) {
+            if (is_plugin_active($plugin)) {
+                return null; // Pass - form plugin likely handles UTMs
+            }
+        }
+        
+        // If marketing tools present, suggest UTM preservation
+        ob_start();
+        wp_head();
+        $header_content = ob_get_clean();
+        
+        if (preg_match('/G-[A-Z0-9]{10}/', $header_content) || preg_match('/GTM-[A-Z0-9]+/', $header_content)) {
+            return array(
+                'id'            => static::$slug,
+                'title'         => static::$title,
+                'description'   => 'Analytics tracking detected but no UTM parameter preservation found.',
+                'color'         => '#ff9800',
+                'bg_color'      => '#fff3e0',
+                'kb_link'       => 'https://wpshadow.com/kb/utm-parameters-preserved/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=utm-parameters-preserved',
+                'training_link' => 'https://wpshadow.com/training/utm-parameters-preserved/',
+                'auto_fixable'  => false,
+                'threat_level'  => 60,
+                'module'        => 'Marketing',
+                'priority'      => 2,
+            );
+        }
+        
+        return null;
     }
 
     /**

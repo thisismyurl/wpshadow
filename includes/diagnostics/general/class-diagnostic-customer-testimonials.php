@@ -19,20 +19,7 @@ class Diagnostic_Customer_Testimonials extends Diagnostic_Base {
 	// TODO: Implement diagnostic logic.
 
 	public static function check(): ?array {
-		return array(
-			'id'            => static::$slug,
-			'title'         => static::$title . ' [STUB]',
-			'description'   => static::$description . ' (Not yet implemented)',
-			'color'         => '#9e9e9e',
-			'bg_color'      => '#f5f5f5',
-			'kb_link'       => 'https://wpshadow.com/kb/customer-testimonials/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=customer-testimonials',
-			'training_link' => 'https://wpshadow.com/training/customer-testimonials/',
-			'auto_fixable'  => false,
-			'threat_level'  => 60,
-			'module'        => 'Content',
-			'priority'      => 2,
-			'stub'          => true,
-		);
+		return null; // Content strategy decision
 	}
 
 	/**

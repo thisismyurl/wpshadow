@@ -52,22 +52,58 @@ class Diagnostic_Unauthorized_Admin_Creation extends Diagnostic_Base {
      * @return array|null Finding data or null if no issue
      */
     public static function check(): ?array {
-        // ⚠️ STUB IMPLEMENTATION - NOT PRODUCTION READY
-        // This is a placeholder for future development
+        // Get baseline of admin/editor users
+        $baseline = get_option('wpshadow_admin_baseline', array());
+        
+        // Get current admin/editor users
+        $current_admins = get_users(array(
+            'role__in' => array('administrator', 'editor'),
+            'fields' => array('ID', 'user_login', 'user_email', 'user_registered')
+        ));
+        
+        $current_ids = wp_list_pluck($current_admins, 'ID');
+        
+        // First run - establish baseline
+        if (empty($baseline)) {
+            update_option('wpshadow_admin_baseline', $current_ids);
+            return null;
+        }
+        
+        // Check for new admin/editor accounts
+        $new_accounts = array_diff($current_ids, $baseline);
+        
+        if (empty($new_accounts)) {
+            return null;
+        }
+        
+        // Build details of new accounts
+        $details = array();
+        foreach ($new_accounts as $user_id) {
+            $user = get_userdata($user_id);
+            $details[] = sprintf(
+                '%s (%s) - Created: %s',
+                $user->user_login,
+                $user->user_email,
+                $user->user_registered
+            );
+        }
         
         return array(
             'id'           => static::$slug,
-            'title'        => static::$title . ' [STUB]',
-            'description'  => static::$description . ' (Not yet implemented)',
-            'color'        => '#9e9e9e',
-            'bg_color'     => '#f5f5f5',
+            'title'        => static::$title,
+            'description'  => sprintf(
+                '%d new admin/editor account(s) detected: %s',
+                count($new_accounts),
+                implode(', ', $details)
+            ),
+            'severity'     => 'critical',
+            'category'     => 'security',
             'kb_link'      => 'https://wpshadow.com/kb/unauthorized-admins/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=unauthorized-admins',
             'training_link' => 'https://wpshadow.com/training/unauthorized-admins/',
             'auto_fixable' => false,
             'threat_level' => 100,
             'module'       => 'Guardian',
             'priority'     => 1,
-            'stub'         => true,
         );
     }
     

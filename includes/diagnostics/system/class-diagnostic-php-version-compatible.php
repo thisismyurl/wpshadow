@@ -19,20 +19,38 @@ class Diagnostic_PHP_Version_Compatible extends Diagnostic_Base {
     // TODO: Implement diagnostic logic.
 
     public static function check(): ?array {
-        return array(
-            'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/php-version-compatible/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=php-version-compatible',
-            'training_link' => 'https://wpshadow.com/training/php-version-compatible/',
-            'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'System',
-            'priority'      => 1,
-            'stub'          => true,
-        );
+        $php_version = phpversion();
+        if (version_compare($php_version, '7.4', '<')) {
+            return array(
+                'id'            => static::$slug,
+                'title'         => static::$title,
+                'description'   => "PHP {$php_version} is outdated. WordPress 6.3+ requires PHP 7.4+.",
+                'color'         => '#f44336',
+                'bg_color'      => '#ffebee',
+                'kb_link'       => 'https://wpshadow.com/kb/php-version-compatible/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=php-version-compatible',
+                'training_link' => 'https://wpshadow.com/training/php-version-compatible/',
+                'auto_fixable'  => false,
+                'threat_level'  => 80,
+                'module'        => 'System',
+                'priority'      => 1,
+            );
+        }
+        if (version_compare($php_version, '8.0', '<')) {
+            return array(
+                'id'            => static::$slug,
+                'title'         => static::$title,
+                'description'   => "PHP {$php_version} will reach end of life soon. Consider upgrading to PHP 8.0+.",
+                'color'         => '#ff9800',
+                'bg_color'      => '#fff3e0',
+                'kb_link'       => 'https://wpshadow.com/kb/php-version-compatible/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=php-version-compatible',
+                'training_link' => 'https://wpshadow.com/training/php-version-compatible/',
+                'auto_fixable'  => false,
+                'threat_level'  => 60,
+                'module'        => 'System',
+                'priority'      => 1,
+            );
+        }
+        return null;
     }
 
     /**

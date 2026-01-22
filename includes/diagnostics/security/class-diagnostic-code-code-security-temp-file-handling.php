@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Code_CODE_SECURITY_TEMP_FILE_HANDLING extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'code-security-temp-file-handling',
             'title' => __('Insecure Temp Files', 'wpshadow'),
             'description' => __('Flags unvalidated temporary file handling.', 'wpshadow'),

@@ -16,22 +16,36 @@ class Diagnostic_Premium_Plugin_Conflicts extends Diagnostic_Base {
 	protected static $title       = 'Premium Plugin Compatibility';
 	protected static $description = 'Detects conflicts with common premium plugins.';
 
-	// TODO: Implement diagnostic logic.
-
 	public static function check(): ?array {
+		// Known plugin conflict pairs (simplified detection)
+		$conflict_pairs = array(
+			array('jetpack/jetpack.php', 'wp-rocket/wp-rocket.php'),
+			array('wordfence/wordfence.php', 'ithemes-security-pro/ithemes-security-pro.php'),
+		);
+		
+		$conflicts_found = array();
+		foreach ($conflict_pairs as $pair) {
+			if (is_plugin_active($pair[0]) && is_plugin_active($pair[1])) {
+				$conflicts_found[] = basename(dirname($pair[0])) . ' + ' . basename(dirname($pair[1]));
+			}
+		}
+		
+		if (empty($conflicts_found)) {
+			return null; // Pass - no known conflicts
+		}
+		
 		return array(
 			'id'            => static::$slug,
-			'title'         => static::$title . ' [STUB]',
-			'description'   => static::$description . ' (Not yet implemented)',
-			'color'         => '#9e9e9e',
-			'bg_color'      => '#f5f5f5',
+			'title'         => static::$title,
+			'description'   => 'Potential conflicts detected: ' . implode(', ', $conflicts_found),
+			'color'         => '#ff9800',
+			'bg_color'      => '#fff3e0',
 			'kb_link'       => 'https://wpshadow.com/kb/premium-plugin-conflicts/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=premium-plugin-conflicts',
 			'training_link' => 'https://wpshadow.com/training/premium-plugin-conflicts/',
 			'auto_fixable'  => false,
 			'threat_level'  => 60,
 			'module'        => 'Compatibility',
 			'priority'      => 2,
-			'stub'          => true,
 		);
 	}
 

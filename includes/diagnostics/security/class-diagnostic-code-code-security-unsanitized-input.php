@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Code_CODE_SECURITY_UNSANITIZED_INPUT extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'code-security-unsanitized-input',
             'title' => __('Unsanitized Input Detection', 'wpshadow'),
             'description' => __('Detects GET/POST/REQUEST/COOKIE/FILES data used without sanitization.', 'wpshadow'),

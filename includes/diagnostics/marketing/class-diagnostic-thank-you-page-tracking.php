@@ -16,23 +16,35 @@ class Diagnostic_Thank_You_Page_Tracking extends Diagnostic_Base {
     protected static $title = 'Thank You Page Tracking?';
     protected static $description = 'Verifies conversion confirmation tracking.';
 
-    // TODO: Implement diagnostic logic.
-
     public static function check(): ?array {
-        return array(
-            'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/thank-you-page-tracking/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=thank-you-page-tracking',
-            'training_link' => 'https://wpshadow.com/training/thank-you-page-tracking/',
-            'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'Marketing',
-            'priority'      => 1,
-            'stub'          => true,
-        );
+        // Check if conversion tracking is present (implies thank you page tracking)
+        ob_start();
+        wp_head();
+        $header_content = ob_get_clean();
+        
+        if (preg_match('/gtag.*event.*conversion/i', $header_content) || 
+            preg_match('/fbq.*Purchase/i', $header_content)) {
+            return null; // Pass - conversion tracking detected (implies thank you pages)
+        }
+        
+        // If e-commerce active, suggest thank you page tracking
+        if (class_exists('WooCommerce') || class_exists('Easy_Digital_Downloads')) {
+            return array(
+                'id'            => static::$slug,
+                'title'         => static::$title,
+                'description'   => 'E-commerce active but no thank you page conversion tracking detected.',
+                'color'         => '#ff9800',
+                'bg_color'      => '#fff3e0',
+                'kb_link'       => 'https://wpshadow.com/kb/thank-you-page-tracking/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=thank-you-page-tracking',
+                'training_link' => 'https://wpshadow.com/training/thank-you-page-tracking/',
+                'auto_fixable'  => false,
+                'threat_level'  => 60,
+                'module'        => 'Marketing',
+                'priority'      => 2,
+            );
+        }
+        
+        return null;
     }
 
     /**

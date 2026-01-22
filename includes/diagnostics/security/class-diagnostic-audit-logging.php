@@ -19,20 +19,39 @@ class Diagnostic_Audit_Logging extends Diagnostic_Base {
     // TODO: Implement diagnostic logic.
 
     public static function check(): ?array {
-        return array(
-            'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/audit-logging/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=audit-logging',
-            'training_link' => 'https://wpshadow.com/training/audit-logging/',
-            'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'Security',
-            'priority'      => 1,
-            'stub'          => true,
+        // Check for common audit logging plugins
+        $audit_plugins = array(
+            'wp-security-audit-log/wp-security-audit-log.php',
+            'activity-log/aryo-activity-log.php',
+            'simple-history/index.php',
+            'stream/stream.php',
         );
+        
+        $has_audit_logging = false;
+        foreach ($audit_plugins as $plugin) {
+            if (is_plugin_active($plugin)) {
+                $has_audit_logging = true;
+                break;
+            }
+        }
+        
+        if (!$has_audit_logging) {
+            return array(
+                'id'            => static::$slug,
+                'title'         => static::$title,
+                'description'   => 'No audit logging plugin detected. User actions are not being tracked.',
+                'severity'      => 'medium',
+                'category'      => 'security',
+                'kb_link'       => 'https://wpshadow.com/kb/audit-logging/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=audit-logging',
+                'training_link' => 'https://wpshadow.com/training/audit-logging/',
+                'auto_fixable'  => false,
+                'threat_level'  => 60,
+                'module'        => 'Security',
+                'priority'      => 1,
+            );
+        }
+        
+        return null;
     }
 
     /**

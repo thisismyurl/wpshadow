@@ -19,19 +19,29 @@ class Diagnostic_Backups_Configured extends Diagnostic_Base {
 	// TODO: Implement diagnostic logic.
 
 	public static function check(): ?array {
+		$backup_plugins = array(
+			'updraftplus/updraftplus.php',
+			'backwpup/backwpup.php',
+			'backup-backup/backup-backup.php',
+			'duplicator/duplicator.php',
+		);
+		foreach ($backup_plugins as $plugin) {
+			if (is_plugin_active($plugin)) {
+				return null;
+			}
+		}
 		return array(
 			'id'            => static::$slug,
-			'title'         => static::$title . ' [STUB]',
-			'description'   => static::$description . ' (Not yet implemented)',
-			'color'         => '#9e9e9e',
-			'bg_color'      => '#f5f5f5',
+			'title'         => static::$title,
+			'description'   => 'No backup plugin detected.',
+			'color'         => '#f44336',
+			'bg_color'      => '#ffebee',
 			'kb_link'       => 'https://wpshadow.com/kb/backups-configured/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=backups-configured',
 			'training_link' => 'https://wpshadow.com/training/backups-configured/',
 			'auto_fixable'  => false,
 			'threat_level'  => 60,
 			'module'        => 'Core',
 			'priority'      => 1,
-			'stub'          => true,
 		);
 	}
 

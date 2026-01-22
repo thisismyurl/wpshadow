@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Code_CODE_SECURITY_FILE_OPERATIONS extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'code-security-file-operations',
             'title' => __('Unsafe File Operations', 'wpshadow'),
             'description' => __('Detects file_put_contents/fopen without validation or sanitization.', 'wpshadow'),

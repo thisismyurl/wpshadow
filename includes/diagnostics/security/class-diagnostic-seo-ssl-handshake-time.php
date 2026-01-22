@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
 
 class Diagnostic_SEO_SSL_Handshake_Time extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'seo-ssl-handshake-time',
             'title' => 'SSL/TLS Handshake Duration',
             'description' => 'SSL handshake should complete under 100ms. Use TLS 1.3, enable session resumption, and consider OCSP stapling.',

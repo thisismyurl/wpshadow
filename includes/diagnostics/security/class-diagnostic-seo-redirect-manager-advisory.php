@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
 
 class Diagnostic_SEO_Redirect_Manager_Advisory extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'seo-redirect-manager-advisory',
             'title' => 'Redirect Manager Setup',
             'description' => 'Use a redirect manager to track URL changes and maintain clean 301 redirects without chains.',

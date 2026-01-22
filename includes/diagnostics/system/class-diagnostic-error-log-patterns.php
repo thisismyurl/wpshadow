@@ -19,20 +19,7 @@ class Diagnostic_Error_Log_Patterns extends Diagnostic_Base {
     // TODO: Implement diagnostic logic.
 
     public static function check(): ?array {
-        return array(
-            'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/error-log-patterns/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=error-log-patterns',
-            'training_link' => 'https://wpshadow.com/training/error-log-patterns/',
-            'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'System',
-            'priority'      => 1,
-            'stub'          => true,
-        );
+        return null; // Requires error log parsing and pattern recognition
     }
 
     /**

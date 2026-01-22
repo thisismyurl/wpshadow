@@ -16,23 +16,53 @@ class Diagnostic_Call_Tracking_Working extends Diagnostic_Base {
     protected static $title = 'Phone Call Tracking Active?';
     protected static $description = 'Verifies click-to-call and tracking working.';
 
-    // TODO: Implement diagnostic logic.
-
     public static function check(): ?array {
-        return array(
-            'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/call-tracking-working/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=call-tracking-working',
-            'training_link' => 'https://wpshadow.com/training/call-tracking-working/',
-            'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'Marketing',
-            'priority'      => 2,
-            'stub'          => true,
+        // Check for call tracking services
+        $call_tracking_patterns = array(
+            'callrail.com',
+            'calltracki ngmetrics.com',
+            'dialogtech.com',
+            'invoca.com',
         );
+        
+        ob_start();
+        wp_head();
+        $header_content = ob_get_clean();
+        
+        foreach ($call_tracking_patterns as $pattern) {
+            if (stripos($header_content, $pattern) !== false) {
+                return null; // Pass - call tracking detected
+            }
+        }
+        
+        // Call tracking typically for businesses, not e-commerce sites
+        // Only suggest if business indicators present (forms, local business schema)
+        $form_plugins = array(
+            'gravityforms/gravityforms.php',
+            'wpforms/wpforms.php',
+            'contact-form-7/wp-contact-form-7.php',
+        );
+        
+        foreach ($form_plugins as $plugin) {
+            if (is_plugin_active($plugin)) {
+                // Has forms but no call tracking - might be beneficial
+                return array(
+                    'id'            => static::$slug,
+                    'title'         => static::$title,
+                    'description'   => 'Contact forms detected but no call tracking configured.',
+                    'color'         => '#ff9800',
+                    'bg_color'      => '#fff3e0',
+                    'kb_link'       => 'https://wpshadow.com/kb/call-tracking-working/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=call-tracking-working',
+                    'training_link' => 'https://wpshadow.com/training/call-tracking-working/',
+                    'auto_fixable'  => false,
+                    'threat_level'  => 60,
+                    'module'        => 'Marketing',
+                    'priority'      => 2,
+                );
+            }
+        }
+        
+        return null;
     }
 
     /**

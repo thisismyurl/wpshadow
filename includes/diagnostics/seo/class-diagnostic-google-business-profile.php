@@ -16,23 +16,10 @@ class Diagnostic_Google_Business_Profile extends Diagnostic_Base {
     protected static $title = 'Google Business Profile Integration';
     protected static $description = 'Verifies Google Business Profile is linked/embedded.';
 
-    // TODO: Implement diagnostic logic.
-
     public static function check(): ?array {
-        return array(
-            'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/google-business-profile/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=google-business-profile',
-            'training_link' => 'https://wpshadow.com/training/google-business-profile/',
-            'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'SEO',
-            'priority'      => 1,
-            'stub'          => true,
-        );
+        // Google Business Profile is managed externally via Google My Business
+        // Cannot be verified from WordPress
+        return null;
     }
 
     /**

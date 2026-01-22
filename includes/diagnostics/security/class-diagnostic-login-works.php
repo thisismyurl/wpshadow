@@ -16,23 +16,49 @@ class Diagnostic_Login_Works extends Diagnostic_Base {
     protected static $title = 'Can You Still Log In?';
     protected static $description = 'Tests admin login functionality.';
 
-    // TODO: Implement diagnostic logic.
-
     public static function check(): ?array {
-        return array(
-            'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/login-works/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=login-works',
-            'training_link' => 'https://wpshadow.com/training/login-works/',
-            'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'Security',
-            'priority'      => 1,
-            'stub'          => true,
-        );
+        // If we're logged in and can run this diagnostic, login works!
+        // This is more of a sanity check diagnostic
+        
+        // Check if user is logged in
+        if (!is_user_logged_in()) {
+            return array(
+                'id'            => static::$slug,
+                'title'         => static::$title,
+                'description'   => 'Cannot verify - you are not logged in.',
+                'severity'      => 'info',
+                'category'      => 'security',
+                'kb_link'       => 'https://wpshadow.com/kb/login-works/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=login-works',
+                'training_link' => 'https://wpshadow.com/training/login-works/',
+                'auto_fixable'  => false,
+                'threat_level'  => 60,
+                'module'        => 'Security',
+                'priority'      => 1,
+            );
+        }
+        
+        // Check if wp-login.php is accessible
+        $login_url = wp_login_url();
+        $response = wp_remote_get($login_url, array('timeout' => 10));
+        
+        if (is_wp_error($response) || wp_remote_retrieve_response_code($response) !== 200) {
+            return array(
+                'id'            => static::$slug,
+                'title'         => 'Login Page May Be Blocked',
+                'description'   => 'wp-login.php appears to be inaccessible or blocked.',
+                'severity'      => 'high',
+                'category'      => 'security',
+                'kb_link'       => 'https://wpshadow.com/kb/login-works/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=login-works',
+                'training_link' => 'https://wpshadow.com/training/login-works/',
+                'auto_fixable'  => false,
+                'threat_level'  => 60,
+                'module'        => 'Security',
+                'priority'      => 1,
+            );
+        }
+        
+        // Login works!
+        return null;
     }
 
     /**

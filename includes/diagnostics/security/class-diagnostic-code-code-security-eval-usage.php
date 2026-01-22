@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Code_CODE_SECURITY_EVAL_USAGE extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'code-security-eval-usage',
             'title' => __('Unsafe eval/create_function', 'wpshadow'),
             'description' => __('Flags use of eval(), create_function(), or preg_replace with e modifier.', 'wpshadow'),

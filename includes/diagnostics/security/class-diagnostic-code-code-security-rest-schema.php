@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Code_CODE_SECURITY_REST_SCHEMA extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'code-security-rest-schema',
             'title' => __('REST Schema Exposure', 'wpshadow'),
             'description' => __('Flags REST routes exposing private data without schema validation.', 'wpshadow'),

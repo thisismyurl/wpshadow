@@ -21,10 +21,27 @@ class Diagnostic_SEO_Missing_Author_Schema extends Diagnostic_Base {
 	 * @return array|null Finding data or null if no issue.
 	 */
 	public static function check(): ?array {
+		// Check a recent post for author schema
+		$recent_posts = get_posts(array('numberposts' => 1));
+		
+		if (empty($recent_posts)) {
+			return null;
+		}
+		
+		$post_content = apply_filters('the_content', $recent_posts[0]->post_content);
+		$post_html = get_post_field('post_content', $recent_posts[0]->ID);
+		
+		// Check for author schema markup patterns
+		if (stripos($post_html, 'schema.org/Person') !== false ||
+		    stripos($post_html, '"@type":"Person"') !== false ||
+		    stripos($post_html, 'itemtype="http://schema.org/Person"') !== false) {
+			return null; // Author schema exists
+		}
+		
 		return array(
 			'id'          => 'seo-missing-author-schema',
 			'title'       => 'Missing Author Schema Markup',
-			'description' => 'Posts lack Author schema. Add Person schema with author name, bio, social links, and credentials. Strengthens E-E-A-T signals.',
+			'description' => 'Posts lack Author schema. Add Person schema to strengthen E-E-A-T signals.',
 			'severity'    => 'low',
 			'category'    => 'seo',
 			'kb_link'     => 'https://wpshadow.com/kb/add-author-schema/',

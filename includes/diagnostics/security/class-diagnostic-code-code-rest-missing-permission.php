@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Code_CODE_REST_MISSING_PERMISSION extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'code-rest-missing-permission',
             'title' => __('REST Missing Permission Callback', 'wpshadow'),
             'description' => __('Flags REST routes with no permission_callback defined.', 'wpshadow'),

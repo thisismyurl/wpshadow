@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
 
 class Diagnostic_SEO_OCSP_Stapling extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'seo-ocsp-stapling',
             'title' => 'OCSP Stapling Enabled',
             'description' => 'Enable OCSP stapling to reduce SSL handshake time by caching certificate validation.',

@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Code_CODE_FRONTEND_MIXED_CONTENT extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'code-frontend-mixed-content',
             'title' => __('Mixed HTTP/HTTPS', 'wpshadow'),
             'description' => __('Detects resources mixed between secure/insecure protocols.', 'wpshadow'),

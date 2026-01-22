@@ -19,19 +19,23 @@ class Diagnostic_Forgot_Password_Works extends Diagnostic_Base {
 	// TODO: Implement diagnostic logic.
 
 	public static function check(): ?array {
+		$smtp_active = is_plugin_active('wp-mail-smtp/wp_mail_smtp.php') || 
+		              is_plugin_active('easy-wp-smtp/easy-wp-smtp.php');
+		if ($smtp_active) {
+			return null;
+		}
 		return array(
 			'id'            => static::$slug,
-			'title'         => static::$title . ' [STUB]',
-			'description'   => static::$description . ' (Not yet implemented)',
-			'color'         => '#9e9e9e',
-			'bg_color'      => '#f5f5f5',
+			'title'         => static::$title,
+			'description'   => 'Password reset relies on default PHP mail().',
+			'color'         => '#ff9800',
+			'bg_color'      => '#fff3e0',
 			'kb_link'       => 'https://wpshadow.com/kb/forgot-password-works/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=forgot-password-works',
 			'training_link' => 'https://wpshadow.com/training/forgot-password-works/',
 			'auto_fixable'  => false,
 			'threat_level'  => 60,
 			'module'        => 'Core',
-			'priority'      => 1,
-			'stub'          => true,
+			'priority'      => 2,
 		);
 	}
 

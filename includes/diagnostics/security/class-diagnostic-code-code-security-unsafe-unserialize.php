@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Code_CODE_SECURITY_UNSAFE_UNSERIALIZE extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'code-security-unsafe-unserialize',
             'title' => __('Unsafe Unserialize', 'wpshadow'),
             'description' => __('Detects maybe_unserialize on untrusted data without guards.', 'wpshadow'),

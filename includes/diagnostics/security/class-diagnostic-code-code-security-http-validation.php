@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Code_CODE_SECURITY_HTTP_VALIDATION extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'code-security-http-validation',
             'title' => __('HTTP/HTTPS Validation', 'wpshadow'),
             'description' => __('Detects insecure HTTP API calls where HTTPS required.', 'wpshadow'),

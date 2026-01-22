@@ -13,15 +13,46 @@ use WPShadow\Core\Diagnostic_Base;
 
 class Diagnostic_Security_Headers_Implementation extends Diagnostic_Base {
     public static function check(): ?array {
+        // Check for security headers by making a request to the site
+        $response = wp_remote_head(home_url(), array('timeout' => 10));
+        
+        if (is_wp_error($response)) {
+            return null;
+        }
+        
+        $headers = wp_remote_retrieve_headers($response);
+        $missing_headers = array();
+        
+        // Check for important security headers
+        if (!isset($headers['X-Frame-Options']) && !isset($headers['x-frame-options'])) {
+            $missing_headers[] = 'X-Frame-Options';
+        }
+        
+        if (!isset($headers['X-Content-Type-Options']) && !isset($headers['x-content-type-options'])) {
+            $missing_headers[] = 'X-Content-Type-Options';
+        }
+        
+        if (!isset($headers['X-XSS-Protection']) && !isset($headers['x-xss-protection'])) {
+            $missing_headers[] = 'X-XSS-Protection';
+        }
+        
+        if (!isset($headers['Referrer-Policy']) && !isset($headers['referrer-policy'])) {
+            $missing_headers[] = 'Referrer-Policy';
+        }
+        
+        if (empty($missing_headers)) {
+            return null;
+        }
+        
         return [
             'id' => 'seo-security-headers-implementation',
-            'title' => 'Security Headers Configuration',
-            'description' => 'Implement security headers: CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy.',
+            'title' => 'Security Headers Missing',
+            'description' => sprintf('Missing security headers: %s', implode(', ', $missing_headers)),
             'severity' => 'high',
-            'category' => 'seo',
+            'category' => 'security',
             'kb_link' => 'https://wpshadow.com/kb/security-headers/',
             'training_link' => 'https://wpshadow.com/training/http-security/',
-            'auto_fixable' => false,
+            'auto_fixable' => true,
             'threat_level' => 65,
         ];
     }

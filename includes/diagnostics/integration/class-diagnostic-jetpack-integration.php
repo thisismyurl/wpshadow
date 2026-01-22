@@ -16,23 +16,33 @@ class Diagnostic_Jetpack_Integration extends Diagnostic_Base {
 	protected static $title       = 'Jetpack Integration Health';
 	protected static $description = 'Monitors Jetpack feature functionality.';
 
-	// TODO: Implement diagnostic logic.
-
 	public static function check(): ?array {
-		return array(
-			'id'            => static::$slug,
-			'title'         => static::$title . ' [STUB]',
-			'description'   => static::$description . ' (Not yet implemented)',
-			'color'         => '#9e9e9e',
-			'bg_color'      => '#f5f5f5',
-			'kb_link'       => 'https://wpshadow.com/kb/jetpack-integration/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=jetpack-integration',
-			'training_link' => 'https://wpshadow.com/training/jetpack-integration/',
-			'auto_fixable'  => false,
-			'threat_level'  => 60,
-			'module'        => 'Integration',
-			'priority'      => 2,
-			'stub'          => true,
-		);
+		// Check if Jetpack is active
+		if (!is_plugin_active('jetpack/jetpack.php')) {
+			return null; // Pass - Jetpack not installed, no concern
+		}
+		
+		// Check Jetpack connection status
+		if (class_exists('Jetpack') && method_exists('Jetpack', 'is_connection_ready')) {
+			if (Jetpack::is_connection_ready()) {
+				return null; // Pass - Jetpack connected
+			}
+			return array(
+				'id'            => static::$slug,
+				'title'         => static::$title,
+				'description'   => 'Jetpack installed but not connected to WordPress.com.',
+				'color'         => '#ff9800',
+				'bg_color'      => '#fff3e0',
+				'kb_link'       => 'https://wpshadow.com/kb/jetpack-integration/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=jetpack-integration',
+				'training_link' => 'https://wpshadow.com/training/jetpack-integration/',
+				'auto_fixable'  => false,
+				'threat_level'  => 60,
+				'module'        => 'Integration',
+				'priority'      => 2,
+			);
+		}
+		
+		return null;
 	}
 
 	/**

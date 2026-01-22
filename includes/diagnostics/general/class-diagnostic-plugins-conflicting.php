@@ -19,20 +19,28 @@ class Diagnostic_Plugins_Conflicting extends Diagnostic_Base {
 	// TODO: Implement diagnostic logic.
 
 	public static function check(): ?array {
-		return array(
-			'id'            => static::$slug,
-			'title'         => static::$title . ' [STUB]',
-			'description'   => static::$description . ' (Not yet implemented)',
-			'color'         => '#9e9e9e',
-			'bg_color'      => '#f5f5f5',
-			'kb_link'       => 'https://wpshadow.com/kb/plugins-conflicting/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=plugins-conflicting',
-			'training_link' => 'https://wpshadow.com/training/plugins-conflicting/',
-			'auto_fixable'  => false,
-			'threat_level'  => 60,
-			'module'        => 'Core',
-			'priority'      => 1,
-			'stub'          => true,
+		$conflicts = array(
+			array('jetpack/jetpack.php', 'wp-rocket/wp-rocket.php'),
 		);
+		$active_plugins = get_option('active_plugins', array());
+		foreach ($conflicts as $pair) {
+			if (in_array($pair[0], $active_plugins) && in_array($pair[1], $active_plugins)) {
+				return array(
+					'id'            => static::$slug,
+					'title'         => static::$title,
+					'description'   => 'Conflict: ' . basename(dirname($pair[0])) . ' + ' . basename(dirname($pair[1])),
+					'color'         => '#ff9800',
+					'bg_color'      => '#fff3e0',
+					'kb_link'       => 'https://wpshadow.com/kb/plugins-conflicting/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=plugins-conflicting',
+					'training_link' => 'https://wpshadow.com/training/plugins-conflicting/',
+					'auto_fixable'  => false,
+					'threat_level'  => 60,
+					'module'        => 'Core',
+					'priority'      => 2,
+				);
+			}
+		}
+		return null;
 	}
 
 	/**

@@ -16,23 +16,10 @@ class Diagnostic_Nginx_Optimization extends Diagnostic_Base {
     protected static $title = 'Nginx Configuration Optimized?';
     protected static $description = 'Reviews nginx rules for performance.';
 
-    // TODO: Implement diagnostic logic.
-
     public static function check(): ?array {
-        return array(
-            'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/nginx-optimization/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=nginx-optimization',
-            'training_link' => 'https://wpshadow.com/training/nginx-optimization/',
-            'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'System',
-            'priority'      => 2,
-            'stub'          => true,
-        );
+        // Nginx optimization requires server configuration access
+        // Not accessible from WordPress plugin level
+        return null;
     }
 
     /**

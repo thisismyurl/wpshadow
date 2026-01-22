@@ -52,23 +52,72 @@ class Diagnostic_No_Two_Factor_Auth extends Diagnostic_Base {
      * @return array|null Finding data or null if no issue
      */
     public static function check(): ?array {
-        // ⚠️ STUB IMPLEMENTATION - NOT PRODUCTION READY
-        // This is a placeholder for future development
+        // Get all admin/editor users
+        $privileged_users = get_users(array(
+            'role__in' => array('administrator', 'editor'),
+            'fields' => array('ID', 'user_login'),
+        ));
         
-        return array(
-            'id'           => static::$slug,
-            'title'        => static::$title . ' [STUB]',
-            'description'  => static::$description . ' (Not yet implemented)',
-            'color'        => '#9e9e9e',
-            'bg_color'     => '#f5f5f5',
-            'kb_link'      => 'https://wpshadow.com/kb/two-factor-auth/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=two-factor-auth',
-            'training_link' => 'https://wpshadow.com/training/two-factor-auth/',
-            'auto_fixable' => false,
-            'threat_level' => 80,
-            'module'       => 'Free + Guardian',
-            'priority'     => 2,
-            'stub'         => true,
+        if (empty($privileged_users)) {
+            return null;
+        }
+        
+        $total = count($privileged_users);
+        $with_2fa = 0;
+        
+        // Check if any popular 2FA plugins are active
+        $twofa_plugins = array(
+            'two-factor/two-factor.php',
+            'wordfence/wordfence.php',
+            'google-authenticator/google-authenticator.php',
+            'two-factor-authentication/two-factor-authentication.php',
         );
+        
+        $has_2fa_plugin = false;
+        foreach ($twofa_plugins as $plugin) {
+            if (is_plugin_active($plugin)) {
+                $has_2fa_plugin = true;
+                break;
+            }
+        }
+        
+        // If 2FA plugin exists, check user meta for enabled users
+        if ($has_2fa_plugin) {
+            foreach ($privileged_users as $user) {
+                // Check common 2FA meta keys
+                if (get_user_meta($user->ID, '_two_factor_enabled', true) ||
+                    get_user_meta($user->ID, 'two-factor-enabled', true) ||
+                    get_user_meta($user->ID, 'wf2fa', true)) {
+                    $with_2fa++;
+                }
+            }
+        }
+        
+        // If no 2FA plugin or less than 50% adoption, flag it
+        if (!$has_2fa_plugin || ($with_2fa / $total) < 0.5) {
+            $percentage = $has_2fa_plugin ? round(($with_2fa / $total) * 100) : 0;
+            
+            return array(
+                'id'           => static::$slug,
+                'title'        => static::$title,
+                'description'  => sprintf(
+                    'Only %d%% of privileged accounts (%d/%d) use two-factor authentication',
+                    $percentage,
+                    $with_2fa,
+                    $total
+                ),
+                'severity'     => 'high',
+                'category'     => 'security',
+                'kb_link'      => 'https://wpshadow.com/kb/two-factor-auth/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=two-factor-auth',
+                'training_link' => 'https://wpshadow.com/training/two-factor-auth/',
+                'auto_fixable' => false,
+                'threat_level' => 80,
+                'module'       => 'Free + Guardian',
+                'priority'     => 2,
+            );
+        }
+        
+        return null;
     }
     
     /**

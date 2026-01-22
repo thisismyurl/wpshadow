@@ -13,7 +13,14 @@ use WPShadow\Core\Diagnostic_Base;
 
 class Diagnostic_SEO_Certificate_Transparency_Monitoring extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Check if monitoring plugins are active
+        $has_monitoring = is_plugin_active('wordfence/wordfence.php') || 
+                         is_plugin_active('sucuri-scanner/sucuri.php');
+        if ($has_monitoring) {
+            return null; // Monitoring in place
+        }
+        
+return [
             'id' => 'seo-certificate-transparency-monitoring',
             'title' => 'Certificate Transparency Monitoring',
             'description' => 'Monitor Certificate Transparency logs for unauthorized SSL certificates for your domain.',

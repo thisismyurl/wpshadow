@@ -19,20 +19,55 @@ class Diagnostic_SSL_Valid extends Diagnostic_Base {
     // TODO: Implement diagnostic logic.
 
     public static function check(): ?array {
-        return array(
-            'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/ssl-valid/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=ssl-valid',
-            'training_link' => 'https://wpshadow.com/training/ssl-valid/',
-            'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'Security',
-            'priority'      => 1,
-            'stub'          => true,
+        // Only check if site claims to use SSL
+        if (!is_ssl()) {
+            return null; // Site doesn't use SSL, not applicable
+        }
+        
+        $site_url = get_site_url();
+        $host = parse_url($site_url, PHP_URL_HOST);
+        
+        if (empty($host)) {
+            return null;
+        }
+        
+        // Try to verify SSL certificate validity
+        $context = stream_context_create(array(
+            'ssl' => array(
+                'capture_peer_cert' => true,
+                'verify_peer' => true,
+                'verify_peer_name' => true,
+                'allow_self_signed' => false,
+            ),
+        ));
+        
+        $stream = @stream_socket_client(
+            'ssl://' . $host . ':443',
+            $errno,
+            $errstr,
+            10,
+            STREAM_CLIENT_CONNECT,
+            $context
         );
+        
+        if (!$stream) {
+            return array(
+                'id'            => static::$slug,
+                'title'         => 'SSL Certificate Invalid',
+                'description'   => sprintf('SSL certificate validation failed: %s', $errstr),
+                'severity'      => 'high',
+                'category'      => 'security',
+                'kb_link'       => 'https://wpshadow.com/kb/ssl-valid/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=ssl-valid',
+                'training_link' => 'https://wpshadow.com/training/ssl-valid/',
+                'auto_fixable'  => false,
+                'threat_level'  => 60,
+                'module'        => 'Security',
+                'priority'      => 1,
+            );
+        }
+        
+        fclose($stream);
+        return null; // SSL is valid
     }
 
     /**

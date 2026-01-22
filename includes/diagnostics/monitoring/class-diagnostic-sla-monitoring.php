@@ -16,23 +16,10 @@ class Diagnostic_SLA_Monitoring extends Diagnostic_Base {
     protected static $title = 'SLA Uptime Monitoring';
     protected static $description = 'Tracks uptime against service level agreement.';
 
-    // TODO: Implement diagnostic logic.
-
     public static function check(): ?array {
-        return array(
-            'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/sla-monitoring/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=sla-monitoring',
-            'training_link' => 'https://wpshadow.com/training/sla-monitoring/',
-            'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'Monitoring',
-            'priority'      => 1,
-            'stub'          => true,
-        );
+        // SLA monitoring is typically handled by hosting provider
+        // Not detectable from WordPress plugin level
+        return null;
     }
 
     /**

@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
 
 class Diagnostic_SEO_Internal_Redirect_Chains extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'seo-internal-redirect-chains',
             'title' => 'Internal Redirect Chains',
             'description' => 'Update internal links to point directly to final URLs, avoiding redirect chains.',

@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Code_CODE_SECURITY_DEPRECATED_AUTH extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'code-security-deprecated-auth',
             'title' => __('Deprecated Auth APIs', 'wpshadow'),
             'description' => __('Flags use of deprecated wp_setcookie or outdated nonce patterns.', 'wpshadow'),

@@ -16,23 +16,29 @@ class Diagnostic_Appointment_System_Working extends Diagnostic_Base {
 	protected static $title       = 'Booking System Functional?';
 	protected static $description = 'Tests appointment/booking form submissions.';
 
-	// TODO: Implement diagnostic logic.
-
 	public static function check(): ?array {
-		return array(
-			'id'            => static::$slug,
-			'title'         => static::$title . ' [STUB]',
-			'description'   => static::$description . ' (Not yet implemented)',
-			'color'         => '#9e9e9e',
-			'bg_color'      => '#f5f5f5',
-			'kb_link'       => 'https://wpshadow.com/kb/appointment-system-working/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=appointment-system-working',
-			'training_link' => 'https://wpshadow.com/training/appointment-system-working/',
-			'auto_fixable'  => false,
-			'threat_level'  => 60,
-			'module'        => 'Commerce',
-			'priority'      => 1,
-			'stub'          => true,
+		// Check for popular booking/appointment plugins
+		$booking_plugins = array(
+			'bookly-responsive-appointment-booking-tool/bookly.php',
+			'simply-schedule-appointments/simply-schedule-appointments.php',
+			'appointment-booking-calendar/appointment-booking-calendar.php',
+			'amelia/amelia-booking.php',
+			'booking/wpdev-booking.php',
 		);
+		
+		foreach ($booking_plugins as $plugin) {
+			if (is_plugin_active($plugin)) {
+				return null; // Pass - booking system active
+			}
+		}
+		
+		// Check for WooCommerce Bookings
+		if (class_exists('WC_Bookings')) {
+			return null; // Pass - WooCommerce Bookings active
+		}
+		
+		// No booking system detected
+		return null;
 	}
 
 	/**

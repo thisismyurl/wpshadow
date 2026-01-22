@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Code_CODE_SECURITY_NONCE_ENFORCEMENT extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'code-security-nonce-enforcement',
             'title' => __('Nonce Enforcement on Admin Actions', 'wpshadow'),
             'description' => __('Detects admin actions and AJAX handlers lacking nonce verification.', 'wpshadow'),

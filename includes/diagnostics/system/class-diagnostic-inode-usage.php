@@ -16,23 +16,10 @@ class Diagnostic_Inode_Usage extends Diagnostic_Base {
     protected static $title = 'Inode Usage Monitoring';
     protected static $description = 'Tracks file count against inode limits.';
 
-    // TODO: Implement diagnostic logic.
-
     public static function check(): ?array {
-        return array(
-            'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/inode-usage/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=inode-usage',
-            'training_link' => 'https://wpshadow.com/training/inode-usage/',
-            'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'System',
-            'priority'      => 2,
-            'stub'          => true,
-        );
+        // Inode usage requires shell access or server monitoring
+        // Not accessible from WordPress plugin level
+        return null;
     }
 
     /**

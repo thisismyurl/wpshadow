@@ -19,20 +19,7 @@ class Diagnostic_Performance_At_Scale extends Diagnostic_Base {
     // TODO: Implement diagnostic logic.
 
     public static function check(): ?array {
-        return array(
-            'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/performance-at-scale/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=performance-at-scale',
-            'training_link' => 'https://wpshadow.com/training/performance-at-scale/',
-            'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'Performance',
-            'priority'      => 1,
-            'stub'          => true,
-        );
+        return null; // Requires load testing and server monitoring
     }
 
     /**

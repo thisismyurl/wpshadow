@@ -19,19 +19,28 @@ class Diagnostic_Email_Delivery_Working extends Diagnostic_Base {
 	// TODO: Implement diagnostic logic.
 
 	public static function check(): ?array {
+		$smtp_plugins = array(
+			'wp-mail-smtp/wp_mail_smtp.php',
+			'easy-wp-smtp/easy-wp-smtp.php',
+			'post-smtp/postman-smtp.php',
+		);
+		foreach ($smtp_plugins as $plugin) {
+			if (is_plugin_active($plugin)) {
+				return null;
+			}
+		}
 		return array(
 			'id'            => static::$slug,
-			'title'         => static::$title . ' [STUB]',
-			'description'   => static::$description . ' (Not yet implemented)',
-			'color'         => '#9e9e9e',
-			'bg_color'      => '#f5f5f5',
+			'title'         => static::$title,
+			'description'   => 'Using default PHP mail() - consider SMTP for better deliverability.',
+			'color'         => '#ff9800',
+			'bg_color'      => '#fff3e0',
 			'kb_link'       => 'https://wpshadow.com/kb/email-delivery-working/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=email-delivery-working',
 			'training_link' => 'https://wpshadow.com/training/email-delivery-working/',
 			'auto_fixable'  => false,
 			'threat_level'  => 60,
 			'module'        => 'Core',
 			'priority'      => 1,
-			'stub'          => true,
 		);
 	}
 

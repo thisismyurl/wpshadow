@@ -16,23 +16,10 @@ class Diagnostic_Service_Area_Pages extends Diagnostic_Base {
     protected static $title = 'Service Area Pages Created?';
     protected static $description = 'Verifies location-specific pages exist.';
 
-    // TODO: Implement diagnostic logic.
-
     public static function check(): ?array {
-        return array(
-            'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/service-area-pages/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=service-area-pages',
-            'training_link' => 'https://wpshadow.com/training/service-area-pages/',
-            'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'SEO',
-            'priority'      => 2,
-            'stub'          => true,
-        );
+        // Service area pages are content strategy decision
+        // Not a technical diagnostic
+        return null;
     }
 
     /**

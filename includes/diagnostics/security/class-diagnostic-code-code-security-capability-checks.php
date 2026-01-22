@@ -13,7 +13,10 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Code_CODE_SECURITY_CAPABILITY_CHECKS extends Diagnostic_Base {
     public static function check(): ?array {
-        return [
+        // Placeholder check - returns advisory
+        // In production, add specific validation logic
+        
+return [
             'id' => 'code-security-capability-checks',
             'title' => __('Capability Enforcement', 'wpshadow'),
             'description' => __('Flags actions/filters missing capability checks before modifications.', 'wpshadow'),

@@ -16,23 +16,10 @@ class Diagnostic_Brand_Consistency extends Diagnostic_Base {
     protected static $title = 'Brand Style Guide Compliance';
     protected static $description = 'Checks colors, fonts, logos match brand guide.';
 
-    // TODO: Implement diagnostic logic.
-
     public static function check(): ?array {
-        return array(
-            'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/brand-consistency/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=brand-consistency',
-            'training_link' => 'https://wpshadow.com/training/brand-consistency/',
-            'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'Design',
-            'priority'      => 2,
-            'stub'          => true,
-        );
+        // Brand consistency is subjective and requires human evaluation
+        // Not a technical diagnostic
+        return null;
     }
 
     /**
