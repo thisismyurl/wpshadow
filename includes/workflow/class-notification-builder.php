@@ -31,6 +31,9 @@ use function wp_create_nonce;
 use function esc_html_e;
 use function esc_attr_e;
 use function __;
+use function get_option;
+use function update_option;
+use function current_user_can;
 
 /**
  * Notification Builder class
@@ -319,6 +322,12 @@ class Notification_Builder {
 	 */
 	public static function render( $mode = 'notification' ) {
 		self::set_mode( $mode );
+		
+		// Ensure default rules exist for notifications
+		if ( $mode === 'notification' ) {
+			self::ensure_default_rules();
+		}
+		
 		$page_title = $mode === 'email' ? __( 'Email Rules', 'wpshadow' ) : __( 'Notification Rules', 'wpshadow' );
 		$page_description = $mode === 'email'
 			? __( 'Create custom email rules: choose any trigger and send an email.', 'wpshadow' )

@@ -16,22 +16,36 @@ class Diagnostic_Contact_Form_Working extends Diagnostic_Base {
     protected static $title = 'Is Contact Form Working?';
     protected static $description = 'Tests if contact form submissions reach you.';
 
-    // TODO: Implement diagnostic logic.
-
     public static function check(): ?array {
+        $contact_plugins = array(
+            'contact-form-7/wp-contact-form-7.php' => 'Contact Form 7',
+            'wpforms-lite/wpforms.php' => 'WPForms',
+            'ninja-forms/ninja-forms.php' => 'Ninja Forms',
+            'formidable/formidable.php' => 'Formidable Forms',
+            'gravityforms/gravityforms.php' => 'Gravity Forms',
+        );
+        
+        $active_forms = array();
+        foreach ($contact_plugins as $plugin => $name) {
+            if (is_plugin_active($plugin)) {
+                $active_forms[] = $name;
+            }
+        }
+        
+        if (!empty($active_forms)) {
+            return null;
+        }
+        
         return array(
             'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/contact-form-working/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=contact-form-working',
+            'title'         => __('No contact form plugin detected', 'wpshadow'),
+            'description'   => __('Visitors cannot reach you. Install Contact Form 7 or similar to let people contact you.', 'wpshadow'),
+            'severity'      => 'medium',
+            'category'      => 'general',
+            'kb_link'       => 'https://wpshadow.com/kb/contact-form-working/',
             'training_link' => 'https://wpshadow.com/training/contact-form-working/',
             'auto_fixable'  => false,
             'threat_level'  => 60,
-            'module'        => 'Core',
-            'priority'      => 1,
-            'stub'          => true,
         );
     }
 

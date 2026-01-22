@@ -16,22 +16,36 @@ class Diagnostic_Backups_Working extends Diagnostic_Base {
     protected static $title = 'Are Backups Actually Working?';
     protected static $description = 'Tests if recent backups completed successfully.';
 
-    // TODO: Implement diagnostic logic.
-
     public static function check(): ?array {
+        $backup_plugins = array(
+            'updraftplus/updraftplus.php' => 'UpdraftPlus',
+            'backwpup/backwpup.php' => 'BackWPup',
+            'duplicator/duplicator.php' => 'Duplicator',
+            'all-in-one-wp-migration/all-in-one-wp-migration.php' => 'All-in-One WP Migration',
+            'jetpack/jetpack.php' => 'Jetpack (with backup)',
+        );
+        
+        $active_backup = array();
+        foreach ($backup_plugins as $plugin => $name) {
+            if (is_plugin_active($plugin)) {
+                $active_backup[] = $name;
+            }
+        }
+        
+        if (!empty($active_backup)) {
+            return null;
+        }
+        
         return array(
             'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/backups-working/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=backups-working',
+            'title'         => __('No backup system detected', 'wpshadow'),
+            'description'   => __('If something breaks, you cannot restore your site. Install a backup plugin like UpdraftPlus (free).', 'wpshadow'),
+            'severity'      => 'high',
+            'category'      => 'general',
+            'kb_link'       => 'https://wpshadow.com/kb/backups-working/',
             'training_link' => 'https://wpshadow.com/training/backups-working/',
             'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'Core',
-            'priority'      => 1,
-            'stub'          => true,
+            'threat_level'  => 75,
         );
     }
 

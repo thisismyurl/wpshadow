@@ -16,23 +16,47 @@ class Diagnostic_Site_Actually_Loading extends Diagnostic_Base {
     protected static $title = 'Is Your Site Actually Loading?';
     protected static $description = 'Checks if your homepage loads successfully for visitors.';
 
-    // TODO: Implement diagnostic logic.
-
     public static function check(): ?array {
-        return array(
-            'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/site-actually-loading/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=site-actually-loading',
-            'training_link' => 'https://wpshadow.com/training/site-actually-loading/',
-            'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'Core',
-            'priority'      => 1,
-            'stub'          => true,
-        );
+        $home_url = home_url();
+        $response = wp_remote_get($home_url, array('timeout' => 10));
+        
+        if (is_wp_error($response)) {
+            return array(
+                'id'            => static::$slug,
+                'title'         => __('Site is not loading', 'wpshadow'),
+                'description'   => sprintf(
+                    __('Your homepage (%s) failed to load: %s', 'wpshadow'),
+                    $home_url,
+                    $response->get_error_message()
+                ),
+                'severity'      => 'critical',
+                'category'      => 'monitoring',
+                'kb_link'       => 'https://wpshadow.com/kb/site-actually-loading/',
+                'training_link' => 'https://wpshadow.com/training/site-actually-loading/',
+                'auto_fixable'  => false,
+                'threat_level'  => 100,
+            );
+        }
+        
+        $code = wp_remote_retrieve_response_code($response);
+        if ($code < 200 || $code >= 400) {
+            return array(
+                'id'            => static::$slug,
+                'title'         => __('Site returns error status', 'wpshadow'),
+                'description'   => sprintf(
+                    __('Your homepage returns HTTP %d instead of 200 OK.', 'wpshadow'),
+                    $code
+                ),
+                'severity'      => 'high',
+                'category'      => 'monitoring',
+                'kb_link'       => 'https://wpshadow.com/kb/site-actually-loading/',
+                'training_link' => 'https://wpshadow.com/training/site-actually-loading/',
+                'auto_fixable'  => false,
+                'threat_level'  => 85,
+            );
+        }
+        
+        return null;
     }
 
     /**

@@ -16,23 +16,77 @@ class Diagnostic_Disaster_Recovery extends Diagnostic_Base {
     protected static $title = 'Disaster Recovery Readiness';
     protected static $description = 'Tests backup restore and recovery procedures.';
 
-    // TODO: Implement diagnostic logic.
-
     public static function check(): ?array {
-        return array(
-            'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/disaster-recovery/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=disaster-recovery',
-            'training_link' => 'https://wpshadow.com/training/disaster-recovery/',
-            'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'Core',
-            'priority'      => 1,
-            'stub'          => true,
+        $backup_plugins = array(
+            'updraftplus/updraftplus.php',
+            'backwpup/backwpup.php',
+            'duplicator/duplicator.php',
+            'all-in-one-wp-migration/all-in-one-wp-migration.php',
         );
+        
+        $has_backup_plugin = false;
+        foreach ($backup_plugins as $plugin) {
+            if (is_plugin_active($plugin)) {
+                $has_backup_plugin = true;
+                break;
+            }
+        }
+        
+        if (!$has_backup_plugin) {
+            return array(
+                'id'            => static::$slug,
+                'title'         => __('No disaster recovery plan', 'wpshadow'),
+                'description'   => __('No backup system detected. Enterprise sites need automated backups and tested restore procedures.', 'wpshadow'),
+                'severity'      => 'critical',
+                'category'      => 'general',
+                'kb_link'       => 'https://wpshadow.com/kb/disaster-recovery/',
+                'training_link' => 'https://wpshadow.com/training/disaster-recovery/',
+                'auto_fixable'  => false,
+                'threat_level'  => 90,
+            );
+        }
+        
+        $upload_dir = wp_upload_dir();
+        $backup_dirs = array(
+            $upload_dir['basedir'] . '/updraft',
+            $upload_dir['basedir'] . '/backwpup-*-backups',
+            ABSPATH . 'wp-snapshots',
+        );
+        
+        $latest_backup = 0;
+        foreach ($backup_dirs as $dir) {
+            $files = glob($dir . '/*');
+            if ($files) {
+                foreach ($files as $file) {
+                    $mtime = filemtime($file);
+                    if ($mtime > $latest_backup) {
+                        $latest_backup = $mtime;
+                    }
+                }
+            }
+        }
+        
+        if ($latest_backup === 0) {
+            return null;
+        }
+        
+        $days_old = (time() - $latest_backup) / DAY_IN_SECONDS;
+        if ($days_old > 7) {
+            return array(
+                'id'            => static::$slug,
+                'title'         => sprintf(__('Last backup is %d days old', 'wpshadow'), (int)$days_old),
+                'description'   => __('Backups should run at least weekly. Old backups may not recover recent data.', 'wpshadow'),
+                'severity'      => 'medium',
+                'category'      => 'general',
+                'kb_link'       => 'https://wpshadow.com/kb/disaster-recovery/',
+                'training_link' => 'https://wpshadow.com/training/disaster-recovery/',
+                'auto_fixable'  => false,
+                'threat_level'  => 65,
+                'backup_age_days' => (int)$days_old,
+            );
+        }
+        
+        return null;
     }
 
     /**

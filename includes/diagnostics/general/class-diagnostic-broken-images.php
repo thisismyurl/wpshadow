@@ -16,22 +16,51 @@ class Diagnostic_Broken_Images extends Diagnostic_Base {
     protected static $title = 'Any Broken Images?';
     protected static $description = 'Scans for missing or broken image files.';
 
-    // TODO: Implement diagnostic logic.
-
     public static function check(): ?array {
+        $posts = get_posts(array(
+            'post_type' => 'any',
+            'posts_per_page' => 50,
+            'post_status' => 'publish',
+        ));
+        
+        $broken = array();
+        foreach ($posts as $post) {
+            preg_match_all('/<img[^>]+src=["\']([^"\']+)["\']/', $post->post_content, $matches);
+            if (!empty($matches[1])) {
+                foreach ($matches[1] as $img_url) {
+                    if (strpos($img_url, home_url()) === 0) {
+                        $path = str_replace(home_url('/'), ABSPATH, $img_url);
+                        $path = strtok($path, '?');
+                        if (!file_exists($path)) {
+                            $broken[] = array(
+                                'post_id' => $post->ID,
+                                'post_title' => $post->post_title,
+                                'image_url' => $img_url,
+                            );
+                            if (count($broken) >= 10) {
+                                break 2;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        if (empty($broken)) {
+            return null;
+        }
+        
         return array(
             'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/broken-images/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=broken-images',
+            'title'         => sprintf(_n('%d broken image found', '%d broken images found', count($broken), 'wpshadow'), count($broken)),
+            'description'   => __('Some images in your content are missing or moved. This looks unprofessional to visitors.', 'wpshadow'),
+            'severity'      => 'medium',
+            'category'      => 'general',
+            'kb_link'       => 'https://wpshadow.com/kb/broken-images/',
             'training_link' => 'https://wpshadow.com/training/broken-images/',
             'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'Content',
-            'priority'      => 1,
-            'stub'          => true,
+            'threat_level'  => 55,
+            'broken_images' => $broken,
         );
     }
 

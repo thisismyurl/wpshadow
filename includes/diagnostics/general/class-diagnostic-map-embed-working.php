@@ -16,22 +16,37 @@ class Diagnostic_Map_Embed_Working extends Diagnostic_Base {
     protected static $title = 'Google Maps Embedded?';
     protected static $description = 'Checks if location map is embedded and working.';
 
-    // TODO: Implement diagnostic logic.
-
     public static function check(): ?array {
+        $pages = get_posts(array(
+            'post_type' => array('page', 'post'),
+            'posts_per_page' => -1,
+            'post_status' => 'publish',
+        ));
+        
+        $has_map = false;
+        foreach ($pages as $page) {
+            if (stripos($page->post_content, 'maps.google.com') !== false ||
+                stripos($page->post_content, 'google.com/maps') !== false ||
+                preg_match('/<iframe[^>]+maps/', $page->post_content)) {
+                $has_map = true;
+                break;
+            }
+        }
+        
+        if ($has_map) {
+            return null;
+        }
+        
         return array(
             'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/map-embed-working/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=map-embed-working',
+            'title'         => __('No location map found', 'wpshadow'),
+            'description'   => __('Local businesses benefit from embedding a Google Map. Customers need to find you easily.', 'wpshadow'),
+            'severity'      => 'low',
+            'category'      => 'general',
+            'kb_link'       => 'https://wpshadow.com/kb/map-embed-working/',
             'training_link' => 'https://wpshadow.com/training/map-embed-working/',
             'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'Content',
-            'priority'      => 1,
-            'stub'          => true,
+            'threat_level'  => 30,
         );
     }
 

@@ -16,22 +16,44 @@ class Diagnostic_Business_Hours_Display extends Diagnostic_Base {
     protected static $title = 'Business Hours Visible?';
     protected static $description = 'Checks if operating hours are prominently displayed.';
 
-    // TODO: Implement diagnostic logic.
-
     public static function check(): ?array {
+        $pages = get_posts(array(
+            'post_type' => array('page', 'post'),
+            'posts_per_page' => -1,
+            'post_status' => 'publish',
+        ));
+        
+        $hours_keywords = array('hours', 'open', 'closed', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'am', 'pm');
+        $has_hours = false;
+        
+        foreach ($pages as $page) {
+            $content_lower = strtolower($page->post_content);
+            $matches = 0;
+            foreach ($hours_keywords as $keyword) {
+                if (strpos($content_lower, $keyword) !== false) {
+                    $matches++;
+                }
+            }
+            if ($matches >= 3) {
+                $has_hours = true;
+                break;
+            }
+        }
+        
+        if ($has_hours) {
+            return null;
+        }
+        
         return array(
             'id'            => static::$slug,
-            'title'         => static::$title . ' [STUB]',
-            'description'   => static::$description . ' (Not yet implemented)',
-            'color'         => '#9e9e9e',
-            'bg_color'      => '#f5f5f5',
-            'kb_link'       => 'https://wpshadow.com/kb/business-hours-display/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=business-hours-display',
+            'title'         => __('Business hours not found', 'wpshadow'),
+            'description'   => __('Customers need to know when you\'re open. Add your hours to your contact page.', 'wpshadow'),
+            'severity'      => 'low',
+            'category'      => 'general',
+            'kb_link'       => 'https://wpshadow.com/kb/business-hours-display/',
             'training_link' => 'https://wpshadow.com/training/business-hours-display/',
             'auto_fixable'  => false,
-            'threat_level'  => 60,
-            'module'        => 'Content',
-            'priority'      => 1,
-            'stub'          => true,
+            'threat_level'  => 35,
         );
     }
 

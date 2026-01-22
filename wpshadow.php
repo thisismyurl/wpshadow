@@ -4244,6 +4244,39 @@ function wpshadow_render_settings() {
 		}
 		?>
 	</div>
+	
+	<script>
+	jQuery(document).ready(function($) {
+		let formChanged = false;
+		
+		// Track form changes
+		$('form input, form select, form textarea').on('change', function() {
+			formChanged = true;
+		});
+		
+		// Check for unsaved changes when clicking tab links
+		$('.wps-btn[href*="wpshadow-settings"]').on('click', function(e) {
+			if (formChanged) {
+				e.preventDefault();
+				const targetUrl = $(this).attr('href');
+				
+				if (confirm('<?php esc_attr_e( 'You have unsaved changes. Do you want to save them before leaving?', 'wpshadow' ); ?>')) {
+					// Submit the form
+					$('form').submit();
+				} else {
+					// Navigate without saving
+					formChanged = false;
+					window.location.href = targetUrl;
+				}
+			}
+		});
+		
+		// Reset flag after successful save
+		$('form').on('submit', function() {
+			formChanged = false;
+		});
+	});
+	</script>
 	<?php
 }
 
