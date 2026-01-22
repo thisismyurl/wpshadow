@@ -873,6 +873,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-domain-expir
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-compromised-accounts-analyzer.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-cache-invalidation-analyzer.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-shortcode-execution-analyzer.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-api-latency-analyzer.php';
 
 // Auto-Fix System (Priority 2)
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-auto-fix-policy-manager.php';
@@ -940,6 +941,7 @@ add_action( 'plugins_loaded', function() {
 	\WPShadow\Guardian\Compromised_Accounts_Analyzer::init();
 	\WPShadow\Guardian\Cache_Invalidation_Analyzer::init();
 	\WPShadow\Guardian\Shortcode_Execution_Analyzer::init();
+	\WPShadow\Guardian\API_Latency_Analyzer::init();
 
 	// Register Guardian AJAX command handlers (Phase 8)
 	// Priority 1 handlers
