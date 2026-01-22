@@ -10,6 +10,8 @@ jobs:
   test:
     name: Test PHP ${{ matrix.php-version }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -41,7 +43,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
       
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
+        run: composer install --prefer-dist --no-progress
       
       - name: Run PHPUnit tests
         run: composer test

@@ -46,7 +46,7 @@ FAILED=0
 
 for BRANCH in $BRANCHES; do
     COUNT=$((COUNT + 1))
-    BATCH_NUM=$(echo "$BRANCH" | grep -oP 'batch-\K\d+' || echo "unknown")
+    BATCH_NUM=$(echo "$BRANCH" | sed 's/.*batch-//' || echo "unknown")
     
     echo "Processing $BRANCH (Batch $BATCH_NUM)..."
     
