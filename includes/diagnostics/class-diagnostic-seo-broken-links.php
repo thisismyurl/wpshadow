@@ -1,0 +1,64 @@
+<?php declare(strict_types=1);
+/**
+ * Broken Links Diagnostic
+ *
+ * Philosophy: SEO user experience - broken links hurt rankings
+ * @package WPShadow
+ */
+
+namespace WPShadow\Diagnostics;
+
+/**
+ * Check for broken internal/external links.
+ */
+class Diagnostic_SEO_Broken_Links {
+	/**
+	 * Run the diagnostic check.
+	 *
+	 * @return array|null Finding data or null if no issue.
+	 */
+	public static function check() {
+		global $wpdb;
+		
+		$posts = $wpdb->get_results(
+			"SELECT ID, post_content FROM {$wpdb->posts} 
+			WHERE post_status = 'publish' 
+			AND post_type IN ('post', 'page') 
+			LIMIT 5"
+		);
+		
+		$broken = 0;
+		foreach ( $posts as $post ) {
+			preg_match_all( '/<a[^>]*href=["\']([^"\']*)["\'][^>]*>/i', $post->post_content, $matches );
+			
+			foreach ( $matches[1] as $url ) {
+				if ( strpos( $url, 'http' ) === 0 ) {
+					$response = wp_remote_head( $url, array( 'timeout' => 5 ) );
+					if ( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) >= 400 ) {
+						$broken++;
+					}
+				}
+				
+				if ( $broken >= 3 ) {
+					break 2;
+				}
+			}
+		}
+		
+		if ( $broken > 0 ) {
+			return array(
+				'id'          => 'seo-broken-links',
+				'title'       => 'Broken Links Detected',
+				'description' => sprintf( 'Found %d broken links (404 errors). Broken links hurt SEO and user experience. Fix or remove broken links.', $broken ),
+				'severity'    => 'medium',
+				'category'    => 'seo',
+				'kb_link'     => 'https://wpshadow.com/kb/fix-broken-links/',
+				'training_link' => 'https://wpshadow.com/training/link-maintenance/',
+				'auto_fixable' => false,
+				'threat_level' => 60,
+			);
+		}
+		
+		return null;
+	}
+}

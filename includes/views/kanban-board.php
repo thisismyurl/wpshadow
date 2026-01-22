@@ -162,6 +162,38 @@ $severity_legend = array(
 		</div>
 	</div>
 
+	<!-- Family-Aware Fix Modal (Philosophy #9: Show Value) -->
+	<div id="wpshadow-family-fix-modal" style="display: none; position: fixed; z-index: 999999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6);">
+		<div style="background: #fff; margin: 10% auto; padding: 30px; border-radius: 8px; max-width: 500px; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+			<button class="wpshadow-family-fix-modal-close" style="position: absolute; top: 15px; right: 15px; background: transparent; border: none; font-size: 28px; cursor: pointer; color: #999; line-height: 1;">×</button>
+			<h2 style="margin-top: 0; color: #2196f3;">
+				<span class="dashicons dashicons-groups" style="font-size: 28px; width: 28px; height: 28px;"></span>
+				Fix Related Issues
+			</h2>
+			<p style="color: #555; line-height: 1.6; margin: 15px 0;">
+				WPShadow found <strong><span class="family-count">2</span> related issues</strong> in the <strong><span class="family-title">Same Family</span></strong>. You can fix them all at once to save time!
+			</p>
+			<div style="background: #e3f2fd; border-left: 4px solid #2196f3; padding: 15px; margin: 15px 0; border-radius: 4px;">
+				<p style="margin: 0 0 10px 0; font-weight: 600; color: #1565c0; font-size: 13px;">
+					Related issues in this family:
+				</p>
+				<ul class="family-list" style="margin: 0; padding-left: 20px; font-size: 13px;">
+					<!-- Populated by JavaScript -->
+				</ul>
+			</div>
+			<div style="background: #f5f5f5; border: 1px solid #ddd; padding: 15px; margin: 15px 0; border-radius: 4px;">
+				<p style="margin: 0 0 10px 0; font-size: 13px; color: #666;">
+					<strong>💡 Time-Saving Tip:</strong><br>
+					Fixing all related issues at once can save you significant time. <a href="https://wpshadow.com/kb/family-grouped-fixes/?utm_source=wpshadow" target="_blank" style="color: #2196f3; text-decoration: none;">Learn more →</a>
+				</p>
+			</div>
+			<div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+				<button id="wpshadow-family-fix-this-only" class="button" style="padding: 10px 20px;">Fix This Only</button>
+				<button id="wpshadow-family-fix-all" class="button button-primary" style="padding: 10px 20px;">Fix All Related Issues</button>
+			</div>
+		</div>
+	</div>
+
 	
 
 	<div class="wpshadow-kanban-board" style="

@@ -321,6 +321,86 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
+	// Family Fix Modal - "Fix This Only" button
+	$(document).on('click', '#wpshadow-family-fix-this-only', function() {
+		if (!window.pendingFamilyFix) return;
+
+		const { findingId, $card, $targetColumn, oldStatus } = window.pendingFamilyFix;
+		const $btn = $(this);
+
+		$btn.prop('disabled', true).text('Fixing...');
+		$('#wpshadow-family-fix-modal').fadeOut(200);
+
+		// Call apply fix with fix_all_family: false
+		executeSimpleOnetimeFix(findingId, $card, $targetColumn, oldStatus);
+		
+		window.pendingFamilyFix = null;
+	});
+
+	// Family Fix Modal - "Fix All Related Issues" button
+	$(document).on('click', '#wpshadow-family-fix-all', function() {
+		if (!window.pendingFamilyFix) return;
+
+		const { findingId, $card, $targetColumn, oldStatus, familyIds } = window.pendingFamilyFix;
+		const $btn = $(this);
+
+		$btn.prop('disabled', true).text('Fixing all...');
+		$('#wpshadow-family-fix-modal').fadeOut(200);
+
+		setStatus('Fixing all related issues...', 'info');
+
+		// Apply fix to all family members
+		$.post(getAjaxUrl(), {
+			action: 'wpshadow_apply_family_fix',
+			nonce: getKanbanNonce(),
+			finding_id: findingId,
+			fix_all_family: true,
+			family_ids: familyIds
+		}, function(response) {
+			if (response.success) {
+				const message = response.data?.message || 'All issues fixed!';
+				const count = response.data?.successful_count || 0;
+				const timeSaved = response.data?.time_saved || 0;
+				
+				let statusMsg = '✓ ' + message;
+				if (timeSaved > 0) {
+					statusMsg += ' (saved ~' + timeSaved + ' minutes)';
+				}
+				
+				setStatus(statusMsg, 'success');
+				
+				// Update the primary card
+				$card.find('.finding-card-actions').html(
+					'<span style="color: #4caf50; font-weight: 500;">✓ Fixed (+ ' + (count - 1) + ' related)</span>'
+				);
+
+				// Update status
+				changeKanbanStatus(findingId, 'automated', oldStatus, $card, $targetColumn, false);
+				
+				// Refresh Kanban to show other fixes
+				setTimeout(() => {
+					$('#wpshadow-refresh-kanban').click();
+				}, 2000);
+			} else {
+				setStatus('✕ Error: ' + (response.data?.message || 'Could not fix issues'), 'error');
+			}
+		}).fail(function() {
+			setStatus('✕ Connection error fixing issues.', 'error');
+		}).always(function() {
+			$btn.prop('disabled', false).text('Fix All Related Issues');
+		});
+
+		window.pendingFamilyFix = null;
+	});
+
+	// Close family fix modal
+	$(document).on('click', '.wpshadow-family-fix-modal-close, #wpshadow-family-fix-modal', function(e) {
+		if (e.target === this) {
+			$('#wpshadow-family-fix-modal').fadeOut(200);
+			window.pendingFamilyFix = null;
+		}
+	});
+
 	/**
 	 * Setup drag and drop event listeners
 	 */
@@ -533,37 +613,101 @@ jQuery(document).ready(function ($) {
 		updateAllColumnCounts();
 		resetDragState();
 
-		// Execute one-time fix immediately
-		setStatus('Scheduling one-time auto-fix...', 'info');
+		// Get family info for this finding (Philosophy #9: Smart grouping)
+		setStatus('Checking for related issues...', 'info');
 
 		$.post(getAjaxUrl(), {
-			action: 'wpshadow_create_autofix_workflow',
+			action: 'wpshadow_get_finding_family',
+			nonce: getKanbanNonce(),
+			finding_id: findingId
+		}, function(response) {
+			if (response.success && response.data) {
+				const familyInfo = response.data;
+				
+				// If finding has family and there are other family members detected, show smart modal
+				if (familyInfo.has_family && familyInfo.family_member_count > 0) {
+					showFamilyFixModal(findingId, familyInfo, $card, $targetColumn, oldStatus);
+				} else {
+					// No family or no family members - execute simple one-time fix
+					executeSimpleOnetimeFix(findingId, $card, $targetColumn, oldStatus);
+				}
+			} else {
+				// Error getting family info, proceed with simple fix
+				executeSimpleOnetimeFix(findingId, $card, $targetColumn, oldStatus);
+			}
+		}).fail(function() {
+			setStatus('Connection error checking for related issues.', 'error');
+			executeSimpleOnetimeFix(findingId, $card, $targetColumn, oldStatus);
+		});
+	}
+
+	/**
+	 * Execute simple one-time fix (no family)
+	 */
+	function executeSimpleOnetimeFix(findingId, $card, $targetColumn, oldStatus) {
+		setStatus('Fixing issue...', 'info');
+
+		$.post(getAjaxUrl(), {
+			action: 'wpshadow_apply_family_fix',
 			nonce: getKanbanNonce(),
 			finding_id: findingId,
-			is_persistent: false,
-			user_email: (window.wpshadowKanban && window.wpshadowKanban.user_email) || ''
+			fix_all_family: false,
+			family_ids: []
 		}, function(response) {
 			if (response.success) {
-				setStatus('One-time fix scheduled. Will run in the background shortly.', 'success');
-
+				setStatus('✓ ' + (response.data?.message || 'Issue fixed!'), 'success');
+				
 				// Mark card as fixing
 				$card.find('.finding-card-actions').html(
-					'<span style="color: #ff9800; font-weight: 500;">⟳ Fixing soon...</span>'
+					'<span style="color: #4caf50; font-weight: 500;">✓ Fixed!</span>'
 				);
 
 				// Update status
 				changeKanbanStatus(findingId, 'automated', oldStatus, $card, $targetColumn, false);
-
-				// Check status after 60 seconds
-				setTimeout(() => {
-					setStatus('One-time fix should be complete. Refresh to see results.', 'info');
-				}, 60000);
 			} else {
-				setStatus('Error scheduling fix: ' + (response.data?.message || 'Unknown error'), 'error');
+				setStatus('✕ Error: ' + (response.data?.message || 'Could not fix issue'), 'error');
 			}
 		}).fail(function() {
-			setStatus('Connection error scheduling fix.', 'error');
+			setStatus('✕ Connection error fixing issue.', 'error');
 		});
+	}
+
+	/**
+	 * Show family-aware fix modal (Philosophy #9: Show Value)
+	 * Offers to fix just this issue or all related issues in the family
+	 */
+	function showFamilyFixModal(findingId, familyInfo, $card, $targetColumn, oldStatus) {
+		const modal = $('#wpshadow-family-fix-modal');
+		if (!modal.length) {
+			console.error('Family fix modal not found in DOM');
+			executeSimpleOnetimeFix(findingId, $card, $targetColumn, oldStatus);
+			return;
+		}
+
+		// Update modal content
+		const familyTitle = escapeHtml(familyInfo.family_label || 'Related Issues');
+		const familyCount = familyInfo.family_member_count;
+		const relatedList = familyInfo.family_members.map(m => 
+			'<li style="padding: 4px 0; color: #555;">' + escapeHtml(m.title) + '</li>'
+		).join('');
+
+		// Update modal HTML
+		modal.find('.family-title').text(familyTitle);
+		modal.find('.family-count').text(familyCount);
+		modal.find('.family-list').html(relatedList);
+
+		// Store modal state
+		window.pendingFamilyFix = {
+			findingId: findingId,
+			$card: $card,
+			$targetColumn: $targetColumn,
+			oldStatus: oldStatus,
+			familyIds: familyInfo.family_members.map(m => m.id)
+		};
+
+		// Show modal
+		modal.fadeIn(200);
+		setStatus('', 'info'); // Clear status message
 	}
 
 	/**

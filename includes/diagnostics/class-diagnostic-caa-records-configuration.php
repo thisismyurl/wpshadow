@@ -1,0 +1,39 @@
+<?php declare(strict_types=1);
+/**
+ * CAA Records Configuration Diagnostic
+ *
+ * Philosophy: Certificate security - authorize certificate authorities
+ * @package WPShadow
+ */
+
+namespace WPShadow\Diagnostics;
+
+/**
+ * Check if CAA records are configured.
+ */
+class Diagnostic_CAA_Records_Configuration {
+	/**
+	 * Run the diagnostic check.
+	 *
+	 * @return array|null Finding data or null if no issue.
+	 */
+	public static function check() {
+		$caa_configured = get_option( 'wpshadow_caa_records_configured' );
+		
+		if ( empty( $caa_configured ) ) {
+			return array(
+				'id'          => 'caa-records-configuration',
+				'title'       => 'No CAA Records Configured',
+				'description' => 'CAA (Certification Authority Authorization) DNS records not set. Attackers can request SSL certificates from rogue CAs. Configure CAA records to authorize only trusted CAs.',
+				'severity'    => 'medium',
+				'category'    => 'security',
+				'kb_link'     => 'https://wpshadow.com/kb/configure-caa-records/',
+				'training_link' => 'https://wpshadow.com/training/certificate-security/',
+				'auto_fixable' => false,
+				'threat_level' => 65,
+			);
+		}
+		
+		return null;
+	}
+}

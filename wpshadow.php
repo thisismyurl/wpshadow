@@ -42,6 +42,9 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-get-dashbo
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-quick-scan-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-deep-scan-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-dismiss-scan-notice-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-save-dashboard-prefs-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-send-executive-report-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-export-csv-handler.php';
 
 \WPShadow\Admin\Ajax\Dismiss_Finding_Handler::register();
 \WPShadow\Admin\Ajax\Autofix_Finding_Handler::register();
@@ -53,6 +56,22 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-dismiss-sc
 \WPShadow\Admin\Ajax\Quick_Scan_Handler::register();
 \WPShadow\Admin\Ajax\Deep_Scan_Handler::register();
 \WPShadow\Admin\Ajax\Dismiss_Scan_Notice_Handler::register();
+\WPShadow\Admin\Ajax\Save_Dashboard_Prefs_Handler::register();
+\WPShadow\Admin\Ajax\Send_Executive_Report_Handler::register();
+\WPShadow\Admin\Ajax\Export_CSV_Handler::register();
+
+// Extracted module files (Phase 3.5: refactoring for maintainability)
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-tooltip-manager.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-analysis-helpers.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-site-health-bridge.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-finding-utils.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-scoring-engine.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-tools-page-module.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-help-page-module.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-privacy-page-module.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-asset-manager.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/dashboard/gauges-module.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/dashboard/activity-module.php';
 
 // Show consent banner for admins (Phase 6: consent-first)
 add_action( 'admin_footer', function() {
@@ -116,100 +135,6 @@ add_action( 'admin_footer', function() {
 			});
 		});
 	})(jQuery);
-	</script>
-	<?php
-});
-
-// Show scan reminder notice (Phase 4: helpful neighbor)
-add_action( 'admin_notices', function() {
-	if ( ! is_admin() || wp_doing_ajax() ) {
-		return;
-	}
-
-	$current_user = get_current_user_id();
-	if ( ! $current_user || ! current_user_can( 'manage_options' ) ) {
-		return;
-	}
-
-	// Check last quick scan time FIRST
-	$last_scan = get_option( 'wpshadow_last_quick_scan', 0 );
-	
-	// If no scan has been run yet, show notice (user should run initial scan)
-	// But if a scan HAS been run, only show if more than 15 minutes ago
-	if ( $last_scan !== 0 ) {
-		$time_since_scan = time() - $last_scan;
-		
-		// Only show if last scan was more than 15 minutes ago
-		if ( $time_since_scan < ( 15 * MINUTE_IN_SECONDS ) ) {
-			return;
-		}
-	}
-
-	// Check if we're on WPShadow dashboard
-	$screen = get_current_screen();
-	$is_wpshadow_page = $screen && strpos( $screen->id, 'wpshadow' ) !== false;
-
-	// If not on WPShadow page, check if dismissed
-	if ( ! $is_wpshadow_page ) {
-		$dismissed_until = get_user_meta( $current_user, 'wpshadow_scan_notice_dismissed_until', true );
-		if ( $dismissed_until && $dismissed_until > time() ) {
-			return; // Still dismissed
-		}
-	}
-
-	// Calculate friendly time string
-	if ( $last_scan === 0 ) {
-		$time_string = __( 'never', 'wpshadow' );
-	} else {
-		$time_since_scan = time() - $last_scan;
-		if ( $time_since_scan < HOUR_IN_SECONDS ) {
-			$minutes = floor( $time_since_scan / MINUTE_IN_SECONDS );
-			$time_string = sprintf( _n( '%d minute ago', '%d minutes ago', $minutes, 'wpshadow' ), $minutes );
-		} elseif ( $time_since_scan < DAY_IN_SECONDS ) {
-			$hours = floor( $time_since_scan / HOUR_IN_SECONDS );
-			$time_string = sprintf( _n( '%d hour ago', '%d hours ago', $hours, 'wpshadow' ), $hours );
-		} else {
-			$days = floor( $time_since_scan / DAY_IN_SECONDS );
-			$time_string = sprintf( _n( '%d day ago', '%d days ago', $days, 'wpshadow' ), $days );
-		}
-	}
-
-	// Show notice
-	?>
-	<div id="wpshadow-scan-notice" class="notice notice-info is-dismissible" style="position: relative;">
-		<p>
-			<span class="dashicons dashicons-shield-alt" style="color: #2196f3; font-size: 20px; vertical-align: middle; margin-right: 5px;"></span>
-			<strong><?php esc_html_e( 'WPShadow:', 'wpshadow' ); ?></strong>
-			<?php
-			printf(
-				/* translators: %s: time since last scan */
-				esc_html__( 'Your last scan was %s. Run a fresh scan to check for new issues.', 'wpshadow' ),
-				'<strong>' . esc_html( $time_string ) . '</strong>'
-			);
-			?>
-			<button id="wpshadow-scan-notice-run-btn" class="button button-primary" style="margin-left: 10px; vertical-align: middle;">
-				<?php esc_html_e( 'Run Quick Scan', 'wpshadow' ); ?>
-			</button>
-		</p>
-	</div>
-	<script>
-	jQuery(document).ready(function($) {
-		// Admin notice Quick Scan button
-		$('#wpshadow-scan-notice-run-btn').on('click', function(e) {
-			e.preventDefault();
-			// Redirect to WPShadow dashboard and trigger scan
-			window.location.href = '<?php echo esc_js( admin_url( 'admin.php?page=wpshadow&action=quick_scan' ) ); ?>';
-		});
-		
-		// Handle dismiss button click
-		$('#wpshadow-scan-notice').on('click', '.notice-dismiss', function() {
-			// Send AJAX to record dismiss
-			$.post(ajaxurl, {
-				action: 'wpshadow_dismiss_scan_notice',
-				nonce: '<?php echo wp_create_nonce( 'wpshadow_scan_notice_nonce' ); ?>'
-			});
-		});
-	});
 	</script>
 	<?php
 });
@@ -332,125 +257,8 @@ add_action( 'wpshadow_run_automated_fixes', function() {
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-schedule-offpeak-handler.php';
 \WPShadow\Admin\Ajax\Schedule_Offpeak_Handler::register();
 
-/**
- * Analyze HTML for basic mobile-friendly signals.
- */
-function wpshadow_analyze_mobile_html( $html ) {
-	$checks = array();
 
-	$viewport_present = (bool) preg_match( '/<meta[^>]+name=["\\\']viewport["\\\'][^>]*>/i', $html );
-	$viewport_content = '';
 
-	if ( $viewport_present && preg_match( '/<meta[^>]+name=["\\\']viewport["\\\'][^>]*content=["\\\']([^"\\\']+)["\\\'][^>]*>/i', $html, $match ) ) {
-		$viewport_content = strtolower( $match[1] );
-	}
-
-	$has_device_width = ( $viewport_content && strpos( $viewport_content, 'width=device-width' ) !== false );
-	$has_initial_scale = ( $viewport_content && strpos( $viewport_content, 'initial-scale' ) !== false );
-	$zoom_disabled = ( $viewport_content && ( strpos( $viewport_content, 'user-scalable=no' ) !== false || preg_match( '/maximum-scale\s*=\s*1(\.0)?/i', $viewport_content ) ) );
-
-	$checks[] = array(
-		'id'      => 'viewport',
-		'label'   => __( 'Viewport meta tag', 'wpshadow' ),
-		'status'  => $viewport_present ? 'pass' : 'fail',
-		'details' => $viewport_present
-			? __( 'Viewport tag detected for responsive layouts.', 'wpshadow' )
-			: __( 'Missing viewport meta tag; mobile browsers may render the desktop layout.', 'wpshadow' ),
-	);
-
-	$checks[] = array(
-		'id'      => 'device-width',
-		'label'   => __( 'Viewport width set to device width', 'wpshadow' ),
-		'status'  => $has_device_width ? 'pass' : 'warn',
-		'details' => $has_device_width
-			? __( 'width=device-width is set.', 'wpshadow' )
-			: __( 'Add width=device-width to the viewport content for proper scaling.', 'wpshadow' ),
-	);
-
-	$checks[] = array(
-		'id'      => 'initial-scale',
-		'label'   => __( 'Initial scale defined', 'wpshadow' ),
-		'status'  => $has_initial_scale ? 'pass' : 'warn',
-		'details' => $has_initial_scale
-			? __( 'initial-scale is specified.', 'wpshadow' )
-			: __( 'Set an initial-scale (typically 1.0) to avoid unexpected zoom.', 'wpshadow' ),
-	);
-
-	$checks[] = array(
-		'id'      => 'zoom',
-		'label'   => __( 'Zoom not disabled', 'wpshadow' ),
-		'status'  => $zoom_disabled ? 'warn' : 'pass',
-		'details' => $zoom_disabled
-			? __( 'Zoom appears disabled via user-scalable or maximum-scale; allow zoom for accessibility.', 'wpshadow' )
-			: __( 'Zoom is allowed for users who need it.', 'wpshadow' ),
-	);
-
-	// Look for very small font sizes in inline styles or stylesheets.
-	$small_font_hits = 0;
-	if ( preg_match_all( '/font-size\s*:\s*([0-9]+(?:\.[0-9]+)?)px/i', $html, $font_matches ) ) {
-		foreach ( $font_matches[1] as $size ) {
-			if ( (float) $size < 14.0 ) {
-				$small_font_hits++;
-			}
-		}
-	}
-
-	$checks[] = array(
-		'id'      => 'font-size',
-		'label'   => __( 'Readable font sizes', 'wpshadow' ),
-		'status'  => $small_font_hits > 0 ? 'warn' : 'pass',
-		'details' => $small_font_hits > 0
-			? sprintf( __( 'Found %d font declarations under 14px; consider increasing for readability.', 'wpshadow' ), (int) $small_font_hits )
-			: __( 'No obvious undersized font declarations detected.', 'wpshadow' ),
-	);
-
-	// Check for rigid widths that may cause horizontal scroll on phones.
-	$wide_tables = false;
-	if ( preg_match( '/<table[^>]+width=["\\\']?(\d{3,})/i', $html, $table_match ) ) {
-		$wide_tables = ( (int) $table_match[1] >= 960 );
-	}
-
-	$fixed_min_width = false;
-	if ( preg_match( '/min-width\s*:\s*(\d{3,})px/i', $html, $min_width_match ) ) {
-		$fixed_min_width = ( (int) $min_width_match[1] >= 960 );
-	}
-
-	$layout_rigid = $wide_tables || $fixed_min_width;
-
-	$checks[] = array(
-		'id'      => 'layout-flex',
-		'label'   => __( 'Flexible layout widths', 'wpshadow' ),
-		'status'  => $layout_rigid ? 'warn' : 'pass',
-		'details' => $layout_rigid
-			? __( 'Detected wide fixed widths that may force horizontal scrolling on small screens.', 'wpshadow' )
-			: __( 'No obvious fixed-width layouts detected.', 'wpshadow' ),
-	);
-
-	return $checks;
-}
-
-/**
- * Run mobile friendliness scan (programmatic helper for tools/workflows).
- *
- * @return array Findings array.
- */
-function wpshadow_run_mobile_friendliness() {
-	$response = wp_remote_get( home_url(), array(
-		'timeout' => 10,
-		'headers' => array( 'User-Agent' => 'WPShadow-Mobile-Check' ),
-	) );
-
-	if ( is_wp_error( $response ) ) {
-		return array();
-	}
-
-	$body = wp_remote_retrieve_body( $response );
-	if ( empty( $body ) ) {
-		return array();
-	}
-
-	return wpshadow_analyze_mobile_html( $body );
-}
 
 /**
  * Convert hex color to RGB array.
@@ -503,118 +311,6 @@ function wpshadow_get_theme_background_color() {
 // AJAX: Report theme palette contrast against the theme background.
 // Theme contrast handler will be migrated to class
 
-/**
- * Tooltip catalog for Tips & Guidance.
- */
-function wpshadow_get_tooltip_catalog( $category = null ) {
-	// Use transient caching for persistent, cross-request caching (24 hour TTL)
-	
-	// If no category specified, load all categories
-	if ( null === $category ) {
-		$cache_key = 'wpshadow_tooltips_all';
-		$cached = get_transient( $cache_key );
-		
-		if ( false !== $cached ) {
-			return $cached;
-		}
-
-		// Load all category files
-		$all_tooltips = array();
-		$categories = array( 'navigation', 'content', 'design', 'extensions', 'maintenance', 'people', 'settings' );
-		
-		foreach ( $categories as $cat ) {
-			$category_tooltips = wpshadow_get_tooltip_catalog( $cat );
-			$all_tooltips = array_merge( $all_tooltips, $category_tooltips );
-		}
-		
-		// Cache all tooltips for 24 hours
-		set_transient( $cache_key, $all_tooltips, 24 * HOUR_IN_SECONDS );
-		return $all_tooltips;
-	}
-
-	// Check transient cache for category
-	$cache_key = 'wpshadow_tooltips_' . sanitize_key( $category );
-	$cached = get_transient( $cache_key );
-	
-	if ( false !== $cached ) {
-		return $cached;
-	}
-
-	// Path to category-specific JSON file
-	$json_file = plugin_dir_path( __FILE__ ) . 'includes/data/tooltips-' . sanitize_file_name( $category ) . '.json';
-
-	// Check if file exists
-	if ( ! file_exists( $json_file ) ) {
-		// Log error only for debugging
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log( 'WPShadow: tooltips-' . $category . '.json file not found at ' . $json_file );
-		}
-		return array();
-	}
-
-	// Load and decode JSON
-	$json_content = file_get_contents( $json_file );
-	$data = json_decode( $json_content, true );
-
-	// Check if JSON is valid
-	if ( null === $data || ! is_array( $data ) ) {
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log( 'WPShadow: Invalid JSON structure in tooltips-' . $category . '.json' );
-		}
-		return array();
-	}
-
-	// Apply translations to title and message fields
-	foreach ( $data as &$tooltip ) {
-		if ( isset( $tooltip['title'] ) ) {
-			$tooltip['title'] = __( $tooltip['title'], 'wpshadow' );
-		}
-		if ( isset( $tooltip['message'] ) ) {
-			$tooltip['message'] = __( $tooltip['message'], 'wpshadow' );
-		}
-	}
-
-	// Cache the result for 24 hours
-	set_transient( $cache_key, $data, 24 * HOUR_IN_SECONDS );
-
-	return $data;
-}
-
-	function wpshadow_get_tip_categories() {
-		return array(
-			'navigation'  => __( 'Navigation', 'wpshadow' ),
-			'content'     => __( 'Content', 'wpshadow' ),
-			'design'      => __( 'Design & Appearance', 'wpshadow' ),
-			'extensions'  => __( 'Plugins & Extensions', 'wpshadow' ),
-			'people'      => __( 'Users & Roles', 'wpshadow' ),
-			'settings'    => __( 'Settings', 'wpshadow' ),
-			'maintenance' => __( 'Maintenance', 'wpshadow' ),
-		);
-	}
-
-	function wpshadow_get_user_tip_prefs( $user_id ) {
-		$prefs = get_user_meta( $user_id, 'wpshadow_tip_prefs', true );
-		if ( ! is_array( $prefs ) ) {
-			$prefs = array();
-		}
-		$defaults = array(
-			'disabled_categories' => array(),
-			'dismissed_tips'      => array(),
-		);
-
-		return wp_parse_args( $prefs, $defaults );
-	}
-
-	function wpshadow_save_user_tip_prefs( $user_id, $prefs ) {
-		if ( ! is_array( $prefs ) ) {
-			return;
-		}
-		$clean = array(
-			'disabled_categories' => array_map( 'sanitize_key', $prefs['disabled_categories'] ?? array() ),
-			'dismissed_tips'      => array_map( 'sanitize_key', $prefs['dismissed_tips'] ?? array() ),
-		);
-		update_user_meta( $user_id, 'wpshadow_tip_prefs', $clean );
-	}
 
 // AJAX: Accessibility audit scan
 // A11y scan handler will be migrated to class
@@ -643,83 +339,6 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-get-availa
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-get-action-config-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-run-workflow-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-create-from-example-handler.php';
-
-/**
- * Analyze HTML for accessibility issues.
- */
-function wpshadow_analyze_a11y_html( $html ) {
-	$issues = array();
-
-	// Check for alt text on images
-	$images_with_alt = preg_match_all( '/<img[^>]*alt=["\']([^"\']*)["\'][^>]*>/i', $html, $matches );
-	$images_without_alt = preg_match_all( '/<img(?![^>]*alt=)[^>]*>/i', $html );
-
-	$issues[] = array(
-		'id'      => 'alt-text',
-		'label'   => __( 'Image alt text', 'wpshadow' ),
-		'status'  => $images_without_alt > 0 ? 'warn' : 'pass',
-		'details' => $images_without_alt > 0
-			? sprintf( __( '%d image(s) missing alt text; add descriptive alt attributes for screen readers.', 'wpshadow' ), $images_without_alt )
-			: __( 'All images have alt text.', 'wpshadow' ),
-	);
-
-	// Check for heading hierarchy
-	preg_match_all( '/<h([1-6])[^>]*>/i', $html, $headings );
-	$has_h1 = ! empty( array_filter( $headings[1], fn( $h ) => $h === '1' ) );
-	$has_multiple_h1 = count( array_filter( $headings[1], fn( $h ) => $h === '1' ) ) > 1;
-
-	$heading_status = $has_h1 ? ( $has_multiple_h1 ? 'warn' : 'pass' ) : 'fail';
-	$heading_detail = ! $has_h1
-		? __( 'Page missing H1 heading; use one H1 as the main page title.', 'wpshadow' )
-		: ( $has_multiple_h1 ? __( 'Multiple H1 headings detected; prefer a single H1 as main title.', 'wpshadow' ) : __( 'Proper H1 heading structure detected.', 'wpshadow' ) );
-
-	$issues[] = array(
-		'id'      => 'heading-hierarchy',
-		'label'   => __( 'Heading hierarchy', 'wpshadow' ),
-		'status'  => $heading_status,
-		'details' => $heading_detail,
-	);
-
-	// Check for ARIA labels on buttons/interactive elements
-	preg_match_all( '/<button[^>]*>/i', $html, $buttons );
-	preg_match_all( '/<button[^>]*aria-label=["\']([^"\']*)["\'][^>]*>/i', $html, $buttons_with_aria );
-
-	$issues[] = array(
-		'id'      => 'aria-labels',
-		'label'   => __( 'ARIA labels on interactive elements', 'wpshadow' ),
-		'status'  => count( $buttons[0] ) > count( $buttons_with_aria[0] ) ? 'warn' : 'pass',
-		'details' => count( $buttons[0] ) > count( $buttons_with_aria[0] )
-			? sprintf( __( '%d button(s) may need explicit ARIA labels.', 'wpshadow' ), count( $buttons[0] ) - count( $buttons_with_aria[0] ) )
-			: __( 'Interactive elements have proper ARIA labels.', 'wpshadow' ),
-	);
-
-	// Check for color contrast (basic check)
-	$has_inline_styles = preg_match_all( '/style\s*=\s*["\']([^"\']*)["\']/', $html, $styles );
-	
-	$issues[] = array(
-		'id'      => 'color-contrast',
-		'label'   => __( 'Color contrast', 'wpshadow' ),
-		'status'  => $has_inline_styles > 0 ? 'warn' : 'pass',
-		'details' => $has_inline_styles > 0
-			? __( 'Page uses inline styles; verify color contrast ratios meet WCAG standards (4.5:1 minimum).', 'wpshadow' )
-			: __( 'No obvious contrast issues detected; use WCAG contrast checker for detailed audit.', 'wpshadow' ),
-	);
-
-	// Check for form labels
-	preg_match_all( '/<input[^>]*>/i', $html, $inputs );
-	preg_match_all( '/<label[^>]*for=["\']([^"\']*)["\'][^>]*>/i', $html, $labels );
-
-	$issues[] = array(
-		'id'      => 'form-labels',
-		'label'   => __( 'Form field labels', 'wpshadow' ),
-		'status'  => count( $inputs[0] ) > 0 && count( $labels[0] ) > 0 ? 'pass' : ( count( $inputs[0] ) > 0 ? 'warn' : 'pass' ),
-		'details' => count( $inputs[0] ) > 0 && count( $labels[0] ) === 0
-			? __( 'Some form inputs may lack associated labels; add <label> elements for accessibility.', 'wpshadow' )
-			: __( 'Form fields have proper label associations.', 'wpshadow' ),
-	);
-
-	return $issues;
-}
 
 // Save cache options handler moved to class
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-save-cache-options-handler.php';
@@ -869,15 +488,7 @@ add_action( 'admin_menu', function() {
 		'wpshadow_render_help'
 	);
 
-	// Activity History submenu (Issue #565)
-	add_submenu_page(
-		'wpshadow',
-		__( 'Activity History', 'wpshadow' ),
-		__( 'Activity History', 'wpshadow' ),
-		'read',
-		'wpshadow-activity',
-		'wpshadow_render_activity_page'
-	);
+
 
 	// Guardian System submenu pages
 	add_submenu_page(
@@ -891,8 +502,9 @@ add_action( 'admin_menu', function() {
 		}
 	);
 
+	// Guardian Settings - hidden from submenu but accessible via direct URL
 	add_submenu_page(
-		'wpshadow',
+		null, // Hidden from menu
 		__( 'Guardian Settings', 'wpshadow' ),
 		__( 'Guardian Settings', 'wpshadow' ),
 		'manage_options',
@@ -984,245 +596,6 @@ add_filter( 'site_status_tests', function ( $tests ) {
 
 	return $tests;
 } );
-
-/**
- * Site Health test: Quick Scan recency.
- */
-function wpshadow_site_health_test_quick_scan() {
-	$badge = $GLOBALS['wpshadow_site_health_badge'] ?? array( 'label' => 'WPShadow', 'color' => 'blue' );
-	$last  = get_option( 'wpshadow_last_quick_checks', 0 );
-
-	$now   = time();
-	$label = __( 'WPShadow Quick Scan', 'wpshadow' );
-	$desc  = __( 'WPShadow provides a fast, lightweight scan of common issues. Run it regularly to keep your site in shape.', 'wpshadow' );
-	$action_url = admin_url( 'admin.php?page=wpshadow' );
-
-	if ( empty( $last ) ) {
-		return array(
-			'label'       => $label,
-			'status'      => 'recommended',
-			'badge'       => $badge,
-			'description' => __( 'Quick Scan has not been run yet. Open WPShadow to run a Quick Scan.', 'wpshadow' ),
-			'actions'     => array(
-				sprintf(
-					'<a href="%s">%s</a>',
-					esc_url( $action_url ),
-					esc_html__( 'Run now', 'wpshadow' )
-				),
-			),
-			'test'        => 'wpshadow_site_health_test_quick_scan',
-		);
-	}
-
-	$age = $now - (int) $last;
-	$age_str = sprintf( __( 'Last run %s ago.', 'wpshadow' ), human_time_diff( $last, $now ) );
-
-	if ( $age > DAY_IN_SECONDS * 2 ) {
-		return array(
-			'label'       => $label,
-			'status'      => 'recommended',
-			'badge'       => $badge,
-			'description' => $age_str . ' ' . __( 'Consider running a new Quick Scan.', 'wpshadow' ),
-			'actions'     => array(
-				sprintf(
-					'<a href="%s">%s</a>',
-					esc_url( $action_url ),
-					esc_html__( 'Run now', 'wpshadow' )
-				),
-			),
-			'test'        => 'wpshadow_site_health_test_quick_scan',
-		);
-	}
-
-	return array(
-		'label'       => $label,
-		'status'      => 'good',
-		'badge'       => $badge,
-		'description' => $age_str,
-		'test'        => 'wpshadow_site_health_test_quick_scan',
-	);
-}
-
-/**
- * Site Health test: Deep Scan recency.
- */
-function wpshadow_site_health_test_deep_scan() {
-	$badge = $GLOBALS['wpshadow_site_health_badge'] ?? array( 'label' => 'WPShadow', 'color' => 'blue' );
-	$last  = get_option( 'wpshadow_last_heavy_tests', 0 );
-
-	$now   = time();
-	$label = __( 'WPShadow Deep Scan', 'wpshadow' );
-	$action_url = admin_url( 'admin.php?page=wpshadow' );
-
-	if ( empty( $last ) ) {
-		return array(
-			'label'       => $label,
-			'status'      => 'recommended',
-			'badge'       => $badge,
-			'description' => __( 'Deep Scan has not been run yet. Open WPShadow to run a Deep Scan.', 'wpshadow' ),
-			'actions'     => array(
-				sprintf(
-					'<a href="%s">%s</a>',
-					esc_url( $action_url . '#deep-scan' ),
-					esc_html__( 'Run now', 'wpshadow' )
-				),
-			),
-			'test'        => 'wpshadow_site_health_test_deep_scan',
-		);
-	}
-
-	$age = $now - (int) $last;
-	$age_str = sprintf( __( 'Last run %s ago.', 'wpshadow' ), human_time_diff( $last, $now ) );
-
-	if ( $age > WEEK_IN_SECONDS ) {
-		return array(
-			'label'       => $label,
-			'status'      => 'recommended',
-			'badge'       => $badge,
-			'description' => $age_str . ' ' . __( 'Consider running a new Deep Scan.', 'wpshadow' ),
-			'actions'     => array(
-				sprintf(
-					'<a href="%s">%s</a>',
-					esc_url( $action_url . '#deep-scan' ),
-					esc_html__( 'Run now', 'wpshadow' )
-				),
-			),
-			'test'        => 'wpshadow_site_health_test_deep_scan',
-		);
-	}
-
-	return array(
-		'label'       => $label,
-		'status'      => 'good',
-		'badge'       => $badge,
-		'description' => $age_str,
-		'test'        => 'wpshadow_site_health_test_deep_scan',
-	);
-}
-
-/**
- * Site Health test: Overall WPShadow summary.
- */
-function wpshadow_site_health_test_overall() {
-	$badge = $GLOBALS['wpshadow_site_health_badge'] ?? array( 'label' => 'WPShadow', 'color' => 'blue' );
-	$label = __( 'WPShadow Overall Status', 'wpshadow' );
-
-	// If we have recent scans, mark good; otherwise recommend action.
-	$quick = (int) get_option( 'wpshadow_last_quick_checks', 0 );
-	$deep  = (int) get_option( 'wpshadow_last_heavy_tests', 0 );
-
-	$action_url = admin_url( 'admin.php?page=wpshadow' );
-
-	if ( empty( $quick ) && empty( $deep ) ) {
-		return array(
-			'label'       => $label,
-			'status'      => 'recommended',
-			'badge'       => $badge,
-			'description' => __( 'No WPShadow scans have been recorded yet. Run Quick or Deep Scan in the WPShadow dashboard.', 'wpshadow' ),
-			'actions'     => array(
-				sprintf(
-					'<a href="%s">%s</a>',
-					esc_url( $action_url . '#quick-scan' ),
-					esc_html__( 'Run now', 'wpshadow' )
-				),
-			),
-			'test'        => 'wpshadow_site_health_test_overall',
-		);
-	}
-
-	return array(
-		'label'       => $label,
-		'status'      => 'good',
-		'badge'       => $badge,
-		'description' => __( 'WPShadow scans are active. See the WPShadow dashboard for detailed category health.', 'wpshadow' ),
-		'actions'     => array(
-			sprintf(
-				'<a href="%s">%s</a>',
-				esc_url( $action_url ),
-				esc_html__( 'View Dashboard', 'wpshadow' )
-			),
-		),
-		'test'        => 'wpshadow_site_health_test_overall',
-	);
-}
-
-/**
- * Site Health test: Individual WPShadow finding (Issue #558)
- * 
- * @param array  $finding Finding data
- * @param array  $badge Site Health badge
- * @param string $finding_id Finding identifier
- * @return array Site Health test result
- */
-function wpshadow_site_health_test_finding( $finding, $badge, $finding_id ) {
-	$action_url = admin_url( 'admin.php?page=wpshadow' );
-	$threat_level = isset( $finding['threat_level'] ) ? $finding['threat_level'] : 50;
-	
-	// Check if already fixed
-	$status_manager = new \WPShadow\Core\Finding_Status_Manager();
-	$status = $status_manager->get_finding_status( $finding_id );
-	
-	if ( $status === 'fixed' ) {
-		return array(
-			'label'       => $finding['title'] ?? __( 'Security Issue', 'wpshadow' ),
-			'status'      => 'good',
-			'badge'       => $badge,
-			'description' => __( '✓ This issue has been resolved by WPShadow.', 'wpshadow' ),
-			'test'        => 'wpshadow_finding_' . $finding_id,
-		);
-	}
-	
-	// Determine status based on threat level
-	$site_status = 'recommended';
-	if ( $threat_level >= 90 ) {
-		$site_status = 'critical';
-	} elseif ( $threat_level >= 75 ) {
-		$site_status = 'recommended';
-	}
-	
-	$description = isset( $finding['description'] ) ? wp_strip_all_tags( $finding['description'] ) : '';
-	$category = isset( $finding['category'] ) ? $finding['category'] : '';
-	$slug = sanitize_title( (string) ( $finding_id ?? ( $finding['title'] ?? '' ) ) );
-	$kb_link = ! empty( $slug ) ? wpshadow_get_kb_link( $slug ) : '';
-	$training_link = ! empty( $slug ) ? wpshadow_get_training_link( $slug ) : '';
-	
-	if ( ! empty( $category ) ) {
-		$description .= ' ' . sprintf( __( '(Category: %s)', 'wpshadow' ), ucfirst( $category ) );
-	}
-	
-	$actions = array(
-		sprintf(
-			'<a href="%s">%s</a>',
-			esc_url( $action_url ),
-			__( 'View in WPShadow', 'wpshadow' )
-		),
-	);
-
-	if ( ! empty( $kb_link ) ) {
-		$actions[] = sprintf(
-			'<a href="%s" target="_blank">%s</a>',
-			esc_url( $kb_link ),
-			__( 'Learn more (KB)', 'wpshadow' )
-		);
-	}
-
-	if ( ! empty( $training_link ) ) {
-		$actions[] = sprintf(
-			'<a href="%s" target="_blank">%s</a>',
-			esc_url( $training_link ),
-			__( 'Watch training', 'wpshadow' )
-		);
-	}
-	
-	return array(
-		'label'       => $finding['title'] ?? __( 'Security Issue', 'wpshadow' ),
-		'status'      => $site_status,
-		'badge'       => $badge,
-		'description' => $description,
-		'actions'     => $actions,
-		'test'        => 'wpshadow_finding_' . $finding_id,
-	);
-}
 
 // Add WPShadow section to Site Health → Info (debug tab).
 add_filter( 'debug_information', function ( $info ) {
@@ -1341,6 +714,10 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/treatments/class-treatment-
 // Load remaining core classes
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-finding-status-manager.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-kpi-tracker.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-kpi-summary-card.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-kpi-metadata.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-recommendation-engine.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-trend-chart.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-block-registry.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-manager.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-discovery.php';
@@ -1353,6 +730,8 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-create-sug
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-workflow-executor.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-kanban-workflow-helper.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-user-preferences-manager.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-dashboard-customization.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-kpi-advanced-features.php';
 
 // FAQ and Knowledge Base features moved to WPShadow Pro modules:
 // - FAQ Module (wpshadow-pro/modules/faq/)
@@ -1491,6 +870,46 @@ add_action( 'plugins_loaded', function() {
 	\WPShadow\Workflow\Commands\Send_Report_Command::register();
 	\WPShadow\Workflow\Commands\Manage_Notifications_Command::register();
 } );
+
+/**
+ * Phase 3: Wire KPI tracking hooks
+ * 
+ * Track when treatments are applied and record time/effort saved
+ */
+add_action( 'wpshadow_after_treatment_apply', function( $class, $finding_id, $result ) {
+	// Only track successful treatments
+	if ( ! isset( $result['success'] ) || ! $result['success'] ) {
+		return;
+	}
+	
+	// Extract treatment ID from class name
+	$treatment_id = strtolower( str_replace( 'WPShadow\Treatments\Treatment_', '', $class ) );
+	
+	// Record KPI for treatment applied
+	\WPShadow\Core\KPI_Tracker::record_treatment_applied( $treatment_id, 5 );
+	
+	// Log activity
+	\WPShadow\Core\Activity_Logger::log(
+		'treatment_applied',
+		sprintf( 'Applied treatment: %s', $treatment_id ),
+		'',
+		array( 'finding_id' => $finding_id, 'treatment' => $treatment_id )
+	);
+	
+	// Update trend chart with finding resolution
+	\WPShadow\Core\Trend_Chart::record_finding_resolved( $finding_id, 'fixed' );
+}, 10, 3 );
+
+/**
+ * Phase 3: Track diagnostic runs
+ * 
+ * Log each diagnostic execution for KPI metrics
+ */
+add_action( 'wpshadow_diagnostic_executed', function( $diagnostic_id, $result ) {
+	// Record KPI for diagnostic run
+	$success = isset( $result['success'] ) ? $result['success'] : false;
+	\WPShadow\Core\KPI_Tracker::record_diagnostic_run( $diagnostic_id, $success );
+}, 10, 2 );
 
 /**
  * Enqueue Kanban board assets and gauges CSS.
@@ -1899,350 +1318,8 @@ function wpshadow_render_workflow_builder() {
  * Catalog of WPShadow tools shown on /wp-admin/?page=wpshadow-tools.
  * Returned structure is reused for both the WPShadow Tools page and the core Tools page mirror.
  */
-function wpshadow_get_tools_catalog() {
-	return array(
-		array(
-			'title'   => __( 'Accessibility Audit', 'wpshadow' ),
-			'desc'    => __( 'Scan your site for accessibility issues and WCAG compliance.', 'wpshadow' ),
-			'tool'    => 'a11y-audit',
-			'enabled' => true,
-		),
-		array(
-			'title'   => __( 'Broken Link Checker', 'wpshadow' ),
-			'desc'    => __( 'Find and fix broken links across your site.', 'wpshadow' ),
-			'tool'    => 'broken-links',
-			'enabled' => true,
-		),
-		array(
-			'title'   => __( 'Color Contrast Checker', 'wpshadow' ),
-			'desc'    => __( 'Check color combinations for accessibility compliance.', 'wpshadow' ),
-			'tool'    => 'color-contrast',
-			'enabled' => true,
-		),
-		array(
-			'title'   => __( 'Dark Mode', 'wpshadow' ),
-			'desc'    => __( 'Enable dark mode for the WordPress admin interface.', 'wpshadow' ),
-			'tool'    => 'dark-mode',
-			'enabled' => true,
-		),
-		array(
-			'title'   => __( 'Email Test & Configuration', 'wpshadow' ),
-			'desc'    => __( 'Test email delivery and configure From Name/Email to ensure emails are sent properly.', 'wpshadow' ),
-			'tool'    => 'email-test',
-			'enabled' => true,
-		),
-		array(
-			'title'   => __( 'Cache Management', 'wpshadow' ),
-			'desc'    => __( 'Manage site caching and clear cache when needed.', 'wpshadow' ),
-			'tool'    => 'simple-cache',
-			'enabled' => true,
-		),
-		array(
-			'title'   => __( 'Magic Link Support', 'wpshadow' ),
-			'desc'    => __( 'Generate secure one-time access links for support staff.', 'wpshadow' ),
-			'tool'    => 'magic-link-support',
-			'enabled' => true,
-		),
-		array(
-			'title'   => __( 'Mobile Friendliness', 'wpshadow' ),
-			'desc'    => __( 'Test your site for mobile compatibility and responsive design.', 'wpshadow' ),
-			'tool'    => 'mobile-friendliness',
-			'enabled' => true,
-		),
-		array(
-			'title'   => __( 'Tips & Guidance', 'wpshadow' ),
-			'desc'    => __( 'Friendly tooltips across wp-admin with opt-out controls and helpful guidance for beginners.', 'wpshadow' ),
-			'tool'    => 'tips-coach',
-			'enabled' => true,
-		),
-	);
-}
 
-/**
- * Render Tools page.
- */
-function wpshadow_render_tools() {
-	if ( ! current_user_can( 'read' ) ) {
-		wp_die( 'Insufficient permissions.' );
-	}
-
-	$tool = isset( $_GET['tool'] ) ? sanitize_key( $_GET['tool'] ) : '';
-
-	// Route to specific tool if requested
-	if ( ! empty( $tool ) ) {
-		$tool_file = WPSHADOW_PATH . 'includes/views/tools/' . $tool . '.php';
-		if ( file_exists( $tool_file ) ) {
-			include $tool_file;
-			return;
-		}
-	}
-
-	$catalog = wpshadow_get_tools_catalog();
-
-	// Show tools index
-	?>
-	<div class="wrap">
-		<h1><?php esc_html_e( 'WPShadow Tools', 'wpshadow' ); ?></h1>
-		<p><?php esc_html_e( 'Additional tools for site analysis and optimization.', 'wpshadow' ); ?></p>
-
-		<div class="wpshadow-tools-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 30px;">
-			<?php foreach ( $catalog as $item ) :
-				$tool_url = admin_url( 'admin.php?page=wpshadow-tools&tool=' . $item['tool'] );
-			?>
-			<div class="wpshadow-tool-card" style="border: 1px solid #ddd; padding: 20px; border-radius: 4px; background: #fff;">
-				<h2 style="margin-top: 0;"><?php echo esc_html( $item['title'] ); ?></h2>
-				<p><?php echo esc_html( $item['desc'] ); ?></p>
-				<p style="margin-bottom: 0;">
-					<?php if ( ! empty( $item['enabled'] ) ) : ?>
-						<a href="<?php echo esc_url( $tool_url ); ?>" class="button button-primary">
-							<?php esc_html_e( 'Open Tool', 'wpshadow' ); ?>
-						</a>
-					<?php else : ?>
-						<button class="button button-secondary" disabled><?php esc_html_e( 'Coming Soon', 'wpshadow' ); ?></button>
-					<?php endif; ?>
-				</p>
-			</div>
-			<?php endforeach; ?>
-		</div>
-	</div>
-	<?php
-}
-
-/**
- * Run broken links scan programmatically for tools/workflows.
- *
- * @param array $args Scan options.
- * @return array Results with broken_links, posts_checked, links_checked.
- */
-function wpshadow_run_broken_links_scan( $args = array() ) {
-	$defaults = array(
-		'check_internal' => true,
-		'check_external' => true,
-		'check_images'   => false,
-		'limit'          => -1,
-	);
-	$args = wp_parse_args( $args, $defaults );
-
-	$broken_links  = array();
-	$posts_checked = 0;
-	$links_checked = 0;
-
-	$query_args = array(
-		'post_type'      => array( 'post', 'page' ),
-		'posts_per_page' => $args['limit'],
-		'post_status'    => 'publish',
-	);
-
-	$posts = get_posts( $query_args );
-	$posts_checked = count( $posts );
-
-	foreach ( $posts as $post ) {
-		$content = $post->post_content;
-
-		// Links
-		preg_match_all( '/<a\s+(?:[^>]*?\s+)?href=["\']([^"\']+)["\']/', $content, $matches );
-		if ( ! empty( $matches[1] ) ) {
-			foreach ( $matches[1] as $url ) {
-				$links_checked++;
-				if ( strpos( $url, '#' ) === 0 ) {
-					continue;
-				}
-				$is_internal = strpos( $url, home_url() ) === 0 || strpos( $url, '/' ) === 0;
-				if ( $is_internal && ! $args['check_internal'] ) {
-					continue;
-				}
-				if ( ! $is_internal && ! $args['check_external'] ) {
-					continue;
-				}
-				if ( strpos( $url, '/' ) === 0 ) {
-					$url = home_url( $url );
-				}
-				$response = wp_remote_head( $url, array(
-					'timeout'     => 5,
-					'redirection' => 2,
-				) );
-				if ( is_wp_error( $response ) ) {
-					$broken_links[] = array(
-						'url'         => $url,
-						'post_title'  => $post->post_title,
-						'edit_url'    => get_edit_post_link( $post->ID, 'raw' ),
-						'status_code' => 'ERROR',
-					);
-				} else {
-					$code = wp_remote_retrieve_response_code( $response );
-					if ( $code >= 400 ) {
-						$broken_links[] = array(
-							'url'         => $url,
-							'post_title'  => $post->post_title,
-							'edit_url'    => get_edit_post_link( $post->ID, 'raw' ),
-							'status_code' => $code,
-						);
-					}
-				}
-			}
-		}
-
-		// Images
-		if ( $args['check_images'] ) {
-			preg_match_all( '/<img\s+(?:[^>]*?\s+)?src=["\']([^"\']+)["\']/', $content, $img_matches );
-			if ( ! empty( $img_matches[1] ) ) {
-				foreach ( $img_matches[1] as $img_url ) {
-					$links_checked++;
-					$response = wp_remote_head( $img_url, array(
-						'timeout'     => 5,
-						'redirection' => 2,
-					) );
-					if ( is_wp_error( $response ) ) {
-						$broken_links[] = array(
-							'url'         => $img_url,
-							'post_title'  => $post->post_title . ' (image)',
-							'edit_url'    => get_edit_post_link( $post->ID, 'raw' ),
-							'status_code' => 'ERROR',
-						);
-					} else {
-						$code = wp_remote_retrieve_response_code( $response );
-						if ( $code >= 400 ) {
-							$broken_links[] = array(
-								'url'         => $img_url,
-								'post_title'  => $post->post_title . ' (image)',
-								'edit_url'    => get_edit_post_link( $post->ID, 'raw' ),
-								'status_code' => $code,
-							);
-						}
-					}
-				}
-			}
-		}
-	}
-
-	return array(
-		'broken_links'  => $broken_links,
-		'posts_checked' => $posts_checked,
-		'links_checked' => $links_checked,
-	);
-}
-
-/**
- * Catalog of WPShadow help items shown on /wp-admin/?page=wpshadow-help.
- */
-function wpshadow_get_help_catalog() {
-	return array(
-		array(
-			'title'   => __( 'Emergency Support', 'wpshadow' ),
-			'desc'    => __( 'Get immediate help when your site is down or experiencing critical issues.', 'wpshadow' ),
-			'page'    => 'emergency-support',
-			'enabled' => true,
-		),
-	);
-}
-
-/**
- * Render Help page.
- */
-function wpshadow_render_help() {
-	if ( ! current_user_can( 'read' ) ) {
-		wp_die( 'Insufficient permissions.' );
-	}
-
-	$page     = isset( $_GET['help_page'] ) ? sanitize_key( $_GET['help_page'] ) : '';
-	$catalog  = wpshadow_get_help_catalog();
-
-	// Route to specific help page if requested and available.
-	if ( ! empty( $page ) ) {
-		$help_file = WPSHADOW_PATH . 'includes/views/help/' . $page . '.php';
-		if ( file_exists( $help_file ) ) {
-			include $help_file;
-			return;
-		}
-	}
-
-	?>
-	<div class="wrap">
-		<h1><?php esc_html_e( 'WPShadow Help & Support', 'wpshadow' ); ?></h1>
-		<p><?php esc_html_e( 'Get help and access support resources for WPShadow.', 'wpshadow' ); ?></p>
-
-		<div class="wpshadow-help-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 30px;">
-			<?php foreach ( $catalog as $item ) :
-				$help_url = admin_url( 'admin.php?page=wpshadow-help&help_page=' . $item['page'] );
-				?>
-				<div class="wpshadow-help-card" style="border: 1px solid #ddd; padding: 20px; border-radius: 4px; background: #fff;">
-					<h2 style="margin-top: 0;"><?php echo esc_html( $item['title'] ); ?></h2>
-					<p><?php echo esc_html( $item['desc'] ); ?></p>
-					<p style="margin-bottom: 0;">
-						<?php if ( ! empty( $item['enabled'] ) ) : ?>
-							<a href="<?php echo esc_url( $help_url ); ?>" class="button button-primary">
-								<?php esc_html_e( 'Open', 'wpshadow' ); ?>
-							</a>
-						<?php else : ?>
-							<button class="button button-secondary" disabled><?php esc_html_e( 'Coming Soon', 'wpshadow' ); ?></button>
-						<?php endif; ?>
-					</p>
-				</div>
-			<?php endforeach; ?>
-		</div>
-
-		<hr style="margin: 40px 0;">
-
-		<h2><?php esc_html_e( 'Documentation & Resources', 'wpshadow' ); ?></h2>
-		<ul>
-			<li><a href="https://github.com/thisismyurl/wpshadow" target="_blank"><?php esc_html_e( 'GitHub Repository', 'wpshadow' ); ?></a></li>
-			<li><a href="https://github.com/thisismyurl/wpshadow/issues" target="_blank"><?php esc_html_e( 'Report an Issue', 'wpshadow' ); ?></a></li>
-		</ul>
-	</div>
-	<?php
-
-	// End help index render.
-}
-
-/**
- * Render activity history page (Issue #565)
- */
-function wpshadow_render_activity_page() {
-	if ( ! current_user_can( 'read' ) ) {
-		wp_die( 'Insufficient permissions.' );
-	}
-
-	// Handle CSV export
-	if ( isset( $_GET['export'] ) && 'csv' === $_GET['export'] ) {
-		// Build filters for export
-		$filters = array();
-		if ( ! empty( $_GET['activity_category'] ) ) {
-			$filters['category'] = sanitize_key( $_GET['activity_category'] );
-		}
-		if ( ! empty( $_GET['activity_action'] ) ) {
-			$filters['action'] = sanitize_key( $_GET['activity_action'] );
-		}
-		if ( ! empty( $_GET['activity_search'] ) ) {
-			$filters['search'] = sanitize_text_field( $_GET['activity_search'] );
-		}
-
-		// Generate CSV
-		$csv = \WPShadow\Core\Activity_Logger::export_csv( $filters );
-
-		// Send headers
-		header( 'Content-Type: text/csv' );
-		header( 'Content-Disposition: attachment; filename="wpshadow-activity-' . date( 'Y-m-d-His' ) . '.csv"' );
-		header( 'Pragma: no-cache' );
-		header( 'Expires: 0' );
-
-		echo $csv;
-		exit;
-	}
-
-	// Render activity history view
-	include WPSHADOW_PATH . 'includes/views/activity-history.php';
-}
-
-/**
- * Render privacy & consent settings page (Issue #566)
- */
-function wpshadow_render_privacy_page() {
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_die( 'Insufficient permissions.' );
-	}
-
-	include WPSHADOW_PATH . 'includes/views/privacy-consent.php';
-}
+// Tools catalog and rendering moved to class-tools-page-module.php
 
 /**
  * Render health diagnostic dashboard.
@@ -2956,6 +2033,12 @@ function wpshadow_render_dashboard() {
 		</div><!-- End #wpshadow-dashboard-wrapper -->
 		<?php } // End if/else for filtered vs normal view ?>
 
+		<!-- KPI Summary Card (Phase 1) -->
+		<?php WPShadow\Core\KPI_Summary_Card::render(); ?>
+
+		<!-- Recommendation Engine Widget (Phase 1) -->
+		<?php WPShadow\Core\Recommendation_Engine::render_recommendation_widget(); ?>
+
 		<!-- Kanban Board for Organizing Findings -->
 		<?php 
 		// Pass category filter to Kanban board if present
@@ -2964,6 +2047,15 @@ function wpshadow_render_dashboard() {
 		}
 		include WPSHADOW_PATH . 'includes/views/kanban-board.php'; 
 		?>
+
+		<!-- Trend Chart (Phase 1) -->
+		<?php WPShadow\Core\Trend_Chart::render_trend_chart(); ?>
+
+		<!-- Phase 6: ROI Calculator -->
+		<?php WPShadow\Core\KPI_Advanced_Features::render_roi_calculator(); ?>
+
+		<!-- Phase 6: Advanced Features (Email Reports & CSV Export) -->
+		<?php WPShadow\Core\KPI_Advanced_Features::render_advanced_panel(); ?>
 
 
 		<!-- Recent Activity -->
@@ -2999,6 +2091,18 @@ function wpshadow_render_dashboard() {
 			</table>
 		</div>
 		<?php endif; ?>
+
+		<!-- Dashboard Customization Panel (Phase 1) -->
+		<div style="margin: 40px 0; padding: 20px; background: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 6px;">
+			<button type="button" id="wpshadow-customize-dashboard-toggle" style="background: transparent; border: none; cursor: pointer; font-size: 16px; font-weight: 500; color: #333; display: flex; align-items: center; gap: 8px; padding: 0; margin-bottom: 15px;">
+				<span class="dashicons dashicons-admin-customizer" style="font-size: 18px;"></span>
+				<span>Customize Dashboard</span>
+				<span class="dashicons dashicons-arrow-down" id="wpshadow-customize-toggle-icon" style="font-size: 14px; transition: transform 0.3s;"></span>
+			</button>
+			<div id="wpshadow-customize-content" style="display: none; padding-top: 15px; border-top: 1px solid #e0e0e0;">
+				<?php WPShadow\Core\Dashboard_Customization::render_settings_panel(); ?>
+			</div>
+		</div>
 
 		<!-- Quick Scan Modal -->
 		<div id="wpshadow-quick-scan-modal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:100000; align-items:center; justify-content:center;">
@@ -3111,6 +2215,16 @@ function wpshadow_render_dashboard() {
 
 		<script>
 		jQuery(document).ready(function($) {
+		// Dashboard Customization Toggle
+		$('#wpshadow-customize-dashboard-toggle').on('click', function() {
+			const $content = $('#wpshadow-customize-content');
+			const $icon = $('#wpshadow-customize-toggle-icon');
+			const isOpen = $content.is(':visible');
+			
+			$content.slideToggle(300);
+			$icon.css('transform', isOpen ? 'rotate(0deg)' : 'rotate(180deg)');
+		});
+
 		// Check URL for action=quick_scan and auto-open modal
 		const urlParams = new URLSearchParams(window.location.search);
 		if (urlParams.get('action') === 'quick_scan') {
@@ -3442,6 +2556,18 @@ function wpshadow_render_dashboard() {
 		});
 		</script>
 
+		<!-- Activity History (moved from submenu to bottom of dashboard) -->
+		<div style="margin: 40px 0;">
+			<h2 style="font-size: 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+				<span class="dashicons dashicons-backup" style="font-size: 24px; color: #0073aa;"></span>
+				<?php esc_html_e( 'Activity History', 'wpshadow' ); ?>
+			</h2>
+			<?php
+			// Include the full activity history view inline
+			include WPSHADOW_PATH . 'includes/views/activity-history.php';
+			?>
+		</div>
+
 	</div>
 	<?php
 }
@@ -3526,55 +2652,6 @@ function wpshadow_calculate_overall_health( $findings_by_category, $category_met
 		'status'  => $status,
 		'color'   => $color,
 		'bg'      => $bg,
-		'message' => $message,
-	);
-}
-
-function wpshadow_get_health_status() {
-	// Get all findings and calculate weighted score
-	$findings = wpshadow_get_site_findings();
-	
-	if ( empty( $findings ) ) {
-		return array(
-			'score'   => 100,
-			'status'  => 'Excellent',
-			'color'   => '#4caf50',
-			'message' => 'Your site is in great shape! All critical checks passed.',
-		);
-	}
-	
-	// Calculate weighted threat score
-	$total_threat = 0;
-	$max_threat = 0;
-	
-	foreach ( $findings as $finding ) {
-		$threat = isset( $finding['threat_level'] ) ? $finding['threat_level'] : 50;
-		$total_threat += $threat;
-		$max_threat += 100; // Each finding could be 100% threat
-	}
-	
-	// Calculate score (inverse of threat percentage)
-	$threat_percentage = $max_threat > 0 ? ( $total_threat / $max_threat ) * 100 : 0;
-	$score = max( 0, 100 - $threat_percentage );
-	
-	if ( $score >= 80 ) {
-		$status = 'Good';
-		$color = '#4caf50';
-		$message = 'Your site is running smoothly. Guardian will continue watching for potential issues.';
-	} elseif ( $score >= 60 ) {
-		$status = 'Fair';
-		$color = '#ff9800';
-		$message = 'Your site has some issues that should be addressed soon.';
-	} else {
-		$status = 'Needs Attention';
-		$color = '#f44336';
-		$message = 'Your site has critical issues that need immediate attention.';
-	}
-	
-	return array(
-		'score'   => $score,
-		'status'  => $status,
-		'color'   => $color,
 		'message' => $message,
 	);
 }
@@ -3790,81 +2867,6 @@ function wpshadow_get_outdated_plugins_count() {
 	}
 
 	return $count;
-}
-
-/**
- * Get recent activity log.
- */
-function wpshadow_get_recent_activity() {
-	$log = get_option( 'wpshadow_finding_log', array() );
-	$activity = array();
-	
-	// Convert finding log to activity format
-	foreach ( array_reverse( array_slice( $log, -10 ) ) as $entry ) {
-		$action_label = '';
-		
-		switch ( $entry['action'] ) {
-			case 'auto_fixed':
-				$action_label = '🔧 Auto-fixed: ' . ucwords( str_replace( '-', ' ', $entry['finding_id'] ) );
-				break;
-			case 'dismissed':
-				$action_label = '👁️ Dismissed: ' . ucwords( str_replace( '-', ' ', $entry['finding_id'] ) );
-				break;
-			case 'scheduled':
-				$action_label = '📅 Scheduled deep scans';
-				break;
-			default:
-				$action_label = ucwords( str_replace( '-', ' ', $entry['finding_id'] ) );
-		}
-		
-		if ( ! empty( $entry['message'] ) ) {
-			$action_label .= ' - ' . $entry['message'];
-		}
-		
-		$activity[] = array(
-			'action' => $action_label,
-			'time'   => $entry['timestamp'],
-		);
-	}
-	
-	// Add activation as fallback if no log entries
-	if ( empty( $activity ) ) {
-		$activity[] = array(
-			'action' => 'WPShadow activated',
-			'time'   => current_time( 'timestamp' ),
-		);
-	}
-	
-	return $activity;
-}
-
-/**
- * Format time as relative with tooltip for precise details.
- */
-function wpshadow_format_time_with_tooltip( $timestamp ) {
-	$now = current_time( 'timestamp' );
-	$diff = $now - $timestamp;
-
-	if ( $diff < 60 ) {
-		$relative = 'just now';
-	} elseif ( $diff < 3600 ) {
-		$minutes = floor( $diff / 60 );
-		$relative = sprintf( _n( '%d minute ago', '%d minutes ago', $minutes, 'wpshadow' ), $minutes );
-	} elseif ( $diff < 86400 ) {
-		$hours = floor( $diff / 3600 );
-		$relative = sprintf( _n( '%d hour ago', '%d hours ago', $hours, 'wpshadow' ), $hours );
-	} else {
-		$days = floor( $diff / 86400 );
-		$relative = sprintf( _n( '%d day ago', '%d days ago', $days, 'wpshadow' ), $days );
-	}
-
-	$precise = wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $timestamp );
-
-	return sprintf(
-		'<span title="%s">%s</span>',
-		esc_attr( $precise ),
-		esc_html( $relative )
-	);
 }
 
 /**
@@ -4129,128 +3131,14 @@ add_action( 'network_admin_menu', function() {
 		999
 	);
 } );
-/**
- * Calculate performance/speed score.
- *
- * @return array Score payload.
- */
-function wpshadow_calculate_performance_score() {
-	$score = 85; // Base score assumes caching enabled.
-	$label = 'Good';
-	$color = '#10b981';
 
-	// Penalize if caching is disabled.
-	if ( defined( 'WP_CACHE' ) && ! WP_CACHE ) {
-		$score -= 10;
-	}
-
-	// Penalize heavy query counts when available.
-	if ( function_exists( 'get_num_queries' ) ) {
-		$queries = get_num_queries();
-		if ( $queries > 120 ) {
-			$score -= 12;
-		} elseif ( $queries > 80 ) {
-			$score -= 6;
-		}
-	}
-
-	$score = max( 0, min( 100, $score ) );
-
-	if ( $score < 60 ) {
-		$label = 'Needs Work';
-		$color = '#ef4444';
-	} elseif ( $score < 80 ) {
-		$label = 'Fair';
-		$color = '#f59e0b';
-	}
-
-	return array(
-		'score' => $score,
-		'label' => $label,
-		'color' => $color,
-	);
-}
-
-/**
- * Calculate cost efficiency score.
- *
- * @return array Score payload.
- */
-function wpshadow_calculate_cost_score() {
-	$score = 90; // Base score assumes lean stack.
-	$label = 'Excellent';
-	$color = '#10b981';
-
-	$active_plugins = count( get_option( 'active_plugins', array() ) );
-	if ( $active_plugins > 30 ) {
-		$score -= 15;
-	} elseif ( $active_plugins > 20 ) {
-		$score -= 8;
-	}
-
-	$themes = wp_get_themes();
-	if ( count( $themes ) > 5 ) {
-		$score -= 5;
-	}
-
-	$score = max( 0, min( 100, $score ) );
-
-	if ( $score < 60 ) {
-		$label = 'Needs Work';
-		$color = '#ef4444';
-	} elseif ( $score < 80 ) {
-		$label = 'Fair';
-		$color = '#f59e0b';
-	}
-
-	return array(
-		'score' => $score,
-		'label' => $label,
-		'color' => $color,
-	);
-}
 
 /**
  * Calculate eco/sustainability score.
  *
  * @return array Score payload.
  */
-function wpshadow_calculate_eco_score() {
-	$score = 75; // Base score assumes standard CDN/compression.
-	$label = 'Good';
-	$color = '#10b981';
 
-	$using_cdn = defined( 'WP_CONTENT_URL' ) && strpos( WP_CONTENT_URL, 'cdn' ) !== false;
-	if ( ! $using_cdn ) {
-		$score -= 6;
-	}
-
-	$compression_enabled = ini_get( 'zlib.output_compression' );
-	if ( empty( $compression_enabled ) ) {
-		$score -= 6;
-	}
-
-	$active_plugins = count( get_option( 'active_plugins', array() ) );
-	if ( $active_plugins > 25 ) {
-		$score -= 6;
-	}
-
-	$score = max( 0, min( 100, $score ) );
-
-	if ( $score < 60 ) {
-		$label = 'Needs Work';
-		$color = '#ef4444';
-	} elseif ( $score < 80 ) {
-		$label = 'Fair';
-		$color = '#f59e0b';
-	}
-
-	return array(
-		'score' => $score,
-		'label' => $label,
-		'color' => $color,
-	);
-}
 
 /**
  * Register WPShadow personal data exporter.

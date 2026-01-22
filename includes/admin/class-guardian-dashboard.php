@@ -80,11 +80,33 @@ class Guardian_Dashboard {
 		$is_enabled = Guardian_Manager::is_enabled();
 		$status_class = $is_enabled ? 'status-enabled' : 'status-disabled';
 		$status_text = $is_enabled ? __( 'WPShadow Guardian Active', 'wpshadow' ) : __( 'WPShadow Guardian Inactive', 'wpshadow' );
+		$click_text = $is_enabled ? __( 'Click to disable', 'wpshadow' ) : __( 'Click to enable', 'wpshadow' );
 		
 		return sprintf(
-			'<div class="guardian-status-badge %s"><span class="status-dot"></span>%s</div>',
+			'<div class="guardian-status-badge %s" style="cursor: pointer;" onclick="wpshadowToggleGuardian()" title="%s"><span class="status-dot"></span>%s</div>
+			<script>
+			function wpshadowToggleGuardian() {
+				if (confirm("%s")) {
+					jQuery.post(ajaxurl, {
+						action: "wpshadow_toggle_guardian",
+						nonce: "%s",
+						enabled: %s
+					}, function(response) {
+						if (response.success) {
+							location.reload();
+						} else {
+							alert("Error: " + (response.data?.message || "Could not toggle Guardian"));
+						}
+					});
+				}
+			}
+			</script>',
 			esc_attr( $status_class ),
-			esc_html( $status_text )
+			esc_attr( $click_text ),
+			esc_html( $status_text ),
+			esc_js( $is_enabled ? __( 'Are you sure you want to disable Guardian automated health monitoring?', 'wpshadow' ) : __( 'Enable Guardian to automatically monitor and fix issues?', 'wpshadow' ) ),
+			esc_js( wp_create_nonce( 'wpshadow_toggle_guardian' ) ),
+			$is_enabled ? 'false' : 'true'
 		);
 	}
 	
@@ -97,18 +119,13 @@ class Guardian_Dashboard {
 		$html = '<div class="guardian-quick-actions">';
 		
 		$html .= sprintf(
-			'<button class="button button-primary" data-action="run-diagnostics">%s</button>',
-			esc_html__( 'Run Diagnostics', 'wpshadow' )
-		);
-		
-		$html .= sprintf(
 			'<button class="button" data-action="preview-fixes">%s</button>',
 			esc_html__( 'Preview Fixes', 'wpshadow' )
 		);
 		
 		$html .= sprintf(
 			'<a href="%s" class="button">%s</a>',
-			esc_url( admin_url( 'admin.php?page=wpshadow-settings' ) ),
+			esc_url( admin_url( 'admin.php?page=wpshadow-guardian-settings' ) ),
 			esc_html__( 'Settings', 'wpshadow' )
 		);
 		
@@ -123,12 +140,12 @@ class Guardian_Dashboard {
 	 * @return string HTML
 	 */
 	private static function render_kpi_cards(): string {
-		$kpis = KPI_Tracker::get_summary();
+		$kpis = KPI_Tracker::get_kpi_summary();
 		
 		$cards = [
 			[
 				'label'  => __( 'Issues Found', 'wpshadow' ),
-				'value'  => $kpis['issues_found'] ?? 0,
+				'value'  => $kpis['findings_detected'] ?? 0,
 				'icon'   => '🔍',
 				'color'  => 'warning',
 			],
@@ -140,13 +157,13 @@ class Guardian_Dashboard {
 			],
 			[
 				'label'  => __( 'Time Saved', 'wpshadow' ),
-				'value'  => ( $kpis['time_saved'] ?? 0 ) . ' min',
+				'value'  => $kpis['time_saved_display'] ?? '0m',
 				'icon'   => '⏱️',
 				'color'  => 'info',
 			],
 			[
 				'label'  => __( 'Value Generated', 'wpshadow' ),
-				'value'  => '$' . ( $kpis['value_equivalent'] ?? 0 ),
+				'value'  => '$' . ( $kpis['labor_cost_avoided'] ?? 0 ),
 				'icon'   => '💰',
 				'color'  => 'success',
 			],
@@ -178,7 +195,7 @@ class Guardian_Dashboard {
 	 * @return string HTML
 	 */
 	private static function render_activity_timeline(): string {
-		$activities = Guardian_Activity_Logger::get_activity( [], 10 );
+		$activities = Guardian_Activity_Logger::get_activity_log( 10 );
 		
 		if ( empty( $activities ) ) {
 			return '<div class="guardian-widget"><p>' . esc_html__( 'No recent activity', 'wpshadow' ) . '</p></div>';
@@ -189,6 +206,10 @@ class Guardian_Dashboard {
 			<div class="timeline">';
 		
 		foreach ( $activities as $activity ) {
+			// Format activity description based on type
+			$action_text = self::format_activity_action( $activity );
+			$time_text = isset( $activity['timestamp'] ) ? human_time_diff( strtotime( $activity['timestamp'] ), current_time( 'timestamp' ) ) . ' ago' : 'Unknown';
+			
 			$html .= sprintf(
 				'<div class="timeline-item">
 					<div class="timeline-dot"></div>
@@ -197,14 +218,53 @@ class Guardian_Dashboard {
 						<div class="timeline-time">%s</div>
 					</div>
 				</div>',
-				esc_html( $activity['action'] ?? 'Unknown' ),
-				esc_html( $activity['timestamp'] ?? 'N/A' )
+				esc_html( $action_text ),
+				esc_html( $time_text )
 			);
 		}
 		
 		$html .= '</div></div>';
 		
 		return $html;
+	}
+	
+	/**
+	 * Format activity action for display
+	 * 
+	 * @param array $activity Activity log entry
+	 * @return string Formatted action text
+	 */
+	private static function format_activity_action( array $activity ): string {
+		$type = $activity['type'] ?? 'unknown';
+		
+		switch ( $type ) {
+			case 'health_check':
+				$findings = $activity['findings_total'] ?? 0;
+				$critical = $activity['critical_count'] ?? 0;
+				if ( $critical > 0 ) {
+					return sprintf( __( 'Health check: %d findings (%d critical)', 'wpshadow' ), $findings, $critical );
+				}
+				return sprintf( __( 'Health check: %d findings', 'wpshadow' ), $findings );
+				
+			case 'auto_fix':
+				$treatment = $activity['treatment'] ?? 'Unknown';
+				$success = $activity['success'] ?? false;
+				if ( $success ) {
+					return sprintf( __( 'Auto-fixed: %s ✓', 'wpshadow' ), $treatment );
+				}
+				return sprintf( __( 'Auto-fix failed: %s', 'wpshadow' ), $treatment );
+				
+			case 'anomaly_detected':
+				$count = $activity['anomalies_count'] ?? 0;
+				return sprintf( __( 'Anomaly detected: %d issues', 'wpshadow' ), $count );
+				
+			case 'settings_changed':
+				$enabled = $activity['enabled'] ?? false;
+				return $enabled ? __( 'Guardian enabled', 'wpshadow' ) : __( 'Guardian disabled', 'wpshadow' );
+				
+			default:
+				return __( 'Unknown activity', 'wpshadow' );
+		}
 	}
 	
 	/**

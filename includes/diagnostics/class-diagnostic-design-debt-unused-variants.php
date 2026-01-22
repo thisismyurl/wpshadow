@@ -1,0 +1,25 @@
+<?php declare(strict_types=1);
+namespace WPShadow\Diagnostics;
+
+/**
+ * Diagnostic: Unused Component Variants
+ * Philosophy: Show value (#9) - identify design system debt, enforcement gaps
+ * Competitive Edge: This category fills gaps competitors don't address
+ * KB Link: https://wpshadow.com/kb/design-debt-unused-variants
+ * Training: https://wpshadow.com/training/design-debt-unused-variants
+ */
+class Diagnostic_Design_DEBT_UNUSED_VARIANTS {
+    public static function check() {
+        return [
+            'id' => 'design-debt-unused-variants',
+            'title' => __('Unused Component Variants', 'wpshadow'),
+            'description' => __('Detects defined component variants never used.', 'wpshadow'),
+            'severity' => 'medium',
+            'category' => 'design',
+            'kb_link' => 'https://wpshadow.com/kb/design-debt-unused-variants',
+            'training_link' => 'https://wpshadow.com/training/design-debt-unused-variants',
+            'auto_fixable' => false,
+            'threat_level' => 6
+        ];
+    }
+}

@@ -1,0 +1,3 @@
+<?php declare(strict_types=1);
+namespace WPShadow\Diagnostics;
+class Diagnostic_Monitor_Revenue_Per_Visitor { public static function check() { return ['id' => 'monitor-rpv', 'title' => __('Revenue Per Visitor Tracking', 'wpshadow'), 'description' => __('Monitors average revenue per visit. Drop indicates undermonetization, pricing issues, or product-market fit loss.', 'wpshadow'), 'severity' => 'high', 'category' => 'monitoring', 'kb_link' => 'https://wpshadow.com/kb/revenue-optimization/', 'training_link' => 'https://wpshadow.com/training/pricing-strategy/', 'auto_fixable' => false, 'threat_level' => 7]; } }

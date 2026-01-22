@@ -118,9 +118,10 @@ class Change_Finding_Status_Handler extends AJAX_Handler_Base {
                 // Clear from all queues, mark complete
                 self::clear_finding_from_queues( $finding_id );
                 
-                // Track KPI
+                // Track KPI - Phase 3: Record finding resolution
                 if ( class_exists( '\WPShadow\Core\KPI_Tracker' ) ) {
-                    \WPShadow\Core\KPI_Tracker::record_finding_resolved( $finding_id, 'medium' );
+                    \WPShadow\Core\KPI_Tracker::record_finding_resolved( $finding_id, 'fixed' );
+                    \WPShadow\Core\Trend_Chart::record_finding_resolved( $finding_id, 'fixed' );
                 }
                 
                 \WPShadow\Core\Activity_Logger::log( 'finding_resolved', "Finding marked as fixed: {$finding_id}", '', array( 'finding_id' => $finding_id ) );

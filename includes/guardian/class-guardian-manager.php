@@ -69,6 +69,15 @@ class Guardian_Manager {
 	}
 	
 	/**
+	 * Check if Guardian is enabled
+	 * 
+	 * @return bool True if Guardian is active
+	 */
+	public static function is_enabled(): bool {
+		return (bool) get_option( 'wpshadow_guardian_enabled', false );
+	}
+	
+	/**
 	 * Update Guardian settings
 	 * 
 	 * Validates settings before storing.

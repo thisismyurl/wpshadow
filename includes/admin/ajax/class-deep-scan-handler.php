@@ -6,6 +6,7 @@ namespace WPShadow\Admin\Ajax;
 use WPShadow\Core\AJAX_Handler_Base;
 use WPShadow\Diagnostics\Diagnostic_Registry;
 use WPShadow\Core\Activity_Logger;
+use WPShadow\Core\KPI_Tracker;
 
 /**
  * AJAX Handler: Deep Scan
@@ -92,6 +93,10 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 				);
 			}
 			
+			// Phase 3: Track KPI for finding detection
+			$severity = isset( $finding['severity'] ) ? $finding['severity'] : 'medium';
+			KPI_Tracker::log_finding_detected( $finding['id'] ?? 'unknown', $severity );
+			
 			if ( ! isset( $progress_by_category[ $category ] ) ) {
 				$progress_by_category[ $category ] = array( 'completed' => 0, 'total' => 0, 'findings' => 0 );
 				$findings_by_category[ $category ] = array();
@@ -106,34 +111,31 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 			$progress_by_category['clean'] = array( 'completed' => $completed, 'total' => $total, 'findings' => 0 );
 		}
 		
-		// Clean up resolved findings from Kanban
-		$current_finding_ids = array_map( function( $f ) { return $f['id'] ?? ''; }, $findings );
-		$current_finding_ids = array_filter( $current_finding_ids );
-		$stored_findings = get_option( 'wpshadow_site_findings', array() );
+		$previous_findings = get_option( 'wpshadow_site_findings', array() );
+		$previous_findings = is_array( $previous_findings ) ? $previous_findings : array();
+		$previous_ids = array_keys( $previous_findings );
+
+		$indexed_findings = \wpshadow_index_findings_by_id( $findings );
+		$current_ids = array_keys( $indexed_findings );
+		$resolved_ids = array_diff( $previous_ids, $current_ids );
 		$resolved_count = 0;
-		
-		foreach ( $stored_findings as $stored_id => $stored_finding ) {
-			if ( ! in_array( $stored_id, $current_finding_ids, true ) ) {
-				// Finding no longer present - it's resolved
-				unset( $stored_findings[ $stored_id ] );
-				$resolved_count++;
-				
-				// Log resolved finding
-				if ( class_exists( '\\WPShadow\\Core\\Activity_Logger' ) ) {
-					Activity_Logger::log(
-						'finding_resolved',
-						sprintf( 'Issue resolved: %s', $stored_finding['title'] ?? $stored_id ),
-						$stored_finding['category'] ?? 'other',
-						array( 'finding_id' => $stored_id )
-					);
-				}
+
+		foreach ( $resolved_ids as $resolved_id ) {
+			$stored_finding = $previous_findings[ $resolved_id ] ?? array();
+			$resolved_count++;
+
+			if ( class_exists( '\\WPShadow\\Core\\Activity_Logger' ) ) {
+				Activity_Logger::log(
+					'finding_resolved',
+					sprintf( 'Issue resolved: %s', $stored_finding['title'] ?? $resolved_id ),
+					$stored_finding['category'] ?? 'other',
+					array( 'finding_id' => $resolved_id )
+				);
 			}
 		}
-		
-		if ( $resolved_count > 0 ) {
-			update_option( 'wpshadow_site_findings', $stored_findings );
-		}
-		
+
+		\wpshadow_store_gauge_snapshot( array_values( $indexed_findings ) );
+
 		// Log comprehensive activity
 		if ( class_exists( '\\WPShadow\\Core\\Activity_Logger' ) ) {
 			$activity_details = sprintf(

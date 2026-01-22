@@ -4,6 +4,9 @@
  *
  * Flags inactive plugins that generate update notifications and offers cleanup.
  *
+ * Family: update-notifications
+ * Related: theme-update-noise
+ *
  * @package WPShadow
  */
 
@@ -11,9 +14,16 @@ declare(strict_types=1);
 
 namespace WPShadow\Diagnostics;
 
+use WPShadow\Core\Diagnostic_Base;
 use WPShadow\Admin\Update_Notification_Manager;
 
-class Diagnostic_Plugin_Update_Noise {
+class Diagnostic_Plugin_Update_Noise extends Diagnostic_Base {
+
+	protected static $slug = 'plugin-update-noise';
+	protected static $title = 'Plugin Update Notifications';
+	protected static $description = 'Flags inactive plugins that generate update notifications.';
+	protected static $family = 'update-notifications';
+	protected static $family_label = 'Update Notification Management';
 	/**
 	 * Run the diagnostic check.
 	 *
@@ -29,16 +39,15 @@ class Diagnostic_Plugin_Update_Noise {
 
 		$count_label = $update_count > 0 ? $update_count : count( $inactive );
 		return array(
-			'id'           => 'plugin-update-noise',
+			'finding_id'   => self::$slug,
 			'title'        => sprintf( _n( '%d inactive plugin shows updates', '%d inactive plugins show updates', $count_label, 'wpshadow' ), $count_label ),
 			'description'  => __( 'Inactive plugins keep nagging for updates. Hide their notices or remove the plugins you no longer need.', 'wpshadow' ),
-			'color'        => '#0288d1',
-			'bg_color'     => '#e1f5fe',
-			'kb_link'      => 'https://wpshadow.com/kb/manage-plugin-update-notifications/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=plugin-update-noise',
-			'action_link'  => admin_url( 'plugins.php' ),
-			'action_text'  => __( 'Manage Plugins', 'wpshadow' ),
-			'auto_fixable' => true,
+			'category'     => 'maintenance',
+			'severity'     => 'low',
 			'threat_level' => 25,
+			'auto_fixable' => true,
+			'family'       => self::$family,
+			'family_label' => self::$family_label,
 		);
 	}
 

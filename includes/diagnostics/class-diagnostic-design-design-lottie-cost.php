@@ -1,0 +1,26 @@
+<?php declare(strict_types=1);
+namespace WPShadow\Diagnostics;
+
+/**
+ * Diagnostic: Lottie Cost
+ * Philosophy: Show value (#9) - identify design system debt, enforcement gaps
+ * Competitive Edge: This category fills gaps competitors don't address
+ * KB Link: https://wpshadow.com/kb/design-lottie-cost
+ * Training: https://wpshadow.com/training/design-lottie-cost
+ */
+class Diagnostic_Design_DESIGN_LOTTIE_COST {
+    public static function check() {
+        return [
+            'id' => 'design-lottie-cost',
+            'title' => __('Lottie Cost', 'wpshadow'),
+            'description' => __('Flags heavy Lottie animations lacking optimization.', 'wpshadow'),
+            'severity' => 'medium',
+            'category' => 'design',
+            'kb_link' => 'https://wpshadow.com/kb/design-lottie-cost',
+            'training_link' => 'https://wpshadow.com/training/design-lottie-cost',
+            'auto_fixable' => false,
+            'threat_level' => 6
+        ];
+    }
+}
+

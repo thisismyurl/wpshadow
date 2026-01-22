@@ -4,6 +4,9 @@
  *
  * Flags inactive themes that generate update notifications and offers cleanup.
  *
+ * Family: update-notifications
+ * Related: plugin-update-noise
+ *
  * @package WPShadow
  */
 
@@ -11,9 +14,16 @@ declare(strict_types=1);
 
 namespace WPShadow\Diagnostics;
 
+use WPShadow\Core\Diagnostic_Base;
 use WPShadow\Admin\Update_Notification_Manager;
 
-class Diagnostic_Theme_Update_Noise {
+class Diagnostic_Theme_Update_Noise extends Diagnostic_Base {
+
+	protected static $slug = 'theme-update-noise';
+	protected static $title = 'Theme Update Notifications';
+	protected static $description = 'Flags inactive themes that generate update notifications.';
+	protected static $family = 'update-notifications';
+	protected static $family_label = 'Update Notification Management';
 	/**
 	 * Run the diagnostic check.
 	 *
@@ -29,16 +39,15 @@ class Diagnostic_Theme_Update_Noise {
 
 		$count_label = $update_count > 0 ? $update_count : count( $inactive );
 		return array(
-			'id'           => 'theme-update-noise',
+			'finding_id'   => self::$slug,
 			'title'        => sprintf( _n( '%d unused theme needs attention', '%d unused themes need attention', $count_label, 'wpshadow' ), $count_label ),
 			'description'  => __( 'Unused themes trigger update nags and add clutter. Delete what you do not need or hide their update notices.', 'wpshadow' ),
-			'color'        => '#0288d1',
-			'bg_color'     => '#e1f5fe',
-			'kb_link'      => 'https://wpshadow.com/kb/manage-theme-update-notifications/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=theme-update-noise',
-			'action_link'  => admin_url( 'themes.php' ),
-			'action_text'  => __( 'Manage Themes', 'wpshadow' ),
-			'auto_fixable' => true,
+			'category'     => 'maintenance',
+			'severity'     => 'low',
 			'threat_level' => 25,
+			'auto_fixable' => true,
+			'family'       => self::$family,
+			'family_label' => self::$family_label,
 		);
 	}
 

@@ -305,7 +305,6 @@
 					// Hide WordPress admin chrome
 					$('html').addClass('wpshadow-fullscreen-mode');
 					$('#wpadminbar').hide();
-					$('body').css('background', '#000');
 					$('#wpshadow-dashboard-wrapper').css({
 						'width': '100vw',
 						'height': '100vh',
@@ -355,10 +354,7 @@
 			// Restore WordPress admin chrome
 			$('html').removeClass('wpshadow-fullscreen-mode');
 			$('#wpadminbar').show();
-			$('body').css('background', '');
-			$('#wpshadow-dashboard-wrapper').removeClass('wpshadow-fullscreen-optimized').css({
-				'width': '',
-				'height': '',
+
 				'margin': '',
 				'padding': '',
 				'box-sizing': '',

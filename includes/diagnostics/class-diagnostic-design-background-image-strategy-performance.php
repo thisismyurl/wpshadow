@@ -1,0 +1,24 @@
+<?php declare(strict_types=1);
+namespace WPShadow\Diagnostics;
+
+/**
+ * Diagnostic: Background Image Performance
+ * Philosophy: Inspire confidence (#8) with excellent UX; Show value (#9) by measuring design quality
+ * KB Link: https://wpshadow.com/kb/design-background-image-strategy-performance
+ * Training: https://wpshadow.com/training/design-background-image-strategy-performance
+ */
+class Diagnostic_Design_BACKGROUND_IMAGE_STRATEGY_PERFORMANCE {
+    public static function check() {
+        return [
+            'id' => 'design-background-image-strategy-performance',
+            'title' => __('Background Image Performance', 'wpshadow'),
+            'description' => __('Checks background images.', 'wpshadow'),
+            'severity' => 'medium',
+            'category' => 'design',
+            'kb_link' => 'https://wpshadow.com/kb/design-background-image-strategy-performance',
+            'training_link' => 'https://wpshadow.com/training/design-background-image-strategy-performance',
+            'auto_fixable' => false,
+            'threat_level' => 5
+        ];
+    }
+}

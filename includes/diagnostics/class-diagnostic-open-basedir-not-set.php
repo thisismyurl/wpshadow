@@ -1,0 +1,39 @@
+<?php declare(strict_types=1);
+/**
+ * Open Basedir Restriction Not Set Diagnostic
+ *
+ * Philosophy: Server hardening - restrict file access scope
+ * @package WPShadow
+ */
+
+namespace WPShadow\Diagnostics;
+
+/**
+ * Check if open_basedir is configured.
+ */
+class Diagnostic_Open_Basedir_Not_Set {
+	/**
+	 * Run the diagnostic check.
+	 *
+	 * @return array|null Finding data or null if no issue.
+	 */
+	public static function check() {
+		$open_basedir = ini_get( 'open_basedir' );
+		
+		if ( empty( $open_basedir ) ) {
+			return array(
+				'id'          => 'open-basedir-not-set',
+				'title'       => 'open_basedir Not Restricted',
+				'description' => 'PHP can access entire file system. Compromised code can read any file. Configure php.ini open_basedir to restrict access to WordPress directory only.',
+				'severity'    => 'high',
+				'category'    => 'security',
+				'kb_link'     => 'https://wpshadow.com/kb/configure-open-basedir/',
+				'training_link' => 'https://wpshadow.com/training/php-hardening/',
+				'auto_fixable' => false,
+				'threat_level' => 75,
+			);
+		}
+		
+		return null;
+	}
+}

@@ -43,6 +43,24 @@ abstract class Diagnostic_Base {
 	protected static $description = '';
 
 	/**
+	 * The family this diagnostic belongs to (optional)
+	 * Used to group related diagnostics together
+	 *
+	 * Example: 'asset-versions', 'head-cleanup', 'update-notifications'
+	 *
+	 * @var string
+	 */
+	protected static $family = '';
+
+	/**
+	 * Display name for the family (optional)
+	 * Example: 'Asset Optimization', 'Head Cleanup Tasks'
+	 *
+	 * @var string
+	 */
+	protected static $family_label = '';
+
+	/**
 	 * Run the diagnostic check
 	 *
 	 * @return array|null Returns an array of findings if issues found, null otherwise
@@ -92,5 +110,41 @@ abstract class Diagnostic_Base {
 	 */
 	public static function get_available_treatments(): array {
 		return array();
+	}
+
+	/**
+	 * Get the family this diagnostic belongs to
+	 *
+	 * @return string
+	 */
+	public static function get_family(): string {
+		return static::$family;
+	}
+
+	/**
+	 * Get the family label/display name
+	 *
+	 * @return string
+	 */
+	public static function get_family_label(): string {
+		return static::$family_label;
+	}
+
+	/**
+	 * Check if this diagnostic belongs to a family
+	 *
+	 * @return bool
+	 */
+	public static function has_family(): bool {
+		return ! empty( static::$family );
+	}
+
+	/**
+	 * Check if this diagnostic can be grouped/fixed with others
+	 *
+	 * @return bool
+	 */
+	public static function is_family_fixable(): bool {
+		return static::has_family();
 	}
 }
