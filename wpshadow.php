@@ -872,6 +872,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-csp-violatio
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-domain-expiration-analyzer.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-compromised-accounts-analyzer.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-cache-invalidation-analyzer.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-shortcode-execution-analyzer.php';
 
 // Auto-Fix System (Priority 2)
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-auto-fix-policy-manager.php';
@@ -938,6 +939,7 @@ add_action( 'plugins_loaded', function() {
 	\WPShadow\Guardian\CSP_Violation_Analyzer::init();
 	\WPShadow\Guardian\Compromised_Accounts_Analyzer::init();
 	\WPShadow\Guardian\Cache_Invalidation_Analyzer::init();
+	\WPShadow\Guardian\Shortcode_Execution_Analyzer::init();
 
 	// Register Guardian AJAX command handlers (Phase 8)
 	// Priority 1 handlers
