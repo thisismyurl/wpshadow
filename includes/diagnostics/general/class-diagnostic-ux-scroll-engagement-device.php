@@ -14,6 +14,9 @@ use WPShadow\Core\Diagnostic_Base;
  * Threat Level: 55/100
  *
  * Impact: Shows \"Mobile users never see your CTA (95% exit before scroll)\".
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_UxScrollEngagementDevice extends Diagnostic_Base {
 	protected static $slug = 'ux-scroll-engagement-device';

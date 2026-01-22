@@ -5,6 +5,9 @@ declare(strict_types=1);
  *
  * Philosophy: Supply chain - detect unmaintained plugins
  * @package WPShadow
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 
 namespace WPShadow\Diagnostics;
@@ -13,6 +16,9 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check for abandoned/unmaintained plugins.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_Abandoned_Plugins extends Diagnostic_Base {
 	/**

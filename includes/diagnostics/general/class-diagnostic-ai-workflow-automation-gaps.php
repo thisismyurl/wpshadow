@@ -14,6 +14,9 @@ use WPShadow\Core\Diagnostic_Base;
  * Threat Level: 40/100
  *
  * Impact: Shows \"You spend 14 hours/month on tasks we can automate\".
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_AiWorkflowAutomationGaps extends Diagnostic_Base {
 	protected static $slug = 'ai-workflow-automation-gaps';

@@ -14,6 +14,9 @@ use WPShadow\Core\Diagnostic_Base;
  * Threat Level: 65/100
  *
  * Impact: Shows \"Your hero image delays LCP by 3.2 seconds\" with preload solution.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_PerfLcpElementAnalyzer extends Diagnostic_Base {
 	protected static $slug = 'perf-lcp-element-analyzer';

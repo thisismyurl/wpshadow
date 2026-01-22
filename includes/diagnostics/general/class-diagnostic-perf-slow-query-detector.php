@@ -14,6 +14,9 @@ use WPShadow\Core\Diagnostic_Base;
  * Threat Level: 75/100
  *
  * Impact: Shows \"3 plugins executing 2,400 queries per page\" with culprit identification.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_PerfSlowQueryDetector extends Diagnostic_Base {
 	protected static $slug = 'perf-slow-query-detector';

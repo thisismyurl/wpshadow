@@ -4,6 +4,9 @@ declare(strict_types=1);
  * REST API Headers Diagnostic
  *
  * @package WPShadow
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 
 
@@ -17,6 +20,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Check if REST API headers are exposed when not needed.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 class Diagnostic_REST_API extends Diagnostic_Base {
 

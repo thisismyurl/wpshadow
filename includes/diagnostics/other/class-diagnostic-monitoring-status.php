@@ -7,6 +7,9 @@ declare(strict_types=1);
  * Guides to Pro Guardian features for automated monitoring
  *
  * @package WPShadow
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 
 namespace WPShadow\Diagnostics;
@@ -15,6 +18,9 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check monitoring and alerting configuration.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 class Diagnostic_Monitoring_Status extends Diagnostic_Base {
 	/**

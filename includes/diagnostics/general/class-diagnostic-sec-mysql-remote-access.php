@@ -14,6 +14,9 @@ use WPShadow\Core\Diagnostic_Base;
  * Threat Level: 85/100
  *
  * Impact: Shows \"Your database accepts connections from anywhere\" with firewall fix.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_SecMysqlRemoteAccess extends Diagnostic_Base {
 	protected static $slug = 'sec-mysql-remote-access';

@@ -16,6 +16,9 @@ use WPShadow\Core\Diagnostic_Base;
  *
  * @package WPShadow
  * @subpackage Diagnostics
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_Dx_Cpt_Organized extends Diagnostic_Base {
 	protected static $slug = 'dx-cpt-organized';

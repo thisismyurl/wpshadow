@@ -13,6 +13,9 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check PHP memory limit configuration.
+ * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Yes - Registered in Diagnostic_Registry quick_diagnostics
  */
 class Diagnostic_Memory_Limit extends Diagnostic_Base {
 	/**

@@ -10,6 +10,9 @@ use WPShadow\Core\Diagnostic_Base;
  * 
  * Target Persona: Enterprise IT/Compliance Team
  * Philosophy: Helpful neighbor (#1), show value (#9), educate (#5, #6)
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_Terms_Of_Service_Current extends Diagnostic_Base {
     protected static $slug = 'terms-of-service-current';

@@ -4,6 +4,9 @@ declare(strict_types=1);
  * Block Asset Cleanup Diagnostic
  *
  * @package WPShadow
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 
 
@@ -13,6 +16,9 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check if optional block assets are being enqueued unnecessarily on the front-end.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 class Diagnostic_Block_Cleanup extends Diagnostic_Base {
 	/**

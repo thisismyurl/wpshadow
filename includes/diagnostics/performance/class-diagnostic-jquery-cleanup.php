@@ -4,6 +4,9 @@ declare(strict_types=1);
  * jQuery Cleanup Diagnostic
  *
  * @package WPShadow
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 
 
@@ -13,6 +16,9 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check if legacy jQuery loads in the footer or unnecessarily on front pages.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_jQuery_Cleanup extends Diagnostic_Base {
 	/**

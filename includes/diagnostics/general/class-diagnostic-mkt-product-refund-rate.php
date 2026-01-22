@@ -14,6 +14,9 @@ use WPShadow\Core\Diagnostic_Base;
  * Threat Level: 50/100
  *
  * Impact: Shows \"\'Widget Pro\' has 34% refund rate\" for listing optimization.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_MktProductRefundRate extends Diagnostic_Base {
 	protected static $slug = 'mkt-product-refund-rate';

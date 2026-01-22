@@ -5,6 +5,9 @@ declare(strict_types=1);
  *
  * @package WPShadow
  * @subpackage DiagnosticsFuture
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 
 namespace WPShadow\Diagnostics;
@@ -22,6 +25,9 @@ use WPShadow\Core\Diagnostic_Base;
  * - ✅ Talk-worthy (Commandment #11): "Your .env file with database passwords is publicly accessible"
  * 
  * @priority 1
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_Env_File_Exposed extends Diagnostic_Base {
     

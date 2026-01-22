@@ -5,6 +5,9 @@ declare(strict_types=1);
  *
  * Philosophy: SEO crawlability - robots.txt guides search engines
  * @package WPShadow
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 
 namespace WPShadow\Diagnostics;
@@ -13,6 +16,9 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check for missing or misconfigured robots.txt.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_SEO_Missing_Robots_Txt extends Diagnostic_Base {
 	/**

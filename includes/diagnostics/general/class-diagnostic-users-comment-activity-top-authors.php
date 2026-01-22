@@ -16,6 +16,9 @@ use WPShadow\Core\Diagnostic_Base;
  *
  * @package WPShadow
  * @subpackage Diagnostics
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_Users_Comment_Activity_Top_Authors extends Diagnostic_Base {
 	protected static $slug = 'users-comment-activity-top-authors';

@@ -5,6 +5,9 @@ declare(strict_types=1);
  *
  * Philosophy: SEO basics to build trust; guides to Pro/Guardian SEO insights.
  * @package WPShadow
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 
 namespace WPShadow\Diagnostics;
@@ -13,6 +16,9 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check if XML sitemap is accessible.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 class Diagnostic_XML_Sitemap extends Diagnostic_Base {
 	/**

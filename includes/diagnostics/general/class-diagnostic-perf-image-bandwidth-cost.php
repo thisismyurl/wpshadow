@@ -14,6 +14,9 @@ use WPShadow\Core\Diagnostic_Base;
  * Threat Level: 60/100
  *
  * Impact: Shows \"You\'re wasting $247/month on image bandwidth\" with savings estimate.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_PerfImageBandwidthCost extends Diagnostic_Base {
 	protected static $slug = 'perf-image-bandwidth-cost';

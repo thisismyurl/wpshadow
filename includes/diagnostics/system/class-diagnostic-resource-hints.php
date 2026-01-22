@@ -4,6 +4,9 @@ declare(strict_types=1);
  * Resource Hints Diagnostic
  *
  * @package WPShadow
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 
 
@@ -13,6 +16,9 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check for missing resource hints on primary domains.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 class Diagnostic_Resource_Hints extends Diagnostic_Base {
 	/**

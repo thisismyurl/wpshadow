@@ -14,6 +14,9 @@ use WPShadow\Core\Diagnostic_Base;
  * Threat Level: 95/100
  *
  * Impact: Shows \"12 tracking cookies fire before consent (€20M fine risk)\".
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_CompGdprCookieAudit extends Diagnostic_Base {
 	protected static $slug = 'comp-gdpr-cookie-audit';

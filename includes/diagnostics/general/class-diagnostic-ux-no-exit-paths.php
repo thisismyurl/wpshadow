@@ -14,6 +14,9 @@ use WPShadow\Core\Diagnostic_Base;
  * Threat Level: 60/100
  *
  * Impact: Shows \"12 pages have no navigation = 58% bounce rate\".
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_UxNoExitPaths extends Diagnostic_Base {
 	protected static $slug = 'ux-no-exit-paths';

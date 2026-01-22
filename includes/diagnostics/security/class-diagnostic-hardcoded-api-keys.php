@@ -5,6 +5,9 @@ declare(strict_types=1);
  *
  * @package WPShadow
  * @subpackage DiagnosticsFuture
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 
 namespace WPShadow\Diagnostics;
@@ -22,6 +25,9 @@ use WPShadow\Core\Diagnostic_Base;
  * - ✅ Talk-worthy (Commandment #11): "Your Stripe secret key is hardcoded in theme functions.php"
  * 
  * @priority 1
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_Hardcoded_API_Keys extends Diagnostic_Base {
     

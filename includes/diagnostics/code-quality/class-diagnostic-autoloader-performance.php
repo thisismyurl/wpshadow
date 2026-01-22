@@ -10,11 +10,14 @@ use WPShadow\Core\Diagnostic_Base;
  * Measures Composer/PSR-4 autoload overhead per request.
  * Philosophy: Show value (#9) and educate (#5) with clear, actionable insights.
  *
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
+ * 
  * @package WPShadow
  * @subpackage Diagnostics
  * @since 1.2601.2200
  */
-class Diagnostic_AutoloaderPerformance extends Diagnostic_Base {
+class Diagnostic_Autoloader_Performance extends Diagnostic_Base {
     /**
      * Run the diagnostic check
      *

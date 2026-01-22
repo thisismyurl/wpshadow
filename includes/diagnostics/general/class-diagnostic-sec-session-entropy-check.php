@@ -14,6 +14,9 @@ use WPShadow\Core\Diagnostic_Base;
  * Threat Level: 70/100
  *
  * Impact: Prevents session hijacking attacks with weak token detection.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_SecSessionEntropyCheck extends Diagnostic_Base {
 	protected static $slug = 'sec-session-entropy-check';

@@ -5,6 +5,9 @@ declare(strict_types=1);
  *
  * Philosophy: Ensure crawlability and safe directives; educates on SEO foundations.
  * @package WPShadow
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 
 namespace WPShadow\Diagnostics;
@@ -13,6 +16,9 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check robots.txt availability and basic directives.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 class Diagnostic_Robots_Txt extends Diagnostic_Base {
 	/**

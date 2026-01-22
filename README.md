@@ -23,6 +23,9 @@ cp wp-config-extra.php /path/to/wordpress/
 docker-compose up -d
 ```
 
+**Access URLs (Codespaces)**
+- Test site (port 9000): https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/
+
 **2. Read Philosophy First**
 ```
 Start with: docs/PRODUCT_PHILOSOPHY.md (11 Commandments)

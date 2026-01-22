@@ -8,6 +8,9 @@ declare(strict_types=1);
  *
  * @package WPShadow
  * @subpackage Diagnostics
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 
 
@@ -21,6 +24,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Diagnostic for comments being disabled
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 class Diagnostic_Comments_Disabled extends Diagnostic_Base {
 

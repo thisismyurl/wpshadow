@@ -5,6 +5,9 @@ declare(strict_types=1);
  *
  * Philosophy: Security best practice; educates on reducing attack surface.
  * @package WPShadow
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 
 namespace WPShadow\Diagnostics;
@@ -13,6 +16,9 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check if DISALLOW_FILE_EDIT is enabled to block theme/plugin editor.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 class Diagnostic_Disallow_File_Edit extends Diagnostic_Base {
 	/**

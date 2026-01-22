@@ -14,6 +14,9 @@ use WPShadow\Core\Diagnostic_Base;
  * Threat Level: 50/100
  *
  * Impact: Shows \"5 dark patterns hurt trust + brand reputation\" with examples.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_UxManipulativePatterns extends Diagnostic_Base {
 	protected static $slug = 'ux-manipulative-patterns';

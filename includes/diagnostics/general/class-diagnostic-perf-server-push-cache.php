@@ -14,6 +14,9 @@ use WPShadow\Core\Diagnostic_Base;
  * Threat Level: 45/100
  *
  * Impact: Shows \"Server pushing 400KB of cached assets\" making site slower.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_PerfServerPushCache extends Diagnostic_Base {
 	protected static $slug = 'perf-server-push-cache';

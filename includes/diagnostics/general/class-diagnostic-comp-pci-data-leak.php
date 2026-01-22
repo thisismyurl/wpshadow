@@ -14,6 +14,9 @@ use WPShadow\Core\Diagnostic_Base;
  * Threat Level: 100/100
  *
  * Impact: Shows \"Found CC numbers in logs = lose Stripe forever\" immediate fix.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_CompPciDataLeak extends Diagnostic_Base {
 	protected static $slug = 'comp-pci-data-leak';

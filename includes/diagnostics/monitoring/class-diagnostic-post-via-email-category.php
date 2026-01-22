@@ -6,6 +6,9 @@ declare(strict_types=1);
  * Flags when Post via Email posts are routed to the default "Uncategorized" category.
  *
  * @package WPShadow
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 
 
@@ -15,6 +18,9 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check Post via Email default category alignment.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 class Diagnostic_Post_Via_Email_Category extends Diagnostic_Base {
 	/**

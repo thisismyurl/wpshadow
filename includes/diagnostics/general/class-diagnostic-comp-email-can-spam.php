@@ -14,6 +14,9 @@ use WPShadow\Core\Diagnostic_Base;
  * Threat Level: 75/100
  *
  * Impact: Shows \"Missing unsubscribe link = $16K per email fine\" violations.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_CompEmailCanSpam extends Diagnostic_Base {
 	protected static $slug = 'comp-email-can-spam';

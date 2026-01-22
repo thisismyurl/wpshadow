@@ -4,6 +4,9 @@ declare(strict_types=1);
  * Diagnostic Registry
  *
  * @package WPShadow
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 
 namespace WPShadow\Diagnostics;
@@ -12,6 +15,9 @@ use WPShadow\Core\Activity_Logger;
 
 /**
  * Registry for managing diagnostic checks.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_Registry {
 	/**

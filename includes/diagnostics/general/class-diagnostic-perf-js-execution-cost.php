@@ -14,6 +14,9 @@ use WPShadow\Core\Diagnostic_Base;
  * Threat Level: 70/100
  *
  * Impact: Shows \"JavaScript blocks main thread for 4.7 seconds\" causing frozen feel.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_PerfJsExecutionCost extends Diagnostic_Base {
 	protected static $slug = 'perf-js-execution-cost';

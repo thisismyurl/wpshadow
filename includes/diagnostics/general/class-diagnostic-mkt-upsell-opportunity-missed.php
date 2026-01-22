@@ -14,6 +14,9 @@ use WPShadow\Core\Diagnostic_Base;
  * Threat Level: 65/100
  *
  * Impact: Shows \"Customers who buy X also buy Y 67% of time (missed $4K)\".
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_MktUpsellOpportunityMissed extends Diagnostic_Base {
 	protected static $slug = 'mkt-upsell-opportunity-missed';

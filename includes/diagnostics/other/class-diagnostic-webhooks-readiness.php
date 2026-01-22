@@ -5,6 +5,9 @@ declare(strict_types=1);
  *
  * Philosophy: Encourage automation and integrations; points to Pro workflows.
  * @package WPShadow
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 
 namespace WPShadow\Diagnostics;
@@ -13,6 +16,9 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check if REST API and permalinks are ready for webhook-based workflows.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 class Diagnostic_Webhooks_Readiness extends Diagnostic_Base {
 	/**

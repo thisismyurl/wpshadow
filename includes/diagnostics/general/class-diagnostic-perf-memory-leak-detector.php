@@ -14,6 +14,9 @@ use WPShadow\Core\Diagnostic_Base;
  * Threat Level: 80/100
  *
  * Impact: Shows \"Memory grows 50MB/hour, crashes after 6 hours\" with leak source.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_PerfMemoryLeakDetector extends Diagnostic_Base {
 	protected static $slug = 'perf-memory-leak-detector';

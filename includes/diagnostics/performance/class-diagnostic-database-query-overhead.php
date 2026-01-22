@@ -9,6 +9,9 @@
  * Training: https://wpshadow.com/training/database-query-overhead
  *
  * @package WPShadow
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 
 declare(strict_types=1);
@@ -21,6 +24,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Database Query Overhead diagnostic
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 class Diagnostic_Database_Query_Overhead extends Diagnostic_Base {
 
