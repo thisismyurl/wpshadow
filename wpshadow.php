@@ -880,6 +880,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-block-render
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-bot-traffic-analyzer.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-browser-compatibility-analyzer.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-canvas-webgl-performance-analyzer.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-captcha-performance-analyzer.php';
 
 // Auto-Fix System (Priority 2)
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-auto-fix-policy-manager.php';
