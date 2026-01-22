@@ -104,39 +104,5 @@ class Diagnostic_Malicious_File_Uploads extends Diagnostic_Base {
             'priority'     => 1,
         );
     }
-    
-    /**
-     * IMPLEMENTATION PLAN
-     * 
-     * "Holy Shit" Moment: "WPShadow found 3 PHP backdoors in your uploads folder"
-     * Revenue Path: Guardian
-     * KB Article: https://wpshadow.com/kb/malicious-uploads/
-     * Training Video: https://wpshadow.com/training/malicious-uploads/
-     * 
-     * Implementation Steps:
-     * Scan wp-content/uploads/ recursively
-     * Find PHP files (shouldn't exist in uploads)
-     * Pattern matching: eval(), base64_decode(), system(), shell_exec(), exec()
-     * YARA rule matching for known malware
-     * Check file upload timestamps (recent = active threat)
-     * Show exact file paths with preview
-     * One-click quarantine (move to /quarantine/)
-     * Optional delete with backup
-     * 
-     * KPI Tracking:
-     * - Time saved: [Calculate based on severity]
-     * - Issues found: [Count of findings]
-     * - Value delivered: [Show $ impact if applicable]
-     * 
-     * Treatment Options (Future):
-     * - Free: Basic remediation steps (KB link)
-     * - Guardian: Advanced automation + monitoring
-     * 
-     * Philosophy Compliance:
-     * - Free detection: ✅ Always accessible
-     * - Paid fixes: ✅ Module-gated advanced features
-     * - Education: ✅ KB + Training links
-     * - KPI: ✅ Track measurable value
-     * - Talk-worthy: ✅ Creates "holy shit" moments
-     */
+
 }

@@ -118,41 +118,5 @@ class Diagnostic_Plugin_Theme_Backdoor extends Diagnostic_Base {
             'priority'     => 1,
         );
     }
-    
-    /**
-     * IMPLEMENTATION PLAN
-     * 
-     * "Holy Shit" Moment: "Plugin X is sending your user data to a third-party server"
-     * Revenue Path: Guardian + SaaS
-     * KB Article: https://wpshadow.com/kb/plugin-backdoors/
-     * Training Video: https://wpshadow.com/training/plugin-backdoors/
-     * 
-     * Implementation Steps:
-     * Scan all plugin/theme PHP files
-     * Detect wp_remote_post/get to non-WordPress domains
-     * Pattern matching: eval(), base64_decode(), exec(), shell_exec()
-     * Find file_get_contents() with external URLs
-     * Detect unauthorized database access (direct mysqli/PDO)
-     * Check for obfuscated code (excessive base64, rot13)
-     * Show exact file + line number
-     * Display domain being contacted
-     * One-click "Quarantine plugin" (move to /quarantine/)
-     * Report to wordpress.org button
-     * 
-     * KPI Tracking:
-     * - Time saved: [Calculate based on severity]
-     * - Issues found: [Count of findings]
-     * - Value delivered: [Show $ impact if applicable]
-     * 
-     * Treatment Options (Future):
-     * - Free: Basic remediation steps (KB link)
-     * - Guardian + SaaS: Advanced automation + monitoring
-     * 
-     * Philosophy Compliance:
-     * - Free detection: ✅ Always accessible
-     * - Paid fixes: ✅ Module-gated advanced features
-     * - Education: ✅ KB + Training links
-     * - KPI: ✅ Track measurable value
-     * - Talk-worthy: ✅ Creates "holy shit" moments
-     */
+
 }

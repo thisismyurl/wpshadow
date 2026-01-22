@@ -105,40 +105,5 @@ class Diagnostic_Compromised_Admin_Account extends Diagnostic_Base {
             'priority'     => 1,
         );
     }
-    
-    /**
-     * IMPLEMENTATION PLAN
-     * 
-     * "Holy Shit" Moment: "Your admin@example.com password was in 12 data breaches"
-     * Revenue Path: Guardian + SaaS
-     * KB Article: https://wpshadow.com/kb/compromised-accounts/
-     * Training Video: https://wpshadow.com/training/compromised-accounts/
-     * 
-     * Implementation Steps:
-     * Get all admin/editor email addresses
-     * Check against Have I Been Pwned API (free tier: 10/day, SaaS: unlimited)
-     * Show breach details: "LinkedIn 2012, Adobe 2013, MySpace 2008"
-     * Test passwords against common password lists (top 10k)
-     * Check password strength (length, complexity)
-     * Identify accounts without 2FA
-     * Show risk score per account
-     * One-click "Force password reset" treatment
-     * Email notification to account owners
-     * 
-     * KPI Tracking:
-     * - Time saved: [Calculate based on severity]
-     * - Issues found: [Count of findings]
-     * - Value delivered: [Show $ impact if applicable]
-     * 
-     * Treatment Options (Future):
-     * - Free: Basic remediation steps (KB link)
-     * - Guardian + SaaS: Advanced automation + monitoring
-     * 
-     * Philosophy Compliance:
-     * - Free detection: ✅ Always accessible
-     * - Paid fixes: ✅ Module-gated advanced features
-     * - Education: ✅ KB + Training links
-     * - KPI: ✅ Track measurable value
-     * - Talk-worthy: ✅ Creates "holy shit" moments
-     */
+
 }

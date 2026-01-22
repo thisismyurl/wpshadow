@@ -128,40 +128,5 @@ class Diagnostic_SSL_Expiration extends Diagnostic_Base {
             'priority'     => 1,
         );
     }
-    
-    /**
-     * IMPLEMENTATION PLAN
-     * 
-     * "Holy Shit" Moment: "Your SSL certificate expires in 7 days"
-     * Revenue Path: Free + Guardian
-     * KB Article: https://wpshadow.com/kb/ssl-expiration/
-     * Training Video: https://wpshadow.com/training/ssl-expiration/
-     * 
-     * Implementation Steps:
-     * Parse SSL certificate via openssl_x509_parse()
-     * Extract validTo timestamp
-     * Calculate days remaining
-     * Show countdown: "Expires in 7 days, 3 hours, 12 minutes"
-     * Urgency levels: 30 days (warn), 7 days (urgent), 24 hours (critical)
-     * Show certificate issuer (Let's Encrypt, paid cert)
-     * Link to renewal instructions (KB article)
-     * Guardian module: Auto-renewal setup + monitoring
-     * Email alerts at 30/7/1 days
-     * 
-     * KPI Tracking:
-     * - Time saved: [Calculate based on severity]
-     * - Issues found: [Count of findings]
-     * - Value delivered: [Show $ impact if applicable]
-     * 
-     * Treatment Options (Future):
-     * - Free: Basic remediation steps (KB link)
-     * - Free + Guardian: Advanced automation + monitoring
-     * 
-     * Philosophy Compliance:
-     * - Free detection: ✅ Always accessible
-     * - Paid fixes: ✅ Module-gated advanced features
-     * - Education: ✅ KB + Training links
-     * - KPI: ✅ Track measurable value
-     * - Talk-worthy: ✅ Creates "holy shit" moments
-     */
+
 }

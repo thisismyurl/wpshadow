@@ -16,7 +16,6 @@ class Diagnostic_Plugins_Conflicting extends Diagnostic_Base {
 	protected static $title       = 'Plugins Causing Conflicts?';
 	protected static $description = 'Detects JavaScript errors from plugin conflicts.';
 
-	// TODO: Implement diagnostic logic.
 
 	public static function check(): ?array {
 		$conflicts = array(
@@ -43,28 +42,4 @@ class Diagnostic_Plugins_Conflicting extends Diagnostic_Base {
 		return null;
 	}
 
-	/**
-	 * IMPLEMENTATION PLAN (Non-technical Site Owner (Mom/Dad))
-	 *
-	 * What This Checks:
-	 * - [Technical implementation details]
-	 *
-	 * Why It Matters:
-	 * - [Business value in plain English]
-	 *
-	 * Success Criteria:
-	 * - [What "passing" means]
-	 *
-	 * How to Fix:
-	 * - Step 1: [Clear instruction]
-	 * - Step 2: [Next step]
-	 * - KB Article: Detailed explanation and examples
-	 * - Training Video: Visual walkthrough
-	 *
-	 * KPIs Tracked:
-	 * - Issues found and fixed
-	 * - Time saved (estimated minutes)
-	 * - Site health improvement %
-	 * - Business value delivered ($)
-	 */
 }

@@ -16,7 +16,6 @@ class Diagnostic_Forgot_Password_Works extends Diagnostic_Base {
 	protected static $title       = 'Password Reset Working?';
 	protected static $description = 'Verifies password reset emails are sent.';
 
-	// TODO: Implement diagnostic logic.
 
 	public static function check(): ?array {
 		$smtp_active = is_plugin_active('wp-mail-smtp/wp_mail_smtp.php') || 
@@ -39,28 +38,4 @@ class Diagnostic_Forgot_Password_Works extends Diagnostic_Base {
 		);
 	}
 
-	/**
-	 * IMPLEMENTATION PLAN (Non-technical Site Owner (Mom/Dad))
-	 *
-	 * What This Checks:
-	 * - [Technical implementation details]
-	 *
-	 * Why It Matters:
-	 * - [Business value in plain English]
-	 *
-	 * Success Criteria:
-	 * - [What "passing" means]
-	 *
-	 * How to Fix:
-	 * - Step 1: [Clear instruction]
-	 * - Step 2: [Next step]
-	 * - KB Article: Detailed explanation and examples
-	 * - Training Video: Visual walkthrough
-	 *
-	 * KPIs Tracked:
-	 * - Issues found and fixed
-	 * - Time saved (estimated minutes)
-	 * - Site health improvement %
-	 * - Business value delivered ($)
-	 */
 }

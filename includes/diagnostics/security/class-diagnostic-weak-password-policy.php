@@ -91,39 +91,5 @@ class Diagnostic_Weak_Password_Policy extends Diagnostic_Base {
         
         return null;
     }
-    
-    /**
-     * IMPLEMENTATION PLAN
-     * 
-     * "Holy Shit" Moment: "73% of your users have passwords under 8 characters"
-     * Revenue Path: Guardian
-     * KB Article: https://wpshadow.com/kb/weak-passwords/
-     * Training Video: https://wpshadow.com/training/weak-passwords/
-     * 
-     * Implementation Steps:
-     * Analyze password hashes (phpass hashing in WP)
-     * Cannot reverse hashes, but can check against common password lists (hash comparison)
-     * Test common passwords: password, 123456, admin, etc. (hash and compare)
-     * Show percentage weak by role: "Admins: 20%, Editors: 40%, Authors: 60%"
-     * Estimate based on hash complexity (not foolproof)
-     * One-click "Enforce strong password policy" treatment (plugin recommendation)
-     * Force password reset for weak accounts
-     * Guardian: Password policy enforcement
-     * 
-     * KPI Tracking:
-     * - Time saved: [Calculate based on severity]
-     * - Issues found: [Count of findings]
-     * - Value delivered: [Show $ impact if applicable]
-     * 
-     * Treatment Options (Future):
-     * - Free: Basic remediation steps (KB link)
-     * - Guardian: Advanced automation + monitoring
-     * 
-     * Philosophy Compliance:
-     * - Free detection: ✅ Always accessible
-     * - Paid fixes: ✅ Module-gated advanced features
-     * - Education: ✅ KB + Training links
-     * - KPI: ✅ Track measurable value
-     * - Talk-worthy: ✅ Creates "holy shit" moments
-     */
+
 }

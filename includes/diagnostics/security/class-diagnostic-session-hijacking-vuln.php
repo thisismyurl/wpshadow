@@ -99,39 +99,5 @@ class Diagnostic_Session_Hijacking_Vuln extends Diagnostic_Base {
             'priority'     => 2,
         );
     }
-    
-    /**
-     * IMPLEMENTATION PLAN
-     * 
-     * "Holy Shit" Moment: "Your login cookies can be stolen over public WiFi"
-     * Revenue Path: Free
-     * KB Article: https://wpshadow.com/kb/session-hijacking/
-     * Training Video: https://wpshadow.com/training/session-hijacking/
-     * 
-     * Implementation Steps:
-     * Check auth cookie flags: Secure, HttpOnly, SameSite
-     * Test via $_COOKIE or setcookie() inspection
-     * Verify HTTPS enforced for admin (FORCE_SSL_ADMIN)
-     * Check session timeout duration (default 48 hours = risky)
-     * Show current settings vs recommended
-     * Calculate risk: "Coffeeshop WiFi = stolen admin access"
-     * One-click "Secure sessions" treatment (define constants in wp-config)
-     * Show before/after security improvement
-     * 
-     * KPI Tracking:
-     * - Time saved: [Calculate based on severity]
-     * - Issues found: [Count of findings]
-     * - Value delivered: [Show $ impact if applicable]
-     * 
-     * Treatment Options (Future):
-     * - Free: Basic remediation steps (KB link)
-     * - Free: Advanced automation + monitoring
-     * 
-     * Philosophy Compliance:
-     * - Free detection: ✅ Always accessible
-     * - Paid fixes: ✅ Module-gated advanced features
-     * - Education: ✅ KB + Training links
-     * - KPI: ✅ Track measurable value
-     * - Talk-worthy: ✅ Creates "holy shit" moments
-     */
+
 }

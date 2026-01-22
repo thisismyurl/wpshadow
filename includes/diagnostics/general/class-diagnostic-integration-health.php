@@ -16,34 +16,9 @@ class Diagnostic_Integration_Health extends Diagnostic_Base {
 	protected static $title       = 'API Integration Health';
 	protected static $description = 'Monitors CRM, ERP, and third-party integrations.';
 
-	// TODO: Implement diagnostic logic.
 
 	public static function check(): ?array {
 		return null; // Generic integration check not feasible
 	}
 
-	/**
-	 * IMPLEMENTATION PLAN (Enterprise IT/Compliance Team)
-	 *
-	 * What This Checks:
-	 * - [Technical implementation details]
-	 *
-	 * Why It Matters:
-	 * - [Business value in plain English]
-	 *
-	 * Success Criteria:
-	 * - [What "passing" means]
-	 *
-	 * How to Fix:
-	 * - Step 1: [Clear instruction]
-	 * - Step 2: [Next step]
-	 * - KB Article: Detailed explanation and examples
-	 * - Training Video: Visual walkthrough
-	 *
-	 * KPIs Tracked:
-	 * - Issues found and fixed
-	 * - Time saved (estimated minutes)
-	 * - Site health improvement %
-	 * - Business value delivered ($)
-	 */
 }

@@ -106,40 +106,5 @@ class Diagnostic_Unauthorized_Admin_Creation extends Diagnostic_Base {
             'priority'     => 1,
         );
     }
-    
-    /**
-     * IMPLEMENTATION PLAN
-     * 
-     * "Holy Shit" Moment: "WPShadow detected a new admin account you didn't create"
-     * Revenue Path: Guardian
-     * KB Article: https://wpshadow.com/kb/unauthorized-admins/
-     * Training Video: https://wpshadow.com/training/unauthorized-admins/
-     * 
-     * Implementation Steps:
-     * Track baseline of admin/editor user IDs on first run
-     * Store in wp_options: wpshadow_admin_baseline
-     * Check for new admin/editor accounts on each diagnostic run
-     * Alert if new accounts detected
-     * Show account details: username, email, created date, IP address (from user_meta)
-     * Display user agent from creation event
-     * One-click "Disable account" treatment
-     * Email/SMS alert (SaaS tier)
-     * Guardian module: Real-time monitoring
-     * 
-     * KPI Tracking:
-     * - Time saved: [Calculate based on severity]
-     * - Issues found: [Count of findings]
-     * - Value delivered: [Show $ impact if applicable]
-     * 
-     * Treatment Options (Future):
-     * - Free: Basic remediation steps (KB link)
-     * - Guardian: Advanced automation + monitoring
-     * 
-     * Philosophy Compliance:
-     * - Free detection: ✅ Always accessible
-     * - Paid fixes: ✅ Module-gated advanced features
-     * - Education: ✅ KB + Training links
-     * - KPI: ✅ Track measurable value
-     * - Talk-worthy: ✅ Creates "holy shit" moments
-     */
+
 }

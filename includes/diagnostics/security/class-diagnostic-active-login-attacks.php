@@ -93,39 +93,5 @@ class Diagnostic_Active_Login_Attacks extends Diagnostic_Base {
             'priority'     => 1,
         );
     }
-    
-    /**
-     * IMPLEMENTATION PLAN
-     * 
-     * "Holy Shit" Moment: "WPShadow blocked 14,327 login attempts in the last 24 hours"
-     * Revenue Path: Guardian
-     * KB Article: https://wpshadow.com/kb/active-login-attacks/
-     * Training Video: https://wpshadow.com/training/active-login-attacks/
-     * 
-     * Implementation Steps:
-     * Parse Apache/Nginx access logs for wp-login.php POST requests
-     * Track failed login attempts (wp_login_failed hook)
-     * Group by IP address, username, time window
-     * Show geographic distribution via GeoIP
-     * Display most-tried usernames
-     * Calculate attack velocity (attempts per minute)
-     * Real-time dashboard widget with live count
-     * One-click "Block attacking IPs" treatment (Guardian module)
-     * 
-     * KPI Tracking:
-     * - Time saved: [Calculate based on severity]
-     * - Issues found: [Count of findings]
-     * - Value delivered: [Show $ impact if applicable]
-     * 
-     * Treatment Options (Future):
-     * - Free: Basic remediation steps (KB link)
-     * - Guardian: Advanced automation + monitoring
-     * 
-     * Philosophy Compliance:
-     * - Free detection: ✅ Always accessible
-     * - Paid fixes: ✅ Module-gated advanced features
-     * - Education: ✅ KB + Training links
-     * - KPI: ✅ Track measurable value
-     * - Talk-worthy: ✅ Creates "holy shit" moments
-     */
+
 }

@@ -120,40 +120,5 @@ class Diagnostic_Hardcoded_API_Keys extends Diagnostic_Base {
             'priority'     => 1,
         );
     }
-    
-    /**
-     * IMPLEMENTATION PLAN
-     * 
-     * "Holy Shit" Moment: "Your Stripe secret key is hardcoded in theme functions.php"
-     * Revenue Path: Guardian
-     * KB Article: https://wpshadow.com/kb/hardcoded-api-keys/
-     * Training Video: https://wpshadow.com/training/hardcoded-api-keys/
-     * 
-     * Implementation Steps:
-     * Scan PHP/JS files in themes/plugins (active only)
-     * Regex patterns: Stripe keys (sk_live_, pk_live_), AWS (AKIA...), Google API, PayPal, OpenAI
-     * Search for: api_key, apiKey, secret_key, access_token patterns
-     * Exclude wp-config.php (expected location)
-     * Show exact file + line number
-     * Display redacted key: "sk_live_***************ABC"
-     * Estimate exposure cost: "Could result in $25,000 AWS bill"
-     * One-click "Move to wp-config" treatment
-     * Guardian: Continuous code scanning
-     * 
-     * KPI Tracking:
-     * - Time saved: [Calculate based on severity]
-     * - Issues found: [Count of findings]
-     * - Value delivered: [Show $ impact if applicable]
-     * 
-     * Treatment Options (Future):
-     * - Free: Basic remediation steps (KB link)
-     * - Guardian: Advanced automation + monitoring
-     * 
-     * Philosophy Compliance:
-     * - Free detection: ✅ Always accessible
-     * - Paid fixes: ✅ Module-gated advanced features
-     * - Education: ✅ KB + Training links
-     * - KPI: ✅ Track measurable value
-     * - Talk-worthy: ✅ Creates "holy shit" moments
-     */
+
 }

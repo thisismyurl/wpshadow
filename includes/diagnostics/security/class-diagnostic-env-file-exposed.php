@@ -90,39 +90,5 @@ class Diagnostic_Env_File_Exposed extends Diagnostic_Base {
         
         return null;
     }
-    
-    /**
-     * IMPLEMENTATION PLAN
-     * 
-     * "Holy Shit" Moment: "Your .env file with database passwords is publicly accessible"
-     * Revenue Path: Free + Guardian
-     * KB Article: https://wpshadow.com/kb/exposed-env-files/
-     * Training Video: https://wpshadow.com/training/exposed-env-files/
-     * 
-     * Implementation Steps:
-     * Test HTTP access to: /.env, /.git/, .svn/, composer.json, package.json, wp-config-sample.php
-     * Use wp_remote_get() with site_url()
-     * Check HTTP status (200 = exposed)
-     * Show exact URL where exposed
-     * Display file contents preview (redacted)
-     * Calculate risk: "Database password publicly visible"
-     * One-click "Block via .htaccess" treatment
-     * Guardian: Daily exposure monitoring
-     * 
-     * KPI Tracking:
-     * - Time saved: [Calculate based on severity]
-     * - Issues found: [Count of findings]
-     * - Value delivered: [Show $ impact if applicable]
-     * 
-     * Treatment Options (Future):
-     * - Free: Basic remediation steps (KB link)
-     * - Free + Guardian: Advanced automation + monitoring
-     * 
-     * Philosophy Compliance:
-     * - Free detection: ✅ Always accessible
-     * - Paid fixes: ✅ Module-gated advanced features
-     * - Education: ✅ KB + Training links
-     * - KPI: ✅ Track measurable value
-     * - Talk-worthy: ✅ Creates "holy shit" moments
-     */
+
 }

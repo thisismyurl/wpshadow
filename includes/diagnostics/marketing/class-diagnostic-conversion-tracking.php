@@ -54,29 +54,4 @@ class Diagnostic_Conversion_Tracking extends Diagnostic_Base {
         
         return null;
     }
-
-    /**
-     * IMPLEMENTATION PLAN (Digital Marketing Agency)
-     * 
-     * What This Checks:
-     * - [Technical implementation details]
-     * 
-     * Why It Matters:
-     * - [Business value in plain English]
-     * 
-     * Success Criteria:
-     * - [What "passing" means]
-     * 
-     * How to Fix:
-     * - Step 1: [Clear instruction]
-     * - Step 2: [Next step]
-     * - KB Article: Detailed explanation and examples
-     * - Training Video: Visual walkthrough
-     * 
-     * KPIs Tracked:
-     * - Issues found and fixed
-     * - Time saved (estimated minutes)
-     * - Site health improvement %
-     * - Business value delivered ($)
-     */
 }

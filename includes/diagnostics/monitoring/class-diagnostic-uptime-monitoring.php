@@ -21,29 +21,4 @@ class Diagnostic_Uptime_Monitoring extends Diagnostic_Base {
         // Cannot be detected from WordPress directly
         return null;
     }
-
-    /**
-     * IMPLEMENTATION PLAN (Web Hosting Provider)
-     * 
-     * What This Checks:
-     * - [Technical implementation details]
-     * 
-     * Why It Matters:
-     * - [Business value in plain English]
-     * 
-     * Success Criteria:
-     * - [What "passing" means]
-     * 
-     * How to Fix:
-     * - Step 1: [Clear instruction]
-     * - Step 2: [Next step]
-     * - KB Article: Detailed explanation and examples
-     * - Training Video: Visual walkthrough
-     * 
-     * KPIs Tracked:
-     * - Issues found and fixed
-     * - Time saved (estimated minutes)
-     * - Site health improvement %
-     * - Business value delivered ($)
-     */
 }

@@ -16,7 +16,6 @@ class Diagnostic_Slow_Queries extends Diagnostic_Base {
 	protected static $title       = 'Slow Database Query Detection';
 	protected static $description = 'Identifies queries over 2 seconds.';
 
-	// TODO: Implement diagnostic logic.
 
 	public static function check(): ?array {
 		if (!defined('SAVEQUERIES') || !SAVEQUERIES) {
@@ -50,28 +49,4 @@ class Diagnostic_Slow_Queries extends Diagnostic_Base {
 		return null;
 	}
 
-	/**
-	 * IMPLEMENTATION PLAN (Web Hosting Provider)
-	 *
-	 * What This Checks:
-	 * - [Technical implementation details]
-	 *
-	 * Why It Matters:
-	 * - [Business value in plain English]
-	 *
-	 * Success Criteria:
-	 * - [What "passing" means]
-	 *
-	 * How to Fix:
-	 * - Step 1: [Clear instruction]
-	 * - Step 2: [Next step]
-	 * - KB Article: Detailed explanation and examples
-	 * - Training Video: Visual walkthrough
-	 *
-	 * KPIs Tracked:
-	 * - Issues found and fixed
-	 * - Time saved (estimated minutes)
-	 * - Site health improvement %
-	 * - Business value delivered ($)
-	 */
 }

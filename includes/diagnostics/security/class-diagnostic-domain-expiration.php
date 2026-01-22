@@ -97,40 +97,5 @@ class Diagnostic_Domain_Expiration extends Diagnostic_Base {
             'priority'     => 1,
         );
     }
-    
-    /**
-     * IMPLEMENTATION PLAN
-     * 
-     * "Holy Shit" Moment: "Your domain expires in 14 days"
-     * Revenue Path: SaaS
-     * KB Article: https://wpshadow.com/kb/domain-expiration/
-     * Training Video: https://wpshadow.com/training/domain-expiration/
-     * 
-     * Implementation Steps:
-     * Extract domain from site_url()
-     * Query WHOIS API (free tier: 1/day, SaaS: hourly)
-     * Parse expiration date
-     * Calculate days remaining
-     * Show countdown timer
-     * Urgency: 90 days (warn), 30 days (urgent), 7 days (critical)
-     * Link to registrar renewal page
-     * Display registrar info
-     * Email alerts at 90/30/7/1 days (SaaS)
-     * 
-     * KPI Tracking:
-     * - Time saved: [Calculate based on severity]
-     * - Issues found: [Count of findings]
-     * - Value delivered: [Show $ impact if applicable]
-     * 
-     * Treatment Options (Future):
-     * - Free: Basic remediation steps (KB link)
-     * - SaaS: Advanced automation + monitoring
-     * 
-     * Philosophy Compliance:
-     * - Free detection: ✅ Always accessible
-     * - Paid fixes: ✅ Module-gated advanced features
-     * - Education: ✅ KB + Training links
-     * - KPI: ✅ Track measurable value
-     * - Talk-worthy: ✅ Creates "holy shit" moments
-     */
+
 }

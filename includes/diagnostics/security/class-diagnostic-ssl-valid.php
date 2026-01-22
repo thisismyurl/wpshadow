@@ -16,7 +16,6 @@ class Diagnostic_SSL_Valid extends Diagnostic_Base {
     protected static $title = 'Is SSL Certificate Valid?';
     protected static $description = 'Checks if your site has a working security certificate.';
 
-    // TODO: Implement diagnostic logic.
 
     public static function check(): ?array {
         // Only check if site claims to use SSL
@@ -69,29 +68,4 @@ class Diagnostic_SSL_Valid extends Diagnostic_Base {
         fclose($stream);
         return null; // SSL is valid
     }
-
-    /**
-     * IMPLEMENTATION PLAN (Non-technical Site Owner (Mom/Dad))
-     * 
-     * What This Checks:
-     * - [Technical implementation details]
-     * 
-     * Why It Matters:
-     * - [Business value in plain English]
-     * 
-     * Success Criteria:
-     * - [What "passing" means]
-     * 
-     * How to Fix:
-     * - Step 1: [Clear instruction]
-     * - Step 2: [Next step]
-     * - KB Article: Detailed explanation and examples
-     * - Training Video: Visual walkthrough
-     * 
-     * KPIs Tracked:
-     * - Issues found and fixed
-     * - Time saved (estimated minutes)
-     * - Site health improvement %
-     * - Business value delivered ($)
-     */
 }
