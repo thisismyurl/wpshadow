@@ -54,3 +54,4 @@ class Diagnostic_Charset_Collation_Mismatches extends Diagnostic_Base {
 
 		return null;
 	}
+}

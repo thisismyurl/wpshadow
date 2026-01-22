@@ -1,15 +1,15 @@
-# Documentation Status - January 21, 2026
+# Documentation Status - January 22, 2026
 
 ## Overview
 
-**Status:** ✅ COMPLETE  
+**Status:** ⚠ In progress (clean-up + refresh underway)  
 **Version:** 1.2601.2112  
-**Active Docs:** 27 files  
+**Active Docs:** 27 core + new "moved" staging area  
 **Archived Docs:** 40+ files
 
 ---
 
-## Documentation Structure
+## Documentation Structure (current)
 
 ```
 /docs
@@ -19,8 +19,9 @@
 ├── CODING_STANDARDS.md                    [Code style - updated]
 ├── FILE_STRUCTURE_GUIDE.md                [Dev reference - streamlined]
 │
-├── FEATURE_MATRIX_DIAGNOSTICS.md          [All 57 diagnostics - NEW]
-├── FEATURE_MATRIX_TREATMENTS.md           [All 44 treatments - NEW]
+├── FEATURE_MATRIX_DIAGNOSTICS.md          [57 live diagnostics]
+├── FEATURE_MATRIX_TREATMENTS.md           [44 treatments]
+├── PERSONA_DIAGNOSTIC_COVERAGE.md         [95 new persona-focused stubs]
 ├── RECENT_CHANGES.md                      [Implementation details - NEW]
 │
 ├── WORKFLOW_BUILDER.md                    [Workflow automation - updated]
@@ -47,6 +48,7 @@
 ├── DOC_AUDIT_FINDINGS.md                  [Initial audit - report]
 ├── DOC_UPDATES_COMPLETED.md               [Update summary - log]
 ├── DOCUMENTATION_STATUS.md                [This file]
+├── moved/                                [Staging for legacy/relocated .md files]
 │
 └── archive/                               [Historical docs]
     ├── README.md                          [Archive index]
@@ -59,13 +61,12 @@
 
 ## Completeness by Feature
 
-### Core Systems (100% Complete)
+### Core Systems (current snapshot)
 ✅ **Diagnostics**
-- All 57 checks documented
-- Threat levels defined
-- Auto-fixable status tracked
-- Recent additions included
-- File: FEATURE_MATRIX_DIAGNOSTICS.md
+- 57 live checks documented (see FEATURE_MATRIX_DIAGNOSTICS.md)
+- 95 persona-focused stubs staged with TODOs (see PERSONA_DIAGNOSTIC_COVERAGE.md)
+- Threat levels defined for live checks; stubs pending implementation
+- Auto-fixable status tracked for live checks
 
 ✅ **Treatments**
 - All 44 implementations documented

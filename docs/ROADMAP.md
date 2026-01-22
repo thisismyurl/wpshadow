@@ -33,15 +33,22 @@
 
 **Production Features (All Free Forever):**
 
-### Diagnostics: 57 Checks Across 10 Categories
-📊 [Complete diagnostic matrix →](FEATURE_MATRIX_DIAGNOSTICS.md)
+### Diagnostics: 57 Live + 95 Persona-Focused Stubs
+📊 [Complete diagnostic matrix →](FEATURE_MATRIX_DIAGNOSTICS.md) | [Persona coverage →](PERSONA_DIAGNOSTIC_COVERAGE.md)
 
+**Live Diagnostics (57 Production-Ready):**
 - **Security** (12): SSL, security headers, admin username, REST API, RSS feeds, hotlink protection, consent checks
 - **Performance** (15): Memory limit, lazy load, external fonts, jQuery migrate, emoji scripts, asset versions, caching
 - **Code Quality** (12): Debug mode, error logging, WP generator, embed disable, interactivity, accessibility
 - **WordPress Config** (10): WP version, PHP version, permalinks, tagline, email deliverability, timezone
 - **Monitoring** (5): Database health, broken links, plugin count, mobile friendliness, theme health
 - **Workflow/System** (3): Initial setup validation, registry health, maintenance mode
+
+**Staged Diagnostics (95 TODO Stubs - Implementation Ready):**
+- **Persona-Focused:** Designed for 6 user types (BasicSiteHealth, SmallBusiness, Corporate, MarketingAgency, Hosting, WordPressVIP)
+- **Module Distribution:** general (8), security (8), performance (11), monitoring (10), seo (8), commerce (8), marketing (8), system (7), design (8), compliance (8), compatibility (6), integration (5)
+- **Philosophy-Aligned:** All include TODO markers, KB links, training video links, KPI tracking placeholders
+- **Implementation Path:** See Phase 2 expansion timeline below
 
 ### Treatments: 44 Safe Auto-Fixes with Backup/Undo
 🔧 [Complete treatment matrix →](FEATURE_MATRIX_TREATMENTS.md)
@@ -87,38 +94,40 @@
 
 **Goal:** Comprehensive health checks that educate users about their site
 
-### Security Diagnostics
-- [x] Post via Email security (threat level 16)
-- [x] Post via Email category (threat level 12)
-- [x] SSL Configuration
-- [x] Debug Mode detection
-- [x] File editors enabled
-- [ ] Plugin security audit
-- [ ] Theme security check
-- [ ] File integrity monitoring
-- [ ] API health check
+**Status:** 57 live diagnostics + 95 persona-focused stubs staged for implementation
+
+### Live Diagnostics (Production-Ready)
+✅ **Security:** 12 checks (SSL, security headers, admin username, REST API, hotlink protection, etc.)
+✅ **Performance:** 15 checks (memory limit, lazy load, asset versions, caching, font optimization, etc.)
+✅ **Code Quality:** 12 checks (debug mode, error logging, WP generator, accessibility, etc.)
+✅ **WordPress Config:** 10 checks (WP version, PHP version, permalinks, tagline, email, etc.)
+✅ **Monitoring:** 5 checks (database health, broken links, plugin count, mobile friendliness, etc.)
+✅ **System/Workflow:** 3 checks (initial setup, registry health, maintenance mode)
+
+### Persona-Focused Diagnostic Expansion (95 Stubs)
+📊 **[PERSONA_DIAGNOSTIC_COVERAGE.md](PERSONA_DIAGNOSTIC_COVERAGE.md)** - Complete stub inventory
+
+**Implementation Priorities:**
+
+**Q1 2026 (High Priority - 30 stubs):**
+- BasicSiteHealth persona (17 stubs): Contact forms, social sharing, Google Analytics integration, mobile optimization, backup verification, uptime monitoring, broken link detection, image optimization, sitemap generation, robots.txt validation
+- SmallBusiness persona (13 stubs): Local SEO setup, business schema markup, contact page optimization, testimonial showcase, service page structure, booking system integration, payment gateway health, business hours display
+
+**Q2 2026 (Medium Priority - 35 stubs):**
+- Corporate persona (18 stubs): Multi-language support, department page structure, employee directory, intranet integration, document management, access control audit, compliance reporting, data retention policies
+- MarketingAgency persona (17 stubs): Client reporting dashboards, A/B testing setup, conversion tracking, marketing automation integration, lead capture optimization, campaign tracking, attribution modeling
+
+**Q3-Q4 2026 (Enterprise Priority - 30 stubs):**
+- Hosting persona (15 stubs): Resource usage monitoring, server health checks, CDN integration, load balancer status, auto-scaling triggers, backup rotation, disaster recovery readiness
+- WordPressVIP persona (15 stubs): VIP code standards compliance, enterprise cache validation, advanced security hardening, high-traffic optimization, multi-region deployment, SLA monitoring
 
 **Each diagnostic must:**
 - ✅ Link to KB article explaining why it matters
 - ✅ Show real-world impact (speed, security, SEO)
 - ✅ Offer auto-fix when possible (free)
 - ✅ Include "learn more" link to free training
-
-### Performance Diagnostics
-- [x] Memory Limit
-- [x] Image optimization status
-- [ ] Database optimization needs
-- [ ] Cache configuration
-- [ ] CDN status
-- [ ] Performance monitoring baseline
-
-### WordPress Config Diagnostics
-- [x] Permalinks structure
-- [x] Site description/tagline
-- [x] Backup plugin installed
-- [ ] WordPress version currency
-- [ ] Email deliverability
-- [ ] Custom field validation
+- ✅ Track KPI (time saved, issues detected)
+- ✅ Follow philosophy: helpful neighbor, education-first
 
 ---
 

@@ -21,15 +21,25 @@ class Diagnostic_HttpKeepAliveReuse extends Diagnostic_Base {
      * @return array|null Array with finding details or null if no issue found
      */
     public static function check(): ?array {
-		// STUB: Check implementation needed
-		// Complete implementation needed:
-		// 1. Gather diagnostic data specific to this check
-		// 2. Analyze against baseline or best practices
-		// 3. Return null if healthy, array with findings if issue detected
-		// 4. Link to KB article for user education (philosophy #5)
-		// 5. Consider KPI tracking (philosophy #9)
-		
-		return null; // Stub: full implementation pending
-	} // Stub
+		$reuse_rate = (float) get_transient('wpshadow_keepalive_reuse_rate'); // percentage
+		$coalescing_success = (float) get_transient('wpshadow_h2_coalescing_success'); // percentage
+
+		if (($reuse_rate > 0 && $reuse_rate < 60) || ($coalescing_success > 0 && $coalescing_success < 60)) {
+			return array(
+				'id' => 'http-keep-alive-reuse',
+				'title' => __('Keep-alive reuse is low', 'wpshadow'),
+				'description' => __('Connections are not being reused efficiently. Ensure CDN origin coalescing, correct TLS certs for coalescing, and fewer domains.', 'wpshadow'),
+				'severity' => 'medium',
+				'category' => 'other',
+				'kb_link' => 'https://wpshadow.com/kb/http-keep-alive/',
+				'training_link' => 'https://wpshadow.com/training/http-optimization/',
+				'auto_fixable' => false,
+				'threat_level' => 45,
+				'keepalive_reuse_rate' => $reuse_rate,
+				'coalescing_success' => $coalescing_success,
+			);
+		}
+
+		return null;
+	}
     }
-}

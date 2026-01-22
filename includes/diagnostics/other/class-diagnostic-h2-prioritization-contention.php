@@ -21,15 +21,25 @@ class Diagnostic_H2PrioritizationContention extends Diagnostic_Base {
      * @return array|null Array with finding details or null if no issue found
      */
     public static function check(): ?array {
-		// STUB: Check implementation needed
-		// Complete implementation needed:
-		// 1. Gather diagnostic data specific to this check
-		// 2. Analyze against baseline or best practices
-		// 3. Return null if healthy, array with findings if issue detected
-		// 4. Link to KB article for user education (philosophy #5)
-		// 5. Consider KPI tracking (philosophy #9)
-		
-		return null; // Stub: full implementation pending
-	} // Stub
+		$priority_score = (int) get_transient('wpshadow_h2_prioritization_score'); // 0-100 higher is better
+		$blocked_streams = (int) get_transient('wpshadow_h2_blocked_streams');
+
+		if ($priority_score > 0 && $priority_score < 70 || $blocked_streams > 5) {
+			return array(
+				'id' => 'h2-prioritization-contention',
+				'title' => __('H2/H3 prioritization contention detected', 'wpshadow'),
+				'description' => __('Resource prioritization over HTTP/2/3 is suboptimal. Review preload/fetchpriority and consolidate critical resources.', 'wpshadow'),
+				'severity' => 'medium',
+				'category' => 'other',
+				'kb_link' => 'https://wpshadow.com/kb/h2-prioritization/',
+				'training_link' => 'https://wpshadow.com/training/http2-performance/',
+				'auto_fixable' => false,
+				'threat_level' => 50,
+				'priority_score' => $priority_score,
+				'blocked_streams' => $blocked_streams,
+			);
+		}
+
+		return null;
+	}
     }
-}

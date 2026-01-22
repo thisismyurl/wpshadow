@@ -19,6 +19,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Import WordPress functions into this namespace for use in render()
+use function wp_nonce_field;
+use function wp_json_encode;
+use function wp_kses_post;
+use function human_time_diff;
+use function esc_html;
+use function esc_attr;
+use function esc_js;
+use function wp_create_nonce;
+use function esc_html_e;
+use function esc_attr_e;
+use function __;
+
 /**
  * Notification Builder class
  */
@@ -302,10 +315,9 @@ class Notification_Builder {
 			</div>
 
 			<!-- Builder Modal -->
-			<div id="wpshadow-notification-builder-modal" class="wps-modal" style="display: none; position: fixed; z-index: 999999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6);">
-				<div class="wps-modal-content" style="background: #fff; margin: 5% auto; padding: 30px; border-radius: 8px; max-width: 600px; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto;">
-					<button type="button" class="wps-modal-close" style="position: absolute; top: 15px; right: 15px; background: transparent; border: none; font-size: 28px; cursor: pointer; color: #999; line-height: 1;">×</button>
-
+		<div id="wpshadow-notification-builder-modal" class="wps-modal" style="display: none; position: fixed; z-index: 999999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center;">
+			<div class="wps-modal-content" style="background: #fff; padding: 40px; border-radius: 12px; max-width: 800px; width: 90%; position: relative; box-shadow: 0 8px 32px rgba(0,0,0,0.4); max-height: 85vh; overflow-y: auto;">
+				<button type="button" class="wps-modal-close" style="position: absolute; top: 20px; right: 20px; background: transparent; border: none; font-size: 32px; cursor: pointer; color: #999; line-height: 1;">×</button>
 					<h2 style="margin-top: 0; color: #0073aa;">
 						<?php echo $mode === 'email' ? esc_html__( 'Create Email Rule', 'wpshadow' ) : esc_html__( 'Create Notification Rule', 'wpshadow' ); ?>
 					</h2>
@@ -333,10 +345,13 @@ class Notification_Builder {
 								<?php esc_html_e( 'When This Happens', 'wpshadow' ); ?>
 								<span style="color: #d32f2f;">*</span>
 							</label>
-							<div id="wpshadow-trigger-categories" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 16px;">
-								<?php foreach ( $triggers as $category_key => $category ) : ?>
-									<button type="button" class="wps-trigger-category-btn" data-category="<?php echo esc_attr( $category_key ); ?>" style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; background: #f9f9f9; cursor: pointer; text-align: left; transition: all 0.2s;">
-										<span class="dashicons dashicons-<?php echo esc_attr( $category['icon'] ?? 'admin-generic' ); ?>" style="vertical-align: middle; margin-right: 6px;"></span>
+						<p class="wps-form-help" style="margin-top: 4px; margin-bottom: 12px;">
+							<?php esc_html_e( 'Choose from scheduled tasks, content events, system changes, or diagnostic test results.', 'wpshadow' ); ?>
+						</p>
+						<div id="wpshadow-trigger-categories" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 16px;">
+							<?php foreach ( $triggers as $category_key => $category ) : ?>
+								<button type="button" class="wps-trigger-category-btn" data-category="<?php echo esc_attr( $category_key ); ?>" style="padding: 14px; border: 2px solid #ddd; border-radius: 8px; background: #fff; cursor: pointer; text-align: left; transition: all 0.2s; font-size: 13px;">
+									<span class="dashicons dashicons-<?php echo esc_attr( $category['icon'] ?? 'admin-generic' ); ?>" style="vertical-align: middle; margin-right: 6px; font-size: 18px; color: var(--wps-primary, #123456);"></span>
 										<strong><?php echo esc_html( $category['label'] ); ?></strong>
 									</button>
 								<?php endforeach; ?>
@@ -438,10 +453,10 @@ class Notification_Builder {
 			function populateTriggerItems(category) {
 				const categoryData = triggers[category];
 				const itemsHtml = Object.entries(categoryData.triggers || {}).map(([key, trigger]) => {
-					return `<label style="display: block; margin: 8px 0; cursor: pointer;">
+					return `<label style="display: block; margin: 8px 0; cursor: pointer; padding: 12px; background: #fff; border: 1px solid #ddd; border-radius: 6px; transition: all 0.2s;">
 						<input type="radio" name="trigger_type" value="${key}" class="wps-trigger-item" style="margin-right: 8px;" />
-						<strong>${trigger.label}</strong>
-						<p style="margin: 4px 0 0 24px; font-size: 12px; color: #666;">${trigger.description}</p>
+						<strong style="font-size: 14px;">${trigger.label}</strong>
+						<p style="margin: 4px 0 0 24px; font-size: 12px; color: #666; line-height: 1.5;">${trigger.description}</p>
 					</label>`;
 				}).join('');
 
@@ -456,8 +471,16 @@ class Notification_Builder {
 				);
 
 				// Highlight selected category
-				$('.wps-trigger-category-btn').removeClass('wps-selected').css('background', '#f9f9f9');
-				$(`[data-category="${category}"]`).addClass('wps-selected').css('background', '#e3f2fd').css('border-color', '#2196f3');
+				$('.wps-trigger-category-btn').removeClass('wps-selected').css({
+					'background': '#fff',
+					'border-color': '#ddd',
+					'border-width': '2px'
+				});
+				$(`[data-category="${category}"]`).addClass('wps-selected').css({
+					'background': '#e3f2fd',
+					'border-color': 'var(--wps-primary, #2196f3)',
+					'border-width': '2px'
+				});
 			}
 
 			// Category button handlers
@@ -477,7 +500,7 @@ class Notification_Builder {
 				$('#wpshadow-notification-builder-form')[0].reset();
 				$('input[name="rule_id"]').val('');
 				$('.wps-trigger-category-btn').first().click();
-				$('#wpshadow-notification-builder-modal').fadeIn(200);
+				$('#wpshadow-notification-builder-modal').css('display', 'flex').hide().fadeIn(200);
 			});
 
 			// Close modal

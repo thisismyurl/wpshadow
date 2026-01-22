@@ -1,50 +1,50 @@
 <?php
 declare(strict_types=1);
 /**
- * Domain Expiration Warning Diagnostic
+ * Compromised Admin Account Detection Diagnostic
  *
  * @package WPShadow
  * @subpackage DiagnosticsFuture
  */
 
-namespace WPShadow\DiagnosticsFuture\Security;
+namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
 /**
- * Domain Expiration Warning
+ * Compromised Admin Account Detection
  * 
  * Philosophy Compliance:
  * - ✅ Free to run (Commandment #2: Free as possible)
- * - ✅ Monetize fixes via SaaS module
+ * - ✅ Monetize fixes via Guardian + SaaS module
  * - ✅ Links to KB/Training (Commandments #5, #6)
  * - ✅ Shows KPI value (Commandment #9)
- * - ✅ Talk-worthy (Commandment #11): "Your domain expires in 14 days"
+ * - ✅ Talk-worthy (Commandment #11): "Your admin@example.com password was in 12 data breaches"
  * 
- * @priority 2
+ * @priority 1
  */
-class Diagnostic_Domain_Expiration extends Diagnostic_Base {
+class Diagnostic_Compromised_Admin_Account extends Diagnostic_Base {
     
     /**
      * The diagnostic slug/ID
      *
      * @var string
      */
-    protected static $slug = 'domain-expiration';
+    protected static $slug = 'compromised-admin-account';
     
     /**
      * The diagnostic title
      *
      * @var string
      */
-    protected static $title = 'Domain Expiration Warning';
+    protected static $title = 'Compromised Admin Account Detection';
     
     /**
      * The diagnostic description
      *
      * @var string
      */
-    protected static $description = 'Queries WHOIS to show domain expiration countdown.';
+    protected static $description = 'Checks admin emails against data breach databases and weak passwords.';
     
     /**
      * Run the diagnostic check
@@ -61,12 +61,12 @@ class Diagnostic_Domain_Expiration extends Diagnostic_Base {
             'description'  => static::$description . ' (Not yet implemented)',
             'color'        => '#9e9e9e',
             'bg_color'     => '#f5f5f5',
-            'kb_link'      => 'https://wpshadow.com/kb/domain-expiration/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=domain-expiration',
-            'training_link' => 'https://wpshadow.com/training/domain-expiration/',
+            'kb_link'      => 'https://wpshadow.com/kb/compromised-accounts/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=compromised-accounts',
+            'training_link' => 'https://wpshadow.com/training/compromised-accounts/',
             'auto_fixable' => false,
-            'threat_level' => 100,
-            'module'       => 'SaaS',
-            'priority'     => 2,
+            'threat_level' => 95,
+            'module'       => 'Guardian + SaaS',
+            'priority'     => 1,
             'stub'         => true,
         );
     }
@@ -74,21 +74,21 @@ class Diagnostic_Domain_Expiration extends Diagnostic_Base {
     /**
      * IMPLEMENTATION PLAN
      * 
-     * "Holy Shit" Moment: "Your domain expires in 14 days"
-     * Revenue Path: SaaS
-     * KB Article: https://wpshadow.com/kb/domain-expiration/
-     * Training Video: https://wpshadow.com/training/domain-expiration/
+     * "Holy Shit" Moment: "Your admin@example.com password was in 12 data breaches"
+     * Revenue Path: Guardian + SaaS
+     * KB Article: https://wpshadow.com/kb/compromised-accounts/
+     * Training Video: https://wpshadow.com/training/compromised-accounts/
      * 
      * Implementation Steps:
-     * Extract domain from site_url()
-     * Query WHOIS API (free tier: 1/day, SaaS: hourly)
-     * Parse expiration date
-     * Calculate days remaining
-     * Show countdown timer
-     * Urgency: 90 days (warn), 30 days (urgent), 7 days (critical)
-     * Link to registrar renewal page
-     * Display registrar info
-     * Email alerts at 90/30/7/1 days (SaaS)
+     * Get all admin/editor email addresses
+     * Check against Have I Been Pwned API (free tier: 10/day, SaaS: unlimited)
+     * Show breach details: "LinkedIn 2012, Adobe 2013, MySpace 2008"
+     * Test passwords against common password lists (top 10k)
+     * Check password strength (length, complexity)
+     * Identify accounts without 2FA
+     * Show risk score per account
+     * One-click "Force password reset" treatment
+     * Email notification to account owners
      * 
      * KPI Tracking:
      * - Time saved: [Calculate based on severity]
@@ -97,7 +97,7 @@ class Diagnostic_Domain_Expiration extends Diagnostic_Base {
      * 
      * Treatment Options (Future):
      * - Free: Basic remediation steps (KB link)
-     * - SaaS: Advanced automation + monitoring
+     * - Guardian + SaaS: Advanced automation + monitoring
      * 
      * Philosophy Compliance:
      * - Free detection: ✅ Always accessible

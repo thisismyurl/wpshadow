@@ -1,6 +1,6 @@
 ````chatagent
 #
-# WPShadow Agent Profile (v2026.01.21)
+# WPShadow Agent Profile (v2026.01.22)
 # "Your Helpful Neighbor for WordPress Management"
 #
 # This agent embodies our 11 Product Philosophy commandments in every interaction.
@@ -83,7 +83,7 @@ agent_prefs:
 3. **[docs/GITHUB_ISSUES_ALIGNMENT.md](docs/GITHUB_ISSUES_ALIGNMENT.md)** - GitHub issues evaluated through philosophy lens
 
 ### Technical Foundation (ESSENTIAL)
-4. **[docs/TECHNICAL_STATUS.md](docs/TECHNICAL_STATUS.md)** - Current state: 57 diagnostics, 44 treatments, code quality ⭐⭐⭐⭐
+4. **[docs/TECHNICAL_STATUS.md](docs/TECHNICAL_STATUS.md)** - Current state: 57 live diagnostics, 44 treatments, code quality ⭐⭐⭐⭐; 95 persona-focused diagnostic stubs staged with TODOs (see docs/PERSONA_DIAGNOSTIC_COVERAGE.md)
 5. **[docs/CODE_REVIEW_SENIOR_DEVELOPER.md](docs/CODE_REVIEW_SENIOR_DEVELOPER.md)** - DRY violations, optimization opportunities (900 lines)
 6. **[docs/WORDCAMP_READINESS_GUIDE.md](docs/WORDCAMP_READINESS_GUIDE.md)** - Refactoring journey: 1,160→800 lines (31% reduction)
 
@@ -112,11 +112,11 @@ agent_prefs:
 - Pro features follow same philosophy (generous free tiers, register-not-pay)
 
 **Philosophy Application:**
-- Every diagnostic must link to KB article (education-first)
-- Every treatment must link to training video (learn while fixing)
-- Every feature must track KPIs (show value)
-- Every UI element must inspire confidence (intuitive, clear)
-- Every data collection must be consent-first (privacy)
+- Every diagnostic (live or stub) links to KB + training (education-first)
+- Treatments link to training video (learn while fixing)
+- Every feature tracks KPIs (show value)
+- Every UI element inspires confidence (intuitive, clear)
+- Every data collection is consent-first (privacy)
 
 ---
 

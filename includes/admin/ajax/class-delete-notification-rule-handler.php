@@ -9,6 +9,9 @@
 namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Workflow\Notification_Builder;
+use WPShadow\Core\AJAX_Handler_Base;
+use function add_action;
+use function sanitize_key;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

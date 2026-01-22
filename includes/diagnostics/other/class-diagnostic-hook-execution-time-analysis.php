@@ -22,15 +22,24 @@ class Diagnostic_Hook_Execution_Time_Analysis extends Diagnostic_Base {
      * @return array|null Array with finding details or null if no issue found
      */
     public static function check(): ?array {
-		// STUB: Check implementation needed
-		// Complete implementation needed:
-		// 1. Gather diagnostic data specific to this check
-		// 2. Analyze against baseline or best practices
-		// 3. Return null if healthy, array with findings if issue detected
-		// 4. Link to KB article for user education (philosophy #5)
-		// 5. Consider KPI tracking (philosophy #9)
-		
-		return null; // Stub: full implementation pending
-	} // Stub - no issues detected yet
-    }
+		$slow_hooks = get_transient('wpshadow_slow_hooks');
+		$slow_hooks = is_array($slow_hooks) ? $slow_hooks : array();
+
+		if (!empty($slow_hooks)) {
+			return array(
+				'id' => 'hook-execution-time-analysis',
+				'title' => __('Slow WordPress hooks detected', 'wpshadow'),
+				'description' => __('Specific hooks have slow callbacks. Profile or defer heavy callbacks, and reduce per-request work.', 'wpshadow'),
+				'severity' => 'medium',
+				'category' => 'other',
+				'kb_link' => 'https://wpshadow.com/kb/hook-performance/',
+				'training_link' => 'https://wpshadow.com/training/wp-performance-profiling/',
+				'auto_fixable' => false,
+				'threat_level' => 50,
+				'slow_hooks' => $slow_hooks,
+			);
+		}
+
+		return null;
+	}
 }

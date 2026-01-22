@@ -1,18 +1,20 @@
 # WPShadow Documentation Index
 
-**Last Updated**: January 21, 2026  
-**Philosophy**: Free forever locally, helpful neighbor, education-first
+**Last Updated**: January 22, 2026  
+**Philosophy**: Free forever locally, helpful neighbor, education-first  
+**Status**: 57 live diagnostics, 95 persona-focused stubs, consolidated documentation
 
 ---
 
-## 🎯 Start Here
+## 🎯 Start Here (Read in Order)
 
 Essential reading for understanding WPShadow:
 
 1. **[README.md](README.md)** - Project overview and quick start
 2. **[PRODUCT_PHILOSOPHY.md](PRODUCT_PHILOSOPHY.md)** - 11 commandments guiding all decisions
-3. **[ROADMAP.md](ROADMAP.md)** - Phases 1-8 implementation plan
-4. **[TECHNICAL_STATUS.md](TECHNICAL_STATUS.md)** - Current state and capabilities
+3. **[ROADMAP.md](ROADMAP.md)** - Phases 1-8 implementation plan (updated with 95 stubs)
+4. **[TECHNICAL_STATUS.md](TECHNICAL_STATUS.md)** - Current state: 57 live + 95 stubs
+5. **[DIAGNOSTICS_GUIDE.md](DIAGNOSTICS_GUIDE.md)** - Complete diagnostic reference (NEW)
 
 ---
 
@@ -32,15 +34,18 @@ System design and technical foundation:
 
 Complete feature documentation:
 
-### Diagnostics & Treatments
-- **[FEATURE_MATRIX_DIAGNOSTICS.md](FEATURE_MATRIX_DIAGNOSTICS.md)** - All 57 diagnostics
-- **[FEATURE_MATRIX_TREATMENTS.md](FEATURE_MATRIX_TREATMENTS.md)** - All 44 treatments
+### Diagnostics & Treatments (Consolidated)
+- **[DIAGNOSTICS_GUIDE.md](DIAGNOSTICS_GUIDE.md)** - **START HERE** - Complete diagnostic reference (NEW)
+- **[FEATURE_MATRIX_DIAGNOSTICS.md](FEATURE_MATRIX_DIAGNOSTICS.md)** - 57 live diagnostics (table format)
+- **[PERSONA_DIAGNOSTIC_COVERAGE.md](PERSONA_DIAGNOSTIC_COVERAGE.md)** - 95 persona-focused stubs by user type
+- **[FEATURE_MATRIX_TREATMENTS.md](FEATURE_MATRIX_TREATMENTS.md)** - 44 treatments
 
 ### Dashboard & UI
 - **[DASHBOARD_LAYOUT_GUIDE.md](DASHBOARD_LAYOUT_GUIDE.md)** - Dashboard design
 - **[KANBAN_UI_GUIDE.md](KANBAN_UI_GUIDE.md)** - Kanban board usage
 - **[REAL_TIME_DASHBOARD_FULLSCREEN_GUIDE.md](REAL_TIME_DASHBOARD_FULLSCREEN_GUIDE.md)** - Real-time updates & fullscreen mode
 - **[QUICK_REFERENCE_REALTIME_FULLSCREEN.md](QUICK_REFERENCE_REALTIME_FULLSCREEN.md)** - Quick reference guide
+- **[KPI_METRICS_QUICK_REFERENCE.md](KPI_METRICS_QUICK_REFERENCE.md)** - KPI tracking
 
 ### Workflows & Automation
 - **[WORKFLOW_BUILDER.md](WORKFLOW_BUILDER.md)** - Workflow creation system
@@ -48,10 +53,15 @@ Complete feature documentation:
 - **[WORKFLOW_TRIGGERS_REFERENCE.md](WORKFLOW_TRIGGERS_REFERENCE.md)** - Available triggers
 
 ### Knowledge Base & Training
-- **[KB_WRITING_GUIDE.md](KB_WRITING_GUIDE.md)** - KB article standards
+- **[KB_WRITING_GUIDE.md](KB_WRITING_GUIDE.md)** - KB article standards (consolidated from 2 guides)
 - **[KB_ARTICLE_MAP.md](KB_ARTICLE_MAP.md)** - KB structure overview
 - **[KB_CONTENT_STRATEGY_SUMMARY.md](KB_CONTENT_STRATEGY_SUMMARY.md)** - Content strategy
 - **[KB_SEO_GAMIFICATION_ARCHITECTURE.md](KB_SEO_GAMIFICATION_ARCHITECTURE.md)** - SEO & engagement
+
+### Performance Monitoring
+- **[PERFORMANCE_IMPACT_START_HERE.md](PERFORMANCE_IMPACT_START_HERE.md)** - Performance impact system
+- **[PERFORMANCE_IMPACT_QUICK_REFERENCE.md](PERFORMANCE_IMPACT_QUICK_REFERENCE.md)** - Quick reference
+- **[PERFORMANCE_IMPACT_PREDICTION_GUIDE.md](PERFORMANCE_IMPACT_PREDICTION_GUIDE.md)** - Impact prediction
 
 ### Guardian (Phase 7-8)
 - **[GUARDIAN_CORE_COMPLETION.md](GUARDIAN_CORE_COMPLETION.md)** - Guardian foundation
@@ -64,28 +74,16 @@ Complete feature documentation:
 
 Phase-by-phase implementation documentation:
 
-### Phase 1-3: Foundation & Core
-- Phase 1: ✅ Complete - Foundation established
-- Phase 2: ✅ Complete - Core diagnostics (57)
-- Phase 3: ✅ Complete - Treatment expansion (44)
+### Active Implementation
+- **[PHASE_4_QUICK_WINS_IMPLEMENTATION.md](PHASE_4_QUICK_WINS_IMPLEMENTATION.md)** - Current focus: code quality (4-6 hours remaining)
+- **[PHASE_5_6_IMPLEMENTATION_PLAN.md](PHASE_5_6_IMPLEMENTATION_PLAN.md)** - KB/Training integration plan
+- **[PHASE_7_8_IMPLEMENTATION_PLAN.md](PHASE_7_8_IMPLEMENTATION_PLAN.md)** - Guardian launch plan
 
-### Phase 4: UX Excellence
-- **[PHASE_4_COMPLETE_SUMMARY.md](PHASE_4_COMPLETE_SUMMARY.md)** - Phase 4 completion
-- **[PHASE_4_QUICK_WINS_IMPLEMENTATION.md](PHASE_4_QUICK_WINS_IMPLEMENTATION.md)** - Quick wins
-
-### Phase 5-6: KB, Training & Privacy
-- **[PHASE_5_6_IMPLEMENTATION_PLAN.md](PHASE_5_6_IMPLEMENTATION_PLAN.md)** - Implementation guide
-- **[PHASE_5_6_COMPLETE_SUMMARY.md](PHASE_5_6_COMPLETE_SUMMARY.md)** - Completion summary
-- **[PHASE_5_6_QUICK_REFERENCE.md](PHASE_5_6_QUICK_REFERENCE.md)** - Quick reference
-
-### Phase 7-8: Guardian & Cloud
-- **[PHASE_7_8_IMPLEMENTATION_PLAN.md](PHASE_7_8_IMPLEMENTATION_PLAN.md)** - Full implementation (34KB)
-- **[PHASE_7_8_FINAL_SUMMARY.md](PHASE_7_8_FINAL_SUMMARY.md)** - Final summary
-- **[PHASE_7_8_FOUNDATION_COMPLETE.md](PHASE_7_8_FOUNDATION_COMPLETE.md)** - Foundation status
-- **[PHASE_7_8_INTEGRATION_COMPLETE.md](PHASE_7_8_INTEGRATION_COMPLETE.md)** - Integration status
-
-### Latest Implementation
-- **[IMPLEMENTATION_SUMMARY_REALTIME_FULLSCREEN.md](IMPLEMENTATION_SUMMARY_REALTIME_FULLSCREEN.md)** - Real-time dashboard (Jan 21, 2026)
+### Completion Summaries (Archived)
+- **Archived:** Phase 3-5 completion docs → [docs/archive/phases/](archive/phases/)
+- **Archived:** Diagnostic expansion docs → [docs/archive/diagnostic-expansion/](archive/diagnostic-expansion/)
+- **Archived:** Performance expansion docs → [docs/archive/performance/](archive/performance/)
+- **Archived:** KB sample articles → [docs/archive/kb-samples/](archive/kb-samples/)
 
 ---
 
@@ -146,30 +144,56 @@ Implementation notes for specific issues:
 
 ---
 
+---
+
 ## 🎯 Quick Access by Role
 
 ### For New Contributors
 1. [README.md](README.md) - Start here
 2. [PRODUCT_PHILOSOPHY.md](PRODUCT_PHILOSOPHY.md) - Understand the "why"
-3. [CODING_STANDARDS.md](CODING_STANDARDS.md) - Code guidelines
-4. [COMPLETE_SETUP_GUIDE.md](COMPLETE_SETUP_GUIDE.md) - Setup environment
+3. [DIAGNOSTICS_GUIDE.md](DIAGNOSTICS_GUIDE.md) - Complete diagnostic overview (NEW)
+4. [CODING_STANDARDS.md](CODING_STANDARDS.md) - Code guidelines
+5. [COMPLETE_SETUP_GUIDE.md](COMPLETE_SETUP_GUIDE.md) - Setup environment
 
 ### For Feature Development
 1. [ARCHITECTURE.md](ARCHITECTURE.md) - System design
-2. [FEATURE_MATRIX_DIAGNOSTICS.md](FEATURE_MATRIX_DIAGNOSTICS.md) - Available diagnostics
-3. [FEATURE_MATRIX_TREATMENTS.md](FEATURE_MATRIX_TREATMENTS.md) - Available treatments
-4. [WORKFLOW_BUILDER.md](WORKFLOW_BUILDER.md) - Workflow system
+2. [DIAGNOSTICS_GUIDE.md](DIAGNOSTICS_GUIDE.md) - All diagnostics (live + stubs)
+3. [FEATURE_MATRIX_DIAGNOSTICS.md](FEATURE_MATRIX_DIAGNOSTICS.md) - Quick reference table
+4. [PERSONA_DIAGNOSTIC_COVERAGE.md](PERSONA_DIAGNOSTIC_COVERAGE.md) - Persona-focused stubs
+5. [FEATURE_MATRIX_TREATMENTS.md](FEATURE_MATRIX_TREATMENTS.md) - Available treatments
+6. [WORKFLOW_BUILDER.md](WORKFLOW_BUILDER.md) - Workflow system
 
 ### For Product/Business
-1. [PRODUCT_PHILOSOPHY.md](PRODUCT_PHILOSOPHY.md) - Core principles
-2. [ROADMAP.md](ROADMAP.md) - Development timeline
-3. [PRODUCT_ECOSYSTEM.md](PRODUCT_ECOSYSTEM.md) - Vision & strategy
+1. [PRODUCT_PHILOSOPHY.md](PRODUCT_PHILOSOPHY.md) - Core principles (11 commandments)
+2. [ROADMAP.md](ROADMAP.md) - Development timeline (updated with 95 stubs)
+3. [PRODUCT_ECOSYSTEM.md](PRODUCT_ECOSYSTEM.md)** - Vision & strategy
 4. [STRATEGIC_PLANNING_Q1_2026.md](STRATEGIC_PLANNING_Q1_2026.md) - Near-term plans
+5. [DIAGNOSTICS_GUIDE.md](DIAGNOSTICS_GUIDE.md) - Feature roadmap by persona
 
 ### For Testing/QA
 1. [TESTING_SETUP.md](TESTING_SETUP.md) - Test environment
-2. [TECHNICAL_STATUS.md](TECHNICAL_STATUS.md) - Current capabilities
+2. [TECHNICAL_STATUS.md](TECHNICAL_STATUS.md) - Current capabilities (57 live + 95 stubs)
 3. [WORDCAMP_READINESS_GUIDE.md](WORDCAMP_READINESS_GUIDE.md) - Production readiness
+4. [DIAGNOSTICS_GUIDE.md](DIAGNOSTICS_GUIDE.md) - Test coverage overview
+
+---
+
+## 📊 Documentation Health
+
+**Active Documents:** ~35 essential files (down from 105+)  
+**Archived:** ~70 historical/redundant files  
+**New Consolidated Guides:** 1 (DIAGNOSTICS_GUIDE.md)  
+**Last Major Cleanup:** January 22, 2026  
+
+**Cleanup Actions:**
+- ✅ Moved 7 phase completion docs to [archive/phases/](archive/phases/)
+- ✅ Moved 5 diagnostic expansion docs to [archive/diagnostic-expansion/](archive/diagnostic-expansion/)
+- ✅ Moved 2 performance expansion docs to [archive/performance/](archive/performance/)
+- ✅ Moved 4 KB sample articles to [archive/kb-samples/](archive/kb-samples/)
+- ✅ Deleted 4 redundant .txt summaries
+- ✅ Created DIAGNOSTICS_GUIDE.md consolidating diagnostic documentation
+- ✅ Updated ROADMAP.md to reference 57 live + 95 stub diagnostics
+- ✅ Updated this index with consolidated structure
 
 ---
 
@@ -180,14 +204,21 @@ Implementation notes for specific issues:
 2. Add entry to this index under appropriate section
 3. Include philosophy alignment in header
 4. Link to related documents
+5. **Consolidate:** If new doc overlaps with existing, consolidate instead of adding
 
 **Removing Outdated Documentation:**
 1. Verify no references exist in code
 2. Check for cross-references in other docs
-3. Update this index
-4. Archive if historical value exists
+3. Move to appropriate archive/ subfolder
+4. Update this index
+5. **Never delete:** Archive for historical reference
 
-**Last Major Cleanup**: January 21, 2026 - Removed 13 outdated files
+**Archiving Guidelines:**
+- `archive/phases/` - Phase completion summaries
+- `archive/diagnostic-expansion/` - Diagnostic expansion planning docs
+- `archive/performance/` - Performance expansion docs
+- `archive/kb-samples/` - Sample KB articles
+- Future: `archive/meetings/`, `archive/proposals/` as needed
 
 ---
 
@@ -197,4 +228,5 @@ Questions about documentation?
 - Check [DOCUMENTATION_STATUS.md](DOCUMENTATION_STATUS.md) for documentation health
 - Review [PRODUCT_PHILOSOPHY.md](PRODUCT_PHILOSOPHY.md) for decision framework
 - See [ROADMAP.md](ROADMAP.md) for feature priorities
+- See [DIAGNOSTICS_GUIDE.md](DIAGNOSTICS_GUIDE.md) for comprehensive diagnostic reference
 

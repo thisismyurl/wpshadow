@@ -21,15 +21,24 @@ class Diagnostic_HydrationCostByComponent extends Diagnostic_Base {
      * @return array|null Array with finding details or null if no issue found
      */
     public static function check(): ?array {
-		// STUB: Check implementation needed
-		// Complete implementation needed:
-		// 1. Gather diagnostic data specific to this check
-		// 2. Analyze against baseline or best practices
-		// 3. Return null if healthy, array with findings if issue detected
-		// 4. Link to KB article for user education (philosophy #5)
-		// 5. Consider KPI tracking (philosophy #9)
-		
-		return null; // Stub: full implementation pending
-	} // Stub
-    }
+		$slow_components = get_transient('wpshadow_slow_hydration_components');
+		$slow_components = is_array($slow_components) ? $slow_components : array();
+
+		if (!empty($slow_components)) {
+			return array(
+				'id' => 'hydration-cost-by-component',
+				'title' => __('High hydration cost components found', 'wpshadow'),
+				'description' => __('Certain components are expensive to hydrate. Consider partial hydration, islands architecture, or server components.', 'wpshadow'),
+				'severity' => 'medium',
+				'category' => 'other',
+				'kb_link' => 'https://wpshadow.com/kb/hydration-cost/',
+				'training_link' => 'https://wpshadow.com/training/react-performance/',
+				'auto_fixable' => false,
+				'threat_level' => 55,
+				'slow_components' => $slow_components,
+			);
+		}
+
+		return null;
+	}
 }

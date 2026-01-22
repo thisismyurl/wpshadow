@@ -4652,17 +4652,15 @@ function wpshadow_render_settings_email() {
 	<!-- Email Rule Builder -->
 	<div style="margin-top: 32px;">
 		<?php
-		$email_builder = new \WPShadow\Workflow\Notification_Builder();
-		$email_builder->set_mode( 'email' );
-		echo wp_kses_post( $email_builder->render( 'email' ) );
+		\WPShadow\Workflow\Notification_Builder::set_mode( 'email' );
+		echo wp_kses_post( \WPShadow\Workflow\Notification_Builder::render( 'email' ) );
 		?>
 	</div>
 	<?php
 }
 function wpshadow_render_settings_notifications() {
 	// Create notification rule builder in 'notification' mode
-	$builder = new \WPShadow\Workflow\Notification_Builder();
-	$builder->set_mode( 'notification' );
+	\WPShadow\Workflow\Notification_Builder::set_mode( 'notification' );
 	?>
 	<div class="wps-card">
 		<div class="wps-card-header">
@@ -4677,7 +4675,7 @@ function wpshadow_render_settings_notifications() {
 			</div>
 		</div>
 		<div class="wps-card-body">
-			<?php echo wp_kses_post( $builder->render( 'notification' ) ); ?>
+			<?php echo wp_kses_post( \WPShadow\Workflow\Notification_Builder::render( 'notification' ) ); ?>
 		</div>
 	</div>
 	<?php

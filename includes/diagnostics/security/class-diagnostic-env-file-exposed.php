@@ -1,50 +1,50 @@
 <?php
 declare(strict_types=1);
 /**
- * Active Login Attack Detection Diagnostic
+ * Exposed Environment Variables Diagnostic
  *
  * @package WPShadow
  * @subpackage DiagnosticsFuture
  */
 
-namespace WPShadow\DiagnosticsFuture\Security;
+namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
 /**
- * Active Login Attack Detection
+ * Exposed Environment Variables
  * 
  * Philosophy Compliance:
  * - ✅ Free to run (Commandment #2: Free as possible)
- * - ✅ Monetize fixes via Guardian module
+ * - ✅ Monetize fixes via Free + Guardian module
  * - ✅ Links to KB/Training (Commandments #5, #6)
  * - ✅ Shows KPI value (Commandment #9)
- * - ✅ Talk-worthy (Commandment #11): "WPShadow blocked 14,327 login attempts in the last 24 hours"
+ * - ✅ Talk-worthy (Commandment #11): "Your .env file with database passwords is publicly accessible"
  * 
  * @priority 1
  */
-class Diagnostic_Active_Login_Attacks extends Diagnostic_Base {
+class Diagnostic_Env_File_Exposed extends Diagnostic_Base {
     
     /**
      * The diagnostic slug/ID
      *
      * @var string
      */
-    protected static $slug = 'active-login-attacks';
+    protected static $slug = 'env-file-exposed';
     
     /**
      * The diagnostic title
      *
      * @var string
      */
-    protected static $title = 'Active Login Attack Detection';
+    protected static $title = 'Exposed Environment Variables';
     
     /**
      * The diagnostic description
      *
      * @var string
      */
-    protected static $description = 'Detects real-time brute force login attempts and shows attack patterns.';
+    protected static $description = 'Tests if .env and other sensitive files are publicly accessible.';
     
     /**
      * Run the diagnostic check
@@ -61,11 +61,11 @@ class Diagnostic_Active_Login_Attacks extends Diagnostic_Base {
             'description'  => static::$description . ' (Not yet implemented)',
             'color'        => '#9e9e9e',
             'bg_color'     => '#f5f5f5',
-            'kb_link'      => 'https://wpshadow.com/kb/active-login-attacks/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=active-login-attacks',
-            'training_link' => 'https://wpshadow.com/training/active-login-attacks/',
+            'kb_link'      => 'https://wpshadow.com/kb/exposed-env-files/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=exposed-env-files',
+            'training_link' => 'https://wpshadow.com/training/exposed-env-files/',
             'auto_fixable' => false,
-            'threat_level' => 95,
-            'module'       => 'Guardian',
+            'threat_level' => 100,
+            'module'       => 'Free + Guardian',
             'priority'     => 1,
             'stub'         => true,
         );
@@ -74,20 +74,20 @@ class Diagnostic_Active_Login_Attacks extends Diagnostic_Base {
     /**
      * IMPLEMENTATION PLAN
      * 
-     * "Holy Shit" Moment: "WPShadow blocked 14,327 login attempts in the last 24 hours"
-     * Revenue Path: Guardian
-     * KB Article: https://wpshadow.com/kb/active-login-attacks/
-     * Training Video: https://wpshadow.com/training/active-login-attacks/
+     * "Holy Shit" Moment: "Your .env file with database passwords is publicly accessible"
+     * Revenue Path: Free + Guardian
+     * KB Article: https://wpshadow.com/kb/exposed-env-files/
+     * Training Video: https://wpshadow.com/training/exposed-env-files/
      * 
      * Implementation Steps:
-     * Parse Apache/Nginx access logs for wp-login.php POST requests
-     * Track failed login attempts (wp_login_failed hook)
-     * Group by IP address, username, time window
-     * Show geographic distribution via GeoIP
-     * Display most-tried usernames
-     * Calculate attack velocity (attempts per minute)
-     * Real-time dashboard widget with live count
-     * One-click "Block attacking IPs" treatment (Guardian module)
+     * Test HTTP access to: /.env, /.git/, .svn/, composer.json, package.json, wp-config-sample.php
+     * Use wp_remote_get() with site_url()
+     * Check HTTP status (200 = exposed)
+     * Show exact URL where exposed
+     * Display file contents preview (redacted)
+     * Calculate risk: "Database password publicly visible"
+     * One-click "Block via .htaccess" treatment
+     * Guardian: Daily exposure monitoring
      * 
      * KPI Tracking:
      * - Time saved: [Calculate based on severity]
@@ -96,7 +96,7 @@ class Diagnostic_Active_Login_Attacks extends Diagnostic_Base {
      * 
      * Treatment Options (Future):
      * - Free: Basic remediation steps (KB link)
-     * - Guardian: Advanced automation + monitoring
+     * - Free + Guardian: Advanced automation + monitoring
      * 
      * Philosophy Compliance:
      * - Free detection: ✅ Always accessible

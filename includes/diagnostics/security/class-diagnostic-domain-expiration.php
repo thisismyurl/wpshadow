@@ -1,50 +1,50 @@
 <?php
 declare(strict_types=1);
 /**
- * Exposed Environment Variables Diagnostic
+ * Domain Expiration Warning Diagnostic
  *
  * @package WPShadow
  * @subpackage DiagnosticsFuture
  */
 
-namespace WPShadow\DiagnosticsFuture\Security;
+namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
 /**
- * Exposed Environment Variables
+ * Domain Expiration Warning
  * 
  * Philosophy Compliance:
  * - ✅ Free to run (Commandment #2: Free as possible)
- * - ✅ Monetize fixes via Free + Guardian module
+ * - ✅ Monetize fixes via SaaS module
  * - ✅ Links to KB/Training (Commandments #5, #6)
  * - ✅ Shows KPI value (Commandment #9)
- * - ✅ Talk-worthy (Commandment #11): "Your .env file with database passwords is publicly accessible"
+ * - ✅ Talk-worthy (Commandment #11): "Your domain expires in 14 days"
  * 
- * @priority 1
+ * @priority 2
  */
-class Diagnostic_Env_File_Exposed extends Diagnostic_Base {
+class Diagnostic_Domain_Expiration extends Diagnostic_Base {
     
     /**
      * The diagnostic slug/ID
      *
      * @var string
      */
-    protected static $slug = 'env-file-exposed';
+    protected static $slug = 'domain-expiration';
     
     /**
      * The diagnostic title
      *
      * @var string
      */
-    protected static $title = 'Exposed Environment Variables';
+    protected static $title = 'Domain Expiration Warning';
     
     /**
      * The diagnostic description
      *
      * @var string
      */
-    protected static $description = 'Tests if .env and other sensitive files are publicly accessible.';
+    protected static $description = 'Queries WHOIS to show domain expiration countdown.';
     
     /**
      * Run the diagnostic check
@@ -61,12 +61,12 @@ class Diagnostic_Env_File_Exposed extends Diagnostic_Base {
             'description'  => static::$description . ' (Not yet implemented)',
             'color'        => '#9e9e9e',
             'bg_color'     => '#f5f5f5',
-            'kb_link'      => 'https://wpshadow.com/kb/exposed-env-files/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=exposed-env-files',
-            'training_link' => 'https://wpshadow.com/training/exposed-env-files/',
+            'kb_link'      => 'https://wpshadow.com/kb/domain-expiration/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=domain-expiration',
+            'training_link' => 'https://wpshadow.com/training/domain-expiration/',
             'auto_fixable' => false,
             'threat_level' => 100,
-            'module'       => 'Free + Guardian',
-            'priority'     => 1,
+            'module'       => 'SaaS',
+            'priority'     => 2,
             'stub'         => true,
         );
     }
@@ -74,20 +74,21 @@ class Diagnostic_Env_File_Exposed extends Diagnostic_Base {
     /**
      * IMPLEMENTATION PLAN
      * 
-     * "Holy Shit" Moment: "Your .env file with database passwords is publicly accessible"
-     * Revenue Path: Free + Guardian
-     * KB Article: https://wpshadow.com/kb/exposed-env-files/
-     * Training Video: https://wpshadow.com/training/exposed-env-files/
+     * "Holy Shit" Moment: "Your domain expires in 14 days"
+     * Revenue Path: SaaS
+     * KB Article: https://wpshadow.com/kb/domain-expiration/
+     * Training Video: https://wpshadow.com/training/domain-expiration/
      * 
      * Implementation Steps:
-     * Test HTTP access to: /.env, /.git/, .svn/, composer.json, package.json, wp-config-sample.php
-     * Use wp_remote_get() with site_url()
-     * Check HTTP status (200 = exposed)
-     * Show exact URL where exposed
-     * Display file contents preview (redacted)
-     * Calculate risk: "Database password publicly visible"
-     * One-click "Block via .htaccess" treatment
-     * Guardian: Daily exposure monitoring
+     * Extract domain from site_url()
+     * Query WHOIS API (free tier: 1/day, SaaS: hourly)
+     * Parse expiration date
+     * Calculate days remaining
+     * Show countdown timer
+     * Urgency: 90 days (warn), 30 days (urgent), 7 days (critical)
+     * Link to registrar renewal page
+     * Display registrar info
+     * Email alerts at 90/30/7/1 days (SaaS)
      * 
      * KPI Tracking:
      * - Time saved: [Calculate based on severity]
@@ -96,7 +97,7 @@ class Diagnostic_Env_File_Exposed extends Diagnostic_Base {
      * 
      * Treatment Options (Future):
      * - Free: Basic remediation steps (KB link)
-     * - Free + Guardian: Advanced automation + monitoring
+     * - SaaS: Advanced automation + monitoring
      * 
      * Philosophy Compliance:
      * - Free detection: ✅ Always accessible

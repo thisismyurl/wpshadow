@@ -3,7 +3,7 @@
 **Your Helpful Neighbor for WordPress Management**
 
 **Version:** 1.26.75000  
-**Status:** Active Development  
+**Status:** Active Development (live + stubs)  
 **License:** GPL v2+  
 **Philosophy:** [Read why we're different →](PRODUCT_PHILOSOPHY.md)
 
@@ -41,8 +41,9 @@ We're not selling you something. We're genuinely helping you succeed, then natur
 ## Why WPShadow is Different
 
 ### ✅ Free Forever (Really)
-- All 57 diagnostics (security, performance, config checks)
-- All 44 auto-fix treatments (with backup + undo)
+- 57 live diagnostics (security, performance, config checks)
+- 44 auto-fix treatments (with backup + undo)
+- 95 persona-focused diagnostic stubs staged for upcoming releases
 - Kanban board for managing findings
 - KPI tracking and value demonstration
 - WordPress Site Health integration
