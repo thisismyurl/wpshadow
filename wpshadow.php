@@ -859,6 +859,12 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-css-analyzer
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-icon-analyzer.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-layout-thrashing-analyzer.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-failed-login-analyzer.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-ssl-expiration-analyzer.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-dashboard-performance-analyzer.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-third-party-script-analyzer.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-rest-api-performance-analyzer.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-csp-violation-analyzer.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-domain-expiration-analyzer.php';
 
 // Auto-Fix System (Priority 2)
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-auto-fix-policy-manager.php';
@@ -920,6 +926,9 @@ add_action( 'plugins_loaded', function() {
 
 	// Initialize Guardian background analyzers
 	\WPShadow\Guardian\Failed_Login_Analyzer::init();
+	\WPShadow\Guardian\Dashboard_Performance_Analyzer::init();
+	\WPShadow\Guardian\REST_API_Performance_Analyzer::init();
+	\WPShadow\Guardian\CSP_Violation_Analyzer::init();
 
 	// Register Guardian AJAX command handlers (Phase 8)
 	// Priority 1 handlers
