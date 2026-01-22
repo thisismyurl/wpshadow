@@ -207,6 +207,78 @@ class Notification_Builder {
 	}
 
 	/**
+	 * Ensure default notifications/email rules exist for first-time users
+	 *
+	 * @return void
+	 */
+	public static function ensure_default_rules() {
+		if ( self::$builder_mode !== 'notification' ) {
+			return; // Only for notifications, not emails
+		}
+
+		$rules = self::get_configured_rules();
+
+		// Check if we already have rules
+		if ( ! empty( $rules ) ) {
+			return;
+		}
+
+		// No rules exist, create defaults
+		$default_rules = array(
+			array(
+				'name'    => __( 'Alert: Security Threat Detected', 'wpshadow' ),
+				'trigger' => array(
+					'type'  => 'security_threat_detected',
+					'label' => __( 'Security Threat Detected', 'wpshadow' ),
+				),
+				'action'  => array(
+					'type'  => 'send_notification',
+					'label' => __( 'Dashboard Notification', 'wpshadow' ),
+				),
+				'config'  => array(
+					'message' => __( '⚠️ Security Alert: A potential security threat has been detected on your site. Please review the WPShadow dashboard immediately.', 'wpshadow' ),
+					'style'   => 'error',
+				),
+			),
+			array(
+				'name'    => __( 'Notify: Critical Issues Found', 'wpshadow' ),
+				'trigger' => array(
+					'type'  => 'critical_issue_found',
+					'label' => __( 'Critical Issue Found', 'wpshadow' ),
+				),
+				'action'  => array(
+					'type'  => 'send_notification',
+					'label' => __( 'Dashboard Notification', 'wpshadow' ),
+				),
+				'config'  => array(
+					'message' => __( '🔴 Critical Issue Detected: WPShadow has identified a critical issue that requires your attention. Check the dashboard for details and recommended fixes.', 'wpshadow' ),
+					'style'   => 'error',
+				),
+			),
+			array(
+				'name'    => __( 'Notify: Backup Completed', 'wpshadow' ),
+				'trigger' => array(
+					'type'  => 'backup_completed',
+					'label' => __( 'Backup Completed', 'wpshadow' ),
+				),
+				'action'  => array(
+					'type'  => 'send_notification',
+					'label' => __( 'Dashboard Notification', 'wpshadow' ),
+				),
+				'config'  => array(
+					'message' => __( '✅ Backup Complete: Your site backup has completed successfully.', 'wpshadow' ),
+					'style'   => 'success',
+				),
+			),
+		);
+
+		// Save each default rule
+		foreach ( $default_rules as $rule ) {
+			self::save_rule( $rule );
+		}
+	}
+
+	/**
 	 * Delete a notification/email rule
 	 *
 	 * @param string $rule_id Rule ID to delete.

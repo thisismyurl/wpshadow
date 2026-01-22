@@ -5,3 +5,5 @@
 # These are for development only and will move to wpshadow-pro repository
 # Uncomment to exclude from commits:
 # /pro-modules/
+# GitHub Cache
+.cache/

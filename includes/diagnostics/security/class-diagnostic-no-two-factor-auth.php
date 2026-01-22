@@ -7,7 +7,7 @@ declare(strict_types=1);
  * @subpackage DiagnosticsFuture
  */
 
-namespace WPShadow\DiagnosticsFuture\Security;
+namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 

@@ -24,6 +24,8 @@ agent_prefs:
   philosophy_first: true  # ALWAYS check philosophy alignment before feature work
   avoid_documentation_updates_in_dev_mode: true
   avoid_changelog_updates_in_dev_mode: true
+  github_api_conservation: true  # CRITICAL: Minimize GitHub API calls
+  prefer_local_operations: true  # Always try local git/grep before API
 
 ---
 
@@ -261,6 +263,88 @@ wpshadow-pro/                    # https://github.com/thisismyurl/wpshadow-pro
 - ❌ `node_modules/` - npm dependencies (if present), don't modify
 - ⚠️ `docs/` - Reference documentation, DO NOT auto-edit unless explicitly requested
 - ⚠️ Existing `TODO/FIXME` comments - Respect, don't remove without user direction
+
+---
+
+## 🚫 GitHub API Rate Limit Protection (CRITICAL)
+
+**Current Limits:** 50,000/hour (authenticated), 30/min (search API)  
+**Status:** Excellent (0.03% usage typical)  
+**Full Guide:** [docs/GITHUB_RATE_LIMIT_MANAGEMENT.md](docs/GITHUB_RATE_LIMIT_MANAGEMENT.md)
+
+### API Call Hierarchy (ALWAYS Use in This Order)
+
+**1. Local Operations First (NO API CALLS - Preferred 90%+ of time)**
+```bash
+# ✅ Use these instead of GitHub API:
+git log --oneline -20                  # Recent commits
+git log --all --grep="keyword"         # Search commits
+git diff main                          # Compare changes
+grep -r "pattern" includes/            # Search code
+grep_search tool                       # Semantic code search
+read_file tool                         # Read local files
+```
+
+**2. Cached GitHub CLI (5-minute cache)**
+```bash
+# Check if recent cache exists before API call
+# Agent should implement caching mentally or in /tmp/
+```
+
+**3. Batched GraphQL (Efficient - When API Required)**
+```bash
+# Fetch multiple resources in ONE call vs multiple REST calls
+# Example: Get issue + comments + labels in single query
+```
+
+**4. REST API (Use Sparingly)**
+```bash
+# Only when GraphQL unavailable or single resource needed
+# Never in loops - batch with GraphQL instead
+```
+
+**5. Search API (LAST RESORT - 30/minute limit)**
+```bash
+# ⚠️ Very restrictive quota (30 requests/minute)
+# Use grep_search or semantic_search tools instead
+# Only use when local search absolutely fails
+```
+
+### Critical Rules
+
+**✅ ALWAYS:**
+- Use `grep_search` instead of GitHub code search (we have full codebase locally)
+- Use `git log --grep` instead of issue API for commit searches
+- Use `read_file` to check code instead of API fetches
+- Batch multiple API needs into single GraphQL query
+- Cache results mentally for repeated queries in same conversation
+
+**❌ NEVER:**
+- Poll GitHub APIs in loops or repeatedly
+- Use search API for code searches (use grep_search)
+- Fetch issues/PRs sequentially in loops (batch with GraphQL)
+- Check rate limits before every operation (wastes quota)
+- Use GitHub code search API (all code is local)
+
+### Tool Selection Guide
+
+| Need | ❌ Wrong Tool | ✅ Right Tool |
+|------|---------------|---------------|
+| Search code | github code search | `grep_search` |
+| Find commits | issue API | `git log --grep` |
+| Read file | API fetch | `read_file` |
+| List issues | REST loop | GraphQL batch or cached |
+| Check PR status | Repeated API | Once per operation |
+
+### Rate Limit Emergency Protocol
+
+If rate limit concerns arise:
+1. Check: `gh api rate_limit --jq '.rate.remaining'`
+2. If < 1000 remaining: Switch to 100% local operations
+3. If < 100 remaining: Stop GitHub API usage entirely
+4. Limits reset every hour (core) or minute (search)
+
+**Philosophy:** Local-first operations respect GitHub's infrastructure and ensure fast, reliable performance.
 
 ---
 
