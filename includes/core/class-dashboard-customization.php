@@ -265,14 +265,13 @@ class Dashboard_Customization {
 					const category = this.dataset.category;
 					pinStates[ category ].visible = this.checked;
 				});
-			});
 			
 			saveBtn.addEventListener( 'click', function() {
 				wp.ajax.post( 'wpshadow_save_dashboard_prefs', {
 					nonce: wpshadow.nonce,
 					prefs: pinStates
 				}).done( function( response ) {
-					alert( '<?php esc_js_e( 'Dashboard preferences saved!', 'wpshadow' ); ?>' );
+					alert( '<?php echo esc_js( __( 'Dashboard preferences saved!', 'wpshadow' ) ); ?>' );
 					location.reload();
 				}).fail( function( error ) {
 					alert( 'Error saving preferences: ' + error );

@@ -155,6 +155,119 @@ class Block_Registry {
 				'color'       => '#f59e0b',
 				'fields'      => array(),
 			),
+			'plugin_update_trigger'   => array(
+				'label'       => 'Plugin/Theme Update Available',
+				'description' => 'Run when plugin or theme updates are detected',
+				'icon'        => 'dashicons-update',
+				'color'       => '#0ea5e9',
+				'fields'      => array(
+					'target_type'   => array(
+						'label'   => 'Target',
+						'type'    => 'select',
+						'options' => array(
+							'any'     => 'Any plugin or theme',
+							'plugins' => 'Plugins only',
+							'themes'  => 'Themes only',
+							'specific' => 'Specific slug',
+						),
+						'default' => 'any',
+					),
+					'specific_slug' => array(
+						'label'   => 'Specific plugin/theme slug',
+						'type'    => 'text',
+						'default' => '',
+					),
+				),
+			),
+			'backup_completion_trigger' => array(
+				'label'       => 'Backup Completion',
+				'description' => 'Run when a backup completes',
+				'icon'        => 'dashicons-database',
+				'color'       => '#22c55e',
+				'fields'      => array(
+					'backup_status' => array(
+						'label'   => 'Status',
+						'type'    => 'select',
+						'options' => array(
+							'any'     => 'Any',
+							'success' => 'Success only',
+							'failure' => 'Failure only',
+						),
+						'default' => 'any',
+					),
+				),
+			),
+			'database_trigger'        => array(
+				'label'       => 'Database Issues',
+				'description' => 'Run when database size or corruption issues are detected',
+				'icon'        => 'dashicons-database',
+				'color'       => '#a855f7',
+				'fields'      => array(
+					'database_issue' => array(
+						'label'   => 'Issue Type',
+						'type'    => 'select',
+						'options' => array(
+							'size_threshold' => 'Size exceeds threshold',
+							'corruption'     => 'Corruption detected',
+						),
+						'default' => 'size_threshold',
+					),
+					'size_mb'        => array(
+						'label'   => 'Size threshold (MB)',
+						'type'    => 'number',
+						'default' => 500,
+					),
+				),
+			),
+			'error_log_trigger'       => array(
+				'label'       => 'Error Log Activity',
+				'description' => 'Run when new warnings or errors are logged',
+				'icon'        => 'dashicons-warning',
+				'color'       => '#ef4444',
+				'fields'      => array(
+					'error_level' => array(
+						'label'   => 'Minimum severity',
+						'type'    => 'select',
+						'options' => array(
+							'any'     => 'Any',
+							'warning' => 'Warning+',
+							'error'   => 'Error+',
+							'critical'=> 'Critical only',
+						),
+						'default' => 'any',
+					),
+				),
+			),
+			'diagnostic_run_trigger'  => array(
+				'label'       => 'Diagnostic Run',
+				'description' => 'Run when any diagnostic executes (manual, Guardian, or scheduled)',
+				'icon'        => 'dashicons-visibility',
+				'color'       => '#14b8a6',
+				'fields'      => array(
+					'source'              => array(
+						'label'   => 'Source',
+						'type'    => 'select',
+						'options' => array(
+							'any'        => 'Any source',
+							'quick_scan' => 'Quick Scan',
+							'deep_scan'  => 'Deep Scan',
+							'guardian'   => 'Guardian',
+							'manual'     => 'Manual',
+						),
+						'default' => 'any',
+					),
+					'specific_diagnostic' => array(
+						'label'   => 'Specific diagnostic (optional)',
+						'type'    => 'text',
+						'default' => '',
+					),
+					'issues_only'         => array(
+						'label'   => 'Only when issues are found',
+						'type'    => 'checkbox',
+						'default' => false,
+					),
+				),
+			),
 		);
 	}
 

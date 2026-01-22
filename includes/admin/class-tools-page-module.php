@@ -81,8 +81,13 @@ function wpshadow_get_tools_catalog() {
 /**
  * Render tools page.
  *
+ * NOTE: This function is already declared in wpshadow.php (line 1443)
+ * This file only provides helper functions like wpshadow_run_broken_links_scan()
+ * If wpshadow_render_tools() is not yet declared, uncomment below.
+ *
  * @return void
  */
+if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 function wpshadow_render_tools() {
 	if ( ! current_user_can( 'read' ) ) {
 		wp_die( 'Insufficient permissions.' );
@@ -103,32 +108,54 @@ function wpshadow_render_tools() {
 
 	// Show tools index
 	?>
-	<div class="wrap">
-		<h1><?php esc_html_e( 'WPShadow Tools', 'wpshadow' ); ?></h1>
-		<p><?php esc_html_e( 'Additional tools for site analysis and optimization.', 'wpshadow' ); ?></p>
+	<div class="wps-page-container">
+		<!-- Page Header -->
+		<div class="wps-page-header">
+			<h1 class="wps-page-title">
+				<span class="dashicons dashicons-admin-tools" style="color: var(--wps-primary);"></span>
+				<?php esc_html_e( 'WPShadow Tools', 'wpshadow' ); ?>
+			</h1>
+			<p class="wps-page-subtitle">
+				<?php esc_html_e( 'Additional tools for site analysis and optimization.', 'wpshadow' ); ?>
+			</p>
+		</div>
 
-		<div class="wpshadow-tools-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 30px;">
+		<!-- Tools Grid -->
+		<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
 			<?php foreach ( $catalog as $item ) :
 				$tool_url = admin_url( 'admin.php?page=wpshadow-tools&tool=' . $item['tool'] );
 			?>
-			<div class="wpshadow-tool-card" style="border: 1px solid #ddd; padding: 20px; border-radius: 4px; background: #fff;">
-				<h2 style="margin-top: 0;"><?php echo esc_html( $item['title'] ); ?></h2>
-				<p><?php echo esc_html( $item['desc'] ); ?></p>
-				<p style="margin-bottom: 0;">
+			<div class="wps-card">
+				<div class="wps-card-header">
+					<div>
+						<h3 class="wps-card-title">
+							<?php echo esc_html( $item['title'] ); ?>
+						</h3>
+						<p class="wps-card-description">
+							<?php echo esc_html( $item['desc'] ); ?>
+						</p>
+					</div>
+				</div>
+				<div class="wps-card-body" style="padding-top: 12px;">
 					<?php if ( ! empty( $item['enabled'] ) ) : ?>
-						<a href="<?php echo esc_url( $tool_url ); ?>" class="button button-primary">
+						<a href="<?php echo esc_url( $tool_url ); ?>" class="wps-btn wps-btn-primary">
+							<span class="dashicons dashicons-external" style="font-size: 14px;"></span>
 							<?php esc_html_e( 'Open Tool', 'wpshadow' ); ?>
 						</a>
 					<?php else : ?>
-						<button class="button button-secondary" disabled><?php esc_html_e( 'Coming Soon', 'wpshadow' ); ?></button>
+						<button class="wps-btn wps-btn-secondary" disabled>
+							<span class="dashicons dashicons-hourglass" style="font-size: 14px;"></span>
+							<?php esc_html_e( 'Coming Soon', 'wpshadow' ); ?>
+						</button>
 					<?php endif; ?>
-				</p>
+				</div>
 			</div>
 			<?php endforeach; ?>
 		</div>
 	</div>
 	<?php
 }
+} // End if ( ! function_exists( 'wpshadow_render_tools' ) )
 
 /**
  * Run broken links scan programmatically for tools/workflows.

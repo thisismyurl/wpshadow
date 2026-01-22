@@ -24,9 +24,13 @@ $suggestions = \WPShadow\Workflow\Workflow_Suggestions::get_suggestions();
 $suggestions = array_slice( $suggestions, 0, 6 );
 ?>
 
-<div class="wrap wpshadow-workflow-list">
-	<h1>
-		<?php esc_html_e( 'Workflow Manager', 'wpshadow' ); ?>
+<div class="wps-page-container wpshadow-workflow-list">
+	<!-- Page Header -->
+	<div class="wps-page-header">
+		<h1 class="wps-page-title">
+			<span class="dashicons dashicons-update" style="color: var(--wps-primary);"></span>
+			<?php esc_html_e( 'Workflow Manager', 'wpshadow' ); ?>
+		</h1>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>" class="page-title-action">
 			<?php esc_html_e( 'Build Your Own', 'wpshadow' ); ?>
 		</a>

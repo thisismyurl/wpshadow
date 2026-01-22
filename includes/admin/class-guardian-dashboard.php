@@ -385,44 +385,60 @@ class Guardian_Dashboard {
 	 * @return string HTML
 	 */
 	private static function render_system_health(): string {
-		$html = '<div class="guardian-widget guardian-health">
-			<h3>' . esc_html__( 'System Health', 'wpshadow' ) . '</h3>
-			<div class="health-checks">';
+		$html = '<div class="wps-card" style="margin-top: 16px;">
+			<div class="wps-card-header">
+				<h3 class="wps-card-title" style="margin: 0;">
+					<span class="dashicons dashicons-heart" style="margin-right: 8px;"></span>
+					' . esc_html__( 'System Health', 'wpshadow' ) . '
+				</h3>
+			</div>
+			<div class="wps-card-body">';
 		
 		$checks = [
 			[
 				'name'   => __( 'Memory Usage', 'wpshadow' ),
 				'status' => self::get_memory_status(),
+				'icon'   => 'dashicons-chart-area',
 			],
 			[
 				'name'   => __( 'Database', 'wpshadow' ),
 				'status' => 'good',
+				'icon'   => 'dashicons-database',
 			],
 			[
 				'name'   => __( 'Plugins', 'wpshadow' ),
 				'status' => 'good',
+				'icon'   => 'dashicons-admin-plugins',
 			],
 			[
 				'name'   => __( 'Security', 'wpshadow' ),
 				'status' => 'good',
+				'icon'   => 'dashicons-lock',
 			],
 		];
 		
+		$html .= '<div style="display: flex; flex-direction: column; gap: 12px;">';
+		
 		foreach ( $checks as $check ) {
-			$status_class = 'status-' . $check['status'];
+			$status_color = 'good' === $check['status'] ? '#10b981' : ( 'warning' === $check['status'] ? '#f59e0b' : '#ef4444' );
 			$html .= sprintf(
-				'<div class="health-check %s">
-					<span class="check-indicator"></span>
-					<span class="check-name">%s</span>
-					<span class="check-status">%s</span>
+				'<div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: #f3f4f6; border-radius: 6px; border-left: 4px solid %s;">
+					<span class="dashicons %s" style="color: %s; font-size: 20px; width: 20px; height: 20px;"></span>
+					<div style="flex: 1;">
+						<div style="font-weight: 500; color: #1f2937;">%s</div>
+					</div>
+					<div style="font-size: 12px; font-weight: 600; color: %s;">%s</div>
 				</div>',
-				esc_attr( $status_class ),
+				esc_attr( $status_color ),
+				esc_attr( $check['icon'] ),
+				esc_attr( $status_color ),
 				esc_html( $check['name'] ),
+				esc_attr( $status_color ),
 				esc_html( ucfirst( $check['status'] ) )
 			);
 		}
 		
-		$html .= '</div></div>';
+		$html .= '</div></div></div>';
 		
 		return $html;
 	}

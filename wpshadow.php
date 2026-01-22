@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WPShadow
  * Description: Minimal bootstrap to show WPShadow menu and Settings link.
- * Version: 1.2601.2112
+ * Version: 1.2601.2148
  * Author: thisismyurl
  */
 
@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'WPSHADOW_VERSION', '1.2601.2112' );
+define( 'WPSHADOW_VERSION', '1.2601.2148' );
 define( 'WPSHADOW_BASENAME', plugin_basename( __FILE__ ) );
 define( 'WPSHADOW_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WPSHADOW_URL', plugin_dir_url( __FILE__ ) );
@@ -896,6 +896,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-guardian-man
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-guardian-activity-logger.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-baseline-manager.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-backup-manager.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-css-analyzer.php';
 
 // Auto-Fix System (Priority 2)
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-auto-fix-policy-manager.php';
@@ -1663,9 +1664,6 @@ function wpshadow_render_dashboard() {
 		wp_die( 'Insufficient permissions.' );
 	}
 
-	// Save report snapshot
-	wpshadow_save_health_snapshot();
-
 	// Check if filtering by category (Issue #564)
 	$filter_category = isset( $_GET['category'] ) ? sanitize_key( $_GET['category'] ) : '';
 	
@@ -1703,8 +1701,8 @@ function wpshadow_render_dashboard() {
 	?>
 	<div class="wrap">
 		<?php if ( ! empty( $filter_category ) ) : 
-			// Get category metadata for filtered view
-			$category_meta = array(
+			// Get category metadata for filtered view (static for performance)
+			static $category_meta = array(
 				'security' => array( 'label' => __( 'Security', 'wpshadow' ), 'icon' => 'dashicons-shield-alt', 'color' => '#dc2626' ),
 				'performance' => array( 'label' => __( 'Performance', 'wpshadow' ), 'icon' => 'dashicons-dashboard', 'color' => '#0891b2' ),
 				'code_quality' => array( 'label' => __( 'Code Quality', 'wpshadow' ), 'icon' => 'dashicons-editor-code', 'color' => '#7c3aed' ),
@@ -1758,51 +1756,7 @@ function wpshadow_render_dashboard() {
 			$fix_emoji = \WPShadow\Gamification\Streak_Tracker::get_streak_emoji( $streaks['fixes'] ?? 0 );
 			$rank = \WPShadow\Gamification\Leaderboard_Manager::get_user_rank( $user_id );
 		?>
-		<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin: 16px 0 24px;">
-			<div>
-				<?php \WPShadow\Gamification\Achievement_System::render_achievements_widget( $user_id ); ?>
-			</div>
-			<div style="display: flex; flex-direction: column; gap: 12px;">
-				<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 16px;">
-					<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-						<span class="dashicons dashicons-smiley" style="font-size: 20px; color: #2563eb;"></span>
-						<strong><?php esc_html_e( 'Momentum', 'wpshadow' ); ?></strong>
-					</div>
-					<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px;">
-						<div style="padding: 10px; background: #f8fafc; border-radius: 6px; border: 1px solid #e5e7eb;">
-							<div style="font-size: 12px; color: #64748b;"><?php esc_html_e( 'Scan Streak', 'wpshadow' ); ?></div>
-							<div style="font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
-								<?php echo esc_html( $streaks['daily_scans'] ?? 0 ); ?>
-								<span><?php echo esc_html( $scan_emoji ); ?></span>
-							</div>
-						</div>
-						<div style="padding: 10px; background: #f8fafc; border-radius: 6px; border: 1px solid #e5e7eb;">
-							<div style="font-size: 12px; color: #64748b;"><?php esc_html_e( 'Fix Streak', 'wpshadow' ); ?></div>
-							<div style="font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
-								<?php echo esc_html( $streaks['fixes'] ?? 0 ); ?>
-								<span><?php echo esc_html( $fix_emoji ); ?></span>
-							</div>
-						</div>
-						<div style="padding: 10px; background: #f8fafc; border-radius: 6px; border: 1px solid #e5e7eb;">
-							<div style="font-size: 12px; color: #64748b;"><?php esc_html_e( 'Your Rank', 'wpshadow' ); ?></div>
-							<div style="font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 6px; color: #16a34a;">
-								#<?php echo (int) $rank; ?>
-								<span class="dashicons dashicons-chart-line" style="font-size: 18px;"></span>
-							</div>
-						</div>
-					</div>
-					<div style="margin-top: 12px;">
-						<?php \WPShadow\Gamification\Badge_Manager::render_user_badges( $user_id ); ?>
-					</div>
-					<div style="margin-top: 12px;">
-						<?php \WPShadow\Gamification\Milestone_Notifier::render_unread_notifications( $user_id ); ?>
-					</div>
-				</div>
-				<div>
-					<?php \WPShadow\Gamification\Leaderboard_Manager::render_leaderboard( 5 ); ?>
-				</div>
-			</div>
-		</div>
+
 		<?php endif; ?>
 
 		<script>
@@ -2493,55 +2447,62 @@ function wpshadow_render_dashboard() {
 		<?php WPShadow\Core\KPI_Advanced_Features::render_advanced_panel(); ?>
 
 		<!-- Phase 3: Dashboard KPI Enhancements Widgets -->
-		<?php WPShadow_KPI_Summary_Widget::render(); ?>
 		<?php WPShadow_Activity_Feed_Widget::render(); ?>
-		<?php WPShadow_Top_Issues_Widget::render(); ?>
-
-		<!-- Recent Activity -->
-		<?php 
-		$activity = wpshadow_get_recent_activity();
 		
-		// Filter activity by category if in drill-down view (#564)
-		if ( ! empty( $filter_category ) && ! empty( $activity ) ) {
-			$activity = array_filter( $activity, function( $entry ) use ( $filter_category ) {
-				return isset( $entry['category'] ) && $entry['category'] === $filter_category;
-			} );
-		}
-		
-		if ( ! empty( $activity ) ) : 
+		<!-- Achievements and Momentum (moved here) -->
+		<?php
+		$user_id = get_current_user_id();
+		$streaks = \WPShadow\Gamification\Streak_Tracker::get_current_streaks( $user_id );
+		$scan_emoji = \WPShadow\Gamification\Streak_Tracker::get_streak_emoji( $streaks['daily_scans'] ?? 0 );
+		$fix_emoji = \WPShadow\Gamification\Streak_Tracker::get_streak_emoji( $streaks['fixes'] ?? 0 );
+		$rank = \WPShadow\Gamification\Leaderboard_Manager::get_user_rank( $user_id );
 		?>
-		<div style="margin: 30px 0;">
-			<h2><?php echo ! empty( $filter_category ) ? esc_html( sprintf( __( '%s Activity', 'wpshadow' ), $category_meta[ $filter_category ]['label'] ?? ucfirst( $filter_category ) ) ) : esc_html_e( 'Recent Activity', 'wpshadow' ); ?></h2>
-			<table class="wp-list-table widefat">
-				<thead>
-					<tr>
-						<th>Action</th>
-						<th>Time</th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php foreach ( $activity as $entry ) : ?>
-					<tr>
-						<td><?php echo esc_html( $entry['action'] ); ?></td>
-						<td><?php echo wp_kses_post( wpshadow_format_time_with_tooltip( $entry['time'] ) ); ?></td>
-					</tr>
-					<?php endforeach; ?>
-				</tbody>
-			</table>
-		</div>
-		<?php endif; ?>
-
-		<!-- Dashboard Customization Panel (Phase 1) -->
-		<div style="margin: 40px 0; padding: 20px; background: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 6px;">
-			<button type="button" id="wpshadow-customize-dashboard-toggle" style="background: transparent; border: none; cursor: pointer; font-size: 16px; font-weight: 500; color: #333; display: flex; align-items: center; gap: 8px; padding: 0; margin-bottom: 15px;">
-				<span class="dashicons dashicons-admin-customizer" style="font-size: 18px;"></span>
-				<span>Customize Dashboard</span>
-				<span class="dashicons dashicons-arrow-down" id="wpshadow-customize-toggle-icon" style="font-size: 14px; transition: transform 0.3s;"></span>
-			</button>
-			<div id="wpshadow-customize-content" style="display: none; padding-top: 15px; border-top: 1px solid #e0e0e0;">
-				<?php WPShadow\Core\Dashboard_Customization::render_settings_panel(); ?>
+		<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin: 30px 0;">
+			<div>
+				<?php \WPShadow\Gamification\Achievement_System::render_achievements_widget( $user_id ); ?>
+			</div>
+			<div style="display: flex; flex-direction: column; gap: 12px;">
+				<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 16px;">
+					<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+						<span class="dashicons dashicons-smiley" style="font-size: 20px; color: #2563eb;"></span>
+						<strong><?php esc_html_e( 'Momentum', 'wpshadow' ); ?></strong>
+					</div>
+					<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px;">
+						<div style="padding: 10px; background: #f8fafc; border-radius: 6px; border: 1px solid #e5e7eb;">
+							<div style="font-size: 12px; color: #64748b;"><?php esc_html_e( 'Scan Streak', 'wpshadow' ); ?></div>
+							<div style="font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+								<?php echo esc_html( $streaks['daily_scans'] ?? 0 ); ?>
+								<span><?php echo esc_html( $scan_emoji ); ?></span>
+							</div>
+						</div>
+						<div style="padding: 10px; background: #f8fafc; border-radius: 6px; border: 1px solid #e5e7eb;">
+							<div style="font-size: 12px; color: #64748b;"><?php esc_html_e( 'Fix Streak', 'wpshadow' ); ?></div>
+							<div style="font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+								<?php echo esc_html( $streaks['fixes'] ?? 0 ); ?>
+								<span><?php echo esc_html( $fix_emoji ); ?></span>
+							</div>
+						</div>
+						<div style="padding: 10px; background: #f8fafc; border-radius: 6px; border: 1px solid #e5e7eb;">
+							<div style="font-size: 12px; color: #64748b;"><?php esc_html_e( 'Your Rank', 'wpshadow' ); ?></div>
+							<div style="font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 6px; color: #16a34a;">
+								#<?php echo (int) $rank; ?>
+								<span class="dashicons dashicons-chart-line" style="font-size: 18px;"></span>
+							</div>
+						</div>
+					</div>
+					<div style="margin-top: 12px;">
+						<?php \WPShadow\Gamification\Badge_Manager::render_user_badges( $user_id ); ?>
+					</div>
+					<div style="margin-top: 12px;">
+						<?php \WPShadow\Gamification\Milestone_Notifier::render_unread_notifications( $user_id ); ?>
+					</div>
+				</div>
 			</div>
 		</div>
+
+
+
+
 
 		<!-- Quick Scan Modal -->
 		<div id="wpshadow-quick-scan-modal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:100000; align-items:center; justify-content:center;">
@@ -2996,16 +2957,10 @@ function wpshadow_render_dashboard() {
 		</script>
 
 		<!-- Activity History (moved from submenu to bottom of dashboard) -->
-		<div style="margin: 40px 0;">
-			<h2 style="font-size: 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-				<span class="dashicons dashicons-backup" style="font-size: 24px; color: #0073aa;"></span>
-				<?php esc_html_e( 'Activity History', 'wpshadow' ); ?>
-			</h2>
-			<?php
-			// Include the full activity history view inline
-			include WPSHADOW_PATH . 'includes/views/activity-history.php';
-			?>
-		</div>
+		<?php
+		// Include the full activity history view inline (view has its own title)
+		include WPSHADOW_PATH . 'includes/views/activity-history.php';
+		?>
 
 	</div>
 	<?php
@@ -3237,6 +3192,13 @@ function wpshadow_get_training_link( string $slug ): string {
  * Get site findings based on diagnostics and WordPress Core Site Health.
  */
 function wpshadow_get_site_findings() {
+	// Check cache first (5 minute expiration)
+	$cache_key = 'wpshadow_site_findings_cache';
+	$cached = get_transient( $cache_key );
+	if ( false !== $cached && is_array( $cached ) ) {
+		return $cached;
+	}
+	
 	// Run all diagnostic checks from registry
 	$findings = \WPShadow\Diagnostics\Diagnostic_Registry::run_all_checks();
 
@@ -3291,8 +3253,20 @@ function wpshadow_get_site_findings() {
 		$finding['training_link'] = wpshadow_get_training_link( $slug );
 	}
 	unset( $finding );
+	
+	// Cache for 5 minutes
+	set_transient( $cache_key, $findings, 5 * MINUTE_IN_SECONDS );
 
 	return $findings;
+}
+
+/**
+ * Clear the cached findings (call after scans, fixes, or settings changes).
+ * 
+ * @return void
+ */
+function wpshadow_clear_findings_cache() {
+	delete_transient( 'wpshadow_site_findings_cache' );
 }
 
 /**
@@ -4375,14 +4349,17 @@ function wpshadow_render_reports() {
 
 	// Render enhanced Phase 4 reports dashboard
 	?>
-	<div class="wrap" style="padding: 20px;">
-		<h1 style="color: #0073aa; margin-bottom: 10px;">
-			<span class="dashicons dashicons-chart-bar" style="font-size: 32px; vertical-align: middle; color: #0073aa;"></span>
-			<?php esc_html_e( 'Reports & Analytics', 'wpshadow' ); ?>
-		</h1>
-		<p style="color: #666; margin-bottom: 30px;">
-			<?php esc_html_e( 'Analyze your WPShadow activities, track KPIs, and generate comprehensive reports.', 'wpshadow' ); ?>
-		</p>
+	<div class="wps-page-container">
+		<!-- Page Header -->
+		<div class="wps-page-header">
+			<h1 class="wps-page-title">
+				<span class="dashicons dashicons-chart-bar" style="color: var(--wps-primary);"></span>
+				<?php esc_html_e( 'Reports & Analytics', 'wpshadow' ); ?>
+			</h1>
+			<p class="wps-page-subtitle">
+				<?php esc_html_e( 'Analyze your WPShadow activities, track KPIs, and generate comprehensive reports.', 'wpshadow' ); ?>
+			</p>
+		</div>
 		
 		<?php \WPShadow\Reports\Report_Builder::render(); ?>
 	</div>

@@ -60,6 +60,9 @@ class Workflow_Executor {
 		// Error log triggers
 		add_action( 'wpshadow_error_log_entry', array( __CLASS__, 'handle_error_logged' ), 10, 2 );
 
+		// Diagnostic run triggers (manual or Guardian)
+		add_action( 'wpshadow_activity_logged', array( __CLASS__, 'handle_activity_logged' ), 10, 1 );
+
 		// Manual/CRON trigger via query string
 		add_action( 'wp', array( __CLASS__, 'handle_query_string_trigger' ), 1 );
 
@@ -391,6 +394,9 @@ class Workflow_Executor {
 			case 'error_log_trigger':
 				return self::error_log_matches( $config, $context );
 
+			case 'diagnostic_run_trigger':
+				return self::diagnostic_run_matches( $config, $context );
+
 			case 'manual_cron_trigger':
 				return true; // Already validated in handle_query_string_trigger
 
@@ -572,6 +578,33 @@ class Workflow_Executor {
 		$context_level  = isset( $severity_order[ $context['error_level'] ] ) ? $severity_order[ $context['error_level'] ] : 0;
 
 		return $context_level >= $config_level;
+	}
+
+	/**
+	 * Check if diagnostic run trigger matches
+	 */
+	private static function diagnostic_run_matches( $config, $context ) {
+		$source_filter = isset( $config['source'] ) ? $config['source'] : 'any';
+		$specific      = isset( $config['specific_diagnostic'] ) ? trim( (string) $config['specific_diagnostic'] ) : '';
+		$issues_only   = ! empty( $config['issues_only'] );
+
+		if ( 'any' !== $source_filter ) {
+			if ( empty( $context['source'] ) || $source_filter !== $context['source'] ) {
+				return false;
+			}
+		}
+
+		if ( '' !== $specific ) {
+			if ( empty( $context['diagnostic'] ) || $context['diagnostic'] !== $specific ) {
+				return false;
+			}
+		}
+
+		if ( $issues_only && empty( $context['found_issue'] ) ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -1474,6 +1507,30 @@ class Workflow_Executor {
 		);
 
 		self::execute_matching_workflows( 'error_log_trigger', $context );
+	}
+
+	/**
+	 * Handle diagnostic run activity (manual, Guardian, or scheduled scans)
+	 */
+	public static function handle_activity_logged( $activity ) {
+		if ( empty( $activity['action'] ) || 'diagnostic_run' !== $activity['action'] ) {
+			return;
+		}
+
+		$metadata = array();
+		if ( isset( $activity['metadata'] ) && is_array( $activity['metadata'] ) ) {
+			$metadata = $activity['metadata'];
+		}
+
+		$context = array(
+			'trigger_type' => 'diagnostic_run',
+			'diagnostic'   => isset( $metadata['diagnostic'] ) ? (string) $metadata['diagnostic'] : '',
+			'source'       => isset( $metadata['trigger'] ) ? (string) $metadata['trigger'] : 'unknown',
+			'found_issue'  => ! empty( $metadata['found_issue'] ),
+			'finding_id'   => isset( $metadata['finding_id'] ) ? (string) $metadata['finding_id'] : '',
+		);
+
+		self::execute_matching_workflows( 'diagnostic_run_trigger', $context );
 	}
 
 	/**

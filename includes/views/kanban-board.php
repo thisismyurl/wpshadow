@@ -37,10 +37,8 @@ if ( class_exists( '\WPShadow\Workflow\Workflow_Manager' ) ) {
 // Organize findings by status
 $findings_by_status = array(
 	'detected'  => array(),
-	'ignored'   => array(),
 	'manual'    => array(),
 	'automated' => array(),
-	'workflow'  => array(), // New: Workflow creation
 	'fixed'     => $workflows, // Workflows column shows workflows instead of findings
 );
 
@@ -80,19 +78,15 @@ if ( ! empty( $findings_by_status['detected'] ) ) {
 
 $status_labels = array(
 	'detected'  => 'Detected',
-	'ignored'   => 'Ignored',
 	'manual'    => 'User to Fix',
 	'automated' => 'Fix Now',
-	'workflow'  => 'Create Workflow',
 	'fixed'     => 'Workflows',
 );
 
 $status_colors = array(
 	'detected'  => '#2196f3', // Blue
-	'ignored'   => '#9e9e9e', // Gray
 	'manual'    => '#ff9800', // Orange
 	'automated' => '#4caf50', // Green
-	'workflow'  => '#9c27b0', // Purple
 	'fixed'     => '#8bc34a', // Light green
 );
 
@@ -312,14 +306,14 @@ $severity_legend = array(
 
 	<div class="wpshadow-kanban-board" style="
 		display: grid;
-		grid-template-columns: repeat(6, 1fr);
+		grid-template-columns: repeat(4, 1fr);
 		gap: 15px;
 		padding: 20px;
 		background: #f5f5f5;
 		border-radius: 8px;
 		min-height: 500px;
 	">
-		<?php foreach ( array( 'detected', 'ignored', 'manual', 'automated', 'workflow', 'fixed' ) as $status ) : ?>
+		<?php foreach ( array( 'detected', 'manual', 'automated', 'fixed' ) as $status ) : ?>
 			<div class="kanban-column" data-status="<?php echo esc_attr( $status ); ?>" style="
 				background: white;
 				border-radius: 6px;
@@ -428,11 +422,7 @@ $severity_legend = array(
 							$smart_icon   = '';
 							$smart_color  = '';
 
-							if ( $status === 'ignored' ) {
-								$smart_status = __( 'Excluded from scans', 'wpshadow' );
-								$smart_icon   = '🚫';
-								$smart_color  = '#999';
-							} elseif ( $status === 'manual' ) {
+						if ( $status === 'manual' ) {
 								$manual_fixes = get_option( 'wpshadow_manual_fixes', array() );
 								if ( isset( $manual_fixes[ $finding['id'] ] ) ) {
 									$smart_status = __( 'Manual fix assigned', 'wpshadow' );

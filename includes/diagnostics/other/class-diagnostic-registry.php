@@ -250,6 +250,11 @@ class Diagnostic_Registry {
 			}
 		}
 
+		// Clear cache after deep scan completes so dashboard picks up new results
+		if ( function_exists( 'wpshadow_clear_findings_cache' ) ) {
+			wpshadow_clear_findings_cache();
+		}
+
 		return $findings;
 	}
 

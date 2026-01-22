@@ -68,6 +68,16 @@ class Workflow_Wizard {
 				'description' => 'Respond to plugin, theme, and user management events',
 				'icon'        => 'admin-tools',
 				'triggers'    => array(
+					'plugin_update_trigger' => array(
+						'label'       => 'Plugin/Theme Update Available',
+						'description' => 'When updates are detected for plugins or themes',
+						'icon'        => 'update',
+					),
+					'backup_completion_trigger' => array(
+						'label'       => 'Backup Completion',
+						'description' => 'When a backup finishes (success or failure)',
+						'icon'        => 'database',
+					),
 					'plugin_state_changed' => array(
 						'label'       => 'Plugin Changed',
 						'description' => 'When any plugin is activated or deactivated',
@@ -95,6 +105,16 @@ class Workflow_Wizard {
 				'description' => 'Trigger on specific system issues or thresholds',
 				'icon'        => 'shield',
 				'triggers'    => array(
+					'database_trigger' => array(
+						'label'       => 'Database Issues',
+						'description' => 'When database size or integrity issues are detected',
+						'icon'        => 'database',
+					),
+					'error_log_trigger' => array(
+						'label'       => 'Error Log Activity',
+						'description' => 'When warnings or errors appear in logs',
+						'icon'        => 'warning',
+					),
 					'high_memory'      => array(
 						'label'       => 'High Memory Usage',
 						'description' => 'When memory usage exceeds a threshold',
@@ -119,6 +139,18 @@ class Workflow_Wizard {
 						'label'       => 'Banned IP Detected',
 						'description' => 'When a banned IP tries to access the site',
 						'icon'        => 'dismiss',
+					),
+				),
+			),
+			'diagnostics'   => array(
+				'label'       => 'Diagnostics & Monitoring',
+				'description' => 'React when diagnostics run (manual, Guardian, or scheduled)',
+				'icon'        => 'visibility',
+				'triggers'    => array(
+					'diagnostic_run_trigger' => array(
+						'label'       => 'When Diagnostics Run',
+						'description' => 'Fire whenever any diagnostic executes, including Guardian scans',
+						'icon'        => 'visibility',
 					),
 				),
 			),
@@ -917,6 +949,33 @@ class Workflow_Wizard {
 					'wordpress_settings_pro',
 				),
 			),
+			// Updates and backups
+			'plugin_update_trigger'    => array(
+				'priority' => array(
+					'notifications',
+					'logging',
+					'diagnostics',
+				),
+				'allowed'  => array(
+					'notifications',
+					'logging',
+					'diagnostics',
+					'maintenance',
+				),
+			),
+			'backup_completion_trigger' => array(
+				'priority' => array(
+					'notifications',
+					'logging',
+					'diagnostics',
+				),
+				'allowed'  => array(
+					'notifications',
+					'logging',
+					'diagnostics',
+					'backup_recovery',
+				),
+			),
 			// Conditions (memory, debug, ssl, plugins, IP): diagnostics, notifications, security
 			'high_memory'          => array(
 				'priority' => array(
@@ -987,6 +1046,44 @@ class Workflow_Wizard {
 					'security',
 					'notifications',
 					'logging',
+				),
+			),
+			'database_trigger'     => array(
+				'priority' => array(
+					'diagnostics',
+					'logging',
+					'notifications',
+				),
+				'allowed'  => array(
+					'diagnostics',
+					'logging',
+					'notifications',
+					'backup_recovery',
+					'maintenance',
+				),
+			),
+			'error_log_trigger'    => array(
+				'priority' => array(
+					'notifications',
+					'logging',
+				),
+				'allowed'  => array(
+					'notifications',
+					'logging',
+					'diagnostics',
+				),
+			),
+			'diagnostic_run_trigger' => array(
+				'priority' => array(
+					'notifications',
+					'logging',
+					'diagnostics',
+				),
+				'allowed'  => array(
+					'notifications',
+					'logging',
+					'diagnostics',
+					'maintenance',
 				),
 			),
 		);
@@ -1063,6 +1160,8 @@ class Workflow_Wizard {
 			'post_status_changed'  => 'post_status',
 			'pre_publish_review'   => 'pre_publish_review',
 			'comment_posted'       => 'comment',
+			'plugin_update_trigger' => 'plugin_update',
+			'backup_completion_trigger' => 'backup_completion',
 			'plugin_state_changed' => 'plugin',
 			'theme_switched'       => 'theme',
 			'user_login'           => 'user_login',
@@ -1072,6 +1171,9 @@ class Workflow_Wizard {
 			'ssl_issue'            => 'ssl',
 			'too_many_plugins'     => 'plugins',
 			'ip_banned'            => 'ip_ban',
+			'database_trigger'     => 'database',
+			'error_log_trigger'    => 'error_log',
+			'diagnostic_run_trigger' => 'diagnostic_run',
 			'manual_cron_trigger'  => 'manual',
 		);
 
@@ -1158,6 +1260,46 @@ class Workflow_Wizard {
 					),
 				),
 			),
+			'plugin_update'    => array(
+				array(
+					'id'       => 'target_type',
+					'type'     => 'select',
+					'label'    => 'Which updates?',
+					'options'  => array(
+						'any'     => 'Any plugin or theme',
+						'plugins' => 'Plugins only',
+						'themes'  => 'Themes only',
+						'specific' => 'Specific slug',
+					),
+					'default'  => 'any',
+					'required' => true,
+				),
+				array(
+					'id'          => 'specific_slug',
+					'type'        => 'text',
+					'label'       => 'Specific plugin/theme slug',
+					'placeholder' => 'e.g., wpshadow/wpshadow.php',
+					'default'     => '',
+					'show_if'     => array(
+						'field' => 'target_type',
+						'value' => 'specific',
+					),
+				),
+			),
+			'backup_completion' => array(
+				array(
+					'id'       => 'backup_status',
+					'type'     => 'select',
+					'label'    => 'When should this fire?',
+					'options'  => array(
+						'any'     => 'Any backup event',
+						'success' => 'Only when successful',
+						'failure' => 'Only when it fails',
+					),
+					'default'  => 'any',
+					'required' => true,
+				),
+			),
 			'user_login'       => array(
 				array(
 					'id'          => 'user_id',
@@ -1216,6 +1358,76 @@ class Workflow_Wizard {
 					'default'     => '',
 					'required'    => true,
 					'rows'        => 5,
+				),
+			),
+			'database'        => array(
+				array(
+					'id'       => 'database_issue',
+					'type'     => 'select',
+					'label'    => 'Which database issue?',
+					'options'  => array(
+						'size_threshold' => 'Size exceeds threshold',
+						'corruption'     => 'Corruption detected',
+					),
+					'default'  => 'size_threshold',
+					'required' => true,
+				),
+				array(
+					'id'       => 'size_mb',
+					'type'     => 'number',
+					'label'    => 'Database size threshold (MB)',
+					'default'  => 500,
+					'required' => true,
+					'min'      => 10,
+					'show_if'  => array(
+						'field' => 'database_issue',
+						'value' => 'size_threshold',
+					),
+				),
+			),
+			'error_log'       => array(
+				array(
+					'id'       => 'error_level',
+					'type'     => 'select',
+					'label'    => 'Minimum severity',
+					'options'  => array(
+						'any'     => 'Any',
+						'warning' => 'Warning+',
+						'error'   => 'Error+',
+						'critical' => 'Critical only',
+					),
+					'default'  => 'any',
+					'required' => true,
+				),
+			),
+			'diagnostic_run'  => array(
+				array(
+					'id'       => 'source',
+					'type'     => 'select',
+					'label'    => 'Which diagnostic runs?',
+					'options'  => array(
+						'any'        => 'Any source',
+						'quick_scan' => 'Quick Scan',
+						'deep_scan'  => 'Deep Scan',
+						'guardian'   => 'Guardian',
+						'manual'     => 'Manual',
+					),
+					'default'  => 'any',
+					'required' => true,
+				),
+				array(
+					'id'       => 'specific_diagnostic',
+					'type'     => 'text',
+					'label'    => 'Specific diagnostic (optional)',
+					'default'  => '',
+					'required' => false,
+					'placeholder' => 'e.g., Diagnostic_SSL',
+				),
+				array(
+					'id'       => 'issues_only',
+					'type'     => 'checkbox',
+					'label'    => 'Only when issues are found',
+					'default'  => false,
 				),
 			),
 		);
@@ -2021,6 +2233,8 @@ class Workflow_Wizard {
 			'page_load_single'     => 'page_load_trigger',
 			'page_load_archive'    => 'page_load_trigger',
 			'page_load_home'       => 'page_load_trigger',
+			'plugin_update_trigger' => 'plugin_update_trigger',
+			'backup_completion_trigger' => 'backup_completion_trigger',
 			'plugin_state_changed' => 'event_trigger',
 			'theme_switched'       => 'event_trigger',
 			'user_login'           => 'event_trigger',
@@ -2032,6 +2246,9 @@ class Workflow_Wizard {
 			'ssl_issue'            => 'condition_trigger',
 			'too_many_plugins'     => 'condition_trigger',
 			'ip_banned'            => 'condition_trigger',
+			'database_trigger'     => 'database_trigger',
+			'error_log_trigger'    => 'error_log_trigger',
+			'diagnostic_run_trigger' => 'diagnostic_run_trigger',
 		);
 
 		$executor_type = isset( $type_map[ $type ] ) ? $type_map[ $type ] : $type;

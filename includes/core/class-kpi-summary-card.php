@@ -31,7 +31,7 @@ class KPI_Summary_Card {
 			<div style="margin-bottom: 20px;">
 				<h2 style="margin: 0 0 8px 0; font-size: 24px; display: flex; align-items: center; gap: 8px;">
 					<span class="dashicons dashicons-chart-line" style="font-size: 28px;"></span>
-					<?php esc_html_e( 'Your WPShadow Impact', 'wpshadow' ); ?>
+				<?php esc_html_e( 'WPShadow Impact', 'wpshadow' ); ?>
 				</h2>
 				<p style="margin: 0; font-size: 14px; opacity: 0.9;">
 					<?php esc_html_e( 'The value you\'ve gained since installing WPShadow', 'wpshadow' ); ?>
@@ -194,18 +194,6 @@ class KPI_Summary_Card {
 		});
 		</script>
 		
-		<!-- Phase 5: KB & Training Link -->
-		<div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2); text-align: center;">
-			<a href="https://wpshadow.com/kb/understanding-kpi-metrics" target="_blank" style="color: white; opacity: 0.9; text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 6px;">
-				<span class="dashicons dashicons-book" style="font-size: 16px;"></span>
-				<?php esc_html_e( 'Learn: Understanding Your WPShadow Metrics', 'wpshadow' ); ?>
-			</a>
-			<span style="opacity: 0.6; margin: 0 10px;">|</span>
-			<a href="https://wpshadow.com/training/maximize-value" target="_blank" style="color: white; opacity: 0.9; text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 6px;">
-				<span class="dashicons dashicons-video-alt3" style="font-size: 16px;"></span>
-				<?php esc_html_e( 'Watch: Maximizing Value Video', 'wpshadow' ); ?>
-			</a>
-		</div>
 		</div>
 		<?php
 	}

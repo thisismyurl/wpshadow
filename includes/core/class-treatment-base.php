@@ -79,6 +79,11 @@ abstract class Treatment_Base implements Treatment_Interface {
 
 		$result = static::apply();
 
+		// Clear findings cache after treatment is applied
+		if ( function_exists( 'wpshadow_clear_findings_cache' ) ) {
+			wpshadow_clear_findings_cache();
+		}
+
 		/**
 		 * Fires after a treatment is applied.
 		 *

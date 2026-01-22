@@ -125,6 +125,10 @@ class Guardian_Manager {
 			return;
 		}
 
+		// Run background analyzers (CSS complexity, etc.)
+		// These set transients that diagnostics can consume
+		self::run_background_analyzers();
+
 		// Run all diagnostics
 		$diagnostics    = \WPShadow\Diagnostics\Diagnostic_Registry::get_all();
 		$findings       = array();
@@ -376,5 +380,28 @@ class Guardian_Manager {
 				? round( ( count( $successful_fixes ) / count( $auto_fixes ) ) * 100, 1 )
 				: 0,
 		);
+	}
+
+	/**
+	 * Run background analyzers
+	 *
+	 * Executes background analysis tasks that set transient data
+	 * for diagnostics to consume. These are performance-intensive
+	 * operations that only need to run periodically.
+	 *
+	 * Current analyzers:
+	 * - CSS_Analyzer: CSS selector complexity analysis
+	 *
+	 * Future analyzers:
+	 * - JavaScript_Analyzer: JS complexity/errors
+	 * - Image_Analyzer: Image optimization opportunities
+	 * - Database_Analyzer: Query performance patterns
+	 */
+	private static function run_background_analyzers(): void {
+		// CSS complexity analysis (cached 24 hours)
+		CSS_Analyzer::analyze();
+
+		// Hook for adding custom analyzers
+		do_action( 'wpshadow_guardian_background_analyzers' );
 	}
 }
