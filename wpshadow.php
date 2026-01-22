@@ -123,6 +123,11 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-admin-notice-cl
 require_once plugin_dir_path( __FILE__ ) . 'includes/views/dashboard/gauges-module.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/views/dashboard/activity-module.php';
 
+// Onboarding system (Phase 5: user experience)
+require_once plugin_dir_path( __FILE__ ) . 'includes/onboarding/class-onboarding-manager.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/onboarding/class-platform-translator.php';
+\WPShadow\Onboarding\Onboarding_Manager::init();
+
 // Show consent banner for admins (Phase 6: consent-first)
 add_action( 'admin_footer', function() {
 	if ( ! is_admin() || wp_doing_ajax() ) {
@@ -865,6 +870,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-third-party-
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-rest-api-performance-analyzer.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-csp-violation-analyzer.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-domain-expiration-analyzer.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-compromised-accounts-analyzer.php';
 
 // Auto-Fix System (Priority 2)
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-auto-fix-policy-manager.php';
@@ -929,6 +935,7 @@ add_action( 'plugins_loaded', function() {
 	\WPShadow\Guardian\Dashboard_Performance_Analyzer::init();
 	\WPShadow\Guardian\REST_API_Performance_Analyzer::init();
 	\WPShadow\Guardian\CSP_Violation_Analyzer::init();
+	\WPShadow\Guardian\Compromised_Accounts_Analyzer::init();
 
 	// Register Guardian AJAX command handlers (Phase 8)
 	// Priority 1 handlers

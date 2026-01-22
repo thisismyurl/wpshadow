@@ -1,0 +1,29 @@
+{
+  "platform": "wix",
+  "label": "Wix",
+  "terms": {
+    "post": "Blog Post",
+    "page": "Site Page",
+    "plugin": "App",
+    "theme": "Template",
+    "widget": "Widget",
+    "menu": "Menu",
+    "category": "Category",
+    "tag": "Label",
+    "media_library": "Media Manager",
+    "customize": "Design",
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "editor": "Editor",
+    "publish": "Publish",
+    "draft": "Draft",
+    "trash": "Trash",
+    "permalink": "Page URL",
+    "excerpt": "Summary",
+    "featured_image": "Featured Image",
+    "author": "Author",
+    "comment": "Comment"
+  },
+  "kb_article": "https://wpshadow.com/kb/wix-to-wordpress/",
+  "training_video": "https://wpshadow.com/training/wix-to-wordpress/"
+}
