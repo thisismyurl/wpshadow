@@ -6,8 +6,8 @@ on:
 
 jobs:
   search_docs:
-    # Only run on Clarification Question issues (labeled with 'question')
-    if: contains(github.event.issue.labels.*.name, 'question')
+    # Only run on Clarification Question issues (has '[QUESTION]' in title or 'question'/'documentation' label)
+    if: contains(github.event.issue.title, '[QUESTION]') || contains(github.event.issue.labels.*.name, 'question') || contains(github.event.issue.labels.*.name, 'documentation')
     runs-on: ubuntu-latest
     
     steps:
@@ -32,34 +32,63 @@ jobs:
         run: |
           QUESTION="${{ steps.extract.outputs.question }}"
           
-          # Convert question to search terms (remove common words, take key terms)
-          SEARCH_TERMS=$(echo "$QUESTION" | sed -e 's/[?.,!]//g' | tr '[:upper:]' '[:lower:]')
+          # Extract key terms from question
+          SEARCH_TERMS=$(echo "$QUESTION" | tr '[:upper:]' '[:lower:]' | sed -e 's/[?.,!]//g')
           
-          # Search docs folder for matching content
-          RESULTS=""
-          FOUND_FILES=""
+          # Initialize results
+          FOUND_CONTENT=""
+          RELEVANT_DOCS=""
           
-          # Search in docs folder
-          for doc in docs/*.md; do
-            if [ -f "$doc" ]; then
-              # Check if any search term matches (case-insensitive)
-              if grep -qi -E "$SEARCH_TERMS" "$doc" 2>/dev/null; then
-                FOUND_FILES="$FOUND_FILES$(basename $doc)\n"
-                # Extract relevant excerpt
-                EXCERPT=$(grep -i -A 2 -B 2 -E "$SEARCH_TERMS" "$doc" | head -10)
-                RESULTS="$RESULTS\n**$(basename $doc)**:\n\`\`\`\n$EXCERPT\n\`\`\`\n"
+          # Priority search order based on common question types
+          PRIORITY_DOCS=(
+            "docs/PRODUCT_PHILOSOPHY.md"
+            "docs/COMMUNITY_MANAGER_ONBOARDING.md"
+            "docs/ROADMAP.md"
+            "docs/FEATURE_MATRIX_DIAGNOSTICS.md"
+            "docs/FEATURE_MATRIX_TREATMENTS.md"
+            "docs/TECHNICAL_STATUS.md"
+          )
+          
+          # Check priority docs first
+          for doc in "${PRIORITY_DOCS[@]}"; do
+            if [ -f "$doc" ] && grep -qi "$SEARCH_TERMS" "$doc" 2>/dev/null; then
+              RELEVANT_DOCS="$RELEVANT_DOCS\n- [$(basename $doc)](https://github.com/thisismyurl/wpshadow/blob/main/$doc)"
+              
+              # Extract relevant sections (look for headers and surrounding context)
+              SECTION=$(grep -i -B 3 -A 10 "$SEARCH_TERMS" "$doc" 2>/dev/null | head -40)
+              if [ ! -z "$SECTION" ]; then
+                FOUND_CONTENT="$FOUND_CONTENT\n\n### From $(basename $doc)\n\n$SECTION\n"
               fi
             fi
           done
           
-          # Output for comment
-          if [ -z "$FOUND_FILES" ]; then
+          # If nothing found in priority docs, search all docs
+          if [ -z "$RELEVANT_DOCS" ]; then
+            for doc in docs/*.md; do
+              if [ -f "$doc" ] && grep -qi "$SEARCH_TERMS" "$doc" 2>/dev/null; then
+                RELEVANT_DOCS="$RELEVANT_DOCS\n- [$(basename $doc)](https://github.com/thisismyurl/wpshadow/blob/main/$doc)"
+                
+                SECTION=$(grep -i -B 2 -A 8 "$SEARCH_TERMS" "$doc" 2>/dev/null | head -30)
+                if [ ! -z "$SECTION" ]; then
+                  FOUND_CONTENT="$FOUND_CONTENT\n\n### From $(basename $doc)\n\n$SECTION\n"
+                fi
+              fi
+            done
+          fi
+          
+          # Output results
+          if [ -z "$RELEVANT_DOCS" ]; then
             echo "status=no_match" >> $GITHUB_OUTPUT
-            echo "results=No directly matching documentation found." >> $GITHUB_OUTPUT
+            echo "docs=" >> $GITHUB_OUTPUT
+            echo "content=" >> $GITHUB_OUTPUT
           else
             echo "status=found" >> $GITHUB_OUTPUT
-            echo "results=$RESULTS" >> $GITHUB_OUTPUT
-            echo "files=$FOUND_FILES" >> $GITHUB_OUTPUT
+            echo "docs<<EOF" >> $GITHUB_OUTPUT
+            echo -e "$RELEVANT_DOCS" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+            echo "content<<EOF" >> $GITHUB_OUTPUT
+            echo -e "$FOUND_CONTENT" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
           fi
 
       - name: Post documentation search comment
@@ -68,15 +97,16 @@ jobs:
         with:
           script: |
             const status = '${{ steps.search.outputs.status }}';
-            const results = `${{ steps.search.outputs.results }}`;
+            const docs = `${{ steps.search.outputs.docs }}`;
+            const content = `${{ steps.search.outputs.content }}`;
             const question = `${{ steps.extract.outputs.question }}`;
             
             let comment = '';
             
             if (status === 'found') {
-              comment = `🔍 **Documentation Search Results**\n\nBased on your question: "${question}"\n\nI found relevant documentation:\n\n${results}\n\n---\n\n**Next steps:**\n- Review the docs above to see if they answer your question\n- If not found or unclear, Christopher or the AI agent will provide a detailed response\n- Questions help us improve documentation!`;
+              comment = `🤖 **Automated Documentation Search**\n\n**Your question:** ${question}\n\n---\n\n## 📚 Found in Documentation\n\n${content}\n\n---\n\n**Full documents:**\n${docs}\n\n**Next steps:**\n- Review the content above\n- Click document links for full context\n- If this doesn't fully answer your question, @thisismyurl or the AI agent will provide additional details\n- Your question helps improve our documentation!`;
             } else {
-              comment = `🔍 **Documentation Search Results**\n\nBased on your question: "${question}"\n\n${results}\n\nIt looks like this topic might not be covered in the docs yet. Christopher or the AI agent will investigate and respond soon.`;
+              comment = `🤖 **Automated Documentation Search**\n\n**Your question:** ${question}\n\n---\n\nI searched the documentation but didn't find a direct match. This could mean:\n- This topic needs better documentation (we'll add it!)\n- The question needs rephrasing with different keywords\n- It requires developer insight\n\n@thisismyurl will review and provide a detailed answer soon. Thank you for helping identify documentation gaps!`;
             }
             
             github.rest.issues.createComment({

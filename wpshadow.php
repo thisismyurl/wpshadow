@@ -4288,7 +4288,7 @@ function wpshadow_render_settings_general() {
 	$scan_frequency = get_option( 'wpshadow_scan_frequency', 'daily' );
 	$dismiss_timeout = get_option( 'wpshadow_dismiss_timeout', 30 );
 	?>
-	<form method="post" action="">
+	<form method="post" action="" id="wpshadow-email-form">
 		<?php wp_nonce_field( 'wpshadow_save_settings', 'wpshadow_settings_nonce' ); ?>
 		<input type="hidden" name="wpshadow_settings_tab" value="general" />
 		
@@ -4648,10 +4648,24 @@ function wpshadow_render_settings_email() {
 	</form>
 
 	<script>
+		function wpshadowSetEmailFieldsState(isEnabled) {
+			const form = document.getElementById('wpshadow-email-form');
+			if (!form) return;
+			const fields = form.querySelectorAll('input, select, textarea');
+			fields.forEach((field) => {
+				if (field.id === 'wpshadow_email_enabled_checkbox' || field.type === 'hidden' || field.name === 'wpshadow_settings_tab') {
+					return; // Keep master toggle and hidden fields always available
+				}
+				field.disabled = !isEnabled;
+			});
+		}
+
 		function wpshadowHandleEmailToggle(checkbox) {
 			const adminEmail = '<?php echo esc_js( $admin_email ); ?>';
 			const confirmedField = document.getElementById('wpshadow_email_confirmed');
-			
+			const enableFields = () => wpshadowSetEmailFieldsState(true);
+			const disableFields = () => wpshadowSetEmailFieldsState(false);
+
 			if (checkbox.checked) {
 				// Show privacy confirmation modal
 				WPShadowDesign.openModal({
@@ -4672,14 +4686,22 @@ function wpshadow_render_settings_email() {
 					cancelText: '<?php esc_attr_e( 'Cancel', 'wpshadow' ); ?>',
 					onConfirm: function() {
 						confirmedField.value = '1';
+						enableFields();
 						document.querySelector('form').submit();
 					},
 					onCancel: function() {
 						checkbox.checked = false;
+						disableFields();
 					}
 				});
+			} else {
+				confirmedField.value = '0';
+				disableFields();
 			}
 		}
+
+		// Initialize field state on load
+		wpshadowSetEmailFieldsState(<?php echo $email_enabled ? 'true' : 'false'; ?>);
 	</script>
 
 	<!-- Email Rule Builder -->
@@ -4836,7 +4858,7 @@ function wpshadow_render_settings_privacy() {
  * Render Settings Scan tab
  */
 function wpshadow_render_settings_scan() {
-	$scan_types = get_option( 'wpshadow_scan_types', array( 'security', 'performance', 'seo' ) );
+	$scan_types = get_option( 'wpshadow_scan_types', array( 'security', 'performance', 'code_quality', 'seo', 'design', 'settings', 'monitoring', 'workflows', 'wordpress_health', 'developer_experience', 'marketing_growth', 'customer_retention', 'ai_readiness', 'environment', 'users', 'content_publishing' ) );
 	$quick_scan_timeout = get_option( 'wpshadow_quick_scan_timeout', 30 );
 	?>
 	<form method="post" action="">
