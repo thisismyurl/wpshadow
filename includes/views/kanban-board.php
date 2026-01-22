@@ -34,8 +34,10 @@ if ( class_exists( '\WPShadow\Workflow\Workflow_Manager' ) ) {
 // Organize findings by status
 $findings_by_status = array(
 	'detected'  => array(),
+	'ignored'   => array(),
 	'manual'    => array(),
 	'automated' => array(),
+	'workflow'  => array(), // New: Workflow creation
 	'fixed'     => $workflows, // Workflows column shows workflows instead of findings
 );
 
@@ -54,7 +56,11 @@ foreach ( $all_findings as $finding ) {
 		$status = 'detected';
 	}
 	$finding['status'] = $status;
-	$findings_by_status[ $status ][] = $finding;
+	
+	// Add to appropriate column (skip if workflow status - those are handled separately)
+	if ( isset( $findings_by_status[ $status ] ) && $status !== 'fixed' ) {
+		$findings_by_status[ $status ][] = $finding;
+	}
 }
 
 // Sort DETECTED column by priority (threat_level DESC) and limit to 10 visible
@@ -68,15 +74,19 @@ if ( ! empty( $findings_by_status['detected'] ) ) {
 
 $status_labels = array(
 	'detected'  => 'Detected',
+	'ignored'   => 'Ignored',
 	'manual'    => 'User to Fix',
 	'automated' => 'Fix Now',
+	'workflow'  => 'Create Workflow',
 	'fixed'     => 'Workflows',
 );
 
 $status_colors = array(
 	'detected'  => '#2196f3', // Blue
+	'ignored'   => '#9e9e9e', // Gray
 	'manual'    => '#ff9800', // Orange
 	'automated' => '#4caf50', // Green
+	'workflow'  => '#9c27b0', // Purple
 	'fixed'     => '#8bc34a', // Light green
 );
 
@@ -171,6 +181,95 @@ $severity_legend = array(
 		</div>
 	</div>
 
+	<!-- Workflow Creation Modal -->
+	<div id="wpshadow-workflow-creation-modal" style="display: none; position: fixed; z-index: 999999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6);">
+		<div style="background: #fff; margin: 10% auto; padding: 30px; border-radius: 8px; max-width: 600px; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+			<button class="wpshadow-workflow-modal-close" style="position: absolute; top: 15px; right: 15px; background: transparent; border: none; font-size: 28px; cursor: pointer; color: #999; line-height: 1;">×</button>
+			<h2 style="margin-top: 0; color: #9c27b0;">
+				<span class="dashicons dashicons-update" style="font-size: 28px; width: 28px; height: 28px;"></span>
+				Create Workflow
+			</h2>
+			
+			<!-- Finding Details -->
+			<div style="background: #f5f5f5; border-left: 4px solid #9c27b0; padding: 15px; margin: 15px 0; border-radius: 4px;">
+				<p style="margin: 0 0 8px 0; font-weight: 600; color: #333; font-size: 14px;">
+					<span class="dashicons dashicons-yes-alt" style="font-size: 16px; width: 16px; height: 16px; vertical-align: middle;"></span>
+					Finding:
+				</p>
+				<p style="margin: 0 0 4px 0; font-size: 14px; font-weight: 600; color: #1a1a1a;" class="workflow-finding-title"></p>
+				<p style="margin: 0; font-size: 12px; color: #666; line-height: 1.4;" class="workflow-finding-desc"></p>
+			</div>
+			
+			<!-- Workflow Name -->
+			<div style="margin: 20px 0;">
+				<label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 13px; color: #333;">
+					<?php esc_html_e( 'Workflow Name', 'wpshadow' ); ?>
+				</label>
+				<input type="text" id="wpshadow-workflow-name" placeholder="e.g., Clear cache daily" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; box-sizing: border-box;">
+			</div>
+			
+			<!-- Workflow Type Selection -->
+			<div style="margin: 20px 0;">
+				<p style="margin: 0 0 12px 0; font-weight: 600; font-size: 13px; color: #333;"><?php esc_html_e( 'How should this workflow work?', 'wpshadow' ); ?></p>
+				
+				<!-- Option 1: Always Auto-fix -->
+				<div style="background: #e8f5e9; border: 2px solid #4caf50; border-radius: 6px; padding: 15px; margin-bottom: 15px; cursor: pointer;">
+					<label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin: 0;">
+						<input type="radio" name="workflow_type" value="auto_fix" checked style="cursor: pointer;">
+						<div>
+							<strong style="font-size: 13px; color: #2e7d32;"><?php esc_html_e( '✓ Always Auto-fix', 'wpshadow' ); ?></strong>
+							<p style="margin: 4px 0 0 0; font-size: 12px; color: #555; line-height: 1.4;">
+								<?php esc_html_e( 'Creates an ongoing workflow that will automatically fix this issue whenever Guardian detects it.', 'wpshadow' ); ?>
+							</p>
+						</div>
+					</label>
+				</div>
+				
+				<!-- Option 2: Reactive (Alert + Manual Fix) -->
+				<div style="background: #fff3e0; border: 2px solid #ff9800; border-radius: 6px; padding: 15px; margin-bottom: 15px; cursor: pointer;">
+					<label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin: 0;">
+						<input type="radio" name="workflow_type" value="reactive" style="cursor: pointer;">
+						<div>
+							<strong style="font-size: 13px; color: #e65100;"><?php esc_html_e( '🔔 Alert & Track', 'wpshadow' ); ?></strong>
+							<p style="margin: 4px 0 0 0; font-size: 12px; color: #555; line-height: 1.4;">
+								<?php esc_html_e( 'Send an alert when Guardian detects this issue, but don\'t auto-fix. You\'ll fix it yourself.', 'wpshadow' ); ?>
+							</p>
+						</div>
+					</label>
+				</div>
+				
+				<!-- Option 3: Scheduled -->
+				<div style="background: #e3f2fd; border: 2px solid #2196f3; border-radius: 6px; padding: 15px; cursor: pointer;">
+					<label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin: 0;">
+						<input type="radio" name="workflow_type" value="scheduled" style="cursor: pointer;">
+						<div>
+							<strong style="font-size: 13px; color: #1565c0;"><?php esc_html_e( '⏰ On Schedule', 'wpshadow' ); ?></strong>
+							<p style="margin: 4px 0 0 0; font-size: 12px; color: #555; line-height: 1.4;">
+								<?php esc_html_e( 'Run this workflow on a regular schedule (e.g., daily maintenance task).', 'wpshadow' ); ?>
+							</p>
+						</div>
+					</label>
+				</div>
+			</div>
+			
+			<!-- Info Box -->
+			<div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; padding: 12px; margin: 20px 0; font-size: 12px; color: #666; line-height: 1.5;">
+				<strong><?php esc_html_e( '💡 Tip:', 'wpshadow' ); ?></strong> <?php esc_html_e( 'After creating the workflow, you\'ll be able to customize triggers, actions, and schedule from the Workflow Manager.', 'wpshadow' ); ?>
+			</div>
+			
+			<!-- Action Buttons -->
+			<div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+				<button id="wpshadow-workflow-modal-cancel" class="button" style="padding: 10px 20px;">
+					<?php esc_html_e( 'Cancel', 'wpshadow' ); ?>
+				</button>
+				<button id="wpshadow-workflow-modal-create" class="button button-primary" style="padding: 10px 20px;">
+					<span class="dashicons dashicons-update" style="font-size: 16px; vertical-align: middle;"></span>
+					<?php esc_html_e( 'Create & Configure', 'wpshadow' ); ?>
+				</button>
+			</div>
+		</div>
+	</div>
+
 	<!-- Family-Aware Fix Modal (Philosophy #9: Show Value) -->
 	<div id="wpshadow-family-fix-modal" style="display: none; position: fixed; z-index: 999999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6);">
 		<div style="background: #fff; margin: 10% auto; padding: 30px; border-radius: 8px; max-width: 500px; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
@@ -207,14 +306,14 @@ $severity_legend = array(
 
 	<div class="wpshadow-kanban-board" style="
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
+		grid-template-columns: repeat(6, 1fr);
 		gap: 15px;
 		padding: 20px;
 		background: #f5f5f5;
 		border-radius: 8px;
 		min-height: 500px;
 	">
-		<?php foreach ( array( 'detected', 'manual', 'automated', 'fixed' ) as $status ) : ?>
+		<?php foreach ( array( 'detected', 'ignored', 'manual', 'automated', 'workflow', 'fixed' ) as $status ) : ?>
 			<div class="kanban-column" data-status="<?php echo esc_attr( $status ); ?>" style="
 				background: white;
 				border-radius: 6px;
@@ -293,7 +392,7 @@ $severity_legend = array(
 						// For DETECTED column, only show first 10 items
 						$is_hidden = ( $status === 'detected' && $idx >= 10 );
 						$hidden_class = $is_hidden ? ' wpshadow-hidden-finding' : '';
-					?> 
+			
 						$threat_level = isset( $finding['threat_level'] ) ? $finding['threat_level'] : 50;
 						$threat_label = wpshadow_get_threat_label( $threat_level );
 						$threat_color = wpshadow_get_threat_gauge_color( $threat_level );
@@ -528,8 +627,27 @@ jQuery(document).ready(function($) {
 			const newStatus = $column.data('status');
 			const $card = $(draggedElement);
 			const findingId = $card.data('finding-id');
+			
+			// If dropping to workflow column, show workflow creation modal
+			if (newStatus === 'workflow') {
+				$card.css('opacity', '1');
+				const findingTitle = $card.find('.finding-title').text();
+				const findingDesc = $card.find('.finding-description').text();
+				const category = $card.data('category');
+				
+				// Show workflow creation modal
+				const $modal = $('#wpshadow-workflow-creation-modal');
+				$modal.data('finding-id', findingId);
+				$modal.data('finding-title', findingTitle);
+				$modal.data('finding-category', category);
+				$modal.find('.workflow-finding-title').text(findingTitle);
+				$modal.find('.workflow-finding-desc').text(findingDesc);
+				$modal.find('#wpshadow-workflow-name').val(findingTitle);
+				$modal.fadeIn(300);
+				return; // Don't save status until user confirms
+			}
 
-			// Save status change via AJAX
+			// Save status change via AJAX for non-workflow drops
 			$.post(ajaxurl, {
 				action: 'wpshadow_change_finding_status',
 				nonce: '<?php echo wp_create_nonce( 'wpshadow_kanban' ); ?>',
@@ -602,6 +720,70 @@ jQuery(document).ready(function($) {
 		});
 	});
 
+	// Workflow Creation Modal
+	$(document).on('click', '.wpshadow-create-workflow-btn', function(e) {
+		e.preventDefault();
+		const findingId = $(this).data('finding-id');
+		const $card = $(this).closest('.finding-card');
+		const findingTitle = $card.find('.finding-title').text();
+		const findingDesc = $card.find('.finding-description').text();
+		const category = $card.data('category');
+		
+		// Show workflow creation modal
+		const $modal = $('#wpshadow-workflow-creation-modal');
+		$modal.data('finding-id', findingId);
+		$modal.data('finding-title', findingTitle);
+		$modal.data('finding-category', category);
+		$modal.find('.workflow-finding-title').text(findingTitle);
+		$modal.find('.workflow-finding-desc').text(findingDesc);
+		$modal.fadeIn(300);
+	});
+	
+	// Close workflow modal
+	$(document).on('click', '.wpshadow-workflow-modal-close, #wpshadow-workflow-modal-cancel', function(e) {
+		e.preventDefault();
+		$('#wpshadow-workflow-creation-modal').fadeOut(200);
+	});
+	
+	// Create workflow from finding
+	$(document).on('click', '#wpshadow-workflow-modal-create', function(e) {
+		e.preventDefault();
+		const $modal = $('#wpshadow-workflow-creation-modal');
+		const findingId = $modal.data('finding-id');
+		const findingTitle = $modal.data('finding-title');
+		const category = $modal.data('finding-category');
+		const workflowName = $modal.find('#wpshadow-workflow-name').val() || findingTitle;
+		const workflowType = $modal.find('input[name="workflow_type"]:checked').val();
+		
+		const $btn = $(this);
+		$btn.prop('disabled', true).text('Creating...');
+		
+		$.post(ajaxurl, {
+			action: 'wpshadow_create_workflow_from_finding',
+			nonce: '<?php echo wp_create_nonce( 'wpshadow_create_workflow' ); ?>',
+			finding_id: findingId,
+			workflow_name: workflowName,
+			workflow_type: workflowType,
+			category: category
+		}, function(response) {
+			if (response.success) {
+				const workflowId = response.data.workflow_id;
+				
+				// Redirect to workflow builder with pre-filled data
+				window.location.href = ajaxurl.replace('admin-ajax.php', '') + 'admin.php?page=wpshadow-workflows&workflow_id=' + workflowId + '&new=1';
+			} else {
+				alert('Error: ' + (response.data.message || 'Could not create workflow'));
+				$btn.prop('disabled', false).text('Create & Configure');
+			}
+		});
+	});
+	
+	// Just close modal button
+	$(document).on('click', '#wpshadow-workflow-modal-cancel', function(e) {
+		e.preventDefault();
+		$('#wpshadow-workflow-creation-modal').fadeOut(200);
+	});
+	
 	// Details modal (placeholder)
 	$(document).on('click', '.finding-details', function(e) {
 		e.preventDefault();

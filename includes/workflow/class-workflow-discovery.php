@@ -53,10 +53,14 @@ class Workflow_Discovery {
 			return self::$diagnostics_cache;
 		}
 
+		// Get files from root and subdirectories
 		$files = glob( $diagnostics_dir . 'class-diagnostic-*.php' );
-
 		if ( ! $files ) {
-			return self::$diagnostics_cache;
+			$files = array();
+		}
+		// Also scan subdirectories
+		foreach ( glob( $diagnostics_dir . '*/class-diagnostic-*.php' ) as $subfile ) {
+			$files[] = $subfile;
 		}
 
 		foreach ( $files as $file ) {

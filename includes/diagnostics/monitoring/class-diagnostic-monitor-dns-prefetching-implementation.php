@@ -1,0 +1,5 @@
+<?php
+declare(strict_types=1);
+namespace WPShadow\Diagnostics;
+
+class Diagnostic_Monitor_DNS_Prefetching_Implementation extends Diagnostic_Base { public static function check(): ?array { return ['id' => 'monitor-dns-prefetch', 'title' => __('DNS Prefetching Implementation Check', 'wpshadow'), 'description' => __('Verifies dns-prefetch for external domains. Missing = users wait for DNS resolution on first request.', 'wpshadow'), 'severity' => 'low', 'category' => 'monitoring', 'kb_link' => 'https://wpshadow.com/kb/resource-hints/', 'training_link' => 'https://wpshadow.com/training/performance-hints/', 'auto_fixable' => false, 'threat_level' => 3]; } }

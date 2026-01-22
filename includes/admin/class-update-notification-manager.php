@@ -587,9 +587,14 @@ class Update_Notification_Manager {
 		$plugin_updates = get_site_transient( 'update_plugins' );
 		$core_updates = get_site_transient( 'update_core' );
 
-		$has_theme_updates = ! empty( $theme_updates->response ) && is_array( $theme_updates->response ) && count( $theme_updates->response ) > 0;
-		$has_plugin_updates = ! empty( $plugin_updates->response ) && is_array( $plugin_updates->response ) && count( $plugin_updates->response ) > 0;
-		$has_core_updates = ! empty( $core_updates->updates ) && is_array( $core_updates->updates ) && count( $core_updates->updates ) > 0;
+		// Check for theme updates
+		$has_theme_updates = is_object( $theme_updates ) && ! empty( $theme_updates->response ) && is_array( $theme_updates->response ) && count( $theme_updates->response ) > 0;
+
+		// Check for plugin updates
+		$has_plugin_updates = is_object( $plugin_updates ) && ! empty( $plugin_updates->response ) && is_array( $plugin_updates->response ) && count( $plugin_updates->response ) > 0;
+
+		// Check for core updates
+		$has_core_updates = is_object( $core_updates ) && ! empty( $core_updates->updates ) && is_array( $core_updates->updates ) && count( $core_updates->updates ) > 0;
 
 		return $has_theme_updates || $has_plugin_updates || $has_core_updates;
 	}

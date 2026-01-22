@@ -1,0 +1,5 @@
+<?php
+declare(strict_types=1);
+namespace WPShadow\Diagnostics;
+
+class Diagnostic_Monitor_Privacy_Policy_Link extends Diagnostic_Base { public static function check(): ?array { return ['id' => 'monitor-privacy-link', 'title' => __('Privacy Policy Link Verification', 'wpshadow'), 'description' => __('Verifies privacy policy link is accessible. Broken link = legal compliance issue, trust signal lost.', 'wpshadow'), 'severity' => 'high', 'category' => 'monitoring', 'kb_link' => 'https://wpshadow.com/kb/privacy-compliance/', 'training_link' => 'https://wpshadow.com/training/legal-pages/', 'auto_fixable' => false, 'threat_level' => 7]; } }

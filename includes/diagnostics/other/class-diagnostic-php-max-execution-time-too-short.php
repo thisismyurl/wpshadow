@@ -1,0 +1,36 @@
+<?php
+declare(strict_types=1);
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+/**
+ * Diagnostic: PHP max_execution_time Too Short (SERVER-003)
+ * 
+ * Checks if execution time <60 seconds.
+ * Philosophy: Educate (#5) about long-running operations.
+ * 
+ * @package WPShadow
+ * @subpackage Diagnostics
+ * @since 1.2601.2200
+ */
+class Diagnostic_Php_Max_Execution_Time_Too_Short extends Diagnostic_Base {
+	
+	/**
+	 * Run the diagnostic check
+	 * 
+	 * @return array|null Array with finding details or null if no issue found
+	 */
+	public static function check(): ?array {
+		// STUB: Check implementation needed
+		// Complete implementation needed:
+		// 1. Gather diagnostic data specific to this check
+		// 2. Analyze against baseline or best practices
+		// 3. Return null if healthy, array with findings if issue detected
+		// 4. Link to KB article for user education (philosophy #5)
+		// 5. Consider KPI tracking (philosophy #9)
+		
+		return null; // Stub: full implementation pending
+	} // Stub - no issues detected yet
+	}
+}

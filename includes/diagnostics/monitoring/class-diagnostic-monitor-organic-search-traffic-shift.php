@@ -1,0 +1,5 @@
+<?php
+declare(strict_types=1);
+namespace WPShadow\Diagnostics;
+
+class Diagnostic_Monitor_Organic_Search_Traffic_Shift extends Diagnostic_Base { public static function check(): ?array { return ['id' => 'monitor-organic-shift', 'title' => __('Organic Search Traffic Shift', 'wpshadow'), 'description' => __('Detects sudden organic traffic drops. Indicates ranking loss, algorithm penalty, or indexation issues.', 'wpshadow'), 'severity' => 'critical', 'category' => 'monitoring', 'kb_link' => 'https://wpshadow.com/kb/organic-monitoring/', 'training_link' => 'https://wpshadow.com/training/ranking-recovery/', 'auto_fixable' => false, 'threat_level' => 10]; } }

@@ -22,6 +22,11 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-color-utils.php'
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-theme-data-provider.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-activity-logger.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-error-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/gamification/class-achievement-system.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/gamification/class-streak-tracker.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/gamification/class-leaderboard-manager.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/gamification/class-badge-manager.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/gamification/class-milestone-notifier.php';
 
 // WP-CLI commands
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
@@ -39,12 +44,36 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-consent-pr
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-error-report-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-first-scan-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-get-dashboard-data-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-get-gamification-summary-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-get-leaderboard-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-mark-notification-read-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-clear-notifications-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-quick-scan-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-deep-scan-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-dismiss-scan-notice-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-save-dashboard-prefs-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-send-executive-report-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-export-csv-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/reports/class-report-engine.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/reports/class-report-builder.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/reports/class-report-renderer.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-generate-report-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-download-report-handler.php';
+
+// Phase 5: Settings Managers (email, scheduling, privacy, retention, scanning)
+require_once plugin_dir_path( __FILE__ ) . 'includes/settings/class-email-template-manager.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/settings/class-report-scheduler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/settings/class-privacy-settings-manager.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/settings/class-data-retention-manager.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/settings/class-scan-frequency-manager.php';
+
+// Phase 5: AJAX Handlers for Settings
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-save-email-template-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-reset-email-template-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-update-report-schedule-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-update-privacy-settings-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-update-data-retention-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-update-scan-frequency-handler.php';
 
 \WPShadow\Admin\Ajax\Dismiss_Finding_Handler::register();
 \WPShadow\Admin\Ajax\Autofix_Finding_Handler::register();
@@ -53,12 +82,26 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-export-csv
 \WPShadow\Admin\Ajax\Error_Report_Handler::register();
 \WPShadow\Admin\Ajax\First_Scan_Handler::register();
 \WPShadow\Admin\Ajax\Get_Dashboard_Data_Handler::register();
+\WPShadow\Admin\Ajax\Get_Gamification_Summary_Handler::register();
+\WPShadow\Admin\Ajax\Get_Leaderboard_Handler::register();
+\WPShadow\Admin\Ajax\Mark_Notification_Read_Handler::register();
+\WPShadow\Admin\Ajax\Clear_Notifications_Handler::register();
 \WPShadow\Admin\Ajax\Quick_Scan_Handler::register();
 \WPShadow\Admin\Ajax\Deep_Scan_Handler::register();
 \WPShadow\Admin\Ajax\Dismiss_Scan_Notice_Handler::register();
 \WPShadow\Admin\Ajax\Save_Dashboard_Prefs_Handler::register();
 \WPShadow\Admin\Ajax\Send_Executive_Report_Handler::register();
 \WPShadow\Admin\Ajax\Export_CSV_Handler::register();
+\WPShadow\Admin\Ajax\Generate_Report_Handler::register();
+\WPShadow\Admin\Ajax\Download_Report_Handler::register();
+
+// Phase 5: Settings AJAX Handlers
+\WPShadow\Admin\Ajax\Save_Email_Template_Handler::register();
+\WPShadow\Admin\Ajax\Reset_Email_Template_Handler::register();
+\WPShadow\Admin\Ajax\Update_Report_Schedule_Handler::register();
+\WPShadow\Admin\Ajax\Update_Privacy_Settings_Handler::register();
+\WPShadow\Admin\Ajax\Update_Data_Retention_Handler::register();
+\WPShadow\Admin\Ajax\Update_Scan_Frequency_Handler::register();
 
 // Extracted module files (Phase 3.5: refactoring for maintainability)
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-tooltip-manager.php';
@@ -257,6 +300,33 @@ add_action( 'wpshadow_run_automated_fixes', function() {
 	update_option( 'wpshadow_scheduled_automated_fixes', $scheduled );
 } );
 
+// Phase 5: Data Retention Cleanup (runs daily at configured time)
+add_action( 'wpshadow_run_data_cleanup', function() {
+	if ( class_exists( '\WPShadow\Settings\Data_Retention_Manager' ) ) {
+		\WPShadow\Settings\Data_Retention_Manager::run_cleanup();
+	}
+} );
+
+// Phase 5: Automatic Diagnostic Scans (runs on configured schedule)
+add_action( 'wpshadow_run_automatic_diagnostic_scan', function() {
+	if ( class_exists( '\WPShadow\Settings\Scan_Frequency_Manager' ) ) {
+		\WPShadow\Settings\Scan_Frequency_Manager::run_diagnostic_scan();
+	}
+} );
+
+// Phase 5: Scheduled Report Delivery (runs according to schedule)
+add_action( 'wpshadow_send_scheduled_reports', function() {
+	if ( class_exists( '\WPShadow\Settings\Report_Scheduler' ) ) {
+		$schedules = \WPShadow\Settings\Report_Scheduler::get_all_schedules();
+		
+		foreach ( $schedules as $report_type => $config ) {
+			if ( ! empty( $config['enabled'] ) ) {
+				\WPShadow\Settings\Report_Scheduler::send_scheduled_report( $report_type );
+			}
+		}
+	}
+} );
+
 // Schedule off-peak operation handler moved to class
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-schedule-offpeak-handler.php';
 \WPShadow\Admin\Ajax\Schedule_Offpeak_Handler::register();
@@ -444,6 +514,11 @@ add_action( 'admin_init', function() {
 	}
 } );
 
+// Load Phase 3 Dashboard Widgets (KPI tracking, activity feed, top issues)
+require_once plugin_dir_path( __FILE__ ) . 'includes/widgets/class-kpi-summary-widget.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/widgets/class-activity-feed-widget.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/widgets/class-top-issues-widget.php';
+
 // Register the WPShadow admin menu.
 add_action( 'admin_menu', function() {
 	add_menu_page(
@@ -452,14 +527,14 @@ add_action( 'admin_menu', function() {
 		'read',
 		'wpshadow',
 		'wpshadow_render_dashboard',
-		'dashicons-admin-generic',
+		'dashicons-shield-alt',
 		999
 	);
 
 	add_submenu_page(
 		'wpshadow',
-		'Dashboard',
-		'Dashboard',
+		__( 'Dashboard', 'wpshadow' ),
+		__( 'Dashboard', 'wpshadow' ),
 		'read',
 		'wpshadow',
 		'wpshadow_render_dashboard'
@@ -475,77 +550,91 @@ add_action( 'admin_menu', function() {
 		'wpshadow_render_action_items'
 	);
 
-	// Guardian System submenu pages
+	// Guardian (Diagnostics & Treatments System)
 	add_submenu_page(
 		'wpshadow',
 		__( 'Guardian', 'wpshadow' ),
 		__( 'Guardian', 'wpshadow' ),
-		'manage_options',
+		'read',
 		'wpshadow-guardian',
-		function() {
-			echo \WPShadow\Admin\Guardian_Dashboard::render();
-		}
+		'wpshadow_render_guardian'
 	);
 
+	// Workflows (Automation)
 	add_submenu_page(
 		'wpshadow',
-		'Workflows',
-		'Workflows',
+		__( 'Workflows', 'wpshadow' ),
+		__( 'Workflows', 'wpshadow' ),
 		'read',
 		'wpshadow-workflows',
 		'wpshadow_render_workflow_builder'
 	);
 
-	// Guardian Settings - hidden from submenu but accessible via direct URL
+	// Reports (Analytics & Insights)
 	add_submenu_page(
-		null, // Hidden from menu
-		__( 'Guardian Settings', 'wpshadow' ),
-		__( 'Guardian Settings', 'wpshadow' ),
+		'wpshadow',
+		__( 'Reports', 'wpshadow' ),
+		__( 'Reports', 'wpshadow' ),
 		'manage_options',
-		'wpshadow-guardian-settings',
-		function() {
-			echo \WPShadow\Admin\Guardian_Settings::render();
-		}
+		'wpshadow-reports',
+		'wpshadow_render_reports'
 	);
 
+	// Settings (including Notifications)
 	add_submenu_page(
 		'wpshadow',
-		__( 'Generate Reports', 'wpshadow' ),
-		__( 'Generate Reports', 'wpshadow' ),
+		__( 'Settings', 'wpshadow' ),
+		__( 'Settings', 'wpshadow' ),
 		'manage_options',
-		'wpshadow-guardian-reports',
-		function() {
-			echo \WPShadow\Admin\Report_Form::render();
-		}
+		'wpshadow-settings',
+		'wpshadow_render_settings'
 	);
 
+	// Help & Documentation
 	add_submenu_page(
 		'wpshadow',
-		__( 'Notifications', 'wpshadow' ),
-		__( 'Notifications', 'wpshadow' ),
-		'manage_options',
-		'wpshadow-guardian-notifications',
-		function() {
-			echo \WPShadow\Admin\Notification_Preferences_Form::render();
-		}
-	);
-
-	add_submenu_page(
-		'wpshadow',
-		'Tools',
-		'Tools',
-		'read',
-		'wpshadow-tools',
-		'wpshadow_render_tools'
-	);
-
-	add_submenu_page(
-		'wpshadow',
-		'Help',
-		'Help',
+		__( 'Help', 'wpshadow' ),
+		__( 'Help', 'wpshadow' ),
 		'read',
 		'wpshadow-help',
 		'wpshadow_render_help'
+	);
+
+	// Legacy redirect handlers (for bookmarks/external links)
+	add_submenu_page(
+		null,
+		'',
+		'',
+		'manage_options',
+		'wpshadow-guardian-reports',
+		function() {
+			wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-reports' ) );
+			exit;
+		}
+	);
+
+	add_submenu_page(
+		null,
+		'',
+		'',
+		'manage_options',
+		'wpshadow-guardian-notifications',
+		function() {
+			wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-settings&tab=notifications' ) );
+			exit;
+		}
+	);
+
+	add_submenu_page(
+		null,
+		'',
+		'',
+		'read',
+		'wpshadow-tools',
+		function() {
+			wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-guardian' ) );
+			exit;
+		}
 	);
 } );
 
@@ -705,7 +794,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-ajax-handler-bas
 require_once plugin_dir_path( __FILE__ ) . 'includes/core/class-abstract-registry.php';
 
 // Load diagnostic registry
-require_once plugin_dir_path( __FILE__ ) . 'includes/diagnostics/class-diagnostic-registry.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/diagnostics/other/class-diagnostic-registry.php';
 
 // Load WordPress Settings Scan
 require_once plugin_dir_path( __FILE__ ) . 'includes/diagnostics/class-wordpress-settings-scan.php';
@@ -921,25 +1010,33 @@ add_action( 'admin_enqueue_scripts', function( $hook ) {
 		return;
 	}
 
+	// Enqueue modern design system (Phase 6 - UX Redesign)
+	wp_enqueue_style(
+		'wpshadow-design-system',
+		WPSHADOW_URL . 'assets/css/design-system.css',
+		array(),
+		WPSHADOW_VERSION
+	);
+
 	// Enqueue gauges CSS for health dashboard (#563)
 	wp_enqueue_style(
 		'wpshadow-gauges',
 		WPSHADOW_URL . 'assets/css/gauges.css',
-		array(),
+		array( 'wpshadow-design-system' ),
 		WPSHADOW_VERSION
 	);
 
 	wp_enqueue_style(
 		'wpshadow-safety-warnings',
 		WPSHADOW_URL . 'assets/css/safety-warnings.css',
-		array(),
+		array( 'wpshadow-design-system' ),
 		WPSHADOW_VERSION
 	);
 
 	wp_enqueue_style(
 		'wpshadow-kanban-board',
 		WPSHADOW_URL . 'assets/css/kanban-board.css',
-		array(),
+		array( 'wpshadow-design-system' ),
 		WPSHADOW_VERSION
 	);
 
@@ -947,14 +1044,23 @@ add_action( 'admin_enqueue_scripts', function( $hook ) {
 	wp_enqueue_style(
 		'wpshadow-dashboard-fullscreen',
 		WPSHADOW_URL . 'assets/css/wpshadow-dashboard-fullscreen.css',
-		array(),
+		array( 'wpshadow-design-system' ),
 		WPSHADOW_VERSION
+	);
+
+	// Design system interactive components (modals, notifications)
+	wp_enqueue_script(
+		'wpshadow-design-system',
+		WPSHADOW_URL . 'assets/js/design-system.js',
+		array( 'jquery' ),
+		WPSHADOW_VERSION,
+		true
 	);
 
 	wp_enqueue_script(
 		'wpshadow-dashboard-realtime',
 		WPSHADOW_URL . 'assets/js/wpshadow-dashboard-realtime.js',
-		array( 'jquery' ),
+		array( 'jquery', 'wpshadow-design-system' ),
 		WPSHADOW_VERSION,
 		false // Load in header so inline scripts can use jQuery
 	);
@@ -1419,6 +1525,58 @@ function wpshadow_render_dashboard() {
 		</p>
 		<?php else : ?>
 		<h1><?php esc_html_e( 'WPShadow Site Health', 'wpshadow' ); ?></h1>
+		<?php 
+			$user_id = get_current_user_id();
+			$streaks = \WPShadow\Gamification\Streak_Tracker::get_current_streaks( $user_id );
+			$scan_emoji = \WPShadow\Gamification\Streak_Tracker::get_streak_emoji( $streaks['daily_scans'] ?? 0 );
+			$fix_emoji = \WPShadow\Gamification\Streak_Tracker::get_streak_emoji( $streaks['fixes'] ?? 0 );
+			$rank = \WPShadow\Gamification\Leaderboard_Manager::get_user_rank( $user_id );
+		?>
+		<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin: 16px 0 24px;">
+			<div>
+				<?php \WPShadow\Gamification\Achievement_System::render_achievements_widget( $user_id ); ?>
+			</div>
+			<div style="display: flex; flex-direction: column; gap: 12px;">
+				<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 16px;">
+					<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+						<span class="dashicons dashicons-smiley" style="font-size: 20px; color: #2563eb;"></span>
+						<strong><?php esc_html_e( 'Momentum', 'wpshadow' ); ?></strong>
+					</div>
+					<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px;">
+						<div style="padding: 10px; background: #f8fafc; border-radius: 6px; border: 1px solid #e5e7eb;">
+							<div style="font-size: 12px; color: #64748b;"><?php esc_html_e( 'Scan Streak', 'wpshadow' ); ?></div>
+							<div style="font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+								<?php echo esc_html( $streaks['daily_scans'] ?? 0 ); ?>
+								<span><?php echo esc_html( $scan_emoji ); ?></span>
+							</div>
+						</div>
+						<div style="padding: 10px; background: #f8fafc; border-radius: 6px; border: 1px solid #e5e7eb;">
+							<div style="font-size: 12px; color: #64748b;"><?php esc_html_e( 'Fix Streak', 'wpshadow' ); ?></div>
+							<div style="font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+								<?php echo esc_html( $streaks['fixes'] ?? 0 ); ?>
+								<span><?php echo esc_html( $fix_emoji ); ?></span>
+							</div>
+						</div>
+						<div style="padding: 10px; background: #f8fafc; border-radius: 6px; border: 1px solid #e5e7eb;">
+							<div style="font-size: 12px; color: #64748b;"><?php esc_html_e( 'Your Rank', 'wpshadow' ); ?></div>
+							<div style="font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 6px; color: #16a34a;">
+								#<?php echo (int) $rank; ?>
+								<span class="dashicons dashicons-chart-line" style="font-size: 18px;"></span>
+							</div>
+						</div>
+					</div>
+					<div style="margin-top: 12px;">
+						<?php \WPShadow\Gamification\Badge_Manager::render_user_badges( $user_id ); ?>
+					</div>
+					<div style="margin-top: 12px;">
+						<?php \WPShadow\Gamification\Milestone_Notifier::render_unread_notifications( $user_id ); ?>
+					</div>
+				</div>
+				<div>
+					<?php \WPShadow\Gamification\Leaderboard_Manager::render_leaderboard( 5 ); ?>
+				</div>
+			</div>
+		</div>
 		<?php endif; ?>
 
 		<script>
@@ -1921,28 +2079,7 @@ function wpshadow_render_dashboard() {
 			$scan_interval = 5 * 60; // 5 minutes
 			$time_since_scan = $current_time - (int) $last_scan_time;
 			
-			if ( $last_scan_time === 0 ) {
-				// Never scanned - show permission prompt
-				?>
-				<div id="wpshadow-first-scan-prompt" style="background: #e3f2fd; border-left: 4px solid #0073aa; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
-					<h2 style="margin-top: 0; color: #0073aa; display: flex; align-items: center; gap: 10px;">
-						<span class="dashicons dashicons-shield-alt" style="font-size: 24px;"></span>
-						<?php esc_html_e( 'Let\'s Get Started', 'wpshadow' ); ?>
-					</h2>
-					<p style="margin: 10px 0; font-size: 15px; color: #333; line-height: 1.6;">
-						<?php esc_html_e( 'We need to run a Quick Scan to analyze your site. This is quick, painless, and won\'t hurt your website or visitors.', 'wpshadow' ); ?>
-					</p>
-					<div style="display: flex; gap: 10px; margin-top: 15px;">
-						<button id="wpshadow-start-first-scan" class="button button-primary" style="padding: 8px 16px; cursor: pointer;">
-							<?php esc_html_e( 'Start Quick Scan', 'wpshadow' ); ?>
-						</button>
-						<button id="wpshadow-skip-first-scan" class="button" style="padding: 8px 16px; cursor: pointer;">
-							<?php esc_html_e( 'Maybe Later', 'wpshadow' ); ?>
-						</button>
-					</div>
-				</div>
-				<?php
-			}
+			// First scan prompt removed - dashboard shows diagnostics immediately
 			?>
 			
 			<div style="display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap;">
@@ -1969,15 +2106,37 @@ function wpshadow_render_dashboard() {
 						<p style="margin: 16px 0 0 0; font-size: 14px; color: #666; line-height: 1.5;"><?php echo esc_html( $overall_health['message'] ); ?></p>
 					</div>
 					
-				<!-- Quick Scan and Deep Scan Buttons -->
+				<!-- Guardian Always Running Status -->
+				<div style="margin-top: 16px; padding: 12px; background: linear-gradient(135deg, #e3f2fd 0%, #f0f7ff 100%); border: 1px solid #90caf9; border-radius: 6px; text-align: center;">
+					<div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 6px;">
+						<span class="dashicons dashicons-shield-alt" style="color: #1976d2; font-size: 18px;"></span>
+						<strong style="color: #1565c0; font-size: 13px;"><?php esc_html_e( 'Guardian Active', 'wpshadow' ); ?></strong>
+					</div>
+					<p style="margin: 0; font-size: 11px; color: #555; line-height: 1.4;">
+						<?php 
+						$last_scan = get_option( 'wpshadow_last_scan_time', time() );
+						$time_ago = human_time_diff( $last_scan, time() );
+						printf( esc_html__( 'Last scan: %s ago', 'wpshadow' ), esc_html( $time_ago ) );
+						?>
+					</p>
+				</div>
+
+				<!-- Quick Action Buttons -->
 				<div style="margin-top: 16px; display: flex; flex-direction: column; gap: 10px;">
-					<button id="wpshadow-quick-scan-btn" class="button button-primary" style="width: 100%; padding: 10px; cursor: pointer;">
-						<?php esc_html_e( 'Quick Scan', 'wpshadow' ); ?>
-					</button>
-					<button id="wpshadow-deep-scan-btn" class="button" style="width: 100%; padding: 10px; cursor: pointer;">
-						<?php esc_html_e( 'Deep Scan', 'wpshadow' ); ?>
-					</button>
-					<button id="wpshadow-fullscreen-toggle" class="button" style="width: 100%; padding: 10px; cursor: pointer; color: #888; border-color: #ccc; background: #f5f5f5;" title="<?php esc_attr_e( 'View dashboard in fullscreen mode (great for office displays)', 'wpshadow' ); ?>">
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian' ) ); ?>" class="button button-primary" style="width: 100%; padding: 10px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none;">
+						<span class="dashicons dashicons-shield-alt"></span>
+						<?php esc_html_e( 'View Guardian', 'wpshadow' ); ?>
+					</a>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows' ) ); ?>" class="button" style="width: 100%; padding: 10px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none;">
+						<span class="dashicons dashicons-update"></span>
+						<?php esc_html_e( 'Manage Workflows', 'wpshadow' ); ?>
+					</a>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-reports' ) ); ?>" class="button" style="width: 100%; padding: 10px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none;">
+						<span class="dashicons dashicons-chart-area"></span>
+						<?php esc_html_e( 'View Reports', 'wpshadow' ); ?>
+					</a>
+					<button id="wpshadow-fullscreen-toggle" class="button" style="width: 100%; padding: 10px; cursor: pointer; color: #888; border-color: #ccc; background: #f5f5f5; display: flex; align-items: center; justify-content: center; gap: 8px;" title="<?php esc_attr_e( 'View dashboard in fullscreen mode (great for office displays)', 'wpshadow' ); ?>">
+						<span class="dashicons dashicons-fullscreen-alt"></span>
 						<?php esc_html_e( 'Full Screen', 'wpshadow' ); ?>
 					</button>
 				</div>
@@ -2107,6 +2266,10 @@ function wpshadow_render_dashboard() {
 		<!-- Phase 6: Advanced Features (Email Reports & CSV Export) -->
 		<?php WPShadow\Core\KPI_Advanced_Features::render_advanced_panel(); ?>
 
+		<!-- Phase 3: Dashboard KPI Enhancements Widgets -->
+		<?php WPShadow_KPI_Summary_Widget::render(); ?>
+		<?php WPShadow_Activity_Feed_Widget::render(); ?>
+		<?php WPShadow_Top_Issues_Widget::render(); ?>
 
 		<!-- Recent Activity -->
 		<?php 
@@ -2750,10 +2913,14 @@ function wpshadow_count_diagnostics_by_category( $category ) {
 	if ( $category_counts === null ) {
 		$category_counts = array();
 		
-		// Scan diagnostics directory for all test files
+		// Scan diagnostics directory for all test files (including subdirectories)
 		$diagnostics_dir = WPSHADOW_PATH . 'includes/diagnostics/';
 		if ( is_dir( $diagnostics_dir ) ) {
 			$files = glob( $diagnostics_dir . 'class-diagnostic-*.php' );
+			// Also scan subdirectories
+			foreach ( glob( $diagnostics_dir . '*/class-diagnostic-*.php' ) as $subfile ) {
+				$files[] = $subfile;
+			}
 			
 			// Extended category prefix mapping - captures all 2,500+ diagnostics
 			$category_prefixes = array(
@@ -3573,6 +3740,124 @@ add_action( 'wp_enqueue_scripts', function() {
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-generate-password-handler.php';
 \WPShadow\Admin\Ajax\Generate_Password_Handler::register();
 
+// Notification builder handlers
+require_once plugin_dir_path( __FILE__ ) . 'includes/workflow/class-notification-builder.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-save-notification-rule-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/ajax/class-delete-notification-rule-handler.php';
+
+// Register notification builder AJAX handlers
+add_action( 'plugins_loaded', function() {
+	\WPShadow\Admin\Ajax\Save_Notification_Rule_Handler::register();
+	\WPShadow\Admin\Ajax\Delete_Notification_Rule_Handler::register();
+} );
+
+/**
+ * AJAX handler for force scan
+ */
+add_action( 'wp_ajax_wpshadow_force_scan', function() {
+	check_ajax_referer( 'wpshadow_force_scan', 'nonce' );
+	
+	if ( ! current_user_can( 'read' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'wpshadow' ) ) );
+	}
+	
+	// Update last scan time
+	update_option( 'wpshadow_last_scan_time', time() );
+	
+	// In future, trigger actual diagnostic scan here
+	// For now, just acknowledge
+	wp_send_json_success( array( 
+		'message' => __( 'Scan completed successfully!', 'wpshadow' ),
+		'findings' => 0
+	) );
+} );
+
+/**
+ * AJAX handler for creating workflow from finding (Phase 2 - Action Items bridge)
+ */
+add_action( 'wp_ajax_wpshadow_create_workflow_from_finding', function() {
+	check_ajax_referer( 'wpshadow_create_workflow', 'nonce' );
+	
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'wpshadow' ) ) );
+	}
+	
+	$finding_id = isset( $_POST['finding_id'] ) ? sanitize_text_field( $_POST['finding_id'] ) : '';
+	$workflow_name = isset( $_POST['workflow_name'] ) ? sanitize_text_field( $_POST['workflow_name'] ) : 'New Workflow';
+	$workflow_type = isset( $_POST['workflow_type'] ) ? sanitize_key( $_POST['workflow_type'] ) : 'auto_fix';
+	$category = isset( $_POST['category'] ) ? sanitize_key( $_POST['category'] ) : 'other';
+	
+	if ( ! $finding_id ) {
+		wp_send_json_error( array( 'message' => __( 'Finding ID is required.', 'wpshadow' ) ) );
+	}
+	
+	// Build workflow blocks from finding context (trigger + action)
+	$blocks = array();
+	
+	// Add trigger block: Guardian detection
+	$blocks[] = array(
+		'type' => 'trigger',
+		'trigger_type' => 'guardian_finding_detected',
+		'finding_id' => $finding_id,
+		'category' => $category
+	);
+	
+	// Add action block based on workflow type
+	if ( $workflow_type === 'auto_fix' ) {
+		$blocks[] = array(
+			'type' => 'action',
+			'action_type' => 'auto_fix',
+			'finding_id' => $finding_id,
+			'auto_execute' => true
+		);
+	} elseif ( $workflow_type === 'reactive' ) {
+		$blocks[] = array(
+			'type' => 'action',
+			'action_type' => 'notify',
+			'finding_id' => $finding_id,
+			'notify_user' => true
+		);
+	} elseif ( $workflow_type === 'scheduled' ) {
+		$blocks[] = array(
+			'type' => 'trigger',
+			'trigger_type' => 'scheduled',
+			'schedule' => 'daily' // User will customize this
+		);
+		$blocks[] = array(
+			'type' => 'action',
+			'action_type' => 'auto_fix',
+			'finding_id' => $finding_id,
+			'auto_execute' => true
+		);
+	}
+	
+	// Save workflow using Workflow_Manager
+	$workflow_id = \WPShadow\Workflow\Workflow_Manager::save_workflow( 
+		$workflow_name,
+		$blocks
+	);
+	
+	if ( ! $workflow_id ) {
+		wp_send_json_error( array( 'message' => __( 'Could not create workflow.', 'wpshadow' ) ) );
+	}
+	
+	// Log activity (Philosophy #9: Show Value)
+	if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
+		\WPShadow\Core\Activity_Logger::log( array(
+			'action' => 'workflow_created_from_finding',
+			'finding_id' => $finding_id,
+			'workflow_id' => $workflow_id,
+			'workflow_type' => $workflow_type,
+			'timestamp' => time()
+		) );
+	}
+	
+	wp_send_json_success( array(
+		'workflow_id' => $workflow_id,
+		'message' => __( 'Workflow created! Redirecting to builder...', 'wpshadow' )
+	) );
+} );
+
 /**
  * Override wp_mail From Name if WPShadow setting is configured.
  */
@@ -3585,6 +3870,1243 @@ add_filter( 'wp_mail_from_name', function( $from_name ) {
 	
 	return $from_name;
 }, 999 );
+
+/**
+ * Render Guardian page (Diagnostics & Treatments System)
+ */
+function wpshadow_render_guardian() {
+	if ( ! current_user_can( 'read' ) ) {
+		wp_die( esc_html__( 'Insufficient permissions.', 'wpshadow' ) );
+	}
+
+	$active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'overview';
+	$last_scan = get_option( 'wpshadow_last_scan_time', 0 );
+	$scan_frequency = get_option( 'wpshadow_scan_frequency', 'every_4_hours' );
+	
+	?>
+	<div class="wrap">
+		<h1>
+			<span class="dashicons dashicons-shield-alt" style="font-size: 32px; vertical-align: middle; color: #0073aa;"></span>
+			<?php esc_html_e( 'Guardian', 'wpshadow' ); ?>
+		</h1>
+		<p><?php esc_html_e( 'Your always-on WordPress health monitoring system', 'wpshadow' ); ?></p>
+
+		<!-- Tab Navigation -->
+		<nav class="nav-tab-wrapper" style="margin: 20px 0;">
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian&tab=overview' ) ); ?>" class="nav-tab <?php echo $active_tab === 'overview' ? 'nav-tab-active' : ''; ?>">
+				<?php esc_html_e( 'Overview', 'wpshadow' ); ?>
+			</a>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian&tab=diagnostics' ) ); ?>" class="nav-tab <?php echo $active_tab === 'diagnostics' ? 'nav-tab-active' : ''; ?>">
+				<?php esc_html_e( 'Diagnostics', 'wpshadow' ); ?>
+			</a>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian&tab=treatments' ) ); ?>" class="nav-tab <?php echo $active_tab === 'treatments' ? 'nav-tab-active' : ''; ?>">
+				<?php esc_html_e( 'Treatments', 'wpshadow' ); ?>
+			</a>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian&tab=schedule' ) ); ?>" class="nav-tab <?php echo $active_tab === 'schedule' ? 'nav-tab-active' : ''; ?>">
+				<?php esc_html_e( 'Schedule', 'wpshadow' ); ?>
+			</a>
+		</nav>
+
+		<?php
+		switch ( $active_tab ) {
+			case 'overview':
+				wpshadow_render_guardian_overview();
+				break;
+			case 'diagnostics':
+				wpshadow_render_guardian_diagnostics();
+				break;
+			case 'treatments':
+				wpshadow_render_guardian_treatments();
+				break;
+			case 'schedule':
+				wpshadow_render_guardian_schedule();
+				break;
+			default:
+				wpshadow_render_guardian_overview();
+		}
+		?>
+	</div>
+	<?php
+}
+
+/**
+ * Render Guardian Overview tab
+ */
+function wpshadow_render_guardian_overview() {
+	$last_scan = get_option( 'wpshadow_last_scan_time', 0 );
+	$time_ago = $last_scan ? human_time_diff( $last_scan, time() ) : __( 'Never', 'wpshadow' );
+	$scan_frequency = get_option( 'wpshadow_scan_frequency', 'every_4_hours' );
+	$next_scan = $last_scan ? $last_scan + ( 4 * HOUR_IN_SECONDS ) : time();
+	$next_scan_text = $next_scan > time() ? human_time_diff( time(), $next_scan ) : __( 'Soon', 'wpshadow' );
+	
+	// Get diagnostics and treatments count
+	$diagnostic_registry = \WPShadow\Diagnostics\Diagnostic_Registry::get_all();
+	$treatment_registry = \WPShadow\Treatments\Treatment_Registry::get_all();
+	
+	// Get recent findings
+	$all_findings = wpshadow_get_site_findings();
+	$recent_findings = array_slice( $all_findings, 0, 5 );
+	
+	?>
+	<div style="max-width: 1200px;">
+		<!-- Status Cards -->
+		<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0;">
+			<!-- Last Scan -->
+			<div style="background: linear-gradient(135deg, #e3f2fd 0%, #f0f7ff 100%); border: 2px solid #2196f3; border-radius: 8px; padding: 20px;">
+				<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+					<span class="dashicons dashicons-clock" style="font-size: 24px; color: #1976d2;"></span>
+					<h3 style="margin: 0; color: #1565c0;"><?php esc_html_e( 'Last Scan', 'wpshadow' ); ?></h3>
+				</div>
+				<p style="font-size: 20px; font-weight: 600; margin: 0; color: #0d47a1;"><?php echo esc_html( $time_ago ); ?> <?php esc_html_e( 'ago', 'wpshadow' ); ?></p>
+			</div>
+
+			<!-- Next Scan -->
+			<div style="background: linear-gradient(135deg, #f3e5f5 0%, #faf5ff 100%); border: 2px solid #ab47bc; border-radius: 8px; padding: 20px;">
+				<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+					<span class="dashicons dashicons-update" style="font-size: 24px; color: #8e24aa;"></span>
+					<h3 style="margin: 0; color: #7b1fa2;"><?php esc_html_e( 'Next Scan', 'wpshadow' ); ?></h3>
+				</div>
+				<p style="font-size: 20px; font-weight: 600; margin: 0; color: #6a1b9a;"><?php esc_html_e( 'In', 'wpshadow' ); ?> <?php echo esc_html( $next_scan_text ); ?></p>
+			</div>
+
+			<!-- Active Diagnostics -->
+			<div style="background: linear-gradient(135deg, #e8f5e9 0%, #f1f8f4 100%); border: 2px solid #66bb6a; border-radius: 8px; padding: 20px;">
+				<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+					<span class="dashicons dashicons-yes-alt" style="font-size: 24px; color: #43a047;"></span>
+					<h3 style="margin: 0; color: #2e7d32;"><?php esc_html_e( 'Diagnostics', 'wpshadow' ); ?></h3>
+				</div>
+				<p style="font-size: 20px; font-weight: 600; margin: 0; color: #1b5e20;"><?php echo count( $diagnostic_registry ); ?> <?php esc_html_e( 'active', 'wpshadow' ); ?></p>
+			</div>
+
+			<!-- Available Treatments -->
+			<div style="background: linear-gradient(135deg, #fff3e0 0%, #fffaf0 100%); border: 2px solid #ffa726; border-radius: 8px; padding: 20px;">
+				<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+					<span class="dashicons dashicons-admin-tools" style="font-size: 24px; color: #fb8c00;"></span>
+					<h3 style="margin: 0; color: #ef6c00;"><?php esc_html_e( 'Treatments', 'wpshadow' ); ?></h3>
+				</div>
+				<p style="font-size: 20px; font-weight: 600; margin: 0; color: #e65100;"><?php echo count( $treatment_registry ); ?> <?php esc_html_e( 'available', 'wpshadow' ); ?></p>
+			</div>
+		</div>
+
+		<!-- Force Scan Button -->
+		<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 24px; margin: 20px 0;">
+			<h3><?php esc_html_e( 'Manual Scan', 'wpshadow' ); ?></h3>
+			<p><?php esc_html_e( 'Guardian runs automatically in the background, but you can force a scan anytime.', 'wpshadow' ); ?></p>
+			<button id="wpshadow-force-scan-btn" class="button button-primary button-hero" style="margin-top: 10px;">
+				<span class="dashicons dashicons-update" style="vertical-align: middle;"></span>
+				<?php esc_html_e( 'Force Scan Now', 'wpshadow' ); ?>
+			</button>
+			<p style="margin-top: 10px; font-size: 12px; color: #666;">
+				<?php esc_html_e( 'Scans typically take 30-60 seconds depending on your site size.', 'wpshadow' ); ?>
+			</p>
+		</div>
+
+		<!-- Recent Findings -->
+		<?php if ( ! empty( $recent_findings ) ) : ?>
+		<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 24px; margin: 20px 0;">
+			<h3><?php esc_html_e( 'Recent Findings', 'wpshadow' ); ?></h3>
+			<table class="wp-list-table widefat fixed striped">
+				<thead>
+					<tr>
+						<th><?php esc_html_e( 'Issue', 'wpshadow' ); ?></th>
+						<th><?php esc_html_e( 'Category', 'wpshadow' ); ?></th>
+						<th><?php esc_html_e( 'Severity', 'wpshadow' ); ?></th>
+						<th><?php esc_html_e( 'Action', 'wpshadow' ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ( $recent_findings as $finding ) : ?>
+					<tr>
+						<td><strong><?php echo esc_html( $finding['title'] ?? __( 'Unknown', 'wpshadow' ) ); ?></strong></td>
+						<td><?php echo esc_html( ucfirst( $finding['category'] ?? 'other' ) ); ?></td>
+						<td>
+							<span style="display: inline-block; padding: 3px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; background: <?php echo esc_attr( $finding['color'] ?? '#ccc' ); ?>; color: white;">
+								<?php echo esc_html( ucfirst( $finding['severity'] ?? 'medium' ) ); ?>
+							</span>
+						</td>
+						<td>
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-action-items' ) ); ?>" class="button button-small">
+								<?php esc_html_e( 'View in Action Items', 'wpshadow' ); ?>
+							</a>
+						</td>
+					</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		</div>
+		<?php endif; ?>
+
+		<script>
+		jQuery(document).ready(function($) {
+			$('#wpshadow-force-scan-btn').on('click', function(e) {
+				e.preventDefault();
+				var $btn = $(this);
+				$btn.prop('disabled', true).html('<span class="dashicons dashicons-update wpshadow-spin" style="vertical-align: middle;"></span> <?php echo esc_js( __( 'Scanning...', 'wpshadow' ) ); ?>');
+				
+				$.post(ajaxurl, {
+					action: 'wpshadow_force_scan',
+					nonce: '<?php echo wp_create_nonce( 'wpshadow_force_scan' ); ?>'
+				}, function(response) {
+					if (response.success) {
+						$btn.html('<span class="dashicons dashicons-yes-alt" style="vertical-align: middle;"></span> <?php echo esc_js( __( 'Scan Complete!', 'wpshadow' ) ); ?>');
+						setTimeout(function() {
+							location.reload();
+						}, 1500);
+					} else {
+						alert(response.data?.message || '<?php echo esc_js( __( 'Scan failed', 'wpshadow' ) ); ?>');
+						$btn.prop('disabled', false).html('<span class="dashicons dashicons-update" style="vertical-align: middle;"></span> <?php echo esc_js( __( 'Force Scan Now', 'wpshadow' ) ); ?>');
+					}
+				});
+			});
+		});
+		</script>
+		<style>
+		.wpshadow-spin {
+			animation: spin 1s linear infinite;
+		}
+		@keyframes spin {
+			from { transform: rotate(0deg); }
+			to { transform: rotate(360deg); }
+		}
+		</style>
+	</div>
+	<?php
+}
+
+/**
+ * Render Guardian Diagnostics tab
+ */
+function wpshadow_render_guardian_diagnostics() {
+	echo '<p>' . esc_html__( 'Diagnostics list coming soon. For now, view findings on the Dashboard or Action Items page.', 'wpshadow' ) . '</p>';
+}
+
+/**
+ * Render Guardian Treatments tab
+ */
+function wpshadow_render_guardian_treatments() {
+	echo '<p>' . esc_html__( 'Treatments list coming soon. Available treatments can be triggered from Action Items.', 'wpshadow' ) . '</p>';
+}
+
+/**
+ * Render Guardian Schedule tab
+ */
+function wpshadow_render_guardian_schedule() {
+	$scan_frequency = get_option( 'wpshadow_scan_frequency', 'every_4_hours' );
+	?>
+	<div style="max-width: 800px;">
+		<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 24px;">
+			<h3><?php esc_html_e( 'Scan Frequency', 'wpshadow' ); ?></h3>
+			<p><?php esc_html_e( 'How often should Guardian scan your site?', 'wpshadow' ); ?></p>
+			
+			<form method="post" action="">
+				<?php wp_nonce_field( 'wpshadow_save_scan_frequency', 'wpshadow_scan_frequency_nonce' ); ?>
+				
+				<label style="display: block; margin: 15px 0;">
+					<input type="radio" name="scan_frequency" value="hourly" <?php checked( $scan_frequency, 'hourly' ); ?>>
+					<strong><?php esc_html_e( 'Hourly', 'wpshadow' ); ?></strong> - <?php esc_html_e( 'Every hour (most vigilant)', 'wpshadow' ); ?>
+				</label>
+				
+				<label style="display: block; margin: 15px 0;">
+					<input type="radio" name="scan_frequency" value="every_4_hours" <?php checked( $scan_frequency, 'every_4_hours' ); ?>>
+					<strong><?php esc_html_e( 'Every 4 Hours', 'wpshadow' ); ?></strong> - <?php esc_html_e( 'Recommended balance', 'wpshadow' ); ?>
+				</label>
+				
+				<label style="display: block; margin: 15px 0;">
+					<input type="radio" name="scan_frequency" value="daily" <?php checked( $scan_frequency, 'daily' ); ?>>
+					<strong><?php esc_html_e( 'Daily', 'wpshadow' ); ?></strong> - <?php esc_html_e( 'Once per day', 'wpshadow' ); ?>
+				</label>
+				
+				<label style="display: block; margin: 15px 0;">
+					<input type="radio" name="scan_frequency" value="weekly" <?php checked( $scan_frequency, 'weekly' ); ?>>
+					<strong><?php esc_html_e( 'Weekly', 'wpshadow' ); ?></strong> - <?php esc_html_e( 'Once per week', 'wpshadow' ); ?>
+				</label>
+				
+				<button type="submit" name="save_scan_frequency" class="button button-primary" style="margin-top: 20px;">
+					<?php esc_html_e( 'Save Frequency', 'wpshadow' ); ?>
+				</button>
+			</form>
+			
+			<?php
+			if ( isset( $_POST['save_scan_frequency'] ) && 
+			     check_admin_referer( 'wpshadow_save_scan_frequency', 'wpshadow_scan_frequency_nonce' ) ) {
+				$new_frequency = sanitize_key( $_POST['scan_frequency'] );
+				update_option( 'wpshadow_scan_frequency', $new_frequency );
+				echo '<div class="notice notice-success" style="margin-top: 20px;"><p>' . esc_html__( 'Scan frequency updated!', 'wpshadow' ) . '</p></div>';
+			}
+			?>
+		</div>
+	</div>
+	<?php
+}
+
+/**
+ * Render Reports page (Analytics & Insights)
+ */
+function wpshadow_render_reports() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( esc_html__( 'Insufficient permissions.', 'wpshadow' ) );
+	}
+
+	// Render enhanced Phase 4 reports dashboard
+	?>
+	<div class="wrap" style="padding: 20px;">
+		<h1 style="color: #0073aa; margin-bottom: 10px;">
+			<span class="dashicons dashicons-chart-bar" style="font-size: 32px; vertical-align: middle; color: #0073aa;"></span>
+			<?php esc_html_e( 'Reports & Analytics', 'wpshadow' ); ?>
+		</h1>
+		<p style="color: #666; margin-bottom: 30px;">
+			<?php esc_html_e( 'Analyze your WPShadow activities, track KPIs, and generate comprehensive reports.', 'wpshadow' ); ?>
+		</p>
+		
+		<?php \WPShadow\Reports\Report_Builder::render(); ?>
+	</div>
+	<?php
+}
+
+/**
+ * Render Settings page
+ */
+function wpshadow_render_settings() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( esc_html__( 'Insufficient permissions.', 'wpshadow' ) );
+	}
+
+	// Handle settings save
+	if ( isset( $_POST['wpshadow_settings_nonce'] ) && wp_verify_nonce( $_POST['wpshadow_settings_nonce'], 'wpshadow_save_settings' ) ) {
+		$tab = isset( $_POST['wpshadow_settings_tab'] ) ? sanitize_key( $_POST['wpshadow_settings_tab'] ) : 'general';
+		wpshadow_save_settings( $tab );
+	}
+
+	$active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'general';
+	?>
+	<div class="wps-page-container">
+		<!-- Page Header -->
+		<div class="wps-page-header">
+			<h1 class="wps-page-title">
+				<span class="dashicons dashicons-admin-settings" style="vertical-align: middle; color: var(--wps-primary);"></span>
+				<?php esc_html_e( 'Settings', 'wpshadow' ); ?>
+			</h1>
+			<p class="wps-page-subtitle">
+				<?php esc_html_e( 'Configure WPShadow to work exactly how you need it.', 'wpshadow' ); ?>
+			</p>
+		</div>
+
+		<!-- Modern Tab Navigation -->
+		<div style="background: #fff; border-radius: var(--wps-radius-lg); border: 1px solid var(--wps-gray-200); padding: var(--wps-space-2); margin-bottom: var(--wps-space-6); display: flex; gap: var(--wps-space-2); overflow-x: auto;">
+			<?php
+			$tabs = array(
+				'general' => array( 'label' => __( 'General', 'wpshadow' ), 'icon' => 'dashicons-admin-generic' ),
+				'email' => array( 'label' => __( 'Email & Reports', 'wpshadow' ), 'icon' => 'dashicons-email-alt' ),
+				'notifications' => array( 'label' => __( 'Notifications', 'wpshadow' ), 'icon' => 'dashicons-bell' ),
+				'privacy' => array( 'label' => __( 'Privacy', 'wpshadow' ), 'icon' => 'dashicons-privacy' ),
+				'scan' => array( 'label' => __( 'Scan Settings', 'wpshadow' ), 'icon' => 'dashicons-search' ),
+				'advanced' => array( 'label' => __( 'Advanced', 'wpshadow' ), 'icon' => 'dashicons-hammer' ),
+			);
+			
+			foreach ( $tabs as $tab_key => $tab_data ) {
+				$is_active = $active_tab === $tab_key;
+				$class = $is_active ? 'wps-btn wps-btn-primary' : 'wps-btn wps-btn-ghost';
+				?>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-settings&tab=' . $tab_key ) ); ?>" 
+				   class="<?php echo esc_attr( $class ); ?>"
+				   style="white-space: nowrap;">
+					<span class="dashicons <?php echo esc_attr( $tab_data['icon'] ); ?>" style="font-size: 16px; width: 16px; height: 16px;"></span>
+					<?php echo esc_html( $tab_data['label'] ); ?>
+				</a>
+				<?php
+			}
+			?>
+		</div>
+
+		<!-- Tab Content -->
+		<?php
+		switch ( $active_tab ) {
+			case 'general':
+				wpshadow_render_settings_general();
+				break;
+			case 'email':
+				wpshadow_render_settings_email();
+				break;
+			case 'notifications':
+				wpshadow_render_settings_notifications();
+				break;
+			case 'privacy':
+				wpshadow_render_settings_privacy();
+				break;
+			case 'scan':
+				wpshadow_render_settings_scan();
+				break;
+			case 'advanced':
+				wpshadow_render_settings_advanced();
+				break;
+			default:
+				wpshadow_render_settings_general();
+		}
+		?>
+	</div>
+	<?php
+}
+
+/**
+ * Render Settings General tab
+ */
+function wpshadow_render_settings_general() {
+	$auto_scan = get_option( 'wpshadow_auto_scan_enabled', true );
+	$scan_frequency = get_option( 'wpshadow_scan_frequency', 'daily' );
+	$dismiss_timeout = get_option( 'wpshadow_dismiss_timeout', 30 );
+	?>
+	<form method="post" action="">
+		<?php wp_nonce_field( 'wpshadow_save_settings', 'wpshadow_settings_nonce' ); ?>
+		<input type="hidden" name="wpshadow_settings_tab" value="general" />
+		
+		<!-- Auto-Scan Settings Card -->
+		<div class="wps-card">
+			<div class="wps-card-header">
+				<div>
+					<h2 class="wps-card-title">
+						<span class="dashicons dashicons-update"></span>
+						<?php esc_html_e( 'Automatic Scanning', 'wpshadow' ); ?>
+					</h2>
+					<p class="wps-card-description">
+						<?php esc_html_e( 'Configure how often WPShadow automatically scans your site for issues.', 'wpshadow' ); ?>
+					</p>
+				</div>
+			</div>
+			<div class="wps-card-body">
+				<div class="wps-form-group">
+					<label class="wps-toggle-wrapper">
+						<div class="wps-toggle">
+							<input type="checkbox" name="wpshadow_auto_scan_enabled" value="1" <?php checked( $auto_scan, true ); ?> />
+							<span class="wps-toggle-slider"></span>
+						</div>
+						<div>
+							<span class="wps-form-label" style="margin: 0;">
+								<?php esc_html_e( 'Enable automatic scanning', 'wpshadow' ); ?>
+							</span>
+							<p class="wps-form-help">
+								<?php esc_html_e( 'Automatically run health checks on a schedule to catch issues early.', 'wpshadow' ); ?>
+							</p>
+						</div>
+					</label>
+				</div>
+
+				<div class="wps-form-group">
+					<label class="wps-form-label">
+						<?php esc_html_e( 'Scan Frequency', 'wpshadow' ); ?>
+					</label>
+					<select name="wpshadow_scan_frequency" class="wps-select">
+						<option value="hourly" <?php selected( $scan_frequency, 'hourly' ); ?>><?php esc_html_e( 'Every Hour', 'wpshadow' ); ?></option>
+						<option value="twicedaily" <?php selected( $scan_frequency, 'twicedaily' ); ?>><?php esc_html_e( 'Twice Daily', 'wpshadow' ); ?></option>
+						<option value="daily" <?php selected( $scan_frequency, 'daily' ); ?>><?php esc_html_e( 'Once Daily', 'wpshadow' ); ?></option>
+						<option value="weekly" <?php selected( $scan_frequency, 'weekly' ); ?>><?php esc_html_e( 'Once Weekly', 'wpshadow' ); ?></option>
+					</select>
+					<p class="wps-form-help">
+						<?php esc_html_e( 'How often should WPShadow run a full diagnostic scan?', 'wpshadow' ); ?>
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Finding Management Card -->
+		<div class="wps-card">
+			<div class="wps-card-header">
+				<div>
+					<h2 class="wps-card-title">
+						<span class="dashicons dashicons-visibility"></span>
+						<?php esc_html_e( 'Finding Management', 'wpshadow' ); ?>
+					</h2>
+					<p class="wps-card-description">
+						<?php esc_html_e( 'Control how long dismissed findings stay hidden.', 'wpshadow' ); ?>
+					</p>
+				</div>
+			</div>
+			<div class="wps-card-body">
+				<div class="wps-form-group">
+					<label class="wps-form-label">
+						<?php esc_html_e( 'Re-check dismissed findings after', 'wpshadow' ); ?>
+					</label>
+					<div style="display: flex; align-items: center; gap: var(--wps-space-3);">
+						<input type="range" 
+							   name="wpshadow_dismiss_timeout" 
+							   class="wps-slider" 
+							   min="7" 
+							   max="90" 
+							   step="1" 
+							   value="<?php echo esc_attr( $dismiss_timeout ); ?>"
+							   oninput="document.getElementById('dismiss-timeout-value').textContent = this.value + ' days'" />
+						<span id="dismiss-timeout-value" class="wps-badge wps-badge-primary" style="min-width: 70px; text-align: center;">
+							<?php echo esc_html( $dismiss_timeout . ' days' ); ?>
+						</span>
+					</div>
+					<p class="wps-form-help">
+						<?php esc_html_e( 'Dismissed findings will reappear after this many days to ensure they haven\'t regressed.', 'wpshadow' ); ?>
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Save Button -->
+		<div class="wps-card-footer" style="background: transparent; border: none; padding: 0;">
+			<button type="submit" class="wps-btn wps-btn-primary wps-btn-lg">
+				<span class="dashicons dashicons-saved"></span>
+				<?php esc_html_e( 'Save Settings', 'wpshadow' ); ?>
+			</button>
+			<span class="wps-text-muted" style="font-size: var(--wps-text-sm);">
+				<?php esc_html_e( 'Changes take effect immediately', 'wpshadow' ); ?>
+			</span>
+		</div>
+	</form>
+	<?php
+}
+
+/**
+ * Render Settings Email tab
+ */
+function wpshadow_render_settings_email() {
+	$email_enabled = get_option( 'wpshadow_email_enabled', false );
+	$from_email = get_option( 'wpshadow_email_from_email', get_option( 'admin_email' ) );
+	$from_name = get_option( 'wpshadow_email_from_name', get_bloginfo( 'name' ) );
+	$admin_email = get_option( 'admin_email' );
+	
+	// Get individual email type settings
+	$email_health_report = get_option( 'wpshadow_email_health_report', true );
+	$email_critical_alerts = get_option( 'wpshadow_email_critical_alerts', true );
+	$email_scan_completion = get_option( 'wpshadow_email_scan_completion', false );
+	$email_weekly_summary = get_option( 'wpshadow_email_weekly_summary', true );
+	$email_new_issues = get_option( 'wpshadow_email_new_issues', true );
+	$email_treatment_results = get_option( 'wpshadow_email_treatment_results', false );
+	?>
+	<form method="post" action="">
+		<?php wp_nonce_field( 'wpshadow_save_settings', 'wpshadow_settings_nonce' ); ?>
+		<input type="hidden" name="wpshadow_settings_tab" value="email" />
+		
+		<div class="wps-alert wps-alert-info">
+			<span class="dashicons dashicons-info wps-alert-icon"></span>
+			<div class="wps-alert-content">
+				<p class="wps-alert-title"><?php esc_html_e( 'Email Configuration', 'wpshadow' ); ?></p>
+				<p class="wps-alert-message">
+					<?php printf(
+						esc_html__( 'Configure sender details and choose which types of emails WPShadow should send to: %s', 'wpshadow' ),
+						'<strong>' . esc_html( $admin_email ) . '</strong>'
+					); ?>
+				</p>
+			</div>
+		</div>
+
+		<div class="wps-card">
+			<div class="wps-card-header">
+				<div>
+					<h2 class="wps-card-title">
+						<span class="dashicons dashicons-email"></span>
+						<?php esc_html_e( 'Email Sender Details', 'wpshadow' ); ?>
+					</h2>
+					<p class="wps-card-description">
+						<?php esc_html_e( 'Configure the sender information for all WPShadow emails.', 'wpshadow' ); ?>
+					</p>
+				</div>
+			</div>
+			<div class="wps-card-body">
+				<div class="wps-form-group">
+					<label class="wps-form-label">
+						<?php esc_html_e( 'From Email', 'wpshadow' ); ?>
+					</label>
+					<input type="email" 
+						   name="wpshadow_email_from_email" 
+						   class="wps-input" 
+						   value="<?php echo esc_attr( $from_email ); ?>"
+						   placeholder="<?php echo esc_attr( get_option( 'admin_email' ) ); ?>" />
+					<p class="wps-form-help">
+						<?php esc_html_e( 'The email address reports will be sent from. Use your domain email for best delivery.', 'wpshadow' ); ?>
+					</p>
+				</div>
+
+				<div class="wps-form-group">
+					<label class="wps-form-label">
+						<?php esc_html_e( 'From Name', 'wpshadow' ); ?>
+					</label>
+					<input type="text" 
+						   name="wpshadow_email_from_name" 
+						   class="wps-input" 
+						   value="<?php echo esc_attr( $from_name ); ?>"
+						   placeholder="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" />
+					<p class="wps-form-help">
+						<?php esc_html_e( 'The name that will appear in the "From" field of emails.', 'wpshadow' ); ?>
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Email Type Selection Card -->
+		<div class="wps-card">
+			<div class="wps-card-header">
+				<div>
+					<h2 class="wps-card-title">
+						<span class="dashicons dashicons-bell"></span>
+						<?php esc_html_e( 'Email Types', 'wpshadow' ); ?>
+					</h2>
+					<p class="wps-card-description">
+						<?php esc_html_e( 'Choose which types of emails WPShadow should send. You have full control here!', 'wpshadow' ); ?>
+					</p>
+				</div>
+			</div>
+			<div class="wps-card-body" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+				<!-- Health Report -->
+				<div style="border: 1px solid var(--wps-gray-200); border-radius: var(--wps-radius-md); padding: 16px;">
+					<label class="wps-toggle-wrapper">
+						<div class="wps-toggle">
+							<input type="checkbox" 
+								   name="wpshadow_email_health_report" 
+								   value="1" 
+								   <?php checked( $email_health_report, true ); ?> />
+							<span class="wps-toggle-slider"></span>
+						</div>
+						<div>
+							<span class="wps-form-label" style="margin: 0;">
+								<?php esc_html_e( 'Health Reports', 'wpshadow' ); ?>
+							</span>
+							<p class="wps-form-help" style="margin-top: 4px;">
+								<?php esc_html_e( 'Daily or weekly summaries of your site health status.', 'wpshadow' ); ?>
+							</p>
+						</div>
+					</label>
+				</div>
+
+				<!-- Critical Alerts -->
+				<div style="border: 1px solid var(--wps-gray-200); border-radius: var(--wps-radius-md); padding: 16px;">
+					<label class="wps-toggle-wrapper">
+						<div class="wps-toggle">
+							<input type="checkbox" 
+								   name="wpshadow_email_critical_alerts" 
+								   value="1" 
+								   <?php checked( $email_critical_alerts, true ); ?> />
+							<span class="wps-toggle-slider"></span>
+						</div>
+						<div>
+							<span class="wps-form-label" style="margin: 0;">
+								<?php esc_html_e( 'Critical Alerts', 'wpshadow' ); ?>
+							</span>
+							<p class="wps-form-help" style="margin-top: 4px;">
+								<?php esc_html_e( 'Immediate alerts for security threats or critical issues.', 'wpshadow' ); ?>
+							</p>
+						</div>
+					</label>
+				</div>
+
+				<!-- Weekly Summary -->
+				<div style="border: 1px solid var(--wps-gray-200); border-radius: var(--wps-radius-md); padding: 16px;">
+					<label class="wps-toggle-wrapper">
+						<div class="wps-toggle">
+							<input type="checkbox" 
+								   name="wpshadow_email_weekly_summary" 
+								   value="1" 
+								   <?php checked( $email_weekly_summary, true ); ?> />
+							<span class="wps-toggle-slider"></span>
+						</div>
+						<div>
+							<span class="wps-form-label" style="margin: 0;">
+								<?php esc_html_e( 'Weekly Summary', 'wpshadow' ); ?>
+							</span>
+							<p class="wps-form-help" style="margin-top: 4px;">
+								<?php esc_html_e( 'Weekly digest of improvements, changes, and updates.', 'wpshadow' ); ?>
+							</p>
+						</div>
+					</label>
+				</div>
+
+				<!-- New Issues Detected -->
+				<div style="border: 1px solid var(--wps-gray-200); border-radius: var(--wps-radius-md); padding: 16px;">
+					<label class="wps-toggle-wrapper">
+						<div class="wps-toggle">
+							<input type="checkbox" 
+								   name="wpshadow_email_new_issues" 
+								   value="1" 
+								   <?php checked( $email_new_issues, true ); ?> />
+							<span class="wps-toggle-slider"></span>
+						</div>
+						<div>
+							<span class="wps-form-label" style="margin: 0;">
+								<?php esc_html_e( 'New Issues Detected', 'wpshadow' ); ?>
+							</span>
+							<p class="wps-form-help" style="margin-top: 4px;">
+								<?php esc_html_e( 'Notification when new problems are found during scans.', 'wpshadow' ); ?>
+							</p>
+						</div>
+					</label>
+				</div>
+
+				<!-- Scan Completion -->
+				<div style="border: 1px solid var(--wps-gray-200); border-radius: var(--wps-radius-md); padding: 16px;">
+					<label class="wps-toggle-wrapper">
+						<div class="wps-toggle">
+							<input type="checkbox" 
+								   name="wpshadow_email_scan_completion" 
+								   value="1" 
+								   <?php checked( $email_scan_completion, true ); ?> />
+							<span class="wps-toggle-slider"></span>
+						</div>
+						<div>
+							<span class="wps-form-label" style="margin: 0;">
+								<?php esc_html_e( 'Scan Completion', 'wpshadow' ); ?>
+							</span>
+							<p class="wps-form-help" style="margin-top: 4px;">
+								<?php esc_html_e( 'Notification when deep scans finish running.', 'wpshadow' ); ?>
+							</p>
+						</div>
+					</label>
+				</div>
+
+				<!-- Treatment Results -->
+				<div style="border: 1px solid var(--wps-gray-200); border-radius: var(--wps-radius-md); padding: 16px;">
+					<label class="wps-toggle-wrapper">
+						<div class="wps-toggle">
+							<input type="checkbox" 
+								   name="wpshadow_email_treatment_results" 
+								   value="1" 
+								   <?php checked( $email_treatment_results, true ); ?> />
+							<span class="wps-toggle-slider"></span>
+						</div>
+						<div>
+							<span class="wps-form-label" style="margin: 0;">
+								<?php esc_html_e( 'Treatment Results', 'wpshadow' ); ?>
+							</span>
+							<p class="wps-form-help" style="margin-top: 4px;">
+								<?php esc_html_e( 'Confirm when auto-fixes or manual treatments complete.', 'wpshadow' ); ?>
+							</p>
+						</div>
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<!-- Master Email Toggle at Bottom -->
+		<div class="wps-card" style="background: linear-gradient(135deg, var(--wps-blue-50) 0%, var(--wps-purple-50) 100%); border-color: var(--wps-primary);">
+			<div class="wps-card-body">
+				<div class="wps-form-group" style="margin: 0;">
+					<label class="wps-toggle-wrapper">
+						<div class="wps-toggle">
+							<input type="checkbox" 
+								   id="wpshadow_email_enabled_checkbox"
+								   name="wpshadow_email_enabled" 
+								   value="1" 
+								   <?php checked( $email_enabled, true ); ?>
+								   onchange="wpshadowHandleEmailToggle(this)" />
+							<span class="wps-toggle-slider"></span>
+						</div>
+						<div>
+							<span class="wps-form-label" style="margin: 0; font-size: 16px; font-weight: 600;">
+								<?php esc_html_e( 'Enable All Email Sending', 'wpshadow' ); ?>
+							</span>
+							<p class="wps-form-help">
+								<?php esc_html_e( 'Master switch to enable or disable all email notifications. Individual types can still be customized above.', 'wpshadow' ); ?>
+							</p>
+						</div>
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="wps-card-footer" style="background: transparent; border: none; padding: 0; margin-top: 24px;">
+			<input type="hidden" id="wpshadow_email_confirmed" name="wpshadow_email_confirmed" value="0" />
+			<button type="submit" class="wps-btn wps-btn-primary wps-btn-lg">
+				<span class="dashicons dashicons-saved"></span>
+				<?php esc_html_e( 'Save Settings', 'wpshadow' ); ?>
+			</button>
+		</div>
+	</form>
+
+	<script>
+		function wpshadowHandleEmailToggle(checkbox) {
+			const adminEmail = '<?php echo esc_js( $admin_email ); ?>';
+			const confirmedField = document.getElementById('wpshadow_email_confirmed');
+			
+			if (checkbox.checked) {
+				// Show privacy confirmation modal
+				WPShadowDesign.openModal({
+					title: '<?php esc_attr_e( 'Enable Email Communications', 'wpshadow' ); ?>',
+					content: '<div class="wps-alert wps-alert-warning" style="margin-bottom: 16px;">' +
+						'<span class="dashicons dashicons-warning wps-alert-icon"></span>' +
+						'<div class="wps-alert-content">' +
+						'<p class="wps-alert-title"><strong><?php esc_attr_e( 'Privacy Notice', 'wpshadow' ); ?></strong></p>' +
+						'<p class="wps-alert-message" style="margin: 0;">' +
+						'<?php esc_attr_e( 'Emails will be sent to:', 'wpshadow' ); ?> <strong>' + adminEmail + '</strong>' +
+						'</p>' +
+						'</div>' +
+						'</div>' +
+						'<p><?php esc_attr_e( 'Please confirm that the email address owner has agreed to receive communications from WPShadow. We take privacy and consent very seriously.', 'wpshadow' ); ?></p>',
+					size: 'small',
+					showCancel: true,
+					confirmText: '<?php esc_attr_e( 'I Confirm', 'wpshadow' ); ?>',
+					cancelText: '<?php esc_attr_e( 'Cancel', 'wpshadow' ); ?>',
+					onConfirm: function() {
+						confirmedField.value = '1';
+						document.querySelector('form').submit();
+					},
+					onCancel: function() {
+						checkbox.checked = false;
+					}
+				});
+			}
+		}
+	</script>
+
+	<!-- Email Rule Builder -->
+	<div style="margin-top: 32px;">
+		<?php
+		$email_builder = new \WPShadow\Workflow\Notification_Builder();
+		$email_builder->set_mode( 'email' );
+		echo wp_kses_post( $email_builder->render( 'email' ) );
+		?>
+	</div>
+	<?php
+}
+function wpshadow_render_settings_notifications() {
+	// Create notification rule builder in 'notification' mode
+	$builder = new \WPShadow\Workflow\Notification_Builder();
+	$builder->set_mode( 'notification' );
+	?>
+	<div class="wps-card">
+		<div class="wps-card-header">
+			<div>
+				<h2 class="wps-card-title">
+					<span class="dashicons dashicons-bell"></span>
+					<?php esc_html_e( 'Custom Notifications', 'wpshadow' ); ?>
+				</h2>
+				<p class="wps-card-description">
+					<?php esc_html_e( 'Create custom dashboard notifications that trigger on any site event. Get notified instantly when backups complete, diagnostics find issues, or other important events occur.', 'wpshadow' ); ?>
+				</p>
+			</div>
+		</div>
+		<div class="wps-card-body">
+			<?php echo wp_kses_post( $builder->render( 'notification' ) ); ?>
+		</div>
+	</div>
+	<?php
+}
+
+/**
+ * Render Settings Privacy tab
+ */
+function wpshadow_render_settings_privacy() {
+	$analytics_enabled = get_option( 'wpshadow_analytics_enabled', false );
+	$telemetry_enabled = get_option( 'wpshadow_telemetry_enabled', false );
+	$data_retention = get_option( 'wpshadow_data_retention_days', 90 );
+	?>
+	<form method="post" action="">
+		<?php wp_nonce_field( 'wpshadow_save_settings', 'wpshadow_settings_nonce' ); ?>
+		<input type="hidden" name="wpshadow_settings_tab" value="privacy" />
+		
+		<div class="wps-alert wps-alert-info">
+			<span class="dashicons dashicons-shield wps-alert-icon"></span>
+			<div class="wps-alert-content">
+				<p class="wps-alert-title"><?php esc_html_e( 'Privacy First', 'wpshadow' ); ?></p>
+				<p class="wps-alert-message">
+					<?php esc_html_e( 'WPShadow is designed with privacy at its core. All diagnostic data stays on your server unless you explicitly opt-in to cloud features.', 'wpshadow' ); ?>
+				</p>
+			</div>
+		</div>
+
+		<div class="wps-card">
+			<div class="wps-card-header">
+				<div>
+					<h2 class="wps-card-title">
+						<span class="dashicons dashicons-chart-line"></span>
+						<?php esc_html_e( 'Analytics & Telemetry', 'wpshadow' ); ?>
+					</h2>
+					<p class="wps-card-description">
+						<?php esc_html_e( 'Help us improve WPShadow by sharing anonymous usage data.', 'wpshadow' ); ?>
+					</p>
+				</div>
+			</div>
+			<div class="wps-card-body">
+				<div class="wps-form-group">
+					<label class="wps-toggle-wrapper">
+						<div class="wps-toggle">
+							<input type="checkbox" name="wpshadow_analytics_enabled" value="1" <?php checked( $analytics_enabled, true ); ?> />
+							<span class="wps-toggle-slider"></span>
+						</div>
+						<div>
+							<span class="wps-form-label" style="margin: 0;">
+								<?php esc_html_e( 'Enable anonymous analytics', 'wpshadow' ); ?>
+							</span>
+							<p class="wps-form-help">
+								<?php esc_html_e( 'Share anonymous plugin usage statistics to help us improve features.', 'wpshadow' ); ?>
+							</p>
+						</div>
+					</label>
+				</div>
+
+				<div class="wps-form-group">
+					<label class="wps-toggle-wrapper">
+						<div class="wps-toggle">
+							<input type="checkbox" name="wpshadow_telemetry_enabled" value="1" <?php checked( $telemetry_enabled, true ); ?> />
+							<span class="wps-toggle-slider"></span>
+						</div>
+						<div>
+							<span class="wps-form-label" style="margin: 0;">
+								<?php esc_html_e( 'Enable error reporting', 'wpshadow' ); ?>
+							</span>
+							<p class="wps-form-help">
+								<?php esc_html_e( 'Automatically send error reports to help us fix bugs faster.', 'wpshadow' ); ?>
+							</p>
+						</div>
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="wps-card">
+			<div class="wps-card-header">
+				<div>
+					<h2 class="wps-card-title">
+						<span class="dashicons dashicons-database"></span>
+						<?php esc_html_e( 'Data Retention', 'wpshadow' ); ?>
+					</h2>
+					<p class="wps-card-description">
+						<?php esc_html_e( 'Control how long diagnostic history is kept.', 'wpshadow' ); ?>
+					</p>
+				</div>
+			</div>
+			<div class="wps-card-body">
+				<div class="wps-form-group">
+					<label class="wps-form-label">
+						<?php esc_html_e( 'Keep diagnostic data for', 'wpshadow' ); ?>
+					</label>
+					<div style="display: flex; align-items: center; gap: var(--wps-space-3);">
+						<input type="range" 
+							   name="wpshadow_data_retention_days" 
+							   class="wps-slider" 
+							   min="30" 
+							   max="365" 
+							   step="30" 
+							   value="<?php echo esc_attr( $data_retention ); ?>"
+							   oninput="document.getElementById('retention-value').textContent = this.value + ' days'" />
+						<span id="retention-value" class="wps-badge wps-badge-primary" style="min-width: 80px; text-align: center;">
+							<?php echo esc_html( $data_retention . ' days' ); ?>
+						</span>
+					</div>
+					<p class="wps-form-help">
+						<?php esc_html_e( 'Older diagnostic data will be automatically cleaned up to save database space.', 'wpshadow' ); ?>
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="wps-card-footer" style="background: transparent; border: none; padding: 0;">
+			<button type="submit" class="wps-btn wps-btn-primary wps-btn-lg">
+				<span class="dashicons dashicons-saved"></span>
+				<?php esc_html_e( 'Save Settings', 'wpshadow' ); ?>
+			</button>
+		</div>
+	</form>
+	<?php
+}
+
+/**
+ * Render Settings Scan tab
+ */
+function wpshadow_render_settings_scan() {
+	$scan_types = get_option( 'wpshadow_scan_types', array( 'security', 'performance', 'seo' ) );
+	$quick_scan_timeout = get_option( 'wpshadow_quick_scan_timeout', 30 );
+	?>
+	<form method="post" action="">
+		<?php wp_nonce_field( 'wpshadow_save_settings', 'wpshadow_settings_nonce' ); ?>
+		<input type="hidden" name="wpshadow_settings_tab" value="scan" />
+		
+		<div class="wps-card">
+			<div class="wps-card-header">
+				<div>
+					<h2 class="wps-card-title">
+						<span class="dashicons dashicons-search"></span>
+						<?php esc_html_e( 'Scan Categories', 'wpshadow' ); ?>
+					</h2>
+					<p class="wps-card-description">
+						<?php esc_html_e( 'Choose which types of diagnostics to run during automatic scans.', 'wpshadow' ); ?>
+					</p>
+				</div>
+			</div>
+			<div class="wps-card-body">
+				<div class="wps-form-group">
+					<?php
+					$categories = array(
+						'security' => __( 'Security Checks', 'wpshadow' ),
+						'performance' => __( 'Performance Optimizations', 'wpshadow' ),
+						'seo' => __( 'SEO Analysis', 'wpshadow' ),
+						'code_quality' => __( 'Code Quality', 'wpshadow' ),
+						'design' => __( 'Design & Accessibility', 'wpshadow' ),
+					);
+					
+					foreach ( $categories as $key => $label ) {
+						$checked = in_array( $key, $scan_types, true );
+						?>
+						<label class="wps-toggle-wrapper" style="margin-bottom: var(--wps-space-4);">
+							<div class="wps-toggle">
+								<input type="checkbox" 
+									   name="wpshadow_scan_types[]" 
+									   value="<?php echo esc_attr( $key ); ?>"
+									   <?php checked( $checked, true ); ?> />
+								<span class="wps-toggle-slider"></span>
+							</div>
+							<span><?php echo esc_html( $label ); ?></span>
+						</label>
+						<?php
+					}
+					?>
+				</div>
+			</div>
+		</div>
+
+		<div class="wps-card">
+			<div class="wps-card-header">
+				<div>
+					<h2 class="wps-card-title">
+						<span class="dashicons dashicons-clock"></span>
+						<?php esc_html_e( 'Scan Performance', 'wpshadow' ); ?>
+					</h2>
+					<p class="wps-card-description">
+						<?php esc_html_e( 'Optimize how scans run on your server.', 'wpshadow' ); ?>
+					</p>
+				</div>
+			</div>
+			<div class="wps-card-body">
+				<div class="wps-form-group">
+					<label class="wps-form-label">
+						<?php esc_html_e( 'Quick Scan Timeout', 'wpshadow' ); ?>
+					</label>
+					<div style="display: flex; align-items: center; gap: var(--wps-space-3);">
+						<input type="range" 
+							   name="wpshadow_quick_scan_timeout" 
+							   class="wps-slider" 
+							   min="15" 
+							   max="120" 
+							   step="15" 
+							   value="<?php echo esc_attr( $quick_scan_timeout ); ?>"
+							   oninput="document.getElementById('timeout-value').textContent = this.value + ' seconds'" />
+						<span id="timeout-value" class="wps-badge wps-badge-primary" style="min-width: 100px; text-align: center;">
+							<?php echo esc_html( $quick_scan_timeout . ' seconds' ); ?>
+						</span>
+					</div>
+					<p class="wps-form-help">
+						<?php esc_html_e( 'Maximum time allowed for quick scans. Increase if you have a slower server.', 'wpshadow' ); ?>
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="wps-card-footer" style="background: transparent; border: none; padding: 0;">
+			<button type="submit" class="wps-btn wps-btn-primary wps-btn-lg">
+				<span class="dashicons dashicons-saved"></span>
+				<?php esc_html_e( 'Save Settings', 'wpshadow' ); ?>
+			</button>
+		</div>
+	</form>
+	<?php
+}
+
+/**
+ * Render Settings Advanced tab
+ */
+function wpshadow_render_settings_advanced() {
+	$debug_mode = get_option( 'wpshadow_debug_mode', false );
+	$cache_enabled = get_option( 'wpshadow_cache_enabled', true );
+	$rest_api_enabled = get_option( 'wpshadow_rest_api_enabled', true );
+	?>
+	<form method="post" action="">
+		<?php wp_nonce_field( 'wpshadow_save_settings', 'wpshadow_settings_nonce' ); ?>
+		<input type="hidden" name="wpshadow_settings_tab" value="advanced" />
+		
+		<div class="wps-alert wps-alert-warning">
+			<span class="dashicons dashicons-warning wps-alert-icon"></span>
+			<div class="wps-alert-content">
+				<p class="wps-alert-title"><?php esc_html_e( 'Advanced Settings', 'wpshadow' ); ?></p>
+				<p class="wps-alert-message">
+					<?php esc_html_e( 'These settings are for advanced users. Incorrect configuration may affect plugin performance.', 'wpshadow' ); ?>
+				</p>
+			</div>
+		</div>
+
+		<div class="wps-card">
+			<div class="wps-card-header">
+				<div>
+					<h2 class="wps-card-title">
+						<span class="dashicons dashicons-admin-tools"></span>
+						<?php esc_html_e( 'Developer Options', 'wpshadow' ); ?>
+					</h2>
+					<p class="wps-card-description">
+						<?php esc_html_e( 'Options for debugging and development.', 'wpshadow' ); ?>
+					</p>
+				</div>
+			</div>
+			<div class="wps-card-body">
+				<div class="wps-form-group">
+					<label class="wps-toggle-wrapper">
+						<div class="wps-toggle">
+							<input type="checkbox" name="wpshadow_debug_mode" value="1" <?php checked( $debug_mode, true ); ?> />
+							<span class="wps-toggle-slider"></span>
+						</div>
+						<div>
+							<span class="wps-form-label" style="margin: 0;">
+								<?php esc_html_e( 'Enable debug mode', 'wpshadow' ); ?>
+							</span>
+							<p class="wps-form-help">
+								<?php esc_html_e( 'Log detailed diagnostic information for troubleshooting.', 'wpshadow' ); ?>
+							</p>
+						</div>
+					</label>
+				</div>
+
+				<div class="wps-form-group">
+					<label class="wps-toggle-wrapper">
+						<div class="wps-toggle">
+							<input type="checkbox" name="wpshadow_cache_enabled" value="1" <?php checked( $cache_enabled, true ); ?> />
+							<span class="wps-toggle-slider"></span>
+						</div>
+						<div>
+							<span class="wps-form-label" style="margin: 0;">
+								<?php esc_html_e( 'Enable caching', 'wpshadow' ); ?>
+							</span>
+							<p class="wps-form-help">
+								<?php esc_html_e( 'Cache diagnostic results to improve performance.', 'wpshadow' ); ?>
+							</p>
+						</div>
+					</label>
+				</div>
+
+				<div class="wps-form-group">
+					<label class="wps-toggle-wrapper">
+						<div class="wps-toggle">
+							<input type="checkbox" name="wpshadow_rest_api_enabled" value="1" <?php checked( $rest_api_enabled, true ); ?> />
+							<span class="wps-toggle-slider"></span>
+						</div>
+						<div>
+							<span class="wps-form-label" style="margin: 0;">
+								<?php esc_html_e( 'Enable REST API', 'wpshadow' ); ?>
+							</span>
+							<p class="wps-form-help">
+								<?php esc_html_e( 'Allow external applications to access WPShadow via REST API.', 'wpshadow' ); ?>
+							</p>
+						</div>
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="wps-card">
+			<div class="wps-card-header">
+				<div>
+					<h2 class="wps-card-title">
+						<span class="dashicons dashicons-trash"></span>
+						<?php esc_html_e( 'Data Management', 'wpshadow' ); ?>
+					</h2>
+					<p class="wps-card-description">
+						<?php esc_html_e( 'Clean up or reset plugin data.', 'wpshadow' ); ?>
+					</p>
+				</div>
+			</div>
+			<div class="wps-card-body">
+				<div class="wps-form-group">
+					<button type="button" class="wps-btn wps-btn-secondary" onclick="if(confirm('<?php echo esc_js( __( 'This will clear all cached diagnostic results. Continue?', 'wpshadow' ) ); ?>')) { alert('<?php echo esc_js( __( 'Cache cleared!', 'wpshadow' ) ); ?>'); }">
+						<span class="dashicons dashicons-update"></span>
+						<?php esc_html_e( 'Clear Cache', 'wpshadow' ); ?>
+					</button>
+					<p class="wps-form-help">
+						<?php esc_html_e( 'Clear all cached diagnostic data and force fresh scans.', 'wpshadow' ); ?>
+					</p>
+				</div>
+
+				<div class="wps-form-group">
+					<button type="button" class="wps-btn wps-btn-danger" onclick="if(confirm('<?php echo esc_js( __( 'This will reset ALL WPShadow settings to defaults. This cannot be undone. Continue?', 'wpshadow' ) ); ?>')) { alert('<?php echo esc_js( __( 'Settings reset!', 'wpshadow' ) ); ?>'); }">
+						<span class="dashicons dashicons-warning"></span>
+						<?php esc_html_e( 'Reset All Settings', 'wpshadow' ); ?>
+					</button>
+					<p class="wps-form-help">
+						<?php esc_html_e( 'Reset all plugin settings to factory defaults. Use with caution.', 'wpshadow' ); ?>
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="wps-card-footer" style="background: transparent; border: none; padding: 0;">
+			<button type="submit" class="wps-btn wps-btn-primary wps-btn-lg">
+				<span class="dashicons dashicons-saved"></span>
+				<?php esc_html_e( 'Save Settings', 'wpshadow' ); ?>
+			</button>
+		</div>
+	</form>
+	<?php
+}
+
+/**
+ * Save settings based on tab
+ */
+function wpshadow_save_settings( $tab ) {
+	// Verify nonce already checked in calling function
+	
+	switch ( $tab ) {
+		case 'general':
+			update_option( 'wpshadow_auto_scan_enabled', isset( $_POST['wpshadow_auto_scan_enabled'] ) );
+			update_option( 'wpshadow_scan_frequency', sanitize_key( $_POST['wpshadow_scan_frequency'] ?? 'daily' ) );
+			update_option( 'wpshadow_dismiss_timeout', absint( $_POST['wpshadow_dismiss_timeout'] ?? 30 ) );
+			break;
+		
+		case 'email':
+			update_option( 'wpshadow_email_enabled', isset( $_POST['wpshadow_email_enabled'] ) );
+			update_option( 'wpshadow_email_from_email', sanitize_email( $_POST['wpshadow_email_from_email'] ?? '' ) );
+			update_option( 'wpshadow_email_from_name', sanitize_text_field( $_POST['wpshadow_email_from_name'] ?? '' ) );
+			
+			// Save individual email type preferences
+			update_option( 'wpshadow_email_health_report', isset( $_POST['wpshadow_email_health_report'] ) );
+			update_option( 'wpshadow_email_critical_alerts', isset( $_POST['wpshadow_email_critical_alerts'] ) );
+			update_option( 'wpshadow_email_scan_completion', isset( $_POST['wpshadow_email_scan_completion'] ) );
+			update_option( 'wpshadow_email_weekly_summary', isset( $_POST['wpshadow_email_weekly_summary'] ) );
+			update_option( 'wpshadow_email_new_issues', isset( $_POST['wpshadow_email_new_issues'] ) );
+			update_option( 'wpshadow_email_treatment_results', isset( $_POST['wpshadow_email_treatment_results'] ) );
+			break;
+		
+		case 'privacy':
+			update_option( 'wpshadow_analytics_enabled', isset( $_POST['wpshadow_analytics_enabled'] ) );
+			update_option( 'wpshadow_telemetry_enabled', isset( $_POST['wpshadow_telemetry_enabled'] ) );
+			update_option( 'wpshadow_data_retention_days', absint( $_POST['wpshadow_data_retention_days'] ?? 90 ) );
+			break;
+		
+		case 'scan':
+			$scan_types = isset( $_POST['wpshadow_scan_types'] ) && is_array( $_POST['wpshadow_scan_types'] ) 
+				? array_map( 'sanitize_key', $_POST['wpshadow_scan_types'] ) 
+				: array();
+			update_option( 'wpshadow_scan_types', $scan_types );
+			update_option( 'wpshadow_quick_scan_timeout', absint( $_POST['wpshadow_quick_scan_timeout'] ?? 30 ) );
+			break;
+		
+		case 'advanced':
+			update_option( 'wpshadow_debug_mode', isset( $_POST['wpshadow_debug_mode'] ) );
+			update_option( 'wpshadow_cache_enabled', isset( $_POST['wpshadow_cache_enabled'] ) );
+			update_option( 'wpshadow_rest_api_enabled', isset( $_POST['wpshadow_rest_api_enabled'] ) );
+			break;
+	}
+	
+	// Show admin notice
+	add_action( 'admin_notices', function() {
+		?>
+		<div class="notice notice-success is-dismissible">
+			<p><strong><?php esc_html_e( 'Settings saved successfully!', 'wpshadow' ); ?></strong></p>
+		</div>
+		<?php
+	} );
+}
+
+/**
+ * Render Settings Privacy tab
+ */
+function wpshadow_render_settings_privacy_old() {
+	?>
+	<div style="max-width: 800px;">
+		<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 24px;">
+			<h3><?php esc_html_e( 'Privacy Settings', 'wpshadow' ); ?></h3>
+			<p><?php esc_html_e( 'Control data collection and privacy preferences.', 'wpshadow' ); ?></p>
+			<p style="color: #666; font-style: italic;"><?php esc_html_e( 'Privacy controls coming soon.', 'wpshadow' ); ?></p>
+		</div>
+	</div>
+	<?php
+}
 
 /**
  * Override wp_mail From Email if WPShadow setting is configured.

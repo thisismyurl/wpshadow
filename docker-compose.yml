@@ -17,9 +17,9 @@ services:
     volumes:
       - wp_site_data:/var/www/html
       - ./:/var/www/html/wp-content/plugins/wpshadow
+      - ./wp-content/mu-plugins:/var/www/html/wp-content/mu-plugins
       - ../theme-wpshadow:/var/www/html/wp-content/themes/theme-wpshadow
       - ../wpshadow-site-plugin:/var/www/html/wp-content/plugins/wpshadow-site
-      - ./wp-config-extra.php:/var/www/html/wp-config-extra.php
     depends_on:
       db-site:
         condition: service_healthy
@@ -60,8 +60,8 @@ services:
     volumes:
       - wp_test_data:/var/www/html
       - ./:/var/www/html/wp-content/plugins/wpshadow
+      - ./wp-content/mu-plugins:/var/www/html/wp-content/mu-plugins
       - ../wpshadow-site-plugin:/var/www/html/wp-content/plugins/wpshadow-site
-      - ./wp-config-extra.php:/var/www/html/wp-config-extra.php
     depends_on:
       db-test:
         condition: service_healthy

@@ -1,0 +1,46 @@
+<?php
+declare(strict_types=1);
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+/**
+ * Diagnostic: Cron-Triggered Database Load Spikes (DB-312)
+ *
+ * Identifies scheduled tasks that spike DB load.
+ * Philosophy: Show value (#9) and educate (#5) with clear, actionable insights.
+ *
+ * @package WPShadow
+ * @subpackage Diagnostics
+ * @since 1.2601.2200
+ */
+class Diagnostic_CronDbLoadSpikes extends Diagnostic_Base {
+    /**
+     * Run the diagnostic check
+     *
+     * @return array|null Array with finding details or null if no issue found
+     */
+    public static function check(): ?array {
+		$spike_events = get_transient('wpshadow_cron_db_spike_events');
+		$spike_events = is_array($spike_events) ? $spike_events : array();
+		$spike_count = count($spike_events);
+
+		if ($spike_count > 0) {
+			$latest = end($spike_events);
+			return array(
+				'id' => 'cron-db-load-spikes',
+				'title' => sprintf(__('Cron jobs spiking DB load (%d recent)', 'wpshadow'), $spike_count),
+				'description' => __('Scheduled tasks are causing database load spikes. Stagger heavy jobs, reduce query volume, or offload to external cron.', 'wpshadow'),
+				'severity' => 'medium',
+				'category' => 'system',
+				'kb_link' => 'https://wpshadow.com/kb/cron-db-load-spikes/',
+				'training_link' => 'https://wpshadow.com/training/cron-optimization/',
+				'auto_fixable' => false,
+				'threat_level' => 50,
+				'latest_spike' => $latest,
+			);
+		}
+
+		return null;
+	}
+    }

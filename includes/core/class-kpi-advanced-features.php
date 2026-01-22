@@ -292,19 +292,19 @@ class KPI_Advanced_Features {
 		document.getElementById('wpshadow-send-report')?.addEventListener('click', function() {
 			const btn = this;
 			btn.disabled = true;
-			btn.textContent = '<?php esc_js_e( 'Sending...', 'wpshadow' ); ?>';
+			btn.textContent = '<?php echo esc_js( __( 'Sending...', 'wpshadow' ) ); ?>';
 			
 			wp.ajax.post('wpshadow_send_executive_report', {
 				nonce: wpshadow.nonce,
 				email: '<?php echo esc_js( get_option( 'admin_email', '' ) ); ?>'
 			}).done(function() {
-				btn.textContent = '<?php esc_js_e( '✓ Sent!', 'wpshadow' ); ?>';
+				btn.textContent = '<?php echo esc_js( __( '✓ Sent!', 'wpshadow' ) ); ?>';
 				setTimeout(() => {
 					btn.disabled = false;
-					btn.textContent = '<?php esc_js_e( 'Send Report Now', 'wpshadow' ); ?>';
+					btn.textContent = '<?php echo esc_js( __( 'Send Report Now', 'wpshadow' ) ); ?>';
 				}, 3000);
 			}).fail(function() {
-				btn.textContent = '<?php esc_js_e( '✗ Error', 'wpshadow' ); ?>';
+				btn.textContent = '<?php echo esc_js( __( '✗ Error', 'wpshadow' ) ); ?>';
 				btn.disabled = false;
 			});
 		});

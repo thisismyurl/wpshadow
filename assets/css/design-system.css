@@ -1,0 +1,915 @@
+/**
+ * WPShadow Design System
+ * Version: 2.0 (2026 Redesign)
+ * 
+ * Philosophy: Inspire confidence (#8), Talk-worthy (#11)
+ * Reference: GitHub, Google Workspace, Office 365, Linear, Notion
+ * 
+ * This design system provides consistent, modern UI components across WPShadow.
+ * All components follow 2026 design principles: clean, elegant, focused, professional.
+ * 
+ * @package WPShadow
+ */
+
+/* ============================================================================
+   1. CSS VARIABLES - Design Tokens
+   ============================================================================ */
+
+:root {
+    /* Primary Brand Colors */
+    --wps-primary: #123456;          /* WPShadow branded color */
+    --wps-primary-hover: #0d1f2d;
+    --wps-primary-light: #e8f0f5;
+    --wps-primary-dark: #0a1620;
+    
+    /* Neutral Palette (Gray scale) */
+    --wps-gray-50: #f9fafb;
+    --wps-gray-100: #f3f4f6;
+    --wps-gray-200: #e5e7eb;
+    --wps-gray-300: #d1d5db;
+    --wps-gray-400: #9ca3af;
+    --wps-gray-500: #6b7280;
+    --wps-gray-600: #4b5563;
+    --wps-gray-700: #374151;
+    --wps-gray-800: #1f2937;
+    --wps-gray-900: #111827;
+    
+    /* Semantic Colors */
+    --wps-success: #10b981;
+    --wps-success-light: #d1fae5;
+    --wps-success-dark: #047857;
+    
+    --wps-warning: #f59e0b;
+    --wps-warning-light: #fef3c7;
+    --wps-warning-dark: #d97706;
+    
+    --wps-danger: #ef4444;
+    --wps-danger-light: #fee2e2;
+    --wps-danger-dark: #dc2626;
+    
+    --wps-info: #3b82f6;
+    --wps-info-light: #dbeafe;
+    --wps-info-dark: #2563eb;
+    
+    /* Typography */
+    --wps-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --wps-font-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+    
+    /* Font Sizes */
+    --wps-text-xs: 0.75rem;      /* 12px */
+    --wps-text-sm: 0.875rem;     /* 14px */
+    --wps-text-base: 1rem;       /* 16px */
+    --wps-text-lg: 1.125rem;     /* 18px */
+    --wps-text-xl: 1.25rem;      /* 20px */
+    --wps-text-2xl: 1.5rem;      /* 24px */
+    --wps-text-3xl: 1.875rem;    /* 30px */
+    --wps-text-4xl: 2.25rem;     /* 36px */
+    
+    /* Font Weights */
+    --wps-font-normal: 400;
+    --wps-font-medium: 500;
+    --wps-font-semibold: 600;
+    --wps-font-bold: 700;
+    
+    /* Spacing Scale */
+    --wps-space-1: 0.25rem;      /* 4px */
+    --wps-space-2: 0.5rem;       /* 8px */
+    --wps-space-3: 0.75rem;      /* 12px */
+    --wps-space-4: 1rem;         /* 16px */
+    --wps-space-5: 1.25rem;      /* 20px */
+    --wps-space-6: 1.5rem;       /* 24px */
+    --wps-space-8: 2rem;         /* 32px */
+    --wps-space-10: 2.5rem;      /* 40px */
+    --wps-space-12: 3rem;        /* 48px */
+    --wps-space-16: 4rem;        /* 64px */
+    
+    /* Border Radius */
+    --wps-radius-sm: 0.375rem;   /* 6px */
+    --wps-radius-md: 0.5rem;     /* 8px */
+    --wps-radius-lg: 0.75rem;    /* 12px */
+    --wps-radius-xl: 1rem;       /* 16px */
+    --wps-radius-full: 9999px;
+    
+    /* Shadows */
+    --wps-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --wps-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --wps-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --wps-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    
+    /* Transitions */
+    --wps-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --wps-transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    --wps-transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Z-Index Scale */
+    --wps-z-base: 0;
+    --wps-z-dropdown: 1000;
+    --wps-z-sticky: 1100;
+    --wps-z-modal: 1200;
+    --wps-z-popover: 1300;
+    --wps-z-tooltip: 1400;
+}
+
+/* ============================================================================
+   2. BASE STYLES - Page & Container
+   ============================================================================ */
+
+.wps-page-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--wps-space-6);
+    font-family: var(--wps-font-sans);
+    color: var(--wps-gray-900);
+    background: var(--wps-gray-50);
+}
+
+.wps-page-header {
+    margin-bottom: var(--wps-space-8);
+    border-bottom: 1px solid var(--wps-gray-200);
+    padding-bottom: var(--wps-space-6);
+}
+
+.wps-page-title {
+    font-size: var(--wps-text-3xl);
+    font-weight: var(--wps-font-bold);
+    color: var(--wps-gray-900);
+    margin: 0 0 var(--wps-space-2) 0;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: var(--wps-space-3);
+}
+
+.wps-page-title .dashicons {
+    font-size: 1.875rem;
+    width: 30px;
+    height: 30px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.wps-page-subtitle {
+    font-size: var(--wps-text-base);
+    color: var(--wps-gray-600);
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* ============================================================================
+   3. CARDS - Modern Card Component
+   ============================================================================ */
+
+.wps-card {
+    background: #ffffff;
+    border: 1px solid var(--wps-gray-200);
+    border-radius: var(--wps-radius-lg);
+    padding: var(--wps-space-6);
+    margin-bottom: var(--wps-space-6);
+    box-shadow: var(--wps-shadow-sm);
+    transition: box-shadow var(--wps-transition-base), transform var(--wps-transition-base);
+}
+
+.wps-card:hover {
+    box-shadow: var(--wps-shadow-md);
+}
+
+.wps-card-interactive {
+    cursor: pointer;
+}
+
+.wps-card-interactive:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--wps-shadow-lg);
+}
+
+.wps-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--wps-space-4);
+    padding-bottom: var(--wps-space-4);
+    border-bottom: 1px solid var(--wps-gray-100);
+}
+
+.wps-card-title {
+    font-size: var(--wps-text-lg);
+    font-weight: var(--wps-font-semibold);
+    color: var(--wps-gray-900);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--wps-space-2);
+}
+
+.wps-card-description {
+    font-size: var(--wps-text-sm);
+    color: var(--wps-gray-600);
+    margin: var(--wps-space-2) 0 0 0;
+    line-height: 1.6;
+}
+
+.wps-card-body {
+    color: var(--wps-gray-700);
+    line-height: 1.6;
+}
+
+.wps-card-footer {
+    margin-top: var(--wps-space-6);
+    padding-top: var(--wps-space-4);
+    border-top: 1px solid var(--wps-gray-100);
+    display: flex;
+    align-items: center;
+    gap: var(--wps-space-3);
+}
+
+/* ============================================================================
+   4. BUTTONS - Modern Button System
+   ============================================================================ */
+
+.wps-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--wps-space-2);
+    padding: var(--wps-space-3) var(--wps-space-5);
+    font-size: var(--wps-text-sm);
+    font-weight: var(--wps-font-medium);
+    line-height: 1;
+    border-radius: var(--wps-radius-md);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all var(--wps-transition-base);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.wps-btn:focus {
+    outline: 2px solid var(--wps-primary);
+    outline-offset: 2px;
+}
+
+.wps-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Primary Button */
+.wps-btn-primary {
+    background: var(--wps-primary);
+    color: #ffffff;
+    border-color: var(--wps-primary);
+}
+
+.wps-btn-primary:hover:not(:disabled) {
+    background: var(--wps-primary-hover);
+    border-color: var(--wps-primary-hover);
+    box-shadow: var(--wps-shadow-md);
+    transform: translateY(-1px);
+    color: #ffffff;
+}
+
+/* Secondary Button */
+.wps-btn-secondary {
+    background: #ffffff;
+    color: var(--wps-gray-700);
+    border-color: var(--wps-gray-300);
+}
+
+.wps-btn-secondary:hover:not(:disabled) {
+    background: var(--wps-gray-50);
+    border-color: var(--wps-gray-400);
+}
+
+/* Success Button */
+.wps-btn-success {
+    background: var(--wps-success);
+    color: #ffffff;
+    border-color: var(--wps-success);
+}
+
+.wps-btn-success:hover:not(:disabled) {
+    background: var(--wps-success-dark);
+    box-shadow: var(--wps-shadow-md);
+}
+
+/* Danger Button */
+.wps-btn-danger {
+    background: var(--wps-danger);
+    color: #ffffff;
+    border-color: var(--wps-danger);
+}
+
+.wps-btn-danger:hover:not(:disabled) {
+    background: var(--wps-danger-dark);
+    box-shadow: var(--wps-shadow-md);
+}
+
+/* Ghost Button */
+.wps-btn-ghost {
+    background: transparent;
+    color: var(--wps-gray-700);
+    border-color: transparent;
+}
+
+.wps-btn-ghost:hover:not(:disabled) {
+    background: var(--wps-gray-100);
+}
+
+/* Button Sizes */
+.wps-btn-sm {
+    padding: var(--wps-space-2) var(--wps-space-3);
+    font-size: var(--wps-text-xs);
+}
+
+.wps-btn-lg {
+    padding: var(--wps-space-4) var(--wps-space-6);
+    font-size: var(--wps-text-base);
+}
+
+/* Icon Button */
+.wps-btn-icon {
+    padding: var(--wps-space-3);
+    aspect-ratio: 1;
+}
+
+/* Icons in buttons */
+.wps-btn .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+/* ============================================================================
+   5. FORM CONTROLS - Modern Inputs, Toggles, Sliders
+   ============================================================================ */
+
+/* Text Input */
+.wps-input {
+    width: 100%;
+    padding: var(--wps-space-3) var(--wps-space-4);
+    font-size: var(--wps-text-sm);
+    font-family: var(--wps-font-sans);
+    color: var(--wps-gray-900);
+    background: #ffffff;
+    border: 1px solid var(--wps-gray-300);
+    border-radius: var(--wps-radius-md);
+    transition: all var(--wps-transition-base);
+}
+
+.wps-input:hover {
+    border-color: var(--wps-gray-400);
+}
+
+.wps-input:focus {
+    outline: none;
+    border-color: var(--wps-primary);
+    box-shadow: 0 0 0 3px var(--wps-primary-light);
+}
+
+.wps-input:disabled {
+    background: var(--wps-gray-50);
+    color: var(--wps-gray-500);
+    cursor: not-allowed;
+}
+
+/* Textarea */
+.wps-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Select Dropdown */
+.wps-select {
+    width: 100%;
+    padding: var(--wps-space-3) var(--wps-space-4);
+    font-size: var(--wps-text-sm);
+    font-family: var(--wps-font-sans);
+    color: var(--wps-gray-900);
+    background: #ffffff url('data:image/svg+xml;charset=UTF-8,<svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L5 5L9 1" stroke="%236b7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>') no-repeat right var(--wps-space-3) center;
+    background-size: 10px;
+    border: 1px solid var(--wps-gray-300);
+    border-radius: var(--wps-radius-md);
+    appearance: none;
+    padding-right: var(--wps-space-10);
+    transition: all var(--wps-transition-base);
+    cursor: pointer;
+}
+
+.wps-select:hover {
+    border-color: var(--wps-gray-400);
+}
+
+.wps-select:focus {
+    outline: none;
+    border-color: var(--wps-primary);
+    box-shadow: 0 0 0 3px var(--wps-primary-light);
+}
+
+/* Modern Toggle Switch */
+.wps-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--wps-space-3);
+}
+
+.wps-toggle {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.wps-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.wps-toggle-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--wps-gray-300);
+    border-radius: var(--wps-radius-full);
+    transition: all var(--wps-transition-base);
+}
+
+.wps-toggle-slider:before {
+    content: '';
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background: #ffffff;
+    border-radius: 50%;
+    transition: all var(--wps-transition-base);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.wps-toggle input:checked + .wps-toggle-slider {
+    background: var(--wps-primary);
+}
+
+.wps-toggle input:checked + .wps-toggle-slider:before {
+    transform: translateX(20px);
+}
+
+.wps-toggle input:focus + .wps-toggle-slider {
+    box-shadow: 0 0 0 3px var(--wps-primary-light);
+}
+
+.wps-toggle input:disabled + .wps-toggle-slider {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Range Slider */
+.wps-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: var(--wps-radius-full);
+    background: var(--wps-gray-200);
+    outline: none;
+    transition: all var(--wps-transition-base);
+}
+
+.wps-slider:hover {
+    background: var(--wps-gray-300);
+}
+
+.wps-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--wps-primary);
+    cursor: pointer;
+    box-shadow: var(--wps-shadow-md);
+    transition: all var(--wps-transition-base);
+}
+
+.wps-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: var(--wps-shadow-lg);
+}
+
+.wps-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--wps-primary);
+    cursor: pointer;
+    border: none;
+    box-shadow: var(--wps-shadow-md);
+    transition: all var(--wps-transition-base);
+}
+
+.wps-slider::-moz-range-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: var(--wps-shadow-lg);
+}
+
+/* Checkbox */
+.wps-checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--wps-space-3);
+    cursor: pointer;
+}
+
+.wps-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--wps-gray-300);
+    border-radius: var(--wps-radius-sm);
+    cursor: pointer;
+    transition: all var(--wps-transition-base);
+}
+
+.wps-checkbox:checked {
+    background: var(--wps-primary);
+    border-color: var(--wps-primary);
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg width="12" height="9" viewBox="0 0 12 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 4.5L4.5 8L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.wps-checkbox:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--wps-primary-light);
+}
+
+/* Radio Button */
+.wps-radio-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--wps-space-3);
+    cursor: pointer;
+}
+
+.wps-radio {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--wps-gray-300);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all var(--wps-transition-base);
+}
+
+.wps-radio:checked {
+    border-color: var(--wps-primary);
+    border-width: 6px;
+}
+
+.wps-radio:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--wps-primary-light);
+}
+
+/* Form Group */
+.wps-form-group {
+    margin-bottom: var(--wps-space-6);
+}
+
+.wps-form-label {
+    display: block;
+    font-size: var(--wps-text-sm);
+    font-weight: var(--wps-font-medium);
+    color: var(--wps-gray-700);
+    margin-bottom: var(--wps-space-2);
+}
+
+.wps-form-help {
+    font-size: var(--wps-text-xs);
+    color: var(--wps-gray-500);
+    margin-top: var(--wps-space-2);
+    line-height: 1.5;
+}
+
+.wps-form-error {
+    font-size: var(--wps-text-xs);
+    color: var(--wps-danger);
+    margin-top: var(--wps-space-2);
+    display: flex;
+    align-items: center;
+    gap: var(--wps-space-1);
+}
+
+/* ============================================================================
+   6. MODALS - Modern Modal Dialog
+   ============================================================================ */
+
+.wps-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: var(--wps-z-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: wps-fade-in var(--wps-transition-base);
+}
+
+@keyframes wps-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.wps-modal {
+    background: #ffffff;
+    border-radius: var(--wps-radius-xl);
+    box-shadow: var(--wps-shadow-xl);
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: wps-scale-in var(--wps-transition-slow);
+}
+
+@keyframes wps-scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.wps-modal-header {
+    padding: var(--wps-space-6);
+    border-bottom: 1px solid var(--wps-gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.wps-modal-title {
+    font-size: var(--wps-text-xl);
+    font-weight: var(--wps-font-semibold);
+    color: var(--wps-gray-900);
+    margin: 0;
+}
+
+.wps-modal-close {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--wps-radius-md);
+    border: none;
+    background: transparent;
+    color: var(--wps-gray-500);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--wps-transition-base);
+}
+
+.wps-modal-close:hover {
+    background: var(--wps-gray-100);
+    color: var(--wps-gray-700);
+}
+
+.wps-modal-body {
+    padding: var(--wps-space-6);
+    overflow-y: auto;
+    flex: 1;
+}
+
+.wps-modal-footer {
+    padding: var(--wps-space-6);
+    border-top: 1px solid var(--wps-gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--wps-space-3);
+}
+
+/* ============================================================================
+   7. BADGES & TAGS
+   ============================================================================ */
+
+.wps-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--wps-space-1);
+    padding: var(--wps-space-1) var(--wps-space-3);
+    font-size: var(--wps-text-xs);
+    font-weight: var(--wps-font-medium);
+    border-radius: var(--wps-radius-full);
+    line-height: 1;
+}
+
+.wps-badge-primary {
+    background: var(--wps-primary-light);
+    color: var(--wps-primary-dark);
+}
+
+.wps-badge-success {
+    background: var(--wps-success-light);
+    color: var(--wps-success-dark);
+}
+
+.wps-badge-warning {
+    background: var(--wps-warning-light);
+    color: var(--wps-warning-dark);
+}
+
+.wps-badge-danger {
+    background: var(--wps-danger-light);
+    color: var(--wps-danger-dark);
+}
+
+.wps-badge-gray {
+    background: var(--wps-gray-100);
+    color: var(--wps-gray-700);
+}
+
+/* ============================================================================
+   8. ALERTS & NOTIFICATIONS
+   ============================================================================ */
+
+.wps-alert {
+    padding: var(--wps-space-4);
+    border-radius: var(--wps-radius-lg);
+    border-left: 4px solid;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--wps-space-3);
+    margin-bottom: var(--wps-space-4);
+}
+
+.wps-alert-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+}
+
+.wps-alert-content {
+    flex: 1;
+}
+
+.wps-alert-title {
+    font-weight: var(--wps-font-semibold);
+    margin: 0 0 var(--wps-space-1) 0;
+}
+
+.wps-alert-message {
+    margin: 0;
+    font-size: var(--wps-text-sm);
+    line-height: 1.5;
+}
+
+.wps-alert-info {
+    background: var(--wps-info-light);
+    border-color: var(--wps-info);
+    color: var(--wps-info-dark);
+}
+
+.wps-alert-success {
+    background: var(--wps-success-light);
+    border-color: var(--wps-success);
+    color: var(--wps-success-dark);
+}
+
+.wps-alert-warning {
+    background: var(--wps-warning-light);
+    border-color: var(--wps-warning);
+    color: var(--wps-warning-dark);
+}
+
+.wps-alert-danger {
+    background: var(--wps-danger-light);
+    border-color: var(--wps-danger);
+    color: var(--wps-danger-dark);
+}
+
+/* ============================================================================
+   9. LOADING STATES & SPINNERS
+   ============================================================================ */
+
+.wps-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--wps-gray-200);
+    border-top-color: var(--wps-primary);
+    border-radius: 50%;
+    animation: wps-spin 0.6s linear infinite;
+}
+
+@keyframes wps-spin {
+    to { transform: rotate(360deg); }
+}
+
+.wps-skeleton {
+    background: linear-gradient(90deg, var(--wps-gray-200) 25%, var(--wps-gray-100) 50%, var(--wps-gray-200) 75%);
+    background-size: 200% 100%;
+    animation: wps-skeleton-loading 1.5s ease-in-out infinite;
+    border-radius: var(--wps-radius-md);
+}
+
+@keyframes wps-skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* ============================================================================
+   10. UTILITY CLASSES
+   ============================================================================ */
+
+/* Spacing */
+.wps-mt-0 { margin-top: 0; }
+.wps-mt-2 { margin-top: var(--wps-space-2); }
+.wps-mt-4 { margin-top: var(--wps-space-4); }
+.wps-mt-6 { margin-top: var(--wps-space-6); }
+.wps-mt-8 { margin-top: var(--wps-space-8); }
+
+.wps-mb-0 { margin-bottom: 0; }
+.wps-mb-2 { margin-bottom: var(--wps-space-2); }
+.wps-mb-4 { margin-bottom: var(--wps-space-4); }
+.wps-mb-6 { margin-bottom: var(--wps-space-6); }
+.wps-mb-8 { margin-bottom: var(--wps-space-8); }
+
+.wps-p-4 { padding: var(--wps-space-4); }
+.wps-p-6 { padding: var(--wps-space-6); }
+
+/* Display */
+.wps-flex { display: flex; }
+.wps-inline-flex { display: inline-flex; }
+.wps-grid { display: grid; }
+.wps-hidden { display: none; }
+
+/* Flex */
+.wps-items-center { align-items: center; }
+.wps-items-start { align-items: flex-start; }
+.wps-justify-between { justify-content: space-between; }
+.wps-justify-center { justify-content: center; }
+.wps-flex-col { flex-direction: column; }
+.wps-gap-2 { gap: var(--wps-space-2); }
+.wps-gap-3 { gap: var(--wps-space-3); }
+.wps-gap-4 { gap: var(--wps-space-4); }
+
+/* Grid */
+.wps-grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+.wps-grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+
+/* Text */
+.wps-text-center { text-align: center; }
+.wps-text-right { text-align: right; }
+.wps-font-medium { font-weight: var(--wps-font-medium); }
+.wps-font-semibold { font-weight: var(--wps-font-semibold); }
+.wps-font-bold { font-weight: var(--wps-font-bold); }
+
+/* Colors */
+.wps-text-muted { color: var(--wps-gray-500); }
+.wps-text-primary { color: var(--wps-primary); }
+.wps-text-success { color: var(--wps-success); }
+.wps-text-danger { color: var(--wps-danger); }
+
+/* Border */
+.wps-border { border: 1px solid var(--wps-gray-200); }
+.wps-border-b { border-bottom: 1px solid var(--wps-gray-200); }
+.wps-rounded { border-radius: var(--wps-radius-md); }
+.wps-rounded-lg { border-radius: var(--wps-radius-lg); }
+
+/* Shadow */
+.wps-shadow-sm { box-shadow: var(--wps-shadow-sm); }
+.wps-shadow { box-shadow: var(--wps-shadow-md); }
+.wps-shadow-lg { box-shadow: var(--wps-shadow-lg); }
+
+/* Transitions */
+.wps-transition { transition: all var(--wps-transition-base); }
+
+/* ============================================================================
+   11. RESPONSIVE UTILITIES
+   ============================================================================ */
+
+@media (max-width: 768px) {
+    .wps-page-container {
+        padding: var(--wps-space-4);
+    }
+    
+    .wps-modal {
+        width: 95%;
+        max-height: 95vh;
+    }
+    
+    .wps-grid-cols-2,
+    .wps-grid-cols-3 {
+        grid-template-columns: 1fr;
+    }
+}
