@@ -7,3 +7,9 @@
 # /pro-modules/
 # GitHub Cache
 .cache/
+
+# Testing artifacts
+.phpunit.result.cache
+/tests/coverage/
+/tests/.phpunit.cache
+

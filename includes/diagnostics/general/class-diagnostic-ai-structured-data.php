@@ -63,10 +63,48 @@ class Diagnostic_Ai_Structured_Data extends Diagnostic_Base {
 	 * @return array Finding data or empty if no issue
 	 */
 	public static function run(): array {
-		// Implement: Is schema markup for AI present? test
-		// Smart implementation needed
-
-		return array(); // Stub: full implementation pending
+		// Check for schema.org structured data plugins/functionality
+		$has_schema = false;
+		
+		// Check for common schema markup plugins
+		$schema_plugins = array(
+			'schema/schema.php',                    // Schema plugin
+			'wp-seopress/seopress.php',            // SEOPress (has schema)
+			'wordpress-seo/wp-seo.php',            // Yoast SEO (has schema)
+			'all-in-one-seo-pack/all_in_one_seo_pack.php', // AIOSEO (has schema)
+			'schema-app-structured-data-for-schemaorg/schema-app.php',
+		);
+		
+		$active_plugins = get_option( 'active_plugins', array() );
+		
+		foreach ( $schema_plugins as $plugin ) {
+			if ( in_array( $plugin, $active_plugins, true ) ) {
+				$has_schema = true;
+				break;
+			}
+		}
+		
+		// Check if theme supports schema via JSON-LD (look for common filters/actions)
+		if ( ! $has_schema && has_action( 'wp_head', 'wp_print_schema_org' ) ) {
+			$has_schema = true;
+		}
+		
+		// If no schema detected, return a finding
+		if ( ! $has_schema ) {
+			return array(
+				'id'            => 'ai-structured-data',
+				'title'         => 'Missing AI-Ready Structured Data',
+				'description'   => 'No schema.org structured data markup detected. Adding structured data helps AI systems and search engines better understand your content.',
+				'category'      => 'ai_readiness',
+				'severity'      => 'medium',
+				'threat_level'  => 59,
+				'kb_link'       => 'https://wpshadow.com/kb/ai-structured-data/',
+				'training_link' => 'https://wpshadow.com/training/ai-structured-data/',
+				'auto_fixable'  => false,
+			);
+		}
+		
+		return array();
 	}
 
 	/**
@@ -92,18 +130,15 @@ class Diagnostic_Ai_Structured_Data extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		if ( ! ( false ) ) {
+		// Reuse the run() method logic for check()
+		$result = self::run();
+		
+		// If no issues found (empty array), return null
+		if ( empty( $result ) ) {
 			return null;
 		}
-
-		return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
-			'ai-structured-data',
-			'Ai Structured Data',
-			'Automatically initialized lean diagnostic for Ai Structured Data. Optimized for minimal overhead while surfacing high-value signals.',
-			'general',
-			'low',
-			30,
-			'ai-structured-data'
-		);
+		
+		// Otherwise, return the finding
+		return $result;
 	}
 }
