@@ -113,6 +113,12 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-tools-page-modu
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-help-page-module.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-privacy-page-module.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-asset-manager.php';
+
+// Performance optimizers (Phase 4+ optimization)
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-asset-optimizer.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-option-optimizer.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-ajax-response-optimizer.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-admin-notice-cleaner.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/dashboard/gauges-module.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/dashboard/activity-module.php';
 
@@ -849,6 +855,8 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-guardian-act
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-baseline-manager.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-backup-manager.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-css-analyzer.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-icon-analyzer.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-layout-thrashing-analyzer.php';
 
 // Auto-Fix System (Priority 2)
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-auto-fix-policy-manager.php';

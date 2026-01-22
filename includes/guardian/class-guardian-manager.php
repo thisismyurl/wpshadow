@@ -401,6 +401,12 @@ class Guardian_Manager {
 		// CSS complexity analysis (cached 24 hours)
 		CSS_Analyzer::analyze();
 
+		// Icon strategy analysis (cached 24 hours)
+		Icon_Analyzer::analyze();
+
+		// Layout thrashing detection (cached 24 hours)
+		Layout_Thrashing_Analyzer::analyze();
+
 		// Hook for adding custom analyzers
 		do_action( 'wpshadow_guardian_background_analyzers' );
 	}
