@@ -233,7 +233,7 @@ class Scan_Frequency_Manager {
 		);
 
 		// Run diagnostics
-		if ( $config['run_diagnostics'] && class_exists( '\WPShadow\Diagnostics\Diagnostic_Runner' ) ) {
+		if ( $config['run_diagnostics'] && class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' ) ) {
 			$runner                     = new \WPShadow\Diagnostics\Diagnostic_Runner();
 			$findings                   = $runner->run_all();
 			$results['diagnostics_run'] = count( $findings );

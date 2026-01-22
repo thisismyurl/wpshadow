@@ -94,12 +94,17 @@ jobs:
       - name: Post documentation search comment
         if: always()
         uses: actions/github-script@v7
+        env:
+          SEARCH_STATUS: ${{ steps.search.outputs.status }}
+          SEARCH_DOCS: ${{ steps.search.outputs.docs }}
+          SEARCH_CONTENT: ${{ steps.search.outputs.content }}
+          QUESTION_TEXT: ${{ steps.extract.outputs.question }}
         with:
           script: |
-            const status = '${{ steps.search.outputs.status }}';
-            const docs = `${{ steps.search.outputs.docs }}`;
-            const content = `${{ steps.search.outputs.content }}`;
-            const question = `${{ steps.extract.outputs.question }}`;
+            const status = process.env.SEARCH_STATUS;
+            const docs = process.env.SEARCH_DOCS;
+            const content = process.env.SEARCH_CONTENT;
+            const question = process.env.QUESTION_TEXT;
             
             let comment = '';
             
@@ -109,7 +114,7 @@ jobs:
               comment = `🤖 **Automated Documentation Search**\n\n**Your question:** ${question}\n\n---\n\nI searched the documentation but didn't find a direct match. This could mean:\n- This topic needs better documentation (we'll add it!)\n- The question needs rephrasing with different keywords\n- It requires developer insight\n\n@thisismyurl will review and provide a detailed answer soon. Thank you for helping identify documentation gaps!`;
             }
             
-            github.rest.issues.createComment({
+            await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
