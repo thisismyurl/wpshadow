@@ -398,7 +398,6 @@ class Notification_Builder {
 			<!-- Modal Centering CSS -->
 			<style>
 				#wpshadow-notification-builder-modal {
-					display: flex !important;
 					flex-direction: column;
 					align-items: center;
 					justify-content: center;
@@ -420,7 +419,7 @@ class Notification_Builder {
 			</style>
 
 			<!-- Builder Modal -->
-		<div id="wpshadow-notification-builder-modal" class="wps-modal" style="display: none; position: fixed; z-index: 999999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); flex-direction: column; align-items: center; justify-content: center;">
+		<div id="wpshadow-notification-builder-modal" class="wps-modal" style="display: none; position: fixed; z-index: 999999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7);">
 			<div class="wps-modal-content" style="background: #fff; padding: 40px; border-radius: 12px; max-width: 800px; width: 90%; position: relative; box-shadow: 0 8px 32px rgba(0,0,0,0.4); max-height: 85vh; overflow-y: auto; margin: auto;">
 				<button type="button" class="wps-modal-close" style="position: absolute; top: 20px; right: 20px; background: transparent; border: none; font-size: 32px; cursor: pointer; color: #999; line-height: 1;">×</button>
 					<h2 style="margin-top: 0; color: #0073aa;">
