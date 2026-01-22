@@ -184,7 +184,13 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 	margin: 10px 0 30px 0;
 }
 
-.platform-cards,
+.platform-cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: 15px;
+	margin: 40px 0;
+}
+
 .comfort-options {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -192,7 +198,15 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 	margin: 40px 0;
 }
 
-.platform-card,
+.platform-card {
+	border: 2px solid #dcdcde;
+	border-radius: 8px;
+	padding: 20px 15px;
+	text-align: center;
+	transition: all 0.3s ease;
+	cursor: pointer;
+}
+
 .comfort-card {
 	border: 2px solid #dcdcde;
 	border-radius: 8px;
@@ -201,15 +215,17 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 	transition: all 0.3s ease;
 	cursor: pointer;
 }
-
-.platform-card:hover,
-.comfort-card:hover {
-	border-color: #2271b1;
-	box-shadow: 0 4px 12px rgba(34, 113, 177, 0.15);
-	transform: translateY(-2px);
+ {
+	width: 60px;
+	height: 60px;
+	margin: 0 auto 15px;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
-.platform-icon,
 .comfort-icon {
 	width: 80px;
 	height: 80px;
@@ -219,6 +235,32 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+
+.platform-icon .dashicons {
+	font-size: 30px;
+	color: white;
+	width: 30px;
+	height: 30px;
+}
+ {
+	margin: 0 0 8px 0;
+	font-size: 16px;
+	color: #1d2327;
+}
+
+.comfort-card h3 {
+	margin: 0 0 10px 0;
+	font-size: 18px;
+	color: #1d2327;
+}
+
+.platform-card p {
+	margin: 0 0 15px 0;
+	color: #646970;
+	font-size: 13px;
+	line-height: 1.4;
+	min-height: 35px;
 }
 
 .platform-icon .dashicons,
@@ -320,7 +362,11 @@ jQuery(document).ready(function($) {
 		const messages = {
 			'wordpress': '<?php echo esc_js( __( 'Since you know WordPress, we\'ll keep the standard interface but add helpful tips along the way.', 'wpshadow' ) ); ?>',
 			'word': '<?php echo esc_js( __( 'We\'ll use terms familiar from Word and guide you to the WordPress way at your own pace.', 'wpshadow' ) ); ?>',
+			'google-docs': '<?php echo esc_js( __( 'We\'ll use terms you know from Google Docs and make WordPress feel just as easy.', 'wpshadow' ) ); ?>',
 			'wix': '<?php echo esc_js( __( 'We\'ll use terms you know from Wix and gradually introduce WordPress concepts.', 'wpshadow' ) ); ?>',
+			'squarespace': '<?php echo esc_js( __( 'We\'ll use familiar Squarespace terms while you learn WordPress at your own pace.', 'wpshadow' ) ); ?>',
+			'moodle': '<?php echo esc_js( __( 'We\'ll translate Moodle concepts to WordPress and help you build great learning experiences.', 'wpshadow' ) ); ?>',
+			'notion': '<?php echo esc_js( __( 'We\'ll use Notion-style language and show you how WordPress can organize your content.', 'wpshadow' ) ); ?>',
 			'none': '<?php echo esc_js( __( 'We\'ll start with the basics and build up your confidence step by step.', 'wpshadow' ) ); ?>'
 		};
 		

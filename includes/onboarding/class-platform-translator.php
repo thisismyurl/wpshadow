@@ -30,29 +30,53 @@ class Platform_Translator {
 	 */
 	public static function get_platforms(): array {
 		return [
-			'wordpress' => [
+			'wordpress'    => [
 				'id'          => 'wordpress',
 				'label'       => __( 'WordPress (I have experience)', 'wpshadow' ),
 				'description' => __( 'You\'re already familiar with WordPress', 'wpshadow' ),
 				'icon'        => 'wordpress-alt',
 			],
-			'word'      => [
+			'word'         => [
 				'id'          => 'word',
 				'label'       => __( 'Microsoft Word', 'wpshadow' ),
 				'description' => __( 'You\'re comfortable with Word documents', 'wpshadow' ),
 				'icon'        => 'media-document',
 			],
-			'wix'       => [
+			'google-docs'  => [
+				'id'          => 'google-docs',
+				'label'       => __( 'Google Docs', 'wpshadow' ),
+				'description' => __( 'You\'re familiar with Google Docs', 'wpshadow' ),
+				'icon'        => 'media-text',
+			],
+			'wix'          => [
 				'id'          => 'wix',
 				'label'       => __( 'Wix', 'wpshadow' ),
 				'description' => __( 'You\'ve used Wix website builder', 'wpshadow' ),
 				'icon'        => 'admin-site-alt3',
 			],
-			'none'      => [
+			'squarespace'  => [
+				'id'          => 'squarespace',
+				'label'       => __( 'Squarespace', 'wpshadow' ),
+				'description' => __( 'You\'ve built sites with Squarespace', 'wpshadow' ),
+				'icon'        => 'layout',
+			],
+			'moodle'       => [
+				'id'          => 'moodle',
+				'label'       => __( 'Moodle', 'wpshadow' ),
+				'description' => __( 'You\'ve used Moodle for courses', 'wpshadow' ),
+				'icon'        => 'welcome-learn-more',
+			],
+			'notion'       => [
+				'id'          => 'notion',
+				'label'       => __( 'Notion', 'wpshadow' ),
+				'description' => __( 'You use Notion for documentation', 'wpshadow' ),
+				'icon'        => 'editor-table',
+			],
+			'none'         => [
 				'id'          => 'none',
 				'label'       => __( 'I\'m new to all of this', 'wpshadow' ),
 				'description' => __( 'No worries! We\'ll guide you every step', 'wpshadow' ),
-				'icon'        => 'welcome-learn-more',
+				'icon'        => 'heart',
 			],
 		];
 	}

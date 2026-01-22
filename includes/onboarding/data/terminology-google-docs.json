@@ -1,0 +1,29 @@
+{
+  "platform": "google-docs",
+  "label": "Google Docs",
+  "terms": {
+    "post": "Document",
+    "page": "Document",
+    "plugin": "Add-on",
+    "theme": "Template",
+    "widget": "Drawing",
+    "menu": "Table of Contents",
+    "category": "Folder",
+    "tag": "Label",
+    "media_library": "My Drive",
+    "customize": "Format",
+    "dashboard": "Drive",
+    "settings": "Settings",
+    "editor": "Document",
+    "publish": "Share",
+    "draft": "Draft",
+    "trash": "Trash",
+    "permalink": "Link",
+    "excerpt": "Summary",
+    "featured_image": "Header Image",
+    "author": "Owner",
+    "comment": "Comment"
+  },
+  "kb_article": "https://wpshadow.com/kb/google-docs-to-wordpress/",
+  "training_video": "https://wpshadow.com/training/google-docs-to-wordpress/"
+}

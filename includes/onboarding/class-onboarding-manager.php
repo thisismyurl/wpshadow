@@ -260,7 +260,7 @@ class Onboarding_Manager {
 		$comfort_level = sanitize_key( $_POST['comfort_level'] ?? '' );
 		
 		// Validate platform
-		$valid_platforms = [ 'wordpress', 'word', 'wix', 'none' ];
+		$valid_platforms = [ 'wordpress', 'word', 'google-docs', 'wix', 'squarespace', 'moodle', 'notion', 'none' ];
 		if ( ! in_array( $platform, $valid_platforms, true ) ) {
 			wp_send_json_error( __( 'Invalid platform selected', 'wpshadow' ) );
 		}
@@ -392,10 +392,14 @@ class Onboarding_Manager {
 						<?php if ( $platform ) : ?>
 							<?php
 							$platform_labels = [
-								'wordpress' => __( 'WordPress (experienced)', 'wpshadow' ),
-								'word'      => __( 'Microsoft Word', 'wpshadow' ),
-								'wix'       => __( 'Wix', 'wpshadow' ),
-								'none'      => __( 'New to all of this', 'wpshadow' ),
+								'wordpress'   => __( 'WordPress (experienced)', 'wpshadow' ),
+								'word'        => __( 'Microsoft Word', 'wpshadow' ),
+								'google-docs' => __( 'Google Docs', 'wpshadow' ),
+								'wix'         => __( 'Wix', 'wpshadow' ),
+								'squarespace' => __( 'Squarespace', 'wpshadow' ),
+								'moodle'      => __( 'Moodle', 'wpshadow' ),
+								'notion'      => __( 'Notion', 'wpshadow' ),
+								'none'        => __( 'New to all of this', 'wpshadow' ),
 							];
 							echo esc_html( $platform_labels[ $platform ] ?? $platform );
 							?>
