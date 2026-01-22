@@ -10,7 +10,7 @@
          verbose="true">
     <testsuites>
         <testsuite name="WPShadow Test Suite">
-            <directory>tests</directory>
+            <directory suffix=".php">tests/Diagnostics</directory>
         </testsuite>
     </testsuites>
     <coverage processUncoveredFiles="true">
