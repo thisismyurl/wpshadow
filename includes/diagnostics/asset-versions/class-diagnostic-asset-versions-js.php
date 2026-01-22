@@ -34,10 +34,16 @@ class Diagnostic_Asset_Versions_JS extends Diagnostic_Base {
 			return null;
 		}
 
+		// Ensure WordPress assets are loaded
+		if ( ! did_action( 'wp_enqueue_scripts' ) && ! did_action( 'admin_enqueue_scripts' ) ) {
+			// Not in proper context, skip check
+			return null;
+		}
+
 		global $wp_scripts;
 
-		if ( ! isset( $wp_scripts ) ) {
-			wp_default_scripts( $wp_scripts );
+		if ( ! isset( $wp_scripts ) || ! ( $wp_scripts instanceof \WP_Scripts ) ) {
+			return null;
 		}
 
 		$versioned_assets = 0;

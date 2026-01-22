@@ -858,6 +858,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-backup-manag
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-css-analyzer.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-icon-analyzer.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-layout-thrashing-analyzer.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-failed-login-analyzer.php';
 
 // Auto-Fix System (Priority 2)
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-auto-fix-policy-manager.php';
@@ -916,6 +917,9 @@ add_action( 'plugins_loaded', function() {
 
 	// Initialize Guardian system (Phase 8)
 	\WPShadow\Guardian\Guardian_Manager::init();
+
+	// Initialize Guardian background analyzers
+	\WPShadow\Guardian\Failed_Login_Analyzer::init();
 
 	// Register Guardian AJAX command handlers (Phase 8)
 	// Priority 1 handlers

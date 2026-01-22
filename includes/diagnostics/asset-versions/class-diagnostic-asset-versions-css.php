@@ -34,10 +34,16 @@ class Diagnostic_Asset_Versions_CSS extends Diagnostic_Base {
 			return null;
 		}
 
+		// Ensure WordPress assets are loaded
+		if ( ! did_action( 'wp_enqueue_scripts' ) && ! did_action( 'admin_enqueue_scripts' ) ) {
+			// Not in proper context, skip check
+			return null;
+		}
+
 		global $wp_styles;
 
-		if ( ! isset( $wp_styles ) ) {
-			wp_default_styles( $wp_styles );
+		if ( ! isset( $wp_styles ) || ! ( $wp_styles instanceof \WP_Styles ) ) {
+			return null;
 		}
 
 		$versioned_assets = 0;
