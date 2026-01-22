@@ -1,5 +1,5 @@
 ---
-name: Content Idea
+name: Content Related
 about: Suggest content for KB articles, training videos, blog posts, or social media
 title: '[CONTENT] '
 labels: content, documentation

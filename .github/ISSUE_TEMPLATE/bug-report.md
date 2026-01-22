@@ -1,5 +1,5 @@
 ---
-name: Bug Report (Community)
+name: Bug Report
 about: Report a bug or issue users are experiencing
 title: '[BUG] '
 labels: bug, needs-triage

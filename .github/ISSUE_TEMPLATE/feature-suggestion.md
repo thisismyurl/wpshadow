@@ -1,5 +1,5 @@
 ---
-name: Feature Request (Community-Driven)
+name: Feature Suggestion
 about: Suggest a feature based on community feedback
 title: '[FEATURE] '
 labels: enhancement, community
