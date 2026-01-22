@@ -158,6 +158,12 @@ class DiagnosticsOrchestrator {
         $slug = $diagnostic['slug'];
         $family = $diagnostic['family'];
         
+        // Skip if slug is null
+        if ($slug === null) {
+            echo "  ⚠ Skipped {$className} (no slug found)\n";
+            return;
+        }
+        
         // Generate a conservative implementation using WP-safe heuristics
         $implementation = $this->generateCheckMethod($slug, $family);
         
@@ -253,6 +259,12 @@ class DiagnosticsOrchestrator {
         $className = $diagnostic['className'];
         $slug = $diagnostic['slug'];
         $family = $diagnostic['family'];
+        
+        // Skip if slug or className is null
+        if ($slug === null || $className === null) {
+            echo "  ⚠ Skipped test for {$className} (missing required data)\n";
+            return;
+        }
         
         // Determine test directory based on file path
         $relativePath = str_replace($this->diagnosticsDir . '/', '', $diagnostic['path']);
