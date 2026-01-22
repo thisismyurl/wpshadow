@@ -61,14 +61,34 @@ function is_stub_file(string $filepath): bool {
     
     // Look for stub patterns
     $stubPatterns = [
+        // check() method that only returns null (no logic)
         '/public\s+static\s+function\s+check\s*\([^)]*\)\s*:\s*\?array\s*\{\s*return\s+null\s*;\s*\}/s',
+        // check() method that only returns empty array
         '/public\s+static\s+function\s+check\s*\([^)]*\)\s*:\s*\?array\s*\{\s*return\s+array\s*\(\s*\)\s*;\s*\}/s',
+        // run() method that returns empty array with stub comment
+        '/public\s+static\s+function\s+run\s*\([^)]*\)\s*:\s*array\s*\{[^}]*return\s+array\s*\(\s*\)\s*;[^}]*\/\/\s*Stub/is',
+        // check() with trivial false condition: if (!(false))
+        '/public\s+static\s+function\s+check\s*\([^)]*\)\s*:\s*\?array\s*\{\s*if\s*\(\s*!\s*\(\s*false\s*\)\s*\)/s',
+        // TODO markers
         '/\/\/\s*TODO/i',
-        '/\/\*\*[^*]*\*+(?:[^/*][^*]*\*+)*\/\s*public\s+static\s+function\s+check\s*\([^)]*\)\s*:\s*\?array\s*\{\s*return\s+null\s*;\s*\}/s',
+        // Stub comment in implementation
+        '/\/\/\s*Stub:/i',
     ];
     
     foreach ($stubPatterns as $pattern) {
         if (preg_match($pattern, $content)) {
+            return true;
+        }
+    }
+    
+    // Additional heuristic: check if check() method has very few lines (< 5 lines excluding comments)
+    if (preg_match('/public\s+static\s+function\s+check\s*\([^)]*\)\s*:\s*\?array\s*\{([^}]*)\}/s', $content, $matches)) {
+        $methodBody = $matches[1];
+        // Remove comments and whitespace
+        $methodBody = preg_replace('/\/\*.*?\*\//s', '', $methodBody);
+        $methodBody = preg_replace('/\/\/.*?$/m', '', $methodBody);
+        $lines = array_filter(array_map('trim', explode("\n", $methodBody)));
+        if (count($lines) <= 3 && strpos($methodBody, 'return null') !== false) {
             return true;
         }
     }
