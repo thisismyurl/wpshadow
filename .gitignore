@@ -7,3 +7,9 @@
 # /pro-modules/
 # GitHub Cache
 .cache/
+
+# PHPUnit cache
+.phpunit.cache/
+
+# Composer vendor (already tracked via lock file)
+# We'll leave vendor/ as it was already in the repo

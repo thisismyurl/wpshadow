@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - 'diag/**'
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['8.0', '8.1', '8.2']
+    
+    name: PHP ${{ matrix.php-version }} Tests
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+          tools: composer:v2
+      
+      - name: Validate composer.json
+        run: composer validate --strict
+      
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+      
+      - name: Check if PHPUnit is installed
+        run: |
+          if [ ! -f vendor/bin/phpunit ]; then
+            echo "Error: PHPUnit is not installed"
+            exit 1
+          fi
+      
+      - name: Run tests
+        run: composer test
+      
+      - name: Run static analysis
+        run: composer phpstan
+        continue-on-error: true
