@@ -398,6 +398,7 @@ class Notification_Builder {
 			<!-- Modal Centering CSS -->
 			<style>
 				#wpshadow-notification-builder-modal {
+					display: flex;
 					flex-direction: column;
 					align-items: center;
 					justify-content: center;
@@ -609,7 +610,9 @@ class Notification_Builder {
 
 			// Close modal
 			$('.wps-modal-close').on('click', function() {
-				$('#wpshadow-notification-builder-modal').fadeOut(200);
+				$('#wpshadow-notification-builder-modal').fadeOut(200, function() {
+					$(this).css('display', 'none');
+				});
 			});
 
 			// Submit form
