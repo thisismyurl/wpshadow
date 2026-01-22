@@ -871,6 +871,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-rest-api-per
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-csp-violation-analyzer.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-domain-expiration-analyzer.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-compromised-accounts-analyzer.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-cache-invalidation-analyzer.php';
 
 // Auto-Fix System (Priority 2)
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-auto-fix-policy-manager.php';
@@ -936,6 +937,7 @@ add_action( 'plugins_loaded', function() {
 	\WPShadow\Guardian\REST_API_Performance_Analyzer::init();
 	\WPShadow\Guardian\CSP_Violation_Analyzer::init();
 	\WPShadow\Guardian\Compromised_Accounts_Analyzer::init();
+	\WPShadow\Guardian\Cache_Invalidation_Analyzer::init();
 
 	// Register Guardian AJAX command handlers (Phase 8)
 	// Priority 1 handlers
@@ -1643,6 +1645,12 @@ function wpshadow_render_tools() {
 function wpshadow_render_dashboard() {
 	if ( ! current_user_can( 'read' ) ) {
 		wp_die( 'Insufficient permissions.' );
+	}
+
+	// Check if user needs onboarding (Philosophy #8: Inspire Confidence)
+	if ( \WPShadow\Onboarding\Onboarding_Manager::needs_onboarding() && ! isset( $_GET['skip_onboarding'] ) ) {
+		require_once WPSHADOW_PATH . 'includes/views/onboarding/wizard.php';
+		return;
 	}
 
 	// Check if filtering by category (Issue #564)
