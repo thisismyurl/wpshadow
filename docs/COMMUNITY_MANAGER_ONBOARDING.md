@@ -17,7 +17,8 @@ This document is your comprehensive guide to understanding WPShadow—what we bu
 7. [Creating "Holy Shit" Moments](#creating-holy-shit-moments)
 8. [Educational Resources Strategy](#educational-resources-strategy)
 9. [Community Engagement Guidelines](#community-engagement-guidelines)
-10. [Quick Reference: Key Messages](#quick-reference-key-messages)
+10. [Using GitHub Issue Templates](#using-github-issue-templates)
+11. [Quick Reference: Key Messages](#quick-reference-key-messages)
 
 ---
 
@@ -1038,6 +1039,246 @@ Welcome to WPShadow! Your role as Community Manager is **critical**—you're the
 3. Our users' success is our success
 4. Transparency builds trust; trust builds community
 5. The bar is: "Why is this free?" Keep raising it.
+
+---
+
+## 10. Using GitHub Issue Templates
+
+### Why GitHub Issues?
+
+GitHub is your direct line to the development team (Christopher and the AI agent). You don't need to know how to code—the issue templates guide you through sharing feedback, asking questions, and reporting what you're hearing from users.
+
+### When to Create an Issue
+
+**✅ CREATE AN ISSUE FOR:**
+- User feedback (positive or negative)
+- Questions about features or messaging
+- Bug reports from community
+- Feature requests from users
+- Content ideas (KB, training, social)
+- Notable user stories ("holy shit" moments)
+- Clarification questions about the plugin
+- Trends you're seeing in community
+
+**❌ DON'T CREATE AN ISSUE FOR:**
+- Quick questions Christopher can answer via chat/email
+- Routine social media posts (unless seeking input)
+- Personal tasks/notes
+- External vendor communications
+
+### The Six Issue Templates
+
+#### 1. **Community Feedback** 🗣️
+**Use when:** Users share opinions, sentiment, or trends
+
+**Example situations:**
+- Multiple users praising a feature
+- Complaints about something confusing
+- Pattern emerging in support threads
+- Survey results to share
+
+**What it captures:**
+- Source (forum, social, email)
+- User quotes
+- Sentiment (positive/negative)
+- Frequency (one-off vs trend)
+- Philosophy alignment
+- Recommended action
+
+---
+
+#### 2. **Clarification Question** ❓
+**Use when:** You need to understand something about WPShadow
+
+**Example situations:**
+- "How does the workflow automation actually work?"
+- "Why do we link to KB instead of explaining inline?"
+- "When is Guardian launching?"
+- "How should I explain Pro vs Core?"
+
+**What it captures:**
+- Question category
+- Your question clearly stated
+- Why you're asking
+- Urgency level
+- What you'll do with the answer
+
+**💡 TIP:** Always check docs/ folder first (especially COMMUNITY_MANAGER_ONBOARDING.md and PRODUCT_PHILOSOPHY.md)
+
+---
+
+#### 3. **Feature Request (Community-Driven)** 💡
+**Use when:** Users are asking for a feature
+
+**Example situations:**
+- Single user suggests something interesting
+- Multiple users asking for same capability
+- You notice a gap in what we offer
+
+**What it captures:**
+- User story (who wants it, why)
+- Community demand (how many asking)
+- User quotes
+- **Philosophy check** (green/yellow/red light)
+- Expected impact
+
+**⚠️ IMPORTANT:** The philosophy check is crucial! It helps developers evaluate if feature fits our values before building.
+
+---
+
+#### 4. **Content Idea** 📝
+**Use when:** You want to create/suggest content
+
+**Example situations:**
+- Support question answered repeatedly → needs KB article
+- Feature misunderstood → needs training video
+- User success story → blog post opportunity
+- Trending topic → social media thread idea
+
+**What it captures:**
+- Content type (KB, training, blog, social)
+- Target audience
+- Goal (educate, showcase, engage)
+- Key messages
+- Philosophy connection
+- Success metrics
+
+---
+
+#### 5. **User Story Highlight** ⭐
+**Use when:** Something amazing happens
+
+**Example situations:**
+- User says "holy shit this is free?!"
+- Site health jumped 60% → 98% after using WPShadow
+- User shares measurable time/cost savings
+- Someone recommends us on Twitter/podcast
+- Agency switches from premium plugin to us
+
+**What it captures:**
+- The story and "holy shit" moment
+- Quantifiable impact (time saved, issues fixed)
+- Permission to share publicly
+- Philosophy exemplified
+- Content opportunities
+
+**💡 GOLDMINE:** These stories become testimonials, case studies, social proof, and team motivation.
+
+---
+
+#### 6. **Bug Report (Community)** 🐛
+**Use when:** Users report something broken
+
+**Example situations:**
+- User says diagnostic isn't working
+- Error message shown
+- Feature behaving unexpectedly
+- Multiple users report same issue
+
+**What it captures:**
+- User impact (critical vs minor)
+- Steps to reproduce
+- User's environment (WP version, PHP, etc.)
+- Workaround (if you know one)
+- User communication status
+
+**🚨 CRITICAL BUGS:** If site-breaking, mark "Critical" and notify Christopher immediately via other channels too.
+
+---
+
+### How to Create an Issue (Step-by-Step)
+
+1. **Go to GitHub:** https://github.com/thisismyurl/wpshadow/issues
+2. **Click "New Issue"** (green button)
+3. **Choose a template** from the list
+4. **Fill out the template:**
+   - ✅ Complete required sections
+   - ✅ Check relevant boxes
+   - ✅ Include user quotes (anonymize if needed)
+   - ✅ Add links to sources
+   - ❌ Don't leave sections blank (write "Unknown" if unsure)
+5. **Give it a clear title:**
+   - Template adds prefix: `[COMMUNITY]`, `[QUESTION]`, `[FEATURE]`, etc.
+   - Add specific description: `[COMMUNITY] Users love new Kanban board`
+6. **Submit**
+7. **Watch for responses** (you'll get email notifications)
+
+### GitHub Etiquette
+
+**DO:**
+- ✅ Use templates (they ensure nothing is missed)
+- ✅ One topic per issue (don't combine unrelated things)
+- ✅ Include user quotes verbatim (shows authentic voice)
+- ✅ Check existing issues first (avoid duplicates)
+- ✅ Update issues if situation changes
+- ✅ Close issues when resolved
+
+**DON'T:**
+- ❌ Create issues for every single support question
+- ❌ Use issues for personal notes/reminders
+- ❌ Expose user email addresses or sensitive info
+- ❌ Rush—take time to fill out templates thoroughly
+- ❌ Be afraid to ask "dumb" questions (there aren't any)
+
+### Response Times
+
+**You'll typically get responses within:**
+- Clarification questions: Same day
+- Community feedback: 1-2 days
+- Feature requests: 2-3 days (requires philosophy evaluation)
+- Bug reports: Same day (critical), 1-2 days (non-critical)
+- Content ideas: 1-3 days
+- User stories: 1-2 days
+
+**If urgent:** Mention in the issue AND ping Christopher via other channels.
+
+### Labels You'll See
+
+GitHub automatically adds labels. Here's what they mean:
+
+- **community** - Related to community feedback/engagement
+- **feedback** - User sentiment or opinions
+- **question** - Needs clarification or answer
+- **enhancement** - Feature request or improvement
+- **bug** - Something broken
+- **content** - KB article, training, blog, social content
+- **documentation** - Related to docs
+- **story** - User success story
+- **needs-triage** - Developers need to evaluate/prioritize
+
+### Pro Tips
+
+1. **Screenshot everything** - Paste screenshots directly into GitHub issues (drag & drop)
+2. **Quote users** - Authentic voice is powerful for developers to understand
+3. **Pattern recognition** - If you see 3+ users mention something, that's an issue worth creating
+4. **Philosophy lens** - Always think about which commandment relates
+5. **Permission first** - Get user permission before sharing their story publicly
+6. **Anonymize** - Remove email addresses, last names, domain names if sensitive
+
+### Practice Exercise
+
+Try creating a test issue right now:
+1. Go to: https://github.com/thisismyurl/wpshadow/issues/new/choose
+2. Choose "Clarification Question"
+3. Ask: "How do I decide if something is worth creating an issue for?"
+4. Fill out the template
+5. Submit
+6. You'll get a response showing how it works!
+
+### Getting Comfortable
+
+**It's okay to:**
+- Ask "obvious" questions
+- Not know technical details
+- Make mistakes (issues can be edited/deleted)
+- Change your mind (close issues if no longer relevant)
+- Request help understanding something
+
+**Remember:** GitHub issues are about communication, not code. Your role is translating community voice → actionable feedback for developers. The templates make it safe and structured.
+
+---
+
+## 11. Quick Reference: Key Messages
 
 **Your success metrics:**
 - Community sentiment (happy, supported, empowered?)

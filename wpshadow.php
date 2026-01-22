@@ -4858,12 +4858,24 @@ function wpshadow_render_settings_scan() {
 			<div class="wps-card-body">
 				<div class="wps-form-group">
 					<?php
+					// Match dashboard gauge categories exactly
 					$categories = array(
-						'security' => __( 'Security Checks', 'wpshadow' ),
-						'performance' => __( 'Performance Optimizations', 'wpshadow' ),
-						'seo' => __( 'SEO Analysis', 'wpshadow' ),
+						'security' => __( 'Security', 'wpshadow' ),
+						'performance' => __( 'Performance', 'wpshadow' ),
 						'code_quality' => __( 'Code Quality', 'wpshadow' ),
-						'design' => __( 'Design & Accessibility', 'wpshadow' ),
+						'seo' => __( 'SEO', 'wpshadow' ),
+						'design' => __( 'Design', 'wpshadow' ),
+						'settings' => __( 'Settings', 'wpshadow' ),
+						'monitoring' => __( 'Monitoring', 'wpshadow' ),
+						'workflows' => __( 'Workflows', 'wpshadow' ),
+						'wordpress_health' => __( 'WordPress Site Health', 'wpshadow' ),
+						'developer_experience' => __( 'Developer Experience', 'wpshadow' ),
+						'marketing_growth' => __( 'Marketing & Growth', 'wpshadow' ),
+						'customer_retention' => __( 'Customer Retention', 'wpshadow' ),
+						'ai_readiness' => __( 'AI Readiness', 'wpshadow' ),
+						'environment' => __( 'Environment & Impact', 'wpshadow' ),
+						'users' => __( 'Users & Team', 'wpshadow' ),
+						'content_publishing' => __( 'Content Publishing', 'wpshadow' ),
 					);
 					
 					foreach ( $categories as $key => $label ) {
