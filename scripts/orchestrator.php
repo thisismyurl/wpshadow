@@ -301,15 +301,38 @@ PHP;
 function update_diagnostic_file(string $filepath, string $newImplementation): bool {
     $content = file_get_contents($filepath);
     
-    // Find and replace the check() method
-    $pattern = '/(public\s+static\s+function\s+check\s*\([^)]*\)\s*:\s*\?array\s*\{)([^}]+)(\})/s';
-    
-    if (preg_match($pattern, $content)) {
-        $newContent = preg_replace($pattern, $newImplementation, $content, 1);
-        return file_put_contents($filepath, $newContent) !== false;
+    // Find the start of check() method
+    if (!preg_match('/(public\s+static\s+function\s+check\s*\([^)]*\)\s*:\s*\?array\s*\{)/s', $content, $matches, PREG_OFFSET_CAPTURE)) {
+        return false;
     }
     
-    return false;
+    $startPos = $matches[0][1] + strlen($matches[0][0]);
+    
+    // Find the matching closing brace for the method
+    $braceCount = 1;
+    $endPos = $startPos;
+    $len = strlen($content);
+    
+    while ($braceCount > 0 && $endPos < $len) {
+        $char = $content[$endPos];
+        if ($char === '{') {
+            $braceCount++;
+        } elseif ($char === '}') {
+            $braceCount--;
+        }
+        $endPos++;
+    }
+    
+    if ($braceCount !== 0) {
+        return false; // Couldn't find matching brace
+    }
+    
+    // Replace the method body
+    $before = substr($content, 0, $matches[0][1]);
+    $after = substr($content, $endPos);
+    $newContent = $before . $newImplementation . "\n\t}\n" . $after;
+    
+    return file_put_contents($filepath, $newContent) !== false;
 }
 
 /**
@@ -329,75 +352,71 @@ function generate_test_file(array $metadata): string {
         $namespace .= '\\' . str_replace('/', '\\', ucwords($namespacePath, '/'));
     }
     
-    return <<<PHP
-<?php
-declare(strict_types=1);
-
-namespace {$namespace};
-
-use PHPUnit\Framework\TestCase;
-use Brain\Monkey;
-use Brain\Monkey\Functions;
-use WPShadow\Diagnostics\\{$className};
-
-/**
- * Test case for {$className}
- */
-class {$testClassName} extends TestCase {
+    $code = "<?php\n";
+    $code .= "declare(strict_types=1);\n\n";
+    $code .= "namespace {$namespace};\n\n";
+    $code .= "use PHPUnit\\Framework\\TestCase;\n";
+    $code .= "use Brain\\Monkey;\n";
+    $code .= "use Brain\\Monkey\\Functions;\n";
+    $code .= "use WPShadow\\Diagnostics\\{$className};\n\n";
+    $code .= "/**\n";
+    $code .= " * Test case for {$className}\n";
+    $code .= " */\n";
+    $code .= "class {$testClassName} extends TestCase {\n";
+    $code .= "    \n";
+    $code .= "    /**\n";
+    $code .= "     * Setup test environment before each test\n";
+    $code .= "     */\n";
+    $code .= "    protected function setUp(): void {\n";
+    $code .= "        parent::setUp();\n";
+    $code .= "        Monkey\\setUp();\n";
+    $code .= "    }\n";
+    $code .= "    \n";
+    $code .= "    /**\n";
+    $code .= "     * Teardown test environment after each test\n";
+    $code .= "     */\n";
+    $code .= "    protected function tearDown(): void {\n";
+    $code .= "        Monkey\\tearDown();\n";
+    $code .= "        parent::tearDown();\n";
+    $code .= "    }\n";
+    $code .= "    \n";
+    $code .= "    /**\n";
+    $code .= "     * Test that diagnostic returns null when no issues detected\n";
+    $code .= "     */\n";
+    $code .= "    public function test_check_returns_null_when_no_issues() {\n";
+    $code .= "        // Mock WordPress functions to simulate healthy state\n";
+    $code .= "        Functions\\when('get_option')->justReturn(true);\n";
+    $code .= "        Functions\\when('get_transient')->justReturn(false);\n";
+    $code .= "        \n";
+    $code .= "        \$result = {$className}::check();\n";
+    $code .= "        \n";
+    $code .= "        \$this->assertNull(\$result, 'Expected null when no issues detected');\n";
+    $code .= "    }\n";
+    $code .= "    \n";
+    $code .= "    /**\n";
+    $code .= "     * Test that diagnostic returns finding when issues detected\n";
+    $code .= "     */\n";
+    $code .= "    public function test_check_returns_finding_when_issues_detected() {\n";
+    $code .= "        // Mock WordPress functions to simulate problematic state\n";
+    $code .= "        Functions\\when('get_option')->justReturn(false);\n";
+    $code .= "        Functions\\when('defined')->justReturn(false);\n";
+    $code .= "        \n";
+    $code .= "        \$result = {$className}::check();\n";
+    $code .= "        \n";
+    $code .= "        // The implementation may still return null if heuristics don't match\n";
+    $code .= "        // This is expected for conservative implementations\n";
+    $code .= "        if (\$result !== null) {\n";
+    $code .= "            \$this->assertIsArray(\$result, 'Expected array result when issues detected');\n";
+    $code .= "            \$this->assertArrayHasKey('id', \$result);\n";
+    $code .= "            \$this->assertArrayHasKey('title', \$result);\n";
+    $code .= "            \$this->assertEquals('{$slug}', \$result['id']);\n";
+    $code .= "        } else {\n";
+    $code .= "            \$this->assertTrue(true, 'Conservative implementation returned null');\n";
+    $code .= "        }\n";
+    $code .= "    }\n";
+    $code .= "}\n";
     
-    /**
-     * Setup test environment before each test
-     */
-    protected function setUp(): void {
-        parent::setUp();
-        Monkey\setUp();
-    }
-    
-    /**
-     * Teardown test environment after each test
-     */
-    protected function tearDown(): void {
-        Monkey\tearDown();
-        parent::tearDown();
-    }
-    
-    /**
-     * Test that diagnostic returns null when no issues detected
-     */
-    public function test_check_returns_null_when_no_issues() {
-        // Mock WordPress functions to simulate healthy state
-        Functions\when('get_option')->justReturn(true);
-        Functions\when('get_transient')->justReturn(false);
-        
-        \$result = {$className}::check();
-        
-        \$this->assertNull(\$result, 'Expected null when no issues detected');
-    }
-    
-    /**
-     * Test that diagnostic returns finding when issues detected
-     */
-    public function test_check_returns_finding_when_issues_detected() {
-        // Mock WordPress functions to simulate problematic state
-        Functions\when('get_option')->justReturn(false);
-        Functions\when('defined')->justReturn(false);
-        
-        \$result = {$className}::check();
-        
-        // The implementation may still return null if heuristics don't match
-        // This is expected for conservative implementations
-        if (\$result !== null) {
-            \$this->assertIsArray(\$result, 'Expected array result when issues detected');
-            \$this->assertArrayHasKey('id', \$result);
-            \$this->assertArrayHasKey('title', \$result);
-            \$this->assertEquals('{$slug}', \$result['id']);
-        } else {
-            \$this->assertTrue(true, 'Conservative implementation returned null');
-        }
-    }
-}
-
-PHP;
+    return $code;
 }
 
 /**
