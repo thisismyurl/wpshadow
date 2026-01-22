@@ -874,6 +874,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-compromised-
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-cache-invalidation-analyzer.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-shortcode-execution-analyzer.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-api-latency-analyzer.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-live-chat-performance-analyzer.php';
 
 // Auto-Fix System (Priority 2)
 require_once plugin_dir_path( __FILE__ ) . 'includes/guardian/class-auto-fix-policy-manager.php';
