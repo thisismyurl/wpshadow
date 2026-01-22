@@ -10,6 +10,14 @@ use WPShadow\Core\Diagnostic_Base;
  * Measures animation frame rate smoothness (60fps target).
  * Philosophy: Show value (#9) - Buttery smooth animations.
  * 
+ * IMPLEMENTATION NOTE:
+ * Requires runtime analyzer that measures actual animation frame rates.
+ * Needs JavaScript-based Performance API integration to detect:
+ * - Frame drops during animations
+ * - Long frame times (>16.67ms for 60fps)
+ * - Animation jank (inconsistent frame timing)
+ * Suggested approach: Browser-side script that reports to admin-ajax.php
+ * 
  * @package WPShadow
  * @subpackage Diagnostics
  * @since 1.2601.2200
@@ -17,6 +25,11 @@ use WPShadow\Core\Diagnostic_Base;
 class Diagnostic_Animation_Performance extends Diagnostic_Base {
     public static function check(): ?array {
         // Monitor animation performance impact
+        // TODO: Create Animation_Performance_Analyzer class that:
+        // 1. Injects JS to measure requestAnimationFrame() timing
+        // 2. Detects frames >16.67ms (60fps threshold)
+        // 3. Reports aggregate ms overhead via AJAX
+        // 4. Sets transient: wpshadow_animation_perf_impact_ms
         $animation_impact = get_transient('wpshadow_animation_perf_impact_ms');
         
         if ($animation_impact && $animation_impact > 100) { // 100ms

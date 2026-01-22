@@ -10,6 +10,17 @@ use WPShadow\Core\Diagnostic_Base;
  * CSS-in-JS Performance Impact diagnostic
  * Philosophy: Educate (#5) - CSS-in-JS trade-offs.
  * 
+ * IMPLEMENTATION NOTE:
+ * Requires analyzer that detects CSS-in-JS libraries and measures overhead.
+ * Needs to identify common libraries:
+ * - styled-components, emotion, JSS, Aphrodite, Radium
+ * - React inline styles, Vue scoped styles
+ * Then measure runtime overhead:
+ * - Style injection time during initial render
+ * - Dynamic style generation cost
+ * - Bundle size impact
+ * Suggested approach: Static JS file scanning + runtime Performance.measure()
+ * 
  * @package WPShadow
  * @subpackage Diagnostics
  * @since 1.2601.2200
@@ -17,6 +28,11 @@ use WPShadow\Core\Diagnostic_Base;
 class Diagnostic_DiagnosticCssInJsPerformance extends Diagnostic_Base {
     public static function check(): ?array {
         // Check for CSS-in-JS performance impact
+        // TODO: Create CSS_in_JS_Analyzer class that:
+        // 1. Scans JS files for CSS-in-JS library imports
+        // 2. Detects styled-components, emotion, JSS patterns
+        // 3. Measures style injection overhead via Performance API
+        // 4. Sets transient: wpshadow_css_in_js_overhead_ms
         $css_js_overhead = get_transient('wpshadow_css_in_js_overhead_ms');
         
         if ($css_js_overhead && $css_js_overhead > 50) { // 50ms

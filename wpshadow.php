@@ -119,8 +119,9 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-asset-optimizer
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-option-optimizer.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-ajax-response-optimizer.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/admin/class-admin-notice-cleaner.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/dashboard/gauges-module.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/dashboard/activity-module.php';
+// Dashboard modules
+require_once plugin_dir_path( __FILE__ ) . 'includes/views/dashboard/gauges-module.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/views/dashboard/activity-module.php';
 
 // Show consent banner for admins (Phase 6: consent-first)
 add_action( 'admin_footer', function() {
