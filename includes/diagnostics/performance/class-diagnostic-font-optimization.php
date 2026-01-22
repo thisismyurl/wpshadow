@@ -81,6 +81,7 @@ class Diagnostic_Font_Optimization extends Diagnostic_Base {
 		
 		if ( ! empty( $issues ) ) {
 			return array(
+				'id'          => 'font-optimization',
 				'title'       => 'Font Loading Optimization',
 				'description' => implode( '. ', $issues ) . '. Optimized fonts can improve Core Web Vitals and perceived performance.',
 				'severity'    => 'low',

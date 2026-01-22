@@ -33,7 +33,7 @@ class Diagnostic_User_Notification_Email extends Diagnostic_Base {
 		}
 
 		return array(
-			'finding_id'   => self::$slug,
+			'id'   => self::$slug,
 			'title'        => self::$title,
 			'description'  => sprintf(
 				__( 'For CASL (Canada), GDPR (EU), and CCPA (US) compliance, new user notification emails should be unchecked by default to ensure explicit opt-in. Currently, the checkbox on user-new.php appears checked by default. Use the Email Test & Configuration tool to enable "Uncheck email notification by default" for strict privacy law compliance.', 'wpshadow' )

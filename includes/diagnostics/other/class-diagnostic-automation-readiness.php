@@ -85,6 +85,7 @@ class Diagnostic_Automation_Readiness extends Diagnostic_Base {
 
 		if ( ! empty( $opportunities ) ) {
 			return array(
+				'id'           => 'automation-readiness',
 				'title'        => 'Automation Opportunities Detected',
 				'description'  => 'Your site could benefit from workflow automation: ' . implode( '. ', $opportunities ) . '. WPShadow Pro includes advanced automation rules.',
 				'severity'     => 'low',

@@ -41,7 +41,7 @@ class Diagnostic_Head_Cleanup_OEmbed extends Diagnostic_Base {
 		}
 
 		return array(
-			'finding_id'   => self::$slug,
+			'id'   => self::$slug,
 			'title'        => self::$title,
 			'description'  => __( 'oEmbed discovery links are rarely used by modern sites. Removing them reduces page bloat and HTTP headers.', 'wpshadow' ),
 			'category'     => 'performance',

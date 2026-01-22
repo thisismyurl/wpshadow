@@ -22,7 +22,7 @@ class Diagnostic_Search_Indexing extends Diagnostic_Base {
 		}
 
 		return array(
-			'finding_id'   => self::$slug,
+			'id'   => self::$slug,
 			'title'        => self::$title,
 			'description'  => __( 'Search engines are blocked from indexing this site! The "Discourage search engines" setting is enabled. This is often accidentally left on after development and prevents the site from appearing in Google. Your site is invisible to search engines.', 'wpshadow' ),
 			'category'     => 'seo',

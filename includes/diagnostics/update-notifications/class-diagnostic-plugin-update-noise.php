@@ -39,7 +39,7 @@ class Diagnostic_Plugin_Update_Noise extends Diagnostic_Base {
 
 		$count_label = $update_count > 0 ? $update_count : count( $inactive );
 		return array(
-			'finding_id'   => self::$slug,
+			'id'   => self::$slug,
 			'title'        => sprintf( _n( '%d inactive plugin shows updates', '%d inactive plugins show updates', $count_label, 'wpshadow' ), $count_label ),
 			'description'  => __( 'Inactive plugins keep nagging for updates. Hide their notices or remove the plugins you no longer need.', 'wpshadow' ),
 			'category'     => 'maintenance',

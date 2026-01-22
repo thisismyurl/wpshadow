@@ -52,6 +52,7 @@ class Diagnostic_Webhooks_Readiness extends Diagnostic_Base {
 		}
 
 		return array(
+			'id'           => 'webhooks-readiness',
 			'title'        => 'Webhooks Not Ready',
 			'description'  => implode( '. ', $issues ) . '.',
 			'severity'     => 'medium',

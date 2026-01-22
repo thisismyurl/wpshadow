@@ -32,6 +32,7 @@ class Diagnostic_XML_Sitemap extends Diagnostic_Base {
 		
 		if ( is_wp_error( $response ) || (int) wp_remote_retrieve_response_code( $response ) >= 400 ) {
 			return array(
+				'id'          => 'xml-sitemap',
 				'title'       => 'XML Sitemap Not Found',
 				'description' => 'Search engines rely on your XML sitemap to discover content. Ensure /sitemap.xml is available or provided by your SEO plugin.',
 				'severity'    => 'medium',

@@ -41,7 +41,7 @@ class Diagnostic_Head_Cleanup_RSD extends Diagnostic_Base {
 		}
 
 		return array(
-			'finding_id'   => self::$slug,
+			'id'   => self::$slug,
 			'title'        => self::$title,
 			'description'  => __( 'The RSD link is legacy from the XML-RPC era and is unnecessary for modern WordPress sites. Removing it improves security and reduces page noise.', 'wpshadow' ),
 			'category'     => 'security',

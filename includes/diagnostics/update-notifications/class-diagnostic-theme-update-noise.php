@@ -39,7 +39,7 @@ class Diagnostic_Theme_Update_Noise extends Diagnostic_Base {
 
 		$count_label = $update_count > 0 ? $update_count : count( $inactive );
 		return array(
-			'finding_id'   => self::$slug,
+			'id'   => self::$slug,
 			'title'        => sprintf( _n( '%d unused theme needs attention', '%d unused themes need attention', $count_label, 'wpshadow' ), $count_label ),
 			'description'  => __( 'Unused themes trigger update nags and add clutter. Delete what you do not need or hide their update notices.', 'wpshadow' ),
 			'category'     => 'maintenance',

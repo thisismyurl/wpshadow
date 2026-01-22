@@ -88,6 +88,7 @@ class Diagnostic_Backup_Verification extends Diagnostic_Base {
 		
 		if ( ! empty( $issues ) ) {
 			return array(
+				'id'          => 'backup-verification',
 				'title'       => 'Backup Status Verification',
 				'description' => implode( '. ', $issues ) . '. Regular backups are your safety net.',
 				'severity'    => 'high',

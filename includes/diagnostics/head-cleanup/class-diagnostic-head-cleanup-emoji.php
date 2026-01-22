@@ -41,7 +41,7 @@ class Diagnostic_Head_Cleanup_Emoji extends Diagnostic_Base {
 		}
 
 		return array(
-			'finding_id'   => self::$slug,
+			'id'   => self::$slug,
 			'title'        => self::$title,
 			'description'  => __( 'Emoji detection scripts load on every page but are rarely needed. Removing them reduces requests and improves performance.', 'wpshadow' ),
 			'category'     => 'performance',

@@ -41,7 +41,7 @@ class Diagnostic_Head_Cleanup_Shortlink extends Diagnostic_Base {
 		}
 
 		return array(
-			'finding_id'   => self::$slug,
+			'id'   => self::$slug,
 			'title'        => self::$title,
 			'description'  => __( 'The WordPress shortlink feature is rarely used in modern sites. Removing it reduces page headers and improves performance.', 'wpshadow' ),
 			'category'     => 'performance',

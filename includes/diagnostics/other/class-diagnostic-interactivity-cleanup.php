@@ -46,7 +46,7 @@ class Diagnostic_Interactivity_Cleanup extends Diagnostic_Base {
 		}
 
 		return array(
-			'finding_id'   => self::$slug,
+			'id'   => self::$slug,
 			'title'        => self::$title,
 			'description'  => __( 'WordPress 6.5+ interactive block features (Interactivity API, Block Bindings) are loaded but not used. Disabling saves bandwidth and improves performance.', 'wpshadow' ),
 			'category'     => 'performance',

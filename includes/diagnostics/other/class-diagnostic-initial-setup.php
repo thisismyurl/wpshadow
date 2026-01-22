@@ -253,7 +253,7 @@ class Diagnostic_Initial_Setup extends Diagnostic_Base {
 
 		// Build finding report with all detected issues
 		return array(
-			'finding_id'   => self::$slug,
+			'id'   => self::$slug,
 			'title'        => self::$title,
 			'description'  => self::build_findings_description( $findings ),
 			'category'     => 'settings',

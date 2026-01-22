@@ -31,7 +31,7 @@ class Diagnostic_HTML_Cleanup extends Diagnostic_Base {
 		}
 
 		return array(
-			'finding_id'   => self::$slug,
+			'id'   => self::$slug,
 			'title'        => self::$title,
 			'description'  => sprintf(
 				__( 'HTML minification could reduce page size by approximately %1$s. Found %2$d HTML comments and excess whitespace.', 'wpshadow' ),

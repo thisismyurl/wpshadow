@@ -22,7 +22,7 @@ class Diagnostic_Admin_Username extends Diagnostic_Base {
 		}
 
 		return array(
-			'finding_id'   => self::$slug,
+			'id'   => self::$slug,
 			'title'        => self::$title,
 			'description'  => __( 'Default "admin" username exists. This is a major security vulnerability as it\'s a primary brute-force target. Create a new admin account with a unique username and delete this one.', 'wpshadow' ),
 			'category'     => 'security',

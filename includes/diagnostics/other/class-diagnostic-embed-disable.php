@@ -24,7 +24,7 @@ class Diagnostic_Embed_Disable extends Diagnostic_Base {
 		}
 
 		return array(
-			'finding_id'   => self::$slug,
+			'id'   => self::$slug,
 			'title'        => self::$title,
 			'description'  => __( 'WordPress embed scripts (wp-embed.js) are loaded but may not be needed. Disabling saves bandwidth and improves performance if you don\'t use embed features.', 'wpshadow' ),
 			'category'     => 'performance',

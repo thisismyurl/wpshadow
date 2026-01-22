@@ -32,6 +32,7 @@ class Diagnostic_Disallow_File_Edit extends Diagnostic_Base {
 		}
 
 		return array(
+			'id'           => 'disallow-file-edit',
 			'title'        => 'Theme/Plugin File Editor Enabled',
 			'description'  => 'Built-in file editor is enabled. Disable it to reduce risk of code tampering.',
 			'severity'     => 'medium',

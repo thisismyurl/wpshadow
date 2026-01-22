@@ -78,6 +78,7 @@ class Diagnostic_Monitoring_Status extends Diagnostic_Base {
 			}
 
 			return array(
+				'id'           => 'monitoring-status',
 				'title'        => 'Monitoring & Alerting Setup',
 				'description'  => $description,
 				'severity'     => 'medium',

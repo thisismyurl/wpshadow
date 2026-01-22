@@ -33,6 +33,7 @@ class Diagnostic_Favicon extends Diagnostic_Base {
 		}
 
 		return array(
+			'id'           => 'favicon',
 			'title'        => 'No Site Icon (Favicon) Set',
 			'description'  => 'Adding a site icon improves brand trust and recognition in browser tabs, bookmarks, and mobile devices.',
 			'severity'     => 'low',

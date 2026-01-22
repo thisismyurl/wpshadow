@@ -32,6 +32,7 @@ class Diagnostic_Object_Cache extends Diagnostic_Base {
 		}
 		
 		return array(
+			'id'          => 'object-cache',
 			'title'       => 'Persistent Object Cache Not Enabled',
 			'description' => 'A persistent object cache (Redis/Memcached) can significantly reduce database load and speed up your site.',
 			'severity'    => 'medium',

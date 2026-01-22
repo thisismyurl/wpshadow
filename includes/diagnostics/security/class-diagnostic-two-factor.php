@@ -47,6 +47,7 @@ class Diagnostic_Two_Factor extends Diagnostic_Base {
 		}
 		
 		return array(
+			'id'          => 'two-factor',
 			'title'       => 'Two-Factor Authentication Not Enabled',
 			'description' => 'Admin accounts lack two-factor authentication. Enable 2FA to prevent account takeover.',
 			'severity'    => 'high',

@@ -64,6 +64,7 @@ class Diagnostic_Theme_Performance extends Diagnostic_Base {
 		
 		if ( ! empty( $issues ) ) {
 			return array(
+				'id'          => 'theme-performance',
 				'title'       => 'Theme Performance Recommendations',
 				'description' => 'Your theme could be optimized for better performance and maintainability: ' . implode( '. ', $issues ) . '.',
 				'severity'    => 'low',

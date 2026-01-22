@@ -52,7 +52,7 @@ class Diagnostic_Howdy_Greeting extends Diagnostic_Base {
 
 		// "Howdy" is displayed by default - this is just informational
 		$finding = array(
-			'finding_id'   => self::$slug,
+			'id'   => self::$slug,
 			'title'        => self::$title,
 			'description'  => self::build_description(),
 			'category'     => 'admin-ux',
