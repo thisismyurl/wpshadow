@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    name: PHP ${{ matrix.php-version }} Tests
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['8.0', '8.1', '8.2']
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: dom, curl, libxml, mbstring, zip
+          coverage: none
+          tools: composer:v2
+      
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+      
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+      
+      - name: Check if PHPUnit is installed
+        run: |
+          if [ ! -f vendor/bin/phpunit ]; then
+            echo "ERROR: PHPUnit is not installed"
+            exit 1
+          fi
+      
+      - name: Run PHPUnit tests
+        run: composer test
+
+  static-analysis:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: dom, curl, libxml, mbstring, zip
+          coverage: none
+          tools: composer:v2
+      
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+      
+      - name: Run PHPStan (optional, continue on error)
+        run: composer phpstan || true
+        continue-on-error: true
