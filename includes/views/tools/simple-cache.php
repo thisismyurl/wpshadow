@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$cache_dir = WP_CONTENT_DIR . '/cache/wpshadow';
+$cache_dir  = WP_CONTENT_DIR . '/cache/wpshadow';
 $cache_size = 0;
 
 if ( is_dir( $cache_dir ) ) {
@@ -21,12 +21,12 @@ if ( is_dir( $cache_dir ) ) {
 	}
 }
 
-$cache_enabled = get_option( 'wpshadow_simple_cache_enabled', false );
+$cache_enabled  = get_option( 'wpshadow_simple_cache_enabled', false );
 $cache_lifetime = get_option( 'wpshadow_cache_lifetime', 3600 );
-$cache_pages = get_option( 'wpshadow_cache_pages', true );
-$cache_posts = get_option( 'wpshadow_cache_posts', true );
+$cache_pages    = get_option( 'wpshadow_cache_pages', true );
+$cache_posts    = get_option( 'wpshadow_cache_posts', true );
 $skip_logged_in = get_option( 'wpshadow_skip_logged_in', true );
-$auto_clear = get_option( 'wpshadow_auto_clear_on_save', true );
+$auto_clear     = get_option( 'wpshadow_auto_clear_on_save', true );
 ?>
 
 <div class="wpshadow-tool-container">

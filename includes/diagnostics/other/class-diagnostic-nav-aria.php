@@ -10,8 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Diagnostic_Nav_ARIA extends Diagnostic_Base {
 
-	protected static $slug = 'nav-aria';
-	protected static $title = 'Navigation Accessibility';
+	protected static $slug        = 'nav-aria';
+	protected static $title       = 'Navigation Accessibility';
 	protected static $description = 'Checks for missing ARIA attributes on navigation menus that help screen readers.';
 
 	public static function check(): ?array {

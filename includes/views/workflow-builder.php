@@ -16,7 +16,7 @@ if ( ! current_user_can( 'read' ) ) {
 
 // Get available blocks
 $triggers = \WPShadow\Workflow\Block_Registry::get_triggers();
-$actions = \WPShadow\Workflow\Block_Registry::get_actions();
+$actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 ?>
 
 <div class="wrap wpshadow-workflow-builder">
@@ -32,7 +32,7 @@ $actions = \WPShadow\Workflow\Block_Registry::get_actions();
 			<h3>Triggers (IF)</h3>
 			<div class="wpshadow-block-list">
 				<?php foreach ( $triggers as $id => $block ) : ?>
-					<?php 
+					<?php
 					// Check if this is the current trigger when editing
 					$is_current_trigger = false;
 					if ( ! empty( $_GET['workflow'] ) && ! empty( $blocks ) ) {

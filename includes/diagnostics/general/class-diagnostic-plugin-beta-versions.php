@@ -28,47 +28,47 @@ class Diagnostic_Plugin_Beta_Versions extends Diagnostic_Base {
 
 	protected static $family_label = 'General';
 
-	
+
 	/**
 	 * Get diagnostic ID
 	 */
 	public static function get_id(): string {
 		return 'plugin-beta-versions';
 	}
-	
+
 	/**
 	 * Get diagnostic name
 	 */
 	public static function get_name(): string {
-		return __('Are beta/RC plugins in production?', 'wpshadow');
+		return __( 'Are beta/RC plugins in production?', 'wpshadow' );
 	}
-	
+
 	/**
 	 * Get diagnostic description
 	 */
 	public static function get_description(): string {
-		return __('Are beta/RC plugins in production?. Part of WordPress Ecosystem Health analysis.', 'wpshadow');
+		return __( 'Are beta/RC plugins in production?. Part of WordPress Ecosystem Health analysis.', 'wpshadow' );
 	}
-	
+
 	/**
 	 * Get diagnostic category
 	 */
 	public static function get_category(): string {
 		return 'wordpress_ecosystem';
 	}
-	
+
 	/**
 	 * Run the diagnostic test
 	 *
 	 * @return array Finding data or empty if no issue
 	 */
-			public static function run(): array {
-			// Implement: Are beta/RC plugins in production? test
-			// Smart implementation needed
-			
-			return array(); // Stub: full implementation pending
-		}
-	
+	public static function run(): array {
+		// Implement: Are beta/RC plugins in production? test
+		// Smart implementation needed
+
+		return array(); // Stub: full implementation pending
+	}
+
 	/**
 	 * Get threat level for this finding (0-100)
 	 */
@@ -76,14 +76,14 @@ class Diagnostic_Plugin_Beta_Versions extends Diagnostic_Base {
 		// Threat level based on diagnostic category
 		return 60;
 	}
-	
+
 	/**
 	 * Get KB article URL
 	 */
 	public static function get_kb_article(): string {
 		return 'https://wpshadow.com/kb/plugin-beta-versions/';
 	}
-	
+
 	/**
 	 * Get training video URL
 	 */
@@ -92,7 +92,7 @@ class Diagnostic_Plugin_Beta_Versions extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		if (!(false)) {
+		if ( ! ( false ) ) {
 			return null;
 		}
 

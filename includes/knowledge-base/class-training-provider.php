@@ -27,48 +27,48 @@ class Training_Provider {
 	public static function get_courses() {
 		return array(
 			'security-101'        => array(
-				'title'       => __( 'WordPress Security 101', 'wpshadow' ),
-				'description' => __( 'Learn the fundamentals of keeping your WordPress site secure.', 'wpshadow' ),
-				'duration'    => '15 minutes',
-				'difficulty'  => 'Beginner',
-				'topics'      => array( 'ssl', 'security-headers', 'admin-username' ),
-				'video_url'   => '',
+				'title'            => __( 'WordPress Security 101', 'wpshadow' ),
+				'description'      => __( 'Learn the fundamentals of keeping your WordPress site secure.', 'wpshadow' ),
+				'duration'         => '15 minutes',
+				'difficulty'       => 'Beginner',
+				'topics'           => array( 'ssl', 'security-headers', 'admin-username' ),
+				'video_url'        => '',
 				'estimate_benefit' => __( '2-3 hours saved per year', 'wpshadow' ),
 			),
 			'performance-basics'  => array(
-				'title'       => __( 'Site Performance Basics', 'wpshadow' ),
-				'description' => __( 'Speed up your WordPress site with proven optimization techniques.', 'wpshadow' ),
-				'duration'    => '20 minutes',
-				'difficulty'  => 'Beginner',
-				'topics'      => array( 'memory-limit', 'external-fonts', 'image-lazy-load', 'jquery-migrate' ),
-				'video_url'   => '',
+				'title'            => __( 'Site Performance Basics', 'wpshadow' ),
+				'description'      => __( 'Speed up your WordPress site with proven optimization techniques.', 'wpshadow' ),
+				'duration'         => '20 minutes',
+				'difficulty'       => 'Beginner',
+				'topics'           => array( 'memory-limit', 'external-fonts', 'image-lazy-load', 'jquery-migrate' ),
+				'video_url'        => '',
 				'estimate_benefit' => __( '5-10 hours saved per year', 'wpshadow' ),
 			),
 			'seo-essentials'      => array(
-				'title'       => __( 'SEO Essentials for WordPress', 'wpshadow' ),
-				'description' => __( 'Optimize your site for search engines without plugins or complexity.', 'wpshadow' ),
-				'duration'    => '12 minutes',
-				'difficulty'  => 'Beginner',
-				'topics'      => array( 'tagline', 'permalinks', 'wp-generator', 'security-headers' ),
-				'video_url'   => '',
+				'title'            => __( 'SEO Essentials for WordPress', 'wpshadow' ),
+				'description'      => __( 'Optimize your site for search engines without plugins or complexity.', 'wpshadow' ),
+				'duration'         => '12 minutes',
+				'difficulty'       => 'Beginner',
+				'topics'           => array( 'tagline', 'permalinks', 'wp-generator', 'security-headers' ),
+				'video_url'        => '',
 				'estimate_benefit' => __( '3-5 hours saved per year', 'wpshadow' ),
 			),
 			'accessibility-intro' => array(
-				'title'       => __( 'Accessibility Fundamentals', 'wpshadow' ),
-				'description' => __( 'Make your WordPress site accessible to everyone, including people with disabilities.', 'wpshadow' ),
-				'duration'    => '18 minutes',
-				'difficulty'  => 'Intermediate',
-				'topics'      => array( 'aria-labels', 'skiplinks', 'color-contrast', 'alt-text' ),
-				'video_url'   => '',
+				'title'            => __( 'Accessibility Fundamentals', 'wpshadow' ),
+				'description'      => __( 'Make your WordPress site accessible to everyone, including people with disabilities.', 'wpshadow' ),
+				'duration'         => '18 minutes',
+				'difficulty'       => 'Intermediate',
+				'topics'           => array( 'aria-labels', 'skiplinks', 'color-contrast', 'alt-text' ),
+				'video_url'        => '',
 				'estimate_benefit' => __( '1-2 hours saved per year', 'wpshadow' ),
 			),
 			'maintenance-pro'     => array(
-				'title'       => __( 'WordPress Maintenance Pro', 'wpshadow' ),
-				'description' => __( 'Advanced maintenance strategies to keep your site running smoothly.', 'wpshadow' ),
-				'duration'    => '25 minutes',
-				'difficulty'  => 'Advanced',
-				'topics'      => array( 'database-health', 'error-logging', 'backup-strategy', 'plugin-updates' ),
-				'video_url'   => '',
+				'title'            => __( 'WordPress Maintenance Pro', 'wpshadow' ),
+				'description'      => __( 'Advanced maintenance strategies to keep your site running smoothly.', 'wpshadow' ),
+				'duration'         => '25 minutes',
+				'difficulty'       => 'Advanced',
+				'topics'           => array( 'database-health', 'error-logging', 'backup-strategy', 'plugin-updates' ),
+				'video_url'        => '',
 				'estimate_benefit' => __( '8-10 hours saved per year', 'wpshadow' ),
 			),
 		);
@@ -81,61 +81,61 @@ class Training_Provider {
 	 */
 	public static function get_topics() {
 		return array(
-			'ssl'                => array(
+			'ssl'              => array(
 				'title'       => __( 'Understanding SSL Certificates', 'wpshadow' ),
 				'duration'    => '3 min',
 				'course'      => 'security-101',
 				'description' => __( 'What SSL is, why you need it, and how to set it up.', 'wpshadow' ),
 			),
-			'security-headers'   => array(
+			'security-headers' => array(
 				'title'       => __( 'Security Headers Explained', 'wpshadow' ),
 				'duration'    => '4 min',
 				'course'      => 'security-101',
 				'description' => __( 'Protect your site from common web attacks with security headers.', 'wpshadow' ),
 			),
-			'admin-username'     => array(
+			'admin-username'   => array(
 				'title'       => __( 'Why Custom Admin Usernames Matter', 'wpshadow' ),
 				'duration'    => '3 min',
 				'course'      => 'security-101',
 				'description' => __( 'The risks of "admin" and how to stay secure.', 'wpshadow' ),
 			),
-			'memory-limit'       => array(
+			'memory-limit'     => array(
 				'title'       => __( 'PHP Memory Limit Optimization', 'wpshadow' ),
 				'duration'    => '4 min',
 				'course'      => 'performance-basics',
 				'description' => __( 'When and how to increase memory for better performance.', 'wpshadow' ),
 			),
-			'external-fonts'     => array(
+			'external-fonts'   => array(
 				'title'       => __( 'Self-Hosted Fonts for Speed', 'wpshadow' ),
 				'duration'    => '5 min',
 				'course'      => 'performance-basics',
 				'description' => __( 'Why external fonts slow you down and how to fix it.', 'wpshadow' ),
 			),
-			'image-lazy-load'    => array(
+			'image-lazy-load'  => array(
 				'title'       => __( 'Lazy Loading Images', 'wpshadow' ),
 				'duration'    => '4 min',
 				'course'      => 'performance-basics',
 				'description' => __( 'Speed up page loads with native lazy loading.', 'wpshadow' ),
 			),
-			'tagline'            => array(
+			'tagline'          => array(
 				'title'       => __( 'Taglines & SEO', 'wpshadow' ),
 				'duration'    => '3 min',
 				'course'      => 'seo-essentials',
 				'description' => __( 'Why site taglines matter for search engines and visitors.', 'wpshadow' ),
 			),
-			'permalinks'         => array(
+			'permalinks'       => array(
 				'title'       => __( 'Permalink Structures for SEO', 'wpshadow' ),
 				'duration'    => '3 min',
 				'course'      => 'seo-essentials',
 				'description' => __( 'Choose the right permalink structure for SEO success.', 'wpshadow' ),
 			),
-			'aria-labels'        => array(
+			'aria-labels'      => array(
 				'title'       => __( 'ARIA Labels & Screen Readers', 'wpshadow' ),
 				'duration'    => '4 min',
 				'course'      => 'accessibility-intro',
 				'description' => __( 'Make your site accessible to screen reader users.', 'wpshadow' ),
 			),
-			'skiplinks'          => array(
+			'skiplinks'        => array(
 				'title'       => __( 'Skip Links for Accessibility', 'wpshadow' ),
 				'duration'    => '3 min',
 				'course'      => 'accessibility-intro',
@@ -152,21 +152,21 @@ class Training_Provider {
 	 * @return array Training recommendations.
 	 */
 	public static function get_training_for_item( $item_id, $type = 'diagnostic' ) {
-		$topics = self::get_topics();
+		$topics   = self::get_topics();
 		$matching = array();
 
 		// Map item IDs to training topics
 		$mapping = array(
-			'ssl'                  => array( 'ssl' ),
-			'security-headers'     => array( 'security-headers' ),
-			'admin-username'       => array( 'admin-username' ),
-			'memory-limit'         => array( 'memory-limit' ),
-			'external-fonts'       => array( 'external-fonts' ),
-			'image-lazy-load'      => array( 'image-lazy-load' ),
-			'tagline'              => array( 'tagline' ),
-			'permalinks'           => array( 'permalinks' ),
-			'nav-aria'             => array( 'aria-labels' ),
-			'skiplinks'            => array( 'skiplinks' ),
+			'ssl'              => array( 'ssl' ),
+			'security-headers' => array( 'security-headers' ),
+			'admin-username'   => array( 'admin-username' ),
+			'memory-limit'     => array( 'memory-limit' ),
+			'external-fonts'   => array( 'external-fonts' ),
+			'image-lazy-load'  => array( 'image-lazy-load' ),
+			'tagline'          => array( 'tagline' ),
+			'permalinks'       => array( 'permalinks' ),
+			'nav-aria'         => array( 'aria-labels' ),
+			'skiplinks'        => array( 'skiplinks' ),
 		);
 
 		if ( isset( $mapping[ $item_id ] ) ) {
@@ -188,8 +188,8 @@ class Training_Provider {
 	 * @return array Suggested courses.
 	 */
 	public static function get_course_recommendations( $user_id, $limit = 3 ) {
-		$courses = self::get_courses();
-		$completed = Training_Progress::get_completed_courses( $user_id );
+		$courses     = self::get_courses();
+		$completed   = Training_Progress::get_completed_courses( $user_id );
 		$suggestions = array();
 
 		// Suggest courses user hasn't completed

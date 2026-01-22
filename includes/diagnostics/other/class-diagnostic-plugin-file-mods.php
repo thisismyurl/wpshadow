@@ -24,18 +24,18 @@ class Diagnostic_Plugin_File_Mods extends Diagnostic_Base {
 		// Check if DISALLOW_FILE_MODS is enabled
 		if ( ! defined( 'DISALLOW_FILE_MODS' ) || ! DISALLOW_FILE_MODS ) {
 			return array(
-				'id'          => 'plugin-file-mods',
-				'title'       => 'Plugin/Theme Installation Allowed',
-				'description' => 'Admins can install plugins and themes via the dashboard. For production sites, consider defining DISALLOW_FILE_MODS to prevent unauthorized installations.',
-				'severity'    => 'high',
-				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/disable-file-modifications/',
+				'id'            => 'plugin-file-mods',
+				'title'         => 'Plugin/Theme Installation Allowed',
+				'description'   => 'Admins can install plugins and themes via the dashboard. For production sites, consider defining DISALLOW_FILE_MODS to prevent unauthorized installations.',
+				'severity'      => 'high',
+				'category'      => 'security',
+				'kb_link'       => 'https://wpshadow.com/kb/disable-file-modifications/',
 				'training_link' => 'https://wpshadow.com/training/file-mod-security/',
-				'auto_fixable' => false,
-				'threat_level' => 70,
+				'auto_fixable'  => false,
+				'threat_level'  => 70,
 			);
 		}
-		
+
 		return null;
 	}
 }

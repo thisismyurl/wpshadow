@@ -32,14 +32,14 @@ class Diagnostic_Emoji_Scripts extends Diagnostic_Base {
 	public static function check(): ?array {
 		// Check if treatment is already applied
 		$disabled = get_option( 'wpshadow_emoji_scripts_disabled', false );
-		
+
 		if ( $disabled ) {
 			return null;
 		}
 
 		// Check if emoji scripts are enabled
 		$has_emoji_frontend = has_action( 'wp_head', 'print_emoji_detection_script' ) !== false;
-		$has_emoji_admin = has_action( 'admin_print_scripts', 'print_emoji_detection_script' ) !== false;
+		$has_emoji_admin    = has_action( 'admin_print_scripts', 'print_emoji_detection_script' ) !== false;
 
 		if ( ! $has_emoji_frontend && ! $has_emoji_admin ) {
 			return null;

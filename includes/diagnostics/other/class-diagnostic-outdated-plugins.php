@@ -22,7 +22,7 @@ class Diagnostic_Outdated_Plugins extends Diagnostic_Base {
 	 */
 	public static function check(): ?array {
 		$outdated = self::get_outdated_plugins_count();
-		
+
 		if ( $outdated > 0 ) {
 			return array(
 				'id'           => 'outdated-plugins',
@@ -37,10 +37,10 @@ class Diagnostic_Outdated_Plugins extends Diagnostic_Base {
 				'threat_level' => 80,
 			);
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * Count outdated plugins.
 	 *

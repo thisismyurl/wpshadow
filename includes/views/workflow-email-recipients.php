@@ -18,7 +18,7 @@ require_once WPSHADOW_INCLUDES . 'workflow/class-email-recipient-manager.php';
 use WPShadow\Workflow\Email_Recipient_Manager;
 
 $recipients = Email_Recipient_Manager::get_approved_recipients();
-$nonce = wp_create_nonce( Email_Recipient_Manager::NONCE_ACTION );
+$nonce      = wp_create_nonce( Email_Recipient_Manager::NONCE_ACTION );
 ?>
 
 <div class="wrap wpshadow-email-recipients">

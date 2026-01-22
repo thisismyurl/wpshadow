@@ -26,8 +26,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Diagnostic_Howdy_Greeting extends Diagnostic_Base {
 
-	protected static $slug = 'howdy-greeting-visible';
-	protected static $title = 'Admin Greeting Visible';
+	protected static $slug        = 'howdy-greeting-visible';
+	protected static $title       = 'Admin Greeting Visible';
 	protected static $description = 'Detects if the "Howdy" greeting is displayed in the admin top menu.';
 
 	/**
@@ -46,14 +46,14 @@ class Diagnostic_Howdy_Greeting extends Diagnostic_Base {
 
 		// "Howdy" is displayed by default - this is just informational
 		$finding = array(
-			'finding_id'  => self::$slug,
-			'title'       => self::$title,
-			'description' => self::build_description(),
-			'category'    => 'admin-ux',
-			'severity'    => 'info',
+			'finding_id'   => self::$slug,
+			'title'        => self::$title,
+			'description'  => self::build_description(),
+			'category'     => 'admin-ux',
+			'severity'     => 'info',
 			'threat_level' => 1,
 			'auto_fixable' => true,
-			'timestamp'   => current_time( 'mysql' ),
+			'timestamp'    => current_time( 'mysql' ),
 		);
 
 		return $finding;
@@ -65,7 +65,7 @@ class Diagnostic_Howdy_Greeting extends Diagnostic_Base {
 	 * @return string HTML description.
 	 */
 	private static function build_description(): string {
-		$description = __( 'The "Howdy" admin greeting is currently displayed in the top menu bar.', 'wpshadow' );
+		$description  = __( 'The "Howdy" admin greeting is currently displayed in the top menu bar.', 'wpshadow' );
 		$description .= '<br><br><strong>' . __( 'Options:', 'wpshadow' ) . '</strong><ul>';
 		$description .= '<li>' . __( 'Keep it for a friendly admin experience', 'wpshadow' ) . '</li>';
 		$description .= '<li>' . __( 'Remove it for a cleaner, more professional admin interface', 'wpshadow' ) . '</li>';

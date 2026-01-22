@@ -23,18 +23,18 @@ class Diagnostic_Database_Error_Exposure extends Diagnostic_Base {
 	public static function check(): ?array {
 		if ( defined( 'DB_DEBUG' ) && DB_DEBUG ) {
 			return array(
-				'id'          => 'database-error-exposure',
-				'title'       => 'Database Error Messages Exposed',
-				'description' => 'Database debug mode is enabled. SQL errors are displayed to users, revealing database schema and enabling SQL injection attacks. Disable DB_DEBUG in wp-config.php.',
-				'severity'    => 'high',
-				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/hide-database-errors/',
+				'id'            => 'database-error-exposure',
+				'title'         => 'Database Error Messages Exposed',
+				'description'   => 'Database debug mode is enabled. SQL errors are displayed to users, revealing database schema and enabling SQL injection attacks. Disable DB_DEBUG in wp-config.php.',
+				'severity'      => 'high',
+				'category'      => 'security',
+				'kb_link'       => 'https://wpshadow.com/kb/hide-database-errors/',
 				'training_link' => 'https://wpshadow.com/training/error-handling/',
-				'auto_fixable' => false,
-				'threat_level' => 75,
+				'auto_fixable'  => false,
+				'threat_level'  => 75,
 			);
 		}
-		
+
 		return null;
 	}
 }

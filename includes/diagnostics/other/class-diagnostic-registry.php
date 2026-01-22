@@ -119,14 +119,14 @@ class Diagnostic_Registry {
 		'Diagnostic_Disallow_File_Edit',
 		'Diagnostic_Webhooks_Readiness',
 	);
-	
+
 	/**
 	 * Initialize and load all diagnostic classes.
 	 */
 	public static function init() {
 		self::load_diagnostics();
 	}
-	
+
 	/**
 	 * Load all diagnostic class files.
 	 */
@@ -134,32 +134,32 @@ class Diagnostic_Registry {
 		$diagnostics_dir = plugin_dir_path( __FILE__ );
 		$base_dir        = dirname( $diagnostics_dir );
 		$core_dir        = $base_dir . '/core/';
-		
+
 		// Load base class first (from core directory)
 		$base_file = $core_dir . 'class-diagnostic-base.php';
 		if ( file_exists( $base_file ) ) {
 			require_once $base_file;
 		}
-		
+
 		$all = array_unique( array_merge( self::$quick_diagnostics, self::$deep_diagnostics ) );
-		
+
 		foreach ( $all as $diagnostic ) {
-			$slug = 'class-' . str_replace( '_', '-', strtolower( $diagnostic ) ) . '.php';
+			$slug    = 'class-' . str_replace( '_', '-', strtolower( $diagnostic ) ) . '.php';
 			$primary = $base_dir . '/' . $slug;
 			$legacy  = $diagnostics_dir . $slug;
-			
+
 			// Preferred location (includes/diagnostics/*)
 			if ( file_exists( $primary ) ) {
 				require_once $primary;
 				continue;
 			}
-			
+
 			// Legacy location (includes/diagnostics/other/*)
 			if ( file_exists( $legacy ) ) {
 				require_once $legacy;
 				continue;
 			}
-			
+
 			// Fallback: search one directory deep for reorganized diagnostics (e.g., seo/, performance/)
 			$subdirs = glob( $base_dir . '/*/' . $slug );
 			if ( is_array( $subdirs ) ) {
@@ -172,7 +172,7 @@ class Diagnostic_Registry {
 			}
 		}
 	}
-	
+
 	/**
 	 * Run quick scan checks (default set, matches Quick Scan button).
 	 *
@@ -180,7 +180,7 @@ class Diagnostic_Registry {
 	 */
 	public static function run_quickscan_checks() {
 		$findings = array();
-		
+
 		foreach ( self::$quick_diagnostics as $diagnostic ) {
 			$class_name = __NAMESPACE__ . '\\' . $diagnostic;
 			if ( class_exists( $class_name ) && method_exists( $class_name, 'check' ) ) {
@@ -194,10 +194,10 @@ class Diagnostic_Registry {
 						sprintf( 'Ran diagnostic: %s', $diagnostic ),
 						$category,
 						array(
-							'diagnostic'     => $diagnostic,
-							'trigger'        => 'quick_scan',
-							'found_issue'    => is_array( $result ) && ! empty( $result ),
-							'finding_id'     => $result['id'] ?? '',
+							'diagnostic'  => $diagnostic,
+							'trigger'     => 'quick_scan',
+							'found_issue' => is_array( $result ) && ! empty( $result ),
+							'finding_id'  => $result['id'] ?? '',
 						)
 					);
 				}
@@ -207,7 +207,7 @@ class Diagnostic_Registry {
 				}
 			}
 		}
-		
+
 		return $findings;
 	}
 
@@ -217,7 +217,7 @@ class Diagnostic_Registry {
 	 * @return array Array of findings.
 	 */
 	public static function run_deepscan_checks() {
-		$findings = array();
+		$findings    = array();
 		$deep_extras = apply_filters( 'wpshadow_deep_scan_diagnostics', self::$deep_diagnostics );
 		$diagnostics = array_unique( array_merge( self::$quick_diagnostics, $deep_extras ) );
 
@@ -234,10 +234,10 @@ class Diagnostic_Registry {
 						sprintf( 'Ran diagnostic: %s', $diagnostic ),
 						$category,
 						array(
-							'diagnostic'     => $diagnostic,
-							'trigger'        => 'deep_scan',
-							'found_issue'    => is_array( $result ) && ! empty( $result ),
-							'finding_id'     => $result['id'] ?? '',
+							'diagnostic'  => $diagnostic,
+							'trigger'     => 'deep_scan',
+							'found_issue' => is_array( $result ) && ! empty( $result ),
+							'finding_id'  => $result['id'] ?? '',
 						)
 					);
 				}
@@ -259,7 +259,7 @@ class Diagnostic_Registry {
 	public static function run_all_checks() {
 		return self::run_deepscan_checks();
 	}
-	
+
 	/**
 	 * Get list of registered diagnostic classes.
 	 *
@@ -268,7 +268,7 @@ class Diagnostic_Registry {
 	public static function get_diagnostics() {
 		return self::$quick_diagnostics;
 	}
-	
+
 	/**
 	 * Register a new diagnostic class.
 	 *
@@ -279,7 +279,7 @@ class Diagnostic_Registry {
 			self::$quick_diagnostics[] = $class_name;
 		}
 	}
-	
+
 	/**
 	 * Unregister a diagnostic class.
 	 *
@@ -299,7 +299,7 @@ class Diagnostic_Registry {
 	 * @return array Array keyed by family slug with diagnostic info
 	 */
 	public static function get_diagnostics_by_family() {
-		$all = array_unique( array_merge( self::$quick_diagnostics, self::$deep_diagnostics ) );
+		$all      = array_unique( array_merge( self::$quick_diagnostics, self::$deep_diagnostics ) );
 		$families = array();
 
 		foreach ( $all as $diagnostic ) {
@@ -309,9 +309,9 @@ class Diagnostic_Registry {
 				if ( ! empty( $family ) ) {
 					if ( ! isset( $families[ $family ] ) ) {
 						$families[ $family ] = array(
-							'label'        => call_user_func( array( $class_name, 'get_family_label' ) ),
-							'diagnostics'  => array(),
-							'count'        => 0,
+							'label'       => call_user_func( array( $class_name, 'get_family_label' ) ),
+							'diagnostics' => array(),
+							'count'       => 0,
 						);
 					}
 					$families[ $family ]['diagnostics'][] = array(
@@ -320,7 +320,7 @@ class Diagnostic_Registry {
 						'title'       => call_user_func( array( $class_name, 'get_title' ) ),
 						'description' => call_user_func( array( $class_name, 'get_description' ) ),
 					);
-					$families[ $family ]['count']++;
+					++$families[ $family ]['count'];
 				}
 			}
 		}

@@ -10,8 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Diagnostic_Timezone extends Diagnostic_Base {
 
-	protected static $slug = 'timezone';
-	protected static $title = 'Timezone Configuration';
+	protected static $slug        = 'timezone';
+	protected static $title       = 'Timezone Configuration';
 	protected static $description = 'Checks if timezone is properly configured with a named timezone instead of UTC offset.';
 
 	public static function check(): ?array {

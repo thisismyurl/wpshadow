@@ -25,24 +25,24 @@ class Diagnostic_Geofencing extends Diagnostic_Base {
 			'geoip-detect/geoip-detect.php',
 			'geo-blocker/geo-blocker.php',
 		);
-		
+
 		$active = get_option( 'active_plugins', array() );
 		foreach ( $geo_plugins as $plugin ) {
 			if ( in_array( $plugin, $active, true ) ) {
 				return null;
 			}
 		}
-		
+
 		return array(
-			'id'          => 'geofencing',
-			'title'       => 'No Geographic Access Control',
-			'description' => 'Geographic blocking not configured. Block traffic from countries where you don\'t operate to reduce attack surface.',
-			'severity'    => 'low',
-			'category'    => 'security',
-			'kb_link'     => 'https://wpshadow.com/kb/geographic-blocking/',
+			'id'            => 'geofencing',
+			'title'         => 'No Geographic Access Control',
+			'description'   => 'Geographic blocking not configured. Block traffic from countries where you don\'t operate to reduce attack surface.',
+			'severity'      => 'low',
+			'category'      => 'security',
+			'kb_link'       => 'https://wpshadow.com/kb/geographic-blocking/',
 			'training_link' => 'https://wpshadow.com/training/geofencing/',
-			'auto_fixable' => false,
-			'threat_level' => 50,
+			'auto_fixable'  => false,
+			'threat_level'  => 50,
 		);
 	}
 }

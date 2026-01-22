@@ -11,17 +11,17 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/design-decorative-image-handling
  */
 class Diagnostic_Design_DECORATIVE_IMAGE_HANDLING extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'design-decorative-image-handling',
-            'title' => __('Decorative Image Handling', 'wpshadow'),
-            'description' => __('Confirms decorative images marked with empty alt.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'design',
-            'kb_link' => 'https://wpshadow.com/kb/design-decorative-image-handling',
-            'training_link' => 'https://wpshadow.com/training/design-decorative-image-handling',
-            'auto_fixable' => false,
-            'threat_level' => 5
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'design-decorative-image-handling',
+			'title'         => __( 'Decorative Image Handling', 'wpshadow' ),
+			'description'   => __( 'Confirms decorative images marked with empty alt.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'design',
+			'kb_link'       => 'https://wpshadow.com/kb/design-decorative-image-handling',
+			'training_link' => 'https://wpshadow.com/training/design-decorative-image-handling',
+			'auto_fixable'  => false,
+			'threat_level'  => 5,
+		);
+	}
 }

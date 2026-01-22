@@ -15,7 +15,7 @@ if ( ! current_user_can( 'read' ) ) {
 
 // Get recent critical errors
 $critical_errors = get_option( 'wpshadow_critical_errors', array() );
-$recent_errors = array_slice( array_reverse( $critical_errors ), 0, 5 );
+$recent_errors   = array_slice( array_reverse( $critical_errors ), 0, 5 );
 ?>
 
 <div class="wrap">

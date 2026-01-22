@@ -24,8 +24,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Diagnostic_Comments_Disabled extends Diagnostic_Base {
 
-	protected static $slug = 'comments-disabled';
-	protected static $title = 'Comments Disabled';
+	protected static $slug        = 'comments-disabled';
+	protected static $title       = 'Comments Disabled';
 	protected static $description = 'Detects when comments are disabled and suggests removing the comments menu from admin.';
 
 	/**
@@ -33,7 +33,7 @@ class Diagnostic_Comments_Disabled extends Diagnostic_Base {
 	 */
 	public static function check(): ?array {
 		$default_comment_status = get_option( 'default_comment_status' );
-		
+
 		// Only report if comments are closed
 		if ( 'closed' !== $default_comment_status ) {
 			return null;
@@ -44,7 +44,7 @@ class Diagnostic_Comments_Disabled extends Diagnostic_Base {
 			return null;
 		}
 
-		$description = __( 'Comments are disabled by default, but the WordPress comments menu is still visible in the admin sidebar. This can be hidden for a cleaner admin interface. WPShadow can automatically remove this menu.', 'wpshadow' );
+		$description  = __( 'Comments are disabled by default, but the WordPress comments menu is still visible in the admin sidebar. This can be hidden for a cleaner admin interface. WPShadow can automatically remove this menu.', 'wpshadow' );
 		$description .= '<br><br>' . __( 'Tip: When comments are disabled, WPShadow also recommends removing the "Howdy" greeting for a professional admin experience.', 'wpshadow' );
 
 		return array(

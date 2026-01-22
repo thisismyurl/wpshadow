@@ -11,17 +11,17 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/design-font-weight-scale
  */
 class Diagnostic_Design_FONT_WEIGHT_SCALE extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'design-font-weight-scale',
-            'title' => __('Font Weight Scale', 'wpshadow'),
-            'description' => __('Validates only 2-3 weights per family used.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'design',
-            'kb_link' => 'https://wpshadow.com/kb/design-font-weight-scale',
-            'training_link' => 'https://wpshadow.com/training/design-font-weight-scale',
-            'auto_fixable' => false,
-            'threat_level' => 5
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'design-font-weight-scale',
+			'title'         => __( 'Font Weight Scale', 'wpshadow' ),
+			'description'   => __( 'Validates only 2-3 weights per family used.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'design',
+			'kb_link'       => 'https://wpshadow.com/kb/design-font-weight-scale',
+			'training_link' => 'https://wpshadow.com/training/design-font-weight-scale',
+			'auto_fixable'  => false,
+			'threat_level'  => 5,
+		);
+	}
 }

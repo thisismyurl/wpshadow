@@ -5,39 +5,42 @@ namespace WPShadow\Settings;
 
 /**
  * Data Retention Manager
- * 
+ *
  * Manages activity log retention policies and automatic cleanup.
  * Philosophy: Beyond Pure (#10) - User control over data lifecycle
  * Philosophy: Show Value (#9) - Maintain valuable historical data
- * 
+ *
  * @since 1.2601
  * @package WPShadow
  */
 class Data_Retention_Manager {
-	
+
 	/**
 	 * Option key for retention settings
 	 */
 	const OPTION_KEY = 'wpshadow_data_retention_settings';
-	
+
 	/**
 	 * Get all retention settings
-	 * 
+	 *
 	 * @return array Retention settings
 	 */
 	public static function get_retention_settings() {
-		return get_option( self::OPTION_KEY, array(
-			'activity_log_days' => 90,
-			'finding_log_days' => 180,
-			'workflow_log_days' => 60,
-			'auto_cleanup_enabled' => true,
-			'cleanup_time' => '03:00', // 3 AM
-		) );
+		return get_option(
+			self::OPTION_KEY,
+			array(
+				'activity_log_days'    => 90,
+				'finding_log_days'     => 180,
+				'workflow_log_days'    => 60,
+				'auto_cleanup_enabled' => true,
+				'cleanup_time'         => '03:00', // 3 AM
+			)
+		);
 	}
-	
+
 	/**
 	 * Update retention setting
-	 * 
+	 *
 	 * @param string $key Setting key
 	 * @param mixed  $value Setting value
 	 * @return bool Success status
@@ -46,12 +49,12 @@ class Data_Retention_Manager {
 		if ( empty( $key ) ) {
 			return false;
 		}
-		
-		$settings = self::get_retention_settings();
+
+		$settings         = self::get_retention_settings();
 		$settings[ $key ] = $value;
-		
+
 		$result = update_option( self::OPTION_KEY, $settings );
-		
+
 		// Schedule or reschedule cron if cleanup enabled
 		if ( $key === 'auto_cleanup_enabled' || $key === 'cleanup_time' ) {
 			if ( $settings['auto_cleanup_enabled'] ) {
@@ -60,89 +63,96 @@ class Data_Retention_Manager {
 				wp_clear_scheduled_hook( 'wpshadow_run_data_cleanup' );
 			}
 		}
-		
+
 		// Log activity
 		if ( $result && class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
 			\WPShadow\Core\Activity_Logger::log(
 				'retention_setting_updated',
 				sprintf( 'Data retention setting updated: %s', $key ),
 				'',
-				array( 'setting_key' => $key, 'value' => $value )
+				array(
+					'setting_key' => $key,
+					'value'       => $value,
+				)
 			);
 		}
-		
+
 		return $result;
 	}
-	
+
 	/**
 	 * Schedule data cleanup cron job
-	 * 
+	 *
 	 * @return void
 	 */
 	private static function schedule_cleanup_cron() {
-		$settings = self::get_retention_settings();
+		$settings     = self::get_retention_settings();
 		$cleanup_time = $settings['cleanup_time'] ?? '03:00';
-		
+
 		// Unschedule existing
 		wp_clear_scheduled_hook( 'wpshadow_run_data_cleanup' );
-		
+
 		// Parse time (format: HH:MM)
 		list( $hour, $minute ) = explode( ':', $cleanup_time );
-		$hour = (int) $hour;
-		$minute = (int) $minute;
-		
+		$hour                  = (int) $hour;
+		$minute                = (int) $minute;
+
 		// Calculate next run
-		$now = time();
+		$now        = time();
 		$today_time = mktime( $hour, $minute, 0 );
-		
+
 		if ( $today_time > $now ) {
 			$next_run = $today_time;
 		} else {
 			$next_run = $today_time + DAY_IN_SECONDS;
 		}
-		
+
 		// Schedule daily event
 		wp_schedule_event( $next_run, 'daily', 'wpshadow_run_data_cleanup' );
 	}
-	
+
 	/**
 	 * Run data cleanup (removes old activity entries)
-	 * 
+	 *
 	 * @return array Cleanup results
 	 */
 	public static function run_cleanup() {
 		$settings = self::get_retention_settings();
-		$results = array();
-		
+		$results  = array();
+
 		// Clean activity logs
-		$activity_deleted = self::cleanup_activity_logs( $settings['activity_log_days'] ?? 90 );
+		$activity_deleted         = self::cleanup_activity_logs( $settings['activity_log_days'] ?? 90 );
 		$results['activity_logs'] = $activity_deleted;
-		
+
 		// Clean finding logs
-		$finding_deleted = self::cleanup_finding_logs( $settings['finding_log_days'] ?? 180 );
+		$finding_deleted         = self::cleanup_finding_logs( $settings['finding_log_days'] ?? 180 );
 		$results['finding_logs'] = $finding_deleted;
-		
+
 		// Clean workflow logs
-		$workflow_deleted = self::cleanup_workflow_logs( $settings['workflow_log_days'] ?? 60 );
+		$workflow_deleted         = self::cleanup_workflow_logs( $settings['workflow_log_days'] ?? 60 );
 		$results['workflow_logs'] = $workflow_deleted;
-		
+
 		// Log cleanup event
 		if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
 			\WPShadow\Core\Activity_Logger::log(
 				'data_cleanup_completed',
-				sprintf( 'Data cleanup completed: %d activity, %d finding, %d workflow records removed', 
-					$activity_deleted, $finding_deleted, $workflow_deleted ),
+				sprintf(
+					'Data cleanup completed: %d activity, %d finding, %d workflow records removed',
+					$activity_deleted,
+					$finding_deleted,
+					$workflow_deleted
+				),
 				'',
 				array( 'results' => $results )
 			);
 		}
-		
+
 		return $results;
 	}
-	
+
 	/**
 	 * Clean old activity log entries
-	 * 
+	 *
 	 * @param int $days_to_keep Number of days to keep
 	 * @return int Number of records deleted
 	 */
@@ -150,67 +160,73 @@ class Data_Retention_Manager {
 		if ( ! class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
 			return 0;
 		}
-		
+
 		$cutoff_date = date( 'Y-m-d H:i:s', strtotime( "-{$days_to_keep} days" ) );
-		
+
 		return \WPShadow\Core\Activity_Logger::delete_old_entries( $cutoff_date );
 	}
-	
+
 	/**
 	 * Clean old finding log entries
-	 * 
+	 *
 	 * @param int $days_to_keep Number of days to keep
 	 * @return int Number of records deleted
 	 */
 	private static function cleanup_finding_logs( $days_to_keep ) {
 		$finding_log = get_option( 'wpshadow_finding_log', array() );
-		
+
 		if ( empty( $finding_log ) ) {
 			return 0;
 		}
-		
-		$cutoff_time = strtotime( "-{$days_to_keep} days" );
+
+		$cutoff_time    = strtotime( "-{$days_to_keep} days" );
 		$original_count = count( $finding_log );
-		
-		$finding_log = array_filter( $finding_log, function( $entry ) use ( $cutoff_time ) {
-			$timestamp = isset( $entry['timestamp'] ) ? $entry['timestamp'] : 0;
-			return $timestamp > $cutoff_time;
-		} );
-		
+
+		$finding_log = array_filter(
+			$finding_log,
+			function ( $entry ) use ( $cutoff_time ) {
+				$timestamp = isset( $entry['timestamp'] ) ? $entry['timestamp'] : 0;
+				return $timestamp > $cutoff_time;
+			}
+		);
+
 		update_option( 'wpshadow_finding_log', $finding_log );
-		
+
 		return $original_count - count( $finding_log );
 	}
-	
+
 	/**
 	 * Clean old workflow log entries
-	 * 
+	 *
 	 * @param int $days_to_keep Number of days to keep
 	 * @return int Number of records deleted
 	 */
 	private static function cleanup_workflow_logs( $days_to_keep ) {
 		$workflow_history = get_option( 'wpshadow_workflow_execution_history', array() );
-		
+
 		if ( empty( $workflow_history ) ) {
 			return 0;
 		}
-		
-		$cutoff_time = strtotime( "-{$days_to_keep} days" );
+
+		$cutoff_time    = strtotime( "-{$days_to_keep} days" );
 		$original_count = count( $workflow_history );
-		
-		$workflow_history = array_filter( $workflow_history, function( $entry ) use ( $cutoff_time ) {
-			$timestamp = isset( $entry['timestamp'] ) ? $entry['timestamp'] : 0;
-			return $timestamp > $cutoff_time;
-		} );
-		
+
+		$workflow_history = array_filter(
+			$workflow_history,
+			function ( $entry ) use ( $cutoff_time ) {
+				$timestamp = isset( $entry['timestamp'] ) ? $entry['timestamp'] : 0;
+				return $timestamp > $cutoff_time;
+			}
+		);
+
 		update_option( 'wpshadow_workflow_execution_history', $workflow_history );
-		
+
 		return $original_count - count( $workflow_history );
 	}
-	
+
 	/**
 	 * Render data retention UI
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function render_retention_ui() {

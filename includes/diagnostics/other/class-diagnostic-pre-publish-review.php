@@ -10,8 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Diagnostic_Pre_Publish_Review extends Diagnostic_Base {
 
-	protected static $slug = 'pre-publish-review';
-	protected static $title = 'Pre-Publish Content Review';
+	protected static $slug        = 'pre-publish-review';
+	protected static $title       = 'Pre-Publish Content Review';
 	protected static $description = 'Checks posts before publishing for broken links, missing images, and quality issues.';
 
 	public static function check(): ?array {

@@ -5,41 +5,44 @@ namespace WPShadow\Settings;
 
 /**
  * Privacy Settings Manager
- * 
+ *
  * Manages privacy, consent, and GDPR compliance settings.
  * Philosophy: Beyond Pure (#10) - Privacy-first, transparent, consent-based
  * Philosophy: Show Value (#9) - Track user preferences
- * 
+ *
  * @since 1.2601
  * @package WPShadow
  */
 class Privacy_Settings_Manager {
-	
+
 	/**
 	 * Option key for privacy settings
 	 */
 	const OPTION_KEY = 'wpshadow_privacy_settings';
-	
+
 	/**
 	 * Get all privacy settings with defaults
-	 * 
+	 *
 	 * @return array Privacy settings
 	 */
 	public static function get_all_settings() {
-		return get_option( self::OPTION_KEY, array(
-			'consent_required' => true,
-			'collect_analytics' => false,
-			'allow_data_processing' => false,
-			'data_retention_days' => 90,
-			'export_user_data' => true,
-			'delete_user_data' => true,
-			'anonymize_on_delete' => true,
-		) );
+		return get_option(
+			self::OPTION_KEY,
+			array(
+				'consent_required'      => true,
+				'collect_analytics'     => false,
+				'allow_data_processing' => false,
+				'data_retention_days'   => 90,
+				'export_user_data'      => true,
+				'delete_user_data'      => true,
+				'anonymize_on_delete'   => true,
+			)
+		);
 	}
-	
+
 	/**
 	 * Update privacy setting
-	 * 
+	 *
 	 * @param string $key Setting key
 	 * @param mixed  $value Setting value
 	 * @return bool Success status
@@ -48,12 +51,12 @@ class Privacy_Settings_Manager {
 		if ( empty( $key ) ) {
 			return false;
 		}
-		
-		$settings = self::get_all_settings();
+
+		$settings         = self::get_all_settings();
 		$settings[ $key ] = $value;
-		
+
 		$result = update_option( self::OPTION_KEY, $settings );
-		
+
 		// Log activity
 		if ( $result && class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
 			\WPShadow\Core\Activity_Logger::log(
@@ -63,13 +66,13 @@ class Privacy_Settings_Manager {
 				array( 'setting_key' => $key )
 			);
 		}
-		
+
 		return $result;
 	}
-	
+
 	/**
 	 * Record user consent
-	 * 
+	 *
 	 * @param int   $user_id User ID
 	 * @param bool  $analytics User consented to analytics
 	 * @param bool  $processing User consented to data processing
@@ -77,31 +80,31 @@ class Privacy_Settings_Manager {
 	 */
 	public static function record_user_consent( $user_id, $analytics = false, $processing = false ) {
 		$consent_data = array(
-			'timestamp' => current_time( 'timestamp' ),
-			'user_id' => $user_id,
-			'analytics' => $analytics,
+			'timestamp'  => current_time( 'timestamp' ),
+			'user_id'    => $user_id,
+			'analytics'  => $analytics,
 			'processing' => $processing,
-			'ip' => isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( $_SERVER['REMOTE_ADDR'] ) : '',
+			'ip'         => isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( $_SERVER['REMOTE_ADDR'] ) : '',
 		);
-		
+
 		return update_user_meta( $user_id, 'wpshadow_privacy_consent', $consent_data );
 	}
-	
+
 	/**
 	 * Get user consent record
-	 * 
+	 *
 	 * @param int $user_id User ID
 	 * @return array|false Consent data or false if not found
 	 */
 	public static function get_user_consent( $user_id ) {
 		return get_user_meta( $user_id, 'wpshadow_privacy_consent', true );
 	}
-	
+
 	/**
 	 * Render privacy settings UI
-	 * 
+	 *
 	 * Philosophy: Inspire Confidence (#8) - Clear, transparent settings
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function render_privacy_ui() {

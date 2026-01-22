@@ -26,24 +26,24 @@ class Diagnostic_File_Integrity_Monitoring extends Diagnostic_Base {
 			'sucuri-scanner/sucuri.php',
 			'shield-security/shield-security-pro.php',
 		);
-		
+
 		$active = get_option( 'active_plugins', array() );
 		foreach ( $fim_plugins as $plugin ) {
 			if ( in_array( $plugin, $active, true ) ) {
 				return null;
 			}
 		}
-		
+
 		return array(
-			'id'          => 'file-integrity-monitoring',
-			'title'       => 'No File Integrity Monitoring',
-			'description' => 'File changes go undetected. Malware and backdoors can be added without your knowledge. Enable file integrity monitoring to detect unauthorized file modifications.',
-			'severity'    => 'high',
-			'category'    => 'security',
-			'kb_link'     => 'https://wpshadow.com/kb/enable-file-integrity-monitoring/',
+			'id'            => 'file-integrity-monitoring',
+			'title'         => 'No File Integrity Monitoring',
+			'description'   => 'File changes go undetected. Malware and backdoors can be added without your knowledge. Enable file integrity monitoring to detect unauthorized file modifications.',
+			'severity'      => 'high',
+			'category'      => 'security',
+			'kb_link'       => 'https://wpshadow.com/kb/enable-file-integrity-monitoring/',
 			'training_link' => 'https://wpshadow.com/training/file-security/',
-			'auto_fixable' => false,
-			'threat_level' => 75,
+			'auto_fixable'  => false,
+			'threat_level'  => 75,
 		);
 	}
 }

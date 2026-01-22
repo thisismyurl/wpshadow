@@ -33,7 +33,7 @@ class Diagnostic_Skiplinks extends Diagnostic_Base {
 				'threat_level' => 25,
 			);
 		}
-		
+
 		return null;
 	}
 }

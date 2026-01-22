@@ -27,14 +27,14 @@ class Diagnostic_IP_Whitelisting extends Diagnostic_Base {
 			'wordfence/wordfence.php',
 			'limit-login-countries/limit-login-countries.php',
 		);
-		
+
 		$active = get_option( 'active_plugins', array() );
 		foreach ( $ip_plugins as $plugin ) {
 			if ( in_array( $plugin, $active, true ) ) {
 				return null; // IP filtering likely configured
 			}
 		}
-		
+
 		// Check for .htaccess restrictions (basic check)
 		$htaccess = ABSPATH . '.htaccess';
 		if ( file_exists( $htaccess ) ) {
@@ -43,17 +43,17 @@ class Diagnostic_IP_Whitelisting extends Diagnostic_Base {
 				return null; // IP restrictions found
 			}
 		}
-		
+
 		return array(
-			'id'          => 'ip-whitelisting',
-			'title'       => 'Admin Access Not IP-Restricted',
-			'description' => 'Admin area is accessible from any IP address. Consider restricting access to known IPs via .htaccess or a security plugin for additional protection.',
-			'severity'    => 'medium',
-			'category'    => 'security',
-			'kb_link'     => 'https://wpshadow.com/kb/restrict-admin-by-ip/',
+			'id'            => 'ip-whitelisting',
+			'title'         => 'Admin Access Not IP-Restricted',
+			'description'   => 'Admin area is accessible from any IP address. Consider restricting access to known IPs via .htaccess or a security plugin for additional protection.',
+			'severity'      => 'medium',
+			'category'      => 'security',
+			'kb_link'       => 'https://wpshadow.com/kb/restrict-admin-by-ip/',
 			'training_link' => 'https://wpshadow.com/training/ip-whitelisting/',
-			'auto_fixable' => false,
-			'threat_level' => 65,
+			'auto_fixable'  => false,
+			'threat_level'  => 65,
 		);
 	}
 }

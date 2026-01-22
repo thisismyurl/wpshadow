@@ -19,10 +19,10 @@ use WPShadow\Admin\Update_Notification_Manager;
 
 class Diagnostic_Plugin_Update_Noise extends Diagnostic_Base {
 
-	protected static $slug = 'plugin-update-noise';
-	protected static $title = 'Plugin Update Notifications';
-	protected static $description = 'Flags inactive plugins that generate update notifications.';
-	protected static $family = 'update-notifications';
+	protected static $slug         = 'plugin-update-noise';
+	protected static $title        = 'Plugin Update Notifications';
+	protected static $description  = 'Flags inactive plugins that generate update notifications.';
+	protected static $family       = 'update-notifications';
 	protected static $family_label = 'Update Notification Management';
 	/**
 	 * Run the diagnostic check.
@@ -30,7 +30,7 @@ class Diagnostic_Plugin_Update_Noise extends Diagnostic_Base {
 	 * @return array|null Finding data or null if no issue.
 	 */
 	public static function check(): ?array {
-		$inactive = Update_Notification_Manager::get_inactive_plugins();
+		$inactive     = Update_Notification_Manager::get_inactive_plugins();
 		$update_count = self::count_inactive_plugin_updates( $inactive );
 
 		if ( 0 === $update_count && empty( $inactive ) ) {
@@ -70,7 +70,7 @@ class Diagnostic_Plugin_Update_Noise extends Diagnostic_Base {
 		$count = 0;
 		foreach ( $inactive as $plugin_file ) {
 			if ( isset( $updates->response[ $plugin_file ] ) ) {
-				$count++;
+				++$count;
 			}
 		}
 

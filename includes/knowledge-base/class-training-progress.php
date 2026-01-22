@@ -65,9 +65,9 @@ class Training_Progress {
 		}
 
 		$progress['courses'][ $course_id ] = array(
-			'completed_at'  => current_time( 'mysql' ),
-			'completed'     => true,
-			'certificate'   => true,
+			'completed_at' => current_time( 'mysql' ),
+			'completed'    => true,
+			'certificate'  => true,
 		);
 
 		return update_user_meta( (int) $user_id, self::$meta_key, $progress );
@@ -125,12 +125,12 @@ class Training_Progress {
 			return 0;
 		}
 
-		$completed = self::get_completed_topics( $user_id );
+		$completed       = self::get_completed_topics( $user_id );
 		$completed_count = 0;
 
 		foreach ( $topics as $topic_id ) {
 			if ( isset( $completed[ $topic_id ] ) && $completed[ $topic_id ]['completed'] ) {
-				$completed_count++;
+				++$completed_count;
 			}
 		}
 
@@ -144,27 +144,32 @@ class Training_Progress {
 	 * @return array Total progress stats.
 	 */
 	public static function get_total_progress( $user_id ) {
-		$courses = Training_Provider::get_courses();
-		$total_topics = 0;
-		$completed_topics = 0;
+		$courses           = Training_Provider::get_courses();
+		$total_topics      = 0;
+		$completed_topics  = 0;
 		$completed_courses = self::get_completed_courses( $user_id );
 
 		foreach ( $courses as $course_id => $course ) {
-			$topics = isset( $course['topics'] ) ? $course['topics'] : array();
+			$topics        = isset( $course['topics'] ) ? $course['topics'] : array();
 			$total_topics += count( $topics );
 		}
 
-		$completed_data = self::get_completed_topics( $user_id );
-		$completed_topics = count( array_filter( $completed_data, function ( $t ) {
-			return isset( $t['completed'] ) && $t['completed'];
-		} ) );
+		$completed_data   = self::get_completed_topics( $user_id );
+		$completed_topics = count(
+			array_filter(
+				$completed_data,
+				function ( $t ) {
+					return isset( $t['completed'] ) && $t['completed'];
+				}
+			)
+		);
 
 		return array(
-			'total_courses'      => count( $courses ),
-			'completed_courses'  => count( $completed_courses ),
-			'total_topics'       => $total_topics,
-			'completed_topics'   => $completed_topics,
-			'percent_complete'   => $total_topics > 0 ? round( ( $completed_topics / $total_topics ) * 100 ) : 0,
+			'total_courses'     => count( $courses ),
+			'completed_courses' => count( $completed_courses ),
+			'total_topics'      => $total_topics,
+			'completed_topics'  => $completed_topics,
+			'percent_complete'  => $total_topics > 0 ? round( ( $completed_topics / $total_topics ) * 100 ) : 0,
 		);
 	}
 

@@ -24,7 +24,7 @@ class Diagnostic_Consent_Checks extends Diagnostic_Base {
 		if ( get_option( 'wpshadow_consent_enabled', false ) ) {
 			return null;
 		}
-		
+
 		return array(
 			'id'           => 'consent-missing',
 			'title'        => 'Enable a Consent Banner',

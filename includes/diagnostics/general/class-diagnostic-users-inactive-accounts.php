@@ -28,26 +28,26 @@ class Diagnostic_Users_Inactive_Accounts extends Diagnostic_Base {
 
 	protected static $family_label = 'General';
 
-	
+
 	/**
 	 * Get diagnostic ID
 	 */
 	public static function get_id(): string {
 		return 'users-inactive-accounts';
 	}
-	
+
 	/**
 	 * Get diagnostic name
 	 */
 	public static function get_name(): string {
 		return __( 'Inactive User Accounts', 'wpshadow' );
 	}
-	
+
 	/**
 	 * Get diagnostic description
 	 */
 	public static function get_description(): string {
-		return __( 'Users who haven't logged in for 90+ days?', 'wpshadow' );
+		return __( 'Users who haven't logged in for 90 + days ? ', 'wpshadow' );
 	}
 	
 	/**
@@ -96,9 +96,9 @@ class Diagnostic_Users_Inactive_Accounts extends Diagnostic_Base {
 	 * Get KB article URL
 	 */
 	public static function get_kb_article(): string {
-		return 'https://wpshadow.com/kb/users-inactive-accounts';
+		return 'https : //wpshadow.com/kb/users-inactive-accounts';
 	}
-	
+
 	/**
 	 * Get training video URL
 	 */
@@ -107,7 +107,7 @@ class Diagnostic_Users_Inactive_Accounts extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		if (!(false)) {
+		if ( ! ( false ) ) {
 			return null;
 		}
 

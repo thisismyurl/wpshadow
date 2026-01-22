@@ -13,9 +13,12 @@ $workflows = \WPShadow\Workflow\Workflow_Manager::get_workflows();
 
 // Filter out temporary Kanban workflows
 $hidden_workflow_ids = \WPShadow\Workflow\Kanban_Workflow_Helper::get_hidden_workflow_ids();
-$workflows = array_filter( $workflows, function( $workflow ) use ( $hidden_workflow_ids ) {
-	return ! in_array( $workflow['id'], $hidden_workflow_ids, true );
-} );
+$workflows           = array_filter(
+	$workflows,
+	function ( $workflow ) use ( $hidden_workflow_ids ) {
+		return ! in_array( $workflow['id'], $hidden_workflow_ids, true );
+	}
+);
 
 $suggestions = \WPShadow\Workflow\Workflow_Suggestions::get_suggestions();
 $suggestions = array_slice( $suggestions, 0, 6 );
@@ -118,8 +121,8 @@ $suggestions = array_slice( $suggestions, 0, 6 );
 			<?php foreach ( $workflows as $workflow ) : ?>
 				<?php
 				$trigger_label = get_trigger_summary( $workflow );
-				$action_label = get_action_summary( $workflow );
-				$is_enabled = ! isset( $workflow['enabled'] ) || $workflow['enabled'];
+				$action_label  = get_action_summary( $workflow );
+				$is_enabled    = ! isset( $workflow['enabled'] ) || $workflow['enabled'];
 				?>
 				<div class="workflow-card <?php echo $is_enabled ? 'enabled' : 'disabled'; ?>" data-workflow-id="<?php echo esc_attr( $workflow['id'] ); ?>">
 					<div class="workflow-header">
@@ -559,58 +562,58 @@ function get_trigger_summary( $workflow ) {
 			}
 		}
 	}
-	
+
 	// Fallback to direct trigger key (legacy format)
 	if ( ! $trigger_block && ! empty( $workflow['trigger'] ) ) {
 		$trigger_block = $workflow['trigger'];
 	}
-	
+
 	if ( ! $trigger_block ) {
 		return __( 'No trigger configured', 'wpshadow' );
 	}
 
 	$trigger_id = isset( $trigger_block['id'] ) ? $trigger_block['id'] : '';
-	$config = isset( $trigger_block['config'] ) ? $trigger_block['config'] : array();
-	
+	$config     = isset( $trigger_block['config'] ) ? $trigger_block['config'] : array();
+
 	// For time triggers, show the schedule
 	if ( 'time_daily' === $trigger_id || ( isset( $trigger_block['type'] ) && 'time_trigger' === $trigger_block['type'] ) ) {
 		$frequency = isset( $config['frequency'] ) ? $config['frequency'] : 'daily';
-		$time = isset( $config['time'] ) ? $config['time'] : '02:00';
-		
+		$time      = isset( $config['time'] ) ? $config['time'] : '02:00';
+
 		// Convert time format (24-hour to 12-hour with AM/PM)
-		$time_parts = explode( ':', $time );
-		$hour = intval( $time_parts[0] );
-		$minute = isset( $time_parts[1] ) ? $time_parts[1] : '00';
-		$ampm = $hour >= 12 ? 'PM' : 'AM';
+		$time_parts   = explode( ':', $time );
+		$hour         = intval( $time_parts[0] );
+		$minute       = isset( $time_parts[1] ) ? $time_parts[1] : '00';
+		$ampm         = $hour >= 12 ? 'PM' : 'AM';
 		$display_hour = $hour % 12;
 		if ( 0 === $display_hour ) {
 			$display_hour = 12;
 		}
-		
+
 		$time_display = sprintf( '%d:%s %s', $display_hour, $minute, $ampm );
-		
+
 		if ( 'daily' === $frequency ) {
 			return sprintf( __( 'Daily at %s', 'wpshadow' ), $time_display );
 		} elseif ( 'weekly' === $frequency ) {
 			$day = isset( $config['day'] ) ? ucfirst( $config['day'] ) : 'Sunday';
-			return sprintf( __( 'Weekly on %s at %s', 'wpshadow' ), $day, $time_display );
+			return sprintf( __( 'Weekly on %1$s at %2$s', 'wpshadow' ), $day, $time_display );
 		} elseif ( 'monthly' === $frequency ) {
 			$day = isset( $config['day'] ) ? $config['day'] : '1';
-			return sprintf( __( 'Monthly on day %s at %s', 'wpshadow' ), $day, $time_display );
+			return sprintf( __( 'Monthly on day %1$s at %2$s', 'wpshadow' ), $day, $time_display );
 		}
 	}
-	
+
 	// For other triggers, get label from registry
 	$all_triggers = \WPShadow\Workflow\Block_Registry::get_triggers();
-	
+
 	if ( ! empty( $trigger_id ) && isset( $all_triggers[ $trigger_id ] ) ) {
 		$trigger_block_data = $all_triggers[ $trigger_id ];
 		return $trigger_block_data['label'];
 	}
-	
+
 	// Fallback to type-based summary
 	if ( isset( $trigger_block['type'] ) ) {
-		$type = $trigger_block['type'];
+		$type      = $trigger_block['type'];
 		$summaries = array(
 			'time_trigger'      => __( 'On schedule', 'wpshadow' ),
 			'page_load_trigger' => __( 'On page load', 'wpshadow' ),
@@ -619,7 +622,7 @@ function get_trigger_summary( $workflow ) {
 		);
 		return isset( $summaries[ $type ] ) ? $summaries[ $type ] : $type;
 	}
-	
+
 	return __( 'Unknown trigger', 'wpshadow' );
 }
 
@@ -632,7 +635,7 @@ function get_trigger_summary( $workflow ) {
  */
 function get_action_summary( $workflow ) {
 	$action_blocks = array();
-	
+
 	// Try to get from blocks format (new format)
 	if ( ! empty( $workflow['blocks'] ) && is_array( $workflow['blocks'] ) ) {
 		foreach ( $workflow['blocks'] as $block ) {
@@ -641,22 +644,22 @@ function get_action_summary( $workflow ) {
 			}
 		}
 	}
-	
+
 	// Fallback to direct actions key (legacy format)
 	if ( empty( $action_blocks ) && ! empty( $workflow['actions'] ) && is_array( $workflow['actions'] ) ) {
 		$action_blocks = $workflow['actions'];
 	}
-	
+
 	if ( empty( $action_blocks ) ) {
 		return __( 'No actions configured', 'wpshadow' );
 	}
 
 	$first_action = $action_blocks[0];
-	$action_id = isset( $first_action['id'] ) ? $first_action['id'] : '';
-	
+	$action_id    = isset( $first_action['id'] ) ? $first_action['id'] : '';
+
 	// Get action from registry to get the label
 	$all_actions = \WPShadow\Workflow\Block_Registry::get_actions();
-	
+
 	if ( ! empty( $action_id ) && isset( $all_actions[ $action_id ] ) ) {
 		$action_block_data = $all_actions[ $action_id ];
 		return $action_block_data['label'];

@@ -32,7 +32,7 @@ class Diagnostic_Admin_Fonts extends Diagnostic_Base {
 	public static function check(): ?array {
 		// Check if treatment is already applied
 		$disabled = get_option( 'wpshadow_admin_fonts_disabled', false );
-		
+
 		if ( $disabled ) {
 			return null;
 		}
@@ -40,7 +40,7 @@ class Diagnostic_Admin_Fonts extends Diagnostic_Base {
 		// Check if Open Sans is enqueued in admin
 		global $wp_styles;
 		$open_sans_loaded = false;
-		
+
 		if ( is_admin() && isset( $wp_styles->registered['open-sans'] ) ) {
 			$open_sans_loaded = true;
 		}

@@ -13,7 +13,7 @@ if ( ! current_user_can( 'read' ) ) {
 	wp_die( 'Insufficient permissions.' );
 }
 
-$user_id = get_current_user_id();
+$user_id        = get_current_user_id();
 $dark_mode_pref = get_user_meta( $user_id, 'wpshadow_dark_mode_preference', true ) ?: 'auto';
 ?>
 

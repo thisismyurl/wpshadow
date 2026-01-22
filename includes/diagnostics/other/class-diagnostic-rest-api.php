@@ -32,13 +32,13 @@ class Diagnostic_REST_API extends Diagnostic_Base {
 	public static function check(): ?array {
 		// Check if treatment is already applied
 		$disabled = get_option( 'wpshadow_rest_api_headers_disabled', false );
-		
+
 		if ( $disabled ) {
 			return null;
 		}
 
 		// Check if REST API link header is enabled
-		$has_rest_link = has_action( 'wp_head', 'rest_output_link_wp_head' ) !== false;
+		$has_rest_link   = has_action( 'wp_head', 'rest_output_link_wp_head' ) !== false;
 		$has_rest_header = has_action( 'template_redirect', 'rest_output_link_header' ) !== false;
 
 		if ( ! $has_rest_link && ! $has_rest_header ) {

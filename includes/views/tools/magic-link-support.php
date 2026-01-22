@@ -9,10 +9,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$magic_links = get_option( 'wpshadow_magic_links', array() );
-$active_links = array_filter( $magic_links, function( $link ) {
-	return isset( $link['expires_at'] ) && $link['expires_at'] > current_time( 'timestamp' );
-} );
+$magic_links  = get_option( 'wpshadow_magic_links', array() );
+$active_links = array_filter(
+	$magic_links,
+	function ( $link ) {
+		return isset( $link['expires_at'] ) && $link['expires_at'] > current_time( 'timestamp' );
+	}
+);
 ?>
 
 <div class="wpshadow-tool-container">

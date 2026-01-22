@@ -74,7 +74,7 @@ class Kanban_Note_Action {
 		);
 
 		// Store the note
-		$notes = self::get_all_notes();
+		$notes             = self::get_all_notes();
 		$notes[ $note_id ] = $note;
 		update_option( self::OPTION_KEY, $notes );
 
@@ -112,7 +112,7 @@ class Kanban_Note_Action {
 		$notes = self::get_all_notes();
 		return array_filter(
 			$notes,
-			function( $note ) use ( $status ) {
+			function ( $note ) use ( $status ) {
 				return $note['status'] === $status;
 			}
 		);
@@ -128,7 +128,7 @@ class Kanban_Note_Action {
 		$notes = self::get_all_notes();
 		return array_filter(
 			$notes,
-			function( $note ) use ( $category ) {
+			function ( $note ) use ( $category ) {
 				return $note['category'] === $category;
 			}
 		);
@@ -158,8 +158,8 @@ class Kanban_Note_Action {
 			return false;
 		}
 
-		$status = self::validate_status( $status );
-		$notes = self::get_all_notes();
+		$status                      = self::validate_status( $status );
+		$notes                       = self::get_all_notes();
 		$notes[ $note_id ]['status'] = $status;
 		update_option( self::OPTION_KEY, $notes );
 
@@ -233,7 +233,7 @@ class Kanban_Note_Action {
 		}
 
 		return array_map(
-			function( $tag ) {
+			function ( $tag ) {
 				return sanitize_text_field( $tag );
 			},
 			$tags
@@ -247,15 +247,15 @@ class Kanban_Note_Action {
 	 * @return int Number of notes deleted
 	 */
 	public static function cleanup_old_notes( int $days_old = 30 ): int {
-		$notes = self::get_all_notes();
-		$cutoff = time() - ( $days_old * DAY_IN_SECONDS );
+		$notes   = self::get_all_notes();
+		$cutoff  = time() - ( $days_old * DAY_IN_SECONDS );
 		$deleted = 0;
 
 		foreach ( $notes as $note_id => $note ) {
 			$created_time = strtotime( $note['created_at'] );
 			if ( $created_time < $cutoff ) {
 				self::delete( $note_id );
-				$deleted++;
+				++$deleted;
 			}
 		}
 
@@ -272,7 +272,7 @@ class Kanban_Note_Action {
 		$notes = self::get_all_notes();
 		return array_filter(
 			$notes,
-			function( $note ) use ( $workflow_id ) {
+			function ( $note ) use ( $workflow_id ) {
 				return $note['workflow_id'] === $workflow_id;
 			}
 		);

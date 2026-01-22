@@ -22,14 +22,14 @@ class Diagnostic_RBAC_Audit extends Diagnostic_Base {
 	 */
 	public static function check(): ?array {
 		global $wp_roles;
-		
+
 		// Check for custom roles with excessive permissions
 		if ( empty( $wp_roles ) ) {
 			return null;
 		}
-		
+
 		$suspicious_roles = array();
-		
+
 		foreach ( $wp_roles->roles as $role_name => $role_data ) {
 			if ( ! in_array( $role_name, array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' ), true ) ) {
 				// Custom role - check for excessive permissions
@@ -38,24 +38,24 @@ class Diagnostic_RBAC_Audit extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		if ( ! empty( $suspicious_roles ) ) {
 			return array(
-				'id'          => 'rbac-audit',
-				'title'       => 'Custom Roles with Admin Capabilities',
-				'description' => sprintf(
+				'id'            => 'rbac-audit',
+				'title'         => 'Custom Roles with Admin Capabilities',
+				'description'   => sprintf(
 					'Found custom roles with administrative permissions: %s. This may indicate privilege escalation. Remove excessive permissions from non-admin roles.',
 					implode( ', ', $suspicious_roles )
 				),
-				'severity'    => 'medium',
-				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/audit-user-roles/',
+				'severity'      => 'medium',
+				'category'      => 'security',
+				'kb_link'       => 'https://wpshadow.com/kb/audit-user-roles/',
 				'training_link' => 'https://wpshadow.com/training/role-management/',
-				'auto_fixable' => false,
-				'threat_level' => 65,
+				'auto_fixable'  => false,
+				'threat_level'  => 65,
 			);
 		}
-		
+
 		return null;
 	}
 }

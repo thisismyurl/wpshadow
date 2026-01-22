@@ -22,21 +22,21 @@ class Diagnostic_CAA_Records_Configuration extends Diagnostic_Base {
 	 */
 	public static function check(): ?array {
 		$caa_configured = get_option( 'wpshadow_caa_records_configured' );
-		
+
 		if ( empty( $caa_configured ) ) {
 			return array(
-				'id'          => 'caa-records-configuration',
-				'title'       => 'No CAA Records Configured',
-				'description' => 'CAA (Certification Authority Authorization) DNS records not set. Attackers can request SSL certificates from rogue CAs. Configure CAA records to authorize only trusted CAs.',
-				'severity'    => 'medium',
-				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/configure-caa-records/',
+				'id'            => 'caa-records-configuration',
+				'title'         => 'No CAA Records Configured',
+				'description'   => 'CAA (Certification Authority Authorization) DNS records not set. Attackers can request SSL certificates from rogue CAs. Configure CAA records to authorize only trusted CAs.',
+				'severity'      => 'medium',
+				'category'      => 'security',
+				'kb_link'       => 'https://wpshadow.com/kb/configure-caa-records/',
 				'training_link' => 'https://wpshadow.com/training/certificate-security/',
-				'auto_fixable' => false,
-				'threat_level' => 65,
+				'auto_fixable'  => false,
+				'threat_level'  => 65,
 			);
 		}
-		
+
 		return null;
 	}
 }

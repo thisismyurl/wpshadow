@@ -28,47 +28,47 @@ class Diagnostic_Qualified_Traffic_Percent extends Diagnostic_Base {
 
 	protected static $family_label = 'General';
 
-	
+
 	/**
 	 * Get diagnostic ID
 	 */
 	public static function get_id(): string {
 		return 'qualified-traffic-percent';
 	}
-	
+
 	/**
 	 * Get diagnostic name
 	 */
 	public static function get_name(): string {
-		return __('% of traffic likely to convert?', 'wpshadow');
+		return __( '% of traffic likely to convert?', 'wpshadow' );
 	}
-	
+
 	/**
 	 * Get diagnostic description
 	 */
 	public static function get_description(): string {
-		return __('% of traffic likely to convert?. Part of Business Impact & Revenue analysis.', 'wpshadow');
+		return __( '% of traffic likely to convert?. Part of Business Impact & Revenue analysis.', 'wpshadow' );
 	}
-	
+
 	/**
 	 * Get diagnostic category
 	 */
 	public static function get_category(): string {
 		return 'business_impact';
 	}
-	
+
 	/**
 	 * Run the diagnostic test
 	 *
 	 * @return array Finding data or empty if no issue
 	 */
-			public static function run(): array {
-			// Implement: % of traffic likely to convert? test
-			// Smart implementation needed
-			
-			return array(); // Stub: full implementation pending
-		}
-	
+	public static function run(): array {
+		// Implement: % of traffic likely to convert? test
+		// Smart implementation needed
+
+		return array(); // Stub: full implementation pending
+	}
+
 	/**
 	 * Get threat level for this finding (0-100)
 	 */
@@ -76,14 +76,14 @@ class Diagnostic_Qualified_Traffic_Percent extends Diagnostic_Base {
 		// Threat level based on diagnostic category
 		return 46;
 	}
-	
+
 	/**
 	 * Get KB article URL
 	 */
 	public static function get_kb_article(): string {
 		return 'https://wpshadow.com/kb/qualified-traffic-percent/';
 	}
-	
+
 	/**
 	 * Get training video URL
 	 */
@@ -92,7 +92,7 @@ class Diagnostic_Qualified_Traffic_Percent extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		if (!(false)) {
+		if ( ! ( false ) ) {
 			return null;
 		}
 

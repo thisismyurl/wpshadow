@@ -61,7 +61,7 @@ class Kanban_Workflow_Helper {
 			),
 		);
 
-		$workflow_name = $config['is_temporary'] 
+		$workflow_name = $config['is_temporary']
 			? '[Auto] Heavy Tests - ' . current_time( 'Y-m-d H:i' )
 			: 'Heavy Diagnostics - Nightly';
 
@@ -169,7 +169,7 @@ class Kanban_Workflow_Helper {
 	 * @param bool   $is_temporary Whether this is a temporary workflow
 	 */
 	private static function mark_as_kanban_workflow( $workflow_id, $is_temporary = false ) {
-		$kanban_workflows = get_option( 'wpshadow_kanban_workflows', array() );
+		$kanban_workflows                 = get_option( 'wpshadow_kanban_workflows', array() );
 		$kanban_workflows[ $workflow_id ] = array(
 			'created_at'   => current_time( 'timestamp' ),
 			'is_temporary' => $is_temporary,
@@ -233,7 +233,7 @@ class Kanban_Workflow_Helper {
 	 */
 	public static function get_hidden_workflow_ids() {
 		$kanban_workflows = get_option( 'wpshadow_kanban_workflows', array() );
-		$hidden = array();
+		$hidden           = array();
 
 		foreach ( $kanban_workflows as $workflow_id => $data ) {
 			if ( $data['is_temporary'] ) {
@@ -268,7 +268,7 @@ class Kanban_Workflow_Helper {
 	 */
 	public static function cleanup_old_temporary_workflows() {
 		$kanban_workflows = get_option( 'wpshadow_kanban_workflows', array() );
-		$cutoff = current_time( 'timestamp' ) - DAY_IN_SECONDS;
+		$cutoff           = current_time( 'timestamp' ) - DAY_IN_SECONDS;
 
 		foreach ( $kanban_workflows as $workflow_id => $data ) {
 			if ( $data['is_temporary'] && $data['created_at'] < $cutoff ) {

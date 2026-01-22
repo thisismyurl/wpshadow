@@ -32,13 +32,13 @@ class Diagnostic_RSS_Feeds extends Diagnostic_Base {
 	public static function check(): ?array {
 		// Check if treatment is already applied
 		$disabled = get_option( 'wpshadow_rss_feeds_disabled', false );
-		
+
 		if ( $disabled ) {
 			return null;
 		}
 
 		// Check if feed links are enabled
-		$has_feed_links = has_action( 'wp_head', 'feed_links' ) !== false;
+		$has_feed_links       = has_action( 'wp_head', 'feed_links' ) !== false;
 		$has_extra_feed_links = has_action( 'wp_head', 'feed_links_extra' ) !== false;
 
 		if ( ! $has_feed_links && ! $has_extra_feed_links ) {

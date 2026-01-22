@@ -32,7 +32,7 @@ class Diagnostic_WP_Generator extends Diagnostic_Base {
 	public static function check(): ?array {
 		// Check if treatment is already applied
 		$disabled = get_option( 'wpshadow_wp_generator_disabled', false );
-		
+
 		if ( $disabled ) {
 			return null;
 		}

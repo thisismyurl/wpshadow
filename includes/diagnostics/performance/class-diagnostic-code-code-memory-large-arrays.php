@@ -12,17 +12,17 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/code-memory-large-arrays
  */
 class Diagnostic_Code_CODE_MEMORY_LARGE_ARRAYS extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'code-memory-large-arrays',
-            'title' => __('Large Arrays in Options', 'wpshadow'),
-            'description' => __('Flags large arrays/objects stored in wp_options without chunking.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'code-quality',
-            'kb_link' => 'https://wpshadow.com/kb/code-memory-large-arrays',
-            'training_link' => 'https://wpshadow.com/training/code-memory-large-arrays',
-            'auto_fixable' => false,
-            'threat_level' => 6
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'code-memory-large-arrays',
+			'title'         => __( 'Large Arrays in Options', 'wpshadow' ),
+			'description'   => __( 'Flags large arrays/objects stored in wp_options without chunking.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'code-quality',
+			'kb_link'       => 'https://wpshadow.com/kb/code-memory-large-arrays',
+			'training_link' => 'https://wpshadow.com/training/code-memory-large-arrays',
+			'auto_fixable'  => false,
+			'threat_level'  => 6,
+		);
+	}
 }

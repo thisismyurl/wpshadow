@@ -33,10 +33,10 @@ class Diagnostic_Backup extends Diagnostic_Base {
 				'threat_level' => 85,
 			);
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * Check if a backup plugin is active.
 	 *
@@ -45,7 +45,7 @@ class Diagnostic_Backup extends Diagnostic_Base {
 	private static function has_backup_plugin() {
 		$backup_keywords = array( 'backup', 'updraft', 'backwpup', 'duplicator', 'snapshot', 'vaultpress', 'jetpack' );
 		$active_plugins  = get_option( 'active_plugins', array() );
-		
+
 		foreach ( $active_plugins as $plugin ) {
 			$plugin_lower = strtolower( $plugin );
 			foreach ( $backup_keywords as $keyword ) {
@@ -54,7 +54,7 @@ class Diagnostic_Backup extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		return false;
 	}
 }

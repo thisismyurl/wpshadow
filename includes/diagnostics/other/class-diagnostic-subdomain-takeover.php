@@ -22,27 +22,27 @@ class Diagnostic_Subdomain_Takeover extends Diagnostic_Base {
 	 */
 	public static function check(): ?array {
 		$domain = wp_parse_url( home_url(), PHP_URL_HOST );
-		
+
 		// Get all DNS records
 		$dns_records = @dns_get_record( $domain, DNS_CNAME + DNS_A );
-		
+
 		if ( empty( $dns_records ) ) {
 			return null;
 		}
-		
+
 		$vulnerable_patterns = array(
-			'cloudfront.net' => 'AWS CloudFront',
+			'cloudfront.net'    => 'AWS CloudFront',
 			'azurewebsites.net' => 'Azure',
-			's3.amazonaws.com' => 'AWS S3',
-			'herokuapp.com' => 'Heroku',
-			'github.io' => 'GitHub Pages',
-			'wordpress.com' => 'WordPress.com',
-			'zendesk.com' => 'Zendesk',
-			'unbounce.com' => 'Unbounce',
+			's3.amazonaws.com'  => 'AWS S3',
+			'herokuapp.com'     => 'Heroku',
+			'github.io'         => 'GitHub Pages',
+			'wordpress.com'     => 'WordPress.com',
+			'zendesk.com'       => 'Zendesk',
+			'unbounce.com'      => 'Unbounce',
 		);
-		
+
 		$vulnerable_subdomains = array();
-		
+
 		foreach ( $dns_records as $record ) {
 			if ( isset( $record['target'] ) ) {
 				$target = $record['target'];
@@ -50,17 +50,23 @@ class Diagnostic_Subdomain_Takeover extends Diagnostic_Base {
 					if ( strpos( $target, $pattern ) !== false ) {
 						// Test if target responds with error (indicating takeover risk)
 						$test_url = 'http://' . $record['host'];
-						$response = wp_remote_get( $test_url, array( 'timeout' => 5, 'sslverify' => false ) );
-						
+						$response = wp_remote_get(
+							$test_url,
+							array(
+								'timeout'   => 5,
+								'sslverify' => false,
+							)
+						);
+
 						if ( ! is_wp_error( $response ) ) {
-							$body = wp_remote_retrieve_body( $response );
+							$body   = wp_remote_retrieve_body( $response );
 							$status = wp_remote_retrieve_response_code( $response );
-							
+
 							// Check for service-specific error messages
-							if ( $status === 404 || 
-							     strpos( $body, 'There isn\'t a GitHub Pages site here' ) !== false ||
-							     strpos( $body, 'NoSuchBucket' ) !== false ||
-							     strpos( $body, 'ERROR: The request could not be satisfied' ) !== false ) {
+							if ( $status === 404 ||
+								strpos( $body, 'There isn\'t a GitHub Pages site here' ) !== false ||
+								strpos( $body, 'NoSuchBucket' ) !== false ||
+								strpos( $body, 'ERROR: The request could not be satisfied' ) !== false ) {
 								$vulnerable_subdomains[] = sprintf( '%s (points to %s)', $record['host'], $service );
 							}
 						}
@@ -68,24 +74,24 @@ class Diagnostic_Subdomain_Takeover extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		if ( ! empty( $vulnerable_subdomains ) ) {
 			return array(
-				'id'          => 'subdomain-takeover',
-				'title'       => 'Subdomain Takeover Risk Detected',
-				'description' => sprintf(
+				'id'            => 'subdomain-takeover',
+				'title'         => 'Subdomain Takeover Risk Detected',
+				'description'   => sprintf(
 					'Dangling DNS records found that could be taken over by attackers: %s. Remove unused DNS records or reclaim the resources they point to.',
 					implode( ', ', $vulnerable_subdomains )
 				),
-				'severity'    => 'high',
-				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/prevent-subdomain-takeover/',
+				'severity'      => 'high',
+				'category'      => 'security',
+				'kb_link'       => 'https://wpshadow.com/kb/prevent-subdomain-takeover/',
 				'training_link' => 'https://wpshadow.com/training/dns-security/',
-				'auto_fixable' => false,
-				'threat_level' => 75,
+				'auto_fixable'  => false,
+				'threat_level'  => 75,
 			);
 		}
-		
+
 		return null;
 	}
 }

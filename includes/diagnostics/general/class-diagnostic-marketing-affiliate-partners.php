@@ -28,47 +28,47 @@ class Diagnostic_Marketing_Affiliate_Partners extends Diagnostic_Base {
 
 	protected static $family_label = 'General';
 
-	
+
 	/**
 	 * Get diagnostic ID
 	 */
 	public static function get_id(): string {
 		return 'marketing-affiliate-partners';
 	}
-	
+
 	/**
 	 * Get diagnostic name
 	 */
 	public static function get_name(): string {
-		return __('Is revenue from affiliates?', 'wpshadow');
+		return __( 'Is revenue from affiliates?', 'wpshadow' );
 	}
-	
+
 	/**
 	 * Get diagnostic description
 	 */
 	public static function get_description(): string {
-		return __('Is revenue from affiliates?. Part of Marketing & Growth analysis.', 'wpshadow');
+		return __( 'Is revenue from affiliates?. Part of Marketing & Growth analysis.', 'wpshadow' );
 	}
-	
+
 	/**
 	 * Get diagnostic category
 	 */
 	public static function get_category(): string {
 		return 'marketing_growth';
 	}
-	
+
 	/**
 	 * Run the diagnostic test
 	 *
 	 * @return array Finding data or empty if no issue
 	 */
-			public static function run(): array {
-			// Implement: Is revenue from affiliates? test
-			// Smart implementation needed
-			
-			return array(); // Stub: full implementation pending
-		}
-	
+	public static function run(): array {
+		// Implement: Is revenue from affiliates? test
+		// Smart implementation needed
+
+		return array(); // Stub: full implementation pending
+	}
+
 	/**
 	 * Get threat level for this finding (0-100)
 	 */
@@ -76,14 +76,14 @@ class Diagnostic_Marketing_Affiliate_Partners extends Diagnostic_Base {
 		// Threat level based on diagnostic category
 		return 47;
 	}
-	
+
 	/**
 	 * Get KB article URL
 	 */
 	public static function get_kb_article(): string {
 		return 'https://wpshadow.com/kb/marketing-affiliate-partners/';
 	}
-	
+
 	/**
 	 * Get training video URL
 	 */
@@ -92,7 +92,7 @@ class Diagnostic_Marketing_Affiliate_Partners extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		if (!(false)) {
+		if ( ! ( false ) ) {
 			return null;
 		}
 

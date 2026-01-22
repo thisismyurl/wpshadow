@@ -23,10 +23,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Diagnostic_Head_Cleanup_RSD extends Diagnostic_Base {
 
-	protected static $slug = 'head-cleanup-rsd';
-	protected static $title = 'RSD (Really Simple Discovery) Link';
-	protected static $description = 'Checks if WordPress RSD link is enabled and can be removed.';
-	protected static $family = 'head-cleanup';
+	protected static $slug         = 'head-cleanup-rsd';
+	protected static $title        = 'RSD (Really Simple Discovery) Link';
+	protected static $description  = 'Checks if WordPress RSD link is enabled and can be removed.';
+	protected static $family       = 'head-cleanup';
 	protected static $family_label = 'Head Cleanup Tasks';
 
 	public static function check(): ?array {

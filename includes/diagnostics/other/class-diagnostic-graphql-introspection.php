@@ -25,40 +25,43 @@ class Diagnostic_GraphQL_Introspection extends Diagnostic_Base {
 		if ( ! class_exists( 'WPGraphQL' ) ) {
 			return null; // GraphQL not installed
 		}
-		
+
 		// Test introspection query
-		$graphql_endpoint = trailingslashit( home_url() ) . 'graphql';
+		$graphql_endpoint    = trailingslashit( home_url() ) . 'graphql';
 		$introspection_query = '{"query":"{__schema{types{name}}}"}';
-		
-		$response = wp_remote_post( $graphql_endpoint, array(
-			'timeout' => 5,
-			'headers' => array( 'Content-Type' => 'application/json' ),
-			'body' => $introspection_query,
-			'sslverify' => false,
-		) );
-		
+
+		$response = wp_remote_post(
+			$graphql_endpoint,
+			array(
+				'timeout'   => 5,
+				'headers'   => array( 'Content-Type' => 'application/json' ),
+				'body'      => $introspection_query,
+				'sslverify' => false,
+			)
+		);
+
 		if ( is_wp_error( $response ) ) {
 			return null;
 		}
-		
+
 		$body = wp_remote_retrieve_body( $response );
 		$data = json_decode( $body, true );
-		
+
 		// If introspection returns schema
 		if ( ! empty( $data['data']['__schema'] ) ) {
 			return array(
-				'id'          => 'graphql-introspection',
-				'title'       => 'GraphQL Introspection Enabled',
-				'description' => 'Your GraphQL API allows introspection, revealing the entire schema including types, fields, and mutations. This helps attackers discover all API capabilities. Disable introspection in production.',
-				'severity'    => 'medium',
-				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/disable-graphql-introspection/',
+				'id'            => 'graphql-introspection',
+				'title'         => 'GraphQL Introspection Enabled',
+				'description'   => 'Your GraphQL API allows introspection, revealing the entire schema including types, fields, and mutations. This helps attackers discover all API capabilities. Disable introspection in production.',
+				'severity'      => 'medium',
+				'category'      => 'security',
+				'kb_link'       => 'https://wpshadow.com/kb/disable-graphql-introspection/',
 				'training_link' => 'https://wpshadow.com/training/graphql-security/',
-				'auto_fixable' => false,
-				'threat_level' => 70,
+				'auto_fixable'  => false,
+				'threat_level'  => 70,
 			);
 		}
-		
+
 		return null;
 	}
 }

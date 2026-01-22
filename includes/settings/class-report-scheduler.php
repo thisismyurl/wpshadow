@@ -5,24 +5,24 @@ namespace WPShadow\Settings;
 
 /**
  * Report Scheduler Manager
- * 
+ *
  * Manages automatic scheduled email delivery of reports.
  * Philosophy: Free as Possible (#2) - Scheduling available to all users
  * Philosophy: Show Value (#9) - Automated insights delivered on schedule
- * 
+ *
  * @since 1.2601
  * @package WPShadow
  */
 class Report_Scheduler {
-	
+
 	/**
 	 * Option key for scheduled reports
 	 */
 	const OPTION_KEY = 'wpshadow_scheduled_reports';
-	
+
 	/**
 	 * Available schedule frequencies
-	 * 
+	 *
 	 * @return array Frequency options
 	 */
 	public static function get_frequencies() {
@@ -35,34 +35,37 @@ class Report_Scheduler {
 			'disabled'  => __( 'Disabled', 'wpshadow' ),
 		);
 	}
-	
+
 	/**
 	 * Get all scheduled reports
-	 * 
+	 *
 	 * @return array Scheduled reports configuration
 	 */
 	public static function get_all_schedules() {
-		return get_option( self::OPTION_KEY, array(
-			'executive_report' => array(
-				'enabled' => false,
-				'frequency' => 'weekly',
-				'recipients' => array(),
-				'template' => 'report_executive',
-				'include_recommendations' => true,
-			),
-			'detailed_report' => array(
-				'enabled' => false,
-				'frequency' => 'monthly',
-				'recipients' => array(),
-				'template' => 'report_detailed',
-				'include_recommendations' => true,
-			),
-		) );
+		return get_option(
+			self::OPTION_KEY,
+			array(
+				'executive_report' => array(
+					'enabled'                 => false,
+					'frequency'               => 'weekly',
+					'recipients'              => array(),
+					'template'                => 'report_executive',
+					'include_recommendations' => true,
+				),
+				'detailed_report'  => array(
+					'enabled'                 => false,
+					'frequency'               => 'monthly',
+					'recipients'              => array(),
+					'template'                => 'report_detailed',
+					'include_recommendations' => true,
+				),
+			)
+		);
 	}
-	
+
 	/**
 	 * Update report schedule
-	 * 
+	 *
 	 * @param string $report_type Report type identifier
 	 * @param array  $config Report schedule configuration
 	 * @return bool Success status
@@ -71,45 +74,48 @@ class Report_Scheduler {
 		if ( empty( $report_type ) ) {
 			return false;
 		}
-		
+
 		// Validate configuration
 		$validated = self::validate_schedule_config( $config );
 		if ( ! $validated ) {
 			return false;
 		}
-		
+
 		// Get existing schedules
 		$schedules = self::get_all_schedules();
-		
+
 		// Update schedule
 		$schedules[ $report_type ] = $config;
-		
+
 		// Save schedules
 		$result = update_option( self::OPTION_KEY, $schedules );
-		
+
 		// Schedule/unschedule cron job
 		if ( $config['enabled'] ) {
 			self::schedule_report_cron( $report_type, $config['frequency'] );
 		} else {
 			self::unschedule_report_cron( $report_type );
 		}
-		
+
 		// Log activity
 		if ( $result && class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
 			\WPShadow\Core\Activity_Logger::log(
 				'report_schedule_updated',
 				sprintf( 'Report schedule updated: %s (frequency: %s)', $report_type, $config['frequency'] ),
 				'',
-				array( 'report_type' => $report_type, 'frequency' => $config['frequency'] )
+				array(
+					'report_type' => $report_type,
+					'frequency'   => $config['frequency'],
+				)
 			);
 		}
-		
+
 		return $result;
 	}
-	
+
 	/**
 	 * Validate schedule configuration
-	 * 
+	 *
 	 * @param array $config Configuration to validate
 	 * @return bool True if valid
 	 */
@@ -118,50 +124,50 @@ class Report_Scheduler {
 		if ( ! isset( $config['enabled'], $config['frequency'], $config['recipients'] ) ) {
 			return false;
 		}
-		
+
 		// Validate frequency
 		$valid_frequencies = array_keys( self::get_frequencies() );
 		if ( ! in_array( $config['frequency'], $valid_frequencies, true ) ) {
 			return false;
 		}
-		
+
 		// Validate recipients (must be array of valid emails)
 		if ( ! is_array( $config['recipients'] ) ) {
 			return false;
 		}
-		
+
 		foreach ( $config['recipients'] as $recipient ) {
 			if ( ! is_email( $recipient ) ) {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Schedule cron job for report delivery
-	 * 
+	 *
 	 * @param string $report_type Report type
 	 * @param string $frequency Frequency string
 	 * @return void
 	 */
 	private static function schedule_report_cron( $report_type, $frequency ) {
 		$hook = 'wpshadow_deliver_scheduled_report_' . $report_type;
-		
+
 		// Unschedule any existing
 		wp_clear_scheduled_hook( $hook );
-		
+
 		// Calculate next run
 		$next_run = self::calculate_next_run( $frequency );
-		
+
 		// Schedule new
 		wp_schedule_event( $next_run, $frequency, $hook );
 	}
-	
+
 	/**
 	 * Unschedule cron job for report delivery
-	 * 
+	 *
 	 * @param string $report_type Report type
 	 * @return void
 	 */
@@ -169,90 +175,90 @@ class Report_Scheduler {
 		$hook = 'wpshadow_deliver_scheduled_report_' . $report_type;
 		wp_clear_scheduled_hook( $hook );
 	}
-	
+
 	/**
 	 * Calculate next run time for given frequency
-	 * 
+	 *
 	 * @param string $frequency Frequency string
 	 * @return int Unix timestamp
 	 */
 	private static function calculate_next_run( $frequency ) {
 		$now = time();
-		
+
 		switch ( $frequency ) {
 			case 'daily':
 				// Tomorrow at 8 AM
 				$time = strtotime( 'tomorrow 08:00', $now );
 				break;
-				
+
 			case 'weekly':
 				// Next Monday at 9 AM
 				$time = strtotime( 'next Monday 09:00', $now );
 				break;
-				
+
 			case 'biweekly':
 				// In 2 weeks at 9 AM
 				$time = strtotime( '+2 weeks 09:00', $now );
 				break;
-				
+
 			case 'monthly':
 				// Next month 1st at 9 AM
 				$time = strtotime( 'first day of next month 09:00', $now );
 				break;
-				
+
 			case 'quarterly':
 				// In 3 months at 9 AM
 				$time = strtotime( '+3 months 09:00', $now );
 				break;
-				
+
 			default:
 				$time = strtotime( 'tomorrow 08:00', $now );
 		}
-		
+
 		return $time;
 	}
-	
+
 	/**
 	 * Send scheduled report via email
-	 * 
+	 *
 	 * @param string $report_type Report type
 	 * @return bool Success status
 	 */
 	public static function send_scheduled_report( $report_type ) {
 		$schedules = self::get_all_schedules();
-		
+
 		if ( ! isset( $schedules[ $report_type ] ) || ! $schedules[ $report_type ]['enabled'] ) {
 			return false;
 		}
-		
+
 		$config = $schedules[ $report_type ];
-		
+
 		// Get report using existing Report_Engine
 		if ( ! class_exists( '\WPShadow\Reports\Report_Engine' ) ) {
 			return false;
 		}
-		
+
 		$report = \WPShadow\Reports\Report_Engine::generate_report(
 			date( 'Y-m-d', strtotime( '-1 day' ) ),
 			date( 'Y-m-d' ),
 			$config['template'],
 			true
 		);
-		
+
 		if ( empty( $report ) ) {
 			return false;
 		}
-		
+
 		// Render report to HTML
 		if ( ! class_exists( '\WPShadow\Reports\Report_Renderer' ) ) {
 			return false;
 		}
-		
+
 		$html_content = \WPShadow\Reports\Report_Renderer::render_html( $report );
-		
+
 		// Get email template
 		$template_html = Email_Template_Manager::get_template( $config['template'], 'html' );
-		
+
 		// Prepare email content
 		$email_content = str_replace(
 			array( '{title}', '{content}', '{footer}' ),
@@ -263,42 +269,45 @@ class Report_Scheduler {
 			),
 			$template_html
 		);
-		
+
 		// Send to all recipients
 		$success = true;
 		foreach ( $config['recipients'] as $recipient ) {
 			$result = wp_mail(
 				$recipient,
-				sprintf( __( '[%s] %s Report', 'wpshadow' ), get_bloginfo( 'name' ), ucfirst( str_replace( '_', ' ', $report_type ) ) ),
+				sprintf( __( '[%1$s] %2$s Report', 'wpshadow' ), get_bloginfo( 'name' ), ucfirst( str_replace( '_', ' ', $report_type ) ) ),
 				$email_content,
 				array( 'Content-Type: text/html; charset=UTF-8' )
 			);
-			
+
 			if ( ! $result ) {
 				$success = false;
 			}
 		}
-		
+
 		// Log activity
 		if ( $success && class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
 			\WPShadow\Core\Activity_Logger::log(
 				'scheduled_report_sent',
 				sprintf( 'Scheduled report sent: %s to %d recipient(s)', $report_type, count( $config['recipients'] ) ),
 				'',
-				array( 'report_type' => $report_type, 'recipients' => $config['recipients'] )
+				array(
+					'report_type' => $report_type,
+					'recipients'  => $config['recipients'],
+				)
 			);
 		}
-		
+
 		return $success;
 	}
-	
+
 	/**
 	 * Render schedule configuration UI
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function render_scheduler_ui() {
-		$schedules = self::get_all_schedules();
+		$schedules   = self::get_all_schedules();
 		$frequencies = self::get_frequencies();
 		?>
 		<div style="max-width: 900px;">
@@ -319,7 +328,7 @@ class Report_Scheduler {
 					<div style="margin-bottom: 16px; display: flex; align-items: center; gap: 12px;">
 						<?php
 						$exec_config = $schedules['executive_report'] ?? array();
-						$is_enabled = isset( $exec_config['enabled'] ) && $exec_config['enabled'];
+						$is_enabled  = isset( $exec_config['enabled'] ) && $exec_config['enabled'];
 						?>
 						<input type="checkbox" name="enabled" <?php checked( $is_enabled ); ?> id="exec-report-enabled" style="width: 18px; height: 18px; cursor: pointer;" />
 						<label for="exec-report-enabled" style="cursor: pointer; font-weight: 500;">
@@ -336,8 +345,10 @@ class Report_Scheduler {
 							<?php
 							$freq = $exec_config['frequency'] ?? 'weekly';
 							foreach ( $frequencies as $value => $label ) :
-								if ( $value === 'disabled' ) continue;
-							?>
+								if ( $value === 'disabled' ) {
+									continue;
+								}
+								?>
 							<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $freq, $value ); ?>>
 								<?php echo esc_html( $label ); ?>
 							</option>
@@ -398,8 +409,10 @@ class Report_Scheduler {
 							<?php
 							$freq = $det_config['frequency'] ?? 'monthly';
 							foreach ( $frequencies as $value => $label ) :
-								if ( $value === 'disabled' ) continue;
-							?>
+								if ( $value === 'disabled' ) {
+									continue;
+								}
+								?>
 							<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $freq, $value ); ?>>
 								<?php echo esc_html( $label ); ?>
 							</option>

@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$trigger_id = isset( $_GET['trigger'] ) ? sanitize_key( $_GET['trigger'] ) : '';
+$trigger_id  = isset( $_GET['trigger'] ) ? sanitize_key( $_GET['trigger'] ) : '';
 $workflow_id = isset( $_GET['workflow'] ) ? sanitize_key( $_GET['workflow'] ) : '';
 
 // If no trigger specified or trigger not found, show trigger selection
@@ -20,7 +20,7 @@ if ( empty( $trigger_id ) ) {
 }
 
 // Get all triggers to find the selected one
-$categories = \WPShadow\Workflow\Workflow_Wizard::get_trigger_categories();
+$categories   = \WPShadow\Workflow\Workflow_Wizard::get_trigger_categories();
 $trigger_data = null;
 foreach ( $categories as $category ) {
 	if ( isset( $category['triggers'][ $trigger_id ] ) ) {
@@ -36,7 +36,7 @@ if ( ! $trigger_data ) {
 }
 
 $config_fields = \WPShadow\Workflow\Workflow_Wizard::get_trigger_config( $trigger_id );
-$has_config = ! empty( $config_fields );
+$has_config    = ! empty( $config_fields );
 ?>
 
 <div class="wizard-step trigger-config">

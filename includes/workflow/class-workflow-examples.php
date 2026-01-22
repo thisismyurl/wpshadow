@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Workflow_Examples {
 
 	const USED_EXAMPLES_OPTION = 'wpshadow_used_workflow_examples';
-	const EXAMPLES_PER_PAGE = 3;
+	const EXAMPLES_PER_PAGE    = 3;
 
 	/**
 	 * Get all available workflow examples
@@ -34,10 +34,10 @@ class Workflow_Examples {
 				'trigger'     => array(
 					'type'   => 'time_trigger',
 					'config' => array(
-						'frequency'   => 'daily',
+						'frequency'     => 'daily',
 						'downtime_mode' => true,
-						'time'        => '02:00',
-						'trigger_id'  => 'time_daily',
+						'time'          => '02:00',
+						'trigger_id'    => 'time_daily',
 					),
 				),
 				'actions'     => array(
@@ -67,7 +67,7 @@ class Workflow_Examples {
 					),
 				),
 			),
-			'security_alert' => array(
+			'security_alert'     => array(
 				'name'        => __( 'Security Alert', 'wpshadow' ),
 				'description' => __( 'When plugins are activated, scan security and run diagnostics', 'wpshadow' ),
 				'icon'        => 'shield',
@@ -104,16 +104,16 @@ class Workflow_Examples {
 					),
 				),
 			),
-			'ssl_monitor' => array(
+			'ssl_monitor'        => array(
 				'name'        => __( 'SSL Certificate Monitor', 'wpshadow' ),
 				'description' => __( 'Daily during downtime: monitor SSL certificate and alert if expiring soon', 'wpshadow' ),
 				'icon'        => 'lock',
 				'trigger'     => array(
 					'type'   => 'time_trigger',
 					'config' => array(
-						'frequency'   => 'daily',
-						'time'        => '03:00',
-						'trigger_id'  => 'time_daily',
+						'frequency'  => 'daily',
+						'time'       => '03:00',
+						'trigger_id' => 'time_daily',
 					),
 				),
 				'actions'     => array(
@@ -133,9 +133,9 @@ class Workflow_Examples {
 	}
 
 	public static function get_featured_examples() {
-		$all_examples = self::get_all_examples();
+		$all_examples  = self::get_all_examples();
 		$featured_keys = array( 'daily_health_check', 'security_alert', 'ssl_monitor' );
-		$featured = array();
+		$featured      = array();
 
 		foreach ( $featured_keys as $key ) {
 			if ( isset( $all_examples[ $key ] ) ) {
@@ -153,7 +153,7 @@ class Workflow_Examples {
 	 */
 	public static function get_available_examples() {
 		$all_examples = self::get_all_examples();
-		$used = self::get_used_examples();
+		$used         = self::get_used_examples();
 
 		return array_diff_key( $all_examples, array_flip( $used ) );
 	}
@@ -169,7 +169,7 @@ class Workflow_Examples {
 
 		// Featured examples (all 3 are featured for Quick Start)
 		$featured_keys = array( 'daily_health_check', 'security_alert', 'ssl_monitor' );
-		$display = array();
+		$display       = array();
 
 		// Always show all featured examples
 		foreach ( $featured_keys as $key ) {
@@ -241,7 +241,7 @@ class Workflow_Examples {
 
 		// Add trigger block
 		if ( ! empty( $example['trigger'] ) ) {
-			$trigger = $example['trigger'];
+			$trigger  = $example['trigger'];
 			$blocks[] = array(
 				'id'     => $trigger['config']['trigger_id'] ?? 'time_daily',
 				'type'   => 'trigger',
@@ -262,7 +262,7 @@ class Workflow_Examples {
 
 		// Save workflow with blocks
 		$workflow_id = 'wf_' . wp_generate_uuid4();
-		$saved = Workflow_Manager::save_workflow( $example['name'], $blocks, $workflow_id );
+		$saved       = Workflow_Manager::save_workflow( $example['name'], $blocks, $workflow_id );
 
 		// Mark example as used
 		self::mark_example_used( $example_key );

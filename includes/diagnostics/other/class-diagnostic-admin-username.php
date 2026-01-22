@@ -10,8 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Diagnostic_Admin_Username extends Diagnostic_Base {
 
-	protected static $slug = 'admin-username';
-	protected static $title = 'Default Admin Username';
+	protected static $slug        = 'admin-username';
+	protected static $title       = 'Default Admin Username';
 	protected static $description = 'Checks if the default "admin" username exists, which is a security vulnerability.';
 
 	public static function check(): ?array {

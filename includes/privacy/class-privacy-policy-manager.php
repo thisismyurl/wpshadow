@@ -26,10 +26,10 @@ class Privacy_Policy_Manager {
 	 */
 	public static function get_policy() {
 		return array(
-			'version'      => '1.0',
-			'updated_date' => current_time( 'mysql' ),
+			'version'        => '1.0',
+			'updated_date'   => current_time( 'mysql' ),
 			'effective_date' => current_time( 'mysql' ),
-			'sections'     => self::get_policy_sections(),
+			'sections'       => self::get_policy_sections(),
 		);
 	}
 
@@ -40,7 +40,7 @@ class Privacy_Policy_Manager {
 	 */
 	private static function get_policy_sections() {
 		return array(
-			'overview'     => array(
+			'overview'        => array(
 				'title'   => __( 'Privacy Overview', 'wpshadow' ),
 				'content' => __( 'WPShadow is committed to protecting your privacy. This privacy policy explains our data practices.', 'wpshadow' ),
 			),
@@ -48,19 +48,19 @@ class Privacy_Policy_Manager {
 				'title'   => __( 'What Information We Collect', 'wpshadow' ),
 				'content' => self::get_what_we_collect_section(),
 			),
-			'how-we-use'   => array(
+			'how-we-use'      => array(
 				'title'   => __( 'How We Use Your Information', 'wpshadow' ),
 				'content' => self::get_how_we_use_section(),
 			),
-			'data-retention' => array(
+			'data-retention'  => array(
 				'title'   => __( 'Data Retention', 'wpshadow' ),
 				'content' => __( 'We retain data only as long as necessary. You can delete your data at any time from settings.', 'wpshadow' ),
 			),
-			'your-rights'  => array(
+			'your-rights'     => array(
 				'title'   => __( 'Your Rights', 'wpshadow' ),
 				'content' => self::get_your_rights_section(),
 			),
-			'contact'      => array(
+			'contact'         => array(
 				'title'   => __( 'Contact Us', 'wpshadow' ),
 				'content' => __( 'Questions about privacy? Please contact your site administrator.', 'wpshadow' ),
 			),
@@ -166,8 +166,8 @@ class Privacy_Policy_Manager {
 		$versions = get_option( 'wpshadow_privacy_policy_versions', array() );
 
 		$versions[ $version ] = array(
-			'content'      => $content,
-			'stored_date'  => current_time( 'mysql' ),
+			'content'     => $content,
+			'stored_date' => current_time( 'mysql' ),
 		);
 
 		return update_option( 'wpshadow_privacy_policy_versions', $versions );

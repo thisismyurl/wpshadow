@@ -181,7 +181,7 @@ class KB_Library {
 		}
 
 		// Get articles in same category
-		$related = array();
+		$related  = array();
 		$category = isset( $article['category'] ) ? $article['category'] : '';
 
 		if ( ! empty( $category ) ) {
@@ -210,10 +210,10 @@ class KB_Library {
 		$articles = self::get_all_articles();
 
 		$stats = array(
-			'total_articles'        => count( $articles ),
-			'diagnostic_articles'   => count( self::get_by_type( 'diagnostic' ) ),
-			'treatment_articles'    => count( self::get_by_type( 'treatment' ) ),
-			'categories'            => array(),
+			'total_articles'      => count( $articles ),
+			'diagnostic_articles' => count( self::get_by_type( 'diagnostic' ) ),
+			'treatment_articles'  => count( self::get_by_type( 'treatment' ) ),
+			'categories'          => array(),
 		);
 
 		// Count by category
@@ -222,7 +222,7 @@ class KB_Library {
 				if ( ! isset( $stats['categories'][ $article['category'] ] ) ) {
 					$stats['categories'][ $article['category'] ] = 0;
 				}
-				$stats['categories'][ $article['category'] ]++;
+				++$stats['categories'][ $article['category'] ];
 			}
 		}
 

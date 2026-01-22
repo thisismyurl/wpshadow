@@ -20,9 +20,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Email_Recipient_Manager {
 
-	const OPTION_KEY = 'wpshadow_approved_email_recipients';
+	const OPTION_KEY              = 'wpshadow_approved_email_recipients';
 	const VERIFICATION_OPTION_KEY = 'wpshadow_email_verification_tokens';
-	const NONCE_ACTION = 'wpshadow_email_recipient';
+	const NONCE_ACTION            = 'wpshadow_email_recipient';
 
 	/**
 	 * Initialize hooks
@@ -100,9 +100,9 @@ class Email_Recipient_Manager {
 			// Mark for admin approval
 			$recipients[ $email ] = array(
 				'approved'      => false,
-				'pending_admin'  => true,
-				'added_date'     => current_time( 'mysql' ),
-				'added_by'       => get_current_user_id(),
+				'pending_admin' => true,
+				'added_date'    => current_time( 'mysql' ),
+				'added_by'      => get_current_user_id(),
 			);
 
 			update_option( self::OPTION_KEY, $recipients );
@@ -121,12 +121,12 @@ class Email_Recipient_Manager {
 	 * @return string Verification token
 	 */
 	private static function generate_verification_token( $email ) {
-		$token = bin2hex( random_bytes( 32 ) );
-		$tokens = get_option( self::VERIFICATION_OPTION_KEY, array() );
+		$token            = bin2hex( random_bytes( 32 ) );
+		$tokens           = get_option( self::VERIFICATION_OPTION_KEY, array() );
 		$tokens[ $token ] = array(
-			'email'      => $email,
-			'created'    => current_time( 'timestamp' ),
-			'expires'    => current_time( 'timestamp' ) + ( 7 * DAY_IN_SECONDS ),
+			'email'   => $email,
+			'created' => current_time( 'timestamp' ),
+			'expires' => current_time( 'timestamp' ) + ( 7 * DAY_IN_SECONDS ),
 		);
 
 		update_option( self::VERIFICATION_OPTION_KEY, $tokens );
@@ -158,7 +158,7 @@ class Email_Recipient_Manager {
 			"This link expires in 7 days.\n\n" .
 			"If you did not request this, you can ignore this email.\n\n" .
 			"Thanks,\n" .
-			"The %s Team",
+			'The %s Team',
 			sanitize_email( $email ),
 			esc_url( $verify_url ),
 			get_bloginfo( 'name' )
@@ -204,7 +204,7 @@ class Email_Recipient_Manager {
 		$email = $token_data['email'];
 
 		// Add to approved recipients
-		$recipients = self::get_approved_recipients();
+		$recipients           = self::get_approved_recipients();
 		$recipients[ $email ] = array(
 			'approved'      => true,
 			'approved_date' => current_time( 'mysql' ),
@@ -237,7 +237,7 @@ class Email_Recipient_Manager {
 			wp_send_json_error( array( 'message' => 'You do not have permission.' ) );
 		}
 
-		$email = isset( $_POST['email'] ) ? sanitize_email( $_POST['email'] ) : '';
+		$email             = isset( $_POST['email'] ) ? sanitize_email( $_POST['email'] ) : '';
 		$send_verification = isset( $_POST['send_verification'] ) && $_POST['send_verification'];
 
 		if ( empty( $email ) ) {
@@ -280,9 +280,9 @@ class Email_Recipient_Manager {
 		}
 
 		// Mark as approved
-		$recipients[ $email ]['approved'] = true;
+		$recipients[ $email ]['approved']      = true;
 		$recipients[ $email ]['approved_date'] = current_time( 'mysql' );
-		$recipients[ $email ]['verified_by'] = 'admin_approval';
+		$recipients[ $email ]['verified_by']   = 'admin_approval';
 		unset( $recipients[ $email ]['pending_admin'] );
 
 		update_option( self::OPTION_KEY, $recipients );
@@ -336,7 +336,7 @@ class Email_Recipient_Manager {
 		$result = self::verify_token( $token );
 
 		$message = $result['message'];
-		$status = $result['success'] ? 'success' : 'error';
+		$status  = $result['success'] ? 'success' : 'error';
 
 		echo '<div style="padding: 20px; text-align: center; font-family: Arial, sans-serif;">';
 		echo '<h2>Email Verification</h2>';

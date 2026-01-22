@@ -33,10 +33,10 @@ class Diagnostic_Iframe_Busting extends Diagnostic_Base {
 				'threat_level' => 50,
 			);
 		}
-		
+
 		return null;
 	}
-	
+
 	private static function is_enabled() {
 		return (bool) get_option( 'wpshadow_iframe_busting_enabled', false );
 	}

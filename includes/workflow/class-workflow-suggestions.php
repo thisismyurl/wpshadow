@@ -27,15 +27,15 @@ class Workflow_Suggestions {
 		$suggestions = array();
 
 		// Analyze site conditions
-		$has_ecommerce   = self::has_ecommerce();
-		$has_forms       = self::has_forms();
-		$high_traffic    = self::is_high_traffic();
-		$has_comments    = self::has_comments();
-		$multisite       = is_multisite();
-		$ssl_issues      = self::has_ssl_issues();
-		$debug_on        = defined( 'WP_DEBUG' ) && WP_DEBUG;
-		$high_memory     = self::check_memory_usage() > 75;
-		$many_plugins    = self::count_active_plugins() > 30;
+		$has_ecommerce    = self::has_ecommerce();
+		$has_forms        = self::has_forms();
+		$high_traffic     = self::is_high_traffic();
+		$has_comments     = self::has_comments();
+		$multisite        = is_multisite();
+		$ssl_issues       = self::has_ssl_issues();
+		$debug_on         = defined( 'WP_DEBUG' ) && WP_DEBUG;
+		$high_memory      = self::check_memory_usage() > 75;
+		$many_plugins     = self::count_active_plugins() > 30;
 		$outdated_plugins = self::has_outdated_plugins();
 
 		// 1. Security-Related Suggestions
@@ -73,7 +73,7 @@ class Workflow_Suggestions {
 				'id'          => 'weekly-performance-audit',
 				'title'       => __( 'Weekly Performance Health Check', 'wpshadow' ),
 				'description' => sprintf(
-					__( 'Your site uses %s memory and has %d active plugins. Run weekly performance audits to catch issues early.', 'wpshadow' ),
+					__( 'Your site uses %1$s memory and has %2$d active plugins. Run weekly performance audits to catch issues early.', 'wpshadow' ),
 					self::get_memory_percentage() . '%',
 					self::count_active_plugins()
 				),
@@ -187,7 +187,7 @@ class Workflow_Suggestions {
 		// Sort by priority (highest first)
 		usort(
 			$suggestions,
-			function( $a, $b ) {
+			function ( $a, $b ) {
 				return $b['priority'] - $a['priority'];
 			}
 		);
@@ -212,9 +212,9 @@ class Workflow_Suggestions {
 	 */
 	private static function has_forms(): bool {
 		return class_exists( 'GFForms' ) || // Gravity Forms
-			   class_exists( 'WPCF7' ) ||    // Contact Form 7
-			   class_exists( 'Ninja_Forms' ) ||
-			   class_exists( 'FrmAppController' ); // Formidable Forms
+				class_exists( 'WPCF7' ) || // Contact Form 7
+				class_exists( 'Ninja_Forms' ) ||
+				class_exists( 'FrmAppController' ); // Formidable Forms
 	}
 
 	/**
@@ -225,9 +225,9 @@ class Workflow_Suggestions {
 	private static function is_high_traffic(): bool {
 		// Check if popular caching plugins are installed (indicator of traffic)
 		return class_exists( 'WP_Rocket' ) ||
-			   class_exists( 'WP_Cache_Manager' ) ||
-			   class_exists( 'WPO_Cache_Config' ) ||
-			   function_exists( 'w3tc_add_action' );
+				class_exists( 'WP_Cache_Manager' ) ||
+				class_exists( 'WPO_Cache_Config' ) ||
+				function_exists( 'w3tc_add_action' );
 	}
 
 	/**
@@ -271,9 +271,9 @@ class Workflow_Suggestions {
 	 * @return int Memory usage percentage
 	 */
 	private static function check_memory_usage(): int {
-		$memory_limit = ini_get( 'memory_limit' );
+		$memory_limit       = ini_get( 'memory_limit' );
 		$memory_limit_bytes = self::convert_to_bytes( $memory_limit );
-		$memory_usage = memory_get_usage( true );
+		$memory_usage       = memory_get_usage( true );
 
 		if ( $memory_limit_bytes > 0 ) {
 			return (int) ( ( $memory_usage / $memory_limit_bytes ) * 100 );
@@ -298,7 +298,7 @@ class Workflow_Suggestions {
 	 * @return int Bytes
 	 */
 	private static function convert_to_bytes( string $size ): int {
-		$unit = strtoupper( substr( $size, -1 ) );
+		$unit  = strtoupper( substr( $size, -1 ) );
 		$value = (int) substr( $size, 0, -1 );
 
 		switch ( $unit ) {
@@ -322,7 +322,7 @@ class Workflow_Suggestions {
 		$active_plugins = get_option( 'active_plugins', array() );
 		if ( is_multisite() ) {
 			$network_plugins = get_site_option( 'active_sitewide_plugins', array() );
-			$active_plugins = array_merge( $active_plugins, array_keys( $network_plugins ) );
+			$active_plugins  = array_merge( $active_plugins, array_keys( $network_plugins ) );
 		}
 		return count( $active_plugins );
 	}

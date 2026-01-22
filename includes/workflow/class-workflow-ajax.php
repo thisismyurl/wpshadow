@@ -4,13 +4,13 @@
  *
  * @package WPShadow
  * @subpackage Workflow
- * 
+ *
  * NOTE: All AJAX handlers have been migrated to class-based handlers in Phase 3.5.1
  * See: includes/admin/ajax/class-*-workflow-*-handler.php
- * 
+ *
  * These handlers now extend AJAX_Handler_Base for centralized security and error handling.
  * This file is retained for reference and can be safely removed.
- * 
+ *
  * Migration Status:
  * ✅ Save_Workflow_Handler (handles both block and wizard formats)
  * ✅ Load_Workflows_Handler
@@ -23,7 +23,7 @@
  * ✅ Run_Workflow_Handler
  * ✅ Create_From_Example_Handler
  * ✅ Get_Examples_Handler (in Load_Workflows_Handler)
- * 
+ *
  * Benefits of Migration:
  * - Centralized nonce verification via AJAX_Handler_Base::verify_request()
  * - Centralized parameter handling via AJAX_Handler_Base::get_post_param()
@@ -80,4 +80,3 @@ if ( ! defined( 'ABSPATH' ) ) {
 // add_action( 'wp_ajax_wpshadow_get_examples', function() { ... } );
 
 */
-

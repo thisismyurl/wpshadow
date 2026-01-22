@@ -67,7 +67,7 @@ class Workflow_Discovery {
 			$trigger_data = self::extract_diagnostic_data( $file );
 
 			if ( $trigger_data ) {
-				$slug = $trigger_data['slug'];
+				$slug                             = $trigger_data['slug'];
 				self::$diagnostics_cache[ $slug ] = $trigger_data;
 			}
 		}
@@ -103,7 +103,7 @@ class Workflow_Discovery {
 			$action_data = self::extract_treatment_data( $file );
 
 			if ( $action_data ) {
-				$slug = $action_data['slug'];
+				$slug                            = $action_data['slug'];
 				self::$treatments_cache[ $slug ] = $action_data;
 			}
 		}
@@ -132,8 +132,8 @@ class Workflow_Discovery {
 		$class_name = $class_matches[1];
 
 		// Extract static properties
-		$slug = self::extract_static_property( $file_contents, 'slug' );
-		$title = self::extract_static_property( $file_contents, 'title' );
+		$slug        = self::extract_static_property( $file_contents, 'slug' );
+		$title       = self::extract_static_property( $file_contents, 'title' );
 		$description = self::extract_static_property( $file_contents, 'description' );
 
 		if ( ! $slug ) {
@@ -245,7 +245,7 @@ class Workflow_Discovery {
 	 */
 	public static function clear_cache(): void {
 		self::$diagnostics_cache = null;
-		self::$treatments_cache = null;
+		self::$treatments_cache  = null;
 	}
 
 	/**

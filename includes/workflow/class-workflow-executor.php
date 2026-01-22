@@ -3,7 +3,7 @@
  * Workflow Execution Engine - Evaluates triggers and executes actions
  *
  * Handles trigger detection and fires matching workflows with appropriate context.
- * 
+ *
  * SECURITY NOTES:
  * - Manual/External CRON triggers use random 32-char hex tokens (128-bit entropy)
  * - Token validation uses hash_equals() to prevent timing attacks
@@ -32,10 +32,10 @@ class Workflow_Executor {
 		// Page load triggers
 		add_action( 'wp', array( __CLASS__, 'handle_frontend_page_load' ), 1 );
 		add_action( 'admin_init', array( __CLASS__, 'handle_admin_page_load' ), 1 );
-		
+
 		// Cron for time-based triggers
 		add_action( 'wpshadow_workflow_cron', array( __CLASS__, 'handle_scheduled_triggers' ) );
-		
+
 		// Event triggers
 		add_action( 'activated_plugin', array( __CLASS__, 'handle_plugin_activated' ), 10, 2 );
 		add_action( 'deactivated_plugin', array( __CLASS__, 'handle_plugin_deactivated' ), 10, 2 );
@@ -45,24 +45,24 @@ class Workflow_Executor {
 		add_action( 'pre_post_update', array( __CLASS__, 'handle_pre_publish_review' ) );
 		add_action( 'delete_post', array( __CLASS__, 'handle_post_deleted' ) );
 		add_action( 'comment_post', array( __CLASS__, 'handle_comment_posted' ) );
-		
+
 		// Plugin/Theme update triggers
 		add_action( 'load-update.php', array( __CLASS__, 'handle_update_check' ) );
 		add_action( 'load-plugins.php', array( __CLASS__, 'handle_update_check' ) );
 		add_action( 'load-themes.php', array( __CLASS__, 'handle_update_check' ) );
-		
+
 		// Backup completion triggers
 		add_action( 'wpshadow_backup_completed', array( __CLASS__, 'handle_backup_completed' ), 10, 1 );
-		
+
 		// Database issue triggers
 		add_action( 'wpshadow_database_check', array( __CLASS__, 'handle_database_check' ) );
-		
+
 		// Error log triggers
 		add_action( 'wpshadow_error_log_entry', array( __CLASS__, 'handle_error_logged' ), 10, 2 );
-		
+
 		// Manual/CRON trigger via query string
 		add_action( 'wp', array( __CLASS__, 'handle_query_string_trigger' ), 1 );
-		
+
 		// Schedule cron if not already scheduled
 		if ( ! wp_next_scheduled( 'wpshadow_workflow_cron' ) ) {
 			wp_schedule_event( time(), 'hourly', 'wpshadow_workflow_cron' );
@@ -78,16 +78,16 @@ class Workflow_Executor {
 		}
 
 		$context = array(
-			'trigger_type' => 'page_load',
-			'context'      => 'frontend',
-			'is_admin'     => false,
-			'post_type'    => get_post_type(),
-			'is_single'    => is_single(),
-			'is_page'      => is_page(),
-			'is_archive'   => is_archive(),
-			'is_category'  => is_category(),
-			'is_tag'       => is_tag(),
-			'is_home'      => is_home(),
+			'trigger_type'  => 'page_load',
+			'context'       => 'frontend',
+			'is_admin'      => false,
+			'post_type'     => get_post_type(),
+			'is_single'     => is_single(),
+			'is_page'       => is_page(),
+			'is_archive'    => is_archive(),
+			'is_category'   => is_category(),
+			'is_tag'        => is_tag(),
+			'is_home'       => is_home(),
 			'is_front_page' => is_front_page(),
 		);
 
@@ -136,7 +136,7 @@ class Workflow_Executor {
 	 * Supports hourly, daily, and weekly frequencies (#572-573)
 	 */
 	private static function should_execute_time_trigger( $config ) {
-		$frequency = isset( $config['frequency'] ) ? $config['frequency'] : 'daily';
+		$frequency   = isset( $config['frequency'] ) ? $config['frequency'] : 'daily';
 		$target_time = isset( $config['time'] ) ? $config['time'] : '02:00';
 		$target_days = isset( $config['days'] ) ? $config['days'] : array();
 
@@ -165,7 +165,7 @@ class Workflow_Executor {
 		}
 
 		// Check if current time matches (within 1 hour window)
-		$target_hour = (int) substr( $target_time, 0, 2 );
+		$target_hour  = (int) substr( $target_time, 0, 2 );
 		$current_hour = (int) current_time( 'H' );
 
 		return abs( $current_hour - $target_hour ) < 1;
@@ -176,11 +176,11 @@ class Workflow_Executor {
 	 */
 	public static function handle_plugin_activated( $plugin, $network_wide ) {
 		$context = array(
-			'trigger_type'   => 'event',
-			'event_type'     => 'plugin_state_changed',
-			'plugin_action'  => 'activated',
-			'plugin'         => $plugin,
-			'network_wide'   => $network_wide,
+			'trigger_type'  => 'event',
+			'event_type'    => 'plugin_state_changed',
+			'plugin_action' => 'activated',
+			'plugin'        => $plugin,
+			'network_wide'  => $network_wide,
 		);
 
 		self::execute_matching_workflows( 'event_trigger', $context );
@@ -191,11 +191,11 @@ class Workflow_Executor {
 	 */
 	public static function handle_plugin_deactivated( $plugin, $network_wide ) {
 		$context = array(
-			'trigger_type'   => 'event',
-			'event_type'     => 'plugin_state_changed',
-			'plugin_action'  => 'deactivated',
-			'plugin'         => $plugin,
-			'network_wide'   => $network_wide,
+			'trigger_type'  => 'event',
+			'event_type'    => 'plugin_state_changed',
+			'plugin_action' => 'deactivated',
+			'plugin'        => $plugin,
+			'network_wide'  => $network_wide,
 		);
 
 		self::execute_matching_workflows( 'event_trigger', $context );
@@ -257,7 +257,7 @@ class Workflow_Executor {
 	 */
 	public static function handle_pre_publish_review( $post_id ) {
 		$post = get_post( $post_id );
-		
+
 		// Only trigger for actual post types, not auto-drafts
 		if ( ! $post || in_array( $post->post_status, array( 'auto-draft', 'inherit' ), true ) ) {
 			return;
@@ -313,12 +313,12 @@ class Workflow_Executor {
 			}
 
 			// Check if this workflow has a matching trigger
-			$has_trigger = false;
+			$has_trigger    = false;
 			$trigger_config = null;
 
 			foreach ( $workflow['blocks'] as $block ) {
 				if ( $block['type'] === 'trigger' && $block['id'] === $trigger_id ) {
-					$has_trigger = true;
+					$has_trigger    = true;
 					$trigger_config = isset( $block['config'] ) ? $block['config'] : array();
 					break;
 				}
@@ -351,34 +351,34 @@ class Workflow_Executor {
 					return false;
 				}
 
-			// First check if event type matches
-			if ( $config['event_type'] !== $context['event_type'] ) {
-				return false;
-			}
-
-			// For plugin state changes, check the plugin_action config
-			if ( 'plugin_state_changed' === $context['event_type'] ) {
-				$plugin_action = isset( $config['plugin_action'] ) ? $config['plugin_action'] : 'any';
-				if ( 'any' !== $plugin_action && $plugin_action !== $context['plugin_action'] ) {
+				// First check if event type matches
+				if ( $config['event_type'] !== $context['event_type'] ) {
 					return false;
 				}
-			}
 
-			// For post status changes, check the post_status config
-			if ( 'post_status_changed' === $context['event_type'] ) {
-				$post_status = isset( $config['post_status'] ) ? $config['post_status'] : 'any';
-				if ( 'any' !== $post_status && $post_status !== $context['post_status'] ) {
-					return false;
+				// For plugin state changes, check the plugin_action config
+				if ( 'plugin_state_changed' === $context['event_type'] ) {
+					$plugin_action = isset( $config['plugin_action'] ) ? $config['plugin_action'] : 'any';
+					if ( 'any' !== $plugin_action && $plugin_action !== $context['plugin_action'] ) {
+						return false;
+					}
 				}
-			}
 
-			// For pre-publish review, match all pre-publish reviews
-			if ( 'pre_publish_review' === $context['event_type'] ) {
-				// Additional filtering can be added here for post types if needed
+				// For post status changes, check the post_status config
+				if ( 'post_status_changed' === $context['event_type'] ) {
+					$post_status = isset( $config['post_status'] ) ? $config['post_status'] : 'any';
+					if ( 'any' !== $post_status && $post_status !== $context['post_status'] ) {
+						return false;
+					}
+				}
+
+				// For pre-publish review, match all pre-publish reviews
+				if ( 'pre_publish_review' === $context['event_type'] ) {
+					// Additional filtering can be added here for post types if needed
+					return true;
+				}
+
 				return true;
-			}
-
-			return true;
 			case 'plugin_update_trigger':
 				return self::plugin_update_matches( $config, $context );
 
@@ -443,24 +443,24 @@ class Workflow_Executor {
 	 */
 	private static function condition_matches( $config ) {
 		$condition_type = isset( $config['condition_type'] ) ? $config['condition_type'] : '';
-		$threshold = isset( $config['threshold'] ) ? (int) $config['threshold'] : 80;
+		$threshold      = isset( $config['threshold'] ) ? (int) $config['threshold'] : 80;
 
 		switch ( $condition_type ) {
 			case 'memory_high':
-				$limit = wp_convert_hr_to_bytes( WP_MEMORY_LIMIT );
-				$usage = memory_get_usage( true );
+				$limit      = wp_convert_hr_to_bytes( WP_MEMORY_LIMIT );
+				$usage      = memory_get_usage( true );
 				$percentage = ( $usage / $limit ) * 100;
 				return $percentage > $threshold;
 
 			case 'memory_low':
-				$limit = wp_convert_hr_to_bytes( WP_MEMORY_LIMIT );
-				$usage = memory_get_usage( true );
+				$limit      = wp_convert_hr_to_bytes( WP_MEMORY_LIMIT );
+				$usage      = memory_get_usage( true );
 				$percentage = ( $usage / $limit ) * 100;
 				return $percentage < $threshold;
 
 			case 'plugins_outdated':
 				$updates = get_site_transient( 'update_plugins' );
-				$count = isset( $updates->response ) ? count( $updates->response ) : 0;
+				$count   = isset( $updates->response ) ? count( $updates->response ) : 0;
 				return $count > 0;
 
 			case 'debug_mode_enabled':
@@ -482,7 +482,7 @@ class Workflow_Executor {
 			return false;
 		}
 
-		$target_type = isset( $config['target_type'] ) ? $config['target_type'] : 'any';
+		$target_type   = isset( $config['target_type'] ) ? $config['target_type'] : 'any';
 		$specific_slug = isset( $config['specific_slug'] ) ? $config['specific_slug'] : '';
 
 		if ( 'any' === $target_type ) {
@@ -533,7 +533,7 @@ class Workflow_Executor {
 			return false;
 		}
 
-		$issue_type = isset( $config['database_issue'] ) ? $config['database_issue'] : '';
+		$issue_type     = isset( $config['database_issue'] ) ? $config['database_issue'] : '';
 		$size_threshold = isset( $config['size_mb'] ) ? (float) $config['size_mb'] : 500;
 
 		foreach ( $context['issues'] as $issue ) {
@@ -563,9 +563,13 @@ class Workflow_Executor {
 			return true;
 		}
 
-		$severity_order = array( 'warning' => 1, 'error' => 2, 'critical' => 3 );
-		$config_level = isset( $severity_order[ $level ] ) ? $severity_order[ $level ] : 0;
-		$context_level = isset( $severity_order[ $context['error_level'] ] ) ? $severity_order[ $context['error_level'] ] : 0;
+		$severity_order = array(
+			'warning'  => 1,
+			'error'    => 2,
+			'critical' => 3,
+		);
+		$config_level   = isset( $severity_order[ $level ] ) ? $severity_order[ $level ] : 0;
+		$context_level  = isset( $severity_order[ $context['error_level'] ] ) ? $severity_order[ $context['error_level'] ] : 0;
 
 		return $context_level >= $config_level;
 	}
@@ -575,7 +579,7 @@ class Workflow_Executor {
 	 */
 	public static function execute_workflow( $workflow, $context = array() ) {
 		$workflow_id = $workflow['id'];
-		$results = array();
+		$results     = array();
 
 		// Log execution start
 		self::log_execution( $workflow_id, 'started', $context );
@@ -586,7 +590,7 @@ class Workflow_Executor {
 				continue;
 			}
 
-			$result = self::execute_action( $block, $context );
+			$result    = self::execute_action( $block, $context );
 			$results[] = array(
 				'block_id' => $block['id'],
 				'result'   => $result,
@@ -599,10 +603,14 @@ class Workflow_Executor {
 		}
 
 		// Log execution complete
-		self::log_execution( $workflow_id, 'completed', array(
-			'context' => $context,
-			'results' => $results,
-		) );
+		self::log_execution(
+			$workflow_id,
+			'completed',
+			array(
+				'context' => $context,
+				'results' => $results,
+			)
+		);
 
 		return $results;
 	}
@@ -612,7 +620,7 @@ class Workflow_Executor {
 	 */
 	private static function execute_action( $block, $context ) {
 		$action_id = $block['id'];
-		$config = isset( $block['config'] ) ? $block['config'] : array();
+		$config    = isset( $block['config'] ) ? $block['config'] : array();
 
 		switch ( $action_id ) {
 			case 'run_diagnostic':
@@ -648,13 +656,13 @@ class Workflow_Executor {
 	 * Execute a diagnostic check
 	 */
 	private static function execute_diagnostic( $config, $context ) {
-		$diagnostic_type = isset( $config['diagnostic_type'] ) ? $config['diagnostic_type'] : 'full';
+		$diagnostic_type     = isset( $config['diagnostic_type'] ) ? $config['diagnostic_type'] : 'full';
 		$specific_diagnostic = isset( $config['specific_diagnostic'] ) ? $config['specific_diagnostic'] : '';
 
 		// If specific diagnostic is set, run just that one
 		if ( ! empty( $specific_diagnostic ) ) {
 			$class_name = self::get_diagnostic_class( $specific_diagnostic );
-			
+
 			if ( ! class_exists( $class_name ) ) {
 				return array(
 					'success' => false,
@@ -663,7 +671,7 @@ class Workflow_Executor {
 			}
 
 			$result = call_user_func( array( $class_name, 'check' ) );
-			
+
 			return array(
 				'success' => true,
 				'message' => 'Diagnostic completed: ' . $specific_diagnostic,
@@ -704,10 +712,10 @@ class Workflow_Executor {
 		$findings = array_filter( $findings );
 
 		return array(
-			'success' => true,
-			'message' => sprintf( 'Diagnostic scan completed. Found %d issues.', count( $findings ) ),
+			'success'  => true,
+			'message'  => sprintf( 'Diagnostic scan completed. Found %d issues.', count( $findings ) ),
 			'findings' => $findings,
-			'count' => count( $findings ),
+			'count'    => count( $findings ),
 		);
 	}
 
@@ -715,13 +723,13 @@ class Workflow_Executor {
 	 * Execute a treatment/fix
 	 */
 	private static function execute_treatment( $config, $context ) {
-		$treatment_type = isset( $config['treatment_type'] ) ? $config['treatment_type'] : '';
+		$treatment_type     = isset( $config['treatment_type'] ) ? $config['treatment_type'] : '';
 		$specific_treatment = isset( $config['specific_treatment'] ) ? $config['specific_treatment'] : '';
 
 		// If specific treatment is set, apply just that one
 		if ( ! empty( $specific_treatment ) ) {
 			$class_name = self::get_treatment_class( $specific_treatment );
-			
+
 			if ( ! class_exists( $class_name ) ) {
 				return array(
 					'success' => false,
@@ -737,7 +745,7 @@ class Workflow_Executor {
 			}
 
 			$result = call_user_func( array( $class_name, 'apply' ) );
-			
+
 			return $result;
 		}
 
@@ -752,11 +760,11 @@ class Workflow_Executor {
 	 */
 	private static function execute_email( $config, $context ) {
 		// Load the email recipient manager
-		require_once dirname( __FILE__ ) . '/class-email-recipient-manager.php';
+		require_once __DIR__ . '/class-email-recipient-manager.php';
 
 		$recipient = isset( $config['recipient'] ) ? sanitize_text_field( $config['recipient'] ) : 'admin';
-		$subject = isset( $config['subject'] ) ? sanitize_text_field( $config['subject'] ) : 'WPShadow Workflow Notification';
-		$message = isset( $config['message'] ) ? $config['message'] : '';
+		$subject   = isset( $config['subject'] ) ? sanitize_text_field( $config['subject'] ) : 'WPShadow Workflow Notification';
+		$message   = isset( $config['message'] ) ? $config['message'] : '';
 
 		// Determine the actual email address
 		if ( 'admin' === $recipient ) {
@@ -797,7 +805,7 @@ class Workflow_Executor {
 		$log_message = isset( $config['log_message'] ) ? $config['log_message'] : 'Workflow action executed';
 		$log_message = self::replace_variables( $log_message, $context );
 
-		$log = get_option( 'wpshadow_workflow_log', array() );
+		$log   = get_option( 'wpshadow_workflow_log', array() );
 		$log[] = array(
 			'message'   => $log_message,
 			'context'   => $context,
@@ -860,7 +868,7 @@ class Workflow_Executor {
 	 */
 	private static function execute_a11y_audit( $config, $context ) {
 		$scan_mode = isset( $config['scan_mode'] ) ? $config['scan_mode'] : 'specific';
-		$url = isset( $config['url'] ) ? esc_url_raw( $config['url'] ) : home_url();
+		$url       = isset( $config['url'] ) ? esc_url_raw( $config['url'] ) : home_url();
 
 		if ( 'specific' === $scan_mode ) {
 			// Scan a specific URL
@@ -873,7 +881,7 @@ class Workflow_Executor {
 
 			// Validate same-site
 			$site_host = wp_parse_url( home_url(), PHP_URL_HOST );
-			$url_host = wp_parse_url( $url, PHP_URL_HOST );
+			$url_host  = wp_parse_url( $url, PHP_URL_HOST );
 			if ( $url_host !== $site_host ) {
 				return array(
 					'success' => false,
@@ -882,10 +890,13 @@ class Workflow_Executor {
 			}
 
 			// Fetch and analyze
-			$response = wp_remote_get( $url, array(
-				'timeout' => 10,
-				'headers' => array( 'User-Agent' => 'WPShadow-Workflow-A11y' ),
-			) );
+			$response = wp_remote_get(
+				$url,
+				array(
+					'timeout' => 10,
+					'headers' => array( 'User-Agent' => 'WPShadow-Workflow-A11y' ),
+				)
+			);
 
 			if ( is_wp_error( $response ) ) {
 				return array(
@@ -903,12 +914,16 @@ class Workflow_Executor {
 			}
 
 			if ( function_exists( 'wpshadow_analyze_a11y_html' ) ) {
-				$issues = wpshadow_analyze_a11y_html( $body );
-				$summary = array( 'pass' => 0, 'warn' => 0, 'fail' => 0 );
+				$issues  = wpshadow_analyze_a11y_html( $body );
+				$summary = array(
+					'pass' => 0,
+					'warn' => 0,
+					'fail' => 0,
+				);
 				foreach ( $issues as $issue ) {
 					$status = $issue['status'] ?? '';
 					if ( isset( $summary[ $status ] ) ) {
-						$summary[ $status ]++;
+						++$summary[ $status ];
 					}
 				}
 				return array(
@@ -921,7 +936,7 @@ class Workflow_Executor {
 			}
 		} elseif ( 'cluster' === $scan_mode ) {
 			// Scan a cluster of URLs
-			$urls = isset( $config['urls'] ) ? (array) $config['urls'] : array( home_url() );
+			$urls    = isset( $config['urls'] ) ? (array) $config['urls'] : array( home_url() );
 			$results = array();
 
 			foreach ( $urls as $page_url ) {
@@ -930,10 +945,13 @@ class Workflow_Executor {
 					continue;
 				}
 
-				$response = wp_remote_get( $page_url, array(
-					'timeout' => 10,
-					'headers' => array( 'User-Agent' => 'WPShadow-Workflow-A11y' ),
-				) );
+				$response = wp_remote_get(
+					$page_url,
+					array(
+						'timeout' => 10,
+						'headers' => array( 'User-Agent' => 'WPShadow-Workflow-A11y' ),
+					)
+				);
 
 				if ( is_wp_error( $response ) ) {
 					continue;
@@ -941,12 +959,16 @@ class Workflow_Executor {
 
 				$body = wp_remote_retrieve_body( $response );
 				if ( ! empty( $body ) && function_exists( 'wpshadow_analyze_a11y_html' ) ) {
-					$issues = wpshadow_analyze_a11y_html( $body );
-					$summary = array( 'pass' => 0, 'warn' => 0, 'fail' => 0 );
+					$issues  = wpshadow_analyze_a11y_html( $body );
+					$summary = array(
+						'pass' => 0,
+						'warn' => 0,
+						'fail' => 0,
+					);
 					foreach ( $issues as $issue ) {
 						$status = $issue['status'] ?? '';
 						if ( isset( $summary[ $status ] ) ) {
-							$summary[ $status ]++;
+							++$summary[ $status ];
 						}
 					}
 					$results[ $page_url ] = $summary;
@@ -954,28 +976,30 @@ class Workflow_Executor {
 			}
 
 			return array(
-				'success' => true,
-				'message' => 'Accessibility audit cluster scan completed.',
+				'success'      => true,
+				'message'      => 'Accessibility audit cluster scan completed.',
 				'urls_scanned' => count( $results ),
-				'results' => $results,
+				'results'      => $results,
 			);
 
 		} elseif ( 'all' === $scan_mode ) {
 			// Scan all posts/pages in batches
-			$paged = isset( $config['batch_number'] ) ? (int) $config['batch_number'] : 1;
+			$paged    = isset( $config['batch_number'] ) ? (int) $config['batch_number'] : 1;
 			$per_page = isset( $config['batch_size'] ) ? (int) $config['batch_size'] : 10;
 
-			$posts = get_posts( array(
-				'posts_per_page' => $per_page,
-				'paged'          => $paged,
-				'post_type'      => array( 'post', 'page' ),
-				'post_status'    => 'publish',
-			) );
+			$posts = get_posts(
+				array(
+					'posts_per_page' => $per_page,
+					'paged'          => $paged,
+					'post_type'      => array( 'post', 'page' ),
+					'post_status'    => 'publish',
+				)
+			);
 
 			if ( empty( $posts ) ) {
 				return array(
-					'success' => true,
-					'message' => 'No more posts to scan.',
+					'success'      => true,
+					'message'      => 'No more posts to scan.',
 					'batch_number' => $paged,
 					'urls_scanned' => 0,
 				);
@@ -984,20 +1008,27 @@ class Workflow_Executor {
 			$results = array();
 			foreach ( $posts as $post ) {
 				$post_url = get_permalink( $post->ID );
-				$response = wp_remote_get( $post_url, array(
-					'timeout' => 10,
-					'headers' => array( 'User-Agent' => 'WPShadow-Workflow-A11y' ),
-				) );
+				$response = wp_remote_get(
+					$post_url,
+					array(
+						'timeout' => 10,
+						'headers' => array( 'User-Agent' => 'WPShadow-Workflow-A11y' ),
+					)
+				);
 
 				if ( ! is_wp_error( $response ) ) {
 					$body = wp_remote_retrieve_body( $response );
 					if ( ! empty( $body ) && function_exists( 'wpshadow_analyze_a11y_html' ) ) {
-						$issues = wpshadow_analyze_a11y_html( $body );
-						$summary = array( 'pass' => 0, 'warn' => 0, 'fail' => 0 );
+						$issues  = wpshadow_analyze_a11y_html( $body );
+						$summary = array(
+							'pass' => 0,
+							'warn' => 0,
+							'fail' => 0,
+						);
 						foreach ( $issues as $issue ) {
 							$status = $issue['status'] ?? '';
 							if ( isset( $summary[ $status ] ) ) {
-								$summary[ $status ]++;
+								++$summary[ $status ];
 							}
 						}
 						$results[ $post_url ] = $summary;
@@ -1006,12 +1037,12 @@ class Workflow_Executor {
 			}
 
 			return array(
-				'success' => true,
-				'message' => 'Batch ' . $paged . ' scanned.',
+				'success'      => true,
+				'message'      => 'Batch ' . $paged . ' scanned.',
 				'batch_number' => $paged,
 				'urls_scanned' => count( $results ),
-				'results' => $results,
-				'has_more' => count( $posts ) >= $per_page,
+				'results'      => $results,
+				'has_more'     => count( $posts ) >= $per_page,
 			);
 		}
 
@@ -1038,18 +1069,20 @@ class Workflow_Executor {
 		}
 
 		if ( function_exists( 'wpshadow_run_broken_links_scan' ) ) {
-			$result = wpshadow_run_broken_links_scan( array(
-				'check_internal' => true,
-				'check_external' => true,
-				'check_images'   => true,
-				'scan_mode'      => $scan_mode,
-				'url'            => isset( $config['url'] ) ? esc_url_raw( $config['url'] ) : null,
-			) );
+			$result = wpshadow_run_broken_links_scan(
+				array(
+					'check_internal' => true,
+					'check_external' => true,
+					'check_images'   => true,
+					'scan_mode'      => $scan_mode,
+					'url'            => isset( $config['url'] ) ? esc_url_raw( $config['url'] ) : null,
+				)
+			);
 			return array(
-				'success' => true,
-				'message' => 'Broken links scan completed',
+				'success'   => true,
+				'message'   => 'Broken links scan completed',
 				'scan_mode' => $scan_mode,
-				'data'    => $result,
+				'data'      => $result,
 			);
 		}
 
@@ -1064,7 +1097,7 @@ class Workflow_Executor {
 	 */
 	private static function execute_mobile_friendliness( $config, $context ) {
 		$scan_mode = isset( $config['scan_mode'] ) ? $config['scan_mode'] : 'specific';
-		$url = isset( $config['url'] ) ? esc_url_raw( $config['url'] ) : home_url();
+		$url       = isset( $config['url'] ) ? esc_url_raw( $config['url'] ) : home_url();
 
 		if ( 'specific' === $scan_mode ) {
 			if ( ! wp_http_validate_url( $url ) ) {
@@ -1076,7 +1109,7 @@ class Workflow_Executor {
 
 			// Validate same-site
 			$site_host = wp_parse_url( home_url(), PHP_URL_HOST );
-			$url_host = wp_parse_url( $url, PHP_URL_HOST );
+			$url_host  = wp_parse_url( $url, PHP_URL_HOST );
 			if ( $url_host !== $site_host ) {
 				return array(
 					'success' => false,
@@ -1088,10 +1121,10 @@ class Workflow_Executor {
 		if ( function_exists( 'wpshadow_run_mobile_friendliness' ) ) {
 			$result = wpshadow_run_mobile_friendliness( $url, $scan_mode );
 			return array(
-				'success' => true,
-				'message' => 'Mobile friendliness scan completed',
+				'success'   => true,
+				'message'   => 'Mobile friendliness scan completed',
 				'scan_mode' => $scan_mode,
-				'findings' => $result,
+				'findings'  => $result,
 			);
 		}
 
@@ -1154,15 +1187,15 @@ class Workflow_Executor {
 
 		if ( 'create' === $action ) {
 			// Generate secure token
-			$token = bin2hex( random_bytes( 16 ) );
-			$expiry = isset( $config['expiry_hours'] ) ? (int) $config['expiry_hours'] : 24;
+			$token      = bin2hex( random_bytes( 16 ) );
+			$expiry     = isset( $config['expiry_hours'] ) ? (int) $config['expiry_hours'] : 24;
 			$expires_at = time() + ( $expiry * HOUR_IN_SECONDS );
 
-			$links = get_option( 'wpshadow_magic_links', array() );
+			$links           = get_option( 'wpshadow_magic_links', array() );
 			$links[ $token ] = array(
-				'created_at' => current_time( 'timestamp' ),
-				'expires_at' => $expires_at,
-				'created_by' => get_current_user_id(),
+				'created_at'  => current_time( 'timestamp' ),
+				'expires_at'  => $expires_at,
+				'created_by'  => get_current_user_id(),
 				'description' => isset( $config['description'] ) ? sanitize_text_field( $config['description'] ) : 'Workflow-generated link',
 			);
 
@@ -1171,10 +1204,10 @@ class Workflow_Executor {
 			$magic_url = add_query_arg( 'wpshadow_magic_token', $token, home_url() );
 
 			return array(
-				'success' => true,
-				'message' => 'Magic link created.',
-				'token' => $token,
-				'url' => $magic_url,
+				'success'    => true,
+				'message'    => 'Magic link created.',
+				'token'      => $token,
+				'url'        => $magic_url,
 				'expires_at' => $expires_at,
 			);
 		}
@@ -1210,11 +1243,11 @@ class Workflow_Executor {
 	 * Send in-app notification
 	 */
 	private static function execute_notification( $config, $context ) {
-		$title = isset( $config['notification_title'] ) ? $config['notification_title'] : 'WPShadow Notification';
+		$title   = isset( $config['notification_title'] ) ? $config['notification_title'] : 'WPShadow Notification';
 		$message = isset( $config['notification_message'] ) ? $config['notification_message'] : '';
-		$type = isset( $config['notification_type'] ) ? $config['notification_type'] : 'info';
+		$type    = isset( $config['notification_type'] ) ? $config['notification_type'] : 'info';
 
-		$notifications = get_option( 'wpshadow_notifications', array() );
+		$notifications   = get_option( 'wpshadow_notifications', array() );
 		$notifications[] = array(
 			'title'     => $title,
 			'message'   => self::replace_variables( $message, $context ),
@@ -1243,14 +1276,14 @@ class Workflow_Executor {
 		}
 
 		$note_config = array(
-			'title'       => isset( $config['title'] ) ? self::replace_variables( $config['title'], $context ) : 'Workflow Alert',
-			'description' => isset( $config['description'] ) ? self::replace_variables( $config['description'], $context ) : '',
-			'status'      => isset( $config['status'] ) ? $config['status'] : 'detected',
-			'severity'    => isset( $config['severity'] ) ? $config['severity'] : 'medium',
-			'category'    => isset( $config['category'] ) ? $config['category'] : 'settings',
+			'title'        => isset( $config['title'] ) ? self::replace_variables( $config['title'], $context ) : 'Workflow Alert',
+			'description'  => isset( $config['description'] ) ? self::replace_variables( $config['description'], $context ) : '',
+			'status'       => isset( $config['status'] ) ? $config['status'] : 'detected',
+			'severity'     => isset( $config['severity'] ) ? $config['severity'] : 'medium',
+			'category'     => isset( $config['category'] ) ? $config['category'] : 'settings',
 			'auto_dismiss' => isset( $config['auto_dismiss'] ) ? (int) $config['auto_dismiss'] : 0,
-			'workflow_id' => isset( $context['workflow_id'] ) ? $context['workflow_id'] : '',
-			'trigger_at'  => isset( $context['trigger_name'] ) ? $context['trigger_name'] : current_time( 'mysql' ),
+			'workflow_id'  => isset( $context['workflow_id'] ) ? $context['workflow_id'] : '',
+			'trigger_at'   => isset( $context['trigger_name'] ) ? $context['trigger_name'] : current_time( 'mysql' ),
 		);
 
 		$result = \WPShadow\Workflow\Kanban_Note_Action::create( $note_config );
@@ -1291,7 +1324,7 @@ class Workflow_Executor {
 	 * Log workflow execution
 	 */
 	private static function log_execution( $workflow_id, $status, $data = array() ) {
-		$log = get_option( 'wpshadow_workflow_executions', array() );
+		$log   = get_option( 'wpshadow_workflow_executions', array() );
 		$log[] = array(
 			'workflow_id' => $workflow_id,
 			'status'      => $status,
@@ -1367,9 +1400,9 @@ class Workflow_Executor {
 	 */
 	public static function handle_backup_completed( $status ) {
 		$context = array(
-			'trigger_type'    => 'backup_completion',
-			'backup_status'   => $status,
-			'timestamp'       => current_time( 'timestamp' ),
+			'trigger_type'  => 'backup_completion',
+			'backup_status' => $status,
+			'timestamp'     => current_time( 'timestamp' ),
 		);
 
 		self::execute_matching_workflows( 'backup_completion_trigger', $context );
@@ -1423,9 +1456,9 @@ class Workflow_Executor {
 
 		$size_query = "SELECT ROUND( SUM( data_length + index_length ) / 1024 / 1024, 2 ) AS 'size' 
 						FROM information_schema.TABLES WHERE table_schema = '" . DB_NAME . "'";
-		
+
 		$result = $wpdb->get_var( $size_query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		
+
 		return $result ? (float) $result : 0;
 	}
 
@@ -1434,10 +1467,10 @@ class Workflow_Executor {
 	 */
 	public static function handle_error_logged( $error_level, $message ) {
 		$context = array(
-			'trigger_type'  => 'error_log',
-			'error_level'   => $error_level,
-			'message'       => $message,
-			'timestamp'     => current_time( 'timestamp' ),
+			'trigger_type' => 'error_log',
+			'error_level'  => $error_level,
+			'message'      => $message,
+			'timestamp'    => current_time( 'timestamp' ),
 		);
 
 		self::execute_matching_workflows( 'error_log_trigger', $context );
@@ -1459,7 +1492,7 @@ class Workflow_Executor {
 		}
 
 		$provided_token = sanitize_text_field( wp_unslash( $_GET['wpshadow_trigger'] ) );
-		$triggered = false;
+		$triggered      = false;
 
 		// Get all workflows with manual_cron_trigger
 		$workflows = Workflow_Manager::get_workflows();
@@ -1474,10 +1507,10 @@ class Workflow_Executor {
 					continue;
 				}
 
-				$config = isset( $block['config'] ) ? $block['config'] : array();
+				$config       = isset( $block['config'] ) ? $block['config'] : array();
 				$stored_token = isset( $config['trigger_token'] ) ? $config['trigger_token'] : '';
 				$require_auth = isset( $config['require_auth'] ) ? $config['require_auth'] : true;
-				$allowed_ips = isset( $config['allowed_ips'] ) ? $config['allowed_ips'] : '';
+				$allowed_ips  = isset( $config['allowed_ips'] ) ? $config['allowed_ips'] : '';
 
 				// Compare tokens using hash_equals for timing attack resistance
 				if ( empty( $stored_token ) || ! hash_equals( $stored_token, $provided_token ) ) {
@@ -1492,8 +1525,8 @@ class Workflow_Executor {
 				// Check IP allowlist if configured
 				if ( ! empty( $allowed_ips ) ) {
 					$allowed_ips_arr = array_map( 'trim', explode( ',', $allowed_ips ) );
-					$client_ip = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
-					
+					$client_ip       = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
+
 					if ( ! in_array( $client_ip, $allowed_ips_arr, true ) ) {
 						continue;
 					}

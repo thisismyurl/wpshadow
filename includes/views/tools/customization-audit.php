@@ -45,13 +45,13 @@ $latest_report = ! empty( $audit_reports ) ? end( $audit_reports ) : null;
 				<td><strong><?php esc_html_e( 'Risk Level', 'wpshadow' ); ?></strong></td>
 				<td>
 					<?php
-					$risk_level = $latest_report['overall_risk'] ?? 'low';
+					$risk_level  = $latest_report['overall_risk'] ?? 'low';
 					$risk_colors = array(
 						'low'    => 'green',
 						'medium' => 'orange',
 						'high'   => 'red',
 					);
-					$color = $risk_colors[ $risk_level ] ?? 'gray';
+					$color       = $risk_colors[ $risk_level ] ?? 'gray';
 					?>
 					<span style="color: <?php echo esc_attr( $color ); ?>; font-weight: bold;">
 						<?php echo esc_html( strtoupper( $risk_level ) ); ?>
@@ -98,7 +98,7 @@ $latest_report = ! empty( $audit_reports ) ? end( $audit_reports ) : null;
 							<td><?php echo esc_html( gmdate( 'Y-m-d H:i', $report['timestamp'] ?? 0 ) ); ?></td>
 							<td>
 								<?php
-								$risk = $report['overall_risk'] ?? 'low';
+								$risk  = $report['overall_risk'] ?? 'low';
 								$color = $risk_colors[ $risk ] ?? 'gray';
 								?>
 								<span style="color: <?php echo esc_attr( $color ); ?>;">

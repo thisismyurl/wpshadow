@@ -18,18 +18,18 @@ class WPShadow_KPI_Summary_Widget {
 	public static function render() {
 		// Get KPI data from Activity Logger
 		$kpis = self::get_kpi_data();
-		
+
 		// Determine status color and message
 		if ( $kpis['total_value'] > 0 ) {
-			$status_icon = '🚀';
-			$status_text = __( 'Delivering Value', 'wpshadow' );
+			$status_icon  = '🚀';
+			$status_text  = __( 'Delivering Value', 'wpshadow' );
 			$status_color = '#2e7d32';
-			$status_bg = '#e8f5e9';
+			$status_bg    = '#e8f5e9';
 		} else {
-			$status_icon = '📊';
-			$status_text = __( 'No Activity This Month', 'wpshadow' );
+			$status_icon  = '📊';
+			$status_text  = __( 'No Activity This Month', 'wpshadow' );
 			$status_color = '#666';
-			$status_bg = '#f5f5f5';
+			$status_bg    = '#f5f5f5';
 		}
 		?>
 		<div style="margin: 30px 0;">
@@ -85,12 +85,14 @@ class WPShadow_KPI_Summary_Widget {
 				<div>
 					<strong style="color: <?php echo esc_attr( $status_color ); ?>;"><?php echo esc_html( $status_text ); ?></strong>
 					<p style="margin: 4px 0 0 0; font-size: 12px; color: #666;">
-						<?php 
+						<?php
 						if ( $kpis['total_value'] > 0 ) {
-							echo esc_html( sprintf( 
-								__( 'You\'ve automated %d workflows this month, saving your team valuable time.', 'wpshadow' ),
-								$kpis['workflows_created']
-							) );
+							echo esc_html(
+								sprintf(
+									__( 'You\'ve automated %d workflows this month, saving your team valuable time.', 'wpshadow' ),
+									$kpis['workflows_created']
+								)
+							);
 						} else {
 							echo esc_html( __( 'Create your first workflow to start tracking value saved.', 'wpshadow' ) );
 						}
@@ -106,53 +108,55 @@ class WPShadow_KPI_Summary_Widget {
 	 * Get KPI data from activity logger
 	 */
 	private static function get_kpi_data() {
-		$now = time();
+		$now       = time();
 		$month_ago = strtotime( '-1 month', $now );
-		
+
 		// Get activities from this month
 		if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
-			$activities = \WPShadow\Core\Activity_Logger::get_activities( array(
-				'start_date' => $month_ago,
-				'end_date' => $now,
-			) );
+			$activities = \WPShadow\Core\Activity_Logger::get_activities(
+				array(
+					'start_date' => $month_ago,
+					'end_date'   => $now,
+				)
+			);
 		} else {
 			$activities = array();
 		}
-		
+
 		// Calculate metrics
-		$time_saved_hours = 0;
-		$issues_fixed = 0;
-		$workflows_created = 0;
+		$time_saved_hours   = 0;
+		$issues_fixed       = 0;
+		$workflows_created  = 0;
 		$workflows_executed = 0;
-		
+
 		foreach ( $activities as $activity ) {
 			$action = isset( $activity['action'] ) ? $activity['action'] : '';
-			
+
 			if ( $action === 'workflow_created_from_finding' ) {
-				$workflows_created++;
+				++$workflows_created;
 				// Estimate 30 minutes saved per workflow creation
 				$time_saved_hours += 0.5;
 			} elseif ( $action === 'finding_fixed' || $action === 'workflow_executed' ) {
-				$issues_fixed++;
-				$workflows_executed++;
+				++$issues_fixed;
+				++$workflows_executed;
 				// Estimate 15 minutes saved per auto-fix
 				$time_saved_hours += 0.25;
 			} elseif ( $action === 'finding_dismissed' ) {
 				// Dismissed issues still count as resolved
-				$issues_fixed++;
+				++$issues_fixed;
 			}
 		}
-		
+
 		// Calculate estimated value
 		$hourly_rate = self::get_hourly_rate();
 		$total_value = (int) ( $time_saved_hours * $hourly_rate );
-		
+
 		return array(
-			'time_saved_hours' => $time_saved_hours,
-			'issues_fixed' => $issues_fixed,
-			'workflows_created' => $workflows_created,
+			'time_saved_hours'   => $time_saved_hours,
+			'issues_fixed'       => $issues_fixed,
+			'workflows_created'  => $workflows_created,
 			'workflows_executed' => $workflows_executed,
-			'total_value' => $total_value,
+			'total_value'        => $total_value,
 		);
 	}
 
@@ -170,9 +174,9 @@ class WPShadow_KPI_Summary_Widget {
 	private static function format_hours( $hours ) {
 		if ( $hours >= 24 ) {
 			$days = (int) ( $hours / 24 );
-			return sprintf( __( '%d day%s', 'wpshadow' ), $days, $days > 1 ? 's' : '' );
+			return sprintf( __( '%1$d day%2$s', 'wpshadow' ), $days, $days > 1 ? 's' : '' );
 		}
-		return sprintf( __( '%.1f hr%s', 'wpshadow' ), $hours, $hours > 1 ? 's' : '' );
+		return sprintf( __( '%1$.1f hr%2$s', 'wpshadow' ), $hours, $hours > 1 ? 's' : '' );
 	}
 
 	/**

@@ -28,21 +28,21 @@ class Diagnostic_Env_Autoplay_Video_Disabled extends Diagnostic_Base {
 
 	protected static $family_label = 'General';
 
-	
+
 	/**
 	 * Get diagnostic ID
 	 */
 	public static function get_id(): string {
 		return 'env-autoplay-video-disabled';
 	}
-	
+
 	/**
 	 * Get diagnostic name
 	 */
 	public static function get_name(): string {
 		return __( 'Autoplay Videos', 'wpshadow' );
 	}
-	
+
 	/**
 	 * Get diagnostic description
 	 */
@@ -98,7 +98,7 @@ class Diagnostic_Env_Autoplay_Video_Disabled extends Diagnostic_Base {
 	public static function get_kb_article(): string {
 		return 'https://wpshadow.com/kb/env-autoplay-video-disabled';
 	}
-	
+
 	/**
 	 * Get training video URL
 	 */
@@ -107,7 +107,7 @@ class Diagnostic_Env_Autoplay_Video_Disabled extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		if (!(false)) {
+		if ( ! ( false ) ) {
 			return null;
 		}
 

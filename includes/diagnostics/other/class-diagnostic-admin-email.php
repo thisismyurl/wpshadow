@@ -10,8 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Diagnostic_Admin_Email extends Diagnostic_Base {
 
-	protected static $slug = 'admin-email';
-	protected static $title = 'Admin Email Configuration';
+	protected static $slug        = 'admin-email';
+	protected static $title       = 'Admin Email Configuration';
 	protected static $description = 'Checks if admin email is valid and configured.';
 
 	public static function check(): ?array {
@@ -65,7 +65,7 @@ class Diagnostic_Admin_Email extends Diagnostic_Base {
 		// Check if using default WordPress from email
 		$wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home_url(), PHP_URL_HOST ) );
 		$from_email    = get_option( 'wpshadow_email_from_email', '' );
-		
+
 		if ( empty( $from_email ) || $from_email === $wp_from_email ) {
 			return array(
 				'finding_id'   => self::$slug . '-from',

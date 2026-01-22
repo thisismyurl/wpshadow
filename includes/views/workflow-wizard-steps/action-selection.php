@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$trigger_id = isset( $_GET['trigger'] ) ? sanitize_key( $_GET['trigger'] ) : '';
+$trigger_id  = isset( $_GET['trigger'] ) ? sanitize_key( $_GET['trigger'] ) : '';
 $workflow_id = isset( $_GET['workflow'] ) ? sanitize_key( $_GET['workflow'] ) : '';
 if ( empty( $trigger_id ) ) {
 	if ( ! empty( $workflow_id ) ) {
@@ -23,12 +23,12 @@ if ( empty( $trigger_id ) ) {
 $action_categories = \WPShadow\Workflow\Workflow_Wizard::get_available_actions( $trigger_id );
 
 // Get trigger details to display context
-$trigger_label = '';
+$trigger_label       = '';
 $trigger_description = '';
-$trigger_categories = \WPShadow\Workflow\Workflow_Wizard::get_trigger_categories();
+$trigger_categories  = \WPShadow\Workflow\Workflow_Wizard::get_trigger_categories();
 foreach ( $trigger_categories as $category ) {
 	if ( isset( $category['triggers'][ $trigger_id ] ) ) {
-		$trigger_label = $category['triggers'][ $trigger_id ]['label'];
+		$trigger_label       = $category['triggers'][ $trigger_id ]['label'];
 		$trigger_description = $category['triggers'][ $trigger_id ]['description'];
 		break;
 	}
@@ -84,7 +84,7 @@ foreach ( $trigger_categories as $category ) {
 					<?php foreach ( $category['actions'] as $action_id => $action ) : ?>
 						<?php
 						$action_config = \WPShadow\Workflow\Workflow_Wizard::get_action_config( $action_id );
-						$has_config = ! empty( $action_config );
+						$has_config    = ! empty( $action_config );
 						?>
 						<button class="action-option" data-action-id="<?php echo esc_attr( $action_id ); ?>" data-has-config="<?php echo esc_attr( $has_config ? 'true' : 'false' ); ?>">
 							<span class="action-icon">

@@ -22,21 +22,21 @@ class Diagnostic_404_Throttling extends Diagnostic_Base {
 	 */
 	public static function check(): ?array {
 		$has_404_protection = has_filter( 'template_redirect' );
-		
+
 		if ( ! $has_404_protection ) {
 			return array(
-				'id'          => '404-throttling',
-				'title'       => 'No 404 Scanning Detection',
-				'description' => 'Vulnerability scanners probe your site via 404s. Without 404 throttling, scanners can freely map your site structure and find exploitable endpoints.',
-				'severity'    => 'medium',
-				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/throttle-404-scans/',
+				'id'            => '404-throttling',
+				'title'         => 'No 404 Scanning Detection',
+				'description'   => 'Vulnerability scanners probe your site via 404s. Without 404 throttling, scanners can freely map your site structure and find exploitable endpoints.',
+				'severity'      => 'medium',
+				'category'      => 'security',
+				'kb_link'       => 'https://wpshadow.com/kb/throttle-404-scans/',
 				'training_link' => 'https://wpshadow.com/training/scanner-detection/',
-				'auto_fixable' => false,
-				'threat_level' => 55,
+				'auto_fixable'  => false,
+				'threat_level'  => 55,
 			);
 		}
-		
+
 		return null;
 	}
 }

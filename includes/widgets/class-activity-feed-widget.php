@@ -17,7 +17,7 @@ class WPShadow_Activity_Feed_Widget {
 	 */
 	public static function render() {
 		$activities = self::get_recent_activities( 5 );
-		
+
 		?>
 		<div style="margin: 30px 0;">
 			<h2><?php esc_html_e( 'Guardian Activity Feed', 'wpshadow' ); ?></h2>
@@ -25,7 +25,8 @@ class WPShadow_Activity_Feed_Widget {
 			<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
 				<?php if ( ! empty( $activities ) ) : ?>
 					<div style="padding: 0;">
-						<?php foreach ( $activities as $index => $activity ) : 
+						<?php
+						foreach ( $activities as $index => $activity ) :
 							$is_last = $index === count( $activities ) - 1;
 							?>
 							<div style="padding: 16px; border-bottom: <?php echo $is_last ? 'none' : '1px solid #eee'; ?>; display: flex; gap: 12px;">
@@ -77,32 +78,34 @@ class WPShadow_Activity_Feed_Widget {
 		if ( ! class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
 			return array();
 		}
-		
-		$all_activities = \WPShadow\Core\Activity_Logger::get_activities( array(
-			'limit' => $limit,
-			'order' => 'DESC',
-		) );
-		
+
+		$all_activities = \WPShadow\Core\Activity_Logger::get_activities(
+			array(
+				'limit' => $limit,
+				'order' => 'DESC',
+			)
+		);
+
 		// Transform for display
 		$activities = array();
 		foreach ( $all_activities as $activity ) {
-			$action = isset( $activity['action'] ) ? $activity['action'] : '';
+			$action    = isset( $activity['action'] ) ? $activity['action'] : '';
 			$timestamp = isset( $activity['timestamp'] ) ? $activity['timestamp'] : time();
-			
+
 			// Skip old internal activities, focus on user-facing ones
 			if ( in_array( $action, array( 'finding_viewed', 'filter_applied' ), true ) ) {
 				continue;
 			}
-			
+
 			$activities[] = array(
-				'type' => self::get_activity_type( $action ),
-				'title' => self::get_activity_title( $action, $activity ),
+				'type'        => self::get_activity_type( $action ),
+				'title'       => self::get_activity_title( $action, $activity ),
 				'description' => self::get_activity_description( $action, $activity ),
-				'timestamp' => $timestamp,
-				'action' => $action,
+				'timestamp'   => $timestamp,
+				'action'      => $action,
 			);
 		}
-		
+
 		return array_slice( $activities, 0, $limit );
 	}
 
@@ -112,15 +115,15 @@ class WPShadow_Activity_Feed_Widget {
 	private static function get_activity_type( $action ) {
 		$types = array(
 			'workflow_created_from_finding' => 'workflow_created',
-			'workflow_executed' => 'workflow_executed',
-			'finding_fixed' => 'fixed',
-			'finding_dismissed' => 'dismissed',
-			'workflow_run_success' => 'workflow_success',
-			'workflow_run_failed' => 'workflow_failed',
-			'finding_detected' => 'detected',
-			'scan_completed' => 'scan_complete',
+			'workflow_executed'             => 'workflow_executed',
+			'finding_fixed'                 => 'fixed',
+			'finding_dismissed'             => 'dismissed',
+			'workflow_run_success'          => 'workflow_success',
+			'workflow_run_failed'           => 'workflow_failed',
+			'finding_detected'              => 'detected',
+			'scan_completed'                => 'scan_complete',
 		);
-		
+
 		return $types[ $action ] ?? 'other';
 	}
 
@@ -129,17 +132,17 @@ class WPShadow_Activity_Feed_Widget {
 	 */
 	private static function get_activity_icon( $type ) {
 		$icons = array(
-			'workflow_created' => '⚙️',
+			'workflow_created'  => '⚙️',
 			'workflow_executed' => '▶️',
-			'fixed' => '✅',
-			'dismissed' => '🚫',
-			'workflow_success' => '✓',
-			'workflow_failed' => '⚠️',
-			'detected' => '🔍',
-			'scan_complete' => '✨',
-			'other' => '📌',
+			'fixed'             => '✅',
+			'dismissed'         => '🚫',
+			'workflow_success'  => '✓',
+			'workflow_failed'   => '⚠️',
+			'detected'          => '🔍',
+			'scan_complete'     => '✨',
+			'other'             => '📌',
 		);
-		
+
 		return $icons[ $type ] ?? '📌';
 	}
 
@@ -148,17 +151,17 @@ class WPShadow_Activity_Feed_Widget {
 	 */
 	private static function get_activity_color( $type ) {
 		$colors = array(
-			'workflow_created' => '#9c27b0',
+			'workflow_created'  => '#9c27b0',
 			'workflow_executed' => '#0091b8',
-			'fixed' => '#2e7d32',
-			'dismissed' => '#f57c00',
-			'workflow_success' => '#2e7d32',
-			'workflow_failed' => '#c62828',
-			'detected' => '#1976d2',
-			'scan_complete' => '#388e3c',
-			'other' => '#666',
+			'fixed'             => '#2e7d32',
+			'dismissed'         => '#f57c00',
+			'workflow_success'  => '#2e7d32',
+			'workflow_failed'   => '#c62828',
+			'detected'          => '#1976d2',
+			'scan_complete'     => '#388e3c',
+			'other'             => '#666',
 		);
-		
+
 		return $colors[ $type ] ?? '#999';
 	}
 
@@ -193,7 +196,7 @@ class WPShadow_Activity_Feed_Widget {
 	 */
 	private static function get_activity_description( $action, $activity ) {
 		$description = '';
-		
+
 		if ( isset( $activity['finding_id'] ) ) {
 			$finding_id = $activity['finding_id'];
 			// Try to get finding title
@@ -207,7 +210,7 @@ class WPShadow_Activity_Feed_Widget {
 				}
 			}
 		}
-		
+
 		if ( empty( $description ) ) {
 			switch ( $action ) {
 				case 'workflow_created_from_finding':
@@ -223,7 +226,7 @@ class WPShadow_Activity_Feed_Widget {
 					$description = __( 'Activity recorded', 'wpshadow' );
 			}
 		}
-		
+
 		return $description;
 	}
 }

@@ -6,23 +6,23 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Diagnostic: Render-Blocking CSS Count (ASSET-001)
- * 
+ *
  * Counts stylesheets loaded in <head> blocking render.
  * Philosophy: Show value (#9) with First Contentful Paint improvement.
- * 
+ *
  * @package WPShadow
  * @subpackage Diagnostics
  * @since 1.2601.2200
  */
 class Diagnostic_Render_Blocking_Css_Count extends Diagnostic_Base {
-	
+
 	/**
 	 * Run the diagnostic check
-	 * 
+	 *
 	 * @return array|null Array with finding details or null if no issue found
 	 */
 	public static function check(): ?array {
-// Placeholder check
+		// Placeholder check
 		// This diagnostic needs specific implementation
 		// Review related KB articles and add custom logic here
 		return null; // No issues detected

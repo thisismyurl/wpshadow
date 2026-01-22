@@ -10,8 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Diagnostic_Paste_Cleanup extends Diagnostic_Base {
 
-	protected static $slug = 'paste-cleanup';
-	protected static $title = 'Pasted Content Cleanup';
+	protected static $slug        = 'paste-cleanup';
+	protected static $title       = 'Pasted Content Cleanup';
 	protected static $description = 'Detects inline styles and formatting issues from copied content (Word, Google Docs).';
 
 	public static function check(): ?array {

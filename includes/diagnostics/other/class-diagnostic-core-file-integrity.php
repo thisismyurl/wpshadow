@@ -22,33 +22,33 @@ class Diagnostic_Core_File_Integrity extends Diagnostic_Base {
 	 */
 	public static function check(): ?array {
 		global $wp_version;
-		
+
 		// Get core checksums from WordPress.org
 		$checksums_url = 'https://api.wordpress.org/core/checksums/1.0/?version=' . $wp_version;
-		$response = wp_remote_get( $checksums_url, array( 'timeout' => 10 ) );
-		
+		$response      = wp_remote_get( $checksums_url, array( 'timeout' => 10 ) );
+
 		if ( is_wp_error( $response ) ) {
 			return null; // Can't check
 		}
-		
+
 		$body = wp_remote_retrieve_body( $response );
 		$data = json_decode( $body, true );
-		
+
 		if ( empty( $data['checksums'] ) ) {
 			return null;
 		}
-		
-		$checksums = $data['checksums'];
+
+		$checksums      = $data['checksums'];
 		$modified_files = array();
-		
+
 		// Check a sample of critical files
 		$critical_files = array( 'wp-login.php', 'wp-settings.php', 'wp-load.php' );
-		
+
 		foreach ( $critical_files as $file ) {
 			if ( ! isset( $checksums[ $file ] ) ) {
 				continue;
 			}
-			
+
 			$filepath = ABSPATH . $file;
 			if ( file_exists( $filepath ) ) {
 				$file_hash = md5_file( $filepath );
@@ -57,24 +57,24 @@ class Diagnostic_Core_File_Integrity extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		if ( ! empty( $modified_files ) ) {
 			return array(
-				'id'          => 'core-file-integrity',
-				'title'       => 'Core Files Modified',
-				'description' => sprintf(
+				'id'            => 'core-file-integrity',
+				'title'         => 'Core Files Modified',
+				'description'   => sprintf(
 					'WordPress core files have been modified: %s. This may indicate malware injection or unauthorized changes. Restore original files immediately.',
 					implode( ', ', $modified_files )
 				),
-				'severity'    => 'critical',
-				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/verify-core-integrity/',
+				'severity'      => 'critical',
+				'category'      => 'security',
+				'kb_link'       => 'https://wpshadow.com/kb/verify-core-integrity/',
 				'training_link' => 'https://wpshadow.com/training/malware-detection/',
-				'auto_fixable' => false,
-				'threat_level' => 95,
+				'auto_fixable'  => false,
+				'threat_level'  => 95,
 			);
 		}
-		
+
 		return null;
 	}
 }

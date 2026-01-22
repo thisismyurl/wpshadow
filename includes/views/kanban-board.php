@@ -19,9 +19,12 @@ $all_findings = wpshadow_get_site_findings();
 // Apply category filter if present (Issue #564)
 $kanban_category = isset( $_GET['kanban_category'] ) ? sanitize_key( $_GET['kanban_category'] ) : '';
 if ( ! empty( $kanban_category ) ) {
-	$all_findings = array_filter( $all_findings, function( $f ) use ( $kanban_category ) {
-		return isset( $f['category'] ) && $f['category'] === $kanban_category;
-	} );
+	$all_findings = array_filter(
+		$all_findings,
+		function ( $f ) use ( $kanban_category ) {
+			return isset( $f['category'] ) && $f['category'] === $kanban_category;
+		}
+	);
 }
 
 // Get all workflows for the Workflows column
@@ -45,8 +48,8 @@ foreach ( $all_findings as $finding ) {
 	$finding_id = isset( $finding['id'] ) ? $finding['id'] : '';
 	if ( empty( $finding_id ) ) {
 		// Generate a stable fallback ID from title/description to avoid undefined index notices
-		$seed = isset( $finding['title'] ) ? $finding['title'] : ( isset( $finding['description'] ) ? $finding['description'] : '' );
-		$finding_id = 'finding-' . md5( $seed );
+		$seed          = isset( $finding['title'] ) ? $finding['title'] : ( isset( $finding['description'] ) ? $finding['description'] : '' );
+		$finding_id    = 'finding-' . md5( $seed );
 		$finding['id'] = $finding_id;
 	}
 
@@ -56,7 +59,7 @@ foreach ( $all_findings as $finding ) {
 		$status = 'detected';
 	}
 	$finding['status'] = $status;
-	
+
 	// Add to appropriate column (skip if workflow status - those are handled separately)
 	if ( isset( $findings_by_status[ $status ] ) && $status !== 'fixed' ) {
 		$findings_by_status[ $status ][] = $finding;
@@ -65,11 +68,14 @@ foreach ( $all_findings as $finding ) {
 
 // Sort DETECTED column by priority (threat_level DESC) and limit to 10 visible
 if ( ! empty( $findings_by_status['detected'] ) ) {
-	usort( $findings_by_status['detected'], function( $a, $b ) {
-		$threat_a = isset( $a['threat_level'] ) ? (int) $a['threat_level'] : 50;
-		$threat_b = isset( $b['threat_level'] ) ? (int) $b['threat_level'] : 50;
-		return $threat_b - $threat_a; // Descending order (highest priority first)
-	} );
+	usort(
+		$findings_by_status['detected'],
+		function ( $a, $b ) {
+			$threat_a = isset( $a['threat_level'] ) ? (int) $a['threat_level'] : 50;
+			$threat_b = isset( $b['threat_level'] ) ? (int) $b['threat_level'] : 50;
+			return $threat_b - $threat_a; // Descending order (highest priority first)
+		}
+	);
 }
 
 $status_labels = array(
@@ -342,12 +348,13 @@ $severity_legend = array(
 
 				<div class="kanban-column-content" style="min-height: 400px;">
 					<?php if ( $status === 'fixed' ) : // Workflows column - show workflows ?>
-						<?php foreach ( $findings_by_status[ $status ] as $workflow_id => $workflow ) : 
-							$workflow_name = isset( $workflow['name'] ) ? $workflow['name'] : 'Unnamed Workflow';
-							$workflow_enabled = isset( $workflow['enabled'] ) ? $workflow['enabled'] : false;
+						<?php
+						foreach ( $findings_by_status[ $status ] as $workflow_id => $workflow ) :
+							$workflow_name     = isset( $workflow['name'] ) ? $workflow['name'] : 'Unnamed Workflow';
+							$workflow_enabled  = isset( $workflow['enabled'] ) ? $workflow['enabled'] : false;
 							$workflow_triggers = isset( $workflow['triggers'] ) ? count( $workflow['triggers'] ) : 0;
-							$workflow_actions = isset( $workflow['actions'] ) ? count( $workflow['actions'] ) : 0;
-						?>
+							$workflow_actions  = isset( $workflow['actions'] ) ? count( $workflow['actions'] ) : 0;
+							?>
 							<div class="workflow-card" 
 								data-workflow-id="<?php echo esc_attr( $workflow_id ); ?>" 
 								style="
@@ -385,73 +392,73 @@ $severity_legend = array(
 							</div>
 						<?php endforeach; ?>
 					<?php else : // Regular findings columns ?>
-					<?php 
-					$findings = $findings_by_status[ $status ];
-					$total_findings = count( $findings );
-					foreach ( $findings as $idx => $finding ) :
-						// For DETECTED column, only show first 10 items
-						$is_hidden = ( $status === 'detected' && $idx >= 10 );
-						$hidden_class = $is_hidden ? ' wpshadow-hidden-finding' : '';
-			
-						$threat_level = isset( $finding['threat_level'] ) ? $finding['threat_level'] : 50;
-						$threat_label = wpshadow_get_threat_label( $threat_level );
-						$threat_color = wpshadow_get_threat_gauge_color( $threat_level );
+						<?php
+						$findings       = $findings_by_status[ $status ];
+						$total_findings = count( $findings );
+						foreach ( $findings as $idx => $finding ) :
+							// For DETECTED column, only show first 10 items
+							$is_hidden    = ( $status === 'detected' && $idx >= 10 );
+							$hidden_class = $is_hidden ? ' wpshadow-hidden-finding' : '';
 
-						// Determine card color based on threat level
-						if ( $threat_level >= 75 ) {
-							$card_border = '#f44336';
-							$card_bg = '#ffebee';
-							$card_severity = 'critical';
-						} elseif ( $threat_level >= 50 ) {
-							$card_border = '#ff9800';
-							$card_bg = '#fff3e0';
-							$card_severity = 'high';
-						} else {
-							$card_border = '#2196f3';
-							$card_bg = '#e3f2fd';
-							$card_severity = 'medium';
-						}
+							$threat_level = isset( $finding['threat_level'] ) ? $finding['threat_level'] : 50;
+							$threat_label = wpshadow_get_threat_label( $threat_level );
+							$threat_color = wpshadow_get_threat_gauge_color( $threat_level );
 
-						$note = $status_manager->get_finding_note( $finding['id'] );
-						$category_key = isset( $finding['category'] ) ? $finding['category'] : 'settings';
-						$category = isset( $category_meta[ $category_key ] ) ? $category_meta[ $category_key ] : $category_meta['settings'];
-						
-						// Smart Action Status (Issue #567)
-						$smart_status = '';
-						$smart_icon = '';
-						$smart_color = '';
-						
-						if ( $status === 'ignored' ) {
-							$smart_status = __( 'Excluded from scans', 'wpshadow' );
-							$smart_icon = '🚫';
-							$smart_color = '#999';
-						} elseif ( $status === 'manual' ) {
-							$manual_fixes = get_option( 'wpshadow_manual_fixes', array() );
-							if ( isset( $manual_fixes[ $finding['id'] ] ) ) {
-								$smart_status = __( 'Manual fix assigned', 'wpshadow' );
-								$smart_icon = '👤';
-								$smart_color = '#ff9800';
+							// Determine card color based on threat level
+							if ( $threat_level >= 75 ) {
+								$card_border   = '#f44336';
+								$card_bg       = '#ffebee';
+								$card_severity = 'critical';
+							} elseif ( $threat_level >= 50 ) {
+								$card_border   = '#ff9800';
+								$card_bg       = '#fff3e0';
+								$card_severity = 'high';
+							} else {
+								$card_border   = '#2196f3';
+								$card_bg       = '#e3f2fd';
+								$card_severity = 'medium';
 							}
-						} elseif ( $status === 'automated' ) {
-							$automated = get_option( 'wpshadow_scheduled_automated_fixes', array() );
-							if ( isset( $automated[ $finding['id'] ] ) ) {
-								$auto_status = $automated[ $finding['id'] ]['status'];
-								if ( $auto_status === 'pending' ) {
-									$smart_status = __( 'Fix scheduled', 'wpshadow' );
-									$smart_icon = '⏱️';
-									$smart_color = '#2196f3';
-								} elseif ( $auto_status === 'completed' ) {
-									$smart_status = __( 'Fix completed', 'wpshadow' );
-									$smart_icon = '✅';
-									$smart_color = '#4caf50';
-								} elseif ( $auto_status === 'failed' ) {
-									$smart_status = __( 'Fix failed', 'wpshadow' );
-									$smart_icon = '⚠️';
-									$smart_color = '#f44336';
+
+							$note         = $status_manager->get_finding_note( $finding['id'] );
+							$category_key = isset( $finding['category'] ) ? $finding['category'] : 'settings';
+							$category     = isset( $category_meta[ $category_key ] ) ? $category_meta[ $category_key ] : $category_meta['settings'];
+
+							// Smart Action Status (Issue #567)
+							$smart_status = '';
+							$smart_icon   = '';
+							$smart_color  = '';
+
+							if ( $status === 'ignored' ) {
+								$smart_status = __( 'Excluded from scans', 'wpshadow' );
+								$smart_icon   = '🚫';
+								$smart_color  = '#999';
+							} elseif ( $status === 'manual' ) {
+								$manual_fixes = get_option( 'wpshadow_manual_fixes', array() );
+								if ( isset( $manual_fixes[ $finding['id'] ] ) ) {
+									$smart_status = __( 'Manual fix assigned', 'wpshadow' );
+									$smart_icon   = '👤';
+									$smart_color  = '#ff9800';
+								}
+							} elseif ( $status === 'automated' ) {
+								$automated = get_option( 'wpshadow_scheduled_automated_fixes', array() );
+								if ( isset( $automated[ $finding['id'] ] ) ) {
+									$auto_status = $automated[ $finding['id'] ]['status'];
+									if ( $auto_status === 'pending' ) {
+										$smart_status = __( 'Fix scheduled', 'wpshadow' );
+										$smart_icon   = '⏱️';
+										$smart_color  = '#2196f3';
+									} elseif ( $auto_status === 'completed' ) {
+										$smart_status = __( 'Fix completed', 'wpshadow' );
+										$smart_icon   = '✅';
+										$smart_color  = '#4caf50';
+									} elseif ( $auto_status === 'failed' ) {
+										$smart_status = __( 'Fix failed', 'wpshadow' );
+										$smart_icon   = '⚠️';
+										$smart_color  = '#f44336';
+									}
 								}
 							}
-						}
-					?>
+							?>
 					<div class="finding-card<?php echo esc_attr( $hidden_class ); ?>" 
 						data-finding-id="<?php echo esc_attr( $finding['id'] ); ?>" 
 						draggable="true"
@@ -465,7 +472,10 @@ $severity_legend = array(
 							cursor: move;
 							transition: all 0.2s;
 							user-select: none;
-							<?php if ( $is_hidden ) echo 'display: none;'; ?>
+							<?php
+							if ( $is_hidden ) {
+								echo 'display: none;';}
+							?>
 							"
 							onmouseover="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'"
 							onmouseout="this.style.boxShadow='none'"
@@ -478,14 +488,14 @@ $severity_legend = array(
 						color: #333;
 						line-height: 1.3;
 					">
-						<?php echo esc_html( $finding['title'] ); ?>
+							<?php echo esc_html( $finding['title'] ); ?>
 					</div>
 					
 					<!-- Smart Action Status Badge (Issue #567) -->
-					<?php if ( ! empty( $smart_status ) ) : ?>
+							<?php if ( ! empty( $smart_status ) ) : ?>
 					<div style="margin: 0 0 8px 0;">
 						<span style="display: inline-block; padding: 4px 8px; background: <?php echo esc_attr( $smart_color ); ?>; color: #fff; border-radius: 3px; font-size: 10px; font-weight: 600;" title="<?php echo esc_attr( $smart_status ); ?>">
-							<?php echo esc_html( $smart_icon . ' ' . $smart_status ); ?>
+								<?php echo esc_html( $smart_icon . ' ' . $smart_status ); ?>
 						</span>
 					</div>
 					<?php endif; ?>
@@ -497,27 +507,30 @@ $severity_legend = array(
 						margin: 0;
 						line-height: 1.4;
 					">
-						<?php echo esc_html( substr( $finding['description'], 0, 100 ) ); ?>
-						<?php if ( strlen( $finding['description'] ) > 100 ) echo '...'; ?>
+							<?php echo esc_html( substr( $finding['description'], 0, 100 ) ); ?>
+							<?php
+							if ( strlen( $finding['description'] ) > 100 ) {
+								echo '...';}
+							?>
 					</p>
-					<?php if ( ! empty( $finding['kb_link'] ) || ! empty( $finding['training_link'] ) ) : ?>
+							<?php if ( ! empty( $finding['kb_link'] ) || ! empty( $finding['training_link'] ) ) : ?>
 					<div style="margin-top: 6px; display: flex; gap: 10px; flex-wrap: wrap; font-size: 11px;">
-						<?php if ( ! empty( $finding['kb_link'] ) ) : ?>
+								<?php if ( ! empty( $finding['kb_link'] ) ) : ?>
 							<a href="<?php echo esc_url( $finding['kb_link'] ); ?>" target="_blank" style="color: #2271b1; text-decoration: none; font-weight: 600;">
-								<?php esc_html_e( 'Learn more (KB)', 'wpshadow' ); ?>
+									<?php esc_html_e( 'Learn more (KB)', 'wpshadow' ); ?>
 							</a>
 						<?php endif; ?>
-						<?php if ( ! empty( $finding['training_link'] ) ) : ?>
+								<?php if ( ! empty( $finding['training_link'] ) ) : ?>
 							<a href="<?php echo esc_url( $finding['training_link'] ); ?>" target="_blank" style="color: #0f9d58; text-decoration: none; font-weight: 600;">
-								<?php esc_html_e( 'Watch training', 'wpshadow' ); ?>
+									<?php esc_html_e( 'Watch training', 'wpshadow' ); ?>
 							</a>
 						<?php endif; ?>
 					</div>
 					<?php endif; ?>
 					<!-- Status note (if exists) -->
-					<?php
-							if ( $note ) : 
-						?>
+							<?php
+							if ( $note ) :
+								?>
 							<div style="
 								font-size: 11px;
 								color: #666;
@@ -534,7 +547,7 @@ $severity_legend = array(
 							</div>
 						<?php endif; ?>
 					</div>
-					<?php endforeach; ?>
+						<?php endforeach; ?>
 					<?php endif; // End if fixed (workflows) vs regular findings ?>
 
 					<?php if ( empty( $findings_by_status[ $status ] ) ) : ?>
@@ -554,7 +567,7 @@ $severity_legend = array(
 				</div>
 			</div>
 		<?php endforeach; ?>
-        <div class="wpshadow-kanban-legend" style="
+		<div class="wpshadow-kanban-legend" style="
 		grid-column: 1 / -1;
 		display: flex;
 		flex-wrap: wrap;
@@ -578,12 +591,12 @@ $severity_legend = array(
 					border: 1px solid <?php echo esc_attr( $legend['color'] ); ?>;
 				"></span>
 				<span><?php echo esc_html( $legend['label'] ); ?></span>
-            </p>
+			</p>
 		<?php endforeach; ?>
 		<span style="font-size: 12px; color: #666; margin-left: auto;">Column dots match status colors</span>
 	</div>
 	</div>
-    
+	
 </div>
 
 <script>

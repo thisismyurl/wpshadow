@@ -34,7 +34,7 @@ if ( isset( $_POST['wpshadow_send_test_email'] ) && check_admin_referer( 'wpshad
 	// Prepare test email
 	$subject = sprintf( __( 'Test Email from %s', 'wpshadow' ), get_bloginfo( 'name' ) );
 	$message = sprintf(
-		__( "This is a test email from your WordPress site.\n\nSite: %s\nTimestamp: %s\n\nIf you received this email, your WordPress email configuration is working correctly.\n\n---\nSent by WPShadow Email Test Tool", 'wpshadow' ),
+		__( "This is a test email from your WordPress site.\n\nSite: %1\$s\nTimestamp: %2\$s\n\nIf you received this email, your WordPress email configuration is working correctly.\n\n---\nSent by WPShadow Email Test Tool", 'wpshadow' ),
 		home_url(),
 		current_time( 'mysql' )
 	);
@@ -164,11 +164,11 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 						</th>
 						<td>
 							<input type="email" 
-								   id="to_email" 
-								   name="to_email" 
-								   value="<?php echo esc_attr( $current_user_email ); ?>" 
-								   class="regular-text" 
-								   required>
+									id="to_email" 
+									name="to_email" 
+									value="<?php echo esc_attr( $current_user_email ); ?>" 
+									class="regular-text" 
+									required>
 							<p class="description">
 								<?php esc_html_e( 'The email address where the test email will be sent.', 'wpshadow' ); ?>
 							</p>
@@ -180,11 +180,11 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 						</th>
 						<td>
 							<input type="text" 
-								   id="from_name" 
-								   name="from_name" 
-								   value="<?php echo esc_attr( $current_from_name ); ?>" 
-								   class="regular-text" 
-								   required>
+									id="from_name" 
+									name="from_name" 
+									value="<?php echo esc_attr( $current_from_name ); ?>" 
+									class="regular-text" 
+									required>
 							<p class="description">
 								<?php esc_html_e( 'The name that appears as the email sender.', 'wpshadow' ); ?>
 							</p>
@@ -196,11 +196,11 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 						</th>
 						<td>
 							<input type="email" 
-								   id="from_email" 
-								   name="from_email" 
-								   value="<?php echo esc_attr( $current_from_email ); ?>" 
-								   class="regular-text" 
-								   required>
+									id="from_email" 
+									name="from_email" 
+									value="<?php echo esc_attr( $current_from_email ); ?>" 
+									class="regular-text" 
+									required>
 							<p class="description">
 								<?php
 								printf(
@@ -314,9 +314,9 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 			<div style="background: #f5f5f5; padding: 15px; border-radius: 4px; border-left: 4px solid #00a0d2;">
 				<label>
 					<input type="checkbox" 
-						   name="email_unchecked_by_default" 
-						   value="1"
-						   <?php checked( $email_unchecked, true ); ?>>
+							name="email_unchecked_by_default" 
+							value="1"
+							<?php checked( $email_unchecked, true ); ?>>
 					<strong><?php esc_html_e( 'Uncheck email notification by default', 'wpshadow' ); ?></strong>
 				</label>
 				<p class="description" style="margin-top: 10px;">

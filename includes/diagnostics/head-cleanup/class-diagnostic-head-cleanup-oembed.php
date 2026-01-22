@@ -23,10 +23,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Diagnostic_Head_Cleanup_OEmbed extends Diagnostic_Base {
 
-	protected static $slug = 'head-cleanup-oembed';
-	protected static $title = 'oEmbed Discovery Links';
-	protected static $description = 'Checks if WordPress oEmbed discovery links are enabled and can be removed.';
-	protected static $family = 'head-cleanup';
+	protected static $slug         = 'head-cleanup-oembed';
+	protected static $title        = 'oEmbed Discovery Links';
+	protected static $description  = 'Checks if WordPress oEmbed discovery links are enabled and can be removed.';
+	protected static $family       = 'head-cleanup';
 	protected static $family_label = 'Head Cleanup Tasks';
 
 	public static function check(): ?array {

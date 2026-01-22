@@ -8,9 +8,9 @@ use WPShadow\Core\Command_Base;
 
 /**
  * Register Site Command
- * 
+ *
  * AJAX endpoint: wp_ajax_wpshadow_register_cloud
- * 
+ *
  * Handles user registration with cloud service.
  * Endpoint is admin-only and requires nonce verification.
  */
@@ -48,10 +48,12 @@ class Register_Cloud_Command extends Command_Base {
 			return $this->error( $result['error'] );
 		}
 
-		return $this->success( [
-			'message'             => $result['message'] ?? __( 'Registration successful', 'wpshadow' ),
-			'cloud_dashboard_url' => $result['cloud_dashboard_url'] ?? '',
-			'site_id'             => $result['site_id'] ?? '',
-		] );
+		return $this->success(
+			array(
+				'message'             => $result['message'] ?? __( 'Registration successful', 'wpshadow' ),
+				'cloud_dashboard_url' => $result['cloud_dashboard_url'] ?? '',
+				'site_id'             => $result['site_id'] ?? '',
+			)
+		);
 	}
 }

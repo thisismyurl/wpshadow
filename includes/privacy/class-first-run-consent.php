@@ -66,8 +66,8 @@ class First_Run_Consent {
 		">
 			<div class="wpshadow-consent-header">
 				<h3 style="margin-top: 0;">' . esc_html( __( 'Your Privacy Matters', 'wpshadow' ) ) . '</h3>
-				<p style="margin: 10px 0; color: #666;">' . 
-					esc_html( __( 'WPShadow respects your privacy. Here\'s what we collect and how we use it.', 'wpshadow' ) ) . 
+				<p style="margin: 10px 0; color: #666;">' .
+					esc_html( __( 'WPShadow respects your privacy. Here\'s what we collect and how we use it.', 'wpshadow' ) ) .
 				'</p>
 			</div>
 
@@ -77,8 +77,8 @@ class First_Run_Consent {
 					<span>
 						<strong>' . esc_html( __( 'Essential Functions', 'wpshadow' ) ) . '</strong>
 						<br />
-						<small style="color: #999;">' . 
-							esc_html( __( 'Required for the plugin to work (always enabled)', 'wpshadow' ) ) . 
+						<small style="color: #999;">' .
+							esc_html( __( 'Required for the plugin to work (always enabled)', 'wpshadow' ) ) .
 						'</small>
 					</span>
 				</label>
@@ -88,8 +88,8 @@ class First_Run_Consent {
 					<span>
 						<strong>' . esc_html( __( 'Error Reporting', 'wpshadow' ) ) . '</strong>
 						<br />
-						<small style="color: #999;">' . 
-							esc_html( __( 'Help us fix problems (no personal data)', 'wpshadow' ) ) . 
+						<small style="color: #999;">' .
+							esc_html( __( 'Help us fix problems (no personal data)', 'wpshadow' ) ) .
 						'</small>
 					</span>
 				</label>
@@ -99,8 +99,8 @@ class First_Run_Consent {
 					<span>
 						<strong>' . esc_html( __( 'Anonymous Analytics', 'wpshadow' ) ) . '</strong>
 						<br />
-						<small style="color: #999;">' . 
-							esc_html( __( 'Show us which features help most (optional)', 'wpshadow' ) ) . 
+						<small style="color: #999;">' .
+							esc_html( __( 'Show us which features help most (optional)', 'wpshadow' ) ) .
 						'</small>
 					</span>
 				</label>

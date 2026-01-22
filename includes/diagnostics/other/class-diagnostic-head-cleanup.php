@@ -22,7 +22,7 @@ class Diagnostic_Head_Cleanup extends Diagnostic_Base {
 	 */
 	public static function check(): ?array {
 		$issues = array();
-		
+
 		if ( self::is_emoji_enabled() ) {
 			$issues[] = 'emoji scripts';
 		}
@@ -35,13 +35,13 @@ class Diagnostic_Head_Cleanup extends Diagnostic_Base {
 		if ( self::is_shortlink_enabled() ) {
 			$issues[] = 'wp-shortlink';
 		}
-		
+
 		if ( empty( $issues ) ) {
 			return null;
 		}
-		
+
 		$summary = ucfirst( implode( ', ', $issues ) );
-		
+
 		return array(
 			'id'           => 'head-cleanup-needed',
 			'title'        => 'Clean Up Page Head',
@@ -53,19 +53,19 @@ class Diagnostic_Head_Cleanup extends Diagnostic_Base {
 			'threat_level' => 35,
 		);
 	}
-	
+
 	private static function is_emoji_enabled() {
 		return has_action( 'wp_head', 'print_emoji_detection_script' ) || has_action( 'admin_print_scripts', 'print_emoji_detection_script' );
 	}
-	
+
 	private static function is_oembed_enabled() {
 		return has_action( 'wp_head', 'wp_oembed_add_discovery_links' );
 	}
-	
+
 	private static function is_rsd_enabled() {
 		return has_action( 'wp_head', 'rsd_link' );
 	}
-	
+
 	private static function is_shortlink_enabled() {
 		return has_action( 'wp_head', 'wp_shortlink_wp_head' );
 	}

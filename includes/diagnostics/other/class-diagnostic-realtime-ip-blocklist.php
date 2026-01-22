@@ -25,24 +25,24 @@ class Diagnostic_Realtime_IP_Blocklist extends Diagnostic_Base {
 			'wordfence/wordfence.php',
 			'sucuri-scanner/sucuri.php',
 		);
-		
+
 		$active = get_option( 'active_plugins', array() );
 		foreach ( $ip_block_plugins as $plugin ) {
 			if ( in_array( $plugin, $active, true ) ) {
 				return null; // IP blocking active
 			}
 		}
-		
+
 		return array(
-			'id'          => 'realtime-ip-blocklist',
-			'title'       => 'No Real-Time IP Blocking',
-			'description' => 'Your site lacks real-time IP blocking. Malicious IPs continue to attack. Enable IP reputation blocking via security plugin.',
-			'severity'    => 'medium',
-			'category'    => 'security',
-			'kb_link'     => 'https://wpshadow.com/kb/enable-ip-blocking/',
+			'id'            => 'realtime-ip-blocklist',
+			'title'         => 'No Real-Time IP Blocking',
+			'description'   => 'Your site lacks real-time IP blocking. Malicious IPs continue to attack. Enable IP reputation blocking via security plugin.',
+			'severity'      => 'medium',
+			'category'      => 'security',
+			'kb_link'       => 'https://wpshadow.com/kb/enable-ip-blocking/',
 			'training_link' => 'https://wpshadow.com/training/ip-blocking/',
-			'auto_fixable' => false,
-			'threat_level' => 60,
+			'auto_fixable'  => false,
+			'threat_level'  => 60,
 		);
 	}
 }

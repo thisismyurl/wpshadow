@@ -12,17 +12,17 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/design-font-variant-bloat
  */
 class Diagnostic_Design_DESIGN_FONT_VARIANT_BLOAT extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'design-font-variant-bloat',
-            'title' => __('Font Variant Bloat', 'wpshadow'),
-            'description' => __('Counts loaded font weights/styles versus actual usage.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'design',
-            'kb_link' => 'https://wpshadow.com/kb/design-font-variant-bloat',
-            'training_link' => 'https://wpshadow.com/training/design-font-variant-bloat',
-            'auto_fixable' => false,
-            'threat_level' => 6
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'design-font-variant-bloat',
+			'title'         => __( 'Font Variant Bloat', 'wpshadow' ),
+			'description'   => __( 'Counts loaded font weights/styles versus actual usage.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'design',
+			'kb_link'       => 'https://wpshadow.com/kb/design-font-variant-bloat',
+			'training_link' => 'https://wpshadow.com/training/design-font-variant-bloat',
+			'auto_fixable'  => false,
+			'threat_level'  => 6,
+		);
+	}
 }

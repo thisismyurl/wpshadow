@@ -55,10 +55,11 @@ foreach ( $catalog as $tip ) {
 		<p><?php esc_html_e( 'Check the categories below to enable tooltips. Unchecked categories will hide their tips from appearing in wp-admin.', 'wpshadow' ); ?></p>
 
 		<div class="wpshadow-categories-list" style="margin-top: 20px;">
-			<?php foreach ( $categories as $cat_slug => $cat_label ) :
+			<?php
+			foreach ( $categories as $cat_slug => $cat_label ) :
 				$is_disabled = in_array( $cat_slug, $disabled_categories, true );
 				$tips_in_cat = count( $tips_by_category[ $cat_slug ] ?? array() );
-			?>
+				?>
 				<div class="wpshadow-category-item" style="padding: 15px; border: 1px solid #e0e0e0; border-radius: 4px; margin-bottom: 12px; background: #fafafa;">
 					<label style="display: flex; align-items: center; cursor: pointer; font-size: 16px; font-weight: 500;">
 						<input
@@ -99,9 +100,11 @@ foreach ( $catalog as $tip ) {
 		<h3 style="margin-top: 0;"><?php esc_html_e( 'How Tips Work', 'wpshadow' ); ?></h3>
 		<ul style="margin: 10px 0; padding-left: 20px;">
 			<li><?php esc_html_e( 'Enabled tips appear as helpful hover tooltips when you move your mouse over menu items, buttons, and other admin elements.', 'wpshadow' ); ?></li>
-			<li><?php esc_html_e( 'Each tip can be dismissed individually by clicking the X button, and won't reappear for you.', 'wpshadow' ); ?></li>
-			<li><?php esc_html_e( 'Disabling a category hides all tips in that category from appearing in wp-admin.', 'wpshadow' ); ?></li>
-			<li><?php esc_html_e( 'These settings apply only to your user account; other users have their own preferences.', 'wpshadow' ); ?></li>
+			<li>
+			<?php
+			esc_html_e( 'Each tip can be dismissed individually by clicking the X button, and won't reappear for you . ', 'wpshadow' ); ?></li>
+			<li><?php esc_html_e( 'Disabling a category hides all tips in that category from appearing in wp - admin . ', 'wpshadow' ); ?></li>
+			<li><?php esc_html_e( 'These settings apply only to your user account; other users have their own preferences . ', 'wpshadow' ); ?></li>
 		</ul>
 	</div>
 
@@ -115,41 +118,45 @@ foreach ( $catalog as $tip ) {
 		nonce: <?php echo json_encode( wp_create_nonce( 'wpshadow_tip_prefs' ) ); ?>,
 
 		init: function() {
-			$( '.wpshadow-category-toggle' ).on( 'change', this.onToggleCategory.bind( this ) );
+			$( ' . wpshadow - category - toggle' ).on( 'change', this.onToggleCategory.bind( this ) );
 			$( '#wpshadow-enable-all-tips' ).on( 'click', this.enableAllCategories.bind( this ) );
-			$( '#wpshadow-disable-all-tips' ).on( 'click', this.disableAllCategories.bind( this ) );
-		},
+			$( '#wpshadow-disable-all-tips' ) {
+				. on( 'click', this . disableAllCategories . bind( this ) );}
+			},
 
-		onToggleCategory: function( e ) {
-			var $checkbox = $( e.target );
-			var category = $checkbox.data( 'category' );
-			var isEnabled = $checkbox.is( ':checked' );
+			onToggleCategory: function ( e ) {
+				var $checkbox = $( e . target );
+				var category  = $checkbox . data( 'category' );
+				var isEnabled = $checkbox . is( ':checked' );
 
-			this.updateCategory( category, isEnabled );
-		},
+				this . updateCategory( category, isEnabled );
+			},
 
-		updateCategory: function( category, isEnabled ) {
-			var self = this;
-			var disabledCategories = [];
+			updateCategory: function ( category, isEnabled ) {
+			var self               = this;
+			var disabledCategories = array();
 
 			// Collect all disabled categories
-			$( '.wpshadow-category-toggle:not(:checked)' ).each( function() {
-				disabledCategories.push( $( this ).data( 'category' ) );
-			} );
+			$( '.wpshadow-category-toggle:not(:checked)' ) . each(
+				function () {
+					disabledCategories . push( $( this ) . data( 'category' ) );
+				}
+			);
 
-			$.ajax( {
+			$ . ajax( {
 				url: ajaxurl,
 				type: 'POST',
 				data: {
 					action: 'wpshadow_save_tip_prefs',
-					nonce: this.nonce,
+					nonce: this . nonce,
 					disabled_categories: disabledCategories,
 				},
-				success: function( response ) {
-					if ( response.success ) {
-						self.showMessage(
+				success: function ( response ) {
+					if ( response . success ) {
+						self . showMessage(
 							isEnabled
-								? <?php echo json_encode( __( 'Tip category enabled!', 'wpshadow' ) ); ?>
+								? < ? php echo json_encode( __( 'Tip category enabled!', 'wpshadow' ) );
+			?>
 								: <?php echo json_encode( __( 'Tip category disabled!', 'wpshadow' ) ); ?>,
 							'success'
 						);

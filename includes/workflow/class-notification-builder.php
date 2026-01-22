@@ -95,7 +95,7 @@ class Notification_Builder {
 						'description' => __( 'Show a pop-up notification in WordPress admin', 'wpshadow' ),
 						'icon'        => 'bell',
 						'config'      => array(
-							'message' => array(
+							'message'      => array(
 								'type'        => 'textarea',
 								'label'       => __( 'Notification Message', 'wpshadow' ),
 								'placeholder' => __( 'Enter custom message', 'wpshadow' ),
@@ -136,25 +136,25 @@ class Notification_Builder {
 						'description' => __( 'Send email to admin', 'wpshadow' ),
 						'icon'        => 'email',
 						'config'      => array(
-							'subject' => array(
+							'subject'      => array(
 								'type'        => 'text',
 								'label'       => __( 'Email Subject', 'wpshadow' ),
 								'placeholder' => __( 'Enter email subject', 'wpshadow' ),
 								'help'        => __( 'Use {finding_name}, {severity}, {category} for variables', 'wpshadow' ),
 								'required'    => true,
 							),
-							'message' => array(
+							'message'      => array(
 								'type'        => 'textarea',
 								'label'       => __( 'Email Message', 'wpshadow' ),
 								'placeholder' => __( 'Enter email body', 'wpshadow' ),
 								'help'        => __( 'Use {finding_name}, {severity}, {category}, {description} for variables', 'wpshadow' ),
 								'required'    => true,
 							),
-							'send_to' => array(
+							'send_to'      => array(
 								'type'    => 'select',
 								'label'   => __( 'Send To', 'wpshadow' ),
 								'options' => array(
-									'admin' => __( 'Site Admin Email', 'wpshadow' ),
+									'admin'  => __( 'Site Admin Email', 'wpshadow' ),
 									'custom' => __( 'Custom Email', 'wpshadow' ),
 								),
 								'default' => 'admin',
@@ -193,10 +193,10 @@ class Notification_Builder {
 			return false;
 		}
 
-		$rules = self::get_configured_rules();
+		$rules   = self::get_configured_rules();
 		$rule_id = isset( $rule['id'] ) ? $rule['id'] : md5( wp_json_encode( $rule ) . time() );
 
-		$rule['id'] = $rule_id;
+		$rule['id']         = $rule_id;
 		$rule['created_at'] = isset( $rule['created_at'] ) ? $rule['created_at'] : time();
 		$rule['updated_at'] = time();
 
@@ -292,7 +292,7 @@ class Notification_Builder {
 			return false;
 		}
 
-		$rules = self::get_configured_rules();
+		$rules      = self::get_configured_rules();
 		$option_key = self::$builder_mode === 'email' ? 'wpshadow_email_rules' : 'wpshadow_notification_rules';
 
 		if ( isset( $rules[ $rule_id ] ) ) {
@@ -322,20 +322,20 @@ class Notification_Builder {
 	 */
 	public static function render( $mode = 'notification' ) {
 		self::set_mode( $mode );
-		
+
 		// Ensure default rules exist for notifications
 		if ( $mode === 'notification' ) {
 			self::ensure_default_rules();
 		}
-		
-		$page_title = $mode === 'email' ? __( 'Email Rules', 'wpshadow' ) : __( 'Notification Rules', 'wpshadow' );
+
+		$page_title       = $mode === 'email' ? __( 'Email Rules', 'wpshadow' ) : __( 'Notification Rules', 'wpshadow' );
 		$page_description = $mode === 'email'
 			? __( 'Create custom email rules: choose any trigger and send an email.', 'wpshadow' )
 			: __( 'Create custom notification rules: choose any trigger and get alerted in WordPress admin.', 'wpshadow' );
 
-		$rules = self::get_configured_rules();
+		$rules    = self::get_configured_rules();
 		$triggers = self::get_triggers();
-		$actions = self::get_actions();
+		$actions  = self::get_actions();
 		?>
 
 		<div class="wps-notification-builder">

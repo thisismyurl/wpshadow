@@ -28,47 +28,47 @@ class Diagnostic_Dx_Meta_Fields_Structured extends Diagnostic_Base {
 
 	protected static $family_label = 'General';
 
-	
+
 	/**
 	 * Get diagnostic ID
 	 */
 	public static function get_id(): string {
 		return 'dx-meta-fields-structured';
 	}
-	
+
 	/**
 	 * Get diagnostic name
 	 */
 	public static function get_name(): string {
-		return __('Is custom meta organized?', 'wpshadow');
+		return __( 'Is custom meta organized?', 'wpshadow' );
 	}
-	
+
 	/**
 	 * Get diagnostic description
 	 */
 	public static function get_description(): string {
-		return __('Is custom meta organized?. Part of Developer Experience analysis.', 'wpshadow');
+		return __( 'Is custom meta organized?. Part of Developer Experience analysis.', 'wpshadow' );
 	}
-	
+
 	/**
 	 * Get diagnostic category
 	 */
 	public static function get_category(): string {
 		return 'developer_experience';
 	}
-	
+
 	/**
 	 * Run the diagnostic test
 	 *
 	 * @return array Finding data or empty if no issue
 	 */
-			public static function run(): array {
-			// Implement: Is custom meta organized? test
-			// Smart implementation needed
-			
-			return array(); // Stub: full implementation pending
-		}
-	
+	public static function run(): array {
+		// Implement: Is custom meta organized? test
+		// Smart implementation needed
+
+		return array(); // Stub: full implementation pending
+	}
+
 	/**
 	 * Get threat level for this finding (0-100)
 	 */
@@ -76,14 +76,14 @@ class Diagnostic_Dx_Meta_Fields_Structured extends Diagnostic_Base {
 		// Threat level based on diagnostic category
 		return 45;
 	}
-	
+
 	/**
 	 * Get KB article URL
 	 */
 	public static function get_kb_article(): string {
 		return 'https://wpshadow.com/kb/dx-meta-fields-structured/';
 	}
-	
+
 	/**
 	 * Get training video URL
 	 */
@@ -92,7 +92,7 @@ class Diagnostic_Dx_Meta_Fields_Structured extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		if (!(false)) {
+		if ( ! ( false ) ) {
 			return null;
 		}
 

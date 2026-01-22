@@ -25,10 +25,10 @@ class Workflow_Templates {
 	 */
 	public static function get_all_templates(): array {
 		return array(
-			'security' => array(
-				'label' => __( 'Security & Monitoring', 'wpshadow' ),
+			'security'    => array(
+				'label'     => __( 'Security & Monitoring', 'wpshadow' ),
 				'templates' => array(
-					'daily_security_scan' => array(
+					'daily_security_scan'     => array(
 						'name'        => __( 'Daily Security Scan', 'wpshadow' ),
 						'description' => __( 'Comprehensive security check every day at 3 AM', 'wpshadow' ),
 						'icon'        => 'dashicons-shield-alt',
@@ -47,16 +47,16 @@ class Workflow_Templates {
 								'type'   => 'action',
 								'id'     => 'run_diagnostic',
 								'config' => array(
-									'diagnostic_type'      => 'specific',
-									'specific_diagnostic'  => 'ssl',
+									'diagnostic_type'     => 'specific',
+									'specific_diagnostic' => 'ssl',
 								),
 							),
 							array(
 								'type'   => 'action',
 								'id'     => 'run_diagnostic',
 								'config' => array(
-									'diagnostic_type'      => 'specific',
-									'specific_diagnostic'  => 'debug_mode',
+									'diagnostic_type'     => 'specific',
+									'specific_diagnostic' => 'debug_mode',
 								),
 							),
 							array(
@@ -98,7 +98,7 @@ class Workflow_Templates {
 				),
 			),
 			'maintenance' => array(
-				'label' => __( 'Maintenance & Cleanup', 'wpshadow' ),
+				'label'     => __( 'Maintenance & Cleanup', 'wpshadow' ),
 				'templates' => array(
 					'weekly_health_check' => array(
 						'name'        => __( 'Weekly Health Check', 'wpshadow' ),
@@ -151,8 +151,8 @@ class Workflow_Templates {
 								'type'   => 'action',
 								'id'     => 'run_diagnostic',
 								'config' => array(
-									'diagnostic_type'      => 'specific',
-									'specific_diagnostic'  => 'backup',
+									'diagnostic_type'     => 'specific',
+									'specific_diagnostic' => 'backup',
 								),
 							),
 						),
@@ -160,7 +160,7 @@ class Workflow_Templates {
 				),
 			),
 			'performance' => array(
-				'label' => __( 'Performance & Optimization', 'wpshadow' ),
+				'label'     => __( 'Performance & Optimization', 'wpshadow' ),
 				'templates' => array(
 					'auto_optimize' => array(
 						'name'        => __( 'Auto-Optimize Daily', 'wpshadow' ),
@@ -197,8 +197,8 @@ class Workflow_Templates {
 					),
 				),
 			),
-			'content' => array(
-				'label' => __( 'Content & Publishing', 'wpshadow' ),
+			'content'     => array(
+				'label'     => __( 'Content & Publishing', 'wpshadow' ),
 				'templates' => array(
 					'pre_publish_checklist' => array(
 						'name'        => __( 'Pre-Publish Quality Check', 'wpshadow' ),
@@ -245,14 +245,14 @@ class Workflow_Templates {
 	 */
 	public static function get_flat_list(): array {
 		$all_templates = self::get_all_templates();
-		$flat = array();
+		$flat          = array();
 
 		foreach ( $all_templates as $category_slug => $category ) {
 			foreach ( $category['templates'] as $template_slug => $template ) {
 				$flat[ $template_slug ] = array_merge(
 					$template,
 					array(
-						'category'      => $category_slug,
+						'category'       => $category_slug,
 						'category_label' => $category['label'],
 					)
 				);
@@ -298,7 +298,7 @@ class Workflow_Templates {
 			return array( 'error' => __( 'Template not found', 'wpshadow' ) );
 		}
 
-		$name = ! empty( $custom_name ) ? $custom_name : $template['name'];
+		$name        = ! empty( $custom_name ) ? $custom_name : $template['name'];
 		$workflow_id = 'wf_' . wp_generate_uuid4();
 
 		$workflow = Workflow_Manager::save_workflow( $name, $template['blocks'], $workflow_id );
@@ -338,7 +338,7 @@ class Workflow_Templates {
 		if ( ! isset( $used[ $template_slug ] ) ) {
 			$used[ $template_slug ] = 0;
 		}
-		$used[ $template_slug ]++;
+		++$used[ $template_slug ];
 		update_option( 'wpshadow_used_templates', $used );
 	}
 

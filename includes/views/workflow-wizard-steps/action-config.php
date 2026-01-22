@@ -9,8 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$trigger_id = isset( $_GET['trigger'] ) ? sanitize_key( $_GET['trigger'] ) : '';
-$workflow_id = isset( $_GET['workflow'] ) ? sanitize_key( $_GET['workflow'] ) : '';
+$trigger_id   = isset( $_GET['trigger'] ) ? sanitize_key( $_GET['trigger'] ) : '';
+$workflow_id  = isset( $_GET['workflow'] ) ? sanitize_key( $_GET['workflow'] ) : '';
 $action_index = isset( $_GET['action_index'] ) ? absint( $_GET['action_index'] ) : 0;
 
 if ( empty( $trigger_id ) ) {

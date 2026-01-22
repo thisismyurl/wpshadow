@@ -10,8 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Diagnostic_HTML_Cleanup extends Diagnostic_Base {
 
-	protected static $slug = 'html-cleanup';
-	protected static $title = 'HTML Minification';
+	protected static $slug        = 'html-cleanup';
+	protected static $title       = 'HTML Minification';
 	protected static $description = 'Checks for opportunities to minify HTML by removing whitespace and comments.';
 
 	public static function check(): ?array {
@@ -23,7 +23,7 @@ class Diagnostic_HTML_Cleanup extends Diagnostic_Base {
 		do_action( 'wp_head' );
 		$head_content = ob_get_clean();
 
-		$comment_count = substr_count( $head_content, '<!--' );
+		$comment_count     = substr_count( $head_content, '<!--' );
 		$estimated_savings = strlen( $head_content ) * 0.15;
 
 		if ( $comment_count < 5 && $estimated_savings < 1000 ) {
@@ -34,7 +34,7 @@ class Diagnostic_HTML_Cleanup extends Diagnostic_Base {
 			'finding_id'   => self::$slug,
 			'title'        => self::$title,
 			'description'  => sprintf(
-				__( 'HTML minification could reduce page size by approximately %s. Found %d HTML comments and excess whitespace.', 'wpshadow' ),
+				__( 'HTML minification could reduce page size by approximately %1$s. Found %2$d HTML comments and excess whitespace.', 'wpshadow' ),
 				size_format( $estimated_savings ),
 				$comment_count
 			),

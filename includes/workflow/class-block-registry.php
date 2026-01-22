@@ -31,7 +31,7 @@ class Block_Registry {
 	 */
 	public static function get_triggers() {
 		return array(
-			'time_trigger' => array(
+			'time_trigger'        => array(
 				'label'       => 'Time Trigger',
 				'description' => 'Run when clock reaches specific time',
 				'icon'        => 'dashicons-clock',
@@ -47,12 +47,12 @@ class Block_Registry {
 						),
 						'default' => 'daily',
 					),
-					'time' => array(
+					'time'      => array(
 						'label'   => 'Time (24-hour format)',
 						'type'    => 'time',
 						'default' => '02:00',
 					),
-					'days' => array(
+					'days'      => array(
 						'label'   => 'Days to run',
 						'type'    => 'checkbox_group',
 						'options' => array(
@@ -68,28 +68,28 @@ class Block_Registry {
 					),
 				),
 			),
-			'condition_trigger' => array(
+			'condition_trigger'   => array(
 				'label'       => 'Condition Trigger',
 				'description' => 'Run when condition is met',
 				'icon'        => 'dashicons-yes-alt',
 				'color'       => '#8b5cf6',
 				'fields'      => array(
-					'condition_type' => array(
+					'condition_type'   => array(
 						'label'   => 'Condition Type',
 						'type'    => 'select',
 						'options' => array(
-							'memory_low'          => 'Memory Usage is Low',
-							'memory_high'         => 'Memory Usage is High',
-							'plugins_outdated'    => 'Plugins are Outdated',
-							'disk_space_low'      => 'Disk Space is Low',
-							'ssl_invalid'         => 'SSL Certificate Invalid',
-							'backup_missing'      => 'Backup Not Found',
-							'debug_mode_enabled'  => 'Debug Mode Enabled',
-							'custom_php'          => 'Custom PHP Condition',
+							'memory_low'         => 'Memory Usage is Low',
+							'memory_high'        => 'Memory Usage is High',
+							'plugins_outdated'   => 'Plugins are Outdated',
+							'disk_space_low'     => 'Disk Space is Low',
+							'ssl_invalid'        => 'SSL Certificate Invalid',
+							'backup_missing'     => 'Backup Not Found',
+							'debug_mode_enabled' => 'Debug Mode Enabled',
+							'custom_php'         => 'Custom PHP Condition',
 						),
 						'default' => 'memory_high',
 					),
-					'threshold' => array(
+					'threshold'        => array(
 						'label'   => 'Threshold Value',
 						'type'    => 'number',
 						'default' => 80,
@@ -101,7 +101,7 @@ class Block_Registry {
 					),
 				),
 			),
-			'event_trigger' => array(
+			'event_trigger'       => array(
 				'label'       => 'Event Trigger',
 				'description' => 'Run when specific event happens',
 				'icon'        => 'dashicons-bell',
@@ -124,7 +124,7 @@ class Block_Registry {
 					),
 				),
 			),
-			'page_load_trigger' => array(
+			'page_load_trigger'   => array(
 				'label'       => 'Page Load Trigger',
 				'description' => 'Run on every page load (frontend or admin)',
 				'icon'        => 'dashicons-update',
@@ -134,15 +134,15 @@ class Block_Registry {
 						'label'   => 'Where to Run',
 						'type'    => 'select',
 						'options' => array(
-							'all'              => 'All Pages (Frontend + Admin)',
-							'frontend'         => 'All Frontend Pages',
-							'admin'            => 'All Admin Pages',
-							'frontend_pages'   => 'Frontend: Pages Only',
-							'frontend_posts'   => 'Frontend: Posts Only',
-							'frontend_single'  => 'Frontend: Single Posts/Pages',
-							'frontend_archive' => 'Frontend: Archives/Categories',
+							'all'               => 'All Pages (Frontend + Admin)',
+							'frontend'          => 'All Frontend Pages',
+							'admin'             => 'All Admin Pages',
+							'frontend_pages'    => 'Frontend: Pages Only',
+							'frontend_posts'    => 'Frontend: Posts Only',
+							'frontend_single'   => 'Frontend: Single Posts/Pages',
+							'frontend_archive'  => 'Frontend: Archives/Categories',
 							'frontend_category' => 'Frontend: Category Pages',
-							'frontend_home'    => 'Frontend: Home/Front Page',
+							'frontend_home'     => 'Frontend: Home/Front Page',
 						),
 						'default' => 'all',
 					),
@@ -163,23 +163,23 @@ class Block_Registry {
 	 */
 	public static function get_actions() {
 		return array(
-			'run_diagnostic' => array(
+			'run_diagnostic'     => array(
 				'label'       => 'Run Diagnostic',
 				'description' => 'Execute a health diagnostic scan',
 				'icon'        => 'dashicons-clipboard',
 				'color'       => '#10b981',
 				'fields'      => array(
-					'diagnostic_type' => array(
+					'diagnostic_type'     => array(
 						'label'   => 'Diagnostic Type',
 						'type'    => 'select',
 						'options' => array(
-							'full'       => 'Full Health Scan',
-							'memory'     => 'Memory Check',
-							'plugins'    => 'Plugin Audit',
-							'ssl'        => 'SSL Check',
-							'backup'     => 'Backup Verification',
+							'full'        => 'Full Health Scan',
+							'memory'      => 'Memory Check',
+							'plugins'     => 'Plugin Audit',
+							'ssl'         => 'SSL Check',
+							'backup'      => 'Backup Verification',
 							'performance' => 'Performance Audit',
-							'specific'   => 'Specific Diagnostic',
+							'specific'    => 'Specific Diagnostic',
 						),
 						'default' => 'full',
 					),
@@ -207,7 +207,7 @@ class Block_Registry {
 					),
 				),
 			),
-			'apply_treatment' => array(
+			'apply_treatment'    => array(
 				'label'       => 'Apply Treatment',
 				'description' => 'Apply an automatic fix/treatment',
 				'icon'        => 'dashicons-admin-tools',
@@ -233,20 +233,20 @@ class Block_Registry {
 						),
 						'default' => '',
 					),
-					'halt_on_error' => array(
+					'halt_on_error'      => array(
 						'label'   => 'Stop workflow if this fails',
 						'type'    => 'checkbox',
 						'default' => false,
 					),
 				),
 			),
-			'send_email' => array(
+			'send_email'         => array(
 				'label'       => 'Send Email',
 				'description' => 'Send email notification',
 				'icon'        => 'dashicons-email-alt',
 				'color'       => '#f59e0b',
 				'fields'      => array(
-					'recipient' => array(
+					'recipient'      => array(
 						'label'   => 'Send To',
 						'type'    => 'select',
 						'options' => array(
@@ -255,17 +255,17 @@ class Block_Registry {
 						),
 						'default' => 'admin',
 					),
-					'custom_email' => array(
+					'custom_email'   => array(
 						'label'   => 'Custom Email Address',
 						'type'    => 'email',
 						'default' => '',
 					),
-					'subject' => array(
+					'subject'        => array(
 						'label'   => 'Email Subject',
 						'type'    => 'text',
 						'default' => 'WPShadow Report',
 					),
-					'message' => array(
+					'message'        => array(
 						'label'   => 'Email Message',
 						'type'    => 'textarea',
 						'default' => 'WPShadow automated report: {report_data}',
@@ -276,7 +276,7 @@ class Block_Registry {
 					),
 				),
 			),
-			'autofix' => array(
+			'autofix'            => array(
 				'label'       => 'Auto-Fix',
 				'description' => 'Automatically fix detected issues',
 				'icon'        => 'dashicons-hammer',
@@ -286,17 +286,17 @@ class Block_Registry {
 						'label'   => 'What to Fix',
 						'type'    => 'select',
 						'options' => array(
-							'all_findings'       => 'All Available Findings',
-							'memory_issues'      => 'Memory Issues',
-							'ssl_issues'         => 'SSL Issues',
-							'plugin_updates'     => 'Plugin Updates',
-							'debug_mode'         => 'Debug Mode',
+							'all_findings'   => 'All Available Findings',
+							'memory_issues'  => 'Memory Issues',
+							'ssl_issues'     => 'SSL Issues',
+							'plugin_updates' => 'Plugin Updates',
+							'debug_mode'     => 'Debug Mode',
 						),
 						'default' => 'all_findings',
 					),
 				),
 			),
-			'backup' => array(
+			'backup'             => array(
 				'label'       => 'Create Backup',
 				'description' => 'Create database or full site backup',
 				'icon'        => 'dashicons-cloud-saved',
@@ -306,21 +306,21 @@ class Block_Registry {
 						'label'   => 'Backup Type',
 						'type'    => 'select',
 						'options' => array(
-							'database'  => 'Database Only',
-							'files'     => 'Files Only',
-							'full'      => 'Full Site Backup',
+							'database' => 'Database Only',
+							'files'    => 'Files Only',
+							'full'     => 'Full Site Backup',
 						),
 						'default' => 'database',
 					),
 				),
 			),
-			'notification' => array(
+			'notification'       => array(
 				'label'       => 'Send Notification',
 				'description' => 'Send in-app notification',
 				'icon'        => 'dashicons-format-chat',
 				'color'       => '#a855f7',
 				'fields'      => array(
-					'title' => array(
+					'title'   => array(
 						'label'   => 'Notification Title',
 						'type'    => 'text',
 						'default' => 'WPShadow Notification',
@@ -330,7 +330,7 @@ class Block_Registry {
 						'type'    => 'textarea',
 						'default' => '',
 					),
-					'type' => array(
+					'type'    => array(
 						'label'   => 'Notification Type',
 						'type'    => 'select',
 						'options' => array(
@@ -343,7 +343,7 @@ class Block_Registry {
 					),
 				),
 			),
-			'slack' => array(
+			'slack'              => array(
 				'label'       => 'Send to Slack',
 				'description' => 'Send message to Slack webhook',
 				'icon'        => 'dashicons-share',
@@ -354,14 +354,14 @@ class Block_Registry {
 						'type'    => 'text',
 						'default' => '',
 					),
-					'message' => array(
+					'message'     => array(
 						'label'   => 'Message',
 						'type'    => 'textarea',
 						'default' => 'WPShadow workflow executed',
 					),
 				),
 			),
-			'log_action' => array(
+			'log_action'         => array(
 				'label'       => 'Log Action',
 				'description' => 'Log action to activity log',
 				'icon'        => 'dashicons-editor-ul',
@@ -374,23 +374,23 @@ class Block_Registry {
 					),
 				),
 			),
-			'kanban_note' => array(
+			'kanban_note'        => array(
 				'label'       => 'Add Kanban Note',
 				'description' => 'Create a note/item in the Kanban board',
 				'icon'        => 'dashicons-postcard',
 				'color'       => '#ec4899',
 				'fields'      => array(
-					'title' => array(
+					'title'        => array(
 						'label'   => 'Note Title',
 						'type'    => 'text',
 						'default' => 'Workflow Alert',
 					),
-					'description' => array(
+					'description'  => array(
 						'label'   => 'Note Description',
 						'type'    => 'textarea',
 						'default' => '',
 					),
-					'status' => array(
+					'status'       => array(
 						'label'   => 'Kanban Status',
 						'type'    => 'select',
 						'options' => array(
@@ -401,7 +401,7 @@ class Block_Registry {
 						),
 						'default' => 'detected',
 					),
-					'severity' => array(
+					'severity'     => array(
 						'label'   => 'Severity Level',
 						'type'    => 'select',
 						'options' => array(
@@ -413,7 +413,7 @@ class Block_Registry {
 						),
 						'default' => 'medium',
 					),
-					'category' => array(
+					'category'     => array(
 						'label'   => 'Category',
 						'type'    => 'select',
 						'options' => array(
@@ -433,13 +433,13 @@ class Block_Registry {
 					),
 				),
 			),
-			'enable_guardian' => array(
+			'enable_guardian'    => array(
 				'label'       => 'Enable Guardian',
 				'description' => 'Activate Guardian automated health monitoring',
 				'icon'        => 'dashicons-shield-alt',
 				'color'       => '#06b6d4',
 				'fields'      => array(
-					'auto_fix_enabled' => array(
+					'auto_fix_enabled'     => array(
 						'label'   => 'Enable Auto-Fixes',
 						'type'    => 'checkbox',
 						'default' => false,
@@ -457,7 +457,7 @@ class Block_Registry {
 				'icon'        => 'dashicons-admin-generic',
 				'color'       => '#8b5cf6',
 				'fields'      => array(
-					'enabled' => array(
+					'enabled'               => array(
 						'label'   => 'Guardian Status',
 						'type'    => 'select',
 						'options' => array(
@@ -475,17 +475,17 @@ class Block_Registry {
 						),
 						'default' => 'daily',
 					),
-					'auto_fix_enabled' => array(
+					'auto_fix_enabled'      => array(
 						'label'   => 'Enable Auto-Fixes',
 						'type'    => 'checkbox',
 						'default' => false,
 					),
-					'backup_before_fix' => array(
+					'backup_before_fix'     => array(
 						'label'   => 'Backup Before Fixes',
 						'type'    => 'checkbox',
 						'default' => true,
 					),
-					'notification_level' => array(
+					'notification_level'    => array(
 						'label'   => 'Notification Level',
 						'type'    => 'select',
 						'options' => array(
@@ -518,7 +518,10 @@ class Block_Registry {
 	 */
 	public static function validate_block( $block ) {
 		if ( empty( $block['id'] ) || empty( $block['type'] ) ) {
-			return array( 'valid' => false, 'error' => 'Missing block ID or type' );
+			return array(
+				'valid' => false,
+				'error' => 'Missing block ID or type',
+			);
 		}
 
 		$id   = $block['id'];
@@ -527,15 +530,24 @@ class Block_Registry {
 		if ( 'trigger' === $type ) {
 			$triggers = self::get_triggers();
 			if ( ! isset( $triggers[ $id ] ) ) {
-				return array( 'valid' => false, 'error' => "Unknown trigger: {$id}" );
+				return array(
+					'valid' => false,
+					'error' => "Unknown trigger: {$id}",
+				);
 			}
 		} elseif ( 'action' === $type ) {
 			$actions = self::get_actions();
 			if ( ! isset( $actions[ $id ] ) ) {
-				return array( 'valid' => false, 'error' => "Unknown action: {$id}" );
+				return array(
+					'valid' => false,
+					'error' => "Unknown action: {$id}",
+				);
 			}
 		} else {
-			return array( 'valid' => false, 'error' => 'Invalid block type' );
+			return array(
+				'valid' => false,
+				'error' => 'Invalid block type',
+			);
 		}
 
 		return array( 'valid' => true );

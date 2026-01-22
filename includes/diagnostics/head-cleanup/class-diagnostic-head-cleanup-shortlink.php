@@ -23,10 +23,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Diagnostic_Head_Cleanup_Shortlink extends Diagnostic_Base {
 
-	protected static $slug = 'head-cleanup-shortlink';
-	protected static $title = 'WordPress Shortlink';
-	protected static $description = 'Checks if WordPress shortlink functionality is enabled and can be removed.';
-	protected static $family = 'head-cleanup';
+	protected static $slug         = 'head-cleanup-shortlink';
+	protected static $title        = 'WordPress Shortlink';
+	protected static $description  = 'Checks if WordPress shortlink functionality is enabled and can be removed.';
+	protected static $family       = 'head-cleanup';
 	protected static $family_label = 'Head Cleanup Tasks';
 
 	public static function check(): ?array {

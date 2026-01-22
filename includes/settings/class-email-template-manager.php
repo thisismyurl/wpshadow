@@ -5,41 +5,41 @@ namespace WPShadow\Settings;
 
 /**
  * Email Template Manager
- * 
+ *
  * Manages email template customization for WPShadow reports and notifications.
  * Philosophy: Free as Possible (#2) - All templates editable locally, no paywalls
  * Philosophy: Show Value (#9) - Track email customization usage
- * 
+ *
  * @since 1.2601
  * @package WPShadow
  */
 class Email_Template_Manager {
-	
+
 	/**
 	 * Option key for email templates storage
 	 */
 	const OPTION_KEY = 'wpshadow_email_templates';
-	
+
 	/**
 	 * Get default email templates
-	 * 
+	 *
 	 * @return array Default templates with HTML and plain text versions
 	 */
 	public static function get_default_templates() {
 		return array(
-			'report_executive' => array(
+			'report_executive'      => array(
 				'label'       => __( 'Executive Report Email', 'wpshadow' ),
 				'description' => __( 'Professional format for management review', 'wpshadow' ),
 				'html'        => self::get_default_html_executive(),
 				'text'        => self::get_default_text_executive(),
 			),
-			'report_detailed' => array(
+			'report_detailed'       => array(
 				'label'       => __( 'Detailed Report Email', 'wpshadow' ),
 				'description' => __( 'Technical details for site administrators', 'wpshadow' ),
 				'html'        => self::get_default_html_detailed(),
 				'text'        => self::get_default_text_detailed(),
 			),
-			'alert_critical' => array(
+			'alert_critical'        => array(
 				'label'       => __( 'Critical Alert Email', 'wpshadow' ),
 				'description' => __( 'Urgent notification for critical issues', 'wpshadow' ),
 				'html'        => self::get_default_html_alert(),
@@ -53,48 +53,48 @@ class Email_Template_Manager {
 			),
 		);
 	}
-	
+
 	/**
 	 * Get all email templates (custom + defaults)
-	 * 
+	 *
 	 * @return array All templates merged with defaults
 	 */
 	public static function get_all_templates() {
 		$defaults = self::get_default_templates();
-		$custom = get_option( self::OPTION_KEY, array() );
-		
+		$custom   = get_option( self::OPTION_KEY, array() );
+
 		// Merge custom templates with defaults
 		foreach ( $defaults as $key => $template ) {
 			if ( isset( $custom[ $key ] ) ) {
-				$defaults[ $key ]['html'] = $custom[ $key ]['html'] ?? $template['html'];
-				$defaults[ $key ]['text'] = $custom[ $key ]['text'] ?? $template['text'];
+				$defaults[ $key ]['html']   = $custom[ $key ]['html'] ?? $template['html'];
+				$defaults[ $key ]['text']   = $custom[ $key ]['text'] ?? $template['text'];
 				$defaults[ $key ]['custom'] = true;
 			}
 		}
-		
+
 		return $defaults;
 	}
-	
+
 	/**
 	 * Get specific template by key
-	 * 
+	 *
 	 * @param string $key Template key (e.g., 'report_executive')
 	 * @param string $format Format to retrieve ('html' or 'text')
 	 * @return string Template content, or empty if not found
 	 */
 	public static function get_template( $key, $format = 'html' ) {
 		$templates = self::get_all_templates();
-		
+
 		if ( ! isset( $templates[ $key ] ) ) {
 			return '';
 		}
-		
+
 		return $templates[ $key ][ $format ] ?? '';
 	}
-	
+
 	/**
 	 * Save custom email template
-	 * 
+	 *
 	 * @param string $key Template key
 	 * @param string $html HTML template content
 	 * @param string $text Plain text template content
@@ -104,24 +104,24 @@ class Email_Template_Manager {
 		if ( empty( $key ) ) {
 			return false;
 		}
-		
+
 		// Sanitize HTML to allow safe markup
 		$html = wp_kses_post( $html );
 		$text = sanitize_textarea_field( $text );
-		
+
 		// Get existing templates
 		$templates = get_option( self::OPTION_KEY, array() );
-		
+
 		// Update template
 		$templates[ $key ] = array(
-			'html' => $html,
-			'text' => $text,
+			'html'    => $html,
+			'text'    => $text,
 			'updated' => current_time( 'timestamp' ),
 		);
-		
+
 		// Save templates
 		$result = update_option( self::OPTION_KEY, $templates );
-		
+
 		// Log activity (Philosophy #9: Show Value)
 		if ( $result && class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
 			\WPShadow\Core\Activity_Logger::log(
@@ -131,13 +131,13 @@ class Email_Template_Manager {
 				array( 'template_key' => $key )
 			);
 		}
-		
+
 		return $result;
 	}
-	
+
 	/**
 	 * Reset template to default
-	 * 
+	 *
 	 * @param string $key Template key
 	 * @return bool Success status
 	 */
@@ -145,13 +145,13 @@ class Email_Template_Manager {
 		if ( empty( $key ) ) {
 			return false;
 		}
-		
+
 		$templates = get_option( self::OPTION_KEY, array() );
-		
+
 		if ( isset( $templates[ $key ] ) ) {
 			unset( $templates[ $key ] );
 			$result = update_option( self::OPTION_KEY, $templates );
-			
+
 			// Log activity
 			if ( $result && class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
 				\WPShadow\Core\Activity_Logger::log(
@@ -161,28 +161,28 @@ class Email_Template_Manager {
 					array( 'template_key' => $key )
 				);
 			}
-			
+
 			return $result;
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Render email template editor UI
-	 * 
+	 *
 	 * Philosophy: Ridiculously good (#7) - Intuitive editor with preview
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function render_template_editor() {
-		$templates = self::get_all_templates();
+		$templates         = self::get_all_templates();
 		$selected_template = isset( $_GET['template'] ) ? sanitize_key( $_GET['template'] ) : 'report_executive';
-		
+
 		if ( ! isset( $templates[ $selected_template ] ) ) {
 			$selected_template = 'report_executive';
 		}
-		
+
 		$template = $templates[ $selected_template ];
 		?>
 		<div style="max-width: 1200px;">
@@ -332,10 +332,10 @@ class Email_Template_Manager {
 		</script>
 		<?php
 	}
-	
+
 	/**
 	 * Default HTML template for Executive Report
-	 * 
+	 *
 	 * @return string HTML template
 	 */
 	private static function get_default_html_executive() {
@@ -390,10 +390,10 @@ class Email_Template_Manager {
 </html>
 HTML;
 	}
-	
+
 	/**
 	 * Default plain text template for Executive Report
-	 * 
+	 *
 	 * @return string Plain text template
 	 */
 	private static function get_default_text_executive() {
@@ -417,10 +417,10 @@ View the full report:
 © <?php echo esc_html( date( 'Y' ) ); ?> <?php echo esc_html( get_bloginfo( 'name' ) ); ?> - All rights reserved
 TEXT;
 	}
-	
+
 	/**
 	 * Default HTML template for Detailed Report
-	 * 
+	 *
 	 * @return string HTML template
 	 */
 	private static function get_default_html_detailed() {
@@ -484,10 +484,10 @@ TEXT;
 </html>
 HTML;
 	}
-	
+
 	/**
 	 * Default plain text template for Detailed Report
-	 * 
+	 *
 	 * @return string Plain text template
 	 */
 	private static function get_default_text_detailed() {
@@ -507,10 +507,10 @@ RECOMMENDATIONS
 {footer}
 TEXT;
 	}
-	
+
 	/**
 	 * Default HTML template for Critical Alert
-	 * 
+	 *
 	 * @return string HTML template
 	 */
 	private static function get_default_html_alert() {
@@ -547,10 +547,10 @@ TEXT;
 </html>
 HTML;
 	}
-	
+
 	/**
 	 * Default plain text template for Critical Alert
-	 * 
+	 *
 	 * @return string Plain text template
 	 */
 	private static function get_default_text_alert() {
@@ -569,10 +569,10 @@ Review this issue now:
 {footer}
 TEXT;
 	}
-	
+
 	/**
 	 * Default HTML template for Workflow Completion
-	 * 
+	 *
 	 * @return string HTML template
 	 */
 	private static function get_default_html_workflow() {
@@ -621,10 +621,10 @@ TEXT;
 </html>
 HTML;
 	}
-	
+
 	/**
 	 * Default plain text template for Workflow Completion
-	 * 
+	 *
 	 * @return string Plain text template
 	 */
 	private static function get_default_text_workflow() {

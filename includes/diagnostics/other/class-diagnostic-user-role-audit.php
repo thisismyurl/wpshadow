@@ -22,12 +22,12 @@ class Diagnostic_User_Role_Audit extends Diagnostic_Base {
 	 */
 	public static function check(): ?array {
 		// Get all users with elevated roles
-		$users = get_users( array( 'role__in' => array( 'editor', 'author' ) ) );
+		$users            = get_users( array( 'role__in' => array( 'editor', 'author' ) ) );
 		$suspicious_users = array();
-		
+
 		// Dangerous capabilities that shouldn't be on non-admin roles
 		$dangerous_caps = array( 'delete_users', 'create_users', 'manage_options', 'activate_plugins' );
-		
+
 		foreach ( $users as $user ) {
 			foreach ( $dangerous_caps as $cap ) {
 				if ( $user->has_cap( $cap ) ) {
@@ -36,24 +36,24 @@ class Diagnostic_User_Role_Audit extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		if ( ! empty( $suspicious_users ) ) {
 			return array(
-				'id'          => 'user-role-audit',
-				'title'       => 'Users With Elevated Capabilities',
-				'description' => sprintf(
+				'id'            => 'user-role-audit',
+				'title'         => 'Users With Elevated Capabilities',
+				'description'   => sprintf(
 					'Non-admin users have dangerous capabilities: %s. Review and remove unnecessary capabilities to prevent privilege escalation.',
 					implode( ', ', array_slice( $suspicious_users, 0, 3 ) )
 				),
-				'severity'    => 'high',
-				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/audit-user-capabilities/',
+				'severity'      => 'high',
+				'category'      => 'security',
+				'kb_link'       => 'https://wpshadow.com/kb/audit-user-capabilities/',
 				'training_link' => 'https://wpshadow.com/training/user-role-security/',
-				'auto_fixable' => false,
-				'threat_level' => 70,
+				'auto_fixable'  => false,
+				'threat_level'  => 70,
 			);
 		}
-		
+
 		return null;
 	}
 }

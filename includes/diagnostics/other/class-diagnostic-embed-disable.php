@@ -10,8 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Diagnostic_Embed_Disable extends Diagnostic_Base {
 
-	protected static $slug = 'embed-disable';
-	protected static $title = 'WordPress Embed Scripts';
+	protected static $slug        = 'embed-disable';
+	protected static $title       = 'WordPress Embed Scripts';
 	protected static $description = 'Checks if WordPress embed scripts are loaded but not being used.';
 
 	public static function check(): ?array {

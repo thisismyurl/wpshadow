@@ -33,15 +33,15 @@ class Diagnostic_Plugin_Auto_Updates extends Diagnostic_Base {
 				'threat_level' => 55,
 			);
 		}
-		
+
 		return null;
 	}
-	
+
 	private static function auto_updates_enabled() {
 		if ( function_exists( 'wp_is_auto_update_enabled_for_type' ) ) {
 			return wp_is_auto_update_enabled_for_type( 'plugin' );
 		}
-		
+
 		$option = get_site_option( 'auto_update_plugins', array() );
 		return is_array( $option ) && ! empty( $option );
 	}

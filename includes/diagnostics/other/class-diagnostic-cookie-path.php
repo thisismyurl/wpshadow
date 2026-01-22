@@ -24,18 +24,18 @@ class Diagnostic_Cookie_Path extends Diagnostic_Base {
 		// Check if ADMIN_COOKIE_PATH is properly set
 		if ( ! defined( 'ADMIN_COOKIE_PATH' ) ) {
 			return array(
-				'id'          => 'cookie-path',
-				'title'       => 'Admin Cookie Path Not Restricted',
-				'description' => 'Admin authentication cookies are not restricted to admin paths. Define ADMIN_COOKIE_PATH to prevent cookie theft via front-end XSS.',
-				'severity'    => 'medium',
-				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/restrict-admin-cookies/',
+				'id'            => 'cookie-path',
+				'title'         => 'Admin Cookie Path Not Restricted',
+				'description'   => 'Admin authentication cookies are not restricted to admin paths. Define ADMIN_COOKIE_PATH to prevent cookie theft via front-end XSS.',
+				'severity'      => 'medium',
+				'category'      => 'security',
+				'kb_link'       => 'https://wpshadow.com/kb/restrict-admin-cookies/',
 				'training_link' => 'https://wpshadow.com/training/cookie-security/',
-				'auto_fixable' => false,
-				'threat_level' => 60,
+				'auto_fixable'  => false,
+				'threat_level'  => 60,
 			);
 		}
-		
+
 		return null;
 	}
 }

@@ -24,13 +24,13 @@ class Diagnostic_Disallow_File_Edit extends Diagnostic_Base {
 		if ( defined( 'DISALLOW_FILE_EDIT' ) && DISALLOW_FILE_EDIT ) {
 			return null; // Already hardened
 		}
-		
+
 		return array(
-			'title'       => 'Theme/Plugin File Editor Enabled',
-			'description' => 'Built-in file editor is enabled. Disable it to reduce risk of code tampering.',
-			'severity'    => 'medium',
-			'category'    => 'security',
-			'kb_link'     => 'https://wpshadow.com/kb/disable-wordpress-file-editor/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=file-editor',
+			'title'        => 'Theme/Plugin File Editor Enabled',
+			'description'  => 'Built-in file editor is enabled. Disable it to reduce risk of code tampering.',
+			'severity'     => 'medium',
+			'category'     => 'security',
+			'kb_link'      => 'https://wpshadow.com/kb/disable-wordpress-file-editor/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=file-editor',
 			'auto_fixable' => false,
 			'threat_level' => 60,
 		);

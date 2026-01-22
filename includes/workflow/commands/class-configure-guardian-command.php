@@ -8,17 +8,17 @@ use WPShadow\Guardian\Guardian_Manager;
 
 /**
  * Configure Guardian Command
- * 
+ *
  * Workflow action to configure Guardian settings.
  * Update health check frequency, auto-fix behavior, notifications, etc.
- * 
+ *
  * Parameters:
  * - enabled: bool - Enable/disable Guardian
  * - auto_fix_enabled: bool - Enable auto-fixes
  * - health_check_interval: string - 'hourly', 'daily', 'weekly'
  * - notification_level: string - 'all', 'warnings', 'critical'
  * - backup_before_fix: bool - Create backup before fixes
- * 
+ *
  * Usage in workflow:
  * {
  *   "action": "configure_guardian",
@@ -28,84 +28,84 @@ use WPShadow\Guardian\Guardian_Manager;
  * }
  */
 class Configure_Guardian_Command extends Command {
-	
+
 	/**
 	 * Get command name
-	 * 
+	 *
 	 * @return string
 	 */
 	public static function get_name(): string {
 		return 'configure_guardian';
 	}
-	
+
 	/**
 	 * Get command description
-	 * 
+	 *
 	 * @return string
 	 */
 	public static function get_description(): string {
 		return __( 'Update Guardian health monitoring and auto-fix settings', 'wpshadow' );
 	}
-	
+
 	/**
 	 * Get command icon
-	 * 
+	 *
 	 * @return string
 	 */
 	public static function get_icon(): string {
 		return 'dashicons-admin-generic';
 	}
-	
+
 	/**
 	 * Get command parameters schema
-	 * 
+	 *
 	 * @return array
 	 */
 	public static function get_parameters(): array {
-		return [
-			'enabled' => [
+		return array(
+			'enabled'               => array(
 				'label'       => __( 'Guardian Status', 'wpshadow' ),
 				'type'        => 'boolean',
 				'description' => __( 'Enable or disable Guardian monitoring', 'wpshadow' ),
-			],
-			'health_check_interval' => [
+			),
+			'health_check_interval' => array(
 				'label'       => __( 'Health Check Frequency', 'wpshadow' ),
 				'type'        => 'select',
-				'options'     => [
-					'hourly'  => __( 'Hourly', 'wpshadow' ),
-					'daily'   => __( 'Daily', 'wpshadow' ),
-					'weekly'  => __( 'Weekly', 'wpshadow' ),
-				],
+				'options'     => array(
+					'hourly' => __( 'Hourly', 'wpshadow' ),
+					'daily'  => __( 'Daily', 'wpshadow' ),
+					'weekly' => __( 'Weekly', 'wpshadow' ),
+				),
 				'description' => __( 'How often to check site health', 'wpshadow' ),
-			],
-			'auto_fix_enabled' => [
+			),
+			'auto_fix_enabled'      => array(
 				'label'       => __( 'Auto-Fix Critical Issues', 'wpshadow' ),
 				'type'        => 'boolean',
 				'description' => __( 'Automatically apply safe treatments', 'wpshadow' ),
-			],
-			'backup_before_fix' => [
+			),
+			'backup_before_fix'     => array(
 				'label'       => __( 'Backup Before Fixes', 'wpshadow' ),
 				'type'        => 'boolean',
 				'default'     => true,
 				'description' => __( 'Create backup before applying auto-fixes', 'wpshadow' ),
-			],
-			'notification_level' => [
+			),
+			'notification_level'    => array(
 				'label'       => __( 'Notification Level', 'wpshadow' ),
 				'type'        => 'select',
-				'options'     => [
+				'options'     => array(
 					'all'      => __( 'All Issues', 'wpshadow' ),
 					'warnings' => __( 'Warnings & Critical', 'wpshadow' ),
 					'critical' => __( 'Critical Only', 'wpshadow' ),
-				],
+				),
 				'description' => __( 'Which issues trigger notifications', 'wpshadow' ),
-			],
-		];
+			),
+		);
 	}
-	
+
 	/**
 	 * Execute the command
 	 * Execute the command
-	 * 
+	 *
 	 * @return void JSON response
 	 */
 	public function execute() {
@@ -115,7 +115,7 @@ class Configure_Guardian_Command extends Command {
 
 		try {
 			$current = Guardian_Manager::get_settings();
-			$updates = [];
+			$updates = array();
 
 			$enabled = $this->get_post_var( 'enabled', null );
 			if ( null !== $enabled ) {
@@ -151,10 +151,12 @@ class Configure_Guardian_Command extends Command {
 			$payload = array_merge( $current, $updates );
 			Guardian_Manager::update_settings( $payload );
 
-			$this->success( [
-				'settings' => $payload,
-				'message'  => __( 'Guardian settings updated', 'wpshadow' ),
-			] );
+			$this->success(
+				array(
+					'settings' => $payload,
+					'message'  => __( 'Guardian settings updated', 'wpshadow' ),
+				)
+			);
 		} catch ( \Exception $e ) {
 			$this->error( sprintf( __( 'Failed to update Guardian settings: %s', 'wpshadow' ), $e->getMessage() ) );
 		}

@@ -25,7 +25,7 @@ class Diagnostic_Core_Integrity extends Diagnostic_Base {
 		if ( empty( $issues ) ) {
 			return null;
 		}
-		
+
 		return array(
 			'id'           => 'core-integrity-mismatch',
 			'title'        => 'Core Files Modified',
@@ -37,7 +37,7 @@ class Diagnostic_Core_Integrity extends Diagnostic_Base {
 			'threat_level' => 85,
 		);
 	}
-	
+
 	/**
 	 * Verify core checksums.
 	 *
@@ -47,17 +47,17 @@ class Diagnostic_Core_Integrity extends Diagnostic_Base {
 		if ( ! function_exists( 'get_core_checksums' ) || ! function_exists( 'wp_normalize_path' ) ) {
 			return array();
 		}
-		
+
 		$locale    = get_locale();
 		$version   = get_bloginfo( 'version' );
 		$checksums = get_core_checksums( $version, $locale );
 		if ( ! is_array( $checksums ) ) {
 			return array();
 		}
-		
-		$root      = wp_normalize_path( ABSPATH );
+
+		$root       = wp_normalize_path( ABSPATH );
 		$mismatches = array();
-		
+
 		foreach ( $checksums as $file => $checksum ) {
 			$path = wp_normalize_path( $root . $file );
 			if ( ! file_exists( $path ) ) {
@@ -69,7 +69,7 @@ class Diagnostic_Core_Integrity extends Diagnostic_Base {
 				$mismatches[] = $file;
 			}
 		}
-		
+
 		return $mismatches;
 	}
 }

@@ -33,15 +33,15 @@ class Diagnostic_Block_Cleanup extends Diagnostic_Base {
 				'threat_level' => 30,
 			);
 		}
-		
+
 		return null;
 	}
-	
+
 	private static function has_block_assets() {
 		wp_enqueue_scripts(); // Populate scripts/styles queue.
 		global $wp_styles, $wp_scripts;
 		$block_handles = array( 'wp-block-library', 'wp-block-library-theme', 'wc-blocks-style' );
-		
+
 		if ( isset( $wp_styles ) ) {
 			foreach ( $block_handles as $handle ) {
 				if ( isset( $wp_styles->registered[ $handle ] ) ) {
@@ -49,7 +49,7 @@ class Diagnostic_Block_Cleanup extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		if ( isset( $wp_scripts ) ) {
 			foreach ( $block_handles as $handle ) {
 				if ( isset( $wp_scripts->registered[ $handle ] ) ) {
@@ -57,7 +57,7 @@ class Diagnostic_Block_Cleanup extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		return false;
 	}
 }

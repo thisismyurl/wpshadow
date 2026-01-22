@@ -15,20 +15,20 @@ use WPShadow\Core\Diagnostic_Base;
  * @since 1.2601.2200
  */
 class Diagnostic_ObjectCacheBackendHealth extends Diagnostic_Base {
-    /**
-     * Run the diagnostic check
-     *
-     * @return array|null Array with finding details or null if no issue found
-     */
-    public static function check(): ?array {
-// Check if caching is properly configured
-		$has_cache = function_exists('wp_cache_get');
-		if (!$has_cache) {
-			return [
-				'status' => 'warning',
-				'message' => __('Object caching not configured', 'wpshadow'),
-				'threat_level' => 'medium'
-			];
+	/**
+	 * Run the diagnostic check
+	 *
+	 * @return array|null Array with finding details or null if no issue found
+	 */
+	public static function check(): ?array {
+		// Check if caching is properly configured
+		$has_cache = function_exists( 'wp_cache_get' );
+		if ( ! $has_cache ) {
+			return array(
+				'status'       => 'warning',
+				'message'      => __( 'Object caching not configured', 'wpshadow' ),
+				'threat_level' => 'medium',
+			);
 		}
 		return null; // No issues detected
 	}

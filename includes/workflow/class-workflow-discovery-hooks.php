@@ -45,10 +45,13 @@ class Workflow_Discovery_Hooks {
 		error_log( '[WPShadow] Workflow discovery cache refreshed at ' . current_time( 'mysql' ) );
 
 		// Trigger hook for Pro modules or other systems to respond
-		do_action( 'wpshadow_discovery_refreshed', array(
-			'diagnostics' => Workflow_Discovery::discover_diagnostics(),
-			'treatments'  => Workflow_Discovery::discover_treatments(),
-		) );
+		do_action(
+			'wpshadow_discovery_refreshed',
+			array(
+				'diagnostics' => Workflow_Discovery::discover_diagnostics(),
+				'treatments'  => Workflow_Discovery::discover_treatments(),
+			)
+		);
 	}
 
 	/**
@@ -57,7 +60,7 @@ class Workflow_Discovery_Hooks {
 	 * Checks if new files have been added since last check
 	 */
 	public static function auto_refresh_if_needed(): void {
-		$last_check = get_transient( 'wpshadow_discovery_last_check' );
+		$last_check    = get_transient( 'wpshadow_discovery_last_check' );
 		$current_check = filemtime( WP_PLUGIN_DIR . '/wpshadow/includes/diagnostics/' );
 
 		if ( ! $last_check || $current_check > $last_check ) {

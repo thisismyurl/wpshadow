@@ -10,8 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Diagnostic_Interactivity_Cleanup extends Diagnostic_Base {
 
-	protected static $slug = 'interactivity-cleanup';
-	protected static $title = 'Modern Block Features';
+	protected static $slug        = 'interactivity-cleanup';
+	protected static $title       = 'Modern Block Features';
 	protected static $description = 'Checks if modern interactive block features are loaded but not being used.';
 
 	public static function check(): ?array {
@@ -24,16 +24,18 @@ class Diagnostic_Interactivity_Cleanup extends Diagnostic_Base {
 		}
 
 		$uses_interactive_blocks = false;
-		$recent_posts = get_posts( array(
-			'post_type'   => array( 'post', 'page' ),
-			'numberposts' => 20,
-			'post_status' => 'publish',
-		) );
+		$recent_posts            = get_posts(
+			array(
+				'post_type'   => array( 'post', 'page' ),
+				'numberposts' => 20,
+				'post_status' => 'publish',
+			)
+		);
 
 		foreach ( $recent_posts as $post ) {
-			if ( has_block( 'core/navigation', $post ) || 
-			     has_block( 'core/query', $post ) ||
-			     strpos( $post->post_content, 'wp-interactivity' ) !== false ) {
+			if ( has_block( 'core/navigation', $post ) ||
+				has_block( 'core/query', $post ) ||
+				strpos( $post->post_content, 'wp-interactivity' ) !== false ) {
 				$uses_interactive_blocks = true;
 				break;
 			}

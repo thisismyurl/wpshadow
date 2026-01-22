@@ -85,9 +85,9 @@ class Consent_Preferences {
 		$prefs = self::get_preferences( $user_id );
 
 		$mapping = array(
-			'functional'    => 'functional_cookies',
-			'errors'        => 'error_reporting',
-			'telemetry'     => 'anonymized_telemetry',
+			'functional' => 'functional_cookies',
+			'errors'     => 'error_reporting',
+			'telemetry'  => 'anonymized_telemetry',
 		);
 
 		$key = isset( $mapping[ $type ] ) ? $mapping[ $type ] : $type;
@@ -128,10 +128,10 @@ class Consent_Preferences {
 		$history = self::get_consent_history( $user_id );
 
 		$history[] = array(
-			'timestamp'     => current_time( 'mysql' ),
-			'decision'      => $decision,
-			'ip_hash'       => self::hash_ip(),
-			'preferences'   => $preferences,
+			'timestamp'   => current_time( 'mysql' ),
+			'decision'    => $decision,
+			'ip_hash'     => self::hash_ip(),
+			'preferences' => $preferences,
 		);
 
 		update_user_meta( (int) $user_id, 'wpshadow_consent_history', $history );
@@ -169,10 +169,10 @@ class Consent_Preferences {
 		$consented = (int) $wpdb->get_var( $query );
 
 		return array(
-			'total_users'          => $total_users['total_users'],
-			'admin_users'          => $admin_users,
-			'users_consented'      => $consented,
-			'consent_rate'         => $total_users['total_users'] > 0 ? round( ( $consented / $total_users['total_users'] ) * 100 ) : 0,
+			'total_users'     => $total_users['total_users'],
+			'admin_users'     => $admin_users,
+			'users_consented' => $consented,
+			'consent_rate'    => $total_users['total_users'] > 0 ? round( ( $consented / $total_users['total_users'] ) * 100 ) : 0,
 		);
 	}
 

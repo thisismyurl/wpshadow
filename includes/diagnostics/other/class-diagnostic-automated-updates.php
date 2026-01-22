@@ -24,18 +24,18 @@ class Diagnostic_Automated_Updates extends Diagnostic_Base {
 		// Check if automatic updates are disabled
 		if ( defined( 'AUTOMATIC_UPDATER_DISABLED' ) && AUTOMATIC_UPDATER_DISABLED ) {
 			return array(
-				'id'          => 'automated-updates',
-				'title'       => 'Automatic Security Updates Disabled',
-				'description' => 'Automatic security updates are disabled. Enable them to ensure critical patches are applied promptly.',
-				'severity'    => 'high',
-				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/enable-automatic-security-updates/',
+				'id'            => 'automated-updates',
+				'title'         => 'Automatic Security Updates Disabled',
+				'description'   => 'Automatic security updates are disabled. Enable them to ensure critical patches are applied promptly.',
+				'severity'      => 'high',
+				'category'      => 'security',
+				'kb_link'       => 'https://wpshadow.com/kb/enable-automatic-security-updates/',
 				'training_link' => 'https://wpshadow.com/training/automated-updates/',
-				'auto_fixable' => false,
-				'threat_level' => 75,
+				'auto_fixable'  => false,
+				'threat_level'  => 75,
 			);
 		}
-		
+
 		return null;
 	}
 }

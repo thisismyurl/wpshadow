@@ -5,71 +5,74 @@ namespace WPShadow\Settings;
 
 /**
  * Scan Frequency Manager
- * 
+ *
  * Manages diagnostic scan scheduling and frequency configuration.
  * Philosophy: Helpful Neighbor (#1) - Let users choose their own schedule
  * Philosophy: Show Value (#9) - Track scan results and improvements
- * 
+ *
  * @since 1.2601
  * @package WPShadow
  */
 class Scan_Frequency_Manager {
-	
+
 	/**
 	 * Option key for scan frequency settings
 	 */
 	const OPTION_KEY = 'wpshadow_scan_frequency_settings';
-	
+
 	/**
 	 * Get available scan frequencies
-	 * 
+	 *
 	 * @return array Frequency options with descriptions
 	 */
 	public static function get_available_frequencies() {
 		return array(
 			'manual' => array(
-				'label' => __( 'Manual Only', 'wpshadow' ),
+				'label'       => __( 'Manual Only', 'wpshadow' ),
 				'description' => __( 'Run scans only when you click the button', 'wpshadow' ),
-				'icon' => 'dashicons-admin-generic'
+				'icon'        => 'dashicons-admin-generic',
 			),
 			'hourly' => array(
-				'label' => __( 'Hourly', 'wpshadow' ),
+				'label'       => __( 'Hourly', 'wpshadow' ),
 				'description' => __( 'Run scans every hour (every 60 minutes)', 'wpshadow' ),
-				'icon' => 'dashicons-update'
+				'icon'        => 'dashicons-update',
 			),
-			'daily' => array(
-				'label' => __( 'Daily', 'wpshadow' ),
+			'daily'  => array(
+				'label'       => __( 'Daily', 'wpshadow' ),
 				'description' => __( 'Run scans once per day (recommended)', 'wpshadow' ),
-				'icon' => 'dashicons-calendar-alt'
+				'icon'        => 'dashicons-calendar-alt',
 			),
 			'weekly' => array(
-				'label' => __( 'Weekly', 'wpshadow' ),
+				'label'       => __( 'Weekly', 'wpshadow' ),
 				'description' => __( 'Run scans once per week (good for low-traffic sites)', 'wpshadow' ),
-				'icon' => 'dashicons-calendar'
+				'icon'        => 'dashicons-calendar',
 			),
 		);
 	}
-	
+
 	/**
 	 * Get current scan frequency configuration
-	 * 
+	 *
 	 * @return array Scan frequency settings
 	 */
 	public static function get_scan_config() {
-		return get_option( self::OPTION_KEY, array(
-			'frequency' => 'daily',
-			'scan_time' => '02:00', // 2 AM
-			'run_diagnostics' => true,
-			'run_treatments' => false,
-			'email_results' => false,
-			'scan_on_plugin_update' => true,
-			'scan_on_theme_update' => true,
-		) );
+		return get_option(
+			self::OPTION_KEY,
+			array(
+				'frequency'             => 'daily',
+				'scan_time'             => '02:00', // 2 AM
+				'run_diagnostics'       => true,
+				'run_treatments'        => false,
+				'email_results'         => false,
+				'scan_on_plugin_update' => true,
+				'scan_on_theme_update'  => true,
+			)
+		);
 	}
-	
+
 	/**
 	 * Update scan frequency setting
-	 * 
+	 *
 	 * @param string $key Setting key
 	 * @param mixed  $value Setting value
 	 * @return bool Success status
@@ -78,11 +81,11 @@ class Scan_Frequency_Manager {
 		if ( empty( $key ) ) {
 			return false;
 		}
-		
-		$config = self::get_scan_config();
-		$old_value = $config[ $key ] ?? null;
+
+		$config         = self::get_scan_config();
+		$old_value      = $config[ $key ] ?? null;
 		$config[ $key ] = $value;
-		
+
 		// Validate frequency
 		if ( $key === 'frequency' ) {
 			$available = self::get_available_frequencies();
@@ -90,9 +93,9 @@ class Scan_Frequency_Manager {
 				return false;
 			}
 		}
-		
+
 		$result = update_option( self::OPTION_KEY, $config );
-		
+
 		// Schedule or reschedule cron if frequency changed
 		if ( $key === 'frequency' || $key === 'scan_time' ) {
 			if ( $config['frequency'] !== 'manual' ) {
@@ -101,45 +104,49 @@ class Scan_Frequency_Manager {
 				wp_clear_scheduled_hook( 'wpshadow_run_automatic_diagnostic_scan' );
 			}
 		}
-		
+
 		// Log activity
 		if ( $result && class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
 			\WPShadow\Core\Activity_Logger::log(
 				'scan_frequency_updated',
 				sprintf( 'Scan frequency setting changed: %s from "%s" to "%s"', $key, $old_value, $value ),
 				'',
-				array( 'setting_key' => $key, 'old_value' => $old_value, 'new_value' => $value )
+				array(
+					'setting_key' => $key,
+					'old_value'   => $old_value,
+					'new_value'   => $value,
+				)
 			);
 		}
-		
+
 		return $result;
 	}
-	
+
 	/**
 	 * Schedule diagnostic scan cron job
-	 * 
+	 *
 	 * @return void
 	 */
 	private static function schedule_scan_cron() {
-		$config = self::get_scan_config();
+		$config    = self::get_scan_config();
 		$frequency = $config['frequency'] ?? 'daily';
-		
+
 		// Unschedule existing
 		wp_clear_scheduled_hook( 'wpshadow_run_automatic_diagnostic_scan' );
-		
+
 		if ( $frequency === 'manual' ) {
 			return;
 		}
-		
+
 		// Parse scan time (format: HH:MM)
-		$scan_time = $config['scan_time'] ?? '02:00';
+		$scan_time             = $config['scan_time'] ?? '02:00';
 		list( $hour, $minute ) = explode( ':', $scan_time );
-		$hour = (int) $hour;
-		$minute = (int) $minute;
-		
+		$hour                  = (int) $hour;
+		$minute                = (int) $minute;
+
 		// Calculate next run based on frequency
 		$now = time();
-		
+
 		if ( $frequency === 'hourly' ) {
 			// Hourly: run at XX:MM every hour
 			$next_run = $now + ( 60 - (int) ( ( $now - mktime( 0, $minute, 0 ) ) / 60 ) % 60 ) * 60;
@@ -147,33 +154,33 @@ class Scan_Frequency_Manager {
 		} elseif ( $frequency === 'daily' ) {
 			// Daily: run at HH:MM every day
 			$today_time = mktime( $hour, $minute, 0 );
-			$next_run = ( $today_time > $now ) ? $today_time : $today_time + DAY_IN_SECONDS;
-			$schedule = 'daily';
+			$next_run   = ( $today_time > $now ) ? $today_time : $today_time + DAY_IN_SECONDS;
+			$schedule   = 'daily';
 		} else { // weekly
 			// Weekly: run at HH:MM every Sunday
 			$next_run = self::get_next_weekly_run( $hour, $minute );
 			$schedule = 'weekly';
 		}
-		
+
 		// Schedule event
 		wp_schedule_event( $next_run, $schedule, 'wpshadow_run_automatic_diagnostic_scan' );
 	}
-	
+
 	/**
 	 * Calculate next weekly run time
-	 * 
+	 *
 	 * @param int $hour Hour (0-23)
 	 * @param int $minute Minute (0-59)
 	 * @return int Unix timestamp
 	 */
 	private static function get_next_weekly_run( $hour, $minute ) {
-		$now = time();
-		$today_weekday = (int) date( 'w' );
+		$now            = time();
+		$today_weekday  = (int) date( 'w' );
 		$target_weekday = 0; // Sunday
-		
+
 		// How many days until Sunday?
 		$days_until_sunday = ( $target_weekday - $today_weekday + 7 ) % 7;
-		
+
 		if ( $days_until_sunday === 0 ) {
 			// Today is Sunday, check if time has passed
 			$today_time = mktime( $hour, $minute, 0 );
@@ -182,86 +189,89 @@ class Scan_Frequency_Manager {
 			}
 			$days_until_sunday = 7;
 		}
-		
+
 		return mktime( $hour, $minute, 0, (int) date( 'm' ), (int) date( 'd' ) + $days_until_sunday );
 	}
-	
+
 	/**
 	 * Get next scheduled scan time
-	 * 
+	 *
 	 * @return string Human-readable next scan time, or 'Manual only' if manual
 	 */
 	public static function get_next_scan_time() {
 		$config = self::get_scan_config();
-		
+
 		if ( $config['frequency'] === 'manual' ) {
 			return __( 'Manual only', 'wpshadow' );
 		}
-		
+
 		$timestamp = wp_next_scheduled( 'wpshadow_run_automatic_diagnostic_scan' );
-		
+
 		if ( ! $timestamp ) {
 			return __( 'Not scheduled', 'wpshadow' );
 		}
-		
+
 		return sprintf(
-			__( '%s at %s', 'wpshadow' ),
+			__( '%1$s at %2$s', 'wpshadow' ),
 			date_i18n( 'l, F j', $timestamp ),
 			date_i18n( 'H:i', $timestamp )
 		);
 	}
-	
+
 	/**
 	 * Run diagnostic scan
-	 * 
+	 *
 	 * @return array Scan results
 	 */
 	public static function run_diagnostic_scan() {
-		$config = self::get_scan_config();
+		$config  = self::get_scan_config();
 		$results = array(
-			'timestamp' => current_time( 'mysql' ),
-			'diagnostics_run' => 0,
-			'findings' => 0,
+			'timestamp'            => current_time( 'mysql' ),
+			'diagnostics_run'      => 0,
+			'findings'             => 0,
 			'treatments_available' => 0,
 		);
-		
+
 		// Run diagnostics
 		if ( $config['run_diagnostics'] && class_exists( '\WPShadow\Diagnostics\Diagnostic_Runner' ) ) {
-			$runner = new \WPShadow\Diagnostics\Diagnostic_Runner();
-			$findings = $runner->run_all();
+			$runner                     = new \WPShadow\Diagnostics\Diagnostic_Runner();
+			$findings                   = $runner->run_all();
 			$results['diagnostics_run'] = count( $findings );
-			$results['findings'] = array_sum( array_column( $findings, 'count' ) );
+			$results['findings']        = array_sum( array_column( $findings, 'count' ) );
 		}
-		
+
 		// Log scan
 		if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
 			\WPShadow\Core\Activity_Logger::log(
 				'diagnostic_scan_completed',
-				sprintf( 'Automatic diagnostic scan completed: %d diagnostics, %d findings', 
-					$results['diagnostics_run'], $results['findings'] ),
+				sprintf(
+					'Automatic diagnostic scan completed: %d diagnostics, %d findings',
+					$results['diagnostics_run'],
+					$results['findings']
+				),
 				'',
 				array( 'scan_results' => $results )
 			);
 		}
-		
+
 		// Store latest scan result
 		$scan_history = get_option( 'wpshadow_scan_history', array() );
 		array_unshift( $scan_history, $results );
 		$scan_history = array_slice( $scan_history, 0, 30 ); // Keep last 30
 		update_option( 'wpshadow_scan_history', $scan_history );
-		
+
 		return $results;
 	}
-	
+
 	/**
 	 * Render scan frequency UI
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function render_scan_ui() {
-		$config = self::get_scan_config();
+		$config      = self::get_scan_config();
 		$frequencies = self::get_available_frequencies();
-		$next_scan = self::get_next_scan_time();
+		$next_scan   = self::get_next_scan_time();
 		?>
 		<div style="max-width: 800px;">
 			<!-- Scan Frequency Selection -->

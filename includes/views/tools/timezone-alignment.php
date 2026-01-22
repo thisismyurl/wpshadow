@@ -1,7 +1,7 @@
 <?php
 /**
  * Timezone Alignment Tool
- * 
+ *
  * Helps admins detect and align their timezone with WordPress.
  * Shows browser timezone vs server timezone vs current WordPress setting.
  * Can be rerun anytime to resync.
@@ -16,11 +16,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Get current timezones
-$current_tz = Timezone_Manager::get_admin_timezone();
-$abbr = Timezone_Manager::get_timezone_abbreviation( $current_tz );
-$offset = Timezone_Manager::get_timezone_offset( $current_tz );
-$server_tz = date_default_timezone_get();
-$suggestion = Timezone_Manager::get_timezone_suggestion();
+$current_tz   = Timezone_Manager::get_admin_timezone();
+$abbr         = Timezone_Manager::get_timezone_abbreviation( $current_tz );
+$offset       = Timezone_Manager::get_timezone_offset( $current_tz );
+$server_tz    = date_default_timezone_get();
+$suggestion   = Timezone_Manager::get_timezone_suggestion();
 $us_timezones = Timezone_Manager::get_us_timezones();
 ?>
 
@@ -52,11 +52,13 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 						<td>
 							<code><?php echo esc_html( $current_tz ); ?></code>
 							<span class="timezone-info">
-								<?php printf(
+								<?php
+								printf(
 									esc_html( '%s %s' ),
 									esc_html( $abbr ),
 									esc_html( $offset )
-								); ?>
+								);
+								?>
 							</span>
 						</td>
 					</tr>

@@ -65,7 +65,7 @@ class KB_Formatter {
 		$category    = isset( $data['category'] ) ? wp_kses_post( $data['category'] ) : '';
 		$difficulty  = isset( $data['difficulty'] ) ? wp_kses_post( $data['difficulty'] ) : 'Beginner';
 
-		$html = '<article class="wpshadow-kb-article">';
+		$html  = '<article class="wpshadow-kb-article">';
 		$html .= '<header class="wpshadow-kb-header">';
 		$html .= '<h1>' . $title . '</h1>';
 		$html .= '<div class="wpshadow-kb-meta">';
@@ -96,10 +96,10 @@ class KB_Formatter {
 		// Extract headings
 		if ( preg_match_all( '/<h([2-3])>(.*?)<\/h[23]>/i', $html, $matches, PREG_OFFSET_CAPTURE ) ) {
 			foreach ( $matches[0] as $idx => $match ) {
-				$level   = (int) $matches[1][ $idx ][0];
-				$title   = wp_strip_all_tags( $matches[2][ $idx ][0] );
-				$anchor  = sanitize_title( $title );
-				$toc[]   = array(
+				$level  = (int) $matches[1][ $idx ][0];
+				$title  = wp_strip_all_tags( $matches[2][ $idx ][0] );
+				$anchor = sanitize_title( $title );
+				$toc[]  = array(
 					'level'  => $level,
 					'title'  => $title,
 					'anchor' => $anchor,

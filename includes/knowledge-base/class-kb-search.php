@@ -29,12 +29,12 @@ class KB_Search {
 		$index    = array();
 
 		foreach ( $articles as $id => $article ) {
-			$searchable = self::extract_searchable_text( $article );
+			$searchable   = self::extract_searchable_text( $article );
 			$index[ $id ] = array(
-				'title'       => isset( $article['title'] ) ? $article['title'] : '',
-				'searchable'  => $searchable,
-				'category'    => isset( $article['category'] ) ? $article['category'] : '',
-				'type'        => isset( $article['type'] ) ? $article['type'] : '',
+				'title'      => isset( $article['title'] ) ? $article['title'] : '',
+				'searchable' => $searchable,
+				'category'   => isset( $article['category'] ) ? $article['category'] : '',
+				'type'       => isset( $article['type'] ) ? $article['type'] : '',
 			);
 		}
 
@@ -52,8 +52,8 @@ class KB_Search {
 	 * @return array Search results.
 	 */
 	public static function search( $query, $filters = array(), $limit = 10 ) {
-		$query    = sanitize_text_field( trim( wp_unslash( $query ) ) );
-		$index    = get_option( 'wpshadow_kb_search_index_v1', array() );
+		$query = sanitize_text_field( trim( wp_unslash( $query ) ) );
+		$index = get_option( 'wpshadow_kb_search_index_v1', array() );
 
 		if ( empty( $index ) ) {
 			self::build_index();
@@ -64,7 +64,7 @@ class KB_Search {
 			return array();
 		}
 
-		$results = array();
+		$results  = array();
 		$keywords = self::tokenize_query( $query );
 
 		foreach ( $index as $article_id => $entry ) {
@@ -87,9 +87,12 @@ class KB_Search {
 		}
 
 		// Sort by relevance score
-		usort( $results, function ( $a, $b ) {
-			return $b['score'] <=> $a['score'];
-		} );
+		usort(
+			$results,
+			function ( $a, $b ) {
+				return $b['score'] <=> $a['score'];
+			}
+		);
 
 		return array_slice( $results, 0, $limit );
 	}
@@ -129,7 +132,7 @@ class KB_Search {
 	 * @return array Keywords.
 	 */
 	private static function tokenize_query( $query ) {
-		$tokens = explode( ' ', $query );
+		$tokens   = explode( ' ', $query );
 		$keywords = array();
 
 		foreach ( $tokens as $token ) {
@@ -150,9 +153,9 @@ class KB_Search {
 	 * @return float Relevance score (0-100).
 	 */
 	private static function calculate_relevance( $keywords, $entry ) {
-		$score = 0;
+		$score      = 0;
 		$searchable = $entry['searchable'];
-		$title = strtolower( $entry['title'] );
+		$title      = strtolower( $entry['title'] );
 
 		foreach ( $keywords as $keyword ) {
 			// Title matches are worth more
@@ -165,7 +168,7 @@ class KB_Search {
 				$score += 10;
 
 				// Count occurrences
-				$count = substr_count( $searchable, $keyword );
+				$count  = substr_count( $searchable, $keyword );
 				$score += min( $count * 2, 20 ); // Max 20 bonus for multiple occurrences
 			}
 		}
@@ -187,7 +190,7 @@ class KB_Search {
 			return array();
 		}
 
-		$articles = KB_Library::get_all_articles();
+		$articles    = KB_Library::get_all_articles();
 		$suggestions = array();
 
 		foreach ( $articles as $article ) {
@@ -238,7 +241,7 @@ class KB_Search {
 			$stats[ $query ] = 0;
 		}
 
-		$stats[ $query ]++;
+		++$stats[ $query ];
 
 		// Keep history to 100 top searches
 		if ( count( $stats ) > 100 ) {

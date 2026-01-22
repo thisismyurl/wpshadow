@@ -23,10 +23,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Diagnostic_Head_Cleanup_Emoji extends Diagnostic_Base {
 
-	protected static $slug = 'head-cleanup-emoji';
-	protected static $title = 'Emoji Detection Scripts';
-	protected static $description = 'Checks if WordPress emoji detection scripts are enabled and can be removed.';
-	protected static $family = 'head-cleanup';
+	protected static $slug         = 'head-cleanup-emoji';
+	protected static $title        = 'Emoji Detection Scripts';
+	protected static $description  = 'Checks if WordPress emoji detection scripts are enabled and can be removed.';
+	protected static $family       = 'head-cleanup';
 	protected static $family_label = 'Head Cleanup Tasks';
 
 	public static function check(): ?array {

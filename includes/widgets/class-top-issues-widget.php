@@ -17,7 +17,7 @@ class WPShadow_Top_Issues_Widget {
 	 */
 	public static function render() {
 		$top_issues = self::get_top_issues( 3 );
-		
+
 		?>
 		<div style="margin: 30px 0;">
 			<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
@@ -29,12 +29,13 @@ class WPShadow_Top_Issues_Widget {
 			
 			<?php if ( ! empty( $top_issues ) ) : ?>
 				<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px;">
-					<?php foreach ( $top_issues as $index => $issue ) : 
+					<?php
+					foreach ( $top_issues as $index => $issue ) :
 						$threat_level = isset( $issue['threat_level'] ) ? $issue['threat_level'] : 50;
 						$threat_label = self::get_threat_label( $threat_level );
 						$threat_color = self::get_threat_color( $threat_level );
-						$category = isset( $issue['category'] ) ? $issue['category'] : 'other';
-						$finding_id = isset( $issue['id'] ) ? $issue['id'] : '';
+						$category     = isset( $issue['category'] ) ? $issue['category'] : 'other';
+						$finding_id   = isset( $issue['id'] ) ? $issue['id'] : '';
 						?>
 						<div style="border: 2px solid <?php echo esc_attr( $threat_color ); ?>; border-radius: 6px; padding: 16px; background: #ffffff; position: relative; overflow: hidden;">
 							<!-- Rank Badge -->
@@ -143,22 +144,28 @@ class WPShadow_Top_Issues_Widget {
 		if ( ! function_exists( 'wpshadow_get_site_findings' ) ) {
 			return array();
 		}
-		
+
 		$all_findings = wpshadow_get_site_findings();
-		$dismissed = get_option( 'wpshadow_dismissed_findings', array() );
-		
+		$dismissed    = get_option( 'wpshadow_dismissed_findings', array() );
+
 		// Filter out dismissed findings
-		$all_findings = array_filter( $all_findings, function( $f ) use ( $dismissed ) {
-			return ! isset( $f['id'] ) || ! isset( $dismissed[ $f['id'] ] );
-		} );
-		
+		$all_findings = array_filter(
+			$all_findings,
+			function ( $f ) use ( $dismissed ) {
+				return ! isset( $f['id'] ) || ! isset( $dismissed[ $f['id'] ] );
+			}
+		);
+
 		// Sort by threat level (highest first)
-		usort( $all_findings, function( $a, $b ) {
-			$a_threat = isset( $a['threat_level'] ) ? $a['threat_level'] : 50;
-			$b_threat = isset( $b['threat_level'] ) ? $b['threat_level'] : 50;
-			return $b_threat - $a_threat;
-		} );
-		
+		usort(
+			$all_findings,
+			function ( $a, $b ) {
+				$a_threat = isset( $a['threat_level'] ) ? $a['threat_level'] : 50;
+				$b_threat = isset( $b['threat_level'] ) ? $b['threat_level'] : 50;
+				return $b_threat - $a_threat;
+			}
+		);
+
 		return array_slice( $all_findings, 0, $limit );
 	}
 

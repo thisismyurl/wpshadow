@@ -22,21 +22,21 @@ class Diagnostic_Rate_Limiting_All_Endpoints extends Diagnostic_Base {
 	 */
 	public static function check(): ?array {
 		$rate_limit_enabled = get_option( 'wpshadow_rate_limiting_enabled' );
-		
+
 		if ( empty( $rate_limit_enabled ) ) {
 			return array(
-				'id'          => 'rate-limiting-all-endpoints',
-				'title'       => 'No Rate Limiting on All Endpoints',
-				'description' => 'Rate limiting not applied to all API endpoints. Attackers can enumerate users, brute force passwords, or DoS your API. Implement rate limiting on all endpoints.',
-				'severity'    => 'high',
-				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/implement-rate-limiting/',
+				'id'            => 'rate-limiting-all-endpoints',
+				'title'         => 'No Rate Limiting on All Endpoints',
+				'description'   => 'Rate limiting not applied to all API endpoints. Attackers can enumerate users, brute force passwords, or DoS your API. Implement rate limiting on all endpoints.',
+				'severity'      => 'high',
+				'category'      => 'security',
+				'kb_link'       => 'https://wpshadow.com/kb/implement-rate-limiting/',
 				'training_link' => 'https://wpshadow.com/training/api-rate-limits/',
-				'auto_fixable' => false,
-				'threat_level' => 70,
+				'auto_fixable'  => false,
+				'threat_level'  => 70,
 			);
 		}
-		
+
 		return null;
 	}
 }

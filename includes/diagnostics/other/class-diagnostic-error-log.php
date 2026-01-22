@@ -25,10 +25,10 @@ class Diagnostic_Error_Log extends Diagnostic_Base {
 		if ( ! $log_path || ! file_exists( $log_path ) ) {
 			return null;
 		}
-		
+
 		$size_bytes = filesize( $log_path );
 		$threshold  = 5 * 1024 * 1024; // 5MB
-		
+
 		if ( $size_bytes >= $threshold ) {
 			$size_mb = round( $size_bytes / 1024 / 1024, 1 );
 			return array(
@@ -42,10 +42,10 @@ class Diagnostic_Error_Log extends Diagnostic_Base {
 				'threat_level' => 45,
 			);
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * Locate the debug log path.
 	 *
@@ -56,7 +56,7 @@ class Diagnostic_Error_Log extends Diagnostic_Base {
 		if ( $path && is_string( $path ) && file_exists( $path ) ) {
 			return $path;
 		}
-		
+
 		$default = WP_CONTENT_DIR . '/debug.log';
 		return file_exists( $default ) ? $default : null;
 	}

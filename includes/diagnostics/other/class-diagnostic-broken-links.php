@@ -25,12 +25,14 @@ class Diagnostic_Broken_Links extends Diagnostic_Base {
 			return null;
 		}
 
-		$result = wpshadow_run_broken_links_scan( array(
-			'check_internal' => true,
-			'check_external' => true,
-			'check_images'   => true,
-			'limit'          => 100,
-		) );
+		$result = wpshadow_run_broken_links_scan(
+			array(
+				'check_internal' => true,
+				'check_external' => true,
+				'check_images'   => true,
+				'limit'          => 100,
+			)
+		);
 
 		if ( empty( $result['broken_links'] ) ) {
 			return null;
@@ -40,7 +42,7 @@ class Diagnostic_Broken_Links extends Diagnostic_Base {
 		$count  = count( $broken );
 		$first  = $broken[0];
 
-		$title = sprintf( 'Broken links found (%d)', (int) $count );
+		$title       = sprintf( 'Broken links found (%d)', (int) $count );
 		$description = sprintf(
 			/* translators: 1: URL, 2: post title, 3: status code */
 			__( 'Example: %1$s in "%2$s" returned %3$s.', 'wpshadow' ),

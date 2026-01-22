@@ -51,7 +51,7 @@ class KB_Search_Command extends Command {
 		}
 
 		// Parse filters
-		$filters = array();
+		$filters  = array();
 		$category = $this->get_post_var( 'category', '' );
 		if ( ! empty( $category ) ) {
 			$filters['category'] = sanitize_key( $category );

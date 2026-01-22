@@ -75,14 +75,14 @@ class KB_Article_Generator {
 		$content .= '</section>';
 
 		return array(
-			'id'          => 'diagnostic-' . $diagnostic_id,
-			'type'        => 'diagnostic',
-			'title'       => $title,
-			'description' => $description,
-			'category'    => $category,
-			'status'      => $status,
-			'content'     => $content,
-			'difficulty'  => 'Beginner',
+			'id'                 => 'diagnostic-' . $diagnostic_id,
+			'type'               => 'diagnostic',
+			'title'              => $title,
+			'description'        => $description,
+			'category'           => $category,
+			'status'             => $status,
+			'content'            => $content,
+			'difficulty'         => 'Beginner',
 			'estimated_fix_time' => __( '2-5 minutes', 'wpshadow' ),
 		);
 	}
@@ -134,13 +134,13 @@ class KB_Article_Generator {
 		$content .= '</section>';
 
 		return array(
-			'id'          => 'treatment-' . $treatment_id,
-			'type'        => 'treatment',
-			'title'       => $title,
-			'description' => $description,
-			'category'    => $category,
-			'content'     => $content,
-			'difficulty'  => 'Advanced',
+			'id'                 => 'treatment-' . $treatment_id,
+			'type'               => 'treatment',
+			'title'              => $title,
+			'description'        => $description,
+			'category'           => $category,
+			'content'            => $content,
+			'difficulty'         => 'Advanced',
 			'estimated_fix_time' => __( 'Automatic', 'wpshadow' ),
 		);
 	}
@@ -172,11 +172,11 @@ class KB_Article_Generator {
 	 */
 	private static function get_fix_instructions( $diagnostic_id ) {
 		$instructions = array(
-			'ssl'                   => __( '1. Log into your hosting control panel (cPanel, Plesk, etc.)\n2. Look for "SSL Certificates"\n3. Click "Install" and select your domain\n4. Follow the prompts to complete installation', 'wpshadow' ),
-			'debug-mode'            => __( '1. Open wp-config.php via FTP or File Manager\n2. Find "WP_DEBUG" and change to false\n3. Find "WP_DEBUG_DISPLAY" and change to false\n4. Save the file', 'wpshadow' ),
-			'memory-limit'          => __( '1. Open wp-config.php via FTP or File Manager\n2. Add this line: define( \'WP_MEMORY_LIMIT\', \'256M\' );\n3. Save the file', 'wpshadow' ),
-			'permalinks'            => __( '1. Go to Settings > Permalinks in WordPress admin\n2. Choose a permalink structure (usually Post name)\n3. Click Save Changes', 'wpshadow' ),
-			'tagline'               => __( '1. Go to Settings > General in WordPress admin\n2. Update the Tagline field\n3. Click Save Changes', 'wpshadow' ),
+			'ssl'          => __( '1. Log into your hosting control panel (cPanel, Plesk, etc.)\n2. Look for "SSL Certificates"\n3. Click "Install" and select your domain\n4. Follow the prompts to complete installation', 'wpshadow' ),
+			'debug-mode'   => __( '1. Open wp-config.php via FTP or File Manager\n2. Find "WP_DEBUG" and change to false\n3. Find "WP_DEBUG_DISPLAY" and change to false\n4. Save the file', 'wpshadow' ),
+			'memory-limit' => __( '1. Open wp-config.php via FTP or File Manager\n2. Add this line: define( \'WP_MEMORY_LIMIT\', \'256M\' );\n3. Save the file', 'wpshadow' ),
+			'permalinks'   => __( '1. Go to Settings > Permalinks in WordPress admin\n2. Choose a permalink structure (usually Post name)\n3. Click Save Changes', 'wpshadow' ),
+			'tagline'      => __( '1. Go to Settings > General in WordPress admin\n2. Update the Tagline field\n3. Click Save Changes', 'wpshadow' ),
 		);
 
 		return isset( $instructions[ $diagnostic_id ] ) ? $instructions[ $diagnostic_id ] : __( 'Please refer to the WPShadow dashboard for specific fix instructions for this issue.', 'wpshadow' );

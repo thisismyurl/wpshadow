@@ -22,27 +22,27 @@ class Diagnostic_Timthumb_Scanner extends Diagnostic_Base {
 	 */
 	public static function check(): ?array {
 		// Scan themes directory for timthumb.php
-		$themes_dir = get_theme_root();
+		$themes_dir     = get_theme_root();
 		$found_timthumb = array();
-		
+
 		if ( ! is_dir( $themes_dir ) ) {
 			return null;
 		}
-		
+
 		// Check active theme and parent theme
-		$active_theme = wp_get_theme();
+		$active_theme    = wp_get_theme();
 		$themes_to_check = array( $active_theme->get_stylesheet() );
-		
+
 		if ( $active_theme->parent() ) {
 			$themes_to_check[] = $active_theme->get_template();
 		}
-		
+
 		foreach ( $themes_to_check as $theme_slug ) {
 			$theme_dir = $themes_dir . '/' . $theme_slug;
 			if ( ! is_dir( $theme_dir ) ) {
 				continue;
 			}
-			
+
 			// Check for timthumb.php
 			$timthumb_path = $theme_dir . '/timthumb.php';
 			if ( file_exists( $timthumb_path ) ) {
@@ -60,24 +60,24 @@ class Diagnostic_Timthumb_Scanner extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		if ( ! empty( $found_timthumb ) ) {
 			return array(
-				'id'          => 'timthumb-scanner',
-				'title'       => 'Vulnerable Timthumb Detected',
-				'description' => sprintf(
+				'id'            => 'timthumb-scanner',
+				'title'         => 'Vulnerable Timthumb Detected',
+				'description'   => sprintf(
 					'Your theme(s) contain vulnerable timthumb.php files: %s. This is a critical security risk allowing remote code execution. Update or remove timthumb immediately.',
 					implode( ', ', $found_timthumb )
 				),
-				'severity'    => 'critical',
-				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/remove-timthumb-vulnerability/',
+				'severity'      => 'critical',
+				'category'      => 'security',
+				'kb_link'       => 'https://wpshadow.com/kb/remove-timthumb-vulnerability/',
 				'training_link' => 'https://wpshadow.com/training/timthumb-security/',
-				'auto_fixable' => false,
-				'threat_level' => 95,
+				'auto_fixable'  => false,
+				'threat_level'  => 95,
 			);
 		}
-		
+
 		return null;
 	}
 }

@@ -20,58 +20,58 @@ $categories = \WPShadow\Workflow\Workflow_Wizard::get_trigger_categories();
 
 	<?php
 	// Store current trigger info for display at bottom
-	$current_trigger_id = null;
+	$current_trigger_id     = null;
 	$current_trigger_config = null;
-	$current_trigger = null;
-	$schedule_display = '';
-	
+	$current_trigger        = null;
+	$schedule_display       = '';
+
 	if ( ! empty( $workflow ) ) {
 		// Try new format first (blocks)
 		if ( ! empty( $workflow['blocks'] ) ) {
 			foreach ( $workflow['blocks'] as $block ) {
 				if ( 'trigger' === $block['type'] ) {
-					$current_trigger_id = $block['id'];
+					$current_trigger_id     = $block['id'];
 					$current_trigger_config = isset( $block['config'] ) ? $block['config'] : array();
 					break;
 				}
 			}
-		} 
+		}
 		// Fall back to old format (trigger key)
 		elseif ( ! empty( $workflow['trigger'] ) ) {
-			$current_trigger_id = $workflow['trigger'];
+			$current_trigger_id     = $workflow['trigger'];
 			$current_trigger_config = array();
 		}
 	}
-	
+
 	if ( $current_trigger_id ) {
 		$all_triggers = \WPShadow\Workflow\Block_Registry::get_triggers();
 		if ( isset( $all_triggers[ $current_trigger_id ] ) ) {
 			$current_trigger = $all_triggers[ $current_trigger_id ];
-			
+
 			// Format schedule for time triggers
 			if ( 'time_daily' === $current_trigger_id ) {
 				$frequency = isset( $current_trigger_config['frequency'] ) ? $current_trigger_config['frequency'] : 'daily';
-				$time = isset( $current_trigger_config['time'] ) ? $current_trigger_config['time'] : '02:00';
-				
-				$time_parts = explode( ':', $time );
-				$hour = intval( $time_parts[0] );
-				$minute = isset( $time_parts[1] ) ? $time_parts[1] : '00';
-				$ampm = $hour >= 12 ? 'PM' : 'AM';
+				$time      = isset( $current_trigger_config['time'] ) ? $current_trigger_config['time'] : '02:00';
+
+				$time_parts   = explode( ':', $time );
+				$hour         = intval( $time_parts[0] );
+				$minute       = isset( $time_parts[1] ) ? $time_parts[1] : '00';
+				$ampm         = $hour >= 12 ? 'PM' : 'AM';
 				$display_hour = $hour % 12;
 				if ( 0 === $display_hour ) {
 					$display_hour = 12;
 				}
-				
+
 				$time_display = sprintf( '%d:%s %s', $display_hour, $minute, $ampm );
-				
+
 				if ( 'daily' === $frequency ) {
 					$schedule_display = sprintf( __( 'Daily at %s', 'wpshadow' ), $time_display );
 				} elseif ( 'weekly' === $frequency ) {
-					$day = isset( $current_trigger_config['day'] ) ? ucfirst( $current_trigger_config['day'] ) : 'Sunday';
-					$schedule_display = sprintf( __( 'Weekly on %s at %s', 'wpshadow' ), $day, $time_display );
+					$day              = isset( $current_trigger_config['day'] ) ? ucfirst( $current_trigger_config['day'] ) : 'Sunday';
+					$schedule_display = sprintf( __( 'Weekly on %1$s at %2$s', 'wpshadow' ), $day, $time_display );
 				} elseif ( 'monthly' === $frequency ) {
-					$day = isset( $current_trigger_config['day'] ) ? $current_trigger_config['day'] : '1';
-					$schedule_display = sprintf( __( 'Monthly on day %s at %s', 'wpshadow' ), $day, $time_display );
+					$day              = isset( $current_trigger_config['day'] ) ? $current_trigger_config['day'] : '1';
+					$schedule_display = sprintf( __( 'Monthly on day %1$s at %2$s', 'wpshadow' ), $day, $time_display );
 				}
 			}
 		}
@@ -98,7 +98,7 @@ $categories = \WPShadow\Workflow\Workflow_Wizard::get_trigger_categories();
 								}
 							}
 						}
-						
+
 						// Build the URL for trigger config
 						$trigger_url = admin_url( 'admin.php?page=wpshadow-workflows' );
 						if ( ! empty( $workflow ) && ! empty( $workflow['id'] ) ) {

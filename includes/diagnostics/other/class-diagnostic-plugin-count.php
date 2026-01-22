@@ -23,7 +23,7 @@ class Diagnostic_Plugin_Count extends Diagnostic_Base {
 	public static function check(): ?array {
 		$plugins = get_plugins();
 		$count   = count( $plugins );
-		
+
 		if ( $count > 50 ) {
 			return array(
 				'id'           => 'plugin-count-high',
@@ -36,7 +36,7 @@ class Diagnostic_Plugin_Count extends Diagnostic_Base {
 				'threat_level' => 40,
 			);
 		}
-		
+
 		return null;
 	}
 }

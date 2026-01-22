@@ -9,9 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$action = isset( $_GET['action'] ) ? sanitize_key( $_GET['action'] ) : 'create';
+$action      = isset( $_GET['action'] ) ? sanitize_key( $_GET['action'] ) : 'create';
 $workflow_id = isset( $_GET['workflow'] ) ? sanitize_text_field( $_GET['workflow'] ) : '';
-$step = isset( $_GET['step'] ) ? sanitize_key( $_GET['step'] ) : 'trigger';
+$step        = isset( $_GET['step'] ) ? sanitize_key( $_GET['step'] ) : 'trigger';
 
 // If editing, load workflow
 $workflow = null;

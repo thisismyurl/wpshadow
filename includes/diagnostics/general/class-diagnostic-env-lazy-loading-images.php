@@ -28,35 +28,35 @@ class Diagnostic_Env_Lazy_Loading_Images extends Diagnostic_Base {
 
 	protected static $family_label = 'General';
 
-	
+
 	/**
 	 * Get diagnostic ID
 	 */
 	public static function get_id(): string {
 		return 'env-lazy-loading-images';
 	}
-	
+
 	/**
 	 * Get diagnostic name
 	 */
 	public static function get_name(): string {
 		return __( 'Lazy Loading on Images', 'wpshadow' );
 	}
-	
+
 	/**
 	 * Get diagnostic description
 	 */
 	public static function get_description(): string {
 		return __( 'Are images lazy-loaded to reduce unnecessary data transfer?', 'wpshadow' );
 	}
-	
+
 	/**
 	 * Get diagnostic category
 	 */
 	public static function get_category(): string {
 		return 'environment';
 	}
-	
+
 	/**
 	 * Get threat level
 	 *
@@ -65,7 +65,7 @@ class Diagnostic_Env_Lazy_Loading_Images extends Diagnostic_Base {
 	public static function get_threat_level(): int {
 		return 10;
 	}
-	
+
 	/**
 	 * Run diagnostic test
 	 *
@@ -74,7 +74,7 @@ class Diagnostic_Env_Lazy_Loading_Images extends Diagnostic_Base {
 	public static function run(): array {
 		// STUB: Implement env-lazy-loading-images test
 		// Philosophy focus: Commandment #7, 8, 9
-		// 
+		//
 		// Data collection strategy:
 		// - Gather relevant metrics from WordPress
 		// - Calculate or query necessary values
@@ -84,21 +84,21 @@ class Diagnostic_Env_Lazy_Loading_Images extends Diagnostic_Base {
 		// Training: https://wpshadow.com/training/category-environment
 		//
 		// User impact: Help users understand and reduce environmental footprint of their site. Feel-good metrics with genuine impact on energy consumption and carbon offset.
-		
+
 		return array(
-			'status' => 'todo',
+			'status'  => 'todo',
 			'message' => 'Diagnostic not yet implemented',
-			'data' => array(),
+			'data'    => array(),
 		);
 	}
-	
+
 	/**
 	 * Get KB article URL
 	 */
 	public static function get_kb_article(): string {
 		return 'https://wpshadow.com/kb/env-lazy-loading-images';
 	}
-	
+
 	/**
 	 * Get training video URL
 	 */
@@ -107,7 +107,7 @@ class Diagnostic_Env_Lazy_Loading_Images extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		if (!(false)) {
+		if ( ! ( false ) ) {
 			return null;
 		}
 
