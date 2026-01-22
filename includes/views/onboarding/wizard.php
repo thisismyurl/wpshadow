@@ -49,12 +49,12 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 		<!-- Step 2: Technical Comfort Level -->
 		<div class="onboarding-step" id="step-comfort">
 			<div class="onboarding-welcome">
-				<h2><?php esc_html_e( 'One More Thing...', 'wpshadow' ); ?></h2>
+				<h2><?php esc_html_e( 'Help Us Help You', 'wpshadow' ); ?></h2>
 				<p class="lead">
 					<?php esc_html_e( 'How would you describe your comfort level with learning new tools?', 'wpshadow' ); ?>
 				</p>
 				<p class="note">
-					<?php esc_html_e( 'This just helps us show you the right amount of detail. No wrong answer!', 'wpshadow' ); ?>
+					<?php esc_html_e( 'This helps us show you the right amount of detail. No wrong answer!', 'wpshadow' ); ?>
 				</p>
 			</div>
 			
@@ -98,11 +98,147 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 			</p>
 		</div>
 		
-		<!-- Step 3: Confirmation -->
+		<!-- Step 3: Configuration Preferences -->
+		<div class="onboarding-step" id="step-config">
+			<div class="onboarding-welcome">
+				<h2><?php esc_html_e( 'Let\'s Set Up Your Preferences', 'wpshadow' ); ?></h2>
+				<p class="lead" id="config-intro"></p>
+			</div>
+			
+			<div class="config-form">
+				<div class="config-option">
+					<label class="config-label">
+						<input type="checkbox" name="auto_scan" value="1" checked />
+						<span class="config-title" id="config-scan-title"><?php esc_html_e( 'Automatic Health Checks', 'wpshadow' ); ?></span>
+					</label>
+					<p class="config-description" id="config-scan-desc">
+						<?php esc_html_e( 'Run quick health checks daily to catch issues early', 'wpshadow' ); ?>
+					</p>
+				</div>
+				
+				<div class="config-option">
+					<label class="config-label">
+						<input type="checkbox" name="show_tips" value="1" checked />
+						<span class="config-title"><?php esc_html_e( 'Helpful Tips & Guidance', 'wpshadow' ); ?></span>
+					</label>
+					<p class="config-description" id="config-tips-desc">
+						<?php esc_html_e( 'Show contextual help tips as you work', 'wpshadow' ); ?>
+					</p>
+				</div>
+				
+				<div class="config-option">
+					<label class="config-label">
+						<input type="checkbox" name="track_improvements" value="1" checked />
+						<span class="config-title"><?php esc_html_e( 'Track Your Progress', 'wpshadow' ); ?></span>
+					</label>
+					<p class="config-description">
+						<?php esc_html_e( 'Show how much time you\'ve saved and issues you\'ve fixed', 'wpshadow' ); ?>
+					</p>
+				</div>
+			</div>
+			
+			<div class="onboarding-actions">
+				<button type="button" class="button button-primary" id="continue-config">
+					<?php esc_html_e( 'Continue', 'wpshadow' ); ?>
+				</button>
+			</div>
+			
+			<p class="onboarding-nav">
+				<a href="#" class="back-step"><?php esc_html_e( '← Back', 'wpshadow' ); ?></a>
+			</p>
+		</div>
+		
+		<!-- Step 4: Privacy & Communication -->
+		<div class="onboarding-step" id="step-privacy">
+			<div class="onboarding-welcome">
+				<h2><?php esc_html_e( 'Your Privacy & Updates', 'wpshadow' ); ?></h2>
+				<p class="lead">
+					<?php esc_html_e( 'We respect your privacy. Here\'s what we\'d like your permission for:', 'wpshadow' ); ?>
+				</p>
+			</div>
+			
+			<div class="privacy-form">
+				<div class="privacy-section">
+					<h3><?php esc_html_e( '📧 Email Notifications', 'wpshadow' ); ?></h3>
+					<div class="config-option">
+						<label class="config-label">
+							<input type="checkbox" name="email_critical" value="1" />
+							<span class="config-title"><?php esc_html_e( 'Critical Security Issues', 'wpshadow' ); ?></span>
+						</label>
+						<p class="config-description">
+							<?php esc_html_e( 'Only email me about urgent security problems (recommended)', 'wpshadow' ); ?>
+						</p>
+					</div>
+					
+					<div class="config-option">
+						<label class="config-label">
+							<input type="checkbox" name="email_weekly" value="1" />
+							<span class="config-title"><?php esc_html_e( 'Weekly Summary', 'wpshadow' ); ?></span>
+						</label>
+						<p class="config-description">
+							<?php esc_html_e( 'Optional weekly report of your site health and improvements', 'wpshadow' ); ?>
+						</p>
+					</div>
+				</div>
+				
+				<div class="privacy-section">
+					<h3><?php esc_html_e( '🔒 Anonymous Usage Data', 'wpshadow' ); ?></h3>
+					<div class="config-option">
+						<label class="config-label">
+							<input type="checkbox" name="share_diagnostics" value="1" />
+							<span class="config-title"><?php esc_html_e( 'Help Improve WPShadow', 'wpshadow' ); ?></span>
+						</label>
+						<p class="config-description">
+							<?php esc_html_e( 'Share anonymous diagnostic results to help us improve (no personal data)', 'wpshadow' ); ?>
+							<a href="https://wpshadow.com/privacy/" target="_blank" style="margin-left: 5px;">
+								<?php esc_html_e( 'Privacy Policy', 'wpshadow' ); ?>
+							</a>
+						</p>
+					</div>
+				</div>
+				
+				<div class="privacy-section newsletter-section">
+					<h3><?php esc_html_e( '💡 Stay Informed (Optional)', 'wpshadow' ); ?></h3>
+					<p class="newsletter-intro">
+						<?php esc_html_e( 'Get WordPress tips, security updates, and exclusive tutorials:', 'wpshadow' ); ?>
+					</p>
+					<div class="config-option">
+						<label class="config-label">
+							<input type="checkbox" name="newsletter" value="1" />
+							<span class="config-title"><?php esc_html_e( 'Subscribe to WPShadow Newsletter', 'wpshadow' ); ?></span>
+						</label>
+						<p class="config-description">
+							<?php esc_html_e( 'Monthly tips, free training, and WordPress best practices. Unsubscribe anytime.', 'wpshadow' ); ?>
+						</p>
+					</div>
+					<div class="newsletter-email" style="display: none; margin-top: 10px;">
+						<input type="email" name="newsletter_email" placeholder="<?php esc_attr_e( 'your.email@example.com', 'wpshadow' ); ?>" 
+							   style="width: 100%; padding: 8px; border: 1px solid #dcdcde; border-radius: 4px;" />
+					</div>
+				</div>
+				
+				<p class="privacy-note">
+					<?php esc_html_e( 'You can change any of these settings later in WPShadow → Settings → Privacy', 'wpshadow' ); ?>
+				</p>
+			</div>
+			
+			<div class="onboarding-actions">
+				<button type="button" class="button button-primary" id="continue-privacy">
+					<?php esc_html_e( 'Continue', 'wpshadow' ); ?>
+				</button>
+			</div>
+			
+			<p class="onboarding-nav">
+				<a href="#" class="back-step"><?php esc_html_e( '← Back', 'wpshadow' ); ?></a>
+			</p>
+		</div>
+		
+		<!-- Step 5: Confirmation -->
 		<div class="onboarding-step" id="step-confirm">
 			<div class="onboarding-welcome">
-				<h2><?php esc_html_e( 'Perfect! You\'re All Set', 'wpshadow' ); ?></h2>
+				<h2><?php esc_html_e( '🎉 Perfect! You\'re All Set', 'wpshadow' ); ?></h2>
 				<p class="lead" id="confirm-message"></p>
+				<p class="confirm-summary" id="confirm-summary"></p>
 			</div>
 			
 			<div class="onboarding-actions">
@@ -324,7 +460,99 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 }
 
 .onboarding-resources a:hover {
-	text-decoration: underline;
+	
+
+/* Config & Privacy styles */
+.config-form,
+.privacy-form {
+	max-width: 600px;
+	margin: 30px auto;
+}
+
+.config-option,
+.privacy-section {
+	margin-bottom: 25px;
+	padding: 20px;
+	background: #f9f9f9;
+	border-radius: 8px;
+	border: 1px solid #e0e0e0;
+}
+
+.privacy-section {
+	margin-bottom: 30px;
+}
+
+.privacy-section h3 {
+	margin: 0 0 15px 0;
+	color: #1d2327;
+	font-size: 16px;
+}
+
+.config-label {
+	display: flex;
+	align-items: flex-start;
+	cursor: pointer;
+	gap: 12px;
+}
+
+.config-label input[type="checkbox"] {
+	margin: 3px 0 0 0;
+	width: 18px;
+	height: 18px;
+	cursor: pointer;
+}
+
+.config-title {
+	font-weight: 600;
+	color: #1d2327;
+	font-size: 15px;
+}
+
+.config-description {
+	margin: 8px 0 0 30px;
+	color: #646970;
+	fontBuild summary
+		let summary = '<strong><?php echo esc_js( __( 'Your choices:', 'wpshadow' ) ); ?></strong><br>';
+		if (selectedConfig.auto_scan) summary += '✓ <?php echo esc_js( __( 'Daily health checks', 'wpshadow' ) ); ?><br>';
+		if (selectedConfig.show_tips) summary += '✓ <?php echo esc_js( __( 'Helpful tips enabled', 'wpshadow' ) ); ?><br>';
+		if (selectedPrivacy.email_critical) summary += '✓ <?php echo esc_js( __( 'Critical alerts via email', 'wpshadow' ) ); ?><br>';
+		if (selectedPrivacy.newsletter) summary += '✓ <?php echo esc_js( __( 'Newsletter subscription', 'wpshadow' ) ); ?><br>';
+		$('#confirm-summary').html(summary);
+		
+		// Show confirmation step
+		$('#step-privacy
+}
+
+.privacy-note {
+	text-align: center;
+	margin-top: 30px;
+	padding-top: 20px;
+	border-top: 1px solid #dcdcde;
+	color: #646970;
+	font-size: 13px;
+	font-style: italic;
+}
+
+.newsletter-section {
+	background: linear-gradient(135deg, #f0f7ff 0%, #e6f2ff 100%);
+	border-color: #2271b1;
+}
+
+.newsletter-intro {
+	color: #1d2327;
+	font-size: 14px;
+	margin-bottom: 15px;
+}
+
+.confirm-summary {
+	background: #f0f7ff;
+	padding: 20px;
+	border-radius: 8px;
+	margin-top: 20px;
+	font-size: 14px;
+	line-height: 1.6;
+	color: #3c434a;
+}text-decoration: underline;
 }
 
 /* Responsive */
@@ -344,6 +572,9 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 jQuery(document).ready(function($) {
 	let selectedPlatform = '';
 	let selectedComfort = '';
+	
+	// Ensure ajaxurl is defined
+	const ajaxurl = '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>';
 	
 	// Platform selection
 	$('.select-platform').on('click', function() {
@@ -372,9 +603,55 @@ jQuery(document).ready(function($) {
 		
 		$('#confirm-message').text(messages[selectedPlatform] || messages['none']);
 		
-		// Show confirmation step
-		$('#step-comfort').removeClass('active');
-		$('#step-confirm').addClass('active');
+		const $current = $('.onboarding-step.active');
+		const currentId = $current.attr('id');
+		
+		$current.removeClass('active');
+		
+		// Navigate to previous step
+		if (currentId === 'step-comfort') {
+			$('#step-platform').addClass('active');
+		} else if (currentId === 'step-config') {
+			$('#step-comfort').addClass('active');
+		} else if (currentId === 'step-privacy') {
+			$('#step-config').addClass('active');
+		} else if (currentId === 'step-confirm') {
+			$('#step-privacy').addClass('active');
+		}
+	});
+	
+	// Customize config step based on platform
+	function updateConfigStep(platform, comfort) {
+		const platformIntros = {
+			'wordpress': '<?php echo esc_js( __( 'Since you know WordPress, let\'s quickly configure your monitoring preferences:', 'wpshadow' ) ); ?>',
+			'word': '<?php echo esc_js( __( 'Let\'s set up some preferences to keep your content safe:', 'wpshadow' ) ); ?>',
+			'google-docs': '<?php echo esc_js( __( 'Let\'s configure how we monitor your site:', 'wpshadow' ) ); ?>',
+			'wix': '<?php echo esc_js( __( 'Let\'s set up automatic monitoring for your site:', 'wpshadow' ) ); ?>',
+			'squarespace': '<?php echo esc_js( __( 'Configure your site monitoring preferences:', 'wpshadow' ) ); ?>',
+			'moodle': '<?php echo esc_js( __( 'Set up monitoring for your learning platform:', 'wpshadow' ) ); ?>',
+			'notion': '<?php echo esc_js( __( 'Configure how we help keep your content organized:', 'wpshadow' ) ); ?>',
+			'none': '<?php echo esc_js( __( 'Let\'s set up some helpful monitoring to keep your site healthy:', 'wpshadow' ) ); ?>'
+		};
+		
+		const scanTitles = {
+			'word': '<?php echo esc_js( __( 'Automatic Document Checks', 'wpshadow' ) ); ?>',
+			'google-docs': '<?php echo esc_js( __( 'Automatic File Checks', 'wpshadow' ) ); ?>',
+			'moodle': '<?php echo esc_js( __( 'Course Health Checks', 'wpshadow' ) ); ?>',
+			'default': '<?php echo esc_js( __( 'Automatic Health Checks', 'wpshadow' ) ); ?>'
+		};
+		
+		const tipDescriptions = {
+			'learning': '<?php echo esc_js( __( 'Show detailed explanations as you learn', 'wpshadow' ) ); ?>',
+			'comfortable': '<?php echo esc_js( __( 'Show contextual help tips as you work', 'wpshadow' ) ); ?>',
+			'config: selectedConfig,
+				privacy: selectedPrivacy,
+				expert': '<?php echo esc_js( __( 'Show quick tips only when needed', 'wpshadow' ) ); ?>'
+		};
+		
+		$('#config-intro').text(platformIntros[platform] || platformIntros['none']);
+		$('#config-scan-title').text(scanTitles[platform] || scanTitles['default']);
+		$('#config-tips-desc').text(tipDescriptions[comfort] || tipDescriptions['comfortable']);
+	}'#step-confirm').addClass('active');
 	});
 	
 	// Back button
@@ -405,16 +682,26 @@ jQuery(document).ready(function($) {
 		const $btn = $(this);
 		$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Setting up...', 'wpshadow' ) ); ?>');
 		
-		$.post(ajaxurl, {
-			action: 'wpshadow_save_onboarding',
-			platform: selectedPlatform,
-			comfort_level: selectedComfort,
-			nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_onboarding' ) ); ?>'
-		}, function(response) {
-			if (response.success) {
-				window.location.reload();
-			} else {
-				alert(response.data || '<?php echo esc_js( __( 'Something went wrong. Please try again.', 'wpshadow' ) ); ?>');
+		$.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			data: {
+				action: 'wpshadow_save_onboarding',
+				platform: selectedPlatform,
+				comfort_level: selectedComfort,
+				nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_onboarding' ) ); ?>'
+			},
+			success: function(response) {
+				if (response.success) {
+					window.location.reload();
+				} else {
+					alert(response.data || '<?php echo esc_js( __( 'Something went wrong. Please try again.', 'wpshadow' ) ); ?>');
+					$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Let\'s Go!', 'wpshadow' ) ); ?>');
+				}
+			},
+			error: function(xhr, status, error) {
+				console.error('AJAX Error:', status, error, xhr.responseText);
+				alert('<?php echo esc_js( __( 'Connection error. Please try again.', 'wpshadow' ) ); ?>');
 				$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Let\'s Go!', 'wpshadow' ) ); ?>');
 			}
 		});

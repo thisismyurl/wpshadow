@@ -57,6 +57,7 @@ class Onboarding_Manager {
 		add_action( 'wp_ajax_wpshadow_skip_onboarding', [ __CLASS__, 'ajax_skip_onboarding' ] );
 		add_action( 'wp_ajax_wpshadow_dismiss_term', [ __CLASS__, 'ajax_dismiss_term' ] );
 		add_action( 'wp_ajax_wpshadow_show_all_features', [ __CLASS__, 'ajax_show_all_features' ] );
+		add_action( 'wp_ajax_wpshadow_dismiss_graduation', [ __CLASS__, 'ajax_dismiss_graduation' ] );
 		
 		// Track user actions for graduation
 		add_action( 'save_post', [ __CLASS__, 'track_action' ] );
@@ -258,6 +259,8 @@ class Onboarding_Manager {
 		$user_id = get_current_user_id();
 		$platform = sanitize_key( $_POST['platform'] ?? '' );
 		$comfort_level = sanitize_key( $_POST['comfort_level'] ?? '' );
+		$config = isset( $_POST['config'] ) ? (array) $_POST['config'] : [];
+		$privacy = isset( $_POST['privacy'] ) ? (array) $_POST['privacy'] : [];
 		
 		// Validate platform
 		$valid_platforms = [ 'wordpress', 'word', 'google-docs', 'wix', 'squarespace', 'moodle', 'notion', 'none' ];
@@ -276,6 +279,24 @@ class Onboarding_Manager {
 		update_user_meta( $user_id, self::META_COMFORT_LEVEL, $comfort_level );
 		update_user_meta( $user_id, self::META_ONBOARDING_COMPLETE, time() );
 		
+		// Save configuration preferences
+		$config_data = [
+			'auto_scan' => ! empty( $config['auto_scan'] ),
+			'show_tips' => ! empty( $config['show_tips'] ),
+			'track_improvements' => ! empty( $config['track_improvements'] ),
+		];
+		update_user_meta( $user_id, 'wpshadow_config_preferences', $config_data );
+		
+		// Save privacy preferences
+		$privacy_data = [
+			'email_critical' => ! empty( $privacy['email_critical'] ),
+			'email_weekly' => ! empty( $privacy['email_weekly'] ),
+			'share_diagnostics' => ! empty( $privacy['share_diagnostics'] ),
+			'newsletter' => ! empty( $privacy['newsletter'] ),
+			'newsletter_email' => ! empty( $privacy['newsletter_email'] ) ? sanitize_email( $privacy['newsletter_email'] ) : '',
+		];
+		update_user_meta( $user_id, 'wpshadow_privacy_preferences', $privacy_data );
+		
 		// Set UI simplification based on platform
 		$simplified = ( 'wordpress' !== $platform );
 		update_user_meta( $user_id, self::META_UI_SIMPLIFIED, $simplified );
@@ -285,11 +306,20 @@ class Onboarding_Manager {
 			\WPShadow\Core\KPI_Tracker::record_custom_event( 'onboarding_completed', [
 				'platform'      => $platform,
 				'comfort_level' => $comfort_level,
+				'config'        => $config_data,
 			] );
 		}
 		
 		// Fire action for Pro module integration
-		do_action( 'wpshadow_onboarding_completed', $user_id, $platform, $comfort_level );
+		do_action( 'wpshadow_onboarding_completed', $user_id, $platform, $comfort_level, $config_data, $privacy_data );
+		
+		// If newsletter requested, trigger subscription
+		if ( ! empty( $privacy['newsletter'] ) && ! empty( $privacy_data['newsletter_email'] ) ) {
+			do_action( 'wpshadow_newsletter_subscribe', $privacy_data['newsletter_email'], [
+				'source' => 'onboarding',
+				'platform' => $platform,
+			] );
+		}
 		
 		wp_send_json_success( [
 			'message'    => __( 'Great! Your workspace is ready.', 'wpshadow' ),
@@ -368,6 +398,24 @@ class Onboarding_Manager {
 	}
 	
 	/**
+	 * AJAX: Dismiss graduation notice
+	 * 
+	 * @return void
+	 */
+	public static function ajax_dismiss_graduation(): void {
+		check_ajax_referer( 'wpshadow_onboarding', 'nonce' );
+		
+		if ( ! current_user_can( 'read' ) ) {
+			wp_send_json_error( __( 'Permission denied', 'wpshadow' ) );
+		}
+		
+		$user_id = get_current_user_id();
+		update_user_meta( $user_id, 'wpshadow_graduation_dismissed', time() );
+		
+		wp_send_json_success();
+	}
+	
+	/**
 	 * Add onboarding settings section
 	 * 
 	 * @return void
@@ -426,5 +474,51 @@ class Onboarding_Manager {
 			</table>
 		</div>
 		<?php
+	}
+	
+	/**
+	 * Get user's configuration preferences
+	 *
+	 * @param int|null $user_id User ID (defaults to current user)
+	 * @return array Configuration preferences
+	 */
+	public static function get_config_preferences( ?int $user_id = null ): array {
+		if ( null === $user_id ) {
+			$user_id = get_current_user_id();
+		}
+		
+		$defaults = [
+			'auto_scan' => true,
+			'show_tips' => true,
+			'track_improvements' => true,
+		];
+		
+		$config = get_user_meta( $user_id, 'wpshadow_config_preferences', true );
+		
+		return is_array( $config ) ? wp_parse_args( $config, $defaults ) : $defaults;
+	}
+	
+	/**
+	 * Get user's privacy preferences
+	 *
+	 * @param int|null $user_id User ID (defaults to current user)
+	 * @return array Privacy preferences
+	 */
+	public static function get_privacy_preferences( ?int $user_id = null ): array {
+		if ( null === $user_id ) {
+			$user_id = get_current_user_id();
+		}
+		
+		$defaults = [
+			'email_critical' => false,
+			'email_weekly' => false,
+			'share_diagnostics' => false,
+			'newsletter' => false,
+			'newsletter_email' => '',
+		];
+		
+		$privacy = get_user_meta( $user_id, 'wpshadow_privacy_preferences', true );
+		
+		return is_array( $privacy ) ? wp_parse_args( $privacy, $defaults ) : $defaults;
 	}
 }

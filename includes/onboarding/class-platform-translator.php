@@ -93,13 +93,13 @@ class Platform_Translator {
 			return self::$platform_cache[ $platform_id ];
 		}
 		
-		$file_path = WPSHADOW_PATH . "includes/onboarding/data/terminology-{$platform_id}.json";
+		$file_path = WPSHADOW_PATH . "includes/onboarding/data/terminology-{$platform_id}.php";
 		
 		if ( ! file_exists( $file_path ) ) {
 			return null;
 		}
 		
-		$data = json_decode( file_get_contents( $file_path ), true );
+		$data = require $file_path;
 		
 		if ( ! is_array( $data ) ) {
 			return null;

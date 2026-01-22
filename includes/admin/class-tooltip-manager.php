@@ -54,38 +54,27 @@ function wpshadow_get_tooltip_catalog( $category = null ) {
 		return $cached;
 	}
 
-	// Path to category-specific JSON file
-	$json_file = plugin_dir_path( __FILE__ ) . '../data/tooltips-' . sanitize_file_name( $category ) . '.json';
+	// Path to category-specific PHP file
+	$php_file = plugin_dir_path( __FILE__ ) . '../data/tooltips-' . sanitize_file_name( $category ) . '.php';
 
 	// Check if file exists
-	if ( ! file_exists( $json_file ) ) {
+	if ( ! file_exists( $php_file ) ) {
 		// Log error only for debugging
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log( 'WPShadow: tooltips-' . $category . '.json file not found at ' . $json_file );
+			error_log( 'WPShadow: tooltips-' . $category . '.php file not found at ' . $php_file );
 		}
 		return array();
 	}
 
-	// Load and decode JSON
-	$json_content = file_get_contents( $json_file );
-	$data = json_decode( $json_content, true );
+	// Load PHP file (returns array with translations already applied)
+	$data = require $php_file;
 
-	// Check if JSON is valid
-	if ( null === $data || ! is_array( $data ) ) {
+	// Check if valid array
+	if ( ! is_array( $data ) ) {
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log( 'WPShadow: Invalid JSON structure in tooltips-' . $category . '.json' );
+			error_log( 'WPShadow: Invalid data structure in tooltips-' . $category . '.php' );
 		}
 		return array();
-	}
-
-	// Apply translations to title and message fields
-	foreach ( $data as &$tooltip ) {
-		if ( isset( $tooltip['title'] ) ) {
-			$tooltip['title'] = __( $tooltip['title'], 'wpshadow' );
-		}
-		if ( isset( $tooltip['message'] ) ) {
-			$tooltip['message'] = __( $tooltip['message'], 'wpshadow' );
-		}
 	}
 
 	// Cache the result for 24 hours
