@@ -6,6 +6,8 @@
 **Status:** Production Ready - Phase 3.5 (Code Quality)  
 **License:** GPL v2 or later
 
+![CI Status](https://github.com/thisismyurl/wpshadow/actions/workflows/ci.yml/badge.svg)
+
 ---
 
 ## 🎯 Quick Start
@@ -42,6 +44,23 @@ docs/GITHUB_WORKFLOW.md       - Issue labels & workflow
 docs/DEPLOYMENT.md             - Release process
 docs/CODE_REVIEW_SENIOR_DEVELOPER.md  - DRY patterns
 ```
+
+**5. Testing & CI**
+```bash
+# Install dependencies
+composer install
+
+# Run tests
+composer test
+
+# Run static analysis (optional)
+composer phpstan
+
+# Run orchestrator to generate diagnostic implementations
+php scripts/orchestrator.php
+```
+
+See `docs/ORCHESTRATOR.md` for details on automated diagnostic generation.
 
 ---
 
