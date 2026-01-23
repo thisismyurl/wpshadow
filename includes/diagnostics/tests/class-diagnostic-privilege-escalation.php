@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 /**
- * WordPress Nonce Expiration Diagnostic
+ * Privilege Escalation Detection Diagnostic
  *
- * Philosophy: Session security - reasonable nonce lifetime
+ * Philosophy: Access control - detect unauthorized privilege changes
  * @package WPShadow
  *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
@@ -16,12 +16,12 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 /**
- * Check WordPress nonce expiration time.
+ * Check for unauthorized privilege escalation.
  *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
-class Diagnostic_Nonce_Expiration extends Diagnostic_Base
+class Diagnostic_Privilege_Escalation extends Diagnostic_Base
 {
 	/**
 	 * Run the diagnostic check.
@@ -30,24 +30,25 @@ class Diagnostic_Nonce_Expiration extends Diagnostic_Base
 	 */
 	public static function check(): ?array
 	{
-		// Check nonce lifetime (default is 1 day)
-		$nonce_life = apply_filters('nonce_life', DAY_IN_SECONDS);
+		global $wpdb;
 
-		// If nonce lifetime is longer than 12 hours
-		if ($nonce_life > (12 * HOUR_IN_SECONDS)) {
+		// Check for unexpected admin users
+		$admin_count = count(get_users(array('role' => 'administrator')));
+
+		if ($admin_count > 10) {
 			return array(
-				'id'          => 'nonce-expiration',
-				'title'       => 'Long Nonce Expiration Time',
+				'id'          => 'privilege-escalation',
+				'title'       => 'Suspicious Number of Administrators',
 				'description' => sprintf(
-					'WordPress security nonces remain valid for %s. Long-lived nonces increase CSRF attack window. Consider reducing nonce lifetime to 8-12 hours for sensitive operations.',
-					human_time_diff(0, $nonce_life)
+					'Found %d administrator accounts. This is unusual and may indicate privilege escalation by attackers. Review all admin accounts and remove unauthorized ones.',
+					$admin_count
 				),
-				'severity'    => 'medium',
+				'severity'    => 'high',
 				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/configure-nonce-lifetime/',
-				'training_link' => 'https://wpshadow.com/training/nonce-security/',
+				'kb_link'     => 'https://wpshadow.com/kb/audit-administrator-accounts/',
+				'training_link' => 'https://wpshadow.com/training/privilege-management/',
 				'auto_fixable' => false,
-				'threat_level' => 60,
+				'threat_level' => 85,
 			);
 		}
 
@@ -59,14 +60,14 @@ class Diagnostic_Nonce_Expiration extends Diagnostic_Base
 	/**
 	 * Live test for this diagnostic
 	 *
-	 * Diagnostic: Nonce Expiration
-	 * Slug: -nonce-expiration
-	 * File: class-diagnostic-nonce-expiration.php
+	 * Diagnostic: Privilege Escalation
+	 * Slug: -privilege-escalation
+	 * File: class-diagnostic-privilege-escalation.php
 	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
-	 * Diagnostic: Nonce Expiration
-	 * Slug: -nonce-expiration
+	 * Diagnostic: Privilege Escalation
+	 * Slug: -privilege-escalation
 	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
@@ -78,19 +79,19 @@ class Diagnostic_Nonce_Expiration extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__nonce_expiration(): array
+	public static function test_live__privilege_escalation(): array
 	{
-		$nonce_life = apply_filters('nonce_life', DAY_IN_SECONDS);
-		$threshold  = 12 * HOUR_IN_SECONDS; // Must match check() logic
+		$admin_count = count(get_users(array('role' => 'administrator')));
+		$threshold   = 10; // Must match check() logic
 
 		$diagnostic_result    = self::check();
-		$should_find_issue    = ($nonce_life > $threshold);
+		$should_find_issue    = ($admin_count > $threshold);
 		$diagnostic_has_issue = (null !== $diagnostic_result);
 		$test_passes          = ($should_find_issue === $diagnostic_has_issue);
 
 		$message = sprintf(
-			'Nonce lifetime: %s seconds. Threshold: %s. Expected diagnostic to %s issue. Diagnostic %s issue. Test: %s',
-			$nonce_life,
+			'Administrator accounts: %d (threshold: %d). Expected diagnostic to %s issue. Diagnostic %s issue. Test: %s',
+			$admin_count,
 			$threshold,
 			$should_find_issue ? 'FIND' : 'NOT find',
 			$diagnostic_has_issue ? 'FOUND' : 'DID NOT find',

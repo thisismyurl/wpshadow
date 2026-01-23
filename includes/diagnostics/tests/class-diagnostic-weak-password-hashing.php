@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 /**
- * WordPress Nonce Expiration Diagnostic
+ * Weak Password Hashing Diagnostic
  *
- * Philosophy: Session security - reasonable nonce lifetime
+ * Philosophy: Cryptography - use strong password hashing
  * @package WPShadow
  *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
@@ -16,12 +16,12 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 /**
- * Check WordPress nonce expiration time.
+ * Check for weak password hashing.
  *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
-class Diagnostic_Nonce_Expiration extends Diagnostic_Base
+class Diagnostic_Weak_Password_Hashing extends Diagnostic_Base
 {
 	/**
 	 * Run the diagnostic check.
@@ -30,24 +30,27 @@ class Diagnostic_Nonce_Expiration extends Diagnostic_Base
 	 */
 	public static function check(): ?array
 	{
-		// Check nonce lifetime (default is 1 day)
-		$nonce_life = apply_filters('nonce_life', DAY_IN_SECONDS);
+		global $wpdb;
 
-		// If nonce lifetime is longer than 12 hours
-		if ($nonce_life > (12 * HOUR_IN_SECONDS)) {
+		// Check for old MD5/SHA1 password hashes in custom tables
+		$results = $wpdb->get_results(
+			"SELECT COUNT(*) as count FROM {$wpdb->usermeta} WHERE meta_key = 'legacy_password_hash' AND meta_value REGEXP '^[a-f0-9]{32}$|^[a-f0-9]{40}$'"
+		);
+
+		if (! empty($results[0]->count) && $results[0]->count > 0) {
 			return array(
-				'id'          => 'nonce-expiration',
-				'title'       => 'Long Nonce Expiration Time',
+				'id'          => 'weak-password-hashing',
+				'title'       => 'Weak Password Hashing Algorithm Detected',
 				'description' => sprintf(
-					'WordPress security nonces remain valid for %s. Long-lived nonces increase CSRF attack window. Consider reducing nonce lifetime to 8-12 hours for sensitive operations.',
-					human_time_diff(0, $nonce_life)
+					'Found %d users with weak password hashes (MD5 or SHA1). Rehash using bcrypt/Argon2. Old hashes are vulnerable to rainbow tables.',
+					$results[0]->count
 				),
-				'severity'    => 'medium',
+				'severity'    => 'high',
 				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/configure-nonce-lifetime/',
-				'training_link' => 'https://wpshadow.com/training/nonce-security/',
+				'kb_link'     => 'https://wpshadow.com/kb/upgrade-password-hashing/',
+				'training_link' => 'https://wpshadow.com/training/password-hashing/',
 				'auto_fixable' => false,
-				'threat_level' => 60,
+				'threat_level' => 75,
 			);
 		}
 
@@ -59,14 +62,14 @@ class Diagnostic_Nonce_Expiration extends Diagnostic_Base
 	/**
 	 * Live test for this diagnostic
 	 *
-	 * Diagnostic: Nonce Expiration
-	 * Slug: -nonce-expiration
-	 * File: class-diagnostic-nonce-expiration.php
+	 * Diagnostic: Weak Password Hashing
+	 * Slug: -weak-password-hashing
+	 * File: class-diagnostic-weak-password-hashing.php
 	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
-	 * Diagnostic: Nonce Expiration
-	 * Slug: -nonce-expiration
+	 * Diagnostic: Weak Password Hashing
+	 * Slug: -weak-password-hashing
 	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
@@ -78,20 +81,22 @@ class Diagnostic_Nonce_Expiration extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__nonce_expiration(): array
+	public static function test_live__weak_password_hashing(): array
 	{
-		$nonce_life = apply_filters('nonce_life', DAY_IN_SECONDS);
-		$threshold  = 12 * HOUR_IN_SECONDS; // Must match check() logic
+		global $wpdb;
+
+		$weak_count = (int) $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->usermeta} WHERE meta_key = 'legacy_password_hash' AND meta_value REGEXP '^[a-f0-9]{32}$|^[a-f0-9]{40}$'"
+		);
 
 		$diagnostic_result    = self::check();
-		$should_find_issue    = ($nonce_life > $threshold);
+		$should_find_issue    = ($weak_count > 0);
 		$diagnostic_has_issue = (null !== $diagnostic_result);
 		$test_passes          = ($should_find_issue === $diagnostic_has_issue);
 
 		$message = sprintf(
-			'Nonce lifetime: %s seconds. Threshold: %s. Expected diagnostic to %s issue. Diagnostic %s issue. Test: %s',
-			$nonce_life,
-			$threshold,
+			'Weak hashes: %d. Expected diagnostic to %s issue. Diagnostic %s issue. Test: %s',
+			$weak_count,
 			$should_find_issue ? 'FIND' : 'NOT find',
 			$diagnostic_has_issue ? 'FOUND' : 'DID NOT find',
 			$test_passes ? 'PASS' : 'FAIL'

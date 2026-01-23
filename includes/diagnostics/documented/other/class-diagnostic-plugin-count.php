@@ -1,10 +1,11 @@
 <?php
+
 declare(strict_types=1);
 /**
  * Plugin Count Diagnostic
  *
  * @package WPShadow
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
@@ -16,21 +17,23 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check for excessive plugin count.
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
-class Diagnostic_Plugin_Count extends Diagnostic_Base {
+class Diagnostic_Plugin_Count extends Diagnostic_Base
+{
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array {
+	public static function check(): ?array
+	{
 		$plugins = get_plugins();
-		$count   = count( $plugins );
+		$count   = count($plugins);
 
-		if ( $count > 50 ) {
+		if ($count > 50) {
 			return array(
 				'id'           => 'plugin-count-high',
 				'title'        => "High Plugin Count ({$count})",
@@ -54,12 +57,12 @@ class Diagnostic_Plugin_Count extends Diagnostic_Base {
 	 * Diagnostic: Plugin Count
 	 * Slug: -plugin-count
 	 * File: class-diagnostic-plugin-count.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Plugin Count
 	 * Slug: -plugin-count
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -70,7 +73,8 @@ class Diagnostic_Plugin_Count extends Diagnostic_Base {
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__plugin_count(): array {
+	public static function test_live__plugin_count(): array
+	{
 		$plugins = get_plugins();
 		$count = count($plugins);
 		$has_issue = ($count > 50);
@@ -94,5 +98,4 @@ class Diagnostic_Plugin_Count extends Diagnostic_Base {
 			'message' => $message,
 		);
 	}
-
 }

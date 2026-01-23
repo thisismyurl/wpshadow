@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 /**
  * User Enumeration Protection Diagnostic
  *
  * Philosophy: Security hardening - prevents username discovery
  * @package WPShadow
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
@@ -16,19 +17,21 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check if user enumeration is blocked.
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
-class Diagnostic_User_Enumeration extends Diagnostic_Base {
+class Diagnostic_User_Enumeration extends Diagnostic_Base
+{
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array {
+	public static function check(): ?array
+	{
 		// Test if /?author=1 reveals usernames
-		$test_url = add_query_arg( 'author', 1, home_url() );
+		$test_url = add_query_arg('author', 1, home_url());
 		$response = wp_remote_head(
 			$test_url,
 			array(
@@ -37,14 +40,14 @@ class Diagnostic_User_Enumeration extends Diagnostic_Base {
 			)
 		);
 
-		if ( is_wp_error( $response ) ) {
+		if (is_wp_error($response)) {
 			return null; // Can't check
 		}
 
-		$status = wp_remote_retrieve_response_code( $response );
+		$status = wp_remote_retrieve_response_code($response);
 
 		// If redirect to author archive succeeds, enumeration is possible
-		if ( $status === 200 || $status === 301 || $status === 302 ) {
+		if ($status === 200 || $status === 301 || $status === 302) {
 			return array(
 				'id'            => 'user-enumeration',
 				'title'         => 'User Enumeration Enabled',
@@ -69,12 +72,12 @@ class Diagnostic_User_Enumeration extends Diagnostic_Base {
 	 * Diagnostic: User Enumeration
 	 * Slug: -user-enumeration
 	 * File: class-diagnostic-user-enumeration.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: User Enumeration
 	 * Slug: -user-enumeration
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -85,7 +88,8 @@ class Diagnostic_User_Enumeration extends Diagnostic_Base {
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__user_enumeration(): array {
+	public static function test_live__user_enumeration(): array
+	{
 		// Replicate the check logic
 		$test_url = add_query_arg('author', 1, home_url());
 		$response = wp_remote_head(
@@ -126,5 +130,4 @@ class Diagnostic_User_Enumeration extends Diagnostic_Base {
 			'message' => $message,
 		);
 	}
-
 }

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 /**
- * WordPress Nonce Expiration Diagnostic
+ * SEO Spam Injection Detection Diagnostic
  *
- * Philosophy: Session security - reasonable nonce lifetime
+ * Philosophy: Content security - detect SEO spam/cloaking
  * @package WPShadow
  *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
@@ -16,12 +16,12 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 /**
- * Check WordPress nonce expiration time.
+ * Check for SEO spam and cloaking.
  *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
-class Diagnostic_Nonce_Expiration extends Diagnostic_Base
+class Diagnostic_SEO_Spam_Injection extends Diagnostic_Base
 {
 	/**
 	 * Run the diagnostic check.
@@ -30,24 +30,27 @@ class Diagnostic_Nonce_Expiration extends Diagnostic_Base
 	 */
 	public static function check(): ?array
 	{
-		// Check nonce lifetime (default is 1 day)
-		$nonce_life = apply_filters('nonce_life', DAY_IN_SECONDS);
+		global $wpdb;
 
-		// If nonce lifetime is longer than 12 hours
-		if ($nonce_life > (12 * HOUR_IN_SECONDS)) {
+		// Check for hidden text (common SEO spam technique)
+		$results = $wpdb->get_results(
+			"SELECT ID FROM {$wpdb->posts} WHERE post_content LIKE '%display:none%' OR post_content LIKE '%visibility:hidden%' LIMIT 5"
+		);
+
+		if (! empty($results)) {
 			return array(
-				'id'          => 'nonce-expiration',
-				'title'       => 'Long Nonce Expiration Time',
+				'id'          => 'seo-spam-injection',
+				'title'       => 'SEO Spam/Hidden Content Detected',
 				'description' => sprintf(
-					'WordPress security nonces remain valid for %s. Long-lived nonces increase CSRF attack window. Consider reducing nonce lifetime to 8-12 hours for sensitive operations.',
-					human_time_diff(0, $nonce_life)
+					'Found %d posts with hidden content (CSS display:none or visibility:hidden). This is SEO spam attempting to inject keywords for search manipulation.',
+					count($results)
 				),
 				'severity'    => 'medium',
 				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/configure-nonce-lifetime/',
-				'training_link' => 'https://wpshadow.com/training/nonce-security/',
+				'kb_link'     => 'https://wpshadow.com/kb/remove-seo-spam/',
+				'training_link' => 'https://wpshadow.com/training/seo-spam-removal/',
 				'auto_fixable' => false,
-				'threat_level' => 60,
+				'threat_level' => 65,
 			);
 		}
 
@@ -59,14 +62,14 @@ class Diagnostic_Nonce_Expiration extends Diagnostic_Base
 	/**
 	 * Live test for this diagnostic
 	 *
-	 * Diagnostic: Nonce Expiration
-	 * Slug: -nonce-expiration
-	 * File: class-diagnostic-nonce-expiration.php
+	 * Diagnostic: SEO Spam Injection
+	 * Slug: -seo-spam-injection
+	 * File: class-diagnostic-seo-spam-injection.php
 	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
-	 * Diagnostic: Nonce Expiration
-	 * Slug: -nonce-expiration
+	 * Diagnostic: SEO Spam Injection
+	 * Slug: -seo-spam-injection
 	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
@@ -78,20 +81,24 @@ class Diagnostic_Nonce_Expiration extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__nonce_expiration(): array
+	public static function test_live__seo_spam_injection(): array
 	{
-		$nonce_life = apply_filters('nonce_life', DAY_IN_SECONDS);
-		$threshold  = 12 * HOUR_IN_SECONDS; // Must match check() logic
+		global $wpdb;
+
+		$spam_posts = $wpdb->get_results(
+			"SELECT ID FROM {$wpdb->posts} WHERE post_content LIKE '%display:none%' OR post_content LIKE '%visibility:hidden%' LIMIT 5"
+		);
+
+		$spam_count = is_array($spam_posts) ? count($spam_posts) : 0;
 
 		$diagnostic_result    = self::check();
-		$should_find_issue    = ($nonce_life > $threshold);
+		$should_find_issue    = ($spam_count > 0);
 		$diagnostic_has_issue = (null !== $diagnostic_result);
 		$test_passes          = ($should_find_issue === $diagnostic_has_issue);
 
 		$message = sprintf(
-			'Nonce lifetime: %s seconds. Threshold: %s. Expected diagnostic to %s issue. Diagnostic %s issue. Test: %s',
-			$nonce_life,
-			$threshold,
+			'Hidden-content posts: %d. Expected diagnostic to %s issue. Diagnostic %s issue. Test: %s',
+			$spam_count,
 			$should_find_issue ? 'FIND' : 'NOT find',
 			$diagnostic_has_issue ? 'FOUND' : 'DID NOT find',
 			$test_passes ? 'PASS' : 'FAIL'

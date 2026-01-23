@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 /**
  * Heartbeat Throttling Diagnostic
  *
  * Philosophy: Educate on reducing admin-ajax load for better performance.
  * @package WPShadow
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
@@ -16,24 +17,26 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check if WordPress Heartbeat is throttled.
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
-class Diagnostic_Heartbeat_Throttling extends Diagnostic_Base {
+class Diagnostic_Heartbeat_Throttling extends Diagnostic_Base
+{
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array {
+	public static function check(): ?array
+	{
 		// If constant is defined to disable heartbeat
-		if ( defined( 'WP_DISABLE_HEARTBEAT' ) && WP_DISABLE_HEARTBEAT ) {
+		if (defined('WP_DISABLE_HEARTBEAT') && WP_DISABLE_HEARTBEAT) {
 			return null; // Already disabled/throttled
 		}
 		// Check if heartbeat is throttled via filters
 		// `heartbeat_settings` or `heartbeat_send` filters indicate custom intervals
-		if ( has_filter( 'heartbeat_settings' ) || has_filter( 'heartbeat_send' ) ) {
+		if (has_filter('heartbeat_settings') || has_filter('heartbeat_send')) {
 			return null; // Considered throttled/customized
 		}
 
@@ -56,12 +59,12 @@ class Diagnostic_Heartbeat_Throttling extends Diagnostic_Base {
 	 * Diagnostic: Heartbeat Throttling
 	 * Slug: -heartbeat-throttling
 	 * File: class-diagnostic-heartbeat-throttling.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Heartbeat Throttling
 	 * Slug: -heartbeat-throttling
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -72,10 +75,11 @@ class Diagnostic_Heartbeat_Throttling extends Diagnostic_Base {
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__heartbeat_throttling(): array {
+	public static function test_live__heartbeat_throttling(): array
+	{
 		$heartbeat_disabled = (defined('WP_DISABLE_HEARTBEAT') && WP_DISABLE_HEARTBEAT);
 		$has_heartbeat_filters = (has_filter('heartbeat_settings') || has_filter('heartbeat_send'));
-		
+
 		// Issue exists if: heartbeat NOT disabled AND no custom filters
 		$has_issue = (!$heartbeat_disabled && !$has_heartbeat_filters);
 
@@ -99,5 +103,4 @@ class Diagnostic_Heartbeat_Throttling extends Diagnostic_Base {
 			'message' => $message,
 		);
 	}
-
 }

@@ -1,16 +1,22 @@
 <?php
+
 declare(strict_types=1);
+
 namespace WPShadow\Diagnostics;
 
-class Diagnostic_Monitor_Login_Success_Rate extends Diagnostic_Base { public static function check(): ?array {
-        // Check if monitoring plugins are active
-        $has_monitoring = is_plugin_active('wordfence/wordfence.php') || 
-                         is_plugin_active('sucuri-scanner/sucuri.php');
-        if ($has_monitoring) {
-            return null; // Monitoring in place
-        }
-        
-return ['id' => 'monitor-login-success', 'title' => __('Login Success Rate', 'wpshadow'), 'description' => __('Tracks successful logins. Drop indicates auth system failure, 2FA issues, or password reset malfunction.', 'wpshadow'), 'severity' => 'high', 'category' => 'monitoring', 'kb_link' => 'https://wpshadow.com/kb/auth-monitoring/', 'training_link' => 'https://wpshadow.com/training/authentication/', 'auto_fixable' => false, 'threat_level' => 8]; } 
+class Diagnostic_Monitor_Login_Success_Rate extends Diagnostic_Base
+{
+	public static function check(): ?array
+	{
+		// Check if monitoring plugins are active
+		$has_monitoring = is_plugin_active('wordfence/wordfence.php') ||
+			is_plugin_active('sucuri-scanner/sucuri.php');
+		if ($has_monitoring) {
+			return null; // Monitoring in place
+		}
+
+		return ['id' => 'monitor-login-success', 'title' => __('Login Success Rate', 'wpshadow'), 'description' => __('Tracks successful logins. Drop indicates auth system failure, 2FA issues, or password reset malfunction.', 'wpshadow'), 'severity' => 'high', 'category' => 'monitoring', 'kb_link' => 'https://wpshadow.com/kb/auth-monitoring/', 'training_link' => 'https://wpshadow.com/training/authentication/', 'auto_fixable' => false, 'threat_level' => 8];
+	}
 
 
 	/**
@@ -19,12 +25,12 @@ return ['id' => 'monitor-login-success', 'title' => __('Login Success Rate', 'wp
 	 * Diagnostic: Monitor Login Success Rate
 	 * Slug: -monitor-login-success-rate
 	 * File: class-diagnostic-monitor-login-success-rate.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Monitor Login Success Rate
 	 * Slug: -monitor-login-success-rate
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -35,23 +41,26 @@ return ['id' => 'monitor-login-success', 'title' => __('Login Success Rate', 'wp
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__monitor_login_success_rate(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
-		$result = self::check();
-		
-		// TODO: Implement actual test logic
+	public static function test_live__monitor_login_success_rate(): array
+	{
+		$has_monitoring = is_plugin_active('wordfence/wordfence.php') || is_plugin_active('sucuri-scanner/sucuri.php');
+
+		$diagnostic_result    = self::check();
+		$should_find_issue    = (! $has_monitoring);
+		$diagnostic_has_issue = (null !== $diagnostic_result);
+		$test_passes          = ($should_find_issue === $diagnostic_has_issue);
+
+		$message = sprintf(
+			'Login monitoring active: %s. Expected diagnostic to %s issue. Diagnostic %s issue. Test: %s',
+			$has_monitoring ? 'YES' : 'NO',
+			$should_find_issue ? 'FIND' : 'NOT find',
+			$diagnostic_has_issue ? 'FOUND' : 'DID NOT find',
+			$test_passes ? 'PASS' : 'FAIL'
+		);
+
 		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
+			'passed'  => $test_passes,
+			'message' => $message,
 		);
 	}
-
 }

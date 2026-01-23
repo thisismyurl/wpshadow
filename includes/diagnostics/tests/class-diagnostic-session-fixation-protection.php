@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 /**
- * WordPress Nonce Expiration Diagnostic
+ * Session Fixation Protection Diagnostic
  *
- * Philosophy: Session security - reasonable nonce lifetime
+ * Philosophy: Authentication security - regenerate session IDs
  * @package WPShadow
  *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
@@ -16,12 +16,12 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 /**
- * Check WordPress nonce expiration time.
+ * Check if session IDs are regenerated on login.
  *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
-class Diagnostic_Nonce_Expiration extends Diagnostic_Base
+class Diagnostic_Session_Fixation_Protection extends Diagnostic_Base
 {
 	/**
 	 * Run the diagnostic check.
@@ -30,24 +30,19 @@ class Diagnostic_Nonce_Expiration extends Diagnostic_Base
 	 */
 	public static function check(): ?array
 	{
-		// Check nonce lifetime (default is 1 day)
-		$nonce_life = apply_filters('nonce_life', DAY_IN_SECONDS);
+		$has_fixation_protection = has_action('wp_login');
 
-		// If nonce lifetime is longer than 12 hours
-		if ($nonce_life > (12 * HOUR_IN_SECONDS)) {
+		if (! $has_fixation_protection) {
 			return array(
-				'id'          => 'nonce-expiration',
-				'title'       => 'Long Nonce Expiration Time',
-				'description' => sprintf(
-					'WordPress security nonces remain valid for %s. Long-lived nonces increase CSRF attack window. Consider reducing nonce lifetime to 8-12 hours for sensitive operations.',
-					human_time_diff(0, $nonce_life)
-				),
-				'severity'    => 'medium',
+				'id'          => 'session-fixation-protection',
+				'title'       => 'No Session Fixation Protection',
+				'description' => 'Session IDs are not regenerated on login. Attackers can use pre-existing session IDs to hijack accounts. Regenerate session ID on every login.',
+				'severity'    => 'high',
 				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/configure-nonce-lifetime/',
-				'training_link' => 'https://wpshadow.com/training/nonce-security/',
+				'kb_link'     => 'https://wpshadow.com/kb/prevent-session-fixation/',
+				'training_link' => 'https://wpshadow.com/training/session-security/',
 				'auto_fixable' => false,
-				'threat_level' => 60,
+				'threat_level' => 70,
 			);
 		}
 
@@ -59,14 +54,14 @@ class Diagnostic_Nonce_Expiration extends Diagnostic_Base
 	/**
 	 * Live test for this diagnostic
 	 *
-	 * Diagnostic: Nonce Expiration
-	 * Slug: -nonce-expiration
-	 * File: class-diagnostic-nonce-expiration.php
+	 * Diagnostic: Session Fixation Protection
+	 * Slug: -session-fixation-protection
+	 * File: class-diagnostic-session-fixation-protection.php
 	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
-	 * Diagnostic: Nonce Expiration
-	 * Slug: -nonce-expiration
+	 * Diagnostic: Session Fixation Protection
+	 * Slug: -session-fixation-protection
 	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
@@ -78,20 +73,18 @@ class Diagnostic_Nonce_Expiration extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__nonce_expiration(): array
+	public static function test_live__session_fixation_protection(): array
 	{
-		$nonce_life = apply_filters('nonce_life', DAY_IN_SECONDS);
-		$threshold  = 12 * HOUR_IN_SECONDS; // Must match check() logic
+		$has_fixation_protection = has_action('wp_login');
 
 		$diagnostic_result    = self::check();
-		$should_find_issue    = ($nonce_life > $threshold);
+		$should_find_issue    = (! $has_fixation_protection);
 		$diagnostic_has_issue = (null !== $diagnostic_result);
 		$test_passes          = ($should_find_issue === $diagnostic_has_issue);
 
 		$message = sprintf(
-			'Nonce lifetime: %s seconds. Threshold: %s. Expected diagnostic to %s issue. Diagnostic %s issue. Test: %s',
-			$nonce_life,
-			$threshold,
+			'wp_login hook present: %s. Expected diagnostic to %s issue. Diagnostic %s issue. Test: %s',
+			$has_fixation_protection ? 'YES' : 'NO',
 			$should_find_issue ? 'FIND' : 'NOT find',
 			$diagnostic_has_issue ? 'FOUND' : 'DID NOT find',
 			$test_passes ? 'PASS' : 'FAIL'
