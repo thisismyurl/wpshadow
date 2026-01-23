@@ -13,10 +13,61 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Code_CODE_A11Y_MISSING_ROLES extends Diagnostic_Base {
     public static function check(): ?array {
+        // Get the home page HTML
+        $home_url = \home_url('/');
+        $response = \wp_remote_get($home_url, array('timeout' => 10));
+
+        if (\is_wp_error($response)) {
+            return null; // Can't check, skip diagnostic
+        }
+
+        $html = \wp_remote_retrieve_body($response);
+
+        $issues = array();
+        $missing_roles_count = 0;
+
+        // Check for divs/spans with button-like classes but no role
+        $button_classes = array('btn', 'button', 'cta', 'submit', 'click');
+        foreach ($button_classes as $class) {
+            if (preg_match_all('/<(div|span)[^>]*class=["\'][^"\']*' . $class . '[^"\']*["\'][^>]*>/i', $html, $matches)) {
+                foreach ($matches[0] as $element) {
+                    // Check if element has role attribute
+                    if (! preg_match('/role=["\']?[^"\'\']+["\']?/i', $element)) {
+                        $missing_roles_count++;
+                        if ($missing_roles_count <= 3) {
+                            $issues[] = sprintf('Found element with class="%s" without role attribute', $class);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Check for divs/spans with onclick but no role
+        if (preg_match_all('/<(div|span)[^>]+onclick=[^>]*>/i', $html, $matches)) {
+            foreach ($matches[0] as $element) {
+                if (! preg_match('/role=["\']?[^"\'\']+["\']?/i', $element)) {
+                    $missing_roles_count++;
+                    if (count($issues) < 3) {
+                        $issues[] = 'Found clickable div/span without role attribute';
+                    }
+                }
+            }
+        }
+
+        if ($missing_roles_count === 0) {
+            return null; // No issues found
+        }
+
+        $description = sprintf(
+            \__('Found %d interactive element(s) missing ARIA role attributes. %s', 'wpshadow'),
+            $missing_roles_count,
+            implode('. ', array_unique($issues))
+        );
+
         return [
             'id' => 'code-a11y-missing-roles',
             'title' => __('Missing ARIA Roles', 'wpshadow'),
-            'description' => __('Flags interactive elements missing role attributes.', 'wpshadow'),
+            'description' => $description,
             'severity' => 'medium',
             'category' => 'code-quality',
             'kb_link' => 'https://wpshadow.com/kb/code-a11y-missing-roles',

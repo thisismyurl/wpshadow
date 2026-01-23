@@ -13,10 +13,49 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Code_CODE_A11Y_KEYBOARD_NAV extends Diagnostic_Base {
     public static function check(): ?array {
+        // Get the home page HTML
+        $home_url = \home_url('/');
+        $response = \wp_remote_get($home_url, array('timeout' => 10));
+
+        if (\is_wp_error($response)) {
+            return null; // Can't check, skip diagnostic
+        }
+
+        $html = \wp_remote_retrieve_body($response);
+
+        // Find elements with onclick on non-interactive elements
+        $issues = array();
+
+        // Check for divs/spans with onclick but no tabindex or role
+        if (preg_match_all('/<(div|span)[^>]+onclick=[^>]*>/i', $html, $matches)) {
+            foreach ($matches[0] as $element) {
+                // Check if element has tabindex or role="button"
+                $has_tabindex = preg_match('/tabindex=["\']?-?\d+["\']?/i', $element);
+                $has_button_role = preg_match('/role=["\']?(button|link)["\']?/i', $element);
+
+                if (! $has_tabindex && ! $has_button_role) {
+                    $issues[] = 'Found non-interactive element with onclick without tabindex/role';
+                    break; // Only report once
+                }
+            }
+        }
+
+        // Check for elements with click handlers but no keyboard handler
+        // This is a heuristic - look for onclick without onkeypress/onkeydown
+        if (preg_match('/<[^>]+onclick=[^>]+>/i', $html, $onclick_matches)) {
+            if (! preg_match('/<[^>]+onkey(press|down|up)=/i', $html)) {
+                $issues[] = 'Found click handlers without corresponding keyboard handlers';
+            }
+        }
+
+        if (empty($issues)) {
+            return null; // No issues found
+        }
+
         return [
             'id' => 'code-a11y-keyboard-nav',
             'title' => __('Keyboard Navigation Missing', 'wpshadow'),
-            'description' => __('Detects interactive components not keyboard accessible.', 'wpshadow'),
+            'description' => __('Detects interactive components not keyboard accessible. ' . implode('. ', $issues), 'wpshadow'),
             'severity' => 'medium',
             'category' => 'code-quality',
             'kb_link' => 'https://wpshadow.com/kb/code-a11y-keyboard-nav',

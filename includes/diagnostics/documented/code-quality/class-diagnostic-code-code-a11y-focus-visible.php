@@ -13,10 +13,67 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Code_CODE_A11Y_FOCUS_VISIBLE extends Diagnostic_Base {
     public static function check(): ?array {
+        $issues = array();
+
+        // Check theme stylesheet for focus indicator removal
+        $stylesheet_path = \get_stylesheet_directory() . '/style.css';
+        $parent_path     = \get_template_directory() . '/style.css';
+
+        $stylesheets = array();
+        if (\file_exists($stylesheet_path)) {
+            $stylesheets['child'] = $stylesheet_path;
+        }
+        if (\file_exists($parent_path) && $parent_path !== $stylesheet_path) {
+            $stylesheets['parent'] = $parent_path;
+        }
+
+        $has_outline_none = false;
+        $has_focus_styles = false;
+
+        foreach ($stylesheets as $type => $path) {
+            $css = \file_get_contents($path);
+
+            // Check for outline: none or outline: 0 without replacement
+            if (preg_match('/(:focus|:focus-visible)\s*\{[^}]*outline\s*:\s*(none|0)\s*;/i', $css)) {
+                $has_outline_none = true;
+
+                // Check if there's a replacement focus style in the same rule
+                if (preg_match('/(:focus|:focus-visible)\s*\{[^}]*(border|box-shadow|background)[^}]*\}/i', $css)) {
+                    $has_focus_styles = true;
+                }
+            }
+        }
+
+        // If outline is removed but no replacement styles, that's an issue
+        if ($has_outline_none && ! $has_focus_styles) {
+            $issues[] = __('Theme CSS removes focus outlines without providing replacement styles', 'wpshadow');
+        }
+
+        // Check if focus-visible is being used (modern best practice)
+        $uses_focus_visible = false;
+        foreach ($stylesheets as $path) {
+            if (\file_exists($path)) {
+                $css = \file_get_contents($path);
+                if (strpos($css, ':focus-visible') !== false) {
+                    $uses_focus_visible = true;
+                    break;
+                }
+            }
+        }
+
+        if (! $uses_focus_visible && ! $has_outline_none) {
+            // Only suggest if they're not already removing outlines
+            $issues[] = __('Theme doesn\'t use modern :focus-visible selector (recommended)', 'wpshadow');
+        }
+
+        if (empty($issues)) {
+            return null; // No issues found
+        }
+
         return [
             'id' => 'code-a11y-focus-visible',
             'title' => __('Missing Focus Indicators', 'wpshadow'),
-            'description' => __('Flags interactive elements without visible focus states.', 'wpshadow'),
+            'description' => __('Flags interactive elements without visible focus states. ' . implode(' ', $issues), 'wpshadow'),
             'severity' => 'medium',
             'category' => 'code-quality',
             'kb_link' => 'https://wpshadow.com/kb/code-a11y-focus-visible',

@@ -13,10 +13,43 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Code_CODE_A11Y_SKIP_LINKS extends Diagnostic_Base {
     public static function check(): ?array {
+        // Get the home page HTML
+        $home_url = \home_url('/');
+        $response = \wp_remote_get($home_url, array('timeout' => 10));
+
+        if (\is_wp_error($response)) {
+            return null; // Can't check, skip diagnostic
+        }
+
+        $html = \wp_remote_retrieve_body($response);
+
+        // Check for common skip link patterns
+        $has_skip_link = false;
+
+        // Pattern 1: Standard skip link with #content or #main
+        if (preg_match('/<a[^>]+href=["\']#(content|main|skip)["\'][^>]*>.*skip.*<\/a>/i', $html)) {
+            $has_skip_link = true;
+        }
+
+        // Pattern 2: Skip to content with various IDs
+        if (preg_match('/<a[^>]+class=["\'][^"\']* skip-link[^"\']* ["\'][^>]*>/i', $html)) {
+            $has_skip_link = true;
+        }
+
+        // Pattern 3: WordPress default skip link
+        if (preg_match('/<a[^>]+class=["\']skip-link screen-reader-text["\'][^>]*>/i', $html)) {
+            $has_skip_link = true;
+        }
+
+        if ($has_skip_link) {
+            return null; // Skip links present, all good!
+        }
+
+        // No skip links found
         return [
             'id' => 'code-a11y-skip-links',
             'title' => __('Missing Skip Links', 'wpshadow'),
-            'description' => __('Detects complex layouts without keyboard skip navigation.', 'wpshadow'),
+            'description' => __('Detects complex layouts without keyboard skip navigation. Your site doesn\'t have skip links, making it harder for keyboard users to navigate.', 'wpshadow'),
             'severity' => 'medium',
             'category' => 'code-quality',
             'kb_link' => 'https://wpshadow.com/kb/code-a11y-skip-links',

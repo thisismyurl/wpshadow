@@ -13,10 +13,73 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Diagnostic_Code_CODE_A11Y_MISSING_LABELS extends Diagnostic_Base {
     public static function check(): ?array {
+        // Get the home page HTML
+        $home_url = \home_url('/');
+        $response = \wp_remote_get($home_url, array('timeout' => 10));
+
+        if (\is_wp_error($response)) {
+            return null; // Can't check, skip diagnostic
+        }
+
+        $html = \wp_remote_retrieve_body($response);
+
+        // Find all input fields (excluding hidden, submit, button)
+        preg_match_all('/<input[^>]+>/i', $html, $inputs);
+        $unlabeled_count = 0;
+        $issues = array();
+
+        foreach ($inputs[0] as $input) {
+            // Skip hidden, submit, button types
+            if (preg_match('/type=["\']?(hidden|submit|button|image)["\']?/i', $input)) {
+                continue;
+            }
+
+            // Check if input has id attribute
+            $has_id = preg_match('/id=["\']([^"\'\']+)["\']?/i', $input, $id_match);
+            $input_id = $has_id ? $id_match[1] : null;
+
+            // Check if input has aria-label or aria-labelledby
+            $has_aria_label = preg_match('/aria-label(ledby)?=["\']?[^"\'\']+["\']?/i', $input);
+
+            // Check if input has associated label by ID
+            $has_label = false;
+            if ($input_id) {
+                if (preg_match('/<label[^>]+for=["\']?' . preg_quote($input_id, '/') . '["\']?[^>]*>/i', $html)) {
+                    $has_label = true;
+                }
+            }
+
+            // Check if input is wrapped in label
+            $input_escaped = preg_quote($input, '/');
+            $has_wrapping_label = preg_match('/<label[^>]*>' . $input_escaped . '/i', $html);
+
+            if (! $has_label && ! $has_aria_label && ! $has_wrapping_label) {
+                $unlabeled_count++;
+                if ($unlabeled_count <= 3) {
+                    // Extract type and name for debugging
+                    preg_match('/type=["\']?([^"\'\'\s>]+)/i', $input, $type_match);
+                    preg_match('/name=["\']?([^"\'\'\s>]+)/i', $input, $name_match);
+                    $type = $type_match[1] ?? 'text';
+                    $name = $name_match[1] ?? 'unknown';
+                    $issues[] = sprintf('Input type="%s" name="%s"', $type, $name);
+                }
+            }
+        }
+
+        if ($unlabeled_count === 0) {
+            return null; // No issues found
+        }
+
+        $description = sprintf(
+            \__('Found %d form input(s) without proper labels. Examples: %s', 'wpshadow'),
+            $unlabeled_count,
+            implode(', ', $issues)
+        );
+
         return [
             'id' => 'code-a11y-missing-labels',
             'title' => __('Missing Form Labels', 'wpshadow'),
-            'description' => __('Detects form inputs without associated labels or aria-labels.', 'wpshadow'),
+            'description' => $description,
             'severity' => 'medium',
             'category' => 'code-quality',
             'kb_link' => 'https://wpshadow.com/kb/code-a11y-missing-labels',
