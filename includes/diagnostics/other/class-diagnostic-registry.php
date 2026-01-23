@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Activity_Logger;
+use WPShadow\Core\Diagnostic_Result_Normalizer;
 
 /**
  * Registry for managing diagnostic checks.
@@ -149,6 +150,17 @@ class Diagnostic_Registry {
 			require_once $base_file;
 		}
 
+		// Shared helpers used by lean diagnostics and normalization.
+		$lean_file = $core_dir . 'class-diagnostic-lean-checks.php';
+		if ( file_exists( $lean_file ) ) {
+			require_once $lean_file;
+		}
+
+		$normalizer_file = $core_dir . 'class-diagnostic-result-normalizer.php';
+		if ( file_exists( $normalizer_file ) ) {
+			require_once $normalizer_file;
+		}
+
 		$all = array_unique( array_merge( self::$quick_diagnostics, self::$deep_diagnostics ) );
 
 		foreach ( $all as $diagnostic ) {
@@ -191,12 +203,14 @@ class Diagnostic_Registry {
 
 		foreach ( self::$quick_diagnostics as $diagnostic ) {
 			$class_name = __NAMESPACE__ . '\\' . $diagnostic;
-			if ( class_exists( $class_name ) && method_exists( $class_name, 'check' ) ) {
-				$result = call_user_func( array( $class_name, 'check' ) );
+			if ( class_exists( $class_name ) ) {
+				$result = self::execute_diagnostic( $class_name );
 
 				// Log that this diagnostic ran (even if it found nothing)
 				if ( class_exists( '\\WPShadow\\Core\\Activity_Logger' ) ) {
-					$category = isset( $result['category'] ) ? (string) $result['category'] : '';
+					$category   = is_array( $result ) && isset( $result['category'] ) ? (string) $result['category'] : '';
+					$finding_id = is_array( $result ) && isset( $result['id'] ) ? (string) $result['id'] : ( method_exists( $class_name, 'get_slug' ) ? (string) call_user_func( array( $class_name, 'get_slug' ) ) : '' );
+
 					Activity_Logger::log(
 						'diagnostic_run',
 						sprintf( 'Ran diagnostic: %s', $diagnostic ),
@@ -205,7 +219,7 @@ class Diagnostic_Registry {
 							'diagnostic'  => $diagnostic,
 							'trigger'     => 'quick_scan',
 							'found_issue' => is_array( $result ) && ! empty( $result ),
-							'finding_id'  => $result['id'] ?? '',
+							'finding_id'  => $finding_id,
 						)
 					);
 				}
@@ -231,12 +245,14 @@ class Diagnostic_Registry {
 
 		foreach ( $diagnostics as $diagnostic ) {
 			$class_name = __NAMESPACE__ . '\\' . $diagnostic;
-			if ( class_exists( $class_name ) && method_exists( $class_name, 'check' ) ) {
-				$result = call_user_func( array( $class_name, 'check' ) );
+			if ( class_exists( $class_name ) ) {
+				$result = self::execute_diagnostic( $class_name );
 
 				// Log that this diagnostic ran (even if it found nothing)
 				if ( class_exists( '\\WPShadow\\Core\\Activity_Logger' ) ) {
-					$category = isset( $result['category'] ) ? (string) $result['category'] : '';
+					$category   = is_array( $result ) && isset( $result['category'] ) ? (string) $result['category'] : '';
+					$finding_id = is_array( $result ) && isset( $result['id'] ) ? (string) $result['id'] : ( method_exists( $class_name, 'get_slug' ) ? (string) call_user_func( array( $class_name, 'get_slug' ) ) : '' );
+
 					Activity_Logger::log(
 						'diagnostic_run',
 						sprintf( 'Ran diagnostic: %s', $diagnostic ),
@@ -245,7 +261,7 @@ class Diagnostic_Registry {
 							'diagnostic'  => $diagnostic,
 							'trigger'     => 'deep_scan',
 							'found_issue' => is_array( $result ) && ! empty( $result ),
-							'finding_id'  => $result['id'] ?? '',
+							'finding_id'  => $finding_id,
 						)
 					);
 				}
@@ -392,5 +408,34 @@ class Diagnostic_Registry {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Execute a diagnostic using its supported method and normalize the output.
+	 *
+	 * @param string $class_name Diagnostic class name (fully qualified).
+	 * @return array|null Normalized finding or null when no issue or invalid structure.
+	 */
+	private static function execute_diagnostic( string $class_name ): ?array {
+		$method = '';
+
+		if ( method_exists( $class_name, 'check' ) ) {
+			$method = 'check';
+		} elseif ( method_exists( $class_name, 'run' ) ) {
+			// Legacy lean diagnostics supported via run() implementations.
+			$method = 'run';
+		}
+
+		if ( '' === $method ) {
+			return null;
+		}
+
+		$result = call_user_func( array( $class_name, $method ) );
+
+		if ( class_exists( '\\WPShadow\\Core\\Diagnostic_Result_Normalizer' ) ) {
+			return Diagnostic_Result_Normalizer::normalize( $class_name, $result );
+		}
+
+		return is_array( $result ) ? $result : null;
 	}
 }
