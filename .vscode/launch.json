@@ -71,7 +71,8 @@
             "runtimeArgs": [
                 "-dxdebug.mode=debug",
                 "-dxdebug.start_with_request=yes",
-                "-d", "error_reporting=E_ALL"
+                "-d",
+                "error_reporting=E_ALL"
             ],
             "presentation": {
                 "group": "debug",
@@ -88,7 +89,8 @@
             "runtimeArgs": [
                 "-dxdebug.mode=debug",
                 "-dxdebug.start_with_request=yes",
-                "-d", "error_reporting=E_ALL"
+                "-d",
+                "error_reporting=E_ALL"
             ],
             "presentation": {
                 "group": "debug",
@@ -105,7 +107,8 @@
             "runtimeArgs": [
                 "-dxdebug.mode=debug",
                 "-dxdebug.start_with_request=yes",
-                "-d", "error_reporting=E_ALL"
+                "-d",
+                "error_reporting=E_ALL"
             ],
             "presentation": {
                 "group": "debug",
