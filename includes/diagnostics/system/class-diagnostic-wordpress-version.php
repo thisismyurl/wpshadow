@@ -79,13 +79,23 @@ class Diagnostic_WordPress_Version extends Diagnostic_Base {
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
 		
+		global $wp_version;
 		$result = self::check();
 		
-		// TODO: Implement actual test logic
-		return array(
+		// Pattern: check() returns NULL when WP version >= 6.4 (healthy)
+		// Pattern: check() returns array when WP version < 6.4 (update available)
+		
+		if ($result === null) {
+			return [
+				'passed' => true,
+				'message' => "WordPress {$wp_version} is current or newer than required version 6.4",
+			];
+		}
+		
+		return [
 			'passed' => false,
-			'message' => 'Test not yet implemented',
-		);
+			'message' => "WordPress {$wp_version} is outdated. Version 6.4+ recommended",
+		];
 	}
 
 }

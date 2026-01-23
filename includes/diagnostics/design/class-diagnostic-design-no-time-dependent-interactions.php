@@ -50,22 +50,12 @@ class Diagnostic_Design_NO_TIME_DEPENDENT_INTERACTIONS extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live__design_no_time_dependent_interactions(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
-		);
+		if ($result === null) {
+			return ['passed' => true, 'message' => 'No problematic time-dependent UI interactions detected'];
+		}
+		$message = $result['description'] ?? 'Time-dependent interaction issue found';
+		return ['passed' => false, 'message' => $message];
 	}
 
 }

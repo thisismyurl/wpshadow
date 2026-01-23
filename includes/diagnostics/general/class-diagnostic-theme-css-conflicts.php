@@ -130,22 +130,12 @@ class Diagnostic_Theme_Css_Conflicts extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live_theme_css_conflicts(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented for ' . self::$slug,
-		);
+		if ($result === null) {
+			return ['passed' => true, 'message' => 'No CSS conflicts detected with plugins or customizations'];
+		}
+		$message = $result['description'] ?? 'CSS conflict detected';
+		return ['passed' => false, 'message' => $message];
 	}
 
 }

@@ -104,22 +104,12 @@ class Diagnostic_Asset_Versions_JS extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live_asset_versions_js(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented for ' . self::$slug,
-		);
+		if ($result === null) {
+			return ['passed' => true, 'message' => 'JavaScript assets have proper version cache-busting configured'];
+		}
+		$message = $result['description'] ?? 'JavaScript asset versioning issue detected';
+		return ['passed' => false, 'message' => $message];
 	}
 
 }

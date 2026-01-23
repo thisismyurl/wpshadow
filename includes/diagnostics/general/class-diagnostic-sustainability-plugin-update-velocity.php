@@ -130,22 +130,12 @@ class Diagnostic_Sustainability_Plugin_Update_Velocity extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live_sustainability_plugin_update_velocity(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented for ' . self::$slug,
-		);
+		if ($result === null) {
+			return ['passed' => true, 'message' => 'Plugins are updated regularly and actively maintained'];
+		}
+		$message = $result['description'] ?? 'Plugin maintenance issue detected';
+		return ['passed' => false, 'message' => $message];
 	}
 
 }

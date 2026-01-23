@@ -86,20 +86,31 @@ class Diagnostic_Payment_Gateway_Functional extends Diagnostic_Base {
 	public static function test_live_payment_gateway_functional(): array {
 		/*
 		 * IMPLEMENTATION NOTES:
-		 * - This test validates that payment gateways are properly configured
-		 * - Check if WooCommerce or EDD is installed and has configured gateways
-		 * - Call self::check() to verify the site state
-		 * - PASS: check() returns null (payment gateways enabled)
-		 * - FAIL: check() returns array (gateways not configured)
+		 * - This test validates the actual WordPress site state
+		 * - Do not use mocks or stubs
+		 * - Call self::check() to get the diagnostic result
+		 * - Verify the result matches expected site state
+		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
 		
 		$result = self::check();
 		
-		// TODO: Implement actual test logic
-		return array(
+		// Pattern: check() returns NULL when payment gateways are configured (healthy)
+		// Pattern: check() returns array when no gateways configured (issue)
+		
+		if ($result === null) {
+			return [
+				'passed' => true,
+				'message' => 'Payment gateways are properly configured and available',
+			];
+		}
+		
+		// Extract which platform has the issue
+		$message = $result['description'] ?? 'Payment gateway not configured';
+		return [
 			'passed' => false,
-			'message' => 'Test not yet implemented for ' . self::$slug,
-		);
+			'message' => $message,
+		];
 	}
 
 }

@@ -51,22 +51,12 @@ class Diagnostic_Design_DEBT_ANIMATION_COUNT extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live__design_debt_animation_count(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
-		);
+		if ($result === null) {
+			return ['passed' => true, 'message' => 'Animation count is optimized for performance'];
+		}
+		$message = $result['description'] ?? 'Excessive animations detected';
+		return ['passed' => false, 'message' => $message];
 	}
 
 }

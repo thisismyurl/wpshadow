@@ -28,22 +28,12 @@ class Diagnostic_Monitor_Site_Health_Score extends Diagnostic_Base { public stat
 	 * }
 	 */
 	public static function test_live__monitor_site_health_score(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
-		);
+		if ($result === null) {
+			return ['passed' => true, 'message' => 'Site health score is excellent and maintained'];
+		}
+		$message = $result['description'] ?? 'Site health concern detected';
+		return ['passed' => false, 'message' => $message];
 	}
 
 }

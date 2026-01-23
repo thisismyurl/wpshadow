@@ -51,22 +51,12 @@ class Diagnostic_Design_DATE_ARCHIVE_DESIGN extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live__design_date_archive_design(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
-		);
+		if ($result === null) {
+			return ['passed' => true, 'message' => 'Date archive pages are properly designed'];
+		}
+		$message = $result['description'] ?? 'Date archive design issue detected';
+		return ['passed' => false, 'message' => $message];
 	}
 
 }

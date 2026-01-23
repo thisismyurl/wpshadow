@@ -130,22 +130,12 @@ class Diagnostic_Sustainability_Wordpress_Core_Drift extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live_sustainability_wordpress_core_drift(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented for ' . self::$slug,
-		);
+		if ($result === null) {
+			return ['passed' => true, 'message' => 'Codebase follows WordPress standards and avoids core drift'];
+		}
+		$message = $result['description'] ?? 'WordPress core drift issue detected';
+		return ['passed' => false, 'message' => $message];
 	}
 
 }

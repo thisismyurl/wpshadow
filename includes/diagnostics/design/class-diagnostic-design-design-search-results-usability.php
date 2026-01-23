@@ -51,22 +51,12 @@ class Diagnostic_Design_DESIGN_SEARCH_RESULTS_USABILITY extends Diagnostic_Base 
 	 * }
 	 */
 	public static function test_live__design_design_search_results_usability(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
-		);
+		if ($result === null) {
+			return ['passed' => true, 'message' => 'Search results page is well-designed and usable'];
+		}
+		$message = $result['description'] ?? 'Search results usability issue detected';
+		return ['passed' => false, 'message' => $message];
 	}
 
 }

@@ -130,22 +130,12 @@ class Diagnostic_Development_Cost_Justification extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live_development_cost_justification(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented for ' . self::$slug,
-		);
+		if ($result === null) {
+			return ['passed' => true, 'message' => 'Development ROI and KPIs are well tracked'];
+		}
+		$message = $result['description'] ?? 'Development metrics tracking issue detected';
+		return ['passed' => false, 'message' => $message];
 	}
 
 }

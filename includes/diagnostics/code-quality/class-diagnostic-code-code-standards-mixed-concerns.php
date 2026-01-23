@@ -51,22 +51,12 @@ class Diagnostic_Code_CODE_STANDARDS_MIXED_CONCERNS extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live__code_code_standards_mixed_concerns(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
-		);
+		if ($result === null) {
+			return ['passed' => true, 'message' => 'Code separation of concerns is well maintained'];
+		}
+		$message = $result['description'] ?? 'Mixed concerns detected in code';
+		return ['passed' => false, 'message' => $message];
 	}
 
 }

@@ -73,11 +73,20 @@ class Diagnostic_Forgot_Password_Works extends Diagnostic_Base {
 		
 		$result = self::check();
 		
-		// TODO: Implement actual test logic
-		return array(
+		// Pattern: check() returns NULL when SMTP plugin is active (healthy)
+		// Pattern: check() returns array when no SMTP configured (issue found)
+		
+		if ($result === null) {
+			return [
+				'passed' => true,
+				'message' => 'Password reset emails are configured with SMTP plugin',
+			];
+		}
+		
+		return [
 			'passed' => false,
-			'message' => 'Test not yet implemented for ' . self::$slug,
-		);
+			'message' => 'Password reset relies on default PHP mail() - recommend SMTP plugin',
+		];
 	}
 
 }

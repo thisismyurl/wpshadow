@@ -101,11 +101,21 @@ class Diagnostic_Disk_Space extends Diagnostic_Base {
 		
 		$result = self::check();
 		
-		// TODO: Implement actual test logic
-		return array(
+		// Pattern: check() returns NULL when disk usage < 80% (healthy)
+		// Pattern: check() returns array when disk usage >= 80% (issue found)
+		
+		if ($result === null) {
+			return [
+				'passed' => true,
+				'message' => 'Disk space usage is healthy (less than 80%)',
+			];
+		}
+		
+		$usage = $result['disk_stats']['usage_percent'] ?? 0;
+		return [
 			'passed' => false,
-			'message' => 'Test not yet implemented for ' . self::$slug,
-		);
+			'message' => "Disk space usage is high at {$usage}%",
+		];
 	}
 
 }

@@ -51,22 +51,12 @@ class Diagnostic_Design_PAGE_HEADER_CONSISTENCY extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live__design_page_header_consistency(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
-		);
+		if ($result === null) {
+			return ['passed' => true, 'message' => 'Page headers are consistent across all pages'];
+		}
+		$message = $result['description'] ?? 'Page header consistency issue detected';
+		return ['passed' => false, 'message' => $message];
 	}
 
 }

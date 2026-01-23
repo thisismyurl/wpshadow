@@ -32,22 +32,12 @@ class Diagnostic_Monitor_Table_Corruption_Detection extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live__monitor_table_corruption_detection(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
-		);
+		if ($result === null) {
+			return ['passed' => true, 'message' => 'Database tables are healthy - no corruption detected'];
+		}
+		$message = $result['description'] ?? 'Database corruption detected';
+		return ['passed' => false, 'message' => $message];
 	}
 
 }

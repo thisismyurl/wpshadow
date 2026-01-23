@@ -130,22 +130,12 @@ class Diagnostic_Database_Transients_Stale extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live_database_transients_stale(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented for ' . self::$slug,
-		);
+		if ($result === null) {
+			return ['passed' => true, 'message' => 'No excessive stale transients in database'];
+		}
+		$message = $result['description'] ?? 'Stale transients buildup detected';
+		return ['passed' => false, 'message' => $message];
 	}
 
 }

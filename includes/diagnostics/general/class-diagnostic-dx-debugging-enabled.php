@@ -130,22 +130,12 @@ class Diagnostic_Dx_Debugging_Enabled extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live_dx_debugging_enabled(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented for ' . self::$slug,
-		);
+		if ($result === null) {
+			return ['passed' => true, 'message' => 'Debugging tools and logging are properly configured'];
+		}
+		$message = $result['description'] ?? 'Debugging configuration issue detected';
+		return ['passed' => false, 'message' => $message];
 	}
 
 }

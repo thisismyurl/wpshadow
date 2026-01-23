@@ -130,22 +130,12 @@ class Diagnostic_Dx_Code_Review_Process extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live_dx_code_review_process(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented for ' . self::$slug,
-		);
+		if ($result === null) {
+			return ['passed' => true, 'message' => 'Code review process is well-established'];
+		}
+		$message = $result['description'] ?? 'Code review process issue detected';
+		return ['passed' => false, 'message' => $message];
 	}
 
 }

@@ -28,22 +28,12 @@ class Diagnostic_Monitor_Third_Party_Script_Performance extends Diagnostic_Base 
 	 * }
 	 */
 	public static function test_live__monitor_third_party_script_performance(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
-		);
+		if ($result === null) {
+			return ['passed' => true, 'message' => 'Third-party scripts are optimized and performant'];
+		}
+		$message = $result['description'] ?? 'Third-party script performance issue detected';
+		return ['passed' => false, 'message' => $message];
 	}
 
 }

@@ -33,22 +33,12 @@ class Diagnostic_Monitor_Site_Uptime_Status extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live__monitor_site_uptime_status(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
-		);
+		if ($result === null) {
+			return ['passed' => true, 'message' => 'Site uptime is excellent - no significant downtime'];
+		}
+		$message = $result['description'] ?? 'Uptime issue detected';
+		return ['passed' => false, 'message' => $message];
 	}
 
 }

@@ -28,22 +28,12 @@ class Diagnostic_Monitor_Search_Intent_Alignment extends Diagnostic_Base { publi
 	 * }
 	 */
 	public static function test_live__monitor_search_intent_alignment(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
-		);
+		if ($result === null) {
+			return ['passed' => true, 'message' => 'Search results align well with user intent'];
+		}
+		$message = $result['description'] ?? 'Search intent alignment issue detected';
+		return ['passed' => false, 'message' => $message];
 	}
 
 }

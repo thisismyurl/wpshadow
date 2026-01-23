@@ -130,22 +130,12 @@ class Diagnostic_Dx_Cli_Commands_Available extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live_dx_cli_commands_available(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented for ' . self::$slug,
-		);
+		if ($result === null) {
+			return ['passed' => true, 'message' => 'CLI commands are well-documented and available'];
+		}
+		$message = $result['description'] ?? 'CLI commands availability issue detected';
+		return ['passed' => false, 'message' => $message];
 	}
 
 }
