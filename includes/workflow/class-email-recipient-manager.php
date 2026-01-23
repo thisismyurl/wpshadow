@@ -15,6 +15,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+require_once __DIR__ . '/../utils/class-email-service.php';
+
+use WPShadow\Utils\Email_Service;
+
 /**
  * Manages pre-approved email recipients
  */
@@ -66,7 +70,7 @@ class Email_Recipient_Manager {
 	 */
 	public static function request_recipient( $email, $send_verification = true ) {
 		// Validate email
-		if ( ! is_email( $email ) ) {
+		if ( ! Email_Service::is_valid( $email ) ) {
 			return array(
 				'success' => false,
 				'message' => 'Invalid email address.',
@@ -164,12 +168,9 @@ class Email_Recipient_Manager {
 			get_bloginfo( 'name' )
 		);
 
-		$sent = wp_mail( $email, $subject, $message );
+		$result = Email_Service::send( $email, $subject, $message, array(), array() );
 
-		return array(
-			'success' => $sent,
-			'message' => $sent ? 'Verification email sent.' : 'Failed to send verification email.',
-		);
+		return $result;
 	}
 
 	/**

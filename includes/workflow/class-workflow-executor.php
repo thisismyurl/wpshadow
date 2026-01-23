@@ -21,6 +21,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once __DIR__ . '/class-context-builder.php';
+require_once __DIR__ . '/../utils/class-email-service.php';
+
+use WPShadow\Utils\Email_Service;
 
 /**
  * Engine that evaluates triggers and executes workflow actions
@@ -161,14 +164,7 @@ class Workflow_Executor {
 	 * Handle plugin activated event
 	 */
 	public static function handle_plugin_activated( $plugin, $network_wide ) {
-		$context = array(
-			'trigger_type'  => 'event',
-			'event_type'    => 'plugin_state_changed',
-			'plugin_action' => 'activated',
-			'plugin'        => $plugin,
-			'network_wide'  => $network_wide,
-		);
-
+		$context = Context_Builder::build_plugin_state_changed( $plugin, 'activated' );
 		self::execute_matching_workflows( 'event_trigger', $context );
 	}
 
@@ -176,14 +172,7 @@ class Workflow_Executor {
 	 * Handle plugin deactivated event
 	 */
 	public static function handle_plugin_deactivated( $plugin, $network_wide ) {
-		$context = array(
-			'trigger_type'  => 'event',
-			'event_type'    => 'plugin_state_changed',
-			'plugin_action' => 'deactivated',
-			'plugin'        => $plugin,
-			'network_wide'  => $network_wide,
-		);
-
+		$context = Context_Builder::build_plugin_state_changed( $plugin, 'deactivated' );
 		self::execute_matching_workflows( 'event_trigger', $context );
 	}
 
@@ -787,12 +776,9 @@ class Workflow_Executor {
 		// Replace variables in message
 		$message = self::replace_variables( $message, $context );
 
-		$sent = wp_mail( $to, $subject, $message );
+		$result = Email_Service::send( $to, $subject, $message, array(), array() );
 
-		return array(
-			'success' => $sent,
-			'message' => $sent ? 'Email sent to ' . sanitize_email( $to ) . '.' : 'Failed to send email.',
-		);
+		return $result;
 	}
 
 	/**
@@ -1463,13 +1449,7 @@ class Workflow_Executor {
 	 * Handle error log entry
 	 */
 	public static function handle_error_logged( $error_level, $message ) {
-		$context = array(
-			'trigger_type' => 'error_log',
-			'error_level'  => $error_level,
-			'message'      => $message,
-			'timestamp'    => current_time( 'timestamp' ),
-		);
-
+		$context = Context_Builder::build_error_logged( $error_level, $message );
 		self::execute_matching_workflows( 'error_log_trigger', $context );
 	}
 
@@ -1481,19 +1461,7 @@ class Workflow_Executor {
 			return;
 		}
 
-		$metadata = array();
-		if ( isset( $activity['metadata'] ) && is_array( $activity['metadata'] ) ) {
-			$metadata = $activity['metadata'];
-		}
-
-		$context = array(
-			'trigger_type' => 'diagnostic_run',
-			'diagnostic'   => isset( $metadata['diagnostic'] ) ? (string) $metadata['diagnostic'] : '',
-			'source'       => isset( $metadata['trigger'] ) ? (string) $metadata['trigger'] : 'unknown',
-			'found_issue'  => ! empty( $metadata['found_issue'] ),
-			'finding_id'   => isset( $metadata['finding_id'] ) ? (string) $metadata['finding_id'] : '',
-		);
-
+		$context = Context_Builder::build_diagnostic_run( $activity );
 		self::execute_matching_workflows( 'diagnostic_run_trigger', $context );
 	}
 
