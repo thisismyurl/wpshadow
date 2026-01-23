@@ -1,6 +1,6 @@
 # WPShadow Product Philosophy
 
-**Version:** 2.0  
+**Version:** 2.0
 **Last Updated:** January 21, 2026
 
 > 📘 **See Also:** [PRODUCT_ECOSYSTEM.md](PRODUCT_ECOSYSTEM.md) for complete product family architecture
@@ -244,6 +244,37 @@ Users should feel *empowered*, not overwhelmed. The experience should be so intu
 - "This is safe to apply"
 - "Here's exactly what will happen"
 
+**Accessibility (Non-Negotiable):**
+- Semantic HTML with proper heading hierarchy (h1→h2→h3)
+- ARIA labels for all interactive elements
+- Text alternatives for all visual content
+- Skip links to main content areas
+- Clear visible focus indicators
+- WCAG AA color contrast minimum (4.5:1 text, 3:1 UI)
+- Keyboard navigation for all features
+- Screen reader tested (NVDA, JAWS, VoiceOver)
+
+**Why Accessibility Matters:**
+- ~15% of WordPress users have disabilities
+- Accessible = better for everyone (mobile, keyboard users, internationalization)
+- Legal requirement in many jurisdictions
+- Inspires confidence that we care about ALL users
+- Screen readers are assistive technology—we support them, never replace them
+
+**Anti-Patterns:**
+- ❌ Using audio to replace text (breaks screen readers)
+- ❌ Color-only indicators (add text/icons)
+- ❌ Keyboard traps or inaccessible modals
+- ❌ Missing alt text or aria-labels
+- ❌ Low contrast text
+
+**Correct Pattern:**
+- ✅ Test every view with NVDA/VoiceOver
+- ✅ All images have descriptive alt text
+- ✅ All buttons have clear labels
+- ✅ All forms have proper label associations
+- ✅ Focus states are visible and clear
+
 **Education:**
 - Tooltips explain terms
 - Icons are intuitive
@@ -397,28 +428,28 @@ Build features so innovative, design so polished, and value so clear that people
 ## The Sales Funnel (Education-First)
 
 ### Stage 1: Discovery (Free Plugin)
-**Goal:** Demonstrate immediate value, build trust  
-**User Action:** Install, run first scan, see results  
+**Goal:** Demonstrate immediate value, build trust
+**User Action:** Install, run first scan, see results
 **Our Action:** Auto-fix what we can, explain everything, show time saved
 
 ### Stage 2: Education (KB + Training)
-**Goal:** Empower users, establish expertise  
-**User Action:** Click KB links, watch training videos  
+**Goal:** Empower users, establish expertise
+**User Action:** Click KB links, watch training videos
 **Our Action:** Deliver genuine value, teach real skills, build confidence
 
 ### Stage 3: Awareness (Continued Use)
-**Goal:** Daily value, monthly KPI demonstration  
-**User Action:** Use dashboard, apply fixes, track improvements  
+**Goal:** Daily value, monthly KPI demonstration
+**User Action:** Use dashboard, apply fixes, track improvements
 **Our Action:** Show cumulative value, highlight achievements
 
 ### Stage 4: Registration (Cloud Features)
-**Goal:** Natural upgrade to free tier of Pro features  
-**User Action:** Register for cloud scanning, email notifications  
+**Goal:** Natural upgrade to free tier of Pro features
+**User Action:** Register for cloud scanning, email notifications
 **Our Action:** Generous free tier, clear value prop, no pressure
 
 ### Stage 5: Conversion (Pro Addon)
-**Goal:** Paid upgrade when needs exceed free tier  
-**User Action:** Upgrade for unlimited usage/advanced features  
+**Goal:** Paid upgrade when needs exceed free tier
+**User Action:** Upgrade for unlimited usage/advanced features
 **Our Action:** Usage-based pricing, clear value, easy downgrade
 
 **Key:** Each stage delivers value independently. Users should feel good stopping at any stage.
@@ -501,13 +532,13 @@ We've achieved the philosophy when:
 
 ## Anti-Goals (What We're Not)
 
-❌ **Not a lead gen tool** - We're a helpful plugin that happens to have a business model  
-❌ **Not freemium** - We're generous free with optional paid enhancements  
-❌ **Not nagware** - We never interrupt to sell  
-❌ **Not a gateway drug** - Free version is fully functional  
-❌ **Not a data harvester** - We collect only what we need, with consent  
-❌ **Not a black box** - Everything is explained  
-❌ **Not "good enough"** - We're excellent or we don't ship  
+❌ **Not a lead gen tool** - We're a helpful plugin that happens to have a business model
+❌ **Not freemium** - We're generous free with optional paid enhancements
+❌ **Not nagware** - We never interrupt to sell
+❌ **Not a gateway drug** - Free version is fully functional
+❌ **Not a data harvester** - We collect only what we need, with consent
+❌ **Not a black box** - Everything is explained
+❌ **Not "good enough"** - We're excellent or we don't ship
 
 ---
 
