@@ -90,7 +90,7 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 	<p><?php esc_html_e( 'Test your WordPress email delivery and configure the From Name and From Email address.', 'wpshadow' ); ?></p>
 
 	<?php if ( $test_results ) : ?>
-		<div class="notice notice-<?php echo $test_results['success'] ? 'success' : 'error'; ?> is-dismissible">
+		<div class="notice notice-<?php echo esc_attr( $test_results['success'] ? 'success' : 'error' ); ?> is-dismissible">
 			<p>
 				<?php if ( $test_results['success'] ) : ?>
 					<strong><?php esc_html_e( 'Test email sent successfully!', 'wpshadow' ); ?></strong><br>

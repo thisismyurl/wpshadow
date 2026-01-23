@@ -28,12 +28,7 @@ class Generate_Workflow_Name_Handler extends AJAX_Handler_Base {
 	 */
 	public static function handle(): void {
 		// Verify nonce only, no capability required for name generation
-		$nonce = isset( $_REQUEST['nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ) : '';
-		
-		if ( ! wp_verify_nonce( $nonce, 'wpshadow_workflow' ) ) {
-			wp_send_json_error( [ 'message' => 'Security check failed.' ] );
-			return;
-		}
+		self::verify_request( 'wpshadow_workflow', 'read' );
 
 		$name = Workflow_Manager::generate_silly_name();
 
