@@ -20,6 +20,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+require_once __DIR__ . '/class-context-builder.php';
+
 /**
  * Engine that evaluates triggers and executes workflow actions
  */
@@ -80,20 +82,7 @@ class Workflow_Executor {
 			return;
 		}
 
-		$context = array(
-			'trigger_type'  => 'page_load',
-			'context'       => 'frontend',
-			'is_admin'      => false,
-			'post_type'     => get_post_type(),
-			'is_single'     => is_single(),
-			'is_page'       => is_page(),
-			'is_archive'    => is_archive(),
-			'is_category'   => is_category(),
-			'is_tag'        => is_tag(),
-			'is_home'       => is_home(),
-			'is_front_page' => is_front_page(),
-		);
-
+		$context = Context_Builder::build_frontend_page_load();
 		self::execute_matching_workflows( 'page_load_trigger', $context );
 	}
 
@@ -112,13 +101,7 @@ class Workflow_Executor {
 	}
 
 	/**
-	 * Handle scheduled time-based triggers
-	 */
-	public static function handle_scheduled_triggers() {
-		$workflows = Workflow_Manager::get_workflows();
-
-		foreach ( $workflows as $workflow ) {
-			if ( ! $workflow['enabled'] ) {
+	 * Handle scContext_Builder::build_admin_page_load();			if ( ! $workflow['enabled'] ) {
 				continue;
 			}
 
@@ -128,7 +111,7 @@ class Workflow_Executor {
 				}
 
 				if ( self::should_execute_time_trigger( $block['config'] ) ) {
-					self::execute_workflow( $workflow, array( 'trigger_type' => 'time' ) );
+					self::execute_workflow( $workflow, Context_Builder::build_time_trigger() );
 				}
 			}
 		}
@@ -208,27 +191,16 @@ class Workflow_Executor {
 	 * Handle theme changed event
 	 */
 	public static function handle_theme_changed( $new_name, $new_theme, $old_theme ) {
-		$context = array(
-			'trigger_type' => 'event',
-			'event_type'   => 'theme_changed',
-			'new_theme'    => $new_name,
-			'old_theme'    => $old_theme->get( 'Name' ),
-		);
-
-		self::execute_matching_workflows( 'event_trigger', $context );
+		$context = Context_Builder::build_theme_switched( $new_name, $new_theme, $old_theme );
+		self::execute_matching_workflows( 'theme_switched', $context );
 	}
 
 	/**
 	 * Handle user registered event
 	 */
 	public static function handle_user_registered( $user_id ) {
-		$context = array(
-			'trigger_type' => 'event',
-			'event_type'   => 'user_registered',
-			'user_id'      => $user_id,
-		);
-
-		self::execute_matching_workflows( 'event_trigger', $context );
+		$context = Context_Builder::build_user_registered( $user_id );
+		self::execute_matching_workflows( 'user_register', $context );
 	}
 
 	/**
@@ -240,16 +212,8 @@ class Workflow_Executor {
 			return;
 		}
 
-		$context = array(
-			'trigger_type' => 'event',
-			'event_type'   => 'post_status_changed',
-			'post_status'  => $new_status,
-			'old_status'   => $old_status,
-			'post_id'      => $post->ID,
-			'post_type'    => $post->post_type,
-		);
-
-		self::execute_matching_workflows( 'event_trigger', $context );
+		$context = Context_Builder::build_post_status_changed( $new_status, $old_status, $post );
+		self::execute_matching_workflows( 'post_status_changed', $context );
 	}
 
 	/**
