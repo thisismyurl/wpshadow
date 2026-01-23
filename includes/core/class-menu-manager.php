@@ -1,4 +1,5 @@
 <?php
+
 /**
  * WPShadow Menu Manager
  *
@@ -13,23 +14,25 @@
 
 namespace WPShadow\Core;
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit;
 }
 
 /**
  * Manages WPShadow admin menu registration and setup
  */
-class Menu_Manager {
+class Menu_Manager
+{
 
 	/**
 	 * Initialize menus (call on admin_menu hook)
 	 *
 	 * @return void
 	 */
-	public static function init() {
-		add_action( 'admin_menu', [ __CLASS__, 'register_menus' ] );
-		add_action( 'admin_init', [ __CLASS__, 'handle_legacy_redirects' ] );
+	public static function init()
+	{
+		add_action('admin_menu', [__CLASS__, 'register_menus']);
+		add_action('admin_init', [__CLASS__, 'handle_legacy_redirects']);
 	}
 
 	/**
@@ -37,7 +40,8 @@ class Menu_Manager {
 	 *
 	 * @return void
 	 */
-	public static function register_menus() {
+	public static function register_menus()
+	{
 		// Top-level menu
 		add_menu_page(
 			'WPShadow',
@@ -52,8 +56,8 @@ class Menu_Manager {
 		// Dashboard submenu
 		add_submenu_page(
 			'wpshadow',
-			__( 'Dashboard', 'wpshadow' ),
-			__( 'Dashboard', 'wpshadow' ),
+			__('Dashboard', 'wpshadow'),
+			__('Dashboard', 'wpshadow'),
 			'read',
 			'wpshadow',
 			'wpshadow_render_dashboard'
@@ -62,8 +66,8 @@ class Menu_Manager {
 		// Action Items (Kanban Board)
 		add_submenu_page(
 			'wpshadow',
-			__( 'Action Items', 'wpshadow' ),
-			__( 'Action Items', 'wpshadow' ),
+			__('Action Items', 'wpshadow'),
+			__('Action Items', 'wpshadow'),
 			'read',
 			'wpshadow-action-items',
 			'wpshadow_render_action_items'
@@ -72,8 +76,8 @@ class Menu_Manager {
 		// Guardian (Diagnostics & Treatments System)
 		add_submenu_page(
 			'wpshadow',
-			__( 'Guardian', 'wpshadow' ),
-			__( 'Guardian', 'wpshadow' ),
+			__('Guardian', 'wpshadow'),
+			__('Guardian', 'wpshadow'),
 			'read',
 			'wpshadow-guardian',
 			'wpshadow_render_guardian'
@@ -82,8 +86,8 @@ class Menu_Manager {
 		// Workflows (Automation)
 		add_submenu_page(
 			'wpshadow',
-			__( 'Workflows', 'wpshadow' ),
-			__( 'Workflows', 'wpshadow' ),
+			__('Workflows', 'wpshadow'),
+			__('Workflows', 'wpshadow'),
 			'read',
 			'wpshadow-workflows',
 			'wpshadow_render_workflow_builder'
@@ -92,8 +96,8 @@ class Menu_Manager {
 		// Reports (Analytics & Insights)
 		add_submenu_page(
 			'wpshadow',
-			__( 'Reports', 'wpshadow' ),
-			__( 'Reports', 'wpshadow' ),
+			__('Reports', 'wpshadow'),
+			__('Reports', 'wpshadow'),
 			'manage_options',
 			'wpshadow-reports',
 			'wpshadow_render_reports'
@@ -102,8 +106,8 @@ class Menu_Manager {
 		// Settings (including Notifications)
 		add_submenu_page(
 			'wpshadow',
-			__( 'Settings', 'wpshadow' ),
-			__( 'Settings', 'wpshadow' ),
+			__('Settings', 'wpshadow'),
+			__('Settings', 'wpshadow'),
 			'manage_options',
 			'wpshadow-settings',
 			'wpshadow_render_settings'
@@ -112,8 +116,8 @@ class Menu_Manager {
 		// Tools (Utilities & Features)
 		add_submenu_page(
 			'wpshadow',
-			__( 'Tools', 'wpshadow' ),
-			__( 'Tools', 'wpshadow' ),
+			__('Tools', 'wpshadow'),
+			__('Tools', 'wpshadow'),
 			'read',
 			'wpshadow-tools',
 			'wpshadow_render_tools'
@@ -122,8 +126,8 @@ class Menu_Manager {
 		// Help & Documentation
 		add_submenu_page(
 			'wpshadow',
-			__( 'Help', 'wpshadow' ),
-			__( 'Help', 'wpshadow' ),
+			__('Help', 'wpshadow'),
+			__('Help', 'wpshadow'),
 			'read',
 			'wpshadow-help',
 			'wpshadow_render_help'
@@ -135,22 +139,23 @@ class Menu_Manager {
 	 *
 	 * @return void
 	 */
-	public static function handle_legacy_redirects() {
-		if ( ! isset( $_GET['page'] ) ) {
+	public static function handle_legacy_redirects()
+	{
+		if (! isset($_GET['page'])) {
 			return;
 		}
 
-		$page = sanitize_text_field( wp_unslash( $_GET['page'] ) );
+		$page = sanitize_text_field(wp_unslash($_GET['page']));
 		$redirects = array(
 			'wpshadow-guardian-reports'       => 'wpshadow-reports',
 			'wpshadow-guardian-notifications' => 'wpshadow-settings&tab=notifications',
 		);
 
-		if ( isset( $redirects[ $page ] ) ) {
-			$capability = ( 'wpshadow-guardian-reports' === $page || 'wpshadow-guardian-notifications' === $page ) ? 'manage_options' : 'read';
+		if (isset($redirects[$page])) {
+			$capability = ('wpshadow-guardian-reports' === $page || 'wpshadow-guardian-notifications' === $page) ? 'manage_options' : 'read';
 
-			if ( current_user_can( $capability ) ) {
-				wp_safe_redirect( admin_url( 'admin.php?page=' . $redirects[ $page ] ) );
+			if (current_user_can($capability)) {
+				wp_safe_redirect(admin_url('admin.php?page=' . $redirects[$page]));
 				exit;
 			}
 		}
@@ -162,9 +167,10 @@ class Menu_Manager {
 	 * @param array $links Plugin action links.
 	 * @return array Modified action links.
 	 */
-	public static function add_settings_link( $links ) {
-		$settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=wpshadow' ) ) . '">Settings</a>';
-		array_unshift( $links, $settings_link );
+	public static function add_settings_link($links)
+	{
+		$settings_link = '<a href="' . esc_url(admin_url('admin.php?page=wpshadow')) . '">Settings</a>';
+		array_unshift($links, $settings_link);
 		return $links;
 	}
 }

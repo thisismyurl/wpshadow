@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name: WPShadow
  * Description: Minimal bootstrap to show WPShadow menu and Settings link.
@@ -6,14 +7,14 @@
  * Author: thisismyurl
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-exit;
+if (! defined('ABSPATH')) {
+	exit;
 }
 
-define( 'WPSHADOW_VERSION', '1.2601.2148' );
-define( 'WPSHADOW_BASENAME', plugin_basename( __FILE__ ) );
-define( 'WPSHADOW_PATH', plugin_dir_path( __FILE__ ) );
-define( 'WPSHADOW_URL', plugin_dir_url( __FILE__ ) );
+define('WPSHADOW_VERSION', '1.2601.2148');
+define('WPSHADOW_BASENAME', plugin_basename(__FILE__));
+define('WPSHADOW_PATH', plugin_dir_path(__FILE__));
+define('WPSHADOW_URL', plugin_dir_url(__FILE__));
 
 /**
  * Load essential base classes (required by all other systems)
@@ -44,6 +45,6 @@ require_once WPSHADOW_PATH . 'includes/core/class-ajax-router.php';
 require_once WPSHADOW_PATH . 'includes/core/class-hooks-initializer.php';
 require_once WPSHADOW_PATH . 'includes/core/class-plugin-bootstrap.php';
 
-add_action( 'plugins_loaded', function() {
-\WPShadow\Core\Plugin_Bootstrap::init();
-} );
+add_action('plugins_loaded', function () {
+	\WPShadow\Core\Plugin_Bootstrap::init();
+});

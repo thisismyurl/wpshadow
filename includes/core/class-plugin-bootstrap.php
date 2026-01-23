@@ -1,4 +1,5 @@
 <?php
+
 /**
  * WPShadow Plugin Bootstrap
  *
@@ -13,14 +14,15 @@
 
 namespace WPShadow\Core;
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit;
 }
 
 /**
  * Service registry and plugin initialization orchestrator
  */
-class Plugin_Bootstrap {
+class Plugin_Bootstrap
+{
 
 	/**
 	 * Initialize all WPShadow systems
@@ -29,7 +31,8 @@ class Plugin_Bootstrap {
 	 *
 	 * @return void
 	 */
-	public static function init() {
+	public static function init()
+	{
 		// 1. Load core base classes (required before everything else)
 		self::load_core_classes();
 
@@ -55,7 +58,7 @@ class Plugin_Bootstrap {
 		self::load_cli_commands();
 
 		// 9. Fire initialization complete hook
-		do_action( 'wpshadow_core_initialized' );
+		do_action('wpshadow_core_initialized');
 	}
 
 	/**
@@ -63,7 +66,8 @@ class Plugin_Bootstrap {
 	 *
 	 * @return void
 	 */
-	private static function load_core_classes() {
+	private static function load_core_classes()
+	{
 		$core_path = WPSHADOW_PATH . 'includes/core/';
 
 		// Already loaded by wpshadow.php:
@@ -76,35 +80,35 @@ class Plugin_Bootstrap {
 		// - class-error-handler.php
 
 		// Load additional core classes
-		if ( file_exists( $core_path . 'class-kpi-tracker.php' ) ) {
+		if (file_exists($core_path . 'class-kpi-tracker.php')) {
 			require_once $core_path . 'class-kpi-tracker.php';
 		}
 
-		if ( file_exists( $core_path . 'class-finding-status-manager.php' ) ) {
+		if (file_exists($core_path . 'class-finding-status-manager.php')) {
 			require_once $core_path . 'class-finding-status-manager.php';
 		}
 
-		if ( file_exists( $core_path . 'class-tooltip-manager.php' ) ) {
+		if (file_exists($core_path . 'class-tooltip-manager.php')) {
 			require_once $core_path . 'class-tooltip-manager.php';
 		}
 
-		if ( file_exists( $core_path . 'class-dashboard-widgets.php' ) ) {
+		if (file_exists($core_path . 'class-dashboard-widgets.php')) {
 			require_once $core_path . 'class-dashboard-widgets.php';
 		}
 
-		if ( file_exists( $core_path . 'class-site-health-explanations.php' ) ) {
+		if (file_exists($core_path . 'class-site-health-explanations.php')) {
 			require_once $core_path . 'class-site-health-explanations.php';
 		}
 
-		if ( file_exists( $core_path . 'class-treatment-hooks.php' ) ) {
+		if (file_exists($core_path . 'class-treatment-hooks.php')) {
 			require_once $core_path . 'class-treatment-hooks.php';
 		}
 
-		if ( file_exists( $core_path . 'class-trend-chart.php' ) ) {
+		if (file_exists($core_path . 'class-trend-chart.php')) {
 			require_once $core_path . 'class-trend-chart.php';
 		}
 
-		if ( file_exists( $core_path . 'class-abstract-registry.php' ) ) {
+		if (file_exists($core_path . 'class-abstract-registry.php')) {
 			require_once $core_path . 'class-abstract-registry.php';
 		}
 	}
@@ -114,7 +118,8 @@ class Plugin_Bootstrap {
 	 *
 	 * @return void
 	 */
-	private static function load_engage_system() {
+	private static function load_engage_system()
+	{
 		$engage_path = WPSHADOW_PATH . 'includes/engage/';
 
 		$engage_classes = array(
@@ -125,30 +130,30 @@ class Plugin_Bootstrap {
 			'class-milestone.php',
 		);
 
-		foreach ( $engage_classes as $file ) {
-			if ( file_exists( $engage_path . $file ) ) {
+		foreach ($engage_classes as $file) {
+			if (file_exists($engage_path . $file)) {
 				require_once $engage_path . $file;
 			}
 		}
 
 		// Initialize engage systems
-		if ( class_exists( '\\WPShadow\\Engage\\Achievement' ) ) {
+		if (class_exists('\\WPShadow\\Engage\\Achievement')) {
 			\WPShadow\Engage\Achievement::init();
 		}
 
-		if ( class_exists( '\\WPShadow\\Engage\\Streak' ) ) {
+		if (class_exists('\\WPShadow\\Engage\\Streak')) {
 			\WPShadow\Engage\Streak::init();
 		}
 
-		if ( class_exists( '\\WPShadow\\Engage\\Leaderboard' ) ) {
+		if (class_exists('\\WPShadow\\Engage\\Leaderboard')) {
 			\WPShadow\Engage\Leaderboard::init();
 		}
 
-		if ( class_exists( '\\WPShadow\\Engage\\Badge' ) ) {
+		if (class_exists('\\WPShadow\\Engage\\Badge')) {
 			\WPShadow\Engage\Badge::init();
 		}
 
-		if ( class_exists( '\\WPShadow\\Engage\\Milestone' ) ) {
+		if (class_exists('\\WPShadow\\Engage\\Milestone')) {
 			\WPShadow\Engage\Milestone::init();
 		}
 	}
@@ -158,13 +163,14 @@ class Plugin_Bootstrap {
 	 *
 	 * @return void
 	 */
-	private static function load_performance_optimizer() {
+	private static function load_performance_optimizer()
+	{
 		$optimizer_path = WPSHADOW_PATH . 'includes/optimizer/';
 
-		if ( file_exists( $optimizer_path . 'class-performance-optimizer.php' ) ) {
+		if (file_exists($optimizer_path . 'class-performance-optimizer.php')) {
 			require_once $optimizer_path . 'class-performance-optimizer.php';
 
-			if ( class_exists( '\\WPShadow\\Optimizer\\Performance_Optimizer' ) ) {
+			if (class_exists('\\WPShadow\\Optimizer\\Performance_Optimizer')) {
 				\WPShadow\Optimizer\Performance_Optimizer::init();
 			}
 		}
@@ -175,13 +181,14 @@ class Plugin_Bootstrap {
 	 *
 	 * @return void
 	 */
-	private static function load_onboarding_system() {
+	private static function load_onboarding_system()
+	{
 		$onboarding_path = WPSHADOW_PATH . 'includes/onboarding/';
 
-		if ( file_exists( $onboarding_path . 'class-onboarding-wizard.php' ) ) {
+		if (file_exists($onboarding_path . 'class-onboarding-wizard.php')) {
 			require_once $onboarding_path . 'class-onboarding-wizard.php';
 
-			if ( class_exists( '\\WPShadow\\Onboarding\\Onboarding_Wizard' ) ) {
+			if (class_exists('\\WPShadow\\Onboarding\\Onboarding_Wizard')) {
 				\WPShadow\Onboarding\Onboarding_Wizard::init();
 			}
 		}
@@ -192,9 +199,10 @@ class Plugin_Bootstrap {
 	 *
 	 * @return void
 	 */
-	private static function load_pro_integration() {
+	private static function load_pro_integration()
+	{
 		// Load pro addon if available (separate plugin)
-		do_action( 'wpshadow_load_pro_features' );
+		do_action('wpshadow_load_pro_features');
 	}
 
 	/**
@@ -202,14 +210,15 @@ class Plugin_Bootstrap {
 	 *
 	 * @return void
 	 */
-	private static function load_cli_commands() {
-		if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
+	private static function load_cli_commands()
+	{
+		if (! defined('WP_CLI') || ! WP_CLI) {
 			return;
 		}
 
 		$cli_path = WPSHADOW_PATH . 'includes/cli/';
 
-		if ( file_exists( $cli_path . 'class-wpshadow-cli.php' ) ) {
+		if (file_exists($cli_path . 'class-wpshadow-cli.php')) {
 			require_once $cli_path . 'class-wpshadow-cli.php';
 
 			// CLI will auto-register
@@ -224,7 +233,8 @@ class Plugin_Bootstrap {
 	 *     @type array $errors Any initialization errors
 	 * }
 	 */
-	public static function get_status() {
+	public static function get_status()
+	{
 		return array(
 			'ready'  => true,
 			'errors' => array(),
