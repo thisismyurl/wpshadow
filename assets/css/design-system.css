@@ -267,6 +267,258 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
 }
 
 /* ============================================================================
+    5. UTILITY CLASSES - Spacing
+    ============================================================================ */
+
+.wps-m-0 { margin: 0; }
+.wps-m-1 { margin: var(--wps-space-1); }
+.wps-m-2 { margin: var(--wps-space-2); }
+.wps-m-3 { margin: var(--wps-space-3); }
+.wps-m-4 { margin: var(--wps-space-4); }
+.wps-m-5 { margin: var(--wps-space-5); }
+.wps-m-6 { margin: var(--wps-space-6); }
+.wps-m-8 { margin: var(--wps-space-8); }
+.wps-m-10 { margin: var(--wps-space-10); }
+.wps-m-12 { margin: var(--wps-space-12); }
+.wps-m-16 { margin: var(--wps-space-16); }
+
+.wps-mt-0 { margin-top: 0; }
+.wps-mt-1 { margin-top: var(--wps-space-1); }
+.wps-mt-2 { margin-top: var(--wps-space-2); }
+.wps-mt-3 { margin-top: var(--wps-space-3); }
+.wps-mt-4 { margin-top: var(--wps-space-4); }
+.wps-mt-5 { margin-top: var(--wps-space-5); }
+.wps-mt-6 { margin-top: var(--wps-space-6); }
+.wps-mt-8 { margin-top: var(--wps-space-8); }
+
+.wps-mr-0 { margin-right: 0; }
+.wps-mr-1 { margin-right: var(--wps-space-1); }
+.wps-mr-2 { margin-right: var(--wps-space-2); }
+.wps-mr-3 { margin-right: var(--wps-space-3); }
+.wps-mr-4 { margin-right: var(--wps-space-4); }
+.wps-mr-5 { margin-right: var(--wps-space-5); }
+.wps-mr-6 { margin-right: var(--wps-space-6); }
+.wps-mr-8 { margin-right: var(--wps-space-8); }
+
+.wps-mb-0 { margin-bottom: 0; }
+.wps-mb-1 { margin-bottom: var(--wps-space-1); }
+.wps-mb-2 { margin-bottom: var(--wps-space-2); }
+.wps-mb-3 { margin-bottom: var(--wps-space-3); }
+.wps-mb-4 { margin-bottom: var(--wps-space-4); }
+.wps-mb-5 { margin-bottom: var(--wps-space-5); }
+.wps-mb-6 { margin-bottom: var(--wps-space-6); }
+.wps-mb-8 { margin-bottom: var(--wps-space-8); }
+
+.wps-ml-0 { margin-left: 0; }
+.wps-ml-1 { margin-left: var(--wps-space-1); }
+.wps-ml-2 { margin-left: var(--wps-space-2); }
+.wps-ml-3 { margin-left: var(--wps-space-3); }
+.wps-ml-4 { margin-left: var(--wps-space-4); }
+
+.wps-p-0 { padding: 0; }
+.wps-p-1 { padding: var(--wps-space-1); }
+.wps-p-2 { padding: var(--wps-space-2); }
+.wps-p-3 { padding: var(--wps-space-3); }
+.wps-p-4 { padding: var(--wps-space-4); }
+.wps-p-5 { padding: var(--wps-space-5); }
+.wps-p-6 { padding: var(--wps-space-6); }
+.wps-p-8 { padding: var(--wps-space-8); }
+.wps-p-10 { padding: var(--wps-space-10); }
+
+.wps-pt-1 { padding-top: var(--wps-space-1); }
+.wps-pt-2 { padding-top: var(--wps-space-2); }
+.wps-pt-3 { padding-top: var(--wps-space-3); }
+.wps-pt-4 { padding-top: var(--wps-space-4); }
+.wps-pt-6 { padding-top: var(--wps-space-6); }
+.wps-pt-8 { padding-top: var(--wps-space-8); }
+
+.wps-pr-1 { padding-right: var(--wps-space-1); }
+.wps-pr-2 { padding-right: var(--wps-space-2); }
+.wps-pr-3 { padding-right: var(--wps-space-3); }
+.wps-pr-4 { padding-right: var(--wps-space-4); }
+
+.wps-pb-0 { padding-bottom: 0; }
+.wps-pb-1 { padding-bottom: var(--wps-space-1); }
+.wps-pb-2 { padding-bottom: var(--wps-space-2); }
+.wps-pb-3 { padding-bottom: var(--wps-space-3); }
+.wps-pb-4 { padding-bottom: var(--wps-space-4); }
+.wps-pb-6 { padding-bottom: var(--wps-space-6); }
+
+.wps-pl-1 { padding-left: var(--wps-space-1); }
+.wps-pl-2 { padding-left: var(--wps-space-2); }
+.wps-pl-3 { padding-left: var(--wps-space-3); }
+.wps-pl-4 { padding-left: var(--wps-space-4); }
+
+/* ============================================================================
+    6. UTILITY CLASSES - Typography
+    ============================================================================ */
+
+.wps-text-xs { font-size: var(--wps-text-xs); }
+.wps-text-sm { font-size: var(--wps-text-sm); }
+.wps-text-base { font-size: var(--wps-text-base); }
+.wps-text-lg { font-size: var(--wps-text-lg); }
+.wps-text-xl { font-size: var(--wps-text-xl); }
+.wps-text-2xl { font-size: var(--wps-text-2xl); }
+.wps-text-3xl { font-size: var(--wps-text-3xl); }
+.wps-text-4xl { font-size: var(--wps-text-4xl); }
+
+.wps-font-normal { font-weight: var(--wps-font-normal); }
+.wps-font-medium { font-weight: var(--wps-font-medium); }
+.wps-font-semibold { font-weight: var(--wps-font-semibold); }
+.wps-font-bold { font-weight: var(--wps-font-bold); }
+
+.wps-uppercase { text-transform: uppercase; }
+.wps-capitalize { text-transform: capitalize; }
+.wps-lowercase { text-transform: lowercase; }
+
+.wps-no-underline { text-decoration: none; }
+.wps-underline { text-decoration: underline; }
+
+.wps-leading-tight { line-height: 1.3; }
+.wps-leading-normal { line-height: 1.5; }
+.wps-leading-relaxed { line-height: 1.6; }
+
+.wps-tracking-tight { letter-spacing: -0.01em; }
+.wps-tracking-normal { letter-spacing: 0; }
+.wps-tracking-wide { letter-spacing: 0.05em; }
+.wps-tracking-wider { letter-spacing: 0.1em; }
+
+.wps-text-white { color: white; }
+.wps-text-gray-400 { color: var(--wps-gray-400); }
+.wps-text-gray-500 { color: var(--wps-gray-500); }
+.wps-text-gray-600 { color: var(--wps-gray-600); }
+.wps-text-gray-700 { color: var(--wps-gray-700); }
+.wps-text-gray-800 { color: var(--wps-gray-800); }
+.wps-text-gray-900 { color: var(--wps-gray-900); }
+.wps-text-primary { color: var(--wps-primary); }
+.wps-text-success { color: var(--wps-success); }
+.wps-text-warning { color: var(--wps-warning); }
+.wps-text-danger { color: var(--wps-danger); }
+.wps-text-info { color: var(--wps-info); }
+
+/* ============================================================================
+    7. UTILITY CLASSES - Icons
+    ============================================================================ */
+
+.wps-icon-xs { font-size: 12px; width: 12px; height: 12px; }
+.wps-icon-sm { font-size: 16px; width: 16px; height: 16px; }
+.wps-icon-md { font-size: 24px; width: 24px; height: 24px; }
+.wps-icon-lg { font-size: 32px; width: 32px; height: 32px; }
+.wps-icon-xl { font-size: 40px; width: 40px; height: 40px; }
+
+.wps-icon-primary { color: var(--wps-primary); }
+.wps-icon-success { color: var(--wps-success); }
+.wps-icon-warning { color: var(--wps-warning); }
+.wps-icon-danger { color: var(--wps-danger); }
+.wps-icon-info { color: var(--wps-info); }
+.wps-icon-gray-400 { color: var(--wps-gray-400); }
+.wps-icon-gray-500 { color: var(--wps-gray-500); }
+.wps-icon-gray-600 { color: var(--wps-gray-600); }
+.wps-icon-white { color: white; }
+
+.wps-icon-mr-0 { margin-right: 0; }
+.wps-icon-mr-1 { margin-right: var(--wps-space-1); }
+.wps-icon-mr-2 { margin-right: var(--wps-space-2); }
+.wps-icon-mr-3 { margin-right: var(--wps-space-3); }
+.wps-icon-mr-4 { margin-right: var(--wps-space-4); }
+
+.wps-icon-mb-1 { margin-bottom: var(--wps-space-1); }
+.wps-icon-mb-2 { margin-bottom: var(--wps-space-2); }
+.wps-icon-mb-3 { margin-bottom: var(--wps-space-3); }
+
+.wps-icon-mt-1 { margin-top: var(--wps-space-1); }
+.wps-icon-mt-2 { margin-top: var(--wps-space-2); }
+
+/* ============================================================================
+    8. UTILITY CLASSES - Flexbox & Display
+    ============================================================================ */
+
+.wps-flex { display: flex; }
+.wps-flex-center { display: flex; align-items: center; justify-content: center; }
+.wps-flex-between { display: flex; align-items: center; justify-content: space-between; }
+.wps-flex-start { display: flex; align-items: flex-start; }
+.wps-flex-end { display: flex; align-items: flex-end; }
+.wps-flex-col { display: flex; flex-direction: column; }
+.wps-flex-row { display: flex; flex-direction: row; }
+.wps-flex-wrap { display: flex; flex-wrap: wrap; }
+
+.wps-gap-1 { gap: var(--wps-space-1); }
+.wps-gap-2 { gap: var(--wps-space-2); }
+.wps-gap-3 { gap: var(--wps-space-3); }
+.wps-gap-4 { gap: var(--wps-space-4); }
+.wps-gap-5 { gap: var(--wps-space-5); }
+.wps-gap-6 { gap: var(--wps-space-6); }
+.wps-gap-8 { gap: var(--wps-space-8); }
+
+.wps-items-center { align-items: center; }
+.wps-items-start { align-items: flex-start; }
+.wps-items-end { align-items: flex-end; }
+.wps-items-stretch { align-items: stretch; }
+
+.wps-justify-center { justify-content: center; }
+.wps-justify-start { justify-content: flex-start; }
+.wps-justify-end { justify-content: flex-end; }
+.wps-justify-between { justify-content: space-between; }
+
+.wps-flex-1 { flex: 1; }
+.wps-flex-none { flex: none; }
+.wps-flex-shrink-0 { flex-shrink: 0; }
+.wps-flex-grow { flex-grow: 1; }
+
+.wps-block { display: block; }
+.wps-inline { display: inline; }
+.wps-inline-block { display: inline-block; }
+.wps-hidden { display: none; }
+.wps-visible { display: block; }
+
+.wps-opacity-50 { opacity: 0.5; }
+.wps-opacity-75 { opacity: 0.75; }
+.wps-opacity-100 { opacity: 1; }
+
+/* ============================================================================
+    9. UTILITY CLASSES - Borders & Shadows
+    ============================================================================ */
+
+.wps-border-b { border-bottom: 1px solid var(--wps-gray-200); }
+.wps-border-t { border-top: 1px solid var(--wps-gray-200); }
+.wps-border-l { border-left: 1px solid var(--wps-gray-200); }
+.wps-border-r { border-right: 1px solid var(--wps-gray-200); }
+
+.wps-shadow-sm { box-shadow: var(--wps-shadow-sm); }
+.wps-shadow-md { box-shadow: var(--wps-shadow-md); }
+.wps-shadow-lg { box-shadow: var(--wps-shadow-lg); }
+.wps-shadow-xl { box-shadow: var(--wps-shadow-xl); }
+
+/* ============================================================================
+    10. UTILITY CLASSES - Width & Height
+    ============================================================================ */
+
+.wps-w-full { width: 100%; }
+.wps-w-auto { width: auto; }
+.wps-w-5 { width: 20px; }
+.wps-h-5 { height: 20px; }
+.wps-w-6 { width: 24px; }
+.wps-h-6 { height: 24px; }
+.wps-w-8 { width: 32px; }
+.wps-h-8 { height: 32px; }
+.wps-w-10 { width: 40px; }
+.wps-h-10 { height: 40px; }
+
+/* ============================================================================
+    11. UTILITY CLASSES - Backgrounds
+    ============================================================================ */
+
+.wps-bg-white { background: white; }
+.wps-bg-gray-50 { background: var(--wps-gray-50); }
+.wps-bg-gray-100 { background: var(--wps-gray-100); }
+.wps-bg-gray-200 { background: var(--wps-gray-200); }
+.wps-bg-primary-light { background: var(--wps-primary-light); }
+.wps-bg-success-light { background: var(--wps-success-light); }
+.wps-bg-warning-light { background: var(--wps-warning-light); }
+.wps-bg-danger-light { background: var(--wps-danger-light); }
+.wps-bg-info-light { background: var(--wps-info-light); }
+
+/* ============================================================================
    4. BUTTONS - Modern Button System
    ============================================================================ */
 

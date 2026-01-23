@@ -181,7 +181,7 @@ class Guardian_Dashboard {
 		foreach ( $cards as $card ) {
 			$html .= sprintf(
 				'<div class="wps-card">
-					<div class="wps-card-body" class="wps-flex-gap-16-items-center">
+					<div class="wps-card-body wps-flex-gap-16-items-center">
 						<span class="dashicons %s" style="font-size: 40px; width: 40px; height: 40px; color: %s;"></span>
 						<div>
 							<div style="font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">%s</div>
@@ -213,7 +213,7 @@ class Guardian_Dashboard {
 		
 		$html = '<div class="wps-card">
 			<div class="wps-card-header">
-				<h3 class="wps-card-title" class="wps-m-0">
+				<h3 class="wps-card-title wps-m-0">
 					<span class="dashicons dashicons-clock" style="margin-right: 8px;"></span>
 					' . esc_html__( 'Recent Activity', 'wpshadow' ) . '
 				</h3>
@@ -300,7 +300,7 @@ class Guardian_Dashboard {
 		
 		$html = '<div class="wps-card wps-mt-4">
 			<div class="wps-card-header">
-				<h3 class="wps-card-title" class="wps-m-0">
+				<h3 class="wps-card-title wps-m-0">
 					<span class="dashicons dashicons-chart-bar" style="margin-right: 8px;"></span>
 					' . esc_html__( 'Auto-Fix Statistics', 'wpshadow' ) . '
 				</h3>
@@ -341,7 +341,7 @@ class Guardian_Dashboard {
 		
 		$html = '<div class="wps-card">
 			<div class="wps-card-header">
-				<h3 class="wps-card-title" class="wps-m-0">
+				<h3 class="wps-card-title wps-m-0">
 					<span class="dashicons dashicons-backup" style="margin-right: 8px;"></span>
 					' . esc_html__( 'Recovery Points', 'wpshadow' ) . '
 				</h3>
@@ -387,7 +387,7 @@ class Guardian_Dashboard {
 	private static function render_system_health(): string {
 		$html = '<div class="wps-card" style="margin-top: 16px;">
 			<div class="wps-card-header">
-				<h3 class="wps-card-title" class="wps-m-0">
+				<h3 class="wps-card-title wps-m-0">
 					<span class="dashicons dashicons-heart" style="margin-right: 8px;"></span>
 					' . esc_html__( 'System Health', 'wpshadow' ) . '
 				</h3>
