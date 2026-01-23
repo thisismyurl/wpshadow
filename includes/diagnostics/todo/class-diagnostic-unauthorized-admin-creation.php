@@ -82,25 +82,20 @@ class Diagnostic_Unauthorized_Admin_Creation extends Diagnostic_Base {
             return null;
         }
         
-        // Build details of new accounts
-        $details = array();
-        foreach ($new_accounts as $user_id) {
-            $user = get_userdata($user_id);
-            $details[] = sprintf(
-                '%s (%s) - Created: %s',
-                $user->user_login,
-                $user->user_email,
-                $user->user_registered
-            );
+        // Analyze creation method for each new account
+        $suspicious_accounts = self::detect_suspicious_admin_creation($new_accounts);
+        
+        if (empty($suspicious_accounts)) {
+            return null;
         }
         
         return array(
             'id'           => static::$slug,
             'title'        => static::$title,
             'description'  => sprintf(
-                '%d new admin/editor account(s) detected: %s',
-                count($new_accounts),
-                implode(', ', $details)
+                '%d admin/editor account(s) created via code detected: %s',
+                count($suspicious_accounts),
+                implode(', ', wp_list_pluck($suspicious_accounts, 'label'))
             ),
             'severity'     => 'critical',
             'category'     => 'security',
@@ -110,6 +105,124 @@ class Diagnostic_Unauthorized_Admin_Creation extends Diagnostic_Base {
             'threat_level' => 100,
             'module'       => 'Guardian',
             'priority'     => 1,
+            'suspicious_accounts' => $suspicious_accounts,
+        );
+    }
+
+    /**
+     * Detect admin accounts created via code vs web interface
+     *
+     * Admin accounts created via code (wp_insert_user, wp_create_user) may indicate:
+     * - Unauthorized access / hacked installation
+     * - Malicious plugin injecting admins
+     * - Backdoor in theme/plugin code
+     *
+     * Legitimate web interface creation leaves traces in:
+     * - User meta (created via admin screen)
+     * - User registration data
+     * - Action hooks logged in code
+     *
+     * @param array $user_ids Array of new user IDs to check
+     * @return array Array of suspicious accounts with creation method analysis
+     */
+    private static function detect_suspicious_admin_creation(array $user_ids): array {
+        $suspicious = array();
+
+        foreach ($user_ids as $user_id) {
+            $user = get_userdata($user_id);
+            if (!$user) {
+                continue;
+            }
+
+            $creation_method = self::analyze_user_creation_method($user);
+
+            // If created via code (not web interface), flag as suspicious
+            if ($creation_method['via_code']) {
+                $suspicious[] = array(
+                    'user_id'    => $user_id,
+                    'user_login' => $user->user_login,
+                    'user_email' => $user->user_email,
+                    'registered' => $user->user_registered,
+                    'method'     => $creation_method['method'],
+                    'indicators' => $creation_method['indicators'],
+                    'label'      => sprintf(
+                        '%s (%s) - Created: %s via %s',
+                        $user->user_login,
+                        $user->user_email,
+                        $user->user_registered,
+                        $creation_method['method']
+                    ),
+                );
+            }
+        }
+
+        return $suspicious;
+    }
+
+    /**
+     * Analyze how a user was created
+     *
+     * Returns:
+     * - via_code: true if created programmatically, false if via web interface
+     * - method: description of creation method
+     * - indicators: array of evidence used to determine creation method
+     *
+     * @param \WP_User $user User object
+     * @return array Analysis results
+     */
+    private static function analyze_user_creation_method(\WP_User $user): array {
+        $indicators = array();
+        $is_code_created = false;
+
+        // Check 1: User meta left by admin screen
+        $admin_meta = get_user_meta($user->ID, 'admin_color', true);
+        if (!empty($admin_meta)) {
+            $indicators[] = 'admin_color meta present (web interface)';
+        } else {
+            $indicators[] = 'no admin_color meta (possible code creation)';
+            $is_code_created = true;
+        }
+
+        // Check 2: Last login meta
+        $last_login = get_user_meta($user->ID, 'wp_last_login', true);
+        if (empty($last_login)) {
+            $indicators[] = 'no login activity (newly created)';
+        }
+
+        // Check 3: User notification sent flag (set during web admin creation)
+        $user_notification = get_user_meta($user->ID, '_wpshadow_user_created_notified', true);
+        if (empty($user_notification)) {
+            $indicators[] = 'no creation notification meta';
+            $is_code_created = true;
+        }
+
+        // Check 4: Account age vs registration time
+        $user_registered = strtotime($user->user_registered);
+        $now = time();
+        $age_seconds = $now - $user_registered;
+
+        // If account is extremely new (less than 5 minutes old) and no login, suspicious
+        if ($age_seconds < 300 && empty($last_login)) {
+            $indicators[] = 'account less than 5 minutes old';
+        }
+
+        // Check 5: Email verification status (WordPress doesn't verify by default, but some plugins do)
+        $email_verified = get_user_meta($user->ID, 'email_verified', true);
+        if (empty($email_verified)) {
+            $indicators[] = 'email not verified';
+        }
+
+        // Determine creation method
+        if ($is_code_created) {
+            $method = 'Code execution (programmatic)';
+        } else {
+            $method = 'Web interface (admin panel)';
+        }
+
+        return array(
+            'via_code'   => $is_code_created,
+            'method'     => $method,
+            'indicators' => $indicators,
         );
     }
 
@@ -119,14 +232,7 @@ class Diagnostic_Unauthorized_Admin_Creation extends Diagnostic_Base {
 	/**
 	 * Live test for this diagnostic
 	 *
-	 * Diagnostic: Unauthorized Admin Creation Detection
-	 * Slug: unauthorized-admin-creation
-	 * 
-	 * Test Purpose:
-	 * - Verify that check() method returns the correct result based on site state
-	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
-	 * - FAIL: check() returns array when diagnostic condition IS met (issue found)
-	 * - Description: Alerts when new admin/editor accounts are created unexpectedly.
+	 * Tests detection of admin accounts created via code vs web interface.
 	 *
 	 * @return array {
 	 *     @type bool   $passed  Whether the test passed
@@ -134,21 +240,25 @@ class Diagnostic_Unauthorized_Admin_Creation extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live_unauthorized_admin_creation(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
+		// Run the full diagnostic check
 		$result = self::check();
 		
-		// TODO: Implement actual test logic
+		if (is_null($result)) {
+			return array(
+				'passed' => true,
+				'message' => '✓ No suspicious admin account creation detected (baseline check)',
+			);
+		}
+
+		// Found suspicious accounts created via code
+		$suspicious_count = count($result['suspicious_accounts']);
 		return array(
 			'passed' => false,
-			'message' => 'Test not yet implemented for ' . self::$slug,
+			'message' => sprintf(
+				'✗ %d admin account(s) detected created via code: %s',
+				$suspicious_count,
+				implode('; ', wp_list_pluck($result['suspicious_accounts'], 'method'))
+			),
 		);
 	}
 

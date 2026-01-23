@@ -62,19 +62,7 @@ class Diagnostic_Security_Headers_Implementation extends Diagnostic_Base {
 	/**
 	 * Live test for this diagnostic
 	 *
-	 * Diagnostic: Security Headers Implementation
-	 * Slug: -security-headers-implementation
-	 * File: class-diagnostic-security-headers-implementation.php
-	 * 
-	 * Test Purpose:
-	 * Cannot determine specific pass criteria from available metadata.
-	 * Diagnostic: Security Headers Implementation
-	 * Slug: -security-headers-implementation
-	 * 
-	 * TODO: Review the check() method to understand what constitutes a passing test.
-	 * The test should verify that:
-	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
-	 * - check() returns an array when the diagnostic condition IS met (issue found)
+	 * Tests whether required security headers are present in HTTP response.
 	 *
 	 * @return array {
 	 *     @type bool   $passed  Whether the test passed
@@ -82,21 +70,19 @@ class Diagnostic_Security_Headers_Implementation extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live__security_headers_implementation(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
+
+		if ( is_null( $result ) ) {
+			return array(
+				'passed'  => true,
+				'message' => '✓ All required security headers are present',
+			);
+		}
+
+		$missing = isset( $result['description'] ) ? preg_match_all( '/([A-Z-]+)/', $result['description'], $m ) : 0;
 		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
+			'passed'  => false,
+			'message' => '✗ Missing security headers detected: ' . $result['description'],
 		);
 	}
 

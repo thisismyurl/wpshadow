@@ -62,19 +62,7 @@ class Diagnostic_HSTS extends Diagnostic_Base {
 	/**
 	 * Live test for this diagnostic
 	 *
-	 * Diagnostic: HSTS
-	 * Slug: -hsts
-	 * File: class-diagnostic-hsts.php
-	 * 
-	 * Test Purpose:
-	 * Cannot determine specific pass criteria from available metadata.
-	 * Diagnostic: HSTS
-	 * Slug: -hsts
-	 * 
-	 * TODO: Review the check() method to understand what constitutes a passing test.
-	 * The test should verify that:
-	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
-	 * - check() returns an array when the diagnostic condition IS met (issue found)
+	 * Tests whether HSTS header is configured on HTTPS sites.
 	 *
 	 * @return array {
 	 *     @type bool   $passed  Whether the test passed
@@ -82,21 +70,27 @@ class Diagnostic_HSTS extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live__hsts(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
+		// If site isn't HTTPS, test passes (no HSTS needed)
+		if ( ! is_ssl() ) {
+			return array(
+				'passed'  => true,
+				'message' => '✓ Site not using HTTPS, HSTS check not required',
+			);
+		}
+
+		// Site is HTTPS - run the diagnostic check
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
+
+		if ( is_null( $result ) ) {
+			return array(
+				'passed'  => true,
+				'message' => '✓ HSTS header is properly configured',
+			);
+		}
+
 		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
+			'passed'  => false,
+			'message' => '✗ HSTS header missing on HTTPS site: ' . $result['title'],
 		);
 	}
 

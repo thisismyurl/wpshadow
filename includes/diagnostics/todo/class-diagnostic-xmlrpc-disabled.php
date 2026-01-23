@@ -71,19 +71,7 @@ class Diagnostic_XMLRPC_Disabled extends Diagnostic_Base {
 	/**
 	 * Live test for this diagnostic
 	 *
-	 * Diagnostic: XMLRPC Disabled
-	 * Slug: -xmlrpc-disabled
-	 * File: class-diagnostic-xmlrpc-disabled.php
-	 * 
-	 * Test Purpose:
-	 * Cannot determine specific pass criteria from available metadata.
-	 * Diagnostic: XMLRPC Disabled
-	 * Slug: -xmlrpc-disabled
-	 * 
-	 * TODO: Review the check() method to understand what constitutes a passing test.
-	 * The test should verify that:
-	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
-	 * - check() returns an array when the diagnostic condition IS met (issue found)
+	 * Tests whether XML-RPC is disabled (attack vector).
 	 *
 	 * @return array {
 	 *     @type bool   $passed  Whether the test passed
@@ -91,21 +79,18 @@ class Diagnostic_XMLRPC_Disabled extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live__xmlrpc_disabled(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
+
+		if ( is_null( $result ) ) {
+			return array(
+				'passed'  => true,
+				'message' => '✓ XML-RPC is properly disabled or not accessible',
+			);
+		}
+
 		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
+			'passed'  => false,
+			'message' => '✗ XML-RPC is enabled and accessible: potential attack vector',
 		);
 	}
 

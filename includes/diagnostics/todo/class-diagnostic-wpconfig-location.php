@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 /**
  * wp-config.php Location Security Diagnostic
  *
  * Philosophy: Security hardening - protect database credentials
  * @package WPShadow
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
@@ -16,20 +17,22 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check wp-config.php location and permissions.
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
-class Diagnostic_WPConfig_Location extends Diagnostic_Base {
+class Diagnostic_WPConfig_Location extends Diagnostic_Base
+{
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array {
+	public static function check(): ?array
+	{
 		$location_result = self::detect_wpconfig_location();
-		
-		if ( ! $location_result ) {
+
+		if (! $location_result) {
 			return null; // Can't find config
 		}
 
@@ -37,11 +40,11 @@ class Diagnostic_WPConfig_Location extends Diagnostic_Base {
 		$is_root     = $location_result['is_root'];
 
 		// Check permissions (should not be world-readable)
-		$perms = fileperms( $config_file );
-		$octal = substr( sprintf( '%o', $perms ), -3 );
+		$perms = fileperms($config_file);
+		$octal = substr(sprintf('%o', $perms), -3);
 
 		// If world-readable (e.g., 644, 664, 777)
-		if ( substr( $octal, -1 ) >= '4' ) {
+		if (substr($octal, -1) >= '4') {
 			$location_text = $is_root ? 'in web root' : 'one level above web root (good security practice)';
 			return array(
 				'id'            => 'wpconfig-location',
@@ -69,12 +72,13 @@ class Diagnostic_WPConfig_Location extends Diagnostic_Base {
 	 *
 	 * @return ?array Array with 'path' and 'is_root' keys, or null if not found
 	 */
-	public static function detect_wpconfig_location(): ?array {
+	public static function detect_wpconfig_location(): ?array
+	{
 		$abspath = ABSPATH;
 
 		// Check web root first
 		$config_file = $abspath . 'wp-config.php';
-		if ( file_exists( $config_file ) ) {
+		if (file_exists($config_file)) {
 			return [
 				'path'    => $config_file,
 				'is_root' => true,
@@ -83,8 +87,8 @@ class Diagnostic_WPConfig_Location extends Diagnostic_Base {
 		}
 
 		// Check one level above web root (more secure)
-		$config_file = dirname( $abspath ) . '/wp-config.php';
-		if ( file_exists( $config_file ) ) {
+		$config_file = dirname($abspath) . '/wp-config.php';
+		if (file_exists($config_file)) {
 			return [
 				'path'    => $config_file,
 				'is_root' => false,
@@ -107,11 +111,12 @@ class Diagnostic_WPConfig_Location extends Diagnostic_Base {
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__wpconfig_location(): array {
+	public static function test_live__wpconfig_location(): array
+	{
 		// Detect wp-config.php location
 		$location = self::detect_wpconfig_location();
-		
-		if ( ! $location ) {
+
+		if (! $location) {
 			return [
 				'passed' => false,
 				'message' => '✗ Could not locate wp-config.php in expected locations',
@@ -121,11 +126,11 @@ class Diagnostic_WPConfig_Location extends Diagnostic_Base {
 		// Run the full diagnostic check
 		$result = self::check();
 
-		$location_type = $location['is_root'] 
-			? 'web root (less secure)' 
+		$location_type = $location['is_root']
+			? 'web root (less secure)'
 			: 'one level above web root (more secure)';
 
-		if ( is_null( $result ) ) {
+		if (is_null($result)) {
 			return [
 				'passed' => true,
 				'message' => '✓ wp-config.php found in ' . $location_type . ' with secure permissions',
@@ -137,5 +142,4 @@ class Diagnostic_WPConfig_Location extends Diagnostic_Base {
 			'message' => '✗ wp-config.php found in ' . $location_type . ' but has insecure permissions: ' . $result['title'],
 		];
 	}
-
 }
