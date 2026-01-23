@@ -14,6 +14,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+require_once __DIR__ . '/../core/class-options-manager.php';
+
+use WPShadow\Core\Options_Manager;
+
 /**
  * Site Health test: Quick Scan recency.
  *
@@ -21,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function wpshadow_site_health_test_quick_scan() {
 	$badge = $GLOBALS['wpshadow_site_health_badge'] ?? array( 'label' => 'WPShadow', 'color' => 'blue' );
-	$last  = get_option( 'wpshadow_last_quick_checks', 0 );
+	$last  = Options_Manager::get_int( 'wpshadow_last_quick_checks', 0 );
 
 	$now   = time();
 	$label = __( 'WPShadow Quick Scan', 'wpshadow' );
@@ -81,7 +85,7 @@ function wpshadow_site_health_test_quick_scan() {
  */
 function wpshadow_site_health_test_deep_scan() {
 	$badge = $GLOBALS['wpshadow_site_health_badge'] ?? array( 'label' => 'WPShadow', 'color' => 'blue' );
-	$last  = get_option( 'wpshadow_last_heavy_tests', 0 );
+	$last  = Options_Manager::get_int( 'wpshadow_last_heavy_tests', 0 );
 
 	$now   = time();
 	$label = __( 'WPShadow Deep Scan', 'wpshadow' );
@@ -143,8 +147,8 @@ function wpshadow_site_health_test_overall() {
 	$label = __( 'WPShadow Overall Status', 'wpshadow' );
 
 	// If we have recent scans, mark good; otherwise recommend action.
-	$quick = (int) get_option( 'wpshadow_last_quick_checks', 0 );
-	$deep  = (int) get_option( 'wpshadow_last_heavy_tests', 0 );
+	$quick = Options_Manager::get_int( 'wpshadow_last_quick_checks', 0 );
+	$deep  = Options_Manager::get_int( 'wpshadow_last_heavy_tests', 0 );
 
 	$action_url = admin_url( 'admin.php?page=wpshadow' );
 

@@ -300,10 +300,11 @@ class Diagnostic_Scheduler {
 	}
 
 	/**
-	 * Record diagnostic run
+	 * Record diagnostic run (uses transient with autoload=false for optimization)
 	 */
 	public static function record_run( string $diagnostic_slug ): void {
-		update_option( "wpshadow_last_run_{$diagnostic_slug}", time() );
+		// Store as option without autoload, transient for 30 days
+		update_option( "wpshadow_last_run_{$diagnostic_slug}", time(), false );
 	}
 
 	/**

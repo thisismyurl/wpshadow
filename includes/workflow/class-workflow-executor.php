@@ -22,8 +22,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once __DIR__ . '/class-context-builder.php';
 require_once __DIR__ . '/../utils/class-email-service.php';
+require_once __DIR__ . '/../core/class-options-manager.php';
 
 use WPShadow\Utils\Email_Service;
+use WPShadow\Core\Options_Manager;
 
 /**
  * Engine that evaluates triggers and executes workflow actions
@@ -782,13 +784,13 @@ class Workflow_Executor {
 	}
 
 	/**
-	 * Log action to activity log
+	 * Log action to activity log (using transients for temporary storage)
 	 */
 	private static function execute_log( $config, $context ) {
 		$log_message = isset( $config['log_message'] ) ? $config['log_message'] : 'Workflow action executed';
 		$log_message = self::replace_variables( $log_message, $context );
 
-		$log   = get_option( 'wpshadow_workflow_log', array() );
+		$log = Options_Manager::get_array( 'wpshadow_workflow_log', [] );
 		$log[] = array(
 			'message'   => $log_message,
 			'context'   => $context,
@@ -800,7 +802,8 @@ class Workflow_Executor {
 			$log = array_slice( $log, -100 );
 		}
 
-		update_option( 'wpshadow_workflow_log', $log );
+		// Use transients for 24 hours (temporary data)
+		Options_Manager::set( 'wpshadow_workflow_log', $log, true, DAY_IN_SECONDS, false );
 
 		return array(
 			'success' => true,
