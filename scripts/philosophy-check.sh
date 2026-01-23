@@ -15,6 +15,7 @@ NC='\033[0m'
 echo -e "${BLUE}→ Checking philosophy compliance...${NC}"
 
 PHILOSOPHY_ISSUES=0
+CRITICAL_ISSUES=0
 
 # === 1. Check for paywalls in diagnostics/treatments ===
 echo "  Checking for philosophy violations (paywalls, dark patterns)..."
@@ -41,6 +42,17 @@ for file in $(git diff --cached --name-only --diff-filter=ACM | grep 'diagnostic
                 echo -e "${YELLOW}    Reminder: Commandment #5-6 - Drive to KB & Training${NC}"
                 ((PHILOSOPHY_ISSUES++))
             fi
+        fi
+    fi
+done
+
+# === 2b. Enforce strict types declaration ===
+echo "  Checking for strict types..."
+for file in $(git diff --cached --name-only --diff-filter=ACM | grep -E '\\.php$' | grep -E '^(includes/|wpshadow\\.php)'); do
+    if [ -f "$file" ]; then
+        if ! head -5 "$file" | grep -q "declare(strict_types=1);"; then
+            echo -e "${YELLOW}⚠️  Missing declare(strict_types=1): $file${NC}"
+            ((PHILOSOPHY_ISSUES++))
         fi
     fi
 done
@@ -73,6 +85,25 @@ for file in $(git diff --cached --name-only --diff-filter=ACM | grep 'treatments
     fi
 done
 
+# === 4b. Check for dangerous patterns (eval, raw SQL) ===
+echo "  Checking for dangerous patterns..."
+for file in $(git diff --cached --name-only --diff-filter=ACM | grep -E '\\.php$' | grep -v 'vendor/'); do
+    if [ -f "$file" ]; then
+        if grep -q "eval\\(" "$file" 2>/dev/null; then
+            echo -e "${RED}❌ eval() found in: $file${NC}"
+            echo -e "${RED}    Never use eval() (security risk)${NC}"
+            ((CRITICAL_ISSUES++))
+        fi
+        # Raw SQL without prepare (basic heuristic)
+        if grep -q "\\$wpdb->query\\(" "$file" 2>/dev/null; then
+            if ! grep -q "\\$wpdb->prepare" "$file" 2>/dev/null; then
+                echo -e "${YELLOW}⚠️  Potential raw SQL without prepare: $file${NC}"
+                ((PHILOSOPHY_ISSUES++))
+            fi
+        fi
+    fi
+done
+
 # === 5. Check commit message for philosophy alignment ===
 echo "  Checking commit message..."
 COMMIT_MSG=$(git diff --cached --diff-filter=ACM --quiet 2>/dev/null; git log -1 --pretty=%B 2>/dev/null || echo "")
@@ -90,6 +121,10 @@ if [ "$PHILOSOPHY_ISSUES" -gt 0 ]; then
     echo ""
     echo -e "${YELLOW}⚠️  Found $PHILOSOPHY_ISSUES philosophy-related items to review${NC}"
     echo -e "${YELLOW}Not blocking (warnings only), but consider the above.${NC}"
+elif [ "$CRITICAL_ISSUES" -gt 0 ]; then
+    echo ""
+    echo -e "${RED}❌ Found $CRITICAL_ISSUES critical security issues${NC}"
+    exit 1
 else
     echo -e "${GREEN}✅ Philosophy compliance check passed${NC}"
 fi
