@@ -52,18 +52,13 @@ class Diagnostic_DNSSEC_Implementation extends Diagnostic_Base {
 	 * Live test for this diagnostic
 	 *
 	 * Diagnostic: DNSSEC Implementation
-	 * Slug: -dnssec-implementation
+	 * Slug: dnssec-implementation
 	 * File: class-diagnostic-dnssec-implementation.php
 	 * 
 	 * Test Purpose:
-	 * Cannot determine specific pass criteria from available metadata.
-	 * Diagnostic: DNSSEC Implementation
-	 * Slug: -dnssec-implementation
-	 * 
-	 * TODO: Review the check() method to understand what constitutes a passing test.
-	 * The test should verify that:
-	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
-	 * - check() returns an array when the diagnostic condition IS met (issue found)
+	 * Verify that DNSSEC is enabled
+	 * - PASS: check() returns NULL when wpshadow_dnssec_enabled option is set
+	 * - FAIL: check() returns array when DNSSEC is not enabled
 	 *
 	 * @return array {
 	 *     @type bool   $passed  Whether the test passed
@@ -71,22 +66,21 @@ class Diagnostic_DNSSEC_Implementation extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live__dnssec_implementation(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
+		$dnssec_enabled = get_option( 'wpshadow_dnssec_enabled' );
 		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
-		);
+		if ( !empty( $dnssec_enabled ) ) {
+			// DNSSEC enabled = diagnostic should pass (return null)
+			return array(
+				'passed' => is_null($result),
+				'message' => 'DNSSEC is enabled'
+			);
+		} else {
+			// DNSSEC not enabled = issue should be found (return array)
+			return array(
+				'passed' => !is_null($result) && isset($result['id']) && $result['id'] === 'dnssec-implementation',
+				'message' => 'DNSSEC not enabled, issue correctly identified'
+			);
+		}
 	}
-
 }

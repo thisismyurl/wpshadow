@@ -52,18 +52,13 @@ class Diagnostic_Admin_Email_Verification extends Diagnostic_Base {
 	 * Live test for this diagnostic
 	 *
 	 * Diagnostic: Admin Email Verification
-	 * Slug: -admin-email-verification
+	 * Slug: admin-email-verification
 	 * File: class-diagnostic-admin-email-verification.php
 	 * 
 	 * Test Purpose:
-	 * Cannot determine specific pass criteria from available metadata.
-	 * Diagnostic: Admin Email Verification
-	 * Slug: -admin-email-verification
-	 * 
-	 * TODO: Review the check() method to understand what constitutes a passing test.
-	 * The test should verify that:
-	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
-	 * - check() returns an array when the diagnostic condition IS met (issue found)
+	 * Verify that admin email changes require verification hook
+	 * - PASS: check() returns NULL when new_admin_email_approve hook is active
+	 * - FAIL: check() returns array when hook is not registered
 	 *
 	 * @return array {
 	 *     @type bool   $passed  Whether the test passed
@@ -71,22 +66,22 @@ class Diagnostic_Admin_Email_Verification extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live__admin_email_verification(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
+		$has_verification = has_action( 'new_admin_email_approve' );
 		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
-		);
+		if ( $has_verification ) {
+			// Verification hook registered = diagnostic should pass (return null)
+			return array(
+				'passed' => is_null($result),
+				'message' => 'Admin email verification hook properly registered'
+			);
+		} else {
+			// No verification hook = issue should be detected (return array)
+			return array(
+				'passed' => !is_null($result) && isset($result['id']) && $result['id'] === 'admin-email-verification',
+				'message' => 'Missing admin email verification, issue correctly identified'
+			);
+		}
 	}
 
 }

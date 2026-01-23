@@ -69,19 +69,14 @@ class Diagnostic_Abandoned_Plugins extends Diagnostic_Base {
 	/**
 	 * Live test for this diagnostic
 	 *
-	 * Diagnostic: Abandoned Plugins
-	 * Slug: -abandoned-plugins
+	 * Diagnostic: Abandoned Plugins Detection
+	 * Slug: abandoned-plugins
 	 * File: class-diagnostic-abandoned-plugins.php
 	 * 
 	 * Test Purpose:
-	 * Cannot determine specific pass criteria from available metadata.
-	 * Diagnostic: Abandoned Plugins
-	 * Slug: -abandoned-plugins
-	 * 
-	 * TODO: Review the check() method to understand what constitutes a passing test.
-	 * The test should verify that:
-	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
-	 * - check() returns an array when the diagnostic condition IS met (issue found)
+	 * Verify that abandoned/unmaintained plugins are detected
+	 * - PASS: check() returns NULL when no abandoned plugins are found
+	 * - FAIL: check() returns array when unmaintained plugins are detected
 	 *
 	 * @return array {
 	 *     @type bool   $passed  Whether the test passed
@@ -89,22 +84,35 @@ class Diagnostic_Abandoned_Plugins extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live__abandoned_plugins(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
-		);
+		$plugins = get_plugins();
+		$abandoned_found = false;
+
+		foreach ( $plugins as $plugin_file => $plugin_data ) {
+			// Check if plugin hasn't been updated in 3+ years
+			$last_update = get_transient( 'plugin_last_update_' . $plugin_file );
+			
+			if ( empty( $last_update ) || ( time() - intval( $last_update ) ) > ( 3 * 365 * DAY_IN_SECONDS ) ) {
+				if ( preg_match( '/abandoned|unmaintained|inactive/i', $plugin_data['Description'] ) ) {
+					$abandoned_found = true;
+					break;
+				}
+			}
+		}
+
+		if ( $abandoned_found ) {
+			// Abandoned plugins exist = diagnostic should report issue (return array)
+			return array(
+				'passed' => !is_null($result) && isset($result['id']) && $result['id'] === 'abandoned-plugins',
+				'message' => 'Abandoned plugins detected, issue correctly identified'
+			);
+		} else {
+			// No abandoned plugins = diagnostic should pass (return null)
+			return array(
+				'passed' => is_null($result),
+				'message' => 'No abandoned plugins found'
+			);
+		}
 	}
 
 }

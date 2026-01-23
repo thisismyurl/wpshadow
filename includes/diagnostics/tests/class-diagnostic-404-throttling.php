@@ -51,19 +51,14 @@ class Diagnostic_404_Throttling extends Diagnostic_Base {
 	/**
 	 * Live test for this diagnostic
 	 *
-	 * Diagnostic: 404 Throttling
-	 * Slug: -404-throttling
+	 * Diagnostic: 404 Detection and Throttling
+	 * Slug: 404-throttling
 	 * File: class-diagnostic-404-throttling.php
 	 * 
 	 * Test Purpose:
-	 * Cannot determine specific pass criteria from available metadata.
-	 * Diagnostic: 404 Throttling
-	 * Slug: -404-throttling
-	 * 
-	 * TODO: Review the check() method to understand what constitutes a passing test.
-	 * The test should verify that:
-	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
-	 * - check() returns an array when the diagnostic condition IS met (issue found)
+	 * Verify that 404 scanning detection is enabled
+	 * - PASS: check() returns NULL when template_redirect filter has handlers
+	 * - FAIL: check() returns array when no 404 protection is active
 	 *
 	 * @return array {
 	 *     @type bool   $passed  Whether the test passed
@@ -71,22 +66,22 @@ class Diagnostic_404_Throttling extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live__404_throttling(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
-		);
+		$has_404_protection = has_filter( 'template_redirect' );
+
+		if ( $has_404_protection ) {
+			// 404 protection active = diagnostic should pass (return null)
+			return array(
+				'passed' => is_null($result),
+				'message' => '404 throttling protection is active'
+			);
+		} else {
+			// No 404 protection = issue should be found (return array)
+			return array(
+				'passed' => !is_null($result) && isset($result['id']) && $result['id'] === '404-throttling',
+				'message' => 'No 404 throttling, issue correctly identified'
+			);
+		}
 	}
 
 }
