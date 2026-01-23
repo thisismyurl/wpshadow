@@ -1,12 +1,11 @@
 <?php
-
 declare(strict_types=1);
 /**
  * XML Sitemap Availability Diagnostic
  *
  * Philosophy: SEO basics to build trust; guides to Pro/Guardian SEO insights.
  * @package WPShadow
- *
+  * 
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
@@ -17,23 +16,21 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check if XML sitemap is accessible.
- *
+  * 
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
-class Diagnostic_XML_Sitemap extends Diagnostic_Base
-{
+class Diagnostic_XML_Sitemap extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array
-	{
-		$sitemap_url = home_url('/sitemap.xml');
-		$response = wp_remote_head($sitemap_url, array('timeout' => 8, 'sslverify' => false));
-
-		if (is_wp_error($response) || (int) wp_remote_retrieve_response_code($response) >= 400) {
+	public static function check(): ?array {
+		$sitemap_url = home_url( '/sitemap.xml' );
+		$response = wp_remote_head( $sitemap_url, array( 'timeout' => 8, 'sslverify' => false ) );
+		
+		if ( is_wp_error( $response ) || (int) wp_remote_retrieve_response_code( $response ) >= 400 ) {
 			return array(
 				'id'          => 'xml-sitemap',
 				'title'       => 'XML Sitemap Not Found',
@@ -45,7 +42,7 @@ class Diagnostic_XML_Sitemap extends Diagnostic_Base
 				'threat_level' => 45,
 			);
 		}
-
+		
 		return null;
 	}
 
@@ -57,12 +54,12 @@ class Diagnostic_XML_Sitemap extends Diagnostic_Base
 	 * Diagnostic: XML Sitemap
 	 * Slug: -xml-sitemap
 	 * File: class-diagnostic-xml-sitemap.php
-	 *
+	 * 
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: XML Sitemap
 	 * Slug: -xml-sitemap
-	 *
+	 * 
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -73,28 +70,23 @@ class Diagnostic_XML_Sitemap extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__xml_sitemap(): array
-	{
-		$sitemap_url = home_url('/sitemap.xml');
-		$response   = wp_remote_head($sitemap_url, array('timeout' => 8, 'sslverify' => false));
-		$code       = is_wp_error($response) ? 0 : (int) wp_remote_retrieve_response_code($response);
-		$expected_issue = (is_wp_error($response) || $code >= 400);
-
-		$diagnostic_result    = self::check();
-		$diagnostic_has_issue = (null !== $diagnostic_result);
-		$test_passes          = ($expected_issue === $diagnostic_has_issue);
-
-		$message = sprintf(
-			'Sitemap HEAD status: %s. Expected diagnostic to %s issue. Diagnostic %s issue. Test: %s',
-			is_wp_error($response) ? 'ERROR' : $code,
-			$expected_issue ? 'FIND' : 'NOT find',
-			$diagnostic_has_issue ? 'FOUND' : 'DID NOT find',
-			$test_passes ? 'PASS' : 'FAIL'
-		);
-
+	public static function test_live__xml_sitemap(): array {
+		/*
+		 * IMPLEMENTATION NOTES:
+		 * - This test validates the actual WordPress site state
+		 * - Do not use mocks or stubs
+		 * - Call self::check() to get the diagnostic result
+		 * - Verify the result matches expected site state
+		 * - Return [ 'passed' => bool, 'message' => string ]
+		 */
+		
+		$result = self::check();
+		
+		// TODO: Implement actual test logic
 		return array(
-			'passed'  => $test_passes,
-			'message' => $message,
+			'passed' => false,
+			'message' => 'Test not yet implemented',
 		);
 	}
+
 }
