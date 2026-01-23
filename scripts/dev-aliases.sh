@@ -43,6 +43,7 @@ alias wpdb='docker exec wpshadow-test wp db'
 alias guardian='/workspaces/wpshadow/scripts/guardian-check.sh'
 alias quicktest='/workspaces/wpshadow/scripts/test-wp-load.sh'
 alias watchlogs='docker exec -it wpshadow-test tail -f /var/www/html/wp-content/debug.log'
+alias auto-continue='tail -f /tmp/auto-continue-watcher.log'
 alias clearlogs='docker exec wpshadow-test bash -c "echo \"\" > /var/www/html/wp-content/debug.log" && echo "✅ Debug log cleared"'
 
 # === Helpful Functions ===

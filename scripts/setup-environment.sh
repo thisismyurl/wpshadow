@@ -113,7 +113,19 @@ else
 fi
 echo ""
 
-# === 7. Quick Test ===
+# === 7. Auto-Continue Setup ===
+echo -e "${BLUE}→ Setting up auto-continue for 25-task prompts...${NC}"
+if ! grep -q "auto-continue-watcher.sh" ~/.bashrc 2>/dev/null; then
+    echo "" >> ~/.bashrc
+    echo "# Start auto-continue watcher (Layer 2 redundancy)" >> ~/.bashrc
+    echo "pgrep -f 'bash scripts/auto-continue-watcher.sh' > /dev/null 2>&1 || (nohup /workspaces/wpshadow/scripts/auto-continue-watcher.sh > /dev/null 2>&1 &)" >> ~/.bashrc
+    echo -e "${GREEN}✓ Auto-continue watcher configured${NC}"
+else
+    echo -e "${GREEN}✓ Auto-continue watcher already configured${NC}"
+fi
+echo ""
+
+# === 8. Quick Test ===
 echo -e "${BLUE}→ Running initial health check...${NC}"
 ./scripts/guardian-check.sh || echo -e "${YELLOW}Some issues found - review above${NC}"
 echo ""
@@ -132,12 +144,13 @@ echo "  3. Start Docker: dup"
 echo "  4. Check sync: gsync"
 echo ""
 echo -e "${BLUE}Available Commands:${NC}"
-echo "  guardian    - Full environment check"
-echo "  gsync       - Check git sync"
-echo "  gcommit     - Quick commit & push"
-echo "  phpcs       - Check coding standards"
-echo "  quicktest   - Test WordPress load"
-echo "  wp          - WordPress CLI"
+echo "  guardian       - Full environment check"
+echo "  gsync          - Check git sync"
+echo "  gcommit        - Quick commit & push"
+echo "  phpcs          - Check coding standards"
+echo "  quicktest      - Test WordPress load"
+echo "  wp             - WordPress CLI"
+echo "  auto-continue  - View auto-continue watcher logs"
 echo ""
 echo -e "${BLUE}Documentation:${NC}"
 echo "  philosophy  - View product philosophy"

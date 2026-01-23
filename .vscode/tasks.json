@@ -213,6 +213,36 @@
             },
             "problemMatcher": [],
             "isBackground": true
+        },
+        // === Auto-Continue: 25-Task Prompt Auto-Accept ===
+        {
+            "label": "🤖 Auto-Continue: Start Layer 2 Watcher",
+            "type": "shell",
+            "command": "pgrep -f 'bash scripts/auto-continue-watcher.sh' > /dev/null 2>&1 && echo '✓ Auto-continue watcher running' || (nohup ${workspaceFolder}/scripts/auto-continue-watcher.sh > /dev/null 2>&1 & echo '✓ Auto-continue watcher started')",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "🤖 Auto-Continue: View Watcher Logs",
+            "type": "shell",
+            "command": "tail -f /tmp/auto-continue-watcher.log",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": [],
+            "isBackground": true
+        },
+        {
+            "label": "🤖 Auto-Continue: Manual Accept Trigger",
+            "type": "shell",
+            "command": "${workspaceFolder}/scripts/auto-continue-watcher.sh",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": []
         }
     ],
     "inputs": [

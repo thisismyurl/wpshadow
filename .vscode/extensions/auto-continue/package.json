@@ -1,0 +1,26 @@
+{
+  "name": "auto-continue",
+  "displayName": "Auto-Continue Copilot Chat",
+  "description": "Automatically accepts continuation prompts after 25 tasks",
+  "version": "1.0.0",
+  "author": "WPShadow Guardian",
+  "publisher": "wpshadow",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "main": "./extension.js",
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "auto-continue.acceptPrompt",
+        "title": "Auto-Continue: Accept Prompt"
+      }
+    ]
+  }
+}
