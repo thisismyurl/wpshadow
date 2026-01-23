@@ -1,11 +1,10 @@
 <?php
-
 declare(strict_types=1);
 /**
  * External Fonts Diagnostic
  *
  * @package WPShadow
- *
+  * 
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
@@ -17,28 +16,26 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Detect usage of Google-hosted fonts that could be inlined or removed.
- *
+  * 
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
-class Diagnostic_External_Fonts extends Diagnostic_Base
-{
+class Diagnostic_External_Fonts extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		$external_handles = self::detect_external_font_handles();
-		$blocked          = (bool) get_option('wpshadow_block_external_fonts', false);
-
-		if (empty($external_handles) || $blocked) {
+		$blocked          = (bool) get_option( 'wpshadow_block_external_fonts', false );
+		
+		if ( empty( $external_handles ) || $blocked ) {
 			return null;
 		}
-
-		$list = implode(', ', $external_handles);
-
+		
+		$list = implode( ', ', $external_handles );
+		
 		return array(
 			'id'           => 'external-fonts-loading',
 			'title'        => 'External Fonts Loaded (Google)',
@@ -50,31 +47,29 @@ class Diagnostic_External_Fonts extends Diagnostic_Base
 			'threat_level' => 30,
 		);
 	}
-
-	private static function detect_external_font_handles()
-	{
+	
+	private static function detect_external_font_handles() {
 		global $wp_styles;
-		if (! isset($wp_styles) || empty($wp_styles->queue)) {
+		if ( ! isset( $wp_styles ) || empty( $wp_styles->queue ) ) {
 			return array();
 		}
-
+		
 		$handles = array();
-		foreach ($wp_styles->queue as $handle) {
-			if (! isset($wp_styles->registered[$handle])) {
+		foreach ( $wp_styles->queue as $handle ) {
+			if ( ! isset( $wp_styles->registered[ $handle ] ) ) {
 				continue;
 			}
-			$src = $wp_styles->registered[$handle]->src;
-			if (is_string($src) && self::is_google_font_src($src)) {
+			$src = $wp_styles->registered[ $handle ]->src;
+			if ( is_string( $src ) && self::is_google_font_src( $src ) ) {
 				$handles[] = $handle;
 			}
 		}
-
+		
 		return $handles;
 	}
-
-	private static function is_google_font_src($src)
-	{
-		return (false !== stripos($src, 'fonts.googleapis.com') || false !== stripos($src, 'fonts.gstatic.com'));
+	
+	private static function is_google_font_src( $src ) {
+		return ( false !== stripos( $src, 'fonts.googleapis.com' ) || false !== stripos( $src, 'fonts.gstatic.com' ) );
 	}
 
 
@@ -85,12 +80,12 @@ class Diagnostic_External_Fonts extends Diagnostic_Base
 	 * Diagnostic: External Fonts
 	 * Slug: -external-fonts
 	 * File: class-diagnostic-external-fonts.php
-	 *
+	 * 
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: External Fonts
 	 * Slug: -external-fonts
-	 *
+	 * 
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -101,15 +96,14 @@ class Diagnostic_External_Fonts extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__external_fonts(): array
-	{
-		$blocked = (bool) get_option('wpshadow_block_external_fonts', false);
+	public static function test_live__external_fonts(): array {
+		$blocked = (bool) get_option( 'wpshadow_block_external_fonts', false );
 		$handles = self::detect_external_font_handles();
-		$has_issue = (! $blocked && ! empty($handles));
+		$has_issue = ( ! $blocked && ! empty( $handles ) );
 
 		$result = self::check();
-		$diagnostic_found_issue = is_array($result);
-		$test_passes = ($has_issue === $diagnostic_found_issue);
+		$diagnostic_found_issue = is_array( $result );
+		$test_passes = ( $has_issue === $diagnostic_found_issue );
 
 		$message = $test_passes
 			? 'External fonts check matches site state'
@@ -118,7 +112,7 @@ class Diagnostic_External_Fonts extends Diagnostic_Base
 				$has_issue ? 'issue' : 'no issue',
 				$diagnostic_found_issue ? 'issue' : 'no issue',
 				$blocked ? 'yes' : 'no',
-				empty($handles) ? 'none' : implode(', ', $handles)
+				empty( $handles ) ? 'none' : implode( ', ', $handles )
 			);
 
 		return array(
@@ -126,4 +120,5 @@ class Diagnostic_External_Fonts extends Diagnostic_Base
 			'message' => $message,
 		);
 	}
+
 }

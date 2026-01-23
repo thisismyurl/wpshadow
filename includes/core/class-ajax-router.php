@@ -87,6 +87,11 @@ class AJAX_Router
 		\WPShadow\Admin\Ajax\Create_From_Example_Handler::register();
 		\WPShadow\Admin\Ajax\Create_Suggested_Workflow_Handler::register();
 
+		// Email recipient management (workflow notifications)
+		\WPShadow\Admin\Ajax\Add_Email_Recipient_Handler::register();
+		\WPShadow\Admin\Ajax\Approve_Email_Recipient_Handler::register();
+		\WPShadow\Admin\Ajax\Remove_Email_Recipient_Handler::register();
+
 		// Guardian operations
 		\WPShadow\Admin\Ajax\Toggle_Guardian_Handler::register();
 

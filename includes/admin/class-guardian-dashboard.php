@@ -92,7 +92,7 @@ class Guardian_Dashboard
 
 		return sprintf(
 			'<div class="wps-flex-gap-12-items-center-p-12-rounded-8" onclick="wpshadowToggleGuardian()" title="%s">
-				<span class="dashicons %s wps-icon-sm" style="color: %s;"></span>
+				<span class="dashicons %s wps-icon-sm wps-status-icon" data-status="%s"></span>
 				<span class="wps-font-semibold wps-text-gray-800">%s</span>
 			</div>
 			<script>
@@ -114,7 +114,7 @@ class Guardian_Dashboard
 			</script>',
 			esc_attr($is_enabled ? __('Click to disable Guardian', 'wpshadow') : __('Click to enable Guardian', 'wpshadow')),
 			esc_attr($status_icon),
-			esc_attr($status_color),
+			esc_attr($is_enabled ? 'enabled' : 'disabled'),
 			esc_html($status_text),
 			esc_js($is_enabled ? __('Are you sure you want to disable Guardian automated health monitoring?', 'wpshadow') : __('Enable Guardian to automatically monitor and fix issues?', 'wpshadow')),
 			esc_js(wp_create_nonce('wpshadow_toggle_guardian')),
@@ -188,7 +188,7 @@ class Guardian_Dashboard
 			$html .= sprintf(
 				'<div class="wps-card">
 					<div class="wps-card-body wps-flex-gap-16-items-center">
-						<span class="dashicons %s wps-icon-xl" style="color: %s;"></span>
+						<span class="dashicons %s wps-icon-xl wps-kpi-icon" style="color: %s;"></span>
 						<div>
 							<div class="wps-text-xs wps-text-gray-500 wps-uppercase wps-tracking-wide wps-font-semibold">%s</div>
 							<div class="wps-text-xl wps-font-bold wps-text-gray-800 wps-mt-1">%s</div>
@@ -351,8 +351,8 @@ class Guardian_Dashboard
 
 		$html = '<div class="wps-card">
 			<div class="wps-card-header">
-				<h3 class="wps-card-title wps-m-0">
-					<span class="dashicons dashicons-backup" style="margin-right: 8px;"></span>
+				<h3 class="wps-card-title wps-m-0 wps-flex-gap-8-items-center">
+					<span class="dashicons dashicons-backup"></span>
 					' . esc_html__('Recovery Points', 'wpshadow') . '
 				</h3>
 			</div>
@@ -434,13 +434,12 @@ class Guardian_Dashboard
 			$status_color = 'good' === $check['status'] ? '#10b981' : ('warning' === $check['status'] ? '#f59e0b' : '#ef4444');
 			$html .= sprintf(
 				'<div class="wps-flex-gap-12-items-center-p-12-rounded-6">
-					<span class="dashicons %s" style="color: %s; font-size: 20px; width: 20px; height: 20px;"></span>
-					<div style="flex: 1;">
+					<span class="dashicons %s wps-icon-md wps-status-check-icon" style="color: %s;"></span>
+					<div class="wps-flex-1">
 						<div class="wps-font-medium wps-text-gray-800">%s</div>
 					</div>
-					<div style="font-size: 12px; font-weight: 600; color: %s;">%s</div>
+					<div class="wps-text-xs wps-font-semibold" style="color: %s;">%s</div>
 				</div>',
-				esc_attr($status_color),
 				esc_attr($check['icon']),
 				esc_attr($status_color),
 				esc_html($check['name']),

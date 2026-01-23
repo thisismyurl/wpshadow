@@ -2024,3 +2024,32 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
     position: relative;
     z-index: 10;
 }
+/* ============================================================================
+   13. GUARDIAN DASHBOARD STATUS ICONS
+   ============================================================================ */
+
+/* Status icon colors for Guardian dashboard */
+.wps-status-icon[data-status="enabled"] {
+    color: var(--wps-success);
+}
+
+.wps-status-icon[data-status="disabled"] {
+    color: var(--wps-gray-500);
+}
+
+/* KPI icons - these can be customized per-card via inline styles if needed */
+.wps-kpi-icon {
+    flex-shrink: 0;
+}
+
+/* Status check icons */
+.wps-status-check-icon {
+    flex-shrink: 0;
+}
+
+/* Icon size variants */
+.wps-icon-md {
+    font-size: 20px !important;
+    width: 20px !important;
+    height: 20px !important;
+}

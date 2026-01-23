@@ -32,12 +32,14 @@ class Email_Recipient_Manager
 
 	/**
 	 * Initialize hooks
+	 *
+	 * NOTE: AJAX handlers for add/approve/remove have been migrated to class-based handlers.
+	 * See: includes/admin/ajax/class-*-email-recipient-handler.php
+	 * Only keeping the nopriv handler here as it's a special public-facing handler.
 	 */
 	public static function init()
 	{
-		add_action('wp_ajax_wpshadow_add_email_recipient', array(__CLASS__, 'handle_add_recipient'));
-		add_action('wp_ajax_wpshadow_approve_recipient', array(__CLASS__, 'handle_approve_recipient'));
-		add_action('wp_ajax_wpshadow_remove_recipient', array(__CLASS__, 'handle_remove_recipient'));
+		// Public verification handler (no authentication required)
 		add_action('wp_ajax_nopriv_wpshadow_verify_email_recipient', array(__CLASS__, 'handle_verify_email'));
 	}
 
@@ -234,107 +236,14 @@ class Email_Recipient_Manager
 	}
 
 	/**
-	 * Handle AJAX request to add email recipient
+	 * DEPRECATED: These handlers have been migrated to class-based handlers.
+	 * See: includes/admin/ajax/class-add-email-recipient-handler.php
+	 * See: includes/admin/ajax/class-approve-email-recipient-handler.php
+	 * See: includes/admin/ajax/class-remove-email-recipient-handler.php
+	 *
+	 * These methods are retained for backwards compatibility and reference only.
+	 * They are no longer called directly as the AJAX hooks have been removed from init().
 	 */
-	public static function handle_add_recipient()
-	{
-		// Verify nonce
-		if (! isset($_POST['nonce']) || ! wp_verify_nonce($_POST['nonce'], self::NONCE_ACTION)) {
-			wp_send_json_error(array('message' => 'Security check failed.'));
-		}
-
-		// Verify capability
-		if (! current_user_can('manage_options')) {
-			wp_send_json_error(array('message' => 'You do not have permission.'));
-		}
-
-		$email             = isset($_POST['email']) ? sanitize_email($_POST['email']) : '';
-		$send_verification = isset($_POST['send_verification']) && $_POST['send_verification'];
-
-		if (empty($email)) {
-			wp_send_json_error(array('message' => 'Email is required.'));
-		}
-
-		$result = self::request_recipient($email, $send_verification);
-
-		if ($result['success']) {
-			wp_send_json_success($result);
-		} else {
-			wp_send_json_error($result);
-		}
-	}
-
-	/**
-	 * Handle AJAX request to approve recipient (admin approval)
-	 */
-	public static function handle_approve_recipient()
-	{
-		// Verify nonce
-		if (! isset($_POST['nonce']) || ! wp_verify_nonce($_POST['nonce'], self::NONCE_ACTION)) {
-			wp_send_json_error(array('message' => 'Security check failed.'));
-		}
-
-		// Verify capability
-		if (! current_user_can('manage_options')) {
-			wp_send_json_error(array('message' => 'You do not have permission.'));
-		}
-
-		$email = isset($_POST['email']) ? sanitize_email($_POST['email']) : '';
-
-		if (empty($email)) {
-			wp_send_json_error(array('message' => 'Email is required.'));
-		}
-
-		$recipients = self::get_approved_recipients();
-
-		if (! isset($recipients[$email])) {
-			wp_send_json_error(array('message' => 'Email not found.'));
-		}
-
-		// Mark as approved
-		$recipients[$email]['approved']      = true;
-		$recipients[$email]['approved_date'] = current_time('mysql');
-		$recipients[$email]['verified_by']   = 'admin_approval';
-		unset($recipients[$email]['pending_admin']);
-
-		update_option(self::OPTION_KEY, $recipients);
-
-		wp_send_json_success(array('message' => 'Email approved successfully.'));
-	}
-
-	/**
-	 * Handle AJAX request to remove recipient
-	 */
-	public static function handle_remove_recipient()
-	{
-		// Verify nonce
-		if (! isset($_POST['nonce']) || ! wp_verify_nonce($_POST['nonce'], self::NONCE_ACTION)) {
-			wp_send_json_error(array('message' => 'Security check failed.'));
-		}
-
-		// Verify capability
-		if (! current_user_can('manage_options')) {
-			wp_send_json_error(array('message' => 'You do not have permission.'));
-		}
-
-		$email = isset($_POST['email']) ? sanitize_email($_POST['email']) : '';
-
-		if (empty($email)) {
-			wp_send_json_error(array('message' => 'Email is required.'));
-		}
-
-		$recipients = self::get_approved_recipients();
-
-		if (! isset($recipients[$email])) {
-			wp_send_json_error(array('message' => 'Email not found.'));
-		}
-
-		// Remove the recipient
-		unset($recipients[$email]);
-		update_option(self::OPTION_KEY, $recipients);
-
-		wp_send_json_success(array('message' => 'Email recipient removed.'));
-	}
 
 	/**
 	 * Handle email verification from verification link
