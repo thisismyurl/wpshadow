@@ -1,0 +1,119 @@
+<?php
+declare(strict_types=1);
+/**
+ * File Upload MIME Type Validation Diagnostic
+ *
+ * Philosophy: Upload security - validate actual file content
+ * @package WPShadow
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
+ */
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+/**
+ * Check if file uploads validate MIME types properly.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
+ */
+class Diagnostic_File_Upload_MIME_Validation extends Diagnostic_Base {
+	/**
+	 * Run the diagnostic check.
+	 *
+	 * @return array|null Finding data or null if no issue.
+	 */
+	public static function check(): ?array {
+		// Check if fileinfo extension is available
+		if ( ! function_exists( 'finfo_open' ) ) {
+			return array(
+				'id'          => 'file-upload-mime-validation',
+				'title'       => 'Missing File Type Detection',
+				'description' => 'PHP fileinfo extension is not installed. WordPress cannot properly validate file types, allowing malicious files to be uploaded with fake extensions (e.g., malware.php.jpg). Install php-fileinfo extension.',
+				'severity'    => 'high',
+				'category'    => 'security',
+				'kb_link'     => 'https://wpshadow.com/kb/enable-fileinfo-extension/',
+				'training_link' => 'https://wpshadow.com/training/upload-security/',
+				'auto_fixable' => false,
+				'threat_level' => 80,
+			);
+		}
+		
+		// Check WordPress upload settings
+		$upload_filetypes = get_option( 'upload_filetypes' );
+		
+		// If multisite and dangerous file types are allowed
+		if ( is_multisite() && ! empty( $upload_filetypes ) ) {
+			$dangerous_types = array( 'php', 'phtml', 'php3', 'php4', 'php5', 'php7', 'phps', 'cgi', 'exe', 'sh' );
+			$allowed_array = array_map( 'trim', explode( ' ', strtolower( $upload_filetypes ) ) );
+			
+			$found_dangerous = array_intersect( $dangerous_types, $allowed_array );
+			
+			if ( ! empty( $found_dangerous ) ) {
+				return array(
+					'id'          => 'file-upload-mime-validation',
+					'title'       => 'Dangerous File Types Allowed',
+					'description' => sprintf(
+						'Your multisite allows uploading executable files: %s. This enables remote code execution. Remove these file types from allowed uploads.',
+						implode( ', ', $found_dangerous )
+					),
+					'severity'    => 'critical',
+					'category'    => 'security',
+					'kb_link'     => 'https://wpshadow.com/kb/restrict-file-uploads/',
+					'training_link' => 'https://wpshadow.com/training/upload-security/',
+					'auto_fixable' => true,
+					'threat_level' => 85,
+				);
+			}
+		}
+		
+		return null;
+	}
+
+
+
+	/**
+	 * Live test for this diagnostic
+	 *
+	 * Diagnostic: File Upload MIME Validation
+	 * Slug: -file-upload-mime-validation
+	 * File: class-diagnostic-file-upload-mime-validation.php
+	 * 
+	 * Test Purpose:
+	 * Cannot determine specific pass criteria from available metadata.
+	 * Diagnostic: File Upload MIME Validation
+	 * Slug: -file-upload-mime-validation
+	 * 
+	 * TODO: Review the check() method to understand what constitutes a passing test.
+	 * The test should verify that:
+	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
+	 * - check() returns an array when the diagnostic condition IS met (issue found)
+	 *
+	 * @return array {
+	 *     @type bool   $passed  Whether the test passed
+	 *     @type string $message Human-readable test result message
+	 * }
+	 */
+	public static function test_live__file_upload_mime_validation(): array {
+		/*
+		 * IMPLEMENTATION NOTES:
+		 * - This test validates the actual WordPress site state
+		 * - Do not use mocks or stubs
+		 * - Call self::check() to get the diagnostic result
+		 * - Verify the result matches expected site state
+		 * - Return [ 'passed' => bool, 'message' => string ]
+		 */
+		
+		$result = self::check();
+		
+		// TODO: Implement actual test logic
+		return array(
+			'passed' => false,
+			'message' => 'Test not yet implemented',
+		);
+	}
+
+}

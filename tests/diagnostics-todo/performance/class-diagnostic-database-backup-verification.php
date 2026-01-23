@@ -1,0 +1,106 @@
+<?php
+declare(strict_types=1);
+/**
+ * Database Backup Verification Diagnostic
+ *
+ * Philosophy: Show value - verify backups actually work
+ * @package WPShadow
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
+ */
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+/**
+ * Check if database backups are functioning.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
+ */
+class Diagnostic_Database_Backup_Verification extends Diagnostic_Base {
+	/**
+	 * Run the diagnostic check.
+	 *
+	 * @return array|null Finding data or null if no issue.
+	 */
+	public static function check(): ?array {
+		// Check for last successful backup timestamp from common plugins
+		$backup_options = array(
+			'updraftplus_last_backup',
+			'backwpup_last_run',
+			'backup_last_success',
+		);
+		
+		$last_backup = 0;
+		foreach ( $backup_options as $option ) {
+			$time = get_option( $option, 0 );
+			if ( $time > $last_backup ) {
+				$last_backup = $time;
+			}
+		}
+		
+		// If no backup in 7 days
+		if ( $last_backup === 0 || ( time() - $last_backup ) > ( 7 * DAY_IN_SECONDS ) ) {
+			return array(
+				'id'          => 'database-backup-verification',
+				'title'       => 'Database Backup Not Verified',
+				'description' => 'No successful database backup detected in the last 7 days. Verify your backup plugin is functioning correctly.',
+				'severity'    => 'high',
+				'category'    => 'security',
+				'kb_link'     => 'https://wpshadow.com/kb/verify-wordpress-backups/',
+				'training_link' => 'https://wpshadow.com/training/backup-verification/',
+				'auto_fixable' => false,
+				'threat_level' => 70,
+			);
+		}
+		
+		return null;
+	}
+
+
+
+	/**
+	 * Live test for this diagnostic
+	 *
+	 * Diagnostic: Database Backup Verification
+	 * Slug: -database-backup-verification
+	 * File: class-diagnostic-database-backup-verification.php
+	 * 
+	 * Test Purpose:
+	 * Cannot determine specific pass criteria from available metadata.
+	 * Diagnostic: Database Backup Verification
+	 * Slug: -database-backup-verification
+	 * 
+	 * TODO: Review the check() method to understand what constitutes a passing test.
+	 * The test should verify that:
+	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
+	 * - check() returns an array when the diagnostic condition IS met (issue found)
+	 *
+	 * @return array {
+	 *     @type bool   $passed  Whether the test passed
+	 *     @type string $message Human-readable test result message
+	 * }
+	 */
+	public static function test_live__database_backup_verification(): array {
+		/*
+		 * IMPLEMENTATION NOTES:
+		 * - This test validates the actual WordPress site state
+		 * - Do not use mocks or stubs
+		 * - Call self::check() to get the diagnostic result
+		 * - Verify the result matches expected site state
+		 * - Return [ 'passed' => bool, 'message' => string ]
+		 */
+		
+		$result = self::check();
+		
+		// TODO: Implement actual test logic
+		return array(
+			'passed' => false,
+			'message' => 'Test not yet implemented',
+		);
+	}
+
+}

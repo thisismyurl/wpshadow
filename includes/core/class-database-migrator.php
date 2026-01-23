@@ -1,0 +1,217 @@
+<?php
+
+/**
+ * WPShadow Database Migrator
+ *
+ * Handles database schema creation, updates, and migrations using WordPress dbDelta().
+ * Called during plugin activation to ensure tables are created/updated as needed.
+ *
+ * Philosophy: Commandment #7 (Ridiculously Good - solid database foundation)
+ * Philosophy: Commandment #10 (Beyond Pure - no presumption, proper schema management)
+ *
+ * @package WPShadow
+ * @subpackage Core
+ */
+
+namespace WPShadow\Core;
+
+if (! defined('ABSPATH')) {
+	exit;
+}
+
+/**
+ * Database migration and schema management
+ */
+class Database_Migrator
+{
+
+	/**
+	 * Current schema version
+	 * Increment when database schema changes
+	 */
+	const SCHEMA_VERSION = 1;
+
+	/**
+	 * Database version option key
+	 */
+	const VERSION_OPTION = 'wpshadow_db_version';
+
+	/**
+	 * Run database migrations
+	 * Called from activation hook
+	 *
+	 * @return void
+	 */
+	public static function migrate()
+	{
+		// Get current version
+		$current_version = (int) get_option(self::VERSION_OPTION, 0);
+
+		// Only run if schema needs update
+		if ($current_version >= self::SCHEMA_VERSION) {
+			return;
+		}
+
+		// Include wp_upgrade.php for dbDelta
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+		// Version 0 -> 1: Initial schema
+		if ($current_version < 1) {
+			self::schema_v1();
+		}
+
+		// Update version
+		update_option(self::VERSION_OPTION, self::SCHEMA_VERSION, false);
+	}
+
+	/**
+	 * Schema Version 1: Initial tables
+	 *
+	 * Creates all base tables needed by WPShadow:
+	 * - wpshadow_workflow_logs: Temporary workflow execution logs
+	 * - wpshadow_activity_log: Guardian activity tracking (optional, uses options by default)
+	 *
+	 * @return void
+	 */
+	private static function schema_v1()
+	{
+		global $wpdb;
+
+		// Table prefix
+		$table_logs = $wpdb->prefix . 'wpshadow_workflow_logs';
+
+		// SQL statement using WordPress coding standards
+		$sql = "CREATE TABLE {$table_logs} (
+			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+			workflow_id VARCHAR(100) NOT NULL,
+			execution_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			execution_time_ms INT UNSIGNED DEFAULT 0,
+			handler_name VARCHAR(255) NOT NULL,
+			status VARCHAR(50) NOT NULL,
+			message TEXT,
+			result_data LONGTEXT,
+			user_id BIGINT UNSIGNED,
+			INDEX (workflow_id),
+			INDEX (execution_date),
+			INDEX (status),
+			PRIMARY KEY (id)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
+
+		// Use dbDelta for safe table creation
+		// dbDelta returns array of queries executed, but we just need side effects
+		dbDelta($sql);
+
+		// Optional: Create activity log table for Guardian
+		// Currently using wp_options with wpshadow_guardian_activity option
+		// This table can be added if performance metrics show need for it
+		// For now, keeping it commented to minimize schema complexity
+		/*
+		$table_activity = $wpdb->prefix . 'wpshadow_activity_log';
+		$sql_activity = "CREATE TABLE {$table_activity} (
+			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+			activity_type VARCHAR(100) NOT NULL,
+			activity_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			severity VARCHAR(50),
+			details TEXT,
+			user_id BIGINT UNSIGNED,
+			INDEX (activity_type),
+			INDEX (activity_date),
+			INDEX (severity),
+			PRIMARY KEY (id)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
+
+		dbDelta($sql_activity);
+		*/
+	}
+
+	/**
+	 * Get database tables created by WPShadow
+	 *
+	 * @return array List of table names
+	 */
+	public static function get_tables()
+	{
+		global $wpdb;
+
+		return [
+			$wpdb->prefix . 'wpshadow_workflow_logs',
+		];
+	}
+
+	/**
+	 * Check if tables exist
+	 *
+	 * @return bool True if all tables exist
+	 */
+	public static function tables_exist()
+	{
+		global $wpdb;
+
+		foreach (self::get_tables() as $table) {
+			$exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
+			if (!$exists) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Get current database schema version
+	 *
+	 * @return int Version number
+	 */
+	public static function get_current_version()
+	{
+		return (int) get_option(self::VERSION_OPTION, 0);
+	}
+
+	/**
+	 * Get required database schema version
+	 *
+	 * @return int Latest schema version
+	 */
+	public static function get_latest_version()
+	{
+		return self::SCHEMA_VERSION;
+	}
+
+	/**
+	 * Check if database schema is up to date
+	 *
+	 * @return bool True if current == latest version
+	 */
+	public static function is_up_to_date()
+	{
+		return self::get_current_version() >= self::get_latest_version();
+	}
+
+	/**
+	 * Reset database (for development/testing)
+	 *
+	 * WARNING: This permanently deletes all WPShadow data
+	 * Only call this explicitly with proper capabilities check
+	 *
+	 * @return bool Success status
+	 */
+	public static function reset()
+	{
+		// Security: Verify capability
+		if (!current_user_can('manage_options')) {
+			return false;
+		}
+
+		global $wpdb;
+
+		foreach (self::get_tables() as $table) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+			$wpdb->query("DROP TABLE IF EXISTS {$table}"); // @phpstan-ignore-line
+		}
+
+		// Reset version
+		delete_option(self::VERSION_OPTION);
+
+		return true;
+	}
+}

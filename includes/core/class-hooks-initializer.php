@@ -88,6 +88,12 @@ class Hooks_Initializer
 	 */
 	public static function on_activate()
 	{
+		// Run database migrations (create tables, schema updates)
+		// This ensures all necessary tables exist for the plugin
+		// Use dynamic include to avoid circular dependencies
+		require_once WPSHADOW_PATH . 'includes/core/class-database-migrator.php';
+		Database_Migrator::migrate();
+
 		set_transient('wpshadow_redirect_to_dashboard', true, 30);
 	}
 

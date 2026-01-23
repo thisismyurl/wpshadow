@@ -210,12 +210,12 @@ class Test_File_Permissions_Too_Open extends Diagnostic_Base
 		$symbolic = '';
 		$symbolic .= ((($perms & 0xC000) === 0xC000) ? 's' : // Socket
 			((($perms & 0xA000) === 0xA000) ? 'l' : // Symbolic Link
-			((($perms & 0x8000) === 0x8000) ? '-' : // Regular
-			((($perms & 0x6000) === 0x6000) ? 'b' : // Block special
-			((($perms & 0x4000) === 0x4000) ? 'd' : // Directory
-			((($perms & 0x2000) === 0x2000) ? 'c' : // Character special
-			((($perms & 0x1000) === 0x1000) ? 'p' : // FIFO pipe
-			'u'))))))); // Unknown
+				((($perms & 0x8000) === 0x8000) ? '-' : // Regular
+					((($perms & 0x6000) === 0x6000) ? 'b' : // Block special
+						((($perms & 0x4000) === 0x4000) ? 'd' : // Directory
+							((($perms & 0x2000) === 0x2000) ? 'c' : // Character special
+								((($perms & 0x1000) === 0x1000) ? 'p' : // FIFO pipe
+									'u'))))))); // Unknown
 
 		// Owner
 		$symbolic .= (($perms & 0x0100) ? 'r' : '-');

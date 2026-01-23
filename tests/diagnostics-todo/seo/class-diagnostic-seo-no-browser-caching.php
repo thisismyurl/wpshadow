@@ -1,0 +1,98 @@
+<?php
+declare(strict_types=1);
+/**
+ * No Browser Caching Diagnostic
+ *
+ * Philosophy: SEO performance - browser caching speeds repeat visits
+ * @package WPShadow
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
+ */
+
+namespace WPShadow\Diagnostics;
+
+use WPShadow\Core\Diagnostic_Base;
+
+/**
+ * Check if browser caching is enabled.
+  * 
+ * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
+ * @guardian-integrated Pending - Not yet in Diagnostic_Registry
+ */
+class Diagnostic_SEO_No_Browser_Caching extends Diagnostic_Base {
+	/**
+	 * Run the diagnostic check.
+	 *
+	 * @return array|null Finding data or null if no issue.
+	 */
+	public static function check(): ?array {
+		$home_url = home_url( '/' );
+		$response = wp_remote_get( $home_url, array( 'timeout' => 5 ) );
+		
+		if ( ! is_wp_error( $response ) ) {
+			$headers = wp_remote_retrieve_headers( $response );
+			$cache_control = $headers['cache-control'] ?? '';
+			
+			if ( empty( $cache_control ) || strpos( $cache_control, 'no-cache' ) !== false ) {
+				return array(
+					'id'          => 'seo-no-browser-caching',
+					'title'       => 'Browser Caching Not Enabled',
+					'description' => 'No cache-control headers detected. Browser caching stores static files locally, speeding up repeat visits. Add cache headers via .htaccess or plugin.',
+					'severity'    => 'medium',
+					'category'    => 'seo',
+					'kb_link'     => 'https://wpshadow.com/kb/enable-browser-caching/',
+					'training_link' => 'https://wpshadow.com/training/caching-strategy/',
+					'auto_fixable' => false,
+					'threat_level' => 60,
+				);
+			}
+		}
+		
+		return null;
+	}
+
+
+
+	/**
+	 * Live test for this diagnostic
+	 *
+	 * Diagnostic: SEO No Browser Caching
+	 * Slug: -seo-no-browser-caching
+	 * File: class-diagnostic-seo-no-browser-caching.php
+	 * 
+	 * Test Purpose:
+	 * Cannot determine specific pass criteria from available metadata.
+	 * Diagnostic: SEO No Browser Caching
+	 * Slug: -seo-no-browser-caching
+	 * 
+	 * TODO: Review the check() method to understand what constitutes a passing test.
+	 * The test should verify that:
+	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
+	 * - check() returns an array when the diagnostic condition IS met (issue found)
+	 *
+	 * @return array {
+	 *     @type bool   $passed  Whether the test passed
+	 *     @type string $message Human-readable test result message
+	 * }
+	 */
+	public static function test_live__seo_no_browser_caching(): array {
+		/*
+		 * IMPLEMENTATION NOTES:
+		 * - This test validates the actual WordPress site state
+		 * - Do not use mocks or stubs
+		 * - Call self::check() to get the diagnostic result
+		 * - Verify the result matches expected site state
+		 * - Return [ 'passed' => bool, 'message' => string ]
+		 */
+		
+		$result = self::check();
+		
+		// TODO: Implement actual test logic
+		return array(
+			'passed' => false,
+			'message' => 'Test not yet implemented',
+		);
+	}
+
+}

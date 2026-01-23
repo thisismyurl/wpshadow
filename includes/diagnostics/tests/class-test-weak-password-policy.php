@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WPShadow\Diagnostics\Tests;
@@ -13,22 +14,24 @@ use WPShadow\Diagnostics\Diagnostic_Base;
  *
  * @since 1.2.0
  */
-class Test_Weak_Password_Policy extends Diagnostic_Base {
+class Test_Weak_Password_Policy extends Diagnostic_Base
+{
 
 	/**
 	 * Check for weak password policy
 	 *
 	 * @return array|null Diagnostic array if issues found, null if all good
 	 */
-	public static function check(): ?array {
+	public static function check(): ?array
+	{
 		$policy_issues = self::detect_policy_issues();
 
-		if ( empty( $policy_issues ) ) {
+		if (empty($policy_issues)) {
 			return null;
 		}
 
-		$threat = count( $policy_issues ) * 15;
-		$threat = min( 70, $threat );
+		$threat = count($policy_issues) * 15;
+		$threat = min(70, $threat);
 
 		return [
 			'threat_level'    => $threat,
@@ -36,10 +39,10 @@ class Test_Weak_Password_Policy extends Diagnostic_Base {
 			'passed'          => false,
 			'issue'           => sprintf(
 				'Found %d password policy weaknesses',
-				count( $policy_issues )
+				count($policy_issues)
 			),
 			'metadata'        => [
-				'issues_count' => count( $policy_issues ),
+				'issues_count' => count($policy_issues),
 				'issues'       => $policy_issues,
 			],
 			'kb_link'         => 'https://wpshadow.com/kb/password-security-policy/',
@@ -52,7 +55,8 @@ class Test_Weak_Password_Policy extends Diagnostic_Base {
 	 *
 	 * @return array Test result
 	 */
-	public static function test_password_policy_config(): array {
+	public static function test_password_policy_config(): array
+	{
 		$policy = self::get_password_policy();
 
 		return [
@@ -62,7 +66,7 @@ class Test_Weak_Password_Policy extends Diagnostic_Base {
 			'requires_numbers' => $policy['requires_numbers'],
 			'requires_special' => $policy['requires_special'],
 			'passed'        => $policy['min_length'] >= 12,
-			'description'   => sprintf( 'Minimum length: %d characters', $policy['min_length'] ),
+			'description'   => sprintf('Minimum length: %d characters', $policy['min_length']),
 		];
 	}
 
@@ -71,19 +75,20 @@ class Test_Weak_Password_Policy extends Diagnostic_Base {
 	 *
 	 * @return array Test result
 	 */
-	public static function test_two_factor_authentication(): array {
+	public static function test_two_factor_authentication(): array
+	{
 		$has_2fa = self::has_2fa_plugin();
-		$admin_count = count( get_users( [ 'role' => 'administrator' ] ) );
-		$admins_with_2fa = self::count_users_with_2fa( 'administrator' );
+		$admin_count = count(get_users(['role' => 'administrator']));
+		$admins_with_2fa = self::count_users_with_2fa('administrator');
 
 		return [
 			'test_name'       => 'Two-Factor Authentication',
 			'plugin_available' => $has_2fa,
 			'admin_count'     => $admin_count,
 			'admins_with_2fa' => $admins_with_2fa,
-			'adoption_rate'   => $admin_count > 0 ? round( ( $admins_with_2fa / $admin_count ) * 100 ) : 0,
-			'passed'          => $has_2fa && $admins_with_2fa >= ( $admin_count / 2 ), // At least 50% adoption
-			'description'     => $has_2fa ? sprintf( '2FA available: %d/%d admins enabled', $admins_with_2fa, $admin_count ) : 'No 2FA plugin found',
+			'adoption_rate'   => $admin_count > 0 ? round(($admins_with_2fa / $admin_count) * 100) : 0,
+			'passed'          => $has_2fa && $admins_with_2fa >= ($admin_count / 2), // At least 50% adoption
+			'description'     => $has_2fa ? sprintf('2FA available: %d/%d admins enabled', $admins_with_2fa, $admin_count) : 'No 2FA plugin found',
 		];
 	}
 
@@ -92,15 +97,16 @@ class Test_Weak_Password_Policy extends Diagnostic_Base {
 	 *
 	 * @return array Test result
 	 */
-	public static function test_weak_admin_accounts(): array {
+	public static function test_weak_admin_accounts(): array
+	{
 		$weak_accounts = self::find_weak_usernames();
 
 		return [
 			'test_name'        => 'Weak Admin Usernames',
 			'weak_accounts'    => $weak_accounts,
-			'count'            => count( $weak_accounts ),
-			'passed'           => empty( $weak_accounts ),
-			'description'      => empty( $weak_accounts ) ? 'No weak admin usernames found' : sprintf( '%d weak admin usernames detected', count( $weak_accounts ) ),
+			'count'            => count($weak_accounts),
+			'passed'           => empty($weak_accounts),
+			'description'      => empty($weak_accounts) ? 'No weak admin usernames found' : sprintf('%d weak admin usernames detected', count($weak_accounts)),
 		];
 	}
 
@@ -109,8 +115,9 @@ class Test_Weak_Password_Policy extends Diagnostic_Base {
 	 *
 	 * @return array Test result
 	 */
-	public static function test_password_expiration(): array {
-		$expiration_days = get_option( 'wpshadow_password_expiration_days', 0 );
+	public static function test_password_expiration(): array
+	{
+		$expiration_days = get_option('wpshadow_password_expiration_days', 0);
 		$has_expiration = $expiration_days > 0;
 
 		return [
@@ -118,7 +125,7 @@ class Test_Weak_Password_Policy extends Diagnostic_Base {
 			'has_expiration'  => $has_expiration,
 			'expiration_days' => $expiration_days,
 			'passed'          => $has_expiration,
-			'description'     => $has_expiration ? sprintf( 'Passwords expire every %d days', $expiration_days ) : 'No password expiration policy',
+			'description'     => $has_expiration ? sprintf('Passwords expire every %d days', $expiration_days) : 'No password expiration policy',
 		];
 	}
 
@@ -127,27 +134,28 @@ class Test_Weak_Password_Policy extends Diagnostic_Base {
 	 *
 	 * @return array List of issues
 	 */
-	private static function detect_policy_issues(): array {
+	private static function detect_policy_issues(): array
+	{
 		$issues = [];
 
 		$policy = self::get_password_policy();
 
-		if ( $policy['min_length'] < 8 ) {
-			$issues[] = sprintf( 'Minimum password length too short (%d characters)', $policy['min_length'] );
+		if ($policy['min_length'] < 8) {
+			$issues[] = sprintf('Minimum password length too short (%d characters)', $policy['min_length']);
 		}
 
-		if ( ! $policy['requires_uppercase'] ) {
+		if (! $policy['requires_uppercase']) {
 			$issues[] = 'Passwords don\'t require uppercase letters';
 		}
 
-		if ( ! $policy['requires_numbers'] ) {
+		if (! $policy['requires_numbers']) {
 			$issues[] = 'Passwords don\'t require numbers';
 		}
 
 		// Check for weak admin usernames
 		$weak = self::find_weak_usernames();
-		if ( ! empty( $weak ) ) {
-			$issues[] = sprintf( '%d admin accounts use weak usernames', count( $weak ) );
+		if (! empty($weak)) {
+			$issues[] = sprintf('%d admin accounts use weak usernames', count($weak));
 		}
 
 		return $issues;
@@ -158,7 +166,8 @@ class Test_Weak_Password_Policy extends Diagnostic_Base {
 	 *
 	 * @return array Policy settings
 	 */
-	private static function get_password_policy(): array {
+	private static function get_password_policy(): array
+	{
 		return [
 			'min_length'         => 8, // WordPress minimum
 			'requires_uppercase' => false, // Not enforced by default
@@ -172,17 +181,18 @@ class Test_Weak_Password_Policy extends Diagnostic_Base {
 	 *
 	 * @return bool
 	 */
-	private static function has_2fa_plugin(): bool {
+	private static function has_2fa_plugin(): bool
+	{
 		$twofa_plugins = [
 			'two-factor-authentication/two-factor-authentication.php',
 			'wordfence/wordfence.php', // Has 2FA
 			'jetpack/jetpack.php', // Has 2FA
 		];
 
-		$active = get_option( 'active_plugins', [] );
+		$active = get_option('active_plugins', []);
 
-		foreach ( $twofa_plugins as $plugin ) {
-			if ( in_array( $plugin, $active, true ) ) {
+		foreach ($twofa_plugins as $plugin) {
+			if (in_array($plugin, $active, true)) {
 				return true;
 			}
 		}
@@ -196,13 +206,14 @@ class Test_Weak_Password_Policy extends Diagnostic_Base {
 	 * @param string $role User role
 	 * @return int
 	 */
-	private static function count_users_with_2fa( string $role ): int {
-		$users = get_users( [ 'role' => $role ] );
+	private static function count_users_with_2fa(string $role): int
+	{
+		$users = get_users(['role' => $role]);
 		$count = 0;
 
-		foreach ( $users as $user ) {
-			$has_2fa = get_user_meta( $user->ID, '_user_2fa_enabled', true );
-			if ( $has_2fa ) {
+		foreach ($users as $user) {
+			$has_2fa = get_user_meta($user->ID, '_user_2fa_enabled', true);
+			if ($has_2fa) {
 				$count++;
 			}
 		}
@@ -215,13 +226,14 @@ class Test_Weak_Password_Policy extends Diagnostic_Base {
 	 *
 	 * @return array Weak usernames
 	 */
-	private static function find_weak_usernames(): array {
+	private static function find_weak_usernames(): array
+	{
 		$weak = [];
-		$weak_names = [ 'admin', 'administrator', 'root', 'test', 'demo', 'user' ];
+		$weak_names = ['admin', 'administrator', 'root', 'test', 'demo', 'user'];
 
-		$admins = get_users( [ 'role' => 'administrator' ] );
-		foreach ( $admins as $user ) {
-			if ( in_array( strtolower( $user->user_login ), $weak_names, true ) ) {
+		$admins = get_users(['role' => 'administrator']);
+		foreach ($admins as $user) {
+			if (in_array(strtolower($user->user_login), $weak_names, true)) {
 				$weak[] = $user->user_login;
 			}
 		}
@@ -234,7 +246,8 @@ class Test_Weak_Password_Policy extends Diagnostic_Base {
 	 *
 	 * @return string
 	 */
-	public static function get_name(): string {
+	public static function get_name(): string
+	{
 		return 'Weak Password Policy';
 	}
 
@@ -243,7 +256,8 @@ class Test_Weak_Password_Policy extends Diagnostic_Base {
 	 *
 	 * @return string
 	 */
-	public static function get_description(): string {
+	public static function get_description(): string
+	{
 		return 'Checks if WordPress enforces strong password policies';
 	}
 
@@ -252,7 +266,8 @@ class Test_Weak_Password_Policy extends Diagnostic_Base {
 	 *
 	 * @return string
 	 */
-	public static function get_category(): string {
+	public static function get_category(): string
+	{
 		return 'Security';
 	}
 }
