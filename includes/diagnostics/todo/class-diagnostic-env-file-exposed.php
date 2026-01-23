@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 /**
  * Exposed Environment Variables Diagnostic
  *
  * @package WPShadow
  * @subpackage DiagnosticsFuture
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
@@ -16,66 +17,68 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Exposed Environment Variables
- * 
+ *
  * Philosophy Compliance:
  * - ✅ Free to run (Commandment #2: Free as possible)
  * - ✅ Monetize fixes via Free + Guardian module
  * - ✅ Links to KB/Training (Commandments #5, #6)
  * - ✅ Shows KPI value (Commandment #9)
  * - ✅ Talk-worthy (Commandment #11): "Your .env file with database passwords is publicly accessible"
- * 
+ *
  * @priority 1
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
-class Diagnostic_Env_File_Exposed extends Diagnostic_Base {
-    
+class Diagnostic_Env_File_Exposed extends Diagnostic_Base
+{
+
     /**
      * The diagnostic slug/ID
      *
      * @var string
      */
     protected static $slug = 'env-file-exposed';
-    
+
     /**
      * The diagnostic title
      *
      * @var string
      */
     protected static $title = 'Exposed Environment Variables';
-    
+
     /**
      * The diagnostic description
      *
      * @var string
      */
     protected static $description = 'Tests if .env and other sensitive files are publicly accessible.';
-    
+
     /**
      * Run the diagnostic check
-     * 
+     *
      * @return array|null Finding data or null if no issue
      */
-    public static function check(): ?array {
+    public static function check(): ?array
+    {
         // Check if .env file exists
         $env_file = ABSPATH . '.env';
-        
+
         if (!file_exists($env_file)) {
             return null;
         }
-        
+
         // Try to access it via HTTP
         $site_url = site_url('/.env');
         $response = wp_remote_get($site_url, array(
             'timeout' => 5,
             'sslverify' => false,
         ));
-        
+
         // If we can access it, it's exposed
         if (!is_wp_error($response) && wp_remote_retrieve_response_code($response) === 200) {
             $body = wp_remote_retrieve_body($response);
-            
+
             // Verify it's actually the env file content
             if (!empty($body) && strlen($body) > 10) {
                 return array(
@@ -93,47 +96,48 @@ class Diagnostic_Env_File_Exposed extends Diagnostic_Base {
                 );
             }
         }
-        
+
         return null;
     }
 
 
 
 
-	/**
-	 * Live test for this diagnostic
-	 *
-	 * Diagnostic: Exposed Environment Variables
-	 * Slug: env-file-exposed
-	 * 
-	 * Test Purpose:
-	 * - Verify that check() method returns the correct result based on site state
-	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
-	 * - FAIL: check() returns array when diagnostic condition IS met (issue found)
-	 * - Description: Tests if .env and other sensitive files are publicly accessible.
-	 *
-	 * @return array {
-	 *     @type bool   $passed  Whether the test passed
-	 *     @type string $message Human-readable test result message
-	 * }
-	 */
-	public static function test_live_env_file_exposed(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
-		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented for ' . self::$slug,
-		);
-	}
+    /**
+     * Live test for this diagnostic
+     *
+     * Tests whether .env file is publicly accessible via HTTP.
+     *
+     * @return array {
+     *     @type bool   $passed  Whether the test passed
+     *     @type string $message Human-readable test result message
+     * }
+     */
+    public static function test_live_env_file_exposed(): array
+    {
+        $env_file = ABSPATH . '.env';
 
+        // If .env doesn't exist locally, it's safe
+        if (! file_exists($env_file)) {
+            return array(
+                'passed'  => true,
+                'message' => '✓ No .env file found (safe)',
+            );
+        }
+
+        // Run the diagnostic check
+        $result = self::check();
+
+        if (is_null($result)) {
+            return array(
+                'passed'  => true,
+                'message' => '✓ .env file exists but is not publicly accessible (safe)',
+            );
+        }
+
+        return array(
+            'passed'  => false,
+            'message' => '✗ .env file is publicly accessible - critical security risk',
+        );
+    }
 }

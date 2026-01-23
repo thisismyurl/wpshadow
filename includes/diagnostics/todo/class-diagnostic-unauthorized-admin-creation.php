@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 /**
  * Unauthorized Admin Creation Detection Diagnostic
  *
  * @package WPShadow
  * @subpackage DiagnosticsFuture
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
@@ -16,79 +17,81 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Unauthorized Admin Creation Detection
- * 
+ *
  * Philosophy Compliance:
  * - ✅ Free to run (Commandment #2: Free as possible)
  * - ✅ Monetize fixes via Guardian module
  * - ✅ Links to KB/Training (Commandments #5, #6)
  * - ✅ Shows KPI value (Commandment #9)
  * - ✅ Talk-worthy (Commandment #11): "WPShadow detected a new admin account you didn't create"
- * 
+ *
  * @priority 1
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
-class Diagnostic_Unauthorized_Admin_Creation extends Diagnostic_Base {
-    
+class Diagnostic_Unauthorized_Admin_Creation extends Diagnostic_Base
+{
+
     /**
      * The diagnostic slug/ID
      *
      * @var string
      */
     protected static $slug = 'unauthorized-admin-creation';
-    
+
     /**
      * The diagnostic title
      *
      * @var string
      */
     protected static $title = 'Unauthorized Admin Creation Detection';
-    
+
     /**
      * The diagnostic description
      *
      * @var string
      */
     protected static $description = 'Alerts when new admin/editor accounts are created unexpectedly.';
-    
+
     /**
      * Run the diagnostic check
-     * 
+     *
      * @return array|null Finding data or null if no issue
      */
-    public static function check(): ?array {
+    public static function check(): ?array
+    {
         // Get baseline of admin/editor users
         $baseline = get_option('wpshadow_admin_baseline', array());
-        
+
         // Get current admin/editor users
         $current_admins = get_users(array(
             'role__in' => array('administrator', 'editor'),
             'fields' => array('ID', 'user_login', 'user_email', 'user_registered')
         ));
-        
+
         $current_ids = wp_list_pluck($current_admins, 'ID');
-        
+
         // First run - establish baseline
         if (empty($baseline)) {
             update_option('wpshadow_admin_baseline', $current_ids);
             return null;
         }
-        
+
         // Check for new admin/editor accounts
         $new_accounts = array_diff($current_ids, $baseline);
-        
+
         if (empty($new_accounts)) {
             return null;
         }
-        
+
         // Analyze creation method for each new account
         $suspicious_accounts = self::detect_suspicious_admin_creation($new_accounts);
-        
+
         if (empty($suspicious_accounts)) {
             return null;
         }
-        
+
         return array(
             'id'           => static::$slug,
             'title'        => static::$title,
@@ -125,7 +128,8 @@ class Diagnostic_Unauthorized_Admin_Creation extends Diagnostic_Base {
      * @param array $user_ids Array of new user IDs to check
      * @return array Array of suspicious accounts with creation method analysis
      */
-    private static function detect_suspicious_admin_creation(array $user_ids): array {
+    private static function detect_suspicious_admin_creation(array $user_ids): array
+    {
         $suspicious = array();
 
         foreach ($user_ids as $user_id) {
@@ -170,7 +174,8 @@ class Diagnostic_Unauthorized_Admin_Creation extends Diagnostic_Base {
      * @param \WP_User $user User object
      * @return array Analysis results
      */
-    private static function analyze_user_creation_method(\WP_User $user): array {
+    private static function analyze_user_creation_method(\WP_User $user): array
+    {
         $indicators = array();
         $is_code_created = false;
 
@@ -229,37 +234,37 @@ class Diagnostic_Unauthorized_Admin_Creation extends Diagnostic_Base {
 
 
 
-	/**
-	 * Live test for this diagnostic
-	 *
-	 * Tests detection of admin accounts created via code vs web interface.
-	 *
-	 * @return array {
-	 *     @type bool   $passed  Whether the test passed
-	 *     @type string $message Human-readable test result message
-	 * }
-	 */
-	public static function test_live_unauthorized_admin_creation(): array {
-		// Run the full diagnostic check
-		$result = self::check();
-		
-		if (is_null($result)) {
-			return array(
-				'passed' => true,
-				'message' => '✓ No suspicious admin account creation detected (baseline check)',
-			);
-		}
+    /**
+     * Live test for this diagnostic
+     *
+     * Tests detection of admin accounts created via code vs web interface.
+     *
+     * @return array {
+     *     @type bool   $passed  Whether the test passed
+     *     @type string $message Human-readable test result message
+     * }
+     */
+    public static function test_live_unauthorized_admin_creation(): array
+    {
+        // Run the full diagnostic check
+        $result = self::check();
 
-		// Found suspicious accounts created via code
-		$suspicious_count = count($result['suspicious_accounts']);
-		return array(
-			'passed' => false,
-			'message' => sprintf(
-				'✗ %d admin account(s) detected created via code: %s',
-				$suspicious_count,
-				implode('; ', wp_list_pluck($result['suspicious_accounts'], 'method'))
-			),
-		);
-	}
+        if (is_null($result)) {
+            return array(
+                'passed' => true,
+                'message' => '✓ No suspicious admin account creation detected (baseline check)',
+            );
+        }
 
+        // Found suspicious accounts created via code
+        $suspicious_count = count($result['suspicious_accounts']);
+        return array(
+            'passed' => false,
+            'message' => sprintf(
+                '✗ %d admin account(s) detected created via code: %s',
+                $suspicious_count,
+                implode('; ', wp_list_pluck($result['suspicious_accounts'], 'method'))
+            ),
+        );
+    }
 }

@@ -69,19 +69,10 @@ class Diagnostic_Code_CODE_STANDARDS_DEPRECATED_FUNCTIONS extends Diagnostic_Bas
 	/**
 	 * Live test for this diagnostic
 	 *
-	 * Diagnostic: Code CODE STANDARDS DEPRECATED FUNCTIONS
-	 * Slug: -code-code-standards-deprecated-functions
-	 * File: class-diagnostic-code-code-standards-deprecated-functions.php
-	 * 
 	 * Test Purpose:
-	 * Cannot determine specific pass criteria from available metadata.
-	 * Diagnostic: Code CODE STANDARDS DEPRECATED FUNCTIONS
-	 * Slug: -code-code-standards-deprecated-functions
-	 * 
-	 * TODO: Review the check() method to understand what constitutes a passing test.
-	 * The test should verify that:
-	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
-	 * - check() returns an array when the diagnostic condition IS met (issue found)
+	 * Verify check() method correctly detects deprecated WordPress functions.
+	 * Pass criteria: No deprecated functions found
+	 * Fail criteria: Any deprecated functions detected
 	 *
 	 * @return array {
 	 *     @type bool   $passed  Whether the test passed
@@ -89,21 +80,18 @@ class Diagnostic_Code_CODE_STANDARDS_DEPRECATED_FUNCTIONS extends Diagnostic_Bas
 	 * }
 	 */
 	public static function test_live__code_code_standards_deprecated_functions(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
+
+		if ( is_null( $result ) ) {
+			return array(
+				'passed'  => true,
+				'message' => '✓ No deprecated functions detected',
+			);
+		}
+
 		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
+			'passed'  => false,
+			'message' => '✗ Deprecated functions: ' . $result['title'],
 		);
 	}
 
