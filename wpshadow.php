@@ -27,12 +27,21 @@ require_once WPSHADOW_PATH . 'includes/core/class-treatment-base.php';
 require_once WPSHADOW_PATH . 'includes/core/class-diagnostic-base.php';
 require_once WPSHADOW_PATH . 'includes/core/class-activity-logger.php';
 require_once WPSHADOW_PATH . 'includes/core/class-error-handler.php';
+require_once WPSHADOW_PATH . 'includes/core/class-settings-registry.php';
 
 /**
  * Initialize error handler early
  *
  * This must run before plugins_loaded so fatal errors during bootstrap are handled.
  */
+
+/**
+ * Initialize Settings Registry
+ * 
+ * Register all settings with WordPress Settings API for proper validation,
+ * sanitization, and WordPress integration.
+ */
+\WPShadow\Core\Settings_Registry::register();
 \WPShadow\Core\Error_Handler::init();
 
 /**
