@@ -6,6 +6,9 @@
             "label": "🛡️ Guardian: Pre-Work Check",
             "type": "shell",
             "command": "${workspaceFolder}/scripts/guardian-check.sh",
+            "runOptions": {
+                "runOn": "folderOpen"
+            },
             "presentation": {
                 "reveal": "always",
                 "panel": "new",
@@ -17,13 +20,14 @@
                 "isDefault": true
             }
         },
-        
         // === Git Workflow ===
         {
             "label": "Git: Check Sync Status",
             "type": "shell",
             "command": "bash",
-            "args": ["${workspaceFolder}/scripts/git-sync-check.sh"],
+            "args": [
+                "${workspaceFolder}/scripts/git-sync-check.sh"
+            ],
             "presentation": {
                 "reveal": "always",
                 "panel": "new"
@@ -44,7 +48,6 @@
             },
             "problemMatcher": []
         },
-        
         // === Testing & Validation ===
         {
             "label": "Test: PHP Syntax Check",
@@ -96,7 +99,6 @@
             ],
             "problemMatcher": []
         },
-        
         // === Docker Management ===
         {
             "label": "Docker: Start All Services",
@@ -139,7 +141,6 @@
             },
             "problemMatcher": []
         },
-        
         // === Development Shortcuts ===
         {
             "label": "Dev: Watch PHP Errors",
@@ -172,7 +173,6 @@
             },
             "problemMatcher": []
         },
-        
         // === Complete Workflows ===
         {
             "label": "🚀 Full Workflow: Sync → Test → Commit",
@@ -192,6 +192,27 @@
                 "Git: Quick Commit & Push"
             ],
             "problemMatcher": []
+        },
+        // === Keep-Alive ===
+        {
+            "label": "🔄 Keep-Alive: Start Session Keeper",
+            "type": "shell",
+            "command": "pgrep -f 'bash scripts/keep-alive.sh' > /dev/null 2>&1 && echo '✓ Keep-alive already running' || (nohup ${workspaceFolder}/scripts/keep-alive.sh > /dev/null 2>&1 & echo '✓ Keep-alive started')",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "🔄 Keep-Alive: View Activity Log",
+            "type": "shell",
+            "command": "tail -f /tmp/wpshadow-keep-alive.log",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": [],
+            "isBackground": true
         }
     ],
     "inputs": [

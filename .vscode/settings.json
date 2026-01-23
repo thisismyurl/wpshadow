@@ -9,7 +9,6 @@
     "**/node_modules": true,
     "**/vendor": true
   },
-  
   // === GitHub Copilot ===
   "github.copilot.chat.maxRequests": 200,
   "github.copilot.chat.autoApproveFileWrites": true,
@@ -20,9 +19,8 @@
     "plaintext": false,
     "markdown": true
   },
-  
   // === PHP & WordPress ===
-  "php.validate.executablePath": "/usr/local/bin/php",
+  "php.validate.executablePath": "/usr/bin/php",
   "php.validate.enable": true,
   "php.validate.run": "onSave",
   "[php]": {
@@ -30,29 +28,26 @@
     "editor.tabSize": 4,
     "editor.insertSpaces": false
   },
-  
   // === Intelephense ===
   "intelephense.diagnostics.enable": true,
   "intelephense.format.enable": true,
   "intelephense.environment.phpVersion": "8.2.0",
-  
   // === Editor Behavior ===
   "editor.formatOnSave": true,
   "editor.tabSize": 4,
-  "editor.rulers": [120],
+  "editor.rulers": [
+    120
+  ],
   "editor.minimap.enabled": true,
   "editor.bracketPairColorization.enabled": true,
-  
   // === Git ===
   "git.autofetch": true,
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
   "git.postCommitCommand": "push",
   "git.showPushSuccessNotification": true,
-  
   // === Docker ===
   "docker.enableDockerComposeLanguageService": true,
-  
   // === Search ===
   "search.exclude": {
     "**/node_modules": true,
@@ -61,10 +56,12 @@
     "**/*.min.js": true,
     "**/*.min.css": true
   },
-  
   // === Terminal ===
   "terminal.integrated.defaultProfile.linux": "bash",
   "terminal.integrated.fontSize": 13,
   "terminal.integrated.scrollback": 10000,
-  "terminal.integrated.copyOnSelection": true
+  "terminal.integrated.copyOnSelection": true,
+  "terminal.integrated.env.linux": {
+    "COMPOSER_CACHE_DIR": "/workspaces/.composer/cache"
+  }
 }

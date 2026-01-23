@@ -1,0 +1,27 @@
+Priority Tests Remaining (to reach critical coverage):
+
+BATCH 1 (SEO Core - 8 tests):
+17. Lang Attribute - HTML lang attribute for language
+18. Hreflang - International targeting
+19. AMP Validation - Accelerated Mobile Pages
+20. Structured Data Breadcrumbs - BreadcrumbList schema
+21. Video Schema - VideoObject for video content
+22. Article Schema - Article/BlogPosting for articles
+23. Local Business Schema - LocalBusiness for local sites
+24. FAQ Schema - FAQPage for Q&A content
+
+BATCH 2 (Accessibility - 5 tests):
+25. ARIA Labels - Proper ARIA implementation
+26. Form Labels - Input field labels
+27. Skip Links - Skip to content navigation
+28. Focus Indicators - Visible focus states
+29. Color Contrast - WCAG AA contrast ratios
+
+BATCH 3 (Performance - 5 tests):
+30. Render-Blocking Resources - CSS/JS blocking render
+31. Font Display - font-display: swap
+32. Preconnect/DNS-Prefetch - Resource hints
+33. Inline Critical CSS - Above-fold CSS
+34. Web Vitals - LCP, CLS, FID indicators
+
+Then continue with remaining ~115 tests across all categories.

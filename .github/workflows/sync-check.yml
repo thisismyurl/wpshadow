@@ -13,14 +13,14 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      
+
       - name: Check for large commits
         run: |
           # Get number of files changed in the last commit
           FILES_CHANGED=$(git diff --name-only HEAD^ HEAD | wc -l)
-          
+
           echo "Files changed in last commit: $FILES_CHANGED"
-          
+
           if [ "$FILES_CHANGED" -gt 100 ]; then
             echo "⚠️ WARNING: Large commit detected ($FILES_CHANGED files)"
             echo "This might indicate uncommitted changes being bulk-committed."
@@ -42,12 +42,12 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      
+
       - name: Check if branch is behind main
         run: |
           git fetch origin main
           BEHIND=$(git rev-list --count HEAD..origin/main)
-          
+
           if [ "$BEHIND" -gt 0 ]; then
             echo "⚠️ WARNING: Your branch is $BEHIND commits behind main"
             echo "Consider rebasing: git pull origin main --rebase"

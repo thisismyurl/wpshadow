@@ -4,33 +4,38 @@
 
 set -e
 
+# Ensure PHP is reachable for hooks
+export PATH="/usr/bin:/usr/local/bin:$PATH"
+PHP_BIN=$(command -v php || command -v php82 || true)
+
 echo "🛡️ Guardian Angel: Pre-commit checks..."
 echo ""
 
 ISSUES=0
 
 # === 1. PHP Syntax Check ===
-if command -v php > /dev/null 2>&1; then
-    echo "→ Checking PHP syntax..."
-    SYNTAX_ERRORS=0
-    for file in $(git diff --cached --name-only --diff-filter=ACM | grep '\.php$' | grep -v 'vendor/' | grep -v 'documented/'); do
-        if [ -f "$file" ]; then
-            if ! php -l "$file" > /dev/null 2>&1; then
-                echo "❌ Syntax error in: $file"
-                php -l "$file"
-                ((SYNTAX_ERRORS++))
-                ((ISSUES++))
-            fi
-        fi
-    done
+if [ -z "$PHP_BIN" ]; then
+    echo "❌ PHP CLI not found. Install php82 and ensure /usr/bin/php is available."
+    exit 1
+fi
 
-    if [ "$SYNTAX_ERRORS" -eq 0 ]; then
-        echo "✅ PHP syntax OK"
-    else
-        echo ""
+echo "→ Checking PHP syntax..."
+SYNTAX_ERRORS=0
+for file in $(git diff --cached --name-only --diff-filter=ACM | grep '\.php$' | grep -v 'vendor/' | grep -v 'documented/'); do
+    if [ -f "$file" ]; then
+        if ! "$PHP_BIN" -l "$file" > /dev/null 2>&1; then
+            echo "❌ Syntax error in: $file"
+            "$PHP_BIN" -l "$file"
+            ((SYNTAX_ERRORS++))
+            ((ISSUES++))
+        fi
     fi
+done
+
+if [ "$SYNTAX_ERRORS" -eq 0 ]; then
+    echo "✅ PHP syntax OK"
 else
-    echo "⚠️  PHP not available - skipping syntax check (will run in CI)"
+    echo ""
 fi
 
 # === 2. No Debug Code ===

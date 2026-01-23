@@ -22,7 +22,7 @@ You had **2,587 uncommitted file changes** (diagnostic reorganization) that were
 ```
 Run this **before starting work** to verify:
 - No uncommitted changes
-- No unpushed commits  
+- No unpushed commits
 - Local matches remote
 - Shows warning if out of sync
 
@@ -190,11 +190,8 @@ git stash pop
 git status
 
 # 2. Edit conflicting files, look for:
-<<<<<<< HEAD
 your changes
-=======
 remote changes
->>>>>>> origin/main
 
 # 3. Fix the conflicts, then:
 git add -A
@@ -237,5 +234,5 @@ Follow these 3 rules and you'll never have version conflicts again! 🎉
 
 ---
 
-**Last Updated:** January 23, 2026  
+**Last Updated:** January 23, 2026
 **Status:** ✅ Problem Solved & Automated

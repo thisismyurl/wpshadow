@@ -27,25 +27,25 @@ if ! git rev-parse --git-dir > /dev/null 2>&1; then
     ((ISSUES++))
 else
     git fetch origin --quiet
-    
+
     UNCOMMITTED=$(git status --porcelain | wc -l)
     UNPUSHED=$(git log origin/$(git rev-parse --abbrev-ref HEAD)..HEAD --oneline 2>/dev/null | wc -l)
     UNPULLED=$(git log HEAD..origin/$(git rev-parse --abbrev-ref HEAD) --oneline 2>/dev/null | wc -l)
-    
+
     if [ "$UNCOMMITTED" -gt 0 ]; then
         echo -e "${YELLOW}⚠ ${UNCOMMITTED} uncommitted changes${NC}"
         ((ISSUES++))
     else
         echo -e "${GREEN}✓ No uncommitted changes${NC}"
     fi
-    
+
     if [ "$UNPUSHED" -gt 0 ]; then
         echo -e "${YELLOW}⚠ ${UNPUSHED} unpushed commits${NC}"
         ((ISSUES++))
     else
         echo -e "${GREEN}✓ All commits pushed${NC}"
     fi
-    
+
     if [ "$UNPULLED" -gt 0 ]; then
         echo -e "${YELLOW}⚠ ${UNPULLED} commits on remote not pulled${NC}"
         ((ISSUES++))

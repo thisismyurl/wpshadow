@@ -40,7 +40,20 @@ else
 fi
 echo ""
 
-# === 3. Composer Dependencies ===
+# === 3. Composer Cache ===
+echo -e "${BLUE}→ Configuring composer cache...${NC}"
+COMPOSER_CACHE_DIR_DEFAULT="/workspaces/.composer/cache"
+mkdir -p "$COMPOSER_CACHE_DIR_DEFAULT"
+export COMPOSER_CACHE_DIR="$COMPOSER_CACHE_DIR_DEFAULT"
+if ! grep -q "COMPOSER_CACHE_DIR" ~/.bashrc 2>/dev/null; then
+    echo "export COMPOSER_CACHE_DIR=$COMPOSER_CACHE_DIR_DEFAULT" >> ~/.bashrc
+    echo -e "${GREEN}✓ Added COMPOSER_CACHE_DIR to ~/.bashrc${NC}"
+else
+    echo -e "${GREEN}✓ Composer cache already configured${NC}"
+fi
+echo ""
+
+# === 4. Composer Dependencies ===
 echo -e "${BLUE}→ Checking composer dependencies...${NC}"
 if [ ! -d "vendor" ]; then
     echo -e "${YELLOW}→ Installing composer dependencies...${NC}"
@@ -51,12 +64,12 @@ else
 fi
 echo ""
 
-# === 4. Docker Environment ===
+# === 5. Docker Environment ===
 echo -e "${BLUE}→ Checking Docker environment...${NC}"
 if command -v docker &> /dev/null; then
     if docker info > /dev/null 2>&1; then
         echo -e "${GREEN}✓ Docker is running${NC}"
-        
+
         # Check if containers exist
         if ! docker ps -a --format '{{.Names}}' | grep -q "wpshadow-test"; then
             echo -e "${YELLOW}→ Starting Docker containers...${NC}"
@@ -75,7 +88,7 @@ else
 fi
 echo ""
 
-# === 5. VS Code Extensions ===
+# === 6. VS Code Extensions ===
 echo -e "${BLUE}→ Recommended VS Code extensions...${NC}"
 if command -v code &> /dev/null; then
     EXTENSIONS=(
@@ -85,7 +98,7 @@ if command -v code &> /dev/null; then
         "eamodio.gitlens"
         "editorconfig.editorconfig"
     )
-    
+
     for ext in "${EXTENSIONS[@]}"; do
         if code --list-extensions | grep -q "$ext"; then
             echo -e "${GREEN}✓ $ext${NC}"
@@ -100,7 +113,7 @@ else
 fi
 echo ""
 
-# === 6. Quick Test ===
+# === 7. Quick Test ===
 echo -e "${BLUE}→ Running initial health check...${NC}"
 ./scripts/guardian-check.sh || echo -e "${YELLOW}Some issues found - review above${NC}"
 echo ""

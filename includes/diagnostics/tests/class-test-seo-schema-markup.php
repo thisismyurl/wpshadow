@@ -1,12 +1,13 @@
 <?php
+
 declare(strict_types=1);
 /**
  * Test: Schema Markup (JSON-LD) Check
  *
  * Tests if HTML contains proper Schema.org structured data in JSON-LD format.
- * 
+ *
  * Philosophy: Show value (#9) - Help users get rich snippets in search results
- * 
+ *
  * @package WPShadow
  */
 
@@ -14,12 +15,13 @@ namespace WPShadow\Diagnostics\Tests;
 
 use WPShadow\Core\Diagnostic_Base;
 
-class Test_SEO_Schema_Markup extends Diagnostic_Base {
-    
+class Test_SEO_Schema_Markup extends Diagnostic_Base
+{
+
     protected static $slug = 'test-seo-schema-markup';
     protected static $title = 'Schema Markup Test';
     protected static $description = 'Tests for Schema.org structured data (JSON-LD)';
-    
+
     /**
      * Common schema types for different page types
      */
@@ -34,7 +36,7 @@ class Test_SEO_Schema_Markup extends Diagnostic_Base {
         'LocalBusiness',
         'BreadcrumbList',
     ];
-    
+
     /**
      * Run the diagnostic check
      *
@@ -45,25 +47,26 @@ class Test_SEO_Schema_Markup extends Diagnostic_Base {
      * @param string|null $html Pre-fetched HTML to analyze
      * @return array|null Finding data or null if no issue
      */
-    public static function check(?string $url = null, ?string $html = null): ?array {
+    public static function check(?string $url = null, ?string $html = null): ?array
+    {
         if ($html !== null) {
             return self::analyze_html($html, $url ?? 'provided-html');
         }
-        
+
         $site_url = $url ?? home_url('/');
-        
+
         if ($url !== null && !self::is_internal_url($url)) {
             return self::error_result('Invalid URL', 'URL must be from this WordPress site');
         }
-        
+
         $html = self::fetch_html($site_url);
         if ($html === false) {
             return self::error_result('Fetch Failed', 'Could not retrieve page HTML');
         }
-        
+
         return self::analyze_html($html, $site_url);
     }
-    
+
     /**
      * Run comprehensive schema markup tests
      *
@@ -71,9 +74,10 @@ class Test_SEO_Schema_Markup extends Diagnostic_Base {
      * @param string|null $html Pre-fetched HTML
      * @return array Test results
      */
-    public static function run_schema_tests(?string $url = null, ?string $html = null): array {
+    public static function run_schema_tests(?string $url = null, ?string $html = null): array
+    {
         $html = $html ?? self::fetch_html($url ?? home_url('/'));
-        
+
         if ($html === false) {
             return [
                 'success' => false,
@@ -81,10 +85,10 @@ class Test_SEO_Schema_Markup extends Diagnostic_Base {
                 'url' => $url ?? home_url('/'),
             ];
         }
-        
+
         $schemas = self::extract_json_ld($html);
         $parsed = self::parse_schemas($schemas);
-        
+
         return [
             'success' => true,
             'url' => $url ?? home_url('/'),
@@ -107,32 +111,34 @@ class Test_SEO_Schema_Markup extends Diagnostic_Base {
             'schemas' => $parsed['parsed'],
         ];
     }
-    
+
     /**
      * Test if schema markup exists
      */
-    public static function test_has_schema(?string $url = null, ?string $html = null): array {
+    public static function test_has_schema(?string $url = null, ?string $html = null): array
+    {
         $html = $html ?? self::fetch_html($url ?? home_url('/'));
         $schemas = self::extract_json_ld($html);
-        
+
         return [
             'test' => 'has_schema',
             'passed' => count($schemas) > 0,
             'count' => count($schemas),
-            'message' => count($schemas) > 0 
+            'message' => count($schemas) > 0
                 ? sprintf('%d schema block(s) found', count($schemas))
                 : 'No schema markup found',
             'impact' => 'Schema markup enables rich snippets in search results',
         ];
     }
-    
+
     /**
      * Test if JSON is valid
      */
-    public static function test_valid_json(?string $url = null, ?string $html = null): array {
+    public static function test_valid_json(?string $url = null, ?string $html = null): array
+    {
         $html = $html ?? self::fetch_html($url ?? home_url('/'));
         $schemas = self::extract_json_ld($html);
-        
+
         if (empty($schemas)) {
             return [
                 'test' => 'valid_json',
@@ -141,10 +147,10 @@ class Test_SEO_Schema_Markup extends Diagnostic_Base {
                 'impact' => 'Invalid JSON prevents search engines from reading schema',
             ];
         }
-        
+
         $valid_count = 0;
         $invalid = [];
-        
+
         foreach ($schemas as $idx => $schema) {
             $decoded = json_decode($schema, true);
             if (json_last_error() === JSON_ERROR_NONE) {
@@ -153,95 +159,98 @@ class Test_SEO_Schema_Markup extends Diagnostic_Base {
                 $invalid[] = sprintf('Block %d: %s', $idx + 1, json_last_error_msg());
             }
         }
-        
+
         return [
             'test' => 'valid_json',
             'passed' => empty($invalid),
             'valid_count' => $valid_count,
             'total_count' => count($schemas),
             'errors' => $invalid,
-            'message' => empty($invalid) 
+            'message' => empty($invalid)
                 ? 'All schema blocks are valid JSON'
                 : sprintf('%d schema block(s) have JSON errors', count($invalid)),
             'impact' => 'Invalid JSON is ignored by search engines',
         ];
     }
-    
+
     /**
      * Test if schema has @context
      */
-    public static function test_has_context(?string $url = null, ?string $html = null): array {
+    public static function test_has_context(?string $url = null, ?string $html = null): array
+    {
         $html = $html ?? self::fetch_html($url ?? home_url('/'));
         $schemas = self::extract_json_ld($html);
         $parsed = self::parse_schemas($schemas);
-        
+
         $missing_context = 0;
         foreach ($parsed['parsed'] as $schema) {
             if (empty($schema['@context'])) {
                 $missing_context++;
             }
         }
-        
+
         return [
             'test' => 'has_context',
             'passed' => $missing_context === 0,
             'missing_count' => $missing_context,
-            'message' => $missing_context === 0 
+            'message' => $missing_context === 0
                 ? 'All schemas have @context'
                 : sprintf('%d schema(s) missing @context', $missing_context),
             'impact' => '@context defines the vocabulary (should be https://schema.org)',
         ];
     }
-    
+
     /**
      * Test if schema has @type
      */
-    public static function test_has_type(?string $url = null, ?string $html = null): array {
+    public static function test_has_type(?string $url = null, ?string $html = null): array
+    {
         $html = $html ?? self::fetch_html($url ?? home_url('/'));
         $schemas = self::extract_json_ld($html);
         $parsed = self::parse_schemas($schemas);
-        
+
         $missing_type = 0;
         foreach ($parsed['parsed'] as $schema) {
             if (empty($schema['@type'])) {
                 $missing_type++;
             }
         }
-        
+
         return [
             'test' => 'has_type',
             'passed' => $missing_type === 0,
             'missing_count' => $missing_type,
             'types_found' => $parsed['types'],
-            'message' => $missing_type === 0 
+            'message' => $missing_type === 0
                 ? 'All schemas have @type'
                 : sprintf('%d schema(s) missing @type', $missing_type),
             'impact' => '@type defines what the data represents (Article, Product, etc.)',
         ];
     }
-    
+
     /**
      * Test for Organization schema (recommended for all sites)
      */
-    public static function test_organization_schema(?string $url = null, ?string $html = null): array {
+    public static function test_organization_schema(?string $url = null, ?string $html = null): array
+    {
         $html = $html ?? self::fetch_html($url ?? home_url('/'));
         $schemas = self::extract_json_ld($html);
         $parsed = self::parse_schemas($schemas);
-        
-        $has_org = in_array('Organization', $parsed['types'], true) || 
-                   in_array('LocalBusiness', $parsed['types'], true);
-        
+
+        $has_org = in_array('Organization', $parsed['types'], true) ||
+            in_array('LocalBusiness', $parsed['types'], true);
+
         return [
             'test' => 'organization_schema',
             'passed' => $has_org,
             'types_found' => $parsed['types'],
-            'message' => $has_org 
+            'message' => $has_org
                 ? 'Organization/Business schema present (recommended)'
                 : 'No Organization schema (recommended for all sites)',
             'impact' => 'Organization schema helps search engines understand your brand',
         ];
     }
-    
+
     /**
      * Analyze HTML for schema markup issues
      *
@@ -249,9 +258,10 @@ class Test_SEO_Schema_Markup extends Diagnostic_Base {
      * @param string $checked_url URL that was checked
      * @return array|null Finding or null
      */
-    protected static function analyze_html(string $html, string $checked_url): ?array {
+    protected static function analyze_html(string $html, string $checked_url): ?array
+    {
         $schemas = self::extract_json_ld($html);
-        
+
         // Missing schema = FAIL (warning level)
         if (empty($schemas)) {
             return [
@@ -273,16 +283,16 @@ class Test_SEO_Schema_Markup extends Diagnostic_Base {
                 ],
             ];
         }
-        
+
         // Parse schemas and check for issues
         $parsed = self::parse_schemas($schemas);
         $issues = [];
-        
+
         // Invalid JSON
         if ($parsed['invalid_count'] > 0) {
             $issues[] = sprintf('%d schema block(s) have JSON errors', $parsed['invalid_count']);
         }
-        
+
         // Missing @context or @type
         foreach ($parsed['parsed'] as $idx => $schema) {
             if (empty($schema['@context'])) {
@@ -292,18 +302,18 @@ class Test_SEO_Schema_Markup extends Diagnostic_Base {
                 $issues[] = sprintf('Block %d missing @type', $idx + 1);
             }
         }
-        
+
         // Perfect: has valid schemas with no issues
         if (empty($issues)) {
             return null; // PASS
         }
-        
+
         // Has schemas but with issues = FAIL
         $threat_level = 40;
         if ($parsed['invalid_count'] > 0) {
             $threat_level = 60; // Invalid JSON is more serious
         }
-        
+
         return [
             'id' => 'seo-schema-markup',
             'title' => 'Schema Markup Issues',
@@ -331,41 +341,43 @@ class Test_SEO_Schema_Markup extends Diagnostic_Base {
             ],
         ];
     }
-    
+
     /**
      * Extract JSON-LD script blocks from HTML
      *
      * @param string $html HTML content
      * @return array Array of JSON-LD strings
      */
-    protected static function extract_json_ld(string $html): array {
+    protected static function extract_json_ld(string $html): array
+    {
         if (empty($html)) {
             return [];
         }
-        
+
         preg_match_all('/<script\s+type=["\']application\/ld\+json["\']\s*>(.*?)<\/script>/is', $html, $matches);
         return array_map('trim', $matches[1] ?? []);
     }
-    
+
     /**
      * Parse schema JSON strings
      *
      * @param array $schemas Array of JSON strings
      * @return array Parsed results
      */
-    protected static function parse_schemas(array $schemas): array {
+    protected static function parse_schemas(array $schemas): array
+    {
         $parsed = [];
         $types = [];
         $valid_count = 0;
         $invalid_count = 0;
-        
+
         foreach ($schemas as $schema) {
             $decoded = json_decode($schema, true);
-            
+
             if (json_last_error() === JSON_ERROR_NONE) {
                 $valid_count++;
                 $parsed[] = $decoded;
-                
+
                 // Extract type(s)
                 if (isset($decoded['@type'])) {
                     if (is_array($decoded['@type'])) {
@@ -374,7 +386,7 @@ class Test_SEO_Schema_Markup extends Diagnostic_Base {
                         $types[] = $decoded['@type'];
                     }
                 }
-                
+
                 // Handle @graph (multiple schemas in one block)
                 if (isset($decoded['@graph']) && is_array($decoded['@graph'])) {
                     foreach ($decoded['@graph'] as $item) {
@@ -391,7 +403,7 @@ class Test_SEO_Schema_Markup extends Diagnostic_Base {
                 $invalid_count++;
             }
         }
-        
+
         return [
             'parsed' => $parsed,
             'types' => array_unique($types),
@@ -399,39 +411,41 @@ class Test_SEO_Schema_Markup extends Diagnostic_Base {
             'invalid_count' => $invalid_count,
         ];
     }
-    
+
     /**
      * Fetch HTML from URL
      *
      * @param string $url URL to fetch
      * @return string|false HTML or false on error
      */
-    protected static function fetch_html(string $url) {
+    protected static function fetch_html(string $url)
+    {
         $response = wp_remote_get($url, [
             'timeout' => 10,
             'user-agent' => 'WPShadow-Diagnostic/1.0 (SEO Checker)',
             'sslverify' => false,
         ]);
-        
+
         if (is_wp_error($response)) {
             return false;
         }
-        
+
         return wp_remote_retrieve_body($response);
     }
-    
+
     /**
      * Check if URL is internal
      *
      * @param string $url URL to check
      * @return bool
      */
-    protected static function is_internal_url(string $url): bool {
+    protected static function is_internal_url(string $url): bool
+    {
         $site_host = wp_parse_url(home_url(), PHP_URL_HOST);
         $test_host = wp_parse_url($url, PHP_URL_HOST);
         return $site_host === $test_host;
     }
-    
+
     /**
      * Generate error result
      *
@@ -439,7 +453,8 @@ class Test_SEO_Schema_Markup extends Diagnostic_Base {
      * @param string $description Error description
      * @return array Error result
      */
-    protected static function error_result(string $title, string $description): array {
+    protected static function error_result(string $title, string $description): array
+    {
         return [
             'id' => 'seo-schema-markup',
             'title' => $title,
@@ -454,22 +469,24 @@ class Test_SEO_Schema_Markup extends Diagnostic_Base {
             'priority' => 3,
         ];
     }
-    
+
     /**
      * Get the name for display
      *
      * @return string
      */
-    public static function get_name(): string {
+    public static function get_name(): string
+    {
         return __('Schema Markup Check', 'wpshadow');
     }
-    
+
     /**
      * Get the description for display
      *
      * @return string
      */
-    public static function get_description(): string {
+    public static function get_description(): string
+    {
         return __('Checks HTML for Schema.org structured data (JSON-LD) for rich snippets.', 'wpshadow');
     }
 }

@@ -32,10 +32,10 @@
   },
   
   // Run commands on container creation
-  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "postCreateCommand": "bash .devcontainer/post-create.sh && nohup bash scripts/keep-alive.sh > /dev/null 2>&1 &",
   
   // Run commands when attaching to existing container
-  "postAttachCommand": "bash .devcontainer/post-attach.sh",
+  "postAttachCommand": "bash .devcontainer/post-attach.sh && nohup bash scripts/keep-alive.sh > /dev/null 2>&1 &",
   
   // Forward ports
   "forwardPorts": [8080, 9000],
@@ -53,5 +53,10 @@
   },
   
   // Remote user
-  "remoteUser": "root"
+  "remoteUser": "root",
+  
+  // Idle timeout: 120 minutes (max)
+  "remoteEnv": {
+    "CODESPACES_TIMEOUT": "120"
+  }
 }
