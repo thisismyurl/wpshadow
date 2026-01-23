@@ -110,4 +110,42 @@ class Diagnostic_Dx_Rollback_Capability extends Diagnostic_Base {
 		);
 	}
 
+
+
+	/**
+	 * Live test for this diagnostic
+	 *
+	 * Diagnostic: Dx Rollback Capability
+	 * Slug: dx-rollback-capability
+	 * 
+	 * Test Purpose:
+	 * - Verify that check() method returns the correct result based on site state
+	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
+	 * - FAIL: check() returns array when diagnostic condition IS met (issue found)
+	 * - Description: Automatically initialized lean diagnostic for Dx Rollback Capability. Optimized for minimal overhead while surfacing high-value signals.
+	 *
+	 * @return array {
+	 *     @type bool   $passed  Whether the test passed
+	 *     @type string $message Human-readable test result message
+	 * }
+	 */
+	public static function test_live_dx_rollback_capability(): array {
+		/*
+		 * IMPLEMENTATION NOTES:
+		 * - This test validates the actual WordPress site state
+		 * - Do not use mocks or stubs
+		 * - Call self::check() to get the diagnostic result
+		 * - Verify the result matches expected site state
+		 * - Return [ 'passed' => bool, 'message' => string ]
+		 */
+		
+		$result = self::check();
+		
+		// TODO: Implement actual test logic
+		return array(
+			'passed' => false,
+			'message' => 'Test not yet implemented for ' . self::$slug,
+		);
+	}
+
 }

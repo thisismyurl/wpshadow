@@ -35,8 +35,12 @@ class Admin_Notice_Cleaner {
 	 * Hide other plugins' notices on WPShadow pages
 	 */
 	public static function hide_other_notices(): void {
-		$screen = get_current_screen();
-		if ( ! $screen || strpos( $screen->id, 'wpshadow' ) === false ) {
+		if ( ! \function_exists( 'get_current_screen' ) ) {
+			return;
+		}
+		
+		$screen = \get_current_screen();
+		if ( ! $screen || ! isset( $screen->id ) || strpos( $screen->id, 'wpshadow' ) === false ) {
 			return;
 		}
 		

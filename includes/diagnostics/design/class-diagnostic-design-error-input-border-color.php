@@ -25,4 +25,47 @@ class Diagnostic_Design_ERROR_INPUT_BORDER_COLOR extends Diagnostic_Base {
         ];
     }
 
+
+
+	/**
+	 * Live test for this diagnostic
+	 *
+	 * Diagnostic: Design ERROR INPUT BORDER COLOR
+	 * Slug: -design-error-input-border-color
+	 * File: class-diagnostic-design-error-input-border-color.php
+	 * 
+	 * Test Purpose:
+	 * Cannot determine specific pass criteria from available metadata.
+	 * Diagnostic: Design ERROR INPUT BORDER COLOR
+	 * Slug: -design-error-input-border-color
+	 * 
+	 * TODO: Review the check() method to understand what constitutes a passing test.
+	 * The test should verify that:
+	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
+	 * - check() returns an array when the diagnostic condition IS met (issue found)
+	 *
+	 * @return array {
+	 *     @type bool   $passed  Whether the test passed
+	 *     @type string $message Human-readable test result message
+	 * }
+	 */
+	public static function test_live__design_error_input_border_color(): array {
+		/*
+		 * IMPLEMENTATION NOTES:
+		 * - This test validates the actual WordPress site state
+		 * - Do not use mocks or stubs
+		 * - Call self::check() to get the diagnostic result
+		 * - Verify the result matches expected site state
+		 * - Return [ 'passed' => bool, 'message' => string ]
+		 */
+		
+		$result = self::check();
+		
+		// TODO: Implement actual test logic
+		return array(
+			'passed' => false,
+			'message' => 'Test not yet implemented',
+		);
+	}
+
 }

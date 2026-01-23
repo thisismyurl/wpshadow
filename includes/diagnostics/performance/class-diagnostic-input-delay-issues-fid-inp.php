@@ -30,4 +30,47 @@ class Diagnostic_Input_Delay_Issues_Fid_Inp extends Diagnostic_Base {
 		// Review related KB articles and add custom logic here
 		return null; // No issues detected
 	}
+
+
+	/**
+	 * Live test for this diagnostic
+	 *
+	 * Diagnostic: Input Delay Issues Fid Inp
+	 * Slug: -input-delay-issues-fid-inp
+	 * File: class-diagnostic-input-delay-issues-fid-inp.php
+	 * 
+	 * Test Purpose:
+	 * Cannot determine specific pass criteria from available metadata.
+	 * Diagnostic: Input Delay Issues Fid Inp
+	 * Slug: -input-delay-issues-fid-inp
+	 * 
+	 * TODO: Review the check() method to understand what constitutes a passing test.
+	 * The test should verify that:
+	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
+	 * - check() returns an array when the diagnostic condition IS met (issue found)
+	 *
+	 * @return array {
+	 *     @type bool   $passed  Whether the test passed
+	 *     @type string $message Human-readable test result message
+	 * }
+	 */
+	public static function test_live__input_delay_issues_fid_inp(): array {
+		/*
+		 * IMPLEMENTATION NOTES:
+		 * - This test validates the actual WordPress site state
+		 * - Do not use mocks or stubs
+		 * - Call self::check() to get the diagnostic result
+		 * - Verify the result matches expected site state
+		 * - Return [ 'passed' => bool, 'message' => string ]
+		 */
+		
+		$result = self::check();
+		
+		// TODO: Implement actual test logic
+		return array(
+			'passed' => false,
+			'message' => 'Test not yet implemented',
+		);
+	}
+
 }

@@ -58,8 +58,12 @@ class Dashboard_Performance_Analyzer {
         $load_time_ms = (int) ((microtime(true) - self::$start_time) * 1000);
         
         // Only track dashboard pages
-        $screen = get_current_screen();
-        if (!$screen || $screen->id !== 'dashboard') {
+        if (!\function_exists('get_current_screen')) {
+            return;
+        }
+        
+        $screen = \get_current_screen();
+        if (!$screen || !isset($screen->id) || $screen->id !== 'dashboard') {
             return;
         }
         

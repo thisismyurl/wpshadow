@@ -25,4 +25,47 @@ class Diagnostic_Design_HINT_TEXT_DISTINCTION extends Diagnostic_Base {
         ];
     }
 
+
+
+	/**
+	 * Live test for this diagnostic
+	 *
+	 * Diagnostic: Design HINT TEXT DISTINCTION
+	 * Slug: -design-hint-text-distinction
+	 * File: class-diagnostic-design-hint-text-distinction.php
+	 * 
+	 * Test Purpose:
+	 * Cannot determine specific pass criteria from available metadata.
+	 * Diagnostic: Design HINT TEXT DISTINCTION
+	 * Slug: -design-hint-text-distinction
+	 * 
+	 * TODO: Review the check() method to understand what constitutes a passing test.
+	 * The test should verify that:
+	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
+	 * - check() returns an array when the diagnostic condition IS met (issue found)
+	 *
+	 * @return array {
+	 *     @type bool   $passed  Whether the test passed
+	 *     @type string $message Human-readable test result message
+	 * }
+	 */
+	public static function test_live__design_hint_text_distinction(): array {
+		/*
+		 * IMPLEMENTATION NOTES:
+		 * - This test validates the actual WordPress site state
+		 * - Do not use mocks or stubs
+		 * - Call self::check() to get the diagnostic result
+		 * - Verify the result matches expected site state
+		 * - Return [ 'passed' => bool, 'message' => string ]
+		 */
+		
+		$result = self::check();
+		
+		// TODO: Implement actual test logic
+		return array(
+			'passed' => false,
+			'message' => 'Test not yet implemented',
+		);
+	}
+
 }

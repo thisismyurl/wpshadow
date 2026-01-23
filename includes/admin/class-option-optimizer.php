@@ -48,8 +48,12 @@ class Option_Optimizer {
 	 * Prime cache with frequently used options in one query
 	 */
 	public static function prime_option_cache(): void {
-		$screen = get_current_screen();
-		if ( ! $screen || strpos( $screen->id, 'wpshadow' ) === false ) {
+		if ( ! \function_exists( 'get_current_screen' ) ) {
+			return;
+		}
+		
+		$screen = \get_current_screen();
+		if ( ! $screen || ! isset( $screen->id ) || strpos( $screen->id, 'wpshadow' ) === false ) {
 			return;
 		}
 		

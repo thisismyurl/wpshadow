@@ -2,5 +2,17 @@
   "files.autoSave": "afterDelay",
   "files.autoSaveDelay": 1000,
   "github.copilot.chat.maxRequests": 200,
-  "github.copilot.chat.autoApproveFileWrites": true
+  "github.copilot.chat.autoApproveFileWrites": true,
+  
+  // Default to WPShadow Agent for all chat interactions
+  "github.copilot.chat.defaultParticipant": "wpshadow",
+  
+  // PHP settings for WordPress development
+  "php.validate.executablePath": "/usr/local/bin/php",
+  "[php]": {
+    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+  },
+  
+  // Docker settings
+  "docker.enableDockerComposeLanguageService": true
 }

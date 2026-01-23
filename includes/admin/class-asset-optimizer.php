@@ -85,8 +85,12 @@ class Asset_Optimizer {
 	 * Preload critical assets for faster loading
 	 */
 	public static function preload_critical_assets(): void {
-		$screen = get_current_screen();
-		if ( ! $screen || strpos( $screen->id, 'wpshadow' ) === false ) {
+		if ( ! \function_exists( 'get_current_screen' ) ) {
+			return;
+		}
+		
+		$screen = \get_current_screen();
+		if ( ! $screen || ! isset( $screen->id ) || strpos( $screen->id, 'wpshadow' ) === false ) {
 			return;
 		}
 		
@@ -104,8 +108,12 @@ class Asset_Optimizer {
 	 * Remove WordPress admin bloat on WPShadow pages
 	 */
 	public static function remove_admin_bloat(): void {
-		$screen = get_current_screen();
-		if ( ! $screen || strpos( $screen->id, 'wpshadow' ) === false ) {
+		if ( ! \function_exists( 'get_current_screen' ) ) {
+			return;
+		}
+		
+		$screen = \get_current_screen();
+		if ( ! $screen || ! isset( $screen->id ) || strpos( $screen->id, 'wpshadow' ) === false ) {
 			return;
 		}
 		

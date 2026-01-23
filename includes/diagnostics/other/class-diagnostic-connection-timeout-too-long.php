@@ -35,5 +35,47 @@ class Diagnostic_Connection_Timeout_Too_Long extends Diagnostic_Base {
 
 		return null; // Stub: full implementation pending
 	} // Stub - no issues detected yet
-}
+
+
+	/**
+	 * Live test for this diagnostic
+	 *
+	 * Diagnostic: Connection Timeout Too Long
+	 * Slug: -connection-timeout-too-long
+	 * File: class-diagnostic-connection-timeout-too-long.php
+	 * 
+	 * Test Purpose:
+	 * Cannot determine specific pass criteria from available metadata.
+	 * Diagnostic: Connection Timeout Too Long
+	 * Slug: -connection-timeout-too-long
+	 * 
+	 * TODO: Review the check() method to understand what constitutes a passing test.
+	 * The test should verify that:
+	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
+	 * - check() returns an array when the diagnostic condition IS met (issue found)
+	 *
+	 * @return array {
+	 *     @type bool   $passed  Whether the test passed
+	 *     @type string $message Human-readable test result message
+	 * }
+	 */
+	public static function test_live__connection_timeout_too_long(): array {
+		/*
+		 * IMPLEMENTATION NOTES:
+		 * - This test validates the actual WordPress site state
+		 * - Do not use mocks or stubs
+		 * - Call self::check() to get the diagnostic result
+		 * - Verify the result matches expected site state
+		 * - Return [ 'passed' => bool, 'message' => string ]
+		 */
+		
+		$result = self::check();
+		
+		// TODO: Implement actual test logic
+		return array(
+			'passed' => false,
+			'message' => 'Test not yet implemented',
+		);
+	}
+
 }

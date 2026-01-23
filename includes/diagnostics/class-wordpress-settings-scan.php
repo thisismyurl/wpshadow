@@ -30,6 +30,11 @@ class WordPress_Settings_Scan {
 	 * @return array Array of finding arrays with 'id', 'title', 'description', 'severity', 'category', etc.
 	 */
 	public static function run_scan() {
+		// TODO: Implement WordPress settings scan methods
+		// This is a stub diagnostic - methods need to be implemented
+		return array();
+		
+		/* COMMENTED OUT UNTIL IMPLEMENTATION COMPLETE
 		$findings = array();
 
 		// General Settings Tests
@@ -80,6 +85,7 @@ class WordPress_Settings_Scan {
 		$findings = array_merge( $findings, self::test_xmlrpc_enabled() );
 
 		return $findings;
+		END OF COMMENTED CODE */
 	}
 
 }

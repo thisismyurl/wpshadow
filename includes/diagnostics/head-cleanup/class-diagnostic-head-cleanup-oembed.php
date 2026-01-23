@@ -63,4 +63,42 @@ class Diagnostic_Head_Cleanup_OEmbed extends Diagnostic_Base {
 		return has_action( 'wp_head', 'wp_oembed_add_discovery_links' ) !== false;
 	}
 
+
+
+	/**
+	 * Live test for this diagnostic
+	 *
+	 * Diagnostic: oEmbed Discovery Links
+	 * Slug: head-cleanup-oembed
+	 * 
+	 * Test Purpose:
+	 * - Verify that check() method returns the correct result based on site state
+	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
+	 * - FAIL: check() returns array when diagnostic condition IS met (issue found)
+	 * - Description: Checks if WordPress oEmbed discovery links are enabled and can be removed.
+	 *
+	 * @return array {
+	 *     @type bool   $passed  Whether the test passed
+	 *     @type string $message Human-readable test result message
+	 * }
+	 */
+	public static function test_live_head_cleanup_oembed(): array {
+		/*
+		 * IMPLEMENTATION NOTES:
+		 * - This test validates the actual WordPress site state
+		 * - Do not use mocks or stubs
+		 * - Call self::check() to get the diagnostic result
+		 * - Verify the result matches expected site state
+		 * - Return [ 'passed' => bool, 'message' => string ]
+		 */
+		
+		$result = self::check();
+		
+		// TODO: Implement actual test logic
+		return array(
+			'passed' => false,
+			'message' => 'Test not yet implemented for ' . self::$slug,
+		);
+	}
+
 }

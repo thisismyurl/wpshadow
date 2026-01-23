@@ -25,4 +25,47 @@ class Diagnostic_Design_FONT_FORMAT_BROWSER_SUPPORT extends Diagnostic_Base {
         ];
     }
 
+
+
+	/**
+	 * Live test for this diagnostic
+	 *
+	 * Diagnostic: Design FONT FORMAT BROWSER SUPPORT
+	 * Slug: -design-font-format-browser-support
+	 * File: class-diagnostic-design-font-format-browser-support.php
+	 * 
+	 * Test Purpose:
+	 * Cannot determine specific pass criteria from available metadata.
+	 * Diagnostic: Design FONT FORMAT BROWSER SUPPORT
+	 * Slug: -design-font-format-browser-support
+	 * 
+	 * TODO: Review the check() method to understand what constitutes a passing test.
+	 * The test should verify that:
+	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
+	 * - check() returns an array when the diagnostic condition IS met (issue found)
+	 *
+	 * @return array {
+	 *     @type bool   $passed  Whether the test passed
+	 *     @type string $message Human-readable test result message
+	 * }
+	 */
+	public static function test_live__design_font_format_browser_support(): array {
+		/*
+		 * IMPLEMENTATION NOTES:
+		 * - This test validates the actual WordPress site state
+		 * - Do not use mocks or stubs
+		 * - Call self::check() to get the diagnostic result
+		 * - Verify the result matches expected site state
+		 * - Return [ 'passed' => bool, 'message' => string ]
+		 */
+		
+		$result = self::check();
+		
+		// TODO: Implement actual test logic
+		return array(
+			'passed' => false,
+			'message' => 'Test not yet implemented',
+		);
+	}
+
 }

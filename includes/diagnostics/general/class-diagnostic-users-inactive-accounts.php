@@ -50,7 +50,7 @@ class Diagnostic_Users_Inactive_Accounts extends Diagnostic_Base {
 	 * Get diagnostic description
 	 */
 	public static function get_description(): string {
-		return __( 'Users who haven't logged in for 90 + days ? ', 'wpshadow' );
+		return __( 'Users who haven\'t logged in for 90+ days', 'wpshadow' );
 	}
 	
 	/**
@@ -124,4 +124,42 @@ class Diagnostic_Users_Inactive_Accounts extends Diagnostic_Base {
 			'users-inactive-accounts'
 		);
 	}
+
+
+	/**
+	 * Live test for this diagnostic
+	 *
+	 * Diagnostic: Users Inactive Accounts
+	 * Slug: users-inactive-accounts
+	 * 
+	 * Test Purpose:
+	 * - Verify that check() method returns the correct result based on site state
+	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
+	 * - FAIL: check() returns array when diagnostic condition IS met (issue found)
+	 * - Description: Automatically initialized lean diagnostic for Users Inactive Accounts. Optimized for minimal overhead while surfacing high-value signals.
+	 *
+	 * @return array {
+	 *     @type bool   $passed  Whether the test passed
+	 *     @type string $message Human-readable test result message
+	 * }
+	 */
+	public static function test_live_users_inactive_accounts(): array {
+		/*
+		 * IMPLEMENTATION NOTES:
+		 * - This test validates the actual WordPress site state
+		 * - Do not use mocks or stubs
+		 * - Call self::check() to get the diagnostic result
+		 * - Verify the result matches expected site state
+		 * - Return [ 'passed' => bool, 'message' => string ]
+		 */
+		
+		$result = self::check();
+		
+		// TODO: Implement actual test logic
+		return array(
+			'passed' => false,
+			'message' => 'Test not yet implemented for ' . self::$slug,
+		);
+	}
+
 }

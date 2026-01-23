@@ -573,43 +573,30 @@ add_action( 'admin_menu', function() {
 		'wpshadow-help',
 		'wpshadow_render_help'
 	);
+} );
 
-	// Legacy redirect handlers (for bookmarks/external links)
-	add_submenu_page(
-		null,
-		'',
-		'',
-		'manage_options',
-		'wpshadow-guardian-reports',
-		function() {
-			wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-reports' ) );
+// Legacy URL redirect handlers (for bookmarks/external links)
+// Using admin_init instead of add_submenu_page to avoid PHP 8.x deprecation warnings
+add_action( 'admin_init', function() {
+	// Check if we're on a legacy page that needs redirecting
+	if ( ! isset( $_GET['page'] ) ) {
+		return;
+	}
+	
+	$page = sanitize_text_field( wp_unslash( $_GET['page'] ) );
+	$redirects = array(
+		'wpshadow-guardian-reports' => 'wpshadow-reports',
+		'wpshadow-guardian-notifications' => 'wpshadow-settings&tab=notifications',
+	);
+	
+	if ( isset( $redirects[ $page ] ) ) {
+		$capability = ( $page === 'wpshadow-guardian-reports' || $page === 'wpshadow-guardian-notifications' ) ? 'manage_options' : 'read';
+		
+		if ( current_user_can( $capability ) ) {
+			wp_safe_redirect( admin_url( 'admin.php?page=' . $redirects[ $page ] ) );
 			exit;
 		}
-	);
-
-	add_submenu_page(
-		null,
-		'',
-		'',
-		'manage_options',
-		'wpshadow-guardian-notifications',
-		function() {
-			wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-settings&tab=notifications' ) );
-			exit;
-		}
-	);
-
-	add_submenu_page(
-		null,
-		'',
-		'',
-		'read',
-		'wpshadow-tools',
-		function() {
-			wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-guardian' ) );
-			exit;
-		}
-	);
+	}
 } );
 
 
@@ -3205,9 +3192,11 @@ function wpshadow_get_site_findings() {
 	}
 
 	// Add mobile friendliness issues
-	$mobile_issues = \WPShadow\Diagnostics\Diagnostic_Mobile_Friendliness::get_all_issues();
-	if ( ! empty( $mobile_issues ) ) {
-		$findings = array_merge( $findings, $mobile_issues );
+	if ( class_exists( '\WPShadow\Diagnostics\Diagnostic_Mobile_Friendliness' ) ) {
+		$mobile_issues = \WPShadow\Diagnostics\Diagnostic_Mobile_Friendliness::get_all_issues();
+		if ( ! empty( $mobile_issues ) ) {
+			$findings = array_merge( $findings, $mobile_issues );
+		}
 	}
 
 	// Get WordPress Core Site Health data if available
@@ -4136,8 +4125,8 @@ function wpshadow_render_guardian_overview() {
 	$next_scan_text = $next_scan > time() ? human_time_diff( time(), $next_scan ) : __( 'Soon', 'wpshadow' );
 	
 	// Get diagnostics and treatments count
-	$diagnostic_registry = \WPShadow\Diagnostics\Diagnostic_Registry::get_all();
-	$treatment_registry = \WPShadow\Treatments\Treatment_Registry::get_all();
+	$diagnostic_registry = \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostics();
+	$treatment_registry = \WPShadow\Treatments\Treatment_Registry::get_treatments();
 	
 	// Get recent findings
 	$all_findings = wpshadow_get_site_findings();

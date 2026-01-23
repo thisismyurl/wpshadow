@@ -1,0 +1,57 @@
+{
+  "name": "WPShadow Development Environment",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "wordpress-test",
+  "workspaceFolder": "/var/www/html/wp-content/plugins/wpshadow",
+  
+  // Features to install
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  
+  // VS Code customizations
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "files.autoSave": "afterDelay",
+        "files.autoSaveDelay": 1000,
+        "github.copilot.chat.maxRequests": 200,
+        "github.copilot.chat.autoApproveFileWrites": true,
+        // Set default chat participant to WPShadow Agent
+        "github.copilot.chat.defaultParticipant": "wpshadow"
+      },
+      "extensions": [
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "bmewburn.vscode-intelephense-client",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  },
+  
+  // Run commands on container creation
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  
+  // Run commands when attaching to existing container
+  "postAttachCommand": "bash .devcontainer/post-attach.sh",
+  
+  // Forward ports
+  "forwardPorts": [8080, 9000],
+  
+  // Port attributes
+  "portsAttributes": {
+    "8080": {
+      "label": "WPShadow Site",
+      "onAutoForward": "notify"
+    },
+    "9000": {
+      "label": "WPShadow Test",
+      "onAutoForward": "notify"
+    }
+  },
+  
+  // Remote user
+  "remoteUser": "root"
+}

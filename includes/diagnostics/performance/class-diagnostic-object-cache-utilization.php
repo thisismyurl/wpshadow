@@ -40,4 +40,42 @@ class Diagnostic_Object_Cache_Utilization extends Diagnostic_Base {
 	}
 
 
+
+
+	/**
+	 * Live test for this diagnostic
+	 *
+	 * Diagnostic: Object Cache Hit Rate
+	 * Slug: object-cache-utilization
+	 * 
+	 * Test Purpose:
+	 * - Verify that check() method returns the correct result based on site state
+	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
+	 * - FAIL: check() returns array when diagnostic condition IS met (issue found)
+	 * - Description: Measures Redis/Memcached effectiveness.
+	 *
+	 * @return array {
+	 *     @type bool   $passed  Whether the test passed
+	 *     @type string $message Human-readable test result message
+	 * }
+	 */
+	public static function test_live_object_cache_utilization(): array {
+		/*
+		 * IMPLEMENTATION NOTES:
+		 * - This test validates the actual WordPress site state
+		 * - Do not use mocks or stubs
+		 * - Call self::check() to get the diagnostic result
+		 * - Verify the result matches expected site state
+		 * - Return [ 'passed' => bool, 'message' => string ]
+		 */
+		
+		$result = self::check();
+		
+		// TODO: Implement actual test logic
+		return array(
+			'passed' => false,
+			'message' => 'Test not yet implemented for ' . self::$slug,
+		);
+	}
+
 }

@@ -110,4 +110,42 @@ class Diagnostic_Tls_Version_Modern extends Diagnostic_Base {
 		);
 	}
 
+
+
+	/**
+	 * Live test for this diagnostic
+	 *
+	 * Diagnostic: Tls Version Modern
+	 * Slug: tls-version-modern
+	 * 
+	 * Test Purpose:
+	 * - Verify that check() method returns the correct result based on site state
+	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
+	 * - FAIL: check() returns array when diagnostic condition IS met (issue found)
+	 * - Description: Automatically initialized lean diagnostic for Tls Version Modern. Optimized for minimal overhead while surfacing high-value signals.
+	 *
+	 * @return array {
+	 *     @type bool   $passed  Whether the test passed
+	 *     @type string $message Human-readable test result message
+	 * }
+	 */
+	public static function test_live_tls_version_modern(): array {
+		/*
+		 * IMPLEMENTATION NOTES:
+		 * - This test validates the actual WordPress site state
+		 * - Do not use mocks or stubs
+		 * - Call self::check() to get the diagnostic result
+		 * - Verify the result matches expected site state
+		 * - Return [ 'passed' => bool, 'message' => string ]
+		 */
+		
+		$result = self::check();
+		
+		// TODO: Implement actual test logic
+		return array(
+			'passed' => false,
+			'message' => 'Test not yet implemented for ' . self::$slug,
+		);
+	}
+
 }

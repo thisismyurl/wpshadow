@@ -138,4 +138,42 @@ class Diagnostic_UxNoExitPaths extends Diagnostic_Base {
 		);
 	}
 
+
+
+	/**
+	 * Live test for this diagnostic
+	 *
+	 * Diagnostic: Ux No Exit Paths
+	 * Slug: ux-no-exit-paths
+	 * 
+	 * Test Purpose:
+	 * - Verify that check() method returns the correct result based on site state
+	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
+	 * - FAIL: check() returns array when diagnostic condition IS met (issue found)
+	 * - Description: Automatically initialized lean diagnostic for Ux No Exit Paths. Optimized for minimal overhead while surfacing high-value signals.
+	 *
+	 * @return array {
+	 *     @type bool   $passed  Whether the test passed
+	 *     @type string $message Human-readable test result message
+	 * }
+	 */
+	public static function test_live_ux_no_exit_paths(): array {
+		/*
+		 * IMPLEMENTATION NOTES:
+		 * - This test validates the actual WordPress site state
+		 * - Do not use mocks or stubs
+		 * - Call self::check() to get the diagnostic result
+		 * - Verify the result matches expected site state
+		 * - Return [ 'passed' => bool, 'message' => string ]
+		 */
+		
+		$result = self::check();
+		
+		// TODO: Implement actual test logic
+		return array(
+			'passed' => false,
+			'message' => 'Test not yet implemented for ' . self::$slug,
+		);
+	}
+
 }

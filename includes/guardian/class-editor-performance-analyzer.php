@@ -45,8 +45,12 @@ class Editor_Performance_Analyzer {
      * @return void
      */
     public static function start_editor_timer(): void {
-        $screen = get_current_screen();
-        if (!$screen || $screen->base !== 'post') {
+        if (!\function_exists('get_current_screen')) {
+            return;
+        }
+        
+        $screen = \get_current_screen();
+        if (!$screen || !isset($screen->base) || $screen->base !== 'post') {
             return;
         }
         
@@ -63,8 +67,12 @@ class Editor_Performance_Analyzer {
             return;
         }
         
-        $screen = get_current_screen();
-        if (!$screen || $screen->base !== 'post') {
+        if (!\function_exists('get_current_screen')) {
+            return;
+        }
+        
+        $screen = \get_current_screen();
+        if (!$screen || !isset($screen->base) || $screen->base !== 'post') {
             return;
         }
         
@@ -77,7 +85,7 @@ class Editor_Performance_Analyzer {
         
         $loads[] = array(
             'time_ms' => $load_time_ms,
-            'post_type' => $screen->post_type,
+            'post_type' => isset($screen->post_type) ? $screen->post_type : 'unknown',
             'timestamp' => time(),
         );
         

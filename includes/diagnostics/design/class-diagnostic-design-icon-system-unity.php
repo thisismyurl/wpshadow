@@ -25,4 +25,47 @@ class Diagnostic_Design_ICON_SYSTEM_UNITY extends Diagnostic_Base {
         ];
     }
 
+
+
+	/**
+	 * Live test for this diagnostic
+	 *
+	 * Diagnostic: Design ICON SYSTEM UNITY
+	 * Slug: -design-icon-system-unity
+	 * File: class-diagnostic-design-icon-system-unity.php
+	 * 
+	 * Test Purpose:
+	 * Cannot determine specific pass criteria from available metadata.
+	 * Diagnostic: Design ICON SYSTEM UNITY
+	 * Slug: -design-icon-system-unity
+	 * 
+	 * TODO: Review the check() method to understand what constitutes a passing test.
+	 * The test should verify that:
+	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
+	 * - check() returns an array when the diagnostic condition IS met (issue found)
+	 *
+	 * @return array {
+	 *     @type bool   $passed  Whether the test passed
+	 *     @type string $message Human-readable test result message
+	 * }
+	 */
+	public static function test_live__design_icon_system_unity(): array {
+		/*
+		 * IMPLEMENTATION NOTES:
+		 * - This test validates the actual WordPress site state
+		 * - Do not use mocks or stubs
+		 * - Call self::check() to get the diagnostic result
+		 * - Verify the result matches expected site state
+		 * - Return [ 'passed' => bool, 'message' => string ]
+		 */
+		
+		$result = self::check();
+		
+		// TODO: Implement actual test logic
+		return array(
+			'passed' => false,
+			'message' => 'Test not yet implemented',
+		);
+	}
+
 }

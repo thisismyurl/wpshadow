@@ -26,4 +26,47 @@ class Diagnostic_Design_POST_LIST_ITEM_DESIGN extends Diagnostic_Base {
         ];
     }
 
+
+
+	/**
+	 * Live test for this diagnostic
+	 *
+	 * Diagnostic: Design POST LIST ITEM DESIGN
+	 * Slug: -design-post-list-item-design
+	 * File: class-diagnostic-design-post-list-item-design.php
+	 * 
+	 * Test Purpose:
+	 * Cannot determine specific pass criteria from available metadata.
+	 * Diagnostic: Design POST LIST ITEM DESIGN
+	 * Slug: -design-post-list-item-design
+	 * 
+	 * TODO: Review the check() method to understand what constitutes a passing test.
+	 * The test should verify that:
+	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
+	 * - check() returns an array when the diagnostic condition IS met (issue found)
+	 *
+	 * @return array {
+	 *     @type bool   $passed  Whether the test passed
+	 *     @type string $message Human-readable test result message
+	 * }
+	 */
+	public static function test_live__design_post_list_item_design(): array {
+		/*
+		 * IMPLEMENTATION NOTES:
+		 * - This test validates the actual WordPress site state
+		 * - Do not use mocks or stubs
+		 * - Call self::check() to get the diagnostic result
+		 * - Verify the result matches expected site state
+		 * - Return [ 'passed' => bool, 'message' => string ]
+		 */
+		
+		$result = self::check();
+		
+		// TODO: Implement actual test logic
+		return array(
+			'passed' => false,
+			'message' => 'Test not yet implemented',
+		);
+	}
+
 }
