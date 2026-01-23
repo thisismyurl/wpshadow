@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 /**
  * Automatic Security Updates Diagnostic
  *
  * Philosophy: Patch management - automatic core/plugin updates
  * @package WPShadow
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
@@ -16,20 +17,22 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check if automatic security updates are enabled.
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
-class Diagnostic_Automatic_Security_Updates extends Diagnostic_Base {
+class Diagnostic_Automatic_Security_Updates extends Diagnostic_Base
+{
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array {
-		$auto_updates = get_option( 'auto_update_core_dev' ) || get_option( 'auto_update_core_minor' ) || get_option( 'auto_update_plugins' );
-		
-		if ( ! $auto_updates ) {
+	public static function check(): ?array
+	{
+		$auto_updates = get_option('auto_update_core_dev') || get_option('auto_update_core_minor') || get_option('auto_update_plugins');
+
+		if (! $auto_updates) {
 			return array(
 				'id'          => 'automatic-security-updates',
 				'title'       => 'No Automatic Security Updates',
@@ -42,7 +45,7 @@ class Diagnostic_Automatic_Security_Updates extends Diagnostic_Base {
 				'threat_level' => 85,
 			);
 		}
-		
+
 		return null;
 	}
 
@@ -54,12 +57,12 @@ class Diagnostic_Automatic_Security_Updates extends Diagnostic_Base {
 	 * Diagnostic: Automatic Security Updates
 	 * Slug: -automatic-security-updates
 	 * File: class-diagnostic-automatic-security-updates.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Automatic Security Updates
 	 * Slug: -automatic-security-updates
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -70,21 +73,21 @@ class Diagnostic_Automatic_Security_Updates extends Diagnostic_Base {
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__automatic_security_updates(): array {
+	public static function test_live__automatic_security_updates(): array
+	{
 		$result = self::check();
-		
+
 		$auto_updates = get_option('auto_update_core_dev') || get_option('auto_update_core_minor') || get_option('auto_update_plugins');
-		
+
 		$should_pass = (bool) $auto_updates;
 		$diagnostic_passed = is_null($result);
 		$test_passes = ($should_pass === $diagnostic_passed);
-		
+
 		return array(
 			'passed' => $test_passes,
-			'message' => $test_passes ? 'Auto-updates check matches site state' : 
-				"Mismatch: expected " . ($should_pass ? 'pass' : 'fail') . " but got " . 
+			'message' => $test_passes ? 'Auto-updates check matches site state' :
+				"Mismatch: expected " . ($should_pass ? 'pass' : 'fail') . " but got " .
 				($diagnostic_passed ? 'pass' : 'fail'),
 		);
 	}
-
 }

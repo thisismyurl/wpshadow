@@ -1,13 +1,13 @@
 /**
  * WPShadow Design System
  * Version: 2.0 (2026 Redesign)
- * 
+ *
  * Philosophy: Inspire confidence (#8), Talk-worthy (#11)
  * Reference: GitHub, Google Workspace, Office 365, Linear, Notion
- * 
+ *
  * This design system provides consistent, modern UI components across WPShadow.
  * All components follow 2026 design principles: clean, elegant, focused, professional.
- * 
+ *
  * @package WPShadow
  */
 
@@ -17,11 +17,12 @@
 
 :root {
     /* Primary Brand Colors */
-    --wps-primary: #123456;          /* WPShadow branded color */
+    --wps-primary: #123456;
+    /* WPShadow branded color */
     --wps-primary-hover: #0d1f2d;
     --wps-primary-light: #e8f0f5;
     --wps-primary-dark: #0a1620;
-    
+
     /* Neutral Palette (Gray scale) */
     --wps-gray-50: #f9fafb;
     --wps-gray-100: #f3f4f6;
@@ -33,74 +34,96 @@
     --wps-gray-700: #374151;
     --wps-gray-800: #1f2937;
     --wps-gray-900: #111827;
-    
+
     /* Semantic Colors */
     --wps-success: #10b981;
     --wps-success-light: #d1fae5;
     --wps-success-dark: #047857;
-    
+
     --wps-warning: #f59e0b;
     --wps-warning-light: #fef3c7;
     --wps-warning-dark: #d97706;
-    
+
     --wps-danger: #ef4444;
     --wps-danger-light: #fee2e2;
     --wps-danger-dark: #dc2626;
-    
+
     --wps-info: #3b82f6;
     --wps-info-light: #dbeafe;
     --wps-info-dark: #2563eb;
-    
+
     /* Typography */
     --wps-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     --wps-font-mono: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
-    
+
     /* Font Sizes */
-    --wps-text-xs: 0.75rem;      /* 12px */
-    --wps-text-sm: 0.875rem;     /* 14px */
-    --wps-text-base: 1rem;       /* 16px */
-    --wps-text-lg: 1.125rem;     /* 18px */
-    --wps-text-xl: 1.25rem;      /* 20px */
-    --wps-text-2xl: 1.5rem;      /* 24px */
-    --wps-text-3xl: 1.875rem;    /* 30px */
-    --wps-text-4xl: 2.25rem;     /* 36px */
-    
+    --wps-text-xs: 0.75rem;
+    /* 12px */
+    --wps-text-sm: 0.875rem;
+    /* 14px */
+    --wps-text-base: 1rem;
+    /* 16px */
+    --wps-text-lg: 1.125rem;
+    /* 18px */
+    --wps-text-xl: 1.25rem;
+    /* 20px */
+    --wps-text-2xl: 1.5rem;
+    /* 24px */
+    --wps-text-3xl: 1.875rem;
+    /* 30px */
+    --wps-text-4xl: 2.25rem;
+    /* 36px */
+
     /* Font Weights */
     --wps-font-normal: 400;
     --wps-font-medium: 500;
     --wps-font-semibold: 600;
     --wps-font-bold: 700;
-    
+
     /* Spacing Scale */
-    --wps-space-1: 0.25rem;      /* 4px */
-    --wps-space-2: 0.5rem;       /* 8px */
-    --wps-space-3: 0.75rem;      /* 12px */
-    --wps-space-4: 1rem;         /* 16px */
-    --wps-space-5: 1.25rem;      /* 20px */
-    --wps-space-6: 1.5rem;       /* 24px */
-    --wps-space-8: 2rem;         /* 32px */
-    --wps-space-10: 2.5rem;      /* 40px */
-    --wps-space-12: 3rem;        /* 48px */
-    --wps-space-16: 4rem;        /* 64px */
-    
+    --wps-space-1: 0.25rem;
+    /* 4px */
+    --wps-space-2: 0.5rem;
+    /* 8px */
+    --wps-space-3: 0.75rem;
+    /* 12px */
+    --wps-space-4: 1rem;
+    /* 16px */
+    --wps-space-5: 1.25rem;
+    /* 20px */
+    --wps-space-6: 1.5rem;
+    /* 24px */
+    --wps-space-8: 2rem;
+    /* 32px */
+    --wps-space-10: 2.5rem;
+    /* 40px */
+    --wps-space-12: 3rem;
+    /* 48px */
+    --wps-space-16: 4rem;
+    /* 64px */
+
     /* Border Radius */
-    --wps-radius-sm: 0.375rem;   /* 6px */
-    --wps-radius-md: 0.5rem;     /* 8px */
-    --wps-radius-lg: 0.75rem;    /* 12px */
-    --wps-radius-xl: 1rem;       /* 16px */
+    --wps-radius-sm: 0.375rem;
+    /* 6px */
+    --wps-radius-md: 0.5rem;
+    /* 8px */
+    --wps-radius-lg: 0.75rem;
+    /* 12px */
+    --wps-radius-xl: 1rem;
+    /* 16px */
     --wps-radius-full: 9999px;
-    
+
     /* Shadows */
     --wps-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --wps-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --wps-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     --wps-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    
+
     /* Transitions */
     --wps-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
     --wps-transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
     --wps-transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     /* Z-Index Scale */
     --wps-z-base: 0;
     --wps-z-dropdown: 1000;
@@ -270,253 +293,812 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
     5. UTILITY CLASSES - Spacing
     ============================================================================ */
 
-.wps-m-0 { margin: 0; }
-.wps-m-1 { margin: var(--wps-space-1); }
-.wps-m-2 { margin: var(--wps-space-2); }
-.wps-m-3 { margin: var(--wps-space-3); }
-.wps-m-4 { margin: var(--wps-space-4); }
-.wps-m-5 { margin: var(--wps-space-5); }
-.wps-m-6 { margin: var(--wps-space-6); }
-.wps-m-8 { margin: var(--wps-space-8); }
-.wps-m-10 { margin: var(--wps-space-10); }
-.wps-m-12 { margin: var(--wps-space-12); }
-.wps-m-16 { margin: var(--wps-space-16); }
+.wps-m-0 {
+    margin: 0;
+}
 
-.wps-mt-0 { margin-top: 0; }
-.wps-mt-1 { margin-top: var(--wps-space-1); }
-.wps-mt-2 { margin-top: var(--wps-space-2); }
-.wps-mt-3 { margin-top: var(--wps-space-3); }
-.wps-mt-4 { margin-top: var(--wps-space-4); }
-.wps-mt-5 { margin-top: var(--wps-space-5); }
-.wps-mt-6 { margin-top: var(--wps-space-6); }
-.wps-mt-8 { margin-top: var(--wps-space-8); }
+.wps-m-1 {
+    margin: var(--wps-space-1);
+}
 
-.wps-mr-0 { margin-right: 0; }
-.wps-mr-1 { margin-right: var(--wps-space-1); }
-.wps-mr-2 { margin-right: var(--wps-space-2); }
-.wps-mr-3 { margin-right: var(--wps-space-3); }
-.wps-mr-4 { margin-right: var(--wps-space-4); }
-.wps-mr-5 { margin-right: var(--wps-space-5); }
-.wps-mr-6 { margin-right: var(--wps-space-6); }
-.wps-mr-8 { margin-right: var(--wps-space-8); }
+.wps-m-2 {
+    margin: var(--wps-space-2);
+}
 
-.wps-mb-0 { margin-bottom: 0; }
-.wps-mb-1 { margin-bottom: var(--wps-space-1); }
-.wps-mb-2 { margin-bottom: var(--wps-space-2); }
-.wps-mb-3 { margin-bottom: var(--wps-space-3); }
-.wps-mb-4 { margin-bottom: var(--wps-space-4); }
-.wps-mb-5 { margin-bottom: var(--wps-space-5); }
-.wps-mb-6 { margin-bottom: var(--wps-space-6); }
-.wps-mb-8 { margin-bottom: var(--wps-space-8); }
+.wps-m-3 {
+    margin: var(--wps-space-3);
+}
 
-.wps-ml-0 { margin-left: 0; }
-.wps-ml-1 { margin-left: var(--wps-space-1); }
-.wps-ml-2 { margin-left: var(--wps-space-2); }
-.wps-ml-3 { margin-left: var(--wps-space-3); }
-.wps-ml-4 { margin-left: var(--wps-space-4); }
+.wps-m-4 {
+    margin: var(--wps-space-4);
+}
 
-.wps-p-0 { padding: 0; }
-.wps-p-1 { padding: var(--wps-space-1); }
-.wps-p-2 { padding: var(--wps-space-2); }
-.wps-p-3 { padding: var(--wps-space-3); }
-.wps-p-4 { padding: var(--wps-space-4); }
-.wps-p-5 { padding: var(--wps-space-5); }
-.wps-p-6 { padding: var(--wps-space-6); }
-.wps-p-8 { padding: var(--wps-space-8); }
-.wps-p-10 { padding: var(--wps-space-10); }
+.wps-m-5 {
+    margin: var(--wps-space-5);
+}
 
-.wps-pt-1 { padding-top: var(--wps-space-1); }
-.wps-pt-2 { padding-top: var(--wps-space-2); }
-.wps-pt-3 { padding-top: var(--wps-space-3); }
-.wps-pt-4 { padding-top: var(--wps-space-4); }
-.wps-pt-6 { padding-top: var(--wps-space-6); }
-.wps-pt-8 { padding-top: var(--wps-space-8); }
+.wps-m-6 {
+    margin: var(--wps-space-6);
+}
 
-.wps-pr-1 { padding-right: var(--wps-space-1); }
-.wps-pr-2 { padding-right: var(--wps-space-2); }
-.wps-pr-3 { padding-right: var(--wps-space-3); }
-.wps-pr-4 { padding-right: var(--wps-space-4); }
+.wps-m-8 {
+    margin: var(--wps-space-8);
+}
 
-.wps-pb-0 { padding-bottom: 0; }
-.wps-pb-1 { padding-bottom: var(--wps-space-1); }
-.wps-pb-2 { padding-bottom: var(--wps-space-2); }
-.wps-pb-3 { padding-bottom: var(--wps-space-3); }
-.wps-pb-4 { padding-bottom: var(--wps-space-4); }
-.wps-pb-6 { padding-bottom: var(--wps-space-6); }
+.wps-m-10 {
+    margin: var(--wps-space-10);
+}
 
-.wps-pl-1 { padding-left: var(--wps-space-1); }
-.wps-pl-2 { padding-left: var(--wps-space-2); }
-.wps-pl-3 { padding-left: var(--wps-space-3); }
-.wps-pl-4 { padding-left: var(--wps-space-4); }
+.wps-m-12 {
+    margin: var(--wps-space-12);
+}
+
+.wps-m-16 {
+    margin: var(--wps-space-16);
+}
+
+.wps-mt-0 {
+    margin-top: 0;
+}
+
+.wps-mt-1 {
+    margin-top: var(--wps-space-1);
+}
+
+.wps-mt-2 {
+    margin-top: var(--wps-space-2);
+}
+
+.wps-mt-3 {
+    margin-top: var(--wps-space-3);
+}
+
+.wps-mt-4 {
+    margin-top: var(--wps-space-4);
+}
+
+.wps-mt-5 {
+    margin-top: var(--wps-space-5);
+}
+
+.wps-mt-6 {
+    margin-top: var(--wps-space-6);
+}
+
+.wps-mt-8 {
+    margin-top: var(--wps-space-8);
+}
+
+.wps-mr-0 {
+    margin-right: 0;
+}
+
+.wps-mr-1 {
+    margin-right: var(--wps-space-1);
+}
+
+.wps-mr-2 {
+    margin-right: var(--wps-space-2);
+}
+
+.wps-mr-3 {
+    margin-right: var(--wps-space-3);
+}
+
+.wps-mr-4 {
+    margin-right: var(--wps-space-4);
+}
+
+.wps-mr-5 {
+    margin-right: var(--wps-space-5);
+}
+
+.wps-mr-6 {
+    margin-right: var(--wps-space-6);
+}
+
+.wps-mr-8 {
+    margin-right: var(--wps-space-8);
+}
+
+.wps-mb-0 {
+    margin-bottom: 0;
+}
+
+.wps-mb-1 {
+    margin-bottom: var(--wps-space-1);
+}
+
+.wps-mb-2 {
+    margin-bottom: var(--wps-space-2);
+}
+
+.wps-mb-3 {
+    margin-bottom: var(--wps-space-3);
+}
+
+.wps-mb-4 {
+    margin-bottom: var(--wps-space-4);
+}
+
+.wps-mb-5 {
+    margin-bottom: var(--wps-space-5);
+}
+
+.wps-mb-6 {
+    margin-bottom: var(--wps-space-6);
+}
+
+.wps-mb-8 {
+    margin-bottom: var(--wps-space-8);
+}
+
+.wps-ml-0 {
+    margin-left: 0;
+}
+
+.wps-ml-1 {
+    margin-left: var(--wps-space-1);
+}
+
+.wps-ml-2 {
+    margin-left: var(--wps-space-2);
+}
+
+.wps-ml-3 {
+    margin-left: var(--wps-space-3);
+}
+
+.wps-ml-4 {
+    margin-left: var(--wps-space-4);
+}
+
+.wps-p-0 {
+    padding: 0;
+}
+
+.wps-p-1 {
+    padding: var(--wps-space-1);
+}
+
+.wps-p-2 {
+    padding: var(--wps-space-2);
+}
+
+.wps-p-3 {
+    padding: var(--wps-space-3);
+}
+
+.wps-p-4 {
+    padding: var(--wps-space-4);
+}
+
+.wps-p-5 {
+    padding: var(--wps-space-5);
+}
+
+.wps-p-6 {
+    padding: var(--wps-space-6);
+}
+
+.wps-p-8 {
+    padding: var(--wps-space-8);
+}
+
+.wps-p-10 {
+    padding: var(--wps-space-10);
+}
+
+.wps-pt-1 {
+    padding-top: var(--wps-space-1);
+}
+
+.wps-pt-2 {
+    padding-top: var(--wps-space-2);
+}
+
+.wps-pt-3 {
+    padding-top: var(--wps-space-3);
+}
+
+.wps-pt-4 {
+    padding-top: var(--wps-space-4);
+}
+
+.wps-pt-6 {
+    padding-top: var(--wps-space-6);
+}
+
+.wps-pt-8 {
+    padding-top: var(--wps-space-8);
+}
+
+.wps-pr-1 {
+    padding-right: var(--wps-space-1);
+}
+
+.wps-pr-2 {
+    padding-right: var(--wps-space-2);
+}
+
+.wps-pr-3 {
+    padding-right: var(--wps-space-3);
+}
+
+.wps-pr-4 {
+    padding-right: var(--wps-space-4);
+}
+
+.wps-pb-0 {
+    padding-bottom: 0;
+}
+
+.wps-pb-1 {
+    padding-bottom: var(--wps-space-1);
+}
+
+.wps-pb-2 {
+    padding-bottom: var(--wps-space-2);
+}
+
+.wps-pb-3 {
+    padding-bottom: var(--wps-space-3);
+}
+
+.wps-pb-4 {
+    padding-bottom: var(--wps-space-4);
+}
+
+.wps-pb-6 {
+    padding-bottom: var(--wps-space-6);
+}
+
+.wps-pl-1 {
+    padding-left: var(--wps-space-1);
+}
+
+.wps-pl-2 {
+    padding-left: var(--wps-space-2);
+}
+
+.wps-pl-3 {
+    padding-left: var(--wps-space-3);
+}
+
+.wps-pl-4 {
+    padding-left: var(--wps-space-4);
+}
 
 /* ============================================================================
     6. UTILITY CLASSES - Typography
     ============================================================================ */
 
-.wps-text-xs { font-size: var(--wps-text-xs); }
-.wps-text-sm { font-size: var(--wps-text-sm); }
-.wps-text-base { font-size: var(--wps-text-base); }
-.wps-text-lg { font-size: var(--wps-text-lg); }
-.wps-text-xl { font-size: var(--wps-text-xl); }
-.wps-text-2xl { font-size: var(--wps-text-2xl); }
-.wps-text-3xl { font-size: var(--wps-text-3xl); }
-.wps-text-4xl { font-size: var(--wps-text-4xl); }
+.wps-text-xs {
+    font-size: var(--wps-text-xs);
+}
 
-.wps-font-normal { font-weight: var(--wps-font-normal); }
-.wps-font-medium { font-weight: var(--wps-font-medium); }
-.wps-font-semibold { font-weight: var(--wps-font-semibold); }
-.wps-font-bold { font-weight: var(--wps-font-bold); }
+.wps-text-sm {
+    font-size: var(--wps-text-sm);
+}
 
-.wps-uppercase { text-transform: uppercase; }
-.wps-capitalize { text-transform: capitalize; }
-.wps-lowercase { text-transform: lowercase; }
+.wps-text-base {
+    font-size: var(--wps-text-base);
+}
 
-.wps-no-underline { text-decoration: none; }
-.wps-underline { text-decoration: underline; }
+.wps-text-lg {
+    font-size: var(--wps-text-lg);
+}
 
-.wps-leading-tight { line-height: 1.3; }
-.wps-leading-normal { line-height: 1.5; }
-.wps-leading-relaxed { line-height: 1.6; }
+.wps-text-xl {
+    font-size: var(--wps-text-xl);
+}
 
-.wps-tracking-tight { letter-spacing: -0.01em; }
-.wps-tracking-normal { letter-spacing: 0; }
-.wps-tracking-wide { letter-spacing: 0.05em; }
-.wps-tracking-wider { letter-spacing: 0.1em; }
+.wps-text-2xl {
+    font-size: var(--wps-text-2xl);
+}
 
-.wps-text-white { color: white; }
-.wps-text-gray-400 { color: var(--wps-gray-400); }
-.wps-text-gray-500 { color: var(--wps-gray-500); }
-.wps-text-gray-600 { color: var(--wps-gray-600); }
-.wps-text-gray-700 { color: var(--wps-gray-700); }
-.wps-text-gray-800 { color: var(--wps-gray-800); }
-.wps-text-gray-900 { color: var(--wps-gray-900); }
-.wps-text-primary { color: var(--wps-primary); }
-.wps-text-success { color: var(--wps-success); }
-.wps-text-warning { color: var(--wps-warning); }
-.wps-text-danger { color: var(--wps-danger); }
-.wps-text-info { color: var(--wps-info); }
+.wps-text-3xl {
+    font-size: var(--wps-text-3xl);
+}
+
+.wps-text-4xl {
+    font-size: var(--wps-text-4xl);
+}
+
+.wps-font-normal {
+    font-weight: var(--wps-font-normal);
+}
+
+.wps-font-medium {
+    font-weight: var(--wps-font-medium);
+}
+
+.wps-font-semibold {
+    font-weight: var(--wps-font-semibold);
+}
+
+.wps-font-bold {
+    font-weight: var(--wps-font-bold);
+}
+
+.wps-uppercase {
+    text-transform: uppercase;
+}
+
+.wps-capitalize {
+    text-transform: capitalize;
+}
+
+.wps-lowercase {
+    text-transform: lowercase;
+}
+
+.wps-no-underline {
+    text-decoration: none;
+}
+
+.wps-underline {
+    text-decoration: underline;
+}
+
+.wps-leading-tight {
+    line-height: 1.3;
+}
+
+.wps-leading-normal {
+    line-height: 1.5;
+}
+
+.wps-leading-relaxed {
+    line-height: 1.6;
+}
+
+.wps-tracking-tight {
+    letter-spacing: -0.01em;
+}
+
+.wps-tracking-normal {
+    letter-spacing: 0;
+}
+
+.wps-tracking-wide {
+    letter-spacing: 0.05em;
+}
+
+.wps-tracking-wider {
+    letter-spacing: 0.1em;
+}
+
+.wps-text-white {
+    color: white;
+}
+
+.wps-text-gray-400 {
+    color: var(--wps-gray-400);
+}
+
+.wps-text-gray-500 {
+    color: var(--wps-gray-500);
+}
+
+.wps-text-gray-600 {
+    color: var(--wps-gray-600);
+}
+
+.wps-text-gray-700 {
+    color: var(--wps-gray-700);
+}
+
+.wps-text-gray-800 {
+    color: var(--wps-gray-800);
+}
+
+.wps-text-gray-900 {
+    color: var(--wps-gray-900);
+}
+
+.wps-text-primary {
+    color: var(--wps-primary);
+}
+
+.wps-text-success {
+    color: var(--wps-success);
+}
+
+.wps-text-warning {
+    color: var(--wps-warning);
+}
+
+.wps-text-danger {
+    color: var(--wps-danger);
+}
+
+.wps-text-info {
+    color: var(--wps-info);
+}
 
 /* ============================================================================
     7. UTILITY CLASSES - Icons
     ============================================================================ */
 
-.wps-icon-xs { font-size: 12px; width: 12px; height: 12px; }
-.wps-icon-sm { font-size: 16px; width: 16px; height: 16px; }
-.wps-icon-md { font-size: 24px; width: 24px; height: 24px; }
-.wps-icon-lg { font-size: 32px; width: 32px; height: 32px; }
-.wps-icon-xl { font-size: 40px; width: 40px; height: 40px; }
+.wps-icon-xs {
+    font-size: 12px;
+    width: 12px;
+    height: 12px;
+}
 
-.wps-icon-primary { color: var(--wps-primary); }
-.wps-icon-success { color: var(--wps-success); }
-.wps-icon-warning { color: var(--wps-warning); }
-.wps-icon-danger { color: var(--wps-danger); }
-.wps-icon-info { color: var(--wps-info); }
-.wps-icon-gray-400 { color: var(--wps-gray-400); }
-.wps-icon-gray-500 { color: var(--wps-gray-500); }
-.wps-icon-gray-600 { color: var(--wps-gray-600); }
-.wps-icon-white { color: white; }
+.wps-icon-sm {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
 
-.wps-icon-mr-0 { margin-right: 0; }
-.wps-icon-mr-1 { margin-right: var(--wps-space-1); }
-.wps-icon-mr-2 { margin-right: var(--wps-space-2); }
-.wps-icon-mr-3 { margin-right: var(--wps-space-3); }
-.wps-icon-mr-4 { margin-right: var(--wps-space-4); }
+.wps-icon-md {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+}
 
-.wps-icon-mb-1 { margin-bottom: var(--wps-space-1); }
-.wps-icon-mb-2 { margin-bottom: var(--wps-space-2); }
-.wps-icon-mb-3 { margin-bottom: var(--wps-space-3); }
+.wps-icon-lg {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+}
 
-.wps-icon-mt-1 { margin-top: var(--wps-space-1); }
-.wps-icon-mt-2 { margin-top: var(--wps-space-2); }
+.wps-icon-xl {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+}
+
+.wps-icon-primary {
+    color: var(--wps-primary);
+}
+
+.wps-icon-success {
+    color: var(--wps-success);
+}
+
+.wps-icon-warning {
+    color: var(--wps-warning);
+}
+
+.wps-icon-danger {
+    color: var(--wps-danger);
+}
+
+.wps-icon-info {
+    color: var(--wps-info);
+}
+
+.wps-icon-gray-400 {
+    color: var(--wps-gray-400);
+}
+
+.wps-icon-gray-500 {
+    color: var(--wps-gray-500);
+}
+
+.wps-icon-gray-600 {
+    color: var(--wps-gray-600);
+}
+
+.wps-icon-white {
+    color: white;
+}
+
+.wps-icon-mr-0 {
+    margin-right: 0;
+}
+
+.wps-icon-mr-1 {
+    margin-right: var(--wps-space-1);
+}
+
+.wps-icon-mr-2 {
+    margin-right: var(--wps-space-2);
+}
+
+.wps-icon-mr-3 {
+    margin-right: var(--wps-space-3);
+}
+
+.wps-icon-mr-4 {
+    margin-right: var(--wps-space-4);
+}
+
+.wps-icon-mb-1 {
+    margin-bottom: var(--wps-space-1);
+}
+
+.wps-icon-mb-2 {
+    margin-bottom: var(--wps-space-2);
+}
+
+.wps-icon-mb-3 {
+    margin-bottom: var(--wps-space-3);
+}
+
+.wps-icon-mt-1 {
+    margin-top: var(--wps-space-1);
+}
+
+.wps-icon-mt-2 {
+    margin-top: var(--wps-space-2);
+}
 
 /* ============================================================================
     8. UTILITY CLASSES - Flexbox & Display
     ============================================================================ */
 
-.wps-flex { display: flex; }
-.wps-flex-center { display: flex; align-items: center; justify-content: center; }
-.wps-flex-between { display: flex; align-items: center; justify-content: space-between; }
-.wps-flex-start { display: flex; align-items: flex-start; }
-.wps-flex-end { display: flex; align-items: flex-end; }
-.wps-flex-col { display: flex; flex-direction: column; }
-.wps-flex-row { display: flex; flex-direction: row; }
-.wps-flex-wrap { display: flex; flex-wrap: wrap; }
+.wps-flex {
+    display: flex;
+}
 
-.wps-gap-1 { gap: var(--wps-space-1); }
-.wps-gap-2 { gap: var(--wps-space-2); }
-.wps-gap-3 { gap: var(--wps-space-3); }
-.wps-gap-4 { gap: var(--wps-space-4); }
-.wps-gap-5 { gap: var(--wps-space-5); }
-.wps-gap-6 { gap: var(--wps-space-6); }
-.wps-gap-8 { gap: var(--wps-space-8); }
+.wps-flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-.wps-items-center { align-items: center; }
-.wps-items-start { align-items: flex-start; }
-.wps-items-end { align-items: flex-end; }
-.wps-items-stretch { align-items: stretch; }
+.wps-flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
-.wps-justify-center { justify-content: center; }
-.wps-justify-start { justify-content: flex-start; }
-.wps-justify-end { justify-content: flex-end; }
-.wps-justify-between { justify-content: space-between; }
+.wps-flex-start {
+    display: flex;
+    align-items: flex-start;
+}
 
-.wps-flex-1 { flex: 1; }
-.wps-flex-none { flex: none; }
-.wps-flex-shrink-0 { flex-shrink: 0; }
-.wps-flex-grow { flex-grow: 1; }
+.wps-flex-end {
+    display: flex;
+    align-items: flex-end;
+}
 
-.wps-block { display: block; }
-.wps-inline { display: inline; }
-.wps-inline-block { display: inline-block; }
-.wps-hidden { display: none; }
-.wps-visible { display: block; }
+.wps-flex-col {
+    display: flex;
+    flex-direction: column;
+}
 
-.wps-opacity-50 { opacity: 0.5; }
-.wps-opacity-75 { opacity: 0.75; }
-.wps-opacity-100 { opacity: 1; }
+.wps-flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.wps-flex-wrap {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.wps-gap-1 {
+    gap: var(--wps-space-1);
+}
+
+.wps-gap-2 {
+    gap: var(--wps-space-2);
+}
+
+.wps-gap-3 {
+    gap: var(--wps-space-3);
+}
+
+.wps-gap-4 {
+    gap: var(--wps-space-4);
+}
+
+.wps-gap-5 {
+    gap: var(--wps-space-5);
+}
+
+.wps-gap-6 {
+    gap: var(--wps-space-6);
+}
+
+.wps-gap-8 {
+    gap: var(--wps-space-8);
+}
+
+.wps-items-center {
+    align-items: center;
+}
+
+.wps-items-start {
+    align-items: flex-start;
+}
+
+.wps-items-end {
+    align-items: flex-end;
+}
+
+.wps-items-stretch {
+    align-items: stretch;
+}
+
+.wps-justify-center {
+    justify-content: center;
+}
+
+.wps-justify-start {
+    justify-content: flex-start;
+}
+
+.wps-justify-end {
+    justify-content: flex-end;
+}
+
+.wps-justify-between {
+    justify-content: space-between;
+}
+
+.wps-flex-1 {
+    flex: 1;
+}
+
+.wps-flex-none {
+    flex: none;
+}
+
+.wps-flex-shrink-0 {
+    flex-shrink: 0;
+}
+
+.wps-flex-grow {
+    flex-grow: 1;
+}
+
+.wps-block {
+    display: block;
+}
+
+.wps-inline {
+    display: inline;
+}
+
+.wps-inline-block {
+    display: inline-block;
+}
+
+.wps-hidden {
+    display: none;
+}
+
+.wps-visible {
+    display: block;
+}
+
+.wps-opacity-50 {
+    opacity: 0.5;
+}
+
+.wps-opacity-75 {
+    opacity: 0.75;
+}
+
+.wps-opacity-100 {
+    opacity: 1;
+}
 
 /* ============================================================================
     9. UTILITY CLASSES - Borders & Shadows
     ============================================================================ */
 
-.wps-border-b { border-bottom: 1px solid var(--wps-gray-200); }
-.wps-border-t { border-top: 1px solid var(--wps-gray-200); }
-.wps-border-l { border-left: 1px solid var(--wps-gray-200); }
-.wps-border-r { border-right: 1px solid var(--wps-gray-200); }
+.wps-border-b {
+    border-bottom: 1px solid var(--wps-gray-200);
+}
 
-.wps-shadow-sm { box-shadow: var(--wps-shadow-sm); }
-.wps-shadow-md { box-shadow: var(--wps-shadow-md); }
-.wps-shadow-lg { box-shadow: var(--wps-shadow-lg); }
-.wps-shadow-xl { box-shadow: var(--wps-shadow-xl); }
+.wps-border-t {
+    border-top: 1px solid var(--wps-gray-200);
+}
+
+.wps-border-l {
+    border-left: 1px solid var(--wps-gray-200);
+}
+
+.wps-border-r {
+    border-right: 1px solid var(--wps-gray-200);
+}
+
+.wps-shadow-sm {
+    box-shadow: var(--wps-shadow-sm);
+}
+
+.wps-shadow-md {
+    box-shadow: var(--wps-shadow-md);
+}
+
+.wps-shadow-lg {
+    box-shadow: var(--wps-shadow-lg);
+}
+
+.wps-shadow-xl {
+    box-shadow: var(--wps-shadow-xl);
+}
 
 /* ============================================================================
     10. UTILITY CLASSES - Width & Height
     ============================================================================ */
 
-.wps-w-full { width: 100%; }
-.wps-w-auto { width: auto; }
-.wps-w-5 { width: 20px; }
-.wps-h-5 { height: 20px; }
-.wps-w-6 { width: 24px; }
-.wps-h-6 { height: 24px; }
-.wps-w-8 { width: 32px; }
-.wps-h-8 { height: 32px; }
-.wps-w-10 { width: 40px; }
-.wps-h-10 { height: 40px; }
+.wps-w-full {
+    width: 100%;
+}
+
+.wps-w-auto {
+    width: auto;
+}
+
+.wps-w-5 {
+    width: 20px;
+}
+
+.wps-h-5 {
+    height: 20px;
+}
+
+.wps-w-6 {
+    width: 24px;
+}
+
+.wps-h-6 {
+    height: 24px;
+}
+
+.wps-w-8 {
+    width: 32px;
+}
+
+.wps-h-8 {
+    height: 32px;
+}
+
+.wps-w-10 {
+    width: 40px;
+}
+
+.wps-h-10 {
+    height: 40px;
+}
 
 /* ============================================================================
     11. UTILITY CLASSES - Backgrounds
     ============================================================================ */
 
-.wps-bg-white { background: white; }
-.wps-bg-gray-50 { background: var(--wps-gray-50); }
-.wps-bg-gray-100 { background: var(--wps-gray-100); }
-.wps-bg-gray-200 { background: var(--wps-gray-200); }
-.wps-bg-primary-light { background: var(--wps-primary-light); }
-.wps-bg-success-light { background: var(--wps-success-light); }
-.wps-bg-warning-light { background: var(--wps-warning-light); }
-.wps-bg-danger-light { background: var(--wps-danger-light); }
-.wps-bg-info-light { background: var(--wps-info-light); }
+.wps-bg-white {
+    background: white;
+}
+
+.wps-bg-gray-50 {
+    background: var(--wps-gray-50);
+}
+
+.wps-bg-gray-100 {
+    background: var(--wps-gray-100);
+}
+
+.wps-bg-gray-200 {
+    background: var(--wps-gray-200);
+}
+
+.wps-bg-primary-light {
+    background: var(--wps-primary-light);
+}
+
+.wps-bg-success-light {
+    background: var(--wps-success-light);
+}
+
+.wps-bg-warning-light {
+    background: var(--wps-warning-light);
+}
+
+.wps-bg-danger-light {
+    background: var(--wps-danger-light);
+}
+
+.wps-bg-info-light {
+    background: var(--wps-info-light);
+}
 
 /* ============================================================================
    4. BUTTONS - Modern Button System
@@ -750,19 +1332,19 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.wps-toggle input:checked + .wps-toggle-slider {
+.wps-toggle input:checked+.wps-toggle-slider {
     background: var(--wps-primary);
 }
 
-.wps-toggle input:checked + .wps-toggle-slider:before {
+.wps-toggle input:checked+.wps-toggle-slider:before {
     transform: translateX(20px);
 }
 
-.wps-toggle input:focus + .wps-toggle-slider {
+.wps-toggle input:focus+.wps-toggle-slider {
     box-shadow: 0 0 0 3px var(--wps-primary-light);
 }
 
-.wps-toggle input:disabled + .wps-toggle-slider {
+.wps-toggle input:disabled+.wps-toggle-slider {
     opacity: 0.5;
     cursor: not-allowed;
 }
@@ -921,8 +1503,13 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
 }
 
 @keyframes wps-fade-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .wps-modal {
@@ -943,6 +1530,7 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
         opacity: 0;
         transform: scale(0.95) translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: scale(1) translateY(0);
@@ -1111,7 +1699,9 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
 }
 
 @keyframes wps-spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .wps-skeleton {
@@ -1122,8 +1712,13 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
 }
 
 @keyframes wps-skeleton-loading {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
 }
 
 /* ============================================================================
@@ -1131,115 +1726,266 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
    ============================================================================ */
 
 /* Spacing */
-.wps-mt-0 { margin-top: 0; }
-.wps-mt-2 { margin-top: var(--wps-space-2); }
-.wps-mt-4 { margin-top: var(--wps-space-4); }
-.wps-mt-6 { margin-top: var(--wps-space-6); }
-.wps-mt-8 { margin-top: var(--wps-space-8); }
-.wps-mt-5 { margin-top: var(--wps-space-5); }
-.wps-mt-10 { margin-top: var(--wps-space-10); }
+.wps-mt-0 {
+    margin-top: 0;
+}
 
-.wps-mb-0 { margin-bottom: 0; }
-.wps-mb-2 { margin-bottom: var(--wps-space-2); }
-.wps-mb-4 { margin-bottom: var(--wps-space-4); }
-.wps-mb-6 { margin-bottom: var(--wps-space-6); }
-.wps-mb-8 { margin-bottom: var(--wps-space-8); }
-.wps-mb-5 { margin-bottom: var(--wps-space-5); }
-.wps-mb-10 { margin-bottom: var(--wps-space-10); }
+.wps-mt-2 {
+    margin-top: var(--wps-space-2);
+}
 
-.wps-my-4 { margin-top: var(--wps-space-4); margin-bottom: var(--wps-space-4); }
-.wps-my-6 { margin-top: var(--wps-space-6); margin-bottom: var(--wps-space-6); }
-.wps-my-8 { margin-top: var(--wps-space-8); margin-bottom: var(--wps-space-8); }
+.wps-mt-4 {
+    margin-top: var(--wps-space-4);
+}
 
-.wps-p-4 { padding: var(--wps-space-4); }
-.wps-p-6 { padding: var(--wps-space-6); }
+.wps-mt-6 {
+    margin-top: var(--wps-space-6);
+}
+
+.wps-mt-8 {
+    margin-top: var(--wps-space-8);
+}
+
+.wps-mt-5 {
+    margin-top: var(--wps-space-5);
+}
+
+.wps-mt-10 {
+    margin-top: var(--wps-space-10);
+}
+
+.wps-mb-0 {
+    margin-bottom: 0;
+}
+
+.wps-mb-2 {
+    margin-bottom: var(--wps-space-2);
+}
+
+.wps-mb-4 {
+    margin-bottom: var(--wps-space-4);
+}
+
+.wps-mb-6 {
+    margin-bottom: var(--wps-space-6);
+}
+
+.wps-mb-8 {
+    margin-bottom: var(--wps-space-8);
+}
+
+.wps-mb-5 {
+    margin-bottom: var(--wps-space-5);
+}
+
+.wps-mb-10 {
+    margin-bottom: var(--wps-space-10);
+}
+
+.wps-my-4 {
+    margin-top: var(--wps-space-4);
+    margin-bottom: var(--wps-space-4);
+}
+
+.wps-my-6 {
+    margin-top: var(--wps-space-6);
+    margin-bottom: var(--wps-space-6);
+}
+
+.wps-my-8 {
+    margin-top: var(--wps-space-8);
+    margin-bottom: var(--wps-space-8);
+}
+
+.wps-p-4 {
+    padding: var(--wps-space-4);
+}
+
+.wps-p-6 {
+    padding: var(--wps-space-6);
+}
 
 /* Display */
-.wps-flex { display: flex; }
-.wps-inline-flex { display: inline-flex; }
-.wps-grid { display: grid; }
-.wps-hidden { display: none; }
+.wps-flex {
+    display: flex;
+}
+
+.wps-inline-flex {
+    display: inline-flex;
+}
+
+.wps-grid {
+    display: grid;
+}
+
+.wps-hidden {
+    display: none;
+}
 
 /* Flex */
-.wps-items-center { align-items: center; }
-.wps-items-start { align-items: flex-start; }
-.wps-justify-between { justify-content: space-between; }
-.wps-justify-center { justify-content: center; }
-.wps-flex-col { flex-direction: column; }
-.wps-gap-2 { gap: var(--wps-space-2); }
-.wps-gap-3 { gap: var(--wps-space-3); }
-.wps-gap-4 { gap: var(--wps-space-4); }
+.wps-items-center {
+    align-items: center;
+}
+
+.wps-items-start {
+    align-items: flex-start;
+}
+
+.wps-justify-between {
+    justify-content: space-between;
+}
+
+.wps-justify-center {
+    justify-content: center;
+}
+
+.wps-flex-col {
+    flex-direction: column;
+}
+
+.wps-gap-2 {
+    gap: var(--wps-space-2);
+}
+
+.wps-gap-3 {
+    gap: var(--wps-space-3);
+}
+
+.wps-gap-4 {
+    gap: var(--wps-space-4);
+}
 
 /* Grid */
-.wps-grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
-.wps-grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+.wps-grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.wps-grid-cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
 .wps-grid-auto-160 {
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: var(--wps-space-3);
 }
+
 .wps-grid-auto-200 {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: var(--wps-space-4);
 }
+
 .wps-grid-auto-200-compact {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: var(--wps-space-3);
 }
+
 .wps-grid-auto-260 {
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: var(--wps-space-4);
 }
+
 .wps-grid-auto-300 {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: var(--wps-space-5);
 }
+
 .wps-grid-auto-300-compact {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: var(--wps-space-3);
 }
+
 .wps-grid-auto-320-compact {
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: var(--wps-space-4);
 }
+
 .wps-grid-auto-140 {
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: var(--wps-space-3);
 }
+
 .wps-grid-auto-250 {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: var(--wps-space-4);
 }
+
 .wps-grid-auto-320 {
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: var(--wps-space-6);
 }
 
 /* Text */
-.wps-text-center { text-align: center; }
-.wps-text-right { text-align: right; }
-.wps-font-medium { font-weight: var(--wps-font-medium); }
-.wps-font-semibold { font-weight: var(--wps-font-semibold); }
-.wps-font-bold { font-weight: var(--wps-font-bold); }
+.wps-text-center {
+    text-align: center;
+}
+
+.wps-text-right {
+    text-align: right;
+}
+
+.wps-font-medium {
+    font-weight: var(--wps-font-medium);
+}
+
+.wps-font-semibold {
+    font-weight: var(--wps-font-semibold);
+}
+
+.wps-font-bold {
+    font-weight: var(--wps-font-bold);
+}
 
 /* Colors */
-.wps-text-muted { color: var(--wps-gray-500); }
-.wps-text-primary { color: var(--wps-primary); }
-.wps-text-success { color: var(--wps-success); }
-.wps-text-danger { color: var(--wps-danger); }
+.wps-text-muted {
+    color: var(--wps-gray-500);
+}
+
+.wps-text-primary {
+    color: var(--wps-primary);
+}
+
+.wps-text-success {
+    color: var(--wps-success);
+}
+
+.wps-text-danger {
+    color: var(--wps-danger);
+}
 
 /* Border */
-.wps-border { border: 1px solid var(--wps-gray-200); }
-.wps-border-b { border-bottom: 1px solid var(--wps-gray-200); }
-.wps-rounded { border-radius: var(--wps-radius-md); }
-.wps-rounded-lg { border-radius: var(--wps-radius-lg); }
+.wps-border {
+    border: 1px solid var(--wps-gray-200);
+}
+
+.wps-border-b {
+    border-bottom: 1px solid var(--wps-gray-200);
+}
+
+.wps-rounded {
+    border-radius: var(--wps-radius-md);
+}
+
+.wps-rounded-lg {
+    border-radius: var(--wps-radius-lg);
+}
 
 /* Shadow */
-.wps-shadow-sm { box-shadow: var(--wps-shadow-sm); }
-.wps-shadow { box-shadow: var(--wps-shadow-md); }
-.wps-shadow-lg { box-shadow: var(--wps-shadow-lg); }
+.wps-shadow-sm {
+    box-shadow: var(--wps-shadow-sm);
+}
+
+.wps-shadow {
+    box-shadow: var(--wps-shadow-md);
+}
+
+.wps-shadow-lg {
+    box-shadow: var(--wps-shadow-lg);
+}
 
 /* Transitions */
-.wps-transition { transition: all var(--wps-transition-base); }
+.wps-transition {
+    transition: all var(--wps-transition-base);
+}
 
 /* ============================================================================
    11. RESPONSIVE UTILITIES
@@ -1249,12 +1995,12 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
     .wps-page-container {
         padding: var(--wps-space-4);
     }
-    
+
     .wps-modal {
         width: 95%;
         max-height: 95vh;
     }
-    
+
     .wps-grid-cols-2,
     .wps-grid-cols-3 {
         grid-template-columns: 1fr;

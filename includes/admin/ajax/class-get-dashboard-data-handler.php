@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
+use WPShadow\Core\Options_Manager;
 
 /**
  * AJAX Handler: Get updated dashboard data
@@ -40,7 +41,7 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 				$findings = \wpshadow_get_site_findings();
 			}
 
-			$dismissed = get_option( 'wpshadow_dismissed_findings', array() );
+			$dismissed = Options_Manager::get_array( 'wpshadow_dismissed_findings', [] );
 			$findings = array_filter( $findings, function( $f ) use ( $dismissed ) {
 				return ! isset( $f['id'] ) || ! isset( $dismissed[ $f['id'] ] );
 			} );

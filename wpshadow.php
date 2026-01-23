@@ -38,7 +38,7 @@ require_once WPSHADOW_PATH . 'includes/core/class-database-migrator.php';
 
 /**
  * Initialize Settings Registry
- * 
+ *
  * Register all settings with WordPress Settings API for proper validation,
  * sanitization, and WordPress integration.
  */

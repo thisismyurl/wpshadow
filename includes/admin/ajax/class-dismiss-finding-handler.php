@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
+use WPShadow\Core\Options_Manager;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -28,7 +29,7 @@ class Dismiss_Finding_Handler extends AJAX_Handler_Base {
             self::send_error( __( 'Invalid finding ID', 'wpshadow' ) );
         }
 
-        $dismissed = get_option( 'wpshadow_dismissed_findings', array() );
+        $dismissed = Options_Manager::get_array( 'wpshadow_dismissed_findings', [] );
         $dismissed[ $finding_id ] = current_time( 'timestamp' );
         update_option( 'wpshadow_dismissed_findings', $dismissed );
 

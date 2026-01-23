@@ -1,17 +1,17 @@
 # WPShadow Database Call Audit
 
-**Date:** 2026-01-23  
-**Purpose:** Audit all database calls for WordPress API compliance and optimization  
-**User Requirement:** Prefer `get_posts()` over other methods; document $wpdb usage extensively  
+**Date:** 2026-01-23
+**Purpose:** Audit all database calls for WordPress API compliance and optimization
+**User Requirement:** Prefer `get_posts()` over other methods; document $wpdb usage extensively
 
 ---
 
 ## Summary
 
-**Total Database Operations Found:** 54  
+**Total Database Operations Found:** 54
 **Breakdown by Type:**
 - Diagnostic Tests (reading metrics): 30 queries
-- Treatments (reading + modifying data): 8 queries  
+- Treatments (reading + modifying data): 8 queries
 - Privacy/Settings (reading user data): 4 queries
 - Other (workflow logs, etc.): 12 queries
 
@@ -88,7 +88,7 @@ $duplicates = $wpdb->get_results(
  * RATIONALE FOR $wpdb USE (vs get_posts):
  * This query requires GROUP BY and HAVING clauses to identify duplicate
  * metadata. The WordPress Post/Meta APIs don't support aggregation queries.
- * 
+ *
  * This is a valid use case where $wpdb is the appropriate tool because:
  * 1. We're not retrieving post content (post_title, post_content, etc.)
  * 2. We need database aggregation (COUNT, GROUP BY)
@@ -110,7 +110,7 @@ $duplicates = $wpdb->get_results(
 global $wpdb;
 $exists = $wpdb->get_var(
     $wpdb->prepare(
-        "SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS 
+        "SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS
          WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = %s AND COLUMN_NAME = %s",
         $table,
         $column
@@ -165,7 +165,7 @@ $exists = $wpdb->get_var(
 ```php
 global $wpdb;
 $query = $wpdb->prepare(
-    "SELECT COUNT(DISTINCT user_id) as count FROM {$wpdb->usermeta} 
+    "SELECT COUNT(DISTINCT user_id) as count FROM {$wpdb->usermeta}
      WHERE meta_key = %s AND meta_value = %s",
     $meta_key,
     $meta_value
@@ -194,17 +194,17 @@ All 4 privacy queries are user meta operations that must use $wpdb:
 
 #### Workflow Logs
 
-**Current:** Stores to `wp_options` table  
+**Current:** Stores to `wp_options` table
 **Status:** ✅ Correctly using get_option/update_option
 
 #### Guardian Activity Logs
 
-**Current:** Stores to `wp_options` table  
+**Current:** Stores to `wp_options` table
 **Status:** ✅ Correctly using Options_Manager (handles transients)
 
 #### Site Health
 
-**Current:** Uses get_site_transient()  
+**Current:** Uses get_site_transient()
 **Status:** ✅ Correct WordPress API
 
 ---
@@ -213,9 +213,9 @@ All 4 privacy queries are user meta operations that must use $wpdb:
 
 ### Opportunity 1: Add $wpdb->prepare() to Diagnostic Tests
 
-**Location:** All 30 diagnostic test files  
-**Current:** Some queries use string interpolation with `{$wpdb->posts}`  
-**Risk:** Not severe (table names are constant), but not best practice  
+**Location:** All 30 diagnostic test files
+**Current:** Some queries use string interpolation with `{$wpdb->posts}`
+**Risk:** Not severe (table names are constant), but not best practice
 **Fix:** Convert to $wpdb->prepare() for consistency
 
 **Example:**
@@ -234,8 +234,8 @@ $wpdb->prepare(
 
 ### Opportunity 2: Add Query Comments to All $wpdb Usage
 
-**Location:** All 54 locations  
-**Purpose:** Explain WHY $wpdb is used, not just WHAT it does  
+**Location:** All 54 locations
+**Purpose:** Explain WHY $wpdb is used, not just WHAT it does
 **Benefits:**
 - Future maintainers understand the design decision
 - Easier to audit for security
@@ -261,8 +261,8 @@ $duplicates = $wpdb->get_results(
 
 ### Opportunity 3: Caching for Expensive Queries
 
-**Location:** Diagnostic tests that run frequently  
-**Current:** Each test queries database every time  
+**Location:** Diagnostic tests that run frequently
+**Current:** Each test queries database every time
 **Optimization:** Cache results for 1 hour (DAY_IN_SECONDS)
 
 **Example:**
@@ -273,7 +273,7 @@ $results = get_transient($cache_key);
 if ($results === false) {
     // Query database
     $results = $wpdb->get_var(...);
-    
+
     // Cache for 1 hour
     set_transient($cache_key, $results, HOUR_IN_SECONDS);
 }
@@ -325,7 +325,7 @@ $wpdb->get_results(
 
 // Check if index exists - MUST use $wpdb
 $wpdb->get_var(
-    "SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS 
+    "SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS
      WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = %s"
 );
 
@@ -348,7 +348,7 @@ $wpdb->get_var(
    - Format: See example above
 
 2. **Convert diagnostic test strings to $wpdb->prepare()** (30 minutes)
-   - Current: `{$wpdb->posts}` 
+   - Current: `{$wpdb->posts}`
    - Better: Use $wpdb->prepare() for parameter safety
    - 30 files, each 1 line change
 
@@ -382,7 +382,7 @@ $wpdb->get_var(
 - [ ] `includes/treatments/performance/class-treatment-clean-duplicate-postmeta.php`
   - Add extensive $wpdb documentation
   - Verify using $wpdb->prepare()
-  
+
 - [ ] `includes/treatments/performance/class-treatment-add-database-indexes.php`
   - Add extensive $wpdb documentation
   - Verify using $wpdb->prepare()
@@ -424,7 +424,7 @@ For each $wpdb usage, verify:
 - ✅ 4 privacy queries: Correctly using $wpdb (user meta)
 - ✅ 12 other: Using WordPress APIs correctly
 
-**Overall Assessment:** ⭐⭐⭐⭐ (4/5)  
+**Overall Assessment:** ⭐⭐⭐⭐ (4/5)
 Code is fundamentally sound. Main needs:
 1. Add documentation explaining WHY each $wpdb usage exists
 2. Convert some string interpolation to $wpdb->prepare() for consistency

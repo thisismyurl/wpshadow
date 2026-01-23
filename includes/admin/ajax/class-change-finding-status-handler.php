@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
+use WPShadow\Core\Options_Manager;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -63,7 +64,7 @@ class Change_Finding_Status_Handler extends AJAX_Handler_Base {
         switch ( $status ) {
             case 'ignored':
                 // Exclude from future scans, log reason
-                $exclusions = get_option( 'wpshadow_excluded_findings', array() );
+                $exclusions = Options_Manager::get_array( 'wpshadow_excluded_findings', [] );
                 $exclusions[ $finding_id ] = array(
                     'reason'    => 'user_ignored',
                     'timestamp' => current_time( 'timestamp' ),
@@ -79,7 +80,7 @@ class Change_Finding_Status_Handler extends AJAX_Handler_Base {
                 );
 
             case 'manual':
-                // User will fix manually, stop auto-reminders
+                // User will fixOptions_Manager::get_array( 'wpshadow_manual_fixes', []
                 $manual_fixes = get_option( 'wpshadow_manual_fixes', array() );
                 $manual_fixes[ $finding_id ] = array(
                     'assigned'  => current_time( 'timestamp' ),
@@ -93,7 +94,7 @@ class Change_Finding_Status_Handler extends AJAX_Handler_Base {
                 );
 
             case 'automated':
-                // Schedule automated fix
+                // Schedule aOptions_Manager::get_array( 'wpshadow_scheduled_automated_fixes', []
                 $scheduled = get_option( 'wpshadow_scheduled_automated_fixes', array() );
                 $scheduled[ $finding_id ] = array(
                     'queued'  => current_time( 'timestamp' ),
@@ -149,22 +150,24 @@ class Change_Finding_Status_Handler extends AJAX_Handler_Base {
      * @param string $finding_id Finding identifier
      */
     private static function clear_finding_from_queues( string $finding_id ): void {
+        // Batch-load all options once (reduces 6 DB queries to 3)
+        $exclusions = Options_Manager::get_array( 'wpshadow_excluded_findings', [] );
+        $manual = Options_Manager::get_array( 'wpshadow_manual_fixes', [] );
+        $automated = Options_Manager::get_array( 'wpshadow_scheduled_automated_fixes', [] );
+
         // Clear from exclusions
-        $exclusions = get_option( 'wpshadow_excluded_findings', array() );
         if ( isset( $exclusions[ $finding_id ] ) ) {
             unset( $exclusions[ $finding_id ] );
             update_option( 'wpshadow_excluded_findings', $exclusions );
         }
 
         // Clear from manual fixes
-        $manual = get_option( 'wpshadow_manual_fixes', array() );
         if ( isset( $manual[ $finding_id ] ) ) {
             unset( $manual[ $finding_id ] );
             update_option( 'wpshadow_manual_fixes', $manual );
         }
 
         // Clear from automated queue
-        $automated = get_option( 'wpshadow_scheduled_automated_fixes', array() );
         if ( isset( $automated[ $finding_id ] ) ) {
             unset( $automated[ $finding_id ] );
             update_option( 'wpshadow_scheduled_automated_fixes', $automated );

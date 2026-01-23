@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WPShadow\Diagnostics\Tests;
@@ -9,16 +10,20 @@ use WPShadow\Diagnostics\Diagnostic_Base;
  * Diagnostic: Head Cleanup - Emoji Detection Scripts
  * Checks if WordPress emoji detection scripts are enabled and can be removed
  */
-class Test_Performance_Head_Cleanup_Emoji extends Diagnostic_Base {
+class Test_Performance_Head_Cleanup_Emoji extends Diagnostic_Base
+{
 
 	/**
 	 * Run the diagnostic check
 	 *
 	 * @return array|null Array with issue details or null if healthy
 	 */
-	public static function check(): ?array {
-		if (!has_action('wp_head', 'print_emoji_detection_script') && 
-		    !has_action('admin_print_scripts', 'print_emoji_detection_script')) {
+	public static function check(): ?array
+	{
+		if (
+			!has_action('wp_head', 'print_emoji_detection_script') &&
+			!has_action('admin_print_scripts', 'print_emoji_detection_script')
+		) {
 			return null;
 		}
 
@@ -35,7 +40,8 @@ class Test_Performance_Head_Cleanup_Emoji extends Diagnostic_Base {
 	 *
 	 * @return array Test result with passed status and message
 	 */
-	public static function test_live_head_cleanup_emoji(): array {
+	public static function test_live_head_cleanup_emoji(): array
+	{
 		$result = self::check();
 		return array(
 			'passed'  => $result === null,

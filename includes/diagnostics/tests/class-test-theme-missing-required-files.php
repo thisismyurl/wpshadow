@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WPShadow\Diagnostics\Tests;
@@ -9,14 +10,16 @@ use WPShadow\Diagnostics\Diagnostic_Base;
  * Diagnostic: Theme Missing Required Files
  * Checks if active theme has essential template files
  */
-class Test_Theme_Missing_Required_Files extends Diagnostic_Base {
+class Test_Theme_Missing_Required_Files extends Diagnostic_Base
+{
 
 	/**
 	 * Run the diagnostic check
 	 *
 	 * @return array|null Array with issue details or null if healthy
 	 */
-	public static function check(): ?array {
+	public static function check(): ?array
+	{
 		$current_theme = wp_get_theme();
 		$theme_root = $current_theme->get_theme_root();
 		$stylesheet = $current_theme->get_stylesheet();
@@ -50,7 +53,8 @@ class Test_Theme_Missing_Required_Files extends Diagnostic_Base {
 	 *
 	 * @return array Test result with passed status and message
 	 */
-	public static function test_live_theme_required_files(): array {
+	public static function test_live_theme_required_files(): array
+	{
 		$result = self::check();
 		return array(
 			'passed'  => $result === null,

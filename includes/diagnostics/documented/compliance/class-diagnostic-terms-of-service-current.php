@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WPShadow\Diagnostics;
@@ -7,19 +8,21 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Diagnostic: Terms of Service Current?
- * 
+ *
  * Target Persona: Enterprise IT/Compliance Team
  * Philosophy: Helpful neighbor (#1), show value (#9), educate (#5, #6)
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
-class Diagnostic_Terms_Of_Service_Current extends Diagnostic_Base {
+class Diagnostic_Terms_Of_Service_Current extends Diagnostic_Base
+{
     protected static $slug = 'terms-of-service-current';
     protected static $title = 'Terms of Service Current?';
     protected static $description = 'Checks if ToS updated within 12 months.';
 
-    public static function check(): ?array {
+    public static function check(): ?array
+    {
         // Look for common ToS page titles/slugs
         $tos_page = get_page_by_path('terms-of-service');
         if (!$tos_page) {
@@ -28,7 +31,7 @@ class Diagnostic_Terms_Of_Service_Current extends Diagnostic_Base {
         if (!$tos_page) {
             $tos_page = get_page_by_path('tos');
         }
-        
+
         // Also search by title
         if (!$tos_page) {
             $query = new \WP_Query(array(
@@ -41,7 +44,7 @@ class Diagnostic_Terms_Of_Service_Current extends Diagnostic_Base {
                 $tos_page = $query->posts[0];
             }
         }
-        
+
         if (!$tos_page) {
             return array(
                 'id'            => static::$slug,
@@ -57,17 +60,17 @@ class Diagnostic_Terms_Of_Service_Current extends Diagnostic_Base {
                 'priority'      => 2,
             );
         }
-        
+
         // Check if updated within 12 months
         $last_modified = strtotime($tos_page->post_modified);
         $twelve_months_ago = strtotime('-12 months');
-        
+
         if ($last_modified >= $twelve_months_ago) {
             return null; // Pass - ToS is current
         }
-        
+
         $months_old = floor((time() - $last_modified) / (30 * 24 * 60 * 60));
-        
+
         return array(
             'id'            => static::$slug,
             'title'         => static::$title,
@@ -85,64 +88,64 @@ class Diagnostic_Terms_Of_Service_Current extends Diagnostic_Base {
 
 
 
-	/**
-	 * Live test for this diagnostic
-	 *
-	 * Diagnostic: Terms of Service Current?
-	 * Slug: terms-of-service-current
-	 * 
-	 * Test Purpose:
-	 * - Verify that check() method returns the correct result based on site state
-	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
-	 * - FAIL: check() returns array when diagnostic condition IS met (issue found)
-	 * - Description: Checks if ToS updated within 12 months.
-	 *
-	 * @return array {
-	 *     @type bool   $passed  Whether the test passed
-	 *     @type string $message Human-readable test result message
-	 * }
-	 */
-	public static function test_live_terms_of_service_current(): array {
-		$result = self::check();
-		
-		$tos_page = get_page_by_path('terms-of-service');
-		if (!$tos_page) {
-			$tos_page = get_page_by_path('terms');
-		}
-		if (!$tos_page) {
-			$tos_page = get_page_by_path('tos');
-		}
-		
-		if (!$tos_page) {
-			$query = new \WP_Query(array(
-				'post_type' => 'page',
-				'post_status' => 'publish',
-				's' => 'terms of service',
-				'posts_per_page' => 1,
-			));
-			if ($query->have_posts()) {
-				$tos_page = $query->posts[0];
-			}
-		}
-		
-		$should_fail = true;
-		if ($tos_page) {
-			$last_modified = strtotime($tos_page->post_modified);
-			$twelve_months_ago = strtotime('-12 months');
-			if ($last_modified >= $twelve_months_ago) {
-				$should_fail = false;
-			}
-		}
-		
-		$diagnostic_failed = !is_null($result);
-		$test_passes = ($should_fail === $diagnostic_failed);
-		
-		return array(
-			'passed' => $test_passes,
-			'message' => $test_passes ? 'ToS check matches site state' : 
-				"Mismatch: expected " . ($should_fail ? 'fail' : 'pass') . " but got " . 
-				($diagnostic_failed ? 'fail' : 'pass'),
-		);
-	}
+    /**
+     * Live test for this diagnostic
+     *
+     * Diagnostic: Terms of Service Current?
+     * Slug: terms-of-service-current
+     *
+     * Test Purpose:
+     * - Verify that check() method returns the correct result based on site state
+     * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
+     * - FAIL: check() returns array when diagnostic condition IS met (issue found)
+     * - Description: Checks if ToS updated within 12 months.
+     *
+     * @return array {
+     *     @type bool   $passed  Whether the test passed
+     *     @type string $message Human-readable test result message
+     * }
+     */
+    public static function test_live_terms_of_service_current(): array
+    {
+        $result = self::check();
 
+        $tos_page = get_page_by_path('terms-of-service');
+        if (!$tos_page) {
+            $tos_page = get_page_by_path('terms');
+        }
+        if (!$tos_page) {
+            $tos_page = get_page_by_path('tos');
+        }
+
+        if (!$tos_page) {
+            $query = new \WP_Query(array(
+                'post_type' => 'page',
+                'post_status' => 'publish',
+                's' => 'terms of service',
+                'posts_per_page' => 1,
+            ));
+            if ($query->have_posts()) {
+                $tos_page = $query->posts[0];
+            }
+        }
+
+        $should_fail = true;
+        if ($tos_page) {
+            $last_modified = strtotime($tos_page->post_modified);
+            $twelve_months_ago = strtotime('-12 months');
+            if ($last_modified >= $twelve_months_ago) {
+                $should_fail = false;
+            }
+        }
+
+        $diagnostic_failed = !is_null($result);
+        $test_passes = ($should_fail === $diagnostic_failed);
+
+        return array(
+            'passed' => $test_passes,
+            'message' => $test_passes ? 'ToS check matches site state' :
+                "Mismatch: expected " . ($should_fail ? 'fail' : 'pass') . " but got " .
+                ($diagnostic_failed ? 'fail' : 'pass'),
+        );
+    }
 }

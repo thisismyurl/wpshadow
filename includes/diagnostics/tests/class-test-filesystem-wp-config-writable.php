@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WPShadow\Diagnostics\Tests;
@@ -9,14 +10,16 @@ use WPShadow\Diagnostics\Diagnostic_Base;
  * Diagnostic: WP-Config Writable
  * Checks if wp-config.php is writable (security risk)
  */
-class Test_Filesystem_WP_Config_Writable extends Diagnostic_Base {
+class Test_Filesystem_WP_Config_Writable extends Diagnostic_Base
+{
 
 	/**
 	 * Run the diagnostic check
 	 *
 	 * @return array|null Array with issue details or null if healthy
 	 */
-	public static function check(): ?array {
+	public static function check(): ?array
+	{
 		$wp_config_path = ABSPATH . 'wp-config.php';
 
 		if (file_exists($wp_config_path) && is_writable($wp_config_path)) {
@@ -36,7 +39,8 @@ class Test_Filesystem_WP_Config_Writable extends Diagnostic_Base {
 	 *
 	 * @return array Test result with passed status and message
 	 */
-	public static function test_live_wp_config_writable(): array {
+	public static function test_live_wp_config_writable(): array
+	{
 		$result = self::check();
 		return array(
 			'passed'  => $result === null,

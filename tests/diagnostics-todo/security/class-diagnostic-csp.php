@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 /**
  * Content Security Policy Diagnostic
  *
  * Philosophy: XSS prevention - control resource loading
  * @package WPShadow
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
@@ -16,26 +17,28 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check if Content Security Policy is configured.
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
-class Diagnostic_CSP extends Diagnostic_Base {
+class Diagnostic_CSP extends Diagnostic_Base
+{
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array {
-		$response = wp_remote_head( home_url(), array( 'timeout' => 5, 'sslverify' => false ) );
-		
-		if ( is_wp_error( $response ) ) {
+	public static function check(): ?array
+	{
+		$response = wp_remote_head(home_url(), array('timeout' => 5, 'sslverify' => false));
+
+		if (is_wp_error($response)) {
 			return null;
 		}
-		
-		$headers = wp_remote_retrieve_headers( $response );
-		
-		if ( empty( $headers['content-security-policy'] ) && empty( $headers['content-security-policy-report-only'] ) ) {
+
+		$headers = wp_remote_retrieve_headers($response);
+
+		if (empty($headers['content-security-policy']) && empty($headers['content-security-policy-report-only'])) {
 			return array(
 				'id'          => 'csp-header',
 				'title'       => 'Content Security Policy Not Configured',
@@ -48,7 +51,7 @@ class Diagnostic_CSP extends Diagnostic_Base {
 				'threat_level' => 55,
 			);
 		}
-		
+
 		return null;
 	}
 
@@ -60,12 +63,12 @@ class Diagnostic_CSP extends Diagnostic_Base {
 	 * Diagnostic: CSP
 	 * Slug: -csp
 	 * File: class-diagnostic-csp.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: CSP
 	 * Slug: -csp
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -76,7 +79,8 @@ class Diagnostic_CSP extends Diagnostic_Base {
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__csp(): array {
+	public static function test_live__csp(): array
+	{
 		/*
 		 * IMPLEMENTATION NOTES:
 		 * - This test validates the actual WordPress site state
@@ -85,14 +89,38 @@ class Diagnostic_CSP extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+		$response = wp_remote_head(home_url(), array('timeout' => 5, 'sslverify' => false));
+
+		$has_csp = false;
+
+		if (! is_wp_error($response)) {
+			$headers = wp_remote_retrieve_headers($response);
+
+			if (! empty($headers['content-security-policy']) || ! empty($headers['content-security-policy-report-only'])) {
+				$has_csp = true;
+			}
+		}
+
+		$expected_issue = ! $has_csp;
+
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
+		$has_finding = is_array($result);
+
+		if ($expected_issue === $has_finding) {
+			$message = $expected_issue ? 'Finding returned when CSP header missing.' : 'No finding when CSP header present.';
+			return array(
+				'passed'  => true,
+				'message' => $message,
+			);
+		}
+
+		$message = $expected_issue
+			? 'Expected finding for missing CSP but got none.'
+			: 'Expected no finding when CSP present but got a finding.';
+
 		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
+			'passed'  => false,
+			'message' => $message,
 		);
 	}
-
 }

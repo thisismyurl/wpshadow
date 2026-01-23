@@ -9,6 +9,7 @@
 namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
+use WPShadow\Core\Options_Manager;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -45,7 +46,7 @@ class Error_Report_Handler extends AJAX_Handler_Base {
 		}
 
 		// Store error report for future reference
-		$reports = get_option( 'wpshadow_error_reports', array() );
+		$reports = Options_Manager::get_array( 'wpshadow_error_reports', [] );
 		$reports[ $error_hash ] = array(
 			'timestamp' => time(),
 			'error' => $error_data,

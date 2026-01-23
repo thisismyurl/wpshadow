@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
+use WPShadow\Core\Options_Manager;
 use WPShadow\Workflow\Workflow_Manager;
 use WPShadow\Workflow\Workflow_Wizard;
 use WPShadow\Workflow\Block_Registry;
@@ -71,7 +72,7 @@ class Save_Workflow_Handler extends AJAX_Handler_Base {
 		$workflow = Workflow_Wizard::convert_to_executor_format( $wizard_data );
 
 		// Save workflow
-		$workflows = get_option( 'wpshadow_workflows', array() );
+		$workflows = Options_Manager::get_array( 'wpshadow_workflows', [] );
 
 		// Generate silly name if empty
 		if ( empty( $workflow['name'] ) ) {

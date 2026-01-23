@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
+use WPShadow\Core\Options_Manager;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -25,7 +26,7 @@ class Schedule_Overnight_Fix_Handler extends AJAX_Handler_Base {
 
         $finding_id = self::get_post_param( 'finding_id', 'key', '', true );
 
-        $scheduled = get_option( 'wpshadow_scheduled_fixes', array() );
+        $scheduled = Options_Manager::get_array( 'wpshadow_scheduled_fixes', [] );
         $scheduled[] = array(
             'finding_id'   => $finding_id,
             'scheduled_at' => current_time( 'timestamp' ),

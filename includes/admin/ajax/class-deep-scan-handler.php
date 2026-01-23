@@ -4,6 +4,7 @@ declare( strict_types=1 );
 namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
+use WPShadow\Core\Options_Manager;
 use WPShadow\Diagnostics\Diagnostic_Registry;
 use WPShadow\Core\Activity_Logger;
 use WPShadow\Core\KPI_Tracker;
@@ -111,7 +112,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 			$progress_by_category['clean'] = array( 'completed' => $completed, 'total' => $total, 'findings' => 0 );
 		}
 		
-		$previous_findings = get_option( 'wpshadow_site_findings', array() );
+		$previous_findings = Options_Manager::get_array( 'wpshadow_site_findings', [] );
 		$previous_findings = is_array( $previous_findings ) ? $previous_findings : array();
 		$previous_ids = array_keys( $previous_findings );
 

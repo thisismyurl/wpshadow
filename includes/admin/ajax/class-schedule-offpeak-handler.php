@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
+use WPShadow\Core\Options_Manager;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -26,7 +27,7 @@ class Schedule_Offpeak_Handler extends AJAX_Handler_Base {
         $operation_type = self::get_post_param( 'operation_type', 'key', '', true );
         $email          = self::get_post_param( 'email', 'email', '', true );
 
-        $scheduled = get_option( 'wpshadow_scheduled_offpeak', array() );
+        $scheduled = Options_Manager::get_array( 'wpshadow_scheduled_offpeak', [] );
         $scheduled[] = array(
             'operation_type' => $operation_type,
             'scheduled_at'   => current_time( 'timestamp' ),

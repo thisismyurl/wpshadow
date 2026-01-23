@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace WPShadow\Diagnostics\Tests;
@@ -9,14 +10,16 @@ use WPShadow\Diagnostics\Diagnostic_Base;
  * Diagnostic: JavaScript Asset Versions
  * Checks for version query strings (?ver=) on JavaScript files that can be removed
  */
-class Test_Performance_Asset_Versions_JS extends Diagnostic_Base {
+class Test_Performance_Asset_Versions_JS extends Diagnostic_Base
+{
 
 	/**
 	 * Run the diagnostic check
 	 *
 	 * @return array|null Array with issue details or null if healthy
 	 */
-	public static function check(): ?array {
+	public static function check(): ?array
+	{
 		if (!did_action('wp_enqueue_scripts') && !did_action('admin_enqueue_scripts')) {
 			return null;
 		}
@@ -54,7 +57,8 @@ class Test_Performance_Asset_Versions_JS extends Diagnostic_Base {
 	 *
 	 * @return array Test result with passed status and message
 	 */
-	public static function test_live_asset_versions_js(): array {
+	public static function test_live_asset_versions_js(): array
+	{
 		$result = self::check();
 		return array(
 			'passed'  => $result === null,

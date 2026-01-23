@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
+use WPShadow\Core\Options_Manager;
 use WPShadow\Core\Activity_Logger;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -27,7 +28,7 @@ class Toggle_Autofix_Permission_Handler extends AJAX_Handler_Base {
         $finding_id = self::get_post_param( 'finding_id', 'key', '', true );
         $enabled    = self::get_post_param( 'enabled', 'bool', false );
 
-        $permissions = get_option( 'wpshadow_autofix_permissions', array() );
+        $permissions = Options_Manager::get_array( 'wpshadow_autofix_permissions', [] );
 
         if ( $enabled ) {
             $permissions[ $finding_id ] = true;

@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
+use WPShadow\Core\Options_Manager;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -25,7 +26,7 @@ class Revoke_Magic_Link_Handler extends AJAX_Handler_Base {
 
         $token = self::get_post_param( 'token', 'key', '', true );
 
-        $magic_links = get_option( 'wpshadow_magic_links', array() );
+        $magic_links = Options_Manager::get_array( 'wpshadow_magic_links', [] );
         if ( isset( $magic_links[ $token ] ) ) {
             unset( $magic_links[ $token ] );
             update_option( 'wpshadow_magic_links', $magic_links );

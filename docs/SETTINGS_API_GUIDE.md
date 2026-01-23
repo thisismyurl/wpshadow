@@ -21,7 +21,7 @@ All WPShadow settings are registered in a single location for maintainability:
 
 This class uses the WordPress Settings API to register settings with:
 - Type validation
-- Sanitization callbacks  
+- Sanitization callbacks
 - Default values
 - REST API exposure control
 
@@ -58,11 +58,11 @@ This class uses the WordPress Settings API to register settings with:
 Controls Guardian automated health monitoring system.
 
 #### `wpshadow_guardian_enabled`
-**Type:** Boolean  
-**Default:** `false` (opt-in philosophy)  
-**Description:** Master switch for Guardian system  
-**REST API:** Exposed as `wpshadow_guardian_enabled`  
-**Sanitization:** Boolean sanitizer  
+**Type:** Boolean
+**Default:** `false` (opt-in philosophy)
+**Description:** Master switch for Guardian system
+**REST API:** Exposed as `wpshadow_guardian_enabled`
+**Sanitization:** Boolean sanitizer
 **Usage:**
 ```php
 $enabled = get_option('wpshadow_guardian_enabled', false);
@@ -72,11 +72,11 @@ if ($enabled) {
 ```
 
 #### `wpshadow_guardian_safety_mode`
-**Type:** Boolean  
-**Default:** `true` (conservative default)  
-**Description:** Enable safety mode (dry-run fixes, no apply)  
-**REST API:** Exposed as `wpshadow_guardian_safety_mode`  
-**Sanitization:** Boolean sanitizer  
+**Type:** Boolean
+**Default:** `true` (conservative default)
+**Description:** Enable safety mode (dry-run fixes, no apply)
+**REST API:** Exposed as `wpshadow_guardian_safety_mode`
+**Sanitization:** Boolean sanitizer
 **Usage:**
 ```php
 $safety_mode = get_option('wpshadow_guardian_safety_mode', true);
@@ -90,12 +90,12 @@ if ($safety_mode) {
 ```
 
 #### `wpshadow_guardian_activity_logging`
-**Type:** Boolean  
-**Default:** `true` (transparency/privacy)  
-**Description:** Enable activity logging (privacy-first)  
-**REST API:** Hidden from REST API (not exposed)  
-**Sanitization:** Boolean sanitizer  
-**Notes:** Logged to `wp_options` table under `wpshadow_guardian_activity`  
+**Type:** Boolean
+**Default:** `true` (transparency/privacy)
+**Description:** Enable activity logging (privacy-first)
+**REST API:** Hidden from REST API (not exposed)
+**Sanitization:** Boolean sanitizer
+**Notes:** Logged to `wp_options` table under `wpshadow_guardian_activity`
 **Usage:**
 ```php
 $logging_enabled = get_option('wpshadow_guardian_activity_logging', true);
@@ -105,12 +105,12 @@ if ($logging_enabled) {
 ```
 
 #### `wpshadow_guardian_check_frequency`
-**Type:** String  
-**Default:** `'hourly'` (reasonable default)  
-**Valid Values:** `'hourly'`, `'twicedaily'`, `'daily'`  
-**Description:** How often Guardian scans run  
-**REST API:** Exposed as `wpshadow_guardian_check_frequency`  
-**Sanitization:** Enum sanitizer (only allows valid values)  
+**Type:** String
+**Default:** `'hourly'` (reasonable default)
+**Valid Values:** `'hourly'`, `'twicedaily'`, `'daily'`
+**Description:** How often Guardian scans run
+**REST API:** Exposed as `wpshadow_guardian_check_frequency`
+**Sanitization:** Enum sanitizer (only allows valid values)
 **Usage:**
 ```php
 $frequency = get_option('wpshadow_guardian_check_frequency', 'hourly');
@@ -118,11 +118,11 @@ wp_schedule_event(time(), $frequency, 'wpshadow_guardian_scan');
 ```
 
 #### `wpshadow_guardian_max_treatments`
-**Type:** Integer  
-**Default:** `5` (safety limit)  
-**Description:** Maximum fixes Guardian can apply in one scan  
-**REST API:** Exposed as `wpshadow_guardian_max_treatments`  
-**Sanitization:** Integer sanitizer with min=1, max=100  
+**Type:** Integer
+**Default:** `5` (safety limit)
+**Description:** Maximum fixes Guardian can apply in one scan
+**REST API:** Exposed as `wpshadow_guardian_max_treatments`
+**Sanitization:** Integer sanitizer with min=1, max=100
 **Usage:**
 ```php
 $max = (int) get_option('wpshadow_guardian_max_treatments', 5);
@@ -130,11 +130,11 @@ $treatments = array_slice($available_treatments, 0, $max);
 ```
 
 #### `wpshadow_guardian_auto_fix_whitelist`
-**Type:** Array (serialized)  
-**Default:** `['ssl_certificate', 'cache_clear']`  
-**Description:** Which treatments Guardian can auto-apply  
-**REST API:** Exposed as `wpshadow_guardian_auto_fix_whitelist`  
-**Sanitization:** Array sanitizer (text array)  
+**Type:** Array (serialized)
+**Default:** `['ssl_certificate', 'cache_clear']`
+**Description:** Which treatments Guardian can auto-apply
+**REST API:** Exposed as `wpshadow_guardian_auto_fix_whitelist`
+**Sanitization:** Array sanitizer (text array)
 **Usage:**
 ```php
 $whitelist = get_option('wpshadow_guardian_auto_fix_whitelist', []);
@@ -148,11 +148,11 @@ if (in_array($treatment_id, $whitelist, true)) {
 Controls workflow automation and email configuration.
 
 #### `wpshadow_workflow_approved_recipients`
-**Type:** Array (serialized)  
-**Default:** `[]` (empty - no emails by default)  
-**Description:** Email addresses approved for workflow notifications  
-**REST API:** Hidden from REST API (privacy)  
-**Sanitization:** Email array sanitizer  
+**Type:** Array (serialized)
+**Default:** `[]` (empty - no emails by default)
+**Description:** Email addresses approved for workflow notifications
+**REST API:** Hidden from REST API (privacy)
+**Sanitization:** Email array sanitizer
 **Usage:**
 ```php
 $recipients = get_option('wpshadow_workflow_approved_recipients', []);
@@ -162,11 +162,11 @@ foreach ($recipients as $email) {
 ```
 
 #### `wpshadow_workflow_email_verification_tokens`
-**Type:** Array (serialized)  
-**Default:** `[]`  
-**Description:** Email verification tokens (internal use)  
-**REST API:** Hidden from REST API (security)  
-**Sanitization:** Text array sanitizer  
+**Type:** Array (serialized)
+**Default:** `[]`
+**Description:** Email verification tokens (internal use)
+**REST API:** Hidden from REST API (security)
+**Sanitization:** Text array sanitizer
 **Usage:** Internal to email verification system
 
 ### Group: `wpshadow_privacy` (3 settings)
@@ -174,11 +174,11 @@ foreach ($recipients as $email) {
 Controls data collection and privacy preferences.
 
 #### `wpshadow_privacy_telemetry_enabled`
-**Type:** Boolean  
-**Default:** `false` (opt-in, privacy-first)  
-**Description:** Whether to send anonymized telemetry  
-**REST API:** Exposed as `wpshadow_privacy_telemetry_enabled`  
-**Sanitization:** Boolean sanitizer  
+**Type:** Boolean
+**Default:** `false` (opt-in, privacy-first)
+**Description:** Whether to send anonymized telemetry
+**REST API:** Exposed as `wpshadow_privacy_telemetry_enabled`
+**Sanitization:** Boolean sanitizer
 **Usage:**
 ```php
 $telemetry = get_option('wpshadow_privacy_telemetry_enabled', false);
@@ -188,11 +188,11 @@ if ($telemetry) {
 ```
 
 #### `wpshadow_privacy_telemetry_consent_date`
-**Type:** String (ISO 8601 datetime)  
-**Default:** `''` (empty string)  
-**Description:** When user consented to telemetry  
-**REST API:** Hidden from REST API  
-**Sanitization:** ISO datetime sanitizer  
+**Type:** String (ISO 8601 datetime)
+**Default:** `''` (empty string)
+**Description:** When user consented to telemetry
+**REST API:** Hidden from REST API
+**Sanitization:** ISO datetime sanitizer
 **Usage:**
 ```php
 $consent_date = get_option('wpshadow_privacy_telemetry_consent_date', '');
@@ -202,11 +202,11 @@ if ($consent_date) {
 ```
 
 #### `wpshadow_privacy_error_reporting`
-**Type:** Boolean  
-**Default:** `false` (opt-in)  
-**Description:** Send error logs for debugging (privacy-first)  
-**REST API:** Hidden from REST API  
-**Sanitization:** Boolean sanitizer  
+**Type:** Boolean
+**Default:** `false` (opt-in)
+**Description:** Send error logs for debugging (privacy-first)
+**REST API:** Hidden from REST API
+**Sanitization:** Boolean sanitizer
 **Usage:**
 ```php
 $error_reporting = get_option('wpshadow_privacy_error_reporting', false);
@@ -220,26 +220,26 @@ if ($error_reporting) {
 Core functionality settings.
 
 #### `wpshadow_cache_enabled`
-**Type:** Boolean  
-**Default:** `true` (better performance)  
-**Description:** Enable internal caching  
-**REST API:** Exposed  
-**Sanitization:** Boolean sanitizer  
+**Type:** Boolean
+**Default:** `true` (better performance)
+**Description:** Enable internal caching
+**REST API:** Exposed
+**Sanitization:** Boolean sanitizer
 
 #### `wpshadow_cache_duration`
-**Type:** Integer  
-**Default:** `3600` (1 hour in seconds)  
-**Valid Range:** 60-86400 (1 min to 24 hours)  
-**Description:** Cache TTL in seconds  
-**REST API:** Exposed  
-**Sanitization:** Integer sanitizer with min=60, max=86400  
+**Type:** Integer
+**Default:** `3600` (1 hour in seconds)
+**Valid Range:** 60-86400 (1 min to 24 hours)
+**Description:** Cache TTL in seconds
+**REST API:** Exposed
+**Sanitization:** Integer sanitizer with min=60, max=86400
 
 #### `wpshadow_debug_mode`
-**Type:** Boolean  
-**Default:** `false` (disabled by default)  
-**Description:** Enable debug logging (dev only)  
-**REST API:** Hidden  
-**Sanitization:** Boolean sanitizer  
+**Type:** Boolean
+**Default:** `false` (disabled by default)
+**Description:** Enable debug logging (dev only)
+**REST API:** Hidden
+**Sanitization:** Boolean sanitizer
 **Usage:**
 ```php
 if (get_option('wpshadow_debug_mode', false)) {
@@ -248,30 +248,30 @@ if (get_option('wpshadow_debug_mode', false)) {
 ```
 
 #### `wpshadow_kb_link_enabled`
-**Type:** Boolean  
-**Default:** `true` (philosophy #5)  
-**Description:** Show Knowledge Base links  
-**REST API:** Hidden  
-**Sanitization:** Boolean sanitizer  
+**Type:** Boolean
+**Default:** `true` (philosophy #5)
+**Description:** Show Knowledge Base links
+**REST API:** Hidden
+**Sanitization:** Boolean sanitizer
 
 #### `wpshadow_training_link_enabled`
-**Type:** Boolean  
-**Default:** `true` (philosophy #6)  
-**Description:** Show training video links  
-**REST API:** Hidden  
-**Sanitization:** Boolean sanitizer  
+**Type:** Boolean
+**Default:** `true` (philosophy #6)
+**Description:** Show training video links
+**REST API:** Hidden
+**Sanitization:** Boolean sanitizer
 
 ### Group: `wpshadow_performance` (1 setting)
 
 Performance optimization settings.
 
 #### `wpshadow_heartbeat_frequency`
-**Type:** String  
-**Default:** `'standard'` (default WP heartbeat)  
-**Valid Values:** `'disabled'`, `'half'`, `'standard'`  
-**Description:** Adjust WordPress heartbeat frequency  
-**REST API:** Hidden  
-**Sanitization:** Enum sanitizer  
+**Type:** String
+**Default:** `'standard'` (default WP heartbeat)
+**Valid Values:** `'disabled'`, `'half'`, `'standard'`
+**Description:** Adjust WordPress heartbeat frequency
+**REST API:** Hidden
+**Sanitization:** Enum sanitizer
 
 ---
 
@@ -330,12 +330,12 @@ Settings are automatically integrated into WordPress Settings pages:
 // In your settings form
 <form method="post" action="options.php">
     <?php settings_fields('wpshadow_guardian'); ?>
-    
-    <input type="checkbox" 
-        name="wpshadow_guardian_enabled" 
-        value="1" 
+
+    <input type="checkbox"
+        name="wpshadow_guardian_enabled"
+        value="1"
         <?php checked(get_option('wpshadow_guardian_enabled', false)); ?> />
-    
+
     <?php submit_button(); ?>
 </form>
 ```
@@ -427,22 +427,22 @@ update_option('wpshadow_my_setting', $new_value);
 
 ### Settings not appearing in WordPress Settings
 
-**Issue:** Settings registered but not visible  
+**Issue:** Settings registered but not visible
 **Solution:** Ensure Settings_Registry::register() is called on `admin_init` hook
 
 ### PHP warnings about undefined settings
 
-**Issue:** Notice: Undefined array key 'wpshadow_my_setting'  
+**Issue:** Notice: Undefined array key 'wpshadow_my_setting'
 **Solution:** Always provide defaults: `get_option('key', 'default')`
 
 ### Settings not persisting
 
-**Issue:** Updated option disappears  
+**Issue:** Updated option disappears
 **Solution:** Check sanitization callback isn't filtering out value too aggressively
 
 ### REST API returns empty
 
-**Issue:** Settings not showing in `/wp-json/wp/v2/settings`  
+**Issue:** Settings not showing in `/wp-json/wp/v2/settings`
 **Solution:** Verify `'show_in_rest' => true` in registration
 
 ---

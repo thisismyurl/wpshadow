@@ -1,16 +1,16 @@
 # Inline CSS/JS Audit & Remediation Plan
 
-**Date:** 2026-01-23  
-**Status:** ⚠️ CRITICAL - Multiple inline styles found  
+**Date:** 2026-01-23
+**Status:** ⚠️ CRITICAL - Multiple inline styles found
 **Priority:** P2 (Medium - Next Phase)
 
 ---
 
 ## Executive Summary
 
-**Issues Found:** 60+ inline `style=` attributes, 1 inline `<script>` block  
-**Severity:** HIGH - Violates WordPress asset best practices  
-**Impact:** Harder to maintain, no caching, poor performance  
+**Issues Found:** 60+ inline `style=` attributes, 1 inline `<script>` block
+**Severity:** HIGH - Violates WordPress asset best practices
+**Impact:** Harder to maintain, no caching, poor performance
 **Effort to Fix:** 4-6 hours
 
 ---
@@ -200,10 +200,10 @@ jQuery(document).on('click', '.wps-guardian-toggle', function(e) {
 });
 
 // 3. Enqueue in PHP
-wp_enqueue_script('wpshadow-guardian-dashboard', 
-    WPSHADOW_URL . 'assets/js/guardian-dashboard.js', 
-    ['jquery'], 
-    WPSHADOW_VERSION, 
+wp_enqueue_script('wpshadow-guardian-dashboard',
+    WPSHADOW_URL . 'assets/js/guardian-dashboard.js',
+    ['jquery'],
+    WPSHADOW_VERSION,
     true
 );
 ```
@@ -283,8 +283,8 @@ wp_enqueue_script('wpshadow-guardian-dashboard',
 
 ## Estimated Timeline
 
-**Total Effort:** 4-6 hours  
-**Complexity:** Medium (repetitive, straightforward)  
+**Total Effort:** 4-6 hours
+**Complexity:** Medium (repetitive, straightforward)
 **Risk:** Low (visual changes only, no logic changes)
 
 | Phase | Task | Hours |
@@ -312,12 +312,12 @@ This is a **quality improvement**, not a bug fix. Recommended for:
 
 ## Success Criteria
 
-✅ **All inline styles removed** - No `style=` attributes remain  
-✅ **All inline JS removed** - No `<script>` blocks in PHP output  
-✅ **All event handlers external** - No `onclick=` or similar  
-✅ **All assets enqueued** - CSS/JS properly registered  
-✅ **CSS utilities documented** - New classes documented  
-✅ **Pages render identically** - Visual regression tested  
-✅ **Performance maintained** - No new HTTP requests  
+✅ **All inline styles removed** - No `style=` attributes remain
+✅ **All inline JS removed** - No `<script>` blocks in PHP output
+✅ **All event handlers external** - No `onclick=` or similar
+✅ **All assets enqueued** - CSS/JS properly registered
+✅ **CSS utilities documented** - New classes documented
+✅ **Pages render identically** - Visual regression tested
+✅ **Performance maintained** - No new HTTP requests
 ✅ **WordPress standards** - 100% compliant
 
