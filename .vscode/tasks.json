@@ -1,0 +1,69 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Git: Check Sync Status",
+            "type": "shell",
+            "command": "bash",
+            "args": ["${workspaceFolder}/scripts/git-sync-check.sh"],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Git: Quick Commit & Push",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "${workspaceFolder}/scripts/git-auto-commit.sh",
+                "${input:commitMessage}"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "WPShadow: Quick Test",
+            "type": "shell",
+            "command": "bash",
+            "args": ["${workspaceFolder}/scripts/quick-test.sh"],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker: Restart Test Environment",
+            "type": "shell",
+            "command": "docker restart wpshadow-test && sleep 5 && echo '✅ Test environment restarted'",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "WPShadow: Full Workflow (Sync → Test → Commit)",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Git: Check Sync Status",
+                "WPShadow: Quick Test",
+                "Git: Quick Commit & Push"
+            ],
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "commitMessage",
+            "type": "promptString",
+            "description": "Commit message (e.g., 'feat: add new diagnostic')",
+            "default": ""
+        }
+    ]
+}
