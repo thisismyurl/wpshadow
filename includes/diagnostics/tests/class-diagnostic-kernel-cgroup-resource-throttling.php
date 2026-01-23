@@ -78,21 +78,32 @@ class Diagnostic_KernelCgroupResourceThrottling extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live__kernel_cgroup_resource_throttling(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
-		$result = self::check();
-		
-		// TODO: Implement actual test logic
+		$stat_file = '/sys/fs/cgroup/cpu.stat';
+		$throttled = 0;
+
+		if ( file_exists( $stat_file ) && is_readable( $stat_file ) ) {
+			$contents = file_get_contents( $stat_file );
+			if ( is_string( $contents ) && preg_match( '/nr_throttled\s+(\d+)/', $contents, $matches ) ) {
+				$throttled = (int) $matches[1];
+			}
+		}
+
+		$expected_issue    = ( $throttled > 0 );
+		$diagnostic_result = self::check();
+		$diagnostic_has_issue = ( null !== $diagnostic_result );
+		$test_passes = ( $expected_issue === $diagnostic_has_issue );
+
+		$message = sprintf(
+			'cgroup nr_throttled: %d. Expected diagnostic to %s issue. Diagnostic %s issue. Test: %s',
+			$throttled,
+			$expected_issue ? 'FIND' : 'NOT find',
+			$diagnostic_has_issue ? 'FOUND' : 'DID NOT find',
+			$test_passes ? 'PASS' : 'FAIL'
+		);
+
 		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
+			'passed'  => $test_passes,
+			'message' => $message,
 		);
 	}
 

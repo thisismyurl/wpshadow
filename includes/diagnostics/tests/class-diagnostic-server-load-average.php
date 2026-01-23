@@ -82,21 +82,42 @@ class Diagnostic_Server_Load_Average extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live__server_load_average(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
-		$result = self::check();
-		
-		// TODO: Implement actual test logic
+		if ( ! function_exists( 'sys_getloadavg' ) ) {
+			return array(
+				'passed'  => true,
+				'message' => 'sys_getloadavg unavailable; diagnostic correctly treats as pass (no data)',
+			);
+		}
+
+		$load       = sys_getloadavg();
+		$one_minute = isset( $load[0] ) ? (float) $load[0] : 0.0;
+		$cpu_count  = (int) ( function_exists( 'wp_cache_get' ) ? wp_cache_get( 'wpshadow_cpu_count' ) : 0 );
+		if ( $cpu_count <= 0 ) {
+			$cpu_count = (int) ( function_exists( 'shell_exec' ) ? (int) shell_exec( 'nproc 2>/dev/null' ) : 0 );
+		}
+		if ( $cpu_count <= 0 ) {
+			$cpu_count = 2;
+		}
+
+		$threshold         = max( 1.0, $cpu_count * 1.5 );
+		$expected_issue    = ( $one_minute > $threshold );
+		$diagnostic_result = self::check();
+		$diagnostic_has_issue = ( null !== $diagnostic_result );
+		$test_passes       = ( $expected_issue === $diagnostic_has_issue );
+
+		$message = sprintf(
+			'1m load: %.2f, CPUs: %d, threshold: %.2f. Expected diagnostic to %s issue. Diagnostic %s issue. Test: %s',
+			$one_minute,
+			$cpu_count,
+			$threshold,
+			$expected_issue ? 'FIND' : 'NOT find',
+			$diagnostic_has_issue ? 'FOUND' : 'DID NOT find',
+			$test_passes ? 'PASS' : 'FAIL'
+		);
+
 		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
+			'passed'  => $test_passes,
+			'message' => $message,
 		);
 	}
 

@@ -107,21 +107,48 @@ class Diagnostic_PHP_Upload_Temp_Dir extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live__php_upload_temp_dir(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
-		$result = self::check();
-		
-		// TODO: Implement actual test logic
+		$upload_tmp_dir = ini_get( 'upload_tmp_dir' );
+
+		if ( empty( $upload_tmp_dir ) ) {
+			$upload_tmp_dir = sys_get_temp_dir();
+		}
+
+		$old_files   = 0;
+		$total_size  = 0;
+		$dir_valid   = is_dir( $upload_tmp_dir ) && is_readable( $upload_tmp_dir );
+		$pattern     = $dir_valid ? ( $upload_tmp_dir . '/php*' ) : '';
+		$temp_files  = $dir_valid ? glob( $pattern ) : array();
+
+		if ( ! empty( $temp_files ) ) {
+			foreach ( $temp_files as $file ) {
+				if ( is_file( $file ) ) {
+					$age        = time() - filemtime( $file );
+					$total_size += filesize( $file );
+					if ( $age > 3600 ) {
+						$old_files++;
+					}
+				}
+			}
+		}
+
+		$expected_issue    = ( $old_files > 50 );
+		$diagnostic_result = self::check();
+		$diagnostic_has_issue = ( null !== $diagnostic_result );
+		$test_passes = ( $expected_issue === $diagnostic_has_issue );
+
+		$message = sprintf(
+			'Upload temp dir: %s. Old temp files (>1h): %d. Total temp files: %d. Expected diagnostic to %s issue. Diagnostic %s issue. Test: %s',
+			$upload_tmp_dir,
+			$old_files,
+			is_array( $temp_files ) ? count( $temp_files ) : 0,
+			$expected_issue ? 'FIND' : 'NOT find',
+			$diagnostic_has_issue ? 'FOUND' : 'DID NOT find',
+			$test_passes ? 'PASS' : 'FAIL'
+		);
+
 		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
+			'passed'  => $test_passes,
+			'message' => $message,
 		);
 	}
 
