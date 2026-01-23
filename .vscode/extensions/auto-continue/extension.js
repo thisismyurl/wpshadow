@@ -15,16 +15,16 @@ const PROMPT_THRESHOLD = 25;
  */
 function activate(context) {
     console.log('🔄 Auto-Continue extension activated');
-    
+
     // Register command for manual trigger
     let disposable = vscode.commands.registerCommand('auto-continue.acceptPrompt', () => {
         autoAcceptCurrentPrompt();
     });
     context.subscriptions.push(disposable);
-    
+
     // Start monitoring chat for continuation prompts
     startMonitoring(context);
-    
+
     // Listen for chat messages
     if (vscode.chat?.onDidCreateChatSession) {
         context.subscriptions.push(
@@ -42,20 +42,20 @@ function activate(context) {
 function startMonitoring(context) {
     if (isMonitoring) return;
     isMonitoring = true;
-    
+
     // Monitor notifications for "Continue?" prompt
     const notificationListener = vscode.window.onDidChangeWindowState(() => {
         checkForPrompt();
     });
     context.subscriptions.push(notificationListener);
-    
+
     // Also set up a periodic check (safety fallback)
     const interval = setInterval(() => {
         checkForPrompt();
     }, 1000); // Check every second
-    
+
     context.subscriptions.push(new vscode.Disposable(() => clearInterval(interval)));
-    
+
     console.log('🔄 Auto-continue monitoring started');
 }
 
@@ -64,22 +64,22 @@ function startMonitoring(context) {
  */
 function monitorSession(session, context) {
     if (!session) return;
-    
+
     try {
         // Intercept chat responses to count tasks
         const originalStream = session.stream;
-        session.stream = function(message) {
+        session.stream = function (message) {
             promptCount++;
-            
+
             if (promptCount % 5 === 0) {
                 console.log(`📊 Auto-continue: ${promptCount} tasks completed`);
             }
-            
+
             if (promptCount >= PROMPT_THRESHOLD) {
                 console.log('🎯 Task threshold reached, preparing auto-accept...');
                 scheduleAutoAccept();
             }
-            
+
             return originalStream.call(this, message);
         };
     } catch (e) {
@@ -93,7 +93,7 @@ function monitorSession(session, context) {
 function checkForPrompt() {
     // Look for common "Continue?" button patterns in visible UI
     // This is a helper that pairs with keyboard shortcut automation
-    
+
     try {
         // Fire keyboard shortcut that accepts the prompt
         // (Paired with Layer 2 notification watcher)
@@ -122,7 +122,7 @@ function scheduleAutoAccept() {
 function autoAcceptCurrentPrompt() {
     // Method 1: Try keyboard shortcut (works with notification UI)
     vscode.commands.executeCommand('notifications.showList');
-    
+
     // Method 2: Send Enter key (accepts focused button)
     setTimeout(() => {
         vscode.commands.executeCommand('key1', 'enter').catch(() => {
@@ -132,7 +132,7 @@ function autoAcceptCurrentPrompt() {
             });
         });
     }, 100);
-    
+
     console.log('✅ Auto-accept triggered');
 }
 

@@ -1,0 +1,110 @@
+# WPShadow Commit Message Template
+
+# <type>(<scope>): <subject>
+#
+# <body>
+#
+# <philosophy>
+# <footer>
+
+# TYPES (use lowercase):
+#   feat:     A new feature (new diagnostic, treatment, system)
+#   fix:      A bug fix (correctness, security, performance)
+#   refactor: Code restructuring (no feature change, better DRY)
+#   docs:     Documentation changes (README, guides, KB links)
+#   style:    Code style changes (spacing, formatting, linting)
+#   perf:     Performance improvements
+#   test:     Test additions or fixes
+#   chore:    Build, dependencies, or tooling changes
+
+# SCOPE (examples):
+#   (diagnostic)    - Add/fix a diagnostic check
+#   (treatment)     - Add/fix a treatment/auto-fix
+#   (workflow)      - Workflow automation system
+#   (kanban)        - Kanban board UI/logic
+#   (kpi)           - KPI tracking system
+#   (ajax)          - AJAX handler
+#   (ui)            - User interface improvements
+#   (security)      - Security improvements
+#   (architecture)  - Architecture changes
+#   (docs)          - Documentation
+
+# SUBJECT LINE RULES:
+#   - Use imperative mood ("add feature" not "added feature")
+#   - Don't capitalize first letter after type
+#   - No period (.) at the end
+#   - Limit to 50 characters
+
+# BODY (wrap at 72 chars):
+#   - Explain WHAT and WHY, not HOW
+#   - Reference related issues: "Fixes #123"
+#   - Separate from subject with blank line
+
+# PHILOSOPHY CHECK:
+#   Add one line indicating which commandment(s) this serves:
+#   
+#   Philosophy: Helpful Neighbor (#1) - links to KB
+#   Philosophy: Free as Possible (#2) - no paywalls
+#   Philosophy: Show Value (#9) - tracks time saved
+#   etc.
+#
+#   Or if refactoring/chore, explain code health:
+#   
+#   Philosophy: Code Quality - 15% DRY improvement
+
+# FOOTER (optional):
+#   Closes #123
+#   Related-To: #456
+#   Breaking-Change: describe any breaking changes
+
+# EXAMPLES:
+
+# Example 1: New diagnostic
+# feat(diagnostic): add ssl certificate expiration check
+#
+# Checks if site's SSL certificate expires within 30 days and
+# recommends renewal. Helps prevent unexpected downtime.
+#
+# Includes automatic renewal link and KB article reference.
+#
+# Philosophy: Helpful Neighbor (#1) - educates on SSL importance
+#             Show Value (#9) - prevents outages
+#
+# Closes #123
+
+# Example 2: New treatment
+# feat(treatment): auto-increase php memory limit to 256mb
+#
+# Safe treatment that increases PHP memory limit if currently below
+# 256MB. Prevents common "allowed memory exhausted" errors.
+#
+# Includes full backup and undo capability. Tracks 10 minutes saved.
+#
+# Philosophy: Ridiculously Good (#7) - safe auto-fix with undo
+#             Show Value (#9) - tracks time saved
+#
+# Closes #456
+
+# Example 3: Code quality improvement
+# refactor(core): consolidate duplicate nonce verification patterns
+#
+# Extract 8 instances of duplicate nonce checking into AJAX_Handler_Base.
+# Reduces code by 45 lines, improves security consistency.
+#
+# All AJAX handlers now extend base class with centralized verification.
+#
+# Philosophy: Code Quality - eliminated DRY violation across 8 files
+#
+# Related-To: #789
+
+# Example 4: Security fix
+# fix(security): add sanitization to widget output
+#
+# Widget title and description weren't being escaped before output.
+# Potential XSS vulnerability.
+#
+# Now uses esc_attr() for all user-facing output.
+#
+# Philosophy: Beyond Pure (#10) - security comes first
+#
+# Closes #321

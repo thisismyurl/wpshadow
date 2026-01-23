@@ -122,6 +122,16 @@ else
 fi
 echo ""
 
+# === 6. Philosophy Compliance ===
+echo "→ Philosophy compliance check..."
+if bash scripts/philosophy-check.sh; then
+    echo "✅ Philosophy compliance OK"
+else
+    echo "❌ Philosophy compliance failed"
+    exit 1
+fi
+echo ""
+
 # === Summary ===
 if [ "$ISSUES" -gt 0 ]; then
     echo "❌ Pre-commit checks found $ISSUES blocking issues"

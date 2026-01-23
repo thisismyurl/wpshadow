@@ -17,10 +17,10 @@ trap 'echo "[$(date '+%Y-%m-%d %H:%M:%S')] Auto-continue watcher stopped" >> "$L
 # Infinite monitoring loop
 while true; do
     sleep "$WATCH_INTERVAL"
-    
+
     # Check for common "Continue?" prompt patterns in recent logs or notifications
     # This targets the UI notification that appears after 25 tasks
-    
+
     # Method 1: Watch for VS Code notification center activity (macOS/Linux/Windows compatible)
     if command -v xdotool > /dev/null 2>&1; then
         # Linux: Use xdotool to find notification windows and send keypress
@@ -31,7 +31,7 @@ while true; do
             sleep 1
         fi
     fi
-    
+
     # Method 2: Monitor clipboard for prompt text (fallback)
     if command -v xclip > /dev/null 2>&1; then
         RECENT_TEXT=$(xclip -selection clipboard -o 2>/dev/null || echo "")
@@ -43,7 +43,7 @@ while true; do
             sleep 2
         fi
     fi
-    
+
     # Method 3: Watch for notification file patterns (VS Code creates temp notification data)
     NOTIF_DIR="$HOME/.vscode-server/data/logs/2026*"
     if [ -d "$NOTIF_DIR" ] 2>/dev/null; then
