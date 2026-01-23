@@ -68,43 +68,43 @@ class KPI_Advanced_Features {
 		<body>
 			<div class="container">
 				<div class="header">
-					<h1 style="margin: 0 0 10px 0;">WPShadow Impact Report</h1>
-					<p style="margin: 0; opacity: 0.9;"><?php echo esc_html( get_bloginfo( 'name' ) ); ?> - <?php echo esc_html( ucfirst( $period ) ); ?> Summary</p>
+					<h1 class="wps-m-0">WPShadow Impact Report</h1>
+					<p class="wps-m-0"><?php echo esc_html( get_bloginfo( 'name' ) ); ?> - <?php echo esc_html( ucfirst( $period ) ); ?> Summary</p>
 				</div>
 				
-				<div style="padding: 20px; background: white;">
+				<div class="wps-p-20">
 					<h2>Executive Summary</h2>
 					
 					<div class="metric">
 						<div class="metric-label">💰 Labor Cost Avoided</div>
 						<div class="metric-value">$<?php echo number_format( $kpis['labor_cost_avoided'] ); ?></div>
-						<p style="margin: 4px 0 0 0; color: #666;">Based on <?php echo (int) $kpis['time_saved_hours']; ?> hours of manual work eliminated</p>
+						<p class="wps-m-4">Based on <?php echo (int) $kpis['time_saved_hours']; ?> hours of manual work eliminated</p>
 					</div>
 					
 					<div class="metric">
 						<div class="metric-label">🛡️ Critical Risks Mitigated</div>
 						<div class="metric-value"><?php echo (int) $kpis['critical_risks_mitigated']; ?></div>
-						<p style="margin: 4px 0 0 0; color: #666;">High-severity security issues resolved</p>
+						<p class="wps-m-4">High-severity security issues resolved</p>
 					</div>
 					
 					<div class="metric">
 						<div class="metric-label">⚡ Performance Optimizations</div>
 						<div class="metric-value"><?php echo (int) $kpis['performance_optimizations']; ?></div>
-						<p style="margin: 4px 0 0 0; color: #666;">Speed and efficiency improvements</p>
+						<p class="wps-m-4">Speed and efficiency improvements</p>
 					</div>
 					
 					<div class="metric">
 						<div class="metric-label">📈 Health Improvement</div>
 						<div class="metric-value"><?php echo esc_html( $kpis['confidence_trend'] ); ?></div>
-						<p style="margin: 4px 0 0 0; color: #666;">Compared to 30 days ago</p>
+						<p class="wps-m-4">Compared to 30 days ago</p>
 					</div>
 					
 					<?php if ( ! empty( $recommendations ) ) : ?>
 					<h2 style="margin-top: 30px;">Top Priorities</h2>
 					<?php foreach ( array_slice( $recommendations, 0, 3 ) as $rec ) : ?>
-						<div style="border: 1px solid #e0e0e0; padding: 15px; margin: 10px 0; border-radius: 4px;">
-							<h3 style="margin: 0 0 8px 0; color: #2196f3;"><?php echo esc_html( $rec['title'] ?? 'Unknown' ); ?></h3>
-							<p style="margin: 0; color: #666;"><?php echo esc_html( $rec['description'] ?? '' ); ?></p>
+						<div class="wps-m-10-p-15-rounded-4">
+							<h3 class="wps-m-0"><?php echo esc_html( $rec['title'] ?? 'Unknown' ); ?></h3>
+							<p class="wps-m-0"><?php echo esc_html( $rec['description'] ?? '' ); ?></p>
 						</div>
 					<?php endforeach; ?>
 					<?php endif; ?>
@@ -190,8 +190,8 @@ class KPI_Advanced_Features {
 		$kpis = KPI_Tracker::get_kpi_summary();
 		$time_saved_hours = $kpis['time_saved_hours'];
 		?>
-		<div class="wpshadow-roi-calculator" style="background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 20px 0;">
-			<h3 style="margin: 0 0 15px 0; display: flex; align-items: center; gap: 8px;">
+		<div class="wpshadow-roi-calculator" class="wps-m-20-p-20-rounded-8">
+			<h3 class="wps-flex-gap-8-items-center-m-0">
 				<span class="dashicons dashicons-calculator" style="font-size: 24px; color: #667eea;"></span>
 				<?php esc_html_e( 'ROI Calculator: See Your Value', 'wpshadow' ); ?>
 			</h3>
@@ -200,28 +200,28 @@ class KPI_Advanced_Features {
 				<?php esc_html_e( 'Calculate the value WPShadow delivered based on your hourly labor cost:', 'wpshadow' ); ?>
 			</p>
 			
-			<div style="display: flex; gap: 15px; align-items: end; flex-wrap: wrap;">
+			<div class="wps-flex-gap-15-items-end">
 				<div style="flex: 1; min-width: 200px;">
-					<label for="wpshadow-hourly-rate" style="display: block; margin-bottom: 8px; font-weight: 500;">
+					<label for="wpshadow-hourly-rate" class="wps-block">
 						<?php esc_html_e( 'Your Hourly Rate ($)', 'wpshadow' ); ?>
 					</label>
-					<input type="number" id="wpshadow-hourly-rate" value="50" min="1" max="500" step="1" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px;" />
+					<input type="number" id="wpshadow-hourly-rate" value="50" min="1" max="500" step="1" class="wps-p-10-rounded-4" />
 				</div>
 				
 				<div style="flex: 1; min-width: 200px;">
-					<label style="display: block; margin-bottom: 8px; font-weight: 500;">
+					<label class="wps-block">
 						<?php esc_html_e( 'Time Saved', 'wpshadow' ); ?>
 					</label>
-					<div style="padding: 10px; background: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 4px; font-size: 16px; font-weight: 600;">
+					<div class="wps-p-10-rounded-4">
 						<?php echo (int) $time_saved_hours; ?> <?php esc_html_e( 'hours', 'wpshadow' ); ?>
 					</div>
 				</div>
 				
 				<div style="flex: 1; min-width: 200px;">
-					<label style="display: block; margin-bottom: 8px; font-weight: 500; color: #667eea;">
+					<label class="wps-block">
 						<?php esc_html_e( 'Your Total Value', 'wpshadow' ); ?>
 					</label>
-					<div id="wpshadow-calculated-value" style="padding: 10px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 4px; font-size: 24px; font-weight: bold; text-align: center;">
+					<div id="wpshadow-calculated-value" class="wps-p-10-rounded-4">
 						$<span id="wpshadow-value-amount"><?php echo number_format( $time_saved_hours * 50 ); ?></span>
 					</div>
 				</div>
@@ -238,7 +238,7 @@ class KPI_Advanced_Features {
 			
 			<!-- Phase 5: KB Link -->
 			<div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0; text-align: center;">
-				<a href="https://wpshadow.com/kb/understanding-roi-calculations" target="_blank" style="color: #667eea; text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 6px;">
+				<a href="https://wpshadow.com/kb/understanding-roi-calculations" target="_blank" class="wps-inline-flex">
 					<span class="dashicons dashicons-book" style="font-size: 16px;"></span>
 					<?php esc_html_e( 'Learn: How WPShadow Calculates ROI', 'wpshadow' ); ?>
 				</a>
@@ -254,34 +254,36 @@ class KPI_Advanced_Features {
 	 */
 	public static function render_advanced_panel() {
 		?>
-		<div class="wpshadow-advanced-features" style="background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 20px 0;">
-			<h3 style="margin: 0 0 15px 0;">
-				<?php esc_html_e( '🚀 Advanced Reporting', 'wpshadow' ); ?>
-			</h3>
+		<div class="wps-card wps-my-6">
+			<div class="wps-card-header">
+				<h3 class="wps-card-title" class="wps-m-0">
+					<?php esc_html_e( '🚀 Advanced Reporting', 'wpshadow' ); ?>
+				</h3>
+			</div>
 			
-			<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+			<div class="wps-grid wps-grid-auto-250 wps-gap-3">
 				<!-- Email Report Card -->
-				<div style="border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px;">
-					<h4 style="margin: 0 0 10px 0; color: #667eea;">
+				<div class="wps-card" style="margin-bottom: 0;">
+					<h4 class="wps-card-title" style="color: #667eea; margin-bottom: var(--wps-space-2);">
 						📧 <?php esc_html_e( 'Executive Email Report', 'wpshadow' ); ?>
 					</h4>
-					<p style="font-size: 13px; color: #666; margin-bottom: 12px;">
+					<p class="wps-text-muted" style="margin-bottom: var(--wps-space-3);">
 						<?php esc_html_e( 'Send monthly impact report to stakeholders', 'wpshadow' ); ?>
 					</p>
-					<button id="wpshadow-send-report" class="button button-primary" style="width: 100%;">
+					<button id="wpshadow-send-report" class="wps-btn wps-btn-primary" style="width: 100%;">
 						<?php esc_html_e( 'Send Report Now', 'wpshadow' ); ?>
 					</button>
 				</div>
 				
 				<!-- CSV Export Card -->
-				<div style="border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px;">
-					<h4 style="margin: 0 0 10px 0; color: #10b981;">
+				<div class="wps-card" style="margin-bottom: 0;">
+					<h4 class="wps-card-title" style="color: #10b981; margin-bottom: var(--wps-space-2);">
 						📊 <?php esc_html_e( 'CSV Export', 'wpshadow' ); ?>
 					</h4>
-					<p style="font-size: 13px; color: #666; margin-bottom: 12px;">
+					<p class="wps-text-muted" style="margin-bottom: var(--wps-space-3);">
 						<?php esc_html_e( 'Download resolution history for audit trail', 'wpshadow' ); ?>
 					</p>
-					<a href="<?php echo esc_url( admin_url( 'admin-ajax.php?action=wpshadow_export_csv&nonce=' . wp_create_nonce( 'wpshadow_export' ) ) ); ?>" class="button" style="width: 100%; text-align: center; display: block;">
+					<a href="<?php echo esc_url( admin_url( 'admin-ajax.php?action=wpshadow_export_csv&nonce=' . wp_create_nonce( 'wpshadow_export' ) ) ); ?>" class="wps-btn wps-btn-secondary" class="wps-block">
 						<?php esc_html_e( 'Download CSV', 'wpshadow' ); ?>
 					</a>
 				</div>

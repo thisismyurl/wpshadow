@@ -19,12 +19,12 @@ class WPShadow_Activity_Feed_Widget {
 		$activities = self::get_recent_activities( 5 );
 
 		?>
-		<div style="margin: 30px 0;">
+		<div class="wps-m-30">
 			<h2><?php esc_html_e( 'Guardian Activity Feed', 'wpshadow' ); ?></h2>
 			
-			<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+			<div class="wps-rounded-8">
 				<?php if ( ! empty( $activities ) ) : ?>
-					<div style="padding: 0;">
+					<div class="wps-p-0">
 						<?php
 						foreach ( $activities as $index => $activity ) :
 							$is_last = $index === count( $activities ) - 1;
@@ -50,18 +50,18 @@ class WPShadow_Activity_Feed_Widget {
 							</div>
 						<?php endforeach; ?>
 					</div>
-					<div style="padding: 12px; background: #f9f9f9; text-align: center; border-top: 1px solid #eee;">
+					<div class="wps-p-12">
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian&tab=overview' ) ); ?>" style="color: #0073aa; text-decoration: none; font-size: 12px; font-weight: 600;">
 							<?php esc_html_e( 'View All Activity →', 'wpshadow' ); ?>
 						</a>
 					</div>
 				<?php else : ?>
-					<div style="padding: 32px; text-align: center; color: #999;">
+					<div class="wps-p-32">
 						<div style="font-size: 40px; margin-bottom: 12px;">🤖</div>
-						<p style="margin: 0; font-size: 14px;">
+						<p class="wps-m-0">
 							<?php esc_html_e( 'No activity yet', 'wpshadow' ); ?>
 						</p>
-						<p style="margin: 8px 0 0 0; font-size: 12px; color: #ccc;">
+						<p class="wps-m-8">
 							<?php esc_html_e( 'Guardian will start logging activity once it runs.', 'wpshadow' ); ?>
 						</p>
 					</div>

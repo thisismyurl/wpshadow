@@ -349,7 +349,7 @@ class Notification_Manager {
 		$dashboard_url = Registration_Manager::get_dashboard_url();
 		if ( $dashboard_url ) {
 			$message .= sprintf(
-				'<p style="margin-top: 20px;"><a href="%s" style="background: #0073aa; color: white; padding: 12px 20px; text-decoration: none; border-radius: 4px; display: inline-block;">View in Dashboard</a></p>',
+				'<p style="margin-top: 20px;"><a href="%s" class="wps-inline-block-p-12-rounded-4">View in Dashboard</a></p>',
 				esc_url( $dashboard_url )
 			);
 		}

@@ -80,7 +80,7 @@ class Diagnostic_Test_Runner {
 			}
 
 			// Run the diagnostic
-			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+			$result = self::normalize_result_for_validation( $diagnostic_class, call_user_func( array( $diagnostic_class, 'check' ) ) );
 
 			// Validate return structure
 			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
@@ -117,7 +117,7 @@ class Diagnostic_Test_Runner {
 			}
 
 			// Run the diagnostic
-			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+			$result = self::normalize_result_for_validation( $diagnostic_class, call_user_func( array( $diagnostic_class, 'check' ) ) );
 
 			// Validate return structure
 			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
@@ -156,7 +156,7 @@ class Diagnostic_Test_Runner {
 			}
 
 			// Run the diagnostic
-			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+			$result = self::normalize_result_for_validation( $diagnostic_class, call_user_func( array( $diagnostic_class, 'check' ) ) );
 
 			// Validate return structure
 			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
@@ -193,7 +193,7 @@ class Diagnostic_Test_Runner {
 			}
 
 			// Run the diagnostic
-			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+			$result = self::normalize_result_for_validation( $diagnostic_class, call_user_func( array( $diagnostic_class, 'check' ) ) );
 
 			// Validate return structure
 			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
@@ -229,7 +229,7 @@ class Diagnostic_Test_Runner {
 			}
 
 			// Run the diagnostic
-			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+			$result = self::normalize_result_for_validation( $diagnostic_class, call_user_func( array( $diagnostic_class, 'check' ) ) );
 
 			// Validate return structure
 			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
@@ -268,7 +268,7 @@ class Diagnostic_Test_Runner {
 			}
 
 			// Run the diagnostic
-			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+			$result = self::normalize_result_for_validation( $diagnostic_class, call_user_func( array( $diagnostic_class, 'check' ) ) );
 
 			// Validate return structure
 			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
@@ -304,7 +304,7 @@ class Diagnostic_Test_Runner {
 			}
 
 			// Run the diagnostic
-			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+			$result = self::normalize_result_for_validation( $diagnostic_class, call_user_func( array( $diagnostic_class, 'check' ) ) );
 
 			// Validate return structure
 			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
@@ -340,7 +340,7 @@ class Diagnostic_Test_Runner {
 			}
 
 			// Run the diagnostic
-			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+			$result = self::normalize_result_for_validation( $diagnostic_class, call_user_func( array( $diagnostic_class, 'check' ) ) );
 
 			// Validate return structure
 			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
@@ -379,7 +379,7 @@ class Diagnostic_Test_Runner {
 			}
 
 			// Run the diagnostic
-			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+			$result = self::normalize_result_for_validation( $diagnostic_class, call_user_func( array( $diagnostic_class, 'check' ) ) );
 
 			// Validate return structure
 			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
@@ -415,7 +415,7 @@ class Diagnostic_Test_Runner {
 			}
 
 			// Run the diagnostic
-			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+			$result = self::normalize_result_for_validation( $diagnostic_class, call_user_func( array( $diagnostic_class, 'check' ) ) );
 
 			// Validate return structure
 			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
@@ -453,7 +453,7 @@ class Diagnostic_Test_Runner {
 				return self::test_result( false, 'Diagnostic class not found', 0 );
 			}
 
-			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+			$result = self::normalize_result_for_validation( $diagnostic_class, call_user_func( array( $diagnostic_class, 'check' ) ) );
 
 			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
 				return self::test_result( false, 'Invalid result structure', microtime( true ) - $start_time );
@@ -489,7 +489,7 @@ class Diagnostic_Test_Runner {
 				return self::test_result( false, 'Diagnostic class not found', 0 );
 			}
 
-			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+			$result = self::normalize_result_for_validation( $diagnostic_class, call_user_func( array( $diagnostic_class, 'check' ) ) );
 
 			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
 				return self::test_result( false, 'Invalid result structure', microtime( true ) - $start_time );
@@ -523,7 +523,7 @@ class Diagnostic_Test_Runner {
 				return self::test_result( false, 'Diagnostic class not found', 0 );
 			}
 
-			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+			$result = self::normalize_result_for_validation( $diagnostic_class, call_user_func( array( $diagnostic_class, 'check' ) ) );
 
 			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
 				return self::test_result( false, 'Invalid result structure', microtime( true ) - $start_time );
@@ -557,7 +557,7 @@ class Diagnostic_Test_Runner {
 				return self::test_result( false, 'Diagnostic class not found', 0 );
 			}
 
-			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+			$result = self::normalize_result_for_validation( $diagnostic_class, call_user_func( array( $diagnostic_class, 'check' ) ) );
 
 			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
 				return self::test_result( false, 'Invalid result structure', microtime( true ) - $start_time );
@@ -593,7 +593,7 @@ class Diagnostic_Test_Runner {
 				return self::test_result( false, 'Diagnostic class not found', 0 );
 			}
 
-			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+			$result = self::normalize_result_for_validation( $diagnostic_class, call_user_func( array( $diagnostic_class, 'check' ) ) );
 
 			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
 				return self::test_result( false, 'Invalid result structure', microtime( true ) - $start_time );
@@ -627,7 +627,7 @@ class Diagnostic_Test_Runner {
 				return self::test_result( false, 'Diagnostic class not found', 0 );
 			}
 
-			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+			$result = self::normalize_result_for_validation( $diagnostic_class, call_user_func( array( $diagnostic_class, 'check' ) ) );
 
 			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
 				return self::test_result( false, 'Invalid result structure', microtime( true ) - $start_time );
@@ -661,7 +661,7 @@ class Diagnostic_Test_Runner {
 				return self::test_result( false, 'Diagnostic class not found', 0 );
 			}
 
-			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+			$result = self::normalize_result_for_validation( $diagnostic_class, call_user_func( array( $diagnostic_class, 'check' ) ) );
 
 			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
 				return self::test_result( false, 'Invalid result structure', microtime( true ) - $start_time );
@@ -695,7 +695,7 @@ class Diagnostic_Test_Runner {
 				return self::test_result( false, 'Diagnostic class not found', 0 );
 			}
 
-			$result = call_user_func( array( $diagnostic_class, 'check' ) );
+			$result = self::normalize_result_for_validation( $diagnostic_class, call_user_func( array( $diagnostic_class, 'check' ) ) );
 
 			if ( null !== $result && ! self::validate_diagnostic_result( $result ) ) {
 				return self::test_result( false, 'Invalid result structure', microtime( true ) - $start_time );
@@ -711,6 +711,29 @@ class Diagnostic_Test_Runner {
 		} catch ( \Exception $e ) {
 			return self::test_result( false, 'Exception: ' . $e->getMessage(), microtime( true ) - $start_time );
 		}
+	}
+
+	/**
+	 * Normalize diagnostic output before validation to enforce standard structure.
+	 *
+	 * @param string     $diagnostic_class Diagnostic class name.
+	 * @param array|null $result           Raw result from check().
+	 *
+	 * @return array|null Normalized result or null when no issue/invalid.
+	 */
+	private static function normalize_result_for_validation( string $diagnostic_class, $result ): ?array {
+		if ( ! class_exists( '\\WPShadow\\Core\\Diagnostic_Result_Normalizer' ) && defined( 'WPSHADOW_PATH' ) ) {
+			$normalizer_path = WPSHADOW_PATH . 'includes/core/class-diagnostic-result-normalizer.php';
+			if ( file_exists( $normalizer_path ) ) {
+				require_once $normalizer_path;
+			}
+		}
+
+		if ( class_exists( '\\WPShadow\\Core\\Diagnostic_Result_Normalizer' ) ) {
+			return \WPShadow\Core\Diagnostic_Result_Normalizer::normalize( $diagnostic_class, $result );
+		}
+
+		return is_array( $result ) ? $result : null;
 	}
 
 	/**

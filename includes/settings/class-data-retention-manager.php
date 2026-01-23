@@ -234,12 +234,12 @@ class Data_Retention_Manager {
 		?>
 		<div style="max-width: 800px;">
 			<!-- Retention Policies -->
-			<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 24px; margin-bottom: 20px;">
-				<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+			<div class="wps-p-24-rounded-8">
+				<div class="wps-flex-gap-12-items-center">
 					<span class="dashicons dashicons-database" style="font-size: 24px; color: #0073aa;"></span>
-					<h3 style="margin: 0;"><?php esc_html_e( 'Data Retention Policies', 'wpshadow' ); ?></h3>
+					<h3 class="wps-m-0"><?php esc_html_e( 'Data Retention Policies', 'wpshadow' ); ?></h3>
 				</div>
-				<p style="color: #666; margin: 0 0 16px 0;">
+				<p class="wps-m-0">
 					<?php esc_html_e( 'Configure how long WPShadow keeps historical records and logs.', 'wpshadow' ); ?>
 				</p>
 				
@@ -248,60 +248,60 @@ class Data_Retention_Manager {
 					<input type="hidden" name="action" value="wpshadow_update_retention_settings" />
 					
 					<!-- Activity Log Retention -->
-					<div style="margin-bottom: 20px; padding: 15px; background: #f9f9f9; border-radius: 4px;">
-						<label style="display: block; margin-bottom: 8px; font-weight: 500;">
+					<div class="wps-p-15-rounded-4">
+						<label class="wps-block">
 							<?php esc_html_e( 'Activity Log Retention (days):', 'wpshadow' ); ?>
 						</label>
-						<input type="number" name="activity_log_days" value="<?php echo esc_attr( $settings['activity_log_days'] ); ?>" min="7" max="730" style="width: 100%; max-width: 200px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" />
-						<p style="font-size: 12px; color: #666; margin: 6px 0 0 0;">
+						<input type="number" name="activity_log_days" value="<?php echo esc_attr( $settings['activity_log_days'] ); ?>" min="7" max="730" class="wps-p-8-rounded-4" />
+						<p class="wps-m-6">
 							<?php esc_html_e( 'How long to keep workflow runs, diagnostics, and user actions (7-730 days)', 'wpshadow' ); ?>
 						</p>
 					</div>
 					
 					<!-- Finding Log Retention -->
-					<div style="margin-bottom: 20px; padding: 15px; background: #f9f9f9; border-radius: 4px;">
-						<label style="display: block; margin-bottom: 8px; font-weight: 500;">
+					<div class="wps-p-15-rounded-4">
+						<label class="wps-block">
 							<?php esc_html_e( 'Finding Log Retention (days):', 'wpshadow' ); ?>
 						</label>
-						<input type="number" name="finding_log_days" value="<?php echo esc_attr( $settings['finding_log_days'] ); ?>" min="7" max="730" style="width: 100%; max-width: 200px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" />
-						<p style="font-size: 12px; color: #666; margin: 6px 0 0 0;">
+						<input type="number" name="finding_log_days" value="<?php echo esc_attr( $settings['finding_log_days'] ); ?>" min="7" max="730" class="wps-p-8-rounded-4" />
+						<p class="wps-m-6">
 							<?php esc_html_e( 'How long to keep records of detected site issues and resolutions (7-730 days)', 'wpshadow' ); ?>
 						</p>
 					</div>
 					
 					<!-- Workflow Log Retention -->
-					<div style="margin-bottom: 20px; padding: 15px; background: #f9f9f9; border-radius: 4px;">
-						<label style="display: block; margin-bottom: 8px; font-weight: 500;">
+					<div class="wps-p-15-rounded-4">
+						<label class="wps-block">
 							<?php esc_html_e( 'Workflow Log Retention (days):', 'wpshadow' ); ?>
 						</label>
-						<input type="number" name="workflow_log_days" value="<?php echo esc_attr( $settings['workflow_log_days'] ); ?>" min="7" max="730" style="width: 100%; max-width: 200px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" />
-						<p style="font-size: 12px; color: #666; margin: 6px 0 0 0;">
+						<input type="number" name="workflow_log_days" value="<?php echo esc_attr( $settings['workflow_log_days'] ); ?>" min="7" max="730" class="wps-p-8-rounded-4" />
+						<p class="wps-m-6">
 							<?php esc_html_e( 'How long to keep records of scheduled workflow executions (7-730 days)', 'wpshadow' ); ?>
 						</p>
 					</div>
 					
 					<!-- Auto Cleanup -->
-					<fieldset style="margin-bottom: 20px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 4px;">
-						<legend style="font-weight: 500; padding: 0 10px;"><?php esc_html_e( 'Automatic Cleanup', 'wpshadow' ); ?></legend>
+					<fieldset class="wps-p-15-rounded-4">
+						<legend class="wps-p-0"><?php esc_html_e( 'Automatic Cleanup', 'wpshadow' ); ?></legend>
 						
-						<div style="margin-top: 12px; display: flex; align-items: flex-start; gap: 12px;">
+						<div class="wps-flex-gap-12-items-flex-start">
 							<input type="checkbox" name="auto_cleanup_enabled" <?php checked( $settings['auto_cleanup_enabled'] ); ?> id="auto-cleanup-enabled" style="width: 18px; height: 18px; cursor: pointer; margin-top: 2px;" />
 							<div style="flex: 1;">
-								<label for="auto-cleanup-enabled" style="cursor: pointer; font-weight: 500; display: block;">
+								<label for="auto-cleanup-enabled" class="wps-block">
 									<?php esc_html_e( 'Enable automatic cleanup', 'wpshadow' ); ?>
 								</label>
-								<p style="font-size: 12px; color: #666; margin: 2px 0 0 0;">
+								<p class="wps-m-2">
 									<?php esc_html_e( 'Automatically delete old records according to your retention settings.', 'wpshadow' ); ?>
 								</p>
 							</div>
 						</div>
 						
 						<div style="margin-top: 12px;">
-							<label style="display: block; margin-bottom: 6px; font-size: 12px; font-weight: 500;">
+							<label class="wps-block">
 								<?php esc_html_e( 'Cleanup Time:', 'wpshadow' ); ?>
 							</label>
-							<input type="time" name="cleanup_time" value="<?php echo esc_attr( $settings['cleanup_time'] ); ?>" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;" />
-							<p style="font-size: 12px; color: #666; margin: 4px 0 0 0;">
+							<input type="time" name="cleanup_time" value="<?php echo esc_attr( $settings['cleanup_time'] ); ?>" class="wps-p-8-rounded-4" />
+							<p class="wps-m-4">
 								<?php esc_html_e( 'Time of day to run automatic cleanup (runs daily)', 'wpshadow' ); ?>
 							</p>
 						</div>
@@ -316,12 +316,12 @@ class Data_Retention_Manager {
 			</div>
 
 			<!-- Manual Cleanup -->
-			<div style="background: #fff3e0; border: 1px solid #ff9800; border-radius: 8px; padding: 16px;">
-				<div style="display: flex; align-items: center; gap: 12px;">
+			<div class="wps-p-16-rounded-8">
+				<div class="wps-flex-gap-12-items-center">
 					<span class="dashicons dashicons-update" style="font-size: 24px; color: #e65100;"></span>
 					<div style="flex: 1;">
 						<strong style="color: #e65100;"><?php esc_html_e( 'Run Cleanup Now', 'wpshadow' ); ?></strong>
-						<p style="font-size: 12px; color: #666; margin: 4px 0 0 0;">
+						<p class="wps-m-4">
 							<?php esc_html_e( 'Manually trigger data cleanup to remove old logs immediately.', 'wpshadow' ); ?>
 						</p>
 					</div>
@@ -379,7 +379,7 @@ class Data_Retention_Manager {
 				}, function(response) {
 					if (response.success && response.data.results) {
 						var results = response.data.results;
-						var html = '<div style="padding: 12px; background: #e8f5e9; color: #2e7d32; border-radius: 4px;">' +
+						var html = '<div class="wps-p-12-rounded-4">' +
 							'<strong>✓ ' + response.data.message + '</strong><br/>' +
 							'Activity logs: ' + results.activity_logs + ' removed<br/>' +
 							'Finding logs: ' + results.finding_logs + ' removed<br/>' +
@@ -387,7 +387,7 @@ class Data_Retention_Manager {
 							'</div>';
 						$result.html(html);
 					} else {
-						$result.html('<div style="padding: 12px; background: #ffebee; color: #c62828; border-radius: 4px;">✗ ' + (response.data.message || '<?php echo esc_js( __( 'Error running cleanup', 'wpshadow' ) ); ?>') + '</div>');
+						$result.html('<div class="wps-p-12-rounded-4">✗ ' + (response.data.message || '<?php echo esc_js( __( 'Error running cleanup', 'wpshadow' ) ); ?>') + '</div>');
 					}
 					$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Run Now', 'wpshadow' ) ); ?>');
 				});

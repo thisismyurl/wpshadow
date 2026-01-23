@@ -62,6 +62,37 @@ function wpshadow_enqueue_workflow_assets( $hook ) {
 			'ajax_url' => admin_url( 'admin-ajax.php' ),
 			'nonce' => wp_create_nonce( 'wpshadow_guardian_nonce' )
 		) );
+
+		// Enqueue consolidated Guardian assets
+		wp_enqueue_style(
+			'wpshadow-guardian',
+			WPSHADOW_URL . 'assets/css/guardian.css',
+			array( 'wpshadow-admin-pages' ),
+			WPSHADOW_VERSION
+		);
+
+		wp_enqueue_script(
+			'wpshadow-guardian',
+			WPSHADOW_URL . 'assets/js/guardian.js',
+			array( 'jquery', 'wpshadow-admin-pages' ),
+			WPSHADOW_VERSION,
+			true
+		);
+
+		// Localize Guardian-specific data
+		wp_localize_script( 'wpshadow-guardian', 'wpshadowGuardian', array(
+			'ajaxUrl'         => admin_url( 'admin-ajax.php' ),
+			'nonce'           => wp_create_nonce( 'wpshadow_guardian' ),
+			'refreshInterval' => 120000, // 2 minutes
+			'i18n'            => array(
+				'active'      => __( 'Active', 'wpshadow' ),
+				'inactive'    => __( 'Inactive', 'wpshadow' ),
+				'error'       => __( 'An error occurred. Please try again.', 'wpshadow' ),
+				'fixing'      => __( 'Fixing...', 'wpshadow' ),
+				'issuefixed'  => __( 'Issue fixed!', 'wpshadow' ),
+				'fixFailed'   => __( 'Failed to fix the issue.', 'wpshadow' ),
+			)
+		) );
 	}
 }
 
@@ -284,6 +315,142 @@ function wpshadow_enqueue_tooltip_assets() {
 }
 
 /**
+ * Enqueue admin pages common assets.
+ *
+ * @param string $hook Current admin hook.
+ * @return void
+ */
+function wpshadow_enqueue_admin_pages_assets( $hook ) {
+	if ( strpos( $hook, 'wpshadow' ) === false ) {
+		return;
+	}
+
+	// Enqueue common admin pages CSS
+	wp_enqueue_style(
+		'wpshadow-admin-pages',
+		WPSHADOW_URL . 'assets/css/admin-pages.css',
+		array( 'wpshadow-design-system' ),
+		WPSHADOW_VERSION
+	);
+
+	// Enqueue common admin pages JS
+	wp_enqueue_script(
+		'wpshadow-admin-pages',
+		WPSHADOW_URL . 'assets/js/admin-pages.js',
+		array( 'jquery' ),
+		WPSHADOW_VERSION,
+		true
+	);
+
+	// Localize common admin data
+	wp_localize_script( 'wpshadow-admin-pages', 'wpshadowAdmin', array(
+		'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+		'nonce'   => wp_create_nonce( 'wpshadow_admin' ),
+		'locale'  => get_locale(),
+		'i18n'    => array(
+			'saving'       => __( 'Saving...', 'wpshadow' ),
+			'saved'        => __( 'Saved successfully!', 'wpshadow' ),
+			'error'        => __( 'An error occurred. Please try again.', 'wpshadow' ),
+			'confirmDelete' => __( 'Are you sure you want to delete this?', 'wpshadow' ),
+		)
+	) );
+}
+
+/**
+ * Enqueue report builder and renderer assets.
+ *
+ * @param string $hook Current admin hook.
+ * @return void
+ */
+function wpshadow_enqueue_report_assets( $hook ) {
+	if ( strpos( $hook, 'wpshadow-reports' ) === false && strpos( $hook, 'wpshadow-report' ) === false ) {
+		return;
+	}
+
+	// Enqueue report CSS
+	wp_enqueue_style(
+		'wpshadow-reports',
+		WPSHADOW_URL . 'assets/css/reports.css',
+		array( 'wpshadow-admin-pages' ),
+		WPSHADOW_VERSION
+	);
+
+	// Enqueue report JS
+	wp_enqueue_script(
+		'wpshadow-reports',
+		WPSHADOW_URL . 'assets/js/reports.js',
+		array( 'jquery', 'wpshadow-admin-pages' ),
+		WPSHADOW_VERSION,
+		true
+	);
+
+	// Localize report-specific data
+	wp_localize_script( 'wpshadow-reports', 'wpshadowReportBuilder', array(
+		'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+		'nonce'   => wp_create_nonce( 'wpshadow_report' ),
+		'i18n'    => array(
+			'generating'     => __( 'Generating report...', 'wpshadow' ),
+			'generated'      => __( 'Report generated successfully!', 'wpshadow' ),
+			'reportGenerated' => __( 'Your report has been generated.', 'wpshadow' ),
+			'fillAllFields'  => __( 'Please fill all required fields', 'wpshadow' ),
+			'invalidDateRange' => __( 'End date must be after start date', 'wpshadow' ),
+			'error'          => __( 'An error occurred while generating the report.', 'wpshadow' ),
+		)
+	) );
+
+	wp_localize_script( 'wpshadow-reports', 'wpshadowReportDisplay', array(
+		'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+		'nonce'   => wp_create_nonce( 'wpshadow_report_export' ),
+		'i18n'    => array(
+			'exporting'   => __( 'Exporting...', 'wpshadow' ),
+			'exported'    => __( 'Report exported successfully!', 'wpshadow' ),
+			'exportError' => __( 'An error occurred while exporting the report.', 'wpshadow' ),
+			'sending'     => __( 'Sending...', 'wpshadow' ),
+			'emailSent'   => __( 'Report sent successfully!', 'wpshadow' ),
+			'emailError'  => __( 'An error occurred while sending the email.', 'wpshadow' ),
+		)
+	) );
+}
+
+/**
+ * Enqueue auto-extracted inline styles CSS files.
+ * These files contain CSS classes extracted from inline styles during refactoring.
+ *
+ * @param string $hook Current admin hook.
+ * @return void
+ */
+function wpshadow_enqueue_inline_styles_css( $hook ) {
+	// Only load on WPShadow admin pages
+	if ( strpos( $hook, 'wpshadow' ) === false ) {
+		return;
+	}
+
+	// Enqueue color styles (backgrounds, borders, etc.)
+	wp_enqueue_style(
+		'wpshadow-inline-colors',
+		WPSHADOW_URL . 'assets/css/wps-inline-colors.css',
+		array(),
+		WPSHADOW_VERSION
+	);
+
+	// Enqueue layout styles (flexbox, grid, alignment)
+	wp_enqueue_style(
+		'wpshadow-inline-layouts',
+		WPSHADOW_URL . 'assets/css/wps-inline-layouts.css',
+		array( 'wpshadow-inline-colors' ),
+		WPSHADOW_VERSION
+	);
+
+	// Enqueue spacing styles (margins, padding)
+	wp_enqueue_style(
+		'wpshadow-inline-spacing',
+		WPSHADOW_URL . 'assets/css/wps-inline-spacing.css',
+		array( 'wpshadow-inline-layouts' ),
+		WPSHADOW_VERSION
+	);
+}
+
+/**
  * Register all asset enqueuing hooks.
  *
  * @return void
@@ -296,6 +463,13 @@ function wpshadow_register_asset_hooks() {
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_site_health_assets' );
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_dark_mode_assets' );
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_tooltip_assets' );
+	
+	// Auto-extracted inline styles
+	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_inline_styles_css' );
+	
+	// New consolidated asset enqueuing
+	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_admin_pages_assets' );
+	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_report_assets' );
 }
 
 wpshadow_register_asset_hooks();

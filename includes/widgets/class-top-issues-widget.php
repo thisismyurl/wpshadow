@@ -19,16 +19,16 @@ class WPShadow_Top_Issues_Widget {
 		$top_issues = self::get_top_issues( 3 );
 
 		?>
-		<div style="margin: 30px 0;">
-			<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-				<h2 style="margin: 0;"><?php esc_html_e( 'Top Issues to Address', 'wpshadow' ); ?></h2>
+		<div class="wps-my-8">
+			<div class="wps-flex-items-center-justify-space-between">
+				<h2 class="wps-m-0"><?php esc_html_e( 'Top Issues to Address', 'wpshadow' ); ?></h2>
 				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-action-items' ) ); ?>" style="font-size: 12px; color: #0073aa; text-decoration: none; font-weight: 600;">
 					<?php esc_html_e( 'View All →', 'wpshadow' ); ?>
 				</a>
 			</div>
 			
 			<?php if ( ! empty( $top_issues ) ) : ?>
-				<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px;">
+				<div class="wps-grid wps-grid-auto-250 wps-gap-3">
 					<?php
 					foreach ( $top_issues as $index => $issue ) :
 						$threat_level = isset( $issue['threat_level'] ) ? $issue['threat_level'] : 50;
@@ -37,21 +37,21 @@ class WPShadow_Top_Issues_Widget {
 						$category     = isset( $issue['category'] ) ? $issue['category'] : 'other';
 						$finding_id   = isset( $issue['id'] ) ? $issue['id'] : '';
 						?>
-						<div style="border: 2px solid <?php echo esc_attr( $threat_color ); ?>; border-radius: 6px; padding: 16px; background: #ffffff; position: relative; overflow: hidden;">
+						<div class="wps-p-16-rounded-6">
 							<!-- Rank Badge -->
-							<div style="position: absolute; top: 0; left: 0; background: <?php echo esc_attr( $threat_color ); ?>; color: white; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px;">
+							<div class="wps-flex-items-center-justify-center">
 								<?php echo esc_html( $index + 1 ); ?>
 							</div>
 							
 							<!-- Content -->
 							<div style="padding-left: 44px;">
 								<!-- Title -->
-								<h3 style="margin: 0 0 8px 0; font-size: 14px; color: #333; font-weight: 600;">
+								<h3 class="wps-m-0">
 									<?php echo esc_html( isset( $issue['title'] ) ? $issue['title'] : 'Unknown Issue' ); ?>
 								</h3>
 								
 								<!-- Description -->
-								<p style="margin: 0 0 12px 0; font-size: 12px; color: #666; line-height: 1.5;">
+								<p class="wps-m-0">
 									<?php echo esc_html( isset( $issue['description'] ) ? substr( $issue['description'], 0, 80 ) : '' ); ?>
 									<?php if ( isset( $issue['description'] ) && strlen( $issue['description'] ) > 80 ) : ?>
 										...
@@ -59,16 +59,16 @@ class WPShadow_Top_Issues_Widget {
 								</p>
 								
 								<!-- Threat Level Badge -->
-								<div style="display: inline-block; padding: 4px 8px; background: <?php echo esc_attr( $threat_color ); ?>; color: white; border-radius: 3px; font-size: 11px; font-weight: 600; margin-bottom: 12px;">
+								<div class="wps-inline-block-p-4-rounded-3">
 									<?php echo esc_html( $threat_label ); ?>
 								</div>
 								
 								<!-- Action Buttons -->
-								<div style="display: flex; gap: 6px; margin-top: 12px;">
-									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-action-items&finding_id=' . $finding_id ) ); ?>" class="button button-small" style="font-size: 11px; padding: 4px 8px; text-decoration: none; flex: 1; text-align: center;">
+								<div class="wps-flex wps-gap-2 wps-mt-3">
+									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-action-items&finding_id=' . $finding_id ) ); ?>" class="wps-btn wps-btn-secondary" class="wps-justify-center">
 										<?php esc_html_e( 'View', 'wpshadow' ); ?>
 									</a>
-									<button class="button button-small wpshadow-quick-autofix" data-finding-id="<?php echo esc_attr( $finding_id ); ?>" style="font-size: 11px; padding: 4px 8px; cursor: pointer; flex: 1;">
+									<button class="wps-btn wps-btn-primary wpshadow-quick-autofix" data-finding-id="<?php echo esc_attr( $finding_id ); ?>" class="wps-justify-center">
 										<?php esc_html_e( 'Fix Now', 'wpshadow' ); ?>
 									</button>
 								</div>
@@ -78,22 +78,22 @@ class WPShadow_Top_Issues_Widget {
 				</div>
 				
 				<!-- Bulk Action -->
-				<div style="margin-top: 16px; padding: 12px; background: #f9f9f9; border-radius: 6px; display: flex; align-items: center; gap: 12px;">
+				<div class="wps-flex wps-items-center wps-gap-3 wps-mt-4" class="wps-p-12-rounded-6">
 					<input type="checkbox" id="wpshadow-select-all-top-issues" style="cursor: pointer;">
-					<label for="wpshadow-select-all-top-issues" style="cursor: pointer; font-size: 12px; margin: 0;">
+					<label for="wpshadow-select-all-top-issues" class="wps-m-0">
 						<?php esc_html_e( 'Select all', 'wpshadow' ); ?>
 					</label>
-					<button id="wpshadow-bulk-create-workflow" class="button button-small" style="margin-left: auto; font-size: 11px; padding: 4px 12px;">
+					<button id="wpshadow-bulk-create-workflow" class="wps-btn wps-btn-secondary" style="margin-left: auto;">
 						<?php esc_html_e( 'Create Workflow for Selected', 'wpshadow' ); ?>
 					</button>
 				</div>
 			<?php else : ?>
-				<div style="padding: 32px; text-align: center; background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%); border: 1px solid #c8e6c9; border-radius: 8px;">
+				<div class="wps-p-32-rounded-8">
 					<div style="font-size: 40px; margin-bottom: 12px;">✨</div>
-					<p style="margin: 0; font-size: 14px; color: #2e7d32; font-weight: 600;">
+					<p class="wps-m-0">
 						<?php esc_html_e( 'No Issues Detected!', 'wpshadow' ); ?>
 					</p>
-					<p style="margin: 8px 0 0 0; font-size: 12px; color: #558b2f;">
+					<p class="wps-m-8">
 						<?php esc_html_e( 'Your site looks great. Keep it up!', 'wpshadow' ); ?>
 					</p>
 				</div>
@@ -117,7 +117,7 @@ class WPShadow_Top_Issues_Widget {
 				}, function(response) {
 					if (response.success) {
 						$btn.closest('div').fadeOut(300, function() {
-							$(this).html('<div style="padding: 12px; background: #e8f5e9; border-radius: 4px; color: #2e7d32; font-weight: 600; text-align: center;">✓ <?php esc_html_e( 'Fixed!', 'wpshadow' ); ?></div>');
+							$(this).html('<div class="wps-p-12-rounded-4">✓ <?php esc_html_e( 'Fixed!', 'wpshadow' ); ?></div>');
 							$(this).fadeIn(200);
 						});
 					} else {

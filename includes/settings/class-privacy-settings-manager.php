@@ -112,12 +112,12 @@ class Privacy_Settings_Manager {
 		?>
 		<div style="max-width: 900px;">
 			<!-- Consent Management -->
-			<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 24px; margin-bottom: 20px;">
-				<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+			<div class="wps-p-24-rounded-8">
+				<div class="wps-flex-gap-12-items-center">
 					<span class="dashicons dashicons-info" style="font-size: 24px; color: #0073aa;"></span>
-					<h3 style="margin: 0;"><?php esc_html_e( 'User Consent', 'wpshadow' ); ?></h3>
+					<h3 class="wps-m-0"><?php esc_html_e( 'User Consent', 'wpshadow' ); ?></h3>
 				</div>
-				<p style="color: #666; margin: 0 0 16px 0;">
+				<p class="wps-m-0">
 					<?php esc_html_e( 'Configure how WPShadow requests user consent for data processing.', 'wpshadow' ); ?>
 				</p>
 				
@@ -126,26 +126,26 @@ class Privacy_Settings_Manager {
 					<input type="hidden" name="action" value="wpshadow_update_privacy_settings" />
 					
 					<!-- Require consent toggle -->
-					<div style="margin-bottom: 16px; display: flex; align-items: flex-start; gap: 12px;">
+					<div class="wps-flex-gap-12-items-flex-start">
 						<input type="checkbox" name="consent_required" <?php checked( $settings['consent_required'] ); ?> id="consent-required" style="width: 18px; height: 18px; cursor: pointer; margin-top: 2px;" />
 						<div style="flex: 1;">
-							<label for="consent-required" style="cursor: pointer; font-weight: 500; display: block;">
+							<label for="consent-required" class="wps-block">
 								<?php esc_html_e( 'Require explicit user consent before processing data', 'wpshadow' ); ?>
 							</label>
-							<p style="font-size: 12px; color: #666; margin: 4px 0 0 0;">
+							<p class="wps-m-4">
 								<?php esc_html_e( 'When enabled, users must explicitly consent before WPShadow collects or processes their data.', 'wpshadow' ); ?>
 							</p>
 						</div>
 					</div>
 					
 					<!-- Analytics collection toggle -->
-					<div style="margin-bottom: 16px; display: flex; align-items: flex-start; gap: 12px;">
+					<div class="wps-flex-gap-12-items-flex-start">
 						<input type="checkbox" name="collect_analytics" <?php checked( $settings['collect_analytics'] ); ?> id="collect-analytics" style="width: 18px; height: 18px; cursor: pointer; margin-top: 2px;" />
 						<div style="flex: 1;">
-							<label for="collect-analytics" style="cursor: pointer; font-weight: 500; display: block;">
+							<label for="collect-analytics" class="wps-block">
 								<?php esc_html_e( 'Allow anonymized analytics collection', 'wpshadow' ); ?>
 							</label>
-							<p style="font-size: 12px; color: #666; margin: 4px 0 0 0;">
+							<p class="wps-m-4">
 								<?php esc_html_e( 'Help improve WPShadow by sharing anonymized usage data (no personal information is collected).', 'wpshadow' ); ?>
 							</p>
 						</div>
@@ -153,50 +153,50 @@ class Privacy_Settings_Manager {
 					
 					<!-- Data retention -->
 					<div style="margin-bottom: 16px;">
-						<label style="display: block; margin-bottom: 8px; font-weight: 500;">
+						<label class="wps-block">
 							<?php esc_html_e( 'Data Retention Period (days):', 'wpshadow' ); ?>
 						</label>
-						<input type="number" name="data_retention_days" value="<?php echo esc_attr( $settings['data_retention_days'] ); ?>" min="7" max="730" style="width: 100%; max-width: 200px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" />
-						<p style="font-size: 12px; color: #666; margin: 6px 0 0 0;">
+						<input type="number" name="data_retention_days" value="<?php echo esc_attr( $settings['data_retention_days'] ); ?>" min="7" max="730" class="wps-p-8-rounded-4" />
+						<p class="wps-m-6">
 							<?php esc_html_e( 'Activity logs and personal data will be automatically deleted after this period (7-730 days).', 'wpshadow' ); ?>
 						</p>
 					</div>
 					
 					<!-- Export/Delete options -->
-					<fieldset style="margin-bottom: 16px; padding: 12px; border: 1px solid #e0e0e0; border-radius: 4px;">
+					<fieldset class="wps-p-12-rounded-4">
 						<legend style="font-weight: 500;"><?php esc_html_e( 'Data Subject Rights (GDPR)', 'wpshadow' ); ?></legend>
 						
-						<div style="margin-top: 12px; display: flex; align-items: flex-start; gap: 12px;">
+						<div class="wps-flex-gap-12-items-flex-start">
 							<input type="checkbox" name="export_user_data" <?php checked( $settings['export_user_data'] ); ?> id="export-user-data" style="width: 18px; height: 18px; cursor: pointer; margin-top: 2px;" />
 							<div style="flex: 1;">
-								<label for="export-user-data" style="cursor: pointer; font-weight: 500; display: block;">
+								<label for="export-user-data" class="wps-block">
 									<?php esc_html_e( 'Allow data export (Right to Access)', 'wpshadow' ); ?>
 								</label>
-								<p style="font-size: 12px; color: #666; margin: 2px 0 0 0;">
+								<p class="wps-m-2">
 									<?php esc_html_e( 'Users can request a copy of their personal data.', 'wpshadow' ); ?>
 								</p>
 							</div>
 						</div>
 						
-						<div style="margin-top: 12px; display: flex; align-items: flex-start; gap: 12px;">
+						<div class="wps-flex-gap-12-items-flex-start">
 							<input type="checkbox" name="delete_user_data" <?php checked( $settings['delete_user_data'] ); ?> id="delete-user-data" style="width: 18px; height: 18px; cursor: pointer; margin-top: 2px;" />
 							<div style="flex: 1;">
-								<label for="delete-user-data" style="cursor: pointer; font-weight: 500; display: block;">
+								<label for="delete-user-data" class="wps-block">
 									<?php esc_html_e( 'Allow data deletion (Right to be Forgotten)', 'wpshadow' ); ?>
 								</label>
-								<p style="font-size: 12px; color: #666; margin: 2px 0 0 0;">
+								<p class="wps-m-2">
 									<?php esc_html_e( 'Users can request deletion of their personal data.', 'wpshadow' ); ?>
 								</p>
 							</div>
 						</div>
 						
-						<div style="margin-top: 12px; display: flex; align-items: flex-start; gap: 12px;">
+						<div class="wps-flex-gap-12-items-flex-start">
 							<input type="checkbox" name="anonymize_on_delete" <?php checked( $settings['anonymize_on_delete'] ); ?> id="anonymize-on-delete" style="width: 18px; height: 18px; cursor: pointer; margin-top: 2px;" />
 							<div style="flex: 1;">
-								<label for="anonymize-on-delete" style="cursor: pointer; font-weight: 500; display: block;">
+								<label for="anonymize-on-delete" class="wps-block">
 									<?php esc_html_e( 'Anonymize instead of delete', 'wpshadow' ); ?>
 								</label>
-								<p style="font-size: 12px; color: #666; margin: 2px 0 0 0;">
+								<p class="wps-m-2">
 									<?php esc_html_e( 'When deleting data, anonymize it instead of permanently removing it (retains historical records).', 'wpshadow' ); ?>
 								</p>
 							</div>
@@ -212,11 +212,11 @@ class Privacy_Settings_Manager {
 			</div>
 
 			<!-- Privacy Info Box -->
-			<div style="background: #e3f2fd; border: 1px solid #2196f3; border-radius: 8px; padding: 16px;">
-				<p style="margin: 0; color: #1565c0; font-weight: 500;">
+			<div class="wps-p-16-rounded-8">
+				<p class="wps-m-0">
 					🔒 <?php esc_html_e( 'Privacy First', 'wpshadow' ); ?>
 				</p>
-				<p style="margin: 8px 0 0 0; font-size: 12px; color: #0d47a1;">
+				<p class="wps-m-8">
 					<?php esc_html_e( 'WPShadow is built on privacy-first principles. All your settings and data are stored locally on your site. No personal information is sent anywhere without your explicit consent.', 'wpshadow' ); ?>
 				</p>
 			</div>

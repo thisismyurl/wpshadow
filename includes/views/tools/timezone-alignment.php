@@ -84,7 +84,7 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 				<?php esc_html_e( 'Detect & Apply My Timezone', 'wpshadow' ); ?>
 			</button>
 
-			<div id="wpshadow-detect-status" style="display: none; margin-top: 10px;">
+			<div id="wpshadow-detect-status" class="wps-none">
 				<p id="wpshadow-detect-result"></p>
 			</div>
 		</div>
@@ -120,15 +120,15 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 				<?php esc_html_e( 'Apply Selected Timezone', 'wpshadow' ); ?>
 			</button>
 
-			<div id="wpshadow-save-status" style="display: none; margin-top: 10px;">
+			<div id="wpshadow-save-status" class="wps-none">
 				<p id="wpshadow-save-result"></p>
 			</div>
 		</div>
 
 		<!-- Info Section -->
-		<div class="info-section" style="margin-top: 30px; padding: 15px; background: #f5f5f5; border-radius: 4px;">
+		<div class="info-section" class="wps-p-15-rounded-4">
 			<h4><?php esc_html_e( 'Why Timezone Matters', 'wpshadow' ); ?></h4>
-			<ul style="margin: 10px 0; padding-left: 20px;">
+			<ul class="wps-m-10">
 				<li><?php esc_html_e( 'All blog post times reflect your timezone', 'wpshadow' ); ?></li>
 				<li><?php esc_html_e( 'Scheduled posts publish at correct local time', 'wpshadow' ); ?></li>
 				<li><?php esc_html_e( 'Admin displays use your timezone, not server\'s', 'wpshadow' ); ?></li>

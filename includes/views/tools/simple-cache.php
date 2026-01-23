@@ -57,7 +57,7 @@ $auto_clear     = get_option( 'wpshadow_auto_clear_on_save', true );
 			<?php esc_html_e( 'Clear All Cache', 'wpshadow' ); ?>
 		</button>
 		<p class="description"><?php esc_html_e( 'Remove all cached pages to rebuild them fresh on next visit.', 'wpshadow' ); ?></p>
-		<div id="wpshadow-cache-message" style="margin-top: 10px; display: none;"></div>
+		<div id="wpshadow-cache-message" class="wps-none"></div>
 	</div>
 
 	<div class="wpshadow-tool-section">
@@ -87,7 +87,7 @@ $auto_clear     = get_option( 'wpshadow_auto_clear_on_save', true );
 			<button type="submit" class="button button-primary">
 				<?php esc_html_e( 'Save Cache Settings', 'wpshadow' ); ?>
 			</button>
-			<div id="wpshadow-cache-options-message" style="margin-top: 10px; display: none;"></div>
+			<div id="wpshadow-cache-options-message" class="wps-none"></div>
 		</form>
 	</div>
 </div>

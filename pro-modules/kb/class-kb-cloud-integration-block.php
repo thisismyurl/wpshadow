@@ -156,7 +156,7 @@ class KB_Cloud_Integration_Block {
 			$html .= self::get_backup_button_script();
 		}
 
-		$html .= '<p style="font-size: 0.9em; margin: 10px 0 0 0; color: #666;">';
+		$html .= '<p class="wps-m-10">';
 		$html .= 'Connected to WPShadow Cloud • ';
 		$html .= '<a href="' . admin_url( 'admin.php?page=wpshadow' ) . '">Manage Settings</a>';
 		$html .= '</p>';

@@ -18,7 +18,7 @@ if ( ! current_user_can( 'read' ) ) {
 	<h1><?php esc_html_e( 'Accessibility Audit', 'wpshadow' ); ?></h1>
 	<p><?php esc_html_e( 'Scan your site for accessibility issues and WCAG compliance.', 'wpshadow' ); ?></p>
 
-	<div class="wpshadow-tool-section" style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; margin-top: 20px;">
+	<div class="wpshadow-tool-section" class="wps-p-20-rounded-4">
 		<h2><?php esc_html_e( 'Quick Scan', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'Enter a page URL to check for common accessibility issues:', 'wpshadow' ); ?></p>
 		
@@ -31,8 +31,8 @@ if ( ! current_user_can( 'read' ) ) {
 						<label for="page_path"><?php esc_html_e( 'Page Path', 'wpshadow' ); ?></label>
 					</th>
 					<td>
-						<div style="display: flex; align-items: center; gap: 10px;">
-							<span style="background: #f5f5f5; padding: 8px 12px; border-radius: 3px; border: 1px solid #ddd; font-weight: 500;" id="a11y-site-domain"><?php echo esc_html( untrailingslashit( home_url() ) ); ?></span>
+						<div class="wps-flex-gap-10-items-center">
+							<span class="wps-p-8-rounded-3" id="a11y-site-domain"><?php echo esc_html( untrailingslashit( home_url() ) ); ?></span>
 							<input type="text" name="page_path" id="page_path" class="regular-text" 
 								value="/" placeholder="/about" required>
 						</div>
@@ -48,10 +48,10 @@ if ( ! current_user_can( 'read' ) ) {
 			</p>
 		</form>
 
-		<div id="scan-results" style="display: none; margin-top: 30px;"></div>
+		<div id="scan-results" class="wps-none"></div>
 	</div>
 
-	<div class="wpshadow-tool-section" style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; margin-top: 20px;">
+	<div class="wpshadow-tool-section" class="wps-p-20-rounded-4">
 		<h2><?php esc_html_e( 'Common Checks', 'wpshadow' ); ?></h2>
 		<ul>
 			<li><strong><?php esc_html_e( 'Alt Text:', 'wpshadow' ); ?></strong> <?php esc_html_e( 'All images must have descriptive alt attributes for screen readers.', 'wpshadow' ); ?></li>
@@ -127,14 +127,14 @@ jQuery(document).ready(function($) {
 				
 				// Summary
 				var summary = data.summary || {};
-				html += '<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px;">' +
-					'<div style="border: 1px solid #28a745; padding: 15px; border-radius: 4px; background: #f0f6f2;">' +
+				html += '<div class="wps-grid">' +
+					'<div class="wps-p-15-rounded-4">' +
 					'<strong><?php esc_js( esc_html_e( 'Pass', 'wpshadow' ) ); ?>:</strong> ' + (summary.pass || 0) +
 					'</div>' +
-					'<div style="border: 1px solid #ffc107; padding: 15px; border-radius: 4px; background: #fffbf0;">' +
+					'<div class="wps-p-15-rounded-4">' +
 					'<strong><?php esc_js( esc_html_e( 'Warnings', 'wpshadow' ) ); ?>:</strong> ' + (summary.warn || 0) +
 					'</div>' +
-					'<div style="border: 1px solid #dc3545; padding: 15px; border-radius: 4px; background: #fdf7f7;">' +
+					'<div class="wps-p-15-rounded-4">' +
 					'<strong><?php esc_js( esc_html_e( 'Issues', 'wpshadow' ) ); ?>:</strong> ' + (summary.fail || 0) +
 					'</div>' +
 					'</div>';
@@ -147,14 +147,14 @@ jQuery(document).ready(function($) {
 						var statusBg = issue.status === 'pass' ? '#f0f6f2' : (issue.status === 'warn' ? '#fffbf0' : '#fdf7f7');
 						html += '<div style="border-left: 4px solid ' + statusColor + '; padding: 15px; background: ' + statusBg + '; margin-bottom: 15px; border-radius: 3px;">' +
 							'<h5 style="margin-top: 0;">' + issue.label + '</h5>' +
-							'<p style="margin: 0;">' + issue.details + '</p>' +
+							'<p class="wps-m-0">' + issue.details + '</p>' +
 							'</div>';
 					});
 				}
 				
 				$results.html(html);
 			} else {
-				$results.html('<div style="border-left: 4px solid #dc3545; padding: 15px; background: #fff8f9;">' +
+				$results.html('<div class="wps-p-15">' +
 					'<strong><?php esc_js( esc_html_e( 'Error:', 'wpshadow' ) ); ?></strong> ' + (response.data && response.data.message ? response.data.message : '<?php esc_js( esc_html_e( 'Unable to scan page.', 'wpshadow' ) ); ?>') + '</div>');
 			}
 			

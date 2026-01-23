@@ -197,17 +197,19 @@ class Dashboard_Customization {
 			'wordpress_health'   => __( 'WordPress Site Health', 'wpshadow' ),
 		);
 		?>
-		<div class="wpshadow-customization-panel" style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-top: 20px;">
-			<h3 style="margin-top: 0;">
-				<?php esc_html_e( 'Customize Your Dashboard', 'wpshadow' ); ?>
-			</h3>
-			<p style="color: #666;">
+		<div class="wps-card wps-mt-5">
+			<div class="wps-card-header">
+				<h3 class="wps-card-title" class="wps-m-0">
+					<?php esc_html_e( 'Customize Your Dashboard', 'wpshadow' ); ?>
+				</h3>
+			</div>
+			<p class="wps-text-muted">
 				<?php esc_html_e( 'Choose which categories to display and pin the most important ones to the top.', 'wpshadow' ); ?>
 			</p>
 			
-			<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-top: 20px;">
+			<div class="wps-grid wps-grid-auto-250 wps-gap-4 wps-mt-4">
 				<?php foreach ( $categories as $key => $label ) : ?>
-					<div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: #f9f9f9; border-radius: 6px;">
+					<div class="wps-flex wps-items-center wps-gap-3" class="wps-p-12-rounded-var(--wps-radius-md)">
 						<input 
 							type="checkbox" 
 							class="wpshadow-category-toggle" 
@@ -215,7 +217,7 @@ class Dashboard_Customization {
 							<?php checked( $prefs[ $key ]['visible'] ?? true ); ?>
 							style="cursor: pointer; width: 18px; height: 18px;"
 						/>
-						<label style="flex: 1; cursor: pointer; margin: 0;">
+						<label class="wps-m-0">
 							<?php echo esc_html( $label ); ?>
 						</label>
 						<button 
@@ -230,7 +232,7 @@ class Dashboard_Customization {
 				<?php endforeach; ?>
 			</div>
 			
-			<button id="wpshadow-save-customization" class="button button-primary" style="margin-top: 20px;">
+			<button id="wpshadow-save-customization" class="wps-btn wps-btn-primary wps-mt-4">
 				<?php esc_html_e( 'Save Preferences', 'wpshadow' ); ?>
 			</button>
 		</div>

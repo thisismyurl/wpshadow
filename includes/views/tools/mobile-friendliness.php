@@ -22,8 +22,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<tr>
 						<th scope="row"><label for="wpshadow-mobile-path"><?php esc_html_e( 'Page Path', 'wpshadow' ); ?></label></th>
 						<td>
-							<div style="display: flex; align-items: center; gap: 10px;">
-								<span style="background: #f5f5f5; padding: 8px 12px; border-radius: 3px; border: 1px solid #ddd; font-weight: 500;" id="mobile-site-domain"><?php echo esc_html( untrailingslashit( home_url() ) ); ?></span>
+							<div class="wps-flex-gap-10-items-center">
+								<span class="wps-p-8-rounded-3" id="mobile-site-domain"><?php echo esc_html( untrailingslashit( home_url() ) ); ?></span>
 								<input type="text" id="wpshadow-mobile-path" name="path" class="regular-text" value="/" placeholder="/about" required />
 							</div>
 							<p class="description"><?php esc_html_e( 'Enter the page path (e.g., /about, /contact). You can also paste a full URL and it will auto-clean. We fetch the page server-side to check viewport and layout signals.', 'wpshadow' ); ?></p>

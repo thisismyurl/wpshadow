@@ -28,7 +28,7 @@ $recent_errors   = array_slice( array_reverse( $critical_errors ), 0, 5 );
 		</div>
 	<?php endif; ?>
 
-	<div class="wpshadow-tool-section" style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; margin-top: 20px;">
+	<div class="wpshadow-tool-section" class="wps-p-20-rounded-4">
 		<h2><?php esc_html_e( 'Recent Critical Errors', 'wpshadow' ); ?></h2>
 		
 		<?php if ( empty( $recent_errors ) ) : ?>
@@ -57,7 +57,7 @@ $recent_errors   = array_slice( array_reverse( $critical_errors ), 0, 5 );
 		<?php endif; ?>
 	</div>
 
-	<div class="wpshadow-tool-section" style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; margin-top: 20px;">
+	<div class="wpshadow-tool-section" class="wps-p-20-rounded-4">
 		<h2><?php esc_html_e( 'Emergency Actions', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'Quick actions to recover from critical issues:', 'wpshadow' ); ?></p>
 		
@@ -74,7 +74,7 @@ $recent_errors   = array_slice( array_reverse( $critical_errors ), 0, 5 );
 		</p>
 	</div>
 
-	<div class="wpshadow-tool-section" style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; margin-top: 20px;">
+	<div class="wpshadow-tool-section" class="wps-p-20-rounded-4">
 		<h2><?php esc_html_e( 'Get Help', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'If you need immediate assistance:', 'wpshadow' ); ?></p>
 		<ul>

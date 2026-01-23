@@ -1,0 +1,452 @@
+/**
+ * WPShadow Report Styles
+ * Consolidated styles for report builder, renderer, and display
+ * Extracted from inline styles in report PHP classes
+ * 
+ * @package WPShadow
+ */
+
+/* ============================================================================
+   Report Builder Styles
+   ============================================================================ */
+
+.wps-report-builder {
+    background: white;
+    border-radius: var(--wps-radius-lg);
+    padding: var(--wps-space-6);
+}
+
+/* Report type selector */
+.wps-report-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--wps-space-4);
+    margin-bottom: var(--wps-space-6);
+}
+
+.wps-report-type-option {
+    padding: var(--wps-space-4);
+    border: 2px solid var(--wps-gray-200);
+    border-radius: var(--wps-radius-md);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+    text-align: center;
+}
+
+.wps-report-type-option:hover {
+    border-color: var(--wps-primary);
+    background: var(--wps-primary-light);
+}
+
+.wps-report-type-option.selected {
+    border-color: var(--wps-primary);
+    background: var(--wps-primary);
+    color: white;
+}
+
+.wps-report-type-icon {
+    font-size: 32px;
+    margin-bottom: var(--wps-space-2);
+}
+
+.wps-report-type-name {
+    font-weight: var(--wps-font-semibold);
+    margin-bottom: var(--wps-space-1);
+}
+
+.wps-report-type-description {
+    font-size: var(--wps-text-xs);
+    opacity: 0.8;
+}
+
+/* Report form elements */
+.wps-report-form-section {
+    border-bottom: 1px solid var(--wps-gray-200);
+    padding-bottom: var(--wps-space-4);
+    margin-bottom: var(--wps-space-4);
+}
+
+.wps-report-form-section:last-child {
+    border-bottom: none;
+}
+
+.wps-form-group-label {
+    display: block;
+    font-weight: var(--wps-font-semibold);
+    margin-bottom: var(--wps-space-2);
+    color: var(--wps-gray-900);
+}
+
+.wps-form-group-label span {
+    font-size: var(--wps-text-sm);
+    font-weight: var(--wps-font-normal);
+    color: var(--wps-gray-600);
+    margin-left: var(--wps-space-1);
+}
+
+.wps-preset-buttons {
+    display: flex;
+    gap: var(--wps-space-2);
+    flex-wrap: wrap;
+    margin-bottom: var(--wps-space-3);
+}
+
+.wps-preset-btn {
+    padding: var(--wps-space-2) var(--wps-space-4);
+    background: var(--wps-gray-100);
+    border: 1px solid var(--wps-gray-300);
+    border-radius: var(--wps-radius-md);
+    cursor: pointer;
+    font-size: var(--wps-text-sm);
+    transition: all 0.2s ease;
+    font-weight: var(--wps-font-medium);
+}
+
+.wps-preset-btn:hover {
+    background: var(--wps-gray-200);
+    border-color: var(--wps-gray-400);
+}
+
+.wps-preset-btn.selected {
+    background: var(--wps-primary);
+    color: white;
+    border-color: var(--wps-primary);
+}
+
+/* Date range picker */
+.wps-date-range-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--wps-space-3);
+}
+
+.wps-date-input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.wps-date-input-group label {
+    font-size: var(--wps-text-sm);
+    margin-bottom: var(--wps-space-1);
+    font-weight: var(--wps-font-medium);
+}
+
+.wps-date-input-group input {
+    padding: var(--wps-space-2);
+    border: 1px solid var(--wps-gray-300);
+    border-radius: var(--wps-radius-md);
+}
+
+/* Checkboxes and toggles */
+.wps-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--wps-space-2);
+}
+
+.wps-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: var(--wps-space-2);
+    cursor: pointer;
+}
+
+.wps-checkbox-item input[type="checkbox"] {
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+}
+
+.wps-checkbox-item label {
+    cursor: pointer;
+    margin: 0;
+}
+
+/* Report format options */
+.wps-format-options {
+    display: flex;
+    gap: var(--wps-space-2);
+    flex-wrap: wrap;
+}
+
+.wps-format-option {
+    padding: var(--wps-space-2) var(--wps-space-4);
+    background: var(--wps-gray-100);
+    border: 1px solid var(--wps-gray-300);
+    border-radius: var(--wps-radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.wps-format-option:hover {
+    background: var(--wps-gray-200);
+}
+
+.wps-format-option.active {
+    background: var(--wps-primary);
+    color: white;
+    border-color: var(--wps-primary);
+}
+
+.wps-format-option .dashicons {
+    margin-right: var(--wps-space-1);
+}
+
+/* ============================================================================
+   Report Renderer Styles
+   ============================================================================ */
+
+.wps-report-output {
+    background: white;
+    border-radius: var(--wps-radius-lg);
+    padding: var(--wps-space-6);
+    margin-top: var(--wps-space-4);
+}
+
+.wps-report-title {
+    font-size: var(--wps-text-3xl);
+    font-weight: var(--wps-font-bold);
+    color: #0073aa;
+    margin: 0 0 var(--wps-space-2) 0;
+}
+
+.wps-report-meta {
+    font-size: var(--wps-text-sm);
+    color: var(--wps-gray-600);
+    margin-bottom: var(--wps-space-6);
+}
+
+.wps-report-meta-item {
+    display: inline-block;
+    margin-right: var(--wps-space-4);
+}
+
+/* Report content cards */
+.wps-report-card {
+    background: white;
+    border-radius: var(--wps-radius-md);
+    padding: var(--wps-space-4);
+    margin-bottom: var(--wps-space-4);
+    border-left: 4px solid var(--wps-primary);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.wps-report-card.info {
+    border-left-color: #2563eb;
+    background: #f0f9ff;
+}
+
+.wps-report-card.success {
+    border-left-color: #10b981;
+    background: #ecfdf5;
+}
+
+.wps-report-card.warning {
+    border-left-color: #f59e0b;
+    background: #fffbeb;
+}
+
+.wps-report-card.error {
+    border-left-color: #dc2626;
+    background: #fef2f2;
+}
+
+.wps-report-card-title {
+    font-weight: var(--wps-font-semibold);
+    margin: 0 0 var(--wps-space-2) 0;
+}
+
+.wps-report-card-content {
+    font-size: var(--wps-text-sm);
+    line-height: 1.6;
+    color: var(--wps-gray-800);
+}
+
+/* Data visualization cards */
+.wps-data-card {
+    background: linear-gradient(135deg, #0073aa 0%, #005a87 100%);
+    color: white;
+    padding: var(--wps-space-4);
+    border-radius: var(--wps-radius-md);
+    margin-bottom: var(--wps-space-3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wps-data-card-label {
+    font-size: var(--wps-text-sm);
+    opacity: 0.9;
+}
+
+.wps-data-card-value {
+    font-size: 24px;
+    font-weight: var(--wps-font-bold);
+    line-height: 1;
+}
+
+.wps-data-card-icon {
+    font-size: 32px;
+    opacity: 0.7;
+}
+
+/* Recommendation boxes */
+.wps-recommendation-box {
+    background: white;
+    border-radius: var(--wps-radius-md);
+    padding: var(--wps-space-4);
+    margin-bottom: var(--wps-space-3);
+    display: flex;
+    gap: var(--wps-space-4);
+    border-left: 4px solid;
+}
+
+.wps-recommendation-box.priority-high {
+    border-left-color: #dc2626;
+    background: #fef2f2;
+}
+
+.wps-recommendation-box.priority-medium {
+    border-left-color: #f59e0b;
+    background: #fffbeb;
+}
+
+.wps-recommendation-box.priority-low {
+    border-left-color: #10b981;
+    background: #ecfdf5;
+}
+
+.wps-recommendation-icon {
+    flex-shrink: 0;
+    font-size: 24px;
+}
+
+.wps-recommendation-text h4 {
+    margin: 0 0 var(--wps-space-1) 0;
+    font-weight: var(--wps-font-semibold);
+}
+
+.wps-recommendation-text p {
+    margin: 0;
+    font-size: var(--wps-text-sm);
+    color: var(--wps-gray-700);
+}
+
+.wps-recommendation-action {
+    display: inline-block;
+    margin-top: var(--wps-space-2);
+}
+
+.wps-recommendation-action a {
+    color: #0073aa;
+    text-decoration: none;
+    font-weight: var(--wps-font-semibold);
+    font-size: var(--wps-text-sm);
+}
+
+.wps-recommendation-action a:hover {
+    text-decoration: underline;
+}
+
+/* Report tables */
+.wps-report-table-container {
+    overflow-x: auto;
+    margin-bottom: var(--wps-space-4);
+}
+
+.wps-report-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.wps-report-table thead {
+    background: var(--wps-gray-100);
+    border-bottom: 2px solid var(--wps-gray-300);
+}
+
+.wps-report-table th {
+    padding: var(--wps-space-3);
+    text-align: left;
+    font-weight: var(--wps-font-semibold);
+    color: var(--wps-gray-900);
+}
+
+.wps-report-table td {
+    padding: var(--wps-space-3);
+    border-bottom: 1px solid var(--wps-gray-200);
+}
+
+.wps-report-table tbody tr:hover {
+    background: var(--wps-gray-50);
+}
+
+.wps-report-table tbody tr:nth-child(odd) {
+    background: white;
+}
+
+.wps-report-table tbody tr:nth-child(even) {
+    background: var(--wps-gray-50);
+}
+
+/* Report stats grid */
+.wps-report-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--wps-space-4);
+    margin-bottom: var(--wps-space-6);
+}
+
+.wps-stat-item {
+    background: white;
+    padding: var(--wps-space-4);
+    border-radius: var(--wps-radius-md);
+    border: 1px solid var(--wps-gray-200);
+}
+
+.wps-stat-icon {
+    font-size: 28px;
+    color: var(--wps-primary);
+    margin-bottom: var(--wps-space-2);
+}
+
+.wps-stat-title {
+    font-size: var(--wps-text-sm);
+    color: var(--wps-gray-600);
+    margin-bottom: var(--wps-space-1);
+}
+
+.wps-stat-value {
+    font-size: var(--wps-text-2xl);
+    font-weight: var(--wps-font-bold);
+    color: var(--wps-gray-900);
+}
+
+/* Export/Email section */
+.wps-report-actions {
+    display: flex;
+    gap: var(--wps-space-3);
+    margin-top: var(--wps-space-6);
+    padding-top: var(--wps-space-6);
+    border-top: 1px solid var(--wps-gray-200);
+}
+
+@media (max-width: 768px) {
+    .wps-date-range-group {
+        grid-template-columns: 1fr;
+    }
+
+    .wps-report-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .wps-recommendation-box {
+        flex-direction: column;
+    }
+
+    .wps-data-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

@@ -172,13 +172,13 @@ function wpshadow_render_health_gauges() : void {
 		return '#f44336'; // Red - High threat
 	};
 	?>
-	<div style="display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap;">
+	<div class="wps-flex-gap-24">
 		<!-- Left: Large Overall Health Gauge + Scan Buttons -->
 		<div style="flex: 0 0 calc(280px); min-width: 280px;">
 			<div style="border: 2px solid <?php echo esc_attr( isset( $overall_health['color'] ) ? $overall_health['color'] : '#ccc' ); ?>; border-radius: 12px; padding: 24px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.15); text-align: center;">
-				<h3 style="margin: 0 0 16px 0; font-size: 20px; color: #333;"><?php esc_html_e( 'Overall Site Health', 'wpshadow' ); ?></h3>
+				<h3 class="wps-m-0"><?php esc_html_e( 'Overall Site Health', 'wpshadow' ); ?></h3>
 				
-				<svg width="200" height="200" viewBox="0 0 200 200" style="margin: 0 auto; display: block; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.2));">
+				<svg width="200" height="200" viewBox="0 0 200 200" class="wps-block-m-0">
 					<!-- Outer decorative circle -->
 					<circle cx="100" cy="100" r="95" fill="none" stroke="<?php echo esc_attr( isset( $overall_health['color'] ) ? $overall_health['color'] : '#ccc' ); ?>" stroke-width="2" opacity="0.2" />
 					<!-- Gauge background -->
@@ -193,18 +193,18 @@ function wpshadow_render_health_gauges() : void {
 					<text x="100" y="120" text-anchor="middle" font-size="16" fill="#666"><?php echo esc_html( isset( $overall_health['status'] ) && $overall_health['status'] ? $overall_health['status'] : 'Unknown' ); ?></text>
 				</svg>
 				
-				<p style="margin: 16px 0 0 0; font-size: 14px; color: #666; line-height: 1.5;"><?php echo esc_html( isset( $overall_health['message'] ) && $overall_health['message'] ? $overall_health['message'] : '' ); ?></p>
+				<p class="wps-m-16"><?php echo esc_html( isset( $overall_health['message'] ) && $overall_health['message'] ? $overall_health['message'] : '' ); ?></p>
 			</div>
 			
 		<!-- Quick Scan and Deep Scan Buttons -->
-		<div style="margin-top: 16px; display: flex; flex-direction: column; gap: 10px;">
-			<button id="wpshadow-quick-scan-btn" class="button button-primary" style="width: 100%; padding: 10px; cursor: pointer;">
+		<div class="wps-flex-gap-10">
+			<button id="wpshadow-quick-scan-btn" class="button button-primary" class="wps-p-10">
 				<?php esc_html_e( 'Quick Scan', 'wpshadow' ); ?>
 			</button>
-			<button id="wpshadow-deep-scan-btn" class="button" style="width: 100%; padding: 10px; cursor: pointer;">
+			<button id="wpshadow-deep-scan-btn" class="button" class="wps-p-10">
 				<?php esc_html_e( 'Deep Scan', 'wpshadow' ); ?>
 			</button>
-			<button id="wpshadow-fullscreen-toggle" class="button" style="width: 100%; padding: 10px; cursor: pointer; color: #888; border-color: #ccc; background: #f5f5f5;" title="<?php esc_attr_e( 'View dashboard in fullscreen mode (great for office displays)', 'wpshadow' ); ?>">
+			<button id="wpshadow-fullscreen-toggle" class="button" class="wps-p-10" title="<?php esc_attr_e( 'View dashboard in fullscreen mode (great for office displays)', 'wpshadow' ); ?>">
 				<?php esc_html_e( 'Full Screen', 'wpshadow' ); ?>
 			</button>
 		</div>
@@ -212,7 +212,7 @@ function wpshadow_render_health_gauges() : void {
 		
 		<!-- Right: 8 Category Gauges in a responsive grid -->
 		<div style="flex: 1; min-width: 600px;">
-			<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px;">
+			<div class="wps-grid">
 					<?php foreach ( $category_meta as $cat_key => $meta ) :
 						$cat_findings = $findings_by_category[ $cat_key ] ?? array();
 						$total = count( $cat_findings );
@@ -266,7 +266,7 @@ function wpshadow_render_health_gauges() : void {
 						<!-- Text on Right -->
 						<div style="flex: 1; min-width: 0;">
 								<!-- Title (icon removed) -->
-								<div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+								<div class="wps-flex-gap-6-items-center">
 										<h4 style="margin: 0; font-size: 13px; color: <?php echo esc_attr( isset( $meta['color'] ) ? $meta['color'] : '#333' ); ?>; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?php echo esc_html( isset( $meta['label'] ) ? $meta['label'] : ucfirst( $cat_key ) ); ?></h4>
 								</div>
 								

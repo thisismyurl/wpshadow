@@ -201,7 +201,7 @@ class Badge_Manager {
 		$badges = self::get_user_badges( $user_id );
 		
 		?>
-		<div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+		<div class="wps-flex-gap-8-items-center">
 			<?php foreach ( $badges as $badge ) : ?>
 				<?php self::render_badge( $badge ); ?>
 			<?php endforeach; ?>

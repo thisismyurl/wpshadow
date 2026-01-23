@@ -155,11 +155,11 @@ class Recommendation_Engine {
 		
 		if ( empty( $recommendations ) ) {
 			?>
-			<div style="background: #ecfdf5; border-left: 4px solid #10b981; padding: 20px; border-radius: 6px; text-align: center;">
+			<div class="wps-p-20-rounded-6">
 				<h3 style="margin-top: 0; color: #059669;">
 					<?php esc_html_e( '🎉 Perfect Score!', 'wpshadow' ); ?>
 				</h3>
-				<p style="margin: 8px 0; color: #065f46;">
+				<p class="wps-m-8">
 					<?php esc_html_e( 'No critical issues found. Your site is in great shape!', 'wpshadow' ); ?>
 				</p>
 			</div>
@@ -167,34 +167,34 @@ class Recommendation_Engine {
 			return;
 		}
 		?>
-		<div class="wpshadow-recommendations" style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; border-radius: 6px; margin: 20px 0;">
-			<h3 style="margin-top: 0; color: #92400e; display: flex; align-items: center; gap: 8px;">
+		<div class="wpshadow-recommendations" class="wps-m-20-p-20-rounded-6">
+			<h3 class="wps-flex-gap-8-items-center">
 				<span style="font-size: 20px;">🎯</span>
 				<?php esc_html_e( 'Recommended Actions', 'wpshadow' ); ?>
 			</h3>
-			<p style="margin: 8px 0 16px 0; color: #78350f;">
+			<p class="wps-m-8">
 				<?php esc_html_e( 'Fix these issues first for maximum impact:', 'wpshadow' ); ?>
 			</p>
 			
-			<div style="display: grid; gap: 12px;">
+			<div class="wps-grid">
 				<?php foreach ( $recommendations as $idx => $rec ) : ?>
-					<div style="background: white; padding: 12px; border-radius: 4px; display: flex; align-items: flex-start; gap: 12px;">
+					<div class="wps-flex-gap-12-items-flex-start-p-12-rounde">
 						<!-- Ranking badge -->
-						<div style="flex-shrink: 0; width: 32px; height: 32px; background: #f59e0b; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px;">
+						<div class="wps-flex-items-center-justify-center-rounded">
 							<?php echo ( $idx + 1 ); ?>
 						</div>
 						
 						<!-- Finding details -->
 						<div style="flex: 1;">
-							<h4 style="margin: 0 0 4px 0; color: #1f2937;">
+							<h4 class="wps-m-0">
 								<?php echo esc_html( $rec['title'] ?? 'Unknown Issue' ); ?>
 							</h4>
-							<p style="margin: 4px 0; color: #6b7280; font-size: 13px;">
+							<p class="wps-m-4">
 								<?php echo esc_html( $rec['description'] ?? '' ); ?>
 							</p>
 							
 							<!-- Phase 5: KB & Training Links -->
-							<div style="font-size: 12px; margin: 8px 0; display: flex; gap: 12px;">
+							<div class="wps-flex-gap-12-m-8">
 								<?php 
 								$kb_slug = isset( $rec['id'] ) ? sanitize_title( $rec['id'] ) : 'general-fix';
 								?>
@@ -207,7 +207,7 @@ class Recommendation_Engine {
 							</div>
 							
 							<!-- Score breakdown -->
-							<div style="display: flex; gap: 12px; margin-top: 8px; font-size: 12px;">
+							<div class="wps-flex-gap-12">
 								<?php if ( isset( $rec['threat_level'] ) ) : ?>
 									<span style="color: #6b7280;">
 										🔴 Threat: <strong><?php echo (int) $rec['threat_level']; ?>%</strong>
@@ -229,7 +229,7 @@ class Recommendation_Engine {
 						<!-- Action button -->
 						<div style="flex-shrink: 0;">
 							<?php if ( isset( $rec['auto_fixable'] ) && $rec['auto_fixable'] ) : ?>
-								<button class="wpshadow-quick-fix" data-finding-id="<?php echo esc_attr( $rec['id'] ?? '' ); ?>" style="background: #10b981; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600;">
+								<button class="wpshadow-quick-fix" data-finding-id="<?php echo esc_attr( $rec['id'] ?? '' ); ?>" class="wps-p-6-rounded-4">
 									<?php esc_html_e( 'Fix Now', 'wpshadow' ); ?>
 								</button>
 							<?php else : ?>

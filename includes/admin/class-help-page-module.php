@@ -92,30 +92,30 @@ function wpshadow_render_help() {
 		</div>
 
 		<!-- Help Resources Grid -->
-		<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+		<div class="wps-grid wps-grid-auto-320">
 			<?php foreach ( $catalog as $item ) : ?>
 				<div class="wps-card">
 					<div class="wps-card-header" style="padding-bottom: 12px; border-bottom: 1px solid #eee;">
-						<div style="display: flex; align-items: flex-start; gap: 12px;">
+						<div class="wps-flex-gap-12-items-flex-start">
 							<span class="dashicons <?php echo esc_attr( $item['icon'] ); ?>" 
 								  style="font-size: 32px; width: 32px; height: 32px; color: #0073aa;"></span>
 							<div>
-								<h3 class="wps-card-title" style="margin: 0 0 4px; font-size: 16px;">
+								<h3 class="wps-card-title" class="wps-m-0">
 									<?php echo esc_html( $item['title'] ); ?>
 								</h3>
-								<p class="wps-card-description" style="margin: 0; font-size: 13px;">
+								<p class="wps-card-description" class="wps-m-0">
 									<?php echo esc_html( $item['description'] ); ?>
 								</p>
 							</div>
 						</div>
 					</div>
-					<div class="wps-card-body" style="padding: 12px 0;">
-						<div style="display: flex; gap: 8px; flex-wrap: wrap;">
+					<div class="wps-card-body" class="wps-p-12">
+						<div class="wps-flex-gap-8">
 							<?php if ( ! empty( $item['url'] ) ) : ?>
 								<a href="<?php echo esc_url( $item['url'] ); ?>" 
 								   target="_blank" rel="noopener noreferrer"
 								   class="wps-btn wps-btn-secondary"
-								   style="text-decoration: none; padding: 6px 12px; font-size: 13px;">
+								   class="wps-p-6">
 									<span class="dashicons dashicons-external" style="margin-right: 4px; font-size: 14px;"></span>
 									<?php esc_html_e( 'Read Article', 'wpshadow' ); ?>
 								</a>
@@ -124,7 +124,7 @@ function wpshadow_render_help() {
 								<a href="<?php echo esc_url( $item['video'] ); ?>" 
 								   target="_blank" rel="noopener noreferrer"
 								   class="wps-btn wps-btn-secondary"
-								   style="text-decoration: none; padding: 6px 12px; font-size: 13px;">
+								   class="wps-p-6">
 									<span class="dashicons dashicons-video-alt2" style="margin-right: 4px; font-size: 14px;"></span>
 									<?php esc_html_e( 'Watch Video', 'wpshadow' ); ?>
 								</a>
@@ -136,19 +136,19 @@ function wpshadow_render_help() {
 		</div>
 
 		<!-- Contact Support & Resources -->
-		<div class="wps-card" style="margin-top: 32px;">
+		<div class="wps-card wps-mt-8">
 			<div class="wps-card-header">
 				<div>
-					<h2 class="wps-card-title" style="margin: 0 0 8px;">
+					<h2 class="wps-card-title" class="wps-m-0">
 						<span class="dashicons dashicons-sos"></span>
 						<?php esc_html_e( 'Need More Help?', 'wpshadow' ); ?>
 					</h2>
-					<p class="wps-card-description" style="margin: 0;">
+					<p class="wps-card-description" class="wps-m-0">
 						<?php esc_html_e( 'Access our knowledge base, training videos, and community support.', 'wpshadow' ); ?>
 					</p>
 				</div>
 			</div>
-			<div class="wps-card-body" style="display: flex; gap: 12px; flex-wrap: wrap;">
+			<div class="wps-card-body" class="wps-flex-gap-12">
 				<a href="https://github.com/thisismyurl/wpshadow/issues" target="_blank" rel="noopener noreferrer" class="wps-btn wps-btn-primary">
 					<span class="dashicons dashicons-admin-comments"></span>
 					<?php esc_html_e( 'Contact Support', 'wpshadow' ); ?>

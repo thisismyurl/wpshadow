@@ -307,15 +307,15 @@ class Achievement_System {
 		$progress = self::get_user_progress( $user_id );
 		
 		?>
-		<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px;">
-			<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+		<div class="wps-card">
+			<div class="wps-flex wps-items-center wps-gap-3" style="margin-bottom: 16px;">
 				<span class="dashicons dashicons-awards" style="font-size: 24px; color: #FFD700;"></span>
-				<h3 style="margin: 0;"><?php esc_html_e( 'Your Achievements', 'wpshadow' ); ?></h3>
+				<h3 class="wps-m-0"><?php esc_html_e( 'Your Achievements', 'wpshadow' ); ?></h3>
 			</div>
 			
 			<!-- Progress Bar -->
 			<div style="margin-bottom: 16px;">
-				<div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+				<div class="wps-flex-justify-space-between">
 					<span style="font-size: 13px; font-weight: 500;">
 						<?php printf( esc_html__( '%d / %d Achievements', 'wpshadow' ), $progress['unlocked'], $progress['total'] ); ?>
 					</span>
@@ -323,7 +323,7 @@ class Achievement_System {
 						<?php printf( esc_html__( '%d Points', 'wpshadow' ), $progress['points'] ); ?>
 					</span>
 				</div>
-				<div style="width: 100%; height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden;">
+				<div class="wps-rounded-4">
 					<div style="width: <?php echo esc_attr( (string) $progress['percentage'] ); ?>%; height: 100%; background: linear-gradient(90deg, #4CAF50, #FFD700); transition: width 0.3s;"></div>
 				</div>
 				<div style="font-size: 12px; color: #999; margin-top: 4px;">
@@ -332,7 +332,7 @@ class Achievement_System {
 			</div>
 			
 			<!-- Achievement Grid -->
-			<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 12px;">
+			<div class="wps-grid wps-grid-auto-140 wps-gap-3">
 				<?php foreach ( $all_achievements as $id => $achievement ) : ?>
 					<?php $unlocked = isset( $achievements[ $id ] ); ?>
 					<div style="

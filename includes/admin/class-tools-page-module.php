@@ -121,7 +121,7 @@ function wpshadow_render_tools() {
 		</div>
 
 		<!-- Tools Grid -->
-		<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+		<div class="wps-grid">
 			<?php foreach ( $catalog as $item ) :
 				$tool_url = admin_url( 'admin.php?page=wpshadow-tools&tool=' . $item['tool'] );
 			?>

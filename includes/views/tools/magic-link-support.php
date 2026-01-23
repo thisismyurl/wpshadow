@@ -63,7 +63,7 @@ $active_links = array_filter(
 			<button type="submit" class="button button-primary">
 				<?php esc_html_e( 'Generate Magic Link', 'wpshadow' ); ?>
 			</button>
-			<div id="wpshadow-magic-link-message" style="margin-top: 15px; display: none;"></div>
+			<div id="wpshadow-magic-link-message" class="wps-none"></div>
 		</form>
 	</div>
 
@@ -139,7 +139,7 @@ jQuery(document).ready(function($) {
 				if (response.success) {
 					var html = '<div class="notice notice-success"><p><strong><?php esc_attr_e( 'Magic Link Created!', 'wpshadow' ); ?></strong></p>' +
 						'<p><?php esc_attr_e( 'Link:', 'wpshadow' ); ?></p>' +
-						'<code style="display: block; padding: 10px; background: #f5f5f5; word-break: break-all; margin: 10px 0;">' + response.data.magic_link + '</code>' +
+						'<code class="wps-block-m-10-p-10">' + response.data.magic_link + '</code>' +
 						'<p><?php esc_attr_e( 'Expires:', 'wpshadow' ); ?> ' + response.data.expires_at + '</p>' +
 						'<button type="button" class="button" onclick="var text = \'' + response.data.magic_link + '\'; navigator.clipboard.writeText(text); alert(\'<?php esc_attr_e( 'Link copied to clipboard!', 'wpshadow' ); ?>\');"><?php esc_attr_e( 'Copy Link', 'wpshadow' ); ?></button>' +
 						'</div>';

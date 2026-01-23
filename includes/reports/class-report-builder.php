@@ -30,136 +30,147 @@ class Report_Builder {
 	 */
 	public static function render(): void {
 		?>
-		<div class="wpshadow-reports-container" style="padding: 20px;">
-			<div style="display: grid; grid-template-columns: 300px 1fr; gap: 20px;">
-				
+		<div class="wps-page-container">
+			<div class="wps-page-header">
+				<h1 class="wps-page-title">
+					<span class="dashicons dashicons-analytics" style="color: var(--wps-primary);"></span>
+					<?php esc_html_e( 'Report Builder', 'wpshadow' ); ?>
+				</h1>
+				<p class="wps-page-subtitle">
+					<?php esc_html_e( 'Assemble custom reports, compare periods, and export in one place.', 'wpshadow' ); ?>
+				</p>
+			</div>
+
+			<div class="wps-grid wps-gap-4" style="grid-template-columns: minmax(320px, 380px) 1fr;">
 				<!-- Left Sidebar: Report Builder Form -->
-				<div class="report-builder-form" style="background: #f9f9f9; padding: 20px; border-radius: 8px;">
-					<h3><?php esc_html_e( 'Build Report', 'wpshadow' ); ?></h3>
-					
-					<form id="wpshadow-report-builder" style="display: flex; flex-direction: column; gap: 15px;">
-						<?php wp_nonce_field( 'wpshadow_report_builder', 'report_nonce' ); ?>
-						
-						<!-- Quick Presets -->
-						<div class="form-group">
-							<label style="display: block; font-weight: bold; margin-bottom: 8px;">
-								<?php esc_html_e( 'Quick Presets', 'wpshadow' ); ?>
-							</label>
-							<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-								<button type="button" class="preset-btn" data-preset="today" style="padding: 8px; background: #0073aa; color: white; border: none; border-radius: 4px; cursor: pointer;">
-									<?php esc_html_e( 'Today', 'wpshadow' ); ?>
-								</button>
-								<button type="button" class="preset-btn" data-preset="week" style="padding: 8px; background: #0073aa; color: white; border: none; border-radius: 4px; cursor: pointer;">
-									<?php esc_html_e( 'Last 7 Days', 'wpshadow' ); ?>
-								</button>
-								<button type="button" class="preset-btn" data-preset="month" style="padding: 8px; background: #0073aa; color: white; border: none; border-radius: 4px; cursor: pointer;">
-									<?php esc_html_e( 'Last 30 Days', 'wpshadow' ); ?>
-								</button>
-								<button type="button" class="preset-btn" data-preset="quarter" style="padding: 8px; background: #0073aa; color: white; border: none; border-radius: 4px; cursor: pointer;">
-									<?php esc_html_e( 'Last 90 Days', 'wpshadow' ); ?>
-								</button>
-							</div>
-						</div>
-						
-						<!-- Date Range -->
-						<div class="form-group">
-							<label for="report_start_date" style="display: block; font-weight: bold; margin-bottom: 4px;">
-								<?php esc_html_e( 'Start Date', 'wpshadow' ); ?>
-							</label>
-							<input type="date" id="report_start_date" name="start_date" 
-								value="<?php echo esc_attr( date( 'Y-m-d', strtotime( '-30 days' ) ) ); ?>"
-								style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" />
-						</div>
-						
-						<div class="form-group">
-							<label for="report_end_date" style="display: block; font-weight: bold; margin-bottom: 4px;">
-								<?php esc_html_e( 'End Date', 'wpshadow' ); ?>
-							</label>
-							<input type="date" id="report_end_date" name="end_date" 
-								value="<?php echo esc_attr( date( 'Y-m-d' ) ); ?>"
-								style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" />
-						</div>
-						
-						<!-- Category Filter -->
-						<div class="form-group">
-							<label for="report_category" style="display: block; font-weight: bold; margin-bottom: 4px;">
-								<?php esc_html_e( 'Category', 'wpshadow' ); ?>
-							</label>
-							<select id="report_category" name="category" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-								<option value=""><?php esc_html_e( 'All Categories', 'wpshadow' ); ?></option>
-								<option value="security"><?php esc_html_e( 'Security', 'wpshadow' ); ?></option>
-								<option value="performance"><?php esc_html_e( 'Performance', 'wpshadow' ); ?></option>
-								<option value="maintenance"><?php esc_html_e( 'Maintenance', 'wpshadow' ); ?></option>
-								<option value="workflow"><?php esc_html_e( 'Workflow', 'wpshadow' ); ?></option>
-								<option value="backup"><?php esc_html_e( 'Backup', 'wpshadow' ); ?></option>
-							</select>
-						</div>
-						
-						<!-- Report Type -->
-						<div class="form-group">
-							<label for="report_type" style="display: block; font-weight: bold; margin-bottom: 4px;">
-								<?php esc_html_e( 'Report Type', 'wpshadow' ); ?>
-							</label>
-							<select id="report_type" name="type" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-								<option value="summary"><?php esc_html_e( 'Summary', 'wpshadow' ); ?></option>
-								<option value="detailed"><?php esc_html_e( 'Detailed', 'wpshadow' ); ?></option>
-								<option value="executive"><?php esc_html_e( 'Executive', 'wpshadow' ); ?></option>
-							</select>
-							<p style="font-size: 12px; color: #666; margin-top: 4px;">
-								<?php esc_html_e( 'Summary: Overview. Detailed: All events. Executive: Board-level KPIs.', 'wpshadow' ); ?>
-							</p>
-						</div>
-						
-						<!-- Export Format -->
-						<div class="form-group">
-							<label for="report_format" style="display: block; font-weight: bold; margin-bottom: 4px;">
-								<?php esc_html_e( 'Export Format', 'wpshadow' ); ?>
-							</label>
-							<select id="report_format" name="format" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-								<option value="html"><?php esc_html_e( 'HTML (View)', 'wpshadow' ); ?></option>
-								<option value="csv"><?php esc_html_e( 'CSV (Excel)', 'wpshadow' ); ?></option>
-								<option value="json"><?php esc_html_e( 'JSON (API)', 'wpshadow' ); ?></option>
-							</select>
-						</div>
-						
-						<!-- Action Buttons -->
-						<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 20px;">
-							<button type="submit" class="button button-primary" style="width: 100%; cursor: pointer;">
-								<?php esc_html_e( 'Generate', 'wpshadow' ); ?>
-							</button>
-							<button type="button" class="button" id="compare-periods-btn" style="width: 100%; cursor: pointer;">
-								<?php esc_html_e( 'Compare', 'wpshadow' ); ?>
-							</button>
-						</div>
-						
-						<!-- Email Option -->
-						<div class="form-group" style="border-top: 1px solid #ddd; padding-top: 15px; margin-top: 15px;">
-							<label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-								<input type="checkbox" name="email_report" id="email_report" />
-								<?php esc_html_e( 'Email this report', 'wpshadow' ); ?>
-							</label>
-							<div id="email-options" style="display: none; margin-top: 10px;">
-								<input type="email" name="email_to" placeholder="<?php esc_attr_e( 'Email address', 'wpshadow' ); ?>" 
-									style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 8px;" />
-								<label style="display: flex; align-items: center; gap: 8px;">
-									<input type="checkbox" name="schedule_email" />
-									<?php esc_html_e( 'Schedule monthly', 'wpshadow' ); ?>
+				<div class="wps-card">
+					<div class="wps-card-header">
+						<h3 class="wps-card-title"><?php esc_html_e( 'Build Report', 'wpshadow' ); ?></h3>
+					</div>
+					<div class="wps-card-body">
+						<form id="wpshadow-report-builder" class="wps-flex wps-flex-col wps-gap-4">
+							<?php wp_nonce_field( 'wpshadow_report_builder', 'report_nonce' ); ?>
+
+							<!-- Quick Presets -->
+							<div class="wps-form-group">
+								<label class="wps-form-label">
+									<?php esc_html_e( 'Quick Presets', 'wpshadow' ); ?>
 								</label>
+								<div class="wps-grid wps-grid-auto-160 wps-gap-2">
+									<button type="button" class="wps-btn wps-btn-secondary preset-btn" data-preset="today">
+										<?php esc_html_e( 'Today', 'wpshadow' ); ?>
+									</button>
+									<button type="button" class="wps-btn wps-btn-secondary preset-btn" data-preset="week">
+										<?php esc_html_e( 'Last 7 Days', 'wpshadow' ); ?>
+									</button>
+									<button type="button" class="wps-btn wps-btn-secondary preset-btn" data-preset="month">
+										<?php esc_html_e( 'Last 30 Days', 'wpshadow' ); ?>
+									</button>
+									<button type="button" class="wps-btn wps-btn-secondary preset-btn" data-preset="quarter">
+										<?php esc_html_e( 'Last 90 Days', 'wpshadow' ); ?>
+									</button>
+								</div>
 							</div>
-						</div>
-						
-					</form>
+
+							<!-- Date Range -->
+							<div class="wps-grid wps-grid-auto-200 wps-gap-3 wps-my-4">
+								<div class="wps-form-group">
+									<label for="report_start_date" class="wps-form-label">
+										<?php esc_html_e( 'Start Date', 'wpshadow' ); ?>
+									</label>
+									<input type="date" id="report_start_date" name="start_date" class="wps-input"
+										value="<?php echo esc_attr( date( 'Y-m-d', strtotime( '-30 days' ) ) ); ?>" />
+								</div>
+
+								<div class="wps-form-group">
+									<label for="report_end_date" class="wps-form-label">
+										<?php esc_html_e( 'End Date', 'wpshadow' ); ?>
+									</label>
+									<input type="date" id="report_end_date" name="end_date" class="wps-input"
+										value="<?php echo esc_attr( date( 'Y-m-d' ) ); ?>" />
+								</div>
+							</div>
+
+							<!-- Category Filter -->
+							<div class="wps-form-group">
+								<label for="report_category" class="wps-form-label">
+									<?php esc_html_e( 'Category', 'wpshadow' ); ?>
+								</label>
+								<select id="report_category" name="category" class="wps-select">
+									<option value=""><?php esc_html_e( 'All Categories', 'wpshadow' ); ?></option>
+									<option value="security"><?php esc_html_e( 'Security', 'wpshadow' ); ?></option>
+									<option value="performance"><?php esc_html_e( 'Performance', 'wpshadow' ); ?></option>
+									<option value="maintenance"><?php esc_html_e( 'Maintenance', 'wpshadow' ); ?></option>
+									<option value="workflow"><?php esc_html_e( 'Workflow', 'wpshadow' ); ?></option>
+									<option value="backup"><?php esc_html_e( 'Backup', 'wpshadow' ); ?></option>
+								</select>
+							</div>
+
+							<!-- Report Type -->
+							<div class="wps-form-group">
+								<label for="report_type" class="wps-form-label">
+									<?php esc_html_e( 'Report Type', 'wpshadow' ); ?>
+								</label>
+								<select id="report_type" name="type" class="wps-select">
+									<option value="summary"><?php esc_html_e( 'Summary', 'wpshadow' ); ?></option>
+									<option value="detailed"><?php esc_html_e( 'Detailed', 'wpshadow' ); ?></option>
+									<option value="executive"><?php esc_html_e( 'Executive', 'wpshadow' ); ?></option>
+								</select>
+								<p class="wps-form-help">
+									<?php esc_html_e( 'Summary: Overview. Detailed: All events. Executive: Board-level KPIs.', 'wpshadow' ); ?>
+								</p>
+							</div>
+
+							<!-- Export Format -->
+							<div class="wps-form-group">
+								<label for="report_format" class="wps-form-label">
+									<?php esc_html_e( 'Export Format', 'wpshadow' ); ?>
+								</label>
+								<select id="report_format" name="format" class="wps-select">
+									<option value="html"><?php esc_html_e( 'HTML (View)', 'wpshadow' ); ?></option>
+									<option value="csv"><?php esc_html_e( 'CSV (Excel)', 'wpshadow' ); ?></option>
+									<option value="json"><?php esc_html_e( 'JSON (API)', 'wpshadow' ); ?></option>
+								</select>
+							</div>
+
+							<!-- Action Buttons -->
+							<div class="wps-grid wps-grid-auto-200 wps-gap-2 wps-mt-4">
+								<button type="submit" class="wps-btn wps-btn-primary" style="width: 100%;">
+									<?php esc_html_e( 'Generate', 'wpshadow' ); ?>
+								</button>
+								<button type="button" class="wps-btn wps-btn-secondary" id="compare-periods-btn" style="width: 100%;">
+									<?php esc_html_e( 'Compare', 'wpshadow' ); ?>
+								</button>
+							</div>
+
+							<!-- Email Option -->
+							<div class="wps-form-group wps-mt-4" style="border-top: 1px solid var(--wps-gray-200); padding-top: var(--wps-space-4);">
+								<label class="wps-flex wps-items-center wps-gap-2" style="cursor: pointer;">
+									<input type="checkbox" name="email_report" id="email_report" />
+									<?php esc_html_e( 'Email this report', 'wpshadow' ); ?>
+								</label>
+								<div id="email-options" class="wps-mt-3" class="wps-none">
+									<input type="email" name="email_to" class="wps-input" placeholder="<?php esc_attr_e( 'Email address', 'wpshadow' ); ?>" />
+									<label class="wps-flex wps-items-center wps-gap-2 wps-mt-2" style="cursor: pointer;">
+										<input type="checkbox" name="schedule_email" />
+										<?php esc_html_e( 'Schedule monthly', 'wpshadow' ); ?>
+									</label>
+								</div>
+							</div>
+
+						</form>
+					</div>
 				</div>
-				
+
 				<!-- Right Content: Report Display -->
 				<div class="report-display-area">
-					<div id="report-content" style="background: white; padding: 20px; border-radius: 8px; min-height: 500px;">
-						<p style="color: #666; text-align: center; padding: 40px 20px;">
+					<div id="report-content" class="wps-card" style="min-height: 500px;">
+						<p class="wps-p-40">
 							<?php esc_html_e( 'Build a report using the form on the left to see results here.', 'wpshadow' ); ?>
 						</p>
 					</div>
 				</div>
-				
+
 			</div>
 		</div>
 		
@@ -228,7 +239,7 @@ class Report_Builder {
 					nonce: $('input[name="report_nonce"]').val()
 				};
 				
-				$('#report-content').html('<p style="text-align: center; padding: 40px;">Loading...</p>');
+				$('#report-content').html('<p class="wps-p-40">Loading...</p>');
 				
 				$.ajax({
 					url: ajaxurl,

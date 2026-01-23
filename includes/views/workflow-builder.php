@@ -46,7 +46,7 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 					?>
 					<div class="wpshadow-block-item <?php echo $is_current_trigger ? 'wpshadow-block-current' : ''; ?>" draggable="true" data-block-id="<?php echo esc_attr( $id ); ?>" data-block-type="trigger" style="background-color: <?php echo esc_attr( $block['color'] ); ?>; position: relative;">
 						<?php if ( $is_current_trigger ) : ?>
-							<span class="dashicons dashicons-yes" style="position: absolute; top: 8px; right: 8px; background: #2271b1; color: white; border-radius: 50%; font-size: 14px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;"></span>
+							<span class="dashicons dashicons-yes" class="wps-flex-items-center-justify-center-rounded"></span>
 						<?php endif; ?>
 						<span class="dashicons <?php echo esc_attr( $block['icon'] ); ?>" style="margin-right: 8px;"></span>
 						<strong><?php echo esc_html( $block['label'] ); ?></strong>
@@ -70,11 +70,11 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 		<!-- Center: Canvas -->
 		<div class="wpshadow-canvas">
 			<div class="wpshadow-workflow-title">
-				<input type="text" id="wpshadow-workflow-name" placeholder="Workflow Name" value="" style="font-size: 18px; font-weight: bold; border: 1px solid #ddd; padding: 8px; border-radius: 4px; width: 100%;" />
+				<input type="text" id="wpshadow-workflow-name" placeholder="Workflow Name" value="" class="wps-p-8-rounded-4" />
 			</div>
 
 			<div class="wpshadow-canvas-area" id="wpshadow-canvas">
-				<div style="text-align: center; color: #999; padding: 60px 20px;">
+				<div class="wps-p-60">
 					<span class="dashicons dashicons-block-default" style="font-size: 48px; opacity: 0.3;"></span>
 					<p>Drag blocks here to build your workflow</p>
 					<p style="font-size: 12px;">1. Start with a TRIGGER (IF condition)</p>
@@ -101,14 +101,14 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 		<!-- Right Sidebar: Block Inspector -->
 		<div class="wpshadow-inspector">
 			<h3>Block Settings</h3>
-			<div id="wpshadow-inspector-content" style="padding: 15px; background: #f5f5f5; border-radius: 4px;">
+			<div id="wpshadow-inspector-content" class="wps-p-15-rounded-4">
 				<p style="color: #999; text-align: center;">Select a block to configure</p>
 			</div>
 		</div>
 	</div>
 
 	<!-- Block Configuration Modal -->
-	<div id="wpshadow-block-modal" class="wpshadow-modal" style="display: none;">
+	<div id="wpshadow-block-modal" class="wpshadow-modal" class="wps-none">
 		<div class="wpshadow-modal-content" style="max-width: 600px;">
 			<button class="wpshadow-modal-close">&times;</button>
 			<h2 id="wpshadow-block-modal-title">Configure Block</h2>
@@ -607,7 +607,7 @@ jQuery(document).ready(function($) {
 		if (confirm('Clear all blocks?')) {
 			workflowBlocks = [];
 			$('#wpshadow-canvas').html(`
-				<div style="text-align: center; color: #999; padding: 60px 20px;">
+				<div class="wps-p-60">
 					<span class="dashicons dashicons-block-default" style="font-size: 48px; opacity: 0.3;"></span>
 					<p>Drag blocks here to build your workflow</p>
 				</div>

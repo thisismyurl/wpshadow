@@ -18,7 +18,7 @@ if ( ! current_user_can( 'read' ) ) {
 	<h1><?php esc_html_e( 'Broken Link Checker', 'wpshadow' ); ?></h1>
 	<p><?php esc_html_e( 'Find and fix broken links across your site.', 'wpshadow' ); ?></p>
 
-	<div class="wpshadow-tool-section" style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; margin-top: 20px;">
+	<div class="wpshadow-tool-section" class="wps-p-20-rounded-4">
 		<h2><?php esc_html_e( 'Scan Site for Broken Links', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'Check all posts and pages for broken internal and external links.', 'wpshadow' ); ?></p>
 		
@@ -52,10 +52,10 @@ if ( ! current_user_can( 'read' ) ) {
 			</p>
 		</form>
 
-		<div id="link-scan-results" style="display: none; margin-top: 30px;"></div>
+		<div id="link-scan-results" class="wps-none"></div>
 	</div>
 
-	<div class="wpshadow-tool-section" style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; margin-top: 20px;">
+	<div class="wpshadow-tool-section" class="wps-p-20-rounded-4">
 		<h2><?php esc_html_e( 'About Link Checking', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'Broken links negatively impact:', 'wpshadow' ); ?></p>
 		<ul>
@@ -89,11 +89,11 @@ jQuery(document).ready(function($) {
 				var html = '<h3><?php esc_js( esc_html_e( 'Scan Complete', 'wpshadow' ) ); ?></h3>';
 				
 				if (data.broken_links.length === 0) {
-					html += '<div style="border-left: 4px solid #00a32a; padding: 15px; background: #f0f6fc; margin: 15px 0;">' +
+					html += '<div class="wps-m-15-p-15">' +
 						'<strong><?php esc_js( esc_html_e( 'Great! No broken links found.', 'wpshadow' ) ); ?></strong>' +
 						'</div>';
 				} else {
-					html += '<div style="border-left: 4px solid #dc3545; padding: 15px; background: #fff8f9; margin: 15px 0;">' +
+					html += '<div class="wps-m-15-p-15">' +
 						'<strong><?php esc_js( esc_html_e( 'Found', 'wpshadow' ) ); ?> ' + data.broken_links.length + ' <?php esc_js( esc_html_e( 'broken link(s)', 'wpshadow' ) ); ?></strong>' +
 						'</div>';
 					
@@ -108,7 +108,7 @@ jQuery(document).ready(function($) {
 						html += '<tr>' +
 							'<td><code style="word-break: break-all; font-size: 12px;">' + link.url + '</code></td>' +
 							'<td><a href="' + link.edit_url + '" target="_blank">' + link.post_title + '</a></td>' +
-							'<td><span style="background: #ffebee; padding: 4px 8px; border-radius: 3px;">' + link.status_code + '</span></td>' +
+							'<td><span class="wps-p-4-rounded-3">' + link.status_code + '</span></td>' +
 							'</tr>';
 					});
 					
@@ -121,7 +121,7 @@ jQuery(document).ready(function($) {
 				
 				$results.html(html);
 			} else {
-				$results.html('<div style="border-left: 4px solid #dc3545; padding: 15px; background: #fff8f9;">' +
+				$results.html('<div class="wps-p-15">' +
 					'<strong><?php esc_js( esc_html_e( 'Error:', 'wpshadow' ) ); ?></strong> ' + response.data + '</div>');
 			}
 			

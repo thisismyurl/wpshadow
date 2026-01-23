@@ -338,7 +338,7 @@ class Email_Recipient_Manager {
 		$message = $result['message'];
 		$status  = $result['success'] ? 'success' : 'error';
 
-		echo '<div style="padding: 20px; text-align: center; font-family: Arial, sans-serif;">';
+		echo '<div class="wps-p-20">';
 		echo '<h2>Email Verification</h2>';
 		echo '<p style="color: ' . ( $result['success'] ? 'green' : 'red' ) . ';">' . esc_html( $message ) . '</p>';
 		echo '<p><a href="' . esc_url( admin_url( 'admin.php?page=wpshadow-settings' ) ) . '">Back to WPShadow Settings</a></p>';

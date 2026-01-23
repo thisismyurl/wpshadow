@@ -120,24 +120,24 @@ $action_labels = array(
 	<p><?php esc_html_e( 'Comprehensive audit log of all WPShadow actions and system changes.', 'wpshadow' ); ?></p>
 	
 	<!-- Filters -->
-	<div style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; margin: 20px 0;">
-		<form method="get" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; align-items: end;">
+	<div class="wps-card" class="wps-m-20">
+		<form method="get" class="wps-grid wps-grid-auto-200 wps-gap-4" style="align-items: end;">
 			<input type="hidden" name="page" value="wpshadow-activity" />
 			
 			<!-- Search -->
 			<div>
-				<label for="activity_search" style="display: block; margin-bottom: 4px; font-weight: 600;">
+				<label for="activity_search" class="wps-form-label">
 					<?php esc_html_e( 'Search', 'wpshadow' ); ?>
 				</label>
-				<input type="text" id="activity_search" name="activity_search" value="<?php echo esc_attr( $filter_search ); ?>" placeholder="<?php esc_attr_e( 'Search activities...', 'wpshadow' ); ?>" style="width: 100%;" />
+				<input type="text" id="activity_search" name="activity_search" value="<?php echo esc_attr( $filter_search ); ?>" placeholder="<?php esc_attr_e( 'Search activities...', 'wpshadow' ); ?>" class="wps-input" />
 			</div>
 			
 			<!-- Category Filter -->
 			<div>
-				<label for="activity_category" style="display: block; margin-bottom: 4px; font-weight: 600;">
+				<label for="activity_category" class="wps-form-label">
 					<?php esc_html_e( 'Category', 'wpshadow' ); ?>
 				</label>
-				<select id="activity_category" name="activity_category" style="width: 100%;">
+				<select id="activity_category" name="activity_category" class="wps-select">
 					<option value=""><?php esc_html_e( 'All Categories', 'wpshadow' ); ?></option>
 					<?php
 					foreach ( $category_counts as $cat => $count ) :
@@ -152,10 +152,10 @@ $action_labels = array(
 			
 			<!-- Action Filter -->
 			<div>
-				<label for="activity_action" style="display: block; margin-bottom: 4px; font-weight: 600;">
+				<label for="activity_action" class="wps-form-label">
 					<?php esc_html_e( 'Action Type', 'wpshadow' ); ?>
 				</label>
-				<select id="activity_action" name="activity_action" style="width: 100%;">
+				<select id="activity_action" name="activity_action" class="wps-select">
 					<option value=""><?php esc_html_e( 'All Actions', 'wpshadow' ); ?></option>
 					<?php
 					foreach ( $action_counts as $action => $count ) :
@@ -169,7 +169,7 @@ $action_labels = array(
 			</div>
 			
 			<!-- Submit and Export -->
-			<div style="display: flex; gap: 8px;">
+			<div class="wps-flex-gap-8">
 				<button type="submit" class="button button-primary" style="flex: 1;">
 					<?php esc_html_e( 'Filter', 'wpshadow' ); ?>
 				</button>
@@ -192,9 +192,9 @@ $action_labels = array(
 	
 	<!-- Activity Table -->
 	<?php if ( empty( $activities ) ) : ?>
-	<div style="background: #fff; padding: 40px; text-align: center; border: 1px solid #ddd; border-radius: 4px;">
+	<div class="wps-p-40-rounded-4">
 		<span class="dashicons dashicons-info" style="font-size: 48px; color: #999; margin-bottom: 16px;"></span>
-		<p style="font-size: 16px; color: #666; margin: 0;">
+		<p class="wps-m-0">
 			<?php echo empty( $filters ) ? esc_html__( 'No activities recorded yet.', 'wpshadow' ) : esc_html__( 'No activities match your filters.', 'wpshadow' ); ?>
 		</p>
 	</div>
@@ -229,7 +229,7 @@ $action_labels = array(
 				<td><?php echo esc_html( $activity['user_name'] ); ?></td>
 				<td>
 					<?php if ( ! empty( $activity['category'] ) ) : ?>
-					<span style="display: inline-block; padding: 4px 8px; background: <?php echo esc_attr( $cat_color ); ?>; color: #fff; border-radius: 3px; font-size: 11px; font-weight: 600;">
+					<span class="wps-inline-block-p-4-rounded-3">
 						<?php echo esc_html( $cat_label ); ?>
 					</span>
 					<?php else : ?>
@@ -240,7 +240,7 @@ $action_labels = array(
 				<td>
 					<div><?php echo esc_html( $activity['details'] ); ?></div>
 					<?php if ( ! empty( $kb_link ) || ! empty( $training_link ) ) : ?>
-					<div style="margin-top: 6px; display: flex; gap: 10px; flex-wrap: wrap; font-size: 11px;">
+					<div class="wps-flex-gap-10">
 						<?php if ( ! empty( $kb_link ) ) : ?>
 							<a href="<?php echo esc_url( $kb_link ); ?>" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 600;">
 								<?php esc_html_e( 'Learn more (KB)', 'wpshadow' ); ?>

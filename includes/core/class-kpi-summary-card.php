@@ -25,34 +25,34 @@ class KPI_Summary_Card {
 	public static function render() {
 		$kpis = KPI_Tracker::get_kpi_summary();
 		?>
-		<div class="wpshadow-kpi-summary-card" style="margin: 30px 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 24px; color: white; box-shadow: 0 8px 16px rgba(0,0,0,0.2);">
+		<div class="wpshadow-kpi-summary-card" class="wps-m-30-p-24-rounded-12">
 			
 			<!-- Header -->
 			<div style="margin-bottom: 20px;">
-				<h2 style="margin: 0 0 8px 0; font-size: 24px; display: flex; align-items: center; gap: 8px;">
+				<h2 class="wps-flex-gap-8-items-center-m-0">
 					<span class="dashicons dashicons-chart-line" style="font-size: 28px;"></span>
 				<?php esc_html_e( 'WPShadow Impact', 'wpshadow' ); ?>
 				</h2>
-				<p style="margin: 0; font-size: 14px; opacity: 0.9;">
+				<p class="wps-m-0">
 					<?php esc_html_e( 'The value you\'ve gained since installing WPShadow', 'wpshadow' ); ?>
 				</p>
 			</div>
 			
 			<!-- Toggle between Human & Executive View -->
-			<div style="margin-bottom: 20px; display: flex; gap: 8px;">
-				<button class="wpshadow-kpi-toggle" data-view="human" style="padding: 8px 16px; background: rgba(255,255,255,0.3); color: white; border: 1px solid rgba(255,255,255,0.5); border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.2s;">
+			<div class="wps-flex-gap-8">
+				<button class="wpshadow-kpi-toggle" data-view="human" class="wps-p-8-rounded-4">
 					<?php esc_html_e( '👤 Human Value', 'wpshadow' ); ?>
 				</button>
-				<button class="wpshadow-kpi-toggle" data-view="executive" style="padding: 8px 16px; background: rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.3); border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.2s;">
+				<button class="wpshadow-kpi-toggle" data-view="executive" class="wps-p-8-rounded-4">
 					<?php esc_html_e( '📊 Executive Value', 'wpshadow' ); ?>
 				</button>
 			</div>
 			
 			<!-- Human Value View (Default) -->
-			<div class="wpshadow-kpi-human-view" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+			<div class="wpshadow-kpi-human-view wps-grid wps-grid-auto-200 wps-gap-4">
 				
 				<!-- Time Saved Card -->
-				<div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; border-left: 4px solid #4ade80;">
+				<div class="wps-p-16-rounded-8">
 					<div style="font-size: 12px; opacity: 0.8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
 						<?php esc_html_e( '⏱️ Time Saved', 'wpshadow' ); ?>
 					</div>
@@ -65,7 +65,7 @@ class KPI_Summary_Card {
 				</div>
 				
 				<!-- Issues Fixed Card -->
-				<div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; border-left: 4px solid #60a5fa;">
+				<div class="wps-p-16-rounded-8">
 					<div style="font-size: 12px; opacity: 0.8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
 						<?php esc_html_e( '🛡️ Issues Fixed', 'wpshadow' ); ?>
 					</div>
@@ -78,7 +78,7 @@ class KPI_Summary_Card {
 				</div>
 				
 				<!-- Security Improvements Card -->
-				<div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; border-left: 4px solid #f87171;">
+				<div class="wps-p-16-rounded-8">
 					<div style="font-size: 12px; opacity: 0.8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
 						<?php esc_html_e( '🔒 Security Wins', 'wpshadow' ); ?>
 					</div>
@@ -91,7 +91,7 @@ class KPI_Summary_Card {
 				</div>
 				
 				<!-- Health Improvement Card -->
-				<div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; border-left: 4px solid #fbbf24;">
+				<div class="wps-p-16-rounded-8">
 					<div style="font-size: 12px; opacity: 0.8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
 						<?php esc_html_e( '📈 Health Trend', 'wpshadow' ); ?>
 					</div>
@@ -106,10 +106,10 @@ class KPI_Summary_Card {
 			</div>
 			
 			<!-- Executive Value View (Hidden by default) -->
-			<div class="wpshadow-kpi-executive-view" style="display: none; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+			<div class="wpshadow-kpi-executive-view wps-grid wps-grid-auto-200 wps-gap-4" class="wps-none">
 				
 				<!-- ROI Card -->
-				<div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; border-left: 4px solid #34d399;">
+				<div class="wps-p-16-rounded-8">
 					<div style="font-size: 12px; opacity: 0.8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
 						<?php esc_html_e( '💰 Labor Cost Avoided', 'wpshadow' ); ?>
 					</div>
@@ -122,7 +122,7 @@ class KPI_Summary_Card {
 				</div>
 				
 				<!-- Critical Risks Mitigated -->
-				<div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; border-left: 4px solid #f87171;">
+				<div class="wps-p-16-rounded-8">
 					<div style="font-size: 12px; opacity: 0.8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
 						<?php esc_html_e( '⚠️ Critical Risks Mitigated', 'wpshadow' ); ?>
 					</div>
@@ -135,7 +135,7 @@ class KPI_Summary_Card {
 				</div>
 				
 				<!-- Performance Optimizations -->
-				<div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; border-left: 4px solid #60a5fa;">
+				<div class="wps-p-16-rounded-8">
 					<div style="font-size: 12px; opacity: 0.8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
 						<?php esc_html_e( '⚡ Performance Gains', 'wpshadow' ); ?>
 					</div>
@@ -148,7 +148,7 @@ class KPI_Summary_Card {
 				</div>
 				
 				<!-- Health Score Improvement -->
-				<div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; border-left: 4px solid #fbbf24;">
+				<div class="wps-p-16-rounded-8">
 					<div style="font-size: 12px; opacity: 0.8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
 						<?php esc_html_e( '📊 Health Score Growth', 'wpshadow' ); ?>
 					</div>
@@ -209,7 +209,7 @@ class KPI_Summary_Card {
 	 */
 	public static function metric_card( $label, $value, $icon = '📊', $color = '#667eea' ) {
 		return sprintf(
-			'<div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; border-left: 4px solid %s;">
+			'<div class="wps-p-16-rounded-8">
 				<div style="font-size: 12px; opacity: 0.8; margin-bottom: 8px;">%s %s</div>
 				<div style="font-size: 24px; font-weight: bold; margin-bottom: 4px;">%s</div>
 			</div>',

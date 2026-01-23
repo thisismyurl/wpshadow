@@ -27,13 +27,13 @@ class Report_Form {
 	public static function render(): string {
 		ob_start();
 		?>
-		<div style="padding: 0;">
+		<div class="wps-p-0">
 			<!-- Page Header -->
-			<div style="padding: 24px 0; margin-bottom: 24px;">
-				<h1 style="margin: 0 0 8px; font-size: 28px; color: #1d2327;">
+			<div class="wps-p-24">
+				<h1 class="wps-m-0">
 					<?php esc_html_e( 'Generate Reports', 'wpshadow' ); ?>
 				</h1>
-				<p style="margin: 0; color: #666; font-size: 15px;">
+				<p class="wps-m-0">
 					<?php esc_html_e( 'Create, preview, and export custom reports of your site activity.', 'wpshadow' ); ?>
 				</p>
 			</div>
@@ -41,11 +41,11 @@ class Report_Form {
 			<div class="wps-card">
 				<div class="wps-card-header">
 					<div>
-						<h2 class="wps-card-title" style="margin: 0;">
+						<h2 class="wps-card-title" class="wps-m-0">
 							<span class="dashicons dashicons-chart-line"></span>
 							<?php esc_html_e( 'Report Generator', 'wpshadow' ); ?>
 						</h2>
-						<p class="wps-card-description" style="margin: 8px 0 0;">
+						<p class="wps-card-description" class="wps-m-8">
 							<?php esc_html_e( 'Configure date range, type, and format for your report.', 'wpshadow' ); ?>
 						</p>
 					</div>
@@ -59,7 +59,7 @@ class Report_Form {
 							<label class="wps-form-label">
 								<?php esc_html_e( 'Quick Presets', 'wpshadow' ); ?>
 							</label>
-							<div style="display: flex; gap: 8px; flex-wrap: wrap;">
+							<div class="wps-flex-gap-8">
 								<button type="button" class="wps-btn wps-btn-secondary" data-preset="today">
 									<?php esc_html_e( 'Today', 'wpshadow' ); ?>
 								</button>
@@ -76,7 +76,7 @@ class Report_Form {
 						</div>
 
 						<!-- Date Range -->
-						<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0;">
+						<div class="wps-grid wps-grid-auto-200 wps-gap-4 wps-my-4">
 							<div class="wps-form-group">
 								<label for="report_start_date" class="wps-form-label">
 									<?php esc_html_e( 'Start Date', 'wpshadow' ); ?>
@@ -135,15 +135,15 @@ class Report_Form {
 			</div>
 
 			<!-- Loading State -->
-			<div class="wps-alert wps-alert-info" id="loading-spinner" style="display: none; margin-top: 16px;">
+			<div class="wps-alert wps-alert-info wps-mt-4" id="loading-spinner" class="wps-none">
 				<span class="dashicons dashicons-hourglass" style="margin-right: 8px;"></span>
 				<?php esc_html_e( 'Generating report...', 'wpshadow' ); ?>
 			</div>
 
 			<!-- Report Preview -->
-			<div id="report-preview" class="wps-card" style="display: none; margin-top: 24px;">
-				<div class="wps-card-header" style="display: flex; justify-content: space-between; align-items: center;">
-					<h3 class="wps-card-title" style="margin: 0;">
+			<div id="report-preview" class="wps-card" class="wps-none">
+				<div class="wps-card-header" class="wps-flex-items-center-justify-space-between">
+					<h3 class="wps-card-title" class="wps-m-0">
 						<?php esc_html_e( 'Report Preview', 'wpshadow' ); ?>
 					</h3>
 					<button type="button" class="wps-btn wps-btn-ghost" id="close-preview">
@@ -154,10 +154,10 @@ class Report_Form {
 			</div>
 
 			<!-- Email Modal -->
-			<div id="email-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center;">
+			<div id="email-modal" class="wps-none">
 				<div class="wps-card" style="max-width: 500px; width: 90%;">
-					<div class="wps-card-header" style="display: flex; justify-content: space-between; align-items: center;">
-						<h3 class="wps-card-title" style="margin: 0;">
+					<div class="wps-card-header" class="wps-flex-items-center-justify-space-between">
+						<h3 class="wps-card-title" class="wps-m-0">
 							<?php esc_html_e( 'Email Report', 'wpshadow' ); ?>
 						</h3>
 						<button type="button" class="wps-btn wps-btn-ghost" id="close-email-modal">
@@ -211,27 +211,27 @@ class Report_Form {
 	public static function render_previous_reports(): string {
 		$html = '<div class="wps-card" style="margin-top: 24px;">
 			<div class="wps-card-header">
-				<h3 class="wps-card-title" style="margin: 0;">
+				<h3 class="wps-card-title" class="wps-m-0">
 					<span class="dashicons dashicons-archive" style="margin-right: 8px;"></span>
 					' . esc_html__( 'Previous Reports', 'wpshadow' ) . '
 				</h3>
 			</div>
 			<div class="wps-card-body">
-				<table class="wp-list-table widefat striped" style="margin: 0;">
+				<table class="wp-list-table widefat striped" class="wps-m-0">
 					<thead>
 						<tr>
-							<th style="padding: 12px;">' . esc_html__( 'Date Range', 'wpshadow' ) . '</th>
-							<th style="padding: 12px;">' . esc_html__( 'Type', 'wpshadow' ) . '</th>
-							<th style="padding: 12px;">' . esc_html__( 'Generated', 'wpshadow' ) . '</th>
-							<th style="padding: 12px;">' . esc_html__( 'Actions', 'wpshadow' ) . '</th>
+							<th class="wps-p-12">' . esc_html__( 'Date Range', 'wpshadow' ) . '</th>
+							<th class="wps-p-12">' . esc_html__( 'Type', 'wpshadow' ) . '</th>
+							<th class="wps-p-12">' . esc_html__( 'Generated', 'wpshadow' ) . '</th>
+							<th class="wps-p-12">' . esc_html__( 'Actions', 'wpshadow' ) . '</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
-							<td style="padding: 12px;">2026-01-01 to 2026-01-31</td>
-							<td style="padding: 12px;">Summary</td>
-							<td style="padding: 12px;">2026-02-01 10:00</td>
-							<td style="padding: 12px;">
+							<td class="wps-p-12">2026-01-01 to 2026-01-31</td>
+							<td class="wps-p-12">Summary</td>
+							<td class="wps-p-12">2026-02-01 10:00</td>
+							<td class="wps-p-12">
 								<a href="#" class="wps-btn wps-btn-secondary" style="margin-right: 8px;">' . esc_html__( 'View', 'wpshadow' ) . '</a>
 								<a href="#" class="wps-btn wps-btn-secondary">' . esc_html__( 'Download', 'wpshadow' ) . '</a>
 							</td>

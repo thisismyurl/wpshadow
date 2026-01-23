@@ -801,14 +801,33 @@ jQuery(document).ready(function ($) {
 	 */
 	function updateAllColumnCounts() {
 		$('.kanban-column').each(function () {
-			const count = $(this).find('.finding-card').length;
+			const $column = $(this);
+			const status = $column.data('status');
+			let count;
+
+			// Only count finding-card elements directly in this column's kanban-column-content
+			const $content = $column.find('.kanban-column-content');
+			
+			if (status === 'detected') {
+				// For detected column, show visible count / total count
+				const visibleCount = $content.find('> .finding-card:not(.wpshadow-hidden-finding)').length;
+				const totalCount = $content.find('> .finding-card').length;
+				count = visibleCount;
+				if (totalCount > visibleCount) {
+					count = visibleCount + ' / ' + totalCount;
+				}
+			} else {
+				// Other columns show total count
+				count = $content.find('> .finding-card').length;
+			}
+
 			const $header = $(this).find('h3');
-			const $countSpan = $header.find('.column-count');
+			const $countSpan = $header.find('span:last');
 
 			if ($countSpan.length) {
 				$countSpan.text(count);
 			} else {
-				$header.append(' <span class="column-count">' + count + '</span>');
+				$header.append(' <span style="color: #999; font-weight: 400; float: right;">' + count + '</span>');
 			}
 		});
 	}

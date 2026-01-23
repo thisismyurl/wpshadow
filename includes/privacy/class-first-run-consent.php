@@ -52,27 +52,16 @@ class First_Run_Consent {
 	 */
 	public static function get_consent_html() {
 		return '
-		<div id="wpshadow-consent-banner" class="wpshadow-consent-flow" style="
-			position: fixed;
-			bottom: 0;
-			right: 0;
-			width: 420px;
-			background: white;
-			border: 1px solid #ddd;
-			border-radius: 10px 10px 0 0;
-			box-shadow: 0 -6px 18px rgba(0,0,0,0.18);
-			padding: 22px;
-			z-index: 99999;
-		">
+		<div id="wpshadow-consent-banner" class="wpshadow-consent-flow" class="wps-p-22-rounded-10 10 0 0">
 			<div class="wpshadow-consent-header">
 				<h3 style="margin-top: 0;">' . esc_html( __( 'Your Privacy Matters', 'wpshadow' ) ) . '</h3>
-				<p style="margin: 10px 0; color: #666;">' .
+				<p class="wps-m-10">' .
 					esc_html( __( 'WPShadow respects your privacy. Here\'s what we collect and how we use it.', 'wpshadow' ) ) .
 				'</p>
 			</div>
 
-			<div class="wpshadow-consent-options" style="margin: 20px 0;">
-				<label style="display: flex; align-items: center; margin: 12px 0; cursor: pointer;">
+			<div class="wpshadow-consent-options" class="wps-m-20">
+				<label class="wps-flex-items-center-m-12">
 					<input type="checkbox" name="functional_cookies" checked disabled style="margin-right: 10px; cursor: not-allowed;" />
 					<span>
 						<strong>' . esc_html( __( 'Essential Functions', 'wpshadow' ) ) . '</strong>
@@ -83,7 +72,7 @@ class First_Run_Consent {
 					</span>
 				</label>
 
-				<label style="display: flex; align-items: center; margin: 12px 0; cursor: pointer;">
+				<label class="wps-flex-items-center-m-12">
 					<input type="checkbox" name="error_reporting" checked disabled style="margin-right: 10px; cursor: not-allowed;" />
 					<span>
 						<strong>' . esc_html( __( 'Error Reporting', 'wpshadow' ) ) . '</strong>
@@ -94,7 +83,7 @@ class First_Run_Consent {
 					</span>
 				</label>
 
-				<label style="display: flex; align-items: center; margin: 12px 0; cursor: pointer;">
+				<label class="wps-flex-items-center-m-12">
 					<input type="checkbox" name="anonymized_telemetry" style="margin-right: 10px;" />
 					<span>
 						<strong>' . esc_html( __( 'Anonymous Analytics', 'wpshadow' ) ) . '</strong>
@@ -106,31 +95,15 @@ class First_Run_Consent {
 				</label>
 			</div>
 
-			<div style="background: #f5f5f5; padding: 12px; border-radius: 4px; margin: 15px 0; font-size: 12px; color: #666;">
+			<div class="wps-m-15-p-12-rounded-4">
 				' . wp_kses_post( __( '<strong>We never:</strong> Track IPs, collect passwords, or share data with third parties.', 'wpshadow' ) ) . '
 			</div>
 
-			<div style="display: flex; gap: 10px;">
-				<button class="wpshadow-consent-dismiss" style="
-					flex: 1;
-					padding: 10px;
-					background: #f0f0f0;
-					border: 1px solid #ddd;
-					border-radius: 4px;
-					cursor: pointer;
-				">' . esc_html( __( 'Not now', 'wpshadow' ) ) . '</button>
-				<button class="wpshadow-consent-accept" style="
-					flex: 1;
-					padding: 10px;
-					background: #2196f3;
-					color: white;
-					border: none;
-					border-radius: 4px;
-					cursor: pointer;
-					font-weight: bold;
-				">' . esc_html( __( 'Save preferences', 'wpshadow' ) ) . '</button>
+			<div class="wps-flex-gap-10">
+				<button class="wpshadow-consent-dismiss" class="wps-p-10-rounded-4">' . esc_html( __( 'Not now', 'wpshadow' ) ) . '</button>
+				<button class="wpshadow-consent-accept" class="wps-p-10-rounded-4">' . esc_html( __( 'Save preferences', 'wpshadow' ) ) . '</button>
 			</div>
-			<p style="margin: 10px 0 0; font-size: 12px;">
+			<p class="wps-m-10">
 				<a href="https://wpshadow.com/privacy/?utm_source=wpshadow&utm_medium=plugin&utm_campaign=consent" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 600;">
 					' . esc_html( __( 'Read our privacy approach', 'wpshadow' ) ) . '
 				</a>

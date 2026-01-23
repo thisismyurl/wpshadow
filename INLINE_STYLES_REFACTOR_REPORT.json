@@ -1,0 +1,14 @@
+{
+  "total_css_rules_generated": 370,
+  "css_rules_by_category": {
+    "layouts": 143,
+    "spacing": 43,
+    "colors": 184
+  },
+  "style_replacements": 370,
+  "css_files_created": [
+    "/workspaces/wpshadow/assets/css/wps-inline-layouts.css",
+    "/workspaces/wpshadow/assets/css/wps-inline-colors.css",
+    "/workspaces/wpshadow/assets/css/wps-inline-spacing.css"
+  ]
+}

@@ -194,32 +194,36 @@
 			var tooltipRect = tooltipEl.getBoundingClientRect();
 			tooltipEl.style.visibility = prevVisibility;
 			tooltipEl.style.display = prevDisplay;
-			var viewportWidth = window.innerWidth;
-			var viewportHeight = window.innerHeight;
+			var viewportWidth = document.documentElement.clientWidth || window.innerWidth;
+			var viewportHeight = document.documentElement.clientHeight || window.innerHeight;
 			var offset = 10;
 			var x = 0;
 			var y = 0;
 			var arrowClass = 'arrow-top';
 
-			var canShowBelow = ( triggerRect.bottom + offset + tooltipRect.height ) <= ( viewportHeight + window.scrollY );
+			var canShowBelow = ( triggerRect.bottom + offset + tooltipRect.height ) <= viewportHeight;
 			if ( canShowBelow ) {
-				y = triggerRect.bottom + offset + window.scrollY;
+				y = triggerRect.bottom + offset;
 				arrowClass = 'arrow-top';
 			} else {
-				y = triggerRect.top - offset - tooltipRect.height + window.scrollY;
+				y = triggerRect.top - offset - tooltipRect.height;
 				arrowClass = 'arrow-bottom';
 			}
 
-			// Center horizontally relative to trigger
+			// Center horizontally relative to trigger.
 			x = triggerRect.left + ( triggerRect.width - tooltipRect.width ) / 2;
 
-			// Keep tooltip in viewport horizontally
+			// Keep tooltip in viewport horizontally.
 			if ( x < 10 ) {
 				x = 10;
 			}
 
 			if ( x + tooltipRect.width > viewportWidth - 10 ) {
 				x = viewportWidth - tooltipRect.width - 10;
+			}
+
+			if ( y < offset ) {
+				y = offset;
 			}
 
 			tooltipEl.className = tooltipEl.className.replace( /arrow-\w+/g, '' );
@@ -259,7 +263,7 @@
 		attachEventListeners: function() {
 			var self = this;
 
-			// Reposition tooltips on window resize
+			// Reposition tooltips on window resize.
 			var resizeTimeout;
 			window.addEventListener( 'resize', function() {
 				clearTimeout( resizeTimeout );
@@ -272,7 +276,20 @@
 				}, 250 );
 			} );
 
-			// Hide tooltips when pressing Escape
+			// Reposition tooltips on scroll so fixed positioning stays aligned.
+			var scrollTimeout;
+			window.addEventListener( 'scroll', function() {
+				clearTimeout( scrollTimeout );
+				scrollTimeout = setTimeout( function() {
+					self.tooltipElements.forEach( function( tooltipEl, triggerEl ) {
+						if ( tooltipEl.classList.contains( 'visible' ) ) {
+							self.positionTooltip( tooltipEl, triggerEl );
+						}
+					} );
+				}, 50 );
+			} );
+
+			// Hide tooltips when pressing Escape.
 			document.addEventListener( 'keydown', function( e ) {
 				if ( e.key === 'Escape' && self.activeTooltip ) {
 					self.hideTooltip( self.activeTooltip );

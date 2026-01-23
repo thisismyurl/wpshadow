@@ -33,30 +33,31 @@ class Guardian_Dashboard {
 	public static function render(): string {
 		ob_start();
 		?>
-		<div style="padding: 0;">
+		<div class="wps-page-container">
 			<!-- Page Header -->
-			<div style="padding: 24px 0; margin-bottom: 24px;">
-				<h1 style="margin: 0 0 8px; font-size: 28px; color: #1d2327;">
+			<div class="wps-page-header">
+				<h1 class="wps-page-title">
+					<span class="dashicons dashicons-shield-alt" style="color: var(--wps-primary);"></span>
 					<?php esc_html_e( 'WPShadow Guardian Dashboard', 'wpshadow' ); ?>
 				</h1>
-				<p style="margin: 0; color: #666; font-size: 15px;">
+				<p class="wps-page-subtitle">
 					<?php esc_html_e( 'Automated health monitoring and intelligent fixes', 'wpshadow' ); ?>
 				</p>
 			</div>
 
 			<!-- Status and Actions Bar -->
-			<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; gap: 16px;">
+			<div class="wps-flex wps-justify-between wps-items-center wps-gap-4 wps-mb-4">
 				<?php echo wp_kses_post( self::render_status_badge() ); ?>
 				<?php echo wp_kses_post( self::render_quick_actions() ); ?>
 			</div>
 
 			<!-- KPI Cards Grid -->
-			<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px;">
+			<div class="wps-grid wps-grid-auto-250 wps-gap-3 wps-mb-4">
 				<?php echo wp_kses_post( self::render_kpi_cards() ); ?>
 			</div>
 
 			<!-- Main Content Grid -->
-			<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+			<div class="wps-grid wps-grid-auto-320 wps-gap-4">
 				<!-- Left Column: Activity & Stats -->
 				<div>
 					<?php echo wp_kses_post( self::render_activity_timeline() ); ?>
@@ -71,7 +72,6 @@ class Guardian_Dashboard {
 			</div>
 		</div>
 		<?php
-		
 		return ob_get_clean();
 	}
 	
@@ -87,7 +87,7 @@ class Guardian_Dashboard {
 		$status_color = $is_enabled ? '#10b981' : '#6b7280';
 		
 		return sprintf(
-			'<div style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #f3f4f6; border-radius: 8px; border: 1px solid #e5e7eb; cursor: pointer;" onclick="wpshadowToggleGuardian()" title="%s">
+			'<div class="wps-flex-gap-12-items-center-p-12-rounded-8" onclick="wpshadowToggleGuardian()" title="%s">
 				<span class="dashicons %s" style="font-size: 20px; width: 20px; height: 20px; color: %s;"></span>
 				<span style="font-weight: 600; color: #1f2937;">%s</span>
 			</div>
@@ -124,15 +124,15 @@ class Guardian_Dashboard {
 	 * @return string HTML
 	 */
 	private static function render_quick_actions(): string {
-		$html = '<div style="display: flex; gap: 12px;">';
+		$html = '<div class="wps-flex-gap-12">';
 		
 		$html .= sprintf(
-			'<button class="wps-btn wps-btn-secondary" data-action="preview-fixes">%s</button>',
+			'<button class="wps-btn wps-btn-secondary" data-action="preview-fixes" style="white-space: nowrap;">%s</button>',
 			esc_html__( 'Preview Fixes', 'wpshadow' )
 		);
 		
 		$html .= sprintf(
-			'<a href="%s" class="wps-btn wps-btn-secondary">%s</a>',
+			'<a href="%s" class="wps-btn wps-btn-secondary" style="white-space: nowrap;">%s</a>',
 			esc_url( admin_url( 'admin.php?page=wpshadow-guardian-settings' ) ),
 			esc_html__( 'Settings', 'wpshadow' )
 		);
@@ -181,7 +181,7 @@ class Guardian_Dashboard {
 		foreach ( $cards as $card ) {
 			$html .= sprintf(
 				'<div class="wps-card">
-					<div class="wps-card-body" style="display: flex; align-items: center; gap: 16px;">
+					<div class="wps-card-body" class="wps-flex-gap-16-items-center">
 						<span class="dashicons %s" style="font-size: 40px; width: 40px; height: 40px; color: %s;"></span>
 						<div>
 							<div style="font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">%s</div>
@@ -208,18 +208,18 @@ class Guardian_Dashboard {
 		$activities = Guardian_Activity_Logger::get_activity_log( 10 );
 		
 		if ( empty( $activities ) ) {
-			return '<div class="wps-card"><div class="wps-card-body"><p style="margin: 0; color: #6b7280;">' . esc_html__( 'No recent activity', 'wpshadow' ) . '</p></div></div>';
+			return '<div class="wps-card"><div class="wps-card-body"><p class="wps-m-0">' . esc_html__( 'No recent activity', 'wpshadow' ) . '</p></div></div>';
 		}
 		
 		$html = '<div class="wps-card">
 			<div class="wps-card-header">
-				<h3 class="wps-card-title" style="margin: 0;">
+				<h3 class="wps-card-title" class="wps-m-0">
 					<span class="dashicons dashicons-clock" style="margin-right: 8px;"></span>
 					' . esc_html__( 'Recent Activity', 'wpshadow' ) . '
 				</h3>
 			</div>
 			<div class="wps-card-body">
-				<div style="display: flex; flex-direction: column; gap: 16px;">';
+				<div class="wps-flex-gap-16">';
 		
 		foreach ( $activities as $activity ) {
 			$action_text = self::format_activity_action( $activity );
@@ -298,15 +298,15 @@ class Guardian_Dashboard {
 	private static function render_auto_fix_stats(): string {
 		$stats = Auto_Fix_Executor::get_statistics();
 		
-		$html = '<div class="wps-card" style="margin-top: 16px;">
+		$html = '<div class="wps-card wps-mt-4">
 			<div class="wps-card-header">
-				<h3 class="wps-card-title" style="margin: 0;">
+				<h3 class="wps-card-title" class="wps-m-0">
 					<span class="dashicons dashicons-chart-bar" style="margin-right: 8px;"></span>
 					' . esc_html__( 'Auto-Fix Statistics', 'wpshadow' ) . '
 				</h3>
 			</div>
 			<div class="wps-card-body">
-				<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">';
+				<div class="wps-grid wps-grid-auto-200 wps-gap-3">';
 		
 		$stat_items = [
 			__( 'Executions', 'wpshadow' ) => $stats['total_executions'] ?? 0,
@@ -341,7 +341,7 @@ class Guardian_Dashboard {
 		
 		$html = '<div class="wps-card">
 			<div class="wps-card-header">
-				<h3 class="wps-card-title" style="margin: 0;">
+				<h3 class="wps-card-title" class="wps-m-0">
 					<span class="dashicons dashicons-backup" style="margin-right: 8px;"></span>
 					' . esc_html__( 'Recovery Points', 'wpshadow' ) . '
 				</h3>
@@ -349,18 +349,18 @@ class Guardian_Dashboard {
 			<div class="wps-card-body">';
 		
 		if ( empty( $recovery_points ) ) {
-			$html .= '<p style="margin: 0; color: #6b7280;">' . esc_html__( 'No recovery points yet', 'wpshadow' ) . '</p>';
+			$html .= '<p class="wps-m-0">' . esc_html__( 'No recovery points yet', 'wpshadow' ) . '</p>';
 		} else {
-			$html .= '<div style="display: flex; flex-direction: column; gap: 12px;">';
+			$html .= '<div class="wps-flex-gap-12">';
 			
 			foreach ( $recovery_points as $point ) {
 				$html .= sprintf(
-					'<div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f3f4f6; border-radius: 6px;">
+					'<div class="wps-flex-items-center-justify-space-between-">
 						<div>
 							<div style="font-weight: 500; color: #1f2937;">%s</div>
 							<div style="font-size: 12px; color: #6b7280; margin-top: 4px;">%s</div>
 						</div>
-						<button class="wps-btn wps-btn-secondary" data-recovery-id="%s" data-action="restore" style="padding: 4px 12px; font-size: 12px;">
+						<button class="wps-btn wps-btn-secondary" data-recovery-id="%s" data-action="restore" class="wps-p-4">
 							%s
 						</button>
 					</div>',
@@ -387,7 +387,7 @@ class Guardian_Dashboard {
 	private static function render_system_health(): string {
 		$html = '<div class="wps-card" style="margin-top: 16px;">
 			<div class="wps-card-header">
-				<h3 class="wps-card-title" style="margin: 0;">
+				<h3 class="wps-card-title" class="wps-m-0">
 					<span class="dashicons dashicons-heart" style="margin-right: 8px;"></span>
 					' . esc_html__( 'System Health', 'wpshadow' ) . '
 				</h3>
@@ -417,12 +417,12 @@ class Guardian_Dashboard {
 			],
 		];
 		
-		$html .= '<div style="display: flex; flex-direction: column; gap: 12px;">';
+		$html .= '<div class="wps-flex-gap-12">';
 		
 		foreach ( $checks as $check ) {
 			$status_color = 'good' === $check['status'] ? '#10b981' : ( 'warning' === $check['status'] ? '#f59e0b' : '#ef4444' );
 			$html .= sprintf(
-				'<div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: #f3f4f6; border-radius: 6px; border-left: 4px solid %s;">
+				'<div class="wps-flex-gap-12-items-center-p-12-rounded-6">
 					<span class="dashicons %s" style="color: %s; font-size: 20px; width: 20px; height: 20px;"></span>
 					<div style="flex: 1;">
 						<div style="font-weight: 500; color: #1f2937;">%s</div>

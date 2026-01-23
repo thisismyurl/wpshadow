@@ -110,20 +110,20 @@ class Links_Post_Type {
 		}
 
 		?>
-		<div style="margin: 15px 0;">
+		<div class="wps-m-15">
 			<label><strong><?php esc_html_e( 'Link URL', 'wpshadow' ); ?></strong></label>
-			<input type="url" name="wpshadow_link_url" value="<?php echo esc_attr( $link_url ); ?>" style="width: 100%; padding: 8px; box-sizing: border-box;" placeholder="https://example.com" />
+			<input type="url" name="wpshadow_link_url" value="<?php echo esc_attr( $link_url ); ?>" class="wps-p-8" placeholder="https://example.com" />
 		</div>
 
-		<div style="margin: 15px 0;">
+		<div class="wps-m-15">
 			<label><strong><?php esc_html_e( 'Link Display Text', 'wpshadow' ); ?></strong></label>
-			<p style="font-size: 12px; color: #666; margin: 5px 0;">
+			<p class="wps-m-5">
 				<?php esc_html_e( 'The text that appears in articles (exact match required)', 'wpshadow' ); ?>
 			</p>
-			<input type="text" name="wpshadow_link_text" value="<?php echo esc_attr( $link_text ); ?>" style="width: 100%; padding: 8px; box-sizing: border-box;" placeholder="e.g., WPShadow" />
+			<input type="text" name="wpshadow_link_text" value="<?php echo esc_attr( $link_text ); ?>" class="wps-p-8" placeholder="e.g., WPShadow" />
 		</div>
 
-		<div style="margin: 15px 0;">
+		<div class="wps-m-15">
 			<label><strong><?php esc_html_e( 'Link Behavior', 'wpshadow' ); ?></strong></label>
 			<div style="margin-top: 8px;">
 				<label>
@@ -139,30 +139,30 @@ class Links_Post_Type {
 			</div>
 		</div>
 
-		<div style="margin: 15px 0; padding: 12px; background: #fff8e5; border-left: 4px solid #ffb81c; border-radius: 4px;">
+		<div class="wps-m-15-p-12-rounded-4">
 			<label>
 				<input type="checkbox" name="wpshadow_link_is_affiliate" value="1" <?php checked( $is_affiliate, '1' ); ?> />
 				<strong><?php esc_html_e( 'This is an affiliate link', 'wpshadow' ); ?></strong>
 			</label>
-			<p style="font-size: 12px; color: #666; margin: 8px 0 0 24px;">
+			<p class="wps-m-8">
 				<?php esc_html_e( 'Checking this will automatically add affiliate disclosure notice to the page', 'wpshadow' ); ?>
 			</p>
 		</div>
 
-		<div style="margin: 15px 0;" id="wpshadow-affiliate-text-box" style="display: none;">
+		<div class="wps-m-15" id="wpshadow-affiliate-text-box" class="wps-none">
 			<label><strong><?php esc_html_e( 'Custom Affiliate Disclosure', 'wpshadow' ); ?></strong></label>
-			<p style="font-size: 12px; color: #666; margin: 5px 0;">
+			<p class="wps-m-5">
 				<?php esc_html_e( 'Leave empty to use default disclosure. Include "##URL##" to show the URL.', 'wpshadow' ); ?>
 			</p>
 			<textarea name="wpshadow_link_affiliate_text" rows="3" style="width: 100%; font-family: monospace;"><?php echo esc_textarea( $affiliate_text ); ?></textarea>
 		</div>
 
-		<div style="margin: 15px 0;">
+		<div class="wps-m-15">
 			<label>
 				<input type="checkbox" name="wpshadow_link_enabled" value="1" <?php checked( $link_enabled, '1' ); ?> />
 				<?php esc_html_e( 'Enable this link in content', 'wpshadow' ); ?>
 			</label>
-			<p style="font-size: 12px; color: #666; margin: 5px 0;">
+			<p class="wps-m-5">
 				<?php esc_html_e( 'If checked, this link will be automatically applied when found in article text.', 'wpshadow' ); ?>
 			</p>
 		</div>

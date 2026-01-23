@@ -212,7 +212,7 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 								?>
 							</p>
 							<?php if ( $current_from_email === $wp_from_email ) : ?>
-								<div class="notice notice-warning inline" style="margin: 10px 0; padding: 10px;">
+								<div class="notice notice-warning inline" class="wps-m-10-p-10">
 									<p>
 										<strong><?php esc_html_e( 'Warning:', 'wpshadow' ); ?></strong>
 										<?php
@@ -311,7 +311,7 @@ $wp_from_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( home
 		<form method="post" action="">
 			<?php wp_nonce_field( 'wpshadow_compliance_settings', 'wpshadow_compliance_nonce' ); ?>
 			
-			<div style="background: #f5f5f5; padding: 15px; border-radius: 4px; border-left: 4px solid #00a0d2;">
+			<div class="wps-p-15-rounded-4">
 				<label>
 					<input type="checkbox" 
 							name="email_unchecked_by_default" 

@@ -35,26 +35,8 @@ class Error_Handler {
 	public static function add_error_modal_script(): void {
 		?>
 		<!-- WPShadow Error Handler Modal -->
-		<div id="wpshadow-modal-overlay" style="
-			display: none;
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background: rgba(0,0,0,0.6);
-			z-index: 999999;
-			align-items: center;
-			justify-content: center;
-		">
-			<div style="
-				background: white;
-				padding: 30px;
-				border-radius: 8px;
-				max-width: 500px;
-				width: 90%;
-				box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-			">
+		<div id="wpshadow-modal-overlay" class="wps-none">
+			<div class="wps-p-30-rounded-8">
 				<h2 style="margin-top: 0; color: #0073aa;">
 					<?php esc_html_e( 'How can WPShadow help?', 'wpshadow' ); ?>
 				</h2>
@@ -64,35 +46,24 @@ class Error_Handler {
 				</p>
 				
 				<!-- Option 1: Send Anonymous Report -->
-				<div style="margin: 20px 0; padding: 15px; background: #f0f7ff; border-left: 4px solid #0073aa; border-radius: 4px;">
+				<div class="wps-m-20-p-15-rounded-4">
 					<h3 style="margin-top: 0; font-size: 16px; color: #0073aa;">
 						<?php esc_html_e( '📊 Send Anonymous Report (Recommended)', 'wpshadow' ); ?>
 					</h3>
-					<p style="font-size: 14px; line-height: 1.5; margin: 10px 0;">
+					<p class="wps-m-10">
 						<?php esc_html_e( 'Send error details to WPShadow for personalized suggestions. We collect:', 'wpshadow' ); ?>
 					</p>
-					<ul style="font-size: 13px; color: #666; margin: 10px 0; padding-left: 20px;">
+					<ul class="wps-m-10">
 						<li><?php esc_html_e( 'Error message and location', 'wpshadow' ); ?></li>
 						<li><?php esc_html_e( 'PHP version and WordPress version', 'wpshadow' ); ?></li>
 						<li><?php esc_html_e( 'Active plugins list (names only)', 'wpshadow' ); ?></li>
 					</ul>
-					<p style="font-size: 12px; color: #666; margin: 10px 0 0 0; font-style: italic;">
+					<p class="wps-m-10">
 						<?php esc_html_e( '✓ No personal data • No site URL • No content • Fully anonymous', 'wpshadow' ); ?>
 					</p>
 					<button 
 						id="wpshadow-send-report-btn"
-						style="
-							background: #0073aa; 
-							color: white; 
-							border: none; 
-							padding: 12px 24px; 
-							font-size: 14px; 
-							border-radius: 4px; 
-							cursor: pointer;
-							font-weight: 600;
-							width: 100%;
-							margin-top: 10px;
-						"
+						class="wps-p-12-rounded-4"
 						onclick="wpshadowSendReport()"
 					>
 						<?php esc_html_e( 'Send Report & Get Help', 'wpshadow' ); ?>
@@ -100,32 +71,18 @@ class Error_Handler {
 				</div>
 				
 				<!-- Option 2: Just Read KB -->
-				<div style="margin: 20px 0; padding: 15px; background: #f9f9f9; border-left: 4px solid #999; border-radius: 4px;">
+				<div class="wps-m-20-p-15-rounded-4">
 					<h3 style="margin-top: 0; font-size: 16px; color: #333;">
 						<?php esc_html_e( '📚 Browse Knowledge Base', 'wpshadow' ); ?>
 					</h3>
-					<p style="font-size: 14px; line-height: 1.5; margin: 10px 0;">
+					<p class="wps-m-10">
 						<?php esc_html_e( 'Read general troubleshooting guides without sending anything.', 'wpshadow' ); ?>
 					</p>
 					<a 
 						href="https://wpshadow.com/kb/fatal-errors" 
 						target="_blank" 
 						rel="noopener"
-						style="
-							display: inline-block;
-							background: #666; 
-							color: white; 
-							border: none; 
-							padding: 12px 24px; 
-							font-size: 14px; 
-							border-radius: 4px; 
-							cursor: pointer;
-							text-decoration: none;
-							width: 100%;
-							text-align: center;
-							box-sizing: border-box;
-							margin-top: 10px;
-						"
+						class="wps-inline-block-p-12-rounded-4"
 					>
 						<?php esc_html_e( 'Open Knowledge Base', 'wpshadow' ); ?>
 					</a>
@@ -134,16 +91,7 @@ class Error_Handler {
 				<!-- Close button -->
 				<button 
 					onclick="wpshadowCloseModal()"
-					style="
-						background: transparent;
-						border: 1px solid #ccc;
-						padding: 10px 20px;
-						font-size: 14px;
-						border-radius: 4px;
-						cursor: pointer;
-						width: 100%;
-						margin-top: 10px;
-					"
+					class="wps-p-10-rounded-4"
 				>
 					<?php esc_html_e( 'Close', 'wpshadow' ); ?>
 				</button>
@@ -257,22 +205,13 @@ class Error_Handler {
 		);
 
 		// Add WPShadow help button that opens consent modal
-		$help_section = '<div style="margin-top: 20px; padding: 15px; background: #f0f7ff; border: 1px solid #0073aa; border-radius: 4px;">' . 
-			'<p style="margin: 0 0 10px 0;">' . 
+		$help_section = '<div class="wps-p-15-rounded-4">' . 
+			'<p class="wps-m-0">' . 
 				esc_html__( 'For help resolving this issue, WPShadow can assist:', 'wpshadow' ) . 
 			'</p>' .
 			'<button 
 				id="wpshadow-help-btn" 
-				style="
-					background: #0073aa; 
-					color: white; 
-					border: none; 
-					padding: 10px 20px; 
-					font-size: 14px; 
-					border-radius: 3px; 
-					cursor: pointer;
-					font-weight: 600;
-				"
+				class="wps-p-10-rounded-3"
 				onclick="wpshadowShowHelpModal(' . wp_json_encode( $error_data ) . ')"
 			>' .
 				esc_html__( 'Get Help with This Error', 'wpshadow' ) . 

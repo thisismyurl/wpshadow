@@ -129,25 +129,25 @@ class Leaderboard_Manager {
 	public static function render_leaderboard( $limit = 10 ): void {
 		$top_users = self::get_top_achievers( $limit );
 		?>
-		<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px;">
-			<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+		<div class="wps-p-20-rounded-8">
+			<div class="wps-flex-gap-12-items-center">
 				<span class="dashicons dashicons-chart-bar" style="font-size: 24px; color: #FF6B6B;"></span>
-				<h3 style="margin: 0;"><?php esc_html_e( 'Top Achievers', 'wpshadow' ); ?></h3>
+				<h3 class="wps-m-0"><?php esc_html_e( 'Top Achievers', 'wpshadow' ); ?></h3>
 			</div>
 			
 			<div style="overflow-x: auto;">
 				<table style="width: 100%; font-size: 13px; border-collapse: collapse;">
 					<thead>
 						<tr style="border-bottom: 2px solid #f0f0f0;">
-							<th style="text-align: left; padding: 8px; color: #999;">Rank</th>
-							<th style="text-align: left; padding: 8px; color: #999;">User</th>
-							<th style="text-align: right; padding: 8px; color: #999;">Points</th>
+							<th class="wps-p-8">Rank</th>
+							<th class="wps-p-8">User</th>
+							<th class="wps-p-8">Points</th>
 						</tr>
 					</thead>
 					<tbody>
 						<?php foreach ( $top_users as $index => $user ) : ?>
 							<tr style="border-bottom: 1px solid #f5f5f5; background: <?php echo $index < 3 ? '#fafafa' : '#fff'; ?>;">
-								<td style="padding: 10px 8px; font-weight: 500;">
+								<td class="wps-p-10">
 									<?php
 									if ( $index === 0 ) {
 										echo '🥇';
@@ -160,13 +160,13 @@ class Leaderboard_Manager {
 									}
 									?>
 								</td>
-								<td style="padding: 10px 8px;">
+								<td class="wps-p-10">
 									<?php echo esc_html( $user['user_name'] ); ?>
 									<?php if ( ! empty( $user['blog_name'] ) ) : ?>
 										<br/><span style="font-size: 11px; color: #999;"><?php echo esc_html( $user['blog_name'] ); ?></span>
 									<?php endif; ?>
 								</td>
-								<td style="padding: 10px 8px; text-align: right; font-weight: 500; color: #FFD700;">
+								<td class="wps-p-10">
 									<?php echo (int) $user['points']; ?> pts
 								</td>
 							</tr>

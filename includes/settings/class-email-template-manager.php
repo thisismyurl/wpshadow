@@ -187,18 +187,18 @@ class Email_Template_Manager {
 		?>
 		<div style="max-width: 1200px;">
 			<!-- Template Selector -->
-			<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+			<div class="wps-card">
 				<h3><?php esc_html_e( 'Select Email Template', 'wpshadow' ); ?></h3>
-				<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px;">
+				<div class="wps-grid wps-grid-auto-250 wps-gap-3">
 					<?php foreach ( $templates as $key => $tmpl ) : ?>
 					<label style="padding: 12px; border: 2px solid <?php echo isset( $tmpl['custom'] ) ? '#2196f3' : '#ddd'; ?>; border-radius: 6px; background: <?php echo isset( $tmpl['custom'] ) ? '#e3f2fd' : '#f9f9f9'; ?>; cursor: pointer; transition: all 0.2s;">
 						<input type="radio" name="template" value="<?php echo esc_attr( $key ); ?>" <?php checked( $selected_template, $key ); ?> onchange="location.href='<?php echo esc_js( add_query_arg( 'template', '', admin_url( 'admin.php?page=wpshadow-settings&tab=email' ) ) ); ?>' + this.value" style="margin-right: 8px;" />
 						<div>
 							<strong style="color: #0073aa;"><?php echo esc_html( $tmpl['label'] ); ?></strong>
 							<?php if ( isset( $tmpl['custom'] ) ) : ?>
-							<span style="display: block; font-size: 11px; color: #1976d2; margin-top: 2px;">● <?php esc_html_e( 'Customized', 'wpshadow' ); ?></span>
+							<span class="wps-block">● <?php esc_html_e( 'Customized', 'wpshadow' ); ?></span>
 							<?php endif; ?>
-							<p style="font-size: 12px; color: #666; margin: 4px 0 0 0;"><?php echo esc_html( $tmpl['description'] ); ?></p>
+							<p class="wps-m-4"><?php echo esc_html( $tmpl['description'] ); ?></p>
 						</div>
 					</label>
 					<?php endforeach; ?>
@@ -206,9 +206,9 @@ class Email_Template_Manager {
 			</div>
 
 			<!-- Template Editor -->
-			<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+			<div class="wps-grid wps-grid-auto-320 wps-gap-4">
 				<!-- Edit Section -->
-				<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px;">
+				<div class="wps-card">
 					<h3><?php esc_html_e( 'Edit Template', 'wpshadow' ); ?></h3>
 					
 					<form id="wpshadow-email-template-form" method="POST" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
@@ -217,29 +217,29 @@ class Email_Template_Manager {
 						<input type="hidden" name="template_key" value="<?php echo esc_attr( $selected_template ); ?>" />
 						
 						<!-- HTML Template -->
-						<label style="display: block; margin-bottom: 10px;">
+						<label class="wps-block">
 							<strong><?php esc_html_e( 'HTML Template', 'wpshadow' ); ?></strong>
-							<p style="font-size: 12px; color: #666; margin: 2px 0 6px 0;">
+							<p class="wps-m-2">
 								<?php esc_html_e( 'Use {title}, {content}, {footer} placeholders', 'wpshadow' ); ?>
 							</p>
 						</label>
-						<textarea name="template_html" style="width: 100%; height: 200px; font-family: 'Monaco', 'Courier New', monospace; font-size: 12px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; background: #f9f9f9;"><?php echo esc_textarea( $template['html'] ); ?></textarea>
+						<textarea name="template_html" class="wps-textarea" style="height: 200px; font-family: 'Monaco', 'Courier New', monospace; font-size: 12px;"><?php echo esc_textarea( $template['html'] ); ?></textarea>
 						
 						<!-- Plain Text Template -->
-						<label style="display: block; margin: 15px 0 10px 0;">
+						<label class="wps-block-m-15">
 							<strong><?php esc_html_e( 'Plain Text Template', 'wpshadow' ); ?></strong>
-							<p style="font-size: 12px; color: #666; margin: 2px 0 6px 0;">
+							<p class="wps-m-2">
 								<?php esc_html_e( 'Fallback for email clients that don\'t support HTML', 'wpshadow' ); ?>
 							</p>
 						</label>
-						<textarea name="template_text" style="width: 100%; height: 200px; font-family: 'Monaco', 'Courier New', monospace; font-size: 12px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; background: #f9f9f9;"><?php echo esc_textarea( $template['text'] ); ?></textarea>
+						<textarea name="template_text" class="wps-textarea" style="height: 200px; font-family: 'Monaco', 'Courier New', monospace; font-size: 12px;"><?php echo esc_textarea( $template['text'] ); ?></textarea>
 						
 						<!-- Actions -->
-						<div style="margin-top: 20px; display: flex; gap: 10px;">
-							<button type="submit" class="button button-primary">
+						<div class="wps-flex wps-gap-2" style="margin-top: 20px;">
+							<button type="submit" class="wps-btn wps-btn-primary">
 								<?php esc_html_e( 'Save Template', 'wpshadow' ); ?>
 							</button>
-							<button type="button" class="button" onclick="wpshadowResetEmailTemplate('<?php echo esc_js( $selected_template ); ?>')">
+							<button type="button" class="wps-btn wps-btn-secondary" onclick="wpshadowResetEmailTemplate('<?php echo esc_js( $selected_template ); ?>')">
 								<?php esc_html_e( 'Reset to Default', 'wpshadow' ); ?>
 							</button>
 						</div>
@@ -248,9 +248,9 @@ class Email_Template_Manager {
 				</div>
 
 				<!-- Preview Section -->
-				<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px;">
+				<div class="wps-card">
 					<h3><?php esc_html_e( 'Preview', 'wpshadow' ); ?></h3>
-					<div style="background: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 4px; padding: 15px; height: 420px; overflow-y: auto; font-size: 13px; line-height: 1.6;">
+					<div class="wps-p-15-rounded-4">
 						<div id="wpshadow-template-preview" style="color: #333;">
 							<p style="color: #999; font-style: italic;">
 								<?php esc_html_e( 'Live preview of your template will appear here', 'wpshadow' ); ?>
@@ -283,14 +283,14 @@ class Email_Template_Manager {
 					dataType: 'json',
 					success: function(response) {
 						if (response.success) {
-							$status.html('<div style="padding: 10px; background: #e8f5e9; color: #2e7d32; border-radius: 4px;">✓ ' + response.data.message + '</div>');
+							$status.html('<div class="wps-p-10-rounded-4">✓ ' + response.data.message + '</div>');
 						} else {
-							$status.html('<div style="padding: 10px; background: #ffebee; color: #c62828; border-radius: 4px;">✗ ' + (response.data.message || '<?php echo esc_js( __( 'Error saving template', 'wpshadow' ) ); ?>') + '</div>');
+							$status.html('<div class="wps-p-10-rounded-4">✗ ' + (response.data.message || '<?php echo esc_js( __( 'Error saving template', 'wpshadow' ) ); ?>') + '</div>');
 						}
 						$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Save Template', 'wpshadow' ) ); ?>');
 					},
 					error: function() {
-						$status.html('<div style="padding: 10px; background: #ffebee; color: #c62828; border-radius: 4px;">✗ <?php echo esc_js( __( 'Network error', 'wpshadow' ) ); ?></div>');
+						$status.html('<div class="wps-p-10-rounded-4">✗ <?php echo esc_js( __( 'Network error', 'wpshadow' ) ); ?></div>');
 						$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Save Template', 'wpshadow' ) ); ?>');
 					}
 				});
@@ -365,7 +365,7 @@ class Email_Template_Manager {
 		<div class="content">
 			<p>Hello,</p>
 			<p>{content}</p>
-			<div style="margin: 20px 0; padding: 20px; background: white; border-radius: 4px;">
+			<div class="wps-m-20-p-20-rounded-4">
 				<div class="metric">
 					<div class="metric-value">95%</div>
 					<div class="metric-label">Site Health</div>
@@ -383,7 +383,7 @@ class Email_Template_Manager {
 		</div>
 		<div class="footer">
 			<p>{footer}</p>
-			<p style="margin: 10px 0 0 0;">© <?php echo esc_html( date( 'Y' ) ); ?> <?php echo esc_html( get_bloginfo( 'name' ) ); ?> - All rights reserved</p>
+			<p class="wps-m-10">© <?php echo esc_html( date( 'Y' ) ); ?> <?php echo esc_html( get_bloginfo( 'name' ) ); ?> - All rights reserved</p>
 		</div>
 	</div>
 </body>
@@ -476,7 +476,7 @@ TEXT;
 			<h3>Recommendations</h3>
 			<p>{recommendations}</p>
 		</div>
-		<div class="footer" style="margin-top: 20px; padding: 15px; color: #666; font-size: 11px;">
+		<div class="footer" class="wps-p-15">
 			<p>{footer}</p>
 		</div>
 	</div>
@@ -539,8 +539,8 @@ TEXT;
 				<a href="{dashboard_url}" class="action-button">Review Issue Now</a>
 			</p>
 		</div>
-		<div style="margin-top: 20px; padding: 15px; background: #f5f5f5; border-radius: 4px; color: #666; font-size: 12px;">
-			<p style="margin: 0;">{footer}</p>
+		<div class="wps-p-15-rounded-4">
+			<p class="wps-m-0">{footer}</p>
 		</div>
 	</div>
 </body>
@@ -613,8 +613,8 @@ TEXT;
 				</div>
 			</div>
 		</div>
-		<div style="margin-top: 20px; padding: 15px; background: #f5f5f5; border-radius: 4px; color: #666; font-size: 12px;">
-			<p style="margin: 0;">{footer}</p>
+		<div class="wps-p-15-rounded-4">
+			<p class="wps-m-0">{footer}</p>
 		</div>
 	</div>
 </body>

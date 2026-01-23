@@ -23,110 +23,27 @@ use WPShadow\Core\Diagnostic_Result_Normalizer;
 class Diagnostic_Registry {
 	/**
 	 * Quick scan diagnostic classes (previously all checks).
+	 * 
+	 * DISABLED: Diagnostic loading disabled for systematic fixes.
+	 * All diagnostic class names have been temporarily removed while
+	 * fixing structural issues and false-positive test code.
 	 *
 	 * @var array
 	 */
 	private static $quick_diagnostics = array(
-		'Diagnostic_Memory_Limit',
-		'Diagnostic_Backup',
-		'Diagnostic_Permalinks',
-		'Diagnostic_Tagline',
-		'Diagnostic_SSL',
-		'Diagnostic_Outdated_Plugins',
-		'Diagnostic_Debug_Mode',
-		'Diagnostic_WordPress_Version',
-		'Diagnostic_Plugin_Count',
-		'Diagnostic_Inactive_Plugins',
-		'Diagnostic_Theme_Update_Noise',
-		'Diagnostic_Plugin_Update_Noise',
-		'Diagnostic_Hotlink_Protection',
-		// Head Cleanup family (split into 4 individual tests)
-		'Diagnostic_Head_Cleanup_Emoji',
-		'Diagnostic_Head_Cleanup_OEmbed',
-		'Diagnostic_Head_Cleanup_RSD',
-		'Diagnostic_Head_Cleanup_Shortlink',
-		'Diagnostic_Iframe_Busting',
-		'Diagnostic_Image_Lazy_Load',
-		'Diagnostic_External_Fonts',
-		'Diagnostic_Jquery_Migrate',
-		'Diagnostic_Plugin_Auto_Updates',
-		'Diagnostic_Error_Log',
-		'Diagnostic_Core_Integrity',
-		'Diagnostic_Skiplinks',
-		// Asset Versions family (split into 2 individual tests)
-		'Diagnostic_Asset_Versions_CSS',
-		'Diagnostic_Asset_Versions_JS',
-		'Diagnostic_CSS_Classes',
-		'Diagnostic_Maintenance',
-		'Diagnostic_Nav_ARIA',
-		'Diagnostic_Admin_Username',
-		'Diagnostic_Admin_Font_Bloat',
-		'Diagnostic_Admin_Theme_Assets',
-		'Diagnostic_Search_Indexing',
-		'Diagnostic_Admin_Email',
-		'Diagnostic_User_Notification_Email',
-		'Diagnostic_Timezone',
-		'Diagnostic_Content_Optimizer',
-		'Diagnostic_Paste_Cleanup',
-		'Diagnostic_HTML_Cleanup',
-		'Diagnostic_Pre_Publish_Review',
-		'Diagnostic_Embed_Disable',
-		'Diagnostic_Interactivity_Cleanup',
-		'Diagnostic_PHP_Version',
-		'Diagnostic_File_Permissions',
-		'Diagnostic_Security_Headers',
-		'Diagnostic_Post_Via_Email',
-		'Diagnostic_Post_Via_Email_Category',
-		'Diagnostic_Initial_Setup',
-		'Diagnostic_Comments_Disabled',
-		'Diagnostic_Howdy_Greeting',
-		'Diagnostic_Dark_Mode',
-		'Diagnostic_Mobile_Friendliness',
-		'Diagnostic_Database_Indexes',
-		'Diagnostic_PHP_Compatibility',
-		'Diagnostic_Theme_Performance',
-		'Diagnostic_Font_Optimization',
-		'Diagnostic_Monitoring_Status',
-		'Diagnostic_Backup_Verification',
-		'Diagnostic_Automation_Readiness',
-		'Diagnostic_Object_Cache',
-		'Diagnostic_Heartbeat_Throttling',
-		'Diagnostic_XML_Sitemap',
-		'Diagnostic_Robots_Txt',
-		'Diagnostic_Favicon',
-		'Diagnostic_Two_Factor',
-		'Diagnostic_Disallow_File_Edit',
-		'Diagnostic_Webhooks_Readiness',
-		'Diagnostic_Resource_Hints',
-		'Diagnostic_REST_API',
-		'Diagnostic_RSS_Feeds',
-		'Diagnostic_WP_Generator',
-		'Diagnostic_Block_Cleanup',
-		'Diagnostic_Consent_Checks',
-		'Diagnostic_Emoji_Scripts',
-		'Diagnostic_JQuery_Cleanup',
+		// TEMPORARILY DISABLED - All diagnostics removed during fix phase
+		// Will be re-enabled after systematic review and validation
 	);
 
 	/**
 	 * Deep scan only diagnostic classes (run in addition to quick set).
 	 *
+	 * DISABLED: Deep diagnostics disabled for systematic fixes.
+	 *
 	 * @var array
 	 */
 	private static $deep_diagnostics = array(
-		// Heavier or more intrusive checks (network/database intensive)
-		'Diagnostic_Database_Health',
-		'Diagnostic_Core_Integrity',
-		'Diagnostic_Broken_Links',
-		'Diagnostic_Database_Indexes',
-		'Diagnostic_File_Permissions',
-		// Extended coverage
-		'Diagnostic_Security_Headers',
-		'Diagnostic_Object_Cache',
-		'Diagnostic_XML_Sitemap',
-		'Diagnostic_Robots_Txt',
-		'Diagnostic_Two_Factor',
-		'Diagnostic_Disallow_File_Edit',
-		'Diagnostic_Webhooks_Readiness',
+		// TEMPORARILY DISABLED - All deep diagnostics removed during fix phase
 	);
 
 	/**

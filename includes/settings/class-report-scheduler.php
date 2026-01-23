@@ -312,12 +312,12 @@ class Report_Scheduler {
 		?>
 		<div style="max-width: 900px;">
 			<!-- Executive Report Schedule -->
-			<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 24px; margin-bottom: 20px;">
-				<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+			<div class="wps-p-24-rounded-8">
+				<div class="wps-flex-gap-12-items-center">
 					<span class="dashicons dashicons-chart-area" style="font-size: 24px; color: #0073aa;"></span>
-					<h3 style="margin: 0;"><?php esc_html_e( 'Executive Report Schedule', 'wpshadow' ); ?></h3>
+					<h3 class="wps-m-0"><?php esc_html_e( 'Executive Report Schedule', 'wpshadow' ); ?></h3>
 				</div>
-				<p style="color: #666; margin: 0 0 16px 0;"><?php esc_html_e( 'Receive a high-level summary of your site\'s health and recommendations.', 'wpshadow' ); ?></p>
+				<p class="wps-m-0"><?php esc_html_e( 'Receive a high-level summary of your site\'s health and recommendations.', 'wpshadow' ); ?></p>
 				
 				<form class="wpshadow-schedule-form" data-report-type="executive_report">
 					<?php wp_nonce_field( 'wpshadow_schedule_report_nonce' ); ?>
@@ -325,7 +325,7 @@ class Report_Scheduler {
 					<input type="hidden" name="report_type" value="executive_report" />
 					
 					<!-- Enable toggle -->
-					<div style="margin-bottom: 16px; display: flex; align-items: center; gap: 12px;">
+					<div class="wps-flex-gap-12-items-center">
 						<?php
 						$exec_config = $schedules['executive_report'] ?? array();
 						$is_enabled  = isset( $exec_config['enabled'] ) && $exec_config['enabled'];
@@ -338,10 +338,10 @@ class Report_Scheduler {
 					
 					<!-- Frequency -->
 					<div style="margin-bottom: 16px;">
-						<label style="display: block; margin-bottom: 8px; font-weight: 500;">
+						<label class="wps-block">
 							<?php esc_html_e( 'Frequency:', 'wpshadow' ); ?>
 						</label>
-						<select name="frequency" style="width: 100%; max-width: 400px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+						<select name="frequency" class="wps-p-8-rounded-4">
 							<?php
 							$freq = $exec_config['frequency'] ?? 'weekly';
 							foreach ( $frequencies as $value => $label ) :
@@ -358,11 +358,11 @@ class Report_Scheduler {
 					
 					<!-- Recipients -->
 					<div style="margin-bottom: 16px;">
-						<label style="display: block; margin-bottom: 8px; font-weight: 500;">
+						<label class="wps-block">
 							<?php esc_html_e( 'Send to:', 'wpshadow' ); ?>
 						</label>
-						<input type="email" name="recipients" placeholder="email@example.com" style="width: 100%; max-width: 400px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" value="<?php echo esc_attr( implode( ', ', $exec_config['recipients'] ?? array() ) ); ?>" />
-						<p style="font-size: 12px; color: #666; margin: 6px 0 0 0;">
+						<input type="email" name="recipients" placeholder="email@example.com" class="wps-p-8-rounded-4" value="<?php echo esc_attr( implode( ', ', $exec_config['recipients'] ?? array() ) ); ?>" />
+						<p class="wps-m-6">
 							<?php esc_html_e( 'Separate multiple emails with commas', 'wpshadow' ); ?>
 						</p>
 					</div>
@@ -376,12 +376,12 @@ class Report_Scheduler {
 			</div>
 
 			<!-- Detailed Report Schedule -->
-			<div style="background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 24px;">
-				<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+			<div class="wps-p-24-rounded-8">
+				<div class="wps-flex-gap-12-items-center">
 					<span class="dashicons dashicons-chart-line" style="font-size: 24px; color: #0073aa;"></span>
-					<h3 style="margin: 0;"><?php esc_html_e( 'Detailed Report Schedule', 'wpshadow' ); ?></h3>
+					<h3 class="wps-m-0"><?php esc_html_e( 'Detailed Report Schedule', 'wpshadow' ); ?></h3>
 				</div>
-				<p style="color: #666; margin: 0 0 16px 0;"><?php esc_html_e( 'Receive comprehensive technical details about all findings and recommendations.', 'wpshadow' ); ?></p>
+				<p class="wps-m-0"><?php esc_html_e( 'Receive comprehensive technical details about all findings and recommendations.', 'wpshadow' ); ?></p>
 				
 				<form class="wpshadow-schedule-form" data-report-type="detailed_report">
 					<?php wp_nonce_field( 'wpshadow_schedule_report_nonce' ); ?>
@@ -389,7 +389,7 @@ class Report_Scheduler {
 					<input type="hidden" name="report_type" value="detailed_report" />
 					
 					<!-- Enable toggle -->
-					<div style="margin-bottom: 16px; display: flex; align-items: center; gap: 12px;">
+					<div class="wps-flex-gap-12-items-center">
 						<?php
 						$det_config = $schedules['detailed_report'] ?? array();
 						$is_enabled = isset( $det_config['enabled'] ) && $det_config['enabled'];
@@ -402,10 +402,10 @@ class Report_Scheduler {
 					
 					<!-- Frequency -->
 					<div style="margin-bottom: 16px;">
-						<label style="display: block; margin-bottom: 8px; font-weight: 500;">
+						<label class="wps-block">
 							<?php esc_html_e( 'Frequency:', 'wpshadow' ); ?>
 						</label>
-						<select name="frequency" style="width: 100%; max-width: 400px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+						<select name="frequency" class="wps-p-8-rounded-4">
 							<?php
 							$freq = $det_config['frequency'] ?? 'monthly';
 							foreach ( $frequencies as $value => $label ) :
@@ -422,11 +422,11 @@ class Report_Scheduler {
 					
 					<!-- Recipients -->
 					<div style="margin-bottom: 16px;">
-						<label style="display: block; margin-bottom: 8px; font-weight: 500;">
+						<label class="wps-block">
 							<?php esc_html_e( 'Send to:', 'wpshadow' ); ?>
 						</label>
-						<input type="email" name="recipients" placeholder="email@example.com" style="width: 100%; max-width: 400px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" value="<?php echo esc_attr( implode( ', ', $det_config['recipients'] ?? array() ) ); ?>" />
-						<p style="font-size: 12px; color: #666; margin: 6px 0 0 0;">
+						<input type="email" name="recipients" placeholder="email@example.com" class="wps-p-8-rounded-4" value="<?php echo esc_attr( implode( ', ', $det_config['recipients'] ?? array() ) ); ?>" />
+						<p class="wps-m-6">
 							<?php esc_html_e( 'Separate multiple emails with commas', 'wpshadow' ); ?>
 						</p>
 					</div>

@@ -122,7 +122,7 @@ class Trend_Chart {
 		
 		if ( count( $history ) < 2 ) {
 			?>
-			<div style="background: #e5e7eb; border-radius: 8px; padding: 40px; text-align: center; color: #6b7280;">
+			<div class="wps-p-40-rounded-8">
 				<p><?php esc_html_e( 'Not enough data yet. Check back in a few days for trend visualization.', 'wpshadow' ); ?></p>
 			</div>
 			<?php
@@ -160,14 +160,14 @@ class Trend_Chart {
 		}
 		?>
 		
-		<div class="wpshadow-trend-chart" style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px;">
+		<div class="wpshadow-trend-chart" class="wps-p-20-rounded-8">
 			
 			<!-- Header -->
-			<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-				<h3 style="margin: 0; font-size: 18px; color: #1f2937;">
+			<div class="wps-flex-items-center-justify-space-between">
+				<h3 class="wps-m-0">
 					<?php esc_html_e( 'Health Score Trend (30 Days)', 'wpshadow' ); ?>
 				</h3>
-				<div style="display: flex; align-items: center; gap: 8px; font-size: 14px; color: #6b7280;">
+				<div class="wps-flex-gap-8-items-center">
 					<?php if ( $trend_direction === 'up' ) : ?>
 						<span style="color: #10b981; font-weight: bold;">📈 +<?php echo abs( $trend_pct ); ?>%</span>
 					<?php elseif ( $trend_direction === 'down' ) : ?>
@@ -179,7 +179,7 @@ class Trend_Chart {
 			</div>
 			
 			<!-- SVG Chart -->
-			<svg width="<?php echo (int) $chart_width; ?>" height="<?php echo (int) $chart_height; ?>" style="display: block; margin: 0 auto; background: #fafafa; border-radius: 4px;">
+			<svg width="<?php echo (int) $chart_width; ?>" height="<?php echo (int) $chart_height; ?>" class="wps-block-m-0-rounded-4">
 				
 				<!-- Grid lines (every 10 points) -->
 				<?php for ( $i = 0; $i <= 100; $i += 10 ) : ?>
@@ -213,13 +213,13 @@ class Trend_Chart {
 			</svg>
 			
 			<!-- Legend -->
-			<div style="display: flex; gap: 24px; margin-top: 16px; font-size: 13px; color: #6b7280; justify-content: center;">
-				<div style="display: flex; align-items: center; gap: 6px;">
-					<span style="width: 12px; height: 12px; background: #667eea; border-radius: 2px;"></span>
+			<div class="wps-flex-gap-24-justify-center">
+				<div class="wps-flex-gap-6-items-center">
+					<span class="wps-rounded-2"></span>
 					<?php esc_html_e( 'Historical Score', 'wpshadow' ); ?>
 				</div>
-				<div style="display: flex; align-items: center; gap: 6px;">
-					<span style="width: 12px; height: 12px; background: #10b981; border-radius: 50%;"></span>
+				<div class="wps-flex-gap-6-items-center">
+					<span class="wps-rounded-50%"></span>
 					<?php esc_html_e( 'Latest Score', 'wpshadow' ); ?>
 				</div>
 			</div>

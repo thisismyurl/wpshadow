@@ -358,31 +358,31 @@ class Notification_Builder {
 			<!-- Rules List -->
 			<div class="wps-notification-rules" style="margin-top: 24px;">
 				<?php if ( empty( $rules ) ) : ?>
-					<div class="wps-empty-state" style="text-align: center; padding: 40px; background: #f9f9f9; border-radius: 8px; border: 1px solid #ddd;">
+					<div class="wps-empty-state" class="wps-p-40-rounded-8">
 						<span class="dashicons" style="font-size: 48px; color: #ccc; margin-bottom: 16px;"></span>
-						<p style="color: #666; font-size: 16px; margin: 0;">
+						<p class="wps-m-0">
 							<?php echo $mode === 'email' ? esc_html__( 'No email rules yet. Create one to get started!', 'wpshadow' ) : esc_html__( 'No notification rules yet. Create one to get started!', 'wpshadow' ); ?>
 						</p>
 					</div>
 				<?php else : ?>
 					<?php foreach ( $rules as $rule_id => $rule ) : ?>
-						<div class="wps-notification-rule-card" data-rule-id="<?php echo esc_attr( $rule_id ); ?>" style="margin-bottom: 16px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 16px; display: flex; justify-content: space-between; align-items: center;">
+						<div class="wps-notification-rule-card" data-rule-id="<?php echo esc_attr( $rule_id ); ?>" class="wps-flex-items-center-justify-space-between-">
 							<div style="flex: 1;">
-								<h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600;">
+								<h4 class="wps-m-0">
 									<?php echo esc_html( $rule['name'] ?? __( 'Unnamed Rule', 'wpshadow' ) ); ?>
 								</h4>
-								<p style="margin: 0; font-size: 13px; color: #666;">
+								<p class="wps-m-0">
 									<strong><?php esc_html_e( 'Trigger:', 'wpshadow' ); ?></strong>
 									<?php echo esc_html( $rule['trigger']['label'] ?? $rule['trigger']['type'] ); ?>
 									<br />
 									<strong><?php esc_html_e( 'Action:', 'wpshadow' ); ?></strong>
 									<?php echo esc_html( $rule['action']['label'] ?? $rule['action']['type'] ); ?>
 								</p>
-								<p style="margin: 8px 0 0 0; font-size: 12px; color: #999;">
+								<p class="wps-m-8">
 									<?php printf( esc_html__( 'Created %s ago', 'wpshadow' ), esc_html( human_time_diff( $rule['created_at'] ) ) ); ?>
 								</p>
 							</div>
-							<div style="display: flex; gap: 8px;">
+							<div class="wps-flex-gap-8">
 								<button type="button" class="wps-btn wps-btn-secondary wps-edit-rule" data-rule-id="<?php echo esc_attr( $rule_id ); ?>" title="<?php esc_attr_e( 'Edit this rule', 'wpshadow' ); ?>">
 									<span class="dashicons dashicons-edit"></span>
 								</button>
@@ -420,8 +420,8 @@ class Notification_Builder {
 			</style>
 
 			<!-- Builder Modal -->
-		<div id="wpshadow-notification-builder-modal" class="wps-modal" style="display: none; position: fixed; z-index: 999999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7);">
-			<div class="wps-modal-content" style="background: #fff; padding: 40px; border-radius: 12px; max-width: 800px; width: 90%; position: relative; box-shadow: 0 8px 32px rgba(0,0,0,0.4); max-height: 85vh; overflow-y: auto; margin: auto;">
+		<div id="wpshadow-notification-builder-modal" class="wps-modal" class="wps-none">
+			<div class="wps-modal-content" class="wps-p-40-rounded-12">
 				<button type="button" class="wps-modal-close" style="position: absolute; top: 20px; right: 20px; background: transparent; border: none; font-size: 32px; cursor: pointer; color: #999; line-height: 1;">×</button>
 					<h2 style="margin-top: 0; color: #0073aa;">
 						<?php echo $mode === 'email' ? esc_html__( 'Create Email Rule', 'wpshadow' ) : esc_html__( 'Create Notification Rule', 'wpshadow' ); ?>
@@ -453,24 +453,24 @@ class Notification_Builder {
 						<p class="wps-form-help" style="margin-top: 4px; margin-bottom: 12px;">
 							<?php esc_html_e( 'Choose from scheduled tasks, content events, system changes, or diagnostic test results.', 'wpshadow' ); ?>
 						</p>
-						<div id="wpshadow-trigger-categories" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 16px;">
+						<div id="wpshadow-trigger-categories" class="wps-grid wps-grid-auto-160 wps-gap-3 wps-mb-4" class="wps-grid">
 							<?php foreach ( $triggers as $category_key => $category ) : ?>
-								<button type="button" class="wps-trigger-category-btn" data-category="<?php echo esc_attr( $category_key ); ?>" style="padding: 14px; border: 2px solid #ddd; border-radius: 8px; background: #fff; cursor: pointer; text-align: left; transition: all 0.2s; font-size: 13px;">
+								<button type="button" class="wps-trigger-category-btn" data-category="<?php echo esc_attr( $category_key ); ?>" class="wps-p-14-rounded-8">
 									<span class="dashicons dashicons-<?php echo esc_attr( $category['icon'] ?? 'admin-generic' ); ?>" style="vertical-align: middle; margin-right: 6px; font-size: 18px; color: var(--wps-primary, #123456);"></span>
 										<strong><?php echo esc_html( $category['label'] ); ?></strong>
 									</button>
 								<?php endforeach; ?>
 							</div>
-							<div id="wpshadow-trigger-items" style="display: none; padding: 16px; background: #f9f9f9; border-radius: 6px; margin-bottom: 16px;">
+							<div id="wpshadow-trigger-items" class="wps-none-p-16-rounded-6">
 								<!-- Populated by JavaScript -->
 							</div>
-							<select name="trigger_type" id="wpshadow-trigger-select" class="wps-input" required style="display: none;">
+							<select name="trigger_type" id="wpshadow-trigger-select" class="wps-input" required class="wps-none">
 								<option value="">-- <?php esc_html_e( 'Select a trigger', 'wpshadow' ); ?> --</option>
 							</select>
 						</div>
 
 						<!-- Then Action Section -->
-						<div style="padding: 12px; background: #e3f2fd; border-radius: 6px; margin: 20px 0; text-align: center;">
+						<div class="wps-m-20-p-12-rounded-6">
 							<strong style="color: #1976d2;"><?php esc_html_e( 'Then', 'wpshadow' ); ?></strong>
 						</div>
 
@@ -485,7 +485,7 @@ class Notification_Builder {
 								}
 								?>
 							</label>
-							<div id="wpshadow-action-config" style="background: #fafafa; padding: 16px; border-radius: 6px;">
+							<div id="wpshadow-action-config" class="wps-p-16-rounded-6">
 								<?php if ( $mode === 'email' ) : ?>
 									<div class="wps-form-group">
 										<label class="wps-form-label">
@@ -536,7 +536,7 @@ class Notification_Builder {
 						</div>
 
 						<!-- Form Actions -->
-						<div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px;">
+						<div class="wps-flex-gap-12-justify-flex-end">
 							<button type="button" class="wps-btn wps-btn-secondary wps-modal-close">
 								<?php esc_html_e( 'Cancel', 'wpshadow' ); ?>
 							</button>
@@ -558,10 +558,10 @@ class Notification_Builder {
 			function populateTriggerItems(category) {
 				const categoryData = triggers[category];
 				const itemsHtml = Object.entries(categoryData.triggers || {}).map(([key, trigger]) => {
-					return `<label style="display: block; margin: 8px 0; cursor: pointer; padding: 12px; background: #fff; border: 1px solid #ddd; border-radius: 6px; transition: all 0.2s;">
+					return `<label class="wps-block-m-8-p-12-rounded-6">
 						<input type="radio" name="trigger_type" value="${key}" class="wps-trigger-item" style="margin-right: 8px;" />
 						<strong style="font-size: 14px;">${trigger.label}</strong>
-						<p style="margin: 4px 0 0 24px; font-size: 12px; color: #666; line-height: 1.5;">${trigger.description}</p>
+						<p class="wps-m-4">${trigger.description}</p>
 					</label>`;
 				}).join('');
 

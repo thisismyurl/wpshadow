@@ -136,54 +136,54 @@ $severity_legend = array(
 );
 ?>
 
-<div class="wpshadow-kanban-container" id="wpshadow-kanban-board" style="margin: 30px 0;">
-	<div style="margin: 20px 0; padding: 15px 20px; background: #f9fafb; border-left: 4px solid #3b82f6; border-radius: 4px;">
-		<h3 style="margin: 0 0 8px 0; color: #1e40af; font-size: 15px; font-weight: 600;">Organize Your Findings</h3>
-		<p style="color: #4b5563; margin: 0; font-size: 14px; line-height: 1.5;">
+<div class="wpshadow-kanban-container" id="wpshadow-kanban-board" class="wps-m-30">
+	<div class="wps-m-20-p-15-rounded-4">
+		<h3 class="wps-m-0">Organize Your Findings</h3>
+		<p class="wps-m-0">
 			Drag findings between columns to decide how to handle them. 
 			<a href="https://wpshadow.com/kb/kanban-workflow/?utm_source=wpshadow" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 500;">Learn about the workflow →</a>
 		</p>
 	</div>
-	<div id="wpshadow-kanban-status" style="display: none; margin: 0 0 16px 0; padding: 10px 12px; border: 1px solid #dbeafe; background: #eff6ff; color: #0b5cad; border-radius: 6px; font-size: 13px;"></div>
+	<div id="wpshadow-kanban-status" class="wps-none-m-0-p-10-rounded-6"></div>
 	<?php wp_nonce_field( 'wpshadow_kanban', 'wpshadow_kanban_nonce' ); ?>
 
 	<!-- Workflow Creation Modal -->
-	<div id="wpshadow-autofix-modal" style="display: none; position: fixed; z-index: 999999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6);">
-		<div style="background: #fff; margin: 10% auto; padding: 30px; border-radius: 8px; max-width: 500px; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+	<div id="wpshadow-autofix-modal" class="wps-none">
+		<div class="wps-m-10-p-30-rounded-8">
 			<button class="wpshadow-autofix-modal-close" style="position: absolute; top: 15px; right: 15px; background: transparent; border: none; font-size: 28px; cursor: pointer; color: #999; line-height: 1;">×</button>
 			<h2 style="margin-top: 0; color: #4caf50;">
 				<span class="dashicons dashicons-update" style="font-size: 28px; width: 28px; height: 28px;"></span>
 				Create Workflow
 			</h2>
-			<p style="color: #555; line-height: 1.6; margin: 15px 0;">
+			<p class="wps-m-15">
 				Create a workflow to automatically handle this issue. Choose how you want it to work:
 			</p>
-			<div style="background: #f0f9ff; border-left: 4px solid #3b82f6; padding: 15px; margin: 15px 0; border-radius: 4px;">
-				<p style="margin: 0 0 10px 0; font-weight: 600; color: #1e40af;">
+			<div class="wps-m-15-p-15-rounded-4">
+				<p class="wps-m-0">
 					<strong>Always Auto-fix:</strong>
 				</p>
-				<p style="margin: 0; font-size: 13px; color: #1e3a8a;">
+				<p class="wps-m-0">
 					Creates a persistent workflow that will automatically fix this issue whenever it's detected. Visible in the Workflow Manager.
 				</p>
 			</div>
-			<div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 15px 0; border-radius: 4px;">
-				<p style="margin: 0 0 10px 0; font-weight: 600; color: #92400e;">
+			<div class="wps-m-15-p-15-rounded-4">
+				<p class="wps-m-0">
 					<strong>Just Once:</strong>
 				</p>
-				<p style="margin: 0; font-size: 13px; color: #78350f;">
+				<p class="wps-m-0">
 					Fixes this specific issue now. A temporary workflow will run in the background (won't appear in your workflow list).
 				</p>
 			</div>
-			<div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
-				<button id="wpshadow-autofix-once" class="button" style="padding: 10px 20px;">Just Once</button>
-				<button id="wpshadow-autofix-always" class="button button-primary" style="padding: 10px 20px;">Create Workflow</button>
+			<div class="wps-flex-gap-10-justify-flex-end">
+				<button id="wpshadow-autofix-once" class="button" class="wps-p-10">Just Once</button>
+				<button id="wpshadow-autofix-always" class="button button-primary" class="wps-p-10">Create Workflow</button>
 			</div>
 		</div>
 	</div>
 
 	<!-- Workflow Creation Modal -->
-	<div id="wpshadow-workflow-creation-modal" style="display: none; position: fixed; z-index: 999999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6);">
-		<div style="background: #fff; margin: 10% auto; padding: 30px; border-radius: 8px; max-width: 600px; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+	<div id="wpshadow-workflow-creation-modal" class="wps-none">
+		<div class="wps-m-10-p-30-rounded-8">
 			<button class="wpshadow-workflow-modal-close" style="position: absolute; top: 15px; right: 15px; background: transparent; border: none; font-size: 28px; cursor: pointer; color: #999; line-height: 1;">×</button>
 			<h2 style="margin-top: 0; color: #9c27b0;">
 				<span class="dashicons dashicons-update" style="font-size: 28px; width: 28px; height: 28px;"></span>
@@ -191,34 +191,34 @@ $severity_legend = array(
 			</h2>
 			
 			<!-- Finding Details -->
-			<div style="background: #f5f5f5; border-left: 4px solid #9c27b0; padding: 15px; margin: 15px 0; border-radius: 4px;">
-				<p style="margin: 0 0 8px 0; font-weight: 600; color: #333; font-size: 14px;">
+			<div class="wps-m-15-p-15-rounded-4">
+				<p class="wps-m-0">
 					<span class="dashicons dashicons-yes-alt" style="font-size: 16px; width: 16px; height: 16px; vertical-align: middle;"></span>
 					Finding:
 				</p>
-				<p style="margin: 0 0 4px 0; font-size: 14px; font-weight: 600; color: #1a1a1a;" class="workflow-finding-title"></p>
-				<p style="margin: 0; font-size: 12px; color: #666; line-height: 1.4;" class="workflow-finding-desc"></p>
+				<p class="wps-m-0" class="workflow-finding-title"></p>
+				<p class="wps-m-0" class="workflow-finding-desc"></p>
 			</div>
 			
 			<!-- Workflow Name -->
-			<div style="margin: 20px 0;">
-				<label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 13px; color: #333;">
+			<div class="wps-m-20">
+				<label class="wps-block">
 					<?php esc_html_e( 'Workflow Name', 'wpshadow' ); ?>
 				</label>
-				<input type="text" id="wpshadow-workflow-name" placeholder="e.g., Clear cache daily" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; box-sizing: border-box;">
+				<input type="text" id="wpshadow-workflow-name" placeholder="e.g., Clear cache daily" class="wps-p-10-rounded-4">
 			</div>
 			
 			<!-- Workflow Type Selection -->
-			<div style="margin: 20px 0;">
-				<p style="margin: 0 0 12px 0; font-weight: 600; font-size: 13px; color: #333;"><?php esc_html_e( 'How should this workflow work?', 'wpshadow' ); ?></p>
+			<div class="wps-m-20">
+				<p class="wps-m-0"><?php esc_html_e( 'How should this workflow work?', 'wpshadow' ); ?></p>
 				
 				<!-- Option 1: Always Auto-fix -->
-				<div style="background: #e8f5e9; border: 2px solid #4caf50; border-radius: 6px; padding: 15px; margin-bottom: 15px; cursor: pointer;">
-					<label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin: 0;">
+				<div class="wps-p-15-rounded-6">
+					<label class="wps-flex-gap-10-items-center-m-0">
 						<input type="radio" name="workflow_type" value="auto_fix" checked style="cursor: pointer;">
 						<div>
 							<strong style="font-size: 13px; color: #2e7d32;"><?php esc_html_e( '✓ Always Auto-fix', 'wpshadow' ); ?></strong>
-							<p style="margin: 4px 0 0 0; font-size: 12px; color: #555; line-height: 1.4;">
+							<p class="wps-m-4">
 								<?php esc_html_e( 'Creates an ongoing workflow that will automatically fix this issue whenever Guardian detects it.', 'wpshadow' ); ?>
 							</p>
 						</div>
@@ -226,12 +226,12 @@ $severity_legend = array(
 				</div>
 				
 				<!-- Option 2: Reactive (Alert + Manual Fix) -->
-				<div style="background: #fff3e0; border: 2px solid #ff9800; border-radius: 6px; padding: 15px; margin-bottom: 15px; cursor: pointer;">
-					<label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin: 0;">
+				<div class="wps-p-15-rounded-6">
+					<label class="wps-flex-gap-10-items-center-m-0">
 						<input type="radio" name="workflow_type" value="reactive" style="cursor: pointer;">
 						<div>
 							<strong style="font-size: 13px; color: #e65100;"><?php esc_html_e( '🔔 Alert & Track', 'wpshadow' ); ?></strong>
-							<p style="margin: 4px 0 0 0; font-size: 12px; color: #555; line-height: 1.4;">
+							<p class="wps-m-4">
 								<?php esc_html_e( 'Send an alert when Guardian detects this issue, but don\'t auto-fix. You\'ll fix it yourself.', 'wpshadow' ); ?>
 							</p>
 						</div>
@@ -239,12 +239,12 @@ $severity_legend = array(
 				</div>
 				
 				<!-- Option 3: Scheduled -->
-				<div style="background: #e3f2fd; border: 2px solid #2196f3; border-radius: 6px; padding: 15px; cursor: pointer;">
-					<label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin: 0;">
+				<div class="wps-p-15-rounded-6">
+					<label class="wps-flex-gap-10-items-center-m-0">
 						<input type="radio" name="workflow_type" value="scheduled" style="cursor: pointer;">
 						<div>
 							<strong style="font-size: 13px; color: #1565c0;"><?php esc_html_e( '⏰ On Schedule', 'wpshadow' ); ?></strong>
-							<p style="margin: 4px 0 0 0; font-size: 12px; color: #555; line-height: 1.4;">
+							<p class="wps-m-4">
 								<?php esc_html_e( 'Run this workflow on a regular schedule (e.g., daily maintenance task).', 'wpshadow' ); ?>
 							</p>
 						</div>
@@ -253,16 +253,16 @@ $severity_legend = array(
 			</div>
 			
 			<!-- Info Box -->
-			<div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; padding: 12px; margin: 20px 0; font-size: 12px; color: #666; line-height: 1.5;">
+			<div class="wps-m-20-p-12-rounded-6">
 				<strong><?php esc_html_e( '💡 Tip:', 'wpshadow' ); ?></strong> <?php esc_html_e( 'After creating the workflow, you\'ll be able to customize triggers, actions, and schedule from the Workflow Manager.', 'wpshadow' ); ?>
 			</div>
 			
 			<!-- Action Buttons -->
-			<div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
-				<button id="wpshadow-workflow-modal-cancel" class="button" style="padding: 10px 20px;">
+			<div class="wps-flex-gap-10-justify-flex-end">
+				<button id="wpshadow-workflow-modal-cancel" class="button" class="wps-p-10">
 					<?php esc_html_e( 'Cancel', 'wpshadow' ); ?>
 				</button>
-				<button id="wpshadow-workflow-modal-create" class="button button-primary" style="padding: 10px 20px;">
+				<button id="wpshadow-workflow-modal-create" class="button button-primary" class="wps-p-10">
 					<span class="dashicons dashicons-update" style="font-size: 16px; vertical-align: middle;"></span>
 					<?php esc_html_e( 'Create & Configure', 'wpshadow' ); ?>
 				</button>
@@ -271,57 +271,42 @@ $severity_legend = array(
 	</div>
 
 	<!-- Family-Aware Fix Modal (Philosophy #9: Show Value) -->
-	<div id="wpshadow-family-fix-modal" style="display: none; position: fixed; z-index: 999999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6);">
-		<div style="background: #fff; margin: 10% auto; padding: 30px; border-radius: 8px; max-width: 500px; position: relative; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+	<div id="wpshadow-family-fix-modal" class="wps-none">
+		<div class="wps-m-10-p-30-rounded-8">
 			<button class="wpshadow-family-fix-modal-close" style="position: absolute; top: 15px; right: 15px; background: transparent; border: none; font-size: 28px; cursor: pointer; color: #999; line-height: 1;">×</button>
 			<h2 style="margin-top: 0; color: #2196f3;">
 				<span class="dashicons dashicons-groups" style="font-size: 28px; width: 28px; height: 28px;"></span>
 				Fix Related Issues
 			</h2>
-			<p style="color: #555; line-height: 1.6; margin: 15px 0;">
+			<p class="wps-m-15">
 				WPShadow found <strong><span class="family-count">2</span> related issues</strong> in the <strong><span class="family-title">Same Family</span></strong>. You can fix them all at once to save time!
 			</p>
-			<div style="background: #e3f2fd; border-left: 4px solid #2196f3; padding: 15px; margin: 15px 0; border-radius: 4px;">
-				<p style="margin: 0 0 10px 0; font-weight: 600; color: #1565c0; font-size: 13px;">
+			<div class="wps-m-15-p-15-rounded-4">
+				<p class="wps-m-0">
 					Related issues in this family:
 				</p>
-				<ul class="family-list" style="margin: 0; padding-left: 20px; font-size: 13px;">
+				<ul class="family-list" class="wps-m-0">
 					<!-- Populated by JavaScript -->
 				</ul>
 			</div>
-			<div style="background: #f5f5f5; border: 1px solid #ddd; padding: 15px; margin: 15px 0; border-radius: 4px;">
-				<p style="margin: 0 0 10px 0; font-size: 13px; color: #666;">
+			<div class="wps-m-15-p-15-rounded-4">
+				<p class="wps-m-0">
 					<strong>💡 Time-Saving Tip:</strong><br>
 					Fixing all related issues at once can save you significant time. <a href="https://wpshadow.com/kb/family-grouped-fixes/?utm_source=wpshadow" target="_blank" style="color: #2196f3; text-decoration: none;">Learn more →</a>
 				</p>
 			</div>
-			<div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
-				<button id="wpshadow-family-fix-this-only" class="button" style="padding: 10px 20px;">Fix This Only</button>
-				<button id="wpshadow-family-fix-all" class="button button-primary" style="padding: 10px 20px;">Fix All Related Issues</button>
+			<div class="wps-flex-gap-10-justify-flex-end">
+				<button id="wpshadow-family-fix-this-only" class="button" class="wps-p-10">Fix This Only</button>
+				<button id="wpshadow-family-fix-all" class="button button-primary" class="wps-p-10">Fix All Related Issues</button>
 			</div>
 		</div>
 	</div>
 
 	
 
-	<div class="wpshadow-kanban-board" style="
-		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		gap: 15px;
-		padding: 20px;
-		background: #f5f5f5;
-		border-radius: 8px;
-		min-height: 500px;
-	">
+	<div class="wpshadow-kanban-board" class="wps-grid-p-20-rounded-8">
 		<?php foreach ( array( 'detected', 'manual', 'automated', 'fixed' ) as $status ) : ?>
-			<div class="kanban-column" data-status="<?php echo esc_attr( $status ); ?>" style="
-				background: white;
-				border-radius: 6px;
-				padding: 15px;
-				min-height: 500px;
-				border: 1px solid #e0e0e0;
-				overflow-y: auto;
-			">
+			<div class="kanban-column" data-status="<?php echo esc_attr( $status ); ?>" class="wps-p-15-rounded-6">
 				<h3 style="
 					margin-top: 0;
 					margin-bottom: 15px;
@@ -351,24 +336,16 @@ $severity_legend = array(
 							?>
 							<div class="workflow-card" 
 								data-workflow-id="<?php echo esc_attr( $workflow_id ); ?>" 
-								style="
-									background: #f0f9ff;
-									border: 1px solid #8bc34a;
-									border-left: 4px solid #8bc34a;
-									border-radius: 4px;
-									padding: 12px;
-									margin-bottom: 10px;
-									transition: all 0.2s;
-								"
+								class="wps-p-12-rounded-4"
 								onmouseover="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'"
 								onmouseout="this.style.boxShadow='none'"
 							>
 								<!-- Workflow Title -->
-								<div style="font-weight: 600; font-size: 13px; margin: 0 0 6px 0; color: #333; display: flex; align-items: center; gap: 8px;">
+								<div class="wps-flex-gap-8-items-center-m-0">
 									<span class="dashicons dashicons-update" style="font-size: 16px; width: 16px; height: 16px; color: #8bc34a;"></span>
 									<?php echo esc_html( $workflow_name ); ?>
 									<?php if ( ! $workflow_enabled ) : ?>
-										<span style="font-size: 10px; padding: 2px 6px; background: #fee; color: #c00; border-radius: 3px;">Disabled</span>
+										<span class="wps-p-2-rounded-3">Disabled</span>
 									<?php endif; ?>
 								</div>
 
@@ -471,32 +448,21 @@ $severity_legend = array(
 							onmouseout="this.style.boxShadow='none'"
 						>
 					<!-- Title -->
-					<div class="finding-title" style="
-						font-weight: 600;
-						font-size: 13px;
-						margin: 0 0 8px 0;
-						color: #333;
-						line-height: 1.3;
-					">
+					<div class="finding-title" class="wps-m-0">
 							<?php echo esc_html( $finding['title'] ); ?>
 					</div>
 					
 					<!-- Smart Action Status Badge (Issue #567) -->
 							<?php if ( ! empty( $smart_status ) ) : ?>
-					<div style="margin: 0 0 8px 0;">
-						<span style="display: inline-block; padding: 4px 8px; background: <?php echo esc_attr( $smart_color ); ?>; color: #fff; border-radius: 3px; font-size: 10px; font-weight: 600;" title="<?php echo esc_attr( $smart_status ); ?>">
+					<div class="wps-m-0">
+						<span class="wps-inline-block-p-4-rounded-3" title="<?php echo esc_attr( $smart_status ); ?>">
 								<?php echo esc_html( $smart_icon . ' ' . $smart_status ); ?>
 						</span>
 					</div>
 					<?php endif; ?>
 
 					<!-- Description (truncated) -->
-					<p style="
-						font-size: 12px;
-						color: #555;
-						margin: 0;
-						line-height: 1.4;
-					">
+					<p class="wps-m-0">
 							<?php echo esc_html( substr( $finding['description'], 0, 100 ) ); ?>
 							<?php
 							if ( strlen( $finding['description'] ) > 100 ) {
@@ -504,7 +470,7 @@ $severity_legend = array(
 							?>
 					</p>
 							<?php if ( ! empty( $finding['kb_link'] ) || ! empty( $finding['training_link'] ) ) : ?>
-					<div style="margin-top: 6px; display: flex; gap: 10px; flex-wrap: wrap; font-size: 11px;">
+					<div class="wps-flex-gap-10">
 								<?php if ( ! empty( $finding['kb_link'] ) ) : ?>
 							<a href="<?php echo esc_url( $finding['kb_link'] ); ?>" target="_blank" style="color: #2271b1; text-decoration: none; font-weight: 600;">
 									<?php esc_html_e( 'Learn more (KB)', 'wpshadow' ); ?>
@@ -521,18 +487,7 @@ $severity_legend = array(
 							<?php
 							if ( $note ) :
 								?>
-							<div style="
-								font-size: 11px;
-								color: #666;
-								background: #fafafa;
-								padding: 8px;
-								margin-top: 8px;
-								border-radius: 3px;
-								border-left: 2px solid <?php echo esc_attr( $status_colors[ $status ] ); ?>;
-								max-height: 50px;
-								overflow: hidden;
-								text-overflow: ellipsis;
-							">
+							<div class="wps-p-8-rounded-3">
 								<strong style="color: #333;">Note:</strong> <?php echo esc_html( $note ); ?>
 							</div>
 						<?php endif; ?>
@@ -541,12 +496,7 @@ $severity_legend = array(
 					<?php endif; // End if fixed (workflows) vs regular findings ?>
 
 					<?php if ( empty( $findings_by_status[ $status ] ) ) : ?>
-						<div class="kanban-empty-message" style="
-							text-align: center;
-							color: #ccc;
-							padding: 40px 10px;
-							font-size: 12px;
-						">
+						<div class="kanban-empty-message" class="wps-p-40">
 							<?php if ( $status === 'fixed' ) : ?>
 								No workflows yet. Drag findings here to create workflows.
 							<?php else : ?>
@@ -557,21 +507,10 @@ $severity_legend = array(
 				</div>
 			</div>
 		<?php endforeach; ?>
-		<div class="wpshadow-kanban-legend" style="
-		grid-column: 1 / -1;
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: 12px;
-		margin: 10px 0 18px 0;
-		padding: 10px 12px;
-		background: #fff;
-		border: 1px solid #e6e6e6;
-		border-radius: 6px;
-	">
+		<div class="wpshadow-kanban-legend" class="wps-flex-gap-12-items-center-m-10-p-10-round">
 		<p style="font-weight: 600; color: #333; font-size: 12px;">Color legend</p>
 		<?php foreach ( $severity_legend as $legend ) : ?>
-			<p style="display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: #444;">
+			<p class="wps-inline-flex">
 				<span style="
 					display: inline-block;
 					width: 12px;
@@ -705,9 +644,9 @@ jQuery(document).ready(function($) {
 			if (response.success) {
 				const $card = $btn.closest('.finding-card');
 				$card.html(
-					'<div style="padding: 15px; background: #e8f5e9; border-left: 4px solid #4caf50; border-radius: 4px; text-align: center;">' +
+					'<div class="wps-p-15-rounded-4">' +
 					'<strong style="color: #2e7d32;">✓ Fixed!</strong>' +
-					'<p style="margin: 8px 0 0 0; font-size: 12px; color: #555;">' + response.data.message + '</p>' +
+					'<p class="wps-m-8">' + response.data.message + '</p>' +
 					'</div>'
 				);
 				setTimeout(function() {
@@ -803,15 +742,19 @@ jQuery(document).ready(function($) {
 			
 			if (status === 'detected') {
 				// For detected column, show visible count / total count
-				const visibleCount = $column.find('.finding-card:not(.wpshadow-hidden-finding)').length;
-				const totalCount = $column.find('.finding-card').length;
+				// Only count finding-card elements directly in this column's kanban-column-content
+				const $content = $column.find('.kanban-column-content');
+				const visibleCount = $content.find('> .finding-card:not(.wpshadow-hidden-finding)').length;
+				const totalCount = $content.find('> .finding-card').length;
 				count = visibleCount;
 				if (totalCount > visibleCount) {
 					count = visibleCount + ' / ' + totalCount;
 				}
 			} else {
 				// Other columns show total count
-				count = $column.find('.finding-card').length;
+				// Only count finding-card elements directly in this column's kanban-column-content
+				const $content = $column.find('.kanban-column-content');
+				count = $content.find('> .finding-card').length;
 			}
 			
 			$column.find('h3').find('span:last').text(count);

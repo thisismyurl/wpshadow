@@ -23,12 +23,12 @@ if ( ! current_user_can( 'read' ) ) {
 		<?php esc_html_e( 'Your WordPress Site Health shows the overall status of your website\'s performance, security, and compatibility. This guide explains what each check means and why it matters.', 'wpshadow' ); ?>
 	</p>
 
-	<div style="background: #f0f7ff; border-left: 4px solid #2563eb; padding: 15px; margin-top: 20px; border-radius: 4px;">
+	<div class="wps-p-15-rounded-4">
 		<p><strong><?php esc_html_e( 'Quick Tip:', 'wpshadow' ); ?></strong> <?php esc_html_e( 'Visit Tools → Site Health in your WordPress admin to check your current status.', 'wpshadow' ); ?></p>
 	</div>
 
 	<!-- REST API Section -->
-	<div style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; margin-top: 30px;">
+	<div class="wps-p-20-rounded-4">
 		<h2 id="rest-api"><?php esc_html_e( 'REST API', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'The REST API is how your site talks to the WordPress cloud and third-party services. Modern WordPress features rely on it.', 'wpshadow' ); ?></p>
 		<h4><?php esc_html_e( 'What to look for:', 'wpshadow' ); ?></h4>
@@ -45,7 +45,7 @@ if ( ! current_user_can( 'read' ) ) {
 	</div>
 
 	<!-- Loopback Requests Section -->
-	<div style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; margin-top: 30px;">
+	<div class="wps-p-20-rounded-4">
 		<h2 id="loopback-requests"><?php esc_html_e( 'Loopback Requests', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'Loopback requests allow your server to "talk to itself". WordPress uses this for scheduled tasks, updates, and background processing.', 'wpshadow' ); ?></p>
 		<h4><?php esc_html_e( 'What to look for:', 'wpshadow' ); ?></h4>
@@ -62,7 +62,7 @@ if ( ! current_user_can( 'read' ) ) {
 	</div>
 
 	<!-- PHP Version Section -->
-	<div style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; margin-top: 30px;">
+	<div class="wps-p-20-rounded-4">
 		<h2 id="php-version"><?php esc_html_e( 'PHP Version', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'PHP is the language WordPress is built on. Newer versions are faster, more secure, and more reliable.', 'wpshadow' ); ?></p>
 		<h4><?php esc_html_e( 'What to look for:', 'wpshadow' ); ?></h4>
@@ -80,7 +80,7 @@ if ( ! current_user_can( 'read' ) ) {
 	</div>
 
 	<!-- SSL/HTTPS Section -->
-	<div style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; margin-top: 30px;">
+	<div class="wps-p-20-rounded-4">
 		<h2 id="ssl-https"><?php esc_html_e( 'SSL Certificate (HTTPS)', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'SSL encrypts the connection between your visitors and your site. It\'s required by modern browsers and helps with SEO.', 'wpshadow' ); ?></p>
 		<h4><?php esc_html_e( 'What to look for:', 'wpshadow' ); ?></h4>
@@ -98,7 +98,7 @@ if ( ! current_user_can( 'read' ) ) {
 	</div>
 
 	<!-- WordPress Updates Section -->
-	<div style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; margin-top: 30px;">
+	<div class="wps-p-20-rounded-4">
 		<h2 id="wordpress-updates"><?php esc_html_e( 'WordPress Updates', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'WordPress updates include security fixes, new features, and bug improvements. Staying current is critical for site security.', 'wpshadow' ); ?></p>
 		<h4><?php esc_html_e( 'What to look for:', 'wpshadow' ); ?></h4>
@@ -115,7 +115,7 @@ if ( ! current_user_can( 'read' ) ) {
 	</div>
 
 	<!-- Plugin Updates Section -->
-	<div style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; margin-top: 30px;">
+	<div class="wps-p-20-rounded-4">
 		<h2 id="plugin-updates"><?php esc_html_e( 'Plugin Updates', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'Outdated plugins are a common target for hackers. Keeping plugins updated protects your site and ensures compatibility.', 'wpshadow' ); ?></p>
 		<h4><?php esc_html_e( 'What to look for:', 'wpshadow' ); ?></h4>
@@ -132,7 +132,7 @@ if ( ! current_user_can( 'read' ) ) {
 	</div>
 
 	<!-- Memory Limit Section -->
-	<div style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; margin-top: 30px;">
+	<div class="wps-p-20-rounded-4">
 		<h2 id="memory-limit"><?php esc_html_e( 'PHP Memory Limit', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'Memory is like your computer\'s RAM. WordPress needs enough to run plugins, process images, and handle requests. Too little causes timeouts and broken features.', 'wpshadow' ); ?></p>
 		<h4><?php esc_html_e( 'What to look for:', 'wpshadow' ); ?></h4>
@@ -145,12 +145,12 @@ if ( ! current_user_can( 'read' ) ) {
 		<ul style="list-style: disc; padding-left: 20px;">
 			<li><?php esc_html_e( 'Ask your hosting provider to increase PHP memory limit', 'wpshadow' ); ?></li>
 			<li><?php esc_html_e( 'You can also add this to wp-config.php (ask your host first):', 'wpshadow' ); ?></li>
-			<li style="font-family: monospace; background: #f5f5f5; padding: 8px; margin-top: 8px;">define( \'WP_MEMORY_LIMIT\', \'256M\' );</li>
+			<li class="wps-p-8">define( \'WP_MEMORY_LIMIT\', \'256M\' );</li>
 		</ul>
 	</div>
 
 	<!-- Debug Mode Section -->
-	<div style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; margin-top: 30px;">
+	<div class="wps-p-20-rounded-4">
 		<h2 id="debug-mode"><?php esc_html_e( 'Debug Mode', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'Debug mode is useful for troubleshooting but should never be left on in production. It exposes sensitive information to potential attackers.', 'wpshadow' ); ?></p>
 		<h4><?php esc_html_e( 'What to look for:', 'wpshadow' ); ?></h4>
@@ -161,14 +161,14 @@ if ( ! current_user_can( 'read' ) ) {
 		<h4><?php esc_html_e( 'How to fix:', 'wpshadow' ); ?></h4>
 		<ul style="list-style: disc; padding-left: 20px;">
 			<li><?php esc_html_e( 'Open wp-config.php and change these lines to false:', 'wpshadow' ); ?></li>
-			<li style="font-family: monospace; background: #f5f5f5; padding: 8px; margin-top: 8px;">
+			<li class="wps-p-8">
 				<?php echo 'define( \'WP_DEBUG\', false );' . "\n" . 'define( \'WP_DEBUG_LOG\', false );'; ?>
 			</li>
 		</ul>
 	</div>
 
 	<!-- Object Cache Section -->
-	<div style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; margin-top: 30px;">
+	<div class="wps-p-20-rounded-4">
 		<h2 id="object-cache"><?php esc_html_e( 'Object Cache', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'Object caching stores frequently-used data in memory instead of the database. This dramatically speeds up your site.', 'wpshadow' ); ?></p>
 		<h4><?php esc_html_e( 'What to look for:', 'wpshadow' ); ?></h4>
@@ -184,7 +184,7 @@ if ( ! current_user_can( 'read' ) ) {
 	</div>
 
 	<!-- Scheduled Events Section -->
-	<div style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; margin-top: 30px;">
+	<div class="wps-p-20-rounded-4">
 		<h2 id="scheduled-events"><?php esc_html_e( 'Scheduled Events (Cron)', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'WordPress uses scheduled tasks (called "cron") to power automatic updates, backups, email notifications, and other background work. If this breaks, these tasks stop running.', 'wpshadow' ); ?></p>
 		<h4><?php esc_html_e( 'What to look for:', 'wpshadow' ); ?></h4>
@@ -201,7 +201,7 @@ if ( ! current_user_can( 'read' ) ) {
 	</div>
 
 	<!-- File Permissions Section -->
-	<div style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; margin-top: 30px;">
+	<div class="wps-p-20-rounded-4">
 		<h2 id="file-permissions"><?php esc_html_e( 'File Permissions & Integrity', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'File permissions control who can read and modify your WordPress files. Incorrect permissions allow hackers to modify your site or prevent WordPress updates.', 'wpshadow' ); ?></p>
 		<h4><?php esc_html_e( 'What to look for:', 'wpshadow' ); ?></h4>
@@ -217,7 +217,7 @@ if ( ! current_user_can( 'read' ) ) {
 	</div>
 
 	<!-- Plugin Count Section -->
-	<div style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; margin-top: 30px;">
+	<div class="wps-p-20-rounded-4">
 		<h2 id="plugin-count"><?php esc_html_e( 'Number of Active Plugins', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'Each plugin adds code to your site. Too many plugins slow down your site, increase the risk of conflicts, and expand your security surface.', 'wpshadow' ); ?></p>
 		<h4><?php esc_html_e( 'What to look for:', 'wpshadow' ); ?></h4>
@@ -234,9 +234,9 @@ if ( ! current_user_can( 'read' ) ) {
 	</div>
 
 	<!-- Summary -->
-	<div style="background: #f0fdf4; border-left: 4px solid #16a34a; padding: 15px; margin-top: 30px; margin-bottom: 30px; border-radius: 4px;">
+	<div class="wps-p-15-rounded-4">
 		<h3><?php esc_html_e( '✓ Quick Summary', 'wpshadow' ); ?></h3>
-		<ul style="list-style: disc; padding-left: 20px; margin: 10px 0 0 0;">
+		<ul class="wps-m-10">
 			<li><?php esc_html_e( 'Green checks = Your site is healthy', 'wpshadow' ); ?></li>
 			<li><?php esc_html_e( 'Yellow checks = Recommended improvements', 'wpshadow' ); ?></li>
 			<li><?php esc_html_e( 'Red checks = Security or functionality issues', 'wpshadow' ); ?></li>

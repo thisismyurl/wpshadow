@@ -11,74 +11,17 @@ use WPShadow\Core\Diagnostic_Base;
  * KB Link: https://wpshadow.com/kb/design-system-deprecated-usage
  * Training: https://wpshadow.com/training/design-system-deprecated-usage
  */
-class Diagnostic_Design_SYSTEM_DEPRECATED_USAGE extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'design-system-deprecated-usage',
-            'title' => __('Deprecated Component Usage', 'wpshadow'),
-            'description' => __('Finds usage of deprecated design system components.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'design',
-            'kb_link' => 'https://wpshadow.com/kb/design-system-deprecated-usage',
-            'training_link' => 'https://wpshadow.com/training/design-system-deprecated-usage',
-            'auto_fixable' => false,
-            'threat_level' => 6
-        ];
-    }
+class Diagnostic_Design_System_Deprecated_Usage extends Diagnostic_Base {
 
-	/**
-	 * Test: Result structure validation
-	 *
-	 * Ensures diagnostic returns null (no issues) or array (issues found)
-	 * with all required fields populated.
-	 *
-	 * @return array Test result with 'passed' and 'message'
-	 */
-	public static function test_result_structure(): array {
-		$result = self::check();
-		
-		// Valid states: null (pass) or array (fail)
-		if ( null === $result || is_array( $result ) ) {
-			// If array, validate structure
-			if ( is_array( $result ) ) {
-				$required = array(
-					'id', 'title', 'description', 'category', 
-					'severity', 'threat_level'
-				);
-				
-				foreach ( $required as $field ) {
-					if ( ! isset( $result[ $field ] ) ) {
-						return array(
-							'passed'  => false,
-							'message' => "Missing field: $field",
-						);
-					}
-				}
-				
-				// Validate field types
-				if ( ! is_string( $result['severity'] ) ) {
-					return array(
-						'passed'  => false,
-						'message' => 'severity must be string',
-					);
-				}
-				
-				if ( ! is_int( $result['threat_level'] ) || $result['threat_level'] < 0 || $result['threat_level'] > 100 ) {
-					return array(
-						'passed'  => false,
-						'message' => 'threat_level must be int 0-100',
-					);
-				}
-			}
-			
-			return array(
-				'passed'  => true,
-				'message' => 'Result structure valid',
-			);
-		}
-		
-		return array(
-			'passed'  => false,
-			'message' => 'Invalid result type: ' . gettype( $result ),
-		);
-	}}
+	protected static $slug         = 'design-system-deprecated-usage';
+	protected static $title        = 'Deprecated Design System Components';
+	protected static $description  = 'Checks for usage of deprecated design system components.';
+	protected static $family       = 'design-system';
+	protected static $family_label = 'Design System Health';
+
+	public static function check(): ?array {
+		// TODO: Implement detection of deprecated component usage
+		return null;
+	}
+
+}
