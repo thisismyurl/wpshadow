@@ -12,6 +12,9 @@
   // === GitHub Copilot ===
   "github.copilot.chat.maxRequests": 200,
   "github.copilot.chat.autoApproveFileWrites": true,
+  "github.copilot.chat.autoApproveFileModifications": true,
+  "github.copilot.chat.autoApproveFolderCreation": true,
+  "github.copilot.chat.autoApproveFileReferences": true,
   "github.copilot.chat.defaultParticipant": "wpshadow",
   "github.copilot.enable": {
     "*": true,
@@ -43,9 +46,11 @@
   // === Git ===
   "git.autofetch": true,
   "git.confirmSync": false,
+  "git.confirmEmoji": false,
   "git.enableSmartCommit": true,
   "git.postCommitCommand": "push",
   "git.showPushSuccessNotification": true,
+  "git.ignoreLimitWarning": true,
   // === Docker ===
   "docker.enableDockerComposeLanguageService": true,
   // === Search ===

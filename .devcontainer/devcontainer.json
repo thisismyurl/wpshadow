@@ -3,14 +3,12 @@
   "dockerComposeFile": "../docker-compose.yml",
   "service": "wordpress-test",
   "workspaceFolder": "/var/www/html/wp-content/plugins/wpshadow",
-  
   // Features to install
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     "ghcr.io/devcontainers/features/git:1": {},
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
-  
   // VS Code customizations
   "customizations": {
     "vscode": {
@@ -19,6 +17,9 @@
         "files.autoSaveDelay": 1000,
         "github.copilot.chat.maxRequests": 200,
         "github.copilot.chat.autoApproveFileWrites": true,
+        "github.copilot.chat.autoApproveFileModifications": true,
+        "github.copilot.chat.autoApproveFolderCreation": true,
+        "github.copilot.chat.autoApproveFileReferences": true,
         // Set default chat participant to WPShadow Agent
         "github.copilot.chat.defaultParticipant": "wpshadow"
       },
@@ -30,16 +31,15 @@
       ]
     }
   },
-  
   // Run commands on container creation
   "postCreateCommand": "bash .devcontainer/post-create.sh && nohup bash scripts/keep-alive.sh > /dev/null 2>&1 &",
-  
   // Run commands when attaching to existing container
   "postAttachCommand": "bash .devcontainer/post-attach.sh && nohup bash scripts/keep-alive.sh > /dev/null 2>&1 &",
-  
   // Forward ports
-  "forwardPorts": [8080, 9000],
-  
+  "forwardPorts": [
+    8080,
+    9000
+  ],
   // Port attributes
   "portsAttributes": {
     "8080": {
@@ -51,10 +51,8 @@
       "onAutoForward": "notify"
     }
   },
-  
   // Remote user
   "remoteUser": "root",
-  
   // Idle timeout: 120 minutes (max)
   "remoteEnv": {
     "CODESPACES_TIMEOUT": "120"

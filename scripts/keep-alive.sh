@@ -23,7 +23,7 @@ trap 'log_activity "⚠️ Keep-alive stopped"; exit 0' TERM INT
 # Infinite loop - keep session alive by fetching from git every N minutes
 while true; do
     sleep "$INTERVAL"
-    
+
     # Light git operation to signal activity (no actual changes)
     if git rev-parse --git-dir > /dev/null 2>&1; then
         git fetch origin --quiet 2>/dev/null || true
