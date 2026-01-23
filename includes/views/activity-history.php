@@ -120,7 +120,7 @@ $action_labels = array(
 	<p><?php esc_html_e( 'Comprehensive audit log of all WPShadow actions and system changes.', 'wpshadow' ); ?></p>
 	
 	<!-- Filters -->
-	<div class="wps-card" class="wps-m-20">
+	<div class="wps-card wps-m-20">
 		<form method="get" class="wps-grid wps-grid-auto-200 wps-gap-4" style="align-items: end;">
 			<input type="hidden" name="page" value="wpshadow-activity" />
 			

@@ -126,7 +126,7 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 		</div>
 
 		<!-- Info Section -->
-		<div class="info-section" class="wps-p-15-rounded-4">
+		<div class="info-section wps-p-15-rounded-4">
 			<h4><?php esc_html_e( 'Why Timezone Matters', 'wpshadow' ); ?></h4>
 			<ul class="wps-m-10">
 				<li><?php esc_html_e( 'All blog post times reflect your timezone', 'wpshadow' ); ?></li>

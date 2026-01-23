@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 /**
  * Pingback/Trackback Enabled Diagnostic
  *
  * Philosophy: Legacy features - disable unnecessary endpoints
  * @package WPShadow
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
@@ -16,18 +17,20 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check if pingback/trackback is enabled.
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
-class Diagnostic_Pingback_Trackback_Enabled extends Diagnostic_Base {
+class Diagnostic_Pingback_Trackback_Enabled extends Diagnostic_Base
+{
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array {
-		if ( get_option( 'default_ping_status' ) === 'open' ) {
+	public static function check(): ?array
+	{
+		if (get_option('default_ping_status') === 'open') {
 			return array(
 				'id'            => 'pingback-trackback-enabled',
 				'title'         => 'Pingback/Trackback Enabled',
@@ -52,12 +55,12 @@ class Diagnostic_Pingback_Trackback_Enabled extends Diagnostic_Base {
 	 * Diagnostic: Pingback Trackback Enabled
 	 * Slug: -pingback-trackback-enabled
 	 * File: class-diagnostic-pingback-trackback-enabled.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Pingback Trackback Enabled
 	 * Slug: -pingback-trackback-enabled
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -68,23 +71,28 @@ class Diagnostic_Pingback_Trackback_Enabled extends Diagnostic_Base {
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__pingback_trackback_enabled(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
+	public static function test_live__pingback_trackback_enabled(): array
+	{
+		$ping_status = get_option('default_ping_status');
+		$has_issue = ($ping_status === 'open');
+
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
+		$diagnostic_found_issue = is_array($result);
+
+		$test_passes = ($has_issue === $diagnostic_found_issue);
+
+		$message = $test_passes
+			? 'Pingback/trackback check matches site state'
+			: sprintf(
+				'Mismatch: expected %s but diagnostic returned %s (default_ping_status: %s)',
+				$has_issue ? 'issue' : 'no issue',
+				$diagnostic_found_issue ? 'issue' : 'no issue',
+				$ping_status
+			);
+
 		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
+			'passed'  => $test_passes,
+			'message' => $message,
 		);
 	}
-
 }

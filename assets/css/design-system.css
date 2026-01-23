@@ -2024,6 +2024,7 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
     position: relative;
     z-index: 10;
 }
+
 /* ============================================================================
    13. GUARDIAN DASHBOARD STATUS ICONS
    ============================================================================ */
@@ -2052,4 +2053,17 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
     font-size: 20px !important;
     width: 20px !important;
     height: 20px !important;
+}
+/* ============================================================================
+   14. TOOL SECTION STYLING
+   ============================================================================ */
+
+/* Standardized tool section - use wps-card for styling */
+.wpshadow-tool-section {
+    /* Inherits card styling from wps-card */
+}
+
+/* Ensure tool container has proper width */
+.wpshadow-tool-container {
+    max-width: 100%;
 }

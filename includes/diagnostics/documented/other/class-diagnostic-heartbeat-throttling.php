@@ -73,21 +73,30 @@ class Diagnostic_Heartbeat_Throttling extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live__heartbeat_throttling(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
+		$heartbeat_disabled = (defined('WP_DISABLE_HEARTBEAT') && WP_DISABLE_HEARTBEAT);
+		$has_heartbeat_filters = (has_filter('heartbeat_settings') || has_filter('heartbeat_send'));
 		
+		// Issue exists if: heartbeat NOT disabled AND no custom filters
+		$has_issue = (!$heartbeat_disabled && !$has_heartbeat_filters);
+
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
+		$diagnostic_found_issue = is_array($result);
+
+		$test_passes = ($has_issue === $diagnostic_found_issue);
+
+		$message = $test_passes
+			? 'Heartbeat throttling check matches site state'
+			: sprintf(
+				'Mismatch: expected %s but diagnostic returned %s (disabled: %s, has_filters: %s)',
+				$has_issue ? 'issue' : 'no issue',
+				$diagnostic_found_issue ? 'issue' : 'no issue',
+				$heartbeat_disabled ? 'yes' : 'no',
+				$has_heartbeat_filters ? 'yes' : 'no'
+			);
+
 		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
+			'passed'  => $test_passes,
+			'message' => $message,
 		);
 	}
 

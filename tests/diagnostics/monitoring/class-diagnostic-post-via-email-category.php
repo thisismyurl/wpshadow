@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 /**
  * Post via Email Category Diagnostic
@@ -7,7 +6,7 @@ declare(strict_types=1);
  * Flags when Post via Email posts are routed to the default "Uncategorized" category.
  *
  * @package WPShadow
- *
+  * 
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
@@ -19,26 +18,24 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check Post via Email default category alignment.
- *
+  * 
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
-class Diagnostic_Post_Via_Email_Category extends Diagnostic_Base
-{
+class Diagnostic_Post_Via_Email_Category extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue or feature disabled.
 	 */
-	public static function check(): ?array
-	{
-		$post_via_email = get_option('mailserver_url');
-		if (empty($post_via_email)) {
+	public static function check(): ?array {
+		$post_via_email = get_option( 'mailserver_url' );
+		if ( empty( $post_via_email ) ) {
 			return null;
 		}
 
-		$default_category = get_option('default_post_category');
-		if ('1' !== $default_category) { // 1 is Uncategorized.
+		$default_category = get_option( 'default_post_category' );
+		if ( '1' !== $default_category ) { // 1 is Uncategorized.
 			return null;
 		}
 
@@ -63,12 +60,12 @@ class Diagnostic_Post_Via_Email_Category extends Diagnostic_Base
 	 * Diagnostic: Post Via Email Category
 	 * Slug: -post-via-email-category
 	 * File: class-diagnostic-post-via-email-category.php
-	 *
+	 * 
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Post Via Email Category
 	 * Slug: -post-via-email-category
-	 *
+	 * 
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -79,8 +76,7 @@ class Diagnostic_Post_Via_Email_Category extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__post_via_email_category(): array
-	{
+	public static function test_live__post_via_email_category(): array {
 		$post_via_email = get_option('mailserver_url');
 		$default_category = get_option('default_post_category');
 
@@ -106,4 +102,5 @@ class Diagnostic_Post_Via_Email_Category extends Diagnostic_Base
 			'message' => $message,
 		);
 	}
+
 }

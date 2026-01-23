@@ -71,21 +71,27 @@ class Diagnostic_Plugin_Count extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live__plugin_count(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
+		$plugins = get_plugins();
+		$count = count($plugins);
+		$has_issue = ($count > 50);
+
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
+		$diagnostic_found_issue = is_array($result);
+
+		$test_passes = ($has_issue === $diagnostic_found_issue);
+
+		$message = $test_passes
+			? 'Plugin count check matches site state'
+			: sprintf(
+				'Mismatch: expected %s but diagnostic returned %s (plugin count: %d)',
+				$has_issue ? 'issue' : 'no issue',
+				$diagnostic_found_issue ? 'issue' : 'no issue',
+				$count
+			);
+
 		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
+			'passed'  => $test_passes,
+			'message' => $message,
 		);
 	}
 

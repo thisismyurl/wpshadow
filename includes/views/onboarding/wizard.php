@@ -211,7 +211,7 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 							<?php esc_html_e( 'Monthly tips, free training, and WordPress best practices. Unsubscribe anytime.', 'wpshadow' ); ?>
 						</p>
 					</div>
-					<div class="newsletter-email" class="wps-none">
+					<div class="newsletter-email wps-none">
 						<input type="email" name="newsletter_email" placeholder="<?php esc_attr_e( 'your.email@example.com', 'wpshadow' ); ?>" 
 							   class="wps-p-8-rounded-4" />
 					</div>

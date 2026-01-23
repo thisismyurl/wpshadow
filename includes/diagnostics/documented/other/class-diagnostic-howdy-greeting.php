@@ -101,21 +101,26 @@ class Diagnostic_Howdy_Greeting extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live_howdy_greeting_visible(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
+		$howdy_hidden = (bool) get_option('wpshadow_hide_howdy_greeting', false);
+		$has_issue = !$howdy_hidden;
+
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
+		$diagnostic_found_issue = is_array($result);
+
+		$test_passes = ($has_issue === $diagnostic_found_issue);
+
+		$message = $test_passes
+			? 'Howdy greeting check matches site state'
+			: sprintf(
+				'Mismatch: expected %s but diagnostic returned %s (howdy_hidden: %s)',
+				$has_issue ? 'issue' : 'no issue',
+				$diagnostic_found_issue ? 'issue' : 'no issue',
+				$howdy_hidden ? 'yes' : 'no'
+			);
+
 		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented for ' . self::$slug,
+			'passed'  => $test_passes,
+			'message' => $message,
 		);
 	}
 

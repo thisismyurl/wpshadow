@@ -55,7 +55,7 @@ if ( ! current_user_can( 'read' ) ) {
 		<div id="link-scan-results" class="wps-none"></div>
 	</div>
 
-	<div class="wpshadow-tool-section" class="wps-p-20-rounded-4">
+	<div class="wpshadow-tool-section wps-p-20-rounded-4">
 		<h2><?php esc_html_e( 'About Link Checking', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'Broken links negatively impact:', 'wpshadow' ); ?></p>
 		<ul>

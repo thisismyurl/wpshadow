@@ -198,13 +198,13 @@ function wpshadow_render_health_gauges() : void {
 			
 		<!-- Quick Scan and Deep Scan Buttons -->
 		<div class="wps-flex-gap-10">
-			<button id="wpshadow-quick-scan-btn" class="button button-primary" class="wps-p-10">
+			<button id="wpshadow-quick-scan-btn" class="button button-primary wps-p-10">
 				<?php esc_html_e( 'Quick Scan', 'wpshadow' ); ?>
 			</button>
-			<button id="wpshadow-deep-scan-btn" class="button" class="wps-p-10">
+			<button id="wpshadow-deep-scan-btn" class="button wps-p-10">
 				<?php esc_html_e( 'Deep Scan', 'wpshadow' ); ?>
 			</button>
-			<button id="wpshadow-fullscreen-toggle" class="button" class="wps-p-10" title="<?php esc_attr_e( 'View dashboard in fullscreen mode (great for office displays)', 'wpshadow' ); ?>">
+			<button id="wpshadow-fullscreen-toggle" class="button wps-p-10" title="<?php esc_attr_e( 'View dashboard in fullscreen mode (great for office displays)', 'wpshadow' ); ?>">
 				<?php esc_html_e( 'Full Screen', 'wpshadow' ); ?>
 			</button>
 		</div>

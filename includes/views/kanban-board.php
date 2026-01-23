@@ -136,7 +136,7 @@ $severity_legend = array(
 );
 ?>
 
-<div class="wpshadow-kanban-container" id="wpshadow-kanban-board" class="wps-m-30">
+<div class="wpshadow-kanban-container wps-m-30" id="wpshadow-kanban-board">
 	<div class="wps-m-20-p-15-rounded-4">
 		<h3 class="wps-m-0">Organize Your Findings</h3>
 		<p class="wps-m-0">
@@ -175,8 +175,8 @@ $severity_legend = array(
 				</p>
 			</div>
 			<div class="wps-flex-gap-10-justify-flex-end">
-				<button id="wpshadow-autofix-once" class="button" class="wps-p-10">Just Once</button>
-				<button id="wpshadow-autofix-always" class="button button-primary" class="wps-p-10">Create Workflow</button>
+				<button id="wpshadow-autofix-once" class="button wps-p-10">Just Once</button>
+				<button id="wpshadow-autofix-always" class="button button-primary wps-p-10">Create Workflow</button>
 			</div>
 		</div>
 	</div>

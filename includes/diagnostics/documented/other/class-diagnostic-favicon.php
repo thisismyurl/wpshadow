@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 /**
  * Favicon / Site Icon Diagnostic
  *
  * Philosophy: Small UX trust signal; educates on branding consistency.
  * @package WPShadow
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
@@ -16,19 +17,21 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check if a site icon (favicon) is set.
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
-class Diagnostic_Favicon extends Diagnostic_Base {
+class Diagnostic_Favicon extends Diagnostic_Base
+{
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array {
-		$site_icon_id = get_option( 'site_icon' );
-		if ( $site_icon_id ) {
+	public static function check(): ?array
+	{
+		$site_icon_id = get_option('site_icon');
+		if ($site_icon_id) {
 			return null; // Favicon set
 		}
 
@@ -52,12 +55,12 @@ class Diagnostic_Favicon extends Diagnostic_Base {
 	 * Diagnostic: Favicon
 	 * Slug: -favicon
 	 * File: class-diagnostic-favicon.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Favicon
 	 * Slug: -favicon
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -68,23 +71,28 @@ class Diagnostic_Favicon extends Diagnostic_Base {
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__favicon(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
+	public static function test_live__favicon(): array
+	{
+		$site_icon_id = get_option('site_icon');
+		$has_issue = empty($site_icon_id);
+
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
+		$diagnostic_found_issue = is_array($result);
+
+		$test_passes = ($has_issue === $diagnostic_found_issue);
+
+		$message = $test_passes
+			? 'Favicon check matches site state'
+			: sprintf(
+				'Mismatch: expected %s but diagnostic returned %s (site_icon: %s)',
+				$has_issue ? 'issue' : 'no issue',
+				$diagnostic_found_issue ? 'issue' : 'no issue',
+				$site_icon_id ? 'set' : 'empty'
+			);
+
 		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
+			'passed'  => $test_passes,
+			'message' => $message,
 		);
 	}
-
 }

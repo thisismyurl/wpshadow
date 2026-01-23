@@ -55,21 +55,32 @@ class Diagnostic_Embed_Disable extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live_embed_disable(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
+		$disabled = (bool) get_option('wpshadow_embed_disable_enabled', false);
+		$embed_enqueued = wp_script_is('wp-embed', 'enqueued');
+		$embed_registered = wp_script_is('wp-embed', 'registered');
 		
+		// Issue exists if: NOT disabled AND (enqueued OR registered)
+		$has_issue = (!$disabled && ($embed_enqueued || $embed_registered));
+
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
+		$diagnostic_found_issue = is_array($result);
+
+		$test_passes = ($has_issue === $diagnostic_found_issue);
+
+		$message = $test_passes
+			? 'Embed disable check matches site state'
+			: sprintf(
+				'Mismatch: expected %s but diagnostic returned %s (disabled: %s, enqueued: %s, registered: %s)',
+				$has_issue ? 'issue' : 'no issue',
+				$diagnostic_found_issue ? 'issue' : 'no issue',
+				$disabled ? 'yes' : 'no',
+				$embed_enqueued ? 'yes' : 'no',
+				$embed_registered ? 'yes' : 'no'
+			);
+
 		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented for ' . self::$slug,
+			'passed'  => $test_passes,
+			'message' => $message,
 		);
 	}
 

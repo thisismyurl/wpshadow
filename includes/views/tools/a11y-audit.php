@@ -51,7 +51,7 @@ if ( ! current_user_can( 'read' ) ) {
 		<div id="scan-results" class="wps-none"></div>
 	</div>
 
-	<div class="wpshadow-tool-section" class="wps-p-20-rounded-4">
+	<div class="wpshadow-tool-section wps-p-20-rounded-4">
 		<h2><?php esc_html_e( 'Common Checks', 'wpshadow' ); ?></h2>
 		<ul>
 			<li><strong><?php esc_html_e( 'Alt Text:', 'wpshadow' ); ?></strong> <?php esc_html_e( 'All images must have descriptive alt attributes for screen readers.', 'wpshadow' ); ?></li>

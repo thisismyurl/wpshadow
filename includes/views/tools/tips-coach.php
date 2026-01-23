@@ -39,7 +39,7 @@ foreach ( $catalog as $tip ) {
 	<h1><?php esc_html_e( 'Tips & Guidance', 'wpshadow' ); ?></h1>
 	<p><?php esc_html_e( 'Configure helpful tooltips that appear across WordPress admin. These friendly tips help beginners navigate and understand what each tool does.', 'wpshadow' ); ?></p>
 
-	<div class="wpshadow-tips-toolbar" class="wps-m-20">
+	<div class="wpshadow-tips-toolbar wps-m-20">
 		<button id="wpshadow-enable-all-tips" class="button button-secondary" style="margin-right: 10px;">
 			<?php esc_html_e( 'Enable All Tips', 'wpshadow' ); ?>
 		</button>
@@ -50,7 +50,7 @@ foreach ( $catalog as $tip ) {
 
 	<div id="wpshadow-tips-message" class="wps-none-m-20-p-12-rounded-4"></div>
 
-	<div class="wpshadow-tips-settings" class="wps-p-20-rounded-4">
+	<div class="wpshadow-tips-settings wps-p-20-rounded-4">
 		<h2><?php esc_html_e( 'Tip Categories', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'Check the categories below to enable tooltips. Unchecked categories will hide their tips from appearing in wp-admin.', 'wpshadow' ); ?></p>
 
@@ -60,7 +60,7 @@ foreach ( $catalog as $tip ) {
 				$is_disabled = in_array( $cat_slug, $disabled_categories, true );
 				$tips_in_cat = count( $tips_by_category[ $cat_slug ] ?? array() );
 				?>
-				<div class="wpshadow-category-item" class="wps-p-15-rounded-4">
+				<div class="wpshadow-category-item wps-p-15-rounded-4">
 					<label class="wps-flex-items-center">
 						<input
 							type="checkbox"
@@ -76,7 +76,7 @@ foreach ( $catalog as $tip ) {
 					</label>
 
 					<?php if ( ! empty( $tips_by_category[ $cat_slug ] ) ) : ?>
-						<div class="wpshadow-tips-preview" class="wps-p-10-rounded-3">
+							<div class="wpshadow-tips-preview wps-p-10-rounded-3">
 							<strong class="wps-block">
 								<?php esc_html_e( 'Tips in this category:', 'wpshadow' ); ?>
 							</strong>
@@ -96,15 +96,13 @@ foreach ( $catalog as $tip ) {
 		</div>
 	</div>
 
-	<div class="wpshadow-tips-info" class="wps-p-20-rounded-4">
+	<div class="wpshadow-tips-info wps-p-20-rounded-4">
 		<h3 style="margin-top: 0;"><?php esc_html_e( 'How Tips Work', 'wpshadow' ); ?></h3>
 		<ul class="wps-m-10">
 			<li><?php esc_html_e( 'Enabled tips appear as helpful hover tooltips when you move your mouse over menu items, buttons, and other admin elements.', 'wpshadow' ); ?></li>
-			<li>
-			<?php
-			esc_html_e( 'Each tip can be dismissed individually by clicking the X button, and won't reappear for you . ', 'wpshadow' ); ?></li>
-			<li><?php esc_html_e( 'Disabling a category hides all tips in that category from appearing in wp - admin . ', 'wpshadow' ); ?></li>
-			<li><?php esc_html_e( 'These settings apply only to your user account; other users have their own preferences . ', 'wpshadow' ); ?></li>
+			<li><?php esc_html_e( 'Each tip can be dismissed individually by clicking the X button, and won\'t reappear for you.', 'wpshadow' ); ?></li>
+			<li><?php esc_html_e( 'Disabling a category hides all tips in that category from appearing in wp-admin.', 'wpshadow' ); ?></li>
+			<li><?php esc_html_e( 'These settings apply only to your user account; other users have their own preferences.', 'wpshadow' ); ?></li>
 		</ul>
 	</div>
 

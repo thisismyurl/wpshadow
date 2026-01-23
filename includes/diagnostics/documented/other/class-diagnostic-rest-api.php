@@ -83,21 +83,32 @@ class Diagnostic_REST_API extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live_rest_api(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
+		$disabled = (bool) get_option('wpshadow_rest_api_headers_disabled', false);
+		$has_rest_link = (has_action('wp_head', 'rest_output_link_wp_head') !== false);
+		$has_rest_header = (has_action('template_redirect', 'rest_output_link_header') !== false);
 		
+		// Issue exists if: NOT disabled AND (rest_link OR rest_header)
+		$has_issue = (!$disabled && ($has_rest_link || $has_rest_header));
+
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
+		$diagnostic_found_issue = is_array($result);
+
+		$test_passes = ($has_issue === $diagnostic_found_issue);
+
+		$message = $test_passes
+			? 'REST API headers check matches site state'
+			: sprintf(
+				'Mismatch: expected %s but diagnostic returned %s (disabled: %s, rest_link: %s, rest_header: %s)',
+				$has_issue ? 'issue' : 'no issue',
+				$diagnostic_found_issue ? 'issue' : 'no issue',
+				$disabled ? 'yes' : 'no',
+				$has_rest_link ? 'yes' : 'no',
+				$has_rest_header ? 'yes' : 'no'
+			);
+
 		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented for ' . self::$slug,
+			'passed'  => $test_passes,
+			'message' => $message,
 		);
 	}
 

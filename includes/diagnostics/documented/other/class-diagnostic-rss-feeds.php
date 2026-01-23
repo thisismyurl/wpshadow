@@ -91,22 +91,35 @@ class Diagnostic_RSS_Feeds extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live_rss_feeds(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
+		$disabled = (bool) get_option('wpshadow_rss_feeds_disabled', false);
+		$has_feed_links = (has_action('wp_head', 'feed_links') !== false);
+		$has_extra_feed_links = (has_action('wp_head', 'feed_links_extra') !== false);
 		
+		// Issue exists if: NOT disabled AND (feed_links OR extra_feed_links)
+		$has_issue = (!$disabled && ($has_feed_links || $has_extra_feed_links));
+
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
+		$diagnostic_found_issue = is_array($result);
+
+		$test_passes = ($has_issue === $diagnostic_found_issue);
+
+		$message = $test_passes
+			? 'RSS feeds check matches site state'
+			: sprintf(
+				'Mismatch: expected %s but diagnostic returned %s (disabled: %s, feed_links: %s, extra: %s)',
+				$has_issue ? 'issue' : 'no issue',
+				$diagnostic_found_issue ? 'issue' : 'no issue',
+				$disabled ? 'yes' : 'no',
+				$has_feed_links ? 'yes' : 'no',
+				$has_extra_feed_links ? 'yes' : 'no'
+			);
+
 		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented for ' . self::$slug,
+			'passed'  => $test_passes,
+			'message' => $message,
 		);
 	}
+
+}
 
 }

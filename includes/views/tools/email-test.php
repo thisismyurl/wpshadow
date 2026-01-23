@@ -213,7 +213,7 @@ $wp_from_email = 'wordpress@' . preg_replace('#^www\.#', '', wp_parse_url(home_u
 								?>
 							</p>
 							<?php if ($current_from_email === $wp_from_email) : ?>
-								<div class="notice notice-warning inline" class="wps-m-10-p-10">
+								<div class="notice notice-warning inline wps-m-10-p-10">
 									<p>
 										<strong><?php esc_html_e('Warning:', 'wpshadow'); ?></strong>
 										<?php

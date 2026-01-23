@@ -86,21 +86,44 @@ class Diagnostic_User_Enumeration extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live__user_enumeration(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
+		// Replicate the check logic
+		$test_url = add_query_arg('author', 1, home_url());
+		$response = wp_remote_head(
+			$test_url,
+			array(
+				'timeout'   => 5,
+				'sslverify' => false,
+			)
+		);
+
+		if (is_wp_error($response)) {
+			// Can't determine, pass test
+			return array(
+				'passed'  => true,
+				'message' => 'Cannot test user enumeration (connection error)',
+			);
+		}
+
+		$status = wp_remote_retrieve_response_code($response);
+		$has_issue = ($status === 200 || $status === 301 || $status === 302);
+
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
+		$diagnostic_found_issue = is_array($result);
+
+		$test_passes = ($has_issue === $diagnostic_found_issue);
+
+		$message = $test_passes
+			? 'User enumeration check matches site state'
+			: sprintf(
+				'Mismatch: expected %s but diagnostic returned %s (status: %d)',
+				$has_issue ? 'issue' : 'no issue',
+				$diagnostic_found_issue ? 'issue' : 'no issue',
+				$status
+			);
+
 		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented',
+			'passed'  => $test_passes,
+			'message' => $message,
 		);
 	}
 

@@ -46,7 +46,7 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 					?>
 					<div class="wpshadow-block-item <?php echo $is_current_trigger ? 'wpshadow-block-current' : ''; ?>" draggable="true" data-block-id="<?php echo esc_attr( $id ); ?>" data-block-type="trigger" style="background-color: <?php echo esc_attr( $block['color'] ); ?>; position: relative;">
 						<?php if ( $is_current_trigger ) : ?>
-							<span class="dashicons dashicons-yes" class="wps-flex-items-center-justify-center-rounded"></span>
+							<span class="dashicons dashicons-yes wps-flex-items-center-justify-center-rounded"></span>
 						<?php endif; ?>
 						<span class="dashicons <?php echo esc_attr( $block['icon'] ); ?>" style="margin-right: 8px;"></span>
 						<strong><?php echo esc_html( $block['label'] ); ?></strong>
@@ -108,7 +108,7 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 	</div>
 
 	<!-- Block Configuration Modal -->
-	<div id="wpshadow-block-modal" class="wpshadow-modal" class="wps-none">
+	<div id="wpshadow-block-modal" class="wpshadow-modal wps-none">
 		<div class="wpshadow-modal-content" style="max-width: 600px;">
 			<button class="wpshadow-modal-close">&times;</button>
 			<h2 id="wpshadow-block-modal-title">Configure Block</h2>

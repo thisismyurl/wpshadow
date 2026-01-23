@@ -1,7 +1,5 @@
 <?php
-
 declare(strict_types=1);
-
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
@@ -15,41 +13,39 @@ use WPShadow\Core\Diagnostic_Base;
  * @package WPShadow
  * @subpackage Diagnostics
  * @since 1.2601.2200
- *
+  * 
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
-class Diagnostic_SpeculationRulesApiReadiness extends Diagnostic_Base
-{
-	/**
-	 * Run the diagnostic check
-	 *
-	 * @return array|null Array with finding details or null if no issue found
-	 */
-	public static function check(): ?array
-	{
+class Diagnostic_SpeculationRulesApiReadiness extends Diagnostic_Base {
+    /**
+     * Run the diagnostic check
+     *
+     * @return array|null Array with finding details or null if no issue found
+     */
+    public static function check(): ?array {
 		// Check for Speculation Rules API implementation
-		if (!is_ssl()) {
-			return null;
-		}
-
-		// Check if Speculation Rules API is enabled
-		$has_speculation = apply_filters('wpshadow_speculation_rules_enabled', false);
-
-		if (!$has_speculation) {
-			return array(
-				'id' => 'speculation-rules-api-readiness',
-				'title' => __('Speculation Rules API Not Enabled', 'wpshadow'),
-				'description' => __('Enable Speculation Rules API for faster navigation. This modern Chrome feature allows prefetching of likely navigation targets.', 'wpshadow'),
-				'severity' => 'info',
-				'category' => 'monitoring',
-				'kb_link' => 'https://wpshadow.com/kb/speculation-rules-api/',
-				'training_link' => 'https://wpshadow.com/training/prefetch-strategies/',
-				'auto_fixable' => false,
-				'threat_level' => 15,
-			);
-		}
-		return null;
+        if (!is_ssl()) {
+            return null;
+        }
+        
+        // Check if Speculation Rules API is enabled
+        $has_speculation = apply_filters('wpshadow_speculation_rules_enabled', false);
+        
+        if (!$has_speculation) {
+            return array(
+                'id' => 'speculation-rules-api-readiness',
+                'title' => __('Speculation Rules API Not Enabled', 'wpshadow'),
+                'description' => __('Enable Speculation Rules API for faster navigation. This modern Chrome feature allows prefetching of likely navigation targets.', 'wpshadow'),
+                'severity' => 'info',
+                'category' => 'monitoring',
+                'kb_link' => 'https://wpshadow.com/kb/speculation-rules-api/',
+                'training_link' => 'https://wpshadow.com/training/prefetch-strategies/',
+                'auto_fixable' => false,
+                'threat_level' => 15,
+            );
+        }
+        return null;
 	}
 
 
@@ -60,12 +56,12 @@ class Diagnostic_SpeculationRulesApiReadiness extends Diagnostic_Base
 	 * Diagnostic: SpeculationRulesApiReadiness
 	 * Slug: -speculation-rules-api-readiness
 	 * File: class-diagnostic-speculation-rules-api-readiness.php
-	 *
+	 * 
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: SpeculationRulesApiReadiness
 	 * Slug: -speculation-rules-api-readiness
-	 *
+	 * 
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -76,8 +72,7 @@ class Diagnostic_SpeculationRulesApiReadiness extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__speculation_rules_api_readiness(): array
-	{
+	public static function test_live__speculation_rules_api_readiness(): array {
 		$is_ssl = is_ssl();
 		$has_speculation = (bool) apply_filters('wpshadow_speculation_rules_enabled', false);
 
@@ -103,4 +98,5 @@ class Diagnostic_SpeculationRulesApiReadiness extends Diagnostic_Base
 			'message' => $message,
 		);
 	}
+
 }
