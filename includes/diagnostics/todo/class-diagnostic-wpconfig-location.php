@@ -27,17 +27,14 @@ class Diagnostic_WPConfig_Location extends Diagnostic_Base {
 	 * @return array|null Finding data or null if no issue.
 	 */
 	public static function check(): ?array {
-		$abspath     = ABSPATH;
-		$config_file = $abspath . 'wp-config.php';
-
-		// Check if wp-config.php exists in web root
-		if ( ! file_exists( $config_file ) ) {
-			// May be one level up (which is good)
-			$config_file = dirname( $abspath ) . '/wp-config.php';
-			if ( ! file_exists( $config_file ) ) {
-				return null; // Can't find config
-			}
+		$location_result = self::detect_wpconfig_location();
+		
+		if ( ! $location_result ) {
+			return null; // Can't find config
 		}
+
+		$config_file = $location_result['path'];
+		$is_root     = $location_result['is_root'];
 
 		// Check permissions (should not be world-readable)
 		$perms = fileperms( $config_file );
@@ -45,17 +42,54 @@ class Diagnostic_WPConfig_Location extends Diagnostic_Base {
 
 		// If world-readable (e.g., 644, 664, 777)
 		if ( substr( $octal, -1 ) >= '4' ) {
+			$location_text = $is_root ? 'in web root' : 'one level above web root (good security practice)';
 			return array(
 				'id'            => 'wpconfig-location',
 				'title'         => 'wp-config.php Permissions Too Permissive',
-				'description'   => 'Your wp-config.php file has world-readable permissions (' . $octal . '). Set permissions to 600 or 640 to restrict access to database credentials.',
+				'description'   => 'Your wp-config.php file (' . $location_text . ') has world-readable permissions (' . $octal . '). Set permissions to 600 or 640 to restrict access to database credentials.',
 				'severity'      => 'high',
 				'category'      => 'security',
 				'kb_link'       => 'https://wpshadow.com/kb/secure-wp-config-permissions/',
 				'training_link' => 'https://wpshadow.com/training/wpconfig-security/',
 				'auto_fixable'  => false,
 				'threat_level'  => 85,
+				'config_location' => $location_result,
 			);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Detect wp-config.php location
+	 *
+	 * WordPress allows wp-config.php to be placed in two locations:
+	 * 1. Web root (ABSPATH) - default but less secure
+	 * 2. One level above web root - more secure (blocks direct access)
+	 *
+	 * @return ?array Array with 'path' and 'is_root' keys, or null if not found
+	 */
+	public static function detect_wpconfig_location(): ?array {
+		$abspath = ABSPATH;
+
+		// Check web root first
+		$config_file = $abspath . 'wp-config.php';
+		if ( file_exists( $config_file ) ) {
+			return [
+				'path'    => $config_file,
+				'is_root' => true,
+				'message' => 'wp-config.php found in web root (less secure)',
+			];
+		}
+
+		// Check one level above web root (more secure)
+		$config_file = dirname( $abspath ) . '/wp-config.php';
+		if ( file_exists( $config_file ) ) {
+			return [
+				'path'    => $config_file,
+				'is_root' => false,
+				'message' => 'wp-config.php found one level above web root (better security)',
+			];
 		}
 
 		return null;
@@ -66,19 +100,7 @@ class Diagnostic_WPConfig_Location extends Diagnostic_Base {
 	/**
 	 * Live test for this diagnostic
 	 *
-	 * Diagnostic: WPConfig Location
-	 * Slug: -wpconfig-location
-	 * File: class-diagnostic-wpconfig-location.php
-	 * 
-	 * Test Purpose:
-	 * Cannot determine specific pass criteria from available metadata.
-	 * Diagnostic: WPConfig Location
-	 * Slug: -wpconfig-location
-	 * 
-	 * TODO: Review the check() method to understand what constitutes a passing test.
-	 * The test should verify that:
-	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
-	 * - check() returns an array when the diagnostic condition IS met (issue found)
+	 * Tests both wp-config.php location detection and permission checking.
 	 *
 	 * @return array {
 	 *     @type bool   $passed  Whether the test passed
@@ -86,22 +108,34 @@ class Diagnostic_WPConfig_Location extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live__wpconfig_location(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
+		// Detect wp-config.php location
+		$location = self::detect_wpconfig_location();
 		
+		if ( ! $location ) {
+			return [
+				'passed' => false,
+				'message' => '✗ Could not locate wp-config.php in expected locations',
+			];
+		}
+
+		// Run the full diagnostic check
 		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
+
+		$location_type = $location['is_root'] 
+			? 'web root (less secure)' 
+			: 'one level above web root (more secure)';
+
+		if ( is_null( $result ) ) {
+			return [
+				'passed' => true,
+				'message' => '✓ wp-config.php found in ' . $location_type . ' with secure permissions',
+			];
+		}
+
+		return [
 			'passed' => false,
-			'message' => 'Test not yet implemented',
-		);
+			'message' => '✗ wp-config.php found in ' . $location_type . ' but has insecure permissions: ' . $result['title'],
+		];
 	}
 
 }
