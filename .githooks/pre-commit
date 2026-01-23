@@ -1,0 +1,129 @@
+#!/bin/bash
+# WPShadow Pre-Commit Hook - Guardian Angel Protection
+# Catches issues before they reach Git
+
+set -e
+
+echo "🛡️ Guardian Angel: Pre-commit checks..."
+echo ""
+
+ISSUES=0
+
+# === 1. PHP Syntax Check ===
+if command -v php > /dev/null 2>&1; then
+    echo "→ Checking PHP syntax..."
+    SYNTAX_ERRORS=0
+    for file in $(git diff --cached --name-only --diff-filter=ACM | grep '\.php$' | grep -v 'vendor/' | grep -v 'documented/'); do
+        if [ -f "$file" ]; then
+            if ! php -l "$file" > /dev/null 2>&1; then
+                echo "❌ Syntax error in: $file"
+                php -l "$file"
+                ((SYNTAX_ERRORS++))
+                ((ISSUES++))
+            fi
+        fi
+    done
+
+    if [ "$SYNTAX_ERRORS" -eq 0 ]; then
+        echo "✅ PHP syntax OK"
+    else
+        echo ""
+    fi
+else
+    echo "⚠️  PHP not available - skipping syntax check (will run in CI)"
+fi
+
+# === 2. No Debug Code ===
+echo "→ Checking for debug code..."
+DEBUG_FOUND=0
+for file in $(git diff --cached --name-only --diff-filter=ACM | grep '\.php$' | grep -v 'vendor/'); do
+    if [ -f "$file" ]; then
+        if grep -n "var_dump\|print_r\|dd(\|dump(\|exit;\|die(\|console\.log" "$file" > /dev/null 2>&1; then
+            echo "⚠️  Debug code found in: $file"
+            grep -n "var_dump\|print_r\|dd(\|dump(\|exit;\|die(\|console\.log" "$file" || true
+            ((DEBUG_FOUND++))
+        fi
+    fi
+done
+
+if [ "$DEBUG_FOUND" -gt 0 ]; then
+    echo ""
+    read -p "Debug code found. Continue anyway? (y/N) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo "❌ Commit aborted. Remove debug code and try again."
+        exit 1
+    fi
+else
+    echo "✅ No debug code found"
+fi
+echo ""
+
+# === 3. No TODO without issue reference ===
+echo "→ Checking TODOs..."
+NAKED_TODOS=0
+for file in $(git diff --cached --name-only --diff-filter=ACM | grep '\.php$' | grep -v 'vendor/' | grep -v 'documented/'); do
+    if [ -f "$file" ]; then
+        if grep -n "// TODO" "$file" | grep -v "#[0-9]" | grep -v "FIXME" > /dev/null 2>&1; then
+            echo "⚠️  TODO without issue reference in: $file"
+            grep -n "// TODO" "$file" | grep -v "#[0-9]" | grep -v "FIXME" || true
+            ((NAKED_TODOS++))
+        fi
+    fi
+done
+
+if [ "$NAKED_TODOS" -eq 0 ]; then
+    echo "✅ All TODOs have issue references"
+else
+    echo "ℹ️  Tip: Add issue reference like: // TODO #123: description"
+fi
+echo ""
+
+# === 4. No Merge Conflict Markers ===
+echo "→ Checking for merge conflicts..."
+CONFLICTS=0
+for file in $(git diff --cached --name-only --diff-filter=ACM); do
+    if [ -f "$file" ]; then
+        if grep -n "^<<<<<<< \|^=======$\|^>>>>>>> " "$file" > /dev/null 2>&1; then
+            echo "❌ Merge conflict markers found in: $file"
+            ((CONFLICTS++))
+            ((ISSUES++))
+        fi
+    fi
+done
+
+if [ "$CONFLICTS" -eq 0 ]; then
+    echo "✅ No merge conflicts"
+fi
+echo ""
+
+# === 5. Security Patterns ===
+echo "→ Checking security patterns..."
+SECURITY_ISSUES=0
+for file in $(git diff --cached --name-only --diff-filter=ACM | grep '\.php$' | grep -v 'vendor/' | grep -v 'documented/'); do
+    if [ -f "$file" ]; then
+        # Check for direct $_POST/$_GET without sanitization (simplified check)
+        if git diff --cached "$file" | grep "^\+" | grep -E '\$_(POST|GET|REQUEST)\[' | grep -v "sanitize_\|wp_unslash\|absint\|intval" > /dev/null 2>&1; then
+            echo "⚠️  Potential unsanitized input in: $file"
+            ((SECURITY_ISSUES++))
+        fi
+    fi
+done
+
+if [ "$SECURITY_ISSUES" -eq 0 ]; then
+    echo "✅ Security patterns look good"
+else
+    echo "ℹ️  Review input sanitization in files above"
+fi
+echo ""
+
+# === Summary ===
+if [ "$ISSUES" -gt 0 ]; then
+    echo "❌ Pre-commit checks found $ISSUES blocking issues"
+    echo "Fix them and try again."
+    exit 1
+else
+    echo "✅ All pre-commit checks passed!"
+    echo ""
+    exit 0
+fi
