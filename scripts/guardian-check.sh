@@ -2,7 +2,7 @@
 # WPShadow Guardian Angel - Comprehensive Pre-Work Check
 # Catches issues before they become problems
 
-set -e
+set +e  # Don't exit on errors - we want to continue checking
 
 # Colors
 RED='\033[0;31m'
@@ -57,18 +57,22 @@ echo ""
 
 # === 2. PHP Syntax Check ===
 echo -e "${BLUE}→ Checking PHP syntax...${NC}"
-SYNTAX_ERRORS=0
-while IFS= read -r file; do
-    if ! php -l "$file" > /dev/null 2>&1; then
-        echo -e "${RED}✗ Syntax error in: $file${NC}"
-        php -l "$file"
-        ((SYNTAX_ERRORS++))
-        ((ISSUES++))
-    fi
-done < <(find includes wpshadow.php -name '*.php' -not -path '*/vendor/*' -not -path '*/documented/*' 2>/dev/null)
+if ! command -v php &> /dev/null; then
+    echo -e "${YELLOW}⚠ PHP not installed - skipping syntax check${NC}"
+else
+    SYNTAX_ERRORS=0
+    while IFS= read -r file; do
+        if ! php -l "$file" > /dev/null 2>&1; then
+            echo -e "${RED}✗ Syntax error in: $file${NC}"
+            php -l "$file"
+            ((SYNTAX_ERRORS++))
+            ((ISSUES++))
+        fi
+    done < <(find includes wpshadow.php -name '*.php' -not -path '*/vendor/*' -not -path '*/documented/*' 2>/dev/null)
 
-if [ "$SYNTAX_ERRORS" -eq 0 ]; then
-    echo -e "${GREEN}✓ No PHP syntax errors${NC}"
+    if [ "$SYNTAX_ERRORS" -eq 0 ]; then
+        echo -e "${GREEN}✓ No PHP syntax errors${NC}"
+    fi
 fi
 echo ""
 
