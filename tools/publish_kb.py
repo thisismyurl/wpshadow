@@ -149,10 +149,21 @@ def validate_article_content(meta: dict, body: str, path: Path) -> list:
     return errors
 
 
-def markdown_to_html(md: str) -> str:
+def principle_to_anchor(principle_id: str) -> str:
+    """
+    Convert principle ID like '#07-ridiculously-good' to anchor like 'ridiculously-good'.
+    """
+    # Remove # prefix and leading numbers/dashes
+    anchor = principle_id.lstrip('#').lstrip('0123456789-')
+    return anchor
+
+
+def markdown_to_html(md: str, meta: dict = None) -> str:
     if markdown is None:
         print('❌ Missing dependency: markdown. Install with: pip install markdown')
         sys.exit(1)
+    
+    meta = meta or {}
     
     # Remove sections we don't want published
     lines = md.split('\n')
@@ -160,6 +171,7 @@ def markdown_to_html(md: str) -> str:
     skip_until_next_section = False
     in_quality_checklist = False
     in_read_on_wpshadow = False
+    in_article_metadata = False
     
     for i, line in enumerate(lines):
         # Skip "Read on WPShadow" section and block link
@@ -183,6 +195,16 @@ def markdown_to_html(md: str) -> str:
         if in_quality_checklist:
             continue
         
+        # Skip Article Metadata section
+        if '## Article Metadata' in line or '## 📋 Article Metadata' in line:
+            in_article_metadata = True
+            continue
+        if in_article_metadata and line.startswith('---'):
+            in_article_metadata = False
+            continue
+        if in_article_metadata:
+            continue
+        
         # Skip the first H1 title
         if i == 0 and line.startswith('# '):
             continue
@@ -191,10 +213,13 @@ def markdown_to_html(md: str) -> str:
     
     md_filtered = '\n'.join(filtered_lines).strip()
     
-    # Extract summary from TLDR section
+    # Extract summary from TLDR section and opening paragraph from "What This Means"
     summary_text = ''
     summary_lines = []
+    opening_paragraph = ''
+    opening_lines = []
     in_summary = False
+    in_opening = False
     summary_ended = False
     
     for line in md_filtered.split('\n'):
@@ -203,23 +228,43 @@ def markdown_to_html(md: str) -> str:
             continue
         if in_summary and line.startswith('## '):
             summary_ended = True
-            break
+            in_summary = False
         if in_summary and line.strip():
             summary_lines.append(line)
+        
+        # Capture opening paragraph (What This Means section)
+        if '## What This Means' in line:
+            in_opening = True
+            continue
+        if in_opening and line.startswith('## '):
+            in_opening = False
+        if in_opening and line.strip() and not line.startswith('---'):
+            opening_lines.append(line)
     
     if summary_lines:
         summary_text = '\n'.join(summary_lines).strip()
     
-    # Remove the entire TLDR section from body (we'll prepend summary separately)
+    if opening_lines:
+        opening_paragraph = '\n'.join(opening_lines).strip()
+    
+    # Remove TLDR section and What This Means section from body
     lines_out = []
     skip_summary = False
+    skip_opening = False
     for line in md_filtered.split('\n'):
         if '## 📝 Summary (TLDR)' in line or '## Summary (TLDR)' in line:
             skip_summary = True
             continue
         if skip_summary and line.startswith('##'):
             skip_summary = False
-        if not skip_summary:
+        
+        if '## What This Means' in line:
+            skip_opening = True
+            continue
+        if skip_opening and line.startswith('##'):
+            skip_opening = False
+        
+        if not skip_summary and not skip_opening:
             lines_out.append(line)
     md_filtered = '\n'.join(lines_out)
     
@@ -228,6 +273,28 @@ def markdown_to_html(md: str) -> str:
     md_filtered = md_filtered.replace('## Tier 2: Intermediate', '## How to Do It')
     md_filtered = md_filtered.replace('## Tier 3: Advanced', '## Technical Details')
     md_filtered = md_filtered.replace('## Tier 4: Developer', '## For Developers')
+    
+    # Add Core Principles links at the end
+    principles = meta.get('principles', [])
+    if principles:
+        principles_html = '\n\n## Core Principles Applied\n\n'
+        for principle in principles:
+            anchor = principle_to_anchor(principle)
+            # Extract readable name from ID like "#07-ridiculously-good" -> "Ridiculously Good"
+            name = principle.lstrip('#').lstrip('0123456789-').replace('-', ' ').title()
+            principles_html += f'- [{name}](/principles/#{anchor})\n'
+        md_filtered += principles_html
+    
+    # Add Related Features links
+    # Note: Looking for 'related_features' in meta (not in current template, but supporting it)
+    related_features = meta.get('related_features', [])
+    if related_features:
+        features_html = '\n\n## Related WPShadow Features\n\n'
+        for feature_slug in related_features:
+            # Convert slug to readable name
+            feature_name = feature_slug.replace('-', ' ').title()
+            features_html += f'- [{feature_name}](/features/{feature_slug})\n'
+        md_filtered += features_html
     
     # Replace backup warnings with WPShadow backup reminder
     backup_reminder = '<div class="wp-block-notice notice-info"><strong>💾 Backup reminder:</strong> WPShadow includes an offsite backup tool with free registration. Make sure you\'re backed up before making database changes.</div>'
@@ -250,24 +317,155 @@ def markdown_to_html(md: str) -> str:
             heading_id = text.lower().replace(' ', '-').replace(':', '').replace('(', '').replace(')', '')
             headings.append((level, text, heading_id))
     
-    # Build TOC HTML
+    # Build TOC HTML with h2
     toc_html = ''
     if headings:
-        toc_html = '<div class="wp-block-columns toc-wrapper"><h3>Contents</h3><ul>\n'
+        toc_html = '<!-- wp:heading --><h2 class="wp-block-heading">Contents</h2><!-- /wp:heading -->'
+        toc_html += '<!-- wp:list {"className":"toc-list"} --><ul class="toc-list">\n'
         for level, text, heading_id in headings:
             indent = '  ' * (level - 2)
             toc_html += f'{indent}<li><a href="#{heading_id}">{text}</a></li>\n'
-        toc_html += '</ul></div>\n\n'
+        toc_html += '</ul><!-- /wp:list -->\n\n'
     
-    # Prepend summary (without label) and TOC
+    # Build final HTML with WordPress Blocks
     final_html = ''
+    
+    # Summary block
     if summary_text:
         summary_html = markdown.markdown(summary_text, extensions=['extra'])
-        final_html = f'<div class="summary-section">{summary_html}</div>\n\n'
+        final_html += f'<!-- wp:group {{"className":"summary-section"}} -->\n<div class="wp-block-group summary-section">{summary_html}</div>\n<!-- /wp:group -->\n\n'
     
-    final_html += toc_html + html_body
+    # Opening paragraph block with special class
+    if opening_paragraph:
+        opening_html = markdown.markdown(opening_paragraph, extensions=['extra'])
+        # Strip <p> tags from markdown output and rewrap
+        opening_text = opening_html.replace('<p>', '').replace('</p>', '').strip()
+        final_html += f'<!-- wp:paragraph {{"className":"opening"}} -->\n<p class="opening">{opening_text}</p>\n<!-- /wp:paragraph -->\n\n'
+    
+    # TOC
+    final_html += toc_html
+    
+    # Main content wrapped in blocks
+    # Split content by headings and paragraphs for proper block structure
+    content_blocks = convert_html_to_blocks(html_body)
+    final_html += content_blocks
     
     return final_html
+
+
+def convert_html_to_blocks(html: str) -> str:
+    """
+    Convert HTML content to WordPress Gutenberg blocks.
+    Wraps headings, paragraphs, lists, code blocks in proper block comments.
+    """
+    lines = html.split('\n')
+    output = []
+    in_list = False
+    in_code = False
+    in_table = False
+    
+    for line in lines:
+        stripped = line.strip()
+        
+        # Handle headings
+        if stripped.startswith('<h2'):
+            if in_list:
+                output.append('<!-- /wp:list -->\n')
+                in_list = False
+            output.append('<!-- wp:heading -->')
+            output.append(line)
+            output.append('<!-- /wp:heading -->\n')
+        
+        elif stripped.startswith('<h3'):
+            if in_list:
+                output.append('<!-- /wp:list -->\n')
+                in_list = False
+            output.append('<!-- wp:heading {"level":3} -->')
+            output.append(line)
+            output.append('<!-- /wp:heading -->\n')
+        
+        elif stripped.startswith('<h4'):
+            if in_list:
+                output.append('<!-- /wp:list -->\n')
+                in_list = False
+            output.append('<!-- wp:heading {"level":4} -->')
+            output.append(line)
+            output.append('<!-- /wp:heading -->\n')
+        
+        # Handle paragraphs
+        elif stripped.startswith('<p>') and not in_code:
+            if in_list:
+                output.append('<!-- /wp:list -->\n')
+                in_list = False
+            output.append('<!-- wp:paragraph -->')
+            output.append(line)
+            output.append('<!-- /wp:paragraph -->\n')
+        
+        # Handle lists
+        elif stripped.startswith('<ul>') and not in_list:
+            in_list = True
+            output.append('<!-- wp:list -->')
+            output.append(line)
+        elif stripped.startswith('</ul>') and in_list:
+            output.append(line)
+            output.append('<!-- /wp:list -->\n')
+            in_list = False
+        
+        elif stripped.startswith('<ol>') and not in_list:
+            in_list = True
+            output.append('<!-- wp:list {"ordered":true} -->')
+            output.append(line)
+        elif stripped.startswith('</ol>') and in_list:
+            output.append(line)
+            output.append('<!-- /wp:list -->\n')
+            in_list = False
+        
+        # Handle code blocks
+        elif stripped.startswith('<pre><code') or stripped.startswith('<pre class'):
+            in_code = True
+            # Extract language from class if present
+            lang_match = 'language-'
+            if lang_match in line:
+                lang_start = line.index(lang_match) + len(lang_match)
+                lang_end = line.index('"', lang_start)
+                language = line[lang_start:lang_end]
+                output.append(f'<!-- wp:code {{"language":"{language}"}} -->')
+            else:
+                output.append('<!-- wp:code -->')
+            output.append('<pre class="wp-block-code"><code>')
+        elif stripped.startswith('</code></pre>') or (in_code and '</pre>' in stripped):
+            output.append('</code></pre>')
+            output.append('<!-- /wp:code -->\n')
+            in_code = False
+        
+        # Handle tables
+        elif stripped.startswith('<table'):
+            in_table = True
+            output.append('<!-- wp:table -->')
+            output.append('<figure class="wp-block-table">')
+            output.append(line)
+        elif stripped.startswith('</table>') and in_table:
+            output.append(line)
+            output.append('</figure>')
+            output.append('<!-- /wp:table -->\n')
+            in_table = False
+        
+        # Handle divs (notices, etc)
+        elif stripped.startswith('<div class="wp-block-notice'):
+            output.append('<!-- wp:group {"className":"notice-info"} -->')
+            output.append(line)
+        elif stripped.endswith('</div>') and 'wp-block-notice' in ''.join(output[-3:]):
+            output.append(line)
+            output.append('<!-- /wp:group -->\n')
+        
+        else:
+            output.append(line)
+    
+    # Close any open blocks
+    if in_list:
+        output.append('<!-- /wp:list -->')
+    
+    return '\n'.join(output)
 
 
 def ensure_term(site: str, auth_header: str, taxonomy: str, name: str, slug: str | None = None) -> int:
@@ -323,7 +521,7 @@ def publish(article_path: Path):
     course_name = meta.get('course_name') or ''
     kb_last_updated = meta.get('last_updated') or ''
 
-    html = markdown_to_html(body_md)
+    html = markdown_to_html(body_md, meta)
 
     # Ensure taxonomies exist
     cat_id = ensure_term(site, auth_header, 'kb_category', category, slug=category)
@@ -351,6 +549,7 @@ def publish(article_path: Path):
         'content': html,
         'slug': slug,
         'status': status,
+        'author': 2,  # wpshadowteam
         'excerpt': description,
         'kb_category': [cat_id],
         'kb_difficulty': [diff_id],
