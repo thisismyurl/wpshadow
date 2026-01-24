@@ -478,5 +478,4 @@ jQuery(document).ready(function($) {
 	}
 }
 </style>
-});
 </script>
