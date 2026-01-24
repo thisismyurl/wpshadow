@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
+use WPShadow\Core\Activity_Logger;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -34,6 +35,13 @@ class Clear_Cache_Handler extends AJAX_Handler_Base {
         }
 
         wp_cache_flush();
+
+        Activity_Logger::log(
+            'cache_cleared',
+            __( 'Cache cleared successfully.', 'wpshadow' ),
+            'performance'
+        );
+
         self::send_success( array( 'message' => __( 'Cache cleared successfully.', 'wpshadow' ) ) );
     }
 }

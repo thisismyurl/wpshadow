@@ -28,17 +28,20 @@ class Save_Cache_Options_Handler extends AJAX_Handler_Base {
         $cache_posts    = self::get_post_param( 'cache_posts', 'int', 0 );
         $skip_logged_in = self::get_post_param( 'skip_logged_in', 'int', 0 );
         $auto_clear     = self::get_post_param( 'auto_clear_on_save', 'int', 0 );
+        $cache_enabled  = self::get_post_param( 'cache_enabled', 'int', 0 );
 
         update_option( 'wpshadow_cache_pages', (bool) $cache_pages );
         update_option( 'wpshadow_cache_posts', (bool) $cache_posts );
         update_option( 'wpshadow_skip_logged_in', (bool) $skip_logged_in );
         update_option( 'wpshadow_auto_clear_on_save', (bool) $auto_clear );
+        update_option( 'wpshadow_simple_cache_enabled', (bool) $cache_enabled );
 
         // Log activity (#565: Activity Logging Expansion)
         Activity_Logger::log(
             'cache_settings_changed',
             sprintf(
-                __( 'Cache settings updated: pages=%s, posts=%s, skip_logged_in=%s, auto_clear=%s', 'wpshadow' ),
+                __( 'Cache settings updated: enabled=%s, pages=%s, posts=%s, skip_logged_in=%s, auto_clear=%s', 'wpshadow' ),
+                $cache_enabled ? __( 'enabled', 'wpshadow' ) : __( 'disabled', 'wpshadow' ),
                 $cache_pages ? __( 'enabled', 'wpshadow' ) : __( 'disabled', 'wpshadow' ),
                 $cache_posts ? __( 'enabled', 'wpshadow' ) : __( 'disabled', 'wpshadow' ),
                 $skip_logged_in ? __( 'enabled', 'wpshadow' ) : __( 'disabled', 'wpshadow' ),
@@ -46,6 +49,7 @@ class Save_Cache_Options_Handler extends AJAX_Handler_Base {
             ),
             'performance',
             array(
+                'cache_enabled'  => (bool) $cache_enabled,
                 'cache_pages'     => (bool) $cache_pages,
                 'cache_posts'     => (bool) $cache_posts,
                 'skip_logged_in'  => (bool) $skip_logged_in,
