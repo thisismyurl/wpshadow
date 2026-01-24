@@ -117,6 +117,10 @@ class Plugin_Bootstrap
 		if (file_exists($core_path . 'class-abstract-registry.php')) {
 			require_once $core_path . 'class-abstract-registry.php';
 		}
+
+		if (file_exists($core_path . 'class-category-metadata.php')) {
+			require_once $core_path . 'class-category-metadata.php';
+		}
 	}
 
 	/**

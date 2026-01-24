@@ -223,16 +223,14 @@ svg circle[class*="gauge-progress"] {
     transition: stroke-dasharray 0.5s ease, stroke 0.3s ease;
 }
 
-/* Color Utilities for Category Gauges */
-.wpshadow-gauge-security { --gauge-color: #dc2626; }
-.wpshadow-gauge-performance { --gauge-color: #0891b2; }
-.wpshadow-gauge-code-quality { --gauge-color: #7c3aed; }
-.wpshadow-gauge-seo { --gauge-color: #2563eb; }
-.wpshadow-gauge-design { --gauge-color: #8e44ad; }
-.wpshadow-gauge-settings { --gauge-color: #4b5563; }
-.wpshadow-gauge-wordpress-config { --gauge-color: #0073aa; }
-.wpshadow-gauge-monitoring { --gauge-color: #059669; }
-.wpshadow-gauge-workflows { --gauge-color: #ea580c; }
-.wpshadow-gauge-site-health { --gauge-color: #db2777; }
-.wpshadow-gauge-wordpress-health { --gauge-color: #2d5016; }
-.wpshadow-gauge-overall { --gauge-color: #1976d2; }
+/* Color Utilities for Category Gauges - Issue #563: 10 Distinct Colors */
+.wpshadow-gauge-security { --gauge-color: #dc2626; }        /* Red */
+.wpshadow-gauge-performance { --gauge-color: #0891b2; }      /* Cyan */
+.wpshadow-gauge-code-quality { --gauge-color: #7c3aed; }    /* Purple */
+.wpshadow-gauge-seo { --gauge-color: #2563eb; }             /* Blue */
+.wpshadow-gauge-design { --gauge-color: #8e44ad; }          /* Purple-Pink */
+.wpshadow-gauge-settings { --gauge-color: #4b5563; }        /* Gray */
+.wpshadow-gauge-monitoring { --gauge-color: #059669; }      /* Green */
+.wpshadow-gauge-workflows { --gauge-color: #ea580c; }       /* Orange */
+.wpshadow-gauge-wordpress-health { --gauge-color: #21759b; } /* WordPress Blue */
+.wpshadow-gauge-overall { --gauge-color: #1976d2; }         /* Deep Blue */
