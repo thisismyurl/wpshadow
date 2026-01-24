@@ -103,6 +103,52 @@ def parse_markdown(path: Path):
     return meta, body.strip()
 
 
+def validate_article_content(meta: dict, body: str, path: Path) -> list:
+    """
+    Validate that article has real content, not placeholder instructions.
+    Returns list of validation errors (empty list if valid).
+    """
+    errors = []
+    
+    # Check for placeholder patterns in frontmatter
+    description = meta.get('description', '')
+    if '[Brief description' in description or not description or len(description) < 20:
+        errors.append('Description is placeholder or too short')
+    
+    related = meta.get('related_articles', [])
+    if any('[related-article' in str(r) for r in related):
+        errors.append('Related articles contain placeholders like [related-article-1]')
+    
+    # Check for placeholder patterns in body
+    placeholder_patterns = [
+        '[Clear, concise overview',
+        '[Brief description',
+        '[Real-world impact',
+        '[describe benefit]',
+        '[Result/confirmation text]',
+        '[Steps for using WPShadow',
+        '[Technical explanation',
+        '[Benchmarking, optimization',
+        '[Links to related KB',
+        '[Common question about',
+        '[Direct, helpful answer]',
+        '[WPShadow Feature',
+        '[How this article embodies',
+        'Draft - Needs Content',
+    ]
+    
+    for pattern in placeholder_patterns:
+        if pattern in body:
+            errors.append(f'Body contains placeholder: "{pattern}"')
+            break  # Only report first placeholder found
+    
+    # Check minimum content length
+    if len(body) < 500:
+        errors.append(f'Article body too short ({len(body)} chars, minimum 500)')
+    
+    return errors
+
+
 def markdown_to_html(md: str) -> str:
     if markdown is None:
         print('❌ Missing dependency: markdown. Install with: pip install markdown')
@@ -164,8 +210,18 @@ def markdown_to_html(md: str) -> str:
     if summary_lines:
         summary_text = '\n'.join(summary_lines).strip()
     
-    # Remove the TLDR section from body (we'll prepend summary separately)
-    md_filtered = md_filtered.replace('## 📝 Summary (TLDR)\n', '').replace('## Summary (TLDR)\n', '')
+    # Remove the entire TLDR section from body (we'll prepend summary separately)
+    lines_out = []
+    skip_summary = False
+    for line in md_filtered.split('\n'):
+        if '## 📝 Summary (TLDR)' in line or '## Summary (TLDR)' in line:
+            skip_summary = True
+            continue
+        if skip_summary and line.startswith('##'):
+            skip_summary = False
+        if not skip_summary:
+            lines_out.append(line)
+    md_filtered = '\n'.join(lines_out)
     
     # Replace tier headings with friendlier names
     md_filtered = md_filtered.replace('## Tier 1: Beginner Summary', '## Getting Started')
@@ -240,6 +296,17 @@ def publish(article_path: Path):
     auth_header = basic_auth_header(env['WP_USERNAME'], env['WP_APP_PASSWORD'])
 
     meta, body_md = parse_markdown(article_path)
+    
+    # Validate article content before publishing
+    validation_errors = validate_article_content(meta, body_md, article_path)
+    if validation_errors:
+        print(f'❌ Article validation failed: {article_path.name}')
+        for error in validation_errors:
+            print(f'   • {error}')
+        print('\n💡 This article appears to be a stub with placeholder content.')
+        print('   Please write real content before publishing.')
+        sys.exit(1)
+    
     slug = article_path.stem
 
     title = meta.get('title') or slug.replace('-', ' ').title()
