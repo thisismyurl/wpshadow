@@ -14,9 +14,46 @@ use WPShadow\Core\Diagnostic_Base;
  * Threat Level: 40/100
  *
  * Impact: Shows \"You spend 14 hours/month on tasks we can automate\".
-  * 
+  *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
+ */
+
+/**
+ * DIAGNOSTIC GOAL CLARIFICATION
+ * ==============================
+ *
+ * Question to Answer: Automated Task Opportunities
+ *
+ * Category: Unknown
+ * Slug: ai-workflow-automation-gaps
+ *
+ * Purpose:
+ * Determine if the WordPress site meets Unknown criteria related to:
+ * Automatically initialized lean diagnostic for Ai Workflow Automation Gaps. Optimized for minimal ove...
+ */
+
+/**
+ * TEST IMPLEMENTATION NEEDED - REQUIRES HUMAN JUDGMENT
+ * =====================================================
+ * This diagnostic requires subjective assessment or complex analysis.
+ *
+ * CHALLENGE: This type requires human expertise, external APIs, or complex heuristics
+ *
+ * APPROACH OPTIONS:
+ * 1. Define measurable criteria and thresholds
+ * 2. Use third-party APIs for external validation
+ * 3. Build heuristic rules with known calibration points
+ * 4. Create feedback loop for continuous refinement
+ *
+ * NEXT STEPS:
+ * 1. Define specific, measurable criteria
+ * 2. Determine data sources (WordPress, external APIs, user input)
+ * 3. Build heuristic rules with documented thresholds
+ * 4. Create calibration tests with known-good/known-bad samples
+ * 5. Document edge cases and limitations
+ *
+ * CONFIDENCE LEVEL: Medium - requires domain expertise and validation
  */
 class Diagnostic_AiWorkflowAutomationGaps extends Diagnostic_Base {
 	protected static $slug = 'ai-workflow-automation-gaps';
@@ -123,29 +160,49 @@ class Diagnostic_AiWorkflowAutomationGaps extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		if ( ! ( false ) ) {
-			return null;
+		$issues = [];
+
+		// Check if workflow automation is configured
+		$workflows_count = (int)get_option('wpshadow_workflow_count', 0);
+
+		if ($workflows_count === 0) {
+			$issues[] = 'No automation workflows configured';
 		}
 
-		return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
-			'ai-workflow-automation-gaps',
-			'Ai Workflow Automation Gaps',
-			'Automatically initialized lean diagnostic for Ai Workflow Automation Gaps. Optimized for minimal overhead while surfacing high-value signals.',
-			'general',
-			'low',
-			30,
-			'ai-workflow-automation-gaps'
-		);
+		// Check for high-opportunity automation gaps
+		$automation_score = (float)get_option('wpshadow_automation_coverage_score', 0);
+		if ($automation_score < 0.5) { // Less than 50% processes automated
+			$issues[] = 'Less than 50% of repeatable processes are automated';
+		}
+
+		return empty($issues) ? null : [
+			'id' => 'ai-workflow-automation-gaps',
+			'title' => 'Workflow automation opportunities missed',
+			'description' => 'Create automated workflows for repetitive tasks',
+			'severity' => 'medium',
+			'category' => 'ai_readiness',
+			'threat_level' => 48,
+			'details' => $issues,
+		];
 	}
 
+	public static function test_live_ai_workflow_automation_gaps(): array {
+		delete_option('wpshadow_workflow_count');
+		delete_option('wpshadow_automation_coverage_score');
+		$r1 = self::check();
 
+		update_option('wpshadow_workflow_count', 3);
+		update_option('wpshadow_automation_coverage_score', 0.75);
+		$r2 = self::check();
 
-	/**
-	 * Live test for this diagnostic
+		delete_option('wpshadow_workflow_count');
+		delete_option('wpshadow_automation_coverage_score');
+		return ['passed' => is_array($r1) && is_null($r2), 'message' => 'Workflow automation gaps check working'];
+	}
 	 *
 	 * Diagnostic: Ai Workflow Automation Gaps
 	 * Slug: ai-workflow-automation-gaps
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -166,9 +223,9 @@ class Diagnostic_AiWorkflowAutomationGaps extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
 			'passed' => false,
@@ -177,3 +234,10 @@ class Diagnostic_AiWorkflowAutomationGaps extends Diagnostic_Base {
 	}
 
 }
+
+
+/**
+ * STUB - NEEDS CLARIFICATION:
+ * The check() method has a stub condition (if !false) that always passes.
+ * Please clarify: What condition should trigger an issue? How can we detect it?
+ */

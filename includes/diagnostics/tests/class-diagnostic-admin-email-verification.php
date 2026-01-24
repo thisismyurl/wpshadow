@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 /**
  * Admin Email Verification Diagnostic
  *
  * Philosophy: Account security - verify admin email changes
  * @package WPShadow
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
@@ -16,20 +17,22 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check if admin email changes require verification.
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
-class Diagnostic_Admin_Email_Verification extends Diagnostic_Base {
+class Diagnostic_Admin_Email_Verification extends Diagnostic_Base
+{
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array {
-		$has_verification = has_action( 'new_admin_email_approve' );
-		
-		if ( ! $has_verification ) {
+	public static function check(): ?array
+	{
+		$has_verification = has_action('new_admin_email_approve');
+
+		if (! $has_verification) {
 			return array(
 				'id'          => 'admin-email-verification',
 				'title'       => 'No Admin Email Change Verification',
@@ -42,7 +45,7 @@ class Diagnostic_Admin_Email_Verification extends Diagnostic_Base {
 				'threat_level' => 70,
 			);
 		}
-		
+
 		return null;
 	}
 
@@ -54,7 +57,7 @@ class Diagnostic_Admin_Email_Verification extends Diagnostic_Base {
 	 * Diagnostic: Admin Email Verification
 	 * Slug: admin-email-verification
 	 * File: class-diagnostic-admin-email-verification.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Verify that admin email changes require verification hook
 	 * - PASS: check() returns NULL when new_admin_email_approve hook is active
@@ -65,11 +68,12 @@ class Diagnostic_Admin_Email_Verification extends Diagnostic_Base {
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__admin_email_verification(): array {
+	public static function test_live__admin_email_verification(): array
+	{
 		$result = self::check();
-		$has_verification = has_action( 'new_admin_email_approve' );
-		
-		if ( $has_verification ) {
+		$has_verification = has_action('new_admin_email_approve');
+
+		if ($has_verification) {
 			// Verification hook registered = diagnostic should pass (return null)
 			return array(
 				'passed' => is_null($result),
@@ -83,5 +87,4 @@ class Diagnostic_Admin_Email_Verification extends Diagnostic_Base {
 			);
 		}
 	}
-
 }

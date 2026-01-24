@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 /**
  * DNSSEC Implementation Diagnostic
  *
  * Philosophy: DNS security - authenticate domain responses
  * @package WPShadow
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
@@ -16,20 +17,22 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check if DNSSEC is enabled.
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
-class Diagnostic_DNSSEC_Implementation extends Diagnostic_Base {
+class Diagnostic_DNSSEC_Implementation extends Diagnostic_Base
+{
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array {
-		$dnssec_enabled = get_option( 'wpshadow_dnssec_enabled' );
-		
-		if ( empty( $dnssec_enabled ) ) {
+	public static function check(): ?array
+	{
+		$dnssec_enabled = get_option('wpshadow_dnssec_enabled');
+
+		if (empty($dnssec_enabled)) {
 			return array(
 				'id'          => 'dnssec-implementation',
 				'title'       => 'DNSSEC Not Enabled',
@@ -42,7 +45,7 @@ class Diagnostic_DNSSEC_Implementation extends Diagnostic_Base {
 				'threat_level' => 65,
 			);
 		}
-		
+
 		return null;
 	}
 
@@ -54,7 +57,7 @@ class Diagnostic_DNSSEC_Implementation extends Diagnostic_Base {
 	 * Diagnostic: DNSSEC Implementation
 	 * Slug: dnssec-implementation
 	 * File: class-diagnostic-dnssec-implementation.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Verify that DNSSEC is enabled
 	 * - PASS: check() returns NULL when wpshadow_dnssec_enabled option is set
@@ -65,11 +68,12 @@ class Diagnostic_DNSSEC_Implementation extends Diagnostic_Base {
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__dnssec_implementation(): array {
+	public static function test_live__dnssec_implementation(): array
+	{
 		$result = self::check();
-		$dnssec_enabled = get_option( 'wpshadow_dnssec_enabled' );
-		
-		if ( !empty( $dnssec_enabled ) ) {
+		$dnssec_enabled = get_option('wpshadow_dnssec_enabled');
+
+		if (!empty($dnssec_enabled)) {
 			// DNSSEC enabled = diagnostic should pass (return null)
 			return array(
 				'passed' => is_null($result),

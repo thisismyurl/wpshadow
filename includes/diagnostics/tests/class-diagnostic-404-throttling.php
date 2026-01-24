@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 /**
  * 404 Detection and Throttling Diagnostic
  *
  * Philosophy: Scan detection - identify vulnerability scanners
  * @package WPShadow
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
@@ -16,20 +17,22 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check if 404 scanning is throttled.
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
-class Diagnostic_404_Throttling extends Diagnostic_Base {
+class Diagnostic_404_Throttling extends Diagnostic_Base
+{
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array {
-		$has_404_protection = has_filter( 'template_redirect' );
+	public static function check(): ?array
+	{
+		$has_404_protection = has_filter('template_redirect');
 
-		if ( ! $has_404_protection ) {
+		if (! $has_404_protection) {
 			return array(
 				'id'            => '404-throttling',
 				'title'         => 'No 404 Scanning Detection',
@@ -54,7 +57,7 @@ class Diagnostic_404_Throttling extends Diagnostic_Base {
 	 * Diagnostic: 404 Detection and Throttling
 	 * Slug: 404-throttling
 	 * File: class-diagnostic-404-throttling.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Verify that 404 scanning detection is enabled
 	 * - PASS: check() returns NULL when template_redirect filter has handlers
@@ -65,11 +68,12 @@ class Diagnostic_404_Throttling extends Diagnostic_Base {
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__404_throttling(): array {
+	public static function test_live__404_throttling(): array
+	{
 		$result = self::check();
-		$has_404_protection = has_filter( 'template_redirect' );
+		$has_404_protection = has_filter('template_redirect');
 
-		if ( $has_404_protection ) {
+		if ($has_404_protection) {
 			// 404 protection active = diagnostic should pass (return null)
 			return array(
 				'passed' => is_null($result),
@@ -83,5 +87,4 @@ class Diagnostic_404_Throttling extends Diagnostic_Base {
 			);
 		}
 	}
-
 }

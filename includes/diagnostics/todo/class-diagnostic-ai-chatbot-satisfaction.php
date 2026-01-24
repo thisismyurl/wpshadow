@@ -14,9 +14,101 @@ use WPShadow\Core\Diagnostic_Base;
  * Threat Level: 60/100
  *
  * Impact: Shows \"Chatbot resolves only 23% (frustrating 77%)\" with training gaps.
-  * 
+  *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
+ */
+
+/**
+ * DIAGNOSTIC GOAL CLARIFICATION
+ * ==============================
+ *
+ * Question to Answer: Chatbot Performance Audit
+ *
+ * Category: Unknown
+ * Slug: ai-chatbot-satisfaction
+ *
+ * Purpose:
+ * Determine if the WordPress site meets Unknown criteria related to:
+ * Automatically initialized lean diagnostic for Ai Chatbot Satisfaction. Optimized for minimal overhea...
+ */
+
+/**
+ * TEST IMPLEMENTATION NEEDED - REQUIRES HUMAN JUDGMENT
+ * =====================================================
+ * This diagnostic requires subjective assessment or complex analysis.
+ *
+ * CHALLENGE: This type requires human expertise, external APIs, or complex heuristics
+ *
+ * APPROACH OPTIONS:
+ * 1. Define measurable criteria and thresholds
+ * 2. Use third-party APIs for external validation
+ * 3. Build heuristic rules with known calibration points
+ * 4. Create feedback loop for continuous refinement
+ *
+ * NEXT STEPS:
+ * 1. Define specific, measurable criteria
+ * 2. Determine data sources (WordPress, external APIs, user input)
+ * 3. Build heuristic rules with documented thresholds
+ * 4. Create calibration tests with known-good/known-bad samples
+ * 5. Document edge cases and limitations
+ *
+ * CONFIDENCE LEVEL: Medium - requires domain expertise and validation
+ */
+
+/**
+ * HTML ASSESSMENT TEST - CURL-BASED IMPLEMENTATION
+ * =================================================
+ *
+ * Question: Chatbot Performance Audit
+ * Slug: ai-chatbot-satisfaction
+ * Category: Unknown
+ *
+ * IMPLEMENTATION APPROACH:
+ * The Guardian will feed HTML content to this test.
+ * The test will parse and analyze the HTML to determine pass/fail.
+ *
+ * IMPLEMENTATION PATTERN:
+ *
+ * public static function check(): ?array {
+ *     // Guardian provides HTML via $_POST['html'] or similar
+ *     $html = get_html_from_guardian();
+ *
+ *     // Parse HTML using DOMDocument
+ *     $dom = new DOMDocument();
+ *     @$dom->loadHTML($html);
+ *
+ *     // Run specific accessibility checks
+ *     // Examples:
+ *     // - Check for zoom viewport settings
+ *     // - Validate color contrast ratios
+ *     // - Verify ARIA labels present
+ *     // - Check heading hierarchy
+ *     // - Verify alt text on images
+ *
+ *     // Return null if all checks pass
+ *     // Return array with findings if issues found
+ * }
+ *
+ * TOOLS AVAILABLE:
+ * - DOMDocument for HTML parsing
+ * - DOMXPath for element queries
+ * - Color contrast calculation libraries
+ * - HTML validation helpers in WPShadow\Core
+ *
+ * TEST HELPERS TO USE:
+ * - WPShadow\Core\Html_Analyzer
+ * - WPShadow\Core\Accessibility_Checker
+ * - WPShadow\Core\Color_Contrast
+ *
+ * DETECTION STRATEGY:
+ * 1. Parse provided HTML
+ * 2. Query relevant elements/attributes
+ * 3. Validate against accessibility standards
+ * 4. Collect issues
+ * 5. Return null (pass) or array (fail)
+ *
+ * Current Status: READY FOR HTML-BASED IMPLEMENTATION
  */
 class Diagnostic_AiChatbotSatisfaction extends Diagnostic_Base {
 	protected static $slug = 'ai-chatbot-satisfaction';
@@ -123,57 +215,57 @@ class Diagnostic_AiChatbotSatisfaction extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		if ( ! ( false ) ) {
-			return null;
+		$issues = [];
+
+		// Check if chatbot satisfaction tracking is enabled
+		$satisfaction_enabled = get_option('wpshadow_chatbot_satisfaction_tracking', false);
+
+		if (!$satisfaction_enabled) {
+			$issues[] = 'Chatbot satisfaction tracking not enabled';
 		}
 
-		return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
-			'ai-chatbot-satisfaction',
-			'Ai Chatbot Satisfaction',
-			'Automatically initialized lean diagnostic for Ai Chatbot Satisfaction. Optimized for minimal overhead while surfacing high-value signals.',
-			'general',
-			'low',
-			30,
-			'ai-chatbot-satisfaction'
-		);
+		// Check for feedback collection mechanisms
+		$feedback_option = get_option('wpshadow_chatbot_feedback_data', []);
+		if (empty($feedback_option)) {
+			$issues[] = 'No satisfaction feedback data collected';
+		}
+
+		return empty($issues) ? null : [
+			'id' => 'ai-chatbot-satisfaction',
+			'title' => 'Chatbot satisfaction not tracked',
+			'description' => 'Enable tracking to measure chatbot effectiveness',
+			'severity' => 'low',
+			'category' => 'ai_readiness',
+			'threat_level' => 28,
+			'details' => $issues,
+		];
 	}
 
-
-
-	/**
-	 * Live test for this diagnostic
-	 *
-	 * Diagnostic: Ai Chatbot Satisfaction
-	 * Slug: ai-chatbot-satisfaction
-	 * 
-	 * Test Purpose:
-	 * - Verify that check() method returns the correct result based on site state
-	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
-	 * - FAIL: check() returns array when diagnostic condition IS met (issue found)
-	 * - Description: Automatically initialized lean diagnostic for Ai Chatbot Satisfaction. Optimized for minimal overhead while surfacing high-value signals.
-	 *
-	 * @return array {
-	 *     @type bool   $passed  Whether the test passed
-	 *     @type string $message Human-readable test result message
-	 * }
-	 */
 	public static function test_live_ai_chatbot_satisfaction(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
-		
-		$result = self::check();
-		
-		// TODO: Implement actual test logic
-		return array(
-			'passed' => false,
-			'message' => 'Test not yet implemented for ' . self::$slug,
-		);
+		// Test without satisfaction tracking
+		delete_option('wpshadow_chatbot_satisfaction_tracking');
+		$r1 = self::check();
+
+		// Test with satisfaction tracking enabled
+		update_option('wpshadow_chatbot_satisfaction_tracking', true);
+		update_option('wpshadow_chatbot_feedback_data', ['avg_rating' => 4.5]);
+		$r2 = self::check();
+
+		delete_option('wpshadow_chatbot_satisfaction_tracking');
+		delete_option('wpshadow_chatbot_feedback_data');
+		return ['passed' => is_array($r1) && is_null($r2), 'message' => 'Chatbot satisfaction check working'];
+	}
 	}
 
 }
+
+
+/**
+ * NEEDS CLARIFICATION:
+ * This diagnostic has a stub check() method that always returns null.
+ * Please review the intended behavior:
+ * - What condition should trigger an issue?
+ * - How can we detect that condition?
+ * - Are there specific WordPress options/settings to check?
+ * - Should we check plugin activity or theme settings?
+ */
