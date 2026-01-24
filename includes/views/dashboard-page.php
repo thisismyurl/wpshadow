@@ -26,6 +26,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return void
  */
 function wpshadow_render_dashboard() {
+	// Check for category drill-down (Issue #564)
+	$category_filter = isset( $_GET['category'] ) ? sanitize_key( $_GET['category'] ) : '';
+	$is_drilldown = ! empty( $category_filter );
+
+	// Get category metadata for title/details
+	$category_meta = \WPShadow\Core\wpshadow_get_category_metadata();
+	$current_category = $is_drilldown && isset( $category_meta[ $category_filter ] ) 
+		? $category_meta[ $category_filter ] 
+		: null;
+
 	$last_scan = get_option( 'wpshadow_last_quick_scan', 0 );
 	$never_run = empty( $last_scan );
 	$five_minutes_ago = time() - ( 5 * MINUTE_IN_SECONDS );
@@ -33,7 +43,23 @@ function wpshadow_render_dashboard() {
 
 	?>
 	<div class="wrap wpshadow-dashboard">
-		<h1><?php esc_html_e( 'WPShadow Dashboard', 'wpshadow' ); ?></h1>
+		<?php if ( $is_drilldown && $current_category ) : ?>
+			<!-- Category Drill-Down Header -->
+			<div class="wpshadow-drilldown-header" style="margin-bottom: 20px;">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>" class="button" style="margin-right: 10px;">
+					&larr; <?php esc_html_e( 'Back to Dashboard', 'wpshadow' ); ?>
+				</a>
+				<h1 style="display: inline-block; margin: 0; vertical-align: middle;">
+					<span class="dashicons <?php echo esc_attr( $current_category['icon'] ); ?>" style="color: <?php echo esc_attr( $current_category['color'] ); ?>; font-size: 32px; vertical-align: middle;"></span>
+					<?php echo esc_html( $current_category['label'] ); ?> <?php esc_html_e( 'Health', 'wpshadow' ); ?>
+				</h1>
+				<p style="margin: 10px 0 0 0; color: #646970; font-size: 14px;">
+					<?php echo esc_html( $current_category['description'] ); ?>
+				</p>
+			</div>
+		<?php else : ?>
+			<h1><?php esc_html_e( 'WPShadow Dashboard', 'wpshadow' ); ?></h1>
+		<?php endif; ?>
 
 		<?php if ( $never_run ) : ?>
 			<!-- First-time Quick Scan prompt -->
@@ -83,7 +109,7 @@ function wpshadow_render_dashboard() {
 			 *
 			 * Renders all health category gauges
 			 */
-			do_action( 'wpshadow_dashboard_gauges' );
+			do_action( 'wpshadow_dashboard_gauges', $category_filter );
 			?>
 
 			<?php
@@ -92,7 +118,7 @@ function wpshadow_render_dashboard() {
 			 *
 			 * Used for Kanban board and other dashboard widgets
 			 */
-			do_action( 'wpshadow_dashboard_after_content' );
+			do_action( 'wpshadow_dashboard_after_content', $category_filter );
 			?>
 
 			<?php
@@ -101,7 +127,7 @@ function wpshadow_render_dashboard() {
 			 *
 			 * Shows recent activity and actions
 			 */
-			do_action( 'wpshadow_dashboard_activity' );
+			do_action( 'wpshadow_dashboard_activity', $category_filter );
 			?>
 		</div>
 	</div>

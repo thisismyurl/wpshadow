@@ -145,9 +145,13 @@ function wpshadow_get_health_status(): array
  *
  * Called via wpshadow_dashboard_gauges hook
  * Renders overall health gauge and category-specific gauges
+@ *
+@ * @param string $category_filter Optional category to filter by (Issue #564)
  */
-function wpshadow_render_health_gauges(): void
+function wpshadow_render_health_gauges( string $category_filter = '' ): void
 {
+	$is_drilldown = ! empty( $category_filter );
+
 	// Get findings
 	$findings = \wpshadow_get_site_findings();
 	if (empty($findings)) {
@@ -156,6 +160,17 @@ function wpshadow_render_health_gauges(): void
 
 	// Group findings by category
 	$category_meta = \wpshadow_get_category_metadata();
+
+		// Filter categories if drill-down active
+		if ( $is_drilldown ) {
+			// Show only the selected category gauge prominently
+			if ( isset( $category_meta[ $category_filter ] ) ) {
+				$category_meta = array( $category_filter => $category_meta[ $category_filter ] );
+			} else {
+				return; // Invalid category
+			}
+		}
+
 	$findings_by_category = array();
 	foreach ($category_meta as $cat_key => $meta) {
 		$findings_by_category[$cat_key] = array_filter(
