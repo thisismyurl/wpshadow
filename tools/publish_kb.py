@@ -107,15 +107,111 @@ def markdown_to_html(md: str) -> str:
     if markdown is None:
         print('❌ Missing dependency: markdown. Install with: pip install markdown')
         sys.exit(1)
-    # Strip first H1 heading (article title) since it's set via post title
+    
+    # Remove sections we don't want published
     lines = md.split('\n')
-    if lines and lines[0].startswith('# '):
-        lines = lines[1:]
-        # Skip blank line after heading if present
-        if lines and lines[0].strip() == '':
-            lines = lines[1:]
-    md_stripped = '\n'.join(lines)
-    return markdown.markdown(md_stripped, extensions=['extra', 'tables', 'fenced_code'])
+    filtered_lines = []
+    skip_until_next_section = False
+    in_quality_checklist = False
+    in_read_on_wpshadow = False
+    
+    for i, line in enumerate(lines):
+        # Skip "Read on WPShadow" section and block link
+        if '> **Read on WPShadow:**' in line:
+            in_read_on_wpshadow = True
+            continue
+        if in_read_on_wpshadow and line.startswith('---'):
+            in_read_on_wpshadow = False
+            skip_until_next_section = False
+            continue
+        if in_read_on_wpshadow:
+            continue
+        
+        # Skip Quality Checklist section
+        if '## ✓ Quality Checklist' in line:
+            in_quality_checklist = True
+            continue
+        if in_quality_checklist and line.startswith('---'):
+            in_quality_checklist = False
+            continue
+        if in_quality_checklist:
+            continue
+        
+        # Skip the first H1 title
+        if i == 0 and line.startswith('# '):
+            continue
+        
+        filtered_lines.append(line)
+    
+    md_filtered = '\n'.join(filtered_lines).strip()
+    
+    # Extract summary from TLDR section
+    summary_text = ''
+    summary_lines = []
+    in_summary = False
+    summary_ended = False
+    
+    for line in md_filtered.split('\n'):
+        if '## 📝 Summary (TLDR)' in line or '## Summary (TLDR)' in line:
+            in_summary = True
+            continue
+        if in_summary and line.startswith('## '):
+            summary_ended = True
+            break
+        if in_summary and line.strip():
+            summary_lines.append(line)
+    
+    if summary_lines:
+        summary_text = '\n'.join(summary_lines).strip()
+    
+    # Remove the TLDR section from body (we'll prepend summary separately)
+    md_filtered = md_filtered.replace('## 📝 Summary (TLDR)\n', '').replace('## Summary (TLDR)\n', '')
+    
+    # Replace tier headings with friendlier names
+    md_filtered = md_filtered.replace('## Tier 1: Beginner Summary', '## Getting Started')
+    md_filtered = md_filtered.replace('## Tier 2: Intermediate', '## How to Do It')
+    md_filtered = md_filtered.replace('## Tier 3: Advanced', '## Technical Details')
+    md_filtered = md_filtered.replace('## Tier 4: Developer', '## For Developers')
+    
+    # Replace backup warnings with WPShadow backup reminder
+    backup_reminder = '<div class="wp-block-notice notice-info"><strong>💾 Backup reminder:</strong> WPShadow includes an offsite backup tool with free registration. Make sure you\'re backed up before making database changes.</div>'
+    md_filtered = md_filtered.replace('### ⚠️ Before You Start', f'### Before You Start\n\n{backup_reminder}')
+    md_filtered = md_filtered.replace('**Create a backup.**', '**Create a backup.** WPShadow offers free offsite backups via our backup tool.')
+    
+    # Wrap code in <code> tags for inline code
+    # (markdown will handle code blocks)
+    
+    # Convert markdown to HTML
+    html_body = markdown.markdown(md_filtered, extensions=['extra', 'tables', 'fenced_code', 'toc'])
+    
+    # Extract headings for TOC
+    headings = []
+    for line in md_filtered.split('\n'):
+        if line.startswith('##'):
+            level = len(line) - len(line.lstrip('#'))
+            text = line.lstrip('# ').strip()
+            # Convert heading text to ID
+            heading_id = text.lower().replace(' ', '-').replace(':', '').replace('(', '').replace(')', '')
+            headings.append((level, text, heading_id))
+    
+    # Build TOC HTML
+    toc_html = ''
+    if headings:
+        toc_html = '<div class="wp-block-columns toc-wrapper"><h3>Contents</h3><ul>\n'
+        for level, text, heading_id in headings:
+            indent = '  ' * (level - 2)
+            toc_html += f'{indent}<li><a href="#{heading_id}">{text}</a></li>\n'
+        toc_html += '</ul></div>\n\n'
+    
+    # Prepend summary (without label) and TOC
+    final_html = ''
+    if summary_text:
+        summary_html = markdown.markdown(summary_text, extensions=['extra'])
+        final_html = f'<div class="summary-section">{summary_html}</div>\n\n'
+    
+    final_html += toc_html + html_body
+    
+    return final_html
 
 
 def ensure_term(site: str, auth_header: str, taxonomy: str, name: str, slug: str | None = None) -> int:
