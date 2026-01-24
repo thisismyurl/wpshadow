@@ -51,13 +51,16 @@ class Plugin_Bootstrap
 		// 6. Load onboarding system
 		self::load_onboarding_system();
 
-		// 7. Load pro addon integration
+		// 7. Load content post types (KB, FAQ, etc.)
+		self::load_content_types();
+
+		// 8. Load pro addon integration
 		self::load_pro_integration();
 
-		// 8. Load WP-CLI commands
+		// 9. Load WP-CLI commands
 		self::load_cli_commands();
 
-		// 9. Fire initialization complete hook
+		// 10. Fire initialization complete hook
 		do_action('wpshadow_core_initialized');
 	}
 
@@ -191,6 +194,26 @@ class Plugin_Bootstrap
 			if (class_exists('\\WPShadow\\Onboarding\\Onboarding_Wizard')) {
 				\WPShadow\Onboarding\Onboarding_Wizard::init();
 			}
+		}
+	}
+
+	/**
+	 * Load content post types (KB, FAQ, etc.)
+	 *
+	 * @return void
+	 */
+	private static function load_content_types()
+	{
+		$content_path = WPSHADOW_PATH . 'includes/content/';
+
+		// Load KB post type
+		if (file_exists($content_path . 'class-kb-post-type.php')) {
+			require_once $content_path . 'class-kb-post-type.php';
+		}
+
+		// Load FAQ post type
+		if (file_exists($content_path . 'class-faq-post-type.php')) {
+			require_once $content_path . 'class-faq-post-type.php';
 		}
 	}
 
