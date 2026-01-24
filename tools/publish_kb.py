@@ -260,7 +260,8 @@ def markdown_to_html(md: str, meta: dict = None) -> str:
             continue
         if in_opening and line.startswith('## '):
             in_opening = False
-        if in_opening and line.strip() and not line.startswith('---'):
+        # Include blank lines to preserve paragraph breaks in markdown
+        if in_opening and not line.startswith('---'):
             opening_lines.append(line)
     
     if summary_lines:
@@ -356,11 +357,14 @@ def markdown_to_html(md: str, meta: dict = None) -> str:
     # Opening paragraph block with special class (proper formatting)
     if opening_paragraph:
         opening_html = markdown.markdown(opening_paragraph, extensions=['extra'])
-        # Strip <p> tags from markdown output and rewrap
-        opening_text = opening_html.replace('<p>', '').replace('</p>', '').strip()
-        final_html += '<!-- wp:paragraph {"className":"opening"} -->\n'
-        final_html += f'<p class="opening">{opening_text}</p>\n'
-        final_html += '<!-- /wp:paragraph -->\n\n'
+        # Add opening class to all paragraphs in the opening section
+        opening_html = opening_html.replace('<p>', '<p class="opening">')
+        # Wrap each paragraph in blocks
+        opening_blocks = ''
+        for p_tag in opening_html.split('</p>'):
+            if p_tag.strip():
+                opening_blocks += f'<!-- wp:paragraph {{"className":"opening"}} -->\n{p_tag}</p>\n<!-- /wp:paragraph -->\n'
+        final_html += opening_blocks + '\n'
     
     # TOC
     final_html += toc_html
