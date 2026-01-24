@@ -28,11 +28,11 @@ Use these to classify the type of issue being reported:
 
 | Label | Color | Usage |
 |-------|-------|-------|
-| `bug` | 🔴 Red | Bug report: Something is broken or not working as expected |
-| `feature` | 🔵 Cyan | New feature request: Enhancement or new capability |
-| `documentation` | 🔵 Blue | Documentation improvement or addition |
-| `question` | 🟣 Purple | Question or need for clarification |
-| `discussion` | 🔵 Blue | Discussion topic for community engagement |
+| `Bug` | 🔴 Red | Bug report: Something is broken or not working as expected |
+| `Feature` | 🔵 Cyan | New feature request: Enhancement or new capability |
+| `Documentation` | 🔵 Blue | Documentation improvement or addition |
+| `Question` | 🟣 Purple | Question or need for clarification |
+| `Discussion` | 🔵 Blue | Discussion topic for community engagement |
 
 **When to use:**
 - Every issue should have ONE issue type label
@@ -47,17 +47,17 @@ Labels for each of WPShadow's **11 Core Commandments**. Use when an issue relate
 
 | Label | Commandment | Usage |
 |-------|-------------|-------|
-| `principle-helpful-neighbor` | #1 | Guide users, don't manipulate |
-| `principle-free-possible` | #2 | All local features free forever |
-| `principle-advice-not-sales` | #3 | Educational, never pushy |
-| `principle-accessibility-first` | #4 | Inclusive design for all abilities |
-| `principle-learning-inclusive` | #5 | Clear documentation at all levels |
-| `principle-culturally-respectful` | #6 | Honor diverse contexts and perspectives |
-| `principle-ridiculously-good` | #7 | Better than premium alternatives |
-| `principle-inspire-confidence` | #8 | UX that builds trust |
-| `principle-show-value-kpis` | #9 | Track and display improvements |
-| `principle-beyond-pure-privacy` | #10 | Consent-first and transparent |
-| `principle-talk-worthy` | #11 | So good users recommend it |
+| `Principle #01 (Helpful Neighbor)` | #1 | Guide users, don't manipulate |
+| `Principle #02 (Free as Possible)` | #2 | All local features free forever |
+| `Principle #03 (Advice Not Sales)` | #3 | Educational, never pushy |
+| `Principle #04 (Accessibility First)` | #4 | Inclusive design for all abilities |
+| `Principle #05 (Learning Inclusive)` | #5 | Clear documentation at all levels |
+| `Principle #06 (Culturally Respectful)` | #6 | Honor diverse contexts and perspectives |
+| `Principle #07 (Ridiculously Good)` | #7 | Better than premium alternatives |
+| `Principle #08 (Inspire Confidence)` | #8 | UX that builds trust |
+| `Principle #09 (Show Value - KPIs)` | #9 | Track and display improvements |
+| `Principle #10 (Privacy First)` | #10 | Consent-first and transparent |
+| `Principle #11 (Talk-Worthy)` | #11 | So good users recommend it |
 
 **When to use:**
 - Issue helps implement a specific commandment
@@ -68,7 +68,7 @@ Labels for each of WPShadow's **11 Core Commandments**. Use when an issue relate
 **Example:**
 ```
 Title: "Ensure all new diagnostics have plain English names"
-Labels: feature, principle-helpful-neighbor, area-accessibility
+Labels: Feature, Principle #01 (Helpful Neighbor), Area (Accessibility)
 Reason: This helps users understand without jargon (Helpful), 
         and makes diagnostics accessible (Accessibility First)
 ```
@@ -81,9 +81,9 @@ Reason: This helps users understand without jargon (Helpful),
 
 | Label | Pillar | Usage |
 |-------|--------|-------|
-| `canon-accessibility-first` | 🔒 CANON | All features must be accessible to diverse abilities |
-| `canon-learning-inclusive` | 🔒 CANON | Documentation must be understandable to all levels |
-| `canon-culturally-respectful` | 🔒 CANON | Implementation must honor diverse contexts |
+| `CANON: Accessibility First` | 🔒 CANON | All features must be accessible to diverse abilities |
+| `CANON: Learning Inclusive` | 🔒 CANON | Documentation must be understandable to all levels |
+| `CANON: Culturally Respectful` | 🔒 CANON | Implementation must honor diverse contexts |
 
 **When to use:**
 - Issue violates a CANON principle
@@ -113,11 +113,11 @@ Labels for WPShadow's core feature areas:
 
 | Label | Category | Usage |
 |--------|----------|-------|
-| `feature-diagnostics` | 🔍 | Related to diagnostic tests and health checks |
-| `feature-treatments` | 🔧 | Related to automatic fixes and reversible actions |
-| `feature-workflow` | ⚙️ | Related to workflow automation and triggers |
-| `feature-kpi-tracking` | 📊 | Related to KPI measurement and value tracking |
-| `feature-dashboard` | 📱 | Related to dashboard UI and visualization |
+| `Feature: Diagnostics` | 🔍 | Related to diagnostic tests and health checks |
+| `Feature: Treatments` | 🔧 | Related to automatic fixes and reversible actions |
+| `Feature: Workflow` | ⚙️ | Related to workflow automation and triggers |
+| `Feature: KPI Tracking` | 📊 | Related to KPI measurement and value tracking |
+| `Feature: Dashboard` | 📱 | Related to dashboard UI and visualization |
 
 **When to use:**
 - Issue affects a specific feature area
@@ -127,7 +127,7 @@ Labels for WPShadow's core feature areas:
 **Example:**
 ```
 Title: "Add KPI tracking for treatment effectiveness"
-Labels: feature, feature-treatments, feature-kpi-tracking
+Labels: Feature, Feature: Treatments, Feature: KPI Tracking
 Reason: Spans both treatments and KPI tracking features
 ```
 
@@ -139,12 +139,12 @@ Labels for technical domains and concerns:
 
 | Label | Area | Color | Usage |
 |-------|------|-------|-------|
-| `area-security` | Security | 🔴 | Security, compliance, and audit concerns |
-| `area-performance` | Performance | 🟠 | Performance optimization and monitoring |
-| `area-accessibility` | Accessibility | 🟢 | A11y compliance and inclusive design |
-| `area-multisite` | Multisite | 🟣 | Multisite network support and features |
-| `area-api` | API | 🔵 | REST API and external integrations |
-| `area-database` | Database | 🩵 | Database queries, optimization, and migration |
+| `Area (Security)` | Security | 🔴 | Security, compliance, and audit concerns |
+| `Area (Performance)` | Performance | 🟠 | Performance optimization and monitoring |
+| `Area (Accessibility)` | Accessibility | 🟢 | A11y compliance and inclusive design |
+| `Area (Multisite)` | Multisite | 🟣 | Multisite network support and features |
+| `Area (API)` | API | 🔵 | REST API and external integrations |
+| `Area (Database)` | Database | 🩵 | Database queries, optimization, and migration |
 
 **When to use:**
 - Issue is in a specific technical domain
@@ -154,7 +154,7 @@ Labels for technical domains and concerns:
 **Example:**
 ```
 Title: "Slow performance on large sites"
-Labels: bug, area-performance, priority-high, area-database
+Labels: Bug, Area (Performance), Priority (High), Area (Database)
 Reason: Performance issue likely related to database efficiency
 ```
 
@@ -166,10 +166,10 @@ Labels for collecting community input and engagement:
 
 | Label | Type | Usage |
 |-------|------|-------|
-| `feedback-user-request` | 💬 | Feature request or idea from community |
-| `feedback-suggestion` | 💭 | Improvement suggestion or enhancement idea |
-| `feedback-discussion` | 🗣️ | Topic for community discussion and input |
-| `feedback-testimonial` | ⭐ | User testimonial, success story, or case study |
+| `Feedback (User Request)` | 💬 | Feature request or idea from community |
+| `Feedback (Suggestion)` | 💭 | Improvement suggestion or enhancement idea |
+| `Feedback (Discussion)` | 🗣️ | Topic for community discussion and input |
+| `Feedback (Testimonial)` | ⭐ | User testimonial, success story, or case study |
 
 **When to use:**
 - Community member submits a feature request
@@ -180,7 +180,7 @@ Labels for collecting community input and engagement:
 **Example:**
 ```
 Title: "Would love to see weekly health report emails"
-Labels: discussion, feedback-suggestion, feature, priority-low
+Labels: Discussion, Feedback (Suggestion), Feature, Priority (Low)
 Reason: Great suggestion from community member, 
         low priority for now but worth discussing
 ```
@@ -193,10 +193,10 @@ Indicates urgency and importance:
 
 | Label | Priority | Color | Usage |
 |-------|----------|-------|-------|
-| `priority-critical` | 🔴 | Critical | Urgent: Blocks users or site functionality |
-| `priority-high` | 🟥 | High | High priority: Should be addressed soon |
-| `priority-medium` | 🟨 | Medium | Medium priority: Important but not urgent |
-| `priority-low` | ⚪ | Low | Low priority: Nice to have, can wait |
+| `Priority (Critical)` | 🔴 | Critical | Urgent: Blocks users or site functionality |
+| `Priority (High)` | 🟥 | High | High priority: Should be addressed soon |
+| `Priority (Medium)` | 🟨 | Medium | Medium priority: Important but not urgent |
+| `Priority (Low)` | ⚪ | Low | Low priority: Nice to have, can wait |
 
 **Guidelines:**
 - **Critical**: Site broken, security hole, data loss risk
@@ -249,10 +249,10 @@ For KB articles, training, and documentation:
 
 | Label | Content Type | Usage |
 |-------|--------------|-------|
-| `content-kb-article` | 📖 | Related to KB article creation or updates |
-| `content-training-video` | 🎥 | Related to training video or tutorial |
-| `content-blog-post` | 📝 | Blog post or article content |
-| `content-social-media` | 📱 | Social media content or promotion |
+| `Content (KB Article)` | 📖 | Related to KB article creation or updates |
+| `Content (Training Video)` | 🎥 | Related to training video or tutorial |
+| `Content (Blog Post)` | 📝 | Blog post or article content |
+| `Content (Social Media)` | 📱 | Social media content or promotion |
 
 **When to use:**
 - Issue requires KB article creation
@@ -263,7 +263,7 @@ For KB articles, training, and documentation:
 **Example:**
 ```
 Title: "Create KB article: How to schedule diagnostics"
-Labels: documentation, content-kb-article, feature-workflow, priority-medium
+Labels: Documentation, Content (KB Article), Feature: Workflow, Priority (Medium)
 Reason: Documentation needed for new scheduling feature
 ```
 
@@ -275,8 +275,8 @@ For tracking roadmap alignment:
 
 | Label | Phase | Color | Usage |
 |-------|-------|-------|-------|
-| `roadmap-phase-3` | Current | 🟢 | Phase 3: Accessibility & Inclusivity (Current) |
-| `roadmap-future` | Future | ⚪ | Future phases or long-term roadmap |
+| `Roadmap #01 (Phase 3 - Current)` | Current | 🟢 | Phase 3: Accessibility & Inclusivity (Current) |
+| `Roadmap #02 (Future)` | Future | ⚪ | Future phases or long-term roadmap |
 
 **When to use:**
 - Issue is part of current roadmap (Phase 3)
@@ -291,9 +291,9 @@ For guiding contributors:
 
 | Label | Role | Usage |
 |-------|------|-------|
-| `role-good-first-issue` | 🟢 | Good for newcomers and first-time contributors |
-| `role-help-wanted` | 💪 | Help needed from community |
-| `role-expert-needed` | 👨‍💻 | Requires expert knowledge in specific area |
+| `Role (Good First Issue)` | 🟢 | Good for newcomers and first-time contributors |
+| `Role (Help Wanted)` | 💪 | Help needed from community |
+| `Role (Expert Needed)` | 👨‍💻 | Requires expert knowledge in specific area |
 
 **When to use:**
 - **good-first-issue**: Simple task, good onboarding
@@ -303,7 +303,7 @@ For guiding contributors:
 **Example:**
 ```
 Title: "Add help text to Settings page"
-Labels: documentation, role-good-first-issue, feature-dashboard
+Labels: Documentation, Role (Good First Issue), Feature: Dashboard
 Reason: Great first issue - simple, isolated, clear requirements
 ```
 

@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://github.com/thisismyurl/wpshadow/tree/main/docs
+    about: Browse detailed guides and architecture docs
+  - name: Product Philosophy
+    url: https://github.com/thisismyurl/wpshadow/blob/main/docs/PRODUCT_PHILOSOPHY.md
+    about: Understand WPShadow's core values (11 Commandments)
+  - name: Roadmap
+    url: https://github.com/thisismyurl/wpshadow/blob/main/docs/ROADMAP.md
+    about: See current phases and timeline
+  - name: Development Setup
+    url: https://github.com/thisismyurl/wpshadow/blob/main/README.md#for-developers
+    about: Get started contributing
