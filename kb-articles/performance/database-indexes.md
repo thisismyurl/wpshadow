@@ -66,10 +66,12 @@ Most WordPress sites are **missing critical indexes**, causing:
 
 If your site makes $10K/month:
 - **Slow site costs you:** ~$500-2,000/month in:
-  - Abandoned shopping carts (2-3% of users leave)
-  - Higher bounce rate (8-12% drop in traffic)
+  - Abandoned shopping carts (studies show 2-3% higher abandonment on slower sites)
+  - Higher bounce rate (8-12% increase in bounce rate)
   - Increased hosting costs (need bigger servers)
 - **Fast site earns you:** That $500-2,000 back + better conversions
+
+*Note: These figures are industry averages from Google and Kissmetrics studies on page speed impact. Your results may vary.*
 
 ---
 
@@ -101,10 +103,14 @@ Done! Your database is optimized. Check your admin pages—they should feel noti
 
 ## Tier 2: Intermediate (How-To Guide)
 
+### ⚠️ Before You Start
+
+**Create a backup.** While adding indexes is safe and doesn't modify data, it's always wise to have a recent backup before making database changes. If your host provides automated backups, you're covered.
+
 ### What You'll Need
 - WordPress admin access (not just hosting access)
 - 5-10 minutes
-- A backup (recommended but optional—this is safe)
+- A recent backup (recommended)
 
 ### The Three Approaches
 
@@ -148,14 +154,6 @@ WPShadow Pro includes:
 **Best for:** Developers who prefer command-line or automated deployments.
 
 SSH into your server and run:
-
-```bash
-wp db query "ALTER TABLE wp_posts ADD INDEX post_date_index (post_date);"
-wp db query "ALTER TABLE wp_posts ADD INDEX post_type_index (post_type);"
-wp db query "ALTER TABLE wp_posts ADD INDEX post_status_index (post_status);"
-wp db query "ALTER TABLE wp_postmeta ADD INDEX post_id_index (post_id);"
-wp db query "ALTER TABLE wp_postmeta ADD INDEX meta_key_index (meta_key);"
-```
 
 ```bash
 wp db query "ALTER TABLE wp_posts ADD INDEX post_date_index (post_date);"
@@ -393,8 +391,8 @@ A: For most sites: once per year. High-traffic sites: quarterly.
 **Q: Can plugins or themes break indexes?**  
 A: No. Plugins can create new tables, but they don't break existing indexes.
 
-**Q: What if I already have WP Rocket—do I need indexing?**  
-A: Yes! WP Rocket caches pages. Indexing speeds up database queries. Together = best performance.
+**Q: What if I already use a caching plugin—do I need indexing?**  
+A: Yes! Caching speeds up page delivery. Indexing speeds up database queries. Together they create the best performance.
 
 ---
 

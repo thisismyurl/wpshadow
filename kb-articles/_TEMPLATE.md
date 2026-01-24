@@ -24,6 +24,19 @@ course_name: "[Course Name]"
 
 ---
 
+## ✓ Quality Checklist Before Publishing
+
+- [ ] **No duplicate code blocks** - Each code example appears once; remove any accidental copy-paste
+- [ ] **Generic tool references** - Avoid competitor names (WP Rocket, Perfmatrix, etc.); use "caching plugin" or "optimization tool"
+- [ ] **Citations for claims** - Any statistic ($X revenue impact, Y% abandonment) has a source or caveat (e.g., "industry averages from Google studies")
+- [ ] **Precise metrics** - Distinguish between bounce rate, conversion rate, traffic drop, etc. (don't mix them)
+- [ ] **Backup warnings** - Any database/file changes include "⚠️ Create a backup" section at start of Tier 2
+- [ ] **Tone check** - Read aloud; sounds like a helpful expert, not an AI bot
+- [ ] **Principles mapped** - Article includes 3-5 core principle mappings with explanations
+- [ ] **WPShadow focus** - Tier 1 is exclusively WPShadow; Tier 2 offers alternatives in order (Free → Pro → Manual → CLI)
+
+---
+
 ## 📝 Summary (TLDR)
 
 [Clear, concise overview in 1-2 sentences. What's the key takeaway? Why should they read this?]
