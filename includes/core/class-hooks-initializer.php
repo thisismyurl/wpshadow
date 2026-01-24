@@ -523,8 +523,8 @@ class Hooks_Initializer
 		$autofix_types = get_option('wpshadow_autofix_permissions', array());
 		$autofix_count = is_array($autofix_types) ? count($autofix_types) : 0;
 
-		$finding_log = get_option('wpshadow_finding_log', array());
-		$finding_count = is_array($finding_log) ? count($finding_log) : 0;
+		$activity_result = \WPShadow\Core\Activity_Logger::get_activities( array(), 500, 0 );
+		$finding_count = isset( $activity_result['total'] ) ? $activity_result['total'] : 0;
 
 		$section = array(
 			'label'  => __('WPShadow', 'wpshadow'),
@@ -645,8 +645,7 @@ class Hooks_Initializer
 			if ($result['success']) {
 				$status_manager = new \WPShadow\Core\Finding_Status_Manager();
 				$status_manager->set_finding_status($finding_id, 'fixed');
-				wpshadow_log_finding_action($finding_id, 'auto_fixed_overnight', $result['message']);
-				\WPShadow\Core\Activity_Logger::log('treatment_applied', "Overnight fix completed: {$finding_id}", '', array('finding_id' => $finding_id));
+				\WPShadow\Core\Activity_Logger::log('treatment_applied', "Overnight fix completed: {$finding_id}", 'workflows', array('finding_id' => $finding_id));
 
 				$subject = 'WPShadow: Fix Completed';
 				$message = "Your scheduled fix has been completed successfully.\n\nFinding: {$finding_id}\n" . $result['message'];

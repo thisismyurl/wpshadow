@@ -173,26 +173,13 @@ class Data_Retention_Manager {
 	 * @return int Number of records deleted
 	 */
 	private static function cleanup_finding_logs( $days_to_keep ) {
-		$finding_log = get_option( 'wpshadow_finding_log', array() );
-
-		if ( empty( $finding_log ) ) {
+		if ( ! class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
 			return 0;
 		}
 
-		$cutoff_time    = strtotime( "-{$days_to_keep} days" );
-		$original_count = count( $finding_log );
+		$cutoff_date = date( 'Y-m-d H:i:s', strtotime( "-{$days_to_keep} days" ) );
 
-		$finding_log = array_filter(
-			$finding_log,
-			function ( $entry ) use ( $cutoff_time ) {
-				$timestamp = isset( $entry['timestamp'] ) ? $entry['timestamp'] : 0;
-				return $timestamp > $cutoff_time;
-			}
-		);
-
-		update_option( 'wpshadow_finding_log', $finding_log );
-
-		return $original_count - count( $finding_log );
+		return \WPShadow\Core\Activity_Logger::delete_old_entries( $cutoff_date );
 	}
 
 	/**

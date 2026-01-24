@@ -44,7 +44,7 @@ class Consent_Preferences_Handler extends AJAX_Handler_Base {
 		) );
 
 		Activity_Logger::log(
-			'settings_changed',
+			'consent_saved',
 			'Consent preferences updated',
 			'privacy',
 			array( 'telemetry' => (bool) $telemetry )

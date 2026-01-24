@@ -28,7 +28,7 @@ class Autofix_Finding_Handler extends AJAX_Handler_Base {
 
         if ( is_array( $result ) && ! empty( $result['success'] ) ) {
             // Log the fix
-            \wpshadow_log_finding_action( $finding_id, 'auto_fixed', $result['message'] ?? '' );
+            \WPShadow\Core\Activity_Logger::log( 'treatment_applied', sprintf( 'Auto-fix applied: %s', $finding_id ), 'workflows', array( 'finding_id' => $finding_id, 'message' => $result['message'] ?? '' ) );
             self::send_success( $result );
         } else {
             self::send_error( $result['message'] ?? __( 'Auto-fix failed.', 'wpshadow' ), $result );

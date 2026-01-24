@@ -64,7 +64,7 @@ class Apply_Family_Fix_Handler extends AJAX_Handler_Base {
                 ];
 
                 // Log the fix
-                \wpshadow_log_finding_action( (string) $fid, 'auto_fixed', $result['message'] ?? '' );
+                \WPShadow\Core\Activity_Logger::log( 'treatment_applied', sprintf( 'Auto-fix applied: %s', (string) $fid ), 'workflows', array( 'finding_id' => (string) $fid, 'message' => $result['message'] ?? '' ) );
 
                 // Track KPI (Philosophy #9)
                 $time_saved = $result['time_saved'] ?? 0;

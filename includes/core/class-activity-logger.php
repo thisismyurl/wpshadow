@@ -222,6 +222,34 @@ class Activity_Logger {
 		
 		return $csv;
 	}
+
+	/**
+	 * Delete activity entries older than a cutoff date.
+	 *
+	 * @param string $cutoff_date Date string parsable by strtotime().
+	 * @return int Number of removed entries.
+	 */
+	public static function delete_old_entries( string $cutoff_date ): int {
+		$log = get_option( self::OPTION_NAME, array() );
+
+		if ( ! is_array( $log ) || empty( $log ) ) {
+			return 0;
+		}
+
+		$cutoff_timestamp = strtotime( $cutoff_date );
+		if ( false === $cutoff_timestamp ) {
+			return 0;
+		}
+
+		$original_count = count( $log );
+		$log = array_values( array_filter( $log, function( $activity ) use ( $cutoff_timestamp ) {
+			return isset( $activity['timestamp'] ) && $activity['timestamp'] >= $cutoff_timestamp;
+		} ) );
+
+		update_option( self::OPTION_NAME, $log );
+
+		return $original_count - count( $log );
+	}
 	
 	/**
 	 * Clear old activities (older than specified days)

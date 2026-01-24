@@ -39,11 +39,8 @@ class Change_Finding_Status_Handler extends AJAX_Handler_Base
         $status_manager = new \WPShadow\Core\Finding_Status_Manager();
         $status_manager->set_finding_status($finding_id, $new_status);
 
-        // Log the action
-        \wpshadow_log_finding_action($finding_id, 'status_changed', "Status changed to: {$new_status}");
-
         // Log activity (Issue #565)
-        \WPShadow\Core\Activity_Logger::log('finding_status_change', "Finding {$finding_id} moved to {$new_status}", '', array('finding_id' => $finding_id, 'status' => $new_status));
+        \WPShadow\Core\Activity_Logger::log('finding_status_change', "Finding {$finding_id} moved to {$new_status}", 'workflows', array('finding_id' => $finding_id, 'status' => $new_status));
 
         // Smart Actions (Issue #567)
         $smart_action_result = self::execute_smart_action($finding_id, $new_status);

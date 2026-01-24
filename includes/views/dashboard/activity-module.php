@@ -24,39 +24,56 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array Recent activity entries with action and timestamp
  */
 function wpshadow_get_recent_activity() : array {
-    $log = get_option( 'wpshadow_finding_log', array() );
+    if ( ! class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
+        return array();
+    }
+
+    $recent = \WPShadow\Core\Activity_Logger::get_recent( 10 );
+
+    $action_labels = array(
+        'diagnostic_run'             => __( 'Diagnostic Run', 'wpshadow' ),
+        'diagnostic_failed'          => __( 'Diagnostic Failed', 'wpshadow' ),
+        'treatment_applied'          => __( 'Auto-fix Applied', 'wpshadow' ),
+        'treatment_undone'           => __( 'Auto-fix Undone', 'wpshadow' ),
+        'finding_status_change'      => __( 'Status Changed', 'wpshadow' ),
+        'finding_dismissed'          => __( 'Finding Dismissed', 'wpshadow' ),
+        'finding_excluded'           => __( 'Finding Excluded', 'wpshadow' ),
+        'finding_action'             => __( 'Finding Activity', 'wpshadow' ),
+        'finding_resolved'           => __( 'Finding Fixed', 'wpshadow' ),
+        'workflow_created'           => __( 'Workflow Created', 'wpshadow' ),
+        'workflow_executed'          => __( 'Workflow Executed', 'wpshadow' ),
+        'workflow_enabled'           => __( 'Workflow Enabled', 'wpshadow' ),
+        'workflow_disabled'          => __( 'Workflow Disabled', 'wpshadow' ),
+        'workflow_saved'             => __( 'Workflow Saved', 'wpshadow' ),
+        'workflow_deleted'           => __( 'Workflow Deleted', 'wpshadow' ),
+        'guardian_enabled'           => __( 'Guardian Enabled', 'wpshadow' ),
+        'guardian_disabled'          => __( 'Guardian Disabled', 'wpshadow' ),
+        'cache_settings_changed'     => __( 'Cache Settings Changed', 'wpshadow' ),
+        'cache_cleared'              => __( 'Cache Cleared', 'wpshadow' ),
+        'consent_saved'              => __( 'Consent Saved', 'wpshadow' ),
+        'settings_changed'           => __( 'Settings Changed', 'wpshadow' ),
+        'site_settings_changed'      => __( 'Site Settings Changed', 'wpshadow' ),
+        'activity_pruned'            => __( 'Activity Log Pruned', 'wpshadow' ),
+        'retention_setting_updated'  => __( 'Retention Setting Updated', 'wpshadow' ),
+        'data_cleanup_completed'     => __( 'Data Cleanup Completed', 'wpshadow' ),
+    );
+
     $activity = array();
 
-    // Convert finding log to activity format
-    foreach ( array_reverse( array_slice( $log, -10 ) ) as $entry ) {
-        $action_label = '';
-
-        switch ( $entry['action'] ) {
-            case 'auto_fixed':
-                $action_label = '🔧 ' . __( 'Auto-fixed', 'wpshadow' ) . ': ' . ucwords( str_replace( '-', ' ', $entry['finding_id'] ) );
-                break;
-            case 'dismissed':
-                $action_label = '👁️ ' . __( 'Dismissed', 'wpshadow' ) . ': ' . ucwords( str_replace( '-', ' ', $entry['finding_id'] ) );
-                break;
-            case 'scheduled':
-                $action_label = '📅 ' . __( 'Scheduled deep scans', 'wpshadow' );
-                break;
-            default:
-                $action_label = ucwords( str_replace( '-', ' ', $entry['finding_id'] ) );
-        }
-
-        if ( ! empty( $entry['message'] ) ) {
-            $action_label .= ' - ' . $entry['message'];
-        }
+    foreach ( $recent as $entry ) {
+        $action      = $entry['action'] ?? '';
+        $label_text  = $action_labels[ $action ] ?? ucwords( str_replace( '_', ' ', (string) $action ) );
+        $details     = isset( $entry['details'] ) ? trim( (string) $entry['details'] ) : '';
+        $description = $details ? $label_text . ': ' . $details : $label_text;
+        $timestamp   = isset( $entry['timestamp'] ) ? (int) $entry['timestamp'] : current_time( 'timestamp' );
 
         $activity[] = array(
-            'action'    => $action_label,
-            'time'      => $entry['timestamp'],
-            'category'  => $entry['category'] ?? '',
+            'action'   => $description,
+            'time'     => $timestamp,
+            'category' => $entry['category'] ?? '',
         );
     }
 
-    // Add activation as fallback if no log entries
     if ( empty( $activity ) ) {
         $activity[] = array(
             'action'   => __( 'WPShadow activated', 'wpshadow' ),

@@ -107,12 +107,20 @@ $action_labels = array(
 	'workflow_disabled'           => __('Workflow Disabled', 'wpshadow'),
 	'workflow_saved'              => __('Workflow Saved', 'wpshadow'),
 	'workflow_deleted'            => __('Workflow Deleted', 'wpshadow'),
+	'guardian_enabled'            => __('Guardian Enabled', 'wpshadow'),
+	'guardian_disabled'           => __('Guardian Disabled', 'wpshadow'),
 	'settings_changed'            => __('Settings Changed', 'wpshadow'),
+	'finding_action'              => __('Finding Activity', 'wpshadow'),
 	'site_settings_changed'       => __('Site Settings Changed', 'wpshadow'),
 	'cache_settings_changed'      => __('Cache Settings Changed', 'wpshadow'),
+	'cache_cleared'               => __('Cache Cleared', 'wpshadow'),
 	'autofix_permission_enabled'  => __('Auto-fix Enabled', 'wpshadow'),
 	'autofix_permission_disabled' => __('Auto-fix Disabled', 'wpshadow'),
 	'user_preferences_changed'    => __('User Preferences Changed', 'wpshadow'),
+	'consent_saved'               => __('Consent Saved', 'wpshadow'),
+	'retention_setting_updated'   => __('Retention Setting Updated', 'wpshadow'),
+	'data_cleanup_completed'      => __('Data Cleanup Completed', 'wpshadow'),
+	'diagnostic_failed'           => __('Diagnostic Failed', 'wpshadow'),
 );
 ?>
 
