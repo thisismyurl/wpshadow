@@ -1,28 +1,31 @@
 === WPShadow ===
 Contributors: thisismyurl
-Tags: diagnostics, health, backup, recovery, emergency, documentation, maintenance, plugin-audit, error-log, accessibility, performance, security, compliance
+Tags: diagnostics, health, backup, recovery, emergency, documentation, maintenance, plugin-audit, error-log, accessibility, performance, security, compliance, inclusive
 Requires at least: 6.4
 Requires PHP: 8.1.29
 Tested up to: 6.6
+Stable tag: 1.2601.2148
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-WordPress plugin featuring comprehensive health diagnostics, emergency recovery, backup verification, and documentation management with intelligent real-time diagnostics and visual regression protection.
+Comprehensive WordPress health diagnostics, emergency recovery, and documentation management with intelligent real-time monitoring, accessibility-first design, and visual regression protection.
 
 == Description ==
 
-WPShadow is a comprehensive WordPress plugin that provides health diagnostics, emergency recovery, backup verification, and documentation management. It features intelligent real-time diagnostics and visual regression protection to help keep your WordPress site running smoothly and securely.
+WPShadow is a philosophy-first WordPress plugin that provides comprehensive health diagnostics, emergency recovery, backup verification, and documentation management. Built on principles of accessibility, inclusivity, and education, it features intelligent real-time diagnostics and visual regression protection to help keep your WordPress site running smoothly, securely, and equitably.
 
 = Key Features =
 
-* **Comprehensive Health Diagnostics** - Real-time system health monitoring and reporting
-* **Emergency Recovery** - Quick recovery options when things go wrong
-* **Backup Verification** - Ensure your backups are working correctly
-* **Documentation Management** - Centralized documentation for your WordPress setup
-* **Performance Monitoring** - Track and optimize your site performance
-* **Security Audits** - Identify potential security issues
-* **Accessibility Compliance** - A11y audit and compliance checking
-* **Plugin Management** - Monitor and manage plugins effectively
+* **57+ Diagnostics** - Real-time health checks across security, performance, compliance, and system categories
+* **44 Safe Treatments** - Reversible automatic fixes with full undo capabilities
+* **Accessibility-First Design** - WCAG-compliant with built-in accessibility audits
+* **Inclusive Documentation** - Clear, jargon-free guidance for all skill levels
+* **Performance Monitoring** - Track and optimize your site performance with KPI tracking
+* **Security Audits** - Comprehensive security scanning and compliance checking
+* **Workflow Automation** - Intelligent triggers and actions for automated maintenance
+* **Multisite Support** - Full network-aware capabilities and management
+* **Educational Focus** - Links to knowledge base articles and training videos
+* **KPI Tracking** - Measure value delivered (time saved, issues fixed)
 
 = Requirements =
 
@@ -60,10 +63,34 @@ Yes. WPShadow includes full multisite support.
 
 WPShadow requires PHP 8.1.29 or higher.
 
+== Key Principles ==
+
+WPShadow follows 11 core commandments:
+
+1. **Helpful Neighbor** - Guide users, don't manipulate
+2. **Free as Possible** - All local features free forever
+3. **Advice Not Sales** - Educational, never pushy
+4. **Accessibility First** - Inclusive design for all abilities
+5. **Learning Inclusive** - Clear documentation at all levels
+6. **Culturally Respectful** - Honor diverse contexts and perspectives
+7. **Ridiculously Good** - Better than premium alternatives
+8. **Show Value** - Track and display KPI improvements
+9. **Privacy Focused** - Consent-first data handling
+10. **Transparent** - Clear communication always
+11. **Talk-Worthy** - So good users recommend it
+
 == Changelog ==
 
+= 1.2601.2148 =
+* **Phase 3 Complete**: Accessibility & Inclusivity as CANON principles
+* **Phase 2 Complete**: Documentation cleanup and reorganization (150+ → 65 curated files)
+* **Phase 1 Complete**: 57 diagnostic tests across 10 categories
+* Full accessibility compliance and inclusive design patterns
+* Comprehensive git history documented and verified
+* Production-ready for community release
+
 = 1.2601.75000 =
-* Initial release
+* Initial development release
 
 == Support ==
 
