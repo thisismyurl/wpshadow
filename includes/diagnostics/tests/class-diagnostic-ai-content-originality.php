@@ -4,62 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: AI Content Quality Score
- *
- * Detects AI-generated content, scores originality. Google penalty prevention.
- *
- * Philosophy: Commandment #9, 5 - Show Value (KPIs) - Track impact, Drive to KB - Link to knowledge
- * Priority: 1 (1=Must-Have, 2=Should-Have, 3=Nice-to-Have)
- * Threat Level: 70/100
- *
- * Impact: Shows \"12 posts flagged as generic AI content (bad for SEO)\".
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: AI Content Quality Score
- *
- * Category: Unknown
- * Slug: ai-content-originality
- *
- * Purpose:
- * Determine if the WordPress site meets Unknown criteria related to:
- * Automatically initialized lean diagnostic for Ai Content Originality. Optimized for minimal overhead...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - HYBRID LOCAL + API
- * ==================================================
- * 
- * DETECTION APPROACH:
- * 1. Run localized tests for basic AI content analysis
- * 2. If basic checks pass locally, send to WPShadow API for deeper analysis
- * 3. Only users with WPShadow API subscription get the API-level validation
- *
- * LOCAL CHECKS:
- * - Scan recent posts for AI content detection patterns (readability scores, patterns)
- * - Check for originality plugin integrations (Copyscape, Turnitin, etc.)
- * - Analyze post metadata for AI quality scores if available
- * - Flag posts with suspicious characteristics locally
- *
- * API VALIDATION:
- * - Send flagged posts to WPShadow API for advanced analysis
- * - Requires user to have API subscription enabled
- * - Returns detailed originality scores and recommendations
- *
- * TEST STRATEGY:
- * 1. Mock local checks (posts with/without AI patterns)
- * 2. Test flag generation for suspicious content
- * 3. Verify API call is made for subscribed users
- * 4. Verify API call is skipped for non-subscribed users
- * 5. Validate results formatting and threat level calculation
- */
 class Diagnostic_AiContentOriginality extends Diagnostic_Base {
 	protected static $slug = 'ai-content-originality';
 
@@ -212,12 +157,3 @@ class Diagnostic_AiContentOriginality extends Diagnostic_Base {
 
 }
 
-/**
- * NEEDS CLARIFICATION:
- * This diagnostic has a stub check() method that always returns null.
- * Please review the intended behavior:
- * - What condition should trigger an issue?
- * - How can we detect that condition?
- * - Are there specific WordPress options/settings to check?
- * - Should we check plugin activity or theme settings?
- */

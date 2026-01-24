@@ -4,82 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Can intelligent chatbot be supported?
- *
- * Category: AI & ML Readiness
- * Priority: 3
- * Philosophy: 7
- *
- * Test Description:
- * Can intelligent chatbot be supported?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Can intelligent chatbot be supported?
- *
- * Category: AI & ML Readiness
- * Slug: ai-chatbot-readiness
- *
- * Purpose:
- * Determine if the WordPress site meets AI & ML Readiness criteria related to:
- * Automatically initialized lean diagnostic for Ai Chatbot Readiness. Optimized for minimal overhead w...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - CHATBOT READINESS AUDIT
- * ======================================================
- * 
- * DETECTION APPROACH:
- * Multi-factor analysis: plugin support + knowledge base + infrastructure
- *
- * LOCAL CHECKS - A: CHATBOT PLUGINS
- * - Check for chatbot plugins (Chatbot for WordPress, Tidio, Intercom, Drift, etc.)
- * - Verify plugin is active and configured
- * - Check plugin settings for API integration
- * - Verify admin has configured bot responses
- *
- * LOCAL CHECKS - B: KNOWLEDGE BASE READINESS
- * - Check for KB/documentation (dedicated KB plugin or organized posts)
- * - Count KB articles/entries
- * - Verify KB is indexed/searchable
- * - Check if taxonomy/organization exists
- *
- * LOCAL CHECKS - C: INFRASTRUCTURE
- * - Verify site is HTTPS/SSL enabled (required for most chatbots)
- * - Check for REST API enabled
- * - Verify CORS headers/policies allow external calls
- * - Check PHP version supports API requirements
- * - Verify server resource allocation
- *
- * PASS CRITERIA:
- * - Chatbot plugin installed and active, OR infrastructure ready for installation
- * - Knowledge base exists with 50+ articles OR structured FAQs
- * - HTTPS enabled, REST API functional, adequate resources
- * - All prerequisites met or easy to enable
- *
- * FAIL CRITERIA:
- * - No chatbot infrastructure and insufficient KB
- * - HTTPS not enabled or REST API blocked
- * - Inadequate server resources
- * - Missing prerequisites that would require significant work
- *
- * TEST STRATEGY:
- * 1. Mock chatbot plugin presence/settings
- * 2. Test KB article counting and detection
- * 3. Test infrastructure checks (SSL, API, headers)
- * 4. Test combined readiness scoring
- * 5. Validate recommendations for missing items
- */
  */
 /**
  * ⚠️ STUB - NEEDS IMPLEMENTATION
@@ -278,12 +203,3 @@ class Diagnostic_Ai_Chatbot_Readiness extends Diagnostic_Base {
 	}
 }
 
-/**
- * NEEDS CLARIFICATION:
- * This diagnostic has a stub check() method that always returns null.
- * Please review the intended behavior:
- * - What condition should trigger an issue?
- * - How can we detect that condition?
- * - Are there specific WordPress options/settings to check?
- * - Should we check plugin activity or theme settings?
- */

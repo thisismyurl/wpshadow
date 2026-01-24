@@ -4,71 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Is child safety compliance in place?
- *
- * Category: Compliance & Legal Risk
- * Priority: 1
- * Philosophy: 10
- *
- * Test Description:
- * Is child safety compliance in place?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  *
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Is child safety compliance in place?
- *
- * Category: Compliance & Legal Risk
- * Slug: coppa-compliance
- *
- * Purpose:
- * Determine if the WordPress site meets Compliance & Legal Risk criteria related to:
- * Automatically initialized lean diagnostic for Coppa Compliance. Optimized for minimal overhead while...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - COMPLIANCE DISCLOSURE AUDIT
- * =========================================================
- *
- * DETECTION APPROACH:
- * Check for compliance-related disclosures and policy pages
- *
- * LOCAL CHECKS:
- * - Search for policy pages (privacy policy, terms, CCPA notice, etc.)
- * - Check for specific required disclosures in policy text
- * - Verify opt-out/do-not-sell links are present and accessible
- * - Check for cookie consent banners if collecting data
- * - Verify data processing disclosures are visible
- * - Check for accessibility of compliance information
- *
- * PASS CRITERIA:
- * - All required policy pages exist and are linked
- * - Required disclosures present in policies
- * - Opt-out mechanisms available and accessible
- * - Current (recently updated) policy documents
- *
- * FAIL CRITERIA:
- * - Missing required policy pages
- * - Incomplete or outdated disclosures
- * - Inaccessible opt-out mechanisms
- * - Missing required notices
- *
- * TEST STRATEGY:
- * 1. Mock WordPress with policy pages
- * 2. Test page detection and content scanning
- * 3. Test disclosure verification
- * 4. Test link accessibility
- * 5. Validate compliance scoring
- */
  */
 /**
  * ⚠️ STUB - NEEDS IMPLEMENTATION
@@ -302,8 +238,3 @@ class Diagnostic_Coppa_Compliance extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

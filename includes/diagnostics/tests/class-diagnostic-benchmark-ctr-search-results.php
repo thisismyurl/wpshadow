@@ -4,70 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Search click-through rate?
- *
- * Category: Competitive Benchmarking
- * Priority: 2
- * Philosophy: 9
- *
- * Test Description:
- * Search click-through rate?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Search click-through rate?
- *
- * Category: Competitive Benchmarking
- * Slug: benchmark-ctr-search-results
- *
- * Purpose:
- * Determine if the WordPress site meets Competitive Benchmarking criteria related to:
- * Automatically initialized lean diagnostic for Benchmark Ctr Search Results. Optimized for minimal ov...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - COMPETITIVE BENCHMARKING
- * =====================================================
- * 
- * DETECTION APPROACH:
- * Compare site metrics against competitor or industry standards
- *
- * LOCAL CHECKS:
- * - Detect SEO/benchmark plugins (SEMrush, Moz, SimilarWeb integration, etc.)
- * - Query benchmark data from plugin storage
- * - Calculate current site metrics locally
- * - Compare against stored benchmark data
- * - Check for recent benchmark updates
- *
- * PASS CRITERIA:
- * - Site metrics are competitive (within top 50% benchmark range)
- * - Benchmark data is current (< 30 days old)
- * - Competitor/industry data available for comparison
- * - Trending in positive direction
- *
- * FAIL CRITERIA:
- * - Site underperforming vs benchmarks
- * - No benchmark data available
- * - Outdated benchmark information (> 90 days)
- * - Declining trend
- *
- * TEST STRATEGY:
- * 1. Mock benchmark plugin with competitor data
- * 2. Test metric comparison logic
- * 3. Test percentile calculations
- * 4. Test trend detection
- * 5. Validate recommendation generation
- */
 class Diagnostic_Benchmark_Ctr_Search_Results extends Diagnostic_Base {
 	protected static $slug = 'benchmark-ctr-search-results';
 
@@ -222,8 +159,3 @@ class Diagnostic_Benchmark_Ctr_Search_Results extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

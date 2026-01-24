@@ -4,38 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Suspicious File Changes
- *
- * Detects unauthorized modifications to core/plugin files since last scan. Early warning system for backdoors.
- *
- * Philosophy: Commandment #1, 8 - Helpful Neighbor - Anticipate needs, Inspire Confidence - Intuitive UX
- * Priority: 1 (1=Must-Have, 2=Should-Have, 3=Nice-to-Have)
- * Threat Level: 95/100
- *
- * Impact: Catches hacked sites before damage spreads. Shows exactly which files were modified.
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Suspicious File Changes
- *
- * Category: Unknown
- * Slug: sec-file-integrity-monitor
- *
- * Purpose:
- * Determine if the WordPress site meets Unknown criteria related to:
- * Automatically initialized lean diagnostic for Sec File Integrity Monitor. Optimized for minimal over...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - MONITORING - Check uptime/health plugins, query status logs
- */
 class Diagnostic_SecFileIntegrityMonitor extends Diagnostic_Base {
 	protected static $slug = 'sec-file-integrity-monitor';
 
@@ -193,8 +162,3 @@ class Diagnostic_SecFileIntegrityMonitor extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

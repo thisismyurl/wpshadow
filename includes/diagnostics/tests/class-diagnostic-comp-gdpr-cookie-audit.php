@@ -4,70 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: GDPR Cookie Violations
- *
- * Detects cookies set before consent. €20M fine prevention.
- *
- * Philosophy: Commandment #10, 1 - Beyond Pure (Privacy) - Consent-first, Helpful Neighbor - Anticipate needs
- * Priority: 1 (1=Must-Have, 2=Should-Have, 3=Nice-to-Have)
- * Threat Level: 95/100
- *
- * Impact: Shows \"12 tracking cookies fire before consent (€20M fine risk)\".
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: GDPR Cookie Violations
- *
- * Category: Unknown
- * Slug: comp-gdpr-cookie-audit
- *
- * Purpose:
- * Determine if the WordPress site meets Unknown criteria related to:
- * Automatically initialized lean diagnostic for Comp Gdpr Cookie Audit. Optimized for minimal overhead...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - AUDIT TRAIL ANALYSIS
- * ================================================
- * 
- * DETECTION APPROACH:
- * Query audit logging systems for recorded activities and compliance data
- *
- * LOCAL CHECKS:
- * - Check for audit plugin (Auditor, Stream, Argon Notifier, etc.)
- * - Query audit logs from database
- * - Analyze logged events for completeness
- * - Verify restoration capabilities
- * - Check retention policies
- *
- * PASS CRITERIA:
- * - Audit plugin installed and active
- * - Logs available for required time period
- * - All required events are being tracked
- * - Log retention meets compliance requirements
- * - Restoration tested successfully
- *
- * FAIL CRITERIA:
- * - No audit system found
- * - Incomplete logging
- * - Log gaps detected
- * - Insufficient retention
- * - Restoration not possible
- *
- * TEST STRATEGY:
- * 1. Mock audit log data with events
- * 2. Test log querying and parsing
- * 3. Test completeness verification
- * 4. Test restoration capability detection
- * 5. Validate compliance checking
- */
 class Diagnostic_CompGdprCookieAudit extends Diagnostic_Base {
 	protected static $slug = 'comp-gdpr-cookie-audit';
 
@@ -225,8 +162,3 @@ class Diagnostic_CompGdprCookieAudit extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

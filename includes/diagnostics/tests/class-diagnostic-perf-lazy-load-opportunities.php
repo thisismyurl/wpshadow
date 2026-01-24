@@ -4,51 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Lazy Load Everything Audit
- *
- * Counts images/videos/iframes that could be lazy loaded. Bandwidth savings.
- *
- * Philosophy: Commandment #9, 7 - Show Value (KPIs) - Track impact, Ridiculously Good - Better than premium
- * Priority: 2 (1=Must-Have, 2=Should-Have, 3=Nice-to-Have)
- * Threat Level: 50/100
- *
- * Impact: Shows \"Loading 47 images user never sees = 12MB wasted\" with savings.
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Lazy Load Everything Audit
- *
- * Category: Unknown
- * Slug: perf-lazy-load-opportunities
- *
- * Purpose:
- * Determine if the WordPress site meets Unknown criteria related to:
- * Automatically initialized lean diagnostic for Perf Lazy Load Opportunities. Optimized for minimal ov...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - PERFORMANCE METRICS ANALYSIS
- * ===========================================================
- * 
- * DETECTION APPROACH:
- * Measure and analyze site performance metrics
- * 
- * LOCAL CHECKS:
- * - Detect performance plugins (caching, optimization)
- * - Query performance metrics from transients/options
- * - Calculate performance scores
- * - Identify bottlenecks
- *
- * PASS CRITERIA: Performance plugin active, metrics good, no major bottlenecks
- * FAIL CRITERIA: No optimization, poor scores, serious slowdowns
- */
 class Diagnostic_PerfLazyLoadOpportunities extends Diagnostic_Base {
 	protected static $slug = 'perf-lazy-load-opportunities';
 
@@ -206,8 +162,3 @@ class Diagnostic_PerfLazyLoadOpportunities extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

@@ -4,38 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Publicly Accessible Config Files
- *
- * Tests if wp-config.php, .env, .git accessible via URL. Instant site takeover risk.
- *
- * Philosophy: Commandment #1, 8 - Helpful Neighbor - Anticipate needs, Inspire Confidence - Intuitive UX
- * Priority: 1 (1=Must-Have, 2=Should-Have, 3=Nice-to-Have)
- * Threat Level: 100/100
- *
- * Impact: Prevents \"Your database password is publicly viewable\" disasters.
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Publicly Accessible Config Files
- *
- * Category: Unknown
- * Slug: sec-config-file-exposed
- *
- * Purpose:
- * Determine if the WordPress site meets Unknown criteria related to:
- * Automatically initialized lean diagnostic for Sec Config File Exposed. Optimized for minimal overhea...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - MEDIA AUDIT - Query attachments, check file types, verify organization
- */
 class Diagnostic_SecConfigFileExposed extends Diagnostic_Base {
 	protected static $slug = 'sec-config-file-exposed';
 
@@ -193,8 +162,3 @@ class Diagnostic_SecConfigFileExposed extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

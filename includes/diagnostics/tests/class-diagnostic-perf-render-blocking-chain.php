@@ -4,39 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Render-Blocking Resource Chain
- *
- * Maps dependency chain blocking first paint. Visual diagram of blocking resources.
- *
- * Philosophy: Commandment #8, 9 - Inspire Confidence - Intuitive UX, Show Value (KPIs) - Track impact
- * Priority: 1 (1=Must-Have, 2=Should-Have, 3=Nice-to-Have)
- * Threat Level: 70/100
- *
- * Impact: Shows \"Plugin X blocks Plugin Y blocks rendering\" dependency map.
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Render-Blocking Resource Chain
- *
- * Category: Unknown
- * Slug: perf-render-blocking-chain
- *
- * Purpose:
- * Determine if the WordPress site meets Unknown criteria related to:
- * Automatically initialized lean diagnostic for Perf Render Blocking Chain. Optimized for minimal over...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - FONT OPTIMIZATION - CSS/HTML Scanning
- * Scan theme CSS for font-face declarations without font-display: swap
- */
 class Diagnostic_PerfRenderBlockingChain extends Diagnostic_Base {
 	protected static $slug = 'perf-render-blocking-chain';
 
@@ -194,8 +162,3 @@ class Diagnostic_PerfRenderBlockingChain extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

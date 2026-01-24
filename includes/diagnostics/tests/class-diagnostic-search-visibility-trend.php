@@ -4,67 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Are we ranking better/worse?
- *
- * Category: Business Impact & Revenue
- * Priority: 1
- * Philosophy: 9, 11
- *
- * Test Description:
- * Are we ranking better/worse?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Are we ranking better/worse?
- *
- * Category: Business Impact & Revenue
- * Slug: search-visibility-trend
- *
- * Purpose:
- * Determine if the WordPress site meets Business Impact & Revenue criteria related to:
- * Automatically initialized lean diagnostic for Search Visibility Trend. Optimized for minimal overhea...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - SEO AUDIT - CHECK SITEMAP, ROBOTS.TXT, META TAGS, KEYWORD OPTIMIZATION
- * ============================================================
- * 
- * DETECTION APPROACH:
- * SEO AUDIT - Check sitemap, robots.txt, meta tags, keyword optimization
- *
- * LOCAL CHECKS:
- * - Query relevant WordPress plugins and settings
- * - Check database for configuration state
- * - Verify feature enablement
- * - Analyze patterns and anomalies
- *
- * PASS CRITERIA:
- * - Required features/plugins installed and active
- * - Configuration meets best practices
- * - No issues detected
- *
- * FAIL CRITERIA:
- * - Missing required components
- * - Misconfiguration detected
- * - Issues found
- *
- * TEST STRATEGY:
- * 1. Mock WordPress state with various configurations
- * 2. Test detection logic
- * 3. Test threshold comparison
- * 4. Test reporting
- * 5. Validate recommendations
- */
 class Diagnostic_Search_Visibility_Trend extends Diagnostic_Base {
 	protected static $slug = 'search-visibility-trend';
 
@@ -192,8 +132,3 @@ class Diagnostic_Search_Visibility_Trend extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

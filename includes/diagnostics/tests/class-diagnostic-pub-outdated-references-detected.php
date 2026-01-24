@@ -4,71 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Outdated References Detected
- *
- * Category: Content Publishing
- * Priority: 2
- * Philosophy: 7, 8, 9
- *
- * Test Description:
- * Content references events/stats from years ago?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Outdated References Detected
- *
- * Category: Content Publishing
- * Slug: pub-outdated-references-detected
- *
- * Purpose:
- * Determine if the WordPress site meets Content Publishing criteria related to:
- * Automatically initialized lean diagnostic for Pub Outdated References Detected. Optimized for minima...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - CONTENT QUALITY ANALYSIS
- * ==============================================
- * 
- * DETECTION APPROACH:
- * Scan posts/pages for content quality metrics and SEO/accessibility compliance
- *
- * LOCAL CHECKS:
- * - Query recent posts and analyze HTML content
- * - Check for SEO elements (meta description, keywords, heading hierarchy)
- * - Verify accessibility attributes (alt text, ARIA labels, color contrast)
- * - Check social sharing tags (OG, Twitter Card)
- * - Validate schema markup presence and correctness
- * - Analyze readability (word count, sentence length, structure)
- * - Check for internal/external links, CTA presence
- *
- * PASS CRITERIA:
- * - 90%+ of posts have required elements
- * - SEO best practices followed in 85%+ of content
- * - Accessibility standards met in 90%+ of content
- * - Social meta tags present on 80%+ of posts
- *
- * FAIL CRITERIA:
- * - < 70% of content has required elements
- * - Major SEO/accessibility gaps
- * - Missing meta tags on majority of posts
- *
- * TEST STRATEGY:
- * 1. Mock posts with complete vs incomplete metadata
- * 2. Test HTML analysis for each content element
- * 3. Test compliance scoring
- * 4. Test threshold detection
- * 5. Validate reporting
- */
 class Diagnostic_Pub_Outdated_References_Detected extends Diagnostic_Base {
 	protected static $slug = 'pub-outdated-references-detected';
 
@@ -211,8 +147,3 @@ class Diagnostic_Pub_Outdated_References_Detected extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

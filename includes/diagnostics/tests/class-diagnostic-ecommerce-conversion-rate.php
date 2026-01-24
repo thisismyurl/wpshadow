@@ -4,70 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: % of visitors converting to customers?
- *
- * Category: Business Impact & Revenue
- * Priority: 1
- * Philosophy: 9, 11
- *
- * Test Description:
- * % of visitors converting to customers?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: % of visitors converting to customers?
- *
- * Category: Business Impact & Revenue
- * Slug: ecommerce-conversion-rate
- *
- * Purpose:
- * Determine if the WordPress site meets Business Impact & Revenue criteria related to:
- * Automatically initialized lean diagnostic for Ecommerce Conversion Rate. Optimized for minimal overh...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - ANALYTICS DATA ANALYSIS
- * ===================================================
- * 
- * DETECTION APPROACH:
- * Query WordPress analytics plugins or database for visitor behavior metrics
- *
- * LOCAL CHECKS:
- * - Check for analytics plugins (Google Analytics, Jetpack Stats, MonsterInsights, etc.)
- * - Query analytics data from plugin transients/options
- * - Calculate metrics from stored analytics data
- * - Compare against WordPress/industry benchmarks
- * - Analyze trends over time periods
- *
- * PASS CRITERIA:
- * - Analytics plugin is installed and active
- * - Analytics data available for last 30 days
- * - Metric values within healthy ranges
- * - Consistent data collection (no gaps)
- *
- * FAIL CRITERIA:
- * - No analytics plugin found
- * - Insufficient data (< 7 days)
- * - Metric values below/above thresholds
- * - Stale data (> 90 days old)
- *
- * TEST STRATEGY:
- * 1. Mock analytics plugin data with various metrics
- * 2. Test metric calculation and extraction
- * 3. Test threshold comparison
- * 4. Test trend analysis
- * 5. Validate alert generation
- */
 class Diagnostic_Ecommerce_Conversion_Rate extends Diagnostic_Base {
 	protected static $slug = 'ecommerce-conversion-rate';
 
@@ -195,8 +132,3 @@ class Diagnostic_Ecommerce_Conversion_Rate extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

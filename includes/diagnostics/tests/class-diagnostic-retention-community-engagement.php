@@ -4,53 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Are users helping each other?
- *
- * Category: Customer Retention
- * Priority: 3
- * Philosophy: 11
- *
- * Test Description:
- * Are users helping each other?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Are users helping each other?
- *
- * Category: Customer Retention
- * Slug: retention-community-engagement
- *
- * Purpose:
- * Determine if the WordPress site meets Customer Retention criteria related to:
- * Automatically initialized lean diagnostic for Retention Community Engagement. Optimized for minimal ...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - ANALYTICS DATA ANALYSIS
- * ===================================================
- * 
- * DETECTION APPROACH:
- * Query analytics plugins for visitor behavior metrics
- * 
- * LOCAL CHECKS:
- * - Detect analytics plugins (Google Analytics, Jetpack, MonsterInsights)
- * - Query stored analytics data from plugin
- * - Calculate metrics and compare to benchmarks
- * - Check data freshness (last update < 30 days)
- *
- * PASS CRITERIA: Analytics active, data current, metrics healthy
- * FAIL CRITERIA: Plugin missing, stale data, poor metrics
- */
 class Diagnostic_Retention_Community_Engagement extends Diagnostic_Base {
 	protected static $slug = 'retention-community-engagement';
 
@@ -178,8 +132,3 @@ class Diagnostic_Retention_Community_Engagement extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

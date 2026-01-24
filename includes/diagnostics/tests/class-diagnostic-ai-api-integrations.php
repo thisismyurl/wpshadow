@@ -4,67 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Is AI API strategy documented?
- *
- * Category: AI & ML Readiness
- * Priority: 3
- * Philosophy: 7
- *
- * Test Description:
- * Is AI API strategy documented?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Is AI API strategy documented?
- *
- * Category: AI & ML Readiness
- * Slug: ai-api-integrations
- *
- * Purpose:
- * Determine if the WordPress site meets AI & ML Readiness criteria related to:
- * Automatically initialized lean diagnostic for Ai Api Integrations. Optimized for minimal overhead wh...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - PLUGIN/THEME DETECTION - CHECK IS_PLUGIN_ACTIVE(), THEME SETTINGS, COMPATIBILITY
- * ============================================================
- * 
- * DETECTION APPROACH:
- * PLUGIN/THEME DETECTION - Check is_plugin_active(), theme settings, compatibility
- *
- * LOCAL CHECKS:
- * - Query relevant WordPress plugins and settings
- * - Check database for configuration state
- * - Verify feature enablement
- * - Analyze patterns and anomalies
- *
- * PASS CRITERIA:
- * - Required features/plugins installed and active
- * - Configuration meets best practices
- * - No issues detected
- *
- * FAIL CRITERIA:
- * - Missing required components
- * - Misconfiguration detected
- * - Issues found
- *
- * TEST STRATEGY:
- * 1. Mock WordPress state with various configurations
- * 2. Test detection logic
- * 3. Test threshold comparison
- * 4. Test reporting
- * 5. Validate recommendations
- */
 class Diagnostic_Ai_Api_Integrations extends Diagnostic_Base {
 	protected static $slug = 'ai-api-integrations';
 
@@ -185,12 +125,3 @@ class Diagnostic_Ai_Api_Integrations extends Diagnostic_Base {
 	}
 }
 
-/**
- * NEEDS CLARIFICATION:
- * This diagnostic has a stub check() method that always returns null.
- * Please review the intended behavior:
- * - What condition should trigger an issue?
- * - How can we detect that condition?
- * - Are there specific WordPress options/settings to check?
- * - Should we check plugin activity or theme settings?
- */

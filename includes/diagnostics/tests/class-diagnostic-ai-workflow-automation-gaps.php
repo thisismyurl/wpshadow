@@ -4,55 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Automated Task Opportunities
- *
- * Analyzes repetitive admin tasks that can be automated. Time = money.
- *
- * Philosophy: Commandment #9, 1 - Show Value (KPIs) - Track impact, Helpful Neighbor - Anticipate needs
- * Priority: 1 (1=Must-Have, 2=Should-Have, 3=Nice-to-Have)
- * Threat Level: 40/100
- *
- * Impact: Shows \"You spend 14 hours/month on tasks we can automate\".
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Automated Task Opportunities
- *
- * Category: Unknown
- * Slug: ai-workflow-automation-gaps
- *
- * Purpose:
- * Determine if the WordPress site meets Unknown criteria related to:
- * Automatically initialized lean diagnostic for Ai Workflow Automation Gaps. Optimized for minimal ove...
- */
-
-/**
- * TEST IMPLEMENTATION NEEDED - REQUIRES HUMAN JUDGMENT
- * =====================================================
- * This diagnostic requires subjective assessment or complex analysis.
- *
- * CHALLENGE: This type requires human expertise, external APIs, or complex heuristics
- *
- * APPROACH OPTIONS:
- * 1. Define measurable criteria and thresholds
- * 2. Use third-party APIs for external validation
- * 3. Build heuristic rules with known calibration points
- * 4. Create feedback loop for continuous refinement
- *
- * NEXT STEPS:
- * 1. Define specific, measurable criteria
- * 2. Determine data sources (WordPress, external APIs, user input)
- * 3. Build heuristic rules with documented thresholds
- * 4. Create calibration tests with known-good/known-bad samples
- * 5. Document edge cases and limitations
- */
 class Diagnostic_AiWorkflowAutomationGaps extends Diagnostic_Base {
 	protected static $slug = 'ai-workflow-automation-gaps';
 
@@ -232,8 +184,3 @@ class Diagnostic_AiWorkflowAutomationGaps extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

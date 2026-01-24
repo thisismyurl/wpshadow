@@ -4,34 +4,6 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Checkout Field Friction
- *
- * Tracks which form fields cause most abandonment. Exact UX fix.
- *
- * Philosophy: Commandment #9, 8 - Show Value (KPIs) - Track impact, Inspire Confidence - Intuitive UX
- * Priority: 2 (1=Must-Have, 2=Should-Have, 3=Nice-to-Have)
- * Threat Level: 75/100
- *
- * Impact: Shows \"78% abandon after \'Phone Number (Required)\'\" field.
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
-
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Checkout Field Friction
- *
- * Category: Unknown
- * Slug: mkt-checkout-field-abandonment
- *
- * Purpose:
- * Determine if the WordPress site meets Unknown criteria related to:
- * Automatically initialized lean diagnostic for Mkt Checkout Field Abandonment. Optimized for minimal ...
- */
 
 /**
  * WOOCOMMERCE METRICS - Database Query Approach
@@ -220,8 +192,3 @@ class Diagnostic_MktCheckoutFieldAbandonment extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

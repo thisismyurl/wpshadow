@@ -4,70 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Recommendation Engine Accuracy
- *
- * Measures CTR on AI product recommendations. Revenue optimization.
- *
- * Philosophy: Commandment #9, 7 - Show Value (KPIs) - Track impact, Ridiculously Good - Better than premium
- * Priority: 3 (1=Must-Have, 2=Should-Have, 3=Nice-to-Have)
- * Threat Level: 55/100
- *
- * Impact: Shows \"Recommendations get 2.1% CTR (manual = 12%)\" algorithm tuning.
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Recommendation Engine Accuracy
- *
- * Category: Unknown
- * Slug: ai-product-recommendation-ctr
- *
- * Purpose:
- * Determine if the WordPress site meets Unknown criteria related to:
- * Automatically initialized lean diagnostic for Ai Product Recommendation Ctr. Optimized for minimal o...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - CTR ANALYSIS
- * ===========================================
- * 
- * DETECTION APPROACH:
- * Analyze click-through rates and performance of product recommendation blocks
- *
- * LOCAL CHECKS:
- * - Query WooCommerce analytics/tracking for recommendation block performance
- * - Check for WooCommerce "Product Recommendations" extension/plugin
- * - Analyze product post meta for recommendation scores/metadata
- * - Review store transients for cached recommendation performance data
- * - Calculate CTR for recommendation blocks (clicks / impressions)
- * - Compare against baseline/industry standards
- * - Look for recommendation engine options in theme/plugin settings
- *
- * PASS CRITERIA:
- * - CTR on recommendations > 2% (industry baseline)
- * - Recommendation blocks are active on majority of product pages
- * - Performance data available for last 30 days
- * - No errors in recommendation generation
- *
- * FAIL CRITERIA:
- * - No recommendation blocks/plugin found
- * - CTR < 0.5% (underperforming)
- * - Stale performance data (> 60 days old)
- * - Recommendation system disabled or misconfigured
- *
- * TEST STRATEGY:
- * 1. Mock WooCommerce analytics data with various CTR values
- * 2. Test recommendation block detection
- * 3. Test CTR calculation from mock data
- * 4. Test threshold comparison against standards
- * 5. Validate performance trending
- */
 class Diagnostic_AiProductRecommendationCtr extends Diagnostic_Base {
 	protected static $slug = 'ai-product-recommendation-ctr';
 
@@ -214,8 +151,3 @@ class Diagnostic_AiProductRecommendationCtr extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

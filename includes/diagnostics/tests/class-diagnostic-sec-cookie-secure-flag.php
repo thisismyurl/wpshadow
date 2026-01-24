@@ -4,55 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Unencrypted Auth Cookies
- *
- * Checks if auth cookies have Secure + HttpOnly flags. Prevents WiFi theft.
- *
- * Philosophy: Commandment #1, 5 - Helpful Neighbor - Anticipate needs, Drive to KB - Link to knowledge
- * Priority: 2 (1=Must-Have, 2=Should-Have, 3=Nice-to-Have)
- * Threat Level: 65/100
- *
- * Impact: Shows \"Login cookies can be stolen over public WiFi\" with fix instructions.
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Unencrypted Auth Cookies
- *
- * Category: Unknown
- * Slug: sec-cookie-secure-flag
- *
- * Purpose:
- * Determine if the WordPress site meets Unknown criteria related to:
- * Automatically initialized lean diagnostic for Sec Cookie Secure Flag. Optimized for minimal overhead...
- */
-
-/**
- * TEST IMPLEMENTATION NEEDED - REQUIRES HUMAN JUDGMENT
- * =====================================================
- * This diagnostic requires subjective assessment or complex analysis.
- *
- * CHALLENGE: This type requires human expertise, external APIs, or complex heuristics
- *
- * APPROACH OPTIONS:
- * 1. Define measurable criteria and thresholds
- * 2. Use third-party APIs for external validation
- * 3. Build heuristic rules with known calibration points
- * 4. Create feedback loop for continuous refinement
- *
- * NEXT STEPS:
- * 1. Define specific, measurable criteria
- * 2. Determine data sources (WordPress, external APIs, user input)
- * 3. Build heuristic rules with documented thresholds
- * 4. Create calibration tests with known-good/known-bad samples
- * 5. Document edge cases and limitations
- */
 class Diagnostic_SecCookieSecureFlag extends Diagnostic_Base {
 	protected static $slug = 'sec-cookie-secure-flag';
 
@@ -210,8 +162,3 @@ class Diagnostic_SecCookieSecureFlag extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

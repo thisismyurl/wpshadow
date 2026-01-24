@@ -4,36 +4,6 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Is page view trend positive?
- *
- * Category: User Engagement
- * Priority: 2
- * Philosophy: 9
- *
- * Test Description:
- * Is page view trend positive?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
-
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Is page view trend positive?
- *
- * Category: User Engagement
- * Slug: pageviews-trend
- *
- * Purpose:
- * Determine if the WordPress site meets User Engagement criteria related to:
- * Automatically initialized lean diagnostic for Pageviews Trend. Optimized for minimal overhead while ...
- */
 
 /**
  * OPTIMIZATION IMPACT - Before/After Snapshots
@@ -192,8 +162,3 @@ class Diagnostic_Pageviews_Trend extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

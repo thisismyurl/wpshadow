@@ -4,75 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Is content optimized for NLP?
- *
- * Category: AI & ML Readiness
- * Priority: 3
- * Philosophy: 7
- *
- * Test Description:
- * Is content optimized for NLP?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Is content optimized for NLP?
- *
- * Category: AI & ML Readiness
- * Slug: ai-nlp-readiness
- *
- * Purpose:
- * Determine if the WordPress site meets AI & ML Readiness criteria related to:
- * Automatically initialized lean diagnostic for Ai Nlp Readiness. Optimized for minimal overhead while...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - LANGUAGE QUALITY ANALYSIS
- * =========================================================
- * 
- * DETECTION APPROACH:
- * Analyze content for language quality, readability, and vocabulary diversity
- *
- * LOCAL CHECKS:
- * - Scan recent posts (last 30) for language quality metrics
- * - Calculate Flesch Kincaid readability score (measure of reading difficulty)
- * - Check average sentence length (NLP prefers shorter sentences)
- * - Analyze vocabulary diversity (type-token ratio)
- * - Detect common grammar issues using basic patterns
- * - Look for proper use of transitions between paragraphs
- * - Check for passive vs active voice ratio
- * - Measure keyword/topic consistency within articles
- *
- * PASS CRITERIA:
- * - Average readability score indicates 8th-12th grade level
- * - Average sentence length is 15-20 words
- * - Vocabulary diversity ratio > 0.6 (good mix of words)
- * - Grammar issues detected in < 5% of posts
- * - Proper use of transitions in majority of posts
- *
- * FAIL CRITERIA:
- * - Poor readability (too technical or too simple)
- * - Overly long sentences (> 30 words average)
- * - Low vocabulary diversity (repetitive language)
- * - Frequent grammar issues
- * - Minimal transitions/flow issues
- *
- * TEST STRATEGY:
- * 1. Mock posts with various readability scores
- * 2. Test sentence length calculation
- * 3. Test vocabulary diversity measurement
- * 4. Test grammar issue detection
- * 5. Validate overall quality scoring
- */
 class Diagnostic_Ai_Nlp_Readiness extends Diagnostic_Base {
 	protected static $slug = 'ai-nlp-readiness';
 
@@ -189,8 +121,3 @@ class Diagnostic_Ai_Nlp_Readiness extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

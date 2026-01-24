@@ -4,41 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Are customers buying again?
- *
- * Category: Customer Retention
- * Priority: 3
- * Philosophy: 11
- *
- * Test Description:
- * Are customers buying again?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Are customers buying again?
- *
- * Category: Customer Retention
- * Slug: retention-repeat-purchase-rate
- *
- * Purpose:
- * Determine if the WordPress site meets Customer Retention criteria related to:
- * Automatically initialized lean diagnostic for Retention Repeat Purchase Rate. Optimized for minimal ...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - ECOMMERCE METRICS - WooCommerce Database Query
- * Query wp_posts (shop_order), calculate metrics, analyze patterns
- */
 class Diagnostic_Retention_Repeat_Purchase_Rate extends Diagnostic_Base {
 	protected static $slug = 'retention-repeat-purchase-rate';
 
@@ -166,8 +132,3 @@ class Diagnostic_Retention_Repeat_Purchase_Rate extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

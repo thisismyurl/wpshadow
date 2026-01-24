@@ -4,100 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Compromised Admin Accounts
- *
- * Scans admin accounts against known breach databases (Have I Been Pwned API). Shows exact breaches and forces password reset.
- *
- * Philosophy: Commandment #1, 9 - Helpful Neighbor - Anticipate needs, Show Value (KPIs) - Track impact
- * Priority: 1 (1=Must-Have, 2=Should-Have, 3=Nice-to-Have)
- * Threat Level: 90/100
- *
- * Impact: Prevents 90% of WordPress hacks by identifying compromised credentials before attackers use them.
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Compromised Admin Accounts
- *
- * Category: Unknown
- * Slug: sec-compromised-admin-check
- *
- * Purpose:
- * Determine if the WordPress site meets Unknown criteria related to:
- * Automatically initialized lean diagnostic for Sec Compromised Admin Check. Optimized for minimal ove...
- */
-
-/**
- * TEST IMPLEMENTATION OUTLINE
- * ============================
- * This diagnostic CAN be successfully implemented. Here's how:
- *
- * DETECTION STRATEGY:
- * 1. Identify WordPress hooks/options/state indicating the answer
- * 2. Query the relevant WordPress state
- * 3. Evaluate against criteria
- * 4. Return null if passing, array with finding if failing
- *
- * SIGNALS TO CHECK:
- * - WordPress options/settings related to this diagnostic
- * - Plugin/theme active status if applicable
- * - Configuration flags or feature toggles
- * - Database state or transient values
- *
- * IMPLEMENTATION STEPS:
- * 1. Update check() method with actual logic
- * 2. Add helper methods to identify relevant options
- * 3. Build severity assessment based on impact
- * 4. Create test case with mock WordPress state
- * 5. Validate against real site conditions
- */
-/**
- * ⚠️ STUB - NEEDS IMPLEMENTATION
- * 
- * This diagnostic is a placeholder with stub implementation (if !false pattern).
- * Before writing tests, we need to clarify:
- * 
- * 1. What is the actual diagnostic question/goal?
- * 2. What WordPress state indicates pass/fail?
- * 3. Are there specific plugins, options, or settings to check?
- * 4. What should trigger an issue vs pass?
- * 5. What is the threat/priority level?
- * 
- * Once clarified, implement the check() method and we can create the test.
- */
-
-/**
- * DIAGNOSTIC ANALYSIS - STRAIGHTFORWARD WORDPRESS STATE CHECK
- * ============================================================
- * 
- * Question: Compromised Admin Accounts
- * Slug: sec-compromised-admin-check
- * Category: Unknown
- * 
- * This diagnostic checks WordPress configuration/settings.
- * Can be implemented by querying options, plugins, or database state.
- * 
- * IMPLEMENTATION PLAN:
- * 1. Identify what "pass" means for this diagnostic
- * 2. Find WordPress option(s) or setting(s) to check
- * 3. Implement check() method
- * 4. Create unit test with mock WordPress state
- * 5. Add integration test on real WordPress instance
- * 
- * NEXT STEPS:
- * - Clarify exact pass/fail criteria
- * - Identify WordPress hooks/options to query
- * - Build the check() method implementation
- * - Create test cases
- * 
- * Current Status: READY FOR IMPLEMENTATION
- */
 class Diagnostic_SecCompromisedAdminCheck extends Diagnostic_Base {
 	protected static $slug = 'sec-compromised-admin-check';
 
@@ -255,8 +162,3 @@ class Diagnostic_SecCompromisedAdminCheck extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

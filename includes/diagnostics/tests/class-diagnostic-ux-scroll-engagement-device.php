@@ -4,51 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Scroll Depth by Device
- *
- * Shows how far users scroll on mobile vs desktop. Content placement optimization.
- *
- * Philosophy: Commandment #9, 8 - Show Value (KPIs) - Track impact, Inspire Confidence - Intuitive UX
- * Priority: 2 (1=Must-Have, 2=Should-Have, 3=Nice-to-Have)
- * Threat Level: 55/100
- *
- * Impact: Shows \"Mobile users never see your CTA (95% exit before scroll)\".
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Scroll Depth by Device
- *
- * Category: Unknown
- * Slug: ux-scroll-engagement-device
- *
- * Purpose:
- * Determine if the WordPress site meets Unknown criteria related to:
- * Automatically initialized lean diagnostic for Ux Scroll Engagement Device. Optimized for minimal ove...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - ANALYTICS DATA ANALYSIS
- * ===================================================
- * 
- * DETECTION APPROACH:
- * Query analytics plugins for visitor behavior metrics
- * 
- * LOCAL CHECKS:
- * - Detect analytics plugins (Google Analytics, Jetpack, MonsterInsights)
- * - Query stored analytics data from plugin
- * - Calculate metrics and compare to benchmarks
- * - Check data freshness (last update < 30 days)
- *
- * PASS CRITERIA: Analytics active, data current, metrics healthy
- * FAIL CRITERIA: Plugin missing, stale data, poor metrics
- */
 class Diagnostic_UxScrollEngagementDevice extends Diagnostic_Base {
 	protected static $slug = 'ux-scroll-engagement-device';
 
@@ -206,8 +162,3 @@ class Diagnostic_UxScrollEngagementDevice extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

@@ -4,53 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Database Query Efficiency
- *
- * Category: Environment & Impact
- * Priority: 3
- * Philosophy: 7, 8, 9
- *
- * Test Description:
- * Inefficient queries waste CPU and energy
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Database Query Efficiency
- *
- * Category: Environment & Impact
- * Slug: env-database-bloat-queries
- *
- * Purpose:
- * Determine if the WordPress site meets Environment & Impact criteria related to:
- * Automatically initialized lean diagnostic for Env Database Bloat Queries. Optimized for minimal over...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - PERFORMANCE METRICS ANALYSIS
- * ===========================================================
- * 
- * DETECTION APPROACH:
- * Measure and analyze site performance metrics
- * 
- * LOCAL CHECKS:
- * - Detect performance plugins (caching, optimization)
- * - Query performance metrics from transients/options
- * - Calculate performance scores
- * - Identify bottlenecks
- *
- * PASS CRITERIA: Performance plugin active, metrics good, no major bottlenecks
- * FAIL CRITERIA: No optimization, poor scores, serious slowdowns
- */
 class Diagnostic_Env_Database_Bloat_Queries extends Diagnostic_Base {
 	protected static $slug = 'env-database-bloat-queries';
 
@@ -193,8 +147,3 @@ class Diagnostic_Env_Database_Bloat_Queries extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

@@ -4,34 +4,6 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: PCI Financial Data Exposure
- *
- * Scans for credit card numbers in logs/database. Payment processor termination prevention.
- *
- * Philosophy: Commandment #10, 1 - Beyond Pure (Privacy) - Consent-first, Helpful Neighbor - Anticipate needs
- * Priority: 1 (1=Must-Have, 2=Should-Have, 3=Nice-to-Have)
- * Threat Level: 100/100
- *
- * Impact: Shows \"Found CC numbers in logs = lose Stripe forever\" immediate fix.
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
-
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: PCI Financial Data Exposure
- *
- * Category: Unknown
- * Slug: comp-pci-data-leak
- *
- * Purpose:
- * Determine if the WordPress site meets Unknown criteria related to:
- * Automatically initialized lean diagnostic for Comp Pci Data Leak. Optimized for minimal overhead whi...
- */
 
 /**
  * PLUGIN SECURITY SCAN - Code Analysis
@@ -224,8 +196,3 @@ class Diagnostic_CompPciDataLeak extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

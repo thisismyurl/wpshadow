@@ -4,36 +4,6 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: CPA increasing/decreasing?
- *
- * Category: Business Impact & Revenue
- * Priority: 1
- * Philosophy: 9, 11
- *
- * Test Description:
- * CPA increasing/decreasing?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
-
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: CPA increasing/decreasing?
- *
- * Category: Business Impact & Revenue
- * Slug: cost-per-acquisition-trend
- *
- * Purpose:
- * Determine if the WordPress site meets Business Impact & Revenue criteria related to:
- * Automatically initialized lean diagnostic for Cost Per Acquisition Trend. Optimized for minimal over...
- */
 
 /**
  * OPTIMIZATION IMPACT - Before/After Snapshots
@@ -192,8 +162,3 @@ class Diagnostic_Cost_Per_Acquisition_Trend extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

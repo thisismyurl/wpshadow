@@ -4,36 +4,6 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: What is comment engagement rate?
- *
- * Category: User Engagement
- * Priority: 2
- * Philosophy: 9
- *
- * Test Description:
- * What is comment engagement rate?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  *
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
-
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: What is comment engagement rate?
- *
- * Category: User Engagement
- * Slug: comment-activity
- *
- * Purpose:
- * Determine if the WordPress site meets User Engagement criteria related to:
- * Automatically initialized lean diagnostic for Comment Activity. Optimized for minimal overhead while...
- */
 
 /**
  * USER ACTIVITY TRACKING - Login Logs + Sessions
@@ -209,8 +179,3 @@ class Diagnostic_Comment_Activity extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

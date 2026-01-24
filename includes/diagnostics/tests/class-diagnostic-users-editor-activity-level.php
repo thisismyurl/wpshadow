@@ -4,67 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Editor Activity Level
- *
- * Category: Users & Team
- * Priority: 3
- * Philosophy: 1, 8, 9
- *
- * Test Description:
- * Which editors are actively creating/editing content?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  *
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Editor Activity Level
- *
- * Category: Users & Team
- * Slug: users-editor-activity-level
- *
- * Purpose:
- * Determine if the WordPress site meets Users & Team criteria related to:
- * Automatically initialized lean diagnostic for Users Editor Activity Level. Optimized for minimal ove...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - USER MANAGEMENT AUDIT - CHECK USER ROLES, PERMISSIONS, ADMIN ACCOUNTS, ACTIVITY
- * ============================================================
- *
- * DETECTION APPROACH:
- * USER MANAGEMENT AUDIT - Check user roles, permissions, admin accounts, activity
- *
- * LOCAL CHECKS:
- * - Query relevant WordPress plugins and settings
- * - Check database for configuration state
- * - Verify feature enablement
- * - Analyze patterns and anomalies
- *
- * PASS CRITERIA:
- * - Required features/plugins installed and active
- * - Configuration meets best practices
- * - No issues detected
- *
- * FAIL CRITERIA:
- * - Missing required components
- * - Misconfiguration detected
- * - Issues found
- *
- * TEST STRATEGY:
- * 1. Mock WordPress state with various configurations
- * 2. Test detection logic
- * 3. Test threshold comparison
- * 4. Test reporting
- * 5. Validate recommendations
- */
 class Diagnostic_Users_Editor_Activity_Level extends Diagnostic_Base {
 	protected static $slug = 'users-editor-activity-level';
 
@@ -212,8 +152,3 @@ class Diagnostic_Users_Editor_Activity_Level extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

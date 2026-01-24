@@ -4,64 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Email Deliverability Score
- *
- * Tests transactional emails vs spam filters. Lost revenue from unseen emails.
- *
- * Philosophy: Commandment #9, 5 - Show Value (KPIs) - Track impact, Drive to KB - Link to knowledge
- * Priority: 1 (1=Must-Have, 2=Should-Have, 3=Nice-to-Have)
- * Threat Level: 80/100
- *
- * Impact: Shows \"47% of your order confirmations go to spam\" with SPF/DKIM fix.
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Email Deliverability Score
- *
- * Category: Unknown
- * Slug: mkt-email-inbox-rate
- *
- * Purpose:
- * Determine if the WordPress site meets Unknown criteria related to:
- * Automatically initialized lean diagnostic for Mkt Email Inbox Rate. Optimized for minimal overhead w...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - EMAIL VERIFICATION - CHECK EMAIL DELIVERY, SMTP CONFIG, NOTIFICATION RELIABILITY
- * ============================================================
- * 
- * DETECTION APPROACH:
- * EMAIL VERIFICATION - Check email delivery, SMTP config, notification reliability
- *
- * LOCAL CHECKS:
- * - Query WordPress settings and plugins
- * - Check database configuration
- * - Analyze recent logs
- * - Test connectivity/health
- *
- * PASS CRITERIA:
- * - Correct configuration
- * - All checks passing
- * - No errors/warnings
- *
- * FAIL CRITERIA:
- * - Misconfiguration
- * - Failed checks
- * - Errors detected
- *
- * TEST STRATEGY:
- * 1. Mock configuration states
- * 2. Test detection logic
- * 3. Test reporting
- * 4. Validate recommendations
- */
 class Diagnostic_MktEmailInboxRate extends Diagnostic_Base {
 	protected static $slug = 'mkt-email-inbox-rate';
 
@@ -219,8 +162,3 @@ class Diagnostic_MktEmailInboxRate extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

@@ -4,53 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Compliance Check
- *
- * Category: Content Publishing
- * Priority: 2
- * Philosophy: 7, 8, 9
- *
- * Test Description:
- * Content complies with brand guidelines?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Compliance Check
- *
- * Category: Content Publishing
- * Slug: pub-compliance-check
- *
- * Purpose:
- * Determine if the WordPress site meets Content Publishing criteria related to:
- * Automatically initialized lean diagnostic for Pub Compliance Check. Optimized for minimal overhead w...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - AUDIT TRAIL ANALYSIS
- * ================================================
- * 
- * DETECTION APPROACH:
- * Query audit logging systems for tracked events
- * 
- * LOCAL CHECKS:
- * - Detect audit plugins (Stream, Auditor, WP Activity Log)
- * - Query audit logs from database
- * - Verify event tracking completeness
- * - Check retention and compliance
- *
- * PASS CRITERIA: Audit active, complete logging, retention meets requirements
- * FAIL CRITERIA: No audit plugin, gaps in logging, insufficient retention
- */
 class Diagnostic_Pub_Compliance_Check extends Diagnostic_Base {
 	protected static $slug = 'pub-compliance-check';
 
@@ -193,8 +147,3 @@ class Diagnostic_Pub_Compliance_Check extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

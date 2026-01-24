@@ -4,110 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Affiliate Link Revenue Loss
- *
- * Tests affiliate links, calculates lost commission from broken URLs.
- *
- * Philosophy: Commandment #9, 1 - Show Value (KPIs) - Track impact, Helpful Neighbor - Anticipate needs
- * Priority: 2 (1=Must-Have, 2=Should-Have, 3=Nice-to-Have)
- * Threat Level: 55/100
- *
- * Impact: Shows \"23 broken Amazon links = $890/month lost commission\".
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Affiliate Link Revenue Loss
- *
- * Category: Unknown
- * Slug: mkt-broken-affiliate-links
- *
- * Purpose:
- * Determine if the WordPress site meets Unknown criteria related to:
- * Automatically initialized lean diagnostic for Mkt Broken Affiliate Links. Optimized for minimal over...
- */
-
-/**
- * TEST IMPLEMENTATION NEEDED - REQUIRES HUMAN JUDGMENT
- * =====================================================
- * This diagnostic requires subjective assessment or complex analysis.
- *
- * CHALLENGE: This type requires human expertise, external APIs, or complex heuristics
- *
- * APPROACH OPTIONS:
- * 1. Define measurable criteria and thresholds
- * 2. Use third-party APIs for external validation
- * 3. Build heuristic rules with known calibration points
- * 4. Create feedback loop for continuous refinement
- *
- * NEXT STEPS:
- * 1. Define specific, measurable criteria
- * 2. Determine data sources (WordPress, external APIs, user input)
- * 3. Build heuristic rules with documented thresholds
- * 4. Create calibration tests with known-good/known-bad samples
- * 5. Document edge cases and limitations
- */
-
-/**
- * HTML ASSESSMENT TEST - CURL-BASED IMPLEMENTATION
- * =================================================
- * 
- * Question: Affiliate Link Revenue Loss
- * Slug: mkt-broken-affiliate-links
- * Category: Unknown
- * 
- * IMPLEMENTATION APPROACH:
- * The Guardian will feed HTML content to this test.
- * The test will parse and analyze the HTML to determine pass/fail.
- * 
- * IMPLEMENTATION PATTERN:
- * 
- * public static function check(): ?array {
- *     // Guardian provides HTML via $_POST['html'] or similar
- *     $html = get_html_from_guardian();
- *     
- *     // Parse HTML using DOMDocument
- *     $dom = new DOMDocument();
- *     @$dom->loadHTML($html);
- *     
- *     // Run specific accessibility checks
- *     // Examples:
- *     // - Check for zoom viewport settings
- *     // - Validate color contrast ratios
- *     // - Verify ARIA labels present
- *     // - Check heading hierarchy
- *     // - Verify alt text on images
- *     
- *     // Return null if all checks pass
- *     // Return array with findings if issues found
- * }
- * 
- * TOOLS AVAILABLE:
- * - DOMDocument for HTML parsing
- * - DOMXPath for element queries
- * - Color contrast calculation libraries
- * - HTML validation helpers in WPShadow\Core
- * 
- * TEST HELPERS TO USE:
- * - WPShadow\Core\Html_Analyzer
- * - WPShadow\Core\Accessibility_Checker
- * - WPShadow\Core\Color_Contrast
- * 
- * DETECTION STRATEGY:
- * 1. Parse provided HTML
- * 2. Query relevant elements/attributes
- * 3. Validate against accessibility standards
- * 4. Collect issues
- * 5. Return null (pass) or array (fail)
- * 
- * Current Status: READY FOR HTML-BASED IMPLEMENTATION
- */
 class Diagnostic_MktBrokenAffiliateLinks extends Diagnostic_Base {
 	protected static $slug = 'mkt-broken-affiliate-links';
 
@@ -265,8 +162,3 @@ class Diagnostic_MktBrokenAffiliateLinks extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

@@ -4,61 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Are ethical AI guidelines in place?
- *
- * Category: AI & ML Readiness
- * Priority: 3
- * Philosophy: 7
- *
- * Test Description:
- * Are ethical AI guidelines in place?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Are ethical AI guidelines in place?
- *
- * Category: AI & ML Readiness
- * Slug: ai-ethical-ai-policy
- *
- * Purpose:
- * Determine if the WordPress site meets AI & ML Readiness criteria related to:
- * Automatically initialized lean diagnostic for Ai Ethical Ai Policy. Optimized for minimal overhead w...
- */
-
-/**
- * TEST IMPLEMENTATION OUTLINE
- * ============================
- * This diagnostic CAN be successfully implemented. Here's how:
- *
- * DETECTION STRATEGY:
- * 1. Identify WordPress hooks/options/state indicating the answer
- * 2. Query the relevant WordPress state
- * 3. Evaluate against criteria
- * 4. Return null if passing, array with finding if failing
- *
- * SIGNALS TO CHECK:
- * - WordPress options/settings related to this diagnostic
- * - Plugin/theme active status if applicable
- * - Configuration flags or feature toggles
- * - Database state or transient values
- *
- * IMPLEMENTATION STEPS:
- * 1. Update check() method with actual logic
- * 2. Add helper methods to identify relevant options
- * 3. Build severity assessment based on impact
- * 4. Create test case with mock WordPress state
- * 5. Validate against real site conditions
- */
 /**
  * ⚠️ STUB - NEEDS IMPLEMENTATION
  * 
@@ -258,12 +204,3 @@ class Diagnostic_Ai_Ethical_Ai_Policy extends Diagnostic_Base {
 
 }
 
-/**
- * NEEDS CLARIFICATION:
- * This diagnostic has a stub check() method that always returns null.
- * Please review the intended behavior:
- * - What condition should trigger an issue?
- * - How can we detect that condition?
- * - Are there specific WordPress options/settings to check?
- * - Should we check plugin activity or theme settings?
- */

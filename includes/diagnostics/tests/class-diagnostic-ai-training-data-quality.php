@@ -4,36 +4,6 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Is training data clean/unbiased?
- *
- * Category: AI & ML Readiness
- * Priority: 3
- * Philosophy: 7
- *
- * Test Description:
- * Is training data clean/unbiased?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
-
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Is training data clean/unbiased?
- *
- * Category: AI & ML Readiness
- * Slug: ai-training-data-quality
- *
- * Purpose:
- * Determine if the WordPress site meets AI & ML Readiness criteria related to:
- * Automatically initialized lean diagnostic for Ai Training Data Quality. Optimized for minimal overhe...
- */
 
 /**
  * CONTENT QUALITY - Keyword Analysis Approach
@@ -185,8 +155,3 @@ class Diagnostic_Ai_Training_Data_Quality extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

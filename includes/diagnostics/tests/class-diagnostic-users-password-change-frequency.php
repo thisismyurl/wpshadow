@@ -4,67 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Password Change Frequency
- *
- * Category: Users & Team
- * Priority: 3
- * Philosophy: 1, 8, 9
- *
- * Test Description:
- * When did users last change passwords? (Security hygiene)
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Password Change Frequency
- *
- * Category: Users & Team
- * Slug: users-password-change-frequency
- *
- * Purpose:
- * Determine if the WordPress site meets Users & Team criteria related to:
- * Automatically initialized lean diagnostic for Users Password Change Frequency. Optimized for minimal...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - SECURITY AUDIT - CHECK SSL/TLS, AUTH, MALWARE, PASSWORD POLICIES
- * ============================================================
- * 
- * DETECTION APPROACH:
- * SECURITY AUDIT - Check SSL/TLS, auth, malware, password policies
- *
- * LOCAL CHECKS:
- * - Query relevant WordPress plugins and settings
- * - Check database for configuration state
- * - Verify feature enablement
- * - Analyze patterns and anomalies
- *
- * PASS CRITERIA:
- * - Required features/plugins installed and active
- * - Configuration meets best practices
- * - No issues detected
- *
- * FAIL CRITERIA:
- * - Missing required components
- * - Misconfiguration detected
- * - Issues found
- *
- * TEST STRATEGY:
- * 1. Mock WordPress state with various configurations
- * 2. Test detection logic
- * 3. Test threshold comparison
- * 4. Test reporting
- * 5. Validate recommendations
- */
 class Diagnostic_Users_Password_Change_Frequency extends Diagnostic_Base {
 	protected static $slug = 'users-password-change-frequency';
 
@@ -207,8 +147,3 @@ class Diagnostic_Users_Password_Change_Frequency extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

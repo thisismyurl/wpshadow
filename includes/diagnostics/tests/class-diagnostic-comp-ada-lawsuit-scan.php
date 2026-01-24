@@ -4,93 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: ADA Accessibility Lawsuit Risk
- *
- * Scans for common ADA lawsuit triggers. $20-50K settlement prevention.
- *
- * Philosophy: Commandment #10, 1 - Beyond Pure (Privacy) - Consent-first, Helpful Neighbor - Anticipate needs
- * Priority: 1 (1=Must-Have, 2=Should-Have, 3=Nice-to-Have)
- * Threat Level: 90/100
- *
- * Impact: Shows \"Found 8 violations in top 10 ADA lawsuit triggers\".
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: ADA Accessibility Lawsuit Risk
- *
- * Category: Unknown
- * Slug: comp-ada-lawsuit-scan
- *
- * Purpose:
- * Determine if the WordPress site meets Unknown criteria related to:
- * Automatically initialized lean diagnostic for Comp Ada Lawsuit Scan. Optimized for minimal overhead ...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - COMPLIANCE CHECK - Look for policy pages, verify legal requirements
- */
-
-/**
- * HTML ASSESSMENT TEST - CURL-BASED IMPLEMENTATION
- * =================================================
- * 
- * Question: ADA Accessibility Lawsuit Risk
- * Slug: comp-ada-lawsuit-scan
- * Category: Unknown
- * 
- * IMPLEMENTATION APPROACH:
- * The Guardian will feed HTML content to this test.
- * The test will parse and analyze the HTML to determine pass/fail.
- * 
- * IMPLEMENTATION PATTERN:
- * 
- * public static function check(): ?array {
- *     // Guardian provides HTML via $_POST['html'] or similar
- *     $html = get_html_from_guardian();
- *     
- *     // Parse HTML using DOMDocument
- *     $dom = new DOMDocument();
- *     @$dom->loadHTML($html);
- *     
- *     // Run specific accessibility checks
- *     // Examples:
- *     // - Check for zoom viewport settings
- *     // - Validate color contrast ratios
- *     // - Verify ARIA labels present
- *     // - Check heading hierarchy
- *     // - Verify alt text on images
- *     
- *     // Return null if all checks pass
- *     // Return array with findings if issues found
- * }
- * 
- * TOOLS AVAILABLE:
- * - DOMDocument for HTML parsing
- * - DOMXPath for element queries
- * - Color contrast calculation libraries
- * - HTML validation helpers in WPShadow\Core
- * 
- * TEST HELPERS TO USE:
- * - WPShadow\Core\Html_Analyzer
- * - WPShadow\Core\Accessibility_Checker
- * - WPShadow\Core\Color_Contrast
- * 
- * DETECTION STRATEGY:
- * 1. Parse provided HTML
- * 2. Query relevant elements/attributes
- * 3. Validate against accessibility standards
- * 4. Collect issues
- * 5. Return null (pass) or array (fail)
- * 
- * Current Status: READY FOR HTML-BASED IMPLEMENTATION
- */
 class Diagnostic_CompAdaLawsuitScan extends Diagnostic_Base {
 	protected static $slug = 'comp-ada-lawsuit-scan';
 
@@ -248,8 +162,3 @@ class Diagnostic_CompAdaLawsuitScan extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

@@ -4,61 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Can deployments be rolled back?
- *
- * Category: Developer Experience
- * Priority: 2
- * Philosophy: 1, 7
- *
- * Test Description:
- * Can deployments be rolled back?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  *
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Can deployments be rolled back?
- *
- * Category: Developer Experience
- * Slug: dx-rollback-capability
- *
- * Purpose:
- * Determine if the WordPress site meets Developer Experience criteria related to:
- * Automatically initialized lean diagnostic for Dx Rollback Capability. Optimized for minimal overhead...
- */
-
-/**
- * TEST IMPLEMENTATION OUTLINE
- * ============================
- * This diagnostic CAN be successfully implemented. Here's how:
- *
- * DETECTION STRATEGY:
- * 1. Identify WordPress hooks/options/state indicating the answer
- * 2. Query the relevant WordPress state
- * 3. Evaluate against criteria
- * 4. Return null if passing, array with finding if failing
- *
- * SIGNALS TO CHECK:
- * - WordPress options/settings related to this diagnostic
- * - Plugin/theme active status if applicable
- * - Configuration flags or feature toggles
- * - Database state or transient values
- *
- * IMPLEMENTATION STEPS:
- * 1. Update check() method with actual logic
- * 2. Add helper methods to identify relevant options
- * 3. Build severity assessment based on impact
- * 4. Create test case with mock WordPress state
- * 5. Validate against real site conditions
- */
 /**
  * ⚠️ STUB - NEEDS IMPLEMENTATION
  *
@@ -287,8 +233,3 @@ class Diagnostic_Dx_Rollback_Capability extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

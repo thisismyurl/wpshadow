@@ -4,64 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Email Marketing Compliance
- *
- * Audits emails for CAN-SPAM/GDPR requirements. $16K per email fine prevention.
- *
- * Philosophy: Commandment #10, 1 - Beyond Pure (Privacy) - Consent-first, Helpful Neighbor - Anticipate needs
- * Priority: 2 (1=Must-Have, 2=Should-Have, 3=Nice-to-Have)
- * Threat Level: 75/100
- *
- * Impact: Shows \"Missing unsubscribe link = $16K per email fine\" violations.
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Email Marketing Compliance
- *
- * Category: Unknown
- * Slug: comp-email-can-spam
- *
- * Purpose:
- * Determine if the WordPress site meets Unknown criteria related to:
- * Automatically initialized lean diagnostic for Comp Email Can Spam. Optimized for minimal overhead wh...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - EMAIL VERIFICATION - CHECK EMAIL DELIVERY, SMTP CONFIG, NOTIFICATION RELIABILITY
- * ============================================================
- * 
- * DETECTION APPROACH:
- * EMAIL VERIFICATION - Check email delivery, SMTP config, notification reliability
- *
- * LOCAL CHECKS:
- * - Query WordPress settings and plugins
- * - Check database configuration
- * - Analyze recent logs
- * - Test connectivity/health
- *
- * PASS CRITERIA:
- * - Correct configuration
- * - All checks passing
- * - No errors/warnings
- *
- * FAIL CRITERIA:
- * - Misconfiguration
- * - Failed checks
- * - Errors detected
- *
- * TEST STRATEGY:
- * 1. Mock configuration states
- * 2. Test detection logic
- * 3. Test reporting
- * 4. Validate recommendations
- */
 class Diagnostic_CompEmailCanSpam extends Diagnostic_Base {
 	protected static $slug = 'comp-email-can-spam';
 
@@ -269,8 +212,3 @@ class Diagnostic_CompEmailCanSpam extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

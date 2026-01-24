@@ -4,34 +4,6 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Content Gap Analysis
- *
- * Uses AI to find topics competitors cover but you don\'t. SEO goldmine.
- *
- * Philosophy: Commandment #9, 5 - Show Value (KPIs) - Track impact, Drive to KB - Link to knowledge
- * Priority: 3 (1=Must-Have, 2=Should-Have, 3=Nice-to-Have)
- * Threat Level: 45/100
- *
- * Impact: Shows \"Competitors rank for 247 keywords you\'re missing\" opportunities.
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
-
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Content Gap Analysis
- *
- * Category: Unknown
- * Slug: ai-competitive-content-gaps
- *
- * Purpose:
- * Determine if the WordPress site meets Unknown criteria related to:
- * Automatically initialized lean diagnostic for Ai Competitive Content Gaps. Optimized for minimal ove...
- */
 
 /**
  * CONTENT QUALITY - Keyword Analysis Approach
@@ -216,12 +188,3 @@ class Diagnostic_AiCompetitiveContentGaps extends Diagnostic_Base {
 
 }
 
-/**
- * NEEDS CLARIFICATION:
- * This diagnostic has a stub check() method that always returns null.
- * Please review the intended behavior:
- * - What condition should trigger an issue?
- * - How can we detect that condition?
- * - Are there specific WordPress options/settings to check?
- * - Should we check plugin activity or theme settings?
- */

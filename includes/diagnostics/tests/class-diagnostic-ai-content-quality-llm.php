@@ -4,72 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Is content LLM-friendly?
- *
- * Category: AI & ML Readiness
- * Priority: 3
- * Philosophy: 7
- *
- * Test Description:
- * Is content LLM-friendly?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Is content LLM-friendly?
- *
- * Category: AI & ML Readiness
- * Slug: ai-content-quality-llm
- *
- * Purpose:
- * Determine if the WordPress site meets AI & ML Readiness criteria related to:
- * Automatically initialized lean diagnostic for Ai Content Quality Llm. Optimized for minimal overhead...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - LOCAL CONTENT ANALYSIS
- * =====================================================
- * 
- * DETECTION APPROACH:
- * Analyze post content structure and formatting for LLM-friendly characteristics
- *
- * LOCAL CHECKS:
- * - Scan recent posts (last 50) for content structure patterns
- * - Count heading hierarchy (H1, H2, H3 usage) - LLMs prefer clear hierarchies
- * - Measure paragraph length (LLMs prefer shorter, focused paragraphs)
- * - Check for list usage (bulleted/numbered) - LLMs handle these well
- * - Analyze sentence complexity/length
- * - Look for code blocks, tables, structured data
- * - Flag posts with poor formatting (walls of text, missing headers)
- *
- * PASS CRITERIA:
- * - Majority of recent posts have proper heading hierarchy
- * - Average paragraph length is reasonable (< 300 words per paragraph)
- * - Mix of lists, tables, and structured content present
- * - No excessive depth nesting (max 3-4 levels)
- *
- * FAIL CRITERIA:
- * - Few/no posts use heading hierarchies
- * - Long paragraphs (> 500 words without breaks)
- * - Minimal use of formatting (all plain text)
- * - Posts that are essentially content walls
- *
- * TEST STRATEGY:
- * 1. Mock posts with good vs bad formatting structures
- * 2. Test heading hierarchy detection
- * 3. Test paragraph length analysis
- * 4. Test list/table detection
- * 5. Validate pass/fail scoring based on post samples
- */
 class Diagnostic_Ai_Content_Quality_Llm extends Diagnostic_Base {
 	protected static $slug = 'ai-content-quality-llm';
 
@@ -195,12 +130,3 @@ class Diagnostic_Ai_Content_Quality_Llm extends Diagnostic_Base {
 
 }
 
-/**
- * NEEDS CLARIFICATION:
- * This diagnostic has a stub check() method that always returns null.
- * Please review the intended behavior:
- * - What condition should trigger an issue?
- * - How can we detect that condition?
- * - Are there specific WordPress options/settings to check?
- * - Should we check plugin activity or theme settings?
- */

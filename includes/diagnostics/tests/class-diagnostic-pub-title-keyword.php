@@ -4,53 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Primary Keyword in Title
- *
- * Category: Content Publishing
- * Priority: 2
- * Philosophy: 7, 8, 9
- *
- * Test Description:
- * Does title contain main keyword?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Primary Keyword in Title
- *
- * Category: Content Publishing
- * Slug: pub-title-keyword
- *
- * Purpose:
- * Determine if the WordPress site meets Content Publishing criteria related to:
- * Automatically initialized lean diagnostic for Pub Title Keyword. Optimized for minimal overhead whil...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - COMPETITIVE BENCHMARKING
- * =====================================================
- * 
- * DETECTION APPROACH:
- * Compare site metrics against competitor/industry standards
- * 
- * LOCAL CHECKS:
- * - Detect benchmark plugins (SEMrush, Moz, SimilarWeb)
- * - Query benchmark comparison data
- * - Calculate percentile ranking
- * - Analyze trending
- *
- * PASS CRITERIA: Competitive data available, metrics strong, trending positive
- * FAIL CRITERIA: No data, underperforming, outdated
- */
 class Diagnostic_Pub_Title_Keyword extends Diagnostic_Base {
 	protected static $slug = 'pub-title-keyword';
 
@@ -193,8 +147,3 @@ class Diagnostic_Pub_Title_Keyword extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

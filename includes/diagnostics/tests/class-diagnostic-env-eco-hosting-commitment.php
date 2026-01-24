@@ -4,73 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Eco Hosting Badge/Commitment
- *
- * Category: Environment & Impact
- * Priority: 3
- * Philosophy: 7, 8, 9
- *
- * Test Description:
- * Has site committed to sustainable practices publicly?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Eco Hosting Badge/Commitment
- *
- * Category: Environment & Impact
- * Slug: env-eco-hosting-commitment
- *
- * Purpose:
- * Determine if the WordPress site meets Environment & Impact criteria related to:
- * Automatically initialized lean diagnostic for Env Eco Hosting Commitment. Optimized for minimal over...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - ENVIRONMENTAL & PERFORMANCE METRICS
- * ======================================================================
- * 
- * DETECTION APPROACH:
- * Measure site environmental impact and performance optimization
- *
- * LOCAL CHECKS:
- * - Check for green/eco hosting provider designation
- * - Query performance data: CDN usage, cache hit rates, database efficiency
- * - Detect dark mode support in theme/plugins
- * - Analyze animation/autoplay usage in content
- * - Calculate estimated carbon footprint
- * - Check critical CSS and font loading strategies
- * - Scan for heavy media optimization
- *
- * PASS CRITERIA:
- * - Eco hosting verified or green practices in place
- * - Performance optimized (CDN, cache, database efficiency)
- * - Dark mode supported where applicable
- * - Heavy resources optimized (animations, autoplay disabled)
- * - Carbon offset calculated or committed
- *
- * FAIL CRITERIA:
- * - No environmental considerations
- * - Poor performance metrics
- * - Unoptimized heavy resources
- * - High carbon footprint
- *
- * TEST STRATEGY:
- * 1. Mock performance metrics data
- * 2. Test hosting verification
- * 3. Test optimization detection
- * 4. Test carbon calculation
- * 5. Validate scoring
- */
 class Diagnostic_Env_Eco_Hosting_Commitment extends Diagnostic_Base {
 	protected static $slug = 'env-eco-hosting-commitment';
 
@@ -213,8 +147,3 @@ class Diagnostic_Env_Eco_Hosting_Commitment extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

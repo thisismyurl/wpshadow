@@ -4,53 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: URL Slug Optimized
- *
- * Category: Content Publishing
- * Priority: 2
- * Philosophy: 7, 8, 9
- *
- * Test Description:
- * Slug is short and keyword-relevant?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: URL Slug Optimized
- *
- * Category: Content Publishing
- * Slug: pub-slug-optimization
- *
- * Purpose:
- * Determine if the WordPress site meets Content Publishing criteria related to:
- * Automatically initialized lean diagnostic for Pub Slug Optimization. Optimized for minimal overhead ...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - PERFORMANCE METRICS ANALYSIS
- * ===========================================================
- * 
- * DETECTION APPROACH:
- * Measure and analyze site performance metrics
- * 
- * LOCAL CHECKS:
- * - Detect performance plugins (caching, optimization)
- * - Query performance metrics from transients/options
- * - Calculate performance scores
- * - Identify bottlenecks
- *
- * PASS CRITERIA: Performance plugin active, metrics good, no major bottlenecks
- * FAIL CRITERIA: No optimization, poor scores, serious slowdowns
- */
 class Diagnostic_Pub_Slug_Optimization extends Diagnostic_Base {
 	protected static $slug = 'pub-slug-optimization';
 
@@ -193,8 +147,3 @@ class Diagnostic_Pub_Slug_Optimization extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

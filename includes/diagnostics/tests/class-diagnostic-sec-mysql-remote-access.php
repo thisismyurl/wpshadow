@@ -4,65 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Database Remote Access Test
- *
- * Tests if MySQL accessible from internet. Direct database compromise risk.
- *
- * Philosophy: Commandment #1, 5 - Helpful Neighbor - Anticipate needs, Drive to KB - Link to knowledge
- * Priority: 2 (1=Must-Have, 2=Should-Have, 3=Nice-to-Have)
- * Threat Level: 85/100
- *
- * Impact: Shows \"Your database accepts connections from anywhere\" with firewall fix.
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Database Remote Access Test
- *
- * Category: Unknown
- * Slug: sec-mysql-remote-access
- *
- * Purpose:
- * Determine if the WordPress site meets Unknown criteria related to:
- * Automatically initialized lean diagnostic for Sec Mysql Remote Access. Optimized for minimal overhea...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - USER MANAGEMENT AUDIT - CHECK USER ROLES, PERMISSIONS, ADMIN ACCOUNTS, ACTIVITY
- * ============================================================
- * 
- * DETECTION APPROACH:
- * USER MANAGEMENT AUDIT - Check user roles, permissions, admin accounts, activity
- *
- * LOCAL CHECKS:
- * - Query relevant WordPress plugins and settings
- * - Check database for configuration state
- * - Verify feature enablement
- * - Analyze patterns and anomalies
- *
- * PASS CRITERIA:
- * - Required features/plugins installed and active
- * - Configuration meets best practices
- * - No issues detected
- *
- * FAIL CRITERIA:
- * - Missing required components
- * - Misconfiguration detected
- * - Issues found
- *
- * TEST STRATEGY:
- * 1. Mock WordPress state with various configurations
- * 2. Test detection logic
- * 3. Test threshold comparison
- * 4. Test reporting
- * 5. Validate recommendations
- */
 class Diagnostic_SecMysqlRemoteAccess extends Diagnostic_Base {
 	protected static $slug = 'sec-mysql-remote-access';
 
@@ -220,8 +162,3 @@ class Diagnostic_SecMysqlRemoteAccess extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

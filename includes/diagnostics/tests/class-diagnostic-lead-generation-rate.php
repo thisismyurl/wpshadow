@@ -4,57 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: % of visitors becoming leads?
- *
- * Category: Business Impact & Revenue
- * Priority: 1
- * Philosophy: 9, 11
- *
- * Test Description:
- * % of visitors becoming leads?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: % of visitors becoming leads?
- *
- * Category: Business Impact & Revenue
- * Slug: lead-generation-rate
- *
- * Purpose:
- * Determine if the WordPress site meets Business Impact & Revenue criteria related to:
- * Automatically initialized lean diagnostic for Lead Generation Rate. Optimized for minimal overhead w...
- */
-
-/**
- * TEST IMPLEMENTATION NEEDED - REQUIRES HUMAN JUDGMENT
- * =====================================================
- * This diagnostic requires subjective assessment or complex analysis.
- *
- * CHALLENGE: This type requires human expertise, external APIs, or complex heuristics
- *
- * APPROACH OPTIONS:
- * 1. Define measurable criteria and thresholds
- * 2. Use third-party APIs for external validation
- * 3. Build heuristic rules with known calibration points
- * 4. Create feedback loop for continuous refinement
- *
- * NEXT STEPS:
- * 1. Define specific, measurable criteria
- * 2. Determine data sources (WordPress, external APIs, user input)
- * 3. Build heuristic rules with documented thresholds
- * 4. Create calibration tests with known-good/known-bad samples
- * 5. Document edge cases and limitations
- */
 class Diagnostic_Lead_Generation_Rate extends Diagnostic_Base {
 	protected static $slug = 'lead-generation-rate';
 
@@ -182,8 +132,3 @@ class Diagnostic_Lead_Generation_Rate extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

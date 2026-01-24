@@ -4,65 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Search Revenue Opportunity
- *
- * Tracks searches with zero results. Shows product expansion opportunities.
- *
- * Philosophy: Commandment #9, 1 - Show Value (KPIs) - Track impact, Helpful Neighbor - Anticipate needs
- * Priority: 2 (1=Must-Have, 2=Should-Have, 3=Nice-to-Have)
- * Threat Level: 60/100
- *
- * Impact: Shows \"Users searched \'blue widget\' 487 times (you don\'t stock it)\".
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Search Revenue Opportunity
- *
- * Category: Unknown
- * Slug: mkt-search-zero-results
- *
- * Purpose:
- * Determine if the WordPress site meets Unknown criteria related to:
- * Automatically initialized lean diagnostic for Mkt Search Zero Results. Optimized for minimal overhea...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - SEO AUDIT - CHECK SITEMAP, ROBOTS.TXT, META TAGS, KEYWORD OPTIMIZATION
- * ============================================================
- * 
- * DETECTION APPROACH:
- * SEO AUDIT - Check sitemap, robots.txt, meta tags, keyword optimization
- *
- * LOCAL CHECKS:
- * - Query relevant WordPress plugins and settings
- * - Check database for configuration state
- * - Verify feature enablement
- * - Analyze patterns and anomalies
- *
- * PASS CRITERIA:
- * - Required features/plugins installed and active
- * - Configuration meets best practices
- * - No issues detected
- *
- * FAIL CRITERIA:
- * - Missing required components
- * - Misconfiguration detected
- * - Issues found
- *
- * TEST STRATEGY:
- * 1. Mock WordPress state with various configurations
- * 2. Test detection logic
- * 3. Test threshold comparison
- * 4. Test reporting
- * 5. Validate recommendations
- */
 class Diagnostic_MktSearchZeroResults extends Diagnostic_Base {
 	protected static $slug = 'mkt-search-zero-results';
 
@@ -220,8 +162,3 @@ class Diagnostic_MktSearchZeroResults extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

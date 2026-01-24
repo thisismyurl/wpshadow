@@ -4,61 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Are file/folder permissions correct?
- *
- * Category: WordPress Ecosystem Health
- * Priority: 1
- * Philosophy: 1, 8, 9
- *
- * Test Description:
- * Are file/folder permissions correct?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Are file/folder permissions correct?
- *
- * Category: WordPress Ecosystem Health
- * Slug: core-permission-issues
- *
- * Purpose:
- * Determine if the WordPress site meets WordPress Ecosystem Health criteria related to:
- * Automatically initialized lean diagnostic for Core Permission Issues. Optimized for minimal overhead...
- */
-
-/**
- * TEST IMPLEMENTATION OUTLINE
- * ============================
- * This diagnostic CAN be successfully implemented. Here's how:
- *
- * DETECTION STRATEGY:
- * 1. Identify WordPress hooks/options/state indicating the answer
- * 2. Query the relevant WordPress state
- * 3. Evaluate against criteria
- * 4. Return null if passing, array with finding if failing
- *
- * SIGNALS TO CHECK:
- * - WordPress options/settings related to this diagnostic
- * - Plugin/theme active status if applicable
- * - Configuration flags or feature toggles
- * - Database state or transient values
- *
- * IMPLEMENTATION STEPS:
- * 1. Update check() method with actual logic
- * 2. Add helper methods to identify relevant options
- * 3. Build severity assessment based on impact
- * 4. Create test case with mock WordPress state
- * 5. Validate against real site conditions
- */
 /**
  * ⚠️ STUB - NEEDS IMPLEMENTATION
  * 
@@ -288,8 +234,3 @@ class Diagnostic_Core_Permission_Issues extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

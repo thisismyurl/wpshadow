@@ -4,113 +4,9 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Is privacy maintained with AI?
- *
- * Category: AI & ML Readiness
- * Priority: 3
- * Philosophy: 7
- *
- * Test Description:
- * Is privacy maintained with AI?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
+
  */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Is privacy maintained with AI?
- *
- * Category: AI & ML Readiness
- * Slug: ai-user-privacy
- *
- * Purpose:
- * Determine if the WordPress site meets AI & ML Readiness criteria related to:
- * Automatically initialized lean diagnostic for Ai User Privacy. Optimized for minimal overhead while ...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - COMPLIANCE DISCLOSURE AUDIT
- * =========================================================
- * 
- * DETECTION APPROACH:
- * Check for compliance-related disclosures and policy pages
- *
- * LOCAL CHECKS:
- * - Search for policy pages (privacy policy, terms, CCPA notice, etc.)
- * - Check for specific required disclosures in policy text
- * - Verify opt-out/do-not-sell links are present and accessible
- * - Check for cookie consent banners if collecting data
- * - Verify data processing disclosures are visible
- * - Check for accessibility of compliance information
- *
- * PASS CRITERIA:
- * - All required policy pages exist and are linked
- * - Required disclosures present in policies
- * - Opt-out mechanisms available and accessible
- * - Current (recently updated) policy documents
- *
- * FAIL CRITERIA:
- * - Missing required policy pages
- * - Incomplete or outdated disclosures
- * - Inaccessible opt-out mechanisms
- * - Missing required notices
- *
- * TEST STRATEGY:
- * 1. Mock WordPress with policy pages
- * 2. Test page detection and content scanning
- * 3. Test disclosure verification
- * 4. Test link accessibility
- * 5. Validate compliance scoring
- */
- */
-/**
- * ⚠️ STUB - NEEDS IMPLEMENTATION
- * 
- * This diagnostic is a placeholder with stub implementation (if !false pattern).
- * Before writing tests, we need to clarify:
- * 
- * 1. What is the actual diagnostic question/goal?
- * 2. What WordPress state indicates pass/fail?
- * 3. Are there specific plugins, options, or settings to check?
- * 4. What should trigger an issue vs pass?
- * 5. What is the threat/priority level?
- * 
- * Once clarified, implement the check() method and we can create the test.
- */
-
-/**
- * DIAGNOSTIC ANALYSIS - STRAIGHTFORWARD WORDPRESS STATE CHECK
- * ============================================================
- * 
- * Question: Is privacy maintained with AI?
- * Slug: ai-user-privacy
- * Category: AI & ML Readiness
- * 
- * This diagnostic checks WordPress configuration/settings.
- * Can be implemented by querying options, plugins, or database state.
- * 
- * IMPLEMENTATION PLAN:
- * 1. Identify what "pass" means for this diagnostic
- * 2. Find WordPress option(s) or setting(s) to check
- * 3. Implement check() method
- * 4. Create unit test with mock WordPress state
- * 5. Add integration test on real WordPress instance
- * 
- * NEXT STEPS:
- * - Clarify exact pass/fail criteria
- * - Identify WordPress hooks/options to query
- * - Build the check() method implementation
- * - Create test cases
- * 
- * Current Status: READY FOR IMPLEMENTATION
- */
 class Diagnostic_Ai_User_Privacy extends Diagnostic_Base {
 	protected static $slug = 'ai-user-privacy';
 
@@ -237,8 +133,3 @@ class Diagnostic_Ai_User_Privacy extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

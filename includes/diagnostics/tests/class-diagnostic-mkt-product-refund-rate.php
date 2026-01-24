@@ -4,34 +4,6 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: High Refund Rate Products
- *
- * Identifies products with high refund rates. Quality control opportunity.
- *
- * Philosophy: Commandment #9, 1 - Show Value (KPIs) - Track impact, Helpful Neighbor - Anticipate needs
- * Priority: 3 (1=Must-Have, 2=Should-Have, 3=Nice-to-Have)
- * Threat Level: 50/100
- *
- * Impact: Shows \"\'Widget Pro\' has 34% refund rate\" for listing optimization.
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
-
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: High Refund Rate Products
- *
- * Category: Unknown
- * Slug: mkt-product-refund-rate
- *
- * Purpose:
- * Determine if the WordPress site meets Unknown criteria related to:
- * Automatically initialized lean diagnostic for Mkt Product Refund Rate. Optimized for minimal overhea...
- */
 
 /**
  * WOOCOMMERCE METRICS - Database Query Approach
@@ -220,8 +192,3 @@ class Diagnostic_MktProductRefundRate extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */

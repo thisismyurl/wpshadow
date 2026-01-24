@@ -4,74 +4,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-/**
- * Diagnostic: Is last backup recent (< 24 hours)?
- *
- * Category: WordPress Ecosystem Health
- * Priority: 1
- * Philosophy: 1, 8, 9
- *
- * Test Description:
- * Is last backup recent (< 24 hours)?
- *
- * @package WPShadow
- * @subpackage Diagnostics
-  * 
- * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
- */
 
-/**
- * DIAGNOSTIC GOAL CLARIFICATION
- * ==============================
- *
- * Question to Answer: Is last backup recent (< 24 hours)?
- *
- * Category: WordPress Ecosystem Health
- * Slug: core-backups-recent
- *
- * Purpose:
- * Determine if the WordPress site meets WordPress Ecosystem Health criteria related to:
- * Automatically initialized lean diagnostic for Core Backups Recent. Optimized for minimal overhead wh...
- */
-
-/**
- * TEST IMPLEMENTATION STRATEGY - BACKUP VERIFICATION
- * ==============================================
- * 
- * DETECTION APPROACH:
- * Check for backup systems and verify backup currency
- *
- * LOCAL CHECKS:
- * - Detect backup plugins (UpdraftPlus, BackWPup, Jetpack Backup, etc.)
- * - Query backup history and last backup timestamp
- * - Verify backup storage location and retention
- * - Check backup frequency settings
- * - Verify backup integrity (no failed backups)
- * - Check for automated backup scheduling
- * - Verify offsite/cloud backup if available
- *
- * PASS CRITERIA:
- * - Backup plugin installed and active
- * - Last backup < 24 hours old
- * - Automated daily or more frequent backups
- * - Backup storage accessible
- * - No failed backup attempts
- *
- * FAIL CRITERIA:
- * - No backup system found
- * - Last backup > 24 hours (or none exists)
- * - Manual-only backups, not automated
- * - Failed backup attempts
- * - No offsite backup storage
- *
- * TEST STRATEGY:
- * 1. Mock backup plugin data with various ages
- * 2. Test backup detection and status checking
- * 3. Test age calculation
- * 4. Test failure detection
- * 5. Validate alerts and recommendations
- */
  */
 /**
  * ⚠️ STUB - NEEDS IMPLEMENTATION
@@ -278,8 +211,3 @@ class Diagnostic_Core_Backups_Recent extends Diagnostic_Base {
 
 }
 
-/**
- * STUB - NEEDS CLARIFICATION:
- * The check() method has a stub condition (if !false) that always passes.
- * Please clarify: What condition should trigger an issue? How can we detect it?
- */
