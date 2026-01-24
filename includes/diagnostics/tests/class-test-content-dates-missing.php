@@ -31,9 +31,7 @@ class Test_Content_Dates_Missing extends Diagnostic_Base
 			return [
 				'id' => 'content-no-dates',
 				'title' => 'No Publication/Update Dates',
-				'description' => 'Article content detected but no published or updated dates shown. Date transparency builds trust and helps SEO.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'Article content detected but no published or updated dates shown. Date transparency builds trust and helps SEO.'
 				'kb_link' => 'https://wpshadow.com/kb/content-dates/',
 				'training_link' => 'https://wpshadow.com/training/content-strategy/',
 				'auto_fixable' => false,

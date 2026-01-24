@@ -37,8 +37,6 @@ class Diagnostic_Admin_Username extends Diagnostic_Base
 		);
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

@@ -65,9 +65,7 @@ class Test_UX_Heading_Hierarchy extends Diagnostic_Base
 				'description' => sprintf(
 					'Found %d instances where visual heading sizes may not match semantic hierarchy (h4 larger than h2, etc). Visual hierarchy should reinforce semantic structure.',
 					$size_violations
-				),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/heading-hierarchy/',
 				'training_link' => 'https://wpshadow.com/training/typography/',
 				'auto_fixable' => false,

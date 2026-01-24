@@ -58,8 +58,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 3. Build severity assessment based on impact
  * 4. Create test case with mock WordPress state
  * 5. Validate against real site conditions
- *
- * CONFIDENCE LEVEL: High - straightforward yes/no detection possible
  */
 /**
  * ⚠️ STUB - NEEDS IMPLEMENTATION
@@ -75,7 +73,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 
  * Once clarified, implement the check() method and we can create the test.
  */
-
 
 /**
  * DIAGNOSTIC ANALYSIS - STRAIGHTFORWARD WORDPRESS STATE CHECK
@@ -113,7 +110,6 @@ class Diagnostic_Users_Admin_Count extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -235,8 +231,6 @@ class Diagnostic_Users_Admin_Count extends Diagnostic_Base {
 		);
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *
@@ -274,7 +268,6 @@ class Diagnostic_Users_Admin_Count extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

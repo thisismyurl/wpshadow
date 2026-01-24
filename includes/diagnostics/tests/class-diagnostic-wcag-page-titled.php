@@ -68,11 +68,7 @@ use WPShadow\Core\Diagnostic_Base;
  * 3. Test compliance scoring
  * 4. Test threshold detection
  * 5. Validate reporting
- *
- * CONFIDENCE LEVEL: High - Content analysis is reliable and measurable
  */
- *
- * CONFIDENCE LEVEL: High - straightforward yes/no detection possible
  */
 /**
  * ⚠️ STUB - NEEDS IMPLEMENTATION
@@ -88,7 +84,6 @@ use WPShadow\Core\Diagnostic_Base;
  *
  * Once clarified, implement the check() method and we can create the test.
  */
-
 
 /**
  * DIAGNOSTIC ANALYSIS - REQUIRES FRONTEND INSPECTION
@@ -182,7 +177,6 @@ class Diagnostic_Wcag_Page_Titled extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -284,8 +278,6 @@ class Diagnostic_Wcag_Page_Titled extends Diagnostic_Base {
 		];
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *
@@ -316,7 +308,6 @@ class Diagnostic_Wcag_Page_Titled extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

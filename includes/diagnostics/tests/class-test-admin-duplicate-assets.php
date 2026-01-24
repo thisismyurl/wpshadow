@@ -152,9 +152,7 @@ class Test_Admin_Duplicate_Assets extends Diagnostic_Base
 				'WordPress admin is loading %d duplicate assets. The same files are enqueued multiple times, wasting bandwidth and potentially causing conflicts. Common culprits: %s',
 				$duplicate_count,
 				! empty($common_duplicates) ? implode(', ', array_unique($common_duplicates)) : 'Multiple plugins'
-			),
-			'color'        => '#FF4500',
-			'bg_color'     => '#FFF4F1',
+			)
 			'kb_link'      => 'https://wpshadow.com/kb/fix-duplicate-assets',
 			'training_link' => 'https://wpshadow.com/training/proper-asset-enqueue',
 			'auto_fixable' => false,

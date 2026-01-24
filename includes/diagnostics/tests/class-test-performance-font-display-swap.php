@@ -58,9 +58,7 @@ class Test_Performance_Font_Display_Swap extends Diagnostic_Base
 				'%d of %d @font-face rules lack font-display. This can cause invisible text (FOIT) while fonts load. Add font-display: swap for better UX.',
 				$missing_display,
 				$total_fontfaces
-			),
-			'color' => '#ff9800',
-			'bg_color' => '#fff3e0',
+			)
 			'kb_link' => 'https://wpshadow.com/kb/font-display/',
 			'training_link' => 'https://wpshadow.com/training/web-fonts/',
 			'auto_fixable' => false,

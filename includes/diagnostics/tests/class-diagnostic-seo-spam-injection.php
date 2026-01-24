@@ -57,8 +57,6 @@ class Diagnostic_SEO_Spam_Injection extends Diagnostic_Base
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

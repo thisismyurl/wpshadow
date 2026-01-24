@@ -42,9 +42,7 @@ class Test_Schema_Course extends Diagnostic_Base
 			return [
 				'id' => 'schema-course-missing',
 				'title' => 'Course Schema Missing',
-				'description' => 'Educational course content detected but no Course structured data found. Course schema enables rich results with duration, instructor, and provider information.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'Educational course content detected but no Course structured data found. Course schema enables rich results with duration, instructor, and provider information.'
 				'kb_link' => 'https://wpshadow.com/kb/course-schema/',
 				'training_link' => 'https://wpshadow.com/training/education-seo/',
 				'auto_fixable' => false,

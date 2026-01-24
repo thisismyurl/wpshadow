@@ -57,8 +57,6 @@ class Diagnostic_Weak_Password_Hashing extends Diagnostic_Base
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

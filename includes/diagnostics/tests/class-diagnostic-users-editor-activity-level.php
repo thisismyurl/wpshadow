@@ -64,8 +64,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 3. Test threshold comparison
  * 4. Test reporting
  * 5. Validate recommendations
- *
- * CONFIDENCE LEVEL: High
  */
 class Diagnostic_Users_Editor_Activity_Level extends Diagnostic_Base {
 	protected static $slug = 'users-editor-activity-level';
@@ -77,7 +75,6 @@ class Diagnostic_Users_Editor_Activity_Level extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -177,8 +174,6 @@ class Diagnostic_Users_Editor_Activity_Level extends Diagnostic_Base {
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *
@@ -216,7 +211,6 @@ class Diagnostic_Users_Editor_Activity_Level extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

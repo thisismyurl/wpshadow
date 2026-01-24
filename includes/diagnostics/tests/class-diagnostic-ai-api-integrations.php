@@ -64,8 +64,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 3. Test threshold comparison
  * 4. Test reporting
  * 5. Validate recommendations
- *
- * CONFIDENCE LEVEL: High
  */
 class Diagnostic_Ai_Api_Integrations extends Diagnostic_Base {
 	protected static $slug = 'ai-api-integrations';
@@ -77,7 +75,6 @@ class Diagnostic_Ai_Api_Integrations extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -187,7 +184,6 @@ class Diagnostic_Ai_Api_Integrations extends Diagnostic_Base {
 		return ['passed' => is_array($r1) && is_null($r2), 'message' => 'AI API integration check working'];
 	}
 }
-
 
 /**
  * NEEDS CLARIFICATION:

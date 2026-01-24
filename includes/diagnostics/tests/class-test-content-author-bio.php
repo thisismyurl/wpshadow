@@ -60,9 +60,7 @@ class Test_Content_Author_Bio extends Diagnostic_Base
 			return [
 				'id' => 'content-no-author-bio',
 				'title' => 'No Author Bio',
-				'description' => 'Article without author bio/information. Author bios build trust, improve E-A-T (SEO), and humanize content.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'Article without author bio/information. Author bios build trust, improve E-A-T (SEO), and humanize content.'
 				'kb_link' => 'https://wpshadow.com/kb/author-bio/',
 				'training_link' => 'https://wpshadow.com/training/content-authority/',
 				'auto_fixable' => false,

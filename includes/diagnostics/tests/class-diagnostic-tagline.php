@@ -10,7 +10,6 @@ declare(strict_types=1);
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 
-
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
@@ -36,10 +35,7 @@ class Diagnostic_Tagline extends Diagnostic_Base
 			$finding = array(
 				'id'            => 'tagline-empty',
 				'title'         => 'Site Tagline is Empty',
-				'description'   => 'Add a tagline (Settings → General) to improve SEO and help visitors understand your site quickly.' . (! $is_registered ? ' 💡 Register with WPShadow and get AI-powered suggestions for the perfect tagline!' : ''),
-				'color'         => '#2196f3',
-				'bg_color'      => '#e3f2fd',
-				'kb_link'       => 'https://wpshadow.com/kb/write-an-effective-site-tagline/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=tagline',
+				'description'   => 'Add a tagline (Settings → General) to improve SEO and help visitors understand your site quickly.' . (! $is_registered ? ' 💡 Register with WPShadow and get AI-powered suggestions for the perfect tagline!' : ''),				'kb_link'       => 'https://wpshadow.com/kb/write-an-effective-site-tagline/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=tagline',
 				'modal_trigger' => 'wpshadow-tagline-modal',
 				'action_text'   => 'Add Tagline',
 				'auto_fixable'  => false,
@@ -68,8 +64,6 @@ class Diagnostic_Tagline extends Diagnostic_Base
 		$consent = get_option('wpshadow_email_consent', false);
 		return ! empty($consent);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

@@ -25,8 +25,6 @@ class Diagnostic_Design_DARK_MODE_COLOR_ADAPTATION extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

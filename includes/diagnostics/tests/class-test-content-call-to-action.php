@@ -54,9 +54,7 @@ class Test_Content_Call_To_Action extends Diagnostic_Base
 			return [
 				'id' => 'content-no-cta',
 				'title' => 'No Clear Call-to-Action',
-				'description' => 'Content page without clear call-to-action. CTAs guide users toward conversion goals and improve engagement.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'Content page without clear call-to-action. CTAs guide users toward conversion goals and improve engagement.'
 				'kb_link' => 'https://wpshadow.com/kb/call-to-action/',
 				'training_link' => 'https://wpshadow.com/training/conversion-optimization/',
 				'auto_fixable' => false,

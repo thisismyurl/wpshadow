@@ -46,9 +46,7 @@ class Test_UX_Success_Confirmation extends Diagnostic_Base
 			return [
 				'id' => 'ux-success-confirmation-missing',
 				'title' => 'No Success Confirmation Pattern',
-				'description' => 'Forms detected but no success confirmation containers (role="status" or success message divs). Users need clear feedback when actions succeed.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'Forms detected but no success confirmation containers (role="status" or success message divs). Users need clear feedback when actions succeed.'
 				'kb_link' => 'https://wpshadow.com/kb/success-messages/',
 				'training_link' => 'https://wpshadow.com/training/form-ux/',
 				'auto_fixable' => false,

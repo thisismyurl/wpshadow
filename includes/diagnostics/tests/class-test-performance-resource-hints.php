@@ -41,9 +41,7 @@ class Test_Performance_Resource_Hints extends Diagnostic_Base
 			return [
 				'id' => 'performance-missing-resource-hints',
 				'title' => 'Missing Resource Hints',
-				'description' => 'External resources detected but no preconnect/dns-prefetch hints. Resource hints can reduce latency by 100-500ms.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'External resources detected but no preconnect/dns-prefetch hints. Resource hints can reduce latency by 100-500ms.'
 				'kb_link' => 'https://wpshadow.com/kb/resource-hints/',
 				'training_link' => 'https://wpshadow.com/training/performance-optimization/',
 				'auto_fixable' => false,

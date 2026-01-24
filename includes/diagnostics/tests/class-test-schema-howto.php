@@ -51,9 +51,7 @@ class Test_Schema_HowTo extends Diagnostic_Base
 				'description' => sprintf(
 					'How-to content detected (%d steps) but no HowTo structured data found. HowTo schema enables rich results with step-by-step cards in search.',
 					$step_count
-				),
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/howto-schema/',
 				'training_link' => 'https://wpshadow.com/training/structured-data/',
 				'auto_fixable' => false,

@@ -50,8 +50,6 @@ use WPShadow\Core\Diagnostic_Base;
  *
  * PASS CRITERIA: Analytics active, data current, metrics healthy
  * FAIL CRITERIA: Plugin missing, stale data, poor metrics
- *
- * CONFIDENCE LEVEL: High
  */
 class Diagnostic_Env_Visitor_Device_Breakdown extends Diagnostic_Base {
 	protected static $slug = 'env-visitor-device-breakdown';
@@ -63,7 +61,6 @@ class Diagnostic_Env_Visitor_Device_Breakdown extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -158,8 +155,6 @@ class Diagnostic_Env_Visitor_Device_Breakdown extends Diagnostic_Base {
 		);
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *
@@ -197,7 +192,6 @@ class Diagnostic_Env_Visitor_Device_Breakdown extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

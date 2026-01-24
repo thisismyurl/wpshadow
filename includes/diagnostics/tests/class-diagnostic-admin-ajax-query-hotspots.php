@@ -29,8 +29,6 @@ class Diagnostic_AdminAjaxQueryHotspots extends Diagnostic_Base
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

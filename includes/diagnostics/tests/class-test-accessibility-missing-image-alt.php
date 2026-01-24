@@ -193,9 +193,7 @@ class Test_Accessibility_Missing_Image_Alt extends Diagnostic_Base {
                 '%d of %d images are missing alt attributes or have suspicious empty alt. This hurts accessibility and SEO.',
                 $missing,
                 $total
-            ),
-            'color' => '#ff9800',
-            'bg_color' => '#fff3e0',
+            )
             'kb_link' => 'https://wpshadow.com/kb/image-alt-text/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
             'training_link' => 'https://wpshadow.com/training/accessibility-images/',
             'auto_fixable' => false,
@@ -360,9 +358,7 @@ class Test_Accessibility_Missing_Image_Alt extends Diagnostic_Base {
         return [
             'id' => 'accessibility-missing-image-alt',
             'title' => $title,
-            'description' => $description,
-            'color' => '#ff5722',
-            'bg_color' => '#ffebee',
+            'description' => $description
             'kb_link' => 'https://wpshadow.com/kb/image-alt-text/',
             'training_link' => 'https://wpshadow.com/training/accessibility-images/',
             'auto_fixable' => false,

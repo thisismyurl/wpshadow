@@ -31,7 +31,6 @@ class Diagnostic_Pub_Excerpt_Present extends Diagnostic_Base {
 
 	protected static $family_label = 'General';
 
-
 	/**
 	 * Get diagnostic ID
 	 */
@@ -124,8 +123,6 @@ class Diagnostic_Pub_Excerpt_Present extends Diagnostic_Base {
 			'pub-excerpt-present'
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

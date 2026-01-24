@@ -51,8 +51,6 @@ class Diagnostic_Heartbeat_Throttling extends Diagnostic_Base
 		);
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

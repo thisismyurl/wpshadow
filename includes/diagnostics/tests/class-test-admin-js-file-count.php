@@ -103,9 +103,7 @@ class Test_Admin_JS_File_Count extends Diagnostic_Base
 				$plugin_count,
 				$external_count,
 				$threshold
-			),
-			'color'        => '#FF8C42',
-			'bg_color'     => '#FFF6F3',
+			)
 			'kb_link'      => 'https://wpshadow.com/kb/admin-js-bloat',
 			'training_link' => 'https://wpshadow.com/training/optimize-admin-assets',
 			'auto_fixable' => false,

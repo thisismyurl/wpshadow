@@ -144,9 +144,7 @@ class Test_Admin_Head_Bloat extends Diagnostic_Base
 				'WordPress admin <head> contains %d unnecessary meta tags and links totaling ~%s. These add bloat without benefit and may expose security information. Common culprits: generator meta, REST API discovery, oEmbed links, emoji script.',
 				$issue_count,
 				$this->format_bytes($total_size)
-			),
-			'color'        => '#FF6347',
-			'bg_color'     => '#FFF5F3',
+			)
 			'kb_link'      => 'https://wpshadow.com/kb/clean-wordpress-head',
 			'training_link' => 'https://wpshadow.com/training/optimize-html-output',
 			'auto_fixable' => true, // Can remove via remove_action

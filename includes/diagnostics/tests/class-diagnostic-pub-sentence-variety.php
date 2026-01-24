@@ -68,8 +68,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 3. Test compliance scoring
  * 4. Test threshold detection
  * 5. Validate reporting
- *
- * CONFIDENCE LEVEL: High - Content analysis is reliable and measurable
  */
 class Diagnostic_Pub_Sentence_Variety extends Diagnostic_Base {
 	protected static $slug = 'pub-sentence-variety';
@@ -81,7 +79,6 @@ class Diagnostic_Pub_Sentence_Variety extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -176,8 +173,6 @@ class Diagnostic_Pub_Sentence_Variety extends Diagnostic_Base {
 		);
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *
@@ -215,7 +210,6 @@ class Diagnostic_Pub_Sentence_Variety extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

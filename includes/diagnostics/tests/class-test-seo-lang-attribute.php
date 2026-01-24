@@ -116,9 +116,7 @@ class Test_SEO_Lang_Attribute extends Diagnostic_Base
 			return [
 				'id' => 'seo-lang-attribute',
 				'title' => 'Missing HTML Lang Attribute',
-				'description' => 'The HTML element is missing a lang attribute. This attribute helps screen readers and search engines understand the page language.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'The HTML element is missing a lang attribute. This attribute helps screen readers and search engines understand the page language.'
 				'kb_link' => 'https://wpshadow.com/kb/html-lang/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
 				'training_link' => 'https://wpshadow.com/training/accessibility-basics/',
 				'auto_fixable' => false,
@@ -167,9 +165,7 @@ class Test_SEO_Lang_Attribute extends Diagnostic_Base
 		return [
 			'id' => 'seo-lang-attribute',
 			'title' => $title,
-			'description' => $description,
-			'color' => '#ff5722',
-			'bg_color' => '#ffebee',
+			'description' => $description
 			'kb_link' => 'https://wpshadow.com/kb/html-lang/',
 			'training_link' => 'https://wpshadow.com/training/accessibility-basics/',
 			'auto_fixable' => false,

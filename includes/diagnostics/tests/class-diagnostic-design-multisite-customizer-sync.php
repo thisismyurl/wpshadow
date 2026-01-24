@@ -26,8 +26,6 @@ class Diagnostic_Design_MULTISITE_CUSTOMIZER_SYNC extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

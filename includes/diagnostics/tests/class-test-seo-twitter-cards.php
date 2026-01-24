@@ -258,9 +258,7 @@ class Test_SEO_Twitter_Cards extends Diagnostic_Base
             return [
                 'id' => 'seo-twitter-cards',
                 'title' => 'Missing Twitter Card',
-                'description' => 'Your page is missing Twitter Card tags. Without these, your content will appear as plain text when shared on Twitter instead of a rich media card.',
-                'color' => '#ff9800',
-                'bg_color' => '#fff3e0',
+                'description' => 'Your page is missing Twitter Card tags. Without these, your content will appear as plain text when shared on Twitter instead of a rich media card.'
                 'kb_link' => 'https://wpshadow.com/kb/twitter-cards/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
                 'training_link' => 'https://wpshadow.com/training/social-media-seo/',
                 'auto_fixable' => false,
@@ -286,9 +284,7 @@ class Test_SEO_Twitter_Cards extends Diagnostic_Base
                     'Your twitter:card value "%s" is not recognized. Valid types: %s.',
                     $card_type,
                     implode(', ', self::VALID_CARD_TYPES)
-                ),
-                'color' => '#ff9800',
-                'bg_color' => '#fff3e0',
+                )
                 'kb_link' => 'https://wpshadow.com/kb/twitter-cards/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
                 'training_link' => 'https://wpshadow.com/training/social-media-seo/',
                 'auto_fixable' => false,
@@ -332,9 +328,7 @@ class Test_SEO_Twitter_Cards extends Diagnostic_Base
                 'Your Twitter Card is missing %d recommended tag(s): %s. While Twitter can fall back to Open Graph tags, specific Twitter tags provide better control.',
                 count($missing_recommended),
                 implode(', ', $missing_recommended)
-            ),
-            'color' => '#ff9800',
-            'bg_color' => '#fff3e0',
+            )
             'kb_link' => 'https://wpshadow.com/kb/twitter-cards/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
             'training_link' => 'https://wpshadow.com/training/social-media-seo/',
             'auto_fixable' => false,
@@ -495,9 +489,7 @@ class Test_SEO_Twitter_Cards extends Diagnostic_Base
         return [
             'id' => 'seo-twitter-cards',
             'title' => $title,
-            'description' => $description,
-            'color' => '#ff5722',
-            'bg_color' => '#ffebee',
+            'description' => $description
             'kb_link' => 'https://wpshadow.com/kb/twitter-cards/',
             'training_link' => 'https://wpshadow.com/training/social-media-seo/',
             'auto_fixable' => false,

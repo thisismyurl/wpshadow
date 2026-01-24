@@ -50,9 +50,7 @@ class Test_Mobile_Content_Overflow extends Diagnostic_Base
 					'Found %d instances of overflow:hidden and %d nowrap properties. On mobile, this might hide important content. Consider using text-overflow:ellipsis or responsive design.',
 					$hidden_count,
 					$nowrap_count
-				),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/content-overflow/',
 				'training_link' => 'https://wpshadow.com/training/mobile-layout/',
 				'auto_fixable' => false,

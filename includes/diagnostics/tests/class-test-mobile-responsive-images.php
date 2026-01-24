@@ -61,9 +61,7 @@ class Test_Mobile_Responsive_Images extends Diagnostic_Base
 				$percentage,
 				$responsive_count,
 				$total_images
-			),
-			'color' => '#ff9800',
-			'bg_color' => '#fff3e0',
+			)
 			'kb_link' => 'https://wpshadow.com/kb/responsive-images/',
 			'training_link' => 'https://wpshadow.com/training/mobile-performance/',
 			'auto_fixable' => false,

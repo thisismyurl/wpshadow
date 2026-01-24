@@ -41,8 +41,6 @@ class Diagnostic_Third_Party_Script_Quarantine extends Diagnostic_Base
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

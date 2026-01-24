@@ -44,9 +44,7 @@ class Test_UX_Skip_Links extends Diagnostic_Base
 			return [
 				'id' => 'ux-skip-links-missing',
 				'title' => 'Skip Links Missing',
-				'description' => 'Navigation detected but no "skip to content" link found. Skip links allow keyboard users to bypass navigation and jump to main content (WCAG 2.4.1).',
-				'color' => '#ff5722',
-				'bg_color' => '#ffebee',
+				'description' => 'Navigation detected but no "skip to content" link found. Skip links allow keyboard users to bypass navigation and jump to main content (WCAG 2.4.1).'
 				'kb_link' => 'https://wpshadow.com/kb/skip-links/',
 				'training_link' => 'https://wpshadow.com/training/keyboard-accessibility/',
 				'auto_fixable' => false,

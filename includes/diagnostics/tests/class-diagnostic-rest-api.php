@@ -10,7 +10,6 @@ declare(strict_types=1);
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 
-
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
@@ -65,8 +64,6 @@ class Diagnostic_REST_API extends Diagnostic_Base
 			'kb_article'  => 'rest-api',
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

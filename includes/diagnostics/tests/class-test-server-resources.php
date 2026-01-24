@@ -105,9 +105,7 @@ class Test_Server_Resources extends Diagnostic_Base
 			return array(
 				'id'            => static::$slug . '-' . $primary_issue['type'],
 				'title'         => 'Server Resource Warning',
-				'description'   => 'One or more server resources are running low. Investigate immediately.',
-				'color'         => '#ff9800',
-				'bg_color'      => '#fff3e0',
+				'description'   => 'One or more server resources are running low. Investigate immediately.'
 				'kb_link'       => 'https://wpshadow.com/kb/server-resources/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=server-resources',
 				'training_link' => 'https://wpshadow.com/training/server-health/',
 				'auto_fixable'  => false,

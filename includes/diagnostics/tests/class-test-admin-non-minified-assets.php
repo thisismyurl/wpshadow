@@ -114,9 +114,7 @@ class Test_Admin_Non_Minified_Assets extends Diagnostic_Base
 				$non_minified_count,
 				count($plugin_assets),
 				count($theme_assets)
-			),
-			'color'        => '#FF4500',
-			'bg_color'     => '#FFF4F1',
+			)
 			'kb_link'      => 'https://wpshadow.com/kb/minify-assets',
 			'training_link' => 'https://wpshadow.com/training/optimize-production-assets',
 			'auto_fixable' => false,

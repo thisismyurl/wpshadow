@@ -71,9 +71,7 @@ class Test_Mobile_Performance extends Diagnostic_Base
 			return [
 				'id' => 'mobile-performance-issues',
 				'title' => 'Mobile Performance Issues Detected',
-				'description' => 'Mobile performance issues: ' . implode(', ', $issues) . '. These can significantly impact mobile user experience and Core Web Vitals.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'Mobile performance issues: ' . implode(', ', $issues) . '. These can significantly impact mobile user experience and Core Web Vitals.'
 				'kb_link' => 'https://wpshadow.com/kb/mobile-performance/',
 				'training_link' => 'https://wpshadow.com/training/mobile-optimization/',
 				'auto_fixable' => false,

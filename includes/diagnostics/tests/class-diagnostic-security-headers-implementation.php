@@ -60,8 +60,6 @@ class Diagnostic_Security_Headers_Implementation extends Diagnostic_Base
 		];
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

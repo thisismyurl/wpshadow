@@ -8,8 +8,6 @@ class Diagnostic_Monitor_Time extends Diagnostic_Base {
     return ['id' => 'monitor-time_to_first_byte', 'title' => __('Time to First Byte Monitoring', 'wpshadow'), 'description' => __('Tracks TTFB trends. Increasing TTFB = infrastructure issue.', 'wpshadow'), 'severity' => 'medium', 'category' => 'monitoring', 'kb_link' => 'https://wpshadow.com/kb/', 'training_link' => 'https://wpshadow.com/training/', 'auto_fixable' => false, 'threat_level' => 6];
   }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

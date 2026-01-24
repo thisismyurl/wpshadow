@@ -22,9 +22,7 @@ class Test_SEO_Robots_Txt extends Diagnostic_Base
 			return [
 				'id' => 'seo-robots-txt-missing',
 				'title' => 'Robots.txt Not Accessible',
-				'description' => 'robots.txt file cannot be accessed. Search engines expect this file to understand crawling rules.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'robots.txt file cannot be accessed. Search engines expect this file to understand crawling rules.'
 				'kb_link' => 'https://wpshadow.com/kb/robots-txt/',
 				'training_link' => 'https://wpshadow.com/training/seo-fundamentals/',
 				'auto_fixable' => false,
@@ -44,9 +42,7 @@ class Test_SEO_Robots_Txt extends Diagnostic_Base
 			return [
 				'id' => 'seo-robots-txt-no-sitemap',
 				'title' => 'Robots.txt Missing Sitemap Reference',
-				'description' => 'robots.txt exists but doesn\'t reference your XML sitemap. Add "Sitemap: ' . home_url('/sitemap.xml') . '" to help search engines discover your content.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'robots.txt exists but doesn\'t reference your XML sitemap. Add "Sitemap: ' . home_url('/sitemap.xml') . '" to help search engines discover your content.'
 				'kb_link' => 'https://wpshadow.com/kb/robots-txt-sitemap/',
 				'training_link' => 'https://wpshadow.com/training/seo-fundamentals/',
 				'auto_fixable' => false,

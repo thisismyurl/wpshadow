@@ -6,7 +6,6 @@ declare(strict_types=1);
  * @package WPShadow
  */
 
-
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
@@ -83,8 +82,6 @@ class Diagnostic_Asset_Versions_CSS extends Diagnostic_Base {
 			'timestamp'    => current_time( 'mysql' ),
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

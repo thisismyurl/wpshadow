@@ -76,9 +76,7 @@ class Test_SEO_Duplicate_Content extends Diagnostic_Base
 				'Detected %d potential duplicate content issues: %s. Duplicate content can dilute search rankings.',
 				count($issues),
 				implode('; ', array_slice($issues, 0, 3))
-			),
-			'color' => '#ff9800',
-			'bg_color' => '#fff3e0',
+			)
 			'kb_link' => 'https://wpshadow.com/kb/duplicate-content/',
 			'training_link' => 'https://wpshadow.com/training/content-strategy/',
 			'auto_fixable' => false,

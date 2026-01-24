@@ -31,7 +31,6 @@ class Diagnostic_Pub_Author_Set extends Diagnostic_Base {
 
 	protected static $family_label = 'General';
 
-
 	/**
 	 * Get diagnostic ID
 	 */
@@ -124,8 +123,6 @@ class Diagnostic_Pub_Author_Set extends Diagnostic_Base {
 			'pub-author-set'
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

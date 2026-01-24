@@ -70,8 +70,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 3. Test optimization detection
  * 4. Test carbon calculation
  * 5. Validate scoring
- *
- * CONFIDENCE LEVEL: High - Performance metrics are measurable
  */
 
 /**
@@ -138,7 +136,6 @@ class Diagnostic_Env_Webp_Adoption extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -258,8 +255,6 @@ class Diagnostic_Env_Webp_Adoption extends Diagnostic_Base {
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *
@@ -297,7 +292,6 @@ class Diagnostic_Env_Webp_Adoption extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

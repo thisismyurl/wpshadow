@@ -267,9 +267,7 @@ class Test_SEO_Schema_Markup extends Diagnostic_Base
             return [
                 'id' => 'seo-schema-markup',
                 'title' => 'Missing Schema Markup',
-                'description' => 'Your page has no structured data (Schema.org JSON-LD). Adding schema markup can help you get rich snippets in search results, improving click-through rates.',
-                'color' => '#ff9800',
-                'bg_color' => '#fff3e0',
+                'description' => 'Your page has no structured data (Schema.org JSON-LD). Adding schema markup can help you get rich snippets in search results, improving click-through rates.'
                 'kb_link' => 'https://wpshadow.com/kb/schema-markup/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
                 'training_link' => 'https://wpshadow.com/training/structured-data/',
                 'auto_fixable' => false,
@@ -322,9 +320,7 @@ class Test_SEO_Schema_Markup extends Diagnostic_Base
                 count($schemas),
                 count($issues),
                 implode(', ', array_slice($issues, 0, 3)) . (count($issues) > 3 ? '...' : '')
-            ),
-            'color' => '#ff9800',
-            'bg_color' => '#fff3e0',
+            )
             'kb_link' => 'https://wpshadow.com/kb/schema-markup/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
             'training_link' => 'https://wpshadow.com/training/structured-data/',
             'auto_fixable' => false,
@@ -458,9 +454,7 @@ class Test_SEO_Schema_Markup extends Diagnostic_Base
         return [
             'id' => 'seo-schema-markup',
             'title' => $title,
-            'description' => $description,
-            'color' => '#ff5722',
-            'bg_color' => '#ffebee',
+            'description' => $description
             'kb_link' => 'https://wpshadow.com/kb/schema-markup/',
             'training_link' => 'https://wpshadow.com/training/structured-data/',
             'auto_fixable' => false,

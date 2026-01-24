@@ -55,9 +55,7 @@ class Test_Performance_Critical_CSS extends Diagnostic_Base
 				return [
 					'id' => 'performance-no-critical-css',
 					'title' => 'No Critical CSS',
-					'description' => sprintf('%d render-blocking stylesheets but no inline critical CSS. Critical CSS can improve First Contentful Paint by 200-500ms.', $blocking_css),
-					'color' => '#2196f3',
-					'bg_color' => '#e3f2fd',
+					'description' => sprintf('%d render-blocking stylesheets but no inline critical CSS. Critical CSS can improve First Contentful Paint by 200-500ms.', $blocking_css)
 					'kb_link' => 'https://wpshadow.com/kb/critical-css/',
 					'training_link' => 'https://wpshadow.com/training/css-optimization/',
 					'auto_fixable' => false,

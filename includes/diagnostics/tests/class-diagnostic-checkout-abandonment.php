@@ -31,7 +31,6 @@ class Diagnostic_Checkout_Abandonment extends Diagnostic_Base {
 
 	protected static $family_label = 'General';
 
-
 	/**
 	 * Get diagnostic ID
 	 */
@@ -109,8 +108,6 @@ class Diagnostic_Checkout_Abandonment extends Diagnostic_Base {
 			'checkout-abandonment'
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

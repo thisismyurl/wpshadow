@@ -40,9 +40,7 @@ class Test_Content_Video_Lazy_Load extends Diagnostic_Base
 			return [
 				'id' => 'content-video-no-lazy-load',
 				'title' => 'Videos Not Lazy Loaded',
-				'description' => sprintf('%d video embeds without lazy loading. Video embeds are heavy (500KB+) and should load on-demand.', $total_videos),
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => sprintf('%d video embeds without lazy loading. Video embeds are heavy (500KB+) and should load on-demand.', $total_videos)
 				'kb_link' => 'https://wpshadow.com/kb/lazy-load-videos/',
 				'training_link' => 'https://wpshadow.com/training/video-optimization/',
 				'auto_fixable' => false,

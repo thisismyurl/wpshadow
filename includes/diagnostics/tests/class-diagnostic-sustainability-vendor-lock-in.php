@@ -31,7 +31,6 @@ class Diagnostic_Sustainability_Vendor_Lock_In extends Diagnostic_Base {
 
 	protected static $family_label = 'General';
 
-
 	/**
 	 * Get diagnostic ID
 	 */
@@ -109,8 +108,6 @@ class Diagnostic_Sustainability_Vendor_Lock_In extends Diagnostic_Base {
 			'sustainability-vendor-lock-in'
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

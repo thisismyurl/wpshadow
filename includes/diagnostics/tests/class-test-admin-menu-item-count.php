@@ -102,9 +102,7 @@ class Test_Admin_Menu_Item_Count extends Diagnostic_Base
 				$plugin_menus,
 				$core_menus,
 				$threshold
-			),
-			'color'        => '#FFA07A',
-			'bg_color'     => '#FFF8F5',
+			)
 			'kb_link'      => 'https://wpshadow.com/kb/admin-menu-organization',
 			'training_link' => 'https://wpshadow.com/training/organize-admin-menu',
 			'auto_fixable' => false,

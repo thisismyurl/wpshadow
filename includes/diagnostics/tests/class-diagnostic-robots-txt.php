@@ -58,8 +58,6 @@ class Diagnostic_Robots_Txt extends Diagnostic_Base {
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

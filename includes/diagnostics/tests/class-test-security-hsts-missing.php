@@ -34,9 +34,7 @@ class Test_Security_HSTS_Missing extends Diagnostic_Base
 			return [
 				'id' => 'security-no-hsts',
 				'title' => 'No HSTS Header',
-				'description' => 'HTTPS site without Strict-Transport-Security header. HSTS prevents protocol downgrade attacks and cookie hijacking.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'HTTPS site without Strict-Transport-Security header. HSTS prevents protocol downgrade attacks and cookie hijacking.'
 				'kb_link' => 'https://wpshadow.com/kb/hsts-header/',
 				'training_link' => 'https://wpshadow.com/training/https-hardening/',
 				'auto_fixable' => false,

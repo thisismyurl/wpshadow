@@ -60,9 +60,7 @@ class Test_PHP_Extensions extends Diagnostic_Base
 			return array(
 				'id'            => static::$slug . '-critical',
 				'title'         => 'Critical PHP Extensions Missing',
-				'description'   => 'WordPress requires: ' . implode(', ', $missing_critical) . '. Contact your hosting provider.',
-				'color'         => '#f44336',
-				'bg_color'      => '#ffebee',
+				'description'   => 'WordPress requires: ' . implode(', ', $missing_critical) . '. Contact your hosting provider.'
 				'kb_link'       => 'https://wpshadow.com/kb/php-extensions/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=php-extensions',
 				'training_link' => 'https://wpshadow.com/training/php-extensions/',
 				'auto_fixable'  => false,
@@ -88,9 +86,7 @@ class Test_PHP_Extensions extends Diagnostic_Base
 			return array(
 				'id'            => static::$slug . '-recommended',
 				'title'         => 'Recommended PHP Extensions Not Installed',
-				'description'   => 'Missing: ' . implode(', ', $ext_names) . '. These improve performance. Ask your host to install them.',
-				'color'         => '#ff9800',
-				'bg_color'      => '#fff3e0',
+				'description'   => 'Missing: ' . implode(', ', $ext_names) . '. These improve performance. Ask your host to install them.'
 				'kb_link'       => 'https://wpshadow.com/kb/php-extensions/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=php-extensions',
 				'training_link' => 'https://wpshadow.com/training/php-extensions/',
 				'auto_fixable'  => false,

@@ -94,9 +94,7 @@ class Test_Admin_Unnecessary_Dashicons extends Diagnostic_Base
 			'description'  => sprintf(
 				'Dashicons icon font (~62KB) is loading in %s context where it\'s not needed. This wastes bandwidth and slows page load. Dashicons should only load in admin or when admin bar is visible.',
 				$context
-			),
-			'color'        => '#FF6347',
-			'bg_color'     => '#FFF5F3',
+			)
 			'kb_link'      => 'https://wpshadow.com/kb/disable-dashicons',
 			'training_link' => 'https://wpshadow.com/training/conditional-asset-loading',
 			'auto_fixable' => true, // Can dequeue conditionally

@@ -72,8 +72,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 3. Test vocabulary diversity measurement
  * 4. Test grammar issue detection
  * 5. Validate overall quality scoring
- *
- * CONFIDENCE LEVEL: High - analyzable via local text processing
  */
 class Diagnostic_Ai_Nlp_Readiness extends Diagnostic_Base {
 	protected static $slug = 'ai-nlp-readiness';
@@ -85,7 +83,6 @@ class Diagnostic_Ai_Nlp_Readiness extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -191,7 +188,6 @@ class Diagnostic_Ai_Nlp_Readiness extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

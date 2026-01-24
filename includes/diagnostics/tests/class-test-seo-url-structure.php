@@ -25,9 +25,7 @@ class Test_SEO_URL_Structure extends Diagnostic_Base
 			return [
 				'id' => 'seo-url-structure-unfriendly',
 				'title' => 'Non-SEO-Friendly URL Structure',
-				'description' => 'URLs use query parameters (?p=123) or /index.php/. Switch to pretty permalinks (Settings > Permalinks) for better SEO.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'URLs use query parameters (?p=123) or /index.php/. Switch to pretty permalinks (Settings > Permalinks) for better SEO.'
 				'kb_link' => 'https://wpshadow.com/kb/permalink-structure/',
 				'training_link' => 'https://wpshadow.com/training/wordpress-seo/',
 				'auto_fixable' => false,

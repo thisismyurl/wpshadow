@@ -44,9 +44,7 @@ class Test_Schema_Product extends Diagnostic_Base
 			return [
 				'id' => 'schema-product-missing',
 				'title' => 'Product Schema Missing',
-				'description' => 'Product page detected but no Product structured data found. Product schema enables rich results in search (price, availability, reviews).',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'Product page detected but no Product structured data found. Product schema enables rich results in search (price, availability, reviews).'
 				'kb_link' => 'https://wpshadow.com/kb/product-schema/',
 				'training_link' => 'https://wpshadow.com/training/ecommerce-seo/',
 				'auto_fixable' => false,

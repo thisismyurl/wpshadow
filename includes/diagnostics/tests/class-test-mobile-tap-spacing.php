@@ -64,9 +64,7 @@ class Test_Mobile_Tap_Spacing extends Diagnostic_Base
 				'description' => sprintf(
 					'Found %d elements with tight spacing. Google recommends 8px minimum spacing between tap targets for good mobile UX.',
 					$tight_spacing + $small_line_heights
-				),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/tap-spacing/',
 				'training_link' => 'https://wpshadow.com/training/mobile-ux/',
 				'auto_fixable' => false,

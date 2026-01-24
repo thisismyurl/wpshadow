@@ -50,9 +50,7 @@ class Test_WordPress_Comment_Form extends Diagnostic_Base
 			return [
 				'id' => 'wordpress-comment-form-no-protection',
 				'title' => 'Comment Form Not Protected',
-				'description' => 'Comment form has no visible spam protection (no CAPTCHA, honeypot, or Akismet). Open to spam bots.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'Comment form has no visible spam protection (no CAPTCHA, honeypot, or Akismet). Open to spam bots.'
 				'kb_link' => 'https://wpshadow.com/kb/comment-spam-protection/',
 				'training_link' => 'https://wpshadow.com/training/spam-prevention/',
 				'auto_fixable' => false,

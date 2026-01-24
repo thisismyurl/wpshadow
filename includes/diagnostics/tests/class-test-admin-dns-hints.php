@@ -111,9 +111,7 @@ class Test_Admin_DNS_Hints extends Diagnostic_Base
 				'WordPress admin <head> contains %d DNS prefetch or preconnect hints pointing to %d unique domains. Browsers limit parallel DNS lookups, so hints beyond 3-4 provide no benefit and waste browser resources. Recommended: Keep hints to 3-4 critical external domains only.',
 				$hint_count,
 				count($unique_domains)
-			),
-			'color'        => '#FF6347',
-			'bg_color'     => '#FFF5F3',
+			)
 			'kb_link'      => 'https://wpshadow.com/kb/optimize-dns-hints',
 			'training_link' => 'https://wpshadow.com/training/resource-hints-best-practices',
 			'auto_fixable' => false,

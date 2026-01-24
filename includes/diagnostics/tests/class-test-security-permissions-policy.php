@@ -32,9 +32,7 @@ class Test_Security_Permissions_Policy extends Diagnostic_Base
 			return [
 				'id' => 'security-no-permissions-policy',
 				'title' => 'No Permissions Policy',
-				'description' => 'No Permissions-Policy header found. This header controls browser features like geolocation, camera, microphone access.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'No Permissions-Policy header found. This header controls browser features like geolocation, camera, microphone access.'
 				'kb_link' => 'https://wpshadow.com/kb/permissions-policy/',
 				'training_link' => 'https://wpshadow.com/training/security-headers/',
 				'auto_fixable' => false,

@@ -25,8 +25,6 @@ class Diagnostic_Design_NO_TIME_DEPENDENT_INTERACTIONS extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

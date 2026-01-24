@@ -29,9 +29,7 @@ class Test_Security_Referrer_Policy_Missing extends Diagnostic_Base
 			return [
 				'id' => 'security-no-referrer-policy',
 				'title' => 'No Referrer Policy',
-				'description' => 'No Referrer-Policy header found. Referrer policy controls what information is sent to external sites, protecting user privacy.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'No Referrer-Policy header found. Referrer policy controls what information is sent to external sites, protecting user privacy.'
 				'kb_link' => 'https://wpshadow.com/kb/referrer-policy/',
 				'training_link' => 'https://wpshadow.com/training/privacy-headers/',
 				'auto_fixable' => false,

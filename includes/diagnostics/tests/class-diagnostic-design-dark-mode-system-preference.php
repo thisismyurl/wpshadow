@@ -26,8 +26,6 @@ class Diagnostic_Design_DARK_MODE_SYSTEM_PREFERENCE extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

@@ -67,8 +67,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 3. Test threshold comparison
  * 4. Test trend analysis
  * 5. Validate alert generation
- *
- * CONFIDENCE LEVEL: High - analytics data is structured and analyzable
  */
 class Diagnostic_Benchmark_Conversion_Rate_Industry extends Diagnostic_Base {
 	protected static $slug = 'benchmark-conversion-rate-industry';
@@ -80,7 +78,6 @@ class Diagnostic_Benchmark_Conversion_Rate_Industry extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -224,7 +221,6 @@ class Diagnostic_Benchmark_Conversion_Rate_Industry extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

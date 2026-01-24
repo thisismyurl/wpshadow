@@ -26,8 +26,6 @@ class Diagnostic_Design_CUSTOM_TAXONOMY_DESIGN extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

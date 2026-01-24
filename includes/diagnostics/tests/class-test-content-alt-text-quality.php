@@ -65,9 +65,7 @@ class Test_Content_Alt_Text_Quality extends Diagnostic_Base
 					'%d of %d images have poor/generic alt text (e.g., "image", "photo", "DSC_1234"). Alt text should describe the image content.',
 					$poor_alt_count,
 					$total_images
-				),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/alt-text-best-practices/',
 				'training_link' => 'https://wpshadow.com/training/accessibility/',
 				'auto_fixable' => false,

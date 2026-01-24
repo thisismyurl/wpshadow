@@ -26,8 +26,6 @@ class Diagnostic_Design_CUSTOMIZER_PREVIEW_ACCURATE extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

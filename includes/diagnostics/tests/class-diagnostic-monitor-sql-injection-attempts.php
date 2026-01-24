@@ -22,8 +22,6 @@ class Diagnostic_Monitor_SQL_Injection_Attempts extends Diagnostic_Base
 		return ['id' => 'monitor-sql-injection', 'title' => __('SQL Injection Monitoring Not Active', 'wpshadow'), 'description' => __('No security plugin monitoring SQL injection attempts. Install Wordfence or similar.', 'wpshadow'), 'severity' => 'low', 'category' => 'monitoring', 'kb_link' => 'https://wpshadow.com/kb/sql-injection-prevention/', 'training_link' => 'https://wpshadow.com/training/security-hardening/', 'auto_fixable' => false, 'threat_level' => 10];
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

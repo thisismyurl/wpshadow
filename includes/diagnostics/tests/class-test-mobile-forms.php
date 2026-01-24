@@ -59,9 +59,7 @@ class Test_Mobile_Forms extends Diagnostic_Base
 				'description' => sprintf(
 					'Found %d form inputs but no mobile-specific input types (email, tel) or autocomplete attributes. Mobile users benefit from correct input types and autocomplete.',
 					$input_count
-				),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/mobile-forms/',
 				'training_link' => 'https://wpshadow.com/training/mobile-ux/',
 				'auto_fixable' => false,

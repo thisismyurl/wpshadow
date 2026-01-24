@@ -25,8 +25,6 @@ class Diagnostic_Design_POPOVER_CONSISTENCY extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

@@ -103,9 +103,6 @@ class Diagnostic_Active_Login_Attacks extends Diagnostic_Base
         );
     }
 
-
-
-
     /**
      * Live test for this diagnostic
      *

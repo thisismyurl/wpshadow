@@ -48,8 +48,6 @@ class Diagnostic_Tracking_Script_Impact extends Diagnostic_Base
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

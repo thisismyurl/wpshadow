@@ -41,9 +41,7 @@ class Test_Security_Admin_User_Enumeration extends Diagnostic_Base
 				return [
 					'id' => 'security-user-enumeration',
 					'title' => 'User Enumeration Possible',
-					'description' => sprintf('Author archive URLs reveal usernames (e.g., "%s"). Attackers can enumerate users for brute-force attacks.', $username),
-					'color' => '#ff9800',
-					'bg_color' => '#fff3e0',
+					'description' => sprintf('Author archive URLs reveal usernames (e.g., "%s"). Attackers can enumerate users for brute-force attacks.', $username)
 					'kb_link' => 'https://wpshadow.com/kb/user-enumeration/',
 					'training_link' => 'https://wpshadow.com/training/authentication-security/',
 					'auto_fixable' => false,
@@ -64,9 +62,7 @@ class Test_Security_Admin_User_Enumeration extends Diagnostic_Base
 				return [
 					'id' => 'security-user-enumeration-direct',
 					'title' => 'User Enumeration via Author Pages',
-					'description' => 'Author pages are publicly accessible via /?author=1 URLs. This allows attackers to enumerate usernames.',
-					'color' => '#ff9800',
-					'bg_color' => '#fff3e0',
+					'description' => 'Author pages are publicly accessible via /?author=1 URLs. This allows attackers to enumerate usernames.'
 					'kb_link' => 'https://wpshadow.com/kb/user-enumeration/',
 					'training_link' => 'https://wpshadow.com/training/authentication-security/',
 					'auto_fixable' => false,

@@ -59,9 +59,7 @@ class Test_Schema_Organization extends Diagnostic_Base
 			return [
 				'id' => 'schema-organization-incomplete',
 				'title' => 'Organization Schema Incomplete',
-				'description' => 'Organization schema found but missing recommended properties: ' . implode(', ', $missing) . '. Complete Organization schema improves knowledge graph presence.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'Organization schema found but missing recommended properties: ' . implode(', ', $missing) . '. Complete Organization schema improves knowledge graph presence.'
 				'kb_link' => 'https://wpshadow.com/kb/organization-schema/',
 				'training_link' => 'https://wpshadow.com/training/brand-seo/',
 				'auto_fixable' => false,

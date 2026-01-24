@@ -47,8 +47,6 @@ class Diagnostic_Favicon extends Diagnostic_Base
 		);
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

@@ -29,9 +29,7 @@ class Test_Content_Video_Autoplay extends Diagnostic_Base
 			return [
 				'id' => 'content-video-autoplay',
 				'title' => 'Video Autoplay Detected',
-				'description' => sprintf('%d video(s) set to autoplay. Autoplay is poor UX, wastes bandwidth, and harms accessibility.', $autoplay_videos),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => sprintf('%d video(s) set to autoplay. Autoplay is poor UX, wastes bandwidth, and harms accessibility.', $autoplay_videos)
 				'kb_link' => 'https://wpshadow.com/kb/video-autoplay/',
 				'training_link' => 'https://wpshadow.com/training/multimedia-best-practices/',
 				'auto_fixable' => false,

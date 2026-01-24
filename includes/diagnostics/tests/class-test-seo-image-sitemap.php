@@ -32,9 +32,7 @@ class Test_SEO_Image_Sitemap extends Diagnostic_Base
 			return [
 				'id' => 'seo-image-sitemap-missing',
 				'title' => 'Images Not in Sitemap',
-				'description' => 'XML sitemap doesn\'t include images. Adding images to your sitemap helps them appear in Google Image Search.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'XML sitemap doesn\'t include images. Adding images to your sitemap helps them appear in Google Image Search.'
 				'kb_link' => 'https://wpshadow.com/kb/image-sitemap/',
 				'training_link' => 'https://wpshadow.com/training/image-seo/',
 				'auto_fixable' => false,

@@ -26,8 +26,6 @@ class Diagnostic_Design_DESIGN_PALETTE_PARITY extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

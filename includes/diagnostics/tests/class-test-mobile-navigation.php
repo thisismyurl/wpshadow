@@ -52,9 +52,7 @@ class Test_Mobile_Navigation extends Diagnostic_Base
 				'description' => sprintf(
 					'Navigation has %d links but no mobile menu pattern detected. Consider using a hamburger menu or collapsible navigation for mobile.',
 					$link_count
-				),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/mobile-navigation/',
 				'training_link' => 'https://wpshadow.com/training/mobile-ux/',
 				'auto_fixable' => false,

@@ -50,8 +50,6 @@ class Diagnostic_External_Comment_Systems extends Diagnostic_Base
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

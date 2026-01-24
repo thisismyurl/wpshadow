@@ -128,8 +128,6 @@ class Diagnostic_Terms_Of_Service_Exists extends Diagnostic_Base
 		);
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

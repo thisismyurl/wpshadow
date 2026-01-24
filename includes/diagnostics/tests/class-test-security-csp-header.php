@@ -32,9 +32,7 @@ class Test_Security_CSP_Header extends Diagnostic_Base
 			return [
 				'id' => 'security-no-csp',
 				'title' => 'No Content Security Policy',
-				'description' => 'No Content-Security-Policy header found. CSP protects against XSS, clickjacking, and code injection attacks.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'No Content-Security-Policy header found. CSP protects against XSS, clickjacking, and code injection attacks.'
 				'kb_link' => 'https://wpshadow.com/kb/content-security-policy/',
 				'training_link' => 'https://wpshadow.com/training/security-headers/',
 				'auto_fixable' => false,

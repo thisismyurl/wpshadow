@@ -60,9 +60,7 @@ class Test_Performance_HTTP2 extends Diagnostic_Base
 			return [
 				'id' => 'performance-no-http2',
 				'title' => 'HTTP/2 Not Detected',
-				'description' => 'Site is using HTTPS but HTTP/2 not detected. HTTP/2 can reduce load time by 15-30% through multiplexing.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'Site is using HTTPS but HTTP/2 not detected. HTTP/2 can reduce load time by 15-30% through multiplexing.'
 				'kb_link' => 'https://wpshadow.com/kb/http2/',
 				'training_link' => 'https://wpshadow.com/training/server-optimization/',
 				'auto_fixable' => false,

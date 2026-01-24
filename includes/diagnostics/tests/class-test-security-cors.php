@@ -38,9 +38,7 @@ class Test_Security_CORS extends Diagnostic_Base
 					return [
 						'id' => 'security-cors-wildcard-credentials',
 						'title' => 'Dangerous CORS Configuration',
-						'description' => 'Access-Control-Allow-Origin: * with credentials enabled. This is a critical security vulnerability allowing any site to read your data.',
-						'color' => '#f44336',
-						'bg_color' => '#ffebee',
+						'description' => 'Access-Control-Allow-Origin: * with credentials enabled. This is a critical security vulnerability allowing any site to read your data.'
 						'kb_link' => 'https://wpshadow.com/kb/cors-security/',
 						'training_link' => 'https://wpshadow.com/training/api-security/',
 						'auto_fixable' => false,
@@ -54,9 +52,7 @@ class Test_Security_CORS extends Diagnostic_Base
 				return [
 					'id' => 'security-cors-wildcard',
 					'title' => 'Permissive CORS Policy',
-					'description' => 'Access-Control-Allow-Origin: * allows any domain to access your resources. Consider restricting to specific domains.',
-					'color' => '#ff9800',
-					'bg_color' => '#fff3e0',
+					'description' => 'Access-Control-Allow-Origin: * allows any domain to access your resources. Consider restricting to specific domains.'
 					'kb_link' => 'https://wpshadow.com/kb/cors-configuration/',
 					'training_link' => 'https://wpshadow.com/training/api-security/',
 					'auto_fixable' => false,

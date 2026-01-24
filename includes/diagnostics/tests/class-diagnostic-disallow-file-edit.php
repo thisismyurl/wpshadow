@@ -46,8 +46,6 @@ class Diagnostic_Disallow_File_Edit extends Diagnostic_Base
 		);
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

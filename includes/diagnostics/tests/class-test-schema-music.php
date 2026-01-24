@@ -42,9 +42,7 @@ class Test_Schema_Music extends Diagnostic_Base
 			return [
 				'id' => 'schema-music-missing',
 				'title' => 'Music Schema Missing',
-				'description' => 'Music content detected (audio player, tracks, album) but no MusicRecording or MusicAlbum structured data found. Music schema enables rich results with playable previews.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'Music content detected (audio player, tracks, album) but no MusicRecording or MusicAlbum structured data found. Music schema enables rich results with playable previews.'
 				'kb_link' => 'https://wpshadow.com/kb/music-schema/',
 				'training_link' => 'https://wpshadow.com/training/media-seo/',
 				'auto_fixable' => false,

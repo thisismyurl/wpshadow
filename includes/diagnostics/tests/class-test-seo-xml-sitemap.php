@@ -42,9 +42,7 @@ class Test_SEO_XML_Sitemap extends Diagnostic_Base
 			return [
 				'id' => 'seo-xml-sitemap-missing',
 				'title' => 'XML Sitemap Not Found',
-				'description' => 'No XML sitemap detected at common locations. XML sitemaps help search engines discover and index your content efficiently.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'No XML sitemap detected at common locations. XML sitemaps help search engines discover and index your content efficiently.'
 				'kb_link' => 'https://wpshadow.com/kb/xml-sitemap/',
 				'training_link' => 'https://wpshadow.com/training/seo-fundamentals/',
 				'auto_fixable' => false,

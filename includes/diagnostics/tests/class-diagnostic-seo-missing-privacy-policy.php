@@ -124,8 +124,6 @@ class Diagnostic_SEO_Missing_Privacy_Policy extends Diagnostic_Base
 		);
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

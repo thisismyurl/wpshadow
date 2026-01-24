@@ -42,9 +42,7 @@ class Test_Schema_Software extends Diagnostic_Base
 			return [
 				'id' => 'schema-software-missing',
 				'title' => 'SoftwareApplication Schema Missing',
-				'description' => 'Software/app content detected but no SoftwareApplication structured data found. This schema enables rich results with ratings, version, and platform info.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'Software/app content detected but no SoftwareApplication structured data found. This schema enables rich results with ratings, version, and platform info.'
 				'kb_link' => 'https://wpshadow.com/kb/software-schema/',
 				'training_link' => 'https://wpshadow.com/training/structured-data/',
 				'auto_fixable' => false,

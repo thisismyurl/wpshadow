@@ -25,8 +25,6 @@ class Diagnostic_Design_PADDING_MARGIN_SCALING extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

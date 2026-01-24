@@ -79,11 +79,7 @@ use WPShadow\Core\Diagnostic_Base;
  * 3. Test infrastructure checks (SSL, API, headers)
  * 4. Test combined readiness scoring
  * 5. Validate recommendations for missing items
- *
- * CONFIDENCE LEVEL: High - all checks are system-level and queryable
  */
- *
- * CONFIDENCE LEVEL: High - straightforward yes/no detection possible
  */
 /**
  * ⚠️ STUB - NEEDS IMPLEMENTATION
@@ -99,7 +95,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 
  * Once clarified, implement the check() method and we can create the test.
  */
-
 
 /**
  * WORDPRESS STATE CHECK - READY FOR IMPLEMENTATION
@@ -174,7 +169,6 @@ class Diagnostic_Ai_Chatbot_Readiness extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -283,7 +277,6 @@ class Diagnostic_Ai_Chatbot_Readiness extends Diagnostic_Base {
 		return ['passed' => is_array($r1) && (is_null($r2) || is_array($r2)), 'message' => 'Chatbot readiness check working'];
 	}
 }
-
 
 /**
  * NEEDS CLARIFICATION:

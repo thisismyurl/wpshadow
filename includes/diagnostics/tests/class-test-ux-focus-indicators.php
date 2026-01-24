@@ -40,9 +40,7 @@ class Test_UX_Focus_Indicators extends Diagnostic_Base
 			return [
 				'id' => 'ux-focus-indicators-removed',
 				'title' => 'Focus Indicators Removed',
-				'description' => 'CSS removes focus outlines (outline:none) without custom focus styles. Keyboard users need visible focus indicators (WCAG 2.4.7).',
-				'color' => '#ff5722',
-				'bg_color' => '#ffebee',
+				'description' => 'CSS removes focus outlines (outline:none) without custom focus styles. Keyboard users need visible focus indicators (WCAG 2.4.7).'
 				'kb_link' => 'https://wpshadow.com/kb/focus-indicators/',
 				'training_link' => 'https://wpshadow.com/training/keyboard-accessibility/',
 				'auto_fixable' => false,

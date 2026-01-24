@@ -48,8 +48,6 @@ class Diagnostic_Automated_Updates extends Diagnostic_Base
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

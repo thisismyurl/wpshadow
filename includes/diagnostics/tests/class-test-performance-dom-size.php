@@ -56,8 +56,6 @@ class Test_Performance_DOM_Size extends Diagnostic_Base
 				'id' => 'performance-large-dom',
 				'title' => sprintf('Large DOM Size (%s)', ucfirst($severity)),
 				'description' => sprintf('%d DOM elements detected. Google recommends <800 elements. Large DOMs slow rendering and increase memory usage.', $element_count),
-				'color' => $threat_level > 50 ? '#ff5722' : '#ff9800',
-				'bg_color' => $threat_level > 50 ? '#ffebee' : '#fff3e0',
 				'kb_link' => 'https://wpshadow.com/kb/dom-size/',
 				'training_link' => 'https://wpshadow.com/training/html-optimization/',
 				'auto_fixable' => false,

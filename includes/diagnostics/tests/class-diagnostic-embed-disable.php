@@ -39,8 +39,6 @@ class Diagnostic_Embed_Disable extends Diagnostic_Base
 		);
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

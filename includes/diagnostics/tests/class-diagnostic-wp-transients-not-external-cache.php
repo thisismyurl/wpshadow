@@ -49,8 +49,6 @@ class Diagnostic_Wp_Transients_Not_External_Cache extends Diagnostic_Base
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

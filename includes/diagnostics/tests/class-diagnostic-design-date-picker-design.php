@@ -25,8 +25,6 @@ class Diagnostic_Design_DATE_PICKER_DESIGN extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

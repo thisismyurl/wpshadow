@@ -68,8 +68,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 3. Test trending detection
  * 4. Test anomaly detection
  * 5. Validate reporting
- *
- * CONFIDENCE LEVEL: High - Order data is queryable and reliable
  */
 class Diagnostic_Ecommerce_Revenue_Trend extends Diagnostic_Base {
 	protected static $slug = 'ecommerce-revenue-trend';
@@ -81,7 +79,6 @@ class Diagnostic_Ecommerce_Revenue_Trend extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -161,8 +158,6 @@ class Diagnostic_Ecommerce_Revenue_Trend extends Diagnostic_Base {
 		);
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *
@@ -200,7 +195,6 @@ class Diagnostic_Ecommerce_Revenue_Trend extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

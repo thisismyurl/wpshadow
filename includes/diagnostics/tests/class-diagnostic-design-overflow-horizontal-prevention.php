@@ -25,8 +25,6 @@ class Diagnostic_Design_OVERFLOW_HORIZONTAL_PREVENTION extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

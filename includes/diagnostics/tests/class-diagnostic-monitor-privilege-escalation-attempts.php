@@ -20,8 +20,6 @@ class Diagnostic_Monitor_Privilege_Escalation_Attempts extends Diagnostic_Base
 		return ['id' => 'monitor-priv-escalation', 'title' => __('Privilege Escalation Attempts', 'wpshadow'), 'description' => __('Detects when users try actions above their permission level. Subscriber accessing admin pages, user modifying others\' content.', 'wpshadow'), 'severity' => 'high', 'category' => 'monitoring', 'kb_link' => 'https://wpshadow.com/kb/permission-control/', 'training_link' => 'https://wpshadow.com/training/role-management/', 'auto_fixable' => false, 'threat_level' => 9];
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

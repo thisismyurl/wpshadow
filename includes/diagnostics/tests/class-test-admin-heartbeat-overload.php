@@ -93,9 +93,7 @@ class Test_Admin_Heartbeat_Overload extends Diagnostic_Base
 				$location,
 				$requests_per_hour,
 				$requests_per_day
-			),
-			'color'        => '#FF4500',
-			'bg_color'     => '#FFF4F1',
+			)
 			'kb_link'      => 'https://wpshadow.com/kb/optimize-heartbeat',
 			'training_link' => 'https://wpshadow.com/training/reduce-server-load',
 			'auto_fixable' => true, // Can adjust via filter

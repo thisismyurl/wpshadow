@@ -52,9 +52,7 @@ class Test_Mobile_Horizontal_Scrolling extends Diagnostic_Base
 				'description' => sprintf(
 					'Found %d elements with fixed widths over 600px. These may cause horizontal scrolling on mobile devices.',
 					$wide_elements
-				),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/horizontal-scrolling/',
 				'training_link' => 'https://wpshadow.com/training/responsive-design/',
 				'auto_fixable' => false,

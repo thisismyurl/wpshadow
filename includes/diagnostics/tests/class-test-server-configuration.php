@@ -93,9 +93,7 @@ class Test_Server_Configuration extends Diagnostic_Base
 			return array(
 				'id'            => static::$slug . '-suboptimal',
 				'title'         => 'Server Configuration Issues Found',
-				'description'   => count($issues) . ' server configuration issue(s). Contact hosting provider.',
-				'color'         => '#ff9800',
-				'bg_color'      => '#fff3e0',
+				'description'   => count($issues) . ' server configuration issue(s). Contact hosting provider.'
 				'kb_link'       => 'https://wpshadow.com/kb/server-configuration/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=server-config',
 				'training_link' => 'https://wpshadow.com/training/server-configuration/',
 				'auto_fixable'  => false,

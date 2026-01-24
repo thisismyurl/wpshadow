@@ -159,9 +159,7 @@ class Test_SEO_Article_Schema extends Diagnostic_Base
 					'description' => sprintf(
 						'Article schema is present but missing required properties: %s. Complete schema is needed for rich snippets.',
 						implode(', ', $missing)
-					),
-					'color' => '#ff9800',
-					'bg_color' => '#fff3e0',
+					)
 					'kb_link' => 'https://wpshadow.com/kb/article-schema/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
 					'training_link' => 'https://wpshadow.com/training/structured-data/',
 					'auto_fixable' => false,
@@ -182,9 +180,7 @@ class Test_SEO_Article_Schema extends Diagnostic_Base
 		return [
 			'id' => 'seo-article-schema',
 			'title' => 'Missing Article Schema',
-			'description' => 'This appears to be an article/blog post but lacks Article schema markup. Adding Article schema enables rich snippets in search results, increasing click-through rates.',
-			'color' => '#ff9800',
-			'bg_color' => '#fff3e0',
+			'description' => 'This appears to be an article/blog post but lacks Article schema markup. Adding Article schema enables rich snippets in search results, increasing click-through rates.'
 			'kb_link' => 'https://wpshadow.com/kb/article-schema/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
 			'training_link' => 'https://wpshadow.com/training/structured-data/',
 			'auto_fixable' => false,
@@ -246,9 +242,7 @@ class Test_SEO_Article_Schema extends Diagnostic_Base
 		return [
 			'id' => 'seo-article-schema',
 			'title' => $title,
-			'description' => $description,
-			'color' => '#ff5722',
-			'bg_color' => '#ffebee',
+			'description' => $description
 			'kb_link' => 'https://wpshadow.com/kb/article-schema/',
 			'training_link' => 'https://wpshadow.com/training/structured-data/',
 			'auto_fixable' => false,

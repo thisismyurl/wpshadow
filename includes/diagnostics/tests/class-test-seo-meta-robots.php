@@ -236,9 +236,7 @@ class Test_SEO_Meta_Robots extends Diagnostic_Base
 			'description' => sprintf(
 				'This page %s. Unless intentional, this prevents the page from appearing in search results and/or passing link equity.',
 				implode(' and ', $issues)
-			),
-			'color' => '#ff5722',
-			'bg_color' => '#ffebee',
+			)
 			'kb_link' => 'https://wpshadow.com/kb/meta-robots/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
 			'training_link' => 'https://wpshadow.com/training/seo-indexing/',
 			'auto_fixable' => false,
@@ -325,9 +323,7 @@ class Test_SEO_Meta_Robots extends Diagnostic_Base
 		return [
 			'id' => 'seo-meta-robots',
 			'title' => $title,
-			'description' => $description,
-			'color' => '#ff5722',
-			'bg_color' => '#ffebee',
+			'description' => $description
 			'kb_link' => 'https://wpshadow.com/kb/meta-robots/',
 			'training_link' => 'https://wpshadow.com/training/seo-indexing/',
 			'auto_fixable' => false,

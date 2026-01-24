@@ -25,8 +25,6 @@ class Diagnostic_Design_NAVIGATION_MENU_STRUCTURE extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

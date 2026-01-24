@@ -213,9 +213,7 @@ class Test_Design_Viewport_Configuration extends Diagnostic_Base {
             return [
                 'id' => 'design-viewport-configuration',
                 'title' => 'Missing Viewport Meta Tag',
-                'description' => 'Your page is missing a viewport meta tag. This tag is essential for mobile responsiveness and will cause display issues on mobile devices.',
-                'color' => '#ff9800',
-                'bg_color' => '#fff3e0',
+                'description' => 'Your page is missing a viewport meta tag. This tag is essential for mobile responsiveness and will cause display issues on mobile devices.'
                 'kb_link' => 'https://wpshadow.com/kb/viewport-meta-tag/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
                 'training_link' => 'https://wpshadow.com/training/mobile-responsive-design/',
                 'auto_fixable' => false,
@@ -273,9 +271,7 @@ class Test_Design_Viewport_Configuration extends Diagnostic_Base {
                 'Your viewport tag has %d issue(s): %s. This may cause mobile display or accessibility problems.',
                 count($issues),
                 implode(', ', $issues)
-            ),
-            'color' => '#ff9800',
-            'bg_color' => '#fff3e0',
+            )
             'kb_link' => 'https://wpshadow.com/kb/viewport-meta-tag/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
             'training_link' => 'https://wpshadow.com/training/mobile-responsive-design/',
             'auto_fixable' => false,
@@ -419,9 +415,7 @@ class Test_Design_Viewport_Configuration extends Diagnostic_Base {
         return [
             'id' => 'design-viewport-configuration',
             'title' => $title,
-            'description' => $description,
-            'color' => '#ff5722',
-            'bg_color' => '#ffebee',
+            'description' => $description
             'kb_link' => 'https://wpshadow.com/kb/viewport-meta-tag/',
             'training_link' => 'https://wpshadow.com/training/mobile-responsive-design/',
             'auto_fixable' => false,

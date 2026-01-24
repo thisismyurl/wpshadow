@@ -193,9 +193,7 @@ class Test_Design_Favicon extends Diagnostic_Base
 			return [
 				'id' => 'design-favicon',
 				'title' => 'Missing Favicon',
-				'description' => 'Your site is missing a favicon. Favicons appear in browser tabs, bookmarks, and search results, helping users identify your site at a glance.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'Your site is missing a favicon. Favicons appear in browser tabs, bookmarks, and search results, helping users identify your site at a glance.'
 				'kb_link' => 'https://wpshadow.com/kb/favicon/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
 				'training_link' => 'https://wpshadow.com/training/branding-basics/',
 				'auto_fixable' => false,
@@ -238,9 +236,7 @@ class Test_Design_Favicon extends Diagnostic_Base
 				'Your site has a basic favicon but is missing %d recommended improvements: %s.',
 				count($recommendations),
 				implode('; ', $recommendations)
-			),
-			'color' => '#ff9800',
-			'bg_color' => '#fff3e0',
+			)
 			'kb_link' => 'https://wpshadow.com/kb/favicon/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
 			'training_link' => 'https://wpshadow.com/training/branding-basics/',
 			'auto_fixable' => false,
@@ -429,9 +425,7 @@ class Test_Design_Favicon extends Diagnostic_Base
 		return [
 			'id' => 'design-favicon',
 			'title' => $title,
-			'description' => $description,
-			'color' => '#ff5722',
-			'bg_color' => '#ffebee',
+			'description' => $description
 			'kb_link' => 'https://wpshadow.com/kb/favicon/',
 			'training_link' => 'https://wpshadow.com/training/branding-basics/',
 			'auto_fixable' => false,

@@ -64,8 +64,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 2. Test comparison logic
  * 3. Test improvement calculation
  * 4. Test edge cases (no change, worse metrics)
- *
- * CONFIDENCE LEVEL: High
  */
 class Diagnostic_Cost_Per_Acquisition_Trend extends Diagnostic_Base {
 	protected static $slug = 'cost-per-acquisition-trend';
@@ -77,7 +75,6 @@ class Diagnostic_Cost_Per_Acquisition_Trend extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -157,8 +154,6 @@ class Diagnostic_Cost_Per_Acquisition_Trend extends Diagnostic_Base {
 		);
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *
@@ -196,7 +191,6 @@ class Diagnostic_Cost_Per_Acquisition_Trend extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

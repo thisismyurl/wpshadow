@@ -45,9 +45,7 @@ class Test_Accessibility_Landmarks extends Diagnostic_Base
 			return [
 				'id' => 'accessibility-missing-landmarks',
 				'title' => 'Missing ARIA Landmarks',
-				'description' => sprintf('Missing landmarks: %s. Landmarks help screen reader users navigate page sections.', implode(', ', $missing)),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => sprintf('Missing landmarks: %s. Landmarks help screen reader users navigate page sections.', implode(', ', $missing))
 				'kb_link' => 'https://wpshadow.com/kb/aria-landmarks/',
 				'training_link' => 'https://wpshadow.com/training/semantic-html/',
 				'auto_fixable' => false,

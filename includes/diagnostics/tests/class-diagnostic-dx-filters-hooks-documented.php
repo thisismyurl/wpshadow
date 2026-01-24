@@ -31,7 +31,6 @@ class Diagnostic_Dx_Filters_Hooks_Documented extends Diagnostic_Base {
 
 	protected static $family_label = 'General';
 
-
 	/**
 	 * Get diagnostic ID
 	 */
@@ -109,8 +108,6 @@ class Diagnostic_Dx_Filters_Hooks_Documented extends Diagnostic_Base {
 			'dx-filters-hooks-documented'
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

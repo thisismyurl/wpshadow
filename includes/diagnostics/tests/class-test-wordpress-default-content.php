@@ -30,9 +30,7 @@ class Test_WordPress_Default_Content extends Diagnostic_Base
 			return [
 				'id' => 'wordpress-default-content-visible',
 				'title' => 'Default WordPress Content Visible',
-				'description' => 'Default WordPress content ("Mr WordPress", "Hello world!") visible in sidebar widgets. Replace with real content.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'Default WordPress content ("Mr WordPress", "Hello world!") visible in sidebar widgets. Replace with real content.'
 				'kb_link' => 'https://wpshadow.com/kb/default-content/',
 				'training_link' => 'https://wpshadow.com/training/content-setup/',
 				'auto_fixable' => false,

@@ -41,9 +41,7 @@ class Test_SEO_FAQ_Schema extends Diagnostic_Base
 			return [
 				'id' => 'seo-faq-schema',
 				'title' => 'Missing FAQ Schema',
-				'description' => 'This page contains Q&A content but lacks FAQ schema markup. Adding FAQ schema can generate rich snippets in search results.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'This page contains Q&A content but lacks FAQ schema markup. Adding FAQ schema can generate rich snippets in search results.'
 				'kb_link' => 'https://wpshadow.com/kb/faq-schema/',
 				'training_link' => 'https://wpshadow.com/training/structured-data/',
 				'auto_fixable' => false,

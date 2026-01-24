@@ -93,8 +93,6 @@ class Test_Admin_Outdated_WordPress extends Diagnostic_Base
 				$current_version,
 				$latest_version
 			),
-			'color'        => $this->get_color_by_severity($severity),
-			'bg_color'     => $this->get_bg_color_by_severity($severity),
 			'kb_link'      => 'https://wpshadow.com/kb/update-wordpress-core',
 			'training_link' => 'https://wpshadow.com/training/safe-wordpress-updates',
 			'auto_fixable' => false, // Core updates should be manual
@@ -154,42 +152,6 @@ class Test_Admin_Outdated_WordPress extends Diagnostic_Base
 
 		// Cannot determine update status
 		return null;
-	}
-
-	/**
-	 * Get color based on severity
-	 *
-	 * @param string $severity Severity level
-	 * @return string Hex color code
-	 */
-	private function get_color_by_severity(string $severity): string
-	{
-		$colors = array(
-			'critical' => '#8B0000', // Dark red
-			'high'     => '#DC143C', // Crimson
-			'medium'   => '#FF6347', // Tomato
-			'low'      => '#FF8C00', // Dark orange
-		);
-
-		return $colors[$severity] ?? '#FF6347';
-	}
-
-	/**
-	 * Get background color based on severity
-	 *
-	 * @param string $severity Severity level
-	 * @return string Hex color code
-	 */
-	private function get_bg_color_by_severity(string $severity): string
-	{
-		$colors = array(
-			'critical' => '#FFEBEE', // Light red
-			'high'     => '#FFF0F0', // Very light red
-			'medium'   => '#FFF5F3', // Lightest red
-			'low'      => '#FFF8F0', // Light orange
-		);
-
-		return $colors[$severity] ?? '#FFF5F3';
 	}
 
 	/**

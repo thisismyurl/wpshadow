@@ -243,9 +243,7 @@ class Test_SEO_Open_Graph_Tags extends Diagnostic_Base {
                     'Your page is missing %d required Open Graph tag(s): %s. These tags control how your content appears when shared on social media.',
                     count($missing_required),
                     implode(', ', $missing_required)
-                ),
-                'color' => '#ff9800',
-                'bg_color' => '#fff3e0',
+                )
                 'kb_link' => 'https://wpshadow.com/kb/open-graph-tags/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
                 'training_link' => 'https://wpshadow.com/training/social-media-seo/',
                 'auto_fixable' => false,
@@ -269,9 +267,7 @@ class Test_SEO_Open_Graph_Tags extends Diagnostic_Base {
                 'Your page has required Open Graph tags but is missing %d recommended tag(s): %s. Adding these will improve social media appearance.',
                 count($missing_recommended),
                 implode(', ', $missing_recommended)
-            ),
-            'color' => '#ff9800',
-            'bg_color' => '#fff3e0',
+            )
             'kb_link' => 'https://wpshadow.com/kb/open-graph-tags/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
             'training_link' => 'https://wpshadow.com/training/social-media-seo/',
             'auto_fixable' => false,
@@ -399,9 +395,7 @@ class Test_SEO_Open_Graph_Tags extends Diagnostic_Base {
         return [
             'id' => 'seo-open-graph-tags',
             'title' => $title,
-            'description' => $description,
-            'color' => '#ff5722',
-            'bg_color' => '#ffebee',
+            'description' => $description
             'kb_link' => 'https://wpshadow.com/kb/open-graph-tags/',
             'training_link' => 'https://wpshadow.com/training/social-media-seo/',
             'auto_fixable' => false,

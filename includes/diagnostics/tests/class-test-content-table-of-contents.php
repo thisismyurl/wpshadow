@@ -58,9 +58,7 @@ class Test_Content_Table_Of_Contents extends Diagnostic_Base
 			return [
 				'id' => 'content-no-table-of-contents',
 				'title' => 'Missing Table of Contents',
-				'description' => sprintf('Long-form content (%d headings) without table of contents. ToC improves navigation, UX, and can earn jump links in search results.', $heading_count),
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => sprintf('Long-form content (%d headings) without table of contents. ToC improves navigation, UX, and can earn jump links in search results.', $heading_count)
 				'kb_link' => 'https://wpshadow.com/kb/table-of-contents/',
 				'training_link' => 'https://wpshadow.com/training/content-structure/',
 				'auto_fixable' => false,

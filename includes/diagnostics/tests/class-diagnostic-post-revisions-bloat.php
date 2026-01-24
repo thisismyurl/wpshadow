@@ -105,8 +105,6 @@ class Diagnostic_Post_Revisions_Bloat extends Diagnostic_Base
 		];
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

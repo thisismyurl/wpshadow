@@ -65,8 +65,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 2. Test bias detection logic
  * 3. Test keyword density calculation
  * 4. Test freshness scoring
- *
- * CONFIDENCE LEVEL: Medium (heuristic-based)
  */
 class Diagnostic_AiCompetitiveContentGaps extends Diagnostic_Base {
 	protected static $slug = 'ai-competitive-content-gaps';
@@ -78,7 +76,6 @@ class Diagnostic_AiCompetitiveContentGaps extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -218,7 +215,6 @@ class Diagnostic_AiCompetitiveContentGaps extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * NEEDS CLARIFICATION:

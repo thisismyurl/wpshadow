@@ -67,8 +67,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 3. Test percentile calculations
  * 4. Test trend detection
  * 5. Validate recommendation generation
- *
- * CONFIDENCE LEVEL: High - benchmark data is external but queryable
  */
 class Diagnostic_Benchmark_Site_Speed_Industry_Avg extends Diagnostic_Base {
 	protected static $slug = 'benchmark-site-speed-industry-avg';
@@ -80,7 +78,6 @@ class Diagnostic_Benchmark_Site_Speed_Industry_Avg extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -160,8 +157,6 @@ class Diagnostic_Benchmark_Site_Speed_Industry_Avg extends Diagnostic_Base {
 		);
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *
@@ -199,7 +194,6 @@ class Diagnostic_Benchmark_Site_Speed_Industry_Avg extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

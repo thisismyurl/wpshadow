@@ -67,8 +67,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 3. Test completeness verification
  * 4. Test restoration capability detection
  * 5. Validate compliance checking
- *
- * CONFIDENCE LEVEL: High - audit data is structured and queryable
  */
 class Diagnostic_CompGdprCookieAudit extends Diagnostic_Base {
 	protected static $slug = 'comp-gdpr-cookie-audit';
@@ -80,7 +78,6 @@ class Diagnostic_CompGdprCookieAudit extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -190,8 +187,6 @@ class Diagnostic_CompGdprCookieAudit extends Diagnostic_Base {
 		);
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *
@@ -229,7 +224,6 @@ class Diagnostic_CompGdprCookieAudit extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

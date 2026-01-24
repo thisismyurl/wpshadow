@@ -231,9 +231,6 @@ class Diagnostic_Unauthorized_Admin_Creation extends Diagnostic_Base
         );
     }
 
-
-
-
     /**
      * Live test for this diagnostic
      *

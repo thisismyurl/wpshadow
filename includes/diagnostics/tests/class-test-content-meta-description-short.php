@@ -32,9 +32,7 @@ class Test_Content_Meta_Description_Short extends Diagnostic_Base
 			return [
 				'id' => 'content-meta-description-too-short',
 				'title' => 'Meta Description Too Short',
-				'description' => sprintf('Meta description is only %d characters. Google recommends 150-160 characters for optimal display.', $desc_length),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => sprintf('Meta description is only %d characters. Google recommends 150-160 characters for optimal display.', $desc_length)
 				'kb_link' => 'https://wpshadow.com/kb/meta-description-length/',
 				'training_link' => 'https://wpshadow.com/training/seo-fundamentals/',
 				'auto_fixable' => false,

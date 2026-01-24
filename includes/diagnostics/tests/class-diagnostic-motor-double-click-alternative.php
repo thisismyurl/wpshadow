@@ -71,11 +71,7 @@ use WPShadow\Core\Diagnostic_Base;
  * 3. Test focus indicator detection
  * 4. Test keyboard navigation verification
  * 5. Validate compliance findings
- *
- * CONFIDENCE LEVEL: High - Accessibility code is analyzable
  */
- *
- * CONFIDENCE LEVEL: High - straightforward yes/no detection possible
  */
 /**
  * ⚠️ STUB - NEEDS IMPLEMENTATION
@@ -91,7 +87,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 
  * Once clarified, implement the check() method and we can create the test.
  */
-
 
 /**
  * DIAGNOSTIC ANALYSIS - STRAIGHTFORWARD WORDPRESS STATE CHECK
@@ -129,7 +124,6 @@ class Diagnostic_Motor_Double_Click_Alternative extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -209,8 +203,6 @@ class Diagnostic_Motor_Double_Click_Alternative extends Diagnostic_Base {
 		);
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *
@@ -248,7 +240,6 @@ class Diagnostic_Motor_Double_Click_Alternative extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

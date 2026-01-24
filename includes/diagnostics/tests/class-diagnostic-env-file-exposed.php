@@ -100,9 +100,6 @@ class Diagnostic_Env_File_Exposed extends Diagnostic_Base
         return null;
     }
 
-
-
-
     /**
      * Live test for this diagnostic
      *

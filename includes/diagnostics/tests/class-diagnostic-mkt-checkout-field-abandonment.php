@@ -62,8 +62,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 2. Test order query and filtering
  * 3. Test metric calculations
  * 4. Test edge cases (zero orders, low volume)
- *
- * CONFIDENCE LEVEL: High
  */
 class Diagnostic_MktCheckoutFieldAbandonment extends Diagnostic_Base {
 	protected static $slug = 'mkt-checkout-field-abandonment';
@@ -75,7 +73,6 @@ class Diagnostic_MktCheckoutFieldAbandonment extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -185,8 +182,6 @@ class Diagnostic_MktCheckoutFieldAbandonment extends Diagnostic_Base {
 		);
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *
@@ -224,7 +219,6 @@ class Diagnostic_MktCheckoutFieldAbandonment extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

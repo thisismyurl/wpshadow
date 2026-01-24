@@ -61,8 +61,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 2. Test detection logic
  * 3. Test reporting
  * 4. Validate recommendations
- *
- * CONFIDENCE LEVEL: High
  */
 class Diagnostic_CompEmailCanSpam extends Diagnostic_Base {
 	protected static $slug = 'comp-email-can-spam';
@@ -74,7 +72,6 @@ class Diagnostic_CompEmailCanSpam extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -234,8 +231,6 @@ class Diagnostic_CompEmailCanSpam extends Diagnostic_Base {
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *
@@ -273,7 +268,6 @@ class Diagnostic_CompEmailCanSpam extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

@@ -48,8 +48,6 @@ class Diagnostic_Large_Third_Party_Embeds extends Diagnostic_Base
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

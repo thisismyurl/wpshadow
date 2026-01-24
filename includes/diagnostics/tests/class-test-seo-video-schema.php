@@ -56,9 +56,7 @@ class Test_SEO_Video_Schema extends Diagnostic_Base
 				return [
 					'id' => 'seo-video-schema',
 					'title' => 'Incomplete Video Schema',
-					'description' => sprintf('VideoObject schema missing: %s', implode(', ', $missing)),
-					'color' => '#ff9800',
-					'bg_color' => '#fff3e0',
+					'description' => sprintf('VideoObject schema missing: %s', implode(', ', $missing))
 					'kb_link' => 'https://wpshadow.com/kb/video-schema/',
 					'training_link' => 'https://wpshadow.com/training/structured-data/',
 					'auto_fixable' => false,
@@ -75,9 +73,7 @@ class Test_SEO_Video_Schema extends Diagnostic_Base
 		return [
 			'id' => 'seo-video-schema',
 			'title' => 'Missing Video Schema',
-			'description' => 'This page contains video content but lacks VideoObject schema. Adding video schema enables video rich results in search.',
-			'color' => '#ff9800',
-			'bg_color' => '#fff3e0',
+			'description' => 'This page contains video content but lacks VideoObject schema. Adding video schema enables video rich results in search.'
 			'kb_link' => 'https://wpshadow.com/kb/video-schema/',
 			'training_link' => 'https://wpshadow.com/training/structured-data/',
 			'auto_fixable' => false,

@@ -9,7 +9,6 @@ declare(strict_types=1);
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 
-
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
@@ -70,8 +69,6 @@ class Diagnostic_RSS_Feeds extends Diagnostic_Base {
 			'kb_article'  => 'rss-feeds',
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

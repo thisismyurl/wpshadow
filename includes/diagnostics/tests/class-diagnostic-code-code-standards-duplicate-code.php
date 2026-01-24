@@ -26,8 +26,6 @@ class Diagnostic_Code_CODE_STANDARDS_DUPLICATE_CODE extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

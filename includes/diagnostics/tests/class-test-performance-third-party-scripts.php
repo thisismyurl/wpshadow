@@ -67,9 +67,7 @@ class Test_Performance_Third_Party_Scripts extends Diagnostic_Base
 					'%d third-party scripts detected (%s). Each adds latency and can block rendering.',
 					$third_party_count,
 					!empty($third_party_services) ? implode(', ', $third_party_services) : 'various services'
-				),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/third-party-scripts/',
 				'training_link' => 'https://wpshadow.com/training/script-optimization/',
 				'auto_fixable' => false,

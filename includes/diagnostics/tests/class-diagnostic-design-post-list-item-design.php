@@ -26,8 +26,6 @@ class Diagnostic_Design_POST_LIST_ITEM_DESIGN extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

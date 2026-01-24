@@ -101,9 +101,7 @@ class Test_Admin_CSS_File_Count extends Diagnostic_Base
 				$plugin_count,
 				$theme_count,
 				$threshold
-			),
-			'color'        => '#FF6B35',
-			'bg_color'     => '#FFF5F3',
+			)
 			'kb_link'      => 'https://wpshadow.com/kb/admin-css-bloat',
 			'training_link' => 'https://wpshadow.com/training/optimize-admin-assets',
 			'auto_fixable' => false,

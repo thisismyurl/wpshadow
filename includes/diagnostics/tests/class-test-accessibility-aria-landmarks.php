@@ -137,9 +137,7 @@ class Test_Accessibility_ARIA_Landmarks extends Diagnostic_Base
 				'Page is missing %d required ARIA landmarks: %s. Landmarks help screen reader users navigate your site structure.',
 				count($missing_required),
 				implode(', ', $missing_required)
-			),
-			'color' => '#ff9800',
-			'bg_color' => '#fff3e0',
+			)
 			'kb_link' => 'https://wpshadow.com/kb/aria-landmarks/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
 			'training_link' => 'https://wpshadow.com/training/accessibility-structure/',
 			'auto_fixable' => false,
@@ -226,9 +224,7 @@ class Test_Accessibility_ARIA_Landmarks extends Diagnostic_Base
 		return [
 			'id' => 'accessibility-aria-landmarks',
 			'title' => $title,
-			'description' => $description,
-			'color' => '#ff5722',
-			'bg_color' => '#ffebee',
+			'description' => $description
 			'kb_link' => 'https://wpshadow.com/kb/aria-landmarks/',
 			'training_link' => 'https://wpshadow.com/training/accessibility-structure/',
 			'auto_fixable' => false,

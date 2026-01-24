@@ -84,9 +84,7 @@ class Test_Content_Broken_Links extends Diagnostic_Base
 					'%d broken link(s) found in sample of %d. Broken links hurt SEO, UX, and credibility.',
 					count($broken_links),
 					$check_count
-				),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/broken-links/',
 				'training_link' => 'https://wpshadow.com/training/link-maintenance/',
 				'auto_fixable' => false,

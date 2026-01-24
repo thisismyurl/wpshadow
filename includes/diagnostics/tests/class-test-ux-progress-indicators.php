@@ -43,9 +43,7 @@ class Test_UX_Progress_Indicators extends Diagnostic_Base
 			return [
 				'id' => 'ux-progress-indicators-missing',
 				'title' => 'Multi-Step Process Missing Progress Indicator',
-				'description' => 'Multi-step process detected (step numbers) but no visual progress indicator. Use progress bars or stepper components to show completion status.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'Multi-step process detected (step numbers) but no visual progress indicator. Use progress bars or stepper components to show completion status.'
 				'kb_link' => 'https://wpshadow.com/kb/progress-indicators/',
 				'training_link' => 'https://wpshadow.com/training/multi-step-forms/',
 				'auto_fixable' => false,

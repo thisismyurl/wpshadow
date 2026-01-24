@@ -26,8 +26,6 @@ class Diagnostic_Design_DEBT_ANIMATION_COUNT extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

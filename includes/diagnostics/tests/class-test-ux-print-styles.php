@@ -40,9 +40,7 @@ class Test_UX_Print_Styles extends Diagnostic_Base
 			return [
 				'id' => 'ux-print-styles-missing',
 				'title' => 'Print Styles Missing',
-				'description' => 'No print media queries or print stylesheets detected. Print styles remove navigation, optimize layout, and improve readability when printing.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'No print media queries or print stylesheets detected. Print styles remove navigation, optimize layout, and improve readability when printing.'
 				'kb_link' => 'https://wpshadow.com/kb/print-styles/',
 				'training_link' => 'https://wpshadow.com/training/css-best-practices/',
 				'auto_fixable' => false,

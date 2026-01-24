@@ -42,9 +42,7 @@ class Test_Schema_Service extends Diagnostic_Base
 			return [
 				'id' => 'schema-service-missing',
 				'title' => 'Service Schema Missing',
-				'description' => 'Service offering detected but no Service structured data found. Service schema helps search engines understand your offerings and can appear in local search.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'Service offering detected but no Service structured data found. Service schema helps search engines understand your offerings and can appear in local search.'
 				'kb_link' => 'https://wpshadow.com/kb/service-schema/',
 				'training_link' => 'https://wpshadow.com/training/local-seo/',
 				'auto_fixable' => false,

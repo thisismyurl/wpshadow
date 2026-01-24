@@ -50,9 +50,7 @@ class Test_Performance_Minification extends Diagnostic_Base
 			return [
 				'id' => 'performance-unminified-assets',
 				'title' => 'Unminified Assets Detected',
-				'description' => sprintf('%d CSS and %d JS files are not minified. Minification can reduce file size by 20-40%%.', $unminified_css, $unminified_js),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => sprintf('%d CSS and %d JS files are not minified. Minification can reduce file size by 20-40%%.', $unminified_css, $unminified_js)
 				'kb_link' => 'https://wpshadow.com/kb/minification/',
 				'training_link' => 'https://wpshadow.com/training/performance-optimization/',
 				'auto_fixable' => false,

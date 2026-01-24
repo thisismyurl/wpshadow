@@ -71,11 +71,7 @@ use WPShadow\Core\Diagnostic_Base;
  * 3. Test age calculation
  * 4. Test failure detection
  * 5. Validate alerts and recommendations
- *
- * CONFIDENCE LEVEL: High - Backup data is structured and queryable
  */
- *
- * CONFIDENCE LEVEL: High - straightforward yes/no detection possible
  */
 /**
  * ⚠️ STUB - NEEDS IMPLEMENTATION
@@ -91,7 +87,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 
  * Once clarified, implement the check() method and we can create the test.
  */
-
 
 /**
  * WORDPRESS STATE CHECK - READY FOR IMPLEMENTATION
@@ -166,7 +161,6 @@ class Diagnostic_Core_Backups_Recent extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -246,8 +240,6 @@ class Diagnostic_Core_Backups_Recent extends Diagnostic_Base {
 		);
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *
@@ -285,7 +277,6 @@ class Diagnostic_Core_Backups_Recent extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

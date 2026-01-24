@@ -235,9 +235,7 @@ class Test_SEO_Meta_Description extends Diagnostic_Base {
             return [
                 'id' => 'seo-meta-description',
                 'title' => 'Missing Meta Description',
-                'description' => 'Your page is missing a meta description tag. Meta descriptions appear in search results and significantly impact click-through rates.',
-                'color' => '#ff9800',
-                'bg_color' => '#fff3e0',
+                'description' => 'Your page is missing a meta description tag. Meta descriptions appear in search results and significantly impact click-through rates.'
                 'kb_link' => 'https://wpshadow.com/kb/meta-description/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
                 'training_link' => 'https://wpshadow.com/training/seo-meta-tags/',
                 'auto_fixable' => false,
@@ -262,9 +260,7 @@ class Test_SEO_Meta_Description extends Diagnostic_Base {
                     $length,
                     self::MIN_LENGTH,
                     self::MAX_LENGTH
-                ),
-                'color' => '#ff9800',
-                'bg_color' => '#fff3e0',
+                )
                 'kb_link' => 'https://wpshadow.com/kb/meta-description/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
                 'training_link' => 'https://wpshadow.com/training/seo-meta-tags/',
                 'auto_fixable' => false,
@@ -289,9 +285,7 @@ class Test_SEO_Meta_Description extends Diagnostic_Base {
                 $length,
                 self::MIN_LENGTH,
                 self::MAX_LENGTH
-            ),
-            'color' => '#ff9800',
-            'bg_color' => '#fff3e0',
+            )
             'kb_link' => 'https://wpshadow.com/kb/meta-description/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
             'training_link' => 'https://wpshadow.com/training/seo-meta-tags/',
             'auto_fixable' => false,
@@ -394,9 +388,7 @@ class Test_SEO_Meta_Description extends Diagnostic_Base {
         return [
             'id' => 'seo-meta-description',
             'title' => $title,
-            'description' => $description,
-            'color' => '#ff5722',
-            'bg_color' => '#ffebee',
+            'description' => $description
             'kb_link' => 'https://wpshadow.com/kb/meta-description/',
             'training_link' => 'https://wpshadow.com/training/seo-meta-tags/',
             'auto_fixable' => false,

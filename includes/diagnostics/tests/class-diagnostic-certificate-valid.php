@@ -31,7 +31,6 @@ class Diagnostic_Certificate_Valid extends Diagnostic_Base {
 
 	protected static $family_label = 'General';
 
-
 	/**
 	 * Get diagnostic ID
 	 */
@@ -109,8 +108,6 @@ class Diagnostic_Certificate_Valid extends Diagnostic_Base {
 			'certificate-valid'
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

@@ -50,9 +50,7 @@ class Test_SEO_Internal_Links extends Diagnostic_Base
 			return [
 				'id' => 'seo-internal-links-low',
 				'title' => 'Low Internal Linking',
-				'description' => sprintf('Only %d internal links found. Internal linking helps SEO by distributing page authority and helping search engines discover content.', $internal_links),
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => sprintf('Only %d internal links found. Internal linking helps SEO by distributing page authority and helping search engines discover content.', $internal_links)
 				'kb_link' => 'https://wpshadow.com/kb/internal-linking/',
 				'training_link' => 'https://wpshadow.com/training/link-building/',
 				'auto_fixable' => false,

@@ -38,9 +38,7 @@ class Test_SEO_404_Helpful extends Diagnostic_Base
 			return [
 				'id' => 'seo-404-page-not-helpful',
 				'title' => '404 Page Not Helpful',
-				'description' => '404 page exists but lacks helpful elements (search box, navigation links). Help users find what they\'re looking for.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => '404 page exists but lacks helpful elements (search box, navigation links). Help users find what they\'re looking for.'
 				'kb_link' => 'https://wpshadow.com/kb/404-page-optimization/',
 				'training_link' => 'https://wpshadow.com/training/ux-optimization/',
 				'auto_fixable' => false,

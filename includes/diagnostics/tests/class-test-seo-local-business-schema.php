@@ -46,9 +46,7 @@ class Test_SEO_Local_Business_Schema extends Diagnostic_Base
 				return [
 					'id' => 'seo-local-business-schema',
 					'title' => 'Incomplete Local Business Schema',
-					'description' => sprintf('Local Business schema missing: %s', implode(', ', $missing)),
-					'color' => '#ff9800',
-					'bg_color' => '#fff3e0',
+					'description' => sprintf('Local Business schema missing: %s', implode(', ', $missing))
 					'kb_link' => 'https://wpshadow.com/kb/local-business-schema/',
 					'training_link' => 'https://wpshadow.com/training/local-seo/',
 					'auto_fixable' => false,
@@ -71,9 +69,7 @@ class Test_SEO_Local_Business_Schema extends Diagnostic_Base
 		return [
 			'id' => 'seo-local-business-schema',
 			'title' => 'Missing Local Business Schema',
-			'description' => 'This appears to be a local business but lacks LocalBusiness schema. Adding this markup improves visibility in local search results and Google Maps.',
-			'color' => '#ff9800',
-			'bg_color' => '#fff3e0',
+			'description' => 'This appears to be a local business but lacks LocalBusiness schema. Adding this markup improves visibility in local search results and Google Maps.'
 			'kb_link' => 'https://wpshadow.com/kb/local-business-schema/',
 			'training_link' => 'https://wpshadow.com/training/local-seo/',
 			'auto_fixable' => false,

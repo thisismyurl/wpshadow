@@ -26,8 +26,6 @@ class Diagnostic_Design_DESIGN_SEARCH_RESULTS_USABILITY extends Diagnostic_Base 
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

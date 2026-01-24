@@ -25,8 +25,6 @@ class Diagnostic_Design_PAGINATION_STYLING extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

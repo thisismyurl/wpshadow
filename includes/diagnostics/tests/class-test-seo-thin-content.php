@@ -64,9 +64,7 @@ class Test_SEO_Thin_Content extends Diagnostic_Base
 				'This page has only %d words. Thin content (under %d words) typically underperforms in search. Consider expanding with valuable, relevant information.',
 				$word_count,
 				self::MIN_WORD_COUNT
-			),
-			'color' => '#ff9800',
-			'bg_color' => '#fff3e0',
+			)
 			'kb_link' => 'https://wpshadow.com/kb/thin-content/',
 			'training_link' => 'https://wpshadow.com/training/content-strategy/',
 			'auto_fixable' => false,

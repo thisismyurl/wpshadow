@@ -138,9 +138,7 @@ class Test_Admin_Inline_JS_Blocks extends Diagnostic_Base
 				$inline_block_count,
 				$size_kb,
 				$threshold
-			),
-			'color'        => '#FF8C69',
-			'bg_color'     => '#FFF7F4',
+			)
 			'kb_link'      => 'https://wpshadow.com/kb/reduce-inline-javascript',
 			'training_link' => 'https://wpshadow.com/training/optimize-js-delivery',
 			'auto_fixable' => false,

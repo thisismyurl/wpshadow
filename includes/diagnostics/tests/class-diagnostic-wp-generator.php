@@ -10,7 +10,6 @@ declare(strict_types=1);
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 
-
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
@@ -66,8 +65,6 @@ class Diagnostic_WP_Generator extends Diagnostic_Base
 			'kb_article'  => 'wp-generator',
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

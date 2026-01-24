@@ -26,8 +26,6 @@ class Diagnostic_Design_DESIGN_REDUCED_MOTION_RESPECT extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

@@ -59,8 +59,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 3. Verify API call is made for subscribed users
  * 4. Verify API call is skipped for non-subscribed users
  * 5. Validate results formatting and threat level calculation
- *
- * CONFIDENCE LEVEL: High - clear hybrid approach is testable
  */
 class Diagnostic_AiContentOriginality extends Diagnostic_Base {
 	protected static $slug = 'ai-content-originality';
@@ -72,7 +70,6 @@ class Diagnostic_AiContentOriginality extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -214,7 +211,6 @@ class Diagnostic_AiContentOriginality extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * NEEDS CLARIFICATION:

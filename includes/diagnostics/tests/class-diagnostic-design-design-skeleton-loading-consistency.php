@@ -26,8 +26,6 @@ class Diagnostic_Design_DESIGN_SKELETON_LOADING_CONSISTENCY extends Diagnostic_B
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

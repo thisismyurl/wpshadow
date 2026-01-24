@@ -209,9 +209,7 @@ class Test_Performance_Image_Lazy_Loading extends Diagnostic_Base
 				'%d of %d images could benefit from lazy loading. This would reduce initial page load time by deferring off-screen images.',
 				$missing,
 				$analysis['total']
-			),
-			'color' => '#ff9800',
-			'bg_color' => '#fff3e0',
+			)
 			'kb_link' => 'https://wpshadow.com/kb/lazy-loading/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
 			'training_link' => 'https://wpshadow.com/training/performance-optimization/',
 			'auto_fixable' => false,
@@ -374,9 +372,7 @@ class Test_Performance_Image_Lazy_Loading extends Diagnostic_Base
 		return [
 			'id' => 'performance-image-lazy-loading',
 			'title' => $title,
-			'description' => $description,
-			'color' => '#ff5722',
-			'bg_color' => '#ffebee',
+			'description' => $description
 			'kb_link' => 'https://wpshadow.com/kb/lazy-loading/',
 			'training_link' => 'https://wpshadow.com/training/performance-optimization/',
 			'auto_fixable' => false,

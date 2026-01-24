@@ -58,7 +58,6 @@ class Diagnostic_Server_Load_Average extends Diagnostic_Base {
 	}
     
 
-
 	/**
 	 * Live test for this diagnostic
 	 *

@@ -26,8 +26,6 @@ class Diagnostic_Design_DESIGN_PASSIVE_EVENT_LISTENERS extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

@@ -39,9 +39,7 @@ class Test_WordPress_Debug_Mode extends Diagnostic_Base
 			return [
 				'id' => 'wordpress-debug-visible',
 				'title' => 'Debug Output Visible',
-				'description' => 'PHP errors/warnings visible in page HTML. Debug mode should be disabled on production sites. Exposes system information to attackers.',
-				'color' => '#ff5722',
-				'bg_color' => '#ffebee',
+				'description' => 'PHP errors/warnings visible in page HTML. Debug mode should be disabled on production sites. Exposes system information to attackers.'
 				'kb_link' => 'https://wpshadow.com/kb/debug-mode/',
 				'training_link' => 'https://wpshadow.com/training/wordpress-configuration/',
 				'auto_fixable' => false,
@@ -56,9 +54,7 @@ class Test_WordPress_Debug_Mode extends Diagnostic_Base
 			return [
 				'id' => 'wordpress-debug-tools-visible',
 				'title' => 'Debug Tools Visible',
-				'description' => 'Debug tools (Query Monitor, Debug Bar) visible on production. These should only be used in development environments.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'Debug tools (Query Monitor, Debug Bar) visible on production. These should only be used in development environments.'
 				'kb_link' => 'https://wpshadow.com/kb/debug-tools/',
 				'training_link' => 'https://wpshadow.com/training/wordpress-configuration/',
 				'auto_fixable' => false,

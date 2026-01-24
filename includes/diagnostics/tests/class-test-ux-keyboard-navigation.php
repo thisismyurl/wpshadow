@@ -49,9 +49,7 @@ class Test_UX_Keyboard_Navigation extends Diagnostic_Base
 				'description' => sprintf(
 					'Found %d click handlers on non-interactive elements (div, span) with insufficient tabindex attributes. Use <button> or add tabindex="0" and keyboard event handlers.',
 					$non_interactive_clicks
-				),
-				'color' => '#ff5722',
-				'bg_color' => '#ffebee',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/keyboard-navigation/',
 				'training_link' => 'https://wpshadow.com/training/accessible-interactions/',
 				'auto_fixable' => false,

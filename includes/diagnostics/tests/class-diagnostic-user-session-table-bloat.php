@@ -55,8 +55,6 @@ class Diagnostic_User_Session_Table_Bloat extends Diagnostic_Base
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

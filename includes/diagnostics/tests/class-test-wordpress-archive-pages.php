@@ -31,9 +31,7 @@ class Test_WordPress_Archive_Pages extends Diagnostic_Base
 			return [
 				'id' => 'wordpress-archive-not-working',
 				'title' => 'Archive Pages Not Working',
-				'description' => 'Category archive returned 404. Archive pages are important for SEO and user navigation.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'Category archive returned 404. Archive pages are important for SEO and user navigation.'
 				'kb_link' => 'https://wpshadow.com/kb/archive-pages/',
 				'training_link' => 'https://wpshadow.com/training/wordpress-templates/',
 				'auto_fixable' => false,

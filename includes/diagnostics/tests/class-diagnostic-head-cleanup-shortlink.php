@@ -9,7 +9,6 @@ declare(strict_types=1);
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 
-
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
@@ -62,8 +61,6 @@ class Diagnostic_Head_Cleanup_Shortlink extends Diagnostic_Base {
 	private static function is_shortlink_enabled(): bool {
 		return has_action( 'wp_head', 'wp_shortlink_wp_head' ) !== false;
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

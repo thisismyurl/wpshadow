@@ -31,7 +31,6 @@ class Diagnostic_Database_Password_Strength extends Diagnostic_Base {
 
 	protected static $family_label = 'General';
 
-
 	/**
 	 * Get diagnostic ID
 	 */
@@ -109,8 +108,6 @@ class Diagnostic_Database_Password_Strength extends Diagnostic_Base {
 			'database-password-strength'
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

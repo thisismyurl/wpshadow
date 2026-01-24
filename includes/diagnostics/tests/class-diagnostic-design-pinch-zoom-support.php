@@ -25,8 +25,6 @@ class Diagnostic_Design_PINCH_ZOOM_SUPPORT extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

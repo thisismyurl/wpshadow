@@ -25,8 +25,6 @@ class Diagnostic_Design_NOTIFICATION_TOAST_DESIGN extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

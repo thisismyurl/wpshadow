@@ -26,8 +26,6 @@ class Diagnostic_Design_DESIGN_RADIUS_SCALE_ADHERENCE extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

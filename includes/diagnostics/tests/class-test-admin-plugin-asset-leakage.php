@@ -144,9 +144,7 @@ class Test_Admin_Plugin_Asset_Leakage extends Diagnostic_Base
 				'Detected %d front-end plugin assets loading in wp-admin from %d plugins. These assets should only load on public pages. This indicates poor plugin coding and wastes server resources.',
 				$leaked_count,
 				$plugin_count
-			),
-			'color'        => '#DC143C',
-			'bg_color'     => '#FFF0F0',
+			)
 			'kb_link'      => 'https://wpshadow.com/kb/prevent-asset-leakage',
 			'training_link' => 'https://wpshadow.com/training/conditional-asset-loading',
 			'auto_fixable' => false,

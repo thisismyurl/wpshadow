@@ -27,9 +27,7 @@ class Test_Performance_Google_Fonts_Display extends Diagnostic_Base
 			return [
 				'id' => 'performance-google-fonts-no-display',
 				'title' => 'Google Fonts Missing Display Parameter',
-				'description' => 'Google Fonts loaded without &display=swap parameter. Can cause text to be invisible during font load.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'Google Fonts loaded without &display=swap parameter. Can cause text to be invisible during font load.'
 				'kb_link' => 'https://wpshadow.com/kb/google-fonts-optimization/',
 				'training_link' => 'https://wpshadow.com/training/font-optimization/',
 				'auto_fixable' => false,

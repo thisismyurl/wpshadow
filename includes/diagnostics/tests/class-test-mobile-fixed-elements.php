@@ -47,9 +47,7 @@ class Test_Mobile_Fixed_Elements extends Diagnostic_Base
 				'description' => sprintf(
 					'Found %d fixed/sticky positioned elements. On mobile, too many fixed elements reduce usable screen space and can cause layout issues.',
 					$total_fixed
-				),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/fixed-elements-mobile/',
 				'training_link' => 'https://wpshadow.com/training/mobile-layout/',
 				'auto_fixable' => false,

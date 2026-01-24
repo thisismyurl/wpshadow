@@ -50,8 +50,6 @@ use WPShadow\Core\Diagnostic_Base;
  *
  * PASS CRITERIA: Plugin installed, active, properly configured
  * FAIL CRITERIA: Plugin missing or misconfigured
- *
- * CONFIDENCE LEVEL: High
  */
 class Diagnostic_Plugin_Slowdown_Cost extends Diagnostic_Base {
 	protected static $slug = 'plugin-slowdown-cost';
@@ -63,7 +61,6 @@ class Diagnostic_Plugin_Slowdown_Cost extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -143,8 +140,6 @@ class Diagnostic_Plugin_Slowdown_Cost extends Diagnostic_Base {
 		);
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *
@@ -182,7 +177,6 @@ class Diagnostic_Plugin_Slowdown_Cost extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

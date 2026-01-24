@@ -48,8 +48,6 @@ class Diagnostic_REST_API_Endpoint_Performance extends Diagnostic_Base
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

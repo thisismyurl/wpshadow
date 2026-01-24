@@ -48,8 +48,6 @@ class Diagnostic_Admin_Dashboard_Load_Speed extends Diagnostic_Base
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

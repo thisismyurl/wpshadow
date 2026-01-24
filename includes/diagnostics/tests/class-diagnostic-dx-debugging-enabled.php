@@ -31,7 +31,6 @@ class Diagnostic_Dx_Debugging_Enabled extends Diagnostic_Base {
 
 	protected static $family_label = 'General';
 
-
 	/**
 	 * Get diagnostic ID
 	 */
@@ -109,8 +108,6 @@ class Diagnostic_Dx_Debugging_Enabled extends Diagnostic_Base {
 			'dx-debugging-enabled'
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

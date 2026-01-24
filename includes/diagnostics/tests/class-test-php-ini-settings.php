@@ -107,9 +107,7 @@ class Test_PHP_INI_Settings extends Diagnostic_Base
 			return array(
 				'id'            => static::$slug . '-suboptimal',
 				'title'         => 'PHP Configuration Not Optimal',
-				'description'   => count($issues) . ' PHP setting(s) below recommended values. Contact hosting provider.',
-				'color'         => '#ff9800',
-				'bg_color'      => '#fff3e0',
+				'description'   => count($issues) . ' PHP setting(s) below recommended values. Contact hosting provider.'
 				'kb_link'       => 'https://wpshadow.com/kb/php-ini-settings/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=php-ini',
 				'training_link' => 'https://wpshadow.com/training/php-configuration/',
 				'auto_fixable'  => false,

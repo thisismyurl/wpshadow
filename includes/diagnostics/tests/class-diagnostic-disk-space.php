@@ -70,8 +70,6 @@ class Diagnostic_Disk_Space extends Diagnostic_Base {
         );
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

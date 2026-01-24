@@ -14,7 +14,6 @@ declare(strict_types=1);
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 
-
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
@@ -84,8 +83,6 @@ class Diagnostic_Howdy_Greeting extends Diagnostic_Base
 
 		return $description;
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

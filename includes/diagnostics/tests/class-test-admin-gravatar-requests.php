@@ -103,9 +103,7 @@ class Test_Admin_Gravatar_Requests extends Diagnostic_Base
 			'description'  => sprintf(
 				'WordPress admin is making approximately %d requests to Gravatar.com (Automattic). Each request sends an MD5 hash of user emails to a third party without explicit consent. This raises GDPR concerns and creates a Single Point of Failure. Consider using local avatars or disabling avatars in admin.',
 				$gravatar_count
-			),
-			'color'        => '#FF4500',
-			'bg_color'     => '#FFF4F1',
+			)
 			'kb_link'      => 'https://wpshadow.com/kb/disable-gravatars',
 			'training_link' => 'https://wpshadow.com/training/privacy-compliant-avatars',
 			'auto_fixable' => true, // Can disable via settings

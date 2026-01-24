@@ -26,8 +26,6 @@ class Diagnostic_Code_CODE_STANDARDS_MIXED_CONCERNS extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

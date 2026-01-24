@@ -69,8 +69,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 3. Test paragraph length analysis
  * 4. Test list/table detection
  * 5. Validate pass/fail scoring based on post samples
- *
- * CONFIDENCE LEVEL: High - purely local analysis, no external dependencies
  */
 class Diagnostic_Ai_Content_Quality_Llm extends Diagnostic_Base {
 	protected static $slug = 'ai-content-quality-llm';
@@ -82,7 +80,6 @@ class Diagnostic_Ai_Content_Quality_Llm extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -197,7 +194,6 @@ class Diagnostic_Ai_Content_Quality_Llm extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * NEEDS CLARIFICATION:

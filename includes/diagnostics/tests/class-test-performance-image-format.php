@@ -43,9 +43,7 @@ class Test_Performance_Image_Format extends Diagnostic_Base
 			return [
 				'id' => 'performance-no-modern-images',
 				'title' => 'No Modern Image Formats',
-				'description' => sprintf('%d images found using traditional formats (JPG/PNG). WebP images are 25-35%% smaller with same quality.', $traditional_count),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => sprintf('%d images found using traditional formats (JPG/PNG). WebP images are 25-35%% smaller with same quality.', $traditional_count)
 				'kb_link' => 'https://wpshadow.com/kb/webp-images/',
 				'training_link' => 'https://wpshadow.com/training/image-optimization/',
 				'auto_fixable' => false,

@@ -26,8 +26,6 @@ class Diagnostic_Code_CODE_STANDARDS_LONG_METHODS extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

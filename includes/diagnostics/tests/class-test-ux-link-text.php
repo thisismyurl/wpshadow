@@ -82,9 +82,7 @@ class Test_UX_Link_Text extends Diagnostic_Base
 					$total_links,
 					$percentage,
 					implode(', ', array_slice($examples, 0, 3))
-				),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/link-text-best-practices/',
 				'training_link' => 'https://wpshadow.com/training/content-ux/',
 				'auto_fixable' => false,

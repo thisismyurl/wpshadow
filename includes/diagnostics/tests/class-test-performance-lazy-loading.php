@@ -48,9 +48,7 @@ class Test_Performance_Lazy_Loading extends Diagnostic_Base
 			return [
 				'id' => 'performance-no-lazy-loading',
 				'title' => 'No Lazy Loading',
-				'description' => sprintf('%d images found without lazy loading. Lazy loading can reduce initial page load by 20-50%% on image-heavy pages.', $total_images),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => sprintf('%d images found without lazy loading. Lazy loading can reduce initial page load by 20-50%% on image-heavy pages.', $total_images)
 				'kb_link' => 'https://wpshadow.com/kb/lazy-loading/',
 				'training_link' => 'https://wpshadow.com/training/image-optimization/',
 				'auto_fixable' => false,

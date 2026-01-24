@@ -26,8 +26,6 @@ class Diagnostic_Code_CODE_STANDARDS_NO_RETURN_TYPES extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

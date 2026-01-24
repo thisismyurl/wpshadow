@@ -30,9 +30,7 @@ class Test_WordPress_Meta_Widget extends Diagnostic_Base
 			return [
 				'id' => 'wordpress-default-meta-widget',
 				'title' => 'Default Meta Widget Active',
-				'description' => 'Default "Meta" widget is active in sidebar. This exposes login link and admin functions. Remove or replace with useful content.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'Default "Meta" widget is active in sidebar. This exposes login link and admin functions. Remove or replace with useful content.'
 				'kb_link' => 'https://wpshadow.com/kb/sidebar-widgets/',
 				'training_link' => 'https://wpshadow.com/training/widget-management/',
 				'auto_fixable' => false,

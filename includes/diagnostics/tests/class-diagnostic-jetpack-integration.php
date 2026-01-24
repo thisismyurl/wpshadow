@@ -33,10 +33,7 @@ class Diagnostic_Jetpack_Integration extends Diagnostic_Base {
 			return array(
 				'id'            => static::$slug,
 				'title'         => static::$title,
-				'description'   => 'Jetpack installed but not connected to WordPress.com.',
-				'color'         => '#ff9800',
-				'bg_color'      => '#fff3e0',
-				'kb_link'       => 'https://wpshadow.com/kb/jetpack-integration/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=jetpack-integration',
+				'description'   => 'Jetpack installed but not connected to WordPress.com.',				'kb_link'       => 'https://wpshadow.com/kb/jetpack-integration/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=jetpack-integration',
 				'training_link' => 'https://wpshadow.com/training/jetpack-integration/',
 				'auto_fixable'  => false,
 				'threat_level'  => 60,
@@ -47,9 +44,6 @@ class Diagnostic_Jetpack_Integration extends Diagnostic_Base {
 		
 		return null;
 	}
-
-
-
 
 	/**
 	 * Live test for this diagnostic

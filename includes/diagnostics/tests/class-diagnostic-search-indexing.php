@@ -33,8 +33,6 @@ class Diagnostic_Search_Indexing extends Diagnostic_Base {
 		);
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

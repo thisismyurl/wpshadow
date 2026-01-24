@@ -26,8 +26,6 @@ class Diagnostic_Design_DESIGN_RTL_ICONS_LISTS extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

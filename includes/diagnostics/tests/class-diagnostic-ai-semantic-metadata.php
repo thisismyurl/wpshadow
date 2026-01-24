@@ -62,8 +62,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 3. Test threshold comparison
  * 4. Test reporting
  * 5. Validate recommendations
- *
- * CONFIDENCE LEVEL: High
  */
 
 /**
@@ -130,7 +128,6 @@ class Diagnostic_AiSemanticMetadata extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -271,7 +268,6 @@ class Diagnostic_AiSemanticMetadata extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

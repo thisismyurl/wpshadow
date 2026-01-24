@@ -31,7 +31,6 @@ class Diagnostic_Development_Cost_Justification extends Diagnostic_Base {
 
 	protected static $family_label = 'General';
 
-
 	/**
 	 * Get diagnostic ID
 	 */
@@ -109,8 +108,6 @@ class Diagnostic_Development_Cost_Justification extends Diagnostic_Base {
 			'development-cost-justification'
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

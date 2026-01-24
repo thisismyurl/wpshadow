@@ -65,9 +65,7 @@ class Test_SEO_Keyword_Density extends Diagnostic_Base
 				return [
 					'id' => 'seo-keyword-stuffing',
 					'title' => 'Possible Keyword Stuffing',
-					'description' => sprintf('The word "%s" appears %d times (%.1f%% density). Keyword density over 5%% may be considered stuffing by search engines.', $word, $count, $density),
-					'color' => '#ff9800',
-					'bg_color' => '#fff3e0',
+					'description' => sprintf('The word "%s" appears %d times (%.1f%% density). Keyword density over 5%% may be considered stuffing by search engines.', $word, $count, $density)
 					'kb_link' => 'https://wpshadow.com/kb/keyword-density/',
 					'training_link' => 'https://wpshadow.com/training/seo-writing/',
 					'auto_fixable' => false,

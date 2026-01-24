@@ -70,8 +70,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 3. Test optimization detection
  * 4. Test carbon calculation
  * 5. Validate scoring
- *
- * CONFIDENCE LEVEL: High - Performance metrics are measurable
  */
 class Diagnostic_Env_Monthly_Bandwidth_Trend extends Diagnostic_Base {
 	protected static $slug = 'env-monthly-bandwidth-trend';
@@ -83,7 +81,6 @@ class Diagnostic_Env_Monthly_Bandwidth_Trend extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -178,8 +175,6 @@ class Diagnostic_Env_Monthly_Bandwidth_Trend extends Diagnostic_Base {
 		);
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *
@@ -217,7 +212,6 @@ class Diagnostic_Env_Monthly_Bandwidth_Trend extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

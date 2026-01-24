@@ -67,8 +67,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 2. Test bias detection logic
  * 3. Test keyword density calculation
  * 4. Test freshness scoring
- *
- * CONFIDENCE LEVEL: Medium (heuristic-based)
  */
 class Diagnostic_Ai_Sentiment_Analysis extends Diagnostic_Base {
 	protected static $slug = 'ai-sentiment-analysis';
@@ -80,7 +78,6 @@ class Diagnostic_Ai_Sentiment_Analysis extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -189,7 +186,6 @@ class Diagnostic_Ai_Sentiment_Analysis extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

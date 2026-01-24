@@ -34,9 +34,7 @@ class Test_Security_Referrer_Policy_Unsafe extends Diagnostic_Base
 			return [
 				'id' => 'security-unsafe-referrer-policy',
 				'title' => 'Unsafe Referrer Policy',
-				'description' => sprintf('Referrer-Policy is "%s" which may leak sensitive URL data. Recommended: "strict-origin-when-cross-origin" or "no-referrer".', $policy_value),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => sprintf('Referrer-Policy is "%s" which may leak sensitive URL data. Recommended: "strict-origin-when-cross-origin" or "no-referrer".', $policy_value)
 				'kb_link' => 'https://wpshadow.com/kb/referrer-policy-values/',
 				'training_link' => 'https://wpshadow.com/training/privacy-headers/',
 				'auto_fixable' => false,

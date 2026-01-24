@@ -10,7 +10,6 @@ declare(strict_types=1);
  * @guardian-integrated Pending - Not yet in Diagnostic_Registry
  */
 
-
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
@@ -75,8 +74,6 @@ class Diagnostic_Admin_Fonts extends Diagnostic_Base
 			'kb_article'  => 'admin-fonts',
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

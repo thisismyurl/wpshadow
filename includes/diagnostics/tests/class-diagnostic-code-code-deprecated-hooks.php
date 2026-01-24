@@ -59,8 +59,6 @@ class Diagnostic_Code_CODE_DEPRECATED_HOOKS extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

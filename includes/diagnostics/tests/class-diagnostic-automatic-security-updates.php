@@ -49,8 +49,6 @@ class Diagnostic_Automatic_Security_Updates extends Diagnostic_Base
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

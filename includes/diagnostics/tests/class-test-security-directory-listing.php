@@ -55,9 +55,7 @@ class Test_Security_Directory_Listing extends Diagnostic_Base
 					count($exposed_dirs),
 					count($exposed_dirs) === 1 ? 'y' : 'ies',
 					implode(', ', $exposed_dirs)
-				),
-				'color' => '#ff5722',
-				'bg_color' => '#ffebee',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/directory-listing/',
 				'training_link' => 'https://wpshadow.com/training/server-hardening/',
 				'auto_fixable' => false,

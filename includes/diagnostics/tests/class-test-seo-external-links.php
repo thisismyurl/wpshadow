@@ -56,9 +56,7 @@ class Test_SEO_External_Links extends Diagnostic_Base
 			return [
 				'id' => 'seo-external-links-no-noopener',
 				'title' => 'External Links Missing rel=noopener',
-				'description' => sprintf('%d external links with target="_blank" are missing rel="noopener". This is a security risk (tabnabbing).', $missing_noopener),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => sprintf('%d external links with target="_blank" are missing rel="noopener". This is a security risk (tabnabbing).', $missing_noopener)
 				'kb_link' => 'https://wpshadow.com/kb/noopener-noreferrer/',
 				'training_link' => 'https://wpshadow.com/training/security-basics/',
 				'auto_fixable' => false,

@@ -60,9 +60,7 @@ class Test_Accessibility_Empty_Links extends Diagnostic_Base
 			return [
 				'id' => 'accessibility-empty-links',
 				'title' => 'Empty Links Detected',
-				'description' => sprintf('%d link(s) have no accessible text. Screen readers announce these as "link" with no context.', $empty_links),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => sprintf('%d link(s) have no accessible text. Screen readers announce these as "link" with no context.', $empty_links)
 				'kb_link' => 'https://wpshadow.com/kb/empty-links/',
 				'training_link' => 'https://wpshadow.com/training/accessible-links/',
 				'auto_fixable' => false,

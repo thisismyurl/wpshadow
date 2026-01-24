@@ -110,8 +110,6 @@ class Diagnostic_Database_Table_Overhead extends Diagnostic_Base
 		];
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

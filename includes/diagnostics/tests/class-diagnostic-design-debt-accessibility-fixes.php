@@ -26,8 +26,6 @@ class Diagnostic_Design_DEBT_ACCESSIBILITY_FIXES extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

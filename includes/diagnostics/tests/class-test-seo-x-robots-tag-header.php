@@ -77,9 +77,7 @@ class Test_SEO_X_Robots_Tag_Header extends Diagnostic_Base {
             return [
                 'id' => 'seo-x-robots-tag-header',
                 'title' => 'Invalid URL Provided',
-                'description' => 'The URL must be from this WordPress site.',
-                'color' => '#ff5722',
-                'bg_color' => '#ffebee',
+                'description' => 'The URL must be from this WordPress site.'
                 'kb_link' => 'https://wpshadow.com/kb/x-robots-tag/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
                 'training_link' => 'https://wpshadow.com/training/seo-headers/',
                 'auto_fixable' => false,
@@ -102,9 +100,7 @@ class Test_SEO_X_Robots_Tag_Header extends Diagnostic_Base {
             return [
                 'id' => 'seo-x-robots-tag-header',
                 'title' => 'X-Robots-Tag Header Check Failed',
-                'description' => 'Could not fetch URL to check headers: ' . $response->get_error_message(),
-                'color' => '#ff5722',
-                'bg_color' => '#ffebee',
+                'description' => 'Could not fetch URL to check headers: ' . $response->get_error_message()
                 'kb_link' => 'https://wpshadow.com/kb/x-robots-tag/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
                 'training_link' => 'https://wpshadow.com/training/seo-headers/',
                 'auto_fixable' => false,
@@ -414,9 +410,7 @@ class Test_SEO_X_Robots_Tag_Header extends Diagnostic_Base {
                 'description' => sprintf(
                     'Your site has an X-Robots-Tag HTTP header with blocking directives: <code>%s</code>. This may prevent search engines from indexing your content. Remove or modify this header unless intentionally blocking indexation.',
                     esc_html($x_robots_value)
-                ),
-                'color' => '#ff9800',
-                'bg_color' => '#fff3e0',
+                )
                 'kb_link' => 'https://wpshadow.com/kb/x-robots-tag/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
                 'training_link' => 'https://wpshadow.com/training/seo-headers/',
                 'auto_fixable' => false,

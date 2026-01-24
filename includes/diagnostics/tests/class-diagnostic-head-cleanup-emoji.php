@@ -9,7 +9,6 @@ declare(strict_types=1);
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 
-
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
@@ -62,8 +61,6 @@ class Diagnostic_Head_Cleanup_Emoji extends Diagnostic_Base {
 	private static function is_emoji_enabled(): bool {
 		return has_action( 'wp_head', 'print_emoji_detection_script' ) !== false || has_action( 'admin_print_scripts', 'print_emoji_detection_script' ) !== false;
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

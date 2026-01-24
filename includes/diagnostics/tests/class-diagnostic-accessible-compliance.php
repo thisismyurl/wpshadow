@@ -74,11 +74,7 @@ use WPShadow\Core\Diagnostic_Base;
  * 3. Test percentage calculation
  * 4. Test compliance thresholds
  * 5. Validate findings report
- *
- * CONFIDENCE LEVEL: High - HTML parsing is reliable and measurable
  */
- *
- * CONFIDENCE LEVEL: High - straightforward yes/no detection possible
  */
 /**
  * ⚠️ STUB - NEEDS IMPLEMENTATION
@@ -94,7 +90,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 
  * Once clarified, implement the check() method and we can create the test.
  */
-
 
 /**
  * HTML ASSESSMENT TEST - CURL-BASED IMPLEMENTATION
@@ -160,7 +155,6 @@ class Diagnostic_Accessible_Compliance extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -283,7 +277,6 @@ class Diagnostic_Accessible_Compliance extends Diagnostic_Base {
 		return ['passed' => is_null($r1) && is_array($r2), 'message' => 'WCAG AA compliance check working'];
 	}
 }
-
 
 /**
  * NEEDS CLARIFICATION:

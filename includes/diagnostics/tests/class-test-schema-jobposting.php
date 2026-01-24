@@ -42,9 +42,7 @@ class Test_Schema_JobPosting extends Diagnostic_Base
 			return [
 				'id' => 'schema-jobposting-missing',
 				'title' => 'JobPosting Schema Missing',
-				'description' => 'Job posting content detected but no JobPosting structured data found. JobPosting schema enables rich job listings in Google for Jobs.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'Job posting content detected but no JobPosting structured data found. JobPosting schema enables rich job listings in Google for Jobs.'
 				'kb_link' => 'https://wpshadow.com/kb/jobposting-schema/',
 				'training_link' => 'https://wpshadow.com/training/recruitment-seo/',
 				'auto_fixable' => false,

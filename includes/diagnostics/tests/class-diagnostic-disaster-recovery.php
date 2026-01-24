@@ -92,9 +92,6 @@ class Diagnostic_Disaster_Recovery extends Diagnostic_Base {
 		return null;
 	}
 
-
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

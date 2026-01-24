@@ -252,9 +252,7 @@ class Test_SEO_Title_Tag extends Diagnostic_Base
 			return [
 				'id' => 'seo-title-tag',
 				'title' => 'Missing Title Tag',
-				'description' => 'This page has no title tag. The title is the most important on-page SEO element and appears as the clickable headline in search results.',
-				'color' => '#ff5722',
-				'bg_color' => '#ffebee',
+				'description' => 'This page has no title tag. The title is the most important on-page SEO element and appears as the clickable headline in search results.'
 				'kb_link' => 'https://wpshadow.com/kb/title-tag/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
 				'training_link' => 'https://wpshadow.com/training/seo-basics/',
 				'auto_fixable' => false,
@@ -286,9 +284,7 @@ class Test_SEO_Title_Tag extends Diagnostic_Base
 					'Your title is %d characters (%s). Optimal titles are 30-60 characters to maximize visibility and click-through rates in search results.',
 					$length,
 					$issue_type
-				),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/title-tag/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
 				'training_link' => 'https://wpshadow.com/training/seo-basics/',
 				'auto_fixable' => false,
@@ -374,9 +370,7 @@ class Test_SEO_Title_Tag extends Diagnostic_Base
 		return [
 			'id' => 'seo-title-tag',
 			'title' => $title,
-			'description' => $description,
-			'color' => '#ff5722',
-			'bg_color' => '#ffebee',
+			'description' => $description
 			'kb_link' => 'https://wpshadow.com/kb/title-tag/',
 			'training_link' => 'https://wpshadow.com/training/seo-basics/',
 			'auto_fixable' => false,

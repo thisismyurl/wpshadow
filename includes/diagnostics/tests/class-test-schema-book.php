@@ -42,9 +42,7 @@ class Test_Schema_Book extends Diagnostic_Base
 			return [
 				'id' => 'schema-book-missing',
 				'title' => 'Book Schema Missing',
-				'description' => 'Book content detected but no Book structured data found. Book schema enables rich results with author, ISBN, and review information.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'Book content detected but no Book structured data found. Book schema enables rich results with author, ISBN, and review information.'
 				'kb_link' => 'https://wpshadow.com/kb/book-schema/',
 				'training_link' => 'https://wpshadow.com/training/structured-data/',
 				'auto_fixable' => false,

@@ -50,9 +50,7 @@ class Test_SEO_Word_Count extends Diagnostic_Base
 			return [
 				'id' => 'seo-word-count-low',
 				'title' => 'Low Word Count',
-				'description' => sprintf('Content has only %d words. For better SEO, aim for at least 300 words (1000+ for competitive topics).', $word_count),
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => sprintf('Content has only %d words. For better SEO, aim for at least 300 words (1000+ for competitive topics).', $word_count)
 				'kb_link' => 'https://wpshadow.com/kb/content-length/',
 				'training_link' => 'https://wpshadow.com/training/seo-writing/',
 				'auto_fixable' => false,

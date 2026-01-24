@@ -25,8 +25,6 @@ class Diagnostic_Design_DATA_TABLE_RESPONSIVENESS extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

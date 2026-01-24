@@ -61,8 +61,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 2. Test detection logic
  * 3. Test reporting
  * 4. Validate recommendations
- *
- * CONFIDENCE LEVEL: High
  */
 
 /**
@@ -129,7 +127,6 @@ class Diagnostic_UxMobileTapTargets extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -239,8 +236,6 @@ class Diagnostic_UxMobileTapTargets extends Diagnostic_Base {
 		);
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *
@@ -278,7 +273,6 @@ class Diagnostic_UxMobileTapTargets extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

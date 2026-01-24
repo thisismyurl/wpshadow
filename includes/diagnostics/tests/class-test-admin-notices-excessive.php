@@ -104,9 +104,7 @@ class Test_Admin_Notices_Excessive extends Diagnostic_Base
 				$warning_count,
 				$success_count,
 				$threshold
-			),
-			'color'        => '#FFB347',
-			'bg_color'     => '#FFF9F4',
+			)
 			'kb_link'      => 'https://wpshadow.com/kb/manage-admin-notices',
 			'training_link' => 'https://wpshadow.com/training/reduce-admin-notices',
 			'auto_fixable' => false,

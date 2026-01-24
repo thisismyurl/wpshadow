@@ -32,9 +32,7 @@ class Test_Content_Meta_Description_Long extends Diagnostic_Base
 			return [
 				'id' => 'content-meta-description-too-long',
 				'title' => 'Meta Description Too Long',
-				'description' => sprintf('Meta description is %d characters. Google truncates at ~160 characters. Important info may be cut off.', $desc_length),
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => sprintf('Meta description is %d characters. Google truncates at ~160 characters. Important info may be cut off.', $desc_length)
 				'kb_link' => 'https://wpshadow.com/kb/meta-description-length/',
 				'training_link' => 'https://wpshadow.com/training/seo-fundamentals/',
 				'auto_fixable' => false,

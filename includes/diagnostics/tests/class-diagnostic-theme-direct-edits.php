@@ -34,7 +34,6 @@ class Diagnostic_Theme_Direct_Edits extends Diagnostic_Base
 
 	protected static $family_label = 'General';
 
-
 	/**
 	 * Get diagnostic ID
 	 */
@@ -129,8 +128,6 @@ class Diagnostic_Theme_Direct_Edits extends Diagnostic_Base
 			'threat_level'  => 75,
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

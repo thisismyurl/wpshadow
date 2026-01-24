@@ -47,9 +47,7 @@ class Test_WordPress_Breadcrumbs extends Diagnostic_Base
 			return [
 				'id' => 'wordpress-no-breadcrumbs',
 				'title' => 'No Breadcrumb Navigation',
-				'description' => 'No breadcrumbs detected on content page. Breadcrumbs improve UX, SEO, and can appear in search results.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'No breadcrumbs detected on content page. Breadcrumbs improve UX, SEO, and can appear in search results.'
 				'kb_link' => 'https://wpshadow.com/kb/breadcrumbs/',
 				'training_link' => 'https://wpshadow.com/training/navigation-ux/',
 				'auto_fixable' => false,

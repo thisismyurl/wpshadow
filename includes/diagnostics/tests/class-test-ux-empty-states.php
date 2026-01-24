@@ -62,9 +62,7 @@ class Test_UX_Empty_States extends Diagnostic_Base
 			return [
 				'id' => 'ux-empty-states-no-cta',
 				'title' => 'Empty State Missing Call-to-Action',
-				'description' => 'Empty state message detected but no helpful call-to-action nearby. Guide users with links like "Browse all posts" or "Clear filters".',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'Empty state message detected but no helpful call-to-action nearby. Guide users with links like "Browse all posts" or "Clear filters".'
 				'kb_link' => 'https://wpshadow.com/kb/empty-states/',
 				'training_link' => 'https://wpshadow.com/training/ux-patterns/',
 				'auto_fixable' => false,

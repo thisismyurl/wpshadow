@@ -32,9 +32,7 @@ class Test_Performance_Cache_Headers_Missing extends Diagnostic_Base
 			return [
 				'id' => 'performance-no-cache-headers',
 				'title' => 'Missing Cache Headers',
-				'description' => 'No Cache-Control or Expires headers found. Browser caching can dramatically reduce repeat-visit load times.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'No Cache-Control or Expires headers found. Browser caching can dramatically reduce repeat-visit load times.'
 				'kb_link' => 'https://wpshadow.com/kb/browser-caching/',
 				'training_link' => 'https://wpshadow.com/training/caching/',
 				'auto_fixable' => false,

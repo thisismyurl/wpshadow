@@ -57,9 +57,7 @@ class Test_Accessibility_Color_Contrast extends Diagnostic_Base
 			'description' => sprintf(
 				'Detected %d potential color contrast issues. Low contrast makes text hard to read and violates WCAG accessibility guidelines. Text should have a 4.5:1 contrast ratio.',
 				$potential_issues
-			),
-			'color' => '#ff9800',
-			'bg_color' => '#fff3e0',
+			)
 			'kb_link' => 'https://wpshadow.com/kb/color-contrast/',
 			'training_link' => 'https://wpshadow.com/training/accessibility-design/',
 			'auto_fixable' => false,

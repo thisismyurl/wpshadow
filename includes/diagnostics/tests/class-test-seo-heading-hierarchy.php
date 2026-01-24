@@ -208,9 +208,7 @@ class Test_SEO_Heading_Hierarchy extends Diagnostic_Base
 				'Your page has %d heading structure issue(s): %s. Proper heading hierarchy is important for accessibility and SEO.',
 				count($issues),
 				implode('; ', array_slice($issues, 0, 3))
-			),
-			'color' => '#ff9800',
-			'bg_color' => '#fff3e0',
+			)
 			'kb_link' => 'https://wpshadow.com/kb/heading-hierarchy/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
 			'training_link' => 'https://wpshadow.com/training/content-structure/',
 			'auto_fixable' => false,
@@ -413,9 +411,7 @@ class Test_SEO_Heading_Hierarchy extends Diagnostic_Base
 		return [
 			'id' => 'seo-heading-hierarchy',
 			'title' => $title,
-			'description' => $description,
-			'color' => '#ff5722',
-			'bg_color' => '#ffebee',
+			'description' => $description
 			'kb_link' => 'https://wpshadow.com/kb/heading-hierarchy/',
 			'training_link' => 'https://wpshadow.com/training/content-structure/',
 			'auto_fixable' => false,

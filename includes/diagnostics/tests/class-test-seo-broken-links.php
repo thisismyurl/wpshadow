@@ -223,9 +223,7 @@ class Test_SEO_Broken_Links extends Diagnostic_Base
 				'Found %d potential link issues: %s. These may create a poor user experience and hurt SEO.',
 				$total_issues,
 				implode('; ', array_slice($issues, 0, 3))
-			),
-			'color' => '#ff9800',
-			'bg_color' => '#fff3e0',
+			)
 			'kb_link' => 'https://wpshadow.com/kb/broken-links/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
 			'training_link' => 'https://wpshadow.com/training/link-maintenance/',
 			'auto_fixable' => false,
@@ -388,9 +386,7 @@ class Test_SEO_Broken_Links extends Diagnostic_Base
 		return [
 			'id' => 'seo-broken-links',
 			'title' => $title,
-			'description' => $description,
-			'color' => '#ff5722',
-			'bg_color' => '#ffebee',
+			'description' => $description
 			'kb_link' => 'https://wpshadow.com/kb/broken-links/',
 			'training_link' => 'https://wpshadow.com/training/link-maintenance/',
 			'auto_fixable' => false,

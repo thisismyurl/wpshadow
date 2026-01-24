@@ -38,9 +38,7 @@ class Test_WordPress_Search_Functionality extends Diagnostic_Base
 			return [
 				'id' => 'wordpress-no-search',
 				'title' => 'No Search Functionality',
-				'description' => 'No search form detected. Site search improves user experience and helps visitors find content quickly.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'No search form detected. Site search improves user experience and helps visitors find content quickly.'
 				'kb_link' => 'https://wpshadow.com/kb/site-search/',
 				'training_link' => 'https://wpshadow.com/training/user-experience/',
 				'auto_fixable' => false,

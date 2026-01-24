@@ -44,9 +44,7 @@ class Test_WordPress_Cookie_Notice extends Diagnostic_Base
 			return [
 				'id' => 'wordpress-no-cookie-notice',
 				'title' => 'No Cookie Notice',
-				'description' => 'Tracking scripts detected but no cookie consent notice. GDPR/CCPA require user consent before setting cookies.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'Tracking scripts detected but no cookie consent notice. GDPR/CCPA require user consent before setting cookies.'
 				'kb_link' => 'https://wpshadow.com/kb/cookie-consent/',
 				'training_link' => 'https://wpshadow.com/training/gdpr-compliance/',
 				'auto_fixable' => false,

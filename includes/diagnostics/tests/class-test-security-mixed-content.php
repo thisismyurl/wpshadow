@@ -72,9 +72,7 @@ class Test_Security_Mixed_Content extends Diagnostic_Base
 					'%d HTTP resource(s) on HTTPS page (%s). Browsers block mixed content, breaking functionality and showing security warnings.',
 					$mixed_content_count,
 					implode(', ', $mixed_types)
-				),
-				'color' => '#ff5722',
-				'bg_color' => '#ffebee',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/mixed-content/',
 				'training_link' => 'https://wpshadow.com/training/https-security/',
 				'auto_fixable' => false,

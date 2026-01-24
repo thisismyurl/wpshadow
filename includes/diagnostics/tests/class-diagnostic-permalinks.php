@@ -9,7 +9,6 @@ declare(strict_types=1);
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 
-
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
@@ -31,10 +30,7 @@ class Diagnostic_Permalinks extends Diagnostic_Base {
 			return array(
 				'id'           => 'permalinks-plain',
 				'title'        => 'Permalink Structure Not Set',
-				'description'  => 'Your site is using plain permalinks (/?p=123). This hurts SEO and user experience. Switch to a prettier structure.',
-				'color'        => '#2196f3',
-				'bg_color'     => '#e3f2fd',
-				'kb_link'      => 'https://wpshadow.com/kb/configure-wordpress-permalinks-for-seo/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=permalinks',
+				'description'  => 'Your site is using plain permalinks (/?p=123). This hurts SEO and user experience. Switch to a prettier structure.',				'kb_link'      => 'https://wpshadow.com/kb/configure-wordpress-permalinks-for-seo/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=permalinks',
 				'action_link'  => admin_url( 'options-permalink.php' ),
 				'action_text'  => 'Fix Permalinks',
 				'auto_fixable' => true,
@@ -54,8 +50,6 @@ class Diagnostic_Permalinks extends Diagnostic_Base {
 		$structure = get_option( 'permalink_structure', '' );
 		return ! empty( $structure );
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

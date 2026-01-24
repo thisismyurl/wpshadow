@@ -106,9 +106,7 @@ class Test_Admin_Bar_Item_Count extends Diagnostic_Base
 				$plugin_items,
 				$core_items,
 				$threshold
-			),
-			'color'        => '#FFA500',
-			'bg_color'     => '#FFF8F0',
+			)
 			'kb_link'      => 'https://wpshadow.com/kb/manage-admin-bar',
 			'training_link' => 'https://wpshadow.com/training/customize-admin-bar',
 			'auto_fixable' => false,

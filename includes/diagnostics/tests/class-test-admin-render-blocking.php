@@ -122,9 +122,7 @@ class Test_Admin_Render_Blocking extends Diagnostic_Base
 				$blocking_count,
 				$script_count,
 				$style_count
-			),
-			'color'        => '#FF6347',
-			'bg_color'     => '#FFF5F3',
+			)
 			'kb_link'      => 'https://wpshadow.com/kb/reduce-render-blocking',
 			'training_link' => 'https://wpshadow.com/training/optimize-asset-loading',
 			'auto_fixable' => false,

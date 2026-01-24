@@ -123,9 +123,7 @@ class Test_Admin_Font_Files extends Diagnostic_Base
 				$google_fonts,
 				$typekit,
 				$local
-			),
-			'color'        => '#FF6347',
-			'bg_color'     => '#FFF5F3',
+			)
 			'kb_link'      => 'https://wpshadow.com/kb/reduce-font-files',
 			'training_link' => 'https://wpshadow.com/training/optimize-web-fonts',
 			'auto_fixable' => false,

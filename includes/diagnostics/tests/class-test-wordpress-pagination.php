@@ -46,9 +46,7 @@ class Test_WordPress_Pagination extends Diagnostic_Base
 			return [
 				'id' => 'wordpress-no-pagination',
 				'title' => 'No Pagination Detected',
-				'description' => sprintf('%d articles found but no pagination navigation. Long pages hurt performance and UX.', $article_count),
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => sprintf('%d articles found but no pagination navigation. Long pages hurt performance and UX.', $article_count)
 				'kb_link' => 'https://wpshadow.com/kb/pagination/',
 				'training_link' => 'https://wpshadow.com/training/archive-optimization/',
 				'auto_fixable' => false,

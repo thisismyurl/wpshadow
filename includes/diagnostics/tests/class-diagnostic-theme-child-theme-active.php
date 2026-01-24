@@ -31,7 +31,6 @@ class Diagnostic_Theme_Child_Theme_Active extends Diagnostic_Base {
 
 	protected static $family_label = 'General';
 
-
 	/**
 	 * Get diagnostic ID
 	 */
@@ -109,8 +108,6 @@ class Diagnostic_Theme_Child_Theme_Active extends Diagnostic_Base {
 			'theme-child-theme-active'
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

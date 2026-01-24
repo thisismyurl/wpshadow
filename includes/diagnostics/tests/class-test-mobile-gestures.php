@@ -44,9 +44,7 @@ class Test_Mobile_Gestures extends Diagnostic_Base
 			return [
 				'id' => 'mobile-gesture-only',
 				'title' => 'Gesture-Only Functionality Detected',
-				'description' => 'Touch/gesture events detected without mouse/keyboard alternatives. WCAG SC 2.5.1 requires all functionality to work without gestures (for users with motor disabilities).',
-				'color' => '#ff5722',
-				'bg_color' => '#ffebee',
+				'description' => 'Touch/gesture events detected without mouse/keyboard alternatives. WCAG SC 2.5.1 requires all functionality to work without gestures (for users with motor disabilities).'
 				'kb_link' => 'https://wpshadow.com/kb/gesture-alternatives/',
 				'training_link' => 'https://wpshadow.com/training/accessible-interactions/',
 				'auto_fixable' => false,

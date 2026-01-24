@@ -30,9 +30,7 @@ class Test_Security_X_Powered_By extends Diagnostic_Base
 			return [
 				'id' => 'security-x-powered-by-exposed',
 				'title' => 'X-Powered-By Header Exposed',
-				'description' => sprintf('X-Powered-By header reveals: "%s". This discloses technology stack to potential attackers.', $powered_by),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => sprintf('X-Powered-By header reveals: "%s". This discloses technology stack to potential attackers.', $powered_by)
 				'kb_link' => 'https://wpshadow.com/kb/x-powered-by/',
 				'training_link' => 'https://wpshadow.com/training/information-disclosure/',
 				'auto_fixable' => false,

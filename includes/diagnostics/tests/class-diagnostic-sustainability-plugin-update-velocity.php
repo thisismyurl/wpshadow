@@ -31,7 +31,6 @@ class Diagnostic_Sustainability_Plugin_Update_Velocity extends Diagnostic_Base {
 
 	protected static $family_label = 'General';
 
-
 	/**
 	 * Get diagnostic ID
 	 */
@@ -109,8 +108,6 @@ class Diagnostic_Sustainability_Plugin_Update_Velocity extends Diagnostic_Base {
 			'sustainability-plugin-update-velocity'
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

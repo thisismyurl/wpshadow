@@ -33,10 +33,7 @@ class Diagnostic_Elasticsearch_Ready extends Diagnostic_Base {
 			return array(
 				'id'            => static::$slug,
 				'title'         => static::$title,
-				'description'   => 'ElasticPress installed but cannot connect to Elasticsearch server.',
-				'color'         => '#f44336',
-				'bg_color'      => '#ffebee',
-				'kb_link'       => 'https://wpshadow.com/kb/elasticsearch-ready/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=elasticsearch-ready',
+				'description'   => 'ElasticPress installed but cannot connect to Elasticsearch server.',				'kb_link'       => 'https://wpshadow.com/kb/elasticsearch-ready/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=elasticsearch-ready',
 				'training_link' => 'https://wpshadow.com/training/elasticsearch-ready/',
 				'auto_fixable'  => false,
 				'threat_level'  => 60,
@@ -47,9 +44,6 @@ class Diagnostic_Elasticsearch_Ready extends Diagnostic_Base {
 		
 		return null;
 	}
-
-
-
 
 	/**
 	 * Live test for this diagnostic

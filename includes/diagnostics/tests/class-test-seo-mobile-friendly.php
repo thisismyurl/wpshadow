@@ -40,9 +40,7 @@ class Test_SEO_Mobile_Friendly extends Diagnostic_Base
 			return [
 				'id' => 'seo-mobile-friendly-no-viewport',
 				'title' => 'Missing Viewport Meta Tag',
-				'description' => 'No viewport meta tag found. This is required for Google\'s mobile-friendly test and mobile-first indexing.',
-				'color' => '#ff5722',
-				'bg_color' => '#ffebee',
+				'description' => 'No viewport meta tag found. This is required for Google\'s mobile-friendly test and mobile-first indexing.'
 				'kb_link' => 'https://wpshadow.com/kb/viewport-meta-tag/',
 				'training_link' => 'https://wpshadow.com/training/mobile-seo/',
 				'auto_fixable' => false,

@@ -107,9 +107,7 @@ class Test_Admin_Dashboard_Widget_Count extends Diagnostic_Base
 				'WordPress dashboard has %d active widgets. This slows dashboard loading and makes API calls on every page load. Recommended: Under %d widgets. Use Screen Options to hide unnecessary widgets.',
 				$widget_count,
 				$threshold
-			),
-			'color'        => '#FF9A76',
-			'bg_color'     => '#FFF7F4',
+			)
 			'kb_link'      => 'https://wpshadow.com/kb/optimize-dashboard-widgets',
 			'training_link' => 'https://wpshadow.com/training/manage-dashboard-widgets',
 			'auto_fixable' => false,

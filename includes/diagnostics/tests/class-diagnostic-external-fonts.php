@@ -10,7 +10,6 @@ declare(strict_types=1);
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 
-
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
@@ -42,10 +41,7 @@ class Diagnostic_External_Fonts extends Diagnostic_Base
 		return array(
 			'id'           => 'external-fonts-loading',
 			'title'        => 'External Fonts Loaded (Google)',
-			'description'  => 'These styles load Google Fonts: ' . $list . '. Consider switching to a system stack to improve privacy and performance.',
-			'color'        => '#ff9800',
-			'bg_color'     => '#fff3e0',
-			'kb_link'      => 'https://wpshadow.com/kb/remove-google-fonts/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=external-fonts',
+			'description'  => 'These styles load Google Fonts: ' . $list . '. Consider switching to a system stack to improve privacy and performance.',			'kb_link'      => 'https://wpshadow.com/kb/remove-google-fonts/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=external-fonts',
 			'auto_fixable' => true,
 			'threat_level' => 30,
 		);
@@ -76,8 +72,6 @@ class Diagnostic_External_Fonts extends Diagnostic_Base
 	{
 		return (false !== stripos($src, 'fonts.googleapis.com') || false !== stripos($src, 'fonts.gstatic.com'));
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

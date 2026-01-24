@@ -121,9 +121,7 @@ class Test_Admin_DOM_Size extends Diagnostic_Base
 				'WordPress admin page contains approximately %d DOM elements. Pages with more than %d elements suffer from slow rendering and poor responsiveness. Recommended: Reduce dashboard widgets and disable unused plugins.',
 				$dom_nodes,
 				$warning_threshold
-			),
-			'color'        => '#FF4500',
-			'bg_color'     => '#FFF4F1',
+			)
 			'kb_link'      => 'https://wpshadow.com/kb/reduce-admin-dom-size',
 			'training_link' => 'https://wpshadow.com/training/optimize-admin-performance',
 			'auto_fixable' => false,

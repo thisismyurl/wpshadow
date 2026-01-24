@@ -45,9 +45,7 @@ class Test_Security_HSTS_Duration extends Diagnostic_Base
 					'description' => sprintf(
 						'HSTS max-age is %d days. Recommended: at least 6 months (180 days) for effective protection.',
 						round($max_age / 86400)
-					),
-					'color' => '#2196f3',
-					'bg_color' => '#e3f2fd',
+					)
 					'kb_link' => 'https://wpshadow.com/kb/hsts-duration/',
 					'training_link' => 'https://wpshadow.com/training/https-hardening/',
 					'auto_fixable' => false,

@@ -194,9 +194,7 @@ class Test_SEO_Missing_H1_Tag extends Diagnostic_Base {
             return [
                 'id' => 'seo-missing-h1-tag',
                 'title' => 'Empty H1 Tag',
-                'description' => 'Your page has an H1 tag but it is empty. Add meaningful content to help search engines understand your page topic.',
-                'color' => '#ff9800',
-                'bg_color' => '#fff3e0',
+                'description' => 'Your page has an H1 tag but it is empty. Add meaningful content to help search engines understand your page topic.'
                 'kb_link' => 'https://wpshadow.com/kb/h1-tags/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
                 'training_link' => 'https://wpshadow.com/training/seo-h1-tags/',
                 'auto_fixable' => false,
@@ -216,9 +214,7 @@ class Test_SEO_Missing_H1_Tag extends Diagnostic_Base {
             return [
                 'id' => 'seo-missing-h1-tag',
                 'title' => 'Missing H1 Tag',
-                'description' => 'Your page is missing an H1 tag. H1 tags are crucial for SEO as they tell search engines what your page is about.',
-                'color' => '#ff9800',
-                'bg_color' => '#fff3e0',
+                'description' => 'Your page is missing an H1 tag. H1 tags are crucial for SEO as they tell search engines what your page is about.'
                 'kb_link' => 'https://wpshadow.com/kb/h1-tags/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
                 'training_link' => 'https://wpshadow.com/training/seo-h1-tags/',
                 'auto_fixable' => false,
@@ -240,9 +236,7 @@ class Test_SEO_Missing_H1_Tag extends Diagnostic_Base {
             'description' => sprintf(
                 'Your page has %d H1 tags. Best practice is to use exactly one H1 per page to avoid diluting SEO value.',
                 $count
-            ),
-            'color' => '#ff9800',
-            'bg_color' => '#fff3e0',
+            )
             'kb_link' => 'https://wpshadow.com/kb/h1-tags/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
             'training_link' => 'https://wpshadow.com/training/seo-h1-tags/',
             'auto_fixable' => false,
@@ -337,9 +331,7 @@ class Test_SEO_Missing_H1_Tag extends Diagnostic_Base {
         return [
             'id' => 'seo-missing-h1-tag',
             'title' => $title,
-            'description' => $description,
-            'color' => '#ff5722',
-            'bg_color' => '#ffebee',
+            'description' => $description
             'kb_link' => 'https://wpshadow.com/kb/h1-tags/',
             'training_link' => 'https://wpshadow.com/training/seo-h1-tags/',
             'auto_fixable' => false,

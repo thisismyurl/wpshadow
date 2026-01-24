@@ -130,9 +130,7 @@ class Test_Accessibility_Form_Labels extends Diagnostic_Base
 			'description' => sprintf(
 				'Found %d form inputs without proper labels. Unlabeled inputs are inaccessible to screen reader users and violate WCAG guidelines.',
 				count($unlabeled)
-			),
-			'color' => '#ff9800',
-			'bg_color' => '#fff3e0',
+			)
 			'kb_link' => 'https://wpshadow.com/kb/form-labels/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
 			'training_link' => 'https://wpshadow.com/training/accessibility-forms/',
 			'auto_fixable' => false,
@@ -224,9 +222,7 @@ class Test_Accessibility_Form_Labels extends Diagnostic_Base
 		return [
 			'id' => 'accessibility-form-labels',
 			'title' => $title,
-			'description' => $description,
-			'color' => '#ff5722',
-			'bg_color' => '#ffebee',
+			'description' => $description
 			'kb_link' => 'https://wpshadow.com/kb/form-labels/',
 			'training_link' => 'https://wpshadow.com/training/accessibility-forms/',
 			'auto_fixable' => false,

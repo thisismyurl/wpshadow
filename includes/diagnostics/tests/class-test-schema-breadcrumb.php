@@ -39,9 +39,7 @@ class Test_Schema_Breadcrumb extends Diagnostic_Base
 			return [
 				'id' => 'schema-breadcrumb-missing',
 				'title' => 'BreadcrumbList Schema Missing',
-				'description' => 'Breadcrumb navigation detected but no BreadcrumbList structured data found. Adding schema helps search engines understand site hierarchy.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'Breadcrumb navigation detected but no BreadcrumbList structured data found. Adding schema helps search engines understand site hierarchy.'
 				'kb_link' => 'https://wpshadow.com/kb/breadcrumb-schema/',
 				'training_link' => 'https://wpshadow.com/training/structured-data/',
 				'auto_fixable' => false,

@@ -44,9 +44,7 @@ class Test_Schema_Person extends Diagnostic_Base
 			return [
 				'id' => 'schema-person-missing',
 				'title' => 'Person Schema Missing',
-				'description' => 'Author or profile page detected but no Person structured data found. Person schema helps search engines understand author identity and expertise.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'Author or profile page detected but no Person structured data found. Person schema helps search engines understand author identity and expertise.'
 				'kb_link' => 'https://wpshadow.com/kb/person-schema/',
 				'training_link' => 'https://wpshadow.com/training/author-seo/',
 				'auto_fixable' => false,

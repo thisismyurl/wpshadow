@@ -29,8 +29,6 @@ class Diagnostic_Database_Backup_Performance_Impact extends Diagnostic_Base
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

@@ -70,9 +70,7 @@ class Test_Performance_Render_Blocking_CSS extends Diagnostic_Base
 			'description' => sprintf(
 				'Found %d render-blocking CSS files. Each stylesheet delays page rendering. Consider consolidating or deferring non-critical styles.',
 				$blocking_count
-			),
-			'color' => '#ff9800',
-			'bg_color' => '#fff3e0',
+			)
 			'kb_link' => 'https://wpshadow.com/kb/render-blocking-css/',
 			'training_link' => 'https://wpshadow.com/training/performance-optimization/',
 			'auto_fixable' => false,

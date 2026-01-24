@@ -42,9 +42,7 @@ class Test_Mobile_Orientation extends Diagnostic_Base
 			return [
 				'id' => 'mobile-orientation-locked',
 				'title' => 'Orientation Lock Detected',
-				'description' => 'JavaScript orientation lock detected. WCAG SC 1.3.4 requires content to support both portrait and landscape unless a specific orientation is essential.',
-				'color' => '#ff5722',
-				'bg_color' => '#ffebee',
+				'description' => 'JavaScript orientation lock detected. WCAG SC 1.3.4 requires content to support both portrait and landscape unless a specific orientation is essential.'
 				'kb_link' => 'https://wpshadow.com/kb/orientation-support/',
 				'training_link' => 'https://wpshadow.com/training/mobile-accessibility/',
 				'auto_fixable' => false,

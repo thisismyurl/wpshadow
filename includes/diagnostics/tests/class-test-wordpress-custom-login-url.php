@@ -31,9 +31,7 @@ class Test_WordPress_Custom_Login_URL extends Diagnostic_Base
 			return [
 				'id' => 'wordpress-default-login-url',
 				'title' => 'Default Login URL Exposed',
-				'description' => 'wp-login.php is accessible at default location. Consider using a custom login URL to reduce brute-force attack surface.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'wp-login.php is accessible at default location. Consider using a custom login URL to reduce brute-force attack surface.'
 				'kb_link' => 'https://wpshadow.com/kb/custom-login-url/',
 				'training_link' => 'https://wpshadow.com/training/login-hardening/',
 				'auto_fixable' => false,

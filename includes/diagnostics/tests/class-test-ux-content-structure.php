@@ -55,9 +55,7 @@ class Test_UX_Content_Structure extends Diagnostic_Base
 					$p_count,
 					$heading_count,
 					$list_count
-				),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/content-structure/',
 				'training_link' => 'https://wpshadow.com/training/content-writing/',
 				'auto_fixable' => false,

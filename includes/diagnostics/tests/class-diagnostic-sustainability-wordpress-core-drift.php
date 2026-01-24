@@ -31,7 +31,6 @@ class Diagnostic_Sustainability_Wordpress_Core_Drift extends Diagnostic_Base {
 
 	protected static $family_label = 'General';
 
-
 	/**
 	 * Get diagnostic ID
 	 */
@@ -109,8 +108,6 @@ class Diagnostic_Sustainability_Wordpress_Core_Drift extends Diagnostic_Base {
 			'sustainability-wordpress-core-drift'
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

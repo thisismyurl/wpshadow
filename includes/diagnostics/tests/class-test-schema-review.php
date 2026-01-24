@@ -42,9 +42,7 @@ class Test_Schema_Review extends Diagnostic_Base
 			return [
 				'id' => 'schema-review-missing',
 				'title' => 'Review/Rating Schema Missing',
-				'description' => 'Ratings or reviews detected but no Review or AggregateRating structured data found. Adding schema can enable star ratings in search results.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'Ratings or reviews detected but no Review or AggregateRating structured data found. Adding schema can enable star ratings in search results.'
 				'kb_link' => 'https://wpshadow.com/kb/review-schema/',
 				'training_link' => 'https://wpshadow.com/training/rich-results/',
 				'auto_fixable' => false,

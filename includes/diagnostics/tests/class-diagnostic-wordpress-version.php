@@ -9,7 +9,6 @@ declare(strict_types=1);
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 
-
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
@@ -33,10 +32,7 @@ class Diagnostic_WordPress_Version extends Diagnostic_Base {
 			return array(
 				'id'           => 'wordpress-outdated',
 				'title'        => 'WordPress Update Available',
-				'description'  => "You're running WordPress {$wp_version}. Updating improves security and performance.",
-				'color'        => '#2196f3',
-				'bg_color'     => '#e3f2fd',
-				'kb_link'      => 'https://wpshadow.com/kb/how-to-update-wordpress-safely/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=wp-update',
+				'description'  => "You're running WordPress {$wp_version}. Updating improves security and performance.",				'kb_link'      => 'https://wpshadow.com/kb/how-to-update-wordpress-safely/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=wp-update',
 				'auto_fixable' => false,
 				'threat_level' => 75,
 			);
@@ -44,8 +40,6 @@ class Diagnostic_WordPress_Version extends Diagnostic_Base {
 		
 		return null;
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

@@ -104,9 +104,7 @@ class Test_Admin_External_Dependencies extends Diagnostic_Base
 				'WordPress admin loads resources from %d external domains. This creates privacy concerns and Single Points of Failure (SPOF). Recommended: Under %d external domains. Consider self-hosting critical assets.',
 				$external_count,
 				$threshold
-			),
-			'color'        => '#FF6347',
-			'bg_color'     => '#FFF5F3',
+			)
 			'kb_link'      => 'https://wpshadow.com/kb/reduce-external-dependencies',
 			'training_link' => 'https://wpshadow.com/training/self-host-assets',
 			'auto_fixable' => false,

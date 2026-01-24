@@ -45,9 +45,7 @@ class Test_SEO_Pagination extends Diagnostic_Base
 			return [
 				'id' => 'seo-pagination-missing-rel',
 				'title' => 'Pagination Missing rel=next/prev',
-				'description' => 'Paginated content detected but no rel=next/prev links found. These links help search engines understand the relationship between paginated pages.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'Paginated content detected but no rel=next/prev links found. These links help search engines understand the relationship between paginated pages.'
 				'kb_link' => 'https://wpshadow.com/kb/pagination-seo/',
 				'training_link' => 'https://wpshadow.com/training/technical-seo/',
 				'auto_fixable' => false,

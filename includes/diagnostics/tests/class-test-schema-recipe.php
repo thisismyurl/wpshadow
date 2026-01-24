@@ -48,9 +48,7 @@ class Test_Schema_Recipe extends Diagnostic_Base
 				'description' => sprintf(
 					'Recipe content detected (%d potential ingredients) but no Recipe structured data found. Recipe schema enables rich results with images, ratings, and cook time.',
 					$potential_ingredients
-				),
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/recipe-schema/',
 				'training_link' => 'https://wpshadow.com/training/recipe-seo/',
 				'auto_fixable' => false,

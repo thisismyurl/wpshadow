@@ -47,8 +47,6 @@ class Diagnostic_Pingback_Trackback_Enabled extends Diagnostic_Base
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

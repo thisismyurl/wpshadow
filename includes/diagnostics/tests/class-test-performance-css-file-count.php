@@ -27,9 +27,7 @@ class Test_Performance_CSS_File_Count extends Diagnostic_Base
 			return [
 				'id' => 'performance-excessive-css-files',
 				'title' => 'Excessive CSS Files',
-				'description' => sprintf('%d CSS files detected. Each requires HTTP request. Consider combining/concatenating stylesheets.', $css_file_count),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => sprintf('%d CSS files detected. Each requires HTTP request. Consider combining/concatenating stylesheets.', $css_file_count)
 				'kb_link' => 'https://wpshadow.com/kb/css-optimization/',
 				'training_link' => 'https://wpshadow.com/training/asset-optimization/',
 				'auto_fixable' => false,

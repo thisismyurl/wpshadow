@@ -50,8 +50,6 @@ use WPShadow\Core\Diagnostic_Base;
  *
  * PASS CRITERIA: Performance plugin active, metrics good, no major bottlenecks
  * FAIL CRITERIA: No optimization, poor scores, serious slowdowns
- *
- * CONFIDENCE LEVEL: High
  */
 class Diagnostic_Pub_Slug_Optimization extends Diagnostic_Base {
 	protected static $slug = 'pub-slug-optimization';
@@ -63,7 +61,6 @@ class Diagnostic_Pub_Slug_Optimization extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -158,8 +155,6 @@ class Diagnostic_Pub_Slug_Optimization extends Diagnostic_Base {
 		);
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *
@@ -197,7 +192,6 @@ class Diagnostic_Pub_Slug_Optimization extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

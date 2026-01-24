@@ -67,8 +67,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 3. Test CTR calculation from mock data
  * 4. Test threshold comparison against standards
  * 5. Validate performance trending
- *
- * CONFIDENCE LEVEL: High - WooCommerce data is reliable and analyzable
  */
 class Diagnostic_AiProductRecommendationCtr extends Diagnostic_Base {
 	protected static $slug = 'ai-product-recommendation-ctr';
@@ -80,7 +78,6 @@ class Diagnostic_AiProductRecommendationCtr extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -216,7 +213,6 @@ class Diagnostic_AiProductRecommendationCtr extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

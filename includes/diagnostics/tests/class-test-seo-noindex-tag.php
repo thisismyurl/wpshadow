@@ -39,9 +39,7 @@ class Test_SEO_Noindex_Tag extends Diagnostic_Base
 			return [
 				'id' => 'seo-homepage-noindex',
 				'title' => 'Homepage Has Noindex Tag',
-				'description' => 'Your homepage has a noindex meta tag, preventing it from appearing in search results. This is likely unintentional and will harm your SEO.',
-				'color' => '#f44336',
-				'bg_color' => '#ffebee',
+				'description' => 'Your homepage has a noindex meta tag, preventing it from appearing in search results. This is likely unintentional and will harm your SEO.'
 				'kb_link' => 'https://wpshadow.com/kb/noindex-tag/',
 				'training_link' => 'https://wpshadow.com/training/indexability/',
 				'auto_fixable' => false,

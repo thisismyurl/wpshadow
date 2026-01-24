@@ -50,9 +50,7 @@ class Test_WordPress_Admin_Email extends Diagnostic_Base
 			return [
 				'id' => 'wordpress-generic-email',
 				'title' => 'Generic Email Address Used',
-				'description' => 'Generic email addresses (admin@, webmaster@) detected. Use personalized email for better deliverability and trust.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'Generic email addresses (admin@, webmaster@) detected. Use personalized email for better deliverability and trust.'
 				'kb_link' => 'https://wpshadow.com/kb/admin-email/',
 				'training_link' => 'https://wpshadow.com/training/email-configuration/',
 				'auto_fixable' => false,

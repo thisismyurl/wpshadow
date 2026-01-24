@@ -63,9 +63,7 @@ class Test_Performance_Preconnect_DNS_Prefetch extends Diagnostic_Base
 			'description' => sprintf(
 				'Page loads resources from %d external domains but lacks preconnect/dns-prefetch hints. Adding these can reduce connection time by up to 300ms.',
 				count($found_major)
-			),
-			'color' => '#ff9800',
-			'bg_color' => '#fff3e0',
+			)
 			'kb_link' => 'https://wpshadow.com/kb/resource-hints/',
 			'training_link' => 'https://wpshadow.com/training/performance-optimization/',
 			'auto_fixable' => false,

@@ -78,9 +78,7 @@ class Test_UX_Button_Clarity extends Diagnostic_Base
 					'Found %d buttons with vague text (%s). Use action-oriented text like "Download PDF" or "Subscribe to Newsletter".',
 					$vague_buttons,
 					implode(', ', array_slice($examples, 0, 3))
-				),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/button-best-practices/',
 				'training_link' => 'https://wpshadow.com/training/conversion-ux/',
 				'auto_fixable' => false,

@@ -26,8 +26,6 @@ class Diagnostic_Design_PLUGIN_OUTPUT_STYLING extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

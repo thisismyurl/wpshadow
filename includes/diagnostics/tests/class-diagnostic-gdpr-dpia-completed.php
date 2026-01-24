@@ -50,8 +50,6 @@ use WPShadow\Core\Diagnostic_Base;
  *
  * PASS CRITERIA: Audit active, complete logging, retention meets requirements
  * FAIL CRITERIA: No audit plugin, gaps in logging, insufficient retention
- *
- * CONFIDENCE LEVEL: High
  */
 class Diagnostic_Gdpr_Dpia_Completed extends Diagnostic_Base {
 	protected static $slug = 'gdpr-dpia-completed';
@@ -63,7 +61,6 @@ class Diagnostic_Gdpr_Dpia_Completed extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -150,8 +147,6 @@ class Diagnostic_Gdpr_Dpia_Completed extends Diagnostic_Base {
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *
@@ -189,7 +184,6 @@ class Diagnostic_Gdpr_Dpia_Completed extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

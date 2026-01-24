@@ -31,9 +31,7 @@ class Test_Security_Server_Version extends Diagnostic_Base
 				return [
 					'id' => 'security-server-version-exposed',
 					'title' => 'Server Version Exposed',
-					'description' => sprintf('Server header reveals version: "%s". Attackers can target known vulnerabilities in specific versions.', $server_value),
-					'color' => '#ff9800',
-					'bg_color' => '#fff3e0',
+					'description' => sprintf('Server header reveals version: "%s". Attackers can target known vulnerabilities in specific versions.', $server_value)
 					'kb_link' => 'https://wpshadow.com/kb/server-header/',
 					'training_link' => 'https://wpshadow.com/training/information-disclosure/',
 					'auto_fixable' => false,

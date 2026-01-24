@@ -10,7 +10,6 @@ declare(strict_types=1);
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 
-
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
@@ -73,8 +72,6 @@ class Diagnostic_Emoji_Scripts extends Diagnostic_Base
 			'kb_article'  => 'emoji-scripts',
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

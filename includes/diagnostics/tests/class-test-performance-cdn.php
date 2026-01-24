@@ -64,9 +64,7 @@ class Test_Performance_CDN extends Diagnostic_Base
 			return [
 				'id' => 'performance-no-cdn',
 				'title' => 'No CDN Detected',
-				'description' => sprintf('%d static resources found but no CDN usage. CDN can reduce latency by serving assets from geographically closer servers.', $total_resources),
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => sprintf('%d static resources found but no CDN usage. CDN can reduce latency by serving assets from geographically closer servers.', $total_resources)
 				'kb_link' => 'https://wpshadow.com/kb/cdn-setup/',
 				'training_link' => 'https://wpshadow.com/training/performance-optimization/',
 				'auto_fixable' => false,

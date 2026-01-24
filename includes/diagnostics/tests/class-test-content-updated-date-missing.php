@@ -31,9 +31,7 @@ class Test_Content_Updated_Date_Missing extends Diagnostic_Base
 			return [
 				'id' => 'content-no-updated-date',
 				'title' => 'Missing "Last Updated" Date',
-				'description' => 'Published date shown but no "last updated" date. Showing update dates signals fresh content to users and search engines.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'Published date shown but no "last updated" date. Showing update dates signals fresh content to users and search engines.'
 				'kb_link' => 'https://wpshadow.com/kb/last-updated-dates/',
 				'training_link' => 'https://wpshadow.com/training/content-freshness/',
 				'auto_fixable' => false,

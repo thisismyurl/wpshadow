@@ -56,9 +56,7 @@ class Test_UX_Semantic_HTML extends Diagnostic_Base
 					'Found %d divs but only %d/5 semantic HTML5 elements (header, nav, main, article, footer). Semantic HTML improves accessibility and SEO.',
 					$div_count,
 					$semantic_score
-				),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/semantic-html/',
 				'training_link' => 'https://wpshadow.com/training/html-best-practices/',
 				'auto_fixable' => false,

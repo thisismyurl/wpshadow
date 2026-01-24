@@ -65,9 +65,7 @@ class Test_Mobile_Friendly_Content extends Diagnostic_Base
 			return [
 				'id' => 'mobile-unfriendly-content',
 				'title' => 'Mobile-Unfriendly Content Patterns',
-				'description' => 'Found mobile-unfriendly content: ' . implode(', ', $issues) . '. These patterns can cause display and usability issues on mobile devices.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'Found mobile-unfriendly content: ' . implode(', ', $issues) . '. These patterns can cause display and usability issues on mobile devices.'
 				'kb_link' => 'https://wpshadow.com/kb/mobile-content/',
 				'training_link' => 'https://wpshadow.com/training/mobile-best-practices/',
 				'auto_fixable' => false,

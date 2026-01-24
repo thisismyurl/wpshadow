@@ -43,9 +43,7 @@ class Test_UX_Loading_States extends Diagnostic_Base
 			return [
 				'id' => 'ux-loading-states-missing',
 				'title' => 'No Loading Indicators Found',
-				'description' => 'AJAX/fetch calls detected but no loading indicators (spinners, skeleton screens, aria-busy). Users need feedback during async operations.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'AJAX/fetch calls detected but no loading indicators (spinners, skeleton screens, aria-busy). Users need feedback during async operations.'
 				'kb_link' => 'https://wpshadow.com/kb/loading-states/',
 				'training_link' => 'https://wpshadow.com/training/async-ux/',
 				'auto_fixable' => false,

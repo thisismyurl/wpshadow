@@ -68,11 +68,7 @@ use WPShadow\Core\Diagnostic_Base;
  * 3. Test disclosure verification
  * 4. Test link accessibility
  * 5. Validate compliance scoring
- *
- * CONFIDENCE LEVEL: High - Compliance pages are searchable and scannable
  */
- *
- * CONFIDENCE LEVEL: High - straightforward yes/no detection possible
  */
 /**
  * ⚠️ STUB - NEEDS IMPLEMENTATION
@@ -88,7 +84,6 @@ use WPShadow\Core\Diagnostic_Base;
  *
  * Once clarified, implement the check() method and we can create the test.
  */
-
 
 /**
  * DIAGNOSTIC ANALYSIS - STRAIGHTFORWARD WORDPRESS STATE CHECK
@@ -126,7 +121,6 @@ class Diagnostic_Pci_Dss_Compliance extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -244,8 +238,6 @@ class Diagnostic_Pci_Dss_Compliance extends Diagnostic_Base {
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *
@@ -283,7 +275,6 @@ class Diagnostic_Pci_Dss_Compliance extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

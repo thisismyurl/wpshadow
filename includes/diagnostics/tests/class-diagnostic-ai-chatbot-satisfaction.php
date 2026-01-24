@@ -52,8 +52,6 @@ use WPShadow\Core\Diagnostic_Base;
  * 3. Build heuristic rules with documented thresholds
  * 4. Create calibration tests with known-good/known-bad samples
  * 5. Document edge cases and limitations
- *
- * CONFIDENCE LEVEL: Medium - requires domain expertise and validation
  */
 
 /**
@@ -120,7 +118,6 @@ class Diagnostic_AiChatbotSatisfaction extends Diagnostic_Base {
 	protected static $family = 'general';
 
 	protected static $family_label = 'General';
-
 
 	/**
 	 * Get diagnostic ID
@@ -258,7 +255,6 @@ class Diagnostic_AiChatbotSatisfaction extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * NEEDS CLARIFICATION:

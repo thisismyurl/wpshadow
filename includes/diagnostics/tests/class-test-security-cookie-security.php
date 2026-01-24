@@ -64,9 +64,7 @@ class Test_Security_Cookie_Security extends Diagnostic_Base
 					'description' => sprintf(
 						'Cookies detected with security issues: %s. Insecure cookies are vulnerable to theft and CSRF attacks.',
 						implode(', ', $issues)
-					),
-					'color' => '#ff9800',
-					'bg_color' => '#fff3e0',
+					)
 					'kb_link' => 'https://wpshadow.com/kb/cookie-security/',
 					'training_link' => 'https://wpshadow.com/training/session-security/',
 					'auto_fixable' => false,

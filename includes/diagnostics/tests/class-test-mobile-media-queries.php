@@ -45,9 +45,7 @@ class Test_Mobile_Media_Queries extends Diagnostic_Base
 			return [
 				'id' => 'mobile-media-queries-missing',
 				'title' => 'No Mobile Media Queries Detected',
-				'description' => 'No CSS media queries detected in inline styles. Mobile-responsive design typically uses @media queries for different screen sizes.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'No CSS media queries detected in inline styles. Mobile-responsive design typically uses @media queries for different screen sizes.'
 				'kb_link' => 'https://wpshadow.com/kb/media-queries/',
 				'training_link' => 'https://wpshadow.com/training/responsive-css/',
 				'auto_fixable' => false,

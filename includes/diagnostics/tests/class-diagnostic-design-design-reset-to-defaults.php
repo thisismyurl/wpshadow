@@ -26,8 +26,6 @@ class Diagnostic_Design_DESIGN_RESET_TO_DEFAULTS extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

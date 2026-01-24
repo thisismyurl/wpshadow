@@ -37,8 +37,6 @@ class Diagnostic_Code_CODE_AJAX_NO_SECURITY extends Diagnostic_Base
 		];
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

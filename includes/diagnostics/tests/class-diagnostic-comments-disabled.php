@@ -14,7 +14,6 @@ declare(strict_types=1);
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 
-
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
@@ -67,8 +66,6 @@ class Diagnostic_Comments_Disabled extends Diagnostic_Base
 			'timestamp'    => current_time('mysql'),
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

@@ -49,9 +49,7 @@ class Test_UX_Error_Messages extends Diagnostic_Base
 			return [
 				'id' => 'ux-error-messages-missing',
 				'title' => 'Form Error Messages Not Configured',
-				'description' => 'Forms with required fields found but no visible error message containers (role="alert" or aria-live). Users need clear feedback when validation fails.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'Forms with required fields found but no visible error message containers (role="alert" or aria-live). Users need clear feedback when validation fails.'
 				'kb_link' => 'https://wpshadow.com/kb/form-validation/',
 				'training_link' => 'https://wpshadow.com/training/accessible-forms/',
 				'auto_fixable' => false,

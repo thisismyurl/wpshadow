@@ -39,9 +39,7 @@ class Test_Performance_Compression extends Diagnostic_Base
 			return [
 				'id' => 'performance-no-compression',
 				'title' => 'No Text Compression',
-				'description' => 'HTML is not compressed (no gzip/brotli). Compression can reduce transfer size by 70-90%.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'HTML is not compressed (no gzip/brotli). Compression can reduce transfer size by 70-90%.'
 				'kb_link' => 'https://wpshadow.com/kb/gzip-compression/',
 				'training_link' => 'https://wpshadow.com/training/server-optimization/',
 				'auto_fixable' => false,

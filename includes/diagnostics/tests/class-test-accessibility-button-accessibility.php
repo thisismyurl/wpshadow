@@ -41,9 +41,7 @@ class Test_Accessibility_Button_Accessibility extends Diagnostic_Base
 			return [
 				'id' => 'accessibility-fake-buttons',
 				'title' => 'Improper Button Implementation',
-				'description' => sprintf('%d div/span elements used as buttons (onclick). Use proper <button> elements for accessibility and keyboard support.', $fake_button_count),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => sprintf('%d div/span elements used as buttons (onclick). Use proper <button> elements for accessibility and keyboard support.', $fake_button_count)
 				'kb_link' => 'https://wpshadow.com/kb/button-accessibility/',
 				'training_link' => 'https://wpshadow.com/training/semantic-html/',
 				'auto_fixable' => false,
@@ -58,9 +56,7 @@ class Test_Accessibility_Button_Accessibility extends Diagnostic_Base
 			return [
 				'id' => 'accessibility-links-as-buttons',
 				'title' => 'Links Used as Buttons',
-				'description' => sprintf('%d links with href="#" styled as buttons. If it performs an action (not navigation), use <button> instead.', $link_button_count),
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => sprintf('%d links with href="#" styled as buttons. If it performs an action (not navigation), use <button> instead.', $link_button_count)
 				'kb_link' => 'https://wpshadow.com/kb/buttons-vs-links/',
 				'training_link' => 'https://wpshadow.com/training/semantic-html/',
 				'auto_fixable' => false,

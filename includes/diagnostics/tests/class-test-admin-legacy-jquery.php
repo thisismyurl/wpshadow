@@ -113,8 +113,6 @@ class Test_Admin_Legacy_jQuery extends Diagnostic_Base
 				$jquery_version,
 				implode(', ', $issues)
 			),
-			'color'        => $this->get_color_by_severity($severity),
-			'bg_color'     => $this->get_bg_color_by_severity($severity),
 			'kb_link'      => 'https://wpshadow.com/kb/update-jquery',
 			'training_link' => 'https://wpshadow.com/training/modern-javascript',
 			'auto_fixable' => false, // Requires theme/plugin updates
@@ -130,42 +128,6 @@ class Test_Admin_Legacy_jQuery extends Diagnostic_Base
 				'severity'             => $severity,
 			),
 		);
-	}
-
-	/**
-	 * Get color based on severity
-	 *
-	 * @param string $severity Severity level
-	 * @return string Hex color code
-	 */
-	private function get_color_by_severity(string $severity): string
-	{
-		$colors = array(
-			'critical' => '#8B0000',
-			'high'     => '#DC143C',
-			'medium'   => '#FF6347',
-			'low'      => '#FF8C00',
-		);
-
-		return $colors[$severity] ?? '#FF6347';
-	}
-
-	/**
-	 * Get background color based on severity
-	 *
-	 * @param string $severity Severity level
-	 * @return string Hex color code
-	 */
-	private function get_bg_color_by_severity(string $severity): string
-	{
-		$colors = array(
-			'critical' => '#FFEBEE',
-			'high'     => '#FFF0F0',
-			'medium'   => '#FFF5F3',
-			'low'      => '#FFF8F0',
-		);
-
-		return $colors[$severity] ?? '#FFF5F3';
 	}
 
 	/**

@@ -20,8 +20,6 @@ class Diagnostic_Monitor_Brute_Force_Attempts extends Diagnostic_Base
 		return ['id' => 'monitor-brute-force', 'title' => __('Brute Force Attack Detection', 'wpshadow'), 'description' => __('Detects multiple failed login attempts from same IP. Real-time alert enables quick block before accounts compromised.', 'wpshadow'), 'severity' => 'high', 'category' => 'monitoring', 'kb_link' => 'https://wpshadow.com/kb/login-security/', 'training_link' => 'https://wpshadow.com/training/brute-force-prevention/', 'auto_fixable' => false, 'threat_level' => 9];
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

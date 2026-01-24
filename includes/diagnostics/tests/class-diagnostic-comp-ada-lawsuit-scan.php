@@ -102,7 +102,6 @@ class Diagnostic_CompAdaLawsuitScan extends Diagnostic_Base {
 
 	protected static $family_label = 'General';
 
-
 	/**
 	 * Get diagnostic ID
 	 *
@@ -211,8 +210,6 @@ class Diagnostic_CompAdaLawsuitScan extends Diagnostic_Base {
 		);
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *
@@ -250,7 +247,6 @@ class Diagnostic_CompAdaLawsuitScan extends Diagnostic_Base {
 	}
 
 }
-
 
 /**
  * STUB - NEEDS CLARIFICATION:

@@ -26,8 +26,6 @@ class Diagnostic_Design_DESIGN_SIDEBAR_CONSISTENCY extends Diagnostic_Base {
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

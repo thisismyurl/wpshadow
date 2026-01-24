@@ -42,9 +42,7 @@ class Test_Schema_Event extends Diagnostic_Base
 			return [
 				'id' => 'schema-event-missing',
 				'title' => 'Event Schema Missing',
-				'description' => 'Event content detected (date, location, event keywords) but no Event structured data found. Event schema enables rich results with date/location in search.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'Event content detected (date, location, event keywords) but no Event structured data found. Event schema enables rich results with date/location in search.'
 				'kb_link' => 'https://wpshadow.com/kb/event-schema/',
 				'training_link' => 'https://wpshadow.com/training/structured-data/',
 				'auto_fixable' => false,

@@ -31,7 +31,6 @@ class Diagnostic_Theme_Critical_Css extends Diagnostic_Base {
 
 	protected static $family_label = 'General';
 
-
 	/**
 	 * Get diagnostic ID
 	 */
@@ -109,8 +108,6 @@ class Diagnostic_Theme_Critical_Css extends Diagnostic_Base {
 			'theme-critical-css'
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

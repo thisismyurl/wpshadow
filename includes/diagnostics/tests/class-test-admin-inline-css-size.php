@@ -112,9 +112,7 @@ class Test_Admin_Inline_CSS_Size extends Diagnostic_Base
 				'WordPress admin has %s KB of inline CSS across %d blocks. Inline styles cannot be cached by browsers, increasing page size on every load. Recommended: Under 20 KB. Consider moving inline styles to external CSS files.',
 				$size_kb,
 				$inline_block_count
-			),
-			'color'        => '#FF7F50',
-			'bg_color'     => '#FFF6F3',
+			)
 			'kb_link'      => 'https://wpshadow.com/kb/reduce-inline-css',
 			'training_link' => 'https://wpshadow.com/training/optimize-css-delivery',
 			'auto_fixable' => false,

@@ -60,9 +60,7 @@ class Test_SEO_Readability extends Diagnostic_Base
 			return [
 				'id' => 'seo-readability-long-sentences',
 				'title' => 'Content Readability Issues',
-				'description' => sprintf('Average sentence length is %.1f words. Aim for 15-20 words per sentence for better readability.', $avg_sentence_length),
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => sprintf('Average sentence length is %.1f words. Aim for 15-20 words per sentence for better readability.', $avg_sentence_length)
 				'kb_link' => 'https://wpshadow.com/kb/content-readability/',
 				'training_link' => 'https://wpshadow.com/training/seo-writing/',
 				'auto_fixable' => false,

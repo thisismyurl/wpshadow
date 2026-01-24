@@ -22,9 +22,7 @@ class Test_Security_SSL_HTTPS extends Diagnostic_Base
 			return [
 				'id' => 'security-ssl-https',
 				'title' => 'Missing HTTPS/SSL',
-				'description' => 'Your site is not using HTTPS. Modern browsers mark HTTP sites as "Not Secure" which hurts trust and rankings. HTTPS is also a Google ranking factor.',
-				'color' => '#ff5722',
-				'bg_color' => '#ffebee',
+				'description' => 'Your site is not using HTTPS. Modern browsers mark HTTP sites as "Not Secure" which hurts trust and rankings. HTTPS is also a Google ranking factor.'
 				'kb_link' => 'https://wpshadow.com/kb/ssl-https/',
 				'training_link' => 'https://wpshadow.com/training/security-basics/',
 				'auto_fixable' => false,
@@ -44,9 +42,7 @@ class Test_Security_SSL_HTTPS extends Diagnostic_Base
 				return [
 					'id' => 'security-ssl-https',
 					'title' => 'Mixed Content Detected',
-					'description' => 'Your site uses HTTPS but loads some resources over HTTP. This triggers browser warnings and security issues.',
-					'color' => '#ff9800',
-					'bg_color' => '#fff3e0',
+					'description' => 'Your site uses HTTPS but loads some resources over HTTP. This triggers browser warnings and security issues.'
 					'kb_link' => 'https://wpshadow.com/kb/mixed-content/',
 					'training_link' => 'https://wpshadow.com/training/security-basics/',
 					'auto_fixable' => false,

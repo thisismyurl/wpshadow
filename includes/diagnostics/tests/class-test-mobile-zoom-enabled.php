@@ -41,9 +41,7 @@ class Test_Mobile_Zoom_Enabled extends Diagnostic_Base
 				return [
 					'id' => 'mobile-zoom-disabled',
 					'title' => 'Mobile Zoom Disabled',
-					'description' => 'Viewport meta tag disables zoom (user-scalable=no or maximum-scale=1). This prevents users from zooming text and violates WCAG accessibility guidelines.',
-					'color' => '#ff5722',
-					'bg_color' => '#ffebee',
+					'description' => 'Viewport meta tag disables zoom (user-scalable=no or maximum-scale=1). This prevents users from zooming text and violates WCAG accessibility guidelines.'
 					'kb_link' => 'https://wpshadow.com/kb/mobile-zoom/',
 					'training_link' => 'https://wpshadow.com/training/mobile-accessibility/',
 					'auto_fixable' => false,

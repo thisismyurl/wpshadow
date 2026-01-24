@@ -51,8 +51,6 @@ class Diagnostic_LiveChatNotificationImpact extends Diagnostic_Base
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

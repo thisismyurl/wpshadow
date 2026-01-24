@@ -47,9 +47,7 @@ class Test_Performance_Defer_JS extends Diagnostic_Base
 				return [
 					'id' => 'performance-render-blocking-js',
 					'title' => 'Render-Blocking JavaScript',
-					'description' => sprintf('%d render-blocking JavaScript files in <head>. Use defer or async attributes to improve page load.', $blocking_scripts),
-					'color' => '#ff9800',
-					'bg_color' => '#fff3e0',
+					'description' => sprintf('%d render-blocking JavaScript files in <head>. Use defer or async attributes to improve page load.', $blocking_scripts)
 					'kb_link' => 'https://wpshadow.com/kb/defer-javascript/',
 					'training_link' => 'https://wpshadow.com/training/javascript-optimization/',
 					'auto_fixable' => false,

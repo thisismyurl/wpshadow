@@ -26,9 +26,7 @@ class Test_Content_Meta_Description_Missing extends Diagnostic_Base
 			return [
 				'id' => 'content-no-meta-description',
 				'title' => 'Missing Meta Description',
-				'description' => 'No meta description found. Meta descriptions show in search results and can improve click-through rate by 5-15%.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'No meta description found. Meta descriptions show in search results and can improve click-through rate by 5-15%.'
 				'kb_link' => 'https://wpshadow.com/kb/meta-description/',
 				'training_link' => 'https://wpshadow.com/training/seo-fundamentals/',
 				'auto_fixable' => false,

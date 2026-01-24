@@ -36,9 +36,7 @@ class Test_Accessibility_Skip_Links extends Diagnostic_Base
 			return [
 				'id' => 'accessibility-no-skip-links',
 				'title' => 'No Skip Navigation Links',
-				'description' => 'No skip links detected. Skip links allow keyboard users to bypass repetitive navigation, critical for accessibility.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'No skip links detected. Skip links allow keyboard users to bypass repetitive navigation, critical for accessibility.'
 				'kb_link' => 'https://wpshadow.com/kb/skip-links/',
 				'training_link' => 'https://wpshadow.com/training/keyboard-accessibility/',
 				'auto_fixable' => false,

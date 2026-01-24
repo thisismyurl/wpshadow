@@ -79,9 +79,7 @@ class Test_Inactive_Plugins extends Diagnostic_Base
 				'%d inactive plugins use %s of disk space and need updates. Deactivate or delete unused plugins to reduce clutter and security surface.',
 				$inactive_count,
 				self::format_bytes($total_size)
-			),
-			'color'         => '#ffc107',
-			'bg_color'      => '#fffde7',
+			)
 			'kb_link'       => 'https://wpshadow.com/kb/inactive-plugins/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=inactive-plugins',
 			'training_link' => 'https://wpshadow.com/training/plugin-management/',
 			'auto_fixable'  => false,

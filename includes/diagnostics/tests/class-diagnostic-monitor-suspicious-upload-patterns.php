@@ -8,8 +8,6 @@ class Diagnostic_Monitor_Suspicious_Upload_Patterns extends Diagnostic_Base {
         return ['id' => 'monitor-upload-patterns', 'title' => __('Suspicious File Upload Patterns', 'wpshadow'), 'description' => __('Detects executable uploads, mass uploads, uploads to wrong directories. Blocks backdoor deployment vectors.', 'wpshadow'), 'severity' => 'high', 'category' => 'monitoring', 'kb_link' => 'https://wpshadow.com/kb/upload-security/', 'training_link' => 'https://wpshadow.com/training/file-handling/', 'auto_fixable' => false, 'threat_level' => 9];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

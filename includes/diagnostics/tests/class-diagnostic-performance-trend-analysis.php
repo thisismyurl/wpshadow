@@ -56,8 +56,6 @@ class Diagnostic_Performance_Trend_Analysis extends Diagnostic_Base
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

@@ -25,7 +25,6 @@ class Diagnostic_Design_PLACEHOLDER_TEXT_CLARITY extends Diagnostic_Base {
         ];
     }
 
-
 	/**
 	 * Live test for this diagnostic
 	 *

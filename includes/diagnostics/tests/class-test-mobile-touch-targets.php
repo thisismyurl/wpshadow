@@ -57,9 +57,7 @@ class Test_Mobile_Touch_Targets extends Diagnostic_Base
 				'description' => sprintf(
 					'Found %d interactive elements with sizes under 48x48px. Small touch targets are difficult to tap on mobile devices and hurt usability.',
 					$small_elements
-				),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/touch-targets/',
 				'training_link' => 'https://wpshadow.com/training/mobile-ux/',
 				'auto_fixable' => false,

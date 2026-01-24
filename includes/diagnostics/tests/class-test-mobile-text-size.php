@@ -52,9 +52,7 @@ class Test_Mobile_Text_Size extends Diagnostic_Base
 					'Found %d instances of text under 16px (average: %spx). Small text is difficult to read on mobile devices without zooming.',
 					count($small_fonts),
 					$avg_small
-				),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/mobile-text-size/',
 				'training_link' => 'https://wpshadow.com/training/mobile-typography/',
 				'auto_fixable' => false,

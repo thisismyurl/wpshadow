@@ -8,8 +8,6 @@ class Diagnostic_Monitor_Service extends Diagnostic_Base {
     return ['id' => 'monitor-service_worker_implementation', 'title' => __('Service Worker Implementation', 'wpshadow'), 'description' => __('Verifies service worker enables offline. Missing = lost offline functionality.', 'wpshadow'), 'severity' => 'medium', 'category' => 'monitoring', 'kb_link' => 'https://wpshadow.com/kb/', 'training_link' => 'https://wpshadow.com/training/', 'auto_fixable' => false, 'threat_level' => 6];
   }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

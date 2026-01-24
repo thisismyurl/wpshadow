@@ -12,7 +12,6 @@ declare(strict_types=1);
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
 
-
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
@@ -45,17 +44,12 @@ class Diagnostic_Post_Via_Email_Category extends Diagnostic_Base
 		return array(
 			'id'           => 'post-via-email-default-category',
 			'title'        => 'Post via Email Uses "Uncategorized"',
-			'description'  => 'Post via Email is enabled but the default post category is "Uncategorized". Assign a dedicated category to prevent unorganized content.',
-			'color'        => '#ff9800',
-			'bg_color'     => '#fff3e0',
-			'category'     => 'settings',
+			'description'  => 'Post via Email is enabled but the default post category is "Uncategorized". Assign a dedicated category to prevent unorganized content.',			'category'     => 'settings',
 			'auto_fixable' => false,
 			'kb_link'      => 'https://wordpress.org/support/article/post-via-email/',
 			'threat_level' => 12,
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

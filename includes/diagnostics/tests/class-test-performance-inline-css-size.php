@@ -34,9 +34,7 @@ class Test_Performance_Inline_CSS_Size extends Diagnostic_Base
 				'description' => sprintf(
 					'%.1f KB of inline CSS detected. Large inline styles bloat HTML. Consider external stylesheets with caching.',
 					$total_inline_css_size / 1024
-				),
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/inline-css/',
 				'training_link' => 'https://wpshadow.com/training/asset-optimization/',
 				'auto_fixable' => false,

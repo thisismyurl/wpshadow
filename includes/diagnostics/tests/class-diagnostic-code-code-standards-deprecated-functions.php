@@ -64,8 +64,6 @@ class Diagnostic_Code_CODE_STANDARDS_DEPRECATED_FUNCTIONS extends Diagnostic_Bas
         ];
     }
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

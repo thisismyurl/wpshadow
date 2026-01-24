@@ -42,9 +42,7 @@ class Test_Schema_Movie extends Diagnostic_Base
 			return [
 				'id' => 'schema-movie-missing',
 				'title' => 'Movie Schema Missing',
-				'description' => 'Movie content detected but no Movie structured data found. Movie schema enables rich results with cast, director, ratings, and trailers.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'Movie content detected but no Movie structured data found. Movie schema enables rich results with cast, director, ratings, and trailers.'
 				'kb_link' => 'https://wpshadow.com/kb/movie-schema/',
 				'training_link' => 'https://wpshadow.com/training/media-seo/',
 				'auto_fixable' => false,

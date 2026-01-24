@@ -28,9 +28,7 @@ class Test_SEO_404_Status extends Diagnostic_Base
 			return [
 				'id' => 'seo-404-wrong-status',
 				'title' => '404 Pages Not Returning 404 Status',
-				'description' => sprintf('Non-existent page returned status %d instead of 404. This can confuse search engines and waste crawl budget.', $status_code),
-				'color' => '#ff5722',
-				'bg_color' => '#ffebee',
+				'description' => sprintf('Non-existent page returned status %d instead of 404. This can confuse search engines and waste crawl budget.', $status_code)
 				'kb_link' => 'https://wpshadow.com/kb/404-status-codes/',
 				'training_link' => 'https://wpshadow.com/training/technical-seo/',
 				'auto_fixable' => false,

@@ -31,7 +31,6 @@ class Diagnostic_Dx_Cli_Commands_Available extends Diagnostic_Base {
 
 	protected static $family_label = 'General';
 
-
 	/**
 	 * Get diagnostic ID
 	 */
@@ -109,8 +108,6 @@ class Diagnostic_Dx_Cli_Commands_Available extends Diagnostic_Base {
 			'dx-cli-commands-available'
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

@@ -37,9 +37,7 @@ class Test_Performance_Cache_Duration_Short extends Diagnostic_Base
 				return [
 					'id' => 'performance-cache-too-short',
 					'title' => 'Cache Duration Too Short',
-					'description' => sprintf('Cache max-age is only %d seconds. For static assets, use at least 1 week (604800 seconds).', $max_age),
-					'color' => '#2196f3',
-					'bg_color' => '#e3f2fd',
+					'description' => sprintf('Cache max-age is only %d seconds. For static assets, use at least 1 week (604800 seconds).', $max_age)
 					'kb_link' => 'https://wpshadow.com/kb/cache-duration/',
 					'training_link' => 'https://wpshadow.com/training/caching/',
 					'auto_fixable' => false,

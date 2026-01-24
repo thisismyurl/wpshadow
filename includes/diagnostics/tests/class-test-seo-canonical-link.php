@@ -245,9 +245,7 @@ class Test_SEO_Canonical_Link extends Diagnostic_Base
             return [
                 'id' => 'seo-canonical-link',
                 'title' => 'Missing Canonical Link Tag',
-                'description' => 'Your page is missing a canonical link tag. This can lead to duplicate content issues if the same content is accessible via multiple URLs.',
-                'color' => '#ff9800',
-                'bg_color' => '#fff3e0',
+                'description' => 'Your page is missing a canonical link tag. This can lead to duplicate content issues if the same content is accessible via multiple URLs.'
                 'kb_link' => 'https://wpshadow.com/kb/canonical-tags/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
                 'training_link' => 'https://wpshadow.com/training/seo-canonical-tags/',
                 'auto_fixable' => false,
@@ -299,9 +297,7 @@ class Test_SEO_Canonical_Link extends Diagnostic_Base
                 'Your canonical tag has %d issue(s): %s. These issues may prevent search engines from properly consolidating duplicate content.',
                 count($issues),
                 implode(', ', $issues)
-            ),
-            'color' => '#ff9800',
-            'bg_color' => '#fff3e0',
+            )
             'kb_link' => 'https://wpshadow.com/kb/canonical-tags/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
             'training_link' => 'https://wpshadow.com/training/seo-canonical-tags/',
             'auto_fixable' => false,
@@ -466,9 +462,7 @@ class Test_SEO_Canonical_Link extends Diagnostic_Base
         return [
             'id' => 'seo-canonical-link',
             'title' => $title,
-            'description' => $description,
-            'color' => '#ff5722',
-            'bg_color' => '#ffebee',
+            'description' => $description
             'kb_link' => 'https://wpshadow.com/kb/canonical-tags/',
             'training_link' => 'https://wpshadow.com/training/seo-canonical-tags/',
             'auto_fixable' => false,

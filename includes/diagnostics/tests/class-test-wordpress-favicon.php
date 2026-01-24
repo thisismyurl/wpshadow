@@ -36,9 +36,7 @@ class Test_WordPress_Favicon extends Diagnostic_Base
 			return [
 				'id' => 'wordpress-no-favicon',
 				'title' => 'No Favicon Configured',
-				'description' => 'No favicon detected. Favicons appear in browser tabs and bookmarks, building brand recognition.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'No favicon detected. Favicons appear in browser tabs and bookmarks, building brand recognition.'
 				'kb_link' => 'https://wpshadow.com/kb/favicon/',
 				'training_link' => 'https://wpshadow.com/training/branding/',
 				'auto_fixable' => false,

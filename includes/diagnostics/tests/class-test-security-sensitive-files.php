@@ -61,9 +61,7 @@ class Test_Security_Sensitive_Files extends Diagnostic_Base
 					'%d sensitive file(s) publicly accessible: %s. These files can reveal security information to attackers.',
 					count($exposed_files),
 					implode(', ', array_keys($exposed_files))
-				),
-				'color' => '#ff5722',
-				'bg_color' => '#ffebee',
+				)
 				'kb_link' => 'https://wpshadow.com/kb/sensitive-files/',
 				'training_link' => 'https://wpshadow.com/training/file-security/',
 				'auto_fixable' => false,

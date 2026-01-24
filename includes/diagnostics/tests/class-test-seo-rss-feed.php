@@ -22,9 +22,7 @@ class Test_SEO_RSS_Feed extends Diagnostic_Base
 			return [
 				'id' => 'seo-rss-feed-error',
 				'title' => 'RSS Feed Not Accessible',
-				'description' => 'RSS feed at /feed/ cannot be accessed. RSS feeds help with content syndication and discovery.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'RSS feed at /feed/ cannot be accessed. RSS feeds help with content syndication and discovery.'
 				'kb_link' => 'https://wpshadow.com/kb/rss-feed/',
 				'training_link' => 'https://wpshadow.com/training/content-distribution/',
 				'auto_fixable' => false,
@@ -44,9 +42,7 @@ class Test_SEO_RSS_Feed extends Diagnostic_Base
 			return [
 				'id' => 'seo-rss-feed-invalid',
 				'title' => 'RSS Feed Invalid',
-				'description' => 'RSS feed exists but doesn\'t appear to be valid RSS/Atom XML. This may prevent content syndication.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'RSS feed exists but doesn\'t appear to be valid RSS/Atom XML. This may prevent content syndication.'
 				'kb_link' => 'https://wpshadow.com/kb/rss-feed-errors/',
 				'training_link' => 'https://wpshadow.com/training/content-distribution/',
 				'auto_fixable' => false,

@@ -43,9 +43,7 @@ class Test_SEO_Hreflang extends Diagnostic_Base
 			return [
 				'id' => 'seo-hreflang',
 				'title' => 'Missing Hreflang Tags',
-				'description' => 'This appears to be a multilingual site but lacks hreflang tags. Hreflang helps search engines serve the correct language version to users.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'This appears to be a multilingual site but lacks hreflang tags. Hreflang helps search engines serve the correct language version to users.'
 				'kb_link' => 'https://wpshadow.com/kb/hreflang/',
 				'training_link' => 'https://wpshadow.com/training/international-seo/',
 				'auto_fixable' => false,
@@ -71,9 +69,7 @@ class Test_SEO_Hreflang extends Diagnostic_Base
 			return [
 				'id' => 'seo-hreflang',
 				'title' => 'Incomplete Hreflang Implementation',
-				'description' => 'Hreflang tags found but missing self-referencing link. Each page should include hreflang pointing to itself.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'Hreflang tags found but missing self-referencing link. Each page should include hreflang pointing to itself.'
 				'kb_link' => 'https://wpshadow.com/kb/hreflang/',
 				'training_link' => 'https://wpshadow.com/training/international-seo/',
 				'auto_fixable' => false,

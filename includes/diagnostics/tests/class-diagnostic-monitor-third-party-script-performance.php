@@ -4,7 +4,6 @@ namespace WPShadow\Diagnostics;
 
 class Diagnostic_Monitor_Third_Party_Script_Performance extends Diagnostic_Base { public static function check(): ?array { return ['id' => 'monitor-3p-performance', 'title' => __('Third-Party Script Performance Impact', 'wpshadow'), 'description' => __('Tracks performance impact of external scripts. Slow 3P scripts = page slowdown, ranking penalty.', 'wpshadow'), 'severity' => 'high', 'category' => 'monitoring', 'kb_link' => 'https://wpshadow.com/kb/script-optimization/', 'training_link' => 'https://wpshadow.com/training/script-loading/', 'auto_fixable' => false, 'threat_level' => 7]; } 
 
-
 	/**
 	 * Live test for this diagnostic
 	 *

@@ -44,9 +44,7 @@ class Test_Accessibility_Focus_Visible extends Diagnostic_Base
 			return [
 				'id' => 'accessibility-no-focus-indicator',
 				'title' => 'Focus Indicators Removed',
-				'description' => 'CSS removes focus outlines (outline:none) without providing alternative indicators. Keyboard users cannot see where focus is.',
-				'color' => '#ff9800',
-				'bg_color' => '#fff3e0',
+				'description' => 'CSS removes focus outlines (outline:none) without providing alternative indicators. Keyboard users cannot see where focus is.'
 				'kb_link' => 'https://wpshadow.com/kb/focus-indicators/',
 				'training_link' => 'https://wpshadow.com/training/keyboard-accessibility/',
 				'auto_fixable' => false,

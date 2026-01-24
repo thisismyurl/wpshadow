@@ -59,9 +59,7 @@ class Test_Content_Social_Sharing extends Diagnostic_Base
 			return [
 				'id' => 'content-no-social-sharing',
 				'title' => 'No Social Sharing Buttons',
-				'description' => 'Article content without social sharing buttons. Easy sharing can increase organic reach by 20-40%.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'Article content without social sharing buttons. Easy sharing can increase organic reach by 20-40%.'
 				'kb_link' => 'https://wpshadow.com/kb/social-sharing/',
 				'training_link' => 'https://wpshadow.com/training/content-distribution/',
 				'auto_fixable' => false,

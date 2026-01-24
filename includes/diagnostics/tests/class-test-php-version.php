@@ -51,9 +51,7 @@ class Test_PHP_Version extends Diagnostic_Base
 			return array(
 				'id'            => static::$slug . '-critical',
 				'title'         => "Critical: PHP {$php_version} is unsupported",
-				'description'   => 'WordPress 6.3+ requires PHP 7.4+. Your site may experience errors or security issues.',
-				'color'         => '#f44336',
-				'bg_color'      => '#ffebee',
+				'description'   => 'WordPress 6.3+ requires PHP 7.4+. Your site may experience errors or security issues.'
 				'kb_link'       => 'https://wpshadow.com/kb/php-version-compatible/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=php-version',
 				'training_link' => 'https://wpshadow.com/training/php-version-compatible/',
 				'auto_fixable'  => false,
@@ -73,9 +71,7 @@ class Test_PHP_Version extends Diagnostic_Base
 			return array(
 				'id'            => static::$slug . '-eol-warning',
 				'title'         => "Warning: PHP {$php_version} is nearing end-of-life",
-				'description'   => 'PHP 7.4 reached EOL November 28, 2022. Plan upgrade to PHP 8.2+ to avoid security vulnerabilities.',
-				'color'         => '#ff9800',
-				'bg_color'      => '#fff3e0',
+				'description'   => 'PHP 7.4 reached EOL November 28, 2022. Plan upgrade to PHP 8.2+ to avoid security vulnerabilities.'
 				'kb_link'       => 'https://wpshadow.com/kb/php-version-compatible/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=php-version',
 				'training_link' => 'https://wpshadow.com/training/php-version-compatible/',
 				'auto_fixable'  => false,
@@ -94,9 +90,7 @@ class Test_PHP_Version extends Diagnostic_Base
 			return array(
 				'id'            => static::$slug . '-outdated',
 				'title'         => "PHP {$php_version} is outdated",
-				'description'   => 'PHP 8.2+ provides significant performance improvements and security patches. Consider upgrading.',
-				'color'         => '#ffc107',
-				'bg_color'      => '#fffde7',
+				'description'   => 'PHP 8.2+ provides significant performance improvements and security patches. Consider upgrading.'
 				'kb_link'       => 'https://wpshadow.com/kb/php-version-compatible/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=php-version',
 				'training_link' => 'https://wpshadow.com/training/php-version-compatible/',
 				'auto_fixable'  => false,

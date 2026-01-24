@@ -37,9 +37,7 @@ class Test_Security_XML_RPC extends Diagnostic_Base
 				return [
 					'id' => 'security-xmlrpc-enabled',
 					'title' => 'XML-RPC Endpoint Enabled',
-					'description' => 'XML-RPC endpoint (xmlrpc.php) is accessible. XML-RPC is commonly targeted for brute-force attacks and DDoS amplification.',
-					'color' => '#ff9800',
-					'bg_color' => '#fff3e0',
+					'description' => 'XML-RPC endpoint (xmlrpc.php) is accessible. XML-RPC is commonly targeted for brute-force attacks and DDoS amplification.'
 					'kb_link' => 'https://wpshadow.com/kb/xml-rpc-security/',
 					'training_link' => 'https://wpshadow.com/training/wordpress-hardening/',
 					'auto_fixable' => false,

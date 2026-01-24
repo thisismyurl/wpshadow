@@ -211,9 +211,7 @@ class Test_Performance_Image_Dimensions extends Diagnostic_Base
 				'%d of %d images are missing explicit width/height attributes. This causes Cumulative Layout Shift (CLS) as images load, negatively impacting user experience and Core Web Vitals.',
 				$analysis['without_dimensions'],
 				$analysis['total']
-			),
-			'color' => '#ff9800',
-			'bg_color' => '#fff3e0',
+			)
 			'kb_link' => 'https://wpshadow.com/kb/image-dimensions-cls/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
 			'training_link' => 'https://wpshadow.com/training/core-web-vitals/',
 			'auto_fixable' => false,
@@ -367,9 +365,7 @@ class Test_Performance_Image_Dimensions extends Diagnostic_Base
 		return [
 			'id' => 'performance-image-dimensions',
 			'title' => $title,
-			'description' => $description,
-			'color' => '#ff5722',
-			'bg_color' => '#ffebee',
+			'description' => $description
 			'kb_link' => 'https://wpshadow.com/kb/image-dimensions-cls/',
 			'training_link' => 'https://wpshadow.com/training/core-web-vitals/',
 			'auto_fixable' => false,

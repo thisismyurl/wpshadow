@@ -107,8 +107,6 @@ class Diagnostic_Timthumb_Scanner extends Diagnostic_Base {
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

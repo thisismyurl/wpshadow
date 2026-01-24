@@ -48,9 +48,7 @@ class Test_SEO_AMP extends Diagnostic_Base
 					return [
 						'id' => 'seo-amp-incomplete',
 						'title' => 'AMP Implementation Incomplete',
-						'description' => 'AMP page detected but missing required elements (amp-boilerplate or amp script). Invalid AMP pages won\'t get AMP benefits in search.',
-						'color' => '#ff9800',
-						'bg_color' => '#fff3e0',
+						'description' => 'AMP page detected but missing required elements (amp-boilerplate or amp script). Invalid AMP pages won\'t get AMP benefits in search.'
 						'kb_link' => 'https://wpshadow.com/kb/amp-implementation/',
 						'training_link' => 'https://wpshadow.com/training/amp/',
 						'auto_fixable' => false,

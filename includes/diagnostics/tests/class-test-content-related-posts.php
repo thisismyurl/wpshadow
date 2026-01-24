@@ -58,9 +58,7 @@ class Test_Content_Related_Posts extends Diagnostic_Base
 			return [
 				'id' => 'content-no-related-posts',
 				'title' => 'No Related Posts Section',
-				'description' => 'Article without related posts. Related content can reduce bounce rate by 10-20% and increase pageviews per session.',
-				'color' => '#2196f3',
-				'bg_color' => '#e3f2fd',
+				'description' => 'Article without related posts. Related content can reduce bounce rate by 10-20% and increase pageviews per session.'
 				'kb_link' => 'https://wpshadow.com/kb/related-posts/',
 				'training_link' => 'https://wpshadow.com/training/content-engagement/',
 				'auto_fixable' => false,

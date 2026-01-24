@@ -52,8 +52,6 @@ class Diagnostic_Multiple_Analytics_Providers extends Diagnostic_Base
 		return null;
 	}
 
-
-
 	/**
 	 * Live test for this diagnostic
 	 *

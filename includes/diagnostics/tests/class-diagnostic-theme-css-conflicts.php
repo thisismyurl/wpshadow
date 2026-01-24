@@ -31,7 +31,6 @@ class Diagnostic_Theme_Css_Conflicts extends Diagnostic_Base {
 
 	protected static $family_label = 'General';
 
-
 	/**
 	 * Get diagnostic ID
 	 */
@@ -109,8 +108,6 @@ class Diagnostic_Theme_Css_Conflicts extends Diagnostic_Base {
 			'theme-css-conflicts'
 		);
 	}
-
-
 
 	/**
 	 * Live test for this diagnostic

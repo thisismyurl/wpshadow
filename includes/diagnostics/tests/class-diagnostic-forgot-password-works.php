@@ -19,7 +19,6 @@ class Diagnostic_Forgot_Password_Works extends Diagnostic_Base {
 	protected static $title       = 'Password Reset Working?';
 	protected static $description = 'Verifies password reset emails are sent.';
 
-
 	public static function check(): ?array {
 		$smtp_active = is_plugin_active('wp-mail-smtp/wp_mail_smtp.php') || 
 		              is_plugin_active('easy-wp-smtp/easy-wp-smtp.php');
@@ -29,10 +28,7 @@ class Diagnostic_Forgot_Password_Works extends Diagnostic_Base {
 		return array(
 			'id'            => static::$slug,
 			'title'         => static::$title,
-			'description'   => 'Password reset relies on default PHP mail().',
-			'color'         => '#ff9800',
-			'bg_color'      => '#fff3e0',
-			'kb_link'       => 'https://wpshadow.com/kb/forgot-password-works/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=forgot-password-works',
+			'description'   => 'Password reset relies on default PHP mail().',			'kb_link'       => 'https://wpshadow.com/kb/forgot-password-works/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=forgot-password-works',
 			'training_link' => 'https://wpshadow.com/training/forgot-password-works/',
 			'auto_fixable'  => false,
 			'threat_level'  => 60,
@@ -40,9 +36,6 @@ class Diagnostic_Forgot_Password_Works extends Diagnostic_Base {
 			'priority'      => 2,
 		);
 	}
-
-
-
 
 	/**
 	 * Live test for this diagnostic
