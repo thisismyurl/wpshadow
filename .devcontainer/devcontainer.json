@@ -2,7 +2,7 @@
   "name": "WPShadow Development Environment",
   "dockerComposeFile": "../docker-compose.yml",
   "service": "wordpress-test",
-  "workspaceFolder": "/var/www/html/wp-content/plugins/wpshadow",
+  "workspaceFolder": "/workspaces/wpshadow",
   // Features to install
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
