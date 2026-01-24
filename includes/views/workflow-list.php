@@ -31,10 +31,7 @@ $suggestions = array_slice( $suggestions, 0, 6 );
 			<span class="dashicons dashicons-update" style="color: var(--wps-primary);"></span>
 			<?php esc_html_e( 'Workflow Manager', 'wpshadow' ); ?>
 		</h1>
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ); ?>" class="page-title-action">
-			<?php esc_html_e( 'Build Your Own', 'wpshadow' ); ?>
-		</a>
-	</h1>
+	</div>
 
 	<p class="description">
 		<?php

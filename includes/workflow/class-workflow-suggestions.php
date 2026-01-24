@@ -192,6 +192,68 @@ class Workflow_Suggestions {
 			}
 		);
 
+		// Ensure we always have at least 3 suggestions (Issue #570)
+		if ( count( $suggestions ) < 3 ) {
+			// Add fallback suggestions if we don't have enough
+			$fallback_suggestions = array(
+				array(
+					'id'          => 'weekly-site-health-fallback',
+					'title'       => __( 'Weekly Site Health Report', 'wpshadow' ),
+					'description' => __( 'Get a comprehensive health report every Monday morning. Track trends, catch issues early, and stay informed about your site.', 'wpshadow' ),
+					'icon'        => 'dashicons-heart',
+					'color'       => '#00a32a',
+					'priority'    => 8,
+					'reason'      => __( 'Recommended for all sites', 'wpshadow' ),
+					'trigger'     => 'time_weekly',
+					'actions'     => array( 'run_full_scan', 'generate_report', 'send_admin_email' ),
+				),
+				array(
+					'id'          => 'backup-schedule-fallback',
+					'title'       => __( 'Automated Daily Backups', 'wpshadow' ),
+					'description' => __( 'Set up daily automatic backups of your entire site. Ensure you can recover quickly from any issue or emergency.', 'wpshadow' ),
+					'icon'        => 'dashicons-cloud-saved',
+					'color'       => '#2271b1',
+					'priority'    => 9,
+					'reason'      => __( 'Backup best practice', 'wpshadow' ),
+					'trigger'     => 'time_daily_morning',
+					'actions'     => array( 'run_full_backup', 'verify_backup', 'log_completion' ),
+				),
+				array(
+					'id'          => 'security-scan-fallback',
+					'title'       => __( 'Weekly Security Scan', 'wpshadow' ),
+					'description' => __( 'Run comprehensive security scans every Thursday to check for malware, vulnerabilities, and suspicious activities.', 'wpshadow' ),
+					'icon'        => 'dashicons-shield-alt',
+					'color'       => '#d63638',
+					'priority'    => 9,
+					'reason'      => __( 'Security best practice', 'wpshadow' ),
+					'trigger'     => 'time_weekly_thursday',
+					'actions'     => array( 'run_security_scan', 'generate_security_report', 'send_admin_notification' ),
+				),
+			);
+
+			// Add fallbacks until we have 3
+			foreach ( $fallback_suggestions as $fallback ) {
+				if ( count( $suggestions ) >= 3 ) {
+					break;
+				}
+				// Only add if not already present
+				$exists = array_filter( $suggestions, function ( $s ) use ( $fallback ) {
+					return $s['id'] === $fallback['id'];
+				});
+				if ( empty( $exists ) ) {
+					$suggestions[] = $fallback;
+				}
+			}
+
+			// Re-sort to maintain priority order
+			usort(
+				$suggestions,
+				function ( $a, $b ) {
+					return $b['priority'] - $a['priority'];
+				}
+			);
+		}
+
 		// Apply filter for extensibility (hook #1)
 		return apply_filters( 'wpshadow_workflow_suggestions', $suggestions );
 	}
