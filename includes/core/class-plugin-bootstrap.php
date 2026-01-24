@@ -42,7 +42,10 @@ class Plugin_Bootstrap
 		// 3. Initialize menu system
 		Menu_Manager::init();
 
-		// 4. Load engage system (gamification)
+		// 4. Load dashboard page
+		self::load_dashboard_page();
+
+		// 5. Load engage system (gamification)
 		self::load_engage_system();
 
 		// 5. Load performance optimizer
@@ -113,6 +116,19 @@ class Plugin_Bootstrap
 
 		if (file_exists($core_path . 'class-abstract-registry.php')) {
 			require_once $core_path . 'class-abstract-registry.php';
+		}
+	}
+
+	/**
+	 * Load dashboard page
+	 *
+	 * @return void
+	 */
+	private static function load_dashboard_page()
+	{
+		$dashboard_file = WPSHADOW_PATH . 'includes/views/dashboard-page.php';
+		if (file_exists($dashboard_file)) {
+			require_once $dashboard_file;
 		}
 	}
 
