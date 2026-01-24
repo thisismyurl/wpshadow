@@ -254,7 +254,7 @@ function wpshadow_enqueue_tooltip_assets() {
 	global $pagenow;
 	
 	// Skip tooltips on specific pages
-	if ( in_array( $pagenow, array( 'plugins.php', 'edit-comments.php', 'edit.php' ), true ) ) {
+	if ( in_array( $pagenow, array( 'edit-comments.php', 'edit.php' ), true ) ) {
 		return;
 	}
 	
