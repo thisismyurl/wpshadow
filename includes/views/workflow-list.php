@@ -60,7 +60,15 @@ $suggestions = array_slice( $suggestions, 0, 6 );
 				<span class="dashicons dashicons-networking"></span>
 			</div>
 			<h2><?php esc_html_e( 'No Workflows Yet', 'wpshadow' ); ?></h2>
-			<p><?php esc_html_e( 'Start with a smart suggestion tailored to your site, or build your own workflow.', 'wpshadow' ); ?></p>
+			<p>
+				<?php
+				printf(
+					/* translators: %s: link to build workflow */
+					esc_html__( 'Start with a smart suggestion tailored to your site, or %s.', 'wpshadow' ),
+					'<a href="' . esc_url( admin_url( 'admin.php?page=wpshadow-workflows&action=create' ) ) . '">' . esc_html__( 'build your own workflow', 'wpshadow' ) . '</a>'
+				);
+				?>
+			</p>
 
 			<?php if ( ! empty( $suggestions ) ) : ?>
 				<div class="suggested-workflows">
