@@ -1,160 +1,170 @@
 # WPShadow Documentation Index
 
-**Version:** 1.2601.2112  
-**Last Updated:** January 22, 2026  
-**Status:** Production Ready (Phase 3.5)
+**Version:** 1.2601.2148  
+**Last Updated:** January 24, 2026  
+**Status:** Production Ready, Prerelease Phase  
+**Recent Update:** Cleaned up task-specific docs, consolidated to foundational references
 
 ---
 
 ## 🎯 Quick Navigation
 
-### **For New Contributors**
-1. [PRODUCT_PHILOSOPHY.md](PRODUCT_PHILOSOPHY.md) - 11 Commandments & Core Values
-2. [ARCHITECTURE.md](ARCHITECTURE.md) - System Design & Code Patterns
-3. [CODING_STANDARDS.md](CODING_STANDARDS.md) - Code Style & Security
-4. [FILE_STRUCTURE_GUIDE.md](FILE_STRUCTURE_GUIDE.md) - Codebase Organization
-5. [COMPLETE_SETUP_GUIDE.md](COMPLETE_SETUP_GUIDE.md) - Development Environment
+### **For New Contributors** (Start Here)
+1. [PRODUCT_PHILOSOPHY.md](PRODUCT_PHILOSOPHY.md) - The 11 Commandments & Core Values
+2. [ACCESSIBILITY_AND_INCLUSIVITY_CANON.md](ACCESSIBILITY_AND_INCLUSIVITY_CANON.md) - Accessibility & Inclusivity Principles
+3. [ARCHITECTURE.md](ARCHITECTURE.md) - System Design & Code Patterns
+4. [CODING_STANDARDS.md](CODING_STANDARDS.md) - Code Style & Security
+5. [FILE_STRUCTURE_GUIDE.md](FILE_STRUCTURE_GUIDE.md) - Codebase Organization
 
 ### **For Understanding Current State**
-1. [ROADMAP.md](ROADMAP.md) - Phases 1-8 Delivery Timeline
-2. [TECHNICAL_STATUS.md](TECHNICAL_STATUS.md) - 57 Diagnostics, 44 Treatments
-3. [PRODUCT_ECOSYSTEM.md](PRODUCT_ECOSYSTEM.md) - Product Family (Core, Academy, Guardian, Vault, Pro)
-4. [FEATURE_MATRIX_DIAGNOSTICS.md](FEATURE_MATRIX_DIAGNOSTICS.md) - Complete Diagnostic Catalog
-5. [FEATURE_MATRIX_TREATMENTS.md](FEATURE_MATRIX_TREATMENTS.md) - Complete Treatment Catalog
+1. [PRODUCT_ECOSYSTEM.md](PRODUCT_ECOSYSTEM.md) - Product Family (Core, Academy, Guardian, Vault, Pro)
+2. [ROADMAP.md](ROADMAP.md) - Vision & Delivery Timeline
+3. [FEATURE_MATRIX_DIAGNOSTICS.md](FEATURE_MATRIX_DIAGNOSTICS.md) - Complete Diagnostic Catalog
+4. [FEATURE_MATRIX_TREATMENTS.md](FEATURE_MATRIX_TREATMENTS.md) - Complete Treatment Catalog
 
 ### **For Feature Development**
 1. [CODE_REVIEW_SENIOR_DEVELOPER.md](CODE_REVIEW_SENIOR_DEVELOPER.md) - DRY Patterns & Refactoring
 2. [GITHUB_ISSUES_ALIGNMENT.md](GITHUB_ISSUES_ALIGNMENT.md) - Issues Evaluated Through Philosophy
 3. [WORKFLOW_BUILDER.md](WORKFLOW_BUILDER.md) - Automation Engine Reference
 4. [WORKFLOW_EXECUTION_ENGINE.md](WORKFLOW_EXECUTION_ENGINE.md) - Workflow Executor Details
-5. [WORKFLOW_TRIGGERS_REFERENCE.md](WORKFLOW_TRIGGERS_REFERENCE.md) - Trigger Types & Configuration
 
 ### **For KB & Education**
-1. [KB_CONTENT_STRATEGY_SUMMARY.md](KB_CONTENT_STRATEGY_SUMMARY.md) - KB Planning & Structure
-2. [KB_ARTICLE_WRITING_GUIDE.md](KB_ARTICLE_WRITING_GUIDE.md) - Article Creation Guidelines
-3. [KB_VISUAL_OVERVIEW.md](KB_VISUAL_OVERVIEW.md) - KB Architecture & Navigation
+1. [KB_CONTENT_STRATEGY_SUMMARY.md](KB_CONTENT_STRATEGY_SUMMARY.md) - KB Planning & Strategy
+2. [KB_ARTICLE_WRITING_GUIDE.md](KB_ARTICLE_WRITING_GUIDE.md) - Article Creation Standards
 
 ### **For Operations & Deployment**
-1. [COMPLETE_SETUP_GUIDE.md](COMPLETE_SETUP_GUIDE.md) - Environment Setup
-2. [DOCKER_COMPOSE_README.md](DOCKER_COMPOSE_README.md) - Docker Configuration
-3. [TESTING_SETUP.md](TESTING_SETUP.md) - Test Environment
-
-### **For Dashboard & UI**
-1. [KANBAN_UI_GUIDE.md](KANBAN_UI_GUIDE.md) - Kanban Board Interface
-2. [KPI_METRICS_QUICK_REFERENCE.md](KPI_METRICS_QUICK_REFERENCE.md) - KPI Tracking
-3. [SITE_HEALTH_QUICK_REFERENCE.md](SITE_HEALTH_QUICK_REFERENCE.md) - Health Checks
+1. [COMPLETE_SETUP_GUIDE.md](COMPLETE_SETUP_GUIDE.md) - Development Environment
+2. [DOCKER_COMPOSE_README.md](DOCKER_COMPOSE_README.md) - Docker Setup
+3. [DEPLOYMENT.md](DEPLOYMENT.md) - Release & Deployment Process
 
 ---
 
 ## 📚 Complete Doc List by Category
 
-### Philosophy & Strategy (START HERE)
-- [PRODUCT_PHILOSOPHY.md](PRODUCT_PHILOSOPHY.md) - The 11 Commandments
+### 🎯 Philosophy & Core Principles (Required Reading)
+- [PRODUCT_PHILOSOPHY.md](PRODUCT_PHILOSOPHY.md) - The 11 Commandments (foundational)
+- [ACCESSIBILITY_AND_INCLUSIVITY_CANON.md](ACCESSIBILITY_AND_INCLUSIVITY_CANON.md) - Canon Principles (foundational)
 - [PRODUCT_ECOSYSTEM.md](PRODUCT_ECOSYSTEM.md) - Product Family Architecture
-- [ROADMAP.md](ROADMAP.md) - Phases 1-8 Timeline & Delivery
+- [STRATEGIC_PLANNING_Q1_2026.md](STRATEGIC_PLANNING_Q1_2026.md) - Current Strategic Direction
+- [ROADMAP.md](ROADMAP.md) - Vision & Phases Timeline
 
-### Technical Reference
-- [ARCHITECTURE.md](ARCHITECTURE.md) - System Design, Base Classes
-- [TECHNICAL_STATUS.md](TECHNICAL_STATUS.md) - Current Production State
-- [CODING_STANDARDS.md](CODING_STANDARDS.md) - Code Style & Security Patterns
+### 🏗️ Architecture & Technical Reference
+- [ARCHITECTURE.md](ARCHITECTURE.md) - System Design, Base Classes, Patterns
+- [ARCHITECTURE_OVERVIEW.md](ARCHITECTURE_OVERVIEW.md) - High-level Architecture
+- [SYSTEM_OVERVIEW.md](SYSTEM_OVERVIEW.md) - System Components & Relationships
 - [FILE_STRUCTURE_GUIDE.md](FILE_STRUCTURE_GUIDE.md) - Directory Organization
-- [FILE_REFERENCE.md](FILE_REFERENCE.md) - Key File Locations
+- [FILE_REFERENCE.md](FILE_REFERENCE.md) - Key File Locations & Purpose
+- [CODING_STANDARDS.md](CODING_STANDARDS.md) - Code Style, Security, Standards
 
-### Feature Documentation
-- [FEATURE_MATRIX_DIAGNOSTICS.md](FEATURE_MATRIX_DIAGNOSTICS.md) - 57 Diagnostics (10 Categories)
-- [FEATURE_MATRIX_TREATMENTS.md](FEATURE_MATRIX_TREATMENTS.md) - 44 Treatments
-- [COMPETITIVE_DIAGNOSTIC_BREAKDOWN.md](COMPETITIVE_DIAGNOSTIC_BREAKDOWN.md) - Diagnostic Analysis
+### 📋 Feature Documentation
+- [FEATURE_MATRIX_DIAGNOSTICS.md](FEATURE_MATRIX_DIAGNOSTICS.md) - All Diagnostics (57 live + stubs)
+- [FEATURE_MATRIX_TREATMENTS.md](FEATURE_MATRIX_TREATMENTS.md) - All Auto-Fix Treatments
+- [COMPETITIVE_DIAGNOSTIC_BREAKDOWN.md](COMPETITIVE_DIAGNOSTIC_BREAKDOWN.md) - Diagnostic Competitive Analysis
 
-### Workflow & Automation
-- [WORKFLOW_BUILDER.md](WORKFLOW_BUILDER.md) - Workflow Creation
-- [WORKFLOW_EXECUTION_ENGINE.md](WORKFLOW_EXECUTION_ENGINE.md) - Execution System
-- [WORKFLOW_TRIGGERS_REFERENCE.md](WORKFLOW_TRIGGERS_REFERENCE.md) - Trigger Types
+### ⚙️ Workflow & Automation
+- [WORKFLOW_BUILDER.md](WORKFLOW_BUILDER.md) - Workflow Creation & Configuration
+- [WORKFLOW_EXECUTION_ENGINE.md](WORKFLOW_EXECUTION_ENGINE.md) - Workflow Execution System
+- [WORKFLOW_TRIGGERS_REFERENCE.md](WORKFLOW_TRIGGERS_REFERENCE.md) - Trigger Types & Configuration
 
-### Dashboard & KPIs
-- [KANBAN_UI_GUIDE.md](KANBAN_UI_GUIDE.md) - Kanban Board
-- [DASHBOARD_LAYOUT_GUIDE.md](DASHBOARD_LAYOUT_GUIDE.md) - Dashboard Structure
-- [KPI_METRICS_QUICK_REFERENCE.md](KPI_METRICS_QUICK_REFERENCE.md) - KPI Tracking
+### 📊 Dashboard & KPIs
+- [KANBAN_UI_GUIDE.md](KANBAN_UI_GUIDE.md) - Kanban Board Interface & Usage
+- [DASHBOARD_LAYOUT_GUIDE.md](DASHBOARD_LAYOUT_GUIDE.md) - Dashboard Structure & Components
+- [KPI_METRICS_QUICK_REFERENCE.md](KPI_METRICS_QUICK_REFERENCE.md) - KPI Tracking & Metrics
 - [KPI_ARCHITECTURE_VISUAL.md](KPI_ARCHITECTURE_VISUAL.md) - KPI System Design
+- [SITE_HEALTH_QUICK_REFERENCE.md](SITE_HEALTH_QUICK_REFERENCE.md) - Health Status Checks
 
-### Knowledge Base & Education
-- [KB_CONTENT_STRATEGY_SUMMARY.md](KB_CONTENT_STRATEGY_SUMMARY.md) - KB Planning
-- [KB_ARTICLE_WRITING_GUIDE.md](KB_ARTICLE_WRITING_GUIDE.md) - Writing Standards
-- [KB_VISUAL_OVERVIEW.md](KB_VISUAL_OVERVIEW.md) - KB Architecture
+### 📚 Knowledge Base & Education
+- [KB_CONTENT_STRATEGY_SUMMARY.md](KB_CONTENT_STRATEGY_SUMMARY.md) - KB Strategy & Planning
+- [KB_ARTICLE_WRITING_GUIDE.md](KB_ARTICLE_WRITING_GUIDE.md) - Article Standards & Guidelines
+- [KB_VISUAL_OVERVIEW.md](KB_VISUAL_OVERVIEW.md) - KB Architecture & Navigation
+- [DIAGNOSTICS_GUIDE.md](DIAGNOSTICS_GUIDE.md) - Diagnostic Features & Usage
+- [DIAGNOSTIC_SCHEDULER_GUIDE.md](DIAGNOSTIC_SCHEDULER_GUIDE.md) - Scheduler Configuration
 
-### Development Setup
-- [COMPLETE_SETUP_GUIDE.md](COMPLETE_SETUP_GUIDE.md) - Initial Setup
+### 🚀 Development & Operations
+- [COMPLETE_SETUP_GUIDE.md](COMPLETE_SETUP_GUIDE.md) - Development Environment Setup
 - [DOCKER_COMPOSE_README.md](DOCKER_COMPOSE_README.md) - Docker Configuration
-- [TESTING_SETUP.md](TESTING_SETUP.md) - Test Environment
+- [TESTING_SETUP.md](TESTING_SETUP.md) - Test Environment Setup
+- [DEPLOYMENT.md](DEPLOYMENT.md) - Release & Deployment Process
+- [RELEASE_PROCESS.md](RELEASE_PROCESS.md) - Release Checklist & Workflow
+- [RELEASE_NOTES.md](RELEASE_NOTES.md) - Current Release Notes
 
-### Code Quality & Review
-- [CODE_REVIEW_SENIOR_DEVELOPER.md](CODE_REVIEW_SENIOR_DEVELOPER.md) - DRY Analysis & Refactoring
+### ✅ Code Quality & Standards
+- [CODE_REVIEW_SENIOR_DEVELOPER.md](CODE_REVIEW_SENIOR_DEVELOPER.md) - DRY Patterns & Code Review
+- [CODE_REVIEW_DRY_AND_STANDARDS.md](CODE_REVIEW_DRY_AND_STANDARDS.md) - Code Standards Review
+- [GITHUB_WORKFLOW.md](GITHUB_WORKFLOW.md) - Contribution Workflow
 - [GITHUB_ISSUES_ALIGNMENT.md](GITHUB_ISSUES_ALIGNMENT.md) - Philosophy-Aligned Issues
 
-### Reference & Utilities
+### 🎓 Developer Guides
+- [SETTINGS_API_GUIDE.md](SETTINGS_API_GUIDE.md) - WordPress Settings API Usage
+- [EXTERNAL_REVIEWER_API.md](EXTERNAL_REVIEWER_API.md) - External Reviewer API
+- [EXTERNAL_CRON_INTEGRATION_GUIDE.md](EXTERNAL_CRON_INTEGRATION_GUIDE.md) - Cron Integration
+- [ASSETS_DEVELOPER_GUIDE.md](ASSETS_DEVELOPER_GUIDE.md) - Assets & CSS/JS Management
+
+### 🔍 Reference & Quick Lookup
+- [README.md](README.md) - Plugin Overview & Getting Started
 - [GLOSSARY_AND_LINKS_COMPLETE.md](GLOSSARY_AND_LINKS_COMPLETE.md) - Terminology & Links
-- [SYSTEM_OVERVIEW.md](SYSTEM_OVERVIEW.md) - High-Level System Map
-- [VISUAL_SUMMARY_ONE_PAGE.md](VISUAL_SUMMARY_ONE_PAGE.md) - One-Page Reference
+- [VISUAL_SUMMARY_ONE_PAGE.md](VISUAL_SUMMARY_ONE_PAGE.md) - One-Page Visual Reference
+- [COMMUNITY_MANAGER_ONBOARDING.md](COMMUNITY_MANAGER_ONBOARDING.md) - Community Manager Guide
+- [QUICK_START_GUIDE.md](QUICK_START_GUIDE.md) - Quick Start for Users
+- [TOOLTIP_QUICK_REFERENCE.md](TOOLTIP_QUICK_REFERENCE.md) - Tooltip Standards & Examples
+- [KB_SEO_GAMIFICATION_ARCHITECTURE.md](KB_SEO_GAMIFICATION_ARCHITECTURE.md) - KB SEO & Engagement
+
+### 📁 Supporting Documentation
+- [WPSHADOW_AGENT_PREFERENCES.md](WPSHADOW_AGENT_PREFERENCES.md) - Agent Behavior Configuration
+- [WPSHADOW_AGENT_SETUP_COMPLETE.md](WPSHADOW_AGENT_SETUP_COMPLETE.md) - Agent Setup Summary
+- [DELIVERABLES_LIST.md](DELIVERABLES_LIST.md) - Feature & Plugin Deliverables
 
 ---
 
-## 📦 Archived Documentation
+## 🗂️ Archive & Historical Documentation
 
-Build reports, completion summaries, and session notes are archived in `/docs/archive/`:
-- DASHBOARD_COMPLETE_VERIFICATION.md
-- PHASE_4_COMPLETION_SUMMARY.md
-- KILLER_TESTS_IMPLEMENTATION_COMPLETE.md
-- And 55+ others...
+Task-specific summaries, phase completion reports, and one-time implementation guides are archived in `/docs/archive/`:
+- Phase completion reports and implementation summaries
+- Code audit and analysis documents
+- Feature task completion reports
+- Build and deployment verification reports
 
-See [DOCUMENTATION_CLEANUP_ANALYSIS.md](DOCUMENTATION_CLEANUP_ANALYSIS.md) for full archive strategy.
-
----
-
-## 🔄 Documentation Maintenance
-
-### When to Update Docs
-- ✅ After major feature implementation
-- ✅ When philosophy or roadmap changes
-- ✅ When architecture patterns evolve
-- ✅ After code review feedback
-- ✅ When onboarding new team members
-
-### Quality Standards
-- Keep docs synchronized with code
-- Use real examples from codebase
-- Link to related documentation
-- Maintain consistent terminology
-- Update version/date headers
+These preserve git history but keep the active docs folder clean and focused on current development.
 
 ---
 
-## 🎯 Current Focus Areas
+## 🔄 Documentation Standards
 
-**Phase 3.5 (Current):** Code Quality & WordCamp Readiness
-- Workflow AJAX migration to base classes
-- Color_Utils consolidation
-- Theme_Data_Provider creation
-- Option query batching
+### Keep docs up-to-date when:
+- ✅ Implementing major features
+- ✅ Changing architecture or patterns
+- ✅ Updating code quality standards
+- ✅ Modifying workflow or processes
+- ✅ Creating new development patterns
 
-**Phase 4:** Dashboard & UX Excellence  
-- Enhanced gauge system
-- Real-time updates
-- Improved error displays
-
-**Phase 5:** KB & Training Integration
-- Every diagnostic links to KB article
-- Every treatment links to training video
-
----
-
-## 💡 Philosophy Reminders
-
-Every doc should reflect:
-1. **Helpful Neighbor** - Educational, empowering tone
-2. **Free First** - Local features free forever
-3. **Show Value** - Track KPIs and demonstrate impact
-4. **Inspire Confidence** - Clarity and intuition
-5. **Privacy First** - Consent-based, transparent
+### Doc quality checklist:
+- ✅ Reflects current code state
+- ✅ Includes real examples from codebase
+- ✅ Links to related documentation
+- ✅ Uses consistent terminology
+- ✅ Updated version/date headers
+- ✅ Maintains WPShadow philosophy tone
 
 ---
 
-**Questions?** See [DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md) or [README.md](README.md)
+## 🎯 What This Documentation Covers
+
+**For Users:** Plugin features, setup, diagnostics, knowledge base articles  
+**For Developers:** Code patterns, standards, architecture, deployment  
+**For Contributors:** Philosophy, code review guidelines, feature matrix  
+**For Product:** Roadmap, ecosystem, strategy, KPIs  
+
+All documentation reflects:
+- **Helpful Neighbor** philosophy (educational, empowering)
+- **Free First** approach (transparency about free vs. paid)
+- **Value Focus** (showing impact and results)
+- **Accessibility & Inclusivity** (canon principles)
+- **Code Quality** (DRY patterns, security, standards)
+
+---
+
+**Last cleaned:** January 24, 2026  
+**Removed:** 74 task-specific and obsolete files  
+**Kept:** 55 foundational and active documentation files
+
+---
