@@ -22,6 +22,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 function wpshadow_get_tools_catalog() {
 	return array(
 		array(
+			'title'   => __( 'Quick Scan', 'wpshadow' ),
+			'desc'    => __( 'Run a fast, lightweight scan of your site for common issues and security concerns.', 'wpshadow' ),
+			'tool'    => 'quick-scan',
+			'enabled' => true,
+		),
+		array(
+			'title'   => __( 'Deep Scan', 'wpshadow' ),
+			'desc'    => __( 'Run a comprehensive scan that checks database health, performance, and advanced compatibility issues.', 'wpshadow' ),
+			'tool'    => 'deep-scan',
+			'enabled' => true,
+		),
+		array(
 			'title'   => __( 'Accessibility Audit', 'wpshadow' ),
 			'desc'    => __( 'Scan your site for accessibility issues and WCAG compliance.', 'wpshadow' ),
 			'tool'    => 'a11y-audit',
