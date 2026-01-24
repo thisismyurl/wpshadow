@@ -119,5 +119,3 @@ class Diagnostic_Ai_Recommendation_Engine extends Diagnostic_Base {
 	}
 	}
 
-}
-

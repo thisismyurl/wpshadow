@@ -154,5 +154,3 @@ class Diagnostic_AiSemanticMetadata extends Diagnostic_Base {
 	}
 	}
 
-}
-

@@ -5,7 +5,6 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 
- */
 
 
 class Diagnostic_Ccpa_Opt_Out_Available extends Diagnostic_Base {

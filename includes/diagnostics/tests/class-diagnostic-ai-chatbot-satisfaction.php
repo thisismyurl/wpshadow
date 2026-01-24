@@ -151,5 +151,3 @@ class Diagnostic_AiChatbotSatisfaction extends Diagnostic_Base {
 	}
 	}
 
-}
-

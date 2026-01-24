@@ -5,7 +5,6 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 
- */
 
 class Diagnostic_Gdpr_Data_Retention_Policy extends Diagnostic_Base {
 	protected static $slug = 'gdpr-data-retention-policy';

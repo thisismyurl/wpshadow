@@ -38,7 +38,7 @@ class Test_Performance_Font_Display_Face extends Diagnostic_Base
 			return [
 				'id' => 'performance-no-font-display',
 				'title' => 'Missing Font Display Strategy',
-				'description' => sprintf('%d @font-face declarations without font-display property. Can cause FOIT (Flash of Invisible Text) for 3+ seconds.', count($font_faces[0]))
+				'description' => sprintf('%d @font-face declarations without font-display property. Can cause FOIT (Flash of Invisible Text) for 3+ seconds.', count($font_faces[0])),
 				'kb_link' => 'https://wpshadow.com/kb/font-display/',
 				'training_link' => 'https://wpshadow.com/training/font-optimization/',
 				'auto_fixable' => false,
@@ -66,5 +66,4 @@ class Test_Performance_Font_Display_Face extends Diagnostic_Base
 	public static function get_description(): string
 	{
 		return __('Checks @font-face rules for the font-display property.', 'wpshadow');
-	}
-}
+	}}

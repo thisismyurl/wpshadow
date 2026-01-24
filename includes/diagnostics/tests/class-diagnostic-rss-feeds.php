@@ -119,4 +119,3 @@ class Diagnostic_RSS_Feeds extends Diagnostic_Base {
 
 }
 
-}

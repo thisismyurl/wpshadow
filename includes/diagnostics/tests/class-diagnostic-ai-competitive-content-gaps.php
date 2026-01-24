@@ -186,5 +186,3 @@ class Diagnostic_AiCompetitiveContentGaps extends Diagnostic_Base {
 	}
 	}
 
-}
-

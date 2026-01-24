@@ -80,4 +80,3 @@ class Test_UX_Success_Confirmation extends Diagnostic_Base
 	{
 		return __('Checks for success messages after form submissions.', 'wpshadow');
 	}
-}

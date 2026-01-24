@@ -124,5 +124,3 @@ class Diagnostic_Ai_Structured_Data extends Diagnostic_Base {
 	}
 	}
 
-}
-

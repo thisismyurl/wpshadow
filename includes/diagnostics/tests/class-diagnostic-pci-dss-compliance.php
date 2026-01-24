@@ -5,7 +5,6 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 
- */
 
 class Diagnostic_Pci_Dss_Compliance extends Diagnostic_Base {
 	protected static $slug = 'pci-dss-compliance';

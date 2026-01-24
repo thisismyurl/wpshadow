@@ -5,7 +5,6 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 
- */
 
 class Diagnostic_Ai_User_Privacy extends Diagnostic_Base {
 	protected static $slug = 'ai-user-privacy';
@@ -130,6 +129,4 @@ class Diagnostic_Ai_User_Privacy extends Diagnostic_Base {
 		return ['passed' => is_array($r1) && (is_null($r2) || is_array($r2)), 'message' => 'AI user privacy check working'];
 	}
 	}
-
-}
 

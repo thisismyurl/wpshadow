@@ -119,5 +119,3 @@ class Diagnostic_Ai_Nlp_Readiness extends Diagnostic_Base {
 	}
 	}
 
-}
-

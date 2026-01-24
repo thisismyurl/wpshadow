@@ -5,7 +5,6 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 
- */
 
 class Diagnostic_Ccpa_Consumer_Rights_Disclosed extends Diagnostic_Base {
 	protected static $slug = 'ccpa-consumer-rights-disclosed';

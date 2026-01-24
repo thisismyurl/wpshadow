@@ -5,7 +5,6 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 
- */
 
 
 class Diagnostic_Wcag_Aria_Attributes extends Diagnostic_Base {
@@ -141,6 +140,4 @@ class Diagnostic_Wcag_Aria_Attributes extends Diagnostic_Base {
 		return ['passed' => is_null($r1) && is_array($r2), 'message' => 'ARIA attributes check working'];
 	}
 	}
-
-}
 

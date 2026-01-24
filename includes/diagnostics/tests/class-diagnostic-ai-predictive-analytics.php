@@ -119,5 +119,3 @@ class Diagnostic_Ai_Predictive_Analytics extends Diagnostic_Base {
 	}
 	}
 
-}
-

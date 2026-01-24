@@ -155,5 +155,3 @@ class Diagnostic_Ai_Sentiment_Analysis extends Diagnostic_Base {
 	}
 	}
 
-}
-

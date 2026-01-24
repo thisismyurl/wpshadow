@@ -5,7 +5,6 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 
- */
 
 class Diagnostic_Pub_Image_Count_Too_Many extends Diagnostic_Base {
 	protected static $slug = 'pub-image-count-too-many';

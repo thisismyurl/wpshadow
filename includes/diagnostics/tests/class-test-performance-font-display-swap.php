@@ -89,4 +89,3 @@ class Test_Performance_Font_Display_Swap extends Diagnostic_Base
 	{
 		return __('Checks for font-display: swap to prevent invisible text.', 'wpshadow');
 	}
-}

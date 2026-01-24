@@ -155,5 +155,3 @@ class Diagnostic_AiContentOriginality extends Diagnostic_Base {
 	}
 	}
 
-}
-

@@ -96,5 +96,3 @@ class Test_UX_Heading_Hierarchy extends Diagnostic_Base
 	public static function get_description(): string
 	{
 		return __('Checks that heading sizes match semantic hierarchy.', 'wpshadow');
-	}
-}

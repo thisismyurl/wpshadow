@@ -149,5 +149,3 @@ class Diagnostic_AiProductRecommendationCtr extends Diagnostic_Base {
 	}
 	}
 
-}
-

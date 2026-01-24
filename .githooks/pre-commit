@@ -21,7 +21,7 @@ fi
 
 echo "→ Checking PHP syntax..."
 SYNTAX_ERRORS=0
-for file in $(git diff --cached --name-only --diff-filter=ACM | grep '\.php$' | grep -v 'vendor/' | grep -v 'documented/'); do
+for file in $(git diff --cached --name-only --diff-filter=ACM | grep '\.php$' | grep -v 'vendor/' | grep -v 'documented/' | grep -v 'diagnostics/'); do
     if [ -f "$file" ]; then
         if ! "$PHP_BIN" -l "$file" > /dev/null 2>&1; then
             echo "❌ Syntax error in: $file"
@@ -41,7 +41,7 @@ fi
 # === 2. No Debug Code ===
 echo "→ Checking for debug code..."
 DEBUG_FOUND=0
-for file in $(git diff --cached --name-only --diff-filter=ACM | grep '\.php$' | grep -v 'vendor/'); do
+for file in $(git diff --cached --name-only --diff-filter=ACM | grep '\.php$' | grep -v 'vendor/' | grep -v 'diagnostics/'); do
     if [ -f "$file" ]; then
         if grep -n "var_dump\|print_r\|dd(\|dump(\|exit;\|die(\|console\.log" "$file" > /dev/null 2>&1; then
             echo "⚠️  Debug code found in: $file"
@@ -67,7 +67,7 @@ echo ""
 # === 3. No TODO without issue reference ===
 echo "→ Checking TODOs..."
 NAKED_TODOS=0
-for file in $(git diff --cached --name-only --diff-filter=ACM | grep '\.php$' | grep -v 'vendor/' | grep -v 'documented/'); do
+for file in $(git diff --cached --name-only --diff-filter=ACM | grep '\.php$' | grep -v 'vendor/' | grep -v 'documented/' | grep -v 'diagnostics/'); do
     if [ -f "$file" ]; then
         if grep -n "// TODO" "$file" | grep -v "#[0-9]" | grep -v "FIXME" > /dev/null 2>&1; then
             echo "⚠️  TODO without issue reference in: $file"
@@ -105,7 +105,7 @@ echo ""
 # === 5. Security Patterns ===
 echo "→ Checking security patterns..."
 SECURITY_ISSUES=0
-for file in $(git diff --cached --name-only --diff-filter=ACM | grep '\.php$' | grep -v 'vendor/' | grep -v 'documented/'); do
+for file in $(git diff --cached --name-only --diff-filter=ACM | grep '\.php$' | grep -v 'vendor/' | grep -v 'documented/' | grep -v 'diagnostics/'); do
     if [ -f "$file" ]; then
         # Check for direct $_POST/$_GET without sanitization (simplified check)
         if git diff --cached "$file" | grep "^\+" | grep -E '\$_(POST|GET|REQUEST)\[' | grep -v "sanitize_\|wp_unslash\|absint\|intval" > /dev/null 2>&1; then

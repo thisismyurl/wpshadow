@@ -5,7 +5,6 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 
- */
 
 class Diagnostic_Pub_Canonical_Tag extends Diagnostic_Base {
 	protected static $slug = 'pub-canonical-tag';

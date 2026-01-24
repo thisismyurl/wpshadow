@@ -18,7 +18,6 @@ class Diagnostic_Ai_Api_Integrations extends Diagnostic_Base {
 
 	/**
 	 * Get diagnostic ID
-	 */
 	public static function get_id(): string {
 		return 'ai-api-integrations';
 	}

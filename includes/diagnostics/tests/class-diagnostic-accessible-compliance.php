@@ -4,9 +4,6 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-
- */
-
 class Diagnostic_Accessible_Compliance extends Diagnostic_Base {
 	protected static $slug = 'accessible-compliance';
 

@@ -18,7 +18,6 @@ class Diagnostic_New_Vs_Returning extends Diagnostic_Base {
 
 	/**
 	 * Get diagnostic ID
-	 */
 	public static function get_id(): string {
 		return 'new-vs-returning';
 	}

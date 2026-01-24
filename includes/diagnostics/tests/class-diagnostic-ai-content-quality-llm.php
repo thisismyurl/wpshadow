@@ -128,5 +128,3 @@ class Diagnostic_Ai_Content_Quality_Llm extends Diagnostic_Base {
 	}
 	}
 
-}
-

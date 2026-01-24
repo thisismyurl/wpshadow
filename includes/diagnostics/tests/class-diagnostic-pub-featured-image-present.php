@@ -5,7 +5,6 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 
- */
 
 class Diagnostic_Pub_Featured_Image_Present extends Diagnostic_Base {
 	protected static $slug = 'pub-featured-image-present';

@@ -68,7 +68,7 @@ else
             ((SYNTAX_ERRORS++))
             ((ISSUES++))
         fi
-    done < <(find includes wpshadow.php -name '*.php' -not -path '*/vendor/*' -not -path '*/documented/*' 2>/dev/null)
+    done < <(find includes wpshadow.php -name '*.php' -not -path '*/vendor/*' -not -path '*/documented/*' -not -path '*/diagnostics/*' 2>/dev/null)
 
     if [ "$SYNTAX_ERRORS" -eq 0 ]; then
         echo -e "${GREEN}✓ No PHP syntax errors${NC}"

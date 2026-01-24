@@ -5,7 +5,6 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 
- */
 
 
 class Diagnostic_Motor_Click_Targets_Large extends Diagnostic_Base {

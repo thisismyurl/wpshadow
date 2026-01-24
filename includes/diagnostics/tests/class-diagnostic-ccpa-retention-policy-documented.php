@@ -5,7 +5,6 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 
- */
 
 class Diagnostic_Ccpa_Retention_Policy_Documented extends Diagnostic_Base {
 	protected static $slug = 'ccpa-retention-policy-documented';

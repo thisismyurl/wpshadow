@@ -5,9 +5,6 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 
- */
-
-
 class Diagnostic_Wcag_Valid_Html extends Diagnostic_Base {
 	protected static $slug = 'wcag-valid-html';
 

@@ -5,7 +5,6 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 
- */
 
 class Diagnostic_Motor_Double_Click_Alternative extends Diagnostic_Base {
 	protected static $slug = 'motor-double-click-alternative';

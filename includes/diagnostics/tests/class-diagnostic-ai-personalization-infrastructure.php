@@ -119,5 +119,3 @@ class Diagnostic_Ai_Personalization_Infrastructure extends Diagnostic_Base {
 	}
 	}
 
-}
-

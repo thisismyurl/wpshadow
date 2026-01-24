@@ -5,7 +5,6 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 
- */
 
 class Diagnostic_Ai_Image_Alt_Text extends Diagnostic_Base {
 	protected static $slug = 'ai-image-alt-text';
@@ -131,6 +130,4 @@ class Diagnostic_Ai_Image_Alt_Text extends Diagnostic_Base {
 		return ['passed' => is_null($r1) && is_array($r2), 'message' => 'AI image alt text check working'];
 	}
 	}
-
-}
 

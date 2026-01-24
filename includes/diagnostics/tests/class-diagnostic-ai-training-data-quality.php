@@ -153,5 +153,3 @@ class Diagnostic_Ai_Training_Data_Quality extends Diagnostic_Base {
 	}
 	}
 
-}
-

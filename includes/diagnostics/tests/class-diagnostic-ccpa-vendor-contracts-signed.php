@@ -5,7 +5,6 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 
- */
 
 class Diagnostic_Ccpa_Vendor_Contracts_Signed extends Diagnostic_Base {
 	protected static $slug = 'ccpa-vendor-contracts-signed';

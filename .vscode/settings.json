@@ -68,5 +68,6 @@
   "terminal.integrated.copyOnSelection": true,
   "terminal.integrated.env.linux": {
     "COMPOSER_CACHE_DIR": "/workspaces/.composer/cache"
-  }
+  },
+  "containers.enableComposeLanguageService": true
 }
