@@ -172,6 +172,8 @@ def markdown_to_html(md: str, meta: dict = None) -> str:
     in_quality_checklist = False
     in_read_on_wpshadow = False
     in_article_metadata = False
+    in_core_principles = False
+    in_related_features = False
     
     for i, line in enumerate(lines):
         # Skip "Read on WPShadow" section and block link
@@ -203,6 +205,26 @@ def markdown_to_html(md: str, meta: dict = None) -> str:
             in_article_metadata = False
             continue
         if in_article_metadata:
+            continue
+        
+        # Skip Core Principles section (will use frontmatter instead)
+        if '## Core Principles' in line:
+            in_core_principles = True
+            continue
+        if in_core_principles and line.startswith('---'):
+            in_core_principles = False
+            continue
+        if in_core_principles:
+            continue
+        
+        # Skip Related Features section (will handle separately if needed)
+        if '## Related Features' in line or '## Related WPShadow Features' in line:
+            in_related_features = True
+            continue
+        if in_related_features and line.startswith('---'):
+            in_related_features = False
+            continue
+        if in_related_features:
             continue
         
         # Skip the first H1 title
@@ -274,16 +296,8 @@ def markdown_to_html(md: str, meta: dict = None) -> str:
     md_filtered = md_filtered.replace('## Tier 3: Advanced', '## Technical Details')
     md_filtered = md_filtered.replace('## Tier 4: Developer', '## For Developers')
     
-    # Add Core Principles links at the end
-    principles = meta.get('principles', [])
-    if principles:
-        principles_html = '\n\n## Core Principles Applied\n\n'
-        for principle in principles:
-            anchor = principle_to_anchor(principle)
-            # Extract readable name from ID like "#07-ridiculously-good" -> "Ridiculously Good"
-            name = principle.lstrip('#').lstrip('0123456789-').replace('-', ' ').title()
-            principles_html += f'- [{name}](/principles/#{anchor})\n'
-        md_filtered += principles_html
+    # Remove the principles markdown section - will be added inline in HTML instead
+    # (was adding as section at end, now we'll add as inline badges)
     
     # Add Related Features links
     # Note: Looking for 'related_features' in meta (not in current template, but supporting it)
@@ -317,11 +331,11 @@ def markdown_to_html(md: str, meta: dict = None) -> str:
             heading_id = text.lower().replace(' ', '-').replace(':', '').replace('(', '').replace(')', '')
             headings.append((level, text, heading_id))
     
-    # Build TOC HTML with h2
+    # Build TOC HTML with h2 (proper block format)
     toc_html = ''
     if headings:
-        toc_html = '<!-- wp:heading --><h2 class="wp-block-heading">Contents</h2><!-- /wp:heading -->'
-        toc_html += '<!-- wp:list {"className":"toc-list"} --><ul class="toc-list">\n'
+        toc_html = '<!-- wp:heading -->\n<h2 class="wp-block-heading">Contents</h2>\n<!-- /wp:heading -->\n'
+        toc_html += '<!-- wp:list {"className":"toc-list"} -->\n<ul class="toc-list">\n'
         for level, text, heading_id in headings:
             indent = '  ' * (level - 2)
             toc_html += f'{indent}<li><a href="#{heading_id}">{text}</a></li>\n'
@@ -330,17 +344,23 @@ def markdown_to_html(md: str, meta: dict = None) -> str:
     # Build final HTML with WordPress Blocks
     final_html = ''
     
-    # Summary block
+    # Summary block (proper block format with newlines)
     if summary_text:
         summary_html = markdown.markdown(summary_text, extensions=['extra'])
-        final_html += f'<!-- wp:group {{"className":"summary-section"}} -->\n<div class="wp-block-group summary-section">{summary_html}</div>\n<!-- /wp:group -->\n\n'
+        final_html += '<!-- wp:group {"className":"summary-section"} -->\n'
+        final_html += '<div class="wp-block-group summary-section">\n'
+        final_html += summary_html
+        final_html += '</div>\n'
+        final_html += '<!-- /wp:group -->\n\n'
     
-    # Opening paragraph block with special class
+    # Opening paragraph block with special class (proper formatting)
     if opening_paragraph:
         opening_html = markdown.markdown(opening_paragraph, extensions=['extra'])
         # Strip <p> tags from markdown output and rewrap
         opening_text = opening_html.replace('<p>', '').replace('</p>', '').strip()
-        final_html += f'<!-- wp:paragraph {{"className":"opening"}} -->\n<p class="opening">{opening_text}</p>\n<!-- /wp:paragraph -->\n\n'
+        final_html += '<!-- wp:paragraph {"className":"opening"} -->\n'
+        final_html += f'<p class="opening">{opening_text}</p>\n'
+        final_html += '<!-- /wp:paragraph -->\n\n'
     
     # TOC
     final_html += toc_html
@@ -349,6 +369,20 @@ def markdown_to_html(md: str, meta: dict = None) -> str:
     # Split content by headings and paragraphs for proper block structure
     content_blocks = convert_html_to_blocks(html_body)
     final_html += content_blocks
+    
+    # Add Core Principles as inline badges at the end
+    principles = meta.get('principles', [])
+    if principles:
+        final_html += '<!-- wp:paragraph {"className":"principles-badges"} -->\n'
+        final_html += '<p class="principles-badges">'
+        for i, principle in enumerate(principles):
+            anchor = principle_to_anchor(principle)
+            name = principle.lstrip('#').lstrip('0123456789-').replace('-', ' ').title()
+            if i > 0:
+                final_html += ' '
+            final_html += f'<a href="/principles/#{anchor}" class="principle-badge">{name}</a>'
+        final_html += '</p>\n'
+        final_html += '<!-- /wp:paragraph -->\n'
     
     return final_html
 
@@ -374,7 +408,7 @@ def convert_html_to_blocks(html: str) -> str:
                 in_list = False
             output.append('<!-- wp:heading -->')
             output.append(line)
-            output.append('<!-- /wp:heading -->\n')
+            output.append('<!-- /wp:heading -->')
         
         elif stripped.startswith('<h3'):
             if in_list:
@@ -382,7 +416,7 @@ def convert_html_to_blocks(html: str) -> str:
                 in_list = False
             output.append('<!-- wp:heading {"level":3} -->')
             output.append(line)
-            output.append('<!-- /wp:heading -->\n')
+            output.append('<!-- /wp:heading -->')
         
         elif stripped.startswith('<h4'):
             if in_list:
@@ -390,7 +424,7 @@ def convert_html_to_blocks(html: str) -> str:
                 in_list = False
             output.append('<!-- wp:heading {"level":4} -->')
             output.append(line)
-            output.append('<!-- /wp:heading -->\n')
+            output.append('<!-- /wp:heading -->')
         
         # Handle paragraphs
         elif stripped.startswith('<p>') and not in_code:
@@ -399,7 +433,7 @@ def convert_html_to_blocks(html: str) -> str:
                 in_list = False
             output.append('<!-- wp:paragraph -->')
             output.append(line)
-            output.append('<!-- /wp:paragraph -->\n')
+            output.append('<!-- /wp:paragraph -->')
         
         # Handle lists
         elif stripped.startswith('<ul>') and not in_list:
@@ -408,7 +442,7 @@ def convert_html_to_blocks(html: str) -> str:
             output.append(line)
         elif stripped.startswith('</ul>') and in_list:
             output.append(line)
-            output.append('<!-- /wp:list -->\n')
+            output.append('<!-- /wp:list -->')
             in_list = False
         
         elif stripped.startswith('<ol>') and not in_list:
@@ -417,7 +451,7 @@ def convert_html_to_blocks(html: str) -> str:
             output.append(line)
         elif stripped.startswith('</ol>') and in_list:
             output.append(line)
-            output.append('<!-- /wp:list -->\n')
+            output.append('<!-- /wp:list -->')
             in_list = False
         
         # Handle code blocks
@@ -435,7 +469,7 @@ def convert_html_to_blocks(html: str) -> str:
             output.append('<pre class="wp-block-code"><code>')
         elif stripped.startswith('</code></pre>') or (in_code and '</pre>' in stripped):
             output.append('</code></pre>')
-            output.append('<!-- /wp:code -->\n')
+            output.append('<!-- /wp:code -->')
             in_code = False
         
         # Handle tables
@@ -447,7 +481,7 @@ def convert_html_to_blocks(html: str) -> str:
         elif stripped.startswith('</table>') and in_table:
             output.append(line)
             output.append('</figure>')
-            output.append('<!-- /wp:table -->\n')
+            output.append('<!-- /wp:table -->')
             in_table = False
         
         # Handle divs (notices, etc)
