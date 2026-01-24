@@ -401,109 +401,174 @@ def convert_html_to_blocks(html: str) -> str:
     in_list = False
     in_code = False
     in_table = False
+    code_buffer = []
+    list_buffer = []
+    table_buffer = []
     
-    for line in lines:
+    i = 0
+    while i < len(lines):
+        line = lines[i]
         stripped = line.strip()
         
         # Handle headings
         if stripped.startswith('<h2'):
-            if in_list:
-                output.append('<!-- /wp:list -->\n')
+            # Close any open blocks first
+            if in_list and list_buffer:
+                output.append('<!-- wp:list -->\n')
+                output.append('\n'.join(list_buffer))
+                output.append('\n<!-- /wp:list -->\n')
                 in_list = False
-            output.append('<!-- wp:heading -->')
+                list_buffer = []
+            if in_code and code_buffer:
+                output.append('<!-- wp:code -->\n')
+                output.append('\n'.join(code_buffer))
+                output.append('\n<!-- /wp:code -->\n')
+                in_code = False
+                code_buffer = []
+            
+            output.append('<!-- wp:heading -->\n')
             output.append(line)
-            output.append('<!-- /wp:heading -->')
+            output.append('\n<!-- /wp:heading -->\n')
         
         elif stripped.startswith('<h3'):
-            if in_list:
-                output.append('<!-- /wp:list -->\n')
+            # Close any open blocks first
+            if in_list and list_buffer:
+                output.append('<!-- wp:list -->\n')
+                output.append('\n'.join(list_buffer))
+                output.append('\n<!-- /wp:list -->\n')
                 in_list = False
-            output.append('<!-- wp:heading {"level":3} -->')
+                list_buffer = []
+            
+            output.append('<!-- wp:heading {"level":3} -->\n')
             output.append(line)
-            output.append('<!-- /wp:heading -->')
+            output.append('\n<!-- /wp:heading -->\n')
         
         elif stripped.startswith('<h4'):
-            if in_list:
-                output.append('<!-- /wp:list -->\n')
+            # Close any open blocks first
+            if in_list and list_buffer:
+                output.append('<!-- wp:list -->\n')
+                output.append('\n'.join(list_buffer))
+                output.append('\n<!-- /wp:list -->\n')
                 in_list = False
-            output.append('<!-- wp:heading {"level":4} -->')
+                list_buffer = []
+            
+            output.append('<!-- wp:heading {"level":4} -->\n')
             output.append(line)
-            output.append('<!-- /wp:heading -->')
+            output.append('\n<!-- /wp:heading -->\n')
         
-        # Handle paragraphs
-        elif stripped.startswith('<p>') and not in_code:
-            if in_list:
-                output.append('<!-- /wp:list -->\n')
-                in_list = False
-            output.append('<!-- wp:paragraph -->')
-            output.append(line)
-            output.append('<!-- /wp:paragraph -->')
-        
-        # Handle lists
-        elif stripped.startswith('<ul>') and not in_list:
-            in_list = True
-            output.append('<!-- wp:list -->')
-            output.append(line)
-        elif stripped.startswith('</ul>') and in_list:
-            output.append(line)
-            output.append('<!-- /wp:list -->')
-            in_list = False
-        
-        elif stripped.startswith('<ol>') and not in_list:
-            in_list = True
-            output.append('<!-- wp:list {"ordered":true} -->')
-            output.append(line)
-        elif stripped.startswith('</ol>') and in_list:
-            output.append(line)
-            output.append('<!-- /wp:list -->')
-            in_list = False
-        
-        # Handle code blocks
-        elif stripped.startswith('<pre><code') or stripped.startswith('<pre class'):
+        # Handle code blocks - capture entire block until closing </pre>
+        elif (stripped.startswith('<pre><code') or stripped.startswith('<pre class')) and not in_code:
             in_code = True
+            code_buffer = []
+            
             # Extract language from class if present
             lang_match = 'language-'
+            language = ''
             if lang_match in line:
-                lang_start = line.index(lang_match) + len(lang_match)
-                lang_end = line.index('"', lang_start)
-                language = line[lang_start:lang_end]
-                output.append(f'<!-- wp:code {{"language":"{language}"}} -->')
+                try:
+                    lang_start = line.index(lang_match) + len(lang_match)
+                    lang_end = line.index('"', lang_start)
+                    language = line[lang_start:lang_end]
+                except:
+                    pass
+            
+            if language:
+                output.append(f'<!-- wp:code {{"language":"{language}"}} -->\n')
             else:
-                output.append('<!-- wp:code -->')
-            output.append('<pre class="wp-block-code"><code>')
-        elif stripped.startswith('</code></pre>') or (in_code and '</pre>' in stripped):
-            output.append('</code></pre>')
-            output.append('<!-- /wp:code -->')
-            in_code = False
+                output.append('<!-- wp:code -->\n')
+            
+            # Collect all lines until </code></pre>
+            code_buffer.append(line)
+        
+        elif in_code:
+            code_buffer.append(line)
+            if stripped.startswith('</code></pre>') or '</pre>' in stripped:
+                in_code = False
+                # Output entire code block
+                output.append('\n'.join(code_buffer))
+                output.append('\n<!-- /wp:code -->\n')
+                code_buffer = []
+        
+        # Handle lists - collect entire list
+        elif (stripped.startswith('<ul') or stripped.startswith('<ol')) and not in_list:
+            in_list = True
+            list_buffer = []
+            is_ordered = stripped.startswith('<ol')
+            
+            if is_ordered:
+                output.append('<!-- wp:list {"ordered":true} -->\n')
+            else:
+                output.append('<!-- wp:list -->\n')
+            
+            list_buffer.append(line)
+        
+        elif in_list:
+            list_buffer.append(line)
+            if (stripped.startswith('</ul>') or stripped.startswith('</ol>')):
+                in_list = False
+                # Output entire list block
+                output.append('\n'.join(list_buffer))
+                output.append('\n<!-- /wp:list -->\n')
+                list_buffer = []
+        
+        # Handle paragraphs (not in code, not in lists)
+        elif stripped.startswith('<p>') and not in_code and not in_list:
+            output.append('<!-- wp:paragraph -->\n')
+            output.append(line)
+            output.append('\n<!-- /wp:paragraph -->\n')
         
         # Handle tables
-        elif stripped.startswith('<table'):
+        elif stripped.startswith('<table') and not in_table:
             in_table = True
-            output.append('<!-- wp:table -->')
-            output.append('<figure class="wp-block-table">')
-            output.append(line)
-        elif stripped.startswith('</table>') and in_table:
-            output.append(line)
-            output.append('</figure>')
-            output.append('<!-- /wp:table -->')
-            in_table = False
+            table_buffer = []
+            output.append('<!-- wp:table -->\n')
+            output.append('<figure class="wp-block-table">\n')
+            table_buffer.append(line)
+        
+        elif in_table:
+            table_buffer.append(line)
+            if stripped.startswith('</table>'):
+                in_table = False
+                output.append('\n'.join(table_buffer))
+                output.append('\n</figure>\n')
+                output.append('<!-- /wp:table -->\n')
+                table_buffer = []
         
         # Handle divs (notices, etc)
         elif stripped.startswith('<div class="wp-block-notice'):
-            output.append('<!-- wp:group {"className":"notice-info"} -->')
+            output.append('<!-- wp:group {"className":"notice-info"} -->\n')
             output.append(line)
-        elif stripped.endswith('</div>') and 'wp-block-notice' in ''.join(output[-3:]):
-            output.append(line)
-            output.append('<!-- /wp:group -->\n')
+            # Find matching closing div
+            i += 1
+            while i < len(lines) and not lines[i].strip().endswith('</div>'):
+                output.append(lines[i])
+                i += 1
+            if i < len(lines):
+                output.append(lines[i])
+            output.append('\n<!-- /wp:group -->\n')
+            i -= 1  # Adjust since loop will increment
         
         else:
-            output.append(line)
+            # Only add non-empty lines that aren't already handled
+            if stripped and not in_code and not in_list:
+                output.append(line)
+        
+        i += 1
     
-    # Close any open blocks
-    if in_list:
-        output.append('<!-- /wp:list -->')
+    # Close any remaining open blocks
+    if in_list and list_buffer:
+        output.append('\n'.join(list_buffer))
+        output.append('\n<!-- /wp:list -->\n')
+    if in_code and code_buffer:
+        output.append('\n'.join(code_buffer))
+        output.append('\n<!-- /wp:code -->\n')
     
-    return '\n'.join(output)
+    result = '\n'.join(output)
+    # Clean up excessive newlines
+    while '\n\n\n' in result:
+        result = result.replace('\n\n\n', '\n\n')
+    
+    return result
 
 
 def ensure_term(site: str, auth_header: str, taxonomy: str, name: str, slug: str | None = None) -> int:
