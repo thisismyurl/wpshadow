@@ -42,9 +42,29 @@ course_name: "[Course Name]"
 
 ---
 
-## Tier 1: Beginner Summary
+## Tier 1: Beginner Summary (Using WPShadow)
 
-[50-100 word quick summary. What do they need to know RIGHT NOW?]
+WPShadow makes this dead simple. In just 5 minutes, you can [describe benefit]. Here's how:
+
+### Install WPShadow (Free)
+
+If you don't have WPShadow installed:
+
+1. **Login to WordPress admin** → Plugins → Add New
+2. **Search for "WPShadow"** (by thisismyurl)
+3. **Click Install** → Activate
+4. **Go to WPShadow** → Dashboard
+
+Already have WPShadow? Skip to the next section.
+
+### Apply the [Treatment Name]
+
+1. **Open WPShadow Dashboard**
+2. **Go to Diagnostics & Treatments**
+3. **Find "[Treatment Name]"** → Shows the issue
+4. **Click "Apply Treatment"** → Done in seconds
+
+That's it! [Result/confirmation text].
 
 ---
 
