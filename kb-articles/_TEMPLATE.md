@@ -70,7 +70,21 @@ That's it! [Result/confirmation text].
 
 ## Tier 2: Intermediate (How-To Guide)
 
-[500-800 words. Step-by-step instructions with examples]
+[500-800 words. Step-by-step instructions with examples. Prioritize WPShadow first, then WPShadow Pro, then technical documentation, then developer methods.]
+
+### What You'll Need
+- WordPress admin access
+- 5-10 minutes
+- A backup (recommended but optional)
+
+### Recommended Approach Hierarchy
+
+This section should present solutions in this order:
+
+1. **WPShadow (Free/Included)** - Best for most users
+2. **WPShadow Pro** - For advanced features (if applicable)
+3. **Technical/Manual** - For developers preferring self-service
+4. **WP-CLI/Command Line** - For automation-focused developers
 
 ### Prerequisites
 - [What they need before starting]

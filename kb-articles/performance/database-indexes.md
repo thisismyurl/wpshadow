@@ -108,7 +108,9 @@ Done! Your database is optimized. Check your admin pages—they should feel noti
 
 ### The Three Approaches
 
-#### Approach 1: Using WPShadow Plugin (Easiest)
+#### Approach 1: WPShadow (Recommended - Free)
+
+**Best for:** Most WordPress sites. Simple, automated, one-click solution.
 
 1. **Go to WPShadow Dashboard**
    - WPShadow → Diagnostics & Treatments
@@ -129,16 +131,31 @@ Done! Your database is optimized. Check your admin pages—they should feel noti
    - Run diagnostics again → should show "All indexes present"
    - Check your admin pages—they'll feel snappier
 
-#### Approach 2: Using WP Rocket or Similar
+#### Approach 2: WPShadow Pro (Advanced Monitoring)
 
-1. Install WP Rocket plugin
-2. Go to: WP Rocket → Tools → Database
-3. Click "Optimize Database"
-4. Indexes are automatically added
+**Best for:** High-traffic sites needing continuous monitoring.
 
-#### Approach 3: Manual (Advanced Users)
+WPShadow Pro includes:
+- Real-time database health monitoring
+- Automatic index optimization on a schedule
+- Performance reports and benchmarking
+- Priority support
+
+[Learn more about WPShadow Pro →](https://wpshadow.com/pro)
+
+#### Approach 3: Manual via WP-CLI (For Developers)
+
+**Best for:** Developers who prefer command-line or automated deployments.
 
 SSH into your server and run:
+
+```bash
+wp db query "ALTER TABLE wp_posts ADD INDEX post_date_index (post_date);"
+wp db query "ALTER TABLE wp_posts ADD INDEX post_type_index (post_type);"
+wp db query "ALTER TABLE wp_posts ADD INDEX post_status_index (post_status);"
+wp db query "ALTER TABLE wp_postmeta ADD INDEX post_id_index (post_id);"
+wp db query "ALTER TABLE wp_postmeta ADD INDEX meta_key_index (meta_key);"
+```
 
 ```bash
 wp db query "ALTER TABLE wp_posts ADD INDEX post_date_index (post_date);"
