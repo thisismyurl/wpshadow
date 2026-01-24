@@ -48,11 +48,11 @@ def load_env():
                 if line and not line.startswith('#') and '=' in line:
                     k, v = line.split('=', 1)
                     env[k] = v
-    env.update({
-        'WP_SITE_URL': os.environ.get('WP_SITE_URL'),
-        'WP_USERNAME': os.environ.get('WP_USERNAME'),
-        'WP_APP_PASSWORD': os.environ.get('WP_APP_PASSWORD'),
-    })
+    # Only override with real environment variables if they are set
+    for key in ['WP_SITE_URL', 'WP_USERNAME', 'WP_APP_PASSWORD']:
+        env_val = os.environ.get(key)
+        if env_val:
+            env[key] = env_val
     missing = [k for k, v in env.items() if k.startswith('WP_') and not v]
     if missing:
         print(f"❌ Missing env vars: {', '.join(missing)}")
@@ -107,7 +107,15 @@ def markdown_to_html(md: str) -> str:
     if markdown is None:
         print('❌ Missing dependency: markdown. Install with: pip install markdown')
         sys.exit(1)
-    return markdown.markdown(md, extensions=['extra', 'tables', 'fenced_code'])
+    # Strip first H1 heading (article title) since it's set via post title
+    lines = md.split('\n')
+    if lines and lines[0].startswith('# '):
+        lines = lines[1:]
+        # Skip blank line after heading if present
+        if lines and lines[0].strip() == '':
+            lines = lines[1:]
+    md_stripped = '\n'.join(lines)
+    return markdown.markdown(md_stripped, extensions=['extra', 'tables', 'fenced_code'])
 
 
 def ensure_term(site: str, auth_header: str, taxonomy: str, name: str, slug: str | None = None) -> int:
