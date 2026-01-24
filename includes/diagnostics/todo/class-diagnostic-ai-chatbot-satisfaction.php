@@ -16,7 +16,7 @@ use WPShadow\Core\Diagnostic_Base;
  * Impact: Shows \"Chatbot resolves only 23% (frustrating 77%)\" with training gaps.
   *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
+ * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
 
 /**

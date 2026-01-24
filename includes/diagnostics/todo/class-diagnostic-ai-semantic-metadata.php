@@ -16,7 +16,7 @@ use WPShadow\Core\Diagnostic_Base;
  * Impact: Shows \"0% of content optimized for voice/AI search\" schema gaps.
   *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
+ * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
 
 /**

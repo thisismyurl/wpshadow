@@ -12,7 +12,7 @@
  * @package WPShadow
  *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
+ * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if (! defined('ABSPATH')) {
  * Database Table Overhead diagnostic
  *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
+ * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
 class Diagnostic_Database_Table_Overhead extends Diagnostic_Base
 {

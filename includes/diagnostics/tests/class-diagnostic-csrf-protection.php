@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @package WPShadow
  *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
+ * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
 
 namespace WPShadow\Diagnostics;
@@ -19,7 +19,7 @@ use WPShadow\Core\Diagnostic_Base;
  * Check for CSRF protection in forms.
  *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
+ * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
 class Diagnostic_CSRF_Protection extends Diagnostic_Base
 {

@@ -15,7 +15,7 @@ use WPShadow\Core\Diagnostic_Base;
  * @since 1.2601.2200
   * 
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
- * @guardian-integrated Pending - Not yet in Diagnostic_Registry
+ * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
 class Diagnostic_Server_Load_Average extends Diagnostic_Base {
     
