@@ -30,6 +30,7 @@ require_once WPSHADOW_PATH . 'includes/core/class-error-handler.php';
 require_once WPSHADOW_PATH . 'includes/core/class-settings-registry.php';
 require_once WPSHADOW_PATH . 'includes/core/class-database-migrator.php';
 require_once WPSHADOW_PATH . 'includes/core/functions-treatment.php';
+require_once WPSHADOW_PATH . 'includes/helpers/form-controls.php';
 
 /**
  * Initialize error handler early
