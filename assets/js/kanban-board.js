@@ -51,7 +51,163 @@ jQuery(document).ready(function ($) {
 	function initKanban() {
 		setupDragAndDrop();
 		setupCardActions();
+		setupKeyboardNavigation();
 		updateAllColumnCounts();
+	}
+
+	/**
+	 * Setup keyboard navigation for accessibility (CANON requirement)
+	 * Allows keyboard users to move cards between columns
+	 */
+	function setupKeyboardNavigation() {
+		let selectedCard = null;
+
+		// Enter key on card: show move menu
+		$(document).on('keydown', '.finding-card', function (e) {
+			if (e.key === 'Enter' || e.key === ' ') {
+				e.preventDefault();
+				selectedCard = $(this);
+				const findingId = selectedCard.data('finding-id');
+				const currentColumn = selectedCard.closest('.kanban-column').data('status');
+				
+				showKeyboardMoveMenu(selectedCard, currentColumn);
+			}
+		});
+
+		// Escape key: cancel operation
+		$(document).on('keydown', function (e) {
+			if (e.key === 'Escape') {
+				hideKeyboardMoveMenu();
+				selectedCard = null;
+			}
+		});
+	}
+
+	/**
+	 * Show keyboard move menu for moving cards
+	 */
+	function showKeyboardMoveMenu(card, currentColumn) {
+		// Remove any existing menu
+		$('.wps-keyboard-move-menu').remove();
+
+		const columns = [
+			{ status: 'detected', label: 'Detected' },
+			{ status: 'manual', label: 'User to Fix' },
+			{ status: 'automated', label: 'Fix Now' },
+			{ status: 'fixed', label: 'Workflows' }
+		];
+
+		let menuHtml = '<div class="wps-keyboard-move-menu" role="menu" aria-label="Move card to column">';
+		menuHtml += '<div class="wps-keyboard-move-menu-header">';
+		menuHtml += '<strong>Move to:</strong>';
+		menuHtml += '<button class="wps-keyboard-move-menu-close" aria-label="Close menu">×</button>';
+		menuHtml += '</div>';
+		menuHtml += '<div class="wps-keyboard-move-menu-options">';
+		
+		columns.forEach((col, index) => {
+			if (col.status !== currentColumn) {
+				menuHtml += '<button class="wps-keyboard-move-option" data-target="' + col.status + '" data-index="' + index + '" role="menuitem">';
+				menuHtml += col.label;
+				menuHtml += '</button>';
+			}
+		});
+		
+		menuHtml += '</div>';
+		menuHtml += '</div>';
+
+		const $menu = $(menuHtml);
+		$('body').append($menu);
+
+		// Position menu near the card
+		const cardOffset = card.offset();
+		$menu.css({
+			top: cardOffset.top + 20,
+			left: cardOffset.left + card.outerWidth() / 2 - $menu.outerWidth() / 2
+		});
+
+		// Focus first option
+		$menu.find('.wps-keyboard-move-option').first().focus();
+
+		// Handle menu interactions
+		$menu.on('click', '.wps-keyboard-move-option', function () {
+			const targetColumn = $(this).data('target');
+			moveCardToColumn(card, targetColumn);
+			hideKeyboardMoveMenu();
+		});
+
+		$menu.on('click', '.wps-keyboard-move-menu-close', function () {
+			hideKeyboardMoveMenu();
+		});
+
+		// Arrow key navigation within menu
+		$menu.on('keydown', '.wps-keyboard-move-option', function (e) {
+			const $options = $menu.find('.wps-keyboard-move-option');
+			const currentIndex = $options.index(this);
+
+			if (e.key === 'ArrowDown') {
+				e.preventDefault();
+				const nextIndex = (currentIndex + 1) % $options.length;
+				$options.eq(nextIndex).focus();
+			} else if (e.key === 'ArrowUp') {
+				e.preventDefault();
+				const prevIndex = (currentIndex - 1 + $options.length) % $options.length;
+				$options.eq(prevIndex).focus();
+			} else if (e.key === 'Enter' || e.key === ' ') {
+				e.preventDefault();
+				$(this).click();
+			} else if (e.key === 'Escape') {
+				e.preventDefault();
+				hideKeyboardMoveMenu();
+			}
+		});
+
+		// Announce to screen readers
+		announceToScreenReader('Move menu opened. Use arrow keys to navigate, Enter to select, Escape to cancel.');
+	}
+
+	/**
+	 * Hide keyboard move menu
+	 */
+	function hideKeyboardMoveMenu() {
+		$('.wps-keyboard-move-menu').remove();
+	}
+
+	/**
+	 * Move card to target column (keyboard navigation)
+	 */
+	function moveCardToColumn(card, targetColumn) {
+		const findingId = card.data('finding-id');
+		const currentColumn = card.closest('.kanban-column').data('status');
+		const $targetColumn = $('.kanban-column[data-status="' + targetColumn + '"]');
+
+		if (targetColumn === 'automated') {
+			executeOnetimeFix(findingId, card, $targetColumn, currentColumn);
+		} else if (targetColumn === 'fixed') {
+			showWorkflowCreationModal(findingId, card, $targetColumn, currentColumn);
+		} else {
+			changeKanbanStatus(findingId, targetColumn, currentColumn, card, $targetColumn);
+		}
+
+		announceToScreenReader('Moving card to ' + targetColumn + ' column');
+	}
+
+	/**
+	 * Announce message to screen readers via ARIA live region
+	 */
+	function announceToScreenReader(message) {
+		let $liveRegion = $('#wpshadow-aria-live');
+		
+		if (!$liveRegion.length) {
+			$liveRegion = $('<div id="wpshadow-aria-live" role="status" aria-live="polite" aria-atomic="true" class="wps-sr-only"></div>');
+			$('body').append($liveRegion);
+		}
+
+		$liveRegion.text(message);
+		
+		// Clear after announcement
+		setTimeout(() => {
+			$liveRegion.text('');
+		}, 1000);
 	}
 
 	/**
@@ -414,10 +570,14 @@ jQuery(document).ready(function ($) {
 			e.originalEvent.dataTransfer.effectAllowed = 'move';
 			e.originalEvent.dataTransfer.setData('text/html', this.innerHTML);
 
-			// Add visual feedback
+			// Enhanced visual feedback
 			setTimeout(() => {
 				$(this).css('opacity', '0.5');
 			}, 0);
+
+			// Announce to screen readers
+			const cardTitle = $(this).find('.wps-card-title, .finding-title').text();
+			announceToScreenReader('Moving: ' + cardTitle);
 		});
 
 		// Drag over column
@@ -762,12 +922,17 @@ jQuery(document).ready(function ($) {
 		$targetColumn,
 		isRemove = false
 	) {
+		// Show loading state
+		$card.addClass('wps-loading');
+
 		$.post(ajaxurl, {
 			action: 'wpshadow_change_finding_status',
-			nonce: $('[name="wpshadow_kanban_nonce"]').val() || $('[data-nonce="wpshadow_kanban"]').attr('data-nonce') || '',
+			nonce: $('[name="wpshadow_kanban_nonce"]').val() || '',
 			finding_id: findingId,
 			new_status: newStatus
 		}, function (response) {
+			$card.removeClass('wps-loading');
+
 			if (response.success) {
 				if (isRemove) {
 					// Fade out and remove
@@ -777,21 +942,52 @@ jQuery(document).ready(function ($) {
 					});
 				} else if ($targetColumn) {
 					// Remove empty message if it exists
-					$targetColumn.find('.kanban-column-content .kanban-empty-message').remove();
-					// Move to target column
+					$targetColumn.find('.kanban-column-content .kanban-empty-message, .wps-kanban-empty').remove();
+					
+					// Move to target column with success animation
 					$card.css('opacity', '1').detach();
 					$targetColumn.find('.kanban-column-content').append($card);
+					
+					// Add success animation
+					$card.addClass('success');
+					setTimeout(() => {
+						$card.removeClass('success');
+					}, 500);
+					
 					updateAllColumnCounts();
+
+					// Announce success to screen readers
+					const statusLabels = {
+						'detected': 'Detected',
+						'manual': 'User to Fix',
+						'automated': 'Fix Now',
+						'fixed': 'Workflows'
+					};
+					announceToScreenReader('Moved to ' + (statusLabels[newStatus] || newStatus) + ' column');
 				}
 			} else {
+				// Error animation
+				$card.addClass('error');
+				setTimeout(() => {
+					$card.removeClass('error');
+				}, 500);
+
 				const message = response.data && response.data.message
 					? response.data.message
 					: 'Could not update status';
-				alert('Error: ' + message);
+				setStatus('Error: ' + message, 'error');
 				resetDragState();
 			}
 		}).fail(() => {
-			alert('Connection error. Please try again.');
+			$card.removeClass('wps-loading');
+			
+			// Error animation
+			$card.addClass('error');
+			setTimeout(() => {
+				$card.removeClass('error');
+			}, 500);
+
+			setStatus('Connection error. Please try again.', 'error');
 			resetDragState();
 		});
 	}
@@ -821,13 +1017,20 @@ jQuery(document).ready(function ($) {
 				count = $content.find('> .finding-card').length;
 			}
 
-			const $header = $(this).find('h3');
-			const $countSpan = $header.find('span:last');
-
-			if ($countSpan.length) {
-				$countSpan.text(count);
+			// Update count badge (supports both old and new structure)
+			const $countBadge = $column.find('.wps-kanban-count-badge, .column-count');
+			if ($countBadge.length) {
+				$countBadge.text(count);
+				$countBadge.attr('aria-label', count + ' items');
 			} else {
-				$header.append(' <span style="color: #999; font-weight: 400; float: right;">' + count + '</span>');
+				// Fallback for old structure
+				const $header = $column.find('h3');
+				const $countSpan = $header.find('span:last');
+				if ($countSpan.length) {
+					$countSpan.text(count);
+				} else {
+					$header.append(' <span class="column-count" style="color: #999; font-weight: 400; float: right;">' + count + '</span>');
+				}
 			}
 		});
 	}
