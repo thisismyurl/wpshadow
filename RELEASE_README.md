@@ -67,8 +67,8 @@ wp plugin install wpshadow-1.2601.2148.zip --activate
 
 ## 🔐 Package Integrity
 
-**MD5:** `3e113eb6082cf5ab8a5be1b6cadf1145`  
-**SHA256:** `5012e8b3ce9fd31708eddf3c6705ba5ed0abc7edbe3a0afcf205f5f118142711`
+**MD5:** `f2868c34c2ca9b8d41c08534ce9f2cb0`  
+**SHA256:** `c87ca1504d81ed28488408ed985e79f6766a2df3004265d45a54de0b9ae2d030`
 
 Verify before installation:
 ```bash

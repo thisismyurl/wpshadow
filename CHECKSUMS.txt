@@ -6,10 +6,10 @@ Size: 7.1 MB
 Build Date: 2026-01-25
 
 MD5:
-3e113eb6082cf5ab8a5be1b6cadf1145
+f2868c34c2ca9b8d41c08534ce9f2cb0
 
 SHA256:
-5012e8b3ce9fd31708eddf3c6705ba5ed0abc7edbe3a0afcf205f5f118142711
+c87ca1504d81ed28488408ed985e79f6766a2df3004265d45a54de0b9ae2d030
 
 Verify integrity before installation:
 md5sum wpshadow-1.2601.2148.zip

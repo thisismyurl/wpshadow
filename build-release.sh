@@ -61,7 +61,6 @@ rsync -av --exclude-from='.distignore' \
     --exclude='KB_PUBLISHING_SUMMARY.md' \
     --exclude='*.py' \
     --exclude='.env' \
-    --exclude="'+str(data.get(state)))" \
     ./ "$RELEASE_DIR/"
 
 # Remove any remaining development files
