@@ -20,12 +20,11 @@
 ```bash
 git clone https://github.com/thisismyurl/wpshadow.git
 cd wpshadow
-cp wp-config-extra.php /path/to/wordpress/
-docker-compose up -d
 ```
 
-**Access Docker Environment**
+**Access Docker Environment (for development)**
 ```bash
+cd dev-tools
 docker-compose up -d
 # Access: http://localhost:9000
 # Admin: http://localhost:9000/wp-admin (admin/password)
@@ -234,7 +233,8 @@ composer phpcs
 # 3. Static analysis
 composer phpstan
 
-# 4. Load plugin locally
+# 4. Load plugin locally (using Docker)
+cd dev-tools
 docker-compose up -d
 # Access: http://localhost:8080/wp-admin/
 ```
@@ -265,8 +265,19 @@ docs/
 ├── GITHUB_WORKFLOW.md                 # Labels, milestones, workflow
 ├── DEPLOYMENT.md                      # Release & deployment process
 ├── FILE_STRUCTURE_GUIDE.md            # Codebase organization
+├── RELEASE_NOTES.md                   # Release information
+├── TESTING_GUIDE.md                   # Testing procedures
+├── INSTALL.md                         # Installation guide
 └── archive/                           # Old session/build reports
     └── (58 archived docs)
+
+dev-tools/                             # Development scripts (not in releases)
+├── README.md                          # Developer tools documentation
+├── docker-compose.yml                 # Docker environment setup
+├── kb-articles/                       # Knowledge base article sources
+├── generate-kb-articles.py            # KB generation script
+├── test-wp-connection.py              # WordPress connection tester
+└── wp-content/                        # Test WordPress content
 ```
 
 ---
