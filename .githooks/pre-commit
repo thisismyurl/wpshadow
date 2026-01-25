@@ -1,8 +1,24 @@
 #!/bin/bash
 # WPShadow Pre-Commit Hook - Guardian Angel Protection
 # Catches issues before they reach Git
+#
+# Enhanced with Educational Philosophy:
+# - Tracks your commit KPIs
+# - Celebrates your progress
+# - Provides helpful error messages
+# - Encourages good practices
 
 set -e
+
+# Source helpful errors if available
+if [ -f ".devcontainer/lib/helpful-errors.sh" ]; then
+    source ".devcontainer/lib/helpful-errors.sh"
+fi
+
+# Source KPI tracking if available
+if [ -f ".devcontainer/lib/dev-kpis.sh" ]; then
+    source ".devcontainer/lib/dev-kpis.sh"
+fi
 
 # Ensure PHP is reachable for hooks
 export PATH="/usr/bin:/usr/local/bin:$PATH"
@@ -140,5 +156,20 @@ if [ "$ISSUES" -gt 0 ]; then
 else
     echo "✅ All pre-commit checks passed!"
     echo ""
+    
+    # Track this commit in KPIs
+    if [ -f ".devcontainer/lib/dev-kpis.sh" ]; then
+        update_kpi "commits" 1
+        update_kpi "estimated_time_saved_minutes" 3
+        
+        # Show encouragement
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "🎉 Great work! Commit tracked."
+        show_kpi_summary
+        echo "💡 Keep it up! Every quality commit makes a difference."
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo ""
+    fi
+    
     exit 0
 fi

@@ -30,10 +30,17 @@
 		}
 	},
 	"scripts": {
-		"phpcs": "phpcs --standard=WordPress-Extra includes features wpshadow.php",
+		"phpcs": [
+			"phpcs --standard=WordPress-Extra includes features wpshadow.php",
+			"bash .devcontainer/lib/track-phpcs.sh"
+		],
 		"phpcbf": "phpcbf --standard=WordPress-Extra includes features wpshadow.php",
 		"phpstan": "phpstan analyse --memory-limit=512M includes features wpshadow.php",
-		"test": "phpunit"
+		"test": [
+			"phpunit",
+			"bash .devcontainer/lib/track-tests.sh"
+		],
+		"kpi": "bash .devcontainer/check-dev-kpis.sh"
 	}
 }
 
