@@ -21,6 +21,14 @@ require_once __DIR__ . '/../diagnostics/class-diagnostic-registry.php';
 use WPShadow\Core\Options_Manager;
 use WPShadow\Diagnostics\Diagnostic_Registry;
 
+// Severity thresholds for Site Health status mapping.
+if ( ! defined( 'WPSHADOW_SEVERITY_CRITICAL_THRESHOLD' ) ) {
+	define( 'WPSHADOW_SEVERITY_CRITICAL_THRESHOLD', 75 );
+}
+if ( ! defined( 'WPSHADOW_SEVERITY_RECOMMENDED_THRESHOLD' ) ) {
+	define( 'WPSHADOW_SEVERITY_RECOMMENDED_THRESHOLD', 50 );
+}
+
 // Initialize Site Health integration on admin_init
 add_action( 'admin_init', 'wpshadow_register_diagnostic_site_health_tests', 20 );
 
@@ -170,7 +178,9 @@ function wpshadow_site_health_test_deep_scan() {
  * @return void
  */
 function wpshadow_register_diagnostic_site_health_tests() {
-	// Only run if we have findings
+	// Bug fix: Changed from 'wpshadow_last_findings' (which was never set) to
+	// 'wpshadow_site_findings' (the actual option used throughout the codebase).
+	// See: class-finding-utils.php line 126 for where this option is updated.
 	$findings = get_option( 'wpshadow_site_findings', array() );
 
 	if ( empty( $findings ) || ! is_array( $findings ) ) {
@@ -232,9 +242,9 @@ function wpshadow_generate_diagnostic_site_health_result( $diagnostic_id, $findi
 	if ( is_numeric( $severity ) ) {
 		// Numeric severity (0-100)
 		$severity_num = (int) $severity;
-		if ( $severity_num >= 75 ) {
+		if ( $severity_num >= WPSHADOW_SEVERITY_CRITICAL_THRESHOLD ) {
 			$site_health_status = 'critical';
-		} elseif ( $severity_num >= 50 ) {
+		} elseif ( $severity_num >= WPSHADOW_SEVERITY_RECOMMENDED_THRESHOLD ) {
 			$site_health_status = 'recommended';
 		} else {
 			$site_health_status = 'good';
