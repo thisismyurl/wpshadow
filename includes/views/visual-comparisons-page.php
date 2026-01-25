@@ -208,19 +208,27 @@ class Visual_Comparisons_Page {
 					success: function(response) {
 						if (response.success && response.data.comparison) {
 							var comparison = response.data.comparison;
+							
+							// Escape HTML entities for safe insertion
+							function escapeHtml(text) {
+								var div = document.createElement('div');
+								div.textContent = text;
+								return div.innerHTML;
+							}
+							
 							var html = '<div class="wpshadow-comparison-side-by-side">';
 							html += '<div class="wpshadow-comparison-side">';
 							html += '<h3><?php esc_html_e( 'Before', 'wpshadow' ); ?></h3>';
-							html += '<img src="' + comparison.before_url + '" alt="<?php esc_attr_e( 'Before', 'wpshadow' ); ?>" />';
+							html += '<img src="' + escapeHtml(comparison.before_url) + '" alt="<?php esc_attr_e( 'Before', 'wpshadow' ); ?>" />';
 							html += '</div>';
 							html += '<div class="wpshadow-comparison-side">';
 							html += '<h3><?php esc_html_e( 'After', 'wpshadow' ); ?></h3>';
-							html += '<img src="' + comparison.after_url + '" alt="<?php esc_attr_e( 'After', 'wpshadow' ); ?>" />';
+							html += '<img src="' + escapeHtml(comparison.after_url) + '" alt="<?php esc_attr_e( 'After', 'wpshadow' ); ?>" />';
 							html += '</div>';
 							html += '</div>';
-							html += '<p><strong><?php esc_html_e( 'Finding:', 'wpshadow' ); ?></strong> ' + comparison.finding_id + '</p>';
-							html += '<p><strong><?php esc_html_e( 'Page:', 'wpshadow' ); ?></strong> <a href="' + comparison.page_url + '" target="_blank">' + comparison.page_url + '</a></p>';
-							html += '<p><strong><?php esc_html_e( 'Date:', 'wpshadow' ); ?></strong> ' + comparison.created_at + '</p>';
+							html += '<p><strong><?php esc_html_e( 'Finding:', 'wpshadow' ); ?></strong> ' + escapeHtml(comparison.finding_id) + '</p>';
+							html += '<p><strong><?php esc_html_e( 'Page:', 'wpshadow' ); ?></strong> <a href="' + escapeHtml(comparison.page_url) + '" target="_blank">' + escapeHtml(comparison.page_url) + '</a></p>';
+							html += '<p><strong><?php esc_html_e( 'Date:', 'wpshadow' ); ?></strong> ' + escapeHtml(comparison.created_at) + '</p>';
 							
 							$('#wpshadow-comparison-content').html(html);
 						} else {

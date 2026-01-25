@@ -225,7 +225,7 @@ Track visual stability over time:
 - Visual stability score
 - Alert on significant changes
 
-## Troubleshoads
+## Troubleshooting
 
 ### Screenshots Not Appearing
 
