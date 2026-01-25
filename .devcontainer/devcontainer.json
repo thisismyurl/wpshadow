@@ -1,21 +1,77 @@
 {
-  "name": "WP Shadow Development",
-  "image": "mcr.microsoft.com/devcontainers/php:8.2",
+  "name": "WP Shadow - WordPress Plugin Development",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "wordpress",
+  "workspaceFolder": "/var/www/html/wp-content/plugins/wpshadow",
+  "shutdownAction": "stopCompose",
+  
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
       "version": "lts"
     },
-    "ghcr.io/devcontainers/features/git:1": {}
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers-contrib/features/composer:2": {
+      "version": "latest"
+    }
   },
+  
   "customizations": {
     "vscode": {
       "extensions": [
         "bmewburn.vscode-intelephense-client",
-        "xdebug.php-debug"
-      ]
+        "wordpresstoolbox.wordpress-toolbox",
+        "wongjn.php-sniffer",
+        "xdebug.php-debug",
+        "editorconfig.editorconfig",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "streetsidesoftware.code-spell-checker",
+        "github.vscode-github-actions",
+        "eamodio.gitlens",
+        "github.copilot"
+      ],
+      "settings": {
+        "php.validate.executablePath": "/usr/local/bin/php",
+        "phpSniffer.standard": "WordPress",
+        "phpSniffer.autoDetect": true,
+        "phpSniffer.executablesFolder": "/var/www/html/wp-content/plugins/wpshadow/vendor/bin/",
+        "editor.formatOnSave": false,
+        "editor.codeActionsOnSave": {
+          "source.fixAll.phpSniffer": true
+        },
+        "files.associations": {
+          "*.php": "php"
+        },
+        "intelephense.environment.phpVersion": "8.2.0",
+        "intelephense.stubs": [
+          "wordpress",
+          "wordpress-globals",
+          "wp-cli",
+          "genesis",
+          "polylang"
+        ]
+      }
     }
   },
-  "forwardPorts": [8080],
-  "postCreateCommand": "composer install",
-  "remoteUser": "vscode"
+  
+  "forwardPorts": [8080, 8081, 3306],
+  "portsAttributes": {
+    "8080": {
+      "label": "WordPress",
+      "onAutoForward": "notify"
+    },
+    "8081": {
+      "label": "phpMyAdmin",
+      "onAutoForward": "silent"
+    },
+    "3306": {
+      "label": "MySQL",
+      "onAutoForward": "silent"
+    }
+  },
+  
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "postStartCommand": "bash .devcontainer/post-start.sh",
+  
+  "remoteUser": "www-data"
 }
