@@ -113,5 +113,16 @@ class AJAX_Router
 		\WPShadow\Admin\Ajax\Error_Report_Handler::register();
 		\WPShadow\Admin\Ajax\Save_Notification_Rule_Handler::register();
 		\WPShadow\Admin\Ajax\Delete_Notification_Rule_Handler::register();
+
+		// Onboarding operations
+		\WPShadow\Admin\Ajax\Save_Onboarding_Handler::register();
+		\WPShadow\Admin\Ajax\Skip_Onboarding_Handler::register();
+		\WPShadow\Admin\Ajax\Dismiss_Term_Handler::register();
+		\WPShadow\Admin\Ajax\Show_All_Features_Handler::register();
+		\WPShadow\Admin\Ajax\Dismiss_Graduation_Handler::register();
+
+		// Timezone management
+		\WPShadow\Admin\Ajax\Detect_Timezone_Handler::register();
+		\WPShadow\Admin\Ajax\Set_Timezone_Handler::register();
 	}
 }

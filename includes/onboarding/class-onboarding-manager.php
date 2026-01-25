@@ -50,15 +50,11 @@ class Onboarding_Manager {
 	
 	/**
 	 * Initialize onboarding system
+	 *
+	 * NOTE: AJAX handlers now registered via AJAX_Router in class-ajax-router.php
+	 * See: includes/admin/ajax/class-*-onboarding-handler.php
 	 */
 	public static function init(): void {
-		// Register AJAX handlers
-		add_action( 'wp_ajax_wpshadow_save_onboarding', [ __CLASS__, 'ajax_save_onboarding' ] );
-		add_action( 'wp_ajax_wpshadow_skip_onboarding', [ __CLASS__, 'ajax_skip_onboarding' ] );
-		add_action( 'wp_ajax_wpshadow_dismiss_term', [ __CLASS__, 'ajax_dismiss_term' ] );
-		add_action( 'wp_ajax_wpshadow_show_all_features', [ __CLASS__, 'ajax_show_all_features' ] );
-		add_action( 'wp_ajax_wpshadow_dismiss_graduation', [ __CLASS__, 'ajax_dismiss_graduation' ] );
-		
 		// Track user actions for graduation
 		add_action( 'save_post', [ __CLASS__, 'track_action' ] );
 		add_action( 'updated_option', [ __CLASS__, 'track_action' ] );
@@ -245,175 +241,15 @@ class Onboarding_Manager {
 	}
 	
 	/**
-	 * AJAX: Save onboarding preferences
+	 * AJAX handlers have been migrated to class-based handlers.
+	 * See: includes/admin/ajax/class-save-onboarding-handler.php
+	 * See: includes/admin/ajax/class-skip-onboarding-handler.php
+	 * See: includes/admin/ajax/class-dismiss-term-handler.php
+	 * See: includes/admin/ajax/class-show-all-features-handler.php
+	 * See: includes/admin/ajax/class-dismiss-graduation-handler.php
 	 * 
-	 * @return void
+	 * Registered via AJAX_Router in class-ajax-router.php
 	 */
-	public static function ajax_save_onboarding(): void {
-		check_ajax_referer( 'wpshadow_onboarding', 'nonce' );
-		
-		if ( ! current_user_can( 'read' ) ) {
-			wp_send_json_error( __( 'Permission denied', 'wpshadow' ) );
-		}
-		
-		$user_id = get_current_user_id();
-		$platform = sanitize_key( $_POST['platform'] ?? '' );
-		$comfort_level = sanitize_key( $_POST['comfort_level'] ?? '' );
-		$config = isset( $_POST['config'] ) ? (array) $_POST['config'] : [];
-		$privacy = isset( $_POST['privacy'] ) ? (array) $_POST['privacy'] : [];
-		
-		// Validate platform
-		$valid_platforms = [ 'wordpress', 'word', 'google-docs', 'wix', 'squarespace', 'moodle', 'notion', 'none' ];
-		if ( ! in_array( $platform, $valid_platforms, true ) ) {
-			wp_send_json_error( __( 'Invalid platform selected', 'wpshadow' ) );
-		}
-		
-		// Validate comfort level
-		$valid_comfort = [ 'learning', 'comfortable', 'expert' ];
-		if ( ! in_array( $comfort_level, $valid_comfort, true ) ) {
-			wp_send_json_error( __( 'Invalid comfort level selected', 'wpshadow' ) );
-		}
-		
-		// Save preferences
-		update_user_meta( $user_id, self::META_PLATFORM, $platform );
-		update_user_meta( $user_id, self::META_COMFORT_LEVEL, $comfort_level );
-		update_user_meta( $user_id, self::META_ONBOARDING_COMPLETE, time() );
-		
-		// Save configuration preferences
-		$config_data = [
-			'auto_scan' => ! empty( $config['auto_scan'] ),
-			'show_tips' => ! empty( $config['show_tips'] ),
-			'track_improvements' => ! empty( $config['track_improvements'] ),
-		];
-		update_user_meta( $user_id, 'wpshadow_config_preferences', $config_data );
-		
-		// Save privacy preferences
-		$privacy_data = [
-			'email_critical' => ! empty( $privacy['email_critical'] ),
-			'email_weekly' => ! empty( $privacy['email_weekly'] ),
-			'share_diagnostics' => ! empty( $privacy['share_diagnostics'] ),
-			'newsletter' => ! empty( $privacy['newsletter'] ),
-			'newsletter_email' => ! empty( $privacy['newsletter_email'] ) ? sanitize_email( $privacy['newsletter_email'] ) : '',
-		];
-		update_user_meta( $user_id, 'wpshadow_privacy_preferences', $privacy_data );
-		
-		// Set UI simplification based on platform
-		$simplified = ( 'wordpress' !== $platform );
-		update_user_meta( $user_id, self::META_UI_SIMPLIFIED, $simplified );
-		
-		// Track KPI
-		if ( class_exists( '\WPShadow\Core\KPI_Tracker' ) ) {
-			\WPShadow\Core\KPI_Tracker::record_custom_event( 'onboarding_completed', [
-				'platform'      => $platform,
-				'comfort_level' => $comfort_level,
-				'config'        => $config_data,
-			] );
-		}
-		
-		// Fire action for Pro module integration
-		do_action( 'wpshadow_onboarding_completed', $user_id, $platform, $comfort_level, $config_data, $privacy_data );
-		
-		// If newsletter requested, trigger subscription
-		if ( ! empty( $privacy['newsletter'] ) && ! empty( $privacy_data['newsletter_email'] ) ) {
-			do_action( 'wpshadow_newsletter_subscribe', $privacy_data['newsletter_email'], [
-				'source' => 'onboarding',
-				'platform' => $platform,
-			] );
-		}
-		
-		wp_send_json_success( [
-			'message'    => __( 'Great! Your workspace is ready.', 'wpshadow' ),
-			'simplified' => $simplified,
-		] );
-	}
-	
-	/**
-	 * AJAX: Skip onboarding
-	 * 
-	 * @return void
-	 */
-	public static function ajax_skip_onboarding(): void {
-		check_ajax_referer( 'wpshadow_onboarding', 'nonce' );
-		
-		if ( ! current_user_can( 'read' ) ) {
-			wp_send_json_error( __( 'Permission denied', 'wpshadow' ) );
-		}
-		
-		$user_id = get_current_user_id();
-		update_user_meta( $user_id, self::META_ONBOARDING_COMPLETE, time() );
-		update_user_meta( $user_id, self::META_UI_SIMPLIFIED, false );
-		
-		wp_send_json_success();
-	}
-	
-	/**
-	 * AJAX: Dismiss terminology term
-	 * 
-	 * @return void
-	 */
-	public static function ajax_dismiss_term(): void {
-		check_ajax_referer( 'wpshadow_onboarding', 'nonce' );
-		
-		if ( ! current_user_can( 'read' ) ) {
-			wp_send_json_error( __( 'Permission denied', 'wpshadow' ) );
-		}
-		
-		$user_id = get_current_user_id();
-		$term = sanitize_key( $_POST['term'] ?? '' );
-		
-		if ( empty( $term ) ) {
-			wp_send_json_error( __( 'Invalid term', 'wpshadow' ) );
-		}
-		
-		$dismissed = get_user_meta( $user_id, self::META_DISMISSED_TERMS, true ) ?: [];
-		$dismissed[] = $term;
-		update_user_meta( $user_id, self::META_DISMISSED_TERMS, array_unique( $dismissed ) );
-		
-		wp_send_json_success();
-	}
-	
-	/**
-	 * AJAX: Show all features (graduate)
-	 * 
-	 * @return void
-	 */
-	public static function ajax_show_all_features(): void {
-		check_ajax_referer( 'wpshadow_onboarding', 'nonce' );
-		
-		if ( ! current_user_can( 'read' ) ) {
-			wp_send_json_error( __( 'Permission denied', 'wpshadow' ) );
-		}
-		
-		$user_id = get_current_user_id();
-		update_user_meta( $user_id, self::META_UI_SIMPLIFIED, false );
-		
-		// Track graduation KPI
-		if ( class_exists( '\WPShadow\Core\KPI_Tracker' ) ) {
-			\WPShadow\Core\KPI_Tracker::record_custom_event( 'onboarding_graduated', [
-				'action_count' => self::get_action_count( $user_id ),
-			] );
-		}
-		
-		wp_send_json_success();
-	}
-	
-	/**
-	 * AJAX: Dismiss graduation notice
-	 * 
-	 * @return void
-	 */
-	public static function ajax_dismiss_graduation(): void {
-		check_ajax_referer( 'wpshadow_onboarding', 'nonce' );
-		
-		if ( ! current_user_can( 'read' ) ) {
-			wp_send_json_error( __( 'Permission denied', 'wpshadow' ) );
-		}
-		
-		$user_id = get_current_user_id();
-		update_user_meta( $user_id, 'wpshadow_graduation_dismissed', time() );
-		
-		wp_send_json_success();
-	}
 	
 	/**
 	 * Add onboarding settings section

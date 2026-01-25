@@ -21,6 +21,7 @@ Usage:
 import base64
 import json
 import os
+import re
 import sys
 import urllib.error
 import urllib.parse
@@ -391,6 +392,95 @@ def markdown_to_html(md: str, meta: dict = None) -> str:
     return final_html
 
 
+def validate_gutenberg_blocks(content: str) -> list[str]:
+    """
+    Validate Gutenberg block structure in content.
+    Returns list of validation errors (empty list = valid).
+    """
+    issues = []
+    
+    # Find all blocks with their boundaries
+    blocks = []
+    pos = 0
+    while True:
+        match = re.search(r'<!-- wp:(\w+)(?:\s+({[^}]*}))?(?:\s*\/)?-->', content[pos:])
+        if not match:
+            break
+        
+        block_name = match.group(1)
+        block_start = pos + match.start()
+        block_content_start = pos + match.end()
+        close_pattern = f'<!-- /wp:{block_name} -->'
+        close_match = content.find(close_pattern, block_content_start)
+        
+        if close_match != -1:
+            blocks.append((block_name, block_start, close_match + len(close_pattern)))
+            pos = close_match + len(close_pattern)
+        else:
+            pos = pos + match.end()
+    
+    # Check for stray content (text outside all block boundaries)
+    covered = set()
+    for name, start, end in blocks:
+        for i in range(start, end):
+            covered.add(i)
+    
+    stray_segments = []
+    in_stray = False
+    stray_start = 0
+    
+    for i, char in enumerate(content):
+        if i not in covered:
+            if not in_stray:
+                stray_start = i
+                in_stray = True
+        else:
+            if in_stray:
+                text = content[stray_start:i].strip()
+                if len(text) > 5 and not text.startswith('<!--'):
+                    stray_segments.append(text)
+                in_stray = False
+    
+    if in_stray:
+        text = content[stray_start:].strip()
+        if len(text) > 5 and not text.startswith('<!--'):
+            stray_segments.append(text)
+    
+    if stray_segments:
+        for segment in stray_segments:
+            preview = segment.replace('\n', ' ')[:60]
+            issues.append(f"Stray content outside block boundaries: {preview}...")
+    
+    return issues
+
+
+def _add_class_to_tag(line: str, tag: str, class_name: str) -> str:
+    """Ensure a tag line includes the given class while preserving other attributes."""
+    if not line.strip().startswith(f'<{tag}'):
+        return line
+    if 'class="' in line:
+        prefix, rest = line.split('class="', 1)
+        classes, suffix = rest.split('"', 1)
+        class_list = classes.split()
+        if class_name not in class_list:
+            class_list.append(class_name)
+        return f"{prefix}class=\"{' '.join(class_list)}\"{suffix}"
+    return line.replace(f'<{tag}', f'<{tag} class="{class_name}"', 1)
+
+
+def _extract_code_content(code_block_html: str) -> str:
+    """Extract inner code content from a <code>...</code> block."""
+    if '<code' not in code_block_html:
+        return code_block_html
+    after_code = code_block_html.split('<code', 1)[1]
+    parts = after_code.split('>', 1)
+    if len(parts) < 2:
+        return code_block_html
+    inner = parts[1]
+    inner = inner.rsplit('</code', 1)[0]
+    return inner.strip('\n')
+
+
 def convert_html_to_blocks(html: str) -> str:
     """
     Convert HTML content to WordPress Gutenberg blocks.
@@ -401,118 +491,143 @@ def convert_html_to_blocks(html: str) -> str:
     in_list = False
     in_code = False
     in_table = False
+    code_language = ''
+    current_list_ordered = False
+    current_list_tag = ''
     code_buffer = []
     list_buffer = []
     table_buffer = []
+    text_list_mode = False
     
     i = 0
+    def finalize_code():
+        nonlocal in_code, code_buffer, code_language
+        if not in_code or not code_buffer:
+            return
+        code_content = _extract_code_content('\n'.join(code_buffer))
+        if code_language:
+            output.append(f'<!-- wp:code {{"language":"{code_language}"}} -->\n')
+        else:
+            output.append('<!-- wp:code -->\n')
+        output.append(f'<pre class="wp-block-code"><code{f" class=\"language-{code_language}\"" if code_language else ""}>{code_content}</code></pre>\n')
+        output.append('<!-- /wp:code -->\n')
+        in_code = False
+        code_buffer = []
+        code_language = ''
+
+    def finalize_list():
+        nonlocal in_list, list_buffer, current_list_ordered, current_list_tag, text_list_mode
+        if not in_list or not list_buffer:
+            return
+        if current_list_tag:
+            list_buffer[0] = _add_class_to_tag(list_buffer[0], current_list_tag, 'wp-block-list')
+        if current_list_ordered:
+            output.append('<!-- wp:list {"ordered":true} -->\n')
+        else:
+            output.append('<!-- wp:list -->\n')
+        output.append('\n'.join(list_buffer))
+        output.append('\n<!-- /wp:list -->\n')
+        in_list = False
+        list_buffer = []
+        current_list_ordered = False
+        current_list_tag = ''
+        text_list_mode = False
+
     while i < len(lines):
         line = lines[i]
         stripped = line.strip()
         
         # Handle headings
         if stripped.startswith('<h2'):
-            # Close any open blocks first
-            if in_list and list_buffer:
-                output.append('<!-- wp:list -->\n')
-                output.append('\n'.join(list_buffer))
-                output.append('\n<!-- /wp:list -->\n')
-                in_list = False
-                list_buffer = []
-            if in_code and code_buffer:
-                output.append('<!-- wp:code -->\n')
-                output.append('\n'.join(code_buffer))
-                output.append('\n<!-- /wp:code -->\n')
-                in_code = False
-                code_buffer = []
-            
+            finalize_list()
+            finalize_code()
             output.append('<!-- wp:heading -->\n')
-            output.append(line)
+            output.append(_add_class_to_tag(line, 'h2', 'wp-block-heading'))
             output.append('\n<!-- /wp:heading -->\n')
         
         elif stripped.startswith('<h3'):
-            # Close any open blocks first
-            if in_list and list_buffer:
-                output.append('<!-- wp:list -->\n')
-                output.append('\n'.join(list_buffer))
-                output.append('\n<!-- /wp:list -->\n')
-                in_list = False
-                list_buffer = []
-            
+            finalize_list()
             output.append('<!-- wp:heading {"level":3} -->\n')
-            output.append(line)
+            output.append(_add_class_to_tag(line, 'h3', 'wp-block-heading'))
             output.append('\n<!-- /wp:heading -->\n')
         
         elif stripped.startswith('<h4'):
-            # Close any open blocks first
-            if in_list and list_buffer:
-                output.append('<!-- wp:list -->\n')
-                output.append('\n'.join(list_buffer))
-                output.append('\n<!-- /wp:list -->\n')
-                in_list = False
-                list_buffer = []
-            
+            finalize_list()
             output.append('<!-- wp:heading {"level":4} -->\n')
-            output.append(line)
+            output.append(_add_class_to_tag(line, 'h4', 'wp-block-heading'))
             output.append('\n<!-- /wp:heading -->\n')
         
         # Handle code blocks - capture entire block until closing </pre>
         elif (stripped.startswith('<pre><code') or stripped.startswith('<pre class')) and not in_code:
             in_code = True
-            code_buffer = []
-            
-            # Extract language from class if present
+            code_buffer = [line]
             lang_match = 'language-'
-            language = ''
+            code_language = ''
             if lang_match in line:
                 try:
                     lang_start = line.index(lang_match) + len(lang_match)
                     lang_end = line.index('"', lang_start)
-                    language = line[lang_start:lang_end]
-                except:
-                    pass
-            
-            if language:
-                output.append(f'<!-- wp:code {{"language":"{language}"}} -->\n')
-            else:
-                output.append('<!-- wp:code -->\n')
-            
-            # Collect all lines until </code></pre>
-            code_buffer.append(line)
+                    code_language = line[lang_start:lang_end]
+                except Exception:
+                    code_language = ''
         
         elif in_code:
             code_buffer.append(line)
             if stripped.startswith('</code></pre>') or '</pre>' in stripped:
-                in_code = False
-                # Output entire code block
-                output.append('\n'.join(code_buffer))
-                output.append('\n<!-- /wp:code -->\n')
-                code_buffer = []
+                finalize_code()
         
         # Handle lists - collect entire list
         elif (stripped.startswith('<ul') or stripped.startswith('<ol')) and not in_list:
             in_list = True
-            list_buffer = []
-            is_ordered = stripped.startswith('<ol')
-            
-            if is_ordered:
-                output.append('<!-- wp:list {"ordered":true} -->\n')
-            else:
-                output.append('<!-- wp:list -->\n')
-            
-            list_buffer.append(line)
+            list_buffer = [line]
+            current_list_ordered = stripped.startswith('<ol')
+            current_list_tag = 'ol' if current_list_ordered else 'ul'
+            text_list_mode = False
         
-        elif in_list:
+        elif in_list and not text_list_mode:
             list_buffer.append(line)
             if (stripped.startswith('</ul>') or stripped.startswith('</ol>')):
-                in_list = False
-                # Output entire list block
-                output.append('\n'.join(list_buffer))
-                output.append('\n<!-- /wp:list -->\n')
-                list_buffer = []
+                finalize_list()
+        
+        # Handle plain-text bullet/numbered lists that weren't converted to HTML lists
+        elif not in_code and (stripped.startswith('- ') or stripped.startswith('* ') or stripped.startswith('&#8211; ') or re.match(r'^\d+\.', stripped)):
+            ordered_match = re.match(r'^(\d+)\.', stripped)
+            is_ordered = bool(ordered_match)
+            bullet_text = stripped
+            if ordered_match:
+                bullet_text = stripped[len(ordered_match.group(0)):].strip()
+            elif stripped.startswith('&#8211; '):
+                bullet_text = stripped[len('&#8211; '):].strip()
+            else:
+                bullet_text = stripped[2:].strip()
+            closing_paragraph = False
+            if bullet_text.endswith('</p>'):
+                bullet_text = bullet_text[:-4].strip()
+                closing_paragraph = True
+            if bullet_text.startswith('<p>'):
+                bullet_text = bullet_text[3:].strip()
+            if not in_list:
+                in_list = True
+                current_list_ordered = is_ordered
+                current_list_tag = 'ol' if is_ordered else 'ul'
+                list_buffer = [f'<{current_list_tag}>']
+                text_list_mode = True
+            elif text_list_mode:
+                text_list_mode = True
+            list_buffer.append(f'<li>{bullet_text}</li>')
+            # If next line is not a bullet, close the list immediately
+            next_stripped = lines[i + 1].strip() if i + 1 < len(lines) else ''
+            if closing_paragraph or not (next_stripped.startswith('- ') or next_stripped.startswith('* ') or next_stripped.startswith('&#8211; ') or re.match(r'^\d+\.', next_stripped)):
+                list_buffer.append(f'</{current_list_tag}>')
+                finalize_list()
+
+        elif in_list and text_list_mode:
+            # Non-bullet line after a text-derived list; close list and reprocess this line
+            finalize_list()
+            i -= 1
         
         # Handle paragraphs (not in code, not in lists)
-        elif stripped.startswith('<p>') and not in_code and not in_list:
+        elif stripped.startswith('<p') and not in_code and not in_list:
             output.append('<!-- wp:paragraph -->\n')
             output.append(line)
             output.append('\n<!-- /wp:paragraph -->\n')
@@ -557,11 +672,9 @@ def convert_html_to_blocks(html: str) -> str:
     
     # Close any remaining open blocks
     if in_list and list_buffer:
-        output.append('\n'.join(list_buffer))
-        output.append('\n<!-- /wp:list -->\n')
+        finalize_list()
     if in_code and code_buffer:
-        output.append('\n'.join(code_buffer))
-        output.append('\n<!-- /wp:code -->\n')
+        finalize_code()
     
     result = '\n'.join(output)
     # Clean up excessive newlines
@@ -625,6 +738,19 @@ def publish(article_path: Path):
     kb_last_updated = meta.get('last_updated') or ''
 
     html = markdown_to_html(body_md, meta)
+
+    # Validate Gutenberg blocks before publishing
+    block_errors = validate_gutenberg_blocks(html)
+    if block_errors:
+        print(f'❌ Gutenberg block validation failed: {article_path.name}')
+        print('\n📋 Issues found:')
+        for error in block_errors:
+            print(f'   • {error}')
+        print('\n⚠️  Content has structure issues that will trigger editor warnings.')
+        print('   Please review and fix before publishing.')
+        sys.exit(1)
+    
+    print(f'✅ Gutenberg blocks validated successfully\n')
 
     # Ensure taxonomies exist
     cat_id = ensure_term(site, auth_header, 'kb_category', category, slug=category)

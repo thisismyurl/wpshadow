@@ -53,11 +53,13 @@ class Timezone_Manager {
 	/**
 	 * Initialize timezone manager
 	 * Hooks into admin to detect and set timezone
+	 *
+	 * NOTE: AJAX handlers now registered via AJAX_Router in class-ajax-router.php
+	 * See: includes/admin/ajax/class-detect-timezone-handler.php
+	 * See: includes/admin/ajax/class-set-timezone-handler.php
 	 */
 	public static function init() {
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_timezone_detection' ) );
-		add_action( 'wp_ajax_wpshadow_detect_timezone', array( __CLASS__, 'ajax_detect_timezone' ) );
-		add_action( 'wp_ajax_wpshadow_set_timezone', array( __CLASS__, 'ajax_set_timezone' ) );
 	}
 
 	/**
@@ -89,56 +91,12 @@ class Timezone_Manager {
 	}
 
 	/**
-	 * AJAX handler to detect timezone from browser
-	 * Browser sends timezone via Intl.DateTimeFormat API
+	 * AJAX handlers have been migrated to class-based handlers.
+	 * See: includes/admin/ajax/class-detect-timezone-handler.php
+	 * See: includes/admin/ajax/class-set-timezone-handler.php
+	 * 
+	 * Registered via AJAX_Router in class-ajax-router.php
 	 */
-	public static function ajax_detect_timezone() {
-		check_ajax_referer( 'wpshadow_timezone_nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
-		}
-
-		// Client sends timezone as query parameter (detected via JS Intl API)
-		$timezone = isset( $_POST['timezone'] ) ? sanitize_text_field( wp_unslash( $_POST['timezone'] ) ) : '';
-
-		if ( ! $timezone || ! self::is_valid_timezone( $timezone ) ) {
-			wp_send_json_error( array( 'message' => 'Invalid timezone' ) );
-		}
-
-		// Store detected timezone
-		self::set_admin_timezone( $timezone );
-
-		wp_send_json_success( array(
-			'timezone' => $timezone,
-			'message'  => sprintf( __( 'Timezone detected: %s', 'wpshadow' ), $timezone ),
-		) );
-	}
-
-	/**
-	 * AJAX handler to manually set timezone
-	 * Used by timezone picker tool
-	 */
-	public static function ajax_set_timezone() {
-		check_ajax_referer( 'wpshadow_timezone_nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
-		}
-
-		$timezone = isset( $_POST['timezone'] ) ? sanitize_text_field( wp_unslash( $_POST['timezone'] ) ) : '';
-
-		if ( ! $timezone || ! self::is_valid_timezone( $timezone ) ) {
-			wp_send_json_error( array( 'message' => 'Invalid timezone' ) );
-		}
-
-		self::set_admin_timezone( $timezone );
-
-		wp_send_json_success( array(
-			'timezone' => $timezone,
-			'message'  => sprintf( __( 'Timezone set to: %s', 'wpshadow' ), $timezone ),
-		) );
-	}
 
 	/**
 	 * Get current admin timezone
