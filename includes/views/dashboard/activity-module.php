@@ -157,7 +157,7 @@ function wpshadow_render_recent_activity(): void {
 			$count = 0;
 			foreach ( $activity as $entry ) :
 				if ( $count >= 7 ) {
-					break; // Show only 5-7 activities
+					break; // Show only first 7 activities
 				}
 				++$count;
 

@@ -290,7 +290,7 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 					foreach ( $cat_findings as $finding ) {
 						$threat_total += isset( $finding['threat_level'] ) ? $finding['threat_level'] : 50;
 					}
-					$gauge_percent = $total > 0 ? min( 100, ( $threat_total / $total ) / 100 * 100 ) : 0;
+					$gauge_percent = $total > 0 ? min( 100, $threat_total / $total ) : 0;
 					$gauge_percent = 100 - $gauge_percent; // Invert: higher is better
 					$gauge_color   = $get_threat_gauge_color( 100 - $gauge_percent );
 					?>
