@@ -63,9 +63,10 @@ abstract class Treatment_Base implements Treatment_Interface {
 	 *
 	 * Wraps apply() with before/after actions for extensibility.
 	 *
+	 * @param bool $dry_run Whether to run in dry-run mode (check only, don't apply).
 	 * @return array Result array.
 	 */
-	public static function execute() {
+	public static function execute( $dry_run = false ) {
 		$class = get_called_class();
 		$finding_id = static::get_finding_id();
 
@@ -74,14 +75,33 @@ abstract class Treatment_Base implements Treatment_Interface {
 		 *
 		 * @param string $class      Treatment class name.
 		 * @param string $finding_id Finding identifier.
+		 * @param bool   $dry_run    Whether this is a dry run.
 		 */
-		do_action( 'wpshadow_before_treatment_apply', $class, $finding_id );
+		do_action( 'wpshadow_before_treatment_apply', $class, $finding_id, $dry_run );
 
-		$result = static::apply();
-
-		// Clear findings cache after treatment is applied
-		if ( function_exists( 'wpshadow_clear_findings_cache' ) ) {
-			wpshadow_clear_findings_cache();
+		if ( $dry_run ) {
+			// In dry-run mode, check if treatment can be applied but don't execute
+			$can_apply = static::can_apply();
+			$result = array(
+				'success'  => $can_apply,
+				'message'  => $can_apply 
+					? 'Treatment can be applied (dry run - no changes made)' 
+					: 'Treatment cannot be applied at this time',
+				'dry_run'  => true,
+				'would_apply' => $can_apply,
+			);
+		} else {
+			$result = static::apply();
+			
+			// Clear findings cache after treatment is applied
+			if ( function_exists( 'wpshadow_clear_findings_cache' ) ) {
+				wpshadow_clear_findings_cache();
+			}
+			
+			// Record in rollback log if successful
+			if ( ! empty( $result['success'] ) ) {
+				self::record_rollback_info( $finding_id, $class );
+			}
 		}
 
 		/**
@@ -101,6 +121,39 @@ abstract class Treatment_Base implements Treatment_Interface {
 		 * @param string $finding_id Finding identifier.
 		 */
 		return apply_filters( 'wpshadow_treatment_result', $result, $class, $finding_id );
+	}
+
+	/**
+	 * Record treatment application for rollback tracking.
+	 *
+	 * @param string $finding_id Finding identifier.
+	 * @param string $class      Treatment class name.
+	 */
+	private static function record_rollback_info( $finding_id, $class ) {
+		$rollback_log = get_option( 'wpshadow_rollback_log', array() );
+		
+		$rollback_log[] = array(
+			'finding_id' => $finding_id,
+			'class'      => $class,
+			'timestamp'  => current_time( 'timestamp' ),
+			'user_id'    => get_current_user_id(),
+		);
+		
+		// Keep only last 100 entries
+		if ( count( $rollback_log ) > 100 ) {
+			$rollback_log = array_slice( $rollback_log, -100 );
+		}
+		
+		update_option( 'wpshadow_rollback_log', $rollback_log );
+	}
+
+	/**
+	 * Get rollback history.
+	 *
+	 * @return array Array of rollback log entries.
+	 */
+	public static function get_rollback_history() {
+		return get_option( 'wpshadow_rollback_log', array() );
 	}
 
 	/**
