@@ -171,8 +171,8 @@ class Hooks_Initializer {
 	public static function on_admin_enqueue_scripts( $hook ) {
 		// Only enqueue consent banner assets if banner should be shown
 		$current_user = get_current_user_id();
-		if ($current_user && current_user_can('manage_options') && class_exists('\\WPShadow\\Privacy\\First_Run_Consent')) {
-			if (\WPShadow\Privacy\First_Run_Consent::should_show_consent($current_user)) {
+		if ( $current_user && current_user_can( 'manage_options' ) && class_exists( '\\WPShadow\\Privacy\\First_Run_Consent' ) ) {
+			if ( \WPShadow\Privacy\First_Run_Consent::should_show_consent( $current_user ) ) {
 				wp_enqueue_style(
 					'wpshadow-consent-banner',
 					WPSHADOW_URL . 'assets/css/consent-banner.css',
@@ -183,19 +183,23 @@ class Hooks_Initializer {
 				wp_enqueue_script(
 					'wpshadow-consent-banner',
 					WPSHADOW_URL . 'assets/js/consent-banner.js',
-					array('jquery'),
+					array( 'jquery' ),
 					WPSHADOW_VERSION,
 					true
 				);
 
-				wp_localize_script('wpshadow-consent-banner', 'wpshadow', array(
-					'consent_nonce' => wp_create_nonce('wpshadow_consent'),
-				));
+				wp_localize_script(
+					'wpshadow-consent-banner',
+					'wpshadow',
+					array(
+						'consent_nonce' => wp_create_nonce( 'wpshadow_consent' ),
+					)
+				);
 			}
 		}
 
 		// Only enqueue other assets on WPShadow pages
-		if (! is_string($hook) || strpos($hook, 'wpshadow') === false) {
+		if ( ! is_string( $hook ) || strpos( $hook, 'wpshadow' ) === false ) {
 			return;
 		}
 
@@ -408,7 +412,7 @@ class Hooks_Initializer {
 
 		// Show email test status on export-personal-data.php page
 		global $pagenow;
-		if ($pagenow === 'export-personal-data.php') {
+		if ( $pagenow === 'export-personal-data.php' ) {
 			self::show_export_personal_data_email_notice();
 		}
 	}
@@ -417,31 +421,31 @@ class Hooks_Initializer {
 	 * Show email server test status on export-personal-data.php page
 	 */
 	private static function show_export_personal_data_email_notice() {
-		$email_test_status = get_option('wpshadow_last_email_test_status', 'not_tested');
-		$email_test_time = get_option('wpshadow_last_email_test_time', 0);
-		$email_tool_url = admin_url('admin.php?page=wpshadow-tools&tool=email-test');
+		$email_test_status = get_option( 'wpshadow_last_email_test_status', 'not_tested' );
+		$email_test_time   = get_option( 'wpshadow_last_email_test_time', 0 );
+		$email_tool_url    = admin_url( 'admin.php?page=wpshadow-tools&tool=email-test' );
 
-		if ($email_test_status === 'passed') {
-			$time_ago = ($email_test_time > 0) ? human_time_diff($email_test_time, current_time('timestamp')) : __('unknown time', 'wpshadow');
+		if ( $email_test_status === 'passed' ) {
+			$time_ago = ( $email_test_time > 0 ) ? human_time_diff( $email_test_time, current_time( 'timestamp' ) ) : __( 'unknown time', 'wpshadow' );
 			echo '<div class="notice notice-success" style="margin-top: 15px;">';
 			echo '<p>';
 			echo '<span class="dashicons dashicons-yes-alt" style="color: #46b450;"></span> ';
 			printf(
 				/* translators: 1: time ago, 2: opening anchor tag for email test tool, 3: closing anchor tag */
-				esc_html__('Email server tested and passed %1$s ago. %2$sRetest email server%3$s', 'wpshadow'),
-				'<strong>' . esc_html($time_ago) . '</strong>',
-				'<a href="' . esc_url($email_tool_url) . '">',
+				esc_html__( 'Email server tested and passed %1$s ago. %2$sRetest email server%3$s', 'wpshadow' ),
+				'<strong>' . esc_html( $time_ago ) . '</strong>',
+				'<a href="' . esc_url( $email_tool_url ) . '">',
 				'</a>'
 			);
 			echo '</p></div>';
-		} elseif ($email_test_status === 'failed') {
+		} elseif ( $email_test_status === 'failed' ) {
 			echo '<div class="notice notice-error" style="margin-top: 15px;">';
 			echo '<p>';
 			echo '<span class="dashicons dashicons-warning" style="color: #d63638;"></span> ';
 			printf(
 				/* translators: 1: opening anchor tag for email test tool, 2: closing anchor tag */
-				esc_html__('Email server test failed. Personal data export notifications may not be delivered. %1$sTest email server%2$s', 'wpshadow'),
-				'<a href="' . esc_url($email_tool_url) . '"><strong>',
+				esc_html__( 'Email server test failed. Personal data export notifications may not be delivered. %1$sTest email server%2$s', 'wpshadow' ),
+				'<a href="' . esc_url( $email_tool_url ) . '"><strong>',
 				'</strong></a>'
 			);
 			echo '</p></div>';
@@ -451,8 +455,8 @@ class Hooks_Initializer {
 			echo '<span class="dashicons dashicons-info" style="color: #f0b849;"></span> ';
 			printf(
 				/* translators: 1: opening anchor tag for email test tool, 2: closing anchor tag */
-				esc_html__('Email server has not been tested. Personal data export notifications may not be delivered. %1$sTest email server now%2$s', 'wpshadow'),
-				'<a href="' . esc_url($email_tool_url) . '"><strong>',
+				esc_html__( 'Email server has not been tested. Personal data export notifications may not be delivered. %1$sTest email server now%2$s', 'wpshadow' ),
+				'<a href="' . esc_url( $email_tool_url ) . '"><strong>',
 				'</strong></a>'
 			);
 			echo '</p></div>';

@@ -296,9 +296,9 @@ class Scan_Frequency_Manager {
 						
 						<?php foreach ( $frequencies as $freq_key => $freq_data ) : ?>
 							<?php
-							$is_selected   = $config['frequency'] === $freq_key;
-							$border_color  = $is_selected ? '#0073aa' : '#e0e0e0';
-							$bg_color      = $is_selected ? '#f0f6fc' : '#fff';
+							$is_selected  = $config['frequency'] === $freq_key;
+							$border_color = $is_selected ? '#0073aa' : '#e0e0e0';
+							$bg_color     = $is_selected ? '#f0f6fc' : '#fff';
 							?>
 							<div style="margin-bottom: 12px; padding: 12px; border: 2px solid <?php echo esc_attr( $border_color ); ?>; border-radius: 4px; cursor: pointer; transition: all 0.2s; background: <?php echo esc_attr( $bg_color ); ?>;">
 								<label class="wps-flex-gap-12-items-flex-start">
