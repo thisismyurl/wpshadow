@@ -79,14 +79,14 @@
 			this.announcementRegion.textContent = '';
 			
 			// Use setTimeout to ensure screen readers detect the change
-			setTimeout(function() {
+			setTimeout(() => {
 				this.announcementRegion.textContent = message;
-			}.bind(this), 100);
+			}, 100);
 
 			// Clear after 3 seconds to prepare for next announcement
-			setTimeout(function() {
+			setTimeout(() => {
 				this.announcementRegion.textContent = '';
-			}.bind(this), 3000);
+			}, 3000);
 		},
 
 		/**
