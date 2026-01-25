@@ -601,7 +601,7 @@ $severity_legend = array(
 				// Save status change via AJAX for non-workflow drops
 				$.post(ajaxurl, {
 					action: 'wpshadow_change_finding_status',
-					nonce: <?php echo wp_json_encode( wp_create_nonce( 'wpshadow_kanban' ) ); ?>,
+					nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_kanban' ) ); ?>',
 					finding_id: findingId,
 					new_status: newStatus
 				}, function(response) {
@@ -647,7 +647,7 @@ $severity_legend = array(
 
 			$.post(ajaxurl, {
 				action: 'wpshadow_autofix_finding',
-				nonce: <?php echo wp_json_encode( wp_create_nonce( 'wpshadow_autofix' ) ); ?>,
+				nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_autofix' ) ); ?>',
 				finding_id: findingId
 			}, function(response) {
 				if (response.success) {
@@ -711,7 +711,7 @@ $severity_legend = array(
 
 			$.post(ajaxurl, {
 				action: 'wpshadow_create_workflow_from_finding',
-				nonce: <?php echo wp_json_encode( wp_create_nonce( 'wpshadow_create_workflow' ) ); ?>,
+				nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_create_workflow' ) ); ?>',
 				finding_id: findingId,
 				workflow_name: workflowName,
 				workflow_type: workflowType,

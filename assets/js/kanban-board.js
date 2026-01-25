@@ -927,7 +927,7 @@ jQuery(document).ready(function ($) {
 
 		$.post(ajaxurl, {
 			action: 'wpshadow_change_finding_status',
-			nonce: $('[name="wpshadow_kanban_nonce"]').val() || $('[data-nonce="wpshadow_kanban"]').attr('data-nonce') || '',
+			nonce: $('[name="wpshadow_kanban_nonce"]').val() || '',
 			finding_id: findingId,
 			new_status: newStatus
 		}, function (response) {
