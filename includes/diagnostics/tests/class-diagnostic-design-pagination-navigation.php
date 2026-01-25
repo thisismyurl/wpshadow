@@ -11,19 +11,19 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/design-pagination-navigation
  */
 class Diagnostic_Design_PAGINATION_NAVIGATION extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'design-pagination-navigation',
-            'title' => __('Pagination Navigation', 'wpshadow'),
-            'description' => __('Validates pagination shows current page, nav buttons.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'design',
-            'kb_link' => 'https://wpshadow.com/kb/design-pagination-navigation',
-            'training_link' => 'https://wpshadow.com/training/design-pagination-navigation',
-            'auto_fixable' => false,
-            'threat_level' => 5
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'design-pagination-navigation',
+			'title'         => __( 'Pagination Navigation', 'wpshadow' ),
+			'description'   => __( 'Validates pagination shows current page, nav buttons.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'design',
+			'kb_link'       => 'https://wpshadow.com/kb/design-pagination-navigation',
+			'training_link' => 'https://wpshadow.com/training/design-pagination-navigation',
+			'auto_fixable'  => false,
+			'threat_level'  => 5,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -31,12 +31,12 @@ class Diagnostic_Design_PAGINATION_NAVIGATION extends Diagnostic_Base {
 	 * Diagnostic: Design PAGINATION NAVIGATION
 	 * Slug: -design-pagination-navigation
 	 * File: class-diagnostic-design-pagination-navigation.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Design PAGINATION NAVIGATION
 	 * Slug: -design-pagination-navigation
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -49,11 +49,16 @@ class Diagnostic_Design_PAGINATION_NAVIGATION extends Diagnostic_Base {
 	 */
 	public static function test_live__design_pagination_navigation(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Pagination navigation is accessible and functional'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Pagination navigation is accessible and functional',
+			);
 		}
 		$message = $result['description'] ?? 'Pagination navigation issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

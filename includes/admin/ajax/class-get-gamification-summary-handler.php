@@ -36,24 +36,26 @@ class Get_Gamification_Summary_Handler extends AJAX_Handler_Base {
 
 		$user_id = get_current_user_id();
 
-		$achievements = Achievement_System::get_user_achievements( $user_id );
-		$points       = Achievement_System::get_user_points( $user_id );
-		$progress     = Achievement_System::get_user_progress( $user_id );
-		$streaks      = Streak_Tracker::get_streaks( $user_id );
-		$badges       = Badge_Manager::get_user_badges( $user_id );
+		$achievements  = Achievement_System::get_user_achievements( $user_id );
+		$points        = Achievement_System::get_user_points( $user_id );
+		$progress      = Achievement_System::get_user_progress( $user_id );
+		$streaks       = Streak_Tracker::get_streaks( $user_id );
+		$badges        = Badge_Manager::get_user_badges( $user_id );
 		$notifications = Milestone_Notifier::get_notifications( $user_id, 10 );
-		$rank         = Leaderboard_Manager::get_user_rank( $user_id );
-		$leaderboard  = Leaderboard_Manager::get_top_achievers( 5 );
+		$rank          = Leaderboard_Manager::get_user_rank( $user_id );
+		$leaderboard   = Leaderboard_Manager::get_top_achievers( 5 );
 
-		self::send_success( array(
-			'achievements'  => $achievements,
-			'points'        => $points,
-			'progress'      => $progress,
-			'streaks'       => $streaks,
-			'badges'        => $badges,
-			'notifications' => $notifications,
-			'rank'          => $rank,
-			'leaderboard'   => $leaderboard,
-		) );
+		self::send_success(
+			array(
+				'achievements'  => $achievements,
+				'points'        => $points,
+				'progress'      => $progress,
+				'streaks'       => $streaks,
+				'badges'        => $badges,
+				'notifications' => $notifications,
+				'rank'          => $rank,
+				'leaderboard'   => $leaderboard,
+			)
+		);
 	}
 }

@@ -24,12 +24,12 @@ use WPShadow\Core\Diagnostic_Lean_Checks;
  * @guardian-integrated Pending
  */
 class Diagnostic_Users_Profile_Completion_Overall extends Diagnostic_Base {
-	protected static $slug = 'users-profile-completion-overall';
-	protected static $title = 'User Profile Completion';
-	protected static $description = 'What percentage of user profile fields are filled?';
-	protected static $category = 'Users & Team';
+	protected static $slug         = 'users-profile-completion-overall';
+	protected static $title        = 'User Profile Completion';
+	protected static $description  = 'What percentage of user profile fields are filled?';
+	protected static $category     = 'Users & Team';
 	protected static $threat_level = 'low';
-	protected static $family = 'general';
+	protected static $family       = 'general';
 	protected static $family_label = 'General';
 
 	/**
@@ -39,45 +39,45 @@ class Diagnostic_Users_Profile_Completion_Overall extends Diagnostic_Base {
 	 */
 	public function check(): ?array {
 		// Get all users
-		$users = get_users( [ 'fields' => 'ID' ] );
+		$users = get_users( array( 'fields' => 'ID' ) );
 
 		if ( empty( $users ) ) {
 			return null;
 		}
 
 		$total_completion = 0;
-		$profile_fields = [ 'user_email', 'user_url', 'description', 'first_name', 'last_name' ];
+		$profile_fields   = array( 'user_email', 'user_url', 'description', 'first_name', 'last_name' );
 
 		foreach ( $users as $user_id ) {
-			$user = get_userdata( $user_id );
+			$user          = get_userdata( $user_id );
 			$filled_fields = 0;
 
 			// Check email
 			if ( ! empty( $user->user_email ) && 'noreply@example.com' !== $user->user_email ) {
-				$filled_fields++;
+				++$filled_fields;
 			}
 
 			// Check URL
 			if ( ! empty( $user->user_url ) ) {
-				$filled_fields++;
+				++$filled_fields;
 			}
 
 			// Check bio
 			if ( ! empty( $user->description ) ) {
-				$filled_fields++;
+				++$filled_fields;
 			}
 
 			// Check first name
 			if ( ! empty( $user->first_name ) ) {
-				$filled_fields++;
+				++$filled_fields;
 			}
 
 			// Check last name
 			if ( ! empty( $user->last_name ) ) {
-				$filled_fields++;
+				++$filled_fields;
 			}
 
-			$user_completion = ( $filled_fields / count( $profile_fields ) ) * 100;
+			$user_completion   = ( $filled_fields / count( $profile_fields ) ) * 100;
 			$total_completion += $user_completion;
 		}
 

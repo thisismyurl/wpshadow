@@ -8,7 +8,7 @@ use WPShadow\Core\Diagnostic_Base;
 /**
  * CONTENT QUALITY - Keyword Analysis Approach
  * ============================================================
- * 
+ *
  * DETECTION APPROACH:
  * Scan local content for quality/bias issues via keyword analysis
  *
@@ -132,7 +132,7 @@ class Diagnostic_Lead_Quality_Score extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Lead Quality Score
 	 * Slug: lead-quality-score
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -153,15 +153,13 @@ class Diagnostic_Lead_Quality_Score extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

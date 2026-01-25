@@ -12,19 +12,19 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/design-search-results-usability
  */
 class Diagnostic_Design_DESIGN_SEARCH_RESULTS_USABILITY extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'design-search-results-usability',
-            'title' => __('Search Results Usability', 'wpshadow'),
-            'description' => __('Checks search results layouts and pagination usability.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'design',
-            'kb_link' => 'https://wpshadow.com/kb/design-search-results-usability',
-            'training_link' => 'https://wpshadow.com/training/design-search-results-usability',
-            'auto_fixable' => false,
-            'threat_level' => 6
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'design-search-results-usability',
+			'title'         => __( 'Search Results Usability', 'wpshadow' ),
+			'description'   => __( 'Checks search results layouts and pagination usability.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'design',
+			'kb_link'       => 'https://wpshadow.com/kb/design-search-results-usability',
+			'training_link' => 'https://wpshadow.com/training/design-search-results-usability',
+			'auto_fixable'  => false,
+			'threat_level'  => 6,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -32,12 +32,12 @@ class Diagnostic_Design_DESIGN_SEARCH_RESULTS_USABILITY extends Diagnostic_Base 
 	 * Diagnostic: Design DESIGN SEARCH RESULTS USABILITY
 	 * Slug: -design-design-search-results-usability
 	 * File: class-diagnostic-design-design-search-results-usability.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Design DESIGN SEARCH RESULTS USABILITY
 	 * Slug: -design-design-search-results-usability
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -50,11 +50,16 @@ class Diagnostic_Design_DESIGN_SEARCH_RESULTS_USABILITY extends Diagnostic_Base 
 	 */
 	public static function test_live__design_design_search_results_usability(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Search results page is well-designed and usable'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Search results page is well-designed and usable',
+			);
 		}
 		$message = $result['description'] ?? 'Search results usability issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

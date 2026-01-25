@@ -21,28 +21,27 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_Admin_Email_Verification extends Diagnostic_Base
-{
+class Diagnostic_Admin_Email_Verification extends Diagnostic_Base {
+
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array
-	{
-		$has_verification = has_action('new_admin_email_approve');
+	public static function check(): ?array {
+		$has_verification = has_action( 'new_admin_email_approve' );
 
-		if (! $has_verification) {
+		if ( ! $has_verification ) {
 			return array(
-				'id'          => 'admin-email-verification',
-				'title'       => 'No Admin Email Change Verification',
-				'description' => 'Admin email can be changed immediately without verification. Attackers can change the admin email to lock out legitimate admins. Require email verification for admin email changes.',
-				'severity'    => 'high',
-				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/verify-admin-email-changes/',
+				'id'            => 'admin-email-verification',
+				'title'         => 'No Admin Email Change Verification',
+				'description'   => 'Admin email can be changed immediately without verification. Attackers can change the admin email to lock out legitimate admins. Require email verification for admin email changes.',
+				'severity'      => 'high',
+				'category'      => 'security',
+				'kb_link'       => 'https://wpshadow.com/kb/verify-admin-email-changes/',
 				'training_link' => 'https://wpshadow.com/training/account-security/',
-				'auto_fixable' => false,
-				'threat_level' => 70,
+				'auto_fixable'  => false,
+				'threat_level'  => 70,
 			);
 		}
 
@@ -66,22 +65,21 @@ class Diagnostic_Admin_Email_Verification extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__admin_email_verification(): array
-	{
-		$result = self::check();
-		$has_verification = has_action('new_admin_email_approve');
+	public static function test_live__admin_email_verification(): array {
+		$result           = self::check();
+		$has_verification = has_action( 'new_admin_email_approve' );
 
-		if ($has_verification) {
+		if ( $has_verification ) {
 			// Verification hook registered = diagnostic should pass (return null)
 			return array(
-				'passed' => is_null($result),
-				'message' => 'Admin email verification hook properly registered'
+				'passed'  => is_null( $result ),
+				'message' => 'Admin email verification hook properly registered',
 			);
 		} else {
 			// No verification hook = issue should be detected (return array)
 			return array(
-				'passed' => !is_null($result) && isset($result['id']) && $result['id'] === 'admin-email-verification',
-				'message' => 'Missing admin email verification, issue correctly identified'
+				'passed'  => ! is_null( $result ) && isset( $result['id'] ) && $result['id'] === 'admin-email-verification',
+				'message' => 'Missing admin email verification, issue correctly identified',
 			);
 		}
 	}

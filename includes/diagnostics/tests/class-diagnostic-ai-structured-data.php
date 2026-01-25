@@ -79,48 +79,50 @@ class Diagnostic_Ai_Structured_Data extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		$issues = [];
+		$issues = array();
 
 		// Check if structured data markup is enabled
-		$schema_enabled = get_option('wpshadow_schema_markup_enabled', false);
+		$schema_enabled = get_option( 'wpshadow_schema_markup_enabled', false );
 
-		if (!$schema_enabled) {
+		if ( ! $schema_enabled ) {
 			$issues[] = 'Schema markup not enabled for structured data';
 		}
 
 		// Check recent posts for JSON-LD
-		$recent_posts = get_posts(['numberposts' => 5]);
-		$with_schema = 0;
-		foreach ($recent_posts as $post) {
-			if (get_post_meta($post->ID, '_schema_markup', true)) {
-				$with_schema++;
+		$recent_posts = get_posts( array( 'numberposts' => 5 ) );
+		$with_schema  = 0;
+		foreach ( $recent_posts as $post ) {
+			if ( get_post_meta( $post->ID, '_schema_markup', true ) ) {
+				++$with_schema;
 			}
 		}
 
-		if ($with_schema < count($recent_posts) * 0.5) {
+		if ( $with_schema < count( $recent_posts ) * 0.5 ) {
 			$issues[] = 'Less than 50% of posts have structured data markup';
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'ai-structured-data',
-			'title' => 'Structured data not implemented',
-			'description' => 'Enable schema markup for better AI parsing',
-			'severity' => 'medium',
-			'category' => 'ai_readiness',
+		return empty( $issues ) ? null : array(
+			'id'           => 'ai-structured-data',
+			'title'        => 'Structured data not implemented',
+			'description'  => 'Enable schema markup for better AI parsing',
+			'severity'     => 'medium',
+			'category'     => 'ai_readiness',
 			'threat_level' => 47,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	public static function test_live_ai_structured_data(): array {
-		delete_option('wpshadow_schema_markup_enabled');
+		delete_option( 'wpshadow_schema_markup_enabled' );
 		$r1 = self::check();
 
-		update_option('wpshadow_schema_markup_enabled', true);
+		update_option( 'wpshadow_schema_markup_enabled', true );
 		$r2 = self::check();
 
-		delete_option('wpshadow_schema_markup_enabled');
-		return ['passed' => is_array($r1) && (is_null($r2) || is_array($r2)), 'message' => 'Structured data check working'];
+		delete_option( 'wpshadow_schema_markup_enabled' );
+		return array(
+			'passed'  => is_array( $r1 ) && ( is_null( $r2 ) || is_array( $r2 ) ),
+			'message' => 'Structured data check working',
+		);
 	}
-	}
-
+}

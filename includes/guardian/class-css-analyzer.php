@@ -67,27 +67,30 @@ class CSS_Analyzer {
 			$results['css_variables_count'] += $file_results['css_variables_count'];
 			$results['import_count']        += $file_results['import_count'];
 			$results['animation_count']     += $file_results['animation_count'];
-			$results['files_scanned']++;
+			++$results['files_scanned'];
 
 			// Keep top 10 most complex examples
 			if ( ! empty( $file_results['complex_selectors'] ) ) {
 				foreach ( $file_results['complex_selectors'] as $selector_data ) {
 					$results['complex_examples'][] = array(
-						'selector'   => $selector_data['selector'],
-						'levels'     => $selector_data['levels'],
-						'file'       => $file_info['relative_path'],
-						'line'       => $selector_data['line'] ?? 0,
-						'source'     => $file_info['source'], // 'theme' or 'plugin'
-						'source_name'=> $file_info['name'],
+						'selector'    => $selector_data['selector'],
+						'levels'      => $selector_data['levels'],
+						'file'        => $file_info['relative_path'],
+						'line'        => $selector_data['line'] ?? 0,
+						'source'      => $file_info['source'], // 'theme' or 'plugin'
+						'source_name' => $file_info['name'],
 					);
 				}
 			}
 		}
 
 		// Sort examples by complexity, keep top 10
-		usort( $results['complex_examples'], function( $a, $b ) {
-			return $b['levels'] - $a['levels'];
-		} );
+		usort(
+			$results['complex_examples'],
+			function ( $a, $b ) {
+				return $b['levels'] - $a['levels'];
+			}
+		);
 		$results['complex_examples'] = array_slice( $results['complex_examples'], 0, 10 );
 
 		// Store results in transients for diagnostics to consume
@@ -114,8 +117,8 @@ class CSS_Analyzer {
 		$files = array();
 
 		// Active theme
-		$theme      = wp_get_theme();
-		$theme_dir  = get_stylesheet_directory();
+		$theme       = wp_get_theme();
+		$theme_dir   = get_stylesheet_directory();
 		$theme_files = self::find_css_in_directory( $theme_dir, 'theme', $theme->get( 'Name' ) );
 		$files       = array_merge( $files, $theme_files );
 
@@ -146,7 +149,7 @@ class CSS_Analyzer {
 
 			$plugin_files = self::find_css_in_directory( $plugin_dir, 'plugin', $plugin_name );
 			$files        = array_merge( $files, $plugin_files );
-			$plugin_count++;
+			++$plugin_count;
 		}
 
 		return $files;
@@ -225,12 +228,12 @@ class CSS_Analyzer {
 	 */
 	private static function analyze_file( string $file_path ): array {
 		$results = array(
-			'complex_count'        => 0,
-			'total_selectors'      => 0,
-			'complex_selectors'    => array(),
-			'css_variables_count'  => 0,
-			'import_count'         => 0,
-			'animation_count'      => 0,
+			'complex_count'       => 0,
+			'total_selectors'     => 0,
+			'complex_selectors'   => array(),
+			'css_variables_count' => 0,
+			'import_count'        => 0,
+			'animation_count'     => 0,
 		);
 
 		$content = file_get_contents( $file_path );
@@ -281,13 +284,13 @@ class CSS_Analyzer {
 					continue;
 				}
 
-				$results['total_selectors']++;
+				++$results['total_selectors'];
 
 				$complexity = self::calculate_selector_complexity( $selector );
 
 				// Flag selectors with >4 levels
 				if ( $complexity > 4 ) {
-					$results['complex_count']++;
+					++$results['complex_count'];
 					$results['complex_selectors'][] = array(
 						'selector' => $selector,
 						'levels'   => $complexity,

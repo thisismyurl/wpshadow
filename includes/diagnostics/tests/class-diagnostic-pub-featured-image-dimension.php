@@ -24,12 +24,12 @@ use WPShadow\Core\Diagnostic_Lean_Checks;
  * @guardian-integrated Pending
  */
 class Diagnostic_Pub_Featured_Image_Dimension extends Diagnostic_Base {
-	protected static $slug = 'pub-featured-image-dimension';
-	protected static $title = 'Posts Have Featured Images';
-	protected static $description = 'Do published posts have featured images?';
-	protected static $category = 'Content Publishing';
+	protected static $slug         = 'pub-featured-image-dimension';
+	protected static $title        = 'Posts Have Featured Images';
+	protected static $description  = 'Do published posts have featured images?';
+	protected static $category     = 'Content Publishing';
 	protected static $threat_level = 'low';
-	protected static $family = 'general';
+	protected static $family       = 'general';
 	protected static $family_label = 'General';
 
 	/**
@@ -39,18 +39,20 @@ class Diagnostic_Pub_Featured_Image_Dimension extends Diagnostic_Base {
 	 */
 	public function check(): ?array {
 		// Get recent published posts
-		$posts = get_posts( [
-			'post_type'      => 'post',
-			'post_status'    => 'publish',
-			'posts_per_page' => -1,
-			'fields'         => 'ids',
-			'date_query'     => [
-				[
-					'after'  => '6 months ago',
-					'column' => 'post_date'
-				]
-			]
-		] );
+		$posts = get_posts(
+			array(
+				'post_type'      => 'post',
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'fields'         => 'ids',
+				'date_query'     => array(
+					array(
+						'after'  => '6 months ago',
+						'column' => 'post_date',
+					),
+				),
+			)
+		);
 
 		if ( empty( $posts ) ) {
 			return null; // No recent posts
@@ -59,7 +61,7 @@ class Diagnostic_Pub_Featured_Image_Dimension extends Diagnostic_Base {
 		$posts_with_featured = 0;
 		foreach ( $posts as $post_id ) {
 			if ( has_post_thumbnail( $post_id ) ) {
-				$posts_with_featured++;
+				++$posts_with_featured;
 			}
 		}
 

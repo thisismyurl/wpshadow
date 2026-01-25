@@ -11,19 +11,19 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/design-pagination-styling
  */
 class Diagnostic_Design_PAGINATION_STYLING extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'design-pagination-styling',
-            'title' => __('Pagination Styling', 'wpshadow'),
-            'description' => __('Checks pagination styling consistent.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'design',
-            'kb_link' => 'https://wpshadow.com/kb/design-pagination-styling',
-            'training_link' => 'https://wpshadow.com/training/design-pagination-styling',
-            'auto_fixable' => false,
-            'threat_level' => 5
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'design-pagination-styling',
+			'title'         => __( 'Pagination Styling', 'wpshadow' ),
+			'description'   => __( 'Checks pagination styling consistent.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'design',
+			'kb_link'       => 'https://wpshadow.com/kb/design-pagination-styling',
+			'training_link' => 'https://wpshadow.com/training/design-pagination-styling',
+			'auto_fixable'  => false,
+			'threat_level'  => 5,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -31,12 +31,12 @@ class Diagnostic_Design_PAGINATION_STYLING extends Diagnostic_Base {
 	 * Diagnostic: Design PAGINATION STYLING
 	 * Slug: -design-pagination-styling
 	 * File: class-diagnostic-design-pagination-styling.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Design PAGINATION STYLING
 	 * Slug: -design-pagination-styling
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -49,11 +49,16 @@ class Diagnostic_Design_PAGINATION_STYLING extends Diagnostic_Base {
 	 */
 	public static function test_live__design_pagination_styling(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Pagination styling matches site design system'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Pagination styling matches site design system',
+			);
 		}
 		$message = $result['description'] ?? 'Pagination styling issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

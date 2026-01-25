@@ -16,45 +16,43 @@ use WPShadow\Core\Diagnostic_Base;
  * @subpackage Diagnostics/Tests
  * @since 1.2601.2112
  */
-class Test_Security_MinimumPhpVersion extends Diagnostic_Base
-{
+class Test_Security_MinimumPhpVersion extends Diagnostic_Base {
 
-	public static function check(): ?array
-	{
+
+	public static function check(): ?array {
 		$php_version = phpversion();
 		$min_version = '7.4.0';
 
-		if (version_compare($php_version, $min_version, '<')) {
-			return [
-				'id' => 'minimum-php-version',
-				'title' => sprintf(__('PHP %s is outdated', 'wpshadow'), $php_version),
-				'description' => sprintf(
-					__('WordPress requires PHP %s or higher for security patches. Current: %s', 'wpshadow'),
+		if ( version_compare( $php_version, $min_version, '<' ) ) {
+			return array(
+				'id'           => 'minimum-php-version',
+				'title'        => sprintf( __( 'PHP %s is outdated', 'wpshadow' ), $php_version ),
+				'description'  => sprintf(
+					__( 'WordPress requires PHP %1$s or higher for security patches. Current: %2$s', 'wpshadow' ),
 					$min_version,
 					$php_version
 				),
-				'severity' => 'critical',
+				'severity'     => 'critical',
 				'threat_level' => 90,
-			];
+			);
 		}
 
 		return null;
 	}
 
-	public static function test_live_minimum_php_version(): array
-	{
+	public static function test_live_minimum_php_version(): array {
 		$result = self::check();
 
-		if (null === $result) {
-			return [
-				'passed' => true,
-				'message' => sprintf(__('PHP version %s is secure', 'wpshadow'), phpversion()),
-			];
+		if ( null === $result ) {
+			return array(
+				'passed'  => true,
+				'message' => sprintf( __( 'PHP version %s is secure', 'wpshadow' ), phpversion() ),
+			);
 		}
 
-		return [
-			'passed' => false,
+		return array(
+			'passed'  => false,
 			'message' => $result['description'],
-		];
+		);
 	}
 }

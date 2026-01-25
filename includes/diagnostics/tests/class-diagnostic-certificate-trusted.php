@@ -93,15 +93,17 @@ class Diagnostic_Certificate_Trusted extends Diagnostic_Base {
 		}
 
 		// Check for valid certificate via stream context
-		$context = stream_context_create( [
-			'ssl' => [
-				'verify_peer'       => true,
-				'verify_peer_name'  => true,
-				'capture_peer_cert' => true,
-			],
-		] );
+		$context = stream_context_create(
+			array(
+				'ssl' => array(
+					'verify_peer'       => true,
+					'verify_peer_name'  => true,
+					'capture_peer_cert' => true,
+				),
+			)
+		);
 
-		$url = parse_url( home_url(), PHP_URL_HOST );
+		$url    = parse_url( home_url(), PHP_URL_HOST );
 		$result = @stream_socket_client( 'ssl://' . $url . ':443', $errno, $errstr, 10, STREAM_CLIENT_CONNECT, $context );
 
 		if ( ! $result ) {
@@ -152,10 +154,8 @@ class Diagnostic_Certificate_Trusted extends Diagnostic_Base {
 
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

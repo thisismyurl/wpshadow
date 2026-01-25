@@ -24,12 +24,12 @@ use WPShadow\Core\Diagnostic_Lean_Checks;
  * @guardian-integrated Pending
  */
 class Diagnostic_Users_Bio_Completion extends Diagnostic_Base {
-	protected static $slug = 'users-bio-completion';
-	protected static $title = 'User Bio Completion';
-	protected static $description = 'What percentage of users have filled in their bio?';
-	protected static $category = 'Users & Team';
+	protected static $slug         = 'users-bio-completion';
+	protected static $title        = 'User Bio Completion';
+	protected static $description  = 'What percentage of users have filled in their bio?';
+	protected static $category     = 'Users & Team';
 	protected static $threat_level = 'low';
-	protected static $family = 'general';
+	protected static $family       = 'general';
 	protected static $family_label = 'General';
 
 	/**
@@ -39,7 +39,7 @@ class Diagnostic_Users_Bio_Completion extends Diagnostic_Base {
 	 */
 	public function check(): ?array {
 		// Get all users
-		$users = get_users( [ 'fields' => 'ID' ] );
+		$users = get_users( array( 'fields' => 'ID' ) );
 
 		if ( empty( $users ) ) {
 			return null;
@@ -50,7 +50,7 @@ class Diagnostic_Users_Bio_Completion extends Diagnostic_Base {
 		foreach ( $users as $user_id ) {
 			$user = get_userdata( $user_id );
 			if ( ! empty( $user->description ) && strlen( trim( $user->description ) ) > 0 ) {
-				$users_with_bio++;
+				++$users_with_bio;
 			}
 		}
 

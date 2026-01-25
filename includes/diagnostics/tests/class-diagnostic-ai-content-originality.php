@@ -109,49 +109,56 @@ class Diagnostic_AiContentOriginality extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		$issues = [];
+		$issues = array();
 
 		// Query recent posts and check AI content detection
-		$recent_posts = get_posts(['numberposts' => 10]);
+		$recent_posts = get_posts( array( 'numberposts' => 10 ) );
 
-		if (empty($recent_posts)) {
+		if ( empty( $recent_posts ) ) {
 			return null; // No posts to analyze
 		}
 
 		$ai_flagged = 0;
-		foreach ($recent_posts as $post) {
-			$ai_score = get_post_meta($post->ID, '_ai_content_score', true);
-			if ($ai_score && $ai_score > 0.7) { // >70% likely AI
-				$ai_flagged++;
+		foreach ( $recent_posts as $post ) {
+			$ai_score = get_post_meta( $post->ID, '_ai_content_score', true );
+			if ( $ai_score && $ai_score > 0.7 ) { // >70% likely AI
+				++$ai_flagged;
 			}
 		}
 
-		if ($ai_flagged > count($recent_posts) * 0.5) {
+		if ( $ai_flagged > count( $recent_posts ) * 0.5 ) {
 			$issues[] = $ai_flagged . ' posts flagged as potentially AI-generated (bad for SEO)';
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'ai-content-originality',
-			'title' => 'AI-generated content detected',
-			'description' => 'High percentage of content appears AI-generated; Google may penalize',
-			'severity' => 'high',
-			'category' => 'ai_readiness',
+		return empty( $issues ) ? null : array(
+			'id'           => 'ai-content-originality',
+			'title'        => 'AI-generated content detected',
+			'description'  => 'High percentage of content appears AI-generated; Google may penalize',
+			'severity'     => 'high',
+			'category'     => 'ai_readiness',
 			'threat_level' => 70,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	public static function test_live_ai_content_originality(): array {
 		// Create test post without AI flag
-		$post_id = wp_insert_post(['post_title' => 'Test Post', 'post_content' => 'Original content']);
-		$r1 = self::check();
+		$post_id = wp_insert_post(
+			array(
+				'post_title'   => 'Test Post',
+				'post_content' => 'Original content',
+			)
+		);
+		$r1      = self::check();
 
 		// Flag post as AI-generated
-		update_post_meta($post_id, '_ai_content_score', 0.85);
+		update_post_meta( $post_id, '_ai_content_score', 0.85 );
 		$r2 = self::check();
 
-		wp_delete_post($post_id, true);
-		return ['passed' => (is_null($r1) || is_array($r1)), 'message' => 'Content originality check working'];
+		wp_delete_post( $post_id, true );
+		return array(
+			'passed'  => ( is_null( $r1 ) || is_array( $r1 ) ),
+			'message' => 'Content originality check working',
+		);
 	}
-	}
-
+}

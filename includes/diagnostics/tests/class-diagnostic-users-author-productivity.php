@@ -24,12 +24,12 @@ use WPShadow\Core\Diagnostic_Lean_Checks;
  * @guardian-integrated Pending
  */
 class Diagnostic_Users_Author_Productivity extends Diagnostic_Base {
-	protected static $slug = 'users-author-productivity';
-	protected static $title = 'Author Productivity';
-	protected static $description = 'Average posts per author per month';
-	protected static $category = 'Content Publishing';
+	protected static $slug         = 'users-author-productivity';
+	protected static $title        = 'Author Productivity';
+	protected static $description  = 'Average posts per author per month';
+	protected static $category     = 'Content Publishing';
 	protected static $threat_level = 'low';
-	protected static $family = 'general';
+	protected static $family       = 'general';
 	protected static $family_label = 'General';
 
 	/**
@@ -39,31 +39,35 @@ class Diagnostic_Users_Author_Productivity extends Diagnostic_Base {
 	 */
 	public function check(): ?array {
 		// Get authors and editors
-		$authors = get_users( [
-			'role__in' => [ 'author', 'editor', 'administrator' ],
-			'fields'   => 'ID'
-		] );
+		$authors = get_users(
+			array(
+				'role__in' => array( 'author', 'editor', 'administrator' ),
+				'fields'   => 'ID',
+			)
+		);
 
 		if ( empty( $authors ) ) {
 			return null;
 		}
 
-		$posts_data = [];
+		$posts_data    = array();
 		$one_month_ago = strtotime( '-1 month' );
 
 		foreach ( $authors as $author_id ) {
-			$posts = get_posts( [
-				'author'         => $author_id,
-				'post_status'    => 'publish',
-				'posts_per_page' => -1,
-				'fields'         => 'ids',
-				'date_query'     => [
-					[
-						'after'     => $one_month_ago,
-						'inclusive' => true,
-					],
-				],
-			] );
+			$posts = get_posts(
+				array(
+					'author'         => $author_id,
+					'post_status'    => 'publish',
+					'posts_per_page' => -1,
+					'fields'         => 'ids',
+					'date_query'     => array(
+						array(
+							'after'     => $one_month_ago,
+							'inclusive' => true,
+						),
+					),
+				)
+			);
 
 			if ( ! empty( $posts ) ) {
 				$posts_data[ $author_id ] = count( $posts );

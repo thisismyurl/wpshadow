@@ -1,7 +1,7 @@
 <?php
 /**
  * Moodle Terminology
- * 
+ *
  * @package WPShadow
  */
 
@@ -9,10 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-return [
+return array(
 	'platform'       => 'moodle',
 	'label'          => __( 'Moodle', 'wpshadow' ),
-	'terms'          => [
+	'terms'          => array(
 		'post'           => __( 'Forum Post', 'wpshadow' ),
 		'page'           => __( 'Page', 'wpshadow' ),
 		'plugin'         => __( 'Plugin', 'wpshadow' ),
@@ -34,7 +34,7 @@ return [
 		'featured_image' => __( 'Course Image', 'wpshadow' ),
 		'author'         => __( 'Teacher', 'wpshadow' ),
 		'comment'        => __( 'Forum Comment', 'wpshadow' ),
-	],
+	),
 	'kb_article'     => 'https://wpshadow.com/kb/moodle-to-wordpress/',
 	'training_video' => 'https://wpshadow.com/training/moodle-to-wordpress/',
-];
+);

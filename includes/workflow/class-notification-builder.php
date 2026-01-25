@@ -341,7 +341,12 @@ class Notification_Builder {
 		<div class="wps-notification-builder">
 			<div class="wps-builder-header">
 				<h2 class="wps-builder-title">
-					<span class="dashicons dashicons-<?php echo $mode === 'email' ? 'email' : 'bell'; ?>"></span>
+					<?php
+					// Validate mode value for dashicon class
+					$valid_mode = in_array( $mode, array( 'email', 'notification' ), true ) ? $mode : 'notification';
+					$icon_class = $valid_mode === 'email' ? 'email' : 'bell';
+					?>
+					<span class="dashicons dashicons-<?php echo esc_attr( $icon_class ); ?>"></span>
 					<?php echo esc_html( $page_title ); ?>
 				</h2>
 				<p class="wps-builder-description">

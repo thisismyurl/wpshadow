@@ -19,23 +19,22 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_Third_Party_Script_Quarantine extends Diagnostic_Base
-{
-	public static function check(): ?array
-	{
-		$quarantined_scripts = get_transient('wpshadow_quarantined_scripts_count');
+class Diagnostic_Third_Party_Script_Quarantine extends Diagnostic_Base {
 
-		if ($quarantined_scripts && $quarantined_scripts > 0) {
+	public static function check(): ?array {
+		$quarantined_scripts = get_transient( 'wpshadow_quarantined_scripts_count' );
+
+		if ( $quarantined_scripts && $quarantined_scripts > 0 ) {
 			return array(
-				'id' => 'third-party-script-quarantine',
-				'title' => sprintf(__('%d Scripts in Quarantine', 'wpshadow'), $quarantined_scripts),
-				'description' => __('Some third-party scripts have been isolated due to performance or security concerns. Review and enable them carefully.', 'wpshadow'),
-				'severity' => 'info',
-				'category' => 'monitoring',
-				'kb_link' => 'https://wpshadow.com/kb/script-quarantine/',
+				'id'            => 'third-party-script-quarantine',
+				'title'         => sprintf( __( '%d Scripts in Quarantine', 'wpshadow' ), $quarantined_scripts ),
+				'description'   => __( 'Some third-party scripts have been isolated due to performance or security concerns. Review and enable them carefully.', 'wpshadow' ),
+				'severity'      => 'info',
+				'category'      => 'monitoring',
+				'kb_link'       => 'https://wpshadow.com/kb/script-quarantine/',
 				'training_link' => 'https://wpshadow.com/training/malicious-script-detection/',
-				'auto_fixable' => false,
-				'threat_level' => 25,
+				'auto_fixable'  => false,
+				'threat_level'  => 25,
 			);
 		}
 		return null;
@@ -63,14 +62,13 @@ class Diagnostic_Third_Party_Script_Quarantine extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__third_party_script_quarantine(): array
-	{
-		$quarantined_scripts = get_transient('wpshadow_quarantined_scripts_count');
-		$has_issue = ($quarantined_scripts && $quarantined_scripts > 0);
+	public static function test_live__third_party_script_quarantine(): array {
+		$quarantined_scripts = get_transient( 'wpshadow_quarantined_scripts_count' );
+		$has_issue           = ( $quarantined_scripts && $quarantined_scripts > 0 );
 
-		$result = self::check();
-		$diagnostic_found_issue = is_array($result);
-		$test_passes = ($has_issue === $diagnostic_found_issue);
+		$result                 = self::check();
+		$diagnostic_found_issue = is_array( $result );
+		$test_passes            = ( $has_issue === $diagnostic_found_issue );
 
 		$message = $test_passes
 			? 'Quarantined script count check matches site state'

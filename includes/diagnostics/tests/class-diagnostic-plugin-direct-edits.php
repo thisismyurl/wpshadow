@@ -22,8 +22,8 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-23 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_Plugin_Direct_Edits extends Diagnostic_Base
-{
+class Diagnostic_Plugin_Direct_Edits extends Diagnostic_Base {
+
 	protected static $slug = 'plugin-direct-edits';
 
 	protected static $title = 'Plugin Direct Edits';
@@ -37,56 +37,49 @@ class Diagnostic_Plugin_Direct_Edits extends Diagnostic_Base
 	/**
 	 * Get diagnostic ID
 	 */
-	public static function get_id(): string
-	{
+	public static function get_id(): string {
 		return 'plugin-direct-edits';
 	}
 
 	/**
 	 * Get diagnostic name
 	 */
-	public static function get_name(): string
-	{
-		return __('Can plugin files be directly edited?', 'wpshadow');
+	public static function get_name(): string {
+		return __( 'Can plugin files be directly edited?', 'wpshadow' );
 	}
 
 	/**
 	 * Get diagnostic description
 	 */
-	public static function get_description(): string
-	{
-		return __('Plugin files should not be editable from the dashboard. Disable to prevent code injection attacks.', 'wpshadow');
+	public static function get_description(): string {
+		return __( 'Plugin files should not be editable from the dashboard. Disable to prevent code injection attacks.', 'wpshadow' );
 	}
 
 	/**
 	 * Get diagnostic category
 	 */
-	public static function get_category(): string
-	{
+	public static function get_category(): string {
 		return 'security';
 	}
 
 	/**
 	 * Get threat level for this finding (0-100)
 	 */
-	public static function get_threat_level(): int
-	{
+	public static function get_threat_level(): int {
 		return 75;
 	}
 
 	/**
 	 * Get KB article URL
 	 */
-	public static function get_kb_article(): string
-	{
+	public static function get_kb_article(): string {
 		return 'https://wpshadow.com/kb/disable-plugin-file-editing/';
 	}
 
 	/**
 	 * Get training video URL
 	 */
-	public static function get_training_video(): string
-	{
+	public static function get_training_video(): string {
 		return 'https://wpshadow.com/training/plugin-file-editing-security/';
 	}
 
@@ -95,13 +88,12 @@ class Diagnostic_Plugin_Direct_Edits extends Diagnostic_Base
 	 *
 	 * @return array|null Finding data or null if no issue
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		// Check if DISALLOW_FILE_EDIT is set to disable plugin/theme editing
 		// If it's NOT set or set to false, file editing is allowed (security issue)
-		$file_edit_allowed = ! (defined('DISALLOW_FILE_EDIT') && DISALLOW_FILE_EDIT);
+		$file_edit_allowed = ! ( defined( 'DISALLOW_FILE_EDIT' ) && DISALLOW_FILE_EDIT );
 
-		if (! $file_edit_allowed) {
+		if ( ! $file_edit_allowed ) {
 			// Good - file editing is disabled
 			return null;
 		}
@@ -130,12 +122,11 @@ class Diagnostic_Plugin_Direct_Edits extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live_plugin_direct_edits(): array
-	{
-		$file_edit_allowed = ! (defined('DISALLOW_FILE_EDIT') && DISALLOW_FILE_EDIT);
-		$result = self::check();
+	public static function test_live_plugin_direct_edits(): array {
+		$file_edit_allowed = ! ( defined( 'DISALLOW_FILE_EDIT' ) && DISALLOW_FILE_EDIT );
+		$result            = self::check();
 
-		if (! $file_edit_allowed) {
+		if ( ! $file_edit_allowed ) {
 			// File editing is disabled (good)
 			return array(
 				'passed'  => true,

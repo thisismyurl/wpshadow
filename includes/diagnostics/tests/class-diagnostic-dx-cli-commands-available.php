@@ -16,7 +16,7 @@ use WPShadow\Core\Diagnostic_Base;
  *
  * @package WPShadow
  * @subpackage Diagnostics
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
@@ -114,7 +114,7 @@ class Diagnostic_Dx_Cli_Commands_Available extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Dx Cli Commands Available
 	 * Slug: dx-cli-commands-available
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -128,11 +128,16 @@ class Diagnostic_Dx_Cli_Commands_Available extends Diagnostic_Base {
 	 */
 	public static function test_live_dx_cli_commands_available(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'CLI commands are well-documented and available'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'CLI commands are well-documented and available',
+			);
 		}
 		$message = $result['description'] ?? 'CLI commands availability issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

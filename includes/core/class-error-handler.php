@@ -195,31 +195,31 @@ class Error_Handler {
 	public static function enhance_error_message( string $message, array $error ): string {
 		// Prepare error data for modal
 		$error_data = array(
-			'message' => $error['message'] ?? '',
-			'file' => basename( $error['file'] ?? '' ),
-			'line' => $error['line'] ?? '',
-			'type' => $error['type'] ?? '',
-			'php_version' => phpversion(),
-			'wp_version' => get_bloginfo( 'version' ),
+			'message'        => $error['message'] ?? '',
+			'file'           => basename( $error['file'] ?? '' ),
+			'line'           => $error['line'] ?? '',
+			'type'           => $error['type'] ?? '',
+			'php_version'    => phpversion(),
+			'wp_version'     => get_bloginfo( 'version' ),
 			'active_plugins' => array_keys( get_option( 'active_plugins', array() ) ),
 		);
 
 		// Add WPShadow help button that opens consent modal
-		$help_section = '<div class="wps-p-15-rounded-4">' . 
-			'<p class="wps-m-0">' . 
-				esc_html__( 'For help resolving this issue, WPShadow can assist:', 'wpshadow' ) . 
+		$help_section = '<div class="wps-p-15-rounded-4">' .
+			'<p class="wps-m-0">' .
+				esc_html__( 'For help resolving this issue, WPShadow can assist:', 'wpshadow' ) .
 			'</p>' .
 			'<button 
 				id="wpshadow-help-btn" 
 				class="wps-p-10-rounded-3"
 				onclick="wpshadowShowHelpModal(' . wp_json_encode( $error_data ) . ')"
 			>' .
-				esc_html__( 'Get Help with This Error', 'wpshadow' ) . 
+				esc_html__( 'Get Help with This Error', 'wpshadow' ) .
 			'</button>' .
 			'</div>';
-		
+
 		$message .= $help_section;
-		
+
 		return $message;
 	}
 

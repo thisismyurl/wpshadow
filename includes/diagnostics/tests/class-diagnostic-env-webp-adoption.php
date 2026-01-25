@@ -105,11 +105,11 @@ class Diagnostic_Env_Webp_Adoption extends Diagnostic_Base {
 		}
 
 		// Check for WebP plugin
-		$webp_plugins = [
+		$webp_plugins = array(
 			'optimus/optimus.php',
 			'imagify/imagify.php',
 			'shortpixel-image-optimiser/wp-shortpixel.php',
-		];
+		);
 
 		$has_webp_plugin = false;
 		foreach ( $webp_plugins as $plugin ) {
@@ -165,10 +165,8 @@ class Diagnostic_Env_Webp_Adoption extends Diagnostic_Base {
 
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

@@ -8,10 +8,10 @@ use WPShadow\Guardian\Auto_Fix_Policy_Manager;
 
 /**
  * WPShadow Guardian Settings Panel
- * 
+ *
  * Settings UI for WPShadow Guardian system configuration.
  * Manage auto-fix policies, anomaly thresholds, schedules.
- * 
+ *
  * Features:
  * - Enable/disable WPShadow Guardian
  * - Treatment whitelist management
@@ -20,10 +20,10 @@ use WPShadow\Guardian\Auto_Fix_Policy_Manager;
  * - Notification settings
  */
 class Guardian_Settings {
-	
+
 	/**
 	 * Render settings page
-	 * 
+	 *
 	 * @return string HTML output
 	 */
 	public static function render(): string {
@@ -80,18 +80,18 @@ class Guardian_Settings {
 			</form>
 		</div>
 		<?php
-		
+
 		return ob_get_clean();
 	}
-	
+
 	/**
 	 * Render general settings tab
-	 * 
+	 *
 	 * @return string HTML
 	 */
 	private static function render_general_tab(): string {
 		$is_enabled = Guardian_Manager::is_enabled();
-		
+
 		$html = '<table class="form-table guardian-settings-table">
 			<tr>
 				<th scope="row">
@@ -130,33 +130,33 @@ class Guardian_Settings {
 				</td>
 			</tr>
 		</table>';
-		
+
 		return $html;
 	}
-	
+
 	/**
 	 * Render policies tab
-	 * 
+	 *
 	 * @return string HTML
 	 */
 	private static function render_policies_tab(): string {
 		$safe_fixes = Auto_Fix_Policy_Manager::get_safe_fixes();
-		
+
 		$html = '<div class="guardian-policies-section">
 			<p>' . esc_html__( 'Select which treatments are safe for automatic execution:', 'wpshadow' ) . '</p>
 			<div class="policies-list">';
-		
+
 		// Get available treatments
-		$treatments = [
-			'WPShadow\Treatments\Treatment_SSL' => __( 'Enable SSL', 'wpshadow' ),
+		$treatments = array(
+			'WPShadow\Treatments\Treatment_SSL'          => __( 'Enable SSL', 'wpshadow' ),
 			'WPShadow\Treatments\Treatment_Outdated_Plugins' => __( 'Update Plugins', 'wpshadow' ),
-			'WPShadow\Treatments\Treatment_Debug_Mode' => __( 'Disable Debug Mode', 'wpshadow' ),
+			'WPShadow\Treatments\Treatment_Debug_Mode'   => __( 'Disable Debug Mode', 'wpshadow' ),
 			'WPShadow\Treatments\Treatment_Memory_Limit' => __( 'Increase Memory', 'wpshadow' ),
-		];
-		
+		);
+
 		foreach ( $treatments as $class => $label ) {
 			$is_approved = in_array( $class, $safe_fixes, true );
-			$html .= sprintf(
+			$html       .= sprintf(
 				'<label class="policy-checkbox">
 					<input type="checkbox" name="guardian_policies[]" value="%s" %s />
 					<span class="policy-label">%s</span>
@@ -166,15 +166,15 @@ class Guardian_Settings {
 				esc_html( $label )
 			);
 		}
-		
+
 		$html .= '</div></div>';
-		
+
 		return $html;
 	}
-	
+
 	/**
 	 * Render anomalies tab
-	 * 
+	 *
 	 * @return string HTML
 	 */
 	private static function render_anomalies_tab(): string {
@@ -210,13 +210,13 @@ class Guardian_Settings {
 				</td>
 			</tr>
 		</table>';
-		
+
 		return $html;
 	}
-	
+
 	/**
 	 * Render schedule tab
-	 * 
+	 *
 	 * @return string HTML
 	 */
 	private static function render_schedule_tab(): string {
@@ -266,13 +266,13 @@ class Guardian_Settings {
 				</td>
 			</tr>
 		</table>';
-		
+
 		return $html;
 	}
-	
+
 	/**
 	 * Render notifications tab
-	 * 
+	 *
 	 * @return string HTML
 	 */
 	private static function render_notifications_tab(): string {
@@ -311,7 +311,7 @@ class Guardian_Settings {
 				</td>
 			</tr>
 		</table>';
-		
+
 		return $html;
 	}
 }

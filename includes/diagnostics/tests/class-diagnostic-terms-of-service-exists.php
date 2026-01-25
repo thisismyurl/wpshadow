@@ -22,8 +22,8 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_Terms_Of_Service_Exists extends Diagnostic_Base
-{
+class Diagnostic_Terms_Of_Service_Exists extends Diagnostic_Base {
+
 	protected static $slug = 'terms-of-service-exists';
 
 	protected static $title = 'Terms of Service Page';
@@ -37,56 +37,49 @@ class Diagnostic_Terms_Of_Service_Exists extends Diagnostic_Base
 	/**
 	 * Get diagnostic ID
 	 */
-	public static function get_id(): string
-	{
+	public static function get_id(): string {
 		return 'terms-of-service-exists';
 	}
 
 	/**
 	 * Get diagnostic name
 	 */
-	public static function get_name(): string
-	{
-		return __('Terms of Service page exists', 'wpshadow');
+	public static function get_name(): string {
+		return __( 'Terms of Service page exists', 'wpshadow' );
 	}
 
 	/**
 	 * Get diagnostic description
 	 */
-	public static function get_description(): string
-	{
-		return __('Ensure your site has a Terms of Service page under common names for legal compliance and trust.', 'wpshadow');
+	public static function get_description(): string {
+		return __( 'Ensure your site has a Terms of Service page under common names for legal compliance and trust.', 'wpshadow' );
 	}
 
 	/**
 	 * Get diagnostic category
 	 */
-	public static function get_category(): string
-	{
+	public static function get_category(): string {
 		return 'compliance';
 	}
 
 	/**
 	 * Get threat level for this finding (0-100)
 	 */
-	public static function get_threat_level(): int
-	{
+	public static function get_threat_level(): int {
 		return 60;
 	}
 
 	/**
 	 * Get KB article URL
 	 */
-	public static function get_kb_article(): string
-	{
+	public static function get_kb_article(): string {
 		return 'https://wpshadow.com/kb/create-terms-of-service/';
 	}
 
 	/**
 	 * Get training video URL
 	 */
-	public static function get_training_video(): string
-	{
+	public static function get_training_video(): string {
 		return 'https://wpshadow.com/training/trust-signals/';
 	}
 
@@ -95,8 +88,7 @@ class Diagnostic_Terms_Of_Service_Exists extends Diagnostic_Base
 	 *
 	 * @return array|null Finding data or null if no issue
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		// Common Terms of Service page titles
 		$tos_names = array(
 			'Terms of Service',
@@ -108,9 +100,9 @@ class Diagnostic_Terms_Of_Service_Exists extends Diagnostic_Base
 		);
 
 		// Search for ToS page by title
-		foreach ($tos_names as $name) {
-			$page = get_page_by_title($name, OBJECT, 'page');
-			if ($page && 'publish' === $page->post_status) {
+		foreach ( $tos_names as $name ) {
+			$page = get_page_by_title( $name, OBJECT, 'page' );
+			if ( $page && 'publish' === $page->post_status ) {
 				return null; // Found ToS page, no issue
 			}
 		}
@@ -140,11 +132,10 @@ class Diagnostic_Terms_Of_Service_Exists extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live_terms_of_service_exists(): array
-	{
+	public static function test_live_terms_of_service_exists(): array {
 		$result = self::check();
 
-		if (is_null($result)) {
+		if ( is_null( $result ) ) {
 			return array(
 				'passed'  => true,
 				'message' => '✓ Terms of Service page found',

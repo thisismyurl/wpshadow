@@ -12,14 +12,14 @@ namespace WPShadow\Views\Tools;
 
 use WPShadow\Core\Timezone_Manager;
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 // Get current timezones
 $current_tz   = Timezone_Manager::get_admin_timezone();
-$abbr         = Timezone_Manager::get_timezone_abbreviation($current_tz);
-$offset       = Timezone_Manager::get_timezone_offset($current_tz);
+$abbr         = Timezone_Manager::get_timezone_abbreviation( $current_tz );
+$offset       = Timezone_Manager::get_timezone_offset( $current_tz );
 $server_tz    = date_default_timezone_get();
 $suggestion   = Timezone_Manager::get_timezone_suggestion();
 $us_timezones = Timezone_Manager::get_us_timezones();
@@ -27,48 +27,48 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 
 <div class="wpshadow-tool-container timezone-alignment-tool">
 	<div class="tool-header">
-		<h2><?php esc_html_e('Timezone Alignment', 'wpshadow'); ?></h2>
+		<h2><?php esc_html_e( 'Timezone Alignment', 'wpshadow' ); ?></h2>
 		<p class="description">
-			<?php esc_html_e('Automatically detect and align your timezone with WordPress. Ensures all timestamps reflect your actual location, not the server\'s timezone.', 'wpshadow'); ?>
+			<?php esc_html_e( 'Automatically detect and align your timezone with WordPress. Ensures all timestamps reflect your actual location, not the server\'s timezone.', 'wpshadow' ); ?>
 		</p>
 	</div>
 
 	<div class="tool-content">
-		<?php if ($suggestion['needs_adjustment']) : ?>
+		<?php if ( $suggestion['needs_adjustment'] ) : ?>
 			<div class="notice notice-warning inline">
 				<p>
-					<strong><?php esc_html_e('Timezone Mismatch Detected', 'wpshadow'); ?></strong><br>
-					<?php echo esc_html($suggestion['message']); ?>
+					<strong><?php esc_html_e( 'Timezone Mismatch Detected', 'wpshadow' ); ?></strong><br>
+					<?php echo esc_html( $suggestion['message'] ); ?>
 				</p>
 			</div>
 		<?php endif; ?>
 
 		<!-- Current Status Section -->
 		<div class="status-section">
-			<h3><?php esc_html_e('Current Status', 'wpshadow'); ?></h3>
+			<h3><?php esc_html_e( 'Current Status', 'wpshadow' ); ?></h3>
 			<table class="widefat striped">
 				<tbody>
 					<tr>
-						<th><?php esc_html_e('WordPress Timezone', 'wpshadow'); ?></th>
+						<th><?php esc_html_e( 'WordPress Timezone', 'wpshadow' ); ?></th>
 						<td>
-							<code><?php echo esc_html($current_tz); ?></code>
+							<code><?php echo esc_html( $current_tz ); ?></code>
 							<span class="timezone-info">
 								<?php
 								printf(
-									esc_html('%s %s'),
-									esc_html($abbr),
-									esc_html($offset)
+									esc_html( '%s %s' ),
+									esc_html( $abbr ),
+									esc_html( $offset )
 								);
 								?>
 							</span>
 						</td>
 					</tr>
 					<tr>
-						<th><?php esc_html_e('Server Timezone', 'wpshadow'); ?></th>
+						<th><?php esc_html_e( 'Server Timezone', 'wpshadow' ); ?></th>
 						<td>
-							<code><?php echo esc_html($server_tz); ?></code>
+							<code><?php echo esc_html( $server_tz ); ?></code>
 							<span class="timezone-info">
-								<?php echo esc_html(Timezone_Manager::get_timezone_abbreviation($server_tz) . ' ' . Timezone_Manager::get_timezone_offset($server_tz)); ?>
+								<?php echo esc_html( Timezone_Manager::get_timezone_abbreviation( $server_tz ) . ' ' . Timezone_Manager::get_timezone_offset( $server_tz ) ); ?>
 							</span>
 						</td>
 					</tr>
@@ -78,11 +78,11 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 
 		<!-- Auto-Detect Section -->
 		<div class="detection-section">
-			<h3><?php esc_html_e('Browser Timezone Detection', 'wpshadow'); ?></h3>
-			<p><?php esc_html_e('Click below to automatically detect your timezone from your browser and apply it to WordPress.', 'wpshadow'); ?></p>
+			<h3><?php esc_html_e( 'Browser Timezone Detection', 'wpshadow' ); ?></h3>
+			<p><?php esc_html_e( 'Click below to automatically detect your timezone from your browser and apply it to WordPress.', 'wpshadow' ); ?></p>
 
 			<button id="wpshadow-detect-tz-btn" class="button button-primary" type="button">
-				<?php esc_html_e('Detect & Apply My Timezone', 'wpshadow'); ?>
+				<?php esc_html_e( 'Detect & Apply My Timezone', 'wpshadow' ); ?>
 			</button>
 
 			<div id="wpshadow-detect-status" class="wps-none">
@@ -92,23 +92,23 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 
 		<!-- Manual Selection Section -->
 		<div class="manual-section">
-			<h3><?php esc_html_e('Manual Timezone Selection', 'wpshadow'); ?></h3>
-			<p><?php esc_html_e('Or manually select your timezone region:', 'wpshadow'); ?></p>
+			<h3><?php esc_html_e( 'Manual Timezone Selection', 'wpshadow' ); ?></h3>
+			<p><?php esc_html_e( 'Or manually select your timezone region:', 'wpshadow' ); ?></p>
 
 			<div class="timezone-selector">
-				<?php foreach ($us_timezones as $region => $timezones) : ?>
+				<?php foreach ( $us_timezones as $region => $timezones ) : ?>
 					<fieldset class="timezone-region">
-						<legend><?php echo esc_html($region); ?></legend>
+						<legend><?php echo esc_html( $region ); ?></legend>
 						<div class="timezone-options">
-							<?php foreach ($timezones as $tz => $label) : ?>
+							<?php foreach ( $timezones as $tz => $label ) : ?>
 								<label class="timezone-label">
 									<input
 										type="radio"
 										name="wpshadow_timezone"
-										value="<?php echo esc_attr($tz); ?>"
-										<?php checked($current_tz, $tz); ?>
+										value="<?php echo esc_attr( $tz ); ?>"
+										<?php checked( $current_tz, $tz ); ?>
 										class="wpshadow-tz-radio" />
-									<span><?php echo esc_html($label); ?></span>
+									<span><?php echo esc_html( $label ); ?></span>
 								</label>
 							<?php endforeach; ?>
 						</div>
@@ -117,7 +117,7 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 			</div>
 
 			<button id="wpshadow-save-tz-btn" class="button button-primary" type="button" style="margin-top: 15px;">
-				<?php esc_html_e('Apply Selected Timezone', 'wpshadow'); ?>
+				<?php esc_html_e( 'Apply Selected Timezone', 'wpshadow' ); ?>
 			</button>
 
 			<div id="wpshadow-save-status" class="wps-none">
@@ -127,12 +127,12 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 
 		<!-- Info Section -->
 		<div class="info-section wps-p-15-rounded-4">
-			<h4><?php esc_html_e('Why Timezone Matters', 'wpshadow'); ?></h4>
+			<h4><?php esc_html_e( 'Why Timezone Matters', 'wpshadow' ); ?></h4>
 			<ul class="wps-m-10">
-				<li><?php esc_html_e('All blog post times reflect your timezone', 'wpshadow'); ?></li>
-				<li><?php esc_html_e('Scheduled posts publish at correct local time', 'wpshadow'); ?></li>
-				<li><?php esc_html_e('Admin displays use your timezone, not server\'s', 'wpshadow'); ?></li>
-				<li><?php esc_html_e('Diagnostic timestamps match your time', 'wpshadow'); ?></li>
+				<li><?php esc_html_e( 'All blog post times reflect your timezone', 'wpshadow' ); ?></li>
+				<li><?php esc_html_e( 'Scheduled posts publish at correct local time', 'wpshadow' ); ?></li>
+				<li><?php esc_html_e( 'Admin displays use your timezone, not server\'s', 'wpshadow' ); ?></li>
+				<li><?php esc_html_e( 'Diagnostic timestamps match your time', 'wpshadow' ); ?></li>
 			</ul>
 		</div>
 	</div>
@@ -266,7 +266,7 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 	jQuery(document).ready(function($) {
 		'use strict';
 
-		const nonce = '<?php echo esc_js(wp_create_nonce('wpshadow_timezone_nonce')); ?>';
+		const nonce = '<?php echo esc_js( wp_create_nonce( 'wpshadow_timezone_nonce' ) ); ?>';
 
 		// Detect timezone button
 		$('#wpshadow-detect-tz-btn').on('click', function() {
@@ -275,15 +275,15 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 			const $result = $('#wpshadow-detect-result');
 
 			// Disable button
-			$btn.prop('disabled', true).text('<?php esc_attr_e('Detecting...', 'wpshadow'); ?>');
+			$btn.prop('disabled', true).text('<?php esc_attr_e( 'Detecting...', 'wpshadow' ); ?>');
 
 			// Detect timezone from browser
 			const detected = WPShadowTZ ? WPShadowTZ.detectBrowserTimezone() : null;
 
 			if (!detected) {
-				$result.text('<?php esc_attr_e('Error: Could not detect timezone from browser.', 'wpshadow'); ?>');
+				$result.text('<?php esc_attr_e( 'Error: Could not detect timezone from browser.', 'wpshadow' ); ?>');
 				$status.addClass('error').show();
-				$btn.prop('disabled', false).text('<?php esc_attr_e('Detect & Apply My Timezone', 'wpshadow'); ?>');
+				$btn.prop('disabled', false).text('<?php esc_attr_e( 'Detect & Apply My Timezone', 'wpshadow' ); ?>');
 				return;
 			}
 
@@ -298,7 +298,7 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 				},
 				success: function(response) {
 					if (response.success) {
-						$result.text('<?php esc_attr_e('Success! Timezone set to:', 'wpshadow'); ?> ' + response.data.timezone);
+						$result.text('<?php esc_attr_e( 'Success! Timezone set to:', 'wpshadow' ); ?> ' + response.data.timezone);
 						$status.removeClass('error').addClass('success').show();
 
 						// Update display
@@ -311,11 +311,11 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 					}
 				},
 				error: function() {
-					$result.text('<?php esc_attr_e('Error: Failed to save timezone.', 'wpshadow'); ?>');
+					$result.text('<?php esc_attr_e( 'Error: Failed to save timezone.', 'wpshadow' ); ?>');
 					$status.addClass('error').show();
 				},
 				complete: function() {
-					$btn.prop('disabled', false).text('<?php esc_attr_e('Detect & Apply My Timezone', 'wpshadow'); ?>');
+					$btn.prop('disabled', false).text('<?php esc_attr_e( 'Detect & Apply My Timezone', 'wpshadow' ); ?>');
 				},
 			});
 		});
@@ -328,13 +328,13 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 			const selected = $('input[name="wpshadow_timezone"]:checked').val();
 
 			if (!selected) {
-				$result.text('<?php esc_attr_e('Error: Please select a timezone.', 'wpshadow'); ?>');
+				$result.text('<?php esc_attr_e( 'Error: Please select a timezone.', 'wpshadow' ); ?>');
 				$status.addClass('error').show();
 				return;
 			}
 
 			// Disable button
-			$btn.prop('disabled', true).text('<?php esc_attr_e('Saving...', 'wpshadow'); ?>');
+			$btn.prop('disabled', true).text('<?php esc_attr_e( 'Saving...', 'wpshadow' ); ?>');
 
 			// Send to server
 			$.ajax({
@@ -347,7 +347,7 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 				},
 				success: function(response) {
 					if (response.success) {
-						$result.text('<?php esc_attr_e('Success! Timezone set to:', 'wpshadow'); ?> ' + response.data.timezone);
+						$result.text('<?php esc_attr_e( 'Success! Timezone set to:', 'wpshadow' ); ?> ' + response.data.timezone);
 						$status.removeClass('error').addClass('success').show();
 
 						// Update display
@@ -360,11 +360,11 @@ $us_timezones = Timezone_Manager::get_us_timezones();
 					}
 				},
 				error: function() {
-					$result.text('<?php esc_attr_e('Error: Failed to save timezone.', 'wpshadow'); ?>');
+					$result.text('<?php esc_attr_e( 'Error: Failed to save timezone.', 'wpshadow' ); ?>');
 					$status.removeClass('success').addClass('error').show();
 				},
 				complete: function() {
-					$btn.prop('disabled', false).text('<?php esc_attr_e('Apply Selected Timezone', 'wpshadow'); ?>');
+					$btn.prop('disabled', false).text('<?php esc_attr_e( 'Apply Selected Timezone', 'wpshadow' ); ?>');
 				},
 			});
 		});

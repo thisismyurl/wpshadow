@@ -6,18 +6,27 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-class Diagnostic_Monitor_Brute_Force_Attempts extends Diagnostic_Base
-{
-	public static function check(): ?array
-	{
+class Diagnostic_Monitor_Brute_Force_Attempts extends Diagnostic_Base {
+
+	public static function check(): ?array {
 		// Check if monitoring plugins are active
-		$has_monitoring = is_plugin_active('wordfence/wordfence.php') ||
-			is_plugin_active('sucuri-scanner/sucuri.php');
-		if ($has_monitoring) {
+		$has_monitoring = is_plugin_active( 'wordfence/wordfence.php' ) ||
+			is_plugin_active( 'sucuri-scanner/sucuri.php' );
+		if ( $has_monitoring ) {
 			return null; // Monitoring in place
 		}
 
-		return ['id' => 'monitor-brute-force', 'title' => __('Brute Force Attack Detection', 'wpshadow'), 'description' => __('Detects multiple failed login attempts from same IP. Real-time alert enables quick block before accounts compromised.', 'wpshadow'), 'severity' => 'high', 'category' => 'monitoring', 'kb_link' => 'https://wpshadow.com/kb/login-security/', 'training_link' => 'https://wpshadow.com/training/brute-force-prevention/', 'auto_fixable' => false, 'threat_level' => 9];
+		return array(
+			'id'            => 'monitor-brute-force',
+			'title'         => __( 'Brute Force Attack Detection', 'wpshadow' ),
+			'description'   => __( 'Detects multiple failed login attempts from same IP. Real-time alert enables quick block before accounts compromised.', 'wpshadow' ),
+			'severity'      => 'high',
+			'category'      => 'monitoring',
+			'kb_link'       => 'https://wpshadow.com/kb/login-security/',
+			'training_link' => 'https://wpshadow.com/training/brute-force-prevention/',
+			'auto_fixable'  => false,
+			'threat_level'  => 9,
+		);
 	}
 
 	/**
@@ -42,14 +51,13 @@ class Diagnostic_Monitor_Brute_Force_Attempts extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__monitor_brute_force_attempts(): array
-	{
-		$has_monitoring = is_plugin_active('wordfence/wordfence.php') || is_plugin_active('sucuri-scanner/sucuri.php');
+	public static function test_live__monitor_brute_force_attempts(): array {
+		$has_monitoring = is_plugin_active( 'wordfence/wordfence.php' ) || is_plugin_active( 'sucuri-scanner/sucuri.php' );
 
 		$diagnostic_result    = self::check();
-		$should_find_issue    = (! $has_monitoring);
-		$diagnostic_has_issue = (null !== $diagnostic_result);
-		$test_passes          = ($should_find_issue === $diagnostic_has_issue);
+		$should_find_issue    = ( ! $has_monitoring );
+		$diagnostic_has_issue = ( null !== $diagnostic_result );
+		$test_passes          = ( $should_find_issue === $diagnostic_has_issue );
 
 		$message = sprintf(
 			'Brute-force monitoring active: %s. Expected diagnostic to %s issue. Diagnostic %s issue. Test: %s',

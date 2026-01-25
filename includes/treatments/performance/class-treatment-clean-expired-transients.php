@@ -33,7 +33,7 @@ class Treatment_Clean_Expired_Transients extends Treatment_Base {
 	 * @param array $options Treatment options
 	 * @return bool Success status
 	 */
-	public static function apply( array $options = [] ): bool {
+	public static function apply( array $options = array() ): bool {
 		global $wpdb;
 
 		// Create backup with count
@@ -47,10 +47,10 @@ class Treatment_Clean_Expired_Transients extends Treatment_Base {
 			)
 		);
 
-		$backup = [
+		$backup = array(
 			'before_count' => $before_count,
 			'timestamp'    => time(),
-		];
+		);
 		self::create_backup( $backup );
 
 		// Delete expired transient timeouts
@@ -65,6 +65,7 @@ class Treatment_Clean_Expired_Transients extends Treatment_Base {
 		);
 
 		// Delete corresponding transient values
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Uses wpdb table property, properly prepared with placeholders
 		$deleted_values = $wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$wpdb->options} 
@@ -83,6 +84,7 @@ class Treatment_Clean_Expired_Transients extends Treatment_Base {
 
 		// Same for site transients on multisite
 		if ( is_multisite() ) {
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Uses wpdb table property, properly prepared with placeholders
 			$wpdb->query(
 				$wpdb->prepare(
 					"DELETE FROM {$wpdb->sitemeta} 
@@ -93,6 +95,7 @@ class Treatment_Clean_Expired_Transients extends Treatment_Base {
 				)
 			);
 
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Uses wpdb table property, properly prepared with placeholders
 			$wpdb->query(
 				$wpdb->prepare(
 					"DELETE FROM {$wpdb->sitemeta} 

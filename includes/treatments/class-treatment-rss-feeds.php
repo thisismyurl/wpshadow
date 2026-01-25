@@ -28,7 +28,7 @@ class Treatment_RSS_Feeds extends Treatment_Base {
 	public static function apply() {
 		update_option( 'wpshadow_rss_feeds_disabled', true );
 		KPI_Tracker::log_fix_applied( self::get_finding_id(), 'performance' );
-		
+
 		return array(
 			'success' => true,
 			'message' => __( 'RSS feed links removed from page head. Your RSS feeds still work at /feed/, but are not auto-discovered.', 'wpshadow' ),
@@ -38,7 +38,7 @@ class Treatment_RSS_Feeds extends Treatment_Base {
 	public static function undo() {
 		delete_option( 'wpshadow_rss_feeds_disabled' );
 		KPI_Tracker::log_fix_undone( self::get_finding_id() );
-		
+
 		return array(
 			'success' => true,
 			'message' => __( 'RSS feed links restored in page head.', 'wpshadow' ),

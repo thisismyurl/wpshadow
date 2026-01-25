@@ -82,9 +82,9 @@ class Diagnostic_Ccpa_Third_Party_Sales_Disclosed extends Diagnostic_Base {
 	public static function check(): ?array {
 		// Check if third-party data sales are disclosed
 		// Check privacy policy for third-party disclosure language
-		
+
 		$privacy_policy_id = (int) get_option( 'wp_page_for_privacy_policy' );
-		
+
 		if ( ! $privacy_policy_id ) {
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
 				'ccpa-third-party-sales-disclosed',
@@ -101,10 +101,10 @@ class Diagnostic_Ccpa_Third_Party_Sales_Disclosed extends Diagnostic_Base {
 		if ( $privacy_policy ) {
 			$content = strtolower( $privacy_policy->post_content );
 			// Check for keywords indicating third-party disclosure
-			$has_disclosure = strpos( $content, 'third party' ) !== false || 
-							  strpos( $content, 'third-party' ) !== false ||
-							  strpos( $content, 'vendor' ) !== false ||
-							  strpos( $content, 'data share' ) !== false;
+			$has_disclosure = strpos( $content, 'third party' ) !== false ||
+								strpos( $content, 'third-party' ) !== false ||
+								strpos( $content, 'vendor' ) !== false ||
+								strpos( $content, 'data share' ) !== false;
 
 			if ( ! $has_disclosure ) {
 				return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
@@ -127,7 +127,7 @@ class Diagnostic_Ccpa_Third_Party_Sales_Disclosed extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Ccpa Third Party Sales Disclosed
 	 * Slug: ccpa-third-party-sales-disclosed
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -148,15 +148,13 @@ class Diagnostic_Ccpa_Third_Party_Sales_Disclosed extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

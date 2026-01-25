@@ -80,53 +80,55 @@ class Diagnostic_Ai_User_Privacy extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		$issues = [];
+		$issues = array();
 
 		// Check if privacy controls are in place
-		$privacy_controls = get_option('wpshadow_ai_privacy_controls_enabled', false);
+		$privacy_controls = get_option( 'wpshadow_ai_privacy_controls_enabled', false );
 
-		if (!$privacy_controls) {
+		if ( ! $privacy_controls ) {
 			$issues[] = 'AI privacy controls not enabled';
 		}
 
 		// Check if privacy policy mentions AI
-		$privacy_page_id = get_option('wp_page_for_privacy_policy', 0);
-		if ($privacy_page_id) {
-			$privacy = get_post($privacy_page_id);
-			if ($privacy && strpos(strtolower($privacy->post_content), 'ai') === false) {
+		$privacy_page_id = get_option( 'wp_page_for_privacy_policy', 0 );
+		if ( $privacy_page_id ) {
+			$privacy = get_post( $privacy_page_id );
+			if ( $privacy && strpos( strtolower( $privacy->post_content ), 'ai' ) === false ) {
 				$issues[] = 'Privacy policy does not address AI/ML data usage';
 			}
 		}
 
 		// Check GDPR compliance
-		$gdpr_compliant = get_option('wpshadow_gdpr_ai_compliant', false);
-		if (!$gdpr_compliant) {
+		$gdpr_compliant = get_option( 'wpshadow_gdpr_ai_compliant', false );
+		if ( ! $gdpr_compliant ) {
 			$issues[] = 'AI implementation not verified for GDPR compliance';
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'ai-user-privacy',
-			'title' => 'AI privacy protections missing',
-			'description' => 'Implement privacy controls for AI/ML operations',
-			'severity' => 'high',
-			'category' => 'ai_readiness',
+		return empty( $issues ) ? null : array(
+			'id'           => 'ai-user-privacy',
+			'title'        => 'AI privacy protections missing',
+			'description'  => 'Implement privacy controls for AI/ML operations',
+			'severity'     => 'high',
+			'category'     => 'ai_readiness',
 			'threat_level' => 72,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	public static function test_live_ai_user_privacy(): array {
-		delete_option('wpshadow_ai_privacy_controls_enabled');
-		delete_option('wpshadow_gdpr_ai_compliant');
+		delete_option( 'wpshadow_ai_privacy_controls_enabled' );
+		delete_option( 'wpshadow_gdpr_ai_compliant' );
 		$r1 = self::check();
 
-		update_option('wpshadow_ai_privacy_controls_enabled', true);
-		update_option('wpshadow_gdpr_ai_compliant', true);
+		update_option( 'wpshadow_ai_privacy_controls_enabled', true );
+		update_option( 'wpshadow_gdpr_ai_compliant', true );
 		$r2 = self::check();
 
-		delete_option('wpshadow_ai_privacy_controls_enabled');
-		delete_option('wpshadow_gdpr_ai_compliant');
-		return ['passed' => is_array($r1) && (is_null($r2) || is_array($r2)), 'message' => 'AI user privacy check working'];
+		delete_option( 'wpshadow_ai_privacy_controls_enabled' );
+		delete_option( 'wpshadow_gdpr_ai_compliant' );
+		return array(
+			'passed'  => is_array( $r1 ) && ( is_null( $r2 ) || is_array( $r2 ) ),
+			'message' => 'AI user privacy check working',
+		);
 	}
-	}
-
+}

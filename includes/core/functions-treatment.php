@@ -29,7 +29,7 @@ function wpshadow_attempt_autofix( $finding_id, $dry_run = false ) {
 			'message' => 'Invalid finding ID provided.',
 		);
 	}
-	
+
 	// Check if Treatment_Registry is available
 	if ( ! class_exists( 'WPShadow\Treatments\Treatment_Registry' ) ) {
 		return array(
@@ -37,7 +37,7 @@ function wpshadow_attempt_autofix( $finding_id, $dry_run = false ) {
 			'message' => 'Treatment system is not available.',
 		);
 	}
-	
+
 	// Apply the treatment through the registry
 	return \WPShadow\Treatments\Treatment_Registry::apply_treatment( $finding_id, $dry_run );
 }
@@ -56,7 +56,7 @@ function wpshadow_rollback_fix( $finding_id ) {
 			'message' => 'Invalid finding ID provided.',
 		);
 	}
-	
+
 	// Check if Treatment_Registry is available
 	if ( ! class_exists( 'WPShadow\Treatments\Treatment_Registry' ) ) {
 		return array(
@@ -64,7 +64,7 @@ function wpshadow_rollback_fix( $finding_id ) {
 			'message' => 'Treatment system is not available.',
 		);
 	}
-	
+
 	// Undo the treatment through the registry
 	return \WPShadow\Treatments\Treatment_Registry::undo_treatment( $finding_id );
 }
@@ -78,7 +78,7 @@ function wpshadow_get_rollback_history() {
 	if ( ! class_exists( 'WPShadow\Core\Treatment_Base' ) ) {
 		return array();
 	}
-	
+
 	return \WPShadow\Core\Treatment_Base::get_rollback_history();
 }
 
@@ -92,12 +92,12 @@ function wpshadow_can_rollback( $finding_id ) {
 	if ( ! class_exists( 'WPShadow\Treatments\Treatment_Registry' ) ) {
 		return false;
 	}
-	
+
 	$treatment = \WPShadow\Treatments\Treatment_Registry::get_treatment( $finding_id );
-	
+
 	if ( ! $treatment ) {
 		return false;
 	}
-	
+
 	return method_exists( $treatment, 'undo' );
 }

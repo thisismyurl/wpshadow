@@ -26,7 +26,7 @@ class Delete_Notification_Rule_Handler extends AJAX_Handler_Base {
 	 * Register AJAX hook
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_delete_notification_rule', [ __CLASS__, 'handle' ] );
+		add_action( 'wp_ajax_wpshadow_delete_notification_rule', array( __CLASS__, 'handle' ) );
 	}
 
 	/**
@@ -37,7 +37,7 @@ class Delete_Notification_Rule_Handler extends AJAX_Handler_Base {
 		self::verify_request( 'wpshadow_notification_builder', 'manage_options' );
 
 		// Get parameters
-		$mode = self::get_post_param( 'mode', 'key', 'notification', true );
+		$mode    = self::get_post_param( 'mode', 'key', 'notification', true );
 		$rule_id = self::get_post_param( 'rule_id', 'text', '', true );
 
 		if ( empty( $rule_id ) ) {
@@ -54,8 +54,10 @@ class Delete_Notification_Rule_Handler extends AJAX_Handler_Base {
 			self::send_error( __( 'Failed to delete rule.', 'wpshadow' ) );
 		}
 
-		self::send_success( array(
-			'message' => __( 'Rule deleted successfully!', 'wpshadow' ),
-		) );
+		self::send_success(
+			array(
+				'message' => __( 'Rule deleted successfully!', 'wpshadow' ),
+			)
+		);
 	}
 }

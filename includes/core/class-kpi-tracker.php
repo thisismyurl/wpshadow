@@ -24,11 +24,11 @@ class KPI_Tracker {
 	 */
 	public static function log_finding_detected( $finding_id, $severity = 'medium' ) {
 		$tracking = self::get_tracking_data();
-		
+
 		if ( ! isset( $tracking['findings_detected'] ) ) {
 			$tracking['findings_detected'] = array();
 		}
-		
+
 		$key = $finding_id . '_' . gmdate( 'Y-m-d' );
 		if ( ! isset( $tracking['findings_detected'][ $key ] ) ) {
 			$tracking['findings_detected'][ $key ] = array(
@@ -38,8 +38,8 @@ class KPI_Tracker {
 				'count'      => 0,
 			);
 		}
-		
-		$tracking['findings_detected'][ $key ]['count']++;
+
+		++$tracking['findings_detected'][ $key ]['count'];
 
 		/**
 		 * Fires when a finding is detected.
@@ -51,7 +51,7 @@ class KPI_Tracker {
 
 		self::save_tracking_data( $tracking );
 	}
-	
+
 	/**
 	 * Log a fix application
 	 *
@@ -61,20 +61,20 @@ class KPI_Tracker {
 	 */
 	public static function log_fix_applied( $finding_id, $method = 'auto' ) {
 		$tracking = self::get_tracking_data();
-		
+
 		if ( ! isset( $tracking['fixes_applied'] ) ) {
 			$tracking['fixes_applied'] = array();
 		}
-		
+
 		$tracking['fixes_applied'][] = array(
 			'finding_id' => $finding_id,
 			'method'     => $method,
 			'date'       => gmdate( 'Y-m-d H:i:s' ),
 		);
-		
+
 		self::save_tracking_data( $tracking );
 	}
-	
+
 	/**
 	 * Log a finding dismissal
 	 *
@@ -84,20 +84,20 @@ class KPI_Tracker {
 	 */
 	public static function log_finding_dismissed( $finding_id, $reason = 'user-choice' ) {
 		$tracking = self::get_tracking_data();
-		
+
 		if ( ! isset( $tracking['findings_dismissed'] ) ) {
 			$tracking['findings_dismissed'] = array();
 		}
-		
+
 		$tracking['findings_dismissed'][] = array(
 			'finding_id' => $finding_id,
 			'reason'     => $reason,
 			'date'       => gmdate( 'Y-m-d H:i:s' ),
 		);
-		
+
 		self::save_tracking_data( $tracking );
 	}
-	
+
 	/**
 	 * Get KPI summary with business value metrics
 	 *
@@ -105,52 +105,52 @@ class KPI_Tracker {
 	 */
 	public static function get_kpi_summary() {
 		$tracking = self::get_tracking_data();
-		
+
 		$findings_detected  = ! empty( $tracking['findings_detected'] ) ? count( $tracking['findings_detected'] ) : 0;
 		$fixes_applied      = ! empty( $tracking['fixes_applied'] ) ? count( $tracking['fixes_applied'] ) : 0;
 		$findings_dismissed = ! empty( $tracking['findings_dismissed'] ) ? count( $tracking['findings_dismissed'] ) : 0;
-		
+
 		// Category breakdown for detailed insights
-		$critical_fixes  = self::count_fixes_by_severity( $tracking, 'critical' );
-		$security_fixes  = self::count_fixes_by_category( $tracking, 'security' );
+		$critical_fixes    = self::count_fixes_by_severity( $tracking, 'critical' );
+		$security_fixes    = self::count_fixes_by_category( $tracking, 'security' );
 		$performance_fixes = self::count_fixes_by_category( $tracking, 'performance' );
-		
+
 		// Human-friendly metrics
 		$time_saved_minutes = $fixes_applied * 15; // 15 min per fix baseline
 		$time_saved_hours   = intdiv( $time_saved_minutes, 60 );
-		
+
 		// Executive metrics
-		$hourly_rate = (int) apply_filters( 'wpshadow_executive_hourly_rate', 50 ); // Configurable
+		$hourly_rate        = (int) apply_filters( 'wpshadow_executive_hourly_rate', 50 ); // Configurable
 		$labor_cost_avoided = $time_saved_hours * $hourly_rate;
-		
+
 		// 30-day comparison for trend
 		$health_trend = self::get_health_trend();
-		
+
 		return array(
 			// Human Value (Non-Technical)
-			'issues_fixed'       => $fixes_applied,
-			'time_saved_display' => self::format_time_saved( $fixes_applied ),
-			'time_saved_hours'   => $time_saved_hours,
-			'confidence_trend'   => $health_trend['confidence_change'], // +15% better than 30 days ago
-			
+			'issues_fixed'              => $fixes_applied,
+			'time_saved_display'        => self::format_time_saved( $fixes_applied ),
+			'time_saved_hours'          => $time_saved_hours,
+			'confidence_trend'          => $health_trend['confidence_change'], // +15% better than 30 days ago
+
 			// Business Value (Executives)
-			'labor_cost_avoided' => $labor_cost_avoided,
-			'critical_risks_mitigated' => $critical_fixes,
-			'security_improvements'    => $security_fixes,
+			'labor_cost_avoided'        => $labor_cost_avoided,
+			'critical_risks_mitigated'  => $critical_fixes,
+			'security_improvements'     => $security_fixes,
 			'performance_optimizations' => $performance_fixes,
-			
+
 			// Derived metrics
-			'findings_detected'  => $findings_detected,
-			'fixes_percentage'   => $findings_detected > 0 ? round( ( $fixes_applied / $findings_detected ) * 100, 1 ) : 0,
-			'findings_dismissed' => $findings_dismissed,
-			
+			'findings_detected'         => $findings_detected,
+			'fixes_percentage'          => $findings_detected > 0 ? round( ( $fixes_applied / $findings_detected ) * 100, 1 ) : 0,
+			'findings_dismissed'        => $findings_dismissed,
+
 			// Trend data for charts
-			'health_score_30_days_ago' => $health_trend['score_30_days_ago'],
-			'health_score_today'       => $health_trend['score_today'],
-			'health_improvement'       => $health_trend['improvement_percentage'],
+			'health_score_30_days_ago'  => $health_trend['score_30_days_ago'],
+			'health_score_today'        => $health_trend['score_today'],
+			'health_improvement'        => $health_trend['improvement_percentage'],
 		);
 	}
-	
+
 	/**
 	 * Calculate estimated time saved with human-readable format
 	 *
@@ -161,13 +161,13 @@ class KPI_Tracker {
 		$minutes = $fixes_count * 15; // Estimate 15 min per fix
 		$hours   = intdiv( $minutes, 60 );
 		$mins    = $minutes % 60;
-		
+
 		if ( $hours > 0 ) {
 			return sprintf( '%dh %dm', $hours, $mins );
 		}
 		return sprintf( '%dm', $mins );
 	}
-	
+
 	/**
 	 * Count fixes by severity level
 	 *
@@ -179,17 +179,17 @@ class KPI_Tracker {
 		if ( empty( $tracking['fixes_applied'] ) ) {
 			return 0;
 		}
-		
+
 		$count = 0;
 		foreach ( $tracking['fixes_applied'] as $fix ) {
 			$finding_severity = self::get_finding_severity( $fix['finding_id'] );
 			if ( $finding_severity === $severity ) {
-				$count++;
+				++$count;
 			}
 		}
 		return $count;
 	}
-	
+
 	/**
 	 * Count fixes by category
 	 *
@@ -201,17 +201,17 @@ class KPI_Tracker {
 		if ( empty( $tracking['fixes_applied'] ) ) {
 			return 0;
 		}
-		
+
 		$count = 0;
 		foreach ( $tracking['fixes_applied'] as $fix ) {
 			$finding_category = self::get_finding_category( $fix['finding_id'] );
 			if ( $finding_category === $category ) {
-				$count++;
+				++$count;
 			}
 		}
 		return $count;
 	}
-	
+
 	/**
 	 * Get finding severity from diagnostic metadata
 	 *
@@ -223,7 +223,7 @@ class KPI_Tracker {
 		// TODO: Implement via diagnostic registry lookup
 		return 'medium'; // Placeholder
 	}
-	
+
 	/**
 	 * Get finding category from diagnostic metadata
 	 *
@@ -235,7 +235,7 @@ class KPI_Tracker {
 		// TODO: Implement via diagnostic registry lookup
 		return 'general'; // Placeholder
 	}
-	
+
 	/**
 	 * Get health score trend over 30 days
 	 *
@@ -244,13 +244,13 @@ class KPI_Tracker {
 	private static function get_health_trend() {
 		$current_health = get_option( 'wpshadow_health_status', array() );
 		$health_history = get_option( 'wpshadow_health_history', array() );
-		
+
 		$score_today = isset( $current_health['score'] ) ? (int) $current_health['score'] : 0;
-		
+
 		// Find score from 30 days ago
-		$cutoff_date = gmdate( 'Y-m-d', strtotime( '-30 days' ) );
+		$cutoff_date       = gmdate( 'Y-m-d', strtotime( '-30 days' ) );
 		$score_30_days_ago = 0;
-		
+
 		if ( is_array( $health_history ) ) {
 			foreach ( array_reverse( $health_history ) as $entry ) {
 				if ( isset( $entry['date'] ) && $entry['date'] <= $cutoff_date ) {
@@ -259,11 +259,11 @@ class KPI_Tracker {
 				}
 			}
 		}
-		
+
 		// Calculate improvement
-		$improvement = $score_today - $score_30_days_ago;
+		$improvement            = $score_today - $score_30_days_ago;
 		$improvement_percentage = $score_30_days_ago > 0 ? round( ( $improvement / $score_30_days_ago ) * 100, 1 ) : 0;
-		
+
 		// Ensure confidence_change is never empty or just '%'
 		if ( $improvement > 0 ) {
 			$confidence_change = '+' . $improvement . '%';
@@ -272,7 +272,7 @@ class KPI_Tracker {
 		} else {
 			$confidence_change = '0%';
 		}
-		
+
 		return array(
 			'score_today'            => $score_today,
 			'score_30_days_ago'      => $score_30_days_ago,
@@ -280,7 +280,7 @@ class KPI_Tracker {
 			'confidence_change'      => $confidence_change,
 		);
 	}
-	
+
 	/**
 	 * Get all tracking data
 	 *
@@ -290,7 +290,7 @@ class KPI_Tracker {
 		$data = get_option( 'wpshadow_kpi_tracking', array() );
 		return is_array( $data ) ? $data : array();
 	}
-	
+
 	/**
 	 * Save tracking data
 	 *
@@ -300,37 +300,37 @@ class KPI_Tracker {
 	private static function save_tracking_data( $data ) {
 		// Keep only last 90 days of data
 		$cutoff_date = gmdate( 'Y-m-d', strtotime( '-90 days' ) );
-		
+
 		if ( ! empty( $data['findings_detected'] ) ) {
 			$data['findings_detected'] = array_filter(
 				$data['findings_detected'],
-				function( $item ) use ( $cutoff_date ) {
+				function ( $item ) use ( $cutoff_date ) {
 					return $item['date'] >= $cutoff_date;
 				}
 			);
 		}
-		
+
 		if ( ! empty( $data['fixes_applied'] ) ) {
 			$data['fixes_applied'] = array_filter(
 				$data['fixes_applied'],
-				function( $item ) use ( $cutoff_date ) {
+				function ( $item ) use ( $cutoff_date ) {
 					return $item['date'] >= $cutoff_date;
 				}
 			);
 		}
-		
+
 		if ( ! empty( $data['findings_dismissed'] ) ) {
 			$data['findings_dismissed'] = array_filter(
 				$data['findings_dismissed'],
-				function( $item ) use ( $cutoff_date ) {
+				function ( $item ) use ( $cutoff_date ) {
 					return $item['date'] >= $cutoff_date;
 				}
 			);
 		}
-		
+
 		update_option( 'wpshadow_kpi_tracking', $data );
 	}
-	
+
 	/**
 	 * Reset all KPI data (useful for testing)
 	 *
@@ -347,16 +347,19 @@ class KPI_Tracker {
 	 */
 	public static function get_dark_mode_adoption() {
 		$adoption_data = get_option( 'wpshadow_dark_mode_adoption', array() );
-		
+
 		// Return with defaults if empty
-		return wp_parse_args( $adoption_data, array(
-			'total_users'       => 0,
-			'dark_mode_users'   => 0,
-			'auto_mode_users'   => 0,
-			'light_mode_users'  => 0,
-			'last_updated'      => 'Never',
-			'adoption_rate'     => 0,
-		) );
+		return wp_parse_args(
+			$adoption_data,
+			array(
+				'total_users'      => 0,
+				'dark_mode_users'  => 0,
+				'auto_mode_users'  => 0,
+				'light_mode_users' => 0,
+				'last_updated'     => 'Never',
+				'adoption_rate'    => 0,
+			)
+		);
 	}
 
 	/**
@@ -368,18 +371,18 @@ class KPI_Tracker {
 	 */
 	public static function record_treatment_applied( $treatment_id, $time_saved_minutes = 15 ) {
 		$tracking = self::get_tracking_data();
-		
+
 		if ( ! isset( $tracking['treatments_applied'] ) ) {
 			$tracking['treatments_applied'] = array();
 		}
-		
+
 		$tracking['treatments_applied'][] = array(
-			'treatment_id'      => $treatment_id,
-			'time_saved'        => $time_saved_minutes,
-			'date'              => gmdate( 'Y-m-d H:i:s' ),
-			'user_id'           => get_current_user_id(),
+			'treatment_id' => $treatment_id,
+			'time_saved'   => $time_saved_minutes,
+			'date'         => gmdate( 'Y-m-d H:i:s' ),
+			'user_id'      => get_current_user_id(),
 		);
-		
+
 		/**
 		 * Fires when a treatment is recorded in KPI tracking.
 		 *
@@ -387,7 +390,7 @@ class KPI_Tracker {
 		 * @param int    $time_saved_minutes Time saved.
 		 */
 		do_action( 'wpshadow_treatment_kpi_recorded', $treatment_id, $time_saved_minutes );
-		
+
 		self::save_tracking_data( $tracking );
 	}
 
@@ -400,17 +403,17 @@ class KPI_Tracker {
 	 */
 	public static function record_diagnostic_run( $diagnostic_id, $success = true ) {
 		$tracking = self::get_tracking_data();
-		
+
 		if ( ! isset( $tracking['diagnostics_run'] ) ) {
 			$tracking['diagnostics_run'] = array();
 		}
-		
+
 		$tracking['diagnostics_run'][] = array(
 			'diagnostic_id' => $diagnostic_id,
 			'success'       => $success,
 			'date'          => gmdate( 'Y-m-d H:i:s' ),
 		);
-		
+
 		/**
 		 * Fires when a diagnostic run is recorded.
 		 *
@@ -418,7 +421,7 @@ class KPI_Tracker {
 		 * @param bool   $success Success status.
 		 */
 		do_action( 'wpshadow_diagnostic_kpi_recorded', $diagnostic_id, $success );
-		
+
 		self::save_tracking_data( $tracking );
 	}
 
@@ -431,18 +434,18 @@ class KPI_Tracker {
 	 */
 	public static function record_finding_resolved( $finding_id, $resolution_type = 'fixed' ) {
 		$tracking = self::get_tracking_data();
-		
+
 		if ( ! isset( $tracking['findings_resolved'] ) ) {
 			$tracking['findings_resolved'] = array();
 		}
-		
+
 		$tracking['findings_resolved'][] = array(
-			'finding_id'       => $finding_id,
-			'resolution_type'  => $resolution_type,
-			'date'             => gmdate( 'Y-m-d H:i:s' ),
-			'user_id'          => get_current_user_id(),
+			'finding_id'      => $finding_id,
+			'resolution_type' => $resolution_type,
+			'date'            => gmdate( 'Y-m-d H:i:s' ),
+			'user_id'         => get_current_user_id(),
 		);
-		
+
 		/**
 		 * Fires when a finding is marked resolved.
 		 *
@@ -450,7 +453,7 @@ class KPI_Tracker {
 		 * @param string $resolution_type Resolution type.
 		 */
 		do_action( 'wpshadow_finding_resolved', $finding_id, $resolution_type );
-		
+
 		self::save_tracking_data( $tracking );
 	}
 }

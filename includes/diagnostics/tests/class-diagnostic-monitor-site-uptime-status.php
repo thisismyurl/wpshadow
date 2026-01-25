@@ -4,9 +4,19 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 class Diagnostic_Monitor_Site_Uptime_Status extends Diagnostic_Base {
-    public static function check(): ?array {
-        return ['id' => 'monitor-uptime', 'title' => __('Site Uptime Status', 'wpshadow'), 'description' => __('Continuously monitors if site is reachable via HTTP/HTTPS from multiple geographic locations. Detects outages within seconds.', 'wpshadow'), 'severity' => 'high', 'category' => 'monitoring', 'kb_link' => 'https://wpshadow.com/kb/uptime-monitoring/', 'training_link' => 'https://wpshadow.com/training/site-availability/', 'auto_fixable' => false, 'threat_level' => 10];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'monitor-uptime',
+			'title'         => __( 'Site Uptime Status', 'wpshadow' ),
+			'description'   => __( 'Continuously monitors if site is reachable via HTTP/HTTPS from multiple geographic locations. Detects outages within seconds.', 'wpshadow' ),
+			'severity'      => 'high',
+			'category'      => 'monitoring',
+			'kb_link'       => 'https://wpshadow.com/kb/uptime-monitoring/',
+			'training_link' => 'https://wpshadow.com/training/site-availability/',
+			'auto_fixable'  => false,
+			'threat_level'  => 10,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -14,12 +24,12 @@ class Diagnostic_Monitor_Site_Uptime_Status extends Diagnostic_Base {
 	 * Diagnostic: Monitor Site Uptime Status
 	 * Slug: -monitor-site-uptime-status
 	 * File: class-diagnostic-monitor-site-uptime-status.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Monitor Site Uptime Status
 	 * Slug: -monitor-site-uptime-status
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -32,11 +42,16 @@ class Diagnostic_Monitor_Site_Uptime_Status extends Diagnostic_Base {
 	 */
 	public static function test_live__monitor_site_uptime_status(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Site uptime is excellent - no significant downtime'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Site uptime is excellent - no significant downtime',
+			);
 		}
 		$message = $result['description'] ?? 'Uptime issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

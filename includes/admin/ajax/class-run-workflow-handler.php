@@ -21,7 +21,7 @@ class Run_Workflow_Handler extends AJAX_Handler_Base {
 	 * Register AJAX hook
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_run_workflow', [ __CLASS__, 'handle' ] );
+		add_action( 'wp_ajax_wpshadow_run_workflow', array( __CLASS__, 'handle' ) );
 	}
 
 	/**
@@ -45,17 +45,19 @@ class Run_Workflow_Handler extends AJAX_Handler_Base {
 		}
 
 		// Execute workflow with manual trigger context
-		$context = [
+		$context = array(
 			'trigger_type' => 'manual',
 			'user_id'      => get_current_user_id(),
 			'timestamp'    => time(),
-		];
+		);
 
 		$result = Workflow_Executor::execute_workflow( $workflow, $context );
 
-		self::send_success( [
-			'message' => 'Workflow executed successfully.',
-			'result'  => $result,
-		] );
+		self::send_success(
+			array(
+				'message' => 'Workflow executed successfully.',
+				'result'  => $result,
+			)
+		);
 	}
 }

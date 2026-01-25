@@ -14,31 +14,30 @@ use WPShadow\Diagnostics\Diagnostic_Base;
  *
  * @since 1.2.0
  */
-class Test_Image_Optimization extends Diagnostic_Base
-{
+class Test_Image_Optimization extends Diagnostic_Base {
+
 
 	/**
 	 * Check image optimization status
 	 *
 	 * @return array|null Diagnostic array if issues found, null if all good
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		$optimization = self::analyze_image_optimization();
 
-		if ($optimization['threat_level'] === 0) {
+		if ( $optimization['threat_level'] === 0 ) {
 			return null;
 		}
 
-		return [
-			'threat_level'    => $optimization['threat_level'],
-			'threat_color'    => 'yellow',
-			'passed'          => false,
-			'issue'           => $optimization['issue'],
-			'metadata'        => $optimization,
-			'kb_link'         => 'https://wpshadow.com/kb/wordpress-image-optimization/',
-			'training_link'   => 'https://wpshadow.com/training/wordpress-image-performance/',
-		];
+		return array(
+			'threat_level'  => $optimization['threat_level'],
+			'threat_color'  => 'yellow',
+			'passed'        => false,
+			'issue'         => $optimization['issue'],
+			'metadata'      => $optimization,
+			'kb_link'       => 'https://wpshadow.com/kb/wordpress-image-optimization/',
+			'training_link' => 'https://wpshadow.com/training/wordpress-image-performance/',
+		);
 	}
 
 	/**
@@ -46,31 +45,30 @@ class Test_Image_Optimization extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_image_optimization_plugin(): array
-	{
+	public static function test_image_optimization_plugin(): array {
 		$active_plugins = get_plugins();
 
-		$optimization_plugins = [
-			'imagify/imagify.php' => 'Imagify',
+		$optimization_plugins = array(
+			'imagify/imagify.php'                          => 'Imagify',
 			'shortpixel-image-optimiser/wp-shortpixel.php' => 'ShortPixel',
-			'smush/wp-smush.php' => 'Smush',
+			'smush/wp-smush.php'                           => 'Smush',
 			'ewww-image-optimizer/ewww-image-optimizer.php' => 'EWWW',
-		];
+		);
 
 		$has_plugin = false;
-		foreach ($optimization_plugins as $plugin_file => $plugin_name) {
-			if (isset($active_plugins[$plugin_file])) {
+		foreach ( $optimization_plugins as $plugin_file => $plugin_name ) {
+			if ( isset( $active_plugins[ $plugin_file ] ) ) {
 				$has_plugin = true;
 				break;
 			}
 		}
 
-		return [
-			'test_name'    => 'Image Optimization Plugin',
-			'has_plugin'   => $has_plugin,
-			'passed'       => $has_plugin,
-			'description'  => $has_plugin ? 'Image optimization plugin active' : 'No image optimization plugin installed',
-		];
+		return array(
+			'test_name'   => 'Image Optimization Plugin',
+			'has_plugin'  => $has_plugin,
+			'passed'      => $has_plugin,
+			'description' => $has_plugin ? 'Image optimization plugin active' : 'No image optimization plugin installed',
+		);
 	}
 
 	/**
@@ -78,24 +76,23 @@ class Test_Image_Optimization extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_attachment_count(): array
-	{
-		$attachment_count = wp_count_posts('attachment')->publish ?? 0;
+	public static function test_attachment_count(): array {
+		$attachment_count = wp_count_posts( 'attachment' )->publish ?? 0;
 
 		$status = 'normal';
-		if ($attachment_count > 1000) {
+		if ( $attachment_count > 1000 ) {
 			$status = 'high';
-		} elseif ($attachment_count > 500) {
+		} elseif ( $attachment_count > 500 ) {
 			$status = 'moderate';
 		}
 
-		return [
-			'test_name'       => 'Attachment Count',
+		return array(
+			'test_name'        => 'Attachment Count',
 			'attachment_count' => $attachment_count,
-			'status'          => $status,
-			'passed'          => $status === 'normal',
-			'description'     => sprintf('%d media files uploaded', $attachment_count),
-		];
+			'status'           => $status,
+			'passed'           => $status === 'normal',
+			'description'      => sprintf( '%d media files uploaded', $attachment_count ),
+		);
 	}
 
 	/**
@@ -103,21 +100,20 @@ class Test_Image_Optimization extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_responsive_images(): array
-	{
+	public static function test_responsive_images(): array {
 		global $_wp_additional_image_sizes;
 
-		$image_sizes = array_merge(get_intermediate_image_sizes(), array_keys($_wp_additional_image_sizes ?? []));
+		$image_sizes = array_merge( get_intermediate_image_sizes(), array_keys( $_wp_additional_image_sizes ?? array() ) );
 
-		$has_responsive = count($image_sizes) > 4; // More than default sizes
+		$has_responsive = count( $image_sizes ) > 4; // More than default sizes
 
-		return [
-			'test_name'     => 'Responsive Image Sizes',
-			'image_sizes'   => $image_sizes,
-			'size_count'    => count($image_sizes),
-			'passed'        => $has_responsive,
-			'description'   => sprintf('%d image sizes configured', count($image_sizes)),
-		];
+		return array(
+			'test_name'   => 'Responsive Image Sizes',
+			'image_sizes' => $image_sizes,
+			'size_count'  => count( $image_sizes ),
+			'passed'      => $has_responsive,
+			'description' => sprintf( '%d image sizes configured', count( $image_sizes ) ),
+		);
 	}
 
 	/**
@@ -125,29 +121,28 @@ class Test_Image_Optimization extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_uploads_folder_size(): array
-	{
-		$upload_dir = wp_upload_dir();
+	public static function test_uploads_folder_size(): array {
+		$upload_dir   = wp_upload_dir();
 		$uploads_path = $upload_dir['basedir'];
 
-		$size_bytes = self::get_directory_size($uploads_path);
-		$size_mb = round($size_bytes / (1024 * 1024), 2);
+		$size_bytes = self::get_directory_size( $uploads_path );
+		$size_mb    = round( $size_bytes / ( 1024 * 1024 ), 2 );
 
 		$status = 'normal';
-		if ($size_mb > 1000) {
+		if ( $size_mb > 1000 ) {
 			$status = 'large';
-		} elseif ($size_mb > 500) {
+		} elseif ( $size_mb > 500 ) {
 			$status = 'moderate';
 		}
 
-		return [
-			'test_name'    => 'Uploads Folder Size',
-			'size_bytes'   => $size_bytes,
-			'size_mb'      => $size_mb,
-			'status'       => $status,
-			'passed'       => $status === 'normal',
-			'description'  => sprintf('Uploads folder: %.2f MB', $size_mb),
-		];
+		return array(
+			'test_name'   => 'Uploads Folder Size',
+			'size_bytes'  => $size_bytes,
+			'size_mb'     => $size_mb,
+			'status'      => $status,
+			'passed'      => $status === 'normal',
+			'description' => sprintf( 'Uploads folder: %.2f MB', $size_mb ),
+		);
 	}
 
 	/**
@@ -156,24 +151,23 @@ class Test_Image_Optimization extends Diagnostic_Base
 	 * @param string $directory Directory path
 	 * @return int Total size in bytes
 	 */
-	private static function get_directory_size(string $directory): int
-	{
+	private static function get_directory_size( string $directory ): int {
 		$size = 0;
 
-		if (is_dir($directory)) {
-			$files = scandir($directory);
+		if ( is_dir( $directory ) ) {
+			$files = scandir( $directory );
 
-			foreach ($files as $file) {
-				if ($file === '.' || $file === '..') {
+			foreach ( $files as $file ) {
+				if ( $file === '.' || $file === '..' ) {
 					continue;
 				}
 
 				$path = $directory . '/' . $file;
 
-				if (is_dir($path)) {
-					$size += self::get_directory_size($path);
+				if ( is_dir( $path ) ) {
+					$size += self::get_directory_size( $path );
 				} else {
-					$size += filesize($path);
+					$size += filesize( $path );
 				}
 			}
 		}
@@ -186,52 +180,51 @@ class Test_Image_Optimization extends Diagnostic_Base
 	 *
 	 * @return array Optimization analysis
 	 */
-	private static function analyze_image_optimization(): array
-	{
+	private static function analyze_image_optimization(): array {
 		$active_plugins = get_plugins();
 
 		$threat_level = 0;
-		$issues = [];
+		$issues       = array();
 
 		// Check for optimization plugin
-		$optimization_plugins = [
+		$optimization_plugins = array(
 			'imagify/imagify.php',
 			'shortpixel-image-optimiser/wp-shortpixel.php',
 			'smush/wp-smush.php',
 			'ewww-image-optimizer/ewww-image-optimizer.php',
-		];
+		);
 
 		$has_plugin = false;
-		foreach ($optimization_plugins as $plugin_file) {
-			if (isset($active_plugins[$plugin_file])) {
+		foreach ( $optimization_plugins as $plugin_file ) {
+			if ( isset( $active_plugins[ $plugin_file ] ) ) {
 				$has_plugin = true;
 				break;
 			}
 		}
 
-		if (! $has_plugin) {
-			$issues[] = 'No image optimization plugin installed';
+		if ( ! $has_plugin ) {
+			$issues[]     = 'No image optimization plugin installed';
 			$threat_level = 25;
 		}
 
 		// Check uploads folder size
 		$upload_dir = wp_upload_dir();
-		$size_bytes = self::get_directory_size($upload_dir['basedir']);
-		$size_mb = round($size_bytes / (1024 * 1024), 2);
+		$size_bytes = self::get_directory_size( $upload_dir['basedir'] );
+		$size_mb    = round( $size_bytes / ( 1024 * 1024 ), 2 );
 
-		if ($size_mb > 1000) {
-			$issues[] = sprintf('Large uploads folder (%.2f MB)', $size_mb);
-			$threat_level = max($threat_level, 40);
+		if ( $size_mb > 1000 ) {
+			$issues[]     = sprintf( 'Large uploads folder (%.2f MB)', $size_mb );
+			$threat_level = max( $threat_level, 40 );
 		}
 
-		$issue = ! empty($issues) ? implode('; ', $issues) : 'Image optimization is configured';
+		$issue = ! empty( $issues ) ? implode( '; ', $issues ) : 'Image optimization is configured';
 
-		return [
-			'threat_level' => $threat_level,
-			'issue'        => $issue,
-			'has_plugin'   => $has_plugin,
+		return array(
+			'threat_level'    => $threat_level,
+			'issue'           => $issue,
+			'has_plugin'      => $has_plugin,
 			'uploads_size_mb' => $size_mb,
-		];
+		);
 	}
 
 	/**
@@ -239,8 +232,7 @@ class Test_Image_Optimization extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_name(): string
-	{
+	public static function get_name(): string {
 		return 'Image Optimization';
 	}
 
@@ -249,8 +241,7 @@ class Test_Image_Optimization extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_description(): string
-	{
+	public static function get_description(): string {
 		return 'Analyzes image sizes and identifies optimization opportunities';
 	}
 
@@ -259,8 +250,7 @@ class Test_Image_Optimization extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_category(): string
-	{
+	public static function get_category(): string {
 		return 'Performance';
 	}
 }

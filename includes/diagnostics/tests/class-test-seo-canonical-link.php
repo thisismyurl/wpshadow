@@ -15,480 +15,464 @@ namespace WPShadow\Diagnostics\Tests;
 
 use WPShadow\Core\Diagnostic_Base;
 
-class Test_SEO_Canonical_Link extends Diagnostic_Base
-{
+class Test_SEO_Canonical_Link extends Diagnostic_Base {
 
-    protected static $slug = 'test-seo-canonical-link';
-    protected static $title = 'Canonical Link Test';
-    protected static $description = 'Tests for proper canonical link tags';
 
-    /**
-     * Run the diagnostic check
-     *
-     * PASS (returns null): Canonical tag exists and is properly formatted
-     * FAIL (returns array): Missing canonical or has issues
-     *
-     * @param string|null $url URL to test (defaults to homepage)
-     * @param string|null $html Pre-fetched HTML to analyze
-     * @return array|null Finding data or null if no issue
-     */
-    public static function check(?string $url = null, ?string $html = null): ?array
-    {
-        if ($html !== null) {
-            return self::analyze_html($html, $url ?? 'provided-html');
-        }
+	protected static $slug        = 'test-seo-canonical-link';
+	protected static $title       = 'Canonical Link Test';
+	protected static $description = 'Tests for proper canonical link tags';
 
-        $site_url = $url ?? home_url('/');
+	/**
+	 * Run the diagnostic check
+	 *
+	 * PASS (returns null): Canonical tag exists and is properly formatted
+	 * FAIL (returns array): Missing canonical or has issues
+	 *
+	 * @param string|null $url URL to test (defaults to homepage)
+	 * @param string|null $html Pre-fetched HTML to analyze
+	 * @return array|null Finding data or null if no issue
+	 */
+	public static function check( ?string $url = null, ?string $html = null ): ?array {
+		if ( $html !== null ) {
+			return self::analyze_html( $html, $url ?? 'provided-html' );
+		}
 
-        if ($url !== null && !self::is_internal_url($url)) {
-            return self::error_result('Invalid URL', 'URL must be from this WordPress site');
-        }
+		$site_url = $url ?? home_url( '/' );
 
-        $html = self::fetch_html($site_url);
-        if ($html === false) {
-            return self::error_result('Fetch Failed', 'Could not retrieve page HTML');
-        }
+		if ( $url !== null && ! self::is_internal_url( $url ) ) {
+			return self::error_result( 'Invalid URL', 'URL must be from this WordPress site' );
+		}
 
-        return self::analyze_html($html, $site_url);
-    }
+		$html = self::fetch_html( $site_url );
+		if ( $html === false ) {
+			return self::error_result( 'Fetch Failed', 'Could not retrieve page HTML' );
+		}
 
-    /**
-     * Run comprehensive canonical link tests
-     *
-     * @param string|null $url URL to test
-     * @param string|null $html Pre-fetched HTML
-     * @return array Test results
-     */
-    public static function run_canonical_tests(?string $url = null, ?string $html = null): array
-    {
-        $html = $html ?? self::fetch_html($url ?? home_url('/'));
-        $checked_url = $url ?? home_url('/');
+		return self::analyze_html( $html, $site_url );
+	}
 
-        if ($html === false) {
-            return [
-                'success' => false,
-                'error' => 'Could not fetch HTML',
-                'url' => $checked_url,
-            ];
-        }
+	/**
+	 * Run comprehensive canonical link tests
+	 *
+	 * @param string|null $url URL to test
+	 * @param string|null $html Pre-fetched HTML
+	 * @return array Test results
+	 */
+	public static function run_canonical_tests( ?string $url = null, ?string $html = null ): array {
+		$html        = $html ?? self::fetch_html( $url ?? home_url( '/' ) );
+		$checked_url = $url ?? home_url( '/' );
 
-        $canonical = self::extract_canonical($html);
+		if ( $html === false ) {
+			return array(
+				'success' => false,
+				'error'   => 'Could not fetch HTML',
+				'url'     => $checked_url,
+			);
+		}
 
-        return [
-            'success' => true,
-            'url' => $checked_url,
-            'canonical_url' => $canonical,
-            'tests' => [
-                'has_canonical' => self::test_has_canonical($html),
-                'is_absolute_url' => self::test_is_absolute_url($html),
-                'is_valid_url' => self::test_is_valid_url($html),
-                'no_multiple_canonicals' => self::test_no_multiple_canonicals($html),
-                'matches_current_url' => self::test_matches_current_url($html, $checked_url),
-            ],
-            'summary' => [
-                'passed' => !empty($canonical) && self::is_canonical_valid($canonical),
-                'canonical_present' => !empty($canonical),
-                'issues' => self::detect_issues($canonical, $checked_url),
-            ],
-        ];
-    }
+		$canonical = self::extract_canonical( $html );
 
-    /**
-     * Test if canonical link exists
-     */
-    public static function test_has_canonical(?string $url = null, ?string $html = null): array
-    {
-        $html = $html ?? self::fetch_html($url ?? home_url('/'));
-        $canonical = self::extract_canonical($html);
+		return array(
+			'success'       => true,
+			'url'           => $checked_url,
+			'canonical_url' => $canonical,
+			'tests'         => array(
+				'has_canonical'          => self::test_has_canonical( $html ),
+				'is_absolute_url'        => self::test_is_absolute_url( $html ),
+				'is_valid_url'           => self::test_is_valid_url( $html ),
+				'no_multiple_canonicals' => self::test_no_multiple_canonicals( $html ),
+				'matches_current_url'    => self::test_matches_current_url( $html, $checked_url ),
+			),
+			'summary'       => array(
+				'passed'            => ! empty( $canonical ) && self::is_canonical_valid( $canonical ),
+				'canonical_present' => ! empty( $canonical ),
+				'issues'            => self::detect_issues( $canonical, $checked_url ),
+			),
+		);
+	}
 
-        return [
-            'test' => 'has_canonical',
-            'passed' => !empty($canonical),
-            'value' => $canonical,
-            'message' => !empty($canonical)
-                ? 'Canonical link tag present'
-                : 'Canonical link tag missing',
-            'impact' => 'Canonical tags prevent duplicate content issues in search engines',
-        ];
-    }
+	/**
+	 * Test if canonical link exists
+	 */
+	public static function test_has_canonical( ?string $url = null, ?string $html = null ): array {
+		$html      = $html ?? self::fetch_html( $url ?? home_url( '/' ) );
+		$canonical = self::extract_canonical( $html );
 
-    /**
-     * Test if canonical URL is absolute
-     */
-    public static function test_is_absolute_url(?string $url = null, ?string $html = null): array
-    {
-        $html = $html ?? self::fetch_html($url ?? home_url('/'));
-        $canonical = self::extract_canonical($html);
+		return array(
+			'test'    => 'has_canonical',
+			'passed'  => ! empty( $canonical ),
+			'value'   => $canonical,
+			'message' => ! empty( $canonical )
+				? 'Canonical link tag present'
+				: 'Canonical link tag missing',
+			'impact'  => 'Canonical tags prevent duplicate content issues in search engines',
+		);
+	}
 
-        if (empty($canonical)) {
-            return [
-                'test' => 'is_absolute_url',
-                'passed' => false,
-                'message' => 'No canonical to check',
-                'impact' => 'Canonical must be absolute URL',
-            ];
-        }
+	/**
+	 * Test if canonical URL is absolute
+	 */
+	public static function test_is_absolute_url( ?string $url = null, ?string $html = null ): array {
+		$html      = $html ?? self::fetch_html( $url ?? home_url( '/' ) );
+		$canonical = self::extract_canonical( $html );
 
-        $is_absolute = self::is_absolute_url($canonical);
+		if ( empty( $canonical ) ) {
+			return array(
+				'test'    => 'is_absolute_url',
+				'passed'  => false,
+				'message' => 'No canonical to check',
+				'impact'  => 'Canonical must be absolute URL',
+			);
+		}
 
-        return [
-            'test' => 'is_absolute_url',
-            'passed' => $is_absolute,
-            'value' => $canonical,
-            'message' => $is_absolute
-                ? 'Canonical URL is absolute (correct)'
-                : 'Canonical URL is relative (should be absolute)',
-            'impact' => 'Relative canonical URLs can cause ambiguity',
-        ];
-    }
+		$is_absolute = self::is_absolute_url( $canonical );
 
-    /**
-     * Test if canonical URL is valid
-     */
-    public static function test_is_valid_url(?string $url = null, ?string $html = null): array
-    {
-        $html = $html ?? self::fetch_html($url ?? home_url('/'));
-        $canonical = self::extract_canonical($html);
+		return array(
+			'test'    => 'is_absolute_url',
+			'passed'  => $is_absolute,
+			'value'   => $canonical,
+			'message' => $is_absolute
+				? 'Canonical URL is absolute (correct)'
+				: 'Canonical URL is relative (should be absolute)',
+			'impact'  => 'Relative canonical URLs can cause ambiguity',
+		);
+	}
 
-        if (empty($canonical)) {
-            return [
-                'test' => 'is_valid_url',
-                'passed' => false,
-                'message' => 'No canonical to validate',
-                'impact' => 'Invalid canonical URL confuses search engines',
-            ];
-        }
+	/**
+	 * Test if canonical URL is valid
+	 */
+	public static function test_is_valid_url( ?string $url = null, ?string $html = null ): array {
+		$html      = $html ?? self::fetch_html( $url ?? home_url( '/' ) );
+		$canonical = self::extract_canonical( $html );
 
-        $is_valid = filter_var($canonical, FILTER_VALIDATE_URL) !== false;
+		if ( empty( $canonical ) ) {
+			return array(
+				'test'    => 'is_valid_url',
+				'passed'  => false,
+				'message' => 'No canonical to validate',
+				'impact'  => 'Invalid canonical URL confuses search engines',
+			);
+		}
 
-        return [
-            'test' => 'is_valid_url',
-            'passed' => $is_valid,
-            'value' => $canonical,
-            'message' => $is_valid
-                ? 'Canonical URL is valid'
-                : 'Canonical URL is malformed',
-            'impact' => 'Invalid URLs are ignored by search engines',
-        ];
-    }
+		$is_valid = filter_var( $canonical, FILTER_VALIDATE_URL ) !== false;
 
-    /**
-     * Test for multiple canonical tags
-     */
-    public static function test_no_multiple_canonicals(?string $url = null, ?string $html = null): array
-    {
-        $html = $html ?? self::fetch_html($url ?? home_url('/'));
-        $canonicals = self::extract_all_canonicals($html);
-        $count = count($canonicals);
+		return array(
+			'test'    => 'is_valid_url',
+			'passed'  => $is_valid,
+			'value'   => $canonical,
+			'message' => $is_valid
+				? 'Canonical URL is valid'
+				: 'Canonical URL is malformed',
+			'impact'  => 'Invalid URLs are ignored by search engines',
+		);
+	}
 
-        return [
-            'test' => 'no_multiple_canonicals',
-            'passed' => $count <= 1,
-            'count' => $count,
-            'values' => $canonicals,
-            'message' => $count <= 1
-                ? 'Single canonical tag (correct)'
-                : "Multiple canonical tags found ({$count}) - confusing for search engines",
-            'impact' => 'Multiple canonicals cause search engines to ignore all of them',
-        ];
-    }
+	/**
+	 * Test for multiple canonical tags
+	 */
+	public static function test_no_multiple_canonicals( ?string $url = null, ?string $html = null ): array {
+		$html       = $html ?? self::fetch_html( $url ?? home_url( '/' ) );
+		$canonicals = self::extract_all_canonicals( $html );
+		$count      = count( $canonicals );
 
-    /**
-     * Test if canonical matches current URL
-     */
-    public static function test_matches_current_url(?string $url = null, ?string $html = null, ?string $current_url = null): array
-    {
-        $html = $html ?? self::fetch_html($url ?? home_url('/'));
-        $current_url = $current_url ?? $url ?? home_url('/');
-        $canonical = self::extract_canonical($html);
+		return array(
+			'test'    => 'no_multiple_canonicals',
+			'passed'  => $count <= 1,
+			'count'   => $count,
+			'values'  => $canonicals,
+			'message' => $count <= 1
+				? 'Single canonical tag (correct)'
+				: "Multiple canonical tags found ({$count}) - confusing for search engines",
+			'impact'  => 'Multiple canonicals cause search engines to ignore all of them',
+		);
+	}
 
-        if (empty($canonical)) {
-            return [
-                'test' => 'matches_current_url',
-                'passed' => false,
-                'message' => 'No canonical to compare',
-                'impact' => 'Canonical should typically match current URL',
-            ];
-        }
+	/**
+	 * Test if canonical matches current URL
+	 */
+	public static function test_matches_current_url( ?string $url = null, ?string $html = null, ?string $current_url = null ): array {
+		$html        = $html ?? self::fetch_html( $url ?? home_url( '/' ) );
+		$current_url = $current_url ?? $url ?? home_url( '/' );
+		$canonical   = self::extract_canonical( $html );
 
-        // Normalize URLs for comparison
-        $canonical_normalized = self::normalize_url($canonical);
-        $current_normalized = self::normalize_url($current_url);
+		if ( empty( $canonical ) ) {
+			return array(
+				'test'    => 'matches_current_url',
+				'passed'  => false,
+				'message' => 'No canonical to compare',
+				'impact'  => 'Canonical should typically match current URL',
+			);
+		}
 
-        $matches = $canonical_normalized === $current_normalized;
+		// Normalize URLs for comparison
+		$canonical_normalized = self::normalize_url( $canonical );
+		$current_normalized   = self::normalize_url( $current_url );
 
-        return [
-            'test' => 'matches_current_url',
-            'passed' => $matches,
-            'canonical' => $canonical,
-            'current_url' => $current_url,
-            'message' => $matches
-                ? 'Canonical matches current URL (typical)'
-                : 'Canonical differs from current URL (may be intentional)',
-            'impact' => 'Different canonical indicates this is a duplicate of another page',
-        ];
-    }
+		$matches = $canonical_normalized === $current_normalized;
 
-    /**
-     * Analyze HTML for canonical link issues
-     *
-     * @param string $html HTML content
-     * @param string $checked_url URL that was checked
-     * @return array|null Finding or null
-     */
-    protected static function analyze_html(string $html, string $checked_url): ?array
-    {
-        $canonical = self::extract_canonical($html);
+		return array(
+			'test'        => 'matches_current_url',
+			'passed'      => $matches,
+			'canonical'   => $canonical,
+			'current_url' => $current_url,
+			'message'     => $matches
+				? 'Canonical matches current URL (typical)'
+				: 'Canonical differs from current URL (may be intentional)',
+			'impact'      => 'Different canonical indicates this is a duplicate of another page',
+		);
+	}
 
-        // Missing canonical = FAIL
-        if (empty($canonical)) {
-            return [
-                'id' => 'seo-canonical-link',
-                'title' => 'Missing Canonical Link Tag',
-                'description' => 'Your page is missing a canonical link tag. This can lead to duplicate content issues if the same content is accessible via multiple URLs.'
-                'kb_link' => 'https://wpshadow.com/kb/canonical-tags/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
-                'training_link' => 'https://wpshadow.com/training/seo-canonical-tags/',
-                'auto_fixable' => false,
-                'threat_level' => 60,
-                'module' => 'SEO',
-                'priority' => 2,
-                'meta' => [
-                    'issue' => 'missing',
-                    'recommendation' => sprintf('<link rel="canonical" href="%s" />', $checked_url),
-                    'checked_url' => $checked_url,
-                ],
-            ];
-        }
+	/**
+	 * Analyze HTML for canonical link issues
+	 *
+	 * @param string $html HTML content
+	 * @param string $checked_url URL that was checked
+	 * @return array|null Finding or null
+	 */
+	protected static function analyze_html( string $html, string $checked_url ): ?array {
+		$canonical = self::extract_canonical( $html );
 
-        // Check for issues
-        $issues = [];
+		// Missing canonical = FAIL
+		if ( empty( $canonical ) ) {
+			return array(
+				'id'            => 'seo-canonical-link',
+				'title'         => 'Missing Canonical Link Tag',
+				'description'   => 'Your page is missing a canonical link tag. This can lead to duplicate content issues if the same content is accessible via multiple URLs.'
+				'kb_link' => 'https://wpshadow.com/kb/canonical-tags/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
+				'training_link' => 'https://wpshadow.com/training/seo-canonical-tags/',
+				'auto_fixable'  => false,
+				'threat_level'  => 60,
+				'module'        => 'SEO',
+				'priority'      => 2,
+				'meta'          => array(
+					'issue'          => 'missing',
+					'recommendation' => sprintf( '<link rel="canonical" href="%s" />', $checked_url ),
+					'checked_url'    => $checked_url,
+				),
+			);
+		}
 
-        // Not absolute URL
-        if (!self::is_absolute_url($canonical)) {
-            $issues[] = 'Relative URL (should be absolute)';
-        }
+		// Check for issues
+		$issues = array();
 
-        // Invalid URL format
-        if (filter_var($canonical, FILTER_VALIDATE_URL) === false) {
-            $issues[] = 'Malformed URL';
-        }
+		// Not absolute URL
+		if ( ! self::is_absolute_url( $canonical ) ) {
+			$issues[] = 'Relative URL (should be absolute)';
+		}
 
-        // Multiple canonicals
-        $all_canonicals = self::extract_all_canonicals($html);
-        if (count($all_canonicals) > 1) {
-            $issues[] = sprintf('Multiple canonical tags (%d found)', count($all_canonicals));
-        }
+		// Invalid URL format
+		if ( filter_var( $canonical, FILTER_VALIDATE_URL ) === false ) {
+			$issues[] = 'Malformed URL';
+		}
 
-        // Perfect: no issues
-        if (empty($issues)) {
-            return null; // PASS
-        }
+		// Multiple canonicals
+		$all_canonicals = self::extract_all_canonicals( $html );
+		if ( count( $all_canonicals ) > 1 ) {
+			$issues[] = sprintf( 'Multiple canonical tags (%d found)', count( $all_canonicals ) );
+		}
 
-        // Has canonical but with issues = FAIL
-        $threat_level = 50;
-        if (filter_var($canonical, FILTER_VALIDATE_URL) === false) {
-            $threat_level = 70; // Invalid URL is serious
-        }
+		// Perfect: no issues
+		if ( empty( $issues ) ) {
+			return null; // PASS
+		}
 
-        return [
-            'id' => 'seo-canonical-link',
-            'title' => 'Canonical Link Issues',
-            'description' => sprintf(
-                'Your canonical tag has %d issue(s): %s. These issues may prevent search engines from properly consolidating duplicate content.',
-                count($issues),
-                implode(', ', $issues)
-            )
-            'kb_link' => 'https://wpshadow.com/kb/canonical-tags/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
-            'training_link' => 'https://wpshadow.com/training/seo-canonical-tags/',
-            'auto_fixable' => false,
-            'threat_level' => $threat_level,
-            'module' => 'SEO',
-            'priority' => 2,
-            'meta' => [
-                'canonical' => $canonical,
-                'issues' => $issues,
-                'all_canonicals' => $all_canonicals,
-                'checked_url' => $checked_url,
-            ],
-        ];
-    }
+		// Has canonical but with issues = FAIL
+		$threat_level = 50;
+		if ( filter_var( $canonical, FILTER_VALIDATE_URL ) === false ) {
+			$threat_level = 70; // Invalid URL is serious
+		}
 
-    /**
-     * Extract canonical link from HTML
-     *
-     * @param string $html HTML content
-     * @return string Canonical URL or empty string
-     */
-    protected static function extract_canonical(string $html): string
-    {
-        if (empty($html)) {
-            return '';
-        }
+		return array(
+			'id'            => 'seo-canonical-link',
+			'title'         => 'Canonical Link Issues',
+			'description'   => sprintf(
+				'Your canonical tag has %d issue(s): %s. These issues may prevent search engines from properly consolidating duplicate content.',
+				count( $issues ),
+				implode( ', ', $issues )
+			)
+			'kb_link' => 'https://wpshadow.com/kb/canonical-tags/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
+			'training_link' => 'https://wpshadow.com/training/seo-canonical-tags/',
+			'auto_fixable'  => false,
+			'threat_level'  => $threat_level,
+			'module'        => 'SEO',
+			'priority'      => 2,
+			'meta'          => array(
+				'canonical'      => $canonical,
+				'issues'         => $issues,
+				'all_canonicals' => $all_canonicals,
+				'checked_url'    => $checked_url,
+			),
+		);
+	}
 
-        if (preg_match('/<link\s+rel=["\']canonical["\']\s+href=["\'](.*?)["\']/i', $html, $matches)) {
-            return trim($matches[1]);
-        }
+	/**
+	 * Extract canonical link from HTML
+	 *
+	 * @param string $html HTML content
+	 * @return string Canonical URL or empty string
+	 */
+	protected static function extract_canonical( string $html ): string {
+		if ( empty( $html ) ) {
+			return '';
+		}
 
-        return '';
-    }
+		if ( preg_match( '/<link\s+rel=["\']canonical["\']\s+href=["\'](.*?)["\']/i', $html, $matches ) ) {
+			return trim( $matches[1] );
+		}
 
-    /**
-     * Extract all canonical links (detect duplicates)
-     *
-     * @param string $html HTML content
-     * @return array All canonical URLs found
-     */
-    protected static function extract_all_canonicals(string $html): array
-    {
-        if (empty($html)) {
-            return [];
-        }
+		return '';
+	}
 
-        preg_match_all('/<link\s+rel=["\']canonical["\']\s+href=["\'](.*?)["\']/i', $html, $matches);
-        return array_map('trim', $matches[1] ?? []);
-    }
+	/**
+	 * Extract all canonical links (detect duplicates)
+	 *
+	 * @param string $html HTML content
+	 * @return array All canonical URLs found
+	 */
+	protected static function extract_all_canonicals( string $html ): array {
+		if ( empty( $html ) ) {
+			return array();
+		}
 
-    /**
-     * Check if URL is absolute
-     *
-     * @param string $url URL to check
-     * @return bool
-     */
-    protected static function is_absolute_url(string $url): bool
-    {
-        return preg_match('/^https?:\/\//i', $url) === 1;
-    }
+		preg_match_all( '/<link\s+rel=["\']canonical["\']\s+href=["\'](.*?)["\']/i', $html, $matches );
+		return array_map( 'trim', $matches[1] ?? array() );
+	}
 
-    /**
-     * Check if canonical is valid
-     *
-     * @param string $canonical Canonical URL
-     * @return bool
-     */
-    protected static function is_canonical_valid(string $canonical): bool
-    {
-        if (empty($canonical)) {
-            return false;
-        }
+	/**
+	 * Check if URL is absolute
+	 *
+	 * @param string $url URL to check
+	 * @return bool
+	 */
+	protected static function is_absolute_url( string $url ): bool {
+		return preg_match( '/^https?:\/\//i', $url ) === 1;
+	}
 
-        return self::is_absolute_url($canonical) &&
-            filter_var($canonical, FILTER_VALIDATE_URL) !== false;
-    }
+	/**
+	 * Check if canonical is valid
+	 *
+	 * @param string $canonical Canonical URL
+	 * @return bool
+	 */
+	protected static function is_canonical_valid( string $canonical ): bool {
+		if ( empty( $canonical ) ) {
+			return false;
+		}
 
-    /**
-     * Detect all issues with canonical
-     *
-     * @param string $canonical Canonical URL
-     * @param string $checked_url Current URL
-     * @return array List of issues
-     */
-    protected static function detect_issues(string $canonical, string $checked_url): array
-    {
-        $issues = [];
+		return self::is_absolute_url( $canonical ) &&
+			filter_var( $canonical, FILTER_VALIDATE_URL ) !== false;
+	}
 
-        if (empty($canonical)) {
-            $issues[] = 'missing';
-            return $issues;
-        }
+	/**
+	 * Detect all issues with canonical
+	 *
+	 * @param string $canonical Canonical URL
+	 * @param string $checked_url Current URL
+	 * @return array List of issues
+	 */
+	protected static function detect_issues( string $canonical, string $checked_url ): array {
+		$issues = array();
 
-        if (!self::is_absolute_url($canonical)) {
-            $issues[] = 'relative_url';
-        }
+		if ( empty( $canonical ) ) {
+			$issues[] = 'missing';
+			return $issues;
+		}
 
-        if (filter_var($canonical, FILTER_VALIDATE_URL) === false) {
-            $issues[] = 'invalid_url';
-        }
+		if ( ! self::is_absolute_url( $canonical ) ) {
+			$issues[] = 'relative_url';
+		}
 
-        return $issues;
-    }
+		if ( filter_var( $canonical, FILTER_VALIDATE_URL ) === false ) {
+			$issues[] = 'invalid_url';
+		}
 
-    /**
-     * Normalize URL for comparison
-     *
-     * @param string $url URL to normalize
-     * @return string Normalized URL
-     */
-    protected static function normalize_url(string $url): string
-    {
-        $url = strtolower(trim($url));
-        $url = preg_replace('/\/$/', '', $url); // Remove trailing slash
-        $url = preg_replace('/^https?:\/\/www\./', 'https://', $url); // Remove www
-        return $url;
-    }
+		return $issues;
+	}
 
-    /**
-     * Fetch HTML from URL
-     *
-     * @param string $url URL to fetch
-     * @return string|false HTML or false on error
-     */
-    protected static function fetch_html(string $url)
-    {
-        $response = wp_remote_get($url, [
-            'timeout' => 10,
-            'user-agent' => 'WPShadow-Diagnostic/1.0 (SEO Checker)',
-            'sslverify' => false,
-        ]);
+	/**
+	 * Normalize URL for comparison
+	 *
+	 * @param string $url URL to normalize
+	 * @return string Normalized URL
+	 */
+	protected static function normalize_url( string $url ): string {
+		$url = strtolower( trim( $url ) );
+		$url = preg_replace( '/\/$/', '', $url ); // Remove trailing slash
+		$url = preg_replace( '/^https?:\/\/www\./', 'https://', $url ); // Remove www
+		return $url;
+	}
 
-        if (is_wp_error($response)) {
-            return false;
-        }
+	/**
+	 * Fetch HTML from URL
+	 *
+	 * @param string $url URL to fetch
+	 * @return string|false HTML or false on error
+	 */
+	protected static function fetch_html( string $url ) {
+		$response = wp_remote_get(
+			$url,
+			array(
+				'timeout'    => 10,
+				'user-agent' => 'WPShadow-Diagnostic/1.0 (SEO Checker)',
+				'sslverify'  => false,
+			)
+		);
 
-        return wp_remote_retrieve_body($response);
-    }
+		if ( is_wp_error( $response ) ) {
+			return false;
+		}
 
-    /**
-     * Check if URL is internal
-     *
-     * @param string $url URL to check
-     * @return bool
-     */
-    protected static function is_internal_url(string $url): bool
-    {
-        $site_host = wp_parse_url(home_url(), PHP_URL_HOST);
-        $test_host = wp_parse_url($url, PHP_URL_HOST);
-        return $site_host === $test_host;
-    }
+		return wp_remote_retrieve_body( $response );
+	}
 
-    /**
-     * Generate error result
-     *
-     * @param string $title Error title
-     * @param string $description Error description
-     * @return array Error result
-     */
-    protected static function error_result(string $title, string $description): array
-    {
-        return [
-            'id' => 'seo-canonical-link',
-            'title' => $title,
-            'description' => $description
-            'kb_link' => 'https://wpshadow.com/kb/canonical-tags/',
-            'training_link' => 'https://wpshadow.com/training/seo-canonical-tags/',
-            'auto_fixable' => false,
-            'threat_level' => 30,
-            'module' => 'SEO',
-            'priority' => 3,
-        ];
-    }
+	/**
+	 * Check if URL is internal
+	 *
+	 * @param string $url URL to check
+	 * @return bool
+	 */
+	protected static function is_internal_url( string $url ): bool {
+		$site_host = wp_parse_url( home_url(), PHP_URL_HOST );
+		$test_host = wp_parse_url( $url, PHP_URL_HOST );
+		return $site_host === $test_host;
+	}
 
-    /**
-     * Get the name for display
-     *
-     * @return string
-     */
-    public static function get_name(): string
-    {
-        return __('Canonical Link Check', 'wpshadow');
-    }
+	/**
+	 * Generate error result
+	 *
+	 * @param string $title Error title
+	 * @param string $description Error description
+	 * @return array Error result
+	 */
+	protected static function error_result( string $title, string $description ): array {
+		return array(
+			'id'            => 'seo-canonical-link',
+			'title'         => $title,
+			'description'   => $description
+			'kb_link' => 'https://wpshadow.com/kb/canonical-tags/',
+			'training_link' => 'https://wpshadow.com/training/seo-canonical-tags/',
+			'auto_fixable'  => false,
+			'threat_level'  => 30,
+			'module'        => 'SEO',
+			'priority'      => 3,
+		);
+	}
 
-    /**
-     * Get the description for display
-     *
-     * @return string
-     */
-    public static function get_description(): string
-    {
-        return __('Checks HTML for proper canonical link tags to prevent duplicate content issues.', 'wpshadow');
-    }
+	/**
+	 * Get the name for display
+	 *
+	 * @return string
+	 */
+	public static function get_name(): string {
+		return __( 'Canonical Link Check', 'wpshadow' );
+	}
+
+	/**
+	 * Get the description for display
+	 *
+	 * @return string
+	 */
+	public static function get_description(): string {
+		return __( 'Checks HTML for proper canonical link tags to prevent duplicate content issues.', 'wpshadow' );
+	}
 }

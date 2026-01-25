@@ -81,7 +81,7 @@ class Diagnostic_Audit_Restore_Safety extends Diagnostic_Base {
 	public static function check(): ?array {
 		// Check if there's a safe restore capability configured
 		// Look for backup/restore plugins
-		
+
 		$backup_plugins = array(
 			'duplicator/duplicator.php',
 			'updraftplus/updraftplus.php',
@@ -124,7 +124,7 @@ class Diagnostic_Audit_Restore_Safety extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Audit Restore Safety
 	 * Slug: audit-restore-safety
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -145,15 +145,13 @@ class Diagnostic_Audit_Restore_Safety extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

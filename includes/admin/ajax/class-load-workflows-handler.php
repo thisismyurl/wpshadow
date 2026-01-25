@@ -20,7 +20,7 @@ class Load_Workflows_Handler extends AJAX_Handler_Base {
 	 * Register AJAX hook
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_load_workflows', [ __CLASS__, 'handle' ] );
+		add_action( 'wp_ajax_wpshadow_load_workflows', array( __CLASS__, 'handle' ) );
 	}
 
 	/**
@@ -31,9 +31,11 @@ class Load_Workflows_Handler extends AJAX_Handler_Base {
 
 		$workflows = Workflow_Manager::get_workflows();
 
-		self::send_success( [
-			'workflows' => $workflows,
-			'count'     => count( $workflows ),
-		] );
+		self::send_success(
+			array(
+				'workflows' => $workflows,
+				'count'     => count( $workflows ),
+			)
+		);
 	}
 }

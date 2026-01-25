@@ -16,7 +16,7 @@ namespace WPShadow\Core;
  * Manages dashboard category visibility and customization
  */
 class Dashboard_Customization {
-	
+
 	/**
 	 * Get user's dashboard category preferences
 	 *
@@ -27,16 +27,16 @@ class Dashboard_Customization {
 		if ( ! $user_id ) {
 			$user_id = get_current_user_id();
 		}
-		
+
 		$prefs = get_user_meta( $user_id, 'wpshadow_dashboard_prefs', true );
-		
+
 		if ( ! is_array( $prefs ) ) {
 			$prefs = self::get_default_preferences();
 		}
-		
+
 		return $prefs;
 	}
-	
+
 	/**
 	 * Get default dashboard preferences (all visible)
 	 *
@@ -44,18 +44,45 @@ class Dashboard_Customization {
 	 */
 	public static function get_default_preferences() {
 		return array(
-			'security'           => array( 'visible' => true, 'pinned' => false ),
-			'performance'        => array( 'visible' => true, 'pinned' => false ),
-			'code_quality'       => array( 'visible' => true, 'pinned' => false ),
-			'seo'                => array( 'visible' => true, 'pinned' => false ),
-			'design'             => array( 'visible' => true, 'pinned' => false ),
-			'settings'           => array( 'visible' => true, 'pinned' => false ),
-			'monitoring'         => array( 'visible' => true, 'pinned' => false ),
-			'workflows'          => array( 'visible' => true, 'pinned' => false ),
-			'wordpress_health'   => array( 'visible' => true, 'pinned' => false ),
+			'security'         => array(
+				'visible' => true,
+				'pinned'  => false,
+			),
+			'performance'      => array(
+				'visible' => true,
+				'pinned'  => false,
+			),
+			'code_quality'     => array(
+				'visible' => true,
+				'pinned'  => false,
+			),
+			'seo'              => array(
+				'visible' => true,
+				'pinned'  => false,
+			),
+			'design'           => array(
+				'visible' => true,
+				'pinned'  => false,
+			),
+			'settings'         => array(
+				'visible' => true,
+				'pinned'  => false,
+			),
+			'monitoring'       => array(
+				'visible' => true,
+				'pinned'  => false,
+			),
+			'workflows'        => array(
+				'visible' => true,
+				'pinned'  => false,
+			),
+			'wordpress_health' => array(
+				'visible' => true,
+				'pinned'  => false,
+			),
 		);
 	}
-	
+
 	/**
 	 * Save user preferences
 	 *
@@ -67,13 +94,13 @@ class Dashboard_Customization {
 		if ( ! $user_id ) {
 			$user_id = get_current_user_id();
 		}
-		
+
 		// Validate preferences structure
 		$validated = self::validate_preferences( $prefs );
-		
+
 		return (bool) update_user_meta( $user_id, 'wpshadow_dashboard_prefs', $validated );
 	}
-	
+
 	/**
 	 * Validate preference structure
 	 *
@@ -81,9 +108,9 @@ class Dashboard_Customization {
 	 * @return array Validated preferences.
 	 */
 	private static function validate_preferences( $prefs ) {
-		$defaults = self::get_default_preferences();
+		$defaults  = self::get_default_preferences();
 		$validated = array();
-		
+
 		foreach ( $defaults as $category => $default_value ) {
 			if ( isset( $prefs[ $category ] ) ) {
 				$validated[ $category ] = array(
@@ -94,10 +121,10 @@ class Dashboard_Customization {
 				$validated[ $category ] = $default_value;
 			}
 		}
-		
+
 		return $validated;
 	}
-	
+
 	/**
 	 * Toggle category visibility
 	 *
@@ -109,18 +136,18 @@ class Dashboard_Customization {
 		if ( ! $user_id ) {
 			$user_id = get_current_user_id();
 		}
-		
+
 		$prefs = self::get_user_preferences( $user_id );
-		
+
 		if ( isset( $prefs[ $category ] ) ) {
 			$prefs[ $category ]['visible'] = ! $prefs[ $category ]['visible'];
 			self::save_user_preferences( $prefs, $user_id );
 			return $prefs[ $category ]['visible'];
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Pin/unpin category
 	 *
@@ -133,17 +160,17 @@ class Dashboard_Customization {
 		if ( ! $user_id ) {
 			$user_id = get_current_user_id();
 		}
-		
+
 		$prefs = self::get_user_preferences( $user_id );
-		
+
 		if ( isset( $prefs[ $category ] ) ) {
 			$prefs[ $category ]['pinned'] = (bool) $pinned;
 			return self::save_user_preferences( $prefs, $user_id );
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Get filtered categories based on user preferences
 	 *
@@ -155,11 +182,11 @@ class Dashboard_Customization {
 		if ( ! $user_id ) {
 			$user_id = get_current_user_id();
 		}
-		
-		$prefs = self::get_user_preferences( $user_id );
+
+		$prefs    = self::get_user_preferences( $user_id );
 		$filtered = array();
-		$pinned = array();
-		
+		$pinned   = array();
+
 		foreach ( $all_categories as $key => $category_data ) {
 			if ( isset( $prefs[ $key ]['visible'] ) && $prefs[ $key ]['visible'] ) {
 				if ( isset( $prefs[ $key ]['pinned'] ) && $prefs[ $key ]['pinned'] ) {
@@ -169,11 +196,11 @@ class Dashboard_Customization {
 				}
 			}
 		}
-		
+
 		// Return pinned first, then regular
 		return array_merge( $pinned, $filtered );
 	}
-	
+
 	/**
 	 * Render customization UI (settings panel)
 	 *
@@ -183,18 +210,18 @@ class Dashboard_Customization {
 		if ( ! current_user_can( 'read' ) ) {
 			return;
 		}
-		
-		$prefs = self::get_user_preferences();
+
+		$prefs      = self::get_user_preferences();
 		$categories = array(
-			'security'           => __( 'Security', 'wpshadow' ),
-			'performance'        => __( 'Performance', 'wpshadow' ),
-			'code_quality'       => __( 'Code Quality', 'wpshadow' ),
-			'seo'                => __( 'SEO', 'wpshadow' ),
-			'design'             => __( 'Design', 'wpshadow' ),
-			'settings'           => __( 'Settings', 'wpshadow' ),
-			'monitoring'         => __( 'Monitoring', 'wpshadow' ),
-			'workflows'          => __( 'Workflows', 'wpshadow' ),
-			'wordpress_health'   => __( 'WordPress Site Health', 'wpshadow' ),
+			'security'         => __( 'Security', 'wpshadow' ),
+			'performance'      => __( 'Performance', 'wpshadow' ),
+			'code_quality'     => __( 'Code Quality', 'wpshadow' ),
+			'seo'              => __( 'SEO', 'wpshadow' ),
+			'design'           => __( 'Design', 'wpshadow' ),
+			'settings'         => __( 'Settings', 'wpshadow' ),
+			'monitoring'       => __( 'Monitoring', 'wpshadow' ),
+			'workflows'        => __( 'Workflows', 'wpshadow' ),
+			'wordpress_health' => __( 'WordPress Site Health', 'wpshadow' ),
 		);
 		?>
 		<div class="wps-card wps-mt-5">

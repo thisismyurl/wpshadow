@@ -1,7 +1,7 @@
 <?php
 /**
  * Squarespace Terminology
- * 
+ *
  * @package WPShadow
  */
 
@@ -9,10 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-return [
+return array(
 	'platform'       => 'squarespace',
 	'label'          => __( 'Squarespace', 'wpshadow' ),
-	'terms'          => [
+	'terms'          => array(
 		'post'           => __( 'Blog Post', 'wpshadow' ),
 		'page'           => __( 'Page', 'wpshadow' ),
 		'plugin'         => __( 'Extension', 'wpshadow' ),
@@ -34,7 +34,7 @@ return [
 		'featured_image' => __( 'Thumbnail', 'wpshadow' ),
 		'author'         => __( 'Contributor', 'wpshadow' ),
 		'comment'        => __( 'Comment', 'wpshadow' ),
-	],
+	),
 	'kb_article'     => 'https://wpshadow.com/kb/squarespace-to-wordpress/',
 	'training_video' => 'https://wpshadow.com/training/squarespace-to-wordpress/',
-];
+);

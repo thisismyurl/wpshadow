@@ -24,7 +24,7 @@ function wpshadow_enqueue_workflow_assets( $hook ) {
 	if ( strpos( $hook, 'wpshadow' ) === false ) {
 		return;
 	}
-	
+
 	// Workflow list scripts
 	if ( $hook === 'toplevel_page_wpshadow' || strpos( $hook, 'wpshadow-workflows' ) !== false ) {
 		wp_enqueue_script(
@@ -34,10 +34,14 @@ function wpshadow_enqueue_workflow_assets( $hook ) {
 			WPSHADOW_VERSION,
 			true
 		);
-		
-		wp_localize_script( 'wpshadow-workflow-list', 'wpshadowWorkflow', array(
-			'nonce' => wp_create_nonce( 'wpshadow_workflow' ),
-		) );
+
+		wp_localize_script(
+			'wpshadow-workflow-list',
+			'wpshadowWorkflow',
+			array(
+				'nonce' => wp_create_nonce( 'wpshadow_workflow' ),
+			)
+		);
 	}
 
 	// Guardian Dashboard and Settings assets (Phase 8)
@@ -58,10 +62,14 @@ function wpshadow_enqueue_workflow_assets( $hook ) {
 		);
 
 		// Localize script for AJAX
-		wp_localize_script( 'wpshadow-guardian-dashboard-settings', 'wpshadow', array(
-			'ajax_url' => admin_url( 'admin-ajax.php' ),
-			'nonce' => wp_create_nonce( 'wpshadow_guardian_nonce' )
-		) );
+		wp_localize_script(
+			'wpshadow-guardian-dashboard-settings',
+			'wpshadow',
+			array(
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'nonce'    => wp_create_nonce( 'wpshadow_guardian_nonce' ),
+			)
+		);
 
 		// Enqueue consolidated Guardian assets
 		wp_enqueue_style(
@@ -80,19 +88,23 @@ function wpshadow_enqueue_workflow_assets( $hook ) {
 		);
 
 		// Localize Guardian-specific data
-		wp_localize_script( 'wpshadow-guardian', 'wpshadowGuardian', array(
-			'ajaxUrl'         => admin_url( 'admin-ajax.php' ),
-			'nonce'           => wp_create_nonce( 'wpshadow_guardian' ),
-			'refreshInterval' => 120000, // 2 minutes
-			'i18n'            => array(
-				'active'      => __( 'Active', 'wpshadow' ),
-				'inactive'    => __( 'Inactive', 'wpshadow' ),
-				'error'       => __( 'An error occurred. Please try again.', 'wpshadow' ),
-				'fixing'      => __( 'Fixing...', 'wpshadow' ),
-				'issuefixed'  => __( 'Issue fixed!', 'wpshadow' ),
-				'fixFailed'   => __( 'Failed to fix the issue.', 'wpshadow' ),
+		wp_localize_script(
+			'wpshadow-guardian',
+			'wpshadowGuardian',
+			array(
+				'ajaxUrl'         => admin_url( 'admin-ajax.php' ),
+				'nonce'           => wp_create_nonce( 'wpshadow_guardian' ),
+				'refreshInterval' => 120000, // 2 minutes
+				'i18n'            => array(
+					'active'     => __( 'Active', 'wpshadow' ),
+					'inactive'   => __( 'Inactive', 'wpshadow' ),
+					'error'      => __( 'An error occurred. Please try again.', 'wpshadow' ),
+					'fixing'     => __( 'Fixing...', 'wpshadow' ),
+					'issuefixed' => __( 'Issue fixed!', 'wpshadow' ),
+					'fixFailed'  => __( 'Failed to fix the issue.', 'wpshadow' ),
+				),
 			)
-		) );
+		);
 	}
 }
 
@@ -127,17 +139,21 @@ function wpshadow_enqueue_color_contrast_assets( $hook ) {
 		true
 	);
 
-	wp_localize_script( 'wpshadow-color-contrast', 'wpshadowContrast', array(
-		'ajaxUrl'        => admin_url( 'admin-ajax.php' ),
-		'themeNonce'     => wp_create_nonce( 'wpshadow_theme_contrast' ),
-		'i18nInvalid'    => __( 'Please enter valid 6-digit hex colors.', 'wpshadow' ),
-		'i18nPass'       => __( 'Pass', 'wpshadow' ),
-		'i18nFail'       => __( 'Fail', 'wpshadow' ),
-		'i18nRatioLabel' => __( 'Contrast ratio', 'wpshadow' ),
-		'i18nThemeScan'  => __( 'Scan Active Theme', 'wpshadow' ),
-		'i18nThemeError' => __( 'Unable to scan the active theme. Please try again.', 'wpshadow' ),
-		'i18nThemeBg'    => __( 'Background', 'wpshadow' ),
-	) );
+	wp_localize_script(
+		'wpshadow-color-contrast',
+		'wpshadowContrast',
+		array(
+			'ajaxUrl'        => admin_url( 'admin-ajax.php' ),
+			'themeNonce'     => wp_create_nonce( 'wpshadow_theme_contrast' ),
+			'i18nInvalid'    => __( 'Please enter valid 6-digit hex colors.', 'wpshadow' ),
+			'i18nPass'       => __( 'Pass', 'wpshadow' ),
+			'i18nFail'       => __( 'Fail', 'wpshadow' ),
+			'i18nRatioLabel' => __( 'Contrast ratio', 'wpshadow' ),
+			'i18nThemeScan'  => __( 'Scan Active Theme', 'wpshadow' ),
+			'i18nThemeError' => __( 'Unable to scan the active theme. Please try again.', 'wpshadow' ),
+			'i18nThemeBg'    => __( 'Background', 'wpshadow' ),
+		)
+	);
 }
 
 /**
@@ -171,14 +187,18 @@ function wpshadow_enqueue_mobile_friendliness_assets( $hook ) {
 		true
 	);
 
-	wp_localize_script( 'wpshadow-mobile-friendliness', 'wpshadowMobileCheck', array(
-		'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
-		'nonce'      => wp_create_nonce( 'wpshadow_mobile_check' ),
-		'defaultUrl' => home_url(),
-		'i18nError'  => __( 'Unable to complete the mobile check. Please try again.', 'wpshadow' ),
-		'i18nRun'    => __( 'Run Mobile Check', 'wpshadow' ),
-		'i18nRunning' => __( 'Checking...', 'wpshadow' ),
-	) );
+	wp_localize_script(
+		'wpshadow-mobile-friendliness',
+		'wpshadowMobileCheck',
+		array(
+			'ajaxUrl'     => admin_url( 'admin-ajax.php' ),
+			'nonce'       => wp_create_nonce( 'wpshadow_mobile_check' ),
+			'defaultUrl'  => home_url(),
+			'i18nError'   => __( 'Unable to complete the mobile check. Please try again.', 'wpshadow' ),
+			'i18nRun'     => __( 'Run Mobile Check', 'wpshadow' ),
+			'i18nRunning' => __( 'Checking...', 'wpshadow' ),
+		)
+	);
 }
 
 /**
@@ -239,9 +259,13 @@ function wpshadow_enqueue_dark_mode_assets( $hook ) {
 			true
 		);
 
-		wp_localize_script( 'wpshadow-dark-mode-script', 'wpshadowDarkMode', array(
-			'pref' => $dark_mode_pref,
-		) );
+		wp_localize_script(
+			'wpshadow-dark-mode-script',
+			'wpshadowDarkMode',
+			array(
+				'pref' => $dark_mode_pref,
+			)
+		);
 	}
 }
 
@@ -252,12 +276,12 @@ function wpshadow_enqueue_dark_mode_assets( $hook ) {
  */
 function wpshadow_enqueue_tooltip_assets() {
 	global $pagenow;
-	
+
 	// Skip tooltips on specific pages
 	if ( in_array( $pagenow, array( 'edit-comments.php', 'edit.php' ), true ) ) {
 		return;
 	}
-	
+
 	$user_id = get_current_user_id();
 	if ( ! $user_id ) {
 		return;
@@ -281,9 +305,9 @@ function wpshadow_enqueue_tooltip_assets() {
 	);
 
 	// Get user preferences
-	$prefs = wpshadow_get_user_tip_prefs( $user_id );
+	$prefs               = wpshadow_get_user_tip_prefs( $user_id );
 	$disabled_categories = $prefs['disabled_categories'] ?? array();
-	$dismissed_tips = $prefs['dismissed_tips'] ?? array();
+	$dismissed_tips      = $prefs['dismissed_tips'] ?? array();
 
 	// Get full tooltip catalog
 	$catalog = wpshadow_get_tooltip_catalog();
@@ -295,7 +319,7 @@ function wpshadow_enqueue_tooltip_assets() {
 		if ( strpos( $tip['selector'], '#wp-admin-bar-' ) === 0 ) {
 			continue;
 		}
-		
+
 		$tooltip_data[ $tip['id'] ] = array(
 			'id'       => $tip['id'],
 			'selector' => $tip['selector'],
@@ -343,17 +367,21 @@ function wpshadow_enqueue_admin_pages_assets( $hook ) {
 	);
 
 	// Localize common admin data
-	wp_localize_script( 'wpshadow-admin-pages', 'wpshadowAdmin', array(
-		'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-		'nonce'   => wp_create_nonce( 'wpshadow_admin' ),
-		'locale'  => get_locale(),
-		'i18n'    => array(
-			'saving'       => __( 'Saving...', 'wpshadow' ),
-			'saved'        => __( 'Saved successfully!', 'wpshadow' ),
-			'error'        => __( 'An error occurred. Please try again.', 'wpshadow' ),
-			'confirmDelete' => __( 'Are you sure you want to delete this?', 'wpshadow' ),
+	wp_localize_script(
+		'wpshadow-admin-pages',
+		'wpshadowAdmin',
+		array(
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'nonce'   => wp_create_nonce( 'wpshadow_admin' ),
+			'locale'  => get_locale(),
+			'i18n'    => array(
+				'saving'        => __( 'Saving...', 'wpshadow' ),
+				'saved'         => __( 'Saved successfully!', 'wpshadow' ),
+				'error'         => __( 'An error occurred. Please try again.', 'wpshadow' ),
+				'confirmDelete' => __( 'Are you sure you want to delete this?', 'wpshadow' ),
+			),
 		)
-	) );
+	);
 }
 
 /**
@@ -385,31 +413,39 @@ function wpshadow_enqueue_report_assets( $hook ) {
 	);
 
 	// Localize report-specific data
-	wp_localize_script( 'wpshadow-reports', 'wpshadowReportBuilder', array(
-		'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-		'nonce'   => wp_create_nonce( 'wpshadow_report' ),
-		'i18n'    => array(
-			'generating'     => __( 'Generating report...', 'wpshadow' ),
-			'generated'      => __( 'Report generated successfully!', 'wpshadow' ),
-			'reportGenerated' => __( 'Your report has been generated.', 'wpshadow' ),
-			'fillAllFields'  => __( 'Please fill all required fields', 'wpshadow' ),
-			'invalidDateRange' => __( 'End date must be after start date', 'wpshadow' ),
-			'error'          => __( 'An error occurred while generating the report.', 'wpshadow' ),
+	wp_localize_script(
+		'wpshadow-reports',
+		'wpshadowReportBuilder',
+		array(
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'nonce'   => wp_create_nonce( 'wpshadow_report' ),
+			'i18n'    => array(
+				'generating'       => __( 'Generating report...', 'wpshadow' ),
+				'generated'        => __( 'Report generated successfully!', 'wpshadow' ),
+				'reportGenerated'  => __( 'Your report has been generated.', 'wpshadow' ),
+				'fillAllFields'    => __( 'Please fill all required fields', 'wpshadow' ),
+				'invalidDateRange' => __( 'End date must be after start date', 'wpshadow' ),
+				'error'            => __( 'An error occurred while generating the report.', 'wpshadow' ),
+			),
 		)
-	) );
+	);
 
-	wp_localize_script( 'wpshadow-reports', 'wpshadowReportDisplay', array(
-		'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-		'nonce'   => wp_create_nonce( 'wpshadow_report_export' ),
-		'i18n'    => array(
-			'exporting'   => __( 'Exporting...', 'wpshadow' ),
-			'exported'    => __( 'Report exported successfully!', 'wpshadow' ),
-			'exportError' => __( 'An error occurred while exporting the report.', 'wpshadow' ),
-			'sending'     => __( 'Sending...', 'wpshadow' ),
-			'emailSent'   => __( 'Report sent successfully!', 'wpshadow' ),
-			'emailError'  => __( 'An error occurred while sending the email.', 'wpshadow' ),
+	wp_localize_script(
+		'wpshadow-reports',
+		'wpshadowReportDisplay',
+		array(
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'nonce'   => wp_create_nonce( 'wpshadow_report_export' ),
+			'i18n'    => array(
+				'exporting'   => __( 'Exporting...', 'wpshadow' ),
+				'exported'    => __( 'Report exported successfully!', 'wpshadow' ),
+				'exportError' => __( 'An error occurred while exporting the report.', 'wpshadow' ),
+				'sending'     => __( 'Sending...', 'wpshadow' ),
+				'emailSent'   => __( 'Report sent successfully!', 'wpshadow' ),
+				'emailError'  => __( 'An error occurred while sending the email.', 'wpshadow' ),
+			),
 		)
-	) );
+	);
 }
 
 /**
@@ -463,10 +499,10 @@ function wpshadow_register_asset_hooks() {
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_site_health_assets' );
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_dark_mode_assets' );
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_tooltip_assets' );
-	
+
 	// Auto-extracted inline styles
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_inline_styles_css' );
-	
+
 	// New consolidated asset enqueuing
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_admin_pages_assets' );
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_report_assets' );

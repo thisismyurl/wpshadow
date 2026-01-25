@@ -99,7 +99,7 @@ class Diagnostic_Sensitive_Data_Encrypted_Transit extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Sensitive Data Encrypted Transit
 	 * Slug: sensitive-data-encrypted-transit
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -120,15 +120,13 @@ class Diagnostic_Sensitive_Data_Encrypted_Transit extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

@@ -14,8 +14,8 @@ use WPShadow\Diagnostics\Diagnostic_Base;
  *
  * @since 1.2.0
  */
-class Test_Slow_Query_Detection extends Diagnostic_Base
-{
+class Test_Slow_Query_Detection extends Diagnostic_Base {
+
 
 	private const SLOW_QUERY_THRESHOLD_MS = 1000; // 1 second
 
@@ -24,36 +24,35 @@ class Test_Slow_Query_Detection extends Diagnostic_Base
 	 *
 	 * @return array|null Diagnostic array if issues found, null if all good
 	 */
-	public static function check(): ?array
-	{
-		if (! defined('SAVEQUERIES') || ! SAVEQUERIES) {
+	public static function check(): ?array {
+		if ( ! defined( 'SAVEQUERIES' ) || ! SAVEQUERIES ) {
 			return null; // Query logging not enabled
 		}
 
 		$slow_queries = self::detect_slow_queries();
 
-		if (empty($slow_queries)) {
+		if ( empty( $slow_queries ) ) {
 			return null;
 		}
 
-		$threat = min(50, count($slow_queries) * 5);
+		$threat = min( 50, count( $slow_queries ) * 5 );
 
-		return [
-			'threat_level'    => $threat,
-			'threat_color'    => 'yellow',
-			'passed'          => false,
-			'issue'           => sprintf(
+		return array(
+			'threat_level'  => $threat,
+			'threat_color'  => 'yellow',
+			'passed'        => false,
+			'issue'         => sprintf(
 				'Found %d slow database queries (>%dms)',
-				count($slow_queries),
+				count( $slow_queries ),
 				self::SLOW_QUERY_THRESHOLD_MS
 			),
-			'metadata'        => [
-				'slow_query_count' => count($slow_queries),
-				'sample_queries'   => array_slice($slow_queries, 0, 5),
-			],
-			'kb_link'         => 'https://wpshadow.com/kb/database-query-optimization/',
-			'training_link'   => 'https://wpshadow.com/training/wordpress-database-performance/',
-		];
+			'metadata'      => array(
+				'slow_query_count' => count( $slow_queries ),
+				'sample_queries'   => array_slice( $slow_queries, 0, 5 ),
+			),
+			'kb_link'       => 'https://wpshadow.com/kb/database-query-optimization/',
+			'training_link' => 'https://wpshadow.com/training/wordpress-database-performance/',
+		);
 	}
 
 	/**
@@ -61,16 +60,15 @@ class Test_Slow_Query_Detection extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_query_logging(): array
-	{
-		$logging_enabled = defined('SAVEQUERIES') && SAVEQUERIES;
+	public static function test_query_logging(): array {
+		$logging_enabled = defined( 'SAVEQUERIES' ) && SAVEQUERIES;
 
-		return [
+		return array(
 			'test_name'       => 'Query Logging Status',
 			'logging_enabled' => $logging_enabled,
 			'passed'          => $logging_enabled,
 			'description'     => $logging_enabled ? 'Query logging is enabled' : 'Query logging disabled (production recommended)',
-		];
+		);
 	}
 
 	/**
@@ -78,24 +76,23 @@ class Test_Slow_Query_Detection extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_slow_query_count(): array
-	{
-		if (! defined('SAVEQUERIES') || ! SAVEQUERIES) {
-			return [
+	public static function test_slow_query_count(): array {
+		if ( ! defined( 'SAVEQUERIES' ) || ! SAVEQUERIES ) {
+			return array(
 				'test_name'       => 'Slow Query Count',
 				'logging_enabled' => false,
 				'description'     => 'Query logging not enabled',
-			];
+			);
 		}
 
 		$slow_queries = self::detect_slow_queries();
 
-		return [
-			'test_name'       => 'Slow Query Count',
-			'slow_queries'    => count($slow_queries),
-			'passed'          => count($slow_queries) < 5,
-			'description'     => sprintf('Found %d slow queries', count($slow_queries)),
-		];
+		return array(
+			'test_name'    => 'Slow Query Count',
+			'slow_queries' => count( $slow_queries ),
+			'passed'       => count( $slow_queries ) < 5,
+			'description'  => sprintf( 'Found %d slow queries', count( $slow_queries ) ),
+		);
 	}
 
 	/**
@@ -103,24 +100,23 @@ class Test_Slow_Query_Detection extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_slowest_queries(): array
-	{
-		if (! defined('SAVEQUERIES') || ! SAVEQUERIES) {
-			return [
-				'test_name'    => 'Slowest Queries',
-				'description'  => 'Query logging not enabled',
-			];
+	public static function test_slowest_queries(): array {
+		if ( ! defined( 'SAVEQUERIES' ) || ! SAVEQUERIES ) {
+			return array(
+				'test_name'   => 'Slowest Queries',
+				'description' => 'Query logging not enabled',
+			);
 		}
 
 		$slow_queries = self::detect_slow_queries();
-		usort($slow_queries, fn($a, $b) => $b['duration'] <=> $a['duration']);
+		usort( $slow_queries, fn( $a, $b ) => $b['duration'] <=> $a['duration'] );
 
-		return [
-			'test_name'    => 'Slowest Queries',
-			'slowest_count' => count($slow_queries),
-			'slowest'      => array_slice($slow_queries, 0, 3),
-			'description'  => sprintf('Slowest query: %sms', round(($slow_queries[0]['duration'] ?? 0) * 1000, 2)),
-		];
+		return array(
+			'test_name'     => 'Slowest Queries',
+			'slowest_count' => count( $slow_queries ),
+			'slowest'       => array_slice( $slow_queries, 0, 3 ),
+			'description'   => sprintf( 'Slowest query: %sms', round( ( $slow_queries[0]['duration'] ?? 0 ) * 1000, 2 ) ),
+		);
 	}
 
 	/**
@@ -128,16 +124,15 @@ class Test_Slow_Query_Detection extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_missing_indexes(): array
-	{
+	public static function test_missing_indexes(): array {
 		$missing_indexes = self::detect_missing_indexes();
 
-		return [
-			'test_name'        => 'Missing Indexes',
+		return array(
+			'test_name'           => 'Missing Indexes',
 			'potentially_missing' => $missing_indexes,
-			'count'             => count($missing_indexes),
-			'description'       => count($missing_indexes) > 0 ? sprintf('%d queries may need indexes', count($missing_indexes)) : 'No obvious missing indexes',
-		];
+			'count'               => count( $missing_indexes ),
+			'description'         => count( $missing_indexes ) > 0 ? sprintf( '%d queries may need indexes', count( $missing_indexes ) ) : 'No obvious missing indexes',
+		);
 	}
 
 	/**
@@ -145,25 +140,24 @@ class Test_Slow_Query_Detection extends Diagnostic_Base
 	 *
 	 * @return array List of slow queries
 	 */
-	private static function detect_slow_queries(): array
-	{
+	private static function detect_slow_queries(): array {
 		global $wpdb;
 
-		if (! isset($wpdb->queries)) {
-			return [];
+		if ( ! isset( $wpdb->queries ) ) {
+			return array();
 		}
 
-		$slow = [];
+		$slow = array();
 
-		foreach ($wpdb->queries as $query) {
+		foreach ( $wpdb->queries as $query ) {
 			$duration = $query[1] * 1000; // Convert to milliseconds
 
-			if ($duration > self::SLOW_QUERY_THRESHOLD_MS) {
-				$slow[] = [
-					'query'    => substr($query[0], 0, 200) . '...',
-					'duration' => $duration / 1000, // Back to seconds
+			if ( $duration > self::SLOW_QUERY_THRESHOLD_MS ) {
+				$slow[] = array(
+					'query'       => substr( $query[0], 0, 200 ) . '...',
+					'duration'    => $duration / 1000, // Back to seconds
 					'duration_ms' => $duration,
-				];
+				);
 			}
 		}
 
@@ -175,33 +169,32 @@ class Test_Slow_Query_Detection extends Diagnostic_Base
 	 *
 	 * @return array Queries that may need indexes
 	 */
-	private static function detect_missing_indexes(): array
-	{
+	private static function detect_missing_indexes(): array {
 		global $wpdb;
 
-		if (! isset($wpdb->queries)) {
-			return [];
+		if ( ! isset( $wpdb->queries ) ) {
+			return array();
 		}
 
-		$missing = [];
+		$missing = array();
 
-		foreach ($wpdb->queries as $query) {
-			$query_text = strtolower($query[0]);
+		foreach ( $wpdb->queries as $query ) {
+			$query_text = strtolower( $query[0] );
 
 			// Look for full table scans or inefficient patterns
-			if (preg_match('/SELECT.*FROM.*WHERE.*LIKE|SELECT.*JOIN.*WHERE.*LIKE/i', $query[0])) {
-				$missing[] = [
+			if ( preg_match( '/SELECT.*FROM.*WHERE.*LIKE|SELECT.*JOIN.*WHERE.*LIKE/i', $query[0] ) ) {
+				$missing[] = array(
 					'type'  => 'LIKE clause without index',
-					'query' => substr($query[0], 0, 150) . '...',
-				];
+					'query' => substr( $query[0], 0, 150 ) . '...',
+				);
 			}
 
 			// Check for missing JOIN conditions
-			if (substr_count($query_text, 'join') > 3 && ($query[1] * 1000) > 500) {
-				$missing[] = [
+			if ( substr_count( $query_text, 'join' ) > 3 && ( $query[1] * 1000 ) > 500 ) {
+				$missing[] = array(
 					'type'  => 'Complex JOIN (>500ms)',
-					'query' => substr($query[0], 0, 150) . '...',
-				];
+					'query' => substr( $query[0], 0, 150 ) . '...',
+				);
 			}
 		}
 
@@ -213,8 +206,7 @@ class Test_Slow_Query_Detection extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_name(): string
-	{
+	public static function get_name(): string {
 		return 'Slow Query Detection';
 	}
 
@@ -223,8 +215,7 @@ class Test_Slow_Query_Detection extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_description(): string
-	{
+	public static function get_description(): string {
 		return 'Identifies slow database queries that impact performance';
 	}
 
@@ -233,8 +224,7 @@ class Test_Slow_Query_Detection extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_category(): string
-	{
+	public static function get_category(): string {
 		return 'Performance';
 	}
 }

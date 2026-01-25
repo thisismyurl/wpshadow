@@ -33,29 +33,29 @@ class Treatment_Optimize_Heartbeat_API extends Treatment_Base {
 	 * @param array $options Treatment options
 	 * @return bool Success status
 	 */
-	public static function apply( array $options = [] ): bool {
+	public static function apply( array $options = array() ): bool {
 		// Default settings: slow down heartbeat
 		$settings = wp_parse_args(
 			$options,
-			[
-				'dashboard'  => 60,   // 60 seconds on dashboard
-				'frontend'   => 'disabled', // Disable on frontend
-				'post_edit'  => 30,   // 30 seconds on post editor (for autosave)
-			]
+			array(
+				'dashboard' => 60,   // 60 seconds on dashboard
+				'frontend'  => 'disabled', // Disable on frontend
+				'post_edit' => 30,   // 30 seconds on post editor (for autosave)
+			)
 		);
 
 		// Create backup
-		$backup = [
-			'previous_settings' => get_option( 'wpshadow_heartbeat_settings', [] ),
+		$backup = array(
+			'previous_settings' => get_option( 'wpshadow_heartbeat_settings', array() ),
 			'timestamp'         => time(),
-		];
+		);
 		self::create_backup( $backup );
 
 		// Store settings
 		update_option( 'wpshadow_heartbeat_settings', $settings );
 
 		// Hook to modify heartbeat
-		add_filter( 'heartbeat_settings', [ __CLASS__, 'modify_heartbeat_settings' ] );
+		add_filter( 'heartbeat_settings', array( __CLASS__, 'modify_heartbeat_settings' ) );
 
 		// Track KPI
 		KPI_Tracker::record_treatment_applied( __CLASS__, 3 );
@@ -70,7 +70,7 @@ class Treatment_Optimize_Heartbeat_API extends Treatment_Base {
 	 * @return array Modified settings
 	 */
 	public static function modify_heartbeat_settings( array $settings ): array {
-		$wpshadow_settings = get_option( 'wpshadow_heartbeat_settings', [] );
+		$wpshadow_settings = get_option( 'wpshadow_heartbeat_settings', array() );
 
 		if ( empty( $wpshadow_settings ) ) {
 			return $settings;
@@ -79,7 +79,7 @@ class Treatment_Optimize_Heartbeat_API extends Treatment_Base {
 		// Determine context
 		if ( is_admin() ) {
 			global $pagenow;
-			
+
 			if ( 'post.php' === $pagenow || 'post-new.php' === $pagenow ) {
 				// Post editor
 				if ( isset( $wpshadow_settings['post_edit'] ) ) {
@@ -116,7 +116,7 @@ class Treatment_Optimize_Heartbeat_API extends Treatment_Base {
 	 */
 	public static function undo(): bool {
 		delete_option( 'wpshadow_heartbeat_settings' );
-		remove_filter( 'heartbeat_settings', [ __CLASS__, 'modify_heartbeat_settings' ] );
+		remove_filter( 'heartbeat_settings', array( __CLASS__, 'modify_heartbeat_settings' ) );
 		return true;
 	}
 

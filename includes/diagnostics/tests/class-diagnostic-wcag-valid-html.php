@@ -79,43 +79,45 @@ class Diagnostic_Wcag_Valid_Html extends Diagnostic_Base {
 	}
 
 	protected static function get_guardian_html(): string {
-		if (isset($_POST['html']) && is_string($_POST['html'])) {
-			return sanitize_text_field(wp_unslash($_POST['html']));
+		if ( isset( $_POST['html'] ) && is_string( $_POST['html'] ) ) {
+			return sanitize_text_field( wp_unslash( $_POST['html'] ) );
 		}
 		return '';
 	}
 
 	public static function check(): ?array {
 		$html = self::get_guardian_html();
-		if (empty($html)) return null;
+		if ( empty( $html ) ) {
+			return null;
+		}
 
-		$issues = [];
+		$issues = array();
 		try {
 			$dom = new \DOMDocument();
-			@$dom->loadHTML($html);
-			$xpath = new \DOMXPath($dom);
+			@$dom->loadHTML( $html );
+			$xpath = new \DOMXPath( $dom );
 
 			// Check for unclosed tags (images without alt)
-			$images = $xpath->query('//img');
-			foreach ($images as $img) {
-				if (!$img->hasAttribute('alt')) {
+			$images = $xpath->query( '//img' );
+			foreach ( $images as $img ) {
+				if ( ! $img->hasAttribute( 'alt' ) ) {
 					$issues[] = 'Image missing alt attribute';
 					break;
 				}
 			}
-		} catch (\Exception $e) {
+		} catch ( \Exception $e ) {
 			return null;
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'wcag-valid-html',
-			'title' => 'Invalid HTML detected',
-			'description' => 'HTML must be valid according to HTML standards',
-			'severity' => 'medium',
-			'category' => 'accessibility',
+		return empty( $issues ) ? null : array(
+			'id'           => 'wcag-valid-html',
+			'title'        => 'Invalid HTML detected',
+			'description'  => 'HTML must be valid according to HTML standards',
+			'severity'     => 'medium',
+			'category'     => 'accessibility',
 			'threat_level' => 48,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	/**
@@ -137,15 +139,16 @@ class Diagnostic_Wcag_Valid_Html extends Diagnostic_Base {
 	 */
 	public static function test_live_wcag_valid_html(): array {
 		$good = '<html><body><img src="test.jpg" alt="Test Image"></body></html>';
-		$bad = '<html><body><img src="test.jpg"></body></html>';
+		$bad  = '<html><body><img src="test.jpg"></body></html>';
 
 		$_POST['html'] = $good;
-		$r1 = self::check();
+		$r1            = self::check();
 		$_POST['html'] = $bad;
-		$r2 = self::check();
+		$r2            = self::check();
 
-		return ['passed' => is_null($r1) && is_array($r2), 'message' => 'HTML validation check working'];
+		return array(
+			'passed'  => is_null( $r1 ) && is_array( $r2 ),
+			'message' => 'HTML validation check working',
+		);
 	}
-
 }
-

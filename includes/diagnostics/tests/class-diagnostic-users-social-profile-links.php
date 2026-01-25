@@ -152,10 +152,8 @@ class Diagnostic_Users_Social_Profile_Links extends Diagnostic_Base {
 
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

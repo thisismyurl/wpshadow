@@ -14,21 +14,20 @@ use WPShadow\Diagnostics\Diagnostic_Base;
  *
  * @since 1.2.0
  */
-class Test_Too_Many_Admins extends Diagnostic_Base
-{
+class Test_Too_Many_Admins extends Diagnostic_Base {
+
 
 	/**
 	 * Check for excessive admin accounts
 	 *
 	 * @return array|null Diagnostic array if issues found, null if all good
 	 */
-	public static function check(): ?array
-	{
-		$admin_users = get_users(['role' => 'administrator']);
-		$admin_count = count($admin_users);
+	public static function check(): ?array {
+		$admin_users = get_users( array( 'role' => 'administrator' ) );
+		$admin_count = count( $admin_users );
 
 		// Threshold: 3+ admin accounts is excessive
-		if ($admin_count < 3) {
+		if ( $admin_count < 3 ) {
 			return null;
 		}
 
@@ -36,31 +35,31 @@ class Test_Too_Many_Admins extends Diagnostic_Base
 		$threat = $admin_count >= 5 ? 80 : 60;
 
 		// Build admin list for metadata
-		$admin_list = [];
-		foreach ($admin_users as $user) {
-			$admin_list[] = [
-				'id'        => $user->ID,
-				'login'     => $user->user_login,
-				'email'     => $user->user_email,
+		$admin_list = array();
+		foreach ( $admin_users as $user ) {
+			$admin_list[] = array(
+				'id'         => $user->ID,
+				'login'      => $user->user_login,
+				'email'      => $user->user_email,
 				'registered' => $user->user_registered,
-			];
+			);
 		}
 
-		return [
-			'threat_level'    => $threat,
-			'threat_color'    => $threat >= 80 ? 'red' : 'yellow',
-			'passed'          => false,
-			'issue'           => sprintf(
+		return array(
+			'threat_level'  => $threat,
+			'threat_color'  => $threat >= 80 ? 'red' : 'yellow',
+			'passed'        => false,
+			'issue'         => sprintf(
 				'Found %d administrator accounts (recommended: 1-2)',
 				$admin_count
 			),
-			'metadata'        => [
+			'metadata'      => array(
 				'admin_count' => $admin_count,
 				'admins'      => $admin_list,
-			],
-			'kb_link'         => 'https://wpshadow.com/kb/admin-account-security/',
-			'training_link'   => 'https://wpshadow.com/training/user-access-control/',
-		];
+			),
+			'kb_link'       => 'https://wpshadow.com/kb/admin-account-security/',
+			'training_link' => 'https://wpshadow.com/training/user-access-control/',
+		);
 	}
 
 	/**
@@ -68,18 +67,17 @@ class Test_Too_Many_Admins extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_admin_count(): array
-	{
-		$admin_users = get_users(['role' => 'administrator']);
-		$admin_count = count($admin_users);
+	public static function test_admin_count(): array {
+		$admin_users = get_users( array( 'role' => 'administrator' ) );
+		$admin_count = count( $admin_users );
 
-		return [
-			'test_name'    => 'Administrator Account Count',
-			'count'        => $admin_count,
-			'passed'       => $admin_count <= 2,
-			'recommended'  => '1-2 admin accounts',
-			'description'  => sprintf('Detected %d administrator account(s)', $admin_count),
-		];
+		return array(
+			'test_name'   => 'Administrator Account Count',
+			'count'       => $admin_count,
+			'passed'      => $admin_count <= 2,
+			'recommended' => '1-2 admin accounts',
+			'description' => sprintf( 'Detected %d administrator account(s)', $admin_count ),
+		);
 	}
 
 	/**
@@ -87,33 +85,32 @@ class Test_Too_Many_Admins extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_admin_list(): array
-	{
-		$admin_users = get_users(['role' => 'administrator']);
-		$admin_list = [];
+	public static function test_admin_list(): array {
+		$admin_users = get_users( array( 'role' => 'administrator' ) );
+		$admin_list  = array();
 
-		foreach ($admin_users as $user) {
-			$admin_list[] = [
+		foreach ( $admin_users as $user ) {
+			$admin_list[] = array(
 				'id'          => $user->ID,
 				'login'       => $user->user_login,
 				'email'       => $user->user_email,
 				'name'        => $user->display_name,
 				'registered'  => $user->user_registered,
-				'last_active' => self::get_user_last_active($user->ID),
-			];
+				'last_active' => self::get_user_last_active( $user->ID ),
+			);
 		}
 
-		return [
-			'test_name'    => 'Administrator Accounts List',
-			'admins'       => $admin_list,
-			'count'        => count($admin_list),
-			'passed'       => count($admin_list) <= 2,
-			'description'  => sprintf(
+		return array(
+			'test_name'   => 'Administrator Accounts List',
+			'admins'      => $admin_list,
+			'count'       => count( $admin_list ),
+			'passed'      => count( $admin_list ) <= 2,
+			'description' => sprintf(
 				'Found %d administrators: %s',
-				count($admin_list),
-				implode(', ', array_map(fn($a) => $a['login'], $admin_list))
+				count( $admin_list ),
+				implode( ', ', array_map( fn( $a ) => $a['login'], $admin_list ) )
 			),
-		];
+		);
 	}
 
 	/**
@@ -121,34 +118,33 @@ class Test_Too_Many_Admins extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_admin_security_impact(): array
-	{
-		$admin_users = get_users(['role' => 'administrator']);
-		$admin_count = count($admin_users);
+	public static function test_admin_security_impact(): array {
+		$admin_users = get_users( array( 'role' => 'administrator' ) );
+		$admin_count = count( $admin_users );
 
 		// Assess security level
-		if ($admin_count <= 1) {
-			$risk_level = 'low';
+		if ( $admin_count <= 1 ) {
+			$risk_level  = 'low';
 			$description = 'Single admin account - consider backup access';
-		} elseif ($admin_count === 2) {
-			$risk_level = 'acceptable';
+		} elseif ( $admin_count === 2 ) {
+			$risk_level  = 'acceptable';
 			$description = 'Two admin accounts - good for backup access';
-		} elseif ($admin_count < 5) {
-			$risk_level = 'medium';
+		} elseif ( $admin_count < 5 ) {
+			$risk_level  = 'medium';
 			$description = 'Multiple admin accounts - review inactive accounts';
 		} else {
-			$risk_level = 'high';
+			$risk_level  = 'high';
 			$description = 'Too many admin accounts - significant security risk';
 		}
 
-		return [
-			'test_name'      => 'Admin Security Impact',
-			'admin_count'    => $admin_count,
-			'risk_level'     => $risk_level,
-			'passed'         => $risk_level === 'low' || $risk_level === 'acceptable',
-			'description'    => $description,
-			'threat_level'   => $admin_count >= 5 ? 80 : ($admin_count >= 3 ? 60 : 0),
-		];
+		return array(
+			'test_name'    => 'Admin Security Impact',
+			'admin_count'  => $admin_count,
+			'risk_level'   => $risk_level,
+			'passed'       => $risk_level === 'low' || $risk_level === 'acceptable',
+			'description'  => $description,
+			'threat_level' => $admin_count >= 5 ? 80 : ( $admin_count >= 3 ? 60 : 0 ),
+		);
 	}
 
 	/**
@@ -157,13 +153,12 @@ class Test_Too_Many_Admins extends Diagnostic_Base
 	 * @param int $user_id User ID
 	 * @return string Last active time or 'Unknown'
 	 */
-	private static function get_user_last_active(int $user_id): string
-	{
+	private static function get_user_last_active( int $user_id ): string {
 		// Try to get from user meta (if other plugins track it)
-		$last_active = get_user_meta($user_id, 'last_activity', true);
+		$last_active = get_user_meta( $user_id, 'last_activity', true );
 
-		if ($last_active) {
-			return human_time_diff(strtotime($last_active)) . ' ago';
+		if ( $last_active ) {
+			return human_time_diff( strtotime( $last_active ) ) . ' ago';
 		}
 
 		return 'Unknown';
@@ -174,8 +169,7 @@ class Test_Too_Many_Admins extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_name(): string
-	{
+	public static function get_name(): string {
 		return 'Too Many Admin Accounts';
 	}
 
@@ -184,8 +178,7 @@ class Test_Too_Many_Admins extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_description(): string
-	{
+	public static function get_description(): string {
 		return 'Detects excessive administrator accounts for security review';
 	}
 
@@ -194,8 +187,7 @@ class Test_Too_Many_Admins extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_category(): string
-	{
+	public static function get_category(): string {
 		return 'Security';
 	}
 }

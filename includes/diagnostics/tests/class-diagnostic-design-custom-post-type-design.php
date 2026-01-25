@@ -12,19 +12,19 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/design-custom-post-type-design
  */
 class Diagnostic_Design_CUSTOM_POST_TYPE_DESIGN extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'design-custom-post-type-design',
-            'title' => __('Custom Post Type Design', 'wpshadow'),
-            'description' => __('Verifies custom post types have proper templates.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'design',
-            'kb_link' => 'https://wpshadow.com/kb/design-custom-post-type-design',
-            'training_link' => 'https://wpshadow.com/training/design-custom-post-type-design',
-            'auto_fixable' => false,
-            'threat_level' => 6
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'design-custom-post-type-design',
+			'title'         => __( 'Custom Post Type Design', 'wpshadow' ),
+			'description'   => __( 'Verifies custom post types have proper templates.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'design',
+			'kb_link'       => 'https://wpshadow.com/kb/design-custom-post-type-design',
+			'training_link' => 'https://wpshadow.com/training/design-custom-post-type-design',
+			'auto_fixable'  => false,
+			'threat_level'  => 6,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -32,12 +32,12 @@ class Diagnostic_Design_CUSTOM_POST_TYPE_DESIGN extends Diagnostic_Base {
 	 * Diagnostic: Design CUSTOM POST TYPE DESIGN
 	 * Slug: -design-custom-post-type-design
 	 * File: class-diagnostic-design-custom-post-type-design.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Design CUSTOM POST TYPE DESIGN
 	 * Slug: -design-custom-post-type-design
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -50,11 +50,16 @@ class Diagnostic_Design_CUSTOM_POST_TYPE_DESIGN extends Diagnostic_Base {
 	 */
 	public static function test_live__design_custom_post_type_design(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Custom post types properly designed and implemented'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Custom post types properly designed and implemented',
+			);
 		}
 		$message = $result['description'] ?? 'Custom post type design issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

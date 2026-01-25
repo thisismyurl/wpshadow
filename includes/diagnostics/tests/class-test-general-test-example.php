@@ -23,55 +23,54 @@ use WPShadow\Core\Diagnostic_Base;
  */
 class Test_General_Testexample extends Diagnostic_Base {
 
-    /**
-     * Diagnostic ID
-     */
-    protected static string $id = 'test-general-test-example';
+	/**
+	 * Diagnostic ID
+	 */
+	protected static string $id = 'test-general-test-example';
 
-    /**
-     * Category for grouping
-     */
-    protected static string $category = 'general';
+	/**
+	 * Category for grouping
+	 */
+	protected static string $category = 'general';
 
-    /**
-     * Run the diagnostic check
-     *
-     * @return array Found issues (empty = healthy)
-     */
-    public static function run(): array {
-        // TODO: Implement the check
-        // Examples:
-        //   - Query WordPress options/settings
-        //   - Check server configuration
-        //   - Validate security headers
-        //   - Analyze plugin/theme data
+	/**
+	 * Run the diagnostic check
+	 *
+	 * @return array Found issues (empty = healthy)
+	 */
+	public static function run(): array {
+		// TODO: Implement the check
+		// Examples:
+		//   - Query WordPress options/settings
+		//   - Check server configuration
+		//   - Validate security headers
+		//   - Analyze plugin/theme data
 
-        // Return format:
-        // [
-        //     'severity' => 'critical|warning|info',
-        //     'message' => 'What we found',
-        //     'recommendation' => 'How to fix it',
-        //     'learning_link' => 'https://wpshadow.com/kb/...',
-        // ]
+		// Return format:
+		// [
+		//     'severity' => 'critical|warning|info',
+		//     'message' => 'What we found',
+		//     'recommendation' => 'How to fix it',
+		//     'learning_link' => 'https://wpshadow.com/kb/...',
+		// ]
 
-        return [];
-    }
+		return array();
+	}
 
-    /**
-     * Get display name (plain English, no jargon)
-     */
-    public static function get_name(): string {
-        return __('Test the scaffolder', 'wpshadow');
-    }
+	/**
+	 * Get display name (plain English, no jargon)
+	 */
+	public static function get_name(): string {
+		return __( 'Test the scaffolder', 'wpshadow' );
+	}
 
-    /**
-     * Get description with KB link (educational, helpful)
-     */
-    public static function get_description(): string {
-        return sprintf(
-            __('Test the scaffolder. <a href="%s" target="_blank">Learn why this matters</a>', 'wpshadow'),
-            'https://wpshadow.com/kb/test_example'
-        );
-    }
+	/**
+	 * Get description with KB link (educational, helpful)
+	 */
+	public static function get_description(): string {
+		return sprintf(
+			__( 'Test the scaffolder. <a href="%s" target="_blank">Learn why this matters</a>', 'wpshadow' ),
+			'https://wpshadow.com/kb/test_example'
+		);
+	}
 }
-

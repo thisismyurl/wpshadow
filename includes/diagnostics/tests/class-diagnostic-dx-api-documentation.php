@@ -16,7 +16,7 @@ use WPShadow\Core\Diagnostic_Base;
  *
  * @package WPShadow
  * @subpackage Diagnostics
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
@@ -114,7 +114,7 @@ class Diagnostic_Dx_Api_Documentation extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Dx Api Documentation
 	 * Slug: dx-api-documentation
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -128,11 +128,16 @@ class Diagnostic_Dx_Api_Documentation extends Diagnostic_Base {
 	 */
 	public static function test_live_dx_api_documentation(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'API documentation is complete and up-to-date'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'API documentation is complete and up-to-date',
+			);
 		}
 		$message = $result['description'] ?? 'API documentation issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

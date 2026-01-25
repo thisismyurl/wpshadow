@@ -26,7 +26,7 @@ class Treatment_Permalinks extends Treatment_Base {
 	public static function get_finding_id() {
 		return 'permalinks-plain';
 	}
-	
+
 	/**
 	 * Check if this treatment can be applied
 	 *
@@ -36,7 +36,7 @@ class Treatment_Permalinks extends Treatment_Base {
 		// Can always update permalink structure (doesn't require file write)
 		return true;
 	}
-	
+
 	/**
 	 * Apply the treatment/fix
 	 *
@@ -46,20 +46,20 @@ class Treatment_Permalinks extends Treatment_Base {
 		// Save current structure for undo
 		$old_structure = get_option( 'permalink_structure', '' );
 		update_option( 'wpshadow_prev_permalink_structure', $old_structure );
-		
+
 		// Set SEO-friendly structure
 		update_option( 'permalink_structure', '/%postname%/' );
 		flush_rewrite_rules();
-		
+
 		// Track KPI
 		KPI_Tracker::log_fix_applied( self::get_finding_id(), 'auto' );
-		
+
 		return array(
 			'success' => true,
 			'message' => 'Permalink structure changed to Post name (/%postname%/). Your URLs are now SEO-friendly!',
 		);
 	}
-	
+
 	/**
 	 * Undo the treatment (if possible)
 	 *
@@ -70,7 +70,7 @@ class Treatment_Permalinks extends Treatment_Base {
 		update_option( 'permalink_structure', $old_structure );
 		flush_rewrite_rules();
 		delete_option( 'wpshadow_prev_permalink_structure' );
-		
+
 		return array(
 			'success' => true,
 			'message' => 'Permalink structure reverted.',

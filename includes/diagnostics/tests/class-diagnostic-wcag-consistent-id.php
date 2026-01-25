@@ -81,58 +81,62 @@ class Diagnostic_Wcag_Consistent_Id extends Diagnostic_Base {
 	}
 
 	protected static function get_guardian_html(): string {
-		if (isset($_POST['html']) && is_string($_POST['html'])) {
-			return sanitize_text_field(wp_unslash($_POST['html']));
+		if ( isset( $_POST['html'] ) && is_string( $_POST['html'] ) ) {
+			return sanitize_text_field( wp_unslash( $_POST['html'] ) );
 		}
 		return '';
 	}
 
 	public static function check(): ?array {
 		$html = self::get_guardian_html();
-		if (empty($html)) return null;
+		if ( empty( $html ) ) {
+			return null;
+		}
 
-		$issues = [];
+		$issues = array();
 		try {
 			$dom = new \DOMDocument();
-			@$dom->loadHTML($html);
-			$xpath = new \DOMXPath($dom);
+			@$dom->loadHTML( $html );
+			$xpath = new \DOMXPath( $dom );
 
 			// Check for duplicate IDs
-			$all_ids = [];
-			$elements_with_id = $xpath->query('//*[@id]');
-			foreach ($elements_with_id as $elem) {
-				$id = $elem->getAttribute('id');
-				if (in_array($id, $all_ids)) {
+			$all_ids          = array();
+			$elements_with_id = $xpath->query( '//*[@id]' );
+			foreach ( $elements_with_id as $elem ) {
+				$id = $elem->getAttribute( 'id' );
+				if ( in_array( $id, $all_ids ) ) {
 					$issues[] = 'Duplicate ID found: ' . $id;
 					break;
 				}
 				$all_ids[] = $id;
 			}
-		} catch (\Exception $e) {
+		} catch ( \Exception $e ) {
 			return null;
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'wcag-consistent-id',
-			'title' => 'Duplicate element IDs found',
-			'description' => 'Element IDs must be unique within the page',
-			'severity' => 'high',
-			'category' => 'accessibility',
+		return empty( $issues ) ? null : array(
+			'id'           => 'wcag-consistent-id',
+			'title'        => 'Duplicate element IDs found',
+			'description'  => 'Element IDs must be unique within the page',
+			'severity'     => 'high',
+			'category'     => 'accessibility',
 			'threat_level' => 60,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	public static function test_live_wcag_consistent_id(): array {
 		$good = '<html><body><div id="unique1"></div><div id="unique2"></div></body></html>';
-		$bad = '<html><body><div id="same"></div><div id="same"></div></body></html>';
+		$bad  = '<html><body><div id="same"></div><div id="same"></div></body></html>';
 
 		$_POST['html'] = $good;
-		$r1 = self::check();
+		$r1            = self::check();
 		$_POST['html'] = $bad;
-		$r2 = self::check();
+		$r2            = self::check();
 
-		return ['passed' => is_null($r1) && is_array($r2), 'message' => 'ID consistency check working'];
+		return array(
+			'passed'  => is_null( $r1 ) && is_array( $r2 ),
+			'message' => 'ID consistency check working',
+		);
 	}
-	}
-
+}

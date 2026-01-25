@@ -16,7 +16,7 @@ use WPShadow\Core\Diagnostic_Base;
  *
  * @package WPShadow
  * @subpackage Diagnostics
-  *
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
@@ -142,49 +142,52 @@ class Diagnostic_Ai_Api_Integrations extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		$issues = [];
+		$issues = array();
 
 		// Check for AI API integrations
-		$openai_key = get_option('wpshadow_openai_api_key');
-		$anthropic_key = get_option('wpshadow_anthropic_api_key');
-		$huggingface_key = get_option('wpshadow_huggingface_api_key');
+		$openai_key      = get_option( 'wpshadow_openai_api_key' );
+		$anthropic_key   = get_option( 'wpshadow_anthropic_api_key' );
+		$huggingface_key = get_option( 'wpshadow_huggingface_api_key' );
 
 		// Check if any AI plugins are active
-		$ai_plugins = ['ai-engine', 'jetpack-ai', 'wordpress-ai-suite'];
+		$ai_plugins    = array( 'ai-engine', 'jetpack-ai', 'wordpress-ai-suite' );
 		$plugin_active = false;
-		foreach ($ai_plugins as $plugin) {
-			if (defined('PLUGIN_' . strtoupper(str_replace('-', '_', $plugin)) . '_VERSION')) {
+		foreach ( $ai_plugins as $plugin ) {
+			if ( defined( 'PLUGIN_' . strtoupper( str_replace( '-', '_', $plugin ) ) . '_VERSION' ) ) {
 				$plugin_active = true;
 				break;
 			}
 		}
 
-		if (empty($openai_key) && empty($anthropic_key) && empty($huggingface_key) && !$plugin_active) {
+		if ( empty( $openai_key ) && empty( $anthropic_key ) && empty( $huggingface_key ) && ! $plugin_active ) {
 			$issues[] = 'No AI API integrations configured or plugins active';
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'ai-api-integrations',
-			'title' => 'AI API integrations not configured',
-			'description' => 'No active AI API connections found',
-			'severity' => 'low',
-			'category' => 'ai_readiness',
+		return empty( $issues ) ? null : array(
+			'id'           => 'ai-api-integrations',
+			'title'        => 'AI API integrations not configured',
+			'description'  => 'No active AI API connections found',
+			'severity'     => 'low',
+			'category'     => 'ai_readiness',
 			'threat_level' => 25,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	public static function test_live_ai_api_integrations(): array {
 		// Test with no API keys
-		delete_option('wpshadow_openai_api_key');
+		delete_option( 'wpshadow_openai_api_key' );
 		$r1 = self::check();
 
 		// Test with API key set
-		update_option('wpshadow_openai_api_key', 'sk-test-key');
+		update_option( 'wpshadow_openai_api_key', 'sk-test-key' );
 		$r2 = self::check();
 
-		delete_option('wpshadow_openai_api_key');
-		return ['passed' => is_array($r1) && is_null($r2), 'message' => 'AI API integration check working'];
+		delete_option( 'wpshadow_openai_api_key' );
+		return array(
+			'passed'  => is_array( $r1 ) && is_null( $r2 ),
+			'message' => 'AI API integration check working',
+		);
 	}
 }
 

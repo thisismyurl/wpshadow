@@ -79,43 +79,45 @@ class Diagnostic_Ai_Nlp_Readiness extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		$issues = [];
+		$issues = array();
 
 		// Check if NLP optimization is enabled
-		$nlp_enabled = get_option('wpshadow_nlp_optimization_enabled', false);
+		$nlp_enabled = get_option( 'wpshadow_nlp_optimization_enabled', false );
 
-		if (!$nlp_enabled) {
+		if ( ! $nlp_enabled ) {
 			$issues[] = 'NLP content optimization not enabled';
 		}
 
 		// Check post count for NLP training
-		$post_count = wp_count_posts();
+		$post_count      = wp_count_posts();
 		$published_posts = $post_count->publish ?? 0;
 
-		if ($published_posts < 20) {
+		if ( $published_posts < 20 ) {
 			$issues[] = 'Insufficient content for NLP training (need 20+ posts)';
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'ai-nlp-readiness',
-			'title' => 'Content not optimized for NLP',
-			'description' => 'Enable NLP optimization and build content corpus',
-			'severity' => 'medium',
-			'category' => 'ai_readiness',
+		return empty( $issues ) ? null : array(
+			'id'           => 'ai-nlp-readiness',
+			'title'        => 'Content not optimized for NLP',
+			'description'  => 'Enable NLP optimization and build content corpus',
+			'severity'     => 'medium',
+			'category'     => 'ai_readiness',
 			'threat_level' => 46,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	public static function test_live_ai_nlp_readiness(): array {
-		delete_option('wpshadow_nlp_optimization_enabled');
+		delete_option( 'wpshadow_nlp_optimization_enabled' );
 		$r1 = self::check();
 
-		update_option('wpshadow_nlp_optimization_enabled', true);
+		update_option( 'wpshadow_nlp_optimization_enabled', true );
 		$r2 = self::check();
 
-		delete_option('wpshadow_nlp_optimization_enabled');
-		return ['passed' => is_array($r1) && (is_null($r2) || is_array($r2)), 'message' => 'NLP readiness check working'];
+		delete_option( 'wpshadow_nlp_optimization_enabled' );
+		return array(
+			'passed'  => is_array( $r1 ) && ( is_null( $r2 ) || is_array( $r2 ) ),
+			'message' => 'NLP readiness check working',
+		);
 	}
-	}
-
+}

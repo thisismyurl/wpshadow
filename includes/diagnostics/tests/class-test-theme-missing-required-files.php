@@ -10,37 +10,36 @@ use WPShadow\Diagnostics\Diagnostic_Base;
  * Diagnostic: Theme Missing Required Files
  * Checks if active theme has essential template files
  */
-class Test_Theme_Missing_Required_Files extends Diagnostic_Base
-{
+class Test_Theme_Missing_Required_Files extends Diagnostic_Base {
+
 
 	/**
 	 * Run the diagnostic check
 	 *
 	 * @return array|null Array with issue details or null if healthy
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		$current_theme = wp_get_theme();
-		$theme_root = $current_theme->get_theme_root();
-		$stylesheet = $current_theme->get_stylesheet();
+		$theme_root    = $current_theme->get_theme_root();
+		$stylesheet    = $current_theme->get_stylesheet();
 
-		$required_files = array('index.php', 'style.css');
-		$missing_files = array();
+		$required_files = array( 'index.php', 'style.css' );
+		$missing_files  = array();
 
-		foreach ($required_files as $file) {
-			if (!file_exists($theme_root . '/' . $stylesheet . '/' . $file)) {
+		foreach ( $required_files as $file ) {
+			if ( ! file_exists( $theme_root . '/' . $stylesheet . '/' . $file ) ) {
 				$missing_files[] = $file;
 			}
 		}
 
-		if (!empty($missing_files)) {
+		if ( ! empty( $missing_files ) ) {
 			return array(
-				'id'            => 'theme-missing-files',
-				'title'         => 'Theme Missing Required Files',
-				'threat_level'  => 70,
-				'description'   => sprintf(
+				'id'           => 'theme-missing-files',
+				'title'        => 'Theme Missing Required Files',
+				'threat_level' => 70,
+				'description'  => sprintf(
 					'Active theme is missing: %s. Theme may not function correctly.',
-					implode(', ', $missing_files)
+					implode( ', ', $missing_files )
 				),
 			);
 		}
@@ -53,8 +52,7 @@ class Test_Theme_Missing_Required_Files extends Diagnostic_Base
 	 *
 	 * @return array Test result with passed status and message
 	 */
-	public static function test_live_theme_required_files(): array
-	{
+	public static function test_live_theme_required_files(): array {
 		$result = self::check();
 		return array(
 			'passed'  => $result === null,

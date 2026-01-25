@@ -14,10 +14,10 @@ use WPShadow\Diagnostics\Diagnostic_Base;
  *
  * @since 1.2.0
  */
-class Test_Outdated_PHP extends Diagnostic_Base
-{
+class Test_Outdated_PHP extends Diagnostic_Base {
 
-	private const RECOMMENDED_PHP = '7.4.0';
+
+	private const RECOMMENDED_PHP    = '7.4.0';
 	private const MINIMUM_SECURE_PHP = '8.0.0';
 
 	/**
@@ -25,39 +25,38 @@ class Test_Outdated_PHP extends Diagnostic_Base
 	 *
 	 * @return array|null Diagnostic array if issues found, null if all good
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		$current_version = phpversion();
 
 		// Parse versions for comparison
-		if (version_compare($current_version, self::RECOMMENDED_PHP, '>=')) {
+		if ( version_compare( $current_version, self::RECOMMENDED_PHP, '>=' ) ) {
 			return null; // PHP version is good
 		}
 
-		$threat = version_compare($current_version, self::MINIMUM_SECURE_PHP, '<') ? 90 : 60;
+		$threat = version_compare( $current_version, self::MINIMUM_SECURE_PHP, '<' ) ? 90 : 60;
 
-		return [
-			'threat_level'    => $threat,
-			'threat_color'    => $threat >= 90 ? 'red' : 'orange',
-			'passed'          => false,
-			'issue'           => sprintf(
+		return array(
+			'threat_level'  => $threat,
+			'threat_color'  => $threat >= 90 ? 'red' : 'orange',
+			'passed'        => false,
+			'issue'         => sprintf(
 				'PHP %s is outdated (recommended: %s+)',
 				$current_version,
 				self::RECOMMENDED_PHP
 			),
-			'metadata'        => [
+			'metadata'      => array(
 				'current_version'     => $current_version,
 				'recommended_version' => self::RECOMMENDED_PHP,
 				'minimum_secure'      => self::MINIMUM_SECURE_PHP,
-				'php_info'            => [
-					'sapi_type'   => php_sapi_name(),
-					'os'          => PHP_OS,
-					'memory_limit' => ini_get('memory_limit'),
-				],
-			],
-			'kb_link'         => 'https://wpshadow.com/kb/php-version-upgrade/',
-			'training_link'   => 'https://wpshadow.com/training/php-security/',
-		];
+				'php_info'            => array(
+					'sapi_type'    => php_sapi_name(),
+					'os'           => PHP_OS,
+					'memory_limit' => ini_get( 'memory_limit' ),
+				),
+			),
+			'kb_link'       => 'https://wpshadow.com/kb/php-version-upgrade/',
+			'training_link' => 'https://wpshadow.com/training/php-security/',
+		);
 	}
 
 	/**
@@ -65,19 +64,18 @@ class Test_Outdated_PHP extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_php_version(): array
-	{
-		$current = phpversion();
+	public static function test_php_version(): array {
+		$current     = phpversion();
 		$recommended = self::RECOMMENDED_PHP;
-		$is_good = version_compare($current, $recommended, '>=');
+		$is_good     = version_compare( $current, $recommended, '>=' );
 
-		return [
-			'test_name'      => 'PHP Version',
+		return array(
+			'test_name'       => 'PHP Version',
 			'current_version' => $current,
-			'recommended'    => $recommended,
-			'passed'         => $is_good,
-			'description'    => sprintf('Running PHP %s%s', $current, $is_good ? ' ✓' : ' (outdated)'),
-		];
+			'recommended'     => $recommended,
+			'passed'          => $is_good,
+			'description'     => sprintf( 'Running PHP %s%s', $current, $is_good ? ' ✓' : ' (outdated)' ),
+		);
 	}
 
 	/**
@@ -85,24 +83,23 @@ class Test_Outdated_PHP extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_php_security(): array
-	{
-		$current = phpversion();
-		$is_secure = version_compare($current, self::MINIMUM_SECURE_PHP, '>=');
+	public static function test_php_security(): array {
+		$current   = phpversion();
+		$is_secure = version_compare( $current, self::MINIMUM_SECURE_PHP, '>=' );
 
-		$risk_level = version_compare($current, '7.0', '<') ? 'critical' : (version_compare($current, '7.2', '<') ? 'high' : (version_compare($current, self::MINIMUM_SECURE_PHP, '<') ? 'medium' : 'low'));
+		$risk_level = version_compare( $current, '7.0', '<' ) ? 'critical' : ( version_compare( $current, '7.2', '<' ) ? 'high' : ( version_compare( $current, self::MINIMUM_SECURE_PHP, '<' ) ? 'medium' : 'low' ) );
 
-		return [
+		return array(
 			'test_name'       => 'PHP Security Level',
 			'current_version' => $current,
 			'risk_level'      => $risk_level,
 			'passed'          => $is_secure,
 			'description'     => sprintf(
 				'Security: %s - %s',
-				strtoupper($risk_level),
+				strtoupper( $risk_level ),
 				$is_secure ? 'Actively maintained' : 'No longer supported'
 			),
-		];
+		);
 	}
 
 	/**
@@ -110,18 +107,17 @@ class Test_Outdated_PHP extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_php_performance(): array
-	{
+	public static function test_php_performance(): array {
 		$current = phpversion();
 
-		$performance_gains = version_compare($current, '7.0', '<') ? '300-400%' : (version_compare($current, '7.4', '<') ? '20-40%' : 'Latest');
+		$performance_gains = version_compare( $current, '7.0', '<' ) ? '300-400%' : ( version_compare( $current, '7.4', '<' ) ? '20-40%' : 'Latest' );
 
-		return [
-			'test_name'          => 'PHP Performance Impact',
-			'current_version'    => $current,
+		return array(
+			'test_name'             => 'PHP Performance Impact',
+			'current_version'       => $current,
 			'potential_improvement' => $performance_gains,
-			'description'        => sprintf('Upgrading could improve performance by %s', $performance_gains),
-		];
+			'description'           => sprintf( 'Upgrading could improve performance by %s', $performance_gains ),
+		);
 	}
 
 	/**
@@ -129,17 +125,16 @@ class Test_Outdated_PHP extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_php_environment(): array
-	{
-		return [
-			'test_name'       => 'PHP Environment',
-			'version'         => phpversion(),
-			'sapi_type'       => php_sapi_name(),
+	public static function test_php_environment(): array {
+		return array(
+			'test_name'        => 'PHP Environment',
+			'version'          => phpversion(),
+			'sapi_type'        => php_sapi_name(),
 			'operating_system' => PHP_OS,
-			'memory_limit'    => ini_get('memory_limit'),
-			'max_execution'   => ini_get('max_execution_time'),
-			'upload_max'      => ini_get('upload_max_filesize'),
-		];
+			'memory_limit'     => ini_get( 'memory_limit' ),
+			'max_execution'    => ini_get( 'max_execution_time' ),
+			'upload_max'       => ini_get( 'upload_max_filesize' ),
+		);
 	}
 
 	/**
@@ -147,8 +142,7 @@ class Test_Outdated_PHP extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_name(): string
-	{
+	public static function get_name(): string {
 		return 'Outdated PHP Version';
 	}
 
@@ -157,8 +151,7 @@ class Test_Outdated_PHP extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_description(): string
-	{
+	public static function get_description(): string {
 		return 'Checks if PHP version meets security and performance standards';
 	}
 
@@ -167,8 +160,7 @@ class Test_Outdated_PHP extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_category(): string
-	{
+	public static function get_category(): string {
 		return 'Security';
 	}
 }

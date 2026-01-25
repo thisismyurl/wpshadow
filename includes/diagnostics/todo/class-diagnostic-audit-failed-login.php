@@ -9,14 +9,14 @@ use WPShadow\Core\Diagnostic_Base;
  * This is a placeholder implementation for future work.
  */
 class Diagnostic_AuditFailedLogin extends Diagnostic_Base {
-	protected static $slug = 'audit-failed-login';
+	protected static $slug  = 'audit-failed-login';
 	protected static $title = 'Audit Failed Login';
-	
+
 	public static function check(): ?array {
 		// TODO: Implement diagnostic logic
 		return null;
 	}
-	
+
 	public static function run(): array {
 		return array();
 	}

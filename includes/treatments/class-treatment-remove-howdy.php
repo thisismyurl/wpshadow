@@ -42,9 +42,9 @@ class Treatment_Remove_Howdy extends Treatment_Base {
 	public static function apply(): array {
 		update_option( 'wpshadow_hide_howdy_greeting', 1 );
 		add_action( 'admin_bar_menu', array( __CLASS__, 'remove_howdy_greeting' ), 25 );
-		
+
 		KPI_Tracker::log_fix_applied( self::get_finding_id(), 'auto' );
-		
+
 		return array(
 			'success' => true,
 			'message' => __( 'Howdy greeting has been removed from the admin bar.', 'wpshadow' ),
@@ -58,9 +58,9 @@ class Treatment_Remove_Howdy extends Treatment_Base {
 	 */
 	public static function undo(): array {
 		delete_option( 'wpshadow_hide_howdy_greeting' );
-		
+
 		KPI_Tracker::log_fix_undone( self::get_finding_id() );
-		
+
 		return array(
 			'success' => true,
 			'message' => __( 'Howdy greeting has been restored to the admin bar.', 'wpshadow' ),

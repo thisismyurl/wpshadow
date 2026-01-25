@@ -14,16 +14,15 @@ use WPShadow\Core\Diagnostic_Base;
  *
  * @verified 2026-01-23 - Detects empty postmeta entries left by inactive plugins
  */
-class Diagnostic_Unused_Postmeta_Keys extends Diagnostic_Base
-{
+class Diagnostic_Unused_Postmeta_Keys extends Diagnostic_Base {
+
 
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		global $wpdb;
 
 		// Count empty postmeta entries (NULL, empty string, or serialized empty array/object)
@@ -36,7 +35,7 @@ class Diagnostic_Unused_Postmeta_Keys extends Diagnostic_Base
 			OR meta_value IS NULL"
 		);
 
-		if (! $empty_postmeta) {
+		if ( ! $empty_postmeta ) {
 			$empty_postmeta = 0;
 		}
 
@@ -54,14 +53,14 @@ class Diagnostic_Unused_Postmeta_Keys extends Diagnostic_Base
 			)"
 		);
 
-		if (! $orphaned_postmeta) {
+		if ( ! $orphaned_postmeta ) {
 			$orphaned_postmeta = 0;
 		}
 
 		$total_useless = (int) $empty_postmeta + (int) $orphaned_postmeta;
 
 		// Threshold: flag if more than 100 useless entries
-		if ($total_useless > 100) {
+		if ( $total_useless > 100 ) {
 			return array(
 				'id'            => 'unused-postmeta-keys',
 				'title'         => 'Useless Postmeta Entries Detected',
@@ -98,8 +97,7 @@ class Diagnostic_Unused_Postmeta_Keys extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__unused_postmeta_keys(): array
-	{
+	public static function test_live__unused_postmeta_keys(): array {
 		global $wpdb;
 
 		$result = self::check();
@@ -129,17 +127,17 @@ class Diagnostic_Unused_Postmeta_Keys extends Diagnostic_Base
 
 		$total_useless = $empty_postmeta + $orphaned_postmeta;
 
-		if ($total_useless > 100) {
+		if ( $total_useless > 100 ) {
 			// Many useless entries = diagnostic should report issue
 			return array(
-				'passed' => !is_null($result) && isset($result['id']) && $result['id'] === 'unused-postmeta-keys',
-				'message' => sprintf('Found %d useless postmeta entries, issue correctly identified', $total_useless)
+				'passed'  => ! is_null( $result ) && isset( $result['id'] ) && $result['id'] === 'unused-postmeta-keys',
+				'message' => sprintf( 'Found %d useless postmeta entries, issue correctly identified', $total_useless ),
 			);
 		} else {
 			// Few/no useless entries = diagnostic should pass
 			return array(
-				'passed' => is_null($result),
-				'message' => sprintf('Database clean: %d useless postmeta entries (below 100 threshold)', $total_useless)
+				'passed'  => is_null( $result ),
+				'message' => sprintf( 'Database clean: %d useless postmeta entries (below 100 threshold)', $total_useless ),
 			);
 		}
 	}

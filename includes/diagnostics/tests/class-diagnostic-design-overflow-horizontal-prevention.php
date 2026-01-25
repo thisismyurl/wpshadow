@@ -11,19 +11,19 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/design-overflow-horizontal-prevention
  */
 class Diagnostic_Design_OVERFLOW_HORIZONTAL_PREVENTION extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'design-overflow-horizontal-prevention',
-            'title' => __('Horizontal Overflow Prevention', 'wpshadow'),
-            'description' => __('Verifies no horizontal scrolling at breakpoints.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'design',
-            'kb_link' => 'https://wpshadow.com/kb/design-overflow-horizontal-prevention',
-            'training_link' => 'https://wpshadow.com/training/design-overflow-horizontal-prevention',
-            'auto_fixable' => false,
-            'threat_level' => 5
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'design-overflow-horizontal-prevention',
+			'title'         => __( 'Horizontal Overflow Prevention', 'wpshadow' ),
+			'description'   => __( 'Verifies no horizontal scrolling at breakpoints.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'design',
+			'kb_link'       => 'https://wpshadow.com/kb/design-overflow-horizontal-prevention',
+			'training_link' => 'https://wpshadow.com/training/design-overflow-horizontal-prevention',
+			'auto_fixable'  => false,
+			'threat_level'  => 5,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -31,12 +31,12 @@ class Diagnostic_Design_OVERFLOW_HORIZONTAL_PREVENTION extends Diagnostic_Base {
 	 * Diagnostic: Design OVERFLOW HORIZONTAL PREVENTION
 	 * Slug: -design-overflow-horizontal-prevention
 	 * File: class-diagnostic-design-overflow-horizontal-prevention.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Design OVERFLOW HORIZONTAL PREVENTION
 	 * Slug: -design-overflow-horizontal-prevention
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -49,11 +49,16 @@ class Diagnostic_Design_OVERFLOW_HORIZONTAL_PREVENTION extends Diagnostic_Base {
 	 */
 	public static function test_live__design_overflow_horizontal_prevention(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'No unwanted horizontal scrollbars detected'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'No unwanted horizontal scrollbars detected',
+			);
 		}
 		$message = $result['description'] ?? 'Horizontal overflow issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

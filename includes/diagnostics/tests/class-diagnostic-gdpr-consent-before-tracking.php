@@ -9,14 +9,14 @@ use WPShadow\Core\Diagnostic_Base;
  * This is a placeholder implementation.
  */
 class Diagnostic_GdprConsentBeforeTracking extends Diagnostic_Base {
-	protected static $slug = 'gdpr-consent-before-tracking';
+	protected static $slug  = 'gdpr-consent-before-tracking';
 	protected static $title = 'Gdpr Consent Before Tracking';
-	
+
 	public static function check(): ?array {
 		// TODO: Implement diagnostic logic
 		return null;
 	}
-	
+
 	public static function run(): array {
 		return array();
 	}

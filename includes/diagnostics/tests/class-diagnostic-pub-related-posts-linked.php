@@ -23,14 +23,14 @@ use WPShadow\Core\Diagnostic_Lean_Checks;
  * @verified 2026-01-24 - Batch 3 implementation
  * @guardian-integrated Pending
  */
-class Diagnostic_Pub_Related_Posts_Linked extends Diagnostic_Base
-{
-	protected static $slug = 'pub-related-posts-linked';
-	protected static $title = 'Related Posts Linked';
-	protected static $description = 'Are posts linking to related content?';
-	protected static $category = 'Content Publishing';
+class Diagnostic_Pub_Related_Posts_Linked extends Diagnostic_Base {
+
+	protected static $slug         = 'pub-related-posts-linked';
+	protected static $title        = 'Related Posts Linked';
+	protected static $description  = 'Are posts linking to related content?';
+	protected static $category     = 'Content Publishing';
 	protected static $threat_level = 'low';
-	protected static $family = 'general';
+	protected static $family       = 'general';
 	protected static $family_label = 'General';
 
 	/**
@@ -38,36 +38,37 @@ class Diagnostic_Pub_Related_Posts_Linked extends Diagnostic_Base
 	 *
 	 * @return ?array Null if pass, array of findings if fail
 	 */
-	public function check(): ?array
-	{
+	public function check(): ?array {
 		// Check if related posts plugin is active
-		$related_plugins = [
+		$related_plugins = array(
 			'related-posts',
 			'yet-another-related-posts-plugin',
 			'contextual-related-posts',
-			'jetpack'
-		];
+			'jetpack',
+		);
 
 		$has_related = false;
-		foreach ($related_plugins as $plugin) {
+		foreach ( $related_plugins as $plugin ) {
 			if (
-				is_plugin_active($plugin . '/' . $plugin . '.php') ||
-				is_plugin_active($plugin)
+				is_plugin_active( $plugin . '/' . $plugin . '.php' ) ||
+				is_plugin_active( $plugin )
 			) {
 				$has_related = true;
 				break;
 			}
 		}
 
-		if (! $has_related) {
+		if ( ! $has_related ) {
 			// Check if site has published posts
-			$posts = get_posts([
-				'post_type'      => 'post',
-				'post_status'    => 'publish',
-				'posts_per_page' => 5
-			]);
+			$posts = get_posts(
+				array(
+					'post_type'      => 'post',
+					'post_status'    => 'publish',
+					'posts_per_page' => 5,
+				)
+			);
 
-			if (! empty($posts)) {
+			if ( ! empty( $posts ) ) {
 				return Diagnostic_Lean_Checks::build_finding(
 					'pub-related-posts-linked',
 					'No Related Posts Plugin Found',

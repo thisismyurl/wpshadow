@@ -81,7 +81,7 @@ class Diagnostic_Audit_Failed_Login extends Diagnostic_Base {
 	public static function check(): ?array {
 		// Check if failed login attempts are being logged
 		// Look for security/audit logging plugins
-		
+
 		$audit_plugins = array(
 			'wsal/wp-security-audit-log.php',
 			'wordfence/wordfence.php',
@@ -118,7 +118,7 @@ class Diagnostic_Audit_Failed_Login extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Audit Failed Login
 	 * Slug: audit-failed-login
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -139,15 +139,13 @@ class Diagnostic_Audit_Failed_Login extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

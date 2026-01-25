@@ -9,14 +9,14 @@ use WPShadow\Core\Diagnostic_Base;
  * This is a placeholder implementation for future work.
  */
 class Diagnostic_GdprContactInfoVisible extends Diagnostic_Base {
-	protected static $slug = 'gdpr-contact-info-visible';
+	protected static $slug  = 'gdpr-contact-info-visible';
 	protected static $title = 'Gdpr Contact Info Visible';
-	
+
 	public static function check(): ?array {
 		// TODO: Implement diagnostic logic
 		return null;
 	}
-	
+
 	public static function run(): array {
 		return array();
 	}

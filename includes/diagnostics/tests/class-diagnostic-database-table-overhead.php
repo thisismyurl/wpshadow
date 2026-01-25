@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace WPShadow\Diagnostics;
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -29,22 +29,21 @@ if (! defined('ABSPATH')) {
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_Database_Table_Overhead extends Diagnostic_Base
-{
+class Diagnostic_Database_Table_Overhead extends Diagnostic_Base {
+
 
 	/**
 	 * Run the diagnostic check
 	 *
 	 * @return array|null Diagnostic result or null if no issue
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		global $wpdb;
 
 		// Get table overhead (MyISAM and InnoDB)
 		$tables = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT
+				'SELECT
 					table_name as name,
 					ROUND(data_length / 1024 / 1024, 2) as data_mb,
 					ROUND(index_length / 1024 / 1024, 2) as index_mb,
@@ -53,47 +52,50 @@ class Diagnostic_Database_Table_Overhead extends Diagnostic_Base
 				FROM information_schema.TABLES
 				WHERE table_schema = %s
 				AND data_free > 0
-				ORDER BY data_free DESC",
+				ORDER BY data_free DESC',
 				DB_NAME
 			),
 			ARRAY_A
 		);
 
-		if (empty($tables)) {
+		if ( empty( $tables ) ) {
 			return null;
 		}
 
 		// Filter to significant overhead (> 1MB per table or > 5MB total)
-		$significant_tables = array_filter($tables, function ($table) {
-			return $table['overhead_mb'] > 1;
-		});
+		$significant_tables = array_filter(
+			$tables,
+			function ( $table ) {
+				return $table['overhead_mb'] > 1;
+			}
+		);
 
-		$total_overhead = array_sum(array_column($tables, 'overhead_mb'));
+		$total_overhead = array_sum( array_column( $tables, 'overhead_mb' ) );
 
-		if (empty($significant_tables) && $total_overhead < 5) {
+		if ( empty( $significant_tables ) && $total_overhead < 5 ) {
 			return null;
 		}
 
 		$severity = $total_overhead > 50 ? 'medium' : 'low';
 
 		$description = sprintf(
-			__('Your database has %s MB of overhead across %d tables. Table overhead is wasted space from deleted rows and fragmentation. Running OPTIMIZE TABLE can reclaim this space and speed up queries.', 'wpshadow'),
-			number_format($total_overhead, 2),
-			count($significant_tables)
+			__( 'Your database has %1$s MB of overhead across %2$d tables. Table overhead is wasted space from deleted rows and fragmentation. Running OPTIMIZE TABLE can reclaim this space and speed up queries.', 'wpshadow' ),
+			number_format( $total_overhead, 2 ),
+			count( $significant_tables )
 		);
 
-		if (! empty($significant_tables)) {
-			$top_table = $significant_tables[0];
+		if ( ! empty( $significant_tables ) ) {
+			$top_table    = $significant_tables[0];
 			$description .= sprintf(
-				' ' . __('Largest: %s has %s MB overhead.', 'wpshadow'),
+				' ' . __( 'Largest: %1$s has %2$s MB overhead.', 'wpshadow' ),
 				$top_table['name'],
-				number_format($top_table['overhead_mb'], 2)
+				number_format( $top_table['overhead_mb'], 2 )
 			);
 		}
 
-		return [
+		return array(
 			'id'                => 'database-table-overhead',
-			'title'             => __('Database Table Overhead', 'wpshadow'),
+			'title'             => __( 'Database Table Overhead', 'wpshadow' ),
 			'description'       => $description,
 			'severity'          => $severity,
 			'category'          => 'performance',
@@ -101,13 +103,13 @@ class Diagnostic_Database_Table_Overhead extends Diagnostic_Base
 			'effort'            => 'low',
 			'kb_link'           => 'https://wpshadow.com/kb/database-table-overhead',
 			'training_link'     => 'https://wpshadow.com/training/database-table-overhead',
-			'affected_resource' => sprintf('%d tables, %s MB overhead', count($significant_tables), number_format($total_overhead, 2)),
-			'metadata'          => [
+			'affected_resource' => sprintf( '%d tables, %s MB overhead', count( $significant_tables ), number_format( $total_overhead, 2 ) ),
+			'metadata'          => array(
 				'total_overhead_mb' => $total_overhead,
-				'table_count'       => count($significant_tables),
-				'tables'            => array_slice($significant_tables, 0, 10),
-			],
-		];
+				'table_count'       => count( $significant_tables ),
+				'tables'            => array_slice( $significant_tables, 0, 10 ),
+			),
+		);
 	}
 
 	/**
@@ -132,41 +134,45 @@ class Diagnostic_Database_Table_Overhead extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__database_table_overhead(): array
-	{
+	public static function test_live__database_table_overhead(): array {
 		global $wpdb;
 
 		// Recompute actual table overhead
 		$tables = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT
+				'SELECT
 					ROUND(data_free / 1024 / 1024, 2) as overhead_mb
 				FROM information_schema.TABLES
 				WHERE table_schema = %s
-				AND data_free > 0",
+				AND data_free > 0',
 				DB_NAME
 			),
 			ARRAY_A
 		);
 
-		$total_overhead = 0;
+		$total_overhead    = 0;
 		$significant_count = 0;
-		if (! empty($tables)) {
-			$total_overhead = array_sum(array_column($tables, 'overhead_mb'));
-			$significant_count = count(array_filter($tables, function ($t) {
-				return $t['overhead_mb'] > 1;
-			}));
+		if ( ! empty( $tables ) ) {
+			$total_overhead    = array_sum( array_column( $tables, 'overhead_mb' ) );
+			$significant_count = count(
+				array_filter(
+					$tables,
+					function ( $t ) {
+						return $t['overhead_mb'] > 1;
+					}
+				)
+			);
 		}
 
 		// Call diagnostic check
 		$diagnostic_result = self::check();
 
 		// Determine expected state (matches check() logic)
-		$should_find_issue = ($significant_count > 0 || $total_overhead >= 5);
-		$diagnostic_found_issue = ($diagnostic_result !== null);
+		$should_find_issue      = ( $significant_count > 0 || $total_overhead >= 5 );
+		$diagnostic_found_issue = ( $diagnostic_result !== null );
 
 		// Compare expected vs actual diagnostic result
-		$test_passes = ($should_find_issue === $diagnostic_found_issue);
+		$test_passes = ( $should_find_issue === $diagnostic_found_issue );
 
 		$message = sprintf(
 			'Total overhead: %.2f MB, significant tables: %d. Expected diagnostic to %s issue. Diagnostic %s issue. Test: %s',

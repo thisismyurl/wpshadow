@@ -34,7 +34,7 @@ function wpshadow_index_findings_by_id( array $findings ): array {
 			$id = md5( wp_json_encode( $finding ) );
 		}
 
-		$finding['id'] = $id;
+		$finding['id']  = $id;
 		$indexed[ $id ] = $finding;
 	}
 
@@ -64,9 +64,9 @@ function wpshadow_get_cached_findings(): array {
  * @return array Gauge snapshot.
  */
 function wpshadow_build_gauge_snapshot( array $findings, array $category_meta = array() ): array {
-	$meta = ! empty( $category_meta ) ? $category_meta : wpshadow_get_gauge_category_meta();
-	$by_category = array();
-	$gauges = array();
+	$meta           = ! empty( $category_meta ) ? $category_meta : wpshadow_get_gauge_category_meta();
+	$by_category    = array();
+	$gauges         = array();
 	$total_findings = 0;
 	$critical_count = 0;
 
@@ -79,15 +79,15 @@ function wpshadow_build_gauge_snapshot( array $findings, array $category_meta = 
 	}
 
 	foreach ( $meta as $key => $cat_meta ) {
-		$cat_findings = $by_category[ $key ] ?? array();
-		$total = count( $cat_findings );
+		$cat_findings    = $by_category[ $key ] ?? array();
+		$total           = count( $cat_findings );
 		$total_findings += $total;
 
 		$threat_total = 0;
 		foreach ( $cat_findings as $finding ) {
 			$threat_total += $finding['threat_level'] ?? 50;
 			if ( isset( $finding['severity'] ) && 'critical' === $finding['severity'] ) {
-				$critical_count++;
+				++$critical_count;
 			}
 		}
 
@@ -95,10 +95,10 @@ function wpshadow_build_gauge_snapshot( array $findings, array $category_meta = 
 		$percent = 100 - $percent;
 
 		$gauges[ $key ] = array(
-			'label' => $cat_meta['label'],
-			'percent' => $percent,
+			'label'          => $cat_meta['label'],
+			'percent'        => $percent,
 			'findings_count' => $total,
-			'color' => $cat_meta['color'],
+			'color'          => $cat_meta['color'],
 		);
 	}
 
@@ -108,10 +108,10 @@ function wpshadow_build_gauge_snapshot( array $findings, array $category_meta = 
 		'overall_health' => round( $overall_health['score'] ),
 		'total_findings' => $total_findings,
 		'critical_count' => $critical_count,
-		'gauges' => $gauges,
-		'findings' => $findings,
-		'by_category' => $by_category,
-		'timestamp' => time(),
+		'gauges'         => $gauges,
+		'findings'       => $findings,
+		'by_category'    => $by_category,
+		'timestamp'      => time(),
 	);
 }
 

@@ -22,23 +22,23 @@ class Dry_Run_Treatment_Handler extends AJAX_Handler_Base {
 	/**
 	 * Register the AJAX handler
 	 */
-	public static function register() : void {
-		add_action( 'wp_ajax_wpshadow_dry_run_treatment', [ __CLASS__, 'handle' ] );
+	public static function register(): void {
+		add_action( 'wp_ajax_wpshadow_dry_run_treatment', array( __CLASS__, 'handle' ) );
 	}
 
 	/**
 	 * Handle the AJAX request
 	 */
-	public static function handle() : void {
+	public static function handle(): void {
 		self::verify_request( 'wpshadow_dry_run', 'manage_options', 'nonce' );
 
 		$finding_id = self::get_post_param( 'finding_id', 'text', '' );
-		
+
 		if ( empty( $finding_id ) ) {
 			self::send_error( __( 'Finding ID is required.', 'wpshadow' ) );
 			return;
 		}
-		
+
 		// Run treatment in dry-run mode
 		$result = \wpshadow_attempt_autofix( $finding_id, true );
 

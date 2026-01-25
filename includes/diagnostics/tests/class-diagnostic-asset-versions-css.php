@@ -19,16 +19,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Family: asset-versions
  * Related: asset-versions-js
- * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry quick_diagnostics
  */
 class Diagnostic_Asset_Versions_CSS extends Diagnostic_Base {
 
-	protected static $slug = 'asset-versions-css';
-	protected static $title = 'CSS Asset Version Strings';
-	protected static $description = 'Checks for version query strings (?ver=) on CSS files that can be removed to improve caching.';
-	protected static $family = 'asset-versions';
+	protected static $slug         = 'asset-versions-css';
+	protected static $title        = 'CSS Asset Version Strings';
+	protected static $description  = 'Checks for version query strings (?ver=) on CSS files that can be removed to improve caching.';
+	protected static $family       = 'asset-versions';
 	protected static $family_label = 'Asset Optimization';
 
 	public static function check(): ?array {
@@ -53,7 +53,7 @@ class Diagnostic_Asset_Versions_CSS extends Diagnostic_Base {
 
 		foreach ( $wp_styles->registered as $handle => $style ) {
 			if ( is_string( $style->src ) && strpos( $style->src, '?ver=' ) !== false ) {
-				$versioned_assets++;
+				++$versioned_assets;
 				if ( count( $sample_assets ) < 3 ) {
 					$sample_assets[] = $handle;
 				}
@@ -69,7 +69,7 @@ class Diagnostic_Asset_Versions_CSS extends Diagnostic_Base {
 			'finding_id'   => self::$slug,
 			'title'        => self::$title,
 			'description'  => sprintf(
-				__( 'Found %d CSS files with version query strings (?ver=) that could be removed. Examples: %s', 'wpshadow' ),
+				__( 'Found %1$d CSS files with version query strings (?ver=) that could be removed. Examples: %2$s', 'wpshadow' ),
 				$versioned_assets,
 				implode( ', ', $sample_assets )
 			),
@@ -88,7 +88,7 @@ class Diagnostic_Asset_Versions_CSS extends Diagnostic_Base {
 	 *
 	 * Diagnostic: CSS Asset Version Strings
 	 * Slug: asset-versions-css
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -102,11 +102,16 @@ class Diagnostic_Asset_Versions_CSS extends Diagnostic_Base {
 	 */
 	public static function test_live_asset_versions_css(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'CSS assets have proper version cache-busting configured'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'CSS assets have proper version cache-busting configured',
+			);
 		}
 		$message = $result['description'] ?? 'CSS asset versioning issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

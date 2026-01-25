@@ -9,14 +9,14 @@ use WPShadow\Core\Diagnostic_Base;
  * This is a placeholder implementation.
  */
 class Diagnostic_BenchmarkDomainAuthority extends Diagnostic_Base {
-	protected static $slug = 'benchmark-domain-authority';
+	protected static $slug  = 'benchmark-domain-authority';
 	protected static $title = 'Benchmark Domain Authority';
-	
+
 	public static function check(): ?array {
 		// TODO: Implement diagnostic logic
 		return null;
 	}
-	
+
 	public static function run(): array {
 		return array();
 	}

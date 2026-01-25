@@ -5,10 +5,10 @@ namespace WPShadow\Admin;
 
 /**
  * Report Generation Form
- * 
+ *
  * UI for generating and exporting reports.
  * Date range selector, format selection, download.
- * 
+ *
  * Features:
  * - Date range picker
  * - Report type selection
@@ -18,10 +18,10 @@ namespace WPShadow\Admin;
  * - Download functionality
  */
 class Report_Form {
-	
+
 	/**
 	 * Render report form
-	 * 
+	 *
 	 * @return string HTML output
 	 */
 	public static function render(): string {
@@ -199,13 +199,13 @@ class Report_Form {
 			<?php echo wp_kses_post( self::render_previous_reports() ); ?>
 		</div>
 		<?php
-		
+
 		return ob_get_clean();
 	}
-	
+
 	/**
 	 * Render previous reports list
-	 * 
+	 *
 	 * @return string HTML
 	 */
 	public static function render_previous_reports(): string {
@@ -240,7 +240,7 @@ class Report_Form {
 				</table>
 			</div>
 		</div>';
-		
+
 		return $html;
 	}
 }

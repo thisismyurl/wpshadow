@@ -24,12 +24,12 @@ use WPShadow\Core\Diagnostic_Lean_Checks;
  * @guardian-integrated Pending
  */
 class Diagnostic_Pub_Title_Length extends Diagnostic_Base {
-	protected static $slug = 'pub-title-length';
-	protected static $title = 'Post Title Length';
-	protected static $description = 'Are post titles appropriate length for SEO?';
-	protected static $category = 'Content Publishing';
+	protected static $slug         = 'pub-title-length';
+	protected static $title        = 'Post Title Length';
+	protected static $description  = 'Are post titles appropriate length for SEO?';
+	protected static $category     = 'Content Publishing';
 	protected static $threat_level = 'low';
-	protected static $family = 'general';
+	protected static $family       = 'general';
 	protected static $family_label = 'General';
 
 	/**
@@ -39,13 +39,15 @@ class Diagnostic_Pub_Title_Length extends Diagnostic_Base {
 	 */
 	public function check(): ?array {
 		// Get recent published posts
-		$posts = get_posts( [
-			'post_type'      => 'post',
-			'post_status'    => 'publish',
-			'posts_per_page' => 20,
-			'orderby'        => 'date',
-			'order'          => 'DESC'
-		] );
+		$posts = get_posts(
+			array(
+				'post_type'      => 'post',
+				'post_status'    => 'publish',
+				'posts_per_page' => 20,
+				'orderby'        => 'date',
+				'order'          => 'DESC',
+			)
+		);
 
 		if ( empty( $posts ) ) {
 			return null;
@@ -56,7 +58,7 @@ class Diagnostic_Pub_Title_Length extends Diagnostic_Base {
 			$title_length = strlen( $post->post_title );
 			// SEO best practice: 50-60 characters
 			if ( $title_length < 30 || $title_length > 60 ) {
-				$issues++;
+				++$issues;
 			}
 		}
 

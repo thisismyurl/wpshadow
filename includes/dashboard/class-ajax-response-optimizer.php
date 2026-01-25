@@ -8,7 +8,7 @@
  * - Caching headers
  *
  * Philosophy: Ridiculously Good (#7) - Fast responses = happy users
- * 
+ *
  * @package WPShadow
  * @subpackage Admin
  */
@@ -25,21 +25,21 @@ if ( ! defined( 'ABSPATH' ) ) {
  * AJAX Response Optimizer class
  */
 class AJAX_Response_Optimizer {
-	
+
 	/**
 	 * Initialize optimizer
 	 */
 	public static function init(): void {
 		// Compress AJAX responses
-		add_action( 'wp_ajax_wpshadow_quick_scan', [ __CLASS__, 'enable_compression' ], 1 );
-		add_action( 'wp_ajax_wpshadow_deep_scan', [ __CLASS__, 'enable_compression' ], 1 );
-		add_action( 'wp_ajax_wpshadow_first_scan', [ __CLASS__, 'enable_compression' ], 1 );
-		
+		add_action( 'wp_ajax_wpshadow_quick_scan', array( __CLASS__, 'enable_compression' ), 1 );
+		add_action( 'wp_ajax_wpshadow_deep_scan', array( __CLASS__, 'enable_compression' ), 1 );
+		add_action( 'wp_ajax_wpshadow_first_scan', array( __CLASS__, 'enable_compression' ), 1 );
+
 		// Add cache headers for cacheable responses
-		add_action( 'wp_ajax_wpshadow_get_tooltip_catalog', [ __CLASS__, 'add_cache_headers' ], 1 );
-		add_action( 'wp_ajax_wpshadow_get_kb_article', [ __CLASS__, 'add_cache_headers' ], 1 );
+		add_action( 'wp_ajax_wpshadow_get_tooltip_catalog', array( __CLASS__, 'add_cache_headers' ), 1 );
+		add_action( 'wp_ajax_wpshadow_get_kb_article', array( __CLASS__, 'add_cache_headers' ), 1 );
 	}
-	
+
 	/**
 	 * Enable gzip compression for AJAX responses
 	 */
@@ -51,7 +51,7 @@ class AJAX_Response_Optimizer {
 			}
 		}
 	}
-	
+
 	/**
 	 * Add cache headers for cacheable AJAX responses
 	 */
@@ -59,12 +59,12 @@ class AJAX_Response_Optimizer {
 		if ( headers_sent() ) {
 			return;
 		}
-		
+
 		// Cache for 1 hour
 		header( 'Cache-Control: public, max-age=3600' );
 		header( 'Expires: ' . gmdate( 'D, d M Y H:i:s', time() + 3600 ) . ' GMT' );
 	}
-	
+
 	/**
 	 * Minify JSON response (remove whitespace)
 	 *
@@ -74,7 +74,7 @@ class AJAX_Response_Optimizer {
 	public static function minify_json( $data ): string {
 		return wp_json_encode( $data, JSON_UNESCAPED_SLASHES );
 	}
-	
+
 	/**
 	 * Send optimized success response
 	 *
@@ -84,7 +84,7 @@ class AJAX_Response_Optimizer {
 		self::enable_compression();
 		wp_send_json_success( $data );
 	}
-	
+
 	/**
 	 * Send optimized error response
 	 *
@@ -93,7 +93,7 @@ class AJAX_Response_Optimizer {
 	 */
 	public static function send_error( string $message, int $code = 400 ): void {
 		self::enable_compression();
-		wp_send_json_error( [ 'message' => $message ], $code );
+		wp_send_json_error( array( 'message' => $message ), $code );
 	}
 }
 

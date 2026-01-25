@@ -12,19 +12,19 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/design-passive-event-listeners
  */
 class Diagnostic_Design_DESIGN_PASSIVE_EVENT_LISTENERS extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'design-passive-event-listeners',
-            'title' => __('Passive Event Listeners', 'wpshadow'),
-            'description' => __('Ensures passive listeners for scroll and touch where safe.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'design',
-            'kb_link' => 'https://wpshadow.com/kb/design-passive-event-listeners',
-            'training_link' => 'https://wpshadow.com/training/design-passive-event-listeners',
-            'auto_fixable' => false,
-            'threat_level' => 6
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'design-passive-event-listeners',
+			'title'         => __( 'Passive Event Listeners', 'wpshadow' ),
+			'description'   => __( 'Ensures passive listeners for scroll and touch where safe.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'design',
+			'kb_link'       => 'https://wpshadow.com/kb/design-passive-event-listeners',
+			'training_link' => 'https://wpshadow.com/training/design-passive-event-listeners',
+			'auto_fixable'  => false,
+			'threat_level'  => 6,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -32,12 +32,12 @@ class Diagnostic_Design_DESIGN_PASSIVE_EVENT_LISTENERS extends Diagnostic_Base {
 	 * Diagnostic: Design DESIGN PASSIVE EVENT LISTENERS
 	 * Slug: -design-design-passive-event-listeners
 	 * File: class-diagnostic-design-design-passive-event-listeners.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Design DESIGN PASSIVE EVENT LISTENERS
 	 * Slug: -design-design-passive-event-listeners
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -50,11 +50,16 @@ class Diagnostic_Design_DESIGN_PASSIVE_EVENT_LISTENERS extends Diagnostic_Base {
 	 */
 	public static function test_live__design_design_passive_event_listeners(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Event listeners properly use passive flag for performance'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Event listeners properly use passive flag for performance',
+			);
 		}
 		$message = $result['description'] ?? 'Event listener performance issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

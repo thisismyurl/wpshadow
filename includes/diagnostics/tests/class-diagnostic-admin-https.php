@@ -21,32 +21,31 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_Admin_HTTPS extends Diagnostic_Base
-{
+class Diagnostic_Admin_HTTPS extends Diagnostic_Base {
+
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		// Only check if site has SSL
-		if (! is_ssl()) {
+		if ( ! is_ssl() ) {
 			return null;
 		}
 
 		// Check if FORCE_SSL_ADMIN is enabled
-		if (! defined('FORCE_SSL_ADMIN') || ! FORCE_SSL_ADMIN) {
+		if ( ! defined( 'FORCE_SSL_ADMIN' ) || ! FORCE_SSL_ADMIN ) {
 			return array(
-				'id'          => 'admin-https',
-				'title'       => 'Admin Not Forced Over HTTPS',
-				'description' => 'Your site has SSL but admin area is not forced over HTTPS. Enable FORCE_SSL_ADMIN to prevent session hijacking.',
-				'severity'    => 'high',
-				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/force-admin-https/',
+				'id'            => 'admin-https',
+				'title'         => 'Admin Not Forced Over HTTPS',
+				'description'   => 'Your site has SSL but admin area is not forced over HTTPS. Enable FORCE_SSL_ADMIN to prevent session hijacking.',
+				'severity'      => 'high',
+				'category'      => 'security',
+				'kb_link'       => 'https://wpshadow.com/kb/force-admin-https/',
 				'training_link' => 'https://wpshadow.com/training/admin-https/',
-				'auto_fixable' => false,
-				'threat_level' => 80,
+				'auto_fixable'  => false,
+				'threat_level'  => 80,
 			);
 		}
 
@@ -70,32 +69,31 @@ class Diagnostic_Admin_HTTPS extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live_admin_https(): array
-	{
+	public static function test_live_admin_https(): array {
 		$result = self::check();
 
 		// Test passes if check result matches site configuration
-		if (!is_ssl()) {
+		if ( ! is_ssl() ) {
 			// No SSL = diagnostic should pass (return null)
 			return array(
-				'passed' => is_null($result),
-				'message' => 'Site has no SSL, diagnostic correctly passes'
+				'passed'  => is_null( $result ),
+				'message' => 'Site has no SSL, diagnostic correctly passes',
 			);
 		}
 
 		// Has SSL - check FORCE_SSL_ADMIN
-		$has_force_ssl = (defined('FORCE_SSL_ADMIN') && FORCE_SSL_ADMIN);
-		if ($has_force_ssl) {
+		$has_force_ssl = ( defined( 'FORCE_SSL_ADMIN' ) && FORCE_SSL_ADMIN );
+		if ( $has_force_ssl ) {
 			// SSL + FORCE_SSL_ADMIN enabled = pass (return null)
 			return array(
-				'passed' => is_null($result),
-				'message' => 'Admin HTTPS enforced with FORCE_SSL_ADMIN'
+				'passed'  => is_null( $result ),
+				'message' => 'Admin HTTPS enforced with FORCE_SSL_ADMIN',
 			);
 		} else {
 			// SSL but no FORCE_SSL_ADMIN = issue found (return array)
 			return array(
-				'passed' => !is_null($result) && isset($result['id']) && $result['id'] === 'admin-https',
-				'message' => 'Admin HTTPS not enforced, issue correctly identified'
+				'passed'  => ! is_null( $result ) && isset( $result['id'] ) && $result['id'] === 'admin-https',
+				'message' => 'Admin HTTPS not enforced, issue correctly identified',
 			);
 		}
 	}

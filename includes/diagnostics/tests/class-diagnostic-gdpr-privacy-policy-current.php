@@ -7,8 +7,8 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 
-class Diagnostic_Gdpr_Privacy_Policy_Current extends Diagnostic_Base
-{
+class Diagnostic_Gdpr_Privacy_Policy_Current extends Diagnostic_Base {
+
 	protected static $slug = 'gdpr-privacy-policy-current';
 
 	protected static $title = 'Gdpr Privacy Policy Current';
@@ -22,32 +22,28 @@ class Diagnostic_Gdpr_Privacy_Policy_Current extends Diagnostic_Base
 	/**
 	 * Get diagnostic ID
 	 */
-	public static function get_id(): string
-	{
+	public static function get_id(): string {
 		return 'gdpr-privacy-policy-current';
 	}
 
 	/**
 	 * Get diagnostic name
 	 */
-	public static function get_name(): string
-	{
-		return __('Is privacy policy recently updated?', 'wpshadow');
+	public static function get_name(): string {
+		return __( 'Is privacy policy recently updated?', 'wpshadow' );
 	}
 
 	/**
 	 * Get diagnostic description
 	 */
-	public static function get_description(): string
-	{
-		return __('Is privacy policy recently updated?. Part of Compliance & Legal Risk analysis.', 'wpshadow');
+	public static function get_description(): string {
+		return __( 'Is privacy policy recently updated?. Part of Compliance & Legal Risk analysis.', 'wpshadow' );
 	}
 
 	/**
 	 * Get diagnostic category
 	 */
-	public static function get_category(): string
-	{
+	public static function get_category(): string {
 		return 'compliance_risk';
 	}
 
@@ -56,8 +52,7 @@ class Diagnostic_Gdpr_Privacy_Policy_Current extends Diagnostic_Base
 	 *
 	 * @return array Finding data or empty if no issue
 	 */
-	public static function run(): array
-	{
+	public static function run(): array {
 		// Implement: Is privacy policy recently updated? test
 		// Smart implementation needed
 
@@ -67,8 +62,7 @@ class Diagnostic_Gdpr_Privacy_Policy_Current extends Diagnostic_Base
 	/**
 	 * Get threat level for this finding (0-100)
 	 */
-	public static function get_threat_level(): int
-	{
+	public static function get_threat_level(): int {
 		// Threat level based on diagnostic category
 		return 54;
 	}
@@ -76,25 +70,22 @@ class Diagnostic_Gdpr_Privacy_Policy_Current extends Diagnostic_Base
 	/**
 	 * Get KB article URL
 	 */
-	public static function get_kb_article(): string
-	{
+	public static function get_kb_article(): string {
 		return 'https://wpshadow.com/kb/gdpr-privacy-policy-current/';
 	}
 
 	/**
 	 * Get training video URL
 	 */
-	public static function get_training_video(): string
-	{
+	public static function get_training_video(): string {
 		return 'https://wpshadow.com/training/gdpr-privacy-policy-current/';
 	}
 
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		// Check if privacy policy was recently updated
-		$privacy_page_id = (int) get_option('wp_page_for_privacy_policy');
+		$privacy_page_id = (int) get_option( 'wp_page_for_privacy_policy' );
 
-		if ($privacy_page_id === 0) {
+		if ( $privacy_page_id === 0 ) {
 			// No policy configured
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
 				'gdpr-privacy-policy-current',
@@ -108,8 +99,8 @@ class Diagnostic_Gdpr_Privacy_Policy_Current extends Diagnostic_Base
 		}
 
 		// Check when it was last modified
-		$privacy_page = get_post($privacy_page_id);
-		if (! $privacy_page) {
+		$privacy_page = get_post( $privacy_page_id );
+		if ( ! $privacy_page ) {
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
 				'gdpr-privacy-policy-current',
 				'Privacy Policy Deleted',
@@ -122,14 +113,14 @@ class Diagnostic_Gdpr_Privacy_Policy_Current extends Diagnostic_Base
 		}
 
 		// Check if updated in last 6 months
-		$last_modified = strtotime($privacy_page->post_modified);
-		$six_months_ago = strtotime('-6 months');
+		$last_modified  = strtotime( $privacy_page->post_modified );
+		$six_months_ago = strtotime( '-6 months' );
 
-		if ($last_modified < $six_months_ago) {
+		if ( $last_modified < $six_months_ago ) {
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
 				'gdpr-privacy-policy-current',
 				'Privacy Policy Outdated',
-				sprintf('Privacy policy was last updated on %s. Review and update as needed for GDPR compliance.', date('F d, Y', $last_modified)),
+				sprintf( 'Privacy policy was last updated on %s. Review and update as needed for GDPR compliance.', date( 'F d, Y', $last_modified ) ),
 				'compliance',
 				'medium',
 				60,
@@ -157,8 +148,7 @@ class Diagnostic_Gdpr_Privacy_Policy_Current extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live_gdpr_privacy_policy_current(): array
-	{
+	public static function test_live_gdpr_privacy_policy_current(): array {
 		/*
 		 * IMPLEMENTATION NOTES:
 		 * - This test validates the actual WordPress site state
@@ -172,9 +162,8 @@ class Diagnostic_Gdpr_Privacy_Policy_Current extends Diagnostic_Base
 
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
 }
-

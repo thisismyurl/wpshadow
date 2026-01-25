@@ -33,19 +33,19 @@ class Treatment_Optimize_Database_Tables extends Treatment_Base {
 	 * @param array $options Treatment options
 	 * @return bool Success status
 	 */
-	public static function apply( array $options = [] ): bool {
+	public static function apply( array $options = array() ): bool {
 		global $wpdb;
 
 		// Get tables with overhead
 		$tables = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT 
+				'SELECT 
 					table_name as name,
 					ROUND(data_free / 1024 / 1024, 2) as overhead_mb
 				FROM information_schema.TABLES
 				WHERE table_schema = %s
 				AND data_free > 1048576
-				ORDER BY data_free DESC",
+				ORDER BY data_free DESC',
 				DB_NAME
 			),
 			ARRAY_A
@@ -55,31 +55,34 @@ class Treatment_Optimize_Database_Tables extends Treatment_Base {
 			return false;
 		}
 
-		$optimized = [];
+		$optimized       = array();
 		$total_reclaimed = 0;
 
 		foreach ( $tables as $table ) {
-			$table_name = $table['name'];
+			$table_name      = $table['name'];
 			$before_overhead = $table['overhead_mb'];
 
 			// Run OPTIMIZE TABLE
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name validated from information_schema, OPTIMIZE TABLE doesn't support prepare()
 			$result = $wpdb->query( "OPTIMIZE TABLE `{$table_name}`" );
 
 			if ( $result ) {
-				$optimized[] = [
-					'table'             => $table_name,
+				$optimized[]      = array(
+					'table'              => $table_name,
 					'overhead_reclaimed' => $before_overhead,
-				];
+				);
 				$total_reclaimed += $before_overhead;
 			}
 		}
 
 		// Create backup with optimization results
-		self::create_backup( [
-			'optimized'       => $optimized,
-			'total_reclaimed' => $total_reclaimed,
-			'timestamp'       => time(),
-		] );
+		self::create_backup(
+			array(
+				'optimized'       => $optimized,
+				'total_reclaimed' => $total_reclaimed,
+				'timestamp'       => time(),
+			)
+		);
 
 		// Track KPI
 		if ( ! empty( $optimized ) ) {

@@ -10,16 +10,15 @@ use WPShadow\Diagnostics\Diagnostic_Base;
  * Diagnostic: Database Empty Categories
  * Checks for categories with no posts
  */
-class Test_Database_Empty_Categories extends Diagnostic_Base
-{
+class Test_Database_Empty_Categories extends Diagnostic_Base {
+
 
 	/**
 	 * Run the diagnostic check
 	 *
 	 * @return array|null Array with issue details or null if healthy
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		global $wpdb;
 
 		$empty_categories = $wpdb->get_var(
@@ -29,12 +28,12 @@ class Test_Database_Empty_Categories extends Diagnostic_Base
 			 WHERE tt.taxonomy = 'category' AND tr.object_id IS NULL"
 		);
 
-		if ($empty_categories > 20) {
+		if ( $empty_categories > 20 ) {
 			return array(
-				'id'            => 'database-empty-categories',
-				'title'         => 'Many Empty Categories',
-				'threat_level'  => 15,
-				'description'   => sprintf(
+				'id'           => 'database-empty-categories',
+				'title'        => 'Many Empty Categories',
+				'threat_level' => 15,
+				'description'  => sprintf(
 					'Found %d empty categories with no associated posts.',
 					$empty_categories
 				),
@@ -49,8 +48,7 @@ class Test_Database_Empty_Categories extends Diagnostic_Base
 	 *
 	 * @return array Test result with passed status and message
 	 */
-	public static function test_live_empty_categories(): array
-	{
+	public static function test_live_empty_categories(): array {
 		$result = self::check();
 		return array(
 			'passed'  => $result === null,

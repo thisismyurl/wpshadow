@@ -19,7 +19,7 @@ class Treatment_Skiplinks extends Treatment_Base {
 	public static function get_finding_id() {
 		return 'skiplinks-missing';
 	}
-	
+
 	public static function apply() {
 		update_option( 'wpshadow_skiplinks_enabled', true );
 		KPI_Tracker::log_fix_applied( self::get_finding_id(), 'auto' );
@@ -28,7 +28,7 @@ class Treatment_Skiplinks extends Treatment_Base {
 			'message' => 'Skiplinks enabled for improved accessibility.',
 		);
 	}
-	
+
 	public static function undo() {
 		delete_option( 'wpshadow_skiplinks_enabled' );
 		return array(

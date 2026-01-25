@@ -22,29 +22,29 @@ class Rollback_Treatment_Handler extends AJAX_Handler_Base {
 	/**
 	 * Register the AJAX handler
 	 */
-	public static function register() : void {
-		add_action( 'wp_ajax_wpshadow_rollback_treatment', [ __CLASS__, 'handle' ] );
+	public static function register(): void {
+		add_action( 'wp_ajax_wpshadow_rollback_treatment', array( __CLASS__, 'handle' ) );
 	}
 
 	/**
 	 * Handle the AJAX request
 	 */
-	public static function handle() : void {
+	public static function handle(): void {
 		self::verify_request( 'wpshadow_rollback', 'manage_options', 'nonce' );
 
 		$finding_id = self::get_post_param( 'finding_id', 'text', '' );
-		
+
 		if ( empty( $finding_id ) ) {
 			self::send_error( __( 'Finding ID is required.', 'wpshadow' ) );
 			return;
 		}
-		
+
 		// Check if treatment can be rolled back
 		if ( ! \wpshadow_can_rollback( $finding_id ) ) {
 			self::send_error( __( 'This treatment does not support rollback.', 'wpshadow' ) );
 			return;
 		}
-		
+
 		// Rollback the treatment
 		$result = \wpshadow_rollback_fix( $finding_id );
 

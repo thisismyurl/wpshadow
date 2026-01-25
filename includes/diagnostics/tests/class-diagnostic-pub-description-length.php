@@ -24,12 +24,12 @@ use WPShadow\Core\Diagnostic_Lean_Checks;
  * @guardian-integrated Pending
  */
 class Diagnostic_Pub_Description_Length extends Diagnostic_Base {
-	protected static $slug = 'pub-description-length';
-	protected static $title = 'Posts Have Descriptions';
-	protected static $description = 'Do posts have meta descriptions (for SEO)?';
-	protected static $category = 'Content Publishing';
+	protected static $slug         = 'pub-description-length';
+	protected static $title        = 'Posts Have Descriptions';
+	protected static $description  = 'Do posts have meta descriptions (for SEO)?';
+	protected static $category     = 'Content Publishing';
 	protected static $threat_level = 'low';
-	protected static $family = 'general';
+	protected static $family       = 'general';
 	protected static $family_label = 'General';
 
 	/**
@@ -39,19 +39,19 @@ class Diagnostic_Pub_Description_Length extends Diagnostic_Base {
 	 */
 	public function check(): ?array {
 		// Check if SEO plugin is active (they handle meta descriptions)
-		$seo_plugins = [
+		$seo_plugins = array(
 			'wordpress-seo',
 			'all-in-one-seo-pack',
 			'rank-math',
 			'the-seo-framework',
 			'seo-by-yoast',
-			'jetpack'
-		];
+			'jetpack',
+		);
 
 		$has_seo_plugin = false;
 		foreach ( $seo_plugins as $plugin ) {
 			if ( is_plugin_active( $plugin . '/' . $plugin . '.php' ) ||
-				 is_plugin_active( $plugin ) ) {
+				is_plugin_active( $plugin ) ) {
 				$has_seo_plugin = true;
 				break;
 			}

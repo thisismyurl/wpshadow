@@ -81,68 +81,72 @@ class Diagnostic_Wcag_Error_Prevention extends Diagnostic_Base {
 	}
 
 	protected static function get_guardian_html(): string {
-		if (isset($_POST['html']) && is_string($_POST['html'])) {
-			return sanitize_text_field(wp_unslash($_POST['html']));
+		if ( isset( $_POST['html'] ) && is_string( $_POST['html'] ) ) {
+			return sanitize_text_field( wp_unslash( $_POST['html'] ) );
 		}
 		return '';
 	}
 
 	public static function check(): ?array {
 		$html = self::get_guardian_html();
-		if (empty($html)) return null;
+		if ( empty( $html ) ) {
+			return null;
+		}
 
-		$issues = [];
+		$issues = array();
 		try {
 			$dom = new \DOMDocument();
-			@$dom->loadHTML($html);
-			$xpath = new \DOMXPath($dom);
+			@$dom->loadHTML( $html );
+			$xpath = new \DOMXPath( $dom );
 
 			// Check for forms with validation
-			$forms = $xpath->query('//form');
-			if ($forms->length === 0) {
+			$forms = $xpath->query( '//form' );
+			if ( $forms->length === 0 ) {
 				return null; // No forms to check
 			}
 
-			foreach ($forms as $form) {
-				$inputs = $xpath->query('.//input[@type="email" or @type="url" or @type="number"]', $form);
-				if ($inputs->length > 0) {
+			foreach ( $forms as $form ) {
+				$inputs = $xpath->query( './/input[@type="email" or @type="url" or @type="number"]', $form );
+				if ( $inputs->length > 0 ) {
 					$with_required = 0;
-					foreach ($inputs as $input) {
-						if ($input->hasAttribute('required')) {
-							$with_required++;
+					foreach ( $inputs as $input ) {
+						if ( $input->hasAttribute( 'required' ) ) {
+							++$with_required;
 						}
 					}
-					if ($with_required < $inputs->length) {
+					if ( $with_required < $inputs->length ) {
 						$issues[] = 'Form inputs missing required attribute for error prevention';
 						break;
 					}
 				}
 			}
-		} catch (\Exception $e) {
+		} catch ( \Exception $e ) {
 			return null;
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'wcag-error-prevention',
-			'title' => 'Forms lack error prevention',
-			'description' => 'Forms should include validation to prevent errors',
-			'severity' => 'medium',
-			'category' => 'accessibility',
+		return empty( $issues ) ? null : array(
+			'id'           => 'wcag-error-prevention',
+			'title'        => 'Forms lack error prevention',
+			'description'  => 'Forms should include validation to prevent errors',
+			'severity'     => 'medium',
+			'category'     => 'accessibility',
 			'threat_level' => 45,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	public static function test_live_wcag_error_prevention(): array {
 		$good = '<html><body><form><input type="email" required></form></body></html>';
-		$bad = '<html><body><form><input type="email"></form></body></html>';
+		$bad  = '<html><body><form><input type="email"></form></body></html>';
 
 		$_POST['html'] = $good;
-		$r1 = self::check();
+		$r1            = self::check();
 		$_POST['html'] = $bad;
-		$r2 = self::check();
+		$r2            = self::check();
 
-		return ['passed' => is_null($r1) && is_array($r2), 'message' => 'Error prevention check working'];
+		return array(
+			'passed'  => is_null( $r1 ) && is_array( $r2 ),
+			'message' => 'Error prevention check working',
+		);
 	}
-	}
-
+}

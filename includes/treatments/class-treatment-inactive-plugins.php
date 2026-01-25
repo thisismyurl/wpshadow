@@ -24,7 +24,7 @@ class Treatment_Inactive_Plugins extends Treatment_Base {
 	public static function get_finding_id() {
 		return 'inactive-plugins';
 	}
-	
+
 	/**
 	 * Check if this treatment can be applied.
 	 *
@@ -33,7 +33,7 @@ class Treatment_Inactive_Plugins extends Treatment_Base {
 	public static function can_apply() {
 		return count( self::get_inactive_plugins() ) > 0;
 	}
-	
+
 	/**
 	 * Apply the treatment/fix.
 	 *
@@ -47,11 +47,11 @@ class Treatment_Inactive_Plugins extends Treatment_Base {
 				'message' => 'No inactive plugins found to remove.',
 			);
 		}
-		
+
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
-		
+
 		$delete_result = delete_plugins( $inactive );
 		if ( is_wp_error( $delete_result ) ) {
 			return array(
@@ -59,15 +59,15 @@ class Treatment_Inactive_Plugins extends Treatment_Base {
 				'message' => $delete_result->get_error_message(),
 			);
 		}
-		
+
 		KPI_Tracker::log_fix_applied( self::get_finding_id(), 'auto' );
-		
+
 		return array(
 			'success' => true,
 			'message' => 'Inactive plugins removed to reduce surface area and bloat.',
 		);
 	}
-	
+
 	/**
 	 * Undo the treatment (not supported for deletions).
 	 *
@@ -79,7 +79,7 @@ class Treatment_Inactive_Plugins extends Treatment_Base {
 			'message' => 'Cannot automatically restore deleted plugins.',
 		);
 	}
-	
+
 	/**
 	 * Get inactive plugin file paths.
 	 *
@@ -88,7 +88,7 @@ class Treatment_Inactive_Plugins extends Treatment_Base {
 	private static function get_inactive_plugins() {
 		$all_plugins    = array_keys( get_plugins() );
 		$active_plugins = get_option( 'active_plugins', array() );
-		
+
 		return array_values( array_diff( $all_plugins, $active_plugins ) );
 	}
 }

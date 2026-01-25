@@ -84,27 +84,27 @@ class Diagnostic_Wcag_Form_Labels extends Diagnostic_Base {
 			return null;
 		}
 
-		$issues = [];
+		$issues = array();
 		try {
 			$dom = new \DOMDocument();
 			@$dom->loadHTML( $html );
 			$xpath = new \DOMXPath( $dom );
 
 			// Check for unlabeled form inputs
-			$inputs = $xpath->query( '//input[@type!="hidden"] | //textarea | //select' );
+			$inputs    = $xpath->query( '//input[@type!="hidden"] | //textarea | //select' );
 			$unlabeled = 0;
 
 			foreach ( $inputs as $input ) {
-				$id = $input->getAttribute( 'id' );
+				$id        = $input->getAttribute( 'id' );
 				$has_label = false;
 
 				if ( $id ) {
-					$label = $xpath->query( '//label[@for="' . $id . '"]' );
+					$label     = $xpath->query( '//label[@for="' . $id . '"]' );
 					$has_label = $label->length > 0;
 				}
 
-				if ( !$has_label && !$input->getAttribute( 'aria-label' ) ) {
-					$unlabeled++;
+				if ( ! $has_label && ! $input->getAttribute( 'aria-label' ) ) {
+					++$unlabeled;
 				}
 			}
 
@@ -119,18 +119,18 @@ class Diagnostic_Wcag_Form_Labels extends Diagnostic_Base {
 			return null;
 		}
 
-		return [
-			'id'           => 'wcag-form-labels',
-			'title'        => 'Form Fields Missing Labels',
-			'description'  => 'Screen reader users cannot identify form fields. WCAG 2.1 requires labels for all form inputs.',
-			'severity'     => 'high',
-			'category'     => 'accessibility',
-			'kb_link'      => 'https://wpshadow.com/kb/wcag-form-labels/',
+		return array(
+			'id'            => 'wcag-form-labels',
+			'title'         => 'Form Fields Missing Labels',
+			'description'   => 'Screen reader users cannot identify form fields. WCAG 2.1 requires labels for all form inputs.',
+			'severity'      => 'high',
+			'category'      => 'accessibility',
+			'kb_link'       => 'https://wpshadow.com/kb/wcag-form-labels/',
 			'training_link' => 'https://wpshadow.com/training/wcag-form-labels/',
-			'auto_fixable' => false,
-			'threat_level' => 75,
-			'details'      => $issues,
-		];
+			'auto_fixable'  => false,
+			'threat_level'  => 75,
+			'details'       => $issues,
+		);
 	}
 
 	/**
@@ -162,22 +162,20 @@ class Diagnostic_Wcag_Form_Labels extends Diagnostic_Base {
 	 */
 	public static function test_live_wcag_form_labels(): array {
 		// Test with labeled form
-		$good_html = '<html><body><label for="name">Name:</label><input id="name" type="text"></body></html>';
+		$good_html     = '<html><body><label for="name">Name:</label><input id="name" type="text"></body></html>';
 		$_POST['html'] = $good_html;
-		$result_good = self::check();
+		$result_good   = self::check();
 
 		// Test with unlabeled form
-		$bad_html = '<html><body><input type="text" placeholder="Name"></body></html>';
+		$bad_html      = '<html><body><input type="text" placeholder="Name"></body></html>';
 		$_POST['html'] = $bad_html;
-		$result_bad = self::check();
+		$result_bad    = self::check();
 
 		$passed = is_null( $result_good ) && is_array( $result_bad ) && isset( $result_bad['id'] ) && $result_bad['id'] === 'wcag-form-labels';
 
-		return [
-			'passed' => $passed,
+		return array(
+			'passed'  => $passed,
 			'message' => 'Form label detection working: ' . ( $passed ? 'PASS' : 'FAIL' ),
-		];
+		);
 	}
-
 }
-

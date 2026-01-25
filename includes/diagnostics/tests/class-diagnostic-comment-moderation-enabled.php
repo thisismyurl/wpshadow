@@ -23,14 +23,14 @@ use WPShadow\Core\Diagnostic_Lean_Checks;
  * @verified 2026-01-24 - Batch 4 implementation
  * @guardian-integrated Pending
  */
-class Diagnostic_Comment_Moderation_Enabled extends Diagnostic_Base
-{
-	protected static $slug = 'comment-moderation-enabled';
-	protected static $title = 'Comment Moderation Enabled';
-	protected static $description = 'Is comment moderation enabled?';
-	protected static $category = 'Content & Community';
+class Diagnostic_Comment_Moderation_Enabled extends Diagnostic_Base {
+
+	protected static $slug         = 'comment-moderation-enabled';
+	protected static $title        = 'Comment Moderation Enabled';
+	protected static $description  = 'Is comment moderation enabled?';
+	protected static $category     = 'Content & Community';
 	protected static $threat_level = 'low';
-	protected static $family = 'general';
+	protected static $family       = 'general';
 	protected static $family_label = 'General';
 
 	/**
@@ -38,16 +38,15 @@ class Diagnostic_Comment_Moderation_Enabled extends Diagnostic_Base
 	 *
 	 * @return ?array Null if pass, array of findings if fail
 	 */
-	public function check(): ?array
-	{
+	public function check(): ?array {
 		// Check if comments require moderation
-		$moderate_comments = get_option('comment_moderation');
-		$comments_need_approval = get_option('comment_whitelist');
+		$moderate_comments      = get_option( 'comment_moderation' );
+		$comments_need_approval = get_option( 'comment_whitelist' );
 
-		if (! $moderate_comments && ! $comments_need_approval) {
+		if ( ! $moderate_comments && ! $comments_need_approval ) {
 			// Check if comments are enabled at all
-			$default_comments = get_option('default_comment_status');
-			if ('open' === $default_comments) {
+			$default_comments = get_option( 'default_comment_status' );
+			if ( 'open' === $default_comments ) {
 				return Diagnostic_Lean_Checks::build_finding(
 					'comment-moderation-enabled',
 					'Comments Not Moderated',

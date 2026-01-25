@@ -22,7 +22,7 @@ namespace WPShadow\Diagnostics\Tests;
 
 use WPShadow\Diagnostics\Diagnostic_Base;
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -33,25 +33,24 @@ if (! defined('ABSPATH')) {
  *
  * @verified Not yet tested
  */
-class Test_Admin_Heartbeat_Overload extends Diagnostic_Base
-{
+class Test_Admin_Heartbeat_Overload extends Diagnostic_Base {
+
 
 	/**
 	 * Run the diagnostic test
 	 *
 	 * @return array|null Diagnostic result array, or null if no issue found
 	 */
-	public function check(): ?array
-	{
+	public function check(): ?array {
 		// Only run in admin context
-		if (! is_admin()) {
+		if ( ! is_admin() ) {
 			return null;
 		}
 
 		// Check Heartbeat settings
 		$heartbeat_settings = $this->get_heartbeat_settings();
 
-		if (! $heartbeat_settings) {
+		if ( ! $heartbeat_settings ) {
 			return null; // Heartbeat disabled or cannot determine
 		}
 
@@ -63,31 +62,31 @@ class Test_Admin_Heartbeat_Overload extends Diagnostic_Base
 		// - Post editor: 15-30 seconds (for autosave)
 		// - Front-end: Disabled or 120+ seconds
 
-		$threshold_warning = 30; // Less than 30s is excessive
+		$threshold_warning  = 30; // Less than 30s is excessive
 		$threshold_critical = 10; // Less than 10s is very excessive
 
 		// Check if interval is too frequent
-		if ($interval >= $threshold_warning) {
+		if ( $interval >= $threshold_warning ) {
 			return null; // Pass - Interval is reasonable
 		}
 
 		// Determine severity
-		if ($interval < $threshold_critical) {
+		if ( $interval < $threshold_critical ) {
 			$threat_level = 55;
-			$severity = 'critical';
+			$severity     = 'critical';
 		} else {
 			$threat_level = 42;
-			$severity = 'medium';
+			$severity     = 'medium';
 		}
 
 		// Calculate impact
 		$requests_per_hour = 3600 / $interval;
-		$requests_per_day = $requests_per_hour * 24;
+		$requests_per_day  = $requests_per_hour * 24;
 
 		return array(
-			'id'           => 'admin-heartbeat-overload',
-			'title'        => 'Excessive WordPress Heartbeat Frequency',
-			'description'  => sprintf(
+			'id'            => 'admin-heartbeat-overload',
+			'title'         => 'Excessive WordPress Heartbeat Frequency',
+			'description'   => sprintf(
 				'WordPress Heartbeat is firing every %d seconds in %s. This generates %d requests per hour and %d requests per day per user, creating unnecessary server load. Recommended: Increase interval to 60 seconds for admin pages, 30 seconds for post editor.',
 				$interval,
 				$location,
@@ -96,17 +95,17 @@ class Test_Admin_Heartbeat_Overload extends Diagnostic_Base
 			)
 			'kb_link'      => 'https://wpshadow.com/kb/optimize-heartbeat',
 			'training_link' => 'https://wpshadow.com/training/reduce-server-load',
-			'auto_fixable' => true, // Can adjust via filter
-			'threat_level' => $threat_level,
-			'module'       => 'admin-performance',
-			'priority'     => 16,
-			'meta'         => array(
-				'interval'            => $interval,
-				'location'            => $location,
-				'requests_per_hour'   => $requests_per_hour,
-				'requests_per_day'    => $requests_per_day,
+			'auto_fixable'  => true, // Can adjust via filter
+			'threat_level'  => $threat_level,
+			'module'        => 'admin-performance',
+			'priority'      => 16,
+			'meta'          => array(
+				'interval'             => $interval,
+				'location'             => $location,
+				'requests_per_hour'    => $requests_per_hour,
+				'requests_per_day'     => $requests_per_day,
 				'recommended_interval' => $location === 'post-editor' ? 30 : 60,
-				'severity'            => $severity,
+				'severity'             => $severity,
 			),
 		);
 	}
@@ -116,17 +115,16 @@ class Test_Admin_Heartbeat_Overload extends Diagnostic_Base
 	 *
 	 * @return array|null Heartbeat settings or null if disabled
 	 */
-	private function get_heartbeat_settings(): ?array
-	{
+	private function get_heartbeat_settings(): ?array {
 		// Check if Heartbeat is disabled
-		if (! wp_script_is('heartbeat', 'enqueued') && ! wp_script_is('heartbeat', 'registered')) {
+		if ( ! wp_script_is( 'heartbeat', 'enqueued' ) && ! wp_script_is( 'heartbeat', 'registered' ) ) {
 			return null; // Heartbeat disabled
 		}
 
 		// Get localized heartbeat settings
 		global $wp_scripts;
 
-		if (! isset($wp_scripts->registered['heartbeat'])) {
+		if ( ! isset( $wp_scripts->registered['heartbeat'] ) ) {
 			return null;
 		}
 
@@ -134,25 +132,25 @@ class Test_Admin_Heartbeat_Overload extends Diagnostic_Base
 
 		// Default interval is 15 seconds in post editor, 60 seconds elsewhere
 		$default_interval = 60;
-		$location = 'dashboard';
+		$location         = 'dashboard';
 
 		// Check current screen
-		if (function_exists('get_current_screen')) {
+		if ( function_exists( 'get_current_screen' ) ) {
 			$screen = get_current_screen();
-			if ($screen && $screen->base === 'post') {
+			if ( $screen && $screen->base === 'post' ) {
 				$default_interval = 15;
-				$location = 'post-editor';
+				$location         = 'post-editor';
 			}
 		}
 
 		// Try to parse interval from heartbeat settings
 		// The interval can be filtered via 'heartbeat_settings'
-		$settings = apply_filters('heartbeat_settings', array());
+		$settings = apply_filters( 'heartbeat_settings', array() );
 		$interval = $settings['interval'] ?? $default_interval;
 
 		// Ensure interval is numeric
-		$interval = absint($interval);
-		if ($interval === 0) {
+		$interval = absint( $interval );
+		if ( $interval === 0 ) {
 			$interval = $default_interval;
 		}
 
@@ -167,8 +165,7 @@ class Test_Admin_Heartbeat_Overload extends Diagnostic_Base
 	 *
 	 * @return array Diagnostic information
 	 */
-	public static function get_info(): array
-	{
+	public static function get_info(): array {
 		return array(
 			'name'        => 'Admin Heartbeat Overload',
 			'category'    => 'admin-performance',

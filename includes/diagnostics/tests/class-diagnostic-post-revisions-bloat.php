@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace WPShadow\Diagnostics;
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -29,16 +29,15 @@ if (! defined('ABSPATH')) {
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_Post_Revisions_Bloat extends Diagnostic_Base
-{
+class Diagnostic_Post_Revisions_Bloat extends Diagnostic_Base {
+
 
 	/**
 	 * Run the diagnostic check
 	 *
 	 * @return array|null Diagnostic result or null if no issue
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		global $wpdb;
 
 		// Count total revisions
@@ -46,7 +45,7 @@ class Diagnostic_Post_Revisions_Bloat extends Diagnostic_Base
 			"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'revision'"
 		);
 
-		if ($revision_count < 100) {
+		if ( $revision_count < 100 ) {
 			return null; // Not significant enough
 		}
 
@@ -62,33 +61,33 @@ class Diagnostic_Post_Revisions_Bloat extends Diagnostic_Base
 		);
 
 		// Calculate database size impact (rough estimate)
-		$revision_size = $wpdb->get_var(
+		$revision_size    = $wpdb->get_var(
 			"SELECT SUM(LENGTH(post_content) + LENGTH(post_title))
 			FROM {$wpdb->posts}
 			WHERE post_type = 'revision'"
 		);
-		$revision_size_mb = round($revision_size / 1024 / 1024, 2);
+		$revision_size_mb = round( $revision_size / 1024 / 1024, 2 );
 
 		$severity = $revision_count > 1000 ? 'medium' : 'low';
 
 		$description = sprintf(
-			__('Your database contains %s post revisions consuming approximately %s MB. Excessive revisions slow down post editing and database performance. WordPress keeps unlimited revisions by default.', 'wpshadow'),
-			number_format($revision_count),
+			__( 'Your database contains %1$s post revisions consuming approximately %2$s MB. Excessive revisions slow down post editing and database performance. WordPress keeps unlimited revisions by default.', 'wpshadow' ),
+			number_format( $revision_count ),
 			$revision_size_mb
 		);
 
-		if (! empty($posts_with_revisions)) {
-			$top_post = $posts_with_revisions[0];
+		if ( ! empty( $posts_with_revisions ) ) {
+			$top_post     = $posts_with_revisions[0];
 			$description .= sprintf(
-				' ' . __('Top culprit: "%s" has %d revisions.', 'wpshadow'),
+				' ' . __( 'Top culprit: "%1$s" has %2$d revisions.', 'wpshadow' ),
 				$top_post['post_title'],
 				$top_post['revision_count']
 			);
 		}
 
-		return [
+		return array(
 			'id'                => 'post-revisions-bloat',
-			'title'             => __('Excessive Post Revisions', 'wpshadow'),
+			'title'             => __( 'Excessive Post Revisions', 'wpshadow' ),
 			'description'       => $description,
 			'severity'          => $severity,
 			'category'          => 'performance',
@@ -96,13 +95,13 @@ class Diagnostic_Post_Revisions_Bloat extends Diagnostic_Base
 			'effort'            => 'low',
 			'kb_link'           => 'https://wpshadow.com/kb/post-revisions-bloat',
 			'training_link'     => 'https://wpshadow.com/training/post-revisions-bloat',
-			'affected_resource' => sprintf('%s revisions, %s MB', number_format($revision_count), $revision_size_mb),
-			'metadata'          => [
-				'revision_count'   => $revision_count,
-				'size_mb'          => $revision_size_mb,
-				'top_posts'        => $posts_with_revisions,
-			],
-		];
+			'affected_resource' => sprintf( '%s revisions, %s MB', number_format( $revision_count ), $revision_size_mb ),
+			'metadata'          => array(
+				'revision_count' => $revision_count,
+				'size_mb'        => $revision_size_mb,
+				'top_posts'      => $posts_with_revisions,
+			),
+		);
 	}
 
 	/**
@@ -127,8 +126,7 @@ class Diagnostic_Post_Revisions_Bloat extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__post_revisions_bloat(): array
-	{
+	public static function test_live__post_revisions_bloat(): array {
 		global $wpdb;
 
 		// Recompute actual revision count
@@ -142,11 +140,11 @@ class Diagnostic_Post_Revisions_Bloat extends Diagnostic_Base
 		$diagnostic_result = self::check();
 
 		// Determine expected state
-		$should_find_issue = ($revision_count >= $threshold);
-		$diagnostic_found_issue = ($diagnostic_result !== null);
+		$should_find_issue      = ( $revision_count >= $threshold );
+		$diagnostic_found_issue = ( $diagnostic_result !== null );
 
 		// Compare expected vs actual diagnostic result
-		$test_passes = ($should_find_issue === $diagnostic_found_issue);
+		$test_passes = ( $should_find_issue === $diagnostic_found_issue );
 
 		$message = sprintf(
 			'Revision count: %d (threshold: %d). Expected diagnostic to %s issue. Diagnostic %s issue. Test: %s',

@@ -80,12 +80,12 @@ class Diagnostic_Plugin_Async_Defer_Missing extends Diagnostic_Base {
 
 	public static function check(): ?array {
 		// Check for async/defer optimization plugin
-		$optimization_plugins = [
+		$optimization_plugins = array(
 			'wp-rocket/wp-rocket.php',
 			'w3-total-cache/w3-total-cache.php',
 			'litespeed-cache/litespeed-cache.php',
 			'autoptimize/autoptimize.php',
-		];
+		);
 
 		foreach ( $optimization_plugins as $plugin ) {
 			if ( is_plugin_active( $plugin ) ) {
@@ -135,10 +135,8 @@ class Diagnostic_Plugin_Async_Defer_Missing extends Diagnostic_Base {
 
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

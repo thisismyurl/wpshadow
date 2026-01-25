@@ -18,7 +18,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -30,8 +30,8 @@ if (! defined('ABSPATH')) {
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
-class Diagnostic_Howdy_Greeting extends Diagnostic_Base
-{
+class Diagnostic_Howdy_Greeting extends Diagnostic_Base {
+
 
 	protected static $slug        = 'howdy-greeting-visible';
 	protected static $title       = 'Admin Greeting Visible';
@@ -42,26 +42,25 @@ class Diagnostic_Howdy_Greeting extends Diagnostic_Base
 	 *
 	 * @return array|null Finding array or null if no issues detected.
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		// Check if "Howdy" greeting is enabled (by default it is)
-		$howdy_hidden = get_option('wpshadow_hide_howdy_greeting', false);
+		$howdy_hidden = get_option( 'wpshadow_hide_howdy_greeting', false );
 
-		if ($howdy_hidden) {
+		if ( $howdy_hidden ) {
 			// Already configured to hide, no finding
 			return null;
 		}
 
 		// "Howdy" is displayed by default - this is just informational
 		$finding = array(
-			'id'   => self::$slug,
+			'id'           => self::$slug,
 			'title'        => self::$title,
 			'description'  => self::build_description(),
 			'category'     => 'admin-ux',
 			'severity'     => 'info',
 			'threat_level' => 1,
 			'auto_fixable' => true,
-			'timestamp'    => current_time('mysql'),
+			'timestamp'    => current_time( 'mysql' ),
 		);
 
 		return $finding;
@@ -72,13 +71,12 @@ class Diagnostic_Howdy_Greeting extends Diagnostic_Base
 	 *
 	 * @return string HTML description.
 	 */
-	private static function build_description(): string
-	{
-		$description  = __('The "Howdy" admin greeting is currently displayed in the top menu bar.', 'wpshadow');
-		$description .= '<br><br><strong>' . __('Options:', 'wpshadow') . '</strong><ul>';
-		$description .= '<li>' . __('Keep it for a friendly admin experience', 'wpshadow') . '</li>';
-		$description .= '<li>' . __('Remove it for a cleaner, more professional admin interface', 'wpshadow') . '</li>';
-		$description .= '<li>' . __('This is automatically hidden when comments are disabled site-wide', 'wpshadow') . '</li>';
+	private static function build_description(): string {
+		$description  = __( 'The "Howdy" admin greeting is currently displayed in the top menu bar.', 'wpshadow' );
+		$description .= '<br><br><strong>' . __( 'Options:', 'wpshadow' ) . '</strong><ul>';
+		$description .= '<li>' . __( 'Keep it for a friendly admin experience', 'wpshadow' ) . '</li>';
+		$description .= '<li>' . __( 'Remove it for a cleaner, more professional admin interface', 'wpshadow' ) . '</li>';
+		$description .= '<li>' . __( 'This is automatically hidden when comments are disabled site-wide', 'wpshadow' ) . '</li>';
 		$description .= '</ul>';
 
 		return $description;
@@ -101,15 +99,14 @@ class Diagnostic_Howdy_Greeting extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live_howdy_greeting_visible(): array
-	{
-		$howdy_hidden = (bool) get_option('wpshadow_hide_howdy_greeting', false);
-		$has_issue = !$howdy_hidden;
+	public static function test_live_howdy_greeting_visible(): array {
+		$howdy_hidden = (bool) get_option( 'wpshadow_hide_howdy_greeting', false );
+		$has_issue    = ! $howdy_hidden;
 
-		$result = self::check();
-		$diagnostic_found_issue = is_array($result);
+		$result                 = self::check();
+		$diagnostic_found_issue = is_array( $result );
 
-		$test_passes = ($has_issue === $diagnostic_found_issue);
+		$test_passes = ( $has_issue === $diagnostic_found_issue );
 
 		$message = $test_passes
 			? 'Howdy greeting check matches site state'

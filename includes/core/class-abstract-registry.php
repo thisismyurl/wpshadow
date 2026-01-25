@@ -66,10 +66,10 @@ abstract class Abstract_Registry {
 	public static function is_registered( $class_name ) {
 		$items     = static::get_registered_items();
 		$namespace = static::get_namespace();
-		
+
 		// Strip namespace if provided
 		$class_name = str_replace( $namespace, '', $class_name );
-		
+
 		return in_array( $class_name, $items, true );
 	}
 

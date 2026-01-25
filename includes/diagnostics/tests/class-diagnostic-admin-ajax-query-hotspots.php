@@ -13,8 +13,8 @@ use WPShadow\Core\Diagnostic_Base;
  * KB Link: https://wpshadow.com/kb/admin-ajax-performance
  * Training: https://wpshadow.com/training/admin-ajax-optimization
  */
-class Diagnostic_AdminAjaxQueryHotspots extends Diagnostic_Base
-{
+class Diagnostic_AdminAjaxQueryHotspots extends Diagnostic_Base {
+
 	/**
 	 * OPEN QUESTIONS (need product guidance):
 	 * - Scope: Are we profiling only admin-ajax.php requests, or also WP REST endpoints called from admin screens?
@@ -23,8 +23,7 @@ class Diagnostic_AdminAjaxQueryHotspots extends Diagnostic_Base
 	 * - Actions: Which ajax actions are in scope (core + common plugins) and should we whitelist heartbeat/admin-notices?
 	 * - Privacy/perf: Are we allowed to sample live queries (adds overhead) or should we only surface historical slow logs if present?
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		// Pending implementation once scope, thresholds, and data source are defined.
 		return null;
 	}
@@ -51,8 +50,7 @@ class Diagnostic_AdminAjaxQueryHotspots extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__admin_ajax_query_hotspots(): array
-	{
+	public static function test_live__admin_ajax_query_hotspots(): array {
 		/*
 		 * IMPLEMENTATION NOTES:
 		 * - This test validates the actual WordPress site state
@@ -65,7 +63,7 @@ class Diagnostic_AdminAjaxQueryHotspots extends Diagnostic_Base
 		$result = self::check();
 
 		return array(
-			'passed' => is_null($result),
+			'passed'  => is_null( $result ),
 			'message' => 'Diagnostic not yet implemented; awaiting scope/threshold guidance',
 		);
 	}

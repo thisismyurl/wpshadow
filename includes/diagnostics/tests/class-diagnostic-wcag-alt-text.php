@@ -81,57 +81,61 @@ class Diagnostic_Wcag_Alt_Text extends Diagnostic_Base {
 	}
 
 	protected static function get_guardian_html(): string {
-		if (isset($_POST['html']) && is_string($_POST['html'])) {
-			return sanitize_text_field(wp_unslash($_POST['html']));
+		if ( isset( $_POST['html'] ) && is_string( $_POST['html'] ) ) {
+			return sanitize_text_field( wp_unslash( $_POST['html'] ) );
 		}
 		return '';
 	}
 
 	public static function check(): ?array {
 		$html = self::get_guardian_html();
-		if (empty($html)) return null;
+		if ( empty( $html ) ) {
+			return null;
+		}
 
-		$issues = [];
+		$issues = array();
 		try {
 			$dom = new \DOMDocument();
-			@$dom->loadHTML($html);
-			$xpath = new \DOMXPath($dom);
+			@$dom->loadHTML( $html );
+			$xpath = new \DOMXPath( $dom );
 
-			$images = $xpath->query('//img');
-			foreach ($images as $img) {
-				if (!$img->hasAttribute('alt')) {
+			$images = $xpath->query( '//img' );
+			foreach ( $images as $img ) {
+				if ( ! $img->hasAttribute( 'alt' ) ) {
 					$issues[] = 'Image missing alt attribute';
 					break;
-				} elseif (empty(trim($img->getAttribute('alt')))) {
+				} elseif ( empty( trim( $img->getAttribute( 'alt' ) ) ) ) {
 					$issues[] = 'Image has empty alt attribute';
 					break;
 				}
 			}
-		} catch (\Exception $e) {
+		} catch ( \Exception $e ) {
 			return null;
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'wcag-alt-text',
-			'title' => 'Images missing alt text',
-			'description' => 'All images must have descriptive alt text',
-			'severity' => 'high',
-			'category' => 'accessibility',
+		return empty( $issues ) ? null : array(
+			'id'           => 'wcag-alt-text',
+			'title'        => 'Images missing alt text',
+			'description'  => 'All images must have descriptive alt text',
+			'severity'     => 'high',
+			'category'     => 'accessibility',
 			'threat_level' => 72,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	public static function test_live_wcag_alt_text(): array {
 		$good = '<html><body><img src="test.jpg" alt="Test"></body></html>';
-		$bad = '<html><body><img src="test.jpg"></body></html>';
+		$bad  = '<html><body><img src="test.jpg"></body></html>';
 
 		$_POST['html'] = $good;
-		$r1 = self::check();
+		$r1            = self::check();
 		$_POST['html'] = $bad;
-		$r2 = self::check();
+		$r2            = self::check();
 
-		return ['passed' => is_null($r1) && is_array($r2), 'message' => 'Alt text check working'];
+		return array(
+			'passed'  => is_null( $r1 ) && is_array( $r2 ),
+			'message' => 'Alt text check working',
+		);
 	}
-	}
-
+}

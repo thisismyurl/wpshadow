@@ -21,15 +21,14 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_CSRF_Protection extends Diagnostic_Base
-{
+class Diagnostic_CSRF_Protection extends Diagnostic_Base {
+
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		global $wpdb;
 
 		// Check for non-admin forms without nonce fields
@@ -37,20 +36,20 @@ class Diagnostic_CSRF_Protection extends Diagnostic_Base
 			"SELECT ID FROM {$wpdb->posts} WHERE post_content LIKE '%<form%' AND post_content NOT LIKE '%wp_nonce_field%' AND post_type = 'page' LIMIT 5"
 		);
 
-		if (! empty($results)) {
+		if ( ! empty( $results ) ) {
 			return array(
-				'id'          => 'csrf-protection',
-				'title'       => 'Forms Missing CSRF Protection',
-				'description' => sprintf(
+				'id'            => 'csrf-protection',
+				'title'         => 'Forms Missing CSRF Protection',
+				'description'   => sprintf(
 					'Found %d pages with forms lacking CSRF tokens. This allows attackers to perform unauthorized actions on behalf of users. Add nonce verification to all forms.',
-					count($results)
+					count( $results )
 				),
-				'severity'    => 'high',
-				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/protect-against-csrf/',
+				'severity'      => 'high',
+				'category'      => 'security',
+				'kb_link'       => 'https://wpshadow.com/kb/protect-against-csrf/',
 				'training_link' => 'https://wpshadow.com/training/csrf-protection/',
-				'auto_fixable' => false,
-				'threat_level' => 75,
+				'auto_fixable'  => false,
+				'threat_level'  => 75,
 			);
 		}
 
@@ -79,8 +78,7 @@ class Diagnostic_CSRF_Protection extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__csrf_protection(): array
-	{
+	public static function test_live__csrf_protection(): array {
 		/*
 		 * IMPLEMENTATION NOTES:
 		 * - This test validates the actual WordPress site state
@@ -95,12 +93,12 @@ class Diagnostic_CSRF_Protection extends Diagnostic_Base
 			"SELECT ID FROM {$wpdb->posts} WHERE post_content LIKE '%<form%' AND post_content NOT LIKE '%wp_nonce_field%' AND post_type = 'page' LIMIT 5"
 		);
 
-		$has_unprotected_forms = ! empty($results);
+		$has_unprotected_forms = ! empty( $results );
 
-		$result = self::check();
-		$has_finding = is_array($result);
+		$result      = self::check();
+		$has_finding = is_array( $result );
 
-		if ($has_unprotected_forms === $has_finding) {
+		if ( $has_unprotected_forms === $has_finding ) {
 			$message = $has_unprotected_forms ? 'Finding returned when forms lack nonce protection.' : 'No finding when all forms are protected.';
 			return array(
 				'passed'  => true,

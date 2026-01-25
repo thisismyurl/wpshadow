@@ -21,28 +21,27 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_Automatic_Security_Updates extends Diagnostic_Base
-{
+class Diagnostic_Automatic_Security_Updates extends Diagnostic_Base {
+
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array
-	{
-		$auto_updates = get_option('auto_update_core_dev') || get_option('auto_update_core_minor') || get_option('auto_update_plugins');
+	public static function check(): ?array {
+		$auto_updates = get_option( 'auto_update_core_dev' ) || get_option( 'auto_update_core_minor' ) || get_option( 'auto_update_plugins' );
 
-		if (! $auto_updates) {
+		if ( ! $auto_updates ) {
 			return array(
-				'id'          => 'automatic-security-updates',
-				'title'       => 'No Automatic Security Updates',
-				'description' => 'Security patches are not applied automatically. Unpatched vulnerabilities are exploited before you manually update. Enable automatic security updates for core, plugins, and themes.',
-				'severity'    => 'critical',
-				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/enable-automatic-updates/',
+				'id'            => 'automatic-security-updates',
+				'title'         => 'No Automatic Security Updates',
+				'description'   => 'Security patches are not applied automatically. Unpatched vulnerabilities are exploited before you manually update. Enable automatic security updates for core, plugins, and themes.',
+				'severity'      => 'critical',
+				'category'      => 'security',
+				'kb_link'       => 'https://wpshadow.com/kb/enable-automatic-updates/',
 				'training_link' => 'https://wpshadow.com/training/update-management/',
-				'auto_fixable' => false,
-				'threat_level' => 85,
+				'auto_fixable'  => false,
+				'threat_level'  => 85,
 			);
 		}
 
@@ -71,21 +70,20 @@ class Diagnostic_Automatic_Security_Updates extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__automatic_security_updates(): array
-	{
+	public static function test_live__automatic_security_updates(): array {
 		$result = self::check();
 
-		$auto_updates = get_option('auto_update_core_dev') || get_option('auto_update_core_minor') || get_option('auto_update_plugins');
+		$auto_updates = get_option( 'auto_update_core_dev' ) || get_option( 'auto_update_core_minor' ) || get_option( 'auto_update_plugins' );
 
-		$should_pass = (bool) $auto_updates;
-		$diagnostic_passed = is_null($result);
-		$test_passes = ($should_pass === $diagnostic_passed);
+		$should_pass       = (bool) $auto_updates;
+		$diagnostic_passed = is_null( $result );
+		$test_passes       = ( $should_pass === $diagnostic_passed );
 
 		return array(
-			'passed' => $test_passes,
+			'passed'  => $test_passes,
 			'message' => $test_passes ? 'Auto-updates check matches site state' :
-				"Mismatch: expected " . ($should_pass ? 'pass' : 'fail') . " but got " .
-				($diagnostic_passed ? 'pass' : 'fail'),
+				'Mismatch: expected ' . ( $should_pass ? 'pass' : 'fail' ) . ' but got ' .
+				( $diagnostic_passed ? 'pass' : 'fail' ),
 		);
 	}
 }

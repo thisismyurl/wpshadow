@@ -28,7 +28,7 @@ class Treatment_REST_API extends Treatment_Base {
 	public static function apply() {
 		update_option( 'wpshadow_rest_api_headers_disabled', true );
 		KPI_Tracker::log_fix_applied( self::get_finding_id(), 'security' );
-		
+
 		return array(
 			'success' => true,
 			'message' => __( 'REST API headers removed from output. The API still works but is not auto-discovered.', 'wpshadow' ),
@@ -38,7 +38,7 @@ class Treatment_REST_API extends Treatment_Base {
 	public static function undo() {
 		delete_option( 'wpshadow_rest_api_headers_disabled' );
 		KPI_Tracker::log_fix_undone( self::get_finding_id() );
-		
+
 		return array(
 			'success' => true,
 			'message' => __( 'REST API headers restored in output.', 'wpshadow' ),

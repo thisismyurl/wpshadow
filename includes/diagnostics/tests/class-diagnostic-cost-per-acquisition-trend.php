@@ -8,7 +8,7 @@ use WPShadow\Core\Diagnostic_Base;
 /**
  * OPTIMIZATION IMPACT - Before/After Snapshots
  * ============================================================
- * 
+ *
  * DETECTION APPROACH:
  * Compare stored metric snapshots (before/after optimization)
  *
@@ -129,7 +129,7 @@ class Diagnostic_Cost_Per_Acquisition_Trend extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Cost Per Acquisition Trend
 	 * Slug: cost-per-acquisition-trend
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -150,15 +150,13 @@ class Diagnostic_Cost_Per_Acquisition_Trend extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

@@ -83,23 +83,23 @@ class Diagnostic_Plugin_Beta_Versions extends Diagnostic_Base {
 		if ( ! function_exists( 'get_plugins' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
-		
+
 		$active_plugins = get_option( 'active_plugins', array() );
-		$beta_plugins = array();
-		
+		$beta_plugins   = array();
+
 		foreach ( $active_plugins as $plugin ) {
 			$plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin, false, false );
-			$version = strtolower( $plugin_data['Version'] );
-			
+			$version     = strtolower( $plugin_data['Version'] );
+
 			// Check for beta/RC/alpha indicators
-			if ( strpos( $version, 'beta' ) !== false || 
-			     strpos( $version, 'rc' ) !== false || 
-			     strpos( $version, 'alpha' ) !== false ||
-			     strpos( $version, 'dev' ) !== false ) {
+			if ( strpos( $version, 'beta' ) !== false ||
+				strpos( $version, 'rc' ) !== false ||
+				strpos( $version, 'alpha' ) !== false ||
+				strpos( $version, 'dev' ) !== false ) {
 				$beta_plugins[] = $plugin_data['Name'] . ' (' . $version . ')';
 			}
 		}
-		
+
 		if ( ! empty( $beta_plugins ) ) {
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
 				'plugin-beta-versions',
@@ -111,7 +111,7 @@ class Diagnostic_Plugin_Beta_Versions extends Diagnostic_Base {
 				'plugin-beta-versions'
 			);
 		}
-		
+
 		return null;
 	}
 
@@ -120,7 +120,7 @@ class Diagnostic_Plugin_Beta_Versions extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Plugin Beta Versions
 	 * Slug: plugin-beta-versions
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -141,15 +141,13 @@ class Diagnostic_Plugin_Beta_Versions extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

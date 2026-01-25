@@ -95,11 +95,11 @@ class Diagnostic_Pub_Og_Tags_Complete extends Diagnostic_Base {
 
 	public static function check(): ?array {
 		// Check if OG tags are being set (requires SEO plugin)
-		$seo_plugins = [
+		$seo_plugins = array(
 			'wordpress-seo/wp-seo.php',
 			'all-in-one-seo-pack/all_in_one_seo_pack.php',
 			'seo-by-rank-math/rank-math.php',
-		];
+		);
 
 		$has_seo_plugin = false;
 		foreach ( $seo_plugins as $plugin ) {
@@ -155,10 +155,8 @@ class Diagnostic_Pub_Og_Tags_Complete extends Diagnostic_Base {
 
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

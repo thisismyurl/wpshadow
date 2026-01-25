@@ -82,13 +82,13 @@ class Diagnostic_Core_Mysql_Version extends Diagnostic_Base {
 		// Get database version
 		global $wpdb;
 		$db_version = $wpdb->db_version();
-		
+
 		// Parse version - check if it's old/unsupported
 		// MySQL 5.5 is very old and no longer supported
 		// MySQL 5.6 reached end of life in Feb 2021
 		// MySQL 5.7 is still receiving updates
 		// MySQL 8.0+ is recommended
-		
+
 		if ( version_compare( $db_version, '5.6', '<' ) ) {
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
 				'core-mysql-version',
@@ -100,7 +100,7 @@ class Diagnostic_Core_Mysql_Version extends Diagnostic_Base {
 				'core-mysql-version'
 			);
 		}
-		
+
 		if ( version_compare( $db_version, '5.7', '<' ) ) {
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
 				'core-mysql-version',
@@ -112,7 +112,7 @@ class Diagnostic_Core_Mysql_Version extends Diagnostic_Base {
 				'core-mysql-version'
 			);
 		}
-		
+
 		return null;
 	}
 
@@ -121,7 +121,7 @@ class Diagnostic_Core_Mysql_Version extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Core Mysql Version
 	 * Slug: core-mysql-version
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -142,15 +142,13 @@ class Diagnostic_Core_Mysql_Version extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

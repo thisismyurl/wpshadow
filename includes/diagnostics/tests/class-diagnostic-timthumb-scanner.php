@@ -5,7 +5,7 @@ declare(strict_types=1);
  *
  * Philosophy: Legacy vulnerability detection - timthumb exploit prevention
  * @package WPShadow
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
@@ -16,7 +16,7 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check for vulnerable timthumb.php files.
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
@@ -134,5 +134,4 @@ class Diagnostic_Timthumb_Scanner extends Diagnostic_Base {
 			'message' => '✗ Timthumb detected: ' . $result['title'],
 		);
 	}
-
 }

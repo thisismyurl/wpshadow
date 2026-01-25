@@ -19,30 +19,29 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_Third_Party_Script_Count extends Diagnostic_Base
-{
+class Diagnostic_Third_Party_Script_Count extends Diagnostic_Base {
+
 
 	/**
 	 * Run the diagnostic check
 	 *
 	 * @return array|null Array with finding details or null if no issue found
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		// Count third-party scripts
-		$third_party_count = get_transient('wpshadow_third_party_script_count');
+		$third_party_count = get_transient( 'wpshadow_third_party_script_count' );
 
-		if ($third_party_count && $third_party_count > 20) {
+		if ( $third_party_count && $third_party_count > 20 ) {
 			return array(
-				'id' => 'third-party-script-count',
-				'title' => sprintf(__('%d Third-Party Scripts Loaded', 'wpshadow'), $third_party_count),
-				'description' => __('Loading many third-party scripts hurts performance. Audit scripts and remove non-essential ones.', 'wpshadow'),
-				'severity' => 'high',
-				'category' => 'monitoring',
-				'kb_link' => 'https://wpshadow.com/kb/third-party-script-audit/',
+				'id'            => 'third-party-script-count',
+				'title'         => sprintf( __( '%d Third-Party Scripts Loaded', 'wpshadow' ), $third_party_count ),
+				'description'   => __( 'Loading many third-party scripts hurts performance. Audit scripts and remove non-essential ones.', 'wpshadow' ),
+				'severity'      => 'high',
+				'category'      => 'monitoring',
+				'kb_link'       => 'https://wpshadow.com/kb/third-party-script-audit/',
 				'training_link' => 'https://wpshadow.com/training/script-optimization/',
-				'auto_fixable' => false,
-				'threat_level' => 70,
+				'auto_fixable'  => false,
+				'threat_level'  => 70,
 			);
 		}
 		return null;
@@ -70,14 +69,13 @@ class Diagnostic_Third_Party_Script_Count extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__third_party_script_count(): array
-	{
-		$third_party_count = get_transient('wpshadow_third_party_script_count');
-		$has_issue = ($third_party_count && $third_party_count > 20);
+	public static function test_live__third_party_script_count(): array {
+		$third_party_count = get_transient( 'wpshadow_third_party_script_count' );
+		$has_issue         = ( $third_party_count && $third_party_count > 20 );
 
-		$result = self::check();
-		$diagnostic_found_issue = is_array($result);
-		$test_passes = ($has_issue === $diagnostic_found_issue);
+		$result                 = self::check();
+		$diagnostic_found_issue = is_array( $result );
+		$test_passes            = ( $has_issue === $diagnostic_found_issue );
 
 		$message = $test_passes
 			? 'Third-party script count check matches site state'

@@ -22,7 +22,7 @@ namespace WPShadow\Diagnostics\Tests;
 
 use WPShadow\Diagnostics\Diagnostic_Base;
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -33,27 +33,26 @@ if (! defined('ABSPATH')) {
  *
  * @verified Not yet tested
  */
-class Test_Admin_Head_Bloat extends Diagnostic_Base
-{
+class Test_Admin_Head_Bloat extends Diagnostic_Base {
+
 
 	/**
 	 * Run the diagnostic test
 	 *
 	 * @return array|null Diagnostic result array, or null if no issue found
 	 */
-	public function check(): ?array
-	{
+	public function check(): ?array {
 		// Only run in admin context
-		if (! is_admin()) {
+		if ( ! is_admin() ) {
 			return null;
 		}
 
-		$issues = array();
+		$issues     = array();
 		$total_size = 0;
 
 		// Check for WordPress generator meta tag
-		if (has_action('admin_head', 'wp_generator')) {
-			$issues[] = array(
+		if ( has_action( 'admin_head', 'wp_generator' ) ) {
+			$issues[]    = array(
 				'type'        => 'generator',
 				'description' => 'WordPress version meta tag (security risk)',
 				'impact'      => 'Version disclosure helps attackers',
@@ -63,8 +62,8 @@ class Test_Admin_Head_Bloat extends Diagnostic_Base
 		}
 
 		// Check for REST API discovery links
-		if (has_action('admin_head', 'rest_output_link_wp_head')) {
-			$issues[] = array(
+		if ( has_action( 'admin_head', 'rest_output_link_wp_head' ) ) {
+			$issues[]    = array(
 				'type'        => 'rest-api',
 				'description' => 'REST API discovery link',
 				'impact'      => 'Not needed in admin context',
@@ -74,8 +73,8 @@ class Test_Admin_Head_Bloat extends Diagnostic_Base
 		}
 
 		// Check for oEmbed discovery links
-		if (has_action('admin_head', 'wp_oembed_add_discovery_links')) {
-			$issues[] = array(
+		if ( has_action( 'admin_head', 'wp_oembed_add_discovery_links' ) ) {
+			$issues[]    = array(
 				'type'        => 'oembed',
 				'description' => 'oEmbed discovery links',
 				'impact'      => 'Not needed in admin context',
@@ -85,8 +84,8 @@ class Test_Admin_Head_Bloat extends Diagnostic_Base
 		}
 
 		// Check for RSD link (Really Simple Discovery for XML-RPC)
-		if (has_action('admin_head', 'rsd_link')) {
-			$issues[] = array(
+		if ( has_action( 'admin_head', 'rsd_link' ) ) {
+			$issues[]    = array(
 				'type'        => 'rsd',
 				'description' => 'RSD/XML-RPC discovery link',
 				'impact'      => 'Legacy feature, rarely needed',
@@ -96,8 +95,8 @@ class Test_Admin_Head_Bloat extends Diagnostic_Base
 		}
 
 		// Check for Windows Live Writer manifest
-		if (has_action('admin_head', 'wlwmanifest_link')) {
-			$issues[] = array(
+		if ( has_action( 'admin_head', 'wlwmanifest_link' ) ) {
+			$issues[]    = array(
 				'type'        => 'wlw',
 				'description' => 'Windows Live Writer manifest',
 				'impact'      => 'Obsolete blogging tool from 2012',
@@ -107,8 +106,8 @@ class Test_Admin_Head_Bloat extends Diagnostic_Base
 		}
 
 		// Check for shortlink
-		if (has_action('admin_head', 'wp_shortlink_wp_head')) {
-			$issues[] = array(
+		if ( has_action( 'admin_head', 'wp_shortlink_wp_head' ) ) {
+			$issues[]    = array(
 				'type'        => 'shortlink',
 				'description' => 'Shortlink meta tag',
 				'impact'      => 'Not needed in admin',
@@ -118,8 +117,8 @@ class Test_Admin_Head_Bloat extends Diagnostic_Base
 		}
 
 		// Check for emoji detection script
-		if (has_action('admin_head', 'print_emoji_detection_script')) {
-			$issues[] = array(
+		if ( has_action( 'admin_head', 'print_emoji_detection_script' ) ) {
+			$issues[]    = array(
 				'type'        => 'emoji',
 				'description' => 'Emoji detection JavaScript',
 				'impact'      => 'Modern browsers support emoji natively',
@@ -128,30 +127,30 @@ class Test_Admin_Head_Bloat extends Diagnostic_Base
 			$total_size += 7000;
 		}
 
-		$issue_count = count($issues);
+		$issue_count = count( $issues );
 
 		// Threshold: More than 3 unnecessary items is bloat
 		$threshold = 3;
 
-		if ($issue_count <= $threshold) {
+		if ( $issue_count <= $threshold ) {
 			return null; // Pass
 		}
 
 		return array(
-			'id'           => 'admin-head-bloat',
-			'title'        => 'Unnecessary Tags in Admin <head>',
-			'description'  => sprintf(
+			'id'            => 'admin-head-bloat',
+			'title'         => 'Unnecessary Tags in Admin <head>',
+			'description'   => sprintf(
 				'WordPress admin <head> contains %d unnecessary meta tags and links totaling ~%s. These add bloat without benefit and may expose security information. Common culprits: generator meta, REST API discovery, oEmbed links, emoji script.',
 				$issue_count,
-				$this->format_bytes($total_size)
+				$this->format_bytes( $total_size )
 			)
 			'kb_link'      => 'https://wpshadow.com/kb/clean-wordpress-head',
 			'training_link' => 'https://wpshadow.com/training/optimize-html-output',
-			'auto_fixable' => true, // Can remove via remove_action
-			'threat_level' => 35,
-			'module'       => 'admin-performance',
-			'priority'     => 19,
-			'meta'         => array(
+			'auto_fixable'  => true, // Can remove via remove_action
+			'threat_level'  => 35,
+			'module'        => 'admin-performance',
+			'priority'      => 19,
+			'meta'          => array(
 				'issue_count' => $issue_count,
 				'total_size'  => $total_size,
 				'issues'      => $issues,
@@ -165,10 +164,9 @@ class Test_Admin_Head_Bloat extends Diagnostic_Base
 	 * @param int $bytes Byte count
 	 * @return string Formatted size
 	 */
-	private function format_bytes(int $bytes): string
-	{
-		if ($bytes >= 1024) {
-			return round($bytes / 1024, 1) . 'KB';
+	private function format_bytes( int $bytes ): string {
+		if ( $bytes >= 1024 ) {
+			return round( $bytes / 1024, 1 ) . 'KB';
 		}
 		return $bytes . ' bytes';
 	}
@@ -178,8 +176,7 @@ class Test_Admin_Head_Bloat extends Diagnostic_Base
 	 *
 	 * @return array Diagnostic information
 	 */
-	public static function get_info(): array
-	{
+	public static function get_info(): array {
 		return array(
 			'name'        => 'Admin Head Bloat',
 			'category'    => 'admin-performance',

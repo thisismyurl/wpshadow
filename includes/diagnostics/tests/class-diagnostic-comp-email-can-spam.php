@@ -111,10 +111,10 @@ class Diagnostic_CompEmailCanSpam extends Diagnostic_Base {
 	public static function check(): ?array {
 		// Check if email marketing practices comply with CAN-SPAM
 		// Requires unsubscribe link in emails, proper identification
-		
+
 		$admin_email = get_option( 'admin_email' );
-		$blogname = get_option( 'blogname' );
-		
+		$blogname    = get_option( 'blogname' );
+
 		if ( ! $admin_email || ! $blogname ) {
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
 				'comp-email-can-spam',
@@ -128,7 +128,7 @@ class Diagnostic_CompEmailCanSpam extends Diagnostic_Base {
 		}
 
 		// Check for privacy policy that discloses email practices
-		$privacy_policy_id = (int) get_option( 'wp_page_for_privacy_policy' );
+		$privacy_policy_id    = (int) get_option( 'wp_page_for_privacy_policy' );
 		$has_email_disclosure = false;
 
 		if ( $privacy_policy_id ) {
@@ -179,7 +179,7 @@ class Diagnostic_CompEmailCanSpam extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Comp Email Can Spam
 	 * Slug: comp-email-can-spam
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -200,15 +200,13 @@ class Diagnostic_CompEmailCanSpam extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

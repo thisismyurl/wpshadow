@@ -1,7 +1,7 @@
 <?php
 /**
  * Google Docs Terminology
- * 
+ *
  * @package WPShadow
  */
 
@@ -9,10 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-return [
+return array(
 	'platform'       => 'google-docs',
 	'label'          => __( 'Google Docs', 'wpshadow' ),
-	'terms'          => [
+	'terms'          => array(
 		'post'           => __( 'Document', 'wpshadow' ),
 		'page'           => __( 'Document', 'wpshadow' ),
 		'plugin'         => __( 'Add-on', 'wpshadow' ),
@@ -34,7 +34,7 @@ return [
 		'featured_image' => __( 'Header Image', 'wpshadow' ),
 		'author'         => __( 'Owner', 'wpshadow' ),
 		'comment'        => __( 'Comment', 'wpshadow' ),
-	],
+	),
 	'kb_article'     => 'https://wpshadow.com/kb/google-docs-to-wordpress/',
 	'training_video' => 'https://wpshadow.com/training/google-docs-to-wordpress/',
-];
+);

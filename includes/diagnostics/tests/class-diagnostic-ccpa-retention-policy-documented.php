@@ -109,9 +109,9 @@ class Diagnostic_Ccpa_Retention_Policy_Documented extends Diagnostic_Base {
 		}
 
 		$content = strtolower( $privacy_policy->post_content );
-		
+
 		// Check for retention-related language
-		$retention_keywords = array( 'retention', 'retain', 'kept', 'keep', 'deleted', 'delete' );
+		$retention_keywords     = array( 'retention', 'retain', 'kept', 'keep', 'deleted', 'delete' );
 		$has_retention_language = false;
 
 		foreach ( $retention_keywords as $keyword ) {
@@ -141,7 +141,7 @@ class Diagnostic_Ccpa_Retention_Policy_Documented extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Ccpa Retention Policy Documented
 	 * Slug: ccpa-retention-policy-documented
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -162,15 +162,13 @@ class Diagnostic_Ccpa_Retention_Policy_Documented extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

@@ -23,14 +23,14 @@ use WPShadow\Core\Diagnostic_Lean_Checks;
  * @verified 2026-01-24 - Batch 3 implementation
  * @guardian-integrated Pending
  */
-class Diagnostic_Users_Admin_Last_Login extends Diagnostic_Base
-{
-	protected static $slug = 'users-admin-last-login';
-	protected static $title = 'Admin Last Login Tracking';
-	protected static $description = 'When did admin accounts last log in?';
-	protected static $category = 'Users & Team';
+class Diagnostic_Users_Admin_Last_Login extends Diagnostic_Base {
+
+	protected static $slug         = 'users-admin-last-login';
+	protected static $title        = 'Admin Last Login Tracking';
+	protected static $description  = 'When did admin accounts last log in?';
+	protected static $category     = 'Users & Team';
 	protected static $threat_level = 'low';
-	protected static $family = 'general';
+	protected static $family       = 'general';
 	protected static $family_label = 'General';
 
 	/**
@@ -38,29 +38,28 @@ class Diagnostic_Users_Admin_Last_Login extends Diagnostic_Base
 	 *
 	 * @return ?array Null if pass, array of findings if fail
 	 */
-	public function check(): ?array
-	{
+	public function check(): ?array {
 		// Check if admin last login tracking is active
-		$login_tracking_plugins = [
+		$login_tracking_plugins = array(
 			'wps-limit-login',
 			'loginizer',
 			'wp-security-audit-log',
 			'simple-login-log',
-			'wordfence'
-		];
+			'wordfence',
+		);
 
 		$has_tracking = false;
-		foreach ($login_tracking_plugins as $plugin) {
+		foreach ( $login_tracking_plugins as $plugin ) {
 			if (
-				is_plugin_active($plugin . '/' . $plugin . '.php') ||
-				is_plugin_active($plugin)
+				is_plugin_active( $plugin . '/' . $plugin . '.php' ) ||
+				is_plugin_active( $plugin )
 			) {
 				$has_tracking = true;
 				break;
 			}
 		}
 
-		if (! $has_tracking) {
+		if ( ! $has_tracking ) {
 			return Diagnostic_Lean_Checks::build_finding(
 				'users-admin-last-login',
 				'No Login Tracking Active',

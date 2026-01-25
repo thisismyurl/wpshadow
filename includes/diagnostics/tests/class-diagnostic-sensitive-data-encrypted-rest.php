@@ -86,7 +86,7 @@ class Diagnostic_Sensitive_Data_Encrypted_Rest extends Diagnostic_Base {
 		if ( $rest_users_enabled && ! current_user_can( 'list_users' ) ) {
 			// Try to fetch users via REST API to see if exposed
 			$test_request = new \WP_REST_Request( 'GET', '/wp/v2/users' );
-			$response = rest_do_request( $test_request );
+			$response     = rest_do_request( $test_request );
 
 			if ( ! is_wp_error( $response ) && is_array( $response->get_data() ) ) {
 				return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
@@ -135,10 +135,8 @@ class Diagnostic_Sensitive_Data_Encrypted_Rest extends Diagnostic_Base {
 
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

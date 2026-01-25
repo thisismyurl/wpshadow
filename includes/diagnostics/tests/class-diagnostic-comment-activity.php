@@ -110,11 +110,11 @@ class Diagnostic_Comment_Activity extends Diagnostic_Base {
 
 	public static function check(): ?array {
 		// Get comment count
-		$comment_count = wp_count_comments();
+		$comment_count  = wp_count_comments();
 		$total_comments = $comment_count->total_comments ?? 0;
 
 		// Get posts
-		$post_count = wp_count_posts();
+		$post_count      = wp_count_posts();
 		$published_posts = $post_count->publish ?? 0;
 
 		// If no posts, nothing to check
@@ -172,10 +172,8 @@ class Diagnostic_Comment_Activity extends Diagnostic_Base {
 
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

@@ -10,16 +10,15 @@ use WPShadow\Diagnostics\Diagnostic_Base;
  * Diagnostic: Database Duplicate Options
  * Checks for duplicate options (same name in database)
  */
-class Test_Database_Duplicate_Options extends Diagnostic_Base
-{
+class Test_Database_Duplicate_Options extends Diagnostic_Base {
+
 
 	/**
 	 * Run the diagnostic check
 	 *
 	 * @return array|null Array with issue details or null if healthy
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		global $wpdb;
 
 		$duplicate_options = $wpdb->get_var(
@@ -29,12 +28,12 @@ class Test_Database_Duplicate_Options extends Diagnostic_Base
 			) AS duplicates"
 		);
 
-		if ($duplicate_options > 0) {
+		if ( $duplicate_options > 0 ) {
 			return array(
-				'id'            => 'database-duplicate-options',
-				'title'         => 'Duplicate Options Found',
-				'threat_level'  => 50,
-				'description'   => sprintf(
+				'id'           => 'database-duplicate-options',
+				'title'        => 'Duplicate Options Found',
+				'threat_level' => 50,
+				'description'  => sprintf(
 					'Found %d options with duplicate names. This indicates data corruption.',
 					$duplicate_options
 				),
@@ -49,8 +48,7 @@ class Test_Database_Duplicate_Options extends Diagnostic_Base
 	 *
 	 * @return array Test result with passed status and message
 	 */
-	public static function test_live_duplicate_options(): array
-	{
+	public static function test_live_duplicate_options(): array {
 		$result = self::check();
 		return array(
 			'passed'  => $result === null,

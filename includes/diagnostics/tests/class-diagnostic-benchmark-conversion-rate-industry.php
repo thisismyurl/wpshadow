@@ -9,14 +9,14 @@ use WPShadow\Core\Diagnostic_Base;
  * This is a placeholder implementation.
  */
 class Diagnostic_BenchmarkConversionRateIndustry extends Diagnostic_Base {
-	protected static $slug = 'benchmark-conversion-rate-industry';
+	protected static $slug  = 'benchmark-conversion-rate-industry';
 	protected static $title = 'Benchmark Conversion Rate Industry';
-	
+
 	public static function check(): ?array {
 		// TODO: Implement diagnostic logic
 		return null;
 	}
-	
+
 	public static function run(): array {
 		return array();
 	}

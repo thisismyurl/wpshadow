@@ -82,10 +82,10 @@ class Diagnostic_Ccpa_Data_Inventory_Complete extends Diagnostic_Base {
 	public static function check(): ?array {
 		// Check if data inventory is documented
 		// This would ideally check for a data inventory page/documentation
-		
+
 		// Check if there's documentation indicating data collection
 		$privacy_policy_id = (int) get_option( 'wp_page_for_privacy_policy' );
-		
+
 		// Check for data inventory indicator
 		$has_inventory = false;
 
@@ -116,7 +116,7 @@ class Diagnostic_Ccpa_Data_Inventory_Complete extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Ccpa Data Inventory Complete
 	 * Slug: ccpa-data-inventory-complete
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -137,15 +137,13 @@ class Diagnostic_Ccpa_Data_Inventory_Complete extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

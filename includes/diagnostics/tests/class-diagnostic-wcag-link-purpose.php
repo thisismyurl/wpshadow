@@ -79,44 +79,46 @@ class Diagnostic_Wcag_Link_Purpose extends Diagnostic_Base {
 	}
 
 	protected static function get_guardian_html(): string {
-		if (isset($_POST['html']) && is_string($_POST['html'])) {
-			return sanitize_text_field(wp_unslash($_POST['html']));
+		if ( isset( $_POST['html'] ) && is_string( $_POST['html'] ) ) {
+			return sanitize_text_field( wp_unslash( $_POST['html'] ) );
 		}
 		return '';
 	}
 
 	public static function check(): ?array {
 		$html = self::get_guardian_html();
-		if (empty($html)) return null;
-
-		$issues = [];
-		try {
-			$dom = new \DOMDocument();
-			@$dom->loadHTML($html);
-			$xpath = new \DOMXPath($dom);
-
-			$links = $xpath->query('//a');
-			foreach ($links as $link) {
-				$text = trim($link->textContent);
-				$aria_label = $link->hasAttribute('aria-label') ? trim($link->getAttribute('aria-label')) : '';
-
-				if (empty($text) && empty($aria_label)) {
-					$issues[] = 'Link missing descriptive text or aria-label';
-				}
-			}
-		} catch (\Exception $e) {
+		if ( empty( $html ) ) {
 			return null;
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'wcag-link-purpose',
-			'title' => 'Links lack descriptive text',
-			'description' => 'Links must have text or aria-label describing their purpose',
-			'severity' => 'medium',
-			'category' => 'accessibility',
+		$issues = array();
+		try {
+			$dom = new \DOMDocument();
+			@$dom->loadHTML( $html );
+			$xpath = new \DOMXPath( $dom );
+
+			$links = $xpath->query( '//a' );
+			foreach ( $links as $link ) {
+				$text       = trim( $link->textContent );
+				$aria_label = $link->hasAttribute( 'aria-label' ) ? trim( $link->getAttribute( 'aria-label' ) ) : '';
+
+				if ( empty( $text ) && empty( $aria_label ) ) {
+					$issues[] = 'Link missing descriptive text or aria-label';
+				}
+			}
+		} catch ( \Exception $e ) {
+			return null;
+		}
+
+		return empty( $issues ) ? null : array(
+			'id'           => 'wcag-link-purpose',
+			'title'        => 'Links lack descriptive text',
+			'description'  => 'Links must have text or aria-label describing their purpose',
+			'severity'     => 'medium',
+			'category'     => 'accessibility',
 			'threat_level' => 46,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	/**
@@ -138,15 +140,16 @@ class Diagnostic_Wcag_Link_Purpose extends Diagnostic_Base {
 	 */
 	public static function test_live_wcag_link_purpose(): array {
 		$good = '<html><body><a href="#">Click here</a></body></html>';
-		$bad = '<html><body><a href="#"></a></body></html>';
+		$bad  = '<html><body><a href="#"></a></body></html>';
 
 		$_POST['html'] = $good;
-		$r1 = self::check();
+		$r1            = self::check();
 		$_POST['html'] = $bad;
-		$r2 = self::check();
+		$r2            = self::check();
 
-		return ['passed' => is_null($r1) && is_array($r2), 'message' => 'Link purpose check working'];
+		return array(
+			'passed'  => is_null( $r1 ) && is_array( $r2 ),
+			'message' => 'Link purpose check working',
+		);
 	}
-
 }
-

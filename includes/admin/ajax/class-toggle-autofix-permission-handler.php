@@ -14,49 +14,52 @@ use WPShadow\Core\AJAX_Handler_Base;
 use WPShadow\Core\Options_Manager;
 use WPShadow\Core\Activity_Logger;
 
-if (! defined('ABSPATH')) {
-    exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
-class Toggle_Autofix_Permission_Handler extends AJAX_Handler_Base
-{
-    public static function register(): void
-    {
-        add_action('wp_ajax_wpshadow_toggle_autofix_permission', [__CLASS__, 'handle']);
-    }
+class Toggle_Autofix_Permission_Handler extends AJAX_Handler_Base {
 
-    public static function handle(): void
-    {
-        self::verify_request('wpshadow_autofix_permission', 'manage_options', 'nonce');
+	public static function register(): void {
+		add_action( 'wp_ajax_wpshadow_toggle_autofix_permission', array( __CLASS__, 'handle' ) );
+	}
 
-        $finding_id = self::get_post_param('finding_id', 'key', '', true);
-        $enabled    = self::get_post_param('enabled', 'bool', false);
+	public static function handle(): void {
+		self::verify_request( 'wpshadow_autofix_permission', 'manage_options', 'nonce' );
 
-        $permissions = Options_Manager::get_array('wpshadow_autofix_permissions', []);
+		$finding_id = self::get_post_param( 'finding_id', 'key', '', true );
+		$enabled    = self::get_post_param( 'enabled', 'bool', false );
 
-        if ($enabled) {
-            $permissions[$finding_id] = true;
-        } else {
-            unset($permissions[$finding_id]);
-        }
+		$permissions = Options_Manager::get_array( 'wpshadow_autofix_permissions', array() );
 
-        update_option('wpshadow_autofix_permissions', $permissions);
+		if ( $enabled ) {
+			$permissions[ $finding_id ] = true;
+		} else {
+			unset( $permissions[ $finding_id ] );
+		}
 
-        // Log activity (#565: Activity Logging Expansion)
-        Activity_Logger::log(
-            'autofix_permission_' . ($enabled ? 'enabled' : 'disabled'),
-            sprintf(
-                __('Auto-fix %s for finding type: %s', 'wpshadow'),
-                $enabled ? __('enabled', 'wpshadow') : __('disabled', 'wpshadow'),
-                $finding_id
-            ),
-            'workflows',
-            array('finding_id' => $finding_id, 'enabled' => (bool) $enabled)
-        );
+		update_option( 'wpshadow_autofix_permissions', $permissions );
 
-        self::send_success(array(
-            'message' => $enabled ? __('Auto-fix enabled for this type.', 'wpshadow') : __('Auto-fix disabled for this type.', 'wpshadow'),
-            'enabled' => (bool) $enabled,
-        ));
-    }
+		// Log activity (#565: Activity Logging Expansion)
+		Activity_Logger::log(
+			'autofix_permission_' . ( $enabled ? 'enabled' : 'disabled' ),
+			sprintf(
+				__( 'Auto-fix %1$s for finding type: %2$s', 'wpshadow' ),
+				$enabled ? __( 'enabled', 'wpshadow' ) : __( 'disabled', 'wpshadow' ),
+				$finding_id
+			),
+			'workflows',
+			array(
+				'finding_id' => $finding_id,
+				'enabled'    => (bool) $enabled,
+			)
+		);
+
+		self::send_success(
+			array(
+				'message' => $enabled ? __( 'Auto-fix enabled for this type.', 'wpshadow' ) : __( 'Auto-fix disabled for this type.', 'wpshadow' ),
+				'enabled' => (bool) $enabled,
+			)
+		);
+	}
 }

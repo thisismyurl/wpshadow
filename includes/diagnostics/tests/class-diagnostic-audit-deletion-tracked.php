@@ -81,7 +81,7 @@ class Diagnostic_Audit_Deletion_Tracked extends Diagnostic_Base {
 	public static function check(): ?array {
 		// Check if deletions are being tracked
 		// Look for audit logging plugins with deletion tracking
-		
+
 		$audit_plugins = array(
 			'aryo-activity-log/aryo-activity-log.php',
 			'wsal/wp-security-audit-log.php',
@@ -99,7 +99,7 @@ class Diagnostic_Audit_Deletion_Tracked extends Diagnostic_Base {
 
 		// Check if trash is configured (basic deletion tracking)
 		$supports_trash = post_type_supports( 'post', 'author' );
-		
+
 		if ( ! $has_deletion_tracking ) {
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
 				'audit-deletion-tracked',
@@ -120,7 +120,7 @@ class Diagnostic_Audit_Deletion_Tracked extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Audit Deletion Tracked
 	 * Slug: audit-deletion-tracked
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -141,15 +141,13 @@ class Diagnostic_Audit_Deletion_Tracked extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

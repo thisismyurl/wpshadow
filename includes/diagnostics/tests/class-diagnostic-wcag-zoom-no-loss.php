@@ -79,44 +79,46 @@ class Diagnostic_Wcag_Zoom_No_Loss extends Diagnostic_Base {
 	}
 
 	protected static function get_guardian_html(): string {
-		if (isset($_POST['html']) && is_string($_POST['html'])) {
-			return sanitize_text_field(wp_unslash($_POST['html']));
+		if ( isset( $_POST['html'] ) && is_string( $_POST['html'] ) ) {
+			return sanitize_text_field( wp_unslash( $_POST['html'] ) );
 		}
 		return '';
 	}
 
 	public static function check(): ?array {
 		$html = self::get_guardian_html();
-		if (empty($html)) return null;
+		if ( empty( $html ) ) {
+			return null;
+		}
 
-		$issues = [];
+		$issues = array();
 		try {
 			$dom = new \DOMDocument();
-			@$dom->loadHTML($html);
-			$xpath = new \DOMXPath($dom);
+			@$dom->loadHTML( $html );
+			$xpath = new \DOMXPath( $dom );
 
-			$elements_with_style = $xpath->query('//*[@style]');
-			foreach ($elements_with_style as $elem) {
-				$style = $elem->getAttribute('style');
-				if (strpos($style, 'overflow:hidden') !== false &&
-					(strpos($style, 'width') !== false || strpos($style, 'max-width') !== false)) {
+			$elements_with_style = $xpath->query( '//*[@style]' );
+			foreach ( $elements_with_style as $elem ) {
+				$style = $elem->getAttribute( 'style' );
+				if ( strpos( $style, 'overflow:hidden' ) !== false &&
+					( strpos( $style, 'width' ) !== false || strpos( $style, 'max-width' ) !== false ) ) {
 					$issues[] = 'Element with fixed width and overflow:hidden will lose content at zoom';
 					break;
 				}
 			}
-		} catch (\Exception $e) {
+		} catch ( \Exception $e ) {
 			return null;
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'wcag-zoom-no-loss',
-			'title' => 'Content lost at 200% zoom',
-			'description' => 'Content should not be lost when zoomed to 200%',
-			'severity' => 'high',
-			'category' => 'accessibility',
+		return empty( $issues ) ? null : array(
+			'id'           => 'wcag-zoom-no-loss',
+			'title'        => 'Content lost at 200% zoom',
+			'description'  => 'Content should not be lost when zoomed to 200%',
+			'severity'     => 'high',
+			'category'     => 'accessibility',
 			'threat_level' => 62,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	/**
@@ -138,15 +140,16 @@ class Diagnostic_Wcag_Zoom_No_Loss extends Diagnostic_Base {
 	 */
 	public static function test_live_wcag_zoom_no_loss(): array {
 		$good = '<html><body><div style="width: 100%">Content</div></body></html>';
-		$bad = '<html><body><div style="width: 300px; overflow: hidden">Content</div></body></html>';
+		$bad  = '<html><body><div style="width: 300px; overflow: hidden">Content</div></body></html>';
 
 		$_POST['html'] = $good;
-		$r1 = self::check();
+		$r1            = self::check();
 		$_POST['html'] = $bad;
-		$r2 = self::check();
+		$r2            = self::check();
 
-		return ['passed' => is_null($r1) && is_array($r2), 'message' => 'Zoom loss check working'];
+		return array(
+			'passed'  => is_null( $r1 ) && is_array( $r2 ),
+			'message' => 'Zoom loss check working',
+		);
 	}
-
 }
-

@@ -15,11 +15,11 @@ namespace WPShadow\Diagnostics\Tests;
 
 use WPShadow\Core\Diagnostic_Base;
 
-class Test_SEO_Broken_Links extends Diagnostic_Base
-{
+class Test_SEO_Broken_Links extends Diagnostic_Base {
 
-	protected static $slug = 'test-seo-broken-links';
-	protected static $title = 'Broken Links Test';
+
+	protected static $slug        = 'test-seo-broken-links';
+	protected static $title       = 'Broken Links Test';
 	protected static $description = 'Tests for potentially broken internal links';
 
 	/**
@@ -37,24 +37,23 @@ class Test_SEO_Broken_Links extends Diagnostic_Base
 	 * @param string|null $html Pre-fetched HTML to analyze
 	 * @return array|null Finding data or null if no issue
 	 */
-	public static function check(?string $url = null, ?string $html = null): ?array
-	{
-		if ($html !== null) {
-			return self::analyze_html($html, $url ?? 'provided-html');
+	public static function check( ?string $url = null, ?string $html = null ): ?array {
+		if ( $html !== null ) {
+			return self::analyze_html( $html, $url ?? 'provided-html' );
 		}
 
-		$site_url = $url ?? home_url('/');
+		$site_url = $url ?? home_url( '/' );
 
-		if ($url !== null && !self::is_internal_url($url)) {
-			return self::error_result('Invalid URL', 'URL must be from this WordPress site');
+		if ( $url !== null && ! self::is_internal_url( $url ) ) {
+			return self::error_result( 'Invalid URL', 'URL must be from this WordPress site' );
 		}
 
-		$html = self::fetch_html($site_url);
-		if ($html === false) {
-			return self::error_result('Fetch Failed', 'Could not retrieve page HTML');
+		$html = self::fetch_html( $site_url );
+		if ( $html === false ) {
+			return self::error_result( 'Fetch Failed', 'Could not retrieve page HTML' );
 		}
 
-		return self::analyze_html($html, $site_url);
+		return self::analyze_html( $html, $site_url );
 	}
 
 	/**
@@ -64,116 +63,111 @@ class Test_SEO_Broken_Links extends Diagnostic_Base
 	 * @param string|null $html Pre-fetched HTML
 	 * @return array Test results
 	 */
-	public static function run_broken_link_tests(?string $url = null, ?string $html = null): array
-	{
-		$html = $html ?? self::fetch_html($url ?? home_url('/'));
+	public static function run_broken_link_tests( ?string $url = null, ?string $html = null ): array {
+		$html = $html ?? self::fetch_html( $url ?? home_url( '/' ) );
 
-		if ($html === false) {
-			return [
+		if ( $html === false ) {
+			return array(
 				'success' => false,
-				'error' => 'Could not fetch HTML',
-				'url' => $url ?? home_url('/'),
-			];
+				'error'   => 'Could not fetch HTML',
+				'url'     => $url ?? home_url( '/' ),
+			);
 		}
 
-		$links = self::extract_internal_links($html);
-		$suspicious = self::find_suspicious_links($links);
+		$links      = self::extract_internal_links( $html );
+		$suspicious = self::find_suspicious_links( $links );
 
-		return [
-			'success' => true,
-			'url' => $url ?? home_url('/'),
-			'total_internal_links' => count($links),
-			'suspicious_links' => $suspicious,
-			'tests' => [
-				'no_empty_hrefs' => self::test_no_empty_hrefs($html),
-				'no_javascript_void' => self::test_no_javascript_void($html),
-				'no_hash_only' => self::test_no_hash_only($html),
-				'valid_anchors' => self::test_valid_anchors($html),
-			],
-			'summary' => [
-				'passed' => empty($suspicious),
-				'suspicious_count' => count($suspicious),
-			],
-		];
+		return array(
+			'success'              => true,
+			'url'                  => $url ?? home_url( '/' ),
+			'total_internal_links' => count( $links ),
+			'suspicious_links'     => $suspicious,
+			'tests'                => array(
+				'no_empty_hrefs'     => self::test_no_empty_hrefs( $html ),
+				'no_javascript_void' => self::test_no_javascript_void( $html ),
+				'no_hash_only'       => self::test_no_hash_only( $html ),
+				'valid_anchors'      => self::test_valid_anchors( $html ),
+			),
+			'summary'              => array(
+				'passed'           => empty( $suspicious ),
+				'suspicious_count' => count( $suspicious ),
+			),
+		);
 	}
 
 	/**
 	 * Test for empty href attributes
 	 */
-	public static function test_no_empty_hrefs(?string $url = null, ?string $html = null): array
-	{
-		$html = $html ?? self::fetch_html($url ?? home_url('/'));
-		$empty = self::find_empty_hrefs($html);
+	public static function test_no_empty_hrefs( ?string $url = null, ?string $html = null ): array {
+		$html  = $html ?? self::fetch_html( $url ?? home_url( '/' ) );
+		$empty = self::find_empty_hrefs( $html );
 
-		return [
-			'test' => 'no_empty_hrefs',
-			'passed' => empty($empty),
-			'count' => count($empty),
-			'message' => empty($empty)
+		return array(
+			'test'    => 'no_empty_hrefs',
+			'passed'  => empty( $empty ),
+			'count'   => count( $empty ),
+			'message' => empty( $empty )
 				? 'No empty href attributes'
-				: sprintf('%d links with empty href', count($empty)),
-			'impact' => 'Empty hrefs create non-functional links',
-		];
+				: sprintf( '%d links with empty href', count( $empty ) ),
+			'impact'  => 'Empty hrefs create non-functional links',
+		);
 	}
 
 	/**
 	 * Test for javascript:void links
 	 */
-	public static function test_no_javascript_void(?string $url = null, ?string $html = null): array
-	{
-		$html = $html ?? self::fetch_html($url ?? home_url('/'));
+	public static function test_no_javascript_void( ?string $url = null, ?string $html = null ): array {
+		$html = $html ?? self::fetch_html( $url ?? home_url( '/' ) );
 
-		preg_match_all('/href\s*=\s*["\']javascript:void\(/i', $html, $matches);
-		$count = count($matches[0]);
+		preg_match_all( '/href\s*=\s*["\']javascript:void\(/i', $html, $matches );
+		$count = count( $matches[0] );
 
-		return [
-			'test' => 'no_javascript_void',
-			'passed' => $count === 0,
-			'count' => $count,
+		return array(
+			'test'    => 'no_javascript_void',
+			'passed'  => $count === 0,
+			'count'   => $count,
 			'message' => $count === 0
 				? 'No javascript:void links'
-				: sprintf('%d javascript:void links (use buttons instead)', $count),
-			'impact' => 'javascript:void links are inaccessible and bad for SEO',
-		];
+				: sprintf( '%d javascript:void links (use buttons instead)', $count ),
+			'impact'  => 'javascript:void links are inaccessible and bad for SEO',
+		);
 	}
 
 	/**
 	 * Test for hash-only links (without id target)
 	 */
-	public static function test_no_hash_only(?string $url = null, ?string $html = null): array
-	{
-		$html = $html ?? self::fetch_html($url ?? home_url('/'));
-		$orphan_hashes = self::find_orphan_hash_links($html);
+	public static function test_no_hash_only( ?string $url = null, ?string $html = null ): array {
+		$html          = $html ?? self::fetch_html( $url ?? home_url( '/' ) );
+		$orphan_hashes = self::find_orphan_hash_links( $html );
 
-		return [
-			'test' => 'no_hash_only',
-			'passed' => empty($orphan_hashes),
-			'count' => count($orphan_hashes),
-			'orphan_links' => array_slice($orphan_hashes, 0, 5),
-			'message' => empty($orphan_hashes)
+		return array(
+			'test'         => 'no_hash_only',
+			'passed'       => empty( $orphan_hashes ),
+			'count'        => count( $orphan_hashes ),
+			'orphan_links' => array_slice( $orphan_hashes, 0, 5 ),
+			'message'      => empty( $orphan_hashes )
 				? 'All anchor links have targets'
-				: sprintf('%d anchor links without matching IDs', count($orphan_hashes)),
-			'impact' => 'Anchor links without targets do nothing when clicked',
-		];
+				: sprintf( '%d anchor links without matching IDs', count( $orphan_hashes ) ),
+			'impact'       => 'Anchor links without targets do nothing when clicked',
+		);
 	}
 
 	/**
 	 * Test for valid anchor targets
 	 */
-	public static function test_valid_anchors(?string $url = null, ?string $html = null): array
-	{
-		$html = $html ?? self::fetch_html($url ?? home_url('/'));
-		$orphan_hashes = self::find_orphan_hash_links($html);
+	public static function test_valid_anchors( ?string $url = null, ?string $html = null ): array {
+		$html          = $html ?? self::fetch_html( $url ?? home_url( '/' ) );
+		$orphan_hashes = self::find_orphan_hash_links( $html );
 
-		return [
-			'test' => 'valid_anchors',
-			'passed' => empty($orphan_hashes),
-			'orphan_count' => count($orphan_hashes),
-			'message' => empty($orphan_hashes)
+		return array(
+			'test'         => 'valid_anchors',
+			'passed'       => empty( $orphan_hashes ),
+			'orphan_count' => count( $orphan_hashes ),
+			'message'      => empty( $orphan_hashes )
 				? 'All anchor links point to valid elements'
-				: sprintf('%d anchor links missing target elements', count($orphan_hashes)),
-			'impact' => 'Invalid anchors create broken navigation',
-		];
+				: sprintf( '%d anchor links missing target elements', count( $orphan_hashes ) ),
+			'impact'       => 'Invalid anchors create broken navigation',
+		);
 	}
 
 	/**
@@ -183,65 +177,64 @@ class Test_SEO_Broken_Links extends Diagnostic_Base
 	 * @param string $checked_url URL that was checked
 	 * @return array|null Finding or null
 	 */
-	protected static function analyze_html(string $html, string $checked_url): ?array
-	{
-		$suspicious = self::find_suspicious_links(self::extract_internal_links($html));
-		$empty_hrefs = self::find_empty_hrefs($html);
-		$orphan_hashes = self::find_orphan_hash_links($html);
+	protected static function analyze_html( string $html, string $checked_url ): ?array {
+		$suspicious    = self::find_suspicious_links( self::extract_internal_links( $html ) );
+		$empty_hrefs   = self::find_empty_hrefs( $html );
+		$orphan_hashes = self::find_orphan_hash_links( $html );
 
-		$total_issues = count($suspicious) + count($empty_hrefs) + count($orphan_hashes);
+		$total_issues = count( $suspicious ) + count( $empty_hrefs ) + count( $orphan_hashes );
 
 		// No issues = PASS
-		if ($total_issues === 0) {
+		if ( $total_issues === 0 ) {
 			return null; // PASS
 		}
 
 		// Collect all issues
-		$issues = [];
+		$issues = array();
 
-		if (!empty($empty_hrefs)) {
-			$issues[] = sprintf('%d empty href attributes', count($empty_hrefs));
+		if ( ! empty( $empty_hrefs ) ) {
+			$issues[] = sprintf( '%d empty href attributes', count( $empty_hrefs ) );
 		}
 
-		if (!empty($orphan_hashes)) {
-			$issues[] = sprintf('%d anchor links without targets', count($orphan_hashes));
+		if ( ! empty( $orphan_hashes ) ) {
+			$issues[] = sprintf( '%d anchor links without targets', count( $orphan_hashes ) );
 		}
 
-		if (!empty($suspicious)) {
-			$issues[] = sprintf('%d suspicious link patterns', count($suspicious));
+		if ( ! empty( $suspicious ) ) {
+			$issues[] = sprintf( '%d suspicious link patterns', count( $suspicious ) );
 		}
 
 		$threat_level = 40;
-		if ($total_issues > 5) {
+		if ( $total_issues > 5 ) {
 			$threat_level = 60;
 		}
 
-		return [
-			'id' => 'seo-broken-links',
-			'title' => 'Potentially Broken Links Found',
-			'description' => sprintf(
+		return array(
+			'id'            => 'seo-broken-links',
+			'title'         => 'Potentially Broken Links Found',
+			'description'   => sprintf(
 				'Found %d potential link issues: %s. These may create a poor user experience and hurt SEO.',
 				$total_issues,
-				implode('; ', array_slice($issues, 0, 3))
+				implode( '; ', array_slice( $issues, 0, 3 ) )
 			)
 			'kb_link' => 'https://wpshadow.com/kb/broken-links/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=diagnostic',
 			'training_link' => 'https://wpshadow.com/training/link-maintenance/',
-			'auto_fixable' => false,
-			'threat_level' => $threat_level,
-			'module' => 'SEO',
-			'priority' => 2,
-			'meta' => [
-				'total_issues' => $total_issues,
-				'empty_hrefs' => count($empty_hrefs),
-				'orphan_hashes' => count($orphan_hashes),
-				'suspicious_patterns' => count($suspicious),
-				'sample_issues' => array_merge(
-					array_slice($empty_hrefs, 0, 3),
-					array_slice($orphan_hashes, 0, 3)
+			'auto_fixable'  => false,
+			'threat_level'  => $threat_level,
+			'module'        => 'SEO',
+			'priority'      => 2,
+			'meta'          => array(
+				'total_issues'        => $total_issues,
+				'empty_hrefs'         => count( $empty_hrefs ),
+				'orphan_hashes'       => count( $orphan_hashes ),
+				'suspicious_patterns' => count( $suspicious ),
+				'sample_issues'       => array_merge(
+					array_slice( $empty_hrefs, 0, 3 ),
+					array_slice( $orphan_hashes, 0, 3 )
 				),
-				'checked_url' => $checked_url,
-			],
-		];
+				'checked_url'         => $checked_url,
+			),
+		);
 	}
 
 	/**
@@ -250,27 +243,26 @@ class Test_SEO_Broken_Links extends Diagnostic_Base
 	 * @param string $html HTML content
 	 * @return array Internal links
 	 */
-	protected static function extract_internal_links(string $html): array
-	{
-		if (empty($html)) {
-			return [];
+	protected static function extract_internal_links( string $html ): array {
+		if ( empty( $html ) ) {
+			return array();
 		}
 
-		preg_match_all('/<a\s+([^>]*href=["\']([^"\']+)["\'][^>]*)>/i', $html, $matches, PREG_SET_ORDER);
+		preg_match_all( '/<a\s+([^>]*href=["\']([^"\']+)["\'][^>]*)>/i', $html, $matches, PREG_SET_ORDER );
 
 		$site_url = home_url();
-		$links = [];
+		$links    = array();
 
-		foreach ($matches as $match) {
+		foreach ( $matches as $match ) {
 			$href = $match[2];
 
 			// Filter for internal links only
-			if (strpos($href, $site_url) === 0 || strpos($href, '/') === 0) {
+			if ( strpos( $href, $site_url ) === 0 || strpos( $href, '/' ) === 0 ) {
 				$links[] = $href;
 			}
 		}
 
-		return array_slice($links, 0, self::MAX_LINKS_TO_CHECK); // Limit for performance
+		return array_slice( $links, 0, self::MAX_LINKS_TO_CHECK ); // Limit for performance
 	}
 
 	/**
@@ -279,13 +271,12 @@ class Test_SEO_Broken_Links extends Diagnostic_Base
 	 * @param array $links Links to check
 	 * @return array Suspicious links
 	 */
-	protected static function find_suspicious_links(array $links): array
-	{
-		$suspicious = [];
+	protected static function find_suspicious_links( array $links ): array {
+		$suspicious = array();
 
-		foreach ($links as $link) {
+		foreach ( $links as $link ) {
 			// Very suspicious patterns
-			if (empty($link) || $link === '#' || $link === 'javascript:void(0)') {
+			if ( empty( $link ) || $link === '#' || $link === 'javascript:void(0)' ) {
 				$suspicious[] = $link;
 			}
 		}
@@ -299,14 +290,13 @@ class Test_SEO_Broken_Links extends Diagnostic_Base
 	 * @param string $html HTML content
 	 * @return array Empty hrefs
 	 */
-	protected static function find_empty_hrefs(string $html): array
-	{
-		if (empty($html)) {
-			return [];
+	protected static function find_empty_hrefs( string $html ): array {
+		if ( empty( $html ) ) {
+			return array();
 		}
 
-		preg_match_all('/<a\s+[^>]*href=["\']["\'][^>]*>/i', $html, $matches);
-		return $matches[0] ?? [];
+		preg_match_all( '/<a\s+[^>]*href=["\']["\'][^>]*>/i', $html, $matches );
+		return $matches[0] ?? array();
 	}
 
 	/**
@@ -315,24 +305,23 @@ class Test_SEO_Broken_Links extends Diagnostic_Base
 	 * @param string $html HTML content
 	 * @return array Orphan hash links
 	 */
-	protected static function find_orphan_hash_links(string $html): array
-	{
-		if (empty($html)) {
-			return [];
+	protected static function find_orphan_hash_links( string $html ): array {
+		if ( empty( $html ) ) {
+			return array();
 		}
 
 		// Extract all hash links
-		preg_match_all('/href\s*=\s*["\']#([^"\']+)["\']/i', $html, $href_matches);
-		$hash_links = array_unique($href_matches[1] ?? []);
+		preg_match_all( '/href\s*=\s*["\']#([^"\']+)["\']/i', $html, $href_matches );
+		$hash_links = array_unique( $href_matches[1] ?? array() );
 
 		// Extract all IDs
-		preg_match_all('/\bid\s*=\s*["\']([^"\']+)["\']/i', $html, $id_matches);
-		$ids = array_unique($id_matches[1] ?? []);
+		preg_match_all( '/\bid\s*=\s*["\']([^"\']+)["\']/i', $html, $id_matches );
+		$ids = array_unique( $id_matches[1] ?? array() );
 
 		// Find orphans (hash links without matching id)
-		$orphans = [];
-		foreach ($hash_links as $hash) {
-			if (!in_array($hash, $ids, true)) {
+		$orphans = array();
+		foreach ( $hash_links as $hash ) {
+			if ( ! in_array( $hash, $ids, true ) ) {
 				$orphans[] = '#' . $hash;
 			}
 		}
@@ -346,19 +335,21 @@ class Test_SEO_Broken_Links extends Diagnostic_Base
 	 * @param string $url URL to fetch
 	 * @return string|false HTML or false on error
 	 */
-	protected static function fetch_html(string $url)
-	{
-		$response = wp_remote_get($url, [
-			'timeout' => 10,
-			'user-agent' => 'WPShadow-Diagnostic/1.0 (SEO Checker)',
-			'sslverify' => false,
-		]);
+	protected static function fetch_html( string $url ) {
+		$response = wp_remote_get(
+			$url,
+			array(
+				'timeout'    => 10,
+				'user-agent' => 'WPShadow-Diagnostic/1.0 (SEO Checker)',
+				'sslverify'  => false,
+			)
+		);
 
-		if (is_wp_error($response)) {
+		if ( is_wp_error( $response ) ) {
 			return false;
 		}
 
-		return wp_remote_retrieve_body($response);
+		return wp_remote_retrieve_body( $response );
 	}
 
 	/**
@@ -367,10 +358,9 @@ class Test_SEO_Broken_Links extends Diagnostic_Base
 	 * @param string $url URL to check
 	 * @return bool
 	 */
-	protected static function is_internal_url(string $url): bool
-	{
-		$site_host = wp_parse_url(home_url(), PHP_URL_HOST);
-		$test_host = wp_parse_url($url, PHP_URL_HOST);
+	protected static function is_internal_url( string $url ): bool {
+		$site_host = wp_parse_url( home_url(), PHP_URL_HOST );
+		$test_host = wp_parse_url( $url, PHP_URL_HOST );
 		return $site_host === $test_host;
 	}
 
@@ -381,19 +371,18 @@ class Test_SEO_Broken_Links extends Diagnostic_Base
 	 * @param string $description Error description
 	 * @return array Error result
 	 */
-	protected static function error_result(string $title, string $description): array
-	{
-		return [
-			'id' => 'seo-broken-links',
-			'title' => $title,
-			'description' => $description
+	protected static function error_result( string $title, string $description ): array {
+		return array(
+			'id'            => 'seo-broken-links',
+			'title'         => $title,
+			'description'   => $description
 			'kb_link' => 'https://wpshadow.com/kb/broken-links/',
 			'training_link' => 'https://wpshadow.com/training/link-maintenance/',
-			'auto_fixable' => false,
-			'threat_level' => 30,
-			'module' => 'SEO',
-			'priority' => 3,
-		];
+			'auto_fixable'  => false,
+			'threat_level'  => 30,
+			'module'        => 'SEO',
+			'priority'      => 3,
+		);
 	}
 
 	/**
@@ -401,9 +390,8 @@ class Test_SEO_Broken_Links extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_name(): string
-	{
-		return __('Broken Links Check', 'wpshadow');
+	public static function get_name(): string {
+		return __( 'Broken Links Check', 'wpshadow' );
 	}
 
 	/**
@@ -411,8 +399,7 @@ class Test_SEO_Broken_Links extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_description(): string
-	{
-		return __('Checks HTML for potentially broken internal links (empty hrefs, orphan anchors).', 'wpshadow');
+	public static function get_description(): string {
+		return __( 'Checks HTML for potentially broken internal links (empty hrefs, orphan anchors).', 'wpshadow' );
 	}
 }

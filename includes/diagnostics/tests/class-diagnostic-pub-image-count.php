@@ -24,12 +24,12 @@ use WPShadow\Core\Diagnostic_Lean_Checks;
  * @guardian-integrated Pending
  */
 class Diagnostic_Pub_Image_Count extends Diagnostic_Base {
-	protected static $slug = 'pub-image-count';
-	protected static $title = 'Posts Have Images';
-	protected static $description = 'Do posts have images for visual content?';
-	protected static $category = 'Content Publishing';
+	protected static $slug         = 'pub-image-count';
+	protected static $title        = 'Posts Have Images';
+	protected static $description  = 'Do posts have images for visual content?';
+	protected static $category     = 'Content Publishing';
 	protected static $threat_level = 'low';
-	protected static $family = 'general';
+	protected static $family       = 'general';
 	protected static $family_label = 'General';
 
 	/**
@@ -39,13 +39,15 @@ class Diagnostic_Pub_Image_Count extends Diagnostic_Base {
 	 */
 	public function check(): ?array {
 		// Get recent published posts
-		$posts = get_posts( [
-			'post_type'      => 'post',
-			'post_status'    => 'publish',
-			'posts_per_page' => 10,
-			'orderby'        => 'date',
-			'order'          => 'DESC'
-		] );
+		$posts = get_posts(
+			array(
+				'post_type'      => 'post',
+				'post_status'    => 'publish',
+				'posts_per_page' => 10,
+				'orderby'        => 'date',
+				'order'          => 'DESC',
+			)
+		);
 
 		if ( empty( $posts ) ) {
 			return null;
@@ -56,7 +58,7 @@ class Diagnostic_Pub_Image_Count extends Diagnostic_Base {
 			// Check for images in content
 			$content = $post->post_content;
 			if ( preg_match( '/<img\s+/', $content ) || preg_match( '/\[gallery/', $content ) ) {
-				$posts_with_images++;
+				++$posts_with_images;
 			}
 		}
 

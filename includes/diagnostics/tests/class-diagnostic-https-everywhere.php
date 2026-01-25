@@ -82,17 +82,17 @@ class Diagnostic_Https_Everywhere extends Diagnostic_Base {
 		// Check if site URLs use HTTPS
 		$home_url = get_home_url();
 		$site_url = get_site_url();
-		
+
 		// Check if both URLs start with https://
 		$home_https = strpos( $home_url, 'https://' ) === 0;
 		$site_https = strpos( $site_url, 'https://' ) === 0;
-		
+
 		// If both are HTTPS, check WordPress configuration
 		if ( $home_https && $site_https ) {
 			// All good
 			return null;
 		}
-		
+
 		// Site is not fully HTTPS
 		return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
 			'https-everywhere',
@@ -110,7 +110,7 @@ class Diagnostic_Https_Everywhere extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Https Everywhere
 	 * Slug: https-everywhere
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -131,15 +131,13 @@ class Diagnostic_Https_Everywhere extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

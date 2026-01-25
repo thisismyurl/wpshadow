@@ -30,111 +30,112 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_Env_File_Exposed extends Diagnostic_Base
-{
+class Diagnostic_Env_File_Exposed extends Diagnostic_Base {
 
-    /**
-     * The diagnostic slug/ID
-     *
-     * @var string
-     */
-    protected static $slug = 'env-file-exposed';
 
-    /**
-     * The diagnostic title
-     *
-     * @var string
-     */
-    protected static $title = 'Exposed Environment Variables';
+	/**
+	 * The diagnostic slug/ID
+	 *
+	 * @var string
+	 */
+	protected static $slug = 'env-file-exposed';
 
-    /**
-     * The diagnostic description
-     *
-     * @var string
-     */
-    protected static $description = 'Tests if .env and other sensitive files are publicly accessible.';
+	/**
+	 * The diagnostic title
+	 *
+	 * @var string
+	 */
+	protected static $title = 'Exposed Environment Variables';
 
-    /**
-     * Run the diagnostic check
-     *
-     * @return array|null Finding data or null if no issue
-     */
-    public static function check(): ?array
-    {
-        // Check if .env file exists
-        $env_file = ABSPATH . '.env';
+	/**
+	 * The diagnostic description
+	 *
+	 * @var string
+	 */
+	protected static $description = 'Tests if .env and other sensitive files are publicly accessible.';
 
-        if (!file_exists($env_file)) {
-            return null;
-        }
+	/**
+	 * Run the diagnostic check
+	 *
+	 * @return array|null Finding data or null if no issue
+	 */
+	public static function check(): ?array {
+		// Check if .env file exists
+		$env_file = ABSPATH . '.env';
 
-        // Try to access it via HTTP
-        $site_url = site_url('/.env');
-        $response = wp_remote_get($site_url, array(
-            'timeout' => 5,
-            'sslverify' => false,
-        ));
+		if ( ! file_exists( $env_file ) ) {
+			return null;
+		}
 
-        // If we can access it, it's exposed
-        if (!is_wp_error($response) && wp_remote_retrieve_response_code($response) === 200) {
-            $body = wp_remote_retrieve_body($response);
+		// Try to access it via HTTP
+		$site_url = site_url( '/.env' );
+		$response = wp_remote_get(
+			$site_url,
+			array(
+				'timeout'   => 5,
+				'sslverify' => false,
+			)
+		);
 
-            // Verify it's actually the env file content
-            if (!empty($body) && strlen($body) > 10) {
-                return array(
-                    'id'           => static::$slug,
-                    'title'        => static::$title,
-                    'description'  => 'Your .env file is publicly accessible! This exposes sensitive credentials.',
-                    'severity'     => 'critical',
-                    'category'     => 'security',
-                    'kb_link'      => 'https://wpshadow.com/kb/exposed-env-files/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=exposed-env-files',
-                    'training_link' => 'https://wpshadow.com/training/exposed-env-files/',
-                    'auto_fixable' => true,
-                    'threat_level' => 100,
-                    'module'       => 'Core',
-                    'priority'     => 1,
-                );
-            }
-        }
+		// If we can access it, it's exposed
+		if ( ! is_wp_error( $response ) && wp_remote_retrieve_response_code( $response ) === 200 ) {
+			$body = wp_remote_retrieve_body( $response );
 
-        return null;
-    }
+			// Verify it's actually the env file content
+			if ( ! empty( $body ) && strlen( $body ) > 10 ) {
+				return array(
+					'id'            => static::$slug,
+					'title'         => static::$title,
+					'description'   => 'Your .env file is publicly accessible! This exposes sensitive credentials.',
+					'severity'      => 'critical',
+					'category'      => 'security',
+					'kb_link'       => 'https://wpshadow.com/kb/exposed-env-files/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=exposed-env-files',
+					'training_link' => 'https://wpshadow.com/training/exposed-env-files/',
+					'auto_fixable'  => true,
+					'threat_level'  => 100,
+					'module'        => 'Core',
+					'priority'      => 1,
+				);
+			}
+		}
 
-    /**
-     * Live test for this diagnostic
-     *
-     * Tests whether .env file is publicly accessible via HTTP.
-     *
-     * @return array {
-     *     @type bool   $passed  Whether the test passed
-     *     @type string $message Human-readable test result message
-     * }
-     */
-    public static function test_live_env_file_exposed(): array
-    {
-        $env_file = ABSPATH . '.env';
+		return null;
+	}
 
-        // If .env doesn't exist locally, it's safe
-        if (! file_exists($env_file)) {
-            return array(
-                'passed'  => true,
-                'message' => '✓ No .env file found (safe)',
-            );
-        }
+	/**
+	 * Live test for this diagnostic
+	 *
+	 * Tests whether .env file is publicly accessible via HTTP.
+	 *
+	 * @return array {
+	 *     @type bool   $passed  Whether the test passed
+	 *     @type string $message Human-readable test result message
+	 * }
+	 */
+	public static function test_live_env_file_exposed(): array {
+		$env_file = ABSPATH . '.env';
 
-        // Run the diagnostic check
-        $result = self::check();
+		// If .env doesn't exist locally, it's safe
+		if ( ! file_exists( $env_file ) ) {
+			return array(
+				'passed'  => true,
+				'message' => '✓ No .env file found (safe)',
+			);
+		}
 
-        if (is_null($result)) {
-            return array(
-                'passed'  => true,
-                'message' => '✓ .env file exists but is not publicly accessible (safe)',
-            );
-        }
+		// Run the diagnostic check
+		$result = self::check();
 
-        return array(
-            'passed'  => false,
-            'message' => '✗ .env file is publicly accessible - critical security risk',
-        );
-    }
+		if ( is_null( $result ) ) {
+			return array(
+				'passed'  => true,
+				'message' => '✓ .env file exists but is not publicly accessible (safe)',
+			);
+		}
+
+		return array(
+			'passed'  => false,
+			'message' => '✗ .env file is publicly accessible - critical security risk',
+		);
+	}
 }

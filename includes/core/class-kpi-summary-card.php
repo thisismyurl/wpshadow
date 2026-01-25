@@ -16,7 +16,7 @@ namespace WPShadow\Core;
  * Generates KPI summary cards with dual-audience appeal
  */
 class KPI_Summary_Card {
-	
+
 	/**
 	 * Render the full KPI summary card section
 	 *
@@ -156,7 +156,7 @@ class KPI_Summary_Card {
 						<?php echo esc_html( isset( $kpis['health_improvement'] ) ? $kpis['health_improvement'] : 0 ); ?>%
 					</div>
 					<div style="font-size: 13px; opacity: 0.8;">
-						<?php echo esc_html( sprintf( __( '%d → %d score in 30 days', 'wpshadow' ), $kpis['health_score_30_days_ago'], $kpis['health_score_today'] ) ); ?>
+						<?php echo esc_html( sprintf( __( '%1$d → %2$d score in 30 days', 'wpshadow' ), $kpis['health_score_30_days_ago'], $kpis['health_score_today'] ) ); ?>
 					</div>
 				</div>
 				
@@ -197,7 +197,7 @@ class KPI_Summary_Card {
 		</div>
 		<?php
 	}
-	
+
 	/**
 	 * Get styled HTML for a KPI metric
 	 *

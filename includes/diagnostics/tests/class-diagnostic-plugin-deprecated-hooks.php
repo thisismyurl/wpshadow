@@ -83,17 +83,17 @@ class Diagnostic_Plugin_Deprecated_Hooks extends Diagnostic_Base {
 
 		// Common deprecated hooks from WordPress
 		$deprecated_hooks = array(
-			'edit_category_form_pre' => 'Removed in WP 3.0',
-			'after_db_upgrade' => 'Removed in WP 3.5',
-			'sanitize_user_object' => 'Removed in WP 4.4',
-			'check_comment_flood' => 'Removed in WP 4.7',
-			'xmlrpc_call' => 'Changed in WP 5.5',
-			'user_admin_notices' => 'Removed in WP 3.1',
+			'edit_category_form_pre'          => 'Removed in WP 3.0',
+			'after_db_upgrade'                => 'Removed in WP 3.5',
+			'sanitize_user_object'            => 'Removed in WP 4.4',
+			'check_comment_flood'             => 'Removed in WP 4.7',
+			'xmlrpc_call'                     => 'Changed in WP 5.5',
+			'user_admin_notices'              => 'Removed in WP 3.1',
 			'wp_plugin_editor_before_actions' => 'Changed in WP 4.9',
 		);
 
 		$found_deprecated = array();
-		
+
 		foreach ( $deprecated_hooks as $hook => $note ) {
 			if ( isset( $wp_filter[ $hook ] ) && ! empty( $wp_filter[ $hook ]->callbacks ) ) {
 				$found_deprecated[ $hook ] = $note;
@@ -152,5 +152,4 @@ class Diagnostic_Plugin_Deprecated_Hooks extends Diagnostic_Base {
 			'message' => '✗ Plugin deprecated hooks: ' . $result['title'],
 		);
 	}
-
 }

@@ -21,16 +21,15 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
-class Diagnostic_Disallow_File_Edit extends Diagnostic_Base
-{
+class Diagnostic_Disallow_File_Edit extends Diagnostic_Base {
+
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array
-	{
-		if (defined('DISALLOW_FILE_EDIT') && DISALLOW_FILE_EDIT) {
+	public static function check(): ?array {
+		if ( defined( 'DISALLOW_FILE_EDIT' ) && DISALLOW_FILE_EDIT ) {
 			return null; // Already hardened
 		}
 
@@ -68,15 +67,14 @@ class Diagnostic_Disallow_File_Edit extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__disallow_file_edit(): array
-	{
-		$is_disabled = (defined('DISALLOW_FILE_EDIT') && DISALLOW_FILE_EDIT);
-		$has_issue = !$is_disabled;
+	public static function test_live__disallow_file_edit(): array {
+		$is_disabled = ( defined( 'DISALLOW_FILE_EDIT' ) && DISALLOW_FILE_EDIT );
+		$has_issue   = ! $is_disabled;
 
-		$result = self::check();
-		$diagnostic_found_issue = is_array($result);
+		$result                 = self::check();
+		$diagnostic_found_issue = is_array( $result );
 
-		$test_passes = ($has_issue === $diagnostic_found_issue);
+		$test_passes = ( $has_issue === $diagnostic_found_issue );
 
 		$message = $test_passes
 			? 'File editor check matches site state'

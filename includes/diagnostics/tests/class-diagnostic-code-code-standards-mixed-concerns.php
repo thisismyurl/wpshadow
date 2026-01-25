@@ -12,19 +12,19 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/code-standards-mixed-concerns
  */
 class Diagnostic_Code_CODE_STANDARDS_MIXED_CONCERNS extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'code-standards-mixed-concerns',
-            'title' => __('Mixed Concerns (MVC)', 'wpshadow'),
-            'description' => __('Detects database logic mixed with HTML/rendering in same function.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'code-quality',
-            'kb_link' => 'https://wpshadow.com/kb/code-standards-mixed-concerns',
-            'training_link' => 'https://wpshadow.com/training/code-standards-mixed-concerns',
-            'auto_fixable' => false,
-            'threat_level' => 6
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'code-standards-mixed-concerns',
+			'title'         => __( 'Mixed Concerns (MVC)', 'wpshadow' ),
+			'description'   => __( 'Detects database logic mixed with HTML/rendering in same function.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'code-quality',
+			'kb_link'       => 'https://wpshadow.com/kb/code-standards-mixed-concerns',
+			'training_link' => 'https://wpshadow.com/training/code-standards-mixed-concerns',
+			'auto_fixable'  => false,
+			'threat_level'  => 6,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -32,12 +32,12 @@ class Diagnostic_Code_CODE_STANDARDS_MIXED_CONCERNS extends Diagnostic_Base {
 	 * Diagnostic: Code CODE STANDARDS MIXED CONCERNS
 	 * Slug: -code-code-standards-mixed-concerns
 	 * File: class-diagnostic-code-code-standards-mixed-concerns.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Code CODE STANDARDS MIXED CONCERNS
 	 * Slug: -code-code-standards-mixed-concerns
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -50,11 +50,16 @@ class Diagnostic_Code_CODE_STANDARDS_MIXED_CONCERNS extends Diagnostic_Base {
 	 */
 	public static function test_live__code_code_standards_mixed_concerns(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Code separation of concerns is well maintained'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Code separation of concerns is well maintained',
+			);
 		}
 		$message = $result['description'] ?? 'Mixed concerns detected in code';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

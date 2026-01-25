@@ -86,7 +86,7 @@ class Diagnostic_Dx_Version_Control_Used extends Diagnostic_Base {
 
 		// Check for other VCS
 		$svn_dir = $wp_root . '/.svn';
-		$hg_dir = $wp_root . '/.hg';
+		$hg_dir  = $wp_root . '/.hg';
 
 		if ( is_dir( $svn_dir ) || is_dir( $hg_dir ) ) {
 			return null; // Version control is being used

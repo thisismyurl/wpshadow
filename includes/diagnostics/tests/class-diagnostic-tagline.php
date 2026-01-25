@@ -20,22 +20,22 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
-class Diagnostic_Tagline extends Diagnostic_Base
-{
+class Diagnostic_Tagline extends Diagnostic_Base {
+
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array
-	{
-		if (empty(get_bloginfo('description'))) {
+	public static function check(): ?array {
+		if ( empty( get_bloginfo( 'description' ) ) ) {
 			$is_registered = self::is_site_registered();
 
 			$finding = array(
 				'id'            => 'tagline-empty',
 				'title'         => 'Site Tagline is Empty',
-				'description'   => 'Add a tagline (Settings → General) to improve SEO and help visitors understand your site quickly.' . (! $is_registered ? ' 💡 Register with WPShadow and get AI-powered suggestions for the perfect tagline!' : ''),				'kb_link'       => 'https://wpshadow.com/kb/write-an-effective-site-tagline/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=tagline',
+				'description'   => 'Add a tagline (Settings → General) to improve SEO and help visitors understand your site quickly.' . ( ! $is_registered ? ' 💡 Register with WPShadow and get AI-powered suggestions for the perfect tagline!' : '' ),
+				'kb_link'       => 'https://wpshadow.com/kb/write-an-effective-site-tagline/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=tagline',
 				'modal_trigger' => 'wpshadow-tagline-modal',
 				'action_text'   => 'Add Tagline',
 				'auto_fixable'  => false,
@@ -43,7 +43,7 @@ class Diagnostic_Tagline extends Diagnostic_Base
 			);
 
 			// Only show AI button for unregistered sites
-			if (! $is_registered) {
+			if ( ! $is_registered ) {
 				$finding['secondary_action_link'] = 'https://wpshadow.com/register/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=tagline';
 				$finding['secondary_action_text'] = 'Get AI Suggestions';
 			}
@@ -59,10 +59,9 @@ class Diagnostic_Tagline extends Diagnostic_Base
 	 *
 	 * @return bool True if site has registered (indicated by email consent).
 	 */
-	private static function is_site_registered()
-	{
-		$consent = get_option('wpshadow_email_consent', false);
-		return ! empty($consent);
+	private static function is_site_registered() {
+		$consent = get_option( 'wpshadow_email_consent', false );
+		return ! empty( $consent );
 	}
 
 	/**
@@ -87,15 +86,14 @@ class Diagnostic_Tagline extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__tagline(): array
-	{
-		$description = get_bloginfo('description');
-		$has_issue = empty($description);
+	public static function test_live__tagline(): array {
+		$description = get_bloginfo( 'description' );
+		$has_issue   = empty( $description );
 
-		$result = self::check();
-		$diagnostic_found_issue = is_array($result);
+		$result                 = self::check();
+		$diagnostic_found_issue = is_array( $result );
 
-		$test_passes = ($has_issue === $diagnostic_found_issue);
+		$test_passes = ( $has_issue === $diagnostic_found_issue );
 
 		$message = $test_passes
 			? 'Tagline check matches site state'
@@ -103,7 +101,7 @@ class Diagnostic_Tagline extends Diagnostic_Base
 				'Mismatch: expected %s but diagnostic returned %s (tagline: %s)',
 				$has_issue ? 'issue' : 'no issue',
 				$diagnostic_found_issue ? 'issue' : 'no issue',
-				empty($description) ? 'empty' : 'set'
+				empty( $description ) ? 'empty' : 'set'
 			);
 
 		return array(

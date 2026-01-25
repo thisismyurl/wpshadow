@@ -23,14 +23,14 @@ use WPShadow\Core\Diagnostic_Lean_Checks;
  * @verified 2026-01-24 - Batch 4 implementation
  * @guardian-integrated Pending
  */
-class Diagnostic_Permalink_Structure_Configured extends Diagnostic_Base
-{
-	protected static $slug = 'permalink-structure-configured';
-	protected static $title = 'Permalink Structure Configured';
-	protected static $description = 'Is a proper permalink structure configured?';
-	protected static $category = 'Site Configuration';
+class Diagnostic_Permalink_Structure_Configured extends Diagnostic_Base {
+
+	protected static $slug         = 'permalink-structure-configured';
+	protected static $title        = 'Permalink Structure Configured';
+	protected static $description  = 'Is a proper permalink structure configured?';
+	protected static $category     = 'Site Configuration';
 	protected static $threat_level = 'low';
-	protected static $family = 'general';
+	protected static $family       = 'general';
 	protected static $family_label = 'General';
 
 	/**
@@ -38,13 +38,12 @@ class Diagnostic_Permalink_Structure_Configured extends Diagnostic_Base
 	 *
 	 * @return ?array Null if pass, array of findings if fail
 	 */
-	public function check(): ?array
-	{
+	public function check(): ?array {
 		// Get permalink structure
-		$permalink_structure = get_option('permalink_structure');
+		$permalink_structure = get_option( 'permalink_structure' );
 
 		// Empty or default (just ?p=123) is not optimal
-		if (empty($permalink_structure) || $permalink_structure === '?p=%post_id%') {
+		if ( empty( $permalink_structure ) || $permalink_structure === '?p=%post_id%' ) {
 			return Diagnostic_Lean_Checks::build_finding(
 				'permalink-structure-configured',
 				'Default Permalink Structure',

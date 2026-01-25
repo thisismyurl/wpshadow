@@ -28,7 +28,7 @@ class Save_Notification_Rule_Handler extends AJAX_Handler_Base {
 	 * Register AJAX hook
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_save_notification_rule', [ __CLASS__, 'handle' ] );
+		add_action( 'wp_ajax_wpshadow_save_notification_rule', array( __CLASS__, 'handle' ) );
 	}
 
 	/**
@@ -39,13 +39,13 @@ class Save_Notification_Rule_Handler extends AJAX_Handler_Base {
 		self::verify_request( 'wpshadow_notification_nonce', 'manage_options' );
 
 		// Get parameters
-		$mode = self::get_post_param( 'mode', 'key', 'notification', true );
-		$rule_id = self::get_post_param( 'rule_id', 'text', '', false );
-		$name = self::get_post_param( 'name', 'text', '', true );
-		$trigger_type = self::get_post_param( 'trigger_type', 'key', '', true );
+		$mode           = self::get_post_param( 'mode', 'key', 'notification', true );
+		$rule_id        = self::get_post_param( 'rule_id', 'text', '', false );
+		$name           = self::get_post_param( 'name', 'text', '', true );
+		$trigger_type   = self::get_post_param( 'trigger_type', 'key', '', true );
 		$action_message = self::get_post_param( 'action_message', 'text', '', true );
 		$action_subject = self::get_post_param( 'action_subject', 'text', '', false );
-		$action_style = self::get_post_param( 'action_style', 'key', 'info', false );
+		$action_style   = self::get_post_param( 'action_style', 'key', 'info', false );
 
 		// Validate inputs
 		if ( empty( $name ) || empty( $trigger_type ) || empty( $action_message ) ) {
@@ -57,17 +57,17 @@ class Save_Notification_Rule_Handler extends AJAX_Handler_Base {
 
 		// Build rule
 		$rule = array(
-			'id'        => $rule_id,
-			'name'      => sanitize_text_field( $name ),
-			'trigger'   => array(
+			'id'      => $rule_id,
+			'name'    => sanitize_text_field( $name ),
+			'trigger' => array(
 				'type'  => $trigger_type,
 				'label' => $trigger_type, // Will be populated by builder
 			),
-			'action'    => array(
-				'type'    => $mode === 'email' ? 'send_email' : 'send_notification',
-				'label'   => $mode === 'email' ? __( 'Send Email', 'wpshadow' ) : __( 'Send Notification', 'wpshadow' ),
+			'action'  => array(
+				'type'  => $mode === 'email' ? 'send_email' : 'send_notification',
+				'label' => $mode === 'email' ? __( 'Send Email', 'wpshadow' ) : __( 'Send Notification', 'wpshadow' ),
 			),
-			'config'    => array(
+			'config'  => array(
 				'message' => wp_kses_post( $action_message ),
 				'subject' => $mode === 'email' ? sanitize_text_field( $action_subject ) : '',
 				'style'   => $mode === 'email' ? '' : sanitize_key( $action_style ),
@@ -81,9 +81,11 @@ class Save_Notification_Rule_Handler extends AJAX_Handler_Base {
 			self::send_error( __( 'Failed to save rule.', 'wpshadow' ) );
 		}
 
-		self::send_success( array(
-			'rule_id' => $saved_id,
-			'message' => __( 'Rule saved successfully!', 'wpshadow' ),
-		) );
+		self::send_success(
+			array(
+				'rule_id' => $saved_id,
+				'message' => __( 'Rule saved successfully!', 'wpshadow' ),
+			)
+		);
 	}
 }

@@ -80,17 +80,17 @@ class Diagnostic_Core_Memory_Used_Percent extends Diagnostic_Base {
 
 	public static function check(): ?array {
 		// Get current memory usage
-		$memory_used = memory_get_usage( true );
+		$memory_used  = memory_get_usage( true );
 		$memory_limit = wp_convert_hr_to_bytes( WP_MEMORY_LIMIT );
-		
+
 		// If no limit or limit is -1 (unlimited), no warning
 		if ( $memory_limit === -1 || $memory_limit === 0 ) {
 			return null;
 		}
-		
+
 		// Calculate percentage
 		$percentage = ( $memory_used / $memory_limit ) * 100;
-		
+
 		// Flag if using more than 90% of available memory
 		if ( $percentage > 90 ) {
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
@@ -103,7 +103,7 @@ class Diagnostic_Core_Memory_Used_Percent extends Diagnostic_Base {
 				'core-memory-used-percent'
 			);
 		}
-		
+
 		// Warn if using more than 75%
 		if ( $percentage > 75 ) {
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
@@ -116,7 +116,7 @@ class Diagnostic_Core_Memory_Used_Percent extends Diagnostic_Base {
 				'core-memory-used-percent'
 			);
 		}
-		
+
 		return null;
 	}
 
@@ -125,7 +125,7 @@ class Diagnostic_Core_Memory_Used_Percent extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Core Memory Used Percent
 	 * Slug: core-memory-used-percent
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -146,15 +146,13 @@ class Diagnostic_Core_Memory_Used_Percent extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

@@ -19,30 +19,29 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_Tracking_Script_Impact extends Diagnostic_Base
-{
+class Diagnostic_Tracking_Script_Impact extends Diagnostic_Base {
+
 
 	/**
 	 * Run the diagnostic check
 	 *
 	 * @return array|null Array with finding details or null if no issue found
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		// Monitor tracking script performance impact
-		$tracking_impact = get_transient('wpshadow_tracking_script_impact_ms');
+		$tracking_impact = get_transient( 'wpshadow_tracking_script_impact_ms' );
 
-		if ($tracking_impact && $tracking_impact > 200) { // 200ms
+		if ( $tracking_impact && $tracking_impact > 200 ) { // 200ms
 			return array(
-				'id' => 'tracking-script-impact',
-				'title' => sprintf(__('Tracking Scripts Impact: +%dms', 'wpshadow'), $tracking_impact),
-				'description' => __('Analytics and tracking scripts are adding significant overhead. Load them asynchronously to reduce impact.', 'wpshadow'),
-				'severity' => 'medium',
-				'category' => 'monitoring',
-				'kb_link' => 'https://wpshadow.com/kb/tracking-script-optimization/',
+				'id'            => 'tracking-script-impact',
+				'title'         => sprintf( __( 'Tracking Scripts Impact: +%dms', 'wpshadow' ), $tracking_impact ),
+				'description'   => __( 'Analytics and tracking scripts are adding significant overhead. Load them asynchronously to reduce impact.', 'wpshadow' ),
+				'severity'      => 'medium',
+				'category'      => 'monitoring',
+				'kb_link'       => 'https://wpshadow.com/kb/tracking-script-optimization/',
 				'training_link' => 'https://wpshadow.com/training/async-tracking-scripts/',
-				'auto_fixable' => false,
-				'threat_level' => 45,
+				'auto_fixable'  => false,
+				'threat_level'  => 45,
 			);
 		}
 		return null;
@@ -70,14 +69,13 @@ class Diagnostic_Tracking_Script_Impact extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__tracking_script_impact(): array
-	{
-		$tracking_impact = get_transient('wpshadow_tracking_script_impact_ms');
-		$has_issue = ($tracking_impact && $tracking_impact > 200);
+	public static function test_live__tracking_script_impact(): array {
+		$tracking_impact = get_transient( 'wpshadow_tracking_script_impact_ms' );
+		$has_issue       = ( $tracking_impact && $tracking_impact > 200 );
 
-		$result = self::check();
-		$diagnostic_found_issue = is_array($result);
-		$test_passes = ($has_issue === $diagnostic_found_issue);
+		$result                 = self::check();
+		$diagnostic_found_issue = is_array( $result );
+		$test_passes            = ( $has_issue === $diagnostic_found_issue );
 
 		$message = $test_passes
 			? 'Tracking script impact check matches site state'

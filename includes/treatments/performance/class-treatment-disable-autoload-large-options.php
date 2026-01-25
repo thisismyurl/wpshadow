@@ -33,10 +33,11 @@ class Treatment_Disable_Autoload_Large_Options extends Treatment_Base {
 	 * @param array $options Treatment options
 	 * @return bool Success status
 	 */
-	public static function apply( array $options = [] ): bool {
+	public static function apply( array $options = array() ): bool {
 		global $wpdb;
 
 		// Get large autoloaded serialized options
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Uses wpdb table property, no user input
 		$large_autoloaded = $wpdb->get_results(
 			"SELECT 
 				option_name,
@@ -54,10 +55,10 @@ class Treatment_Disable_Autoload_Large_Options extends Treatment_Base {
 		}
 
 		// Create backup
-		$backup = [
+		$backup = array(
 			'options'   => array_column( $large_autoloaded, 'option_name' ),
 			'timestamp' => time(),
-		];
+		);
 		self::create_backup( $backup );
 
 		// Disable autoload for each
@@ -65,22 +66,22 @@ class Treatment_Disable_Autoload_Large_Options extends Treatment_Base {
 		foreach ( $large_autoloaded as $option ) {
 			$result = $wpdb->update(
 				$wpdb->options,
-				[ 'autoload' => 'no' ],
-				[ 'option_name' => $option['option_name'] ],
-				[ '%s' ],
-				[ '%s' ]
+				array( 'autoload' => 'no' ),
+				array( 'option_name' => $option['option_name'] ),
+				array( '%s' ),
+				array( '%s' )
 			);
 
 			if ( $result ) {
-				$updated++;
+				++$updated;
 			}
 		}
 
 		// Track KPI
 		if ( $updated > 0 ) {
-			$size_saved = array_sum( array_column( $large_autoloaded, 'size' ) );
+			$size_saved    = array_sum( array_column( $large_autoloaded, 'size' ) );
 			$size_saved_kb = round( $size_saved / 1024, 2 );
-			
+
 			KPI_Tracker::record_treatment_applied( __CLASS__, 3 );
 		}
 
@@ -105,14 +106,14 @@ class Treatment_Disable_Autoload_Large_Options extends Treatment_Base {
 		foreach ( $backup['options'] as $option_name ) {
 			$result = $wpdb->update(
 				$wpdb->options,
-				[ 'autoload' => 'yes' ],
-				[ 'option_name' => $option_name ],
-				[ '%s' ],
-				[ '%s' ]
+				array( 'autoload' => 'yes' ),
+				array( 'option_name' => $option_name ),
+				array( '%s' ),
+				array( '%s' )
 			);
 
 			if ( $result ) {
-				$restored++;
+				++$restored;
 			}
 		}
 

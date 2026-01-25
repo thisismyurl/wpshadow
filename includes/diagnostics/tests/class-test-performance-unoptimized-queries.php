@@ -16,11 +16,10 @@ use WPShadow\Core\Diagnostic_Base;
  * @subpackage Diagnostics/Tests
  * @since 1.2601.2112
  */
-class Test_Performance_UnoptimizedQueries extends Diagnostic_Base
-{
+class Test_Performance_UnoptimizedQueries extends Diagnostic_Base {
 
-	public static function check(): ?array
-	{
+
+	public static function check(): ?array {
 		global $wpdb;
 
 		// Check for posts with missing metadata which causes repeated queries
@@ -29,33 +28,32 @@ class Test_Performance_UnoptimizedQueries extends Diagnostic_Base
             WHERE post_id NOT IN (SELECT ID FROM {$wpdb->posts})"
 		);
 
-		if ($orphaned_meta > 50) {
-			return [
-				'id' => 'unoptimized-queries',
-				'title' => sprintf(__('%d orphaned post metadata records found', 'wpshadow'), $orphaned_meta),
-				'description' => __('Orphaned metadata causes extra database queries. Clean up unused data to improve performance.', 'wpshadow'),
-				'severity' => 'low',
+		if ( $orphaned_meta > 50 ) {
+			return array(
+				'id'           => 'unoptimized-queries',
+				'title'        => sprintf( __( '%d orphaned post metadata records found', 'wpshadow' ), $orphaned_meta ),
+				'description'  => __( 'Orphaned metadata causes extra database queries. Clean up unused data to improve performance.', 'wpshadow' ),
+				'severity'     => 'low',
 				'threat_level' => 35,
-			];
+			);
 		}
 
 		return null;
 	}
 
-	public static function test_live_unoptimized_queries(): array
-	{
+	public static function test_live_unoptimized_queries(): array {
 		$result = self::check();
 
-		if (null === $result) {
-			return [
-				'passed' => true,
-				'message' => __('Database is optimized', 'wpshadow'),
-			];
+		if ( null === $result ) {
+			return array(
+				'passed'  => true,
+				'message' => __( 'Database is optimized', 'wpshadow' ),
+			);
 		}
 
-		return [
-			'passed' => false,
+		return array(
+			'passed'  => false,
 			'message' => $result['description'],
-		];
+		);
 	}
 }

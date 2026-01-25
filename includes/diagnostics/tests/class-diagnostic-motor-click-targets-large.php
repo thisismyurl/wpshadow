@@ -101,7 +101,7 @@ class Diagnostic_Motor_Click_Targets_Large extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Motor Click Targets Large
 	 * Slug: motor-click-targets-large
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -122,15 +122,13 @@ class Diagnostic_Motor_Click_Targets_Large extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

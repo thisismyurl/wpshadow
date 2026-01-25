@@ -12,19 +12,19 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/code-standards-late-static-binding
  */
 class Diagnostic_Code_CODE_STANDARDS_LATE_STATIC_BINDING extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'code-standards-late-static-binding',
-            'title' => __('Late Static Binding Misuse', 'wpshadow'),
-            'description' => __('Detects incorrect use of static:: vs self::.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'code-quality',
-            'kb_link' => 'https://wpshadow.com/kb/code-standards-late-static-binding',
-            'training_link' => 'https://wpshadow.com/training/code-standards-late-static-binding',
-            'auto_fixable' => false,
-            'threat_level' => 6
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'code-standards-late-static-binding',
+			'title'         => __( 'Late Static Binding Misuse', 'wpshadow' ),
+			'description'   => __( 'Detects incorrect use of static:: vs self::.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'code-quality',
+			'kb_link'       => 'https://wpshadow.com/kb/code-standards-late-static-binding',
+			'training_link' => 'https://wpshadow.com/training/code-standards-late-static-binding',
+			'auto_fixable'  => false,
+			'threat_level'  => 6,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -32,12 +32,12 @@ class Diagnostic_Code_CODE_STANDARDS_LATE_STATIC_BINDING extends Diagnostic_Base
 	 * Diagnostic: Code CODE STANDARDS LATE STATIC BINDING
 	 * Slug: -code-code-standards-late-static-binding
 	 * File: class-diagnostic-code-code-standards-late-static-binding.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Code CODE STANDARDS LATE STATIC BINDING
 	 * Slug: -code-code-standards-late-static-binding
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -50,11 +50,16 @@ class Diagnostic_Code_CODE_STANDARDS_LATE_STATIC_BINDING extends Diagnostic_Base
 	 */
 	public static function test_live__code_code_standards_late_static_binding(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Code properly uses late static binding'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Code properly uses late static binding',
+			);
 		}
 		$message = $result['description'] ?? 'Late static binding issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

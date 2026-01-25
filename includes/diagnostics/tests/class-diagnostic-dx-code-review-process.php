@@ -16,7 +16,7 @@ use WPShadow\Core\Diagnostic_Base;
  *
  * @package WPShadow
  * @subpackage Diagnostics
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
@@ -114,7 +114,7 @@ class Diagnostic_Dx_Code_Review_Process extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Dx Code Review Process
 	 * Slug: dx-code-review-process
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -128,11 +128,16 @@ class Diagnostic_Dx_Code_Review_Process extends Diagnostic_Base {
 	 */
 	public static function test_live_dx_code_review_process(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Code review process is well-established'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Code review process is well-established',
+			);
 		}
 		$message = $result['description'] ?? 'Code review process issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

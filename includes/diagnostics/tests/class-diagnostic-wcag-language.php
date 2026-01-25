@@ -79,39 +79,41 @@ class Diagnostic_Wcag_Language extends Diagnostic_Base {
 	}
 
 	protected static function get_guardian_html(): string {
-		if (isset($_POST['html']) && is_string($_POST['html'])) {
-			return sanitize_text_field(wp_unslash($_POST['html']));
+		if ( isset( $_POST['html'] ) && is_string( $_POST['html'] ) ) {
+			return sanitize_text_field( wp_unslash( $_POST['html'] ) );
 		}
 		return '';
 	}
 
 	public static function check(): ?array {
 		$html = self::get_guardian_html();
-		if (empty($html)) return null;
-
-		$issues = [];
-		try {
-			$dom = new \DOMDocument();
-			@$dom->loadHTML($html);
-			$xpath = new \DOMXPath($dom);
-
-			$html_tag = $xpath->query('//html')->item(0);
-			if (!$html_tag || !$html_tag->hasAttribute('lang') || empty($html_tag->getAttribute('lang'))) {
-				$issues[] = 'Missing or empty lang attribute on <html> element';
-			}
-		} catch (\Exception $e) {
+		if ( empty( $html ) ) {
 			return null;
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'wcag-language',
-			'title' => 'Language not marked',
-			'description' => 'The primary language of the page must be marked with the lang attribute',
-			'severity' => 'medium',
-			'category' => 'accessibility',
+		$issues = array();
+		try {
+			$dom = new \DOMDocument();
+			@$dom->loadHTML( $html );
+			$xpath = new \DOMXPath( $dom );
+
+			$html_tag = $xpath->query( '//html' )->item( 0 );
+			if ( ! $html_tag || ! $html_tag->hasAttribute( 'lang' ) || empty( $html_tag->getAttribute( 'lang' ) ) ) {
+				$issues[] = 'Missing or empty lang attribute on <html> element';
+			}
+		} catch ( \Exception $e ) {
+			return null;
+		}
+
+		return empty( $issues ) ? null : array(
+			'id'           => 'wcag-language',
+			'title'        => 'Language not marked',
+			'description'  => 'The primary language of the page must be marked with the lang attribute',
+			'severity'     => 'medium',
+			'category'     => 'accessibility',
 			'threat_level' => 59,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	/**
@@ -133,15 +135,16 @@ class Diagnostic_Wcag_Language extends Diagnostic_Base {
 	 */
 	public static function test_live_wcag_language(): array {
 		$good = '<html lang="en"><body>Test</body></html>';
-		$bad = '<html><body>Test</body></html>';
+		$bad  = '<html><body>Test</body></html>';
 
 		$_POST['html'] = $good;
-		$r1 = self::check();
+		$r1            = self::check();
 		$_POST['html'] = $bad;
-		$r2 = self::check();
+		$r2            = self::check();
 
-		return ['passed' => is_null($r1) && is_array($r2), 'message' => 'Language attribute check working'];
+		return array(
+			'passed'  => is_null( $r1 ) && is_array( $r2 ),
+			'message' => 'Language attribute check working',
+		);
 	}
-
 }
-

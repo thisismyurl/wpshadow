@@ -132,8 +132,9 @@ $suggestions = array_slice( $suggestions, 0, 6 );
 				$trigger_label = get_trigger_summary( $workflow );
 				$action_label  = get_action_summary( $workflow );
 				$is_enabled    = ! isset( $workflow['enabled'] ) || $workflow['enabled'];
+				$card_class    = $is_enabled ? 'enabled' : 'disabled';
 				?>
-				<div class="workflow-card <?php echo $is_enabled ? 'enabled' : 'disabled'; ?>" data-workflow-id="<?php echo esc_attr( $workflow['id'] ); ?>">
+				<div class="workflow-card <?php echo esc_attr( $card_class ); ?>" data-workflow-id="<?php echo esc_attr( $workflow['id'] ); ?>">
 					<div class="workflow-header">
 						<div class="workflow-status">
 							<label class="workflow-toggle">

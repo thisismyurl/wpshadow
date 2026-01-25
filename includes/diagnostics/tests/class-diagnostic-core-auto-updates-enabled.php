@@ -9,14 +9,14 @@ use WPShadow\Core\Diagnostic_Base;
  * This is a placeholder implementation.
  */
 class Diagnostic_CoreAutoUpdatesEnabled extends Diagnostic_Base {
-	protected static $slug = 'core-auto-updates-enabled';
+	protected static $slug  = 'core-auto-updates-enabled';
 	protected static $title = 'Core Auto Updates Enabled';
-	
+
 	public static function check(): ?array {
 		// TODO: Implement diagnostic logic
 		return null;
 	}
-	
+
 	public static function run(): array {
 		return array();
 	}

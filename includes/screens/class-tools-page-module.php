@@ -112,26 +112,26 @@ function wpshadow_get_tools_catalog() {
  * @return void
  */
 if ( ! function_exists( 'wpshadow_render_tools' ) ) {
-function wpshadow_render_tools() {
-	if ( ! current_user_can( 'read' ) ) {
-		wp_die( 'Insufficient permissions.' );
-	}
-
-	$tool = isset( $_GET['tool'] ) ? sanitize_key( $_GET['tool'] ) : '';
-
-	// Route to specific tool if requested
-	if ( ! empty( $tool ) ) {
-		$tool_file = WPSHADOW_PATH . 'includes/views/tools/' . $tool . '.php';
-		if ( file_exists( $tool_file ) ) {
-			include $tool_file;
-			return;
+	function wpshadow_render_tools() {
+		if ( ! current_user_can( 'read' ) ) {
+			wp_die( 'Insufficient permissions.' );
 		}
-	}
 
-	$catalog = wpshadow_get_tools_catalog();
+		$tool = isset( $_GET['tool'] ) ? sanitize_key( $_GET['tool'] ) : '';
 
-	// Show tools index
-	?>
+		// Route to specific tool if requested
+		if ( ! empty( $tool ) ) {
+			$tool_file = WPSHADOW_PATH . 'includes/views/tools/' . $tool . '.php';
+			if ( file_exists( $tool_file ) ) {
+				include $tool_file;
+				return;
+			}
+		}
+
+		$catalog = wpshadow_get_tools_catalog();
+
+		// Show tools index
+		?>
 	<div class="wps-page-container">
 		<!-- Page Header -->
 		<div class="wps-page-header">
@@ -146,9 +146,10 @@ function wpshadow_render_tools() {
 
 		<!-- Tools Grid -->
 		<div class="wps-grid">
-			<?php foreach ( $catalog as $item ) :
+			<?php
+			foreach ( $catalog as $item ) :
 				$tool_url = admin_url( 'admin.php?page=wpshadow-tools&tool=' . $item['tool'] );
-			?>
+				?>
 			<div class="wps-card">
 				<div class="wps-card-header">
 					<div>
@@ -177,8 +178,8 @@ function wpshadow_render_tools() {
 			<?php endforeach; ?>
 		</div>
 	</div>
-	<?php
-}
+		<?php
+	}
 } // End if ( ! function_exists( 'wpshadow_render_tools' ) )
 
 /**
@@ -194,7 +195,7 @@ function wpshadow_run_broken_links_scan( $args = array() ) {
 		'check_images'   => false,
 		'limit'          => -1,
 	);
-	$args = wp_parse_args( $args, $defaults );
+	$args     = wp_parse_args( $args, $defaults );
 
 	$broken_links  = array();
 	$posts_checked = 0;
@@ -206,7 +207,7 @@ function wpshadow_run_broken_links_scan( $args = array() ) {
 		'post_status'    => 'publish',
 	);
 
-	$posts = get_posts( $query_args );
+	$posts         = get_posts( $query_args );
 	$posts_checked = count( $posts );
 
 	foreach ( $posts as $post ) {
@@ -216,7 +217,7 @@ function wpshadow_run_broken_links_scan( $args = array() ) {
 		preg_match_all( '/<a\s+(?:[^>]*?\s+)?href=["\']([^"\']+)["\']/', $content, $matches );
 		if ( ! empty( $matches[1] ) ) {
 			foreach ( $matches[1] as $url ) {
-				$links_checked++;
+				++$links_checked;
 				if ( strpos( $url, '#' ) === 0 ) {
 					continue;
 				}
@@ -230,10 +231,13 @@ function wpshadow_run_broken_links_scan( $args = array() ) {
 				if ( strpos( $url, '/' ) === 0 ) {
 					$url = home_url( $url );
 				}
-				$response = wp_remote_head( $url, array(
-					'timeout'     => 5,
-					'redirection' => 2,
-				) );
+				$response = wp_remote_head(
+					$url,
+					array(
+						'timeout'     => 5,
+						'redirection' => 2,
+					)
+				);
 				if ( is_wp_error( $response ) ) {
 					$broken_links[] = array(
 						'url'         => $url,
@@ -260,11 +264,14 @@ function wpshadow_run_broken_links_scan( $args = array() ) {
 			preg_match_all( '/<img\s+(?:[^>]*?\s+)?src=["\']([^"\']+)["\']/', $content, $img_matches );
 			if ( ! empty( $img_matches[1] ) ) {
 				foreach ( $img_matches[1] as $img_url ) {
-					$links_checked++;
-					$response = wp_remote_head( $img_url, array(
-						'timeout'     => 5,
-						'redirection' => 2,
-					) );
+					++$links_checked;
+					$response = wp_remote_head(
+						$img_url,
+						array(
+							'timeout'     => 5,
+							'redirection' => 2,
+						)
+					);
 					if ( is_wp_error( $response ) ) {
 						$broken_links[] = array(
 							'url'         => $img_url,

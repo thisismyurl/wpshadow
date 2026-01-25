@@ -81,7 +81,7 @@ class Diagnostic_Sustainability_Backup_Redundancy extends Diagnostic_Base {
 	public static function check(): ?array {
 		// Check if backups are configured in multiple locations
 		// Multiple backup plugins or backup strategies indicate redundancy
-		
+
 		$backup_plugins = array(
 			'duplicator/duplicator.php',
 			'updraftplus/updraftplus.php',
@@ -94,20 +94,20 @@ class Diagnostic_Sustainability_Backup_Redundancy extends Diagnostic_Base {
 		$active_backups = 0;
 		foreach ( $backup_plugins as $plugin ) {
 			if ( is_plugin_active( $plugin ) ) {
-				$active_backups++;
+				++$active_backups;
 			}
 		}
 
 		// Check for multiple backup strategies
-		$has_git_backup = file_exists( ABSPATH . '.git' );
+		$has_git_backup    = file_exists( ABSPATH . '.git' );
 		$has_docker_backup = file_exists( ABSPATH . 'docker-compose.yml' );
 
 		$total_strategies = $active_backups;
 		if ( $has_git_backup ) {
-			$total_strategies++;
+			++$total_strategies;
 		}
 		if ( $has_docker_backup ) {
-			$total_strategies++;
+			++$total_strategies;
 		}
 
 		// Require at least 2 backup strategies for redundancy
@@ -136,7 +136,7 @@ class Diagnostic_Sustainability_Backup_Redundancy extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Sustainability Backup Redundancy
 	 * Slug: sustainability-backup-redundancy
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -157,15 +157,13 @@ class Diagnostic_Sustainability_Backup_Redundancy extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

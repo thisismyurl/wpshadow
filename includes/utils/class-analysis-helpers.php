@@ -30,9 +30,9 @@ function wpshadow_analyze_mobile_html( $html ) {
 		$viewport_content = strtolower( $match[1] );
 	}
 
-	$has_device_width = ( $viewport_content && strpos( $viewport_content, 'width=device-width' ) !== false );
+	$has_device_width  = ( $viewport_content && strpos( $viewport_content, 'width=device-width' ) !== false );
 	$has_initial_scale = ( $viewport_content && strpos( $viewport_content, 'initial-scale' ) !== false );
-	$zoom_disabled = ( $viewport_content && ( strpos( $viewport_content, 'user-scalable=no' ) !== false || preg_match( '/maximum-scale\s*=\s*1(\.0)?/i', $viewport_content ) ) );
+	$zoom_disabled     = ( $viewport_content && ( strpos( $viewport_content, 'user-scalable=no' ) !== false || preg_match( '/maximum-scale\s*=\s*1(\.0)?/i', $viewport_content ) ) );
 
 	$checks[] = array(
 		'id'      => 'viewport',
@@ -75,7 +75,7 @@ function wpshadow_analyze_mobile_html( $html ) {
 	if ( preg_match_all( '/font-size\s*:\s*([0-9]+(?:\.[0-9]+)?)px/i', $html, $font_matches ) ) {
 		foreach ( $font_matches[1] as $size ) {
 			if ( (float) $size < 14.0 ) {
-				$small_font_hits++;
+				++$small_font_hits;
 			}
 		}
 	}
@@ -120,10 +120,13 @@ function wpshadow_analyze_mobile_html( $html ) {
  * @return array Findings array.
  */
 function wpshadow_run_mobile_friendliness() {
-	$response = wp_remote_get( home_url(), array(
-		'timeout' => 10,
-		'headers' => array( 'User-Agent' => 'WPShadow-Mobile-Check' ),
-	) );
+	$response = wp_remote_get(
+		home_url(),
+		array(
+			'timeout' => 10,
+			'headers' => array( 'User-Agent' => 'WPShadow-Mobile-Check' ),
+		)
+	);
 
 	if ( is_wp_error( $response ) ) {
 		return array();
@@ -171,14 +174,14 @@ function wpshadow_analyze_a11y_html( $html ) {
 		'label'   => __( 'Alt text on images', 'wpshadow' ),
 		'status'  => $alt_count >= $img_count * 0.8 ? 'pass' : 'warn',
 		'details' => sprintf(
-			__( 'Found %d images, %d with alt text.', 'wpshadow' ),
+			__( 'Found %1$d images, %2$d with alt text.', 'wpshadow' ),
 			$img_count,
 			$alt_count
 		),
 	);
 
 	// Check for form labels
-	$form_count = substr_count( $html, '<form' );
+	$form_count  = substr_count( $html, '<form' );
 	$label_count = substr_count( $html, '<label' );
 
 	$checks[] = array(

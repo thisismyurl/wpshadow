@@ -28,7 +28,7 @@ class Treatment_Admin_Fonts extends Treatment_Base {
 	public static function apply() {
 		update_option( 'wpshadow_admin_fonts_disabled', true );
 		KPI_Tracker::log_fix_applied( self::get_finding_id(), 'performance' );
-		
+
 		return array(
 			'success' => true,
 			'message' => __( 'Google Fonts disabled in WP Admin. The admin will now use system fonts.', 'wpshadow' ),
@@ -38,7 +38,7 @@ class Treatment_Admin_Fonts extends Treatment_Base {
 	public static function undo() {
 		delete_option( 'wpshadow_admin_fonts_disabled' );
 		KPI_Tracker::log_fix_undone( self::get_finding_id() );
-		
+
 		return array(
 			'success' => true,
 			'message' => __( 'Google Fonts re-enabled in WP Admin.', 'wpshadow' ),

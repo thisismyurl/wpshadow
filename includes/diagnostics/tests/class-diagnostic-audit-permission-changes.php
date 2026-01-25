@@ -81,7 +81,7 @@ class Diagnostic_Audit_Permission_Changes extends Diagnostic_Base {
 	public static function check(): ?array {
 		// Check if permission/capability changes are being logged
 		// Look for audit logging plugins
-		
+
 		$audit_plugins = array(
 			'aryo-activity-log/aryo-activity-log.php',
 			'wsal/wp-security-audit-log.php',
@@ -117,7 +117,7 @@ class Diagnostic_Audit_Permission_Changes extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Audit Permission Changes
 	 * Slug: audit-permission-changes
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -138,15 +138,13 @@ class Diagnostic_Audit_Permission_Changes extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

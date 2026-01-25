@@ -21,17 +21,16 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_Automated_Updates extends Diagnostic_Base
-{
+class Diagnostic_Automated_Updates extends Diagnostic_Base {
+
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		// Check if automatic updates are disabled
-		if (defined('AUTOMATIC_UPDATER_DISABLED') && AUTOMATIC_UPDATER_DISABLED) {
+		if ( defined( 'AUTOMATIC_UPDATER_DISABLED' ) && AUTOMATIC_UPDATER_DISABLED ) {
 			return array(
 				'id'            => 'automated-updates',
 				'title'         => 'Automatic Security Updates Disabled',
@@ -70,15 +69,14 @@ class Diagnostic_Automated_Updates extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__automated_updates(): array
-	{
-		$updates_disabled = (defined('AUTOMATIC_UPDATER_DISABLED') && AUTOMATIC_UPDATER_DISABLED);
-		$has_issue = $updates_disabled;
+	public static function test_live__automated_updates(): array {
+		$updates_disabled = ( defined( 'AUTOMATIC_UPDATER_DISABLED' ) && AUTOMATIC_UPDATER_DISABLED );
+		$has_issue        = $updates_disabled;
 
-		$result = self::check();
-		$diagnostic_found_issue = is_array($result);
+		$result                 = self::check();
+		$diagnostic_found_issue = is_array( $result );
 
-		$test_passes = ($has_issue === $diagnostic_found_issue);
+		$test_passes = ( $has_issue === $diagnostic_found_issue );
 
 		$message = $test_passes
 			? 'Automated updates check matches site state'

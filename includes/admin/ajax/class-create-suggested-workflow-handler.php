@@ -37,7 +37,7 @@ class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 		self::verify_request( 'wpshadow_workflow', 'manage_options' );
 
 		// Get parameters
-		$title = self::get_post_param( 'title', 'text', '', true );
+		$title   = self::get_post_param( 'title', 'text', '', true );
 		$trigger = self::get_post_param( 'trigger', 'text', '', true );
 		$actions = self::get_post_param( 'actions', 'json', array(), true );
 
@@ -52,7 +52,7 @@ class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 		$blocks[] = $mapped_trigger;
 
 		$mapped_actions = self::map_actions( $actions, $title );
-		$blocks        = array_merge( $blocks, $mapped_actions );
+		$blocks         = array_merge( $blocks, $mapped_actions );
 
 		// Save workflow
 		$workflow_id = 'wf_' . wp_generate_uuid4();
@@ -182,7 +182,7 @@ class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 						'id'     => 'run_diagnostic',
 						'config' => array(
 							'diagnostic_type'     => 'specific',
-							'specific_diagnostic'  => 'ssl',
+							'specific_diagnostic' => 'ssl',
 						),
 					);
 					break;
@@ -193,7 +193,7 @@ class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 						'id'     => 'run_diagnostic',
 						'config' => array(
 							'diagnostic_type'     => 'specific',
-							'specific_diagnostic'  => 'outdated_plugins',
+							'specific_diagnostic' => 'outdated_plugins',
 						),
 					);
 					break;
@@ -225,9 +225,9 @@ class Create_Suggested_Workflow_Handler extends AJAX_Handler_Base {
 						'type'   => 'action',
 						'id'     => 'send_email',
 						'config' => array(
-							'recipient'     => 'admin',
-							'subject'       => sanitize_text_field( $title ),
-							'message'       => __( 'WPShadow workflow notification', 'wpshadow' ),
+							'recipient'      => 'admin',
+							'subject'        => sanitize_text_field( $title ),
+							'message'        => __( 'WPShadow workflow notification', 'wpshadow' ),
 							'include_report' => false,
 						),
 					);

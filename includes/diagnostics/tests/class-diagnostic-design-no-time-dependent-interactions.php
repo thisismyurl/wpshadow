@@ -11,19 +11,19 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/design-no-time-dependent-interactions
  */
 class Diagnostic_Design_NO_TIME_DEPENDENT_INTERACTIONS extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'design-no-time-dependent-interactions',
-            'title' => __('No Time-Dependent Interactions', 'wpshadow'),
-            'description' => __('Verifies no session timeouts without control.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'design',
-            'kb_link' => 'https://wpshadow.com/kb/design-no-time-dependent-interactions',
-            'training_link' => 'https://wpshadow.com/training/design-no-time-dependent-interactions',
-            'auto_fixable' => false,
-            'threat_level' => 5
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'design-no-time-dependent-interactions',
+			'title'         => __( 'No Time-Dependent Interactions', 'wpshadow' ),
+			'description'   => __( 'Verifies no session timeouts without control.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'design',
+			'kb_link'       => 'https://wpshadow.com/kb/design-no-time-dependent-interactions',
+			'training_link' => 'https://wpshadow.com/training/design-no-time-dependent-interactions',
+			'auto_fixable'  => false,
+			'threat_level'  => 5,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -31,12 +31,12 @@ class Diagnostic_Design_NO_TIME_DEPENDENT_INTERACTIONS extends Diagnostic_Base {
 	 * Diagnostic: Design NO TIME DEPENDENT INTERACTIONS
 	 * Slug: -design-no-time-dependent-interactions
 	 * File: class-diagnostic-design-no-time-dependent-interactions.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Design NO TIME DEPENDENT INTERACTIONS
 	 * Slug: -design-no-time-dependent-interactions
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -49,11 +49,16 @@ class Diagnostic_Design_NO_TIME_DEPENDENT_INTERACTIONS extends Diagnostic_Base {
 	 */
 	public static function test_live__design_no_time_dependent_interactions(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'No problematic time-dependent UI interactions detected'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'No problematic time-dependent UI interactions detected',
+			);
 		}
 		$message = $result['description'] ?? 'Time-dependent interaction issue found';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

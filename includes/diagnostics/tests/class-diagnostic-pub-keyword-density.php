@@ -16,7 +16,7 @@ use WPShadow\Core\Diagnostic_Base;
  *
  * @package WPShadow
  * @subpackage Diagnostics
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
@@ -129,7 +129,7 @@ class Diagnostic_Pub_Keyword_Density extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Pub Keyword Density
 	 * Slug: pub-keyword-density
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -143,11 +143,16 @@ class Diagnostic_Pub_Keyword_Density extends Diagnostic_Base {
 	 */
 	public static function test_live_pub_keyword_density(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Published posts have optimal keyword density for SEO'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Published posts have optimal keyword density for SEO',
+			);
 		}
 		$message = $result['description'] ?? 'Keyword density optimization issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

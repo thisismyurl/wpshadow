@@ -14,7 +14,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -24,8 +24,8 @@ if (! defined('ABSPATH')) {
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
-class Diagnostic_REST_API extends Diagnostic_Base
-{
+class Diagnostic_REST_API extends Diagnostic_Base {
+
 
 	protected static $slug        = 'rest-api';
 	protected static $title       = 'REST API Links in Head';
@@ -36,20 +36,19 @@ class Diagnostic_REST_API extends Diagnostic_Base
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		// Check if treatment is already applied
-		$disabled = get_option('wpshadow_rest_api_headers_disabled', false);
+		$disabled = get_option( 'wpshadow_rest_api_headers_disabled', false );
 
-		if ($disabled) {
+		if ( $disabled ) {
 			return null;
 		}
 
 		// Check if REST API link header is enabled
-		$has_rest_link   = has_action('wp_head', 'rest_output_link_wp_head') !== false;
-		$has_rest_header = has_action('template_redirect', 'rest_output_link_header') !== false;
+		$has_rest_link   = has_action( 'wp_head', 'rest_output_link_wp_head' ) !== false;
+		$has_rest_header = has_action( 'template_redirect', 'rest_output_link_header' ) !== false;
 
-		if (! $has_rest_link && ! $has_rest_header) {
+		if ( ! $has_rest_link && ! $has_rest_header ) {
 			return null;
 		}
 
@@ -82,19 +81,18 @@ class Diagnostic_REST_API extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live_rest_api(): array
-	{
-		$disabled = (bool) get_option('wpshadow_rest_api_headers_disabled', false);
-		$has_rest_link = (has_action('wp_head', 'rest_output_link_wp_head') !== false);
-		$has_rest_header = (has_action('template_redirect', 'rest_output_link_header') !== false);
+	public static function test_live_rest_api(): array {
+		$disabled        = (bool) get_option( 'wpshadow_rest_api_headers_disabled', false );
+		$has_rest_link   = ( has_action( 'wp_head', 'rest_output_link_wp_head' ) !== false );
+		$has_rest_header = ( has_action( 'template_redirect', 'rest_output_link_header' ) !== false );
 
 		// Issue exists if: NOT disabled AND (rest_link OR rest_header)
-		$has_issue = (!$disabled && ($has_rest_link || $has_rest_header));
+		$has_issue = ( ! $disabled && ( $has_rest_link || $has_rest_header ) );
 
-		$result = self::check();
-		$diagnostic_found_issue = is_array($result);
+		$result                 = self::check();
+		$diagnostic_found_issue = is_array( $result );
 
-		$test_passes = ($has_issue === $diagnostic_found_issue);
+		$test_passes = ( $has_issue === $diagnostic_found_issue );
 
 		$message = $test_passes
 			? 'REST API headers check matches site state'

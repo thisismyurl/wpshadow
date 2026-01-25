@@ -64,7 +64,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 */
 	private static function discover_diagnostics(): array {
 		$diagnostics = array();
-		$base_dir    = dirname( __FILE__ );
+		$base_dir    = __DIR__;
 		$subdirs     = array( 'tests', 'help', 'todo', 'verified' );
 
 		foreach ( $subdirs as $subdir ) {
@@ -134,7 +134,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 * Loads both class-diagnostic-*.php and class-test-*.php patterns.
 	 */
 	private static function load_diagnostics(): void {
-		$base_dir = dirname( __FILE__ );
+		$base_dir = __DIR__;
 		$subdirs  = array( 'tests', 'help', 'todo', 'verified' );
 
 		foreach ( $subdirs as $subdir ) {

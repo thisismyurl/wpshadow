@@ -21,34 +21,39 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_CSP extends Diagnostic_Base
-{
+class Diagnostic_CSP extends Diagnostic_Base {
+
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array
-	{
-		$response = wp_remote_head(home_url(), array('timeout' => 5, 'sslverify' => false));
+	public static function check(): ?array {
+		$response = wp_remote_head(
+			home_url(),
+			array(
+				'timeout'   => 5,
+				'sslverify' => false,
+			)
+		);
 
-		if (is_wp_error($response)) {
+		if ( is_wp_error( $response ) ) {
 			return null;
 		}
 
-		$headers = wp_remote_retrieve_headers($response);
+		$headers = wp_remote_retrieve_headers( $response );
 
-		if (empty($headers['content-security-policy']) && empty($headers['content-security-policy-report-only'])) {
+		if ( empty( $headers['content-security-policy'] ) && empty( $headers['content-security-policy-report-only'] ) ) {
 			return array(
-				'id'          => 'csp-header',
-				'title'       => 'Content Security Policy Not Configured',
-				'description' => 'Your site lacks a Content Security Policy (CSP) header, which helps prevent XSS attacks by controlling which resources can be loaded. Consider implementing CSP.',
-				'severity'    => 'medium',
-				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/implement-content-security-policy/',
+				'id'            => 'csp-header',
+				'title'         => 'Content Security Policy Not Configured',
+				'description'   => 'Your site lacks a Content Security Policy (CSP) header, which helps prevent XSS attacks by controlling which resources can be loaded. Consider implementing CSP.',
+				'severity'      => 'medium',
+				'category'      => 'security',
+				'kb_link'       => 'https://wpshadow.com/kb/implement-content-security-policy/',
 				'training_link' => 'https://wpshadow.com/training/csp-security/',
-				'auto_fixable' => false,
-				'threat_level' => 55,
+				'auto_fixable'  => false,
+				'threat_level'  => 55,
 			);
 		}
 
@@ -77,8 +82,7 @@ class Diagnostic_CSP extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__csp(): array
-	{
+	public static function test_live__csp(): array {
 		/*
 		 * IMPLEMENTATION NOTES:
 		 * - This test validates the actual WordPress site state
@@ -87,24 +91,30 @@ class Diagnostic_CSP extends Diagnostic_Base
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		$response = wp_remote_head(home_url(), array('timeout' => 5, 'sslverify' => false));
+		$response = wp_remote_head(
+			home_url(),
+			array(
+				'timeout'   => 5,
+				'sslverify' => false,
+			)
+		);
 
 		$has_csp = false;
 
-		if (! is_wp_error($response)) {
-			$headers = wp_remote_retrieve_headers($response);
+		if ( ! is_wp_error( $response ) ) {
+			$headers = wp_remote_retrieve_headers( $response );
 
-			if (! empty($headers['content-security-policy']) || ! empty($headers['content-security-policy-report-only'])) {
+			if ( ! empty( $headers['content-security-policy'] ) || ! empty( $headers['content-security-policy-report-only'] ) ) {
 				$has_csp = true;
 			}
 		}
 
 		$expected_issue = ! $has_csp;
 
-		$result = self::check();
-		$has_finding = is_array($result);
+		$result      = self::check();
+		$has_finding = is_array( $result );
 
-		if ($expected_issue === $has_finding) {
+		if ( $expected_issue === $has_finding ) {
 			$message = $expected_issue ? 'Finding returned when CSP header missing.' : 'No finding when CSP header present.';
 			return array(
 				'passed'  => true,

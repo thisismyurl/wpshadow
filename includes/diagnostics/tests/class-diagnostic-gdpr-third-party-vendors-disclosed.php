@@ -80,7 +80,7 @@ class Diagnostic_Gdpr_Third_Party_Vendors_Disclosed extends Diagnostic_Base {
 
 	public static function check(): ?array {
 		// Check if third-party vendors are disclosed
-		
+
 		$privacy_policy_id = (int) get_option( 'wp_page_for_privacy_policy' );
 
 		if ( ! $privacy_policy_id ) {
@@ -97,12 +97,12 @@ class Diagnostic_Gdpr_Third_Party_Vendors_Disclosed extends Diagnostic_Base {
 
 		$privacy_policy = get_post( $privacy_policy_id );
 		if ( $privacy_policy ) {
-			$content = strtolower( $privacy_policy->post_content );
+			$content               = strtolower( $privacy_policy->post_content );
 			$has_vendor_disclosure = strpos( $content, 'third party' ) !== false ||
-									  strpos( $content, 'third-party' ) !== false ||
-									  strpos( $content, 'processor' ) !== false ||
-									  strpos( $content, 'vendor' ) !== false ||
-									  strpos( $content, 'service provider' ) !== false;
+										strpos( $content, 'third-party' ) !== false ||
+										strpos( $content, 'processor' ) !== false ||
+										strpos( $content, 'vendor' ) !== false ||
+										strpos( $content, 'service provider' ) !== false;
 
 			if ( ! $has_vendor_disclosure ) {
 				return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
@@ -125,7 +125,7 @@ class Diagnostic_Gdpr_Third_Party_Vendors_Disclosed extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Gdpr Third Party Vendors Disclosed
 	 * Slug: gdpr-third-party-vendors-disclosed
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -146,15 +146,13 @@ class Diagnostic_Gdpr_Third_Party_Vendors_Disclosed extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

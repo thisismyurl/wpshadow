@@ -19,7 +19,7 @@ class Treatment_Head_Cleanup extends Treatment_Base {
 	public static function get_finding_id() {
 		return 'head-cleanup-needed';
 	}
-	
+
 	public static function apply() {
 		update_option( 'wpshadow_head_cleanup_enabled', true );
 		KPI_Tracker::log_fix_applied( self::get_finding_id(), 'auto' );
@@ -28,7 +28,7 @@ class Treatment_Head_Cleanup extends Treatment_Base {
 			'message' => 'Head cleanup enabled. Emoji, oEmbed discovery, RSD, and shortlink tags will be removed.',
 		);
 	}
-	
+
 	public static function undo() {
 		delete_option( 'wpshadow_head_cleanup_enabled' );
 		return array(

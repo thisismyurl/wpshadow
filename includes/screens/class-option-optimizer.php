@@ -8,7 +8,7 @@
  * - Object caching integration
  *
  * Philosophy: Ridiculously Good (#7) - Optimize what matters
- * 
+ *
  * @package WPShadow
  * @subpackage Admin
  */
@@ -25,25 +25,25 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Option Optimizer class
  */
 class Option_Optimizer {
-	
+
 	/**
 	 * Cache for batch-loaded options
 	 *
 	 * @var array
 	 */
-	private static $option_cache = [];
-	
+	private static $option_cache = array();
+
 	/**
 	 * Initialize optimizer
 	 */
 	public static function init(): void {
 		// Prime option cache on admin init
-		add_action( 'admin_init', [ __CLASS__, 'prime_option_cache' ] );
-		
+		add_action( 'admin_init', array( __CLASS__, 'prime_option_cache' ) );
+
 		// Set autoload=false for large options
-		add_action( 'update_option', [ __CLASS__, 'manage_autoload' ], 10, 3 );
+		add_action( 'update_option', array( __CLASS__, 'manage_autoload' ), 10, 3 );
 	}
-	
+
 	/**
 	 * Prime cache with frequently used options in one query
 	 */
@@ -51,16 +51,16 @@ class Option_Optimizer {
 		if ( ! \function_exists( 'get_current_screen' ) ) {
 			return;
 		}
-		
+
 		$screen = \get_current_screen();
 		if ( ! $screen || ! isset( $screen->id ) || strpos( $screen->id, 'wpshadow' ) === false ) {
 			return;
 		}
-		
+
 		global $wpdb;
-		
+
 		// Batch load WPShadow options (1 query instead of multiple)
-		$option_names = [
+		$option_names = array(
 			'wpshadow_workflows',
 			'wpshadow_dismissed_findings',
 			'wpshadow_excluded_findings',
@@ -70,11 +70,11 @@ class Option_Optimizer {
 			'wpshadow_allow_all_autofixes',
 			'wpshadow_last_quick_scan',
 			'wpshadow_last_deep_scan',
-		];
-		
+		);
+
 		$placeholders = implode( ',', array_fill( 0, count( $option_names ), '%s' ) );
-		
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Uses wpdb table property, placeholders dynamically created but properly prepared
 		$results = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name IN ($placeholders)",
@@ -82,7 +82,7 @@ class Option_Optimizer {
 			),
 			ARRAY_A
 		);
-		
+
 		// Store in cache
 		foreach ( $results as $row ) {
 			$value = maybe_unserialize( $row['option_value'] );
@@ -90,7 +90,7 @@ class Option_Optimizer {
 			self::$option_cache[ $row['option_name'] ] = $value;
 		}
 	}
-	
+
 	/**
 	 * Get option from cache or database
 	 *
@@ -103,14 +103,14 @@ class Option_Optimizer {
 		if ( isset( self::$option_cache[ $option_name ] ) ) {
 			return self::$option_cache[ $option_name ];
 		}
-		
+
 		// Fall back to get_option (uses object cache)
-		$value = get_option( $option_name, $default );
+		$value                              = get_option( $option_name, $default );
 		self::$option_cache[ $option_name ] = $value;
-		
+
 		return $value;
 	}
-	
+
 	/**
 	 * Manage autoload flag to prevent option bloat
 	 *
@@ -123,17 +123,17 @@ class Option_Optimizer {
 		if ( strpos( $option_name, 'wpshadow_' ) !== 0 ) {
 			return;
 		}
-		
+
 		// Large options that should NOT autoload
-		$no_autoload = [
+		$no_autoload = array(
 			'wpshadow_activity_log',        // Activity log can get large
 			'wpshadow_events',              // Event logger
 			'wpshadow_error_reports',       // Error reports
 			'wpshadow_workflow_executions', // Execution log
 			'wpshadow_kb_articles_v1',      // KB cache
 			'wpshadow_tooltips_all',        // Tooltip cache (transient)
-		];
-		
+		);
+
 		if ( in_array( $option_name, $no_autoload, true ) ) {
 			global $wpdb;
 			$wpdb->query(
@@ -144,7 +144,7 @@ class Option_Optimizer {
 			);
 		}
 	}
-	
+
 	/**
 	 * Get multiple options at once (batch operation)
 	 *
@@ -153,10 +153,10 @@ class Option_Optimizer {
 	 */
 	public static function get_options( array $option_names ): array {
 		global $wpdb;
-		
-		$results = [];
-		$to_fetch = [];
-		
+
+		$results  = array();
+		$to_fetch = array();
+
 		// Check cache first
 		foreach ( $option_names as $name ) {
 			if ( isset( self::$option_cache[ $name ] ) ) {
@@ -165,12 +165,12 @@ class Option_Optimizer {
 				$to_fetch[] = $name;
 			}
 		}
-		
+
 		// Fetch remaining from database in one query
 		if ( ! empty( $to_fetch ) ) {
 			$placeholders = implode( ',', array_fill( 0, count( $to_fetch ), '%s' ) );
-			
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Uses wpdb table property, placeholders dynamically created but properly prepared
 			$rows = $wpdb->get_results(
 				$wpdb->prepare(
 					"SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name IN ($placeholders)",
@@ -178,15 +178,15 @@ class Option_Optimizer {
 				),
 				ARRAY_A
 			);
-			
+
 			foreach ( $rows as $row ) {
-				$value = maybe_unserialize( $row['option_value'] );
-				$results[ $row['option_name'] ] = $value;
+				$value                                     = maybe_unserialize( $row['option_value'] );
+				$results[ $row['option_name'] ]            = $value;
 				self::$option_cache[ $row['option_name'] ] = $value;
 				wp_cache_set( $row['option_name'], $value, 'options' );
 			}
 		}
-		
+
 		return $results;
 	}
 }

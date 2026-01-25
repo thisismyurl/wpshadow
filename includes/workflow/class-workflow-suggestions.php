@@ -237,9 +237,12 @@ class Workflow_Suggestions {
 					break;
 				}
 				// Only add if not already present
-				$exists = array_filter( $suggestions, function ( $s ) use ( $fallback ) {
-					return $s['id'] === $fallback['id'];
-				});
+				$exists = array_filter(
+					$suggestions,
+					function ( $s ) use ( $fallback ) {
+						return $s['id'] === $fallback['id'];
+					}
+				);
 				if ( empty( $exists ) ) {
 					$suggestions[] = $fallback;
 				}

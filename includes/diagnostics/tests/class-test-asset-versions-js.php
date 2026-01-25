@@ -18,45 +18,44 @@ namespace WPShadow\Diagnostics\Tests;
 
 use WPShadow\Diagnostics\Diagnostic_Base;
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class Test_Asset_Versions_JS extends Diagnostic_Base
-{
+class Test_Asset_Versions_JS extends Diagnostic_Base {
+
 	/**
 	 * Run the diagnostic test
 	 *
 	 * @return array|null Diagnostic result array, or null if no issue found
 	 */
-	public function check(): ?array
-	{
+	public function check(): ?array {
 		// Respect setting that already handles removal
-		if (get_option('wpshadow_asset_version_removal_enabled', false)) {
+		if ( get_option( 'wpshadow_asset_version_removal_enabled', false ) ) {
 			return null;
 		}
 
 		// Only evaluate when assets have been enqueued
-		if (! did_action('wp_enqueue_scripts') && ! did_action('admin_enqueue_scripts')) {
+		if ( ! did_action( 'wp_enqueue_scripts' ) && ! did_action( 'admin_enqueue_scripts' ) ) {
 			return null;
 		}
 
 		global $wp_scripts;
 
-		if (! isset($wp_scripts) || ! ($wp_scripts instanceof \WP_Scripts)) {
+		if ( ! isset( $wp_scripts ) || ! ( $wp_scripts instanceof \WP_Scripts ) ) {
 			return null;
 		}
 
 		$versioned = array();
 
-		foreach ($wp_scripts->registered as $handle => $script) {
+		foreach ( $wp_scripts->registered as $handle => $script ) {
 			$src = $script->src ?? '';
 
-			if (! is_string($src) || $src === '') {
+			if ( ! is_string( $src ) || $src === '' ) {
 				continue;
 			}
 
-			if (strpos($src, '?ver=') !== false) {
+			if ( strpos( $src, '?ver=' ) !== false ) {
 				$versioned[] = array(
 					'handle' => $handle,
 					'src'    => $src,
@@ -64,33 +63,33 @@ class Test_Asset_Versions_JS extends Diagnostic_Base
 			}
 		}
 
-		$versioned_count = count($versioned);
+		$versioned_count = count( $versioned );
 
-		if ($versioned_count === 0) {
+		if ( $versioned_count === 0 ) {
 			return null; // Pass
 		}
 
-		$examples = array_slice(array_column($versioned, 'handle'), 0, 3);
+		$examples = array_slice( array_column( $versioned, 'handle' ), 0, 3 );
 
 		return array(
-			'id'           => 'asset-versions-js',
-			'title'        => 'JavaScript Asset Version Strings',
-			'description'  => sprintf(
+			'id'            => 'asset-versions-js',
+			'title'         => 'JavaScript Asset Version Strings',
+			'description'   => sprintf(
 				'Found %d JavaScript files with version query strings (?ver=). Examples: %s',
 				$versioned_count,
-				implode(', ', $examples)
+				implode( ', ', $examples )
 			),
-			'kb_link'      => 'https://wpshadow.com/kb/remove-asset-version-strings',
+			'kb_link'       => 'https://wpshadow.com/kb/remove-asset-version-strings',
 			'training_link' => 'https://wpshadow.com/training/asset-cache-busting',
-			'category'     => 'performance',
-			'severity'     => 'low',
-			'auto_fixable' => true,
-			'threat_level' => 7,
-			'priority'     => 14,
-			'module'       => 'admin-performance',
-			'meta'         => array(
+			'category'      => 'performance',
+			'severity'      => 'low',
+			'auto_fixable'  => true,
+			'threat_level'  => 7,
+			'priority'      => 14,
+			'module'        => 'admin-performance',
+			'meta'          => array(
 				'versioned_count' => $versioned_count,
-				'examples'        => array_slice($versioned, 0, 5),
+				'examples'        => array_slice( $versioned, 0, 5 ),
 			),
 		);
 	}
@@ -100,8 +99,7 @@ class Test_Asset_Versions_JS extends Diagnostic_Base
 	 *
 	 * @return array
 	 */
-	public static function get_info(): array
-	{
+	public static function get_info(): array {
 		return array(
 			'name'        => 'Asset Versions (JS)',
 			'category'    => 'performance',

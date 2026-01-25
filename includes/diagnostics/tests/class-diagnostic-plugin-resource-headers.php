@@ -85,12 +85,12 @@ class Diagnostic_Plugin_Resource_Headers extends Diagnostic_Base {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
-		$all_plugins = get_plugins();
+		$all_plugins     = get_plugins();
 		$missing_headers = 0;
 
 		foreach ( $all_plugins as $plugin ) {
 			if ( empty( $plugin['Name'] ) || empty( $plugin['Version'] ) || empty( $plugin['Author'] ) ) {
-				$missing_headers++;
+				++$missing_headers;
 			}
 		}
 
@@ -141,10 +141,8 @@ class Diagnostic_Plugin_Resource_Headers extends Diagnostic_Base {
 
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

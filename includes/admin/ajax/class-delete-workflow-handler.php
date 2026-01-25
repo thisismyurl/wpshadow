@@ -21,7 +21,7 @@ class Delete_Workflow_Handler extends AJAX_Handler_Base {
 	 * Register AJAX hook
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_delete_workflow', [ __CLASS__, 'handle' ] );
+		add_action( 'wp_ajax_wpshadow_delete_workflow', array( __CLASS__, 'handle' ) );
 	}
 
 	/**
@@ -52,6 +52,6 @@ class Delete_Workflow_Handler extends AJAX_Handler_Base {
 			array( 'workflow_id' => $workflow_id )
 		);
 
-		self::send_success( [ 'message' => 'Workflow deleted successfully.' ] );
+		self::send_success( array( 'message' => 'Workflow deleted successfully.' ) );
 	}
 }

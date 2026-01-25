@@ -16,11 +16,11 @@ namespace WPShadow\Core;
  */
 class Finding_Status_Manager {
 	// Finding status constants
-	const STATUS_DETECTED   = 'detected';    // New finding
-	const STATUS_IGNORED    = 'ignored';     // User chose to ignore
-	const STATUS_MANUAL     = 'manual';      // User will fix manually
-	const STATUS_AUTOMATED  = 'automated';   // Automated fix enabled
-	const STATUS_FIXED      = 'fixed';       // Already fixed
+	const STATUS_DETECTED  = 'detected';    // New finding
+	const STATUS_IGNORED   = 'ignored';     // User chose to ignore
+	const STATUS_MANUAL    = 'manual';      // User will fix manually
+	const STATUS_AUTOMATED = 'automated';   // Automated fix enabled
+	const STATUS_FIXED     = 'fixed';       // Already fixed
 
 	/**
 	 * Get all findings with their current status
@@ -29,18 +29,18 @@ class Finding_Status_Manager {
 	 */
 	public static function get_findings_by_status() {
 		$statuses = array(
-			self::STATUS_DETECTED   => array(),
-			self::STATUS_IGNORED    => array(),
-			self::STATUS_MANUAL     => array(),
-			self::STATUS_AUTOMATED  => array(),
-			self::STATUS_FIXED      => array(),
+			self::STATUS_DETECTED  => array(),
+			self::STATUS_IGNORED   => array(),
+			self::STATUS_MANUAL    => array(),
+			self::STATUS_AUTOMATED => array(),
+			self::STATUS_FIXED     => array(),
 		);
-		
+
 		$status_map = get_option( 'wpshadow_finding_status_map', array() );
-		
+
 		return array_merge( $statuses, $status_map );
 	}
-	
+
 	/**
 	 * Set finding status
 	 *
@@ -52,27 +52,28 @@ class Finding_Status_Manager {
 		if ( ! self::is_valid_status( $status ) ) {
 			return false;
 		}
+
 		
 		$old_status = self::get_finding_status( $finding_id );
 		$status_map = get_option( 'wpshadow_finding_status_map', array() );
-		
+
 		// Remove from all statuses
 		foreach ( array_keys( $status_map ) as $key ) {
 			if ( is_array( $status_map[ $key ] ) ) {
 				$status_map[ $key ] = array_filter(
 					$status_map[ $key ],
-					function( $item ) use ( $finding_id ) {
+					function ( $item ) use ( $finding_id ) {
 						return $item['id'] !== $finding_id;
 					}
 				);
 			}
 		}
-		
+
 		// Add to new status
 		if ( ! isset( $status_map[ $status ] ) ) {
 			$status_map[ $status ] = array();
 		}
-		
+
 		$status_map[ $status ][] = array(
 			'id'        => $finding_id,
 			'timestamp' => time(),
@@ -94,7 +95,7 @@ class Finding_Status_Manager {
 		
 		return $result;
 	}
-	
+
 	/**
 	 * Get findings by status
 	 *
@@ -105,11 +106,11 @@ class Finding_Status_Manager {
 		if ( ! self::is_valid_status( $status ) ) {
 			return array();
 		}
-		
+
 		$status_map = get_option( 'wpshadow_finding_status_map', array() );
 		return ! empty( $status_map[ $status ] ) ? $status_map[ $status ] : array();
 	}
-	
+
 	/**
 	 * Get status for a finding
 	 *
@@ -118,7 +119,7 @@ class Finding_Status_Manager {
 	 */
 	public static function get_finding_status( $finding_id ) {
 		$status_map = get_option( 'wpshadow_finding_status_map', array() );
-		
+
 		foreach ( $status_map as $status => $findings ) {
 			if ( is_array( $findings ) ) {
 				foreach ( $findings as $item ) {
@@ -128,10 +129,10 @@ class Finding_Status_Manager {
 				}
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * Check if status is valid
 	 *
@@ -151,7 +152,7 @@ class Finding_Status_Manager {
 			true
 		);
 	}
-	
+
 	/**
 	 * Add note to finding status
 	 *
@@ -161,7 +162,7 @@ class Finding_Status_Manager {
 	 */
 	public static function add_note( $finding_id, $note ) {
 		$status_map = get_option( 'wpshadow_finding_status_map', array() );
-		
+
 		foreach ( $status_map as $status => $findings ) {
 			if ( is_array( $findings ) ) {
 				foreach ( $findings as &$item ) {
@@ -172,10 +173,10 @@ class Finding_Status_Manager {
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Get note for a finding
 	 *
@@ -184,7 +185,7 @@ class Finding_Status_Manager {
 	 */
 	public static function get_finding_note( $finding_id ) {
 		$status_map = get_option( 'wpshadow_finding_status_map', array() );
-		
+
 		foreach ( $status_map as $status => $findings ) {
 			if ( is_array( $findings ) ) {
 				foreach ( $findings as $item ) {
@@ -194,10 +195,10 @@ class Finding_Status_Manager {
 				}
 			}
 		}
-		
+
 		return '';
 	}
-	
+
 	/**
 	 * Get statistics on finding statuses
 	 *
@@ -205,27 +206,27 @@ class Finding_Status_Manager {
 	 */
 	public static function get_stats() {
 		$status_map = get_option( 'wpshadow_finding_status_map', array() );
-		
+
 		$stats = array(
-			'detected'   => 0,
-			'ignored'    => 0,
-			'manual'     => 0,
-			'automated'  => 0,
-			'fixed'      => 0,
-			'total'      => 0,
+			'detected'  => 0,
+			'ignored'   => 0,
+			'manual'    => 0,
+			'automated' => 0,
+			'fixed'     => 0,
+			'total'     => 0,
 		);
-		
+
 		foreach ( $status_map as $status => $findings ) {
 			if ( is_array( $findings ) ) {
 				$count = count( $findings );
 				$key   = str_replace( 'wpshadow_status_', '', $status );
 				if ( isset( $stats[ $key ] ) ) {
-					$stats[ $key ] = $count;
+					$stats[ $key ]   = $count;
 					$stats['total'] += $count;
 				}
 			}
 		}
-		
+
 		return $stats;
 	}
 }

@@ -22,7 +22,7 @@ namespace WPShadow\Diagnostics\Tests;
 
 use WPShadow\Diagnostics\Diagnostic_Base;
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -33,18 +33,17 @@ if (! defined('ABSPATH')) {
  *
  * @verified Not yet tested
  */
-class Test_Admin_DNS_Hints extends Diagnostic_Base
-{
+class Test_Admin_DNS_Hints extends Diagnostic_Base {
+
 
 	/**
 	 * Run the diagnostic test
 	 *
 	 * @return array|null Diagnostic result array, or null if no issue found
 	 */
-	public function check(): ?array
-	{
+	public function check(): ?array {
 		// Only run in admin context
-		if (! is_admin()) {
+		if ( ! is_admin() ) {
 			return null;
 		}
 
@@ -52,12 +51,12 @@ class Test_Admin_DNS_Hints extends Diagnostic_Base
 
 		// Buffer admin_head output to capture hints
 		ob_start();
-		do_action('admin_head');
+		do_action( 'admin_head' );
 		$head_content = ob_get_clean();
 
 		// Find dns-prefetch links
-		preg_match_all('/<link[^>]+rel=["\']dns-prefetch["\'][^>]+href=["\']([^"\']+)["\'][^>]*>/i', $head_content, $prefetch_matches);
-		foreach ($prefetch_matches[1] ?? array() as $href) {
+		preg_match_all( '/<link[^>]+rel=["\']dns-prefetch["\'][^>]+href=["\']([^"\']+)["\'][^>]*>/i', $head_content, $prefetch_matches );
+		foreach ( $prefetch_matches[1] ?? array() as $href ) {
 			$dns_hints[] = array(
 				'type' => 'dns-prefetch',
 				'href' => $href,
@@ -65,8 +64,8 @@ class Test_Admin_DNS_Hints extends Diagnostic_Base
 		}
 
 		// Find preconnect links
-		preg_match_all('/<link[^>]+rel=["\']preconnect["\'][^>]+href=["\']([^"\']+)["\'][^>]*>/i', $head_content, $preconnect_matches);
-		foreach ($preconnect_matches[1] ?? array() as $href) {
+		preg_match_all( '/<link[^>]+rel=["\']preconnect["\'][^>]+href=["\']([^"\']+)["\'][^>]*>/i', $head_content, $preconnect_matches );
+		foreach ( $preconnect_matches[1] ?? array() as $href ) {
 			$dns_hints[] = array(
 				'type' => 'preconnect',
 				'href' => $href,
@@ -74,9 +73,9 @@ class Test_Admin_DNS_Hints extends Diagnostic_Base
 		}
 
 		// Also check for hints added via wp_resource_hints filter
-		$resource_hints = apply_filters('wp_resource_hints', array(), 'dns-prefetch');
-		foreach ($resource_hints as $hint) {
-			if (is_string($hint)) {
+		$resource_hints = apply_filters( 'wp_resource_hints', array(), 'dns-prefetch' );
+		foreach ( $resource_hints as $hint ) {
+			if ( is_string( $hint ) ) {
 				$dns_hints[] = array(
 					'type' => 'dns-prefetch (filter)',
 					'href' => $hint,
@@ -84,46 +83,46 @@ class Test_Admin_DNS_Hints extends Diagnostic_Base
 			}
 		}
 
-		$hint_count = count($dns_hints);
+		$hint_count = count( $dns_hints );
 
 		// Threshold: More than 4 hints has diminishing returns
 		// Browsers typically limit to 6 parallel DNS lookups
 		$threshold = 4;
 
-		if ($hint_count <= $threshold) {
+		if ( $hint_count <= $threshold ) {
 			return null; // Pass
 		}
 
 		// Identify unique domains
 		$domains = array();
-		foreach ($dns_hints as $hint) {
-			$parsed = wp_parse_url($hint['href']);
-			if (! empty($parsed['host'])) {
+		foreach ( $dns_hints as $hint ) {
+			$parsed = wp_parse_url( $hint['href'] );
+			if ( ! empty( $parsed['host'] ) ) {
 				$domains[] = $parsed['host'];
 			}
 		}
-		$unique_domains = array_unique($domains);
+		$unique_domains = array_unique( $domains );
 
 		return array(
-			'id'           => 'admin-dns-hints',
-			'title'        => 'Excessive DNS Prefetch/Preconnect Hints',
-			'description'  => sprintf(
+			'id'            => 'admin-dns-hints',
+			'title'         => 'Excessive DNS Prefetch/Preconnect Hints',
+			'description'   => sprintf(
 				'WordPress admin <head> contains %d DNS prefetch or preconnect hints pointing to %d unique domains. Browsers limit parallel DNS lookups, so hints beyond 3-4 provide no benefit and waste browser resources. Recommended: Keep hints to 3-4 critical external domains only.',
 				$hint_count,
-				count($unique_domains)
+				count( $unique_domains )
 			)
 			'kb_link'      => 'https://wpshadow.com/kb/optimize-dns-hints',
 			'training_link' => 'https://wpshadow.com/training/resource-hints-best-practices',
-			'auto_fixable' => false,
-			'threat_level' => 32,
-			'module'       => 'admin-performance',
-			'priority'     => 22,
-			'meta'         => array(
-				'hint_count'      => $hint_count,
-				'threshold'       => $threshold,
-				'unique_domains'  => count($unique_domains),
-				'domains'         => array_slice($unique_domains, 0, 10),
-				'sample_hints'    => array_slice($dns_hints, 0, 5),
+			'auto_fixable'  => false,
+			'threat_level'  => 32,
+			'module'        => 'admin-performance',
+			'priority'      => 22,
+			'meta'          => array(
+				'hint_count'     => $hint_count,
+				'threshold'      => $threshold,
+				'unique_domains' => count( $unique_domains ),
+				'domains'        => array_slice( $unique_domains, 0, 10 ),
+				'sample_hints'   => array_slice( $dns_hints, 0, 5 ),
 			),
 		);
 	}
@@ -133,8 +132,7 @@ class Test_Admin_DNS_Hints extends Diagnostic_Base
 	 *
 	 * @return array Diagnostic information
 	 */
-	public static function get_info(): array
-	{
+	public static function get_info(): array {
 		return array(
 			'name'        => 'Excessive DNS Hints',
 			'category'    => 'admin-performance',

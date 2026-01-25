@@ -12,19 +12,19 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/design-sidebar-consistency
  */
 class Diagnostic_Design_DESIGN_SIDEBAR_CONSISTENCY extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'design-sidebar-consistency',
-            'title' => __('Sidebar Consistency', 'wpshadow'),
-            'description' => __('Checks sidebar width, gaps, and widget styling consistency.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'design',
-            'kb_link' => 'https://wpshadow.com/kb/design-sidebar-consistency',
-            'training_link' => 'https://wpshadow.com/training/design-sidebar-consistency',
-            'auto_fixable' => false,
-            'threat_level' => 6
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'design-sidebar-consistency',
+			'title'         => __( 'Sidebar Consistency', 'wpshadow' ),
+			'description'   => __( 'Checks sidebar width, gaps, and widget styling consistency.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'design',
+			'kb_link'       => 'https://wpshadow.com/kb/design-sidebar-consistency',
+			'training_link' => 'https://wpshadow.com/training/design-sidebar-consistency',
+			'auto_fixable'  => false,
+			'threat_level'  => 6,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -32,12 +32,12 @@ class Diagnostic_Design_DESIGN_SIDEBAR_CONSISTENCY extends Diagnostic_Base {
 	 * Diagnostic: Design DESIGN SIDEBAR CONSISTENCY
 	 * Slug: -design-design-sidebar-consistency
 	 * File: class-diagnostic-design-design-sidebar-consistency.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Design DESIGN SIDEBAR CONSISTENCY
 	 * Slug: -design-design-sidebar-consistency
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -50,11 +50,16 @@ class Diagnostic_Design_DESIGN_SIDEBAR_CONSISTENCY extends Diagnostic_Base {
 	 */
 	public static function test_live__design_design_sidebar_consistency(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Sidebar design is consistent across pages'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Sidebar design is consistent across pages',
+			);
 		}
 		$message = $result['description'] ?? 'Sidebar consistency issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

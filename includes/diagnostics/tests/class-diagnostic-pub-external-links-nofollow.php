@@ -24,12 +24,12 @@ use WPShadow\Core\Diagnostic_Lean_Checks;
  * @guardian-integrated Pending
  */
 class Diagnostic_Pub_External_Links_Nofollow extends Diagnostic_Base {
-	protected static $slug = 'pub-external-links-nofollow';
-	protected static $title = 'External Links Use No-Follow';
-	protected static $description = 'Are external links properly marked with rel=nofollow?';
-	protected static $category = 'Content Publishing';
+	protected static $slug         = 'pub-external-links-nofollow';
+	protected static $title        = 'External Links Use No-Follow';
+	protected static $description  = 'Are external links properly marked with rel=nofollow?';
+	protected static $category     = 'Content Publishing';
 	protected static $threat_level = 'low';
-	protected static $family = 'general';
+	protected static $family       = 'general';
 	protected static $family_label = 'General';
 
 	/**
@@ -39,18 +39,18 @@ class Diagnostic_Pub_External_Links_Nofollow extends Diagnostic_Base {
 	 */
 	public function check(): ?array {
 		// Check if SEO or link management plugin is active
-		$link_plugins = [
+		$link_plugins = array(
 			'wordpress-seo',
 			'all-in-one-seo-pack',
 			'rank-math',
 			'broken-link-checker',
-			'jetpack'
-		];
+			'jetpack',
+		);
 
 		$has_plugin = false;
 		foreach ( $link_plugins as $plugin ) {
 			if ( is_plugin_active( $plugin . '/' . $plugin . '.php' ) ||
-				 is_plugin_active( $plugin ) ) {
+				is_plugin_active( $plugin ) ) {
 				$has_plugin = true;
 				break;
 			}

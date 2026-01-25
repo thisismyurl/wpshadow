@@ -10,28 +10,27 @@ use WPShadow\Diagnostics\Diagnostic_Base;
  * Diagnostic: Database Options Bloat
  * Checks for excessive options in database
  */
-class Test_Database_Options_Bloat extends Diagnostic_Base
-{
+class Test_Database_Options_Bloat extends Diagnostic_Base {
+
 
 	/**
 	 * Run the diagnostic check
 	 *
 	 * @return array|null Array with issue details or null if healthy
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		global $wpdb;
 
 		$total_options = $wpdb->get_var(
 			"SELECT COUNT(*) FROM {$wpdb->options}"
 		);
 
-		if ($total_options > 5000) {
+		if ( $total_options > 5000 ) {
 			return array(
-				'id'            => 'database-options-bloat',
-				'title'         => 'Excessive Options in Database',
-				'threat_level'  => 30,
-				'description'   => sprintf(
+				'id'           => 'database-options-bloat',
+				'title'        => 'Excessive Options in Database',
+				'threat_level' => 30,
+				'description'  => sprintf(
 					'Database contains %d options. Normal range is 500-2000.',
 					$total_options
 				),
@@ -46,8 +45,7 @@ class Test_Database_Options_Bloat extends Diagnostic_Base
 	 *
 	 * @return array Test result with passed status and message
 	 */
-	public static function test_live_options_bloat(): array
-	{
+	public static function test_live_options_bloat(): array {
 		$result = self::check();
 		return array(
 			'passed'  => $result === null,

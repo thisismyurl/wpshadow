@@ -11,19 +11,19 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/design-data-table-responsiveness
  */
 class Diagnostic_Design_DATA_TABLE_RESPONSIVENESS extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'design-data-table-responsiveness',
-            'title' => __('Data Table Responsiveness', 'wpshadow'),
-            'description' => __('Verifies large tables handle responsiveness.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'design',
-            'kb_link' => 'https://wpshadow.com/kb/design-data-table-responsiveness',
-            'training_link' => 'https://wpshadow.com/training/design-data-table-responsiveness',
-            'auto_fixable' => false,
-            'threat_level' => 5
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'design-data-table-responsiveness',
+			'title'         => __( 'Data Table Responsiveness', 'wpshadow' ),
+			'description'   => __( 'Verifies large tables handle responsiveness.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'design',
+			'kb_link'       => 'https://wpshadow.com/kb/design-data-table-responsiveness',
+			'training_link' => 'https://wpshadow.com/training/design-data-table-responsiveness',
+			'auto_fixable'  => false,
+			'threat_level'  => 5,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -31,12 +31,12 @@ class Diagnostic_Design_DATA_TABLE_RESPONSIVENESS extends Diagnostic_Base {
 	 * Diagnostic: Design DATA TABLE RESPONSIVENESS
 	 * Slug: -design-data-table-responsiveness
 	 * File: class-diagnostic-design-data-table-responsiveness.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Design DATA TABLE RESPONSIVENESS
 	 * Slug: -design-data-table-responsiveness
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -49,11 +49,16 @@ class Diagnostic_Design_DATA_TABLE_RESPONSIVENESS extends Diagnostic_Base {
 	 */
 	public static function test_live__design_data_table_responsiveness(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Data tables are responsive and mobile-friendly'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Data tables are responsive and mobile-friendly',
+			);
 		}
 		$message = $result['description'] ?? 'Table responsiveness issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

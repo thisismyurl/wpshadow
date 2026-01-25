@@ -82,20 +82,20 @@ class Diagnostic_Dx_Staging_Environment extends Diagnostic_Base {
 		// Check if staging environment is configured
 
 		// Check for staging/dev indicators
-		$staging_indicators = [
+		$staging_indicators = array(
 			// Staging domain patterns
 			ABSPATH . 'wp-config.php', // Just check wp-config exists for now
-		];
+		);
 
 		// Check if site is in development/staging mode
 		$is_staging = false;
 
 		// Check for staging plugins
-		$staging_plugins = [
+		$staging_plugins = array(
 			'wp-staging/wp-staging.php',
 			'duplicator/duplicator.php',
 			'updraftplus/updraftplus.php',
-		];
+		);
 
 		foreach ( $staging_plugins as $plugin ) {
 			if ( is_plugin_active( $plugin ) ) {
@@ -155,10 +155,8 @@ class Diagnostic_Dx_Staging_Environment extends Diagnostic_Base {
 
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

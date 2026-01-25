@@ -51,11 +51,17 @@ $tips = array(
 		<h2><?php esc_html_e( 'Recommended Actions', 'wpshadow' ); ?></h2>
 		
 		<?php foreach ( $tips as $tip ) : ?>
-			<div class="wpshadow-tip" style="padding: 15px; border-left: 4px solid <?php echo $tip['priority'] === 'high' ? '#d63638' : ( $tip['priority'] === 'medium' ? '#dba617' : '#00a32a' ); ?>; background: #f9f9f9; margin-bottom: 15px;">
+			<?php
+			// Validate priority value for inline style
+			$valid_priorities = array( 'high', 'medium', 'low' );
+			$priority         = in_array( $tip['priority'], $valid_priorities, true ) ? $tip['priority'] : 'low';
+			$border_color     = $priority === 'high' ? '#d63638' : ( $priority === 'medium' ? '#dba617' : '#00a32a' );
+			?>
+			<div class="wpshadow-tip" style="padding: 15px; border-left: 4px solid <?php echo esc_attr( $border_color ); ?>; background: #f9f9f9; margin-bottom: 15px;">
 				<h3 style="margin-top: 0;">
 					<?php echo esc_html( $tip['title'] ); ?>
 					<span style="font-size: 12px; font-weight: normal; color: #666;">
-						(<?php echo esc_html( ucfirst( $tip['priority'] ) ); ?> priority)
+						(<?php echo esc_html( ucfirst( $priority ) ); ?> priority)
 					</span>
 				</h3>
 				<p style="margin-bottom: 0;"><?php echo esc_html( $tip['message'] ); ?></p>

@@ -81,61 +81,65 @@ class Diagnostic_Wcag_Focus_Order extends Diagnostic_Base {
 	}
 
 	protected static function get_guardian_html(): string {
-		if (isset($_POST['html']) && is_string($_POST['html'])) {
-			return sanitize_text_field(wp_unslash($_POST['html']));
+		if ( isset( $_POST['html'] ) && is_string( $_POST['html'] ) ) {
+			return sanitize_text_field( wp_unslash( $_POST['html'] ) );
 		}
 		return '';
 	}
 
 	public static function check(): ?array {
 		$html = self::get_guardian_html();
-		if (empty($html)) return null;
+		if ( empty( $html ) ) {
+			return null;
+		}
 
-		$issues = [];
+		$issues = array();
 		try {
 			$dom = new \DOMDocument();
-			@$dom->loadHTML($html);
-			$xpath = new \DOMXPath($dom);
+			@$dom->loadHTML( $html );
+			$xpath = new \DOMXPath( $dom );
 
 			// Check for logical focus order (proper heading hierarchy)
-			$headings = $xpath->query('//h1 | //h2 | //h3 | //h4 | //h5 | //h6');
-			if ($headings->length > 0) {
+			$headings = $xpath->query( '//h1 | //h2 | //h3 | //h4 | //h5 | //h6' );
+			if ( $headings->length > 0 ) {
 				$first_heading = null;
-				foreach ($headings as $h) {
-					$level = (int)substr($h->nodeName, 1);
-					if (!$first_heading) {
+				foreach ( $headings as $h ) {
+					$level = (int) substr( $h->nodeName, 1 );
+					if ( ! $first_heading ) {
 						$first_heading = $level;
-					} elseif ($level > $first_heading + 1) {
+					} elseif ( $level > $first_heading + 1 ) {
 						$issues[] = 'Heading hierarchy broken; skipped levels detected';
 						break;
 					}
 				}
 			}
-		} catch (\Exception $e) {
+		} catch ( \Exception $e ) {
 			return null;
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'wcag-focus-order',
-			'title' => 'Focus order not logical',
-			'description' => 'Heading hierarchy must be logical for navigation',
-			'severity' => 'medium',
-			'category' => 'accessibility',
+		return empty( $issues ) ? null : array(
+			'id'           => 'wcag-focus-order',
+			'title'        => 'Focus order not logical',
+			'description'  => 'Heading hierarchy must be logical for navigation',
+			'severity'     => 'medium',
+			'category'     => 'accessibility',
 			'threat_level' => 50,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	public static function test_live_wcag_focus_order(): array {
 		$good = '<html><body><h1>Title</h1><h2>Section</h2></body></html>';
-		$bad = '<html><body><h1>Title</h1><h3>Section</h3></body></html>';
+		$bad  = '<html><body><h1>Title</h1><h3>Section</h3></body></html>';
 
 		$_POST['html'] = $good;
-		$r1 = self::check();
+		$r1            = self::check();
 		$_POST['html'] = $bad;
-		$r2 = self::check();
+		$r2            = self::check();
 
-		return ['passed' => is_null($r1) && is_array($r2), 'message' => 'Focus order check working'];
+		return array(
+			'passed'  => is_null( $r1 ) && is_array( $r2 ),
+			'message' => 'Focus order check working',
+		);
 	}
-	}
-
+}

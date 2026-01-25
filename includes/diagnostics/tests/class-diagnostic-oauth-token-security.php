@@ -21,15 +21,14 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_OAuth_Token_Security extends Diagnostic_Base
-{
+class Diagnostic_OAuth_Token_Security extends Diagnostic_Base {
+
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		global $wpdb;
 
 		// Check for OAuth tokens in user meta or options (should be encrypted)
@@ -37,27 +36,27 @@ class Diagnostic_OAuth_Token_Security extends Diagnostic_Base
 			"SELECT COUNT(*) as count FROM {$wpdb->usermeta} WHERE meta_key LIKE '%oauth%' OR meta_key LIKE '%token%'"
 		);
 
-		if (! empty($results[0]->count) && $results[0]->count > 0) {
+		if ( ! empty( $results[0]->count ) && $results[0]->count > 0 ) {
 			// Tokens found - check if encrypted
 			$tokens = $wpdb->get_results(
 				"SELECT meta_value FROM {$wpdb->usermeta} WHERE meta_key LIKE '%oauth%' LIMIT 1"
 			);
 
-			if (! empty($tokens)) {
+			if ( ! empty( $tokens ) ) {
 				$token_value = $tokens[0]->meta_value;
 
 				// Check if it looks encrypted
-				if (! preg_match('/^[a-f0-9]+$/', $token_value) && strlen($token_value) > 100) {
+				if ( ! preg_match( '/^[a-f0-9]+$/', $token_value ) && strlen( $token_value ) > 100 ) {
 					return array(
-						'id'          => 'oauth-token-security',
-						'title'       => 'OAuth Tokens May Not Be Encrypted',
-						'description' => 'OAuth tokens stored in database without encryption. Compromised database exposes third-party accounts. Encrypt sensitive tokens at rest.',
-						'severity'    => 'high',
-						'category'    => 'security',
-						'kb_link'     => 'https://wpshadow.com/kb/encrypt-oauth-tokens/',
+						'id'            => 'oauth-token-security',
+						'title'         => 'OAuth Tokens May Not Be Encrypted',
+						'description'   => 'OAuth tokens stored in database without encryption. Compromised database exposes third-party accounts. Encrypt sensitive tokens at rest.',
+						'severity'      => 'high',
+						'category'      => 'security',
+						'kb_link'       => 'https://wpshadow.com/kb/encrypt-oauth-tokens/',
 						'training_link' => 'https://wpshadow.com/training/token-security/',
-						'auto_fixable' => false,
-						'threat_level' => 75,
+						'auto_fixable'  => false,
+						'threat_level'  => 75,
 					);
 				}
 			}
@@ -88,8 +87,7 @@ class Diagnostic_OAuth_Token_Security extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__oauth_token_security(): array
-	{
+	public static function test_live__oauth_token_security(): array {
 		global $wpdb;
 
 		$token_count = (int) $wpdb->get_var(
@@ -97,24 +95,24 @@ class Diagnostic_OAuth_Token_Security extends Diagnostic_Base
 		);
 
 		$token_value = null;
-		if ($token_count > 0) {
+		if ( $token_count > 0 ) {
 			$token_value = $wpdb->get_var(
 				"SELECT meta_value FROM {$wpdb->usermeta} WHERE meta_key LIKE '%oauth%' LIMIT 1"
 			);
 		}
 
 		$looks_encrypted = false;
-		if (null !== $token_value) {
-			$looks_encrypted = (bool) preg_match('/^[a-f0-9]+$/', (string) $token_value) || strlen((string) $token_value) <= 100;
+		if ( null !== $token_value ) {
+			$looks_encrypted = (bool) preg_match( '/^[a-f0-9]+$/', (string) $token_value ) || strlen( (string) $token_value ) <= 100;
 		}
 
 		// Call diagnostic check
 		$diagnostic_result = self::check();
 
 		// Determine expected state (matches check() logic)
-		$should_find_issue    = ($token_count > 0 && null !== $token_value && ! $looks_encrypted);
-		$diagnostic_has_issue = (null !== $diagnostic_result);
-		$test_passes          = ($should_find_issue === $diagnostic_has_issue);
+		$should_find_issue    = ( $token_count > 0 && null !== $token_value && ! $looks_encrypted );
+		$diagnostic_has_issue = ( null !== $diagnostic_result );
+		$test_passes          = ( $should_find_issue === $diagnostic_has_issue );
 
 		$message = sprintf(
 			'OAuth/token rows: %d, sample token %s encrypted. Expected diagnostic to %s issue. Diagnostic %s issue. Test: %s',
