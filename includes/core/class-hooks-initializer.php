@@ -168,11 +168,7 @@ class Hooks_Initializer {
 	/**
 	 * Admin enqueue scripts hook
 	 */
-		
-	public static function on_admin_enqueue_scripts($hook)
-	{
-    
-    if ( ! is_string( $hook ) || strpos( $hook, 'wpshadow' ) === false ) {
+	public static function on_admin_enqueue_scripts( $hook ) {
 		// Only enqueue consent banner assets if banner should be shown
 		$current_user = get_current_user_id();
 		if ($current_user && current_user_can('manage_options') && class_exists('\\WPShadow\\Privacy\\First_Run_Consent')) {

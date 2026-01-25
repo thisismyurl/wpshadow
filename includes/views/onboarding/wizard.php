@@ -360,7 +360,7 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 		cursor: pointer;
 	}
 
-		{
+	.platform-icon {
 		width: 60px;
 		height: 60px;
 		margin: 0 auto 15px;
@@ -380,33 +380,6 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 		display: flex;
 		align-items: center;
 		justify-content: center;
-	}
-
-	.platform-icon .dashicons {
-		font-size: 30px;
-		color: white;
-		width: 30px;
-		height: 30px;
-	}
-
-		{
-		margin: 0 0 8px 0;
-		font-size: 16px;
-		color: #1d2327;
-	}
-
-	.comfort-card h3 {
-		margin: 0 0 10px 0;
-		font-size: 18px;
-		color: #1d2327;
-	}
-
-	.platform-card p {
-		margin: 0 0 15px 0;
-		color: #646970;
-		font-size: 13px;
-		line-height: 1.4;
-		min-height: 35px;
 	}
 
 	.platform-icon .dashicons,
@@ -470,114 +443,107 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 	}
 
 	.onboarding-resources a:hover {
+		text-decoration: underline;
+	}
 
+	/* Config & Privacy styles */
+	.config-form,
+	.privacy-form {
+		max-width: 600px;
+		margin: 30px auto;
+	}
 
-		/* Config & Privacy styles */
-		.config-form,
-		.privacy-form {
-			max-width: 600px;
-			margin: 30px auto;
+	.config-option {
+		margin-bottom: 25px;
+		padding: 20px;
+		background: #f9f9f9;
+		border-radius: 8px;
+		border: 1px solid #e0e0e0;
+	}
+
+	.privacy-section {
+		margin-bottom: 30px;
+		padding: 20px;
+		background: #f9f9f9;
+		border-radius: 8px;
+		border: 1px solid #e0e0e0;
+	}
+
+	.privacy-section h3 {
+		margin: 0 0 15px 0;
+		color: #1d2327;
+		font-size: 16px;
+	}
+
+	.config-label {
+		display: flex;
+		align-items: flex-start;
+		cursor: pointer;
+		gap: 12px;
+	}
+
+	.config-label input[type="checkbox"] {
+		margin: 3px 0 0 0;
+		width: 18px;
+		height: 18px;
+		cursor: pointer;
+	}
+
+	.config-title {
+		font-weight: 600;
+		color: #1d2327;
+		font-size: 15px;
+	}
+
+	.config-description {
+		margin: 8px 0 0 30px;
+		color: #646970;
+		font-size: 14px;
+		line-height: 1.5;
+	}
+
+	.privacy-note {
+		text-align: center;
+		margin-top: 30px;
+		padding-top: 20px;
+		border-top: 1px solid #dcdcde;
+		color: #646970;
+		font-size: 13px;
+		font-style: italic;
+	}
+
+	.newsletter-section {
+		background: linear-gradient(135deg, #f0f7ff 0%, #e6f2ff 100%);
+		border-color: #2271b1;
+	}
+
+	.newsletter-intro {
+		color: #1d2327;
+		font-size: 14px;
+		margin-bottom: 15px;
+	}
+
+	.confirm-summary {
+		background: #f0f7ff;
+		padding: 20px;
+		border-radius: 8px;
+		margin-top: 20px;
+		font-size: 14px;
+		line-height: 1.6;
+		color: #3c434a;
+	}
+
+	/* Responsive */
+	@media (max-width: 768px) {
+		.wpshadow-onboarding-container {
+			padding: 30px 20px;
 		}
 
-		.config-option,
-		.privacy-section {
-			margin-bottom: 25px;
-			padding: 20px;
-			background: #f9f9f9;
-			border-radius: 8px;
-			border: 1px solid #e0e0e0;
+		.platform-cards,
+		.comfort-options {
+			grid-template-columns: 1fr;
 		}
-
-		.privacy-section {
-			margin-bottom: 30px;
-		}
-
-		.privacy-section h3 {
-			margin: 0 0 15px 0;
-			color: #1d2327;
-			font-size: 16px;
-		}
-
-		.config-label {
-			display: flex;
-			align-items: flex-start;
-			cursor: pointer;
-			gap: 12px;
-		}
-
-		.config-label input[type="checkbox"] {
-			margin: 3px 0 0 0;
-			width: 18px;
-			height: 18px;
-			cursor: pointer;
-		}
-
-		.config-title {
-			font-weight: 600;
-			color: #1d2327;
-			font-size: 15px;
-		}
-
-		.config-description {
-			margin: 8px 0 0 30px;
-			color: #646970;
-			fontBuild summary let summary='<strong><?php echo esc_js(__('Your choices:', 'wpshadow')); ?></strong><br>';
-			if (selectedConfig.auto_scan) summary+='✓ <?php echo esc_js(__('Daily health checks', 'wpshadow')); ?><br>';
-			if (selectedConfig.show_tips) summary+='✓ <?php echo esc_js(__('Helpful tips enabled', 'wpshadow')); ?><br>';
-			if (selectedPrivacy.email_critical) summary+='✓ <?php echo esc_js(__('Critical alerts via email', 'wpshadow')); ?><br>';
-			if (selectedPrivacy.newsletter) summary+='✓ <?php echo esc_js(__('Newsletter subscription', 'wpshadow')); ?><br>';
-			$('#confirm-summary').html(summary);
-
-			// Show confirmation step
-			$('#step-privacy
-
-			}
-
-			.privacy-note {
-				text-align: center;
-				margin-top: 30px;
-				padding-top: 20px;
-				border-top: 1px solid #dcdcde;
-				color: #646970;
-				font-size: 13px;
-				font-style: italic;
-			}
-
-			.newsletter-section {
-				background: linear-gradient(135deg, #f0f7ff 0%, #e6f2ff 100%);
-				border-color: #2271b1;
-			}
-
-			.newsletter-intro {
-				color: #1d2327;
-				font-size: 14px;
-				margin-bottom: 15px;
-			}
-
-			.confirm-summary {
-				background: #f0f7ff;
-				padding: 20px;
-				border-radius: 8px;
-				margin-top: 20px;
-				font-size: 14px;
-				line-height: 1.6;
-				color: #3c434a;
-			}
-
-			text-decoration: underline;
-		}
-
-		/* Responsive */
-		@media (max-width: 768px) {
-			.wpshadow-onboarding-container {
-				padding: 30px 20px;
-			}
-
-			.platform-cards,
-			.comfort-options {
-				grid-template-columns: 1fr;
-			}
-		}
+	}
 </style>
 
 <script>
@@ -600,7 +566,46 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 		// Comfort level selection
 		$('.select-comfort').on('click', function() {
 			selectedComfort = $(this).closest('.comfort-card').data('comfort');
+			
+			// Update config step based on selections
+			updateConfigStep(selectedPlatform, selectedComfort);
 
+			// Show next step
+			$('#step-comfort').removeClass('active');
+			$('#step-config').addClass('active');
+		});
+		
+		// Continue from config step
+		$('#continue-config').on('click', function() {
+			// Collect config preferences
+			const selectedConfig = {
+				auto_scan: $('input[name="auto_scan"]').is(':checked'),
+				show_tips: $('input[name="show_tips"]').is(':checked'),
+				track_improvements: $('input[name="track_improvements"]').is(':checked')
+			};
+			
+			// Store for later submission
+			$('#continue-config').data('config', selectedConfig);
+			
+			// Show next step
+			$('#step-config').removeClass('active');
+			$('#step-privacy').addClass('active');
+		});
+		
+		// Continue from privacy step
+		$('#continue-privacy').on('click', function() {
+			// Collect privacy preferences
+			const selectedPrivacy = {
+				email_critical: $('input[name="email_critical"]').is(':checked'),
+				email_weekly: $('input[name="email_weekly"]').is(':checked'),
+				share_diagnostics: $('input[name="share_diagnostics"]').is(':checked'),
+				newsletter: $('input[name="newsletter"]').is(':checked'),
+				newsletter_email: $('input[name="newsletter_email"]').val()
+			};
+			
+			// Store for later submission
+			$('#continue-privacy').data('privacy', selectedPrivacy);
+			
 			// Update confirmation message
 			const messages = {
 				'wordpress': '<?php echo esc_js(__('Since you know WordPress, we\'ll keep the standard interface but add helpful tips along the way.', 'wpshadow')); ?>',
@@ -612,24 +617,21 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 				'notion': '<?php echo esc_js(__('We\'ll use Notion-style language and show you how WordPress can organize your content.', 'wpshadow')); ?>',
 				'none': '<?php echo esc_js(__('We\'ll start with the basics and build up your confidence step by step.', 'wpshadow')); ?>'
 			};
-
+			
 			$('#confirm-message').text(messages[selectedPlatform] || messages['none']);
-
-			const $current = $('.onboarding-step.active');
-			const currentId = $current.attr('id');
-
-			$current.removeClass('active');
-
-			// Navigate to previous step
-			if (currentId === 'step-comfort') {
-				$('#step-platform').addClass('active');
-			} else if (currentId === 'step-config') {
-				$('#step-comfort').addClass('active');
-			} else if (currentId === 'step-privacy') {
-				$('#step-config').addClass('active');
-			} else if (currentId === 'step-confirm') {
-				$('#step-privacy').addClass('active');
-			}
+			
+			// Build summary
+			const configData = $('#continue-config').data('config') || {};
+			let summary = '<strong><?php echo esc_js(__('Your choices:', 'wpshadow')); ?></strong><br>';
+			if (configData.auto_scan) summary += '✓ <?php echo esc_js(__('Daily health checks', 'wpshadow')); ?><br>';
+			if (configData.show_tips) summary += '✓ <?php echo esc_js(__('Helpful tips enabled', 'wpshadow')); ?><br>';
+			if (selectedPrivacy.email_critical) summary += '✓ <?php echo esc_js(__('Critical alerts via email', 'wpshadow')); ?><br>';
+			if (selectedPrivacy.newsletter) summary += '✓ <?php echo esc_js(__('Newsletter subscription', 'wpshadow')); ?><br>';
+			$('#confirm-summary').html(summary);
+			
+			// Show confirmation step
+			$('#step-privacy').removeClass('active');
+			$('#step-confirm').addClass('active');
 		});
 
 		// Customize config step based on platform
@@ -655,24 +657,42 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 			const tipDescriptions = {
 				'learning': '<?php echo esc_js(__('Show detailed explanations as you learn', 'wpshadow')); ?>',
 				'comfortable': '<?php echo esc_js(__('Show contextual help tips as you work', 'wpshadow')); ?>',
-				'config: selectedConfig,
-				privacy: selectedPrivacy,
-				expert ': '
-				<?php echo esc_js(__('Show quick tips only when needed', 'wpshadow')); ?> '
+				'expert': '<?php echo esc_js(__('Show quick tips only when needed', 'wpshadow')); ?>'
 			};
 
 			$('#config-intro').text(platformIntros[platform] || platformIntros['none']);
 			$('#config-scan-title').text(scanTitles[platform] || scanTitles['default']);
 			$('#config-tips-desc').text(tipDescriptions[comfort] || tipDescriptions['comfortable']);
 		}
-		'#step-confirm').addClass('active');
-	});
+		
+		// Newsletter checkbox toggle
+		$('input[name="newsletter"]').on('change', function() {
+			if ($(this).is(':checked')) {
+				$('.newsletter-email').removeClass('wps-none');
+			} else {
+				$('.newsletter-email').addClass('wps-none');
+			}
+		});
 
 	// Back button
 	$('.back-step').on('click', function(e) {
 		e.preventDefault();
-		$('#step-comfort').removeClass('active');
-		$('#step-platform').addClass('active');
+		
+		const $current = $('.onboarding-step.active');
+		const currentId = $current.attr('id');
+		
+		$current.removeClass('active');
+		
+		// Navigate to previous step
+		if (currentId === 'step-comfort') {
+			$('#step-platform').addClass('active');
+		} else if (currentId === 'step-config') {
+			$('#step-comfort').addClass('active');
+		} else if (currentId === 'step-privacy') {
+			$('#step-config').addClass('active');
+		} else if (currentId === 'step-confirm') {
+			$('#step-privacy').addClass('active');
+		}
 	});
 
 	// Skip onboarding
@@ -693,32 +713,38 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 
 	// Finish onboarding
 	$('#finish-onboarding').on('click', function() {
-	const $btn = $(this);
-	$btn.prop('disabled', true).text('<?php echo esc_js(__('Setting up...', 'wpshadow')); ?>');
+		const $btn = $(this);
+		$btn.prop('disabled', true).text('<?php echo esc_js(__('Setting up...', 'wpshadow')); ?>');
+		
+		// Collect all data
+		const configData = $('#continue-config').data('config') || {};
+		const privacyData = $('#continue-privacy').data('privacy') || {};
 
-	$.ajax({
-		url: ajaxurl,
-		type: 'POST',
-		data: {
-			action: 'wpshadow_save_onboarding',
-			platform: selectedPlatform,
-			comfort_level: selectedComfort,
-			nonce: '<?php echo esc_js(wp_create_nonce('wpshadow_onboarding')); ?>'
-		},
-		success: function(response) {
-			if (response.success) {
-				window.location.reload();
-			} else {
-				alert(response.data || '<?php echo esc_js(__('Something went wrong. Please try again.', 'wpshadow')); ?>');
+		$.ajax({
+			url: ajaxurl,
+			type: 'POST',
+			data: {
+				action: 'wpshadow_save_onboarding',
+				platform: selectedPlatform,
+				comfort_level: selectedComfort,
+				config: configData,
+				privacy: privacyData,
+				nonce: '<?php echo esc_js(wp_create_nonce('wpshadow_onboarding')); ?>'
+			},
+			success: function(response) {
+				if (response.success) {
+					window.location.reload();
+				} else {
+					alert(response.data || '<?php echo esc_js(__('Something went wrong. Please try again.', 'wpshadow')); ?>');
+					$btn.prop('disabled', false).text('<?php echo esc_js(__('Let\'s Go!', 'wpshadow')); ?>');
+				}
+			},
+			error: function(xhr, status, error) {
+				console.error('AJAX Error:', status, error, xhr.responseText);
+				alert('<?php echo esc_js(__('Connection error. Please try again.', 'wpshadow')); ?>');
 				$btn.prop('disabled', false).text('<?php echo esc_js(__('Let\'s Go!', 'wpshadow')); ?>');
 			}
-		},
-		error: function(xhr, status, error) {
-			console.error('AJAX Error:', status, error, xhr.responseText);
-			alert('<?php echo esc_js(__('Connection error. Please try again.', 'wpshadow')); ?>');
-			$btn.prop('disabled', false).text('<?php echo esc_js(__('Let\'s Go!', 'wpshadow')); ?>');
-		}
+		});
 	});
-	});
-	});
+});
 </script>

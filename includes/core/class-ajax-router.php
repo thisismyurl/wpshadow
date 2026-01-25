@@ -36,6 +36,8 @@ class AJAX_Router
 		// Core finding operations
 		\WPShadow\Admin\Ajax\Dismiss_Finding_Handler::register();
 		\WPShadow\Admin\Ajax\Autofix_Finding_Handler::register();
+		\WPShadow\Admin\Ajax\Dry_Run_Treatment_Handler::register();
+		\WPShadow\Admin\Ajax\Rollback_Treatment_Handler::register();
 		\WPShadow\Admin\Ajax\Toggle_Autofix_Permission_Handler::register();
 		\WPShadow\Admin\Ajax\Allow_All_Autofixes_Handler::register();
 		\WPShadow\Admin\Ajax\Change_Finding_Status_Handler::register();

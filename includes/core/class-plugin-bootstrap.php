@@ -149,6 +149,15 @@ class Plugin_Bootstrap
 		$visual_comparisons_file = WPSHADOW_PATH . 'includes/views/visual-comparisons-page.php';
 		if (file_exists($visual_comparisons_file)) {
 			require_once $visual_comparisons_file;
+		
+		// Load dashboard widgets
+		$widgets_path = WPSHADOW_PATH . 'includes/dashboard/widgets/';
+		if (file_exists($widgets_path . 'class-setup-widget.php')) {
+			require_once $widgets_path . 'class-setup-widget.php';
+			
+			if (class_exists('\\WPShadow\\Dashboard\\Widgets\\Setup_Widget')) {
+				\WPShadow\Dashboard\Widgets\Setup_Widget::init();
+			}
 		}
 	}
 

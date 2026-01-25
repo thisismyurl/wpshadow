@@ -126,9 +126,10 @@ class Treatment_Registry extends Abstract_Registry {
 	 * Apply a treatment
 	 *
 	 * @param string $finding_id Finding identifier.
+	 * @param bool   $dry_run    Whether to run in dry-run mode (default: false).
 	 * @return array Result array.
 	 */
-	public static function apply_treatment( $finding_id ) {
+	public static function apply_treatment( $finding_id, $dry_run = false ) {
 		$treatment = self::get_treatment( $finding_id );
 		
 		if ( ! $treatment ) {
@@ -145,7 +146,48 @@ class Treatment_Registry extends Abstract_Registry {
 			);
 		}
 		
+		// Use execute method if available (supports dry run)
+		if ( method_exists( $treatment, 'execute' ) ) {
+			return call_user_func( array( $treatment, 'execute' ), $dry_run );
+		}
+		
+		// Fallback to direct apply (no dry run support)
+		if ( $dry_run ) {
+			return array(
+				'success'     => true,
+				'message'     => 'Treatment can be applied (dry run - no changes made)',
+				'dry_run'     => true,
+				'would_apply' => true,
+			);
+		}
+		
 		return call_user_func( array( $treatment, 'apply' ) );
+	}
+	
+	/**
+	 * Undo a treatment
+	 *
+	 * @param string $finding_id Finding identifier.
+	 * @return array Result array.
+	 */
+	public static function undo_treatment( $finding_id ) {
+		$treatment = self::get_treatment( $finding_id );
+		
+		if ( ! $treatment ) {
+			return array(
+				'success' => false,
+				'message' => 'No treatment available for this finding.',
+			);
+		}
+		
+		if ( ! method_exists( $treatment, 'undo' ) ) {
+			return array(
+				'success' => false,
+				'message' => 'This treatment does not support undo.',
+			);
+		}
+		
+		return call_user_func( array( $treatment, 'undo' ) );
 	}
 	
 	/**
