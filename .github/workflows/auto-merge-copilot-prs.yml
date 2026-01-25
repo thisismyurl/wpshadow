@@ -165,15 +165,10 @@ jobs:
               repo: context.repo.repo,
               issue_number: pr.number,
               body: `## 🔒 Auto-Merge Blocked
-              
+
 **Reason:** ${analysis.reason}
 
-This PR requires human review due to:
-- Security-critical files modified, OR
-- Merge conflicts present, OR
-- Draft state
-
-Please review and merge manually when ready.`
+This PR requires human review. Please review and merge manually when ready.`
             });
       
       - name: Auto-merge safe PRs
@@ -223,7 +218,7 @@ Merged automatically by workflow.`
                 repo: context.repo.repo,
                 issue_number: pr.number,
                 body: `## ❌ Auto-Merge Failed
-                
+
 Attempted to auto-merge but failed: ${error.message}
 
 Please merge manually.`
