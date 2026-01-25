@@ -313,7 +313,7 @@ $severity_legend = array(
 						<span class="kanban-column-icon dashicons dashicons-info" aria-hidden="true"></span>
 						<?php echo esc_html( $status_labels[ $status ] ); ?>
 					</h3>
-					<span class="kanban-column-count" aria-label="<?php echo esc_attr( sprintf( __( '%d items', 'wpshadow' ), count( $findings_by_status[ $status ] ) ) ); ?>">
+					<span class="kanban-column-count" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: number of items */ __( '%d items', 'wpshadow' ), count( $findings_by_status[ $status ] ) ) ); ?>">
 						<?php echo count( $findings_by_status[ $status ] ); ?>
 					</span>
 				</div>
@@ -438,7 +438,7 @@ $severity_legend = array(
 								draggable="true"
 								tabindex="0"
 								role="button"
-								aria-label="<?php echo esc_attr( sprintf( __( '%s - %s severity', 'wpshadow' ), $finding['title'], $card_severity ) ); ?>"
+								aria-label="<?php echo esc_attr( sprintf( /* translators: 1: finding title, 2: severity level */ __( '%1$s - %2$s severity', 'wpshadow' ), $finding['title'], $card_severity ) ); ?>"
 								<?php
 								if ( $is_hidden ) {
 									echo 'style="display: none;"';
@@ -481,17 +481,17 @@ $severity_legend = array(
 										<div class="finding-card-actions finding-actions">
 											<?php if ( ! empty( $finding['kb_link'] ) ) : ?>
 												<a href="<?php echo esc_url( $finding['kb_link'] ); ?>" 
-												   target="_blank" 
-												   class="button button-small"
-												   aria-label="<?php esc_attr_e( 'Learn more in knowledge base', 'wpshadow' ); ?>">
+													target="_blank" 
+													class="button button-small"
+													aria-label="<?php esc_attr_e( 'Learn more in knowledge base', 'wpshadow' ); ?>">
 													<?php esc_html_e( 'Learn more', 'wpshadow' ); ?>
 												</a>
 											<?php endif; ?>
 											<?php if ( ! empty( $finding['training_link'] ) ) : ?>
 												<a href="<?php echo esc_url( $finding['training_link'] ); ?>" 
-												   target="_blank" 
-												   class="button button-small"
-												   aria-label="<?php esc_attr_e( 'Watch training video', 'wpshadow' ); ?>">
+													target="_blank" 
+													class="button button-small"
+													aria-label="<?php esc_attr_e( 'Watch training video', 'wpshadow' ); ?>">
 													<?php esc_html_e( 'Watch training', 'wpshadow' ); ?>
 												</a>
 											<?php endif; ?>
