@@ -368,6 +368,59 @@ class Hooks_Initializer
 			echo '<strong>WPShadow:</strong> ' . esc_html($count) . ' operation(s) scheduled for off-peak hours (' . esc_html($time_text) . ').';
 			echo '</p></div>';
 		}
+
+		// Show email test status on export-personal-data.php page
+		global $pagenow;
+		if ($pagenow === 'export-personal-data.php') {
+			self::show_export_personal_data_email_notice();
+		}
+	}
+
+	/**
+	 * Show email server test status on export-personal-data.php page
+	 */
+	private static function show_export_personal_data_email_notice()
+	{
+		$email_test_status = get_option('wpshadow_last_email_test_status', 'not_tested');
+		$email_test_time = get_option('wpshadow_last_email_test_time', 0);
+		$email_tool_url = admin_url('admin.php?page=wpshadow-tools&tool=email-test');
+
+		if ($email_test_status === 'passed') {
+			$time_ago = human_time_diff($email_test_time, current_time('timestamp'));
+			echo '<div class="notice notice-success" style="margin-top: 15px;">';
+			echo '<p>';
+			echo '<span class="dashicons dashicons-yes-alt" style="color: #46b450;"></span> ';
+			printf(
+				/* translators: 1: time ago, 2: opening anchor tag for email test tool, 3: closing anchor tag */
+				esc_html__('Email server tested and passed %1$s ago. %2$sRetest email server%3$s', 'wpshadow'),
+				'<strong>' . esc_html($time_ago) . '</strong>',
+				'<a href="' . esc_url($email_tool_url) . '">',
+				'</a>'
+			);
+			echo '</p></div>';
+		} elseif ($email_test_status === 'failed') {
+			echo '<div class="notice notice-error" style="margin-top: 15px;">';
+			echo '<p>';
+			echo '<span class="dashicons dashicons-warning" style="color: #d63638;"></span> ';
+			printf(
+				/* translators: 1: opening anchor tag for email test tool, 2: closing anchor tag */
+				esc_html__('Email server test failed. Personal data export notifications may not be delivered. %1$sTest email server%2$s', 'wpshadow'),
+				'<a href="' . esc_url($email_tool_url) . '"><strong>',
+				'</strong></a>'
+			);
+			echo '</p></div>';
+		} else {
+			echo '<div class="notice notice-warning" style="margin-top: 15px;">';
+			echo '<p>';
+			echo '<span class="dashicons dashicons-info" style="color: #f0b849;"></span> ';
+			printf(
+				/* translators: 1: opening anchor tag for email test tool, 2: closing anchor tag */
+				esc_html__('Email server has not been tested. Personal data export notifications may not be delivered. %1$sTest email server now%2$s', 'wpshadow'),
+				'<a href="' . esc_url($email_tool_url) . '"><strong>',
+				'</strong></a>'
+			);
+			echo '</p></div>';
+		}
 	}
 
 	/**
