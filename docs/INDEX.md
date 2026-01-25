@@ -98,6 +98,8 @@
 - [SETTINGS_API_GUIDE.md](SETTINGS_API_GUIDE.md) - WordPress Settings API Usage
 - [EXTERNAL_REVIEWER_API.md](EXTERNAL_REVIEWER_API.md) - External Reviewer API
 - [EXTERNAL_CRON_INTEGRATION_GUIDE.md](EXTERNAL_CRON_INTEGRATION_GUIDE.md) - Cron Integration
+- [HOOKS_REFERENCE.md](HOOKS_REFERENCE.md) - Developer Hooks & Filters Reference
+- [WP_CLI_REFERENCE.md](WP_CLI_REFERENCE.md) - WP-CLI Commands Reference
 - [ASSETS_DEVELOPER_GUIDE.md](ASSETS_DEVELOPER_GUIDE.md) - Assets & CSS/JS Management
 
 ### 🔍 Reference & Quick Lookup
