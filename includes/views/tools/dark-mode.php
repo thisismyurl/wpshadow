@@ -40,32 +40,37 @@ $dark_mode_pref = get_user_meta( $user_id, 'wpshadow_dark_mode_preference', true
 		<form method="post" action="">
 			<?php wp_nonce_field( 'wpshadow_dark_mode', 'wpshadow_dark_mode_nonce' ); ?>
 
-			<table class="form-table">
-				<tr>
-					<th scope="row">
-						<label><?php esc_html_e( 'Mode Preference', 'wpshadow' ); ?></label>
-					</th>
-					<td>
-						<fieldset>
-							<label>
-								<input type="radio" name="dark_mode_pref" value="auto" <?php checked( $dark_mode_pref, 'auto' ); ?>>
-								<?php esc_html_e( 'Auto (follow system/WordPress theme)', 'wpshadow' ); ?>
-							</label><br>
-							<label>
-								<input type="radio" name="dark_mode_pref" value="light" <?php checked( $dark_mode_pref, 'light' ); ?>>
-								<?php esc_html_e( 'Light mode', 'wpshadow' ); ?>
-							</label><br>
-							<label>
-								<input type="radio" name="dark_mode_pref" value="dark" <?php checked( $dark_mode_pref, 'dark' ); ?>>
-								<?php esc_html_e( 'Dark mode', 'wpshadow' ); ?>
-							</label>
-						</fieldset>
-						<p class="description">
-							<?php esc_html_e( 'Dark mode reduces eye strain in low-light environments and saves battery on OLED screens.', 'wpshadow' ); ?>
-						</p>
-					</td>
-				</tr>
-			</table>
+			<?php
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by Form_Controls helper
+			echo \WPShadow\Helpers\Form_Controls::button_group(
+				array(
+					'name'     => 'dark_mode_pref',
+					'label'    => __( 'Mode Preference', 'wpshadow' ),
+					'options'  => array(
+						array(
+							'value' => 'auto',
+							'label' => __( 'Auto', 'wpshadow' ),
+							'icon'  => 'dashicons-update',
+						),
+						array(
+							'value' => 'light',
+							'label' => __( 'Light', 'wpshadow' ),
+							'icon'  => 'dashicons-admin-appearance',
+						),
+						array(
+							'value' => 'dark',
+							'label' => __( 'Dark', 'wpshadow' ),
+							'icon'  => 'dashicons-admin-customizer',
+						),
+					),
+					'selected' => $dark_mode_pref,
+				)
+			);
+			?>
+
+			<p class="description" style="margin-top: -15px; margin-left: 15px;">
+				<?php esc_html_e( 'Dark mode reduces eye strain in low-light environments and saves battery on OLED screens.', 'wpshadow' ); ?>
+			</p>
 
 			<p class="submit">
 				<button type="submit" name="save_dark_mode" class="button button-primary">
