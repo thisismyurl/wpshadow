@@ -202,10 +202,11 @@ Done → Production Release
 - Reference CODE_REVIEW_SENIOR_DEVELOPER.md in code reviews
 
 ### Issue Templates
-Create templates for:
-- `Feature request` - Includes philosophy checklist
-- `Bug report` - Includes reproduction steps
-- `Code review` - Includes standards checklist
+Available templates in `.github/ISSUE_TEMPLATE/`:
+- `feature_request.md` - Includes philosophy checklist
+- `bug_report.md` - Includes reproduction steps
+- `code_review.md` - Includes standards checklist
+- `question.md` - For discussions and questions
 
 ---
 
