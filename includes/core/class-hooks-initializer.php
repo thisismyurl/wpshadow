@@ -776,6 +776,12 @@ class Hooks_Initializer {
 		if ( class_exists( '\WPShadow\Settings\Data_Retention_Manager' ) ) {
 			\WPShadow\Settings\Data_Retention_Manager::run_cleanup();
 		}
+
+		// Cleanup old visual comparisons
+		if ( class_exists( '\WPShadow\Core\Visual_Comparator' ) ) {
+			$retention_days = get_option( 'wpshadow_visual_comparison_retention_days', 30 );
+			\WPShadow\Core\Visual_Comparator::cleanup_old_comparisons( (int) $retention_days );
+		}
 	}
 
 	/**
