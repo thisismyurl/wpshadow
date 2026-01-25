@@ -157,6 +157,7 @@ private static function load_dashboard_page() {
 			}
 		}
 	}
+}
 
 	/**
 	 * Load engage system (gamification)
