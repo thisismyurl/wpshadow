@@ -320,10 +320,12 @@ class Guardian_Settings {
 					<label for="continue_on_error">' . esc_html__( 'Error Handling', 'wpshadow' ) . '</label>
 				</th>
 				<td>
-					<select id="continue_on_error" name="continue_on_error">
-						<option value="stop">' . esc_html__( 'Stop on First Error', 'wpshadow' ) . '</option>
-						<option value="continue" selected>' . esc_html__( 'Skip Failed, Continue', 'wpshadow' ) . '</option>
-					</select>
+					<div class="wps-select-wrapper">
+						<select id="continue_on_error" name="continue_on_error" class="wps-select">
+							<option value="stop">' . esc_html__( 'Stop on First Error', 'wpshadow' ) . '</option>
+							<option value="continue" selected>' . esc_html__( 'Skip Failed, Continue', 'wpshadow' ) . '</option>
+						</select>
+					</div>
 					<p class="description">' . esc_html__( 'How to handle errors during batch execution', 'wpshadow' ) . '</p>
 				</td>
 			</tr>
