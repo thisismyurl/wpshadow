@@ -175,6 +175,27 @@ class Hooks_Initializer
 	 */
 	public static function on_admin_enqueue_scripts($hook)
 	{
+		// Enqueue consent banner assets on all admin pages
+		wp_enqueue_style(
+			'wpshadow-consent-banner',
+			WPSHADOW_URL . 'assets/css/consent-banner.css',
+			array(),
+			WPSHADOW_VERSION
+		);
+
+		wp_enqueue_script(
+			'wpshadow-consent-banner',
+			WPSHADOW_URL . 'assets/js/consent-banner.js',
+			array('jquery'),
+			WPSHADOW_VERSION,
+			true
+		);
+
+		wp_localize_script('wpshadow-consent-banner', 'wpshadow', array(
+			'consent_nonce' => wp_create_nonce('wpshadow_consent'),
+		));
+
+		// Only enqueue other assets on WPShadow pages
 		if (! is_string($hook) || strpos($hook, 'wpshadow') === false) {
 			return;
 		}

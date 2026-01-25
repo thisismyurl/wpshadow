@@ -54,16 +54,19 @@ class Plugin_Bootstrap
 		// 6. Load onboarding system
 		self::load_onboarding_system();
 
-		// 7. Load content post types (KB, FAQ, etc.)
+		// 7. Load privacy system
+		self::load_privacy_system();
+
+		// 8. Load content post types (KB, FAQ, etc.)
 		self::load_content_types();
 
-		// 8. Load pro addon integration
+		// 9. Load pro addon integration
 		self::load_pro_integration();
 
-		// 9. Load WP-CLI commands
+		// 10. Load WP-CLI commands
 		self::load_cli_commands();
 
-		// 10. Fire initialization complete hook
+		// 11. Fire initialization complete hook
 		do_action('wpshadow_core_initialized');
 	}
 
@@ -214,6 +217,25 @@ class Plugin_Bootstrap
 			if (class_exists('\\WPShadow\\Onboarding\\Onboarding_Wizard')) {
 				\WPShadow\Onboarding\Onboarding_Wizard::init();
 			}
+		}
+	}
+
+	/**
+	 * Load privacy system
+	 *
+	 * @return void
+	 */
+	private static function load_privacy_system()
+	{
+		$privacy_path = WPSHADOW_PATH . 'includes/privacy/';
+
+		// Load privacy classes
+		if (file_exists($privacy_path . 'class-consent-preferences.php')) {
+			require_once $privacy_path . 'class-consent-preferences.php';
+		}
+
+		if (file_exists($privacy_path . 'class-first-run-consent.php')) {
+			require_once $privacy_path . 'class-first-run-consent.php';
 		}
 	}
 
