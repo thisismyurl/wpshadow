@@ -1,227 +1,265 @@
 /**
  * WPShadow Health Gauges Stylesheet
  * 
- * Implements the 11-gauge health dashboard with 3-column responsive layout.
- * Philosophy: Show value (#9) - Visual health at a glance
+ * Implements modern health dashboard with clean, GitHub-inspired aesthetics.
+ * Philosophy: Show value (#9), Inspire confidence (#8)
  * 
  * @package WPShadow
  */
 
-/* Gauge Container - 3-Column Layout */
-.wpshadow-health-dashboard {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    margin: 30px 0;
+/* ============================================================================
+   Dashboard Gauges Container
+   ============================================================================ */
+
+.wps-dashboard-gauges {
+    margin-bottom: var(--wps-space-8);
+    flex-wrap: wrap;
 }
 
-/* Left Column: Large Overall Health Gauge */
-.wpshadow-gauge-column-left {
-    grid-column: 1;
-    display: flex;
-    flex-direction: column;
+/* ============================================================================
+   Main Health Gauge (Left Side)
+   ============================================================================ */
+
+.wps-health-gauge-main {
+    flex: 0 0 auto;
+    width: 280px;
+    min-width: 280px;
 }
 
-.wpshadow-gauge-large {
-    border-radius: 12px;
-    padding: 24px;
+.wps-health-gauge-card {
+    border: 2px solid var(--wps-gray-300);
+    border-radius: var(--wps-radius-lg);
+    padding: var(--wps-space-6);
     background: #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--wps-shadow-md);
     text-align: center;
-    transition: all 0.3s ease;
+    transition: box-shadow var(--wps-transition-base), transform var(--wps-transition-base);
 }
 
-.wpshadow-gauge-large:hover {
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+.wps-health-gauge-card:hover {
+    box-shadow: var(--wps-shadow-lg);
     transform: translateY(-2px);
 }
 
-.wpshadow-gauge-large h3 {
-    margin: 0 0 16px 0;
-    font-size: 20px;
-    color: #333;
-    font-weight: 600;
+.wps-health-gauge-title {
+    margin: 0 0 var(--wps-space-4) 0;
+    font-size: var(--wps-text-xl);
+    color: var(--wps-gray-900);
+    font-weight: var(--wps-font-semibold);
 }
 
-.wpshadow-gauge-large .wpshadow-gauge-svg {
+.wps-health-gauge-svg {
     margin: 0 auto;
     display: block;
-    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.2));
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.1));
 }
 
-.wpshadow-gauge-large p {
-    margin: 16px 0 0 0;
-    font-size: 14px;
-    color: #666;
+.wps-health-gauge-message {
+    margin: var(--wps-space-4) 0 0 0;
+    font-size: var(--wps-text-sm);
+    color: var(--wps-gray-600);
     line-height: 1.5;
 }
 
-/* Quick Scan & Deep Scan Buttons */
-.wpshadow-scan-buttons {
-    margin-top: 16px;
+/* Gauge progress animation */
+.wps-gauge-progress {
+    transition: stroke-dasharray 0.5s ease, stroke 0.3s ease;
+}
+
+/* ============================================================================
+   Scan Action Buttons
+   ============================================================================ */
+
+.wps-health-gauge-actions {
+    margin-top: var(--wps-space-4);
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: var(--wps-space-3);
 }
 
-.wpshadow-scan-buttons .button {
+.wps-btn-scan {
     width: 100%;
-    padding: 10px;
+    padding: var(--wps-space-3) var(--wps-space-4);
     cursor: pointer;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-}
-
-.wpshadow-scan-buttons .button-primary {
-    background-color: #0073aa;
-    color: white;
-}
-
-.wpshadow-scan-buttons .button-primary:hover {
-    background-color: #005a87;
-    box-shadow: 0 2px 8px rgba(0, 115, 170, 0.3);
-}
-
-.wpshadow-scan-buttons .button {
-    background-color: #f3f3f3;
-    color: #333;
-    border: 1px solid #ddd;
-}
-
-.wpshadow-scan-buttons .button:hover {
-    background-color: #e8e8e8;
-    border-color: #999;
-}
-
-/* Right Columns: Small Category Gauges */
-.wpshadow-gauge-column-right {
-    grid-column: 2 / 4;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-}
-
-.wpshadow-gauge-small {
+    border-radius: var(--wps-radius-md);
+    transition: all var(--wps-transition-fast);
     display: flex;
     align-items: center;
-    gap: 14px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 12px 14px;
+    justify-content: center;
+    gap: var(--wps-space-2);
+    font-weight: var(--wps-font-medium);
+}
+
+.wps-btn-scan .dashicons {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+.wps-btn-scan.button-primary {
+    background: var(--wps-info);
+    color: #ffffff;
+    border-color: var(--wps-info);
+}
+
+.wps-btn-scan.button-primary:hover {
+    background: var(--wps-info-dark);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.wps-btn-scan.button:not(.button-primary) {
     background: #ffffff;
-    text-decoration: none !important;
-    color: inherit !important;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    height: 90px;
+    color: var(--wps-gray-700);
+    border: 1px solid var(--wps-gray-300);
+}
+
+.wps-btn-scan.button:not(.button-primary):hover {
+    background: var(--wps-gray-50);
+    border-color: var(--wps-gray-400);
+}
+
+/* ============================================================================
+   Category Gauges Grid (Right Side)
+   ============================================================================ */
+
+.wps-health-gauge-categories {
+    flex: 1;
     min-width: 0;
 }
 
-.wpshadow-gauge-small:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-color: #bbb;
-    transform: translateY(-1px);
+.wps-health-gauge-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--wps-space-4);
 }
 
-.wpshadow-gauge-small-icon {
+/* Individual category gauge */
+.wps-category-gauge {
+    display: flex;
+    align-items: center;
+    gap: var(--wps-space-4);
+    border: 1px solid var(--wps-gray-200);
+    border-radius: var(--wps-radius-md);
+    padding: var(--wps-space-3) var(--wps-space-4);
+    background: #ffffff;
+    text-decoration: none;
+    color: inherit;
+    transition: all var(--wps-transition-base);
+    cursor: pointer;
+    min-height: 90px;
+}
+
+.wps-category-gauge:hover {
+    box-shadow: var(--wps-shadow-md);
+    border-color: var(--wps-gray-300);
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+.wps-category-gauge:focus {
+    outline: 2px solid var(--wps-info);
+    outline-offset: 2px;
+}
+
+.wps-category-gauge-icon {
     flex-shrink: 0;
 }
 
-.wpshadow-gauge-small-icon svg {
+.wps-category-gauge-icon svg {
     filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.1));
 }
 
-.wpshadow-gauge-small-text {
+.wps-category-gauge-content {
     flex: 1;
     min-width: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
 }
 
-.wpshadow-gauge-small-text-header {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 4px;
-}
-
-.wpshadow-gauge-small-text-header .dashicons {
-    font-size: 16px;
-    flex-shrink: 0;
-}
-
-.wpshadow-gauge-small-text-header h4 {
-    margin: 0;
-    font-size: 13px;
-    font-weight: 600;
+.wps-category-gauge-title {
+    margin: 0 0 var(--wps-space-1) 0;
+    font-size: var(--wps-text-sm);
+    font-weight: var(--wps-font-semibold);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.wpshadow-gauge-small-text-status {
-    font-weight: 600;
-    font-size: 11px;
+.wps-category-gauge-status {
+    display: flex;
+    flex-direction: column;
+    gap: var(--wps-space-1);
 }
 
-.wpshadow-gauge-small-text-count {
-    color: #666;
-    font-size: 10px;
-    margin-top: 2px;
+.wps-category-gauge-status-text {
+    font-weight: var(--wps-font-semibold);
+    font-size: var(--wps-text-xs);
 }
 
-/* Responsive Design */
-@media (max-width: 1400px) {
-    .wpshadow-health-dashboard {
-        grid-template-columns: 1fr;
-        gap: 20px;
+.wps-category-gauge-count {
+    color: var(--wps-gray-600);
+    font-size: var(--wps-text-xs);
+}
+
+/* ============================================================================
+   Responsive Design
+   ============================================================================ */
+
+@media (max-width: 1200px) {
+    .wps-dashboard-gauges {
+        flex-direction: column;
     }
 
-    .wpshadow-gauge-column-left {
-        grid-column: 1;
+    .wps-health-gauge-main {
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto var(--wps-space-6) auto;
     }
 
-    .wpshadow-gauge-column-right {
-        grid-column: 1;
-        grid-template-columns: repeat(2, 1fr);
+    .wps-health-gauge-categories {
+        width: 100%;
     }
 }
 
 @media (max-width: 768px) {
-    .wpshadow-health-dashboard {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-
-    .wpshadow-gauge-column-right {
+    .wps-health-gauge-grid {
         grid-template-columns: 1fr;
     }
 
-    .wpshadow-gauge-large {
-        padding: 16px;
+    .wps-health-gauge-card {
+        padding: var(--wps-space-4);
     }
 
-    .wpshadow-gauge-large h3 {
-        font-size: 18px;
-        margin-bottom: 12px;
+    .wps-health-gauge-title {
+        font-size: var(--wps-text-lg);
+        margin-bottom: var(--wps-space-3);
     }
 
-    .wpshadow-scan-buttons {
-        margin-top: 12px;
-        gap: 8px;
+    .wps-health-gauge-actions {
+        margin-top: var(--wps-space-3);
+        gap: var(--wps-space-2);
     }
 
-    .wpshadow-scan-buttons .button {
-        padding: 8px;
-        font-size: 13px;
+    .wps-btn-scan {
+        padding: var(--wps-space-2) var(--wps-space-3);
+        font-size: var(--wps-text-sm);
     }
 }
 
-/* Gauge SVG Animations */
-svg circle[class*="gauge-progress"] {
-    transition: stroke-dasharray 0.5s ease, stroke 0.3s ease;
+/* ============================================================================
+   Accessibility - Reduced Motion
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    .wps-gauge-progress,
+    .wps-health-gauge-card,
+    .wps-category-gauge,
+    .wps-btn-scan {
+        transition: none;
+    }
 }
+
+/* ============================================================================
+   Legacy Gauge Classes (Backwards Compatibility)
+   ============================================================================ */
 
 /* Color Utilities for Category Gauges - Issue #563: 10 Distinct Colors */
 .wpshadow-gauge-security { --gauge-color: #dc2626; }        /* Red */

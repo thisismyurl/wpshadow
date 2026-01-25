@@ -1426,7 +1426,101 @@ Respect user preferences for reduced motion:
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
     }
+}
+```
+
+**Implementation Note:** The design system automatically respects `prefers-reduced-motion` media query. Users with motion sensitivity will see instant state changes instead of animations.
+
+### High Contrast Mode Support
+
+For users who require high contrast (Windows High Contrast Mode):
+
+```css
+@media (prefers-contrast: high) {
+    .wps-btn,
+    .wps-input,
+    .wps-select,
+    .wps-card {
+        border: 2px solid currentColor;
+    }
+    
+    .wps-btn:focus,
+    .wps-input:focus,
+    .wps-select:focus {
+        outline: 3px solid;
+        outline-offset: 2px;
+    }
+}
+```
+
+### Focus-Visible Support
+
+Use `:focus-visible` for better UX - shows focus indicators only for keyboard navigation:
+
+```css
+.wps-btn:focus-visible,
+.wps-input:focus-visible,
+a:focus-visible {
+    outline: 2px solid var(--wps-primary);
+    outline-offset: 2px;
+    box-shadow: var(--wps-shadow-focus);
+}
+```
+
+### Skip to Content Links
+
+Allow keyboard users to skip navigation:
+
+```html
+<a href="#main-content" class="wps-skip-link">Skip to main content</a>
+
+<!-- Main content area -->
+<main id="main-content">
+    <!-- Page content -->
+</main>
+```
+
+**CSS:**
+
+```css
+.wps-skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--wps-primary);
+    color: #ffffff;
+    padding: var(--wps-space-2) var(--wps-space-4);
+    text-decoration: none;
+}
+
+.wps-skip-link:focus {
+    top: var(--wps-space-2);
+}
+```
+
+### Visually Hidden Content
+
+Hide content visually but keep it accessible to screen readers:
+
+```html
+<span class="wps-visually-hidden">Additional context for screen readers</span>
+```
+
+**CSS:**
+
+```css
+.wps-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 ```
 
@@ -1438,12 +1532,21 @@ Respect user preferences for reduced motion:
 
 ```css
 @media (max-width: 768px) {
-    .wps-btn {
+    .wps-btn,
+    .wps-toggle,
+    a.wps-link {
         min-height: 44px;
         min-width: 44px;
     }
+    
+    /* Ensure adequate spacing between touch targets */
+    .wps-btn + .wps-btn {
+        margin-left: var(--wps-space-2);
+    }
 }
 ```
+
+**Automatic Implementation:** The design system automatically enforces 44x44px minimum touch targets on mobile devices.
 
 ---
 

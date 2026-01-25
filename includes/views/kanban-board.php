@@ -52,16 +52,16 @@ foreach ( $all_findings as $finding ) {
 		$finding['id'] = $finding_id;
 	}
 
-	$status = $status_manager->get_finding_status( $finding_id );
-	if ( ! $status ) {
+	$finding_status = $status_manager->get_finding_status( $finding_id );
+	if ( ! $finding_status ) {
 		// New findings default to 'detected'
-		$status = 'detected';
+		$finding_status = 'detected';
 	}
-	$finding['status'] = $status;
+	$finding['status'] = $finding_status;
 
 	// Add to appropriate column (skip if workflow status - those are handled separately)
-	if ( isset( $findings_by_status[ $status ] ) && $status !== 'fixed' ) {
-		$findings_by_status[ $status ][] = $finding;
+	if ( isset( $findings_by_status[ $finding_status ] ) && 'fixed' !== $finding_status ) {
+		$findings_by_status[ $finding_status ][] = $finding;
 	}
 }
 
@@ -306,32 +306,23 @@ $severity_legend = array(
 
 
 	<div class="wpshadow-kanban-board" class="wps-grid-p-20-rounded-8">
-		<?php foreach ( array( 'detected', 'manual', 'automated', 'fixed' ) as $status ) : ?>
-			<div class="kanban-column" data-status="<?php echo esc_attr( $status ); ?>" class="wps-p-15-rounded-6">
-				<h3 style="
-					margin-top: 0;
-					margin-bottom: 15px;
-					color: #333;
-					font-size: 13px;
-					font-weight: 600;
-					text-transform: uppercase;
-					letter-spacing: 0.5px;
-					padding-bottom: 10px;
-					border-bottom: 2px solid <?php echo esc_attr( $status_colors[ $status ] ); ?>;
-				">
-					<span style="color: <?php echo esc_attr( $status_colors[ $status ] ); ?>;">●</span>
-					<?php echo esc_html( $status_labels[ $status ] ); ?>
-					<span style="color: #999; font-weight: 400; float: right;">
-						<?php echo count( $findings_by_status[ $status ] ); ?>
+		<?php foreach ( array( 'detected', 'manual', 'automated', 'fixed' ) as $column_status ) : ?>
+			<div class="kanban-column" data-status="<?php echo esc_attr( $column_status ); ?>" role="region" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: Column status label */ __( '%s findings column', 'wpshadow' ), $status_labels[ $column_status ] ) ); ?>">
+				<div class="wps-kanban-column-header">
+					<h3 class="wps-kanban-column-title">
+						<?php echo esc_html( $status_labels[ $column_status ] ); ?>
+					</h3>
+					<span class="wps-kanban-count-badge column-count" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: Number of items in the column */ __( '%d items', 'wpshadow' ), count( $findings_by_status[ $column_status ] ) ) ); ?>">
+						<?php echo count( $findings_by_status[ $column_status ] ); ?>
 					</span>
-				</h3>
+				</div>
 
-				<div class="kanban-column-content" style="min-height: 400px;">
+				<div class="kanban-column-content">
 					<?php
-					if ( $status === 'fixed' ) : // Workflows column - show workflows
+					if ( 'fixed' === $column_status ) : // Workflows column - show workflows
 						?>
 						<?php
-						foreach ( $findings_by_status[ $status ] as $workflow_id => $workflow ) :
+						foreach ( $findings_by_status[ $column_status ] as $workflow_id => $workflow ) :
 							$workflow_name     = isset( $workflow['name'] ) ? $workflow['name'] : 'Unnamed Workflow';
 							$workflow_enabled  = isset( $workflow['enabled'] ) ? $workflow['enabled'] : false;
 							$workflow_triggers = isset( $workflow['triggers'] ) ? count( $workflow['triggers'] ) : 0;
@@ -353,8 +344,8 @@ $severity_legend = array(
 
 								<!-- Workflow Stats -->
 								<div style="font-size: 11px; color: #666; margin-bottom: 8px;">
-									<?php echo (int) $workflow_triggers; ?> trigger<?php echo $workflow_triggers !== 1 ? 's' : ''; ?> •
-									<?php echo (int) $workflow_actions; ?> action<?php echo $workflow_actions !== 1 ? 's' : ''; ?>
+									<?php echo (int) $workflow_triggers; ?> trigger<?php echo 1 !== $workflow_triggers ? 's' : ''; ?> •
+									<?php echo (int) $workflow_actions; ?> action<?php echo 1 !== $workflow_actions ? 's' : ''; ?>
 								</div>
 
 								<!-- Edit Link -->
@@ -368,11 +359,11 @@ $severity_legend = array(
 					else : // Regular findings columns
 						?>
 						<?php
-						$findings       = $findings_by_status[ $status ];
+						$findings       = $findings_by_status[ $column_status ];
 						$total_findings = count( $findings );
 						foreach ( $findings as $idx => $finding ) :
 							// For DETECTED column, only show first 10 items
-							$is_hidden    = ( $status === 'detected' && $idx >= 10 );
+							$is_hidden    = ( 'detected' === $column_status && $idx >= 10 );
 							$hidden_class = $is_hidden ? ' wpshadow-hidden-finding' : '';
 
 							$threat_level = isset( $finding['threat_level'] ) ? $finding['threat_level'] : 50;
@@ -403,26 +394,26 @@ $severity_legend = array(
 							$smart_icon   = '';
 							$smart_color  = '';
 
-							if ( $status === 'manual' ) {
+							if ( 'manual' === $column_status ) {
 								$manual_fixes = get_option( 'wpshadow_manual_fixes', array() );
 								if ( isset( $manual_fixes[ $finding['id'] ] ) ) {
 									$smart_status = __( 'Manual fix assigned', 'wpshadow' );
 									$smart_icon   = '👤';
 									$smart_color  = '#ff9800';
 								}
-							} elseif ( $status === 'automated' ) {
+							} elseif ( 'automated' === $column_status ) {
 								$automated = get_option( 'wpshadow_scheduled_automated_fixes', array() );
 								if ( isset( $automated[ $finding['id'] ] ) ) {
 									$auto_status = $automated[ $finding['id'] ]['status'];
-									if ( $auto_status === 'pending' ) {
+									if ( 'pending' === $auto_status ) {
 										$smart_status = __( 'Fix scheduled', 'wpshadow' );
 										$smart_icon   = '⏱️';
 										$smart_color  = '#2196f3';
-									} elseif ( $auto_status === 'completed' ) {
+									} elseif ( 'completed' === $auto_status ) {
 										$smart_status = __( 'Fix completed', 'wpshadow' );
 										$smart_icon   = '✅';
 										$smart_color  = '#4caf50';
-									} elseif ( $auto_status === 'failed' ) {
+									} elseif ( 'failed' === $auto_status ) {
 										$smart_status = __( 'Fix failed', 'wpshadow' );
 										$smart_icon   = '⚠️';
 										$smart_color  = '#f44336';
@@ -430,85 +421,96 @@ $severity_legend = array(
 								}
 							}
 							?>
-							<div class="finding-card<?php echo esc_attr( $hidden_class ); ?>"
+							<div class="finding-card <?php echo esc_attr( $card_severity . $hidden_class ); ?>"
 								data-finding-id="<?php echo esc_attr( $finding['id'] ); ?>"
+								data-category="<?php echo esc_attr( $category_key ); ?>"
 								draggable="true"
-								style="
-							background: <?php echo esc_attr( $card_bg ); ?>;
-							border: 1px solid <?php echo esc_attr( $card_border ); ?>;
-							border-left: 4px solid <?php echo esc_attr( $card_border ); ?>;
-							border-radius: 4px;
-							padding: 12px;
-							margin-bottom: 10px;
-							cursor: move;
-							transition: all 0.2s;
-							user-select: none;
-							<?php
-							if ( $is_hidden ) {
-								echo 'display: none;';
-							}
-							?>
-							"
-								onmouseover="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'"
-								onmouseout="this.style.boxShadow='none'">
-								<!-- Title -->
-								<div class="finding-title" class="wps-m-0">
-									<?php echo esc_html( $finding['title'] ); ?>
+								tabindex="0"
+								role="article"
+								aria-label="<?php echo esc_attr( sprintf( /* translators: 1: Finding title, 2: Threat level label */ __( '%1$s - Threat level: %2$s', 'wpshadow' ), $finding['title'], $threat_label ) ); ?>"
+								<?php
+								if ( $is_hidden ) {
+									echo 'style="display: none;"';
+								}
+								?>
+							>
+								<!-- Card Header: Category Badge and Threat Indicator -->
+								<div class="wps-card-header">
+									<span class="wps-category-badge <?php echo esc_attr( $category_key ); ?>">
+										<?php echo esc_html( strtoupper( $category['label'] ) ); ?>
+									</span>
+									<span class="wps-threat-indicator <?php echo esc_attr( $card_severity ); ?>" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: Threat level label */ __( 'Threat level: %s', 'wpshadow' ), $threat_label ) ); ?>">
+										●
+									</span>
 								</div>
+
+								<!-- Card Title -->
+								<h4 class="wps-card-title">
+									<?php echo esc_html( $finding['title'] ); ?>
+								</h4>
+
+								<!-- Card Description -->
+								<p class="wps-card-description">
+									<?php
+									echo esc_html( substr( $finding['description'], 0, 150 ) );
+									if ( strlen( $finding['description'] ) > 150 ) {
+										echo '...';
+									}
+									?>
+								</p>
 
 								<!-- Smart Action Status Badge (Issue #567) -->
 								<?php if ( ! empty( $smart_status ) ) : ?>
-									<div class="wps-m-0">
-										<span class="wps-inline-block-p-4-rounded-3" title="<?php echo esc_attr( $smart_status ); ?>">
+									<div style="margin: 8px 0;">
+										<span style="display: inline-block; font-size: 0.75rem; padding: 4px 8px; border-radius: 12px; background: <?php echo esc_attr( $smart_color ); ?>20; color: <?php echo esc_attr( $smart_color ); ?>; font-weight: 500;" title="<?php echo esc_attr( $smart_status ); ?>">
 											<?php echo esc_html( $smart_icon . ' ' . $smart_status ); ?>
 										</span>
 									</div>
 								<?php endif; ?>
 
-								<!-- Description (truncated) -->
-								<p class="wps-m-0">
-									<?php echo esc_html( substr( $finding['description'], 0, 100 ) ); ?>
-									<?php
-									if ( strlen( $finding['description'] ) > 100 ) {
-										echo '...';
-									}
-									?>
-								</p>
-								<?php if ( ! empty( $finding['kb_link'] ) || ! empty( $finding['training_link'] ) ) : ?>
-									<div class="wps-flex-gap-10">
-										<?php if ( ! empty( $finding['kb_link'] ) ) : ?>
-											<a href="<?php echo esc_url( $finding['kb_link'] ); ?>" target="_blank" style="color: #2271b1; text-decoration: none; font-weight: 600;">
-												<?php esc_html_e( 'Learn more (KB)', 'wpshadow' ); ?>
-											</a>
-										<?php endif; ?>
-										<?php if ( ! empty( $finding['training_link'] ) ) : ?>
-											<a href="<?php echo esc_url( $finding['training_link'] ); ?>" target="_blank" style="color: #0f9d58; text-decoration: none; font-weight: 600;">
-												<?php esc_html_e( 'Watch training', 'wpshadow' ); ?>
-											</a>
-										<?php endif; ?>
-									</div>
-								<?php endif; ?>
+								<!-- Card Footer: Action Buttons -->
+								<div class="wps-card-footer">
+									<?php if ( ! empty( $finding['kb_link'] ) ) : ?>
+										<a href="<?php echo esc_url( $finding['kb_link'] ); ?>" target="_blank" class="wps-btn-sm ghost" rel="noopener noreferrer">
+											<?php esc_html_e( 'Learn More', 'wpshadow' ); ?>
+										</a>
+									<?php endif; ?>
+									<?php if ( ! empty( $finding['auto_fixable'] ) && $finding['auto_fixable'] ) : ?>
+										<button class="wps-btn-sm primary finding-autofix" data-finding-id="<?php echo esc_attr( $finding['id'] ); ?>">
+											<?php esc_html_e( 'Auto-Fix', 'wpshadow' ); ?>
+										</button>
+									<?php endif; ?>
+								</div>
+
 								<!-- Status note (if exists) -->
-								<?php
-								if ( $note ) :
-									?>
-									<div class="wps-p-8-rounded-3">
-										<strong style="color: #333;">Note:</strong> <?php echo esc_html( $note ); ?>
+								<?php if ( $note ) : ?>
+									<div class="finding-note">
+										<strong><?php esc_html_e( 'Note:', 'wpshadow' ); ?></strong> <?php echo esc_html( $note ); ?>
 									</div>
 								<?php endif; ?>
+
+								<!-- Keyboard Navigation Hint (appears on focus) -->
+								<span class="wps-keyboard-hint" aria-hidden="true">
+									<?php esc_html_e( 'Press Enter to move', 'wpshadow' ); ?>
+								</span>
 							</div>
-						<?php endforeach; ?>
+							<?php endforeach; ?>
 						<?php
 					endif; // End if fixed (workflows) vs regular findings
 					?>
 
-					<?php if ( empty( $findings_by_status[ $status ] ) ) : ?>
-						<div class="kanban-empty-message" class="wps-p-40">
-							<?php if ( $status === 'fixed' ) : ?>
-								No workflows yet. Drag findings here to create workflows.
-							<?php else : ?>
-								No findings yet
-							<?php endif; ?>
+					<?php if ( empty( $findings_by_status[ $column_status ] ) ) : ?>
+						<div class="wps-kanban-empty">
+							<span class="dashicons dashicons-yes-alt"></span>
+							<p>
+								<?php
+								if ( 'fixed' === $column_status ) :
+									esc_html_e( 'No workflows yet', 'wpshadow' );
+								else :
+									esc_html_e( 'No items in this column', 'wpshadow' );
+								endif;
+								?>
+							</p>
 						</div>
 					<?php endif; ?>
 				</div>
@@ -599,7 +601,7 @@ $severity_legend = array(
 				// Save status change via AJAX for non-workflow drops
 				$.post(ajaxurl, {
 					action: 'wpshadow_change_finding_status',
-					nonce: '<?php echo wp_create_nonce( 'wpshadow_kanban' ); ?>',
+					nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_kanban' ) ); ?>',
 					finding_id: findingId,
 					new_status: newStatus
 				}, function(response) {
@@ -645,7 +647,7 @@ $severity_legend = array(
 
 			$.post(ajaxurl, {
 				action: 'wpshadow_autofix_finding',
-				nonce: '<?php echo wp_create_nonce( 'wpshadow_autofix' ); ?>',
+				nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_autofix' ) ); ?>',
 				finding_id: findingId
 			}, function(response) {
 				if (response.success) {
@@ -709,7 +711,7 @@ $severity_legend = array(
 
 			$.post(ajaxurl, {
 				action: 'wpshadow_create_workflow_from_finding',
-				nonce: '<?php echo wp_create_nonce( 'wpshadow_create_workflow' ); ?>',
+				nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_create_workflow' ) ); ?>',
 				finding_id: findingId,
 				workflow_name: workflowName,
 				workflow_type: workflowType,

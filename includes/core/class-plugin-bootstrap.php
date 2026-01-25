@@ -44,31 +44,34 @@ class Plugin_Bootstrap {
 		// 4. Load dashboard page
 		self::load_dashboard_page();
 
-		// 5. Load engage system (gamification)
+		// 5. Load workflow module
+		self::load_workflow_module();
+
+		// 6. Load engage system (gamification)
 		self::load_engage_system();
 
-		// 5. Load performance optimizer
+		// 7. Load performance optimizer
 		self::load_performance_optimizer();
 
-		// 6. Load onboarding system
+		// 8. Load onboarding system
 		self::load_onboarding_system();
 
-		// 7. Load privacy system
+		// 9. Load privacy system
 		self::load_privacy_system();
 
-		// 8. Load content post types (KB, FAQ, etc.)
+		// 10. Load content post types (KB, FAQ, etc.)
 		self::load_content_types();
 
-		// 9. Load pro addon integration
+		// 11. Load pro addon integration
 		self::load_pro_integration();
 
-		// 10. Load WP-CLI commands
+		// 12. Load WP-CLI commands
 		self::load_cli_commands();
 
-		// 11. Initialize visual comparator
+		// 13. Initialize visual comparator
 		self::init_visual_comparator();
 
-		// 12. Fire initialization complete hook
+		// 14. Fire initialization complete hook
 		do_action( 'wpshadow_core_initialized' );
 	}
 
@@ -156,6 +159,19 @@ class Plugin_Bootstrap {
 					\WPShadow\Dashboard\Widgets\Setup_Widget::init();
 				}
 			}
+		}
+	}
+
+	/**
+	 * Load workflow module
+	 *
+	 * @since  1.2601.2148
+	 * @return void
+	 */
+	private static function load_workflow_module() {
+		$workflow_module_file = WPSHADOW_PATH . 'includes/workflow/workflow-module.php';
+		if ( file_exists( $workflow_module_file ) ) {
+			require_once $workflow_module_file;
 		}
 	}
 
