@@ -1413,6 +1413,7 @@ class Workflow_Executor {
 		}
 
 		// Check for corruption
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared -- CHECK TABLE DDL with wpdb prefix, no user input
 		$corruption_check = $wpdb->get_results( 'CHECK TABLE ' . $wpdb->prefix . 'posts' );
 		if ( ! empty( $corruption_check ) ) {
 			foreach ( $corruption_check as $check ) {
@@ -1441,10 +1442,14 @@ class Workflow_Executor {
 	private static function get_database_size() {
 		global $wpdb;
 
-		$size_query = "SELECT ROUND( SUM( data_length + index_length ) / 1024 / 1024, 2 ) AS 'size'
-						FROM information_schema.TABLES WHERE table_schema = '" . DB_NAME . "'";
-
-		$result = $wpdb->get_var( $size_query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$result = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT ROUND( SUM( data_length + index_length ) / 1024 / 1024, 2 ) AS 'size'
+				FROM information_schema.TABLES WHERE table_schema = %s",
+				DB_NAME
+			)
+		);
 
 		return $result ? (float) $result : 0;
 	}

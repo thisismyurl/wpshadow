@@ -63,6 +63,7 @@ class Treatment_Optimize_Database_Tables extends Treatment_Base {
 			$before_overhead = $table['overhead_mb'];
 
 			// Run OPTIMIZE TABLE
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name validated from information_schema, OPTIMIZE TABLE doesn't support prepare()
 			$result = $wpdb->query( "OPTIMIZE TABLE `{$table_name}`" );
 
 			if ( $result ) {

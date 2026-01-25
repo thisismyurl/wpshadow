@@ -65,6 +65,7 @@ class Treatment_Clean_Expired_Transients extends Treatment_Base {
 		);
 
 		// Delete corresponding transient values
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Uses wpdb table property, properly prepared with placeholders
 		$deleted_values = $wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$wpdb->options} 
@@ -83,6 +84,7 @@ class Treatment_Clean_Expired_Transients extends Treatment_Base {
 
 		// Same for site transients on multisite
 		if ( is_multisite() ) {
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Uses wpdb table property, properly prepared with placeholders
 			$wpdb->query(
 				$wpdb->prepare(
 					"DELETE FROM {$wpdb->sitemeta} 
@@ -93,6 +95,7 @@ class Treatment_Clean_Expired_Transients extends Treatment_Base {
 				)
 			);
 
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Uses wpdb table property, properly prepared with placeholders
 			$wpdb->query(
 				$wpdb->prepare(
 					"DELETE FROM {$wpdb->sitemeta} 

@@ -37,6 +37,7 @@ class Treatment_Disable_Autoload_Large_Options extends Treatment_Base {
 		global $wpdb;
 
 		// Get large autoloaded serialized options
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Uses wpdb table property, no user input
 		$large_autoloaded = $wpdb->get_results(
 			"SELECT 
 				option_name,

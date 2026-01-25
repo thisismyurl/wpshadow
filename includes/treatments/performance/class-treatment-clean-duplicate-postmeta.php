@@ -37,6 +37,7 @@ class Treatment_Clean_Duplicate_Postmeta extends Treatment_Base {
 		global $wpdb;
 
 		// Find duplicates
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Uses wpdb table property, no user input
 		$duplicates = $wpdb->get_results(
 			"SELECT 
 				post_id,
@@ -88,6 +89,7 @@ class Treatment_Clean_Duplicate_Postmeta extends Treatment_Base {
 
 			// Delete duplicates
 			$placeholders = implode( ',', array_fill( 0, count( $delete_ids ), '%d' ) );
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Placeholders are dynamically created but properly prepared with values
 			$deleted      = $wpdb->query(
 				$wpdb->prepare(
 					"DELETE FROM {$wpdb->postmeta} WHERE meta_id IN ({$placeholders})",

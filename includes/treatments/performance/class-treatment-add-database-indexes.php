@@ -93,6 +93,7 @@ class Treatment_Add_Database_Indexes extends Treatment_Base {
 				$index['columns']
 			);
 
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared -- DDL statement with validated table/index names from internal array
 			$result = $wpdb->query( $sql );
 
 			if ( $result !== false ) {
@@ -135,6 +136,7 @@ class Treatment_Add_Database_Indexes extends Treatment_Base {
 
 		// Remove added indexes
 		foreach ( $backup['added_indexes'] as $index ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- DDL statement with validated table/index names from backup
 			$wpdb->query(
 				sprintf(
 					'ALTER TABLE `%s` DROP INDEX `%s`',

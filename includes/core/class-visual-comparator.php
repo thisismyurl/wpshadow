@@ -333,9 +333,12 @@ class Visual_Comparator {
 		$args       = wp_parse_args( $args, $defaults );
 		$table_name = $wpdb->prefix . self::TABLE_NAME;
 
-		$where = '1=1';
+		$where_clause = '1=1';
+		$where_values = array();
+		
 		if ( $args['finding_id'] ) {
-			$where .= $wpdb->prepare( ' AND finding_id = %s', $args['finding_id'] );
+			$where_clause  .= ' AND finding_id = %s';
+			$where_values[] = $args['finding_id'];
 		}
 
 		$orderby = sanitize_sql_orderby( $args['orderby'] . ' ' . $args['order'] );
@@ -343,12 +346,15 @@ class Visual_Comparator {
 			$orderby = 'created_at DESC';
 		}
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$where_values[] = $args['limit'];
+		$where_values[] = $args['offset'];
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name from constant, orderby sanitized, where/limit properly prepared
 		$results = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT * FROM $table_name WHERE $where ORDER BY $orderby LIMIT %d OFFSET %d",
-				$args['limit'],
-				$args['offset']
+				// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- Placeholders created dynamically based on WHERE conditions
+				"SELECT * FROM $table_name WHERE $where_clause ORDER BY $orderby LIMIT %d OFFSET %d",
+				$where_values
 			),
 			ARRAY_A
 		);
@@ -371,7 +377,7 @@ class Visual_Comparator {
 
 		$table_name = $wpdb->prefix . self::TABLE_NAME;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name from constant with wpdb prefix
 		$result = $wpdb->get_row(
 			$wpdb->prepare( "SELECT * FROM $table_name WHERE id = %d", $id ),
 			ARRAY_A
@@ -397,7 +403,7 @@ class Visual_Comparator {
 		$cutoff_date = gmdate( 'Y-m-d H:i:s', strtotime( "-{$days} days" ) );
 
 		// Get old records to delete files
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name from constant with wpdb prefix
 		$old_records = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT * FROM $table_name WHERE created_at < %s",
@@ -417,7 +423,7 @@ class Visual_Comparator {
 		}
 
 		// Delete database records
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name from constant with wpdb prefix
 		$deleted = $wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM $table_name WHERE created_at < %s",
@@ -438,10 +444,10 @@ class Visual_Comparator {
 
 		$table_name = $wpdb->prefix . self::TABLE_NAME;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name from constant with wpdb prefix
 		$total = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name from constant with wpdb prefix
 		$last_30_days = $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(*) FROM $table_name WHERE created_at > %s",

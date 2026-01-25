@@ -77,6 +77,7 @@ class Treatment_Limit_Post_Revisions extends Treatment_Base {
 			global $wpdb;
 
 			// Keep only the latest N revisions per post
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Uses wpdb table property, properly prepared with placeholders
 			$deleted = $wpdb->query(
 				$wpdb->prepare(
 					"DELETE FROM {$wpdb->posts} 
@@ -95,6 +96,7 @@ class Treatment_Limit_Post_Revisions extends Treatment_Base {
 			);
 
 			// Clean up orphaned revision meta
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Uses wpdb table properties, no user input
 			$wpdb->query(
 				"DELETE pm FROM {$wpdb->postmeta} pm 
 				LEFT JOIN {$wpdb->posts} p ON pm.post_id = p.ID 

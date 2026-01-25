@@ -74,7 +74,7 @@ class Option_Optimizer {
 
 		$placeholders = implode( ',', array_fill( 0, count( $option_names ), '%s' ) );
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Uses wpdb table property, placeholders dynamically created but properly prepared
 		$results = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name IN ($placeholders)",
@@ -170,7 +170,7 @@ class Option_Optimizer {
 		if ( ! empty( $to_fetch ) ) {
 			$placeholders = implode( ',', array_fill( 0, count( $to_fetch ), '%s' ) );
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Uses wpdb table property, placeholders dynamically created but properly prepared
 			$rows = $wpdb->get_results(
 				$wpdb->prepare(
 					"SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name IN ($placeholders)",

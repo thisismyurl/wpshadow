@@ -39,6 +39,7 @@ class Treatment_Clean_Orphaned_Metadata extends Treatment_Base {
 		$deleted = array();
 
 		// Delete orphaned postmeta
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Uses wpdb table properties, no user input
 		$postmeta_deleted = $wpdb->query(
 			"DELETE pm FROM {$wpdb->postmeta} pm 
 			LEFT JOIN {$wpdb->posts} p ON pm.post_id = p.ID 
@@ -49,6 +50,7 @@ class Treatment_Clean_Orphaned_Metadata extends Treatment_Base {
 		}
 
 		// Delete orphaned usermeta
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Uses wpdb table properties, no user input
 		$usermeta_deleted = $wpdb->query(
 			"DELETE um FROM {$wpdb->usermeta} um 
 			LEFT JOIN {$wpdb->users} u ON um.user_id = u.ID 
@@ -59,6 +61,7 @@ class Treatment_Clean_Orphaned_Metadata extends Treatment_Base {
 		}
 
 		// Delete orphaned termmeta
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Uses wpdb table properties, no user input
 		$termmeta_deleted = $wpdb->query(
 			"DELETE tm FROM {$wpdb->termmeta} tm 
 			LEFT JOIN {$wpdb->terms} t ON tm.term_id = t.term_id 

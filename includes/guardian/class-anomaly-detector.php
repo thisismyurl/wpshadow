@@ -219,6 +219,7 @@ class Anomaly_Detector {
 		global $wpdb;
 
 		// Try simple query
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared -- Simple connectivity test with no user input
 		$result = $wpdb->get_results( 'SELECT 1', ARRAY_A );
 
 		if ( $wpdb->last_error || ! $result ) {
