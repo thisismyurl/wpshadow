@@ -114,6 +114,7 @@ function wpshadow_get_health_status(): array {
 		$status  = __( 'Good', 'wpshadow' );
 		$color   = '#2e7d32';
 		$message = sprintf(
+			/* translators: %d: number of issues found */
 			__( 'Your site is in good health with %d issue(s) to address.', 'wpshadow' ),
 			$total_findings
 		);
@@ -121,6 +122,7 @@ function wpshadow_get_health_status(): array {
 		$status  = __( 'Fair', 'wpshadow' );
 		$color   = '#f57c00';
 		$message = sprintf(
+			/* translators: 1: total issues count, 2: critical issues count */
 			__( 'Your site needs attention: %1$d issue(s) detected, including %2$d critical issue(s).', 'wpshadow' ),
 			$total_findings,
 			$critical_count
@@ -129,6 +131,7 @@ function wpshadow_get_health_status(): array {
 		$status  = __( 'Poor', 'wpshadow' );
 		$color   = '#c62828';
 		$message = sprintf(
+			/* translators: %d: number of critical issues */
 			__( 'Your site has %d critical issue(s) that need immediate attention.', 'wpshadow' ),
 			$critical_count
 		);
@@ -196,13 +199,24 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 		return '#f44336'; // Red - High threat
 	};
 	?>
-	<div class="wps-flex-gap-24">
+	<div class="wps-dashboard-gauges wps-flex wps-gap-6 wps-mb-8">
 		<!-- Left: Large Overall Health Gauge + Scan Buttons -->
-		<div style="flex: 0 0 calc(280px); min-width: 280px;">
-			<div style="border: 2px solid <?php echo esc_attr( isset( $overall_health['color'] ) ? $overall_health['color'] : '#ccc' ); ?>; border-radius: 12px; padding: 24px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.15); text-align: center;">
-				<h3 class="wps-m-0"><?php esc_html_e( 'Overall Site Health', 'wpshadow' ); ?></h3>
+		<div class="wps-health-gauge-main">
+			<div class="wps-health-gauge-card" style="border-color: <?php echo esc_attr( isset( $overall_health['color'] ) ? $overall_health['color'] : '#ccc' ); ?>;">
+				<h3 class="wps-health-gauge-title"><?php esc_html_e( 'Overall Site Health', 'wpshadow' ); ?></h3>
 
-				<svg width="200" height="200" viewBox="0 0 200 200" class="wps-block-m-0">
+				<svg width="200" height="200" viewBox="0 0 200 200" class="wps-health-gauge-svg" aria-labelledby="overall-health-title" role="img">
+					<title id="overall-health-title">
+						<?php
+						echo esc_html(
+							sprintf(
+								/* translators: %d: health score percentage */
+								__( 'Overall site health: %d%%', 'wpshadow' ),
+								isset( $overall_health['score'] ) ? (int) $overall_health['score'] : 0
+							)
+						);
+						?>
+					</title>
 					<!-- Outer decorative circle -->
 					<circle cx="100" cy="100" r="95" fill="none" stroke="<?php echo esc_attr( isset( $overall_health['color'] ) ? $overall_health['color'] : '#ccc' ); ?>" stroke-width="2" opacity="0.2" />
 					<!-- Gauge background -->
@@ -211,32 +225,35 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 					<circle cx="100" cy="100" r="85" fill="none" stroke="<?php echo esc_attr( isset( $overall_health['color'] ) ? $overall_health['color'] : '#ccc' ); ?>" stroke-width="16"
 						stroke-dasharray="<?php echo (int) ( ( isset( $overall_health['score'] ) ? $overall_health['score'] : 0 ) / 100 * 534 ); ?> 534"
 						stroke-linecap="round" transform="rotate(-90 100 100)"
-						style="transition: stroke-dasharray 0.5s ease;" />
+						class="wps-gauge-progress" />
 					<!-- Center text -->
 					<text x="100" y="95" text-anchor="middle" font-size="48" font-weight="bold" fill="<?php echo esc_attr( isset( $overall_health['color'] ) ? $overall_health['color'] : '#ccc' ); ?>"><?php echo isset( $overall_health['score'] ) ? (int) $overall_health['score'] : 0; ?>%</text>
 					<text x="100" y="120" text-anchor="middle" font-size="16" fill="#666"><?php echo esc_html( isset( $overall_health['status'] ) && $overall_health['status'] ? $overall_health['status'] : 'Unknown' ); ?></text>
 				</svg>
 
-				<p class="wps-m-16"><?php echo esc_html( isset( $overall_health['message'] ) && $overall_health['message'] ? $overall_health['message'] : '' ); ?></p>
+				<p class="wps-health-gauge-message"><?php echo esc_html( isset( $overall_health['message'] ) && $overall_health['message'] ? $overall_health['message'] : '' ); ?></p>
 			</div>
 
 			<!-- Quick Scan and Deep Scan Buttons -->
-			<div class="wps-flex-gap-10">
-				<button id="wpshadow-quick-scan-btn" class="button button-primary wps-p-10">
+			<div class="wps-health-gauge-actions">
+				<button id="wpshadow-quick-scan-btn" class="button button-primary wps-btn-scan" aria-label="<?php esc_attr_e( 'Run quick site scan', 'wpshadow' ); ?>">
+					<span class="dashicons dashicons-update" aria-hidden="true"></span>
 					<?php esc_html_e( 'Quick Scan', 'wpshadow' ); ?>
 				</button>
-				<button id="wpshadow-deep-scan-btn" class="button wps-p-10">
+				<button id="wpshadow-deep-scan-btn" class="button wps-btn-scan" aria-label="<?php esc_attr_e( 'Run comprehensive deep scan', 'wpshadow' ); ?>">
+					<span class="dashicons dashicons-search" aria-hidden="true"></span>
 					<?php esc_html_e( 'Deep Scan', 'wpshadow' ); ?>
 				</button>
-				<button id="wpshadow-fullscreen-toggle" class="button wps-p-10" title="<?php esc_attr_e( 'View dashboard in fullscreen mode (great for office displays)', 'wpshadow' ); ?>">
+				<button id="wpshadow-fullscreen-toggle" class="button wps-btn-scan" title="<?php esc_attr_e( 'View dashboard in fullscreen mode (great for office displays)', 'wpshadow' ); ?>" aria-label="<?php esc_attr_e( 'Toggle fullscreen mode', 'wpshadow' ); ?>">
+					<span class="dashicons dashicons-fullscreen-alt" aria-hidden="true"></span>
 					<?php esc_html_e( 'Full Screen', 'wpshadow' ); ?>
 				</button>
 			</div>
 		</div>
 
-		<!-- Right: 8 Category Gauges in a responsive grid -->
-		<div style="flex: 1; min-width: 600px;">
-			<div class="wps-grid">
+		<!-- Right: Category Gauges in a responsive grid -->
+		<div class="wps-health-gauge-categories">
+			<div class="wps-health-gauge-grid">
 				<?php
 				foreach ( $category_meta as $cat_key => $meta ) :
 					$cat_findings = $findings_by_category[ $cat_key ] ?? array();
@@ -246,76 +263,92 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 						array_filter(
 							$cat_findings,
 							function ( $f ) {
-								return isset( $f['color'] ) && $f['color'] === '#f44336';
+								return isset( $f['color'] ) && '#f44336' === $f['color'];
 							}
 						)
 					);
 
-					if ( $total === 0 ) {
+					if ( 0 === $total ) {
 						$status_text  = __( 'Excellent', 'wpshadow' );
 						$status_icon  = '✓';
-						$status_color = '#2e7d32';
-					} elseif ( $critical_count === 0 ) {
+						$status_color = '#10b981';
+					} elseif ( 0 === $critical_count ) {
 						$status_text  = __( 'Good', 'wpshadow' );
 						$status_icon  = '✓';
-						$status_color = '#2e7d32';
+						$status_color = '#10b981';
 					} elseif ( $critical_count < $total / 2 ) {
 						$status_text  = __( 'Fair', 'wpshadow' );
 						$status_icon  = '◐';
-						$status_color = '#f57c00';
+						$status_color = '#f59e0b';
 					} else {
 						$status_text  = __( 'Needs Work', 'wpshadow' );
 						$status_icon  = '✕';
-						$status_color = '#c62828';
+						$status_color = '#ef4444';
 					}
 
 					$threat_total = 0;
 					foreach ( $cat_findings as $finding ) {
 						$threat_total += isset( $finding['threat_level'] ) ? $finding['threat_level'] : 50;
 					}
-					$gauge_percent = $total > 0 ? min( 100, ( $threat_total / $total ) / 100 * 100 ) : 0;
+					$gauge_percent = $total > 0 ? min( 100, $threat_total / $total ) : 0;
 					$gauge_percent = 100 - $gauge_percent; // Invert: higher is better
 					$gauge_color   = $get_threat_gauge_color( 100 - $gauge_percent );
 					?>
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&category=' . $cat_key ) ); ?>" style="text-decoration: none; color: inherit;" title="<?php echo esc_attr( sprintf( __( 'Click to view %s details', 'wpshadow' ), isset( $meta['label'] ) ? $meta['label'] : 'category' ) ); ?>">
-						<div class="wpshadow-category-gauge" data-category="<?php echo esc_attr( $cat_key ); ?>" style="display: flex; align-items: center; gap: 14px; border: 2px solid <?php echo esc_attr( isset( $meta['color'] ) ? $meta['color'] : '#ccc' ); ?>; border-radius: 6px; padding: 12px 14px; background: #ffffff; transition: all 0.2s ease; cursor: pointer; height: 90px;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'; this.style.borderColor='<?php echo esc_js( isset( $meta['color'] ) ? $meta['color'] : '#ccc' ); ?>';" onmouseout="this.style.boxShadow='none'; this.style.borderColor='<?php echo esc_js( isset( $meta['color'] ) ? $meta['color'] : '#ccc' ); ?>';">
-							<!-- Gauge on Left -->
-							<div style="flex-shrink: 0;">
-								<svg width="70" height="70" viewBox="0 0 100 100" style="filter: drop-shadow(0 1px 3px rgba(0,0,0,0.1));">
-									<!-- Gauge background -->
-									<circle cx="50" cy="50" r="40" fill="none" stroke="#e0e0e0" stroke-width="8" />
-									<!-- Gauge progress -->
-									<circle cx="50" cy="50" r="40" fill="none" stroke="<?php echo esc_attr( $gauge_color ); ?>" stroke-width="8"
-										class="gauge-progress"
-										stroke-dasharray="<?php echo (int) ( $gauge_percent / 100 * 251 ); ?> 251"
-										stroke-linecap="round" transform="rotate(-90 50 50)"
-										style="transition: stroke-dasharray 0.3s ease;" />
-									<!-- Percentage text -->
-									<text x="50" y="58" text-anchor="middle" font-size="18" font-weight="bold" fill="#333" class="gauge-percent"><?php echo (int) $gauge_percent; ?>%</text>
-								</svg>
-							</div>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&category=' . $cat_key ) ); ?>" 
+						class="wps-category-gauge" 
+						data-category="<?php echo esc_attr( $cat_key ); ?>"
+						aria-label="
+						<?php
+						echo esc_attr(
+							sprintf(
+								/* translators: 1: category name, 2: health percentage */
+								__( '%1$s health: %2$d%%. Click to view details', 'wpshadow' ),
+								isset( $meta['label'] ) ? $meta['label'] : ucfirst( $cat_key ),
+								(int) $gauge_percent
+							)
+						);
+						?>
+						">
+						<div class="wps-category-gauge-icon">
+							<svg width="70" height="70" viewBox="0 0 100 100" aria-hidden="true">
+								<!-- Gauge background -->
+								<circle cx="50" cy="50" r="40" fill="none" stroke="#e0e0e0" stroke-width="8" />
+								<!-- Gauge progress -->
+								<circle cx="50" cy="50" r="40" fill="none" stroke="<?php echo esc_attr( $gauge_color ); ?>" stroke-width="8"
+									class="wps-gauge-progress"
+									stroke-dasharray="<?php echo (int) ( $gauge_percent / 100 * 251 ); ?> 251"
+									stroke-linecap="round" transform="rotate(-90 50 50)" />
+								<!-- Percentage text -->
+								<text x="50" y="58" text-anchor="middle" font-size="18" font-weight="bold" fill="#333"><?php echo (int) $gauge_percent; ?>%</text>
+							</svg>
+						</div>
 
-							<!-- Text on Right -->
-							<div style="flex: 1; min-width: 0;">
-								<!-- Title (icon removed) -->
-								<div class="wps-flex-gap-6-items-center">
-									<h4 style="margin: 0; font-size: 13px; color: <?php echo esc_attr( isset( $meta['color'] ) ? $meta['color'] : '#333' ); ?>; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?php echo esc_html( isset( $meta['label'] ) ? $meta['label'] : ucfirst( $cat_key ) ); ?></h4>
-								</div>
+						<div class="wps-category-gauge-content">
+							<!-- Title -->
+							<h4 class="wps-category-gauge-title" style="color: <?php echo esc_attr( isset( $meta['color'] ) ? $meta['color'] : '#333' ); ?>;">
+								<?php echo esc_html( isset( $meta['label'] ) ? $meta['label'] : ucfirst( $cat_key ) ); ?>
+							</h4>
 
-								<!-- Status -->
-								<div>
-									<span style="color: <?php echo esc_attr( $status_color ); ?>; font-weight: 600; font-size: 11px;">
-										<?php echo esc_html( $status_icon . ' ' . $status_text ); ?>
-									</span>
-									<div style="color: #666; font-size: 10px; margin-top: 2px;">
-										<?php
-										if ( $total === 0 ) {
-											echo esc_html( __( 'No issues', 'wpshadow' ) );
-										} else {
-											echo esc_html( sprintf( __( '%d issues found', 'wpshadow' ), $total ) );
-										}
-										?>
-									</div>
+							<!-- Status -->
+							<div class="wps-category-gauge-status">
+								<span class="wps-category-gauge-status-text" style="color: <?php echo esc_attr( $status_color ); ?>;">
+									<span aria-hidden="true"><?php echo esc_html( $status_icon ); ?></span>
+									<?php echo esc_html( $status_text ); ?>
+								</span>
+								<div class="wps-category-gauge-count">
+									<?php
+									if ( 0 === $total ) {
+										echo esc_html( __( 'No issues', 'wpshadow' ) );
+									} else {
+										echo esc_html(
+											sprintf(
+												/* translators: %d: number of issues found */
+												__( '%d issues found', 'wpshadow' ),
+												$total
+											)
+										);
+									}
+									?>
 								</div>
 							</div>
 						</div>

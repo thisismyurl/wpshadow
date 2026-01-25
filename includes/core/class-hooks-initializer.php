@@ -219,6 +219,22 @@ class Hooks_Initializer {
 			true
 		);
 
+		// Enqueue modern form controls
+		wp_enqueue_style(
+			'wpshadow-form-controls',
+			WPSHADOW_URL . 'assets/css/form-controls.css',
+			array( 'wpshadow-design-system' ),
+			WPSHADOW_VERSION
+		);
+
+		wp_enqueue_script(
+			'wpshadow-form-controls',
+			WPSHADOW_URL . 'assets/js/form-controls.js',
+			array( 'jquery', 'wpshadow-design-system' ),
+			WPSHADOW_VERSION,
+			true
+		);
+
 		// Enqueue page-specific styles
 		wp_enqueue_style(
 			'wpshadow-gauges',
