@@ -260,6 +260,6 @@ return [
 		'message' => __( 'Click to sort items by this column. Click again to reverse order.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level' => 'beginner',
-		'kb_url' => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-sort-column',
+		'kb_url' => '',
 	],
 ];
