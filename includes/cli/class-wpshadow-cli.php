@@ -526,12 +526,18 @@ class WPShadow_CLI extends WP_CLI_Command {
 			return;
 		}
 
-		$result = $matched::undo();
+		// Use execute_undo() wrapper if available to fire hooks, otherwise call undo() directly.
+		if ( method_exists( $matched, 'execute_undo' ) ) {
+			$result = $matched::execute_undo();
+		} else {
+			$result = $matched::undo();
+		}
 
-		if ( $result ) {
+		if ( $result && ( ! is_array( $result ) || ! empty( $result['success'] ) ) ) {
 			WP_CLI::success( "Treatment undone: {$matched::get_name()}" );
 		} else {
-			WP_CLI::error( "Treatment undo failed: {$matched::get_name()}" );
+			$message = is_array( $result ) && isset( $result['message'] ) ? $result['message'] : 'Unknown error';
+			WP_CLI::error( "Treatment undo failed: {$matched::get_name()} - {$message}" );
 		}
 	}
 
@@ -603,10 +609,11 @@ class WPShadow_CLI extends WP_CLI_Command {
 		global $wpdb;
 
 		// Get all wpshadow options.
+		// Use proper escaping for wildcard pattern.
 		$settings = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name LIKE %s ORDER BY option_name",
-				'wpshadow_%'
+				$wpdb->esc_like( 'wpshadow_' ) . '%'
 			),
 			ARRAY_A
 		);

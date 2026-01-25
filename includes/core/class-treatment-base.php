@@ -174,7 +174,9 @@ abstract class Treatment_Base implements Treatment_Interface {
 	 */
 	public static function execute_undo() {
 		$class = get_called_class();
-		$finding_id = static::get_finding_id();
+		
+		// Get finding_id if method exists, otherwise use class name.
+		$finding_id = method_exists( $class, 'get_finding_id' ) ? static::get_finding_id() : $class;
 
 		/**
 		 * Fires before a treatment is undone.

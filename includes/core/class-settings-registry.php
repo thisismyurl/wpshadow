@@ -38,9 +38,16 @@ class Settings_Registry
 	 * @param mixed  $value     The new option value.
 	 */
 	public static function on_setting_updated( $option, $old_value, $value ): void {
-		// Only fire for WPShadow settings.
-		if ( 0 !== strpos( $option, 'wpshadow_' ) ) {
-			return;
+		// Only fire for WPShadow settings (check for prefix).
+		// Use str_starts_with for PHP 8.0+, fallback to strpos for earlier versions.
+		if ( function_exists( 'str_starts_with' ) ) {
+			if ( ! str_starts_with( $option, 'wpshadow_' ) ) {
+				return;
+			}
+		} else {
+			if ( 0 !== strpos( $option, 'wpshadow_' ) ) {
+				return;
+			}
 		}
 
 		/**
@@ -71,9 +78,16 @@ class Settings_Registry
 	 * @param mixed  $value  Value of the added option.
 	 */
 	public static function on_setting_added( $option, $value ): void {
-		// Only fire for WPShadow settings.
-		if ( 0 !== strpos( $option, 'wpshadow_' ) ) {
-			return;
+		// Only fire for WPShadow settings (check for prefix).
+		// Use str_starts_with for PHP 8.0+, fallback to strpos for earlier versions.
+		if ( function_exists( 'str_starts_with' ) ) {
+			if ( ! str_starts_with( $option, 'wpshadow_' ) ) {
+				return;
+			}
+		} else {
+			if ( 0 !== strpos( $option, 'wpshadow_' ) ) {
+				return;
+			}
 		}
 
 		/**
