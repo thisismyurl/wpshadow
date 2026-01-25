@@ -50,15 +50,10 @@ rsync -av --exclude-from='.distignore' \
     --exclude='*.zip' \
     --exclude='.venv/' \
     --exclude='.venv/**' \
-    --exclude='wp-content/' \
-    --exclude='wp-content/**' \
     --exclude='.copilot/' \
     --exclude='.copilot/**' \
-    --exclude='kb-articles/' \
-    --exclude='kb-articles/**' \
-    --exclude='kb-articles-content-output.json' \
-    --exclude='.kb-index.json' \
-    --exclude='KB_PUBLISHING_SUMMARY.md' \
+    --exclude='dev-tools/' \
+    --exclude='dev-tools/**' \
     --exclude='*.py' \
     --exclude='.env' \
     ./ "$RELEASE_DIR/"
