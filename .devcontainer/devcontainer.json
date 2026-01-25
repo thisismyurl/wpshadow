@@ -1,79 +1,10 @@
 {
-  "name": "WP Shadow - WordPress Plugin Development",
-  "dockerComposeFile": "docker-compose.yml",
-  "service": "wordpress",
-  "workspaceFolder": "/var/www/html/wp-content/plugins/wpshadow",
-  
   "features": {
-    "ghcr.io/devcontainers/features/node:1": {
+    "node": {
       "version": "lts"
     },
-    "ghcr.io/devcontainers/features/git:1": {},
-    "ghcr.io/devcontainers-extra/features/composer:2": {
+    "git": {
       "version": "latest"
     }
-  },
-  
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "bmewburn.vscode-intelephense-client",
-        "xdebug.php-debug",
-        "wordpresstoolbox.wordpress-toolbox",
-        "claudiosanches.code-php-cs-fixer",
-        "editorconfig.editorconfig",
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
-        "eamodio.gitlens",
-        "github.copilot",
-        "mrmlnc.vscode-apache",
-        "neilbrayfield.php-docblocker",
-        "junstyle.php-cs-fixer",
-        "valeryanm.vscode-phpsab"
-      ],
-      "settings": {
-        "php.validate.executablePath": "/usr/local/bin/php",
-        "phpcs.standard": "WordPress",
-        "phpcs.enable": true,
-        "phpcbf.standard": "WordPress",
-        "editor.formatOnSave": true,
-        "editor.codeActionsOnSave": {
-          "source.fixAll.eslint": true
-        },
-        "intelephense.environment.phpVersion": "8.2",
-        "files.associations": {
-          "*.php": "php"
-        },
-        "[php]": {
-          "editor.defaultFormatter": "junstyle.php-cs-fixer"
-        },
-        "[javascript]": {
-          "editor.defaultFormatter": "esbenp.prettier-vscode"
-        },
-        "[json]": {
-          "editor.defaultFormatter": "esbenp.prettier-vscode"
-        }
-      }
-    }
-  },
-  
-  "forwardPorts": [8080, 8081, 3306],
-  "portsAttributes": {
-    "8080": {
-      "label": "WordPress",
-      "onAutoForward": "notify"
-    },
-    "8081": {
-      "label": "phpMyAdmin",
-      "onAutoForward": "silent"
-    },
-    "3306": {
-      "label": "MySQL",
-      "onAutoForward": "silent"
-    }
-  },
-  
-  "postCreateCommand": "bash .devcontainer/setup.sh",
-  
-  "remoteUser": "www-data"
+  }
 }
