@@ -9,6 +9,6 @@ class Test_Sample extends WP_UnitTestCase {
 	}
 
 	public function test_plugin_loaded() {
-		$this->assertTrue( class_exists( 'WPShadow\\Core\\Plugin' ) );
+		$this->assertTrue( class_exists( 'WPShadow\Core\Plugin_Bootstrap' ) );
 	}
 }
