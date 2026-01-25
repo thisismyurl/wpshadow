@@ -35,11 +35,11 @@ class Guardian_Dashboard {
 	public static function render(): string {
 		ob_start();
 		?>
-		<div class="wps-page-container">
+		<div class="wps-page-container" role="main" aria-labelledby="guardian-dashboard-title">
 			<!-- Page Header -->
 			<div class="wps-page-header">
-				<h1 class="wps-page-title">
-					<span class="dashicons dashicons-shield-alt wps-icon-primary"></span>
+				<h1 class="wps-page-title" id="guardian-dashboard-title">
+					<span class="dashicons dashicons-shield-alt wps-icon-primary" aria-hidden="true"></span>
 					<?php esc_html_e( 'WPShadow Guardian Dashboard', 'wpshadow' ); ?>
 				</h1>
 				<p class="wps-page-subtitle">
@@ -48,26 +48,26 @@ class Guardian_Dashboard {
 			</div>
 
 			<!-- Status and Actions Bar -->
-			<div class="wps-flex wps-justify-between wps-items-center wps-gap-4 wps-mb-4">
+			<div class="wps-flex wps-justify-between wps-items-center wps-gap-4 wps-mb-4" role="region" aria-label="<?php esc_attr_e( 'Guardian status and actions', 'wpshadow' ); ?>">
 				<?php echo wp_kses_post( self::render_status_badge() ); ?>
 				<?php echo wp_kses_post( self::render_quick_actions() ); ?>
 			</div>
 
 			<!-- KPI Cards Grid -->
-			<div class="wps-grid wps-grid-auto-250 wps-gap-3 wps-mb-4">
+			<div class="wps-grid wps-grid-auto-250 wps-gap-3 wps-mb-4" role="region" aria-label="<?php esc_attr_e( 'Key performance indicators', 'wpshadow' ); ?>">
 				<?php echo wp_kses_post( self::render_kpi_cards() ); ?>
 			</div>
 
 			<!-- Main Content Grid -->
 			<div class="wps-grid wps-grid-auto-320 wps-gap-4">
 				<!-- Left Column: Activity & Stats -->
-				<div>
+				<div role="region" aria-labelledby="activity-heading">
 					<?php echo wp_kses_post( self::render_activity_timeline() ); ?>
 					<?php echo wp_kses_post( self::render_auto_fix_stats() ); ?>
 				</div>
 
 				<!-- Right Column: Recovery & Health -->
-				<div>
+				<div role="region" aria-labelledby="system-health-heading">
 					<?php echo wp_kses_post( self::render_recovery_widget() ); ?>
 					<?php echo wp_kses_post( self::render_system_health() ); ?>
 				</div>
@@ -89,10 +89,16 @@ class Guardian_Dashboard {
 		$status_color = $is_enabled ? '#10b981' : '#6b7280';
 
 		return sprintf(
-			'<div class="wps-flex-gap-12-items-center-p-12-rounded-8" onclick="wpshadowToggleGuardian()" title="%s">
-				<span class="dashicons %s wps-icon-sm wps-status-icon" data-status="%s"></span>
+			'<button 
+				type="button"
+				class="wps-flex-gap-12-items-center-p-12-rounded-8" 
+				onclick="wpshadowToggleGuardian()"
+				aria-label="%s"
+				aria-pressed="%s"
+				role="switch">
+				<span class="dashicons %s wps-icon-sm wps-status-icon" data-status="%s" aria-hidden="true"></span>
 				<span class="wps-font-semibold wps-text-gray-800">%s</span>
-			</div>
+			</button>
 			<script>
 			function wpshadowToggleGuardian() {
 				if (confirm("%s")) {
@@ -111,6 +117,7 @@ class Guardian_Dashboard {
 			}
 			</script>',
 			esc_attr( $is_enabled ? __( 'Click to disable Guardian', 'wpshadow' ) : __( 'Click to enable Guardian', 'wpshadow' ) ),
+			esc_attr( $is_enabled ? 'true' : 'false' ),
 			esc_attr( $status_icon ),
 			esc_attr( $is_enabled ? 'enabled' : 'disabled' ),
 			esc_html( $status_text ),
@@ -126,16 +133,18 @@ class Guardian_Dashboard {
 	 * @return string HTML
 	 */
 	private static function render_quick_actions(): string {
-		$html = '<div class="wps-flex-gap-12">';
+		$html = '<div class="wps-flex-gap-12" role="group" aria-label="' . esc_attr__( 'Quick actions', 'wpshadow' ) . '">';
 
 		$html .= sprintf(
-			'<button class="wps-btn wps-btn-secondary" data-action="preview-fixes">%s</button>',
+			'<button type="button" class="wps-btn wps-btn-secondary" data-action="preview-fixes" aria-label="%s">%s</button>',
+			esc_attr__( 'Preview available fixes before applying', 'wpshadow' ),
 			esc_html__( 'Preview Fixes', 'wpshadow' )
 		);
 
 		$html .= sprintf(
-			'<a href="%s" class="wps-btn wps-btn-secondary">%s</a>',
+			'<a href="%s" class="wps-btn wps-btn-secondary" aria-label="%s">%s</a>',
 			esc_url( admin_url( 'admin.php?page=wpshadow-guardian-settings' ) ),
+			esc_attr__( 'Configure Guardian settings', 'wpshadow' ),
 			esc_html__( 'Settings', 'wpshadow' )
 		);
 
