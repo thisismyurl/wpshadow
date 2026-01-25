@@ -147,8 +147,8 @@ function wpshadow_get_health_status(): array {
  *
  * Called via wpshadow_dashboard_gauges hook
  * Renders overall health gauge and category-specific gauges
-@ *
-@paramaram string $category_filter Optional category to filter by (Issue #564)
+ *
+ * @param string $category_filter Optional category to filter by (Issue #564)
  */
 function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 	$is_drilldown = ! empty( $category_filter );

@@ -1413,8 +1413,8 @@ class Workflow_Executor {
 		}
 
 		// Check for corruption
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared -- CHECK TABLE DDL with wpdb prefix, no user input
-		$corruption_check = $wpdb->get_results( 'CHECK TABLE ' . $wpdb->prefix . 'posts' );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- CHECK TABLE DDL with wpdb prefix, no user input
+		$corruption_check = $wpdb->get_results( "CHECK TABLE `{$wpdb->prefix}posts`" );
 		if ( ! empty( $corruption_check ) ) {
 			foreach ( $corruption_check as $check ) {
 				if ( 'error' === $check->Msg_type || 'warning' === $check->Msg_type ) {
