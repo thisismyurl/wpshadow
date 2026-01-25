@@ -3,8 +3,14 @@ set -e
 
 echo "📦 Building WPShadow Release Package..."
 
-# Get plugin version
-VERSION=$(grep "Version:" wpshadow.php | awk '{print $3}')
+# Get plugin version - extract from Version: header
+VERSION=$(grep -i 'Version:' wpshadow.php | sed 's/.*Version:[[:space:]]*//' | head -1)
+if [ -z "$VERSION" ]; then
+    echo "❌ Could not extract version from wpshadow.php"
+    exit 1
+fi
+echo "Building version: $VERSION"
+
 BUILD_DIR="build"
 RELEASE_DIR="$BUILD_DIR/wpshadow"
 

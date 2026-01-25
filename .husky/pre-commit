@@ -63,7 +63,7 @@ echo "✓ Checking for learning resources..."
 STAGED_PHP=$(git diff --cached --name-only --diff-filter=ACM | grep '\.php$')
 if [ -n "$STAGED_PHP" ]; then
     # Check if new functions have docblocks
-    if git diff --cached "$STAGED_PHP" | grep -E "^\\+[[:space:]]*(public|private|protected|function)[[:space:]]+function" | head -1 > /dev/null 2>&1; then
+    if git diff --cached "$STAGED_PHP" | grep -E '^\+[[:space:]]*(public|private|protected|function)[[:space:]]+function' | head -1 > /dev/null 2>&1; then
         echo "⚠️  Reminder: Add PHPDoc comments for better learning resources"
     fi
 fi

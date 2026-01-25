@@ -29,7 +29,7 @@ class SampleTest extends WP_UnitTestCase {
 	 * Test plugin structure.
 	 */
 	public function test_plugin_structure() {
-		$plugin_file = dirname( dirname( __FILE__ ) ) . '/wpshadow.php';
+		$plugin_file = dirname( __DIR__ ) . '/wpshadow.php';
 		$this->assertFileExists( $plugin_file );
 	}
 }

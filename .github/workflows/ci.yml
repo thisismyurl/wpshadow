@@ -121,7 +121,11 @@ jobs:
       - name: Check for hardcoded text (i18n)
         run: |
           echo "Checking for hardcoded text strings..."
-          ! grep -r "echo[[:space:]]*['\"]" --include="*.php" includes/ || echo "⚠️ Found potential hardcoded strings"
+          if grep -r "echo[[:space:]]*['\"]" --include="*.php" includes/ 2>/dev/null; then
+            echo "⚠️ Found potential hardcoded strings - consider internationalization"
+          else
+            echo "✅ No hardcoded strings found"
+          fi
 
       - name: Check for accessibility issues
         run: |
