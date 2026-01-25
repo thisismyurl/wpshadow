@@ -90,7 +90,7 @@ class Treatment_Clean_Duplicate_Postmeta extends Treatment_Base {
 			// Delete duplicates
 			$placeholders = implode( ',', array_fill( 0, count( $delete_ids ), '%d' ) );
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Placeholders are dynamically created but properly prepared with values
-			$deleted      = $wpdb->query(
+			$deleted = $wpdb->query(
 				$wpdb->prepare(
 					"DELETE FROM {$wpdb->postmeta} WHERE meta_id IN ({$placeholders})",
 					...$delete_ids

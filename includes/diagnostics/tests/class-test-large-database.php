@@ -144,7 +144,7 @@ class Test_Large_Database extends Diagnostic_Base {
 	private static function get_database_size(): int {
 		global $wpdb;
 
-		$result = $wpdb->get_results( $wpdb->prepare( "SELECT SUM(data_length + index_length) as size FROM information_schema.tables WHERE table_schema = %s", DB_NAME ) );
+		$result = $wpdb->get_results( $wpdb->prepare( 'SELECT SUM(data_length + index_length) as size FROM information_schema.tables WHERE table_schema = %s', DB_NAME ) );
 
 		if ( $result && isset( $result[0]->size ) ) {
 			return (int) $result[0]->size;
@@ -161,7 +161,7 @@ class Test_Large_Database extends Diagnostic_Base {
 	private static function get_tables_info(): array {
 		global $wpdb;
 
-		$results = $wpdb->get_results( $wpdb->prepare( "SELECT table_name, data_length + index_length as size FROM information_schema.tables WHERE table_schema = %s ORDER BY size DESC", DB_NAME ) );
+		$results = $wpdb->get_results( $wpdb->prepare( 'SELECT table_name, data_length + index_length as size FROM information_schema.tables WHERE table_schema = %s ORDER BY size DESC', DB_NAME ) );
 
 		$tables = array();
 		if ( $results ) {

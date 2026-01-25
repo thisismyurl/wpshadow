@@ -335,7 +335,7 @@ class Visual_Comparator {
 
 		$where_clause = '1=1';
 		$where_values = array();
-		
+
 		if ( $args['finding_id'] ) {
 			$where_clause  .= ' AND finding_id = %s';
 			$where_values[] = $args['finding_id'];
