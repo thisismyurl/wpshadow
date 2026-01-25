@@ -42,9 +42,10 @@
 				success: function(response) {
 					if (response.success) {
 						// Show success message briefly
+						$banner.addClass('wpshadow-consent-success');
 						$banner.html(
-							'<div style="text-align: center; padding: 20px;">' +
-							'<p style="margin: 0; color: #059669; font-weight: 600;">✓ ' + 
+							'<div class="wpshadow-consent-success-message">' +
+							'<p>✓ ' + 
 							(response.data.message || 'Preferences saved. Thank you!') +
 							'</p></div>'
 						);
@@ -117,20 +118,16 @@
 	}
 
 	/**
-	 * Get consent nonce from inline script or create one
+	 * Get consent nonce from inline script
 	 */
 	function getConsentNonce() {
-		// Try to get from existing wpshadow object
+		// Try to get from wpshadow object (localized by WordPress)
 		if (typeof wpshadow !== 'undefined' && wpshadow.consent_nonce) {
 			return wpshadow.consent_nonce;
 		}
 		
-		// Fallback: try to generate from WordPress nonce
-		if (typeof wpApiSettings !== 'undefined' && wpApiSettings.nonce) {
-			return wpApiSettings.nonce;
-		}
-		
-		// Last resort: empty string (will be validated server-side)
+		// Return empty string if not available (will cause validation error server-side)
+		console.error('WPShadow: Consent nonce not found. Please refresh the page.');
 		return '';
 	}
 
