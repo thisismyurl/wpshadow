@@ -762,6 +762,8 @@ jQuery(document).ready(function ($) {
 		$targetColumn,
 		isRemove = false
 	) {
+		const findingTitle = $card.find('.finding-card-title, .finding-title').first().text();
+
 		$.post(ajaxurl, {
 			action: 'wpshadow_change_finding_status',
 			nonce: $('[name="wpshadow_kanban_nonce"]').val() || $('[data-nonce="wpshadow_kanban"]').attr('data-nonce') || '',
@@ -782,6 +784,11 @@ jQuery(document).ready(function ($) {
 					$card.css('opacity', '1').detach();
 					$targetColumn.find('.kanban-column-content').append($card);
 					updateAllColumnCounts();
+					
+					// Announce status change for accessibility
+					if (findingTitle && oldStatus !== newStatus) {
+						announceStatusChange(findingTitle, oldStatus, newStatus);
+					}
 				}
 			} else {
 				const message = response.data && response.data.message
@@ -821,15 +828,58 @@ jQuery(document).ready(function ($) {
 				count = $content.find('> .finding-card').length;
 			}
 
-			const $header = $(this).find('h3');
-			const $countSpan = $header.find('span:last');
-
-			if ($countSpan.length) {
-				$countSpan.text(count);
+			// Update count badge with new structure
+			const $countBadge = $column.find('.kanban-column-count');
+			if ($countBadge.length) {
+				$countBadge.text(count);
+				$countBadge.attr('aria-label', count + ' items');
 			} else {
-				$header.append(' <span style="color: #999; font-weight: 400; float: right;">' + count + '</span>');
+				// Fallback for old structure
+				const $header = $column.find('h3');
+				const $countSpan = $header.find('span:last');
+				if ($countSpan.length) {
+					$countSpan.text(count);
+				} else {
+					$header.append(' <span class="kanban-column-count">' + count + '</span>');
+				}
 			}
 		});
+	}
+
+	/**
+	 * Announce status change to screen readers
+	 * Creates ARIA live region announcement for accessibility
+	 */
+	function announceStatusChange(findingTitle, oldStatus, newStatus) {
+		const statusLabels = {
+			'detected': 'Detected',
+			'manual': 'User to Fix',
+			'automated': 'Fix Now',
+			'fixed': 'Workflows'
+		};
+
+		const message = findingTitle + ' moved from ' + 
+			(statusLabels[oldStatus] || oldStatus) + ' to ' + 
+			(statusLabels[newStatus] || newStatus);
+
+		// Create or update ARIA live region
+		let $liveRegion = $('#wpshadow-kanban-announcer');
+		if (!$liveRegion.length) {
+			$liveRegion = $('<div>', {
+				id: 'wpshadow-kanban-announcer',
+				'aria-live': 'polite',
+				'aria-atomic': 'true',
+				'class': 'screen-reader-text'
+			}).appendTo('body');
+		}
+
+		// Update announcement
+		$liveRegion.text(message);
+
+		// Clear after a moment to allow for next announcement
+		setTimeout(function() {
+			$liveRegion.text('');
+		}, 1000);
 	}
 
 	/**
