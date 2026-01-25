@@ -2090,6 +2090,36 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
     gap: var(--wps-space-4);
 }
 
+.wps-gap-6 {
+    gap: var(--wps-space-6);
+}
+
+.wps-gap-8 {
+    gap: var(--wps-space-8);
+}
+
+/* Legacy flex-gap classes (backwards compatibility) */
+.wps-flex-gap-6 {
+    display: flex;
+    gap: var(--wps-space-2);
+}
+
+.wps-flex-gap-6-items-center {
+    display: flex;
+    gap: var(--wps-space-2);
+    align-items: center;
+}
+
+.wps-flex-gap-10 {
+    display: flex;
+    gap: var(--wps-space-3);
+}
+
+.wps-flex-gap-24 {
+    display: flex;
+    gap: var(--wps-space-6);
+}
+
 /* Grid */
 .wps-grid-cols-2 {
     grid-template-columns: repeat(2, 1fr);
