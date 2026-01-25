@@ -373,6 +373,278 @@ class WPShadow_CLI extends WP_CLI_Command {
 			$formatter->display_items( $data );
 		}
 	}
+
+	/**
+	 * List available diagnostics.
+	 *
+	 * ## OPTIONS
+	 *
+	 * [--format=<format>]
+	 * : Output format (table, json, csv, yaml). Default: table
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp wpshadow diagnostic list
+	 *     wp wpshadow diagnostic list --format=json
+	 *
+	 * @param array $args       Positional arguments.
+	 * @param array $assoc_args Associative arguments.
+	 */
+	public function diagnostic_list( array $args, array $assoc_args ): void {
+		$format      = $assoc_args['format'] ?? 'table';
+		$diagnostics = Diagnostic_Registry::get_all();
+		$data        = array();
+
+		foreach ( $diagnostics as $class ) {
+			if ( ! method_exists( $class, 'get_name' ) ) {
+				continue;
+			}
+
+			$data[] = array(
+				'class' => $class,
+				'name'  => $class::get_name(),
+			);
+		}
+
+		$formatter = new \WP_CLI\Formatter( $assoc_args, array( 'class', 'name' ) );
+		$formatter->display_items( $data );
+	}
+
+	/**
+	 * Run a diagnostic check.
+	 *
+	 * ## OPTIONS
+	 *
+	 * [<diagnostic_class>]
+	 * : The diagnostic class name to run (e.g., 'Diagnostic_SSL'). If not provided, runs all diagnostics.
+	 *
+	 * [--format=<format>]
+	 * : Output format (table, json, yaml). Default: table
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp wpshadow diagnostic run
+	 *     wp wpshadow diagnostic run Diagnostic_SSL
+	 *     wp wpshadow diagnostic run --format=json
+	 *
+	 * @param array $args       Positional arguments.
+	 * @param array $assoc_args Associative arguments.
+	 */
+	public function diagnostic_run( array $args, array $assoc_args ): void {
+		$format      = $assoc_args['format'] ?? 'table';
+		$diagnostics = Diagnostic_Registry::get_all();
+
+		// If specific diagnostic requested, filter to that one.
+		if ( isset( $args[0] ) ) {
+			$target_class = $args[0];
+			// Try to match by class name or partial name.
+			$diagnostics = array_filter(
+				$diagnostics,
+				function ( $class ) use ( $target_class ) {
+					return false !== stripos( $class, $target_class );
+				}
+			);
+
+			if ( empty( $diagnostics ) ) {
+				WP_CLI::error( "No diagnostic found matching: {$target_class}" );
+				return;
+			}
+		}
+
+		$results = array();
+
+		foreach ( $diagnostics as $class ) {
+			if ( ! method_exists( $class, 'check' ) ) {
+				continue;
+			}
+
+			$finding = $class::check();
+
+			if ( $finding ) {
+				$results[] = array(
+					'diagnostic' => $class::get_name(),
+					'status'     => $finding['status'] ?? 'unknown',
+					'severity'   => $finding['severity'] ?? 'info',
+					'message'    => isset( $finding['message'] ) ? wp_strip_all_tags( $finding['message'] ) : '',
+				);
+			}
+		}
+
+		if ( empty( $results ) ) {
+			WP_CLI::success( 'All diagnostics passed!' );
+			return;
+		}
+
+		if ( 'json' === $format ) {
+			WP_CLI::line( wp_json_encode( $results, JSON_PRETTY_PRINT ) );
+		} elseif ( 'yaml' === $format ) {
+			foreach ( $results as $result ) {
+				WP_CLI::line( '---' );
+				foreach ( $result as $key => $value ) {
+					WP_CLI::line( "{$key}: {$value}" );
+				}
+			}
+		} else {
+			$formatter = new \WP_CLI\Formatter( $assoc_args, array( 'diagnostic', 'status', 'severity', 'message' ) );
+			$formatter->display_items( $results );
+		}
+	}
+
+	/**
+	 * Undo a treatment.
+	 *
+	 * ## OPTIONS
+	 *
+	 * <finding_id>
+	 * : The finding ID to undo treatment for
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp wpshadow treatment undo ssl-check
+	 *
+	 * @param array $args       Positional arguments.
+	 * @param array $assoc_args Associative arguments.
+	 */
+	public function treatment_undo( array $args, array $assoc_args ): void {
+		$finding_id = $args[0];
+
+		// Find matching treatment.
+		$treatments = Treatment_Registry::get_all();
+		$matched    = null;
+
+		foreach ( $treatments as $class ) {
+			if ( method_exists( $class, 'get_slug' ) && $class::get_slug() === $finding_id ) {
+				$matched = $class;
+				break;
+			}
+		}
+
+		if ( ! $matched ) {
+			WP_CLI::error( "No treatment found for finding: {$finding_id}" );
+			return;
+		}
+
+		if ( ! method_exists( $matched, 'undo' ) ) {
+			WP_CLI::error( "Treatment does not support undo: {$matched::get_name()}" );
+			return;
+		}
+
+		// Use execute_undo() wrapper if available to fire hooks, otherwise call undo() directly.
+		if ( method_exists( $matched, 'execute_undo' ) ) {
+			$result = $matched::execute_undo();
+		} else {
+			$result = $matched::undo();
+		}
+
+		if ( $result && ( ! is_array( $result ) || ! empty( $result['success'] ) ) ) {
+			WP_CLI::success( "Treatment undone: {$matched::get_name()}" );
+		} else {
+			$message = is_array( $result ) && isset( $result['message'] ) ? $result['message'] : 'Unknown error';
+			WP_CLI::error( "Treatment undo failed: {$matched::get_name()} - {$message}" );
+		}
+	}
+
+	/**
+	 * Get or set plugin settings.
+	 *
+	 * ## OPTIONS
+	 *
+	 * [<setting_name>]
+	 * : Setting name to get or set
+	 *
+	 * [<setting_value>]
+	 * : Setting value to set (if not provided, gets current value)
+	 *
+	 * [--format=<format>]
+	 * : Output format (table, json, yaml). Default: table
+	 *
+	 * ## EXAMPLES
+	 *
+	 *     wp wpshadow setting list
+	 *     wp wpshadow setting get wpshadow_auto_fix_enabled
+	 *     wp wpshadow setting set wpshadow_auto_fix_enabled 1
+	 *     wp wpshadow setting list --format=json
+	 *
+	 * @param array $args       Positional arguments.
+	 * @param array $assoc_args Associative arguments.
+	 */
+	public function setting( array $args, array $assoc_args ): void {
+		$format = $assoc_args['format'] ?? 'table';
+
+		// If no setting name provided, list all settings.
+		if ( empty( $args ) ) {
+			$this->list_settings( $format, $assoc_args );
+			return;
+		}
+
+		$setting_name = $args[0];
+
+		// If value provided, set the setting.
+		if ( isset( $args[1] ) ) {
+			$setting_value = $args[1];
+			update_option( $setting_name, $setting_value );
+			WP_CLI::success( "Setting updated: {$setting_name} = {$setting_value}" );
+			return;
+		}
+
+		// Get the setting.
+		$value = get_option( $setting_name, null );
+
+		if ( null === $value ) {
+			WP_CLI::warning( "Setting not found: {$setting_name}" );
+			return;
+		}
+
+		if ( 'json' === $format ) {
+			WP_CLI::line( wp_json_encode( array( $setting_name => $value ), JSON_PRETTY_PRINT ) );
+		} else {
+			WP_CLI::line( "{$setting_name}: " . ( is_bool( $value ) ? ( $value ? 'true' : 'false' ) : $value ) );
+		}
+	}
+
+	/**
+	 * List all WPShadow settings.
+	 *
+	 * @param string $format       Output format.
+	 * @param array  $assoc_args   Associative arguments.
+	 */
+	private function list_settings( string $format, array $assoc_args ): void {
+		global $wpdb;
+
+		// Get all wpshadow options.
+		// Use proper escaping for wildcard pattern.
+		$settings = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name LIKE %s ORDER BY option_name",
+				$wpdb->esc_like( 'wpshadow_' ) . '%'
+			),
+			ARRAY_A
+		);
+
+		if ( empty( $settings ) ) {
+			WP_CLI::warning( 'No WPShadow settings found.' );
+			return;
+		}
+
+		$data = array();
+		foreach ( $settings as $setting ) {
+			$data[] = array(
+				'name'  => $setting['option_name'],
+				'value' => $setting['option_value'],
+			);
+		}
+
+		if ( 'json' === $format ) {
+			WP_CLI::line( wp_json_encode( $data, JSON_PRETTY_PRINT ) );
+		} elseif ( 'yaml' === $format ) {
+			foreach ( $data as $item ) {
+				WP_CLI::line( "{$item['name']}: {$item['value']}" );
+			}
+		} else {
+			$formatter = new \WP_CLI\Formatter( $assoc_args, array( 'name', 'value' ) );
+			$formatter->display_items( $data );
+		}
+	}
 }
 
 WP_CLI::add_command( 'wpshadow', WPShadow_CLI::class );

@@ -23,14 +23,15 @@
 *~
 
 # Development scripts and tools
+dev-tools/
+dev-tools/**
 scripts/
 scripts/**
 tools/
 tools/**
 migrate-files.sh
 
-# Docker files (development only)
-docker-compose.yml
+# Docker files (development only - now in dev-tools/)
 docker-compose-test.yml
 setup-docker.sh
 
@@ -103,7 +104,7 @@ docs/archive/
 docs/archive/**
 docs/composer.json
 
-# Root-level development files
+# Root-level development files (most have been moved to docs/ or dev-tools/)
 BATCH_*.md
 DIAGNOSTIC_*.md
 DIAGNOSTIC_*.txt
@@ -119,62 +120,6 @@ REAL_DIAGNOSTIC_*.md
 TOP_100_*.md
 test-x-robots-results.md
 100
-
-# Documentation files in root (should be in docs/)
-ARCHITECTURE*.md
-ASSET_CONSOLIDATION*.md
-CODE_CLEANUP_SUMMARY.md
-CODE_REVIEW_*.md
-CODESPACES_*.md
-COMMUNITY_MANAGER*.md
-COMPETITIVE_*.md
-CONSOLIDATION_*.md
-DARK_MODE_*.md
-DASHBOARD_LAYOUT*.md
-DATABASE_CALL_AUDIT.md
-DELIVERABLES_LIST.md
-DEPLOYMENT.md
-DESIGN_MIGRATION_*.md
-DIAGNOSTICS_*.md
-EXTERNAL_*.md
-FEATURE_*.md
-FINAL_*.md
-GITHUB_*.md
-GIT_SYNC_*.md
-GLOSSARY_*.md
-GUARDIAN_*.md
-INLINE_STYLES_*.md
-ISSUE_*.md
-KANBAN_*.md
-KB_*.md
-KPI_*.md
-LOCAL_*.md
-MODULES_*.md
-NOTIFICATION_*.md
-OPTIMIZATION_*.md
-PERFORMANCE_IMPACT*.md
-PERSONA_*.md
-PRIORITY_*.md
-PRODUCT_*.md
-QUICK_REFERENCE*.md
-ROADMAP.md
-SCHEDULER_*.md
-SENSEI_*.md
-SESSION_*.md
-SETTINGS_API_GUIDE.md
-SITE_HEALTH_*.md
-STRATEGIC_*.md
-SYSTEM_OVERVIEW.md
-TECHNICAL_*.md
-TESTING_SETUP.md
-TEST_COVERAGE_*.md
-TOOLTIP_*.md
-VERIFICATION_*.md
-VISUAL_*.md
-WORDCAMP_*.md
-WORDPRESS_API_*.md
-WORKFLOW_*.md
-WPSHADOW_AGENT_*.md
 
 # AI and automation tools
 .copilot-instructions.md

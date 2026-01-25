@@ -68,6 +68,48 @@ abstract class Diagnostic_Base {
 	abstract public static function check();
 
 	/**
+	 * Execute diagnostic check with hooks.
+	 *
+	 * Wraps check() with before/after actions for extensibility.
+	 *
+	 * @return array|null Finding array if issues found, null otherwise.
+	 */
+	public static function execute() {
+		$class = get_called_class();
+		$slug  = static::get_slug();
+
+		/**
+		 * Fires before a diagnostic check is run.
+		 *
+		 * @param string $class Diagnostic class name.
+		 * @param string $slug  Diagnostic slug/identifier.
+		 */
+		do_action( 'wpshadow_before_diagnostic_check', $class, $slug );
+
+		$finding = static::check();
+
+		/**
+		 * Fires after a diagnostic check is run.
+		 *
+		 * @param string     $class   Diagnostic class name.
+		 * @param string     $slug    Diagnostic slug/identifier.
+		 * @param array|null $finding Finding result (null if no issues).
+		 */
+		do_action( 'wpshadow_after_diagnostic_check', $class, $slug, $finding );
+
+		/**
+		 * Filter diagnostic check result.
+		 *
+		 * Allows modification of diagnostic findings before they're stored/displayed.
+		 *
+		 * @param array|null $finding Finding result (null if no issues).
+		 * @param string     $class   Diagnostic class name.
+		 * @param string     $slug    Diagnostic slug/identifier.
+		 */
+		return apply_filters( 'wpshadow_diagnostic_result', $finding, $class, $slug );
+	}
+
+	/**
 	 * Get the diagnostic slug
 	 *
 	 * @return string

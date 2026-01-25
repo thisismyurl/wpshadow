@@ -33,7 +33,9 @@ This setup provides everything needed to develop both the WPShadow plugin AND th
 ```
 /workspaces/
 ├── wpshadow/                    # Core plugin repository
-│   ├── docker-compose.yml       # Multi-service orchestration
+│   ├── dev-tools/
+│   │   ├── docker-compose.yml   # Multi-service orchestration (for dev)
+│   │   └── wp-content/          # Test WordPress content
 │   ├── Makefile                 # 30+ convenience commands
 │   └── wpshadow.php             # Main plugin file
 ├── theme-wpshadow/              # Site theme
@@ -79,7 +81,7 @@ make setup
 ### Option 3: Manual docker-compose
 
 ```bash
-cd /workspaces/wpshadow
+cd /workspaces/wpshadow/dev-tools
 docker-compose up -d
 ```
 

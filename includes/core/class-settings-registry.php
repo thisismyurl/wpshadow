@@ -23,8 +23,89 @@ class Settings_Registry {
 	/**
 	 * Register hooks
 	 */
-	public static function register(): void {
-		add_action( 'admin_init', array( __CLASS__, 'register_all_settings' ) );
+	public static function register(): void
+	{
+		add_action('admin_init', [__CLASS__, 'register_all_settings']);
+		add_action('update_option', [__CLASS__, 'on_setting_updated'], 10, 3);
+		add_action('add_option', [__CLASS__, 'on_setting_added'], 10, 2);
+	}
+
+	/**
+	 * Hook called when a setting is updated.
+	 *
+	 * @param string $option    Name of the updated option.
+	 * @param mixed  $old_value The old option value.
+	 * @param mixed  $value     The new option value.
+	 */
+	public static function on_setting_updated( $option, $old_value, $value ): void {
+		// Only fire for WPShadow settings (check for prefix).
+		// Use str_starts_with for PHP 8.0+, fallback to strpos for earlier versions.
+		if ( function_exists( 'str_starts_with' ) ) {
+			if ( ! str_starts_with( $option, 'wpshadow_' ) ) {
+				return;
+			}
+		} else {
+			if ( 0 !== strpos( $option, 'wpshadow_' ) ) {
+				return;
+			}
+		}
+
+		/**
+		 * Fires when a WPShadow setting is updated.
+		 *
+		 * @param string $option    Setting name.
+		 * @param mixed  $old_value Previous value.
+		 * @param mixed  $value     New value.
+		 */
+		do_action( 'wpshadow_setting_updated', $option, $old_value, $value );
+
+		/**
+		 * Fires when a specific WPShadow setting is updated.
+		 *
+		 * The dynamic portion of the hook name, $option, refers to the setting name.
+		 * For example: wpshadow_setting_updated_wpshadow_debug_mode
+		 *
+		 * @param mixed $old_value Previous value.
+		 * @param mixed $value     New value.
+		 */
+		do_action( "wpshadow_setting_updated_{$option}", $old_value, $value );
+	}
+
+	/**
+	 * Hook called when a setting is added.
+	 *
+	 * @param string $option Name of the added option.
+	 * @param mixed  $value  Value of the added option.
+	 */
+	public static function on_setting_added( $option, $value ): void {
+		// Only fire for WPShadow settings (check for prefix).
+		// Use str_starts_with for PHP 8.0+, fallback to strpos for earlier versions.
+		if ( function_exists( 'str_starts_with' ) ) {
+			if ( ! str_starts_with( $option, 'wpshadow_' ) ) {
+				return;
+			}
+		} else {
+			if ( 0 !== strpos( $option, 'wpshadow_' ) ) {
+				return;
+			}
+		}
+
+		/**
+		 * Fires when a WPShadow setting is added.
+		 *
+		 * @param string $option Setting name.
+		 * @param mixed  $value  Setting value.
+		 */
+		do_action( 'wpshadow_setting_added', $option, $value );
+
+		/**
+		 * Fires when a specific WPShadow setting is added.
+		 *
+		 * The dynamic portion of the hook name, $option, refers to the setting name.
+		 *
+		 * @param mixed $value Setting value.
+		 */
+		do_action( "wpshadow_setting_added_{$option}", $value );
 	}
 
 	/**
