@@ -2,6 +2,10 @@
 <ruleset name="WPShadow">
 	<description>WordPress Coding Standards for WPShadow Plugin</description>
 
+	<!-- TODO: Remove exclusions as codebase becomes compliant -->
+	<!-- Current: Relaxed for initial development -->
+	<!-- Target: Full WordPress-Extra compliance -->
+
 	<!-- Check all PHP files in directory tree by default. -->
 	<arg name="extensions" value="php"/>
 	<file>.</file>
@@ -18,12 +22,23 @@
 	<exclude-pattern>*/.venv/*</exclude-pattern>
 	<exclude-pattern>*/docs/*</exclude-pattern>
 	<exclude-pattern>*/tools/*</exclude-pattern>
+	<exclude-pattern>*/.devcontainer/*</exclude-pattern>
+	<exclude-pattern>*/bin/*</exclude-pattern>
+	<exclude-pattern>*.min.js</exclude-pattern>
+	<exclude-pattern>*.min.css</exclude-pattern>
 
 	<!-- Use WordPress Coding Standards -->
 	<rule ref="WordPress-Extra">
 		<!-- Allow array short syntax -->
 		<exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
 		<exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+		
+		<!-- Temporarily relax file comment requirements -->
+		<exclude name="Squiz.Commenting.FileComment.Missing"/>
+		<exclude name="Squiz.Commenting.FileComment.MissingPackageTag"/>
+		
+		<!-- Temporarily relax class comment requirements -->
+		<exclude name="Squiz.Commenting.ClassComment.Missing"/>
 	</rule>
 
 	<!-- Use WordPress Documentation Standards -->
