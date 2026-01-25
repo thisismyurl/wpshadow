@@ -9,7 +9,7 @@
       "version": "lts"
     },
     "ghcr.io/devcontainers/features/git:1": {},
-    "ghcr.io/devcontainers-contrib/features/composer:2": {
+    "ghcr.io/devcontainers-extra/features/composer:2": {
       "version": "latest"
     }
   },
