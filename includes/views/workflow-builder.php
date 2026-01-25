@@ -65,15 +65,20 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 					<?php esc_html_e( 'Triggers (IF)', 'wpshadow' ); ?>
 				</h3>
 				<div class="wps-palette-blocks">
-					<?php foreach ( $triggers as $id => $block ) : ?>
+					<?php foreach ( $triggers as $trigger_id => $block ) : ?>
 						<div 
 							class="wps-block-item trigger" 
 							draggable="true" 
-							data-block-id="<?php echo esc_attr( $id ); ?>" 
+							data-block-id="<?php echo esc_attr( $trigger_id ); ?>" 
 							data-block-type="trigger"
 							role="button"
 							tabindex="0"
-							aria-label="<?php echo esc_attr( sprintf( __( 'Trigger: %s - %s', 'wpshadow' ), $block['label'], $block['description'] ) ); ?>"
+							aria-label="
+							<?php
+								/* translators: 1: Trigger label, 2: Trigger description */
+								echo esc_attr( sprintf( __( 'Trigger: %1$s - %2$s', 'wpshadow' ), $block['label'], $block['description'] ) );
+							?>
+							"
 						>
 							<span class="wps-block-icon" aria-hidden="true">
 								<span class="dashicons <?php echo esc_attr( $block['icon'] ); ?>"></span>
@@ -94,15 +99,20 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 					<?php esc_html_e( 'Actions (THEN)', 'wpshadow' ); ?>
 				</h3>
 				<div class="wps-palette-blocks">
-					<?php foreach ( $actions as $id => $block ) : ?>
+					<?php foreach ( $actions as $action_id => $block ) : ?>
 						<div 
 							class="wps-block-item action" 
 							draggable="true" 
-							data-block-id="<?php echo esc_attr( $id ); ?>" 
+							data-block-id="<?php echo esc_attr( $action_id ); ?>" 
 							data-block-type="action"
 							role="button"
 							tabindex="0"
-							aria-label="<?php echo esc_attr( sprintf( __( 'Action: %s - %s', 'wpshadow' ), $block['label'], $block['description'] ) ); ?>"
+							aria-label="
+							<?php
+								/* translators: 1: Action label, 2: Action description */
+								echo esc_attr( sprintf( __( 'Action: %1$s - %2$s', 'wpshadow' ), $block['label'], $block['description'] ) );
+							?>
+							"
 						>
 							<span class="wps-block-icon" aria-hidden="true">
 								<span class="dashicons <?php echo esc_attr( $block['icon'] ); ?>"></span>
