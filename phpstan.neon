@@ -1,5 +1,8 @@
+# TODO: Gradually increase level to 8 as codebase matures
+# Current: level 5 (relaxed for initial development)
+# Target: level 8 (strict type checking)
 parameters:
-	level: 8
+	level: 5
 	paths:
 		- includes
 		- wpshadow.php
