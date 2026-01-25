@@ -40,7 +40,7 @@ class Dry_Run_Treatment_Handler extends AJAX_Handler_Base {
 		}
 		
 		// Run treatment in dry-run mode
-		$result = wpshadow_attempt_autofix( $finding_id, true );
+		$result = \wpshadow_attempt_autofix( $finding_id, true );
 
 		if ( is_array( $result ) && ! empty( $result['success'] ) ) {
 			// Log the dry run

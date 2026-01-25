@@ -40,13 +40,13 @@ class Rollback_Treatment_Handler extends AJAX_Handler_Base {
 		}
 		
 		// Check if treatment can be rolled back
-		if ( ! wpshadow_can_rollback( $finding_id ) ) {
+		if ( ! \wpshadow_can_rollback( $finding_id ) ) {
 			self::send_error( __( 'This treatment does not support rollback.', 'wpshadow' ) );
 			return;
 		}
 		
 		// Rollback the treatment
-		$result = wpshadow_rollback_fix( $finding_id );
+		$result = \wpshadow_rollback_fix( $finding_id );
 
 		if ( is_array( $result ) && ! empty( $result['success'] ) ) {
 			// Log the rollback

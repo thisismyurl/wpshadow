@@ -135,7 +135,7 @@ abstract class Treatment_Base implements Treatment_Interface {
 		$rollback_log[] = array(
 			'finding_id' => $finding_id,
 			'class'      => $class,
-			'timestamp'  => current_time( 'timestamp' ),
+			'timestamp'  => time(),
 			'user_id'    => get_current_user_id(),
 		);
 		
