@@ -11,3 +11,6 @@
 # Build artifacts
 /build/
 *.zip
+
+# Development KPI tracking (user-specific data)
+.devcontainer/.dev-kpis.json
