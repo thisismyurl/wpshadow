@@ -26,20 +26,32 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return void
  */
 function wpshadow_render_dashboard() {
+	// Check if onboarding wizard should be shown
+	$show_onboarding = isset( $_GET['onboarding'] ) && ( 'start' === $_GET['onboarding'] || 'restart' === $_GET['onboarding'] );
+
+	if ( $show_onboarding ) {
+		// Load and display the onboarding wizard
+		$wizard_file = WPSHADOW_PATH . 'includes/views/onboarding/wizard.php';
+		if ( file_exists( $wizard_file ) ) {
+			include $wizard_file;
+			return;
+		}
+	}
+
 	// Check for category drill-down (Issue #564)
 	$category_filter = isset( $_GET['category'] ) ? sanitize_key( $_GET['category'] ) : '';
-	$is_drilldown = ! empty( $category_filter );
+	$is_drilldown    = ! empty( $category_filter );
 
 	// Get category metadata for title/details
-	$category_meta = \WPShadow\Core\wpshadow_get_category_metadata();
-	$current_category = $is_drilldown && isset( $category_meta[ $category_filter ] ) 
-		? $category_meta[ $category_filter ] 
+	$category_meta    = \WPShadow\Core\wpshadow_get_category_metadata();
+	$current_category = $is_drilldown && isset( $category_meta[ $category_filter ] )
+		? $category_meta[ $category_filter ]
 		: null;
 
-	$last_scan = get_option( 'wpshadow_last_quick_scan', 0 );
-	$never_run = empty( $last_scan );
+	$last_scan        = get_option( 'wpshadow_last_quick_scan', 0 );
+	$never_run        = empty( $last_scan );
 	$five_minutes_ago = time() - ( 5 * MINUTE_IN_SECONDS );
-	$needs_refresh = ( $last_scan > 0 && $last_scan < $five_minutes_ago );
+	$needs_refresh    = ( $last_scan > 0 && $last_scan < $five_minutes_ago );
 
 	?>
 	<div class="wrap wpshadow-dashboard">
