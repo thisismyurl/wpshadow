@@ -55,6 +55,15 @@ if (isset($_POST['wpshadow_send_test_email']) && check_admin_referer('wpshadow_e
 		$smtp_error = $phpmailer->ErrorInfo;
 	}
 
+	// Store email test status
+	if ($sent) {
+		update_option('wpshadow_last_email_test_status', 'passed');
+		update_option('wpshadow_last_email_test_time', current_time('timestamp'));
+	} else {
+		update_option('wpshadow_last_email_test_status', 'failed');
+		update_option('wpshadow_last_email_test_time', current_time('timestamp'));
+	}
+
 	$test_results = array(
 		'success'    => $sent,
 		'to'         => $to_email,
