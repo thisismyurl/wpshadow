@@ -10,16 +10,15 @@ use WPShadow\Diagnostics\Diagnostic_Base;
  * Diagnostic: Database Orphaned PostMeta
  * Checks for post metadata without corresponding posts
  */
-class Test_Database_Orphaned_PostMeta extends Diagnostic_Base
-{
+class Test_Database_Orphaned_PostMeta extends Diagnostic_Base {
+
 
 	/**
 	 * Run the diagnostic check
 	 *
 	 * @return array|null Array with issue details or null if healthy
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		global $wpdb;
 
 		$orphaned_meta = $wpdb->get_var(
@@ -28,12 +27,12 @@ class Test_Database_Orphaned_PostMeta extends Diagnostic_Base
 			 WHERE p.ID IS NULL"
 		);
 
-		if ($orphaned_meta > 100) {
+		if ( $orphaned_meta > 100 ) {
 			return array(
-				'id'            => 'database-orphaned-postmeta',
-				'title'         => 'Orphaned Post Metadata',
-				'threat_level'  => 25,
-				'description'   => sprintf(
+				'id'           => 'database-orphaned-postmeta',
+				'title'        => 'Orphaned Post Metadata',
+				'threat_level' => 25,
+				'description'  => sprintf(
 					'Found %d orphaned postmeta entries without corresponding posts.',
 					$orphaned_meta
 				),
@@ -48,8 +47,7 @@ class Test_Database_Orphaned_PostMeta extends Diagnostic_Base
 	 *
 	 * @return array Test result with passed status and message
 	 */
-	public static function test_live_orphaned_postmeta(): array
-	{
+	public static function test_live_orphaned_postmeta(): array {
 		$result = self::check();
 		return array(
 			'passed'  => $result === null,

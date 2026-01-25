@@ -15,116 +15,116 @@
 declare(strict_types=1);
 
 if ( ! defined( 'ABSPATH' ) ) {
-    exit;
+	exit;
 }
 
 /**
  * Get recent activity for dashboard
- * 
+ *
  * @return array Recent activity entries with action and timestamp
  */
-function wpshadow_get_recent_activity() : array {
-    if ( ! class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
-        return array();
-    }
+function wpshadow_get_recent_activity(): array {
+	if ( ! class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
+		return array();
+	}
 
-    $recent = \WPShadow\Core\Activity_Logger::get_recent( 10 );
+	$recent = \WPShadow\Core\Activity_Logger::get_recent( 10 );
 
-    $action_labels = array(
-        'diagnostic_run'             => __( 'Diagnostic Run', 'wpshadow' ),
-        'diagnostic_failed'          => __( 'Diagnostic Failed', 'wpshadow' ),
-        'treatment_applied'          => __( 'Auto-fix Applied', 'wpshadow' ),
-        'treatment_undone'           => __( 'Auto-fix Undone', 'wpshadow' ),
-        'finding_status_change'      => __( 'Status Changed', 'wpshadow' ),
-        'finding_dismissed'          => __( 'Finding Dismissed', 'wpshadow' ),
-        'finding_excluded'           => __( 'Finding Excluded', 'wpshadow' ),
-        'finding_action'             => __( 'Finding Activity', 'wpshadow' ),
-        'finding_resolved'           => __( 'Finding Fixed', 'wpshadow' ),
-        'workflow_created'           => __( 'Workflow Created', 'wpshadow' ),
-        'workflow_executed'          => __( 'Workflow Executed', 'wpshadow' ),
-        'workflow_enabled'           => __( 'Workflow Enabled', 'wpshadow' ),
-        'workflow_disabled'          => __( 'Workflow Disabled', 'wpshadow' ),
-        'workflow_saved'             => __( 'Workflow Saved', 'wpshadow' ),
-        'workflow_deleted'           => __( 'Workflow Deleted', 'wpshadow' ),
-        'guardian_enabled'           => __( 'Guardian Enabled', 'wpshadow' ),
-        'guardian_disabled'          => __( 'Guardian Disabled', 'wpshadow' ),
-        'cache_settings_changed'     => __( 'Cache Settings Changed', 'wpshadow' ),
-        'cache_cleared'              => __( 'Cache Cleared', 'wpshadow' ),
-        'consent_saved'              => __( 'Consent Saved', 'wpshadow' ),
-        'settings_changed'           => __( 'Settings Changed', 'wpshadow' ),
-        'site_settings_changed'      => __( 'Site Settings Changed', 'wpshadow' ),
-        'activity_pruned'            => __( 'Activity Log Pruned', 'wpshadow' ),
-        'retention_setting_updated'  => __( 'Retention Setting Updated', 'wpshadow' ),
-        'data_cleanup_completed'     => __( 'Data Cleanup Completed', 'wpshadow' ),
-    );
+	$action_labels = array(
+		'diagnostic_run'            => __( 'Diagnostic Run', 'wpshadow' ),
+		'diagnostic_failed'         => __( 'Diagnostic Failed', 'wpshadow' ),
+		'treatment_applied'         => __( 'Auto-fix Applied', 'wpshadow' ),
+		'treatment_undone'          => __( 'Auto-fix Undone', 'wpshadow' ),
+		'finding_status_change'     => __( 'Status Changed', 'wpshadow' ),
+		'finding_dismissed'         => __( 'Finding Dismissed', 'wpshadow' ),
+		'finding_excluded'          => __( 'Finding Excluded', 'wpshadow' ),
+		'finding_action'            => __( 'Finding Activity', 'wpshadow' ),
+		'finding_resolved'          => __( 'Finding Fixed', 'wpshadow' ),
+		'workflow_created'          => __( 'Workflow Created', 'wpshadow' ),
+		'workflow_executed'         => __( 'Workflow Executed', 'wpshadow' ),
+		'workflow_enabled'          => __( 'Workflow Enabled', 'wpshadow' ),
+		'workflow_disabled'         => __( 'Workflow Disabled', 'wpshadow' ),
+		'workflow_saved'            => __( 'Workflow Saved', 'wpshadow' ),
+		'workflow_deleted'          => __( 'Workflow Deleted', 'wpshadow' ),
+		'guardian_enabled'          => __( 'Guardian Enabled', 'wpshadow' ),
+		'guardian_disabled'         => __( 'Guardian Disabled', 'wpshadow' ),
+		'cache_settings_changed'    => __( 'Cache Settings Changed', 'wpshadow' ),
+		'cache_cleared'             => __( 'Cache Cleared', 'wpshadow' ),
+		'consent_saved'             => __( 'Consent Saved', 'wpshadow' ),
+		'settings_changed'          => __( 'Settings Changed', 'wpshadow' ),
+		'site_settings_changed'     => __( 'Site Settings Changed', 'wpshadow' ),
+		'activity_pruned'           => __( 'Activity Log Pruned', 'wpshadow' ),
+		'retention_setting_updated' => __( 'Retention Setting Updated', 'wpshadow' ),
+		'data_cleanup_completed'    => __( 'Data Cleanup Completed', 'wpshadow' ),
+	);
 
-    $activity = array();
+	$activity = array();
 
-    foreach ( $recent as $entry ) {
-        $action      = $entry['action'] ?? '';
-        $label_text  = $action_labels[ $action ] ?? ucwords( str_replace( '_', ' ', (string) $action ) );
-        $details     = isset( $entry['details'] ) ? trim( (string) $entry['details'] ) : '';
-        $description = $details ? $label_text . ': ' . $details : $label_text;
-        $timestamp   = isset( $entry['timestamp'] ) ? (int) $entry['timestamp'] : current_time( 'timestamp' );
+	foreach ( $recent as $entry ) {
+		$action      = $entry['action'] ?? '';
+		$label_text  = $action_labels[ $action ] ?? ucwords( str_replace( '_', ' ', (string) $action ) );
+		$details     = isset( $entry['details'] ) ? trim( (string) $entry['details'] ) : '';
+		$description = $details ? $label_text . ': ' . $details : $label_text;
+		$timestamp   = isset( $entry['timestamp'] ) ? (int) $entry['timestamp'] : current_time( 'timestamp' );
 
-        $activity[] = array(
-            'action'   => $description,
-            'time'     => $timestamp,
-            'category' => $entry['category'] ?? '',
-        );
-    }
+		$activity[] = array(
+			'action'   => $description,
+			'time'     => $timestamp,
+			'category' => $entry['category'] ?? '',
+		);
+	}
 
-    if ( empty( $activity ) ) {
-        $activity[] = array(
-            'action'   => __( 'WPShadow activated', 'wpshadow' ),
-            'time'     => current_time( 'timestamp' ),
-            'category' => '',
-        );
-    }
+	if ( empty( $activity ) ) {
+		$activity[] = array(
+			'action'   => __( 'WPShadow activated', 'wpshadow' ),
+			'time'     => current_time( 'timestamp' ),
+			'category' => '',
+		);
+	}
 
-    return $activity;
+	return $activity;
 }
 
 /**
  * Format time as relative with tooltip for precise details
- * 
+ *
  * @param int $timestamp Unix timestamp
  * @return string HTML with formatted time
  */
-function wpshadow_format_time_with_tooltip( int $timestamp ) : string {
-    $now = current_time( 'timestamp' );
-    $diff = $now - $timestamp;
+function wpshadow_format_time_with_tooltip( int $timestamp ): string {
+	$now  = current_time( 'timestamp' );
+	$diff = $now - $timestamp;
 
-    if ( $diff < 60 ) {
-        $relative = __( 'just now', 'wpshadow' );
-    } elseif ( $diff < 3600 ) {
-        $minutes = (int) floor( $diff / 60 );
-        $relative = sprintf( _n( '%d minute ago', '%d minutes ago', $minutes, 'wpshadow' ), $minutes );
-    } elseif ( $diff < 86400 ) {
-        $hours = (int) floor( $diff / 3600 );
-        $relative = sprintf( _n( '%d hour ago', '%d hours ago', $hours, 'wpshadow' ), $hours );
-    } else {
-        $days = (int) floor( $diff / 86400 );
-        $relative = sprintf( _n( '%d day ago', '%d days ago', $days, 'wpshadow' ), $days );
-    }
+	if ( $diff < 60 ) {
+		$relative = __( 'just now', 'wpshadow' );
+	} elseif ( $diff < 3600 ) {
+		$minutes  = (int) floor( $diff / 60 );
+		$relative = sprintf( _n( '%d minute ago', '%d minutes ago', $minutes, 'wpshadow' ), $minutes );
+	} elseif ( $diff < 86400 ) {
+		$hours    = (int) floor( $diff / 3600 );
+		$relative = sprintf( _n( '%d hour ago', '%d hours ago', $hours, 'wpshadow' ), $hours );
+	} else {
+		$days     = (int) floor( $diff / 86400 );
+		$relative = sprintf( _n( '%d day ago', '%d days ago', $days, 'wpshadow' ), $days );
+	}
 
-    $precise = wp_date( get_option( 'date_format', 'Y-m-d' ) . ' ' . get_option( 'time_format', 'H:i:s' ), $timestamp );
+	$precise = wp_date( get_option( 'date_format', 'Y-m-d' ) . ' ' . get_option( 'time_format', 'H:i:s' ), $timestamp );
 
-    return sprintf(
-        '<span title="%s">%s</span>',
-        esc_attr( $precise ),
-        esc_html( $relative )
-    );
+	return sprintf(
+		'<span title="%s">%s</span>',
+		esc_attr( $precise ),
+		esc_html( $relative )
+	);
 }
 
 /**
  * Render recent activity section on dashboard
- * 
+ *
  * Called via wpshadow_dashboard_activity hook
  */
-function wpshadow_render_recent_activity() : void {
+function wpshadow_render_recent_activity(): void {
 	$activity = wpshadow_get_recent_activity();
-	
+
 	if ( empty( $activity ) ) {
 		return; // No activity to display
 	}
@@ -153,46 +153,46 @@ function wpshadow_render_recent_activity() : void {
 
 /**
  * Render activity history page
- * 
+ *
  * Handles:
  * - Activity display with filtering
  * - CSV export functionality
  * - Activity Logger integration
  */
-function wpshadow_render_activity_page() : void {
-    if ( ! current_user_can( 'read' ) ) {
-        wp_die( __( 'Insufficient permissions.', 'wpshadow' ) );
-    }
+function wpshadow_render_activity_page(): void {
+	if ( ! current_user_can( 'read' ) ) {
+		wp_die( __( 'Insufficient permissions.', 'wpshadow' ) );
+	}
 
-    // Handle CSV export
-    if ( isset( $_GET['export'] ) && 'csv' === $_GET['export'] ) {
-        // Build filters for export
-        $filters = array();
-        if ( ! empty( $_GET['activity_category'] ) ) {
-            $filters['category'] = sanitize_key( wp_unslash( $_GET['activity_category'] ) );
-        }
-        if ( ! empty( $_GET['activity_action'] ) ) {
-            $filters['action'] = sanitize_key( wp_unslash( $_GET['activity_action'] ) );
-        }
-        if ( ! empty( $_GET['activity_search'] ) ) {
-            $filters['search'] = sanitize_text_field( wp_unslash( $_GET['activity_search'] ) );
-        }
+	// Handle CSV export
+	if ( isset( $_GET['export'] ) && 'csv' === $_GET['export'] ) {
+		// Build filters for export
+		$filters = array();
+		if ( ! empty( $_GET['activity_category'] ) ) {
+			$filters['category'] = sanitize_key( wp_unslash( $_GET['activity_category'] ) );
+		}
+		if ( ! empty( $_GET['activity_action'] ) ) {
+			$filters['action'] = sanitize_key( wp_unslash( $_GET['activity_action'] ) );
+		}
+		if ( ! empty( $_GET['activity_search'] ) ) {
+			$filters['search'] = sanitize_text_field( wp_unslash( $_GET['activity_search'] ) );
+		}
 
-        // Generate CSV
-        $csv = \WPShadow\Core\Activity_Logger::export_csv( $filters );
+		// Generate CSV
+		$csv = \WPShadow\Core\Activity_Logger::export_csv( $filters );
 
-        // Send headers
-        header( 'Content-Type: text/csv; charset=utf-8' );
-        header( 'Content-Disposition: attachment; filename="wpshadow-activity-' . esc_attr( gmdate( 'Y-m-d-His' ) ) . '.csv"' );
-        header( 'Pragma: no-cache' );
-        header( 'Expires: 0' );
+		// Send headers
+		header( 'Content-Type: text/csv; charset=utf-8' );
+		header( 'Content-Disposition: attachment; filename="wpshadow-activity-' . esc_attr( gmdate( 'Y-m-d-His' ) ) . '.csv"' );
+		header( 'Pragma: no-cache' );
+		header( 'Expires: 0' );
 
-        echo $csv; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-        exit;
-    }
+		echo $csv; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		exit;
+	}
 
-    // Render activity history view
-    include WPSHADOW_PATH . 'includes/views/activity-history.php';
+	// Render activity history view
+	include WPSHADOW_PATH . 'includes/views/activity-history.php';
 }
 
 // Hook activity rendering into dashboard

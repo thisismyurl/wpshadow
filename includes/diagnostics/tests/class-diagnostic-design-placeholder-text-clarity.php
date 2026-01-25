@@ -11,19 +11,19 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/design-placeholder-text-clarity
  */
 class Diagnostic_Design_PLACEHOLDER_TEXT_CLARITY extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'design-placeholder-text-clarity',
-            'title' => __('Placeholder Text Clarity', 'wpshadow'),
-            'description' => __('Confirms placeholder text helpful.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'design',
-            'kb_link' => 'https://wpshadow.com/kb/design-placeholder-text-clarity',
-            'training_link' => 'https://wpshadow.com/training/design-placeholder-text-clarity',
-            'auto_fixable' => false,
-            'threat_level' => 5
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'design-placeholder-text-clarity',
+			'title'         => __( 'Placeholder Text Clarity', 'wpshadow' ),
+			'description'   => __( 'Confirms placeholder text helpful.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'design',
+			'kb_link'       => 'https://wpshadow.com/kb/design-placeholder-text-clarity',
+			'training_link' => 'https://wpshadow.com/training/design-placeholder-text-clarity',
+			'auto_fixable'  => false,
+			'threat_level'  => 5,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -31,12 +31,12 @@ class Diagnostic_Design_PLACEHOLDER_TEXT_CLARITY extends Diagnostic_Base {
 	 * Diagnostic: Design PLACEHOLDER TEXT CLARITY
 	 * Slug: -design-placeholder-text-clarity
 	 * File: class-diagnostic-design-placeholder-text-clarity.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Design PLACEHOLDER TEXT CLARITY
 	 * Slug: -design-placeholder-text-clarity
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -49,11 +49,16 @@ class Diagnostic_Design_PLACEHOLDER_TEXT_CLARITY extends Diagnostic_Base {
 	 */
 	public static function test_live__design_placeholder_text_clarity(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Placeholder text is clear and helpful'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Placeholder text is clear and helpful',
+			);
 		}
 		$message = $result['description'] ?? 'Placeholder text clarity issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

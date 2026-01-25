@@ -81,7 +81,7 @@ class Diagnostic_Audit_Log_Retention extends Diagnostic_Base {
 	public static function check(): ?array {
 		// Check if audit logs are being retained with proper retention policy
 		// Look for audit logging plugins with retention settings
-		
+
 		$audit_plugins = array(
 			'aryo-activity-log/aryo-activity-log.php',
 			'wsal/wp-security-audit-log.php',
@@ -123,7 +123,7 @@ class Diagnostic_Audit_Log_Retention extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Audit Log Retention
 	 * Slug: audit-log-retention
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -144,15 +144,13 @@ class Diagnostic_Audit_Log_Retention extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

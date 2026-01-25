@@ -6,7 +6,7 @@
  * for a cleaner, faster interface.
  *
  * Philosophy: Inspire Confidence (#8) - Clean UI = trust
- * 
+ *
  * @package WPShadow
  * @subpackage Admin
  */
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Admin Notice Cleaner class
  */
 class Admin_Notice_Cleaner {
-	
+
 	/**
 	 * Initialize cleaner
 	 */
 	public static function init(): void {
-		add_action( 'admin_head', [ __CLASS__, 'hide_other_notices' ], 1 );
+		add_action( 'admin_head', array( __CLASS__, 'hide_other_notices' ), 1 );
 	}
-	
+
 	/**
 	 * Hide other plugins' notices on WPShadow pages
 	 */
@@ -38,20 +38,20 @@ class Admin_Notice_Cleaner {
 		if ( ! \function_exists( 'get_current_screen' ) ) {
 			return;
 		}
-		
+
 		$screen = \get_current_screen();
 		if ( ! $screen || ! isset( $screen->id ) || strpos( $screen->id, 'wpshadow' ) === false ) {
 			return;
 		}
-		
+
 		// Remove other plugins' admin notices to reduce clutter
 		remove_all_actions( 'admin_notices' );
 		remove_all_actions( 'all_admin_notices' );
-		
+
 		// Re-add only WPShadow notices
-		add_action( 'admin_notices', [ __CLASS__, 'restore_wpshadow_notices' ] );
+		add_action( 'admin_notices', array( __CLASS__, 'restore_wpshadow_notices' ) );
 	}
-	
+
 	/**
 	 * Restore only WPShadow-specific notices
 	 */

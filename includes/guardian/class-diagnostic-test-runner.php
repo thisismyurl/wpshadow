@@ -25,40 +25,40 @@ class Diagnostic_Test_Runner {
 		$results = array();
 
 		// General diagnostics
-		$results['site-actually-loading']      = self::test_site_actually_loading();
-		$results['backups-working']            = self::test_backups_working();
-		$results['broken-images']              = self::test_broken_images();
-		$results['business-hours-display']     = self::test_business_hours_display();
-		$results['contact-form-working']       = self::test_contact_form_working();
-		$results['disaster-recovery']          = self::test_disaster_recovery();
-		$results['map-embed-working']          = self::test_map_embed_working();
-		$results['updates-available']          = self::test_updates_available();
+		$results['site-actually-loading']  = self::test_site_actually_loading();
+		$results['backups-working']        = self::test_backups_working();
+		$results['broken-images']          = self::test_broken_images();
+		$results['business-hours-display'] = self::test_business_hours_display();
+		$results['contact-form-working']   = self::test_contact_form_working();
+		$results['disaster-recovery']      = self::test_disaster_recovery();
+		$results['map-embed-working']      = self::test_map_embed_working();
+		$results['updates-available']      = self::test_updates_available();
 
 		// Monitoring diagnostics
-		$results['site-down']                  = self::test_site_down();
+		$results['site-down'] = self::test_site_down();
 
 		// System diagnostics
-		$results['disk-space']                 = self::test_disk_space();
+		$results['disk-space'] = self::test_disk_space();
 
 		// Security diagnostics (batch 2)
-		$results['ssl']                        = self::test_ssl();
-		$results['security-headers']           = self::test_security_headers();
-		$results['file-permissions']           = self::test_file_permissions();
-		$results['secret-keys']                = self::test_secret_keys();
-		$results['two-factor']                 = self::test_two_factor();
-		$results['login-protection']           = self::test_login_protection();
-		$results['malware-scan']               = self::test_malware_scan();
-		$results['vulnerable-plugins']         = self::test_vulnerable_plugins();
+		$results['ssl']                = self::test_ssl();
+		$results['security-headers']   = self::test_security_headers();
+		$results['file-permissions']   = self::test_file_permissions();
+		$results['secret-keys']        = self::test_secret_keys();
+		$results['two-factor']         = self::test_two_factor();
+		$results['login-protection']   = self::test_login_protection();
+		$results['malware-scan']       = self::test_malware_scan();
+		$results['vulnerable-plugins'] = self::test_vulnerable_plugins();
 
 		// Performance diagnostics (batch 3)
-		$results['page-speed']                 = self::test_page_speed();
-		$results['image-optimization']         = self::test_image_optimization();
-		$results['caching']                    = self::test_caching();
-		$results['database-optimization']      = self::test_database_optimization();
-		$results['memory-limit']               = self::test_memory_limit();
-		$results['slow-queries']               = self::test_slow_queries();
-		$results['render-blocking']            = self::test_render_blocking();
-		$results['font-optimization']          = self::test_font_optimization();
+		$results['page-speed']            = self::test_page_speed();
+		$results['image-optimization']    = self::test_image_optimization();
+		$results['caching']               = self::test_caching();
+		$results['database-optimization'] = self::test_database_optimization();
+		$results['memory-limit']          = self::test_memory_limit();
+		$results['slow-queries']          = self::test_slow_queries();
+		$results['render-blocking']       = self::test_render_blocking();
+		$results['font-optimization']     = self::test_font_optimization();
 
 		return $results;
 	}

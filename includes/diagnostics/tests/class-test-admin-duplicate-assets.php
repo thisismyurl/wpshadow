@@ -22,7 +22,7 @@ namespace WPShadow\Diagnostics\Tests;
 
 use WPShadow\Diagnostics\Diagnostic_Base;
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -33,18 +33,17 @@ if (! defined('ABSPATH')) {
  *
  * @verified Not yet tested
  */
-class Test_Admin_Duplicate_Assets extends Diagnostic_Base
-{
+class Test_Admin_Duplicate_Assets extends Diagnostic_Base {
+
 
 	/**
 	 * Run the diagnostic test
 	 *
 	 * @return array|null Diagnostic result array, or null if no issue found
 	 */
-	public function check(): ?array
-	{
+	public function check(): ?array {
 		// Only run in admin context
-		if (! is_admin()) {
+		if ( ! is_admin() ) {
 			return null;
 		}
 
@@ -56,33 +55,33 @@ class Test_Admin_Duplicate_Assets extends Diagnostic_Base
 		$seen_urls = array();
 
 		// Check JavaScript files
-		if (isset($wp_scripts) && is_object($wp_scripts)) {
-			foreach ($wp_scripts->queue ?? array() as $handle) {
-				if (! isset($wp_scripts->registered[$handle])) {
+		if ( isset( $wp_scripts ) && is_object( $wp_scripts ) ) {
+			foreach ( $wp_scripts->queue ?? array() as $handle ) {
+				if ( ! isset( $wp_scripts->registered[ $handle ] ) ) {
 					continue;
 				}
 
-				$src = $wp_scripts->registered[$handle]->src ?? '';
+				$src = $wp_scripts->registered[ $handle ]->src ?? '';
 
-				if (empty($src)) {
+				if ( empty( $src ) ) {
 					continue;
 				}
 
 				// Normalize URL (remove query strings for comparison)
-				$normalized = $this->normalize_url($src);
+				$normalized = $this->normalize_url( $src );
 
-				if (isset($seen_urls[$normalized])) {
+				if ( isset( $seen_urls[ $normalized ] ) ) {
 					// Duplicate found
 					$duplicates[] = array(
 						'type'           => 'script',
 						'url'            => $normalized,
 						'handle_current' => $handle,
-						'handle_first'   => $seen_urls[$normalized]['handle'],
+						'handle_first'   => $seen_urls[ $normalized ]['handle'],
 						'src_current'    => $src,
-						'src_first'      => $seen_urls[$normalized]['src'],
+						'src_first'      => $seen_urls[ $normalized ]['src'],
 					);
 				} else {
-					$seen_urls[$normalized] = array(
+					$seen_urls[ $normalized ] = array(
 						'handle' => $handle,
 						'src'    => $src,
 					);
@@ -91,31 +90,31 @@ class Test_Admin_Duplicate_Assets extends Diagnostic_Base
 		}
 
 		// Check CSS files
-		if (isset($wp_styles) && is_object($wp_styles)) {
-			foreach ($wp_styles->queue ?? array() as $handle) {
-				if (! isset($wp_styles->registered[$handle])) {
+		if ( isset( $wp_styles ) && is_object( $wp_styles ) ) {
+			foreach ( $wp_styles->queue ?? array() as $handle ) {
+				if ( ! isset( $wp_styles->registered[ $handle ] ) ) {
 					continue;
 				}
 
-				$src = $wp_styles->registered[$handle]->src ?? '';
+				$src = $wp_styles->registered[ $handle ]->src ?? '';
 
-				if (empty($src)) {
+				if ( empty( $src ) ) {
 					continue;
 				}
 
-				$normalized = $this->normalize_url($src);
+				$normalized = $this->normalize_url( $src );
 
-				if (isset($seen_urls[$normalized])) {
+				if ( isset( $seen_urls[ $normalized ] ) ) {
 					$duplicates[] = array(
 						'type'           => 'stylesheet',
 						'url'            => $normalized,
 						'handle_current' => $handle,
-						'handle_first'   => $seen_urls[$normalized]['handle'],
+						'handle_first'   => $seen_urls[ $normalized ]['handle'],
 						'src_current'    => $src,
-						'src_first'      => $seen_urls[$normalized]['src'],
+						'src_first'      => $seen_urls[ $normalized ]['src'],
 					);
 				} else {
-					$seen_urls[$normalized] = array(
+					$seen_urls[ $normalized ] = array(
 						'handle' => $handle,
 						'src'    => $src,
 					);
@@ -123,46 +122,46 @@ class Test_Admin_Duplicate_Assets extends Diagnostic_Base
 			}
 		}
 
-		$duplicate_count = count($duplicates);
+		$duplicate_count = count( $duplicates );
 
 		// Any duplicates are a problem
-		if ($duplicate_count === 0) {
+		if ( $duplicate_count === 0 ) {
 			return null; // Pass
 		}
 
 		// Identify common duplicate libraries
 		$common_duplicates = array();
-		foreach ($duplicates as $dup) {
+		foreach ( $duplicates as $dup ) {
 			$url = $dup['url'];
-			if (strpos($url, 'jquery') !== false) {
+			if ( strpos( $url, 'jquery' ) !== false ) {
 				$common_duplicates[] = 'jQuery';
-			} elseif (strpos($url, 'lodash') !== false || strpos($url, 'underscore') !== false) {
+			} elseif ( strpos( $url, 'lodash' ) !== false || strpos( $url, 'underscore' ) !== false ) {
 				$common_duplicates[] = 'Lodash/Underscore';
-			} elseif (strpos($url, 'bootstrap') !== false) {
+			} elseif ( strpos( $url, 'bootstrap' ) !== false ) {
 				$common_duplicates[] = 'Bootstrap';
-			} elseif (strpos($url, 'font-awesome') !== false) {
+			} elseif ( strpos( $url, 'font-awesome' ) !== false ) {
 				$common_duplicates[] = 'Font Awesome';
 			}
 		}
 
 		return array(
-			'id'           => 'admin-duplicate-assets',
-			'title'        => 'Duplicate Assets Loaded in Admin',
-			'description'  => sprintf(
+			'id'            => 'admin-duplicate-assets',
+			'title'         => 'Duplicate Assets Loaded in Admin',
+			'description'   => sprintf(
 				'WordPress admin is loading %d duplicate assets. The same files are enqueued multiple times, wasting bandwidth and potentially causing conflicts. Common culprits: %s',
 				$duplicate_count,
-				! empty($common_duplicates) ? implode(', ', array_unique($common_duplicates)) : 'Multiple plugins'
+				! empty( $common_duplicates ) ? implode( ', ', array_unique( $common_duplicates ) ) : 'Multiple plugins'
 			)
 			'kb_link'      => 'https://wpshadow.com/kb/fix-duplicate-assets',
 			'training_link' => 'https://wpshadow.com/training/proper-asset-enqueue',
-			'auto_fixable' => false,
-			'threat_level' => 40,
-			'module'       => 'admin-performance',
-			'priority'     => 15,
-			'meta'         => array(
-				'duplicate_count'    => $duplicate_count,
-				'common_duplicates'  => array_unique($common_duplicates),
-				'duplicates'         => array_slice($duplicates, 0, 5), // First 5
+			'auto_fixable'  => false,
+			'threat_level'  => 40,
+			'module'        => 'admin-performance',
+			'priority'      => 15,
+			'meta'          => array(
+				'duplicate_count'   => $duplicate_count,
+				'common_duplicates' => array_unique( $common_duplicates ),
+				'duplicates'        => array_slice( $duplicates, 0, 5 ), // First 5
 			),
 		);
 	}
@@ -175,16 +174,15 @@ class Test_Admin_Duplicate_Assets extends Diagnostic_Base
 	 * @param string $url URL to normalize
 	 * @return string Normalized URL
 	 */
-	private function normalize_url(string $url): string
-	{
+	private function normalize_url( string $url ): string {
 		// Remove query string
-		$url = strtok($url, '?');
+		$url = strtok( $url, '?' );
 
 		// Convert to lowercase for case-insensitive comparison
-		$url = strtolower($url);
+		$url = strtolower( $url );
 
 		// Remove protocol for comparison
-		$url = preg_replace('#^https?://#', '', $url);
+		$url = preg_replace( '#^https?://#', '', $url );
 
 		return $url;
 	}
@@ -194,8 +192,7 @@ class Test_Admin_Duplicate_Assets extends Diagnostic_Base
 	 *
 	 * @return array Diagnostic information
 	 */
-	public static function get_info(): array
-	{
+	public static function get_info(): array {
 		return array(
 			'name'        => 'Admin Duplicate Assets',
 			'category'    => 'admin-performance',

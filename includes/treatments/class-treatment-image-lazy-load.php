@@ -19,7 +19,7 @@ class Treatment_Image_Lazy_Load extends Treatment_Base {
 	public static function get_finding_id() {
 		return 'image-lazyload-disabled';
 	}
-	
+
 	public static function apply() {
 		update_option( 'wpshadow_force_lazyload', true );
 		KPI_Tracker::log_fix_applied( self::get_finding_id(), 'auto' );
@@ -28,7 +28,7 @@ class Treatment_Image_Lazy_Load extends Treatment_Base {
 			'message' => 'Image lazy loading enforced for front-end images.',
 		);
 	}
-	
+
 	public static function undo() {
 		delete_option( 'wpshadow_force_lazyload' );
 		return array(

@@ -80,9 +80,11 @@ class Diagnostic_Wcag_Keyboard_Nav extends Diagnostic_Base {
 
 	public static function check(): ?array {
 		$html = self::get_guardian_html();
-		if ( empty( $html ) ) return null;
+		if ( empty( $html ) ) {
+			return null;
+		}
 
-		$issues = [];
+		$issues = array();
 		try {
 			$dom = new \DOMDocument();
 			@$dom->loadHTML( $html );
@@ -90,11 +92,11 @@ class Diagnostic_Wcag_Keyboard_Nav extends Diagnostic_Base {
 
 			// Check for interactive elements without keyboard access
 			$custom_interactive = $xpath->query( '//div[@onclick] | //span[@onclick] | //div[@role="button"] | //span[@role="button"]' );
-			$missing_tabindex = 0;
+			$missing_tabindex   = 0;
 
 			foreach ( $custom_interactive as $elem ) {
-				if ( !$elem->getAttribute( 'tabindex' ) ) {
-					$missing_tabindex++;
+				if ( ! $elem->getAttribute( 'tabindex' ) ) {
+					++$missing_tabindex;
 				}
 			}
 
@@ -105,18 +107,18 @@ class Diagnostic_Wcag_Keyboard_Nav extends Diagnostic_Base {
 			return null;
 		}
 
-		return empty( $issues ) ? null : [
-			'id'           => 'wcag-keyboard-nav',
-			'title'        => 'Keyboard Navigation Issues',
-			'description'  => 'Not all functionality is available via keyboard. WCAG 2.1 requires keyboard access.',
-			'severity'     => 'high',
-			'category'     => 'accessibility',
-			'kb_link'      => 'https://wpshadow.com/kb/wcag-keyboard-nav/',
+		return empty( $issues ) ? null : array(
+			'id'            => 'wcag-keyboard-nav',
+			'title'         => 'Keyboard Navigation Issues',
+			'description'   => 'Not all functionality is available via keyboard. WCAG 2.1 requires keyboard access.',
+			'severity'      => 'high',
+			'category'      => 'accessibility',
+			'kb_link'       => 'https://wpshadow.com/kb/wcag-keyboard-nav/',
 			'training_link' => 'https://wpshadow.com/training/wcag-keyboard-nav/',
-			'auto_fixable' => false,
-			'threat_level' => 75,
-			'details'      => $issues,
-		];
+			'auto_fixable'  => false,
+			'threat_level'  => 75,
+			'details'       => $issues,
+		);
 	}
 
 	protected static function get_guardian_html(): string {
@@ -142,15 +144,16 @@ class Diagnostic_Wcag_Keyboard_Nav extends Diagnostic_Base {
 	 */
 	public static function test_live_wcag_keyboard_nav(): array {
 		$good = '<html><body><button>Click</button><div tabindex="0" onclick="alert()">Custom</div></body></html>';
-		$bad = '<html><body><div onclick="alert()">Click</div></body></html>';
+		$bad  = '<html><body><div onclick="alert()">Click</div></body></html>';
 
 		$_POST['html'] = $good;
-		$r1 = self::check();
+		$r1            = self::check();
 		$_POST['html'] = $bad;
-		$r2 = self::check();
+		$r2            = self::check();
 
-		return ['passed' => is_null($r1) && is_array($r2), 'message' => 'Keyboard nav check working'];
+		return array(
+			'passed'  => is_null( $r1 ) && is_array( $r2 ),
+			'message' => 'Keyboard nav check working',
+		);
 	}
-
 }
-

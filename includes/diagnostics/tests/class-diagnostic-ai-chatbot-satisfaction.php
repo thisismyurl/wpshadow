@@ -109,45 +109,47 @@ class Diagnostic_AiChatbotSatisfaction extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		$issues = [];
+		$issues = array();
 
 		// Check if chatbot satisfaction tracking is enabled
-		$satisfaction_enabled = get_option('wpshadow_chatbot_satisfaction_tracking', false);
+		$satisfaction_enabled = get_option( 'wpshadow_chatbot_satisfaction_tracking', false );
 
-		if (!$satisfaction_enabled) {
+		if ( ! $satisfaction_enabled ) {
 			$issues[] = 'Chatbot satisfaction tracking not enabled';
 		}
 
 		// Check for feedback collection mechanisms
-		$feedback_option = get_option('wpshadow_chatbot_feedback_data', []);
-		if (empty($feedback_option)) {
+		$feedback_option = get_option( 'wpshadow_chatbot_feedback_data', array() );
+		if ( empty( $feedback_option ) ) {
 			$issues[] = 'No satisfaction feedback data collected';
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'ai-chatbot-satisfaction',
-			'title' => 'Chatbot satisfaction not tracked',
-			'description' => 'Enable tracking to measure chatbot effectiveness',
-			'severity' => 'low',
-			'category' => 'ai_readiness',
+		return empty( $issues ) ? null : array(
+			'id'           => 'ai-chatbot-satisfaction',
+			'title'        => 'Chatbot satisfaction not tracked',
+			'description'  => 'Enable tracking to measure chatbot effectiveness',
+			'severity'     => 'low',
+			'category'     => 'ai_readiness',
 			'threat_level' => 28,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	public static function test_live_ai_chatbot_satisfaction(): array {
 		// Test without satisfaction tracking
-		delete_option('wpshadow_chatbot_satisfaction_tracking');
+		delete_option( 'wpshadow_chatbot_satisfaction_tracking' );
 		$r1 = self::check();
 
 		// Test with satisfaction tracking enabled
-		update_option('wpshadow_chatbot_satisfaction_tracking', true);
-		update_option('wpshadow_chatbot_feedback_data', ['avg_rating' => 4.5]);
+		update_option( 'wpshadow_chatbot_satisfaction_tracking', true );
+		update_option( 'wpshadow_chatbot_feedback_data', array( 'avg_rating' => 4.5 ) );
 		$r2 = self::check();
 
-		delete_option('wpshadow_chatbot_satisfaction_tracking');
-		delete_option('wpshadow_chatbot_feedback_data');
-		return ['passed' => is_array($r1) && is_null($r2), 'message' => 'Chatbot satisfaction check working'];
+		delete_option( 'wpshadow_chatbot_satisfaction_tracking' );
+		delete_option( 'wpshadow_chatbot_feedback_data' );
+		return array(
+			'passed'  => is_array( $r1 ) && is_null( $r2 ),
+			'message' => 'Chatbot satisfaction check working',
+		);
 	}
-	}
-
+}

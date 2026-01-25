@@ -76,14 +76,14 @@ class Treatment_Registry extends Abstract_Registry {
 	protected static function get_namespace() {
 		return __NAMESPACE__ . '\\';
 	}
-	
+
 	/**
 	 * Initialize and load all treatment classes
 	 */
 	public static function init() {
 		self::load_treatments();
 	}
-	
+
 	/**
 	 * Load all treatment class files
 	 */
@@ -95,7 +95,7 @@ class Treatment_Registry extends Abstract_Registry {
 		if ( file_exists( $interface_file ) ) {
 			require_once $interface_file;
 		}
-		
+
 		foreach ( self::$treatments as $treatment ) {
 			$file = $treatments_dir . 'class-' . str_replace( '_', '-', strtolower( $treatment ) ) . '.php';
 			if ( file_exists( $file ) ) {
@@ -103,7 +103,7 @@ class Treatment_Registry extends Abstract_Registry {
 			}
 		}
 	}
-	
+
 	/**
 	 * Get treatment for a specific finding
 	 *
@@ -121,7 +121,7 @@ class Treatment_Registry extends Abstract_Registry {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Apply a treatment
 	 *
@@ -131,26 +131,26 @@ class Treatment_Registry extends Abstract_Registry {
 	 */
 	public static function apply_treatment( $finding_id, $dry_run = false ) {
 		$treatment = self::get_treatment( $finding_id );
-		
+
 		if ( ! $treatment ) {
 			return array(
 				'success' => false,
 				'message' => 'No treatment available for this finding.',
 			);
 		}
-		
+
 		if ( ! call_user_func( array( $treatment, 'can_apply' ) ) ) {
 			return array(
 				'success' => false,
 				'message' => 'Treatment cannot be applied at this time.',
 			);
 		}
-		
+
 		// Use execute method if available (supports dry run)
 		if ( method_exists( $treatment, 'execute' ) ) {
 			return call_user_func( array( $treatment, 'execute' ), $dry_run );
 		}
-		
+
 		// Fallback to direct apply (no dry run support)
 		if ( $dry_run ) {
 			return array(
@@ -160,10 +160,10 @@ class Treatment_Registry extends Abstract_Registry {
 				'would_apply' => true,
 			);
 		}
-		
+
 		return call_user_func( array( $treatment, 'apply' ) );
 	}
-	
+
 	/**
 	 * Undo a treatment
 	 *
@@ -172,24 +172,24 @@ class Treatment_Registry extends Abstract_Registry {
 	 */
 	public static function undo_treatment( $finding_id ) {
 		$treatment = self::get_treatment( $finding_id );
-		
+
 		if ( ! $treatment ) {
 			return array(
 				'success' => false,
 				'message' => 'No treatment available for this finding.',
 			);
 		}
-		
+
 		if ( ! method_exists( $treatment, 'undo' ) ) {
 			return array(
 				'success' => false,
 				'message' => 'This treatment does not support undo.',
 			);
 		}
-		
+
 		return call_user_func( array( $treatment, 'undo' ) );
 	}
-	
+
 	/**
 	 * Get list of registered treatments
 	 *
@@ -198,7 +198,7 @@ class Treatment_Registry extends Abstract_Registry {
 	public static function get_treatments() {
 		return self::$treatments;
 	}
-	
+
 	/**
 	 * Register a new treatment
 	 *
@@ -209,7 +209,7 @@ class Treatment_Registry extends Abstract_Registry {
 			self::$treatments[] = $class_name;
 		}
 	}
-	
+
 	/**
 	 * Unregister a treatment
 	 *

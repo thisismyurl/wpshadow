@@ -81,58 +81,62 @@ class Diagnostic_Wcag_Abbreviations extends Diagnostic_Base {
 	}
 
 	protected static function get_guardian_html(): string {
-		if (isset($_POST['html']) && is_string($_POST['html'])) {
-			return sanitize_text_field(wp_unslash($_POST['html']));
+		if ( isset( $_POST['html'] ) && is_string( $_POST['html'] ) ) {
+			return sanitize_text_field( wp_unslash( $_POST['html'] ) );
 		}
 		return '';
 	}
 
 	public static function check(): ?array {
 		$html = self::get_guardian_html();
-		if (empty($html)) return null;
+		if ( empty( $html ) ) {
+			return null;
+		}
 
-		$issues = [];
+		$issues = array();
 		try {
 			$dom = new \DOMDocument();
-			@$dom->loadHTML($html);
-			$xpath = new \DOMXPath($dom);
+			@$dom->loadHTML( $html );
+			$xpath = new \DOMXPath( $dom );
 
-			$abbrs = $xpath->query('//abbr');
-			if ($abbrs->length === 0) {
+			$abbrs = $xpath->query( '//abbr' );
+			if ( $abbrs->length === 0 ) {
 				$issues[] = 'No abbreviations found or not marked with <abbr> tag';
 			} else {
-				foreach ($abbrs as $abbr) {
-					if (!$abbr->hasAttribute('title')) {
-						$issues[] = 'Abbreviation "' . trim($abbr->textContent) . '" missing title attribute';
+				foreach ( $abbrs as $abbr ) {
+					if ( ! $abbr->hasAttribute( 'title' ) ) {
+						$issues[] = 'Abbreviation "' . trim( $abbr->textContent ) . '" missing title attribute';
 						break;
 					}
 				}
 			}
-		} catch (\Exception $e) {
+		} catch ( \Exception $e ) {
 			return null;
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'wcag-abbreviations',
-			'title' => 'Abbreviations not explained',
-			'description' => 'Abbreviations must be explained with title attribute or definition',
-			'severity' => 'low',
-			'category' => 'accessibility',
+		return empty( $issues ) ? null : array(
+			'id'           => 'wcag-abbreviations',
+			'title'        => 'Abbreviations not explained',
+			'description'  => 'Abbreviations must be explained with title attribute or definition',
+			'severity'     => 'low',
+			'category'     => 'accessibility',
 			'threat_level' => 49,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	public static function test_live_wcag_abbreviations(): array {
 		$good = '<html><body>Use <abbr title="Hyper Text Markup Language">HTML</abbr></body></html>';
-		$bad = '<html><body>Use <abbr>HTML</abbr></body></html>';
+		$bad  = '<html><body>Use <abbr>HTML</abbr></body></html>';
 
 		$_POST['html'] = $good;
-		$r1 = self::check();
+		$r1            = self::check();
 		$_POST['html'] = $bad;
-		$r2 = self::check();
+		$r2            = self::check();
 
-		return ['passed' => is_null($r1) && is_array($r2), 'message' => 'Abbreviations check working'];
+		return array(
+			'passed'  => is_null( $r1 ) && is_array( $r2 ),
+			'message' => 'Abbreviations check working',
+		);
 	}
-	}
-
+}

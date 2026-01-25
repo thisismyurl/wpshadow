@@ -95,7 +95,7 @@ class Diagnostic_Users_Editor_Activity_Level extends Diagnostic_Base {
 
 	public static function check(): ?array {
 		// Check editor activity level
-		$editors = new \WP_User_Query( [ 'role' => 'editor' ] );
+		$editors      = new \WP_User_Query( array( 'role' => 'editor' ) );
 		$editor_count = count( $editors->get_results() );
 
 		// Flag if no editors
@@ -145,10 +145,8 @@ class Diagnostic_Users_Editor_Activity_Level extends Diagnostic_Base {
 
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

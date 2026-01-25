@@ -22,25 +22,25 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function wpshadow_get_tooltip_catalog( $category = null ) {
 	// Use transient caching for persistent, cross-request caching (24 hour TTL)
-	
+
 	// If no category specified, load all categories
 	if ( null === $category ) {
 		$cache_key = 'wpshadow_tooltips_all';
-		$cached = get_transient( $cache_key );
-		
+		$cached    = get_transient( $cache_key );
+
 		if ( false !== $cached ) {
 			return $cached;
 		}
 
 		// Load all category files
 		$all_tooltips = array();
-		$categories = array( 'navigation', 'content', 'design', 'extensions', 'maintenance', 'people', 'settings' );
-		
+		$categories   = array( 'navigation', 'content', 'design', 'extensions', 'maintenance', 'people', 'settings' );
+
 		foreach ( $categories as $cat ) {
 			$category_tooltips = wpshadow_get_tooltip_catalog( $cat );
-			$all_tooltips = array_merge( $all_tooltips, $category_tooltips );
+			$all_tooltips      = array_merge( $all_tooltips, $category_tooltips );
 		}
-		
+
 		// Cache all tooltips for 24 hours
 		set_transient( $cache_key, $all_tooltips, 24 * HOUR_IN_SECONDS );
 		return $all_tooltips;
@@ -48,8 +48,8 @@ function wpshadow_get_tooltip_catalog( $category = null ) {
 
 	// Check transient cache for category
 	$cache_key = 'wpshadow_tooltips_' . sanitize_key( $category );
-	$cached = get_transient( $cache_key );
-	
+	$cached    = get_transient( $cache_key );
+
 	if ( false !== $cached ) {
 		return $cached;
 	}

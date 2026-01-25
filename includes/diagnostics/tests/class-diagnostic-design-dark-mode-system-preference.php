@@ -12,19 +12,19 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/design-dark-mode-system-preference
  */
 class Diagnostic_Design_DARK_MODE_SYSTEM_PREFERENCE extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'design-dark-mode-system-preference',
-            'title' => __('System Dark Mode Detection', 'wpshadow'),
-            'description' => __('Validates dark mode respects prefers-color-scheme.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'design',
-            'kb_link' => 'https://wpshadow.com/kb/design-dark-mode-system-preference',
-            'training_link' => 'https://wpshadow.com/training/design-dark-mode-system-preference',
-            'auto_fixable' => false,
-            'threat_level' => 6
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'design-dark-mode-system-preference',
+			'title'         => __( 'System Dark Mode Detection', 'wpshadow' ),
+			'description'   => __( 'Validates dark mode respects prefers-color-scheme.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'design',
+			'kb_link'       => 'https://wpshadow.com/kb/design-dark-mode-system-preference',
+			'training_link' => 'https://wpshadow.com/training/design-dark-mode-system-preference',
+			'auto_fixable'  => false,
+			'threat_level'  => 6,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -32,12 +32,12 @@ class Diagnostic_Design_DARK_MODE_SYSTEM_PREFERENCE extends Diagnostic_Base {
 	 * Diagnostic: Design DARK MODE SYSTEM PREFERENCE
 	 * Slug: -design-dark-mode-system-preference
 	 * File: class-diagnostic-design-dark-mode-system-preference.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Design DARK MODE SYSTEM PREFERENCE
 	 * Slug: -design-dark-mode-system-preference
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -50,11 +50,16 @@ class Diagnostic_Design_DARK_MODE_SYSTEM_PREFERENCE extends Diagnostic_Base {
 	 */
 	public static function test_live__design_dark_mode_system_preference(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Dark mode respects system preference settings'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Dark mode respects system preference settings',
+			);
 		}
 		$message = $result['description'] ?? 'System preference handling issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

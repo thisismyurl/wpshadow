@@ -20,7 +20,7 @@ class Get_Workflow_Handler extends AJAX_Handler_Base {
 	 * Register AJAX hook
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_get_workflow', [ __CLASS__, 'handle' ] );
+		add_action( 'wp_ajax_wpshadow_get_workflow', array( __CLASS__, 'handle' ) );
 	}
 
 	/**
@@ -43,6 +43,6 @@ class Get_Workflow_Handler extends AJAX_Handler_Base {
 			return;
 		}
 
-		self::send_success( [ 'workflow' => $workflow ] );
+		self::send_success( array( 'workflow' => $workflow ) );
 	}
 }

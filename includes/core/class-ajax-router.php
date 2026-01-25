@@ -14,15 +14,15 @@
 
 namespace WPShadow\Core;
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
  * Routes and registers all AJAX handlers for WPShadow
  */
-class AJAX_Router
-{
+class AJAX_Router {
+
 
 	/**
 	 * Register all AJAX handlers
@@ -31,8 +31,7 @@ class AJAX_Router
 	 *
 	 * @return void
 	 */
-	public static function init()
-	{
+	public static function init() {
 		// Core finding operations
 		\WPShadow\Admin\Ajax\Dismiss_Finding_Handler::register();
 		\WPShadow\Admin\Ajax\Autofix_Finding_Handler::register();

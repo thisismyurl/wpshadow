@@ -21,22 +21,21 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
-class Diagnostic_Heartbeat_Throttling extends Diagnostic_Base
-{
+class Diagnostic_Heartbeat_Throttling extends Diagnostic_Base {
+
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		// If constant is defined to disable heartbeat
-		if (defined('WP_DISABLE_HEARTBEAT') && WP_DISABLE_HEARTBEAT) {
+		if ( defined( 'WP_DISABLE_HEARTBEAT' ) && WP_DISABLE_HEARTBEAT ) {
 			return null; // Already disabled/throttled
 		}
 		// Check if heartbeat is throttled via filters
 		// `heartbeat_settings` or `heartbeat_send` filters indicate custom intervals
-		if (has_filter('heartbeat_settings') || has_filter('heartbeat_send')) {
+		if ( has_filter( 'heartbeat_settings' ) || has_filter( 'heartbeat_send' ) ) {
 			return null; // Considered throttled/customized
 		}
 
@@ -73,18 +72,17 @@ class Diagnostic_Heartbeat_Throttling extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__heartbeat_throttling(): array
-	{
-		$heartbeat_disabled = (defined('WP_DISABLE_HEARTBEAT') && WP_DISABLE_HEARTBEAT);
-		$has_heartbeat_filters = (has_filter('heartbeat_settings') || has_filter('heartbeat_send'));
+	public static function test_live__heartbeat_throttling(): array {
+		$heartbeat_disabled    = ( defined( 'WP_DISABLE_HEARTBEAT' ) && WP_DISABLE_HEARTBEAT );
+		$has_heartbeat_filters = ( has_filter( 'heartbeat_settings' ) || has_filter( 'heartbeat_send' ) );
 
 		// Issue exists if: heartbeat NOT disabled AND no custom filters
-		$has_issue = (!$heartbeat_disabled && !$has_heartbeat_filters);
+		$has_issue = ( ! $heartbeat_disabled && ! $has_heartbeat_filters );
 
-		$result = self::check();
-		$diagnostic_found_issue = is_array($result);
+		$result                 = self::check();
+		$diagnostic_found_issue = is_array( $result );
 
-		$test_passes = ($has_issue === $diagnostic_found_issue);
+		$test_passes = ( $has_issue === $diagnostic_found_issue );
 
 		$message = $test_passes
 			? 'Heartbeat throttling check matches site state'

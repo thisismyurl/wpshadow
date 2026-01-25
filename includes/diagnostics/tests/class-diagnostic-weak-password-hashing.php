@@ -21,15 +21,14 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_Weak_Password_Hashing extends Diagnostic_Base
-{
+class Diagnostic_Weak_Password_Hashing extends Diagnostic_Base {
+
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		global $wpdb;
 
 		// Check for old MD5/SHA1 password hashes in custom tables
@@ -37,20 +36,20 @@ class Diagnostic_Weak_Password_Hashing extends Diagnostic_Base
 			"SELECT COUNT(*) as count FROM {$wpdb->usermeta} WHERE meta_key = 'legacy_password_hash' AND meta_value REGEXP '^[a-f0-9]{32}$|^[a-f0-9]{40}$'"
 		);
 
-		if (! empty($results[0]->count) && $results[0]->count > 0) {
+		if ( ! empty( $results[0]->count ) && $results[0]->count > 0 ) {
 			return array(
-				'id'          => 'weak-password-hashing',
-				'title'       => 'Weak Password Hashing Algorithm Detected',
-				'description' => sprintf(
+				'id'            => 'weak-password-hashing',
+				'title'         => 'Weak Password Hashing Algorithm Detected',
+				'description'   => sprintf(
 					'Found %d users with weak password hashes (MD5 or SHA1). Rehash using bcrypt/Argon2. Old hashes are vulnerable to rainbow tables.',
 					$results[0]->count
 				),
-				'severity'    => 'high',
-				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/upgrade-password-hashing/',
+				'severity'      => 'high',
+				'category'      => 'security',
+				'kb_link'       => 'https://wpshadow.com/kb/upgrade-password-hashing/',
 				'training_link' => 'https://wpshadow.com/training/password-hashing/',
-				'auto_fixable' => false,
-				'threat_level' => 75,
+				'auto_fixable'  => false,
+				'threat_level'  => 75,
 			);
 		}
 
@@ -79,8 +78,7 @@ class Diagnostic_Weak_Password_Hashing extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__weak_password_hashing(): array
-	{
+	public static function test_live__weak_password_hashing(): array {
 		global $wpdb;
 
 		$weak_count = (int) $wpdb->get_var(
@@ -88,9 +86,9 @@ class Diagnostic_Weak_Password_Hashing extends Diagnostic_Base
 		);
 
 		$diagnostic_result    = self::check();
-		$should_find_issue    = ($weak_count > 0);
-		$diagnostic_has_issue = (null !== $diagnostic_result);
-		$test_passes          = ($should_find_issue === $diagnostic_has_issue);
+		$should_find_issue    = ( $weak_count > 0 );
+		$diagnostic_has_issue = ( null !== $diagnostic_result );
+		$test_passes          = ( $should_find_issue === $diagnostic_has_issue );
 
 		$message = sprintf(
 			'Weak hashes: %d. Expected diagnostic to %s issue. Diagnostic %s issue. Test: %s',

@@ -22,7 +22,7 @@ namespace WPShadow\Diagnostics\Tests;
 
 use WPShadow\Diagnostics\Diagnostic_Base;
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -33,55 +33,54 @@ if (! defined('ABSPATH')) {
  *
  * @verified Not yet tested
  */
-class Test_Admin_Unnecessary_Dashicons extends Diagnostic_Base
-{
+class Test_Admin_Unnecessary_Dashicons extends Diagnostic_Base {
+
 
 	/**
 	 * Run the diagnostic test
 	 *
 	 * @return array|null Diagnostic result array, or null if no issue found
 	 */
-	public function check(): ?array
-	{
+	public function check(): ?array {
 		// Check if Dashicons is enqueued
-		$dashicons_enqueued = wp_style_is('dashicons', 'enqueued') || wp_style_is('dashicons', 'registered');
+		$dashicons_enqueued = wp_style_is( 'dashicons', 'enqueued' ) || wp_style_is( 'dashicons', 'registered' );
 
-		if (! $dashicons_enqueued) {
+		if ( ! $dashicons_enqueued ) {
 			return null; // Not loaded, test doesn't apply
 		}
 
 		// Get current context
-		$context = 'unknown';
+		$context     = 'unknown';
 		$should_load = true;
 
-		if (is_admin()) {
-			$context = 'admin';
+		if ( is_admin() ) {
+			$context     = 'admin';
 			$should_load = true; // Expected in admin
-		} elseif (is_user_logged_in()) {
+		} elseif ( is_user_logged_in() ) {
 			// Check if admin bar is showing
-			if (is_admin_bar_showing()) {
-				$context = 'front-end-with-admin-bar';
+			if ( is_admin_bar_showing() ) {
+				$context     = 'front-end-with-admin-bar';
 				$should_load = true; // Admin bar uses Dashicons
 			} else {
-				$context = 'front-end-logged-in';
+				$context     = 'front-end-logged-in';
 				$should_load = false; // Probably unnecessary
 			}
 		} else {
-			$context = 'front-end-logged-out';
+			$context     = 'front-end-logged-out';
 			$should_load = false; // Definitely unnecessary
 		}
 
 		// If it should load in this context, no issue
-		if ($should_load) {
+		if ( $should_load ) {
 			return null; // Pass
 		}
 
 		// Dashicons is loading when it shouldn't
-		$impact = 'medium';
+		$impact       = 'medium';
 		$threat_level = 38;
 
-		if ($context === 'front-end-logged-out') {
-			$impact = 'high';
+		if ( $context === 'front-end-logged-out' ) {
+			$impact       = 'high';
 			$threat_level = 45; // Affects all visitors
 		}
 
@@ -89,22 +88,22 @@ class Test_Admin_Unnecessary_Dashicons extends Diagnostic_Base
 		$dashicons_size = 62000;
 
 		return array(
-			'id'           => 'admin-unnecessary-dashicons',
-			'title'        => 'Unnecessary Dashicons Icon Font Loading',
-			'description'  => sprintf(
+			'id'            => 'admin-unnecessary-dashicons',
+			'title'         => 'Unnecessary Dashicons Icon Font Loading',
+			'description'   => sprintf(
 				'Dashicons icon font (~62KB) is loading in %s context where it\'s not needed. This wastes bandwidth and slows page load. Dashicons should only load in admin or when admin bar is visible.',
 				$context
 			)
 			'kb_link'      => 'https://wpshadow.com/kb/disable-dashicons',
 			'training_link' => 'https://wpshadow.com/training/conditional-asset-loading',
-			'auto_fixable' => true, // Can dequeue conditionally
-			'threat_level' => $threat_level,
-			'module'       => 'performance',
-			'priority'     => 20,
-			'meta'         => array(
-				'context'        => $context,
-				'file_size'      => $dashicons_size,
-				'impact'         => $impact,
+			'auto_fixable'  => true, // Can dequeue conditionally
+			'threat_level'  => $threat_level,
+			'module'        => 'performance',
+			'priority'      => 20,
+			'meta'          => array(
+				'context'          => $context,
+				'file_size'        => $dashicons_size,
+				'impact'           => $impact,
 				'affects_visitors' => $context === 'front-end-logged-out',
 			),
 		);
@@ -115,8 +114,7 @@ class Test_Admin_Unnecessary_Dashicons extends Diagnostic_Base
 	 *
 	 * @return array Diagnostic information
 	 */
-	public static function get_info(): array
-	{
+	public static function get_info(): array {
 		return array(
 			'name'        => 'Unnecessary Dashicons',
 			'category'    => 'performance',

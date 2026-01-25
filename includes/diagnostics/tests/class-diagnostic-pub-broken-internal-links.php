@@ -95,13 +95,15 @@ class Diagnostic_Pub_Broken_Internal_Links extends Diagnostic_Base {
 
 	public static function check(): ?array {
 		// Check for broken internal links (simplified - check if posts exist)
-		$posts = get_posts( [
-			'post_status'    => 'publish',
-			'posts_per_page' => -1,
-			'fields'         => 'ids',
-		] );
+		$posts = get_posts(
+			array(
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'fields'         => 'ids',
+			)
+		);
 
-		$home_url = home_url();
+		$home_url           = home_url();
 		$potentially_broken = 0;
 
 		// Sample check - look for common patterns of broken links
@@ -110,7 +112,7 @@ class Diagnostic_Pub_Broken_Internal_Links extends Diagnostic_Base {
 
 			// Check if content contains links to /index.php which often indicates broken URLs
 			if ( preg_match( '/href=["\'].*\/index\.php/i', $content ) ) {
-				$potentially_broken++;
+				++$potentially_broken;
 			}
 		}
 
@@ -160,10 +162,8 @@ class Diagnostic_Pub_Broken_Internal_Links extends Diagnostic_Base {
 
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

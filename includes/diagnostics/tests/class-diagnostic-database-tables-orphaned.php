@@ -16,7 +16,7 @@ use WPShadow\Core\Diagnostic_Base;
  *
  * @package WPShadow
  * @subpackage Diagnostics
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
@@ -114,7 +114,7 @@ class Diagnostic_Database_Tables_Orphaned extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Database Tables Orphaned
 	 * Slug: database-tables-orphaned
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -128,11 +128,16 @@ class Diagnostic_Database_Tables_Orphaned extends Diagnostic_Base {
 	 */
 	public static function test_live_database_tables_orphaned(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'No orphaned database tables detected'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'No orphaned database tables detected',
+			);
 		}
 		$message = $result['description'] ?? 'Orphaned database tables found';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

@@ -30,128 +30,126 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_Active_Login_Attacks extends Diagnostic_Base
-{
+class Diagnostic_Active_Login_Attacks extends Diagnostic_Base {
 
-    /**
-     * The diagnostic slug/ID
-     *
-     * @var string
-     */
-    protected static $slug = 'active-login-attacks';
 
-    /**
-     * The diagnostic title
-     *
-     * @var string
-     */
-    protected static $title = 'Active Login Attack Detection';
+	/**
+	 * The diagnostic slug/ID
+	 *
+	 * @var string
+	 */
+	protected static $slug = 'active-login-attacks';
 
-    /**
-     * The diagnostic description
-     *
-     * @var string
-     */
-    protected static $description = 'Detects real-time brute force login attempts and shows attack patterns.';
+	/**
+	 * The diagnostic title
+	 *
+	 * @var string
+	 */
+	protected static $title = 'Active Login Attack Detection';
 
-    /**
-     * Run the diagnostic check
-     *
-     * @return array|null Finding data or null if no issue
-     */
-    public static function check(): ?array
-    {
-        // Check for failed login attempts (requires authentication log)
-        // Look for limit_login_attempts or similar plugin data
-        $failed_attempts = get_transient('wpshadow_failed_logins_24h');
+	/**
+	 * The diagnostic description
+	 *
+	 * @var string
+	 */
+	protected static $description = 'Detects real-time brute force login attempts and shows attack patterns.';
 
-        if ($failed_attempts === false) {
-            // No tracking data available - check for suspicious patterns via server logs
-            // For basic implementation, check authentication hooks
-            $failed_attempts = 0;
-        }
+	/**
+	 * Run the diagnostic check
+	 *
+	 * @return array|null Finding data or null if no issue
+	 */
+	public static function check(): ?array {
+		// Check for failed login attempts (requires authentication log)
+		// Look for limit_login_attempts or similar plugin data
+		$failed_attempts = get_transient( 'wpshadow_failed_logins_24h' );
 
-        // Check for recent failed login attempts
-        // This would ideally integrate with Guardian module or fail2ban
-        $suspicious_ips = get_transient('wpshadow_suspicious_ips');
+		if ( $failed_attempts === false ) {
+			// No tracking data available - check for suspicious patterns via server logs
+			// For basic implementation, check authentication hooks
+			$failed_attempts = 0;
+		}
 
-        if (empty($suspicious_ips)) {
-            $suspicious_ips = array();
-        }
+		// Check for recent failed login attempts
+		// This would ideally integrate with Guardian module or fail2ban
+		$suspicious_ips = get_transient( 'wpshadow_suspicious_ips' );
 
-        // Threshold: 100+ failed attempts in 24h = active attack
-        if ($failed_attempts < 100 && count($suspicious_ips) < 10) {
-            return null;
-        }
+		if ( empty( $suspicious_ips ) ) {
+			$suspicious_ips = array();
+		}
 
-        return array(
-            'id'           => static::$slug,
-            'title'        => static::$title,
-            'description'  => sprintf(
-                'Detected %d failed login attempts from %d IP addresses in last 24 hours',
-                $failed_attempts,
-                count($suspicious_ips)
-            ),
-            'severity'     => 'critical',
-            'category'     => 'security',
-            'kb_link'      => 'https://wpshadow.com/kb/active-login-attacks/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=active-login-attacks',
-            'training_link' => 'https://wpshadow.com/training/active-login-attacks/',
-            'auto_fixable' => false,
-            'threat_level' => 95,
-            'module'       => 'Guardian',
-            'priority'     => 1,
-        );
-    }
+		// Threshold: 100+ failed attempts in 24h = active attack
+		if ( $failed_attempts < 100 && count( $suspicious_ips ) < 10 ) {
+			return null;
+		}
 
-    /**
-     * Live test for this diagnostic
-     *
-     * Diagnostic: Active Login Attack Detection
-     * Slug: active-login-attacks
-     *
-     * Test Purpose:
-     * - Verify that check() method returns the correct result based on site state
-     * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
-     * - FAIL: check() returns array when diagnostic condition IS met (issue found)
-     * - Description: Detects real-time brute force login attempts and shows attack patterns.
-     *
-     * @return array {
-     *     @type bool   $passed  Whether the test passed
-     *     @type string $message Human-readable test result message
-     * }
-     */
-    public static function test_live_active_login_attacks(): array
-    {
-        $failed_attempts = get_transient('wpshadow_failed_logins_24h');
-        if ($failed_attempts === false) {
-            $failed_attempts = 0;
-        }
+		return array(
+			'id'            => static::$slug,
+			'title'         => static::$title,
+			'description'   => sprintf(
+				'Detected %d failed login attempts from %d IP addresses in last 24 hours',
+				$failed_attempts,
+				count( $suspicious_ips )
+			),
+			'severity'      => 'critical',
+			'category'      => 'security',
+			'kb_link'       => 'https://wpshadow.com/kb/active-login-attacks/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=active-login-attacks',
+			'training_link' => 'https://wpshadow.com/training/active-login-attacks/',
+			'auto_fixable'  => false,
+			'threat_level'  => 95,
+			'module'        => 'Guardian',
+			'priority'      => 1,
+		);
+	}
 
-        $suspicious_ips = get_transient('wpshadow_suspicious_ips');
-        if (empty($suspicious_ips)) {
-            $suspicious_ips = array();
-        }
+	/**
+	 * Live test for this diagnostic
+	 *
+	 * Diagnostic: Active Login Attack Detection
+	 * Slug: active-login-attacks
+	 *
+	 * Test Purpose:
+	 * - Verify that check() method returns the correct result based on site state
+	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
+	 * - FAIL: check() returns array when diagnostic condition IS met (issue found)
+	 * - Description: Detects real-time brute force login attempts and shows attack patterns.
+	 *
+	 * @return array {
+	 *     @type bool   $passed  Whether the test passed
+	 *     @type string $message Human-readable test result message
+	 * }
+	 */
+	public static function test_live_active_login_attacks(): array {
+		$failed_attempts = get_transient( 'wpshadow_failed_logins_24h' );
+		if ( $failed_attempts === false ) {
+			$failed_attempts = 0;
+		}
 
-        $expected_issue = $failed_attempts >= 100 || count($suspicious_ips) >= 10;
+		$suspicious_ips = get_transient( 'wpshadow_suspicious_ips' );
+		if ( empty( $suspicious_ips ) ) {
+			$suspicious_ips = array();
+		}
 
-        $result = self::check();
-        $has_finding = is_array($result);
+		$expected_issue = $failed_attempts >= 100 || count( $suspicious_ips ) >= 10;
 
-        if ($expected_issue === $has_finding) {
-            $message = $expected_issue ? 'Finding returned when active attack detected.' : 'No finding when attack transients are below threshold.';
-            return array(
-                'passed'  => true,
-                'message' => $message,
-            );
-        }
+		$result      = self::check();
+		$has_finding = is_array( $result );
 
-        $message = $expected_issue
-            ? 'Expected a finding for active attack but got none.'
-            : 'Expected no finding but attack transients exceeded threshold.';
+		if ( $expected_issue === $has_finding ) {
+			$message = $expected_issue ? 'Finding returned when active attack detected.' : 'No finding when attack transients are below threshold.';
+			return array(
+				'passed'  => true,
+				'message' => $message,
+			);
+		}
 
-        return array(
-            'passed'  => false,
-            'message' => $message,
-        );
-    }
+		$message = $expected_issue
+			? 'Expected a finding for active attack but got none.'
+			: 'Expected no finding but attack transients exceeded threshold.';
+
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
+	}
 }

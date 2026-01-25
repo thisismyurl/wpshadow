@@ -81,9 +81,9 @@ class Diagnostic_Ccpa_Sale_Opt_Out_Working extends Diagnostic_Base {
 	public static function check(): ?array {
 		// Check if "Do Not Sell My Personal Information" link is functional
 		// Check for privacy page with opt-out link
-		
+
 		$privacy_policy_id = (int) get_option( 'wp_page_for_privacy_policy' );
-		
+
 		if ( ! $privacy_policy_id ) {
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
 				'ccpa-sale-opt-out-working',
@@ -98,8 +98,8 @@ class Diagnostic_Ccpa_Sale_Opt_Out_Working extends Diagnostic_Base {
 
 		// Check if opt-out plugin is active
 		$has_opt_out_plugin = is_plugin_active( 'cookie-notice/cookie-notice.php' ) ||
-							  is_plugin_active( 'iubenda-cookie-law-consent/iubenda.php' ) ||
-							  is_plugin_active( 'termly-cookie-consent/termly.php' );
+								is_plugin_active( 'iubenda-cookie-law-consent/iubenda.php' ) ||
+								is_plugin_active( 'termly-cookie-consent/termly.php' );
 
 		if ( ! $has_opt_out_plugin ) {
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
@@ -121,7 +121,7 @@ class Diagnostic_Ccpa_Sale_Opt_Out_Working extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Ccpa Sale Opt Out Working
 	 * Slug: ccpa-sale-opt-out-working
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -142,15 +142,13 @@ class Diagnostic_Ccpa_Sale_Opt_Out_Working extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

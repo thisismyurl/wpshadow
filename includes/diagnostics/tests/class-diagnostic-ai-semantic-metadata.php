@@ -109,48 +109,50 @@ class Diagnostic_AiSemanticMetadata extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		$issues = [];
+		$issues = array();
 
 		// Check if semantic metadata is being generated
-		$semantic_enabled = get_option('wpshadow_semantic_metadata_enabled', false);
+		$semantic_enabled = get_option( 'wpshadow_semantic_metadata_enabled', false );
 
-		if (!$semantic_enabled) {
+		if ( ! $semantic_enabled ) {
 			$issues[] = 'Semantic metadata generation not enabled';
 		}
 
 		// Check recent posts for semantic tags
-		$recent_posts = get_posts(['numberposts' => 10]);
+		$recent_posts  = get_posts( array( 'numberposts' => 10 ) );
 		$with_semantic = 0;
-		foreach ($recent_posts as $post) {
-			if (get_post_meta($post->ID, '_semantic_keywords', true)) {
-				$with_semantic++;
+		foreach ( $recent_posts as $post ) {
+			if ( get_post_meta( $post->ID, '_semantic_keywords', true ) ) {
+				++$with_semantic;
 			}
 		}
 
-		if ($with_semantic < count($recent_posts) * 0.5) {
+		if ( $with_semantic < count( $recent_posts ) * 0.5 ) {
 			$issues[] = 'Less than 50% of posts have semantic metadata';
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'ai-semantic-metadata',
-			'title' => 'Semantic metadata missing',
-			'description' => 'Enable semantic metadata generation for better AI understanding',
-			'severity' => 'medium',
-			'category' => 'ai_readiness',
+		return empty( $issues ) ? null : array(
+			'id'           => 'ai-semantic-metadata',
+			'title'        => 'Semantic metadata missing',
+			'description'  => 'Enable semantic metadata generation for better AI understanding',
+			'severity'     => 'medium',
+			'category'     => 'ai_readiness',
 			'threat_level' => 41,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	public static function test_live_ai_semantic_metadata(): array {
-		delete_option('wpshadow_semantic_metadata_enabled');
+		delete_option( 'wpshadow_semantic_metadata_enabled' );
 		$r1 = self::check();
 
-		update_option('wpshadow_semantic_metadata_enabled', true);
+		update_option( 'wpshadow_semantic_metadata_enabled', true );
 		$r2 = self::check();
 
-		delete_option('wpshadow_semantic_metadata_enabled');
-		return ['passed' => is_array($r1) && (is_null($r2) || is_array($r2)), 'message' => 'Semantic metadata check working'];
+		delete_option( 'wpshadow_semantic_metadata_enabled' );
+		return array(
+			'passed'  => is_array( $r1 ) && ( is_null( $r2 ) || is_array( $r2 ) ),
+			'message' => 'Semantic metadata check working',
+		);
 	}
-	}
-
+}

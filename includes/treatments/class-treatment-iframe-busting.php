@@ -19,7 +19,7 @@ class Treatment_Iframe_Busting extends Treatment_Base {
 	public static function get_finding_id() {
 		return 'iframe-busting-missing';
 	}
-	
+
 	public static function apply() {
 		update_option( 'wpshadow_iframe_busting_enabled', true );
 		KPI_Tracker::log_fix_applied( self::get_finding_id(), 'auto' );
@@ -28,7 +28,7 @@ class Treatment_Iframe_Busting extends Treatment_Base {
 			'message' => 'Clickjacking protection enabled (SAMEORIGIN frame headers).',
 		);
 	}
-	
+
 	public static function undo() {
 		delete_option( 'wpshadow_iframe_busting_enabled' );
 		return array(

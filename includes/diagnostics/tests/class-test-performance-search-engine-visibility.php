@@ -16,41 +16,39 @@ use WPShadow\Core\Diagnostic_Base;
  * @subpackage Diagnostics/Tests
  * @since 1.2601.2112
  */
-class Test_Performance_SearchEngineVisibility extends Diagnostic_Base
-{
+class Test_Performance_SearchEngineVisibility extends Diagnostic_Base {
 
-	public static function check(): ?array
-	{
+
+	public static function check(): ?array {
 		// Check if blog is public
-		$public = get_option('blog_public');
+		$public = get_option( 'blog_public' );
 
-		if (empty($public) || $public === '0') {
-			return [
-				'id' => 'search-engine-visibility',
-				'title' => __('Site is hidden from search engines', 'wpshadow'),
-				'description' => __('Enable search engine visibility (Settings > Reading) to allow search engines to index your content.', 'wpshadow'),
-				'severity' => 'medium',
+		if ( empty( $public ) || $public === '0' ) {
+			return array(
+				'id'           => 'search-engine-visibility',
+				'title'        => __( 'Site is hidden from search engines', 'wpshadow' ),
+				'description'  => __( 'Enable search engine visibility (Settings > Reading) to allow search engines to index your content.', 'wpshadow' ),
+				'severity'     => 'medium',
 				'threat_level' => 50,
-			];
+			);
 		}
 
 		return null;
 	}
 
-	public static function test_live_search_engine_visibility(): array
-	{
+	public static function test_live_search_engine_visibility(): array {
 		$result = self::check();
 
-		if (null === $result) {
-			return [
-				'passed' => true,
-				'message' => __('Site is visible to search engines', 'wpshadow'),
-			];
+		if ( null === $result ) {
+			return array(
+				'passed'  => true,
+				'message' => __( 'Site is visible to search engines', 'wpshadow' ),
+			);
 		}
 
-		return [
-			'passed' => false,
+		return array(
+			'passed'  => false,
 			'message' => $result['description'],
-		];
+		);
 	}
 }

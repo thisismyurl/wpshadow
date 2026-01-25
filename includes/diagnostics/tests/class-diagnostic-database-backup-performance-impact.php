@@ -13,8 +13,8 @@ use WPShadow\Core\Diagnostic_Base;
  * KB: https://wpshadow.com/kb/database-backup-performance
  * Training: https://wpshadow.com/training/backup-scheduling
  */
-class Diagnostic_Database_Backup_Performance_Impact extends Diagnostic_Base
-{
+class Diagnostic_Database_Backup_Performance_Impact extends Diagnostic_Base {
+
 	/**
 	 * OPEN QUESTIONS (need guidance):
 	 * - Signal source: Do we inspect recent backup job timestamps (from common plugins) vs. generic cron events containing "backup"?
@@ -23,8 +23,7 @@ class Diagnostic_Database_Backup_Performance_Impact extends Diagnostic_Base
 	 * - Plugin coverage: Which backup plugins should we detect (UpdraftPlus, Jetpack Backup, Duplicator, etc.) and where to read their schedules safely?
 	 * - Thresholds: When do we warn vs. fail (e.g., >1 concurrent heavy backup in peak, or backup duration > X minutes during peak)?
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		// Pending implementation until scope, signals, and thresholds are defined.
 		return null;
 	}
@@ -51,8 +50,7 @@ class Diagnostic_Database_Backup_Performance_Impact extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__database_backup_performance_impact(): array
-	{
+	public static function test_live__database_backup_performance_impact(): array {
 		/*
 		 * IMPLEMENTATION NOTES:
 		 * - This test validates the actual WordPress site state
@@ -65,7 +63,7 @@ class Diagnostic_Database_Backup_Performance_Impact extends Diagnostic_Base
 		$result = self::check();
 
 		return array(
-			'passed' => is_null($result),
+			'passed'  => is_null( $result ),
 			'message' => 'Diagnostic not yet implemented; awaiting scheduling/impact rules',
 		);
 	}

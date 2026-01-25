@@ -12,19 +12,19 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/code-standards-no-return-types
  */
 class Diagnostic_Code_CODE_STANDARDS_NO_RETURN_TYPES extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'code-standards-no-return-types',
-            'title' => __('Missing Return Type Hints', 'wpshadow'),
-            'description' => __('Flags functions without return type declarations.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'code-quality',
-            'kb_link' => 'https://wpshadow.com/kb/code-standards-no-return-types',
-            'training_link' => 'https://wpshadow.com/training/code-standards-no-return-types',
-            'auto_fixable' => false,
-            'threat_level' => 6
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'code-standards-no-return-types',
+			'title'         => __( 'Missing Return Type Hints', 'wpshadow' ),
+			'description'   => __( 'Flags functions without return type declarations.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'code-quality',
+			'kb_link'       => 'https://wpshadow.com/kb/code-standards-no-return-types',
+			'training_link' => 'https://wpshadow.com/training/code-standards-no-return-types',
+			'auto_fixable'  => false,
+			'threat_level'  => 6,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -32,12 +32,12 @@ class Diagnostic_Code_CODE_STANDARDS_NO_RETURN_TYPES extends Diagnostic_Base {
 	 * Diagnostic: Code CODE STANDARDS NO RETURN TYPES
 	 * Slug: -code-code-standards-no-return-types
 	 * File: class-diagnostic-code-code-standards-no-return-types.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Code CODE STANDARDS NO RETURN TYPES
 	 * Slug: -code-code-standards-no-return-types
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -50,11 +50,16 @@ class Diagnostic_Code_CODE_STANDARDS_NO_RETURN_TYPES extends Diagnostic_Base {
 	 */
 	public static function test_live__code_code_standards_no_return_types(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'All functions properly declare return types'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'All functions properly declare return types',
+			);
 		}
 		$message = $result['description'] ?? 'Functions missing return type hints detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

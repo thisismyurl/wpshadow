@@ -6,18 +6,27 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-class Diagnostic_Monitor_Privilege_Escalation_Attempts extends Diagnostic_Base
-{
-	public static function check(): ?array
-	{
+class Diagnostic_Monitor_Privilege_Escalation_Attempts extends Diagnostic_Base {
+
+	public static function check(): ?array {
 		// Check if monitoring plugins are active
-		$has_monitoring = is_plugin_active('wordfence/wordfence.php') ||
-			is_plugin_active('sucuri-scanner/sucuri.php');
-		if ($has_monitoring) {
+		$has_monitoring = is_plugin_active( 'wordfence/wordfence.php' ) ||
+			is_plugin_active( 'sucuri-scanner/sucuri.php' );
+		if ( $has_monitoring ) {
 			return null; // Monitoring in place
 		}
 
-		return ['id' => 'monitor-priv-escalation', 'title' => __('Privilege Escalation Attempts', 'wpshadow'), 'description' => __('Detects when users try actions above their permission level. Subscriber accessing admin pages, user modifying others\' content.', 'wpshadow'), 'severity' => 'high', 'category' => 'monitoring', 'kb_link' => 'https://wpshadow.com/kb/permission-control/', 'training_link' => 'https://wpshadow.com/training/role-management/', 'auto_fixable' => false, 'threat_level' => 9];
+		return array(
+			'id'            => 'monitor-priv-escalation',
+			'title'         => __( 'Privilege Escalation Attempts', 'wpshadow' ),
+			'description'   => __( 'Detects when users try actions above their permission level. Subscriber accessing admin pages, user modifying others\' content.', 'wpshadow' ),
+			'severity'      => 'high',
+			'category'      => 'monitoring',
+			'kb_link'       => 'https://wpshadow.com/kb/permission-control/',
+			'training_link' => 'https://wpshadow.com/training/role-management/',
+			'auto_fixable'  => false,
+			'threat_level'  => 9,
+		);
 	}
 
 	/**
@@ -42,14 +51,13 @@ class Diagnostic_Monitor_Privilege_Escalation_Attempts extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__monitor_privilege_escalation_attempts(): array
-	{
-		$has_monitoring = is_plugin_active('wordfence/wordfence.php') || is_plugin_active('sucuri-scanner/sucuri.php');
+	public static function test_live__monitor_privilege_escalation_attempts(): array {
+		$has_monitoring = is_plugin_active( 'wordfence/wordfence.php' ) || is_plugin_active( 'sucuri-scanner/sucuri.php' );
 
 		$diagnostic_result    = self::check();
-		$should_find_issue    = (! $has_monitoring);
-		$diagnostic_has_issue = (null !== $diagnostic_result);
-		$test_passes          = ($should_find_issue === $diagnostic_has_issue);
+		$should_find_issue    = ( ! $has_monitoring );
+		$diagnostic_has_issue = ( null !== $diagnostic_result );
+		$test_passes          = ( $should_find_issue === $diagnostic_has_issue );
 
 		$message = sprintf(
 			'Privilege-escalation monitoring active: %s. Expected diagnostic to %s issue. Diagnostic %s issue. Test: %s',

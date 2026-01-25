@@ -36,14 +36,14 @@ class Diagnostic_Env_Autoplay_Video_Disabled extends Diagnostic_Base {
 	public static function get_description(): string {
 		return __( 'Autoplay wastes bandwidth on users who do not watch', 'wpshadow' );
 	}
-	
+
 	/**
 	 * Get diagnostic category
 	 */
 	public static function get_category(): string {
 		return 'environment';
 	}
-	
+
 	/**
 	 * Get threat level
 	 *
@@ -52,7 +52,7 @@ class Diagnostic_Env_Autoplay_Video_Disabled extends Diagnostic_Base {
 	public static function get_threat_level(): int {
 		return 10;
 	}
-	
+
 	/**
 	 * Run diagnostic test
 	 *
@@ -61,7 +61,7 @@ class Diagnostic_Env_Autoplay_Video_Disabled extends Diagnostic_Base {
 	public static function run(): array {
 		// STUB: Implement env-autoplay-video-disabled test
 		// Philosophy focus: Commandment #7, 8, 9
-		// 
+		//
 		// Data collection strategy:
 		// - Gather relevant metrics from WordPress
 		// - Calculate or query necessary values
@@ -71,14 +71,14 @@ class Diagnostic_Env_Autoplay_Video_Disabled extends Diagnostic_Base {
 		// Training: https://wpshadow.com/training/category-environment
 		//
 		// User impact: Help users understand and reduce environmental footprint of their site. Feel-good metrics with genuine impact on energy consumption and carbon offset.
-		
+
 		return array(
-			'status' => 'todo',
+			'status'  => 'todo',
 			'message' => 'Diagnostic not yet implemented',
-			'data' => array(),
+			'data'    => array(),
 		);
 	}
-	
+
 	/**
 	 * Get KB article URL
 	 */
@@ -114,7 +114,7 @@ class Diagnostic_Env_Autoplay_Video_Disabled extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Env Autoplay Video Disabled
 	 * Slug: env-autoplay-video-disabled
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -135,15 +135,13 @@ class Diagnostic_Env_Autoplay_Video_Disabled extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Diagnostic_Result_Normalizer {
-	const VALID_SEVERITIES  = array( 'critical', 'high', 'medium', 'low', 'info' );
+	const VALID_SEVERITIES = array( 'critical', 'high', 'medium', 'low', 'info' );
 	const DEFAULT_SEVERITY = 'medium';
 
 	/**
@@ -73,8 +73,8 @@ class Diagnostic_Result_Normalizer {
 			$normalized['description'] = self::call_optional( $class_name, 'get_description', $slug );
 		}
 
-		$family   = $normalized['family'] ?? self::call_optional( $class_name, 'get_family', '' );
-		$category = $normalized['category'] ?? Diagnostic_Lean_Checks::family_to_category( $family ?: 'general' );
+		$family                 = $normalized['family'] ?? self::call_optional( $class_name, 'get_family', '' );
+		$category               = $normalized['category'] ?? Diagnostic_Lean_Checks::family_to_category( $family ?: 'general' );
 		$normalized['category'] = $category;
 
 		$severity = $normalized['severity'] ?? self::call_optional( $class_name, 'get_severity', '' );

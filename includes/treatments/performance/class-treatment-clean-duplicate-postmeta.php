@@ -33,7 +33,7 @@ class Treatment_Clean_Duplicate_Postmeta extends Treatment_Base {
 	 * @param array $options Treatment options
 	 * @return bool Success status
 	 */
-	public static function apply( array $options = [] ): bool {
+	public static function apply( array $options = array() ): bool {
 		global $wpdb;
 
 		// Find duplicates
@@ -53,10 +53,10 @@ class Treatment_Clean_Duplicate_Postmeta extends Treatment_Base {
 		}
 
 		$deleted_total = 0;
-		$backup_data = [];
+		$backup_data   = array();
 
 		foreach ( $duplicates as $duplicate ) {
-			$post_id = $duplicate['post_id'];
+			$post_id  = $duplicate['post_id'];
 			$meta_key = $duplicate['meta_key'];
 
 			// Get all meta_ids for this combination
@@ -71,7 +71,7 @@ class Treatment_Clean_Duplicate_Postmeta extends Treatment_Base {
 			);
 
 			// Keep the latest (first in DESC order), delete the rest
-			$keep_id = array_shift( $meta_ids );
+			$keep_id    = array_shift( $meta_ids );
 			$delete_ids = $meta_ids;
 
 			if ( empty( $delete_ids ) ) {
@@ -79,16 +79,16 @@ class Treatment_Clean_Duplicate_Postmeta extends Treatment_Base {
 			}
 
 			// Backup deleted values
-			$backup_data[] = [
-				'post_id'    => $post_id,
-				'meta_key'   => $meta_key,
-				'kept_id'    => $keep_id,
+			$backup_data[] = array(
+				'post_id'     => $post_id,
+				'meta_key'    => $meta_key,
+				'kept_id'     => $keep_id,
 				'deleted_ids' => $delete_ids,
-			];
+			);
 
 			// Delete duplicates
 			$placeholders = implode( ',', array_fill( 0, count( $delete_ids ), '%d' ) );
-			$deleted = $wpdb->query(
+			$deleted      = $wpdb->query(
 				$wpdb->prepare(
 					"DELETE FROM {$wpdb->postmeta} WHERE meta_id IN ({$placeholders})",
 					...$delete_ids
@@ -99,11 +99,13 @@ class Treatment_Clean_Duplicate_Postmeta extends Treatment_Base {
 		}
 
 		// Create backup
-		self::create_backup( [
-			'deleted_count' => $deleted_total,
-			'duplicates'    => $backup_data,
-			'timestamp'     => time(),
-		] );
+		self::create_backup(
+			array(
+				'deleted_count' => $deleted_total,
+				'duplicates'    => $backup_data,
+				'timestamp'     => time(),
+			)
+		);
 
 		// Track KPI
 		if ( $deleted_total > 0 ) {

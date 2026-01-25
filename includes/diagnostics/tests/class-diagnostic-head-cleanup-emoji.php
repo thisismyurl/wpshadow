@@ -4,7 +4,7 @@ declare(strict_types=1);
  * Head Cleanup - Emoji Scripts Diagnostic
  *
  * @package WPShadow
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Family: head-cleanup
  * Related: head-cleanup-oembed, head-cleanup-rsd, head-cleanup-shortlink
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
@@ -40,7 +40,7 @@ class Diagnostic_Head_Cleanup_Emoji extends Diagnostic_Base {
 		}
 
 		return array(
-			'id'   => self::$slug,
+			'id'           => self::$slug,
 			'title'        => self::$title,
 			'description'  => __( 'Emoji detection scripts load on every page but are rarely needed. Removing them reduces requests and improves performance.', 'wpshadow' ),
 			'category'     => 'performance',
@@ -67,7 +67,7 @@ class Diagnostic_Head_Cleanup_Emoji extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Emoji Detection Scripts
 	 * Slug: head-cleanup-emoji
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -88,24 +88,23 @@ class Diagnostic_Head_Cleanup_Emoji extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// Pattern: has_action() returns false when action NOT hooked (healthy)
 		// Pattern: has_action() returns integer when action IS hooked (issue found)
 		// So: NULL result = healthy, array result = issue detected
-		
-		if ($result === null) {
-			return [
-				'passed' => true,
-				'message' => 'WordPress emoji detection script is properly disabled (healthy)',
-			];
-		}
-		
-		return [
-			'passed' => false,
-			'message' => 'WordPress emoji detection script is enabled and could be removed',
-		];
-	}
 
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'WordPress emoji detection script is properly disabled (healthy)',
+			);
+		}
+
+		return array(
+			'passed'  => false,
+			'message' => 'WordPress emoji detection script is enabled and could be removed',
+		);
+	}
 }

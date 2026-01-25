@@ -51,7 +51,7 @@ class Treatment_File_Editors extends Treatment_Base {
 		}
 
 		$config_content = file_get_contents( $config_file );
-		$modified = false;
+		$modified       = false;
 
 		$patterns = array(
 			"/define\\(\\s*'DISALLOW_FILE_EDIT'\\s*,\\s*false\\s*\\);/i",
@@ -65,7 +65,7 @@ class Treatment_File_Editors extends Treatment_Base {
 					"define( 'DISALLOW_FILE_EDIT', true );",
 					$config_content
 				);
-				$modified = true;
+				$modified       = true;
 				break;
 			}
 		}
@@ -78,7 +78,7 @@ class Treatment_File_Editors extends Treatment_Base {
 					"define( 'DISALLOW_FILE_EDIT', true );\n\n$1",
 					$config_content
 				);
-				$modified = true;
+				$modified       = true;
 			}
 		}
 

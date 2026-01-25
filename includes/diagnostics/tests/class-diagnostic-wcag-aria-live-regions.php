@@ -81,51 +81,55 @@ class Diagnostic_Wcag_Aria_Live_Regions extends Diagnostic_Base {
 	}
 
 	protected static function get_guardian_html(): string {
-		if (isset($_POST['html']) && is_string($_POST['html'])) {
-			return sanitize_text_field(wp_unslash($_POST['html']));
+		if ( isset( $_POST['html'] ) && is_string( $_POST['html'] ) ) {
+			return sanitize_text_field( wp_unslash( $_POST['html'] ) );
 		}
 		return '';
 	}
 
 	public static function check(): ?array {
 		$html = self::get_guardian_html();
-		if (empty($html)) return null;
-
-		$issues = [];
-		try {
-			$dom = new \DOMDocument();
-			@$dom->loadHTML($html);
-			$xpath = new \DOMXPath($dom);
-
-			$live_regions = $xpath->query('//*[@aria-live]');
-			if ($live_regions->length === 0) {
-				$issues[] = 'No live regions defined with aria-live attribute';
-			}
-		} catch (\Exception $e) {
+		if ( empty( $html ) ) {
 			return null;
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'wcag-aria-live-regions',
-			'title' => 'Live regions not marked',
-			'description' => 'Dynamic content updates should be marked with aria-live',
-			'severity' => 'low',
-			'category' => 'accessibility',
+		$issues = array();
+		try {
+			$dom = new \DOMDocument();
+			@$dom->loadHTML( $html );
+			$xpath = new \DOMXPath( $dom );
+
+			$live_regions = $xpath->query( '//*[@aria-live]' );
+			if ( $live_regions->length === 0 ) {
+				$issues[] = 'No live regions defined with aria-live attribute';
+			}
+		} catch ( \Exception $e ) {
+			return null;
+		}
+
+		return empty( $issues ) ? null : array(
+			'id'           => 'wcag-aria-live-regions',
+			'title'        => 'Live regions not marked',
+			'description'  => 'Dynamic content updates should be marked with aria-live',
+			'severity'     => 'low',
+			'category'     => 'accessibility',
 			'threat_level' => 38,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	public static function test_live_wcag_aria_live_regions(): array {
 		$good = '<html><body><div aria-live="polite">Status</div></body></html>';
-		$bad = '<html><body><div>Status</div></body></html>';
+		$bad  = '<html><body><div>Status</div></body></html>';
 
 		$_POST['html'] = $good;
-		$r1 = self::check();
+		$r1            = self::check();
 		$_POST['html'] = $bad;
-		$r2 = self::check();
+		$r2            = self::check();
 
-		return ['passed' => is_null($r1) && is_array($r2), 'message' => 'Live regions check working'];
+		return array(
+			'passed'  => is_null( $r1 ) && is_array( $r2 ),
+			'message' => 'Live regions check working',
+		);
 	}
-	}
-
+}

@@ -33,18 +33,18 @@ class Treatment_Collapse_Large_Menus extends Treatment_Base {
 	 * @param array $options Treatment options
 	 * @return bool Success status
 	 */
-	public static function apply( array $options = [] ): bool {
+	public static function apply( array $options = array() ): bool {
 		// Store setting
 		update_option( 'wpshadow_collapse_admin_menu', true );
 
 		// Add admin body class for CSS targeting
-		add_filter( 'admin_body_class', [ __CLASS__, 'add_collapsed_menu_class' ] );
+		add_filter( 'admin_body_class', array( __CLASS__, 'add_collapsed_menu_class' ) );
 
 		// Add CSS to collapse menu
-		add_action( 'admin_head', [ __CLASS__, 'add_collapsed_menu_css' ] );
+		add_action( 'admin_head', array( __CLASS__, 'add_collapsed_menu_css' ) );
 
 		// Add JS to improve collapsed menu UX
-		add_action( 'admin_footer', [ __CLASS__, 'add_collapsed_menu_js' ] );
+		add_action( 'admin_footer', array( __CLASS__, 'add_collapsed_menu_js' ) );
 
 		// Track KPI
 		KPI_Tracker::record_treatment_applied( __CLASS__, 1 );
@@ -143,9 +143,9 @@ class Treatment_Collapse_Large_Menus extends Treatment_Base {
 	 */
 	public static function undo(): bool {
 		delete_option( 'wpshadow_collapse_admin_menu' );
-		remove_filter( 'admin_body_class', [ __CLASS__, 'add_collapsed_menu_class' ] );
-		remove_action( 'admin_head', [ __CLASS__, 'add_collapsed_menu_css' ] );
-		remove_action( 'admin_footer', [ __CLASS__, 'add_collapsed_menu_js' ] );
+		remove_filter( 'admin_body_class', array( __CLASS__, 'add_collapsed_menu_class' ) );
+		remove_action( 'admin_head', array( __CLASS__, 'add_collapsed_menu_css' ) );
+		remove_action( 'admin_footer', array( __CLASS__, 'add_collapsed_menu_js' ) );
 		return true;
 	}
 

@@ -85,14 +85,14 @@ class Diagnostic_Sox_Compliance extends Diagnostic_Base {
 		$compliance_score = 0;
 
 		// Check for audit logging
-		$audit_plugins = [
+		$audit_plugins = array(
 			'wp-security-audit-log/wp-security-audit-log.php',
 			'stream/stream.php',
-		];
+		);
 
 		foreach ( $audit_plugins as $plugin ) {
 			if ( is_plugin_active( $plugin ) ) {
-				$compliance_score++;
+				++$compliance_score;
 				break;
 			}
 		}
@@ -100,18 +100,18 @@ class Diagnostic_Sox_Compliance extends Diagnostic_Base {
 		// Check for role-based access control
 		$roles = wp_roles()->get_names();
 		if ( count( $roles ) > 2 ) { // More than just admin/subscriber
-			$compliance_score++;
+			++$compliance_score;
 		}
 
 		// Check for backup/disaster recovery
-		$backup_plugins = [
+		$backup_plugins = array(
 			'updraftplus/updraftplus.php',
 			'backwpup/backwpup.php',
-		];
+		);
 
 		foreach ( $backup_plugins as $plugin ) {
 			if ( is_plugin_active( $plugin ) ) {
-				$compliance_score++;
+				++$compliance_score;
 				break;
 			}
 		}
@@ -162,10 +162,8 @@ class Diagnostic_Sox_Compliance extends Diagnostic_Base {
 
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

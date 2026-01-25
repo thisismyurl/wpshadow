@@ -33,7 +33,7 @@ class Treatment_Clean_Expired_Transients extends Treatment_Base {
 	 * @param array $options Treatment options
 	 * @return bool Success status
 	 */
-	public static function apply( array $options = [] ): bool {
+	public static function apply( array $options = array() ): bool {
 		global $wpdb;
 
 		// Create backup with count
@@ -47,10 +47,10 @@ class Treatment_Clean_Expired_Transients extends Treatment_Base {
 			)
 		);
 
-		$backup = [
+		$backup = array(
 			'before_count' => $before_count,
 			'timestamp'    => time(),
-		];
+		);
 		self::create_backup( $backup );
 
 		// Delete expired transient timeouts

@@ -16,56 +16,54 @@ use WPShadow\Core\Diagnostic_Base;
  * @subpackage Diagnostics/Tests
  * @since 1.2601.2112
  */
-class Test_Monitoring_BackupConfiguration extends Diagnostic_Base
-{
+class Test_Monitoring_BackupConfiguration extends Diagnostic_Base {
 
-	public static function check(): ?array
-	{
+
+	public static function check(): ?array {
 		// Check if backup plugin is active
-		$plugins = get_plugins();
+		$plugins       = get_plugins();
 		$backup_active = false;
 
-		foreach ($plugins as $plugin_file => $plugin_data) {
+		foreach ( $plugins as $plugin_file => $plugin_data ) {
 			if (
-				stripos($plugin_file, 'backup') !== false ||
-				stripos($plugin_file, 'jetpack') !== false ||
-				stripos($plugin_file, 'backwpup') !== false ||
-				stripos($plugin_file, 'updraft') !== false
+				stripos( $plugin_file, 'backup' ) !== false ||
+				stripos( $plugin_file, 'jetpack' ) !== false ||
+				stripos( $plugin_file, 'backwpup' ) !== false ||
+				stripos( $plugin_file, 'updraft' ) !== false
 			) {
-				if (is_plugin_active($plugin_file)) {
+				if ( is_plugin_active( $plugin_file ) ) {
 					$backup_active = true;
 					break;
 				}
 			}
 		}
 
-		if (!$backup_active) {
-			return [
-				'id' => 'backup-configuration',
-				'title' => __('Automated backups not configured', 'wpshadow'),
-				'description' => __('Enable automated backups to protect against data loss. Use UpdraftPlus, BackWPup, or similar.', 'wpshadow'),
-				'severity' => 'high',
+		if ( ! $backup_active ) {
+			return array(
+				'id'           => 'backup-configuration',
+				'title'        => __( 'Automated backups not configured', 'wpshadow' ),
+				'description'  => __( 'Enable automated backups to protect against data loss. Use UpdraftPlus, BackWPup, or similar.', 'wpshadow' ),
+				'severity'     => 'high',
 				'threat_level' => 85,
-			];
+			);
 		}
 
 		return null;
 	}
 
-	public static function test_live_backup_configuration(): array
-	{
+	public static function test_live_backup_configuration(): array {
 		$result = self::check();
 
-		if (null === $result) {
-			return [
-				'passed' => true,
-				'message' => __('Automated backups are configured', 'wpshadow'),
-			];
+		if ( null === $result ) {
+			return array(
+				'passed'  => true,
+				'message' => __( 'Automated backups are configured', 'wpshadow' ),
+			);
 		}
 
-		return [
-			'passed' => false,
+		return array(
+			'passed'  => false,
 			'message' => $result['description'],
-		];
+		);
 	}
 }

@@ -16,7 +16,7 @@ namespace WPShadow\Core;
  * Generates trend charts for KPI visualization
  */
 class Trend_Chart {
-	
+
 	/**
 	 * Get health score history for the past 30 days
 	 *
@@ -24,34 +24,34 @@ class Trend_Chart {
 	 */
 	public static function get_health_history() {
 		$history = get_option( 'wpshadow_health_history', array() );
-		
+
 		if ( ! is_array( $history ) ) {
 			$history = array();
 		}
-		
+
 		// Get last 30 days of data
 		$cutoff_date = gmdate( 'Y-m-d', strtotime( '-30 days' ) );
-		$history = array_filter(
+		$history     = array_filter(
 			$history,
-			function( $item ) use ( $cutoff_date ) {
+			function ( $item ) use ( $cutoff_date ) {
 				return isset( $item['date'] ) && $item['date'] >= $cutoff_date;
 			}
 		);
-		
+
 		// Ensure today's data is included
 		$today = gmdate( 'Y-m-d' );
 		if ( ! self::history_has_date( $history, $today ) ) {
 			$current_health = get_option( 'wpshadow_health_status', array() );
-			$score = isset( $current_health['score'] ) ? (int) $current_health['score'] : 0;
-			$history[] = array(
+			$score          = isset( $current_health['score'] ) ? (int) $current_health['score'] : 0;
+			$history[]      = array(
 				'date'  => $today,
 				'score' => $score,
 			);
 		}
-		
+
 		return array_values( $history ); // Re-index
 	}
-	
+
 	/**
 	 * Check if history contains data for a specific date
 	 *
@@ -67,7 +67,7 @@ class Trend_Chart {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Record a health score in history
 	 *
@@ -76,42 +76,42 @@ class Trend_Chart {
 	 */
 	public static function record_health_score( $score ) {
 		$history = get_option( 'wpshadow_health_history', array() );
-		
+
 		if ( ! is_array( $history ) ) {
 			$history = array();
 		}
-		
+
 		$today = gmdate( 'Y-m-d' );
-		
+
 		// Update if today already exists, otherwise add
 		$found = false;
 		foreach ( $history as &$item ) {
 			if ( isset( $item['date'] ) && $item['date'] === $today ) {
 				$item['score'] = (int) $score;
-				$found = true;
+				$found         = true;
 				break;
 			}
 		}
-		
+
 		if ( ! $found ) {
 			$history[] = array(
 				'date'  => $today,
 				'score' => (int) $score,
 			);
 		}
-		
+
 		// Keep only last 90 days
 		$cutoff_date = gmdate( 'Y-m-d', strtotime( '-90 days' ) );
-		$history = array_filter(
+		$history     = array_filter(
 			$history,
-			function( $item ) use ( $cutoff_date ) {
+			function ( $item ) use ( $cutoff_date ) {
 				return isset( $item['date'] ) && $item['date'] >= $cutoff_date;
 			}
 		);
-		
+
 		update_option( 'wpshadow_health_history', array_values( $history ) );
 	}
-	
+
 	/**
 	 * Render a line chart of health scores
 	 *
@@ -119,7 +119,7 @@ class Trend_Chart {
 	 */
 	public static function render_trend_chart() {
 		$history = self::get_health_history();
-		
+
 		if ( count( $history ) < 2 ) {
 			?>
 			<div class="wps-p-40-rounded-8">
@@ -128,34 +128,37 @@ class Trend_Chart {
 			<?php
 			return;
 		}
-		
+
 		// Prepare data for chart
-		$scores = array_map( function( $item ) {
-			return isset( $item['score'] ) ? (int) $item['score'] : 0;
-		}, $history );
-		
+		$scores = array_map(
+			function ( $item ) {
+				return isset( $item['score'] ) ? (int) $item['score'] : 0;
+			},
+			$history
+		);
+
 		$min_score = min( $scores );
 		$max_score = max( $scores );
-		$range = max( 1, $max_score - $min_score );
-		
+		$range     = max( 1, $max_score - $min_score );
+
 		// Calculate trend direction
-		$first_score = $scores[0];
-		$last_score = end( $scores );
+		$first_score     = $scores[0];
+		$last_score      = end( $scores );
 		$trend_direction = $last_score > $first_score ? 'up' : ( $last_score < $first_score ? 'down' : 'flat' );
-		$trend_pct = $range > 0 ? round( ( ( $last_score - $first_score ) / $range ) * 100, 1 ) : 0;
-		
-		$chart_width = 600;
+		$trend_pct       = $range > 0 ? round( ( ( $last_score - $first_score ) / $range ) * 100, 1 ) : 0;
+
+		$chart_width  = 600;
 		$chart_height = 300;
-		$padding = 40;
-		$point_count = count( $scores );
-		$x_step = ( $chart_width - 2 * $padding ) / max( 1, $point_count - 1 );
-		$y_scale = ( $chart_height - 2 * $padding ) / max( 1, $range );
-		
+		$padding      = 40;
+		$point_count  = count( $scores );
+		$x_step       = ( $chart_width - 2 * $padding ) / max( 1, $point_count - 1 );
+		$y_scale      = ( $chart_height - 2 * $padding ) / max( 1, $range );
+
 		// Generate SVG path
 		$path_data = '';
 		foreach ( $scores as $idx => $score ) {
-			$x = $padding + $idx * $x_step;
-			$y = $chart_height - $padding - ( $score - $min_score ) * $y_scale;
+			$x          = $padding + $idx * $x_step;
+			$y          = $chart_height - $padding - ( $score - $min_score ) * $y_scale;
 			$path_data .= ( $idx === 0 ? 'M' : 'L' ) . $x . ' ' . $y . ' ';
 		}
 		?>
@@ -183,10 +186,10 @@ class Trend_Chart {
 				
 				<!-- Grid lines (every 10 points) -->
 				<?php for ( $i = 0; $i <= 100; $i += 10 ) : ?>
-					<?php 
+					<?php
 					$grid_y = $chart_height - $padding - ( ( $i - $min_score ) / max( 1, $range ) ) * ( $chart_height - 2 * $padding );
 					if ( $grid_y >= $padding && $grid_y <= $chart_height - $padding ) :
-					?>
+						?>
 						<line x1="<?php echo (int) $padding; ?>" y1="<?php echo (int) $grid_y; ?>" x2="<?php echo (int) ( $chart_width - $padding ); ?>" y2="<?php echo (int) $grid_y; ?>" stroke="#e5e7eb" stroke-width="1" />
 						<text x="<?php echo (int) ( $padding - 10 ); ?>" y="<?php echo (int) ( $grid_y + 4 ); ?>" font-size="12" fill="#9ca3af" text-anchor="end"><?php echo (int) $i; ?>%</text>
 					<?php endif; ?>
@@ -200,7 +203,7 @@ class Trend_Chart {
 				
 				<!-- Data points -->
 				<?php foreach ( $scores as $idx => $score ) : ?>
-					<?php 
+					<?php
 					$x = $padding + $idx * $x_step;
 					$y = $chart_height - $padding - ( $score - $min_score ) * $y_scale;
 					?>
@@ -228,7 +231,7 @@ class Trend_Chart {
 		
 		<?php
 	}
-	
+
 	/**
 	 * Get trend summary statistics
 	 *
@@ -236,34 +239,37 @@ class Trend_Chart {
 	 */
 	public static function get_trend_stats() {
 		$history = self::get_health_history();
-		
+
 		if ( count( $history ) < 1 ) {
 			return array(
-				'current_score'     => 0,
-				'start_score'       => 0,
-				'improvement'       => 0,
-				'improvement_pct'   => 0,
-				'days_tracked'      => 0,
-				'avg_daily_change'  => 0,
+				'current_score'    => 0,
+				'start_score'      => 0,
+				'improvement'      => 0,
+				'improvement_pct'  => 0,
+				'days_tracked'     => 0,
+				'avg_daily_change' => 0,
 			);
 		}
-		
-		$scores = array_map( function( $item ) {
-			return isset( $item['score'] ) ? (int) $item['score'] : 0;
-		}, $history );
-		
-		$current_score = end( $scores );
-		$start_score = reset( $scores );
-		$improvement = $current_score - $start_score;
+
+		$scores = array_map(
+			function ( $item ) {
+				return isset( $item['score'] ) ? (int) $item['score'] : 0;
+			},
+			$history
+		);
+
+		$current_score   = end( $scores );
+		$start_score     = reset( $scores );
+		$improvement     = $current_score - $start_score;
 		$improvement_pct = $start_score > 0 ? round( ( $improvement / $start_score ) * 100, 1 ) : 0;
-		
+
 		return array(
-			'current_score'     => $current_score,
-			'start_score'       => $start_score,
-			'improvement'       => $improvement,
-			'improvement_pct'   => $improvement_pct,
-			'days_tracked'      => count( $history ),
-			'avg_daily_change'  => count( $history ) > 1 ? round( $improvement / ( count( $history ) - 1 ), 2 ) : 0,
+			'current_score'    => $current_score,
+			'start_score'      => $start_score,
+			'improvement'      => $improvement,
+			'improvement_pct'  => $improvement_pct,
+			'days_tracked'     => count( $history ),
+			'avg_daily_change' => count( $history ) > 1 ? round( $improvement / ( count( $history ) - 1 ), 2 ) : 0,
 		);
 	}
 
@@ -276,27 +282,27 @@ class Trend_Chart {
 	 */
 	public static function record_finding_resolved( $finding_id, $status = 'fixed' ) {
 		$resolutions = get_option( 'wpshadow_finding_resolutions', array() );
-		
+
 		if ( ! is_array( $resolutions ) ) {
 			$resolutions = array();
 		}
-		
+
 		$resolutions[] = array(
 			'finding_id' => $finding_id,
 			'status'     => $status,
 			'date'       => gmdate( 'Y-m-d H:i:s' ),
 			'user_id'    => get_current_user_id(),
 		);
-		
+
 		// Keep only last 90 days (privacy-first, per Philosophy #10)
 		$cutoff_date = gmdate( 'Y-m-d', strtotime( '-90 days' ) );
 		$resolutions = array_filter(
 			$resolutions,
-			function( $item ) use ( $cutoff_date ) {
+			function ( $item ) use ( $cutoff_date ) {
 				return isset( $item['date'] ) && substr( $item['date'], 0, 10 ) >= $cutoff_date;
 			}
 		);
-		
+
 		update_option( 'wpshadow_finding_resolutions', $resolutions );
 	}
 }

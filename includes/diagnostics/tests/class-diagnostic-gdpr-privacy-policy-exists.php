@@ -7,8 +7,8 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 
-class Diagnostic_Gdpr_Privacy_Policy_Exists extends Diagnostic_Base
-{
+class Diagnostic_Gdpr_Privacy_Policy_Exists extends Diagnostic_Base {
+
 	protected static $slug = 'gdpr-privacy-policy-exists';
 
 	protected static $title = 'Gdpr Privacy Policy Exists';
@@ -22,32 +22,28 @@ class Diagnostic_Gdpr_Privacy_Policy_Exists extends Diagnostic_Base
 	/**
 	 * Get diagnostic ID
 	 */
-	public static function get_id(): string
-	{
+	public static function get_id(): string {
 		return 'gdpr-privacy-policy-exists';
 	}
 
 	/**
 	 * Get diagnostic name
 	 */
-	public static function get_name(): string
-	{
-		return __('Is privacy policy in place?', 'wpshadow');
+	public static function get_name(): string {
+		return __( 'Is privacy policy in place?', 'wpshadow' );
 	}
 
 	/**
 	 * Get diagnostic description
 	 */
-	public static function get_description(): string
-	{
-		return __('Is privacy policy in place?. Part of Compliance & Legal Risk analysis.', 'wpshadow');
+	public static function get_description(): string {
+		return __( 'Is privacy policy in place?. Part of Compliance & Legal Risk analysis.', 'wpshadow' );
 	}
 
 	/**
 	 * Get diagnostic category
 	 */
-	public static function get_category(): string
-	{
+	public static function get_category(): string {
 		return 'compliance_risk';
 	}
 
@@ -56,8 +52,7 @@ class Diagnostic_Gdpr_Privacy_Policy_Exists extends Diagnostic_Base
 	 *
 	 * @return array Finding data or empty if no issue
 	 */
-	public static function run(): array
-	{
+	public static function run(): array {
 		// Implement: Is privacy policy in place? test
 		// Smart implementation needed
 
@@ -67,8 +62,7 @@ class Diagnostic_Gdpr_Privacy_Policy_Exists extends Diagnostic_Base
 	/**
 	 * Get threat level for this finding (0-100)
 	 */
-	public static function get_threat_level(): int
-	{
+	public static function get_threat_level(): int {
 		// Threat level based on diagnostic category
 		return 48;
 	}
@@ -76,26 +70,23 @@ class Diagnostic_Gdpr_Privacy_Policy_Exists extends Diagnostic_Base
 	/**
 	 * Get KB article URL
 	 */
-	public static function get_kb_article(): string
-	{
+	public static function get_kb_article(): string {
 		return 'https://wpshadow.com/kb/gdpr-privacy-policy-exists/';
 	}
 
 	/**
 	 * Get training video URL
 	 */
-	public static function get_training_video(): string
-	{
+	public static function get_training_video(): string {
 		return 'https://wpshadow.com/training/gdpr-privacy-policy-exists/';
 	}
 
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		// Check if privacy policy page exists in WordPress
-		$privacy_page_id = (int) get_option('wp_page_for_privacy_policy');
+		$privacy_page_id = (int) get_option( 'wp_page_for_privacy_policy' );
 
 		// Check if privacy policy page is assigned and published
-		if ($privacy_page_id === 0) {
+		if ( $privacy_page_id === 0 ) {
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
 				'gdpr-privacy-policy-exists',
 				'Privacy Policy Not Configured',
@@ -108,8 +99,8 @@ class Diagnostic_Gdpr_Privacy_Policy_Exists extends Diagnostic_Base
 		}
 
 		// Check if the page still exists and is published
-		$privacy_page = get_post($privacy_page_id);
-		if (! $privacy_page || $privacy_page->post_status !== 'publish') {
+		$privacy_page = get_post( $privacy_page_id );
+		if ( ! $privacy_page || $privacy_page->post_status !== 'publish' ) {
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
 				'gdpr-privacy-policy-exists',
 				'Privacy Policy Not Published',
@@ -141,8 +132,7 @@ class Diagnostic_Gdpr_Privacy_Policy_Exists extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live_gdpr_privacy_policy_exists(): array
-	{
+	public static function test_live_gdpr_privacy_policy_exists(): array {
 		/*
 		 * IMPLEMENTATION NOTES:
 		 * - This test validates the actual WordPress site state
@@ -156,9 +146,8 @@ class Diagnostic_Gdpr_Privacy_Policy_Exists extends Diagnostic_Base
 
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
 }
-

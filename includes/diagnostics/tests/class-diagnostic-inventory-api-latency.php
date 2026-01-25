@@ -19,29 +19,28 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_InventoryApiLatency extends Diagnostic_Base
-{
+class Diagnostic_InventoryApiLatency extends Diagnostic_Base {
+
 	/**
 	 * Run the diagnostic check
 	 *
 	 * @return array|null Array with finding details or null if no issue found
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		// Monitor third-party inventory API latency
-		$api_latency = get_transient('wpshadow_inventory_api_latency_ms');
+		$api_latency = get_transient( 'wpshadow_inventory_api_latency_ms' );
 
-		if ($api_latency && $api_latency > 1000) { // 1 second
+		if ( $api_latency && $api_latency > 1000 ) { // 1 second
 			return array(
-				'id' => 'inventory-api-latency',
-				'title' => sprintf(__('Slow Inventory API (%dms)', 'wpshadow'), $api_latency),
-				'description' => __('Your inventory/stock API is responding slowly. Consider caching results or using a faster API endpoint.', 'wpshadow'),
-				'severity' => 'medium',
-				'category' => 'monitoring',
-				'kb_link' => 'https://wpshadow.com/kb/api-performance-monitoring/',
+				'id'            => 'inventory-api-latency',
+				'title'         => sprintf( __( 'Slow Inventory API (%dms)', 'wpshadow' ), $api_latency ),
+				'description'   => __( 'Your inventory/stock API is responding slowly. Consider caching results or using a faster API endpoint.', 'wpshadow' ),
+				'severity'      => 'medium',
+				'category'      => 'monitoring',
+				'kb_link'       => 'https://wpshadow.com/kb/api-performance-monitoring/',
 				'training_link' => 'https://wpshadow.com/training/api-optimization/',
-				'auto_fixable' => false,
-				'threat_level' => 50,
+				'auto_fixable'  => false,
+				'threat_level'  => 50,
 			);
 		}
 		return null;
@@ -69,14 +68,13 @@ class Diagnostic_InventoryApiLatency extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__inventory_api_latency(): array
-	{
-		$api_latency = get_transient('wpshadow_inventory_api_latency_ms');
-		$has_issue  = ($api_latency && $api_latency > 1000);
+	public static function test_live__inventory_api_latency(): array {
+		$api_latency = get_transient( 'wpshadow_inventory_api_latency_ms' );
+		$has_issue   = ( $api_latency && $api_latency > 1000 );
 
-		$result = self::check();
-		$diagnostic_found_issue = is_array($result);
-		$test_passes = ($has_issue === $diagnostic_found_issue);
+		$result                 = self::check();
+		$diagnostic_found_issue = is_array( $result );
+		$test_passes            = ( $has_issue === $diagnostic_found_issue );
 
 		$message = $test_passes
 			? 'Inventory API latency check matches site state'

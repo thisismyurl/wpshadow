@@ -33,10 +33,10 @@ class Treatment_Clean_Orphaned_Metadata extends Treatment_Base {
 	 * @param array $options Treatment options
 	 * @return bool Success status
 	 */
-	public static function apply( array $options = [] ): bool {
+	public static function apply( array $options = array() ): bool {
 		global $wpdb;
 
-		$deleted = [];
+		$deleted = array();
 
 		// Delete orphaned postmeta
 		$postmeta_deleted = $wpdb->query(
@@ -69,10 +69,12 @@ class Treatment_Clean_Orphaned_Metadata extends Treatment_Base {
 		}
 
 		// Create backup with deletion counts
-		self::create_backup( [
-			'deleted'   => $deleted,
-			'timestamp' => time(),
-		] );
+		self::create_backup(
+			array(
+				'deleted'   => $deleted,
+				'timestamp' => time(),
+			)
+		);
 
 		$total_deleted = array_sum( $deleted );
 

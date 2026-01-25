@@ -55,12 +55,12 @@ class Treatment_Remove_Comments_Menu extends Treatment_Base {
 
 		// Store the option to hide comments menu
 		update_option( 'wpshadow_hide_comments_menu', true );
-		
+
 		// Hook to remove comments menu on next admin load
 		add_action( 'admin_menu', array( __CLASS__, 'hide_comments_menu' ) );
-		
+
 		KPI_Tracker::log_fix_applied( self::get_finding_id(), 'auto' );
-		
+
 		return array(
 			'success' => true,
 			'message' => 'Comments menu has been hidden from the admin sidebar.',
@@ -74,7 +74,7 @@ class Treatment_Remove_Comments_Menu extends Treatment_Base {
 	 */
 	public static function undo() {
 		delete_option( 'wpshadow_hide_comments_menu' );
-		
+
 		return array(
 			'success' => true,
 			'message' => 'Comments menu will be visible again on next admin load.',

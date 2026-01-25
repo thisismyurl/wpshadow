@@ -21,16 +21,15 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_Pingback_Trackback_Enabled extends Diagnostic_Base
-{
+class Diagnostic_Pingback_Trackback_Enabled extends Diagnostic_Base {
+
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array
-	{
-		if (get_option('default_ping_status') === 'open') {
+	public static function check(): ?array {
+		if ( get_option( 'default_ping_status' ) === 'open' ) {
 			return array(
 				'id'            => 'pingback-trackback-enabled',
 				'title'         => 'Pingback/Trackback Enabled',
@@ -69,15 +68,14 @@ class Diagnostic_Pingback_Trackback_Enabled extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__pingback_trackback_enabled(): array
-	{
-		$ping_status = get_option('default_ping_status');
-		$has_issue = ($ping_status === 'open');
+	public static function test_live__pingback_trackback_enabled(): array {
+		$ping_status = get_option( 'default_ping_status' );
+		$has_issue   = ( $ping_status === 'open' );
 
-		$result = self::check();
-		$diagnostic_found_issue = is_array($result);
+		$result                 = self::check();
+		$diagnostic_found_issue = is_array( $result );
 
-		$test_passes = ($has_issue === $diagnostic_found_issue);
+		$test_passes = ( $has_issue === $diagnostic_found_issue );
 
 		$message = $test_passes
 			? 'Pingback/trackback check matches site state'

@@ -14,10 +14,10 @@ use WPShadow\Diagnostics\Diagnostic_Base;
  *
  * @since 1.2.0
  */
-class Test_Large_Database extends Diagnostic_Base
-{
+class Test_Large_Database extends Diagnostic_Base {
 
-	private const SIZE_WARNING_MB = 500;   // 500MB warning threshold
+
+	private const SIZE_WARNING_MB  = 500;   // 500MB warning threshold
 	private const SIZE_CRITICAL_MB = 1000; // 1GB critical threshold
 
 	/**
@@ -25,15 +25,14 @@ class Test_Large_Database extends Diagnostic_Base
 	 *
 	 * @return array|null Diagnostic array if issues found, null if all good
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		global $wpdb;
 
 		$database_size = self::get_database_size();
-		$database_mb = $database_size / (1024 * 1024);
+		$database_mb   = $database_size / ( 1024 * 1024 );
 
 		// Check thresholds
-		if ($database_mb < self::SIZE_WARNING_MB) {
+		if ( $database_mb < self::SIZE_WARNING_MB ) {
 			return null;
 		}
 
@@ -42,23 +41,23 @@ class Test_Large_Database extends Diagnostic_Base
 		// Get table breakdown
 		$tables_info = self::get_tables_info();
 
-		return [
-			'threat_level'    => $threat,
-			'threat_color'    => $threat >= 80 ? 'red' : 'yellow',
-			'passed'          => false,
-			'issue'           => sprintf(
+		return array(
+			'threat_level'  => $threat,
+			'threat_color'  => $threat >= 80 ? 'red' : 'yellow',
+			'passed'        => false,
+			'issue'         => sprintf(
 				'Database is %s (consider optimization)',
-				self::format_bytes($database_size)
+				self::format_bytes( $database_size )
 			),
-			'metadata'        => [
-				'total_size'      => $database_size,
-				'formatted_size'  => self::format_bytes($database_size),
-				'table_count'     => count($tables_info),
-				'largest_tables'  => array_slice($tables_info, 0, 5),
-			],
-			'kb_link'         => 'https://wpshadow.com/kb/database-optimization/',
-			'training_link'   => 'https://wpshadow.com/training/wordpress-database-maintenance/',
-		];
+			'metadata'      => array(
+				'total_size'     => $database_size,
+				'formatted_size' => self::format_bytes( $database_size ),
+				'table_count'    => count( $tables_info ),
+				'largest_tables' => array_slice( $tables_info, 0, 5 ),
+			),
+			'kb_link'       => 'https://wpshadow.com/kb/database-optimization/',
+			'training_link' => 'https://wpshadow.com/training/wordpress-database-maintenance/',
+		);
 	}
 
 	/**
@@ -66,22 +65,21 @@ class Test_Large_Database extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_database_size(): array
-	{
-		$size = self::get_database_size();
-		$size_mb = $size / (1024 * 1024);
+	public static function test_database_size(): array {
+		$size    = self::get_database_size();
+		$size_mb = $size / ( 1024 * 1024 );
 
-		$status = $size_mb > self::SIZE_CRITICAL_MB ? 'critical' : ($size_mb > self::SIZE_WARNING_MB ? 'large' : 'normal');
+		$status = $size_mb > self::SIZE_CRITICAL_MB ? 'critical' : ( $size_mb > self::SIZE_WARNING_MB ? 'large' : 'normal' );
 
-		return [
-			'test_name'        => 'Database Size',
-			'total_bytes'      => $size,
-			'formatted_size'   => self::format_bytes($size),
-			'size_mb'          => round($size_mb, 2),
-			'status'           => $status,
-			'passed'           => $size_mb < self::SIZE_WARNING_MB,
-			'description'      => sprintf('Database size: %s (%s)', self::format_bytes($size), $status),
-		];
+		return array(
+			'test_name'      => 'Database Size',
+			'total_bytes'    => $size,
+			'formatted_size' => self::format_bytes( $size ),
+			'size_mb'        => round( $size_mb, 2 ),
+			'status'         => $status,
+			'passed'         => $size_mb < self::SIZE_WARNING_MB,
+			'description'    => sprintf( 'Database size: %s (%s)', self::format_bytes( $size ), $status ),
+		);
 	}
 
 	/**
@@ -89,16 +87,15 @@ class Test_Large_Database extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_largest_tables(): array
-	{
+	public static function test_largest_tables(): array {
 		$tables = self::get_tables_info();
 
-		return [
-			'test_name'       => 'Largest Database Tables',
-			'table_count'     => count($tables),
-			'largest_tables'  => array_slice($tables, 0, 10),
-			'description'     => sprintf('Found %d tables, largest: %s', count($tables), $tables[0]['name'] ?? 'N/A'),
-		];
+		return array(
+			'test_name'      => 'Largest Database Tables',
+			'table_count'    => count( $tables ),
+			'largest_tables' => array_slice( $tables, 0, 10 ),
+			'description'    => sprintf( 'Found %d tables, largest: %s', count( $tables ), $tables[0]['name'] ?? 'N/A' ),
+		);
 	}
 
 	/**
@@ -106,20 +103,19 @@ class Test_Large_Database extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_post_revisions(): array
-	{
+	public static function test_post_revisions(): array {
 		global $wpdb;
 
-		$revision_count = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'revision'");
-		$revision_size = self::get_revisions_size();
+		$revision_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'revision'" );
+		$revision_size  = self::get_revisions_size();
 
-		return [
-			'test_name'        => 'Post Revisions',
-			'revision_count'   => (int) $revision_count,
-			'revision_size'    => self::format_bytes($revision_size),
+		return array(
+			'test_name'         => 'Post Revisions',
+			'revision_count'    => (int) $revision_count,
+			'revision_size'     => self::format_bytes( $revision_size ),
 			'cleanup_potential' => $revision_count > 100 ? 'High' : 'Low',
-			'description'      => sprintf('%d revisions using %s space', $revision_count, self::format_bytes($revision_size)),
-		];
+			'description'       => sprintf( '%d revisions using %s space', $revision_count, self::format_bytes( $revision_size ) ),
+		);
 	}
 
 	/**
@@ -127,18 +123,17 @@ class Test_Large_Database extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_transients(): array
-	{
+	public static function test_transients(): array {
 		global $wpdb;
 
-		$transient_count = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE '_transient_%'");
+		$transient_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE '_transient_%'" );
 
-		return [
-			'test_name'      => 'Transient Data',
-			'transient_count' => (int) $transient_count,
+		return array(
+			'test_name'         => 'Transient Data',
+			'transient_count'   => (int) $transient_count,
 			'cleanup_potential' => $transient_count > 1000 ? 'High' : 'Low',
-			'description'    => sprintf('Found %d transients (cache entries)', $transient_count),
-		];
+			'description'       => sprintf( 'Found %d transients (cache entries)', $transient_count ),
+		);
 	}
 
 	/**
@@ -146,13 +141,12 @@ class Test_Large_Database extends Diagnostic_Base
 	 *
 	 * @return int Database size in bytes
 	 */
-	private static function get_database_size(): int
-	{
+	private static function get_database_size(): int {
 		global $wpdb;
 
-		$result = $wpdb->get_results("SELECT SUM(data_length + index_length) as size FROM information_schema.tables WHERE table_schema = '" . DB_NAME . "'");
+		$result = $wpdb->get_results( "SELECT SUM(data_length + index_length) as size FROM information_schema.tables WHERE table_schema = '" . DB_NAME . "'" );
 
-		if ($result && isset($result[0]->size)) {
+		if ( $result && isset( $result[0]->size ) ) {
 			return (int) $result[0]->size;
 		}
 
@@ -164,20 +158,19 @@ class Test_Large_Database extends Diagnostic_Base
 	 *
 	 * @return array Table information
 	 */
-	private static function get_tables_info(): array
-	{
+	private static function get_tables_info(): array {
 		global $wpdb;
 
-		$results = $wpdb->get_results("SELECT table_name, data_length + index_length as size FROM information_schema.tables WHERE table_schema = '" . DB_NAME . "' ORDER BY size DESC");
+		$results = $wpdb->get_results( "SELECT table_name, data_length + index_length as size FROM information_schema.tables WHERE table_schema = '" . DB_NAME . "' ORDER BY size DESC" );
 
-		$tables = [];
-		if ($results) {
-			foreach ($results as $row) {
-				$tables[] = [
-					'name'  => $row->table_name,
-					'size'  => $row->size,
-					'formatted' => self::format_bytes($row->size),
-				];
+		$tables = array();
+		if ( $results ) {
+			foreach ( $results as $row ) {
+				$tables[] = array(
+					'name'      => $row->table_name,
+					'size'      => $row->size,
+					'formatted' => self::format_bytes( $row->size ),
+				);
 			}
 		}
 
@@ -189,13 +182,12 @@ class Test_Large_Database extends Diagnostic_Base
 	 *
 	 * @return int Size in bytes
 	 */
-	private static function get_revisions_size(): int
-	{
+	private static function get_revisions_size(): int {
 		global $wpdb;
 
-		$result = $wpdb->get_var("SELECT SUM(post_content_filtered) FROM {$wpdb->posts} WHERE post_type = 'revision'");
+		$result = $wpdb->get_var( "SELECT SUM(post_content_filtered) FROM {$wpdb->posts} WHERE post_type = 'revision'" );
 
-		return (int) ($result ?: 0);
+		return (int) ( $result ?: 0 );
 	}
 
 	/**
@@ -204,15 +196,14 @@ class Test_Large_Database extends Diagnostic_Base
 	 * @param int $bytes Byte count
 	 * @return string Formatted size
 	 */
-	private static function format_bytes(int $bytes): string
-	{
-		$units = ['B', 'KB', 'MB', 'GB'];
-		$bytes = max($bytes, 0);
-		$pow = floor(($bytes ? log($bytes) : 0) / log(1024));
-		$pow = min($pow, count($units) - 1);
-		$bytes /= (1 << (10 * $pow));
+	private static function format_bytes( int $bytes ): string {
+		$units  = array( 'B', 'KB', 'MB', 'GB' );
+		$bytes  = max( $bytes, 0 );
+		$pow    = floor( ( $bytes ? log( $bytes ) : 0 ) / log( 1024 ) );
+		$pow    = min( $pow, count( $units ) - 1 );
+		$bytes /= ( 1 << ( 10 * $pow ) );
 
-		return round($bytes, 2) . ' ' . $units[$pow];
+		return round( $bytes, 2 ) . ' ' . $units[ $pow ];
 	}
 
 	/**
@@ -220,8 +211,7 @@ class Test_Large_Database extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_name(): string
-	{
+	public static function get_name(): string {
 		return 'Large Database';
 	}
 
@@ -230,8 +220,7 @@ class Test_Large_Database extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_description(): string
-	{
+	public static function get_description(): string {
 		return 'Detects oversized databases that need optimization';
 	}
 
@@ -240,8 +229,7 @@ class Test_Large_Database extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_category(): string
-	{
+	public static function get_category(): string {
 		return 'Performance';
 	}
 }

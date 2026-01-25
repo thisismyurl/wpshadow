@@ -97,49 +97,64 @@ class Update_Notification_Manager {
 			return $actions;
 		}
 
-		$slug             = $theme->get_stylesheet();
-		$active           = wp_get_theme();
-		$active_slug      = $active->get_stylesheet();
-		$active_parent    = $active->get_template();
-		$is_inactive      = ( $slug !== $active_slug && $slug !== $active_parent );
-		$suppressed       = self::get_suppressed_themes();
-		$base_url         = admin_url( 'themes.php' );
+		$slug          = $theme->get_stylesheet();
+		$active        = wp_get_theme();
+		$active_slug   = $active->get_stylesheet();
+		$active_parent = $active->get_template();
+		$is_inactive   = ( $slug !== $active_slug && $slug !== $active_parent );
+		$suppressed    = self::get_suppressed_themes();
+		$base_url      = admin_url( 'themes.php' );
 
 		if ( $is_inactive ) {
 			$actions['wpshadow-delete'] = sprintf(
 				'<a href="%s" class="wpshadow-delete-theme">%s</a>',
-				esc_url( wp_nonce_url( add_query_arg(
-					array(
-						'wpshadow_action' => 'delete_theme',
-						'theme'           => rawurlencode( $slug ),
-					),
-					$base_url
-				), 'wpshadow_delete_theme' ) ),
+				esc_url(
+					wp_nonce_url(
+						add_query_arg(
+							array(
+								'wpshadow_action' => 'delete_theme',
+								'theme'           => rawurlencode( $slug ),
+							),
+							$base_url
+						),
+						'wpshadow_delete_theme'
+					)
+				),
 				esc_html__( 'Delete', 'wpshadow' )
 			);
 
 			if ( in_array( $slug, $suppressed, true ) ) {
 				$actions['wpshadow-allow-updates'] = sprintf(
 					'<a href="%s">%s</a>',
-					esc_url( wp_nonce_url( add_query_arg(
-						array(
-							'wpshadow_action' => 'unsuppress_theme_update',
-							'theme'           => rawurlencode( $slug ),
-						),
-						$base_url
-					), 'wpshadow_unsuppress_theme_update' ) ),
+					esc_url(
+						wp_nonce_url(
+							add_query_arg(
+								array(
+									'wpshadow_action' => 'unsuppress_theme_update',
+									'theme'           => rawurlencode( $slug ),
+								),
+								$base_url
+							),
+							'wpshadow_unsuppress_theme_update'
+						)
+					),
 					esc_html__( 'Allow Updates', 'wpshadow' )
 				);
 			} else {
 				$actions['wpshadow-hide-updates'] = sprintf(
 					'<a href="%s">%s</a>',
-					esc_url( wp_nonce_url( add_query_arg(
-						array(
-							'wpshadow_action' => 'suppress_theme_update',
-							'theme'           => rawurlencode( $slug ),
-						),
-						$base_url
-					), 'wpshadow_suppress_theme_update' ) ),
+					esc_url(
+						wp_nonce_url(
+							add_query_arg(
+								array(
+									'wpshadow_action' => 'suppress_theme_update',
+									'theme'           => rawurlencode( $slug ),
+								),
+								$base_url
+							),
+							'wpshadow_suppress_theme_update'
+						)
+					),
 					esc_html__( 'Snooze Updates', 'wpshadow' )
 				);
 			}
@@ -174,25 +189,35 @@ class Update_Notification_Manager {
 		if ( in_array( $plugin_file, $suppressed, true ) ) {
 			$actions['wpshadow-allow-updates'] = sprintf(
 				'<a href="%s">%s</a>',
-				esc_url( wp_nonce_url( add_query_arg(
-					array(
-						'wpshadow_action' => 'unsuppress_plugin_update',
-						'plugin'         => rawurlencode( $plugin_file ),
-					),
-					$base_url
-				), 'wpshadow_unsuppress_plugin_update' ) ),
+				esc_url(
+					wp_nonce_url(
+						add_query_arg(
+							array(
+								'wpshadow_action' => 'unsuppress_plugin_update',
+								'plugin'          => rawurlencode( $plugin_file ),
+							),
+							$base_url
+						),
+						'wpshadow_unsuppress_plugin_update'
+					)
+				),
 				esc_html__( 'Allow Updates', 'wpshadow' )
 			);
 		} else {
 			$actions['wpshadow-hide-updates'] = sprintf(
 				'<a href="%s">%s</a>',
-				esc_url( wp_nonce_url( add_query_arg(
-					array(
-						'wpshadow_action' => 'suppress_plugin_update',
-						'plugin'         => rawurlencode( $plugin_file ),
-					),
-					$base_url
-				), 'wpshadow_suppress_plugin_update' ) ),
+				esc_url(
+					wp_nonce_url(
+						add_query_arg(
+							array(
+								'wpshadow_action' => 'suppress_plugin_update',
+								'plugin'          => rawurlencode( $plugin_file ),
+							),
+							$base_url
+						),
+						'wpshadow_suppress_plugin_update'
+					)
+				),
 				esc_html__( 'Snooze Updates', 'wpshadow' )
 			);
 		}
@@ -268,7 +293,7 @@ class Update_Notification_Manager {
 			return;
 		}
 
-		$notice = isset( $_GET['wpshadow_notice'] ) ? sanitize_key( wp_unslash( $_GET['wpshadow_notice'] ) ) : '';
+		$notice  = isset( $_GET['wpshadow_notice'] ) ? sanitize_key( wp_unslash( $_GET['wpshadow_notice'] ) ) : '';
 		$message = '';
 
 		switch ( $notice ) {
@@ -357,7 +382,7 @@ class Update_Notification_Manager {
 	 * @param string $redirect Redirect target.
 	 */
 	private static function handle_theme_delete( string $redirect ): void {
-		$slug = isset( $_GET['theme'] ) ? sanitize_text_field( wp_unslash( $_GET['theme'] ) ) : '';
+		$slug  = isset( $_GET['theme'] ) ? sanitize_text_field( wp_unslash( $_GET['theme'] ) ) : '';
 		$nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
 		if ( empty( $slug ) || ! wp_verify_nonce( $nonce, 'wpshadow_delete_theme' ) ) {
 			return;
@@ -389,9 +414,9 @@ class Update_Notification_Manager {
 	 * @param string $redirect Redirect target.
 	 */
 	private static function handle_theme_suppression( bool $suppress, string $redirect ): void {
-		$slug = isset( $_GET['theme'] ) ? sanitize_text_field( wp_unslash( $_GET['theme'] ) ) : '';
+		$slug         = isset( $_GET['theme'] ) ? sanitize_text_field( wp_unslash( $_GET['theme'] ) ) : '';
 		$nonce_action = $suppress ? 'wpshadow_suppress_theme_update' : 'wpshadow_unsuppress_theme_update';
-		$nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
+		$nonce        = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
 		if ( empty( $slug ) || ! wp_verify_nonce( $nonce, $nonce_action ) ) {
 			return;
 		}
@@ -424,9 +449,9 @@ class Update_Notification_Manager {
 	 */
 	private static function handle_plugin_suppression( bool $suppress, string $redirect ): void {
 		self::ensure_plugin_functions();
-		$plugin = isset( $_GET['plugin'] ) ? sanitize_text_field( wp_unslash( $_GET['plugin'] ) ) : '';
+		$plugin       = isset( $_GET['plugin'] ) ? sanitize_text_field( wp_unslash( $_GET['plugin'] ) ) : '';
 		$nonce_action = $suppress ? 'wpshadow_suppress_plugin_update' : 'wpshadow_unsuppress_plugin_update';
-		$nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
+		$nonce        = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
 		if ( empty( $plugin ) || ! wp_verify_nonce( $nonce, $nonce_action ) ) {
 			return;
 		}
@@ -540,7 +565,7 @@ class Update_Notification_Manager {
 	 */
 	public static function get_inactive_plugins(): array {
 		self::ensure_plugin_functions();
-		$all_plugins   = array_keys( get_plugins() );
+		$all_plugins    = array_keys( get_plugins() );
 		$active_plugins = get_option( 'active_plugins', array() );
 		return array_values( array_diff( $all_plugins, $active_plugins ) );
 	}
@@ -571,9 +596,12 @@ class Update_Notification_Manager {
 	public static function clear_snooze_on_updates_page(): void {
 		if ( self::is_snoozed() ) {
 			self::clear_snooze();
-			add_action( 'admin_notices', function() {
-				printf( '<div class="notice notice-success"><p>%s</p></div>', esc_html__( 'Update notifications restored after visiting the Updates screen.', 'wpshadow' ) );
-			} );
+			add_action(
+				'admin_notices',
+				function () {
+					printf( '<div class="notice notice-success"><p>%s</p></div>', esc_html__( 'Update notifications restored after visiting the Updates screen.', 'wpshadow' ) );
+				}
+			);
 		}
 	}
 
@@ -583,9 +611,9 @@ class Update_Notification_Manager {
 	 * @return bool
 	 */
 	private static function has_available_updates(): bool {
-		$theme_updates = get_site_transient( 'update_themes' );
+		$theme_updates  = get_site_transient( 'update_themes' );
 		$plugin_updates = get_site_transient( 'update_plugins' );
-		$core_updates = get_site_transient( 'update_core' );
+		$core_updates   = get_site_transient( 'update_core' );
 
 		// Check for theme updates
 		$has_theme_updates = is_object( $theme_updates ) && ! empty( $theme_updates->response ) && is_array( $theme_updates->response ) && count( $theme_updates->response ) > 0;

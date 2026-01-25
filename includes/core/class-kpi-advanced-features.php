@@ -15,7 +15,7 @@ namespace WPShadow\Core;
  * Advanced KPI features for executive reporting
  */
 class KPI_Advanced_Features {
-	
+
 	/**
 	 * Generate executive email report
 	 *
@@ -24,22 +24,22 @@ class KPI_Advanced_Features {
 	 * @return bool Success status.
 	 */
 	public static function send_executive_report( $email_address, $period = 'monthly' ) {
-		$kpis = KPI_Tracker::get_kpi_summary();
+		$kpis            = KPI_Tracker::get_kpi_summary();
 		$recommendations = Recommendation_Engine::get_recommendations( 5 );
-		
+
 		$subject = sprintf(
-			__( 'WPShadow Impact Report (%s) - %s', 'wpshadow' ),
+			__( 'WPShadow Impact Report (%1$s) - %2$s', 'wpshadow' ),
 			ucfirst( $period ),
 			get_bloginfo( 'name' )
 		);
-		
+
 		$message = self::build_executive_email_html( $kpis, $recommendations, $period );
-		
+
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
-		
+
 		return wp_mail( $email_address, $subject, $message, $headers );
 	}
-	
+
 	/**
 	 * Build HTML email for executive report
 	 *
@@ -101,7 +101,7 @@ class KPI_Advanced_Features {
 					
 					<?php if ( ! empty( $recommendations ) ) : ?>
 					<h2 style="margin-top: 30px;">Top Priorities</h2>
-					<?php foreach ( array_slice( $recommendations, 0, 3 ) as $rec ) : ?>
+						<?php foreach ( array_slice( $recommendations, 0, 3 ) as $rec ) : ?>
 						<div class="wps-m-10-p-15-rounded-4">
 							<h3 class="wps-m-0"><?php echo esc_html( $rec['title'] ?? 'Unknown' ); ?></h3>
 							<p class="wps-m-0"><?php echo esc_html( $rec['description'] ?? '' ); ?></p>
@@ -120,7 +120,7 @@ class KPI_Advanced_Features {
 		<?php
 		return ob_get_clean();
 	}
-	
+
 	/**
 	 * Export resolution history to CSV
 	 *
@@ -129,56 +129,59 @@ class KPI_Advanced_Features {
 	 */
 	public static function export_resolution_history_csv( $days = 30 ) {
 		$tracking = KPI_Tracker::get_tracking_data();
-		
+
 		if ( empty( $tracking['findings_resolved'] ) ) {
 			return '';
 		}
-		
+
 		$cutoff_date = gmdate( 'Y-m-d', strtotime( "-{$days} days" ) );
 		$resolutions = array_filter(
 			$tracking['findings_resolved'],
-			function( $item ) use ( $cutoff_date ) {
+			function ( $item ) use ( $cutoff_date ) {
 				return isset( $item['date'] ) && substr( $item['date'], 0, 10 ) >= $cutoff_date;
 			}
 		);
-		
+
 		if ( empty( $resolutions ) ) {
 			return '';
 		}
-		
+
 		// Create CSV in uploads directory
-		$upload_dir = wp_upload_dir();
+		$upload_dir   = wp_upload_dir();
 		$csv_filename = 'wpshadow-resolutions-' . gmdate( 'Y-m-d-His' ) . '.csv';
-		$csv_path = trailingslashit( $upload_dir['path'] ) . $csv_filename;
-		
+		$csv_path     = trailingslashit( $upload_dir['path'] ) . $csv_filename;
+
 		$fp = fopen( $csv_path, 'w' );
-		
+
 		// CSV Headers
 		fputcsv( $fp, array( 'Date', 'Finding ID', 'Resolution Type', 'User ID', 'Category', 'Time Saved (min)', 'Labor Cost ($)' ) );
-		
+
 		// CSV Rows
 		foreach ( $resolutions as $resolution ) {
 			$finding_id = $resolution['finding_id'] ?? 'unknown';
-			$metadata = KPI_Metadata::get( $finding_id );
+			$metadata   = KPI_Metadata::get( $finding_id );
 			$time_saved = $metadata['time_to_fix_minutes'] ?? 15;
 			$labor_cost = round( ( $time_saved / 60 ) * 50, 2 );
-			
-			fputcsv( $fp, array(
-				$resolution['date'] ?? '',
-				$finding_id,
-				$resolution['resolution_type'] ?? 'unknown',
-				$resolution['user_id'] ?? 0,
-				$metadata['category'] ?? 'general',
-				$time_saved,
-				$labor_cost,
-			) );
+
+			fputcsv(
+				$fp,
+				array(
+					$resolution['date'] ?? '',
+					$finding_id,
+					$resolution['resolution_type'] ?? 'unknown',
+					$resolution['user_id'] ?? 0,
+					$metadata['category'] ?? 'general',
+					$time_saved,
+					$labor_cost,
+				)
+			);
 		}
-		
+
 		fclose( $fp );
-		
+
 		return $csv_path;
 	}
-	
+
 	/**
 	 * Render ROI calculator widget
 	 *
@@ -187,7 +190,7 @@ class KPI_Advanced_Features {
 	 * @return void Outputs HTML.
 	 */
 	public static function render_roi_calculator() {
-		$kpis = KPI_Tracker::get_kpi_summary();
+		$kpis             = KPI_Tracker::get_kpi_summary();
 		$time_saved_hours = $kpis['time_saved_hours'];
 		?>
 		<div class="wpshadow-roi-calculator" class="wps-m-20-p-20-rounded-8">
@@ -246,7 +249,7 @@ class KPI_Advanced_Features {
 		</div>
 		<?php
 	}
-	
+
 	/**
 	 * Render advanced features panel (email + CSV export)
 	 *

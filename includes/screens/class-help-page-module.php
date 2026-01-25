@@ -98,7 +98,7 @@ function wpshadow_render_help() {
 					<div class="wps-card-header" style="padding-bottom: 12px; border-bottom: 1px solid #eee;">
 						<div class="wps-flex-gap-12-items-flex-start">
 							<span class="dashicons <?php echo esc_attr( $item['icon'] ); ?>" 
-								  style="font-size: 32px; width: 32px; height: 32px; color: #0073aa;"></span>
+									style="font-size: 32px; width: 32px; height: 32px; color: #0073aa;"></span>
 							<div>
 								<h3 class="wps-card-title" class="wps-m-0">
 									<?php echo esc_html( $item['title'] ); ?>
@@ -113,18 +113,18 @@ function wpshadow_render_help() {
 						<div class="wps-flex-gap-8">
 							<?php if ( ! empty( $item['url'] ) ) : ?>
 								<a href="<?php echo esc_url( $item['url'] ); ?>" 
-								   target="_blank" rel="noopener noreferrer"
-								   class="wps-btn wps-btn-secondary"
-								   class="wps-p-6">
+									target="_blank" rel="noopener noreferrer"
+									class="wps-btn wps-btn-secondary"
+									class="wps-p-6">
 									<span class="dashicons dashicons-external" style="margin-right: 4px; font-size: 14px;"></span>
 									<?php esc_html_e( 'Read Article', 'wpshadow' ); ?>
 								</a>
 							<?php endif; ?>
 							<?php if ( ! empty( $item['video'] ) ) : ?>
 								<a href="<?php echo esc_url( $item['video'] ); ?>" 
-								   target="_blank" rel="noopener noreferrer"
-								   class="wps-btn wps-btn-secondary"
-								   class="wps-p-6">
+									target="_blank" rel="noopener noreferrer"
+									class="wps-btn wps-btn-secondary"
+									class="wps-p-6">
 									<span class="dashicons dashicons-video-alt2" style="margin-right: 4px; font-size: 14px;"></span>
 									<?php esc_html_e( 'Watch Video', 'wpshadow' ); ?>
 								</a>

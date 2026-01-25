@@ -24,12 +24,12 @@ use WPShadow\Core\Diagnostic_Lean_Checks;
  * @guardian-integrated Pending
  */
 class Diagnostic_Users_Orphaned_Accounts extends Diagnostic_Base {
-	protected static $slug = 'users-orphaned-accounts';
-	protected static $title = 'Orphaned User Accounts';
-	protected static $description = 'Are there user accounts with no activity?';
-	protected static $category = 'Users & Team';
+	protected static $slug         = 'users-orphaned-accounts';
+	protected static $title        = 'Orphaned User Accounts';
+	protected static $description  = 'Are there user accounts with no activity?';
+	protected static $category     = 'Users & Team';
 	protected static $threat_level = 'low';
-	protected static $family = 'general';
+	protected static $family       = 'general';
 	protected static $family_label = 'General';
 
 	/**
@@ -38,7 +38,7 @@ class Diagnostic_Users_Orphaned_Accounts extends Diagnostic_Base {
 	 * @return ?array Null if pass, array of findings if fail
 	 */
 	public function check(): ?array {
-		$users = get_users( [ 'fields' => 'ID' ] );
+		$users = get_users( array( 'fields' => 'ID' ) );
 
 		if ( empty( $users ) || count( $users ) < 2 ) {
 			return null; // Only admin or very few users
@@ -52,7 +52,7 @@ class Diagnostic_Users_Orphaned_Accounts extends Diagnostic_Base {
 				// Check if never logged in or very old
 				$last_login = get_user_meta( $user_id, 'last_login', true );
 				if ( empty( $last_login ) ) {
-					$inactive_users++;
+					++$inactive_users;
 				}
 			}
 		}

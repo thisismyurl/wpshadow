@@ -23,14 +23,14 @@ use WPShadow\Core\Diagnostic_Lean_Checks;
  * @verified 2026-01-24 - Batch 4 implementation
  * @guardian-integrated Pending
  */
-class Diagnostic_Users_Profile_Photo_Adoption extends Diagnostic_Base
-{
-	protected static $slug = 'users-profile-photo-adoption';
-	protected static $title = 'Users with Profile Photo';
-	protected static $description = 'What percentage of users have uploaded a profile photo?';
-	protected static $category = 'Users & Team';
+class Diagnostic_Users_Profile_Photo_Adoption extends Diagnostic_Base {
+
+	protected static $slug         = 'users-profile-photo-adoption';
+	protected static $title        = 'Users with Profile Photo';
+	protected static $description  = 'What percentage of users have uploaded a profile photo?';
+	protected static $category     = 'Users & Team';
 	protected static $threat_level = 'low';
-	protected static $family = 'general';
+	protected static $family       = 'general';
 	protected static $family_label = 'General';
 
 	/**
@@ -38,22 +38,21 @@ class Diagnostic_Users_Profile_Photo_Adoption extends Diagnostic_Base
 	 *
 	 * @return ?array Null if pass, array of findings if fail
 	 */
-	public function check(): ?array
-	{
+	public function check(): ?array {
 		// Check if a profile photo plugin is active
-		$profile_plugins = [
+		$profile_plugins = array(
 			'user-avatar',
 			'wp-user-avatar',
 			'members',
 			'gravatar',
-			'buddypress'
-		];
+			'buddypress',
+		);
 
 		$has_profiles = false;
-		foreach ($profile_plugins as $plugin) {
+		foreach ( $profile_plugins as $plugin ) {
 			if (
-				is_plugin_active($plugin . '/' . $plugin . '.php') ||
-				is_plugin_active($plugin)
+				is_plugin_active( $plugin . '/' . $plugin . '.php' ) ||
+				is_plugin_active( $plugin )
 			) {
 				$has_profiles = true;
 				break;
@@ -61,9 +60,9 @@ class Diagnostic_Users_Profile_Photo_Adoption extends Diagnostic_Base
 		}
 
 		// If no profile plugin, informational
-		if (! $has_profiles) {
+		if ( ! $has_profiles ) {
 			$total_users = count_users();
-			if ($total_users['total_users'] > 1) {
+			if ( $total_users['total_users'] > 1 ) {
 				return Diagnostic_Lean_Checks::build_finding(
 					'users-profile-photo-adoption',
 					'No User Avatar Plugin Found',

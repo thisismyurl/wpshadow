@@ -81,7 +81,7 @@ class Diagnostic_Gdpr_Data_Deletion_Capability extends Diagnostic_Base {
 	public static function check(): ?array {
 		// Check if user data deletion is supported
 		// WordPress has built-in export/deletion features, check if accessible
-		
+
 		// Check if privacy page exists (which has delete data functionality in newer WP)
 		$privacy_policy_id = (int) get_option( 'wp_page_for_privacy_policy' );
 
@@ -119,7 +119,7 @@ class Diagnostic_Gdpr_Data_Deletion_Capability extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Gdpr Data Deletion Capability
 	 * Slug: gdpr-data-deletion-capability
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -140,15 +140,13 @@ class Diagnostic_Gdpr_Data_Deletion_Capability extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

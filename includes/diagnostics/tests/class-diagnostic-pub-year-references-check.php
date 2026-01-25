@@ -114,7 +114,7 @@ class Diagnostic_Pub_Year_References_Check extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Pub Year References Check
 	 * Slug: pub-year-references-check
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -135,15 +135,13 @@ class Diagnostic_Pub_Year_References_Check extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

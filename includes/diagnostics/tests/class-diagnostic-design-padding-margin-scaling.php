@@ -11,19 +11,19 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/design-padding-margin-scaling
  */
 class Diagnostic_Design_PADDING_MARGIN_SCALING extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'design-padding-margin-scaling',
-            'title' => __('Padding & Margin Scaling', 'wpshadow'),
-            'description' => __('Verifies margins/padding scale with viewport (clamp or breakpoints).', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'design',
-            'kb_link' => 'https://wpshadow.com/kb/design-padding-margin-scaling',
-            'training_link' => 'https://wpshadow.com/training/design-padding-margin-scaling',
-            'auto_fixable' => false,
-            'threat_level' => 5
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'design-padding-margin-scaling',
+			'title'         => __( 'Padding & Margin Scaling', 'wpshadow' ),
+			'description'   => __( 'Verifies margins/padding scale with viewport (clamp or breakpoints).', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'design',
+			'kb_link'       => 'https://wpshadow.com/kb/design-padding-margin-scaling',
+			'training_link' => 'https://wpshadow.com/training/design-padding-margin-scaling',
+			'auto_fixable'  => false,
+			'threat_level'  => 5,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -31,12 +31,12 @@ class Diagnostic_Design_PADDING_MARGIN_SCALING extends Diagnostic_Base {
 	 * Diagnostic: Design PADDING MARGIN SCALING
 	 * Slug: -design-padding-margin-scaling
 	 * File: class-diagnostic-design-padding-margin-scaling.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Design PADDING MARGIN SCALING
 	 * Slug: -design-padding-margin-scaling
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -49,11 +49,16 @@ class Diagnostic_Design_PADDING_MARGIN_SCALING extends Diagnostic_Base {
 	 */
 	public static function test_live__design_padding_margin_scaling(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Padding and margin scales consistently across site'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Padding and margin scales consistently across site',
+			);
 		}
 		$message = $result['description'] ?? 'Padding/margin scaling issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

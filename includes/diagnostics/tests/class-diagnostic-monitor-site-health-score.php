@@ -2,7 +2,19 @@
 declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
-class Diagnostic_Monitor_Site_Health_Score extends Diagnostic_Base { public static function check(): ?array { return ['id' => 'monitor-site-health', 'title' => __('Overall Site Health Score', 'wpshadow'), 'description' => __('Composite score: uptime, speed, security, errors, updates. Guides prioritization of fixes.', 'wpshadow'), 'severity' => 'high', 'category' => 'monitoring', 'kb_link' => 'https://wpshadow.com/kb/site-health/', 'training_link' => 'https://wpshadow.com/training/maintenance/', 'auto_fixable' => false, 'threat_level' => 8]; } 
+class Diagnostic_Monitor_Site_Health_Score extends Diagnostic_Base {
+	public static function check(): ?array {
+		return array(
+			'id'            => 'monitor-site-health',
+			'title'         => __( 'Overall Site Health Score', 'wpshadow' ),
+			'description'   => __( 'Composite score: uptime, speed, security, errors, updates. Guides prioritization of fixes.', 'wpshadow' ),
+			'severity'      => 'high',
+			'category'      => 'monitoring',
+			'kb_link'       => 'https://wpshadow.com/kb/site-health/',
+			'training_link' => 'https://wpshadow.com/training/maintenance/',
+			'auto_fixable'  => false,
+			'threat_level'  => 8,
+		); }
 
 	/**
 	 * Live test for this diagnostic
@@ -10,12 +22,12 @@ class Diagnostic_Monitor_Site_Health_Score extends Diagnostic_Base { public stat
 	 * Diagnostic: Monitor Site Health Score
 	 * Slug: -monitor-site-health-score
 	 * File: class-diagnostic-monitor-site-health-score.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Monitor Site Health Score
 	 * Slug: -monitor-site-health-score
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -28,11 +40,16 @@ class Diagnostic_Monitor_Site_Health_Score extends Diagnostic_Base { public stat
 	 */
 	public static function test_live__monitor_site_health_score(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Site health score is excellent and maintained'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Site health score is excellent and maintained',
+			);
 		}
 		$message = $result['description'] ?? 'Site health concern detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

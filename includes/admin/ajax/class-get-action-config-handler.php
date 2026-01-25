@@ -20,7 +20,7 @@ class Get_Action_Config_Handler extends AJAX_Handler_Base {
 	 * Register AJAX hook
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_get_action_config', [ __CLASS__, 'handle' ] );
+		add_action( 'wp_ajax_wpshadow_get_action_config', array( __CLASS__, 'handle' ) );
 	}
 
 	/**
@@ -38,6 +38,6 @@ class Get_Action_Config_Handler extends AJAX_Handler_Base {
 
 		$fields = Workflow_Wizard::get_action_config( $action_id );
 
-		self::send_success( [ 'fields' => $fields ] );
+		self::send_success( array( 'fields' => $fields ) );
 	}
 }

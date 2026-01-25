@@ -81,63 +81,67 @@ class Diagnostic_Wcag_Aria_Attributes extends Diagnostic_Base {
 	}
 
 	protected static function get_guardian_html(): string {
-		if (isset($_POST['html']) && is_string($_POST['html'])) {
-			return sanitize_text_field(wp_unslash($_POST['html']));
+		if ( isset( $_POST['html'] ) && is_string( $_POST['html'] ) ) {
+			return sanitize_text_field( wp_unslash( $_POST['html'] ) );
 		}
 		return '';
 	}
 
 	public static function check(): ?array {
 		$html = self::get_guardian_html();
-		if (empty($html)) return null;
-
-		$issues = [];
-		try {
-			$dom = new \DOMDocument();
-			@$dom->loadHTML($html);
-			$xpath = new \DOMXPath($dom);
-
-			// Check interactive elements for ARIA attributes
-			$buttons = $xpath->query('//button');
-			$inputs = $xpath->query('//input[@type="button"]');
-			$all_interactive = $buttons->length + $inputs->length;
-
-			if ($all_interactive > 0) {
-				$with_aria = 0;
-				foreach ($buttons as $btn) {
-					if ($btn->hasAttribute('aria-label') || $btn->hasAttribute('aria-describedby')) {
-						$with_aria++;
-					}
-				}
-				if ($with_aria < $all_interactive / 2) {
-					$issues[] = 'Interactive elements missing ARIA attributes';
-				}
-			}
-		} catch (\Exception $e) {
+		if ( empty( $html ) ) {
 			return null;
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'wcag-aria-attributes',
-			'title' => 'ARIA attributes missing',
-			'description' => 'Interactive elements should have proper ARIA attributes',
-			'severity' => 'medium',
-			'category' => 'accessibility',
+		$issues = array();
+		try {
+			$dom = new \DOMDocument();
+			@$dom->loadHTML( $html );
+			$xpath = new \DOMXPath( $dom );
+
+			// Check interactive elements for ARIA attributes
+			$buttons         = $xpath->query( '//button' );
+			$inputs          = $xpath->query( '//input[@type="button"]' );
+			$all_interactive = $buttons->length + $inputs->length;
+
+			if ( $all_interactive > 0 ) {
+				$with_aria = 0;
+				foreach ( $buttons as $btn ) {
+					if ( $btn->hasAttribute( 'aria-label' ) || $btn->hasAttribute( 'aria-describedby' ) ) {
+						++$with_aria;
+					}
+				}
+				if ( $with_aria < $all_interactive / 2 ) {
+					$issues[] = 'Interactive elements missing ARIA attributes';
+				}
+			}
+		} catch ( \Exception $e ) {
+			return null;
+		}
+
+		return empty( $issues ) ? null : array(
+			'id'           => 'wcag-aria-attributes',
+			'title'        => 'ARIA attributes missing',
+			'description'  => 'Interactive elements should have proper ARIA attributes',
+			'severity'     => 'medium',
+			'category'     => 'accessibility',
 			'threat_level' => 54,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	public static function test_live_wcag_aria_attributes(): array {
 		$good = '<html><body><button aria-label="Close">X</button></body></html>';
-		$bad = '<html><body><button>X</button></body></html>';
+		$bad  = '<html><body><button>X</button></body></html>';
 
 		$_POST['html'] = $good;
-		$r1 = self::check();
+		$r1            = self::check();
 		$_POST['html'] = $bad;
-		$r2 = self::check();
+		$r2            = self::check();
 
-		return ['passed' => is_null($r1) && is_array($r2), 'message' => 'ARIA attributes check working'];
+		return array(
+			'passed'  => is_null( $r1 ) && is_array( $r2 ),
+			'message' => 'ARIA attributes check working',
+		);
 	}
-	}
-
+}

@@ -1,7 +1,7 @@
 <?php
 /**
  * Notion Terminology
- * 
+ *
  * @package WPShadow
  */
 
@@ -9,10 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-return [
+return array(
 	'platform'       => 'notion',
 	'label'          => __( 'Notion', 'wpshadow' ),
-	'terms'          => [
+	'terms'          => array(
 		'post'           => __( 'Page', 'wpshadow' ),
 		'page'           => __( 'Page', 'wpshadow' ),
 		'plugin'         => __( 'Integration', 'wpshadow' ),
@@ -34,7 +34,7 @@ return [
 		'featured_image' => __( 'Cover', 'wpshadow' ),
 		'author'         => __( 'Creator', 'wpshadow' ),
 		'comment'        => __( 'Comment', 'wpshadow' ),
-	],
+	),
 	'kb_article'     => 'https://wpshadow.com/kb/notion-to-wordpress/',
 	'training_video' => 'https://wpshadow.com/training/notion-to-wordpress/',
-];
+);

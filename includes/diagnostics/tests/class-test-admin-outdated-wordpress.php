@@ -22,7 +22,7 @@ namespace WPShadow\Diagnostics\Tests;
 
 use WPShadow\Diagnostics\Diagnostic_Base;
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -33,16 +33,15 @@ if (! defined('ABSPATH')) {
  *
  * @verified Not yet tested
  */
-class Test_Admin_Outdated_WordPress extends Diagnostic_Base
-{
+class Test_Admin_Outdated_WordPress extends Diagnostic_Base {
+
 
 	/**
 	 * Run the diagnostic test
 	 *
 	 * @return array|null Diagnostic result array, or null if no issue found
 	 */
-	public function check(): ?array
-	{
+	public function check(): ?array {
 		// Get current WordPress version
 		global $wp_version;
 		$current_version = $wp_version;
@@ -50,56 +49,56 @@ class Test_Admin_Outdated_WordPress extends Diagnostic_Base
 		// Get latest version from WordPress.org
 		$update_data = $this->get_wordpress_update_data();
 
-		if (! $update_data) {
+		if ( ! $update_data ) {
 			// Cannot determine latest version, assume OK
 			return null;
 		}
 
-		$latest_version = $update_data['latest_version'] ?? '';
+		$latest_version  = $update_data['latest_version'] ?? '';
 		$is_major_update = $update_data['is_major'] ?? false;
 
 		// If current version matches latest, we're good
-		if (version_compare($current_version, $latest_version, '>=')) {
+		if ( version_compare( $current_version, $latest_version, '>=' ) ) {
 			return null; // Pass - Up to date
 		}
 
 		// Calculate version difference
-		$version_parts = explode('.', $current_version);
-		$latest_parts = explode('.', $latest_version);
+		$version_parts = explode( '.', $current_version );
+		$latest_parts  = explode( '.', $latest_version );
 
-		$major_behind = (int) ($latest_parts[0] ?? 0) - (int) ($version_parts[0] ?? 0);
-		$minor_behind = (int) ($latest_parts[1] ?? 0) - (int) ($version_parts[1] ?? 0);
+		$major_behind = (int) ( $latest_parts[0] ?? 0 ) - (int) ( $version_parts[0] ?? 0 );
+		$minor_behind = (int) ( $latest_parts[1] ?? 0 ) - (int) ( $version_parts[1] ?? 0 );
 
 		// Determine threat level based on how far behind
-		if ($major_behind > 0) {
+		if ( $major_behind > 0 ) {
 			$threat_level = 70; // CRITICAL - Major version behind
-			$severity = 'critical';
-		} elseif ($minor_behind >= 3) {
+			$severity     = 'critical';
+		} elseif ( $minor_behind >= 3 ) {
 			$threat_level = 60; // HIGH - 3+ minor versions behind
-			$severity = 'high';
-		} elseif ($minor_behind >= 1) {
+			$severity     = 'high';
+		} elseif ( $minor_behind >= 1 ) {
 			$threat_level = 45; // MEDIUM - 1-2 minor versions behind
-			$severity = 'medium';
+			$severity     = 'medium';
 		} else {
 			$threat_level = 30; // LOW - Patch version behind
-			$severity = 'low';
+			$severity     = 'low';
 		}
 
 		return array(
-			'id'           => 'admin-outdated-wordpress',
-			'title'        => 'WordPress Core is Outdated',
-			'description'  => sprintf(
+			'id'            => 'admin-outdated-wordpress',
+			'title'         => 'WordPress Core is Outdated',
+			'description'   => sprintf(
 				'WordPress %s is installed, but %s is available. Running outdated WordPress exposes your site to known security vulnerabilities. Update immediately to protect your site.',
 				$current_version,
 				$latest_version
 			),
-			'kb_link'      => 'https://wpshadow.com/kb/update-wordpress-core',
+			'kb_link'       => 'https://wpshadow.com/kb/update-wordpress-core',
 			'training_link' => 'https://wpshadow.com/training/safe-wordpress-updates',
-			'auto_fixable' => false, // Core updates should be manual
-			'threat_level' => $threat_level,
-			'module'       => 'security',
-			'priority'     => 1, // HIGHEST PRIORITY
-			'meta'         => array(
+			'auto_fixable'  => false, // Core updates should be manual
+			'threat_level'  => $threat_level,
+			'module'        => 'security',
+			'priority'      => 1, // HIGHEST PRIORITY
+			'meta'          => array(
 				'current_version' => $current_version,
 				'latest_version'  => $latest_version,
 				'major_behind'    => $major_behind,
@@ -115,36 +114,35 @@ class Test_Admin_Outdated_WordPress extends Diagnostic_Base
 	 *
 	 * @return array|null Update data or null if unavailable
 	 */
-	private function get_wordpress_update_data(): ?array
-	{
+	private function get_wordpress_update_data(): ?array {
 		// First try to get from core update check
-		if (! function_exists('get_core_updates')) {
+		if ( ! function_exists( 'get_core_updates' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/update.php';
 		}
 
 		$updates = get_core_updates();
 
-		if (is_array($updates) && ! empty($updates)) {
+		if ( is_array( $updates ) && ! empty( $updates ) ) {
 			$latest_update = $updates[0];
 
 			// Check if it's an upgrade (not already installed)
-			if (isset($latest_update->response) && $latest_update->response === 'upgrade') {
+			if ( isset( $latest_update->response ) && $latest_update->response === 'upgrade' ) {
 				return array(
 					'latest_version' => $latest_update->version ?? '',
-					'is_major'       => strpos($latest_update->version ?? '', '.0') !== false,
+					'is_major'       => strpos( $latest_update->version ?? '', '.0' ) !== false,
 				);
 			}
 		}
 
 		// Fallback: Check transient directly
-		$update_core = get_site_transient('update_core');
+		$update_core = get_site_transient( 'update_core' );
 
-		if (is_object($update_core) && isset($update_core->updates) && is_array($update_core->updates)) {
-			foreach ($update_core->updates as $update) {
-				if (isset($update->response) && $update->response === 'upgrade') {
+		if ( is_object( $update_core ) && isset( $update_core->updates ) && is_array( $update_core->updates ) ) {
+			foreach ( $update_core->updates as $update ) {
+				if ( isset( $update->response ) && $update->response === 'upgrade' ) {
 					return array(
 						'latest_version' => $update->version ?? '',
-						'is_major'       => strpos($update->version ?? '', '.0') !== false,
+						'is_major'       => strpos( $update->version ?? '', '.0' ) !== false,
 					);
 				}
 			}
@@ -159,8 +157,7 @@ class Test_Admin_Outdated_WordPress extends Diagnostic_Base
 	 *
 	 * @return array Diagnostic information
 	 */
-	public static function get_info(): array
-	{
+	public static function get_info(): array {
 		return array(
 			'name'        => 'Outdated WordPress Version',
 			'category'    => 'security',

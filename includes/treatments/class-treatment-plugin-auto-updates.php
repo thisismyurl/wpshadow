@@ -19,7 +19,7 @@ class Treatment_Plugin_Auto_Updates extends Treatment_Base {
 	public static function get_finding_id() {
 		return 'plugin-auto-updates-disabled';
 	}
-	
+
 	public static function apply() {
 		// Enable auto-updates for all plugins.
 		$all_plugins = array_keys( get_plugins() );
@@ -30,7 +30,7 @@ class Treatment_Plugin_Auto_Updates extends Treatment_Base {
 			'message' => 'Auto-updates enabled for all plugins.',
 		);
 	}
-	
+
 	public static function undo() {
 		delete_site_option( 'auto_update_plugins' );
 		return array(

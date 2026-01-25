@@ -6,13 +6,13 @@
  * @package WPShadow
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if (! current_user_can('read')) {
-	wp_die('Insufficient permissions.');
+if ( ! current_user_can( 'read' ) ) {
+	wp_die( 'Insufficient permissions.' );
 }
 
 // Include the activity history view
-include WPSHADOW_PATH . 'includes/views/activity-history.php';
+require WPSHADOW_PATH . 'includes/views/activity-history.php';

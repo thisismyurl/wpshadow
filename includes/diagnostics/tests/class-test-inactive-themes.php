@@ -14,74 +14,76 @@ use WPShadow\Diagnostics\Diagnostic_Base;
  *
  * @since 1.2.0
  */
-class Test_Inactive_Themes extends Diagnostic_Base
-{
+class Test_Inactive_Themes extends Diagnostic_Base {
+
 
 	/**
 	 * Check for inactive themes
 	 *
 	 * @return array|null Diagnostic array if issues found, null if all good
 	 */
-	public static function check(): ?array
-	{
-		$all_themes = wp_get_themes();
+	public static function check(): ?array {
+		$all_themes   = wp_get_themes();
 		$active_theme = wp_get_theme();
-		$active_slug = $active_theme->get_stylesheet();
+		$active_slug  = $active_theme->get_stylesheet();
 
 		// Count inactive themes
-		$inactive_count = count($all_themes) - 1; // -1 for active theme
+		$inactive_count = count( $all_themes ) - 1; // -1 for active theme
 
 		// Threshold: 3+ inactive themes is wasteful
-		if ($inactive_count < 3) {
+		if ( $inactive_count < 3 ) {
 			return null;
 		}
 
 		// Calculate total size of inactive themes
-		$total_size = 0;
-		$inactive_themes = [];
+		$total_size      = 0;
+		$inactive_themes = array();
 
-		foreach ($all_themes as $slug => $theme) {
-			if ($slug !== $active_slug) {
-				$theme_path = $theme->get_theme_root() . '/' . $slug;
-				$size = self::get_dir_size($theme_path);
+		foreach ( $all_themes as $slug => $theme ) {
+			if ( $slug !== $active_slug ) {
+				$theme_path  = $theme->get_theme_root() . '/' . $slug;
+				$size        = self::get_dir_size( $theme_path );
 				$total_size += $size;
 
-				$inactive_themes[] = [
-					'name'    => $theme->get('Name'),
+				$inactive_themes[] = array(
+					'name'    => $theme->get( 'Name' ),
 					'slug'    => $slug,
-					'version' => $theme->get('Version'),
-					'author'  => $theme->get('Author'),
+					'version' => $theme->get( 'Version' ),
+					'author'  => $theme->get( 'Author' ),
 					'size'    => $size,
-				];
+				);
 			}
 		}
 
 		// Sort by size descending
-		usort($inactive_themes, function ($a, $b) {
-			return $b['size'] <=> $a['size'];
-		});
+		usort(
+			$inactive_themes,
+			function ( $a, $b ) {
+				return $b['size'] <=> $a['size'];
+			}
+		);
 
 		// Calculate threat level
-		$threat = min(40, $inactive_count * 3);
+		$threat = min( 40, $inactive_count * 3 );
 
-		return [
-			'threat_level'    => $threat,
-			'threat_color'    => $threat > 30 ? 'red' : 'yellow',
-			'passed'          => false,
-			'issue'           => sprintf(
+		return array(
+			'threat_level'  => $threat,
+			'threat_color'  => $threat > 30 ? 'red' : 'yellow',
+			'passed'        => false,
+			'issue'         => sprintf(
 				'Found %d inactive themes using %s disk space',
 				$inactive_count,
-				self::format_bytes($total_size)
+				self::format_bytes( $total_size )
 			),
-			'metadata'        => [
+			'metadata'      => array(
 				'inactive_count' => $inactive_count,
 				'total_size'     => $total_size,
-				'formatted_size' => self::format_bytes($total_size),
-				'top_themes'     => array_slice($inactive_themes, 0, 5),
-			],
-			'kb_link'         => 'https://wpshadow.com/kb/inactive-themes/',
-			'training_link'   => 'https://wpshadow.com/training/cleanup-themes/',
-		];
+				'formatted_size' => self::format_bytes( $total_size ),
+				'top_themes'     => array_slice( $inactive_themes, 0, 5 ),
+			),
+			'kb_link'       => 'https://wpshadow.com/kb/inactive-themes/',
+			'training_link' => 'https://wpshadow.com/training/cleanup-themes/',
+		);
 	}
 
 	/**
@@ -89,18 +91,17 @@ class Test_Inactive_Themes extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_inactive_themes_count(): array
-	{
-		$all_themes = wp_get_themes();
-		$inactive_count = count($all_themes) - 1;
+	public static function test_inactive_themes_count(): array {
+		$all_themes     = wp_get_themes();
+		$inactive_count = count( $all_themes ) - 1;
 
-		return [
+		return array(
 			'test_name'   => 'Inactive Themes Count',
-			'total'       => count($all_themes),
+			'total'       => count( $all_themes ),
 			'inactive'    => $inactive_count,
 			'passed'      => $inactive_count < 3,
-			'description' => sprintf('Detected %d total themes, %d inactive', count($all_themes), $inactive_count),
-		];
+			'description' => sprintf( 'Detected %d total themes, %d inactive', count( $all_themes ), $inactive_count ),
+		);
 	}
 
 	/**
@@ -108,27 +109,26 @@ class Test_Inactive_Themes extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_inactive_themes_size(): array
-	{
-		$all_themes = wp_get_themes();
+	public static function test_inactive_themes_size(): array {
+		$all_themes   = wp_get_themes();
 		$active_theme = wp_get_theme();
-		$active_slug = $active_theme->get_stylesheet();
-		$total_size = 0;
+		$active_slug  = $active_theme->get_stylesheet();
+		$total_size   = 0;
 
-		foreach ($all_themes as $slug => $theme) {
-			if ($slug !== $active_slug) {
-				$theme_path = $theme->get_theme_root() . '/' . $slug;
-				$total_size += self::get_dir_size($theme_path);
+		foreach ( $all_themes as $slug => $theme ) {
+			if ( $slug !== $active_slug ) {
+				$theme_path  = $theme->get_theme_root() . '/' . $slug;
+				$total_size += self::get_dir_size( $theme_path );
 			}
 		}
 
-		return [
+		return array(
 			'test_name'      => 'Inactive Themes Disk Space',
 			'total_bytes'    => $total_size,
-			'formatted_size' => self::format_bytes($total_size),
+			'formatted_size' => self::format_bytes( $total_size ),
 			'passed'         => $total_size < 50 * 1024 * 1024, // 50MB threshold
-			'description'    => sprintf('Inactive themes use %s disk space', self::format_bytes($total_size)),
-		];
+			'description'    => sprintf( 'Inactive themes use %s disk space', self::format_bytes( $total_size ) ),
+		);
 	}
 
 	/**
@@ -136,31 +136,30 @@ class Test_Inactive_Themes extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_inactive_themes_list(): array
-	{
-		$all_themes = wp_get_themes();
-		$active_theme = wp_get_theme();
-		$active_slug = $active_theme->get_stylesheet();
-		$inactive_list = [];
+	public static function test_inactive_themes_list(): array {
+		$all_themes    = wp_get_themes();
+		$active_theme  = wp_get_theme();
+		$active_slug   = $active_theme->get_stylesheet();
+		$inactive_list = array();
 
-		foreach ($all_themes as $slug => $theme) {
-			if ($slug !== $active_slug) {
-				$inactive_list[] = [
-					'name'    => $theme->get('Name'),
+		foreach ( $all_themes as $slug => $theme ) {
+			if ( $slug !== $active_slug ) {
+				$inactive_list[] = array(
+					'name'    => $theme->get( 'Name' ),
 					'slug'    => $slug,
-					'version' => $theme->get('Version'),
-					'author'  => $theme->get('Author'),
-				];
+					'version' => $theme->get( 'Version' ),
+					'author'  => $theme->get( 'Author' ),
+				);
 			}
 		}
 
-		return [
-			'test_name'    => 'Inactive Themes List',
+		return array(
+			'test_name'       => 'Inactive Themes List',
 			'inactive_themes' => $inactive_list,
-			'count'        => count($inactive_list),
-			'passed'       => count($inactive_list) < 3,
-			'description'  => sprintf('Found %d inactive themes', count($inactive_list)),
-		];
+			'count'           => count( $inactive_list ),
+			'passed'          => count( $inactive_list ) < 3,
+			'description'     => sprintf( 'Found %d inactive themes', count( $inactive_list ) ),
+		);
 	}
 
 	/**
@@ -169,26 +168,25 @@ class Test_Inactive_Themes extends Diagnostic_Base
 	 * @param string $path Directory path
 	 * @return int Total size in bytes
 	 */
-	private static function get_dir_size(string $path): int
-	{
+	private static function get_dir_size( string $path ): int {
 		$size = 0;
 
-		if (! is_dir($path)) {
+		if ( ! is_dir( $path ) ) {
 			return 0;
 		}
 
 		try {
 			$iterator = new \RecursiveIteratorIterator(
-				new \RecursiveDirectoryIterator($path, \RecursiveDirectoryIterator::SKIP_DOTS),
+				new \RecursiveDirectoryIterator( $path, \RecursiveDirectoryIterator::SKIP_DOTS ),
 				\RecursiveIteratorIterator::SELF_FIRST
 			);
 
-			foreach ($iterator as $file) {
-				if (is_file($file)) {
-					$size += filesize($file);
+			foreach ( $iterator as $file ) {
+				if ( is_file( $file ) ) {
+					$size += filesize( $file );
 				}
 			}
-		} catch (\Exception $e) {
+		} catch ( \Exception $e ) {
 			// Silently fail if directory not accessible
 			return 0;
 		}
@@ -202,15 +200,14 @@ class Test_Inactive_Themes extends Diagnostic_Base
 	 * @param int $bytes Number of bytes
 	 * @return string Formatted size
 	 */
-	private static function format_bytes(int $bytes): string
-	{
-		$units = ['B', 'KB', 'MB', 'GB'];
-		$bytes = max($bytes, 0);
-		$pow = floor(($bytes ? log($bytes) : 0) / log(1024));
-		$pow = min($pow, count($units) - 1);
-		$bytes /= (1 << (10 * $pow));
+	private static function format_bytes( int $bytes ): string {
+		$units  = array( 'B', 'KB', 'MB', 'GB' );
+		$bytes  = max( $bytes, 0 );
+		$pow    = floor( ( $bytes ? log( $bytes ) : 0 ) / log( 1024 ) );
+		$pow    = min( $pow, count( $units ) - 1 );
+		$bytes /= ( 1 << ( 10 * $pow ) );
 
-		return round($bytes, 2) . ' ' . $units[$pow];
+		return round( $bytes, 2 ) . ' ' . $units[ $pow ];
 	}
 
 	/**
@@ -218,8 +215,7 @@ class Test_Inactive_Themes extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_name(): string
-	{
+	public static function get_name(): string {
 		return 'Inactive Themes';
 	}
 
@@ -228,8 +224,7 @@ class Test_Inactive_Themes extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_description(): string
-	{
+	public static function get_description(): string {
 		return 'Detects unused theme installations that waste disk space';
 	}
 
@@ -238,8 +233,7 @@ class Test_Inactive_Themes extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_category(): string
-	{
+	public static function get_category(): string {
 		return 'Performance';
 	}
 }

@@ -4,9 +4,19 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 class Diagnostic_Monitor_Time extends Diagnostic_Base {
-  public static function check(): ?array {
-    return ['id' => 'monitor-time_to_first_byte', 'title' => __('Time to First Byte Monitoring', 'wpshadow'), 'description' => __('Tracks TTFB trends. Increasing TTFB = infrastructure issue.', 'wpshadow'), 'severity' => 'medium', 'category' => 'monitoring', 'kb_link' => 'https://wpshadow.com/kb/', 'training_link' => 'https://wpshadow.com/training/', 'auto_fixable' => false, 'threat_level' => 6];
-  }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'monitor-time_to_first_byte',
+			'title'         => __( 'Time to First Byte Monitoring', 'wpshadow' ),
+			'description'   => __( 'Tracks TTFB trends. Increasing TTFB = infrastructure issue.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'monitoring',
+			'kb_link'       => 'https://wpshadow.com/kb/',
+			'training_link' => 'https://wpshadow.com/training/',
+			'auto_fixable'  => false,
+			'threat_level'  => 6,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -14,12 +24,12 @@ class Diagnostic_Monitor_Time extends Diagnostic_Base {
 	 * Diagnostic: Monitor Time
 	 * Slug: -monitor-time-to-first-byte
 	 * File: class-diagnostic-monitor-time-to-first-byte.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Monitor Time
 	 * Slug: -monitor-time-to-first-byte
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -32,11 +42,16 @@ class Diagnostic_Monitor_Time extends Diagnostic_Base {
 	 */
 	public static function test_live__monitor_time_to_first_byte(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Time to First Byte (TTFB) is within acceptable range'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Time to First Byte (TTFB) is within acceptable range',
+			);
 		}
 		$message = $result['description'] ?? 'TTFB performance issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

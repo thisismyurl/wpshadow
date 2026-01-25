@@ -8,7 +8,7 @@ use WPShadow\Core\Diagnostic_Base;
 /**
  * CONTENT QUALITY - Keyword Analysis Approach
  * ============================================================
- * 
+ *
  * DETECTION APPROACH:
  * Scan local content for quality/bias issues via keyword analysis
  *
@@ -112,44 +112,46 @@ class Diagnostic_Ai_Training_Data_Quality extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		$issues = [];
+		$issues = array();
 
 		// Check training data quality metrics
-		$quality_score = (float)get_option('wpshadow_training_data_quality_score', 0);
+		$quality_score = (float) get_option( 'wpshadow_training_data_quality_score', 0 );
 
-		if ($quality_score < 0.7) { // Less than 70% quality
+		if ( $quality_score < 0.7 ) { // Less than 70% quality
 			$issues[] = 'Training data quality score below 70% (need data cleanup)';
 		}
 
 		// Check for data completeness
-		$data_coverage = (int)get_option('wpshadow_training_data_coverage_percent', 0);
-		if ($data_coverage < 80) {
+		$data_coverage = (int) get_option( 'wpshadow_training_data_coverage_percent', 0 );
+		if ( $data_coverage < 80 ) {
 			$issues[] = 'Training data coverage below 80% (missing key fields)';
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'ai-training-data-quality',
-			'title' => 'Training data quality issues',
-			'description' => 'Improve data quality for better AI model performance',
-			'severity' => 'high',
-			'category' => 'ai_readiness',
+		return empty( $issues ) ? null : array(
+			'id'           => 'ai-training-data-quality',
+			'title'        => 'Training data quality issues',
+			'description'  => 'Improve data quality for better AI model performance',
+			'severity'     => 'high',
+			'category'     => 'ai_readiness',
 			'threat_level' => 65,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	public static function test_live_ai_training_data_quality(): array {
-		update_option('wpshadow_training_data_quality_score', 0.5);
-		update_option('wpshadow_training_data_coverage_percent', 60);
+		update_option( 'wpshadow_training_data_quality_score', 0.5 );
+		update_option( 'wpshadow_training_data_coverage_percent', 60 );
 		$r1 = self::check();
 
-		update_option('wpshadow_training_data_quality_score', 0.85);
-		update_option('wpshadow_training_data_coverage_percent', 90);
+		update_option( 'wpshadow_training_data_quality_score', 0.85 );
+		update_option( 'wpshadow_training_data_coverage_percent', 90 );
 		$r2 = self::check();
 
-		delete_option('wpshadow_training_data_quality_score');
-		delete_option('wpshadow_training_data_coverage_percent');
-		return ['passed' => is_array($r1) && is_null($r2), 'message' => 'Training data quality check working'];
+		delete_option( 'wpshadow_training_data_quality_score' );
+		delete_option( 'wpshadow_training_data_coverage_percent' );
+		return array(
+			'passed'  => is_array( $r1 ) && is_null( $r2 ),
+			'message' => 'Training data quality check working',
+		);
 	}
-	}
-
+}

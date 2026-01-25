@@ -5,49 +5,49 @@ namespace WPShadow\Onboarding;
 
 /**
  * Onboarding Manager
- * 
+ *
  * Helps users transition to WordPress from other platforms with friendly guidance.
- * 
+ *
  * Philosophy: #1 Helpful Neighbor - Guide without judgment
  * Philosophy: #8 Inspire Confidence - Make WordPress feel approachable
  * Philosophy: #5 Drive to KB - Link to learning resources
  * Philosophy: #6 Drive to Training - Educational journey
- * 
+ *
  * @since 1.2601.2201
  * @package WPShadow
  */
 class Onboarding_Manager {
-	
+
 	/**
 	 * User meta key for onboarding completion
 	 */
 	const META_ONBOARDING_COMPLETE = 'wpshadow_onboarding_complete';
-	
+
 	/**
 	 * User meta key for selected platform
 	 */
 	const META_PLATFORM = 'wpshadow_onboarding_platform';
-	
+
 	/**
 	 * User meta key for technical comfort level
 	 */
 	const META_COMFORT_LEVEL = 'wpshadow_onboarding_comfort_level';
-	
+
 	/**
 	 * User meta key for dismissed terms
 	 */
 	const META_DISMISSED_TERMS = 'wpshadow_onboarding_dismissed_terms';
-	
+
 	/**
 	 * User meta key for action count
 	 */
 	const META_ACTION_COUNT = 'wpshadow_onboarding_action_count';
-	
+
 	/**
 	 * User meta key for UI simplification preference
 	 */
 	const META_UI_SIMPLIFIED = 'wpshadow_onboarding_ui_simplified';
-	
+
 	/**
 	 * Initialize onboarding system
 	 *
@@ -56,20 +56,20 @@ class Onboarding_Manager {
 	 */
 	public static function init(): void {
 		// Track user actions for graduation
-		add_action( 'save_post', [ __CLASS__, 'track_action' ] );
-		add_action( 'updated_option', [ __CLASS__, 'track_action' ] );
-		add_action( 'wp_insert_comment', [ __CLASS__, 'track_action' ] );
-		
+		add_action( 'save_post', array( __CLASS__, 'track_action' ) );
+		add_action( 'updated_option', array( __CLASS__, 'track_action' ) );
+		add_action( 'wp_insert_comment', array( __CLASS__, 'track_action' ) );
+
 		// Check if should show graduation
-		add_action( 'admin_notices', [ __CLASS__, 'maybe_show_graduation' ] );
-		
+		add_action( 'admin_notices', array( __CLASS__, 'maybe_show_graduation' ) );
+
 		// Add settings page integration
-		add_action( 'wpshadow_settings_sections', [ __CLASS__, 'add_settings_section' ] );
+		add_action( 'wpshadow_settings_sections', array( __CLASS__, 'add_settings_section' ) );
 	}
-	
+
 	/**
 	 * Check if user needs onboarding
-	 * 
+	 *
 	 * @param int $user_id User ID (default: current user)
 	 * @return bool True if needs onboarding
 	 */
@@ -77,14 +77,14 @@ class Onboarding_Manager {
 		if ( ! $user_id ) {
 			$user_id = get_current_user_id();
 		}
-		
+
 		$complete = get_user_meta( $user_id, self::META_ONBOARDING_COMPLETE, true );
 		return empty( $complete );
 	}
-	
+
 	/**
 	 * Get user's selected platform
-	 * 
+	 *
 	 * @param int $user_id User ID (default: current user)
 	 * @return string Platform ID or empty string
 	 */
@@ -92,13 +92,13 @@ class Onboarding_Manager {
 		if ( ! $user_id ) {
 			$user_id = get_current_user_id();
 		}
-		
+
 		return get_user_meta( $user_id, self::META_PLATFORM, true ) ?: '';
 	}
-	
+
 	/**
 	 * Get user's technical comfort level
-	 * 
+	 *
 	 * @param int $user_id User ID (default: current user)
 	 * @return string Comfort level or empty string
 	 */
@@ -106,13 +106,13 @@ class Onboarding_Manager {
 		if ( ! $user_id ) {
 			$user_id = get_current_user_id();
 		}
-		
+
 		return get_user_meta( $user_id, self::META_COMFORT_LEVEL, true ) ?: '';
 	}
-	
+
 	/**
 	 * Check if UI should be simplified for user
-	 * 
+	 *
 	 * @param int $user_id User ID (default: current user)
 	 * @return bool True if UI should be simplified
 	 */
@@ -120,27 +120,27 @@ class Onboarding_Manager {
 		if ( ! $user_id ) {
 			$user_id = get_current_user_id();
 		}
-		
+
 		// If user hasn't completed onboarding, use simplified UI
 		if ( self::needs_onboarding( $user_id ) ) {
 			return false; // Don't simplify until they choose
 		}
-		
+
 		// Check user preference
 		$simplified = get_user_meta( $user_id, self::META_UI_SIMPLIFIED, true );
-		
+
 		// Default to simplified if they selected a platform (not WordPress)
 		if ( '' === $simplified ) {
 			$platform = self::get_user_platform( $user_id );
-			return ! empty( $platform ) && 'wordpress' !== $platform;
+			return ! empty( $platform ) && 'WordPress' !== $platform;
 		}
-		
+
 		return (bool) $simplified;
 	}
-	
+
 	/**
 	 * Get user's action count (for graduation tracking)
-	 * 
+	 *
 	 * @param int $user_id User ID (default: current user)
 	 * @return int Action count
 	 */
@@ -148,50 +148,50 @@ class Onboarding_Manager {
 		if ( ! $user_id ) {
 			$user_id = get_current_user_id();
 		}
-		
+
 		return (int) get_user_meta( $user_id, self::META_ACTION_COUNT, true );
 	}
-	
+
 	/**
 	 * Track user action for graduation
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function track_action(): void {
 		$user_id = get_current_user_id();
-		
+
 		// Only track if user has platform set and UI simplified
 		if ( ! self::is_ui_simplified( $user_id ) ) {
 			return;
 		}
-		
+
 		$count = self::get_action_count( $user_id );
 		update_user_meta( $user_id, self::META_ACTION_COUNT, $count + 1 );
 	}
-	
+
 	/**
 	 * Maybe show graduation notice
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function maybe_show_graduation(): void {
 		$user_id = get_current_user_id();
-		
+
 		// Check if eligible for graduation
 		if ( ! self::is_ui_simplified( $user_id ) ) {
 			return;
 		}
-		
+
 		$count = self::get_action_count( $user_id );
 		if ( $count < 20 ) {
 			return;
 		}
-		
+
 		// Check if already dismissed
 		if ( get_user_meta( $user_id, 'wpshadow_graduation_dismissed', true ) ) {
 			return;
 		}
-		
+
 		// Show graduation notice
 		?>
 		<div class="notice notice-success is-dismissible wpshadow-graduation-notice">
@@ -239,7 +239,7 @@ class Onboarding_Manager {
 		</script>
 		<?php
 	}
-	
+
 	/**
 	 * AJAX handlers have been migrated to class-based handlers.
 	 * See: includes/admin/ajax/class-save-onboarding-handler.php
@@ -247,13 +247,13 @@ class Onboarding_Manager {
 	 * See: includes/admin/ajax/class-dismiss-term-handler.php
 	 * See: includes/admin/ajax/class-show-all-features-handler.php
 	 * See: includes/admin/ajax/class-dismiss-graduation-handler.php
-	 * 
+	 *
 	 * Registered via AJAX_Router in class-ajax-router.php
 	 */
-	
+
 	/**
 	 * Add onboarding settings section
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function add_settings_section(): void {
@@ -263,9 +263,9 @@ class Onboarding_Manager {
 			<p><?php esc_html_e( 'Customize your WordPress learning experience', 'wpshadow' ); ?></p>
 			
 			<?php
-			$user_id = get_current_user_id();
-			$platform = self::get_user_platform( $user_id );
-			$comfort = self::get_comfort_level( $user_id );
+			$user_id    = get_current_user_id();
+			$platform   = self::get_user_platform( $user_id );
+			$comfort    = self::get_comfort_level( $user_id );
 			$simplified = self::is_ui_simplified( $user_id );
 			?>
 			
@@ -275,7 +275,7 @@ class Onboarding_Manager {
 					<td>
 						<?php if ( $platform ) : ?>
 							<?php
-							$platform_labels = [
+							$platform_labels = array(
 								'wordpress'   => __( 'WordPress (experienced)', 'wpshadow' ),
 								'word'        => __( 'Microsoft Word', 'wpshadow' ),
 								'google-docs' => __( 'Google Docs', 'wpshadow' ),
@@ -284,7 +284,7 @@ class Onboarding_Manager {
 								'moodle'      => __( 'Moodle', 'wpshadow' ),
 								'notion'      => __( 'Notion', 'wpshadow' ),
 								'none'        => __( 'New to all of this', 'wpshadow' ),
-							];
+							);
 							echo esc_html( $platform_labels[ $platform ] ?? $platform );
 							?>
 						<?php else : ?>
@@ -311,7 +311,7 @@ class Onboarding_Manager {
 		</div>
 		<?php
 	}
-	
+
 	/**
 	 * Get user's configuration preferences
 	 *
@@ -322,18 +322,18 @@ class Onboarding_Manager {
 		if ( null === $user_id ) {
 			$user_id = get_current_user_id();
 		}
-		
-		$defaults = [
-			'auto_scan' => true,
-			'show_tips' => true,
+
+		$defaults = array(
+			'auto_scan'          => true,
+			'show_tips'          => true,
 			'track_improvements' => true,
-		];
-		
+		);
+
 		$config = get_user_meta( $user_id, 'wpshadow_config_preferences', true );
-		
+
 		return is_array( $config ) ? wp_parse_args( $config, $defaults ) : $defaults;
 	}
-	
+
 	/**
 	 * Get user's privacy preferences
 	 *
@@ -344,17 +344,17 @@ class Onboarding_Manager {
 		if ( null === $user_id ) {
 			$user_id = get_current_user_id();
 		}
-		
-		$defaults = [
-			'email_critical' => false,
-			'email_weekly' => false,
+
+		$defaults = array(
+			'email_critical'    => false,
+			'email_weekly'      => false,
 			'share_diagnostics' => false,
-			'newsletter' => false,
-			'newsletter_email' => '',
-		];
-		
+			'newsletter'        => false,
+			'newsletter_email'  => '',
+		);
+
 		$privacy = get_user_meta( $user_id, 'wpshadow_privacy_preferences', true );
-		
+
 		return is_array( $privacy ) ? wp_parse_args( $privacy, $defaults ) : $defaults;
 	}
 }

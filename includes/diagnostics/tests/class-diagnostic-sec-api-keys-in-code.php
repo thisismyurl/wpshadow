@@ -24,12 +24,12 @@ use WPShadow\Core\Diagnostic_Lean_Checks;
  * @guardian-integrated Pending
  */
 class Diagnostic_Sec_Api_Keys_In_Code extends Diagnostic_Base {
-	protected static $slug = 'sec-api-keys-in-code';
-	protected static $title = 'API Keys Exposed in Code';
-	protected static $description = 'Are API keys or secrets stored in code/config?';
-	protected static $category = 'Security & Compliance';
+	protected static $slug         = 'sec-api-keys-in-code';
+	protected static $title        = 'API Keys Exposed in Code';
+	protected static $description  = 'Are API keys or secrets stored in code/config?';
+	protected static $category     = 'Security & Compliance';
 	protected static $threat_level = 'high';
-	protected static $family = 'general';
+	protected static $family       = 'general';
 	protected static $family_label = 'General';
 
 	/**
@@ -47,11 +47,11 @@ class Diagnostic_Sec_Api_Keys_In_Code extends Diagnostic_Base {
 		$config_content = file_get_contents( $config_file );
 
 		// Look for patterns that suggest exposed secrets
-		$suspicious_patterns = [
+		$suspicious_patterns = array(
 			'/define\s*\(\s*[\'"].*API.*KEY.*[\'"]/i',
 			'/define\s*\(\s*[\'"].*SECRET.*[\'"]/i',
 			'/define\s*\(\s*[\'"].*TOKEN.*[\'"]/i',
-		];
+		);
 
 		$found_issues = false;
 		foreach ( $suspicious_patterns as $pattern ) {

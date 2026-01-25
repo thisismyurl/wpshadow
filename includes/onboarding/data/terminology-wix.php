@@ -1,7 +1,7 @@
 <?php
 /**
  * Wix Terminology
- * 
+ *
  * @package WPShadow
  */
 
@@ -9,10 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-return [
+return array(
 	'platform'       => 'wix',
 	'label'          => __( 'Wix', 'wpshadow' ),
-	'terms'          => [
+	'terms'          => array(
 		'post'           => __( 'Blog Post', 'wpshadow' ),
 		'page'           => __( 'Site Page', 'wpshadow' ),
 		'plugin'         => __( 'App', 'wpshadow' ),
@@ -34,7 +34,7 @@ return [
 		'featured_image' => __( 'Featured Image', 'wpshadow' ),
 		'author'         => __( 'Author', 'wpshadow' ),
 		'comment'        => __( 'Comment', 'wpshadow' ),
-	],
+	),
 	'kb_article'     => 'https://wpshadow.com/kb/wix-to-wordpress/',
 	'training_video' => 'https://wpshadow.com/training/wix-to-wordpress/',
-];
+);

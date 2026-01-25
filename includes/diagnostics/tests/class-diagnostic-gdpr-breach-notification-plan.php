@@ -9,14 +9,14 @@ use WPShadow\Core\Diagnostic_Base;
  * This is a placeholder implementation.
  */
 class Diagnostic_GdprBreachNotificationPlan extends Diagnostic_Base {
-	protected static $slug = 'gdpr-breach-notification-plan';
+	protected static $slug  = 'gdpr-breach-notification-plan';
 	protected static $title = 'Gdpr Breach Notification Plan';
-	
+
 	public static function check(): ?array {
 		// TODO: Implement diagnostic logic
 		return null;
 	}
-	
+
 	public static function run(): array {
 		return array();
 	}

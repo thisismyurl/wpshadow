@@ -46,8 +46,8 @@ class WPShadow_CLI extends WP_CLI_Command {
 	 *     wp wpshadow activity list --category=security
 	 */
 	public function activity_list( array $args, array $assoc_args ) {
-		$limit    = isset( $assoc_args['limit'] ) ? (int) $assoc_args['limit'] : 20;
-		$filters  = array();
+		$limit   = isset( $assoc_args['limit'] ) ? (int) $assoc_args['limit'] : 20;
+		$filters = array();
 
 		if ( isset( $assoc_args['category'] ) ) {
 			$filters['category'] = sanitize_key( $assoc_args['category'] );
@@ -57,15 +57,18 @@ class WPShadow_CLI extends WP_CLI_Command {
 		}
 
 		$result = Activity_Logger::get_activities( $filters, $limit, 0 );
-		$items  = array_map( function( $entry ) {
-			return array(
-				'date'     => $entry['date'],
-				'action'   => $entry['action'],
-				'category' => $entry['category'],
-				'details'  => $entry['details'],
-				'user'     => $entry['user_name'],
-			);
-		}, $result['activities'] );
+		$items  = array_map(
+			function ( $entry ) {
+				return array(
+					'date'     => $entry['date'],
+					'action'   => $entry['action'],
+					'category' => $entry['category'],
+					'details'  => $entry['details'],
+					'user'     => $entry['user_name'],
+				);
+			},
+			$result['activities']
+		);
 
 		if ( empty( $items ) ) {
 			WP_CLI::success( 'No activity found.' );
@@ -190,7 +193,7 @@ class WPShadow_CLI extends WP_CLI_Command {
 
 		if ( $dry_run ) {
 			WP_CLI::line( "Would apply treatment: {$matched::get_name()}" );
-			WP_CLI::line( "Description: " . wp_strip_all_tags( $matched::get_description() ) );
+			WP_CLI::line( 'Description: ' . wp_strip_all_tags( $matched::get_description() ) );
 			return;
 		}
 

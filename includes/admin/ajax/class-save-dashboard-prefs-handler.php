@@ -22,29 +22,29 @@ use WPShadow\Core\Dashboard_Customization;
  * Capability: read
  */
 class Save_Dashboard_Prefs_Handler extends AJAX_Handler_Base {
-	
+
 	/**
 	 * Register AJAX hook
 	 */
 	public static function register(): void {
 		add_action( 'wp_ajax_wpshadow_save_dashboard_prefs', array( __CLASS__, 'handle' ) );
 	}
-	
+
 	/**
 	 * Handle AJAX request to save dashboard preferences
 	 */
 	public static function handle(): void {
 		// Verify nonce and capability
 		self::verify_request( 'wpshadow_admin_nonce', 'read' );
-		
+
 		// Get and validate preferences
 		$prefs = isset( $_POST['prefs'] ) ? (array) $_POST['prefs'] : array();
-		
+
 		// Sanitize category names
 		$sanitized_prefs = array();
 		foreach ( $prefs as $category => $value ) {
 			$category = sanitize_key( $category );
-			
+
 			if ( is_array( $value ) ) {
 				$sanitized_prefs[ $category ] = array(
 					'visible' => isset( $value['visible'] ) ? (bool) $value['visible'] : true,
@@ -52,15 +52,17 @@ class Save_Dashboard_Prefs_Handler extends AJAX_Handler_Base {
 				);
 			}
 		}
-		
+
 		// Save preferences
 		$success = Dashboard_Customization::save_user_preferences( $sanitized_prefs );
-		
+
 		if ( $success ) {
-			self::send_success( array(
-				'message' => __( 'Dashboard preferences saved successfully', 'wpshadow' ),
-				'prefs'   => $sanitized_prefs,
-			) );
+			self::send_success(
+				array(
+					'message' => __( 'Dashboard preferences saved successfully', 'wpshadow' ),
+					'prefs'   => $sanitized_prefs,
+				)
+			);
 		} else {
 			self::send_error( __( 'Failed to save dashboard preferences', 'wpshadow' ) );
 		}

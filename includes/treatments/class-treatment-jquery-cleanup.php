@@ -19,7 +19,7 @@ class Treatment_jQuery_Cleanup extends Treatment_Base {
 	public static function get_finding_id() {
 		return 'jquery-front-loading';
 	}
-	
+
 	public static function apply() {
 		update_option( 'wpshadow_jquery_cleanup_enabled', true );
 		KPI_Tracker::log_fix_applied( self::get_finding_id(), 'auto' );
@@ -28,7 +28,7 @@ class Treatment_jQuery_Cleanup extends Treatment_Base {
 			'message' => 'Front-end jQuery will be dequeued when not required.',
 		);
 	}
-	
+
 	public static function undo() {
 		delete_option( 'wpshadow_jquery_cleanup_enabled' );
 		return array(

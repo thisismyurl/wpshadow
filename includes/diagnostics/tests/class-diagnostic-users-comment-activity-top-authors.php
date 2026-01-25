@@ -95,27 +95,31 @@ class Diagnostic_Users_Comment_Activity_Top_Authors extends Diagnostic_Base {
 
 	public static function check(): ?array {
 		// Check if top authors have comment activity
-		$top_authors = new \WP_User_Query( [
-			'role__in' => [ 'author', 'editor', 'administrator' ],
-			'number'   => 10,
-			'orderby'  => 'post_count',
-			'order'    => 'DESC',
-			'fields'   => 'ID',
-		] );
+		$top_authors = new \WP_User_Query(
+			array(
+				'role__in' => array( 'author', 'editor', 'administrator' ),
+				'number'   => 10,
+				'orderby'  => 'post_count',
+				'order'    => 'DESC',
+				'fields'   => 'ID',
+			)
+		);
 
-		$author_ids = $top_authors->get_results();
+		$author_ids       = $top_authors->get_results();
 		$inactive_authors = 0;
 
 		foreach ( $author_ids as $author_id ) {
-			$comment_count = get_comments( [
-				'count'        => true,
-				'user_id'      => $author_id,
-				'approved'     => 1,
-				'status'       => 'approve',
-			] );
+			$comment_count = get_comments(
+				array(
+					'count'    => true,
+					'user_id'  => $author_id,
+					'approved' => 1,
+					'status'   => 'approve',
+				)
+			);
 
 			if ( $comment_count === 0 ) {
-				$inactive_authors++;
+				++$inactive_authors;
 			}
 		}
 
@@ -166,10 +170,8 @@ class Diagnostic_Users_Comment_Activity_Top_Authors extends Diagnostic_Base {
 
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

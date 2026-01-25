@@ -33,15 +33,15 @@ class Treatment_Limit_Post_Revisions extends Treatment_Base {
 	 * @param array $options Treatment options
 	 * @return bool Success status
 	 */
-	public static function apply( array $options = [] ): bool {
-		$limit = isset( $options['limit'] ) ? (int) $options['limit'] : 5;
+	public static function apply( array $options = array() ): bool {
+		$limit       = isset( $options['limit'] ) ? (int) $options['limit'] : 5;
 		$cleanup_old = isset( $options['cleanup_old'] ) ? (bool) $options['cleanup_old'] : false;
 
 		// Create backup
-		$backup = [
+		$backup = array(
 			'previous_limit' => defined( 'WP_POST_REVISIONS' ) ? WP_POST_REVISIONS : 'unlimited',
 			'timestamp'      => time(),
-		];
+		);
 
 		self::create_backup( $backup );
 

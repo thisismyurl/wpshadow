@@ -19,8 +19,8 @@ namespace WPShadow\Core;
  * @package WPShadow
  * @subpackage Core
  */
-class Options_Manager
-{
+class Options_Manager {
+
 
 	/**
 	 * Get option with optional caching
@@ -40,16 +40,16 @@ class Options_Manager
 		int $transient_ttl = HOUR_IN_SECONDS
 	) {
 		// Use transient if requested (for temporary data)
-		if ($use_transient) {
-			$transient_name = self::get_transient_name($option);
-			$cached = get_transient($transient_name);
-			if (false !== $cached) {
+		if ( $use_transient ) {
+			$transient_name = self::get_transient_name( $option );
+			$cached         = get_transient( $transient_name );
+			if ( false !== $cached ) {
 				return $cached;
 			}
 		}
 
 		// Fall back to option
-		return get_option($option, $default);
+		return get_option( $option, $default );
 	}
 
 	/**
@@ -70,12 +70,12 @@ class Options_Manager
 		bool $autoload = false
 	): bool {
 		// Set option (autoload=false for large/rarely-used data)
-		$result = update_option($option, $value);
+		$result = update_option( $option, $value );
 
 		// Cache with transient if requested
-		if ($use_transient) {
-			$transient_name = self::get_transient_name($option);
-			set_transient($transient_name, $value, $transient_ttl);
+		if ( $use_transient ) {
+			$transient_name = self::get_transient_name( $option );
+			set_transient( $transient_name, $value, $transient_ttl );
 		}
 
 		return $result;
@@ -89,15 +89,14 @@ class Options_Manager
 	 * @param mixed $default Default value
 	 * @return mixed Typed value
 	 */
-	public static function get_typed(string $option, string $type = 'string', $default = null)
-	{
-		$value = get_option($option);
+	public static function get_typed( string $option, string $type = 'string', $default = null ) {
+		$value = get_option( $option );
 
-		if (false === $value) {
+		if ( false === $value ) {
 			return $default;
 		}
 
-		switch ($type) {
+		switch ( $type ) {
 			case 'int':
 				return (int) $value;
 			case 'float':
@@ -105,7 +104,7 @@ class Options_Manager
 			case 'bool':
 				return (bool) $value;
 			case 'array':
-				return is_array($value) ? $value : [];
+				return is_array( $value ) ? $value : array();
 			case 'string':
 			default:
 				return (string) $value;
@@ -120,12 +119,11 @@ class Options_Manager
 	 * @param string $option Option name
 	 * @return string Transient name
 	 */
-	private static function get_transient_name(string $option): string
-	{
+	private static function get_transient_name( string $option ): string {
 		// Transients have 40-char limit, hash if necessary
 		$transient = 'wpshadow_tmp_' . $option;
-		if (strlen($transient) > 40) {
-			$transient = 'wpshadow_tmp_' . substr(md5($option), 0, 27);
+		if ( strlen( $transient ) > 40 ) {
+			$transient = 'wpshadow_tmp_' . substr( md5( $option ), 0, 27 );
 		}
 		return $transient;
 	}
@@ -136,14 +134,13 @@ class Options_Manager
 	 * @param string $option Option name
 	 * @return bool Success
 	 */
-	public static function delete(string $option): bool
-	{
+	public static function delete( string $option ): bool {
 		// Delete option
-		delete_option($option);
+		delete_option( $option );
 
 		// Delete associated transient
-		$transient_name = self::get_transient_name($option);
-		delete_transient($transient_name);
+		$transient_name = self::get_transient_name( $option );
+		delete_transient( $transient_name );
 
 		return true;
 	}
@@ -155,9 +152,8 @@ class Options_Manager
 	 * @param int $default Default value
 	 * @return int Option value
 	 */
-	public static function get_int(string $option, int $default = 0): int
-	{
-		return (int) get_option($option, $default);
+	public static function get_int( string $option, int $default = 0 ): int {
+		return (int) get_option( $option, $default );
 	}
 
 	/**
@@ -167,9 +163,8 @@ class Options_Manager
 	 * @param bool $default Default value
 	 * @return bool Option value
 	 */
-	public static function get_bool(string $option, bool $default = false): bool
-	{
-		return (bool) get_option($option, $default);
+	public static function get_bool( string $option, bool $default = false ): bool {
+		return (bool) get_option( $option, $default );
 	}
 
 	/**
@@ -179,10 +174,9 @@ class Options_Manager
 	 * @param array $default Default value
 	 * @return array Option value
 	 */
-	public static function get_array(string $option, array $default = []): array
-	{
-		$value = get_option($option);
-		return is_array($value) ? $value : $default;
+	public static function get_array( string $option, array $default = array() ): array {
+		$value = get_option( $option );
+		return is_array( $value ) ? $value : $default;
 	}
 
 	/**
@@ -192,11 +186,10 @@ class Options_Manager
 	 * @param int $offset Increment amount
 	 * @return int New value
 	 */
-	public static function increment(string $option, int $offset = 1): int
-	{
-		$value = self::get_int($option, 0);
-		$new = $value + $offset;
-		self::set($option, $new);
+	public static function increment( string $option, int $offset = 1 ): int {
+		$value = self::get_int( $option, 0 );
+		$new   = $value + $offset;
+		self::set( $option, $new );
 		return $new;
 	}
 
@@ -208,17 +201,16 @@ class Options_Manager
 	 * @param int $limit Maximum array size (optional)
 	 * @return array Updated array
 	 */
-	public static function append_array(string $option, $item, int $limit = 0): array
-	{
-		$array = self::get_array($option, []);
+	public static function append_array( string $option, $item, int $limit = 0 ): array {
+		$array   = self::get_array( $option, array() );
 		$array[] = $item;
 
 		// Limit array size if specified
-		if ($limit > 0 && count($array) > $limit) {
-			$array = array_slice($array, -$limit);
+		if ( $limit > 0 && count( $array ) > $limit ) {
+			$array = array_slice( $array, -$limit );
 		}
 
-		self::set($option, $array);
+		self::set( $option, $array );
 		return $array;
 	}
 }

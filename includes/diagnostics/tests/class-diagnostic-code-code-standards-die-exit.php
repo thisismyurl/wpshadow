@@ -12,19 +12,19 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/code-standards-die-exit
  */
 class Diagnostic_Code_CODE_STANDARDS_DIE_EXIT extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'code-standards-die-exit',
-            'title' => __('Die/Exit in Plugins', 'wpshadow'),
-            'description' => __('Flags die()/exit() calls in plugin code (non-fatal alternative needed).', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'code-quality',
-            'kb_link' => 'https://wpshadow.com/kb/code-standards-die-exit',
-            'training_link' => 'https://wpshadow.com/training/code-standards-die-exit',
-            'auto_fixable' => false,
-            'threat_level' => 6
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'code-standards-die-exit',
+			'title'         => __( 'Die/Exit in Plugins', 'wpshadow' ),
+			'description'   => __( 'Flags die()/exit() calls in plugin code (non-fatal alternative needed).', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'code-quality',
+			'kb_link'       => 'https://wpshadow.com/kb/code-standards-die-exit',
+			'training_link' => 'https://wpshadow.com/training/code-standards-die-exit',
+			'auto_fixable'  => false,
+			'threat_level'  => 6,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -32,12 +32,12 @@ class Diagnostic_Code_CODE_STANDARDS_DIE_EXIT extends Diagnostic_Base {
 	 * Diagnostic: Code CODE STANDARDS DIE EXIT
 	 * Slug: -code-code-standards-die-exit
 	 * File: class-diagnostic-code-code-standards-die-exit.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Code CODE STANDARDS DIE EXIT
 	 * Slug: -code-code-standards-die-exit
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -50,11 +50,16 @@ class Diagnostic_Code_CODE_STANDARDS_DIE_EXIT extends Diagnostic_Base {
 	 */
 	public static function test_live__code_code_standards_die_exit(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Code follows standards - no die/exit statements detected'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Code follows standards - no die/exit statements detected',
+			);
 		}
 		$message = $result['description'] ?? 'die/exit statements found in code';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

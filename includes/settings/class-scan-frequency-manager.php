@@ -235,7 +235,7 @@ class Scan_Frequency_Manager {
 		// Run diagnostics
 		if ( $config['run_diagnostics'] && class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' ) ) {
 			// Use the enabled scans method which respects wpshadow_scan_types setting
-		$findings = \WPShadow\Diagnostics\Diagnostic_Registry::run_enabled_scans();
+			$findings                   = \WPShadow\Diagnostics\Diagnostic_Registry::run_enabled_scans();
 			$results['diagnostics_run'] = count( $findings );
 			$results['findings']        = array_sum( array_column( $findings, 'count' ) );
 		}

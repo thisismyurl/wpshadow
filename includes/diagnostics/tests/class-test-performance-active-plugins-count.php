@@ -16,44 +16,42 @@ use WPShadow\Core\Diagnostic_Base;
  * @subpackage Diagnostics/Tests
  * @since 1.2601.2112
  */
-class Test_Performance_ActivePluginsCount extends Diagnostic_Base
-{
+class Test_Performance_ActivePluginsCount extends Diagnostic_Base {
 
-	public static function check(): ?array
-	{
+
+	public static function check(): ?array {
 		$plugins = get_plugins();
-		$active = get_option('active_plugins', []);
+		$active  = get_option( 'active_plugins', array() );
 
-		$active_count = count($active);
+		$active_count = count( $active );
 
 		// More than 50 active plugins is excessive
-		if ($active_count > 50) {
-			return [
-				'id' => 'active-plugins-count',
-				'title' => sprintf(__('%d plugins are active', 'wpshadow'), $active_count),
-				'description' => __('Too many plugins can slow down your site. Review and disable unnecessary plugins.', 'wpshadow'),
-				'severity' => 'low',
+		if ( $active_count > 50 ) {
+			return array(
+				'id'           => 'active-plugins-count',
+				'title'        => sprintf( __( '%d plugins are active', 'wpshadow' ), $active_count ),
+				'description'  => __( 'Too many plugins can slow down your site. Review and disable unnecessary plugins.', 'wpshadow' ),
+				'severity'     => 'low',
 				'threat_level' => 25,
-			];
+			);
 		}
 
 		return null;
 	}
 
-	public static function test_live_active_plugins_count(): array
-	{
+	public static function test_live_active_plugins_count(): array {
 		$result = self::check();
 
-		if (null === $result) {
-			return [
-				'passed' => true,
-				'message' => sprintf(__('Active plugins count is reasonable (%d)', 'wpshadow'), count(get_option('active_plugins', []))),
-			];
+		if ( null === $result ) {
+			return array(
+				'passed'  => true,
+				'message' => sprintf( __( 'Active plugins count is reasonable (%d)', 'wpshadow' ), count( get_option( 'active_plugins', array() ) ) ),
+			);
 		}
 
-		return [
-			'passed' => false,
+		return array(
+			'passed'  => false,
 			'message' => $result['description'],
-		];
+		);
 	}
 }

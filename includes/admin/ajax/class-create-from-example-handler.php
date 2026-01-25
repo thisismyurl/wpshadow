@@ -20,7 +20,7 @@ class Create_From_Example_Handler extends AJAX_Handler_Base {
 	 * Register AJAX hook
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_create_from_example', [ __CLASS__, 'handle' ] );
+		add_action( 'wp_ajax_wpshadow_create_from_example', array( __CLASS__, 'handle' ) );
 	}
 
 	/**
@@ -43,9 +43,11 @@ class Create_From_Example_Handler extends AJAX_Handler_Base {
 			return;
 		}
 
-		self::send_success( [
-			'message'  => 'Workflow created from example successfully.',
-			'workflow' => $result,
-		] );
+		self::send_success(
+			array(
+				'message'  => 'Workflow created from example successfully.',
+				'workflow' => $result,
+			)
+		);
 	}
 }

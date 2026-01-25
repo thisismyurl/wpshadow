@@ -8,7 +8,7 @@ use WPShadow\Core\Diagnostic_Base;
 /**
  * CONTENT QUALITY - Keyword Analysis Approach
  * ============================================================
- * 
+ *
  * DETECTION APPROACH:
  * Scan local content for quality/bias issues via keyword analysis
  *
@@ -112,46 +112,48 @@ class Diagnostic_Ai_Sentiment_Analysis extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		$issues = [];
+		$issues = array();
 
 		// Check if sentiment analysis is enabled
-		$sentiment_enabled = get_option('wpshadow_sentiment_analysis_enabled', false);
+		$sentiment_enabled = get_option( 'wpshadow_sentiment_analysis_enabled', false );
 
-		if (!$sentiment_enabled) {
+		if ( ! $sentiment_enabled ) {
 			$issues[] = 'Sentiment analysis not enabled';
 		}
 
 		// Check for recent sentiment data
-		$last_analysis = get_option('wpshadow_sentiment_last_run', 0);
-		$days_old = (time() - $last_analysis) / (24 * 3600);
+		$last_analysis = get_option( 'wpshadow_sentiment_last_run', 0 );
+		$days_old      = ( time() - $last_analysis ) / ( 24 * 3600 );
 
-		if ($days_old > 7) {
+		if ( $days_old > 7 ) {
 			$issues[] = 'Sentiment analysis data is stale (not run in 7 days)';
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'ai-sentiment-analysis',
-			'title' => 'Sentiment analysis not running',
-			'description' => 'Enable sentiment analysis to monitor user feedback',
-			'severity' => 'low',
-			'category' => 'ai_readiness',
+		return empty( $issues ) ? null : array(
+			'id'           => 'ai-sentiment-analysis',
+			'title'        => 'Sentiment analysis not running',
+			'description'  => 'Enable sentiment analysis to monitor user feedback',
+			'severity'     => 'low',
+			'category'     => 'ai_readiness',
 			'threat_level' => 30,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	public static function test_live_ai_sentiment_analysis(): array {
-		delete_option('wpshadow_sentiment_analysis_enabled');
-		delete_option('wpshadow_sentiment_last_run');
+		delete_option( 'wpshadow_sentiment_analysis_enabled' );
+		delete_option( 'wpshadow_sentiment_last_run' );
 		$r1 = self::check();
 
-		update_option('wpshadow_sentiment_analysis_enabled', true);
-		update_option('wpshadow_sentiment_last_run', time());
+		update_option( 'wpshadow_sentiment_analysis_enabled', true );
+		update_option( 'wpshadow_sentiment_last_run', time() );
 		$r2 = self::check();
 
-		delete_option('wpshadow_sentiment_analysis_enabled');
-		delete_option('wpshadow_sentiment_last_run');
-		return ['passed' => is_array($r1) && is_null($r2), 'message' => 'Sentiment analysis check working'];
+		delete_option( 'wpshadow_sentiment_analysis_enabled' );
+		delete_option( 'wpshadow_sentiment_last_run' );
+		return array(
+			'passed'  => is_array( $r1 ) && is_null( $r2 ),
+			'message' => 'Sentiment analysis check working',
+		);
 	}
-	}
-
+}

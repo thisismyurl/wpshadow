@@ -7,10 +7,10 @@ use WPShadow\Reporting\Notification_Manager;
 
 /**
  * Notification Preferences Form
- * 
+ *
  * UI for managing notification settings.
  * Alert type toggles, email management, frequency selection.
- * 
+ *
  * Features:
  * - Alert type preferences
  * - Multiple email management
@@ -19,10 +19,10 @@ use WPShadow\Reporting\Notification_Manager;
  * - Test notifications
  */
 class Notification_Preferences_Form {
-	
+
 	/**
 	 * Render preferences form
-	 * 
+	 *
 	 * @return string HTML output
 	 */
 	public static function render(): string {
@@ -124,49 +124,49 @@ class Notification_Preferences_Form {
 			</div>
 		</div>
 		<?php
-		
+
 		return ob_get_clean();
 	}
-	
+
 	/**
 	 * Render alert type toggles
-	 * 
+	 *
 	 * @return string HTML
 	 */
 	private static function render_alert_toggles(): string {
 		$preferences = Notification_Manager::get_default_preferences();
-		
-		$alert_types = [
-			'critical_issue' => [
+
+		$alert_types = array(
+			'critical_issue'   => array(
 				'label'       => __( 'Critical Issues', 'wpshadow' ),
 				'description' => __( 'Severe problems requiring immediate attention', 'wpshadow' ),
-			],
-			'auto_fix_failed' => [
+			),
+			'auto_fix_failed'  => array(
 				'label'       => __( 'Auto-Fix Failures', 'wpshadow' ),
 				'description' => __( 'Notifications when automated fixes fail', 'wpshadow' ),
-			],
-			'anomaly_detected' => [
+			),
+			'anomaly_detected' => array(
 				'label'       => __( 'Anomalies Detected', 'wpshadow' ),
 				'description' => __( 'Unusual system activity or patterns', 'wpshadow' ),
-			],
-			'daily_report' => [
+			),
+			'daily_report'     => array(
 				'label'       => __( 'Daily Report', 'wpshadow' ),
 				'description' => __( 'Summary of daily system activity and fixes', 'wpshadow' ),
-			],
-			'weekly_report' => [
+			),
+			'weekly_report'    => array(
 				'label'       => __( 'Weekly Report', 'wpshadow' ),
 				'description' => __( 'Comprehensive weekly performance report', 'wpshadow' ),
-			],
-			'monthly_report' => [
+			),
+			'monthly_report'   => array(
 				'label'       => __( 'Monthly Report', 'wpshadow' ),
 				'description' => __( 'Executive monthly summary', 'wpshadow' ),
-			],
-		];
-		
+			),
+		);
+
 		$html = '';
 		foreach ( $alert_types as $key => $config ) {
 			$is_enabled = $preferences[ $key ] ?? false;
-			$html .= sprintf(
+			$html      .= sprintf(
 				'<div class="alert-type-item">
 					<label class="alert-toggle">
 						<input type="checkbox" class="alert-checkbox" name="alerts[]" value="%s" %s />
@@ -180,18 +180,18 @@ class Notification_Preferences_Form {
 				esc_html( $config['description'] )
 			);
 		}
-		
+
 		return $html;
 	}
-	
+
 	/**
 	 * Render subscriptions list
-	 * 
+	 *
 	 * @return string HTML
 	 */
 	private static function render_subscriptions(): string {
 		$stats = Notification_Manager::get_statistics();
-		
+
 		$html = '<table class="subscriptions-table">
 			<thead>
 				<tr>
@@ -202,12 +202,16 @@ class Notification_Preferences_Form {
 				</tr>
 			</thead>
 			<tbody>';
-		
+
 		// Sample subscriptions
-		$subscriptions = [
-			['email' => get_option( 'admin_email', '' ), 'frequency' => 'weekly', 'status' => 'active'],
-		];
-		
+		$subscriptions = array(
+			array(
+				'email'     => get_option( 'admin_email', '' ),
+				'frequency' => 'weekly',
+				'status'    => 'active',
+			),
+		);
+
 		foreach ( $subscriptions as $sub ) {
 			$html .= sprintf(
 				'<tr>
@@ -228,20 +232,20 @@ class Notification_Preferences_Form {
 				esc_html__( 'Unsubscribe', 'wpshadow' )
 			);
 		}
-		
+
 		$html .= '</tbody></table>';
-		
+
 		return $html;
 	}
-	
+
 	/**
 	 * Render statistics
-	 * 
+	 *
 	 * @return string HTML
 	 */
 	private static function render_statistics(): string {
 		$stats = Notification_Manager::get_statistics();
-		
+
 		$html = '<div class="stats-grid">
 			<div class="stat-card">
 				<div class="stat-number">' . esc_html( (string) $stats['total_subscribers'] ) . '</div>
@@ -260,7 +264,7 @@ class Notification_Preferences_Form {
 				<div class="stat-label">' . esc_html__( 'Monthly', 'wpshadow' ) . '</div>
 			</div>
 		</div>';
-		
+
 		return $html;
 	}
 }

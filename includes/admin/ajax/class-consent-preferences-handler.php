@@ -39,9 +39,12 @@ class Consent_Preferences_Handler extends AJAX_Handler_Base {
 		$current_user = get_current_user_id();
 		$telemetry    = self::get_post_param( 'telemetry', 'bool', false, false );
 
-		First_Run_Consent::save_consent( $current_user, array(
-			'anonymized_telemetry' => (bool) $telemetry,
-		) );
+		First_Run_Consent::save_consent(
+			$current_user,
+			array(
+				'anonymized_telemetry' => (bool) $telemetry,
+			)
+		);
 
 		Activity_Logger::log(
 			'consent_saved',

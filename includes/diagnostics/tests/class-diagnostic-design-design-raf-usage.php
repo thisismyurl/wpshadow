@@ -12,19 +12,19 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/design-raf-usage
  */
 class Diagnostic_Design_DESIGN_RAF_USAGE extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'design-raf-usage',
-            'title' => __('rAF Usage', 'wpshadow'),
-            'description' => __('Checks animations use requestAnimationFrame instead of timers.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'design',
-            'kb_link' => 'https://wpshadow.com/kb/design-raf-usage',
-            'training_link' => 'https://wpshadow.com/training/design-raf-usage',
-            'auto_fixable' => false,
-            'threat_level' => 6
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'design-raf-usage',
+			'title'         => __( 'rAF Usage', 'wpshadow' ),
+			'description'   => __( 'Checks animations use requestAnimationFrame instead of timers.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'design',
+			'kb_link'       => 'https://wpshadow.com/kb/design-raf-usage',
+			'training_link' => 'https://wpshadow.com/training/design-raf-usage',
+			'auto_fixable'  => false,
+			'threat_level'  => 6,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -32,12 +32,12 @@ class Diagnostic_Design_DESIGN_RAF_USAGE extends Diagnostic_Base {
 	 * Diagnostic: Design DESIGN RAF USAGE
 	 * Slug: -design-design-raf-usage
 	 * File: class-diagnostic-design-design-raf-usage.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Design DESIGN RAF USAGE
 	 * Slug: -design-design-raf-usage
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -50,11 +50,16 @@ class Diagnostic_Design_DESIGN_RAF_USAGE extends Diagnostic_Base {
 	 */
 	public static function test_live__design_design_raf_usage(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'RequestAnimationFrame properly used for smooth animations'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'RequestAnimationFrame properly used for smooth animations',
+			);
 		}
 		$message = $result['description'] ?? 'RAF usage optimization issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

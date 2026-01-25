@@ -79,43 +79,45 @@ class Diagnostic_Ai_Personalization_Infrastructure extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		$issues = [];
+		$issues = array();
 
 		// Check for personalization infrastructure
-		$personalization_active = get_option('wpshadow_personalization_enabled', false);
-		$user_tracking = get_option('wpshadow_user_behavior_tracking', false);
+		$personalization_active = get_option( 'wpshadow_personalization_enabled', false );
+		$user_tracking          = get_option( 'wpshadow_user_behavior_tracking', false );
 
-		if (!$personalization_active) {
+		if ( ! $personalization_active ) {
 			$issues[] = 'Personalization infrastructure not configured';
 		}
 
-		if (!$user_tracking) {
+		if ( ! $user_tracking ) {
 			$issues[] = 'User behavior tracking disabled (needed for personalization)';
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'ai-personalization-infrastructure',
-			'title' => 'Personalization infrastructure missing',
-			'description' => 'Set up infrastructure to track and personalize user experiences',
-			'severity' => 'medium',
-			'category' => 'ai_readiness',
+		return empty( $issues ) ? null : array(
+			'id'           => 'ai-personalization-infrastructure',
+			'title'        => 'Personalization infrastructure missing',
+			'description'  => 'Set up infrastructure to track and personalize user experiences',
+			'severity'     => 'medium',
+			'category'     => 'ai_readiness',
 			'threat_level' => 40,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	public static function test_live_ai_personalization_infrastructure(): array {
-		delete_option('wpshadow_personalization_enabled');
-		delete_option('wpshadow_user_behavior_tracking');
+		delete_option( 'wpshadow_personalization_enabled' );
+		delete_option( 'wpshadow_user_behavior_tracking' );
 		$r1 = self::check();
 
-		update_option('wpshadow_personalization_enabled', true);
-		update_option('wpshadow_user_behavior_tracking', true);
+		update_option( 'wpshadow_personalization_enabled', true );
+		update_option( 'wpshadow_user_behavior_tracking', true );
 		$r2 = self::check();
 
-		delete_option('wpshadow_personalization_enabled');
-		delete_option('wpshadow_user_behavior_tracking');
-		return ['passed' => is_array($r1) && is_null($r2), 'message' => 'Personalization infrastructure check working'];
+		delete_option( 'wpshadow_personalization_enabled' );
+		delete_option( 'wpshadow_user_behavior_tracking' );
+		return array(
+			'passed'  => is_array( $r1 ) && is_null( $r2 ),
+			'message' => 'Personalization infrastructure check working',
+		);
 	}
-	}
-
+}

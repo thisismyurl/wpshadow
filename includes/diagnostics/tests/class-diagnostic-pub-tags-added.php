@@ -24,12 +24,12 @@ use WPShadow\Core\Diagnostic_Lean_Checks;
  * @guardian-integrated Pending
  */
 class Diagnostic_Pub_Tags_Added extends Diagnostic_Base {
-	protected static $slug = 'pub-tags-added';
-	protected static $title = 'Posts Have Tags';
-	protected static $description = 'Are published posts assigned relevant tags?';
-	protected static $category = 'Content Publishing';
+	protected static $slug         = 'pub-tags-added';
+	protected static $title        = 'Posts Have Tags';
+	protected static $description  = 'Are published posts assigned relevant tags?';
+	protected static $category     = 'Content Publishing';
 	protected static $threat_level = 'low';
-	protected static $family = 'general';
+	protected static $family       = 'general';
 	protected static $family_label = 'General';
 
 	/**
@@ -39,12 +39,14 @@ class Diagnostic_Pub_Tags_Added extends Diagnostic_Base {
 	 */
 	public function check(): ?array {
 		// Get all published posts
-		$posts = get_posts( [
-			'post_type'      => 'post',
-			'post_status'    => 'publish',
-			'posts_per_page' => -1,
-			'fields'         => 'ids'
-		] );
+		$posts = get_posts(
+			array(
+				'post_type'      => 'post',
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'fields'         => 'ids',
+			)
+		);
 
 		if ( empty( $posts ) ) {
 			return null; // No posts to check
@@ -55,7 +57,7 @@ class Diagnostic_Pub_Tags_Added extends Diagnostic_Base {
 		foreach ( $posts as $post_id ) {
 			$tags = get_the_tags( $post_id );
 			if ( is_array( $tags ) && count( $tags ) >= 3 ) {
-				$posts_with_tags++;
+				++$posts_with_tags;
 			}
 		}
 

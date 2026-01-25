@@ -21,17 +21,17 @@ class FAQ_Post_Type {
 	 * Bootstrap hooks.
 	 */
 	public static function init(): void {
-		add_action( 'init', [ __CLASS__, 'register_post_type' ] );
-		add_action( 'init', [ __CLASS__, 'register_taxonomy' ] );
-		add_action( 'init', [ __CLASS__, 'register_meta' ] );
-		add_action( 'init', [ __CLASS__, 'register_block' ] );
+		add_action( 'init', array( __CLASS__, 'register_post_type' ) );
+		add_action( 'init', array( __CLASS__, 'register_taxonomy' ) );
+		add_action( 'init', array( __CLASS__, 'register_meta' ) );
+		add_action( 'init', array( __CLASS__, 'register_block' ) );
 	}
 
 	/**
 	 * Register the FAQ custom post type.
 	 */
 	public static function register_post_type(): void {
-		$labels = [
+		$labels = array(
 			'name'               => __( 'FAQs', 'wpshadow' ),
 			'singular_name'      => __( 'FAQ', 'wpshadow' ),
 			'menu_name'          => __( 'FAQs', 'wpshadow' ),
@@ -43,24 +43,24 @@ class FAQ_Post_Type {
 			'search_items'       => __( 'Search FAQs', 'wpshadow' ),
 			'not_found'          => __( 'No FAQs found', 'wpshadow' ),
 			'not_found_in_trash' => __( 'No FAQs found in trash', 'wpshadow' ),
-		];
+		);
 
-		$args = [
+		$args = array(
 			'labels'             => $labels,
 			'public'             => true,
 			'publicly_queryable' => true,
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => [ 'slug' => 'faq' ],
+			'rewrite'            => array( 'slug' => 'faq' ),
 			'capability_type'    => 'post',
 			'has_archive'        => true,
 			'hierarchical'       => false,
 			'menu_position'      => 24,
 			'menu_icon'          => 'dashicons-editor-help',
 			'show_in_rest'       => true,
-			'supports'           => [ 'title', 'editor', 'excerpt', 'revisions', 'custom-fields' ],
-		];
+			'supports'           => array( 'title', 'editor', 'excerpt', 'revisions', 'custom-fields' ),
+		);
 
 		register_post_type( 'wpshadow_faq', $args );
 	}
@@ -69,7 +69,7 @@ class FAQ_Post_Type {
 	 * Register FAQ taxonomy for topics.
 	 */
 	public static function register_taxonomy(): void {
-		$labels = [
+		$labels = array(
 			'name'          => __( 'FAQ Topics', 'wpshadow' ),
 			'singular_name' => __( 'FAQ Topic', 'wpshadow' ),
 			'search_items'  => __( 'Search FAQ Topics', 'wpshadow' ),
@@ -79,20 +79,20 @@ class FAQ_Post_Type {
 			'add_new_item'  => __( 'Add New FAQ Topic', 'wpshadow' ),
 			'new_item_name' => __( 'New FAQ Topic Name', 'wpshadow' ),
 			'menu_name'     => __( 'FAQ Topics', 'wpshadow' ),
-		];
+		);
 
 		register_taxonomy(
 			'faq_topic',
-			[ 'wpshadow_faq' ],
-			[
+			array( 'wpshadow_faq' ),
+			array(
 				'hierarchical'      => false,
 				'labels'            => $labels,
 				'show_ui'           => true,
 				'show_admin_column' => true,
 				'query_var'         => true,
 				'show_in_rest'      => true,
-				'rewrite'           => [ 'slug' => 'faq-topic' ],
-			]
+				'rewrite'           => array( 'slug' => 'faq-topic' ),
+			)
 		);
 	}
 
@@ -100,17 +100,17 @@ class FAQ_Post_Type {
 	 * Register meta fields for FAQs.
 	 */
 	public static function register_meta(): void {
-		$meta = [
-			'wpshadow_faq_tooltip'        => 'string',
-			'wpshadow_faq_related_links'  => 'string',
-			'wpshadow_faq_order'          => 'number',
-		];
+		$meta = array(
+			'wpshadow_faq_tooltip'       => 'string',
+			'wpshadow_faq_related_links' => 'string',
+			'wpshadow_faq_order'         => 'number',
+		);
 
 		foreach ( $meta as $key => $type ) {
 			register_post_meta(
 				'wpshadow_faq',
 				$key,
-				[
+				array(
 					'single'            => true,
 					'type'              => $type,
 					'show_in_rest'      => true,
@@ -118,7 +118,7 @@ class FAQ_Post_Type {
 					'auth_callback'     => function () {
 						return current_user_can( 'edit_posts' );
 					},
-				]
+				)
 			);
 		}
 	}
@@ -135,7 +135,7 @@ class FAQ_Post_Type {
 			wp_register_script(
 				$script_handle,
 				$script_url,
-				[ 'wp-blocks', 'wp-element', 'wp-components', 'wp-i18n', 'wp-editor', 'wp-data' ],
+				array( 'wp-blocks', 'wp-element', 'wp-components', 'wp-i18n', 'wp-editor', 'wp-data' ),
 				'1.0.0',
 				true
 			);
@@ -143,15 +143,24 @@ class FAQ_Post_Type {
 
 		register_block_type(
 			'wpshadow/faq-list',
-			[
-				'attributes'      => [
-					'ids'     => [ 'type' => 'string', 'default' => '' ],
-					'topic'   => [ 'type' => 'string', 'default' => '' ],
-					'showExcerpt' => [ 'type' => 'boolean', 'default' => true ],
-				],
-				'editor_script'  => $script_handle,
-				'render_callback' => [ __CLASS__, 'render_block' ],
-			]
+			array(
+				'attributes'      => array(
+					'ids'         => array(
+						'type'    => 'string',
+						'default' => '',
+					),
+					'topic'       => array(
+						'type'    => 'string',
+						'default' => '',
+					),
+					'showExcerpt' => array(
+						'type'    => 'boolean',
+						'default' => true,
+					),
+				),
+				'editor_script'   => $script_handle,
+				'render_callback' => array( __CLASS__, 'render_block' ),
+			)
 		);
 	}
 
@@ -162,19 +171,19 @@ class FAQ_Post_Type {
 	 * @return string
 	 */
 	public static function render_block( array $atts ): string {
-		$ids_raw   = isset( $atts['ids'] ) ? $atts['ids'] : '';
-		$topic     = isset( $atts['topic'] ) ? sanitize_title( (string) $atts['topic'] ) : '';
+		$ids_raw      = isset( $atts['ids'] ) ? $atts['ids'] : '';
+		$topic        = isset( $atts['topic'] ) ? sanitize_title( (string) $atts['topic'] ) : '';
 		$show_excerpt = isset( $atts['showExcerpt'] ) ? (bool) $atts['showExcerpt'] : true;
 
 		$ids = array_filter( array_map( 'absint', explode( ',', (string) $ids_raw ) ) );
 
-		$args = [
+		$args = array(
 			'post_type'      => 'wpshadow_faq',
 			'post_status'    => 'publish',
 			'posts_per_page' => -1,
 			'orderby'        => 'menu_order date',
 			'order'          => 'ASC',
-		];
+		);
 
 		if ( ! empty( $ids ) ) {
 			$args['post__in'] = $ids;
@@ -182,13 +191,13 @@ class FAQ_Post_Type {
 		}
 
 		if ( ! empty( $topic ) ) {
-			$args['tax_query'] = [
-				[
+			$args['tax_query'] = array(
+				array(
 					'taxonomy' => 'faq_topic',
 					'field'    => 'slug',
 					'terms'    => $topic,
-				],
-			];
+				),
+			);
 		}
 
 		$q    = new \WP_Query( $args );

@@ -21,34 +21,33 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_Privilege_Escalation extends Diagnostic_Base
-{
+class Diagnostic_Privilege_Escalation extends Diagnostic_Base {
+
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		global $wpdb;
 
 		// Check for unexpected admin users
-		$admin_count = count(get_users(array('role' => 'administrator')));
+		$admin_count = count( get_users( array( 'role' => 'administrator' ) ) );
 
-		if ($admin_count > 10) {
+		if ( $admin_count > 10 ) {
 			return array(
-				'id'          => 'privilege-escalation',
-				'title'       => 'Suspicious Number of Administrators',
-				'description' => sprintf(
+				'id'            => 'privilege-escalation',
+				'title'         => 'Suspicious Number of Administrators',
+				'description'   => sprintf(
 					'Found %d administrator accounts. This is unusual and may indicate privilege escalation by attackers. Review all admin accounts and remove unauthorized ones.',
 					$admin_count
 				),
-				'severity'    => 'high',
-				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/audit-administrator-accounts/',
+				'severity'      => 'high',
+				'category'      => 'security',
+				'kb_link'       => 'https://wpshadow.com/kb/audit-administrator-accounts/',
 				'training_link' => 'https://wpshadow.com/training/privilege-management/',
-				'auto_fixable' => false,
-				'threat_level' => 85,
+				'auto_fixable'  => false,
+				'threat_level'  => 85,
 			);
 		}
 
@@ -77,15 +76,14 @@ class Diagnostic_Privilege_Escalation extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__privilege_escalation(): array
-	{
-		$admin_count = count(get_users(array('role' => 'administrator')));
+	public static function test_live__privilege_escalation(): array {
+		$admin_count = count( get_users( array( 'role' => 'administrator' ) ) );
 		$threshold   = 10; // Must match check() logic
 
 		$diagnostic_result    = self::check();
-		$should_find_issue    = ($admin_count > $threshold);
-		$diagnostic_has_issue = (null !== $diagnostic_result);
-		$test_passes          = ($should_find_issue === $diagnostic_has_issue);
+		$should_find_issue    = ( $admin_count > $threshold );
+		$diagnostic_has_issue = ( null !== $diagnostic_result );
+		$test_passes          = ( $should_find_issue === $diagnostic_has_issue );
 
 		$message = sprintf(
 			'Administrator accounts: %d (threshold: %d). Expected diagnostic to %s issue. Diagnostic %s issue. Test: %s',

@@ -33,22 +33,22 @@ class Treatment_Disable_Dashboard_Widgets extends Treatment_Base {
 	 * @param array $options Treatment options
 	 * @return bool Success status
 	 */
-	public static function apply( array $options = [] ): bool {
+	public static function apply( array $options = array() ): bool {
 		// Get list of widgets to disable (default: external only)
 		$disable_list = isset( $options['widgets'] ) ? $options['widgets'] : 'external';
 
 		// Create backup
-		$backup = [
+		$backup = array(
 			'disabled_widgets' => $disable_list,
 			'timestamp'        => time(),
-		];
+		);
 		self::create_backup( $backup );
 
 		// Store in options
 		update_option( 'wpshadow_disabled_dashboard_widgets', $disable_list );
 
 		// Hook to remove widgets
-		add_action( 'wp_dashboard_setup', [ __CLASS__, 'remove_dashboard_widgets' ], 999 );
+		add_action( 'wp_dashboard_setup', array( __CLASS__, 'remove_dashboard_widgets' ), 999 );
 
 		// Track KPI
 		KPI_Tracker::record_treatment_applied( __CLASS__, 1 );
@@ -64,12 +64,12 @@ class Treatment_Disable_Dashboard_Widgets extends Treatment_Base {
 
 		$disable_list = get_option( 'wpshadow_disabled_dashboard_widgets', 'external' );
 
-		$core_widgets = [
+		$core_widgets = array(
 			'dashboard_right_now',
 			'dashboard_activity',
 			'dashboard_quick_press',
 			'dashboard_primary',
-		];
+		);
 
 		if ( $disable_list === 'external' ) {
 			// Remove only external widgets
@@ -109,7 +109,7 @@ class Treatment_Disable_Dashboard_Widgets extends Treatment_Base {
 	 */
 	public static function undo(): bool {
 		delete_option( 'wpshadow_disabled_dashboard_widgets' );
-		remove_action( 'wp_dashboard_setup', [ __CLASS__, 'remove_dashboard_widgets' ], 999 );
+		remove_action( 'wp_dashboard_setup', array( __CLASS__, 'remove_dashboard_widgets' ), 999 );
 		return true;
 	}
 

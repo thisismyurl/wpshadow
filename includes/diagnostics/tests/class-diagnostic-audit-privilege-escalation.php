@@ -81,7 +81,7 @@ class Diagnostic_Audit_Privilege_Escalation extends Diagnostic_Base {
 	public static function check(): ?array {
 		// Check if privilege escalation attempts are being logged
 		// Look for security/audit logging plugins
-		
+
 		$security_plugins = array(
 			'wsal/wp-security-audit-log.php',
 			'wordfence/wordfence.php',
@@ -127,7 +127,7 @@ class Diagnostic_Audit_Privilege_Escalation extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Audit Privilege Escalation
 	 * Slug: audit-privilege-escalation
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -148,15 +148,13 @@ class Diagnostic_Audit_Privilege_Escalation extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

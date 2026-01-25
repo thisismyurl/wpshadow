@@ -13,35 +13,35 @@ use WPShadow\Core\AJAX_Handler_Base;
 use WPShadow\Core\Activity_Logger;
 
 if ( ! defined( 'ABSPATH' ) ) {
-    exit;
+	exit;
 }
 
 class Clear_Cache_Handler extends AJAX_Handler_Base {
-    public static function register() : void {
-        add_action( 'wp_ajax_wpshadow_clear_cache', [ __CLASS__, 'handle' ] );
-    }
+	public static function register(): void {
+		add_action( 'wp_ajax_wpshadow_clear_cache', array( __CLASS__, 'handle' ) );
+	}
 
-    public static function handle() : void {
-        self::verify_request( 'wpshadow_cache_nonce', 'manage_options', 'nonce' );
+	public static function handle(): void {
+		self::verify_request( 'wpshadow_cache_nonce', 'manage_options', 'nonce' );
 
-        $cache_dir = WP_CONTENT_DIR . '/cache/wpshadow';
-        if ( is_dir( $cache_dir ) ) {
-            require_once ABSPATH . 'wp-admin/includes/file.php';
-            \WP_Filesystem();
-            global $wp_filesystem;
-            if ( $wp_filesystem && $wp_filesystem->is_dir( $cache_dir ) ) {
-                $wp_filesystem->delete( $cache_dir, true );
-            }
-        }
+		$cache_dir = WP_CONTENT_DIR . '/cache/wpshadow';
+		if ( is_dir( $cache_dir ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+			\WP_Filesystem();
+			global $wp_filesystem;
+			if ( $wp_filesystem && $wp_filesystem->is_dir( $cache_dir ) ) {
+				$wp_filesystem->delete( $cache_dir, true );
+			}
+		}
 
-        wp_cache_flush();
+		wp_cache_flush();
 
-        Activity_Logger::log(
-            'cache_cleared',
-            __( 'Cache cleared successfully.', 'wpshadow' ),
-            'performance'
-        );
+		Activity_Logger::log(
+			'cache_cleared',
+			__( 'Cache cleared successfully.', 'wpshadow' ),
+			'performance'
+		);
 
-        self::send_success( array( 'message' => __( 'Cache cleared successfully.', 'wpshadow' ) ) );
-    }
+		self::send_success( array( 'message' => __( 'Cache cleared successfully.', 'wpshadow' ) ) );
+	}
 }

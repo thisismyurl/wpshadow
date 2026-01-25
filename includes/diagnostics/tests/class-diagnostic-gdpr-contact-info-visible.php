@@ -80,13 +80,13 @@ class Diagnostic_Gdpr_Contact_Info_Visible extends Diagnostic_Base {
 
 	public static function check(): ?array {
 		// Check if contact info is visible (required for GDPR)
-		$contact_options = [
+		$contact_options = array(
 			'admin_email',
 			'blogname',
-		];
+		);
 
 		$has_contact_info = false;
-		
+
 		foreach ( $contact_options as $option ) {
 			$value = get_option( $option );
 			if ( ! empty( $value ) ) {
@@ -121,7 +121,7 @@ class Diagnostic_Gdpr_Contact_Info_Visible extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Gdpr Contact Info Visible
 	 * Slug: gdpr-contact-info-visible
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -142,15 +142,13 @@ class Diagnostic_Gdpr_Contact_Info_Visible extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

@@ -13,28 +13,27 @@ use WPShadow\Core\Diagnostic_Base;
  * KB Link: https://wpshadow.com/kb/code-ajax-no-security
  * Training: https://wpshadow.com/training/code-ajax-no-security
  */
-class Diagnostic_Code_CODE_AJAX_NO_SECURITY extends Diagnostic_Base
-{
-	public static function check(): ?array
-	{
+class Diagnostic_Code_CODE_AJAX_NO_SECURITY extends Diagnostic_Base {
+
+	public static function check(): ?array {
 		$analysis = self::analyze_public_ajax_callbacks();
 
-		if (0 === $analysis['unsecured']) {
+		if ( 0 === $analysis['unsecured'] ) {
 			return null;
 		}
 
-		return [
-			'id' => 'code-ajax-no-security',
-			'title' => __('AJAX No Security Check', 'wpshadow'),
-			'description' => __('Flags AJAX handlers lacking nonce/capability verification.', 'wpshadow'),
-			'severity' => 'medium',
-			'category' => 'code-quality',
-			'kb_link' => 'https://wpshadow.com/kb/code-ajax-no-security',
+		return array(
+			'id'            => 'code-ajax-no-security',
+			'title'         => __( 'AJAX No Security Check', 'wpshadow' ),
+			'description'   => __( 'Flags AJAX handlers lacking nonce/capability verification.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'code-quality',
+			'kb_link'       => 'https://wpshadow.com/kb/code-ajax-no-security',
 			'training_link' => 'https://wpshadow.com/training/code-ajax-no-security',
-			'auto_fixable' => false,
-			'threat_level' => 6,
-			'data' => $analysis,
-		];
+			'auto_fixable'  => false,
+			'threat_level'  => 6,
+			'data'          => $analysis,
+		);
 	}
 
 	/**
@@ -59,13 +58,12 @@ class Diagnostic_Code_CODE_AJAX_NO_SECURITY extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__code_code_ajax_no_security(): array
-	{
-		$analysis = self::analyze_public_ajax_callbacks();
-		$diagnostic_result = self::check();
-		$should_find_issue = ($analysis['unsecured'] > 0);
-		$diagnostic_has_issue = (null !== $diagnostic_result);
-		$test_passes = ($should_find_issue === $diagnostic_has_issue);
+	public static function test_live__code_code_ajax_no_security(): array {
+		$analysis             = self::analyze_public_ajax_callbacks();
+		$diagnostic_result    = self::check();
+		$should_find_issue    = ( $analysis['unsecured'] > 0 );
+		$diagnostic_has_issue = ( null !== $diagnostic_result );
+		$test_passes          = ( $should_find_issue === $diagnostic_has_issue );
 
 		$message = sprintf(
 			'Public AJAX callbacks: %d, unsecured (non-core/non-WPShadow) callbacks: %d. Expected diagnostic to %s issue. Diagnostic %s issue. Test: %s',
@@ -93,52 +91,51 @@ class Diagnostic_Code_CODE_AJAX_NO_SECURITY extends Diagnostic_Base
 	 *
 	 * @return array{total:int,unsecured:int}
 	 */
-	private static function analyze_public_ajax_callbacks(): array
-	{
+	private static function analyze_public_ajax_callbacks(): array {
 		global $wp_filter;
 
-		$total = 0;
+		$total     = 0;
 		$unsecured = 0;
 
-		if (! isset($wp_filter) || ! is_array($wp_filter)) {
+		if ( ! isset( $wp_filter ) || ! is_array( $wp_filter ) ) {
 			return array(
-				'total' => 0,
+				'total'     => 0,
 				'unsecured' => 0,
 			);
 		}
 
-		foreach ($wp_filter as $hook_name => $hook) {
-			if (0 !== strpos($hook_name, 'wp_ajax_nopriv_')) {
+		foreach ( $wp_filter as $hook_name => $hook ) {
+			if ( 0 !== strpos( $hook_name, 'wp_ajax_nopriv_' ) ) {
 				continue;
 			}
 
-			if (! $hook instanceof \WP_Hook || empty($hook->callbacks)) {
+			if ( ! $hook instanceof \WP_Hook || empty( $hook->callbacks ) ) {
 				continue;
 			}
 
-			foreach ($hook->callbacks as $callbacks_at_priority) {
-				if (empty($callbacks_at_priority) || ! is_array($callbacks_at_priority)) {
+			foreach ( $hook->callbacks as $callbacks_at_priority ) {
+				if ( empty( $callbacks_at_priority ) || ! is_array( $callbacks_at_priority ) ) {
 					continue;
 				}
 
-				foreach ($callbacks_at_priority as $callback_data) {
-					if (empty($callback_data['function'])) {
+				foreach ( $callbacks_at_priority as $callback_data ) {
+					if ( empty( $callback_data['function'] ) ) {
 						continue;
 					}
 
-					$total++;
+					++$total;
 
-					$evaluation = self::evaluate_ajax_callback_security($callback_data['function']);
+					$evaluation = self::evaluate_ajax_callback_security( $callback_data['function'] );
 
-					if (! $evaluation['is_core'] && ! $evaluation['is_wpshadow_handler']) {
-						$unsecured++;
+					if ( ! $evaluation['is_core'] && ! $evaluation['is_wpshadow_handler'] ) {
+						++$unsecured;
 					}
 				}
 			}
 		}
 
 		return array(
-			'total' => $total,
+			'total'     => $total,
 			'unsecured' => $unsecured,
 		);
 	}
@@ -149,42 +146,41 @@ class Diagnostic_Code_CODE_AJAX_NO_SECURITY extends Diagnostic_Base
 	 * @param callable $callback AJAX callback.
 	 * @return array{is_core:bool,is_wpshadow_handler:bool}
 	 */
-	private static function evaluate_ajax_callback_security($callback): array
-	{
-		$is_core = false;
+	private static function evaluate_ajax_callback_security( $callback ): array {
+		$is_core             = false;
 		$is_wpshadow_handler = false;
-		$class_name = null;
-		$file_path = null;
+		$class_name          = null;
+		$file_path           = null;
 
 		try {
-			if (is_string($callback)) {
-				$reflection = new \ReflectionFunction($callback);
-				$file_path = $reflection->getFileName();
-			} elseif (is_array($callback) && isset($callback[0], $callback[1])) {
-				$class_name = is_object($callback[0]) ? get_class($callback[0]) : (string) $callback[0];
-				$reflection = new \ReflectionMethod($class_name, (string) $callback[1]);
-				$file_path = $reflection->getFileName();
-			} elseif ($callback instanceof \Closure) {
-				$reflection = new \ReflectionFunction($callback);
-				$file_path = $reflection->getFileName();
+			if ( is_string( $callback ) ) {
+				$reflection = new \ReflectionFunction( $callback );
+				$file_path  = $reflection->getFileName();
+			} elseif ( is_array( $callback ) && isset( $callback[0], $callback[1] ) ) {
+				$class_name = is_object( $callback[0] ) ? get_class( $callback[0] ) : (string) $callback[0];
+				$reflection = new \ReflectionMethod( $class_name, (string) $callback[1] );
+				$file_path  = $reflection->getFileName();
+			} elseif ( $callback instanceof \Closure ) {
+				$reflection = new \ReflectionFunction( $callback );
+				$file_path  = $reflection->getFileName();
 			}
-		} catch (\ReflectionException $e) {
+		} catch ( \ReflectionException $e ) {
 			// Reflection failed; treat as potentially unsecured.
 		}
 
-		if (null !== $class_name && is_subclass_of($class_name, '\\WPShadow\\Admin\\Ajax\\AJAX_Handler_Base')) {
+		if ( null !== $class_name && is_subclass_of( $class_name, '\\WPShadow\\Admin\\Ajax\\AJAX_Handler_Base' ) ) {
 			$is_wpshadow_handler = true;
 		}
 
-		if (null !== $file_path && defined('ABSPATH') && function_exists('wp_normalize_path')) {
-			$normalized = wp_normalize_path($file_path);
+		if ( null !== $file_path && defined( 'ABSPATH' ) && function_exists( 'wp_normalize_path' ) ) {
+			$normalized = wp_normalize_path( $file_path );
 			$core_paths = array(
-				wp_normalize_path(ABSPATH . 'wp-admin'),
-				wp_normalize_path(ABSPATH . 'wp-includes'),
+				wp_normalize_path( ABSPATH . 'wp-admin' ),
+				wp_normalize_path( ABSPATH . 'wp-includes' ),
 			);
 
-			foreach ($core_paths as $core_path) {
-				if (0 === strpos($normalized, $core_path)) {
+			foreach ( $core_paths as $core_path ) {
+				if ( 0 === strpos( $normalized, $core_path ) ) {
 					$is_core = true;
 					break;
 				}
@@ -192,7 +188,7 @@ class Diagnostic_Code_CODE_AJAX_NO_SECURITY extends Diagnostic_Base
 		}
 
 		return array(
-			'is_core' => $is_core,
+			'is_core'             => $is_core,
 			'is_wpshadow_handler' => $is_wpshadow_handler,
 		);
 	}

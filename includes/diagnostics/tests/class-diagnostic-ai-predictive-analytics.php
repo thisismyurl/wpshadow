@@ -79,43 +79,45 @@ class Diagnostic_Ai_Predictive_Analytics extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		$issues = [];
+		$issues = array();
 
 		// Check if predictive analytics is enabled
-		$analytics_enabled = get_option('wpshadow_predictive_analytics_enabled', false);
+		$analytics_enabled = get_option( 'wpshadow_predictive_analytics_enabled', false );
 
-		if (!$analytics_enabled) {
+		if ( ! $analytics_enabled ) {
 			$issues[] = 'Predictive analytics not enabled';
 		}
 
 		// Check if sufficient historical data exists
-		$historical_data = get_option('wpshadow_analytics_data_points', 0);
-		if ($historical_data < 100) {
+		$historical_data = get_option( 'wpshadow_analytics_data_points', 0 );
+		if ( $historical_data < 100 ) {
 			$issues[] = 'Insufficient historical data for accurate predictions';
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'ai-predictive-analytics',
-			'title' => 'Predictive analytics not ready',
-			'description' => 'Enable and gather data for predictive models',
-			'severity' => 'medium',
-			'category' => 'ai_readiness',
+		return empty( $issues ) ? null : array(
+			'id'           => 'ai-predictive-analytics',
+			'title'        => 'Predictive analytics not ready',
+			'description'  => 'Enable and gather data for predictive models',
+			'severity'     => 'medium',
+			'category'     => 'ai_readiness',
 			'threat_level' => 38,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	public static function test_live_ai_predictive_analytics(): array {
-		delete_option('wpshadow_predictive_analytics_enabled');
+		delete_option( 'wpshadow_predictive_analytics_enabled' );
 		$r1 = self::check();
 
-		update_option('wpshadow_predictive_analytics_enabled', true);
-		update_option('wpshadow_analytics_data_points', 150);
+		update_option( 'wpshadow_predictive_analytics_enabled', true );
+		update_option( 'wpshadow_analytics_data_points', 150 );
 		$r2 = self::check();
 
-		delete_option('wpshadow_predictive_analytics_enabled');
-		delete_option('wpshadow_analytics_data_points');
-		return ['passed' => is_array($r1) && is_null($r2), 'message' => 'Predictive analytics check working'];
+		delete_option( 'wpshadow_predictive_analytics_enabled' );
+		delete_option( 'wpshadow_analytics_data_points' );
+		return array(
+			'passed'  => is_array( $r1 ) && is_null( $r2 ),
+			'message' => 'Predictive analytics check working',
+		);
 	}
-	}
-
+}

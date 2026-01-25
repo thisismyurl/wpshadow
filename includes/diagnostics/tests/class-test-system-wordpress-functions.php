@@ -6,7 +6,7 @@ namespace WPShadow\Diagnostics\Tests;
 
 use WPShadow\Core\Diagnostic_Base;
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -20,16 +20,15 @@ if (! defined('ABSPATH')) {
  * @category    System
  * @philosophy  #9 Show Value - Ensure WordPress core functions are accessible
  */
-class Test_System_WordPress_Functions extends Diagnostic_Base
-{
+class Test_System_WordPress_Functions extends Diagnostic_Base {
+
 
 	/**
 	 * Check for required WordPress functions
 	 *
 	 * @return array|null Issues found or null if all functions available
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		$required_functions = array(
 			'add_action',
 			'add_filter',
@@ -44,20 +43,20 @@ class Test_System_WordPress_Functions extends Diagnostic_Base
 		);
 
 		$missing = array();
-		foreach ($required_functions as $function) {
-			if (! function_exists($function)) {
+		foreach ( $required_functions as $function ) {
+			if ( ! function_exists( $function ) ) {
 				$missing[] = $function;
 			}
 		}
 
-		if (empty($missing)) {
+		if ( empty( $missing ) ) {
 			return null; // All functions available
 		}
 
 		return array(
 			'id'           => 'wordpress-functions-missing',
 			'title'        => 'Missing WordPress Functions',
-			'description'  => 'Critical WordPress functions are missing: ' . implode(', ', $missing),
+			'description'  => 'Critical WordPress functions are missing: ' . implode( ', ', $missing ),
 			'threat_level' => 90,
 		);
 	}
@@ -67,8 +66,7 @@ class Test_System_WordPress_Functions extends Diagnostic_Base
 	 *
 	 * @return array Test result with 'passed' and 'message' keys
 	 */
-	public static function test_live_wordpress_functions(): array
-	{
+	public static function test_live_wordpress_functions(): array {
 		$result = self::check();
 
 		// Test 1: Check each required function manually
@@ -86,34 +84,34 @@ class Test_System_WordPress_Functions extends Diagnostic_Base
 		);
 
 		$actually_missing = array();
-		foreach ($required_functions as $function) {
-			if (! function_exists($function)) {
+		foreach ( $required_functions as $function ) {
+			if ( ! function_exists( $function ) ) {
 				$actually_missing[] = $function;
 			}
 		}
 
 		// Test 2: Compare results
-		if (! empty($actually_missing)) {
+		if ( ! empty( $actually_missing ) ) {
 			// Should return an issue
-			if (is_null($result)) {
+			if ( is_null( $result ) ) {
 				return array(
-					'passed' => false,
-					'message' => 'Missing functions: ' . implode(', ', $actually_missing) . ', but check() returned null.',
+					'passed'  => false,
+					'message' => 'Missing functions: ' . implode( ', ', $actually_missing ) . ', but check() returned null.',
 				);
 			}
 		} else {
 			// All functions available
-			if (! is_null($result)) {
+			if ( ! is_null( $result ) ) {
 				return array(
-					'passed' => false,
-					'message' => 'All functions available, but check() returned: ' . wp_json_encode($result),
+					'passed'  => false,
+					'message' => 'All functions available, but check() returned: ' . wp_json_encode( $result ),
 				);
 			}
 		}
 
 		// All tests passed
 		return array(
-			'passed' => true,
+			'passed'  => true,
 			'message' => 'WordPress functions check passed. All required functions are available.',
 		);
 	}

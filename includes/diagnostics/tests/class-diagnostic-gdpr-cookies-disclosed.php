@@ -80,14 +80,14 @@ class Diagnostic_Gdpr_Cookies_Disclosed extends Diagnostic_Base {
 
 	public static function check(): ?array {
 		// Check if cookies are disclosed
-		
+
 		// Check if cookie consent plugin is active
-		$consent_plugins = [
+		$consent_plugins = array(
 			'cookie-notice/cookie-notice.php',
 			'iubenda-cookie-law-consent/iubenda.php',
 			'termly-cookie-consent/termly.php',
 			'cookiebot/cookiebot.php',
-		];
+		);
 
 		$has_cookie_disclosure = false;
 		foreach ( $consent_plugins as $plugin ) {
@@ -128,7 +128,7 @@ class Diagnostic_Gdpr_Cookies_Disclosed extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Gdpr Cookies Disclosed
 	 * Slug: gdpr-cookies-disclosed
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -149,15 +149,13 @@ class Diagnostic_Gdpr_Cookies_Disclosed extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

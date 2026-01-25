@@ -12,19 +12,19 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/design-customizer-preview-accurate
  */
 class Diagnostic_Design_CUSTOMIZER_PREVIEW_ACCURATE extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'design-customizer-preview-accurate',
-            'title' => __('Customizer Preview Accuracy', 'wpshadow'),
-            'description' => __('Validates customizer preview matches live site.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'design',
-            'kb_link' => 'https://wpshadow.com/kb/design-customizer-preview-accurate',
-            'training_link' => 'https://wpshadow.com/training/design-customizer-preview-accurate',
-            'auto_fixable' => false,
-            'threat_level' => 6
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'design-customizer-preview-accurate',
+			'title'         => __( 'Customizer Preview Accuracy', 'wpshadow' ),
+			'description'   => __( 'Validates customizer preview matches live site.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'design',
+			'kb_link'       => 'https://wpshadow.com/kb/design-customizer-preview-accurate',
+			'training_link' => 'https://wpshadow.com/training/design-customizer-preview-accurate',
+			'auto_fixable'  => false,
+			'threat_level'  => 6,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -32,12 +32,12 @@ class Diagnostic_Design_CUSTOMIZER_PREVIEW_ACCURATE extends Diagnostic_Base {
 	 * Diagnostic: Design CUSTOMIZER PREVIEW ACCURATE
 	 * Slug: -design-customizer-preview-accurate
 	 * File: class-diagnostic-design-customizer-preview-accurate.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Design CUSTOMIZER PREVIEW ACCURATE
 	 * Slug: -design-customizer-preview-accurate
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -50,11 +50,16 @@ class Diagnostic_Design_CUSTOMIZER_PREVIEW_ACCURATE extends Diagnostic_Base {
 	 */
 	public static function test_live__design_customizer_preview_accurate(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Theme customizer preview accurately represents live site'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Theme customizer preview accurately represents live site',
+			);
 		}
 		$message = $result['description'] ?? 'Customizer preview accuracy issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

@@ -95,7 +95,7 @@ class Diagnostic_Wcag_Focus_Visible extends Diagnostic_Base {
 			return null;
 		}
 
-		$issues = [];
+		$issues = array();
 
 		try {
 			$dom = new \DOMDocument();
@@ -111,7 +111,7 @@ class Diagnostic_Wcag_Focus_Visible extends Diagnostic_Base {
 			}
 
 			// Check for focus-related styles
-			$style_nodes = $xpath->query( '//style | //link[@rel="stylesheet"]' );
+			$style_nodes      = $xpath->query( '//style | //link[@rel="stylesheet"]' );
 			$has_focus_styles = false;
 
 			foreach ( $style_nodes as $node ) {
@@ -122,7 +122,7 @@ class Diagnostic_Wcag_Focus_Visible extends Diagnostic_Base {
 			}
 
 			// Check for focus indicators with visibility issues (display:none, visibility:hidden on focus)
-			$bad_focus_styles = $xpath->query( '//*[@style]' );
+			$bad_focus_styles  = $xpath->query( '//*[@style]' );
 			$visibility_issues = 0;
 
 			foreach ( $bad_focus_styles as $elem ) {
@@ -130,7 +130,7 @@ class Diagnostic_Wcag_Focus_Visible extends Diagnostic_Base {
 				// Check if element removes focus visibility
 				if ( preg_match( '/outline\s*:\s*(none|0)/i', $style ) ) {
 					if ( ! preg_match( '/outline\s*:\s*\d+px/i', $style ) ) {
-						$visibility_issues++;
+						++$visibility_issues;
 					}
 				}
 			}
@@ -144,7 +144,6 @@ class Diagnostic_Wcag_Focus_Visible extends Diagnostic_Base {
 			if ( ! $has_focus_styles && $interactive->length > 0 ) {
 				$issues[] = 'No :focus or :focus-visible styles detected for interactive elements';
 			}
-
 		} catch ( \Exception $e ) {
 			// HTML parsing error - cannot determine, pass
 			return null;
@@ -154,7 +153,7 @@ class Diagnostic_Wcag_Focus_Visible extends Diagnostic_Base {
 			return null;
 		}
 
-		return [
+		return array(
 			'id'            => 'wcag-focus-visible',
 			'title'         => 'Focus Indicators Not Visible',
 			'description'   => 'Keyboard users cannot see which element has focus. This violates WCAG 2.4.7.',
@@ -165,7 +164,7 @@ class Diagnostic_Wcag_Focus_Visible extends Diagnostic_Base {
 			'auto_fixable'  => false,
 			'threat_level'  => 75,
 			'details'       => $issues,
-		];
+		);
 	}
 
 	/**
@@ -207,33 +206,31 @@ class Diagnostic_Wcag_Focus_Visible extends Diagnostic_Base {
 
 		// Simulate Guardian providing HTML
 		$_POST['html'] = $good_html;
-		$result = self::check();
+		$result        = self::check();
 
 		if ( is_null( $result ) ) {
-			return [
-				'passed' => true,
-				'message' => 'WCAG Focus Visible: HTML with proper focus styles correctly identified as passing'
-			];
+			return array(
+				'passed'  => true,
+				'message' => 'WCAG Focus Visible: HTML with proper focus styles correctly identified as passing',
+			);
 		}
 
 		// Test Case 2: HTML with hidden focus (should fail)
 		$bad_html = '<html><head><style>button { outline: none; }</style></head><body><button>Click me</button></body></html>';
 
 		$_POST['html'] = $bad_html;
-		$result = self::check();
+		$result        = self::check();
 
 		if ( is_array( $result ) && isset( $result['id'] ) && $result['id'] === 'wcag-focus-visible' ) {
-			return [
-				'passed' => true,
-				'message' => 'WCAG Focus Visible: HTML with hidden focus correctly identified as failing'
-			];
+			return array(
+				'passed'  => true,
+				'message' => 'WCAG Focus Visible: HTML with hidden focus correctly identified as failing',
+			);
 		}
 
-		return [
-			'passed' => false,
-			'message' => 'WCAG Focus Visible: Test logic failed'
-		];
+		return array(
+			'passed'  => false,
+			'message' => 'WCAG Focus Visible: Test logic failed',
+		);
 	}
-
 }
-

@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Get category metadata for all health gauges
  *
  * Returns configuration for all 10 health categories:
- * - 8 standard WPShadow categories  
+ * - 8 standard WPShadow categories
  * - 1 WordPress native Site Health
  * - 1 Overall site health (calculated from all)
  *
@@ -30,56 +30,56 @@ if ( ! defined( 'ABSPATH' ) ) {
 function wpshadow_get_category_metadata(): array {
 	return array(
 		// Standard WPShadow Categories (8)
-		'security'        => array(
+		'security'         => array(
 			'label'       => __( 'Security', 'wpshadow' ),
 			'icon'        => 'dashicons-shield',
 			'color'       => '#dc2626', // Red
 			'background'  => 'rgba(220, 38, 38, 0.1)',
 			'description' => __( 'Site security, vulnerabilities, and protection measures', 'wpshadow' ),
 		),
-		'performance'     => array(
+		'performance'      => array(
 			'label'       => __( 'Performance', 'wpshadow' ),
 			'icon'        => 'dashicons-performance',
 			'color'       => '#0891b2', // Cyan
 			'background'  => 'rgba(8, 145, 178, 0.1)',
 			'description' => __( 'Site speed, caching, and optimization', 'wpshadow' ),
 		),
-		'code-quality'    => array(
+		'code-quality'     => array(
 			'label'       => __( 'Code Quality', 'wpshadow' ),
 			'icon'        => 'dashicons-editor-code',
 			'color'       => '#7c3aed', // Purple
 			'background'  => 'rgba(124, 58, 237, 0.1)',
 			'description' => __( 'Code standards, best practices, and technical debt', 'wpshadow' ),
 		),
-		'seo'             => array(
+		'seo'              => array(
 			'label'       => __( 'SEO', 'wpshadow' ),
 			'icon'        => 'dashicons-search',
 			'color'       => '#2563eb', // Blue
 			'background'  => 'rgba(37, 99, 235, 0.1)',
 			'description' => __( 'Search engine optimization and discoverability', 'wpshadow' ),
 		),
-		'design'          => array(
+		'design'           => array(
 			'label'       => __( 'Design', 'wpshadow' ),
 			'icon'        => 'dashicons-admin-appearance',
 			'color'       => '#8e44ad', // Purple-Pink
 			'background'  => 'rgba(142, 68, 173, 0.1)',
 			'description' => __( 'Visual design, UX, and accessibility', 'wpshadow' ),
 		),
-		'settings'        => array(
+		'settings'         => array(
 			'label'       => __( 'Settings', 'wpshadow' ),
 			'icon'        => 'dashicons-admin-settings',
 			'color'       => '#4b5563', // Gray
 			'background'  => 'rgba(75, 85, 99, 0.1)',
 			'description' => __( 'WordPress configuration and settings', 'wpshadow' ),
 		),
-		'monitoring'      => array(
+		'monitoring'       => array(
 			'label'       => __( 'Monitoring', 'wpshadow' ),
 			'icon'        => 'dashicons-visibility',
 			'color'       => '#059669', // Green
 			'background'  => 'rgba(5, 150, 105, 0.1)',
 			'description' => __( 'Site monitoring, uptime, and alerts', 'wpshadow' ),
 		),
-		'workflows'       => array(
+		'workflows'        => array(
 			'label'       => __( 'Workflows', 'wpshadow' ),
 			'icon'        => 'dashicons-update',
 			'color'       => '#ea580c', // Orange
@@ -97,7 +97,7 @@ function wpshadow_get_category_metadata(): array {
 		),
 
 		// Overall Site Health (10th gauge - calculated)
-		'overall'         => array(
+		'overall'          => array(
 			'label'       => __( 'Overall Health', 'wpshadow' ),
 			'icon'        => 'dashicons-heart',
 			'color'       => '#1976d2', // Deep Blue
@@ -127,15 +127,15 @@ function wpshadow_calculate_overall_health( array $findings_by_category, array $
 		}
 
 		foreach ( $findings as $finding ) {
-			$total_findings++;
+			++$total_findings;
 			$threat = isset( $finding['threat_level'] ) ? $finding['threat_level'] : 50;
 
 			if ( $threat >= 75 ) {
-				$critical_count++;
+				++$critical_count;
 			} elseif ( $threat >= 50 ) {
-				$high_count++;
+				++$high_count;
 			} else {
-				$medium_count++;
+				++$medium_count;
 			}
 		}
 	}
@@ -215,11 +215,11 @@ function wpshadow_get_wordpress_health_status(): array {
 
 			if ( isset( $result['status'] ) ) {
 				if ( $result['status'] === 'good' ) {
-					$passed++;
+					++$passed;
 				} elseif ( $result['status'] === 'recommended' ) {
-					$recommended++;
+					++$recommended;
 				} else {
-					$critical++;
+					++$critical;
 				}
 			}
 		}

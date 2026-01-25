@@ -1,7 +1,7 @@
 <?php
 /**
  * Microsoft Word Terminology
- * 
+ *
  * @package WPShadow
  */
 
@@ -9,10 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-return [
+return array(
 	'platform'       => 'word',
 	'label'          => __( 'Microsoft Word', 'wpshadow' ),
-	'terms'          => [
+	'terms'          => array(
 		'post'           => __( 'Document', 'wpshadow' ),
 		'page'           => __( 'Page', 'wpshadow' ),
 		'plugin'         => __( 'Add-in', 'wpshadow' ),
@@ -34,7 +34,7 @@ return [
 		'featured_image' => __( 'Cover Image', 'wpshadow' ),
 		'author'         => __( 'Author', 'wpshadow' ),
 		'comment'        => __( 'Comment', 'wpshadow' ),
-	],
+	),
 	'kb_article'     => 'https://wpshadow.com/kb/word-to-wordpress/',
 	'training_video' => 'https://wpshadow.com/training/word-to-wordpress/',
-];
+);

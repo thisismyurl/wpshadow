@@ -19,30 +19,29 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_DiagnosticCspReportOverhead extends Diagnostic_Base
-{
-	public static function check(): ?array
-	{
+class Diagnostic_DiagnosticCspReportOverhead extends Diagnostic_Base {
+
+	public static function check(): ?array {
 		// Check if Content-Security-Policy header is set
-		$headers = wp_get_server_var('HTTP_CONTENT_SECURITY_POLICY_REPORT_ONLY');
-		if (!$headers) {
-			$headers = wp_get_server_var('HTTP_CONTENT_SECURITY_POLICY');
+		$headers = wp_get_server_var( 'HTTP_CONTENT_SECURITY_POLICY_REPORT_ONLY' );
+		if ( ! $headers ) {
+			$headers = wp_get_server_var( 'HTTP_CONTENT_SECURITY_POLICY' );
 		}
 
 		// If CSP enabled, monitor for excessive reports
-		if ($headers) {
-			$csp_reports = get_transient('wpshadow_csp_violation_count');
-			if ($csp_reports && $csp_reports > 100) {
+		if ( $headers ) {
+			$csp_reports = get_transient( 'wpshadow_csp_violation_count' );
+			if ( $csp_reports && $csp_reports > 100 ) {
 				return array(
-					'id' => 'csp-report-overhead',
-					'title' => __('High CSP Violation Report Rate', 'wpshadow'),
-					'description' => __('CSP violations are being reported frequently. Review CSP policy to reduce legitimate violations and improve performance.', 'wpshadow'),
-					'severity' => 'medium',
-					'category' => 'security',
-					'kb_link' => 'https://wpshadow.com/kb/csp-policy-optimization/',
+					'id'            => 'csp-report-overhead',
+					'title'         => __( 'High CSP Violation Report Rate', 'wpshadow' ),
+					'description'   => __( 'CSP violations are being reported frequently. Review CSP policy to reduce legitimate violations and improve performance.', 'wpshadow' ),
+					'severity'      => 'medium',
+					'category'      => 'security',
+					'kb_link'       => 'https://wpshadow.com/kb/csp-policy-optimization/',
 					'training_link' => 'https://wpshadow.com/training/csp-headers/',
-					'auto_fixable' => false,
-					'threat_level' => 40,
+					'auto_fixable'  => false,
+					'threat_level'  => 40,
 				);
 			}
 		}
@@ -72,22 +71,21 @@ class Diagnostic_DiagnosticCspReportOverhead extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__csp_report_overhead(): array
-	{
-		$headers = wp_get_server_var('HTTP_CONTENT_SECURITY_POLICY_REPORT_ONLY');
-		if (! $headers) {
-			$headers = wp_get_server_var('HTTP_CONTENT_SECURITY_POLICY');
+	public static function test_live__csp_report_overhead(): array {
+		$headers = wp_get_server_var( 'HTTP_CONTENT_SECURITY_POLICY_REPORT_ONLY' );
+		if ( ! $headers ) {
+			$headers = wp_get_server_var( 'HTTP_CONTENT_SECURITY_POLICY' );
 		}
 
 		$csp_reports = 0;
-		if ($headers) {
-			$csp_reports = (int) get_transient('wpshadow_csp_violation_count');
+		if ( $headers ) {
+			$csp_reports = (int) get_transient( 'wpshadow_csp_violation_count' );
 		}
 
 		$diagnostic_result    = self::check();
-		$should_find_issue    = ($headers && $csp_reports > 100);
-		$diagnostic_has_issue = (null !== $diagnostic_result);
-		$test_passes          = ($should_find_issue === $diagnostic_has_issue);
+		$should_find_issue    = ( $headers && $csp_reports > 100 );
+		$diagnostic_has_issue = ( null !== $diagnostic_result );
+		$test_passes          = ( $should_find_issue === $diagnostic_has_issue );
 
 		$message = sprintf(
 			'CSP header present: %s, violation count: %d. Expected diagnostic to %s issue. Diagnostic %s issue. Test: %s',

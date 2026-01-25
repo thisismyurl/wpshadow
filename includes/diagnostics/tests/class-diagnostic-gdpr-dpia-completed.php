@@ -81,7 +81,7 @@ class Diagnostic_Gdpr_Dpia_Completed extends Diagnostic_Base {
 	public static function check(): ?array {
 		// Check if Data Protection Impact Assessment (DPIA) is documented
 		// This is difficult to verify programmatically - check for documentation
-		
+
 		// Check if there's a documented privacy policy indicating DPIA consideration
 		$privacy_policy_id = (int) get_option( 'wp_page_for_privacy_policy' );
 
@@ -106,7 +106,7 @@ class Diagnostic_Gdpr_Dpia_Completed extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Gdpr Dpia Completed
 	 * Slug: gdpr-dpia-completed
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -127,15 +127,13 @@ class Diagnostic_Gdpr_Dpia_Completed extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

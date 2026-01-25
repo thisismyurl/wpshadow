@@ -20,7 +20,7 @@ class Get_Examples_Handler extends AJAX_Handler_Base {
 	 * Register AJAX hook
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_get_examples', [ __CLASS__, 'handle' ] );
+		add_action( 'wp_ajax_wpshadow_get_examples', array( __CLASS__, 'handle' ) );
 	}
 
 	/**
@@ -31,9 +31,11 @@ class Get_Examples_Handler extends AJAX_Handler_Base {
 
 		$examples = Workflow_Examples::get_display_examples();
 
-		self::send_success( [
-			'examples' => $examples,
-			'count'    => count( $examples ),
-		] );
+		self::send_success(
+			array(
+				'examples' => $examples,
+				'count'    => count( $examples ),
+			)
+		);
 	}
 }

@@ -109,43 +109,45 @@ class Diagnostic_AiProductRecommendationCtr extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		$issues = [];
+		$issues = array();
 
 		// Check if recommendation engine is active
-		$recommendations_enabled = get_option('wpshadow_product_recommendations_enabled', false);
+		$recommendations_enabled = get_option( 'wpshadow_product_recommendations_enabled', false );
 
-		if (!$recommendations_enabled) {
+		if ( ! $recommendations_enabled ) {
 			$issues[] = 'Product recommendation engine not enabled';
 		}
 
 		// Check CTR (click-through rate) metrics
-		$avg_ctr = (float)get_option('wpshadow_recommendation_avg_ctr', 0);
-		if ($avg_ctr < 0.01) { // Less than 1% CTR
+		$avg_ctr = (float) get_option( 'wpshadow_recommendation_avg_ctr', 0 );
+		if ( $avg_ctr < 0.01 ) { // Less than 1% CTR
 			$issues[] = 'Product recommendation CTR is below 1% (optimize algorithm)';
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'ai-product-recommendation-ctr',
-			'title' => 'Product recommendations underperforming',
-			'description' => 'Enable recommendations and optimize for higher CTR',
-			'severity' => 'medium',
-			'category' => 'ai_readiness',
+		return empty( $issues ) ? null : array(
+			'id'           => 'ai-product-recommendation-ctr',
+			'title'        => 'Product recommendations underperforming',
+			'description'  => 'Enable recommendations and optimize for higher CTR',
+			'severity'     => 'medium',
+			'category'     => 'ai_readiness',
 			'threat_level' => 44,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	public static function test_live_ai_product_recommendation_ctr(): array {
-		delete_option('wpshadow_product_recommendations_enabled');
+		delete_option( 'wpshadow_product_recommendations_enabled' );
 		$r1 = self::check();
 
-		update_option('wpshadow_product_recommendations_enabled', true);
-		update_option('wpshadow_recommendation_avg_ctr', 0.05);
+		update_option( 'wpshadow_product_recommendations_enabled', true );
+		update_option( 'wpshadow_recommendation_avg_ctr', 0.05 );
 		$r2 = self::check();
 
-		delete_option('wpshadow_product_recommendations_enabled');
-		delete_option('wpshadow_recommendation_avg_ctr');
-		return ['passed' => is_array($r1) && is_null($r2), 'message' => 'Product recommendation CTR check working'];
+		delete_option( 'wpshadow_product_recommendations_enabled' );
+		delete_option( 'wpshadow_recommendation_avg_ctr' );
+		return array(
+			'passed'  => is_array( $r1 ) && is_null( $r2 ),
+			'message' => 'Product recommendation CTR check working',
+		);
 	}
-	}
-
+}

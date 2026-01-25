@@ -6,7 +6,7 @@ namespace WPShadow\Diagnostics\Tests;
 
 use WPShadow\Core\Diagnostic_Base;
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -20,24 +20,23 @@ if (! defined('ABSPATH')) {
  * @category    System
  * @philosophy  #9 Show Value - Ensure site security with HTTPS
  */
-class Test_System_SSL_Certificate extends Diagnostic_Base
-{
+class Test_System_SSL_Certificate extends Diagnostic_Base {
+
 
 	/**
 	 * Check HTTPS/SSL status
 	 *
 	 * @return array|null Issues found or null if HTTPS enabled
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		// Check if HTTPS is enabled
 		$is_ssl = is_ssl();
 
 		// Also check the siteurl option
-		$siteurl = get_option('siteurl');
-		$is_https_url = strpos($siteurl, 'https://') === 0;
+		$siteurl      = get_option( 'siteurl' );
+		$is_https_url = strpos( $siteurl, 'https://' ) === 0;
 
-		if (! $is_ssl || ! $is_https_url) {
+		if ( ! $is_ssl || ! $is_https_url ) {
 			return array(
 				'id'           => 'ssl-certificate-not-enabled',
 				'title'        => 'HTTPS Not Enabled',
@@ -54,30 +53,29 @@ class Test_System_SSL_Certificate extends Diagnostic_Base
 	 *
 	 * @return array Test result with 'passed' and 'message' keys
 	 */
-	public static function test_live_ssl_certificate(): array
-	{
+	public static function test_live_ssl_certificate(): array {
 		$result = self::check();
 
 		// Test 1: Check HTTPS status
-		$is_ssl = is_ssl();
-		$siteurl = get_option('siteurl');
-		$is_https_url = strpos($siteurl, 'https://') === 0;
+		$is_ssl       = is_ssl();
+		$siteurl      = get_option( 'siteurl' );
+		$is_https_url = strpos( $siteurl, 'https://' ) === 0;
 
 		// Test 2: Compare results
-		if (! $is_ssl || ! $is_https_url) {
+		if ( ! $is_ssl || ! $is_https_url ) {
 			// Should return an issue
-			if (is_null($result)) {
+			if ( is_null( $result ) ) {
 				return array(
-					'passed' => false,
-					'message' => 'HTTPS is disabled (is_ssl=' . ($is_ssl ? 'true' : 'false') . ', siteurl=' . $siteurl . '), but check() returned null.',
+					'passed'  => false,
+					'message' => 'HTTPS is disabled (is_ssl=' . ( $is_ssl ? 'true' : 'false' ) . ', siteurl=' . $siteurl . '), but check() returned null.',
 				);
 			}
 		} else {
 			// HTTPS is enabled
-			if (! is_null($result)) {
+			if ( ! is_null( $result ) ) {
 				return array(
-					'passed' => false,
-					'message' => 'HTTPS is enabled, but check() returned: ' . wp_json_encode($result),
+					'passed'  => false,
+					'message' => 'HTTPS is enabled, but check() returned: ' . wp_json_encode( $result ),
 				);
 			}
 		}
@@ -85,7 +83,7 @@ class Test_System_SSL_Certificate extends Diagnostic_Base
 		// All tests passed
 		$https_status = $is_ssl ? 'enabled' : 'disabled';
 		return array(
-			'passed' => true,
+			'passed'  => true,
 			'message' => "SSL/HTTPS check passed. Current status: {$https_status}.",
 		);
 	}

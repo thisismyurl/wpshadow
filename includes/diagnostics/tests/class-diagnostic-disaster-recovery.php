@@ -10,7 +10,7 @@ use WPShadow\Core\Diagnostic_Base;
  *
  * Target Persona: Enterprise IT/Compliance Team
  * Philosophy: Helpful neighbor (#1), show value (#9), educate (#5, #6)
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
@@ -97,7 +97,7 @@ class Diagnostic_Disaster_Recovery extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Disaster Recovery Readiness
 	 * Slug: disaster-recovery
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -111,11 +111,16 @@ class Diagnostic_Disaster_Recovery extends Diagnostic_Base {
 	 */
 	public static function test_live_disaster_recovery(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Disaster recovery plan is in place and tested'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Disaster recovery plan is in place and tested',
+			);
 		}
 		$message = $result['description'] ?? 'Disaster recovery readiness issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

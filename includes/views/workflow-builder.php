@@ -7,12 +7,12 @@
  * @subpackage Views
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if (! current_user_can('read')) {
-	wp_die('Insufficient permissions.');
+if ( ! current_user_can( 'read' ) ) {
+	wp_die( 'Insufficient permissions.' );
 }
 
 // Get available blocks
@@ -32,37 +32,37 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 		<div class="wpshadow-block-palette">
 			<h3>Triggers (IF)</h3>
 			<div class="wpshadow-block-list">
-				<?php foreach ($triggers as $id => $block) : ?>
+				<?php foreach ( $triggers as $id => $block ) : ?>
 					<?php
 					// Check if this is the current trigger when editing
 					$is_current_trigger = false;
-					if (! empty($_GET['workflow']) && ! empty($blocks)) {
-						foreach ($blocks as $block_item) {
-							if ('trigger' === $block_item['type'] && $id === $block_item['id']) {
+					if ( ! empty( $_GET['workflow'] ) && ! empty( $blocks ) ) {
+						foreach ( $blocks as $block_item ) {
+							if ( 'trigger' === $block_item['type'] && $id === $block_item['id'] ) {
 								$is_current_trigger = true;
 								break;
 							}
 						}
 					}
 					?>
-					<div class="wpshadow-block-item <?php echo $is_current_trigger ? 'wpshadow-block-current' : ''; ?>" draggable="true" data-block-id="<?php echo esc_attr($id); ?>" data-block-type="trigger" style="background-color: <?php echo esc_attr($block['color']); ?>; position: relative;">
-						<?php if ($is_current_trigger) : ?>
+					<div class="wpshadow-block-item <?php echo $is_current_trigger ? 'wpshadow-block-current' : ''; ?>" draggable="true" data-block-id="<?php echo esc_attr( $id ); ?>" data-block-type="trigger" style="background-color: <?php echo esc_attr( $block['color'] ); ?>; position: relative;">
+						<?php if ( $is_current_trigger ) : ?>
 							<span class="dashicons dashicons-yes wps-flex-items-center-justify-center-rounded"></span>
 						<?php endif; ?>
-						<span class="dashicons <?php echo esc_attr($block['icon']); ?>" style="margin-right: 8px;"></span>
-						<strong><?php echo esc_html($block['label']); ?></strong>
-						<small><?php echo esc_html($block['description']); ?></small>
+						<span class="dashicons <?php echo esc_attr( $block['icon'] ); ?>" style="margin-right: 8px;"></span>
+						<strong><?php echo esc_html( $block['label'] ); ?></strong>
+						<small><?php echo esc_html( $block['description'] ); ?></small>
 					</div>
 				<?php endforeach; ?>
 			</div>
 
 			<h3 style="margin-top: 20px;">Actions (THEN)</h3>
 			<div class="wpshadow-block-list">
-				<?php foreach ($actions as $id => $block) : ?>
-					<div class="wpshadow-block-item" draggable="true" data-block-id="<?php echo esc_attr($id); ?>" data-block-type="action" style="background-color: <?php echo esc_attr($block['color']); ?>;">
-						<span class="dashicons <?php echo esc_attr($block['icon']); ?>" style="margin-right: 8px;"></span>
-						<strong><?php echo esc_html($block['label']); ?></strong>
-						<small><?php echo esc_html($block['description']); ?></small>
+				<?php foreach ( $actions as $id => $block ) : ?>
+					<div class="wpshadow-block-item" draggable="true" data-block-id="<?php echo esc_attr( $id ); ?>" data-block-type="action" style="background-color: <?php echo esc_attr( $block['color'] ); ?>;">
+						<span class="dashicons <?php echo esc_attr( $block['icon'] ); ?>" style="margin-right: 8px;"></span>
+						<strong><?php echo esc_html( $block['label'] ); ?></strong>
+						<small><?php echo esc_html( $block['description'] ); ?></small>
 					</div>
 				<?php endforeach; ?>
 			</div>
@@ -466,8 +466,8 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 
 			// Get block definition
 			const allBlocks = {
-				...<?php echo wp_json_encode($triggers); ?>,
-				...<?php echo wp_json_encode($actions); ?>
+				...<?php echo wp_json_encode( $triggers ); ?>,
+				...<?php echo wp_json_encode( $actions ); ?>
 			};
 
 			const blockDef = allBlocks[blockId] || {};
@@ -526,8 +526,8 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 
 		function openBlockConfig(block) {
 			const allBlocks = {
-				...<?php echo wp_json_encode($triggers); ?>,
-				...<?php echo wp_json_encode($actions); ?>
+				...<?php echo wp_json_encode( $triggers ); ?>,
+				...<?php echo wp_json_encode( $actions ); ?>
 			};
 
 			const blockDef = allBlocks[block.blockId] || {};

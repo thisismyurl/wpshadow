@@ -33,7 +33,7 @@ class User_Preferences_Manager {
 				'disabled_categories' => array(),
 				'dismissed_tips'      => array(),
 			),
-			'type' => 'array',
+			'type'    => 'array',
 		),
 		'dark_mode' => array(
 			'default' => false,
@@ -56,7 +56,7 @@ class User_Preferences_Manager {
 		}
 
 		$meta_key = 'wpshadow_' . $key;
-		$meta = get_user_meta( (int) $user_id, $meta_key, true );
+		$meta     = get_user_meta( (int) $user_id, $meta_key, true );
 
 		// Return stored value if found, otherwise use default
 		if ( '' === $meta || null === $meta ) {

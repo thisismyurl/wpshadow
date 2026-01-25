@@ -16,23 +16,22 @@ use WPShadow\Core\Diagnostic_Base;
  * @subpackage Diagnostics/Tests
  * @since 1.2601.2112
  */
-class Test_Performance_CdnConfiguration extends Diagnostic_Base
-{
+class Test_Performance_CdnConfiguration extends Diagnostic_Base {
 
-	public static function check(): ?array
-	{
+
+	public static function check(): ?array {
 		// Check if CDN is configured
-		$plugins = get_plugins();
+		$plugins    = get_plugins();
 		$cdn_active = false;
 
-		foreach ($plugins as $plugin_file => $plugin_data) {
+		foreach ( $plugins as $plugin_file => $plugin_data ) {
 			if (
-				stripos($plugin_file, 'cdn') !== false ||
-				stripos($plugin_file, 'cloudflare') !== false ||
-				stripos($plugin_file, 'bunnycdn') !== false ||
-				stripos($plugin_file, 'stackpath') !== false
+				stripos( $plugin_file, 'cdn' ) !== false ||
+				stripos( $plugin_file, 'cloudflare' ) !== false ||
+				stripos( $plugin_file, 'bunnycdn' ) !== false ||
+				stripos( $plugin_file, 'stackpath' ) !== false
 			) {
-				if (is_plugin_active($plugin_file)) {
+				if ( is_plugin_active( $plugin_file ) ) {
 					$cdn_active = true;
 					break;
 				}
@@ -40,34 +39,33 @@ class Test_Performance_CdnConfiguration extends Diagnostic_Base
 		}
 
 		// Check if using WordPress.com or similar CDN service
-		$siteurl = get_option('siteurl');
-		if (strpos($siteurl, 'wordpress.com') === false && !$cdn_active) {
-			return [
-				'id' => 'cdn-configuration',
-				'title' => __('CDN not configured', 'wpshadow'),
-				'description' => __('Configure a CDN (Cloudflare, BunnyCDN, etc.) to serve static assets faster to users worldwide.', 'wpshadow'),
-				'severity' => 'low',
+		$siteurl = get_option( 'siteurl' );
+		if ( strpos( $siteurl, 'wordpress.com' ) === false && ! $cdn_active ) {
+			return array(
+				'id'           => 'cdn-configuration',
+				'title'        => __( 'CDN not configured', 'wpshadow' ),
+				'description'  => __( 'Configure a CDN (Cloudflare, BunnyCDN, etc.) to serve static assets faster to users worldwide.', 'wpshadow' ),
+				'severity'     => 'low',
 				'threat_level' => 25,
-			];
+			);
 		}
 
 		return null;
 	}
 
-	public static function test_live_cdn_configuration(): array
-	{
+	public static function test_live_cdn_configuration(): array {
 		$result = self::check();
 
-		if (null === $result) {
-			return [
-				'passed' => true,
-				'message' => __('CDN is configured', 'wpshadow'),
-			];
+		if ( null === $result ) {
+			return array(
+				'passed'  => true,
+				'message' => __( 'CDN is configured', 'wpshadow' ),
+			);
 		}
 
-		return [
-			'passed' => false,
+		return array(
+			'passed'  => false,
 			'message' => $result['description'],
-		];
+		);
 	}
 }

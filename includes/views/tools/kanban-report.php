@@ -6,13 +6,13 @@
  * @package WPShadow
  */
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if (! current_user_can('read')) {
-	wp_die('Insufficient permissions.');
+if ( ! current_user_can( 'read' ) ) {
+	wp_die( 'Insufficient permissions.' );
 }
 
 // Include the kanban board view
-include WPSHADOW_PATH . 'includes/views/kanban-board.php';
+require WPSHADOW_PATH . 'includes/views/kanban-board.php';

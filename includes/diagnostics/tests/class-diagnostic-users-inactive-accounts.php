@@ -73,9 +73,9 @@ class Diagnostic_Users_Inactive_Accounts extends Diagnostic_Base {
 		// User impact: Give site owners visibility into team productivity and customer engagement patterns. Identify inactive accounts, track admin activity.
 
 		return array(
-			'status' => 'todo',
+			'status'  => 'todo',
 			'message' => 'Diagnostic not yet implemented',
-			'data' => array(),
+			'data'    => array(),
 		);
 	}
 
@@ -154,10 +154,8 @@ class Diagnostic_Users_Inactive_Accounts extends Diagnostic_Base {
 
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

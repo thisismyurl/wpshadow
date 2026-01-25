@@ -35,7 +35,7 @@ abstract class Treatment_Base implements Treatment_Interface {
 		if ( is_multisite() && is_network_admin() ) {
 			return current_user_can( 'manage_network_options' );
 		}
-		
+
 		// Single site or multisite sub-site requires options capability
 		return current_user_can( 'manage_options' );
 	}
@@ -67,7 +67,7 @@ abstract class Treatment_Base implements Treatment_Interface {
 	 * @return array Result array.
 	 */
 	public static function execute( $dry_run = false ) {
-		$class = get_called_class();
+		$class      = get_called_class();
 		$finding_id = static::get_finding_id();
 
 		/**
@@ -82,22 +82,22 @@ abstract class Treatment_Base implements Treatment_Interface {
 		if ( $dry_run ) {
 			// In dry-run mode, check if treatment can be applied but don't execute
 			$can_apply = static::can_apply();
-			$result = array(
-				'success'  => $can_apply,
-				'message'  => $can_apply 
-					? 'Treatment can be applied (dry run - no changes made)' 
+			$result    = array(
+				'success'     => $can_apply,
+				'message'     => $can_apply
+					? 'Treatment can be applied (dry run - no changes made)'
 					: 'Treatment cannot be applied at this time',
-				'dry_run'  => true,
+				'dry_run'     => true,
 				'would_apply' => $can_apply,
 			);
 		} else {
 			$result = static::apply();
-			
+
 			// Clear findings cache after treatment is applied
 			if ( function_exists( 'wpshadow_clear_findings_cache' ) ) {
 				wpshadow_clear_findings_cache();
 			}
-			
+
 			// Record in rollback log if successful
 			if ( ! empty( $result['success'] ) ) {
 				self::record_rollback_info( $finding_id, $class );
@@ -131,19 +131,19 @@ abstract class Treatment_Base implements Treatment_Interface {
 	 */
 	private static function record_rollback_info( $finding_id, $class ) {
 		$rollback_log = get_option( 'wpshadow_rollback_log', array() );
-		
+
 		$rollback_log[] = array(
 			'finding_id' => $finding_id,
 			'class'      => $class,
 			'timestamp'  => time(),
 			'user_id'    => get_current_user_id(),
 		);
-		
+
 		// Keep only last 100 entries
 		if ( count( $rollback_log ) > 100 ) {
 			$rollback_log = array_slice( $rollback_log, -100 );
 		}
-		
+
 		update_option( 'wpshadow_rollback_log', $rollback_log );
 	}
 

@@ -19,31 +19,30 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_Wp_Transients_Not_External_Cache extends Diagnostic_Base
-{
+class Diagnostic_Wp_Transients_Not_External_Cache extends Diagnostic_Base {
+
 
 	/**
 	 * Run the diagnostic check
 	 *
 	 * @return array|null Array with finding details or null if no issue found
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		// Check if transients are using external cache
 		// Check if object cache is enabled
-		$has_cache = function_exists('wp_cache_get');
+		$has_cache = function_exists( 'wp_cache_get' );
 
-		if (!$has_cache) {
+		if ( ! $has_cache ) {
 			return array(
-				'id' => 'wp-transients-not-external-cache',
-				'title' => __('Transients Not Cached Externally', 'wpshadow'),
-				'description' => __('WordPress transients are stored in database, not in a fast external cache. Enable Redis or Memcached for better performance.', 'wpshadow'),
-				'severity' => 'medium',
-				'category' => 'monitoring',
-				'kb_link' => 'https://wpshadow.com/kb/transient-caching/',
+				'id'            => 'wp-transients-not-external-cache',
+				'title'         => __( 'Transients Not Cached Externally', 'wpshadow' ),
+				'description'   => __( 'WordPress transients are stored in database, not in a fast external cache. Enable Redis or Memcached for better performance.', 'wpshadow' ),
+				'severity'      => 'medium',
+				'category'      => 'monitoring',
+				'kb_link'       => 'https://wpshadow.com/kb/transient-caching/',
 				'training_link' => 'https://wpshadow.com/training/redis-memcached-setup/',
-				'auto_fixable' => false,
-				'threat_level' => 50,
+				'auto_fixable'  => false,
+				'threat_level'  => 50,
 			);
 		}
 		return null;
@@ -71,15 +70,14 @@ class Diagnostic_Wp_Transients_Not_External_Cache extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__wp_transients_not_external_cache(): array
-	{
-		$has_cache = function_exists('wp_cache_get');
-		$has_issue = !$has_cache;
+	public static function test_live__wp_transients_not_external_cache(): array {
+		$has_cache = function_exists( 'wp_cache_get' );
+		$has_issue = ! $has_cache;
 
-		$result = self::check();
-		$diagnostic_found_issue = is_array($result);
+		$result                 = self::check();
+		$diagnostic_found_issue = is_array( $result );
 
-		$test_passes = ($has_issue === $diagnostic_found_issue);
+		$test_passes = ( $has_issue === $diagnostic_found_issue );
 
 		$message = $test_passes
 			? 'Transient external cache detection matches site state'

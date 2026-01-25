@@ -28,7 +28,7 @@ class Treatment_WP_Generator extends Treatment_Base {
 	public static function apply() {
 		update_option( 'wpshadow_wp_generator_disabled', true );
 		KPI_Tracker::log_fix_applied( self::get_finding_id(), 'security' );
-		
+
 		return array(
 			'success' => true,
 			'message' => __( 'WordPress generator tag removed from page head. Your WordPress version is now hidden.', 'wpshadow' ),
@@ -38,7 +38,7 @@ class Treatment_WP_Generator extends Treatment_Base {
 	public static function undo() {
 		delete_option( 'wpshadow_wp_generator_disabled' );
 		KPI_Tracker::log_fix_undone( self::get_finding_id() );
-		
+
 		return array(
 			'success' => true,
 			'message' => __( 'WordPress generator tag restored in page head.', 'wpshadow' ),

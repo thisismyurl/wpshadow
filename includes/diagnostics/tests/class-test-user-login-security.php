@@ -14,31 +14,30 @@ use WPShadow\Diagnostics\Diagnostic_Base;
  *
  * @since 1.2.0
  */
-class Test_User_Login_Security extends Diagnostic_Base
-{
+class Test_User_Login_Security extends Diagnostic_Base {
+
 
 	/**
 	 * Check login security configuration
 	 *
 	 * @return array|null Diagnostic array if issues found, null if all good
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		$login_security = self::analyze_login_security();
 
-		if ($login_security['threat_level'] === 0) {
+		if ( $login_security['threat_level'] === 0 ) {
 			return null;
 		}
 
-		return [
-			'threat_level'    => $login_security['threat_level'],
-			'threat_color'    => 'orange',
-			'passed'          => false,
-			'issue'           => $login_security['issue'],
-			'metadata'        => $login_security,
-			'kb_link'         => 'https://wpshadow.com/kb/wordpress-login-security/',
-			'training_link'   => 'https://wpshadow.com/training/wordpress-authentication-security/',
-		];
+		return array(
+			'threat_level'  => $login_security['threat_level'],
+			'threat_color'  => 'orange',
+			'passed'        => false,
+			'issue'         => $login_security['issue'],
+			'metadata'      => $login_security,
+			'kb_link'       => 'https://wpshadow.com/kb/wordpress-login-security/',
+			'training_link' => 'https://wpshadow.com/training/wordpress-authentication-security/',
+		);
 	}
 
 	/**
@@ -46,30 +45,29 @@ class Test_User_Login_Security extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_two_factor_authentication(): array
-	{
+	public static function test_two_factor_authentication(): array {
 		$active_plugins = get_plugins();
 
-		$tfa_plugins = [
+		$tfa_plugins = array(
 			'two-factor/two-factor.php' => 'Two Factor',
 			'google-authenticator-per-user-prompt/google-auth.php' => 'Google Authenticator',
-			'wordfence/wordfence.php' => 'Wordfence',
-		];
+			'wordfence/wordfence.php'   => 'Wordfence',
+		);
 
 		$has_tfa = false;
-		foreach ($tfa_plugins as $plugin_file => $plugin_name) {
-			if (isset($active_plugins[$plugin_file])) {
+		foreach ( $tfa_plugins as $plugin_file => $plugin_name ) {
+			if ( isset( $active_plugins[ $plugin_file ] ) ) {
 				$has_tfa = true;
 				break;
 			}
 		}
 
-		return [
+		return array(
 			'test_name'   => 'Two-Factor Authentication',
 			'enabled'     => $has_tfa,
 			'passed'      => $has_tfa,
 			'description' => $has_tfa ? 'Two-factor authentication plugin active' : 'Two-factor authentication not configured',
-		];
+		);
 	}
 
 	/**
@@ -77,31 +75,30 @@ class Test_User_Login_Security extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_brute_force_protection(): array
-	{
+	public static function test_brute_force_protection(): array {
 		$active_plugins = get_plugins();
 
-		$brute_force_plugins = [
-			'wordfence/wordfence.php' => 'Wordfence',
+		$brute_force_plugins = array(
+			'wordfence/wordfence.php'   => 'Wordfence',
 			'sucuri-scanner/sucuri.php' => 'Sucuri Security',
 			'iThemes-Security-Pro/iThemes-Security-Pro.php' => 'iThemes Security',
 			'limit-login-attempts-reloaded/limit-login-attempts-reloaded.php' => 'Limit Login Attempts',
-		];
+		);
 
 		$has_protection = false;
-		foreach ($brute_force_plugins as $plugin_file => $plugin_name) {
-			if (isset($active_plugins[$plugin_file])) {
+		foreach ( $brute_force_plugins as $plugin_file => $plugin_name ) {
+			if ( isset( $active_plugins[ $plugin_file ] ) ) {
 				$has_protection = true;
 				break;
 			}
 		}
 
-		return [
+		return array(
 			'test_name'   => 'Brute Force Protection',
 			'enabled'     => $has_protection,
 			'passed'      => $has_protection,
 			'description' => $has_protection ? 'Brute force protection plugin active' : 'Brute force protection not configured',
-		];
+		);
 	}
 
 	/**
@@ -109,25 +106,27 @@ class Test_User_Login_Security extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_login_url_obscurity(): array
-	{
+	public static function test_login_url_obscurity(): array {
 		// Check if login URL is at default /wp-login.php or customized
 		$wp_login_accessible = true;
 
-		$response = wp_remote_head(home_url('/wp-login.php'), [
-			'timeout' => 5,
-		]);
+		$response = wp_remote_head(
+			home_url( '/wp-login.php' ),
+			array(
+				'timeout' => 5,
+			)
+		);
 
-		if (is_wp_error($response) || wp_remote_retrieve_response_code($response) === 404) {
+		if ( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) === 404 ) {
 			$wp_login_accessible = false;
 		}
 
-		return [
+		return array(
 			'test_name'     => 'Login URL Obscurity',
 			'default_login' => $wp_login_accessible,
 			'passed'        => ! $wp_login_accessible,
 			'description'   => $wp_login_accessible ? 'Using default /wp-login.php URL' : 'Login URL is customized/hidden',
-		];
+		);
 	}
 
 	/**
@@ -135,31 +134,30 @@ class Test_User_Login_Security extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_login_attempt_logging(): array
-	{
+	public static function test_login_attempt_logging(): array {
 		$active_plugins = get_plugins();
 
 		// Check for plugins that log login attempts
-		$logging_plugins = [
+		$logging_plugins = array(
 			'simple-login-log/simple-login-log.php' => 'Simple Login Log',
-			'wordfence/wordfence.php' => 'Wordfence',
-			'sucuri-scanner/sucuri.php' => 'Sucuri Security',
-		];
+			'wordfence/wordfence.php'               => 'Wordfence',
+			'sucuri-scanner/sucuri.php'             => 'Sucuri Security',
+		);
 
 		$has_logging = false;
-		foreach ($logging_plugins as $plugin_file => $plugin_name) {
-			if (isset($active_plugins[$plugin_file])) {
+		foreach ( $logging_plugins as $plugin_file => $plugin_name ) {
+			if ( isset( $active_plugins[ $plugin_file ] ) ) {
 				$has_logging = true;
 				break;
 			}
 		}
 
-		return [
+		return array(
 			'test_name'   => 'Login Attempt Logging',
 			'enabled'     => $has_logging,
 			'passed'      => $has_logging,
 			'description' => $has_logging ? 'Login attempts are logged' : 'Login attempt logging not configured',
-		];
+		);
 	}
 
 	/**
@@ -167,18 +165,17 @@ class Test_User_Login_Security extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_admin_username(): array
-	{
-		$admin = get_user_by('login', 'admin');
+	public static function test_admin_username(): array {
+		$admin = get_user_by( 'login', 'admin' );
 
 		$has_default_admin = $admin !== false;
 
-		return [
+		return array(
 			'test_name'         => 'Default Admin Username',
 			'has_default_admin' => $has_default_admin,
 			'passed'            => ! $has_default_admin,
 			'description'       => $has_default_admin ? 'Found default "admin" username account' : 'No default admin account found',
-		];
+		);
 	}
 
 	/**
@@ -186,69 +183,68 @@ class Test_User_Login_Security extends Diagnostic_Base
 	 *
 	 * @return array Login security analysis
 	 */
-	private static function analyze_login_security(): array
-	{
+	private static function analyze_login_security(): array {
 		$active_plugins = get_plugins();
 
 		$threat_level = 0;
-		$issues = [];
+		$issues       = array();
 
 		// Check for two-factor authentication
-		$tfa_plugins = [
+		$tfa_plugins = array(
 			'two-factor/two-factor.php',
 			'google-authenticator-per-user-prompt/google-auth.php',
 			'wordfence/wordfence.php',
-		];
+		);
 
 		$has_tfa = false;
-		foreach ($tfa_plugins as $plugin_file) {
-			if (isset($active_plugins[$plugin_file])) {
+		foreach ( $tfa_plugins as $plugin_file ) {
+			if ( isset( $active_plugins[ $plugin_file ] ) ) {
 				$has_tfa = true;
 				break;
 			}
 		}
 
-		if (! $has_tfa) {
-			$issues[] = 'Two-factor authentication not enabled';
+		if ( ! $has_tfa ) {
+			$issues[]     = 'Two-factor authentication not enabled';
 			$threat_level = 30;
 		}
 
 		// Check for brute force protection
-		$brute_force_plugins = [
+		$brute_force_plugins = array(
 			'wordfence/wordfence.php',
 			'sucuri-scanner/sucuri.php',
 			'limit-login-attempts-reloaded/limit-login-attempts-reloaded.php',
-		];
+		);
 
 		$has_brute_force = false;
-		foreach ($brute_force_plugins as $plugin_file) {
-			if (isset($active_plugins[$plugin_file])) {
+		foreach ( $brute_force_plugins as $plugin_file ) {
+			if ( isset( $active_plugins[ $plugin_file ] ) ) {
 				$has_brute_force = true;
 				break;
 			}
 		}
 
-		if (! $has_brute_force) {
-			$issues[] = 'Brute force protection not enabled';
-			$threat_level = max($threat_level, 40);
+		if ( ! $has_brute_force ) {
+			$issues[]     = 'Brute force protection not enabled';
+			$threat_level = max( $threat_level, 40 );
 		}
 
 		// Check for default admin account
-		$admin = get_user_by('login', 'admin');
-		if ($admin) {
-			$issues[] = 'Default admin account still exists';
-			$threat_level = max($threat_level, 50);
+		$admin = get_user_by( 'login', 'admin' );
+		if ( $admin ) {
+			$issues[]     = 'Default admin account still exists';
+			$threat_level = max( $threat_level, 50 );
 		}
 
-		$issue = ! empty($issues) ? implode('; ', $issues) : 'Login security is properly configured';
+		$issue = ! empty( $issues ) ? implode( '; ', $issues ) : 'Login security is properly configured';
 
-		return [
-			'threat_level' => $threat_level,
-			'issue'        => $issue,
-			'has_tfa'      => $has_tfa,
-			'has_brute_force' => $has_brute_force,
+		return array(
+			'threat_level'      => $threat_level,
+			'issue'             => $issue,
+			'has_tfa'           => $has_tfa,
+			'has_brute_force'   => $has_brute_force,
 			'has_default_admin' => $admin !== false,
-		];
+		);
 	}
 
 	/**
@@ -256,8 +252,7 @@ class Test_User_Login_Security extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_name(): string
-	{
+	public static function get_name(): string {
 		return 'User Login Security';
 	}
 
@@ -266,8 +261,7 @@ class Test_User_Login_Security extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_description(): string
-	{
+	public static function get_description(): string {
 		return 'Monitors login security and detects brute force attack risks';
 	}
 
@@ -276,8 +270,7 @@ class Test_User_Login_Security extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_category(): string
-	{
+	public static function get_category(): string {
 		return 'Security';
 	}
 }

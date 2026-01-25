@@ -81,52 +81,56 @@ class Diagnostic_Wcag_Aria_Roles extends Diagnostic_Base {
 	}
 
 	protected static function get_guardian_html(): string {
-		if (isset($_POST['html']) && is_string($_POST['html'])) {
-			return sanitize_text_field(wp_unslash($_POST['html']));
+		if ( isset( $_POST['html'] ) && is_string( $_POST['html'] ) ) {
+			return sanitize_text_field( wp_unslash( $_POST['html'] ) );
 		}
 		return '';
 	}
 
 	public static function check(): ?array {
 		$html = self::get_guardian_html();
-		if (empty($html)) return null;
-
-		$issues = [];
-		try {
-			$dom = new \DOMDocument();
-			@$dom->loadHTML($html);
-			$xpath = new \DOMXPath($dom);
-
-			// Check for elements with role attribute
-			$with_role = $xpath->query('//*[@role]');
-			if ($with_role->length === 0) {
-				$issues[] = 'No ARIA roles defined for semantic structure';
-			}
-		} catch (\Exception $e) {
+		if ( empty( $html ) ) {
 			return null;
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'wcag-aria-roles',
-			'title' => 'ARIA roles missing',
-			'description' => 'Use ARIA roles to provide semantic meaning',
-			'severity' => 'low',
-			'category' => 'accessibility',
+		$issues = array();
+		try {
+			$dom = new \DOMDocument();
+			@$dom->loadHTML( $html );
+			$xpath = new \DOMXPath( $dom );
+
+			// Check for elements with role attribute
+			$with_role = $xpath->query( '//*[@role]' );
+			if ( $with_role->length === 0 ) {
+				$issues[] = 'No ARIA roles defined for semantic structure';
+			}
+		} catch ( \Exception $e ) {
+			return null;
+		}
+
+		return empty( $issues ) ? null : array(
+			'id'           => 'wcag-aria-roles',
+			'title'        => 'ARIA roles missing',
+			'description'  => 'Use ARIA roles to provide semantic meaning',
+			'severity'     => 'low',
+			'category'     => 'accessibility',
 			'threat_level' => 40,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	public static function test_live_wcag_aria_roles(): array {
 		$good = '<html><body><div role="navigation">Menu</div></body></html>';
-		$bad = '<html><body><div>Menu</div></body></html>';
+		$bad  = '<html><body><div>Menu</div></body></html>';
 
 		$_POST['html'] = $good;
-		$r1 = self::check();
+		$r1            = self::check();
 		$_POST['html'] = $bad;
-		$r2 = self::check();
+		$r2            = self::check();
 
-		return ['passed' => is_null($r1) && is_array($r2), 'message' => 'ARIA roles check working'];
+		return array(
+			'passed'  => is_null( $r1 ) && is_array( $r2 ),
+			'message' => 'ARIA roles check working',
+		);
 	}
-	}
-
+}

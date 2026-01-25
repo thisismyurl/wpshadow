@@ -100,7 +100,7 @@ class Color_Utils {
 
 		// Lighter color / darker color
 		$lighter = max( $fg_luminance, $bg_luminance );
-		$darker = min( $fg_luminance, $bg_luminance );
+		$darker  = min( $fg_luminance, $bg_luminance );
 
 		return ( $lighter + 0.05 ) / ( $darker + 0.05 );
 	}

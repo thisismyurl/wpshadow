@@ -19,30 +19,29 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_Admin_Dashboard_Load_Speed extends Diagnostic_Base
-{
+class Diagnostic_Admin_Dashboard_Load_Speed extends Diagnostic_Base {
+
 
 	/**
 	 * Run the diagnostic check
 	 *
 	 * @return array|null Array with finding details or null if no issue found
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		// Check admin dashboard load speed
-		$dashboard_load_time = get_transient('wpshadow_dashboard_load_ms');
+		$dashboard_load_time = get_transient( 'wpshadow_dashboard_load_ms' );
 
-		if ($dashboard_load_time && $dashboard_load_time > 2000) { // 2 seconds
+		if ( $dashboard_load_time && $dashboard_load_time > 2000 ) { // 2 seconds
 			return array(
-				'id' => 'admin-dashboard-load-speed',
-				'title' => sprintf(__('Slow Admin Dashboard (%dms)', 'wpshadow'), $dashboard_load_time),
-				'description' => __('Admin dashboard is loading slowly. Disable dashboard widgets and check for slow plugins.', 'wpshadow'),
-				'severity' => 'medium',
-				'category' => 'monitoring',
-				'kb_link' => 'https://wpshadow.com/kb/admin-performance/',
+				'id'            => 'admin-dashboard-load-speed',
+				'title'         => sprintf( __( 'Slow Admin Dashboard (%dms)', 'wpshadow' ), $dashboard_load_time ),
+				'description'   => __( 'Admin dashboard is loading slowly. Disable dashboard widgets and check for slow plugins.', 'wpshadow' ),
+				'severity'      => 'medium',
+				'category'      => 'monitoring',
+				'kb_link'       => 'https://wpshadow.com/kb/admin-performance/',
 				'training_link' => 'https://wpshadow.com/training/dashboard-tuning/',
-				'auto_fixable' => false,
-				'threat_level' => 40,
+				'auto_fixable'  => false,
+				'threat_level'  => 40,
 			);
 		}
 		return null;
@@ -70,14 +69,13 @@ class Diagnostic_Admin_Dashboard_Load_Speed extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__admin_dashboard_load_speed(): array
-	{
-		$dashboard_load_time = get_transient('wpshadow_dashboard_load_ms');
-		$has_issue = ($dashboard_load_time && $dashboard_load_time > 2000);
+	public static function test_live__admin_dashboard_load_speed(): array {
+		$dashboard_load_time = get_transient( 'wpshadow_dashboard_load_ms' );
+		$has_issue           = ( $dashboard_load_time && $dashboard_load_time > 2000 );
 
-		$result = self::check();
-		$diagnostic_found_issue = is_array($result);
-		$test_passes = ($has_issue === $diagnostic_found_issue);
+		$result                 = self::check();
+		$diagnostic_found_issue = is_array( $result );
+		$test_passes            = ( $has_issue === $diagnostic_found_issue );
 
 		$message = $test_passes
 			? 'Admin dashboard load speed check matches site state'

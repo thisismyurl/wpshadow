@@ -9,14 +9,14 @@ use WPShadow\Core\Diagnostic_Base;
  * This is a placeholder implementation for future work.
  */
 class Diagnostic_CompEmailCanSpam extends Diagnostic_Base {
-	protected static $slug = 'comp-email-can-spam';
+	protected static $slug  = 'comp-email-can-spam';
 	protected static $title = 'Comp Email Can Spam';
-	
+
 	public static function check(): ?array {
 		// TODO: Implement diagnostic logic
 		return null;
 	}
-	
+
 	public static function run(): array {
 		return array();
 	}

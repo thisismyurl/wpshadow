@@ -81,7 +81,7 @@ class Diagnostic_Gdpr_Data_Retention_Policy extends Diagnostic_Base {
 
 	public static function check(): ?array {
 		// Check if data retention policy is documented
-		
+
 		$privacy_policy_id = (int) get_option( 'wp_page_for_privacy_policy' );
 
 		if ( ! $privacy_policy_id ) {
@@ -98,10 +98,10 @@ class Diagnostic_Gdpr_Data_Retention_Policy extends Diagnostic_Base {
 
 		$privacy_policy = get_post( $privacy_policy_id );
 		if ( $privacy_policy ) {
-			$content = strtolower( $privacy_policy->post_content );
+			$content            = strtolower( $privacy_policy->post_content );
 			$has_retention_info = strpos( $content, 'retention' ) !== false ||
-								  strpos( $content, 'delete' ) !== false ||
-								  strpos( $content, 'keep' ) !== false;
+									strpos( $content, 'delete' ) !== false ||
+									strpos( $content, 'keep' ) !== false;
 
 			if ( ! $has_retention_info ) {
 				return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
@@ -124,7 +124,7 @@ class Diagnostic_Gdpr_Data_Retention_Policy extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Gdpr Data Retention Policy
 	 * Slug: gdpr-data-retention-policy
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -145,15 +145,13 @@ class Diagnostic_Gdpr_Data_Retention_Policy extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

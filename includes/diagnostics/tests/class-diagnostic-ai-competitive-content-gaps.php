@@ -8,7 +8,7 @@ use WPShadow\Core\Diagnostic_Base;
 /**
  * CONTENT QUALITY - Keyword Analysis Approach
  * ============================================================
- * 
+ *
  * DETECTION APPROACH:
  * Scan local content for quality/bias issues via keyword analysis
  *
@@ -142,47 +142,49 @@ class Diagnostic_AiCompetitiveContentGaps extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		$issues = [];
+		$issues = array();
 
 		// Check if competitive analysis is configured
-		$competitors = get_option('wpshadow_competitors_tracked', []);
+		$competitors = get_option( 'wpshadow_competitors_tracked', array() );
 
-		if (empty($competitors)) {
+		if ( empty( $competitors ) ) {
 			$issues[] = 'No competitor sites configured for gap analysis';
 		}
 
 		// Check if last analysis was performed
-		$last_analysis = get_option('wpshadow_content_gap_last_run', 0);
-		$days_old = (time() - $last_analysis) / (24 * 3600);
+		$last_analysis = get_option( 'wpshadow_content_gap_last_run', 0 );
+		$days_old      = ( time() - $last_analysis ) / ( 24 * 3600 );
 
-		if ($days_old > 30) {
+		if ( $days_old > 30 ) {
 			$issues[] = 'Content gap analysis not run in 30+ days';
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'ai-competitive-content-gaps',
-			'title' => 'Content gaps not analyzed',
-			'description' => 'Analyze competitor content to identify gaps',
-			'severity' => 'medium',
-			'category' => 'ai_readiness',
+		return empty( $issues ) ? null : array(
+			'id'           => 'ai-competitive-content-gaps',
+			'title'        => 'Content gaps not analyzed',
+			'description'  => 'Analyze competitor content to identify gaps',
+			'severity'     => 'medium',
+			'category'     => 'ai_readiness',
 			'threat_level' => 42,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	public static function test_live_ai_competitive_content_gaps(): array {
 		// Test without competitors configured
-		delete_option('wpshadow_competitors_tracked');
+		delete_option( 'wpshadow_competitors_tracked' );
 		$r1 = self::check();
 
 		// Test with competitors configured
-		update_option('wpshadow_competitors_tracked', ['example.com', 'competitor.com']);
-		update_option('wpshadow_content_gap_last_run', time());
+		update_option( 'wpshadow_competitors_tracked', array( 'example.com', 'competitor.com' ) );
+		update_option( 'wpshadow_content_gap_last_run', time() );
 		$r2 = self::check();
 
-		delete_option('wpshadow_competitors_tracked');
-		delete_option('wpshadow_content_gap_last_run');
-		return ['passed' => is_array($r1) && is_null($r2), 'message' => 'Content gap check working'];
+		delete_option( 'wpshadow_competitors_tracked' );
+		delete_option( 'wpshadow_content_gap_last_run' );
+		return array(
+			'passed'  => is_array( $r1 ) && is_null( $r2 ),
+			'message' => 'Content gap check working',
+		);
 	}
-	}
-
+}

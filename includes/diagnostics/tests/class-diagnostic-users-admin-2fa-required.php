@@ -23,14 +23,14 @@ use WPShadow\Core\Diagnostic_Lean_Checks;
  * @verified 2026-01-24 - Batch 3 implementation
  * @guardian-integrated Pending
  */
-class Diagnostic_Users_Admin_2fa_Required extends Diagnostic_Base
-{
-	protected static $slug = 'users-admin-2fa-required';
-	protected static $title = '2FA Required for Admins';
-	protected static $description = 'Is 2FA enforced for admin accounts?';
-	protected static $category = 'Users & Team';
+class Diagnostic_Users_Admin_2fa_Required extends Diagnostic_Base {
+
+	protected static $slug         = 'users-admin-2fa-required';
+	protected static $title        = '2FA Required for Admins';
+	protected static $description  = 'Is 2FA enforced for admin accounts?';
+	protected static $category     = 'Users & Team';
 	protected static $threat_level = 'medium';
-	protected static $family = 'general';
+	protected static $family       = 'general';
 	protected static $family_label = 'General';
 
 	/**
@@ -38,30 +38,29 @@ class Diagnostic_Users_Admin_2fa_Required extends Diagnostic_Base
 	 *
 	 * @return ?array Null if pass, array of findings if fail
 	 */
-	public function check(): ?array
-	{
+	public function check(): ?array {
 		// Check if 2FA plugin is active
-		$two_fa_plugins = [
+		$two_fa_plugins = array(
 			'two-factor',
 			'wordfence',
 			'jetpack',
 			'shield-security',
 			'google-authenticator',
-			'authy-two-factor'
-		];
+			'authy-two-factor',
+		);
 
 		$has_2fa = false;
-		foreach ($two_fa_plugins as $plugin) {
+		foreach ( $two_fa_plugins as $plugin ) {
 			if (
-				is_plugin_active($plugin . '/' . $plugin . '.php') ||
-				is_plugin_active($plugin)
+				is_plugin_active( $plugin . '/' . $plugin . '.php' ) ||
+				is_plugin_active( $plugin )
 			) {
 				$has_2fa = true;
 				break;
 			}
 		}
 
-		if (! $has_2fa) {
+		if ( ! $has_2fa ) {
 			return Diagnostic_Lean_Checks::build_finding(
 				'users-admin-2fa-required',
 				'2FA Not Enforced',

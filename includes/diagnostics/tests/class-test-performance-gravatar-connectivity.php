@@ -16,13 +16,12 @@ use WPShadow\Core\Diagnostic_Base;
  * @subpackage Diagnostics/Tests
  * @since 1.2601.2112
  */
-class Test_Performance_GravatarConnectivity extends Diagnostic_Base
-{
+class Test_Performance_GravatarConnectivity extends Diagnostic_Base {
 
-	public static function check(): ?array
-	{
+
+	public static function check(): ?array {
 		// Check if Gravatar is being used
-		if (get_option('show_avatars') === '1') {
+		if ( get_option( 'show_avatars' ) === '1' ) {
 			// If Gravatar is enabled, it's being used
 			// This is informational, not necessarily an issue
 			return null;
@@ -32,20 +31,19 @@ class Test_Performance_GravatarConnectivity extends Diagnostic_Base
 		return null;
 	}
 
-	public static function test_live_gravatar_connectivity(): array
-	{
+	public static function test_live_gravatar_connectivity(): array {
 		$result = self::check();
 
-		if (null === $result) {
-			return [
-				'passed' => true,
-				'message' => __('Avatar settings are properly configured', 'wpshadow'),
-			];
+		if ( null === $result ) {
+			return array(
+				'passed'  => true,
+				'message' => __( 'Avatar settings are properly configured', 'wpshadow' ),
+			);
 		}
 
-		return [
-			'passed' => false,
-			'message' => __('Check avatar configuration', 'wpshadow'),
-		];
+		return array(
+			'passed'  => false,
+			'message' => __( 'Check avatar configuration', 'wpshadow' ),
+		);
 	}
 }

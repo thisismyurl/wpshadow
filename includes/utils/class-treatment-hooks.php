@@ -179,7 +179,7 @@ class Treatment_Hooks {
 	public static function disable_emojis_dns_prefetch( $urls, $relation_type ) {
 		if ( 'dns-prefetch' === $relation_type ) {
 			$emoji_svg_url = apply_filters( 'emoji_svg_url', 'https://s.w.org/images/core/emoji/2/svg/' );
-			$urls = array_diff( $urls, array( $emoji_svg_url ) );
+			$urls          = array_diff( $urls, array( $emoji_svg_url ) );
 		}
 		return $urls;
 	}
@@ -196,7 +196,7 @@ class Treatment_Hooks {
 		foreach ( $wp_styles->registered as $handle => $style ) {
 			if ( isset( $style->src ) && is_string( $style->src ) ) {
 				if ( strpos( $style->src, 'fonts.googleapis.com' ) !== false ||
-				     strpos( $style->src, 'fonts.gstatic.com' ) !== false ) {
+					strpos( $style->src, 'fonts.gstatic.com' ) !== false ) {
 					wp_dequeue_style( $handle );
 					wp_deregister_style( $handle );
 				}
@@ -216,9 +216,14 @@ class Treatment_Hooks {
 			return $urls;
 		}
 		if ( in_array( $relation_type, array( 'dns-prefetch', 'preconnect' ), true ) ) {
-			$urls = array_values( array_filter( $urls, function ( $url ) {
-				return ( false === strpos( (string) $url, 'fonts.googleapis.com' ) && false === strpos( (string) $url, 'fonts.gstatic.com' ) );
-			} ) );
+			$urls = array_values(
+				array_filter(
+					$urls,
+					function ( $url ) {
+						return ( false === strpos( (string) $url, 'fonts.googleapis.com' ) && false === strpos( (string) $url, 'fonts.gstatic.com' ) );
+					}
+				)
+			);
 		}
 		return $urls;
 	}
@@ -435,9 +440,14 @@ class Treatment_Hooks {
 		if ( ! is_array( $urls ) || empty( $urls ) ) {
 			return $urls;
 		}
-		return array_values( array_filter( $urls, function( $url ) {
-			return ! self::is_blocked_analytics_url( (string) $url );
-		} ) );
+		return array_values(
+			array_filter(
+				$urls,
+				function ( $url ) {
+					return ! self::is_blocked_analytics_url( (string) $url );
+				}
+			)
+		);
 	}
 
 	/**
@@ -462,7 +472,12 @@ class Treatment_Hooks {
 		if ( empty( $hosts ) ) {
 			return $html;
 		}
-		$escaped = array_map( function( $h ) { return preg_quote( $h, '/' ); }, $hosts );
+		$escaped       = array_map(
+			function ( $h ) {
+				return preg_quote( $h, '/' );
+			},
+			$hosts
+		);
 		$pattern_hosts = implode( '|', $escaped );
 		// Remove script tags with src to blocked hosts.
 		$html = preg_replace( "/<script[^>]*\\bsrc\\s*=\\s*(\"|')[^\"']*(?:$pattern_hosts)[^\"']*\\1[^>]*>\\s*<\\/script>/i", '', $html );
@@ -491,7 +506,7 @@ class Treatment_Hooks {
 	 */
 	public static function cleanup_post_classes( $classes ) {
 		// Keep only essential classes
-		$keep = array( 'post', 'page', 'attachment', 'type-post', 'type-page', 'status-publish' );
+		$keep     = array( 'post', 'page', 'attachment', 'type-post', 'type-page', 'status-publish' );
 		$filtered = array();
 		foreach ( $classes as $class ) {
 			foreach ( $keep as $pattern ) {
@@ -546,8 +561,8 @@ class Treatment_Hooks {
 	 */
 	public static function add_nav_aria_current( $atts, $item, $args, $depth ) {
 		if ( in_array( 'current-menu-item', $item->classes, true ) ||
-		     in_array( 'current-menu-parent', $item->classes, true ) ||
-		     in_array( 'current-menu-ancestor', $item->classes, true ) ) {
+			in_array( 'current-menu-parent', $item->classes, true ) ||
+			in_array( 'current-menu-ancestor', $item->classes, true ) ) {
 			$atts['aria-current'] = 'page';
 		}
 		return $atts;

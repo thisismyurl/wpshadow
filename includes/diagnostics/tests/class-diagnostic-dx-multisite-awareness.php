@@ -85,7 +85,7 @@ class Diagnostic_Dx_Multisite_Awareness extends Diagnostic_Base {
 
 		// If multisite is enabled, verify basic configuration
 		$network_home = network_home_url();
-		$site_url = site_url();
+		$site_url     = site_url();
 
 		// Check if site URL is different from network URL (expected for multisite)
 		if ( $network_home === $site_url ) {

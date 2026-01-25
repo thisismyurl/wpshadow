@@ -16,7 +16,7 @@ use WPShadow\Core\Diagnostic_Base;
  *
  * @package WPShadow
  * @subpackage Diagnostics
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
@@ -114,7 +114,7 @@ class Diagnostic_Theme_Font_Loading extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Theme Font Loading
 	 * Slug: theme-font-loading
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -128,11 +128,16 @@ class Diagnostic_Theme_Font_Loading extends Diagnostic_Base {
 	 */
 	public static function test_live_theme_font_loading(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Fonts are efficiently loaded and cached'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Fonts are efficiently loaded and cached',
+			);
 		}
 		$message = $result['description'] ?? 'Font loading issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

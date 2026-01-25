@@ -4,7 +4,7 @@ declare(strict_types=1);
  * RSS Feed Links Diagnostic
  *
  * @package WPShadow
-  *
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Check if RSS feed links are in the head when not needed.
-  *
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
@@ -88,17 +88,17 @@ class Diagnostic_RSS_Feeds extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live_rss_feeds(): array {
-		$disabled = (bool) get_option('wpshadow_rss_feeds_disabled', false);
-		$has_feed_links = (has_action('wp_head', 'feed_links') !== false);
-		$has_extra_feed_links = (has_action('wp_head', 'feed_links_extra') !== false);
+		$disabled             = (bool) get_option( 'wpshadow_rss_feeds_disabled', false );
+		$has_feed_links       = ( has_action( 'wp_head', 'feed_links' ) !== false );
+		$has_extra_feed_links = ( has_action( 'wp_head', 'feed_links_extra' ) !== false );
 
 		// Issue exists if: NOT disabled AND (feed_links OR extra_feed_links)
-		$has_issue = (!$disabled && ($has_feed_links || $has_extra_feed_links));
+		$has_issue = ( ! $disabled && ( $has_feed_links || $has_extra_feed_links ) );
 
-		$result = self::check();
-		$diagnostic_found_issue = is_array($result);
+		$result                 = self::check();
+		$diagnostic_found_issue = is_array( $result );
 
-		$test_passes = ($has_issue === $diagnostic_found_issue);
+		$test_passes = ( $has_issue === $diagnostic_found_issue );
 
 		$message = $test_passes
 			? 'RSS feeds check matches site state'
@@ -116,6 +116,4 @@ class Diagnostic_RSS_Feeds extends Diagnostic_Base {
 			'message' => $message,
 		);
 	}
-
 }
-

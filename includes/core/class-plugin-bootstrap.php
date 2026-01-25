@@ -14,7 +14,7 @@
 
 namespace WPShadow\Core;
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -31,131 +31,128 @@ class Plugin_Bootstrap
 	 *
 	 * @return void
 	 */
-	public static function init()
-	{
-		// 1. Load core base classes (required before everything else)
-		self::load_core_classes();
+public static function init() {
+	// 1. Load core base classes (required before everything else)
+	self::load_core_classes();
 
-		// 2. Register hooks (must be early, before other systems)
-		Hooks_Initializer::init();
+	// 2. Register hooks (must be early, before other systems)
+	Hooks_Initializer::init();
 
-		// 3. Initialize menu system
-		Menu_Manager::init();
+	// 3. Initialize menu system
+	Menu_Manager::init();
 
-		// 4. Load dashboard page
-		self::load_dashboard_page();
+	// 4. Load dashboard page
+	self::load_dashboard_page();
 
-		// 5. Load engage system (gamification)
-		self::load_engage_system();
+	// 5. Load engage system (gamification)
+	self::load_engage_system();
 
-		// 5. Load performance optimizer
-		self::load_performance_optimizer();
+	// 5. Load performance optimizer
+	self::load_performance_optimizer();
 
-		// 6. Load onboarding system
-		self::load_onboarding_system();
+	// 6. Load onboarding system
+	self::load_onboarding_system();
 
-		// 7. Load privacy system
-		self::load_privacy_system();
+	// 7. Load privacy system
+	self::load_privacy_system();
 
-		// 8. Load content post types (KB, FAQ, etc.)
-		self::load_content_types();
+	// 8. Load content post types (KB, FAQ, etc.)
+	self::load_content_types();
 
-		// 9. Load pro addon integration
-		self::load_pro_integration();
+	// 9. Load pro addon integration
+	self::load_pro_integration();
 
-		// 10. Load WP-CLI commands
-		self::load_cli_commands();
+	// 10. Load WP-CLI commands
+	self::load_cli_commands();
 
-		// 11. Initialize visual comparator
-		self::init_visual_comparator();
+	// 11. Initialize visual comparator
+	self::init_visual_comparator();
 
-		// 12. Fire initialization complete hook
-		do_action('wpshadow_core_initialized');
-	}
+	// 12. Fire initialization complete hook
+	do_action( 'wpshadow_core_initialized' );
+}
 
 	/**
 	 * Load core base classes
 	 *
 	 * @return void
 	 */
-	private static function load_core_classes()
-	{
-		$core_path = WPSHADOW_PATH . 'includes/core/';
+private static function load_core_classes() {
+	$core_path = WPSHADOW_PATH . 'includes/core/';
 
-		// Already loaded by wpshadow.php:
-		// - class-treatment-base.php
-		// - class-ajax-handler-base.php
-		// - class-diagnostic-base.php
-		// - class-color-utils.php
-		// - class-theme-data-provider.php
-		// - class-activity-logger.php
-		// - class-error-handler.php
+	// Already loaded by wpshadow.php:
+	// - class-treatment-base.php
+	// - class-ajax-handler-base.php
+	// - class-diagnostic-base.php
+	// - class-color-utils.php
+	// - class-theme-data-provider.php
+	// - class-activity-logger.php
+	// - class-error-handler.php
 
-		// Load additional core classes
-		if (file_exists($core_path . 'class-kpi-tracker.php')) {
-			require_once $core_path . 'class-kpi-tracker.php';
-		}
-
-		if (file_exists($core_path . 'class-finding-status-manager.php')) {
-			require_once $core_path . 'class-finding-status-manager.php';
-		}
-
-		if (file_exists($core_path . 'class-tooltip-manager.php')) {
-			require_once $core_path . 'class-tooltip-manager.php';
-		}
-
-		if (file_exists($core_path . 'class-dashboard-widgets.php')) {
-			require_once $core_path . 'class-dashboard-widgets.php';
-		}
-
-		if (file_exists($core_path . 'class-site-health-explanations.php')) {
-			require_once $core_path . 'class-site-health-explanations.php';
-		}
-
-		if (file_exists($core_path . 'class-treatment-hooks.php')) {
-			require_once $core_path . 'class-treatment-hooks.php';
-		}
-
-		if (file_exists($core_path . 'class-trend-chart.php')) {
-			require_once $core_path . 'class-trend-chart.php';
-		}
-
-		if (file_exists($core_path . 'class-abstract-registry.php')) {
-			require_once $core_path . 'class-abstract-registry.php';
-		}
-
-		if (file_exists($core_path . 'class-category-metadata.php')) {
-			require_once $core_path . 'class-category-metadata.php';
-		}
-
-		if (file_exists($core_path . 'class-visual-comparator.php')) {
-			require_once $core_path . 'class-visual-comparator.php';
-		}
+	// Load additional core classes
+	if ( file_exists( $core_path . 'class-kpi-tracker.php' ) ) {
+		require_once $core_path . 'class-kpi-tracker.php';
 	}
+
+	if ( file_exists( $core_path . 'class-finding-status-manager.php' ) ) {
+		require_once $core_path . 'class-finding-status-manager.php';
+	}
+
+	if ( file_exists( $core_path . 'class-tooltip-manager.php' ) ) {
+		require_once $core_path . 'class-tooltip-manager.php';
+	}
+
+	if ( file_exists( $core_path . 'class-dashboard-widgets.php' ) ) {
+		require_once $core_path . 'class-dashboard-widgets.php';
+	}
+
+	if ( file_exists( $core_path . 'class-site-health-explanations.php' ) ) {
+		require_once $core_path . 'class-site-health-explanations.php';
+	}
+
+	if ( file_exists( $core_path . 'class-treatment-hooks.php' ) ) {
+		require_once $core_path . 'class-treatment-hooks.php';
+	}
+
+	if ( file_exists( $core_path . 'class-trend-chart.php' ) ) {
+		require_once $core_path . 'class-trend-chart.php';
+	}
+
+	if ( file_exists( $core_path . 'class-abstract-registry.php' ) ) {
+		require_once $core_path . 'class-abstract-registry.php';
+	}
+
+	if ( file_exists( $core_path . 'class-category-metadata.php' ) ) {
+		require_once $core_path . 'class-category-metadata.php';
+	}
+
+	if ( file_exists( $core_path . 'class-visual-comparator.php' ) ) {
+		require_once $core_path . 'class-visual-comparator.php';
+	}
+}
 
 	/**
 	 * Load dashboard page
 	 *
 	 * @return void
 	 */
-	private static function load_dashboard_page()
-	{
-		$dashboard_file = WPSHADOW_PATH . 'includes/views/dashboard-page.php';
-		if (file_exists($dashboard_file)) {
-			require_once $dashboard_file;
-		}
+private static function load_dashboard_page() {
+	$dashboard_file = WPSHADOW_PATH . 'includes/views/dashboard-page.php';
+	if ( file_exists( $dashboard_file ) ) {
+		require_once $dashboard_file;
+	}
 
-		// Load visual comparisons page
-		$visual_comparisons_file = WPSHADOW_PATH . 'includes/views/visual-comparisons-page.php';
-		if (file_exists($visual_comparisons_file)) {
-			require_once $visual_comparisons_file;
-		
+	// Load visual comparisons page
+	$visual_comparisons_file = WPSHADOW_PATH . 'includes/views/visual-comparisons-page.php';
+	if ( file_exists( $visual_comparisons_file ) ) {
+		require_once $visual_comparisons_file;
+
 		// Load dashboard widgets
 		$widgets_path = WPSHADOW_PATH . 'includes/dashboard/widgets/';
-		if (file_exists($widgets_path . 'class-setup-widget.php')) {
+		if ( file_exists( $widgets_path . 'class-setup-widget.php' ) ) {
 			require_once $widgets_path . 'class-setup-widget.php';
-			
-			if (class_exists('\\WPShadow\\Dashboard\\Widgets\\Setup_Widget')) {
+
+			if ( class_exists( '\\WPShadow\\Dashboard\\Widgets\\Setup_Widget' ) ) {
 				\WPShadow\Dashboard\Widgets\Setup_Widget::init();
 			}
 		}
@@ -166,8 +163,7 @@ class Plugin_Bootstrap
 	 *
 	 * @return void
 	 */
-	private static function load_engage_system()
-	{
+	private static function load_engage_system() {
 		$engage_path = WPSHADOW_PATH . 'includes/engage/';
 
 		$engage_classes = array(
@@ -178,30 +174,30 @@ class Plugin_Bootstrap
 			'class-milestone.php',
 		);
 
-		foreach ($engage_classes as $file) {
-			if (file_exists($engage_path . $file)) {
+		foreach ( $engage_classes as $file ) {
+			if ( file_exists( $engage_path . $file ) ) {
 				require_once $engage_path . $file;
 			}
 		}
 
 		// Initialize engage systems
-		if (class_exists('\\WPShadow\\Engage\\Achievement')) {
+		if ( class_exists( '\\WPShadow\\Engage\\Achievement' ) ) {
 			\WPShadow\Engage\Achievement::init();
 		}
 
-		if (class_exists('\\WPShadow\\Engage\\Streak')) {
+		if ( class_exists( '\\WPShadow\\Engage\\Streak' ) ) {
 			\WPShadow\Engage\Streak::init();
 		}
 
-		if (class_exists('\\WPShadow\\Engage\\Leaderboard')) {
+		if ( class_exists( '\\WPShadow\\Engage\\Leaderboard' ) ) {
 			\WPShadow\Engage\Leaderboard::init();
 		}
 
-		if (class_exists('\\WPShadow\\Engage\\Badge')) {
+		if ( class_exists( '\\WPShadow\\Engage\\Badge' ) ) {
 			\WPShadow\Engage\Badge::init();
 		}
 
-		if (class_exists('\\WPShadow\\Engage\\Milestone')) {
+		if ( class_exists( '\\WPShadow\\Engage\\Milestone' ) ) {
 			\WPShadow\Engage\Milestone::init();
 		}
 	}
@@ -211,14 +207,13 @@ class Plugin_Bootstrap
 	 *
 	 * @return void
 	 */
-	private static function load_performance_optimizer()
-	{
+	private static function load_performance_optimizer() {
 		$optimizer_path = WPSHADOW_PATH . 'includes/optimizer/';
 
-		if (file_exists($optimizer_path . 'class-performance-optimizer.php')) {
+		if ( file_exists( $optimizer_path . 'class-performance-optimizer.php' ) ) {
 			require_once $optimizer_path . 'class-performance-optimizer.php';
 
-			if (class_exists('\\WPShadow\\Optimizer\\Performance_Optimizer')) {
+			if ( class_exists( '\\WPShadow\\Optimizer\\Performance_Optimizer' ) ) {
 				\WPShadow\Optimizer\Performance_Optimizer::init();
 			}
 		}
@@ -229,14 +224,13 @@ class Plugin_Bootstrap
 	 *
 	 * @return void
 	 */
-	private static function load_onboarding_system()
-	{
+	private static function load_onboarding_system() {
 		$onboarding_path = WPSHADOW_PATH . 'includes/onboarding/';
 
-		if (file_exists($onboarding_path . 'class-onboarding-wizard.php')) {
+		if ( file_exists( $onboarding_path . 'class-onboarding-wizard.php' ) ) {
 			require_once $onboarding_path . 'class-onboarding-wizard.php';
 
-			if (class_exists('\\WPShadow\\Onboarding\\Onboarding_Wizard')) {
+			if ( class_exists( '\\WPShadow\\Onboarding\\Onboarding_Wizard' ) ) {
 				\WPShadow\Onboarding\Onboarding_Wizard::init();
 			}
 		}
@@ -247,16 +241,15 @@ class Plugin_Bootstrap
 	 *
 	 * @return void
 	 */
-	private static function load_privacy_system()
-	{
+	private static function load_privacy_system() {
 		$privacy_path = WPSHADOW_PATH . 'includes/privacy/';
 
 		// Load privacy classes
-		if (file_exists($privacy_path . 'class-consent-preferences.php')) {
+		if ( file_exists( $privacy_path . 'class-consent-preferences.php' ) ) {
 			require_once $privacy_path . 'class-consent-preferences.php';
 		}
 
-		if (file_exists($privacy_path . 'class-first-run-consent.php')) {
+		if ( file_exists( $privacy_path . 'class-first-run-consent.php' ) ) {
 			require_once $privacy_path . 'class-first-run-consent.php';
 		}
 	}
@@ -266,17 +259,16 @@ class Plugin_Bootstrap
 	 *
 	 * @return void
 	 */
-	private static function load_content_types()
-	{
+	private static function load_content_types() {
 		$content_path = WPSHADOW_PATH . 'includes/content/';
 
 		// Load KB post type
-		if (file_exists($content_path . 'class-kb-post-type.php')) {
+		if ( file_exists( $content_path . 'class-kb-post-type.php' ) ) {
 			require_once $content_path . 'class-kb-post-type.php';
 		}
 
 		// Load FAQ post type
-		if (file_exists($content_path . 'class-faq-post-type.php')) {
+		if ( file_exists( $content_path . 'class-faq-post-type.php' ) ) {
 			require_once $content_path . 'class-faq-post-type.php';
 		}
 	}
@@ -286,10 +278,9 @@ class Plugin_Bootstrap
 	 *
 	 * @return void
 	 */
-	private static function load_pro_integration()
-	{
+	private static function load_pro_integration() {
 		// Load pro addon if available (separate plugin)
-		do_action('wpshadow_load_pro_features');
+		do_action( 'wpshadow_load_pro_features' );
 	}
 
 	/**
@@ -297,15 +288,14 @@ class Plugin_Bootstrap
 	 *
 	 * @return void
 	 */
-	private static function load_cli_commands()
-	{
-		if (! defined('WP_CLI') || ! WP_CLI) {
+	private static function load_cli_commands() {
+		if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
 			return;
 		}
 
 		$cli_path = WPSHADOW_PATH . 'includes/cli/';
 
-		if (file_exists($cli_path . 'class-wpshadow-cli.php')) {
+		if ( file_exists( $cli_path . 'class-wpshadow-cli.php' ) ) {
 			require_once $cli_path . 'class-wpshadow-cli.php';
 
 			// CLI will auto-register
@@ -317,9 +307,8 @@ class Plugin_Bootstrap
 	 *
 	 * @return void
 	 */
-	private static function init_visual_comparator()
-	{
-		if (class_exists('\\WPShadow\\Core\\Visual_Comparator')) {
+	private static function init_visual_comparator() {
+		if ( class_exists( '\\WPShadow\\Core\\Visual_Comparator' ) ) {
 			\WPShadow\Core\Visual_Comparator::init();
 		}
 	}
@@ -332,8 +321,7 @@ class Plugin_Bootstrap
 	 *     @type array $errors Any initialization errors
 	 * }
 	 */
-	public static function get_status()
-	{
+	public static function get_status() {
 		return array(
 			'ready'  => true,
 			'errors' => array(),

@@ -12,19 +12,19 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/design-post-list-item-design
  */
 class Diagnostic_Design_POST_LIST_ITEM_DESIGN extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'design-post-list-item-design',
-            'title' => __('Post List Item Design', 'wpshadow'),
-            'description' => __('Checks post cards/list items styled consistently.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'design',
-            'kb_link' => 'https://wpshadow.com/kb/design-post-list-item-design',
-            'training_link' => 'https://wpshadow.com/training/design-post-list-item-design',
-            'auto_fixable' => false,
-            'threat_level' => 6
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'design-post-list-item-design',
+			'title'         => __( 'Post List Item Design', 'wpshadow' ),
+			'description'   => __( 'Checks post cards/list items styled consistently.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'design',
+			'kb_link'       => 'https://wpshadow.com/kb/design-post-list-item-design',
+			'training_link' => 'https://wpshadow.com/training/design-post-list-item-design',
+			'auto_fixable'  => false,
+			'threat_level'  => 6,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -32,12 +32,12 @@ class Diagnostic_Design_POST_LIST_ITEM_DESIGN extends Diagnostic_Base {
 	 * Diagnostic: Design POST LIST ITEM DESIGN
 	 * Slug: -design-post-list-item-design
 	 * File: class-diagnostic-design-post-list-item-design.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Design POST LIST ITEM DESIGN
 	 * Slug: -design-post-list-item-design
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -50,11 +50,16 @@ class Diagnostic_Design_POST_LIST_ITEM_DESIGN extends Diagnostic_Base {
 	 */
 	public static function test_live__design_post_list_item_design(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Post list items are well-designed and scannable'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Post list items are well-designed and scannable',
+			);
 		}
 		$message = $result['description'] ?? 'Post list design issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

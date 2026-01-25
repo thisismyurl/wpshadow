@@ -15,15 +15,15 @@
 
 namespace WPShadow\Core;
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
  * Database migration and schema management
  */
-class Database_Migrator
-{
+class Database_Migrator {
+
 
 	/**
 	 * Current schema version
@@ -42,13 +42,12 @@ class Database_Migrator
 	 *
 	 * @return void
 	 */
-	public static function migrate()
-	{
+	public static function migrate() {
 		// Get current version
-		$current_version = (int) get_option(self::VERSION_OPTION, 0);
+		$current_version = (int) get_option( self::VERSION_OPTION, 0 );
 
 		// Only run if schema needs update
-		if ($current_version >= self::SCHEMA_VERSION) {
+		if ( $current_version >= self::SCHEMA_VERSION ) {
 			return;
 		}
 
@@ -56,12 +55,12 @@ class Database_Migrator
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 		// Version 0 -> 1: Initial schema
-		if ($current_version < 1) {
+		if ( $current_version < 1 ) {
 			self::schema_v1();
 		}
 
 		// Update version
-		update_option(self::VERSION_OPTION, self::SCHEMA_VERSION, false);
+		update_option( self::VERSION_OPTION, self::SCHEMA_VERSION, false );
 	}
 
 	/**
@@ -73,8 +72,7 @@ class Database_Migrator
 	 *
 	 * @return void
 	 */
-	private static function schema_v1()
-	{
+	private static function schema_v1() {
 		global $wpdb;
 
 		// Table prefix
@@ -99,7 +97,7 @@ class Database_Migrator
 
 		// Use dbDelta for safe table creation
 		// dbDelta returns array of queries executed, but we just need side effects
-		dbDelta($sql);
+		dbDelta( $sql );
 
 		// Optional: Create activity log table for Guardian
 		// Currently using wp_options with wpshadow_guardian_activity option
@@ -129,13 +127,12 @@ class Database_Migrator
 	 *
 	 * @return array List of table names
 	 */
-	public static function get_tables()
-	{
+	public static function get_tables() {
 		global $wpdb;
 
-		return [
+		return array(
 			$wpdb->prefix . 'wpshadow_workflow_logs',
-		];
+		);
 	}
 
 	/**
@@ -143,13 +140,12 @@ class Database_Migrator
 	 *
 	 * @return bool True if all tables exist
 	 */
-	public static function tables_exist()
-	{
+	public static function tables_exist() {
 		global $wpdb;
 
-		foreach (self::get_tables() as $table) {
-			$exists = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table));
-			if (!$exists) {
+		foreach ( self::get_tables() as $table ) {
+			$exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
+			if ( ! $exists ) {
 				return false;
 			}
 		}
@@ -162,9 +158,8 @@ class Database_Migrator
 	 *
 	 * @return int Version number
 	 */
-	public static function get_current_version()
-	{
-		return (int) get_option(self::VERSION_OPTION, 0);
+	public static function get_current_version() {
+		return (int) get_option( self::VERSION_OPTION, 0 );
 	}
 
 	/**
@@ -172,8 +167,7 @@ class Database_Migrator
 	 *
 	 * @return int Latest schema version
 	 */
-	public static function get_latest_version()
-	{
+	public static function get_latest_version() {
 		return self::SCHEMA_VERSION;
 	}
 
@@ -182,8 +176,7 @@ class Database_Migrator
 	 *
 	 * @return bool True if current == latest version
 	 */
-	public static function is_up_to_date()
-	{
+	public static function is_up_to_date() {
 		return self::get_current_version() >= self::get_latest_version();
 	}
 
@@ -195,22 +188,21 @@ class Database_Migrator
 	 *
 	 * @return bool Success status
 	 */
-	public static function reset()
-	{
+	public static function reset() {
 		// Security: Verify capability
-		if (!current_user_can('manage_options')) {
+		if ( ! current_user_can( 'manage_options' ) ) {
 			return false;
 		}
 
 		global $wpdb;
 
-		foreach (self::get_tables() as $table) {
+		foreach ( self::get_tables() as $table ) {
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-			$wpdb->query("DROP TABLE IF EXISTS {$table}"); // @phpstan-ignore-line
+			$wpdb->query( "DROP TABLE IF EXISTS {$table}" ); // @phpstan-ignore-line
 		}
 
 		// Reset version
-		delete_option(self::VERSION_OPTION);
+		delete_option( self::VERSION_OPTION );
 
 		return true;
 	}

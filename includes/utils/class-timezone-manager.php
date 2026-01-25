@@ -47,7 +47,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Timezone_Manager {
 
-	const OPTION_KEY = 'wpshadow_admin_timezone';
+	const OPTION_KEY    = 'wpshadow_admin_timezone';
 	const USER_META_KEY = 'wpshadow_timezone';
 
 	/**
@@ -94,7 +94,7 @@ class Timezone_Manager {
 	 * AJAX handlers have been migrated to class-based handlers.
 	 * See: includes/admin/ajax/class-detect-timezone-handler.php
 	 * See: includes/admin/ajax/class-set-timezone-handler.php
-	 * 
+	 *
 	 * Registered via AJAX_Router in class-ajax-router.php
 	 */
 
@@ -198,7 +198,7 @@ class Timezone_Manager {
 	 */
 	public static function get_timezone_abbreviation( $timezone ) {
 		try {
-			$tz = new \DateTimeZone( $timezone );
+			$tz  = new \DateTimeZone( $timezone );
 			$now = new \DateTime( 'now', $tz );
 			return $now->format( 'T' );
 		} catch ( \Exception $e ) {
@@ -215,7 +215,7 @@ class Timezone_Manager {
 	 */
 	public static function get_timezone_offset( $timezone ) {
 		try {
-			$tz = new \DateTimeZone( $timezone );
+			$tz  = new \DateTimeZone( $timezone );
 			$now = new \DateTime( 'now', $tz );
 			return $now->format( 'P' );
 		} catch ( \Exception $e ) {
@@ -231,23 +231,23 @@ class Timezone_Manager {
 	 */
 	public static function get_us_timezones() {
 		return array(
-			'Pacific' => array(
-				'Pacific/Honolulu'       => 'Hawaii (HST)',
-				'America/Anchorage'      => 'Alaska (AKST/AKDT)',
-				'America/Los_Angeles'    => 'Pacific (PST/PDT)',
-				'America/Phoenix'        => 'Arizona (MST)',
-				'America/Boise'          => 'Mountain (MST/MDT)',
+			'Pacific'  => array(
+				'Pacific/Honolulu'    => 'Hawaii (HST)',
+				'America/Anchorage'   => 'Alaska (AKST/AKDT)',
+				'America/Los_Angeles' => 'Pacific (PST/PDT)',
+				'America/Phoenix'     => 'Arizona (MST)',
+				'America/Boise'       => 'Mountain (MST/MDT)',
 			),
 			'Mountain' => array(
-				'America/Denver'         => 'Mountain (MST/MDT)',
+				'America/Denver'              => 'Mountain (MST/MDT)',
 				'America/North_Dakota/Center' => 'North Dakota (CST/CDT)',
 			),
-			'Central' => array(
-				'America/Chicago'        => 'Central (CST/CDT)',
+			'Central'  => array(
+				'America/Chicago' => 'Central (CST/CDT)',
 			),
-			'Eastern' => array(
-				'America/Detroit'        => 'Eastern (EST/EDT)',
-				'America/New_York'       => 'Eastern (EST/EDT)',
+			'Eastern'  => array(
+				'America/Detroit'              => 'Eastern (EST/EDT)',
+				'America/New_York'             => 'Eastern (EST/EDT)',
 				'America/Indiana/Indianapolis' => 'Indiana (EST/EDT)',
 			),
 		);
@@ -268,9 +268,9 @@ class Timezone_Manager {
 		// Calculate time difference
 		try {
 			$current_time = new \DateTime( 'now', new \DateTimeZone( $current_tz ) );
-			$server_time = new \DateTime( 'now', new \DateTimeZone( $server_tz ) );
+			$server_time  = new \DateTime( 'now', new \DateTimeZone( $server_tz ) );
 
-			$diff = $current_time->diff( $server_time );
+			$diff       = $current_time->diff( $server_time );
 			$hours_diff = $diff->h + ( $diff->days * 24 );
 
 			if ( $hours_diff > 3 ) {
@@ -280,7 +280,7 @@ class Timezone_Manager {
 					'server'           => $server_tz,
 					'difference_hours' => $hours_diff,
 					'message'          => sprintf(
-						__( 'Admin timezone differs from server by %d hours. Server runs in %s but admin is in %s.', 'wpshadow' ),
+						__( 'Admin timezone differs from server by %1$d hours. Server runs in %2$s but admin is in %3$s.', 'wpshadow' ),
 						$hours_diff,
 						$server_tz,
 						$current_tz

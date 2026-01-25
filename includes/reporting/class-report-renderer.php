@@ -5,25 +5,25 @@ namespace WPShadow\Reports;
 
 /**
  * Report Renderer - Renders reports in various formats
- * 
+ *
  * Handles:
  * - HTML rendering with charts and visualizations
  * - CSV export with proper formatting
  * - JSON export for API usage
  * - Printable PDF layouts
- * 
+ *
  * Philosophy:
  * - #9 Show Value: Visually compelling reports
  * - #8 Inspire Confidence: Professional presentation
  * - #5 Drive to KB: Educational links throughout
- * 
+ *
  * @package WPShadow\Reports
  */
 class Report_Renderer {
-	
+
 	/**
 	 * Render report as HTML
-	 * 
+	 *
 	 * @param array $report Report data
 	 * @return string HTML output
 	 */
@@ -38,7 +38,7 @@ class Report_Renderer {
 					<?php echo esc_html( $report['title'] ); ?>
 				</h1>
 				<p class="wps-m-0">
-					<?php 
+					<?php
 					printf(
 						/* translators: %1$s is start date, %2$s is end date, %3$s is generated time */
 						esc_html__( 'Period: %1$s to %2$s | Generated: %3$s', 'wpshadow' ),
@@ -54,7 +54,7 @@ class Report_Renderer {
 			<div class="wps-grid wps-grid-auto-200" style="margin-bottom: 30px;">
 				<?php
 				$metrics = $report['metrics'];
-				$cards = array(
+				$cards   = array(
 					array(
 						'icon'  => '⏱️',
 						'label' => __( 'Time Saved', 'wpshadow' ),
@@ -97,7 +97,7 @@ class Report_Renderer {
 				<div class="wps-grid wps-grid-auto-200-compact">
 					<?php
 					foreach ( (array) $metrics['by_category'] as $category => $count ) {
-						$percent = ( $metrics['total_activities'] > 0 ) ? 
+						$percent = ( $metrics['total_activities'] > 0 ) ?
 							round( ( $count / $metrics['total_activities'] ) * 100 ) : 0;
 						?>
 						<div>
@@ -146,17 +146,17 @@ class Report_Renderer {
 			<div style="margin-bottom: 20px;">
 				<h3 style="color: #0073aa;"><?php esc_html_e( 'Recommendations', 'wpshadow' ); ?></h3>
 				<?php foreach ( $report['recommendations'] as $rec ) : ?>
-				<?php
-				$rec_bg = '#d1ecf1';
-				$rec_border = '#17a2b8';
-				if ( isset( $rec['severity'] ) && $rec['severity'] === 'warning' ) {
-					$rec_bg = '#fff3cd';
-					$rec_border = '#ffc107';
-				} elseif ( isset( $rec['severity'] ) && $rec['severity'] === 'success' ) {
-					$rec_bg = '#d4edda';
-					$rec_border = '#28a745';
-				}
-				?>
+					<?php
+					$rec_bg     = '#d1ecf1';
+					$rec_border = '#17a2b8';
+					if ( isset( $rec['severity'] ) && $rec['severity'] === 'warning' ) {
+						$rec_bg     = '#fff3cd';
+						$rec_border = '#ffc107';
+					} elseif ( isset( $rec['severity'] ) && $rec['severity'] === 'success' ) {
+						$rec_bg     = '#d4edda';
+						$rec_border = '#28a745';
+					}
+					?>
 				<div class="wps-p-15-rounded-4">
 					<h4 class="wps-m-0"><?php echo esc_html( $rec['title'] ); ?></h4>
 					<p class="wps-m-0"><?php echo esc_html( $rec['description'] ); ?></p>
@@ -177,30 +177,30 @@ class Report_Renderer {
 		<?php
 		return ob_get_clean();
 	}
-	
+
 	/**
 	 * Render report as JSON
-	 * 
+	 *
 	 * @param array $report Report data
 	 * @return string JSON output
 	 */
 	public static function render_json( array $report ): string {
 		return wp_json_encode( $report );
 	}
-	
+
 	/**
 	 * Render report as CSV
-	 * 
+	 *
 	 * @param array $report Report data
 	 * @return string CSV output
 	 */
 	public static function render_csv( array $report ): string {
 		return Report_Engine::export_csv( $report );
 	}
-	
+
 	/**
 	 * Download report as file
-	 * 
+	 *
 	 * @param array  $report Report data
 	 * @param string $format Export format (html, csv, json)
 	 * @param string $filename Filename for download
@@ -210,14 +210,14 @@ class Report_Renderer {
 		if ( empty( $filename ) ) {
 			$filename = 'wpshadow-report-' . date( 'Y-m-d-H-i-s' ) . '.' . $format;
 		}
-		
+
 		// Set headers
 		header( 'Content-Type: ' . self::get_content_type( $format ) );
 		header( 'Content-Disposition: attachment; filename="' . basename( $filename ) . '"' );
 		header( 'Cache-Control: no-cache, no-store, must-revalidate' );
 		header( 'Pragma: no-cache' );
 		header( 'Expires: 0' );
-		
+
 		// Output content
 		switch ( $format ) {
 			case 'json':
@@ -231,13 +231,13 @@ class Report_Renderer {
 				echo self::render_html( $report );
 				break;
 		}
-		
+
 		exit;
 	}
-	
+
 	/**
 	 * Get content type for format
-	 * 
+	 *
 	 * @param string $format Export format
 	 * @return string MIME type
 	 */
@@ -247,7 +247,7 @@ class Report_Renderer {
 			'csv'  => 'text/csv; charset=utf-8',
 			'html' => 'text/html; charset=utf-8',
 		);
-		
+
 		return $types[ $format ] ?? 'text/plain';
 	}
 }

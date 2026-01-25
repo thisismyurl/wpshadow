@@ -68,7 +68,7 @@ class Workflow_Wizard {
 				'description' => 'Respond to plugin, theme, and user management events',
 				'icon'        => 'admin-tools',
 				'triggers'    => array(
-					'plugin_update_trigger' => array(
+					'plugin_update_trigger'     => array(
 						'label'       => 'Plugin/Theme Update Available',
 						'description' => 'When updates are detected for plugins or themes',
 						'icon'        => 'update',
@@ -78,22 +78,22 @@ class Workflow_Wizard {
 						'description' => 'When a backup finishes (success or failure)',
 						'icon'        => 'database',
 					),
-					'plugin_state_changed' => array(
+					'plugin_state_changed'      => array(
 						'label'       => 'Plugin Changed',
 						'description' => 'When any plugin is activated or deactivated',
 						'icon'        => 'admin-plugins',
 					),
-					'theme_switched'       => array(
+					'theme_switched'            => array(
 						'label'       => 'Theme Changed',
 						'description' => 'When the active theme is changed',
 						'icon'        => 'admin-appearance',
 					),
-					'user_login'           => array(
+					'user_login'                => array(
 						'label'       => 'User Login',
 						'description' => 'When a user logs in',
 						'icon'        => 'admin-users',
 					),
-					'user_register'        => array(
+					'user_register'             => array(
 						'label'       => 'User Registration',
 						'description' => 'When a new user registers',
 						'icon'        => 'admin-users',
@@ -105,7 +105,7 @@ class Workflow_Wizard {
 				'description' => 'Trigger on specific system issues or thresholds',
 				'icon'        => 'shield',
 				'triggers'    => array(
-					'database_trigger' => array(
+					'database_trigger'  => array(
 						'label'       => 'Database Issues',
 						'description' => 'When database size or integrity issues are detected',
 						'icon'        => 'database',
@@ -115,34 +115,34 @@ class Workflow_Wizard {
 						'description' => 'When warnings or errors appear in logs',
 						'icon'        => 'warning',
 					),
-					'high_memory'      => array(
+					'high_memory'       => array(
 						'label'       => 'High Memory Usage',
 						'description' => 'When memory usage exceeds a threshold',
 						'icon'        => 'performance',
 					),
-					'debug_mode_on'    => array(
+					'debug_mode_on'     => array(
 						'label'       => 'Debug Mode Enabled',
 						'description' => 'When WP_DEBUG is enabled on production',
 						'icon'        => 'warning',
 					),
-					'ssl_issue'        => array(
+					'ssl_issue'         => array(
 						'label'       => 'SSL Problem Detected',
 						'description' => 'When SSL configuration issues are found',
 						'icon'        => 'lock',
 					),
-					'too_many_plugins' => array(
+					'too_many_plugins'  => array(
 						'label'       => 'Too Many Plugins',
 						'description' => 'When plugin count exceeds a threshold',
 						'icon'        => 'admin-plugins',
 					),
-					'ip_banned'        => array(
+					'ip_banned'         => array(
 						'label'       => 'Banned IP Detected',
 						'description' => 'When a banned IP tries to access the site',
 						'icon'        => 'dismiss',
 					),
 				),
 			),
-			'diagnostics'   => array(
+			'diagnostics'    => array(
 				'label'       => 'Diagnostics & Monitoring',
 				'description' => 'React when diagnostics run (manual, Guardian, or scheduled)',
 				'icon'        => 'visibility',
@@ -676,7 +676,7 @@ class Workflow_Wizard {
 		// Define which action categories are relevant for each trigger
 		$trigger_action_map = array(
 			// Schedule: maintenance, diagnostics, backups, monitoring - things that should run automatically
-			'schedule'             => array(
+			'schedule'                  => array(
 				'priority'           => array(
 					'monitoring_alerts',
 					'backup_recovery',
@@ -711,7 +711,7 @@ class Workflow_Wizard {
 				),
 			),
 			// Page Load: frontend optimization, diagnostics, caching - things that run per-page
-			'page_load'            => array(
+			'page_load'                 => array(
 				'priority'           => array(
 					'performance',
 					'diagnostics',
@@ -759,7 +759,7 @@ class Workflow_Wizard {
 				),
 			),
 			// Plugin State Changed: maintenance, security, notifications
-			'plugin_state_changed' => array(
+			'plugin_state_changed'      => array(
 				'priority'           => array(
 					'diagnostics',
 					'security_hardening',
@@ -791,7 +791,7 @@ class Workflow_Wizard {
 				),
 			),
 			// Theme Switched: maintenance, diagnostics, caching
-			'theme_switched'       => array(
+			'theme_switched'            => array(
 				'priority'           => array(
 					'diagnostics',
 					'site_maintenance',
@@ -814,7 +814,7 @@ class Workflow_Wizard {
 				),
 			),
 			// User Login: security, notifications, user management
-			'user_login'           => array(
+			'user_login'                => array(
 				'priority'           => array(
 					'security_hardening',
 					'notifications',
@@ -840,7 +840,7 @@ class Workflow_Wizard {
 				),
 			),
 			// User Registration: notifications, user management, security
-			'user_register'        => array(
+			'user_register'             => array(
 				'priority'           => array(
 					'notifications',
 					'user_management',
@@ -866,7 +866,7 @@ class Workflow_Wizard {
 				),
 			),
 			// Post Status Changed: content management, notifications, diagnostics
-			'post_status_changed'  => array(
+			'post_status_changed'       => array(
 				'priority'           => array(
 					'content_management',
 					'notifications',
@@ -894,7 +894,7 @@ class Workflow_Wizard {
 				),
 			),
 			// Pre Publish Review: content validation, notifications, security checks
-			'pre_publish_review'   => array(
+			'pre_publish_review'        => array(
 				'priority'           => array(
 					'content_management',
 					'notifications',
@@ -922,7 +922,7 @@ class Workflow_Wizard {
 				),
 			),
 			// Comment Posted: content moderation, notifications, security
-			'comment_posted'       => array(
+			'comment_posted'            => array(
 				'priority'           => array(
 					'notifications',
 					'content',
@@ -950,7 +950,7 @@ class Workflow_Wizard {
 				),
 			),
 			// Updates and backups
-			'plugin_update_trigger'    => array(
+			'plugin_update_trigger'     => array(
 				'priority' => array(
 					'notifications',
 					'logging',
@@ -977,7 +977,7 @@ class Workflow_Wizard {
 				),
 			),
 			// Conditions (memory, debug, ssl, plugins, IP): diagnostics, notifications, security
-			'high_memory'          => array(
+			'high_memory'               => array(
 				'priority' => array(
 					'diagnostics',
 					'security_hardening',
@@ -993,7 +993,7 @@ class Workflow_Wizard {
 					'maintenance',
 				),
 			),
-			'debug_mode_on'        => array(
+			'debug_mode_on'             => array(
 				'priority' => array(
 					'security',
 					'security_hardening',
@@ -1006,7 +1006,7 @@ class Workflow_Wizard {
 					'logging',
 				),
 			),
-			'ssl_issue'            => array(
+			'ssl_issue'                 => array(
 				'priority' => array(
 					'diagnostics',
 					'security',
@@ -1021,7 +1021,7 @@ class Workflow_Wizard {
 					'logging',
 				),
 			),
-			'too_many_plugins'     => array(
+			'too_many_plugins'          => array(
 				'priority' => array(
 					'maintenance',
 					'diagnostics',
@@ -1034,7 +1034,7 @@ class Workflow_Wizard {
 					'logging',
 				),
 			),
-			'ip_banned'            => array(
+			'ip_banned'                 => array(
 				'priority' => array(
 					'security_hardening',
 					'security',
@@ -1048,7 +1048,7 @@ class Workflow_Wizard {
 					'logging',
 				),
 			),
-			'database_trigger'     => array(
+			'database_trigger'          => array(
 				'priority' => array(
 					'diagnostics',
 					'logging',
@@ -1062,7 +1062,7 @@ class Workflow_Wizard {
 					'maintenance',
 				),
 			),
-			'error_log_trigger'    => array(
+			'error_log_trigger'         => array(
 				'priority' => array(
 					'notifications',
 					'logging',
@@ -1073,7 +1073,7 @@ class Workflow_Wizard {
 					'diagnostics',
 				),
 			),
-			'diagnostic_run_trigger' => array(
+			'diagnostic_run_trigger'    => array(
 				'priority' => array(
 					'notifications',
 					'logging',
@@ -1155,33 +1155,33 @@ class Workflow_Wizard {
 	public static function get_trigger_config( $trigger_id ) {
 		// Map trigger IDs to their config groups
 		$trigger_to_config = array(
-			'time_daily'           => 'schedule',
-			'page_load_trigger'    => 'page_load',
-			'post_status_changed'  => 'post_status',
-			'pre_publish_review'   => 'pre_publish_review',
-			'comment_posted'       => 'comment',
-			'plugin_update_trigger' => 'plugin_update',
+			'time_daily'                => 'schedule',
+			'page_load_trigger'         => 'page_load',
+			'post_status_changed'       => 'post_status',
+			'pre_publish_review'        => 'pre_publish_review',
+			'comment_posted'            => 'comment',
+			'plugin_update_trigger'     => 'plugin_update',
 			'backup_completion_trigger' => 'backup_completion',
-			'plugin_state_changed' => 'plugin',
-			'theme_switched'       => 'theme',
-			'user_login'           => 'user_login',
-			'user_register'        => 'user_register',
-			'high_memory'          => 'memory',
-			'debug_mode_on'        => 'debug',
-			'ssl_issue'            => 'ssl',
-			'too_many_plugins'     => 'plugins',
-			'ip_banned'            => 'ip_ban',
-			'database_trigger'     => 'database',
-			'error_log_trigger'    => 'error_log',
-			'diagnostic_run_trigger' => 'diagnostic_run',
-			'manual_cron_trigger'  => 'manual',
+			'plugin_state_changed'      => 'plugin',
+			'theme_switched'            => 'theme',
+			'user_login'                => 'user_login',
+			'user_register'             => 'user_register',
+			'high_memory'               => 'memory',
+			'debug_mode_on'             => 'debug',
+			'ssl_issue'                 => 'ssl',
+			'too_many_plugins'          => 'plugins',
+			'ip_banned'                 => 'ip_ban',
+			'database_trigger'          => 'database',
+			'error_log_trigger'         => 'error_log',
+			'diagnostic_run_trigger'    => 'diagnostic_run',
+			'manual_cron_trigger'       => 'manual',
 		);
 
 		// Get the config group key for this trigger
 		$config_key = isset( $trigger_to_config[ $trigger_id ] ) ? $trigger_to_config[ $trigger_id ] : $trigger_id;
 
 		$configs = array(
-			'schedule'         => array(
+			'schedule'          => array(
 				array(
 					'id'       => 'frequency',
 					'type'     => 'select',
@@ -1227,7 +1227,7 @@ class Workflow_Wizard {
 					),
 				),
 			),
-			'page_load'        => array(
+			'page_load'         => array(
 				array(
 					'id'       => 'page_type',
 					'type'     => 'select',
@@ -1260,15 +1260,15 @@ class Workflow_Wizard {
 					),
 				),
 			),
-			'plugin_update'    => array(
+			'plugin_update'     => array(
 				array(
 					'id'       => 'target_type',
 					'type'     => 'select',
 					'label'    => 'Which updates?',
 					'options'  => array(
-						'any'     => 'Any plugin or theme',
-						'plugins' => 'Plugins only',
-						'themes'  => 'Themes only',
+						'any'      => 'Any plugin or theme',
+						'plugins'  => 'Plugins only',
+						'themes'   => 'Themes only',
 						'specific' => 'Specific slug',
 					),
 					'default'  => 'any',
@@ -1300,7 +1300,7 @@ class Workflow_Wizard {
 					'required' => true,
 				),
 			),
-			'user_login'       => array(
+			'user_login'        => array(
 				array(
 					'id'          => 'user_id',
 					'type'        => 'text',
@@ -1325,7 +1325,7 @@ class Workflow_Wizard {
 					'required' => false,
 				),
 			),
-			'high_memory'      => array(
+			'high_memory'       => array(
 				array(
 					'id'          => 'threshold',
 					'type'        => 'number',
@@ -1337,7 +1337,7 @@ class Workflow_Wizard {
 					'max'         => 100,
 				),
 			),
-			'too_many_plugins' => array(
+			'too_many_plugins'  => array(
 				array(
 					'id'          => 'count',
 					'type'        => 'number',
@@ -1349,7 +1349,7 @@ class Workflow_Wizard {
 					'max'         => 100,
 				),
 			),
-			'ip_banned'        => array(
+			'ip_banned'         => array(
 				array(
 					'id'          => 'ip_list',
 					'type'        => 'textarea',
@@ -1360,7 +1360,7 @@ class Workflow_Wizard {
 					'rows'        => 5,
 				),
 			),
-			'database'        => array(
+			'database'          => array(
 				array(
 					'id'       => 'database_issue',
 					'type'     => 'select',
@@ -1385,22 +1385,22 @@ class Workflow_Wizard {
 					),
 				),
 			),
-			'error_log'       => array(
+			'error_log'         => array(
 				array(
 					'id'       => 'error_level',
 					'type'     => 'select',
 					'label'    => 'Minimum severity',
 					'options'  => array(
-						'any'     => 'Any',
-						'warning' => 'Warning+',
-						'error'   => 'Error+',
+						'any'      => 'Any',
+						'warning'  => 'Warning+',
+						'error'    => 'Error+',
 						'critical' => 'Critical only',
 					),
 					'default'  => 'any',
 					'required' => true,
 				),
 			),
-			'diagnostic_run'  => array(
+			'diagnostic_run'    => array(
 				array(
 					'id'       => 'source',
 					'type'     => 'select',
@@ -1416,18 +1416,18 @@ class Workflow_Wizard {
 					'required' => true,
 				),
 				array(
-					'id'       => 'specific_diagnostic',
-					'type'     => 'text',
-					'label'    => 'Specific diagnostic (optional)',
-					'default'  => '',
-					'required' => false,
+					'id'          => 'specific_diagnostic',
+					'type'        => 'text',
+					'label'       => 'Specific diagnostic (optional)',
+					'default'     => '',
+					'required'    => false,
 					'placeholder' => 'e.g., Diagnostic_SSL',
 				),
 				array(
-					'id'       => 'issues_only',
-					'type'     => 'checkbox',
-					'label'    => 'Only when issues are found',
-					'default'  => false,
+					'id'      => 'issues_only',
+					'type'    => 'checkbox',
+					'label'   => 'Only when issues are found',
+					'default' => false,
 				),
 			),
 		);
@@ -2224,31 +2224,31 @@ class Workflow_Wizard {
 
 		// Map wizard trigger types to executor trigger types
 		$type_map = array(
-			'time_daily'           => 'time_trigger',
-			'time_weekly'          => 'time_trigger',
-			'time_hourly'          => 'time_trigger',
-			'page_load_all'        => 'page_load_trigger',
-			'page_load_frontend'   => 'page_load_trigger',
-			'page_load_admin'      => 'page_load_trigger',
-			'page_load_single'     => 'page_load_trigger',
-			'page_load_archive'    => 'page_load_trigger',
-			'page_load_home'       => 'page_load_trigger',
-			'plugin_update_trigger' => 'plugin_update_trigger',
+			'time_daily'                => 'time_trigger',
+			'time_weekly'               => 'time_trigger',
+			'time_hourly'               => 'time_trigger',
+			'page_load_all'             => 'page_load_trigger',
+			'page_load_frontend'        => 'page_load_trigger',
+			'page_load_admin'           => 'page_load_trigger',
+			'page_load_single'          => 'page_load_trigger',
+			'page_load_archive'         => 'page_load_trigger',
+			'page_load_home'            => 'page_load_trigger',
+			'plugin_update_trigger'     => 'plugin_update_trigger',
 			'backup_completion_trigger' => 'backup_completion_trigger',
-			'plugin_state_changed' => 'event_trigger',
-			'theme_switched'       => 'event_trigger',
-			'user_login'           => 'event_trigger',
-			'user_register'        => 'event_trigger',
-			'post_status_changed'  => 'event_trigger',
-			'comment_posted'       => 'event_trigger',
-			'high_memory'          => 'condition_trigger',
-			'debug_mode_on'        => 'condition_trigger',
-			'ssl_issue'            => 'condition_trigger',
-			'too_many_plugins'     => 'condition_trigger',
-			'ip_banned'            => 'condition_trigger',
-			'database_trigger'     => 'database_trigger',
-			'error_log_trigger'    => 'error_log_trigger',
-			'diagnostic_run_trigger' => 'diagnostic_run_trigger',
+			'plugin_state_changed'      => 'event_trigger',
+			'theme_switched'            => 'event_trigger',
+			'user_login'                => 'event_trigger',
+			'user_register'             => 'event_trigger',
+			'post_status_changed'       => 'event_trigger',
+			'comment_posted'            => 'event_trigger',
+			'high_memory'               => 'condition_trigger',
+			'debug_mode_on'             => 'condition_trigger',
+			'ssl_issue'                 => 'condition_trigger',
+			'too_many_plugins'          => 'condition_trigger',
+			'ip_banned'                 => 'condition_trigger',
+			'database_trigger'          => 'database_trigger',
+			'error_log_trigger'         => 'error_log_trigger',
+			'diagnostic_run_trigger'    => 'diagnostic_run_trigger',
 		);
 
 		$executor_type = isset( $type_map[ $type ] ) ? $type_map[ $type ] : $type;

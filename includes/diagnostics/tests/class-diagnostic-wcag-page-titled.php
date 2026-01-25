@@ -79,41 +79,43 @@ class Diagnostic_Wcag_Page_Titled extends Diagnostic_Base {
 	}
 
 	protected static function get_guardian_html(): string {
-		if (isset($_POST['html']) && is_string($_POST['html'])) {
-			return sanitize_text_field(wp_unslash($_POST['html']));
+		if ( isset( $_POST['html'] ) && is_string( $_POST['html'] ) ) {
+			return sanitize_text_field( wp_unslash( $_POST['html'] ) );
 		}
 		return '';
 	}
 
 	public static function check(): ?array {
 		$html = self::get_guardian_html();
-		if (empty($html)) return null;
-
-		$issues = [];
-		try {
-			$dom = new \DOMDocument();
-			@$dom->loadHTML($html);
-			$xpath = new \DOMXPath($dom);
-
-			$titles = $xpath->query('//title');
-			if ($titles->length === 0) {
-				$issues[] = 'Missing <title> element';
-			} elseif (empty(trim($titles->item(0)->textContent))) {
-				$issues[] = '<title> element is empty';
-			}
-		} catch (\Exception $e) {
+		if ( empty( $html ) ) {
 			return null;
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'wcag-page-titled',
-			'title' => 'Missing page title',
-			'description' => 'Pages must have a descriptive title element',
-			'severity' => 'high',
-			'category' => 'accessibility',
+		$issues = array();
+		try {
+			$dom = new \DOMDocument();
+			@$dom->loadHTML( $html );
+			$xpath = new \DOMXPath( $dom );
+
+			$titles = $xpath->query( '//title' );
+			if ( $titles->length === 0 ) {
+				$issues[] = 'Missing <title> element';
+			} elseif ( empty( trim( $titles->item( 0 )->textContent ) ) ) {
+				$issues[] = '<title> element is empty';
+			}
+		} catch ( \Exception $e ) {
+			return null;
+		}
+
+		return empty( $issues ) ? null : array(
+			'id'           => 'wcag-page-titled',
+			'title'        => 'Missing page title',
+			'description'  => 'Pages must have a descriptive title element',
+			'severity'     => 'high',
+			'category'     => 'accessibility',
 			'threat_level' => 57,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	/**
@@ -135,15 +137,16 @@ class Diagnostic_Wcag_Page_Titled extends Diagnostic_Base {
 	 */
 	public static function test_live_wcag_page_titled(): array {
 		$good = '<html><head><title>About Us</title></head><body>Test</body></html>';
-		$bad = '<html><head></head><body>Test</body></html>';
+		$bad  = '<html><head></head><body>Test</body></html>';
 
 		$_POST['html'] = $good;
-		$r1 = self::check();
+		$r1            = self::check();
 		$_POST['html'] = $bad;
-		$r2 = self::check();
+		$r2            = self::check();
 
-		return ['passed' => is_null($r1) && is_array($r2), 'message' => 'Page title check working'];
+		return array(
+			'passed'  => is_null( $r1 ) && is_array( $r2 ),
+			'message' => 'Page title check working',
+		);
 	}
-
 }
-

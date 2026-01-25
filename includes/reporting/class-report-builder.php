@@ -5,7 +5,7 @@ namespace WPShadow\Reports;
 
 /**
  * Report Builder - Build custom reports with filters
- * 
+ *
  * Provides UI for generating reports with:
  * - Date range selection (presets + custom)
  * - Category filtering
@@ -13,19 +13,19 @@ namespace WPShadow\Reports;
  * - Report type selection (summary/detailed/executive)
  * - Export format selection (HTML/CSV/JSON)
  * - Scheduled report configuration
- * 
+ *
  * Philosophy:
  * - #1 Helpful Neighbor: Intuitive report building
  * - #9 Show Value: Detailed metrics and trends
  * - #5 Drive to KB: Educational links in reports
- * 
+ *
  * @package WPShadow\Reports
  */
 class Report_Builder {
-	
+
 	/**
 	 * Render report builder form and dashboard
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function render(): void {
@@ -177,10 +177,10 @@ class Report_Builder {
 		<?php self::render_scripts(); ?>
 		<?php
 	}
-	
+
 	/**
 	 * Render JavaScript for form interactions
-	 * 
+	 *
 	 * @return void
 	 */
 	private static function render_scripts(): void {

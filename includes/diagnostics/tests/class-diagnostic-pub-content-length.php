@@ -24,12 +24,12 @@ use WPShadow\Core\Diagnostic_Lean_Checks;
  * @guardian-integrated Pending
  */
 class Diagnostic_Pub_Content_Length extends Diagnostic_Base {
-	protected static $slug = 'pub-content-length';
-	protected static $title = 'Post Content Length';
-	protected static $description = 'Are posts substantive in length?';
-	protected static $category = 'Content Publishing';
+	protected static $slug         = 'pub-content-length';
+	protected static $title        = 'Post Content Length';
+	protected static $description  = 'Are posts substantive in length?';
+	protected static $category     = 'Content Publishing';
 	protected static $threat_level = 'low';
-	protected static $family = 'general';
+	protected static $family       = 'general';
 	protected static $family_label = 'General';
 
 	/**
@@ -39,13 +39,15 @@ class Diagnostic_Pub_Content_Length extends Diagnostic_Base {
 	 */
 	public function check(): ?array {
 		// Get recent published posts
-		$posts = get_posts( [
-			'post_type'      => 'post',
-			'post_status'    => 'publish',
-			'posts_per_page' => 10,
-			'orderby'        => 'date',
-			'order'          => 'DESC'
-		] );
+		$posts = get_posts(
+			array(
+				'post_type'      => 'post',
+				'post_status'    => 'publish',
+				'posts_per_page' => 10,
+				'orderby'        => 'date',
+				'order'          => 'DESC',
+			)
+		);
 
 		if ( empty( $posts ) ) {
 			return null;
@@ -54,11 +56,11 @@ class Diagnostic_Pub_Content_Length extends Diagnostic_Base {
 		$short_posts = 0;
 		foreach ( $posts as $post ) {
 			// Remove HTML tags and count words
-			$content = wp_strip_all_tags( $post->post_content );
+			$content    = wp_strip_all_tags( $post->post_content );
 			$word_count = str_word_count( $content );
 			// Posts should be at least 300 words for good SEO
 			if ( $word_count < 300 ) {
-				$short_posts++;
+				++$short_posts;
 			}
 		}
 

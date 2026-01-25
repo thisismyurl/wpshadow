@@ -9,14 +9,14 @@ use WPShadow\Core\Diagnostic_Base;
  * This is a placeholder implementation.
  */
 class Diagnostic_EncryptionKeyManagement extends Diagnostic_Base {
-	protected static $slug = 'encryption-key-management';
+	protected static $slug  = 'encryption-key-management';
 	protected static $title = 'Encryption Key Management';
-	
+
 	public static function check(): ?array {
 		// TODO: Implement diagnostic logic
 		return null;
 	}
-	
+
 	public static function run(): array {
 		return array();
 	}

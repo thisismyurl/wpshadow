@@ -14,7 +14,7 @@ namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -24,8 +24,8 @@ if (! defined('ABSPATH')) {
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_Admin_Fonts extends Diagnostic_Base
-{
+class Diagnostic_Admin_Fonts extends Diagnostic_Base {
+
 
 	protected static $slug        = 'admin-fonts';
 	protected static $title       = 'WP Admin Loads Google Fonts';
@@ -36,12 +36,11 @@ class Diagnostic_Admin_Fonts extends Diagnostic_Base
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		// Check if treatment is already applied
-		$disabled = get_option('wpshadow_admin_fonts_disabled', false);
+		$disabled = get_option( 'wpshadow_admin_fonts_disabled', false );
 
-		if ($disabled) {
+		if ( $disabled ) {
 			return null;
 		}
 
@@ -49,17 +48,17 @@ class Diagnostic_Admin_Fonts extends Diagnostic_Base
 		global $wp_styles;
 		$open_sans_loaded = false;
 
-		if (is_admin() && isset($wp_styles->registered['open-sans'])) {
+		if ( is_admin() && isset( $wp_styles->registered['open-sans'] ) ) {
 			$open_sans_loaded = true;
 		}
 
 		// WordPress loads Open Sans by default in admin
-		if (! $open_sans_loaded && ! is_admin()) {
+		if ( ! $open_sans_loaded && ! is_admin() ) {
 			// Assume it will load in admin
 			$open_sans_loaded = true;
 		}
 
-		if (! $open_sans_loaded) {
+		if ( ! $open_sans_loaded ) {
 			return null;
 		}
 
@@ -91,22 +90,21 @@ class Diagnostic_Admin_Fonts extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live_admin_fonts(): array
-	{
-		$result = self::check();
-		$disabled = get_option('wpshadow_admin_fonts_disabled', false);
+	public static function test_live_admin_fonts(): array {
+		$result   = self::check();
+		$disabled = get_option( 'wpshadow_admin_fonts_disabled', false );
 
-		if ($disabled) {
+		if ( $disabled ) {
 			// Treatment already applied = diagnostic should pass
 			return array(
-				'passed' => is_null($result),
-				'message' => 'Admin fonts have been disabled via treatment'
+				'passed'  => is_null( $result ),
+				'message' => 'Admin fonts have been disabled via treatment',
 			);
 		} else {
 			// Check if Open Sans would load - just verify the diagnostic runs
 			return array(
-				'passed' => true,
-				'message' => 'Admin fonts diagnostic executed successfully'
+				'passed'  => true,
+				'message' => 'Admin fonts diagnostic executed successfully',
 			);
 		}
 	}

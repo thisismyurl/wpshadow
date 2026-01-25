@@ -21,39 +21,44 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_HSTS extends Diagnostic_Base
-{
+class Diagnostic_HSTS extends Diagnostic_Base {
+
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		// Only check if site uses HTTPS
-		if (! is_ssl()) {
+		if ( ! is_ssl() ) {
 			return null;
 		}
 
-		$response = wp_remote_head(home_url(), array('timeout' => 5, 'sslverify' => false));
+		$response = wp_remote_head(
+			home_url(),
+			array(
+				'timeout'   => 5,
+				'sslverify' => false,
+			)
+		);
 
-		if (is_wp_error($response)) {
+		if ( is_wp_error( $response ) ) {
 			return null;
 		}
 
-		$headers = wp_remote_retrieve_headers($response);
+		$headers = wp_remote_retrieve_headers( $response );
 
-		if (empty($headers['strict-transport-security'])) {
+		if ( empty( $headers['strict-transport-security'] ) ) {
 			return array(
-				'id'          => 'hsts-header',
-				'title'       => 'HSTS Header Not Configured',
-				'description' => 'Your HTTPS site lacks HTTP Strict Transport Security (HSTS) header, making it vulnerable to SSL stripping attacks. Add the Strict-Transport-Security header.',
-				'severity'    => 'medium',
-				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/enable-hsts/',
+				'id'            => 'hsts-header',
+				'title'         => 'HSTS Header Not Configured',
+				'description'   => 'Your HTTPS site lacks HTTP Strict Transport Security (HSTS) header, making it vulnerable to SSL stripping attacks. Add the Strict-Transport-Security header.',
+				'severity'      => 'medium',
+				'category'      => 'security',
+				'kb_link'       => 'https://wpshadow.com/kb/enable-hsts/',
 				'training_link' => 'https://wpshadow.com/training/hsts-security/',
-				'auto_fixable' => true,
-				'threat_level' => 60,
+				'auto_fixable'  => true,
+				'threat_level'  => 60,
 			);
 		}
 
@@ -70,10 +75,9 @@ class Diagnostic_HSTS extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__hsts(): array
-	{
+	public static function test_live__hsts(): array {
 		// If site isn't HTTPS, test passes (no HSTS needed)
-		if (! is_ssl()) {
+		if ( ! is_ssl() ) {
 			return array(
 				'passed'  => true,
 				'message' => '✓ Site not using HTTPS, HSTS check not required',
@@ -83,7 +87,7 @@ class Diagnostic_HSTS extends Diagnostic_Base
 		// Site is HTTPS - run the diagnostic check
 		$result = self::check();
 
-		if (is_null($result)) {
+		if ( is_null( $result ) ) {
 			return array(
 				'passed'  => true,
 				'message' => '✓ HSTS header is properly configured',

@@ -14,8 +14,8 @@ use WPShadow\Diagnostics\Diagnostic_Base;
  *
  * @since 1.2.0
  */
-class Test_Expired_SSL_Certificate extends Diagnostic_Base
-{
+class Test_Expired_SSL_Certificate extends Diagnostic_Base {
+
 
 	private const EXPIRY_WARNING_DAYS = 30;
 
@@ -24,30 +24,29 @@ class Test_Expired_SSL_Certificate extends Diagnostic_Base
 	 *
 	 * @return array|null Diagnostic array if issues found, null if all good
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		$expiry_info = self::check_ssl_expiry();
 
-		if (! $expiry_info || $expiry_info['status'] === 'valid') {
+		if ( ! $expiry_info || $expiry_info['status'] === 'valid' ) {
 			return null;
 		}
 
 		$threat = $expiry_info['status'] === 'expired' ? 95 : 70;
 
-		return [
-			'threat_level'    => $threat,
-			'threat_color'    => 'red',
-			'passed'          => false,
-			'issue'           => $expiry_info['message'],
-			'metadata'        => [
+		return array(
+			'threat_level'  => $threat,
+			'threat_color'  => 'red',
+			'passed'        => false,
+			'issue'         => $expiry_info['message'],
+			'metadata'      => array(
 				'status'           => $expiry_info['status'],
 				'expiry_date'      => $expiry_info['expiry_date'] ?? 'Unknown',
 				'days_remaining'   => $expiry_info['days_remaining'] ?? 0,
-				'certificate_info' => $expiry_info['cert_info'] ?? [],
-			],
-			'kb_link'         => 'https://wpshadow.com/kb/ssl-certificate-security/',
-			'training_link'   => 'https://wpshadow.com/training/wordpress-ssl-https/',
-		];
+				'certificate_info' => $expiry_info['cert_info'] ?? array(),
+			),
+			'kb_link'       => 'https://wpshadow.com/kb/ssl-certificate-security/',
+			'training_link' => 'https://wpshadow.com/training/wordpress-ssl-https/',
+		);
 	}
 
 	/**
@@ -55,18 +54,17 @@ class Test_Expired_SSL_Certificate extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_ssl_status(): array
-	{
-		$expiry = self::check_ssl_expiry();
+	public static function test_ssl_status(): array {
+		$expiry         = self::check_ssl_expiry();
 		$is_using_https = is_ssl();
 
-		return [
-			'test_name'        => 'SSL Certificate Status',
-			'using_https'      => $is_using_https,
+		return array(
+			'test_name'          => 'SSL Certificate Status',
+			'using_https'        => $is_using_https,
 			'certificate_status' => $expiry ? $expiry['status'] : 'Unable to verify',
-			'passed'           => $is_using_https && $expiry && $expiry['status'] === 'valid',
-			'description'      => $expiry ? sprintf('Certificate: %s', $expiry['message']) : 'Unable to check certificate status',
-		];
+			'passed'             => $is_using_https && $expiry && $expiry['status'] === 'valid',
+			'description'        => $expiry ? sprintf( 'Certificate: %s', $expiry['message'] ) : 'Unable to check certificate status',
+		);
 	}
 
 	/**
@@ -74,26 +72,25 @@ class Test_Expired_SSL_Certificate extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_certificate_expiry(): array
-	{
+	public static function test_certificate_expiry(): array {
 		$expiry = self::check_ssl_expiry();
 
-		if (! $expiry) {
-			return [
-				'test_name'     => 'Certificate Expiry',
-				'passed'        => false,
-				'description'   => 'Unable to determine certificate expiry',
-			];
+		if ( ! $expiry ) {
+			return array(
+				'test_name'   => 'Certificate Expiry',
+				'passed'      => false,
+				'description' => 'Unable to determine certificate expiry',
+			);
 		}
 
-		return [
-			'test_name'       => 'Certificate Expiry',
-			'expiry_date'     => $expiry['expiry_date'] ?? 'Unknown',
-			'days_remaining'  => $expiry['days_remaining'] ?? 0,
-			'status'          => $expiry['status'],
-			'passed'          => $expiry['status'] === 'valid',
-			'description'     => $expiry['message'],
-		];
+		return array(
+			'test_name'      => 'Certificate Expiry',
+			'expiry_date'    => $expiry['expiry_date'] ?? 'Unknown',
+			'days_remaining' => $expiry['days_remaining'] ?? 0,
+			'status'         => $expiry['status'],
+			'passed'         => $expiry['status'] === 'valid',
+			'description'    => $expiry['message'],
+		);
 	}
 
 	/**
@@ -101,19 +98,18 @@ class Test_Expired_SSL_Certificate extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_certificate_details(): array
-	{
+	public static function test_certificate_details(): array {
 		$cert_details = self::get_certificate_details();
 
-		return [
-			'test_name'          => 'Certificate Details',
-			'issued_to'          => $cert_details['issued_to'] ?? 'Unknown',
-			'issued_by'          => $cert_details['issued_by'] ?? 'Unknown',
-			'valid_from'         => $cert_details['valid_from'] ?? 'Unknown',
-			'valid_until'        => $cert_details['valid_until'] ?? 'Unknown',
-			'is_self_signed'     => $cert_details['is_self_signed'] ?? false,
-			'description'        => sprintf('Issued to: %s', $cert_details['issued_to'] ?? 'Unknown'),
-		];
+		return array(
+			'test_name'      => 'Certificate Details',
+			'issued_to'      => $cert_details['issued_to'] ?? 'Unknown',
+			'issued_by'      => $cert_details['issued_by'] ?? 'Unknown',
+			'valid_from'     => $cert_details['valid_from'] ?? 'Unknown',
+			'valid_until'    => $cert_details['valid_until'] ?? 'Unknown',
+			'is_self_signed' => $cert_details['is_self_signed'] ?? false,
+			'description'    => sprintf( 'Issued to: %s', $cert_details['issued_to'] ?? 'Unknown' ),
+		);
 	}
 
 	/**
@@ -121,22 +117,21 @@ class Test_Expired_SSL_Certificate extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_https_enforcement(): array
-	{
-		$site_url = home_url();
-		$is_using_https = is_ssl();
-		$force_ssl_admin = defined('FORCE_SSL_ADMIN') && FORCE_SSL_ADMIN;
-		$force_ssl_login = defined('FORCE_SSL_LOGIN') && FORCE_SSL_LOGIN;
+	public static function test_https_enforcement(): array {
+		$site_url        = home_url();
+		$is_using_https  = is_ssl();
+		$force_ssl_admin = defined( 'FORCE_SSL_ADMIN' ) && FORCE_SSL_ADMIN;
+		$force_ssl_login = defined( 'FORCE_SSL_LOGIN' ) && FORCE_SSL_LOGIN;
 
-		return [
-			'test_name'          => 'HTTPS Enforcement',
-			'site_url'           => $site_url,
-			'using_https'        => $is_using_https,
-			'force_ssl_admin'    => $force_ssl_admin,
-			'force_ssl_login'    => $force_ssl_login,
-			'passed'             => $is_using_https,
-			'description'        => $is_using_https ? 'HTTPS enforced' : 'Site not using HTTPS (security risk)',
-		];
+		return array(
+			'test_name'       => 'HTTPS Enforcement',
+			'site_url'        => $site_url,
+			'using_https'     => $is_using_https,
+			'force_ssl_admin' => $force_ssl_admin,
+			'force_ssl_login' => $force_ssl_login,
+			'passed'          => $is_using_https,
+			'description'     => $is_using_https ? 'HTTPS enforced' : 'Site not using HTTPS (security risk)',
+		);
 	}
 
 	/**
@@ -144,44 +139,43 @@ class Test_Expired_SSL_Certificate extends Diagnostic_Base
 	 *
 	 * @return array|null Certificate expiry info or null
 	 */
-	private static function check_ssl_expiry(): ?array
-	{
-		$host = wp_parse_url(home_url(), PHP_URL_HOST);
+	private static function check_ssl_expiry(): ?array {
+		$host = wp_parse_url( home_url(), PHP_URL_HOST );
 
-		if (! $host) {
+		if ( ! $host ) {
 			return null;
 		}
 
 		try {
 			$cert_details = self::get_certificate_details();
 
-			if (! $cert_details || ! isset($cert_details['valid_until'])) {
+			if ( ! $cert_details || ! isset( $cert_details['valid_until'] ) ) {
 				return null;
 			}
 
-			$expiry_time = strtotime($cert_details['valid_until']);
-			$now = time();
-			$days_remaining = (int) (($expiry_time - $now) / 86400);
+			$expiry_time    = strtotime( $cert_details['valid_until'] );
+			$now            = time();
+			$days_remaining = (int) ( ( $expiry_time - $now ) / 86400 );
 
-			if ($days_remaining < 0) {
-				$status = 'expired';
-				$message = sprintf('SSL certificate expired %d days ago', abs($days_remaining));
-			} elseif ($days_remaining < self::EXPIRY_WARNING_DAYS) {
-				$status = 'expiring_soon';
-				$message = sprintf('SSL certificate expires in %d days', $days_remaining);
+			if ( $days_remaining < 0 ) {
+				$status  = 'expired';
+				$message = sprintf( 'SSL certificate expired %d days ago', abs( $days_remaining ) );
+			} elseif ( $days_remaining < self::EXPIRY_WARNING_DAYS ) {
+				$status  = 'expiring_soon';
+				$message = sprintf( 'SSL certificate expires in %d days', $days_remaining );
 			} else {
-				$status = 'valid';
-				$message = sprintf('SSL certificate valid for %d days', $days_remaining);
+				$status  = 'valid';
+				$message = sprintf( 'SSL certificate valid for %d days', $days_remaining );
 			}
 
-			return [
-				'status'          => $status,
-				'message'         => $message,
-				'expiry_date'     => $cert_details['valid_until'],
-				'days_remaining'  => $days_remaining,
-				'cert_info'       => $cert_details,
-			];
-		} catch (\Exception $e) {
+			return array(
+				'status'         => $status,
+				'message'        => $message,
+				'expiry_date'    => $cert_details['valid_until'],
+				'days_remaining' => $days_remaining,
+				'cert_info'      => $cert_details,
+			);
+		} catch ( \Exception $e ) {
 			return null;
 		}
 	}
@@ -191,19 +185,20 @@ class Test_Expired_SSL_Certificate extends Diagnostic_Base
 	 *
 	 * @return array|null Certificate details or null
 	 */
-	private static function get_certificate_details(): ?array
-	{
-		$host = wp_parse_url(home_url(), PHP_URL_HOST);
+	private static function get_certificate_details(): ?array {
+		$host = wp_parse_url( home_url(), PHP_URL_HOST );
 
-		if (! $host) {
+		if ( ! $host ) {
 			return null;
 		}
 
-		$stream_context = stream_context_create([
-			'ssl' => [
-				'capture_peer_cert' => true,
-			],
-		]);
+		$stream_context = stream_context_create(
+			array(
+				'ssl' => array(
+					'capture_peer_cert' => true,
+				),
+			)
+		);
 
 		try {
 			$resource = @stream_socket_client(
@@ -215,33 +210,33 @@ class Test_Expired_SSL_Certificate extends Diagnostic_Base
 				$stream_context
 			);
 
-			if (! $resource) {
+			if ( ! $resource ) {
 				return null;
 			}
 
-			$params = stream_context_get_params($stream_context);
-			$cert = $params['options']['ssl']['peer_certificate'];
+			$params = stream_context_get_params( $stream_context );
+			$cert   = $params['options']['ssl']['peer_certificate'];
 
-			if (! $cert) {
+			if ( ! $cert ) {
 				return null;
 			}
 
-			$cert_info = openssl_x509_parse($cert);
+			$cert_info = openssl_x509_parse( $cert );
 
-			if (! $cert_info) {
+			if ( ! $cert_info ) {
 				return null;
 			}
 
-			fclose($resource);
+			fclose( $resource );
 
-			return [
-				'issued_to'     => $cert_info['subject']['CN'] ?? 'Unknown',
-				'issued_by'     => $cert_info['issuer']['CN'] ?? 'Unknown',
-				'valid_from'    => isset($cert_info['validFrom_time_t']) ? date('Y-m-d', $cert_info['validFrom_time_t']) : 'Unknown',
-				'valid_until'   => isset($cert_info['validTo_time_t']) ? date('Y-m-d H:i:s', $cert_info['validTo_time_t']) : 'Unknown',
+			return array(
+				'issued_to'      => $cert_info['subject']['CN'] ?? 'Unknown',
+				'issued_by'      => $cert_info['issuer']['CN'] ?? 'Unknown',
+				'valid_from'     => isset( $cert_info['validFrom_time_t'] ) ? date( 'Y-m-d', $cert_info['validFrom_time_t'] ) : 'Unknown',
+				'valid_until'    => isset( $cert_info['validTo_time_t'] ) ? date( 'Y-m-d H:i:s', $cert_info['validTo_time_t'] ) : 'Unknown',
 				'is_self_signed' => $cert_info['subject']['CN'] === $cert_info['issuer']['CN'],
-			];
-		} catch (\Exception $e) {
+			);
+		} catch ( \Exception $e ) {
 			return null;
 		}
 	}
@@ -251,8 +246,7 @@ class Test_Expired_SSL_Certificate extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_name(): string
-	{
+	public static function get_name(): string {
 		return 'Expired SSL Certificate';
 	}
 
@@ -261,8 +255,7 @@ class Test_Expired_SSL_Certificate extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_description(): string
-	{
+	public static function get_description(): string {
 		return 'Checks if SSL certificate is valid and not expired';
 	}
 
@@ -271,8 +264,7 @@ class Test_Expired_SSL_Certificate extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_category(): string
-	{
+	public static function get_category(): string {
 		return 'Security';
 	}
 }

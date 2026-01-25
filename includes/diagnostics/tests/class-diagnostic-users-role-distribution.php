@@ -23,14 +23,14 @@ use WPShadow\Core\Diagnostic_Lean_Checks;
  * @verified 2026-01-24 - Batch 4 implementation
  * @guardian-integrated Pending
  */
-class Diagnostic_Users_Role_Distribution extends Diagnostic_Base
-{
-	protected static $slug = 'users-role-distribution';
-	protected static $title = 'User Role Distribution';
-	protected static $description = 'Breakdown of users by role';
-	protected static $category = 'Users & Team';
+class Diagnostic_Users_Role_Distribution extends Diagnostic_Base {
+
+	protected static $slug         = 'users-role-distribution';
+	protected static $title        = 'User Role Distribution';
+	protected static $description  = 'Breakdown of users by role';
+	protected static $category     = 'Users & Team';
 	protected static $threat_level = 'low';
-	protected static $family = 'general';
+	protected static $family       = 'general';
 	protected static $family_label = 'General';
 
 	/**
@@ -38,15 +38,14 @@ class Diagnostic_Users_Role_Distribution extends Diagnostic_Base
 	 *
 	 * @return ?array Null if pass, array of findings if fail
 	 */
-	public function check(): ?array
-	{
-		$roles = ['administrator', 'editor', 'author', 'contributor', 'subscriber'];
-		$distribution = [];
+	public function check(): ?array {
+		$roles        = array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' );
+		$distribution = array();
 
-		foreach ($roles as $role) {
-			$users = count(get_users(['role' => $role]));
-			if ($users > 0) {
-				$distribution[$role] = $users;
+		foreach ( $roles as $role ) {
+			$users = count( get_users( array( 'role' => $role ) ) );
+			if ( $users > 0 ) {
+				$distribution[ $role ] = $users;
 			}
 		}
 

@@ -95,20 +95,22 @@ class Diagnostic_Pub_Content_Too_Long extends Diagnostic_Base {
 
 	public static function check(): ?array {
 		// Check if published content is excessively long
-		$long_posts = get_posts( [
-			'post_status'    => 'publish',
-			'posts_per_page' => -1,
-			'fields'         => 'ids',
-		] );
+		$long_posts = get_posts(
+			array(
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'fields'         => 'ids',
+			)
+		);
 
 		$excessively_long = 0;
 		foreach ( $long_posts as $post_id ) {
-			$content = get_post_field( 'post_content', $post_id );
+			$content    = get_post_field( 'post_content', $post_id );
 			$word_count = str_word_count( $content );
 
 			// Flag posts longer than 5000 words
 			if ( $word_count > 5000 ) {
-				$excessively_long++;
+				++$excessively_long;
 			}
 		}
 
@@ -159,10 +161,8 @@ class Diagnostic_Pub_Content_Too_Long extends Diagnostic_Base {
 
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

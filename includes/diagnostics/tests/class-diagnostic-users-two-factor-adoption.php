@@ -24,12 +24,12 @@ use WPShadow\Core\Diagnostic_Lean_Checks;
  * @guardian-integrated Pending
  */
 class Diagnostic_Users_Two_Factor_Adoption extends Diagnostic_Base {
-	protected static $slug = 'users-two-factor-adoption';
-	protected static $title = 'Two-Factor Authentication Adoption';
-	protected static $description = 'What percentage of users have two-factor auth enabled?';
-	protected static $category = 'Users & Team';
+	protected static $slug         = 'users-two-factor-adoption';
+	protected static $title        = 'Two-Factor Authentication Adoption';
+	protected static $description  = 'What percentage of users have two-factor auth enabled?';
+	protected static $category     = 'Users & Team';
 	protected static $threat_level = 'medium';
-	protected static $family = 'general';
+	protected static $family       = 'general';
 	protected static $family_label = 'General';
 
 	/**
@@ -39,19 +39,19 @@ class Diagnostic_Users_Two_Factor_Adoption extends Diagnostic_Base {
 	 */
 	public function check(): ?array {
 		// First check if 2FA plugin is active
-		$two_fa_plugins = [
+		$two_fa_plugins = array(
 			'two-factor',
 			'wordfence',
 			'jetpack',
 			'shield-security',
 			'google-authenticator',
-			'authy-two-factor'
-		];
+			'authy-two-factor',
+		);
 
 		$has_2fa = false;
 		foreach ( $two_fa_plugins as $plugin ) {
 			if ( is_plugin_active( $plugin . '/' . $plugin . '.php' ) ||
-				 is_plugin_active( $plugin ) ) {
+				is_plugin_active( $plugin ) ) {
 				$has_2fa = true;
 				break;
 			}
@@ -70,16 +70,16 @@ class Diagnostic_Users_Two_Factor_Adoption extends Diagnostic_Base {
 
 		// If plugin is active, try to check adoption
 		// Most 2FA plugins store enabled status in user meta
-		$users = get_users( [ 'fields' => 'ID' ] );
+		$users = get_users( array( 'fields' => 'ID' ) );
 		if ( ! empty( $users ) ) {
 			$users_with_2fa = 0;
 			foreach ( $users as $user_id ) {
 				// Check common 2FA meta keys
 				$has_2fa_enabled = get_user_meta( $user_id, 'two_factor_enabled' ) ||
-								   get_user_meta( $user_id, '_two_factor_active' ) ||
-								   get_user_meta( $user_id, 'wordfence_2fa' );
+									get_user_meta( $user_id, '_two_factor_active' ) ||
+									get_user_meta( $user_id, 'wordfence_2fa' );
 				if ( $has_2fa_enabled ) {
-					$users_with_2fa++;
+					++$users_with_2fa;
 				}
 			}
 

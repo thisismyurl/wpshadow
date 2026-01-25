@@ -16,41 +16,39 @@ use WPShadow\Core\Diagnostic_Base;
  * @subpackage Diagnostics/Tests
  * @since 1.2601.2112
  */
-class Test_Security_WeakPasswordHashing extends Diagnostic_Base
-{
+class Test_Security_WeakPasswordHashing extends Diagnostic_Base {
 
-	public static function check(): ?array
-	{
+
+	public static function check(): ?array {
 		// Check if WordPress password hashing is properly configured
 		global $wp_version;
 
-		if (version_compare($wp_version, '5.3.0', '<')) {
-			return [
-				'id' => 'weak-password-hashing',
-				'title' => __('Weak password hashing detected', 'wpshadow'),
-				'description' => __('WordPress 5.3+ includes improved password hashing. Update to get better security.', 'wpshadow'),
-				'severity' => 'medium',
+		if ( version_compare( $wp_version, '5.3.0', '<' ) ) {
+			return array(
+				'id'           => 'weak-password-hashing',
+				'title'        => __( 'Weak password hashing detected', 'wpshadow' ),
+				'description'  => __( 'WordPress 5.3+ includes improved password hashing. Update to get better security.', 'wpshadow' ),
+				'severity'     => 'medium',
 				'threat_level' => 60,
-			];
+			);
 		}
 
 		return null;
 	}
 
-	public static function test_live_weak_password_hashing(): array
-	{
+	public static function test_live_weak_password_hashing(): array {
 		$result = self::check();
 
-		if (null === $result) {
-			return [
-				'passed' => true,
-				'message' => __('Password hashing is secure', 'wpshadow'),
-			];
+		if ( null === $result ) {
+			return array(
+				'passed'  => true,
+				'message' => __( 'Password hashing is secure', 'wpshadow' ),
+			);
 		}
 
-		return [
-			'passed' => false,
+		return array(
+			'passed'  => false,
 			'message' => $result['description'],
-		];
+		);
 	}
 }

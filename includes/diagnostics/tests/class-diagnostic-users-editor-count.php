@@ -24,12 +24,12 @@ use WPShadow\Core\Diagnostic_Lean_Checks;
  * @guardian-integrated Pending
  */
 class Diagnostic_Users_Editor_Count extends Diagnostic_Base {
-	protected static $slug = 'users-editor-count';
-	protected static $title = 'Editor Count';
-	protected static $description = 'How many editors does the site have?';
-	protected static $category = 'Users & Team';
+	protected static $slug         = 'users-editor-count';
+	protected static $title        = 'Editor Count';
+	protected static $description  = 'How many editors does the site have?';
+	protected static $category     = 'Users & Team';
 	protected static $threat_level = 'low';
-	protected static $family = 'general';
+	protected static $family       = 'general';
 	protected static $family_label = 'General';
 
 	/**
@@ -38,7 +38,7 @@ class Diagnostic_Users_Editor_Count extends Diagnostic_Base {
 	 * @return ?array Null if pass, array of findings if fail
 	 */
 	public function check(): ?array {
-		$editors = count_users();
+		$editors      = count_users();
 		$editor_count = isset( $editors['avail_roles']['editor'] ) ? $editors['avail_roles']['editor'] : 0;
 
 		// This is purely informational

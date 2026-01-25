@@ -80,7 +80,7 @@ class Diagnostic_Gdpr_Data_Portability extends Diagnostic_Base {
 
 	public static function check(): ?array {
 		// Check if data portability is supported (export functionality)
-		
+
 		// Check WordPress version for data export support
 		if ( ! function_exists( 'wp_user_request_scheduled_resend' ) ) {
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
@@ -116,7 +116,7 @@ class Diagnostic_Gdpr_Data_Portability extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Gdpr Data Portability
 	 * Slug: gdpr-data-portability
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -137,15 +137,13 @@ class Diagnostic_Gdpr_Data_Portability extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

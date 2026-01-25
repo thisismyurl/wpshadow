@@ -16,7 +16,7 @@ use WPShadow\Core\Diagnostic_Base;
  *
  * @package WPShadow
  * @subpackage Diagnostics
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
@@ -114,7 +114,7 @@ class Diagnostic_Sustainability_Technical_Debt extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Sustainability Technical Debt
 	 * Slug: sustainability-technical-debt
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -128,11 +128,16 @@ class Diagnostic_Sustainability_Technical_Debt extends Diagnostic_Base {
 	 */
 	public static function test_live_sustainability_technical_debt(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Technical debt is being actively addressed'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Technical debt is being actively addressed',
+			);
 		}
 		$message = $result['description'] ?? 'Technical debt backlog issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

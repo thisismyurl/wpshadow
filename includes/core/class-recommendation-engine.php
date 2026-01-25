@@ -16,7 +16,7 @@ namespace WPShadow\Core;
  * Smart recommendation system for prioritizing fixes
  */
 class Recommendation_Engine {
-	
+
 	/**
 	 * Get top N recommended fixes
 	 *
@@ -25,36 +25,36 @@ class Recommendation_Engine {
 	 */
 	public static function get_recommendations( $limit = 3 ) {
 		// Get current findings
-		$findings = wpshadow_get_site_findings();
+		$findings  = wpshadow_get_site_findings();
 		$dismissed = get_option( 'wpshadow_dismissed_findings', array() );
-		
+
 		// Filter out dismissed findings
 		$active_findings = array_filter(
 			$findings,
-			function( $f ) use ( $dismissed ) {
+			function ( $f ) use ( $dismissed ) {
 				return ! isset( $f['id'] ) || ! isset( $dismissed[ $f['id'] ] );
 			}
 		);
-		
+
 		// Score each finding
 		$scored_findings = array();
 		foreach ( $active_findings as $finding ) {
-			$score = self::calculate_recommendation_score( $finding );
+			$score             = self::calculate_recommendation_score( $finding );
 			$scored_findings[] = array_merge( $finding, array( 'recommendation_score' => $score ) );
 		}
-		
+
 		// Sort by score (highest first)
 		usort(
 			$scored_findings,
-			function( $a, $b ) {
+			function ( $a, $b ) {
 				return $b['recommendation_score'] <=> $a['recommendation_score'];
 			}
 		);
-		
+
 		// Return top N
 		return array_slice( $scored_findings, 0, $limit );
 	}
-	
+
 	/**
 	 * Calculate recommendation score using Eisenhower Matrix
 	 *
@@ -72,32 +72,32 @@ class Recommendation_Engine {
 	private static function calculate_recommendation_score( $finding ) {
 		// Get base score from threat level
 		$urgency = isset( $finding['threat_level'] ) ? $finding['threat_level'] : 50;
-		
+
 		// Get metadata for this finding's category
 		$diagnostic_id = isset( $finding['id'] ) ? $finding['id'] : 'unknown';
-		$metadata = KPI_Metadata::get( $diagnostic_id );
-		
+		$metadata      = KPI_Metadata::get( $diagnostic_id );
+
 		// Extract KPI factors
-		$importance = $metadata['risk_reduction'] ?? 10;
+		$importance     = $metadata['risk_reduction'] ?? 10;
 		$effort_minutes = $metadata['time_to_fix_minutes'] ?? 15;
-		$impact = $metadata['roi_multiplier'] ?? 1.0;
-		
+		$impact         = $metadata['roi_multiplier'] ?? 1.0;
+
 		// Calculate base priority (Eisenhower)
 		$priority = ( ( $urgency + $importance ) * $impact ) / max( 1, $effort_minutes / 10 );
-		
+
 		// Boost priority if it's auto-fixable (quick wins)
 		if ( isset( $finding['auto_fixable'] ) && $finding['auto_fixable'] ) {
 			$priority *= 1.5;
 		}
-		
+
 		// Reduce priority if already in user's ignore list
 		if ( isset( $finding['ignored'] ) && $finding['ignored'] ) {
 			$priority *= 0.5;
 		}
-		
+
 		return (float) $priority;
 	}
-	
+
 	/**
 	 * Get recommendations grouped by impact type
 	 *
@@ -110,14 +110,14 @@ class Recommendation_Engine {
 	 */
 	public static function get_recommendations_by_impact() {
 		$recommendations = self::get_recommendations( 10 );
-		
+
 		$grouped = array(
 			'quick_wins'  => array(),
 			'security'    => array(),
 			'performance' => array(),
 			'other'       => array(),
 		);
-		
+
 		foreach ( $recommendations as $rec ) {
 			// Quick wins: auto-fixable + low effort
 			if ( isset( $rec['auto_fixable'] ) && $rec['auto_fixable'] && isset( $rec['threat_level'] ) && $rec['threat_level'] < 70 ) {
@@ -136,7 +136,7 @@ class Recommendation_Engine {
 				$grouped['other'][] = $rec;
 			}
 		}
-		
+
 		// Filter to top 3 by type
 		return array(
 			'quick_wins'  => array_slice( $grouped['quick_wins'], 0, 1 ),
@@ -144,7 +144,7 @@ class Recommendation_Engine {
 			'performance' => array_slice( $grouped['performance'], 0, 1 ),
 		);
 	}
-	
+
 	/**
 	 * Render recommendation widget
 	 *
@@ -152,7 +152,7 @@ class Recommendation_Engine {
 	 */
 	public static function render_recommendation_widget() {
 		$recommendations = self::get_recommendations( 3 );
-		
+
 		if ( empty( $recommendations ) ) {
 			?>
 			<div class="wps-p-20-rounded-6">
@@ -195,7 +195,7 @@ class Recommendation_Engine {
 							
 							<!-- Phase 5: KB & Training Links -->
 							<div class="wps-flex-gap-12-m-8">
-								<?php 
+								<?php
 								$kb_slug = isset( $rec['id'] ) ? sanitize_title( $rec['id'] ) : 'general-fix';
 								?>
 								<a href="<?php echo esc_url( 'https://wpshadow.com/kb/' . $kb_slug ); ?>" target="_blank" style="color: #2196f3; text-decoration: none;">
@@ -244,7 +244,7 @@ class Recommendation_Engine {
 		</div>
 		<?php
 	}
-	
+
 	/**
 	 * Get impact summary for recommendations
 	 *
@@ -253,29 +253,29 @@ class Recommendation_Engine {
 	 * @return array Impact summary.
 	 */
 	public static function get_impact_summary() {
-		$recommendations = self::get_recommendations( 5 );
-		$total_minutes = 0;
+		$recommendations      = self::get_recommendations( 5 );
+		$total_minutes        = 0;
 		$total_risk_reduction = 0;
-		$auto_fixable_count = 0;
-		
+		$auto_fixable_count   = 0;
+
 		foreach ( $recommendations as $rec ) {
-			$metadata = KPI_Metadata::get( $rec['id'] ?? 'unknown' );
-			$total_minutes += $metadata['time_to_fix_minutes'] ?? 15;
+			$metadata              = KPI_Metadata::get( $rec['id'] ?? 'unknown' );
+			$total_minutes        += $metadata['time_to_fix_minutes'] ?? 15;
 			$total_risk_reduction += $metadata['risk_reduction'] ?? 10;
-			
+
 			if ( isset( $rec['auto_fixable'] ) && $rec['auto_fixable'] ) {
-				$auto_fixable_count++;
+				++$auto_fixable_count;
 			}
 		}
-		
+
 		$total_hours = intdiv( $total_minutes, 60 );
-		$labor_cost = $total_hours * 50; // Standard $50/hr
-		
+		$labor_cost  = $total_hours * 50; // Standard $50/hr
+
 		return array(
-			'total_hours'         => $total_hours,
-			'labor_cost_avoided'  => $labor_cost,
-			'risk_reduction_pct'  => min( 100, $total_risk_reduction ),
-			'auto_fixable_count'  => $auto_fixable_count,
+			'total_hours'           => $total_hours,
+			'labor_cost_avoided'    => $labor_cost,
+			'risk_reduction_pct'    => min( 100, $total_risk_reduction ),
+			'auto_fixable_count'    => $auto_fixable_count,
 			'total_recommendations' => count( $recommendations ),
 		);
 	}

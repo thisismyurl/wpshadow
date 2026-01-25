@@ -24,7 +24,7 @@ class Treatment_Outdated_Plugins extends Treatment_Base {
 	public static function get_finding_id() {
 		return 'outdated-plugins';
 	}
-	
+
 	/**
 	 * Check if this treatment can be applied.
 	 *
@@ -33,7 +33,7 @@ class Treatment_Outdated_Plugins extends Treatment_Base {
 	public static function can_apply() {
 		return count( self::get_outdated_plugins() ) > 0;
 	}
-	
+
 	/**
 	 * Apply the treatment/fix.
 	 *
@@ -47,42 +47,42 @@ class Treatment_Outdated_Plugins extends Treatment_Base {
 				'message' => 'No outdated plugins to update.',
 			);
 		}
-		
+
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
-		
+
 		$skin     = new \Automatic_Upgrader_Skin();
 		$upgrader = new \Plugin_Upgrader( $skin );
-		
-		$updated   = 0;
-		$failures  = array();
+
+		$updated  = 0;
+		$failures = array();
 		foreach ( $updates as $plugin_file ) {
 			$result = $upgrader->upgrade( $plugin_file );
 			if ( $result && ! is_wp_error( $result ) ) {
-				$updated++;
+				++$updated;
 			} else {
 				$failures[] = $plugin_file;
 			}
 		}
-		
+
 		if ( $updated > 0 ) {
 			KPI_Tracker::log_fix_applied( self::get_finding_id(), 'auto' );
 		}
-		
+
 		if ( ! empty( $failures ) ) {
 			return array(
 				'success' => false,
 				'message' => 'Some plugins could not be updated automatically: ' . implode( ', ', $failures ),
 			);
 		}
-		
+
 		return array(
 			'success' => true,
 			'message' => "Updated {$updated} plugin" . ( $updated !== 1 ? 's' : '' ) . ' successfully.',
 		);
 	}
-	
+
 	/**
 	 * Undo the treatment (plugin updates cannot be auto-rolled back).
 	 *
@@ -94,7 +94,7 @@ class Treatment_Outdated_Plugins extends Treatment_Base {
 			'message' => 'Plugin updates cannot be automatically rolled back.',
 		);
 	}
-	
+
 	/**
 	 * Get outdated plugins list.
 	 *
@@ -105,7 +105,7 @@ class Treatment_Outdated_Plugins extends Treatment_Base {
 		if ( empty( $updates->response ) || ! is_array( $updates->response ) ) {
 			return array();
 		}
-		
+
 		return array_keys( $updates->response );
 	}
 }

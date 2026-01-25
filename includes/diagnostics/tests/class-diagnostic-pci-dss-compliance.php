@@ -87,32 +87,32 @@ class Diagnostic_Pci_Dss_Compliance extends Diagnostic_Base {
 
 		// 1. Check for HTTPS
 		if ( is_ssl() ) {
-			$compliance_checks++;
+			++$compliance_checks;
 		}
 
 		// 2. Check for security plugin
-		$security_plugins = [
+		$security_plugins = array(
 			'wordfence/wordfence.php',
 			'sucuri/sucuri.php',
 			'jetpack-protect/jetpack-protect.php',
-		];
+		);
 
 		foreach ( $security_plugins as $plugin ) {
 			if ( is_plugin_active( $plugin ) ) {
-				$compliance_checks++;
+				++$compliance_checks;
 				break;
 			}
 		}
 
 		// 3. Check for payment gateway with built-in security
-		$payment_plugins = [
+		$payment_plugins = array(
 			'woocommerce-stripe/woocommerce-stripe.php',
 			'woocommerce-paypal-payments/woocommerce-paypal-payments.php',
-		];
+		);
 
 		foreach ( $payment_plugins as $plugin ) {
 			if ( is_plugin_active( $plugin ) ) {
-				$compliance_checks++;
+				++$compliance_checks;
 				break;
 			}
 		}
@@ -164,10 +164,8 @@ class Diagnostic_Pci_Dss_Compliance extends Diagnostic_Base {
 
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

@@ -12,19 +12,19 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/design-pagination-consistency
  */
 class Diagnostic_Design_PAGINATION_CONSISTENCY extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'design-pagination-consistency',
-            'title' => __('Pagination Consistency', 'wpshadow'),
-            'description' => __('Checks pagination styled consistently across post types.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'design',
-            'kb_link' => 'https://wpshadow.com/kb/design-pagination-consistency',
-            'training_link' => 'https://wpshadow.com/training/design-pagination-consistency',
-            'auto_fixable' => false,
-            'threat_level' => 6
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'design-pagination-consistency',
+			'title'         => __( 'Pagination Consistency', 'wpshadow' ),
+			'description'   => __( 'Checks pagination styled consistently across post types.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'design',
+			'kb_link'       => 'https://wpshadow.com/kb/design-pagination-consistency',
+			'training_link' => 'https://wpshadow.com/training/design-pagination-consistency',
+			'auto_fixable'  => false,
+			'threat_level'  => 6,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -32,12 +32,12 @@ class Diagnostic_Design_PAGINATION_CONSISTENCY extends Diagnostic_Base {
 	 * Diagnostic: Design PAGINATION CONSISTENCY
 	 * Slug: -design-pagination-consistency
 	 * File: class-diagnostic-design-pagination-consistency.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Design PAGINATION CONSISTENCY
 	 * Slug: -design-pagination-consistency
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -50,11 +50,16 @@ class Diagnostic_Design_PAGINATION_CONSISTENCY extends Diagnostic_Base {
 	 */
 	public static function test_live__design_pagination_consistency(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Pagination is consistent across all archive pages'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Pagination is consistent across all archive pages',
+			);
 		}
 		$message = $result['description'] ?? 'Pagination consistency issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

@@ -21,29 +21,28 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_Database_Error_Display extends Diagnostic_Base
-{
+class Diagnostic_Database_Error_Display extends Diagnostic_Base {
+
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		global $wpdb;
 
 		// Check if show_errors is enabled
-		if ($wpdb->show_errors) {
+		if ( $wpdb->show_errors ) {
 			return array(
-				'id'          => 'database-error-display',
-				'title'       => 'Database Errors Displayed to Public',
-				'description' => 'Database errors are being displayed to visitors, potentially revealing database structure, table names, and credentials. Disable WP_DEBUG_DISPLAY in production.',
-				'severity'    => 'high',
-				'category'    => 'security',
-				'kb_link'     => 'https://wpshadow.com/kb/hide-database-errors/',
+				'id'            => 'database-error-display',
+				'title'         => 'Database Errors Displayed to Public',
+				'description'   => 'Database errors are being displayed to visitors, potentially revealing database structure, table names, and credentials. Disable WP_DEBUG_DISPLAY in production.',
+				'severity'      => 'high',
+				'category'      => 'security',
+				'kb_link'       => 'https://wpshadow.com/kb/hide-database-errors/',
 				'training_link' => 'https://wpshadow.com/training/database-security/',
-				'auto_fixable' => true,
-				'threat_level' => 70,
+				'auto_fixable'  => true,
+				'threat_level'  => 70,
 			);
 		}
 
@@ -72,11 +71,10 @@ class Diagnostic_Database_Error_Display extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__database_error_display(): array
-	{
+	public static function test_live__database_error_display(): array {
 		global $wpdb;
 
-		if (! isset($wpdb) || ! is_object($wpdb)) {
+		if ( ! isset( $wpdb ) || ! is_object( $wpdb ) ) {
 			return array(
 				'passed'  => false,
 				'message' => 'Cannot access $wpdb to verify database error display state',
@@ -90,10 +88,10 @@ class Diagnostic_Database_Error_Display extends Diagnostic_Base
 
 		// Determine expected state
 		$should_find_issue      = $show_errors_enabled;
-		$diagnostic_found_issue = (null !== $diagnostic_result);
+		$diagnostic_found_issue = ( null !== $diagnostic_result );
 
 		// Compare expected vs actual diagnostic result
-		$test_passes = ($should_find_issue === $diagnostic_found_issue);
+		$test_passes = ( $should_find_issue === $diagnostic_found_issue );
 
 		$message = sprintf(
 			'wpdb show_errors: %s. Expected diagnostic to %s issue. Diagnostic %s issue. Test: %s',

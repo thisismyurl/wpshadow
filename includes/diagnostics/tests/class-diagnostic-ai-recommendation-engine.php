@@ -79,43 +79,45 @@ class Diagnostic_Ai_Recommendation_Engine extends Diagnostic_Base {
 	}
 
 	public static function check(): ?array {
-		$issues = [];
+		$issues = array();
 
 		// Check if recommendation engine is configured
-		$engine_type = get_option('wpshadow_recommendation_engine_type', '');
+		$engine_type = get_option( 'wpshadow_recommendation_engine_type', '' );
 
-		if (empty($engine_type)) {
+		if ( empty( $engine_type ) ) {
 			$issues[] = 'No recommendation engine configured';
 		}
 
 		// Check if training data exists
-		$training_runs = (int)get_option('wpshadow_recommendation_training_runs', 0);
-		if ($training_runs === 0) {
+		$training_runs = (int) get_option( 'wpshadow_recommendation_training_runs', 0 );
+		if ( $training_runs === 0 ) {
 			$issues[] = 'Recommendation engine has not been trained';
 		}
 
-		return empty($issues) ? null : [
-			'id' => 'ai-recommendation-engine',
-			'title' => 'Recommendation engine not deployed',
-			'description' => 'Deploy and train recommendation engine',
-			'severity' => 'medium',
-			'category' => 'ai_readiness',
+		return empty( $issues ) ? null : array(
+			'id'           => 'ai-recommendation-engine',
+			'title'        => 'Recommendation engine not deployed',
+			'description'  => 'Deploy and train recommendation engine',
+			'severity'     => 'medium',
+			'category'     => 'ai_readiness',
 			'threat_level' => 42,
-			'details' => $issues,
-		];
+			'details'      => $issues,
+		);
 	}
 
 	public static function test_live_ai_recommendation_engine(): array {
-		delete_option('wpshadow_recommendation_engine_type');
+		delete_option( 'wpshadow_recommendation_engine_type' );
 		$r1 = self::check();
 
-		update_option('wpshadow_recommendation_engine_type', 'collaborative-filtering');
-		update_option('wpshadow_recommendation_training_runs', 5);
+		update_option( 'wpshadow_recommendation_engine_type', 'collaborative-filtering' );
+		update_option( 'wpshadow_recommendation_training_runs', 5 );
 		$r2 = self::check();
 
-		delete_option('wpshadow_recommendation_engine_type');
-		delete_option('wpshadow_recommendation_training_runs');
-		return ['passed' => is_array($r1) && is_null($r2), 'message' => 'Recommendation engine check working'];
+		delete_option( 'wpshadow_recommendation_engine_type' );
+		delete_option( 'wpshadow_recommendation_training_runs' );
+		return array(
+			'passed'  => is_array( $r1 ) && is_null( $r2 ),
+			'message' => 'Recommendation engine check working',
+		);
 	}
-	}
-
+}

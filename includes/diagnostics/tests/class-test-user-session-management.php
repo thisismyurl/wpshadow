@@ -14,36 +14,35 @@ use WPShadow\Diagnostics\Diagnostic_Base;
  *
  * @since 1.2.0
  */
-class Test_User_Session_Management extends Diagnostic_Base
-{
+class Test_User_Session_Management extends Diagnostic_Base {
+
 
 	/**
 	 * Check session management
 	 *
 	 * @return array|null Diagnostic array if issues found, null if all good
 	 */
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		$sessions = self::analyze_user_sessions();
 
-		if (empty($sessions['excessive_sessions'])) {
+		if ( empty( $sessions['excessive_sessions'] ) ) {
 			return null;
 		}
 
-		$threat = min(75, count($sessions['excessive_sessions']) * 10);
+		$threat = min( 75, count( $sessions['excessive_sessions'] ) * 10 );
 
-		return [
-			'threat_level'    => $threat,
-			'threat_color'    => 'orange',
-			'passed'          => false,
-			'issue'           => sprintf(
+		return array(
+			'threat_level'  => $threat,
+			'threat_color'  => 'orange',
+			'passed'        => false,
+			'issue'         => sprintf(
 				'%d user accounts with multiple concurrent sessions',
-				count($sessions['excessive_sessions'])
+				count( $sessions['excessive_sessions'] )
 			),
-			'metadata'        => $sessions,
-			'kb_link'         => 'https://wpshadow.com/kb/user-session-security/',
-			'training_link'   => 'https://wpshadow.com/training/wordpress-user-management/',
-		];
+			'metadata'      => $sessions,
+			'kb_link'       => 'https://wpshadow.com/kb/user-session-security/',
+			'training_link' => 'https://wpshadow.com/training/wordpress-user-management/',
+		);
 	}
 
 	/**
@@ -51,17 +50,16 @@ class Test_User_Session_Management extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_concurrent_sessions(): array
-	{
+	public static function test_concurrent_sessions(): array {
 		$sessions = self::analyze_user_sessions();
 
-		return [
-			'test_name'         => 'Concurrent Session Analysis',
-			'total_sessions'    => $sessions['total_sessions'] ?? 0,
-			'excessive_sessions' => count($sessions['excessive_sessions'] ?? []),
-			'passed'            => empty($sessions['excessive_sessions']),
-			'description'       => empty($sessions['excessive_sessions']) ? 'User sessions appear normal' : sprintf('%d accounts have excessive concurrent sessions', count($sessions['excessive_sessions'])),
-		];
+		return array(
+			'test_name'          => 'Concurrent Session Analysis',
+			'total_sessions'     => $sessions['total_sessions'] ?? 0,
+			'excessive_sessions' => count( $sessions['excessive_sessions'] ?? array() ),
+			'passed'             => empty( $sessions['excessive_sessions'] ),
+			'description'        => empty( $sessions['excessive_sessions'] ) ? 'User sessions appear normal' : sprintf( '%d accounts have excessive concurrent sessions', count( $sessions['excessive_sessions'] ) ),
+		);
 	}
 
 	/**
@@ -69,13 +67,12 @@ class Test_User_Session_Management extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_session_token_uniqueness(): array
-	{
+	public static function test_session_token_uniqueness(): array {
 		global $wpdb;
 
 		// Get all active user sessions
 		$sessions_table = $wpdb->prefix . 'user_meta';
-		$results = $wpdb->get_results(
+		$results        = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT meta_key, COUNT(*) as cnt FROM {$sessions_table} WHERE meta_key LIKE %s GROUP BY meta_key",
 				'%wp_session%'
@@ -83,18 +80,18 @@ class Test_User_Session_Management extends Diagnostic_Base
 		);
 
 		$duplicate_tokens = 0;
-		foreach ($results as $row) {
-			if ($row->cnt > 1) {
+		foreach ( $results as $row ) {
+			if ( $row->cnt > 1 ) {
 				$duplicate_tokens += $row->cnt;
 			}
 		}
 
-		return [
-			'test_name'         => 'Session Token Uniqueness',
-			'duplicate_tokens'  => $duplicate_tokens,
-			'passed'            => $duplicate_tokens === 0,
-			'description'       => $duplicate_tokens === 0 ? 'All session tokens are unique' : sprintf('%d duplicate session tokens detected', $duplicate_tokens),
-		];
+		return array(
+			'test_name'        => 'Session Token Uniqueness',
+			'duplicate_tokens' => $duplicate_tokens,
+			'passed'           => $duplicate_tokens === 0,
+			'description'      => $duplicate_tokens === 0 ? 'All session tokens are unique' : sprintf( '%d duplicate session tokens detected', $duplicate_tokens ),
+		);
 	}
 
 	/**
@@ -102,19 +99,18 @@ class Test_User_Session_Management extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_session_timeout(): array
-	{
-		$cookie_expire = intval(apply_filters('auth_cookie_expiration', 2 * DAY_IN_SECONDS));
-		$is_secure = is_ssl();
+	public static function test_session_timeout(): array {
+		$cookie_expire = intval( apply_filters( 'auth_cookie_expiration', 2 * DAY_IN_SECONDS ) );
+		$is_secure     = is_ssl();
 
-		return [
-			'test_name'       => 'Session Timeout Configuration',
+		return array(
+			'test_name'         => 'Session Timeout Configuration',
 			'cookie_expiration' => $cookie_expire,
-			'days'            => round($cookie_expire / DAY_IN_SECONDS),
-			'is_secure'       => $is_secure,
-			'passed'          => $cookie_expire <= 14 * DAY_IN_SECONDS && $is_secure,
-			'description'     => sprintf('Session timeout: %d days, HTTPS: %s', round($cookie_expire / DAY_IN_SECONDS), $is_secure ? 'Yes' : 'No'),
-		];
+			'days'              => round( $cookie_expire / DAY_IN_SECONDS ),
+			'is_secure'         => $is_secure,
+			'passed'            => $cookie_expire <= 14 * DAY_IN_SECONDS && $is_secure,
+			'description'       => sprintf( 'Session timeout: %d days, HTTPS: %s', round( $cookie_expire / DAY_IN_SECONDS ), $is_secure ? 'Yes' : 'No' ),
+		);
 	}
 
 	/**
@@ -122,25 +118,24 @@ class Test_User_Session_Management extends Diagnostic_Base
 	 *
 	 * @return array Test result
 	 */
-	public static function test_admin_accounts(): array
-	{
-		$admins = get_users(['role' => 'administrator']);
+	public static function test_admin_accounts(): array {
+		$admins = get_users( array( 'role' => 'administrator' ) );
 
-		$concerns = [];
-		foreach ($admins as $admin) {
+		$concerns = array();
+		foreach ( $admins as $admin ) {
 			// Check for weak usernames
-			if (in_array(strtolower($admin->user_login), ['admin', 'administrator', 'root', 'test'], true)) {
+			if ( in_array( strtolower( $admin->user_login ), array( 'admin', 'administrator', 'root', 'test' ), true ) ) {
 				$concerns[] = $admin->user_login;
 			}
 		}
 
-		return [
+		return array(
 			'test_name'      => 'Admin Account Security',
-			'admin_count'    => count($admins),
+			'admin_count'    => count( $admins ),
 			'weak_usernames' => $concerns,
-			'passed'         => empty($concerns),
-			'description'    => empty($concerns) ? sprintf('%d admin accounts with secure usernames', count($admins)) : sprintf('%d admin accounts with weak usernames', count($concerns)),
-		];
+			'passed'         => empty( $concerns ),
+			'description'    => empty( $concerns ) ? sprintf( '%d admin accounts with secure usernames', count( $admins ) ) : sprintf( '%d admin accounts with weak usernames', count( $concerns ) ),
+		);
 	}
 
 	/**
@@ -148,8 +143,7 @@ class Test_User_Session_Management extends Diagnostic_Base
 	 *
 	 * @return array Session analysis
 	 */
-	private static function analyze_user_sessions(): array
-	{
+	private static function analyze_user_sessions(): array {
 		global $wpdb;
 
 		$sessions_table = $wpdb->prefix . 'usermeta';
@@ -162,23 +156,23 @@ class Test_User_Session_Management extends Diagnostic_Base
 			)
 		);
 
-		$excessive_sessions = [];
-		$total_sessions = 0;
+		$excessive_sessions = array();
+		$total_sessions     = 0;
 
-		foreach ($session_results as $result) {
+		foreach ( $session_results as $result ) {
 			$total_sessions += $result->session_count;
-			if ($result->session_count > 3) {
-				$excessive_sessions[] = [
+			if ( $result->session_count > 3 ) {
+				$excessive_sessions[] = array(
 					'user_id'       => $result->user_id,
 					'session_count' => $result->session_count,
-				];
+				);
 			}
 		}
 
-		return [
+		return array(
 			'total_sessions'     => $total_sessions,
 			'excessive_sessions' => $excessive_sessions,
-		];
+		);
 	}
 
 	/**
@@ -186,8 +180,7 @@ class Test_User_Session_Management extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_name(): string
-	{
+	public static function get_name(): string {
 		return 'User Session Management';
 	}
 
@@ -196,8 +189,7 @@ class Test_User_Session_Management extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_description(): string
-	{
+	public static function get_description(): string {
 		return 'Monitors user session security and concurrent login limits';
 	}
 
@@ -206,8 +198,7 @@ class Test_User_Session_Management extends Diagnostic_Base
 	 *
 	 * @return string
 	 */
-	public static function get_category(): string
-	{
+	public static function get_category(): string {
 		return 'Security';
 	}
 }

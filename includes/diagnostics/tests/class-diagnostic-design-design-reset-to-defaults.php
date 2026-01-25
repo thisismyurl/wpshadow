@@ -12,19 +12,19 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/design-reset-to-defaults
  */
 class Diagnostic_Design_DESIGN_RESET_TO_DEFAULTS extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'design-reset-to-defaults',
-            'title' => __('Reset To Defaults', 'wpshadow'),
-            'description' => __('Checks reset restores tokenized defaults cleanly.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'design',
-            'kb_link' => 'https://wpshadow.com/kb/design-reset-to-defaults',
-            'training_link' => 'https://wpshadow.com/training/design-reset-to-defaults',
-            'auto_fixable' => false,
-            'threat_level' => 6
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'design-reset-to-defaults',
+			'title'         => __( 'Reset To Defaults', 'wpshadow' ),
+			'description'   => __( 'Checks reset restores tokenized defaults cleanly.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'design',
+			'kb_link'       => 'https://wpshadow.com/kb/design-reset-to-defaults',
+			'training_link' => 'https://wpshadow.com/training/design-reset-to-defaults',
+			'auto_fixable'  => false,
+			'threat_level'  => 6,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -32,12 +32,12 @@ class Diagnostic_Design_DESIGN_RESET_TO_DEFAULTS extends Diagnostic_Base {
 	 * Diagnostic: Design DESIGN RESET TO DEFAULTS
 	 * Slug: -design-design-reset-to-defaults
 	 * File: class-diagnostic-design-design-reset-to-defaults.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Design DESIGN RESET TO DEFAULTS
 	 * Slug: -design-design-reset-to-defaults
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -50,11 +50,16 @@ class Diagnostic_Design_DESIGN_RESET_TO_DEFAULTS extends Diagnostic_Base {
 	 */
 	public static function test_live__design_design_reset_to_defaults(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Reset to defaults functionality properly implemented'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Reset to defaults functionality properly implemented',
+			);
 		}
 		$message = $result['description'] ?? 'Reset functionality issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

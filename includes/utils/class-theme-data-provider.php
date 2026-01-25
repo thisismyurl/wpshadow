@@ -53,16 +53,33 @@ class Theme_Data_Provider {
 		// Fall back to safe defaults
 		if ( empty( $palette ) ) {
 			$palette = array(
-				array( 'name' => 'Black', 'slug' => 'black', 'color' => '#000000' ),
-				array( 'name' => 'White', 'slug' => 'white', 'color' => '#ffffff' ),
-				array( 'name' => 'Gray', 'slug' => 'gray', 'color' => '#666666' ),
+				array(
+					'name'  => 'Black',
+					'slug'  => 'black',
+					'color' => '#000000',
+				),
+				array(
+					'name'  => 'White',
+					'slug'  => 'white',
+					'color' => '#ffffff',
+				),
+				array(
+					'name'  => 'Gray',
+					'slug'  => 'gray',
+					'color' => '#666666',
+				),
 			);
 		}
 
 		// Filter out items with missing colors
-		return array_values( array_filter( $palette, function( $item ) {
-			return ! empty( $item['color'] );
-		} ) );
+		return array_values(
+			array_filter(
+				$palette,
+				function ( $item ) {
+					return ! empty( $item['color'] );
+				}
+			)
+		);
 	}
 
 	/**
@@ -107,8 +124,8 @@ class Theme_Data_Provider {
 	 * @return array Array of context objects with label, fg, bg keys.
 	 */
 	public static function get_color_contexts() {
-		$contexts = array();
-		$palette = self::get_palette();
+		$contexts   = array();
+		$palette    = self::get_palette();
 		$background = self::get_background_color();
 
 		if ( empty( $palette ) ) {
@@ -116,9 +133,9 @@ class Theme_Data_Provider {
 		}
 
 		// Get theme text and link colors
-		$text_color = wp_get_global_settings( array( 'color', 'text' ) ) ?: '#000000';
-		$link_color = wp_get_global_settings( array( 'color', 'link' ) ) ?: '#0073aa';
-		$button_bg = wp_get_global_settings( array( 'color', 'button' ) ) ?: '#0073aa';
+		$text_color  = wp_get_global_settings( array( 'color', 'text' ) ) ?: '#000000';
+		$link_color  = wp_get_global_settings( array( 'color', 'link' ) ) ?: '#0073aa';
+		$button_bg   = wp_get_global_settings( array( 'color', 'button' ) ) ?: '#0073aa';
 		$button_text = wp_get_global_settings( array( 'color', 'buttontext' ) ) ?: '#ffffff';
 
 		// Text on background

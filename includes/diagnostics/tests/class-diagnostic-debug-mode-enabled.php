@@ -23,14 +23,14 @@ use WPShadow\Core\Diagnostic_Lean_Checks;
  * @verified 2026-01-24 - Batch 4 implementation
  * @guardian-integrated Pending
  */
-class Diagnostic_Debug_Mode_Enabled extends Diagnostic_Base
-{
-	protected static $slug = 'debug-mode-enabled';
-	protected static $title = 'Debug Mode Enabled';
-	protected static $description = 'Is WordPress debug mode enabled?';
-	protected static $category = 'Environment & Infrastructure';
+class Diagnostic_Debug_Mode_Enabled extends Diagnostic_Base {
+
+	protected static $slug         = 'debug-mode-enabled';
+	protected static $title        = 'Debug Mode Enabled';
+	protected static $description  = 'Is WordPress debug mode enabled?';
+	protected static $category     = 'Environment & Infrastructure';
 	protected static $threat_level = 'medium';
-	protected static $family = 'general';
+	protected static $family       = 'general';
 	protected static $family_label = 'General';
 
 	/**
@@ -38,10 +38,9 @@ class Diagnostic_Debug_Mode_Enabled extends Diagnostic_Base
 	 *
 	 * @return ?array Null if pass, array of findings if fail
 	 */
-	public function check(): ?array
-	{
+	public function check(): ?array {
 		// Check if debug mode is enabled
-		if (defined('WP_DEBUG') && WP_DEBUG) {
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			// This is a security risk in production
 			return Diagnostic_Lean_Checks::build_finding(
 				'debug-mode-enabled',
@@ -54,7 +53,7 @@ class Diagnostic_Debug_Mode_Enabled extends Diagnostic_Base
 		}
 
 		// Also check debug log
-		if (defined('WP_DEBUG_LOG') && WP_DEBUG_LOG) {
+		if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
 			return Diagnostic_Lean_Checks::build_finding(
 				'debug-mode-enabled',
 				'Debug Log Enabled',

@@ -21,7 +21,7 @@ namespace WPShadow\Diagnostics\Tests;
 
 use WPShadow\Diagnostics\Diagnostic_Base;
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -32,31 +32,30 @@ if (! defined('ABSPATH')) {
  *
  * @verified Not yet tested
  */
-class Test_Admin_CSS_File_Count extends Diagnostic_Base
-{
+class Test_Admin_CSS_File_Count extends Diagnostic_Base {
+
 
 	/**
 	 * Run the diagnostic test
 	 *
 	 * @return array|null Diagnostic result array, or null if no issue found
 	 */
-	public function check(): ?array
-	{
+	public function check(): ?array {
 		// Only run in admin context
-		if (! is_admin()) {
+		if ( ! is_admin() ) {
 			return null;
 		}
 
 		global $wp_styles;
 
 		// Ensure wp_styles is initialized
-		if (! isset($wp_styles) || ! is_object($wp_styles)) {
+		if ( ! isset( $wp_styles ) || ! is_object( $wp_styles ) ) {
 			return null;
 		}
 
 		// Count enqueued + registered stylesheets
-		$enqueued_count = count($wp_styles->queue ?? array());
-		$registered_count = count($wp_styles->registered ?? array());
+		$enqueued_count   = count( $wp_styles->queue ?? array() );
+		$registered_count = count( $wp_styles->registered ?? array() );
 
 		// Get actual enqueued handles for context
 		$enqueued_handles = $wp_styles->queue ?? array();
@@ -64,38 +63,38 @@ class Test_Admin_CSS_File_Count extends Diagnostic_Base
 		// Threshold: More than 15 enqueued stylesheets is excessive
 		$threshold = 15;
 
-		if ($enqueued_count <= $threshold) {
+		if ( $enqueued_count <= $threshold ) {
 			return null; // Pass
 		}
 
 		// Identify plugin vs core stylesheets
 		$plugin_styles = array();
-		$theme_styles = array();
-		$core_styles = array();
+		$theme_styles  = array();
+		$core_styles   = array();
 
-		foreach ($enqueued_handles as $handle) {
-			if (! isset($wp_styles->registered[$handle])) {
+		foreach ( $enqueued_handles as $handle ) {
+			if ( ! isset( $wp_styles->registered[ $handle ] ) ) {
 				continue;
 			}
 
-			$src = $wp_styles->registered[$handle]->src ?? '';
+			$src = $wp_styles->registered[ $handle ]->src ?? '';
 
-			if (strpos($src, 'wp-includes') !== false || strpos($src, 'wp-admin') !== false) {
+			if ( strpos( $src, 'wp-includes' ) !== false || strpos( $src, 'wp-admin' ) !== false ) {
 				$core_styles[] = $handle;
-			} elseif (strpos($src, 'wp-content/plugins') !== false) {
+			} elseif ( strpos( $src, 'wp-content/plugins' ) !== false ) {
 				$plugin_styles[] = $handle;
-			} elseif (strpos($src, 'wp-content/themes') !== false) {
+			} elseif ( strpos( $src, 'wp-content/themes' ) !== false ) {
 				$theme_styles[] = $handle;
 			}
 		}
 
-		$plugin_count = count($plugin_styles);
-		$theme_count = count($theme_styles);
+		$plugin_count = count( $plugin_styles );
+		$theme_count  = count( $theme_styles );
 
 		return array(
-			'id'           => 'admin-css-file-count',
-			'title'        => 'Too Many CSS Files in Admin Dashboard',
-			'description'  => sprintf(
+			'id'            => 'admin-css-file-count',
+			'title'         => 'Too Many CSS Files in Admin Dashboard',
+			'description'   => sprintf(
 				'WordPress admin is loading %d CSS files (%d from plugins, %d from theme). This causes render blocking and slower page loads. Recommended: Under %d files.',
 				$enqueued_count,
 				$plugin_count,
@@ -104,16 +103,16 @@ class Test_Admin_CSS_File_Count extends Diagnostic_Base
 			)
 			'kb_link'      => 'https://wpshadow.com/kb/admin-css-bloat',
 			'training_link' => 'https://wpshadow.com/training/optimize-admin-assets',
-			'auto_fixable' => false,
-			'threat_level' => 45, // Medium-high priority
-			'module'       => 'admin-performance',
-			'priority'     => 3,
-			'meta'         => array(
+			'auto_fixable'  => false,
+			'threat_level'  => 45, // Medium-high priority
+			'module'        => 'admin-performance',
+			'priority'      => 3,
+			'meta'          => array(
 				'css_count'     => $enqueued_count,
 				'plugin_styles' => $plugin_count,
 				'theme_styles'  => $theme_count,
 				'threshold'     => $threshold,
-				'top_culprits'  => array_slice($plugin_styles, 0, 5), // Show top 5 plugin styles
+				'top_culprits'  => array_slice( $plugin_styles, 0, 5 ), // Show top 5 plugin styles
 			),
 		);
 	}
@@ -123,8 +122,7 @@ class Test_Admin_CSS_File_Count extends Diagnostic_Base
 	 *
 	 * @return array Diagnostic information
 	 */
-	public static function get_info(): array
-	{
+	public static function get_info(): array {
 		return array(
 			'name'        => 'Admin CSS File Count',
 			'category'    => 'admin-performance',

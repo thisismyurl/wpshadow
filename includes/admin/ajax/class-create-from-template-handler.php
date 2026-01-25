@@ -30,7 +30,7 @@ class Create_From_Template_Handler extends AJAX_Handler_Base {
 		self::verify_request( 'wpshadow_workflow', 'manage_options' );
 
 		$template_slug = self::get_post_param( 'template_slug', 'key', '', true );
-		$custom_name = self::get_post_param( 'custom_name', 'text', '', false );
+		$custom_name   = self::get_post_param( 'custom_name', 'text', '', false );
 
 		if ( empty( $template_slug ) ) {
 			self::send_error( __( 'Invalid template slug.', 'wpshadow' ) );

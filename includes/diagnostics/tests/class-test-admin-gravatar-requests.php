@@ -22,7 +22,7 @@ namespace WPShadow\Diagnostics\Tests;
 
 use WPShadow\Diagnostics\Diagnostic_Base;
 
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -33,27 +33,26 @@ if (! defined('ABSPATH')) {
  *
  * @verified Not yet tested
  */
-class Test_Admin_Gravatar_Requests extends Diagnostic_Base
-{
+class Test_Admin_Gravatar_Requests extends Diagnostic_Base {
+
 
 	/**
 	 * Run the diagnostic test
 	 *
 	 * @return array|null Diagnostic result array, or null if no issue found
 	 */
-	public function check(): ?array
-	{
+	public function check(): ?array {
 		// Only run in admin context
-		if (! is_admin()) {
+		if ( ! is_admin() ) {
 			return null;
 		}
 
 		// Check if this is a page that might have comments/users
 		global $pagenow;
-		$gravatar_pages = array('index.php', 'edit-comments.php', 'users.php', 'profile.php');
+		$gravatar_pages = array( 'index.php', 'edit-comments.php', 'users.php', 'profile.php' );
 
 		// Only test on relevant pages
-		if (! in_array($pagenow, $gravatar_pages, true) && ! isset($_GET['page'])) {
+		if ( ! in_array( $pagenow, $gravatar_pages, true ) && ! isset( $_GET['page'] ) ) {
 			return null; // Not a relevant page
 		}
 
@@ -61,35 +60,35 @@ class Test_Admin_Gravatar_Requests extends Diagnostic_Base
 		$gravatar_count = 0;
 
 		// Method 1: Count recent comments that would show Gravatars
-		if ($pagenow === 'index.php' || $pagenow === 'edit-comments.php') {
+		if ( $pagenow === 'index.php' || $pagenow === 'edit-comments.php' ) {
 			$recent_comments = wp_count_comments();
 			// Estimate: Dashboard shows ~5 recent comments, edit-comments shows 20+ per page
-			if ($pagenow === 'index.php') {
-				$gravatar_count = min(5, $recent_comments->approved ?? 0);
+			if ( $pagenow === 'index.php' ) {
+				$gravatar_count = min( 5, $recent_comments->approved ?? 0 );
 			} else {
 				$gravatar_count = 20; // Default per-page count
 			}
 		}
 
 		// Method 2: Count users on users.php page
-		if ($pagenow === 'users.php') {
-			$user_count = count_users();
+		if ( $pagenow === 'users.php' ) {
+			$user_count  = count_users();
 			$total_users = $user_count['total_users'] ?? 0;
 			// Users page typically shows 20 users per page
-			$gravatar_count = min(20, $total_users);
+			$gravatar_count = min( 20, $total_users );
 		}
 
 		// Method 3: Check for Gravatar settings
-		$show_avatars = get_option('show_avatars', '1');
+		$show_avatars = get_option( 'show_avatars', '1' );
 
-		if ($show_avatars === '0') {
+		if ( $show_avatars === '0' ) {
 			return null; // Avatars disabled, no Gravatars load
 		}
 
 		// Threshold: More than 10 Gravatar requests per page is excessive
 		$threshold = 10;
 
-		if ($gravatar_count <= $threshold) {
+		if ( $gravatar_count <= $threshold ) {
 			return null; // Pass
 		}
 
@@ -98,19 +97,19 @@ class Test_Admin_Gravatar_Requests extends Diagnostic_Base
 		$data_sent = $gravatar_count * 32; // MD5 hash = 32 chars per request
 
 		return array(
-			'id'           => 'admin-gravatar-requests',
-			'title'        => 'Excessive Gravatar Requests in Admin',
-			'description'  => sprintf(
+			'id'            => 'admin-gravatar-requests',
+			'title'         => 'Excessive Gravatar Requests in Admin',
+			'description'   => sprintf(
 				'WordPress admin is making approximately %d requests to Gravatar.com (Automattic). Each request sends an MD5 hash of user emails to a third party without explicit consent. This raises GDPR concerns and creates a Single Point of Failure. Consider using local avatars or disabling avatars in admin.',
 				$gravatar_count
 			)
 			'kb_link'      => 'https://wpshadow.com/kb/disable-gravatars',
 			'training_link' => 'https://wpshadow.com/training/privacy-compliant-avatars',
-			'auto_fixable' => true, // Can disable via settings
-			'threat_level' => 42, // Medium-high (privacy concern)
-			'module'       => 'privacy',
-			'priority'     => 21,
-			'meta'         => array(
+			'auto_fixable'  => true, // Can disable via settings
+			'threat_level'  => 42, // Medium-high (privacy concern)
+			'module'        => 'privacy',
+			'priority'      => 21,
+			'meta'          => array(
 				'gravatar_count' => $gravatar_count,
 				'threshold'      => $threshold,
 				'page'           => $pagenow,
@@ -125,8 +124,7 @@ class Test_Admin_Gravatar_Requests extends Diagnostic_Base
 	 *
 	 * @return array Diagnostic information
 	 */
-	public static function get_info(): array
-	{
+	public static function get_info(): array {
 		return array(
 			'name'        => 'Excessive Gravatar Requests',
 			'category'    => 'privacy',

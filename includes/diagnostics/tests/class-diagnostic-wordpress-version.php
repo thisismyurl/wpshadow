@@ -4,7 +4,7 @@ declare(strict_types=1);
  * WordPress Version Diagnostic
  *
  * @package WPShadow
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
@@ -15,7 +15,7 @@ use WPShadow\Core\Diagnostic_Base;
 
 /**
  * Check WordPress version for updates.
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Registered in Diagnostic_Registry
  */
@@ -27,17 +27,18 @@ class Diagnostic_WordPress_Version extends Diagnostic_Base {
 	 */
 	public static function check(): ?array {
 		global $wp_version;
-		
+
 		if ( version_compare( $wp_version, '6.4', '<' ) ) {
 			return array(
 				'id'           => 'wordpress-outdated',
 				'title'        => 'WordPress Update Available',
-				'description'  => "You're running WordPress {$wp_version}. Updating improves security and performance.",				'kb_link'      => 'https://wpshadow.com/kb/how-to-update-wordpress-safely/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=wp-update',
+				'description'  => "You're running WordPress {$wp_version}. Updating improves security and performance.",
+				'kb_link'      => 'https://wpshadow.com/kb/how-to-update-wordpress-safely/?utm_source=wpshadow&utm_medium=dashboard&utm_campaign=wp-update',
 				'auto_fixable' => false,
 				'threat_level' => 75,
 			);
 		}
-		
+
 		return null;
 	}
 
@@ -47,12 +48,12 @@ class Diagnostic_WordPress_Version extends Diagnostic_Base {
 	 * Diagnostic: WordPress Version
 	 * Slug: -wordpress-version
 	 * File: class-diagnostic-wordpress-version.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: WordPress Version
 	 * Slug: -wordpress-version
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -72,24 +73,23 @@ class Diagnostic_WordPress_Version extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		global $wp_version;
 		$result = self::check();
-		
+
 		// Pattern: check() returns NULL when WP version >= 6.4 (healthy)
 		// Pattern: check() returns array when WP version < 6.4 (update available)
-		
-		if ($result === null) {
-			return [
-				'passed' => true,
-				'message' => "WordPress {$wp_version} is current or newer than required version 6.4",
-			];
-		}
-		
-		return [
-			'passed' => false,
-			'message' => "WordPress {$wp_version} is outdated. Version 6.4+ recommended",
-		];
-	}
 
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => "WordPress {$wp_version} is current or newer than required version 6.4",
+			);
+		}
+
+		return array(
+			'passed'  => false,
+			'message' => "WordPress {$wp_version} is outdated. Version 6.4+ recommended",
+		);
+	}
 }

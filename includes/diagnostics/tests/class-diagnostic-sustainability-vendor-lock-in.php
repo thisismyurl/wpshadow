@@ -16,7 +16,7 @@ use WPShadow\Core\Diagnostic_Base;
  *
  * @package WPShadow
  * @subpackage Diagnostics
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
@@ -114,7 +114,7 @@ class Diagnostic_Sustainability_Vendor_Lock_In extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Sustainability Vendor Lock In
 	 * Slug: sustainability-vendor-lock-in
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -128,11 +128,16 @@ class Diagnostic_Sustainability_Vendor_Lock_In extends Diagnostic_Base {
 	 */
 	public static function test_live_sustainability_vendor_lock_in(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'Architecture minimizes vendor lock-in risk'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'Architecture minimizes vendor lock-in risk',
+			);
 		}
 		$message = $result['description'] ?? 'Vendor lock-in risk detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

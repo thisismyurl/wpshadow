@@ -83,13 +83,13 @@ class Diagnostic_Ccpa_Opt_Out_Available extends Diagnostic_Base {
 	public static function check(): ?array {
 		// Check if opt-out mechanism is available for data sales
 		// Check for cookie consent plugin with opt-out capability
-		
-		$opt_out_plugins = [
+
+		$opt_out_plugins = array(
 			'cookie-notice/cookie-notice.php',
 			'iubenda-cookie-law-consent/iubenda.php',
 			'termly-cookie-consent/termly.php',
 			'cookiebot/cookiebot.php',
-		];
+		);
 
 		$has_opt_out = false;
 		foreach ( $opt_out_plugins as $plugin ) {
@@ -119,7 +119,7 @@ class Diagnostic_Ccpa_Opt_Out_Available extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Ccpa Opt Out Available
 	 * Slug: ccpa-opt-out-available
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -140,15 +140,13 @@ class Diagnostic_Ccpa_Opt_Out_Available extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

@@ -35,12 +35,14 @@ abstract class AJAX_Handler_Base {
 	protected static function verify_request( $nonce_action, $capability = 'manage_options', $nonce_field = 'nonce' ) {
 		// Verify nonce
 		check_ajax_referer( $nonce_action, $nonce_field );
-		
+
 		// Verify capability
 		if ( ! current_user_can( $capability ) ) {
-			wp_send_json_error( array(
-				'message' => __( 'Insufficient permissions.', 'wpshadow' ),
-			) );
+			wp_send_json_error(
+				array(
+					'message' => __( 'Insufficient permissions.', 'wpshadow' ),
+				)
+			);
 		}
 	}
 
@@ -56,13 +58,15 @@ abstract class AJAX_Handler_Base {
 	protected static function get_post_param( $key, $type = 'text', $default = '', $required = false ) {
 		if ( ! isset( $_POST[ $key ] ) ) {
 			if ( $required ) {
-				wp_send_json_error( array(
-					'message' => sprintf(
+				wp_send_json_error(
+					array(
+						'message' => sprintf(
 						/* translators: %s: parameter name */
-						__( 'Required parameter "%s" is missing.', 'wpshadow' ),
-						$key
-					),
-				) );
+							__( 'Required parameter "%s" is missing.', 'wpshadow' ),
+							$key
+						),
+					)
+				);
 			}
 			return $default;
 		}

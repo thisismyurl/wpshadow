@@ -7,8 +7,8 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 
-class Diagnostic_Audit_Logging_Enabled extends Diagnostic_Base
-{
+class Diagnostic_Audit_Logging_Enabled extends Diagnostic_Base {
+
 	protected static $slug = 'audit-logging-enabled';
 
 	protected static $title = 'Audit Logging Enabled';
@@ -22,32 +22,28 @@ class Diagnostic_Audit_Logging_Enabled extends Diagnostic_Base
 	/**
 	 * Get diagnostic ID
 	 */
-	public static function get_id(): string
-	{
+	public static function get_id(): string {
 		return 'audit-logging-enabled';
 	}
 
 	/**
 	 * Get diagnostic name
 	 */
-	public static function get_name(): string
-	{
-		return __('Is activity logging enabled?', 'wpshadow');
+	public static function get_name(): string {
+		return __( 'Is activity logging enabled?', 'wpshadow' );
 	}
 
 	/**
 	 * Get diagnostic description
 	 */
-	public static function get_description(): string
-	{
-		return __('Is activity logging enabled?. Part of Audit & Activity Trail analysis.', 'wpshadow');
+	public static function get_description(): string {
+		return __( 'Is activity logging enabled?. Part of Audit & Activity Trail analysis.', 'wpshadow' );
 	}
 
 	/**
 	 * Get diagnostic category
 	 */
-	public static function get_category(): string
-	{
+	public static function get_category(): string {
 		return 'audit_trail';
 	}
 
@@ -56,8 +52,7 @@ class Diagnostic_Audit_Logging_Enabled extends Diagnostic_Base
 	 *
 	 * @return array Finding data or empty if no issue
 	 */
-	public static function run(): array
-	{
+	public static function run(): array {
 		// Implement: Is activity logging enabled? test
 		// Smart implementation needed
 
@@ -67,8 +62,7 @@ class Diagnostic_Audit_Logging_Enabled extends Diagnostic_Base
 	/**
 	 * Get threat level for this finding (0-100)
 	 */
-	public static function get_threat_level(): int
-	{
+	public static function get_threat_level(): int {
 		// Threat level based on diagnostic category
 		return 54;
 	}
@@ -76,36 +70,33 @@ class Diagnostic_Audit_Logging_Enabled extends Diagnostic_Base
 	/**
 	 * Get KB article URL
 	 */
-	public static function get_kb_article(): string
-	{
+	public static function get_kb_article(): string {
 		return 'https://wpshadow.com/kb/audit-logging-enabled/';
 	}
 
 	/**
 	 * Get training video URL
 	 */
-	public static function get_training_video(): string
-	{
+	public static function get_training_video(): string {
 		return 'https://wpshadow.com/training/audit-logging-enabled/';
 	}
 
-	public static function check(): ?array
-	{
+	public static function check(): ?array {
 		// Check if audit logging is enabled via plugin
 		// This requires an audit logging plugin like WP Activity Log
 
-		if (! function_exists('get_plugins')) {
+		if ( ! function_exists( 'get_plugins' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
-		$active_plugins = get_option('active_plugins', array());
+		$active_plugins   = get_option( 'active_plugins', array() );
 		$has_audit_plugin = false;
 
 		// Check for common audit logging plugins
-		foreach ($active_plugins as $plugin) {
+		foreach ( $active_plugins as $plugin ) {
 			if (
-				strpos($plugin, 'activity-log') !== false ||
-				strpos($plugin, 'audit') !== false
+				strpos( $plugin, 'activity-log' ) !== false ||
+				strpos( $plugin, 'audit' ) !== false
 			) {
 				$has_audit_plugin = true;
 				break;
@@ -113,12 +104,12 @@ class Diagnostic_Audit_Logging_Enabled extends Diagnostic_Base
 		}
 
 		// Also check site-wide plugins
-		if (! $has_audit_plugin && is_multisite()) {
-			$network_plugins = get_site_option('active_sitewide_plugins', array());
-			foreach (array_keys($network_plugins) as $plugin) {
+		if ( ! $has_audit_plugin && is_multisite() ) {
+			$network_plugins = get_site_option( 'active_sitewide_plugins', array() );
+			foreach ( array_keys( $network_plugins ) as $plugin ) {
 				if (
-					strpos($plugin, 'activity-log') !== false ||
-					strpos($plugin, 'audit') !== false
+					strpos( $plugin, 'activity-log' ) !== false ||
+					strpos( $plugin, 'audit' ) !== false
 				) {
 					$has_audit_plugin = true;
 					break;
@@ -126,7 +117,7 @@ class Diagnostic_Audit_Logging_Enabled extends Diagnostic_Base
 			}
 		}
 
-		if (! $has_audit_plugin) {
+		if ( ! $has_audit_plugin ) {
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
 				'audit-logging-enabled',
 				'Audit Logging Not Enabled',
@@ -158,8 +149,7 @@ class Diagnostic_Audit_Logging_Enabled extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live_audit_logging_enabled(): array
-	{
+	public static function test_live_audit_logging_enabled(): array {
 		/*
 		 * IMPLEMENTATION NOTES:
 		 * - This test validates the actual WordPress site state
@@ -173,9 +163,8 @@ class Diagnostic_Audit_Logging_Enabled extends Diagnostic_Base
 
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
 }
-

@@ -24,12 +24,12 @@ use WPShadow\Core\Diagnostic_Lean_Checks;
  * @guardian-integrated Pending
  */
 class Diagnostic_Pub_Category_Assigned extends Diagnostic_Base {
-	protected static $slug = 'pub-category-assigned';
-	protected static $title = 'Posts Have Category Assignment';
-	protected static $description = 'Are posts assigned to appropriate categories?';
-	protected static $category = 'Content Publishing';
+	protected static $slug         = 'pub-category-assigned';
+	protected static $title        = 'Posts Have Category Assignment';
+	protected static $description  = 'Are posts assigned to appropriate categories?';
+	protected static $category     = 'Content Publishing';
 	protected static $threat_level = 'low';
-	protected static $family = 'general';
+	protected static $family       = 'general';
 	protected static $family_label = 'General';
 
 	/**
@@ -39,12 +39,14 @@ class Diagnostic_Pub_Category_Assigned extends Diagnostic_Base {
 	 */
 	public function check(): ?array {
 		// Get all published posts
-		$posts = get_posts( [
-			'post_type'      => 'post',
-			'post_status'    => 'publish',
-			'posts_per_page' => -1,
-			'fields'         => 'ids'
-		] );
+		$posts = get_posts(
+			array(
+				'post_type'      => 'post',
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'fields'         => 'ids',
+			)
+		);
 
 		if ( empty( $posts ) ) {
 			return null; // No posts to check
@@ -64,7 +66,7 @@ class Diagnostic_Pub_Category_Assigned extends Diagnostic_Base {
 					}
 				}
 				if ( $in_category ) {
-					$posts_with_category++;
+					++$posts_with_category;
 				}
 			}
 		}

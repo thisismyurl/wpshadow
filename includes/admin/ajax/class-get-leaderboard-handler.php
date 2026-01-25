@@ -35,8 +35,10 @@ class Get_Leaderboard_Handler extends AJAX_Handler_Base {
 
 		$leaderboard = Leaderboard_Manager::get_top_achievers( $limit );
 
-		self::send_success( array(
-			'leaderboard' => $leaderboard,
-		) );
+		self::send_success(
+			array(
+				'leaderboard' => $leaderboard,
+			)
+		);
 	}
 }

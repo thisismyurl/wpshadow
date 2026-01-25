@@ -95,18 +95,20 @@ class Diagnostic_Pub_Author_Bio_Complete extends Diagnostic_Base {
 
 	public static function check(): ?array {
 		// Check if author profiles have bios
-		$authors = new \WP_User_Query( [
-			'role__in' => [ 'author', 'editor', 'contributor' ],
-			'fields'   => 'ID',
-		] );
+		$authors = new \WP_User_Query(
+			array(
+				'role__in' => array( 'author', 'editor', 'contributor' ),
+				'fields'   => 'ID',
+			)
+		);
 
-		$author_ids = $authors->get_results();
+		$author_ids   = $authors->get_results();
 		$missing_bios = 0;
 
 		foreach ( $author_ids as $author_id ) {
 			$bio = get_user_meta( $author_id, 'description', true );
 			if ( empty( $bio ) ) {
-				$missing_bios++;
+				++$missing_bios;
 			}
 		}
 
@@ -157,10 +159,8 @@ class Diagnostic_Pub_Author_Bio_Complete extends Diagnostic_Base {
 
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

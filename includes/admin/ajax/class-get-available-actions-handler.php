@@ -20,7 +20,7 @@ class Get_Available_Actions_Handler extends AJAX_Handler_Base {
 	 * Register AJAX hook
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_get_available_actions', [ __CLASS__, 'handle' ] );
+		add_action( 'wp_ajax_wpshadow_get_available_actions', array( __CLASS__, 'handle' ) );
 	}
 
 	/**
@@ -32,9 +32,11 @@ class Get_Available_Actions_Handler extends AJAX_Handler_Base {
 		$diagnostics = Workflow_Manager::get_available_diagnostics();
 		$treatments  = Workflow_Manager::get_available_treatments();
 
-		self::send_success( [
-			'diagnostics' => $diagnostics,
-			'treatments'  => $treatments,
-		] );
+		self::send_success(
+			array(
+				'diagnostics' => $diagnostics,
+				'treatments'  => $treatments,
+			)
+		);
 	}
 }

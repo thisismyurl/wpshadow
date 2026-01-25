@@ -82,10 +82,10 @@ class Diagnostic_Ccpa_Vendor_Contracts_Signed extends Diagnostic_Base {
 	public static function check(): ?array {
 		// Check if vendor contracts are documented
 		// This is a compliance documentation check
-		
+
 		// Check if privacy policy mentions vendor agreements
 		$privacy_policy_id = (int) get_option( 'wp_page_for_privacy_policy' );
-		
+
 		if ( ! $privacy_policy_id ) {
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
 				'ccpa-vendor-contracts-signed',
@@ -100,11 +100,11 @@ class Diagnostic_Ccpa_Vendor_Contracts_Signed extends Diagnostic_Base {
 
 		$privacy_policy = get_post( $privacy_policy_id );
 		if ( $privacy_policy ) {
-			$content = strtolower( $privacy_policy->post_content );
+			$content            = strtolower( $privacy_policy->post_content );
 			$has_vendor_mention = strpos( $content, 'service provider' ) !== false ||
-								  strpos( $content, 'processor' ) !== false ||
-								  strpos( $content, 'vendor agreement' ) !== false ||
-								  strpos( $content, 'data processing' ) !== false;
+									strpos( $content, 'processor' ) !== false ||
+									strpos( $content, 'vendor agreement' ) !== false ||
+									strpos( $content, 'data processing' ) !== false;
 
 			if ( ! $has_vendor_mention ) {
 				return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
@@ -127,7 +127,7 @@ class Diagnostic_Ccpa_Vendor_Contracts_Signed extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Ccpa Vendor Contracts Signed
 	 * Slug: ccpa-vendor-contracts-signed
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -148,15 +148,13 @@ class Diagnostic_Ccpa_Vendor_Contracts_Signed extends Diagnostic_Base {
 		 * - Verify the result matches expected site state
 		 * - Return [ 'passed' => bool, 'message' => string ]
 		 */
-		
+
 		$result = self::check();
-		
+
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

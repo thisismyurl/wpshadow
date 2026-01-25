@@ -21,44 +21,43 @@ use WPShadow\Core\Diagnostic_Base;
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
-class Diagnostic_Display_Errors_Production extends Diagnostic_Base
-{
+class Diagnostic_Display_Errors_Production extends Diagnostic_Base {
+
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * @return array|null Finding data or null if no issue.
 	 */
-	public static function check(): ?array
-	{
-		$display_errors  = ini_get('display_errors');
+	public static function check(): ?array {
+		$display_errors  = ini_get( 'display_errors' );
 		$error_reporting = error_reporting();
 
 		$issues = array();
 
 		// Check if display_errors is on
-		if ($display_errors && $display_errors !== '0' && $display_errors !== 'off') {
+		if ( $display_errors && $display_errors !== '0' && $display_errors !== 'off' ) {
 			$issues[] = 'display_errors is ON (exposes file paths and logic)';
 		}
 
 		// Check if error_reporting includes warnings/notices in production
-		if ($error_reporting & E_WARNING || $error_reporting & E_NOTICE) {
-			if (! defined('WP_DEBUG') || ! WP_DEBUG) {
+		if ( $error_reporting & E_WARNING || $error_reporting & E_NOTICE ) {
+			if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
 				$issues[] = 'error_reporting includes warnings/notices in production';
 			}
 		}
 
 		// Check if WP_DEBUG_DISPLAY is enabled
-		if (defined('WP_DEBUG_DISPLAY') && WP_DEBUG_DISPLAY) {
+		if ( defined( 'WP_DEBUG_DISPLAY' ) && WP_DEBUG_DISPLAY ) {
 			$issues[] = 'WP_DEBUG_DISPLAY is TRUE (shows WordPress errors to public)';
 		}
 
-		if (! empty($issues)) {
+		if ( ! empty( $issues ) ) {
 			return array(
 				'id'            => 'display-errors-production',
 				'title'         => 'Errors Displayed in Production',
 				'description'   => sprintf(
 					'Production error configuration issues: %s. Error messages reveal file paths, database structure, and application logic to attackers.',
-					implode('; ', $issues)
+					implode( '; ', $issues )
 				),
 				'severity'      => 'high',
 				'category'      => 'security',
@@ -94,23 +93,22 @@ class Diagnostic_Display_Errors_Production extends Diagnostic_Base
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
-	public static function test_live__display_errors_production(): array
-	{
-		$display_errors = ini_get('display_errors');
-		$error_reporting = error_reporting();
-		$wp_debug_display = (defined('WP_DEBUG_DISPLAY') && WP_DEBUG_DISPLAY);
+	public static function test_live__display_errors_production(): array {
+		$display_errors   = ini_get( 'display_errors' );
+		$error_reporting  = error_reporting();
+		$wp_debug_display = ( defined( 'WP_DEBUG_DISPLAY' ) && WP_DEBUG_DISPLAY );
 
 		// Determine if issue exists
-		$display_errors_on = ($display_errors && $display_errors !== '0' && $display_errors !== 'off');
-		$reporting_warnings = ($error_reporting & E_WARNING || $error_reporting & E_NOTICE);
-		$reporting_issue = $reporting_warnings && (!defined('WP_DEBUG') || !WP_DEBUG);
+		$display_errors_on  = ( $display_errors && $display_errors !== '0' && $display_errors !== 'off' );
+		$reporting_warnings = ( $error_reporting & E_WARNING || $error_reporting & E_NOTICE );
+		$reporting_issue    = $reporting_warnings && ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG );
 
-		$has_issue = ($display_errors_on || $reporting_issue || $wp_debug_display);
+		$has_issue = ( $display_errors_on || $reporting_issue || $wp_debug_display );
 
-		$result = self::check();
-		$diagnostic_found_issue = is_array($result);
+		$result                 = self::check();
+		$diagnostic_found_issue = is_array( $result );
 
-		$test_passes = ($has_issue === $diagnostic_found_issue);
+		$test_passes = ( $has_issue === $diagnostic_found_issue );
 
 		$message = $test_passes
 			? 'Display errors check matches site state'

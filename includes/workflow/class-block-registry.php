@@ -31,7 +31,7 @@ class Block_Registry {
 	 */
 	public static function get_triggers() {
 		return array(
-			'time_trigger'        => array(
+			'time_trigger'              => array(
 				'label'       => 'Time Trigger',
 				'description' => 'Run when clock reaches specific time',
 				'icon'        => 'dashicons-clock',
@@ -68,7 +68,7 @@ class Block_Registry {
 					),
 				),
 			),
-			'condition_trigger'   => array(
+			'condition_trigger'         => array(
 				'label'       => 'Condition Trigger',
 				'description' => 'Run when condition is met',
 				'icon'        => 'dashicons-yes-alt',
@@ -101,7 +101,7 @@ class Block_Registry {
 					),
 				),
 			),
-			'event_trigger'       => array(
+			'event_trigger'             => array(
 				'label'       => 'Event Trigger',
 				'description' => 'Run when specific event happens',
 				'icon'        => 'dashicons-bell',
@@ -124,7 +124,7 @@ class Block_Registry {
 					),
 				),
 			),
-			'page_load_trigger'   => array(
+			'page_load_trigger'         => array(
 				'label'       => 'Page Load Trigger',
 				'description' => 'Run on every page load (frontend or admin)',
 				'icon'        => 'dashicons-update',
@@ -148,14 +148,14 @@ class Block_Registry {
 					),
 				),
 			),
-			'manual_cron_trigger' => array(
+			'manual_cron_trigger'       => array(
 				'label'       => 'Manual or External Trigger',
 				'description' => 'Trigger via URL (for external CRON jobs, webhooks, etc)',
 				'icon'        => 'dashicons-admin-links',
 				'color'       => '#f59e0b',
 				'fields'      => array(),
 			),
-			'plugin_update_trigger'   => array(
+			'plugin_update_trigger'     => array(
 				'label'       => 'Plugin/Theme Update Available',
 				'description' => 'Run when plugin or theme updates are detected',
 				'icon'        => 'dashicons-update',
@@ -165,9 +165,9 @@ class Block_Registry {
 						'label'   => 'Target',
 						'type'    => 'select',
 						'options' => array(
-							'any'     => 'Any plugin or theme',
-							'plugins' => 'Plugins only',
-							'themes'  => 'Themes only',
+							'any'      => 'Any plugin or theme',
+							'plugins'  => 'Plugins only',
+							'themes'   => 'Themes only',
 							'specific' => 'Specific slug',
 						),
 						'default' => 'any',
@@ -197,7 +197,7 @@ class Block_Registry {
 					),
 				),
 			),
-			'database_trigger'        => array(
+			'database_trigger'          => array(
 				'label'       => 'Database Issues',
 				'description' => 'Run when database size or corruption issues are detected',
 				'icon'        => 'dashicons-database',
@@ -219,7 +219,7 @@ class Block_Registry {
 					),
 				),
 			),
-			'error_log_trigger'       => array(
+			'error_log_trigger'         => array(
 				'label'       => 'Error Log Activity',
 				'description' => 'Run when new warnings or errors are logged',
 				'icon'        => 'dashicons-warning',
@@ -229,16 +229,16 @@ class Block_Registry {
 						'label'   => 'Minimum severity',
 						'type'    => 'select',
 						'options' => array(
-							'any'     => 'Any',
-							'warning' => 'Warning+',
-							'error'   => 'Error+',
-							'critical'=> 'Critical only',
+							'any'      => 'Any',
+							'warning'  => 'Warning+',
+							'error'    => 'Error+',
+							'critical' => 'Critical only',
 						),
 						'default' => 'any',
 					),
 				),
 			),
-			'diagnostic_run_trigger'  => array(
+			'diagnostic_run_trigger'    => array(
 				'label'       => 'Diagnostic Run',
 				'description' => 'Run when any diagnostic executes (manual, Guardian, or scheduled)',
 				'icon'        => 'dashicons-visibility',

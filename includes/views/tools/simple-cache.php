@@ -107,7 +107,8 @@ $kanban_cards = array(
 	<div class="wpshadow-tool-section">
 		<h3><?php esc_html_e( 'Health & Checks', 'wpshadow' ); ?></h3>
 		<div class="wps-kanban">
-			<?php foreach ( $kanban_cards as $card ) :
+			<?php
+			foreach ( $kanban_cards as $card ) :
 				$status_label = $card['status'];
 				$label_text   = '';
 				if ( 'ok' === $status_label ) {

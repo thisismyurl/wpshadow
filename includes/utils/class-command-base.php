@@ -112,7 +112,13 @@ abstract class Command_Base {
 	 * @return array
 	 */
 	protected function error( string $message = '', array $data = array() ): array {
-		return array_merge( array( 'success' => false, 'message' => $message ), $data );
+		return array_merge(
+			array(
+				'success' => false,
+				'message' => $message,
+			),
+			$data
+		);
 	}
 
 	/**

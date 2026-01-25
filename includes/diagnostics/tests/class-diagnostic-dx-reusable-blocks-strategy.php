@@ -135,10 +135,8 @@ class Diagnostic_Dx_Reusable_Blocks_Strategy extends Diagnostic_Base {
 
 		// TODO: Implement actual test logic
 		return array(
-			'passed' => false,
+			'passed'  => false,
 			'message' => 'Test not yet implemented for ' . self::$slug,
 		);
 	}
-
 }
-

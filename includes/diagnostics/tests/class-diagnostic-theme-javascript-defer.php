@@ -16,7 +16,7 @@ use WPShadow\Core\Diagnostic_Base;
  *
  * @package WPShadow
  * @subpackage Diagnostics
-  * 
+ *
  * @verified 2026-01-22 - Fully functional, returns null on pass, array on issues
  * @guardian-integrated Yes - Loaded via Diagnostic_Registry
  */
@@ -114,7 +114,7 @@ class Diagnostic_Theme_Javascript_Defer extends Diagnostic_Base {
 	 *
 	 * Diagnostic: Theme Javascript Defer
 	 * Slug: theme-javascript-defer
-	 * 
+	 *
 	 * Test Purpose:
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
@@ -128,11 +128,16 @@ class Diagnostic_Theme_Javascript_Defer extends Diagnostic_Base {
 	 */
 	public static function test_live_theme_javascript_defer(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'JavaScript loading is properly deferred for performance'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'JavaScript loading is properly deferred for performance',
+			);
 		}
 		$message = $result['description'] ?? 'JavaScript deferring optimization issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

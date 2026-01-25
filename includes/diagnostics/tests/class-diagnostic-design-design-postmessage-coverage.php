@@ -12,19 +12,19 @@ use WPShadow\Core\Diagnostic_Base;
  * Training: https://wpshadow.com/training/design-postmessage-coverage
  */
 class Diagnostic_Design_DESIGN_POSTMESSAGE_COVERAGE extends Diagnostic_Base {
-    public static function check(): ?array {
-        return [
-            'id' => 'design-postmessage-coverage',
-            'title' => __('PostMessage Coverage', 'wpshadow'),
-            'description' => __('Checks live preview coverage for customizer controls.', 'wpshadow'),
-            'severity' => 'medium',
-            'category' => 'design',
-            'kb_link' => 'https://wpshadow.com/kb/design-postmessage-coverage',
-            'training_link' => 'https://wpshadow.com/training/design-postmessage-coverage',
-            'auto_fixable' => false,
-            'threat_level' => 6
-        ];
-    }
+	public static function check(): ?array {
+		return array(
+			'id'            => 'design-postmessage-coverage',
+			'title'         => __( 'PostMessage Coverage', 'wpshadow' ),
+			'description'   => __( 'Checks live preview coverage for customizer controls.', 'wpshadow' ),
+			'severity'      => 'medium',
+			'category'      => 'design',
+			'kb_link'       => 'https://wpshadow.com/kb/design-postmessage-coverage',
+			'training_link' => 'https://wpshadow.com/training/design-postmessage-coverage',
+			'auto_fixable'  => false,
+			'threat_level'  => 6,
+		);
+	}
 
 	/**
 	 * Live test for this diagnostic
@@ -32,12 +32,12 @@ class Diagnostic_Design_DESIGN_POSTMESSAGE_COVERAGE extends Diagnostic_Base {
 	 * Diagnostic: Design DESIGN POSTMESSAGE COVERAGE
 	 * Slug: -design-design-postmessage-coverage
 	 * File: class-diagnostic-design-design-postmessage-coverage.php
-	 * 
+	 *
 	 * Test Purpose:
 	 * Cannot determine specific pass criteria from available metadata.
 	 * Diagnostic: Design DESIGN POSTMESSAGE COVERAGE
 	 * Slug: -design-design-postmessage-coverage
-	 * 
+	 *
 	 * TODO: Review the check() method to understand what constitutes a passing test.
 	 * The test should verify that:
 	 * - check() returns NULL when the diagnostic condition is NOT met (site is healthy)
@@ -50,11 +50,16 @@ class Diagnostic_Design_DESIGN_POSTMESSAGE_COVERAGE extends Diagnostic_Base {
 	 */
 	public static function test_live__design_design_postmessage_coverage(): array {
 		$result = self::check();
-		if ($result === null) {
-			return ['passed' => true, 'message' => 'PostMessage API properly implemented for customizer'];
+		if ( $result === null ) {
+			return array(
+				'passed'  => true,
+				'message' => 'PostMessage API properly implemented for customizer',
+			);
 		}
 		$message = $result['description'] ?? 'PostMessage coverage issue detected';
-		return ['passed' => false, 'message' => $message];
+		return array(
+			'passed'  => false,
+			'message' => $message,
+		);
 	}
-
 }

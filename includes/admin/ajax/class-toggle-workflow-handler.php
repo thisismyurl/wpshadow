@@ -21,7 +21,7 @@ class Toggle_Workflow_Handler extends AJAX_Handler_Base {
 	 * Register AJAX hook
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_toggle_workflow', [ __CLASS__, 'handle' ] );
+		add_action( 'wp_ajax_wpshadow_toggle_workflow', array( __CLASS__, 'handle' ) );
 	}
 
 	/**
@@ -51,17 +51,22 @@ class Toggle_Workflow_Handler extends AJAX_Handler_Base {
 		Activity_Logger::log(
 			'workflow_' . ( $workflow['enabled'] ? 'enabled' : 'disabled' ),
 			sprintf(
-				__( 'Workflow "%s" %s', 'wpshadow' ),
+				__( 'Workflow "%1$s" %2$s', 'wpshadow' ),
 				$workflow['name'] ?? $workflow_id,
 				$workflow['enabled'] ? __( 'enabled', 'wpshadow' ) : __( 'disabled', 'wpshadow' )
 			),
 			'workflows',
-			array( 'workflow_id' => $workflow_id, 'enabled' => (bool) $workflow['enabled'] )
+			array(
+				'workflow_id' => $workflow_id,
+				'enabled'     => (bool) $workflow['enabled'],
+			)
 		);
 
-		self::send_success( [
-			'message'  => 'Workflow updated.',
-			'workflow' => $workflow,
-		] );
+		self::send_success(
+			array(
+				'message'  => 'Workflow updated.',
+				'workflow' => $workflow,
+			)
+		);
 	}
 }
