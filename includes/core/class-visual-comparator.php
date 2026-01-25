@@ -54,7 +54,7 @@ class Visual_Comparator {
 	public static function maybe_create_table() {
 		global $wpdb;
 
-		$table_name = $wpdb->prefix . self::TABLE_NAME;
+		$table_name      = $wpdb->prefix . self::TABLE_NAME;
 		$charset_collate = $wpdb->get_charset_collate();
 
 		// Check if table exists
@@ -106,7 +106,7 @@ class Visual_Comparator {
 			return;
 		}
 
-		$page_url = home_url( '/' );
+		$page_url        = home_url( '/' );
 		$screenshot_path = self::capture_screenshot( $page_url, 'before' );
 
 		if ( $screenshot_path ) {
@@ -114,8 +114,8 @@ class Visual_Comparator {
 			set_transient(
 				'wpshadow_before_screenshot_' . $finding_id,
 				array(
-					'path' => $screenshot_path,
-					'url' => $page_url,
+					'path'  => $screenshot_path,
+					'url'   => $page_url,
 					'class' => $class,
 				),
 				HOUR_IN_SECONDS
@@ -149,7 +149,7 @@ class Visual_Comparator {
 			return;
 		}
 
-		$page_url = home_url( '/' );
+		$page_url        = home_url( '/' );
 		$screenshot_path = self::capture_screenshot( $page_url, 'after' );
 
 		if ( $screenshot_path ) {
@@ -176,7 +176,7 @@ class Visual_Comparator {
 	 */
 	private static function capture_screenshot( $url, $type = 'before' ) {
 		// Create screenshots directory if it doesn't exist
-		$upload_dir = wp_upload_dir();
+		$upload_dir     = wp_upload_dir();
 		$screenshot_dir = trailingslashit( $upload_dir['basedir'] ) . self::SCREENSHOT_DIR;
 
 		if ( ! file_exists( $screenshot_dir ) ) {
@@ -184,9 +184,13 @@ class Visual_Comparator {
 		}
 
 		// Generate unique filename
+		$host = wp_parse_url( $url, PHP_URL_HOST );
+		if ( empty( $host ) ) {
+			$host = 'site';
+		}
 		$filename = sprintf(
 			'%s-%s-%s.png',
-			sanitize_title( parse_url( $url, PHP_URL_HOST ) ?: 'site' ),
+			sanitize_title( $host ),
 			$type,
 			gmdate( 'Y-m-d-His' )
 		);
@@ -215,9 +219,9 @@ class Visual_Comparator {
 	private static function perform_screenshot_capture( $url, $filepath ) {
 		// Create a placeholder image (400x300 PNG)
 		// In production, this would be replaced with actual screenshot logic
-		$width = 1200;
+		$width  = 1200;
 		$height = 800;
-		$image = imagecreatetruecolor( $width, $height );
+		$image  = imagecreatetruecolor( $width, $height );
 
 		if ( ! $image ) {
 			return false;
@@ -229,9 +233,9 @@ class Visual_Comparator {
 
 		// Add text showing this is a placeholder
 		$text_color = imagecolorallocate( $image, 100, 100, 100 );
-		$text = 'Screenshot Placeholder';
-		$text2 = esc_url( $url );
-		$text3 = gmdate( 'Y-m-d H:i:s' );
+		$text       = 'Screenshot Placeholder';
+		$text2      = esc_url( $url );
+		$text3      = gmdate( 'Y-m-d H:i:s' );
 
 		// Add text to image (requires GD with FreeType support)
 		if ( function_exists( 'imagettftext' ) ) {
@@ -264,7 +268,7 @@ class Visual_Comparator {
 	private static function store_comparison( $finding_id, $treatment_class, $before_path, $after_path, $page_url ) {
 		global $wpdb;
 
-		$upload_dir = wp_upload_dir();
+		$upload_dir     = wp_upload_dir();
 		$screenshot_dir = trailingslashit( $upload_dir['basedir'] ) . self::SCREENSHOT_DIR;
 
 		// Convert file paths to URLs
@@ -273,7 +277,7 @@ class Visual_Comparator {
 			trailingslashit( $upload_dir['baseurl'] ) . self::SCREENSHOT_DIR . '/',
 			$before_path
 		);
-		$after_url = str_replace(
+		$after_url  = str_replace(
 			$screenshot_dir,
 			trailingslashit( $upload_dir['baseurl'] ) . self::SCREENSHOT_DIR . '/',
 			$after_path
@@ -282,7 +286,7 @@ class Visual_Comparator {
 		// Calculate basic diff data (in production, this would use image comparison libraries)
 		$diff_data = wp_json_encode(
 			array(
-				'method' => 'placeholder',
+				'method'      => 'placeholder',
 				'differences' => 'Visual comparison pending implementation',
 			)
 		);
@@ -293,15 +297,15 @@ class Visual_Comparator {
 		$result = $wpdb->insert(
 			$table_name,
 			array(
-				'finding_id' => $finding_id,
+				'finding_id'      => $finding_id,
 				'treatment_class' => $treatment_class,
-				'before_url' => $before_url,
-				'after_url' => $after_url,
-				'before_path' => $before_path,
-				'after_path' => $after_path,
-				'page_url' => $page_url,
-				'diff_data' => $diff_data,
-				'created_at' => current_time( 'mysql' ),
+				'before_url'      => $before_url,
+				'after_url'       => $after_url,
+				'before_path'     => $before_path,
+				'after_path'      => $after_path,
+				'page_url'        => $page_url,
+				'diff_data'       => $diff_data,
+				'created_at'      => current_time( 'mysql' ),
 			),
 			array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' )
 		);
@@ -319,14 +323,14 @@ class Visual_Comparator {
 		global $wpdb;
 
 		$defaults = array(
-			'limit' => 50,
-			'offset' => 0,
+			'limit'      => 50,
+			'offset'     => 0,
 			'finding_id' => null,
-			'orderby' => 'created_at',
-			'order' => 'DESC',
+			'orderby'    => 'created_at',
+			'order'      => 'DESC',
 		);
 
-		$args = wp_parse_args( $args, $defaults );
+		$args       = wp_parse_args( $args, $defaults );
 		$table_name = $wpdb->prefix . self::TABLE_NAME;
 
 		$where = '1=1';
@@ -349,7 +353,11 @@ class Visual_Comparator {
 			ARRAY_A
 		);
 
-		return $results ?: array();
+		if ( empty( $results ) ) {
+			return array();
+		}
+
+		return $results;
 	}
 
 	/**
@@ -363,13 +371,17 @@ class Visual_Comparator {
 
 		$table_name = $wpdb->prefix . self::TABLE_NAME;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$result = $wpdb->get_row(
 			$wpdb->prepare( "SELECT * FROM $table_name WHERE id = %d", $id ),
 			ARRAY_A
 		);
 
-		return $result ?: null;
+		if ( empty( $result ) ) {
+			return null;
+		}
+
+		return $result;
 	}
 
 	/**
@@ -381,11 +393,11 @@ class Visual_Comparator {
 	public static function cleanup_old_comparisons( $days = 30 ) {
 		global $wpdb;
 
-		$table_name = $wpdb->prefix . self::TABLE_NAME;
+		$table_name  = $wpdb->prefix . self::TABLE_NAME;
 		$cutoff_date = gmdate( 'Y-m-d H:i:s', strtotime( "-{$days} days" ) );
 
 		// Get old records to delete files
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$old_records = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT * FROM $table_name WHERE created_at < %s",
@@ -405,7 +417,7 @@ class Visual_Comparator {
 		}
 
 		// Delete database records
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$deleted = $wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM $table_name WHERE created_at < %s",
@@ -426,10 +438,10 @@ class Visual_Comparator {
 
 		$table_name = $wpdb->prefix . self::TABLE_NAME;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$total = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$last_30_days = $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(*) FROM $table_name WHERE created_at > %s",
@@ -438,7 +450,7 @@ class Visual_Comparator {
 		);
 
 		return array(
-			'total' => (int) $total,
+			'total'        => (int) $total,
 			'last_30_days' => (int) $last_30_days,
 		);
 	}

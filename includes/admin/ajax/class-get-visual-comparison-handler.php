@@ -25,7 +25,7 @@ class Get_Visual_Comparison_Handler extends AJAX_Handler_Base {
 	 *
 	 * @return void
 	 */
-	public static function register() : void {
+	public static function register(): void {
 		add_action( 'wp_ajax_wpshadow_get_visual_comparison', array( __CLASS__, 'handle' ) );
 	}
 
@@ -34,7 +34,7 @@ class Get_Visual_Comparison_Handler extends AJAX_Handler_Base {
 	 *
 	 * @return void
 	 */
-	public static function handle() : void {
+	public static function handle(): void {
 		self::verify_request( 'wpshadow_visual_comparison', 'manage_options', 'nonce' );
 
 		$id = self::get_post_param( 'id', 'int', 0 );
