@@ -17,6 +17,15 @@ use WPShadow\Core\Options_Manager;
 // Enqueue scan tools assets
 wp_enqueue_style( 'wpshadow-scan-tools', WPSHADOW_URL . 'assets/css/scan-tools.css', array(), WPSHADOW_VERSION );
 wp_enqueue_script( 'wpshadow-scan-tools', WPSHADOW_URL . 'assets/js/scan-tools.js', array( 'jquery' ), WPSHADOW_VERSION, true );
+
+// Localize script for AJAX URL
+wp_localize_script(
+	'wpshadow-scan-tools',
+	'wpshadowScanTools',
+	array(
+		'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+	)
+);
 ?>
 
 <div class="wpshadow-tool quick-scan-tool">
@@ -52,6 +61,7 @@ wp_enqueue_script( 'wpshadow-scan-tools', WPSHADOW_URL . 'assets/js/scan-tools.j
 	<button class="button button-primary wpshadow-run-scan" 
 		data-scan-type="quick"
 		data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_scan_nonce' ) ); ?>"
+		data-ajax-url="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>"
 		data-redirect-url="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>">
 		<?php esc_html_e( 'Run Quick Scan Now', 'wpshadow' ); ?>
 	</button>
@@ -63,5 +73,5 @@ wp_enqueue_script( 'wpshadow-scan-tools', WPSHADOW_URL . 'assets/js/scan-tools.j
 		<p class="progress-text"></p>
 	</div>
 
-	<div class="scan-results" style="margin-top: 20px;"></div>
+	<div class="scan-results"></div>
 </div>

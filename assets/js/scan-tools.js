@@ -9,9 +9,21 @@
 	'use strict';
 
 	/**
+	 * Restore button to original state
+	 */
+	function restoreButton($button) {
+		$button.prop('disabled', false).text($button.data('original-text'));
+	}
+
+	/**
 	 * Initialize scan tool functionality
 	 */
 	function initScanTool() {
+		// Store original button text
+		$('.wpshadow-run-scan').each(function() {
+			$(this).data('original-text', $(this).text());
+		});
+
 		$('.wpshadow-run-scan').on('click', function(e) {
 			e.preventDefault();
 			
@@ -26,6 +38,13 @@
 			var $progressFill = $('.progress-fill');
 			var $progressText = $('.progress-text');
 			var $results = $('.scan-results');
+			
+			// Ensure ajaxurl is available
+			var ajaxUrl = typeof ajaxurl !== 'undefined' ? ajaxurl : $button.data('ajax-url');
+			if (!ajaxUrl) {
+				alert('Error: AJAX URL not available. Please contact support.');
+				return;
+			}
 			
 			// Disable button and show progress
 			$button.prop('disabled', true).text('Running...');
@@ -45,7 +64,7 @@
 			
 			// Run scan via AJAX
 			$.ajax({
-				url: ajaxurl,
+				url: ajaxUrl,
 				type: 'POST',
 				data: {
 					action: 'wpshadow_' + scanType + '_scan',
@@ -78,9 +97,8 @@
 					} else {
 						$progressText.text('Error: ' + (response.data || 'Unknown error'));
 						$results.html('<div class="notice notice-error"><p>' + (response.data || scanName + ' failed') + '</p></div>');
+						restoreButton($button);
 					}
-					
-					$button.prop('disabled', false).text($button.data('original-text'));
 				},
 				error: function(xhr, status, error) {
 					clearInterval(progressAnimationInterval);
@@ -93,14 +111,9 @@
 					
 					$progressText.text(errorMsg);
 					$results.html('<div class="notice notice-error"><p>' + errorMsg + '</p></div>');
-					$button.prop('disabled', false).text($button.data('original-text'));
+					restoreButton($button);
 				}
 			});
-		});
-		
-		// Store original button text
-		$('.wpshadow-run-scan').each(function() {
-			$(this).data('original-text', $(this).text());
 		});
 	}
 

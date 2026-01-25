@@ -35,6 +35,10 @@
 	margin: 0;
 }
 
+.scan-results {
+	margin-top: 20px;
+}
+
 .scan-results .notice {
 	margin-top: 15px;
 }
