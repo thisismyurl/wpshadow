@@ -1,6 +1,6 @@
 <?php
 /**
- * Quick Scan Tool View
+ * Deep Scan Tool View
  *
  * @package WPShadow
  * @subpackage Tools
@@ -15,16 +15,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 use WPShadow\Core\Options_Manager;
 ?>
 
-<div class="wpshadow-tool quick-scan-tool">
-	<h2><?php esc_html_e( 'Quick Scan', 'wpshadow' ); ?></h2>
+<div class="wpshadow-tool deep-scan-tool">
+	<h2><?php esc_html_e( 'Deep Scan', 'wpshadow' ); ?></h2>
 	
 	<p class="description">
-		<?php esc_html_e( 'Run a fast, lightweight scan of your site for common issues and security concerns. This typically completes in 30-60 seconds.', 'wpshadow' ); ?>
+		<?php esc_html_e( 'Run a comprehensive scan that checks database health, performance, and advanced compatibility issues. This may take several minutes to complete.', 'wpshadow' ); ?>
 	</p>
 
 	<div class="scan-info">
 		<?php
-		$last_run = Options_Manager::get_int( 'wpshadow_last_quick_checks', 0 );
+		$last_run = Options_Manager::get_int( 'wpshadow_last_heavy_tests', 0 );
 		
 		if ( ! empty( $last_run ) ) {
 			$age = time() - $last_run;
@@ -38,15 +38,15 @@ use WPShadow\Core\Options_Manager;
 		} else {
 			?>
 			<p class="never-run">
-				<?php esc_html_e( 'Quick Scan has never been run on this site.', 'wpshadow' ); ?>
+				<?php esc_html_e( 'Deep Scan has never been run on this site.', 'wpshadow' ); ?>
 			</p>
 			<?php
 		}
 		?>
 	</div>
 
-	<button class="button button-primary wpshadow-run-scan" data-scan-type="quick">
-		<?php esc_html_e( 'Run Quick Scan Now', 'wpshadow' ); ?>
+	<button class="button button-primary wpshadow-run-scan" data-scan-type="deep">
+		<?php esc_html_e( 'Run Deep Scan Now', 'wpshadow' ); ?>
 	</button>
 
 	<div class="scan-progress hidden">
@@ -106,17 +106,17 @@ jQuery(document).ready(function($) {
 		$button.prop('disabled', true).text('Running...');
 		$progress.removeClass('hidden');
 		$progressFill.css('width', '0%');
-		$progressText.text('Starting scan...');
+		$progressText.text('Starting deep scan... This may take several minutes.');
 		$results.empty();
 		
 		// Simulate progress
 		var progress = 0;
 		var progressInterval = setInterval(function() {
 			if (progress < 90) {
-				progress += Math.random() * 10;
+				progress += Math.random() * 5; // Slower progress for deep scan
 				$progressFill.css('width', Math.min(progress, 90) + '%');
 			}
-		}, 500);
+		}, 1000);
 		
 		// Run scan via AJAX
 		$.ajax({
@@ -127,18 +127,22 @@ jQuery(document).ready(function($) {
 				nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_scan_nonce' ) ); ?>',
 				mode: 'now'
 			},
+			timeout: 120000, // 2 minutes timeout for deep scan
 			success: function(response) {
 				clearInterval(progressInterval);
 				$progressFill.css('width', '100%');
 				
 				if (response.success) {
 					var data = response.data;
-					$progressText.text(data.message || 'Scan completed successfully!');
+					$progressText.text(data.message || 'Deep scan completed successfully!');
 					
 					// Show results
-					var resultsHtml = '<div class="notice notice-success"><p><strong>Scan Complete!</strong></p>';
+					var resultsHtml = '<div class="notice notice-success"><p><strong>Deep Scan Complete!</strong></p>';
 					resultsHtml += '<p>Completed: ' + data.completed + ' / ' + data.total + ' diagnostics</p>';
 					resultsHtml += '<p>Findings: ' + data.findings_count + '</p>';
+					if (data.findings_by_category) {
+						resultsHtml += '<p>Categories affected: ' + Object.keys(data.findings_by_category).length + '</p>';
+					}
 					resultsHtml += '</div>';
 					$results.html(resultsHtml);
 					
@@ -148,17 +152,17 @@ jQuery(document).ready(function($) {
 					}, 2000);
 				} else {
 					$progressText.text('Error: ' + (response.data || 'Unknown error'));
-					$results.html('<div class="notice notice-error"><p>' + (response.data || 'Scan failed') + '</p></div>');
+					$results.html('<div class="notice notice-error"><p>' + (response.data || 'Deep scan failed') + '</p></div>');
 				}
 				
-				$button.prop('disabled', false).text('<?php esc_attr_e( 'Run Quick Scan Now', 'wpshadow' ); ?>');
+				$button.prop('disabled', false).text('<?php esc_attr_e( 'Run Deep Scan Now', 'wpshadow' ); ?>');
 			},
 			error: function(xhr, status, error) {
 				clearInterval(progressInterval);
 				$progressFill.css('width', '100%').css('background-color', '#d63638');
-				$progressText.text('Error: Unable to complete scan');
+				$progressText.text('Error: Unable to complete deep scan');
 				$results.html('<div class="notice notice-error"><p>Error: ' + error + '</p></div>');
-				$button.prop('disabled', false).text('<?php esc_attr_e( 'Run Quick Scan Now', 'wpshadow' ); ?>');
+				$button.prop('disabled', false).text('<?php esc_attr_e( 'Run Deep Scan Now', 'wpshadow' ); ?>');
 			}
 		});
 	});
