@@ -30,7 +30,6 @@ composer require --dev \
     phpcompatibility/phpcompatibility-wp:^2.1 \
     automattic/vipwpcs:^3.0 \
     phpstan/phpstan:^1.10 \
-    phpunit/phpunit:^9.6 \
     --no-interaction
 
 # Configure PHPCS
@@ -98,11 +97,11 @@ if [ ! -f "phpunit.xml" ]; then
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>
-    <filter>
-        <whitelist>
+    <coverage>
+        <include>
             <directory suffix=".php">./includes/</directory>
-        </whitelist>
-    </filter>
+        </include>
+    </coverage>
 </phpunit>
 EOF
 fi
