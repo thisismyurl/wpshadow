@@ -87,6 +87,18 @@ function wpshadow_get_tools_catalog() {
 			'tool'    => 'tips-coach',
 			'enabled' => true,
 		),
+		array(
+			'title'   => __( 'Kanban Report', 'wpshadow' ),
+			'desc'    => __( 'Visual board to organize and track findings by status with drag-and-drop interface.', 'wpshadow' ),
+			'tool'    => 'kanban-report',
+			'enabled' => true,
+		),
+		array(
+			'title'   => __( 'Activity History', 'wpshadow' ),
+			'desc'    => __( 'Comprehensive audit log of all actions, changes, and fixes performed on your site.', 'wpshadow' ),
+			'tool'    => 'activity-history',
+			'enabled' => true,
+		),
 	);
 }
 

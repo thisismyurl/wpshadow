@@ -15,12 +15,24 @@ if (! current_user_can('read')) {
 }
 
 $user_id        = get_current_user_id();
+
+// Process form submission BEFORE reading the preference
+$saved_message = '';
+if (isset($_POST['save_dark_mode']) && wp_verify_nonce($_POST['wpshadow_dark_mode_nonce'] ?? '', 'wpshadow_dark_mode')) {
+	$new_pref = isset($_POST['dark_mode_pref']) ? sanitize_key($_POST['dark_mode_pref']) : 'auto';
+	update_user_meta($user_id, 'wpshadow_dark_mode_preference', $new_pref);
+	$saved_message = '<div class="notice notice-success"><p>' . esc_html__('Dark mode preference saved!', 'wpshadow') . '</p></div>';
+}
+
+// Now read the current preference (which may have just been updated)
 $dark_mode_pref = get_user_meta($user_id, 'wpshadow_dark_mode_preference', true) ?: 'auto';
 ?>
 
 <div class="wrap">
 	<h1><?php esc_html_e('Dark Mode', 'wpshadow'); ?></h1>
 	<p><?php esc_html_e('Enable dark mode for the WordPress admin interface.', 'wpshadow'); ?></p>
+
+	<?php echo wp_kses_post($saved_message); ?>
 
 	<div class="wpshadow-tool-section wps-card wps-mt-20">
 		<h2><?php esc_html_e('Dark Mode Settings', 'wpshadow'); ?></h2>
@@ -61,14 +73,6 @@ $dark_mode_pref = get_user_meta($user_id, 'wpshadow_dark_mode_preference', true)
 				</button>
 			</p>
 		</form>
-
-		<?php
-		if (isset($_POST['save_dark_mode']) && wp_verify_nonce($_POST['wpshadow_dark_mode_nonce'], 'wpshadow_dark_mode')) {
-			$new_pref = isset($_POST['dark_mode_pref']) ? sanitize_key($_POST['dark_mode_pref']) : 'auto';
-			update_user_meta($user_id, 'wpshadow_dark_mode_preference', $new_pref);
-			echo '<div class="notice notice-success"><p>' . esc_html__('Dark mode preference saved!', 'wpshadow') . '</p></div>';
-		}
-		?>
 	</div>
 </div>
 
