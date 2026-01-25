@@ -379,14 +379,13 @@ class Hooks_Initializer
 	/**
 	 * Show email server test status on export-personal-data.php page
 	 */
-	private static function show_export_personal_data_email_notice()
-	{
+	private static function show_export_personal_data_email_notice() {
 		$email_test_status = get_option('wpshadow_last_email_test_status', 'not_tested');
 		$email_test_time = get_option('wpshadow_last_email_test_time', 0);
 		$email_tool_url = admin_url('admin.php?page=wpshadow-tools&tool=email-test');
 
 		if ($email_test_status === 'passed') {
-			$time_ago = human_time_diff($email_test_time, current_time('timestamp'));
+			$time_ago = ($email_test_time > 0) ? human_time_diff($email_test_time, current_time('timestamp')) : __('unknown time', 'wpshadow');
 			echo '<div class="notice notice-success" style="margin-top: 15px;">';
 			echo '<p>';
 			echo '<span class="dashicons dashicons-yes-alt" style="color: #46b450;"></span> ';
