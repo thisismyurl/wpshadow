@@ -1,0 +1,16 @@
+WPShadow v1.2601.2148 - Package Checksums
+=========================================
+
+Package: wpshadow-1.2601.2148.zip
+Size: 7.1 MB
+Build Date: 2026-01-25
+
+MD5:
+3e113eb6082cf5ab8a5be1b6cadf1145
+
+SHA256:
+5012e8b3ce9fd31708eddf3c6705ba5ed0abc7edbe3a0afcf205f5f118142711
+
+Verify integrity before installation:
+md5sum wpshadow-1.2601.2148.zip
+sha256sum wpshadow-1.2601.2148.zip

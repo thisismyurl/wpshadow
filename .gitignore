@@ -7,3 +7,7 @@
 # /pro-modules/
 # GitHub Cache
 .cache/
+
+# Build artifacts
+/build/
+*.zip
