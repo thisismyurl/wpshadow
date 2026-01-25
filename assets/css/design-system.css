@@ -2333,3 +2333,128 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
 .wpshadow-tool-container {
     max-width: 100%;
 }
+
+/* ============================================================================
+   15. ACCESSIBILITY ENHANCEMENTS
+   ============================================================================ */
+
+/**
+ * Reduced Motion Support
+ * Respects user preferences for reduced motion (WCAG 2.1 - 2.3.3)
+ * Disables animations for users who have motion sensitivity
+ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/**
+ * High Contrast Mode Support
+ * Ensures focus indicators and borders are visible in Windows High Contrast Mode
+ */
+@media (prefers-contrast: high) {
+    .wps-btn,
+    .wps-input,
+    .wps-select,
+    .wps-card {
+        border: 2px solid currentColor;
+    }
+    
+    .wps-btn:focus,
+    .wps-input:focus,
+    .wps-select:focus {
+        outline: 3px solid;
+        outline-offset: 2px;
+    }
+}
+
+/**
+ * Focus-Visible Support
+ * Shows focus indicators only for keyboard navigation, not mouse clicks
+ * Improves visual clarity while maintaining accessibility
+ */
+.wps-btn:focus-visible,
+.wps-input:focus-visible,
+.wps-select:focus-visible,
+.wps-toggle:focus-visible,
+.wps-slider:focus-visible,
+.wps-checkbox:focus-visible,
+a:focus-visible {
+    outline: 2px solid var(--wps-primary);
+    outline-offset: 2px;
+    box-shadow: var(--wps-shadow-focus);
+}
+
+/**
+ * Skip to Content Link
+ * Allows keyboard users to skip navigation and jump to main content
+ */
+.wps-skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--wps-primary);
+    color: #ffffff;
+    padding: var(--wps-space-2) var(--wps-space-4);
+    text-decoration: none;
+    border-radius: var(--wps-radius-sm);
+    z-index: var(--wps-z-tooltip);
+    transition: top var(--wps-transition-fast);
+}
+
+.wps-skip-link:focus {
+    top: var(--wps-space-2);
+}
+
+/**
+ * Visually Hidden but Accessible
+ * Hides content visually but keeps it accessible to screen readers
+ */
+.wps-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/**
+ * Focus Visible Only
+ * Shows content only when parent element is focused
+ */
+.wps-focus-visible:not(:focus-within) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
+
+/**
+ * Touch Target Size Enforcement
+ * Ensures minimum 44x44px touch targets for mobile accessibility (WCAG 2.5.5)
+ */
+@media (max-width: 768px) {
+    .wps-btn,
+    .wps-toggle,
+    a.wps-link {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    /* Ensure adequate spacing between touch targets */
+    .wps-btn + .wps-btn,
+    .wps-toggle + .wps-toggle {
+        margin-left: var(--wps-space-2);
+    }
+}
