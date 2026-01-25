@@ -61,9 +61,9 @@ class Diagnostic_Performance_Benchmark extends Diagnostic_Base {
 	/**
 	 * Asset size thresholds (in KB)
 	 */
-	const MAX_JS_SIZE_KB  = 100;
-	const MAX_CSS_SIZE_KB = 50;
-	const WARN_JS_SIZE_KB = 75;
+	const MAX_JS_SIZE_KB   = 100;
+	const MAX_CSS_SIZE_KB  = 50;
+	const WARN_JS_SIZE_KB  = 75;
 	const WARN_CSS_SIZE_KB = 35;
 
 	/**
@@ -77,7 +77,7 @@ class Diagnostic_Performance_Benchmark extends Diagnostic_Base {
 		$issues  = array();
 
 		// Analyze JavaScript bundle sizes.
-		$js_metrics = self::analyze_javascript_bundles();
+		$js_metrics            = self::analyze_javascript_bundles();
 		$metrics['javascript'] = $js_metrics;
 
 		if ( ! empty( $js_metrics['oversized_files'] ) ) {
@@ -93,7 +93,7 @@ class Diagnostic_Performance_Benchmark extends Diagnostic_Base {
 		}
 
 		// Analyze CSS bundle sizes.
-		$css_metrics = self::analyze_css_bundles();
+		$css_metrics    = self::analyze_css_bundles();
 		$metrics['css'] = $css_metrics;
 
 		if ( ! empty( $css_metrics['oversized_files'] ) ) {
@@ -150,10 +150,13 @@ class Diagnostic_Performance_Benchmark extends Diagnostic_Base {
 	private static function analyze_javascript_bundles() {
 		$js_path = WPSHADOW_PATH . 'assets/js/';
 		$metrics = array(
-			'total_size'       => 0,
-			'total_files'      => 0,
-			'oversized_files'  => array(),
-			'largest_file'     => array( 'name' => '', 'size' => 0 ),
+			'total_size'      => 0,
+			'total_files'     => 0,
+			'oversized_files' => array(),
+			'largest_file'    => array(
+				'name' => '',
+				'size' => 0,
+			),
 		);
 
 		if ( ! is_dir( $js_path ) ) {
@@ -171,7 +174,7 @@ class Diagnostic_Performance_Benchmark extends Diagnostic_Base {
 			$filename   = basename( $file );
 
 			$metrics['total_size'] += $size_bytes;
-			$metrics['total_files']++;
+			++$metrics['total_files'];
 
 			// Track largest file.
 			if ( $size_bytes > $metrics['largest_file']['size'] ) {
@@ -226,7 +229,10 @@ class Diagnostic_Performance_Benchmark extends Diagnostic_Base {
 			'total_size'      => 0,
 			'total_files'     => 0,
 			'oversized_files' => array(),
-			'largest_file'    => array( 'name' => '', 'size' => 0 ),
+			'largest_file'    => array(
+				'name' => '',
+				'size' => 0,
+			),
 		);
 
 		if ( ! is_dir( $css_path ) ) {
@@ -244,7 +250,7 @@ class Diagnostic_Performance_Benchmark extends Diagnostic_Base {
 			$filename   = basename( $file );
 
 			$metrics['total_size'] += $size_bytes;
-			$metrics['total_files']++;
+			++$metrics['total_files'];
 
 			// Track largest file.
 			if ( $size_bytes > $metrics['largest_file']['size'] ) {

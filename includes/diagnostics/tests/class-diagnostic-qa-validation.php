@@ -278,8 +278,8 @@ class Diagnostic_QA_Validation extends Diagnostic_Base {
 			$filename = basename( $file );
 
 			// Check for AJAX calls without loading indicators.
-			$has_ajax        = preg_match( '/\.(ajax|post|fetch)\s*\(/i', $content );
-			$has_loading     = preg_match( '/(loading|spinner|aria-busy|disabled)/i', $content );
+			$has_ajax    = preg_match( '/\.(ajax|post|fetch)\s*\(/i', $content );
+			$has_loading = preg_match( '/(loading|spinner|aria-busy|disabled)/i', $content );
 
 			if ( $has_ajax && ! $has_loading ) {
 				$issues[] = array(
@@ -291,8 +291,8 @@ class Diagnostic_QA_Validation extends Diagnostic_Base {
 			}
 
 			// Check for destructive actions without confirmation.
-			$has_delete      = preg_match( '/(delete|remove|destroy|clear)/i', $content );
-			$has_confirm     = preg_match( '/(confirm|dialog|modal)/i', $content );
+			$has_delete  = preg_match( '/(delete|remove|destroy|clear)/i', $content );
+			$has_confirm = preg_match( '/(confirm|dialog|modal)/i', $content );
 
 			if ( $has_delete && ! $has_confirm ) {
 				$issues[] = array(

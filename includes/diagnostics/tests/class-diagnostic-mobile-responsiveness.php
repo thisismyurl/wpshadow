@@ -169,9 +169,9 @@ class Diagnostic_Mobile_Responsiveness extends Diagnostic_Base {
 			foreach ( $fixed_widths[1] as $width ) {
 				if ( (int) $width > 600 ) {
 					// Check if there's a corresponding max-width nearby.
-					$position    = strpos( $content, "width: {$width}px" );
-					$context     = substr( $content, max( 0, $position - 200 ), 400 );
-					$has_max     = preg_match( '/max-width:/i', $context );
+					$position = strpos( $content, "width: {$width}px" );
+					$context  = substr( $content, max( 0, $position - 200 ), 400 );
+					$has_max  = preg_match( '/max-width:/i', $context );
 
 					if ( ! $has_max ) {
 						$issues[] = array(
@@ -242,9 +242,9 @@ class Diagnostic_Mobile_Responsiveness extends Diagnostic_Base {
 					$height = (int) $height_match[1];
 					if ( $height < self::MIN_TOUCH_TARGET_SIZE ) {
 						// Check if it's inside a media query for mobile.
-						$rule_pos   = strpos( $content, $rule );
-						$before     = substr( $content, max( 0, $rule_pos - 500 ), 500 );
-						$in_mobile  = preg_match( '/@media[^{]*\(max-width:\s*\d+px\)/i', $before );
+						$rule_pos  = strpos( $content, $rule );
+						$before    = substr( $content, max( 0, $rule_pos - 500 ), 500 );
+						$in_mobile = preg_match( '/@media[^{]*\(max-width:\s*\d+px\)/i', $before );
 
 						if ( $in_mobile ) {
 							$issues[] = array(
@@ -297,8 +297,8 @@ class Diagnostic_Mobile_Responsiveness extends Diagnostic_Base {
 					foreach ( $hover_matches[1] as $selector ) {
 						$selector = trim( $selector );
 						// Check if there's a corresponding :focus or :active.
-						$has_focus  = preg_match( '/' . preg_quote( $selector, '/' ) . '\s*:(focus|active)/i', $content );
-						$has_touch  = preg_match( '/' . preg_quote( $selector, '/' ) . '\s*:active/i', $content );
+						$has_focus = preg_match( '/' . preg_quote( $selector, '/' ) . '\s*:(focus|active)/i', $content );
+						$has_touch = preg_match( '/' . preg_quote( $selector, '/' ) . '\s*:active/i', $content );
 
 						if ( ! $has_focus && ! $has_touch ) {
 							$issues[] = array(

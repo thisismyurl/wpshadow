@@ -198,9 +198,9 @@ class Diagnostic_Accessibility_Validation extends Diagnostic_Base {
 			$filename = basename( $file );
 
 			// Check for click events without keyboard support.
-			$has_click     = preg_match( '/\.(on|addEventListener)\s*\(\s*[\'"]click[\'"]/i', $content );
-			$has_keyboard  = preg_match( '/\.(on|addEventListener)\s*\(\s*[\'"]key(down|up|press)[\'"]/i', $content );
-			$has_keyevent  = preg_match( '/event\.(key|keyCode|which)/i', $content );
+			$has_click    = preg_match( '/\.(on|addEventListener)\s*\(\s*[\'"]click[\'"]/i', $content );
+			$has_keyboard = preg_match( '/\.(on|addEventListener)\s*\(\s*[\'"]key(down|up|press)[\'"]/i', $content );
+			$has_keyevent = preg_match( '/event\.(key|keyCode|which)/i', $content );
 
 			if ( $has_click && ! $has_keyboard && ! $has_keyevent ) {
 				$issues[] = array(
@@ -211,7 +211,7 @@ class Diagnostic_Accessibility_Validation extends Diagnostic_Base {
 			}
 
 			// Check for focus management.
-			$has_focus = preg_match( '/\.focus\(\)|\.blur\(\)|tabindex/i', $content );
+			$has_focus       = preg_match( '/\.focus\(\)|\.blur\(\)|tabindex/i', $content );
 			$has_interaction = preg_match( '/\.(show|hide|toggle|open|close)\(/i', $content );
 
 			if ( $has_interaction && ! $has_focus ) {
@@ -303,8 +303,8 @@ class Diagnostic_Accessibility_Validation extends Diagnostic_Base {
 	 * @return array Array of file paths.
 	 */
 	private static function get_php_files_recursive( $dir ) {
-		$files  = array();
-		$items  = glob( $dir . '/*' );
+		$files = array();
+		$items = glob( $dir . '/*' );
 
 		if ( ! $items ) {
 			return $files;
