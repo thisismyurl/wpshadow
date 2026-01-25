@@ -164,4 +164,53 @@ abstract class Treatment_Base implements Treatment_Interface {
 	 * @return array Result array with 'success' and 'message' keys.
 	 */
 	abstract public static function undo();
+
+	/**
+	 * Execute undo with hooks.
+	 *
+	 * Wraps undo() with before/after actions for extensibility.
+	 *
+	 * @return array Result array.
+	 */
+	public static function execute_undo() {
+		$class = get_called_class();
+		
+		// Get finding_id if method exists, otherwise use class name.
+		$finding_id = method_exists( $class, 'get_finding_id' ) ? static::get_finding_id() : $class;
+
+		/**
+		 * Fires before a treatment is undone.
+		 *
+		 * @param string $class      Treatment class name.
+		 * @param string $finding_id Finding identifier.
+		 */
+		do_action( 'wpshadow_before_treatment_undo', $class, $finding_id );
+
+		$result = static::undo();
+
+		// Clear findings cache after undo
+		if ( ! empty( $result['success'] ) ) {
+			if ( function_exists( 'wpshadow_clear_findings_cache' ) ) {
+				wpshadow_clear_findings_cache();
+			}
+		}
+
+		/**
+		 * Fires after a treatment is undone.
+		 *
+		 * @param string $class      Treatment class name.
+		 * @param string $finding_id Finding identifier.
+		 * @param array  $result     Undo result.
+		 */
+		do_action( 'wpshadow_after_treatment_undo', $class, $finding_id, $result );
+
+		/**
+		 * Filter treatment undo result.
+		 *
+		 * @param array  $result     Result array.
+		 * @param string $class      Treatment class name.
+		 * @param string $finding_id Finding identifier.
+		 */
+		return apply_filters( 'wpshadow_treatment_undo_result', $result, $class, $finding_id );
+	}
 }
