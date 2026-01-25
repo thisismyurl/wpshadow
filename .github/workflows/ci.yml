@@ -2,9 +2,9 @@ name: Continuous Integration
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 jobs:
   phpcs:
@@ -12,19 +12,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
           tools: composer, cs2pr
-          
+
       - name: Install Dependencies
         run: composer install --no-interaction --prefer-dist
-        
+
       - name: Run PHPCS
         run: composer run-script phpcs -- --report=checkstyle | cs2pr
-        
+
   phpunit:
     name: PHPUnit Tests
     runs-on: ubuntu-latest
@@ -34,37 +34,40 @@ jobs:
         wordpress: ['6.4', '6.5', 'latest']
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           extensions: mysql
           coverage: xdebug
-          
+
       - name: Install WordPress Test Suite
-        run: bash bin/install-wp-tests.sh wordpress_test root '' localhost ${{ matrix.wordpress }}
-        
+        run: |
+          bash bin/install-wp-tests.sh wordpress_test root '' \
+            localhost ${{ matrix.wordpress }}
+
       - name: Run PHPUnit
         run: vendor/bin/phpunit
-        
+
   accessibility:
     name: Accessibility Checks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-          
+
       - name: Install axe-core
         run: npm install -g @axe-core/cli
-        
+
       - name: Run Accessibility Checks
         run: |
           # Check if HTML views follow accessibility standards
-          find includes/views -name "*.php" | xargs grep -l "html" | while read file; do
+          find includes/views -name "*.php" | \
+            xargs grep -l "html" | while read file; do
             echo "Checking $file for common accessibility issues"
           done

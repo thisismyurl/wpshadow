@@ -11,18 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          
+
       - name: Install Dependencies
         run: composer install --no-dev --optimize-autoloader
-        
+
       - name: Build Release
         run: bash .devcontainer/build-release.sh
-        
+
       - name: Create Release
         uses: actions/create-release@v1
         env:
@@ -32,7 +32,7 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
-          
+
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         env:
