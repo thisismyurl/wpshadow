@@ -137,6 +137,16 @@ class Plugin_Bootstrap
 		if (file_exists($dashboard_file)) {
 			require_once $dashboard_file;
 		}
+		
+		// Load dashboard widgets
+		$widgets_path = WPSHADOW_PATH . 'includes/dashboard/widgets/';
+		if (file_exists($widgets_path . 'class-setup-widget.php')) {
+			require_once $widgets_path . 'class-setup-widget.php';
+			
+			if (class_exists('\\WPShadow\\Dashboard\\Widgets\\Setup_Widget')) {
+				\WPShadow\Dashboard\Widgets\Setup_Widget::init();
+			}
+		}
 	}
 
 	/**
