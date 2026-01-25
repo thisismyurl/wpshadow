@@ -40,14 +40,15 @@
 		</properties>
 	</rule>
 
-	<!-- Verify that everything in the global namespace is prefixed -->
+	<!-- Naming conventions -->
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array" value="wpshadow,WPShadow"/>
 		</properties>
 	</rule>
 
-	<!-- Allow short array syntax -->
+	<!-- Array and ternary syntax -->
+	<!-- Allow short array syntax [] but disallow short ternary ?: for clarity -->
 	<rule ref="WordPress.PHP.DisallowShortTernary"/>
 
 	<!-- File naming -->

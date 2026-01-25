@@ -22,7 +22,7 @@ fi
 
 # Check for debug code
 echo "✓ Checking for debug code..."
-if git diff --cached --name-only | grep -E '\.(php|js)$' | xargs grep -n "console\.log\|var_dump\|print_r\|error_log\|dd(" 2> /dev/null; then
+if git diff --cached --name-only | grep -E '\.(php|js)$' | xargs grep -nE "\bvar_dump\(|\bprint_r\(|\berror_log\(|\bconsole\.log\(|\bdd\(" 2> /dev/null; then
     echo "⚠️  Warning: Debug code found in staged files!"
     echo "Remove debug statements before committing."
     exit 1
@@ -63,7 +63,7 @@ echo "✓ Checking for learning resources..."
 STAGED_PHP=$(git diff --cached --name-only --diff-filter=ACM | grep '\.php$')
 if [ -n "$STAGED_PHP" ]; then
     # Check if new functions have docblocks
-    if git diff --cached $STAGED_PHP | grep -A 1 "^+.*function " | grep -v "\/\*\*" > /dev/null 2>&1; then
+    if git diff --cached "$STAGED_PHP" | grep -E "^\\+[[:space:]]*(public|private|protected|function)[[:space:]]+function" | head -1 > /dev/null 2>&1; then
         echo "⚠️  Reminder: Add PHPDoc comments for better learning resources"
     fi
 fi

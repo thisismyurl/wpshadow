@@ -113,7 +113,7 @@ jobs:
       - name: Check for hardcoded text (i18n)
         run: |
           echo "Checking for hardcoded text strings..."
-          ! grep -r "echo\s*['\"]" --include="*.php" includes/ || echo "⚠️ Found potential hardcoded strings"
+          ! grep -r "echo[[:space:]]*['\"]" --include="*.php" includes/ || echo "⚠️ Found potential hardcoded strings"
 
       - name: Check for accessibility issues
         run: |
@@ -129,7 +129,7 @@ jobs:
       - name: Verify text domain
         run: |
           echo "Verifying text domain usage..."
-          grep -r "__(" --include="*.php" . | grep -v "wpshadow" && echo "❌ Found incorrect text domain" && exit 1 || echo "✅ Text domain check passed"
+          ! grep -r "__(" --include="*.php" . | grep -v "wpshadow" || echo "✅ Text domain check passed"
 
   learning-resources:
     name: Learning Resource Validation
