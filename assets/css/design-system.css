@@ -2303,3 +2303,298 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
 .wpshadow-tool-container {
     max-width: 100%;
 }
+
+/* ============================================================================
+   15. FORM CONTROLS - MODERN INPUT STYLING
+   ============================================================================ */
+
+/* Range Slider Component */
+.wps-range-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--wps-space-2);
+}
+
+.wps-range-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wps-range-value {
+    font-size: var(--wps-text-sm);
+    font-weight: var(--wps-font-semibold);
+    color: var(--wps-primary);
+    padding: var(--wps-space-1) var(--wps-space-2);
+    background: var(--wps-primary-light);
+    border-radius: var(--wps-radius-sm);
+    min-width: 60px;
+    text-align: center;
+}
+
+.wps-range {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    background: var(--wps-gray-200);
+    border-radius: var(--wps-radius-full);
+    outline: none;
+    transition: var(--wps-transition-base);
+}
+
+.wps-range:hover {
+    background: var(--wps-gray-300);
+}
+
+/* Webkit (Chrome, Safari, Edge) */
+.wps-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--wps-primary);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: var(--wps-shadow-sm);
+    transition: var(--wps-transition-base);
+}
+
+.wps-range::-webkit-slider-thumb:hover {
+    background: var(--wps-primary-hover);
+    box-shadow: var(--wps-shadow-md);
+    transform: scale(1.1);
+}
+
+.wps-range:focus::-webkit-slider-thumb {
+    box-shadow: 0 0 0 4px var(--wps-primary-light);
+}
+
+/* Firefox */
+.wps-range::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--wps-primary);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: var(--wps-shadow-sm);
+    transition: var(--wps-transition-base);
+}
+
+.wps-range::-moz-range-thumb:hover {
+    background: var(--wps-primary-hover);
+    box-shadow: var(--wps-shadow-md);
+    transform: scale(1.1);
+}
+
+.wps-range:focus::-moz-range-thumb {
+    box-shadow: 0 0 0 4px var(--wps-primary-light);
+}
+
+/* Range track fill (for progress visualization) */
+.wps-range-wrapper {
+    position: relative;
+}
+
+.wps-range-track {
+    position: absolute;
+    height: 6px;
+    background: var(--wps-primary);
+    border-radius: var(--wps-radius-full);
+    pointer-events: none;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Select Dropdown Component */
+.wps-select-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.wps-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 100%;
+    padding: var(--wps-space-2) var(--wps-space-8) var(--wps-space-2) var(--wps-space-3);
+    font-size: var(--wps-text-sm);
+    font-family: var(--wps-font-sans);
+    color: var(--wps-gray-900);
+    background: white;
+    border: 1px solid var(--wps-gray-300);
+    border-radius: var(--wps-radius-md);
+    cursor: pointer;
+    transition: var(--wps-transition-base);
+}
+
+.wps-select:hover {
+    border-color: var(--wps-gray-400);
+}
+
+.wps-select:focus {
+    outline: none;
+    border-color: var(--wps-primary);
+    box-shadow: 0 0 0 3px var(--wps-primary-light);
+}
+
+.wps-select:disabled {
+    background: var(--wps-gray-100);
+    color: var(--wps-gray-500);
+    cursor: not-allowed;
+}
+
+/* Dropdown arrow icon */
+.wps-select-wrapper::after {
+    content: "";
+    position: absolute;
+    right: var(--wps-space-3);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid var(--wps-gray-600);
+    pointer-events: none;
+}
+
+.wps-select:focus + .wps-select-wrapper::after {
+    border-top-color: var(--wps-primary);
+}
+
+/* Compact variant */
+.wps-select-compact {
+    padding: var(--wps-space-1) var(--wps-space-6) var(--wps-space-1) var(--wps-space-2);
+    font-size: var(--wps-text-xs);
+}
+
+/* Text Input Component */
+.wps-input {
+    width: 100%;
+    padding: var(--wps-space-2) var(--wps-space-3);
+    font-size: var(--wps-text-sm);
+    font-family: var(--wps-font-sans);
+    color: var(--wps-gray-900);
+    background: white;
+    border: 1px solid var(--wps-gray-300);
+    border-radius: var(--wps-radius-md);
+    transition: var(--wps-transition-base);
+}
+
+.wps-input:hover {
+    border-color: var(--wps-gray-400);
+}
+
+.wps-input:focus {
+    outline: none;
+    border-color: var(--wps-primary);
+    box-shadow: 0 0 0 3px var(--wps-primary-light);
+}
+
+.wps-input:disabled {
+    background: var(--wps-gray-100);
+    color: var(--wps-gray-500);
+    cursor: not-allowed;
+}
+
+.wps-input::placeholder {
+    color: var(--wps-gray-400);
+}
+
+/* Input with prefix/suffix */
+.wps-input-group {
+    display: flex;
+    align-items: stretch;
+}
+
+.wps-input-prefix,
+.wps-input-suffix {
+    display: flex;
+    align-items: center;
+    padding: var(--wps-space-2) var(--wps-space-3);
+    background: var(--wps-gray-100);
+    border: 1px solid var(--wps-gray-300);
+    font-size: var(--wps-text-sm);
+    color: var(--wps-gray-600);
+    white-space: nowrap;
+}
+
+.wps-input-prefix {
+    border-right: none;
+    border-radius: var(--wps-radius-md) 0 0 var(--wps-radius-md);
+}
+
+.wps-input-suffix {
+    border-left: none;
+    border-radius: 0 var(--wps-radius-md) var(--wps-radius-md) 0;
+}
+
+.wps-input-group .wps-input {
+    border-radius: 0;
+}
+
+.wps-input-group .wps-input:first-child {
+    border-radius: var(--wps-radius-md) 0 0 var(--wps-radius-md);
+}
+
+.wps-input-group .wps-input:last-child {
+    border-radius: 0 var(--wps-radius-md) var(--wps-radius-md) 0;
+}
+
+/* Input sizes */
+.wps-input-sm {
+    padding: var(--wps-space-1) var(--wps-space-2);
+    font-size: var(--wps-text-xs);
+}
+
+.wps-input-lg {
+    padding: var(--wps-space-3) var(--wps-space-4);
+    font-size: var(--wps-text-base);
+}
+
+/* Textarea */
+.wps-textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: var(--wps-space-3);
+    font-size: var(--wps-text-sm);
+    font-family: var(--wps-font-sans);
+    color: var(--wps-gray-900);
+    background: white;
+    border: 1px solid var(--wps-gray-300);
+    border-radius: var(--wps-radius-md);
+    resize: vertical;
+    transition: var(--wps-transition-base);
+}
+
+.wps-textarea:focus {
+    outline: none;
+    border-color: var(--wps-primary);
+    box-shadow: 0 0 0 3px var(--wps-primary-light);
+}
+
+/* Help text for form fields */
+.wps-help-text {
+    display: block;
+    font-size: var(--wps-text-xs);
+    color: var(--wps-gray-600);
+    margin-top: var(--wps-space-1);
+}
+
+/* Form group container */
+.wps-form-group {
+    margin-bottom: var(--wps-space-4);
+}
+
+/* Form labels */
+.wps-label {
+    display: block;
+    font-size: var(--wps-text-sm);
+    font-weight: var(--wps-font-medium);
+    color: var(--wps-gray-900);
+    margin-bottom: var(--wps-space-1);
+}
