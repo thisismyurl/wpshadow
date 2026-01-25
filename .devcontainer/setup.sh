@@ -23,10 +23,7 @@ fi
 
 # Install WordPress Coding Standards
 echo "📋 Installing WordPress Coding Standards..."
-composer global require --dev wp-coding-standards/wpcs:"^3.0"
-composer global require --dev phpcompatibility/phpcompatibility-wp:"*"
-composer global require --dev phpstan/phpstan:"^1.10"
-composer global require --dev automattic/vipwpcs:"^3.0"
+composer global require --dev wp-coding-standards/wpcs:"^3.0" phpcompatibility/phpcompatibility-wp:"*" phpstan/phpstan:"^1.10" automattic/vipwpcs:"^3.0"
 
 # Configure PHPCS
 echo "⚙️ Configuring PHPCS..."
