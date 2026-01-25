@@ -474,26 +474,8 @@ class Hooks_Initializer
 			'test'  => 'wpshadow_site_health_test_deep_scan',
 		);
 
-		$tests['direct']['wpshadow_overall'] = array(
-			'label' => __('WPShadow Overall Status', 'wpshadow'),
-			'test'  => 'wpshadow_site_health_test_overall',
-		);
-
-		// Add critical findings as tests
-		$findings = wpshadow_get_site_findings();
-		$critical = array_filter($findings, function ($f) {
-			return isset($f['threat_level']) && $f['threat_level'] >= 75;
-		});
-
-		foreach (array_slice($critical, 0, 5) as $finding) {
-			$finding_id = isset($finding['id']) ? $finding['id'] : md5($finding['title'] ?? '');
-			$tests['direct']['wpshadow_finding_' . $finding_id] = array(
-				'label' => $finding['title'] ?? __('Security Issue', 'wpshadow'),
-				'test'  => function () use ($finding) {
-					return wpshadow_site_health_test_finding($finding, array(), $finding['id'] ?? '');
-				},
-			);
-		}
+		// Removed wpshadow_overall test - individual findings are now shown separately
+		// per Issue #558: site-health.php page improvements
 
 		$GLOBALS['wpshadow_site_health_badge'] = array(
 			'label' => __('WPShadow', 'wpshadow'),
