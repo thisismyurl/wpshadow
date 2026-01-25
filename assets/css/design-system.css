@@ -8,6 +8,18 @@
  * This design system provides consistent, modern UI components across WPShadow.
  * All components follow 2026 design principles: clean, elegant, focused, professional.
  *
+ * WCAG 2.1 Level AA Compliance:
+ * - All color combinations validated for contrast ratios
+ * - Text: 4.5:1 minimum (normal), 3:1 (large text 18px+)
+ * - UI components: 3:1 minimum
+ * - Focus indicators: visible with 3:1 contrast
+ * 
+ * Recent Updates (Jan 2026):
+ * - Fixed success button background for WCAG AA compliance
+ * - Fixed warning alert border for better contrast
+ * - Validated all semantic color combinations
+ * - See docs/COLOR_CONTRAST_VALIDATION.md for full report
+ *
  * @package WPShadow
  */
 
@@ -1195,15 +1207,15 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
     border-color: var(--wps-gray-400);
 }
 
-/* Success Button */
+/* Success Button - uses dark variant for WCAG AA compliance (4.97:1) */
 .wps-btn-success {
-    background: var(--wps-success);
+    background: var(--wps-success-dark);
     color: #ffffff;
-    border-color: var(--wps-success);
+    border-color: var(--wps-success-dark);
 }
 
 .wps-btn-success:hover:not(:disabled) {
-    background: var(--wps-success-dark);
+    background: #036347; /* Even darker on hover */
     box-shadow: var(--wps-shadow-md);
 }
 
@@ -1776,7 +1788,7 @@ body[class*="wpshadow"] .screen-reader-text span:focus {
 
 .wps-alert-warning {
     background: var(--wps-warning-light);
-    border-color: var(--wps-warning);
+    border-color: var(--wps-warning-dark); /* Dark variant for better contrast (3.37:1) */
     color: var(--wps-warning-dark);
 }
 
