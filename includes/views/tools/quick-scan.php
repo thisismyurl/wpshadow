@@ -25,9 +25,9 @@ use WPShadow\Core\Options_Manager;
 	<div class="scan-info">
 		<?php
 		$last_run = Options_Manager::get_int( 'wpshadow_last_quick_checks', 0 );
-		
+
 		if ( ! empty( $last_run ) ) {
-			$age = time() - $last_run;
+			$age     = time() - $last_run;
 			$age_str = human_time_diff( $last_run, time() );
 			?>
 			<p class="last-run">
