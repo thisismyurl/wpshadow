@@ -99,13 +99,25 @@ function wpshadow_format_time_with_tooltip( int $timestamp ): string {
 		$relative = __( 'just now', 'wpshadow' );
 	} elseif ( $diff < 3600 ) {
 		$minutes  = (int) floor( $diff / 60 );
-		$relative = sprintf( _n( '%d minute ago', '%d minutes ago', $minutes, 'wpshadow' ), $minutes );
+		$relative = sprintf(
+			/* translators: %d: number of minutes */
+			_n( '%d minute ago', '%d minutes ago', $minutes, 'wpshadow' ),
+			$minutes
+		);
 	} elseif ( $diff < 86400 ) {
 		$hours    = (int) floor( $diff / 3600 );
-		$relative = sprintf( _n( '%d hour ago', '%d hours ago', $hours, 'wpshadow' ), $hours );
+		$relative = sprintf(
+			/* translators: %d: number of hours */
+			_n( '%d hour ago', '%d hours ago', $hours, 'wpshadow' ),
+			$hours
+		);
 	} else {
 		$days     = (int) floor( $diff / 86400 );
-		$relative = sprintf( _n( '%d day ago', '%d days ago', $days, 'wpshadow' ), $days );
+		$relative = sprintf(
+			/* translators: %d: number of days */
+			_n( '%d day ago', '%d days ago', $days, 'wpshadow' ),
+			$days
+		);
 	}
 
 	$precise = wp_date( get_option( 'date_format', 'Y-m-d' ) . ' ' . get_option( 'time_format', 'H:i:s' ), $timestamp );
@@ -128,25 +140,61 @@ function wpshadow_render_recent_activity(): void {
 	if ( empty( $activity ) ) {
 		return; // No activity to display
 	}
+
+	// Get category metadata for icons
+	$category_meta = \WPShadow\Core\wpshadow_get_category_metadata();
 	?>
-	<div style="margin: 30px 0;">
-		<h2><?php esc_html_e( 'Recent Activity', 'wpshadow' ); ?></h2>
-		<table class="wp-list-table widefat">
-			<thead>
-				<tr>
-					<th><?php esc_html_e( 'Action', 'wpshadow' ); ?></th>
-					<th><?php esc_html_e( 'Time', 'wpshadow' ); ?></th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php foreach ( $activity as $entry ) : ?>
-				<tr>
-					<td><?php echo esc_html( $entry['action'] ); ?></td>
-					<td><?php echo wp_kses_post( wpshadow_format_time_with_tooltip( $entry['time'] ) ); ?></td>
-				</tr>
-				<?php endforeach; ?>
-			</tbody>
-		</table>
+	<div class="wps-activity-section wps-mt-8">
+		<div class="wps-activity-header">
+			<h2 class="wps-activity-title"><?php esc_html_e( 'Recent Activity', 'wpshadow' ); ?></h2>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-activity' ) ); ?>" class="wps-activity-link">
+				<?php esc_html_e( 'View All Activity', 'wpshadow' ); ?>
+				<span class="dashicons dashicons-arrow-right-alt2" aria-hidden="true"></span>
+			</a>
+		</div>
+		<div class="wps-activity-timeline" role="list" aria-label="<?php esc_attr_e( 'Recent site activity', 'wpshadow' ); ?>">
+			<?php
+			$count = 0;
+			foreach ( $activity as $entry ) :
+				if ( $count >= 7 ) {
+					break; // Show only 5-7 activities
+				}
+				++$count;
+
+				// Determine icon based on action type
+				$icon_class = 'dashicons-yes-alt';
+				$icon_color = 'var(--wps-success)';
+
+				if ( strpos( $entry['action'], 'Failed' ) !== false || strpos( $entry['action'], 'Error' ) !== false ) {
+					$icon_class = 'dashicons-warning';
+					$icon_color = 'var(--wps-danger)';
+				} elseif ( strpos( $entry['action'], 'Scan' ) !== false || strpos( $entry['action'], 'Diagnostic' ) !== false ) {
+					$icon_class = 'dashicons-update';
+					$icon_color = 'var(--wps-info)';
+				} elseif ( strpos( $entry['action'], 'Applied' ) !== false || strpos( $entry['action'], 'Fixed' ) !== false ) {
+					$icon_class = 'dashicons-yes';
+					$icon_color = 'var(--wps-success)';
+				} elseif ( strpos( $entry['action'], 'Workflow' ) !== false ) {
+					$icon_class = 'dashicons-controls-play';
+					$icon_color = 'var(--wps-primary)';
+				} elseif ( strpos( $entry['action'], 'Settings' ) !== false ) {
+					$icon_class = 'dashicons-admin-settings';
+					$icon_color = 'var(--wps-gray-600)';
+				}
+				?>
+				<div class="wps-activity-item" role="listitem">
+					<div class="wps-activity-icon" style="color: <?php echo esc_attr( $icon_color ); ?>;" aria-hidden="true">
+						<span class="dashicons <?php echo esc_attr( $icon_class ); ?>"></span>
+					</div>
+					<div class="wps-activity-content">
+						<div class="wps-activity-text"><?php echo esc_html( $entry['action'] ); ?></div>
+						<time class="wps-activity-time" datetime="<?php echo esc_attr( gmdate( 'c', $entry['time'] ) ); ?>">
+							<?php echo wp_kses_post( wpshadow_format_time_with_tooltip( $entry['time'] ) ); ?>
+						</time>
+					</div>
+				</div>
+			<?php endforeach; ?>
+		</div>
 	</div>
 	<?php
 }

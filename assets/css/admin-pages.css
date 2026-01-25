@@ -468,6 +468,130 @@
 }
 
 /* ============================================================================
+   Activity Timeline
+   ============================================================================ */
+
+.wps-activity-section {
+    margin-top: var(--wps-space-8);
+    margin-bottom: var(--wps-space-8);
+}
+
+.wps-activity-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--wps-space-6);
+    padding-bottom: var(--wps-space-4);
+    border-bottom: 2px solid var(--wps-gray-200);
+}
+
+.wps-activity-title {
+    margin: 0;
+    font-size: var(--wps-text-2xl);
+    font-weight: var(--wps-font-semibold);
+    color: var(--wps-gray-900);
+}
+
+.wps-activity-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--wps-space-2);
+    color: var(--wps-info);
+    text-decoration: none;
+    font-weight: var(--wps-font-medium);
+    font-size: var(--wps-text-sm);
+    transition: color var(--wps-transition-fast);
+}
+
+.wps-activity-link:hover {
+    color: var(--wps-info-dark);
+    text-decoration: none;
+}
+
+.wps-activity-link .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+/* Timeline container */
+.wps-activity-timeline {
+    position: relative;
+    padding-left: var(--wps-space-10);
+}
+
+/* Vertical timeline line */
+.wps-activity-timeline::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: var(--wps-gray-200);
+}
+
+/* Individual activity item */
+.wps-activity-item {
+    position: relative;
+    display: flex;
+    gap: var(--wps-space-4);
+    padding: var(--wps-space-3);
+    margin-bottom: var(--wps-space-2);
+    border-radius: var(--wps-radius-md);
+    transition: background var(--wps-transition-fast);
+}
+
+.wps-activity-item:hover {
+    background: var(--wps-gray-50);
+}
+
+.wps-activity-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Timeline dot/icon */
+.wps-activity-icon {
+    position: absolute;
+    left: calc(-1 * var(--wps-space-10));
+    top: var(--wps-space-3);
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: 2px solid var(--wps-gray-200);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.wps-activity-icon .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+}
+
+/* Activity content */
+.wps-activity-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.wps-activity-text {
+    color: var(--wps-gray-900);
+    font-size: var(--wps-text-base);
+    line-height: 1.5;
+    margin-bottom: var(--wps-space-1);
+}
+
+.wps-activity-time {
+    display: inline-block;
+    color: var(--wps-gray-600);
+    font-size: var(--wps-text-sm);
+}
+
+/* ============================================================================
    Dashboard-Specific Styles
    ============================================================================ */
 

@@ -114,6 +114,7 @@ function wpshadow_get_health_status(): array {
 		$status  = __( 'Good', 'wpshadow' );
 		$color   = '#2e7d32';
 		$message = sprintf(
+			/* translators: %d: number of issues found */
 			__( 'Your site is in good health with %d issue(s) to address.', 'wpshadow' ),
 			$total_findings
 		);
@@ -121,6 +122,7 @@ function wpshadow_get_health_status(): array {
 		$status  = __( 'Fair', 'wpshadow' );
 		$color   = '#f57c00';
 		$message = sprintf(
+			/* translators: 1: total issues count, 2: critical issues count */
 			__( 'Your site needs attention: %1$d issue(s) detected, including %2$d critical issue(s).', 'wpshadow' ),
 			$total_findings,
 			$critical_count
@@ -129,6 +131,7 @@ function wpshadow_get_health_status(): array {
 		$status  = __( 'Poor', 'wpshadow' );
 		$color   = '#c62828';
 		$message = sprintf(
+			/* translators: %d: number of critical issues */
 			__( 'Your site has %d critical issue(s) that need immediate attention.', 'wpshadow' ),
 			$critical_count
 		);
@@ -260,16 +263,16 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 						array_filter(
 							$cat_findings,
 							function ( $f ) {
-								return isset( $f['color'] ) && $f['color'] === '#f44336';
+								return isset( $f['color'] ) && '#f44336' === $f['color'];
 							}
 						)
 					);
 
-					if ( $total === 0 ) {
+					if ( 0 === $total ) {
 						$status_text  = __( 'Excellent', 'wpshadow' );
 						$status_icon  = '✓';
 						$status_color = '#10b981';
-					} elseif ( $critical_count === 0 ) {
+					} elseif ( 0 === $critical_count ) {
 						$status_text  = __( 'Good', 'wpshadow' );
 						$status_icon  = '✓';
 						$status_color = '#10b981';
@@ -292,9 +295,20 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 					$gauge_color   = $get_threat_gauge_color( 100 - $gauge_percent );
 					?>
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&category=' . $cat_key ) ); ?>" 
-					   class="wps-category-gauge" 
-					   data-category="<?php echo esc_attr( $cat_key ); ?>"
-					   aria-label="<?php echo esc_attr( sprintf( __( '%s health: %d%%. Click to view details', 'wpshadow' ), isset( $meta['label'] ) ? $meta['label'] : ucfirst( $cat_key ), (int) $gauge_percent ) ); ?>">
+						class="wps-category-gauge" 
+						data-category="<?php echo esc_attr( $cat_key ); ?>"
+						aria-label="
+						<?php
+						echo esc_attr(
+							sprintf(
+								/* translators: 1: category name, 2: health percentage */
+								__( '%1$s health: %2$d%%. Click to view details', 'wpshadow' ),
+								isset( $meta['label'] ) ? $meta['label'] : ucfirst( $cat_key ),
+								(int) $gauge_percent
+							)
+						);
+						?>
+						">
 						<div class="wps-category-gauge-icon">
 							<svg width="70" height="70" viewBox="0 0 100 100" aria-hidden="true">
 								<!-- Gauge background -->
@@ -323,10 +337,16 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 								</span>
 								<div class="wps-category-gauge-count">
 									<?php
-									if ( $total === 0 ) {
+									if ( 0 === $total ) {
 										echo esc_html( __( 'No issues', 'wpshadow' ) );
 									} else {
-										echo esc_html( sprintf( __( '%d issues found', 'wpshadow' ), $total ) );
+										echo esc_html(
+											sprintf(
+												/* translators: %d: number of issues found */
+												__( '%d issues found', 'wpshadow' ),
+												$total
+											)
+										);
 									}
 									?>
 								</div>
