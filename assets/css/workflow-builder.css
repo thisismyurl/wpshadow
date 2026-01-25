@@ -1,0 +1,746 @@
+/**
+ * WPShadow Workflow Builder - Modern Visual Interface
+ * 
+ * Scratch-inspired block-based automation builder
+ * Follows WPShadow Design System 2.0
+ * 
+ * @package WPShadow
+ * @since   1.2601.2148
+ */
+
+/* ============================================================================
+   Layout & Container
+   ============================================================================ */
+
+.wps-workflow-builder {
+	max-width: 100%;
+	background: #fff;
+}
+
+.wps-workflow-builder-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 1.5rem;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+
+.wps-workflow-builder-title {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	margin: 0;
+	font-size: 1.75rem;
+	font-weight: 600;
+	color: var(--wps-gray-900, #111827);
+}
+
+.wps-workflow-builder-title .dashicons {
+	font-size: 2rem;
+	width: 2rem;
+	height: 2rem;
+	color: var(--wps-info, #3b82f6);
+}
+
+.wps-workflow-builder-description {
+	color: var(--wps-gray-600, #4b5563);
+	font-size: 0.9375rem;
+	margin: 0.5rem 0 0;
+}
+
+.wps-workflow-builder-container {
+	display: grid;
+	grid-template-columns: 240px 1fr;
+	gap: 1.5rem;
+	min-height: 600px;
+	margin-top: 1.5rem;
+}
+
+/* ============================================================================
+   Block Palette Sidebar
+   ============================================================================ */
+
+.wps-workflow-palette {
+	background: var(--wps-gray-50, #f9fafb);
+	border: 1px solid var(--wps-gray-200, #e5e7eb);
+	border-radius: 0.5rem;
+	padding: 1rem;
+	overflow-y: auto;
+	max-height: calc(100vh - 250px);
+	position: sticky;
+	top: 32px;
+}
+
+.wps-palette-section {
+	margin-bottom: 1.5rem;
+}
+
+.wps-palette-section:last-child {
+	margin-bottom: 0;
+}
+
+.wps-palette-heading {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin: 0 0 0.75rem 0;
+	padding: 0;
+	font-size: 0.875rem;
+	font-weight: 600;
+	color: var(--wps-gray-700, #374151);
+	text-transform: uppercase;
+	letter-spacing: 0.025em;
+}
+
+.wps-palette-heading .dashicons {
+	font-size: 1rem;
+	width: 1rem;
+	height: 1rem;
+	color: var(--wps-gray-500, #6b7280);
+}
+
+.wps-palette-blocks {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.wps-block-item {
+	background: #fff;
+	border: 1px solid var(--wps-gray-200, #e5e7eb);
+	border-radius: 0.5rem;
+	padding: 0.75rem;
+	cursor: grab;
+	transition: all 0.2s ease;
+	display: flex;
+	align-items: flex-start;
+	gap: 0.625rem;
+	user-select: none;
+}
+
+.wps-block-item:hover {
+	border-color: var(--wps-info, #3b82f6);
+	box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+	transform: translateY(-2px);
+}
+
+.wps-block-item:active {
+	cursor: grabbing;
+	opacity: 0.5;
+}
+
+.wps-block-item.trigger {
+	border-left: 3px solid var(--wps-info, #3b82f6);
+}
+
+.wps-block-item.action {
+	border-left: 3px solid var(--wps-success, #10b981);
+}
+
+.wps-block-icon {
+	font-size: 1.25rem;
+	line-height: 1;
+	flex-shrink: 0;
+}
+
+.wps-block-info {
+	flex: 1;
+	min-width: 0;
+}
+
+.wps-block-info strong {
+	display: block;
+	font-size: 0.8125rem;
+	font-weight: 600;
+	color: var(--wps-gray-900, #111827);
+	line-height: 1.3;
+	margin-bottom: 0.25rem;
+}
+
+.wps-block-info small {
+	display: block;
+	font-size: 0.75rem;
+	color: var(--wps-gray-600, #4b5563);
+	line-height: 1.3;
+}
+
+/* ============================================================================
+   Canvas Area
+   ============================================================================ */
+
+.wps-workflow-canvas-wrapper {
+	display: flex;
+	flex-direction: column;
+	background: #fff;
+}
+
+.wps-workflow-header {
+	margin-bottom: 1.5rem;
+}
+
+.wps-workflow-name-input {
+	width: 100%;
+	max-width: 600px;
+	font-size: 1.25rem;
+	font-weight: 500;
+	padding: 0.5rem 0.75rem;
+	border: none;
+	border-bottom: 2px solid var(--wps-gray-200, #e5e7eb);
+	background: transparent;
+	color: var(--wps-gray-900, #111827);
+	transition: border-color 0.2s ease;
+}
+
+.wps-workflow-name-input:focus {
+	outline: none;
+	border-bottom-color: var(--wps-info, #3b82f6);
+}
+
+.wps-workflow-name-input::placeholder {
+	color: var(--wps-gray-400, #9ca3af);
+	font-weight: 400;
+}
+
+.wps-workflow-canvas {
+	flex: 1;
+	background: #fff;
+	border: 2px dashed var(--wps-gray-200, #e5e7eb);
+	border-radius: 0.5rem;
+	padding: 2rem;
+	min-height: 500px;
+	margin-bottom: 1.5rem;
+	position: relative;
+	transition: all 0.2s ease;
+}
+
+.wps-workflow-canvas.drag-over {
+	border-color: var(--wps-info, #3b82f6);
+	background: var(--wps-info-light, #dbeafe);
+}
+
+.wps-workflow-canvas.drag-invalid {
+	border-color: var(--wps-danger, #ef4444);
+	background: var(--wps-danger-light, #fee2e2);
+	animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+	0%, 100% { transform: translateX(0); }
+	25% { transform: translateX(-10px); }
+	75% { transform: translateX(10px); }
+}
+
+/* Empty State */
+.wps-canvas-empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	padding: 3rem 2rem;
+	color: var(--wps-gray-500, #6b7280);
+}
+
+.wps-canvas-empty .dashicons {
+	font-size: 4rem;
+	width: 4rem;
+	height: 4rem;
+	opacity: 0.3;
+	margin-bottom: 1rem;
+}
+
+.wps-canvas-empty h3 {
+	margin: 0 0 0.5rem;
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: var(--wps-gray-700, #374151);
+}
+
+.wps-canvas-empty > p {
+	margin: 0 0 1.5rem;
+	font-size: 0.9375rem;
+	color: var(--wps-gray-600, #4b5563);
+}
+
+.wps-steps {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	text-align: left;
+	max-width: 400px;
+}
+
+.wps-steps li {
+	padding: 0.5rem 0;
+	padding-left: 2rem;
+	position: relative;
+	font-size: 0.875rem;
+	color: var(--wps-gray-700, #374151);
+}
+
+.wps-steps li::before {
+	content: attr(data-step);
+	position: absolute;
+	left: 0;
+	top: 0.5rem;
+	width: 1.5rem;
+	height: 1.5rem;
+	background: var(--wps-info, #3b82f6);
+	color: #fff;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 0.75rem;
+	font-weight: 600;
+}
+
+/* ============================================================================
+   Canvas Blocks
+   ============================================================================ */
+
+.wps-canvas-blocks-container {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	position: relative;
+}
+
+.wps-block {
+	background: #fff;
+	border: 1px solid var(--wps-gray-200, #e5e7eb);
+	border-left: 4px solid;
+	border-radius: 0.5rem;
+	padding: 1rem;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	position: relative;
+	transition: all 0.2s ease;
+}
+
+.wps-block:hover {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.wps-block.trigger {
+	border-left-color: var(--wps-info, #3b82f6);
+	background: var(--wps-info-light, #eff6ff);
+}
+
+.wps-block.action {
+	border-left-color: var(--wps-success, #10b981);
+	background: var(--wps-success-light, #f0fdf4);
+}
+
+.wps-block.selected {
+	outline: 2px solid var(--wps-info, #3b82f6);
+	outline-offset: 2px;
+}
+
+.wps-block-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 0.75rem;
+}
+
+.wps-block-label {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-weight: 600;
+	font-size: 0.875rem;
+	color: var(--wps-gray-900, #111827);
+}
+
+.wps-block-label .dashicons {
+	font-size: 1rem;
+	width: 1rem;
+	height: 1rem;
+}
+
+.wps-block-remove {
+	background: transparent;
+	border: none;
+	color: var(--wps-gray-400, #9ca3af);
+	cursor: pointer;
+	padding: 0.25rem;
+	font-size: 1.25rem;
+	line-height: 1;
+	transition: color 0.2s ease;
+}
+
+.wps-block-remove:hover {
+	color: var(--wps-danger, #ef4444);
+}
+
+.wps-block-remove:focus {
+	outline: 2px solid var(--wps-info, #3b82f6);
+	outline-offset: 2px;
+	border-radius: 2px;
+}
+
+.wps-block-config {
+	font-size: 0.8125rem;
+	color: var(--wps-gray-600, #4b5563);
+}
+
+.wps-block-config label {
+	display: block;
+	margin-bottom: 0.25rem;
+	font-weight: 500;
+	color: var(--wps-gray-700, #374151);
+}
+
+.wps-block-config select,
+.wps-block-config input[type="text"],
+.wps-block-config input[type="number"],
+.wps-block-config input[type="time"],
+.wps-block-config textarea {
+	width: 100%;
+	padding: 0.375rem 0.5rem;
+	border: 1px solid var(--wps-gray-300, #d1d5db);
+	border-radius: 0.25rem;
+	font-size: 0.8125rem;
+	font-family: inherit;
+}
+
+/* Block Connector Lines */
+.wps-block-connector {
+	position: absolute;
+	left: 50%;
+	bottom: -1rem;
+	width: 2px;
+	height: 1rem;
+	background: var(--wps-gray-300, #d1d5db);
+	transform: translateX(-50%);
+}
+
+.wps-block:last-child .wps-block-connector {
+	display: none;
+}
+
+/* ============================================================================
+   Toolbar
+   ============================================================================ */
+
+.wps-workflow-toolbar {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	flex-wrap: wrap;
+}
+
+.wps-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.625rem 1rem;
+	font-size: 0.875rem;
+	font-weight: 500;
+	border: none;
+	border-radius: 0.375rem;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	text-decoration: none;
+	line-height: 1.5;
+}
+
+.wps-btn .dashicons {
+	font-size: 1rem;
+	width: 1rem;
+	height: 1rem;
+}
+
+.wps-btn.primary {
+	background: var(--wps-info, #3b82f6);
+	color: #fff;
+}
+
+.wps-btn.primary:hover {
+	background: var(--wps-info-dark, #2563eb);
+	box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.wps-btn.secondary {
+	background: var(--wps-gray-600, #4b5563);
+	color: #fff;
+}
+
+.wps-btn.secondary:hover {
+	background: var(--wps-gray-700, #374151);
+	box-shadow: 0 2px 8px rgba(75, 85, 99, 0.3);
+}
+
+.wps-btn.ghost {
+	background: transparent;
+	color: var(--wps-gray-700, #374151);
+	border: 1px solid var(--wps-gray-300, #d1d5db);
+}
+
+.wps-btn.ghost:hover {
+	background: var(--wps-gray-50, #f9fafb);
+	border-color: var(--wps-gray-400, #9ca3af);
+}
+
+.wps-btn:focus {
+	outline: 2px solid var(--wps-info, #3b82f6);
+	outline-offset: 2px;
+}
+
+.wps-btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+/* ============================================================================
+   Block Configuration Modal
+   ============================================================================ */
+
+.wps-block-config-panel {
+	position: fixed;
+	right: 0;
+	top: 32px;
+	bottom: 0;
+	width: 400px;
+	max-width: 100%;
+	background: #fff;
+	border-left: 1px solid var(--wps-gray-200, #e5e7eb);
+	padding: 1.5rem;
+	overflow-y: auto;
+	box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+	transform: translateX(100%);
+	transition: transform 0.3s ease;
+	z-index: 9999;
+}
+
+.wps-block-config-panel.active {
+	transform: translateX(0);
+}
+
+.wps-block-config-panel h4 {
+	margin: 0 0 1.5rem;
+	font-size: 1.125rem;
+	font-weight: 600;
+	color: var(--wps-gray-900, #111827);
+}
+
+.wps-config-field {
+	margin-bottom: 1.25rem;
+}
+
+.wps-config-field label {
+	display: block;
+	margin-bottom: 0.5rem;
+	font-size: 0.875rem;
+	font-weight: 500;
+	color: var(--wps-gray-700, #374151);
+}
+
+.wps-config-field input[type="text"],
+.wps-config-field input[type="email"],
+.wps-config-field input[type="number"],
+.wps-config-field input[type="time"],
+.wps-config-field select,
+.wps-config-field textarea {
+	width: 100%;
+	padding: 0.5rem 0.75rem;
+	border: 1px solid var(--wps-gray-300, #d1d5db);
+	border-radius: 0.375rem;
+	font-size: 0.875rem;
+	font-family: inherit;
+	transition: border-color 0.2s ease;
+}
+
+.wps-config-field input:focus,
+.wps-config-field select:focus,
+.wps-config-field textarea:focus {
+	outline: none;
+	border-color: var(--wps-info, #3b82f6);
+	box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.wps-config-field textarea {
+	min-height: 80px;
+	resize: vertical;
+}
+
+/* ============================================================================
+   Test Results
+   ============================================================================ */
+
+.wps-test-results {
+	position: fixed;
+	right: 1rem;
+	bottom: 1rem;
+	width: 400px;
+	max-width: calc(100% - 2rem);
+	background: #fff;
+	border: 1px solid var(--wps-gray-200, #e5e7eb);
+	border-radius: 0.5rem;
+	padding: 1.5rem;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+	z-index: 9999;
+	animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+	from {
+		transform: translateY(20px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+.wps-test-results h4 {
+	margin: 0 0 1rem;
+	font-size: 1rem;
+	font-weight: 600;
+	color: var(--wps-gray-900, #111827);
+}
+
+.wps-test-step {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.75rem;
+	padding: 0.75rem;
+	margin-bottom: 0.75rem;
+	background: var(--wps-gray-50, #f9fafb);
+	border-radius: 0.375rem;
+	border-left: 3px solid;
+}
+
+.wps-test-step.success {
+	border-left-color: var(--wps-success, #10b981);
+	background: var(--wps-success-light, #d1fae5);
+}
+
+.wps-test-step.error {
+	border-left-color: var(--wps-danger, #ef4444);
+	background: var(--wps-danger-light, #fee2e2);
+}
+
+.wps-test-step .dashicons {
+	flex-shrink: 0;
+	font-size: 1.25rem;
+	width: 1.25rem;
+	height: 1.25rem;
+}
+
+.wps-test-step.success .dashicons {
+	color: var(--wps-success-dark, #047857);
+}
+
+.wps-test-step.error .dashicons {
+	color: var(--wps-danger-dark, #dc2626);
+}
+
+.wps-test-step strong {
+	display: block;
+	font-size: 0.875rem;
+	font-weight: 600;
+	color: var(--wps-gray-900, #111827);
+	margin-bottom: 0.25rem;
+}
+
+.wps-test-step p {
+	margin: 0;
+	font-size: 0.8125rem;
+	color: var(--wps-gray-700, #374151);
+}
+
+/* ============================================================================
+   Accessibility
+   ============================================================================ */
+
+/* Focus indicators */
+*:focus {
+	outline: 2px solid var(--wps-info, #3b82f6);
+	outline-offset: 2px;
+}
+
+/* Screen reader only text */
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}
+
+/* ============================================================================
+   Responsive Design
+   ============================================================================ */
+
+@media (max-width: 1200px) {
+	.wps-workflow-builder-container {
+		grid-template-columns: 1fr;
+	}
+
+	.wps-workflow-palette {
+		max-height: 300px;
+		position: relative;
+		top: 0;
+	}
+
+	.wps-block-config-panel {
+		width: 100%;
+		top: 0;
+	}
+}
+
+@media (max-width: 768px) {
+	.wps-workflow-builder-title {
+		font-size: 1.5rem;
+	}
+
+	.wps-workflow-name-input {
+		font-size: 1rem;
+	}
+
+	.wps-workflow-canvas {
+		padding: 1rem;
+		min-height: 400px;
+	}
+
+	.wps-workflow-toolbar {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.wps-btn {
+		justify-content: center;
+	}
+
+	.wps-test-results {
+		width: calc(100% - 2rem);
+		right: 1rem;
+		left: 1rem;
+	}
+}
+
+/* ============================================================================
+   Dark Mode Support (Future)
+   ============================================================================ */
+
+@media (prefers-color-scheme: dark) {
+	/* Dark mode styles would go here if needed */
+}
