@@ -1,4 +1,6 @@
 /**
+ * Kanban Board Styles - 2026 Redesign
+ * Inspired by: Replit, Linear, GitHub Projects
  * Kanban Board Styles - Modernized Design (Issue #670)
  * Replit-inspired, clean, and accessible drag-and-drop interface
  * 
@@ -6,9 +8,58 @@
  * CANON: Accessibility-first with keyboard navigation support
  */
 
-/* Kanban Container */
+/* ============================================================================
+   Kanban Container & Layout
+   ============================================================================ */
+
 .wpshadow-kanban-board {
 	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: var(--wps-space-4);
+	padding: var(--wps-space-6);
+	background: var(--wps-gray-50);
+	border-radius: var(--wps-radius-lg);
+	margin: var(--wps-space-6) 0;
+}
+
+/* ============================================================================
+   Column Styles
+   ============================================================================ */
+
+.kanban-column {
+	background: white;
+	border: 1px solid var(--wps-gray-200);
+	border-radius: var(--wps-radius-lg);
+	padding: var(--wps-space-4);
+	min-height: 500px;
+	max-height: 700px;
+	display: flex;
+	flex-direction: column;
+	box-shadow: var(--wps-shadow-sm);
+	transition: var(--wps-transition-base);
+}
+
+.kanban-column:hover {
+	box-shadow: var(--wps-shadow-md);
+}
+
+/* Column Header */
+.kanban-column-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding-bottom: var(--wps-space-3);
+	margin-bottom: var(--wps-space-3);
+	border-bottom: 2px solid var(--wps-gray-200);
+}
+
+.kanban-column h3 {
+	margin: 0;
+	font-size: var(--wps-text-sm);
+	font-weight: var(--wps-font-semibold);
+	color: var(--wps-gray-900);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
 	grid-template-columns: repeat(4, 1fr);
 	gap: 24px;
 	padding: 0;
@@ -86,8 +137,16 @@
 	letter-spacing: 0;
 	border-bottom: 1px solid var(--wps-gray-200, #e5e7eb);
 	display: flex;
-	justify-content: space-between;
 	align-items: center;
+	gap: var(--wps-space-2);
+}
+
+.kanban-column-icon {
+	font-size: var(--wps-text-base);
+	color: var(--wps-gray-500);
+}
+
+.kanban-column-count {
 	background: #ffffff;
 }
 
@@ -104,6 +163,37 @@
 	justify-content: center;
 	min-width: 24px;
 	height: 24px;
+	padding: 0 var(--wps-space-2);
+	background: var(--wps-gray-100);
+	border-radius: var(--wps-radius-full);
+	font-size: var(--wps-text-xs);
+	font-weight: var(--wps-font-semibold);
+	color: var(--wps-gray-700);
+}
+
+/* Column Status Colors */
+.kanban-column[data-status="new"] .kanban-column-count,
+.kanban-column[data-status="detected"] .kanban-column-count {
+	background: var(--wps-info-light);
+	color: var(--wps-info-dark);
+}
+
+.kanban-column[data-status="in-progress"] .kanban-column-count,
+.kanban-column[data-status="manual"] .kanban-column-count {
+	background: var(--wps-warning-light);
+	color: var(--wps-warning-dark);
+}
+
+.kanban-column[data-status="resolved"] .kanban-column-count,
+.kanban-column[data-status="automated"] .kanban-column-count {
+	background: var(--wps-success-light);
+	color: var(--wps-success-dark);
+}
+
+.kanban-column[data-status="dismissed"] .kanban-column-count,
+.kanban-column[data-status="fixed"] .kanban-column-count {
+	background: var(--wps-gray-200);
+	color: var(--wps-gray-600);
 	padding: 0 8px;
 	background: var(--wps-gray-200, #e5e7eb);
 	color: var(--wps-gray-600, #6b7280);
@@ -159,6 +249,8 @@
 .kanban-column-content {
 	flex: 1;
 	overflow-y: auto;
+	padding-right: var(--wps-space-2);
+
 	padding: 16px;
 	min-height: 200px;
 }
@@ -173,6 +265,96 @@
 }
 
 .kanban-column-content::-webkit-scrollbar-thumb {
+	background: var(--wps-gray-300);
+	border-radius: var(--wps-radius-full);
+}
+
+.kanban-column-content::-webkit-scrollbar-thumb:hover {
+	background: var(--wps-gray-400);
+}
+
+/* Empty State */
+.kanban-column-empty,
+.kanban-empty-message {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 200px;
+	color: var(--wps-gray-400);
+	font-size: var(--wps-text-sm);
+	font-style: italic;
+	text-align: center;
+	padding: var(--wps-space-4);
+}
+
+/* ============================================================================
+   Finding Card Styles
+   ============================================================================ */
+
+.finding-card {
+	background: white;
+	border: 1px solid var(--wps-gray-200);
+	border-left: 3px solid var(--wps-info);
+	border-radius: var(--wps-radius-md);
+	padding: var(--wps-space-3);
+	margin-bottom: var(--wps-space-3);
+	cursor: move;
+	transition: var(--wps-transition-base);
+	box-shadow: var(--wps-shadow-sm);
+}
+
+.finding-card:hover {
+	border-color: var(--wps-gray-300);
+	box-shadow: var(--wps-shadow-md);
+	transform: translateY(-1px);
+}
+
+.finding-card:active {
+	cursor: grabbing;
+}
+
+/* Card Severity Colors */
+.finding-card[data-severity="critical"],
+.finding-card.critical {
+	border-left-color: var(--wps-danger);
+}
+
+.finding-card[data-severity="high"],
+.finding-card.high {
+	border-left-color: var(--wps-warning);
+}
+
+.finding-card[data-severity="medium"],
+.finding-card.medium {
+	border-left-color: var(--wps-info);
+}
+
+.finding-card[data-severity="low"],
+.finding-card.low {
+	border-left-color: var(--wps-success);
+}
+
+/* Card Header */
+.finding-card-header {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	margin-bottom: var(--wps-space-2);
+	gap: var(--wps-space-2);
+}
+
+.finding-card-title,
+.finding-title {
+	flex: 1;
+	font-size: var(--wps-text-sm);
+	font-weight: var(--wps-font-semibold);
+	color: var(--wps-gray-900);
+	line-height: 1.4;
+	margin: 0;
+	padding-right: 5px;
+}
+
+.finding-card-severity,
 	background: var(--wps-gray-300, #d1d5db);
 	border-radius: 4px;
 }
@@ -342,7 +524,15 @@
 
 /* Threat Badge (Legacy) */
 .finding-threat {
+	flex-shrink: 0;
+	padding: var(--wps-space-1) var(--wps-space-2);
+	font-size: var(--wps-text-xs);
+	font-weight: var(--wps-font-medium);
+	text-transform: uppercase;
+	border-radius: var(--wps-radius-sm);
+	letter-spacing: 0.03em;
 	display: inline-block;
+	margin-bottom: 8px;
 	font-size: 0.75rem;
 	color: #fff;
 	padding: 4px 8px;
@@ -352,19 +542,41 @@
 	white-space: nowrap;
 }
 
+.finding-card-severity[data-level="critical"],
 .finding-threat.critical {
+	background: var(--wps-danger-light);
+	color: var(--wps-danger-dark);
 	background: var(--wps-danger, #ef4444);
 }
 
+.finding-card-severity[data-level="high"],
 .finding-threat.high {
+	background: var(--wps-warning-light);
+	color: var(--wps-warning-dark);
 	background: var(--wps-warning, #f59e0b);
 }
 
+.finding-card-severity[data-level="medium"],
 .finding-threat.medium {
+	background: var(--wps-info-light);
+	color: var(--wps-info-dark);
 	background: var(--wps-info, #3b82f6);
 }
 
+.finding-card-severity[data-level="low"],
 .finding-threat.low {
+	background: var(--wps-success-light);
+	color: var(--wps-success-dark);
+}
+
+/* Card Body */
+.finding-card-description,
+.finding-description {
+	font-size: var(--wps-text-xs);
+	color: var(--wps-gray-600);
+	line-height: 1.5;
+	margin-bottom: var(--wps-space-3);
+	margin-top: 8px;
 	background: var(--wps-success, #10b981);
 }
 
@@ -383,6 +595,27 @@
 	-webkit-box-orient: vertical;
 }
 
+/* Card Footer */
+.finding-card-footer {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding-top: var(--wps-space-2);
+	border-top: 1px solid var(--wps-gray-100);
+}
+
+.finding-card-meta {
+	display: flex;
+	align-items: center;
+	gap: var(--wps-space-2);
+	font-size: var(--wps-text-xs);
+	color: var(--wps-gray-500);
+}
+
+.finding-card-actions,
+.finding-actions {
+	display: flex;
+	gap: var(--wps-space-1);
 /* Card Footer - Actions */
 .finding-actions,
 .wps-card-footer {
@@ -390,6 +623,22 @@
 	gap: 8px;
 	margin-top: 12px;
 	flex-wrap: wrap;
+	margin-top: 8px;
+}
+
+.finding-card-action {
+	padding: var(--wps-space-1);
+	background: none;
+	border: none;
+	color: var(--wps-gray-500);
+	cursor: pointer;
+	border-radius: var(--wps-radius-sm);
+	transition: var(--wps-transition-base);
+}
+
+.finding-card-action:hover {
+	background: var(--wps-gray-100);
+	color: var(--wps-gray-900);
 }
 
 /* Modern Button Styles for Cards */
@@ -460,6 +709,20 @@
 	color: var(--wps-gray-900, #111827);
 }
 
+/* Remove Button */
+.finding-remove-btn {
+	position: absolute;
+	top: 6px;
+	right: 6px;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	color: var(--wps-gray-400);
+	font-size: 18px;
+	line-height: 1;
+	padding: 0;
+	width: 24px;
+	height: 24px;
 /* Empty State */
 .kanban-empty-state,
 .wps-kanban-empty {
@@ -472,6 +735,85 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	border-radius: var(--wps-radius-sm);
+	transition: var(--wps-transition-base);
+}
+
+.finding-remove-btn:hover {
+	background: var(--wps-danger-light);
+	color: var(--wps-danger);
+}
+
+/* Workflow Card */
+.workflow-card {
+	background: white;
+	border: 1px solid var(--wps-gray-200);
+	border-left: 3px solid var(--wps-success);
+	border-radius: var(--wps-radius-md);
+	padding: var(--wps-space-3);
+	margin-bottom: var(--wps-space-3);
+	transition: var(--wps-transition-base);
+	box-shadow: var(--wps-shadow-sm);
+}
+
+.workflow-card:hover {
+	box-shadow: var(--wps-shadow-md);
+	transform: translateY(-1px);
+}
+
+/* ============================================================================
+   Drag & Drop States
+   ============================================================================ */
+
+.finding-card.dragging {
+	opacity: 0.5;
+	cursor: grabbing;
+	transform: rotate(2deg) scale(0.95);
+}
+
+.kanban-column.drag-over {
+	background: var(--wps-primary-light);
+	border-color: var(--wps-primary);
+}
+
+.kanban-column.drag-over .kanban-column-content {
+	border: 2px dashed var(--wps-primary);
+	border-radius: var(--wps-radius-md);
+	padding: 10px;
+}
+
+.finding-card.drag-placeholder {
+	border-style: dashed;
+	background: var(--wps-gray-50);
+	opacity: 0.5;
+}
+
+/* ============================================================================
+   Animations
+   ============================================================================ */
+
+@keyframes slideIn {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.finding-card.new {
+	animation: slideIn 0.3s ease-out;
+}
+
+/* ============================================================================
+   Responsive Design
+   ============================================================================ */
+
+@media (max-width: 1200px) {
+	.wpshadow-kanban-board {
+		grid-template-columns: repeat(2, 1fr);
 	gap: 12px;
 }
 
@@ -594,14 +936,15 @@
 	}
 }
 
-/* Responsive: Mobile */
 @media (max-width: 768px) {
 	.wpshadow-kanban-board {
 		grid-template-columns: 1fr;
+		padding: var(--wps-space-4);
 		gap: 12px;
 	}
 
 	.kanban-column {
+		max-height: none;
 		min-height: 300px;
 		max-height: 60vh;
 	}
@@ -613,6 +956,27 @@
 	}
 
 	.finding-card {
+		padding: 10px;
+		margin-bottom: 8px;
+	}
+
+	.finding-card-title,
+	.finding-title {
+		font-size: 12px;
+		margin: 0 18px 6px 0;
+	}
+
+	.finding-card-severity,
+	.finding-threat {
+		font-size: 10px;
+		padding: 3px 6px;
+		margin-bottom: 6px;
+	}
+
+	.finding-card-actions,
+	.finding-actions {
+		gap: 3px;
+		margin-top: 6px;
 		padding: 12px;
 		margin-bottom: 10px;
 	}
@@ -634,6 +998,12 @@
 	}
 }
 
+/* ============================================================================
+   Accessibility
+   ============================================================================ */
+
+.finding-card:focus {
+	outline: 2px solid var(--wps-primary);
 /* Accessibility - Focus States (CANON Requirement) */
 .finding-card:focus,
 .finding-card:focus-visible {
@@ -642,6 +1012,36 @@
 	box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
 }
 
+.finding-card:focus-visible {
+	outline: 2px solid var(--wps-primary);
+	outline-offset: 2px;
+}
+
+.finding-remove-btn:focus-visible,
+.finding-actions .button:focus-visible,
+.finding-card-action:focus-visible {
+	outline: 2px solid var(--wps-primary);
+	outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.finding-card,
+	.kanban-column,
+	.workflow-card {
+		transition: none;
+	}
+
+	.finding-card.new {
+		animation: none;
+	}
+
+	.finding-card:hover {
+		transform: none;
+	}
+
+	.workflow-card:hover {
+		transform: none;
+	}
 .finding-remove-btn:focus-visible,
 .finding-actions .button:focus-visible,
 .wps-btn-sm:focus-visible {
@@ -764,7 +1164,10 @@
 	outline-offset: -2px;
 }
 
-/* Print Styles */
+/* ============================================================================
+   Print Styles
+   ============================================================================ */
+
 @media print {
 	.wpshadow-kanban-board {
 		page-break-inside: avoid;
@@ -774,7 +1177,9 @@
 		page-break-inside: avoid;
 	}
 
-	.finding-actions .button {
+	.finding-actions .button,
+	.finding-card-action,
+	.finding-remove-btn {
 		display: none;
 	}
 }

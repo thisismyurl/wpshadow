@@ -922,6 +922,7 @@ jQuery(document).ready(function ($) {
 		$targetColumn,
 		isRemove = false
 	) {
+		const findingTitle = $card.find('.finding-card-title, .finding-title').first().text();
 		// Show loading state
 		$card.addClass('wps-loading');
 
@@ -955,6 +956,11 @@ jQuery(document).ready(function ($) {
 					}, 500);
 					
 					updateAllColumnCounts();
+					
+					// Announce status change for accessibility
+					if (findingTitle && oldStatus !== newStatus) {
+						announceStatusChange(findingTitle, oldStatus, newStatus);
+					}
 
 					// Announce success to screen readers
 					const statusLabels = {
@@ -1017,6 +1023,8 @@ jQuery(document).ready(function ($) {
 				count = $content.find('> .finding-card').length;
 			}
 
+			// Update count badge with new structure
+			const $countBadge = $column.find('.kanban-column-count');
 			// Update count badge (supports both old and new structure)
 			const $countBadge = $column.find('.wps-kanban-count-badge, .column-count');
 			if ($countBadge.length) {
@@ -1029,10 +1037,47 @@ jQuery(document).ready(function ($) {
 				if ($countSpan.length) {
 					$countSpan.text(count);
 				} else {
+					$header.append(' <span class="kanban-column-count">' + count + '</span>');
 					$header.append(' <span class="column-count" style="color: #999; font-weight: 400; float: right;">' + count + '</span>');
 				}
 			}
 		});
+	}
+
+	/**
+	 * Announce status change to screen readers
+	 * Creates ARIA live region announcement for accessibility
+	 */
+	function announceStatusChange(findingTitle, oldStatus, newStatus) {
+		const statusLabels = {
+			'detected': 'Detected',
+			'manual': 'User to Fix',
+			'automated': 'Fix Now',
+			'fixed': 'Workflows'
+		};
+
+		const message = findingTitle + ' moved from ' + 
+			(statusLabels[oldStatus] || oldStatus) + ' to ' + 
+			(statusLabels[newStatus] || newStatus);
+
+		// Create or update ARIA live region
+		let $liveRegion = $('#wpshadow-kanban-announcer');
+		if (!$liveRegion.length) {
+			$liveRegion = $('<div>', {
+				id: 'wpshadow-kanban-announcer',
+				'aria-live': 'polite',
+				'aria-atomic': 'true',
+				'class': 'screen-reader-text'
+			}).appendTo('body');
+		}
+
+		// Update announcement
+		$liveRegion.text(message);
+
+		// Clear after a moment to allow for next announcement
+		setTimeout(function() {
+			$liveRegion.text('');
+		}, 1000);
 	}
 
 	/**
