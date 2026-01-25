@@ -27,7 +27,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function wpshadow_render_dashboard() {
 	// Check if onboarding wizard should be shown
-	$show_onboarding = isset( $_GET['onboarding'] ) && ( 'start' === $_GET['onboarding'] || 'restart' === $_GET['onboarding'] );
+	$onboarding_action = isset( $_GET['onboarding'] ) ? sanitize_key( $_GET['onboarding'] ) : '';
+	$show_onboarding   = in_array( $onboarding_action, array( 'start', 'restart' ), true );
 
 	if ( $show_onboarding ) {
 		// Load and display the onboarding wizard
