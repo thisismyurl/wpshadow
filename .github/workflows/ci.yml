@@ -1,0 +1,185 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  phpcs:
+    name: PHPCS - WordPress Coding Standards
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Install WPCS
+        run: |
+          composer global require wp-coding-standards/wpcs
+          composer global require phpcompatibility/phpcompatibility-wp
+          composer global require automattic/vipwpcs
+          phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs,$HOME/.composer/vendor/phpcompatibility/phpcompatibility-wp,$HOME/.composer/vendor/automattic/vipwpcs
+
+      - name: Run PHPCS
+        run: composer phpcs
+
+      - name: Check PHP Compatibility
+        run: phpcs -p . --standard=PHPCompatibilityWP --runtime-set testVersion 8.1-
+
+  phpunit:
+    name: PHPUnit Tests (PHP ${{ matrix.php }} - WP ${{ matrix.wordpress }})
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.1', '8.2', '8.3']
+        wordpress: ['6.4', '6.5', 'latest']
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: rootpass
+          MYSQL_DATABASE: wordpress_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mysqli, zip
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Install WordPress test suite
+        run: |
+          bash bin/install-wp-tests.sh wordpress_test root rootpass 127.0.0.1:3306 ${{ matrix.wordpress }} true
+        env:
+          WP_VERSION: ${{ matrix.wordpress }}
+
+      - name: Run PHPUnit tests
+        run: composer test
+        env:
+          WP_TESTS_DIR: /tmp/wordpress-tests-lib
+
+  phpstan:
+    name: PHPStan - Static Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Run PHPStan
+        run: composer phpstan
+
+  accessibility:
+    name: Accessibility & Privacy Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for hardcoded text (i18n)
+        run: |
+          echo "Checking for hardcoded text strings..."
+          ! grep -r "echo\s*['\"]" --include="*.php" includes/ || echo "⚠️ Found potential hardcoded strings"
+
+      - name: Check for accessibility issues
+        run: |
+          echo "Checking for common accessibility issues..."
+          ! grep -r "onclick=" --include="*.php" . || echo "⚠️ Found onclick handlers - use proper event listeners"
+          ! grep -r "tabindex=\"[3-9]" --include="*.php" . || echo "⚠️ Found high tabindex values"
+
+      - name: Check for privacy concerns
+        run: |
+          echo "Checking for privacy concerns..."
+          ! grep -ri "google-analytics\|facebook\|twitter\|linkedin" --include="*.php" . || echo "⚠️ Found third-party tracking"
+
+      - name: Verify text domain
+        run: |
+          echo "Verifying text domain usage..."
+          grep -r "__(" --include="*.php" . | grep -v "wpshadow" && echo "❌ Found incorrect text domain" && exit 1 || echo "✅ Text domain check passed"
+
+  learning-resources:
+    name: Learning Resource Validation
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for TODO/FIXME
+        run: |
+          echo "Checking for unresolved TODO/FIXME..."
+          if grep -r "TODO\|FIXME" --include="*.php" --include="*.js" .; then
+            echo "⚠️ Found TODO/FIXME items - ensure they're documented"
+          fi
+
+      - name: Validate README structure
+        run: |
+          echo "Checking README completeness..."
+          grep -q "Installation" README.md || echo "⚠️ Missing Installation section"
+          grep -q "Usage" README.md || echo "⚠️ Missing Usage section"
+          grep -q "FAQ" README.md || echo "⚠️ Missing FAQ section"
+
+  build-test:
+    name: Build Test
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Install Composer dependencies
+        run: composer install --no-dev --prefer-dist --no-progress
+
+      - name: Test release build
+        run: |
+          if [ -f "build-release.sh" ]; then
+            bash build-release.sh
+          elif [ -f ".devcontainer/build-release.sh" ]; then
+            bash .devcontainer/build-release.sh
+          fi
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: wpshadow-build
+          path: build/*.zip
+          if-no-files-found: warn

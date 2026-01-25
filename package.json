@@ -1,0 +1,31 @@
+{
+  "name": "wpshadow",
+  "version": "1.0.0",
+  "description": "WPShadow WordPress Plugin - Philosophy-driven development environment",
+  "private": true,
+  "scripts": {
+    "prepare": "husky install",
+    "test": "composer test",
+    "lint": "composer phpcs",
+    "lint:fix": "composer phpcbf",
+    "analyze": "composer phpstan",
+    "test:a11y": "echo 'Run accessibility tests - see .devcontainer/ACCESSIBILITY_TESTING.md'",
+    "build": "bash .devcontainer/build-release.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thisismyurl/wpshadow"
+  },
+  "keywords": [
+    "wordpress",
+    "plugin",
+    "privacy",
+    "accessibility",
+    "analytics"
+  ],
+  "author": "Christopher Ross <info@wpshadow.com>",
+  "license": "GPL-2.0-or-later",
+  "devDependencies": {
+    "husky": "^8.0.3"
+  }
+}

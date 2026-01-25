@@ -1,0 +1,18 @@
+parameters:
+	level: 8
+	paths:
+		- includes
+		- wpshadow.php
+	excludePaths:
+		- vendor
+		- tests
+	bootstrapFiles:
+		- vendor/autoload.php
+	scanDirectories:
+		- includes
+	ignoreErrors:
+		# WordPress specific ignores
+		- '#Function (do_action|apply_filters|add_action|add_filter|wp_enqueue_\w+|wp_\w+) invoked with \d+ parameters?, \d+ required#'
+		- '#Access to an undefined property WP_\w+::\$\w+#'
+	checkMissingIterableValueType: false
+	checkGenericClassInNonGenericObjectType: false

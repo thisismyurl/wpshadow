@@ -44,6 +44,19 @@ sudo chown -R www-data:www-data /var/www/html/wp-content/plugins/wpshadow
 echo "🔌 Activating WP Shadow plugin..."
 wp plugin activate wpshadow --allow-root || echo "Plugin activation will complete after WordPress setup"
 
+# Install Debug Plugins (from PR #642)
+echo "🐛 Installing WordPress Debug Plugins..."
+wp plugin install query-monitor --activate --allow-root || echo "Query Monitor installation pending"
+wp plugin install debug-bar --activate --allow-root || echo "Debug Bar installation pending"
+wp plugin install wp-crontrol --activate --allow-root || echo "WP Crontrol installation pending"
+wp plugin install user-switching --activate --allow-root || echo "User Switching installation pending"
+
+# Install WordPress Test Suite (from PR #642)
+echo "🧪 Setting up WordPress Test Suite..."
+if [ ! -d "/tmp/wordpress-tests-lib" ]; then
+    bash bin/install-wp-tests.sh wordpress_test root rootpass db latest true || echo "Test suite installation pending"
+fi
+
 echo "✅ Setup complete!"
 echo ""
 echo "📍 Access your development environment:"

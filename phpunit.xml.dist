@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<phpunit
+	bootstrap="tests/bootstrap.php"
+	backupGlobals="false"
+	colors="true"
+	convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true"
+	convertWarningsToExceptions="true"
+	cacheDirectory=".phpunit.cache"
+	>
+	<testsuites>
+		<testsuite name="default">
+			<directory suffix=".php">./tests/</directory>
+		</testsuite>
+	</testsuites>
+	<coverage>
+		<include>
+			<directory suffix=".php">./includes/</directory>
+			<file>./wpshadow.php</file>
+		</include>
+		<exclude>
+			<directory>./tests/</directory>
+			<directory>./vendor/</directory>
+		</exclude>
+	</coverage>
+	<php>
+		<env name="WP_TESTS_DIR" value="/tmp/wordpress-tests-lib"/>
+		<env name="WP_CORE_DIR" value="/tmp/wordpress/"/>
+	</php>
+</phpunit>

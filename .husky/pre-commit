@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running pre-commit checks..."
+
+# Check PHP syntax
+echo "✓ Checking PHP syntax..."
+find . -name "*.php" ! -path "./vendor/*" ! -path "./node_modules/*" -exec php -l {} \; > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    echo "❌ PHP syntax errors found!"
+    exit 1
+fi
+
+# Run PHPCS
+if command -v phpcs &> /dev/null; then
+    echo "✓ Running PHPCS..."
+    if ! composer phpcs --quiet 2>&1; then
+        echo "❌ PHPCS checks failed! Run 'composer phpcbf' to auto-fix."
+        exit 1
+    fi
+fi
+
+# Check for debug code
+echo "✓ Checking for debug code..."
+if git diff --cached --name-only | grep -E '\.(php|js)$' | xargs grep -n "console\.log\|var_dump\|print_r\|error_log\|dd(" 2> /dev/null; then
+    echo "⚠️  Warning: Debug code found in staged files!"
+    echo "Remove debug statements before committing."
+    exit 1
+fi
+
+# Check for TODO/FIXME in new code
+echo "✓ Checking for TODO/FIXME..."
+if git diff --cached | grep -E "^\+.*TODO|^\+.*FIXME" > /dev/null; then
+    echo "⚠️  Warning: New TODO/FIXME found in staged changes"
+    echo "Consider creating an issue for these items."
+fi
+
+# Accessibility checks
+echo "✓ Checking accessibility patterns..."
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(php|js)$')
+if [ -n "$STAGED_FILES" ]; then
+    # Check for onclick without keyboard equivalent
+    if echo "$STAGED_FILES" | xargs grep -n "onclick=" 2>/dev/null | grep -v "onkeypress=\|onkeydown=" > /dev/null; then
+        echo "⚠️  Warning: onclick without keyboard handler found"
+        echo "Ensure keyboard accessibility (see .devcontainer/ACCESSIBILITY_TESTING.md)"
+    fi
+    
+    # Check for missing alt text patterns
+    if echo "$STAGED_FILES" | xargs grep -n "<img" 2>/dev/null | grep -v "alt=" > /dev/null; then
+        echo "⚠️  Warning: <img> tag without alt attribute found"
+    fi
+fi
+
+# Privacy checks
+echo "✓ Checking privacy patterns..."
+if git diff --cached | grep -iE "^\+.*(google-analytics|facebook|twitter|linkedin|tracking)" > /dev/null; then
+    echo "⚠️  Warning: Third-party tracking code detected"
+    echo "Ensure compliance with 'Beyond Pure Privacy' principle"
+fi
+
+# Learning resource checks
+echo "✓ Checking for learning resources..."
+STAGED_PHP=$(git diff --cached --name-only --diff-filter=ACM | grep '\.php$')
+if [ -n "$STAGED_PHP" ]; then
+    # Check if new functions have docblocks
+    if git diff --cached $STAGED_PHP | grep -A 1 "^+.*function " | grep -v "\/\*\*" > /dev/null 2>&1; then
+        echo "⚠️  Reminder: Add PHPDoc comments for better learning resources"
+    fi
+fi
+
+# Philosophy alignment reminder
+echo ""
+echo "📋 Philosophy Checklist Reminder:"
+echo "   • Helpful Neighbor: Is this code friendly and supportive?"
+echo "   • Accessibility First: Does this work for everyone?"
+echo "   • Learning Inclusive: Can beginners understand this?"
+echo ""
+echo "See .devcontainer/PHILOSOPHY_CHECKLIST.md for full checklist"
+echo ""
+
+echo "✅ Pre-commit checks passed!"

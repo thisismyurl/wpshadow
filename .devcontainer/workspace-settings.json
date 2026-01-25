@@ -1,0 +1,69 @@
+{
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.organizeImports": false
+  },
+  "files.associations": {
+    "*.php": "php",
+    "*.inc": "php"
+  },
+  "php.validate.executablePath": "/usr/local/bin/php",
+  "php.validate.run": "onType",
+  "phpcs.enable": true,
+  "phpcs.standard": "WordPress",
+  "phpcs.executablePath": "/root/.composer/vendor/bin/phpcs",
+  "phpcbf.enable": true,
+  "phpcbf.standard": "WordPress",
+  "phpcbf.executablePath": "/root/.composer/vendor/bin/phpcbf",
+  "intelephense.environment.phpVersion": "8.2",
+  "intelephense.diagnostics.undefinedTypes": false,
+  "intelephense.diagnostics.undefinedFunctions": false,
+  "intelephense.diagnostics.undefinedConstants": false,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/vendor": false,
+    "**/.phpunit.cache": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/vendor": true,
+    "**/.phpunit.cache": true,
+    "**/build": true
+  },
+  "emmet.includeLanguages": {
+    "php": "html"
+  },
+  "[php]": {
+    "editor.defaultFormatter": "junstyle.php-cs-fixer",
+    "editor.tabSize": 4,
+    "editor.insertSpaces": false
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.wordWrap": "on"
+  },
+  "accessibility.signals.terminalBell": {
+    "sound": "on"
+  },
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "git.enableCommitSigning": false,
+  "git.autofetch": true
+}
