@@ -1,0 +1,226 @@
+name: Auto-Merge Copilot PRs
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+  check_suite:
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    name: Auto-Merge Safe PRs
+    runs-on: ubuntu-latest
+    if: github.actor == 'copilot-swe-agent[bot]' || github.actor == 'Copilot'
+    
+    steps:
+      - name: Get PR details
+        id: pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request?.number || context.payload.check_suite.pull_requests[0].number
+            });
+            
+            // Get files changed
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number
+            });
+            
+            return {
+              number: pr.number,
+              mergeable: pr.mergeable,
+              mergeable_state: pr.mergeable_state,
+              draft: pr.draft,
+              title: pr.title,
+              labels: pr.labels.map(l => l.name),
+              files: files.map(f => f.filename)
+            };
+      
+      - name: Analyze PR safety
+        id: analyze
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = ${{ steps.pr.outputs.result }};
+            
+            // Critical files that always require human review
+            const criticalFiles = [
+              /^wpshadow\.php$/,
+              /^includes\/core\/class-plugin-bootstrap\.php$/,
+              /^includes\/core\/class-ajax-router\.php$/,
+              /^includes\/core\/class-database-migrator\.php$/,
+              /ajax/i,
+              /auth/i,
+              /migration/i,
+              /sql/i
+            ];
+            
+            // Safe files that can always auto-merge
+            const safeFiles = [
+              /\.md$/,
+              /^docs\//,
+              /^\.devcontainer\//,
+              /^tests\//,
+              /Test\.php$/,
+              /-test\.php$/,
+              /\.example$/,
+              /\.sample$/,
+              /^\.github\/CODEOWNERS$/,
+              /^\.github\/PULL_REQUEST_TEMPLATE.*$/
+            ];
+            
+            // Check if any critical files modified
+            const touchesCritical = pr.files.some(file => 
+              criticalFiles.some(pattern => pattern.test(file))
+            );
+            
+            // Check if only safe files modified
+            const onlySafeFiles = pr.files.every(file =>
+              safeFiles.some(pattern => pattern.test(file))
+            );
+            
+            // Determine safety level
+            let safetyLevel = 'unknown';
+            let reason = '';
+            
+            if (pr.labels.includes('no-auto-merge')) {
+              safetyLevel = 'unsafe';
+              reason = 'PR has no-auto-merge label';
+            } else if (pr.draft) {
+              safetyLevel = 'unsafe';
+              reason = 'PR is in draft state';
+            } else if (!pr.mergeable) {
+              safetyLevel = 'unsafe';
+              reason = 'PR has merge conflicts';
+            } else if (touchesCritical) {
+              safetyLevel = 'unsafe';
+              reason = 'PR modifies security-critical files';
+            } else if (onlySafeFiles) {
+              safetyLevel = 'safe-docs';
+              reason = 'PR only modifies documentation/tests';
+            } else if (pr.mergeable_state === 'clean') {
+              safetyLevel = 'safe-ci';
+              reason = 'PR passes all CI checks and modifies non-critical files';
+            } else {
+              safetyLevel = 'wait';
+              reason = 'Waiting for CI checks to complete';
+            }
+            
+            core.info(`Safety level: ${safetyLevel}`);
+            core.info(`Reason: ${reason}`);
+            
+            return {
+              level: safetyLevel,
+              reason: reason,
+              canMerge: ['safe-docs', 'safe-ci'].includes(safetyLevel)
+            };
+      
+      - name: Add labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const analysis = ${{ steps.analyze.outputs.result }};
+            const pr = ${{ steps.pr.outputs.result }};
+            
+            const labels = [];
+            
+            if (analysis.canMerge) {
+              labels.push('auto-merge-ready');
+            }
+            
+            if (analysis.level === 'safe-docs') {
+              labels.push('docs-only');
+            } else if (analysis.level === 'unsafe') {
+              labels.push('needs-review');
+            }
+            
+            if (labels.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                labels: labels
+              });
+            }
+      
+      - name: Add comment for unsafe PRs
+        if: fromJSON(steps.analyze.outputs.result).level == 'unsafe'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const analysis = ${{ steps.analyze.outputs.result }};
+            const pr = ${{ steps.pr.outputs.result }};
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              body: `## 🔒 Auto-Merge Blocked
+
+**Reason:** ${analysis.reason}
+
+This PR requires human review. Please review and merge manually when ready.`
+            });
+      
+      - name: Auto-merge safe PRs
+        if: fromJSON(steps.analyze.outputs.result).canMerge
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const analysis = ${{ steps.analyze.outputs.result }};
+            const pr = ${{ steps.pr.outputs.result }};
+            
+            // Add success comment
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              body: `## ✅ Auto-Merging
+
+**Reason:** ${analysis.reason}
+
+This PR has been automatically merged because:
+- Created by Copilot coding agent
+- No merge conflicts
+- ${analysis.level === 'safe-docs' ? 'Only documentation/tests modified' : 'All CI checks passed'}
+- No security-critical files modified
+
+Merged automatically by workflow.`
+            });
+            
+            // Merge the PR
+            try {
+              await github.rest.pulls.merge({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pr.number,
+                merge_method: 'squash',
+                commit_title: `${pr.title} (#${pr.number})`,
+                commit_message: `Auto-merged by Copilot workflow\n\nSafety level: ${analysis.level}\nReason: ${analysis.reason}`
+              });
+              
+              core.info(`✅ Successfully merged PR #${pr.number}`);
+            } catch (error) {
+              core.setFailed(`Failed to merge PR: ${error.message}`);
+              
+              // Comment on failure
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                body: `## ❌ Auto-Merge Failed
+
+Attempted to auto-merge but failed: ${error.message}
+
+Please merge manually.`
+              });
+            }
