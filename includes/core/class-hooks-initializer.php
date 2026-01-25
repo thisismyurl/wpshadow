@@ -197,11 +197,12 @@ class Hooks_Initializer {
 				));
 			}
 		}
+	}
 
-		// Only enqueue other assets on WPShadow pages
-		if (! is_string($hook) || strpos($hook, 'wpshadow') === false) {
-			return;
-		}
+	// Only enqueue other assets on WPShadow pages
+	if (! is_string($hook) || strpos($hook, 'wpshadow') === false) {
+		return;
+	}
 
 		// Enqueue design system
 		wp_enqueue_style(
