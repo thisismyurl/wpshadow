@@ -27,6 +27,24 @@
 	 */
 	window.WPShadowFormControls = {
 		
+		// Cache computed styles for performance
+		_cachedColors: null,
+
+		/**
+		 * Get design system colors (cached)
+		 */
+		_getColors: function() {
+			if (!this._cachedColors) {
+				const root = document.documentElement;
+				const styles = getComputedStyle(root);
+				this._cachedColors = {
+					progress: styles.getPropertyValue('--wps-info').trim() || '#3b82f6',
+					track: styles.getPropertyValue('--wps-gray-200').trim() || '#e5e7eb'
+				};
+			}
+			return this._cachedColors;
+		},
+
 		/**
 		 * Initialize all form controls
 		 */
@@ -160,14 +178,11 @@
 			const value = parseFloat($slider.val());
 			const percentage = ((value - min) / (max - min)) * 100;
 			
-			// Create gradient background to show progress
-			const progressColor = getComputedStyle(document.documentElement)
-				.getPropertyValue('--wps-info').trim() || '#3b82f6';
-			const trackColor = getComputedStyle(document.documentElement)
-				.getPropertyValue('--wps-gray-200').trim() || '#e5e7eb';
+			// Get cached colors
+			const colors = this._getColors();
 			
 			$slider.css('background', 
-				`linear-gradient(to right, ${progressColor} 0%, ${progressColor} ${percentage}%, ${trackColor} ${percentage}%, ${trackColor} 100%)`
+				`linear-gradient(to right, ${colors.progress} 0%, ${colors.progress} ${percentage}%, ${colors.track} ${percentage}%, ${colors.track} 100%)`
 			);
 		},
 

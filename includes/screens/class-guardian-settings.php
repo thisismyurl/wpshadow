@@ -159,13 +159,13 @@ class Guardian_Settings {
 			<p><?php esc_html_e( 'Select which treatments are safe for automatic execution:', 'wpshadow' ); ?></p>
 			<?php foreach ( $treatments as $class => $label ) : ?>
 				<?php
-				$is_approved = in_array( $class, $safe_fixes, true );
-				$safe_id     = sanitize_key( str_replace( '\\', '-', $class ) );
+				$is_approved           = in_array( $class, $safe_fixes, true );
+				$sanitized_class_id    = sanitize_key( str_replace( '\\', '-', $class ) );
 
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by Form_Controls helper
 				echo \WPShadow\Helpers\Form_Controls::toggle_switch(
 					array(
-						'id'      => 'policy-' . $safe_id,
+						'id'      => 'policy-' . $sanitized_class_id,
 						'name'    => 'guardian_policies[]',
 						'label'   => $label,
 						'checked' => $is_approved,

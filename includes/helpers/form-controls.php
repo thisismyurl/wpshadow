@@ -35,6 +35,9 @@ class Form_Controls {
 	 *
 	 *     @type string $id           Element ID. Required.
 	 *     @type string $name         Form field name for hidden input.
+	 *                                Note: Array notation (e.g., 'items[]') is supported
+	 *                                for multi-value fields. JavaScript will update the
+	 *                                corresponding hidden input by name attribute.
 	 *     @type string $label        Label text. Required.
 	 *     @type string $helper_text  Optional helper text description.
 	 *     @type bool   $checked      Whether toggle is checked. Default false.
@@ -95,7 +98,7 @@ class Form_Controls {
 				<input 
 					type="hidden" 
 					name="<?php echo esc_attr( $args['name'] ); ?>" 
-					value="<?php echo $args['checked'] ? '1' : '0'; ?>"
+					value="<?php echo esc_attr( $args['checked'] ? '1' : '0' ); ?>"
 				/>
 			<?php endif; ?>
 		</div>
