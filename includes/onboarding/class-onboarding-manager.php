@@ -269,10 +269,12 @@ class Onboarding_Manager {
 			$simplified = self::is_ui_simplified( $user_id );
 			?>
 			
-			<table class="form-table">
-				<tr>
-					<th><?php esc_html_e( 'Your Background', 'wpshadow' ); ?></th>
-					<td>
+			<div class="wps-settings-section">
+				<div class="wps-form-group">
+					<label class="wps-label">
+						<?php esc_html_e( 'Your Background', 'wpshadow' ); ?>
+					</label>
+					<div>
 						<?php if ( $platform ) : ?>
 							<?php
 							$platform_labels = array(
@@ -293,21 +295,24 @@ class Onboarding_Manager {
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&onboarding=restart' ) ); ?>" style="margin-left: 15px;">
 							<?php esc_html_e( 'Change', 'wpshadow' ); ?>
 						</a>
-					</td>
-				</tr>
-				<tr>
-					<th><?php esc_html_e( 'Simplified Interface', 'wpshadow' ); ?></th>
-					<td>
+					</div>
+				</div>
+
+				<div class="wps-form-group">
+					<label class="wps-label">
+						<?php esc_html_e( 'Simplified Interface', 'wpshadow' ); ?>
+					</label>
+					<div>
 						<label>
 							<input type="checkbox" name="wpshadow_ui_simplified" value="1" <?php checked( $simplified ); ?> />
 							<?php esc_html_e( 'Show only essential features (recommended for beginners)', 'wpshadow' ); ?>
 						</label>
-						<p class="description">
+						<span class="wps-help-text">
 							<?php esc_html_e( 'Hide advanced WordPress features until you\'re ready. You can toggle this anytime.', 'wpshadow' ); ?>
-						</p>
-					</td>
-				</tr>
-			</table>
+						</span>
+					</div>
+				</div>
+			</div>
 		</div>
 		<?php
 	}

@@ -236,35 +236,98 @@ class Data_Retention_Manager {
 					
 					<!-- Activity Log Retention -->
 					<div class="wps-p-15-rounded-4">
-						<label class="wps-block">
-							<?php esc_html_e( 'Activity Log Retention (days):', 'wpshadow' ); ?>
-						</label>
-						<input type="number" name="activity_log_days" value="<?php echo esc_attr( $settings['activity_log_days'] ); ?>" min="7" max="730" class="wps-p-8-rounded-4" />
-						<p class="wps-m-6">
-							<?php esc_html_e( 'How long to keep workflow runs, diagnostics, and user actions (7-730 days)', 'wpshadow' ); ?>
-						</p>
+						<div class="wps-range-group">
+							<div class="wps-range-header">
+								<label class="wps-label" for="activity_log_days">
+									<?php esc_html_e( 'Activity Log Retention (days):', 'wpshadow' ); ?>
+								</label>
+								<span class="wps-range-value" id="activity_log_days_display"><?php echo esc_html( $settings['activity_log_days'] ); ?> days</span>
+							</div>
+							<div class="wps-range-wrapper">
+								<input 
+									type="range" 
+									id="activity_log_days" 
+									name="activity_log_days" 
+									class="wps-range"
+									min="7" 
+									max="730" 
+									value="<?php echo esc_attr( $settings['activity_log_days'] ); ?>" 
+									step="1"
+									data-suffix=" days"
+									aria-valuemin="7"
+									aria-valuemax="730"
+									aria-valuenow="<?php echo esc_attr( $settings['activity_log_days'] ); ?>"
+									aria-valuetext="<?php echo esc_attr( $settings['activity_log_days'] ); ?> days"
+								/>
+							</div>
+							<span class="wps-help-text">
+								<?php esc_html_e( 'How long to keep workflow runs, diagnostics, and user actions (7-730 days)', 'wpshadow' ); ?>
+							</span>
+						</div>
 					</div>
 					
 					<!-- Finding Log Retention -->
 					<div class="wps-p-15-rounded-4">
-						<label class="wps-block">
-							<?php esc_html_e( 'Finding Log Retention (days):', 'wpshadow' ); ?>
-						</label>
-						<input type="number" name="finding_log_days" value="<?php echo esc_attr( $settings['finding_log_days'] ); ?>" min="7" max="730" class="wps-p-8-rounded-4" />
-						<p class="wps-m-6">
-							<?php esc_html_e( 'How long to keep records of detected site issues and resolutions (7-730 days)', 'wpshadow' ); ?>
-						</p>
+						<div class="wps-range-group">
+							<div class="wps-range-header">
+								<label class="wps-label" for="finding_log_days">
+									<?php esc_html_e( 'Finding Log Retention (days):', 'wpshadow' ); ?>
+								</label>
+								<span class="wps-range-value" id="finding_log_days_display"><?php echo esc_html( $settings['finding_log_days'] ); ?> days</span>
+							</div>
+							<div class="wps-range-wrapper">
+								<input 
+									type="range" 
+									id="finding_log_days" 
+									name="finding_log_days" 
+									class="wps-range"
+									min="7" 
+									max="730" 
+									value="<?php echo esc_attr( $settings['finding_log_days'] ); ?>" 
+									step="1"
+									data-suffix=" days"
+									aria-valuemin="7"
+									aria-valuemax="730"
+									aria-valuenow="<?php echo esc_attr( $settings['finding_log_days'] ); ?>"
+									aria-valuetext="<?php echo esc_attr( $settings['finding_log_days'] ); ?> days"
+								/>
+							</div>
+							<span class="wps-help-text">
+								<?php esc_html_e( 'How long to keep records of detected site issues and resolutions (7-730 days)', 'wpshadow' ); ?>
+							</span>
+						</div>
 					</div>
 					
 					<!-- Workflow Log Retention -->
 					<div class="wps-p-15-rounded-4">
-						<label class="wps-block">
-							<?php esc_html_e( 'Workflow Log Retention (days):', 'wpshadow' ); ?>
-						</label>
-						<input type="number" name="workflow_log_days" value="<?php echo esc_attr( $settings['workflow_log_days'] ); ?>" min="7" max="730" class="wps-p-8-rounded-4" />
-						<p class="wps-m-6">
-							<?php esc_html_e( 'How long to keep records of scheduled workflow executions (7-730 days)', 'wpshadow' ); ?>
-						</p>
+						<div class="wps-range-group">
+							<div class="wps-range-header">
+								<label class="wps-label" for="workflow_log_days">
+									<?php esc_html_e( 'Workflow Log Retention (days):', 'wpshadow' ); ?>
+								</label>
+								<span class="wps-range-value" id="workflow_log_days_display"><?php echo esc_html( $settings['workflow_log_days'] ); ?> days</span>
+							</div>
+							<div class="wps-range-wrapper">
+								<input 
+									type="range" 
+									id="workflow_log_days" 
+									name="workflow_log_days" 
+									class="wps-range"
+									min="7" 
+									max="730" 
+									value="<?php echo esc_attr( $settings['workflow_log_days'] ); ?>" 
+									step="1"
+									data-suffix=" days"
+									aria-valuemin="7"
+									aria-valuemax="730"
+									aria-valuenow="<?php echo esc_attr( $settings['workflow_log_days'] ); ?>"
+									aria-valuetext="<?php echo esc_attr( $settings['workflow_log_days'] ); ?> days"
+								/>
+							</div>
+							<span class="wps-help-text">
+								<?php esc_html_e( 'How long to keep records of scheduled workflow executions (7-730 days)', 'wpshadow' ); ?>
+							</span>
+						</div>
 					</div>
 					
 					<!-- Auto Cleanup -->

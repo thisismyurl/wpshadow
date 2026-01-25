@@ -8,9 +8,9 @@ This document summarizes the comprehensive design system foundation implementati
 
 ### 1. Enhanced Design Tokens (`assets/css/design-system.css`)
 
-**Before:** Basic design tokens (colors, typography, spacing, shadows, transitions, z-index)
+**Before:** Basic design tokens (colors, typography, spacing, shadows, transitions, z-index) - 2305 lines
 
-**After:** Comprehensive token system with:
+**After:** Comprehensive token system with accessibility enhancements - 2430 lines (+125 lines)
 
 ```css
 /* NEW: Enhanced focus shadows for accessibility */
@@ -48,9 +48,17 @@ This document summarizes the comprehensive design system foundation implementati
 --wps-dark-border: #334155;
 --wps-dark-text: #e2e8f0;
 --wps-dark-text-muted: #94a3b8;
+
+/* NEW: Accessibility Enhancements (Section 15) - 125 lines */
+/* - Reduced motion support (@media prefers-reduced-motion) */
+/* - High contrast mode support (@media prefers-contrast) */
+/* - Focus-visible for keyboard-only focus indicators */
+/* - Skip to content link styling */
+/* - Visually hidden utility class */
+/* - Touch target size enforcement (44x44px minimum on mobile) */
 ```
 
-**Lines Added:** ~35 new design tokens
+**Lines Added:** ~160 new design tokens and accessibility rules
 
 ### 2. New CSS Components
 
@@ -117,7 +125,15 @@ This document summarizes the comprehensive design system foundation implementati
 .wps-checkbox-group { /* Grouped checkboxes */ }
 ```
 
-**Total CSS Added:** ~235 lines of production-ready component styles
+**Total CSS Added:** ~360 lines of production-ready component styles and accessibility enhancements
+
+**Accessibility Enhancements (Section 15):** ~125 lines
+- Reduced motion support (`@media (prefers-reduced-motion: reduce)`)
+- High contrast mode support (`@media (prefers-contrast: high)`)
+- Focus-visible pseudo-class for keyboard-only focus indicators
+- Skip to content link styling (`.wps-skip-link`)
+- Visually hidden utility class (`.wps-visually-hidden`)
+- Touch target size enforcement on mobile (44x44px minimum)
 
 ### 3. Comprehensive Documentation (`docs/UI_COMPONENTS.md`)
 

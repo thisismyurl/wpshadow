@@ -28,6 +28,7 @@
             this.initNotifications();
             this.initTooltips();
             this.initAnimations();
+            this.initRangeSliders();
         },
 
         /**
@@ -287,6 +288,36 @@
                 size: 'small',
                 showCancel: false,
                 confirmText: 'OK'
+            });
+        },
+
+        /**
+         * Initialize range sliders with live value updates
+         */
+        initRangeSliders: function() {
+            // Handle all range inputs with wps-range class
+            document.querySelectorAll('.wps-range').forEach(function(range) {
+                const display = document.getElementById(range.id + '_display');
+                if (display) {
+                    // Get suffix from data attribute or default to empty string
+                    const suffix = range.dataset.suffix || '';
+                    
+                    // Update on input event (live updates)
+                    range.addEventListener('input', function(e) {
+                        const value = e.target.value;
+                        display.textContent = value + suffix;
+                        
+                        // Update ARIA attributes for accessibility
+                        e.target.setAttribute('aria-valuenow', value);
+                        e.target.setAttribute('aria-valuetext', value + ' ' + suffix);
+                    });
+                    
+                    // Initialize display value
+                    const initialValue = range.value;
+                    display.textContent = initialValue + suffix;
+                    range.setAttribute('aria-valuenow', initialValue);
+                    range.setAttribute('aria-valuetext', initialValue + ' ' + suffix);
+                }
             });
         }
     };

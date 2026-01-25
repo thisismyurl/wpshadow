@@ -30,38 +30,37 @@ $nonce      = wp_create_nonce( Email_Recipient_Manager::NONCE_ACTION );
 	<!-- Add New Recipient Form -->
 	<div class="card">
 		<h2><?php esc_html_e( 'Add New Recipient', 'wpshadow' ); ?></h2>
-		<table class="form-table">
-			<tr>
-				<th scope="row">
-					<label for="new-email"><?php esc_html_e( 'Email Address', 'wpshadow' ); ?></label>
-				</th>
-				<td>
-					<input type="email" id="new-email" class="regular-text" placeholder="user@example.com" />
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><?php esc_html_e( 'Verification Method', 'wpshadow' ); ?></th>
-				<td>
+		<div class="wps-settings-section">
+			<div class="wps-form-group">
+				<label class="wps-label" for="new-email">
+					<?php esc_html_e( 'Email Address', 'wpshadow' ); ?>
+				</label>
+				<input type="email" id="new-email" class="regular-text" placeholder="user@example.com" />
+			</div>
+
+			<div class="wps-form-group">
+				<label class="wps-label">
+					<?php esc_html_e( 'Verification Method', 'wpshadow' ); ?>
+				</label>
+				<div style="display: flex; flex-direction: column; gap: 8px;">
 					<label>
 						<input type="radio" name="verification-method" value="email" checked />
 						<?php esc_html_e( 'Send Verification Email (recipient must approve)', 'wpshadow' ); ?>
-					</label><br />
+					</label>
 					<label>
 						<input type="radio" name="verification-method" value="admin" />
 						<?php esc_html_e( 'Admin Approval (I confirm I have permission)', 'wpshadow' ); ?>
 					</label>
-				</td>
-			</tr>
-			<tr>
-				<th></th>
-				<td>
-					<button class="button button-primary" id="add-email-btn">
-						<?php esc_html_e( 'Add Recipient', 'wpshadow' ); ?>
-					</button>
-					<span id="add-email-message" style="margin-left: 10px;"></span>
-				</td>
-			</tr>
-		</table>
+				</div>
+			</div>
+
+			<div class="wps-form-group">
+				<button class="button button-primary" id="add-email-btn">
+					<?php esc_html_e( 'Add Recipient', 'wpshadow' ); ?>
+				</button>
+				<span id="add-email-message" style="margin-left: 10px;"></span>
+			</div>
+		</div>
 	</div>
 
 	<!-- Approved Recipients List -->
