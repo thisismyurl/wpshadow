@@ -165,7 +165,7 @@ function wpshadow_site_health_test_deep_scan()
  */
 function wpshadow_register_diagnostic_site_health_tests() {
 	// Only run if we have findings
-	$findings = get_option( 'wpshadow_last_findings', array() );
+	$findings = get_option( 'wpshadow_site_findings', array() );
 
 	if ( empty( $findings ) || ! is_array( $findings ) ) {
 		return;
@@ -214,16 +214,38 @@ function wpshadow_generate_diagnostic_site_health_result( $diagnostic_id, $findi
 	$action_url = admin_url( 'admin.php?page=wpshadow' );
 	$title      = isset( $finding_data['title'] ) ? $finding_data['title'] : $diagnostic_id;
 	$description = isset( $finding_data['description'] ) ? $finding_data['description'] : __( 'WPShadow has detected an issue.', 'wpshadow' );
-	$severity   = isset( $finding_data['severity'] ) ? (int) $finding_data['severity'] : 50;
-
+	
+	// Get severity - can be string (critical/high/medium/low) or numeric (0-100)
+	$severity = isset( $finding_data['severity'] ) ? $finding_data['severity'] : 'medium';
+	
 	// Map severity to Site Health status
+	// String format: 'critical', 'high', 'medium', 'low'
+	// Numeric format: 0-100 (from threat_level)
 	$site_health_status = 'recommended';
-	if ( $severity >= 75 ) {
-		$site_health_status = 'critical';
-	} elseif ( $severity >= 50 ) {
-		$site_health_status = 'recommended';
+	
+	if ( is_numeric( $severity ) ) {
+		// Numeric severity (0-100)
+		$severity_num = (int) $severity;
+		if ( $severity_num >= 75 ) {
+			$site_health_status = 'critical';
+		} elseif ( $severity_num >= 50 ) {
+			$site_health_status = 'recommended';
+		} else {
+			$site_health_status = 'good';
+		}
 	} else {
-		$site_health_status = 'good';
+		// String severity
+		$severity_str = strtolower( (string) $severity );
+		if ( 'critical' === $severity_str ) {
+			$site_health_status = 'critical';
+		} elseif ( 'high' === $severity_str ) {
+			$site_health_status = 'critical';
+		} elseif ( 'medium' === $severity_str ) {
+			$site_health_status = 'recommended';
+		} else {
+			// 'low' or anything else
+			$site_health_status = 'good';
+		}
 	}
 
 	return array(
