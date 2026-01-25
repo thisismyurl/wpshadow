@@ -1413,7 +1413,7 @@ class Workflow_Executor {
 		}
 
 		// Check for corruption
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- CHECK TABLE DDL with wpdb prefix, no user input
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- CHECK TABLE is DDL (cannot use prepare()), $wpdb->prefix is sanitized by WordPress core
 		$corruption_check = $wpdb->get_results( "CHECK TABLE `{$wpdb->prefix}posts`" );
 		if ( ! empty( $corruption_check ) ) {
 			foreach ( $corruption_check as $check ) {
