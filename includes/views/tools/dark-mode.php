@@ -40,32 +40,32 @@ $dark_mode_pref = get_user_meta( $user_id, 'wpshadow_dark_mode_preference', true
 		<form method="post" action="">
 			<?php wp_nonce_field( 'wpshadow_dark_mode', 'wpshadow_dark_mode_nonce' ); ?>
 
-			<table class="form-table">
-				<tr>
-					<th scope="row">
-						<label><?php esc_html_e( 'Mode Preference', 'wpshadow' ); ?></label>
-					</th>
-					<td>
-						<fieldset>
+			<div class="wps-settings-section">
+				<div class="wps-form-group">
+					<label class="wps-label">
+						<?php esc_html_e( 'Mode Preference', 'wpshadow' ); ?>
+					</label>
+					<fieldset>
+						<div style="display: flex; flex-direction: column; gap: 8px;">
 							<label>
 								<input type="radio" name="dark_mode_pref" value="auto" <?php checked( $dark_mode_pref, 'auto' ); ?>>
 								<?php esc_html_e( 'Auto (follow system/WordPress theme)', 'wpshadow' ); ?>
-							</label><br>
+							</label>
 							<label>
 								<input type="radio" name="dark_mode_pref" value="light" <?php checked( $dark_mode_pref, 'light' ); ?>>
 								<?php esc_html_e( 'Light mode', 'wpshadow' ); ?>
-							</label><br>
+							</label>
 							<label>
 								<input type="radio" name="dark_mode_pref" value="dark" <?php checked( $dark_mode_pref, 'dark' ); ?>>
 								<?php esc_html_e( 'Dark mode', 'wpshadow' ); ?>
 							</label>
-						</fieldset>
-						<p class="description">
-							<?php esc_html_e( 'Dark mode reduces eye strain in low-light environments and saves battery on OLED screens.', 'wpshadow' ); ?>
-						</p>
-					</td>
-				</tr>
-			</table>
+						</div>
+					</fieldset>
+					<span class="wps-help-text">
+						<?php esc_html_e( 'Dark mode reduces eye strain in low-light environments and saves battery on OLED screens.', 'wpshadow' ); ?>
+					</span>
+				</div>
+			</div>
 
 			<p class="submit">
 				<button type="submit" name="save_dark_mode" class="button button-primary">
