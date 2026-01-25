@@ -66,7 +66,10 @@ class Plugin_Bootstrap
 		// 10. Load WP-CLI commands
 		self::load_cli_commands();
 
-		// 11. Fire initialization complete hook
+		// 11. Initialize visual comparator
+		self::init_visual_comparator();
+
+		// 12. Fire initialization complete hook
 		do_action('wpshadow_core_initialized');
 	}
 
@@ -124,6 +127,10 @@ class Plugin_Bootstrap
 		if (file_exists($core_path . 'class-category-metadata.php')) {
 			require_once $core_path . 'class-category-metadata.php';
 		}
+
+		if (file_exists($core_path . 'class-visual-comparator.php')) {
+			require_once $core_path . 'class-visual-comparator.php';
+		}
 	}
 
 	/**
@@ -136,6 +143,12 @@ class Plugin_Bootstrap
 		$dashboard_file = WPSHADOW_PATH . 'includes/views/dashboard-page.php';
 		if (file_exists($dashboard_file)) {
 			require_once $dashboard_file;
+		}
+
+		// Load visual comparisons page
+		$visual_comparisons_file = WPSHADOW_PATH . 'includes/views/visual-comparisons-page.php';
+		if (file_exists($visual_comparisons_file)) {
+			require_once $visual_comparisons_file;
 		}
 	}
 
@@ -287,6 +300,18 @@ class Plugin_Bootstrap
 			require_once $cli_path . 'class-wpshadow-cli.php';
 
 			// CLI will auto-register
+		}
+	}
+
+	/**
+	 * Initialize visual comparator
+	 *
+	 * @return void
+	 */
+	private static function init_visual_comparator()
+	{
+		if (class_exists('\\WPShadow\\Core\\Visual_Comparator')) {
+			\WPShadow\Core\Visual_Comparator::init();
 		}
 	}
 
