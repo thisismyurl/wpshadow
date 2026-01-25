@@ -35,7 +35,7 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 						</div>
 						<h3><?php echo esc_html( $platform['label'] ); ?></h3>
 						<p><?php echo esc_html( $platform['description'] ); ?></p>
-						<button type="button" class="button button-primary select-platform">
+						<button type="button" class="wps-btn wps-btn-primary select-platform">
 							<?php esc_html_e( 'This One', 'wpshadow' ); ?>
 						</button>
 					</div>
@@ -66,7 +66,7 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 					</div>
 					<h3><?php esc_html_e( 'I like to take my time', 'wpshadow' ); ?></h3>
 					<p><?php esc_html_e( 'I prefer step-by-step guidance and clear explanations', 'wpshadow' ); ?></p>
-					<button type="button" class="button button-primary select-comfort">
+					<button type="button" class="wps-btn wps-btn-primary select-comfort">
 						<?php esc_html_e( 'That\'s Me', 'wpshadow' ); ?>
 					</button>
 				</div>
@@ -77,7 +77,7 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 					</div>
 					<h3><?php esc_html_e( 'I can figure things out', 'wpshadow' ); ?></h3>
 					<p><?php esc_html_e( 'I like some guidance but I\'m comfortable exploring', 'wpshadow' ); ?></p>
-					<button type="button" class="button button-primary select-comfort">
+					<button type="button" class="wps-btn wps-btn-primary select-comfort">
 						<?php esc_html_e( 'That\'s Me', 'wpshadow' ); ?>
 					</button>
 				</div>
@@ -88,7 +88,7 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 					</div>
 					<h3><?php esc_html_e( 'I dive right in', 'wpshadow' ); ?></h3>
 					<p><?php esc_html_e( 'I learn by doing and prefer minimal hand-holding', 'wpshadow' ); ?></p>
-					<button type="button" class="button button-primary select-comfort">
+					<button type="button" class="wps-btn wps-btn-primary select-comfort">
 						<?php esc_html_e( 'That\'s Me', 'wpshadow' ); ?>
 					</button>
 				</div>
@@ -139,7 +139,7 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 			</div>
 
 			<div class="onboarding-actions">
-				<button type="button" class="button button-primary" id="continue-config">
+				<button type="button" class="wps-btn wps-btn-primary" id="continue-config">
 					<?php esc_html_e( 'Continue', 'wpshadow' ); ?>
 				</button>
 			</div>
@@ -224,7 +224,7 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 			</div>
 
 			<div class="onboarding-actions">
-				<button type="button" class="button button-primary" id="continue-privacy">
+				<button type="button" class="wps-btn wps-btn-primary" id="continue-privacy">
 					<?php esc_html_e( 'Continue', 'wpshadow' ); ?>
 				</button>
 			</div>
@@ -243,7 +243,7 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 			</div>
 
 			<div class="onboarding-actions">
-				<button type="button" class="button button-primary button-hero" id="finish-onboarding">
+				<button type="button" class="wps-btn wps-btn-primary wps-btn-lg" id="finish-onboarding">
 					<?php esc_html_e( 'Let\'s Go!', 'wpshadow' ); ?>
 				</button>
 			</div>
