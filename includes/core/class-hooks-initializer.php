@@ -509,31 +509,32 @@ class Hooks_Initializer {
 	public static function on_show_user_profile( $user ) {
 		$dark_mode_pref = get_user_meta( $user->ID, 'wpshadow_dark_mode_preference', true ) ?: 'auto';
 		?>
-		<table class="form-table" role="presentation">
-			<tr class="wpshadow-dark-mode-wrap">
-				<th scope="row"><?php esc_html_e( 'WPShadow Dark Mode', 'wpshadow' ); ?></th>
-				<td>
-					<fieldset>
-						<legend class="screen-reader-text"><span><?php esc_html_e( 'WPShadow Dark Mode', 'wpshadow' ); ?></span></legend>
-						<label>
-							<input type="radio" name="wpshadow_dark_mode" value="auto" <?php checked( $dark_mode_pref, 'auto' ); ?>>
-							<?php esc_html_e( 'Auto (follow system preference)', 'wpshadow' ); ?>
-						</label><br>
-						<label>
-							<input type="radio" name="wpshadow_dark_mode" value="light" <?php checked( $dark_mode_pref, 'light' ); ?>>
-							<?php esc_html_e( 'Light', 'wpshadow' ); ?>
-						</label><br>
-						<label>
-							<input type="radio" name="wpshadow_dark_mode" value="dark" <?php checked( $dark_mode_pref, 'dark' ); ?>>
-							<?php esc_html_e( 'Dark', 'wpshadow' ); ?>
-						</label>
-						<p class="description">
-							<?php esc_html_e( 'Choose your preferred dark mode setting for WPShadow admin pages.', 'wpshadow' ); ?>
-						</p>
-					</fieldset>
-				</td>
-			</tr>
-		</table>
+		<div class="wps-settings-section" style="max-width: 600px;">
+			<div class="wps-settings-section-header">
+				<h3 class="wps-settings-section-title"><?php esc_html_e( 'WPShadow Dark Mode', 'wpshadow' ); ?></h3>
+				<p class="wps-settings-section-description">
+					<?php esc_html_e( 'Choose your preferred dark mode setting for WPShadow admin pages.', 'wpshadow' ); ?>
+				</p>
+			</div>
+
+			<fieldset>
+				<legend class="screen-reader-text"><span><?php esc_html_e( 'WPShadow Dark Mode', 'wpshadow' ); ?></span></legend>
+				<div style="display: flex; flex-direction: column; gap: 8px;">
+					<label>
+						<input type="radio" name="wpshadow_dark_mode" value="auto" <?php checked( $dark_mode_pref, 'auto' ); ?>>
+						<?php esc_html_e( 'Auto (follow system preference)', 'wpshadow' ); ?>
+					</label>
+					<label>
+						<input type="radio" name="wpshadow_dark_mode" value="light" <?php checked( $dark_mode_pref, 'light' ); ?>>
+						<?php esc_html_e( 'Light', 'wpshadow' ); ?>
+					</label>
+					<label>
+						<input type="radio" name="wpshadow_dark_mode" value="dark" <?php checked( $dark_mode_pref, 'dark' ); ?>>
+						<?php esc_html_e( 'Dark', 'wpshadow' ); ?>
+					</label>
+				</div>
+			</fieldset>
+		</div>
 		<?php
 	}
 
