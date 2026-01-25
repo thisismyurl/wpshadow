@@ -1,0 +1,40 @@
+/**
+ * Scan Tools Styles
+ * Shared styles for Quick Scan and Deep Scan tool pages
+ *
+ * @package WPShadow
+ */
+
+.scan-progress {
+	margin-top: 20px;
+}
+
+.scan-progress.hidden {
+	display: none;
+}
+
+.progress-bar {
+	width: 100%;
+	height: 30px;
+	background-color: #f1f1f1;
+	border-radius: 4px;
+	overflow: hidden;
+	margin-bottom: 10px;
+}
+
+.progress-fill {
+	height: 100%;
+	background-color: #2271b1;
+	width: 0;
+	transition: width 0.3s ease;
+}
+
+.progress-text {
+	font-size: 14px;
+	color: #666;
+	margin: 0;
+}
+
+.scan-results .notice {
+	margin-top: 15px;
+}

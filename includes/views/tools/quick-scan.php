@@ -13,6 +13,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use WPShadow\Core\Options_Manager;
+
+// Enqueue scan tools assets
+wp_enqueue_style( 'wpshadow-scan-tools', WPSHADOW_URL . 'assets/css/scan-tools.css', array(), WPSHADOW_VERSION );
+wp_enqueue_script( 'wpshadow-scan-tools', WPSHADOW_URL . 'assets/js/scan-tools.js', array( 'jquery' ), WPSHADOW_VERSION, true );
 ?>
 
 <div class="wpshadow-tool quick-scan-tool">
@@ -45,7 +49,10 @@ use WPShadow\Core\Options_Manager;
 		?>
 	</div>
 
-	<button class="button button-primary wpshadow-run-scan" data-scan-type="quick">
+	<button class="button button-primary wpshadow-run-scan" 
+		data-scan-type="quick"
+		data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_scan_nonce' ) ); ?>"
+		data-redirect-url="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>">
 		<?php esc_html_e( 'Run Quick Scan Now', 'wpshadow' ); ?>
 	</button>
 
@@ -58,109 +65,3 @@ use WPShadow\Core\Options_Manager;
 
 	<div class="scan-results" style="margin-top: 20px;"></div>
 </div>
-
-<style>
-.scan-progress {
-	margin-top: 20px;
-}
-.scan-progress.hidden {
-	display: none;
-}
-.progress-bar {
-	width: 100%;
-	height: 30px;
-	background-color: #f1f1f1;
-	border-radius: 4px;
-	overflow: hidden;
-	margin-bottom: 10px;
-}
-.progress-fill {
-	height: 100%;
-	background-color: #2271b1;
-	width: 0;
-	transition: width 0.3s ease;
-}
-.progress-text {
-	font-size: 14px;
-	color: #666;
-	margin: 0;
-}
-.scan-results .notice {
-	margin-top: 15px;
-}
-</style>
-
-<script>
-jQuery(document).ready(function($) {
-	$('.wpshadow-run-scan').on('click', function(e) {
-		e.preventDefault();
-		
-		var $button = $(this);
-		var scanType = $button.data('scan-type');
-		var $progress = $('.scan-progress');
-		var $progressFill = $('.progress-fill');
-		var $progressText = $('.progress-text');
-		var $results = $('.scan-results');
-		
-		// Disable button and show progress
-		$button.prop('disabled', true).text('Running...');
-		$progress.removeClass('hidden');
-		$progressFill.css('width', '0%');
-		$progressText.text('Starting scan...');
-		$results.empty();
-		
-		// Simulate progress
-		var progress = 0;
-		var progressInterval = setInterval(function() {
-			if (progress < 90) {
-				progress += Math.random() * 10;
-				$progressFill.css('width', Math.min(progress, 90) + '%');
-			}
-		}, 500);
-		
-		// Run scan via AJAX
-		$.ajax({
-			url: ajaxurl,
-			type: 'POST',
-			data: {
-				action: 'wpshadow_' + scanType + '_scan',
-				nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_scan_nonce' ) ); ?>',
-				mode: 'now'
-			},
-			success: function(response) {
-				clearInterval(progressInterval);
-				$progressFill.css('width', '100%');
-				
-				if (response.success) {
-					var data = response.data;
-					$progressText.text(data.message || 'Scan completed successfully!');
-					
-					// Show results
-					var resultsHtml = '<div class="notice notice-success"><p><strong>Scan Complete!</strong></p>';
-					resultsHtml += '<p>Completed: ' + data.completed + ' / ' + data.total + ' diagnostics</p>';
-					resultsHtml += '<p>Findings: ' + data.findings_count + '</p>';
-					resultsHtml += '</div>';
-					$results.html(resultsHtml);
-					
-					// Refresh page after delay
-					setTimeout(function() {
-						window.location.href = '<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>';
-					}, 2000);
-				} else {
-					$progressText.text('Error: ' + (response.data || 'Unknown error'));
-					$results.html('<div class="notice notice-error"><p>' + (response.data || 'Scan failed') + '</p></div>');
-				}
-				
-				$button.prop('disabled', false).text('<?php esc_attr_e( 'Run Quick Scan Now', 'wpshadow' ); ?>');
-			},
-			error: function(xhr, status, error) {
-				clearInterval(progressInterval);
-				$progressFill.css('width', '100%').css('background-color', '#d63638');
-				$progressText.text('Error: Unable to complete scan');
-				$results.html('<div class="notice notice-error"><p>Error: ' + error + '</p></div>');
-				$button.prop('disabled', false).text('<?php esc_attr_e( 'Run Quick Scan Now', 'wpshadow' ); ?>');
-			}
-		});
-	});
-});
-</script>
