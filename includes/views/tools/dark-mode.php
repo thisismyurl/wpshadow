@@ -32,7 +32,7 @@ $dark_mode_pref = get_user_meta($user_id, 'wpshadow_dark_mode_preference', true)
 	<h1><?php esc_html_e('Dark Mode', 'wpshadow'); ?></h1>
 	<p><?php esc_html_e('Enable dark mode for the WordPress admin interface.', 'wpshadow'); ?></p>
 
-	<?php echo $saved_message; ?>
+	<?php echo wp_kses_post($saved_message); ?>
 
 	<div class="wpshadow-tool-section wps-card wps-mt-20">
 		<h2><?php esc_html_e('Dark Mode Settings', 'wpshadow'); ?></h2>
