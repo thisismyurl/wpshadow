@@ -41,6 +41,7 @@ jobs:
               mergeable_state: pr.mergeable_state,
               draft: pr.draft,
               title: pr.title,
+              labels: pr.labels.map(l => l.name),
               files: files.map(f => f.filename)
             };
       
@@ -74,7 +75,7 @@ jobs:
               /\.example$/,
               /\.sample$/,
               /^\.github\/CODEOWNERS$/,
-              /^\.github\/PULL_REQUEST_TEMPLATE/
+              /^\.github\/PULL_REQUEST_TEMPLATE.*$/
             ];
             
             // Check if any critical files modified
@@ -91,7 +92,10 @@ jobs:
             let safetyLevel = 'unknown';
             let reason = '';
             
-            if (pr.draft) {
+            if (pr.labels.includes('no-auto-merge')) {
+              safetyLevel = 'unsafe';
+              reason = 'PR has no-auto-merge label';
+            } else if (pr.draft) {
               safetyLevel = 'unsafe';
               reason = 'PR is in draft state';
             } else if (!pr.mergeable) {
