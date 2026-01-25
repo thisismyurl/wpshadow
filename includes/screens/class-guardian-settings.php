@@ -98,7 +98,6 @@ class Guardian_Settings {
 			<?php
 			// Enable Guardian toggle
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by Form_Controls helper
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by Form_Controls helper
 			echo \WPShadow\Helpers\Form_Controls::toggle_switch(
 				array(
 					'id'          => 'guardian-enabled',
@@ -111,7 +110,6 @@ class Guardian_Settings {
 
 			// Safety Mode toggle
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by Form_Controls helper
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by Form_Controls helper
 			echo \WPShadow\Helpers\Form_Controls::toggle_switch(
 				array(
 					'id'          => 'guardian-safety-mode',
@@ -123,7 +121,6 @@ class Guardian_Settings {
 			);
 
 			// Activity Logging toggle
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by Form_Controls helper
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by Form_Controls helper
 			echo \WPShadow\Helpers\Form_Controls::toggle_switch(
 				array(
