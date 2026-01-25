@@ -11,11 +11,47 @@
     "vscode": {
       "extensions": [
         "bmewburn.vscode-intelephense-client",
-        "xdebug.php-debug"
-      ]
+        "xdebug.php-debug",
+        "wongjn.php-sniffer",
+        "devsense.phptools-vscode"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll": true
+        },
+        "files.associations": {
+          "*.php": "php"
+        },
+        "php.suggest.basic": false,
+        "php.validate.enable": true,
+        "php.validate.run": "onType",
+        "phpcs.enable": true,
+        "phpcs.standard": "WordPress",
+        "phpcs.showWarnings": true,
+        "intelephense.environment.phpVersion": "8.2.0",
+        "intelephense.stubs": [
+          "wordpress",
+          "wordpress-globals",
+          "wp-cli",
+          "genesis",
+          "polylang"
+        ],
+        "accessibility.signals.lineHasError": {
+          "sound": "on"
+        },
+        "accessibility.signals.lineHasWarning": {
+          "sound": "on"
+        },
+        "editor.accessibilitySupport": "on",
+        "workbench.colorCustomizations": {
+          "editorError.foreground": "#ff0000",
+          "editorWarning.foreground": "#FFA500"
+        }
+      }
     }
   },
-  "forwardPorts": [8080],
-  "postCreateCommand": "composer install",
+  "forwardPorts": [8080, 9000],
+  "postCreateCommand": "composer install && npm install",
   "remoteUser": "vscode"
 }

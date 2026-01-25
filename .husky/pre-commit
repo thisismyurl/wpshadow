@@ -1,0 +1,39 @@
+#!/bin/bash
+
+echo "🚀 Running WPShadow Pre-commit Checks..."
+
+# WordPress Coding Standards
+echo "📋 Checking WordPress Coding Standards..."
+composer run-script phpcs
+if [ $? -ne 0 ]; then
+    echo "❌ PHPCS failed. Run 'composer run-script phpcbf' to auto-fix."
+    exit 1
+fi
+
+# Accessibility Check
+echo "🌍 Checking Accessibility..."
+if git diff --cached --name-only | grep -q "includes/views"; then
+    echo "⚠️  View files modified. Remember to check:"
+    echo "  - Keyboard navigation"
+    echo "  - Screen reader compatibility"
+    echo "  - WCAG AA color contrast"
+    echo "  - Alt text on images"
+    echo "  - ARIA labels"
+fi
+
+# Privacy Check
+echo "🔒 Checking Privacy..."
+if git diff --cached --diff-filter=AM | grep -q "wp_remote"; then
+    echo "⚠️  External API call detected. Ensure:"
+    echo "  - User consent obtained"
+    echo "  - Privacy policy updated"
+    echo "  - Data minimization applied"
+fi
+
+# Learning Resources Check
+echo "🎓 Checking Learning Resources..."
+if git diff --cached --name-only | grep -q "includes/diagnostics"; then
+    echo "⚠️  Diagnostic modified. Ensure KB article exists and is linked."
+fi
+
+echo "✅ Pre-commit checks passed!"
