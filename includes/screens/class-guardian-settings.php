@@ -37,12 +37,12 @@ class Guardian_Settings {
 				
 				<!-- Main Settings Tab -->
 				<div class="guardian-settings-tabs">
-					<nav class="nav-tab-wrapper">
-						<a href="#general" class="nav-tab nav-tab-active"><?php esc_html_e( 'General', 'wpshadow' ); ?></a>
-						<a href="#policies" class="nav-tab"><?php esc_html_e( 'Auto-Fix Policies', 'wpshadow' ); ?></a>
-						<a href="#anomalies" class="nav-tab"><?php esc_html_e( 'Anomaly Detection', 'wpshadow' ); ?></a>
-						<a href="#schedule" class="nav-tab"><?php esc_html_e( 'Schedule', 'wpshadow' ); ?></a>
-						<a href="#notifications" class="nav-tab"><?php esc_html_e( 'Notifications', 'wpshadow' ); ?></a>
+					<nav class="wps-tabs" role="tablist">
+						<a href="#general" class="wps-tab wps-tab-active" role="tab" aria-selected="true" data-tab="general"><?php esc_html_e( 'General', 'wpshadow' ); ?></a>
+						<a href="#policies" class="wps-tab" role="tab" aria-selected="false" data-tab="policies"><?php esc_html_e( 'Auto-Fix Policies', 'wpshadow' ); ?></a>
+						<a href="#anomalies" class="wps-tab" role="tab" aria-selected="false" data-tab="anomalies"><?php esc_html_e( 'Anomaly Detection', 'wpshadow' ); ?></a>
+						<a href="#schedule" class="wps-tab" role="tab" aria-selected="false" data-tab="schedule"><?php esc_html_e( 'Schedule', 'wpshadow' ); ?></a>
+						<a href="#notifications" class="wps-tab" role="tab" aria-selected="false" data-tab="notifications"><?php esc_html_e( 'Notifications', 'wpshadow' ); ?></a>
 					</nav>
 					
 					<!-- General Tab -->
@@ -92,44 +92,67 @@ class Guardian_Settings {
 	private static function render_general_tab(): string {
 		$is_enabled = Guardian_Manager::is_enabled();
 
-		$html = '<table class="form-table guardian-settings-table">
-			<tr>
-				<th scope="row">
-						<label for="guardian_enabled">' . esc_html__( 'Enable WPShadow Guardian', 'wpshadow' ) . '</label>
-				</th>
-				<td>
+		$html = '<div class="wps-settings-section">
+			<div class="wps-settings-section-header">
+				<h3 class="wps-settings-section-title">' . esc_html__( 'General Settings', 'wpshadow' ) . '</h3>
+				<p class="wps-settings-section-description">' . esc_html__( 'Configure core WPShadow Guardian monitoring features', 'wpshadow' ) . '</p>
+			</div>
+
+			<div class="wps-form-group-inline">
+				<div>
+					<label class="wps-label" for="guardian_enabled">
+						' . esc_html__( 'Enable WPShadow Guardian', 'wpshadow' ) . '
+					</label>
+					<span class="wps-help-text">
+						' . esc_html__( 'Activate automated health monitoring and intelligent fix suggestions', 'wpshadow' ) . '
+					</span>
+				</div>
+				<div>
 					<label>
 						<input type="checkbox" id="guardian_enabled" name="guardian_enabled" value="1" ' . checked( $is_enabled, true, false ) . ' />
-							' . esc_html__( 'Activate WPShadow Guardian monitoring and auto-fixes', 'wpshadow' ) . '
+						' . esc_html__( 'Activate monitoring', 'wpshadow' ) . '
 					</label>
-					<p class="description">' . esc_html__( 'Enables automated health monitoring and intelligent fix suggestions', 'wpshadow' ) . '</p>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">
-					<label>' . esc_html__( 'Safety Mode', 'wpshadow' ) . '</label>
-				</th>
-				<td>
+				</div>
+			</div>
+
+			<hr class="wps-form-divider" />
+
+			<div class="wps-form-group-inline">
+				<div>
+					<label class="wps-label">
+						' . esc_html__( 'Safety Mode', 'wpshadow' ) . '
+					</label>
+					<span class="wps-help-text">
+						' . esc_html__( 'When enabled, all auto-fixes require user approval before execution', 'wpshadow' ) . '
+					</span>
+				</div>
+				<div>
 					<label>
 						<input type="checkbox" name="guardian_safety_mode" value="1" checked />
-						' . esc_html__( 'Require manual confirmation for auto-fixes', 'wpshadow' ) . '
+						' . esc_html__( 'Require manual confirmation', 'wpshadow' ) . '
 					</label>
-					<p class="description">' . esc_html__( 'When enabled, all auto-fixes require user approval before execution', 'wpshadow' ) . '</p>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">
-					<label>' . esc_html__( 'Activity Logging', 'wpshadow' ) . '</label>
-				</th>
-				<td>
+				</div>
+			</div>
+
+			<hr class="wps-form-divider" />
+
+			<div class="wps-form-group-inline">
+				<div>
+					<label class="wps-label">
+						' . esc_html__( 'Activity Logging', 'wpshadow' ) . '
+					</label>
+					<span class="wps-help-text">
+						' . esc_html__( 'Comprehensive audit trail for all system actions', 'wpshadow' ) . '
+					</span>
+				</div>
+				<div>
 					<label>
 						<input type="checkbox" name="guardian_activity_logging" value="1" checked />
-							' . esc_html__( 'Log all WPShadow Guardian actions and events', 'wpshadow' ) . '
+						' . esc_html__( 'Log all actions', 'wpshadow' ) . '
 					</label>
-					<p class="description">' . esc_html__( 'Comprehensive audit trail for all system actions', 'wpshadow' ) . '</p>
-				</td>
-			</tr>
-		</table>';
+				</div>
+			</div>
+		</div>';
 
 		return $html;
 	}
@@ -178,38 +201,51 @@ class Guardian_Settings {
 	 * @return string HTML
 	 */
 	private static function render_anomalies_tab(): string {
-		$html = '<table class="form-table guardian-settings-table">
-			<tr>
-				<th scope="row">
-					<label for="memory_threshold">' . esc_html__( 'Memory Usage Threshold', 'wpshadow' ) . '</label>
-				</th>
-				<td>
-					<input type="number" id="memory_threshold" name="memory_threshold" min="50" max="95" value="85" />
+		$html = '<div class="wps-settings-section">
+			<div class="wps-settings-section-header">
+				<h3 class="wps-settings-section-title">' . esc_html__( 'Anomaly Detection', 'wpshadow' ) . '</h3>
+				<p class="wps-settings-section-description">' . esc_html__( 'Configure thresholds for detecting unusual system behavior', 'wpshadow' ) . '</p>
+			</div>
+
+			<div class="wps-form-group">
+				<label class="wps-label" for="memory_threshold">
+					' . esc_html__( 'Memory Usage Threshold', 'wpshadow' ) . '
+				</label>
+				<div style="display: flex; align-items: center; gap: 8px;">
+					<input type="number" id="memory_threshold" name="memory_threshold" min="50" max="95" value="85" style="max-width: 100px;" />
 					<span class="unit">%</span>
-					<p class="description">' . esc_html__( 'Pause auto-fixes if memory usage exceeds this percentage', 'wpshadow' ) . '</p>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">
-					<label for="change_detection_window">' . esc_html__( 'Change Detection Window', 'wpshadow' ) . '</label>
-				</th>
-				<td>
-					<input type="number" id="change_detection_window" name="change_detection_window" min="5" max="60" value="30" />
+				</div>
+				<span class="wps-help-text">
+					' . esc_html__( 'Pause auto-fixes if memory usage exceeds this percentage', 'wpshadow' ) . '
+				</span>
+			</div>
+
+			<div class="wps-form-group">
+				<label class="wps-label" for="change_detection_window">
+					' . esc_html__( 'Change Detection Window', 'wpshadow' ) . '
+				</label>
+				<div style="display: flex; align-items: center; gap: 8px;">
+					<input type="number" id="change_detection_window" name="change_detection_window" min="5" max="60" value="30" style="max-width: 100px;" />
 					<span class="unit">' . esc_html__( 'minutes', 'wpshadow' ) . '</span>
-					<p class="description">' . esc_html__( 'Detect plugin/theme changes within this time window', 'wpshadow' ) . '</p>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">
-					<label for="error_spike_threshold">' . esc_html__( 'Error Log Growth Threshold', 'wpshadow' ) . '</label>
-				</th>
-				<td>
-					<input type="number" id="error_spike_threshold" name="error_spike_threshold" min="10" max="500" value="100" />
+				</div>
+				<span class="wps-help-text">
+					' . esc_html__( 'Detect plugin/theme changes within this time window', 'wpshadow' ) . '
+				</span>
+			</div>
+
+			<div class="wps-form-group">
+				<label class="wps-label" for="error_spike_threshold">
+					' . esc_html__( 'Error Log Growth Threshold', 'wpshadow' ) . '
+				</label>
+				<div style="display: flex; align-items: center; gap: 8px;">
+					<input type="number" id="error_spike_threshold" name="error_spike_threshold" min="10" max="500" value="100" style="max-width: 100px;" />
 					<span class="unit">KB</span>
-					<p class="description">' . esc_html__( 'Pause auto-fixes if error log grows this much in 5 minutes', 'wpshadow' ) . '</p>
-				</td>
-			</tr>
-		</table>';
+				</div>
+				<span class="wps-help-text">
+					' . esc_html__( 'Pause auto-fixes if error log grows this much in 5 minutes', 'wpshadow' ) . '
+				</span>
+			</div>
+		</div>';
 
 		return $html;
 	}
@@ -220,52 +256,62 @@ class Guardian_Settings {
 	 * @return string HTML
 	 */
 	private static function render_schedule_tab(): string {
-		$html = '<table class="form-table guardian-settings-table">
-			<tr>
-				<th scope="row">
-					<label for="execution_frequency">' . esc_html__( 'Auto-Fix Execution Frequency', 'wpshadow' ) . '</label>
-				</th>
-				<td>
-					<select id="execution_frequency" name="execution_frequency">
-						<option value="manual">' . esc_html__( 'Manual Only', 'wpshadow' ) . '</option>
-						<option value="cron_hourly">' . esc_html__( 'Hourly', 'wpshadow' ) . '</option>
-						<option value="cron_daily" selected>' . esc_html__( 'Daily', 'wpshadow' ) . '</option>
-					</select>
-					<p class="description">' . esc_html__( 'How often to automatically execute approved fixes', 'wpshadow' ) . '</p>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">
-					<label for="execution_time">' . esc_html__( 'Preferred Execution Time', 'wpshadow' ) . '</label>
-				</th>
-				<td>
-					<input type="time" id="execution_time" name="execution_time" value="02:00" />
-					<p class="description">' . esc_html__( 'Time of day to run auto-fixes (server timezone)', 'wpshadow' ) . '</p>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">
-					<label for="max_treatments">' . esc_html__( 'Max Treatments Per Run', 'wpshadow' ) . '</label>
-				</th>
-				<td>
-					<input type="range" id="max_treatments" name="max_treatments" min="1" max="20" value="5" />
-					<span id="max_treatments_value">5</span>
-					<p class="description">' . esc_html__( 'Maximum number of treatments to apply in a single execution', 'wpshadow' ) . '</p>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">
-					<label for="continue_on_error">' . esc_html__( 'Error Handling', 'wpshadow' ) . '</label>
-				</th>
-				<td>
-					<select id="continue_on_error" name="continue_on_error">
-						<option value="stop">' . esc_html__( 'Stop on First Error', 'wpshadow' ) . '</option>
-						<option value="continue" selected>' . esc_html__( 'Skip Failed, Continue', 'wpshadow' ) . '</option>
-					</select>
-					<p class="description">' . esc_html__( 'How to handle errors during batch execution', 'wpshadow' ) . '</p>
-				</td>
-			</tr>
-		</table>';
+		$html = '<div class="wps-settings-section">
+			<div class="wps-settings-section-header">
+				<h3 class="wps-settings-section-title">' . esc_html__( 'Execution Schedule', 'wpshadow' ) . '</h3>
+				<p class="wps-settings-section-description">' . esc_html__( 'Configure when and how often auto-fixes are executed', 'wpshadow' ) . '</p>
+			</div>
+
+			<div class="wps-form-group">
+				<label class="wps-label" for="execution_frequency">
+					' . esc_html__( 'Auto-Fix Execution Frequency', 'wpshadow' ) . '
+				</label>
+				<select id="execution_frequency" name="execution_frequency">
+					<option value="manual">' . esc_html__( 'Manual Only', 'wpshadow' ) . '</option>
+					<option value="cron_hourly">' . esc_html__( 'Hourly', 'wpshadow' ) . '</option>
+					<option value="cron_daily" selected>' . esc_html__( 'Daily', 'wpshadow' ) . '</option>
+				</select>
+				<span class="wps-help-text">
+					' . esc_html__( 'How often to automatically execute approved fixes', 'wpshadow' ) . '
+				</span>
+			</div>
+
+			<div class="wps-form-group">
+				<label class="wps-label" for="execution_time">
+					' . esc_html__( 'Preferred Execution Time', 'wpshadow' ) . '
+				</label>
+				<input type="time" id="execution_time" name="execution_time" value="02:00" />
+				<span class="wps-help-text">
+					' . esc_html__( 'Time of day to run auto-fixes (server timezone)', 'wpshadow' ) . '
+				</span>
+			</div>
+
+			<div class="wps-form-group">
+				<label class="wps-label" for="max_treatments">
+					' . esc_html__( 'Max Treatments Per Run', 'wpshadow' ) . '
+				</label>
+				<div style="display: flex; align-items: center; gap: 12px;">
+					<input type="range" id="max_treatments" name="max_treatments" min="1" max="20" value="5" style="flex: 1; max-width: 300px;" />
+					<span id="max_treatments_value" style="font-weight: 600;">5</span>
+				</div>
+				<span class="wps-help-text">
+					' . esc_html__( 'Maximum number of treatments to apply in a single execution', 'wpshadow' ) . '
+				</span>
+			</div>
+
+			<div class="wps-form-group">
+				<label class="wps-label" for="continue_on_error">
+					' . esc_html__( 'Error Handling', 'wpshadow' ) . '
+				</label>
+				<select id="continue_on_error" name="continue_on_error">
+					<option value="stop">' . esc_html__( 'Stop on First Error', 'wpshadow' ) . '</option>
+					<option value="continue" selected>' . esc_html__( 'Skip Failed, Continue', 'wpshadow' ) . '</option>
+				</select>
+				<span class="wps-help-text">
+					' . esc_html__( 'How to handle errors during batch execution', 'wpshadow' ) . '
+				</span>
+			</div>
+		</div>';
 
 		return $html;
 	}
@@ -276,41 +322,51 @@ class Guardian_Settings {
 	 * @return string HTML
 	 */
 	private static function render_notifications_tab(): string {
-		$html = '<table class="form-table guardian-settings-table">
-			<tr>
-				<th scope="row">
-					<label>' . esc_html__( 'Alert Types', 'wpshadow' ) . '</label>
-				</th>
-				<td>
+		$html = '<div class="wps-settings-section">
+			<div class="wps-settings-section-header">
+				<h3 class="wps-settings-section-title">' . esc_html__( 'Notification Settings', 'wpshadow' ) . '</h3>
+				<p class="wps-settings-section-description">' . esc_html__( 'Configure which events should trigger notifications', 'wpshadow' ) . '</p>
+			</div>
+
+			<div class="wps-form-group">
+				<label class="wps-label">
+					' . esc_html__( 'Alert Types', 'wpshadow' ) . '
+				</label>
+				<div style="display: flex; flex-direction: column; gap: 8px;">
 					<label>
 						<input type="checkbox" name="notify_critical_issues" value="1" checked />
 						' . esc_html__( 'Critical Issues', 'wpshadow' ) . '
-					</label><br>
+					</label>
 					<label>
 						<input type="checkbox" name="notify_auto_fix_failed" value="1" checked />
 						' . esc_html__( 'Auto-Fix Failures', 'wpshadow' ) . '
-					</label><br>
+					</label>
 					<label>
 						<input type="checkbox" name="notify_anomalies" value="1" />
 						' . esc_html__( 'Anomaly Detection', 'wpshadow' ) . '
-					</label><br>
+					</label>
 					<label>
 						<input type="checkbox" name="notify_daily_report" value="1" />
 						' . esc_html__( 'Daily Reports', 'wpshadow' ) . '
 					</label>
-					<p class="description">' . esc_html__( 'Select which events should trigger notifications', 'wpshadow' ) . '</p>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">
-					<label for="notification_email">' . esc_html__( 'Notification Email', 'wpshadow' ) . '</label>
-				</th>
-				<td>
-					<input type="email" id="notification_email" name="notification_email" value="' . esc_attr( get_option( 'admin_email', '' ) ) . '" />
-						<p class="description">' . esc_html__( 'Email address to receive WPShadow Guardian notifications', 'wpshadow' ) . '</p>
-				</td>
-			</tr>
-		</table>';
+				</div>
+				<span class="wps-help-text">
+					' . esc_html__( 'Select which events should trigger notifications', 'wpshadow' ) . '
+				</span>
+			</div>
+
+			<hr class="wps-form-divider" />
+
+			<div class="wps-form-group">
+				<label class="wps-label" for="notification_email">
+					' . esc_html__( 'Notification Email', 'wpshadow' ) . '
+				</label>
+				<input type="email" id="notification_email" name="notification_email" value="' . esc_attr( get_option( 'admin_email', '' ) ) . '" />
+				<span class="wps-help-text">
+					' . esc_html__( 'Email address to receive WPShadow Guardian notifications', 'wpshadow' ) . '
+				</span>
+			</div>
+		</div>';
 
 		return $html;
 	}
