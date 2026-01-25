@@ -194,7 +194,7 @@ class Badge_Manager {
 			margin: 4px;
 		" title="<?php echo esc_attr( $badge['description'] ?? '' ); ?>">
 			<div style="font-size: 24px; margin-bottom: 4px;">
-				<?php echo $badge['icon'] ?? ''; ?>
+				<?php echo esc_html( $badge['icon'] ?? '' ); ?>
 			</div>
 			<div style="font-size: 10px; font-weight: 500; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
 				<?php echo esc_html( $badge['name'] ); ?>

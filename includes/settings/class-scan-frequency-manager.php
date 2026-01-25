@@ -295,7 +295,12 @@ class Scan_Frequency_Manager {
 						</legend>
 						
 						<?php foreach ( $frequencies as $freq_key => $freq_data ) : ?>
-							<div style="margin-bottom: 12px; padding: 12px; border: 2px solid <?php echo $config['frequency'] === $freq_key ? '#0073aa' : '#e0e0e0'; ?>; border-radius: 4px; cursor: pointer; transition: all 0.2s; background: <?php echo $config['frequency'] === $freq_key ? '#f0f6fc' : '#fff'; ?>;">
+							<?php
+							$is_selected   = $config['frequency'] === $freq_key;
+							$border_color  = $is_selected ? '#0073aa' : '#e0e0e0';
+							$bg_color      = $is_selected ? '#f0f6fc' : '#fff';
+							?>
+							<div style="margin-bottom: 12px; padding: 12px; border: 2px solid <?php echo esc_attr( $border_color ); ?>; border-radius: 4px; cursor: pointer; transition: all 0.2s; background: <?php echo esc_attr( $bg_color ); ?>;">
 								<label class="wps-flex-gap-12-items-flex-start">
 									<input type="radio" name="frequency" value="<?php echo esc_attr( $freq_key ); ?>" <?php checked( $config['frequency'], $freq_key ); ?> style="margin-top: 2px; cursor: pointer; width: 18px; height: 18px;" />
 									<div style="flex: 1;">

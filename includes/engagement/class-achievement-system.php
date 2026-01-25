@@ -343,18 +343,18 @@ class Achievement_System {
 					<?php $unlocked = isset( $achievements[ $id ] ); ?>
 					<div style="
 						padding: 12px;
-						background: <?php echo $unlocked ? $achievement['color'] : '#f5f5f5'; ?>;
+						background: <?php echo esc_attr( $unlocked ? $achievement['color'] : '#f5f5f5' ); ?>;
 						border-radius: 8px;
 						text-align: center;
-						opacity: <?php echo $unlocked ? '1' : '0.5'; ?>;
+						opacity: <?php echo esc_attr( $unlocked ? '1' : '0.5' ); ?>;
 						transition: all 0.3s;
 						cursor: pointer;
-						border: 2px solid <?php echo $unlocked ? $achievement['color'] : '#ddd'; ?>;
+						border: 2px solid <?php echo esc_attr( $unlocked ? $achievement['color'] : '#ddd' ); ?>;
 					" title="<?php echo esc_attr( $achievement['description'] ); ?>">
 						<div style="font-size: 24px; margin-bottom: 4px;">
 							<span class="dashicons <?php echo esc_attr( $achievement['icon'] ); ?>" style="font-size: 24px;"></span>
 						</div>
-						<div style="font-size: 11px; font-weight: 500; color: <?php echo $unlocked ? '#fff' : '#999'; ?>; word-break: break-word;">
+						<div style="font-size: 11px; font-weight: 500; color: <?php echo esc_attr( $unlocked ? '#fff' : '#999' ); ?>; word-break: break-word;">
 							<?php echo esc_html( $achievement['name'] ); ?>
 						</div>
 						<?php if ( $unlocked ) : ?>

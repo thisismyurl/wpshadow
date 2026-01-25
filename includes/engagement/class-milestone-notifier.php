@@ -240,7 +240,7 @@ class Milestone_Notifier {
 				border-left: 4px solid <?php echo esc_attr( $bg_color ); ?>;
 				opacity: <?php echo $notification['read'] ? '0.6' : '1'; ?>;
 			">
-			<?php echo $notification['message']; ?>
+			<?php echo esc_html( $notification['message'] ); ?>
 			<div style="font-size: 11px; margin-top: 6px; opacity: 0.8;">
 				<?php
 					$time = strtotime( $notification['timestamp'] );

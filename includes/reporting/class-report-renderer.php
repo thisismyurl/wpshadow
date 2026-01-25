@@ -84,7 +84,7 @@ class Report_Renderer {
 				
 				<?php foreach ( $cards as $card ) : ?>
 					<div style="background: linear-gradient(135deg, <?php echo esc_attr( $card['color'] ); ?> 0%, <?php echo esc_attr( $card['color'] ); ?>dd 100%); color: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-						<div style="font-size: 24px; margin-bottom: 8px;"><?php echo $card['icon']; ?></div>
+						<div style="font-size: 24px; margin-bottom: 8px;"><?php echo esc_html( $card['icon'] ); ?></div>
 						<div style="font-size: 12px; opacity: 0.9; margin-bottom: 5px;"><?php echo esc_html( $card['label'] ); ?></div>
 						<div style="font-size: 20px; font-weight: bold;"><?php echo esc_html( $card['value'] ); ?></div>
 					</div>

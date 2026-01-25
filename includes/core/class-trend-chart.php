@@ -172,9 +172,9 @@ class Trend_Chart {
 				</h3>
 				<div class="wps-flex-gap-8-items-center">
 					<?php if ( $trend_direction === 'up' ) : ?>
-						<span style="color: #10b981; font-weight: bold;">📈 +<?php echo abs( $trend_pct ); ?>%</span>
+						<span style="color: #10b981; font-weight: bold;">📈 +<?php echo (float) abs( $trend_pct ); ?>%</span>
 					<?php elseif ( $trend_direction === 'down' ) : ?>
-						<span style="color: #ef4444; font-weight: bold;">📉 -<?php echo abs( $trend_pct ); ?>%</span>
+						<span style="color: #ef4444; font-weight: bold;">📉 -<?php echo (float) abs( $trend_pct ); ?>%</span>
 					<?php else : ?>
 						<span style="color: #f59e0b; font-weight: bold;">➡️ Stable</span>
 					<?php endif; ?>
@@ -190,24 +190,27 @@ class Trend_Chart {
 					$grid_y = $chart_height - $padding - ( ( $i - $min_score ) / max( 1, $range ) ) * ( $chart_height - 2 * $padding );
 					if ( $grid_y >= $padding && $grid_y <= $chart_height - $padding ) :
 						?>
-						<line x1="<?php echo (int) $padding; ?>" y1="<?php echo (int) $grid_y; ?>" x2="<?php echo (int) ( $chart_width - $padding ); ?>" y2="<?php echo (int) $grid_y; ?>" stroke="#e5e7eb" stroke-width="1" />
-						<text x="<?php echo (int) ( $padding - 10 ); ?>" y="<?php echo (int) ( $grid_y + 4 ); ?>" font-size="12" fill="#9ca3af" text-anchor="end"><?php echo (int) $i; ?>%</text>
+						<line x1="<?php echo (int) $padding; ?>" y1="<?php echo (float) $grid_y; ?>" x2="<?php echo (int) ( $chart_width - $padding ); ?>" y2="<?php echo (float) $grid_y; ?>" stroke="#e5e7eb" stroke-width="1" />
+						<text x="<?php echo (int) ( $padding - 10 ); ?>" y="<?php echo (float) ( $grid_y + 4 ); ?>" font-size="12" fill="#9ca3af" text-anchor="end"><?php echo (int) $i; ?>%</text>
 					<?php endif; ?>
 				<?php endfor; ?>
 				
 				<!-- Path (trend line) -->
-				<path d="<?php echo esc_attr( $path_data ); ?>" stroke="#667eea" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+				<!-- phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG path data is constructed from numeric calculations only -->
+				<path d="<?php echo $path_data; ?>" stroke="#667eea" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" />
 				
 				<!-- Area under curve -->
-				<path d="<?php echo esc_attr( $path_data ); ?> L <?php echo (int) ( $chart_width - $padding ); ?> <?php echo (int) ( $chart_height - $padding ); ?> L <?php echo (int) $padding; ?> <?php echo (int) ( $chart_height - $padding ); ?> Z" fill="#667eea" opacity="0.1" />
+				<!-- phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG path data is constructed from numeric calculations only -->
+				<path d="<?php echo $path_data; ?> L <?php echo (float) ( $chart_width - $padding ); ?> <?php echo (float) ( $chart_height - $padding ); ?> L <?php echo (float) $padding; ?> <?php echo (float) ( $chart_height - $padding ); ?> Z" fill="#667eea" opacity="0.1" />
 				
 				<!-- Data points -->
 				<?php foreach ( $scores as $idx => $score ) : ?>
 					<?php
-					$x = $padding + $idx * $x_step;
-					$y = $chart_height - $padding - ( $score - $min_score ) * $y_scale;
+					$x          = $padding + $idx * $x_step;
+					$y          = $chart_height - $padding - ( $score - $min_score ) * $y_scale;
+					$fill_color = $idx === count( $scores ) - 1 ? '#10b981' : '#667eea';
 					?>
-					<circle cx="<?php echo (int) $x; ?>" cy="<?php echo (int) $y; ?>" r="4" fill="<?php echo $idx === count( $scores ) - 1 ? '#10b981' : '#667eea'; ?>" stroke="white" stroke-width="2" />
+					<circle cx="<?php echo (float) $x; ?>" cy="<?php echo (float) $y; ?>" r="4" fill="<?php echo esc_attr( $fill_color ); ?>" stroke="white" stroke-width="2" />
 					
 					<!-- Tooltip on hover (via title element) -->
 					<title><?php echo esc_attr( sprintf( '%s: %d%%', isset( $history[ $idx ]['date'] ) ? $history[ $idx ]['date'] : 'N/A', $score ) ); ?></title>
