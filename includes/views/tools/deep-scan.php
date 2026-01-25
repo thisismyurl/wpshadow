@@ -1,6 +1,6 @@
 <?php
 /**
- * Quick Scan Tool View
+ * Deep Scan Tool View
  *
  * @package WPShadow
  * @subpackage Tools
@@ -28,16 +28,16 @@ wp_localize_script(
 );
 ?>
 
-<div class="wpshadow-tool quick-scan-tool">
-	<h2><?php esc_html_e( 'Quick Scan', 'wpshadow' ); ?></h2>
+<div class="wpshadow-tool deep-scan-tool">
+	<h2><?php esc_html_e( 'Deep Scan', 'wpshadow' ); ?></h2>
 	
 	<p class="description">
-		<?php esc_html_e( 'Run a fast, lightweight scan of your site for common issues and security concerns. This typically completes in 30-60 seconds.', 'wpshadow' ); ?>
+		<?php esc_html_e( 'Run a comprehensive scan that checks database health, performance, and advanced compatibility issues. This may take several minutes to complete.', 'wpshadow' ); ?>
 	</p>
 
 	<div class="scan-info">
 		<?php
-		$last_run = Options_Manager::get_int( 'wpshadow_last_quick_checks', 0 );
+		$last_run = Options_Manager::get_int( 'wpshadow_last_heavy_tests', 0 );
 
 		if ( ! empty( $last_run ) ) {
 			$age     = time() - $last_run;
@@ -51,7 +51,7 @@ wp_localize_script(
 		} else {
 			?>
 			<p class="never-run">
-				<?php esc_html_e( 'Quick Scan has never been run on this site.', 'wpshadow' ); ?>
+				<?php esc_html_e( 'Deep Scan has never been run on this site.', 'wpshadow' ); ?>
 			</p>
 			<?php
 		}
@@ -59,11 +59,11 @@ wp_localize_script(
 	</div>
 
 	<button class="button button-primary wpshadow-run-scan" 
-		data-scan-type="quick"
+		data-scan-type="deep"
 		data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_scan_nonce' ) ); ?>"
 		data-ajax-url="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>"
 		data-redirect-url="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>">
-		<?php esc_html_e( 'Run Quick Scan Now', 'wpshadow' ); ?>
+		<?php esc_html_e( 'Run Deep Scan Now', 'wpshadow' ); ?>
 	</button>
 
 	<div class="scan-progress hidden">
