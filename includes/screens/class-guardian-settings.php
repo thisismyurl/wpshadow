@@ -245,6 +245,98 @@ class Guardian_Settings {
 	 * @return string HTML
 	 */
 	private static function render_anomalies_tab(): string {
+		$html = '<table class="form-table guardian-settings-table">
+			<tr>
+				<th scope="row">
+					<label for="memory_threshold">' . esc_html__( 'Memory Usage Threshold', 'wpshadow' ) . '</label>
+				</th>
+				<td>
+					<div class="wps-range-group">
+						<div class="wps-range-header">
+							<span class="wps-range-value" id="memory_threshold_display">85%</span>
+						</div>
+						<div class="wps-range-wrapper">
+							<input 
+								type="range" 
+								id="memory_threshold" 
+								name="memory_threshold" 
+								class="wps-range"
+								min="50" 
+								max="95" 
+								value="85" 
+								step="5"
+								data-suffix="%"
+								aria-valuemin="50"
+								aria-valuemax="95"
+								aria-valuenow="85"
+								aria-valuetext="85 percent"
+							/>
+						</div>
+						<p class="description wps-help-text">' . esc_html__( 'Pause auto-fixes if memory usage exceeds this percentage', 'wpshadow' ) . '</p>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row">
+					<label for="change_detection_window">' . esc_html__( 'Change Detection Window', 'wpshadow' ) . '</label>
+				</th>
+				<td>
+					<div class="wps-range-group">
+						<div class="wps-range-header">
+							<span class="wps-range-value" id="change_detection_window_display">30 ' . esc_html__( 'minutes', 'wpshadow' ) . '</span>
+						</div>
+						<div class="wps-range-wrapper">
+							<input 
+								type="range" 
+								id="change_detection_window" 
+								name="change_detection_window" 
+								class="wps-range"
+								min="5" 
+								max="60" 
+								value="30" 
+								step="5"
+								data-suffix=" ' . esc_attr__( 'minutes', 'wpshadow' ) . '"
+								aria-valuemin="5"
+								aria-valuemax="60"
+								aria-valuenow="30"
+								aria-valuetext="30 minutes"
+							/>
+						</div>
+						<p class="description wps-help-text">' . esc_html__( 'Detect plugin/theme changes within this time window', 'wpshadow' ) . '</p>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row">
+					<label for="error_spike_threshold">' . esc_html__( 'Error Log Growth Threshold', 'wpshadow' ) . '</label>
+				</th>
+				<td>
+					<div class="wps-range-group">
+						<div class="wps-range-header">
+							<span class="wps-range-value" id="error_spike_threshold_display">100 KB</span>
+						</div>
+						<div class="wps-range-wrapper">
+							<input 
+								type="range" 
+								id="error_spike_threshold" 
+								name="error_spike_threshold" 
+								class="wps-range"
+								min="10" 
+								max="500" 
+								value="100" 
+								step="10"
+								data-suffix=" KB"
+								aria-valuemin="10"
+								aria-valuemax="500"
+								aria-valuenow="100"
+								aria-valuetext="100 kilobytes"
+							/>
+						</div>
+						<p class="description wps-help-text">' . esc_html__( 'Pause auto-fixes if error log grows this much in 5 minutes', 'wpshadow' ) . '</p>
+					</div>
+				</td>
+			</tr>
+		</table>';
 		$html = '<div class="wps-settings-section">
 			<div class="wps-settings-section-header">
 				<h3 class="wps-settings-section-title">' . esc_html__( 'Anomaly Detection', 'wpshadow' ) . '</h3>
@@ -356,6 +448,58 @@ class Guardian_Settings {
 	 * @return string HTML
 	 */
 	private static function render_schedule_tab(): string {
+		$html = '<table class="form-table guardian-settings-table">
+			<tr>
+				<th scope="row">
+					<label for="execution_frequency">' . esc_html__( 'Auto-Fix Execution Frequency', 'wpshadow' ) . '</label>
+				</th>
+				<td>
+					<div class="wps-select-wrapper">
+						<select id="execution_frequency" name="execution_frequency" class="wps-select">
+							<option value="manual">' . esc_html__( 'Manual Only', 'wpshadow' ) . '</option>
+							<option value="cron_hourly">' . esc_html__( 'Hourly', 'wpshadow' ) . '</option>
+							<option value="cron_daily" selected>' . esc_html__( 'Daily', 'wpshadow' ) . '</option>
+						</select>
+					</div>
+					<p class="description">' . esc_html__( 'How often to automatically execute approved fixes', 'wpshadow' ) . '</p>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row">
+					<label for="execution_time">' . esc_html__( 'Preferred Execution Time', 'wpshadow' ) . '</label>
+				</th>
+				<td>
+					<input type="time" id="execution_time" name="execution_time" value="02:00" />
+					<p class="description">' . esc_html__( 'Time of day to run auto-fixes (server timezone)', 'wpshadow' ) . '</p>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row">
+					<label for="max_treatments">' . esc_html__( 'Max Treatments Per Run', 'wpshadow' ) . '</label>
+				</th>
+				<td>
+					<input type="range" id="max_treatments" name="max_treatments" min="1" max="20" value="5" />
+					<span id="max_treatments_value">5</span>
+					<p class="description">' . esc_html__( 'Maximum number of treatments to apply in a single execution', 'wpshadow' ) . '</p>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row">
+					<label for="continue_on_error">' . esc_html__( 'Error Handling', 'wpshadow' ) . '</label>
+				</th>
+				<td>
+					<div class="wps-select-wrapper">
+						<select id="continue_on_error" name="continue_on_error" class="wps-select">
+							<option value="stop">' . esc_html__( 'Stop on First Error', 'wpshadow' ) . '</option>
+							<option value="continue" selected>' . esc_html__( 'Skip Failed, Continue', 'wpshadow' ) . '</option>
+						</select>
+					</div>
+					<p class="description">' . esc_html__( 'How to handle errors during batch execution', 'wpshadow' ) . '</p>
+				</td>
+			</tr>
+		</table>';
+
+		return $html;
 		$html = '<div class="wps-settings-section">
 			<div class="wps-settings-section-header">
 				<h3 class="wps-settings-section-title">' . esc_html__( 'Execution Schedule', 'wpshadow' ) . '</h3>

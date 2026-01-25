@@ -341,19 +341,21 @@ class Report_Scheduler {
 						<label class="wps-block">
 							<?php esc_html_e( 'Frequency:', 'wpshadow' ); ?>
 						</label>
-						<select name="frequency" class="wps-p-8-rounded-4">
-							<?php
-							$freq = $exec_config['frequency'] ?? 'weekly';
-							foreach ( $frequencies as $value => $label ) :
-								if ( $value === 'disabled' ) {
-									continue;
-								}
-								?>
-							<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $freq, $value ); ?>>
-								<?php echo esc_html( $label ); ?>
-							</option>
-							<?php endforeach; ?>
-						</select>
+						<div class="wps-select-wrapper">
+							<select name="frequency" class="wps-select">
+								<?php
+								$freq = $exec_config['frequency'] ?? 'weekly';
+								foreach ( $frequencies as $value => $label ) :
+									if ( $value === 'disabled' ) {
+										continue;
+									}
+									?>
+								<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $freq, $value ); ?>>
+									<?php echo esc_html( $label ); ?>
+								</option>
+								<?php endforeach; ?>
+							</select>
+						</div>
 					</div>
 					
 					<!-- Recipients -->
@@ -361,7 +363,7 @@ class Report_Scheduler {
 						<label class="wps-block">
 							<?php esc_html_e( 'Send to:', 'wpshadow' ); ?>
 						</label>
-						<input type="email" name="recipients" placeholder="email@example.com" class="wps-p-8-rounded-4" value="<?php echo esc_attr( implode( ', ', $exec_config['recipients'] ?? array() ) ); ?>" />
+						<input type="email" name="recipients" placeholder="email@example.com" class="wps-input" value="<?php echo esc_attr( implode( ', ', $exec_config['recipients'] ?? array() ) ); ?>" />
 						<p class="wps-m-6">
 							<?php esc_html_e( 'Separate multiple emails with commas', 'wpshadow' ); ?>
 						</p>
@@ -405,19 +407,21 @@ class Report_Scheduler {
 						<label class="wps-block">
 							<?php esc_html_e( 'Frequency:', 'wpshadow' ); ?>
 						</label>
-						<select name="frequency" class="wps-p-8-rounded-4">
-							<?php
-							$freq = $det_config['frequency'] ?? 'monthly';
-							foreach ( $frequencies as $value => $label ) :
-								if ( $value === 'disabled' ) {
-									continue;
-								}
-								?>
-							<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $freq, $value ); ?>>
-								<?php echo esc_html( $label ); ?>
-							</option>
-							<?php endforeach; ?>
-						</select>
+						<div class="wps-select-wrapper">
+							<select name="frequency" class="wps-select">
+								<?php
+								$freq = $det_config['frequency'] ?? 'monthly';
+								foreach ( $frequencies as $value => $label ) :
+									if ( $value === 'disabled' ) {
+										continue;
+									}
+									?>
+								<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $freq, $value ); ?>>
+									<?php echo esc_html( $label ); ?>
+								</option>
+								<?php endforeach; ?>
+							</select>
+						</div>
 					</div>
 					
 					<!-- Recipients -->
@@ -425,7 +429,7 @@ class Report_Scheduler {
 						<label class="wps-block">
 							<?php esc_html_e( 'Send to:', 'wpshadow' ); ?>
 						</label>
-						<input type="email" name="recipients" placeholder="email@example.com" class="wps-p-8-rounded-4" value="<?php echo esc_attr( implode( ', ', $det_config['recipients'] ?? array() ) ); ?>" />
+						<input type="email" name="recipients" placeholder="email@example.com" class="wps-input" value="<?php echo esc_attr( implode( ', ', $det_config['recipients'] ?? array() ) ); ?>" />
 						<p class="wps-m-6">
 							<?php esc_html_e( 'Separate multiple emails with commas', 'wpshadow' ); ?>
 						</p>
