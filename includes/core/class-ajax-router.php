@@ -126,5 +126,9 @@ class AJAX_Router
 		// Timezone management
 		\WPShadow\Admin\Ajax\Detect_Timezone_Handler::register();
 		\WPShadow\Admin\Ajax\Set_Timezone_Handler::register();
+
+		// Visual comparison operations
+		\WPShadow\Admin\Ajax\Get_Visual_Comparisons_Handler::register();
+		\WPShadow\Admin\Ajax\Get_Visual_Comparison_Handler::register();
 	}
 }

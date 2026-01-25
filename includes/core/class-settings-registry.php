@@ -199,6 +199,42 @@ class Settings_Registry
 			'show_in_rest' => false,
 			'description' => __('WordPress Heartbeat API optimization settings', 'wpshadow'),
 		]);
+
+		// =================================================================
+		// VISUAL COMPARISON SETTINGS
+		// =================================================================
+
+		register_setting('wpshadow_settings', 'wpshadow_visual_comparison_enabled', [
+			'type' => 'boolean',
+			'default' => true,
+			'sanitize_callback' => 'rest_sanitize_boolean',
+			'show_in_rest' => false,
+			'description' => __('Enable visual comparison screenshots before/after treatments', 'wpshadow'),
+		]);
+
+		register_setting('wpshadow_settings', 'wpshadow_visual_comparison_retention_days', [
+			'type' => 'integer',
+			'default' => 30,
+			'sanitize_callback' => [__CLASS__, 'sanitize_retention_days'],
+			'show_in_rest' => false,
+			'description' => __('Number of days to keep visual comparison screenshots', 'wpshadow'),
+		]);
+
+		register_setting('wpshadow_settings', 'wpshadow_visual_comparison_width', [
+			'type' => 'integer',
+			'default' => 1200,
+			'sanitize_callback' => [__CLASS__, 'sanitize_screenshot_dimension'],
+			'show_in_rest' => false,
+			'description' => __('Screenshot width in pixels', 'wpshadow'),
+		]);
+
+		register_setting('wpshadow_settings', 'wpshadow_visual_comparison_height', [
+			'type' => 'integer',
+			'default' => 800,
+			'sanitize_callback' => [__CLASS__, 'sanitize_screenshot_dimension'],
+			'show_in_rest' => false,
+			'description' => __('Screenshot height in pixels', 'wpshadow'),
+		]);
 	}
 
 	/**
@@ -332,5 +368,29 @@ class Settings_Registry
 		}
 
 		return $sanitized;
+	}
+
+	/**
+	 * Sanitize retention days for visual comparisons
+	 *
+	 * @param mixed $value Input value
+	 * @return int Sanitized value (7-365 days)
+	 */
+	public static function sanitize_retention_days($value): int
+	{
+		$int = absint($value);
+		return min(max($int, 7), 365); // Clamp between 7-365 days
+	}
+
+	/**
+	 * Sanitize screenshot dimension
+	 *
+	 * @param mixed $value Input value
+	 * @return int Sanitized value (400-2560 pixels)
+	 */
+	public static function sanitize_screenshot_dimension($value): int
+	{
+		$int = absint($value);
+		return min(max($int, 400), 2560); // Clamp between 400-2560 pixels
 	}
 }

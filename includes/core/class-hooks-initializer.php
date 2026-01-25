@@ -193,11 +193,12 @@ class Hooks_Initializer {
 				));
 			}
 		}
+	}
 
-		// Only enqueue other assets on WPShadow pages
-		if (! is_string($hook) || strpos($hook, 'wpshadow') === false) {
-			return;
-		}
+	// Only enqueue other assets on WPShadow pages
+	if (! is_string($hook) || strpos($hook, 'wpshadow') === false) {
+		return;
+	}
 
 		// Enqueue design system
 		wp_enqueue_style(
@@ -771,6 +772,12 @@ class Hooks_Initializer {
 	public static function on_data_cleanup() {
 		if ( class_exists( '\WPShadow\Settings\Data_Retention_Manager' ) ) {
 			\WPShadow\Settings\Data_Retention_Manager::run_cleanup();
+		}
+
+		// Cleanup old visual comparisons
+		if ( class_exists( '\WPShadow\Core\Visual_Comparator' ) ) {
+			$retention_days = get_option( 'wpshadow_visual_comparison_retention_days', 30 );
+			\WPShadow\Core\Visual_Comparator::cleanup_old_comparisons( (int) $retention_days );
 		}
 	}
 

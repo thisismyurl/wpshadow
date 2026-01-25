@@ -123,6 +123,16 @@ class Menu_Manager
 			'wpshadow_render_tools'
 		);
 
+		// Visual Comparisons
+		add_submenu_page(
+			'wpshadow',
+			__('Visual Comparisons', 'wpshadow'),
+			__('Visual Comparisons', 'wpshadow'),
+			'manage_options',
+			'wpshadow-visual-comparisons',
+			'wpshadow_render_visual_comparisons'
+		);
+
 		// Help & Documentation
 		add_submenu_page(
 			'wpshadow',
