@@ -402,10 +402,14 @@ class Diagnostic_Env_Caching_Effectiveness extends Diagnostic_Base {
 		);
 
 		if ( ! empty( $issues ) ) {
-			$description .= __( 'Issues found: ', 'wpshadow' ) . implode( ', ', $issues ) . '.';
+			$description .= sprintf(
+				/* translators: %s: comma-separated list of issues */
+				__( 'Issues found: %s. ', 'wpshadow' ),
+				implode( ', ', $issues )
+			);
 		}
 
-		$description .= ' ' . __( 'Improving cache effectiveness can reduce server load by 50-80% and significantly improve response times.', 'wpshadow' );
+		$description .= __( 'Improving cache effectiveness can reduce server load by 50-80% and significantly improve response times.', 'wpshadow' );
 
 		return array(
 			'id'           => self::$slug,
