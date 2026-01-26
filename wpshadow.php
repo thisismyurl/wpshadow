@@ -3,7 +3,7 @@
 /**
  * Plugin Name: WPShadow
  * Description: Minimal bootstrap to show WPShadow menu and Settings link.
- * Version: 1.2601.210225
+ * Version: 1.2601.210238
  * Author: thisismyurl
  */
 
@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'WPSHADOW_VERSION', '1.2601.210225' );
+define( 'WPSHADOW_VERSION', '1.2601.210238' );
 define( 'WPSHADOW_BASENAME', plugin_basename( __FILE__ ) );
 define( 'WPSHADOW_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WPSHADOW_URL', plugin_dir_url( __FILE__ ) );
@@ -58,6 +58,12 @@ require_once WPSHADOW_PATH . 'includes/core/class-menu-manager.php';
 require_once WPSHADOW_PATH . 'includes/core/class-ajax-router.php';
 require_once WPSHADOW_PATH . 'includes/core/class-hooks-initializer.php';
 require_once WPSHADOW_PATH . 'includes/core/class-plugin-bootstrap.php';
+
+// Load privacy classes (required by AJAX handlers)
+require_once WPSHADOW_PATH . 'includes/privacy/class-consent-preferences.php';
+require_once WPSHADOW_PATH . 'includes/privacy/class-first-run-consent.php';
+
+// Load AJAX handlers (requires privacy classes to be loaded first)
 require_once WPSHADOW_PATH . 'includes/admin/ajax/ajax-handlers-loader.php';
 
 add_action(
