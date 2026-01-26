@@ -50,7 +50,9 @@
 			// Fullscreen toggle button
 			$(document).on('click', '#wpshadow-fullscreen-toggle', function(e) {
 				e.preventDefault();
-			console.log('Fullscreen toggle clicked');
+			self.toggleFullscreen();
+		});
+		
 			// Auto-refresh toggle
 			$(document).on('change', '#wpshadow-autorefresh-toggle', function() {
 				const enabled = $(this).prop('checked');

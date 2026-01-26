@@ -1,8 +1,24 @@
 # WPShadow Diagnostic Features - Complete Matrix
 
-**Total Diagnostics:** 59  
-**Last Updated:** January 21, 2026  
+**Total Diagnostics:** 60 (1 implemented, 59 planned)  
+**Last Updated:** January 26, 2026  
 **Location:** `includes/diagnostics/`
+
+## Implementation Status
+
+✅ **Implemented:** 1  
+📋 **Planned:** 59  
+**Progress:** 1.7%
+
+---
+
+## Implemented Diagnostics
+
+| ID | Slug | Category | Threat Level | Auto-Fixable | Status | File |
+|----|------|----------|--------------|--------------|--------|------|
+| 1 | `php-version` | Settings | 25-95 (varies) | No | ✅ Live | [class-diagnostic-php-version.php](../includes/diagnostics/tests/settings/class-diagnostic-php-version.php) |
+
+---
 
 ## Quick Summary by Category
 

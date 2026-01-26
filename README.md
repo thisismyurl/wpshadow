@@ -3,16 +3,17 @@
 > **A WordPress plugin that genuinely helps, built on principles of accessibility, inclusivity, and education**
 
 **Version:** 1.2601.2148  
-**Status:** ✅ Production Ready - Phase 3 Complete (Accessibility & Inclusivity as CANON)  
+**Status:** ✅ Core Plugin Production Ready | SaaS & Ecosystem In Development  
 **License:** GPL v2 or later  
-**Last Updated:** January 24, 2026
+**Last Updated:** January 26, 2026
 
 ---
 
 ## 🎯 Quick Start
 
 ### For Users
-👉 **Install from WordPress.org:** [WPShadow Plugin](https://wordpress.org/plugins/wpshadow/)
+👉 **Install from WordPress.org:** [WPShadow Plugin](https://wordpress.org/plugins/wpshadow/)  
+👉 **SaaS Features:** [wpshadow.com](https://wpshadow.com) (KB articles, training, cloud backups)
 
 ### For Developers
 
@@ -62,7 +63,9 @@ docs/INDEX.md                             - Complete documentation index
 - ✅ **Workflow Automation** (11-file engine with triggers, actions, executor)
 - ✅ **Multisite Support** (network-aware with proper capabilities)
 - ✅ **Accessibility-First Design** (WCAG compliant, inclusive patterns)
-- ✅ **65 Curated Docs** (cleaned, organized, publication-ready)
+- ✅ **Guardian System** (integrated diagnostics/treatments monitoring)
+- ✅ **16 Built-in Tools** (accessibility audit, color contrast, deep scan, cache, etc.)
+- ✅ **54 Curated Docs** (cleaned, organized, publication-ready)
 
 **Code Quality:** ⭐⭐⭐⭐⭐ (5/5)
 - 43/43 treatments use base classes (100% DRY)

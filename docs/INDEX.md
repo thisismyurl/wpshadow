@@ -69,7 +69,11 @@
 - [EXTERNAL_CRON_INTEGRATION_GUIDE.md](EXTERNAL_CRON_INTEGRATION_GUIDE.md) - Cron Integration
 - [SCHEDULER_PERFORMANCE_INTEGRATION.md](SCHEDULER_PERFORMANCE_INTEGRATION.md) - Performance Integration
 
-### 📊 Dashboard & UI
+### � Tools & Utilities
+- [TOOLS_REFERENCE.md](TOOLS_REFERENCE.md) - Complete Guide to All 16 Built-in Tools
+- [TOOLTIP_QUICK_REFERENCE.md](TOOLTIP_QUICK_REFERENCE.md) - Tooltip System
+
+### �📊 Dashboard & UI
 - [KANBAN_UI_GUIDE.md](KANBAN_UI_GUIDE.md) - Kanban Board Interface
 - [DASHBOARD_LAYOUT_GUIDE.md](DASHBOARD_LAYOUT_GUIDE.md) - Dashboard Components
 - [KPI_METRICS_QUICK_REFERENCE.md](KPI_METRICS_QUICK_REFERENCE.md) - KPI Tracking

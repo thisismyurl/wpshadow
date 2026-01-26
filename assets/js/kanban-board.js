@@ -1023,10 +1023,8 @@ jQuery(document).ready(function ($) {
 				count = $content.find('> .finding-card').length;
 			}
 
-			// Update count badge with new structure
-			const $countBadge = $column.find('.kanban-column-count');
 			// Update count badge (supports both old and new structure)
-			const $countBadge = $column.find('.wps-kanban-count-badge, .column-count');
+			const $countBadge = $column.find('.wps-kanban-count-badge, .column-count, .kanban-column-count');
 			if ($countBadge.length) {
 				$countBadge.text(count);
 				$countBadge.attr('aria-label', count + ' items');

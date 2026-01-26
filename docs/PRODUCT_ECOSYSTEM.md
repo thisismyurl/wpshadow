@@ -9,6 +9,11 @@
 
 WPShadow is a family of products built on a single philosophy: **helpful neighbor, not sales tool**. Each product serves a specific need while maintaining our commitment to free-first, education-focused, privacy-respectful WordPress management.
 
+**Key Terminology:**
+- **Guardian**: Integrated diagnostics/treatments system (part of free plugin)
+- **SaaS**: Hosted features at wpshadow.com (KB articles, training, cloud backups)
+- **Pro**: Commercial plugin in separate repository (wpshadow-pro)
+
 ---
 
 ## Product Architecture
@@ -72,7 +77,103 @@ Everything that doesn't require ongoing server costs is free forever.
 
 ---
 
-## 2. WPShadow Guardian (SaaS/AI Tools)
+## 2. WPShadow SaaS (Hosted Features)
+
+### What It Is
+Cloud-based hosted features at wpshadow.com that extend the free plugin. Includes Vault (backups), Academy (training), knowledge base, and cloud integrations.
+
+### Philosophy
+> "Your helpful neighbor who offers to store your extra tools in their garage—because they genuinely want to help, not because they want to sell you a storage unit."
+
+### Components
+
+#### Vault (Cloud Backups)
+**Status:** 🔴 In Development  
+**Free Tier:**
+- 1GB cloud storage
+- Daily automated backups
+- 7-day retention
+- One-click restore
+
+**Paid Tiers:**
+- Unlimited storage
+- Real-time backups
+- 90-day retention
+- Migration tools
+
+#### Academy (Learning Platform)  
+**Status:** 🔴 In Development  
+**Free Tier:**
+- Access to all basic courses
+- WordPress fundamentals
+- WPShadow feature tutorials
+- Community support
+
+**Paid Tiers:**
+- Advanced courses
+- Certification programs
+- Private workshops
+- Priority support
+
+#### Knowledge Base
+**Status:** 🟡 Partial (articles exist, integration pending)  
+**Free Access:**
+- All KB articles
+- Video tutorials
+- Code examples
+- Community Q&A
+
+### Integration
+- Plugin communicates with wpshadow.com API
+- Registration required (free tier available)
+- No features locked until quota exceeded
+- Clear pricing before any costs
+
+---
+
+## 3. Guardian System (Integrated Monitoring)
+
+### What It Is
+Built into the free WPShadow plugin. The Guardian system continuously monitors your WordPress site, runs diagnostics, applies treatments, and alerts you to issues—all locally within your WordPress installation.
+
+### Philosophy
+> "The watchful neighbor who notices your porch light is out and lets you know—not because they sell lightbulbs, but because they care."
+
+### Features (All Free Forever)
+- **57 Diagnostics:** Security, performance, code quality, config, monitoring
+- **44 Auto-Fix Treatments:** Safe, reversible fixes with backup/undo
+- **Continuous Monitoring:** Health checks run automatically
+- **Smart Alerting:** Only notify when action needed
+- **KPI Tracking:** Time saved, issues fixed, site health score
+- **Activity Logging:** Complete audit trail
+- **Crisis Mode:** Automatic issue prioritization
+
+### How It Works
+```
+Guardian Cycle (runs every hour by default):
+
+1. Run Diagnostics → Detect issues
+2. Prioritize Findings → Assess threat levels
+3. Apply Auto-Fixes → Safe treatments with backup
+4. Log Activity → Track KPIs
+5. Alert if Needed → Only critical issues
+```
+
+### Configuration
+- Frequency: Hourly/Daily/Weekly (customizable)
+- Auto-fix: Enable/disable per finding type
+- Notifications: Email/dashboard (customizable)
+- Exclusions: Skip specific checks
+
+### No External Dependencies
+- Runs entirely within WordPress
+- No API calls required
+- No registration needed
+- Works offline
+
+---
+
+## 4. WPShadow Pro (Commercial Plugin)
 
 ### What It Is
 Cloud-based AI-powered analysis and monitoring tools. Requires registration to access, includes generous free tier with token-based upgrades.
