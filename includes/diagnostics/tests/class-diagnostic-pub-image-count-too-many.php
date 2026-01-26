@@ -183,7 +183,8 @@ class Diagnostic_Pub_Image_Count_Too_Many extends Diagnostic_Base {
 			$word_count = str_word_count( $plain_text );
 
 			// Count images in post content.
-			preg_match_all( '/<img\s+[^>]*>/i', $content, $matches );
+			// Handles both self-closing and regular img tags.
+			preg_match_all( '/<img\s[^>]*?\/?>/i', $content, $matches );
 			$image_count = count( $matches[0] );
 
 			// Calculate maximum recommended images based on word count.
@@ -199,7 +200,7 @@ class Diagnostic_Pub_Image_Count_Too_Many extends Diagnostic_Base {
 					'word_count'             => $word_count,
 					'image_count'            => $image_count,
 					'max_recommended_images' => $max_recommended_images,
-					'ratio'                  => $word_count > 0 ? round( $word_count / $image_count, 0 ) : 0,
+					'ratio'                  => $image_count > 0 ? round( $word_count / $image_count, 0 ) : 0,
 				);
 			}
 		}
