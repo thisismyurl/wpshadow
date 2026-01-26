@@ -119,6 +119,9 @@ require_once $ajax_path . 'Set_Timezone_Handler.php';
 require_once $ajax_path . 'Get_Visual_Comparisons_Handler.php';
 require_once $ajax_path . 'Get_Visual_Comparison_Handler.php';
 
+// Exit interview operations
+require_once $ajax_path . 'Submit_Exit_Interview_Handler.php';
+
 // Kanban operations (loaded separately in kanban-module.php)
 // - Get_Finding_Family_Handler.php
 // - Apply_Family_Fix_Handler.php

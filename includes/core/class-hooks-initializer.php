@@ -32,6 +32,7 @@ class Hooks_Initializer {
 	public static function init() {
 		// Activation/Deactivation
 		register_activation_hook( WPSHADOW_BASENAME, array( __CLASS__, 'on_activate' ) );
+		register_deactivation_hook( WPSHADOW_BASENAME, array( __CLASS__, 'on_deactivate' ) );
 
 		// Admin initialization
 		add_action( 'admin_init', array( __CLASS__, 'on_admin_init' ) );
@@ -93,6 +94,16 @@ class Hooks_Initializer {
 		Database_Migrator::migrate();
 
 		set_transient( 'wpshadow_redirect_to_dashboard', true, 30 );
+	}
+
+	/**
+	 * Plugin deactivation hook
+	 */
+	public static function on_deactivate() {
+		// Store deactivation timestamp for exit interview
+		if ( class_exists( '\\WPShadow\\Engagement\\Exit_Interview' ) ) {
+			\WPShadow\Engagement\Exit_Interview::on_deactivation();
+		}
 	}
 
 	/**

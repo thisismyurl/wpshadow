@@ -5,11 +5,6 @@
     },
     "git": {
       "version": "latest"
-    },
-    "docker-in-docker": {
-      "version": "latest",
-      "moby": true,
-      "dockerDashComposeVersion": "v2"
     }
   }
 }

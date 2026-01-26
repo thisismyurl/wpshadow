@@ -66,7 +66,7 @@ fi
 
 # Wait for WordPress to be ready
 # -------------------------------
-# Why: WordPress runs in a separate Docker container. We need to wait
+# Why: WordPress initialization takes time. We need to wait
 # until MySQL is ready and WordPress is fully installed before we can
 # activate plugins or make changes.
 #
@@ -84,7 +84,7 @@ until wp core is-installed --allow-root 2>/dev/null; do
     if [ $WAIT_COUNT -gt 60 ]; then
         helpful_error \
             "WordPress took too long to start (over 2 minutes)" \
-            "This might mean Docker is low on resources or MySQL failed to start. Try rebuilding the container." \
+            "This might mean the environment is low on resources or MySQL failed to start. Try rebuilding the container." \
             "https://docs.wpshadow.com/troubleshooting/wp-timeout"
         exit 1
     fi

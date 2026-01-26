@@ -23,9 +23,9 @@ The `.gitattributes` file automatically excludes development files from GitHub r
 - `vendor/` (Composer dev dependencies)
 - `composer.json` and `composer.lock`
 
-❌ **Docker/Development Setup:**
-- `docker-compose.yml`
-- `setup-docker.sh`
+❌ **Development Setup:**
+- `.devcontainer/`
+- `tests/`
 - `wp-config-extra.php`
 - `wp-content/` (test site)
 

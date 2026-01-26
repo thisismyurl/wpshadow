@@ -406,22 +406,12 @@ cd wpshadow
 # Install dependencies (dev only - plugin has zero runtime dependencies)
 composer install
 
-# Start Docker test environment (WordPress + MySQL)
-docker-compose up -d
-
-# Access WordPress
-# URL: http://localhost:8080
-# Admin: admin / admin
-
 # Run code quality checks
 composer phpcs      # PHP_CodeSniffer (WordPress standards)
 composer phpstan    # Static analysis (level 6)
-
-# Watch logs
-docker-compose logs -f wordpress
 ```
 
-See [TESTING_SETUP.md](TESTING_SETUP.md) for detailed setup instructions.
+See [TESTING_GUIDE.md](TESTING_GUIDE.md) for detailed testing instructions.
 
 ### File Structure
 

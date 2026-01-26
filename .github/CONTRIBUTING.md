@@ -37,7 +37,7 @@ Thanks for your interest in contributing! This guide ensures contributions align
 git clone https://github.com/thisismyurl/wpshadow.git
 cd wpshadow
 
-# See README.md for Docker/dev environment setup
+# See README.md for Codespaces development environment setup
 cat README.md
 ```
 

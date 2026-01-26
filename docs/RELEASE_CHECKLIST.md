@@ -32,7 +32,7 @@
 - [x] Core plugin files in root (wpshadow.php, readme.txt, LICENSE)
 - [x] Proper directory structure (includes/, assets/, pro-modules/, vendor/)
 - [x] Development files removed (.github/, .devcontainer/, scripts/, tools/, etc.)
-- [x] Temporary files cleaned up (tmp/, docker-compose*, setup-docker.sh, migrate-files.sh)
+- [x] Temporary files cleaned up (tmp/, setup scripts)
 - [x] .distignore created for packaging exclusions
 - [x] No unnecessary files in package
 
@@ -119,9 +119,8 @@
 - [x] scripts/ directory
 - [x] tools/ directory
 - [x] tmp/ directory
-- [x] docker-compose.yml
-- [x] docker-compose-test.yml
-- [x] setup-docker.sh
+- [x] .devcontainer/
+- [x] tests/
 - [x] migrate-files.sh
 - [x] .copilot-instructions.md
 - [x] .gitmessage file

@@ -22,13 +22,9 @@ git clone https://github.com/thisismyurl/wpshadow.git
 cd wpshadow
 ```
 
-**Access Docker Environment (for development)**
-```bash
-cd dev-tools
-docker-compose up -d
-# Access: http://localhost:9000
-# Admin: http://localhost:9000/wp-admin (admin/password)
-```
+**Development Environment**
+
+For development, open this repository in GitHub Codespaces or VS Code with the Dev Containers extension. The environment will be automatically configured.
 
 **2. Read Core Philosophy**
 ```
@@ -233,10 +229,9 @@ composer phpcs
 # 3. Static analysis
 composer phpstan
 
-# 4. Load plugin locally (using Docker)
-cd dev-tools
-docker-compose up -d
-# Access: http://localhost:8080/wp-admin/
+# 4. Load plugin locally (using Codespaces)
+# Plugin is already loaded in development environment
+# Access: Your Codespaces URL (shown in terminal on start)
 ```
 
 **Before pushing:**
@@ -273,10 +268,7 @@ docs/
 
 dev-tools/                             # Development scripts (not in releases)
 ├── README.md                          # Developer tools documentation
-├── docker-compose.yml                 # Docker environment setup
 ├── kb-articles/                       # Knowledge base article sources
-├── generate-kb-articles.py            # KB generation script
-├── test-wp-connection.py              # WordPress connection tester
 └── wp-content/                        # Test WordPress content
 ```
 

@@ -74,7 +74,7 @@ fi
 if [ ! -f "/var/www/html/wp-config.php" ]; then
     echo "📦 Auto-installing WordPress..."
     
-    # Wait for wp-config to be created by WordPress Docker image
+    # Wait for wp-config to be created by WordPress installation
     for i in {1..30}; do
         if [ -f "/var/www/html/wp-config.php" ]; then
             echo "✅ WordPress installed"

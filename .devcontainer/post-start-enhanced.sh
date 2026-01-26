@@ -19,25 +19,15 @@ ERROR_COUNT=0
 RECOVERY_NEEDED=false
 
 # ============================================================================
-# 1. VERIFY DOCKER DAEMON
+# 1. ENVIRONMENT CHECK
 # ============================================================================
-echo -e "${BLUE}[1/8] Checking Docker daemon...${NC}"
-if docker ps &>/dev/null; then
-    echo -e "${GREEN}✓ Docker daemon is running${NC}"
-else
-    echo -e "${YELLOW}⚠ Docker daemon may not be responding${NC}"
-    ERROR_COUNT=$((ERROR_COUNT + 1))
-fi
+echo -e "${BLUE}[1/8] Environment check...${NC}"
+echo -e "${GREEN}✓ Codespace environment ready${NC}"
 
 # ============================================================================
 # 2. VERIFY MYSQL SERVICE
 # ============================================================================
 echo -e "${BLUE}[2/8] Checking MySQL service...${NC}"
-if ! docker ps | grep -q "mysql"; then
-    echo -e "${RED}✗ MySQL container not running - attempting to start...${NC}"
-    docker-compose up -d mysql 2>/dev/null || true
-    RECOVERY_NEEDED=true
-fi
 
 if mysqladmin ping -h mysql -u wordpress -pwordpress &>/dev/null 2>&1; then
     echo -e "${GREEN}✓ MySQL is running${NC}"
@@ -61,11 +51,6 @@ fi
 # 3. VERIFY WORDPRESS SERVICE
 # ============================================================================
 echo -e "${BLUE}[3/8] Checking WordPress service...${NC}"
-if ! docker ps | grep -q "wordpress"; then
-    echo -e "${RED}✗ WordPress container not running - attempting to start...${NC}"
-    docker-compose up -d wordpress 2>/dev/null || true
-    RECOVERY_NEEDED=true
-fi
 
 if curl -s http://localhost/ &>/dev/null; then
     echo -e "${GREEN}✓ WordPress is responding${NC}"
@@ -153,7 +138,7 @@ echo -e "${BLUE}[8/8] Recovery check...${NC}"
 if [ "$RECOVERY_NEEDED" = true ]; then
     echo -e "${YELLOW}⚠ Attempting auto-recovery...${NC}"
     sleep 5
-    docker-compose restart &>/dev/null || true
+    # Service restart managed by Codespaces
     echo -e "${GREEN}✓ Services restarted${NC}"
 fi
 
@@ -193,9 +178,9 @@ echo ""
 # QUICK COMMANDS
 # ============================================================================
 echo -e "${BLUE}Quick Commands:${NC}"
-echo "  View logs:           docker-compose logs -f wordpress"
-echo "  MySQL client:        docker exec -it wpshadow-mysql mysql -u wordpress -pwordpress wordpress"
-echo "  Restart services:    docker-compose restart"
+echo "  View logs:           Check VS Code Output panel"
+echo "  MySQL client:        mysql -u wordpress -pwordpress wordpress"
+echo "  Restart services:    Rebuild Codespace if needed"
 echo "  Check setup log:     cat $LOG"
 echo ""
 

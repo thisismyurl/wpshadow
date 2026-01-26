@@ -295,9 +295,6 @@ Ready to publish? Make sure you've covered:
 
 **Container won't start?**
 ```bash
-# Check Docker is running
-docker ps
-
 # Rebuild container
 # In VS Code: F1 → "Dev Containers: Rebuild Container"
 ```

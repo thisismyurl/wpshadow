@@ -32,7 +32,7 @@
 - [ ] GitHub issues closed or linked
 
 **Testing**
-- [ ] Functionality tested in Docker environment
+- [ ] Functionality tested in GitHub Codespaces environment
 - [ ] Dashboard displays correctly
 - [ ] Treatments execute with proper undo
 - [ ] AJAX handlers respond correctly
@@ -66,7 +66,7 @@ git push origin main --tags
 ## 🚀 Deployment Environments
 
 ### Development
-- **Location:** Docker container (wpshadow-site)
+- **Location:** WordPress site (wpshadow-site)
 - **Database:** MySQL 8.0
 - **PHP Version:** 8.3.30
 - **Updates:** Real-time from git
@@ -186,7 +186,7 @@ git checkout -b hotfix/critical-issue v1.2601.0001
 # ... make changes ...
 
 # 4. Test locally
-docker-compose restart
+# Restart WordPress/PHP-FPM if needed
 # ... verify fix ...
 
 # 5. Commit and tag

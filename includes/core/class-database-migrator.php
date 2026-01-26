@@ -125,6 +125,27 @@ class Database_Migrator {
 
 		dbDelta($sql_activity);
 		*/
+
+		// Exit interview table
+		$table_exit_interviews = $wpdb->prefix . 'wpshadow_exit_interviews';
+		$sql_exit_interviews   = "CREATE TABLE {$table_exit_interviews} (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			reason varchar(50) NOT NULL,
+			details text,
+			allow_contact tinyint(1) DEFAULT 0,
+			contact_email varchar(255),
+			site_url varchar(255),
+			plugin_version varchar(20),
+			wp_version varchar(20),
+			php_version varchar(20),
+			created_at datetime NOT NULL,
+			interview_type varchar(20) DEFAULT 'deactivation',
+			PRIMARY KEY  (id),
+			KEY created_at (created_at),
+			KEY interview_type (interview_type)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
+
+		dbDelta( $sql_exit_interviews );
 	}
 
 	/**
