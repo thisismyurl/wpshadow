@@ -93,7 +93,7 @@ class Diagnostic_Gdpr_Data_Deletion_Capability extends Diagnostic_Base {
 	 * @return string Translatable diagnostic description.
 	 */
 	public static function get_description(): string {
-		return __( 'Can users request data deletion?. Part of Compliance & Legal Risk analysis.', 'wpshadow' );
+		return __( 'Can users request data deletion? Part of Compliance & Legal Risk analysis.', 'wpshadow' );
 	}
 
 	/**
