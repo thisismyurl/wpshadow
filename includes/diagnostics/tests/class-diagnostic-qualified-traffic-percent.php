@@ -74,7 +74,7 @@ class Diagnostic_QualifiedTrafficPercent extends Diagnostic_Base {
 	 * @return string Diagnostic identifier.
 	 */
 	public static function get_id(): string {
-		return 'qualified-traffic-percent';
+		return static::$slug;
 	}
 
 	/**
@@ -189,13 +189,13 @@ class Diagnostic_QualifiedTrafficPercent extends Diagnostic_Base {
 			);
 
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
-				'qualified-traffic-percent',
+				static::$slug,
 				__( 'Low Qualified Traffic Percentage', 'wpshadow' ),
 				$description,
 				'user-engagement',
 				'medium',
 				50,
-				'qualified-traffic-percent'
+				static::$slug
 			);
 		}
 
@@ -261,14 +261,16 @@ class Diagnostic_QualifiedTrafficPercent extends Diagnostic_Base {
 			return 0;
 		}
 
+		$post_count = count( $recent_posts );
+
 		// Count approved comments on recent posts.
 		$total_comments = 0;
 		foreach ( $recent_posts as $post ) {
 			$total_comments += (int) get_comments_number( $post->ID );
 		}
 
-		// Calculate average comments per post.
-		$avg_comments_per_post = $total_comments / count( $recent_posts );
+		// Calculate average comments per post (guard against division by zero).
+		$avg_comments_per_post = $post_count > 0 ? $total_comments / $post_count : 0;
 
 		// Score based on comments per post:
 		// 0 comments = 0 score
@@ -295,9 +297,7 @@ class Diagnostic_QualifiedTrafficPercent extends Diagnostic_Base {
 	 * @return int Score from 0-100.
 	 */
 	private static function get_content_freshness_score(): int {
-		// Count posts published in the last 30 days.
-		$recent_post_count = (int) wp_count_posts( 'post' )->publish;
-
+		// Check if posts published in the last 30 days exist.
 		$args = array(
 			'post_type'      => 'post',
 			'post_status'    => 'publish',
@@ -357,8 +357,8 @@ class Diagnostic_QualifiedTrafficPercent extends Diagnostic_Base {
 			return 50;
 		}
 
-		// Calculate spam percentage.
-		$spam_percentage = ( $spam_count / $total_comments ) * 100;
+		// Calculate spam percentage (guard against division by zero).
+		$spam_percentage = $total_comments > 0 ? ( $spam_count / $total_comments ) * 100 : 0;
 
 		// Score inversely proportional to spam:
 		// 0-10% spam = 100 score
