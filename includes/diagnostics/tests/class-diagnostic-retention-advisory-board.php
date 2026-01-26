@@ -170,6 +170,7 @@ class Diagnostic_Retention_Advisory_Board extends Diagnostic_Base {
 		global $wpdb;
 
 		// Check 1: Look for pages with advisory board content.
+		// Search titles only for performance (indexed column).
 		$advisory_keywords = array( 'advisory board', 'customer advisory', 'advisory council', 'customer council' );
 		$has_advisory_page = false;
 
@@ -179,8 +180,7 @@ class Diagnostic_Retention_Advisory_Board extends Diagnostic_Base {
 					"SELECT COUNT(*) FROM {$wpdb->posts} 
 					WHERE post_type = 'page' 
 					AND post_status = 'publish' 
-					AND (post_title LIKE %s OR post_content LIKE %s)",
-					'%' . $wpdb->esc_like( $keyword ) . '%',
+					AND post_title LIKE %s",
 					'%' . $wpdb->esc_like( $keyword ) . '%'
 				)
 			);
@@ -236,7 +236,7 @@ class Diagnostic_Retention_Advisory_Board extends Diagnostic_Base {
 				'Customer advisory boards involve key customers in strategic decisions, improving retention by 25-40%. Consider creating a formal advisory council with quarterly meetings, product roadmap input, and exclusive access to leadership.',
 				'wpshadow'
 			),
-			'customer_retention',
+			'general',
 			'medium',
 			52,
 			'retention-advisory-board'
