@@ -6,12 +6,29 @@ use WPShadow\Core\Diagnostic_Base;
 
 
 
+/**
+ * Diagnostic: Pub Internal Links Count
+ *
+ * Checks if published posts contain adequate internal linking (2-3 links per post).
+ * Internal links improve SEO, user engagement, and help readers discover related content.
+ *
+ * Category: Content Publishing
+ * Priority: Low
+ * Philosophy: Commandment #7, 8, 9 (Ridiculously Good, Inspire Confidence, Everything Has a KPI)
+ *
+ * Test Description:
+ * Analyzes recent published posts to ensure they contain at least 2-3 internal links.
+ * Internal linking is a best practice for SEO and user experience.
+ *
+ * @since   1.2601.2148
+ * @package WPShadow\Diagnostics
+ */
 class Diagnostic_Pub_Internal_Links_Count extends Diagnostic_Base {
 	protected static $slug = 'pub-internal-links-count';
 
 	protected static $title = 'Pub Internal Links Count';
 
-	protected static $description = 'Automatically initialized lean diagnostic for Pub Internal Links Count. Optimized for minimal overhead while surfacing high-value signals.';
+	protected static $description = 'Checks if published posts contain adequate internal linking (2-3 links per post).';
 
 	protected static $family = 'general';
 
@@ -57,26 +74,26 @@ class Diagnostic_Pub_Internal_Links_Count extends Diagnostic_Base {
 	/**
 	 * Run diagnostic test
 	 *
+	 * Legacy method for compatibility. New code should use check() directly.
+	 *
+	 * @since  1.2601.2148
 	 * @return array Diagnostic results
 	 */
 	public static function run(): array {
-		// STUB: Implement pub-internal-links-count test
-		// Philosophy focus: Commandment #7, 8, 9
-		//
-		// Data collection strategy:
-		// - Gather relevant metrics from WordPress
-		// - Calculate or query necessary values
-		// - Return structured result
-		//
-		// KB Article: https://wpshadow.com/kb/pub-internal-links-count
-		// Training: https://wpshadow.com/training/category-content-publishing
-		//
-		// User impact: Comprehensive pre-publication audit ensures content meets quality standards, SEO best practices, and accessibility requirements before going live.
+		$result = self::check();
+
+		if ( null === $result ) {
+			return array(
+				'status'  => 'pass',
+				'message' => __( 'Published posts have adequate internal linking', 'wpshadow' ),
+				'data'    => array(),
+			);
+		}
 
 		return array(
-			'status'  => 'todo',
-			'message' => 'Diagnostic not yet implemented',
-			'data'    => array(),
+			'status'  => 'warning',
+			'message' => $result['description'] ?? __( 'Internal link count below recommended threshold', 'wpshadow' ),
+			'data'    => $result,
 		);
 	}
 
@@ -94,20 +111,95 @@ class Diagnostic_Pub_Internal_Links_Count extends Diagnostic_Base {
 		return 'https://wpshadow.com/training/category-content-publishing';
 	}
 
+	/**
+	 * Run the diagnostic check.
+	 *
+	 * Checks if recent published posts have adequate internal linking (2-3 links per post).
+	 * Internal links improve SEO, user engagement, and site navigation.
+	 *
+	 * @since  1.2601.2148
+	 * @return array|null Finding array if issue detected, null if posts have adequate internal links.
+	 */
 	public static function check(): ?array {
-		if ( ! ( false ) ) {
+		// Get recent published posts (sample 20 to balance performance and accuracy).
+		$posts = get_posts(
+			array(
+				'post_type'      => 'post',
+				'post_status'    => 'publish',
+				'posts_per_page' => 20,
+				'fields'         => 'ids',
+				'orderby'        => 'date',
+				'order'          => 'DESC',
+			)
+		);
+
+		// No posts to check - site is healthy.
+		if ( empty( $posts ) ) {
 			return null;
 		}
 
-		return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
-			'pub-internal-links-count',
-			'Pub Internal Links Count',
-			'Automatically initialized lean diagnostic for Pub Internal Links Count. Optimized for minimal overhead while surfacing high-value signals.',
-			'general',
-			'low',
-			30,
-			'pub-internal-links-count'
-		);
+		$site_url              = home_url();
+		$site_domain           = wp_parse_url( $site_url, PHP_URL_HOST );
+		$total_links           = 0;
+		$posts_count           = 0;
+		$posts_below_threshold = 0;
+
+		foreach ( $posts as $post_id ) {
+			$content = get_post_field( 'post_content', $post_id );
+
+			// Find all links in content.
+			preg_match_all( '/<a[^>]+href=["\']([^"\']+)["\']/i', $content, $matches );
+
+			if ( empty( $matches[1] ) ) {
+				++$posts_below_threshold;
+				++$posts_count;
+				continue;
+			}
+
+			$internal_links_count = 0;
+
+			// Check each link to see if it's internal.
+			foreach ( $matches[1] as $link ) {
+				$link_domain = wp_parse_url( $link, PHP_URL_HOST );
+
+				// Internal link if domain matches or is relative path.
+				if ( $link_domain === $site_domain || ( null === $link_domain && 0 === strpos( $link, '/' ) ) ) {
+					++$internal_links_count;
+				}
+			}
+
+			$total_links += $internal_links_count;
+			++$posts_count;
+
+			// Track posts with less than 2 internal links.
+			if ( $internal_links_count < 2 ) {
+				++$posts_below_threshold;
+			}
+		}
+
+		// Calculate average internal links per post.
+		$average_links = $posts_count > 0 ? $total_links / $posts_count : 0;
+
+		// Flag if average is below 2 links per post OR more than 50% of posts have < 2 links.
+		if ( $average_links < 2.0 || ( $posts_below_threshold / $posts_count ) > 0.5 ) {
+			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
+				'pub-internal-links-count',
+				__( 'Low Internal Link Count', 'wpshadow' ),
+				sprintf(
+					/* translators: 1: average links per post, 2: number of posts below threshold, 3: total posts checked */
+					__( 'Your posts average %1$.1f internal links each. %2$d of %3$d recent posts have fewer than 2 internal links. Aim for 2-3 internal links per post to improve SEO and keep readers engaged.', 'wpshadow' ),
+					$average_links,
+					$posts_below_threshold,
+					$posts_count
+				),
+				'general',
+				'low',
+				25,
+				'pub-internal-links-count'
+			);
+		}
+
+		return null;
 	}
 
 	/**
@@ -120,29 +212,89 @@ class Diagnostic_Pub_Internal_Links_Count extends Diagnostic_Base {
 	 * - Verify that check() method returns the correct result based on site state
 	 * - PASS: check() returns NULL when diagnostic condition is NOT met (site is healthy)
 	 * - FAIL: check() returns array when diagnostic condition IS met (issue found)
-	 * - Description: Automatically initialized lean diagnostic for Pub Internal Links Count. Optimized for minimal overhead while surfacing high-value signals.
+	 * - Description: Checks if published posts have adequate internal linking (2-3 links per post).
 	 *
+	 * @since  1.2601.2148
 	 * @return array {
 	 *     @type bool   $passed  Whether the test passed
 	 *     @type string $message Human-readable test result message
 	 * }
 	 */
 	public static function test_live_pub_internal_links_count(): array {
-		/*
-		 * IMPLEMENTATION NOTES:
-		 * - This test validates the actual WordPress site state
-		 * - Do not use mocks or stubs
-		 * - Call self::check() to get the diagnostic result
-		 * - Verify the result matches expected site state
-		 * - Return [ 'passed' => bool, 'message' => string ]
-		 */
+		// Get actual site state.
+		$posts = get_posts(
+			array(
+				'post_type'      => 'post',
+				'post_status'    => 'publish',
+				'posts_per_page' => 20,
+				'fields'         => 'ids',
+				'orderby'        => 'date',
+				'order'          => 'DESC',
+			)
+		);
 
+		// If no posts exist, test passes (nothing to check).
+		if ( empty( $posts ) ) {
+			return array(
+				'passed'  => true,
+				'message' => 'No published posts found. Test passes (nothing to check).',
+			);
+		}
+
+		// Run the diagnostic check.
 		$result = self::check();
 
-		// TODO: Implement actual test logic
+		// Calculate actual stats for reporting.
+		$site_url    = home_url();
+		$site_domain = wp_parse_url( $site_url, PHP_URL_HOST );
+		$total_links = 0;
+		$posts_count = count( $posts );
+
+		foreach ( $posts as $post_id ) {
+			$content = get_post_field( 'post_content', $post_id );
+			preg_match_all( '/<a[^>]+href=["\']([^"\']+)["\']/i', $content, $matches );
+
+			if ( ! empty( $matches[1] ) ) {
+				foreach ( $matches[1] as $link ) {
+					$link_domain = wp_parse_url( $link, PHP_URL_HOST );
+					if ( $link_domain === $site_domain || ( null === $link_domain && 0 === strpos( $link, '/' ) ) ) {
+						++$total_links;
+					}
+				}
+			}
+		}
+
+		$average_links = $posts_count > 0 ? $total_links / $posts_count : 0;
+
+		// Test passes if check() correctly identifies the state.
+		if ( null === $result && $average_links >= 2.0 ) {
+			// Healthy state correctly identified.
+			return array(
+				'passed'  => true,
+				'message' => sprintf(
+					'Test PASSED: Posts have adequate internal links (%.1f average per post).',
+					$average_links
+				),
+			);
+		} elseif ( is_array( $result ) && $average_links < 2.0 ) {
+			// Issue correctly identified.
+			return array(
+				'passed'  => true,
+				'message' => sprintf(
+					'Test PASSED: Issue correctly detected (%.1f average internal links per post).',
+					$average_links
+				),
+			);
+		}
+
+		// Test failed - check() returned incorrect result.
 		return array(
 			'passed'  => false,
-			'message' => 'Test not yet implemented for ' . self::$slug,
+			'message' => sprintf(
+				'Test FAILED: check() returned %s but average links is %.1f (expected threshold: 2.0).',
+				null === $result ? 'NULL' : 'array',
+				$average_links
+			),
 		);
 	}
 }
