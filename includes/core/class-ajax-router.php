@@ -55,7 +55,6 @@ class AJAX_Router {
 		\WPShadow\Admin\Ajax\Save_Tagline_Handler::register();
 		\WPShadow\Admin\Ajax\Mark_Notification_Read_Handler::register();
 		\WPShadow\Admin\Ajax\Clear_Notifications_Handler::register();
-		\WPShadow\Admin\Ajax\Update_Notification_Manager::register();
 
 		// Gamification
 		\WPShadow\Admin\Ajax\Get_Gamification_Summary_Handler::register();

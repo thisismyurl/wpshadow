@@ -38,7 +38,6 @@ require_once $ajax_path . 'class-dismiss-scan-notice-handler.php';
 require_once $ajax_path . 'class-save-tagline-handler.php';
 require_once $ajax_path . 'class-mark-notification-read-handler.php';
 require_once $ajax_path . 'class-clear-notifications-handler.php';
-require_once $ajax_path . 'class-update-notification-manager-handler.php';
 
 // Gamification
 require_once $ajax_path . 'class-get-gamification-summary-handler.php';
