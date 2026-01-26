@@ -39,8 +39,7 @@ class Consent_Preferences_Handler extends AJAX_Handler_Base {
 			wp_send_json_error(
 				array(
 					'message' => __( 'Security check failed. Please refresh the page and try again.', 'wpshadow' ),
-				),
-				400
+				)
 			);
 		}
 
@@ -49,8 +48,7 @@ class Consent_Preferences_Handler extends AJAX_Handler_Base {
 			wp_send_json_error(
 				array(
 					'message' => __( 'You must be logged in to save preferences.', 'wpshadow' ),
-				),
-				403
+				)
 			);
 		}
 
@@ -83,8 +81,7 @@ class Consent_Preferences_Handler extends AJAX_Handler_Base {
 			wp_send_json_error(
 				array(
 					'message' => __( 'Security check failed. Please refresh the page and try again.', 'wpshadow' ),
-				),
-				400
+				)
 			);
 		}
 
@@ -93,8 +90,7 @@ class Consent_Preferences_Handler extends AJAX_Handler_Base {
 			wp_send_json_error(
 				array(
 					'message' => __( 'You must be logged in to dismiss this prompt.', 'wpshadow' ),
-				),
-				403
+				)
 			);
 		}
 
