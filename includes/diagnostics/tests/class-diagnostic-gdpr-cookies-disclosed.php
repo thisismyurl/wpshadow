@@ -154,16 +154,15 @@ class Diagnostic_Gdpr_Cookies_Disclosed extends Diagnostic_Base {
 	}
 
 	/**
-	 * Run the diagnostic check
+	 * Check if the site has cookie disclosure
 	 *
-	 * Checks if cookie usage is properly disclosed through:
-	 * 1. Popular cookie consent/notice plugins being active
-	 * 2. Cookie disclosure in the privacy policy content
+	 * Helper method to determine if cookie usage is disclosed through
+	 * either an active cookie consent plugin or privacy policy content.
 	 *
 	 * @since  1.2601.2148
-	 * @return array|null Finding array if issue found, null otherwise.
+	 * @return bool True if disclosure is present, false otherwise.
 	 */
-	public static function check(): ?array {
+	private static function has_cookie_disclosure(): bool {
 		// Ensure required WordPress functions are available.
 		if ( ! function_exists( 'is_plugin_active' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -177,58 +176,67 @@ class Diagnostic_Gdpr_Cookies_Disclosed extends Diagnostic_Base {
 			'cookiebot/cookiebot.php',                       // Cookiebot CMP.
 			'gdpr-cookie-compliance/moove-gdpr.php',         // GDPR Cookie Compliance.
 			'cookie-law-info/cookie-law-info.php',           // CookieYes.
-			'complianz-gdpr/complianz-gpdr.php',             // Complianz.
+			'complianz-gdpr/complianz-gdpr.php',             // Complianz.
 			'uk-cookie-consent/uk-cookie-consent.php',       // UK Cookie Consent.
 			'wp-gdpr-compliance/wp-gdpr-compliance.php',     // WP GDPR Compliance.
 		);
 
-		$has_cookie_disclosure = false;
-
 		// Check if any cookie consent plugin is active.
 		foreach ( $consent_plugins as $plugin ) {
 			if ( is_plugin_active( $plugin ) ) {
-				$has_cookie_disclosure = true;
-				break;
+				return true;
 			}
 		}
 
 		// If no plugin found, check privacy policy for cookie disclosure.
-		if ( ! $has_cookie_disclosure ) {
-			$privacy_policy_id = (int) get_option( 'wp_page_for_privacy_policy', 0 );
+		$privacy_policy_id = (int) get_option( 'wp_page_for_privacy_policy', 0 );
 
-			if ( $privacy_policy_id > 0 ) {
-				$privacy_policy = get_post( $privacy_policy_id );
+		if ( $privacy_policy_id > 0 ) {
+			$privacy_policy = get_post( $privacy_policy_id );
 
-				// Check if privacy policy exists, is published, and mentions cookies.
-				if ( $privacy_policy && 'publish' === $privacy_policy->post_status ) {
-					$content = $privacy_policy->post_content;
+			// Check if privacy policy exists, is published, and mentions cookies.
+			if ( $privacy_policy && 'publish' === $privacy_policy->post_status ) {
+				$content = $privacy_policy->post_content;
 
-					// Search for cookie-related keywords in the content.
-					$cookie_keywords = array( 'cookie', 'cookies', 'tracking', 'analytics' );
-					foreach ( $cookie_keywords as $keyword ) {
-						if ( false !== stripos( $content, $keyword ) ) {
-							$has_cookie_disclosure = true;
-							break;
-						}
+				// Search for cookie-related keywords in the content.
+				$cookie_keywords = array( 'cookie', 'cookies', 'tracking', 'analytics' );
+				foreach ( $cookie_keywords as $keyword ) {
+					if ( false !== stripos( $content, $keyword ) ) {
+						return true;
 					}
 				}
 			}
 		}
 
-		// If no disclosure found, return a finding.
-		if ( ! $has_cookie_disclosure ) {
-			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
-				'gdpr-cookies-disclosed',
-				'Cookie Usage Not Disclosed',
-				__( 'Your website does not appear to disclose cookie usage. GDPR Article 13 requires websites to inform visitors about cookies before setting non-essential ones. Install a cookie consent plugin or add cookie information to your privacy policy.', 'wpshadow' ),
-				'compliance',
-				'high',
-				75,
-				'gdpr-cookies-disclosed'
-			);
+		return false;
+	}
+
+	/**
+	 * Run the diagnostic check
+	 *
+	 * Checks if cookie usage is properly disclosed through:
+	 * 1. Popular cookie consent/notice plugins being active
+	 * 2. Cookie disclosure in the privacy policy content
+	 *
+	 * @since  1.2601.2148
+	 * @return array|null Finding array if issue found, null otherwise.
+	 */
+	public static function check(): ?array {
+		// Check if disclosure is present using helper method.
+		if ( self::has_cookie_disclosure() ) {
+			return null;
 		}
 
-		return null;
+		// If no disclosure found, return a finding.
+		return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
+			'gdpr-cookies-disclosed',
+			'Cookie Usage Not Disclosed',
+			__( 'Your website does not appear to disclose cookie usage. GDPR Article 13 requires websites to inform visitors about cookies before setting non-essential ones. Install a cookie consent plugin or add cookie information to your privacy policy.', 'wpshadow' ),
+			'compliance',
+			'high',
+			75,
+			'gdpr-cookies-disclosed'
+		);
 	}
 
 	/**
@@ -255,50 +263,8 @@ class Diagnostic_Gdpr_Cookies_Disclosed extends Diagnostic_Base {
 		// Run the actual diagnostic check.
 		$result = self::check();
 
-		// Determine if the site has cookie disclosure.
-		$has_disclosure = false;
-
-		// Check for active cookie consent plugins.
-		if ( ! function_exists( 'is_plugin_active' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-
-		$consent_plugins = array(
-			'cookie-notice/cookie-notice.php',
-			'iubenda-cookie-law-consent/iubenda.php',
-			'termly-cookie-consent/termly.php',
-			'cookiebot/cookiebot.php',
-			'gdpr-cookie-compliance/moove-gdpr.php',
-			'cookie-law-info/cookie-law-info.php',
-			'complianz-gdpr/complianz-gpdr.php',
-			'uk-cookie-consent/uk-cookie-consent.php',
-			'wp-gdpr-compliance/wp-gdpr-compliance.php',
-		);
-
-		foreach ( $consent_plugins as $plugin ) {
-			if ( is_plugin_active( $plugin ) ) {
-				$has_disclosure = true;
-				break;
-			}
-		}
-
-		// Check privacy policy for cookie disclosure.
-		if ( ! $has_disclosure ) {
-			$privacy_policy_id = (int) get_option( 'wp_page_for_privacy_policy', 0 );
-			if ( $privacy_policy_id > 0 ) {
-				$privacy_policy = get_post( $privacy_policy_id );
-				if ( $privacy_policy && 'publish' === $privacy_policy->post_status ) {
-					$content        = $privacy_policy->post_content;
-					$cookie_keywords = array( 'cookie', 'cookies', 'tracking', 'analytics' );
-					foreach ( $cookie_keywords as $keyword ) {
-						if ( false !== stripos( $content, $keyword ) ) {
-							$has_disclosure = true;
-							break;
-						}
-					}
-				}
-			}
-		}
+		// Determine if the site has cookie disclosure using helper method.
+		$has_disclosure = self::has_cookie_disclosure();
 
 		// Validate the check() result matches the expected behavior.
 		if ( $has_disclosure ) {
