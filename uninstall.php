@@ -106,11 +106,13 @@ if ( $analytics_consent ) {
 		'uninstall_date' => current_time( 'mysql' ),
 	);
 
-	// Only send if network is available and consent is explicit
+	// Only send if network is available, consent is explicit, and endpoint is configured
 	// This is a fire-and-forget request, won't block uninstall
-	if ( function_exists( 'wp_remote_post' ) ) {
+	$analytics_endpoint = apply_filters( 'wpshadow_analytics_endpoint', '' );
+
+	if ( ! empty( $analytics_endpoint ) && function_exists( 'wp_remote_post' ) ) {
 		wp_remote_post(
-			'https://analytics.wpshadow.com/uninstall', // Placeholder URL
+			$analytics_endpoint,
 			array(
 				'timeout'  => 5,
 				'blocking' => false, // Non-blocking
