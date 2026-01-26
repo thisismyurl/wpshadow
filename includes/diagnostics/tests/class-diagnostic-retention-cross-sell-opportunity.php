@@ -80,7 +80,7 @@ class Diagnostic_RetentionCrossSellOpportunity extends Diagnostic_Base {
 
 		// Check if there are published products.
 		$product_count = self::get_product_count();
-		if ( $product_count < 5 ) {
+		if ( 5 > $product_count ) {
 			return null; // Not meaningful for stores with very few products.
 		}
 
@@ -89,12 +89,12 @@ class Diagnostic_RetentionCrossSellOpportunity extends Diagnostic_Base {
 
 		// Calculate utilization percentage.
 		$utilization_percent = 0;
-		if ( $cross_sell_stats['total_products'] > 0 ) {
+		if ( 0 < $cross_sell_stats['total_products'] ) {
 			$utilization_percent = ( $cross_sell_stats['products_with_cross_sells'] / $cross_sell_stats['total_products'] ) * 100;
 		}
 
 		// Flag as opportunity if less than 20% of products have cross-sells configured.
-		if ( $utilization_percent < 20 ) {
+		if ( 20 > $utilization_percent ) {
 			$products_without = $cross_sell_stats['total_products'] - $cross_sell_stats['products_with_cross_sells'];
 
 			return array(
@@ -152,7 +152,11 @@ class Diagnostic_RetentionCrossSellOpportunity extends Diagnostic_Base {
 
 		// Count total published products.
 		$total_products = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'product' AND post_status = 'publish'"
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = %s AND post_status = %s",
+				'product',
+				'publish'
+			)
 		);
 
 		// Count products with cross-sells configured (non-empty _crosssell_ids meta).
@@ -165,10 +169,12 @@ class Diagnostic_RetentionCrossSellOpportunity extends Diagnostic_Base {
 				AND meta_value IS NOT NULL
 				AND post_id IN (
 					SELECT ID FROM {$wpdb->posts} 
-					WHERE post_type = 'product' AND post_status = 'publish'
+					WHERE post_type = %s AND post_status = %s
 				)",
 				'_crosssell_ids',
-				'a:0:{}'
+				'a:0:{}',
+				'product',
+				'publish'
 			)
 		);
 
