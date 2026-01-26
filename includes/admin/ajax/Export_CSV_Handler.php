@@ -30,16 +30,17 @@ class Export_CSV_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Handle AJAX request
+	 *
+	 * @since 1.2601.2148
+	 * @return void
 	 */
 	public static function handle(): void {
-		// Verify security (URL nonce instead of POST)
-		if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( sanitize_key( $_GET['nonce'] ), 'wpshadow_export' ) ) {
-			wp_die( __( 'Security check failed', 'wpshadow' ), 403 );
-		}
+		// Verify nonce from URL parameter (use check_admin_referer for GET requests)
+		check_admin_referer( 'wpshadow_export', 'nonce' );
 
-		// Capability check
+		// Verify capability
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( __( 'Insufficient permissions', 'wpshadow' ), 403 );
+			wp_die( esc_html__( 'Insufficient permissions', 'wpshadow' ), 403 );
 		}
 
 		// Generate CSV
