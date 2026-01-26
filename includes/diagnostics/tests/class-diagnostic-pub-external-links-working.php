@@ -241,6 +241,8 @@ class Diagnostic_Pub_External_Links_Working extends Diagnostic_Base {
 	/**
 	 * Extract external links from HTML content.
 	 *
+	 * Uses WordPress's DOMDocument for safe HTML parsing to avoid ReDoS attacks.
+	 *
 	 * @since  1.2601.2148
 	 * @param  string $content HTML content to parse.
 	 * @return array Array of external URLs.
@@ -250,26 +252,51 @@ class Diagnostic_Pub_External_Links_Working extends Diagnostic_Base {
 		$site_url       = home_url();
 		$site_host      = wp_parse_url( $site_url, PHP_URL_HOST );
 
-		// Match href attributes in anchor tags.
-		if ( preg_match_all( '/<a[^>]+href=["\']([^"\']+)["\'][^>]*>/i', $content, $matches ) ) {
-			foreach ( $matches[1] as $url ) {
-				// Skip anchors, javascript, mailto, etc.
-				if ( strpos( $url, '#' ) === 0 || strpos( $url, 'javascript:' ) === 0 || strpos( $url, 'mailto:' ) === 0 || strpos( $url, 'tel:' ) === 0 ) {
-					continue;
-				}
+		// Suppress warnings from malformed HTML.
+		libxml_use_internal_errors( true );
 
-				// Skip relative URLs.
-				if ( strpos( $url, 'http' ) !== 0 ) {
-					continue;
-				}
+		// Use DOMDocument for safe HTML parsing.
+		$dom = new \DOMDocument();
+		$dom->loadHTML( '<?xml encoding="UTF-8">' . $content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD );
 
-				// Check if URL is external.
-				$url_host = wp_parse_url( $url, PHP_URL_HOST );
-				if ( $url_host && $url_host !== $site_host ) {
-					$external_links[] = $url;
+		$links = $dom->getElementsByTagName( 'a' );
+
+		foreach ( $links as $link ) {
+			$url = $link->getAttribute( 'href' );
+
+			if ( empty( $url ) ) {
+				continue;
+			}
+
+			// Skip anchors, javascript, mailto, tel, etc.
+			$excluded_prefixes = array( '#', 'javascript:', 'mailto:', 'tel:', 'data:' );
+			$should_skip       = false;
+
+			foreach ( $excluded_prefixes as $prefix ) {
+				if ( 0 === strpos( $url, $prefix ) ) {
+					$should_skip = true;
+					break;
 				}
 			}
+
+			if ( $should_skip ) {
+				continue;
+			}
+
+			// Skip relative URLs.
+			if ( 0 !== strpos( $url, 'http' ) ) {
+				continue;
+			}
+
+			// Check if URL is external.
+			$url_host = wp_parse_url( $url, PHP_URL_HOST );
+			if ( $url_host && $url_host !== $site_host ) {
+				$external_links[] = $url;
+			}
 		}
+
+		// Clear libxml errors.
+		libxml_clear_errors();
 
 		return array_unique( $external_links );
 	}
@@ -278,42 +305,87 @@ class Diagnostic_Pub_External_Links_Working extends Diagnostic_Base {
 	 * Test if an external link is working.
 	 *
 	 * Uses wp_remote_head() for efficiency, falls back to wp_remote_get() if needed.
+	 * Tries with SSL verification first, falls back without SSL verification if that fails.
 	 *
 	 * @since  1.2601.2148
 	 * @param  string $url URL to test.
 	 * @return bool True if link is working, false otherwise.
 	 */
 	private static function test_external_link( string $url ): bool {
-		// Try HEAD request first (faster).
+		// Try HEAD request with SSL verification first.
 		$response = wp_remote_head(
 			$url,
 			array(
-				'timeout'     => 5,
+				'timeout'     => 3,
 				'redirection' => 5,
 				'user-agent'  => 'WPShadow-Diagnostic/1.0 (Link Checker)',
-				'sslverify'   => false, // Some sites have SSL issues but are still reachable.
+				'sslverify'   => true,
 			)
 		);
 
-		// If HEAD request failed, try GET request (some servers don't support HEAD).
-		if ( is_wp_error( $response ) ) {
-			$response = wp_remote_get(
-				$url,
-				array(
-					'timeout'     => 5,
-					'redirection' => 5,
-					'user-agent'  => 'WPShadow-Diagnostic/1.0 (Link Checker)',
-					'sslverify'   => false,
-				)
-			);
+		// Check if request succeeded.
+		if ( ! is_wp_error( $response ) ) {
+			$status_code = wp_remote_retrieve_response_code( $response );
+			// Consider 2xx and 3xx status codes as working.
+			if ( $status_code >= 200 && $status_code < 400 ) {
+				return true;
+			}
 		}
+
+		// If HEAD with SSL failed, try HEAD without SSL verification.
+		$response = wp_remote_head(
+			$url,
+			array(
+				'timeout'     => 3,
+				'redirection' => 5,
+				'user-agent'  => 'WPShadow-Diagnostic/1.0 (Link Checker)',
+				'sslverify'   => false,
+			)
+		);
+
+		// Check if request succeeded.
+		if ( ! is_wp_error( $response ) ) {
+			$status_code = wp_remote_retrieve_response_code( $response );
+			if ( $status_code >= 200 && $status_code < 400 ) {
+				return true;
+			}
+		}
+
+		// If HEAD requests failed, try GET with SSL verification (some servers don't support HEAD).
+		$response = wp_remote_get(
+			$url,
+			array(
+				'timeout'     => 3,
+				'redirection' => 5,
+				'user-agent'  => 'WPShadow-Diagnostic/1.0 (Link Checker)',
+				'sslverify'   => true,
+			)
+		);
+
+		// Check if request succeeded.
+		if ( ! is_wp_error( $response ) ) {
+			$status_code = wp_remote_retrieve_response_code( $response );
+			if ( $status_code >= 200 && $status_code < 400 ) {
+				return true;
+			}
+		}
+
+		// Last resort: GET without SSL verification.
+		$response = wp_remote_get(
+			$url,
+			array(
+				'timeout'     => 3,
+				'redirection' => 5,
+				'user-agent'  => 'WPShadow-Diagnostic/1.0 (Link Checker)',
+				'sslverify'   => false,
+			)
+		);
 
 		// Check if request succeeded.
 		if ( is_wp_error( $response ) ) {
 			return false;
 		}
 
-		// Check HTTP status code.
 		$status_code = wp_remote_retrieve_response_code( $response );
 
 		// Consider 2xx and 3xx status codes as working.
