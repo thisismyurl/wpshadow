@@ -143,15 +143,15 @@ class Diagnostic_Retention_Churn_Rate extends Diagnostic_Base {
 	 * @return array|null Finding array if churn rate is high, null otherwise.
 	 */
 	public static function check(): ?array {
-		// Check if WooCommerce is active
+		// Check if WooCommerce is active.
 		if ( ! class_exists( 'WooCommerce' ) || ! function_exists( 'wc_get_orders' ) ) {
-			// Not applicable without WooCommerce
+			// Not applicable without WooCommerce.
 			return null;
 		}
 
 		global $wpdb;
 
-		// Get all customers who have made at least one order
+		// Get all customers who have made at least one order.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$all_customers = $wpdb->get_results(
 			"SELECT DISTINCT pm.meta_value as customer_email
@@ -165,15 +165,15 @@ class Diagnostic_Retention_Churn_Rate extends Diagnostic_Base {
 
 		$total_customers = count( $all_customers );
 
-		// Need at least 10 customers for meaningful churn analysis
-		if ( $total_customers < 10 ) {
+		// Need at least 10 customers for meaningful churn analysis.
+		if ( 10 > $total_customers ) {
 			return null;
 		}
 
-		// Calculate date 6 months ago
+		// Calculate date 6 months ago.
 		$six_months_ago = gmdate( 'Y-m-d H:i:s', strtotime( '-6 months' ) );
 
-		// Get customers who haven't ordered in 6 months (churned)
+		// Get customers who haven't ordered in 6 months (churned).
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$churned_customers = $wpdb->get_results(
 			$wpdb->prepare(
@@ -200,10 +200,10 @@ class Diagnostic_Retention_Churn_Rate extends Diagnostic_Base {
 		$churned_count = count( $churned_customers );
 		$churn_rate    = ( $churned_count / $total_customers ) * 100;
 
-		// Flag if churn rate exceeds 15%
-		if ( $churn_rate > 15 ) {
+		// Flag if churn rate exceeds 15%.
+		if ( 15 < $churn_rate ) {
 			$severity = 'medium';
-			if ( $churn_rate > 30 ) {
+			if ( 30 < $churn_rate ) {
 				$severity = 'high';
 			}
 
