@@ -1,0 +1,313 @@
+/**
+ * Modern Guardian Dashboard Styles
+ * Phase 2: UI/UX Modernization (Epic #685, Issue #667)
+ * 
+ * Provides clean, modern styling for the Guardian Dashboard with:
+ * - Enhanced KPI cards with trends and visual hierarchy
+ * - Modern activity timeline with icons and colors
+ * - Improved responsive design
+ * - WCAG AA accessibility compliance
+ * 
+ * Philosophy: Inspire Confidence (#8), Show Value (#9)
+ * CANON: Accessibility First
+ * 
+ * @package WPShadow
+ * @since 1.2601.2148
+ */
+
+/* ============================================================================
+   Enhanced KPI Cards
+   ============================================================================ */
+
+.wps-kpi-card {
+	background: #ffffff;
+	border: 1px solid var(--wps-gray-200, #e5e7eb);
+	border-radius: var(--wps-radius-lg, 12px);
+	padding: var(--wps-space-5, 1.25rem);
+	box-shadow: var(--wps-shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1));
+	transition: all var(--wps-transition-base, 0.2s ease);
+	display: flex;
+	flex-direction: column;
+	gap: var(--wps-space-4, 1rem);
+}
+
+.wps-kpi-card:hover {
+	box-shadow: var(--wps-shadow-md, 0 4px 12px rgba(0, 0, 0, 0.15));
+	transform: translateY(-2px);
+	border-color: var(--wps-gray-300, #d1d5db);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wps-kpi-card,
+	.wps-kpi-card:hover {
+		transition: none;
+		transform: none;
+	}
+}
+
+/* KPI Card Header */
+.wps-kpi-card-header {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.wps-kpi-icon-wrapper {
+	width: 48px;
+	height: 48px;
+	border-radius: var(--wps-radius-md, 8px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.wps-kpi-icon {
+	font-size: 24px;
+	width: 24px;
+	height: 24px;
+}
+
+.wps-kpi-trend {
+	font-size: var(--wps-text-sm, 0.875rem);
+	font-weight: var(--wps-font-semibold, 600);
+	display: flex;
+	align-items: center;
+	gap: var(--wps-space-1, 0.25rem);
+}
+
+/* KPI Card Body */
+.wps-kpi-card-body {
+	flex: 1;
+}
+
+.wps-kpi-label {
+	font-size: var(--wps-text-xs, 0.75rem);
+	font-weight: var(--wps-font-semibold, 600);
+	color: var(--wps-gray-500, #6b7280);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	margin: 0 0 var(--wps-space-2, 0.5rem) 0;
+}
+
+.wps-kpi-value {
+	font-size: var(--wps-text-3xl, 1.875rem);
+	font-weight: var(--wps-font-bold, 700);
+	color: var(--wps-gray-900, #111827);
+	line-height: 1.2;
+	margin-bottom: var(--wps-space-1, 0.25rem);
+}
+
+.wps-kpi-description {
+	font-size: var(--wps-text-sm, 0.875rem);
+	color: var(--wps-gray-600, #6b7280);
+	margin: 0;
+	line-height: 1.5;
+}
+
+/* KPI Card Footer */
+.wps-kpi-card-footer {
+	padding-top: var(--wps-space-3, 0.75rem);
+	border-top: 1px solid var(--wps-gray-100, #f3f4f6);
+}
+
+.wps-kpi-link {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--wps-space-1, 0.25rem);
+	font-size: var(--wps-text-sm, 0.875rem);
+	font-weight: var(--wps-font-medium, 500);
+	color: var(--wps-info, #3b82f6);
+	text-decoration: none;
+	transition: color var(--wps-transition-fast, 0.15s ease);
+}
+
+.wps-kpi-link:hover {
+	color: var(--wps-info-dark, #2563eb);
+	text-decoration: none;
+}
+
+.wps-kpi-link:focus-visible {
+	outline: 2px solid var(--wps-info, #3b82f6);
+	outline-offset: 2px;
+	border-radius: var(--wps-radius-sm, 6px);
+}
+
+.wps-kpi-link .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+/* ============================================================================
+   Modern Activity Timeline
+   ============================================================================ */
+
+.wps-activity-timeline {
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+	position: relative;
+}
+
+.wps-activity-item {
+	display: flex;
+	gap: var(--wps-space-4, 1rem);
+	padding: var(--wps-space-4, 1rem) 0;
+	position: relative;
+}
+
+/* Timeline connector line */
+.wps-activity-item::before {
+	content: '';
+	position: absolute;
+	left: 19px; /* Center of icon (48px width / 2 + border) */
+	top: 48px; /* Start after icon */
+	bottom: -16px;
+	width: 2px;
+	background: var(--wps-gray-200, #e5e7eb);
+}
+
+/* Hide connector on last item */
+.wps-activity-item.wps-activity-last::before {
+	display: none;
+}
+
+.wps-activity-icon-wrapper {
+	width: 40px;
+	height: 40px;
+	border-radius: var(--wps-radius-full, 50%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	border: 2px solid;
+	position: relative;
+	z-index: 1;
+	background: #ffffff;
+}
+
+.wps-activity-icon-wrapper .dashicons {
+	font-size: 20px;
+	width: 20px;
+	height: 20px;
+}
+
+.wps-activity-content {
+	flex: 1;
+	min-width: 0; /* Allow text truncation */
+}
+
+.wps-activity-text {
+	font-size: var(--wps-text-sm, 0.875rem);
+	font-weight: var(--wps-font-medium, 500);
+	color: var(--wps-gray-900, #111827);
+	line-height: 1.5;
+	margin-bottom: var(--wps-space-1, 0.25rem);
+}
+
+.wps-activity-time {
+	font-size: var(--wps-text-xs, 0.75rem);
+	color: var(--wps-gray-500, #6b7280);
+	display: block;
+}
+
+/* Empty state */
+.wps-activity-empty {
+	text-align: center;
+	padding: var(--wps-space-8, 2rem) var(--wps-space-4, 1rem);
+	color: var(--wps-gray-400, #9ca3af);
+}
+
+.wps-activity-empty-icon {
+	font-size: 48px;
+	width: 48px;
+	height: 48px;
+	opacity: 0.3;
+	display: block;
+	margin: 0 auto var(--wps-space-3, 0.75rem);
+}
+
+/* ============================================================================
+   Responsive Design
+   ============================================================================ */
+
+@media (max-width: 768px) {
+	.wps-kpi-card {
+		padding: var(--wps-space-4, 1rem);
+	}
+
+	.wps-kpi-value {
+		font-size: var(--wps-text-2xl, 1.5rem);
+	}
+
+	.wps-kpi-icon-wrapper {
+		width: 40px;
+		height: 40px;
+	}
+
+	.wps-kpi-icon {
+		font-size: 20px;
+		width: 20px;
+		height: 20px;
+	}
+
+	.wps-activity-item {
+		gap: var(--wps-space-3, 0.75rem);
+	}
+
+	.wps-activity-icon-wrapper {
+		width: 32px;
+		height: 32px;
+	}
+
+	.wps-activity-icon-wrapper .dashicons {
+		font-size: 16px;
+		width: 16px;
+		height: 16px;
+	}
+
+	.wps-activity-item::before {
+		left: 15px; /* Adjust for smaller icon */
+	}
+}
+
+/* ============================================================================
+   Accessibility Enhancements
+   ============================================================================ */
+
+/* Focus indicators (WCAG 2.1 Level AA) */
+.wps-kpi-card:focus-within {
+	outline: 2px solid var(--wps-info, #3b82f6);
+	outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+	.wps-kpi-card,
+	.wps-activity-icon-wrapper {
+		border-width: 2px;
+	}
+
+	.wps-kpi-link {
+		text-decoration: underline;
+	}
+}
+
+/* Print styles */
+@media print {
+	.wps-kpi-card {
+		page-break-inside: avoid;
+		box-shadow: none;
+		border: 1px solid #000;
+	}
+
+	.wps-kpi-card-footer,
+	.wps-kpi-link {
+		display: none;
+	}
+
+	.wps-activity-item::before {
+		background: #000;
+	}
+}

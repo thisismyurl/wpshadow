@@ -8,8 +8,6 @@
  * @subpackage Views
  */
 
-namespace WPShadow\Views;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -44,7 +42,7 @@ function wpshadow_render_dashboard() {
 	$is_drilldown    = ! empty( $category_filter );
 
 	// Get category metadata for title/details
-	$category_meta    = \WPShadow\Core\wpshadow_get_category_metadata();
+	$category_meta    = wpshadow_get_category_metadata();
 	$current_category = $is_drilldown && isset( $category_meta[ $category_filter ] )
 		? $category_meta[ $category_filter ]
 		: null;
@@ -55,67 +53,69 @@ function wpshadow_render_dashboard() {
 	$needs_refresh    = ( $last_scan > 0 && $last_scan < $five_minutes_ago );
 
 	?>
-	<div class="wrap wpshadow-dashboard">
+	<div class="wrap wpshadow-dashboard wps-page-container">
 		<?php if ( $is_drilldown && $current_category ) : ?>
 			<!-- Category Drill-Down Header -->
-			<div class="wpshadow-drilldown-header" style="margin-bottom: 20px;">
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>" class="button" style="margin-right: 10px;">
+			<div class="wps-page-header wps-drilldown-header">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>" class="button wps-btn-secondary wps-mr-3" aria-label="<?php esc_attr_e( 'Return to main dashboard', 'wpshadow' ); ?>">
 					&larr; <?php esc_html_e( 'Back to Dashboard', 'wpshadow' ); ?>
 				</a>
-				<h1 style="display: inline-block; margin: 0; vertical-align: middle;">
-					<span class="dashicons <?php echo esc_attr( $current_category['icon'] ); ?>" style="color: <?php echo esc_attr( $current_category['color'] ); ?>; font-size: 32px; vertical-align: middle;"></span>
+				<h1 class="wps-page-title">
+					<span class="dashicons <?php echo esc_attr( $current_category['icon'] ); ?>" style="color: <?php echo esc_attr( $current_category['color'] ); ?>;" aria-hidden="true"></span>
 					<?php echo esc_html( $current_category['label'] ); ?> <?php esc_html_e( 'Health', 'wpshadow' ); ?>
 				</h1>
-				<p style="margin: 10px 0 0 0; color: #646970; font-size: 14px;">
+				<p class="wps-page-subtitle">
 					<?php echo esc_html( $current_category['description'] ); ?>
 				</p>
 			</div>
 		<?php else : ?>
-			<h1><?php esc_html_e( 'WPShadow Dashboard', 'wpshadow' ); ?></h1>
+			<div class="wps-page-header">
+				<h1 class="wps-page-title"><?php esc_html_e( 'WPShadow Dashboard', 'wpshadow' ); ?></h1>
+			</div>
 		<?php endif; ?>
 
 		<?php if ( $never_run ) : ?>
 			<!-- First-time Quick Scan prompt -->
-			<div class="notice notice-info wpshadow-quick-scan-prompt" id="wpshadow-first-scan-prompt">
-				<p>
-					<strong><?php esc_html_e( 'Welcome to WPShadow!', 'wpshadow' ); ?></strong>
-				</p>
-				<p>
-					<?php esc_html_e( 'To get started, WPShadow needs to run a Quick Scan of your site. This scan is completely safe and won\'t make any changes to your website.', 'wpshadow' ); ?>
-				</p>
-				<p>
-					<button type="button" class="button button-primary" id="wpshadow-run-first-scan">
-						<?php esc_html_e( 'Run Quick Scan', 'wpshadow' ); ?>
-					</button>
-					<button type="button" class="button" id="wpshadow-dismiss-first-scan">
-						<?php esc_html_e( 'Maybe Later', 'wpshadow' ); ?>
-					</button>
-				</p>
+			<div class="wps-cta-card wps-cta-info" id="wpshadow-first-scan-prompt" role="region" aria-labelledby="wpshadow-first-scan-heading">
+				<button type="button" class="wps-cta-dismiss" id="wpshadow-dismiss-first-scan" aria-label="<?php esc_attr_e( 'Dismiss welcome message', 'wpshadow' ); ?>">
+					<span class="dashicons dashicons-no-alt" aria-hidden="true"></span>
+				</button>
+				<div class="wps-cta-icon" aria-hidden="true">
+					<span class="dashicons dashicons-yes-alt"></span>
+				</div>
+				<div class="wps-cta-content">
+					<h2 id="wpshadow-first-scan-heading" class="wps-cta-heading"><?php esc_html_e( 'Welcome to WPShadow!', 'wpshadow' ); ?></h2>
+					<p class="wps-cta-description">
+						<?php esc_html_e( 'To get started, WPShadow needs to run a Quick Scan of your site. This scan is completely safe and won\'t make any changes to your website.', 'wpshadow' ); ?>
+					</p>
+					<div class="wps-cta-actions">
+						<button type="button" class="button button-primary wps-btn-primary" id="wpshadow-run-first-scan">
+							<?php esc_html_e( 'Run Quick Scan', 'wpshadow' ); ?>
+						</button>
+					</div>
+				</div>
 			</div>
 		<?php endif; ?>
 
 		<?php if ( $needs_refresh ) : ?>
 			<!-- Stale data overlay with progress -->
-			<div class="wpshadow-scan-overlay" id="wpshadow-refresh-overlay">
-				<div class="wpshadow-scan-overlay-content">
-					<h2><?php esc_html_e( 'Refreshing Dashboard Data', 'wpshadow' ); ?></h2>
-					<div class="wpshadow-progress-bar">
-						<div class="wpshadow-progress-fill" id="wpshadow-progress-fill"></div>
+			<div class="wps-scan-overlay" id="wpshadow-refresh-overlay" role="dialog" aria-labelledby="wpshadow-scan-heading" aria-modal="true" aria-busy="true">
+				<div class="wps-scan-overlay-content">
+					<h2 id="wpshadow-scan-heading"><?php esc_html_e( 'Refreshing Dashboard Data', 'wpshadow' ); ?></h2>
+					<div class="wps-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+						<div class="wps-progress-fill" id="wpshadow-progress-fill"></div>
 					</div>
-					<p class="wpshadow-progress-text" id="wpshadow-progress-text">
+					<p class="wps-progress-text" id="wpshadow-progress-text" aria-live="polite">
 						<?php esc_html_e( 'Preparing scan...', 'wpshadow' ); ?>
 					</p>
-					<p class="wpshadow-progress-details" id="wpshadow-progress-details">
+					<p class="wps-progress-details" id="wpshadow-progress-details">
 						<span id="wpshadow-current-diagnostic"></span>
 					</p>
 				</div>
 			</div>
-			<style>
-				.wpshadow-dashboard-content { opacity: 0.3; pointer-events: none; }
-			</style>
 		<?php endif; ?>
 
-		<div class="wpshadow-dashboard-content">
+		<div class="wpshadow-dashboard-content <?php echo $needs_refresh ? 'wps-loading' : ''; ?>">
 			<?php
 			/**
 			 * Health Gauges Section
@@ -174,6 +174,7 @@ function wpshadow_render_dashboard() {
 			var $progressText = $('#wpshadow-progress-text');
 			var $progressDetails = $('#wpshadow-progress-details');
 			var $currentDiagnostic = $('#wpshadow-current-diagnostic');
+			var $progressBar = $('.wps-progress-bar');
 
 			$overlay.show();
 
@@ -193,6 +194,7 @@ function wpshadow_render_dashboard() {
 						if (evt.lengthComputable) {
 							var percentComplete = (evt.loaded / evt.total) * 100;
 							$progressFill.css('width', percentComplete + '%');
+							$progressBar.attr('aria-valuenow', Math.round(percentComplete));
 						}
 					});
 					return xhr;
@@ -205,18 +207,19 @@ function wpshadow_render_dashboard() {
 						var percent = Math.round((completed / total) * 100);
 
 						$progressFill.css('width', percent + '%');
-						$progressText.text('Scan complete! Found ' + data.findings_count + ' items.');
+						$progressBar.attr('aria-valuenow', percent);
+						$progressText.text('<?php esc_html_e( 'Scan complete! Found', 'wpshadow' ); ?> ' + data.findings_count + ' <?php esc_html_e( 'items.', 'wpshadow' ); ?>');
 
 						// Reload page after short delay
 						setTimeout(function() {
 							location.reload();
 						}, 1500);
 					} else {
-						$progressText.text('Error: ' + (response.data || 'Unknown error'));
+						$progressText.text('<?php esc_html_e( 'Error:', 'wpshadow' ); ?> ' + (response.data || '<?php esc_html_e( 'Unknown error', 'wpshadow' ); ?>'));
 					}
 				},
 				error: function() {
-					$progressText.text('Error: Unable to complete scan');
+					$progressText.text('<?php esc_html_e( 'Error: Unable to complete scan', 'wpshadow' ); ?>');
 				}
 			});
 
@@ -225,18 +228,20 @@ function wpshadow_render_dashboard() {
 			var progressInterval = setInterval(function() {
 				if (simulatedProgress < 90) {
 					simulatedProgress += Math.random() * 15;
-					$progressFill.css('width', Math.min(simulatedProgress, 90) + '%');
+					var currentProgress = Math.min(simulatedProgress, 90);
+					$progressFill.css('width', currentProgress + '%');
+					$progressBar.attr('aria-valuenow', Math.round(currentProgress));
 
 					// Rotate through common diagnostic names for UX
 					var diagnosticNames = [
-						'Checking site health...',
-						'Analyzing performance...',
-						'Scanning security...',
-						'Reviewing accessibility...',
-						'Testing SEO configuration...',
-						'Examining code quality...',
-						'Validating theme setup...',
-						'Inspecting plugins...'
+						'<?php esc_html_e( 'Checking site health...', 'wpshadow' ); ?>',
+						'<?php esc_html_e( 'Analyzing performance...', 'wpshadow' ); ?>',
+						'<?php esc_html_e( 'Scanning security...', 'wpshadow' ); ?>',
+						'<?php esc_html_e( 'Reviewing accessibility...', 'wpshadow' ); ?>',
+						'<?php esc_html_e( 'Testing SEO configuration...', 'wpshadow' ); ?>',
+						'<?php esc_html_e( 'Examining code quality...', 'wpshadow' ); ?>',
+						'<?php esc_html_e( 'Validating theme setup...', 'wpshadow' ); ?>',
+						'<?php esc_html_e( 'Inspecting plugins...', 'wpshadow' ); ?>'
 					];
 					var randomDiagnostic = diagnosticNames[Math.floor(Math.random() * diagnosticNames.length)];
 					$currentDiagnostic.text(randomDiagnostic);
@@ -250,64 +255,5 @@ function wpshadow_render_dashboard() {
 		}
 	});
 	</script>
-
-	<style>
-	.wpshadow-scan-overlay {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background: rgba(255, 255, 255, 0.95);
-		z-index: 999999;
-		display: none;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.wpshadow-scan-overlay-content {
-		text-align: center;
-		max-width: 600px;
-		padding: 40px;
-	}
-
-	.wpshadow-progress-bar {
-		width: 100%;
-		height: 30px;
-		background: #f0f0f1;
-		border-radius: 15px;
-		overflow: hidden;
-		margin: 20px 0;
-	}
-
-	.wpshadow-progress-fill {
-		height: 100%;
-		background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-		width: 0%;
-		transition: width 0.3s ease;
-	}
-
-	.wpshadow-progress-text {
-		font-size: 16px;
-		font-weight: 600;
-		color: #1d2327;
-		margin: 10px 0;
-	}
-
-	.wpshadow-progress-details {
-		font-size: 14px;
-		color: #646970;
-		font-style: italic;
-	}
-
-	.wpshadow-quick-scan-prompt {
-		padding: 20px;
-		margin: 20px 0;
-	}
-
-	.wpshadow-quick-scan-prompt p:last-child {
-		margin-bottom: 0;
-	}
-	</style>
 	<?php
 }

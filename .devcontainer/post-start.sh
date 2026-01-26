@@ -47,6 +47,11 @@ if [ -f ".devcontainer/.dev-kpis.json" ]; then
     show_kpi_summary
 fi
 
+# Setup deployment configuration (SSH keys, Git remote)
+if [ -f ".devcontainer/setup-deployment.sh" ]; then
+    bash .devcontainer/setup-deployment.sh
+fi
+
 # Helpful tip of the day
 TIPS=(
     "💡 Tip: Run 'composer kpi' to see your development progress"
