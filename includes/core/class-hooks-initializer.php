@@ -141,47 +141,100 @@ class Hooks_Initializer {
 	 * Plugins loaded hook - Late phase (everything else that needs fully-loaded classes)
 	 */
 	public static function on_plugins_loaded_late() {
-		// Only run on admin - other systems are loaded in on_admin_init
-		if ( ! is_admin() ) {
-			return;
+		// Initialize core registries and systems - only if classes are loaded
+		if ( class_exists( '\WPShadow\Admin\Update_Notification_Manager' ) ) {
+			\WPShadow\Admin\Update_Notification_Manager::init();
+		}
+		if ( class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' ) ) {
+			\WPShadow\Diagnostics\Diagnostic_Registry::init();
+		}
+		if ( class_exists( '\WPShadow\Treatments\Treatment_Registry' ) ) {
+			\WPShadow\Treatments\Treatment_Registry::init();
+		}
+		if ( class_exists( '\WPShadow\Workflow\Workflow_Executor' ) ) {
+			\WPShadow\Workflow\Workflow_Executor::init();
+		}
+		if ( class_exists( '\WPShadow\Core\Treatment_Hooks' ) ) {
+			\WPShadow\Core\Treatment_Hooks::init();
+		}
+		if ( class_exists( '\WPShadow\Core\Site_Health_Explanations' ) ) {
+			\WPShadow\Core\Site_Health_Explanations::init();
 		}
 
-		// Initialize core registries and systems
-		\WPShadow\Admin\Update_Notification_Manager::init();
-		\WPShadow\Diagnostics\Diagnostic_Registry::init();
-		\WPShadow\Treatments\Treatment_Registry::init();
-		\WPShadow\Workflow\Workflow_Executor::init();
-		\WPShadow\Core\Treatment_Hooks::init();
-		\WPShadow\Core\Site_Health_Explanations::init();
-
 		// Initialize Guardian system
-		\WPShadow\Guardian\Guardian_Manager::init();
+		if ( class_exists( '\WPShadow\Guardian\Guardian_Manager' ) ) {
+			\WPShadow\Guardian\Guardian_Manager::init();
+		}
 
 		// Initialize analyzers
-		\WPShadow\Guardian\Failed_Login_Analyzer::init();
-		\WPShadow\Guardian\Dashboard_Performance_Analyzer::init();
-		\WPShadow\Guardian\REST_API_Performance_Analyzer::init();
-		\WPShadow\Guardian\CSP_Violation_Analyzer::init();
-		\WPShadow\Guardian\Compromised_Accounts_Analyzer::init();
-		\WPShadow\Guardian\Cache_Invalidation_Analyzer::init();
-		\WPShadow\Guardian\Shortcode_Execution_Analyzer::init();
-		\WPShadow\Guardian\API_Latency_Analyzer::init();
-		\WPShadow\Guardian\Block_Rendering_Performance_Analyzer::init();
-		\WPShadow\Guardian\Bot_Traffic_Analyzer::init();
-		\WPShadow\Guardian\Browser_Compatibility_Analyzer::init();
-		\WPShadow\Guardian\Editor_Performance_Analyzer::init();
-		\WPShadow\Guardian\Hook_Execution_Analyzer::init();
+		if ( class_exists( '\WPShadow\Guardian\Failed_Login_Analyzer' ) ) {
+			\WPShadow\Guardian\Failed_Login_Analyzer::init();
+		}
+		if ( class_exists( '\WPShadow\Guardian\Dashboard_Performance_Analyzer' ) ) {
+			\WPShadow\Guardian\Dashboard_Performance_Analyzer::init();
+		}
+		if ( class_exists( '\WPShadow\Guardian\REST_API_Performance_Analyzer' ) ) {
+			\WPShadow\Guardian\REST_API_Performance_Analyzer::init();
+		}
+		if ( class_exists( '\WPShadow\Guardian\CSP_Violation_Analyzer' ) ) {
+			\WPShadow\Guardian\CSP_Violation_Analyzer::init();
+		}
+		if ( class_exists( '\WPShadow\Guardian\Compromised_Accounts_Analyzer' ) ) {
+			\WPShadow\Guardian\Compromised_Accounts_Analyzer::init();
+		}
+		if ( class_exists( '\WPShadow\Guardian\Cache_Invalidation_Analyzer' ) ) {
+			\WPShadow\Guardian\Cache_Invalidation_Analyzer::init();
+		}
+		if ( class_exists( '\WPShadow\Guardian\Shortcode_Execution_Analyzer' ) ) {
+			\WPShadow\Guardian\Shortcode_Execution_Analyzer::init();
+		}
+		if ( class_exists( '\WPShadow\Guardian\API_Latency_Analyzer' ) ) {
+			\WPShadow\Guardian\API_Latency_Analyzer::init();
+		}
+		if ( class_exists( '\WPShadow\Guardian\Block_Rendering_Performance_Analyzer' ) ) {
+			\WPShadow\Guardian\Block_Rendering_Performance_Analyzer::init();
+		}
+		if ( class_exists( '\WPShadow\Guardian\Bot_Traffic_Analyzer' ) ) {
+			\WPShadow\Guardian\Bot_Traffic_Analyzer::init();
+		}
+		if ( class_exists( '\WPShadow\Guardian\Browser_Compatibility_Analyzer' ) ) {
+			\WPShadow\Guardian\Browser_Compatibility_Analyzer::init();
+		}
+		if ( class_exists( '\WPShadow\Guardian\Editor_Performance_Analyzer' ) ) {
+			\WPShadow\Guardian\Editor_Performance_Analyzer::init();
+		}
+		if ( class_exists( '\WPShadow\Guardian\Hook_Execution_Analyzer' ) ) {
+			\WPShadow\Guardian\Hook_Execution_Analyzer::init();
+		}
 
 		// Guardian command handlers
-		\WPShadow\Workflow\Commands\Enable_Guardian_Command::register();
-		\WPShadow\Workflow\Commands\Configure_Guardian_Command::register();
-		\WPShadow\Workflow\Commands\Get_Scan_Results_Command::register();
-		\WPShadow\Workflow\Commands\Execute_Auto_Fix_Command::register();
-		\WPShadow\Workflow\Commands\Preview_Auto_Fixes_Command::register();
-		\WPShadow\Workflow\Commands\Update_Auto_Fix_Policy_Command::register();
-		\WPShadow\Workflow\Commands\Generate_Report_Command::register();
-		\WPShadow\Workflow\Commands\Send_Report_Command::register();
-		\WPShadow\Workflow\Commands\Manage_Notifications_Command::register();
+		if ( class_exists( '\WPShadow\Workflow\Commands\Enable_Guardian_Command' ) ) {
+			\WPShadow\Workflow\Commands\Enable_Guardian_Command::register();
+		}
+		if ( class_exists( '\WPShadow\Workflow\Commands\Configure_Guardian_Command' ) ) {
+			\WPShadow\Workflow\Commands\Configure_Guardian_Command::register();
+		}
+		if ( class_exists( '\WPShadow\Workflow\Commands\Get_Scan_Results_Command' ) ) {
+			\WPShadow\Workflow\Commands\Get_Scan_Results_Command::register();
+		}
+		if ( class_exists( '\WPShadow\Workflow\Commands\Execute_Auto_Fix_Command' ) ) {
+			\WPShadow\Workflow\Commands\Execute_Auto_Fix_Command::register();
+		}
+		if ( class_exists( '\WPShadow\Workflow\Commands\Preview_Auto_Fixes_Command' ) ) {
+			\WPShadow\Workflow\Commands\Preview_Auto_Fixes_Command::register();
+		}
+		if ( class_exists( '\WPShadow\Workflow\Commands\Update_Auto_Fix_Policy_Command' ) ) {
+			\WPShadow\Workflow\Commands\Update_Auto_Fix_Policy_Command::register();
+		}
+		if ( class_exists( '\WPShadow\Workflow\Commands\Generate_Report_Command' ) ) {
+			\WPShadow\Workflow\Commands\Generate_Report_Command::register();
+		}
+		if ( class_exists( '\WPShadow\Workflow\Commands\Send_Report_Command' ) ) {
+			\WPShadow\Workflow\Commands\Send_Report_Command::register();
+		}
+		if ( class_exists( '\WPShadow\Workflow\Commands\Manage_Notifications_Command' ) ) {
+			\WPShadow\Workflow\Commands\Manage_Notifications_Command::register();
+		}
 
 		// Fire hook for external plugins/addons
 		do_action( 'wpshadow_core_loaded' );
