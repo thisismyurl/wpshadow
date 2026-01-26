@@ -142,6 +142,10 @@ class Diagnostic_CompEmailCanSpam extends Diagnostic_Base {
 		}
 
 		// Step 4: Check for email marketing plugins with CAN-SPAM compliance features.
+		// Note: This is a curated list of popular email marketing plugins.
+		// The list may need updates as plugins evolve or new plugins emerge.
+		// Each plugin includes built-in unsubscribe and sender identification features
+		// that help with CAN-SPAM compliance.
 		$email_plugins = array(
 			'newsletter/newsletter.php',          // Newsletter - manages subscriptions.
 			'mailpoet/mailpoet.php',              // MailPoet - email marketing.
@@ -152,6 +156,18 @@ class Diagnostic_CompEmailCanSpam extends Diagnostic_Base {
 			'wpforms-lite/wpforms.php',           // WPForms (has email features).
 			'contact-form-7/wp-contact-form-7.php', // Contact Form 7.
 		);
+
+		/**
+		 * Filters the list of email marketing plugins checked for CAN-SPAM compliance.
+		 *
+		 * Allows extending or modifying the list of plugins that are considered
+		 * to provide CAN-SPAM compliant email features (unsubscribe, sender info).
+		 *
+		 * @since 1.2601.2148
+		 *
+		 * @param array $email_plugins Array of plugin paths to check.
+		 */
+		$email_plugins = apply_filters( 'wpshadow_can_spam_email_plugins', $email_plugins );
 
 		$has_email_management = false;
 		$active_plugin        = '';
@@ -285,7 +301,7 @@ class Diagnostic_CompEmailCanSpam extends Diagnostic_Base {
 				'Mismatch: expected %s but diagnostic returned %s (email: %s, blogname: %s, has_disclosure: %s, has_plugin: %s)',
 				$should_have_issue ? 'issue' : 'no issue',
 				$diagnostic_found_issue ? 'issue' : 'no issue',
-				$admin_email ? $admin_email : 'empty',
+				$admin_email ? esc_html( $admin_email ) : 'empty',
 				$blogname ? 'set' : 'empty',
 				$has_email_disclosure ? 'yes' : 'no',
 				$has_email_management ? 'yes' : 'no'
