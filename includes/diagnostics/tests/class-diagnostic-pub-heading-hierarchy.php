@@ -255,22 +255,25 @@ class Diagnostic_Pub_Heading_Hierarchy extends Diagnostic_Base {
 			$issues[] = __( 'No H1 heading found', 'wpshadow' );
 		}
 
-		// Check for skipped levels by tracking max level seen.
+		// First pass: track all levels that exist in the document.
+		$all_levels_present = array();
+		foreach ( $headings as $level ) {
+			$all_levels_present[ $level ] = true;
+		}
+
+		// Second pass: check for skipped levels by tracking max level seen.
 		$max_level_seen = 0;
-		$seen_levels    = array();
 
 		foreach ( $headings as $level ) {
-			$seen_levels[ $level ] = true;
-
 			// Check if we skipped any levels between max_level_seen and current level.
 			if ( $level > $max_level_seen + 1 ) {
 				// Find which levels were skipped.
 				for ( $expected = $max_level_seen + 1; $expected < $level; $expected++ ) {
-					if ( ! isset( $seen_levels[ $expected ] ) ) {
+					if ( ! isset( $all_levels_present[ $expected ] ) ) {
 						$issues[] = sprintf(
 							/* translators: 1: previous heading level, 2: current heading level */
 							__( 'Skipped heading level: H%1$d → H%2$d', 'wpshadow' ),
-							$max_level_seen > 0 ? $max_level_seen : 0,
+							$max_level_seen,
 							$level
 						);
 						break; // Only report once per gap.
