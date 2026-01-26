@@ -9,8 +9,6 @@
  * @since      1.2601.2148
  */
 
-namespace WPShadow\Workflow;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -70,17 +68,4 @@ function wpshadow_render_workflow_builder() {
 
 	// Load the view.
 	require_once WPSHADOW_PATH . 'includes/views/workflow-builder.php';
-}
-
-// Make function available globally (for backward compatibility).
-if ( ! function_exists( 'wpshadow_render_workflow_builder' ) ) {
-	/**
-	 * Global wrapper for workflow builder render function
-	 *
-	 * @since  1.2601.2148
-	 * @return void
-	 */
-	function wpshadow_render_workflow_builder() {
-		\WPShadow\Workflow\wpshadow_render_workflow_builder();
-	}
 }
