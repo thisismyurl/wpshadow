@@ -41,6 +41,9 @@ class Plugin_Bootstrap {
 
 		// 2. Register hooks (must be early, before other systems)
 		Hooks_Initializer::init();
+		
+		// 2.5 Call on_plugins_loaded directly since we're ALREADY ON plugins_loaded
+		Hooks_Initializer::on_plugins_loaded();
 
 		// 3. Initialize menu system
 		Menu_Manager::init();

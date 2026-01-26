@@ -37,7 +37,9 @@ class Hooks_Initializer {
 
 		// Admin initialization
 		add_action( 'admin_init', array( __CLASS__, 'on_admin_init' ) );
-		add_action( 'plugins_loaded', array( __CLASS__, 'on_plugins_loaded' ) );
+		// NOTE: on_plugins_loaded is called directly from Plugin_Bootstrap::init()
+		// because Plugin_Bootstrap::init() is ITSELF hooked to plugins_loaded,
+		// so trying to hook it here would be too late (plugins_loaded already fired)
 
 		// Menu and asset loading
 		add_action( 'admin_menu', array( __CLASS__, 'on_admin_menu' ) );
