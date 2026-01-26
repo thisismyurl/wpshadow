@@ -129,8 +129,8 @@ $suggestions = array_slice( $suggestions, 0, 6 );
 		<div class="wpshadow-workflows">
 			<?php foreach ( $workflows as $workflow ) : ?>
 				<?php
-				$trigger_label = get_trigger_summary( $workflow );
-				$action_label  = get_action_summary( $workflow );
+				$trigger_label = wpshadow_workflow_get_trigger_summary( $workflow );
+				$action_label  = wpshadow_workflow_get_action_summary( $workflow );
 				$is_enabled    = ! isset( $workflow['enabled'] ) || $workflow['enabled'];
 				$card_class    = $is_enabled ? 'enabled' : 'disabled';
 				?>
@@ -561,7 +561,7 @@ $suggestions = array_slice( $suggestions, 0, 6 );
  * @param array $workflow Workflow data
  * @return string Trigger summary
  */
-function get_trigger_summary( $workflow ) {
+function wpshadow_workflow_get_trigger_summary( $workflow ) {
 	// Try to get from blocks format (new format)
 	$trigger_block = null;
 	if ( ! empty( $workflow['blocks'] ) && is_array( $workflow['blocks'] ) ) {
@@ -643,7 +643,7 @@ function get_trigger_summary( $workflow ) {
  * @param array $workflow Workflow data
  * @return string Action summary
  */
-function get_action_summary( $workflow ) {
+function wpshadow_workflow_get_action_summary( $workflow ) {
 	$action_blocks = array();
 
 	// Try to get from blocks format (new format)
