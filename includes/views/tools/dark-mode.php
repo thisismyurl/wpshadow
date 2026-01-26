@@ -99,7 +99,7 @@ $dark_mode_pref = get_user_meta( $user_id, 'wpshadow_dark_mode_preference', true
 			</p>
 
 			<p class="submit">
-				<button type="submit" name="save_dark_mode" class="button button-primary">
+				<button type="submit" name="save_dark_mode" class="wps-btn wps-btn-primary">
 					<?php esc_html_e( 'Save Changes', 'wpshadow' ); ?>
 				</button>
 			</p>

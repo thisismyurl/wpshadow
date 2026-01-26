@@ -204,7 +204,7 @@ class Privacy_Settings_Manager {
 					</fieldset>
 					
 					<!-- Save Button -->
-					<button type="submit" class="button button-primary">
+					<button type="submit" class="wps-btn wps-btn-primary">
 						<?php esc_html_e( 'Save Privacy Settings', 'wpshadow' ); ?>
 					</button>
 					<span id="wpshadow-privacy-status" style="margin-left: 10px;"></span>

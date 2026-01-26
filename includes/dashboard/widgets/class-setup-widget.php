@@ -111,7 +111,7 @@ class Setup_Widget {
 			</div>
 			
 			<div class="wpshadow-setup-actions">
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&onboarding=start' ) ); ?>" class="button button-primary button-hero">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&onboarding=start' ) ); ?>" class="wps-btn wps-btn-primary wps-btn-lg">
 					<?php esc_html_e( 'Continue Setup', 'wpshadow' ); ?>
 				</a>
 				<a href="#" class="wpshadow-setup-skip" data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_onboarding' ) ); ?>">

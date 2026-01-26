@@ -358,7 +358,7 @@ class Data_Retention_Manager {
 					</fieldset>
 					
 					<!-- Save Button -->
-					<button type="submit" class="button button-primary">
+					<button type="submit" class="wps-btn wps-btn-primary">
 						<?php esc_html_e( 'Save Retention Settings', 'wpshadow' ); ?>
 					</button>
 					<span id="wpshadow-retention-status" style="margin-left: 10px;"></span>
