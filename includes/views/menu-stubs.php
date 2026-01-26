@@ -32,9 +32,18 @@ if ( ! function_exists( 'wpshadow_render_guardian' ) ) {
 	 * Render Guardian page (Diagnostics & Treatments)
 	 */
 	function wpshadow_render_guardian() {
-		// Load Guardian Manager class if not already loaded
+		// Load Guardian classes if not already loaded
 		if ( ! class_exists( '\WPShadow\Guardian\Guardian_Manager' ) ) {
 			require_once WPSHADOW_PATH . 'includes/guardian/class-guardian-manager.php';
+		}
+		if ( ! class_exists( '\WPShadow\Guardian\Guardian_Activity_Logger' ) ) {
+			require_once WPSHADOW_PATH . 'includes/monitoring/class-guardian-activity-logger.php';
+		}
+		if ( ! class_exists( '\WPShadow\Guardian\Auto_Fix_Executor' ) ) {
+			require_once WPSHADOW_PATH . 'includes/monitoring/recovery/class-auto-fix-executor.php';
+		}
+		if ( ! class_exists( '\WPShadow\Guardian\Recovery_System' ) ) {
+			require_once WPSHADOW_PATH . 'includes/monitoring/recovery/class-recovery-system.php';
 		}
 		
 		// Load Guardian Dashboard class if not already loaded
