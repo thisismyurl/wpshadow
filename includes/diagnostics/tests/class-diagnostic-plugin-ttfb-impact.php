@@ -165,11 +165,22 @@ class Diagnostic_Plugin_Ttfb_Impact extends Diagnostic_Base {
 	 * Data is expected to be collected by performance monitoring utilities
 	 * and stored in the 'wpshadow_plugin_ttfb_impact' transient.
 	 *
+	 * Expected transient data structure:
+	 * <code>
+	 * array(
+	 *     'plugin-slug' => array(
+	 *         'name'    => 'Plugin Name',
+	 *         'ttfb_ms' => 150,
+	 *     ),
+	 * )
+	 * </code>
+	 *
 	 * @since  1.2601.2148
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check(): ?array {
 		// Get plugin TTFB impact data from transient.
+		// Expected structure: [ plugin-slug => [ name, ttfb_ms ] ]
 		$plugin_data = get_transient( 'wpshadow_plugin_ttfb_impact' );
 
 		// If no data available, cannot determine impact.
@@ -226,7 +237,7 @@ class Diagnostic_Plugin_Ttfb_Impact extends Diagnostic_Base {
 			'description'   => $description,
 			'severity'      => $severity,
 			'threat_level'  => $threat_level,
-			'category'      => 'performance',
+			'category'      => self::get_category(),
 			'auto_fixable'  => false,
 			'kb_link'       => self::get_kb_article(),
 			'training_link' => self::get_training_video(),
