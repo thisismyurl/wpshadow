@@ -51,7 +51,7 @@ DETECT (Diagnostics) → ORGANIZE (Kanban) → FIX (Treatments) → TRACK (KPIs)
 │   ├── data/                            # JSON data files (tooltips, KB mappings)
 │   ├── diagnostics/                     # Detection layer (57 diagnostic classes)
 │   ├── treatments/                      # Solution layer (44 treatment classes)
-│   ├── workflow/                        # Workflow automation system (11 files)
+│   ├── workflow/                        # Workflow automation system (39 files)
 │   ├── views/                           # PHP view templates
 │   ├── detectors/                       # Environment detection utilities
 │   └── helpers/                         # Shared helper functions

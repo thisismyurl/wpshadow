@@ -423,7 +423,7 @@ wpshadow/
 │   ├── core/                 # Registry, settings, base classes, KPI tracking
 │   ├── diagnostics/          # 57 health check classes
 │   ├── treatments/           # 44 auto-fix classes
-│   ├── workflow/             # Automation engine (11 files)
+│   ├── workflow/             # Automation engine (39 files)
 │   ├── views/                # PHP templates (dashboard, Kanban, help, rules)
 │   └── data/                 # Tooltip JSON files (1200+ definitions)
 ├── assets/                   # CSS, JS, images (admin UI)

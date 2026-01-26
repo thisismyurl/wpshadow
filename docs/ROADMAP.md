@@ -63,7 +63,7 @@
 - ✅ **Kanban Board:** 6 columns (Detected → Ignored → User to Fix → Fix Now → Workflows → Fixed)
 - ✅ **KPI Tracking:** Time saved, issues fixed, site health score, value $ equivalent
 - ✅ **1200+ Contextual Tooltips:** Category-filtered, user-dismissible, KB-linked
-- ✅ **Workflow Automation:** 11-file engine (triggers, actions, executor, scheduler, wizard)
+- ✅ **Workflow Automation:** 39-file engine (triggers, actions, commands, executor, scheduler, wizard, blocks)
 - ✅ **Activity Logging:** Diagnostic runs, treatment applications, user actions
 - ✅ **Multisite Support:** Network-aware capabilities (`manage_network_options`)
 

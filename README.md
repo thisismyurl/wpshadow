@@ -60,7 +60,7 @@ docs/INDEX.md                             - Complete documentation index
 - ✅ **44 Treatments** (safe, reversible automatic fixes)
 - ✅ **Kanban Board** (6-column workflow tracking)
 - ✅ **KPI Tracking** (time saved, issues fixed, value delivered)
-- ✅ **Workflow Automation** (11-file engine with triggers, actions, executor)
+- ✅ **Workflow Automation** (39-file engine with triggers, actions, commands, executor)
 - ✅ **Multisite Support** (network-aware with proper capabilities)
 - ✅ **Accessibility-First Design** (WCAG compliant, inclusive patterns)
 - ✅ **Guardian System** (integrated diagnostics/treatments monitoring)
@@ -136,7 +136,7 @@ $diagnostics = Diagnostic_Registry::get_all();
 ## 📁 Key Files
 
 **Core Bootstrap**
-- [wpshadow.php](wpshadow.php) (~2000 lines) - Plugin initialization, menu registration, AJAX router
+- [wpshadow.php](wpshadow.php) (~85 lines) - Plugin initialization and autoloader bootstrap
 
 **Foundation**
 - [includes/core/class-treatment-base.php](includes/core/class-treatment-base.php) - Base for all treatments
@@ -148,7 +148,7 @@ $diagnostics = Diagnostic_Registry::get_all();
 **Features**
 - [includes/diagnostics/](includes/diagnostics/) - 57 diagnostic classes + registry
 - [includes/treatments/](includes/treatments/) - 44 treatment classes + registry
-- [includes/workflow/](includes/workflow/) - 11-file automation engine
+- [includes/workflow/](includes/workflow/) - 39-file automation engine (triggers, actions, commands, executor)
 - [includes/admin/](includes/admin/) - Dashboard UI & AJAX handlers
 
 **Views**
