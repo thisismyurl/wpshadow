@@ -89,7 +89,7 @@ class Diagnostic_PluginUpdatesPending extends Diagnostic_Base {
 			return null;
 		}
 
-		// Count updates and categorize by type.
+		// Count the total number of updates.
 		$update_count = count( $updates );
 
 		// Build description with details.
