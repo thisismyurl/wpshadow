@@ -19,6 +19,9 @@
 		canvasPosition: { x: 0, y: 0 },
 		isPanning: false,
 		lastPanPosition: { x: 0, y: 0 },
+		touchedBlock: null,
+		touchStartPos: { x: 0, y: 0 },
+		validationTimeout: null,
 
 		/**
 		 * Initialize the workflow builder
@@ -80,31 +83,28 @@
 			});
 
 			// Pan controls
-			let isPanning = false;
-			let startX = 0;
-			let startY = 0;
-
 			$('.wps-canvas-viewport').on('mousedown', (e) => {
 				if (e.which === 2 || (e.which === 1 && e.shiftKey)) { // Middle click or Shift+click
-					isPanning = true;
-					startX = e.clientX - this.canvasPosition.x;
-					startY = e.clientY - this.canvasPosition.y;
+					this.isPanning = true;
+					const startX = e.clientX - this.canvasPosition.x;
+					const startY = e.clientY - this.canvasPosition.y;
+					this.lastPanPosition = { x: startX, y: startY };
 					$('.wps-canvas-content').addClass('panning');
 					e.preventDefault();
 				}
 			});
 
 			$(document).on('mousemove', (e) => {
-				if (isPanning) {
-					this.canvasPosition.x = e.clientX - startX;
-					this.canvasPosition.y = e.clientY - startY;
+				if (this.isPanning) {
+					this.canvasPosition.x = e.clientX - this.lastPanPosition.x;
+					this.canvasPosition.y = e.clientY - this.lastPanPosition.y;
 					this.updateCanvasTransform();
 				}
 			});
 
 			$(document).on('mouseup', () => {
-				if (isPanning) {
-					isPanning = false;
+				if (this.isPanning) {
+					this.isPanning = false;
 					$('.wps-canvas-content').removeClass('panning');
 				}
 			});
@@ -234,25 +234,22 @@
 		 * Setup touch events for mobile devices
 		 */
 		setupTouchEvents: function() {
-			let touchedBlock = null;
-			let touchStartPos = { x: 0, y: 0 };
-
 			// Touch start on palette blocks
-			$('.wps-block-item').on('touchstart', function(e) {
+			$('.wps-block-item').on('touchstart', (e) => {
 				const touch = e.originalEvent.touches[0];
-				touchedBlock = $(this);
-				touchStartPos = { x: touch.clientX, y: touch.clientY };
+				this.touchedBlock = $(e.currentTarget);
+				this.touchStartPos = { x: touch.clientX, y: touch.clientY };
 				
-				$(this).addClass('dragging');
+				this.touchedBlock.addClass('dragging');
 			});
 
 			// Touch move
-			$(document).on('touchmove', function(e) {
-				if (!touchedBlock) return;
+			$(document).on('touchmove', (e) => {
+				if (!this.touchedBlock) return;
 
 				const touch = e.originalEvent.touches[0];
-				const deltaX = touch.clientX - touchStartPos.x;
-				const deltaY = touch.clientY - touchStartPos.y;
+				const deltaX = touch.clientX - this.touchStartPos.x;
+				const deltaY = touch.clientY - this.touchStartPos.y;
 
 				// Show visual feedback for drag
 				if (Math.abs(deltaX) > 10 || Math.abs(deltaY) > 10) {
@@ -261,8 +258,8 @@
 			});
 
 			// Touch end
-			$(document).on('touchend', function(e) {
-				if (!touchedBlock) return;
+			$(document).on('touchend', (e) => {
+				if (!this.touchedBlock) return;
 
 				$('.wps-block-item').removeClass('dragging');
 				$('#wps-canvas').removeClass('drag-over');
@@ -277,12 +274,12 @@
 					touch.clientY >= canvasRect.top &&
 					touch.clientY <= canvasRect.bottom
 				) {
-					const blockId = touchedBlock.data('block-id');
-					const blockType = touchedBlock.data('block-type');
-					WorkflowBuilder.addBlockToCanvas(blockId, blockType);
+					const blockId = this.touchedBlock.data('block-id');
+					const blockType = this.touchedBlock.data('block-type');
+					this.addBlockToCanvas(blockId, blockType);
 				}
 
-				touchedBlock = null;
+				this.touchedBlock = null;
 			});
 		},
 
@@ -568,19 +565,19 @@
 			this.blocks = this.blocks.filter(b => b.id !== blockId);
 
 			// Remove from DOM with animation
-			$(`[data-block-id="${blockId}"]`).fadeOut(300, function() {
-				$(this).remove();
+			$(`[data-block-id="${blockId}"]`).fadeOut(300, () => {
+				$(`[data-block-id="${blockId}"]`).remove();
 
 				// Show empty state if no blocks left
-				if (WorkflowBuilder.blocks.length === 0) {
-					WorkflowBuilder.showEmptyState();
+				if (this.blocks.length === 0) {
+					this.showEmptyState();
 				} else {
 					// Update connections after block removal
-					WorkflowBuilder.updateConnections();
+					this.updateConnections();
 				}
 				
 				// Validate workflow
-				WorkflowBuilder.validateWorkflow();
+				this.validateWorkflow();
 			});
 
 			this.announceToScreenReader(wpshadowWorkflow.strings.blockRemoved);
@@ -735,11 +732,12 @@
 				const name = $field.attr('name');
 				
 				if ($field.attr('type') === 'checkbox') {
-					if (!config[name.replace('[]', '')]) {
-						config[name.replace('[]', '')] = [];
+					const fieldName = name.replace('[]', '');
+					if (!config[fieldName]) {
+						config[fieldName] = [];
 					}
 					if ($field.is(':checked')) {
-						config[name.replace('[]', '')].push($field.val());
+						config[fieldName].push($field.val());
 					}
 				} else {
 					config[name] = $field.val();
