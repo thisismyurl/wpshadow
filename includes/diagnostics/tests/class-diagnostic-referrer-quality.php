@@ -103,7 +103,7 @@ class Diagnostic_Referrer_Quality extends Diagnostic_Base {
 	 * @return string The diagnostic name.
 	 */
 	public static function get_name(): string {
-		return __( 'Are traffic sources quality?', 'wpshadow' );
+		return __( 'Are traffic sources of good quality?', 'wpshadow' );
 	}
 
 	/**
@@ -113,7 +113,7 @@ class Diagnostic_Referrer_Quality extends Diagnostic_Base {
 	 * @return string The diagnostic description.
 	 */
 	public static function get_description(): string {
-		return __( 'Are traffic sources quality?. Part of User Engagement analysis.', 'wpshadow' );
+		return __( 'Checks if traffic sources are of good quality. Part of User Engagement analysis.', 'wpshadow' );
 	}
 
 	/**
@@ -124,18 +124,6 @@ class Diagnostic_Referrer_Quality extends Diagnostic_Base {
 	 */
 	public static function get_category(): string {
 		return 'user_engagement';
-	}
-
-	/**
-	 * Run the diagnostic test
-	 *
-	 * @since  1.2601.2148
-	 * @return array Finding data or empty if no issue
-	 */
-	public static function run(): array {
-		// This method delegates to check() for consistency
-		$result = self::check();
-		return is_array( $result ) ? $result : array();
 	}
 
 	/**
