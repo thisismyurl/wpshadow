@@ -1,8 +1,12 @@
 <?php
 /**
- * AJAX Handler for Exit Followup Management
+ * AJAX Handlers for Exit Followup Management
  *
  * Handles AJAX requests for viewing and managing exit interview followups.
+ * Multiple handlers grouped in one file for related functionality.
+ *
+ * phpcs:disable WordPress.Files.FileName.InvalidClassFileName
+ * phpcs:disable Generic.Files.OneObjectStructurePerFile.MultipleFound
  *
  * @since   1.2601.2148
  * @package WPShadow\Admin\AJAX
@@ -82,11 +86,11 @@ class Get_Exit_Followups_Handler extends AJAX_Handler_Base {
 			$params[] = $status;
 		}
 
-		$query .= ' ORDER BY f.scheduled_date DESC LIMIT %d';
+		$query   .= ' ORDER BY f.scheduled_date DESC LIMIT %d';
 		$params[] = $limit;
 
 		$followups = $wpdb->get_results(
-			$wpdb->prepare( $query, ...$params ),
+			$wpdb->prepare( $query, ...$params ), // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			ARRAY_A
 		);
 

@@ -81,16 +81,16 @@ class Exit_Survey_Builder {
 
 		// Question 1: How's the competitor working out?
 		$questions[] = array(
-			'id'      => 'competitor_satisfaction',
-			'type'    => self::TYPE_RATING,
+			'id'       => 'competitor_satisfaction',
+			'type'     => self::TYPE_RATING,
 			'question' => sprintf(
 				/* translators: 1: competitor name, 2: usage duration label */
 				__( 'You mentioned switching to %1$s after using WPShadow for %2$s. How\'s it working out so far?', 'wpshadow' ),
 				$competitor,
 				$usage_label
 			),
-			'scale'   => 5,
-			'labels'  => array(
+			'scale'    => 5,
+			'labels'   => array(
 				1 => __( 'Not well', 'wpshadow' ),
 				5 => __( 'Much better', 'wpshadow' ),
 			),
@@ -99,9 +99,9 @@ class Exit_Survey_Builder {
 
 		// Question 2: What made the difference?
 		$questions[] = array(
-			'id'      => 'key_differences',
-			'type'    => self::TYPE_TEXT,
-			'question' => sprintf(
+			'id'          => 'key_differences',
+			'type'        => self::TYPE_TEXT,
+			'question'    => sprintf(
 				/* translators: %s: competitor name */
 				__( 'What does %s do better than WPShadow? (This genuinely helps us improve)', 'wpshadow' ),
 				$competitor
@@ -112,10 +112,10 @@ class Exit_Survey_Builder {
 
 		// Question 3: Missing features
 		$questions[] = array(
-			'id'      => 'missing_features',
-			'type'    => self::TYPE_MULTIPLE_CHOICE,
-			'question' => __( 'Which of these would have kept you with WPShadow?', 'wpshadow' ),
-			'options' => array(
+			'id'             => 'missing_features',
+			'type'           => self::TYPE_MULTIPLE_CHOICE,
+			'question'       => __( 'Which of these would have kept you with WPShadow?', 'wpshadow' ),
+			'options'        => array(
 				'better_performance' => __( 'Better performance/speed', 'wpshadow' ),
 				'more_features'      => __( 'More features', 'wpshadow' ),
 				'easier_ui'          => __( 'Easier to use interface', 'wpshadow' ),
@@ -130,17 +130,17 @@ class Exit_Survey_Builder {
 
 		// Question 4: Would you recommend us for specific use cases?
 		$questions[] = array(
-			'id'      => 'would_recommend',
-			'type'    => self::TYPE_TEXT,
-			'question' => __( 'Is there a specific type of website or use case where you\'d still recommend WPShadow?', 'wpshadow' ),
+			'id'          => 'would_recommend',
+			'type'        => self::TYPE_TEXT,
+			'question'    => __( 'Is there a specific type of website or use case where you\'d still recommend WPShadow?', 'wpshadow' ),
 			'placeholder' => __( 'e.g., "Great for small blogs" or "Good for beginners"', 'wpshadow' ),
 			'required'    => false,
 		);
 
 		// Question 5: Can we reach out with updates?
 		$questions[] = array(
-			'id'      => 'stay_in_touch',
-			'type'    => self::TYPE_YES_NO,
+			'id'       => 'stay_in_touch',
+			'type'     => self::TYPE_YES_NO,
 			'question' => __( 'If we address the issues you mentioned, would you like us to let you know?', 'wpshadow' ),
 			'required' => false,
 		);
@@ -163,8 +163,8 @@ class Exit_Survey_Builder {
 
 		// Question 1: Did you find the feature elsewhere?
 		$questions[] = array(
-			'id'      => 'found_alternative',
-			'type'    => self::TYPE_YES_NO,
+			'id'       => 'found_alternative',
+			'type'     => self::TYPE_YES_NO,
 			'question' => __( 'Did you find another solution that has the features you needed?', 'wpshadow' ),
 			'required' => true,
 		);
@@ -172,19 +172,19 @@ class Exit_Survey_Builder {
 		// Question 2: What was the feature?
 		if ( empty( $features_needed ) ) {
 			$questions[] = array(
-				'id'      => 'specific_features',
-				'type'    => self::TYPE_TEXT,
-				'question' => __( 'Can you describe the specific features you were looking for?', 'wpshadow' ),
+				'id'          => 'specific_features',
+				'type'        => self::TYPE_TEXT,
+				'question'    => __( 'Can you describe the specific features you were looking for?', 'wpshadow' ),
 				'placeholder' => __( 'The more detail, the better...', 'wpshadow' ),
 				'required'    => false,
 			);
 		} else {
 			$questions[] = array(
-				'id'      => 'feature_importance',
-				'type'    => self::TYPE_RATING,
+				'id'       => 'feature_importance',
+				'type'     => self::TYPE_RATING,
 				'question' => __( 'How critical was this feature to your workflow?', 'wpshadow' ),
-				'scale'   => 5,
-				'labels'  => array(
+				'scale'    => 5,
+				'labels'   => array(
 					1 => __( 'Nice to have', 'wpshadow' ),
 					5 => __( 'Absolutely essential', 'wpshadow' ),
 				),
@@ -194,10 +194,10 @@ class Exit_Survey_Builder {
 
 		// Question 3: Feature priority
 		$questions[] = array(
-			'id'      => 'feature_priorities',
-			'type'    => self::TYPE_MULTIPLE_CHOICE,
-			'question' => __( 'Which types of features matter most to your workflow?', 'wpshadow' ),
-			'options' => array(
+			'id'             => 'feature_priorities',
+			'type'           => self::TYPE_MULTIPLE_CHOICE,
+			'question'       => __( 'Which types of features matter most to your workflow?', 'wpshadow' ),
+			'options'        => array(
 				'security'    => __( 'Security features', 'wpshadow' ),
 				'performance' => __( 'Performance optimization', 'wpshadow' ),
 				'analytics'   => __( 'Analytics and reporting', 'wpshadow' ),
@@ -213,17 +213,17 @@ class Exit_Survey_Builder {
 
 		// Question 4: Workaround attempts
 		$questions[] = array(
-			'id'      => 'workaround_tried',
-			'type'    => self::TYPE_TEXT,
-			'question' => __( 'Did you try any workarounds before deciding to leave? What did you try?', 'wpshadow' ),
+			'id'          => 'workaround_tried',
+			'type'        => self::TYPE_TEXT,
+			'question'    => __( 'Did you try any workarounds before deciding to leave? What did you try?', 'wpshadow' ),
 			'placeholder' => __( 'This helps us understand pain points...', 'wpshadow' ),
 			'required'    => false,
 		);
 
 		// Question 5: Would feature implementation bring you back?
 		$questions[] = array(
-			'id'      => 'would_return',
-			'type'    => self::TYPE_YES_NO,
+			'id'       => 'would_return',
+			'type'     => self::TYPE_YES_NO,
 			'question' => __( 'If we implemented the features you need, would you consider coming back?', 'wpshadow' ),
 			'required' => false,
 		);
@@ -246,11 +246,11 @@ class Exit_Survey_Builder {
 
 		// Question 1: Overall experience
 		$questions[] = array(
-			'id'      => 'overall_experience',
-			'type'    => self::TYPE_RATING,
+			'id'       => 'overall_experience',
+			'type'     => self::TYPE_RATING,
 			'question' => __( 'Looking back, how would you rate your overall experience with WPShadow?', 'wpshadow' ),
-			'scale'   => 5,
-			'labels'  => array(
+			'scale'    => 5,
+			'labels'   => array(
 				1 => __( 'Poor', 'wpshadow' ),
 				5 => __( 'Excellent', 'wpshadow' ),
 			),
@@ -259,38 +259,38 @@ class Exit_Survey_Builder {
 
 		// Question 2: What worked well?
 		$questions[] = array(
-			'id'      => 'what_worked_well',
-			'type'    => self::TYPE_TEXT,
-			'question' => __( 'What did WPShadow do well? (We\'d love to hear what we should keep doing)', 'wpshadow' ),
+			'id'          => 'what_worked_well',
+			'type'        => self::TYPE_TEXT,
+			'question'    => __( 'What did WPShadow do well? (We\'d love to hear what we should keep doing)', 'wpshadow' ),
 			'placeholder' => __( 'Any features or aspects you appreciated...', 'wpshadow' ),
 			'required'    => false,
 		);
 
 		// Question 3: What could be better?
 		$questions[] = array(
-			'id'      => 'what_could_improve',
-			'type'    => self::TYPE_TEXT,
-			'question' => __( 'What could we have done better?', 'wpshadow' ),
+			'id'          => 'what_could_improve',
+			'type'        => self::TYPE_TEXT,
+			'question'    => __( 'What could we have done better?', 'wpshadow' ),
 			'placeholder' => __( 'Honest feedback helps us improve...', 'wpshadow' ),
 			'required'    => false,
 		);
 
 		// Question 4: Current solution
 		$questions[] = array(
-			'id'      => 'current_solution',
-			'type'    => self::TYPE_TEXT,
-			'question' => __( 'What are you using now instead of WPShadow (if anything)?', 'wpshadow' ),
+			'id'          => 'current_solution',
+			'type'        => self::TYPE_TEXT,
+			'question'    => __( 'What are you using now instead of WPShadow (if anything)?', 'wpshadow' ),
 			'placeholder' => __( 'Plugin name, manual process, nothing, etc.', 'wpshadow' ),
 			'required'    => false,
 		);
 
 		// Question 5: Would you recommend to others?
 		$questions[] = array(
-			'id'      => 'would_recommend_to_others',
-			'type'    => self::TYPE_RATING,
+			'id'       => 'would_recommend_to_others',
+			'type'     => self::TYPE_RATING,
 			'question' => __( 'How likely would you be to recommend WPShadow to a friend with a similar website?', 'wpshadow' ),
-			'scale'   => 10,
-			'labels'  => array(
+			'scale'    => 10,
+			'labels'   => array(
 				0  => __( 'Not at all likely', 'wpshadow' ),
 				10 => __( 'Extremely likely', 'wpshadow' ),
 			),
@@ -299,9 +299,9 @@ class Exit_Survey_Builder {
 
 		// Question 6: Any resources we could share?
 		$questions[] = array(
-			'id'      => 'helpful_resources',
-			'type'    => self::TYPE_TEXT,
-			'question' => __( 'Is there anything we could help you with, even if you\'re not using WPShadow? (tutorials, recommendations, etc.)', 'wpshadow' ),
+			'id'          => 'helpful_resources',
+			'type'        => self::TYPE_TEXT,
+			'question'    => __( 'Is there anything we could help you with, even if you\'re not using WPShadow? (tutorials, recommendations, etc.)', 'wpshadow' ),
 			'placeholder' => __( 'We genuinely want to help you succeed...', 'wpshadow' ),
 			'required'    => false,
 		);

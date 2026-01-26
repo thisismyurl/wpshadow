@@ -124,5 +124,5 @@ require_once $ajax_path . 'Get_Visual_Comparison_Handler.php';
 // - Apply_Family_Fix_Handler.php
 
 // Exit interview and followup operations
-require_once $ajax_path . 'Exit_Followup_Handlers.php';
+require_once $ajax_path . 'exit-followup-handlers.php';
 

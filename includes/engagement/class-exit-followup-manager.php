@@ -111,9 +111,12 @@ class Exit_Followup_Manager {
 		);
 
 		if ( false === $result ) {
-			Error_Handler::log_error( 'Failed to insert exit interview', array(
-				'error' => $wpdb->last_error,
-			) );
+			Error_Handler::log_error(
+				'Failed to insert exit interview',
+				array(
+					'error' => $wpdb->last_error,
+				)
+			);
 			return false;
 		}
 
@@ -270,10 +273,13 @@ class Exit_Followup_Manager {
 		);
 
 		if ( false === $result ) {
-			Error_Handler::log_error( 'Failed to create followup', array(
-				'error'        => $wpdb->last_error,
-				'interview_id' => $interview_id,
-			) );
+			Error_Handler::log_error(
+				'Failed to create followup',
+				array(
+					'error'        => $wpdb->last_error,
+					'interview_id' => $interview_id,
+				)
+			);
 			return false;
 		}
 
@@ -293,7 +299,10 @@ class Exit_Followup_Manager {
 		$table = $wpdb->prefix . 'wpshadow_exit_interviews';
 
 		$interview = $wpdb->get_row(
-			$wpdb->prepare( "SELECT * FROM {$table} WHERE id = %d", $interview_id ),
+			$wpdb->prepare(
+				"SELECT * FROM {$table} WHERE id = %d", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$interview_id
+			),
 			ARRAY_A
 		);
 
@@ -322,7 +331,10 @@ class Exit_Followup_Manager {
 
 		$table = $wpdb->prefix . 'wpshadow_exit_followups';
 
-		$query = $wpdb->prepare( "SELECT * FROM {$table} WHERE interview_id = %d", $interview_id );
+		$query = $wpdb->prepare(
+			"SELECT * FROM {$table} WHERE interview_id = %d", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$interview_id
+		);
 
 		if ( ! empty( $status ) ) {
 			$query .= $wpdb->prepare( ' AND status = %s', $status );
@@ -330,7 +342,7 @@ class Exit_Followup_Manager {
 
 		$query .= ' ORDER BY scheduled_date ASC';
 
-		$followups = $wpdb->get_results( $query, ARRAY_A );
+		$followups = $wpdb->get_results( $query, ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 		// Decode JSON fields
 		foreach ( $followups as &$followup ) {
@@ -359,7 +371,7 @@ class Exit_Followup_Manager {
 		$followups = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT f.*, i.contact_email, i.user_id 
-				FROM {$table} f
+				FROM {$table} f -- phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				INNER JOIN {$wpdb->prefix}wpshadow_exit_interviews i ON f.interview_id = i.id
 				WHERE f.status = %s 
 				AND f.scheduled_date <= %s
@@ -403,19 +415,19 @@ class Exit_Followup_Manager {
 		// Add completion date if status is completed
 		if ( self::STATUS_COMPLETED === $status ) {
 			$update_data['completed_date'] = current_time( 'mysql' );
-			$update_format[]                = '%s';
+			$update_format[]               = '%s';
 		}
 
 		// Add survey responses if provided
 		if ( ! empty( $data['survey_responses'] ) ) {
 			$update_data['survey_responses'] = wp_json_encode( $data['survey_responses'] );
-			$update_format[]                  = '%s';
+			$update_format[]                 = '%s';
 		}
 
 		// Add notes if provided
 		if ( ! empty( $data['notes'] ) ) {
 			$update_data['notes'] = sanitize_textarea_field( $data['notes'] );
-			$update_format[]       = '%s';
+			$update_format[]      = '%s';
 		}
 
 		$result = $wpdb->update(
@@ -427,11 +439,14 @@ class Exit_Followup_Manager {
 		);
 
 		if ( false === $result ) {
-			Error_Handler::log_error( 'Failed to update followup status', array(
-				'followup_id' => $followup_id,
-				'status'      => $status,
-				'error'       => $wpdb->last_error,
-			) );
+			Error_Handler::log_error(
+				'Failed to update followup status',
+				array(
+					'followup_id' => $followup_id,
+					'status'      => $status,
+					'error'       => $wpdb->last_error,
+				)
+			);
 			return false;
 		}
 
@@ -462,21 +477,21 @@ class Exit_Followup_Manager {
 		// Count total interviews with contact allowed
 		$total_with_contact = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$table_interviews} WHERE contact_allowed = %d",
+				"SELECT COUNT(*) FROM {$table_interviews} WHERE contact_allowed = %d", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				1
 			)
 		);
 
 		// Count followups by status
 		$followup_counts = $wpdb->get_results(
-			"SELECT status, COUNT(*) as count FROM {$table_followups} GROUP BY status",
+			"SELECT status, COUNT(*) as count FROM {$table_followups} GROUP BY status", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			ARRAY_A
 		);
 
 		$stats = array(
 			'total_interviews_with_contact' => $total_with_contact,
-			'followups_by_status'            => wp_list_pluck( $followup_counts, 'count', 'status' ),
-			'pending_due_count'              => count( self::get_due_followups() ),
+			'followups_by_status'           => wp_list_pluck( $followup_counts, 'count', 'status' ),
+			'pending_due_count'             => count( self::get_due_followups() ),
 		);
 
 		return $stats;
