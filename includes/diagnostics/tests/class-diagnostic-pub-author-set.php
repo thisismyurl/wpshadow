@@ -61,7 +61,7 @@ class Diagnostic_Pub_Author_Set extends Diagnostic_Base {
 	 * @return string The diagnostic description.
 	 */
 	public static function get_description(): string {
-		return __( 'Post author set and bio filled?', 'wpshadow' );
+		return __( 'Verifies published posts have valid authors with complete biographical information', 'wpshadow' );
 	}
 
 	/**
@@ -171,6 +171,7 @@ class Diagnostic_Pub_Author_Set extends Diagnostic_Base {
 			return null; // No posts to check.
 		}
 
+		$total_posts               = count( $posts );
 		$posts_with_author_and_bio = 0;
 		$posts_with_valid_author   = 0;
 
@@ -212,7 +213,7 @@ class Diagnostic_Pub_Author_Set extends Diagnostic_Base {
 			);
 		}
 
-		$percentage = ( $posts_with_author_and_bio / count( $posts ) ) * 100;
+		$percentage = ( $posts_with_author_and_bio / $total_posts ) * 100;
 
 		// Flag if less than 70% of posts have authors with bios.
 		if ( $percentage < 70 ) {
