@@ -125,7 +125,7 @@ class Diagnostic_Pub_Compliance_Check extends Diagnostic_Base {
 	 * - Proper category (not just "Uncategorized")
 	 * - At least one tag
 	 * - Featured image
-	 * - Minimum 300 word count
+	 * - Minimum 300 word count (using regex for i18n support)
 	 *
 	 * A post is considered non-compliant if it fails 2 or more checks.
 	 * Issues a finding if less than 70% of posts are compliant.
@@ -174,7 +174,7 @@ class Diagnostic_Pub_Compliance_Check extends Diagnostic_Base {
 
 			// Check 2: Has tags
 			$tags = get_the_tags( $post_id );
-			if ( ! is_array( $tags ) || count( $tags ) < 1 ) {
+			if ( empty( $tags ) ) {
 				++$post_issues;
 			}
 
@@ -185,7 +185,10 @@ class Diagnostic_Pub_Compliance_Check extends Diagnostic_Base {
 
 			// Check 4: Has adequate word count (300+ words)
 			$post_content = get_post_field( 'post_content', $post_id );
-			$word_count   = str_word_count( wp_strip_all_tags( $post_content ) );
+			$clean_text   = wp_strip_all_tags( $post_content );
+			// Use regex for better i18n support
+			preg_match_all( '/\b\w+\b/u', $clean_text, $matches );
+			$word_count = count( $matches[0] );
 			if ( $word_count < 300 ) {
 				++$post_issues;
 			}
