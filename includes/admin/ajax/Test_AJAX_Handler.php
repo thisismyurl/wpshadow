@@ -20,6 +20,7 @@ class Test_AJAX_Handler {
 		file_put_contents( $debug_file, "Test_AJAX_Handler::register() called at " . date( 'Y-m-d H:i:s' ) . " - Adding action wp_ajax_wpshadow_test_ajax\n", FILE_APPEND );
 		
 		add_action( 'wp_ajax_wpshadow_test_ajax', array( __CLASS__, 'handle' ) );
+		add_action( 'wp_ajax_nopriv_wpshadow_test_ajax', array( __CLASS__, 'handle' ) );
 	}
 
 	public static function handle(): void {
