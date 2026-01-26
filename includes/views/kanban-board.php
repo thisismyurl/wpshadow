@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $status_manager = new \WPShadow\Core\Finding_Status_Manager();
 
 // Get all findings
-$all_findings = wpshadow_get_site_findings();
+$all_findings = wpshadow_get_cached_findings();
 
 // Apply category filter if present (Issue #564)
 $kanban_category = isset( $_GET['kanban_category'] ) ? sanitize_key( $_GET['kanban_category'] ) : '';
