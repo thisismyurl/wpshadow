@@ -72,6 +72,52 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wpshadow_render_tools' ) ) {
+	/**
+	 * Render Tools page
+	 */
+	function wpshadow_render_tools() {
+		// Load Tools module if not already loaded
+		if ( ! function_exists( 'wpshadow_get_tools_catalog' ) ) {
+			require_once WPSHADOW_PATH . 'includes/screens/class-tools-page-module.php';
+		}
+		
+		// Call the actual render function from the module
+		\wpshadow_render_tools();
+	}
+}
+
+if ( ! function_exists( 'wpshadow_render_help' ) ) {
+	/**
+	 * Render Help page
+	 */
+	function wpshadow_render_help() {
+		// Load Help module if not already loaded
+		if ( ! function_exists( 'wpshadow_get_help_catalog' ) ) {
+			require_once WPSHADOW_PATH . 'includes/screens/class-help-page-module.php';
+		}
+		
+		// Call the actual render function from the module
+		\wpshadow_render_help();
+	}
+}
+
+if ( ! function_exists( 'wpshadow_render_workflows' ) ) {
+	/**
+	 * Render Workflows page
+	 */
+	function wpshadow_render_workflows() {
+		// Load Workflow module if not already loaded
+		if ( ! function_exists( 'wpshadow_render_workflow_builder' ) ) {
+			require_once WPSHADOW_PATH . 'includes/workflow/workflow-module.php';
+		}
+		
+		// Call the actual render function from the module
+		\wpshadow_render_workflow_builder();
+	}
+}
+
+
 if ( ! function_exists( 'wpshadow_render_visual_comparisons' ) ) {
 	/**
 	 * Render Visual Comparisons page

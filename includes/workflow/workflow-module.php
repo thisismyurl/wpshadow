@@ -16,6 +16,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Ensure Block_Registry is loaded.
 require_once WPSHADOW_PATH . 'includes/workflow/class-block-registry.php';
 
+// Use statement for cleaner code.
+use WPShadow\Workflow\Block_Registry;
+
 /**
  * Render the Visual Workflow Builder page
  *
