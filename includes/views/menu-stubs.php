@@ -86,6 +86,24 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wpshadow_render_scan_settings' ) ) {
+	/**
+	 * Render Scan Settings page (Diagnostics/Treatments toggles)
+	 */
+	function wpshadow_render_scan_settings() {
+		// Load the scan settings page file
+		if ( file_exists( WPSHADOW_PATH . 'includes/screens/class-scan-settings-page.php' ) ) {
+			require_once WPSHADOW_PATH . 'includes/screens/class-scan-settings-page.php';
+			if ( function_exists( '\\WPShadow\\Admin\\wpshadow_render_scan_settings' ) ) {
+				\\WPShadow\\Admin\\wpshadow_render_scan_settings();
+				return;
+			}
+		}
+
+		echo '<div class="wrap"><h1>' . esc_html__( 'Scan Settings', 'wpshadow' ) . '</h1><p class="wps-version-tag">v' . esc_html( WPSHADOW_VERSION ) . '</p><p>' . esc_html__( 'Loading scan settings...', 'wpshadow' ) . '</p></div>';
+	}
+}
+
 // Load Tools module (defines wpshadow_render_tools if not already defined)
 if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 	require_once WPSHADOW_PATH . 'includes/screens/class-tools-page-module.php';

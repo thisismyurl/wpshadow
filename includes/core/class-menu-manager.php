@@ -111,6 +111,16 @@ class Menu_Manager {
 			'wpshadow_render_settings'
 		);
 
+		// Scan Settings (Diagnostics/Treatments toggles)
+		add_submenu_page(
+			'wpshadow',
+			__( 'Scan Settings', 'wpshadow' ),
+			__( 'Scan Settings', 'wpshadow' ),
+			'manage_options',
+			'wpshadow-scan-settings',
+			'wpshadow_render_scan_settings'
+		);
+
 		// Tools (Utilities & Features)
 		add_submenu_page(
 			'wpshadow',
