@@ -42,7 +42,7 @@ function wpshadow_render_dashboard() {
 	$is_drilldown    = ! empty( $category_filter );
 
 	// Get category metadata for title/details
-	$category_meta    = \WPShadow\Core\wpshadow_get_category_metadata();
+	$category_meta    = wpshadow_get_category_metadata();
 	$current_category = $is_drilldown && isset( $category_meta[ $category_filter ] )
 		? $category_meta[ $category_filter ]
 		: null;
