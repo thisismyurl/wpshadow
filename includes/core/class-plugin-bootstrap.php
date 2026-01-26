@@ -297,6 +297,19 @@ class Plugin_Bootstrap {
 	 * @return void
 	 */
 	private static function load_exit_followup_system() {
+		/**
+		 * Filters whether the exit followup system should load.
+		 *
+		 * @since 1.2601.2148
+		 *
+		 * @param bool $enabled Whether exit followups are enabled.
+		 */
+		$exit_followups_enabled = \apply_filters( 'wpshadow_exit_followups_enabled', false );
+
+		if ( ! $exit_followups_enabled ) {
+			return;
+		}
+
 		$engagement_path = WPSHADOW_PATH . 'includes/engagement/';
 		$screens_path    = WPSHADOW_PATH . 'includes/screens/';
 

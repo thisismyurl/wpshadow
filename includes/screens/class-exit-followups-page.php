@@ -30,6 +30,10 @@ class Exit_Followups_Page {
 	 * @return void
 	 */
 	public static function init() {
+		if ( ! \apply_filters( 'wpshadow_exit_followups_enabled', false ) ) {
+			return;
+		}
+
 		add_action( 'admin_menu', array( __CLASS__, 'add_menu_page' ), 99 );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ) );
 	}

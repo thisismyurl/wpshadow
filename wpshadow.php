@@ -3,7 +3,7 @@
 /**
  * Plugin Name: WPShadow
  * Description: Minimal bootstrap to show WPShadow menu and Settings link.
- * Version: 1.2601.212300
+ * Version: 1.2601.212358
  * Author: thisismyurl
  */
 
@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'WPSHADOW_VERSION', '1.2601.212300' );
+define( 'WPSHADOW_VERSION', '1.2601.212358' );
 define( 'WPSHADOW_BASENAME', plugin_basename( __FILE__ ) );
 define( 'WPSHADOW_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WPSHADOW_URL', plugin_dir_url( __FILE__ ) );
@@ -84,3 +84,41 @@ add_action(
 		\WPShadow\Core\Plugin_Bootstrap::init();
 	}
 );
+
+/**
+ * Prevent caching on WPShadow admin pages during testing.
+ *
+ * Ensures page/object/db caches are bypassed and sends no-cache headers
+ * on WPShadow admin screens to avoid stale admin UI while we test.
+ *
+ * @return void
+ */
+function wpshadow_disable_admin_page_cache() {
+	if ( ! is_admin() ) {
+		return;
+	}
+
+	$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
+
+	if ( empty( $page ) || 0 !== strpos( $page, 'wpshadow' ) ) {
+		return;
+	}
+
+	if ( ! defined( 'DONOTCACHEPAGE' ) ) {
+		define( 'DONOTCACHEPAGE', true );
+	}
+
+	if ( ! defined( 'DONOTCACHEOBJECT' ) ) {
+		define( 'DONOTCACHEOBJECT', true );
+	}
+
+	if ( ! defined( 'DONOTCACHEDB' ) ) {
+		define( 'DONOTCACHEDB', true );
+	}
+
+	if ( function_exists( 'nocache_headers' ) ) {
+		nocache_headers();
+	}
+}
+
+add_action( 'admin_init', 'wpshadow_disable_admin_page_cache', 1 );

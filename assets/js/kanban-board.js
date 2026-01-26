@@ -45,6 +45,28 @@ jQuery(document).ready(function ($) {
 		return '';
 	}
 
+	function showAlert(title, message, tone) {
+		if (window.WPShadowDesign && typeof window.WPShadowDesign.alert === 'function') {
+			window.WPShadowDesign.alert(title, message, tone || 'info');
+			return;
+		}
+
+		alert((title ? title + ': ' : '') + message);
+	}
+
+	function confirmAction(message, onConfirm, onCancel) {
+		if (window.WPShadowDesign && typeof window.WPShadowDesign.confirm === 'function') {
+			window.WPShadowDesign.confirm(message, onConfirm, onCancel);
+			return;
+		}
+
+		if (confirm(message)) {
+			onConfirm();
+		} else if (onCancel) {
+			onCancel();
+		}
+	}
+
 	/**
 	 * Initialize Kanban board
 	 */
@@ -677,7 +699,7 @@ jQuery(document).ready(function ($) {
 			const $card = $(this).closest('.finding-card');
 			const currentStatus = $card.closest('.kanban-column').data('status');
 
-		if (confirm('Remove this finding from the board?\n\nThis will hide it from view but the finding will still be recorded.')) {
+		const removeFromBoard = function() {
 			// Just hide the card from UI
 			$card.fadeOut(300, function() {
 				$(this).remove();
@@ -687,7 +709,12 @@ jQuery(document).ready(function ($) {
 				$column.find('h3 span[style*="float: right"]').text(count);
 			});
 			setStatus('Finding removed from view.', 'success');
-		}
+		};
+
+		confirmAction(
+			'REMOVE finding from board?\n\nThis will hide it from view but the finding will still be recorded.',
+			removeFromBoard
+		);
 	});
 
 	$(document).on('click', '.finding-autofix', function (e) {
@@ -731,7 +758,7 @@ jQuery(document).ready(function ($) {
 					const message = response.data && response.data.message
 						? response.data.message
 						: 'Could not auto-fix';
-					alert('Error: ' + message);
+					showAlert('Auto-fix failed', message, 'error');
 					$btn.prop('disabled', false).text('Fix Now');
 				}
 			});
@@ -750,12 +777,8 @@ jQuery(document).ready(function ($) {
 			const description = $card.find('.finding-description').text();
 			const threat = $card.find('.finding-threat').text();
 
-			alert(
-				'Finding Details:\n\n' +
-				'Title: ' + title + '\n\n' +
-				'Description: ' + description + '\n\n' +
-				'Threat: ' + threat
-			);
+			const detailsMessage = 'Title: ' + title + '\n\nDescription: ' + description + '\n\nThreat: ' + threat;
+			showAlert('Finding Details', detailsMessage, 'info');
 			// TODO: Implement proper modal interface
 		});
 
@@ -1121,10 +1144,11 @@ jQuery(document).ready(function ($) {
 			if (response.success) {
 				$panel.slideUp(200, function(){ $(this).remove(); });
 			} else {
-				alert('Could not dismiss: ' + (response.data && response.data.message ? response.data.message : 'Unknown error'));
+				const message = response.data && response.data.message ? response.data.message : 'Unknown error';
+				showAlert('Dismiss failed', 'Could not dismiss: ' + message, 'error');
 			}
 		}).fail(function(){
-			alert('Connection error.');
+			showAlert('Connection error', 'Could not dismiss scan panel.', 'error');
 		});
 	});
 
@@ -1138,10 +1162,11 @@ jQuery(document).ready(function ($) {
 			if (response.success) {
 				location.reload();
 			} else {
-				alert('Could not restore: ' + (response.data && response.data.message ? response.data.message : 'Unknown error'));
+				const message = response.data && response.data.message ? response.data.message : 'Unknown error';
+				showAlert('Restore failed', 'Could not restore: ' + message, 'error');
 			}
 		}).fail(function(){
-			alert('Connection error.');
+			showAlert('Connection error', 'Could not restore panels.', 'error');
 		});
 	});
 

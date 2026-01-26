@@ -13,7 +13,10 @@
 
 .wps-dashboard-gauges {
 	margin-bottom: var(--wps-space-8);
-	flex-wrap: wrap;
+	display: grid;
+	grid-template-columns: minmax(320px, 1fr) 2fr;
+	align-items: start;
+	gap: var(--wps-space-6);
 	animation: fadeInUp 0.5s ease-out;
 }
 
@@ -33,9 +36,11 @@
 	============================================================================ */
 
 .wps-health-gauge-main {
-	flex: 0 0 auto;
-	width: 280px;
-	min-width: 280px;
+	width: 100%;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--wps-space-4);
 }
 
 .wps-health-gauge-card {
@@ -185,7 +190,7 @@
 
 .wps-health-gauge-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 	gap: var(--wps-space-4);
 }
 
@@ -279,17 +284,12 @@
 
 @media (max-width: 1200px) {
 	.wps-dashboard-gauges {
-		flex-direction: column;
+		grid-template-columns: 1fr;
 	}
 
 	.wps-health-gauge-main {
-		width: 100%;
-		max-width: 400px;
-		margin: 0 auto var(--wps-space-6) auto;
-	}
-
-	.wps-health-gauge-categories {
-		width: 100%;
+		max-width: 520px;
+		margin: 0 auto;
 	}
 }
 

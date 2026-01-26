@@ -199,7 +199,7 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 		return '#f44336'; // Red - High threat
 	};
 	?>
-	<div class="wps-dashboard-gauges wps-flex wps-gap-6 wps-mb-8">
+	<div class="wps-dashboard-gauges wps-gap-6 wps-mb-8">
 		<!-- Left: Large Overall Health Gauge + Scan Buttons -->
 		<div class="wps-health-gauge-main">
 			<div class="wps-health-gauge-card" style="border-color: <?php echo esc_attr( isset( $overall_health['color'] ) ? $overall_health['color'] : '#ccc' ); ?>;">

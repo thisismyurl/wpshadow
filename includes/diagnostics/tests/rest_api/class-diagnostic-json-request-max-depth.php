@@ -12,7 +12,7 @@ class Diagnostic_Json_Request_Max_Depth extends Diagnostic_Base {
 		if ( ! function_exists( 'json_decode' ) ) {
 			return null;
 		}
-		$test_json = json_encode( array( 'level1' => array( 'level2' => array( 'level3' => array( 'level4' => array( 'level5' => 'deep' ) ) ) ) );
+		$test_json = json_encode( array( 'level1' => array( 'level2' => array( 'level3' => array( 'level4' => array( 'level5' => 'deep' ) ) ) ) ) );
 		$decoded = json_decode( $test_json, true );
 		if ( empty( $decoded ) ) {
 			return array(

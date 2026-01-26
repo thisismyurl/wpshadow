@@ -182,7 +182,9 @@ class Cancel_Exit_Followups_Handler extends AJAX_Handler_Base {
 	}
 }
 
-// Register AJAX handlers
-add_action( 'wp_ajax_wpshadow_get_exit_followups', array( 'WPShadow\Admin\AJAX\Get_Exit_Followups_Handler', 'handle' ) );
-add_action( 'wp_ajax_wpshadow_update_exit_followup', array( 'WPShadow\Admin\AJAX\Update_Exit_Followup_Handler', 'handle' ) );
-add_action( 'wp_ajax_wpshadow_cancel_exit_followups', array( 'WPShadow\Admin\AJAX\Cancel_Exit_Followups_Handler', 'handle' ) );
+if ( \apply_filters( 'wpshadow_exit_followups_enabled', false ) ) {
+	// Register AJAX handlers only when exit followups are enabled
+	add_action( 'wp_ajax_wpshadow_get_exit_followups', array( 'WPShadow\Admin\AJAX\Get_Exit_Followups_Handler', 'handle' ) );
+	add_action( 'wp_ajax_wpshadow_update_exit_followup', array( 'WPShadow\Admin\AJAX\Update_Exit_Followup_Handler', 'handle' ) );
+	add_action( 'wp_ajax_wpshadow_cancel_exit_followups', array( 'WPShadow\Admin\AJAX\Cancel_Exit_Followups_Handler', 'handle' ) );
+}

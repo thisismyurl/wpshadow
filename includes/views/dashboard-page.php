@@ -81,24 +81,28 @@ function wpshadow_render_dashboard() {
 		<?php endif; ?>
 
 		<?php if ( $never_run ) : ?>
-			<!-- First-time Quick Scan prompt -->
-			<div class="wps-cta-card wps-cta-info" id="wpshadow-first-scan-prompt" role="region" aria-labelledby="wpshadow-first-scan-heading">
-				<button type="button" class="wps-cta-dismiss" id="wpshadow-dismiss-first-scan" aria-label="<?php esc_attr_e( 'Dismiss welcome message', 'wpshadow' ); ?>">
-					<span class="dashicons dashicons-no-alt" aria-hidden="true"></span>
-				</button>
-				<div class="wps-cta-icon" aria-hidden="true">
-					<span class="dashicons dashicons-yes-alt"></span>
-				</div>
-				<div class="wps-cta-content">
-					<h2 id="wpshadow-first-scan-heading" class="wps-cta-heading"><?php esc_html_e( 'Welcome to WPShadow!', 'wpshadow' ); ?></h2>
-					<p class="wps-cta-description">
-						<?php esc_html_e( 'To get started, WPShadow needs to run a Quick Scan of your site. This scan is completely safe and won\'t make any changes to your website.', 'wpshadow' ); ?>
-					</p>
-					<div class="wps-cta-actions">
-						<button type="button" class="wps-btn wps-btn-success wps-btn-icon-left" id="wpshadow-run-first-scan" aria-label="<?php esc_attr_e( 'Run an initial quick scan of your site', 'wpshadow' ); ?>">
-							<span class="dashicons dashicons-update"></span>
-							<?php esc_html_e( 'Run Quick Scan', 'wpshadow' ); ?>
+			<!-- First-time Quick Scan prompt (centered modal) -->
+			<div class="wps-scan-overlay wps-first-scan-overlay" id="wpshadow-first-scan-overlay" role="dialog" aria-labelledby="wpshadow-first-scan-heading" aria-modal="true">
+				<div class="wps-scan-overlay-content">
+					<div class="wps-cta-card wps-cta-info" id="wpshadow-first-scan-prompt">
+						<button type="button" class="wps-cta-dismiss" id="wpshadow-dismiss-first-scan" aria-label="<?php esc_attr_e( 'Dismiss welcome message', 'wpshadow' ); ?>">
+							<span class="dashicons dashicons-no-alt" aria-hidden="true"></span>
 						</button>
+						<div class="wps-cta-icon" aria-hidden="true">
+							<span class="dashicons dashicons-yes-alt"></span>
+						</div>
+						<div class="wps-cta-content">
+							<h2 id="wpshadow-first-scan-heading" class="wps-cta-heading"><?php esc_html_e( 'Welcome to WPShadow!', 'wpshadow' ); ?></h2>
+							<p class="wps-cta-description">
+								<?php esc_html_e( 'To get started, WPShadow needs to run a Quick Scan of your site. This scan is completely safe and won\'t make any changes to your website.', 'wpshadow' ); ?>
+							</p>
+							<div class="wps-cta-actions">
+								<button type="button" class="wps-btn wps-btn-success wps-btn-icon-left" id="wpshadow-run-first-scan" aria-label="<?php esc_attr_e( 'Run an initial quick scan of your site', 'wpshadow' ); ?>">
+									<span class="dashicons dashicons-update"></span>
+									<?php esc_html_e( 'Run Quick Scan', 'wpshadow' ); ?>
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

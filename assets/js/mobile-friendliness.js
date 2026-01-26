@@ -60,7 +60,12 @@
 					// Validate same-site
 					if (urlObj.hostname !== siteHost) {
 						this.value = '/';
-						alert('You can only test your own site. Please enter a path from your domain.');
+						const message = 'You can only test your own site. Please enter a path from your domain.';
+						if (window.WPShadowDesign && typeof window.WPShadowDesign.alert === 'function') {
+							window.WPShadowDesign.alert('Invalid URL', message, 'warning');
+						} else {
+							alert(message);
+						}
 						return;
 					}
 
@@ -69,7 +74,12 @@
 					this.value = path || '/';
 				} catch (e) {
 					this.value = '/';
-					alert('Invalid URL format. Please enter a valid path or URL.');
+					const message = 'Invalid URL format. Please enter a valid path or URL.';
+					if (window.WPShadowDesign && typeof window.WPShadowDesign.alert === 'function') {
+						window.WPShadowDesign.alert('Invalid URL', message, 'warning');
+					} else {
+						alert(message);
+					}
 				}
 			} else if (!value.startsWith('/')) {
 				// Ensure path starts with /

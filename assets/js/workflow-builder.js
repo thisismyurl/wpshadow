@@ -424,11 +424,15 @@
 			const actionBlocks = this.blocks.filter(b => b.type === 'action');
 
 			if (this.blocks.length === 0) {
-				message = 'Add at least one trigger and one action to create a workflow';
+				message = 'Add exactly one trigger and one action to create a workflow';
 			} else if (triggerBlocks.length === 0) {
-				message = 'Add at least one trigger (IF condition)';
+				message = 'Add exactly one trigger (IF condition)';
+			} else if (triggerBlocks.length > 1) {
+				message = 'Only one trigger is allowed per workflow';
 			} else if (actionBlocks.length === 0) {
-				message = 'Add at least one action (THEN what to do)';
+				message = 'Add exactly one action (THEN what to do)';
+			} else if (actionBlocks.length > 1) {
+				message = 'Only one action is allowed per workflow';
 			} else {
 				isValid = true;
 				message = 'Workflow is ready to save';
@@ -723,6 +727,23 @@
 		 * Add a block to the canvas
 		 */
 		addBlockToCanvas: function(blockId, blockType) {
+			const triggerCount = this.blocks.filter(b => b.type === 'trigger').length;
+			const actionCount = this.blocks.filter(b => b.type === 'action').length;
+
+			if ('trigger' === blockType && triggerCount >= 1) {
+				const message = wpshadowWorkflow.strings.singleTrigger || 'Only one trigger is allowed per workflow';
+				this.showNotification('error', message);
+				this.announceToScreenReader(message);
+				return;
+			}
+
+			if ('action' === blockType && actionCount >= 1) {
+				const message = wpshadowWorkflow.strings.singleAction || 'Only one action is allowed per workflow';
+				this.showNotification('error', message);
+				this.announceToScreenReader(message);
+				return;
+			}
+
 			const uniqueId = 'block_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 
 			const blockData = {
