@@ -261,7 +261,82 @@
 					WorkflowBuilder.addBlockToCanvas(blockId, blockType);
 				}
 			});
+
+			// Add tooltips to blocks
+			this.addBlockTooltips();
+
+			// Add validation indicator
+			this.addValidationIndicator();
 		},
+
+		/**
+		 * Add tooltips to block items
+		 */
+		addBlockTooltips: function() {
+			$('.wps-block-item').each(function() {
+				const $block = $(this);
+				const blockId = $block.data('block-id');
+				const description = $block.find('small').text();
+				
+				// Add tooltip element
+				const tooltip = `<span class="wps-block-tooltip" role="tooltip">${description}</span>`;
+				$block.append(tooltip);
+			});
+		},
+
+		/**
+		 * Add workflow validation indicator
+		 */
+		addValidationIndicator: function() {
+			const indicatorHTML = `
+				<div class="wps-workflow-validation" role="status" aria-live="polite">
+					<span class="dashicons"></span>
+					<span class="wps-validation-message"></span>
+				</div>
+			`;
+			$('body').append(indicatorHTML);
+		},
+
+		/**
+		 * Validate workflow
+		 */
+		validateWorkflow: function() {
+			let isValid = false;
+			let message = '';
+
+			const triggerBlocks = this.blocks.filter(b => b.type === 'trigger');
+			const actionBlocks = this.blocks.filter(b => b.type === 'action');
+
+			if (this.blocks.length === 0) {
+				message = 'Add at least one trigger and one action to create a workflow';
+			} else if (triggerBlocks.length === 0) {
+				message = 'Add at least one trigger (IF condition)';
+			} else if (actionBlocks.length === 0) {
+				message = 'Add at least one action (THEN what to do)';
+			} else {
+				isValid = true;
+				message = 'Workflow is ready to save';
+			}
+
+			// Update indicator
+			const $indicator = $('.wps-workflow-validation');
+			$indicator.removeClass('valid invalid');
+			$indicator.addClass(isValid ? 'valid' : 'invalid');
+			$indicator.find('.dashicons').removeClass().addClass('dashicons').addClass(
+				isValid ? 'dashicons-yes-alt' : 'dashicons-info'
+			);
+			$indicator.find('.wps-validation-message').text(message);
+
+			// Show indicator briefly
+			$indicator.addClass('show');
+			clearTimeout(this.validationTimeout);
+			this.validationTimeout = setTimeout(() => {
+				$indicator.removeClass('show');
+			}, 3000);
+
+			return isValid;
+		},
+
 
 		/**
 		 * Handle palette block drag start
@@ -364,6 +439,8 @@
 			$(`[data-block-id="${uniqueId}"]`).hide().fadeIn(300, () => {
 				// Update connections after animation
 				this.updateConnections();
+				// Validate workflow
+				this.validateWorkflow();
 			});
 		},
 
@@ -389,7 +466,6 @@
 					<div class="wps-block-config">
 						<p>${description}</p>
 					</div>
-					<div class="wps-block-connector" aria-hidden="true"></div>
 				</div>
 			`;
 		},
@@ -443,6 +519,9 @@
 					// Update connections after block removal
 					WorkflowBuilder.updateConnections();
 				}
+				
+				// Validate workflow
+				WorkflowBuilder.validateWorkflow();
 			});
 
 			this.announceToScreenReader(wpshadowWorkflow.strings.blockRemoved);
@@ -679,9 +758,9 @@
 
 			const name = $('#wps-workflow-name').val() || 'Untitled Workflow';
 
-			if (this.blocks.length === 0) {
-				alert(wpshadowWorkflow.strings.noBlocks);
-				$('#wps-workflow-name').focus();
+			// Validate workflow before saving
+			if (!this.validateWorkflow()) {
+				this.showNotification('error', 'Please complete your workflow before saving');
 				return;
 			}
 
@@ -812,10 +891,68 @@
 				$('#wps-save-workflow').trigger('click');
 			}
 
+			// Ctrl+T or Cmd+T to test
+			if ((e.ctrlKey || e.metaKey) && e.key === 't') {
+				e.preventDefault();
+				$('#wps-test-workflow').trigger('click');
+			}
+
+			// Ctrl+Z or Cmd+Z to clear (with confirmation)
+			if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+				e.preventDefault();
+				$('#wps-clear-canvas').trigger('click');
+			}
+
 			// Escape to deselect
 			if (e.key === 'Escape') {
 				$('.wps-block').removeClass('selected');
 				this.selectedBlock = null;
+			}
+
+			// Arrow key navigation between blocks
+			if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+				this.handleArrowNavigation(e);
+			}
+
+			// Ctrl+F or Cmd+F to focus search
+			if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+				e.preventDefault();
+				$('#wps-block-search').focus();
+			}
+		},
+
+		/**
+		 * Handle arrow key navigation between blocks
+		 */
+		handleArrowNavigation: function(e) {
+			const $blocks = $('.wps-block');
+			if ($blocks.length === 0) return;
+
+			const $focused = $(':focus');
+			let currentIndex = -1;
+
+			// Find currently focused block
+			$blocks.each(function(index) {
+				if ($(this).is($focused)) {
+					currentIndex = index;
+					return false;
+				}
+			});
+
+			// Navigate based on arrow key
+			let newIndex = currentIndex;
+			if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+				e.preventDefault();
+				newIndex = currentIndex < $blocks.length - 1 ? currentIndex + 1 : 0;
+			} else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+				e.preventDefault();
+				newIndex = currentIndex > 0 ? currentIndex - 1 : $blocks.length - 1;
+			}
+
+			// Focus new block
+			if (newIndex !== currentIndex && newIndex >= 0) {
+				$blocks.eq(newIndex).focus();
+				this.announceToScreenReader('Block ' + (newIndex + 1) + ' of ' + $blocks.length);
 			}
 		},
 
