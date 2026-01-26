@@ -34,7 +34,7 @@ class Consent_Preferences_Handler extends AJAX_Handler_Base {
 	 * Save consent preferences for the current admin user.
 	 */
 	public static function handle_save(): void {
-		self::verify_request( 'wpshadow_consent', 'manage_options' );
+		self::verify_request( 'wpshadow_consent', 'read' );
 
 		$current_user = get_current_user_id();
 		$telemetry    = self::get_post_param( 'telemetry', 'bool', false, false );
@@ -60,7 +60,7 @@ class Consent_Preferences_Handler extends AJAX_Handler_Base {
 	 * Dismiss consent prompt for 30 days.
 	 */
 	public static function handle_dismiss(): void {
-		self::verify_request( 'wpshadow_consent', 'manage_options' );
+		self::verify_request( 'wpshadow_consent', 'read' );
 
 		$current_user = get_current_user_id();
 		First_Run_Consent::dismiss_consent( $current_user );
