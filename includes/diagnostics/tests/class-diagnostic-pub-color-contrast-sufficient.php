@@ -162,13 +162,17 @@ class Diagnostic_Pub_Color_Contrast_Sufficient extends Diagnostic_Base {
 	 * provided via POST for analysis. Nonce verification should be
 	 * performed by the calling context before invoking this diagnostic.
 	 *
+	 * The HTML is sanitized but not stripped to preserve structure needed
+	 * for color contrast analysis.
+	 *
 	 * @since  1.2601.2148
 	 * @return string HTML content if provided, empty string otherwise.
 	 */
 	protected static function get_guardian_html(): string {
 		// phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce verification handled by Guardian context
 		if ( isset( $_POST['html'] ) && is_string( $_POST['html'] ) ) {
-			return sanitize_textarea_field( wp_unslash( $_POST['html'] ) );
+			// Use wp_kses_post to allow safe HTML while preserving styles for analysis
+			return wp_kses_post( wp_unslash( $_POST['html'] ) );
 		}
 		// phpcs:enable WordPress.Security.NonceVerification.Missing
 		return '';
@@ -226,7 +230,8 @@ class Diagnostic_Pub_Color_Contrast_Sufficient extends Diagnostic_Base {
 			$dom = new \DOMDocument();
 			// Suppress warnings for malformed HTML.
 			libxml_use_internal_errors( true );
-			$dom->loadHTML( '<?xml encoding="UTF-8">' . $html );
+			// LIBXML_NONET prevents network access during XML parsing
+			$dom->loadHTML( '<?xml encoding="UTF-8">' . $html, LIBXML_NONET );
 			libxml_clear_errors();
 
 			$xpath = new \DOMXPath( $dom );
@@ -359,6 +364,11 @@ class Diagnostic_Pub_Color_Contrast_Sufficient extends Diagnostic_Base {
 	protected static function color_to_rgb( string $color ): ?array {
 		$color = trim( $color );
 
+		// Check for empty string before array access
+		if ( empty( $color ) ) {
+			return null;
+		}
+
 		// Handle hex colors
 		if ( '#' === $color[0] ) {
 			$hex = ltrim( $color, '#' );
@@ -488,6 +498,10 @@ class Diagnostic_Pub_Color_Contrast_Sufficient extends Diagnostic_Base {
 		// Test with poor contrast (light gray on white)
 		$bad_html = '<html><body><p style="color: #cccccc; background-color: #ffffff;">Poor contrast text</p></body></html>';
 
+		// Store original POST state
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Test context only, not user input
+		$original_post = $_POST;
+
 		// Test good contrast scenario
 		$_POST['html'] = $good_html;
 		$result_good   = self::check();
@@ -496,8 +510,9 @@ class Diagnostic_Pub_Color_Contrast_Sufficient extends Diagnostic_Base {
 		$_POST['html'] = $bad_html;
 		$result_bad    = self::check();
 
-		// Clean up
-		unset( $_POST['html'] );
+		// Restore original POST state
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Test context only, restoring state
+		$_POST = $original_post;
 
 		// Check if test behaves as expected
 		$good_passes = is_null( $result_good );
