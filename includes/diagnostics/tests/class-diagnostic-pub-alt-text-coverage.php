@@ -169,6 +169,56 @@ class Diagnostic_Pub_Alt_Text_Coverage extends Diagnostic_Base {
 	 * @return array|null Finding array if coverage is low, null if adequate.
 	 */
 	public static function check(): ?array {
+		$coverage_data = self::calculate_alt_text_coverage();
+
+		if ( null === $coverage_data ) {
+			return null; // No images to check.
+		}
+
+		$coverage        = $coverage_data['coverage'];
+		$images_with_alt = $coverage_data['images_with_alt'];
+		$total_images    = $coverage_data['total_images'];
+
+		// Flag if less than 80% coverage.
+		if ( $coverage < 80 ) {
+			$description = sprintf(
+				/* translators: 1: number of images with alt text, 2: total images, 3: percentage */
+				__( 'Only %1$d of %2$d images (%3$.0f%%) have alt text. Alt text is essential for accessibility and SEO. Aim for 100%% coverage.', 'wpshadow' ),
+				$images_with_alt,
+				$total_images,
+				$coverage
+			);
+
+			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
+				'pub-alt-text-coverage',
+				__( 'Low Alt Text Coverage', 'wpshadow' ),
+				$description,
+				'general',
+				'low',
+				30,
+				'pub-alt-text-coverage'
+			);
+		}
+
+		return null; // Coverage is adequate.
+	}
+
+	/**
+	 * Calculate alt text coverage across all published posts.
+	 *
+	 * Helper method that scans all published posts for images and calculates
+	 * the percentage of images that have non-empty alt text.
+	 *
+	 * @since  1.2601.2148
+	 * @return array|null {
+	 *     Coverage data array, or null if no images found.
+	 *
+	 *     @type int   $total_images    Total number of images found.
+	 *     @type int   $images_with_alt Number of images with alt text.
+	 *     @type float $coverage        Percentage of images with alt text.
+	 * }
+	 */
+	private static function calculate_alt_text_coverage(): ?array {
 		// Get all published posts.
 		$posts = get_posts(
 			array(
@@ -220,28 +270,11 @@ class Diagnostic_Pub_Alt_Text_Coverage extends Diagnostic_Base {
 
 		$coverage = ( $images_with_alt / $total_images ) * 100;
 
-		// Flag if less than 80% coverage.
-		if ( $coverage < 80 ) {
-			$description = sprintf(
-				/* translators: 1: number of images with alt text, 2: total images, 3: percentage */
-				__( 'Only %1$d of %2$d images (%3$.0f%%) have alt text. Alt text is essential for accessibility and SEO. Aim for 100%% coverage.', 'wpshadow' ),
-				$images_with_alt,
-				$total_images,
-				$coverage
-			);
-
-			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
-				'pub-alt-text-coverage',
-				__( 'Low Alt Text Coverage', 'wpshadow' ),
-				$description,
-				'general',
-				'low',
-				30,
-				'pub-alt-text-coverage'
-			);
-		}
-
-		return null; // Coverage is adequate.
+		return array(
+			'total_images'    => $total_images,
+			'images_with_alt' => $images_with_alt,
+			'coverage'        => $coverage,
+		);
 	}
 
 	/**
@@ -263,49 +296,17 @@ class Diagnostic_Pub_Alt_Text_Coverage extends Diagnostic_Base {
 	 * }
 	 */
 	public static function test_live_pub_alt_text_coverage(): array {
-		$result = self::check();
+		$result        = self::check();
+		$coverage_data = self::calculate_alt_text_coverage();
 
-		// Get actual coverage for reporting.
-		$posts = get_posts(
-			array(
-				'post_type'      => 'post',
-				'post_status'    => 'publish',
-				'posts_per_page' => -1,
-				'fields'         => 'ids',
-			)
-		);
-
-		$total_images    = 0;
-		$images_with_alt = 0;
-
-		foreach ( $posts as $post_id ) {
-			$content = get_post_field( 'post_content', $post_id );
-			preg_match_all( '/<img\s+([^>]+)>/i', $content, $matches );
-
-			if ( empty( $matches[1] ) ) {
-				continue;
-			}
-
-			foreach ( $matches[1] as $img_attrs ) {
-				++$total_images;
-
-				if ( preg_match( '/alt\s*=\s*["\']([^"\']+)["\']/', $img_attrs, $alt_match ) ) {
-					$alt_text = trim( $alt_match[1] );
-					if ( ! empty( $alt_text ) ) {
-						++$images_with_alt;
-					}
-				}
-			}
-		}
-
-		if ( 0 === $total_images ) {
+		if ( null === $coverage_data ) {
 			return array(
 				'passed'  => true,
 				'message' => __( 'No published posts with images found. Test N/A.', 'wpshadow' ),
 			);
 		}
 
-		$coverage = ( $images_with_alt / $total_images ) * 100;
+		$coverage = $coverage_data['coverage'];
 
 		if ( null === $result && $coverage >= 80 ) {
 			return array(
