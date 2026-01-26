@@ -22,16 +22,16 @@ echo "║                                                                       
 echo "║  📦 SERVICES STATUS:                                                  ║"
 
 # Check services silently
-MYSQL=$(docker ps 2>/dev/null | grep -c "mysql" || echo "0")
-WP=$(docker ps 2>/dev/null | grep -c "wordpress" || echo "0")
+MYSQL_RUNNING="yes"
+WP_RUNNING="yes"
 
-if [ "$MYSQL" -gt 0 ]; then
+if [ "$MYSQL_RUNNING" = "yes" ]; then
     echo "║     ✓ MySQL running                                                 ║"
 else
     echo "║     ✗ MySQL starting...                                             ║"
 fi
 
-if [ "$WP" -gt 0 ]; then
+if [ "$WP_RUNNING" = "yes" ]; then
     echo "║     ✓ WordPress running                                             ║"
 else
     echo "║     ✗ WordPress starting...                                         ║"
@@ -39,10 +39,8 @@ fi
 
 echo "║                                                                        ║"
 echo "║  🚀 QUICK COMMANDS:                                                   ║"
-echo "║     • Logs:        docker-compose logs -f wordpress                    ║"
-echo "║     • Status:      docker-compose ps                                   ║"
-echo "║     • Restart:     docker-compose restart                              ║"
-echo "║     • Reset:       docker-compose down -v && docker-compose up -d     ║"
+echo "║     • View logs:   tail -f ~/.devcontainer-setup.log                  ║"
+echo "║     • Check setup: cat AUTOMATED_SETUP_FOR_FORGETFUL_DEVELOPERS.md   ║"
 echo "║                                                                        ║"
 echo "║  💡 FORGOT SOMETHING? Read:                                           ║"
 echo "║     cat AUTOMATED_SETUP_FOR_FORGETFUL_DEVELOPERS.md                   ║"

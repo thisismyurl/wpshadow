@@ -1,49 +1,39 @@
 # WPShadow Development Tools
 
-This directory contains scripts, tools, and resources used for development and automation of the WPShadow plugin. These files are **not** included in the production release package.
+This directory contains resources for the WPShadow plugin. These files are **not** included in the production release package.
 
 ## Contents
 
-### GitHub Automation Scripts
-- **create-final-labels.sh** - Script to create GitHub labels for issue tracking
-- **create-labels-fixed.sh** - Fixed version of label creation script
-
-### Python Development Scripts
-- **generate-kb-articles.py** - Generates knowledge base articles
-- **test-wp-connection.py** - Tests WordPress connection for development
-
 ### Knowledge Base Files
-- **kb-articles/** - Source markdown files for knowledge base articles
+- **kb-articles/** - Source markdown files for knowledge base articles (79 articles)
 - **kb-articles-content-output.json** - Generated KB content
 - **.kb-index.json** - KB article index
 
-## Usage
+### WordPress Content
+- **wp-content/** - WordPress content directory for development and KB publishing
 
-These tools are for developers and contributors only. End users installing the plugin from WordPress.org will not see these files.
+## KB Article Structure
 
-### Running Scripts
+KB articles are organized by category:
+- accessibility/
+- design/
+- developer/
+- enterprise/
+- marketing/
+- performance/
+- privacy/
+- security/
+- seo/
+- user-experience/
 
-#### GitHub Label Creation
-```bash
-./create-final-labels.sh
-```
-
-#### KB Article Generation
-```bash
-python3 generate-kb-articles.py
-```
-
-#### WordPress Connection Test
-```bash
-python3 test-wp-connection.py
-```
+See [kb-articles/README.md](kb-articles/README.md) for KB article documentation.
 
 ## Development Setup
 
 For development setup instructions, see:
 - Main README: `/README.md`
 - Development Guide: `/docs/COMPLETE_SETUP_GUIDE.md`
-- Docker Setup: `.devcontainer/README.md`
+- Development Environment: `.devcontainer/README.md`
 
 ## Exclusion from Release
 

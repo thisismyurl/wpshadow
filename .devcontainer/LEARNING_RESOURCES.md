@@ -201,7 +201,7 @@ Welcome to your comprehensive learning resource catalog! This guide embodies our
 - **Container Won't Start**  
   📚 https://docs.wpshadow.com/troubleshooting/container-start  
   ⏱️ 5 minutes  
-  Common causes: Docker not running, port conflicts, resource limits
+  Common causes: Port conflicts, resource limits, service initialization delays
 
 - **WordPress Database Connection Error**  
   📚 https://docs.wpshadow.com/troubleshooting/db-connection  

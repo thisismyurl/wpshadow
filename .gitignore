@@ -5,6 +5,7 @@
 # These are for development only and will move to wpshadow-pro repository
 # Uncomment to exclude from commits:
 # /pro-modules/
+
 # GitHub Cache
 .cache/
 
@@ -18,3 +19,39 @@
 # Deployment credentials (NEVER commit)
 .sftp-config.env
 .deploy-git.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+ENV/
+env/
+
+# PHP
+vendor/
+.phpunit.cache/
+.phpunit.result.cache
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Issue tracking (GitHub only)
+/issues/
+
+# Temporary files
+*.tmp
+*.bak
+*.log

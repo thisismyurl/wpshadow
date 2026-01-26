@@ -4,6 +4,14 @@
  * Scratch-inspired block-based automation builder
  * Follows WPShadow Design System 2.0
  * Phase 3 Enhancement: Epic #667/#686
+ * Issue #664: Visual Interface Modernization
+ * 
+ * WCAG 2.1 Level AA Compliance:
+ * - All text colors meet 4.5:1 minimum contrast ratio
+ * - UI components meet 3:1 minimum contrast ratio
+ * - Placeholder text uses gray-500 (5.14:1 contrast)
+ * - Warning/success colors only for UI elements, not text
+ * - See docs/COLOR_CONTRAST_VALIDATION.md for full audit
  * 
  * @package WPShadow
  * @since   1.2601.2148
@@ -285,7 +293,7 @@
 }
 
 .wps-workflow-validation.invalid .dashicons {
-	color: var(--wps-warning, #f59e0b);
+	color: var(--wps-warning-dark, #d97706); /* WCAG AA: Use dark variant for text (warning base is 2.18:1) */
 }
 
 .wps-workflow-validation span {
@@ -328,7 +336,7 @@
 }
 
 .wps-workflow-name-input::placeholder {
-	color: var(--wps-gray-400, #9ca3af);
+	color: var(--wps-gray-500, #6b7280); /* WCAG AA: 5.14:1 contrast (was gray-400: 3.86:1) */
 	font-weight: 400;
 }
 
@@ -555,7 +563,7 @@
 .wps-block-remove {
 	background: transparent;
 	border: none;
-	color: var(--wps-gray-400, #9ca3af);
+	color: var(--wps-gray-500, #6b7280); /* WCAG AA: 5.14:1 contrast (was gray-400: 3.86:1) */
 	cursor: pointer;
 	padding: 0.25rem;
 	font-size: 1.25rem;
@@ -1491,7 +1499,7 @@
 	left: 0.75rem;
 	top: 50%;
 	transform: translateY(-50%);
-	color: var(--wps-gray-400, #9ca3af);
+	color: var(--wps-gray-500, #6b7280); /* WCAG AA: 5.14:1 contrast (was gray-400: 3.86:1) */
 	pointer-events: none;
 }
 
