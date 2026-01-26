@@ -264,6 +264,13 @@ class Hooks_Initializer {
 			WPSHADOW_VERSION
 		);
 
+		wp_enqueue_style(
+			'wpshadow-guardian-dashboard-modern',
+			WPSHADOW_URL . 'assets/css/guardian-dashboard-modern.css',
+			array( 'wpshadow-design-system' ),
+			WPSHADOW_VERSION
+		);
+
 		// Enqueue scripts
 		wp_enqueue_script(
 			'wpshadow-dashboard-realtime',
