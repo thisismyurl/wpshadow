@@ -264,40 +264,48 @@ function wpshadow_get_wordpress_health_status(): array {
 	);
 }
 
-// Global function aliases for backward compatibility
-// These allow calling the functions without namespace prefix
-if ( ! function_exists( 'wpshadow_get_category_metadata' ) ) {
-	/**
-	 * Global alias for WPShadow\Core\wpshadow_get_category_metadata()
-	 *
-	 * @return array Category metadata.
-	 */
-	function wpshadow_get_category_metadata(): array {
-		return \WPShadow\Core\wpshadow_get_category_metadata();
+// ============================================================================
+// Global Function Aliases (Outside Namespace)
+// ============================================================================
+
+namespace {
+	// These global aliases allow calling the functions without namespace prefix
+	// for backward compatibility with code expecting global functions
+
+	if ( ! function_exists( 'wpshadow_get_category_metadata' ) ) {
+		/**
+		 * Global alias for WPShadow\Core\wpshadow_get_category_metadata()
+		 *
+		 * @return array Category metadata.
+		 */
+		function wpshadow_get_category_metadata(): array {
+			return \WPShadow\Core\wpshadow_get_category_metadata();
+		}
+	}
+
+	if ( ! function_exists( 'wpshadow_calculate_overall_health' ) ) {
+		/**
+		 * Global alias for WPShadow\Core\wpshadow_calculate_overall_health()
+		 *
+		 * @param array $findings_by_category Findings grouped by category.
+		 * @param array $category_meta Category metadata array.
+		 * @return array Health status.
+		 */
+		function wpshadow_calculate_overall_health( array $findings_by_category, array $category_meta ): array {
+			return \WPShadow\Core\wpshadow_calculate_overall_health( $findings_by_category, $category_meta );
+		}
+	}
+
+	if ( ! function_exists( 'wpshadow_calculate_wordpress_native_health' ) ) {
+		/**
+		 * Global alias for WPShadow\Core\wpshadow_calculate_wordpress_native_health()
+		 *
+		 * @return array WordPress health status.
+		 */
+		function wpshadow_calculate_wordpress_native_health(): array {
+			return \WPShadow\Core\wpshadow_calculate_wordpress_native_health();
+		}
 	}
 }
 
-if ( ! function_exists( 'wpshadow_calculate_overall_health' ) ) {
-	/**
-	 * Global alias for WPShadow\Core\wpshadow_calculate_overall_health()
-	 *
-	 * @param array $findings_by_category Findings grouped by category.
-	 * @param array $category_meta Category metadata array.
-	 * @return array Health status.
-	 */
-	function wpshadow_calculate_overall_health( array $findings_by_category, array $category_meta ): array {
-		return \WPShadow\Core\wpshadow_calculate_overall_health( $findings_by_category, $category_meta );
-	}
-}
-
-if ( ! function_exists( 'wpshadow_calculate_wordpress_native_health' ) ) {
-	/**
-	 * Global alias for WPShadow\Core\wpshadow_calculate_wordpress_native_health()
-	 *
-	 * @return array WordPress health status.
-	 */
-	function wpshadow_calculate_wordpress_native_health(): array {
-		return \WPShadow\Core\wpshadow_calculate_wordpress_native_health();
-	}
-}
 
