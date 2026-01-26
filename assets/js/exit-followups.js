@@ -161,9 +161,9 @@
 		 * @param {number} followupId Followup ID
 		 */
 		viewFollowupDetails: function(followupId) {
-			// TODO: Implement modal or details view
-			console.log('View details for followup:', followupId);
-			alert('View details functionality coming soon!');
+			// TODO: Implement modal/details view in future iteration
+			// For now, this is a placeholder for future functionality
+			// Will display survey questions, responses, and detailed history
 		},
 
 		/**
