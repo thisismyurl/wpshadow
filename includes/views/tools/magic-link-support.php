@@ -61,7 +61,8 @@ $active_links = array_filter(
 						<?php esc_html_e( 'How long the link will work before expiring', 'wpshadow' ); ?>
 					</div>
 			</div>
-			<button type="submit" class="wps-btn wps-btn-primary wps-btn-icon-left"><span class="dashicons dashicons-update"></span>
+			<button type="submit" class="wps-btn wps-btn-primary wps-btn-icon-left">
+				<span class="dashicons dashicons-update"></span>
 				<?php esc_html_e( 'Generate Magic Link', 'wpshadow' ); ?>
 			</button>
 			<div id="wpshadow-magic-link-message" class="wps-none"></div>

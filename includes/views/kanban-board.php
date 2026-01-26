@@ -176,8 +176,8 @@ $severity_legend = array(
 				</p>
 			</div>
 			<div class="wps-flex-gap-10-justify-flex-end">
-				<button type="button" id="wpshadow-autofix-once" class="wps-btn wps-btn-secondary wps-p-10">Just Once</button>
-				<button type="button" id="wpshadow-autofix-always" class="wps-btn wps-btn-primary wps-p-10">Create Workflow</button>
+				<button type="button" class="wps-btn wps-btn-secondary wps-p-10" id="wpshadow-autofix-once">Just Once</button>
+				<button type="button" class="wps-btn wps-btn-primary wps-p-10" id="wpshadow-autofix-always">Create Workflow</button>
 			</div>
 		</div>
 	</div>
