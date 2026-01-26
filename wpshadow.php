@@ -23,6 +23,7 @@ define( 'WPSHADOW_URL', plugin_dir_url( __FILE__ ) );
  * dependencies for other classes that might be loaded before plugins_loaded.
  */
 require_once WPSHADOW_PATH . 'includes/core/class-ajax-handler-base.php';
+require_once WPSHADOW_PATH . 'includes/core/class-treatment-interface.php';
 require_once WPSHADOW_PATH . 'includes/core/class-treatment-base.php';
 require_once WPSHADOW_PATH . 'includes/core/class-diagnostic-base.php';
 require_once WPSHADOW_PATH . 'includes/core/class-activity-logger.php';
