@@ -241,22 +241,23 @@ class Diagnostic_Pub_Keyword_In_Headings extends Diagnostic_Base {
 		if ( ! empty( $aioseo_keyword ) ) {
 			// AIOSEO stores as JSON array.
 			$keywords_data = json_decode( $aioseo_keyword, true );
-			if ( is_array( $keywords_data ) && isset( $keywords_data['focus']['keyphrase'] ) ) {
+			// Check for JSON decode errors.
+			if ( JSON_ERROR_NONE === json_last_error() && is_array( $keywords_data ) && isset( $keywords_data['focus']['keyphrase'] ) ) {
 				return $keywords_data['focus']['keyphrase'];
 			}
 		}
 
-		// The SEO Framework.
-		$tsf_keyword = get_post_meta( $post_id, '_genesis_focus_keyword', true );
-		if ( ! empty( $tsf_keyword ) ) {
-			return $tsf_keyword;
-		}
+		// The SEO Framework (uses different meta structure).
+		// Note: The SEO Framework doesn't store focus keywords in the same way.
+		// It's more focused on titles and descriptions rather than explicit keywords.
 
 		return '';
 	}
 
 	/**
 	 * Extract H1 and H2 headings from HTML content.
+	 *
+	 * Uses WordPress's built-in functions for safer HTML parsing.
 	 *
 	 * @since  1.2601.2148
 	 * @param  string $content Post content HTML.
@@ -265,19 +266,58 @@ class Diagnostic_Pub_Keyword_In_Headings extends Diagnostic_Base {
 	private static function extract_headings( $content ): array {
 		$headings = array();
 
-		// Match H1 tags.
-		preg_match_all( '/<h1[^>]*>(.*?)<\/h1>/is', $content, $h1_matches );
-		if ( ! empty( $h1_matches[1] ) ) {
-			foreach ( $h1_matches[1] as $heading ) {
-				$headings[] = wp_strip_all_tags( $heading );
-			}
-		}
+		// Sanitize content first to prevent any malicious content.
+		$content = wp_kses_post( $content );
 
-		// Match H2 tags.
-		preg_match_all( '/<h2[^>]*>(.*?)<\/h2>/is', $content, $h2_matches );
-		if ( ! empty( $h2_matches[1] ) ) {
-			foreach ( $h2_matches[1] as $heading ) {
-				$headings[] = wp_strip_all_tags( $heading );
+		// Try using DOMDocument for more reliable parsing.
+		if ( class_exists( 'DOMDocument' ) ) {
+			$dom = new \DOMDocument();
+			// Suppress warnings for malformed HTML.
+			libxml_use_internal_errors( true );
+			$dom->loadHTML( '<?xml encoding="UTF-8">' . $content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD );
+			libxml_clear_errors();
+
+			// Extract H1 tags.
+			$h1_elements = $dom->getElementsByTagName( 'h1' );
+			foreach ( $h1_elements as $element ) {
+				// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- DOM property
+				$text = trim( $element->textContent );
+				if ( ! empty( $text ) ) {
+					$headings[] = $text;
+				}
+			}
+
+			// Extract H2 tags.
+			$h2_elements = $dom->getElementsByTagName( 'h2' );
+			foreach ( $h2_elements as $element ) {
+				// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- DOM property
+				$text = trim( $element->textContent );
+				if ( ! empty( $text ) ) {
+					$headings[] = $text;
+				}
+			}
+		} else {
+			// Fallback to regex if DOMDocument not available (unlikely).
+			// Match H1 tags.
+			preg_match_all( '/<h1[^>]*>(.*?)<\/h1>/is', $content, $h1_matches );
+			if ( ! empty( $h1_matches[1] ) ) {
+				foreach ( $h1_matches[1] as $heading ) {
+					$text = trim( wp_strip_all_tags( $heading ) );
+					if ( ! empty( $text ) ) {
+						$headings[] = $text;
+					}
+				}
+			}
+
+			// Match H2 tags.
+			preg_match_all( '/<h2[^>]*>(.*?)<\/h2>/is', $content, $h2_matches );
+			if ( ! empty( $h2_matches[1] ) ) {
+				foreach ( $h2_matches[1] as $heading ) {
+					$text = trim( wp_strip_all_tags( $heading ) );
+					if ( ! empty( $text ) ) {
+						$headings[] = $text;
+					}
+				}
 			}
 		}
 
