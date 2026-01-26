@@ -14,6 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Load tooltip manager functions (needed by tips-coach tool)
+require_once WPSHADOW_PATH . 'includes/dashboard/widgets/class-tooltip-manager.php';
+
 /**
  * Get tools catalog.
  *
