@@ -32,6 +32,10 @@ class Plugin_Bootstrap {
 	 * @return void
 	 */
 	public static function init() {
+		// Debug logging
+		$debug_file = WPSHADOW_PATH . 'debug-ajax.log';
+		file_put_contents( $debug_file, "Plugin_Bootstrap::init() called at " . date( 'Y-m-d H:i:s' ) . " - PHP_SAPI: " . PHP_SAPI . "\n", FILE_APPEND );
+		
 		// 1. Load core base classes (required before everything else)
 		self::load_core_classes();
 

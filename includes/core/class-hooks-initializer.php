@@ -127,7 +127,8 @@ class Hooks_Initializer {
 	 */
 	public static function on_plugins_loaded() {
 		// Debug logging
-		file_put_contents( '/tmp/wpshadow_ajax_debug.log', "Hooks_Initializer::on_plugins_loaded() called at " . date( 'Y-m-d H:i:s' ) . " - PHP_SAPI: " . PHP_SAPI . "\n", FILE_APPEND );
+		$debug_file = WPSHADOW_PATH . 'debug-ajax.log';
+		file_put_contents( $debug_file, "Hooks_Initializer::on_plugins_loaded() called at " . date( 'Y-m-d H:i:s' ) . " - PHP_SAPI: " . PHP_SAPI . "\n", FILE_APPEND );
 		
 		// Initialize core registries and systems
 		\WPShadow\Admin\Update_Notification_Manager::init();

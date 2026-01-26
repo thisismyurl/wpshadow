@@ -33,7 +33,8 @@ class AJAX_Router {
 	 */
 	public static function init() {
 		// Debug logging
-		file_put_contents( '/tmp/wpshadow_ajax_debug.log', "AJAX_Router::init() called at " . date( 'Y-m-d H:i:s' ) . " - PHP_SAPI: " . PHP_SAPI . "\n", FILE_APPEND );
+		$debug_file = defined( 'WPSHADOW_PATH' ) ? WPSHADOW_PATH . 'debug-ajax.log' : '/tmp/debug-ajax.log';
+		file_put_contents( $debug_file, "AJAX_Router::init() called at " . date( 'Y-m-d H:i:s' ) . " - PHP_SAPI: " . PHP_SAPI . "\n", FILE_APPEND );
 		
 		// Core finding operations
 		\WPShadow\Admin\Ajax\Dismiss_Finding_Handler::register();
