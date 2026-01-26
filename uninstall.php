@@ -61,6 +61,7 @@ if ( ! $keep_data ) {
 	);
 
 	foreach ( $tables as $table ) {
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table names cannot be prepared.
 		$wpdb->query( "DROP TABLE IF EXISTS {$table}" );
 	}
 
@@ -111,7 +112,7 @@ if ( $analytics_consent ) {
 		wp_remote_post(
 			'https://analytics.wpshadow.com/uninstall', // Placeholder URL
 			array(
-				'timeout' => 5,
+				'timeout'  => 5,
 				'blocking' => false, // Non-blocking
 				'body'     => $diagnostic_data,
 				'headers'  => array(

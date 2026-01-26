@@ -76,9 +76,9 @@ class Submit_Exit_Interview_Handler extends AJAX_Handler_Base {
 
 			// Prepare data
 			$data = array(
-				'reason'         => $reason,
-				'details'        => $details,
-				'allow_contact'  => $allow_contact,
+				'reason'        => $reason,
+				'details'       => $details,
+				'allow_contact' => $allow_contact,
 			);
 
 			// Save the response

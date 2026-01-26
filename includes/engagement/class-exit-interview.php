@@ -78,15 +78,15 @@ class Exit_Interview {
 			'wpshadow-exit-interview',
 			'wpshadowExitInterview',
 			array(
-				'nonce'           => wp_create_nonce( 'wpshadow_exit_interview' ),
-				'plugin_slug'     => WPSHADOW_BASENAME,
-				'site_url'        => get_site_url(),
-				'site_name'       => get_bloginfo( 'name' ),
-				'plugin_version'  => WPSHADOW_VERSION,
-				'wp_version'      => get_bloginfo( 'version' ),
-				'php_version'     => PHP_VERSION,
-				'active_plugins'  => self::get_active_plugins_count(),
-				'active_theme'    => wp_get_theme()->get( 'Name' ),
+				'nonce'          => wp_create_nonce( 'wpshadow_exit_interview' ),
+				'plugin_slug'    => WPSHADOW_BASENAME,
+				'site_url'       => get_site_url(),
+				'site_name'      => get_bloginfo( 'name' ),
+				'plugin_version' => WPSHADOW_VERSION,
+				'wp_version'     => get_bloginfo( 'version' ),
+				'php_version'    => PHP_VERSION,
+				'active_plugins' => self::get_active_plugins_count(),
+				'active_theme'   => wp_get_theme()->get( 'Name' ),
 			)
 		);
 	}
@@ -241,9 +241,12 @@ class Exit_Interview {
 			);
 
 			if ( false === $result ) {
-				Error_Handler::log_error( 'Failed to save exit interview response', array(
-					'error' => $wpdb->last_error,
-				) );
+				Error_Handler::log_error(
+					'Failed to save exit interview response',
+					array(
+						'error' => $wpdb->last_error,
+					)
+				);
 				return false;
 			}
 
