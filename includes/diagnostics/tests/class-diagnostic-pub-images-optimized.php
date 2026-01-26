@@ -297,7 +297,7 @@ class Diagnostic_Pub_Images_Optimized extends Diagnostic_Base {
 		if ( $low_modern_adoption ) {
 			$description_parts[] = sprintf(
 				/* translators: %d: percentage of modern format adoption */
-				__( 'Only %.0f%%%% of images use modern formats (WebP/AVIF). Modern formats reduce file sizes by 25-35%%%% without quality loss', 'wpshadow' ),
+				__( 'Only %.0f%% of images use modern formats (WebP/AVIF). Modern formats reduce file sizes by 25-35%% without quality loss', 'wpshadow' ),
 				$modern_format_adoption
 			);
 		}
@@ -305,7 +305,7 @@ class Diagnostic_Pub_Images_Optimized extends Diagnostic_Base {
 		if ( $low_optimization ) {
 			$description_parts[] = sprintf(
 				/* translators: %d: optimization percentage */
-				__( 'Overall optimization score: %.0f%%%%. Consider using an image optimization plugin', 'wpshadow' ),
+				__( 'Overall optimization score: %.0f%%. Consider using an image optimization plugin', 'wpshadow' ),
 				$optimization_percentage
 			);
 		}
