@@ -48,9 +48,6 @@ vendor/
 Thumbs.db
 desktop.ini
 
-# Issue tracking (GitHub only)
-/issues/
-
 # Temporary files
 *.tmp
 *.bak
