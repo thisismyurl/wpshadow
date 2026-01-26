@@ -35,10 +35,18 @@
 			$('.wps-block-item').on('dragstart', this.handlePaletteDragStart.bind(this));
 			$('.wps-block-item').on('dragend', this.handlePaletteDragEnd.bind(this));
 
+			// Touch events for mobile
+			$('.wps-block-item').on('touchstart', this.handlePaletteTouchStart.bind(this));
+			$('.wps-block-item').on('touchend', this.handlePaletteTouchEnd.bind(this));
+
 			// Canvas drop events
 			$('#wps-canvas').on('dragover', this.handleCanvasDragOver.bind(this));
 			$('#wps-canvas').on('dragleave', this.handleCanvasDragLeave.bind(this));
 			$('#wps-canvas').on('drop', this.handleCanvasDrop.bind(this));
+
+			// Canvas touch events
+			$('#wps-canvas').on('touchmove', this.handleCanvasTouchMove.bind(this));
+			$('#wps-canvas').on('touchend', this.handleCanvasTouchEnd.bind(this));
 
 			// Toolbar actions
 			$('#wps-save-workflow').on('click', this.handleSaveWorkflow.bind(this));
@@ -108,6 +116,65 @@
 		handlePaletteDragEnd: function(e) {
 			$(e.currentTarget).removeClass('dragging');
 			this.draggedBlock = null;
+		},
+
+		/**
+		 * Handle palette block touch start (mobile)
+		 */
+		handlePaletteTouchStart: function(e) {
+			const $block = $(e.currentTarget);
+			const blockId = $block.data('block-id');
+			const blockType = $block.data('block-type');
+
+			this.draggedBlock = { blockId, blockType, isNew: true };
+			$block.addClass('dragging');
+
+			// Provide haptic feedback if available
+			if (navigator.vibrate) {
+				navigator.vibrate(50);
+			}
+
+			this.announceToScreenReader(wpshadowWorkflow.strings.dragBlock + ': ' + blockId);
+		},
+
+		/**
+		 * Handle palette block touch end (mobile)
+		 */
+		handlePaletteTouchEnd: function(e) {
+			const $block = $(e.currentTarget);
+			$block.removeClass('dragging');
+
+			// Check if touch ended over canvas
+			const touch = e.originalEvent.changedTouches[0];
+			const canvasEl = document.getElementById('wps-canvas');
+			const canvasRect = canvasEl.getBoundingClientRect();
+
+			if (touch.clientX >= canvasRect.left && touch.clientX <= canvasRect.right &&
+			    touch.clientY >= canvasRect.top && touch.clientY <= canvasRect.bottom) {
+				if (this.draggedBlock) {
+					this.addBlockToCanvas(this.draggedBlock.blockId, this.draggedBlock.blockType);
+					this.announceToScreenReader(wpshadowWorkflow.strings.dropSuccess);
+				}
+			}
+
+			this.draggedBlock = null;
+		},
+
+		/**
+		 * Handle canvas touch move (mobile)
+		 */
+		handleCanvasTouchMove: function(e) {
+			if (this.draggedBlock) {
+				e.preventDefault();
+				$('#wps-canvas').addClass('drag-over');
+			}
+		},
+
+		/**
+		 * Handle canvas touch end (mobile)
+		 */
+		handleCanvasTouchEnd: function(e) {
+			$('#wps-canvas').removeClass('drag-over');
 		},
 
 		/**
