@@ -32,6 +32,9 @@ class AJAX_Router {
 	 * @return void
 	 */
 	public static function init() {
+		// Debug logging
+		file_put_contents( '/tmp/wpshadow_ajax_debug.log', "AJAX_Router::init() called at " . date( 'Y-m-d H:i:s' ) . " - PHP_SAPI: " . PHP_SAPI . "\n", FILE_APPEND );
+		
 		// Core finding operations
 		\WPShadow\Admin\Ajax\Dismiss_Finding_Handler::register();
 		\WPShadow\Admin\Ajax\Autofix_Finding_Handler::register();
