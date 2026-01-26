@@ -27,7 +27,9 @@ class Consent_Preferences_Handler extends AJAX_Handler_Base {
 	 */
 	public static function register(): void {
 		add_action( 'wp_ajax_wpshadow_save_consent', array( __CLASS__, 'handle_save' ) );
+		add_action( 'wp_ajax_nopriv_wpshadow_save_consent', array( __CLASS__, 'handle_save' ) );
 		add_action( 'wp_ajax_wpshadow_dismiss_consent', array( __CLASS__, 'handle_dismiss' ) );
+		add_action( 'wp_ajax_nopriv_wpshadow_dismiss_consent', array( __CLASS__, 'handle_dismiss' ) );
 	}
 
 	/**
