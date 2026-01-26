@@ -2,934 +2,934 @@
  * WPShadow Admin Pages Styles
  * Common styles for all admin pages and components
  * Consolidates inline styles from various admin modules
- * 
+ *
  * @package WPShadow
  */
 
 /* ============================================================================
-   Admin Page Utilities
-   ============================================================================ */
+	Admin Page Utilities
+	============================================================================ */
 
 /* Full-width, responsive card containers */
 .wps-admin-card-container {
-    background: white;
-    border: 1px solid var(--wps-gray-200);
-    border-radius: var(--wps-radius-lg);
-    padding: var(--wps-space-6);
-    box-shadow: var(--wps-shadow-sm);
+	background: white;
+	border: 1px solid var(--wps-gray-200);
+	border-radius: var(--wps-radius-lg);
+	padding: var(--wps-space-6);
+	box-shadow: var(--wps-shadow-sm);
 }
 
 .wps-admin-card-container:hover {
-    box-shadow: var(--wps-shadow-md);
+	box-shadow: var(--wps-shadow-md);
 }
 
 /* Report and content display areas */
 .wps-report-container {
-    background: white;
-    padding: var(--wps-space-6);
-    font-family: var(--wps-font-sans);
-    min-height: 500px;
+	background: white;
+	padding: var(--wps-space-6);
+	font-family: var(--wps-font-sans);
+	min-height: 500px;
 }
 
 .wps-report-header {
-    border-bottom: 3px solid #0073aa;
-    padding-bottom: var(--wps-space-6);
-    margin-bottom: var(--wps-space-6);
+	border-bottom: 3px solid #0073aa;
+	padding-bottom: var(--wps-space-6);
+	margin-bottom: var(--wps-space-6);
 }
 
 .wps-report-header h1 {
-    margin: 0 0 var(--wps-space-2) 0;
-    color: #0073aa;
-    font-size: var(--wps-text-3xl);
+	margin: 0 0 var(--wps-space-2) 0;
+	color: #0073aa;
+	font-size: var(--wps-text-3xl);
 }
 
 .wps-report-header p {
-    margin: 0;
-    color: var(--wps-gray-600);
+	margin: 0;
+	color: var(--wps-gray-600);
 }
 
 /* Grid for report stats cards */
 .wps-report-stats {
-    display: grid;
-    gap: var(--wps-space-4);
-    margin-bottom: var(--wps-space-8);
+	display: grid;
+	gap: var(--wps-space-4);
+	margin-bottom: var(--wps-space-8);
 }
 
 .wps-stat-card {
-    background: linear-gradient(135deg, var(--wps-primary) 0%, var(--wps-primary-dark) 100%);
-    color: white;
-    padding: var(--wps-space-4);
-    border-radius: var(--wps-radius-md);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+	background: linear-gradient(135deg, var(--wps-primary) 0%, var(--wps-primary-dark) 100%);
+	color: white;
+	padding: var(--wps-space-4);
+	border-radius: var(--wps-radius-md);
+	box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .wps-stat-card-icon {
-    font-size: 24px;
-    margin-bottom: var(--wps-space-2);
+	font-size: 24px;
+	margin-bottom: var(--wps-space-2);
 }
 
 .wps-stat-card-label {
-    font-size: var(--wps-text-sm);
-    opacity: 0.9;
-    margin-bottom: var(--wps-space-1);
+	font-size: var(--wps-text-sm);
+	opacity: 0.9;
+	margin-bottom: var(--wps-space-1);
 }
 
 .wps-stat-card-value {
-    font-size: 20px;
-    font-weight: var(--wps-font-bold);
+	font-size: 20px;
+	font-weight: var(--wps-font-bold);
 }
 
 /* Report section styles */
 .wps-report-section {
-    background: var(--wps-gray-50);
-    padding: var(--wps-space-4);
-    border-radius: var(--wps-radius-md);
-    margin-bottom: var(--wps-space-6);
+	background: var(--wps-gray-50);
+	padding: var(--wps-space-4);
+	border-radius: var(--wps-radius-md);
+	margin-bottom: var(--wps-space-6);
 }
 
 .wps-report-section h3 {
-    margin-top: 0;
-    color: #0073aa;
-    margin-bottom: var(--wps-space-4);
+	margin-top: 0;
+	color: #0073aa;
+	margin-bottom: var(--wps-space-4);
 }
 
 /* Report table styles */
 .wps-report-table {
-    width: 100%;
-    border-collapse: collapse;
+	width: 100%;
+	border-collapse: collapse;
 }
 
 .wps-report-table thead tr {
-    background: var(--wps-gray-100);
-    border-bottom: 2px solid var(--wps-gray-300);
+	background: var(--wps-gray-100);
+	border-bottom: 2px solid var(--wps-gray-300);
 }
 
 .wps-report-table th {
-    padding: var(--wps-space-2);
-    text-align: left;
-    font-weight: var(--wps-font-semibold);
+	padding: var(--wps-space-2);
+	text-align: left;
+	font-weight: var(--wps-font-semibold);
 }
 
 .wps-report-table td {
-    padding: var(--wps-space-2);
-    border-bottom: 1px solid var(--wps-gray-200);
+	padding: var(--wps-space-2);
+	border-bottom: 1px solid var(--wps-gray-200);
 }
 
 .wps-report-table tbody tr:hover {
-    background: var(--wps-gray-50);
+	background: var(--wps-gray-50);
 }
 
 /* Progress bar styles */
 .wps-progress-container {
-    background: white;
-    height: 8px;
-    border-radius: var(--wps-radius-sm);
-    overflow: hidden;
-    margin: var(--wps-space-3) 0;
+	background: white;
+	height: 8px;
+	border-radius: var(--wps-radius-sm);
+	overflow: hidden;
+	margin: var(--wps-space-3) 0;
 }
 
 .wps-progress-fill {
-    background: #0073aa;
-    height: 100%;
-    width: 0%;
-    transition: width 0.3s ease;
+	background: #0073aa;
+	height: 100%;
+	width: 0%;
+	transition: width 0.3s ease;
 }
 
 /* Recommendation/alert card styles */
 .wps-recommendation-card {
-    border-left: 4px solid;
-    padding: var(--wps-space-4);
-    border-radius: var(--wps-radius-sm);
-    margin-bottom: var(--wps-space-3);
+	border-left: 4px solid;
+	padding: var(--wps-space-4);
+	border-radius: var(--wps-radius-sm);
+	margin-bottom: var(--wps-space-3);
 }
 
 .wps-recommendation-card.info {
-    background: #e7f1ff;
-    border-left-color: #2563eb;
+	background: #e7f1ff;
+	border-left-color: #2563eb;
 }
 
 .wps-recommendation-card.warning {
-    background: #fef3c7;
-    border-left-color: #f59e0b;
+	background: #fef3c7;
+	border-left-color: #f59e0b;
 }
 
 .wps-recommendation-card.error {
-    background: #fee2e2;
-    border-left-color: #dc2626;
+	background: #fee2e2;
+	border-left-color: #dc2626;
 }
 
 .wps-recommendation-card.success {
-    background: #d1fae5;
-    border-left-color: #10b981;
+	background: #d1fae5;
+	border-left-color: #10b981;
 }
 
 .wps-recommendation-card h4 {
-    margin: 0 0 var(--wps-space-2) 0;
+	margin: 0 0 var(--wps-space-2) 0;
 }
 
 .wps-recommendation-card p {
-    margin: 0 0 var(--wps-space-2) 0;
-    color: var(--wps-gray-700);
+	margin: 0 0 var(--wps-space-2) 0;
+	color: var(--wps-gray-700);
 }
 
 .wps-recommendation-card a {
-    color: #0073aa;
-    text-decoration: none;
-    font-weight: var(--wps-font-semibold);
+	color: #0073aa;
+	text-decoration: none;
+	font-weight: var(--wps-font-semibold);
 }
 
 .wps-recommendation-card a:hover {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 
 /* Back button styling */
 .wps-back-button {
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: var(--wps-space-2);
-    padding: var(--wps-space-2) var(--wps-space-4);
-    background: var(--wps-gray-100);
-    border-radius: var(--wps-radius-sm);
-    color: var(--wps-gray-900);
-    transition: background 0.2s ease;
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	gap: var(--wps-space-2);
+	padding: var(--wps-space-2) var(--wps-space-4);
+	background: var(--wps-gray-100);
+	border-radius: var(--wps-radius-sm);
+	color: var(--wps-gray-900);
+	transition: background 0.2s ease;
 }
 
 .wps-back-button:hover {
-    background: var(--wps-gray-200);
-    text-decoration: none;
+	background: var(--wps-gray-200);
+	text-decoration: none;
 }
 
 .wps-back-button .dashicons {
-    font-size: 16px;
+	font-size: 16px;
 }
 
 /* Filter badge */
 .wps-filter-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--wps-space-2);
-    padding: var(--wps-space-1) var(--wps-space-3);
-    background: var(--wps-primary);
-    color: white;
-    border-radius: 20px;
-    font-size: var(--wps-text-xs);
-    font-weight: var(--wps-font-semibold);
+	display: inline-flex;
+	align-items: center;
+	gap: var(--wps-space-2);
+	padding: var(--wps-space-1) var(--wps-space-3);
+	background: var(--wps-primary);
+	color: white;
+	border-radius: 20px;
+	font-size: var(--wps-text-xs);
+	font-weight: var(--wps-font-semibold);
 }
 
 .wps-filter-badge .dashicons {
-    font-size: 14px;
-    width: 14px;
-    height: 14px;
+	font-size: 14px;
+	width: 14px;
+	height: 14px;
 }
 
 /* ============================================================================
-   Modal and Dialog Styles
-   ============================================================================ */
+	Modal and Dialog Styles
+	============================================================================ */
 
 .wps-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
-    align-items: center;
-    justify-content: center;
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 9999;
+	align-items: center;
+	justify-content: center;
 }
 
 .wps-modal.active {
-    display: flex;
+	display: flex;
 }
 
 .wps-modal-content {
-    background: white;
-    padding: var(--wps-space-8);
-    border-radius: var(--wps-radius-lg);
-    max-width: 800px;
-    width: 90%;
-    position: relative;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-    max-height: 85vh;
-    overflow-y: auto;
-    margin: auto;
+	background: white;
+	padding: var(--wps-space-8);
+	border-radius: var(--wps-radius-lg);
+	max-width: 800px;
+	width: 90%;
+	position: relative;
+	box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+	max-height: 85vh;
+	overflow-y: auto;
+	margin: auto;
 }
 
 .wps-modal-close {
-    position: absolute;
-    top: var(--wps-space-5);
-    right: var(--wps-space-5);
-    background: transparent;
-    border: none;
-    font-size: 32px;
-    cursor: pointer;
-    color: var(--wps-gray-400);
-    line-height: 1;
-    padding: 0;
+	position: absolute;
+	top: var(--wps-space-5);
+	right: var(--wps-space-5);
+	background: transparent;
+	border: none;
+	font-size: 32px;
+	cursor: pointer;
+	color: var(--wps-gray-400);
+	line-height: 1;
+	padding: 0;
 }
 
 .wps-modal-close:hover {
-    color: var(--wps-gray-600);
+	color: var(--wps-gray-600);
 }
 
 /* Small modal for alerts/prompts */
 .wps-modal-small .wps-modal-content {
-    max-width: 500px;
+	max-width: 500px;
 }
 
 /* ============================================================================
-   Form and Input Helpers
-   ============================================================================ */
+	Form and Input Helpers
+	============================================================================ */
 
 .wps-form-inline {
-    display: flex;
-    gap: var(--wps-space-2);
-    flex-wrap: wrap;
-    align-items: flex-end;
+	display: flex;
+	gap: var(--wps-space-2);
+	flex-wrap: wrap;
+	align-items: flex-end;
 }
 
 .wps-form-row {
-    display: grid;
-    gap: var(--wps-space-2);
-    margin-bottom: var(--wps-space-3);
+	display: grid;
+	gap: var(--wps-space-2);
+	margin-bottom: var(--wps-space-3);
 }
 
 .wps-form-row-2col {
-    grid-template-columns: 1fr 1fr;
+	grid-template-columns: 1fr 1fr;
 }
 
 @media (max-width: 768px) {
-    .wps-form-row-2col {
-        grid-template-columns: 1fr;
-    }
+	.wps-form-row-2col {
+		grid-template-columns: 1fr;
+	}
 }
 
 /* ============================================================================
-   Tool/Help Page Specific
-   ============================================================================ */
+	Tool/Help Page Specific
+	============================================================================ */
 
 .wps-tool-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: var(--wps-space-6);
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+	gap: var(--wps-space-6);
 }
 
 .wps-tool-card {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
 }
 
 .wps-tool-card-icon {
-    color: var(--wps-primary);
-    margin-bottom: var(--wps-space-3);
+	color: var(--wps-primary);
+	margin-bottom: var(--wps-space-3);
 }
 
 .wps-tool-card-header {
-    padding: 0;
-    border-bottom: none;
-    margin-bottom: var(--wps-space-2);
+	padding: 0;
+	border-bottom: none;
+	margin-bottom: var(--wps-space-2);
 }
 
 .wps-tool-card-body {
-    padding-top: var(--wps-space-2);
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
+	padding-top: var(--wps-space-2);
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
 }
 
 .wps-tool-links {
-    display: flex;
-    gap: var(--wps-space-2);
-    flex-wrap: wrap;
-    margin-top: auto;
+	display: flex;
+	gap: var(--wps-space-2);
+	flex-wrap: wrap;
+	margin-top: auto;
 }
 
 .wps-tool-link {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--wps-space-1);
-    padding: var(--wps-space-1) var(--wps-space-3);
-    background: var(--wps-gray-100);
-    color: var(--wps-primary);
-    text-decoration: none;
-    border-radius: var(--wps-radius-sm);
-    font-size: var(--wps-text-sm);
-    transition: background 0.2s ease;
+	display: inline-flex;
+	align-items: center;
+	gap: var(--wps-space-1);
+	padding: var(--wps-space-1) var(--wps-space-3);
+	background: var(--wps-gray-100);
+	color: var(--wps-primary);
+	text-decoration: none;
+	border-radius: var(--wps-radius-sm);
+	font-size: var(--wps-text-sm);
+	transition: background 0.2s ease;
 }
 
 .wps-tool-link:hover {
-    background: var(--wps-gray-200);
-    text-decoration: none;
+	background: var(--wps-gray-200);
+	text-decoration: none;
 }
 
 .wps-tool-link .dashicons {
-    font-size: 14px;
+	font-size: 14px;
 }
 
 /* ============================================================================
-   Activity and Status Indicators
-   ============================================================================ */
+	Activity and Status Indicators
+	============================================================================ */
 
 .wps-status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--wps-space-2);
-    padding: var(--wps-space-2) var(--wps-space-4);
-    background: var(--wps-gray-100);
-    border-radius: var(--wps-radius-md);
-    border: 1px solid var(--wps-gray-200);
-    cursor: pointer;
-    transition: all 0.2s ease;
+	display: inline-flex;
+	align-items: center;
+	gap: var(--wps-space-2);
+	padding: var(--wps-space-2) var(--wps-space-4);
+	background: var(--wps-gray-100);
+	border-radius: var(--wps-radius-md);
+	border: 1px solid var(--wps-gray-200);
+	cursor: pointer;
+	transition: all 0.2s ease;
 }
 
 .wps-status-badge:hover {
-    background: var(--wps-gray-200);
+	background: var(--wps-gray-200);
 }
 
 .wps-status-badge .dashicons {
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
+	font-size: 20px;
+	width: 20px;
+	height: 20px;
 }
 
 .wps-status-badge-text {
-    font-weight: var(--wps-font-semibold);
-    color: var(--wps-gray-900);
+	font-weight: var(--wps-font-semibold);
+	color: var(--wps-gray-900);
 }
 
 /* ============================================================================
-   Loading and Spinners
-   ============================================================================ */
+	Loading and Spinners
+	============================================================================ */
 
 @keyframes wps-spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
 }
 
 .wps-spinner {
-    animation: wps-spin 2s linear infinite;
+	animation: wps-spin 2s linear infinite;
 }
 
 .wps-loading-message {
-    display: flex;
-    align-items: center;
-    gap: var(--wps-space-3);
-    padding: var(--wps-space-4);
-    background: #e3f2fd;
-    border-left: 4px solid #0073aa;
-    border-radius: var(--wps-radius-sm);
-    margin-bottom: var(--wps-space-4);
+	display: flex;
+	align-items: center;
+	gap: var(--wps-space-3);
+	padding: var(--wps-space-4);
+	background: #e3f2fd;
+	border-left: 4px solid #0073aa;
+	border-radius: var(--wps-radius-sm);
+	margin-bottom: var(--wps-space-4);
 }
 
 .wps-loading-message h2 {
-    margin: 0;
-    color: #0073aa;
-    font-size: var(--wps-text-lg);
+	margin: 0;
+	color: #0073aa;
+	font-size: var(--wps-text-lg);
 }
 
 .wps-loading-message p {
-    margin: var(--wps-space-2) 0 0 0;
-    color: var(--wps-gray-600);
-    font-size: var(--wps-text-sm);
+	margin: var(--wps-space-2) 0 0 0;
+	color: var(--wps-gray-600);
+	font-size: var(--wps-text-sm);
 }
 
 /* ============================================================================
-   Icon and Text Helpers
-   ============================================================================ */
+	Icon and Text Helpers
+	============================================================================ */
 
 .wps-icon-text {
-    display: flex;
-    align-items: center;
-    gap: var(--wps-space-2);
+	display: flex;
+	align-items: center;
+	gap: var(--wps-space-2);
 }
 
 .wps-icon-large {
-    font-size: 32px;
-    width: 32px;
-    height: 32px;
-    flex-shrink: 0;
+	font-size: 32px;
+	width: 32px;
+	height: 32px;
+	flex-shrink: 0;
 }
 
 .wps-icon-medium {
-    font-size: 24px;
-    width: 24px;
-    height: 24px;
-    flex-shrink: 0;
+	font-size: 24px;
+	width: 24px;
+	height: 24px;
+	flex-shrink: 0;
 }
 
 .wps-icon-small {
-    font-size: 18px;
-    width: 18px;
-    height: 18px;
-    flex-shrink: 0;
+	font-size: 18px;
+	width: 18px;
+	height: 18px;
+	flex-shrink: 0;
 }
 
 /* ============================================================================
-   Activity Timeline
-   ============================================================================ */
+	Activity Timeline
+	============================================================================ */
 
 .wps-activity-section {
-    margin-top: var(--wps-space-8);
-    margin-bottom: var(--wps-space-8);
+	margin-top: var(--wps-space-8);
+	margin-bottom: var(--wps-space-8);
 }
 
 .wps-activity-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: var(--wps-space-6);
-    padding-bottom: var(--wps-space-4);
-    border-bottom: 2px solid var(--wps-gray-200);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: var(--wps-space-6);
+	padding-bottom: var(--wps-space-4);
+	border-bottom: 2px solid var(--wps-gray-200);
 }
 
 .wps-activity-title {
-    margin: 0;
-    font-size: var(--wps-text-2xl);
-    font-weight: var(--wps-font-semibold);
-    color: var(--wps-gray-900);
+	margin: 0;
+	font-size: var(--wps-text-2xl);
+	font-weight: var(--wps-font-semibold);
+	color: var(--wps-gray-900);
 }
 
 .wps-activity-link {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--wps-space-2);
-    color: var(--wps-info);
-    text-decoration: none;
-    font-weight: var(--wps-font-medium);
-    font-size: var(--wps-text-sm);
-    transition: color var(--wps-transition-fast);
+	display: inline-flex;
+	align-items: center;
+	gap: var(--wps-space-2);
+	color: var(--wps-info);
+	text-decoration: none;
+	font-weight: var(--wps-font-medium);
+	font-size: var(--wps-text-sm);
+	transition: color var(--wps-transition-fast);
 }
 
 .wps-activity-link:hover {
-    color: var(--wps-info-dark);
-    text-decoration: none;
+	color: var(--wps-info-dark);
+	text-decoration: none;
 }
 
 .wps-activity-link .dashicons {
-    font-size: 16px;
-    width: 16px;
-    height: 16px;
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
 }
 
 /* Timeline container */
 .wps-activity-timeline {
-    position: relative;
-    padding-left: var(--wps-space-10);
+	position: relative;
+	padding-left: var(--wps-space-10);
 }
 
 /* Vertical timeline line */
 .wps-activity-timeline::before {
-    content: '';
-    position: absolute;
-    left: 11px;
-    top: 8px;
-    bottom: 8px;
-    width: 2px;
-    background: var(--wps-gray-200);
+	content: '';
+	position: absolute;
+	left: 11px;
+	top: 8px;
+	bottom: 8px;
+	width: 2px;
+	background: var(--wps-gray-200);
 }
 
 /* Individual activity item */
 .wps-activity-item {
-    position: relative;
-    display: flex;
-    gap: var(--wps-space-4);
-    padding: var(--wps-space-3);
-    margin-bottom: var(--wps-space-2);
-    border-radius: var(--wps-radius-md);
-    transition: background var(--wps-transition-fast);
+	position: relative;
+	display: flex;
+	gap: var(--wps-space-4);
+	padding: var(--wps-space-3);
+	margin-bottom: var(--wps-space-2);
+	border-radius: var(--wps-radius-md);
+	transition: background var(--wps-transition-fast);
 }
 
 .wps-activity-item:hover {
-    background: var(--wps-gray-50);
+	background: var(--wps-gray-50);
 }
 
 .wps-activity-item:last-child {
-    margin-bottom: 0;
+	margin-bottom: 0;
 }
 
 /* Timeline dot/icon */
 .wps-activity-icon {
-    position: absolute;
-    left: calc(-1 * var(--wps-space-10));
-    top: var(--wps-space-3);
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #ffffff;
-    border: 2px solid var(--wps-gray-200);
-    border-radius: 50%;
-    z-index: 1;
+	position: absolute;
+	left: calc(-1 * var(--wps-space-10));
+	top: var(--wps-space-3);
+	width: 24px;
+	height: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #ffffff;
+	border: 2px solid var(--wps-gray-200);
+	border-radius: 50%;
+	z-index: 1;
 }
 
 .wps-activity-icon .dashicons {
-    font-size: 14px;
-    width: 14px;
-    height: 14px;
+	font-size: 14px;
+	width: 14px;
+	height: 14px;
 }
 
 /* Activity content */
 .wps-activity-content {
-    flex: 1;
-    min-width: 0;
+	flex: 1;
+	min-width: 0;
 }
 
 .wps-activity-text {
-    color: var(--wps-gray-900);
-    font-size: var(--wps-text-base);
-    line-height: 1.5;
-    margin-bottom: var(--wps-space-1);
+	color: var(--wps-gray-900);
+	font-size: var(--wps-text-base);
+	line-height: 1.5;
+	margin-bottom: var(--wps-space-1);
 }
 
 .wps-activity-time {
-    display: inline-block;
-    color: var(--wps-gray-600);
-    font-size: var(--wps-text-sm);
+	display: inline-block;
+	color: var(--wps-gray-600);
+	font-size: var(--wps-text-sm);
 }
 
 /* ============================================================================
-   Dashboard-Specific Styles
-   ============================================================================ */
+	Dashboard-Specific Styles
+	============================================================================ */
 
 /* Dashboard page container */
 .wpshadow-dashboard.wps-page-container {
-    background: #ffffff;
+	background: #ffffff;
 }
 
 /* Dashboard content loading state */
 .wpshadow-dashboard-content.wps-loading {
-    opacity: 0.3;
-    pointer-events: none;
+	opacity: 0.3;
+	pointer-events: none;
 }
 
 /* Drill-down header */
 .wps-drilldown-header {
-    margin-bottom: var(--wps-space-6);
+	margin-bottom: var(--wps-space-6);
 }
 
 /* CTA Cards (Call-to-Action) */
 .wps-cta-card {
-    position: relative;
-    background: #ffffff;
-    border: 1px solid var(--wps-gray-200);
-    border-radius: var(--wps-radius-lg);
-    padding: var(--wps-space-6);
-    margin-bottom: var(--wps-space-6);
-    display: flex;
-    gap: var(--wps-space-4);
-    box-shadow: var(--wps-shadow-sm);
-    transition: box-shadow var(--wps-transition-base);
+	position: relative;
+	background: #ffffff;
+	border: 1px solid var(--wps-gray-200);
+	border-radius: var(--wps-radius-lg);
+	padding: var(--wps-space-6);
+	margin-bottom: var(--wps-space-6);
+	display: flex;
+	gap: var(--wps-space-4);
+	box-shadow: var(--wps-shadow-sm);
+	transition: box-shadow var(--wps-transition-base);
 }
 
 .wps-cta-card:hover {
-    box-shadow: var(--wps-shadow-md);
+	box-shadow: var(--wps-shadow-md);
 }
 
 /* CTA Info variant */
 .wps-cta-info {
-    border-left: 4px solid var(--wps-info);
+	border-left: 4px solid var(--wps-info);
 }
 
 /* CTA dismiss button */
 .wps-cta-dismiss {
-    position: absolute;
-    top: var(--wps-space-3);
-    right: var(--wps-space-3);
-    background: transparent;
-    border: none;
-    padding: var(--wps-space-2);
-    cursor: pointer;
-    color: var(--wps-gray-400);
-    border-radius: var(--wps-radius-sm);
-    transition: color var(--wps-transition-fast), background var(--wps-transition-fast);
+	position: absolute;
+	top: var(--wps-space-3);
+	right: var(--wps-space-3);
+	background: transparent;
+	border: none;
+	padding: var(--wps-space-2);
+	cursor: pointer;
+	color: var(--wps-gray-400);
+	border-radius: var(--wps-radius-sm);
+	transition: color var(--wps-transition-fast), background var(--wps-transition-fast);
 }
 
 .wps-cta-dismiss:hover {
-    color: var(--wps-gray-600);
-    background: var(--wps-gray-100);
+	color: var(--wps-gray-600);
+	background: var(--wps-gray-100);
 }
 
 .wps-cta-dismiss:focus {
-    outline: 2px solid var(--wps-info);
-    outline-offset: 2px;
+	outline: 2px solid var(--wps-info);
+	outline-offset: 2px;
 }
 
 .wps-cta-dismiss .dashicons {
-    font-size: 18px;
-    width: 18px;
-    height: 18px;
+	font-size: 18px;
+	width: 18px;
+	height: 18px;
 }
 
 /* CTA icon */
 .wps-cta-icon {
-    flex-shrink: 0;
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--wps-info-light);
-    border-radius: var(--wps-radius-md);
+	flex-shrink: 0;
+	width: 48px;
+	height: 48px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--wps-info-light);
+	border-radius: var(--wps-radius-md);
 }
 
 .wps-cta-icon .dashicons {
-    font-size: 24px;
-    width: 24px;
-    height: 24px;
-    color: var(--wps-info);
+	font-size: 24px;
+	width: 24px;
+	height: 24px;
+	color: var(--wps-info);
 }
 
 /* CTA content */
 .wps-cta-content {
-    flex: 1;
-    min-width: 0;
+	flex: 1;
+	min-width: 0;
 }
 
 .wps-cta-heading {
-    margin: 0 0 var(--wps-space-2) 0;
-    font-size: var(--wps-text-xl);
-    font-weight: var(--wps-font-semibold);
-    color: var(--wps-gray-900);
+	margin: 0 0 var(--wps-space-2) 0;
+	font-size: var(--wps-text-xl);
+	font-weight: var(--wps-font-semibold);
+	color: var(--wps-gray-900);
 }
 
 .wps-cta-description {
-    margin: 0 0 var(--wps-space-4) 0;
-    color: var(--wps-gray-600);
-    line-height: 1.6;
+	margin: 0 0 var(--wps-space-4) 0;
+	color: var(--wps-gray-600);
+	line-height: 1.6;
 }
 
 .wps-cta-actions {
-    display: flex;
-    gap: var(--wps-space-3);
-    flex-wrap: wrap;
+	display: flex;
+	gap: var(--wps-space-3);
+	flex-wrap: wrap;
 }
 
 /* Scan overlay (loading modal) */
 .wps-scan-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.95);
-    z-index: 999999;
-    display: none;
-    align-items: center;
-    justify-content: center;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(255, 255, 255, 0.95);
+	z-index: 999999;
+	display: none;
+	align-items: center;
+	justify-content: center;
 }
 
 .wps-scan-overlay[aria-busy="true"] {
-    display: flex;
+	display: flex;
 }
 
 .wps-scan-overlay-content {
-    text-align: center;
-    max-width: 600px;
-    padding: var(--wps-space-10);
+	text-align: center;
+	max-width: 600px;
+	padding: var(--wps-space-10);
 }
 
 .wps-scan-overlay-content h2 {
-    margin: 0 0 var(--wps-space-6) 0;
-    font-size: var(--wps-text-2xl);
-    font-weight: var(--wps-font-semibold);
-    color: var(--wps-gray-900);
+	margin: 0 0 var(--wps-space-6) 0;
+	font-size: var(--wps-text-2xl);
+	font-weight: var(--wps-font-semibold);
+	color: var(--wps-gray-900);
 }
 
 /* Modern progress bar */
 .wps-progress-bar {
-    width: 100%;
-    height: 8px;
-    background: var(--wps-gray-200);
-    border-radius: var(--wps-radius-full);
-    overflow: hidden;
-    margin: var(--wps-space-6) 0;
+	width: 100%;
+	height: 8px;
+	background: var(--wps-gray-200);
+	border-radius: var(--wps-radius-full);
+	overflow: hidden;
+	margin: var(--wps-space-6) 0;
 }
 
 .wps-progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--wps-info) 0%, var(--wps-primary) 100%);
-    width: 0%;
-    transition: width 0.3s ease;
-    border-radius: var(--wps-radius-full);
+	height: 100%;
+	background: linear-gradient(90deg, var(--wps-info) 0%, var(--wps-primary) 100%);
+	width: 0%;
+	transition: width 0.3s ease;
+	border-radius: var(--wps-radius-full);
 }
 
 .wps-progress-text {
-    font-size: var(--wps-text-base);
-    font-weight: var(--wps-font-semibold);
-    color: var(--wps-gray-900);
-    margin: var(--wps-space-3) 0;
+	font-size: var(--wps-text-base);
+	font-weight: var(--wps-font-semibold);
+	color: var(--wps-gray-900);
+	margin: var(--wps-space-3) 0;
 }
 
 .wps-progress-details {
-    font-size: var(--wps-text-sm);
-    color: var(--wps-gray-600);
-    font-style: italic;
+	font-size: var(--wps-text-sm);
+	color: var(--wps-gray-600);
+	font-style: italic;
 }
 
 /* Button styles */
 .wps-btn-primary {
-    background: var(--wps-info);
-    color: #ffffff;
-    border: none;
-    padding: var(--wps-space-2) var(--wps-space-5);
-    border-radius: var(--wps-radius-md);
-    font-weight: var(--wps-font-medium);
-    cursor: pointer;
-    transition: background var(--wps-transition-fast), box-shadow var(--wps-transition-fast);
+	background: var(--wps-info);
+	color: #ffffff;
+	border: none;
+	padding: var(--wps-space-2) var(--wps-space-5);
+	border-radius: var(--wps-radius-md);
+	font-weight: var(--wps-font-medium);
+	cursor: pointer;
+	transition: background var(--wps-transition-fast), box-shadow var(--wps-transition-fast);
 }
 
 .wps-btn-primary:hover {
-    background: var(--wps-info-dark);
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+	background: var(--wps-info-dark);
+	box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
 }
 
 .wps-btn-primary:focus {
-    outline: 2px solid var(--wps-info);
-    outline-offset: 2px;
+	outline: 2px solid var(--wps-info);
+	outline-offset: 2px;
 }
 
 .wps-btn-secondary {
-    background: #ffffff;
-    color: var(--wps-gray-700);
-    border: 1px solid var(--wps-gray-300);
-    padding: var(--wps-space-2) var(--wps-space-4);
-    border-radius: var(--wps-radius-md);
-    font-weight: var(--wps-font-medium);
-    cursor: pointer;
-    transition: background var(--wps-transition-fast), border-color var(--wps-transition-fast);
+	background: #ffffff;
+	color: var(--wps-gray-700);
+	border: 1px solid var(--wps-gray-300);
+	padding: var(--wps-space-2) var(--wps-space-4);
+	border-radius: var(--wps-radius-md);
+	font-weight: var(--wps-font-medium);
+	cursor: pointer;
+	transition: background var(--wps-transition-fast), border-color var(--wps-transition-fast);
 }
 
 .wps-btn-secondary:hover {
-    background: var(--wps-gray-50);
-    border-color: var(--wps-gray-400);
+	background: var(--wps-gray-50);
+	border-color: var(--wps-gray-400);
 }
 
 .wps-btn-secondary:focus {
-    outline: 2px solid var(--wps-info);
-    outline-offset: 2px;
+	outline: 2px solid var(--wps-info);
+	outline-offset: 2px;
 }
 
 /* ============================================================================
-   Responsive Utilities
-   ============================================================================ */
+	Responsive Utilities
+	============================================================================ */
 
 @media (max-width: 768px) {
-    .wps-modal-content {
-        max-width: 100%;
-        width: 95%;
-        padding: var(--wps-space-4);
-    }
+	.wps-modal-content {
+		max-width: 100%;
+		width: 95%;
+		padding: var(--wps-space-4);
+	}
 
-    .wps-tool-grid {
-        grid-template-columns: 1fr;
-    }
+	.wps-tool-grid {
+		grid-template-columns: 1fr;
+	}
 
-    .wps-cta-card {
-        flex-direction: column;
-        text-align: center;
-    }
+	.wps-cta-card {
+		flex-direction: column;
+		text-align: center;
+	}
 
-    .wps-cta-icon {
-        margin: 0 auto;
-    }
+	.wps-cta-icon {
+		margin: 0 auto;
+	}
 
-    .wps-cta-actions {
-        justify-content: center;
-    }
+	.wps-cta-actions {
+		justify-content: center;
+	}
 }
 
 /* ============================================================================
-   Enhanced Page Header Styles (UI/UX Modernization Phase 2)
-   ============================================================================ */
+	Enhanced Page Header Styles (UI/UX Modernization Phase 2)
+	============================================================================ */
 
 .wps-page-header {
-    margin-bottom: var(--wps-space-8);
-    animation: fadeInDown 0.5s ease-out;
+	margin-bottom: var(--wps-space-8);
+	animation: fadeInDown 0.5s ease-out;
 }
 
 @keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+	from {
+		opacity: 0;
+		transform: translateY(-20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 .wps-page-title {
-    font-size: var(--wps-text-4xl);
-    font-weight: var(--wps-font-bold);
-    color: var(--wps-gray-900);
-    margin: 0 0 var(--wps-space-2) 0;
-    letter-spacing: -0.03em;
-    line-height: 1.2;
-    display: flex;
-    align-items: center;
-    gap: var(--wps-space-3);
+	font-size: var(--wps-text-4xl);
+	font-weight: var(--wps-font-bold);
+	color: var(--wps-gray-900);
+	margin: 0 0 var(--wps-space-2) 0;
+	letter-spacing: -0.03em;
+	line-height: 1.2;
+	display: flex;
+	align-items: center;
+	gap: var(--wps-space-3);
 }
 
 .wps-page-title .dashicons {
-    font-size: 36px;
-    width: 36px;
-    height: 36px;
+	font-size: 36px;
+	width: 36px;
+	height: 36px;
 }
 
 .wps-page-subtitle {
-    font-size: var(--wps-text-lg);
-    color: var(--wps-gray-600);
-    margin: 0;
-    line-height: 1.5;
+	font-size: var(--wps-text-lg);
+	color: var(--wps-gray-600);
+	margin: 0;
+	line-height: 1.5;
 }
 
 /* Drilldown header variant */
 .wps-drilldown-header {
-    position: relative;
-    padding: var(--wps-space-6);
-    background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
-    border-radius: var(--wps-radius-xl);
-    border: 1px solid var(--wps-gray-200);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+	position: relative;
+	padding: var(--wps-space-6);
+	background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+	border-radius: var(--wps-radius-xl);
+	border: 1px solid var(--wps-gray-200);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 /* Mobile responsive adjustments */
 @media (max-width: 768px) {
-    .wps-page-header {
-        margin-bottom: var(--wps-space-6);
-    }
+	.wps-page-header {
+		margin-bottom: var(--wps-space-6);
+	}
 
-    .wps-page-title {
-        font-size: var(--wps-text-2xl);
-        flex-direction: column;
-        align-items: flex-start;
-        gap: var(--wps-space-2);
-    }
+	.wps-page-title {
+		font-size: var(--wps-text-2xl);
+		flex-direction: column;
+		align-items: flex-start;
+		gap: var(--wps-space-2);
+	}
 
-    .wps-page-title .dashicons {
-        font-size: 28px;
-        width: 28px;
-        height: 28px;
-    }
+	.wps-page-title .dashicons {
+		font-size: 28px;
+		width: 28px;
+		height: 28px;
+	}
 
-    .wps-page-subtitle {
-        font-size: var(--wps-text-base);
-    }
+	.wps-page-subtitle {
+		font-size: var(--wps-text-base);
+	}
 
-    .wps-drilldown-header {
-        padding: var(--wps-space-4);
-        border-radius: var(--wps-radius-lg);
-    }
+	.wps-drilldown-header {
+		padding: var(--wps-space-4);
+		border-radius: var(--wps-radius-lg);
+	}
 }
 
 /* Respect reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
-    .wps-page-header,
-    @keyframes fadeInDown {
-        animation: none;
-    }
+	.wps-page-header,
+	@keyframes fadeInDown {
+		animation: none;
+	}
 }

@@ -1,7 +1,7 @@
 /**
  * Kanban Board Styles - Modernized Design (Issue #670)
  * Replit-inspired, clean, and accessible drag-and-drop interface
- * 
+ *
  * Philosophy: Inspire Confidence (#8) - Effortless task management
  * CANON: Accessibility-first with keyboard navigation support
  */
@@ -775,11 +775,11 @@
 	.finding-card {
 		border-width: 2px;
 	}
-	
+
 	.kanban-column {
 		border-width: 2px;
 	}
-	
+
 	.wps-btn-sm,
 	.finding-actions .button {
 		border-width: 2px;
@@ -828,8 +828,8 @@
 }
 
 /* ============================================================================
-   Workflow Cards (Workflows Column)
-   ============================================================================ */
+	Workflow Cards (Workflows Column)
+	============================================================================ */
 
 .workflow-card {
 	background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
