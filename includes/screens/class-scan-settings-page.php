@@ -52,15 +52,36 @@ function wpshadow_render_scan_settings() {
 				<button type="button" class="button" id="wpshadow-next" aria-label="<?php echo esc_attr__( 'Next page', 'wpshadow' ); ?>">&rarr;</button>
 			</div>
 		</section>
+		<section aria-labelledby="treatments-heading">
+			<h2 id="treatments-heading"><?php echo esc_html__( 'Treatments', 'wpshadow' ); ?></h2>
+			<div class="wpshadow-controls" style="margin-top:10px;margin-bottom:10px;">
+				<label for="wpshadow-t-search"><?php echo esc_html__( 'Search', 'wpshadow' ); ?></label>
+				<input type="search" id="wpshadow-t-search" placeholder="<?php echo esc_attr__( 'Search treatments...', 'wpshadow' ); ?>" />
+			</div>
+
+			<div id="wpshadow-treatments-list" role="region" aria-live="polite" style="margin-top:15px;"></div>
+			<div class="wpshadow-pagination" style="margin-top:10px;">
+				<button type="button" class="button" id="wpshadow-t-prev" aria-label="<?php echo esc_attr__( 'Previous page', 'wpshadow' ); ?>">&larr;</button>
+				<span id="wpshadow-t-page">1</span>
+				<button type="button" class="button" id="wpshadow-t-next" aria-label="<?php echo esc_attr__( 'Next page', 'wpshadow' ); ?>">&rarr;</button>
+			</div>
+		</section>
 	</div>
 	<script type="text/javascript">
 	(function(){
 		const ajaxurl = '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>';
 		const nonce = '<?php echo esc_js( $nonce ); ?>';
+
+		// Diagnostics state
 		let page = 1;
 		const perPage = 25;
 		let currentFamily = '';
 		let currentSearch = '';
+
+		// Treatments state
+		let tPage = 1;
+		const tPerPage = 25;
+		let tSearch = '';
 
 		function renderList(items){
 			const container = document.getElementById('wpshadow-diagnostics-list');
@@ -91,6 +112,56 @@ function wpshadow_render_scan_settings() {
 						headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 						body: new URLSearchParams({
 							action: 'wpshadow_toggle_diagnostic',
+							nonce: nonce,
+							class_name: item.class_name,
+							enable: item.enabled ? '0' : '1'
+						}).toString()
+					}).then(r=>r.json()).then(function(resp){
+						if (resp && resp.success){
+							item.enabled = !!resp.data.enabled;
+							toggle.textContent = item.enabled ? '<?php echo esc_js( __( 'Disable', 'wpshadow' ) ); ?>' : '<?php echo esc_js( __( 'Enable', 'wpshadow' ) ); ?>';
+						} else {
+							alert((resp && resp.data && resp.data.message) || '<?php echo esc_js( __( 'Operation failed', 'wpshadow' ) ); ?>');
+						}
+					}).catch(function(){
+						alert('<?php echo esc_js( __( 'Network error', 'wpshadow' ) ); ?>');
+					}).finally(function(){ toggle.disabled = false; });
+				});
+				row.appendChild(info);
+				row.appendChild(toggle);
+				frag.appendChild(row);
+			});
+			container.appendChild(frag);
+		}
+
+		function renderTreatments(items){
+			const container = document.getElementById('wpshadow-treatments-list');
+			container.innerHTML = '';
+			if (!items || items.length === 0){
+				container.innerHTML = '<p><?php echo esc_js( __( 'No treatments found.', 'wpshadow' ) ); ?></p>';
+				return;
+			}
+			const frag = document.createDocumentFragment();
+			items.forEach(function(item){
+				const row = document.createElement('div');
+				row.className = 'wpshadow-row';
+				row.style.display = 'grid';
+				row.style.gridTemplateColumns = '1fr auto';
+				row.style.gap = '8px';
+				const info = document.createElement('div');
+				info.innerHTML = '<strong>' + escapeHtml(item.label || item.class_name) + '</strong>' +
+					'<div style="opacity:.9">' + escapeHtml(item.class_name) + '</div>';
+				const toggle = document.createElement('button');
+				toggle.className = 'button';
+				toggle.setAttribute('aria-label', '<?php echo esc_js( __( 'Toggle treatment', 'wpshadow' ) ); ?>');
+				toggle.textContent = item.enabled ? '<?php echo esc_js( __( 'Disable', 'wpshadow' ) ); ?>' : '<?php echo esc_js( __( 'Enable', 'wpshadow' ) ); ?>';
+				toggle.addEventListener('click', function(){
+					toggle.disabled = true;
+					fetch(ajaxurl, {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+						body: new URLSearchParams({
+							action: 'wpshadow_toggle_treatment',
 							nonce: nonce,
 							class_name: item.class_name,
 							enable: item.enabled ? '0' : '1'
@@ -159,6 +230,23 @@ function wpshadow_render_scan_settings() {
 				});
 		}
 
+		function loadTreatmentsPage(){
+			const params = new URLSearchParams({
+				action: 'wpshadow_list_treatments',
+				nonce: nonce,
+				page: String(tPage),
+				per_page: String(tPerPage)
+			});
+			if (tSearch){ params.append('search', tSearch); }
+			fetch(ajaxurl, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params.toString() })
+				.then(r=>r.json()).then(function(resp){
+					if (resp && resp.success){
+						renderTreatments(resp.data.items || []);
+						document.getElementById('wpshadow-t-page').textContent = String(tPage);
+					}
+				});
+		}
+
 		document.getElementById('wpshadow-prev').addEventListener('click', function(){ if (page>1){ page--; loadPage(); } });
 		document.getElementById('wpshadow-next').addEventListener('click', function(){ page++; loadPage(); });
 		document.getElementById('wpshadow-family').addEventListener('change', function(e){ currentFamily = e.target.value || ''; page = 1; loadPage(); });
@@ -166,8 +254,15 @@ function wpshadow_render_scan_settings() {
 		let t;
 		searchEl.addEventListener('input', function(){ clearTimeout(t); t = setTimeout(function(){ currentSearch = searchEl.value || ''; page = 1; loadPage(); }, 300); });
 
+		const tSearchEl = document.getElementById('wpshadow-t-search');
+		let tDebounce;
+		tSearchEl.addEventListener('input', function(){ clearTimeout(tDebounce); tDebounce = setTimeout(function(){ tSearch = tSearchEl.value || ''; tPage = 1; loadTreatmentsPage(); }, 300); });
+		document.getElementById('wpshadow-t-prev').addEventListener('click', function(){ if (tPage>1){ tPage--; loadTreatmentsPage(); } });
+		document.getElementById('wpshadow-t-next').addEventListener('click', function(){ tPage++; loadTreatmentsPage(); });
+
 		loadFamilies();
 		loadPage();
+		loadTreatmentsPage();
 	})();
 	</script>
 	<?php

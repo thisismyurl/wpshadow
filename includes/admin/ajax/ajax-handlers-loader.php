@@ -3,7 +3,7 @@
  * AJAX Handlers Loader
  *
  * Loads all AJAX handler classes before they're registered in AJAX_Router.
- * 
+ *
  * NOTE: With PSR-4 autoloading enabled, this file is no longer strictly necessary
  * as classes will be loaded automatically when referenced. However, we keep it for:
  * - Explicit dependency loading order
@@ -126,6 +126,11 @@ require_once $ajax_path . 'Submit_Exit_Interview_Handler.php';
 // - Get_Finding_Family_Handler.php
 // - Apply_Family_Fix_Handler.php
 
+// Diagnostics & Treatments listing/toggles (Scan Settings UI)
+require_once $ajax_path . 'class-ajax-diagnostics-list.php';
+require_once $ajax_path . 'class-ajax-toggle-diagnostic.php';
+require_once $ajax_path . 'class-ajax-treatments-list.php';
+require_once $ajax_path . 'class-ajax-toggle-treatment.php';
+
 // Exit interview and followup operations
 require_once $ajax_path . 'exit-followup-handlers.php';
-
