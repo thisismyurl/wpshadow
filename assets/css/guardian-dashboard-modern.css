@@ -48,7 +48,7 @@
 /* KPI Card Header */
 .wps-kpi-card-header {
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-start;
 	align-items: center;
 }
 

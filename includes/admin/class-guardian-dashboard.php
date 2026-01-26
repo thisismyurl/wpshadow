@@ -167,8 +167,6 @@ class Guardian_Dashboard {
 				'value'       => $kpis['findings_detected'] ?? 0,
 				'icon'        => 'dashicons-search',
 				'color'       => '#f59e0b',
-				'trend'       => '+3',
-				'trend_up'    => false,
 				'description' => __( 'Total findings detected', 'wpshadow' ),
 			),
 			array(
@@ -176,8 +174,6 @@ class Guardian_Dashboard {
 				'value'       => $kpis['issues_fixed'] ?? 0,
 				'icon'        => 'dashicons-yes-alt',
 				'color'       => '#10b981',
-				'trend'       => '+8',
-				'trend_up'    => true,
 				'description' => __( 'Successfully resolved', 'wpshadow' ),
 			),
 			array(
@@ -185,8 +181,6 @@ class Guardian_Dashboard {
 				'value'       => $kpis['time_saved_display'] ?? '0m',
 				'icon'        => 'dashicons-clock',
 				'color'       => '#3b82f6',
-				'trend'       => '12min',
-				'trend_up'    => true,
 				'description' => __( 'Automated work time', 'wpshadow' ),
 			),
 			array(
@@ -194,25 +188,17 @@ class Guardian_Dashboard {
 				'value'       => '$' . ( $kpis['labor_cost_avoided'] ?? 0 ),
 				'icon'        => 'dashicons-chart-area',
 				'color'       => '#8b5cf6',
-				'trend'       => '$45',
-				'trend_up'    => true,
 				'description' => __( 'Labor cost avoided', 'wpshadow' ),
 			),
 		);
 
 		$html = '';
 		foreach ( $cards as $card ) {
-			$trend_arrow = $card['trend_up'] ? '↗' : '↘';
-			$trend_color = $card['trend_up'] ? '#10b981' : '#ef4444';
-
 			$html .= sprintf(
 				'<div class="wps-kpi-card" role="article" aria-labelledby="kpi-%s">
 					<div class="wps-kpi-card-header">
 						<div class="wps-kpi-icon-wrapper" style="background: %s20;">
 							<span class="dashicons %s wps-kpi-icon" style="color: %s;" aria-hidden="true"></span>
-						</div>
-						<div class="wps-kpi-trend" style="color: %s;" aria-label="%s">
-							<span aria-hidden="true">%s</span> %s
 						</div>
 					</div>
 					<div class="wps-kpi-card-body">
@@ -220,26 +206,15 @@ class Guardian_Dashboard {
 						<div class="wps-kpi-value">%s</div>
 						<p class="wps-kpi-description">%s</p>
 					</div>
-					<div class="wps-kpi-card-footer">
-						<a href="#" class="wps-kpi-link" aria-label="%s">
-							%s <span class="dashicons dashicons-arrow-right-alt2" aria-hidden="true"></span>
-						</a>
-					</div>
 				</div>',
 				esc_attr( sanitize_title( $card['label'] ) ),
 				esc_attr( $card['color'] ),
 				esc_attr( $card['icon'] ),
 				esc_attr( $card['color'] ),
-				esc_attr( $trend_color ),
-				esc_attr( sprintf( __( 'Trend: %s', 'wpshadow' ), $card['trend'] ) ),
-				esc_html( $trend_arrow ),
-				esc_html( $card['trend'] ),
 				esc_attr( sanitize_title( $card['label'] ) ),
 				esc_html( $card['label'] ),
 				esc_html( (string) $card['value'] ),
-				esc_html( $card['description'] ),
-				esc_attr( sprintf( __( 'View details for %s', 'wpshadow' ), $card['label'] ) ),
-				esc_html__( 'View details', 'wpshadow' )
+				esc_html( $card['description'] )
 			);
 		}
 
