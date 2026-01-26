@@ -3,7 +3,7 @@
 /**
  * Plugin Name: WPShadow
  * Description: Minimal bootstrap to show WPShadow menu and Settings link.
- * Version: 1.2601.210238
+ * Version: 1.2601.210244
  * Author: thisismyurl
  */
 
@@ -11,10 +11,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'WPSHADOW_VERSION', '1.2601.210238' );
+define( 'WPSHADOW_VERSION', '1.2601.210244' );
 define( 'WPSHADOW_BASENAME', plugin_basename( __FILE__ ) );
 define( 'WPSHADOW_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WPSHADOW_URL', plugin_dir_url( __FILE__ ) );
+
+/**
+ * Load Composer autoloader (PSR-4)
+ *
+ * Enables automatic class loading for PSR-4 compliant files.
+ * Coexists with manual requires for WordPress-style named files.
+ */
+if ( file_exists( WPSHADOW_PATH . 'vendor/autoload.php' ) ) {
+	require_once WPSHADOW_PATH . 'vendor/autoload.php';
+}
 
 /**
  * Load essential base classes (required by all other systems)
