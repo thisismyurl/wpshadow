@@ -146,6 +146,15 @@ class Diagnostic_Pub_Featured_Image_Present extends Diagnostic_Base {
 	}
 
 	/**
+	 * Threshold for acceptable featured image coverage
+	 *
+	 * Posts are considered healthy if at least this percentage have featured images.
+	 *
+	 * @since 1.2601.2148
+	 */
+	const COVERAGE_THRESHOLD = 70;
+
+	/**
 	 * Run the diagnostic check
 	 *
 	 * Checks if published posts have featured images set. Featured images
@@ -172,6 +181,9 @@ class Diagnostic_Pub_Featured_Image_Present extends Diagnostic_Base {
 		);
 
 		// If no recent posts, consider it passing (nothing to check).
+		// Returning null indicates the diagnostic passed - there's no issue to report
+		// when there are no posts to evaluate. A new site with no content yet is
+		// not considered "unhealthy" for this metric.
 		if ( empty( $posts ) ) {
 			return null;
 		}
@@ -186,8 +198,17 @@ class Diagnostic_Pub_Featured_Image_Present extends Diagnostic_Base {
 		$total_posts = count( $posts );
 		$percentage  = ( $posts_with_featured / $total_posts ) * 100;
 
-		// If less than 70% of posts have featured images, flag as an issue.
-		if ( $percentage < 70 ) {
+		/**
+		 * Filters the featured image coverage threshold.
+		 *
+		 * @since 1.2601.2148
+		 *
+		 * @param int $threshold Minimum percentage of posts that should have featured images. Default 70.
+		 */
+		$threshold = apply_filters( 'wpshadow_featured_image_threshold', self::COVERAGE_THRESHOLD );
+
+		// If less than threshold of posts have featured images, flag as an issue.
+		if ( $percentage < $threshold ) {
 			return \WPShadow\Core\Diagnostic_Lean_Checks::build_finding(
 				'pub-featured-image-present',
 				__( 'Posts Missing Featured Images', 'wpshadow' ),
@@ -273,17 +294,27 @@ class Diagnostic_Pub_Featured_Image_Present extends Diagnostic_Base {
 
 		$percentage = ( $posts_with_featured / $total_posts ) * 100;
 
+		/**
+		 * Filters the featured image coverage threshold.
+		 *
+		 * @since 1.2601.2148
+		 *
+		 * @param int $threshold Minimum percentage of posts that should have featured images. Default 70.
+		 */
+		$threshold = apply_filters( 'wpshadow_featured_image_threshold', self::COVERAGE_THRESHOLD );
+
 		// Verify the check() logic matches expectations.
-		if ( $percentage >= 70 ) {
+		if ( $percentage >= $threshold ) {
 			if ( null === $result ) {
 				return array(
 					'passed'  => true,
 					'message' => sprintf(
-						/* translators: 1: percentage, 2: count with featured, 3: total count */
-						__( 'Test passed: %1$.0f%% (%2$d of %3$d) posts have featured images (above 70%% threshold), diagnostic correctly returned null', 'wpshadow' ),
+						/* translators: 1: percentage, 2: count with featured, 3: total count, 4: threshold percentage */
+						__( 'Test passed: %1$.0f%% (%2$d of %3$d) posts have featured images (above %4$d%% threshold), diagnostic correctly returned null', 'wpshadow' ),
 						$percentage,
 						$posts_with_featured,
-						$total_posts
+						$total_posts,
+						$threshold
 					),
 				);
 			}
@@ -291,11 +322,12 @@ class Diagnostic_Pub_Featured_Image_Present extends Diagnostic_Base {
 			return array(
 				'passed'  => false,
 				'message' => sprintf(
-					/* translators: 1: percentage, 2: count with featured, 3: total count */
-					__( 'Test failed: %1$.0f%% (%2$d of %3$d) posts have featured images (above 70%% threshold), but diagnostic returned a finding', 'wpshadow' ),
+					/* translators: 1: percentage, 2: count with featured, 3: total count, 4: threshold percentage */
+					__( 'Test failed: %1$.0f%% (%2$d of %3$d) posts have featured images (above %4$d%% threshold), but diagnostic returned a finding', 'wpshadow' ),
 					$percentage,
 					$posts_with_featured,
-					$total_posts
+					$total_posts,
+					$threshold
 				),
 			);
 		} else {
@@ -303,11 +335,12 @@ class Diagnostic_Pub_Featured_Image_Present extends Diagnostic_Base {
 				return array(
 					'passed'  => true,
 					'message' => sprintf(
-						/* translators: 1: percentage, 2: count with featured, 3: total count */
-						__( 'Test passed: %1$.0f%% (%2$d of %3$d) posts have featured images (below 70%% threshold), diagnostic correctly returned a finding', 'wpshadow' ),
+						/* translators: 1: percentage, 2: count with featured, 3: total count, 4: threshold percentage */
+						__( 'Test passed: %1$.0f%% (%2$d of %3$d) posts have featured images (below %4$d%% threshold), diagnostic correctly returned a finding', 'wpshadow' ),
 						$percentage,
 						$posts_with_featured,
-						$total_posts
+						$total_posts,
+						$threshold
 					),
 				);
 			}
@@ -315,11 +348,12 @@ class Diagnostic_Pub_Featured_Image_Present extends Diagnostic_Base {
 			return array(
 				'passed'  => false,
 				'message' => sprintf(
-					/* translators: 1: percentage, 2: count with featured, 3: total count */
-					__( 'Test failed: %1$.0f%% (%2$d of %3$d) posts have featured images (below 70%% threshold), but diagnostic returned null', 'wpshadow' ),
+					/* translators: 1: percentage, 2: count with featured, 3: total count, 4: threshold percentage */
+					__( 'Test failed: %1$.0f%% (%2$d of %3$d) posts have featured images (below %4$d%% threshold), but diagnostic returned null', 'wpshadow' ),
 					$percentage,
 					$posts_with_featured,
-					$total_posts
+					$total_posts,
+					$threshold
 				),
 			);
 		}
