@@ -202,28 +202,28 @@ class Plugin_Bootstrap {
 		}
 
 		// Initialize gamification systems
-		if ( class_exists( '\\WPShadow\\Gamification\\Achievement_System' ) ) {
+		if ( class_exists( '\\WPShadow\\Gamification\\Achievement_System' ) && method_exists( '\\WPShadow\\Gamification\\Achievement_System', 'init' ) ) {
 			\WPShadow\Gamification\Achievement_System::init();
 		}
 
-		if ( class_exists( '\\WPShadow\\Gamification\\Streak_Tracker' ) ) {
+		if ( class_exists( '\\WPShadow\\Gamification\\Streak_Tracker' ) && method_exists( '\\WPShadow\\Gamification\\Streak_Tracker', 'init' ) ) {
 			\WPShadow\Gamification\Streak_Tracker::init();
 		}
 
-		if ( class_exists( '\\WPShadow\\Gamification\\Leaderboard_Manager' ) ) {
+		if ( class_exists( '\\WPShadow\\Gamification\\Leaderboard_Manager' ) && method_exists( '\\WPShadow\\Gamification\\Leaderboard_Manager', 'init' ) ) {
 			\WPShadow\Gamification\Leaderboard_Manager::init();
 		}
 
-		if ( class_exists( '\\WPShadow\\Gamification\\Badge_Manager' ) ) {
+		if ( class_exists( '\\WPShadow\\Gamification\\Badge_Manager' ) && method_exists( '\\WPShadow\\Gamification\\Badge_Manager', 'init' ) ) {
 			\WPShadow\Gamification\Badge_Manager::init();
 		}
 
-		if ( class_exists( '\\WPShadow\\Gamification\\Milestone_Notifier' ) ) {
+		if ( class_exists( '\\WPShadow\\Gamification\\Milestone_Notifier' ) && method_exists( '\\WPShadow\\Gamification\\Milestone_Notifier', 'init' ) ) {
 			\WPShadow\Gamification\Milestone_Notifier::init();
 		}
 
 		// Initialize exit interview system
-		if ( class_exists( '\\WPShadow\\Engagement\\Exit_Interview' ) ) {
+		if ( class_exists( '\\WPShadow\\Engagement\\Exit_Interview' ) && method_exists( '\\WPShadow\\Engagement\\Exit_Interview', 'init' ) ) {
 			\WPShadow\Engagement\Exit_Interview::init();
 		}
 	}
