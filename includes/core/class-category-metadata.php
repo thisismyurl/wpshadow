@@ -264,11 +264,8 @@ function wpshadow_get_wordpress_health_status(): array {
 	);
 }
 
-// ============================================================================
-// End of WPShadow\Core namespace
-// ============================================================================
-
-// The following functions are in the global namespace for backward compatibility
+// Switch to global namespace for backward-compatible function aliases
+namespace;
 
 /**
  * Global alias for WPShadow\Core\wpshadow_get_category_metadata()
@@ -298,6 +295,7 @@ function wpshadow_calculate_overall_health( array $findings_by_category, array $
 function wpshadow_calculate_wordpress_native_health(): array {
 	return \WPShadow\Core\wpshadow_calculate_wordpress_native_health();
 }
+
 
 
 
