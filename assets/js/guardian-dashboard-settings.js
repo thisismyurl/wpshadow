@@ -269,30 +269,39 @@
 			const $button = $(e.currentTarget);
 			const recoveryId = $button.data('recovery-id');
 			
+			const restoreAction = function() {
+				$button.prop('disabled', true);
+				$button.append(' <span class="spinner"></span>');
+				
+				const data = {
+					action: 'wpshadow_restore_recovery',
+					nonce: wpshadow.nonce,
+					recovery_id: recoveryId
+				};
+				
+				$.post(wpshadow.ajax_url, data, function(response) {
+					if (response.success) {
+						GuardianAdmin.showNotification('Recovery point restored successfully', 'success');
+						location.reload();
+					} else {
+						GuardianAdmin.showNotification(response.data || 'Failed to restore recovery point', 'error');
+					}
+				}).always(function() {
+					$button.prop('disabled', false);
+					$button.find('.spinner').remove();
+				});
+			};
+
+			if (window.WPShadowDesign && typeof window.WPShadowDesign.confirm === 'function') {
+				window.WPShadowDesign.confirm('Are you sure you want to restore from this recovery point?', restoreAction);
+				return;
+			}
+
 			if (!confirm('Are you sure you want to restore from this recovery point?')) {
 				return;
 			}
-			
-			$button.prop('disabled', true);
-			$button.append(' <span class="spinner"></span>');
-			
-			const data = {
-				action: 'wpshadow_restore_recovery',
-				nonce: wpshadow.nonce,
-				recovery_id: recoveryId
-			};
-			
-			$.post(wpshadow.ajax_url, data, function(response) {
-				if (response.success) {
-					GuardianAdmin.showNotification('Recovery point restored successfully', 'success');
-					location.reload();
-				} else {
-					GuardianAdmin.showNotification(response.data || 'Failed to restore recovery point', 'error');
-				}
-			}).always(function() {
-				$button.prop('disabled', false);
-				$button.find('.spinner').remove();
-			});
+
+			restoreAction();
 		},
 		
 		/**
@@ -480,32 +489,41 @@
 			const $button = $(e.currentTarget);
 			const subscriptionId = $button.data('subscription-id');
 			
+			const removeSubscription = function() {
+				$button.prop('disabled', true);
+				$button.append(' <span class="spinner"></span>');
+				
+				const data = {
+					action: 'wpshadow_remove_subscription',
+					nonce: wpshadow.nonce,
+					subscription_id: subscriptionId
+				};
+				
+				$.post(wpshadow.ajax_url, data, function(response) {
+					if (response.success) {
+						$button.closest('tr').fadeOut(function() {
+							$(this).remove();
+						});
+						GuardianAdmin.showNotification('Subscription removed', 'success');
+					} else {
+						GuardianAdmin.showNotification(response.data || 'Failed to remove subscription', 'error');
+					}
+				}).always(function() {
+					$button.prop('disabled', false);
+					$button.find('.spinner').remove();
+				});
+			};
+
+			if (window.WPShadowDesign && typeof window.WPShadowDesign.confirm === 'function') {
+				window.WPShadowDesign.confirm('Are you sure you want to remove this subscription?', removeSubscription);
+				return;
+			}
+
 			if (!confirm('Are you sure you want to remove this subscription?')) {
 				return;
 			}
-			
-			$button.prop('disabled', true);
-			$button.append(' <span class="spinner"></span>');
-			
-			const data = {
-				action: 'wpshadow_remove_subscription',
-				nonce: wpshadow.nonce,
-				subscription_id: subscriptionId
-			};
-			
-			$.post(wpshadow.ajax_url, data, function(response) {
-				if (response.success) {
-					$button.closest('tr').fadeOut(function() {
-						$(this).remove();
-					});
-					GuardianAdmin.showNotification('Subscription removed', 'success');
-				} else {
-					GuardianAdmin.showNotification(response.data || 'Failed to remove subscription', 'error');
-				}
-			}).always(function() {
-				$button.prop('disabled', false);
-				$button.find('.spinner').remove();
-			});
+
+			removeSubscription();
 		},
 		
 		/**

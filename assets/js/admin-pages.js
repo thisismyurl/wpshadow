@@ -212,11 +212,20 @@
                 const action = $(this).data('action');
                 const confirm = $(this).data('confirm');
 
+                const triggerAction = function() {
+                    self.performAction(action, $(this));
+                }.bind(this);
+
+                if (confirm && window.WPShadowDesign && typeof window.WPShadowDesign.confirm === 'function') {
+                    window.WPShadowDesign.confirm(confirm, triggerAction);
+                    return;
+                }
+
                 if (confirm && !window.confirm(confirm)) {
                     return;
                 }
 
-                self.performAction(action, $(this));
+                triggerAction();
             });
         },
 

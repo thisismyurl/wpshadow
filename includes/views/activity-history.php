@@ -133,7 +133,7 @@ $action_labels = array(
 
 	<!-- Filters -->
 	<div class="wps-card wps-m-20">
-		<form method="get" class="wps-grid wps-grid-auto-200 wps-gap-4" style="align-items: end;">
+		<form method="get" class="wps-grid wps-grid-auto-200 wps-gap-4 wps-items-end">
 			<input type="hidden" name="page" value="wpshadow-activity" />
 
 			<!-- Search -->
@@ -182,20 +182,20 @@ $action_labels = array(
 
 			<!-- Submit and Export -->
 			<div class="wps-flex-gap-8">
-				<button type="submit" class="wps-btn wps-btn-primary" style="flex: 1;">
+				<button type="submit" class="wps-btn wps-btn-primary wps-flex-1">
 					<?php esc_html_e( 'Filter', 'wpshadow' ); ?>
 				</button>
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-activity&export=csv' . ( ! empty( $filters ) ? '&' . http_build_query( $filters ) : '' ) ) ); ?>" class="wps-btn wps-btn-secondary wps-btn-icon-left" style="flex: 1;" title="<?php esc_attr_e( 'Export to CSV', 'wpshadow' ); ?>">
-					<span class="dashicons dashicons-download" style="vertical-align: middle;"></span>
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-activity&export=csv' . ( ! empty( $filters ) ? '&' . http_build_query( $filters ) : '' ) ) ); ?>" class="wps-btn wps-btn-secondary wps-btn-icon-left wps-flex-1" title="<?php esc_attr_e( 'Export to CSV', 'wpshadow' ); ?>">
+					<span class="dashicons dashicons-download wps-align-middle"></span>
 					<?php esc_html_e( 'Export', 'wpshadow' ); ?>
 				</a>
 			</div>
 		</form>
 
 		<?php if ( ! empty( $filters ) ) : ?>
-			<div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #ddd;">
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-activity' ) ); ?>" style="color: #2271b1; text-decoration: none;">
-					<span class="dashicons dashicons-dismiss" style="vertical-align: middle;"></span>
+			<div class="wps-mt-4 wps-pt-4 wps-border-t-gray-200">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-activity' ) ); ?>" class="wps-text-blue-600 wps-no-underline">
+					<span class="dashicons dashicons-dismiss wps-align-middle"></span>
 					<?php esc_html_e( 'Clear Filters', 'wpshadow' ); ?>
 				</a>
 			</div>
@@ -205,7 +205,7 @@ $action_labels = array(
 	<!-- Activity Table -->
 	<?php if ( empty( $activities ) ) : ?>
 		<div class="wps-p-40-rounded-4">
-			<span class="dashicons dashicons-info" style="font-size: 48px; color: #999; margin-bottom: 16px;"></span>
+			<span class="dashicons dashicons-info wps-text-4xl wps-text-gray-400 wps-mb-4"></span>
 			<p class="wps-m-0">
 				<?php echo empty( $filters ) ? esc_html__( 'No activities recorded yet.', 'wpshadow' ) : esc_html__( 'No activities match your filters.', 'wpshadow' ); ?>
 			</p>
@@ -214,10 +214,10 @@ $action_labels = array(
 		<table class="wp-list-table widefat fixed striped">
 			<thead>
 				<tr>
-					<th style="width: 160px;"><?php esc_html_e( 'Date/Time', 'wpshadow' ); ?></th>
-					<th style="width: 120px;"><?php esc_html_e( 'User', 'wpshadow' ); ?></th>
-					<th style="width: 120px;"><?php esc_html_e( 'Category', 'wpshadow' ); ?></th>
-					<th style="width: 150px;"><?php esc_html_e( 'Action', 'wpshadow' ); ?></th>
+					<th class="wps-w-40"><?php esc_html_e( 'Date/Time', 'wpshadow' ); ?></th>
+					<th class="wps-w-30"><?php esc_html_e( 'User', 'wpshadow' ); ?></th>
+					<th class="wps-w-30"><?php esc_html_e( 'Category', 'wpshadow' ); ?></th>
+					<th class="wps-w-37"><?php esc_html_e( 'Action', 'wpshadow' ); ?></th>
 					<th><?php esc_html_e( 'Details', 'wpshadow' ); ?></th>
 				</tr>
 			</thead>
@@ -245,7 +245,7 @@ $action_labels = array(
 									<?php echo esc_html( $cat_label ); ?>
 								</span>
 							<?php else : ?>
-								<span style="color: #999;">—</span>
+								<span class="wps-text-gray-400">—</span>
 							<?php endif; ?>
 						</td>
 						<td><?php echo esc_html( $action_label ); ?></td>
@@ -254,12 +254,12 @@ $action_labels = array(
 							<?php if ( ! empty( $kb_link ) || ! empty( $training_link ) ) : ?>
 								<div class="wps-flex-gap-10">
 									<?php if ( ! empty( $kb_link ) ) : ?>
-										<a href="<?php echo esc_url( $kb_link ); ?>" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 600;">
+										<a href="<?php echo esc_url( $kb_link ); ?>" target="_blank" class="wps-text-blue-600 wps-no-underline wps-font-600">
 											<?php esc_html_e( 'Learn more (KB)', 'wpshadow' ); ?>
 										</a>
 									<?php endif; ?>
 									<?php if ( ! empty( $training_link ) ) : ?>
-										<a href="<?php echo esc_url( $training_link ); ?>" target="_blank" style="color: #16a34a; text-decoration: none; font-weight: 600;">
+										<a href="<?php echo esc_url( $training_link ); ?>" target="_blank" class="wps-text-green-600 wps-no-underline wps-font-600">
 											<?php esc_html_e( 'Watch training', 'wpshadow' ); ?>
 										</a>
 									<?php endif; ?>
@@ -273,7 +273,7 @@ $action_labels = array(
 
 		<!-- Pagination -->
 		<?php if ( $total_pages > 1 ) : ?>
-			<div class="tablenav" style="margin-top: 20px;">
+			<div class="tablenav wps-mt-5">
 				<div class="tablenav-pages">
 					<span class="displaying-num"><?php echo esc_html( sprintf( _n( '%s item', '%s items', $total, 'wpshadow' ), number_format_i18n( $total ) ) ); ?></span>
 					<?php

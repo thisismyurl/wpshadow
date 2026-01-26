@@ -39,28 +39,38 @@ jQuery(document).ready(function($) {
 		const $card = $btn.closest('.workflow-card');
 		const workflowName = $card.find('.workflow-name').text();
 		
+		const runWorkflow = function() {
+			$btn.prop('disabled', true).text('Running...');
+
+			$.post(ajaxurl, {
+				action: 'wpshadow_run_workflow',
+				nonce: wpshadowWorkflow.nonce,
+				workflow_id: workflowId
+			}, function(response) {
+				$btn.prop('disabled', false).text('Run Now');
+				
+				if (response.success) {
+					showNotice('Workflow executed successfully!', 'success');
+				} else {
+					showNotice(response.data.message || 'Error running workflow', 'error');
+				}
+			}).fail(function() {
+				$btn.prop('disabled', false).text('Run Now');
+				showNotice('Error running workflow', 'error');
+			});
+		};
+
+		if (window.WPShadowDesign && typeof window.WPShadowDesign.confirm === 'function') {
+			window.WPShadowDesign.confirm('Run workflow "' + workflowName + '" now?', runWorkflow);
+			return;
+		}
+
 		if (!confirm('Run workflow "' + workflowName + '" now?')) {
 			return;
 		}
 		
-		$btn.prop('disabled', true).text('Running...');
+		runWorkflow();
 		
-		$.post(ajaxurl, {
-			action: 'wpshadow_run_workflow',
-			nonce: wpshadowWorkflow.nonce,
-			workflow_id: workflowId
-		}, function(response) {
-			$btn.prop('disabled', false).text('Run Now');
-			
-			if (response.success) {
-				showNotice('Workflow executed successfully!', 'success');
-			} else {
-				showNotice(response.data.message || 'Error running workflow', 'error');
-			}
-		}).fail(function() {
-			$btn.prop('disabled', false).text('Run Now');
-			showNotice('Error running workflow', 'error');
-		});
 	});
 	
 	// Test workflow (dry run)
@@ -97,33 +107,42 @@ jQuery(document).ready(function($) {
 		const $card = $btn.closest('.workflow-card');
 		const workflowName = $card.find('.workflow-name').text();
 		
+		const deleteWorkflow = function() {
+			$btn.prop('disabled', true);
+			
+			$.post(ajaxurl, {
+				action: 'wpshadow_delete_workflow',
+				nonce: wpshadowWorkflow.nonce,
+				workflow_id: workflowId
+			}, function(response) {
+				if (response.success) {
+					$card.fadeOut(function() {
+						$(this).remove();
+						
+						// Check if all workflows deleted
+						if ($('.workflow-card').length === 0) {
+							location.reload();
+						}
+					});
+					
+					showNotice('Workflow deleted successfully', 'success');
+				} else {
+					$btn.prop('disabled', false);
+					showNotice(response.data.message || 'Error deleting workflow', 'error');
+				}
+			});
+		};
+
+		if (window.WPShadowDesign && typeof window.WPShadowDesign.confirm === 'function') {
+			window.WPShadowDesign.confirm('Delete workflow "' + workflowName + '"? This cannot be undone.', deleteWorkflow);
+			return;
+		}
+
 		if (!confirm('Delete workflow "' + workflowName + '"? This cannot be undone.')) {
 			return;
 		}
 		
-		$btn.prop('disabled', true);
-		
-		$.post(ajaxurl, {
-			action: 'wpshadow_delete_workflow',
-			nonce: wpshadowWorkflow.nonce,
-			workflow_id: workflowId
-		}, function(response) {
-			if (response.success) {
-				$card.fadeOut(function() {
-					$(this).remove();
-					
-					// Check if all workflows deleted
-					if ($('.workflow-card').length === 0) {
-						location.reload();
-					}
-				});
-				
-				showNotice('Workflow deleted successfully', 'success');
-			} else {
-				$btn.prop('disabled', false);
-				showNotice(response.data.message || 'Error deleting workflow', 'error');
-			}
-		});
+		deleteWorkflow();
 	});
 	
 	// Show admin notice

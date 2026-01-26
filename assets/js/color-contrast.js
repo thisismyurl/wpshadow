@@ -244,13 +244,23 @@
 			.then((res) => res.json())
 			.then((json) => {
 				if (!json || !json.success) {
-					alert((json && json.data && json.data.message) || data.i18nThemeError || 'Theme scan failed.');
+					const message = (json && json.data && json.data.message) || data.i18nThemeError || 'Theme scan failed.';
+					if (window.WPShadowDesign && typeof window.WPShadowDesign.alert === 'function') {
+						window.WPShadowDesign.alert('Theme scan failed', message, 'error');
+					} else {
+						alert(message);
+					}
 					return;
 				}
 				renderThemeReport(json.data || {});
 			})
 			.catch(() => {
-				alert(data.i18nThemeError || 'Theme scan failed.');
+				const message = data.i18nThemeError || 'Theme scan failed.';
+				if (window.WPShadowDesign && typeof window.WPShadowDesign.alert === 'function') {
+					window.WPShadowDesign.alert('Theme scan failed', message, 'error');
+				} else {
+					alert(message);
+				}
 			})
 			.finally(() => {
 				themeScanBtn.disabled = false;

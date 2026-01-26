@@ -1124,7 +1124,11 @@
 			e.preventDefault();
 
 			if (this.blocks.length === 0) {
-				alert(wpshadowWorkflow.strings.noBlocks);
+				if (window.WPShadowDesign && typeof window.WPShadowDesign.alert === 'function') {
+					window.WPShadowDesign.alert(wpshadowWorkflow.strings.testTitle || 'Workflow Test', wpshadowWorkflow.strings.noBlocks, 'warning');
+				} else {
+					alert(wpshadowWorkflow.strings.noBlocks);
+				}
 				return;
 			}
 
@@ -1184,7 +1188,7 @@
 
 			if (this.blocks.length === 0) return;
 
-			if (confirm(wpshadowWorkflow.strings.clearConfirm)) {
+			const clearCanvas = () => {
 				$('.wps-canvas-blocks-container').fadeOut(300, () => {
 					this.blocks = [];
 					this.selectedBlock = null;
@@ -1192,6 +1196,15 @@
 					$('.wps-canvas-blocks-container').remove();
 					this.announceToScreenReader('Canvas cleared');
 				});
+			};
+
+			if (window.WPShadowDesign && typeof window.WPShadowDesign.confirm === 'function') {
+				window.WPShadowDesign.confirm(wpshadowWorkflow.strings.clearConfirm, clearCanvas);
+				return;
+			}
+
+			if (confirm(wpshadowWorkflow.strings.clearConfirm)) {
+				clearCanvas();
 			}
 		},
 

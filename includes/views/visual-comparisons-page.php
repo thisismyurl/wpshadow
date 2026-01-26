@@ -58,7 +58,7 @@ class Visual_Comparisons_Page {
 
 			<div class="wpshadow-visual-comparisons">
 				<!-- Statistics Cards -->
-				<div class="wpshadow-statistics-cards" style="margin: 20px 0; display: flex; gap: 20px;">
+				<div class="wpshadow-statistics-cards wps-flex wps-gap-5 wps-my-5">
 					<div class="wpshadow-stat-card" style="flex: 1; padding: 20px; background: #fff; border: 1px solid #ddd; border-radius: 4px;">
 						<h3 style="margin: 0 0 10px 0; font-size: 14px; color: #666;">
 							<?php esc_html_e( 'Total Comparisons', 'wpshadow' ); ?>
@@ -92,12 +92,12 @@ class Visual_Comparisons_Page {
 						<table class="wp-list-table widefat fixed striped">
 							<thead>
 								<tr>
-									<th style="width: 150px;"><?php esc_html_e( 'Date', 'wpshadow' ); ?></th>
+									<th class="wps-w-40"><?php esc_html_e( 'Date', 'wpshadow' ); ?></th>
 									<th><?php esc_html_e( 'Finding', 'wpshadow' ); ?></th>
 									<th><?php esc_html_e( 'Page', 'wpshadow' ); ?></th>
-									<th style="width: 200px;"><?php esc_html_e( 'Before', 'wpshadow' ); ?></th>
-									<th style="width: 200px;"><?php esc_html_e( 'After', 'wpshadow' ); ?></th>
-									<th style="width: 100px;"><?php esc_html_e( 'Actions', 'wpshadow' ); ?></th>
+									<th class="wps-w-50"><?php esc_html_e( 'Before', 'wpshadow' ); ?></th>
+									<th class="wps-w-50"><?php esc_html_e( 'After', 'wpshadow' ); ?></th>
+									<th class="wps-w-25"><?php esc_html_e( 'Actions', 'wpshadow' ); ?></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -123,7 +123,7 @@ class Visual_Comparisons_Page {
 													<img 
 														src="<?php echo esc_url( $comparison['before_url'] ); ?>" 
 														alt="<?php esc_attr_e( 'Before screenshot', 'wpshadow' ); ?>"
-														style="max-width: 150px; height: auto; border: 1px solid #ddd;"
+														class="wps-max-w-150 wps-h-auto wps-border wps-border-gray-200"
 													/>
 												</a>
 											<?php endif; ?>
@@ -134,7 +134,7 @@ class Visual_Comparisons_Page {
 													<img 
 														src="<?php echo esc_url( $comparison['after_url'] ); ?>" 
 														alt="<?php esc_attr_e( 'After screenshot', 'wpshadow' ); ?>"
-														style="max-width: 150px; height: auto; border: 1px solid #ddd;"
+														class="wps-max-w-150 wps-h-auto wps-border wps-border-gray-200"
 													/>
 												</a>
 											<?php endif; ?>

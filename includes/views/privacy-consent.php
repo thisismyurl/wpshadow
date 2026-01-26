@@ -31,10 +31,10 @@ $ajax_url     = admin_url( 'admin-ajax.php' );
 		</p>
 	</div>
 
-	<div class="wps-grid wps-grid-auto-260 wps-gap-4 wps-mt-4" style="max-width: 900px;">
-		<div class="wps-card" style="margin-bottom: 0;">
-			<h2 style="margin-top: 0;"><?php esc_html_e( 'Consent Preferences', 'wpshadow' ); ?></h2>
-			<p style="color: #555; font-size: 13px; margin-bottom: 12px;">
+	<div class="wps-grid wps-grid-auto-260 wps-gap-4 wps-mt-4 wps-max-w-900">
+		<div class="wps-card wps-mb-0">
+			<h2 class="wps-mt-0"><?php esc_html_e( 'Consent Preferences', 'wpshadow' ); ?></h2>
+			<p class="wps-text-sm wps-text-gray-600 wps-mb-3">
 				<?php esc_html_e( 'Anonymous analytics help us understand which features save you the most time. No personal data, IPs, or passwords are ever collected.', 'wpshadow' ); ?>
 			</p>
 
@@ -63,15 +63,15 @@ $ajax_url     = admin_url( 'admin-ajax.php' );
 				<button id="wpshadow-dismiss-consent" class="wps-btn wps-btn-secondary">
 					<?php esc_html_e( 'Snooze for 30 days', 'wpshadow' ); ?>
 				</button>
-				<a href="https://wpshadow.com/privacy/?utm_source=wpshadow&utm_medium=plugin&utm_campaign=consent" target="_blank" style="font-size: 12px; text-decoration: none; color: #2563eb; font-weight: 600;">
+				<a href="https://wpshadow.com/privacy/?utm_source=wpshadow&utm_medium=plugin&utm_campaign=consent" target="_blank" class="wps-text-xs wps-no-underline wps-text-blue-600 wps-font-600">
 					<?php esc_html_e( 'Read our privacy approach', 'wpshadow' ); ?> →
 				</a>
 			</div>
 
-			<div id="wpshadow-consent-status" style="margin-top: 12px; font-size: 12px; color: #555;"></div>
+			<div id="wpshadow-consent-status" class="wps-mt-3 wps-text-xs wps-text-gray-600"></div>
 		</div>
 
-		<div class="wps-card" style="margin-bottom: 0;">
+		<div class="wps-card wps-mb-0">
 			<h2 class="wps-flex-gap-8-items-center">
 				<span class="dashicons dashicons-shield"></span>
 				<?php esc_html_e( 'What we collect (summary)', 'wpshadow' ); ?>

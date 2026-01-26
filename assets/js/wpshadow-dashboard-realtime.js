@@ -327,10 +327,18 @@
 				$('#wpshadow-fullscreen-toggle').html('Exit Full Screen (ESC)');
 
 			}).catch(function(err) {
-				alert('Unable to enter fullscreen mode. Error: ' + err.message);
+				if (window.WPShadowDesign && typeof window.WPShadowDesign.alert === 'function') {
+					window.WPShadowDesign.alert('Fullscreen unavailable', 'Unable to enter fullscreen mode. Error: ' + err.message, 'error');
+				} else {
+					alert('Unable to enter fullscreen mode. Error: ' + err.message);
+				}
 			});
 		} else {
-			alert('Fullscreen mode is not supported in your browser.');
+			if (window.WPShadowDesign && typeof window.WPShadowDesign.alert === 'function') {
+				window.WPShadowDesign.alert('Fullscreen unavailable', 'Fullscreen mode is not supported in your browser.', 'warning');
+			} else {
+				alert('Fullscreen mode is not supported in your browser.');
+			}
 		}
 		
 		// Listen for ESC key to exit

@@ -107,44 +107,56 @@
             const originalText = button.text();
             const confirm = button.data('confirm');
 
-            if (confirm && !window.confirm(confirm)) {
-                return;
-            }
+                const executeAction = function() {
+                    button.prop('disabled', true);
 
-            button.prop('disabled', true);
-
-            $.ajax({
-                url: wpshadowGuardian.ajaxUrl,
-                type: 'POST',
-                data: {
-                    action: 'wps_guardian_scan_' + action,
-                    nonce: wpshadowGuardian.nonce
-                },
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) {
-                        WPShadowAdmin.showNotice('success', response.message);
-                        
-                        if (action === 'run') {
-                            // Start monitoring progress
-                            self.monitorScanProgress();
-                        } else if (action === 'reset') {
-                            // Reload page to show fresh state
-                            setTimeout(() => {
-                                location.reload();
-                            }, 1500);
+                    $.ajax({
+                        url: wpshadowGuardian.ajaxUrl,
+                        type: 'POST',
+                        data: {
+                            action: 'wps_guardian_scan_' + action,
+                            nonce: wpshadowGuardian.nonce
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.success) {
+                                WPShadowAdmin.showNotice('success', response.message);
+                            
+                                if (action === 'run') {
+                                    // Start monitoring progress
+                                    self.monitorScanProgress();
+                                } else if (action === 'reset') {
+                                    // Reload page to show fresh state
+                                    setTimeout(() => {
+                                        location.reload();
+                                    }, 1500);
+                                }
+                            } else {
+                                WPShadowAdmin.showNotice('error', response.message);
+                            }
+                        },
+                        error: function() {
+                            WPShadowAdmin.showNotice('error', wpshadowGuardian.i18n.error);
+                            button.text(originalText);
+                        },
+                        complete: function() {
+                            button.prop('disabled', false);
                         }
-                    } else {
-                        WPShadowAdmin.showNotice('error', response.message);
-                    }
-                },
-                error: function() {
-                    WPShadowAdmin.showNotice('error', wpshadowGuardian.i18n.error);
-                },
-                complete: function() {
-                    button.prop('disabled', false).text(originalText);
+                    });
+                };
+
+                if (confirm && window.WPShadowDesign && typeof window.WPShadowDesign.confirm === 'function') {
+                    window.WPShadowDesign.confirm(confirm, executeAction, function() {
+                        button.text(originalText);
+                    });
+                    return;
                 }
-            });
+
+                if (confirm && !window.confirm(confirm)) {
+                    return;
+                }
+
+                executeAction();
         },
 
         /**
