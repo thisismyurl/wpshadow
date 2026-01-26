@@ -121,6 +121,12 @@ if ( file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 		}
 	}
 	
+	if ( ! function_exists( 'esc_html_e' ) ) {
+		function esc_html_e( $text, $domain = 'default' ) {
+			echo htmlspecialchars( $text, ENT_QUOTES, 'UTF-8' );
+		}
+	}
+	
 	if ( ! function_exists( 'esc_html' ) ) {
 		function esc_html( $text ) {
 			return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8' );
@@ -198,6 +204,21 @@ if ( file_exists( $_tests_dir . '/includes/functions.php' ) ) {
 	if ( ! function_exists( 'do_action' ) ) {
 		function do_action( $hook, ...$args ) {
 			return null;
+		}
+	}
+	
+	// Mock Treatment_Registry class for tests
+	if ( ! class_exists( 'WPShadow\\Treatments\\Treatment_Registry' ) ) {
+		class Treatment_Registry {
+			public static function register( $id, $class ) {
+				return true;
+			}
+			public static function get( $id ) {
+				return null;
+			}
+			public static function get_all() {
+				return array();
+			}
 		}
 	}
 	

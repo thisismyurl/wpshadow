@@ -309,4 +309,35 @@ class WCAGComplianceTest extends TestCase {
 			'CSS should respect prefers-reduced-motion for accessibility'
 		);
 	}
+
+	/**
+	 * Test workflow builder has keyboard skip links
+	 *
+	 * @return void
+	 */
+	public function testWorkflowBuilderSkipLinks(): void {
+		$view_file = $this->getPluginPath() . '/includes/views/workflow-builder.php';
+		
+		if ( ! file_exists( $view_file ) ) {
+			$this->markTestSkipped( 'Workflow builder view not found' );
+		}
+
+		ob_start();
+		include $view_file;
+		$html = ob_get_clean();
+
+		// Check for skip link class
+		$this->assertStringContainsString(
+			'wps-skip-link',
+			$html,
+			'Workflow builder should have skip links for keyboard navigation'
+		);
+
+		// Check for canvas skip link
+		$this->assertStringContainsString(
+			'href="#wps-canvas"',
+			$html,
+			'Skip link should point to canvas element'
+		);
+	}
 }

@@ -3187,4 +3187,7 @@ a:focus-visible {
     .wps-toggle + .wps-toggle {
         margin-left: var(--wps-space-2);
     }
+}}
+}
+}
 }

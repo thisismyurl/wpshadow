@@ -639,7 +639,7 @@
 	height: 0;
 	border-left: 6px solid transparent;
 	border-right: 6px solid transparent;
-	border-top: 8px solid var(--wps-gray-400, #9ca3af);
+	border-top: 8px solid var(--wps-gray-500, #6b7280); /* WCAG AA compliant */
 }
 
 .wps-block.trigger .wps-block-connector {
