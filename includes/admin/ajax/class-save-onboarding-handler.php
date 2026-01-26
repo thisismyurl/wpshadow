@@ -37,8 +37,8 @@ class Save_Onboarding_Handler extends AJAX_Handler_Base {
 		self::verify_request( 'wpshadow_onboarding', 'read' );
 
 		$user_id       = get_current_user_id();
-		$platform      = self::get_post_param( 'platform', '' );
-		$comfort_level = self::get_post_param( 'comfort_level', '' );
+		$platform      = self::get_post_param( 'platform', 'text', '' );
+		$comfort_level = self::get_post_param( 'comfort_level', 'text', '' );
 		$config        = isset( $_POST['config'] ) ? (array) $_POST['config'] : array();
 		$privacy       = isset( $_POST['privacy'] ) ? (array) $_POST['privacy'] : array();
 
