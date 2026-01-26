@@ -27,6 +27,7 @@
 			this.bindEvents();
 			this.setupAccessibility();
 			this.createConfigPanel();
+
 			this.createCanvasControls();
 			this.announceToScreenReader('Workflow builder loaded. Press Tab to navigate blocks, Enter to configure.');
 		},
@@ -39,10 +40,18 @@
 			$('.wps-block-item').on('dragstart', this.handlePaletteDragStart.bind(this));
 			$('.wps-block-item').on('dragend', this.handlePaletteDragEnd.bind(this));
 
+			// Touch events for mobile
+			$('.wps-block-item').on('touchstart', this.handlePaletteTouchStart.bind(this));
+			$('.wps-block-item').on('touchend', this.handlePaletteTouchEnd.bind(this));
+
 			// Canvas drop events
 			$('#wps-canvas').on('dragover', this.handleCanvasDragOver.bind(this));
 			$('#wps-canvas').on('dragleave', this.handleCanvasDragLeave.bind(this));
 			$('#wps-canvas').on('drop', this.handleCanvasDrop.bind(this));
+
+			// Canvas touch events
+			$('#wps-canvas').on('touchmove', this.handleCanvasTouchMove.bind(this));
+			$('#wps-canvas').on('touchend', this.handleCanvasTouchEnd.bind(this));
 
 			// Toolbar actions
 			$('#wps-save-workflow').on('click', this.handleSaveWorkflow.bind(this));
@@ -194,6 +203,65 @@
 		handlePaletteDragEnd: function(e) {
 			$(e.currentTarget).removeClass('dragging');
 			this.draggedBlock = null;
+		},
+
+		/**
+		 * Handle palette block touch start (mobile)
+		 */
+		handlePaletteTouchStart: function(e) {
+			const $block = $(e.currentTarget);
+			const blockId = $block.data('block-id');
+			const blockType = $block.data('block-type');
+
+			this.draggedBlock = { blockId, blockType, isNew: true };
+			$block.addClass('dragging');
+
+			// Provide haptic feedback if available
+			if (navigator.vibrate) {
+				navigator.vibrate(50);
+			}
+
+			this.announceToScreenReader(wpshadowWorkflow.strings.dragBlock + ': ' + blockId);
+		},
+
+		/**
+		 * Handle palette block touch end (mobile)
+		 */
+		handlePaletteTouchEnd: function(e) {
+			const $block = $(e.currentTarget);
+			$block.removeClass('dragging');
+
+			// Check if touch ended over canvas
+			const touch = e.originalEvent.changedTouches[0];
+			const canvasEl = document.getElementById('wps-canvas');
+			const canvasRect = canvasEl.getBoundingClientRect();
+
+			if (touch.clientX >= canvasRect.left && touch.clientX <= canvasRect.right &&
+			    touch.clientY >= canvasRect.top && touch.clientY <= canvasRect.bottom) {
+				if (this.draggedBlock) {
+					this.addBlockToCanvas(this.draggedBlock.blockId, this.draggedBlock.blockType);
+					this.announceToScreenReader(wpshadowWorkflow.strings.dropSuccess);
+				}
+			}
+
+			this.draggedBlock = null;
+		},
+
+		/**
+		 * Handle canvas touch move (mobile)
+		 */
+		handleCanvasTouchMove: function(e) {
+			if (this.draggedBlock) {
+				e.preventDefault();
+				$('#wps-canvas').addClass('drag-over');
+			}
+		},
+
+		/**
+		 * Handle canvas touch end (mobile)
+		 */
+		handleCanvasTouchEnd: function(e) {
+			$('#wps-canvas').removeClass('drag-over');
 		},
 
 		/**
@@ -914,6 +982,120 @@
 				$('body').append('<div id="wps-sr-announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>');
 			}
 			$('#wps-sr-announcer').text(message);
+		},
+
+		/**
+		 * Create configuration panel
+		 */
+		createConfigPanel: function() {
+			if ($('.wps-block-config-panel').length > 0) return;
+
+			const panelHTML = `
+				<div class="wps-block-config-panel" role="dialog" aria-labelledby="config-panel-title" aria-hidden="true">
+					<div class="wps-config-panel-header">
+						<h4 id="config-panel-title">
+							<span class="dashicons dashicons-admin-generic" aria-hidden="true"></span>
+							Configure Block
+						</h4>
+						<button type="button" class="wps-config-panel-close" aria-label="Close configuration panel">
+							×
+						</button>
+					</div>
+					<div class="wps-config-panel-body" id="wps-config-panel-content">
+						<!-- Configuration fields will be dynamically inserted here -->
+					</div>
+				</div>
+			`;
+
+			$('body').append(panelHTML);
+
+			// Bind close button
+			$('.wps-config-panel-close').on('click', () => {
+				$('.wps-block-config-panel').removeClass('active').attr('aria-hidden', 'true');
+				$('.wps-block').removeClass('selected');
+				this.selectedBlock = null;
+			});
+		},
+
+		/**
+		 * Create keyboard shortcuts panel
+		 */
+		createShortcutsPanel: function() {
+			if ($('.wps-shortcuts-panel').length > 0) return;
+
+			const shortcuts = [
+				{ label: 'Save workflow', keys: ['Ctrl/Cmd', 'S'] },
+				{ label: 'Test workflow', keys: ['Ctrl/Cmd', 'T'] },
+				{ label: 'Clear canvas', keys: ['Ctrl/Cmd', 'K'] },
+				{ label: 'Show shortcuts', keys: ['?'] },
+				{ label: 'Close panel/Deselect', keys: ['Esc'] },
+				{ label: 'Delete selected block', keys: ['Del/Backspace'] }
+			];
+
+			const shortcutsHTML = shortcuts.map(s => `
+				<li>
+					<span class="wps-shortcut-label">${s.label}</span>
+					<div class="wps-shortcut-keys">
+						${s.keys.map(k => `<kbd class="wps-key">${k}</kbd>`).join('<span style="margin: 0 0.25rem;">+</span>')}
+					</div>
+				</li>
+			`).join('');
+
+			const panelHTML = `
+				<div class="wps-shortcuts-backdrop"></div>
+				<div class="wps-shortcuts-panel" role="dialog" aria-labelledby="shortcuts-title" aria-modal="true">
+					<h3 id="shortcuts-title">
+						<span class="dashicons dashicons-keyboard-hide" aria-hidden="true"></span>
+						Keyboard Shortcuts
+					</h3>
+					<ul class="wps-shortcuts-list">
+						${shortcutsHTML}
+					</ul>
+					<button type="button" class="wps-btn ghost wps-close-shortcuts" style="width: 100%; margin-top: 1rem;">
+						Close
+					</button>
+				</div>
+			`;
+
+			$('body').append(panelHTML);
+
+			// Bind close button event
+			$('.wps-close-shortcuts').on('click', () => {
+				this.toggleShortcutsPanel();
+			});
+
+			// Close on backdrop click
+			$('.wps-shortcuts-backdrop').on('click', () => {
+				this.toggleShortcutsPanel();
+			});
+
+			// Add help button to toolbar
+			if ($('#wps-show-shortcuts').length === 0) {
+				$('.wps-workflow-toolbar').append(`
+					<button type="button" id="wps-show-shortcuts" class="wps-btn ghost" aria-label="Show keyboard shortcuts">
+						<span class="dashicons dashicons-keyboard-hide" aria-hidden="true"></span>
+						Shortcuts
+					</button>
+				`);
+
+				$('#wps-show-shortcuts').on('click', () => {
+					this.toggleShortcutsPanel();
+				});
+			}
+		},
+
+		/**
+		 * Toggle keyboard shortcuts panel
+		 */
+		toggleShortcutsPanel: function() {
+			$('.wps-shortcuts-panel, .wps-shortcuts-backdrop').toggleClass('active');
+			
+			if ($('.wps-shortcuts-panel').hasClass('active')) {
+				$('.wps-shortcuts-panel').focus();
+				this.announceToScreenReader('Keyboard shortcuts panel opened');
+			} else {
+				this.announceToScreenReader('Keyboard shortcuts panel closed');
+			}
 		}
 	};
 
