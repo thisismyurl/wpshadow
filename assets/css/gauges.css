@@ -112,13 +112,32 @@
     width: 100%;
     padding: var(--wps-space-3) var(--wps-space-4);
     cursor: pointer;
-    border-radius: var(--wps-radius-md);
-    transition: all var(--wps-transition-fast);
+    border-radius: var(--wps-radius-lg);
+    transition: all var(--wps-transition-base);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: var(--wps-space-2);
-    font-weight: var(--wps-font-medium);
+    font-weight: var(--wps-font-semibold);
+    font-size: var(--wps-text-base);
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.wps-btn-scan::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.wps-btn-scan:hover::before {
+    left: 100%;
 }
 
 .wps-btn-scan .dashicons {
@@ -128,25 +147,31 @@
 }
 
 .wps-btn-scan.button-primary {
-    background: var(--wps-info);
+    background: linear-gradient(135deg, var(--wps-info) 0%, var(--wps-info-dark) 100%);
     color: #ffffff;
-    border-color: var(--wps-info);
+    border-color: var(--wps-info-dark);
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
 }
 
 .wps-btn-scan.button-primary:hover {
-    background: var(--wps-info-dark);
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+    background: linear-gradient(135deg, var(--wps-info-dark) 0%, #1e40af 100%);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    transform: translateY(-2px);
 }
 
 .wps-btn-scan.button:not(.button-primary) {
     background: #ffffff;
     color: var(--wps-gray-700);
-    border: 1px solid var(--wps-gray-300);
+    border-color: var(--wps-gray-300);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .wps-btn-scan.button:not(.button-primary):hover {
     background: var(--wps-gray-50);
-    border-color: var(--wps-gray-400);
+    border-color: var(--wps-info);
+    color: var(--wps-info-dark);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
 }
 
 /* ============================================================================

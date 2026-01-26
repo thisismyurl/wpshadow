@@ -273,12 +273,19 @@
 /* Category Badge (Small Pills) */
 .wps-category-badge {
 	display: inline-block;
-	padding: 4px 10px;
-	font-size: 0.75rem;
-	font-weight: 600;
-	border-radius: 12px;
+	padding: 6px 12px;
+	font-size: 0.6875rem;
+	font-weight: 700;
+	border-radius: 16px;
 	text-transform: uppercase;
-	letter-spacing: 0.3px;
+	letter-spacing: 0.5px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	transition: all 0.2s ease;
+}
+
+.wps-category-badge:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 /* Category Colors */
@@ -314,8 +321,25 @@
 
 /* Threat Level Indicators (Colored Dots) */
 .wps-threat-indicator {
-	font-size: 18px;
+	font-size: 20px;
 	line-height: 1;
+	filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+	animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+	0%, 100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.7;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wps-threat-indicator {
+		animation: none;
+	}
 }
 
 .wps-threat-indicator.critical,
@@ -788,6 +812,44 @@
 	align-items: center;
 	justify-content: center;
 	border-radius: 4px;
+}
+
+/* ============================================================================
+   Workflow Cards (Workflows Column)
+   ============================================================================ */
+
+.workflow-card {
+	background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+	border: 1px solid var(--wps-gray-200, #e5e7eb);
+	border-radius: 12px;
+	padding: 16px;
+	margin-bottom: 14px;
+	transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+	position: relative;
+	overflow: hidden;
+}
+
+.workflow-card::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 4px;
+	background: linear-gradient(180deg, var(--wps-success) 0%, var(--wps-success-dark) 100%);
+	opacity: 0;
+	transition: opacity 0.2s ease;
+}
+
+.workflow-card:hover {
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08);
+	transform: translateY(-3px) scale(1.01);
+	border-color: var(--wps-success-light);
+}
+
+.workflow-card:hover::before {
+	opacity: 1;
 }
 
 .wps-keyboard-move-menu-close:hover {
