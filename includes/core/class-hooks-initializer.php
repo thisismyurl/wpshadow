@@ -141,6 +141,11 @@ class Hooks_Initializer {
 	 * Plugins loaded hook - Late phase (everything else that needs fully-loaded classes)
 	 */
 	public static function on_plugins_loaded_late() {
+		// Only run on admin - other systems are loaded in on_admin_init
+		if ( ! is_admin() ) {
+			return;
+		}
+
 		// Initialize core registries and systems
 		\WPShadow\Admin\Update_Notification_Manager::init();
 		\WPShadow\Diagnostics\Diagnostic_Registry::init();
