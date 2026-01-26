@@ -2,6 +2,7 @@
  * WPShadow Workflow Builder - Enhanced Interactions
  * 
  * Modern drag-and-drop workflow builder with accessibility support
+ * Phase 3 Enhancement: Epic #667/#686 - Scratch-style visual blocks
  * 
  * @package WPShadow
  * @since   1.2601.2148
@@ -15,6 +16,9 @@
 		blocks: [],
 		selectedBlock: null,
 		draggedBlock: null,
+		draggedElement: null,
+		zoomLevel: 1,
+		configPanel: null,
 
 		/**
 		 * Initialize the workflow builder
@@ -23,8 +27,9 @@
 			this.bindEvents();
 			this.setupAccessibility();
 			this.createConfigPanel();
-			this.createShortcutsPanel();
-			this.announceToScreenReader('Workflow builder loaded');
+
+			this.createCanvasControls();
+			this.announceToScreenReader('Workflow builder loaded. Press Tab to navigate blocks, Enter to configure.');
 		},
 
 		/**
@@ -55,6 +60,12 @@
 
 			// Keyboard shortcuts
 			$(document).on('keydown', this.handleKeyboardShortcuts.bind(this));
+			
+			// Canvas reordering
+			$(document).on('dragstart', '.wps-block', this.handleBlockDragStart.bind(this));
+			$(document).on('dragend', '.wps-block', this.handleBlockDragEnd.bind(this));
+			$(document).on('dragover', '.wps-block', this.handleBlockDragOver.bind(this));
+			$(document).on('drop', '.wps-block', this.handleBlockDrop.bind(this));
 		},
 
 		/**
@@ -77,20 +88,96 @@
 			// Make blocks keyboard navigable
 			$('.wps-block-item').attr({
 				'role': 'button',
-				'tabindex': '0'
+				'tabindex': '0',
+				'aria-pressed': 'false'
 			});
 
 			// Enable keyboard activation for blocks
 			$('.wps-block-item').on('keydown', function(e) {
 				if (e.key === 'Enter' || e.key === ' ') {
 					e.preventDefault();
-					$(this).trigger('dragstart');
-					// Add to canvas via keyboard
 					const blockId = $(this).data('block-id');
 					const blockType = $(this).data('block-type');
 					WorkflowBuilder.addBlockToCanvas(blockId, blockType);
+					WorkflowBuilder.announceToScreenReader('Block added to canvas');
 				}
 			});
+			
+			// Add keyboard hint
+			if ($('.wps-keyboard-hint').length === 0) {
+				$('.wps-workflow-builder').append(
+					'<div class="wps-keyboard-hint" role="status" aria-live="polite">' +
+					'Keyboard: Tab to navigate, Enter to add/configure, Delete to remove, Arrow keys to reorder' +
+					'</div>'
+				);
+			}
+		},
+
+		/**
+		 * Create configuration panel
+		 */
+		createConfigPanel: function() {
+			if ($('#wps-config-panel').length > 0) return;
+			
+			const panelHTML = `
+				<div id="wps-config-panel" class="wps-block-config-panel" role="dialog" aria-labelledby="config-panel-title" aria-modal="true">
+					<div class="wps-config-panel-header">
+						<h4 id="config-panel-title">
+							<span class="dashicons dashicons-admin-generic" aria-hidden="true"></span>
+							Configure Block
+						</h4>
+						<button class="wps-config-panel-close" aria-label="Close configuration panel">
+							×
+						</button>
+					</div>
+					<div class="wps-config-panel-body" id="wps-config-panel-body">
+						<!-- Dynamic content -->
+					</div>
+					<div class="wps-config-panel-footer">
+						<button class="wps-btn ghost" id="wps-config-cancel">Cancel</button>
+						<button class="wps-btn primary" id="wps-config-save">Save Changes</button>
+					</div>
+				</div>
+			`;
+			
+			$('body').append(panelHTML);
+			this.configPanel = $('#wps-config-panel');
+			
+			// Bind panel events
+			$('.wps-config-panel-close, #wps-config-cancel').on('click', this.closeConfigPanel.bind(this));
+			$('#wps-config-save').on('click', this.saveBlockConfig.bind(this));
+			
+			// Focus trap
+			this.configPanel.on('keydown', this.handleConfigPanelKeydown.bind(this));
+		},
+
+		/**
+		 * Create canvas controls (zoom/pan)
+		 */
+		createCanvasControls: function() {
+			if ($('.wps-canvas-controls').length > 0) return;
+			
+			const controlsHTML = `
+				<div class="wps-canvas-controls" role="toolbar" aria-label="Canvas controls">
+					<button class="wps-canvas-control-btn" id="wps-zoom-out" aria-label="Zoom out" title="Zoom out">
+						<span class="dashicons dashicons-minus" aria-hidden="true"></span>
+					</button>
+					<span class="wps-canvas-zoom-level" id="wps-zoom-level" aria-live="polite">100%</span>
+					<button class="wps-canvas-control-btn" id="wps-zoom-in" aria-label="Zoom in" title="Zoom in">
+						<span class="dashicons dashicons-plus" aria-hidden="true"></span>
+					</button>
+					<button class="wps-canvas-control-btn" id="wps-zoom-reset" aria-label="Reset zoom" title="Reset zoom (100%)">
+						<span class="dashicons dashicons-image-crop" aria-hidden="true"></span>
+					</button>
+				</div>
+			`;
+			
+			$('.wps-workflow-canvas-wrapper').append(controlsHTML);
+			
+			// Bind zoom events
+			$('#wps-zoom-in').on('click', this.zoomIn.bind(this));
+			$('#wps-zoom-out').on('click', this.zoomOut.bind(this));
+			$('#wps-zoom-reset').on('click', this.zoomReset.bind(this));
 		},
 
 		/**
@@ -202,13 +289,160 @@
 
 			try {
 				const data = JSON.parse(e.originalEvent.dataTransfer.getData('text/plain'));
-				this.addBlockToCanvas(data.blockId, data.blockType);
-				this.announceToScreenReader(wpshadowWorkflow.strings.dropSuccess);
+				
+				if (data.isNew) {
+					// Adding new block from palette
+					this.addBlockToCanvas(data.blockId, data.blockType);
+					this.announceToScreenReader(wpshadowWorkflow.strings.dropSuccess);
+				}
 			} catch (error) {
 				console.error('Failed to parse drop data:', error);
 				$('#wps-canvas').addClass('drag-invalid');
 				setTimeout(() => $('#wps-canvas').removeClass('drag-invalid'), 500);
 			}
+		},
+
+		/**
+		 * Handle canvas block drag start (reordering)
+		 */
+		handleBlockDragStart: function(e) {
+			const $block = $(e.currentTarget);
+			const blockId = $block.data('block-id');
+			
+			this.draggedElement = $block;
+			this.draggedBlock = this.blocks.find(b => b.id === blockId);
+			
+			$block.addClass('dragging');
+			e.originalEvent.dataTransfer.effectAllowed = 'move';
+			e.originalEvent.dataTransfer.setData('text/plain', JSON.stringify({ 
+				blockId: blockId, 
+				isReorder: true 
+			}));
+			
+			this.announceToScreenReader('Dragging block. Drop on another block to reorder.');
+		},
+
+		/**
+		 * Handle canvas block drag end
+		 */
+		handleBlockDragEnd: function(e) {
+			$(e.currentTarget).removeClass('dragging');
+			$('.wps-block-drop-placeholder').remove();
+			this.draggedElement = null;
+		},
+
+		/**
+		 * Handle canvas block drag over (for reordering)
+		 */
+		handleBlockDragOver: function(e) {
+			if (!this.draggedElement) return;
+			
+			e.preventDefault();
+			e.stopPropagation();
+			
+			const $target = $(e.currentTarget);
+			if ($target.hasClass('dragging')) return;
+			
+			const rect = e.currentTarget.getBoundingClientRect();
+			const midpoint = rect.top + rect.height / 2;
+			const insertBefore = e.clientY < midpoint;
+			
+			$('.wps-block-drop-placeholder').remove();
+			
+			if (insertBefore) {
+				$target.before('<div class="wps-block-drop-placeholder"></div>');
+			} else {
+				$target.after('<div class="wps-block-drop-placeholder"></div>');
+			}
+		},
+
+		/**
+		 * Handle canvas block drop (reordering)
+		 */
+		handleBlockDrop: function(e) {
+			if (!this.draggedElement) return;
+			
+			e.preventDefault();
+			e.stopPropagation();
+			
+			const $target = $(e.currentTarget);
+			if ($target.hasClass('dragging')) return;
+			
+			const rect = e.currentTarget.getBoundingClientRect();
+			const midpoint = rect.top + rect.height / 2;
+			const insertBefore = e.clientY < midpoint;
+			
+			// Reorder DOM
+			if (insertBefore) {
+				$target.before(this.draggedElement);
+			} else {
+				$target.after(this.draggedElement);
+			}
+			
+			// Reorder state array
+			const draggedId = this.draggedElement.data('block-id');
+			const targetId = $target.data('block-id');
+			const draggedIndex = this.blocks.findIndex(b => b.id === draggedId);
+			const targetIndex = this.blocks.findIndex(b => b.id === targetId);
+			
+			if (draggedIndex !== -1 && targetIndex !== -1) {
+				const [movedBlock] = this.blocks.splice(draggedIndex, 1);
+				const newTargetIndex = insertBefore ? targetIndex : targetIndex + 1;
+				this.blocks.splice(newTargetIndex > draggedIndex ? newTargetIndex - 1 : newTargetIndex, 0, movedBlock);
+			}
+			
+			$('.wps-block-drop-placeholder').remove();
+			this.announceToScreenReader('Block reordered');
+		},
+
+		/**
+		 * Zoom in
+		 */
+		zoomIn: function() {
+			const levels = [0.75, 1, 1.25, 1.5];
+			const currentIndex = levels.indexOf(this.zoomLevel);
+			
+			if (currentIndex < levels.length - 1) {
+				this.zoomLevel = levels[currentIndex + 1];
+				this.applyZoom();
+			}
+		},
+
+		/**
+		 * Zoom out
+		 */
+		zoomOut: function() {
+			const levels = [0.75, 1, 1.25, 1.5];
+			const currentIndex = levels.indexOf(this.zoomLevel);
+			
+			if (currentIndex > 0) {
+				this.zoomLevel = levels[currentIndex - 1];
+				this.applyZoom();
+			}
+		},
+
+		/**
+		 * Reset zoom
+		 */
+		zoomReset: function() {
+			this.zoomLevel = 1;
+			this.applyZoom();
+		},
+
+		/**
+		 * Apply zoom level
+		 */
+		applyZoom: function() {
+			const $canvas = $('#wps-canvas');
+			$canvas.attr('data-zoom', this.zoomLevel);
+			$canvas.addClass('zoomed');
+			$('#wps-zoom-level').text(Math.round(this.zoomLevel * 100) + '%');
+			
+			// Update button states
+			$('#wps-zoom-out').prop('disabled', this.zoomLevel <= 0.75);
+			$('#wps-zoom-in').prop('disabled', this.zoomLevel >= 1.5);
+			
+			this.announceToScreenReader('Zoom level: ' + Math.round(this.zoomLevel * 100) + '%');
 		},
 
 		/**
@@ -262,13 +496,21 @@
 			const description = blockDef.description || 'Click to configure';
 
 			return `
-				<div class="wps-block ${blockType}" data-block-id="${uniqueId}" role="listitem" tabindex="0" aria-label="${blockType}: ${label}">
+				<div class="wps-block ${blockType}" 
+				     data-block-id="${uniqueId}" 
+				     role="listitem" 
+				     tabindex="0" 
+				     draggable="true"
+				     aria-label="${blockType}: ${label}. Press Enter to configure, Delete to remove, or drag to reorder.">
 					<div class="wps-block-header">
 						<div class="wps-block-label">
 							<span class="dashicons ${iconClass}" aria-hidden="true"></span>
 							<span>${blockType === 'trigger' ? 'WHEN' : 'THEN'}: ${label}</span>
 						</div>
-						<button class="wps-block-remove" data-block-id="${uniqueId}" aria-label="Remove ${label} block">
+						<button class="wps-block-remove" 
+						        data-block-id="${uniqueId}" 
+						        aria-label="Remove ${label} block"
+						        tabindex="0">
 							×
 						</button>
 					</div>
@@ -307,8 +549,60 @@
 				} else if (e.key === 'Delete' || e.key === 'Backspace') {
 					e.preventDefault();
 					this.removeBlock(blockId);
+				} else if (e.ctrlKey && e.key === 'ArrowUp') {
+					// Move block up
+					e.preventDefault();
+					this.moveBlockUp(blockId);
+				} else if (e.ctrlKey && e.key === 'ArrowDown') {
+					// Move block down
+					e.preventDefault();
+					this.moveBlockDown(blockId);
 				}
 			});
+		},
+
+		/**
+		 * Move block up in the order
+		 */
+		moveBlockUp: function(blockId) {
+			const $block = $(`[data-block-id="${blockId}"]`);
+			const $prev = $block.prev('.wps-block');
+			
+			if ($prev.length) {
+				$block.insertBefore($prev);
+				$block.focus();
+				
+				// Update state array
+				const index = this.blocks.findIndex(b => b.id === blockId);
+				if (index > 0) {
+					const [block] = this.blocks.splice(index, 1);
+					this.blocks.splice(index - 1, 0, block);
+				}
+				
+				this.announceToScreenReader('Block moved up');
+			}
+		},
+
+		/**
+		 * Move block down in the order
+		 */
+		moveBlockDown: function(blockId) {
+			const $block = $(`[data-block-id="${blockId}"]`);
+			const $next = $block.next('.wps-block');
+			
+			if ($next.length) {
+				$block.insertAfter($next);
+				$block.focus();
+				
+				// Update state array
+				const index = this.blocks.findIndex(b => b.id === blockId);
+				if (index < this.blocks.length - 1) {
+					const [block] = this.blocks.splice(index, 1);
+					this.blocks.splice(index + 1, 0, block);
+				}
+				
+				this.announceToScreenReader('Block moved down');
+			}
 		},
 
 		/**
@@ -351,118 +645,119 @@
 
 			this.selectedBlock = block;
 
-			// Build configuration form
-			const fields = blockDef.fields || {};
-			let configHTML = `
-				<div class="wps-config-field">
-					<label for="block-label-${blockId}">
-						Block Label
-						<span class="wps-help-tooltip" data-tooltip="Give this block a custom name">?</span>
-					</label>
-					<input type="text" id="block-label-${blockId}" value="${blockDef.label || ''}" readonly aria-readonly="true" tabindex="-1" />
-				</div>
-			`;
-
-			// Generate fields based on block definition
-			Object.keys(fields).forEach(fieldKey => {
-				const field = fields[fieldKey];
-				const fieldId = `field-${blockId}-${fieldKey}`;
-				const currentValue = block.config[fieldKey] || field.default || '';
-
-				configHTML += `<div class="wps-config-field">`;
-				configHTML += `<label for="${fieldId}">${field.label}</label>`;
-
-				switch (field.type) {
-					case 'select':
-						configHTML += `<select id="${fieldId}" data-field="${fieldKey}" aria-label="${field.label}">`;
-						Object.keys(field.options || {}).forEach(optKey => {
-							const selected = currentValue === optKey ? 'selected' : '';
-							configHTML += `<option value="${optKey}" ${selected}>${field.options[optKey]}</option>`;
+			// Build config form
+			let formHTML = `<p><strong>${blockDef.label || block.blockId}</strong></p>`;
+			formHTML += `<p class="description">${blockDef.description || ''}</p>`;
+			
+			if (blockDef.fields) {
+				Object.keys(blockDef.fields).forEach(fieldKey => {
+					const field = blockDef.fields[fieldKey];
+					const value = block.config[fieldKey] || field.default || '';
+					
+					formHTML += `<div class="wps-config-field">`;
+					formHTML += `<label for="config-${fieldKey}">${field.label}</label>`;
+					
+					if (field.type === 'select') {
+						formHTML += `<select id="config-${fieldKey}" name="${fieldKey}">`;
+						Object.keys(field.options).forEach(optKey => {
+							const selected = value === optKey ? 'selected' : '';
+							formHTML += `<option value="${optKey}" ${selected}>${field.options[optKey]}</option>`;
 						});
-						configHTML += `</select>`;
-						break;
-
-					case 'textarea':
-						configHTML += `<textarea id="${fieldId}" data-field="${fieldKey}" rows="4" aria-label="${field.label}">${currentValue}</textarea>`;
-						break;
-
-					case 'time':
-						configHTML += `<input type="time" id="${fieldId}" data-field="${fieldKey}" value="${currentValue}" aria-label="${field.label}" />`;
-						break;
-
-					case 'number':
-						configHTML += `<input type="number" id="${fieldId}" data-field="${fieldKey}" value="${currentValue}" aria-label="${field.label}" />`;
-						break;
-
-					default:
-						configHTML += `<input type="text" id="${fieldId}" data-field="${fieldKey}" value="${currentValue}" aria-label="${field.label}" />`;
-				}
-
-				configHTML += `</div>`;
-			});
-
-			// Add save button
-			configHTML += `
-				<div style="margin-top: 1.5rem; display: flex; gap: 0.75rem;">
-					<button type="button" class="wps-btn primary" id="save-block-config" style="flex: 1;">
-						Save Configuration
-					</button>
-					<button type="button" class="wps-btn ghost" id="cancel-block-config" style="flex: 1;">
-						Cancel
-					</button>
-				</div>
-			`;
-
-			// Update panel content
-			$('#wps-config-panel-content').html(configHTML);
-			$('.wps-block-config-panel').addClass('active').attr('aria-hidden', 'false');
-
-			// Focus first field for accessibility
+						formHTML += `</select>`;
+					} else if (field.type === 'textarea') {
+						formHTML += `<textarea id="config-${fieldKey}" name="${fieldKey}" rows="4">${value}</textarea>`;
+					} else if (field.type === 'checkbox') {
+						const checked = value ? 'checked' : '';
+						formHTML += `<input type="checkbox" id="config-${fieldKey}" name="${fieldKey}" ${checked} />`;
+					} else {
+						formHTML += `<input type="${field.type || 'text'}" id="config-${fieldKey}" name="${fieldKey}" value="${value}" />`;
+					}
+					
+					formHTML += `</div>`;
+				});
+			}
+			
+			$('#wps-config-panel-body').html(formHTML);
+			this.configPanel.addClass('active');
+			
+			// Focus first field
 			setTimeout(() => {
-				$('#wps-config-panel-content').find('input, select, textarea').first().focus();
-			}, 300);
+				$('#wps-config-panel-body').find('input, select, textarea').first().focus();
+			}, 100);
+			
+			this.announceToScreenReader('Configuration panel opened. Use Tab to navigate fields.');
+		},
 
-			// Bind save button
-			$('#save-block-config').on('click', () => {
-				this.saveBlockConfig(blockId);
-			});
-
-			// Bind cancel button
-			$('#cancel-block-config').on('click', () => {
-				$('.wps-block-config-panel').removeClass('active').attr('aria-hidden', 'true');
-				$('.wps-block').removeClass('selected');
-				this.selectedBlock = null;
-			});
-
-			// Auto-save on field change
-			$('#wps-config-panel-content').find('input, select, textarea').on('change', () => {
-				this.saveBlockConfig(blockId, true);
-			});
-
-			this.announceToScreenReader(`Configuring ${blockDef.label || 'block'}`);
+		/**
+		 * Close configuration panel
+		 */
+		closeConfigPanel: function() {
+			this.configPanel.removeClass('active');
+			$('.wps-block').removeClass('selected');
+			this.selectedBlock = null;
+			
+			// Return focus to canvas
+			$('#wps-canvas').focus();
+			this.announceToScreenReader('Configuration panel closed');
 		},
 
 		/**
 		 * Save block configuration
 		 */
-		saveBlockConfig: function(blockId, silent = false) {
-			const block = this.blocks.find(b => b.id === blockId);
-			if (!block) return;
-
-			// Gather all field values
-			$('#wps-config-panel-content').find('[data-field]').each((i, el) => {
-				const $field = $(el);
-				const fieldKey = $field.data('field');
-				block.config[fieldKey] = $field.val();
+		saveBlockConfig: function() {
+			if (!this.selectedBlock) return;
+			
+			// Gather form data
+			const formData = {};
+			$('#wps-config-panel-body').find('input, select, textarea').each(function() {
+				const $field = $(this);
+				const name = $field.attr('name');
+				
+				if ($field.is(':checkbox')) {
+					formData[name] = $field.is(':checked');
+				} else {
+					formData[name] = $field.val();
+				}
 			});
+			
+			// Update block config
+			this.selectedBlock.config = formData;
+			
+			// Update block display
+			const $block = $(`[data-block-id="${this.selectedBlock.id}"]`);
+			$block.find('.wps-block-config p').text('Configured');
+			
+			this.closeConfigPanel();
+			this.announceToScreenReader(wpshadowWorkflow.strings.configSaved);
+		},
 
-			if (!silent) {
-				this.announceToScreenReader('Configuration saved');
-				this.showNotification('success', 'Block configuration saved');
+		/**
+		 * Handle config panel keyboard navigation (focus trap)
+		 */
+		handleConfigPanelKeydown: function(e) {
+			if (!this.configPanel.hasClass('active')) return;
+			
+			// Escape to close
+			if (e.key === 'Escape') {
+				e.preventDefault();
+				this.closeConfigPanel();
+				return;
 			}
-
-			// Update block display to show it's configured
-			$(`[data-block-id="${blockId}"]`).addClass('configured');
+			
+			// Tab focus trap
+			if (e.key === 'Tab') {
+				const $focusable = this.configPanel.find('button, input, select, textarea, [tabindex="0"]');
+				const $first = $focusable.first();
+				const $last = $focusable.last();
+				
+				if (e.shiftKey && document.activeElement === $first[0]) {
+					e.preventDefault();
+					$last.focus();
+				} else if (!e.shiftKey && document.activeElement === $last[0]) {
+					e.preventDefault();
+					$first.focus();
+				}
+			}
 		},
 
 		/**
@@ -596,37 +891,64 @@
 		 * Handle keyboard shortcuts
 		 */
 		handleKeyboardShortcuts: function(e) {
+			// Ignore if typing in input
+			if ($(e.target).is('input, textarea, select')) return;
+			
 			// Ctrl+S or Cmd+S to save
 			if ((e.ctrlKey || e.metaKey) && e.key === 's') {
 				e.preventDefault();
 				$('#wps-save-workflow').trigger('click');
 			}
 
-			// Escape to deselect or close panels
+			// Escape to deselect or close panel
 			if (e.key === 'Escape') {
-				$('.wps-block').removeClass('selected');
-				this.selectedBlock = null;
-				$('.wps-block-config-panel').removeClass('active');
-				$('.wps-shortcuts-panel, .wps-shortcuts-backdrop').removeClass('active');
+				if (this.configPanel && this.configPanel.hasClass('active')) {
+					this.closeConfigPanel();
+				} else {
+					$('.wps-block').removeClass('selected');
+					this.selectedBlock = null;
+				}
 			}
-
-			// ? to show keyboard shortcuts
-			if (e.key === '?' && !$(e.target).is('input, textarea')) {
+			
+			// Arrow keys for block navigation
+			if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
 				e.preventDefault();
-				this.toggleShortcutsPanel();
+				const $blocks = $('.wps-block');
+				const $focused = $blocks.filter(':focus');
+				
+				if ($focused.length) {
+					const currentIndex = $blocks.index($focused);
+					let newIndex;
+					
+					if (e.key === 'ArrowUp' && currentIndex > 0) {
+						newIndex = currentIndex - 1;
+					} else if (e.key === 'ArrowDown' && currentIndex < $blocks.length - 1) {
+						newIndex = currentIndex + 1;
+					}
+					
+					if (newIndex !== undefined) {
+						$blocks.eq(newIndex).focus();
+						this.announceToScreenReader('Moved to block ' + (newIndex + 1) + ' of ' + $blocks.length);
+					}
+				} else if ($blocks.length > 0) {
+					// Focus first block if none focused
+					$blocks.first().focus();
+					this.announceToScreenReader('Focused first block');
+				}
 			}
-
-			// Ctrl+Z or Cmd+Z for undo (future enhancement)
-			if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
-				e.preventDefault();
-				// TODO: Implement undo functionality
-				this.announceToScreenReader('Undo not yet implemented');
-			}
-
-			// Delete selected block
-			if ((e.key === 'Delete' || e.key === 'Backspace') && this.selectedBlock && !$(e.target).is('input, textarea')) {
-				e.preventDefault();
-				this.removeBlock(this.selectedBlock.id);
+			
+			// Zoom shortcuts
+			if (e.ctrlKey || e.metaKey) {
+				if (e.key === '+' || e.key === '=') {
+					e.preventDefault();
+					this.zoomIn();
+				} else if (e.key === '-') {
+					e.preventDefault();
+					this.zoomOut();
+				} else if (e.key === '0') {
+					e.preventDefault();
+					this.zoomReset();
+				}
 			}
 		},
 
