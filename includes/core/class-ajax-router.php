@@ -131,5 +131,8 @@ class AJAX_Router {
 
 		// Exit interview operations
 		\WPShadow\Admin\Ajax\Submit_Exit_Interview_Handler::register();
+
+		// Test handler (temporary)
+		\WPShadow\Admin\Ajax\Test_AJAX_Handler::register();
 	}
 }

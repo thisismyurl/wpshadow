@@ -134,3 +134,5 @@ require_once $ajax_path . 'class-ajax-toggle-treatment.php';
 
 // Exit interview and followup operations
 require_once $ajax_path . 'exit-followup-handlers.php';
+// Test handler (temporary)
+require_once $ajax_path . 'Test_AJAX_Handler.php';
