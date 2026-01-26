@@ -152,7 +152,6 @@ class Diagnostic_Pub_Compliance_Check extends Diagnostic_Base {
 
 		$total_posts      = count( $posts );
 		$compliance_fails = 0;
-		$issues           = array();
 
 		foreach ( $posts as $post_id ) {
 			$post_issues = 0;
@@ -199,7 +198,10 @@ class Diagnostic_Pub_Compliance_Check extends Diagnostic_Base {
 			}
 		}
 
-		// Calculate compliance percentage
+		// Calculate compliance percentage (protected against division by zero)
+		if ( 0 === $total_posts ) {
+			return null; // Safety check, should not occur due to earlier empty check
+		}
 		$compliance_percentage = ( ( $total_posts - $compliance_fails ) / $total_posts ) * 100;
 
 		// Flag if less than 70% of recent posts are compliant
